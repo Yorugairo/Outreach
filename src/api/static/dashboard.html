@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23171a18'/%3E%3Cpath d='M18 34h12l-5 15 21-25H34l5-12z' fill='%233ecf8e'/%3E%3C/svg%3E">
+  <title>SEO Insights Control Plane</title>
+  <style>
+    :root {
+      --bg: #101211;
+      --surface: #171a18;
+      --surface-2: #1d211f;
+      --border: #2b312e;
+      --border-strong: #3a423e;
+      --text: #f3f6f4;
+      --muted: #9ca8a1;
+      --accent: #3ecf8e;
+      --accent-strong: #00c573;
+      --danger: #ff6b6b;
+      --warning: #f4c15d;
+      --info: #70a5ff;
+      --radius: 10px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html { background: var(--bg); color: var(--text); font-family: var(--sans); }
+    body { margin: 0; min-height: 100vh; background: radial-gradient(circle at 70% -20%, rgba(62,207,142,.08), transparent 34rem), var(--bg); }
+    button, input, select { font: inherit; }
+    button, select, input { min-height: 42px; }
+    button { cursor: pointer; }
+    a { color: var(--accent); }
+    .skip-link { position: fixed; left: 16px; top: -60px; z-index: 100; padding: 10px 14px; color: #07110c; background: var(--accent); border-radius: 6px; }
+    .skip-link:focus { top: 16px; }
+    :focus-visible { outline: 3px solid rgba(62, 207, 142, .75); outline-offset: 3px; }
+    .shell { display: grid; grid-template-columns: 240px minmax(0, 1fr); min-height: 100vh; }
+    aside { position: sticky; top: 0; height: 100vh; border-right: 1px solid var(--border); background: rgba(16,18,17,.92); padding: 24px 18px; }
+    .brand { display: flex; gap: 11px; align-items: center; margin-bottom: 32px; }
+    .brand-mark { display: grid; place-items: center; width: 34px; height: 34px; border: 1px solid rgba(62,207,142,.35); border-radius: 8px; color: var(--accent); background: rgba(62,207,142,.08); font-family: var(--mono); }
+    .brand strong { display: block; font-weight: 600; letter-spacing: -.02em; }
+    .brand small, .eyebrow { color: var(--muted); font: 11px/1.3 var(--mono); text-transform: uppercase; letter-spacing: .12em; }
+    nav { display: grid; gap: 6px; }
+    nav a { display: flex; align-items: center; gap: 10px; padding: 10px 12px; color: var(--muted); text-decoration: none; border: 1px solid transparent; border-radius: 7px; font-size: 14px; }
+    nav a:hover, nav a[aria-current="page"] { color: var(--text); background: var(--surface); border-color: var(--border); }
+    .connection { position: absolute; left: 18px; right: 18px; bottom: 22px; padding: 12px; border: 1px solid var(--border); border-radius: 8px; background: var(--surface); }
+    .connection span { display: flex; gap: 8px; align-items: center; font-size: 13px; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--muted); }
+    .dot.ok { background: var(--accent); box-shadow: 0 0 0 4px rgba(62,207,142,.1); }
+    main { min-width: 0; padding: 28px clamp(20px, 4vw, 58px) 64px; }
+    .topbar { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; margin-bottom: 28px; }
+    h1 { margin: 5px 0 0; font-size: clamp(28px, 4vw, 44px); font-weight: 500; line-height: 1.02; letter-spacing: -.045em; }
+    h2 { margin: 0; font-size: 18px; font-weight: 500; letter-spacing: -.02em; }
+    p { color: var(--muted); line-height: 1.55; }
+    .auth { display: grid; grid-template-columns: minmax(200px, 290px) auto; gap: 8px; align-items: end; }
+    label { display: grid; gap: 7px; color: var(--muted); font-size: 12px; }
+    input, select { width: 100%; border: 1px solid var(--border-strong); border-radius: 7px; padding: 9px 11px; color: var(--text); background: #111412; }
+    input::placeholder { color: #66716a; }
+    .btn { border: 1px solid var(--border-strong); border-radius: 7px; padding: 9px 14px; color: var(--text); background: var(--surface-2); font-weight: 500; }
+    .btn:hover { border-color: #56615b; background: #242a27; }
+    .btn-primary { color: #07110c; background: var(--accent); border-color: var(--accent); }
+    .btn-primary:hover { background: #57dda1; border-color: #57dda1; }
+    .btn-ghost { background: transparent; }
+    .btn-danger { color: #ffd9d9; border-color: rgba(255,107,107,.38); background: rgba(255,107,107,.07); }
+    .grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-bottom: 18px; }
+    .metric, .panel { border: 1px solid var(--border); border-radius: var(--radius); background: rgba(23,26,24,.86); }
+    .metric { padding: 16px; }
+    .metric b { display: block; margin-top: 10px; font: 500 28px/1 var(--mono); letter-spacing: -.05em; }
+    .layout { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(330px, .8fr); gap: 18px; align-items: start; }
+    .panel-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 16px 18px; border-bottom: 1px solid var(--border); }
+    .panel-body { padding: 18px; }
+    .run-form { display: grid; grid-template-columns: minmax(220px, 1fr) 130px 110px auto; gap: 10px; align-items: end; }
+    .check { display: flex; align-items: center; gap: 9px; min-height: 42px; color: var(--text); }
+    .check input { width: 18px; min-height: 18px; accent-color: var(--accent); }
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    caption { text-align: left; padding: 0 0 12px; color: var(--muted); }
+    th { color: var(--muted); font: 11px var(--mono); text-transform: uppercase; letter-spacing: .09em; text-align: left; }
+    th, td { padding: 12px 10px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+    tbody tr:hover { background: rgba(255,255,255,.018); }
+    .domain { color: var(--text); font-weight: 500; }
+    .run-id { display: block; max-width: 130px; overflow: hidden; text-overflow: ellipsis; color: var(--muted); font: 11px var(--mono); }
+    .status { display: inline-flex; align-items: center; gap: 6px; padding: 4px 8px; border-radius: 999px; border: 1px solid var(--border); color: var(--muted); font: 11px var(--mono); }
+    .status.completed { color: var(--accent); border-color: rgba(62,207,142,.28); background: rgba(62,207,142,.07); }
+    .status.failed { color: var(--danger); border-color: rgba(255,107,107,.28); background: rgba(255,107,107,.07); }
+    .row-actions { display: flex; gap: 6px; }
+    .row-actions .btn { min-height: 32px; padding: 5px 8px; font-size: 12px; }
+    .empty { display: grid; place-items: center; min-height: 220px; color: var(--muted); text-align: center; }
+    .detail { position: sticky; top: 24px; }
+    .detail-content { min-height: 360px; }
+    .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 14px 0; }
+    .detail-stat { padding: 12px; border: 1px solid var(--border); border-radius: 7px; background: #121513; }
+    .detail-stat b { display: block; margin-top: 6px; font: 500 18px var(--mono); }
+    .actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+    .evidence { margin: 16px 0 0; padding-left: 18px; color: var(--muted); }
+    .evidence li { margin: 8px 0; }
+    .evidence code { color: var(--accent); font-family: var(--mono); font-size: 11px; }
+    .diff-bar { display: grid; grid-template-columns: 1fr 1fr auto; gap: 8px; align-items: end; }
+    .diff-result { margin-top: 14px; padding: 12px; border: 1px solid var(--border); border-radius: 7px; background: #121513; white-space: pre-wrap; font: 12px/1.55 var(--mono); color: #c7d2cc; }
+    .flash { min-height: 22px; margin: 10px 0 0; color: var(--muted); font-size: 13px; }
+    .flash.error { color: var(--danger); }
+    .flash.success { color: var(--accent); }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+    @media (max-width: 1100px) {
+      .grid { grid-template-columns: repeat(2, 1fr); }
+      .layout { grid-template-columns: 1fr; }
+      .detail { position: static; }
+    }
+    @media (max-width: 760px) {
+      .shell { display: block; }
+      aside { position: static; height: auto; padding: 14px 16px; border-right: 0; border-bottom: 1px solid var(--border); }
+      .brand { margin-bottom: 12px; }
+      nav { display: flex; overflow-x: auto; }
+      .connection { position: static; margin-top: 12px; }
+      main { padding: 22px 14px 50px; }
+      .topbar { display: grid; align-items: stretch; }
+      .auth, .run-form, .diff-bar { grid-template-columns: 1fr; }
+      .grid { grid-template-columns: 1fr 1fr; }
+      .panel-header { align-items: flex-start; flex-direction: column; }
+      .btn-primary { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <div class="shell">
+    <aside>
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">SEO</span>
+        <div><strong>Insight Control</strong><small>Evidence plane</small></div>
+      </div>
+      <nav aria-label="Primary navigation">
+        <a href="#runs" aria-current="page">Runs</a>
+        <a href="#new-run">New analysis</a>
+        <a href="#compare">Compare</a>
+      </nav>
+      <div class="connection" aria-label="API connection status">
+        <span><i id="connection-dot" class="dot" aria-hidden="true"></i><span id="connection-label">Not connected</span></span>
+      </div>
+    </aside>
+
+    <main id="main-content" tabindex="-1">
+      <header class="topbar">
+        <div>
+          <div class="eyebrow">Operator workspace</div>
+          <h1>SEO insight runs</h1>
+          <p>Launch, validate, compare, and recover evidence-backed audits.</p>
+        </div>
+        <div class="auth">
+          <label for="api-key">API key
+            <input id="api-key" type="password" autocomplete="off" placeholder="Enter session API key">
+          </label>
+          <button id="connect-button" class="btn" type="button">Connect</button>
+        </div>
+      </header>
+
+      <div id="announcement" role="status" aria-live="polite" class="flash"></div>
+
+      <section class="grid" aria-label="Run metrics">
+        <article class="metric"><span class="eyebrow">All runs</span><b id="metric-total">0</b></article>
+        <article class="metric"><span class="eyebrow">Completed</span><b id="metric-completed">0</b></article>
+        <article class="metric"><span class="eyebrow">Needs attention</span><b id="metric-failed">0</b></article>
+        <article class="metric"><span class="eyebrow">Average score</span><b id="metric-score">—</b></article>
+      </section>
+
+      <section id="new-run" class="panel" aria-labelledby="new-run-title">
+        <div class="panel-header">
+          <div><div class="eyebrow">Create</div><h2 id="new-run-title">Start a new insight run</h2></div>
+        </div>
+        <div class="panel-body">
+          <form id="run-form" class="run-form">
+            <label for="target-url">Target URL or domain
+              <input id="target-url" name="url" type="text" required maxlength="2048" placeholder="example.com">
+            </label>
+            <label for="run-mode">Mode
+              <select id="run-mode" name="mode"><option>quick</option><option selected>standard</option><option>full</option></select>
+            </label>
+            <label for="max-pages">Max pages
+              <input id="max-pages" name="max_pages" type="number" min="1" max="100" value="5">
+            </label>
+            <button class="btn btn-primary" type="submit">Start run</button>
+            <label class="check" for="approve-paid"><input id="approve-paid" name="approve_paid_enrichment" type="checkbox">Approve paid enrichment</label>
+          </form>
+        </div>
+      </section>
+
+      <div class="layout" style="margin-top:18px">
+        <section id="runs" class="panel" aria-labelledby="runs-title">
+          <div class="panel-header">
+            <div><div class="eyebrow">Activity</div><h2 id="runs-title">Recent runs</h2></div>
+            <button id="refresh-button" class="btn btn-ghost" type="button">Refresh</button>
+          </div>
+          <div class="panel-body table-wrap">
+            <table>
+              <caption>Most recently updated insight runs</caption>
+              <thead><tr><th scope="col">Target</th><th scope="col">Status</th><th scope="col">Score</th><th scope="col">Pages</th><th scope="col">Actions</th></tr></thead>
+              <tbody id="runs-body"><tr><td colspan="5"><div class="empty">Connect with an API key to load runs.</div></td></tr></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="panel detail" aria-labelledby="detail-title">
+          <div class="panel-header"><div><div class="eyebrow">Evidence</div><h2 id="detail-title">Run detail</h2></div></div>
+          <div id="detail-content" class="panel-body detail-content"><div class="empty">Select a run to inspect validation, budget, and recommendations.</div></div>
+        </section>
+      </div>
+
+      <section id="compare" class="panel" aria-labelledby="compare-title" style="margin-top:18px">
+        <div class="panel-header"><div><div class="eyebrow">Regression view</div><h2 id="compare-title">Compare runs</h2></div></div>
+        <div class="panel-body">
+          <div class="diff-bar">
+            <label for="base-run">Base run<select id="base-run"></select></label>
+            <label for="comparison-run">Comparison run<select id="comparison-run"></select></label>
+            <button id="compare-button" class="btn" type="button">Compare</button>
+          </div>
+          <div id="diff-result" class="diff-result" hidden></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    (() => {
+      'use strict';
+      const state = { runs: [], selectedRunId: null };
+      const $ = (id) => document.getElementById(id);
+      const announce = (message, kind = '') => {
+        const node = $('announcement');
+        node.textContent = message;
+        node.className = `flash ${kind}`.trim();
+      };
+      const apiKey = () => $('api-key').value.trim();
+      const apiFetch = async (path, options = {}) => {
+        const key = apiKey();
+        if (!key) throw new Error('Enter an API key to connect.');
+        const response = await fetch(path, {
+          ...options,
+          headers: { 'Content-Type': 'application/json', 'X-API-Key': key, ...(options.headers || {}) }
+        });
+        const payload = await response.json().catch(() => ({}));
+        if (!response.ok) throw new Error(payload.detail || `Request failed (${response.status})`);
+        return payload;
+      };
+      const text = (tag, value, className = '') => {
+        const node = document.createElement(tag);
+        node.textContent = value ?? '—';
+        if (className) node.className = className;
+        return node;
+      };
+      const button = (label, action, className = 'btn') => {
+        const node = document.createElement('button');
+        node.type = 'button'; node.className = className; node.textContent = label; node.addEventListener('click', action);
+        return node;
+      };
+      const setConnected = (connected) => {
+        $('connection-dot').classList.toggle('ok', connected);
+        $('connection-label').textContent = connected ? 'API connected' : 'Not connected';
+      };
+      const scoreOf = (run) => run.summary?.overall_score;
+      const renderMetrics = () => {
+        $('metric-total').textContent = state.runs.length;
+        $('metric-completed').textContent = state.runs.filter(r => r.status === 'completed').length;
+        $('metric-failed').textContent = state.runs.filter(r => r.status === 'failed').length;
+        const scores = state.runs.map(scoreOf).filter(v => typeof v === 'number');
+        $('metric-score').textContent = scores.length ? (scores.reduce((a,b) => a+b, 0) / scores.length).toFixed(1) : '—';
+      };
+      const populateRunSelects = () => {
+        ['base-run', 'comparison-run'].forEach((id, index) => {
+          const select = $(id); select.replaceChildren();
+          state.runs.forEach((run, runIndex) => {
+            const option = document.createElement('option');
+            option.value = run.id; option.textContent = `${run.requested_domain} · ${run.id.slice(0, 8)}`;
+            if (runIndex === index) option.selected = true;
+            select.append(option);
+          });
+        });
+      };
+      const renderRuns = () => {
+        const body = $('runs-body'); body.replaceChildren();
+        if (!state.runs.length) {
+          const row = document.createElement('tr'); const cell = document.createElement('td'); cell.colSpan = 5;
+          cell.append(text('div', 'No runs yet. Start your first evidence-backed audit.', 'empty')); row.append(cell); body.append(row); return;
+        }
+        state.runs.forEach(run => {
+          const row = document.createElement('tr');
+          const target = document.createElement('td'); target.append(text('span', run.requested_domain, 'domain'), text('span', run.id, 'run-id'));
+          const statusCell = document.createElement('td'); statusCell.append(text('span', run.status, `status ${run.status}`));
+          const score = document.createElement('td'); score.textContent = scoreOf(run) ?? '—';
+          const pages = document.createElement('td'); pages.textContent = run.summary?.page_count ?? '—';
+          const actions = document.createElement('td'); const wrap = document.createElement('div'); wrap.className = 'row-actions';
+          wrap.append(button('Inspect', () => inspectRun(run.id)), button('Validate', () => validateRun(run.id), 'btn btn-ghost'));
+          actions.append(wrap); row.append(target, statusCell, score, pages, actions); body.append(row);
+        });
+      };
+      const renderAll = () => { renderMetrics(); renderRuns(); populateRunSelects(); };
+      const loadRuns = async () => {
+        try {
+          const payload = await apiFetch('/api/runs?limit=100');
+          state.runs = payload.runs; renderAll(); setConnected(true); announce(`Loaded ${state.runs.length} runs.`, 'success');
+        } catch (error) { setConnected(false); announce(error.message, 'error'); }
+      };
+      const inspectRun = async (runId) => {
+        try {
+          const payload = await apiFetch(`/api/runs/${runId}`); const run = payload.run; const status = payload.status;
+          state.selectedRunId = runId; const root = $('detail-content'); root.replaceChildren();
+          root.append(text('div', run.requested_domain, 'domain'), text('span', run.id, 'run-id'));
+          const grid = document.createElement('div'); grid.className = 'detail-grid';
+          [['Status', run.status], ['Score', run.summary?.overall_score], ['Pages', run.summary?.page_count], ['Paid calls', run.input_payload?.budget?.estimated_paid_api_calls]].forEach(([label,value]) => {
+            const card = document.createElement('div'); card.className = 'detail-stat'; card.append(text('span', label, 'eyebrow'), text('b', value)); grid.append(card);
+          });
+          root.append(grid);
+          const validation = text('p', status.validation?.valid ? 'Artifact contract valid' : `Validation errors: ${(status.validation?.errors || []).join(', ')}`);
+          validation.style.color = status.validation?.valid ? 'var(--accent)' : 'var(--danger)'; root.append(validation);
+          const actionWrap = document.createElement('div'); actionWrap.className = 'actions';
+          actionWrap.append(
+            button('Validate', () => validateRun(runId)),
+            button('Resume', () => mutateRun(`/api/runs/${runId}/resume`, {max_pages: run.input_payload?.limits?.max_pages || 5})),
+            button('Rerun report', () => mutateRun(`/api/runs/${runId}/rerun`, {stage: 'assembling_report', max_pages: run.input_payload?.limits?.max_pages || 5})),
+            button('Approve paid enrichment', () => mutateRun(`/api/runs/${runId}/approve-paid-enrichment`, {max_pages: run.input_payload?.limits?.max_pages || 5}), 'btn btn-danger')
+          );
+          root.append(actionWrap);
+          const report = await apiFetch(`/api/runs/${runId}/report`);
+          const list = document.createElement('ul'); list.className = 'evidence';
+          (report.key_actions || []).forEach(action => {
+            const item = document.createElement('li'); item.append(text('span', action.action));
+            const ref = action.evidence_refs?.[0]; if (ref) item.append(text('code', ` ${ref.artifact_path} → ${ref.field}`)); list.append(item);
+          });
+          root.append(list); announce(`Loaded run ${runId.slice(0,8)}.`, 'success');
+        } catch (error) { announce(error.message, 'error'); }
+      };
+      const validateRun = async (runId) => {
+        try { const result = await apiFetch(`/api/runs/${runId}/validation`); announce(result.valid ? 'Run passes the artifact contract.' : result.errors.join('; '), result.valid ? 'success' : 'error'); }
+        catch (error) { announce(error.message, 'error'); }
+      };
+      const mutateRun = async (path, payload) => {
+        try { announce('Working…'); await apiFetch(path, {method: 'POST', body: JSON.stringify(payload)}); await loadRuns(); if (state.selectedRunId) await inspectRun(state.selectedRunId); }
+        catch (error) { announce(error.message, 'error'); }
+      };
+      $('run-form').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const payload = { url: $('target-url').value.trim(), mode: $('run-mode').value, max_pages: Number($('max-pages').value), approve_paid_enrichment: $('approve-paid').checked };
+        try { announce('Running analysis…'); const result = await apiFetch('/api/runs', {method: 'POST', body: JSON.stringify(payload)}); announce(`Run ${result.run.id.slice(0,8)} completed.`, 'success'); $('target-url').value = ''; await loadRuns(); await inspectRun(result.run.id); }
+        catch (error) { announce(error.message, 'error'); }
+      });
+      $('connect-button').addEventListener('click', () => { sessionStorage.setItem('seo-insights-api-key', apiKey()); loadRuns(); });
+      $('refresh-button').addEventListener('click', loadRuns);
+      $('compare-button').addEventListener('click', async () => {
+        const base = $('base-run').value, comparison = $('comparison-run').value;
+        if (!base || !comparison) return announce('Create at least two runs to compare.', 'error');
+        try { const result = await apiFetch(`/api/diff?base_run_id=${encodeURIComponent(base)}&comparison_run_id=${encodeURIComponent(comparison)}`); const box = $('diff-result'); box.hidden = false; box.textContent = `Score Δ ${result.score_delta ?? '—'}\nPages Δ ${result.page_count_delta ?? '—'}\nAdded: ${result.recommendation_changes.added.join('; ') || 'none'}\nRemoved: ${result.recommendation_changes.removed.join('; ') || 'none'}`; announce('Run comparison ready.', 'success'); }
+        catch (error) { announce(error.message, 'error'); }
+      });
+      const sessionKey = sessionStorage.getItem('seo-insights-api-key');
+      if (sessionKey) { $('api-key').value = sessionKey; loadRuns(); }
+    })();
+  </script>
+</body>
+</html>

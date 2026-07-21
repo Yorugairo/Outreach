@@ -1,0 +1,29 @@
+[
+  {
+    "name": "python-org-quick-contract",
+    "url": "python.org",
+    "mode": "quick",
+    "max_pages": 1,
+    "expected_stage_count": 6,
+    "requires_recommendation_evidence_refs": true,
+    "requires_run_limits": true
+  },
+  {
+    "name": "example-com-quick-contract",
+    "url": "example.com",
+    "mode": "quick",
+    "max_pages": 1,
+    "expected_stage_count": 6,
+    "requires_recommendation_evidence_refs": true,
+    "requires_run_limits": true
+  },
+  {
+    "name": "iana-org-quick-contract",
+    "url": "iana.org",
+    "mode": "quick",
+    "max_pages": 1,
+    "expected_stage_count": 6,
+    "requires_recommendation_evidence_refs": true,
+    "requires_run_limits": true
+  }
+]

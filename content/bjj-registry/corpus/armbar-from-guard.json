@@ -1,0 +1,21 @@
+{
+  "name": "Armbar from Guard",
+  "slug": "armbar-from-guard",
+  "position": "guard",
+  "belt": "white",
+  "category": "submission",
+  "summary": "The armbar from closed guard is the first submission most white belts learn and the one you'll hit for the rest of your career. Break posture, grip the wrist, thread the arm, and finish with the hips.",
+  "transcript": "Start in closed guard with your partner. First, break their posture by pulling down on the collar and framing on the hips. Grip the wrist of the arm you want to attack with both hands. Use your legs to create space and thread your arm under their attacking arm, across their chest. Swing your leg over their head and lock the triangle with your knees. Sit up, grip the wrist tight, and rotate your hips toward their shoulder as you extend your hips for the finish. Keep their elbow pointed at the ceiling and do not let them post.",
+  "metadata": {
+    "common_errors": [
+      "Letting their elbow drop to the mat instead of pointing it at the ceiling.",
+      "Finishing flat on your back instead of sitting up and rotating the hips.",
+      "Losing the wrist grip during the swing-over."
+    ],
+    "key_terms": ["closed guard", "posture", "triangle", "hip drive", "wrist grip"]
+  },
+  "related": [
+    {"name": "Triangle Choke from Guard", "slug": "triangle-choke-from-guard", "position": "guard"},
+    {"name": "Americana from Mount", "slug": "americana-from-mount", "position": "mount"}
+  ]
+}
