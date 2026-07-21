@@ -69,6 +69,7 @@ class ReportAssemblyService:
                 "robots_url": crawl.robots_url,
                 "robots_status": crawl.robots_status,
                 "sitemap_urls": crawl.sitemap_urls,
+                "candidate_sitemap_urls": crawl.candidate_sitemap_urls,
                 "errors": crawl.errors,
             },
             "pages": [page.to_dict() for page in pages.pages],
@@ -115,7 +116,7 @@ class ReportAssemblyService:
                             "artifact_type": "report",
                             "artifact_path": "reports/v1.json",
                             "field": "report_payload.crawl.sitemap_urls",
-                            "reason": "No sitemap URLs were discovered for this run.",
+                            "reason": "No sitemap URLs were validated for this run.",
                             "observed": [],
                         }
                     ],
