@@ -32,6 +32,13 @@ Thumbs.db
 .worktrees/
 .context/
 
+# Derived SigMap context
+/.github/copilot-instructions.md
+/.sigmap-cache.json
+
+# SigMap configuration is source, not generated context.
+!/gen-context.config.json
+
 # Runtime data and generated evidence
 artifacts/
 runs/

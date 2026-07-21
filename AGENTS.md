@@ -159,3 +159,24 @@ Subagent summaries are **not** proof. Require the actual artifact path, run ID, 
 
 ### Rerun vs new run
 If a run failed at a specific stage, prefer re-running that stage (once a rerun capability exists) over starting from scratch. See the implementation plan for the "First Mate" orchestrator that adds resume/rerun.
+
+---
+
+## 10. Local code-navigation workflow
+
+Use the portable wrapper from the repository root when a named symbol, service, or architecture path needs ranked evidence:
+
+```bash
+python scripts/sigmap_context.py build
+python scripts/sigmap_context.py query "sitemap discovery" --top 5
+python scripts/sigmap_context.py evidence "CrawlDiscoveryService" --markdown
+```
+
+Every wrapper command regenerates the local index first with `--no-track`. Its configuration writes only the gitignored `.github/copilot-instructions.md`; it does not modify `AGENTS.md` or `CLAUDE.md`, register MCP clients, or invoke Codex/Claude adapters.
+
+Route questions to the smallest suitable tool:
+
+- **SigMap**: declared symbols, ranked architecture discovery, and evidence packs.
+- **ast-grep**: structural patterns and exact call-site sweeps.
+- **Text search** (`git grep` or `search_files`): literals, configuration keys, SQL, docs, and test descriptions.
+- **SQZ**: compress noisy command output or logs only after collecting the original evidence; do not use it as a search or correctness tool.
