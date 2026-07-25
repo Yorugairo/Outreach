@@ -25,7 +25,7 @@ class PageAnalysisService:
                 continue
             seen.add(url)
             try:
-                fetched = self.fetcher.fetch(url)
+                fetched = self.fetcher.fetch(url, allowed_host=target.normalized_domain)
                 page = PageRecord(
                     insight_run_id=insight_run_id,
                     seo_target_id=target.id,

@@ -4,9 +4,10 @@ import gzip
 import html
 import re
 import urllib.parse
-import urllib.request
 from dataclasses import dataclass, field
 from html.parser import HTMLParser
+
+from src.fetchers.http_client import FetchLimits, SafeHTTPClient
 
 
 @dataclass(slots=True)
@@ -100,17 +101,28 @@ class _MetadataParser(HTMLParser):
 
 
 class PageFetcher:
-    def __init__(self, timeout_seconds: int = 30):
+    def __init__(
+        self,
+        timeout_seconds: int = 30,
+        max_response_bytes: int = 2_000_000,
+        http_client: SafeHTTPClient | None = None,
+    ):
         self.timeout_seconds = timeout_seconds
+        self.http_client = http_client or SafeHTTPClient(
+            limits=FetchLimits(
+                timeout_seconds=timeout_seconds,
+                max_response_bytes=max_response_bytes,
+            )
+        )
 
-    def fetch(self, url: str) -> PageFetchResult:
-        req = urllib.request.Request(url, headers={"User-Agent": "OutreachProgram/0.1"})
-        with urllib.request.urlopen(req, timeout=self.timeout_seconds) as response:
-            raw_body = response.read()
-            final_url = response.geturl()
-            content_type = response.headers.get("content-type")
-            content_encoding = (response.headers.get("content-encoding") or "").lower()
-            status = response.status
+    def fetch(self, url: str, *, allowed_host: str | None = None) -> PageFetchResult:
+        allowed_hosts = {allowed_host} if allowed_host else None
+        response = self.http_client.fetch(url, allowed_hosts=allowed_hosts)
+        raw_body = response.body
+        final_url = response.final_url
+        content_type = response.headers.get("content-type")
+        content_encoding = (response.headers.get("content-encoding") or "").lower()
+        status = response.status
 
         if content_encoding == "gzip":
             raw_body = gzip.decompress(raw_body)

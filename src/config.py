@@ -13,14 +13,22 @@ def load_dotenv(path: str | Path | None = None) -> None:
     if not env_path.exists():
         return
 
+    for key, value in _dotenv_values(env_path).items():
+        os.environ.setdefault(key, value)
+
+
+def _dotenv_values(path: str | Path) -> dict[str, str]:
+    env_path = Path(path)
+    if not env_path.exists():
+        return {}
+    values: dict[str, str] = {}
     for raw_line in env_path.read_text(encoding="utf-8").splitlines():
         line = raw_line.strip()
         if not line or line.startswith("#") or "=" not in line:
             continue
         key, value = line.split("=", 1)
-        key = key.strip()
-        value = value.strip().strip('"').strip("'")
-        os.environ.setdefault(key, value)
+        values[key.strip()] = value.strip().strip('"').strip("'")
+    return values
 
 
 @dataclass(slots=True)
@@ -31,6 +39,7 @@ class DataForSEOSettings:
     default_language_code: str = "en"
     api_base: str = "https://api.dataforseo.com"
     timeout_seconds: int = 30
+    max_paid_calls: int = 6
 
     @property
     def configured(self) -> bool:
@@ -63,10 +72,12 @@ class AppConfig:
 
 
 def load_config(dotenv_path: str | Path | None = None) -> AppConfig:
-    load_dotenv(dotenv_path)
-    location_code = int(os.getenv("DATAFORSEO_DEFAULT_LOCATION_CODE", "2840"))
-    timeout_seconds = int(os.getenv("DATAFORSEO_TIMEOUT_SECONDS", "30"))
-    allow_paid_api_calls = os.getenv("SEO_INSIGHTS_ALLOW_PAID_API_CALLS", "false").lower() in {
+    dotenv_values = _dotenv_values(dotenv_path or ROOT_DIR / ".env")
+    values = {**dotenv_values, **os.environ}
+    location_code = int(values.get("DATAFORSEO_DEFAULT_LOCATION_CODE", "2840"))
+    timeout_seconds = int(values.get("DATAFORSEO_TIMEOUT_SECONDS", "30"))
+    max_paid_calls = max(0, int(values.get("DATAFORSEO_MAX_CALLS", "6")))
+    allow_paid_api_calls = values.get("SEO_INSIGHTS_ALLOW_PAID_API_CALLS", "false").lower() in {
         "1",
         "true",
         "yes",
@@ -74,12 +85,13 @@ def load_config(dotenv_path: str | Path | None = None) -> AppConfig:
     }
     return AppConfig(
         dataforseo=DataForSEOSettings(
-            login=os.getenv("DATAFORSEO_LOGIN"),
-            password=os.getenv("DATAFORSEO_PASSWORD"),
+            login=values.get("DATAFORSEO_LOGIN"),
+            password=values.get("DATAFORSEO_PASSWORD"),
             default_location_code=location_code,
-            default_language_code=os.getenv("DATAFORSEO_DEFAULT_LANGUAGE_CODE", "en"),
-            api_base=os.getenv("DATAFORSEO_API_BASE", "https://api.dataforseo.com").rstrip("/"),
+            default_language_code=values.get("DATAFORSEO_DEFAULT_LANGUAGE_CODE", "en"),
+            api_base=values.get("DATAFORSEO_API_BASE", "https://api.dataforseo.com").rstrip("/"),
             timeout_seconds=timeout_seconds,
+            max_paid_calls=max_paid_calls,
         ),
         approval=ApprovalPolicy(allow_paid_api_calls=allow_paid_api_calls),
     )

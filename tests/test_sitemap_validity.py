@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import io
 import json
 import sys
 import urllib.error
@@ -14,7 +13,8 @@ if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
 from src.fetchers import sitemap_fetcher as sitemap_fetcher_module  # noqa: E402
-from src.fetchers.sitemap_fetcher import SitemapDiscoveryResult, SitemapFetcher  # noqa: E402
+from src.fetchers.http_client import SafeHTTPClient  # noqa: E402
+from src.fetchers.sitemap_fetcher import SitemapDiscoveryResult, SitemapDocument, SitemapFetcher  # noqa: E402
 from src.models import InsightRun, SEOTarget  # noqa: E402
 from src.services.crawl_discovery_service import (  # noqa: E402
     CrawlDiscoveryService,
@@ -36,6 +36,34 @@ TARGET_CONTEXT = TargetContext(
     location_code=None,
     market="United States",
 )
+
+
+class _FakeHTTPResponse:
+    def __init__(self, body: bytes):
+        from email.message import Message
+
+        self.body = body
+        self.status = 200
+        self.code = 200
+        self.url = SITEMAP_URL
+        self.headers = Message()
+        self.headers["Content-Length"] = str(len(body))
+
+    def read(self, size: int = -1) -> bytes:
+        return self.body if size < 0 else self.body[:size]
+
+    def geturl(self) -> str:
+        return self.url
+
+    def close(self) -> None:
+        return None
+
+
+def _fake_http_client(body: str) -> SafeHTTPClient:
+    return SafeHTTPClient(
+        resolver=lambda host, port: [(None, None, None, None, ("93.184.216.34", port))],
+        opener=lambda request, timeout: _FakeHTTPResponse(body.encode("utf-8")),
+    )
 
 
 @pytest.mark.parametrize(
@@ -61,14 +89,8 @@ TARGET_CONTEXT = TargetContext(
         ),
     ],
 )
-def test_fetch_sitemap_urls_accepts_exact_supported_roots(monkeypatch, xml_body, expected_urls):
-    monkeypatch.setattr(
-        sitemap_fetcher_module.urllib.request,
-        "urlopen",
-        lambda *_args, **_kwargs: io.BytesIO(xml_body.encode("utf-8")),
-    )
-
-    assert SitemapFetcher().fetch_sitemap_urls(SITEMAP_URL) == expected_urls
+def test_fetch_sitemap_urls_accepts_exact_supported_roots(xml_body, expected_urls):
+    assert SitemapFetcher(http_client=_fake_http_client(xml_body)).fetch_sitemap_urls(SITEMAP_URL) == expected_urls
 
 
 @pytest.mark.parametrize(
@@ -80,15 +102,9 @@ def test_fetch_sitemap_urls_accepts_exact_supported_roots(monkeypatch, xml_body,
         "<notsitemapindex><sitemap><loc>https://example.test/lookalike.xml</loc></sitemap></notsitemapindex>",
     ],
 )
-def test_fetch_sitemap_urls_rejects_well_formed_unsupported_or_lookalike_roots(monkeypatch, xml_body):
-    monkeypatch.setattr(
-        sitemap_fetcher_module.urllib.request,
-        "urlopen",
-        lambda *_args, **_kwargs: io.BytesIO(xml_body.encode("utf-8")),
-    )
-
+def test_fetch_sitemap_urls_rejects_well_formed_unsupported_or_lookalike_roots(xml_body):
     with pytest.raises(sitemap_fetcher_module.InvalidSitemapError, match="invalid sitemap root"):
-        SitemapFetcher().fetch_sitemap_urls(SITEMAP_URL)
+        SitemapFetcher(http_client=_fake_http_client(xml_body)).fetch_sitemap_urls(SITEMAP_URL)
 
 
 class _FailingSitemapFetcher:
@@ -148,6 +164,9 @@ class _InvalidRootSitemapFetcher(SitemapFetcher):
             robots_status=200,
             sitemap_urls=[SITEMAP_URL],
         )
+
+    def fetch_sitemap_urls(self, sitemap_url: str) -> list[str]:
+        raise sitemap_fetcher_module.InvalidSitemapError("invalid sitemap root: 'html'")
 
 
 def _target() -> SEOTarget:
@@ -302,12 +321,7 @@ def test_real_parse_error_sitemap_failure_is_a_prospect_issue():
     assert scorecard.sitemap_quality_score == 20.0
 
 
-def test_invalid_sitemap_root_is_persisted_as_a_scored_prospect_issue(monkeypatch):
-    monkeypatch.setattr(
-        sitemap_fetcher_module.urllib.request,
-        "urlopen",
-        lambda *_args, **_kwargs: io.BytesIO(b"<html><body>not a sitemap</body></html>"),
-    )
+def test_invalid_sitemap_root_is_persisted_as_a_scored_prospect_issue():
     service = CrawlDiscoveryService()
     service.fetcher = _InvalidRootSitemapFetcher()
 
@@ -359,3 +373,68 @@ def test_transient_oserror_sitemap_failure_remains_unknown():
         target_context=TARGET_CONTEXT,
     )
     assert scorecard.sitemap_quality_score is None
+
+
+class _RecursiveSitemapFetcher:
+    def discover(self, domain: str) -> SitemapDiscoveryResult:
+        return SitemapDiscoveryResult(
+            domain="https://example.test",
+            robots_url=ROBOTS_URL,
+            robots_status=200,
+            sitemap_urls=[SITEMAP_URL],
+        )
+
+    def fetch_sitemap_document(self, sitemap_url: str) -> SitemapDocument:
+        documents = {
+            SITEMAP_URL: SitemapDocument(
+                root_type="sitemapindex",
+                urls=[
+                    "https://example.test/child-a.xml",
+                    "https://example.test/child-b.xml",
+                ],
+            ),
+            "https://example.test/child-a.xml": SitemapDocument(
+                root_type="urlset",
+                urls=[PAGE_URL, "https://other.test/out-of-scope"],
+            ),
+            "https://example.test/child-b.xml": SitemapDocument(
+                root_type="urlset",
+                urls=["https://example.test/about"],
+            ),
+        }
+        return documents[sitemap_url]
+
+
+def test_sitemap_index_recurses_and_classifies_page_urls():
+    service = CrawlDiscoveryService(max_sitemaps=5, max_pages_per_sitemap=10)
+    service.fetcher = _RecursiveSitemapFetcher()
+
+    crawl, assets = service.discover(_target(), "run-1")
+
+    assert crawl.sitemap_urls == [
+        SITEMAP_URL,
+        "https://example.test/child-a.xml",
+        "https://example.test/child-b.xml",
+    ]
+    assert crawl.candidate_sitemap_urls == crawl.sitemap_urls
+    assert crawl.candidate_page_urls == [PAGE_URL, "https://example.test/about"]
+    sitemap_assets = [asset for asset in assets if asset.asset_type == "sitemap"]
+    assert sitemap_assets[0].metadata["root_type"] == "sitemapindex"
+    assert sitemap_assets[1].discovered_from == SITEMAP_URL
+    assert sitemap_assets[2].discovered_from == SITEMAP_URL
+
+
+def test_sitemap_index_walk_stops_at_configured_limit():
+    service = CrawlDiscoveryService(max_sitemaps=1)
+    service.fetcher = _RecursiveSitemapFetcher()
+
+    crawl, _ = service.discover(_target(), "run-1")
+
+    assert crawl.sitemap_urls == [SITEMAP_URL]
+    assert crawl.candidate_sitemap_urls == [
+        SITEMAP_URL,
+        "https://example.test/child-a.xml",
+        "https://example.test/child-b.xml",
+    ]
+    assert crawl.candidate_page_urls == []
+    assert crawl.errors == ["sitemap_walk_limit_exceeded:max_sitemaps=1"]

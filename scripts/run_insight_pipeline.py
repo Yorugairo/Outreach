@@ -9,12 +9,12 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from src.config import ROOT_DIR
+from src.config import ROOT_DIR, load_config
 from src.orchestrator import InsightRunOrchestrator
 from src.repositories.file_repository import FileBackedInsightRepository
 
 COMMANDS = {"run", "status", "inspect", "validate", "resume", "rerun", "diff"}
-GLOBAL_OPTIONS_WITH_VALUES = {"--artifact-root"}
+GLOBAL_OPTIONS_WITH_VALUES = {"--artifact-root", "--dotenv"}
 
 
 def _repo(artifact_root: str) -> FileBackedInsightRepository:
@@ -51,6 +51,7 @@ def _normalize_legacy_args(argv: list[str]) -> list[str]:
 def main() -> int:
     parser = argparse.ArgumentParser(description="SEO Insight Run control plane")
     parser.add_argument("--artifact-root", default=str(ROOT_DIR / "artifacts" / "seo_insight_runs"))
+    parser.add_argument("--dotenv", default=None, help="explicit dotenv file to load")
     sub = parser.add_subparsers(dest="command", required=True)
 
     p_run = sub.add_parser("run", help="start a new insight run")
@@ -82,7 +83,11 @@ def main() -> int:
 
     args = parser.parse_args(_normalize_legacy_args(sys.argv[1:]))
     repo = _repo(args.artifact_root)
-    orch = InsightRunOrchestrator(repo, artifact_root=args.artifact_root)
+    orch = InsightRunOrchestrator(
+        repo,
+        config=load_config(args.dotenv),
+        artifact_root=args.artifact_root,
+    )
 
     if args.command == "run":
         run = orch.start(args.url, mode=args.mode, max_pages=args.max_pages)

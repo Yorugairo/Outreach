@@ -665,12 +665,13 @@ class InsightRunPipeline:
         paid_calls_allowed = self.config.dataforseo.configured and self.config.approval.allow_paid_api_calls
         return {
             "max_pages": max_pages,
-            "max_dataforseo_calls": 1 if paid_calls_allowed else 0,
+            "max_dataforseo_calls": self.config.dataforseo.max_paid_calls if paid_calls_allowed else 0,
             "network_fetches_allowed": True,
         }
 
     def _budget_snapshot(self, max_pages: int) -> dict[str, Any]:
         paid_calls = 1 if self.config.dataforseo.configured and self.config.approval.allow_paid_api_calls else 0
+        paid_calls = self.config.dataforseo.max_paid_calls if paid_calls else 0
         return {
             "estimated_paid_api_calls": paid_calls,
             "paid_api_providers": ["dataforseo"] if paid_calls else [],

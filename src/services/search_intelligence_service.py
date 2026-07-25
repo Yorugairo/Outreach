@@ -122,15 +122,41 @@ class SearchIntelligenceService:
                 requested_context=requested,
             )
         client = DataForSEOClient(self.config.dataforseo, artifact_dir=self.artifact_dir)
-        response = client.get_errors_reference()
+        context = TargetContext.from_value(target_context)
+        location_code = context.location_code or self.config.dataforseo.default_location_code
+        language_code = context.language_code or self.config.dataforseo.default_language_code
+        market = context.market or f"location_code:{location_code}"
+        max_paid_calls = self.config.dataforseo.max_paid_calls
+        if max_paid_calls < 1:
+            return SearchIntelligenceOutput(
+                configured=True,
+                skipped_reason="DataForSEO paid-call limit is zero",
+                payload={},
+                approved=False,
+                requested_context=requested,
+            )
+        try:
+            response = client.collect_target_search_evidence(
+                context,
+                location_code=location_code,
+                language_code=language_code,
+                device=context.device or "desktop",
+                market=market,
+                keyword_limit=10,
+                serp_limit=min(5, max_paid_calls - 1),
+            )
+        except Exception as exc:
+            return SearchIntelligenceOutput(
+                configured=True,
+                skipped_reason=f"DataForSEO target evidence collection failed: {type(exc).__name__}",
+                payload={},
+                approved=False,
+                requested_context=requested,
+            )
         return SearchIntelligenceOutput(
             configured=True,
-            skipped_reason="Target-specific search evidence was not collected by the reference connectivity call.",
-            payload={
-                "status_code": response.get("status_code"),
-                "tasks_error": response.get("tasks_error"),
-                "raw_excerpt_keys": sorted(response.keys())[:10],
-            },
+            skipped_reason=None,
+            payload=response,
             approved=True,
             requested_context=requested,
         )
