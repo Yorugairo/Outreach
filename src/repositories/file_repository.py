@@ -5,7 +5,7 @@ import json
 from pathlib import Path
 from typing import Any
 
-from src.models import DiscoveredAsset, InsightReport, InsightRun, PageRecord, RunStageEvent, SEOTarget
+from src.models import DiscoveredAsset, InsightReport, InsightRun, PageRecord, RunStageEvent, SEOTarget, StageCheckpoint
 
 
 class FileBackedInsightRepository:
@@ -36,7 +36,13 @@ class FileBackedInsightRepository:
         safe_stamp = self._safe_filename(event.created_at)
         safe_stage = self._safe_filename(event.stage_name)
         safe_status = self._safe_filename(event.status)
-        path = self._run_dir(event.insight_run_id) / "events" / f"{safe_stamp}_{safe_stage}_{safe_status}.json"
+        if event.artifact_path:
+            relative = Path(event.artifact_path)
+            if relative.is_absolute() or ".." in relative.parts:
+                raise ValueError("stage event artifact_path must be a safe run-relative path")
+            path = self._run_dir(event.insight_run_id) / relative
+        else:
+            path = self._run_dir(event.insight_run_id) / "events" / f"{safe_stamp}_{safe_stage}_{safe_status}.json"
         self._write_json(path, event.to_dict())
         return event
 
@@ -56,6 +62,11 @@ class FileBackedInsightRepository:
         if report.export_markdown:
             (run_dir / "reports" / f"{report.report_version}.md").write_text(report.export_markdown, encoding="utf-8")
         return report
+
+    def save_checkpoint(self, checkpoint: StageCheckpoint) -> StageCheckpoint:
+        path = self._checkpoint_path(checkpoint.insight_run_id, checkpoint.attempt_id, checkpoint.stage_name)
+        self._write_json(path, checkpoint.to_dict())
+        return checkpoint
 
     def get_run(self, run_id: str) -> "InsightRun | None":
         path = self._run_dir(run_id) / "run.json"
@@ -85,8 +96,25 @@ class FileBackedInsightRepository:
             return None
         return InsightReport(**self._read_json(path))
 
+    def get_checkpoint(self, run_id: str, attempt_id: str, stage_name: str) -> StageCheckpoint | None:
+        path = self._checkpoint_path(run_id, attempt_id, stage_name)
+        if not path.exists():
+            return None
+        payload = self._read_json(path)
+        checkpoint = StageCheckpoint(**payload)
+        if checkpoint.insight_run_id != run_id or checkpoint.attempt_id != attempt_id or checkpoint.stage_name != stage_name:
+            raise ValueError("checkpoint identity does not match requested loader scope")
+        return checkpoint
+
     def _run_dir(self, run_id: str) -> Path:
         return self.runs_dir / run_id
+
+    def _checkpoint_path(self, run_id: str, attempt_id: str, stage_name: str) -> Path:
+        safe_attempt = self._safe_filename(attempt_id)
+        safe_stage = self._safe_filename(stage_name)
+        if safe_attempt != attempt_id or safe_stage != stage_name:
+            raise ValueError("checkpoint identity contains unsafe path characters")
+        return self._run_dir(run_id) / "checkpoints" / safe_attempt / f"{safe_stage}.json"
 
     @staticmethod
     def _read_json(path: Path) -> dict:
@@ -96,7 +124,9 @@ class FileBackedInsightRepository:
     @staticmethod
     def _write_json(path: Path, payload: dict[str, Any]) -> None:
         path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+        temporary = path.with_name(f".{path.name}.tmp")
+        temporary.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+        temporary.replace(path)
 
     @staticmethod
     def _safe_filename(value: str | None) -> str:

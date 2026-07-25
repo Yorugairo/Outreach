@@ -7,12 +7,16 @@ from pathlib import Path
 from typing import Any, Callable
 
 from src.config import AppConfig
-from src.models import InsightRun, RunStageEvent, SEOTarget
+from src.models import DiscoveredAsset, InsightRun, PageRecord, RunStageEvent, SEOTarget, StageCheckpoint, new_id
 from src.repositories.base import InsightRepository
 from src.services.crawl_discovery_service import CrawlDiscoveryOutput, CrawlDiscoveryService
 from src.services.page_analysis_service import PageAnalysisOutput, PageAnalysisService
 from src.services.reporting_service import ReportAssemblyService, ScorecardOutput, ScorecardService
-from src.services.search_intelligence_service import SearchIntelligenceOutput, SearchIntelligenceService
+from src.services.search_intelligence_service import (
+    SearchIntelligenceOutput,
+    SearchIntelligenceService,
+    TargetContext,
+)
 from src.stage_errors import classify_stage_error, is_retryable
 
 
@@ -95,7 +99,10 @@ class InsightRunPipeline:
         run.current_stage = stage_name
         run.error_text = None
         run.completed_at = None
+        source_attempt_id = run.attempt_id
         run.attempt_count += 1
+        run.attempt_id = new_id()
+        self._inherit_checkpoints(run.id, source_attempt_id, run.attempt_id, stage_name)
         run.input_payload.setdefault("limits", {}).update(self._run_limits(max_pages))
         run.input_payload.setdefault("budget", {}).update(self._budget_snapshot(max_pages))
         run.config_snapshot["run_limits"] = self._run_limits(max_pages)
@@ -117,6 +124,14 @@ class InsightRunPipeline:
         start_stage: str,
     ) -> PipelineResult:
         start_index = DEFAULT_STAGES.index(start_stage)
+        target_context = TargetContext(
+            primary_url=run.requested_url,
+            target_domain=run.requested_domain,
+            language_code=run.language_code,
+            device=run.device,
+            location_code=run.location_code,
+            market=target.country_code,
+        )
 
         def should_record(stage_name: str) -> bool:
             return DEFAULT_STAGES.index(stage_name) >= start_index
@@ -137,18 +152,31 @@ class InsightRunPipeline:
                     },
                     duration_ms=self._duration_ms(started),
                 )
+            else:
+                self._stage_complete(
+                    run,
+                    "normalizing_target",
+                    STAGE_ORDER["normalizing_target"],
+                    {
+                        "normalized_url": target.normalized_url,
+                        "normalized_domain": target.normalized_domain,
+                        "inherited": True,
+                    },
+                    duration_ms=0,
+                )
 
             if should_record("discovering_sitemaps"):
                 crawl_output, assets = self._run_stage(
                     run,
                     "discovering_sitemaps",
                     STAGE_ORDER["discovering_sitemaps"],
-                    lambda: self._discover_and_save(target, run.id),
+                    lambda: self._discover_and_save(target, run.id, run.attempt_id),
                     {"domain": target.normalized_domain},
                     summarize=self._summarize_crawl,
                 )
             else:
-                crawl_output, assets = self.crawl_discovery.discover(target, run.id)
+                crawl_output, assets = self._load_crawl_checkpoint(run)
+                self._record_inherited_stage(run, "discovering_sitemaps", self._summarize_crawl((crawl_output, assets)))
 
             urls_to_analyze = [target.normalized_url, *crawl_output.candidate_page_urls][:max_pages]
             if should_record("fetching_pages"):
@@ -156,36 +184,45 @@ class InsightRunPipeline:
                     run,
                     "fetching_pages",
                     STAGE_ORDER["fetching_pages"],
-                    lambda: self._analyze_and_save_pages(target, run.id, urls_to_analyze),
+                    lambda: self._analyze_and_save_pages(target, run.id, urls_to_analyze, run.attempt_id),
                     {"url_count": len(urls_to_analyze)},
                     summarize=self._summarize_pages,
                 )
             else:
-                page_output = self.page_analysis.analyze_urls(target, run.id, urls_to_analyze)
+                page_output = self._load_page_checkpoint(run)
+                self._record_inherited_stage(run, "fetching_pages", self._summarize_pages(page_output))
 
             if should_record("pulling_search_intelligence"):
                 search_output = self._run_stage(
                     run,
                     "pulling_search_intelligence",
                     STAGE_ORDER["pulling_search_intelligence"],
-                    lambda: self.search_intelligence.gather(),
+                    lambda: self.search_intelligence.gather(target_context),
                     {},
-                    summarize=self._summarize_search,
+                    summarize=lambda output: self._summarize_search(output, target_context),
                 )
             else:
-                search_output = self.search_intelligence.gather()
+                search_output = self._load_search_checkpoint(run)
+                self._record_inherited_stage(
+                    run,
+                    "pulling_search_intelligence",
+                    self._summarize_search(search_output, target_context),
+                )
 
             if should_record("scoring"):
                 scorecard = self._run_stage(
                     run,
                     "scoring",
                     STAGE_ORDER["scoring"],
-                    lambda: self.scorecards.build(crawl_output, page_output, search_output),
+                    lambda: self.scorecards.build(
+                        crawl_output, page_output, search_output, target_context=target_context
+                    ),
                     {},
                     summarize=self._summarize_scorecard,
                 )
             else:
-                scorecard = self.scorecards.build(crawl_output, page_output, search_output)
+                scorecard = self._load_scorecard_checkpoint(run)
+                self._record_inherited_stage(run, "scoring", self._summarize_scorecard(scorecard))
 
             final_summary = {
                 "sitemap_count": len(crawl_output.sitemap_urls),
@@ -194,12 +231,20 @@ class InsightRunPipeline:
                 "search_configured": search_output.configured,
                 "search_approved": search_output.approved,
                 "overall_score": scorecard.overall_score,
+                "score_completeness_percent": scorecard.completeness_percent,
+                "scored_dimensions": scorecard.scored_dimensions,
+                "score_dimension_status": scorecard.dimension_status,
+                "score_warnings": scorecard.warnings,
                 "limits": run.input_payload.get("limits", {}),
                 "budget": run.input_payload.get("budget", {}),
+                "report_versions": ["v1", "v2"],
+                "primary_report_version": "v2",
                 "artifact_paths": [
                     f"runs/{run.id}/run.json",
                     f"runs/{run.id}/reports/v1.json",
                     f"runs/{run.id}/reports/v1.md",
+                    f"runs/{run.id}/reports/v2.json",
+                    f"runs/{run.id}/reports/v2.md",
                 ],
             }
             final_completed_at = self._now()
@@ -216,19 +261,24 @@ class InsightRunPipeline:
                         page_output,
                         search_output,
                         scorecard,
+                        target_context=target_context,
                         final_summary=final_summary,
                         completed_at=final_completed_at,
                     ),
                     {},
                     summarize=lambda saved_report: {
                         "report_version": saved_report.report_version,
+                        "report_versions": ["v1", "v2"],
+                        "primary_report_version": "v2",
                         "artifact_paths": [
-                            f"reports/{saved_report.report_version}.json",
-                            f"reports/{saved_report.report_version}.md",
+                            "reports/v1.json",
+                            "reports/v1.md",
+                            "reports/v2.json",
+                            "reports/v2.md",
                         ],
                     },
                 )
-                report_path = str(self.artifact_root / "runs" / run.id / "reports" / f"{report.report_version}.json")
+                report_path = (self.artifact_root / "runs" / run.id / "reports" / "v1.json").as_posix()
 
             run.status = "completed"
             run.current_stage = "completed"
@@ -248,15 +298,28 @@ class InsightRunPipeline:
             self.repository.update_run(run)
             raise
 
-    def _discover_and_save(self, target: SEOTarget, run_id: str) -> tuple[CrawlDiscoveryOutput, list]:
+    def _discover_and_save(
+        self,
+        target: SEOTarget,
+        run_id: str,
+        attempt_id: str,
+    ) -> tuple[CrawlDiscoveryOutput, list]:
         crawl_output, assets = self.crawl_discovery.discover(target, run_id)
         for asset in assets:
+            asset.attempt_id = attempt_id
             self.repository.save_discovered_asset(asset)
         return crawl_output, assets
 
-    def _analyze_and_save_pages(self, target: SEOTarget, run_id: str, urls: list[str]) -> PageAnalysisOutput:
+    def _analyze_and_save_pages(
+        self,
+        target: SEOTarget,
+        run_id: str,
+        urls: list[str],
+        attempt_id: str,
+    ) -> PageAnalysisOutput:
         page_output = self.page_analysis.analyze_urls(target, run_id, urls)
         for page in page_output.pages:
+            page.attempt_id = attempt_id
             self.repository.save_page_record(page)
         return page_output
 
@@ -269,6 +332,7 @@ class InsightRunPipeline:
         search_output: SearchIntelligenceOutput,
         scorecard: ScorecardOutput,
         *,
+        target_context: TargetContext,
         final_summary: dict[str, Any],
         completed_at: str,
     ):
@@ -278,8 +342,35 @@ class InsightRunPipeline:
         final_run_snapshot.summary = final_summary
         final_run_snapshot.completed_at = completed_at
         final_run_snapshot.updated_at = completed_at
-        report = self.reporting.build_report(target, final_run_snapshot, crawl_output, page_output, search_output, scorecard)
-        return self.repository.save_report(report)
+        report_v1 = self.reporting.build_report(
+            target, final_run_snapshot, crawl_output, page_output, search_output, scorecard
+        )
+        self.repository.save_report(report_v1)
+        completed_events: dict[str, str] = {}
+        completed_event_records = sorted(
+            (
+                event
+                for event in self.repository.list_stage_events(run.id)
+                if event.status == "completed"
+                and event.attempt_id == run.attempt_id
+                and event.artifact_path
+            ),
+            key=lambda event: (event.completed_at or "", event.created_at, event.id),
+        )
+        for event in completed_event_records:
+            completed_events[event.stage_name] = event.artifact_path
+        report_v2 = self.reporting.build_report_v2(
+            target,
+            final_run_snapshot,
+            crawl_output,
+            page_output,
+            search_output,
+            scorecard,
+            target_context=target_context,
+            stage_artifacts=completed_events,
+        )
+        self._assert_report_evidence_exists(run.id, report_v2.report_payload.get("findings", []))
+        return self.repository.save_report(report_v2)
 
     def _run_stage(
         self,
@@ -304,6 +395,7 @@ class InsightRunPipeline:
                 output_summary = {"attempt": attempt}
                 if summarize is not None:
                     output_summary.update(summarize(result))
+                self._save_checkpoint(run, stage_name, result)
                 self._stage_complete(
                     run,
                     stage_name,
@@ -315,11 +407,12 @@ class InsightRunPipeline:
             except Exception as exc:  # noqa: BLE001 - classified below
                 last_exc = classify_stage_error(exc)
                 self.repository.append_stage_event(
-                    RunStageEvent(
+                    self._new_stage_event(
                         insight_run_id=run.id,
                         stage_name=stage_name,
                         stage_order=stage_order,
                         status="failed",
+                        attempt_id=run.attempt_id,
                         started_at=self._now(),
                         completed_at=self._now(),
                         duration_ms=self._duration_ms(stage_started),
@@ -339,17 +432,122 @@ class InsightRunPipeline:
                 time.sleep(delay)
         raise last_exc  # pragma: no cover - defensive
 
+    def _save_checkpoint(self, run: InsightRun, stage_name: str, result: Any) -> None:
+        payload_type = {
+            "discovering_sitemaps": "crawl_discovery",
+            "fetching_pages": "page_analysis",
+            "pulling_search_intelligence": "search_intelligence",
+            "scoring": "scorecard",
+        }.get(stage_name)
+        if payload_type is None:
+            return
+        checkpoint = StageCheckpoint.create(
+            insight_run_id=run.id,
+            attempt_id=run.attempt_id,
+            stage_name=stage_name,
+            payload_type=payload_type,
+            payload=self._checkpoint_payload(stage_name, result),
+        )
+        self.repository.save_checkpoint(checkpoint)
+
+    @staticmethod
+    def _checkpoint_payload(stage_name: str, result: Any) -> dict[str, Any]:
+        if stage_name == "discovering_sitemaps":
+            crawl_output, assets = result
+            return {"crawl": asdict(crawl_output), "assets": [asset.to_dict() for asset in assets]}
+        if stage_name in {"fetching_pages", "pulling_search_intelligence", "scoring"}:
+            return asdict(result)
+        raise ValueError(f"stage does not have a checkpoint contract: {stage_name}")
+
+    def _inherit_checkpoints(
+        self,
+        run_id: str,
+        source_attempt_id: str,
+        target_attempt_id: str,
+        start_stage: str,
+    ) -> None:
+        start_index = DEFAULT_STAGES.index(start_stage)
+        for stage_name in DEFAULT_STAGES[:start_index]:
+            source = self.repository.get_checkpoint(run_id, source_attempt_id, stage_name)
+            if source is None:
+                continue
+            self.repository.save_checkpoint(
+                StageCheckpoint.create(
+                    insight_run_id=run_id,
+                    attempt_id=target_attempt_id,
+                    stage_name=stage_name,
+                    payload_type=source.payload_type,
+                    payload=source.payload,
+                )
+            )
+
+    def _load_checkpoint(self, run: InsightRun, stage_name: str, payload_type: str) -> StageCheckpoint:
+        checkpoint = self.repository.get_checkpoint(run.id, run.attempt_id, stage_name)
+        if checkpoint is None:
+            raise ValueError(f"missing checkpoint for {stage_name} in attempt {run.attempt_id}")
+        if checkpoint.payload_type != payload_type:
+            raise ValueError(
+                f"checkpoint type mismatch for {stage_name}: expected {payload_type}, got {checkpoint.payload_type}"
+            )
+        return checkpoint
+
+    def _load_crawl_checkpoint(self, run: InsightRun) -> tuple[CrawlDiscoveryOutput, list[DiscoveredAsset]]:
+        checkpoint = self._load_checkpoint(run, "discovering_sitemaps", "crawl_discovery")
+        crawl_output = CrawlDiscoveryOutput(**checkpoint.payload["crawl"])
+        assets = [DiscoveredAsset(**payload) for payload in checkpoint.payload.get("assets", [])]
+        for asset in assets:
+            asset.attempt_id = run.attempt_id
+            self.repository.save_discovered_asset(asset)
+        return crawl_output, assets
+
+    def _load_page_checkpoint(self, run: InsightRun) -> PageAnalysisOutput:
+        checkpoint = self._load_checkpoint(run, "fetching_pages", "page_analysis")
+        output = PageAnalysisOutput(**checkpoint.payload)
+        for page in output.pages:
+            page = page if isinstance(page, PageRecord) else PageRecord(**page)
+            page.attempt_id = run.attempt_id
+            self.repository.save_page_record(page)
+        output.pages = [page if isinstance(page, PageRecord) else PageRecord(**page) for page in output.pages]
+        return output
+
+    def _load_search_checkpoint(self, run: InsightRun) -> SearchIntelligenceOutput:
+        checkpoint = self._load_checkpoint(run, "pulling_search_intelligence", "search_intelligence")
+        return SearchIntelligenceOutput(**checkpoint.payload)
+
+    def _load_scorecard_checkpoint(self, run: InsightRun) -> ScorecardOutput:
+        checkpoint = self._load_checkpoint(run, "scoring", "scorecard")
+        return ScorecardOutput(**checkpoint.payload)
+
+    def _record_inherited_stage(self, run: InsightRun, stage_name: str, summary: dict[str, Any]) -> None:
+        checkpoint = self.repository.get_checkpoint(run.id, run.attempt_id, stage_name)
+        if checkpoint is None:
+            raise ValueError(f"cannot inherit missing checkpoint for {stage_name}")
+        inherited_summary = {
+            **summary,
+            "inherited": True,
+            "checkpoint_schema_version": checkpoint.schema_version,
+            "checkpoint_sha256": checkpoint.content_sha256,
+        }
+        self._stage_complete(
+            run,
+            stage_name,
+            STAGE_ORDER[stage_name],
+            inherited_summary,
+            duration_ms=0,
+        )
+
     def _stage_start(self, run: InsightRun, stage_name: str, stage_order: int, payload: dict) -> None:
         run.current_stage = stage_name
         run.updated_at = self._now()
         self._heartbeat(run)
         self.repository.update_run(run)
         self.repository.append_stage_event(
-            RunStageEvent(
+            self._new_stage_event(
                 insight_run_id=run.id,
                 stage_name=stage_name,
                 stage_order=stage_order,
                 status="started",
+                attempt_id=run.attempt_id,
                 started_at=self._now(),
                 input_payload=payload,
             )
@@ -368,16 +566,24 @@ class InsightRunPipeline:
         self._heartbeat(run)
         self.repository.update_run(run)
         self.repository.append_stage_event(
-            RunStageEvent(
+            self._new_stage_event(
                 insight_run_id=run.id,
                 stage_name=stage_name,
                 stage_order=stage_order,
                 status="completed",
+                attempt_id=run.attempt_id,
                 completed_at=self._now(),
                 duration_ms=duration_ms,
                 output_summary=summary,
             )
         )
+
+    @staticmethod
+    def _new_stage_event(**kwargs: Any) -> RunStageEvent:
+        """Create a pipeline event with a stable, independently addressable artifact path."""
+        event = RunStageEvent(**kwargs)
+        event.artifact_path = f"events/{event.id}.json"
+        return event
 
     @staticmethod
     def _summarize_crawl(result: tuple[CrawlDiscoveryOutput, list]) -> dict[str, Any]:
@@ -389,28 +595,59 @@ class InsightRunPipeline:
             "candidate_page_count": len(crawl_output.candidate_page_urls),
             "asset_count": len(assets),
             "error_count": len(crawl_output.errors),
+            "sitemap_urls": sorted(set(crawl_output.sitemap_urls))[:100],
+            "candidate_sitemap_urls": sorted(set(crawl_output.candidate_sitemap_urls))[:100],
+            "candidate_page_urls": sorted(set(crawl_output.candidate_page_urls))[:100],
+            "errors": sorted(crawl_output.errors)[:100],
             "artifact_paths": [f"assets/{asset.id}.json" for asset in assets],
             "degraded": bool(crawl_output.errors),
         }
 
     @staticmethod
     def _summarize_pages(page_output: PageAnalysisOutput) -> dict[str, Any]:
+        ordered_errors = sorted(
+            page_output.errors,
+            key=lambda item: (str(item.get("url", "")), str(item.get("error", ""))),
+        )
         return {
             "pages_saved": len(page_output.pages),
             "error_count": len(page_output.errors),
+            "errors": ordered_errors[:100],
             "artifact_paths": [f"pages/{page.id}.json" for page in page_output.pages],
             "degraded": bool(page_output.errors),
         }
 
     @staticmethod
-    def _summarize_search(search_output: SearchIntelligenceOutput) -> dict[str, Any]:
+    def _summarize_search(
+        search_output: SearchIntelligenceOutput,
+        target_context: TargetContext,
+    ) -> dict[str, Any]:
         return {
             "configured": search_output.configured,
             "approved": search_output.approved,
+            "skipped": bool(search_output.skipped_reason),
             "skipped_reason": search_output.skipped_reason,
-            "payload_keys": list(search_output.payload.keys()),
+            "payload_keys": sorted(search_output.payload)[:100],
+            "requested_context": target_context.to_dict(),
             "degraded": not search_output.configured,
         }
+
+    def _assert_report_evidence_exists(self, run_id: str, findings: list[dict[str, Any]]) -> None:
+        run_dir = (self.artifact_root / "runs" / run_id).resolve()
+        for finding in findings:
+            for ref in finding.get("evidence_refs", []):
+                relative = Path(str(ref.get("artifact_path", "")))
+                if relative.is_absolute() or ".." in relative.parts:
+                    raise ValueError("v2 evidence path must be safe and run-relative")
+                resolved = (run_dir / relative).resolve()
+                try:
+                    resolved.relative_to(run_dir)
+                except ValueError as exc:
+                    raise ValueError("v2 evidence path escapes its run") from exc
+                if resolved.suffix.casefold() != ".json" or not resolved.is_file():
+                    raise FileNotFoundError(
+                        f"v2 evidence artifact is missing or not JSON: {relative.as_posix()}"
+                    )
 
     @staticmethod
     def _summarize_scorecard(scorecard: ScorecardOutput) -> dict[str, Any]:

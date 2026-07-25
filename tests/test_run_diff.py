@@ -23,7 +23,12 @@ def test_orchestrator_diffs_two_same_target_runs(tmp_path: Path):
     assert diff["base_run_id"] == before.id
     assert diff["comparison_run_id"] == after.id
     assert diff["same_target"] is True
-    assert diff["score_delta"] == 0
+    assert diff["base_overall_score"] == before.summary["overall_score"]
+    assert diff["comparison_overall_score"] == after.summary["overall_score"]
+    if before.summary["overall_score"] is None or after.summary["overall_score"] is None:
+        assert diff["score_delta"] is None
+    else:
+        assert diff["score_delta"] == 0
     assert diff["page_count_delta"] == 0
     assert diff["recommendation_changes"]["unchanged_count"] >= 1
 

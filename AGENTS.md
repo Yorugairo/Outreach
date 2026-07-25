@@ -177,6 +177,15 @@ Every wrapper command regenerates the local index first with `--no-track`. Its c
 Route questions to the smallest suitable tool:
 
 - **SigMap**: declared symbols, ranked architecture discovery, and evidence packs.
-- **ast-grep**: structural patterns and exact call-site sweeps.
+- **ast-grep**: structural patterns and exact call-site sweeps. Always set `--lang`, use a narrow pattern, and scope it to repo-relative paths; one-shot `run` needs no `sgconfig.yml`, while reusable configured rules use `scan`.
 - **Text search** (`git grep` or `search_files`): literals, configuration keys, SQL, docs, and test descriptions.
-- **SQZ**: compress noisy command output or logs only after collecting the original evidence; do not use it as a search or correctness tool.
+- **SQZ**: compress noisy command output or logs only after saving the original evidence. Use `sqz compress --mode safe --verify --no-cache --cmd <producer>`; do not compress hashes, exact test verdicts, security evidence, or small outputs, and never use SQZ as a search or correctness tool.
+
+Windows path rule: set the command/tool workdir to the exact repository root and pass `.` or repo-relative paths. The native Windows `rg` used by `search_files` does not accept MSYS-style absolute paths such as `/c/Users/...`; if an absolute-path search fails, retry from the exact workdir with a relative path before concluding that nothing matched.
+
+Bound a structural sweep and preserve its raw output before optional compression:
+
+```bash
+ast-grep run --lang python --pattern 'class $C: $$$BODY' src/services --json=stream > .context/ast-grep-classes.jsonl
+sqz compress --mode safe --verify --no-cache --cmd ast-grep < .context/ast-grep-classes.jsonl
+```

@@ -34,20 +34,20 @@ Given a URL/domain, the platform should:
 3. crawl or fetch key pages
 4. extract title/meta/H1/canonical/schema/internal-link/image evidence
 5. classify pages by search role
-6. score sitemap quality and page coverage
+6. score only evidence-backed dimensions and report unknown/completeness separately
 7. collect keyword seeds + SERP snapshots via DataForSEO
 8. generate a prioritized SEO insight package
 9. persist all raw and normalized evidence
 10. expose the results in a consistent operator-facing format
 
-### Explicitly de-emphasized in v1
-- deep competitor intelligence as a first-class platform module
-- full outbound automation
-- generative content creation as the primary deliverable
+### Explicitly out of scope for v1
+- competitor intelligence as a platform module
+- automated outbound or follow-up delivery
+- generative content production or publishing
+- CRM/contact-pipeline workflowing
 - video/creative upsells
-- heavy CRM workflowing
 
-Those can be layered later once the SEO insight engine is solid.
+Later modules may consume validated `InsightReport` evidence, but none of these capabilities may weaken or block the v1 SEO insight engine.
 
 ---
 
@@ -118,10 +118,11 @@ Responsibilities:
 Responsibilities:
 - parse metadata/H1/canonical/schema
 - classify pages
-- score metadata quality
+- score primary-requested-page metadata quality without allowing `max_pages` to change target health
 - score crawl/indexability signals
-- score sitemap quality
+- score sitemap quality only from conclusive persisted evidence
 - produce page-coverage model
+- emit sampled secondary-page facts as findings rather than target-level score inputs
 
 #### D. Search Intelligence Service
 Responsibilities:
@@ -130,11 +131,14 @@ Responsibilities:
 - pull SERP snapshots
 - attach search volume / rank evidence
 - maintain raw + normalized search artifacts
+- bind accepted evidence to the run target, snapshot date, market/location, language, device, source, and observed target ranking URLs
+- report missing or mismatched context as unknown rather than scoring it
 
 #### E. Reporting Service
 Responsibilities:
 - assemble final scorecard
-- generate recommendations
+- generate deterministic `prospect_issue` recommendations from independently persisted evidence
+- separate unrouted `evidence_limit` records into an operator-review section
 - export JSON/markdown
 - provide report-friendly objects to UI/API
 
@@ -265,9 +269,9 @@ The irreducible core is:
 Once those are collected, a competitor module is much easier to add later because the evidence model is already there.
 
 In practice, this means:
-- keep `competitor_snapshots` in the data model if useful
+- do not add competitor snapshots or research workflows to the v1 runtime/data contract
 - do not make competitor research block the platform architecture
-- allow later enrichment via LLM or analyst over the existing insight report
+- after v1, an optional analyst layer may consume the existing insight report without changing target evidence or scoring
 
 ---
 
@@ -377,10 +381,15 @@ UI for runs, evidence, and recommendations
 ### Phase C — entity-integrated mode
 attach runs to canonical businesses and normalized categories
 
-### Phase D — optional competitor enrichment
+### Phase D — outreach activation
+Commercially package validated run evidence into a human-reviewed outreach asset that answers: what is wrong, why it matters, and what we would fix. Route supported opportunities into **web development / rebuild**, **profile management / reputation**, and **pSEO / search architecture** service offers, then support operator-led movement from outreach to booked call and proposal.
+
+This phase is packaging and activation over the existing deterministic report; it does not change target-health scoring or permit unsupported claims. It also preserves the current v1 exclusions: no automated outbound, CRM platform, competitor intelligence module, or generative content production. Subscriptions are not a primary product assumption.
+
+### Phase E — optional competitor enrichment
 LLM/analyst layer driven by the existing insight report
 
-### Phase E — action layer
+### Phase F — action layer
 content recommendations, sitemap rewrites, publishing workflows
 
 ---

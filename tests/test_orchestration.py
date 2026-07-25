@@ -225,6 +225,44 @@ def test_stage_completion_events_include_artifact_backed_summaries(tmp_path: Pat
     report = completed["assembling_report"]
     assert "reports/v1.json" in report.output_summary["artifact_paths"]
     assert "reports/v1.md" in report.output_summary["artifact_paths"]
+    assert "reports/v2.json" in report.output_summary["artifact_paths"]
+    assert "reports/v2.md" in report.output_summary["artifact_paths"]
+    assert report.output_summary["report_versions"] == ["v1", "v2"]
+    assert report.output_summary["primary_report_version"] == "v2"
+    assert run.summary["report_versions"] == ["v1", "v2"]
+    assert run.summary["primary_report_version"] == "v2"
+
+
+def test_legacy_v1_only_summary_remains_valid(tmp_path: Path):
+    repo = _make_repo(tmp_path)
+    orch = InsightRunOrchestrator(repo, artifact_root=tmp_path / "artifacts")
+    run = orch.start("python.org", mode="quick", max_pages=1)
+    run.summary.pop("report_versions", None)
+    run.summary.pop("primary_report_version", None)
+    repo.update_run(run)
+    report_dir = tmp_path / "artifacts" / "runs" / run.id / "reports"
+    (report_dir / "v2.json").unlink()
+    (report_dir / "v2.md").unlink()
+
+    validation = orch.validate(run.id)
+
+    assert validation["valid"] is True
+    assert validation["report_json_exists"] is True
+    assert validation["report_markdown_exists"] is True
+
+
+def test_advertised_v2_missing_artifact_fails_validation(tmp_path: Path):
+    repo = _make_repo(tmp_path)
+    orch = InsightRunOrchestrator(repo, artifact_root=tmp_path / "artifacts")
+    run = orch.start("python.org", mode="quick", max_pages=1)
+    report_dir = tmp_path / "artifacts" / "runs" / run.id / "reports"
+    (report_dir / "v2.json").unlink()
+
+    validation = orch.validate(run.id)
+
+    assert validation["valid"] is False
+    assert validation["report_v2_json_exists"] is False
+    assert "reports/v2.json is missing" in validation["errors"]
 
 
 def test_orchestrator_status_missing(tmp_path: Path):

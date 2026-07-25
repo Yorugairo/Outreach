@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import json
+import re
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional
@@ -8,6 +10,7 @@ from src.config import AppConfig, load_config
 from src.models import InsightRun, RunStageEvent
 from src.pipeline import DEFAULT_STAGES, InsightRunPipeline
 from src.repositories.base import InsightRepository
+from src.services.provenance_service import EvidenceReferenceError, validate_evidence_ref
 
 
 class InsightRunOrchestrator:
@@ -72,6 +75,8 @@ class InsightRunOrchestrator:
         run_json = run_dir / "run.json"
         report_json = run_dir / "reports" / "v1.json"
         report_md = run_dir / "reports" / "v1.md"
+        report_v2_json = run_dir / "reports" / "v2.json"
+        report_v2_md = run_dir / "reports" / "v2.md"
         events_dir = run_dir / "events"
         errors: list[str] = []
 
@@ -85,17 +90,26 @@ class InsightRunOrchestrator:
             }
 
         events = self.repository.list_stage_events(run_id)
-        completed_by_stage = self._completed_stage_events(events)
+        completed_by_stage = self._completed_stage_events(events, attempt_id=run.attempt_id)
         latest_search = completed_by_stage.get("pulling_search_intelligence")
+        latest_scoring = completed_by_stage.get("scoring")
 
         run_json_exists = run_json.exists()
         events_dir_exists = events_dir.exists()
         report_json_exists = report_json.exists()
         report_markdown_exists = report_md.exists()
+        advertised_versions = run.summary.get("report_versions")
+        requires_v2 = isinstance(advertised_versions, list) and "v2" in advertised_versions
+        report_v2_json_exists = report_v2_json.exists()
+        report_v2_markdown_exists = report_v2_md.exists()
+        report_v2_findings_valid = self._report_v2_findings_valid(run_id) if requires_v2 else None
         summary_has_overall_score = "overall_score" in run.summary
         run_limits_recorded = self._run_limits_recorded(run)
         run_execution_recorded = self._run_execution_recorded(run)
         report_actions_have_evidence_refs = self._report_actions_have_evidence_refs(run_id)
+        scorecard_semantics_recorded = (
+            self._scorecard_semantics_recorded(latest_scoring) if requires_v2 else True
+        )
 
         if not run_json_exists:
             errors.append("run.json is missing")
@@ -112,6 +126,12 @@ class InsightRunOrchestrator:
             errors.append("reports/v1.json is missing")
         if not report_markdown_exists:
             errors.append("reports/v1.md is missing")
+        if requires_v2 and not report_v2_json_exists:
+            errors.append("reports/v2.json is missing")
+        if requires_v2 and not report_v2_markdown_exists:
+            errors.append("reports/v2.md is missing")
+        if requires_v2 and report_v2_json_exists and not report_v2_findings_valid:
+            errors.append("reports/v2.json has malformed findings or provenance")
         if not summary_has_overall_score:
             errors.append("run summary missing overall_score")
         if not run_limits_recorded:
@@ -120,6 +140,8 @@ class InsightRunOrchestrator:
             errors.append("run execution lease/heartbeat metadata is not recorded")
         if not report_actions_have_evidence_refs:
             errors.append("report key actions are missing evidence_refs")
+        if not scorecard_semantics_recorded:
+            errors.append("completed scoring event has malformed scorecard semantics")
 
         search_intelligence_recorded = self._search_intelligence_recorded(run, latest_search)
         if not search_intelligence_recorded:
@@ -142,10 +164,16 @@ class InsightRunOrchestrator:
             "missing_completed_stages": missing_completed,
             "report_json_exists": report_json_exists,
             "report_markdown_exists": report_markdown_exists,
+            "report_versions": advertised_versions if isinstance(advertised_versions, list) else ["v1"],
+            "primary_report_version": run.summary.get("primary_report_version", "v1"),
+            "report_v2_json_exists": report_v2_json_exists,
+            "report_v2_markdown_exists": report_v2_markdown_exists,
+            "report_v2_findings_valid": report_v2_findings_valid,
             "summary_has_overall_score": summary_has_overall_score,
             "run_limits_recorded": run_limits_recorded,
             "run_execution_recorded": run_execution_recorded,
             "report_actions_have_evidence_refs": report_actions_have_evidence_refs,
+            "scorecard_semantics_recorded": scorecard_semantics_recorded,
             "overall_score": run.summary.get("overall_score"),
             "search_intelligence_recorded": search_intelligence_recorded,
             "artifact_paths": {
@@ -153,6 +181,8 @@ class InsightRunOrchestrator:
                 "events_dir": str(events_dir),
                 "report_json": str(report_json),
                 "report_markdown": str(report_md),
+                "report_v2_json": str(report_v2_json),
+                "report_v2_markdown": str(report_v2_md),
             },
             "errors": errors,
         }
@@ -199,6 +229,7 @@ class InsightRunOrchestrator:
                     stage_name=stage_name,
                     stage_order=stage_order,
                     status="failed",
+                    attempt_id=run.attempt_id,
                     started_at=run.started_at,
                     completed_at=now,
                     error_text=message,
@@ -261,7 +292,18 @@ class InsightRunOrchestrator:
         return DEFAULT_STAGES[0]
 
     @staticmethod
-    def _completed_stage_events(events: list[RunStageEvent]) -> dict[str, RunStageEvent]:
+    def _completed_stage_events(
+        events: list[RunStageEvent],
+        attempt_id: str | None = None,
+    ) -> dict[str, RunStageEvent]:
+        if attempt_id:
+            scoped = [event for event in events if event.attempt_id == attempt_id]
+            if scoped:
+                events = scoped
+            else:
+                # Preserve validation of genuinely legacy artifacts created before
+                # attempt identity was introduced.
+                events = [event for event in events if event.attempt_id is None]
         completed: dict[str, RunStageEvent] = {}
         for event in events:
             if event.status == "completed" and event.stage_name in DEFAULT_STAGES:
@@ -281,6 +323,43 @@ class InsightRunOrchestrator:
         return summary.get("configured") is False and bool(summary.get("skipped_reason"))
 
     @staticmethod
+    def _scorecard_semantics_recorded(event: RunStageEvent | None) -> bool:
+        if event is None:
+            return False
+        scorecard = event.output_summary.get("scorecard")
+        if not isinstance(scorecard, dict):
+            return False
+
+        completeness = scorecard.get("completeness_percent")
+        if (
+            isinstance(completeness, bool)
+            or not isinstance(completeness, (int, float))
+            or not 0 <= completeness <= 100
+        ):
+            return False
+
+        known_dimensions = {
+            "sitemap_quality",
+            "metadata_quality",
+            "page_coverage",
+            "search_visibility",
+        }
+        statuses = scorecard.get("dimension_status")
+        if not isinstance(statuses, dict) or set(statuses) != known_dimensions:
+            return False
+        if any(status not in {"valid", "unknown", "degraded"} for status in statuses.values()):
+            return False
+
+        scored_dimensions = scorecard.get("scored_dimensions")
+        if not isinstance(scored_dimensions, list) or any(
+            not isinstance(name, str) or name not in known_dimensions for name in scored_dimensions
+        ):
+            return False
+        if any(statuses[name] == "unknown" for name in scored_dimensions):
+            return False
+        return True
+
+    @staticmethod
     def _run_limits_recorded(run: InsightRun) -> bool:
         limits = run.input_payload.get("limits")
         budget = run.input_payload.get("budget")
@@ -298,14 +377,161 @@ class InsightRunOrchestrator:
         report = self.repository.get_report(run_id, "v1")
         if report is None or not report.key_actions:
             return False
+        run = self.repository.get_run(run_id)
+        if run is None:
+            return False
+        run_dir = self.artifact_root / "runs" / run_id
         for action in report.key_actions:
             refs = action.get("evidence_refs")
             if not refs:
                 return False
             for ref in refs:
-                if not ref.get("artifact_path") or not ref.get("field") or not ref.get("reason"):
+                if isinstance(ref, dict) and "observed" not in ref:
+                    if report.report_version == "v1" and self._legacy_evidence_ref_present(run_dir, ref):
+                        continue
+                    return False
+                try:
+                    validate_evidence_ref(
+                        run_dir,
+                        ref,
+                        expected_attempt_id=run.attempt_id,
+                    )
+                except EvidenceReferenceError:
                     return False
         return True
+
+    @staticmethod
+    def _legacy_evidence_ref_present(run_dir: Path, ref: object) -> bool:
+        if not isinstance(ref, dict):
+            return False
+        if any(not isinstance(ref.get(key), str) or not ref[key].strip() for key in ("artifact_path", "field", "reason")):
+            return False
+        relative = Path(ref["artifact_path"])
+        if relative.is_absolute() or ".." in relative.parts or relative.suffix.casefold() != ".json":
+            return False
+        if relative.parts and relative.parts[0].casefold() == "reports":
+            return False
+        resolved = (run_dir / relative).resolve()
+        try:
+            resolved.relative_to(run_dir.resolve())
+        except ValueError:
+            return False
+        return resolved.is_file()
+
+    def _report_v2_findings_valid(self, run_id: str) -> bool:
+        report = self.repository.get_report(run_id, "v2")
+        if report is None or report.report_version != "v2":
+            return False
+        payload = report.report_payload
+        required_payload_keys = {
+            "target",
+            "run",
+            "crawl",
+            "pages",
+            "page_errors",
+            "search",
+            "scorecard",
+            "findings",
+            "executive_answer",
+            "method_and_limits",
+            "next_best_action",
+        }
+        if not isinstance(payload, dict) or not required_payload_keys.issubset(payload):
+            return False
+        findings = payload.get("findings")
+        if not isinstance(findings, list):
+            return False
+        required_finding_fields = {
+            "id",
+            "finding_type",
+            "category",
+            "title",
+            "observation",
+            "impact",
+            "recommended_action",
+            "severity",
+            "effort",
+            "confidence",
+            "recommended_services",
+            "service_fit_reason",
+            "evidence_refs",
+        }
+        web_route_fields = {
+            "sitemap_discovery": {
+                "output_summary.candidate_sitemap_urls",
+                "output_summary.errors",
+            },
+            "page_metadata": {"title", "meta_description"},
+            "page_heading": {"h1"},
+        }
+        for finding in findings:
+            if not isinstance(finding, dict) or not required_finding_fields.issubset(finding):
+                return False
+            if finding["severity"] not in {"critical", "high", "medium", "low", "info"}:
+                return False
+            if finding["effort"] not in {"small", "medium", "large", "discovery_required"}:
+                return False
+            if finding["confidence"] not in {"high", "medium", "low"}:
+                return False
+            finding_type = finding["finding_type"]
+            if finding_type not in {"prospect_issue", "evidence_limit"}:
+                return False
+            services = finding["recommended_services"]
+            if not isinstance(services, list):
+                return False
+            if finding_type == "evidence_limit" and services:
+                return False
+            if any(service != "web_development_rebuild" for service in services):
+                return False
+            category = finding["category"]
+            if services and (finding_type != "prospect_issue" or category not in web_route_fields):
+                return False
+            refs = finding["evidence_refs"]
+            if not isinstance(refs, list) or not refs:
+                return False
+            for ref in refs:
+                if not self._v2_evidence_ref_valid(run_id, ref):
+                    return False
+                if services and ref["field"] not in web_route_fields[category]:
+                    return False
+        return True
+
+    def _v2_evidence_ref_valid(self, run_id: str, ref: object) -> bool:
+        try:
+            run = self.repository.get_run(run_id)
+            if run is None:
+                return False
+            validate_evidence_ref(
+                self.artifact_root / "runs" / run_id,
+                ref,
+                expected_attempt_id=run.attempt_id,
+            )
+            return True
+        except EvidenceReferenceError:
+            return False
+
+    @staticmethod
+    def _resolve_evidence_field(payload: object, field: str) -> object:
+        if not field or field.startswith(".") or field.endswith("."):
+            raise ValueError("malformed evidence field")
+        current = payload
+        for part in field.split("."):
+            match = re.fullmatch(r"([A-Za-z_][A-Za-z0-9_-]*)(.*)", part)
+            if match is None:
+                raise ValueError("malformed evidence field")
+            key, indexes = match.groups()
+            if not isinstance(current, dict) or key not in current:
+                raise KeyError(key)
+            current = current[key]
+            while indexes:
+                index_match = re.match(r"^\[(0|[1-9][0-9]*)\](.*)$", indexes)
+                if index_match is None:
+                    raise ValueError("malformed evidence index")
+                index_text, indexes = index_match.groups()
+                if not isinstance(current, list):
+                    raise TypeError("indexed evidence value is not a list")
+                current = current[int(index_text)]
+        return current
 
     @staticmethod
     def _run_execution_recorded(run: InsightRun) -> bool:

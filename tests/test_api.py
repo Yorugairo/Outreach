@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import sqlite3
 from pathlib import Path
 
 import pytest
@@ -68,6 +69,7 @@ def test_api_run_lifecycle_and_diff(api_client):
     detail = client.get(f"/api/runs/{first_id}", headers=headers)
     validation = client.get(f"/api/runs/{first_id}/validation", headers=headers)
     report = client.get(f"/api/runs/{first_id}/report", headers=headers)
+    report_v2 = client.get(f"/api/runs/{first_id}/report?version=v2", headers=headers)
     diff = client.get(
         f"/api/diff?base_run_id={first_id}&comparison_run_id={second_id}",
         headers=headers,
@@ -80,9 +82,41 @@ def test_api_run_lifecycle_and_diff(api_client):
     assert validation.json()["valid"] is True
     assert report.status_code == 200
     assert report.json()["report_status"] == "complete"
+    assert report.json()["report_version"] == "v1"
+    assert report_v2.status_code == 200
+    assert report_v2.json()["report_version"] == "v2"
     assert diff.status_code == 200
     assert diff.json()["same_target"] is True
     assert diff.json()["score_delta"] == 0
+
+
+def test_api_v1_only_run_defaults_to_v1_and_returns_clear_v2_404(api_client):
+    client, repo = api_client
+    headers = {"X-API-Key": "test-secret"}
+    created = client.post(
+        "/api/runs",
+        headers=headers,
+        json={"url": "example.com", "mode": "quick", "max_pages": 1},
+    )
+    run_id = created.json()["run"]["id"]
+    with sqlite3.connect(repo.database_path) as connection:
+        connection.execute(
+            "DELETE FROM insight_reports WHERE insight_run_id = ? AND report_version = 'v2'",
+            (run_id,),
+        )
+    report_dir = repo.artifact_root / "runs" / run_id / "reports"
+    (report_dir / "v2.json").unlink()
+    (report_dir / "v2.md").unlink()
+
+    default = client.get(f"/api/runs/{run_id}/report", headers=headers)
+    missing_v2 = client.get(f"/api/runs/{run_id}/report?version=v2", headers=headers)
+    invalid = client.get(f"/api/runs/{run_id}/report?version=v3", headers=headers)
+
+    assert default.status_code == 200
+    assert default.json()["report_version"] == "v1"
+    assert missing_v2.status_code == 404
+    assert missing_v2.json()["detail"] == "report v2 not found"
+    assert invalid.status_code == 422
 
 
 def test_production_app_fails_closed_without_api_key(tmp_path: Path):

@@ -8,6 +8,10 @@ from dataclasses import dataclass, field
 from typing import Iterable
 
 
+class InvalidSitemapError(ValueError):
+    """Raised when well-formed XML does not have a supported sitemap root."""
+
+
 @dataclass(slots=True)
 class SitemapDiscoveryResult:
     domain: str
@@ -52,21 +56,24 @@ class SitemapFetcher:
 
         root = ET.fromstring(body)
         namespace = self._namespace(root.tag)
+        root_name = self._local_name(root.tag)
         url_tag = f"{{{namespace}}}url" if namespace else "url"
         loc_tag = f"{{{namespace}}}loc" if namespace else "loc"
         sitemap_tag = f"{{{namespace}}}sitemap" if namespace else "sitemap"
 
         urls: list[str] = []
-        if root.tag.endswith("urlset"):
+        if root_name == "urlset":
             for url_node in root.findall(url_tag):
                 loc = url_node.find(loc_tag)
                 if loc is not None and loc.text:
                     urls.append(loc.text.strip())
-        elif root.tag.endswith("sitemapindex"):
+        elif root_name == "sitemapindex":
             for sitemap_node in root.findall(sitemap_tag):
                 loc = sitemap_node.find(loc_tag)
                 if loc is not None and loc.text:
                     urls.append(loc.text.strip())
+        else:
+            raise InvalidSitemapError(f"invalid sitemap root: {root.tag!r}")
         return urls
 
     @staticmethod
@@ -89,3 +96,9 @@ class SitemapFetcher:
         if tag.startswith("{") and "}" in tag:
             return tag[1:].split("}", 1)[0]
         return None
+
+    @staticmethod
+    def _local_name(tag: str) -> str:
+        if tag.startswith("{") and "}" in tag:
+            return tag.split("}", 1)[1]
+        return tag

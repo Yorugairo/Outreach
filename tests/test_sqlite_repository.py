@@ -21,15 +21,21 @@ def test_sqlite_repository_persists_pipeline_and_artifacts_across_reopen(tmp_pat
     reopened_orch = InsightRunOrchestrator(reopened, artifact_root=artifact_root)
     persisted = reopened.get_run(run.id)
     report = reopened.get_report(run.id, "v1")
+    report_v2 = reopened.get_report(run.id, "v2")
 
     assert persisted is not None
     assert persisted.status == "completed"
     assert report is not None
+    assert report_v2 is not None
+    assert report.report_version == "v1"
+    assert report_v2.report_version == "v2"
     assert reopened_orch.validate(run.id)["valid"] is True
     assert first_validation["valid"] is True
     assert len(reopened.list_stage_events(run.id)) >= 12
     assert (artifact_root / "runs" / run.id / "run.json").exists()
     assert (artifact_root / "runs" / run.id / "reports" / "v1.json").exists()
+    assert (artifact_root / "runs" / run.id / "reports" / "v2.json").exists()
+    assert (artifact_root / "runs" / run.id / "reports" / "v2.md").exists()
 
     health = reopened.health()
     with sqlite3.connect(database_path) as connection:

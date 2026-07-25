@@ -5,7 +5,7 @@ import sqlite3
 from pathlib import Path
 from typing import Any
 
-from src.models import DiscoveredAsset, InsightReport, InsightRun, PageRecord, RunStageEvent, SEOTarget
+from src.models import DiscoveredAsset, InsightReport, InsightRun, PageRecord, RunStageEvent, SEOTarget, StageCheckpoint
 from src.repositories.file_repository import FileBackedInsightRepository
 
 
@@ -156,6 +156,38 @@ class SQLiteInsightRepository:
         self._files.save_report(report)
         return report
 
+    def save_checkpoint(self, checkpoint: StageCheckpoint) -> StageCheckpoint:
+        payload = checkpoint.to_dict()
+        with self._connect() as connection:
+            connection.execute(
+                """
+                INSERT INTO stage_checkpoints (
+                    id, insight_run_id, attempt_id, stage_name, payload_type,
+                    schema_version, content_sha256, created_at, payload_json
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                ON CONFLICT(insight_run_id, attempt_id, stage_name) DO UPDATE SET
+                    id = excluded.id,
+                    payload_type = excluded.payload_type,
+                    schema_version = excluded.schema_version,
+                    content_sha256 = excluded.content_sha256,
+                    created_at = excluded.created_at,
+                    payload_json = excluded.payload_json
+                """,
+                (
+                    checkpoint.id,
+                    checkpoint.insight_run_id,
+                    checkpoint.attempt_id,
+                    checkpoint.stage_name,
+                    checkpoint.payload_type,
+                    checkpoint.schema_version,
+                    checkpoint.content_sha256,
+                    checkpoint.created_at,
+                    self._encode(checkpoint.payload),
+                ),
+            )
+        self._files.save_checkpoint(checkpoint)
+        return checkpoint
+
     def get_run(self, run_id: str) -> InsightRun | None:
         with self._connect() as connection:
             row = connection.execute(
@@ -194,6 +226,31 @@ class SQLiteInsightRepository:
                 (run_id, report_version),
             ).fetchone()
         return InsightReport(**self._decode(row[0])) if row else None
+
+    def get_checkpoint(self, run_id: str, attempt_id: str, stage_name: str) -> StageCheckpoint | None:
+        with self._connect() as connection:
+            row = connection.execute(
+                """
+                SELECT id, insight_run_id, attempt_id, stage_name, payload_type,
+                       schema_version, content_sha256, created_at, payload_json
+                FROM stage_checkpoints
+                WHERE insight_run_id = ? AND attempt_id = ? AND stage_name = ?
+                """,
+                (run_id, attempt_id, stage_name),
+            ).fetchone()
+        if row is None:
+            return None
+        return StageCheckpoint(
+            id=row[0],
+            insight_run_id=row[1],
+            attempt_id=row[2],
+            stage_name=row[3],
+            payload_type=row[4],
+            schema_version=row[5],
+            content_sha256=row[6],
+            created_at=row[7],
+            payload=self._decode(row[8]),
+        )
 
     def health(self) -> dict[str, Any]:
         with self._connect() as connection:

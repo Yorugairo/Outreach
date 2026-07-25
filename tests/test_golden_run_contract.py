@@ -24,6 +24,8 @@ def test_golden_domains_preserve_artifact_contract(tmp_path: Path):
         validation = orch.validate(run.id)
         report_path = tmp_path / case["name"] / "artifacts" / "runs" / run.id / "reports" / "v1.json"
         report = json.loads(report_path.read_text())
+        report_v2_path = tmp_path / case["name"] / "artifacts" / "runs" / run.id / "reports" / "v2.json"
+        report_v2 = json.loads(report_v2_path.read_text())
 
         assert validation["valid"] is True
         assert validation["completed_stage_count"] == case["expected_stage_count"]
@@ -31,3 +33,8 @@ def test_golden_domains_preserve_artifact_contract(tmp_path: Path):
         assert validation["report_actions_have_evidence_refs"] is True
         assert report["report_payload"]["run"]["input_payload"]["limits"]["max_pages"] == case["max_pages"]
         assert all(action.get("evidence_refs") for action in report["key_actions"])
+        assert report["report_version"] == "v1"
+        assert report_v2["report_version"] == "v2"
+        assert report_v2["report_payload"]["findings"] is not None
+        assert (report_v2_path.parent / "v1.md").exists()
+        assert (report_v2_path.parent / "v2.md").exists()

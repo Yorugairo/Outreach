@@ -148,11 +148,11 @@ def create_app(
         return base_orchestrator.validate(run_id)
 
     @app.get("/api/runs/{run_id}/report", dependencies=[auth])
-    def get_report(run_id: str) -> dict:
+    def get_report(run_id: str, version: Literal["v1", "v2"] = Query(default="v1")) -> dict:
         run_or_404(run_id)
-        report = active_repository.get_report(run_id, "v1")
+        report = active_repository.get_report(run_id, version)
         if report is None:
-            raise HTTPException(status_code=404, detail="report v1 not found")
+            raise HTTPException(status_code=404, detail=f"report {version} not found")
         return report.to_dict()
 
     @app.post("/api/runs/{run_id}/resume", dependencies=[auth])
