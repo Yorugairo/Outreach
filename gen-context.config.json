@@ -20,11 +20,15 @@
     "dist",
     ".venv",
     "venv",
-    "__pycache__"
+    "__pycache__",
+    "__init__.py",
+    "static",
+    "migrations",
+    "dataforseo_smoke_test.py"
   ],
   "maxDepth": 6,
   "maxSigsPerFile": 25,
-  "maxTokens": 8000,
+  "maxTokens": 30000,
   "autoMaxTokens": false,
   "strategy": "full",
   "secretScan": true,

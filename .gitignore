@@ -32,6 +32,15 @@ Thumbs.db
 .worktrees/
 .context/
 
+# Repository-local agent configuration is source. Generated context is not.
+!.codex/
+!.codex/config.toml
+!.codex/agents/
+!.codex/agents/*.toml
+!.agents/
+!.agents/skills/
+!.agents/skills/**
+
 # Derived SigMap context
 /.github/copilot-instructions.md
 /.sigmap-cache.json

@@ -1,0 +1,77 @@
+{
+  "$schema": "https://aka.ms/codetour-schema",
+  "title": "SEO Insight Platform: New Maintainer Tour",
+  "description": "Follow one target URL through the deterministic, evidence-backed insight pipeline and its operator surfaces.",
+  "steps": [
+    {
+      "directory": "src",
+      "title": "Runtime Boundary",
+      "description": "The product runtime is intentionally small: models define persisted truth, repositories own storage, services own stage logic, and one pipeline composes them. Start here to keep future SEO, GEO, AEO, and AIO work inside the evidence-first boundary."
+    },
+    {
+      "file": "docs/product-revenue-contract.md",
+      "line": 3,
+      "title": "Commercial Contract",
+      "description": "This document defines the real product: a value-first outreach intelligence asset. Its hard-truth rules prevent unsupported claims, while competitor intelligence and automated outbound remain later phases rather than hidden v1 behavior."
+    },
+    {
+      "file": "src/models.py",
+      "line": 43,
+      "title": "Canonical Run",
+      "description": "InsightRun anchors scope, attempts, status, configuration, and summary. Any new analysis dimension should remain attributable to this run instead of becoming a disconnected script output."
+    },
+    {
+      "file": "src/repositories/base.py",
+      "line": 8,
+      "title": "Persistence Contract",
+      "description": "InsightRepository is the storage seam. Services and orchestration should persist through this protocol so file-backed and SQLite implementations remain interchangeable and every completion claim resolves to an artifact."
+    },
+    {
+      "file": "scripts/run_insight_pipeline.py",
+      "line": 51,
+      "title": "Operator CLI",
+      "description": "The CLI is the primary control plane for run, status, validation, recovery, rerun, and diff operations. It preserves the original URL shorthand while exposing explicit lifecycle commands."
+    },
+    {
+      "file": "src/orchestrator.py",
+      "line": 32,
+      "title": "Run Lifecycle",
+      "description": "The orchestrator starts and validates runs, then owns resume, stage rerun, stale-run recovery, and comparisons. Completion is semantic only when persisted run, events, reports, and evidence references all validate."
+    },
+    {
+      "file": "src/pipeline.py",
+      "line": 23,
+      "title": "Six Deterministic Stages",
+      "description": "DEFAULT_STAGES is the canonical execution order from target normalization through report assembly. Adding a capability means preserving stage events, checkpoints, retry semantics, and explicit degraded or skipped summaries."
+    },
+    {
+      "directory": "src/services",
+      "title": "Stage Services",
+      "description": "Target intake, sitemap discovery, page analysis, search intelligence, scoring, finding generation, and reporting live here. The important gotcha is that findings must derive from persisted observations; missing enrichment is an evidence limit, never a fabricated weakness."
+    },
+    {
+      "file": "src/services/finding_service.py",
+      "line": 17,
+      "title": "Commercial Findings",
+      "description": "FindingService converts deterministic observations into typed prospect issues or evidence limits. Service recommendations are gated by evidence, keeping outreach useful without turning unknowns into sales claims."
+    },
+    {
+      "file": "src/services/reporting_service.py",
+      "line": 151,
+      "title": "Report Assembly",
+      "description": "ReportAssemblyService packages the stable technical result into structured JSON and operator-readable Markdown. This is the downstream seam for future outreach briefs, not permission to invent competitor or generative facts."
+    },
+    {
+      "file": "src/api/app.py",
+      "line": 40,
+      "title": "API and Dashboard",
+      "description": "create_app exposes run creation, inspection, validation, recovery, rerun, paid-enrichment approval, and run diff endpoints. The dashboard is an operator surface over the same orchestration rather than a separate execution path."
+    },
+    {
+      "file": "docs/AGENT_START_HERE.md",
+      "line": 1,
+      "title": "Safe Next Move",
+      "description": "Use this routing index before changing the repo: query SigMap, narrow with text or structural search, read the relevant architecture route, and verify artifacts or focused tests. This keeps exploration cheap and changes aligned with the product contract."
+    }
+  ]
+}

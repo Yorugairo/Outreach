@@ -2,6 +2,9 @@
 
 This file is the operating playbook for any agentic system (Hermes, Claude Code, Codex, OpenCode) working in this repo. It is the durable, always-loaded layer. Conditional workflows belong in skills, not here.
 
+Read this file first, then read [`docs/AGENT_START_HERE.md`](docs/AGENT_START_HERE.md).
+Load only the task route and PRP named there; do not preload the full docs tree.
+
 ---
 
 ## 1. Mission
@@ -139,26 +142,23 @@ Never hand-edit artifacts manually. They are produced by the repository layer on
 
 ---
 
-## 9. Hermes operating conventions (for agentic use)
+## 9. Agent routing and durable execution
 
-Use the layered model:
+Use [`docs/runbooks/PRP_EXECUTION.md`](docs/runbooks/PRP_EXECUTION.md) for
+complex, multi-slice, architectural, data-model, security, or release work.
+Active plans live under `.claude/PRPs/plans/` as agent-neutral durable state.
 
-- **Memory** = durable user preferences (response style, cost posture, platform-first bias). Do not store task status here.
-- **This file (AGENTS.md)** = repo rules, architecture, definition of done.
-- **Skills** = reusable conditional workflows (e.g. `seo-insight-run-triage`, `shotstack-hosted-render-pipeline`). Create one when the same procedure recurs.
-- **Main session** = Captain: plan, prioritize, review evidence, decide promotion.
-- **Subagents / background jobs** = Crew: isolated reasoning (`delegate_task`) or long bounded execution (`terminal(background=True, notify_on_complete=True)`).
-
-### Dispatch rules
-- Use `delegate_task` for: architecture comparisons, code review, research synthesis.
-- Use background terminal for: pipeline runs, tests, long scripts.
-- Use `cronjob` for: recurring audits/refreshes.
-
-### Evidence rule
-Subagent summaries are **not** proof. Require the actual artifact path, run ID, or command output before accepting a result. This repo already produces run IDs and report paths — ask for them.
-
-### Rerun vs new run
-If a run failed at a specific stage, prefer re-running that stage (once a rerun capability exists) over starting from scratch. See the implementation plan for the "First Mate" orchestrator that adds resume/rerun.
+- The parent task owns architecture, integration, protected actions, and the
+  final completion claim.
+- `speedster` handles exact low-reasoning microtasks only.
+- `implementation_luna` handles bounded moderate implementation with tests.
+- `architect_sol` researches and drafts implementation-ready PRPs.
+- `release_steward` performs reviewed Git mechanics only; push still requires
+  current explicit user authorization.
+- Keep write sets disjoint and review delegated diffs before integration.
+- Subagent summaries are not proof. Require artifact paths, run IDs, diffs, or
+  command output.
+- Keep task state in the PRP, not in transcripts or this file.
 
 ---
 
