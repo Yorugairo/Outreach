@@ -2,7 +2,8 @@
 
 This file is the operating playbook for any agentic system (Hermes, Claude Code, Codex, OpenCode) working in this repo. It is the durable, always-loaded layer. Conditional workflows belong in skills, not here.
 
-Read this file first, then read [`docs/AGENT_START_HERE.md`](docs/AGENT_START_HERE.md).
+Read this file first, then read [`docs/AGENT_START_HERE.md`](docs/AGENT_START_HERE.md)
+and its authoritative [`docs/agent-context/SKILL_ROUTER.md`](docs/agent-context/SKILL_ROUTER.md).
 Load only the task route and PRP named there; do not preload the full docs tree.
 
 ---
@@ -38,6 +39,9 @@ DEFAULT_STAGES = [
     "fetching_pages",
     "pulling_search_intelligence",
     "scoring",
+    "scoring_technical_health",
+    "scoring_ai_readiness",
+    "scoring_conversion_readiness",
     "assembling_report",
 ]
 ```
@@ -55,7 +59,10 @@ Every stage emits a `RunStageEvent` (`src/models.py`) with `stage_name`, `status
 | `fetching_pages` | `PageAnalysisService` | `PageRecord` per analyzed URL |
 | `pulling_search_intelligence` | `SearchIntelligenceService` | keyword/SERP enrichment (skips if DataForSEO unconfigured) |
 | `scoring` | `ScorecardService` | metrics + `overall_score` |
-| `assembling_report` | `ReportAssemblyService` | `InsightReport` v1 JSON + Markdown |
+| `scoring_technical_health` | `TechnicalSEOHealthService` | issue-density Technical SEO Health v2 + Evidence Confidence |
+| `scoring_ai_readiness` | `AIReadinessV3Service` | separate versioned AEO/GEO/AIO readiness output |
+| `scoring_conversion_readiness` | `ConversionReadinessService` | deterministic, vertical-aware conversion evidence |
+| `assembling_report` | `ReportAssemblyService` | immutable v1/v2, technical, AI, and conversion reports |
 
 ---
 
@@ -66,8 +73,8 @@ A run is **not** "done" until artifacts exist on disk and are readable. The agen
 Before reporting a run complete, confirm ALL of:
 
 - [ ] `run.json` exists at `artifacts/seo_insight_runs/runs/<run_id>/run.json` with `status == "completed"`
-- [ ] All 6 stage events exist under `.../events/` with `status == "completed"`
-- [ ] `reports/v1.json` and `reports/v1.md` exist
+- [ ] All 9 v5 stage events exist under `.../events/` with `status == "completed"` (legacy/v3/v4 contracts retain 6/7/8)
+- [ ] `reports/v1.*`, `reports/v2.*`, `reports/seo-health-v2.*`, `reports/ai-v3.*`, and `reports/conversion-v1.*` exist for v5 runs
 - [ ] `summary` on the run contains `overall_score`
 - [ ] If DataForSEO was configured, search intelligence output is present; if not, the skip is recorded in the stage event
 
@@ -125,6 +132,14 @@ artifacts/seo_insight_runs/
     pages/<page_id>.json            # per-page SEO evidence
     reports/v1.json                 # structured report
     reports/v1.md                   # operator-readable report
+    reports/v2.json                 # commercial evidence report
+    reports/v2.md
+    reports/seo-health-v2.json      # issue-density technical health
+    reports/seo-health-v2.md
+    reports/ai-v3.json              # current AI Readiness evidence
+    reports/ai-v3.md
+    reports/conversion-v1.json      # deterministic conversion readiness
+    reports/conversion-v1.md
 ```
 
 Never hand-edit artifacts manually. They are produced by the repository layer only.
@@ -150,9 +165,14 @@ Active plans live under `.claude/PRPs/plans/` as agent-neutral durable state.
 
 - The parent task owns architecture, integration, protected actions, and the
   final completion claim.
-- `speedster` handles exact low-reasoning microtasks only.
+- `speedster` handles exact deterministic microtasks only.
+- `junior_developer` handles bounded limited implementation, scoped fixes,
+  explicit line changes, and small reads/writes.
 - `implementation_luna` handles bounded moderate implementation with tests.
 - `architect_sol` researches and drafts implementation-ready PRPs.
+- `explorer` performs read-only repository tracing and evidence gathering.
+- `docs_researcher` performs read-only primary-documentation verification.
+- `reviewer` performs read-only correctness, security, and regression review.
 - `release_steward` performs reviewed Git mechanics only; push still requires
   current explicit user authorization.
 - Keep write sets disjoint and review delegated diffs before integration.

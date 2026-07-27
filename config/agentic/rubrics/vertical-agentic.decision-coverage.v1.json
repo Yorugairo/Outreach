@@ -1,0 +1,8 @@
+{
+  "rubric_version": "vertical-agentic.decision-coverage.v1",
+  "statuses": ["answered", "partial", "ambiguous", "contradicted", "missing", "unknown"],
+  "positive_statuses_require_evidence": ["answered", "partial", "ambiguous", "contradicted"],
+  "completeness_units": {"answered": 1.0, "partial": 0.5, "ambiguous": 0.0, "contradicted": 0.0, "missing": 0.0, "unknown": 0.0},
+  "unsupported_question_policy": "Ignore IDs not present in the reviewed vertical pack and record a limitation.",
+  "sensitive_claim_policy": "Preserve the result for review; never mark a sensitive fact customer-safe automatically."
+}

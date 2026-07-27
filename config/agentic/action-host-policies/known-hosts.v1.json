@@ -1,0 +1,13 @@
+{
+  "version": "known-hosts.v1",
+  "same_origin": true,
+  "vertical_known_hosts": {
+    "national_bjj_registry": [],
+    "one_trade_network": []
+  },
+  "notes": [
+    "Target origin is always included.",
+    "External action hosts enter a successor policy version only after operator approval.",
+    "Subdomains of an allowed registrable host are permitted by the runtime policy."
+  ]
+}

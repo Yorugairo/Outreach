@@ -1,0 +1,120 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "vertical-agentic-evidence.v1",
+  "title": "Vertical Agentic Evidence Candidate",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "work_kind",
+    "source_sha256",
+    "items",
+    "limitations"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "vertical-agentic-evidence.v1"
+    },
+    "work_kind": {
+      "enum": [
+        "business_fact_ledger",
+        "decision_coverage",
+        "target_journey",
+        "competitor_journey",
+        "ai_representation_accuracy",
+        "owner_diagnostic",
+        "remediation_blueprint"
+      ]
+    },
+    "source_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "items": {
+      "type": "array",
+      "maxItems": 200,
+      "items": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "id",
+          "status",
+          "evidence_refs"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "status": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64
+          },
+          "evidence_refs": {
+            "type": "array",
+            "maxItems": 20,
+            "items": {
+              "$ref": "#/$defs/evidence_ref"
+            }
+          }
+        }
+      }
+    },
+    "limitations": {
+      "type": "array",
+      "maxItems": 50,
+      "items": {
+        "type": "string",
+        "maxLength": 500
+      }
+    }
+  },
+  "$defs": {
+    "evidence_ref": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "artifact_ref",
+        "reference_kind"
+      ],
+      "properties": {
+        "artifact_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "reference_kind": {
+          "enum": [
+            "source_span",
+            "persisted_field",
+            "dom",
+            "screenshot",
+            "provider_artifact"
+          ]
+        },
+        "exact_span": {
+          "type": "string",
+          "maxLength": 2000
+        },
+        "field_path": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "dom_ref": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "screenshot_ref": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "response_span": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      }
+    }
+  }
+}

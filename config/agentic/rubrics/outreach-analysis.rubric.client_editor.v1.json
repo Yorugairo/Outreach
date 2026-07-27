@@ -1,0 +1,29 @@
+{
+  "id": "outreach-analysis.rubric.client_editor.v1",
+  "pass_name": "client_editor",
+  "version": 1,
+  "schema_version": "agentic-assessment.v1",
+  "scoring": {
+    "criteria": [
+      "clarity",
+      "customer_safety",
+      "evidence_linkage",
+      "actionability"
+    ],
+    "weights": {
+      "clarity": 0.30,
+      "customer_safety": 0.35,
+      "evidence_linkage": 0.20,
+      "actionability": 0.15
+    }
+  },
+  "acceptance": {
+    "require_customer_safe": true,
+    "minimum_evidence_precision": 0.9
+  },
+  "disallow": [
+    "marketing_language",
+    "unsafe_instructions",
+    "unsupported_estimates"
+  ]
+}

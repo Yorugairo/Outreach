@@ -1,18 +1,76 @@
 from __future__ import annotations
 
+import re
 from dataclasses import asdict, dataclass
 from typing import Any, Mapping
 from urllib.parse import urlsplit, urlunsplit
 
-from src.models import InsightReport, InsightRun, PageRecord, SEOTarget
+from src.models import InsightReport, InsightRun, PageRecord, ProductSurfaceResult, SEOTarget
+from src.services.ai_readiness_service import AIReadinessOutput
 from src.services.crawl_discovery_service import CrawlDiscoveryOutput, sitemap_evidence_status
 from src.services.finding_service import FindingService
 from src.services.page_analysis_service import PageAnalysisOutput
 from src.services.search_intelligence_service import (
     SearchIntelligenceOutput,
     TargetContext,
+    build_search_evidence_view,
     validate_target_search_evidence,
 )
+from src.services.offsite_authority_service import build_offsite_authority_view
+
+
+_CLIENT_EMAIL_RE = re.compile(
+    r"\b[A-Z0-9._%+\-]+@[A-Z0-9.\-]+\.[A-Z]{2,}\b",
+    re.IGNORECASE,
+)
+_CLIENT_PHONE_RE = re.compile(
+    r"(?<!\d)(?:\+?1[\s.\-]?)?(?:\(\d{3}\)|\d{3})[\s.\-]\d{3}[\s.\-]\d{4}(?!\d)"
+)
+_CLIENT_PRIVATE_KEYS = {"raw_html", "phone_numbers", "email_addresses"}
+
+
+def _redact_client_text(value: str) -> str:
+    value = _CLIENT_EMAIL_RE.sub("[email redacted]", value)
+    return _CLIENT_PHONE_RE.sub("[phone redacted]", value)
+
+
+def _client_safe_payload(value: Any, *, key: str | None = None) -> Any:
+    """Remove direct contact values and raw source material from client reports."""
+
+    if isinstance(value, dict):
+        result: dict[str, Any] = {}
+        for child_key, child_value in value.items():
+            normalized_key = str(child_key).casefold()
+            if normalized_key in _CLIENT_PRIVATE_KEYS:
+                if isinstance(child_value, list):
+                    count_key = (
+                        "phone_number_count"
+                        if normalized_key == "phone_numbers"
+                        else "email_address_count"
+                        if normalized_key == "email_addresses"
+                        else None
+                    )
+                    if count_key and count_key not in value:
+                        result[count_key] = len(child_value)
+                continue
+            result[str(child_key)] = _client_safe_payload(
+                child_value,
+                key=normalized_key,
+            )
+        return result
+    if isinstance(value, list):
+        return [_client_safe_payload(item, key=key) for item in value]
+    if isinstance(value, str):
+        if key in {"href", "action"}:
+            parsed = urlsplit(value)
+            if parsed.scheme.casefold() in {"mailto", "tel"}:
+                return "[contact route redacted]"
+            if parsed.scheme.casefold() in {"http", "https"}:
+                value = urlunsplit(
+                    (parsed.scheme, parsed.netloc, parsed.path, "", "")
+                )
+        return _redact_client_text(value)
+    return value
 
 
 def _markdown_label(value: str) -> str:
@@ -149,6 +207,231 @@ class ScorecardService:
 
 
 class ReportAssemblyService:
+    def build_technical_health_report(
+        self,
+        target: SEOTarget,
+        run: InsightRun,
+        output: ProductSurfaceResult,
+    ) -> InsightReport:
+        payload = _client_safe_payload(output.to_dict())
+        payload["target"] = {
+            "id": target.id,
+            "normalized_url": target.normalized_url,
+            "normalized_domain": target.normalized_domain,
+        }
+        payload["run_id"] = run.id
+        payload["attempt_id"] = run.attempt_id
+        lines = [
+            f"# Technical SEO Health — {target.normalized_domain}",
+            "",
+            f"- Score: {payload['score']}/100",
+            f"- Formula: {payload['version']}",
+            f"- Evidence completeness: {payload['completeness_percent']}% ({payload['status']})",
+            f"- Evidence Confidence: {payload['evidence_confidence']}%",
+            "- Scope: collected-site technical health; rankings are reported separately.",
+            "",
+            "## Families",
+        ]
+        for name, family in payload["families"].items():
+            lines.append(
+                f"- {_markdown_label(name)}: {family.get('score')} "
+                f"({family.get('completeness_percent')}% complete)"
+            )
+        lines.extend(["", "## Priority actions"])
+        for item in payload.get("recommendations", []):
+            lines.append(
+                f"- **{item['check_id']}** — {item['action']} "
+                f"({item['affected_page_count']} affected pages)"
+            )
+        if payload.get("warnings"):
+            lines.extend(["", "## Evidence limits"])
+            lines.extend(f"- {warning}" for warning in payload["warnings"])
+        markdown = "\n".join(lines) + "\n"
+        return InsightReport(
+            insight_run_id=run.id,
+            seo_target_id=target.id,
+            report_version="seo-health-v2",
+            attempt_id=run.attempt_id,
+            report_status="complete",
+            headline=f"Technical SEO Health for {target.normalized_domain}",
+            executive_summary=(
+                f"Technical SEO Health is {output.score}/100 at "
+                f"{output.completeness_percent}% evidence completeness."
+            ),
+            key_actions=output.recommendations,
+            report_payload=payload,
+            export_json=payload,
+            export_markdown=markdown,
+        )
+
+    def build_ai_report(
+        self,
+        target: SEOTarget,
+        run: InsightRun,
+        output: AIReadinessOutput,
+    ) -> InsightReport:
+        payload = _client_safe_payload(output.to_dict())
+        payload["target"] = {
+            "id": target.id,
+            "normalized_url": target.normalized_url,
+            "normalized_domain": target.normalized_domain,
+        }
+        payload["run_id"] = run.id
+        checkpoint_by_check = {
+            "crawler_access": (
+                "discovering_sitemaps",
+                "payload.crawl.robots_access",
+            ),
+            "link_health": ("fetching_pages", "payload.errors"),
+            "external_corroboration": (
+                "pulling_search_intelligence",
+                "payload.payload.external_mentions",
+            ),
+        }
+        for cohort in payload.get("cohorts", {}).values():
+            for dimension in cohort.get("dimensions", {}).values():
+                for check in dimension.get("checks", []):
+                    evidence_observed = check.pop(
+                        "evidence_observed",
+                        check.get("score"),
+                    )
+                    evidence_field = check.pop("evidence_field", None)
+                    if check.get("evidence_refs"):
+                        continue
+                    contract = checkpoint_by_check.get(check.get("id"))
+                    if contract:
+                        stage, field = contract
+                        field = evidence_field or field
+                        check["evidence_refs"] = [{
+                            "artifact_path": f"checkpoints/{run.attempt_id}/{stage}.json",
+                            "field": field,
+                            "reason": check.get("observation", "Persisted scoring evidence."),
+                            "observed": evidence_observed,
+                        }]
+        markdown = _redact_client_text(self._markdown_ai(target, payload))
+        report_version = (
+            "ai-v3"
+            if output.score_version == "ai-readiness.v3"
+            else "ai-v2"
+        )
+        return InsightReport(
+            insight_run_id=run.id,
+            seo_target_id=target.id,
+            report_version=report_version,
+            attempt_id=run.attempt_id,
+            report_status="complete",
+            headline=f"AI Readiness for {target.normalized_domain}",
+            executive_summary=(
+                f"AI Readiness is {output.score}/100 ({output.presentation_label}) at "
+                f"{output.completeness_percent}% evidence completeness. "
+                "Readiness does not prove AI citation or ranking."
+            ),
+            key_actions=output.recommendations,
+            report_payload=payload,
+            export_json=payload,
+            export_markdown=markdown,
+        )
+
+    def build_conversion_readiness_report(
+        self,
+        target: SEOTarget,
+        run: InsightRun,
+        output: ProductSurfaceResult,
+    ) -> InsightReport:
+        payload = _client_safe_payload(output.to_dict())
+        payload["target"] = {
+            "id": target.id,
+            "normalized_url": target.normalized_url,
+            "normalized_domain": target.normalized_domain,
+        }
+        payload["run_id"] = run.id
+        payload["attempt_id"] = run.attempt_id
+        lines = [
+            f"# Conversion Readiness — {target.normalized_domain}",
+            "",
+            f"- Score: {payload['score']}/100",
+            f"- Formula: {payload['version']}",
+            (
+                f"- Evidence completeness: {payload['completeness_percent']}% "
+                f"({payload['status']})"
+            ),
+            f"- Evidence Confidence: {payload['evidence_confidence']}%",
+            (
+                "- Scope: visible website paths only; this does not measure lead "
+                "quality, attendance, close rate, CRM performance, or revenue."
+            ),
+            "",
+            "## Checks",
+        ]
+        for check in payload.get("checks", []):
+            lines.append(
+                f"- {_markdown_label(check['check_id'])}: "
+                f"{check.get('score')} ({check.get('status')})"
+            )
+        if payload.get("recommendations"):
+            lines.extend(["", "## Priority actions"])
+            for item in payload["recommendations"]:
+                lines.append(
+                    f"- **{_markdown_label(item['check_id'])}** — "
+                    f"{item['action']}"
+                )
+        if payload.get("warnings"):
+            lines.extend(["", "## Evidence limits"])
+            lines.extend(f"- {warning}" for warning in payload["warnings"])
+        markdown = _redact_client_text("\n".join(lines) + "\n")
+        return InsightReport(
+            insight_run_id=run.id,
+            seo_target_id=target.id,
+            report_version="conversion-v1",
+            attempt_id=run.attempt_id,
+            report_status="complete",
+            headline=f"Conversion Readiness for {target.normalized_domain}",
+            executive_summary=(
+                f"Conversion Readiness is {output.score}/100 at "
+                f"{output.completeness_percent}% evidence completeness. "
+                "It measures visible website path readiness, not funnel results."
+            ),
+            key_actions=output.recommendations,
+            report_payload=payload,
+            export_json=payload,
+            export_markdown=markdown,
+        )
+
+    @staticmethod
+    def _markdown_ai(target: SEOTarget, payload: dict[str, Any]) -> str:
+        lines = [
+            f"# AI Readiness — {target.normalized_domain}",
+            "",
+            f"- Score: {payload['score']}/100 ({payload['presentation_label']})",
+            f"- Formula: {payload['score_version']} — 40% AEO, 35% GEO, 25% AIO",
+            f"- Evidence completeness: {payload['completeness_percent']}% ({payload['status']})",
+            f"- Customer-claim eligible: {payload['customer_claim_eligible']}",
+            "- Scope: readiness only; this does not prove AI citation, visibility, or ranking.",
+            "",
+            "## Dimensions",
+        ]
+        for name in ("aeo", "geo", "aio"):
+            dimension = payload["dimensions"].get(name, {})
+            lines.append(f"- {name.upper()}: {dimension.get('score')} — {dimension.get('description', '')}")
+        lines.extend(["", "## Page cohorts"])
+        for name in ("core", "supporting"):
+            cohort = payload["cohorts"].get(name, {})
+            lines.append(
+                f"- {name.capitalize()}: {cohort.get('score')} "
+                f"({cohort.get('completeness_percent', 0)}% complete)"
+            )
+        lines.extend(["", "## Prioritized actions"])
+        for item in payload.get("recommendations", []):
+            lines.append(f"- **{item['title']}** — {item['action']}")
+        if payload.get("broken_links"):
+            lines.extend(["", "## Conclusive crawl errors"])
+            for item in payload["broken_links"]:
+                lines.append(f"- {item.get('url')}: {item.get('http_status')} {item.get('error', '')}")
+        if payload.get("warnings"):
+            lines.extend(["", "## Evidence limits"])
+            lines.extend(f"- {warning}" for warning in payload["warnings"])
+        return "\n".join(lines) + "\n"
+
     def build_report(
         self,
         target: SEOTarget,
@@ -180,7 +463,11 @@ class ReportAssemblyService:
             "scorecard": asdict(scorecard),
             "key_actions": key_actions,
         }
-        markdown = self._markdown(target, scorecard, key_actions)
+        payload = _client_safe_payload(payload)
+        safe_key_actions = _client_safe_payload(key_actions)
+        markdown = _redact_client_text(
+            self._markdown(target, scorecard, key_actions)
+        )
         return InsightReport(
             insight_run_id=run.id,
             seo_target_id=target.id,
@@ -188,7 +475,7 @@ class ReportAssemblyService:
             report_status="complete",
             headline=f"SEO Insight Run for {target.normalized_domain}",
             executive_summary=f"Generated a scaffolded SEO insight run for {target.normalized_domain} with {len(pages.pages)} analyzed pages.",
-            key_actions=key_actions,
+            key_actions=safe_key_actions,
             report_payload=payload,
             export_json=payload,
             export_markdown=markdown,
@@ -207,6 +494,16 @@ class ReportAssemblyService:
         stage_artifacts: Mapping[str, str],
     ) -> InsightReport:
         context = TargetContext.from_value(target_context)
+        search_visibility = build_search_evidence_view(
+            search,
+            context,
+            checkpoint_path=stage_artifacts.get("pulling_search_intelligence"),
+        )
+        offsite_authority = build_offsite_authority_view(
+            search,
+            context,
+            checkpoint_path=stage_artifacts.get("pulling_search_intelligence"),
+        )
         findings = FindingService().build_findings(
             crawl,
             pages,
@@ -280,6 +577,8 @@ class ReportAssemblyService:
                 "skipped_reason": search.skipped_reason,
                 "payload": search.payload,
             },
+            "search_visibility": search_visibility,
+            "offsite_authority": offsite_authority,
             "target_context": context.to_dict(),
             "scorecard": asdict(scorecard),
             "findings": finding_payloads,
@@ -288,7 +587,19 @@ class ReportAssemblyService:
             "next_best_action": next_best_action,
             "key_actions": key_actions,
         }
-        markdown = self._markdown_v2(target, executive_answer, finding_payloads, method_and_limits)
+        payload = _client_safe_payload(payload)
+        safe_key_actions = _client_safe_payload(key_actions)
+        safe_executive_answer = _redact_client_text(executive_answer)
+        markdown = _redact_client_text(
+            self._markdown_v2(
+                target,
+                executive_answer,
+                finding_payloads,
+                method_and_limits,
+                search_visibility,
+                offsite_authority,
+            )
+        )
         return InsightReport(
             insight_run_id=run.id,
             seo_target_id=target.id,
@@ -296,8 +607,8 @@ class ReportAssemblyService:
             attempt_id=run.attempt_id,
             report_status="complete",
             headline=f"Evidence-backed SEO opportunity for {target.normalized_domain}",
-            executive_summary=executive_answer,
-            key_actions=key_actions,
+            executive_summary=safe_executive_answer,
+            key_actions=safe_key_actions,
             report_payload=payload,
             export_json=payload,
             export_markdown=markdown,
@@ -309,6 +620,8 @@ class ReportAssemblyService:
         executive_answer: str,
         findings: list[dict[str, Any]],
         method_and_limits: dict[str, Any],
+        search_visibility: dict[str, Any] | None = None,
+        offsite_authority: dict[str, Any] | None = None,
     ) -> str:
         lines = [
             f"# Evidence-backed SEO opportunity — {target.normalized_domain}",
@@ -317,6 +630,86 @@ class ReportAssemblyService:
             executive_answer,
             "",
         ]
+        search_view = search_visibility or {}
+        lines.extend(
+            [
+                "## Keywords and Google rankings",
+                "",
+                f"- Evidence status: {_markdown_label(str(search_view.get('status', 'unknown')))}",
+                f"- Search visibility: {search_view.get('visibility_score') if search_view.get('visibility_score') is not None else 'Unknown'}",
+                f"- Market/device: {search_view.get('market') or 'Unknown'} / {search_view.get('device') or 'Unknown'}",
+                f"- Snapshot date: {search_view.get('snapshot_date') or 'Unknown'}",
+                f"- Provider calls: {search_view.get('provider_call_count', 0)}",
+                "",
+            ]
+        )
+        search_rows = search_view.get("keywords", [])
+        if search_rows:
+            lines.extend(
+                [
+                    "| Keyword | Volume | Intent | Organic position | Overall SERP position | Ranking page | Opportunity |",
+                    "| --- | ---: | --- | ---: | ---: | --- | --- |",
+                ]
+            )
+            for row in search_rows:
+                if not isinstance(row, Mapping):
+                    continue
+                position = row.get("observed_rank")
+                if row.get("checked") and position is None:
+                    position = "Not observed in sampled top 100"
+                elif not row.get("checked"):
+                    position = "Not checked"
+                lines.append(
+                    "| "
+                    + " | ".join(
+                        str("Unknown" if value is None or value == "" else value).replace("|", "\\|")
+                        for value in (
+                            row.get("keyword"),
+                            row.get("search_volume"),
+                            row.get("intent"),
+                            position,
+                            row.get("observed_absolute_position"),
+                            row.get("observed_url"),
+                            row.get("opportunity_label"),
+                        )
+                    )
+                    + " |"
+                )
+        else:
+            lines.append("No target-specific paid keyword or Google ranking evidence was collected.")
+        for limitation in search_view.get("limitations", []):
+            lines.append(f"- Evidence limit: {limitation}")
+        lines.append("")
+        if offsite_authority is not None:
+            authority = offsite_authority
+            lines.extend(
+                [
+                    "## Off-site authority",
+                    "",
+                    f"- Evidence status: {_markdown_label(str(authority.get('status', 'unknown')))}",
+                    (
+                        f"- DataForSEO Link Rank: {authority.get('link_rank')}/100"
+                        if authority.get("link_rank") is not None
+                        else "- DataForSEO Link Rank: Unknown"
+                    ),
+                    f"- Backlinks: {authority.get('backlinks') if authority.get('backlinks') is not None else 'Unknown'}",
+                    f"- Referring domains: {authority.get('referring_domains') if authority.get('referring_domains') is not None else 'Unknown'}",
+                    f"- Referring main domains: {authority.get('referring_main_domains') if authority.get('referring_main_domains') is not None else 'Unknown'}",
+                    f"- Referring pages: {authority.get('referring_pages') if authority.get('referring_pages') is not None else 'Unknown'}",
+                    f"- Referring IPs/subnets: {authority.get('referring_ips') if authority.get('referring_ips') is not None else 'Unknown'} / {authority.get('referring_subnets') if authority.get('referring_subnets') is not None else 'Unknown'}",
+                    (
+                        f"- Rel=nofollow referring domains: {authority.get('referring_domains_nofollow_percent')}%"
+                        if authority.get("referring_domains_nofollow_percent") is not None
+                        else "- Rel=nofollow referring domains: Unknown"
+                    ),
+                    f"- Backlink spam score: {authority.get('backlinks_spam_score') if authority.get('backlinks_spam_score') is not None else 'Unknown'}",
+                    f"- Snapshot date: {authority.get('snapshot_date') or 'Unknown'}",
+                    "",
+                ]
+            )
+            for limitation in authority.get("limitations", []):
+                lines.append(f"- Evidence limit: {limitation}")
+            lines.append("")
         prospect_issues = [item for item in findings if item["finding_type"] == "prospect_issue"]
         evidence_limits = [item for item in findings if item["finding_type"] == "evidence_limit"]
         if not prospect_issues:

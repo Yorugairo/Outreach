@@ -4,7 +4,7 @@
     "url": "python.org",
     "mode": "quick",
     "max_pages": 1,
-    "expected_stage_count": 6,
+    "expected_stage_count": 9,
     "requires_recommendation_evidence_refs": true,
     "requires_run_limits": true
   },
@@ -13,7 +13,7 @@
     "url": "example.com",
     "mode": "quick",
     "max_pages": 1,
-    "expected_stage_count": 6,
+    "expected_stage_count": 9,
     "requires_recommendation_evidence_refs": true,
     "requires_run_limits": true
   },
@@ -22,7 +22,7 @@
     "url": "iana.org",
     "mode": "quick",
     "max_pages": 1,
-    "expected_stage_count": 6,
+    "expected_stage_count": 9,
     "requires_recommendation_evidence_refs": true,
     "requires_run_limits": true
   }

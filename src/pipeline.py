@@ -7,9 +7,23 @@ from pathlib import Path
 from typing import Any, Callable
 
 from src.config import AppConfig
-from src.models import DiscoveredAsset, InsightRun, PageRecord, RunStageEvent, SEOTarget, StageCheckpoint, new_id
+from src.models import (
+    DiscoveredAsset,
+    InsightRun,
+    PageRecord,
+    ProductSurfaceResult,
+    RunStageEvent,
+    SEOTarget,
+    StageCheckpoint,
+    new_id,
+)
 from src.repositories.base import InsightRepository
+from src.services.ai_readiness_service import (
+    AIReadinessOutput,
+    AIReadinessV3Service,
+)
 from src.services.crawl_discovery_service import CrawlDiscoveryOutput, CrawlDiscoveryService
+from src.services.conversion_readiness_service import ConversionReadinessService
 from src.services.page_analysis_service import PageAnalysisOutput, PageAnalysisService
 from src.services.reporting_service import ReportAssemblyService, ScorecardOutput, ScorecardService
 from src.services.search_intelligence_service import (
@@ -18,9 +32,10 @@ from src.services.search_intelligence_service import (
     TargetContext,
 )
 from src.stage_errors import classify_stage_error, is_retryable
+from src.services.technical_seo_health_service import TechnicalSEOHealthService
 
 
-DEFAULT_STAGES = [
+LEGACY_STAGES = [
     "normalizing_target",
     "discovering_sitemaps",
     "fetching_pages",
@@ -28,6 +43,19 @@ DEFAULT_STAGES = [
     "scoring",
     "assembling_report",
 ]
+V3_STAGES = [*LEGACY_STAGES[:-1], "scoring_ai_readiness", LEGACY_STAGES[-1]]
+V4_STAGES = [
+    *LEGACY_STAGES[:-1],
+    "scoring_technical_health",
+    "scoring_ai_readiness",
+    LEGACY_STAGES[-1],
+]
+DEFAULT_STAGES = [
+    *V4_STAGES[:-1],
+    "scoring_conversion_readiness",
+    LEGACY_STAGES[-1],
+]
+PIPELINE_CONTRACT_VERSION = 5
 STAGE_ORDER = {stage: index + 1 for index, stage in enumerate(DEFAULT_STAGES)}
 LEASE_SECONDS = 15 * 60
 
@@ -48,9 +76,12 @@ class InsightRunPipeline:
         self.page_analysis = PageAnalysisService(timeout_seconds=config.dataforseo.timeout_seconds)
         self.search_intelligence = SearchIntelligenceService(config, artifact_dir=str(self.artifact_root / "dataforseo_raw"))
         self.scorecards = ScorecardService()
+        self.technical_health = TechnicalSEOHealthService()
+        self.ai_readiness = AIReadinessV3Service()
+        self.conversion_readiness = ConversionReadinessService()
         self.reporting = ReportAssemblyService()
 
-    def run(self, url: str, mode: str = "standard", max_pages: int = 5) -> PipelineResult:
+    def run(self, url: str, mode: str = "standard", max_pages: int = 100) -> PipelineResult:
         target = self.target_intake.build_target(url)
         self.repository.upsert_target(target)
 
@@ -72,6 +103,7 @@ class InsightRunPipeline:
                 "budget": self._budget_snapshot(max_pages),
             },
             config_snapshot={
+                "pipeline_contract_version": PIPELINE_CONTRACT_VERSION,
                 "dataforseo_configured": self.config.dataforseo.configured,
                 "paid_api_approved": self.config.approval.allow_paid_api_calls,
                 "default_location_code": self.config.dataforseo.default_location_code,
@@ -86,7 +118,7 @@ class InsightRunPipeline:
         self.repository.update_run(run)
         return self._execute_stages(run, target, mode=mode, max_pages=max_pages, start_stage="normalizing_target")
 
-    def rerun_from_stage(self, run: InsightRun, stage_name: str, max_pages: int = 5) -> PipelineResult:
+    def rerun_from_stage(self, run: InsightRun, stage_name: str, max_pages: int = 100) -> PipelineResult:
         if stage_name not in DEFAULT_STAGES:
             raise ValueError(f"unknown stage {stage_name}")
 
@@ -105,6 +137,10 @@ class InsightRunPipeline:
         self._inherit_checkpoints(run.id, source_attempt_id, run.attempt_id, stage_name)
         run.input_payload.setdefault("limits", {}).update(self._run_limits(max_pages))
         run.input_payload.setdefault("budget", {}).update(self._budget_snapshot(max_pages))
+        # A rerun is a new attempt executed by the current pipeline. Preserve the
+        # historical events/checkpoints while making the active attempt validate
+        # against the contract that actually produced it.
+        run.config_snapshot["pipeline_contract_version"] = PIPELINE_CONTRACT_VERSION
         run.config_snapshot["run_limits"] = self._run_limits(max_pages)
         run.config_snapshot["paid_api_approved"] = self.config.approval.allow_paid_api_calls
         self._acquire_lease(run)
@@ -178,20 +214,30 @@ class InsightRunPipeline:
                 crawl_output, assets = self._load_crawl_checkpoint(run)
                 self._record_inherited_stage(run, "discovering_sitemaps", self._summarize_crawl((crawl_output, assets)))
 
-            urls_to_analyze = [target.normalized_url, *crawl_output.candidate_page_urls][:max_pages]
             if should_record("fetching_pages"):
                 page_output = self._run_stage(
                     run,
                     "fetching_pages",
                     STAGE_ORDER["fetching_pages"],
-                    lambda: self._analyze_and_save_pages(target, run.id, urls_to_analyze, run.attempt_id),
-                    {"url_count": len(urls_to_analyze)},
+                    lambda: self._analyze_and_save_pages(
+                        target,
+                        run.id,
+                        crawl_output.candidate_page_urls,
+                        run.attempt_id,
+                        max_pages=max_pages,
+                    ),
+                    {"page_limit": max_pages},
                     summarize=self._summarize_pages,
                 )
             else:
                 page_output = self._load_page_checkpoint(run)
                 self._record_inherited_stage(run, "fetching_pages", self._summarize_pages(page_output))
 
+            target_context = replace(
+                target_context,
+                entity_name=self._entity_name(page_output),
+                entity_name_source="page_evidence" if self._entity_name(page_output) else None,
+            )
             if should_record("pulling_search_intelligence"):
                 search_output = self._run_stage(
                     run,
@@ -224,6 +270,120 @@ class InsightRunPipeline:
                 scorecard = self._load_scorecard_checkpoint(run)
                 self._record_inherited_stage(run, "scoring", self._summarize_scorecard(scorecard))
 
+            if should_record("scoring_technical_health"):
+                technical_health = self._run_stage(
+                    run,
+                    "scoring_technical_health",
+                    STAGE_ORDER["scoring_technical_health"],
+                    lambda: self.technical_health.build(
+                        crawl_output,
+                        page_output,
+                        page_limit=max_pages,
+                        attempt_id=run.attempt_id,
+                    ),
+                    {},
+                    summarize=self._summarize_technical_health,
+                )
+            else:
+                technical_health = self._load_technical_health_checkpoint(run)
+                self._record_inherited_stage(
+                    run,
+                    "scoring_technical_health",
+                    self._summarize_technical_health(technical_health),
+                )
+
+            if should_record("scoring_ai_readiness"):
+                ai_readiness = self._run_stage(
+                    run,
+                    "scoring_ai_readiness",
+                    STAGE_ORDER["scoring_ai_readiness"],
+                    lambda: self.ai_readiness.build(
+                        crawl_output,
+                        page_output,
+                        search_output,
+                        page_limit=max_pages,
+                        attempt_id=run.attempt_id,
+                    ),
+                    {},
+                    summarize=self._summarize_ai_readiness,
+                )
+            else:
+                checkpoint = self.repository.get_checkpoint(
+                    run.id,
+                    run.attempt_id,
+                    "scoring_ai_readiness",
+                )
+                if checkpoint is None:
+                    ai_readiness = self._run_stage(
+                        run,
+                        "scoring_ai_readiness",
+                        STAGE_ORDER["scoring_ai_readiness"],
+                        lambda: self.ai_readiness.build(
+                            crawl_output,
+                            page_output,
+                            search_output,
+                            page_limit=max_pages,
+                            attempt_id=run.attempt_id,
+                        ),
+                        {"compatibility_upgrade": True},
+                        summarize=self._summarize_ai_readiness,
+                    )
+                else:
+                    ai_readiness = self._load_ai_readiness_checkpoint(run)
+                    self._record_inherited_stage(
+                        run,
+                        "scoring_ai_readiness",
+                        self._summarize_ai_readiness(ai_readiness),
+                    )
+
+            vertical_id = self._vertical_id_for_domain(target.normalized_domain)
+            if should_record("scoring_conversion_readiness"):
+                conversion_readiness = self._run_stage(
+                    run,
+                    "scoring_conversion_readiness",
+                    STAGE_ORDER["scoring_conversion_readiness"],
+                    lambda: self.conversion_readiness.build(
+                        page_output,
+                        vertical_id,
+                        page_limit=max_pages,
+                    ),
+                    {"vertical_id": vertical_id},
+                    summarize=self._summarize_conversion_readiness,
+                )
+            else:
+                checkpoint = self.repository.get_checkpoint(
+                    run.id,
+                    run.attempt_id,
+                    "scoring_conversion_readiness",
+                )
+                if checkpoint is None:
+                    conversion_readiness = self._run_stage(
+                        run,
+                        "scoring_conversion_readiness",
+                        STAGE_ORDER["scoring_conversion_readiness"],
+                        lambda: self.conversion_readiness.build(
+                            page_output,
+                            vertical_id,
+                            page_limit=max_pages,
+                        ),
+                        {
+                            "vertical_id": vertical_id,
+                            "compatibility_upgrade": True,
+                        },
+                        summarize=self._summarize_conversion_readiness,
+                    )
+                else:
+                    conversion_readiness = (
+                        self._load_conversion_readiness_checkpoint(run)
+                    )
+                    self._record_inherited_stage(
+                        run,
+                        "scoring_conversion_readiness",
+                        self._summarize_conversion_readiness(
+                            conversion_readiness
+                        ),
+                    )
+
             final_summary = {
                 "sitemap_count": len(crawl_output.sitemap_urls),
                 "page_count": len(page_output.pages),
@@ -231,13 +391,37 @@ class InsightRunPipeline:
                 "search_configured": search_output.configured,
                 "search_approved": search_output.approved,
                 "overall_score": scorecard.overall_score,
+                "technical_seo_health_score": technical_health.score,
+                "technical_seo_health_completeness": technical_health.completeness_percent,
+                "technical_seo_health_status": technical_health.status,
+                "technical_seo_health_version": technical_health.version,
+                "evidence_confidence": technical_health.evidence_confidence,
+                "evidence_confidence_version": technical_health.metrics.get(
+                    "evidence_confidence_version"
+                ),
+                "ai_readiness_score": ai_readiness.score,
+                "ai_readiness_completeness": ai_readiness.completeness_percent,
+                "ai_readiness_status": ai_readiness.status,
+                "ai_readiness_version": ai_readiness.score_version,
+                "conversion_readiness_score": conversion_readiness.score,
+                "conversion_readiness_completeness": (
+                    conversion_readiness.completeness_percent
+                ),
+                "conversion_readiness_status": conversion_readiness.status,
+                "conversion_readiness_version": conversion_readiness.version,
                 "score_completeness_percent": scorecard.completeness_percent,
                 "scored_dimensions": scorecard.scored_dimensions,
                 "score_dimension_status": scorecard.dimension_status,
                 "score_warnings": scorecard.warnings,
                 "limits": run.input_payload.get("limits", {}),
                 "budget": run.input_payload.get("budget", {}),
-                "report_versions": ["v1", "v2"],
+                "report_versions": [
+                    "v1",
+                    "v2",
+                    "seo-health-v2",
+                    "ai-v3",
+                    "conversion-v1",
+                ],
                 "primary_report_version": "v2",
                 "artifact_paths": [
                     f"runs/{run.id}/run.json",
@@ -245,6 +429,12 @@ class InsightRunPipeline:
                     f"runs/{run.id}/reports/v1.md",
                     f"runs/{run.id}/reports/v2.json",
                     f"runs/{run.id}/reports/v2.md",
+                    f"runs/{run.id}/reports/seo-health-v2.json",
+                    f"runs/{run.id}/reports/seo-health-v2.md",
+                    f"runs/{run.id}/reports/ai-v3.json",
+                    f"runs/{run.id}/reports/ai-v3.md",
+                    f"runs/{run.id}/reports/conversion-v1.json",
+                    f"runs/{run.id}/reports/conversion-v1.md",
                 ],
             }
             final_completed_at = self._now()
@@ -261,6 +451,9 @@ class InsightRunPipeline:
                         page_output,
                         search_output,
                         scorecard,
+                        technical_health,
+                        ai_readiness,
+                        conversion_readiness,
                         target_context=target_context,
                         final_summary=final_summary,
                         completed_at=final_completed_at,
@@ -268,13 +461,25 @@ class InsightRunPipeline:
                     {},
                     summarize=lambda saved_report: {
                         "report_version": saved_report.report_version,
-                        "report_versions": ["v1", "v2"],
+                        "report_versions": [
+                            "v1",
+                            "v2",
+                            "seo-health-v2",
+                            "ai-v3",
+                            "conversion-v1",
+                        ],
                         "primary_report_version": "v2",
                         "artifact_paths": [
                             "reports/v1.json",
                             "reports/v1.md",
                             "reports/v2.json",
                             "reports/v2.md",
+                            "reports/seo-health-v2.json",
+                            "reports/seo-health-v2.md",
+                            "reports/ai-v3.json",
+                            "reports/ai-v3.md",
+                            "reports/conversion-v1.json",
+                            "reports/conversion-v1.md",
                         ],
                     },
                 )
@@ -316,8 +521,15 @@ class InsightRunPipeline:
         run_id: str,
         urls: list[str],
         attempt_id: str,
+        *,
+        max_pages: int,
     ) -> PageAnalysisOutput:
-        page_output = self.page_analysis.analyze_urls(target, run_id, urls)
+        page_output = self.page_analysis.crawl_site(
+            target,
+            run_id,
+            urls,
+            max_pages=max_pages,
+        )
         for page in page_output.pages:
             page.attempt_id = attempt_id
             self.repository.save_page_record(page)
@@ -331,6 +543,9 @@ class InsightRunPipeline:
         page_output: PageAnalysisOutput,
         search_output: SearchIntelligenceOutput,
         scorecard: ScorecardOutput,
+        technical_health: ProductSurfaceResult,
+        ai_readiness: AIReadinessOutput,
+        conversion_readiness: ProductSurfaceResult,
         *,
         target_context: TargetContext,
         final_summary: dict[str, Any],
@@ -370,6 +585,20 @@ class InsightRunPipeline:
             stage_artifacts=completed_events,
         )
         self._assert_report_evidence_exists(run.id, report_v2.report_payload.get("findings", []))
+        technical_report = self.reporting.build_technical_health_report(
+            target,
+            final_run_snapshot,
+            technical_health,
+        )
+        self.repository.save_report(technical_report)
+        ai_report = self.reporting.build_ai_report(target, final_run_snapshot, ai_readiness)
+        self.repository.save_report(ai_report)
+        conversion_report = self.reporting.build_conversion_readiness_report(
+            target,
+            final_run_snapshot,
+            conversion_readiness,
+        )
+        self.repository.save_report(conversion_report)
         return self.repository.save_report(report_v2)
 
     def _run_stage(
@@ -438,6 +667,9 @@ class InsightRunPipeline:
             "fetching_pages": "page_analysis",
             "pulling_search_intelligence": "search_intelligence",
             "scoring": "scorecard",
+            "scoring_technical_health": "technical_seo_health",
+            "scoring_ai_readiness": "ai_readiness",
+            "scoring_conversion_readiness": "conversion_readiness",
         }.get(stage_name)
         if payload_type is None:
             return
@@ -455,7 +687,14 @@ class InsightRunPipeline:
         if stage_name == "discovering_sitemaps":
             crawl_output, assets = result
             return {"crawl": asdict(crawl_output), "assets": [asset.to_dict() for asset in assets]}
-        if stage_name in {"fetching_pages", "pulling_search_intelligence", "scoring"}:
+        if stage_name in {
+            "fetching_pages",
+            "pulling_search_intelligence",
+            "scoring",
+            "scoring_technical_health",
+            "scoring_ai_readiness",
+            "scoring_conversion_readiness",
+        }:
             return asdict(result)
         raise ValueError(f"stage does not have a checkpoint contract: {stage_name}")
 
@@ -517,6 +756,29 @@ class InsightRunPipeline:
     def _load_scorecard_checkpoint(self, run: InsightRun) -> ScorecardOutput:
         checkpoint = self._load_checkpoint(run, "scoring", "scorecard")
         return ScorecardOutput(**checkpoint.payload)
+
+    def _load_technical_health_checkpoint(self, run: InsightRun) -> ProductSurfaceResult:
+        checkpoint = self._load_checkpoint(
+            run,
+            "scoring_technical_health",
+            "technical_seo_health",
+        )
+        return ProductSurfaceResult(**checkpoint.payload)
+
+    def _load_ai_readiness_checkpoint(self, run: InsightRun) -> AIReadinessOutput:
+        checkpoint = self._load_checkpoint(run, "scoring_ai_readiness", "ai_readiness")
+        return AIReadinessOutput(**checkpoint.payload)
+
+    def _load_conversion_readiness_checkpoint(
+        self,
+        run: InsightRun,
+    ) -> ProductSurfaceResult:
+        checkpoint = self._load_checkpoint(
+            run,
+            "scoring_conversion_readiness",
+            "conversion_readiness",
+        )
+        return ProductSurfaceResult(**checkpoint.payload)
 
     def _record_inherited_stage(self, run: InsightRun, stage_name: str, summary: dict[str, Any]) -> None:
         checkpoint = self.repository.get_checkpoint(run.id, run.attempt_id, stage_name)
@@ -598,6 +860,7 @@ class InsightRunPipeline:
             "sitemap_urls": sorted(set(crawl_output.sitemap_urls))[:100],
             "candidate_sitemap_urls": sorted(set(crawl_output.candidate_sitemap_urls))[:100],
             "candidate_page_urls": sorted(set(crawl_output.candidate_page_urls))[:100],
+            "robots_access": crawl_output.robots_access,
             "errors": sorted(crawl_output.errors)[:100],
             "artifact_paths": [f"assets/{asset.id}.json" for asset in assets],
             "degraded": bool(crawl_output.errors),
@@ -611,6 +874,9 @@ class InsightRunPipeline:
         )
         return {
             "pages_saved": len(page_output.pages),
+            "pages_discovered": page_output.discovered_count,
+            "pages_attempted": page_output.attempted_count,
+            "capped": page_output.capped,
             "error_count": len(page_output.errors),
             "errors": ordered_errors[:100],
             "artifact_paths": [f"pages/{page.id}.json" for page in page_output.pages],
@@ -656,6 +922,80 @@ class InsightRunPipeline:
             "metrics": scorecard.metrics,
             "scorecard": asdict(scorecard),
         }
+
+    @staticmethod
+    def _summarize_technical_health(output: ProductSurfaceResult) -> dict[str, Any]:
+        return {
+            "technical_seo_health_score": output.score,
+            "technical_seo_health_completeness": output.completeness_percent,
+            "technical_seo_health_status": output.status,
+            "technical_seo_health_version": output.version,
+            "evidence_confidence": output.evidence_confidence,
+            "families": output.families,
+            "affected_check_count": sum(
+                1 for check in output.checks if check.get("status") == "failed"
+            ),
+        }
+
+    @staticmethod
+    def _summarize_ai_readiness(output: AIReadinessOutput) -> dict[str, Any]:
+        return {
+            "ai_readiness_score": output.score,
+            "ai_readiness_completeness": output.completeness_percent,
+            "ai_readiness_status": output.status,
+            "ai_readiness_version": output.score_version,
+            "dimensions": output.dimensions,
+            "inventory": output.inventory,
+            "broken_link_count": len(output.broken_links),
+        }
+
+    @staticmethod
+    def _summarize_conversion_readiness(
+        output: ProductSurfaceResult,
+    ) -> dict[str, Any]:
+        return {
+            "conversion_readiness_score": output.score,
+            "conversion_readiness_completeness": output.completeness_percent,
+            "conversion_readiness_status": output.status,
+            "conversion_readiness_version": output.version,
+            "vertical_id": output.metrics.get("vertical_id"),
+            "affected_check_count": sum(
+                1
+                for check in output.checks
+                if check.get("status") == "failed"
+            ),
+        }
+
+    def _vertical_id_for_domain(self, normalized_domain: str) -> str | None:
+        prospects = self.repository.list_prospects(limit=10_000)
+        matches = [
+            prospect
+            for prospect in prospects
+            if prospect.normalized_domain.casefold()
+            == normalized_domain.casefold().removeprefix("www.")
+            and prospect.qualification_status in {"qualified", "needs_review"}
+        ]
+        matches.sort(key=lambda prospect: (prospect.updated_at, prospect.id), reverse=True)
+        return matches[0].vertical_id if matches else None
+
+    @staticmethod
+    def _entity_name(page_output: PageAnalysisOutput) -> str | None:
+        ordered = sorted(
+            page_output.pages,
+            key=lambda page: (
+                page.page_class != "homepage",
+                page.page_class not in {"contact_about", "service", "location"},
+                page.url,
+            ),
+        )
+        for page in ordered:
+            names = page.ai_evidence.get("entity_names", [])
+            if isinstance(names, list):
+                for name in names:
+                    value = str(name).strip()
+                    if value:
+                        return value[:200]
+        return None
 
     @staticmethod
     def _duration_ms(started: float) -> int:

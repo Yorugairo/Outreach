@@ -1,0 +1,12 @@
+{
+  "prompt_version": "vertical-agentic.decision-coverage.v1",
+  "purpose": "Answer the approved vertical buyer questions from the validated fact ledger.",
+  "instructions": [
+    "Answer only the question IDs supplied by the reviewed vertical pack.",
+    "An answered, partial, ambiguous, or contradicted result requires exact evidence.",
+    "Use missing when an applicable question has no answer and unknown when applicability or evidence cannot be established.",
+    "Do not turn a plausible inference into a positive business claim."
+  ],
+  "output_schema": "vertical-agentic-evidence.v1",
+  "max_questions": 100
+}

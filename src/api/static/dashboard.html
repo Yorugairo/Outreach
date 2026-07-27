@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="dark">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23171a18'/%3E%3Cpath d='M18 34h12l-5 15 21-25H34l5-12z' fill='%233ecf8e'/%3E%3C/svg%3E">
-  <title>SEO Insights Control Plane</title>
+  <title>Outreach Program</title>
   <style>
     :root {
       --bg: #101211;
@@ -52,7 +52,7 @@
     h1 { margin: 5px 0 0; font-size: clamp(28px, 4vw, 44px); font-weight: 500; line-height: 1.02; letter-spacing: -.045em; }
     h2 { margin: 0; font-size: 18px; font-weight: 500; letter-spacing: -.02em; }
     p { color: var(--muted); line-height: 1.55; }
-    .auth { display: grid; grid-template-columns: minmax(200px, 290px) auto; gap: 8px; align-items: end; }
+    .auth { display: grid; grid-template-columns: minmax(200px, 290px) auto; gap: 8px; align-items: end; margin-top: 12px; }
     label { display: grid; gap: 7px; color: var(--muted); font-size: 12px; }
     input, select { width: 100%; border: 1px solid var(--border-strong); border-radius: 7px; padding: 9px 11px; color: var(--text); background: #111412; }
     input::placeholder { color: #66716a; }
@@ -69,7 +69,13 @@
     .layout { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(330px, .8fr); gap: 18px; align-items: start; }
     .panel-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 16px 18px; border-bottom: 1px solid var(--border); }
     .panel-body { padding: 18px; }
-    .run-form { display: grid; grid-template-columns: minmax(220px, 1fr) 130px 110px auto; gap: 10px; align-items: end; }
+    .run-form { display: grid; grid-template-columns: minmax(220px, 1fr) auto; gap: 10px; align-items: end; }
+    .run-options { grid-column: 1 / -1; }
+    .run-options-grid { display: grid; grid-template-columns: 130px 110px minmax(220px, 1fr); gap: 10px; align-items: end; padding-top: 12px; }
+    .prospect-form { display: grid; grid-template-columns: minmax(220px, 1fr) 220px auto; gap: 10px; align-items: end; }
+    .workflow-form { display: grid; grid-template-columns: repeat(4, minmax(140px, 1fr)); gap: 10px; align-items: end; }
+    .market-form { display: grid; grid-template-columns: repeat(3, minmax(180px, 1fr)); gap: 10px; align-items: end; }
+    textarea { width: 100%; min-height: 120px; border: 1px solid var(--border-strong); border-radius: 7px; padding: 9px 11px; color: var(--text); background: #111412; font: 12px/1.5 var(--mono); }
     .check { display: flex; align-items: center; gap: 9px; min-height: 42px; color: var(--text); }
     .check input { width: 18px; min-height: 18px; accent-color: var(--accent); }
     .table-wrap { overflow-x: auto; }
@@ -100,6 +106,18 @@
     .flash { min-height: 22px; margin: 10px 0 0; color: var(--muted); font-size: 13px; }
     .flash.error { color: var(--danger); }
     .flash.success { color: var(--accent); }
+    details > summary { cursor: pointer; color: var(--muted); font-size: 13px; }
+    details > summary:hover { color: var(--text); }
+    .connection-settings { min-width: min(100%, 360px); }
+    .operator-tools { margin-top: 18px; border: 1px solid var(--border); border-radius: var(--radius); background: rgba(23,26,24,.55); }
+    .operator-tools > summary { padding: 16px 18px; color: var(--text); font-weight: 500; }
+    .operator-tools[open] > summary { border-bottom: 1px solid var(--border); }
+    .operator-tools-body { padding: 18px; }
+    .operator-tools-body > * + * { margin-top: 18px; }
+    .forecast-label { color: var(--warning); font: 12px/1.5 var(--mono); }
+    .opportunity-steps { display: grid; gap: 14px; }
+    .opportunity-steps fieldset { margin: 0; padding: 14px; border: 1px solid var(--border); border-radius: 8px; }
+    .opportunity-steps legend { padding: 0 7px; color: var(--muted); font: 11px var(--mono); text-transform: uppercase; letter-spacing: .08em; }
     .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
     @media (max-width: 1100px) {
       .grid { grid-template-columns: repeat(2, 1fr); }
@@ -114,7 +132,7 @@
       .connection { position: static; margin-top: 12px; }
       main { padding: 22px 14px 50px; }
       .topbar { display: grid; align-items: stretch; }
-      .auth, .run-form, .diff-bar { grid-template-columns: 1fr; }
+      .auth, .run-form, .run-options-grid, .diff-bar, .market-form { grid-template-columns: 1fr; }
       .grid { grid-template-columns: 1fr 1fr; }
       .panel-header { align-items: flex-start; flex-direction: column; }
       .btn-primary { width: 100%; }
@@ -126,13 +144,12 @@
   <div class="shell">
     <aside>
       <div class="brand">
-        <span class="brand-mark" aria-hidden="true">SEO</span>
-        <div><strong>Insight Control</strong><small>Evidence plane</small></div>
+        <span class="brand-mark" aria-hidden="true">OP</span>
+        <div><strong>Outreach Program</strong><small>Evidence pitch</small></div>
       </div>
       <nav aria-label="Primary navigation">
-        <a href="#runs" aria-current="page">Runs</a>
-        <a href="#new-run">New analysis</a>
-        <a href="#compare">Compare</a>
+        <a href="#new-run" aria-current="page">Analyze</a>
+        <a href="#operator-tools">Operator tools</a>
       </nav>
       <div class="connection" aria-label="API connection status">
         <span><i id="connection-dot" class="dot" aria-hidden="true"></i><span id="connection-label">Not connected</span></span>
@@ -142,87 +159,368 @@
     <main id="main-content" tabindex="-1">
       <header class="topbar">
         <div>
-          <div class="eyebrow">Operator workspace</div>
-          <h1>SEO insight runs</h1>
-          <p>Launch, validate, compare, and recover evidence-backed audits.</p>
+          <div class="eyebrow">Outreach Program</div>
+          <h1>Website opportunity scan</h1>
+          <p>Paste a URL. Get a concise, evidence-backed conversation starter.</p>
         </div>
-        <div class="auth">
-          <label for="api-key">API key
-            <input id="api-key" type="password" autocomplete="off" placeholder="Enter session API key">
-          </label>
-          <button id="connect-button" class="btn" type="button">Connect</button>
-        </div>
+        <details class="connection-settings">
+          <summary>Connection settings</summary>
+          <div class="auth">
+            <label for="api-key">API key
+              <input id="api-key" type="password" autocomplete="off" placeholder="Enter session API key">
+            </label>
+            <button id="connect-button" class="btn" type="button">Connect</button>
+          </div>
+        </details>
       </header>
 
       <div id="announcement" role="status" aria-live="polite" class="flash"></div>
 
-      <section class="grid" aria-label="Run metrics">
-        <article class="metric"><span class="eyebrow">All runs</span><b id="metric-total">0</b></article>
-        <article class="metric"><span class="eyebrow">Completed</span><b id="metric-completed">0</b></article>
-        <article class="metric"><span class="eyebrow">Needs attention</span><b id="metric-failed">0</b></article>
-        <article class="metric"><span class="eyebrow">Average score</span><b id="metric-score">—</b></article>
-      </section>
-
       <section id="new-run" class="panel" aria-labelledby="new-run-title">
         <div class="panel-header">
-          <div><div class="eyebrow">Create</div><h2 id="new-run-title">Start a new insight run</h2></div>
+          <div><div class="eyebrow">One-step scan</div><h2 id="new-run-title">Analyze a website</h2></div>
         </div>
         <div class="panel-body">
           <form id="run-form" class="run-form">
-            <label for="target-url">Target URL or domain
-              <input id="target-url" name="url" type="text" required maxlength="2048" placeholder="example.com">
+            <label for="target-url">Website URL or domain
+              <input id="target-url" name="url" type="text" required maxlength="2048" autofocus placeholder="example.com">
             </label>
-            <label for="run-mode">Mode
-              <select id="run-mode" name="mode"><option>quick</option><option selected>standard</option><option>full</option></select>
-            </label>
-            <label for="max-pages">Max pages
-              <input id="max-pages" name="max_pages" type="number" min="1" max="100" value="5">
-            </label>
-            <button class="btn btn-primary" type="submit">Start run</button>
-            <label class="check" for="approve-paid"><input id="approve-paid" name="approve_paid_enrichment" type="checkbox">Approve paid enrichment</label>
+            <button class="btn btn-primary" type="submit">Analyze website</button>
+            <details class="run-options">
+              <summary>Run options</summary>
+              <div class="run-options-grid">
+                <label for="run-mode">Mode
+                  <select id="run-mode" name="mode"><option>quick</option><option selected>standard</option><option>full</option></select>
+                </label>
+                <label for="max-pages">Max pages
+                  <input id="max-pages" name="max_pages" type="number" min="1" max="100" value="100">
+                </label>
+                <p class="muted">Keyword and Google ranking evidence follows the operator's bounded paid-search policy.</p>
+              </div>
+            </details>
           </form>
         </div>
       </section>
 
-      <div class="layout" style="margin-top:18px">
-        <section id="runs" class="panel" aria-labelledby="runs-title">
-          <div class="panel-header">
-            <div><div class="eyebrow">Activity</div><h2 id="runs-title">Recent runs</h2></div>
-            <button id="refresh-button" class="btn btn-ghost" type="button">Refresh</button>
-          </div>
-          <div class="panel-body table-wrap">
-            <table>
-              <caption>Most recently updated insight runs</caption>
-              <thead><tr><th scope="col">Target</th><th scope="col">Status</th><th scope="col">Score</th><th scope="col">Pages</th><th scope="col">Actions</th></tr></thead>
-              <tbody id="runs-body"><tr><td colspan="5"><div class="empty">Connect with an API key to load runs.</div></td></tr></tbody>
-            </table>
-          </div>
-        </section>
-
-        <section class="panel detail" aria-labelledby="detail-title">
-          <div class="panel-header"><div><div class="eyebrow">Evidence</div><h2 id="detail-title">Run detail</h2></div></div>
-          <div id="detail-content" class="panel-body detail-content"><div class="empty">Select a run to inspect validation, budget, and recommendations.</div></div>
-        </section>
-      </div>
-
-      <section id="compare" class="panel" aria-labelledby="compare-title" style="margin-top:18px">
-        <div class="panel-header"><div><div class="eyebrow">Regression view</div><h2 id="compare-title">Compare runs</h2></div></div>
-        <div class="panel-body">
-          <div class="diff-bar">
-            <label for="base-run">Base run<select id="base-run"></select></label>
-            <label for="comparison-run">Comparison run<select id="comparison-run"></select></label>
-            <button id="compare-button" class="btn" type="button">Compare</button>
-          </div>
-          <div id="diff-result" class="diff-result" hidden></div>
+      <section class="panel detail" aria-labelledby="detail-title" style="margin-top:18px">
+        <div class="panel-header">
+          <div><div class="eyebrow">Result</div><h2 id="detail-title">Opportunity brief</h2></div>
         </div>
+        <div id="detail-content" class="panel-body detail-content"><div class="empty">Paste a URL above to create an evidence-backed brief.</div></div>
       </section>
+
+      <details id="operator-tools" class="operator-tools">
+        <summary>Operator tools, outreach workflow, and run history</summary>
+        <div class="operator-tools-body">
+          <section class="grid" aria-label="Run metrics">
+            <article class="metric"><span class="eyebrow">All runs</span><b id="metric-total">0</b></article>
+            <article class="metric"><span class="eyebrow">Completed</span><b id="metric-completed">0</b></article>
+            <article class="metric"><span class="eyebrow">Needs attention</span><b id="metric-failed">0</b></article>
+            <article class="metric"><span class="eyebrow">Average score</span><b id="metric-score">—</b></article>
+          </section>
+
+          <section id="prospects" class="panel" aria-labelledby="prospects-title">
+            <div class="panel-header">
+              <div><div class="eyebrow">Qualified targets</div><h2 id="prospects-title">Prospect CSV intake</h2></div>
+              <button id="load-prospects-button" class="btn btn-ghost" type="button">Load queue</button>
+            </div>
+            <div class="panel-body">
+              <form id="prospect-form" class="prospect-form">
+                <label for="prospect-csv">CSV rows
+                  <textarea id="prospect-csv" placeholder="business_name,website_url,category,location,contact_route,source"></textarea>
+                </label>
+                <label for="vertical-pack">Vertical pack
+                  <select id="vertical-pack">
+                    <option value="one_trade_network.v1">One Trade Network v1</option>
+                    <option value="national_bjj_registry.v1">National BJJ Registry v1</option>
+                  </select>
+                </label>
+                <button class="btn btn-primary" type="submit">Preview CSV</button>
+              </form>
+              <div class="actions">
+                <button id="commit-prospects-button" class="btn" type="button">Commit qualified prospects</button>
+                <button id="load-funnel-button" class="btn btn-ghost" type="button">Refresh funnel</button>
+              </div>
+              <div id="prospect-result" class="diff-result" hidden></div>
+              <div id="prospect-queue" class="table-wrap" aria-live="polite"></div>
+            </div>
+          </section>
+
+          <section id="market-tools" class="panel" aria-labelledby="market-tools-title">
+            <div class="panel-header">
+              <div><div class="eyebrow">Optional market evidence</div><h2 id="market-tools-title">Tacoma BJJ competitor workflow</h2></div>
+              <button id="load-keyword-sets-button" class="btn btn-ghost" type="button">Load keyword sets</button>
+            </div>
+            <div class="panel-body">
+              <p>The normal URL scan stays one step. Use these controls only when you want paid Tacoma rankings, approved competitor evidence, screenshots, and the combined v3 report.</p>
+              <form id="keyword-form" class="market-form">
+                <label for="keyword-file">Keyword CSV file
+                  <input id="keyword-file" type="file" accept=".csv,text/csv">
+                </label>
+                <label for="keyword-domain">Bind to domain
+                  <input id="keyword-domain" value="novaryu.com" placeholder="novaryu.com">
+                </label>
+                <label for="keyword-version">Version
+                  <input id="keyword-version" value="v2" placeholder="v2">
+                </label>
+                <label for="keyword-csv" style="grid-column:1/-1">Keyword CSV rows
+                  <textarea id="keyword-csv" placeholder="Keyword,Category,Search Intent,Optimization Focus,Target Page / Usage"></textarea>
+                </label>
+                <button id="preview-keywords-button" class="btn" type="submit">Preview keywords</button>
+                <button id="commit-keywords-button" class="btn" type="button">Commit draft</button>
+              </form>
+              <div class="market-form" style="margin-top:12px">
+                <label for="keyword-set-id">Keyword set
+                  <select id="keyword-set-id"></select>
+                </label>
+                <label for="keyword-review-list">Approve factual-risk terms
+                  <textarea id="keyword-review-list" placeholder="One exact keyword per line"></textarea>
+                </label>
+                <button id="approve-keyword-set-button" class="btn" type="button">Approve keyword set</button>
+              </div>
+              <hr style="border:0;border-top:1px solid var(--border);margin:18px 0">
+              <div class="market-form">
+                <label for="market-run-core-id">Completed Insight Run ID
+                  <input id="market-run-core-id" placeholder="Run ID">
+                </label>
+                <label for="market-entity-name">Validated business name
+                  <input id="market-entity-name" value="Nova Ryu" placeholder="Nova Ryu">
+                </label>
+                <label class="check" for="market-paid-approval">
+                  <input id="market-paid-approval" type="checkbox"> Approve bounded paid calls
+                </label>
+                <button id="start-market-pilot-button" class="btn btn-primary" type="button">Run 12-keyword pilot</button>
+                <label for="market-evidence-id">Market evidence run ID
+                  <input id="market-evidence-id" placeholder="Created by pilot">
+                </label>
+                <label class="check" for="market-screenshots">
+                  <input id="market-screenshots" type="checkbox" checked> Capture screenshots
+                </label>
+              </div>
+              <div id="competitor-candidates" class="table-wrap" aria-live="polite"></div>
+              <div class="actions">
+                <button id="approve-competitors-button" class="btn" type="button">Approve selected competitors</button>
+                <button id="enrich-competitors-button" class="btn" type="button">Crawl + compare</button>
+                <button id="deep-market-button" class="btn btn-danger" type="button">Deepen to approved 50-keyword set</button>
+                <button id="load-market-report-button" class="btn btn-ghost" type="button">Load v3 report</button>
+              </div>
+              <div id="market-result" class="diff-result" hidden></div>
+            </div>
+          </section>
+
+          <section id="opportunity-tools" class="panel" aria-labelledby="opportunity-tools-title">
+            <div class="panel-header">
+              <div><div class="eyebrow">Secondary workflow</div><h2 id="opportunity-tools-title">Demand-to-revenue opportunity case</h2></div>
+            </div>
+            <div class="panel-body">
+              <p>Build a conservative commercial case only after the URL scan. Demand means monthly search occasions—not unique people—and every projection is capacity-limited.</p>
+              <p class="forecast-label">Forecast, not guarantee</p>
+              <div class="opportunity-steps">
+                <fieldset>
+                  <legend>1 · Demand evidence</legend>
+                  <div class="workflow-form">
+                    <label for="opportunity-prospect-id">Prospect ID<input id="opportunity-prospect-id" placeholder="Qualified prospect ID"></label>
+                    <label for="opportunity-run-id">Completed run ID<input id="opportunity-run-id" placeholder="Insight run ID"></label>
+                    <label for="demand-keyword-set-id">Approved keyword set ID<input id="demand-keyword-set-id" placeholder="Bound keyword set ID"></label>
+                    <label for="opportunity-vertical">Vertical<select id="opportunity-vertical"><option value="national_bjj_registry">National BJJ Registry</option><option value="one_trade_network">One Trade Network</option></select></label>
+                    <label for="opportunity-market">Market<input id="opportunity-market" value="Tacoma, WA"></label>
+                    <label for="demand-file">Keyword Planner CSV<input id="demand-file" type="file" accept=".csv,text/csv"></label>
+                    <label for="demand-csv" style="grid-column:1/-1">Demand CSV rows<textarea id="demand-csv" placeholder="Keyword,Avg. monthly searches,Category,Search Intent,Target Page Usage"></textarea></label>
+                    <label for="demand-trend-source">Trend source<select id="demand-trend-source"><option value="google_trends_csv">Google Trends export</option><option value="keyword_planner_csv">Keyword Planner export</option><option value="operator_csv">Reviewed operator export</option></select></label>
+                    <label for="demand-trend-file">Trend CSV<input id="demand-trend-file" type="file" accept=".csv,text/csv"></label>
+                    <label for="demand-trend-start">Trend period start<input id="demand-trend-start" value="2025-07-01"></label>
+                    <label for="demand-trend-end">Trend period end<input id="demand-trend-end" value="2026-06-30"></label>
+                    <label for="demand-trend-csv" style="grid-column:1/-1">Relative trend or planner rows<textarea id="demand-trend-csv" placeholder="Week,bjj tacoma&#10;2026-01-04,50"></textarea></label>
+                  </div>
+                  <div class="actions">
+                    <button id="preview-demand-button" class="btn" type="button">Preview demand</button>
+                    <button id="commit-demand-button" class="btn" type="button">Commit demand draft</button>
+                    <button id="approve-demand-button" class="btn" type="button">Approve reviewed groups</button>
+                    <button id="preview-demand-trend-button" class="btn" type="button">Preview trend</button>
+                    <button id="commit-demand-trend-button" class="btn" type="button">Commit trend snapshot</button>
+                  </div>
+                </fieldset>
+
+                <fieldset>
+                  <legend>2 · Business economics and assumptions</legend>
+                  <div class="workflow-form">
+                    <label for="demand-conversion-mode">Evidence mode<select id="demand-conversion-mode"><option value="prospect">Prospect · public/supplied</option><option value="owner_verified">Owner-verified · aggregate first-party</option></select></label>
+                    <label for="economics-price">Monthly price / job value<input id="economics-price" type="number" min="0" step="0.01" value="100"></label>
+                    <label for="economics-capacity">Capacity headroom<input id="economics-capacity" type="number" min="0" step="1" value="20"></label>
+                    <label for="economics-model">Revenue model<input id="economics-model" value="membership"></label>
+                    <label for="economics-fill-months">Desired fill months<input id="economics-fill-months" type="number" min="1" value="12"></label>
+                    <label for="opportunity-assumptions" style="grid-column:1/-1">Low / base / high assumptions JSON<textarea id="opportunity-assumptions" aria-describedby="assumption-help"></textarea></label>
+                  </div>
+                  <p id="assumption-help">Each material input includes a value, provenance, and explicit operator review.</p>
+                  <div class="actions">
+                    <button id="save-economics-button" class="btn" type="button">Approve economics</button>
+                    <button id="build-opportunity-button" class="btn btn-primary" type="button">Build opportunity case</button>
+                    <button id="approve-opportunity-button" class="btn" type="button">Approve scenario + build v4</button>
+                    <button id="build-demand-conversion-button" class="btn btn-primary" type="button">Build demand evidence report</button>
+                    <button id="approve-demand-conversion-button" class="btn" type="button">Approve + build v5</button>
+                    <button id="load-demand-conversion-button" class="btn btn-ghost" type="button">Load demand report</button>
+                    <button id="create-pitch-pack-button" class="btn" type="button">Create pitch pack</button>
+                  </div>
+                </fieldset>
+
+                <fieldset>
+                  <legend>3 · Recovery and calibration</legend>
+                  <div class="workflow-form">
+                    <label for="recovery-market-id">Partial market run ID<input id="recovery-market-id" placeholder="Immutable predecessor run ID"></label>
+                    <label class="check" for="recovery-account-confirmed"><input id="recovery-account-confirmed" type="checkbox"> Provider account issue confirmed fixed</label>
+                    <label for="calibration-file">Aggregate outcome CSV<input id="calibration-file" type="file" accept=".csv,text/csv"></label>
+                    <label for="owned-measurement-source">Owner measurement source<select id="owned-measurement-source"><option value="gsc_csv">Search Console</option><option value="gbp_csv">GBP Performance</option><option value="ga4_csv">GA4</option><option value="crm_csv">CRM</option><option value="ai_performance_csv">AI Performance export</option></select></label>
+                    <label class="check" for="owner-consent-confirmed"><input id="owner-consent-confirmed" type="checkbox"> Owner authorized this aggregate export</label>
+                    <label for="owned-snapshot-ids">Owner snapshot IDs<input id="owned-snapshot-ids" placeholder="Filled after imports; comma separated"></label>
+                    <label for="trend-snapshot-ids">Approved trend snapshot IDs<input id="trend-snapshot-ids" placeholder="Filled after trend approval; comma separated"></label>
+                    <label for="conversion-event-map-id">Conversion event map ID<input id="conversion-event-map-id" placeholder="Optional approved map"></label>
+                    <label for="conversion-event-map-json" style="grid-column:1/-1">Conversion event map JSON<textarea id="conversion-event-map-json" placeholder='{"visit":["session_start"],"lead":["generate_lead"],"booking":["booking_completed"],"customer":["membership_started"]}'></textarea></label>
+                    <label for="calibration-csv" style="grid-column:1/-1">Aggregate rows only<textarea id="calibration-csv" placeholder="period_start,period_end,source,clicks,total_users,signups_or_leads,attended_or_appointments,new_customers,spend"></textarea></label>
+                  </div>
+                  <div class="actions">
+                    <button id="resume-market-button" class="btn btn-danger" type="button">Resume unresolved paid evidence</button>
+                    <button id="preview-calibration-button" class="btn" type="button">Preview calibration</button>
+                    <button id="commit-calibration-button" class="btn" type="button">Commit aggregate outcomes</button>
+                    <button id="preview-owned-measurement-button" class="btn" type="button">Preview owner measurement</button>
+                    <button id="commit-owned-measurement-button" class="btn" type="button">Commit immutable owner snapshot</button>
+                    <button id="create-event-map-button" class="btn" type="button">Approve event map</button>
+                  </div>
+                </fieldset>
+              </div>
+              <div id="opportunity-result" class="diff-result" hidden aria-live="polite"></div>
+            </div>
+          </section>
+
+          <section id="vertical-agentic-tools" class="panel" aria-labelledby="vertical-agentic-title">
+            <div class="panel-header">
+              <div><div class="eyebrow">Optional decision evidence</div><h2 id="vertical-agentic-title">Customer journey and business-truth analysis</h2></div>
+            </div>
+            <div class="panel-body">
+              <p>The URL scan still finishes first. Promoted runs can queue three bounded, non-submitting customer journeys plus buyer-question and business-fact review. No agentic result changes SEO, AI Readiness, visibility, demand, conversion, or revenue scores.</p>
+              <div class="workflow-form">
+                <label for="agentic-evidence-run-id">Completed run ID<input id="agentic-evidence-run-id" placeholder="Insight run ID"></label>
+                <label for="agentic-evidence-mode">Execution mode<select id="agentic-evidence-mode"><option value="automatic">Automatic · promoted only</option><option value="shadow">Shadow · review-only</option><option value="review">Explicit review</option><option value="premium">Premium · preflight required</option></select></label>
+                <label for="agentic-snapshot-id">Snapshot ID<input id="agentic-snapshot-id" placeholder="Fact, decision, journey, or blueprint snapshot"></label>
+                <label for="agentic-snapshot-type">Snapshot type<select id="agentic-snapshot-type"><option value="business_fact_ledger">Business facts</option><option value="decision_coverage">Decision coverage</option><option value="journey_evidence">Journey evidence</option><option value="ai_representation_accuracy">AI representation</option><option value="owner_diagnostic">Owner diagnostic</option><option value="remediation_blueprint">Remediation blueprint</option></select></label>
+              </div>
+              <div class="actions">
+                <button id="preflight-agentic-evidence-button" class="btn" type="button">Preflight decision evidence</button>
+                <button id="queue-agentic-evidence-button" class="btn btn-primary" type="button">Queue bounded analysis</button>
+                <button id="load-agentic-evidence-button" class="btn btn-ghost" type="button">Load evidence and traces</button>
+                <button id="approve-agentic-snapshot-button" class="btn" type="button">Approve reviewed snapshot</button>
+                <button id="build-decision-report-button" class="btn" type="button">Build decision-intelligence + v6</button>
+              </div>
+              <details>
+                <summary>Owner-only diagnosis and offline prototype gates</summary>
+                <div class="workflow-form">
+                  <label for="agentic-owner-prospect-id">Owner prospect ID<input id="agentic-owner-prospect-id" placeholder="Qualified prospect ID"></label>
+                  <label for="agentic-owner-consent-id">Consent ID<input id="agentic-owner-consent-id" placeholder="Recorded consent identity"></label>
+                  <label for="agentic-owner-snapshot-ids">Approved aggregate P11 snapshot IDs<input id="agentic-owner-snapshot-ids" placeholder="Comma separated"></label>
+                  <label for="agentic-blueprint-source-ids">Approved source snapshot IDs<input id="agentic-blueprint-source-ids" placeholder="Comma separated"></label>
+                </div>
+                <div class="actions">
+                  <button id="queue-owner-agentic-button" class="btn" type="button">Queue private owner analysis</button>
+                  <button id="queue-blueprint-button" class="btn" type="button">Queue offline remediation blueprint</button>
+                </div>
+              </details>
+              <p class="muted">Playwright/Chromium health, unknown-host approvals, action traces, inference cost, and limitations are returned with the evidence. Forms, downloads, authentication, purchases, messages, and personal-data entry are prohibited.</p>
+              <div id="agentic-evidence-result" class="diff-result" hidden aria-live="polite"></div>
+            </div>
+          </section>
+
+          <section id="packages" class="panel" aria-labelledby="packages-title">
+            <div class="panel-header">
+              <div><div class="eyebrow">Human review</div><h2 id="packages-title">Outreach packages</h2></div>
+              <button id="load-packages-button" class="btn btn-ghost" type="button">Load packages</button>
+            </div>
+            <div class="panel-body">
+              <form id="package-create-form" class="workflow-form">
+                <label for="package-prospect-id">Prospect ID<input id="package-prospect-id" required placeholder="Qualified prospect ID"></label>
+                <label for="package-run-id">Completed run ID<input id="package-run-id" required placeholder="Insight run ID"></label>
+                <label for="package-report-version">Report<select id="package-report-version"><option value="v2">v2</option><option value="v3">v3 market brief</option><option value="v4">v4 opportunity brief</option><option value="v6">v6 decision-intelligence brief</option></select></label>
+                <button class="btn btn-primary" type="submit">Create package</button>
+              </form>
+              <div class="actions">
+                <button id="approve-package-button" class="btn" type="button">Approve selected</button>
+                <button id="reject-package-button" class="btn btn-danger" type="button">Reject selected</button>
+                <button id="export-package-button" class="btn" type="button">Export selected</button>
+              </div>
+              <div id="package-result" class="diff-result" hidden></div>
+            </div>
+          </section>
+
+          <section id="runs" class="panel" aria-labelledby="runs-title">
+            <div class="panel-header">
+              <div><div class="eyebrow">Activity</div><h2 id="runs-title">Recent runs</h2></div>
+              <button id="refresh-button" class="btn btn-ghost" type="button">Refresh</button>
+            </div>
+            <div class="panel-body table-wrap">
+              <table>
+                <caption>Most recently updated insight runs</caption>
+                <thead><tr><th scope="col">Target</th><th scope="col">Status</th><th scope="col">Score</th><th scope="col">Pages</th><th scope="col">Actions</th></tr></thead>
+                <tbody id="runs-body"><tr><td colspan="5"><div class="empty">Connect with an API key to load runs.</div></td></tr></tbody>
+              </table>
+            </div>
+          </section>
+
+          <section id="compare" class="panel" aria-labelledby="compare-title">
+            <div class="panel-header"><div><div class="eyebrow">Regression view</div><h2 id="compare-title">Compare runs</h2></div></div>
+            <div class="panel-body">
+              <div class="diff-bar">
+                <label for="base-run">Base run<select id="base-run"></select></label>
+                <label for="comparison-run">Comparison run<select id="comparison-run"></select></label>
+                <button id="compare-button" class="btn" type="button">Compare</button>
+              </div>
+              <div id="diff-result" class="diff-result" hidden></div>
+            </div>
+          </section>
+
+          <section id="funnel" class="panel" aria-labelledby="funnel-title">
+            <div class="panel-header"><div><div class="eyebrow">Activation</div><h2 id="funnel-title">Manual outreach funnel</h2></div></div>
+            <div class="panel-body">
+              <p>Approved-package exports and activation events stay manual in v1. This view reads `/api/funnel` and shows segmented event counts.</p>
+              <form id="event-form" class="workflow-form">
+                <label for="event-package-id">Package ID<input id="event-package-id" required></label>
+                <label for="event-run-id">Run ID<input id="event-run-id" required></label>
+                <label for="event-vertical-id">Vertical<select id="event-vertical-id"><option value="one_trade_network">One Trade Network</option><option value="national_bjj_registry">National BJJ Registry</option></select></label>
+                <label for="event-stage">Outcome<select id="event-stage"><option value="outreach_sent">Outreach sent</option><option value="positive_reply">Positive reply</option><option value="call_booked">Call booked</option><option value="proposal_sent">Proposal sent</option><option value="closed_won">Closed won</option><option value="closed_lost">Closed lost</option><option value="correction_recorded">Correction recorded</option></select></label>
+                <label for="event-operator">Operator<input id="event-operator" value="operator" required></label>
+                <label for="event-reason">Reason code<input id="event-reason" placeholder="Optional outcome reason"></label>
+                <label for="event-correction">Correction class<input id="event-correction" placeholder="Required for corrections without a reason"></label>
+                <label for="event-revenue">Won revenue<input id="event-revenue" type="number" min="0" step="0.01" placeholder="Closed won only"></label>
+                <label for="event-currency">Currency<input id="event-currency" maxlength="12" placeholder="USD"></label>
+                <button class="btn btn-primary" type="submit">Record event</button>
+              </form>
+              <div class="actions"><label for="funnel-vertical">Funnel vertical<select id="funnel-vertical"><option value="">All verticals</option><option value="one_trade_network">One Trade Network</option><option value="national_bjj_registry">National BJJ Registry</option></select></label></div>
+              <div id="funnel-result" class="diff-result">Connect with an API key to load funnel metrics.</div>
+            </div>
+          </section>
+        </div>
+      </details>
     </main>
   </div>
 
   <script>
     (() => {
       'use strict';
-      const state = { runs: [], selectedRunId: null };
+      const state = {
+        runs: [],
+        selectedRunId: null,
+        lastProspectPreview: null,
+        prospects: [],
+        selectedPackageId: null,
+        selectedPackage: null,
+        lastKeywordPayload: null,
+        keywordSets: [],
+        marketEvidence: null,
+        demandEvidence: null,
+        demandTrend: null,
+        ownedMeasurements: [],
+        demandConversion: null,
+        ownerConsentConfirmedAt: null,
+        economicsProfile: null,
+        opportunityScenario: null
+      };
       const $ = (id) => document.getElementById(id);
       const announce = (message, kind = '') => {
         const node = $('announcement');
@@ -241,6 +539,19 @@
         if (!response.ok) throw new Error(payload.detail || `Request failed (${response.status})`);
         return payload;
       };
+      const apiDownload = async (path, filename) => {
+        const key = apiKey();
+        if (!key) throw new Error('Enter an API key to connect.');
+        const response = await fetch(path, {headers: {'X-API-Key': key}});
+        if (!response.ok) {
+          const payload = await response.json().catch(() => ({}));
+          throw new Error(payload.detail || `Download failed (${response.status})`);
+        }
+        const url = URL.createObjectURL(await response.blob());
+        const link = document.createElement('a');
+        link.href = url; link.download = filename; link.click();
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+      };
       const text = (tag, value, className = '') => {
         const node = document.createElement(tag);
         node.textContent = value ?? '—';
@@ -252,6 +563,39 @@
         node.type = 'button'; node.className = className; node.textContent = label; node.addEventListener('click', action);
         return node;
       };
+      const reviewedAssumptions = () => {
+        const names = [
+          'searches_per_prospect',
+          'organic_incremental_click_share',
+          'maps_incremental_click_share',
+          'organic_maps_overlap_rate',
+          'visit_to_signup_rate',
+          'signup_to_attended_rate',
+          'attended_to_customer_rate',
+          'ramp_months'
+        ];
+        const bands = {
+          low: [2.5, .10, .05, .50, .30, .70, .40, 12],
+          base: [2.0, .20, .10, .50, .40, .80, .50, 12],
+          high: [1.5, .30, .15, .40, .50, .85, .60, 12]
+        };
+        return Object.fromEntries(Object.entries(bands).map(([band, values]) => [
+          band,
+          Object.fromEntries(names.map((name, index) => [
+            name,
+            {value: values[index], provenance: 'assumed', reviewed: true}
+          ]))
+        ]));
+      };
+      $('opportunity-assumptions').value = JSON.stringify(reviewedAssumptions(), null, 2);
+      $('conversion-event-map-json').value = JSON.stringify({
+        visit: ['session_start'],
+        lead: ['generate_lead'],
+        booking: ['booking_completed'],
+        attended: ['class_attended'],
+        customer: ['membership_started'],
+        revenue: ['purchase']
+      }, null, 2);
       const setConnected = (connected) => {
         $('connection-dot').classList.toggle('ok', connected);
         $('connection-label').textContent = connected ? 'API connected' : 'Not connected';
@@ -299,33 +643,657 @@
           state.runs = payload.runs; renderAll(); setConnected(true); announce(`Loaded ${state.runs.length} runs.`, 'success');
         } catch (error) { setConnected(false); announce(error.message, 'error'); }
       };
+      const loadVerticalPacks = async () => {
+        try {
+          const payload = await apiFetch('/api/vertical-packs');
+          const select = $('vertical-pack'); select.replaceChildren();
+          payload.vertical_packs.forEach(pack => {
+            const option = document.createElement('option'); option.value = pack.pack_id; option.textContent = `${pack.display_name} (${pack.version})`;
+            option.selected = pack.pack_id === 'one_trade_network.v1';
+            select.append(option);
+          });
+        } catch (error) { announce(error.message, 'error'); }
+      };
+      const keywordPayload = () => ({
+        csv_text: $('keyword-csv').value,
+        vertical_id: 'national_bjj_registry',
+        market: 'Tacoma, WA',
+        market_slug: 'tacoma',
+        location_code: 1027773,
+        language_code: 'en',
+        version: $('keyword-version').value.trim() || 'v1',
+        normalized_domain: $('keyword-domain').value.trim().toLowerCase().replace(/^www\./, ''),
+        scope_type: 'domain',
+        scope_id: $('keyword-domain').value.trim().toLowerCase().replace(/^www\./, ''),
+        source_provenance: 'operator_csv_upload'
+      });
+      const demandPayload = () => ({
+        csv_text: $('demand-csv').value,
+        prospect_id: $('opportunity-prospect-id').value.trim(),
+        keyword_set_id: $('demand-keyword-set-id').value.trim(),
+        vertical_id: $('opportunity-vertical').value,
+        market: $('opportunity-market').value.trim(),
+        location_code: $('opportunity-vertical').value === 'national_bjj_registry' ? 1027773 : null,
+        snapshot_period: new Date().toISOString().slice(0, 7),
+        source: 'operator_csv',
+        brand_terms: []
+      });
+      const demandTrendPayload = () => ({
+        csv_text: $('demand-trend-csv').value,
+        prospect_id: $('opportunity-prospect-id').value.trim(),
+        vertical_id: $('opportunity-vertical').value,
+        market: $('opportunity-market').value.trim(),
+        source: $('demand-trend-source').value,
+        period_start: $('demand-trend-start').value.trim(),
+        period_end: $('demand-trend-end').value.trim(),
+        location_code: $('opportunity-vertical').value === 'national_bjj_registry' ? 1027773 : null,
+        keyword_set_id: $('demand-keyword-set-id').value.trim() || null,
+        context: {market: $('opportunity-market').value.trim()},
+        aggregation_rule: 'max_close_variant',
+        operator_approved: false,
+        operator: 'operator'
+      });
+      const demandConversionAssumptions = () => {
+        const reviewed = JSON.parse($('opportunity-assumptions').value);
+        const valueOf = (band, key) => {
+          const candidate = reviewed?.[band]?.[key];
+          return candidate && typeof candidate === 'object' ? candidate.value : candidate;
+        };
+        return Object.fromEntries(['low', 'base', 'high'].map(band => [band, {
+          organic_visit_capture_rate: valueOf(band, 'organic_incremental_click_share'),
+          lead_rate: valueOf(band, 'visit_to_signup_rate'),
+          booking_rate: valueOf(band, 'signup_to_attended_rate'),
+          close_rate: valueOf(band, 'attended_to_customer_rate')
+        }]));
+      };
+      const commaSeparatedIds = (id) => $(id).value.split(',').map(value => value.trim()).filter(Boolean);
+      const renderOpportunityResult = (payload) => {
+        const box = $('opportunity-result');
+        box.hidden = false;
+        box.textContent = JSON.stringify(payload, null, 2);
+      };
+      const showOpportunityTools = (runId = '') => {
+        $('operator-tools').open = true;
+        if (runId) $('opportunity-run-id').value = runId;
+        $('opportunity-tools').scrollIntoView({behavior: 'smooth', block: 'start'});
+      };
+      const economicsPayload = () => ({
+        vertical_id: $('opportunity-vertical').value,
+        revenue_model: $('economics-model').value.trim(),
+        monthly_price: Number($('economics-price').value),
+        currency: 'USD',
+        capacity_headroom: Number($('economics-capacity').value),
+        desired_fill_months: Number($('economics-fill-months').value),
+        field_provenance: {
+          monthly_price: 'business_supplied',
+          capacity_headroom: 'business_supplied',
+          desired_fill_months: 'business_supplied'
+        },
+        approve: true,
+        operator: 'operator'
+      });
+      const loadKeywordSets = async () => {
+        try {
+          const payload = await apiFetch('/api/keyword-sets?vertical_id=national_bjj_registry&limit=100');
+          state.keywordSets = payload.keyword_sets;
+          const select = $('keyword-set-id'); select.replaceChildren();
+          payload.keyword_sets.forEach(item => {
+            const option = document.createElement('option');
+            option.value = item.id;
+            option.textContent = `${item.keyword_set_key || item.version} · ${item.state} · ${item.normalized_domain || item.market}`;
+            select.append(option);
+          });
+          announce(`Loaded ${payload.keyword_sets.length} keyword set(s).`, 'success');
+        } catch (error) { announce(error.message, 'error'); }
+      };
+      const renderCompetitorCandidates = (market) => {
+        state.marketEvidence = market;
+        $('market-evidence-id').value = market.id;
+        const root = $('competitor-candidates'); root.replaceChildren();
+        const candidates = market.competitor_candidates || [];
+        if (!candidates.length) { root.append(text('p', 'No eligible direct-business candidates in the current sample.', 'empty')); return; }
+        const table = document.createElement('table');
+        const caption = document.createElement('caption'); caption.textContent = 'Approve one to three direct competitors'; table.append(caption);
+        const head = document.createElement('thead'); const headRow = document.createElement('tr');
+        ['Approve', 'Business', 'Domain', 'Appearances', 'Organic / Maps'].forEach(label => { const cell = document.createElement('th'); cell.scope = 'col'; cell.textContent = label; headRow.append(cell); });
+        head.append(headRow); table.append(head);
+        const body = document.createElement('tbody');
+        candidates.forEach(candidate => {
+          const row = document.createElement('tr');
+          const choice = document.createElement('td'); const input = document.createElement('input');
+          input.type = 'checkbox'; input.className = 'competitor-choice'; input.value = candidate.candidate_id; input.setAttribute('aria-label', `Approve ${candidate.name || candidate.domain}`);
+          choice.append(input);
+          [candidate.name || 'Unknown', candidate.domain || candidate.candidate_id, candidate.appearances, `${candidate.organic_appearances} / ${candidate.maps_appearances}`].forEach(value => {
+            const cell = document.createElement('td'); cell.textContent = value ?? '—'; row.append(cell);
+          });
+          row.prepend(choice); body.append(row);
+        });
+        table.append(body); root.append(table);
+      };
+      const loadMarketEvidence = async (marketId) => {
+        const payload = await apiFetch(`/api/market-evidence/${encodeURIComponent(marketId)}`);
+        renderCompetitorCandidates(payload.market_evidence_run);
+        $('market-result').hidden = false;
+        $('market-result').textContent = JSON.stringify({
+          state: payload.market_evidence_run.state,
+          phase: payload.market_evidence_run.phase,
+          provider_calls: payload.market_evidence_run.provider_calls.length,
+          actual_cost_usd: payload.market_evidence_run.actual_provider_cost,
+          evidence_limits: payload.market_evidence_run.evidence_limits
+        }, null, 2);
+        return payload.market_evidence_run;
+      };
+      const loadProspects = async () => {
+        try {
+          const payload = await apiFetch('/api/prospects?limit=100');
+          state.prospects = payload.prospects;
+          const box = $('prospect-result'); box.hidden = false;
+          box.textContent = JSON.stringify({count: payload.prospects.length}, null, 2);
+          renderProspectQueue();
+          announce(`Loaded ${payload.prospects.length} prospects.`, 'success');
+        } catch (error) { announce(error.message, 'error'); }
+      };
+      const renderProspectQueue = () => {
+        const root = $('prospect-queue'); root.replaceChildren();
+        if (!state.prospects.length) { root.append(text('div', 'No prospects in the queue.', 'empty')); return; }
+        const table = document.createElement('table');
+        const caption = document.createElement('caption'); caption.textContent = 'Prospect qualification queue'; table.append(caption);
+        const head = document.createElement('thead'); const row = document.createElement('tr');
+        ['Business', 'Vertical', 'Status', 'Actions'].forEach(label => { const cell = document.createElement('th'); cell.scope = 'col'; cell.textContent = label; row.append(cell); });
+        head.append(row); table.append(head);
+        const body = document.createElement('tbody');
+        state.prospects.forEach(prospect => {
+          const item = document.createElement('tr');
+          const business = document.createElement('td'); business.append(text('span', prospect.business_name, 'domain'), text('span', prospect.id, 'run-id'));
+          const vertical = document.createElement('td'); vertical.textContent = prospect.vertical_id || '—';
+          const status = document.createElement('td'); status.append(text('span', prospect.qualification_status, `status ${prospect.qualification_status}`));
+          const actions = document.createElement('td'); const wrap = document.createElement('div'); wrap.className = 'row-actions';
+          wrap.append(button('Qualify', () => updateQualification(prospect, 'qualified')), button('Reject', () => updateQualification(prospect, 'rejected'), 'btn btn-danger'));
+          if (prospect.qualification_status === 'qualified') wrap.append(button('Run', () => runProspect(prospect), 'btn btn-primary'));
+          actions.append(wrap); item.append(business, vertical, status, actions); body.append(item);
+        });
+        table.append(body); root.append(table);
+      };
+      const updateQualification = async (prospect, qualification_status) => {
+        const reasons = qualification_status === 'rejected' ? ['Rejected during operator review'] : [];
+        try {
+          await apiFetch(`/api/prospects/${encodeURIComponent(prospect.id)}/qualification`, {method: 'PATCH', body: JSON.stringify({qualification_status, rejection_reasons: reasons, operator: 'operator'})});
+          await loadProspects(); announce(`${prospect.business_name} marked ${qualification_status}.`, 'success');
+        } catch (error) { announce(error.message, 'error'); }
+      };
+      const runProspect = async (prospect) => {
+        try {
+          const result = await apiFetch(`/api/prospects/${encodeURIComponent(prospect.id)}/runs`, {method: 'POST', body: JSON.stringify({mode: 'quick', max_pages: 100})});
+          $('package-prospect-id').value = prospect.id; $('package-run-id').value = result.run.id;
+          $('opportunity-prospect-id').value = prospect.id;
+          $('opportunity-run-id').value = result.run.id;
+          $('opportunity-vertical').value = prospect.vertical_id;
+          if (result.market?.keyword_set?.id) $('demand-keyword-set-id').value = result.market.keyword_set.id;
+          await loadRuns(); announce(`Run ${result.run.id.slice(0, 8)} completed for ${prospect.business_name}.`, 'success');
+        } catch (error) { announce(error.message, 'error'); }
+      };
+      const renderPackages = (packages) => {
+        const box = $('package-result'); box.hidden = false; box.replaceChildren();
+        if (!packages.length) { box.append(text('div', 'No outreach packages yet.', 'empty')); return; }
+        packages.forEach(pkg => {
+          const row = document.createElement('div'); row.className = 'actions';
+          const label = text('span', `${pkg.id.slice(0, 8)} · ${pkg.state} · ${pkg.prospect_id}`);
+          row.append(label, button('Select', () => {
+            state.selectedPackageId = pkg.id;
+            state.selectedPackage = pkg;
+            $('event-package-id').value = pkg.id;
+            $('event-run-id').value = pkg.insight_run_id;
+            const verticalId = (pkg.vertical_pack_version || '').replace(/\.v[0-9]+$/, '');
+            if (verticalId) $('event-vertical-id').value = verticalId;
+            announce(`Selected package ${pkg.id.slice(0, 8)}.`);
+          }));
+          box.append(row);
+        });
+      };
+      const loadPackages = async () => {
+        try { const payload = await apiFetch('/api/outreach-packages?limit=100'); renderPackages(payload.outreach_packages); announce(`Loaded ${payload.outreach_packages.length} packages.`, 'success'); }
+        catch (error) { announce(error.message, 'error'); }
+      };
+      const createPackage = async (event) => {
+        event.preventDefault();
+        const prospectId = $('package-prospect-id').value.trim(), runId = $('package-run-id').value.trim();
+        try {
+          const result = await apiFetch(`/api/runs/${encodeURIComponent(runId)}/outreach-packages`, {method: 'POST', body: JSON.stringify({prospect_id: prospectId, report_version: $('package-report-version').value})});
+          state.selectedPackageId = result.outreach_package.id; state.selectedPackage = result.outreach_package; $('event-package-id').value = result.outreach_package.id; $('event-run-id').value = runId;
+          const verticalId = (result.outreach_package.vertical_pack_version || '').replace(/\.v[0-9]+$/, '');
+          if (verticalId) $('event-vertical-id').value = verticalId;
+          await loadPackages(); announce(`Created package ${result.outreach_package.id.slice(0, 8)} for review.`, 'success');
+        } catch (error) { announce(error.message, 'error'); }
+      };
+      const reviewPackage = async (action) => {
+        if (!state.selectedPackageId) return announce('Select an outreach package first.', 'error');
+        try {
+          let acknowledgePartialAi = false;
+          if (
+            action === 'approve'
+            && state.selectedPackage?.ai_score_snapshot?.customer_claim_eligible === false
+          ) {
+            acknowledgePartialAi = window.confirm(
+              'AI evidence is partial. Approve only after reviewing the completeness limits. Continue?'
+            );
+            if (!acknowledgePartialAi) return announce('Approval cancelled; partial AI evidence was not acknowledged.', 'error');
+          }
+          const result = await apiFetch(`/api/outreach-packages/${encodeURIComponent(state.selectedPackageId)}/${action}`, {method: 'POST', body: JSON.stringify({operator: 'operator', reason_code: action === 'reject' ? 'operator_review' : null, acknowledge_partial_ai: acknowledgePartialAi})});
+          $('package-result').textContent = JSON.stringify(result, null, 2); await loadPackages(); announce(`Package ${action}d.`, 'success');
+        } catch (error) { announce(error.message, 'error'); }
+      };
+      const exportPackage = async () => {
+        if (!state.selectedPackageId) return announce('Select an outreach package first.', 'error');
+        try { const result = await apiFetch(`/api/outreach-packages/${encodeURIComponent(state.selectedPackageId)}/export`); $('package-result').textContent = JSON.stringify(result, null, 2); announce('Approved package export ready.', 'success'); }
+        catch (error) { announce(error.message, 'error'); }
+      };
+      const loadFunnel = async () => {
+        try {
+          const vertical = $('funnel-vertical').value;
+          const payload = vertical
+            ? await apiFetch(`/api/funnel?vertical_id=${encodeURIComponent(vertical)}`)
+            : await apiFetch('/api/funnel');
+          $('funnel-result').textContent = JSON.stringify(payload, null, 2);
+          announce('Funnel metrics refreshed.', 'success');
+        } catch (error) { announce(error.message, 'error'); }
+      };
+      const startAgenticAnalysis = async (runId) => {
+        const request = {analysis_mode: 'standard', target_facts: {}};
+        try {
+          const preview = await apiFetch(`/api/runs/${runId}/agentic-analysis/preflight`, {
+            method: 'POST', body: JSON.stringify(request)
+          });
+          const preflight = preview.preflight;
+          if (!preflight.available) {
+            return announce('Agent analysis is disabled until its evaluation and operator promotion gates pass.', 'error');
+          }
+          if (!window.confirm(`Queue ${preflight.planned_calls} fixed analysis passes with a $${Number(preflight.max_cost_usd).toFixed(2)} ceiling?`)) return;
+          const result = await apiFetch(`/api/runs/${runId}/agentic-analysis`, {
+            method: 'POST', body: JSON.stringify(request)
+          });
+          announce(`Agent analysis job ${result.job.id.slice(0, 8)} queued. It cannot change deterministic scores.`, 'success');
+          await inspectRun(runId);
+        } catch (error) { announce(error.message, 'error'); }
+      };
+      const verticalAgenticPayload = () => ({
+        execution_mode: $('agentic-evidence-mode').value,
+        target_facts: {}
+      });
+      const verticalAgenticRunId = () => $('agentic-evidence-run-id').value.trim();
+      const renderVerticalAgentic = (payload) => {
+        const box = $('agentic-evidence-result');
+        box.hidden = false;
+        box.textContent = JSON.stringify(payload, null, 2);
+      };
+      const preflightVerticalAgentic = async () => {
+        const runId = verticalAgenticRunId();
+        if (!runId) return announce('Enter a completed run ID.', 'error');
+        try {
+          const result = await apiFetch(`/api/runs/${encodeURIComponent(runId)}/agentic-evidence/preflight`, {
+            method: 'POST', body: JSON.stringify(verticalAgenticPayload())
+          });
+          renderVerticalAgentic(result);
+          const status = result.preflight.available ? 'ready' : result.preflight.unavailable_reason;
+          announce(`Decision-evidence preflight: ${status}.`, result.preflight.available ? 'success' : 'error');
+        } catch (error) { announce(error.message, 'error'); }
+      };
+      const queueVerticalAgentic = async () => {
+        const runId = verticalAgenticRunId();
+        if (!runId) return announce('Enter a completed run ID.', 'error');
+        try {
+          const preview = await apiFetch(`/api/runs/${encodeURIComponent(runId)}/agentic-evidence/preflight`, {
+            method: 'POST', body: JSON.stringify(verticalAgenticPayload())
+          });
+          if (!preview.preflight.available) {
+            renderVerticalAgentic(preview);
+            return announce(preview.preflight.unavailable_reason, 'error');
+          }
+          if (!window.confirm(`Queue five durable work items with a maximum $${Number(preview.preflight.max_inference_cost_usd).toFixed(2)} aggregate inference ceiling?`)) return;
+          const result = await apiFetch(`/api/runs/${encodeURIComponent(runId)}/agentic-evidence`, {
+            method: 'POST', body: JSON.stringify(verticalAgenticPayload())
+          });
+          renderVerticalAgentic(result);
+          announce('Decision evidence queued for the separate durable worker.', 'success');
+        } catch (error) { announce(error.message, 'error'); }
+      };
+      const loadVerticalAgentic = async () => {
+        const runId = verticalAgenticRunId();
+        if (!runId) return announce('Enter a completed run ID.', 'error');
+        try {
+          const result = await apiFetch(`/api/runs/${encodeURIComponent(runId)}/agentic-evidence`);
+          renderVerticalAgentic(result);
+          announce('Agentic evidence, traces, runtime health, and limitations loaded.', 'success');
+        } catch (error) { announce(error.message, 'error'); }
+      };
+      const approveVerticalAgenticSnapshot = async () => {
+        const snapshotId = $('agentic-snapshot-id').value.trim();
+        if (!snapshotId) return announce('Enter a reviewed snapshot ID.', 'error');
+        try {
+          const result = await apiFetch(`/api/agentic-evidence/${encodeURIComponent(snapshotId)}/review`, {
+            method: 'POST',
+            body: JSON.stringify({
+              snapshot_type: $('agentic-snapshot-type').value,
+              event_type: 'approved',
+              operator: 'operator',
+              reason_code: 'evidence_reviewed'
+            })
+          });
+          renderVerticalAgentic(result);
+          announce('Agentic evidence snapshot approved.', 'success');
+        } catch (error) { announce(error.message, 'error'); }
+      };
+      const buildDecisionReport = async () => {
+        const runId = verticalAgenticRunId();
+        if (!runId) return announce('Enter a completed run ID.', 'error');
+        try {
+          const result = await apiFetch(`/api/runs/${encodeURIComponent(runId)}/agentic-evidence/reports`, {method: 'POST'});
+          renderVerticalAgentic(result);
+          announce('Immutable decision-intelligence-v1 and additive v6 reports created.', 'success');
+        } catch (error) { announce(error.message, 'error'); }
+      };
+      const queueOwnerAgentic = async () => {
+        const runId = verticalAgenticRunId();
+        try {
+          const result = await apiFetch(`/api/runs/${encodeURIComponent(runId)}/owner-agentic-analysis`, {
+            method: 'POST',
+            body: JSON.stringify({
+              prospect_id: $('agentic-owner-prospect-id').value.trim(),
+              consent_id: $('agentic-owner-consent-id').value.trim(),
+              approved_snapshot_ids: commaSeparatedIds('agentic-owner-snapshot-ids'),
+              execution_mode: 'premium'
+            })
+          });
+          renderVerticalAgentic(result);
+          announce('Private owner analysis queued; it cannot enter prospect output.', 'success');
+        } catch (error) { announce(error.message, 'error'); }
+      };
+      const queueRemediationBlueprint = async () => {
+        const runId = verticalAgenticRunId();
+        try {
+          const result = await apiFetch(`/api/runs/${encodeURIComponent(runId)}/remediation-blueprints`, {
+            method: 'POST',
+            body: JSON.stringify({
+              source_snapshot_ids: commaSeparatedIds('agentic-blueprint-source-ids'),
+              execution_mode: 'premium'
+            })
+          });
+          renderVerticalAgentic(result);
+          announce('Structured offline remediation blueprint queued for review.', 'success');
+        } catch (error) { announce(error.message, 'error'); }
+      };
+      const createClientBundle = async (runId) => {
+        try {
+          const result = await apiFetch(`/api/runs/${runId}/client-bundles`, {
+            method: 'POST', body: JSON.stringify({})
+          });
+          const bundle = result.client_report_bundle;
+          announce(`Client report bundle ${bundle.id.slice(0, 8)} created and manifest-validated.`, 'success');
+          await inspectRun(runId);
+        } catch (error) { announce(error.message, 'error'); }
+      };
+      const showAgenticJob = async (jobId, root) => {
+        try {
+          const payload = await apiFetch(`/api/agentic-analysis/jobs/${jobId}`);
+          const box = document.createElement('details'); box.open = true;
+          box.append(text('summary', 'Validated agent findings, contradictions, and escalation reasons'));
+          const pre = document.createElement('pre'); pre.className = 'diff-result';
+          pre.textContent = JSON.stringify(payload, null, 2); box.append(pre);
+          (payload.assessments || []).forEach(assessment => {
+            const actions = document.createElement('div'); actions.className = 'actions';
+            actions.append(
+              button('Approve validated assessment', async () => {
+                await apiFetch(`/api/agentic-assessments/${assessment.id}/review`, {
+                  method: 'POST',
+                  body: JSON.stringify({event_type: 'approved', operator: 'operator', reason_code: 'evidence_reviewed'})
+                });
+                announce('Validated assessment approved.', 'success');
+              }),
+              button('Request GPT review', async () => {
+                const result = await apiFetch(`/api/agentic-assessments/${assessment.id}/gpt-review`, {
+                  method: 'POST',
+                  body: JSON.stringify({event_type: 'gpt_review_requested', operator: 'operator', reason_code: 'second_opinion'})
+                });
+                announce(`GPT review request: ${result.execution_status}.`, 'success');
+              })
+            );
+            box.append(actions);
+          });
+          root.append(box);
+        } catch (error) { announce(error.message, 'error'); }
+      };
+      const appendProductStrength = (root, product) => {
+        const strength = product.product_strength;
+        const technical = strength.technical_seo_health || {};
+        const aiSurface = strength.ai_readiness || {};
+        const conversion = strength.conversion_readiness || {};
+        root.append(text('h3', 'Product strength score stack'));
+        const scoreGrid = document.createElement('div'); scoreGrid.className = 'detail-grid';
+        [
+          ['Technical SEO Health', technical.score],
+          ['AI Readiness', aiSurface.score],
+          ['Conversion Readiness', conversion.score],
+          ['Observed AI Visibility', strength.observed_ai_visibility?.score]
+        ].forEach(([label, value]) => {
+          const card = document.createElement('div'); card.className = 'detail-stat';
+          card.append(text('span', label, 'eyebrow'), text('b', value ?? 'Unknown')); scoreGrid.append(card);
+        });
+        root.append(scoreGrid);
+        root.append(text('p', strength.readiness_visibility_disclosure));
+        const localGrid = strength.market_evidence?.local_visibility || strength.market_evidence?.local_visibility_grid;
+        const heatmap = localGrid?.heatmap || localGrid?.cells;
+        if (Array.isArray(heatmap) && heatmap.length) {
+          const local = document.createElement('details');
+          local.append(text('summary', 'Local Visibility heatmap'));
+          const table = document.createElement('table');
+          const caption = document.createElement('caption'); caption.textContent = 'Coordinate-bound local rank observations'; table.append(caption);
+          const body = document.createElement('tbody');
+          heatmap.forEach(cell => {
+            const row = document.createElement('tr');
+            [cell.keyword || cell.keyword_target_id, `${cell.latitude}, ${cell.longitude}`, cell.rank ?? 'Not observed', cell.status || 'unknown'].forEach(value => {
+              const item = document.createElement('td'); item.textContent = value ?? '—'; row.append(item);
+            });
+            body.append(row);
+          });
+          table.append(body); local.append(table); root.append(local);
+        }
+        const confidence = document.createElement('details');
+        confidence.append(text('summary', 'Evidence Confidence, formulas, and limitations'));
+        const list = document.createElement('ul'); list.className = 'evidence';
+        Object.entries(strength.evidence_confidence || {}).forEach(([surface, value]) => {
+          list.append(text('li', `${surface.replaceAll('_', ' ')}: ${value ?? 'Unknown'}% Evidence Confidence`));
+        });
+        (strength.limitations || []).forEach(item => list.append(text('li', item)));
+        confidence.append(list); root.append(confidence);
+        if (product.agentic_jobs?.length) {
+          const job = product.agentic_jobs[0];
+          root.append(text('h3', 'Agent analysis'));
+          root.append(text('p', `${job.state} · ${job.requested_provider}/${job.requested_model} · $${Number(job.actual_cost_usd || 0).toFixed(4)} actual cost · ${job.call_attempts} recorded calls`));
+          root.append(button('Inspect agent evidence and review state', () => showAgenticJob(job.id, root)));
+        }
+        if (product.bundle_history?.length) {
+          root.append(text('h3', 'Client report history'));
+          product.bundle_history.slice(0, 3).forEach(bundle => {
+            const actions = document.createElement('div'); actions.className = 'actions';
+            actions.append(
+              text('span', `${bundle.created_at} · ${bundle.status} · ${bundle.id.slice(0, 8)}`),
+              button('Download HTML', () => apiDownload(`/api/client-bundles/${bundle.id}/download/html`, `${bundle.id}.html`)),
+              button('Download PDF', () => apiDownload(`/api/client-bundles/${bundle.id}/download/pdf`, `${bundle.id}.pdf`))
+            );
+            root.append(actions);
+          });
+        }
+      };
       const inspectRun = async (runId) => {
         try {
           const payload = await apiFetch(`/api/runs/${runId}`); const run = payload.run; const status = payload.status;
-          state.selectedRunId = runId; const root = $('detail-content'); root.replaceChildren();
+          let product = null;
+          try { product = await apiFetch(`/api/runs/${runId}/product-strength`); } catch (error) { if (!error.message.includes('404')) throw error; }
+          let ai = null;
+          try { ai = await apiFetch(`/api/runs/${runId}/ai-readiness`); } catch (error) { if (!error.message.includes('404')) throw error; }
+          state.selectedRunId = runId; $('market-run-core-id').value = runId;
+          if (run.summary?.market_keyword_set_id) $('keyword-set-id').value = run.summary.market_keyword_set_id;
+          const root = $('detail-content'); root.replaceChildren();
           root.append(text('div', run.requested_domain, 'domain'), text('span', run.id, 'run-id'));
           const grid = document.createElement('div'); grid.className = 'detail-grid';
-          [['Status', run.status], ['Score', run.summary?.overall_score], ['Pages', run.summary?.page_count], ['Paid calls', run.input_payload?.budget?.estimated_paid_api_calls]].forEach(([label,value]) => {
+          [['Status', run.status], ['SEO score', run.summary?.overall_score], ['AI Readiness', ai?.score ?? '—'], ['Pages', run.summary?.page_count]].forEach(([label,value]) => {
             const card = document.createElement('div'); card.className = 'detail-stat'; card.append(text('span', label, 'eyebrow'), text('b', value)); grid.append(card);
           });
           root.append(grid);
+          if (product) appendProductStrength(root, product);
+          if (ai) {
+            root.append(text('p', `${ai.completeness_percent}% evidence completeness · ${ai.status} · ${ai.presentation_label || ai.band || 'Unbanded'}`));
+            const aiGrid = document.createElement('div'); aiGrid.className = 'detail-grid';
+            [['AEO', ai.dimensions?.aeo?.score], ['GEO', ai.dimensions?.geo?.score], ['AIO', ai.dimensions?.aio?.score], ['Core pages', ai.cohorts?.core?.score], ['Supporting pages', ai.cohorts?.supporting?.score]].forEach(([label,value]) => {
+              const card = document.createElement('div'); card.className = 'detail-stat'; card.append(text('span', label, 'eyebrow'), text('b', value ?? 'Unknown')); aiGrid.append(card);
+            });
+            root.append(aiGrid);
+            const inventory = ai.inventory || {};
+            root.append(text('p', `Collected ${inventory.collected_pages ?? 0} pages from ${inventory.attempted_pages ?? 0} fetch attempts and ${inventory.discovered_pages ?? 0} discovered identities${inventory.duplicate_alias_count ? `; ${inventory.duplicate_alias_count} duplicate alias(es) collapsed` : ''}${inventory.capped ? ' (page cap reached)' : ''}.`));
+            const priorities = document.createElement('ol'); priorities.className = 'evidence';
+            (ai.recommendations || []).slice(0, 3).forEach(item => priorities.append(text('li', `${item.title}: ${item.action}`)));
+            root.append(priorities);
+            if ((ai.broken_links || []).length) root.append(text('p', `${ai.broken_links.length} conclusive broken internal link(s) found.`));
+            if ((ai.warnings || []).length) {
+              const limits = document.createElement('details'); limits.append(text('summary', 'Evidence limits'));
+              const limitList = document.createElement('ul'); ai.warnings.forEach(item => limitList.append(text('li', item))); limits.append(limitList); root.append(limits);
+            }
+          }
           const validation = text('p', status.validation?.valid ? 'Artifact contract valid' : `Validation errors: ${(status.validation?.errors || []).join(', ')}`);
           validation.style.color = status.validation?.valid ? 'var(--accent)' : 'var(--danger)'; root.append(validation);
           const actionWrap = document.createElement('div'); actionWrap.className = 'actions';
           actionWrap.append(
             button('Validate', () => validateRun(runId)),
-            button('Resume', () => mutateRun(`/api/runs/${runId}/resume`, {max_pages: run.input_payload?.limits?.max_pages || 5})),
-            button('Rerun report', () => mutateRun(`/api/runs/${runId}/rerun`, {stage: 'assembling_report', max_pages: run.input_payload?.limits?.max_pages || 5})),
-            button('Approve paid enrichment', () => mutateRun(`/api/runs/${runId}/approve-paid-enrichment`, {max_pages: run.input_payload?.limits?.max_pages || 5}), 'btn btn-danger')
+            button('Run agent analysis', () => startAgenticAnalysis(runId)),
+            button('Create client report', () => createClientBundle(runId), 'btn btn-primary'),
+            button('Build opportunity case', () => showOpportunityTools(runId), 'btn btn-primary'),
+            button('Resume', () => mutateRun(`/api/runs/${runId}/resume`, {max_pages: run.input_payload?.limits?.max_pages || 100})),
+            button('Rerun report', () => mutateRun(`/api/runs/${runId}/rerun`, {stage: 'assembling_report', max_pages: run.input_payload?.limits?.max_pages || 100})),
+            button('Approve paid enrichment', () => mutateRun(`/api/runs/${runId}/approve-paid-enrichment`, {max_pages: run.input_payload?.limits?.max_pages || 100}), 'btn btn-danger')
           );
           root.append(actionWrap);
-          const report = await apiFetch(`/api/runs/${runId}/report`);
+          const report = await apiFetch(`/api/runs/${runId}/report?version=v2`);
+          const search = report.report_payload?.search_visibility;
+          if (search) {
+            root.append(text('h3', 'Keywords and Google rankings'));
+            root.append(text(
+              'p',
+              `${search.ranking_checks ?? 0} checked · ${search.ranked_count ?? 0} observed rankings · ${search.not_observed_count ?? 0} not observed in the sampled top 100 · ${search.provider_call_count ?? 0} provider calls`
+            ));
+            root.append(text(
+              'p',
+              `Search visibility ${search.visibility_score ?? 'Unknown'} · ${search.market || 'Unknown market'} · ${search.device || 'Unknown device'} · ${search.snapshot_date || 'No snapshot date'}`
+            ));
+            const keywordRows = search.keywords || [];
+            if (keywordRows.length) {
+              const table = document.createElement('table');
+              const caption = document.createElement('caption'); caption.textContent = 'Observed keyword and Google ranking evidence'; table.append(caption);
+              const head = document.createElement('thead'); const headRow = document.createElement('tr');
+              ['Keyword', 'Volume', 'Organic position', 'Overall SERP position', 'Ranking page', 'Opportunity'].forEach(label => {
+                const cell = document.createElement('th'); cell.scope = 'col'; cell.textContent = label; headRow.append(cell);
+              });
+              head.append(headRow); table.append(head);
+              const body = document.createElement('tbody');
+              keywordRows.slice(0, 10).forEach(row => {
+                const item = document.createElement('tr');
+                const position = row.checked
+                  ? (row.observed_rank ?? 'Not observed in sampled top 100')
+                  : 'Not checked';
+                [row.keyword, row.search_volume ?? 'Unknown', position, row.observed_absolute_position ?? '—', row.observed_url || '—', row.opportunity_label].forEach(value => {
+                  const cell = document.createElement('td'); cell.textContent = value ?? '—'; item.append(cell);
+                });
+                body.append(item);
+              });
+              table.append(body); root.append(table);
+            } else {
+              root.append(text('p', 'No paid keyword or Google ranking evidence was collected for this run.', 'empty'));
+            }
+            if ((search.limitations || []).length) {
+              const limits = document.createElement('details'); limits.append(text('summary', 'Search evidence limits'));
+              const limitList = document.createElement('ul'); search.limitations.forEach(item => limitList.append(text('li', item))); limits.append(limitList); root.append(limits);
+            }
+          }
+          const authority = report.report_payload?.offsite_authority;
+          if (authority) {
+            root.append(text('h3', 'Off-site authority'));
+            root.append(text(
+              'p',
+              `DataForSEO Link Rank ${authority.link_rank ?? 'Unknown'}${authority.link_rank != null ? '/100' : ''} · ${authority.referring_domains ?? 'Unknown'} referring domains · ${authority.backlinks ?? 'Unknown'} backlinks`
+            ));
+            const authorityGrid = document.createElement('div'); authorityGrid.className = 'detail-grid';
+            [
+              ['Main referring domains', authority.referring_main_domains],
+              ['Referring pages', authority.referring_pages],
+              ['Referring IPs', authority.referring_ips],
+              ['Nofollow domains', authority.referring_domains_nofollow_percent != null ? `${authority.referring_domains_nofollow_percent}%` : null],
+              ['Backlink spam score', authority.backlinks_spam_score],
+            ].forEach(([label, value]) => {
+              const card = document.createElement('div'); card.className = 'detail-stat';
+              card.append(text('span', label, 'eyebrow'), text('b', value ?? 'Unknown')); authorityGrid.append(card);
+            });
+            root.append(authorityGrid);
+            root.append(text('p', 'DataForSEO Link Rank is provider-specific link evidence—not Google Domain Authority or an exposed Google PageRank value.'));
+            if ((authority.limitations || []).length) {
+              const limits = document.createElement('details'); limits.append(text('summary', 'Authority evidence limits'));
+              const limitList = document.createElement('ul'); authority.limitations.forEach(item => limitList.append(text('li', item))); limits.append(limitList); root.append(limits);
+            }
+          }
           const list = document.createElement('ul'); list.className = 'evidence';
           (report.key_actions || []).forEach(action => {
             const item = document.createElement('li'); item.append(text('span', action.action));
             const ref = action.evidence_refs?.[0]; if (ref) item.append(text('code', ` ${ref.artifact_path} → ${ref.field}`)); list.append(item);
           });
           root.append(list); announce(`Loaded run ${runId.slice(0,8)}.`, 'success');
+          try {
+            const marketPayload = await apiFetch(`/api/runs/${runId}/market-evidence`);
+            if (marketPayload.market_evidence_runs?.length) {
+              renderCompetitorCandidates(marketPayload.market_evidence_runs[0]);
+              root.append(text('h3', 'Tacoma market evidence'));
+              const marketRun = marketPayload.market_evidence_runs[0];
+              const completeness = marketRun.provider_completeness || {};
+              root.append(text('p', `${marketRun.state} · ${marketRun.phase} · ${marketRun.provider_calls.length} provider calls · $${Number(marketRun.actual_provider_cost || 0).toFixed(4)} actual provider cost · ${completeness.completeness_percent ?? 'Unknown'}% provider completeness`));
+            }
+          } catch (error) {
+            if (!error.message.includes('404')) announce(error.message, 'error');
+          }
+          try {
+            const demandPayload = await apiFetch(`/api/runs/${runId}/demand-conversion?mode=prospect`);
+            const demand = demandPayload.demand_conversion;
+            if (demand) {
+              root.append(text('h3', 'Demand and conversion evidence'));
+              root.append(text('p', `${demand.completeness_percent}% evidence completeness · ${demand.status} · ${demand.mode.replace('_', ' ')}`));
+              const demandGrid = document.createElement('div'); demandGrid.className = 'detail-grid';
+              const base = demand.modeled_outputs?.base || {};
+              [
+                ['Approved intent groups', demand.intent_groups?.length ?? 0],
+                ['Base qualified visits', base.incremental_qualified_visits ?? 'Unknown'],
+                ['Base new customers', base.incremental_members ?? 'Unknown'],
+                ['Base recurring revenue', base.incremental_recurring_revenue != null ? `$${Number(base.incremental_recurring_revenue).toLocaleString()}` : 'Unknown']
+              ].forEach(([label, value]) => {
+                const card = document.createElement('div'); card.className = 'detail-stat';
+                card.append(text('span', label, 'eyebrow'), text('b', value)); demandGrid.append(card);
+              });
+              root.append(demandGrid);
+              root.append(text('p', 'Search demand represents occasions, not unique people. Modeled lift is capacity-bound and is not a guarantee.'));
+              if (!Object.keys(demand.modeled_outputs || {}).length) {
+                root.append(text('p', 'Revenue ranges are withheld until demand, economics, and reviewed funnel assumptions are available.', 'empty'));
+              }
+            }
+          } catch (error) {
+            if (!error.message.includes('404')) announce(error.message, 'error');
+          }
+          try {
+            const opportunityPayload = await apiFetch(`/api/runs/${runId}/opportunity`);
+            const opportunity = opportunityPayload.opportunity.report_payload;
+            const economics = opportunity.verified_now?.economics || {};
+            root.append(text('h3', 'Demand-to-revenue opportunity'));
+            root.append(text('p', 'Forecast, not guarantee', 'forecast-label'));
+            root.append(text(
+              'p',
+              `${opportunity.demand?.approved_nonbrand_search_occasions ?? 'Unknown'} monthly non-brand search occasions · ${economics.capacity_headroom ?? 'Unknown'} customer capacity · $${Number(economics.capacity_mrr || 0).toLocaleString()} MRR ceiling · $${Number(economics.capacity_annual_run_rate || 0).toLocaleString()} annual run-rate ceiling`
+            ));
+          } catch (error) {
+            if (!error.message.includes('404')) announce(error.message, 'error');
+          }
         } catch (error) { announce(error.message, 'error'); }
       };
       const validateRun = async (runId) => {
@@ -338,11 +1306,502 @@
       };
       $('run-form').addEventListener('submit', async (event) => {
         event.preventDefault();
-        const payload = { url: $('target-url').value.trim(), mode: $('run-mode').value, max_pages: Number($('max-pages').value), approve_paid_enrichment: $('approve-paid').checked };
-        try { announce('Running analysis…'); const result = await apiFetch('/api/runs', {method: 'POST', body: JSON.stringify(payload)}); announce(`Run ${result.run.id.slice(0,8)} completed.`, 'success'); $('target-url').value = ''; await loadRuns(); await inspectRun(result.run.id); }
+        const payload = { url: $('target-url').value.trim(), mode: $('run-mode').value, max_pages: Number($('max-pages').value) };
+        try {
+          announce('Running analysis…');
+          const result = await apiFetch('/api/runs', {method: 'POST', body: JSON.stringify(payload)});
+          if (result.market?.keyword_set?.id) {
+            $('keyword-set-id').value = result.market.keyword_set.id;
+            $('market-run-core-id').value = result.run.id;
+          }
+          announce(`Run ${result.run.id.slice(0,8)} completed${result.market ? '; Tacoma market pilot is ready for explicit approval' : ''}.`, 'success');
+          $('target-url').value = ''; await loadRuns(); await inspectRun(result.run.id);
+        }
         catch (error) { announce(error.message, 'error'); }
       });
-      $('connect-button').addEventListener('click', () => { sessionStorage.setItem('seo-insights-api-key', apiKey()); loadRuns(); });
+      $('keyword-file').addEventListener('change', async (event) => {
+        const file = event.target.files?.[0];
+        if (file) $('keyword-csv').value = await file.text();
+      });
+      $('keyword-form').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        try {
+          const payload = keywordPayload();
+          const result = await apiFetch('/api/keyword-sets/csv-preview', {method: 'POST', body: JSON.stringify(payload)});
+          state.lastKeywordPayload = payload;
+          $('market-result').hidden = false;
+          $('market-result').textContent = JSON.stringify({rows_seen: result.rows_seen, category_counts: result.category_counts, issues: result.issues}, null, 2);
+          announce(`Previewed ${result.rows_seen} keyword rows.`, result.valid ? 'success' : 'error');
+        } catch (error) { announce(error.message, 'error'); }
+      });
+      $('commit-keywords-button').addEventListener('click', async () => {
+        try {
+          const payload = state.lastKeywordPayload || keywordPayload();
+          const result = await apiFetch('/api/keyword-sets/csv-commit', {method: 'POST', body: JSON.stringify(payload)});
+          $('market-result').hidden = false; $('market-result').textContent = JSON.stringify(result, null, 2);
+          await loadKeywordSets(); $('keyword-set-id').value = result.keyword_set.id;
+          announce('Keyword set committed as a draft.', 'success');
+        } catch (error) { announce(error.message, 'error'); }
+      });
+      $('approve-keyword-set-button').addEventListener('click', async () => {
+        const id = $('keyword-set-id').value;
+        if (!id) return announce('Select a keyword set first.', 'error');
+        const approvedKeywords = $('keyword-review-list').value.split(/\r?\n/).map(value => value.trim()).filter(Boolean);
+        try {
+          const result = await apiFetch(`/api/keyword-sets/${encodeURIComponent(id)}/approve`, {
+            method: 'POST',
+            body: JSON.stringify({approved_keywords: approvedKeywords, rejected_keywords: [], operator: 'operator'})
+          });
+          $('market-result').hidden = false; $('market-result').textContent = JSON.stringify({pilot: result.pilot_preflight, deep: result.deep_preflight}, null, 2);
+          await loadKeywordSets(); $('keyword-set-id').value = id;
+          announce('Keyword set approved. Factual-risk terms not listed remain excluded.', 'success');
+        } catch (error) { announce(error.message, 'error'); }
+      });
+      $('start-market-pilot-button').addEventListener('click', async () => {
+        const runId = $('market-run-core-id').value.trim(), keywordSetId = $('keyword-set-id').value;
+        if (!runId || !keywordSetId) return announce('Select a completed run and approved keyword set.', 'error');
+        try {
+          announce('Collecting bounded Tacoma pilot evidence…');
+          const result = await apiFetch(`/api/runs/${encodeURIComponent(runId)}/market-evidence/pilot`, {
+            method: 'POST',
+            body: JSON.stringify({
+              keyword_set_id: keywordSetId,
+              target_entity_name: $('market-entity-name').value.trim() || null,
+              approve_paid_enrichment: $('market-paid-approval').checked
+            })
+          });
+          renderCompetitorCandidates(result.market_evidence_run);
+          $('market-result').hidden = false; $('market-result').textContent = JSON.stringify({state: result.market_evidence_run.state, provider_calls: result.market_evidence_run.provider_calls.length, cost: result.market_evidence_run.actual_provider_cost}, null, 2);
+          announce('Pilot complete; approve one to three direct competitors.', 'success');
+        } catch (error) { announce(error.message, 'error'); }
+      });
+      $('approve-competitors-button').addEventListener('click', async () => {
+        const marketId = $('market-evidence-id').value.trim();
+        const ids = Array.from(document.querySelectorAll('.competitor-choice:checked')).map(node => node.value);
+        try {
+          const result = await apiFetch(`/api/market-evidence/${encodeURIComponent(marketId)}/competitors/approve`, {method: 'POST', body: JSON.stringify({candidate_ids: ids, operator: 'operator'})});
+          state.marketEvidence = result.market_evidence_run;
+          $('market-result').hidden = false; $('market-result').textContent = JSON.stringify({state: result.market_evidence_run.state, approved_competitors: result.market_evidence_run.approved_competitors}, null, 2);
+          announce(`Approved ${ids.length} competitor(s).`, 'success');
+        } catch (error) { announce(error.message, 'error'); }
+      });
+      $('enrich-competitors-button').addEventListener('click', async () => {
+        const marketId = $('market-evidence-id').value.trim();
+        try {
+          announce('Collecting bounded competitor and screenshot evidence…');
+          const result = await apiFetch(`/api/market-evidence/${encodeURIComponent(marketId)}/enrich`, {
+            method: 'POST',
+            body: JSON.stringify({
+              approve_paid_enrichment: $('market-paid-approval').checked,
+              capture_screenshots: $('market-screenshots').checked
+            })
+          });
+          renderCompetitorCandidates(result.market_evidence_run);
+          $('market-result').hidden = false; $('market-result').textContent = JSON.stringify({state: result.market_evidence_run.state, recommended_gaps: result.market_evidence_run.recommended_gaps, screenshots: result.market_evidence_run.screenshots}, null, 2);
+          announce('Competitor comparison and v3 report are ready.', 'success');
+        } catch (error) { announce(error.message, 'error'); }
+      });
+      $('deep-market-button').addEventListener('click', async () => {
+        const marketId = $('market-evidence-id').value.trim();
+        if (!window.confirm('Run the explicitly approved deep keyword collection within the 40-call cap?')) return;
+        try {
+          const result = await apiFetch(`/api/market-evidence/${encodeURIComponent(marketId)}/deep-run`, {
+            method: 'POST',
+            body: JSON.stringify({approve_paid_enrichment: $('market-paid-approval').checked})
+          });
+          $('market-evidence-id').value = result.market_evidence_run.id;
+          renderCompetitorCandidates(result.market_evidence_run);
+          $('market-result').hidden = false; $('market-result').textContent = JSON.stringify({state: result.market_evidence_run.state, organic_checks: result.market_evidence_run.organic_evidence.length, maps_checks: result.market_evidence_run.maps_evidence.length, cost: result.market_evidence_run.actual_provider_cost}, null, 2);
+          announce('Deep market evidence completed in a new immutable version.', 'success');
+        } catch (error) { announce(error.message, 'error'); }
+      });
+      $('load-market-report-button').addEventListener('click', async () => {
+        const runId = $('market-run-core-id').value.trim();
+        try {
+          const result = await apiFetch(`/api/runs/${encodeURIComponent(runId)}/report?version=v3`);
+          $('market-result').hidden = false; $('market-result').textContent = result.export_markdown || JSON.stringify(result.report_payload, null, 2);
+          announce('Loaded combined v3 report.', 'success');
+        } catch (error) { announce(error.message, 'error'); }
+      });
+      $('demand-file').addEventListener('change', async (event) => {
+        const file = event.target.files?.[0];
+        if (file) $('demand-csv').value = await file.text();
+      });
+      $('demand-trend-file').addEventListener('change', async (event) => {
+        const file = event.target.files?.[0];
+        if (file) $('demand-trend-csv').value = await file.text();
+      });
+      $('calibration-file').addEventListener('change', async (event) => {
+        const file = event.target.files?.[0];
+        if (file) $('calibration-csv').value = await file.text();
+      });
+      $('opportunity-vertical').addEventListener('change', () => {
+        const bjj = $('opportunity-vertical').value === 'national_bjj_registry';
+        $('economics-model').value = bjj ? 'membership' : 'won_job';
+        if (bjj) $('opportunity-market').value = 'Tacoma, WA';
+      });
+      $('preview-demand-button').addEventListener('click', async () => {
+        try {
+          const result = await apiFetch('/api/demand-evidence/csv-preview', {
+            method: 'POST',
+            body: JSON.stringify(demandPayload())
+          });
+          renderOpportunityResult({
+            valid: result.valid,
+            rows_seen: result.rows_seen,
+            groups: result.groups,
+            issues: result.issues,
+            semantics: 'Monthly search occasions, not unique people'
+          });
+          announce('Demand preview ready for close-variant and intent review.', result.valid ? 'success' : 'error');
+        } catch (error) { announce(error.message, 'error'); }
+      });
+      $('commit-demand-button').addEventListener('click', async () => {
+        try {
+          const result = await apiFetch('/api/demand-evidence/csv-commit', {
+            method: 'POST',
+            body: JSON.stringify(demandPayload())
+          });
+          state.demandEvidence = result.demand_evidence;
+          renderOpportunityResult(result);
+          announce('Demand draft committed as immutable evidence.', 'success');
+        } catch (error) { announce(error.message, 'error'); }
+      });
+      $('approve-demand-button').addEventListener('click', async () => {
+        if (!state.demandEvidence?.id) return announce('Commit a demand draft first.', 'error');
+        try {
+          const result = await apiFetch(`/api/demand-evidence/${encodeURIComponent(state.demandEvidence.id)}/approve`, {
+            method: 'POST',
+            body: JSON.stringify({operator: 'operator'})
+          });
+          state.demandEvidence = result.demand_evidence;
+          renderOpportunityResult(result);
+          announce('Reviewed demand groups approved in a new immutable version.', 'success');
+        } catch (error) { announce(error.message, 'error'); }
+      });
+      $('preview-demand-trend-button').addEventListener('click', async () => {
+        try {
+          const result = await apiFetch('/api/demand-trends/csv-preview', {
+            method: 'POST',
+            body: JSON.stringify(demandTrendPayload())
+          });
+          renderOpportunityResult(result);
+          announce('Trend preview ready. Relative indices are not treated as searcher counts.', result.valid ? 'success' : 'error');
+        } catch (error) { announce(error.message, 'error'); }
+      });
+      $('commit-demand-trend-button').addEventListener('click', async () => {
+        try {
+          const committed = await apiFetch('/api/demand-trends/csv-commit', {
+            method: 'POST',
+            body: JSON.stringify(demandTrendPayload())
+          });
+          const draft = committed.demand_trend;
+          const result = draft.state === 'approved'
+            ? committed
+            : await apiFetch(`/api/demand-trends/${encodeURIComponent(draft.id)}/approve`, {
+                method: 'POST',
+                body: JSON.stringify({operator: 'operator'})
+              });
+          state.demandTrend = result.demand_trend;
+          $('trend-snapshot-ids').value = state.demandTrend.id;
+          renderOpportunityResult(result);
+          announce('Immutable trend snapshot approved and bound to this evidence context.', 'success');
+        } catch (error) { announce(error.message, 'error'); }
+      });
+      $('save-economics-button').addEventListener('click', async () => {
+        const prospectId = $('opportunity-prospect-id').value.trim();
+        if (!prospectId) return announce('Select a prospect first.', 'error');
+        try {
+          const result = await apiFetch(`/api/prospects/${encodeURIComponent(prospectId)}/economics`, {
+            method: 'POST',
+            body: JSON.stringify(economicsPayload())
+          });
+          state.economicsProfile = result.economics_profile;
+          renderOpportunityResult(result);
+          announce('Business economics approved with source provenance.', 'success');
+        } catch (error) { announce(error.message, 'error'); }
+      });
+      $('build-opportunity-button').addEventListener('click', async () => {
+        const runId = $('opportunity-run-id').value.trim();
+        if (!runId || !state.economicsProfile?.id) return announce('Select a run and approve economics first.', 'error');
+        try {
+          const assumptions = JSON.parse($('opportunity-assumptions').value);
+          const result = await apiFetch(`/api/runs/${encodeURIComponent(runId)}/opportunity-scenarios`, {
+            method: 'POST',
+            body: JSON.stringify({
+              prospect_id: $('opportunity-prospect-id').value.trim(),
+              demand_evidence_set_id: state.demandEvidence?.id || null,
+              economics_profile_id: state.economicsProfile.id,
+              assumptions
+            })
+          });
+          state.opportunityScenario = result.opportunity_scenario;
+          renderOpportunityResult({
+            forecast_label: 'Forecast, not guarantee',
+            status: state.opportunityScenario.status,
+            completeness_percent: state.opportunityScenario.completeness_percent,
+            outputs: state.opportunityScenario.outputs,
+            sensitivity: state.opportunityScenario.sensitivity,
+            warnings: state.opportunityScenario.warnings
+          });
+          announce('Opportunity scenario built; review all assumptions before approval.', 'success');
+        } catch (error) { announce(error.message, 'error'); }
+      });
+      $('approve-opportunity-button').addEventListener('click', async () => {
+        if (!state.opportunityScenario?.id) return announce('Build a complete scenario first.', 'error');
+        try {
+          const result = await apiFetch(`/api/opportunity-scenarios/${encodeURIComponent(state.opportunityScenario.id)}/approve`, {
+            method: 'POST',
+            body: JSON.stringify({operator: 'operator'})
+          });
+          state.opportunityScenario = result.opportunity_scenario;
+          const report = result.reports?.['opportunity-v1']?.report_payload || {};
+          const economics = report.verified_now?.economics || {};
+          renderOpportunityResult({
+            forecast_label: 'Forecast, not guarantee',
+            executive_answer: report.executive_answer,
+            capacity_headroom: economics.capacity_headroom,
+            capacity_mrr: economics.capacity_mrr,
+            capacity_annual_run_rate: economics.capacity_annual_run_rate,
+            provider_cost_and_completeness: report.provider_cost_and_completeness,
+            what_we_need_to_confirm: report.what_we_need_to_confirm
+          });
+          announce('Approved scenario and immutable v4 report are ready.', 'success');
+        } catch (error) { announce(error.message, 'error'); }
+      });
+      $('build-demand-conversion-button').addEventListener('click', async () => {
+        const runId = $('opportunity-run-id').value.trim();
+        const prospectId = $('opportunity-prospect-id').value.trim();
+        const mode = $('demand-conversion-mode').value;
+        if (!runId || !prospectId) return announce('Select a completed run and qualified prospect first.', 'error');
+        if (!state.economicsProfile?.id) return announce('Approve business economics first.', 'error');
+        if (!state.demandEvidence?.id) return announce('Approve reviewed demand evidence first.', 'error');
+        const ownerIds = commaSeparatedIds('owned-snapshot-ids');
+        if (mode === 'owner_verified' && !ownerIds.length) {
+          return announce('Owner-verified mode requires at least one consented aggregate snapshot.', 'error');
+        }
+        try {
+          const result = await apiFetch(`/api/runs/${encodeURIComponent(runId)}/demand-conversion`, {
+            method: 'POST',
+            body: JSON.stringify({
+              prospect_id: prospectId,
+              mode,
+              market: $('opportunity-market').value.trim(),
+              demand_evidence_set_id: state.demandEvidence.id,
+              economics_profile_id: state.economicsProfile.id,
+              owner_snapshot_ids: mode === 'owner_verified' ? ownerIds : [],
+              trend_snapshot_ids: commaSeparatedIds('trend-snapshot-ids'),
+              event_map_id: $('conversion-event-map-id').value.trim() || null,
+              assumptions: demandConversionAssumptions(),
+              public_sources: []
+            })
+          });
+          state.demandConversion = result.demand_conversion;
+          renderOpportunityResult(result);
+          announce(`Built ${mode.replace('_', '-')} demand-to-conversion evidence for review.`, 'success');
+        } catch (error) { announce(error.message, 'error'); }
+      });
+      $('approve-demand-conversion-button').addEventListener('click', async () => {
+        if (!state.demandConversion?.id) return announce('Build demand-to-conversion evidence first.', 'error');
+        try {
+          const result = await apiFetch(`/api/demand-conversion/${encodeURIComponent(state.demandConversion.id)}/approve`, {
+            method: 'POST',
+            body: JSON.stringify({operator: 'operator'})
+          });
+          state.demandConversion = result.demand_conversion;
+          renderOpportunityResult(result);
+          announce('Approved evidence and generated immutable demand-conversion and v5 reports.', 'success');
+        } catch (error) { announce(error.message, 'error'); }
+      });
+      $('load-demand-conversion-button').addEventListener('click', async () => {
+        const runId = $('opportunity-run-id').value.trim();
+        if (!runId) return announce('Select a completed run first.', 'error');
+        try {
+          const mode = $('demand-conversion-mode').value;
+          const result = await apiFetch(`/api/runs/${encodeURIComponent(runId)}/demand-conversion?mode=${encodeURIComponent(mode)}`);
+          state.demandConversion = result.demand_conversion;
+          renderOpportunityResult(result);
+          announce('Loaded demand-to-conversion evidence and report history.', 'success');
+        } catch (error) { announce(error.message, 'error'); }
+      });
+      $('create-pitch-pack-button').addEventListener('click', async () => {
+        const runId = $('opportunity-run-id').value.trim();
+        const prospectId = $('opportunity-prospect-id').value.trim();
+        try {
+          const result = await apiFetch(`/api/runs/${encodeURIComponent(runId)}/pitch-pack`, {
+            method: 'POST',
+            body: JSON.stringify({prospect_id: prospectId})
+          });
+          state.selectedPackageId = result.outreach_package.id;
+          state.selectedPackage = result.outreach_package;
+          renderOpportunityResult(result);
+          announce('Pitch pack created for required human review.', 'success');
+        } catch (error) { announce(error.message, 'error'); }
+      });
+      $('resume-market-button').addEventListener('click', async () => {
+        const marketId = $('recovery-market-id').value.trim();
+        if (!marketId) return announce('Enter a partial market evidence run ID.', 'error');
+        if (!window.confirm('Retry only unresolved eligible paid evidence in a new immutable market run?')) return;
+        try {
+          const result = await apiFetch(`/api/market-evidence/${encodeURIComponent(marketId)}/resume`, {
+            method: 'POST',
+            body: JSON.stringify({
+              approve_paid_enrichment: $('market-paid-approval').checked,
+              account_recovered: $('recovery-account-confirmed').checked
+            })
+          });
+          $('market-evidence-id').value = result.market_evidence_run.id;
+          renderOpportunityResult({
+            predecessor_market_run_id: result.predecessor_market_run_id,
+            successor_market_run_id: result.market_evidence_run.id,
+            actual_provider_cost: result.market_evidence_run.actual_provider_cost,
+            provider_completeness: result.market_evidence_run.provider_completeness,
+            evidence_limits: result.market_evidence_run.evidence_limits
+          });
+          announce('Unresolved provider work resumed in a successor run.', 'success');
+        } catch (error) { announce(error.message, 'error'); }
+      });
+      const calibrationPayload = () => ({
+        csv_text: $('calibration-csv').value,
+        prospect_id: $('opportunity-prospect-id').value.trim(),
+        vertical_id: $('opportunity-vertical').value,
+        market: $('opportunity-market').value.trim()
+      });
+      const ownedMeasurementPayload = () => {
+        const ownerVerified = $('demand-conversion-mode').value === 'owner_verified';
+        if (ownerVerified && $('owner-consent-confirmed').checked && !state.ownerConsentConfirmedAt) {
+          state.ownerConsentConfirmedAt = new Date().toISOString();
+        }
+        return {
+          csv_text: $('calibration-csv').value,
+          prospect_id: $('opportunity-prospect-id').value.trim(),
+          vertical_id: $('opportunity-vertical').value,
+          source: $('owned-measurement-source').value,
+          context: {market: $('opportunity-market').value.trim()},
+          owner_verified: ownerVerified,
+          owner_consent: ownerVerified && $('owner-consent-confirmed').checked ? {
+            confirmed: true,
+            operator: 'operator',
+            confirmed_at: state.ownerConsentConfirmedAt
+          } : null,
+          event_map_id: $('conversion-event-map-id').value.trim() || null
+        };
+      };
+      $('preview-calibration-button').addEventListener('click', async () => {
+        try {
+          const result = await apiFetch('/api/calibration/csv-preview', {
+            method: 'POST',
+            body: JSON.stringify(calibrationPayload())
+          });
+          renderOpportunityResult(result);
+          announce('Aggregate calibration preview ready; no lead identity is accepted.', result.valid ? 'success' : 'error');
+        } catch (error) { announce(error.message, 'error'); }
+      });
+      $('commit-calibration-button').addEventListener('click', async () => {
+        try {
+          const result = await apiFetch('/api/calibration/csv-commit', {
+            method: 'POST',
+            body: JSON.stringify(calibrationPayload())
+          });
+          renderOpportunityResult(result);
+          announce('Aggregate outcome calibration committed.', 'success');
+        } catch (error) { announce(error.message, 'error'); }
+      });
+      $('preview-owned-measurement-button').addEventListener('click', async () => {
+        try {
+          const result = await apiFetch('/api/owned-measurements/csv-preview', {
+            method: 'POST', body: JSON.stringify(ownedMeasurementPayload())
+          });
+          renderOpportunityResult(result);
+          announce('Owner-authorized aggregate snapshot preview ready.', result.valid ? 'success' : 'error');
+        } catch (error) { announce(error.message, 'error'); }
+      });
+      $('commit-owned-measurement-button').addEventListener('click', async () => {
+        try {
+          const result = await apiFetch('/api/owned-measurements/csv-commit', {
+            method: 'POST', body: JSON.stringify(ownedMeasurementPayload())
+          });
+          state.ownedMeasurements = result.owned_measurements || [];
+          $('owned-snapshot-ids').value = state.ownedMeasurements.map(item => item.id).join(',');
+          renderOpportunityResult(result);
+          announce('Immutable aggregate owner measurement committed.', 'success');
+        } catch (error) { announce(error.message, 'error'); }
+      });
+      $('create-event-map-button').addEventListener('click', async () => {
+        const sourceSnapshotIds = commaSeparatedIds('owned-snapshot-ids');
+        if (!sourceSnapshotIds.length) return announce('Commit owner measurement snapshots before mapping conversion events.', 'error');
+        try {
+          const result = await apiFetch('/api/conversion-event-maps', {
+            method: 'POST',
+            body: JSON.stringify({
+              prospect_id: $('opportunity-prospect-id').value.trim(),
+              vertical_id: $('opportunity-vertical').value,
+              mappings: JSON.parse($('conversion-event-map-json').value),
+              source_snapshot_ids: sourceSnapshotIds,
+              approve: true,
+              operator: 'operator'
+            })
+          });
+          $('conversion-event-map-id').value = result.conversion_event_map.id;
+          renderOpportunityResult(result);
+          announce('Approved immutable conversion event map.', 'success');
+        } catch (error) { announce(error.message, 'error'); }
+      });
+      $('prospect-form').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const payload = {csv_text: $('prospect-csv').value, vertical_pack_version: $('vertical-pack').value};
+        try {
+          const result = await apiFetch('/api/prospects/csv-preview', {method: 'POST', body: JSON.stringify(payload)});
+          state.lastProspectPreview = payload;
+          const box = $('prospect-result'); box.hidden = false;
+          box.textContent = JSON.stringify({rows_seen: result.rows_seen, valid: result.valid_prospects.length, issues: result.issues}, null, 2);
+          announce(`Previewed ${result.rows_seen} rows; ${result.valid_prospects.length} qualified.`, 'success');
+        } catch (error) { announce(error.message, 'error'); }
+      });
+      $('commit-prospects-button').addEventListener('click', async () => {
+        const payload = state.lastProspectPreview || {csv_text: $('prospect-csv').value, vertical_pack_version: $('vertical-pack').value};
+        try {
+          const result = await apiFetch('/api/prospects/csv-commit', {method: 'POST', body: JSON.stringify(payload)});
+          const box = $('prospect-result'); box.hidden = false; box.textContent = JSON.stringify(result, null, 2);
+          await loadProspects(); announce(`Saved ${result.saved_count} qualified prospects.`, 'success');
+        } catch (error) { announce(error.message, 'error'); }
+      });
+      $('load-prospects-button').addEventListener('click', loadProspects);
+      $('load-keyword-sets-button').addEventListener('click', loadKeywordSets);
+      $('preflight-agentic-evidence-button').addEventListener('click', preflightVerticalAgentic);
+      $('queue-agentic-evidence-button').addEventListener('click', queueVerticalAgentic);
+      $('load-agentic-evidence-button').addEventListener('click', loadVerticalAgentic);
+      $('approve-agentic-snapshot-button').addEventListener('click', approveVerticalAgenticSnapshot);
+      $('build-decision-report-button').addEventListener('click', buildDecisionReport);
+      $('queue-owner-agentic-button').addEventListener('click', queueOwnerAgentic);
+      $('queue-blueprint-button').addEventListener('click', queueRemediationBlueprint);
+      $('load-packages-button').addEventListener('click', loadPackages);
+      $('package-create-form').addEventListener('submit', createPackage);
+      $('approve-package-button').addEventListener('click', () => reviewPackage('approve'));
+      $('reject-package-button').addEventListener('click', () => reviewPackage('reject'));
+      $('export-package-button').addEventListener('click', exportPackage);
+      $('load-funnel-button').addEventListener('click', loadFunnel);
+      $('funnel-vertical').addEventListener('change', loadFunnel);
+      $('event-form').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const revenueText = $('event-revenue').value.trim();
+        const payload = {
+          insight_run_id: $('event-run-id').value.trim(),
+          outreach_package_id: $('event-package-id').value.trim(),
+          package_version: state.selectedPackage?.package_version || 1,
+          stage: $('event-stage').value,
+          vertical_id: $('event-vertical-id').value,
+          operator: $('event-operator').value.trim(),
+          service_packages: state.selectedPackage?.recommended_service_package || [],
+          reason_code: $('event-reason').value.trim() || null,
+          correction_class: $('event-correction').value.trim() || null,
+          revenue_amount: revenueText ? Number(revenueText) : null,
+          currency: $('event-currency').value.trim() || null
+        };
+        try { await apiFetch('/api/activation-events', {method: 'POST', body: JSON.stringify(payload)}); await loadFunnel(); announce('Activation event recorded.', 'success'); }
+        catch (error) { announce(error.message, 'error'); }
+      });
+      $('connect-button').addEventListener('click', () => { sessionStorage.setItem('seo-insights-api-key', apiKey()); loadVerticalPacks(); loadKeywordSets(); loadRuns(); });
       $('refresh-button').addEventListener('click', loadRuns);
       $('compare-button').addEventListener('click', async () => {
         const base = $('base-run').value, comparison = $('comparison-run').value;
@@ -351,7 +1810,7 @@
         catch (error) { announce(error.message, 'error'); }
       });
       const sessionKey = sessionStorage.getItem('seo-insights-api-key');
-      if (sessionKey) { $('api-key').value = sessionKey; loadRuns(); }
+      if (sessionKey) { $('api-key').value = sessionKey; loadVerticalPacks(); loadKeywordSets(); loadRuns(); }
     })();
   </script>
 </body>

@@ -1,0 +1,28 @@
+{
+  "id": "outreach-analysis.prompt.recommendation_prioritizer.v1",
+  "pass_name": "recommendation_prioritizer",
+  "version": 1,
+  "schema_version": "agentic-assessment.v1",
+  "goal": "Rank evidence-based recommendations by expected operator impact.",
+  "instructions": {
+    "role": "Recommendation prioritizer",
+    "analysis_focus": [
+      "apply deterministic ordering rules",
+      "require service_fit mapping to supported services",
+      "attach confidence and estimated effort",
+      "flag unsupported recommendations as needs_review"
+    ],
+    "max_findings": 5,
+    "required_output_shape": "structured_json",
+    "supported_findings": [
+      "finding",
+      "recommendation",
+      "caution"
+    ]
+  },
+  "prompts": [
+    "Sort recommendations by business relevance and evidence confidence.",
+    "Use severity, commercial_relevance, and evidence strength in order.",
+    "Do not include duplicate or overlapping recommendations."
+  ]
+}

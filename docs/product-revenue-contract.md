@@ -1,122 +1,220 @@
-# Product / Revenue Contract: SEO Insight Run
+# Product / Revenue Contract: Outreach Program
 
 ## Product goal
 
-The `SEO Insight Run` is a **value-first outreach intelligence asset**, not a subscription product. Given a qualified business, URL, or normalized entity, it produces a deterministic, evidence-backed answer to:
+The Outreach Program is an internal, URL-first expertise demonstration. An
+operator pastes a business website URL and receives a concise,
+evidence-backed conversation starter:
 
-> What is wrong with this prospect's search presence, why does it matter, and what would we fix for them?
+> What did we observe, why may it matter, and is there enough value to start a
+> conversation?
 
-Its commercial purpose is to improve prospect selection, outreach relevance, discovery calls, and proposals for downstream services. Subscriptions are not the primary design assumption. The durable product boundary remains the persisted run and its evidence; the commercial layer packages that truth for a specific prospect without changing it.
+The audit opens the door. It is not the product being sold, a generic score
+pitch, or an offer to construct a separate pSEO system for the prospect.
+Technical evidence remains immutable and commercial framing remains a
+human-reviewed downstream object.
 
-## Primary downstream service packages
+## Owned vertical products
 
-Each recommendation must map to one or more services that can actually resolve the observed problem:
+- **One Trade Network** is the owned discovery/pSEO property for home-service
+  trades.
+- **National BJJ Registry** is the owned discovery/pSEO property for BJJ
+  academies.
 
-1. **Web development / rebuild** — site structure, technical remediation, conversion-oriented pages, metadata and schema implementation, internal linking, sitemap and indexability fixes, and full rebuilds when the current platform cannot support the required work.
-2. **Profile management / reputation** — business profile completeness and consistency, review/reputation workflows, local presence hygiene, and aligned on-site trust signals.
-3. **pSEO / search architecture** — programmatic SEO opportunity design, service/location and other search-intent page systems, taxonomy, templates, internal-link architecture, sitemap architecture, and governed publishing plans.
+The target business does not own or commission these pSEO systems. Outreach
+may show how the business can benefit from the appropriate owned vertical
+property.
 
-A package recommendation is an evidence-based routing decision, not a forced upsell. If the run does not support a service package, it must not recommend it.
+## Primary service packages
 
-### Evidence gates by service package
+Each vertical pack exposes the same three commercial paths with
+vertical-specific implementation:
 
-- **Web development / rebuild** may be routed from persisted site evidence such as validated sitemap state, fetched page records, metadata and heading defects, canonical/indexability facts, schema, internal linking, or reproducible fetch failures.
-- **Profile management / reputation** requires persisted profile-specific evidence (for example, business-profile completeness, NAP inconsistency, review/reputation facts, or a profile-to-site mismatch) or an explicit operator-supplied evidence record with provenance. Website crawl evidence alone cannot route this package.
-- **pSEO / search architecture** requires target-specific demand evidence plus a demonstrated systematic service/location/taxonomy coverage gap and sufficient crawl coverage. A small crawl sample, URL classification, missing metadata, or unknown search visibility cannot route this package.
-- A combined package is allowed only when every included service independently passes its own evidence gate. Otherwise the route is `none` or remains pending operator evidence.
+1. **Improve the existing website + sitemap/SEO + vertical visibility** —
+   improve design, conversion clarity, sitemap/search fundamentals, and
+   technical SEO on the prospect's current site while leveraging the relevant
+   owned vertical pSEO property.
+2. **Vertical plugin/embed upgrades** — add owned, vertical-specific
+   functionality to the prospect's current website through supported plugins
+   or embeds.
+3. **Custom website + optional CRM/SaaS** — onboard the business to a custom
+   vertical website, with the relevant CRM/SaaS bundle offered as an option.
 
-## Operator workflow
+Audit evidence describes observed website conditions. Qualification and
+operator review determine which product path is appropriate. A technical
+finding must never be rewritten as proof that a prospect needs all three
+packages.
 
-1. **Select a target** — choose a qualified prospect using business fit, serviceability, and reachable decision-maker criteria; do not audit indiscriminately.
-2. **Create an SEO Insight Run** — normalize the target, set market/device/scope, and record limits and paid-data approval.
-3. **Collect deterministic evidence** — validate sitemaps and crawl state, fetch pages, extract page facts, classify coverage, and collect target-specific search evidence where available.
-4. **Validate the audit** — distinguish successful artifact production from semantic validity; suppress unsupported conclusions and mark incomplete evidence as unknown or warning states.
-5. **Assemble the outreach package** — lead with an executive answer, identify the highest-value observed problems, explain why they matter, state what we would fix, attach evidence and confidence, estimate effort, and route the opportunity to a relevant service package.
-6. **Operator review and correction** — a human approves the target, claims, framing, contact route, and package fit. Corrections are recorded for quality measurement.
-7. **Send personalized outreach** — the operator uses the approved package to deliver a concise, prospect-specific message and supporting artifact. The platform does not automate outbound in v1.
-8. **Handle the response** — answer questions from the same evidence, capture positive replies, and book a discovery call.
-9. **Convert to a scoped proposal** — confirm needs on the call, then propose web development, profile management, pSEO, or a justified combination. Closed revenue is attributed to the originating run and service package.
+## Default operator workflow
 
-The intended funnel is: **target selection -> valid audit -> evidence-backed outreach package -> operator-approved outreach -> positive reply -> booked call -> proposal -> closed revenue**.
+1. Paste a URL and run the scan with safe defaults.
+2. Review the concise opportunity brief and its evidence limits.
+3. If the target is worth pursuing, associate or create a qualified prospect.
+4. Create and human-review an outreach package.
+5. Export a short elevator pitch and evidence brief for manual outreach.
+6. Record sent, reply, call, proposal, and revenue outcomes as append-only
+   activation events.
+
+CSV intake, run history, comparisons, package administration, and funnel
+entry are secondary operator tools. They must not obstruct the URL-first scan.
+
+## Outreach package promise
+
+Every approved package contains:
+
+- a concise executive answer;
+- the strongest supported observation and why it may matter;
+- direct references to independently persisted evidence;
+- confidence, effort, and evidence limits;
+- a short invitation to receive or discuss the evidence brief;
+- the relevant vertical platform and the three available commercial paths.
+
+The legacy `what_we_would_fix` and `recommended_service_package` fields remain
+in the persisted contract for compatibility. In new packages they represent
+the proposed conversation/delivery path, not proof that the operator will
+build client pSEO.
 
 ## Hard truth rules
 
-These rules are contractual and fail closed:
+- Never fabricate traffic, leads, conversion, or revenue loss.
+- Missing credentials, unapproved paid calls, unavailable enrichment, and
+  crawl limits are evidence limits, not score penalties.
+- Every website claim resolves to an independently persisted artifact.
+- Collection, validation, scoring, and recommendation eligibility are
+  deterministic.
+- Insufficient evidence reduces confidence or suppresses a claim.
+- Commercial framing cannot exaggerate technical truth.
+- Coverage analysis is internal research context. Any pSEO leverage offered to
+  a prospect comes from One Trade Network or National BJJ Registry.
+- Operators approve all outbound copy. The platform does not send messages.
 
-- **No fabricated revenue loss.** Never invent traffic, lead, conversion, or revenue-loss figures. Financial impact may be stated only when supported by disclosed inputs and a reproducible method; otherwise describe the observed risk or opportunity without a dollar claim.
-- **No configuration-based score penalties.** Missing credentials, unapproved paid calls, unavailable enrichment, crawl limits, or operator settings produce `unknown`, `not collected`, or a completeness warning—not a lower target health score.
-- **Every finding is evidence-backed.** Each claim and recommended action must cite persisted source facts or artifacts. Failed fetches, guessed sitemap locations, generic best practices, and model assertions are not target findings.
-- **Deterministic before generative.** Collection, validation, classification, scoring, confidence, and recommendation eligibility are deterministic. A generative layer may summarize or rephrase approved findings, but it may not create facts, scores, evidence, impact claims, or service recommendations.
-- **Unknown is better than wrong.** Insufficient or contradictory evidence must reduce confidence, trigger review, or suppress the finding.
-- **Commercial framing cannot rewrite technical truth.** Outreach packaging may prioritize findings for relevance, but it may not exaggerate severity or conceal limitations to manufacture demand.
+## Activation and attribution
 
-### Evidence and score boundaries
+Commercial measurement uses append-only `OutreachActivationEvent` records:
+`package_approved`, `outreach_sent`, `positive_reply`, `call_booked`,
+`proposal_sent`, `closed_won`, `closed_lost`, and `correction_recorded`.
+Revenue is permitted only on `closed_won`.
 
-- A target-level metadata score may use only the primary requested URL. Secondary pages collected under `max_pages` may produce page-specific findings, but changing the sample limit or composition must not change target health.
-- Sitemap absence is a target finding only when a persisted candidate was actually checked and returned conclusive absence or invalidity evidence. No candidate, timeout, access denial, or other inconclusive collection result is an evidence limit, not a defect.
-- Search visibility evidence is target-specific only when its domain matches the run target and it includes a valid snapshot date, market/location, language, device, source, and observed ranking URLs belonging to that target. A score-like value without this context is unknown.
-- Finding provenance must resolve to an independently persisted run artifact and exact observed field. A report cannot prove its own claims by citing itself.
-- Every commercial finding is typed as either `prospect_issue` or `evidence_limit`. Evidence limits are displayed separately for operator review, cannot recommend a service, and cannot become the next best commercial action.
+Measure qualified-to-approved, approved-to-sent, positive reply, booked call,
+proposal, and closed-won rates by vertical and service package. Also measure
+audit cost, operator review time, and factual correction rate.
 
-## Outreach package / output structure
+## Explicit milestone exclusions
 
-Every approved package must contain:
+- no automated outbound or autonomous follow-up;
+- no CRM replacement inside the Outreach Program;
+- no generative publishing or client pSEO construction;
+- no billing, multi-tenancy, or customer-facing audit SaaS;
+- no autonomous or score-changing competitor intelligence. The optional Tacoma
+  BJJ market-evidence pilot is operator-gated, bounded, separately persisted,
+  and may only support attributable comparison statements.
 
-| Field | Required content |
-|---|---|
-| **Executive answer** | A concise, prospect-specific answer summarizing the strongest supported issue and opportunity. |
-| **What is wrong** | One or more concrete `prospect_issue` findings, separated from unknowns and general advice. |
-| **Why it matters** | The likely search, crawl, visibility, trust, or conversion consequence, calibrated to the available evidence and without fabricated revenue loss. |
-| **What we would fix** | Specific remediation scope phrased as work we can perform, not merely a diagnostic label. |
-| **Evidence** | Direct evidence references, source URLs/artifact IDs, observations, timestamps, and relevant market/device context. |
-| **Confidence** | A defined confidence level with reason, including completeness or contradiction warnings. |
-| **Effort** | A bounded relative estimate such as small, medium, large, or discovery required; assumptions must be explicit. |
-| **Recommended service package** | One of web development / rebuild, profile management / reputation, pSEO / search architecture, or a justified combination; `none` when evidence does not support an offer. |
-| **Evidence limits (operator review)** | Separately typed collection or completeness gaps, with what remains unknown and how to verify it; never presented as a prospect defect or remediation sale. |
+## Optional market-evidence outreach
 
-The structured package should be reusable in an operator view, a concise outreach brief, discovery-call preparation, and proposal scoping without losing provenance.
+An approved `v3` outreach package may snapshot up to three strongest
+market-evidence gaps plus screenshot metadata. Approval and export revalidate
+the immutable market-run hash, every JSON evidence reference, and every PNG
+hash. The email opener uses one verified observation; numeric SEO/AI scores,
+competitor accusations, and ranking promises remain ineligible as the opening
+claim.
 
-## KPI funnel and unit economics
+## Demand and commercial opportunity
 
-Measure the commercial system as a funnel, segmented by recommended and sold service package:
+Demand and revenue forecasts are downstream, immutable model versions. They do
+not change the website, SEO, AI Readiness, ranking, Maps, authority, or
+competitor evidence that supplied their context.
 
-1. **Qualified targets** — prospects meeting explicit fit and contactability criteria.
-2. **Valid audits** — runs that pass evidence, completeness, and semantic-validity gates.
-3. **Outreach sent** — operator-approved packages actually delivered.
-4. **Positive replies** — replies expressing relevant interest or requesting more information.
-5. **Booked calls** — qualified discovery calls scheduled.
-6. **Proposals** — scoped commercial proposals delivered.
-7. **Closed revenue by service package** — won revenue attributed separately to web development / rebuild, profile management / reputation, pSEO / search architecture, and justified combinations.
+- Keyword-tool volume is labeled **monthly search occasions**, never unique
+  people.
+- Every demand row belongs to one reviewed intent/close-variant group before it
+  can enter arithmetic. The safe default is the maximum observed close-variant
+  value; summing distinct intents requires explicit operator review.
+- Brand and lineage demand is reported separately and excluded from net-new
+  opportunity by default.
+- Unique prospects are a low/base/high modeled range using an explicit
+  searches-per-prospect divisor.
+- Business price, capacity, retention, and funnel inputs carry field-level
+  provenance: operator-observed, business-supplied, assumed, or aggregate
+  calibration.
+- Forecasts are always labeled `Forecast, not guarantee` and use
+  `opportunity-formula.v1`.
+- Acquisition projections are suppressed when demand or material funnel inputs
+  are unresolved. A known capacity ceiling may still be displayed on its own.
+- Active-customer output is capped by reviewed capacity. Nova Ryu's current
+  fixture is `$100/month × 20 spots = $2,000 additional MRR / $24,000 annual
+  run-rate`; this is a capacity ceiling, not promised ranking revenue.
 
-Also track:
+Service levers remain sequential:
 
-- conversion rate between every adjacent funnel stage;
-- **cost per outreach package**, including paid data and operator labor;
-- **time per outreach package**, including run, review, correction, and assembly time;
-- **correction rate**, defined as the share of packages requiring a factual, evidence-linkage, severity, confidence, or service-routing correction before use;
-- reason codes for invalid audits, rejected packages, negative replies, lost proposals, and corrections.
+1. visibility can create qualified visits;
+2. a plugin/embed can improve visitor-to-signup or visitor-to-lead conversion;
+3. CRM/SaaS follow-up can improve attendance and close rates.
 
-Optimize for trustworthy closed revenue and learning by package—not audit volume, score severity, or message volume.
+The product does not add these effects as independent gains. Revenue values
+remain out of the cold-email opening and require an approved opportunity
+scenario before pitch export.
 
-### Minimal activation and attribution record
+## Provider recovery truth
 
-Commercial measurement uses an append-only `OutreachActivationEvent`; it does not turn this platform into a CRM. Each event must record:
+Each paid operation records provider, operation, query/target, market context,
+attempt, status, failure class, retryability, actual cost, raw artifact
+reference, timestamps, and predecessor call when evidence is reused.
+Authentication and balance/payment failures stop the paid queue. Call count
+does not prove completeness: required successful, unresolved, inapplicable, and
+reused evidence is reconciled by operation. A run with unresolved required work
+is `partial`.
 
-- a unique event ID, the originating `InsightRun` ID, and the immutable outreach-package/report version;
-- one stage from `package_approved`, `outreach_sent`, `positive_reply`, `call_booked`, `proposal_sent`, `closed_won`, `closed_lost`, or `correction_recorded`;
-- `occurred_at`, operator/source system, an external reference when one exists, routed service packages, and a reason code or correction class where applicable;
-- revenue amount and currency only for `closed_won`, copied from an authoritative proposal, invoice, or CRM reference rather than inferred by this platform.
+Retrying creates an immutable `resume_unresolved` successor. Successful
+same-context evidence is reused by reference and only unresolved retryable work
+is scheduled. Historical provider artifacts and costs are never rewritten.
 
-Funnel attribution is first-touch to the originating run/package only when the external opportunity or invoice is explicitly linked. Repeated or out-of-order events remain auditable; dashboards derive current funnel state from the event log rather than overwriting history. Manual import/export is sufficient for v1.
+## Aggregate calibration
 
-## Explicit v1 exclusions
+Calibration accepts only aggregate period counts from operator-uploaded Google
+Ads, GA4, Search Console, signup, trial, appointment, customer, or spend CSVs.
+Raw names, email addresses, phone numbers, and other lead identity are rejected.
+Observed conversion rates create a successor calibrated forecast; the original
+forecast remains attributable and unchanged.
 
-The following are not primary assumptions or v1 platform responsibilities:
+## Demand-conversion evidence modes
 
-- **Subscriptions are not a primary design assumption.** The platform is not optimized around recurring seats, usage tiers, or self-serve subscription conversion.
-- **No automated outbound in v1.** The system may create an operator-reviewed outreach package, but it does not autonomously send email, social messages, or follow-up sequences.
-- **No CRM in v1.** It does not replace pipeline/contact management or build heavy CRM workflowing.
-- **No competitor intelligence in v1.** Competitor analysis remains optional later enrichment and does not block target-site evidence collection or commercial activation.
-- **No generative content production in v1.** It does not generate or publish scaled landing pages, blogs, or other production content. pSEO recommendations describe a potential service scope; they are not a content-generation module.
+`demand-conversion.v1` is a separate commercial evidence contract. It never
+changes SEO, AI Readiness, conversion-readiness, visibility, or authority
+scores.
 
-These exclusions do not prohibit manual export or operator use of an approved package in existing tools. They preserve a narrow v1: deterministic SEO evidence first, human-reviewed outreach intelligence second, and downstream service delivery after qualification.
+- **Prospect mode** may use approved keyword/demand imports, public crawl and
+  ranking observations, relative trend evidence, and clearly labeled
+  third-party estimates. It cannot reference owner-first-party snapshots.
+- **Owner-verified mode** requires explicit authorization and at least one
+  context-matched aggregate Search Console, GA4, GBP, or booking/CRM snapshot.
+  Raw credentials and lead identity remain prohibited.
+
+The evidence hierarchy is:
+
+1. owner-first-party observations;
+2. operator-supplied business facts;
+3. approved market evidence;
+4. public observations;
+5. provider-specific third-party estimates;
+6. scenario assumptions and deterministic models.
+
+Every claim carries an independent provenance label: `observed`, `supplied`,
+`assumed`, or `modeled`. Search-volume rows remain search occasions. They are
+grouped by reviewed intent/close-variant rules and are never presented as
+unique people or unique searchers.
+
+The versioned demand-to-conversion formula is:
+
+```text
+incremental_members =
+  min(
+    incremental_qualified_visits * lead_rate * booking_rate * close_rate,
+    available_capacity
+  )
+
+incremental_recurring_revenue =
+  incremental_members * monthly_price
+```
+
+Low/base/high scenarios must preserve their input provenance, confidence,
+completeness, capacity ceiling, and `Forecast, not guarantee` language.

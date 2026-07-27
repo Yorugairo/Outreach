@@ -1,0 +1,43 @@
+{
+  "target_domain": "novaryu.com",
+  "vertical_id": "national_bjj_registry",
+  "recommendations": [
+    {
+      "id": "online-trial-path",
+      "title": "Make the trial signup path immediate",
+      "severity": "high",
+      "affected_page_count": 5,
+      "commercial_intent": "transactional",
+      "current_visibility": "low",
+      "conversion_friction": "blocking",
+      "confidence": "high",
+      "effort": "medium",
+      "recorded_outcome_rate": 0.65
+    },
+    {
+      "id": "program-answers",
+      "title": "Answer beginner and family program questions",
+      "severity": "medium",
+      "affected_page_count": 3,
+      "commercial_intent": "commercial",
+      "observed_rank": 18,
+      "conversion_friction": "medium",
+      "confidence": "high",
+      "effort": "small",
+      "recorded_outcome_rate": 0.5
+    },
+    {
+      "id": "decorative-polish",
+      "title": "Refine decorative visual details",
+      "severity": "low",
+      "affected_page_count": 1,
+      "commercial_intent": "low",
+      "current_visibility": "high",
+      "conversion_friction": "low",
+      "confidence": "medium",
+      "effort": "large",
+      "recorded_outcome_rate": 0.1
+    }
+  ],
+  "total_pages": 8
+}

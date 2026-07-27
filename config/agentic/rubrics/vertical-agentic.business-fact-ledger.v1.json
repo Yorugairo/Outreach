@@ -1,0 +1,16 @@
+{
+  "rubric_version": "vertical-agentic.business-fact-ledger.v1",
+  "required_fact_fields": [
+    "fact_id",
+    "name",
+    "normalized_value",
+    "source_status",
+    "sensitivity_class",
+    "approval_state",
+    "evidence_refs"
+  ],
+  "known_statuses": ["observed", "business_supplied", "conflicted", "unknown"],
+  "sensitivity_classes": ["public", "sensitive", "private"],
+  "unknown_rule": "No exact evidence means unknown and needs_review.",
+  "positive_claim_rule": "Observed or business-supplied facts require exact persisted evidence."
+}

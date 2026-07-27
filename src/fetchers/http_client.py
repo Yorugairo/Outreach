@@ -129,6 +129,15 @@ class SafeHTTPClient:
             )
         raise UnsafeURL("redirect limit exceeded")
 
+    def validate_destination(self, url: str, *, allowed_hosts: set[str] | None = None) -> str:
+        """Apply the same URL, host-scope, DNS, and private-address checks without fetching."""
+        parsed = self._validate_url(url, allowed_hosts=allowed_hosts)
+        self._validate_resolved_host(
+            parsed.hostname or "",
+            parsed.port or self._default_port(parsed.scheme),
+        )
+        return (parsed.hostname or "").casefold().rstrip(".")
+
     @staticmethod
     def _validate_url(url: str, *, allowed_hosts: set[str] | None) -> urllib.parse.SplitResult:
         try:

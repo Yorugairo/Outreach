@@ -1,0 +1,122 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:agentic-assessment:v1",
+  "title": "AgenticAssessmentSnapshot",
+  "type": "object",
+  "required": [
+    "job_id",
+    "evidence_pack_id",
+    "evidence_pack_sha256",
+    "runtime",
+    "requested_model",
+    "served_model",
+    "served_provider",
+    "prompt_version",
+    "rubric_version",
+    "schema_version",
+    "validation_result",
+    "findings",
+    "total_cost_usd",
+    "total_latency_ms"
+  ],
+  "properties": {
+    "job_id": { "type": "string", "minLength": 1 },
+    "evidence_pack_id": { "type": "string", "minLength": 1 },
+    "evidence_pack_sha256": {
+      "type": "string",
+      "pattern": "^[a-fA-F0-9]{64}$"
+    },
+    "runtime": { "type": "string", "minLength": 1 },
+    "requested_model": { "type": "string", "minLength": 1 },
+    "served_model": { "type": "string", "minLength": 1 },
+    "served_provider": { "type": "string", "minLength": 1 },
+    "prompt_version": { "type": "string", "minLength": 1 },
+    "rubric_version": { "type": "string", "minLength": 1 },
+    "schema_version": {
+      "type": "string",
+      "const": "agentic-assessment.v1"
+    },
+    "findings": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/finding" },
+      "minItems": 0,
+      "maxItems": 64
+    },
+    "contradictions": {
+      "type": "array",
+      "items": { "type": "object" }
+    },
+    "validation_result": {
+      "type": "object",
+      "required": ["customer_safe"],
+      "properties": {
+        "customer_safe": { "type": "boolean" },
+        "unsupported_claims": { "type": "array", "items": { "type": "string" } },
+        "evidence_precision": { "type": "number", "minimum": 0, "maximum": 1 }
+      },
+      "additionalProperties": true
+    },
+    "limitations": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "call_ids": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "total_cost_usd": { "type": "number", "minimum": 0 },
+    "total_latency_ms": { "type": "integer", "minimum": 0 },
+    "predecessor_id": { "type": ["string", "null"], "minLength": 1 },
+    "contract_version": { "type": "string" }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "evidence_ref": {
+      "type": "object",
+      "required": ["artifact_path", "field", "reason", "observed"],
+      "properties": {
+        "artifact_path": { "type": "string", "minLength": 1 },
+        "field": { "type": "string", "minLength": 1 },
+        "reason": { "type": "string", "minLength": 1 },
+        "observed": {}
+      },
+      "additionalProperties": true
+    },
+    "finding": {
+      "type": "object",
+      "required": [
+        "claim_type",
+        "title",
+        "claim",
+        "confidence",
+        "severity",
+        "commercial_relevance",
+        "service_fit",
+        "evidence_refs",
+        "customer_safe"
+      ],
+      "properties": {
+        "claim_type": { "type": "string", "minLength": 1 },
+        "title": { "type": "string", "minLength": 1 },
+        "claim": { "type": "string", "minLength": 1 },
+        "confidence": { "type": "string", "enum": ["high", "medium", "low"] },
+        "severity": {
+          "type": "string",
+          "enum": ["critical", "high", "medium", "low", "info"]
+        },
+        "commercial_relevance": { "type": "string", "minLength": 1 },
+        "service_fit": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "evidence_refs": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/evidence_ref" }
+        },
+        "customer_safe": { "type": "boolean" },
+        "review_reason": { "type": ["string", "null"] }
+      },
+      "additionalProperties": true
+    }
+  }
+}

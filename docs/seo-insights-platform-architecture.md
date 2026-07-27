@@ -12,6 +12,7 @@ Build a consistent platform where an operator can point the system at a URL/doma
 - Google ranking / SERP visibility snapshots
 - page coverage gaps
 - recommended sitemap/page actions
+- evidence-backed AI Readiness (AEO, GEO, and AIO), reported separately from SEO
 
 Competitor research is **not** the primary product surface in v1. It is a downstream enrichment that can be run later by an LLM or analyst using the already-collected SEO evidence.
 
@@ -39,6 +40,7 @@ Given a URL/domain, the platform should:
 8. generate a prioritized SEO insight package
 9. persist all raw and normalized evidence
 10. expose the results in a consistent operator-facing format
+11. derive a versioned AI Readiness score from the same bounded crawl without claiming AI rankings or citations
 
 ### Explicitly out of scope for v1
 - competitor intelligence as a platform module
@@ -93,6 +95,7 @@ The operator should not have to think in terms of scripts. They should think in 
 - `KeywordCluster` — grouped search intents
 - `SerpSnapshot` — rank and SERP result evidence
 - `CoverageScorecard` — deterministic score output
+- `AIReadinessOutput` — deterministic AEO/GEO/AIO, cohort, completeness, and evidence output
 - `SitemapRecommendation` — include/exclude + child sitemap structure
 - `InsightReport` — operator-ready result bundle
 
@@ -142,6 +145,15 @@ Responsibilities:
 - export JSON/markdown
 - provide report-friendly objects to UI/API
 
+#### F. AI Readiness Service
+Responsibilities:
+- reuse the page records from the single, host-restricted crawl
+- score AEO, GEO, and AIO with versioned deterministic checks
+- report unknown and inapplicable checks separately from measured failures
+- preserve core/supporting page cohorts and crawl completeness
+- emit versioned AI JSON/Markdown (`ai-v2` current; `ai-v1` remains readable) independently of SEO reports
+- treat external corroboration as optional paid evidence, never as a zero when unavailable
+
 ### 3.3 Infrastructure layer
 - Postgres/Supabase for state
 - object/artifact storage for raw payloads
@@ -166,6 +178,9 @@ Sections:
 - discovered sitemaps
 - crawl inventory
 - metadata coverage
+- SEO and AI Readiness headline scores
+- AEO/GEO/AIO and core/supporting score views
+- crawl completeness, broken links, and AI evidence limits
 - page classification matrix
 - keyword clusters
 - SERP snapshots
@@ -382,12 +397,23 @@ UI for runs, evidence, and recommendations
 attach runs to canonical businesses and normalized categories
 
 ### Phase D — outreach activation
-Commercially package validated run evidence into a human-reviewed outreach asset that answers: what is wrong, why it matters, and what we would fix. Route supported opportunities into **web development / rebuild**, **profile management / reputation**, and **pSEO / search architecture** service offers, then support operator-led movement from outreach to booked call and proposal.
+Commercially package validated run evidence into a short, human-reviewed expertise demonstration: what was observed, why it matters, and what the owner may want to investigate. The audit is the elevator pitch. Qualified conversations route to one of three delivery paths: improve the existing website, sitemap, and SEO while leveraging the owned vertical pSEO property; add vertical-specific plugins/embeds to the existing website; or onboard the business to a custom website with an optional CRM/SaaS bundle. The owned property is **One Trade Network** or **National BJJ Registry**; the program does not offer to construct a separate client pSEO system.
 
 This phase is packaging and activation over the existing deterministic report; it does not change target-health scoring or permit unsupported claims. It also preserves the current v1 exclusions: no automated outbound, CRM platform, competitor intelligence module, or generative content production. Subscriptions are not a primary product assumption.
 
 ### Phase E — optional competitor enrichment
-LLM/analyst layer driven by the existing insight report
+
+The Tacoma BJJ pilot implements this as a deterministic market-evidence child
+run, not an LLM judge. An approved keyword version produces a bounded organic
+and Maps sample, the operator approves one to three direct competitors, and
+each approved host receives an independently scoped ten-page crawl, one
+provider-specific backlink summary, and optional screenshots. A deep action
+creates a new immutable market-run version rather than rewriting the pilot.
+
+Market evidence produces `market-v1` and combined `v3` reports. It is an
+explanatory and outreach layer only: it never changes the target SEO or AI
+Readiness arithmetic, assigns no competitor health score, and emits no causal
+claim without persisted comparative evidence.
 
 ### Phase F — action layer
 content recommendations, sitemap rewrites, publishing workflows
@@ -402,3 +428,75 @@ The correct product statement is:
 > Given a URL or normalized entity, produce a deterministic SEO intelligence package with sitemap, crawl, metadata, keyword, and ranking insights — persisted as a first-class platform object.
 
 Everything else, including competitor research, should be secondary to that core loop.
+
+### Market-evidence persistence boundary
+
+- `KeywordSet` and `KeywordTarget` preserve source hash, Tacoma market/location,
+  review state, category, intent, focus, and intended page usage.
+- `KeywordSetBinding` attaches an approved version to a domain/prospect without
+  mutating the shared research version.
+- `MarketEvidenceRun` is tied to one InsightRun attempt and one keyword-set
+  version. Provider costs, SERP/Maps snapshots, approved competitor identities,
+  bounded pages, screenshots, gaps, and limitations live in this child record.
+- Provider, competitor, and screenshot artifacts remain beneath the originating
+  run. Target `PageRecord` data and target scoring never contain competitor
+  pages.
+- Pilot, competitor authority, deepening, and outreach export remain explicit
+  operator actions.
+
+### Demand-to-revenue persistence boundary
+
+P9 adds four independently versioned aggregates beneath the commercial layer:
+
+- `DemandEvidenceSet` stores source-hashed search-occasion rows and
+  operator-reviewed close-variant/intent groups.
+- `BusinessEconomicsProfile` stores price, capacity, retention, funnel values,
+  and field-level provenance.
+- `OpportunityScenario` stores `opportunity-formula.v1` assumptions, low/base/
+  high outputs, capacity clamps, sensitivity, evidence references, and approval.
+- `AcquisitionCalibrationRecord` stores aggregate period outcomes without lead
+  identity or PII.
+
+Demand/economics/calibration records are prospect-scoped and survive multiple
+runs. Scenario and `opportunity-v1`/`v4` artifacts live beneath the originating
+run so every forecast resolves to the exact SEO, AI, market, demand, and
+economics versions used. Additive SQLite JSON payload tables mirror the
+file-backed artifacts; legacy objects require no backfill.
+
+Paid market operations use `provider-calls.v1`. Required-evidence
+completeness—not call count—determines whether a market run is complete. A
+`resume_unresolved` action creates a successor run, reuses successful
+same-context evidence by reference, and schedules only eligible unresolved
+work. Authentication and payment failures stop further paid operations.
+
+The operator UI preserves one required launcher field: URL. `Build opportunity
+case` is the primary post-run action; demand upload, economics, provider
+recovery, calibration, and assumption review remain secondary tools. All
+forecast surfaces retain the label `Forecast, not guarantee`.
+
+### Product-strength score stack and immutable delivery
+
+P10 replaces the client-facing use of the legacy mixed `overall_score` with
+independent, versioned surfaces:
+
+- `seo-health.v2`
+- `search-visibility.v2`
+- `local-visibility.v1`
+- `ai-readiness.v3`
+- `ai-visibility.v1`
+- `conversion-readiness.v1`
+- `evidence-confidence.v1`
+
+The legacy score remains readable for compatibility. It is never averaged with
+the new surfaces.
+
+New client output is generated from a write-once `ReportSnapshot`, an optional
+validated `AgenticAssessmentSnapshot`, and a content-addressed
+`ClientReportBundle`. Mutable aliases such as `latest` point to immutable
+snapshots rather than overwriting a report slot.
+
+The agentic layer receives only a bounded, hashed `SiteEvidencePack` assembled
+from persisted artifacts. Runtime calls, requested and served model routes,
+tokens, cost, latency, raw response references, validation, and operator review
+events remain independently attributable. The layer cannot recrawl, query
+search providers, change deterministic scores, or render unsupported claims.

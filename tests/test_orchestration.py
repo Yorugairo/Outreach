@@ -20,6 +20,8 @@ from src.config import AppConfig, DataForSEOSettings, RetryPolicy  # noqa: E402
 from src.models import InsightRun, RunStageEvent  # noqa: E402
 from src.repositories.file_repository import FileBackedInsightRepository  # noqa: E402
 from src.orchestrator import InsightRunOrchestrator  # noqa: E402
+from src.pipeline import DEFAULT_STAGES, PIPELINE_CONTRACT_VERSION  # noqa: E402
+from src.services.provenance_service import validate_evidence_ref  # noqa: E402
 
 
 # ---- stage_errors ----
@@ -120,7 +122,7 @@ def test_orchestrator_validate_completed_run_proves_artifacts(tmp_path: Path):
     assert validation["report_json_exists"] is True
     assert validation["report_markdown_exists"] is True
     assert validation["summary_has_overall_score"] is True
-    assert validation["completed_stage_count"] == 6
+    assert validation["completed_stage_count"] == len(DEFAULT_STAGES)
     assert validation["search_intelligence_recorded"] is True
     assert validation["errors"] == []
 
@@ -227,10 +229,45 @@ def test_stage_completion_events_include_artifact_backed_summaries(tmp_path: Pat
     assert "reports/v1.md" in report.output_summary["artifact_paths"]
     assert "reports/v2.json" in report.output_summary["artifact_paths"]
     assert "reports/v2.md" in report.output_summary["artifact_paths"]
-    assert report.output_summary["report_versions"] == ["v1", "v2"]
+    assert report.output_summary["report_versions"] == [
+        "v1",
+        "v2",
+        "seo-health-v2",
+        "ai-v3",
+        "conversion-v1",
+    ]
     assert report.output_summary["primary_report_version"] == "v2"
-    assert run.summary["report_versions"] == ["v1", "v2"]
+    assert run.summary["report_versions"] == [
+        "v1",
+        "v2",
+        "seo-health-v2",
+        "ai-v3",
+        "conversion-v1",
+    ]
     assert run.summary["primary_report_version"] == "v2"
+
+
+def test_ai_v3_check_references_resolve_and_remain_compact(tmp_path: Path):
+    artifact_root = tmp_path / "artifacts"
+    repo = _make_repo(tmp_path)
+    orch = InsightRunOrchestrator(repo, artifact_root=artifact_root)
+    run = orch.start("python.org", mode="quick", max_pages=1)
+    report = repo.get_report(run.id, "ai-v3")
+    assert report is not None
+
+    refs = []
+    for cohort in report.report_payload["cohorts"].values():
+        for dimension in cohort["dimensions"].values():
+            for check in dimension["checks"]:
+                refs.extend(check.get("evidence_refs", []))
+    assert refs
+    for ref in refs:
+        validate_evidence_ref(
+            artifact_root / "runs" / run.id,
+            ref,
+            expected_attempt_id=run.attempt_id,
+        )
+        assert len(json.dumps(ref["observed"])) < 2_000
 
 
 def test_legacy_v1_only_summary_remains_valid(tmp_path: Path):
@@ -275,6 +312,8 @@ def test_orchestrator_rerun_stage_completes_same_run(tmp_path: Path):
     repo = _make_repo(tmp_path)
     orch = InsightRunOrchestrator(repo, artifact_root=tmp_path / "artifacts")
     run = orch.start("python.org", mode="quick", max_pages=1)
+    run.config_snapshot["pipeline_contract_version"] = 1
+    repo.update_run(run)
     event_count_before = len(repo.list_stage_events(run.id))
 
     rerun = orch.rerun_stage(run.id, "fetching_pages", max_pages=1)
@@ -282,6 +321,10 @@ def test_orchestrator_rerun_stage_completes_same_run(tmp_path: Path):
     assert rerun.id == run.id
     assert rerun.status == "completed"
     assert rerun.attempt_count == run.attempt_count + 1
+    assert (
+        rerun.config_snapshot["pipeline_contract_version"]
+        == PIPELINE_CONTRACT_VERSION
+    )
     assert len(repo.list_stage_events(run.id)) > event_count_before
     assert orch.validate(run.id)["valid"] is True
 

@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "remediation-blueprint.v1",
+  "title": "Structured remediation blueprint",
+  "description": "Model output accepted by the deterministic offline prototype renderer.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "target", "pages", "navigation", "answer_blocks", "cta_flows", "schema_recommendations", "embeds", "crm", "limitations"],
+  "properties": {
+    "schema_version": {"const": "remediation-blueprint.v1"},
+    "target": {"oneOf": [{"type": "string"}, {"$ref": "#/$defs/structured"}]},
+    "title": {"type": "string", "maxLength": 240},
+    "summary": {"type": "string", "maxLength": 2000},
+    "executive_summary": {"type": "string", "maxLength": 2000},
+    "service_fit": {"type": "array", "items": {"type": "string", "maxLength": 120}, "maxItems": 20},
+    "sitemap": {"type": "array", "items": {"$ref": "#/$defs/recommendation"}, "maxItems": 100},
+    "pages": {"type": "array", "items": {"$ref": "#/$defs/recommendation"}, "maxItems": 100},
+    "navigation": {"type": "array", "items": {"$ref": "#/$defs/recommendation"}, "maxItems": 100},
+    "answer_blocks": {"type": "array", "items": {"$ref": "#/$defs/recommendation"}, "maxItems": 100},
+    "cta_flows": {"type": "array", "items": {"$ref": "#/$defs/recommendation"}, "maxItems": 50},
+    "schema_recommendations": {"type": "array", "items": {"$ref": "#/$defs/recommendation"}, "maxItems": 100},
+    "embeds": {"type": "array", "items": {"$ref": "#/$defs/recommendation"}, "maxItems": 50},
+    "crm": {"oneOf": [{"type": "array", "items": {"$ref": "#/$defs/recommendation"}, "maxItems": 50}, {"$ref": "#/$defs/recommendation"}]},
+    "limitations": {"type": "array", "items": {"type": "string", "maxLength": 500}, "maxItems": 50},
+    "placeholder_fields": {"type": "array", "items": {"type": "string", "maxLength": 300}, "maxItems": 200},
+    "evidence_refs": {"type": "array", "items": {"$ref": "#/$defs/evidence_ref"}, "maxItems": 200}
+  },
+  "$defs": {
+    "structured": {"type": "object", "additionalProperties": true},
+    "recommendation": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["id"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1, "maxLength": 160},
+        "status": {"type": "string", "maxLength": 64},
+        "title": {"type": "string", "maxLength": 240},
+        "label": {"type": "string", "maxLength": 240},
+        "description": {"type": "string", "maxLength": 2000},
+        "value": {},
+        "evidence_refs": {"type": "array", "items": {"$ref": "#/$defs/evidence_ref"}, "maxItems": 20},
+        "evidence_ref_ids": {"type": "array", "items": {"type": "string", "maxLength": 200}, "maxItems": 20}
+      }
+    },
+    "evidence_ref": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["artifact_ref", "reference_kind"],
+      "properties": {
+        "artifact_ref": {"type": "string", "minLength": 1, "maxLength": 500},
+        "reference_kind": {"enum": ["source_span", "persisted_field", "dom", "screenshot", "provider_artifact"]},
+        "exact_span": {"type": "string", "maxLength": 2000},
+        "field_path": {"type": "string", "maxLength": 500},
+        "dom_ref": {"type": "string", "maxLength": 500},
+        "screenshot_ref": {"type": "string", "maxLength": 500},
+        "response_span": {"type": "string", "maxLength": 2000}
+      }
+    }
+  }
+}

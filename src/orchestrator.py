@@ -8,9 +8,16 @@ from typing import Optional
 
 from src.config import AppConfig, load_config
 from src.models import InsightRun, RunStageEvent
-from src.pipeline import DEFAULT_STAGES, InsightRunPipeline
+from src.pipeline import (
+    DEFAULT_STAGES,
+    LEGACY_STAGES,
+    V3_STAGES,
+    V4_STAGES,
+    InsightRunPipeline,
+)
 from src.repositories.base import InsightRepository
 from src.services.provenance_service import EvidenceReferenceError, validate_evidence_ref
+from src.services.report_comparison_service import ReportComparisonService
 
 
 class InsightRunOrchestrator:
@@ -29,7 +36,7 @@ class InsightRunOrchestrator:
             repository=repository, config=self.config, artifact_root=self.artifact_root
         )
 
-    def start(self, url: str, mode: str = "standard", max_pages: int = 5) -> InsightRun:
+    def start(self, url: str, mode: str = "standard", max_pages: int = 100) -> InsightRun:
         result = self._pipeline.run(url, mode=mode, max_pages=max_pages)
         return result.run
 
@@ -77,6 +84,10 @@ class InsightRunOrchestrator:
         report_md = run_dir / "reports" / "v1.md"
         report_v2_json = run_dir / "reports" / "v2.json"
         report_v2_md = run_dir / "reports" / "v2.md"
+        report_health_json = run_dir / "reports" / "seo-health-v2.json"
+        report_health_md = run_dir / "reports" / "seo-health-v2.md"
+        report_conversion_json = run_dir / "reports" / "conversion-v1.json"
+        report_conversion_md = run_dir / "reports" / "conversion-v1.md"
         events_dir = run_dir / "events"
         errors: list[str] = []
 
@@ -99,9 +110,35 @@ class InsightRunOrchestrator:
         report_json_exists = report_json.exists()
         report_markdown_exists = report_md.exists()
         advertised_versions = run.summary.get("report_versions")
+        ai_report_version = next(
+            (
+                version
+                for version in ("ai-v3", "ai-v2", "ai-v1")
+                if isinstance(advertised_versions, list)
+                and version in advertised_versions
+            ),
+            "ai-v1",
+        )
+        report_ai_json = run_dir / "reports" / f"{ai_report_version}.json"
+        report_ai_md = run_dir / "reports" / f"{ai_report_version}.md"
         requires_v2 = isinstance(advertised_versions, list) and "v2" in advertised_versions
+        requires_health = (
+            isinstance(advertised_versions, list)
+            and "seo-health-v2" in advertised_versions
+        )
+        requires_conversion = (
+            isinstance(advertised_versions, list)
+            and "conversion-v1" in advertised_versions
+        )
         report_v2_json_exists = report_v2_json.exists()
         report_v2_markdown_exists = report_v2_md.exists()
+        report_conversion_json_exists = report_conversion_json.exists()
+        report_conversion_markdown_exists = report_conversion_md.exists()
+        requires_ai = isinstance(advertised_versions, list) and any(
+            version in advertised_versions for version in ("ai-v1", "ai-v2", "ai-v3")
+        )
+        report_ai_json_exists = report_ai_json.exists()
+        report_ai_markdown_exists = report_ai_md.exists()
         report_v2_findings_valid = self._report_v2_findings_valid(run_id) if requires_v2 else None
         summary_has_overall_score = "overall_score" in run.summary
         run_limits_recorded = self._run_limits_recorded(run)
@@ -118,7 +155,14 @@ class InsightRunOrchestrator:
         if not events_dir_exists:
             errors.append("events directory is missing")
 
-        missing_completed = [stage for stage in DEFAULT_STAGES if stage not in completed_by_stage]
+        pipeline_contract = int(run.config_snapshot.get("pipeline_contract_version", 1))
+        expected_stages = (
+            DEFAULT_STAGES
+            if pipeline_contract >= 5
+            else V4_STAGES if pipeline_contract >= 4
+            else V3_STAGES if pipeline_contract >= 3 else LEGACY_STAGES
+        )
+        missing_completed = [stage for stage in expected_stages if stage not in completed_by_stage]
         for stage in missing_completed:
             errors.append(f"completed stage event missing: {stage}")
 
@@ -130,6 +174,24 @@ class InsightRunOrchestrator:
             errors.append("reports/v2.json is missing")
         if requires_v2 and not report_v2_markdown_exists:
             errors.append("reports/v2.md is missing")
+        if requires_health and not report_health_json.exists():
+            errors.append("reports/seo-health-v2.json is missing")
+        if requires_health and not report_health_md.exists():
+            errors.append("reports/seo-health-v2.md is missing")
+        if requires_conversion and not report_conversion_json_exists:
+            errors.append("reports/conversion-v1.json is missing")
+        if requires_conversion and not report_conversion_markdown_exists:
+            errors.append("reports/conversion-v1.md is missing")
+        if requires_health and "technical_seo_health_score" not in run.summary:
+            errors.append("run summary missing technical_seo_health_score")
+        if requires_ai and not report_ai_json_exists:
+            errors.append(f"reports/{ai_report_version}.json is missing")
+        if requires_ai and not report_ai_markdown_exists:
+            errors.append(f"reports/{ai_report_version}.md is missing")
+        if requires_ai and "ai_readiness_score" not in run.summary:
+            errors.append("run summary missing ai_readiness_score")
+        if requires_conversion and "conversion_readiness_score" not in run.summary:
+            errors.append("run summary missing conversion_readiness_score")
         if requires_v2 and report_v2_json_exists and not report_v2_findings_valid:
             errors.append("reports/v2.json has malformed findings or provenance")
         if not summary_has_overall_score:
@@ -158,8 +220,8 @@ class InsightRunOrchestrator:
             "current_stage": run.current_stage,
             "run_json_exists": run_json_exists,
             "events_dir_exists": events_dir_exists,
-            "expected_stages": DEFAULT_STAGES,
-            "completed_stages": [stage for stage in DEFAULT_STAGES if stage in completed_by_stage],
+            "expected_stages": expected_stages,
+            "completed_stages": [stage for stage in expected_stages if stage in completed_by_stage],
             "completed_stage_count": len(completed_by_stage),
             "missing_completed_stages": missing_completed,
             "report_json_exists": report_json_exists,
@@ -169,6 +231,12 @@ class InsightRunOrchestrator:
             "report_v2_json_exists": report_v2_json_exists,
             "report_v2_markdown_exists": report_v2_markdown_exists,
             "report_v2_findings_valid": report_v2_findings_valid,
+            "report_health_json_exists": report_health_json.exists(),
+            "report_health_markdown_exists": report_health_md.exists(),
+            "report_conversion_json_exists": report_conversion_json_exists,
+            "report_conversion_markdown_exists": report_conversion_markdown_exists,
+            "report_ai_json_exists": report_ai_json_exists,
+            "report_ai_markdown_exists": report_ai_markdown_exists,
             "summary_has_overall_score": summary_has_overall_score,
             "run_limits_recorded": run_limits_recorded,
             "run_execution_recorded": run_execution_recorded,
@@ -183,11 +251,15 @@ class InsightRunOrchestrator:
                 "report_markdown": str(report_md),
                 "report_v2_json": str(report_v2_json),
                 "report_v2_markdown": str(report_v2_md),
+                "report_health_json": str(report_health_json),
+                "report_health_markdown": str(report_health_md),
+                "report_conversion_json": str(report_conversion_json),
+                "report_conversion_markdown": str(report_conversion_md),
             },
             "errors": errors,
         }
 
-    def resume(self, run_id: str, max_pages: int = 5) -> InsightRun:
+    def resume(self, run_id: str, max_pages: int = 100) -> InsightRun:
         run = self.repository.get_run(run_id)
         if run is None:
             raise ValueError(f"run {run_id} not found")
@@ -195,7 +267,7 @@ class InsightRunOrchestrator:
             return run
         return self.rerun_stage(run_id, self._resume_stage_for(run_id, run), max_pages=max_pages)
 
-    def rerun_stage(self, run_id: str, stage_name: str, max_pages: int = 5) -> InsightRun:
+    def rerun_stage(self, run_id: str, stage_name: str, max_pages: int = 100) -> InsightRun:
         run = self.repository.get_run(run_id)
         if run is None:
             raise ValueError(f"run {run_id} not found")
@@ -249,6 +321,24 @@ class InsightRunOrchestrator:
 
         base_report = self.repository.get_report(base_run_id, "v1")
         comparison_report = self.repository.get_report(comparison_run_id, "v1")
+        comparison_snapshot = ReportComparisonService(self.repository).compare(
+            {
+                "id": f"{base_run_id}:v1",
+                "target_id": base.requested_domain,
+            },
+            {
+                "id": f"{comparison_run_id}:v1",
+                "target_id": comparison.requested_domain,
+            },
+            base_report,
+            comparison_report,
+            target_id=base.requested_domain,
+        )
+        comparison_saver = getattr(self.repository, "save_report_comparison_snapshot", None)
+        if comparison_saver is None:
+            comparison_saver = getattr(self.repository, "save_comparison_snapshot", None)
+        if comparison_saver is not None:
+            comparison_saver(comparison_snapshot)
         base_actions = [action.get("action", "") for action in (base_report.key_actions if base_report else [])]
         comparison_actions = [
             action.get("action", "") for action in (comparison_report.key_actions if comparison_report else [])
@@ -259,6 +349,7 @@ class InsightRunOrchestrator:
         comparison_score = comparison.summary.get("overall_score")
         base_page_count = base.summary.get("page_count")
         comparison_page_count = comparison.summary.get("page_count")
+        comparison_payload = comparison_snapshot.to_dict()
         return {
             "base_run_id": base_run_id,
             "comparison_run_id": comparison_run_id,
@@ -276,6 +367,7 @@ class InsightRunOrchestrator:
                 "removed": sorted(base_action_set - comparison_action_set),
                 "unchanged_count": len(base_action_set & comparison_action_set),
             },
+            "comparison_snapshot": comparison_payload,
         }
 
     def _resume_stage_for(self, run_id: str, run: InsightRun) -> str:

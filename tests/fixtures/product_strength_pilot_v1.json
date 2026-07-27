@@ -1,0 +1,34 @@
+{
+  "contract_version": "product-strength-pilot.v1",
+  "source_kind": "synthetic_contract_fixture",
+  "disclosure": "These frozen cases validate the evaluation harness. They are not recorded DeepSeek or GPT outputs and are not a promotion sample.",
+  "cases": [
+    {"id": "nova-ryu", "target_domain": "novaryu.com", "vertical_id": "national_bjj_registry", "review_minutes": 6},
+    {"id": "lacey-glass", "target_domain": "laceyglass.com", "vertical_id": "one_trade_network", "review_minutes": 7},
+    {"id": "bjj-01", "target_domain": "bjj-01.example", "vertical_id": "national_bjj_registry", "review_minutes": 5},
+    {"id": "bjj-02", "target_domain": "bjj-02.example", "vertical_id": "national_bjj_registry", "review_minutes": 6},
+    {"id": "bjj-03", "target_domain": "bjj-03.example", "vertical_id": "national_bjj_registry", "review_minutes": 7},
+    {"id": "bjj-04", "target_domain": "bjj-04.example", "vertical_id": "national_bjj_registry", "review_minutes": 5},
+    {"id": "bjj-05", "target_domain": "bjj-05.example", "vertical_id": "national_bjj_registry", "review_minutes": 6},
+    {"id": "bjj-06", "target_domain": "bjj-06.example", "vertical_id": "national_bjj_registry", "review_minutes": 7},
+    {"id": "bjj-07", "target_domain": "bjj-07.example", "vertical_id": "national_bjj_registry", "review_minutes": 5},
+    {"id": "bjj-08", "target_domain": "bjj-08.example", "vertical_id": "national_bjj_registry", "review_minutes": 6},
+    {"id": "bjj-09", "target_domain": "bjj-09.example", "vertical_id": "national_bjj_registry", "review_minutes": 7},
+    {"id": "bjj-10", "target_domain": "bjj-10.example", "vertical_id": "national_bjj_registry", "review_minutes": 5},
+    {"id": "trade-01", "target_domain": "trade-01.example", "vertical_id": "one_trade_network", "review_minutes": 6},
+    {"id": "trade-02", "target_domain": "trade-02.example", "vertical_id": "one_trade_network", "review_minutes": 7},
+    {"id": "trade-03", "target_domain": "trade-03.example", "vertical_id": "one_trade_network", "review_minutes": 5},
+    {"id": "trade-04", "target_domain": "trade-04.example", "vertical_id": "one_trade_network", "review_minutes": 6},
+    {"id": "trade-05", "target_domain": "trade-05.example", "vertical_id": "one_trade_network", "review_minutes": 7},
+    {"id": "trade-06", "target_domain": "trade-06.example", "vertical_id": "one_trade_network", "review_minutes": 5},
+    {"id": "trade-07", "target_domain": "trade-07.example", "vertical_id": "one_trade_network", "review_minutes": 6},
+    {"id": "trade-08", "target_domain": "trade-08.example", "vertical_id": "one_trade_network", "review_minutes": 7},
+    {"id": "trade-09", "target_domain": "trade-09.example", "vertical_id": "one_trade_network", "review_minutes": 5},
+    {"id": "trade-10", "target_domain": "trade-10.example", "vertical_id": "one_trade_network", "review_minutes": 6}
+  ],
+  "routes": [
+    {"provider": "openrouter", "model": "deepseek/deepseek-v4-flash", "cost_usd": 0.02},
+    {"provider": "openai", "model": "gpt-5-codex-review", "cost_usd": 0.08}
+  ],
+  "repeats_per_route": 2
+}

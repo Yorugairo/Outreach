@@ -28,6 +28,7 @@ REQUIRED_FIELDS = {
     "recommended_services",
     "service_fit_reason",
     "evidence_refs",
+    "evidence_family",
 }
 ALLOWED_SEVERITIES = {"critical", "high", "medium", "low", "info"}
 ALLOWED_EFFORTS = {"small", "medium", "large", "discovery_required"}
@@ -157,6 +158,7 @@ def test_commercial_finding_has_exact_required_fields_and_validates_enums_and_pr
         ("confidence", "certain"),
         ("recommended_services", ["sales_package"]),
         ("evidence_refs", []),
+        ("evidence_family", "unsupported"),
     ]:
         kwargs = {**base, field_name: invalid}
         with pytest.raises(ValueError):

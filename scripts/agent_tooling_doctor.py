@@ -4,6 +4,7 @@ import json
 import shutil
 import subprocess
 import sys
+import tomllib
 from pathlib import Path
 
 
@@ -64,9 +65,49 @@ def main() -> int:
         result = run(["git", "check-ignore", "--no-index", "--quiet", ignored], timeout=30)
         record(f"ignored:{ignored}", result.returncode == 0, "ignored" if result.returncode == 0 else "not ignored")
 
-    for agent in ["speedster", "implementation_luna", "architect_sol", "release_steward"]:
-        exists = (REPO_ROOT / ".codex" / "agents" / f"{agent}.toml").exists()
-        record(f"agent:{agent}", exists, "registered" if exists else "missing")
+    expected_agents = {
+        "speedster": ("gpt-5.3-codex-spark", "low", "workspace-write"),
+        "junior_developer": (
+            "gpt-5.3-codex-spark",
+            "xhigh",
+            "workspace-write",
+        ),
+        "implementation_luna": ("gpt-5.6-luna", "max", "workspace-write"),
+        "architect_sol": ("gpt-5.6-sol", "high", "workspace-write"),
+        "release_steward": (
+            "gpt-5.3-codex-spark",
+            "high",
+            "workspace-write",
+        ),
+        "explorer": ("gpt-5.3-codex-spark", "xhigh", "read-only"),
+        "docs_researcher": ("gpt-5.3-codex-spark", "xhigh", "read-only"),
+        "reviewer": ("gpt-5.3-codex-spark", "xhigh", "read-only"),
+    }
+    for agent, expected in expected_agents.items():
+        path = REPO_ROOT / ".codex" / "agents" / f"{agent}.toml"
+        if not path.exists():
+            record(f"agent:{agent}", False, "missing")
+            continue
+        try:
+            profile = tomllib.loads(path.read_text(encoding="utf-8"))
+        except (OSError, tomllib.TOMLDecodeError) as exc:
+            record(f"agent:{agent}", False, f"invalid TOML: {exc}")
+            continue
+        actual = (
+            profile.get("model"),
+            profile.get("model_reasoning_effort"),
+            profile.get("sandbox_mode"),
+        )
+        record(
+            f"agent:{agent}",
+            actual == expected,
+            {
+                "model": actual[0],
+                "reasoning_effort": actual[1],
+                "sandbox_mode": actual[2],
+                "expected": expected,
+            },
+        )
 
     allowlist = run(
         [sys.executable, "scripts/configure_codex_skill_allowlist.py", "--check"],

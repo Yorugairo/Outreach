@@ -1,7 +1,7 @@
 name = "implementation_luna"
-description = "Bounded junior implementation agent for well-defined features and fixes."
+description = "Bounded implementation agent for well-defined moderate features and fixes."
 model = "gpt-5.6-luna"
-model_reasoning_effort = "high"
+model_reasoning_effort = "max"
 sandbox_mode = "workspace-write"
 
 developer_instructions = """

@@ -1,0 +1,31 @@
+{
+  "target_domain": "laceyglass.com",
+  "vertical_id": "one_trade_network",
+  "recommendations": [
+    {
+      "id": "quote-path",
+      "title": "Clarify the request-a-quote path",
+      "severity": "high",
+      "affected_page_count": 7,
+      "commercial_intent": "transactional",
+      "current_visibility": "not_observed",
+      "conversion_friction": "high",
+      "confidence": "high",
+      "effort": "small",
+      "recorded_outcome_rate": 0.7
+    },
+    {
+      "id": "service-coverage",
+      "title": "Match service pages to approved local demand",
+      "severity": "medium",
+      "affected_page_count": 4,
+      "commercial_intent": "commercial",
+      "observed_rank": 24,
+      "conversion_friction": "medium",
+      "confidence": "medium",
+      "effort": "medium",
+      "recorded_outcome_rate": 0.45
+    }
+  ],
+  "total_pages": 10
+}

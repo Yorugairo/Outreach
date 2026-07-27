@@ -1,0 +1,61 @@
+{
+  "formula_version": "demand-conversion-formula.v1",
+  "cases": [
+    {
+      "case_id": "nova-ryu-tacoma-prospect",
+      "business_name": "Nova Ryu",
+      "vertical_id": "national_bjj_registry",
+      "market": "Tacoma, WA",
+      "monthly_price": 100,
+      "capacity_headroom": 20,
+      "assumptions": {
+        "low": {
+          "organic_visit_capture_rate": 0.05,
+          "lead_rate": 0.1,
+          "booking_rate": 0.7,
+          "close_rate": 0.4
+        },
+        "base": {
+          "organic_visit_capture_rate": 0.1,
+          "lead_rate": 0.15,
+          "booking_rate": 0.75,
+          "close_rate": 0.5
+        },
+        "high": {
+          "organic_visit_capture_rate": 0.2,
+          "lead_rate": 0.2,
+          "booking_rate": 0.8,
+          "close_rate": 0.6
+        }
+      }
+    },
+    {
+      "case_id": "lacey-glass-trades-prospect",
+      "business_name": "Lacey Glass",
+      "vertical_id": "one_trade_network",
+      "market": "Lacey, WA",
+      "monthly_price": 750,
+      "capacity_headroom": 5,
+      "assumptions": {
+        "low": {
+          "organic_visit_capture_rate": 0.04,
+          "lead_rate": 0.08,
+          "booking_rate": 0.65,
+          "close_rate": 0.35
+        },
+        "base": {
+          "organic_visit_capture_rate": 0.08,
+          "lead_rate": 0.12,
+          "booking_rate": 0.7,
+          "close_rate": 0.45
+        },
+        "high": {
+          "organic_visit_capture_rate": 0.15,
+          "lead_rate": 0.18,
+          "booking_rate": 0.75,
+          "close_rate": 0.55
+        }
+      }
+    }
+  ]
+}

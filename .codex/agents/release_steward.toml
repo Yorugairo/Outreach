@@ -1,7 +1,7 @@
 name = "release_steward"
-description = "Low-reasoning Git steward for reviewed commits and explicitly authorized pushes."
-model = "gpt-5.6-luna"
-model_reasoning_effort = "low"
+description = "Git steward for reviewed commits and explicitly authorized pushes."
+model = "gpt-5.3-codex-spark"
+model_reasoning_effort = "high"
 sandbox_mode = "workspace-write"
 
 developer_instructions = """

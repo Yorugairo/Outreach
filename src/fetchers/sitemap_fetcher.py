@@ -18,6 +18,7 @@ class SitemapDiscoveryResult:
     robots_url: str
     sitemap_urls: list[str] = field(default_factory=list)
     robots_status: int | None = None
+    robots_body: str = ""
     errors: list[str] = field(default_factory=list)
 
 
@@ -56,6 +57,7 @@ class SitemapFetcher:
             )
             result.robots_status = response.status
             robots_body = response.body.decode("utf-8", "ignore")
+            result.robots_body = robots_body
         except Exception as exc:
             result.errors.append(f"robots_fetch_failed: {exc}")
             robots_body = ""

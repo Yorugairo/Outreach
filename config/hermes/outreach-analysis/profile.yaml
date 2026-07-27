@@ -1,0 +1,43 @@
+profile_name: outreach-analysis
+route: hermes-openrouter
+provider: openrouter
+model: deepseek/deepseek-v4-flash
+prompt_versions:
+  - outreach-analysis.prompt.evidence_analyst.v1
+  - outreach-analysis.prompt.vertical_strategist.v1
+  - outreach-analysis.prompt.recommendation_prioritizer.v1
+  - outreach-analysis.prompt.client_editor.v1
+rubric_versions:
+  - outreach-analysis.rubric.evidence_analyst.v1
+  - outreach-analysis.rubric.vertical_strategist.v1
+  - outreach-analysis.rubric.recommendation_prioritizer.v1
+  - outreach-analysis.rubric.client_editor.v1
+schema_version: agentic-assessment.v1
+max_calls: 4
+max_output_tokens: 8000
+max_cost_usd: 0.1
+timeout_seconds: 120
+retry_limit: 2
+default_analysis_mode: standard
+stateless: true
+memory_enabled: false
+routing_policy:
+  allow_fallback: false
+  require_structured_output: true
+  require_parameter_support: true
+  require_zero_data_retention: true
+  allow_data_collection: false
+tooling:
+  allow_network: false
+  allow_browser: false
+  allow_shell: false
+  allow_filesystem_write: false
+  allow_learning: false
+  allow_messaging: false
+  mcp_tools:
+    - outreach-evidence-pack
+safety:
+  output_format: structured_json
+  deny_unsafe_system: true
+  deny_recursive_tooling: true
+  deny_unscoped_file_access: true

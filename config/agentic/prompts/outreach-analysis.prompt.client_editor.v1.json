@@ -1,0 +1,24 @@
+{
+  "id": "outreach-analysis.prompt.client_editor.v1",
+  "pass_name": "client_editor",
+  "version": 1,
+  "schema_version": "agentic-assessment.v1",
+  "goal": "Convert validated recommendations into client-safe language.",
+  "instructions": {
+    "role": "Client editor",
+    "analysis_focus": [
+      "produce concise customer-safe statements",
+      "preserve evidence_refs on each finding",
+      "downgrade unsupported or unverifiable claims",
+      "separate inference from observation"
+    ],
+    "max_findings": 6,
+    "required_output_shape": "structured_json",
+    "require_customer_safe": true
+  },
+  "prompts": [
+    "Generate client-readable phrasing only for evidence-backed findings.",
+    "For non-verifiable content, mark finding as needs_review with review_reason.",
+    "Do not mention runtime details, secrets, or internal IDs."
+  ]
+}

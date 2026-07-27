@@ -25,13 +25,22 @@ multiple coherent slices.
 | Agent | Use | Hard stop |
 | --- | --- | --- |
 | `speedster` | Exact microtask, tiny write set, exact validation | Ambiguity, architecture, security, release |
+| `junior_developer` | Limited implementation, scoped fixes, explicit line changes, small reads/writes | Expanding write set, cross-module design, unclear acceptance |
 | `implementation_luna` | Bounded moderate implementation with tests | Major refactor or unclear contract |
 | `architect_sol` | SigMap-led research and PRP draft | Product implementation or self-approval |
+| `explorer` | Read-only repository trace and evidence pack | Any write or implementation decision |
+| `docs_researcher` | Read-only primary documentation verification | Product implementation or undocumented inference |
+| `reviewer` | Read-only correctness, security, regression, and test review | Editing or integrating its own findings |
 | `release_steward` | Reviewed stage/commit/authorized push mechanics | Unexpected diff, conflict, absent approval |
 
 The parent owns architecture, integration, protected actions, and completion
 truth. Keep concurrency at four threads and depth one. Do not overlap write
 sets.
+
+Use `speedster` only when judgment is unnecessary. Prefer `junior_developer`
+for a small bounded fix that still requires implementation reasoning, and
+`implementation_luna` for coherent moderate slices. Use `explorer`,
+`docs_researcher`, and `reviewer` as read-only evidence producers.
 
 ## PRP Format
 

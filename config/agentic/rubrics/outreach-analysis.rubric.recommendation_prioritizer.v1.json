@@ -1,0 +1,28 @@
+{
+  "id": "outreach-analysis.rubric.recommendation_prioritizer.v1",
+  "pass_name": "recommendation_prioritizer",
+  "version": 1,
+  "schema_version": "agentic-assessment.v1",
+  "scoring": {
+    "criteria": [
+      "priority_strength",
+      "evidence_strength",
+      "resource_effort",
+      "alignment_with_pack"
+    ],
+    "weights": {
+      "priority_strength": 0.35,
+      "evidence_strength": 0.35,
+      "resource_effort": 0.20,
+      "alignment_with_pack": 0.10
+    }
+  },
+  "acceptance": {
+    "require_rankable_output": true,
+    "max_findings": 5
+  },
+  "disallow": [
+    "duplicate_recommendations",
+    "unsupported_goal_claims"
+  ]
+}

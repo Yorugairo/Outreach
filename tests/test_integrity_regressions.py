@@ -88,7 +88,7 @@ def test_commercial_finding_type_is_required_and_evidence_limits_cannot_route():
     assert {item.name for item in fields(CommercialFinding)} == {
         "id", "finding_type", "category", "title", "observation", "impact",
         "recommended_action", "severity", "effort", "confidence",
-        "recommended_services", "service_fit_reason", "evidence_refs",
+        "recommended_services", "service_fit_reason", "evidence_refs", "evidence_family",
     }
     base = dict(
         id="finding-1", finding_type="evidence_limit", category="collection",
@@ -102,6 +102,8 @@ def test_commercial_finding_type_is_required_and_evidence_limits_cannot_route():
         CommercialFinding(**{**base, "finding_type": "warning"})
     with pytest.raises(ValueError):
         CommercialFinding(**{**base, "recommended_services": ["web_development_rebuild"]})
+    with pytest.raises(ValueError):
+        CommercialFinding(**{**base, "evidence_family": "geo_score"})
 
 
 def test_primary_page_alone_controls_metadata_and_overall_score():
@@ -119,6 +121,76 @@ def test_primary_page_alone_controls_metadata_and_overall_score():
     )
     assert missing.metadata_quality_score is None
     assert missing.dimension_status["metadata_quality"] == "unknown"
+
+
+def test_client_reports_redact_raw_source_and_direct_contact_values():
+    target = SEOTarget(
+        id="target-1",
+        input_url="https://example.com/",
+        normalized_url="https://example.com/",
+        normalized_domain="example.com",
+    )
+    run = InsightRun(
+        id="run-1",
+        seo_target_id=target.id,
+        requested_url=target.normalized_url,
+        requested_domain=target.normalized_domain,
+    )
+    sensitive_page = page(target.normalized_url, "page-sensitive")
+    sensitive_page.ai_evidence = {
+        "raw_html": "<p>Call 253-555-0182 or owner@example.com</p>",
+        "phone_numbers": ["253-555-0182"],
+        "email_addresses": ["owner@example.com"],
+        "specific_evidence_excerpts": [
+            "Call 253-555-0182 or owner@example.com for 20 years of experience."
+        ],
+        "conversion_links": [
+            {"href": "tel:2535550182", "text": "253-555-0182"},
+            {"href": "mailto:owner@example.com", "text": "Email owner@example.com"},
+        ],
+        "forms": [{
+            "action": "https://example.com/contact?email=owner@example.com",
+            "field_count": 1,
+        }],
+    }
+    pages = PageAnalysisOutput(pages=[sensitive_page])
+    search = unknown_search()
+    crawl_output = crawl()
+    score = ScorecardService().build(
+        crawl_output,
+        pages,
+        search,
+        target_context=context(),
+    )
+    service = ReportAssemblyService()
+    reports = [
+        service.build_report(
+            target,
+            run,
+            crawl_output,
+            pages,
+            search,
+            score,
+        ),
+        service.build_report_v2(
+            target,
+            run,
+            crawl_output,
+            pages,
+            search,
+            score,
+            target_context=context(),
+            stage_artifacts=stage_paths(),
+        ),
+    ]
+
+    for report in reports:
+        rendered = json.dumps(report.to_dict())
+        assert "raw_html" not in rendered
+        assert "253-555-0182" not in rendered
+        assert "owner@example.com" not in rendered
+        assert "phone_number_count" in rendered
+        assert "email_address_count" in rendered
 
 
 @pytest.mark.parametrize(
@@ -181,6 +253,8 @@ def test_markdown_separates_evidence_limits_and_humanizes_service_without_creden
         target_context=context(), stage_artifacts=stage_paths(),
     )
     markdown = report.export_markdown
+    assert "## Keywords and Google rankings" in markdown
+    assert "No target-specific paid keyword or Google ranking evidence was collected." in markdown
     assert "Website development / rebuild" in markdown
     assert "Confidence: High" in markdown
     assert "Effort: Medium" in markdown

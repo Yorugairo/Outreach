@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import urllib.error
 import urllib.parse
+import urllib.robotparser
 import xml.etree.ElementTree as ET
 from dataclasses import dataclass, field
 
@@ -17,6 +18,7 @@ class CrawlDiscoveryOutput:
     candidate_page_urls: list[str] = field(default_factory=list)
     errors: list[str] = field(default_factory=list)
     candidate_sitemap_urls: list[str] = field(default_factory=list)
+    robots_access: dict[str, bool | None] = field(default_factory=dict)
 
 
 def sitemap_evidence_status(crawl: CrawlDiscoveryOutput) -> str:
@@ -53,6 +55,7 @@ class CrawlDiscoveryService:
 
     def discover(self, target: SEOTarget, insight_run_id: str) -> tuple[CrawlDiscoveryOutput, list[DiscoveredAsset]]:
         result = self.fetcher.discover(target.normalized_domain)
+        robots_access = self._robots_access(result.robots_body, target.normalized_url, result.robots_status)
         candidate_sitemap_urls = self._dedupe(result.sitemap_urls)
         validated_sitemap_urls: list[str] = []
         candidate_page_urls: list[str] = []
@@ -63,7 +66,7 @@ class CrawlDiscoveryService:
                 url=result.robots_url,
                 http_status=result.robots_status,
                 is_primary=True,
-                metadata={"errors": result.errors},
+                metadata={"errors": result.errors, "robots_access": robots_access},
             )
         ]
         queue: list[tuple[str, str | None]] = [
@@ -136,6 +139,7 @@ class CrawlDiscoveryService:
                 candidate_page_urls=self._dedupe(candidate_page_urls),
                 errors=result.errors,
                 candidate_sitemap_urls=candidate_sitemap_urls,
+                robots_access=robots_access,
             ),
             assets,
         )
@@ -167,3 +171,19 @@ class CrawlDiscoveryService:
         if isinstance(exc, InvalidSitemapError):
             return "invalid_sitemap_xml"
         return "inconclusive"
+
+    @staticmethod
+    def _robots_access(body: str, url: str, status: int | None) -> dict[str, bool | None]:
+        if status != 200 or not body.strip():
+            return {name: None for name in ("googlebot", "bingbot", "oai-searchbot")}
+        parser = urllib.robotparser.RobotFileParser()
+        parser.set_url(urllib.parse.urljoin(url, "/robots.txt"))
+        parser.parse(body.splitlines())
+        return {
+            name: parser.can_fetch(user_agent, url)
+            for name, user_agent in {
+                "googlebot": "Googlebot",
+                "bingbot": "bingbot",
+                "oai-searchbot": "OAI-SearchBot",
+            }.items()
+        }

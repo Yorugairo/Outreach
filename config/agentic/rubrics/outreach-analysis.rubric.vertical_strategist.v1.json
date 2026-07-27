@@ -1,0 +1,28 @@
+{
+  "id": "outreach-analysis.rubric.vertical_strategist.v1",
+  "pass_name": "vertical_strategist",
+  "version": 1,
+  "schema_version": "agentic-assessment.v1",
+  "scoring": {
+    "criteria": [
+      "commercial_relevance",
+      "service_fit",
+      "evidence_precision",
+      "confidence"
+    ],
+    "weights": {
+      "commercial_relevance": 0.35,
+      "service_fit": 0.25,
+      "evidence_precision": 0.25,
+      "confidence": 0.15
+    }
+  },
+  "acceptance": {
+    "minimum_confidence": "medium",
+    "maximum_caution_level": "high"
+  },
+  "disallow": [
+    "unsupported_business_facts",
+    "cross_run_reasoning_without_reference"
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "id": "outreach-analysis.prompt.vertical_strategist.v1",
+  "pass_name": "vertical_strategist",
+  "version": 1,
+  "schema_version": "agentic-assessment.v1",
+  "goal": "Translate evidence into commercial-value opportunities for the target vertical.",
+  "instructions": {
+    "role": "Vertical strategist",
+    "analysis_focus": [
+      "map evidence to commercial relevance",
+      "score opportunity likelihood with confidence",
+      "anchor every conclusion in evidence_refs",
+      "avoid any claims outside the pack"
+    ],
+    "max_findings": 6,
+    "required_output_shape": "structured_json",
+    "required_claim_types": ["observation", "recommendation"]
+  },
+  "prompts": [
+    "Prioritize opportunities that can be directly observed or inferred from the evidence.",
+    "Do not fabricate competitive positioning or market-share assumptions.",
+    "Label uncertainty explicitly in limitations."
+  ]
+}
