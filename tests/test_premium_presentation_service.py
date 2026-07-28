@@ -67,3 +67,17 @@ def test_ai_slide_uses_customer_facing_answer_readiness_copy() -> None:
     assert "when students search" in html
     assert "books a first class" in html
     assert "not a claim" not in html
+
+
+def test_organic_slide_names_the_program_surface_gap() -> None:
+    html = PremiumPresentationService()._rankings_slide(
+        "Tacoma organic rankings",
+        "A location-focused website lacking",
+        "ranked program surfaces",
+        [],
+        "2026-07-27",
+    )
+
+    assert "A location-focused website lacking" in html
+    assert "ranked program surfaces" in html
+    assert "program pages new students need" in html

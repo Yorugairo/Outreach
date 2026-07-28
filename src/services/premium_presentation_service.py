@@ -370,7 +370,7 @@ class PremiumPresentationService:
         slides.append(self._slide(3, "What we reviewed", "A public-site review with", "market context", f"We reviewed {target.get('pages') or '—'} public Nova pages, {market.get('inventory', {}).get('keyword_metrics', '—')} Tacoma keyword metrics, {market.get('inventory', {}).get('organic_checks', '—')} organic checks, and {market.get('inventory', {}).get('maps_checks', '—')} Maps checks. Three nearby academies provide the comparison context.", self._evidence_list(target, competitors, market)))
         slides.append(self._slide(4, "Website foundations", "The fastest wins are", "structural", "The foundation is healthy enough to build on. The first wins are page-level: write a useful search description, give each program one clear H1, and align every page with the action a new student wants to take.", self._metrics(("Technical", technical, "health"), ("Meta", "0", "pages with descriptions"), ("Broken", "0", "conclusive fetch errors"))))
         slides.append(self._ai_slide(target))
-        slides.append(self._rankings_slide("Tacoma organic rankings", "A brand winner with", "program headroom", market.get("organic") or [], target.get("observed_at")))
+        slides.append(self._rankings_slide("Tacoma organic rankings", "A location-focused website lacking", "ranked program surfaces", market.get("organic") or [], target.get("observed_at")))
         slides.append(self._rankings_slide("Google Maps evidence", "Local visibility is the", "stronger foothold", market.get("maps") or [], target.get("observed_at")))
         slides.append(self._competitor_slide(target, competitors, market))
         slides.append(self._comparison_slide(evidence))
@@ -411,7 +411,7 @@ class PremiumPresentationService:
             body += f"<tr><td>{escape(str(row.get('keyword') or ''))}</td><td class=\"{'win' if (row.get('position') or 99) <= 3 else ''}\">#{escape(str(row.get('position') or '—'))}</td><td>{escape(self._short_url(str(row.get('url') or '')))}</td></tr>"
         body += '</tbody></table><p class="fine">Tacoma desktop sample · ' + escape(str(date or "undated")) + '. “Not observed” is not inferred as zero.</p>'
         if "organic" in eyebrow.lower():
-            lede = "Nova is already visible for several program searches. The practical opportunity is to turn mid-page visibility into a page that answers fit, schedule, and the next step."
+            lede = "Nova is visible when someone searches the name or address, but the program pages new students need are not yet doing the same work. Give No-Gi, Kids, beginner, and adult training each a clear search destination—and a clear next step."
         else:
             lede = "Maps is the stronger foothold today. The website and local profile should make the same program choices—No-Gi, Kids, beginner—obvious before a prospect taps through."
         return self._slide(6 if "organic" in eyebrow.lower() else 7, eyebrow, title, accent, lede, body)
