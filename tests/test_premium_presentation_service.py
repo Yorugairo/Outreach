@@ -58,3 +58,12 @@ def test_comparison_matrix_aligns_values_to_filtered_columns() -> None:
         {"organic": 3, "maps": None},
         {"organic": 7, "maps": None},
     ]
+
+
+def test_ai_slide_uses_customer_facing_answer_readiness_copy() -> None:
+    html = PremiumPresentationService()._ai_slide({"ai_score": 64})
+
+    assert "Make Nova the answer" in html
+    assert "when students search" in html
+    assert "books a first class" in html
+    assert "not a claim" not in html
