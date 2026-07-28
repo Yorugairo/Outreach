@@ -81,3 +81,12 @@ def test_organic_slide_names_the_program_surface_gap() -> None:
     assert "A location-focused website lacking" in html
     assert "ranked program surfaces" in html
     assert "program pages new students need" in html
+
+
+def test_mobile_comparison_keeps_nova_and_drops_only_legend() -> None:
+    css = PremiumPresentationService._responsive_overrides()
+
+    assert "#slide-9 .rank-table th:nth-child(2)" in css
+    assert "display: table-cell !important" in css
+    assert "#slide-9 .rank-table th:nth-child(4)" in css
+    assert "display: none !important" in css

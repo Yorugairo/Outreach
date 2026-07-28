@@ -343,6 +343,10 @@ class PremiumPresentationService:
         @media (max-width: 760px) {
           #slide-5 .score-orbit { width: min(26vh, 11rem); }
           #slide-11 .metric-value { font-size: clamp(1.15rem, 6vw, 2.6rem); letter-spacing: -.05em; }
+          /* The foundation hides the second column to fit simple ranking tables.
+             The comparison matrix must keep Nova and drop only Legend on mobile. */
+          #slide-9 .rank-table th:nth-child(2), #slide-9 .rank-table td:nth-child(2) { display: table-cell !important; }
+          #slide-9 .rank-table th:nth-child(4), #slide-9 .rank-table td:nth-child(4) { display: none !important; }
         }
         @page { size: A4 landscape; margin: 0; }
         @media print {
