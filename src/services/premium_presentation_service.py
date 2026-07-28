@@ -428,7 +428,7 @@ class PremiumPresentationService:
 
     def _comparison_slide(self, evidence: dict[str, Any]) -> str:
         rows = self._comparison_display_rows(evidence)
-        matrix = self._comparison_keyword_matrix(evidence)
+        matrix = self._comparison_keyword_matrix(evidence, rows)
         names = [str(row.get("name") or "School") for row in rows]
         headers = "".join(f"<th>{escape(name)}</th>" for name in names)
         html = f'<table class="rank-table"><thead><tr><th>Query</th>{headers}</tr></thead><tbody>'
@@ -495,9 +495,25 @@ class PremiumPresentationService:
         best = min([value for value in (organic, maps) if isinstance(value, int)], default=None)
         return f'<td class="{("win" if best and best <= 3 else "")}">{escape(text)}</td>'
 
-    def _comparison_keyword_matrix(self, evidence: dict[str, Any]) -> list[dict[str, Any]]:
+    def _comparison_keyword_matrix(
+        self,
+        evidence: dict[str, Any],
+        display_rows: list[dict[str, Any]] | None = None,
+    ) -> list[dict[str, Any]]:
         """Return a bounded per-keyword matrix across target and historical runs."""
-        bundles = [evidence["target"], *(evidence.get("competitors") or [])]
+        all_bundles = [evidence["target"], *(evidence.get("competitors") or [])]
+        if display_rows is None:
+            bundles = all_bundles
+        else:
+            visible_ids = {str(row.get("run_id") or "") for row in display_rows}
+            bundles = [
+                bundle
+                for bundle in all_bundles
+                if str(bundle.get("run_id") or "") in visible_ids
+            ]
+            # Keep the target first even if a caller supplied rows out of order.
+            target_id = str(evidence["target"].get("run_id") or "")
+            bundles.sort(key=lambda bundle: 0 if str(bundle.get("run_id") or "") == target_id else 1)
         candidates: dict[str, int] = {}
         target_payload = self._payload_from_market(evidence["target"])
         for metric in target_payload.get("keyword_metrics") or []:
