@@ -58,6 +58,10 @@ server.
 
 ## Execution Path
 
+Implementation spec: **`P13-VIDEO-ENGINE-IMPLEMENTATION.plan.md`** — sizes T1–T8 into seven
+agent-assignable work packages (WP-A…WP-G) with frozen interface contracts, real codebase
+pattern snippets, and per-package validation. This file remains the status/evidence ledger.
+
 Thin slice first (T1–T7 sequential, each validated), then pilot production (T8) interleaved with
 remaining scene classes. TDD per repo testing rules (RED → GREEN → IMPROVE, 80%+ on pure-python
 modules; render/TTS integration tests marked slow with mocked providers by default).
