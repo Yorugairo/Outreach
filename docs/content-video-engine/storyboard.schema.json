@@ -1,0 +1,327 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://outreach-program.internal/schemas/storyboard.schema.json",
+  "title": "VideoStoryboard",
+  "description": "v2 contract between storyboard authoring (human or LLM, Gate A) and the deterministic render pipeline. Canonical copy lives at content/video-engine/configs/storyboard.schema.json once the engine is scaffolded; this copy is the spec-of-record for the doc set.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "job_id",
+    "source",
+    "channel",
+    "global_settings",
+    "packaging",
+    "claims",
+    "scenes"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "pattern": "^2\\.[0-9]+\\.[0-9]+$",
+      "description": "Semver of this contract. Renderers refuse storyboards from a different major version."
+    },
+    "job_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["slug", "kind", "ref", "content_hash"],
+      "properties": {
+        "slug": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+        "kind": {
+          "type": "string",
+          "enum": ["corpus_technique", "registry_article", "essay_markdown"]
+        },
+        "ref": {
+          "type": "string",
+          "description": "Repo-relative path or URL of the source content this storyboard was derived from."
+        },
+        "content_hash": {
+          "type": "string",
+          "description": "sha256 of the source content at transformation time — provenance + staleness detection."
+        }
+      }
+    },
+    "channel": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "series"],
+      "properties": {
+        "id": { "type": "string", "description": "Channel config id, e.g. 'combat-science' (resolves to configs/channels/<id>.json)." },
+        "series": { "type": "string", "description": "Series lane within the channel, e.g. 'physics-of-grappling'. Drives thumbnail badge color + playlist." }
+      }
+    },
+    "global_settings": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["voice", "theme", "targets"],
+      "properties": {
+        "voice": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["provider", "voice_id"],
+          "properties": {
+            "provider": { "type": "string", "enum": ["elevenlabs", "human_recorded"] },
+            "voice_id": { "type": "string", "description": "Provider voice id, or take label for human_recorded." },
+            "is_custom_voice": {
+              "type": "boolean",
+              "default": true,
+              "description": "Must be true for elevenlabs in published runs — stock Default voices are a mass-production audio fingerprint AND are retired by ElevenLabs on 2026-12-31 (see 02-CONTENT-STRATEGY voice policy)."
+            },
+            "settings": {
+              "type": "object",
+              "description": "Provider tuning (stability/similarity/style etc.). Passed through verbatim; part of the TTS cache key.",
+              "additionalProperties": true
+            }
+          }
+        },
+        "theme": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "background_color": { "type": "string", "default": "#0F0F12" },
+            "primary_text": { "type": "string", "default": "#FFFFFF" },
+            "accent_color": { "type": "string", "default": "#3B82F6" },
+            "secondary_accent": { "type": "string", "default": "#10B981" },
+            "font": { "type": "string", "default": "default" }
+          }
+        },
+        "music": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "track_id": { "type": ["string", "null"], "default": null, "description": "Licensed/library track id; null = no music bed." },
+            "gain_db_rel_voice": { "type": "number", "default": -18 },
+            "ducking": { "type": "boolean", "default": true }
+          }
+        },
+        "pacing": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "wpm_target": { "type": "integer", "default": 140, "minimum": 110, "maximum": 175 },
+            "visual_change_max_s": { "type": "number", "default": 6, "description": "Max seconds without any on-screen change (micro-beat budget)." },
+            "pattern_interrupt_max_s": { "type": "number", "default": 30, "description": "Max seconds between deliberate pattern interrupts (gag, scene shift, diagram flip)." },
+            "shorts_visual_change_max_s": { "type": "number", "default": 3, "description": "Tighter micro-beat budget applied to vertical renders — shorts stagnate faster than landscape." }
+          }
+        },
+        "targets": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "enum": ["landscape", "vertical"] },
+          "description": "Aspect layouts this storyboard supports. Vertical is a layout, never a crop."
+        }
+      }
+    },
+    "expert": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "credential"],
+      "properties": {
+        "name": { "type": "string" },
+        "credential": { "type": "string" },
+        "role": { "type": "string", "description": "e.g. 'reviewed script', 'on-camera quote'." }
+      },
+      "description": "Required by the guard whenever narration uses credential framing ('a physical therapist explains…'). Never fabricated."
+    },
+    "claims": {
+      "type": "array",
+      "description": "Claims ledger. Every number, superlative, medical, financial, or historical assertion in narration must reference an entry here via scene.claim_refs. Empty array is valid for claim-free scripts; the guard verifies the absence.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "text", "kind", "source", "verified"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^c[0-9]+$" },
+          "text": { "type": "string" },
+          "kind": { "type": "string", "enum": ["number", "medical", "financial", "historical", "biomechanical", "other"] },
+          "source": { "type": "string", "description": "URL or repo-relative fact-layer reference. 'corpus' allowed for transcript-derived technique steps." },
+          "verified": { "type": "boolean" }
+        }
+      }
+    },
+    "scenes": {
+      "type": "array",
+      "minItems": 3,
+      "items": { "$ref": "#/definitions/scene" }
+    },
+    "shorts": {
+      "type": "array",
+      "description": "Vertical clip plans. Each is a scene-subset with its own hook — not a center-cut of the landscape master.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["clip_id", "scene_ids", "hook_line", "title"],
+        "properties": {
+          "clip_id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+          "scene_ids": { "type": "array", "minItems": 1, "items": { "type": "integer" } },
+          "hook_line": { "type": "string", "description": "Replacement first-line narration/caption for the vertical cut." },
+          "title": { "type": "string", "maxLength": 100 },
+          "max_duration_s": { "type": "number", "default": 58, "maximum": 178 }
+        }
+      }
+    },
+    "packaging": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["titles", "description_md", "cta", "synthetic_content_disclosure"],
+      "properties": {
+        "titles": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 5,
+          "items": { "type": "string", "maxLength": 100 },
+          "description": "Title variants — packaging is decided at Gate A, not after render."
+        },
+        "thumbnail": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "concept": { "type": "string", "description": "One-line visual concept for the programmatic thumbnail scene." },
+            "variant_texts": { "type": "array", "maxItems": 3, "items": { "type": "string", "maxLength": 30 } },
+            "badge_color": { "type": "string", "description": "Series badge border color; defaults from channel config." }
+          }
+        },
+        "description_md": {
+          "type": "string",
+          "description": "Video description. May contain {ARTICLE_URL} and {REGISTRY_URL} placeholders — packaging service injects UTM-tagged links."
+        },
+        "tags": { "type": "array", "maxItems": 30, "items": { "type": "string" } },
+        "chapters_from_scenes": {
+          "type": "boolean",
+          "default": true,
+          "description": "Emit YouTube chapter markers from act/scene boundaries at packaging time."
+        },
+        "cta": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["line", "url"],
+          "properties": {
+            "line": { "type": "string", "description": "Spoken/on-screen CTA, e.g. 'Trace your academy's lineage at NationalBJJRegistry.com'." },
+            "url": { "type": "string" },
+            "utm_campaign": { "type": "string", "description": "Defaults to job slug; ensures every click is attributable." }
+          }
+        },
+        "synthetic_content_disclosure": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["required"],
+          "properties": {
+            "required": {
+              "type": "boolean",
+              "description": "YouTube's disclosure is triggered by realistic depictions of real people/events/scenes or by cloning a voice other than your own — NOT by synthetic narration over clearly non-realistic animation. Fully-animated stick-figure content with an own-voice clone → false. Guard forces true when any scene sets realistic_recreation."
+            },
+            "reason": { "type": ["string", "null"], "default": null }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "scene": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["scene_id", "act", "narration_text", "visual_type", "manim_class", "parameters", "timing", "claim_refs"],
+      "properties": {
+        "scene_id": { "type": "integer", "minimum": 1 },
+        "act": {
+          "type": "string",
+          "enum": ["hook", "develop", "conflict", "comeback", "payoff", "cta"],
+          "description": "Conflict-loop arc role. Guard enforces: exactly one hook (first), ≥1 develop, ≥1 conflict in the first third for runs >90s (a misconception, obstacle, or reversal found in the source), comeback paired with conflict, ≥1 payoff, exactly one cta (last)."
+        },
+        "narration_text": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 700,
+          "description": "What the voice says in this scene. ~140 WPM ⇒ keep scenes under ~90 words."
+        },
+        "on_screen_text": { "type": ["string", "null"], "default": null },
+        "visual_type": {
+          "type": "string",
+          "enum": [
+            "stick_figure_action",
+            "joint_leverage_diagram",
+            "map_data_overlay",
+            "title_card",
+            "chart_data",
+            "timeline",
+            "comparison"
+          ]
+        },
+        "manim_class": {
+          "type": "string",
+          "description": "Scene class name; guard verifies it exists in the scenes/ registry and matches visual_type."
+        },
+        "parameters": {
+          "type": "object",
+          "description": "Scene-class-specific inputs: pose sequence ids, lever/force labels, map nodes+edges, chart series, etc. Validated per-class by the guard.",
+          "additionalProperties": true
+        },
+        "beats": {
+          "type": "array",
+          "description": "Optional visual triggers anchored to narration words — the '[VISUAL: samurai gets thrown]' markers from script transformation, resolved to word indices after TTS.",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["at_word", "action"],
+            "properties": {
+              "at_word": { "type": "integer", "minimum": 0, "description": "Index into this scene's word-timing array." },
+              "action": { "type": "string", "description": "Named animation the scene class exposes, e.g. 'pose:armbar_extension', 'flash_label:fulcrum'." }
+            }
+          }
+        },
+        "layout_hints": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "landscape": { "type": "object", "additionalProperties": true },
+            "vertical": { "type": "object", "additionalProperties": true }
+          },
+          "description": "Per-aspect composition hints (zones, scale, caption placement). Scene classes own the defaults."
+        },
+        "timing": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["target_s"],
+          "properties": {
+            "target_s": { "type": "number", "minimum": 1.5, "description": "Authoring-time estimate from word count ÷ WPM. The measured clock arrives from audio artifacts, never stored here." },
+            "min_s": { "type": "number", "default": 2 },
+            "max_s": { "type": "number", "default": 45 },
+            "padding_s": { "type": "number", "default": 0.3, "description": "Silence appended after narration before the next scene." }
+          }
+        },
+        "claim_refs": {
+          "type": "array",
+          "items": { "type": "string", "pattern": "^c[0-9]+$" },
+          "description": "Ids from the claims ledger used by this scene's narration. Guard cross-checks both directions."
+        },
+        "realistic_recreation": {
+          "type": "boolean",
+          "default": false,
+          "description": "True when the scene realistically re-creates a real event/person/place (rare in this format). Any true value forces packaging.synthetic_content_disclosure.required = true."
+        },
+        "transition": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "in": {
+              "type": "string",
+              "enum": ["continuous", "crossfade", "match_cut", "hard_cut"],
+              "default": "continuous",
+              "description": "How this scene enters. 'continuous' joins the previous scene in one rendered Manim sequence when classes are compatible — no cut at all. hard_cut is the exception and needs a reason; random-cut prevention is a design goal."
+            },
+            "motif": {
+              "type": ["string", "null"],
+              "default": null,
+              "description": "Element carried across the boundary (e.g. 'lever_arrow', 'cast:uke') for match cuts and continuity."
+            }
+          }
+        }
+      }
+    }
+  }
+}
