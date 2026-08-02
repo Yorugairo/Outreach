@@ -23,6 +23,7 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
+sys.path.insert(0, str(HERE.parent))
 
 from article_template import build_article, build_blog_row  # noqa: E402
 from sample_facts import ALL_SAMPLE_FACTS  # noqa: E402
@@ -35,7 +36,21 @@ def load_facts(args) -> list:
     axis = getattr(args, "axis", "location")
     if axis == "technique":
         import corpus_loader
+        from validate_corpus import validate_corpus
+
         src = getattr(args, "corpus", None) or (HERE.parent / "corpus")
+        readiness = validate_corpus(src)
+        if not readiness["valid"]:
+            details = [
+                f"{item['path']}: {error}"
+                for item in readiness["records"]
+                for error in item["errors"]
+            ]
+            details.extend(readiness["errors"])
+            raise ValueError(
+                "technique corpus is not production-ready:\n  - "
+                + "\n  - ".join(details)
+            )
         return corpus_loader.load_corpus(str(src))
     # location axis
     if getattr(args, "source", None):
@@ -143,7 +158,11 @@ def main() -> int:
     out_root = Path(args.out)
     out_root.mkdir(parents=True, exist_ok=True)
 
-    facts_list = load_facts(args)
+    try:
+        facts_list = load_facts(args)
+    except ValueError as exc:
+        print(f"ERROR: {exc}", file=sys.stderr)
+        return 1
     if args.slug:
         facts_list = [f for f in facts_list if f.slug == args.slug]
     if args.tier:

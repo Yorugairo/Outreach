@@ -1,0 +1,339 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://outreach-program.internal/schemas/asset-manifest.v1.json",
+  "title": "Asset Manifest v1",
+  "description": "A local, rights-reviewed asset inventory for History Documentary V4. Source URLs may be retained for credits, but are never copied into renderer-facing resolved assets.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "assets"],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "asset_manifest.v1"
+    },
+    "manifest_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "project_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "episode_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "job_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "project_root": {
+      "type": "string",
+      "minLength": 1
+    },
+    "review": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "notes": {
+      "type": ["string", "array", "object"]
+    },
+    "assets": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/definitions/asset"
+      }
+    },
+    "artifact_hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    }
+  },
+  "definitions": {
+    "permission": {
+      "type": "string",
+      "enum": [
+        "original",
+        "operator_owned",
+        "licensed",
+        "public_domain",
+        "cc_by",
+        "cc_by_sa",
+        "fair_use",
+        "unverified",
+        "research_only"
+      ]
+    },
+    "rights": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["permission", "reviewed"],
+      "properties": {
+        "permission": {
+          "$ref": "#/definitions/permission"
+        },
+        "status": {
+          "$ref": "#/definitions/permission"
+        },
+        "reviewed": {
+          "type": "boolean"
+        },
+        "approved": {
+          "type": "boolean"
+        },
+        "review_status": {
+          "type": "string"
+        },
+        "reviewed_by": {
+          "type": ["string", "null"]
+        },
+        "reviewed_at": {
+          "type": ["string", "null"]
+        },
+        "source": {
+          "type": ["string", "null"]
+        },
+        "source_url": {
+          "type": ["string", "null"]
+        },
+        "license": {
+          "type": ["string", "null"]
+        },
+        "attribution_required": {
+          "type": "boolean"
+        },
+        "attribution": {
+          "type": ["string", "object", "array", "null"]
+        },
+        "rights_statement": {
+          "type": ["string", "null"]
+        }
+      }
+    },
+    "attribution": {
+      "type": ["string", "object", "array"],
+      "minLength": 1,
+      "additionalProperties": true,
+      "properties": {
+        "text": {
+          "type": "string",
+          "minLength": 1
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "creator": {
+          "type": "string",
+          "minLength": 1
+        },
+        "author": {
+          "type": "string",
+          "minLength": 1
+        },
+        "license": {
+          "type": "string",
+          "minLength": 1
+        },
+        "url": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_url": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "likeness": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "living": {
+          "type": "boolean"
+        },
+        "living_person": {
+          "type": "boolean"
+        },
+        "living_persons": {
+          "type": "array"
+        },
+        "subjects": {
+          "type": "array"
+        },
+        "approved": {
+          "type": "boolean"
+        },
+        "operator_approved": {
+          "type": "boolean"
+        },
+        "reference_approved": {
+          "type": "boolean"
+        },
+        "approved_by": {
+          "type": ["string", "null"]
+        }
+      }
+    },
+    "logo": {
+      "type": ["boolean", "string", "object"],
+      "additionalProperties": true,
+      "properties": {
+        "is_logo": {
+          "type": "boolean"
+        },
+        "permission": {
+          "type": ["boolean", "string"]
+        },
+        "approved": {
+          "type": "boolean"
+        },
+        "operator_approved": {
+          "type": "boolean"
+        },
+        "trademark_permission": {
+          "type": "boolean"
+        }
+      }
+    },
+    "alteration": {
+      "type": ["boolean", "string", "object", "array"],
+      "additionalProperties": true,
+      "properties": {
+        "allowed": {
+          "type": "boolean"
+        },
+        "permitted": {
+          "type": "boolean"
+        },
+        "approved": {
+          "type": "boolean"
+        },
+        "reviewed": {
+          "type": "boolean"
+        },
+        "policy": {
+          "type": "string"
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "asset": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "sha256", "render_eligible"],
+      "anyOf": [
+        {"required": ["path"]},
+        {"required": ["local_path"]},
+        {"required": ["asset_path"]}
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9._-]*$"
+        },
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "local_path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "asset_path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[A-Fa-f0-9]{64}$"
+        },
+        "content_sha256": {
+          "type": "string",
+          "pattern": "^[A-Fa-f0-9]{64}$"
+        },
+        "kind": {
+          "type": "string",
+          "minLength": 1
+        },
+        "role": {
+          "type": "string",
+          "minLength": 1
+        },
+        "title": {
+          "type": "string"
+        },
+        "creator": {
+          "type": "string"
+        },
+        "author": {
+          "type": "string"
+        },
+        "origin": {
+          "type": ["string", "object", "null"]
+        },
+        "source": {
+          "type": ["string", "object", "null"]
+        },
+        "source_url": {
+          "type": ["string", "null"]
+        },
+        "license": {
+          "type": ["string", "null"]
+        },
+        "permission": {
+          "$ref": "#/definitions/permission"
+        },
+        "rights": {
+          "$ref": "#/definitions/rights"
+        },
+        "attribution": {
+          "anyOf": [
+            {"$ref": "#/definitions/attribution"},
+            {"type": "null"}
+          ]
+        },
+        "likeness": {
+          "$ref": "#/definitions/likeness"
+        },
+        "living_person": {
+          "type": "boolean"
+        },
+        "likeness_approved": {
+          "type": "boolean"
+        },
+        "logo": {
+          "$ref": "#/definitions/logo"
+        },
+        "is_logo": {
+          "type": "boolean"
+        },
+        "logo_permission": {
+          "type": "boolean"
+        },
+        "alteration": {
+          "$ref": "#/definitions/alteration"
+        },
+        "alteration_policy": {
+          "$ref": "#/definitions/alteration"
+        },
+        "altered": {
+          "type": "boolean"
+        },
+        "render_eligible": {
+          "type": "boolean"
+        },
+        "quarantine_reason": {
+          "type": ["string", "array"]
+        },
+        "metadata": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    }
+  }
+}

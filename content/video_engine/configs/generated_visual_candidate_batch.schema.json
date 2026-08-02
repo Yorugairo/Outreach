@@ -1,0 +1,129 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://outreach-program.internal/schemas/generated-visual-candidates.v1.json",
+  "title": "Generated Visual Candidates v1",
+  "description": "Review-only AI-assisted illustrations for a documentary Visual Direction Gate. These candidates are never factual evidence or renderer assets before explicit promotion.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "provider",
+    "provider_calls",
+    "items"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "generated_visual_candidates.v1"
+    },
+    "provider": {
+      "type": "string",
+      "minLength": 1
+    },
+    "provider_calls": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "cost_usd": {
+      "type": "number",
+      "minimum": 0
+    },
+    "notes": {
+      "type": "string"
+    },
+    "artifact_hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "items": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "id",
+          "role",
+          "usage",
+          "path",
+          "sha256",
+          "source_kind",
+          "preview_eligible",
+          "render_eligible",
+          "evidence_eligible",
+          "contains_factual_text",
+          "review_status",
+          "style_board_selected",
+          "disclosure_label"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9._-]*$"
+          },
+          "role": {
+            "enum": [
+              "cold_open",
+              "concept_mechanics",
+              "document",
+              "illustration",
+              "lineage_concept",
+              "map_timeline",
+              "lofi_comedy"
+            ]
+          },
+          "usage": {
+            "enum": [
+              "full_plate",
+              "background_only",
+              "context_layer"
+            ]
+          },
+          "path": {
+            "type": "string",
+            "minLength": 1
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "source_kind": {
+            "const": "ai_assisted_illustration"
+          },
+          "preview_eligible": {
+            "const": true
+          },
+          "render_eligible": {
+            "const": false
+          },
+          "evidence_eligible": {
+            "const": false
+          },
+          "contains_factual_text": {
+            "const": false
+          },
+          "review_status": {
+            "enum": [
+              "pending",
+              "selected",
+              "rejected"
+            ]
+          },
+          "style_board_selected": {
+            "type": "boolean"
+          },
+          "motion_selected": {
+            "type": "boolean",
+            "description": "Operator-selected for a review-only motion revision; never asset promotion."
+          },
+          "disclosure_label": {
+            "type": "string",
+            "minLength": 1
+          },
+          "prompt_summary": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "schema_version": "original_style_profile.v1",
+  "id": "combat-woodblock-graphic-silhouette-explainer-v1",
+  "title": "Combat Woodblock Graphic Silhouette Explainer",
+  "channel_lane": ["history", "culture", "timely-explainer"],
+  "render_policy": {
+    "input_domain": "internal_style_atoms_and_approved_asset_ids",
+    "allow_creator_imitation": false,
+    "allow_reference_study_inputs": false,
+    "allow_source_frames": false,
+    "generated_factual_text": false,
+    "facts_rendered_locally": true
+  },
+  "identity": {
+    "world": "Original Combat Woodblock: warm fibrous paper, deep indigo, rust, ochre, carved contours, and flat registered colour.",
+    "foreground": "Original Graphic Silhouette: filled two-dimensional cutout anatomy, thick dark contour, 1–3 colour regions, one readable gesture.",
+    "editorial": "Original local evidence and information surfaces attached to intentional page, scroll, panel, or empty field geometry."
+  },
+  "palette": {
+    "paper": "#E7D3A1",
+    "ink": "#1B1A17",
+    "indigo": "#17324D",
+    "rust": "#B64F36",
+    "ochre": "#D99B32",
+    "teal": "#2F7F7A"
+  },
+  "style_atoms": [
+    {
+      "id": "woodblock-world",
+      "purpose": "Establish a stable place and period.",
+      "tokens": ["warm paper", "carved dark contour", "flat colour fields", "selective fine hatching", "three to five depth layers"]
+    },
+    {
+      "id": "graphic-silhouette-actor",
+      "purpose": "Carry a readable human choice or emotion at phone size.",
+      "tokens": ["filled cutout anatomy", "8 to 12 px contour at 1080p", "one unmistakable gesture", "one grounded plane", "clear negative space"]
+    },
+    {
+      "id": "story-signal",
+      "purpose": "Make a narrated change observable.",
+      "tokens": ["door", "page", "route", "seal", "bag", "beam", "ink puff", "weather region", "one state change"]
+    },
+    {
+      "id": "local-fact-surface",
+      "purpose": "Display verified facts without generated text.",
+      "tokens": ["local type", "citation rail only when useful", "map inset", "list slot", "real paper or panel geometry"]
+    }
+  ],
+  "camera_and_motion": {
+    "world_camera": "locked_or_small_eased_focal_push",
+    "preferred_motion": ["character", "prop", "localized_weather", "route", "information_reveal"],
+    "prohibited_motion": ["constant_background_pan", "whole_plate_shake", "decorative_motion_without_meaning"],
+    "micro_event_seconds": [1.5, 3.0],
+    "major_shot_seconds": [3.0, 6.0],
+    "maximum_unchanged_seconds": 6.0
+  },
+  "prompt_core": "Original illustrated editorial scene: a stable Combat Woodblock world with warm fibrous paper, deep indigo, rust, ochre, carved contours, and flat registered colour. Add one simple Graphic Silhouette foreground actor with filled two-dimensional anatomy, a thick dark outline, a single clear grounded gesture, and one meaningful prop or environmental action. Leave deliberate clean space for locally composited information. No text in the image.",
+  "negative_constraints": [
+    "no creator names or imitation language",
+    "no generated text, dates, citations, logos, flags, maps, or charts",
+    "no skeletal stick figures",
+    "no technical grappling choreography",
+    "no extra limbs, fused hands, floating actor, or implausible object contact",
+    "no photorealistic false archive",
+    "no gray generic text box or blank book as an information substitute",
+    "no full-frame camera shake or moving background plate"
+  ],
+  "sample_pack": "content/video_engine/projects/history-of-bjj/style-samples/combat-woodblock-graphic-silhouette-explainer-v1/",
+  "render_eligible": false
+}

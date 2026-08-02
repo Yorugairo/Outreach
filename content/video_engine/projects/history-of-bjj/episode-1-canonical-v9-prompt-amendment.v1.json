@@ -1,0 +1,41 @@
+{
+  "schema_version": "canonical_plate_prompt_amendment.v1",
+  "episode_id": "how-judo-became-brazilian-jiu-jitsu",
+  "canonical_visual_coverage_hash": "fbf3c6dbf0824cffe57464129fefc7e9d63d3c28a4b377d6bfdebe27f1db5754",
+  "supersedes": "episode-1-canonical-v8-prompt-amendment.v1.json",
+  "status": "active_for_candidate_generation_only",
+  "global_rules": [
+    "The narrated Brazilian chapter must read as a humid early-twentieth-century Brazilian Amazon or Brazilian regional setting as appropriate: broad river light, palms, wooden wharves, river craft, mixed tropical and colonial street architecture, and locally varied civilian clothing.",
+    "Japanese woodblock editorial is a graphic medium and palette, not a geographic instruction. Do not generate tatami rooms, shoji screens, pagodas, topknots, kimonos, Japanese rooflines, Japanese crowd dress, or Japanese city views for Brazilian slots unless the prompt explicitly requires a visiting Japanese traveler.",
+    "Generated reconstruction is never historical evidence or a likeness. It may show anonymous social context but cannot identify a named person, assert a specific event, or contain factual text.",
+    "Qualified historical claims must not receive fake documents, certificate-like surfaces, source-looking tables, or visually complete handoffs that contradict incomplete or contested narration.",
+    "A meaningful inventory may use one distinct anonymous visual action per named social role, but never a generated label, card, graph, or claim-bearing diagram."
+  ],
+  "slot_amendments": [
+    {
+      "slot_id": "canonical-107",
+      "world": "Belém community threshold",
+      "purpose": "two distinct actions: a student becomes an instructor; a local teacher carries practice into another community"
+    },
+    {
+      "slot_id": "canonical-108",
+      "world": "Belém memory and public story",
+      "purpose": "later memory compresses several stages into one famous connection; do not represent the compression as factual evidence"
+    },
+    {
+      "slot_id": "canonical-112",
+      "world": "Brazilian regional social worlds",
+      "purpose": "three distinct anonymous social-role cut-ins for immigrant teachers, professional fighters, and community networks; no named person, text, relationship graph, or fake evidence surface"
+    },
+    {
+      "slot_id": "canonical-113",
+      "world": "Brazilian regional spread",
+      "purpose": "show lived regional variety without drawing a map or implying one verified route; factual route graphics remain local editorial overlays"
+    },
+    {
+      "slot_id": "canonical-114",
+      "world": "Brazilian research horizon",
+      "purpose": "an open, human-scale transition to the next episode's research questions; no blank book, generic card, fake archive, or solved-looking lineage"
+    }
+  ]
+}

@@ -1,0 +1,58 @@
+{
+  "schema_version": "canonical_plate_prompt_amendment.v1",
+  "episode_id": "how-judo-became-brazilian-jiu-jitsu",
+  "canonical_visual_coverage_hash": "6c81bf078c5ba80dcfdc7958f7e01ca3ccf3c324851009f4b469ad558ae28bce",
+  "status": "active_for_candidate_generation_only",
+  "global_rules": [
+    "The narrated Belém chapter must read as a humid early-twentieth-century Brazilian Amazon river city: broad river light, palms, wooden wharves, river craft, mixed tropical and colonial street architecture, and locally varied civilian clothing.",
+    "Japanese woodblock editorial is a graphic medium and palette, not a geographic instruction. Do not generate tatami rooms, shoji screens, pagodas, topknots, kimonos, Japanese rooflines, Japanese crowd dress, or Japanese city views for Belém slots unless the prompt explicitly requires a visiting Japanese traveler.",
+    "Generated reconstruction is never historical evidence or a likeness. It may show anonymous social context but cannot identify a named person, assert a specific event, or contain factual text."
+  ],
+  "slot_amendments": [
+    {
+      "slot_id": "canonical-081",
+      "world": "Belém public venue",
+      "purpose": "a public test of skill, not an actual match"
+    },
+    {
+      "slot_id": "canonical-082",
+      "world": "Belém community teaching threshold",
+      "purpose": "setting affects what students can receive"
+    },
+    {
+      "slot_id": "canonical-083",
+      "world": "Belém commercial sport culture",
+      "purpose": "adjacent entertainments, physically separated"
+    },
+    {
+      "slot_id": "canonical-084",
+      "world": "Belém training context",
+      "purpose": "avoid equating one local curriculum with the full Kodokan system"
+    },
+    {
+      "slot_id": "canonical-085",
+      "world": "Belém public daylight threshold",
+      "purpose": "correct a secret-system myth through ordinary openness"
+    },
+    {
+      "slot_id": "canonical-087",
+      "world": "Belém public challenge audience",
+      "purpose": "immediate public explanation"
+    },
+    {
+      "slot_id": "canonical-088",
+      "world": "Belém public venue",
+      "purpose": "quick demonstrative performance"
+    },
+    {
+      "slot_id": "canonical-089",
+      "world": "Belém community class",
+      "purpose": "habit-building over time"
+    },
+    {
+      "slot_id": "canonical-090",
+      "world": "Belém river-city arcade",
+      "purpose": "distinct settings in one connected place"
+    }
+  ]
+}

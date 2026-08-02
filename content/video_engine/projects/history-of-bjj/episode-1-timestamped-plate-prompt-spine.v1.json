@@ -1,0 +1,279 @@
+{
+  "schema_version": "timestamped_plate_prompt_spine.v1",
+  "episode_id": "how-judo-became-brazilian-jiu-jitsu",
+  "global_continuity": {
+    "output": "16:9 landscape 1920x1080 editorial production plate",
+    "locks": [
+      "Combat Woodblock historical editorial: clean graphic woodblock blocks, sharp carved sumi-ink contours, large flat registered fields of deep indigo, muted rust, ochre, and jade; a faint warm paper substrate only, never photographic grit or distressed noise",
+      "cinematic but stable worlds; communicate movement through character, prop, weather, water, steam, fabric, or distant activity rather than whole-frame camera drift",
+      "one clear subject hierarchy with full bodies and props kept inside the frame; avoid accidental limb or object collisions",
+      "reserve a calm negative-space anchor for deterministic dates, source treatment, or a cutout learner; generated pixels carry no factual text",
+      "do not create readable writing, dates, labels, logos, watermarks, diagrams, or citations; do not invent an identifiable historical likeness",
+      "avoid grain, film noise, halftone speckling, cracked texture overlays, faux aged-photo effects, muddy gradients, and busy micro-detail; favor crisp graphic silhouettes and calm clean color fields"
+    ]
+  },
+  "chapters": [
+    {
+      "chapter_id": "kano-system-before-brazil",
+      "story_world": "late nineteenth-century Japan moving from a deliberately mythic battlefield edge into quiet Kodokan courtyards, tatami rooms, study desks, school corridors, and print-advertisement streets",
+      "visual_arc": "the audience trades a simplistic origin legend for an institution that selects, teaches, names, and adapts a practice",
+      "entry_motif": "rust battlefield smoke resolves into still dawn steam above an orderly gate",
+      "exit_motif": "a stamped paper edge becomes an indigo route ribbon leaving Japan",
+      "character_staging": "reserve a foot-supported lower-left or lower-right lane for the fictional learner cutout; use anonymous period figures rather than generating Kano's likeness",
+      "recurring_motifs": [
+        "circular date seal",
+        "tatami geometry",
+        "quiet steam and paper dust",
+        "indigo roofline",
+        "rust correction stamp"
+      ]
+    },
+    {
+      "chapter_id": "maeda-and-the-belem-network",
+      "story_world": "a transnational travel world of steamship decks, tickets, port cranes, newspaper streets, Rio venues, humid Belém riverfronts, theaters, training rooms, and crowded public challenges",
+      "visual_arc": "a named traveler enters an already active Brazilian field; movement changes what the audience, venue, instructor, and practice can become",
+      "entry_motif": "the Japan route ribbon bends into a ship wake and a carried travel case",
+      "exit_motif": "river foam becomes a broad paper-and-ink network weave rather than a single lineage arrow",
+      "character_staging": "leave a perspective-safe deck, quay, aisle, or floor lane for the fictional learner or an approved anonymous traveler cutout; never place a cutout on cargo, water, a rail, or a flat foreground object",
+      "recurring_motifs": [
+        "ship wake",
+        "ticket and travel case",
+        "river foam",
+        "port awning",
+        "theater light",
+        "inked route ribbon"
+      ]
+    },
+    {
+      "chapter_id": "from-network-to-brazilian-sport",
+      "story_world": "early Brazilian training halls, public posters without readable text, community rooms, city streets, newspaper textures, and a modern-looking archive desk that gathers many overlapping paths without a false family tree",
+      "visual_arc": "overlapping communities become a public Brazilian identity through institutions, promotion, memory, and repeated transformation",
+      "entry_motif": "a woven river network opens into layered community thresholds and training-room light",
+      "exit_motif": "multiple ink routes settle into one open registry folio and a quiet horizon",
+      "character_staging": "reserve an uncluttered floor or threshold for the fictional learner; historical figures remain anonymous illustration or approved local archival composites",
+      "recurring_motifs": [
+        "layered route weave",
+        "training-hall curtain",
+        "public poster wall without text",
+        "open folio",
+        "jade horizon line"
+      ]
+    }
+  ],
+  "shot_sequences": [
+    {
+      "parent_shot_id": "history-001",
+      "plate_directions": [
+        "Distant mythic battlefield at blue dusk, anonymous armored silhouettes reduced to smoke and broken banners, with a quiet open sky at right.",
+        "The rust battlefield smoke thins around a dark wooden martial gate at night, shifting attention away from conflict toward a threshold.",
+        "Moonlit open dojo gate with wet stone courtyard and slow clouds, an orderly path leading inward and no figures competing for attention.",
+        "Early daylight outside a modest nineteenth-century Japanese training compound, a wooden doorway centered with calm empty paper sky for a later date seal.",
+        "Wide tatami-room interior in daytime, anonymous students arranged with generous geometry and a clear central aisle.",
+        "Quiet study shelf holding several tied martial scroll bundles and old wooden practice tools, visibly preserved rather than destroyed.",
+        "Anonymous practitioners in separate small training circles on a courtyard, each full body clearly staged with no complex grappling contact.",
+        "Layered old manuals and folded training garments on a low desk, paper dust and morning light suggesting continuity rather than disappearance.",
+        "Sunlit compound entrance with a newly swept tatami path and a single unoccupied teaching stool, a durable home taking shape.",
+        "School corridor receding toward an open classroom, sandals and practice bags aligned beside the wall to suggest routine and structure.",
+        "Wide interior class with an anonymous instructor standing at the far end of a tatami grid, students seated with clear empty foreground staging.",
+        "Three related objects arranged as a visual still life: folded gi, bound manual, and circular training seal, with no writing on any surface."
+      ]
+    },
+    {
+      "parent_shot_id": "history-002",
+      "plate_directions": [
+        "A craft table where anonymous hands sort several old training tools into a new orderly arrangement, seen from a warm overhead angle.",
+        "A before-and-after editorial diptych of a cluttered practice room and an ordered tatami hall, separated by an indigo paper fold.",
+        "Multiple anonymous jujutsu school entrances gathered along one old Tokyo street, each door visually distinct but without signs or labels.",
+        "A practitioner selects one simple training object from a varied shelf while other objects remain visible in the background.",
+        "Top-down tatami geometry with neatly placed training sleeves, ropes, and pads arranged into a deliberate curriculum-like pattern.",
+        "A teacher and several students walking from a practice room into a bright school corridor, carrying no text-bearing material.",
+        "A calm physical-education yard with practice in the foreground and school architecture framing the scene.",
+        "A Japanese city morning where one indigo roofline, tatami pattern, and route ribbon subtly share the same carved-ink language.",
+        "A small train platform and travel bag at the edge of a quiet Japanese town, an implied future journey without a map or labels.",
+        "A paper route ribbon escapes an open compound gate and becomes the curved wake of a distant ship silhouette.",
+        "Dawn shoreline in Japan, an indigo travel case beside a pier and a ship on the horizon, leaving a clean transition toward the sea."
+      ]
+    },
+    {
+      "parent_shot_id": "history-003",
+      "plate_directions": [
+        "Low table of harmless training objects, manuals, and a folded gi arranged as a larger system rather than a display of fighting moves.",
+        "An anonymous learner studies a wide room with a book, practice mat, and school bell occupying separate clear zones.",
+        "A period classroom where an instructor gestures toward a neat tatami field while students listen from a disciplined semicircle.",
+        "Early-morning training hall with shoes aligned, curtains raised, and anonymous students beginning a measured practice routine.",
+        "A restrained metaphor for efficiency: water flowing through a simple wooden channel and turning one small wheel, no diagram arrows or text.",
+        "Two anonymous students cooperatively roll up a heavy tatami mat, sharing the work in a balanced full-body composition.",
+        "A travel case opened on a pier to reveal neutral practice cloth, a blank folio, and simple rule markers without readable symbols.",
+        "An anonymous traveler on a ship deck holds a rolled mat against the rail; sea spray and sail cloth provide local motion cues.",
+        "Three portable objects—travel case, simple contest rope, and folded practice cloth—sit on deck with the horizon behind them.",
+        "A public hall lit for a contest, seen from wide distance with a clear central floor and silhouetted audience, no active grappling choreography.",
+        "A calm school-room threshold and a lively public hall threshold joined by one curved indigo ribbon, showing different proportions of one practice."
+      ]
+    },
+    {
+      "parent_shot_id": "history-004",
+      "plate_directions": [
+        "A wall of overlapping blank paper tags tied with red and indigo thread, suggesting unsettled terminology without rendering any words.",
+        "Several differently shaped blank print notices layered on a desk beside an ink brush and a round seal, viewed as archival texture only.",
+        "Two period newspaper-like sheets overlap imperfectly, their visible areas intentionally blank and their edges held by a rust paper clip.",
+        "A set of circular seals with different carved borders floats above a dark paper field, no letters inside any seal.",
+        "A school doorway and a theater doorway share one street corner, each receiving a different anonymous audience.",
+        "A public demonstration floor illuminated by lanterns while a quieter classroom remains visible through a side doorway.",
+        "Magnifying glass over stacked blank archival cards, with the glass casting a soft circular shadow and no fake evidence text.",
+        "A researcher-like anonymous figure sorts source folders at a desk, leaving a clean evidence-anchor area on the desk surface.",
+        "Close detail of hands pinning route threads between portraits rendered only as blank silhouette medallions, with no names or graph labels.",
+        "One heavy paper label shape cracks into several smaller shapes across a tatami pattern, an abstract warning against false stability.",
+        "Parallel mats in three adjacent rooms, each occupied by different anonymous practice postures with no complex contact.",
+        "A rust correction stamp motif presses into paper dust beside a steady indigo route ribbon, preparing the overseas chapter."
+      ]
+    },
+    {
+      "parent_shot_id": "history-005",
+      "plate_directions": [
+        "A travel case and coiled ship rope on a sunlit dock, one strong human journey implied without an identifiable portrait.",
+        "Busy early twentieth-century Brazilian waterfront with vendors, carriages, and multiple small martial activity clusters already present.",
+        "A Japanese martial demonstration on a distant public platform in Brazil, clearly staged as a broad event with separated figures.",
+        "A crowded contest hall before a match begins, ropes, benches, and lanterns visible but no active entangled bodies.",
+        "Rio street at evening with a public gathering outside a hall, vintage atmosphere and blank poster surfaces only.",
+        "Ticket stubs, a bell, and an empty contest ring under warm theater light, all objects visibly complete and inside frame.",
+        "Several pairs of footprints arrive from different street directions toward one Brazilian public square.",
+        "A coastal street shows three separate thresholds—a hall, a courtyard, and a family home—each hinting at different local entry points.",
+        "A layered route ribbon crosses older Brazilian paving stones while unrelated community silhouettes continue behind it.",
+        "Wide harbor view with several vessels and a busy quay, ending on the open water route rather than one singular arrival."
+      ]
+    },
+    {
+      "parent_shot_id": "history-006",
+      "plate_directions": [
+        "An open archival folio on a desk with several competing blank bookmark ribbons, a composed uncertainty image with no question-mark text.",
+        "A small brass crown rests cracked beside multiple equally weighted paper medallions, rejecting a single winner without readable labels.",
+        "Two anonymous travelers stand apart on a ship deck with distinct luggage and a shared horizon, leaving their identities unrendered.",
+        "A sequence of varied travelers enters through different dock gates while older residents move through the same space.",
+        "A quiet immigrant-community practice room with family shoes, simple mats, and an anonymous teacher facing a small circle.",
+        "Split world: a lantern-lit public stage on one side and a humble community class on the other, joined by a paper fold.",
+        "Mixed archival materials—ticket, photo frame, program, and notebook—overlap without any object becoming a fake source document.",
+        "Several route threads reach an open harbor from different angles and remain visibly separate, preparing a qualified transition."
+      ]
+    },
+    {
+      "parent_shot_id": "history-007",
+      "plate_directions": [
+        "A ship passes through a tall coastal harbor gate at sunrise, using the threshold as a clear major transition image.",
+        "Wide deck scene with several anonymous martial travelers, luggage and folded mats placed on stable planks rather than rails or cargo.",
+        "The ship approaches a Brazilian port where cranes, palms, and a crowded waterfront build anticipation across the full frame.",
+        "A small group of Japanese travelers walks down a broad quay with varied travel cases, each body fully visible and separated.",
+        "A traveling troupe packs a lantern, a folded mat, and blank handbills into cases, stressing practical work over missionary imagery.",
+        "A public hall seen from backstage: stage curtain, empty demonstration floor, and a classroom doorway in one layered composition.",
+        "Audience members gather around a distant public demonstration platform, with performers represented as clean, separate silhouettes.",
+        "An illuminated contest venue at night with ropes and ticket booth geometry, ending on theater light that leads toward Belém."
+      ]
+    },
+    {
+      "parent_shot_id": "history-008",
+      "plate_directions": [
+        "Humid Belém riverfront at golden morning, broad water, palm silhouettes, and warehouse roofs leaving a calm center for later evidence.",
+        "Rubber-economy river quay with stacked crates, workers, and steamboat smoke, all figures grounded on stable surfaces.",
+        "Close editorial view of a market stall, rolled rubber goods, and a riverside warehouse, with visible local activity but no text.",
+        "Night theater frontage in Belém with marquee-like blank lights and a crowd moving toward open doors.",
+        "Interior theater stage framed by curtains and lanterns, an empty center before any exhibition begins.",
+        "A clean public demonstration seen from the audience edge, two practitioners in a simple upright stance with clearly separated limbs.",
+        "Blank period handbills pinned outside a hall beside an open practice-room door, suggesting advertised lessons without fabricated writing.",
+        "A split composition: attentive seated pupils at left and excited theater spectators at right, connected by one spotlight beam.",
+        "A practical training room after a public event, mats, water bucket, and travel bag suggesting the work behind spectacle."
+      ]
+    },
+    {
+      "parent_shot_id": "history-009",
+      "plate_directions": [
+        "An anonymous learner stands at the edge of a room where a theater curtain and tatami mat meet, showing context shaping instruction.",
+        "Period wrestling posters rendered as blank graphic silhouettes around a public hall doorway, with no readable print.",
+        "A prizefighting ring under warm lamps, shown empty just before an event so no risky multi-person choreography is generated.",
+        "Quiet Kodokan-like classroom detail: folded uniforms, neat mat lines, and a wooden teaching pointer against a stable wall.",
+        "A closed, ordinary travel trunk surrounded by mundane training items, deliberately refusing a secret-system visual metaphor.",
+        "Open source folders and several small neutral practice objects spread on a desk, evidence texture without fake written proof.",
+        "A river current carries three harmless training objects past a dock, showing methods changing through travel rather than a technical sequence.",
+        "Three adjacent doorways reveal a classroom, a ring, and a community mat, each lit differently but joined by one route ribbon.",
+        "A traveler’s hand sets a folded gi beside a theater ticket and a school bell, a concise transfer-of-emphasis still life."
+      ]
+    },
+    {
+      "parent_shot_id": "history-010",
+      "plate_directions": [
+        "Two hands pass a blank folded paper across a crowded table, but the paper remains slightly between them rather than completing a clean handoff.",
+        "Belém training room with one empty portrait-shaped light area and multiple anonymous students around a central mat.",
+        "An open courtyard class where several people observe one instructor, composed as a networked room rather than a lineage tableau.",
+        "A senior anonymous student helps another student tie a belt correctly, a grounded transmission action with no historical likeness.",
+        "A partially assembled paper family-tree shape breaks into ordinary pages and route threads, visibly incomplete rather than authoritative.",
+        "Archive shelves recede behind scattered folders, with one missing gap of light and no fake source labels.",
+        "A teacher hands a rolled practice cloth to a learner at a doorway, a simple positive transmission image.",
+        "The rolled cloth becomes a loose indigo thread crossing a paper field and ending in several possible paths, inviting qualification."
+      ]
+    },
+    {
+      "parent_shot_id": "history-011",
+      "plate_directions": [
+        "A braided indigo cord crosses a training-hall floor and branches toward several evenly spaced lanterns, a network rather than an arrow.",
+        "Several anonymous figures in separate rooms are connected by the same recurring lantern glow, with no chart boxes or names.",
+        "A senior local student stands at the center of a small class, gesturing toward a mat while two learners watch from grounded positions.",
+        "A circular training space contains multiple teaching pairs around its edge, no single person rendered as the sole origin.",
+        "Two empty portrait medallion spaces share the same woven route field, preserving multiple roles without generating historical faces.",
+        "A set of small stepping stones across a river each carries a neutral practice object, honoring intermediaries through the path itself.",
+        "Open research notebooks, several photo corners, and a route ribbon gather on a warm archive desk before the scene moves beyond Rio."
+      ]
+    },
+    {
+      "parent_shot_id": "history-012",
+      "plate_directions": [
+        "Wide Brazilian city montage of river port, inland street, and coastal hall arranged as layered paper panels without a literal map.",
+        "A bustling neighborhood threshold where a modest training room opens onto an ordinary public street, clearly beyond one famous city image.",
+        "An immigrant teacher leads a small orderly class in a community hall, figures fully separated and grounded on mats.",
+        "A professional fighter waits in a backstage corridor with gloves and a travel case, avoiding active combat choreography.",
+        "Three community rooms glow across a nighttime Brazilian neighborhood, each containing a different small group activity.",
+        "A woven route ribbon passes from a river pier to a town street to an interior mat, no geography labels required.",
+        "A cabinet of many closed archival folders sits under a bright desk lamp, inviting research rather than claiming a solved history.",
+        "Several side paths peel away from a central paper road but remain richly illustrated, refusing to make them decorative scraps.",
+        "An anonymous researcher opens one unlabeled folder while additional folders remain visible in deep background.",
+        "The folder’s paper edge turns into a rust-and-jade chapter border that prepares the reinvention period."
+      ]
+    },
+    {
+      "parent_shot_id": "history-013",
+      "plate_directions": [
+        "Belém river at late afternoon with a route ribbon continuing past the harbor toward a wider Brazilian horizon.",
+        "An open city gate beyond the port reveals several roads and neighborhood roofs, rejecting a finished-origin endpoint.",
+        "1930s-inspired Brazilian boulevard with print textures, streetcars, and public gathering spaces in an original illustrated reconstruction.",
+        "A bright training hall opens beside a small arena, suggesting reinvention through new public settings rather than a single lineage scene.",
+        "A crowd approaches a public exhibition with banners intentionally blank and all activity kept in clear wide silhouettes.",
+        "A sturdy institutional building facade with an open door, practice bags, and a repeating circular medallion motif.",
+        "A wall of blank promotional posters catches orange evening light while the learner’s safe floor lane remains empty.",
+        "Abstract rust, jade, and indigo sunburst textiles hang beside training gear, evoking a changing public identity without flags or text.",
+        "Several distinct martial practice spaces share one Brazilian streetscape, separated by thresholds rather than mixed in one impossible fight.",
+        "A calm floor-level still life of varied footwear, mats, and travel cases near an open doorway, concluding the local-practice contrast."
+      ]
+    },
+    {
+      "parent_shot_id": "history-014",
+      "plate_directions": [
+        "A wide archive table gathers a Japanese gate miniature, ship ticket, river stone, and folded gi into one balanced final still life.",
+        "The same objects cast connected shadows that form a woven route pattern across warm paper, more interesting than one straight lineage line.",
+        "Anonymous craft hands modify an older practice tool into an orderly new set, an adaptation image with no heroic likeness.",
+        "A travel case moves from a Japanese pier through a ship doorway toward a Brazilian quay in three connected paper layers.",
+        "The ship wake shifts into a warm Brazilian training-hall floor, with the shared curve serving as a motivated match cut.",
+        "A Brazilian street holds several separate community thresholds and groups, none elevated as the only source.",
+        "Multiple small rooms glow behind an evening facade, suggesting active communities with gentle stable environment motion opportunities.",
+        "A later institutional hall with a public doorway and orderly mats is framed as one more transformation, not an endpoint.",
+        "Layered print textures, a circular medallion, and a route ribbon assemble into a public-facing identity collage with no readable type.",
+        "A blank paper seal receives overlapping ink layers from different directions, visually rejecting a one-time copy.",
+        "A sequence of carved paper panels progressively changes from gate to ship to river to training hall, settling into a quiet horizon."
+      ]
+    },
+    {
+      "parent_shot_id": "history-015",
+      "plate_directions": [
+        "An open unmarked registry folio rests on an archive desk beside a route ribbon and warm lamp, with ample intentional whitespace for local CTA treatment.",
+        "Quiet jade-and-indigo horizon beyond an open archive doorway, the folio and route ribbon resting in foreground as a gentle final hold."
+      ]
+    }
+  ],
+  "artifact_hash": "8508b71746b83ba46b2059591e680850068de1daf21413fe6fae17be9da03d85"
+}

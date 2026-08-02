@@ -1,0 +1,4 @@
+interface:
+  display_name: "History Editorial Asset Foundation"
+  short_description: "Build reviewed, timestamped documentary plates"
+  default_prompt: "Use $history-editorial-asset-foundation to build a reviewed timestamped plate wave for a history documentary."

@@ -1,0 +1,91 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://outreach-program.internal/schemas/storyboard-v2.3.json",
+  "title": "Living Editorial History Storyboard 2.3",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "job_id",
+    "source",
+    "channel",
+    "research_hash",
+    "asset_manifest_hash",
+    "coverage_plan_hash",
+    "asset_selection_hash",
+    "art_direction",
+    "global_settings",
+    "claims",
+    "scenes",
+    "derivatives",
+    "packaging"
+  ],
+  "properties": {
+    "schema_version": { "const": "2.3.0" },
+    "job_id": { "type": "string", "format": "uuid" },
+    "source": { "type": "object", "required": ["slug", "kind", "ref", "content_hash"], "properties": { "slug": { "$ref": "#/definitions/id" }, "kind": { "const": "history_episode" }, "ref": { "type": "string", "minLength": 1 }, "content_hash": { "$ref": "#/definitions/hash" } }, "additionalProperties": false },
+    "channel": { "type": "object", "required": ["id", "series"], "properties": { "id": { "type": "string", "minLength": 1 }, "series": { "const": "history-of-bjj" } }, "additionalProperties": false },
+    "research_hash": { "$ref": "#/definitions/hash" },
+    "asset_manifest_hash": { "$ref": "#/definitions/hash" },
+    "coverage_plan_hash": { "$ref": "#/definitions/hash" },
+    "asset_selection_hash": { "$ref": "#/definitions/hash" },
+    "art_direction": { "type": "object", "required": ["id", "hash", "treatment_contract_version", "treatment_hash"], "properties": { "id": { "type": "string", "minLength": 1 }, "hash": { "$ref": "#/definitions/hash" }, "treatment_contract_version": { "const": "visual_treatment.v2" }, "treatment_hash": { "$ref": "#/definitions/hash" } }, "additionalProperties": false },
+    "global_settings": { "type": "object", "required": ["voice", "targets", "target_duration_s", "concept_mechanics_runtime_cap"], "properties": { "voice": { "type": "object", "required": ["provider", "is_custom_voice"], "properties": { "provider": { "enum": ["elevenlabs", "human_recorded"] }, "voice_id": { "type": "string" }, "is_custom_voice": { "const": true } }, "additionalProperties": true }, "targets": { "type": "array", "uniqueItems": true, "items": { "enum": ["landscape", "vertical", "chapter_subvideo"] } }, "target_duration_s": { "type": "number", "minimum": 480, "maximum": 720 }, "concept_mechanics_runtime_cap": { "type": "number", "maximum": 0.15 } }, "additionalProperties": false },
+    "claims": { "type": "array", "minItems": 1, "items": { "type": "object" } },
+    "scenes": { "type": "array", "minItems": 8, "items": { "$ref": "#/definitions/scene" } },
+    "derivatives": { "type": "object" },
+    "packaging": { "type": "object" }
+  },
+  "definitions": {
+    "id": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+    "hash": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "motionRecipe": { "enum": ["parallax_push", "detail_punch", "masked_reveal", "evidence_highlight", "map_trace", "comic_pop", "split_compare", "type_build", "paper_transition"] },
+    "microEvent": { "type": "object", "required": ["at_s", "action", "recipe"], "properties": { "at_s": { "type": "number", "minimum": 0 }, "action": { "type": "string", "minLength": 1 }, "recipe": { "$ref": "#/definitions/motionRecipe" } }, "additionalProperties": false },
+    "visualBeat": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["coverage_slot_id", "narration_excerpt", "parent_offset_s", "duration_s", "semantic_purpose", "visual_source", "asset_ids", "motion_recipe", "micro_events", "transition"],
+      "properties": {
+        "coverage_slot_id": { "type": "string", "minLength": 1 },
+        "narration_excerpt": { "type": "string", "minLength": 1 },
+        "parent_offset_s": { "type": "number", "minimum": 0 },
+        "duration_s": { "type": "number", "exclusiveMinimum": 0, "maximum": 8 },
+        "semantic_purpose": { "enum": ["evidence", "setting", "person", "object", "transition", "humor", "explanation", "correction"] },
+        "visual_source": { "enum": ["archive", "stock_photo", "stock_vector", "original_illustration", "document", "map", "graph", "typography"] },
+        "asset_ids": { "type": "array", "uniqueItems": true, "items": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]*$" } },
+        "motion_recipe": { "$ref": "#/definitions/motionRecipe" },
+        "micro_events": { "type": "array", "minItems": 1, "items": { "$ref": "#/definitions/microEvent" } },
+        "transition": { "enum": ["hard_cut", "match_cut", "crossfade", "continuous"] }
+        ,"producer_block_id": { "type": "string", "minLength": 1 }
+        ,"producer_kind": { "enum": ["image", "video", "asset", "deterministic"] }
+        ,"provider_duration_s": { "type": ["number", "null"], "minimum": 0 }
+        ,"still_producers": { "type": "array", "items": { "type": "object" } }
+        ,"motion_producers": { "type": "array", "items": { "type": "object" } }
+        ,"producer_prompt": { "type": "object" }
+      }
+    },
+    "scene": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["scene_id", "act", "chapter_id", "narration_text", "visual_type", "visual_function", "manim_class", "visual_treatment_id", "visual_treatment_ids", "visual_beats", "parameters", "timing", "claim_refs", "citation_refs", "asset_ids", "transition"],
+      "properties": {
+        "scene_id": { "type": "integer", "minimum": 1 },
+        "act": { "enum": ["hook", "develop", "conflict", "comeback", "payoff", "cta"] },
+        "chapter_id": { "$ref": "#/definitions/id" },
+        "narration_text": { "type": "string", "minLength": 1 },
+        "visual_type": { "type": "string" },
+        "visual_function": { "type": "string" },
+        "manim_class": { "const": "DocumentaryScene" },
+        "visual_treatment_id": { "type": "string", "minLength": 1 },
+        "visual_treatment_ids": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "minLength": 1 } },
+        "visual_beats": { "type": "array", "minItems": 1, "items": { "$ref": "#/definitions/visualBeat" } },
+        "parameters": { "type": "object" },
+        "timing": { "type": "object", "required": ["target_s"], "properties": { "target_s": { "type": "number", "minimum": 1.5 }, "padding_s": { "type": "number", "minimum": 0 } }, "additionalProperties": false },
+        "claim_refs": { "type": "array", "uniqueItems": true, "items": { "$ref": "#/definitions/id" } },
+        "citation_refs": { "type": "array", "uniqueItems": true, "items": { "$ref": "#/definitions/id" } },
+        "asset_ids": { "type": "array", "uniqueItems": true, "items": { "type": "string" } },
+        "transition": { "type": "object" }
+      }
+    }
+  }
+}

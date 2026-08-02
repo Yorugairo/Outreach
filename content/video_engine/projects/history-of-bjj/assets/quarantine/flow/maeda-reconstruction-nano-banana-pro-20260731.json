@@ -1,0 +1,23 @@
+{
+  "schema_version": "flow_character_output.v1",
+  "output_id": "flow-character-7e841b23-24fa-4ac5-9bb6-fefda659ac23",
+  "character_pack_id": "history-episode-1-flow-cast-v1",
+  "character_id": "maeda-reconstruction",
+  "provider": "google_flow",
+  "builder_surface": "character_builder",
+  "model": "nano-banana-pro",
+  "provider_media_id": "7e841b23-24fa-4ac5-9bb6-fefda659ac23",
+  "local_path": "content/video_engine/projects/history-of-bjj/assets/quarantine/flow/maeda-reconstruction-nano-banana-pro-20260731.png",
+  "sha256": "a7253b9f42f359a32291e82a204b765109d37ae767de8abfd8ce932edb7d58ec",
+  "dimensions": {"width": 1376, "height": 768},
+  "source_kind": "generated_original",
+  "rights_policy": {
+    "likeness_status": "historical_reconstruction",
+    "label_as_illustration": true,
+    "operator_review_required": true
+  },
+  "render_eligible": false,
+  "quarantine_reason": ["provider_output_requires_visual_direction_review", "asset_not_promoted_to_manifest"],
+  "generated_at": "2026-07-31",
+  "notes": "Generated from the approved Maeda reconstruction prompt. Illustration only; not archival evidence."
+}

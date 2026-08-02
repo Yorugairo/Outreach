@@ -1,0 +1,221 @@
+{
+  "schema_version": "art_bible.v2",
+  "id": "combat-history-longform-cutout-fork-v1",
+  "title": "Combat History Long-form Cutout Fork",
+  "channel": "history-of-bjj",
+  "render_policy": {
+    "input_domain": "internal_style_atoms_and_approved_asset_ids",
+    "allow_external_assets": false,
+    "allow_creator_imitation": false,
+    "approved_asset_ids": []
+  },
+  "profile_derivation": {
+    "contract": "production_profile_fork.v1",
+    "base_profile_id": "longform-illustrated-history-v1",
+    "base_profile_hash": "6762c8c43e8d80aef7e0b8b39dc2cb5d5f77e46e259135cdc5fed0a4fab3cd35",
+    "carry_forward": [
+      "composition",
+      "motion_economics",
+      "editing",
+      "visual_hierarchy",
+      "sound_hierarchy"
+    ],
+    "brand_overrides": [
+      "Replace source character construction with original angular Combat History cutout characters.",
+      "Replace source typography and titles with a literary folio, Inter narration type, and Roboto Mono evidence rails.",
+      "Use BJJ-specific maps, documents, clothing, locations, and relationship data.",
+      "Make archives and citations a recurring proof mode rather than occasional decoration.",
+      "Use a dry margin narrator and recurring evidence-stamp gag as the comedic voice."
+    ],
+    "differentiation": [
+      "Combat History characters use long angular torsos, rectangular hands, dot eyes, and asymmetric gi or period clothing panels.",
+      "Green evidence rails, red correction stamps, and numbered folios form an original recurring identity.",
+      "Every factual sequence resolves to a local archive, document, map datum, or qualified citation.",
+      "Map lines transform into chapter rules and evidence underlines as a channel-specific transition motif."
+    ]
+  },
+  "palette": {
+    "paper": "#E9D7B0",
+    "ink": "#17191B",
+    "background": "#101419",
+    "surface": "#252C32",
+    "rust": "#B84E38",
+    "indigo": "#31577A",
+    "jade": "#267B68",
+    "ochre": "#D69A35",
+    "muted": "#918877",
+    "sky": "#8FAFC1",
+    "field": "#7E8D58",
+    "highlighter": "#F0CD55"
+  },
+  "typography": {
+    "family": "Inter",
+    "caption_font": "Inter (local OFL)",
+    "measurement_font": "Roboto Mono (local OFL)",
+    "caption_source": "checked-in local OFL font assets",
+    "measurement_source": "checked-in local OFL font assets",
+    "weight": "semibold",
+    "case": "sentence",
+    "tracking": 0.01,
+    "safe_chars": 42
+  },
+  "style_atoms": [
+    {
+      "id": "combat-history-cutout-cast",
+      "kind": "cast",
+      "description": "Original angular cutout characters use thick ink outlines, flat clothing panels, restrained facial features, and prop-led acting.",
+      "tokens": {
+        "outline_px": 7,
+        "torso": "angular",
+        "hands": "rectangular",
+        "eyes": "dot",
+        "pose_changes": "stepped"
+      },
+      "applies_to": ["artifact_cold_open", "illustrated_reconstruction", "chapter_cta"]
+    },
+    {
+      "id": "layered-history-tableau",
+      "kind": "illustration",
+      "description": "Foreground props, cutout actors, middle-ground architecture, and a quiet painted field create economical historical depth.",
+      "tokens": {
+        "depth_planes": 3,
+        "foreground": "prop",
+        "midground": "cast",
+        "background": "place",
+        "label": "ILLUSTRATION / RECONSTRUCTION"
+      },
+      "applies_to": ["illustrated_reconstruction", "artifact_cold_open"]
+    },
+    {
+      "id": "map-to-character-transition",
+      "kind": "transition",
+      "description": "A route, border, or place marker enlarges into the next scene's road, wall, prop, or chapter rule.",
+      "tokens": {
+        "source": "map_shape",
+        "destination": "scene_anchor",
+        "continuity": "shape_and_direction"
+      },
+      "applies_to": ["migration_map_timeline", "illustrated_reconstruction"]
+    },
+    {
+      "id": "dry-reaction-insert",
+      "kind": "illustration",
+      "description": "A short original reaction pose or margin note punctures a simplification without carrying factual proof.",
+      "tokens": {
+        "maximum_s": 3.5,
+        "background": "paper",
+        "accent": "rust",
+        "evidence_role": false
+      },
+      "applies_to": ["concept_mechanics_cutaway", "chapter_cta"]
+    },
+    {
+      "id": "archive-proof-window",
+      "kind": "archive",
+      "description": "A rights-reviewed archive receives restrained parallax, an evidence stamp, and an exact source rail.",
+      "tokens": {
+        "parallax_px": 16,
+        "matte": "surface",
+        "stamp": "EVIDENCE",
+        "citation": "jade"
+      },
+      "applies_to": ["archival_portrait", "artifact_cold_open"]
+    },
+    {
+      "id": "document-proof-window",
+      "kind": "document",
+      "description": "The cited passage is highlighted inside a document field while qualification and locator remain visible.",
+      "tokens": {
+        "paper": "paper",
+        "highlight": "highlighter",
+        "qualification": "rust",
+        "citation": "jade"
+      },
+      "applies_to": ["document_quote_closeup"]
+    },
+    {
+      "id": "typed-relationship-only",
+      "kind": "diagram",
+      "description": "Relationship cards require named historical entities, a sourced verb, and an explicit direction or symmetric edge.",
+      "tokens": {
+        "named_entities_required": 2,
+        "edge_label_required": true,
+        "keyword_fallback": false,
+        "uncertainty_style": "dashed"
+      },
+      "applies_to": ["lineage_graph"]
+    },
+    {
+      "id": "combat-history-folio",
+      "kind": "type",
+      "description": "Numbered folios, green evidence rails, and red correction stamps bind comedy, illustration, maps, and archives into one authored volume.",
+      "tokens": {
+        "folio": true,
+        "evidence_rail": "jade",
+        "correction_stamp": "rust",
+        "safe_margin": 0.08
+      },
+      "applies_to": ["artifact_cold_open", "archival_portrait", "illustrated_reconstruction", "document_quote_closeup", "migration_map_timeline", "lineage_graph", "concept_mechanics_cutaway", "chapter_cta"]
+    }
+  ],
+  "composition": {
+    "safe_margin": 0.08,
+    "anchor_grid": "document_grid",
+    "max_repeated_framing": 2,
+    "functions": {
+      "artifact_cold_open": {
+        "framing": "prop_or_character_cold_open",
+        "atom_ids": ["combat-history-cutout-cast", "layered-history-tableau", "combat-history-folio"],
+        "asset_category": "original_illustration"
+      },
+      "archival_portrait": {
+        "framing": "archive_proof",
+        "atom_ids": ["archive-proof-window", "combat-history-folio"],
+        "asset_category": "archival_photo"
+      },
+      "illustrated_reconstruction": {
+        "framing": "layered_cutout_tableau",
+        "atom_ids": ["combat-history-cutout-cast", "layered-history-tableau", "combat-history-folio"],
+        "asset_category": "original_illustration"
+      },
+      "document_quote_closeup": {
+        "framing": "document_proof",
+        "atom_ids": ["document-proof-window", "combat-history-folio"],
+        "asset_category": "document_scan"
+      },
+      "migration_map_timeline": {
+        "framing": "map_to_scene",
+        "atom_ids": ["map-to-character-transition", "combat-history-folio"],
+        "asset_category": "map"
+      },
+      "lineage_graph": {
+        "framing": "typed_relationship_card",
+        "atom_ids": ["typed-relationship-only", "combat-history-folio"],
+        "asset_category": "diagram"
+      },
+      "concept_mechanics_cutaway": {
+        "framing": "dry_reaction_insert",
+        "atom_ids": ["dry-reaction-insert", "combat-history-folio"],
+        "asset_category": "original_illustration"
+      },
+      "chapter_cta": {
+        "framing": "illustrated_chapter_card",
+        "atom_ids": ["combat-history-cutout-cast", "combat-history-folio"],
+        "asset_category": "typography"
+      }
+    }
+  },
+  "motion": {
+    "phase_order": ["anticipation", "reveal", "action", "recovery", "hold"],
+    "easing": {
+      "anticipation": "stepped_hold",
+      "reveal": "ease_out",
+      "action": "linear",
+      "recovery": "ease_in_out",
+      "hold": "constant"
+    },
+    "transition_motifs": ["map_to_scene", "prop_match", "page_or_smoke_wipe", "reaction_hard_cut", "evidence_stamp"]
+  },
+  "approved_asset_categories": ["archival_photo", "original_illustration", "document_scan", "map", "diagram", "texture", "typography"],
+  "signature": ["longform_cutout_history", "original_angular_cast", "map_to_character", "archive_as_proof", "dry_margin_humor", "combat_history_folio"]
+}

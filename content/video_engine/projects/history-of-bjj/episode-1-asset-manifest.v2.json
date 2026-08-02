@@ -1,0 +1,536 @@
+{
+  "schema_version": "asset_manifest.v1",
+  "manifest_id": "how-judo-became-brazilian-jiu-jitsu-assets-v2",
+  "project_id": "history-of-bjj",
+  "episode_id": "how-judo-became-brazilian-jiu-jitsu",
+  "review": {
+    "status": "rights_reviewed",
+    "reviewed_by": "P13 evidence review and Operator Asset Foundation Gate",
+    "reviewed_at": "2026-08-01",
+    "policy": "rights-cleared-only pilot"
+  },
+  "assets": [
+    {
+      "id": "archive-jigoro-kano",
+      "path": "content/video_engine/projects/history-of-bjj/assets/archive/jigoro-kano-public-domain.jpg",
+      "sha256": "029679163a5cf0a5a36ec7353d5b427d806351948fd19a7e492b4d3e8244560c",
+      "kind": "archival_portrait",
+      "role": "kano-portrait",
+      "title": "Portrait of Kano Jigoro",
+      "creator": "Unknown",
+      "origin": "National Diet Library scan via Wikimedia Commons",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Jigoro_KANO.jpg",
+      "rights": {
+        "permission": "public_domain",
+        "reviewed": true,
+        "reviewed_by": "P13 evidence review",
+        "reviewed_at": "2026-07-30",
+        "source": "National Diet Library / Wikimedia Commons",
+        "source_url": "https://commons.wikimedia.org/wiki/File:Jigoro_KANO.jpg",
+        "license": "Public domain in Japan and the United States",
+        "attribution_required": false,
+        "attribution": {
+          "title": "Portrait of Kano Jigoro",
+          "creator": "Unknown",
+          "url": "https://commons.wikimedia.org/wiki/File:Jigoro_KANO.jpg",
+          "license": "Public domain"
+        }
+      },
+      "likeness": {
+        "living": false,
+        "approved": true,
+        "subjects": [
+          {
+            "name": "Jigoro Kano",
+            "living": false
+          }
+        ]
+      },
+      "alteration_policy": {
+        "allowed": true,
+        "reviewed": true,
+        "policy": "crop, tone, and parallax separation permitted; do not fabricate event context"
+      },
+      "render_eligible": true
+    },
+    {
+      "id": "archive-mitsuyo-maeda",
+      "path": "content/video_engine/projects/history-of-bjj/assets/archive/mitsuyo-maeda-public-domain.jpg",
+      "sha256": "5ea1cd5f5400df1022e83de4ea31d774a5aaca0987d0df29b91a3e1ff046114e",
+      "kind": "archival_portrait",
+      "role": "maeda-portrait",
+      "title": "Mitsuyo Maeda as a fourth dan",
+      "creator": "Unknown",
+      "origin": "Japanese publication scan via Wikimedia Commons",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Maeda_Mituyo.jpg",
+      "rights": {
+        "permission": "public_domain",
+        "reviewed": true,
+        "reviewed_by": "P13 evidence review",
+        "reviewed_at": "2026-07-30",
+        "source": "Wikimedia Commons",
+        "source_url": "https://commons.wikimedia.org/wiki/File:Maeda_Mituyo.jpg",
+        "license": "Public domain old Japanese photograph",
+        "attribution_required": false,
+        "attribution": {
+          "title": "Mitsuyo Maeda as a fourth dan",
+          "creator": "Unknown",
+          "url": "https://commons.wikimedia.org/wiki/File:Maeda_Mituyo.jpg",
+          "license": "Public domain"
+        }
+      },
+      "likeness": {
+        "living": false,
+        "approved": true,
+        "subjects": [
+          {
+            "name": "Mitsuyo Maeda",
+            "living": false
+          }
+        ]
+      },
+      "alteration_policy": {
+        "allowed": true,
+        "reviewed": true,
+        "policy": "crop, tone, and parallax separation permitted; do not fabricate event context"
+      },
+      "render_eligible": true
+    },
+    {
+      "id": "original-artifact-1882",
+      "path": "content/video_engine/projects/history-of-bjj/assets/original/artifact-1882.svg",
+      "sha256": "9bbf98e07be450cc8b0e9ae205abbd07a09cbe148c164bdf8dd172455a702e09",
+      "kind": "illustration",
+      "role": "artifact-cold-open",
+      "origin": "Original P13 vector artwork",
+      "rights": {
+        "permission": "original",
+        "reviewed": true,
+        "reviewed_by": "P13 implementation",
+        "reviewed_at": "2026-07-30",
+        "source": "Outreach Program",
+        "attribution_required": false
+      },
+      "likeness": {
+        "living": false,
+        "approved": true
+      },
+      "alteration_policy": {
+        "allowed": true,
+        "reviewed": true
+      },
+      "render_eligible": true
+    },
+    {
+      "id": "original-maeda-voyage",
+      "path": "content/video_engine/projects/history-of-bjj/assets/original/maeda-voyage-reconstruction.svg",
+      "sha256": "83736eaf083b42b81af2805dec8b4ad223442b7108209f63d86649b26a7da94b",
+      "kind": "illustrated_reconstruction",
+      "role": "migration-reconstruction",
+      "origin": "Original P13 vector artwork",
+      "rights": {
+        "permission": "original",
+        "reviewed": true,
+        "reviewed_by": "P13 implementation",
+        "reviewed_at": "2026-07-30",
+        "source": "Outreach Program",
+        "attribution_required": false
+      },
+      "likeness": {
+        "living": false,
+        "approved": true
+      },
+      "alteration_policy": {
+        "allowed": true,
+        "reviewed": true
+      },
+      "render_eligible": true
+    },
+    {
+      "id": "original-document-question",
+      "path": "content/video_engine/projects/history-of-bjj/assets/original/document-question-panel.svg",
+      "sha256": "1905e23bd23a15589cf1f18f0928a2ed524f03955133c11f2af1ce72c9700541",
+      "kind": "illustration",
+      "role": "document-question-panel",
+      "origin": "Original P13 vector artwork",
+      "rights": {
+        "permission": "original",
+        "reviewed": true,
+        "reviewed_by": "P13 implementation",
+        "reviewed_at": "2026-07-30",
+        "source": "Outreach Program",
+        "attribution_required": false
+      },
+      "likeness": {
+        "living": false,
+        "approved": true
+      },
+      "alteration_policy": {
+        "allowed": true,
+        "reviewed": true
+      },
+      "render_eligible": true
+    },
+    {
+      "id": "original-lineage-question",
+      "path": "content/video_engine/projects/history-of-bjj/assets/original/lineage-question.svg",
+      "sha256": "14286e99f23b452e0fc72648bd28b0500e481e244574ebc8ed2739475799d1c0",
+      "kind": "illustration",
+      "role": "lineage-relationship-graph",
+      "origin": "Original P13 vector artwork",
+      "rights": {
+        "permission": "original",
+        "reviewed": true,
+        "reviewed_by": "P13 implementation",
+        "reviewed_at": "2026-07-30",
+        "source": "Outreach Program",
+        "attribution_required": false
+      },
+      "likeness": {
+        "living": false,
+        "approved": true
+      },
+      "alteration_policy": {
+        "allowed": true,
+        "reviewed": true
+      },
+      "render_eligible": true
+    },
+    {
+      "id": "flow-learner-character-sheet-20260731",
+      "path": "content/video_engine/projects/history-of-bjj/assets/generated/flow/learner-character-sheet-nano-banana-pro-20260731.png",
+      "sha256": "169f18a87d7a186fa4aba2283a10654a269eaf944f69abfa14bcdbb98a55b0c5",
+      "kind": "generated_character_sheet",
+      "role": "recurring-cast-reference",
+      "title": "Registry Learner character sheet",
+      "creator": "Outreach Program",
+      "origin": "Google Flow character builder, Nano Banana Pro",
+      "rights": {
+        "permission": "original",
+        "reviewed": true,
+        "reviewed_by": "Operator approval",
+        "reviewed_at": "2026-07-31",
+        "source": "Operator-approved generated original",
+        "attribution_required": false
+      },
+      "likeness": {
+        "living": false,
+        "approved": true,
+        "subjects": [
+          {
+            "name": "Fictional Registry Learner",
+            "living": false
+          }
+        ]
+      },
+      "alteration_policy": {
+        "allowed": true,
+        "reviewed": true,
+        "policy": "scale, crop, and composite as a recurring fictional character reference; preserve identity and do not treat the illustration as historical evidence"
+      },
+      "altered": false,
+      "metadata": {
+        "provider": "google_flow",
+        "model": "nano-banana-pro",
+        "provider_media_id": "5d020540-a2e5-4df6-bbc2-66bfd6cc2797",
+        "character_pack_id": "history-episode-1-flow-cast-v1",
+        "output_record": "content/video_engine/projects/history-of-bjj/assets/quarantine/flow/learner-character-sheet-nano-banana-pro-20260731.json"
+      },
+      "render_eligible": true
+    },
+    {
+      "id": "flow-kano-reconstruction-20260731",
+      "path": "content/video_engine/projects/history-of-bjj/assets/generated/flow/kano-reconstruction-nano-banana-pro-20260731.png",
+      "sha256": "62162d8d629074340b9ed0132df1f328cecf0bb81ba4d6afc1c202aa73f23a41",
+      "kind": "generated_character_sheet",
+      "role": "kano-illustrated-reconstruction",
+      "title": "Jigoro Kano illustrated reconstruction character sheet",
+      "creator": "Outreach Program",
+      "origin": "Google Flow character builder, Nano Banana Pro",
+      "rights": {
+        "permission": "original",
+        "reviewed": true,
+        "reviewed_by": "Operator approval",
+        "reviewed_at": "2026-07-31",
+        "source": "Operator-approved generated original",
+        "attribution_required": false
+      },
+      "likeness": {
+        "living": false,
+        "approved": true,
+        "subjects": [{"name": "Jigoro Kano illustrated reconstruction", "living": false}]
+      },
+      "alteration_policy": {
+        "allowed": true,
+        "reviewed": true,
+        "policy": "scale, crop, and composite as an explicitly labeled illustration; never present as archival evidence"
+      },
+      "altered": false,
+      "metadata": {
+        "provider": "google_flow",
+        "model": "nano-banana-pro",
+        "provider_media_id": "ef3038b4-e868-4dc9-a599-99a8eab0d299",
+        "character_pack_id": "history-episode-1-flow-cast-v1",
+        "output_record": "content/video_engine/projects/history-of-bjj/assets/quarantine/flow/kano-reconstruction-nano-banana-pro-20260731.json"
+      },
+      "render_eligible": true
+    },
+    {
+      "id": "flow-maeda-reconstruction-20260731",
+      "path": "content/video_engine/projects/history-of-bjj/assets/generated/flow/maeda-reconstruction-nano-banana-pro-20260731.png",
+      "sha256": "a7253b9f42f359a32291e82a204b765109d37ae767de8abfd8ce932edb7d58ec",
+      "kind": "generated_character_sheet",
+      "role": "maeda-illustrated-reconstruction",
+      "title": "Mitsuyo Maeda illustrated reconstruction character sheet",
+      "creator": "Outreach Program",
+      "origin": "Google Flow character builder, Nano Banana Pro",
+      "rights": {
+        "permission": "original",
+        "reviewed": true,
+        "reviewed_by": "Operator approval",
+        "reviewed_at": "2026-07-31",
+        "source": "Operator-approved generated original",
+        "attribution_required": false
+      },
+      "likeness": {
+        "living": false,
+        "approved": true,
+        "subjects": [{"name": "Mitsuyo Maeda illustrated reconstruction", "living": false}]
+      },
+      "alteration_policy": {
+        "allowed": true,
+        "reviewed": true,
+        "policy": "scale, crop, and composite as an explicitly labeled illustration; never present as archival evidence"
+      },
+      "altered": false,
+      "metadata": {
+        "provider": "google_flow",
+        "model": "nano-banana-pro",
+        "provider_media_id": "7e841b23-24fa-4ac5-9bb6-fefda659ac23",
+        "character_pack_id": "history-episode-1-flow-cast-v1",
+        "output_record": "content/video_engine/projects/history-of-bjj/assets/quarantine/flow/maeda-reconstruction-nano-banana-pro-20260731.json"
+      },
+      "render_eligible": true
+    },
+    {
+      "id": "flow-brazilian-bridge-composite-20260731",
+      "path": "content/video_engine/projects/history-of-bjj/assets/generated/flow/brazilian-bridge-composite-nano-banana-pro-20260731.png",
+      "sha256": "8a6b17d32b5e7e64c583b1eab8f248af4665120b45efb85108b5fc5226580e65",
+      "kind": "generated_character_sheet",
+      "role": "brazilian-bridge-composite",
+      "title": "Brazilian bridge practitioner composite character sheet",
+      "creator": "Outreach Program",
+      "origin": "Google Flow character builder, Nano Banana Pro",
+      "rights": {
+        "permission": "original",
+        "reviewed": true,
+        "reviewed_by": "Operator approval",
+        "reviewed_at": "2026-07-31",
+        "source": "Operator-approved generated original",
+        "attribution_required": false
+      },
+      "likeness": {
+        "living": false,
+        "approved": true,
+        "subjects": [{"name": "Brazilian bridge practitioner composite", "living": false}]
+      },
+      "alteration_policy": {
+        "allowed": true,
+        "reviewed": true,
+        "policy": "scale, crop, and composite as an explicitly labeled illustration; never present as a named historical person or evidence"
+      },
+      "altered": false,
+      "metadata": {
+        "provider": "google_flow",
+        "model": "nano-banana-pro",
+        "provider_media_id": "b02e4131-4172-409d-ba78-617e9b96fe53",
+        "character_pack_id": "history-episode-1-flow-cast-v1",
+        "output_record": "content/video_engine/projects/history-of-bjj/assets/quarantine/flow/brazilian-bridge-composite-nano-banana-pro-20260731.json"
+      },
+      "render_eligible": true
+    },
+    {
+      "id": "world-archive-study-v1",
+      "path": "content/video_engine/projects/history-of-bjj/assets/generated/living-scenes-v1/worlds/world-archive-study-master-v1.png",
+      "sha256": "126fadd694cd1d6b2f4a783502a5618d6055ca4ade3ff8bc693ae71a0cbb43d8",
+      "kind": "generated_world_master",
+      "role": "world-archive-study",
+      "origin": "Operator-approved original Combat Woodblock world generated through Codex built-in image generation",
+      "rights": {"permission": "original", "reviewed": true, "reviewed_by": "Operator Asset Foundation Gate", "reviewed_at": "2026-08-01", "source": "Outreach Program", "attribution_required": false},
+      "likeness": {"living": false, "approved": true},
+      "alteration_policy": {"allowed": true, "reviewed": true, "policy": "Composite, crop, and masked localized ambient motion permitted; no generated factual pixels."},
+      "metadata": {"foundation_candidate_id": "candidate-world-archive-study-v1", "style_pack_id": "woodblock-historical-editorial-v1", "ambient_followup": ["lamp", "paper"]},
+      "render_eligible": true
+    },
+    {
+      "id": "world-kodokan-institution-v1",
+      "path": "content/video_engine/projects/history-of-bjj/assets/generated/living-scenes-v1/worlds/world-kodokan-institution-master-v1.png",
+      "sha256": "a3d113055a87a879ac4eb36571382322a61b752bf00a556990294a401392d8d2",
+      "kind": "generated_world_master",
+      "role": "world-kodokan-institution",
+      "origin": "Operator-approved original Combat Woodblock world generated through Codex built-in image generation",
+      "rights": {"permission": "original", "reviewed": true, "reviewed_by": "Operator Asset Foundation Gate", "reviewed_at": "2026-08-01", "source": "Outreach Program", "attribution_required": false},
+      "likeness": {"living": false, "approved": true},
+      "alteration_policy": {"allowed": true, "reviewed": true, "policy": "Composite, crop, and masked localized ambient motion permitted; no generated factual pixels."},
+      "metadata": {"foundation_candidate_id": "candidate-world-kodokan-institution-v1", "style_pack_id": "woodblock-historical-editorial-v1", "ambient_followup": ["garden-leaves", "window-light"]},
+      "render_eligible": true
+    },
+    {
+      "id": "world-maritime-circuit-v1",
+      "path": "content/video_engine/projects/history-of-bjj/assets/generated/living-scenes-v1/worlds/world-maritime-circuit-master-v1.png",
+      "sha256": "5bb4d88115095cfea6aebcfd048d435283d410e6c64a328861c43a18f6c0a0d5",
+      "kind": "generated_world_master",
+      "role": "world-maritime-circuit",
+      "origin": "Operator-approved original Combat Woodblock world generated through Codex built-in image generation",
+      "rights": {"permission": "original", "reviewed": true, "reviewed_by": "Operator Asset Foundation Gate", "reviewed_at": "2026-08-01", "source": "Outreach Program", "attribution_required": false},
+      "likeness": {"living": false, "approved": true},
+      "alteration_policy": {"allowed": true, "reviewed": true, "policy": "Composite, crop, and masked localized ambient motion permitted; no generated factual pixels."},
+      "metadata": {"foundation_candidate_id": "candidate-world-maritime-circuit-v1", "style_pack_id": "woodblock-historical-editorial-v1", "ambient_followup": ["sea", "wake", "smoke"]},
+      "render_eligible": true
+    },
+    {
+      "id": "world-belem-riverfront-v1",
+      "path": "content/video_engine/projects/history-of-bjj/assets/generated/living-scenes-v1/worlds/world-belem-riverfront-master-v1.png",
+      "sha256": "be7d3d53d1657be98ecbd387900b417c76eaa051c6bcbb05d65aeae675b4b2e0",
+      "kind": "generated_world_master",
+      "role": "world-belem-riverfront",
+      "origin": "Operator-approved original Combat Woodblock world generated through Codex built-in image generation",
+      "rights": {"permission": "original", "reviewed": true, "reviewed_by": "Operator Asset Foundation Gate", "reviewed_at": "2026-08-01", "source": "Outreach Program", "attribution_required": false},
+      "likeness": {"living": false, "approved": true},
+      "alteration_policy": {"allowed": true, "reviewed": true, "policy": "Composite, crop, and masked localized ambient motion permitted; no generated factual pixels."},
+      "metadata": {"foundation_candidate_id": "candidate-world-belem-riverfront-v1", "style_pack_id": "woodblock-historical-editorial-v1", "ambient_followup": ["river", "steam", "awning", "foliage"]},
+      "render_eligible": true
+    },
+    {
+      "id": "world-brazil-training-hall-v1",
+      "path": "content/video_engine/projects/history-of-bjj/assets/generated/living-scenes-v1/worlds/world-brazil-training-hall-master-v1.png",
+      "sha256": "7fe1a19649b2fc6eec1d447fdf0bd6fb9c5b461ed889dcefe9362b55b478606a",
+      "kind": "generated_world_master",
+      "role": "world-brazil-training-hall",
+      "origin": "Operator-approved original Combat Woodblock world generated through Codex built-in image generation",
+      "rights": {"permission": "original", "reviewed": true, "reviewed_by": "Operator Asset Foundation Gate", "reviewed_at": "2026-08-01", "source": "Outreach Program", "attribution_required": false},
+      "likeness": {"living": false, "approved": true},
+      "alteration_policy": {"allowed": true, "reviewed": true, "policy": "Composite, crop, and masked localized ambient motion permitted; replace or mask the foreground pseudo-print newspaper before final use."},
+      "metadata": {"foundation_candidate_id": "candidate-world-brazil-training-hall-v1", "style_pack_id": "woodblock-historical-editorial-v1", "ambient_followup": ["curtain", "window-light", "foliage"], "final_use_constraint": "foreground newspaper must be masked or replaced"},
+      "render_eligible": true
+    },
+    {
+      "id": "plate-battlefield-myth-v1",
+      "path": "content/video_engine/projects/history-of-bjj/assets/generated/living-scenes-v1/plates/plate-battlefield-myth-v1.png",
+      "sha256": "8ac2f7d3291e72c41119acd8d7e4db259560df82e7e6c68b9062ebaef46ab9bb",
+      "kind": "illustrated_reconstruction",
+      "role": "battlefield-legend-contrast",
+      "origin": "Operator-approved original Combat Woodblock illustration generated through Codex built-in image generation",
+      "rights": {"permission": "original", "reviewed": true, "reviewed_by": "Operator Asset Foundation Gate", "reviewed_at": "2026-08-01", "source": "Outreach Program", "attribution_required": false},
+      "likeness": {"living": false, "approved": true},
+      "alteration_policy": {"allowed": true, "reviewed": true, "policy": "Use only as an explicitly disclosed legend/illustration contrast; never as historical evidence."},
+      "metadata": {"foundation_candidate_id": "candidate-battlefield-myth-v1", "style_pack_id": "woodblock-historical-editorial-v1", "required_local_disclosure": "illustration or legend"},
+      "render_eligible": true
+    },
+    {
+      "id": "cast-registry-learner-motion-sheet-v1",
+      "path": "content/video_engine/projects/history-of-bjj/assets/generated/living-scenes-v1/cast/sheets/registry-learner-motion-sheet-alpha-v1.png",
+      "sha256": "af5db346c05556d125b391d7b3441c90e54fc27fa1f4eca60a91a0d2237cfe7a",
+      "kind": "generated_character_motion_sheet",
+      "role": "registry-learner-motion-reference",
+      "origin": "Operator-approved original fictional cast sheet generated through Codex built-in image generation",
+      "rights": {"permission": "original", "reviewed": true, "reviewed_by": "Operator Asset Foundation Gate", "reviewed_at": "2026-08-01", "source": "Outreach Program", "attribution_required": false},
+      "likeness": {"living": false, "approved": true, "subjects": [{"name": "Fictional Registry Learner", "living": false}]},
+      "alteration_policy": {"allowed": true, "reviewed": true, "policy": "Use individual reviewed sprites for editorial compositing; do not treat as historical evidence."},
+      "metadata": {"foundation_candidate_id": "candidate-registry-learner-motion-v1", "style_pack_id": "woodblock-historical-editorial-v1", "alpha_required": true},
+      "render_eligible": true
+    },
+    {
+      "id": "cast-kano-motion-sheet-v1",
+      "path": "content/video_engine/projects/history-of-bjj/assets/generated/living-scenes-v1/cast/sheets/kano-motion-sheet-alpha-v1.png",
+      "sha256": "aacb403e3c56ce61b353de648fe70f47469519030abad7932f50285e5a2b0b4f",
+      "kind": "generated_character_motion_sheet",
+      "role": "kano-reconstruction-motion-reference",
+      "origin": "Operator-approved original illustrated reconstruction generated through Codex built-in image generation",
+      "rights": {"permission": "original", "reviewed": true, "reviewed_by": "Operator Asset Foundation Gate", "reviewed_at": "2026-08-01", "source": "Outreach Program", "attribution_required": false},
+      "likeness": {"living": false, "approved": true, "subjects": [{"name": "Jigoro Kano illustrated reconstruction", "living": false}]},
+      "alteration_policy": {"allowed": true, "reviewed": true, "policy": "Use only as a labeled illustration/reconstruction; the archival portrait remains the evidence surface."},
+      "metadata": {"foundation_candidate_id": "candidate-kano-motion-v1", "style_pack_id": "woodblock-historical-editorial-v1", "alpha_required": true},
+      "render_eligible": true
+    },
+    {
+      "id": "cast-maeda-motion-sheet-v1",
+      "path": "content/video_engine/projects/history-of-bjj/assets/generated/living-scenes-v1/cast/sheets/maeda-motion-sheet-alpha-v1.png",
+      "sha256": "c90512eab1fad14f15bac3a1f14e18eefcf7fca83775e455064aceedd5640758",
+      "kind": "generated_character_motion_sheet",
+      "role": "maeda-reconstruction-motion-reference",
+      "origin": "Operator-approved original illustrated reconstruction generated through Codex built-in image generation",
+      "rights": {"permission": "original", "reviewed": true, "reviewed_by": "Operator Asset Foundation Gate", "reviewed_at": "2026-08-01", "source": "Outreach Program", "attribution_required": false},
+      "likeness": {"living": false, "approved": true, "subjects": [{"name": "Mitsuyo Maeda illustrated reconstruction", "living": false}]},
+      "alteration_policy": {"allowed": true, "reviewed": true, "policy": "Use only as a labeled illustration/reconstruction; the archival portrait remains the evidence surface."},
+      "metadata": {"foundation_candidate_id": "candidate-maeda-motion-v1", "style_pack_id": "woodblock-historical-editorial-v1", "alpha_required": true},
+      "render_eligible": true
+    },
+    {
+      "id": "cast-brazilian-composite-motion-sheet-v1",
+      "path": "content/video_engine/projects/history-of-bjj/assets/generated/living-scenes-v1/cast/sheets/brazilian-composite-motion-sheet-alpha-v1.png",
+      "sha256": "2ebb348b320aa9232c96feb49373e797986aa83ea7d394f36f5887ae8e27b8f3",
+      "kind": "generated_character_motion_sheet",
+      "role": "brazilian-composite-motion-reference",
+      "origin": "Operator-approved original composite cast sheet generated through Codex built-in image generation",
+      "rights": {"permission": "original", "reviewed": true, "reviewed_by": "Operator Asset Foundation Gate", "reviewed_at": "2026-08-01", "source": "Outreach Program", "attribution_required": false},
+      "likeness": {"living": false, "approved": true, "subjects": [{"name": "Brazilian bridge composite reconstruction", "living": false}]},
+      "alteration_policy": {"allowed": true, "reviewed": true, "policy": "Use only as an explicitly labeled composite illustration; never as a named person or evidence."},
+      "metadata": {"foundation_candidate_id": "candidate-brazilian-composite-motion-v1", "style_pack_id": "woodblock-historical-editorial-v1", "alpha_required": true},
+      "render_eligible": true
+    },
+    {
+      "id": "prop-archive-photo-frame-v2", "path": "content/video_engine/projects/history-of-bjj/assets/generated/living-scenes-v1/props/prop-archive-photo-frame-v2.png", "sha256": "68aa5e3da01b4cdcae1793628cdac88229a626e6188af2a1e68144027295af86", "kind": "generated_prop_sprite", "role": "archive-photo-frame", "origin": "Operator-approved original prop generated through Codex built-in image generation", "rights": {"permission": "original", "reviewed": true, "reviewed_by": "Operator Asset Foundation Gate", "reviewed_at": "2026-08-01", "source": "Outreach Program", "attribution_required": false}, "likeness": {"living": false, "approved": true}, "alteration_policy": {"allowed": true, "reviewed": true}, "metadata": {"foundation_candidate_id": "candidate-archive-photo-frame-sprite-v1", "alpha_required": true}, "render_eligible": true},
+    {
+      "id": "prop-gi-belt-v1", "path": "content/video_engine/projects/history-of-bjj/assets/generated/living-scenes-v1/props/prop-gi-belt-trimmed-v1.png", "sha256": "bd8fd75ea44f6964c1a17f812f0ea37b2f2d3179450d131225675feadbe524f7", "kind": "generated_prop_sprite", "role": "gi-belt", "origin": "Operator-approved original prop generated through Codex built-in image generation", "rights": {"permission": "original", "reviewed": true, "reviewed_by": "Operator Asset Foundation Gate", "reviewed_at": "2026-08-01", "source": "Outreach Program", "attribution_required": false}, "likeness": {"living": false, "approved": true}, "alteration_policy": {"allowed": true, "reviewed": true}, "metadata": {"foundation_candidate_id": "candidate-gi-belt-sprite-v1", "alpha_required": true}, "render_eligible": true},
+    {
+      "id": "prop-ledger-v2", "path": "content/video_engine/projects/history-of-bjj/assets/generated/living-scenes-v1/props/prop-ledger-v2.png", "sha256": "1a771138e78a90a0972b4ee3a4c990ba41ebc3886ae799dfdd50cad25050bf26", "kind": "generated_prop_sprite", "role": "ledger", "origin": "Operator-approved original prop generated through Codex built-in image generation", "rights": {"permission": "original", "reviewed": true, "reviewed_by": "Operator Asset Foundation Gate", "reviewed_at": "2026-08-01", "source": "Outreach Program", "attribution_required": false}, "likeness": {"living": false, "approved": true}, "alteration_policy": {"allowed": true, "reviewed": true, "policy": "Local information may be composited onto the blank prop; generated pixels do not carry facts."}, "metadata": {"foundation_candidate_id": "candidate-ledger-sprite-v1", "alpha_required": true}, "render_eligible": true},
+    {
+      "id": "prop-newspaper-v2", "path": "content/video_engine/projects/history-of-bjj/assets/generated/living-scenes-v1/props/prop-newspaper-v2.png", "sha256": "869ff7b8c8661819dfdff8000099bbb6e89190c8f0b1807f149ea10a3fe6fd61", "kind": "generated_prop_sprite", "role": "newspaper", "origin": "Operator-approved original prop generated through Codex built-in image generation", "rights": {"permission": "original", "reviewed": true, "reviewed_by": "Operator Asset Foundation Gate", "reviewed_at": "2026-08-01", "source": "Outreach Program", "attribution_required": false}, "likeness": {"living": false, "approved": true}, "alteration_policy": {"allowed": true, "reviewed": true, "policy": "Use only with locally composited reviewed text."}, "metadata": {"foundation_candidate_id": "candidate-newspaper-sprite-v1", "alpha_required": true}, "render_eligible": true},
+    {
+      "id": "prop-research-notebook-v2", "path": "content/video_engine/projects/history-of-bjj/assets/generated/living-scenes-v1/props/prop-research-notebook-v2.png", "sha256": "8c38da133a4cd1db909d759082d91070f6758afaea5ea71f45804221c5d81115", "kind": "generated_prop_sprite", "role": "research-notebook", "origin": "Operator-approved original prop generated through Codex built-in image generation", "rights": {"permission": "original", "reviewed": true, "reviewed_by": "Operator Asset Foundation Gate", "reviewed_at": "2026-08-01", "source": "Outreach Program", "attribution_required": false}, "likeness": {"living": false, "approved": true}, "alteration_policy": {"allowed": true, "reviewed": true, "policy": "Use only with locally composited reviewed text."}, "metadata": {"foundation_candidate_id": "candidate-research-notebook-sprite-v1", "alpha_required": true}, "render_eligible": true},
+    {
+      "id": "prop-steamship-ticket-v2", "path": "content/video_engine/projects/history-of-bjj/assets/generated/living-scenes-v1/props/prop-steamship-ticket-v2.png", "sha256": "6c4c469b1c947174cd5312452c836966a1ccfd7c64dc0ec6d89c1feeefda6cb5", "kind": "generated_prop_sprite", "role": "steamship-ticket", "origin": "Operator-approved original prop generated through Codex built-in image generation", "rights": {"permission": "original", "reviewed": true, "reviewed_by": "Operator Asset Foundation Gate", "reviewed_at": "2026-08-01", "source": "Outreach Program", "attribution_required": false}, "likeness": {"living": false, "approved": true}, "alteration_policy": {"allowed": true, "reviewed": true, "policy": "Use only with locally composited reviewed text."}, "metadata": {"foundation_candidate_id": "candidate-steamship-ticket-sprite-v1", "alpha_required": true}, "render_eligible": true},
+    {
+      "id": "prop-theater-poster-frame-v2", "path": "content/video_engine/projects/history-of-bjj/assets/generated/living-scenes-v1/props/prop-theater-poster-frame-v2.png", "sha256": "27e4b8bde259cfc75e1856d4315a1e62c293d5d3424048f75ea45d2e47e9f603", "kind": "generated_prop_sprite", "role": "theater-poster-frame", "origin": "Operator-approved original prop generated through Codex built-in image generation", "rights": {"permission": "original", "reviewed": true, "reviewed_by": "Operator Asset Foundation Gate", "reviewed_at": "2026-08-01", "source": "Outreach Program", "attribution_required": false}, "likeness": {"living": false, "approved": true}, "alteration_policy": {"allowed": true, "reviewed": true, "policy": "Use only with locally composited reviewed text."}, "metadata": {"foundation_candidate_id": "candidate-theater-poster-frame-sprite-v1", "alpha_required": true}, "render_eligible": true},
+    {
+      "id": "prop-tournament-bracket-v1", "path": "content/video_engine/projects/history-of-bjj/assets/generated/living-scenes-v1/props/prop-tournament-bracket-trimmed-v1.png", "sha256": "1a1bef3aab03b4488f08b437996d87580b23eb0a077a9a04c2302ce090bb9fe1", "kind": "generated_prop_sprite", "role": "tournament-bracket-frame", "origin": "Operator-approved original prop generated through Codex built-in image generation", "rights": {"permission": "original", "reviewed": true, "reviewed_by": "Operator Asset Foundation Gate", "reviewed_at": "2026-08-01", "source": "Outreach Program", "attribution_required": false}, "likeness": {"living": false, "approved": true}, "alteration_policy": {"allowed": true, "reviewed": true, "policy": "Use only with locally composited reviewed text."}, "metadata": {"foundation_candidate_id": "candidate-tournament-bracket-sprite-v1", "alpha_required": true}, "render_eligible": true},
+    {
+      "id": "prop-training-jacket-v2", "path": "content/video_engine/projects/history-of-bjj/assets/generated/living-scenes-v1/props/prop-training-jacket-v2.png", "sha256": "6c549d7d3bb19a9ff63a633d1c2d8dd0bfd4d0627a4df6aaacb9c5f5c9b4c092", "kind": "generated_prop_sprite", "role": "training-jacket", "origin": "Operator-approved original prop generated through Codex built-in image generation", "rights": {"permission": "original", "reviewed": true, "reviewed_by": "Operator Asset Foundation Gate", "reviewed_at": "2026-08-01", "source": "Outreach Program", "attribution_required": false}, "likeness": {"living": false, "approved": true}, "alteration_policy": {"allowed": true, "reviewed": true}, "metadata": {"foundation_candidate_id": "candidate-training-jacket-sprite-v1", "alpha_required": true}, "render_eligible": true},
+    {
+      "id": "prop-travel-trunk-v2", "path": "content/video_engine/projects/history-of-bjj/assets/generated/living-scenes-v1/props/prop-travel-trunk-v2.png", "sha256": "bf58a89a0087e623e59b002c23e5b7009a0eb35fb4cdb322db5b755d7a22ce5b", "kind": "generated_prop_sprite", "role": "travel-trunk", "origin": "Operator-approved original prop generated through Codex built-in image generation", "rights": {"permission": "original", "reviewed": true, "reviewed_by": "Operator Asset Foundation Gate", "reviewed_at": "2026-08-01", "source": "Outreach Program", "attribution_required": false}, "likeness": {"living": false, "approved": true}, "alteration_policy": {"allowed": true, "reviewed": true}, "metadata": {"foundation_candidate_id": "candidate-travel-trunk-sprite-v1", "alpha_required": true}, "render_eligible": true},
+    {
+      "id": "cast-registry-learner-idle-v1", "path": "content/video_engine/projects/history-of-bjj/assets/generated/living-scenes-v1/cast/sprites/registry-learner/registry-learner-idle-v1.png", "sha256": "4078b37b5a09f39da00b42dd52792e088b20c78894eda06189bb655862487698", "kind": "generated_character_sprite", "role": "registry-learner-idle", "origin": "Locally derived, operator-approved sprite from the original Registry Learner motion sheet", "rights": {"permission": "original", "reviewed": true, "reviewed_by": "Operator Asset Foundation Gate", "reviewed_at": "2026-08-01", "source": "Outreach Program", "attribution_required": false}, "likeness": {"living": false, "approved": true, "subjects": [{"name": "Fictional Registry Learner", "living": false}]}, "alteration_policy": {"allowed": true, "reviewed": true, "policy": "Composite and transform as a fictional on-screen guide; not historical evidence."}, "metadata": {"source_sheet_id": "cast-registry-learner-motion-sheet-v1", "pose": "idle", "alpha_required": true}, "render_eligible": true},
+    {
+      "id": "cast-registry-learner-walk-v1", "path": "content/video_engine/projects/history-of-bjj/assets/generated/living-scenes-v1/cast/sprites/registry-learner/registry-learner-walk-v1.png", "sha256": "d90b6be156b9e18aae7ce4b761859af3641e91b28eac07406006e345642a39c7", "kind": "generated_character_sprite", "role": "registry-learner-walk", "origin": "Locally derived, operator-approved sprite from the original Registry Learner motion sheet", "rights": {"permission": "original", "reviewed": true, "reviewed_by": "Operator Asset Foundation Gate", "reviewed_at": "2026-08-01", "source": "Outreach Program", "attribution_required": false}, "likeness": {"living": false, "approved": true, "subjects": [{"name": "Fictional Registry Learner", "living": false}]}, "alteration_policy": {"allowed": true, "reviewed": true, "policy": "Composite and transform as a fictional on-screen guide; not historical evidence."}, "metadata": {"source_sheet_id": "cast-registry-learner-motion-sheet-v1", "pose": "walk", "alpha_required": true}, "render_eligible": true},
+    {
+      "id": "cast-registry-learner-explain-v1", "path": "content/video_engine/projects/history-of-bjj/assets/generated/living-scenes-v1/cast/sprites/registry-learner/registry-learner-explain-v1.png", "sha256": "56086c99f87aa0136cb0a5afb2134d2d9aa5bb2d6033594d01a6ca5d128b4173", "kind": "generated_character_sprite", "role": "registry-learner-explain", "origin": "Locally derived, operator-approved sprite from the original Registry Learner motion sheet", "rights": {"permission": "original", "reviewed": true, "reviewed_by": "Operator Asset Foundation Gate", "reviewed_at": "2026-08-01", "source": "Outreach Program", "attribution_required": false}, "likeness": {"living": false, "approved": true, "subjects": [{"name": "Fictional Registry Learner", "living": false}]}, "alteration_policy": {"allowed": true, "reviewed": true, "policy": "Composite and transform as a fictional on-screen guide; not historical evidence."}, "metadata": {"source_sheet_id": "cast-registry-learner-motion-sheet-v1", "pose": "explain", "alpha_required": true}, "render_eligible": true},
+    {
+      "id": "cast-registry-learner-prop-v1", "path": "content/video_engine/projects/history-of-bjj/assets/generated/living-scenes-v1/cast/sprites/registry-learner/registry-learner-prop-v1.png", "sha256": "0827a54fc2dc25a4b492214711ad330b1010a17301d706614c257d93d2178094", "kind": "generated_character_sprite", "role": "registry-learner-prop", "origin": "Locally derived, operator-approved sprite from the original Registry Learner motion sheet", "rights": {"permission": "original", "reviewed": true, "reviewed_by": "Operator Asset Foundation Gate", "reviewed_at": "2026-08-01", "source": "Outreach Program", "attribution_required": false}, "likeness": {"living": false, "approved": true, "subjects": [{"name": "Fictional Registry Learner", "living": false}]}, "alteration_policy": {"allowed": true, "reviewed": true, "policy": "Composite and transform as a fictional on-screen guide; not historical evidence."}, "metadata": {"source_sheet_id": "cast-registry-learner-motion-sheet-v1", "pose": "prop", "alpha_required": true}, "render_eligible": true},
+    {
+      "id": "cast-kano-idle-v1", "path": "content/video_engine/projects/history-of-bjj/assets/generated/living-scenes-v1/cast/sprites/kano/kano-idle-v1.png", "sha256": "8d7ebef7a7019ebe4c2c85bad41d10b4df7174933c0244a5138138a4a827b055", "kind": "generated_character_sprite", "role": "kano-reconstruction-idle", "origin": "Locally derived, operator-approved sprite from the original Kano reconstruction motion sheet", "rights": {"permission": "original", "reviewed": true, "reviewed_by": "Operator Asset Foundation Gate", "reviewed_at": "2026-08-01", "source": "Outreach Program", "attribution_required": false}, "likeness": {"living": false, "approved": true, "subjects": [{"name": "Jigoro Kano illustrated reconstruction", "living": false}]}, "alteration_policy": {"allowed": true, "reviewed": true, "policy": "Composite only as a labeled reconstruction; archival portrait remains evidence."}, "metadata": {"source_sheet_id": "cast-kano-motion-sheet-v1", "pose": "idle", "alpha_required": true}, "render_eligible": true},
+    {
+      "id": "cast-kano-walk-v1", "path": "content/video_engine/projects/history-of-bjj/assets/generated/living-scenes-v1/cast/sprites/kano/kano-walk-v1.png", "sha256": "ab2d7b6990a4b78ef6734eb0c3b1c5b140206f67fa0a9e7955f781880bcd0e40", "kind": "generated_character_sprite", "role": "kano-reconstruction-walk", "origin": "Locally derived, operator-approved sprite from the original Kano reconstruction motion sheet", "rights": {"permission": "original", "reviewed": true, "reviewed_by": "Operator Asset Foundation Gate", "reviewed_at": "2026-08-01", "source": "Outreach Program", "attribution_required": false}, "likeness": {"living": false, "approved": true, "subjects": [{"name": "Jigoro Kano illustrated reconstruction", "living": false}]}, "alteration_policy": {"allowed": true, "reviewed": true, "policy": "Composite only as a labeled reconstruction; archival portrait remains evidence."}, "metadata": {"source_sheet_id": "cast-kano-motion-sheet-v1", "pose": "walk", "alpha_required": true}, "render_eligible": true},
+    {
+      "id": "cast-kano-explain-v1", "path": "content/video_engine/projects/history-of-bjj/assets/generated/living-scenes-v1/cast/sprites/kano/kano-explain-v1.png", "sha256": "24cf28022f7c0e7274d012e494af4ffbf58ac817bd1773956d7b881d79aa2aab", "kind": "generated_character_sprite", "role": "kano-reconstruction-explain", "origin": "Locally derived, operator-approved sprite from the original Kano reconstruction motion sheet", "rights": {"permission": "original", "reviewed": true, "reviewed_by": "Operator Asset Foundation Gate", "reviewed_at": "2026-08-01", "source": "Outreach Program", "attribution_required": false}, "likeness": {"living": false, "approved": true, "subjects": [{"name": "Jigoro Kano illustrated reconstruction", "living": false}]}, "alteration_policy": {"allowed": true, "reviewed": true, "policy": "Composite only as a labeled reconstruction; archival portrait remains evidence."}, "metadata": {"source_sheet_id": "cast-kano-motion-sheet-v1", "pose": "explain", "alpha_required": true}, "render_eligible": true},
+    {
+      "id": "cast-kano-prop-v1", "path": "content/video_engine/projects/history-of-bjj/assets/generated/living-scenes-v1/cast/sprites/kano/kano-prop-v1.png", "sha256": "468317c002997c615ba669ff9cc3f91f527794ff07397815eb1f6b8a51f08760", "kind": "generated_character_sprite", "role": "kano-reconstruction-prop", "origin": "Locally derived, operator-approved sprite from the original Kano reconstruction motion sheet", "rights": {"permission": "original", "reviewed": true, "reviewed_by": "Operator Asset Foundation Gate", "reviewed_at": "2026-08-01", "source": "Outreach Program", "attribution_required": false}, "likeness": {"living": false, "approved": true, "subjects": [{"name": "Jigoro Kano illustrated reconstruction", "living": false}]}, "alteration_policy": {"allowed": true, "reviewed": true, "policy": "Composite only as a labeled reconstruction; archival portrait remains evidence."}, "metadata": {"source_sheet_id": "cast-kano-motion-sheet-v1", "pose": "prop", "alpha_required": true}, "render_eligible": true},
+    {
+      "id": "cast-maeda-idle-v1", "path": "content/video_engine/projects/history-of-bjj/assets/generated/living-scenes-v1/cast/sprites/maeda/maeda-idle-v1.png", "sha256": "e63bb058a0840db5b8b96c1fca3de3fb4a622770741290bb6bd12997e35f5717", "kind": "generated_character_sprite", "role": "maeda-reconstruction-idle", "origin": "Locally derived, operator-approved sprite from the original Maeda reconstruction motion sheet", "rights": {"permission": "original", "reviewed": true, "reviewed_by": "Operator Asset Foundation Gate", "reviewed_at": "2026-08-01", "source": "Outreach Program", "attribution_required": false}, "likeness": {"living": false, "approved": true, "subjects": [{"name": "Mitsuyo Maeda illustrated reconstruction", "living": false}]}, "alteration_policy": {"allowed": true, "reviewed": true, "policy": "Composite only as a labeled reconstruction; archival portrait remains evidence."}, "metadata": {"source_sheet_id": "cast-maeda-motion-sheet-v1", "pose": "idle", "alpha_required": true}, "render_eligible": true},
+    {
+      "id": "cast-maeda-walk-v1", "path": "content/video_engine/projects/history-of-bjj/assets/generated/living-scenes-v1/cast/sprites/maeda/maeda-walk-v1.png", "sha256": "d0af8c44f8fc806b6cd403eaa65b33d81935dd66717ce6ba29ec3da23aa78239", "kind": "generated_character_sprite", "role": "maeda-reconstruction-walk", "origin": "Locally derived, operator-approved sprite from the original Maeda reconstruction motion sheet", "rights": {"permission": "original", "reviewed": true, "reviewed_by": "Operator Asset Foundation Gate", "reviewed_at": "2026-08-01", "source": "Outreach Program", "attribution_required": false}, "likeness": {"living": false, "approved": true, "subjects": [{"name": "Mitsuyo Maeda illustrated reconstruction", "living": false}]}, "alteration_policy": {"allowed": true, "reviewed": true, "policy": "Composite only as a labeled reconstruction; archival portrait remains evidence."}, "metadata": {"source_sheet_id": "cast-maeda-motion-sheet-v1", "pose": "walk", "alpha_required": true}, "render_eligible": true},
+    {
+      "id": "cast-maeda-explain-v1", "path": "content/video_engine/projects/history-of-bjj/assets/generated/living-scenes-v1/cast/sprites/maeda/maeda-explain-v1.png", "sha256": "7e702a863e25746a7fb1b38a412a6de469ba458e9d50910f5b530f7f3f79818a", "kind": "generated_character_sprite", "role": "maeda-reconstruction-explain", "origin": "Locally derived, operator-approved sprite from the original Maeda reconstruction motion sheet", "rights": {"permission": "original", "reviewed": true, "reviewed_by": "Operator Asset Foundation Gate", "reviewed_at": "2026-08-01", "source": "Outreach Program", "attribution_required": false}, "likeness": {"living": false, "approved": true, "subjects": [{"name": "Mitsuyo Maeda illustrated reconstruction", "living": false}]}, "alteration_policy": {"allowed": true, "reviewed": true, "policy": "Composite only as a labeled reconstruction; archival portrait remains evidence."}, "metadata": {"source_sheet_id": "cast-maeda-motion-sheet-v1", "pose": "explain", "alpha_required": true}, "render_eligible": true},
+    {
+      "id": "cast-maeda-prop-v1", "path": "content/video_engine/projects/history-of-bjj/assets/generated/living-scenes-v1/cast/sprites/maeda/maeda-prop-v1.png", "sha256": "79938f3a13b6553ba771df92aa06666247e076bdcc03987ae80d61e3251effe0", "kind": "generated_character_sprite", "role": "maeda-reconstruction-prop", "origin": "Locally derived, operator-approved sprite from the original Maeda reconstruction motion sheet", "rights": {"permission": "original", "reviewed": true, "reviewed_by": "Operator Asset Foundation Gate", "reviewed_at": "2026-08-01", "source": "Outreach Program", "attribution_required": false}, "likeness": {"living": false, "approved": true, "subjects": [{"name": "Mitsuyo Maeda illustrated reconstruction", "living": false}]}, "alteration_policy": {"allowed": true, "reviewed": true, "policy": "Composite only as a labeled reconstruction; archival portrait remains evidence."}, "metadata": {"source_sheet_id": "cast-maeda-motion-sheet-v1", "pose": "prop", "alpha_required": true}, "render_eligible": true},
+    {
+      "id": "cast-brazilian-composite-idle-v1", "path": "content/video_engine/projects/history-of-bjj/assets/generated/living-scenes-v1/cast/sprites/brazilian-composite/brazilian-composite-idle-v1.png", "sha256": "f87d6c3f2825cde63f60f57f90efd53e8422f3a511458c9d64a4dde2ac7921bf", "kind": "generated_character_sprite", "role": "brazilian-composite-idle", "origin": "Locally derived, operator-approved sprite from the original Brazilian composite motion sheet", "rights": {"permission": "original", "reviewed": true, "reviewed_by": "Operator Asset Foundation Gate", "reviewed_at": "2026-08-01", "source": "Outreach Program", "attribution_required": false}, "likeness": {"living": false, "approved": true, "subjects": [{"name": "Brazilian bridge composite reconstruction", "living": false}]}, "alteration_policy": {"allowed": true, "reviewed": true, "policy": "Composite only as an explicitly labeled composite illustration."}, "metadata": {"source_sheet_id": "cast-brazilian-composite-motion-sheet-v1", "pose": "idle", "alpha_required": true}, "render_eligible": true},
+    {
+      "id": "cast-brazilian-composite-walk-v1", "path": "content/video_engine/projects/history-of-bjj/assets/generated/living-scenes-v1/cast/sprites/brazilian-composite/brazilian-composite-walk-v1.png", "sha256": "019e257f7b38f7311b0cfca979c9c7b6c41e1616d682f25a1df39762042a8475", "kind": "generated_character_sprite", "role": "brazilian-composite-walk", "origin": "Locally derived, operator-approved sprite from the original Brazilian composite motion sheet", "rights": {"permission": "original", "reviewed": true, "reviewed_by": "Operator Asset Foundation Gate", "reviewed_at": "2026-08-01", "source": "Outreach Program", "attribution_required": false}, "likeness": {"living": false, "approved": true, "subjects": [{"name": "Brazilian bridge composite reconstruction", "living": false}]}, "alteration_policy": {"allowed": true, "reviewed": true, "policy": "Composite only as an explicitly labeled composite illustration."}, "metadata": {"source_sheet_id": "cast-brazilian-composite-motion-sheet-v1", "pose": "walk", "alpha_required": true}, "render_eligible": true},
+    {
+      "id": "cast-brazilian-composite-explain-v1", "path": "content/video_engine/projects/history-of-bjj/assets/generated/living-scenes-v1/cast/sprites/brazilian-composite/brazilian-composite-explain-v1.png", "sha256": "0b8e181cf0efcf2aaa026b2106b61c8142aa2fc9fe8ad3bc2b1813b0540e789e", "kind": "generated_character_sprite", "role": "brazilian-composite-explain", "origin": "Locally derived, operator-approved sprite from the original Brazilian composite motion sheet", "rights": {"permission": "original", "reviewed": true, "reviewed_by": "Operator Asset Foundation Gate", "reviewed_at": "2026-08-01", "source": "Outreach Program", "attribution_required": false}, "likeness": {"living": false, "approved": true, "subjects": [{"name": "Brazilian bridge composite reconstruction", "living": false}]}, "alteration_policy": {"allowed": true, "reviewed": true, "policy": "Composite only as an explicitly labeled composite illustration."}, "metadata": {"source_sheet_id": "cast-brazilian-composite-motion-sheet-v1", "pose": "explain", "alpha_required": true}, "render_eligible": true},
+    {
+      "id": "cast-brazilian-composite-prop-v1", "path": "content/video_engine/projects/history-of-bjj/assets/generated/living-scenes-v1/cast/sprites/brazilian-composite/brazilian-composite-prop-v1.png", "sha256": "641b33996094b71f8c42f8394d1318af0232fba37f0c69b613eaddd2ebc046be", "kind": "generated_character_sprite", "role": "brazilian-composite-prop", "origin": "Locally derived, operator-approved sprite from the original Brazilian composite motion sheet", "rights": {"permission": "original", "reviewed": true, "reviewed_by": "Operator Asset Foundation Gate", "reviewed_at": "2026-08-01", "source": "Outreach Program", "attribution_required": false}, "likeness": {"living": false, "approved": true, "subjects": [{"name": "Brazilian bridge composite reconstruction", "living": false}]}, "alteration_policy": {"allowed": true, "reviewed": true, "policy": "Composite only as an explicitly labeled composite illustration."}, "metadata": {"source_sheet_id": "cast-brazilian-composite-motion-sheet-v1", "pose": "prop", "alpha_required": true}, "render_eligible": true}
+  ],
+  "notes": "Rights-cleared-only pilot. Research sources and YouTube reference material are not visual assets."
+}

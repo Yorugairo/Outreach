@@ -1,0 +1,151 @@
+{
+  "manifest_version": "cast.v1",
+  "source": "internal_deterministic_vector_library",
+  "rights": {
+    "status": "operator_owned",
+    "permission": "internal_library",
+    "reference_refs": []
+  },
+  "joint_names": [
+    "head",
+    "neck",
+    "shoulder_left",
+    "shoulder_right",
+    "elbow_left",
+    "elbow_right",
+    "wrist_left",
+    "wrist_right",
+    "hip_left",
+    "hip_right",
+    "knee_left",
+    "knee_right",
+    "ankle_left",
+    "ankle_right"
+  ],
+  "variants": {
+    "white_gi_blue_belt": {
+      "cast_id": "attacker",
+      "cast_role": "attacker",
+      "gi_color": "#F8FAFC",
+      "belt_color": "#2563EB",
+      "skin_color": "#F4C7A1",
+      "z_base": 20,
+      "body_parts": [
+        "head",
+        "torso",
+        "belt",
+        "upper_arm_left",
+        "forearm_left",
+        "upper_arm_right",
+        "forearm_right",
+        "thigh_left",
+        "shin_left",
+        "thigh_right",
+        "shin_right"
+      ],
+      "z_order": {
+        "head": 55,
+        "torso": 40,
+        "belt": 42,
+        "upper_arm_left": 44,
+        "forearm_left": 45,
+        "upper_arm_right": 44,
+        "forearm_right": 45,
+        "thigh_left": 41,
+        "shin_left": 42,
+        "thigh_right": 41,
+        "shin_right": 42
+      }
+    },
+    "black_gi_purple_belt": {
+      "cast_id": "defender",
+      "cast_role": "defender",
+      "gi_color": "#1F2937",
+      "belt_color": "#7C3AED",
+      "skin_color": "#C68663",
+      "z_base": 10,
+      "body_parts": [
+        "head",
+        "torso",
+        "belt",
+        "upper_arm_left",
+        "forearm_left",
+        "upper_arm_right",
+        "forearm_right",
+        "thigh_left",
+        "shin_left",
+        "thigh_right",
+        "shin_right"
+      ],
+      "z_order": {
+        "head": 45,
+        "torso": 30,
+        "belt": 32,
+        "upper_arm_left": 34,
+        "forearm_left": 35,
+        "upper_arm_right": 34,
+        "forearm_right": 35,
+        "thigh_left": 31,
+        "shin_left": 32,
+        "thigh_right": 31,
+        "shin_right": 32
+      }
+    }
+  },
+  "contact_anchors": [
+    {
+      "id": "wrist_control",
+      "owner": "attacker",
+      "joint": "wrist_right",
+      "target_owner": "defender",
+      "target_joint": "wrist_left",
+      "kind": "grip",
+      "z_index": 80
+    },
+    {
+      "id": "hip_fulcrum",
+      "owner": "attacker",
+      "joint": "hip_right",
+      "target_owner": "defender",
+      "target_joint": "elbow_right",
+      "kind": "fulcrum",
+      "z_index": 80
+    },
+    {
+      "id": "elbow_load",
+      "owner": "defender",
+      "joint": "elbow_right",
+      "target_owner": "attacker",
+      "target_joint": "hip_right",
+      "kind": "load",
+      "z_index": 80
+    },
+    {
+      "id": "knee_over_head",
+      "owner": "attacker",
+      "joint": "knee_right",
+      "target_owner": "defender",
+      "target_joint": "head",
+      "kind": "frame",
+      "z_index": 80
+    },
+    {
+      "id": "leg_control",
+      "owner": "attacker",
+      "joint": "ankle_right",
+      "target_owner": "defender",
+      "target_joint": "shoulder_right",
+      "kind": "control",
+      "z_index": 80
+    },
+    {
+      "id": "elbow_line",
+      "owner": "defender",
+      "joint": "elbow_right",
+      "target_owner": "attacker",
+      "target_joint": "hip_right",
+      "kind": "extension",
+      "z_index": 80
+    }
+  ]
+}

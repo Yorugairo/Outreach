@@ -1,0 +1,37 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://outreach-program.internal/schemas/provider-reference-registry.v1.json",
+  "title": "Provider Reference Registry v1",
+  "type": "object",
+  "required": ["schema_version", "references"],
+  "properties": {
+    "schema_version": {"const": "provider_reference_registry.v1"},
+    "references": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "provider",
+          "kind",
+          "input_hashes",
+          "rights_reviewed",
+          "render_eligible"
+        ],
+        "properties": {
+          "id": {"type": "string", "minLength": 1},
+          "provider": {"const": "magnific"},
+          "kind": {"enum": ["style", "character", "element", "location", "template"]},
+          "provider_id": {"type": ["string", "null"]},
+          "input_hashes": {
+            "type": "array",
+            "minItems": 1,
+            "items": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+          },
+          "rights_reviewed": {"type": "boolean"},
+          "render_eligible": {"const": false}
+        }
+      }
+    }
+  }
+}

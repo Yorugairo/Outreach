@@ -1,0 +1,87 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://outreach-program.internal/schemas/stock-candidate-batch.v1.json",
+  "title": "Stock Candidate Batch v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "provider",
+    "coverage_hash",
+    "stock_slot_ids",
+    "candidate_count",
+    "candidates",
+    "artifact_hash"
+  ],
+  "properties": {
+    "schema_version": {"const": "stock_candidate_batch.v1"},
+    "provider": {"const": "magnific"},
+    "coverage_hash": {"$ref": "#/definitions/hash"},
+    "stock_slot_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+    "search_call_count": {"type": "integer", "minimum": 0},
+    "preview_download_count": {"type": "integer", "minimum": 0},
+    "relevance_rejection_count": {"type": "integer", "minimum": 0},
+    "duplicate_rejection_count": {"type": "integer", "minimum": 0},
+    "entitlement_snapshot": {
+      "type": "object",
+      "required": ["account_plan", "downloads_included", "daily_download_limit"],
+      "properties": {
+        "account_plan": {"type": "string", "minLength": 1},
+        "downloads_included": {"type": "boolean"},
+        "daily_download_limit": {"type": "integer", "minimum": 0},
+        "confirmed_by": {"type": "string"}
+      },
+      "additionalProperties": false
+    },
+    "candidate_count": {"type": "integer", "minimum": 0},
+    "candidates": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "candidate_id",
+          "slot_id",
+          "provider",
+          "resource_id",
+          "media_type",
+          "preview_path",
+          "preview_sha256",
+          "license_type",
+          "plan_snapshot",
+          "attribution_required",
+          "estimated_cost_usd",
+          "render_eligible",
+          "status"
+        ],
+        "properties": {
+          "candidate_id": {"type": "string", "minLength": 1},
+          "slot_id": {"type": "string", "minLength": 1},
+          "provider": {"enum": ["magnific", "local"]},
+          "resource_id": {"type": "string", "minLength": 1},
+          "media_type": {"type": "string", "minLength": 1},
+          "preview_path": {"type": "string", "minLength": 1},
+          "preview_sha256": {"$ref": "#/definitions/hash"},
+          "license_type": {"type": "string", "minLength": 1},
+          "license_url": {"type": "string"},
+          "visual_archetype": {"type": "string"},
+          "search_query": {"type": "string"},
+          "relevance_score": {"type": "integer"},
+          "matched_terms": {
+            "type": "array",
+            "items": {"type": "string"}
+          },
+          "preview_dhash": {"type": "string"},
+          "plan_snapshot": {"type": "string", "minLength": 1},
+          "attribution_required": {"type": "boolean"},
+          "estimated_cost_usd": {"type": ["number", "null"], "minimum": 0},
+          "render_eligible": {"const": false},
+          "status": {"const": "pending_review"}
+        }
+      }
+    },
+    "artifact_hash": {"$ref": "#/definitions/hash"}
+  },
+  "definitions": {
+    "hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}

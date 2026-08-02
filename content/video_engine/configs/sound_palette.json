@@ -1,0 +1,25 @@
+{
+  "schema_version": "sound_palette.v1",
+  "cues": {
+    "movement": {
+      "asset_path": null,
+      "gain_db": -18.0,
+      "phase": "anticipation"
+    },
+    "contact": {
+      "asset_path": null,
+      "gain_db": -12.0,
+      "phase": "contact"
+    },
+    "aftermath": {
+      "asset_path": null,
+      "gain_db": -20.0,
+      "phase": "recovery"
+    },
+    "diagram_click": {
+      "asset_path": null,
+      "gain_db": -20.0,
+      "phase": "action"
+    }
+  }
+}

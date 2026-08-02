@@ -1,5 +1,26 @@
 # Script Transformation Spec — Essay/Corpus → Beat Sheet → Storyboard
 
+> **History V4 override:** documentary transformation consumes an
+> operator-approved `research_packet.v1`; it does not infer facts from essays,
+> consultant material, reference videos, or visual assets.
+
+## Evidence-constrained documentary transformation
+
+For a `history_episode.v1`, every narration sentence carries one or more approved
+claim IDs. Transformation may shorten, order, and qualify those claims. It may not
+invent chronology, causation, motive, lineage, quotation, or certainty.
+
+Direct quotations require an approved exact-text claim and a valid locator.
+Contested claims require two independent citations and explicit qualifying
+language. A visual reconstruction never adds factual detail: narration and
+captions remain bounded by the claim matrix, while the image is labeled
+`Illustration` or `Reconstruction`.
+
+The documentary beat sheet uses
+[`10-HISTORY-DOCUMENTARY-EDITORIAL-SPEC.md`](10-HISTORY-DOCUMENTARY-EDITORIAL-SPEC.md).
+Its first-pass compiler is deterministic and refuses unapproved claims. An LLM may
+later propose phrasing only if the same claim-boundary guard proves every sentence.
+
 *Date: 2026-07-28 · Implements the operator's "Script Transformation Instructions" + "3 Golden Rules" as an enforceable spec · Enforced by: `storyboard_guard.py` (machine checks) + Gate A rubric (human checks).*
 
 This is the editorial quality system. Rendering is deterministic; **retention is won or lost
@@ -7,6 +28,22 @@ here.** The transformer (LLM-assisted for essays, deterministic-floor for corpus
 source content into a beat sheet, which `storyboard_build` compiles into the v2 storyboard.
 
 ---
+
+## 0. Angle selection precedes transformation
+
+The transformer does not decide what the channel believes. Before beat generation, the operator
+may supply an angle brief derived from outlier/trend research:
+
+1. **Pattern:** what question, tension, or format outperformed the reference channel's baseline?
+2. **Inversion:** what original counter-premise can this project's fact layer actually prove?
+3. **Skill stack:** which two defensible capabilities make the treatment hard to copy?
+4. **Human thesis:** the operator's one-sentence point of view and why it serves this audience.
+
+AI may organize references and propose candidates. It may not copy a title/premise, treat raw
+views as evidence, manufacture a contradiction, or select the final thesis. Reference URL,
+observed pattern, and operator decision remain in the source/job evidence; they are not written
+into the immutable storyboard unless a later contract version explicitly adds them. Autonomous
+reference scraping is P1 work, not a P0 dependency.
 
 ## 1. Length + pacing math (140 WPM basis)
 
@@ -88,6 +125,25 @@ Rules: every marker must resolve to a **named action or pose that exists** in th
 registry / `assets/poses/` (guard-checked — a marker that resolves to nothing is a build error,
 not a silent skip). `at_word` anchors are resolved after TTS from the word-timing arrays.
 
+For grappling instruction, a pose marker alone is insufficient. Technique beats should resolve to
+an anchored action marker with cast, state, and shot coverage, for example:
+
+```json
+{
+  "at_word": 4,
+  "action": "bjj_action:two_on_one_wrist_control",
+  "cast": {"attacker": "white_gi_blue_belt", "defender": "black_gi_purple_belt"},
+  "state_from": "closed_guard_posture_broken",
+  "state_to": "wrist_control_hip_frame",
+  "shot": "grip_closeup",
+  "overlays": ["wrist_lock", "hip_frame_arrow"]
+}
+```
+
+The transformer must prefer color-coded flat vector/chibi or technical infographic assets for
+intertwined limbs. Generative image/video references may inform a shot recipe only when provenance
+and permission are recorded; they do not replace the deterministic action/state contract.
+
 ## 5. Information gain (Golden Rule 2, made checkable)
 
 Every long-form script must carry **≥3 only-here specifics** — facts a generic summary channel
@@ -128,6 +184,7 @@ surface at Gate A as "needs source" — the operator sources or cuts.
 | Dimension | Question | Scored |
 |---|---|---|
 | Hook | Would *you* keep watching past 5s? Is the hook the strongest frame? | 1–5 |
+| Angle originality | Is this a source-backed inversion with a human-owned thesis, rather than a copied outlier? Does any claimed skill stack feel earned? | 1–5 |
 | Arc | Is there a real conflict/misconception, and does the comeback earn the payoff? | 1–5 |
 | Information gain | ≥3 only-here specifics present and load-bearing? | 1–5 |
 | Pacing | (machine-verified budgets) any dead stretches on read-through? | pass/fail |

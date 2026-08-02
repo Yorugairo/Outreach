@@ -1,0 +1,120 @@
+{
+  "schema_version": "art_bible.v2",
+  "id": "combat-history-archival-editorial-v1",
+  "title": "Combat History Archival Editorial",
+  "channel": "history-of-bjj",
+  "render_policy": {
+    "input_domain": "internal_style_atoms_and_approved_asset_ids",
+    "allow_external_assets": false,
+    "allow_creator_imitation": false,
+    "approved_asset_ids": []
+  },
+  "palette": {
+    "paper": "#F4EBDD",
+    "ink": "#1F252A",
+    "background": "#171B20",
+    "surface": "#2B3136",
+    "rust": "#A44A32",
+    "indigo": "#324C73",
+    "jade": "#2C7666",
+    "ochre": "#C18B45",
+    "muted": "#A7A092"
+  },
+  "typography": {
+    "family": "Inter",
+    "caption_font": "Inter (local OFL)",
+    "measurement_font": "Roboto Mono (local OFL)",
+    "caption_source": "checked-in local OFL font assets",
+    "measurement_source": "checked-in local OFL font assets",
+    "weight": "semibold",
+    "case": "sentence",
+    "tracking": 0.02,
+    "safe_chars": 44
+  },
+  "style_atoms": [
+    {
+      "id": "warm-paper-field",
+      "kind": "field",
+      "description": "Warm paper field with quiet grain and a documentary margin.",
+      "tokens": { "fill": "paper", "grain_alpha": 0.08, "edge": "ink" },
+      "applies_to": ["artifact_cold_open", "document_quote_closeup", "chapter_cta"]
+    },
+    {
+      "id": "archival-parallax",
+      "kind": "archive",
+      "description": "A rights-cleared archival image moves in two restrained depth planes.",
+      "tokens": { "image_layer": "subject", "matte_layer": "surface", "parallax_px": 18, "caption_panel": "paper" },
+      "applies_to": ["archival_portrait", "artifact_cold_open"]
+    },
+    {
+      "id": "illustrated-reconstruction",
+      "kind": "illustration",
+      "description": "Visible flat illustration and reconstruction marks distinguish interpretation from evidence.",
+      "tokens": { "stroke": "ink", "fill": "ochre", "label": "ILLUSTRATION / RECONSTRUCTION", "texture": "paper" },
+      "applies_to": ["illustrated_reconstruction"]
+    },
+    {
+      "id": "document-window",
+      "kind": "document",
+      "description": "A document or quotation is framed as an editorial close-up with a citation rail.",
+      "tokens": { "frame": "ink", "paper": "paper", "quote_rule": "rust", "citation": "indigo" },
+      "applies_to": ["document_quote_closeup"]
+    },
+    {
+      "id": "migration-thread",
+      "kind": "diagram",
+      "description": "A measured route line and date rail explain movement without implying unsupported precision.",
+      "tokens": { "route": "jade", "node": "rust", "date": "indigo", "stroke_px": 4 },
+      "applies_to": ["migration_map_timeline"]
+    },
+    {
+      "id": "lineage-constellation",
+      "kind": "diagram",
+      "description": "A sparse relationship graph reveals lineage and uncertainty through node treatment.",
+      "tokens": { "node": "indigo", "edge": "jade", "uncertain": "ochre", "label": "ink" },
+      "applies_to": ["lineage_graph"]
+    },
+    {
+      "id": "concept-cutaway",
+      "kind": "diagram",
+      "description": "A brief conceptual cutaway uses arrows and planes to explain an idea, never a multi-step technique.",
+      "tokens": { "plane": "surface", "arrow": "rust", "label": "ink", "runtime_cap": 0.15 },
+      "applies_to": ["concept_mechanics_cutaway"]
+    },
+    {
+      "id": "chapter-signpost",
+      "kind": "type",
+      "description": "A restrained chapter signpost keeps thesis, source note, and CTA legible in safe zones.",
+      "tokens": { "title": "ink", "rule": "rust", "meta": "muted", "safe_margin": 0.08 },
+      "applies_to": ["chapter_cta"]
+    }
+  ],
+  "composition": {
+    "safe_margin": 0.08,
+    "anchor_grid": "document_grid",
+    "max_repeated_framing": 2,
+    "functions": {
+      "artifact_cold_open": { "framing": "artifact_hero", "atom_ids": ["warm-paper-field", "archival-parallax"], "asset_category": "archival_photo" },
+      "archival_portrait": { "framing": "portrait_parallax", "atom_ids": ["archival-parallax", "chapter-signpost"], "asset_category": "archival_photo" },
+      "illustrated_reconstruction": { "framing": "illustrated_wide", "atom_ids": ["illustrated-reconstruction", "warm-paper-field"], "asset_category": "original_illustration" },
+      "document_quote_closeup": { "framing": "document_macro", "atom_ids": ["document-window", "chapter-signpost"], "asset_category": "document_scan" },
+      "migration_map_timeline": { "framing": "map_timeline", "atom_ids": ["migration-thread", "chapter-signpost"], "asset_category": "map" },
+      "lineage_graph": { "framing": "lineage_graph", "atom_ids": ["lineage-constellation", "chapter-signpost"], "asset_category": "diagram" },
+      "concept_mechanics_cutaway": { "framing": "concept_cutaway", "atom_ids": ["concept-cutaway", "warm-paper-field"], "asset_category": "diagram" },
+      "chapter_cta": { "framing": "chapter_card", "atom_ids": ["chapter-signpost", "warm-paper-field"], "asset_category": "typography" }
+    }
+  },
+  "motion": {
+    "phase_order": ["anticipation", "reveal", "action", "recovery", "hold"],
+    "easing": {
+      "anticipation": "ease_out",
+      "reveal": "ease_in_out",
+      "action": "linear",
+      "recovery": "ease_out",
+      "hold": "constant"
+    },
+    "transition_motifs": ["paper_wipe", "route_carry", "parallax_drift", "document_match", "hard_reset"]
+  },
+  "approved_asset_categories": ["archival_photo", "original_illustration", "document_scan", "map", "diagram", "texture", "typography"],
+  "signature": ["warm_paper", "archival_parallax", "visible_reconstruction", "citation_rail", "route_and_lineage_diagrams", "restrained_editorial_type"]
+}

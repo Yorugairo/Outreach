@@ -1,5 +1,34 @@
 # Pilot Season — Phase 0 Validation Cohort
 
+> **Superseded cohort:** the technique-heavy cohort below is retained as historical
+> planning context. The active V4 cohort is the three-part series defined here.
+
+## History Documentary V4 cohort
+
+1. **How Judo Became Brazilian Jiu-Jitsu** — approximately 10-minute acceptance
+   pilot (8–12 minute band) covering
+   Kano, Maeda, and early Brazilian development. Popular one-line origin stories
+   remain hypotheses until the Research Gate approves exact claims.
+2. **The Branches BJJ History Forgot** — George Gracie, São Paulo, and Lotus Club
+   are research questions only in this PRP.
+3. **How BJJ Became a Global Sport** — Brazil, the United States, modern
+   competition, and Pacific Northwest arrival; no named academy promotion.
+
+Each episode targets one landscape research master, two native vertical clips, and
+chapter-level subvideos built from self-contained approved claim clusters. Episode 1
+alone proceeds through the acceptance pipeline. It stops for the operator at
+Research, Visual Direction, Gate A, and Gate B. The release buffer still requires
+three Gate-B-approved packages before a public launch, but does not authorize
+publication.
+
+Armbar V3 is frozen R&D. No stick-figure technique tutorial, corpus technique short,
+or generated grappling choreography is part of the V4 acceptance cohort.
+
+Length is earned by evidence, not padding. Each chapter must introduce a distinct
+historical question, source cluster, and visual progression. A subvideo preserves
+the qualification and citations required to stand alone; it is not an arbitrary
+excerpt from the master.
+
 *Date: 2026-07-28 · Purpose: the content plan for Phase 0. The pilot exists to answer assumption
 A1 (can this format retain viewers?) with real data before any orchestration is built. Episodes
 are produced through the thin-slice pipeline as it comes online — the pilot IS the pipeline's
@@ -79,6 +108,18 @@ the shorts surface with zero LLM risk, (b) become the first **embeds** on their 
 location registry pages (assumption A2 test starts here), (c) exercise the pipeline weekly while
 long-form episodes are in review.
 
+### 2.1 Pre-launch batch gate
+
+Do not make the first public channel upload until **three distinct videos** are
+Gate-B-approved, QC-passing, and packaged with final metadata/thumbnails. They remain private
+artifacts until the buffer is complete; automated tests or draft renders do not count. The
+three should collectively exercise both landscape and native-vertical outputs.
+
+This is an operator release checklist for P0, not a new per-run stage. Once the buffer is ready,
+publish from it at the cadence below and continue production so early view counts do not dictate
+the unfinished catalog. A later publish-queue implementation may enforce the same policy from
+persisted run evidence.
+
 ---
 
 ## 3. Measurement targets (calibrated to 2026 benchmarks, sourced in `05-COMPETITIVE-BRIEF.md`)
@@ -110,6 +151,8 @@ Numbers are pre-committed pass bars, not predictions. Kill/pivot rules live in
 - **Let uploads breathe.** In the first ~10 uploads, space posts ≥48h apart and hold the queue
   while the previous video is still visibly climbing. Evidence is single-creator anecdote, but
   spacing costs nothing and the pilot cadence already fits it.
+- **Launch from a buffer.** The first public upload waits for the three-video gate in §2.1; the
+  ≥48h spacing rule begins only after that buffer exists.
 - **Monetization is not a pilot goal.** YPP thresholds and review come much later; the pilot
   optimizes retention + funnel evidence. Voice: custom/cloned only — ElevenLabs Default voices
   retire 2026-12-31 and are the mass-production fingerprint regardless.
@@ -124,3 +167,6 @@ Numbers are pre-committed pass bars, not predictions. Kill/pivot rules live in
 - [ ] Published with UTM-tagged long-form description links; shorts CTA verbal/on-screen only
 - [ ] Technique shorts: embed payload delivered for registry page placement
 - [ ] Analytics snapshot captured at 7 and 28 days into `runtime/jobs/<id>/analytics/`
+
+A video counts toward the pre-launch buffer only after every pre-publication item above is
+complete through Gate B; the publish and analytics items occur after release.

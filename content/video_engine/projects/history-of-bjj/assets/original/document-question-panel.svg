@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
+  <rect width="1920" height="1080" fill="#0B0F14"/>
+  <rect x="220" y="120" width="1480" height="840" rx="18" fill="#EFE3C8"/>
+  <path d="M350 300H1570M350 410H1570M350 520H1320M350 630H1510M350 740H1210" stroke="#9C917B" stroke-width="18"/>
+  <rect x="320" y="480" width="1060" height="88" fill="#F0A34A" opacity=".72"/>
+  <circle cx="1500" cy="760" r="110" fill="none" stroke="#B34B35" stroke-width="15"/>
+  <text x="1500" y="790" text-anchor="middle" font-family="serif" font-size="110" fill="#B34B35">?</text>
+  <text x="960" y="1025" text-anchor="middle" font-family="monospace" font-size="28" fill="#F4F7FA">DOCUMENT QUESTION — NOT A FACSIMILE</text>
+</svg>

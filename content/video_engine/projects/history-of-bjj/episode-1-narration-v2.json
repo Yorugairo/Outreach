@@ -1,0 +1,129 @@
+{
+  "schema_version": "history_narration_source.v1",
+  "episode_id": "how-judo-became-brazilian-jiu-jitsu",
+  "source_storyboard": "active Episode 1 Storyboard 2.3 scene narration, expanded without adding a new historical claim",
+  "target_duration_s": 600,
+  "status": "research_gate_revision",
+  "segments": [
+    {
+      "segment_id": "kano-system-opening",
+      "scene_id": 1,
+      "chapter_id": "kano-system-before-brazil",
+      "claim_refs": ["kano-founded-kodokan-1882"],
+      "citation_refs": ["citation-ijf-1882", "citation-tsukuba-education"],
+      "text": "The useful starting point is not a battlefield legend but an institution. In 1882, Jigoro Kano established the Kodokan. That date does not mean every older jujutsu practice vanished overnight. It marks the point at which Kano's system gained a durable home, a teaching structure, and an identity. That distinction changes the question we are asking. Instead of looking for a single ancient technique that somehow travelled unchanged into Brazil, we can follow a system as it acquires schools, teachers, rules, and public meaning. The date is an anchor in the record, not a magical beginning for every practice that later received the name jiu-jitsu."
+    },
+    {
+      "segment_id": "kano-transformation",
+      "scene_id": 2,
+      "chapter_id": "kano-system-before-brazil",
+      "claim_refs": ["kodokan-synthesized-jujutsu"],
+      "citation_refs": ["citation-ijf-1882", "citation-tsukuba-education"],
+      "text": "Kodokan judo was already a transformation. Kano drew from multiple jujutsu schools, selected and reorganized techniques, and connected practice to a broader educational program. So the story begins with adaptation inside Japan, before the art ever reaches Brazil. A system is not only a list of movements. It is also a way of deciding what should be taught, how students should practice, what counts as progress, and which ideas deserve to travel with the exercise. When later observers describe judo or jiu-jitsu, they may be describing different portions of that larger project. Keeping the transformation visible prevents us from mistaking a later label for an unchanged original."
+    },
+    {
+      "segment_id": "kano-education",
+      "scene_id": 3,
+      "chapter_id": "kano-system-before-brazil",
+      "claim_refs": ["kano-education-project"],
+      "citation_refs": ["citation-ijf-education", "citation-tsukuba-education"],
+      "text": "Kano's project was larger than a catalog of fighting moves. Institutional histories emphasize education, disciplined practice, efficient use of energy, and mutual benefit. Those ideas matter because later travelers could carry techniques, sporting rules, professional contests, or educational ideals in different proportions. The same practice could look different when it entered a school, a theater, a challenge match, or a community of immigrants. This is why a history of Brazilian jiu-jitsu cannot be reduced to asking who knew which move first. We also have to ask what the practice was being used for, who was teaching it, and what the surrounding institution rewarded."
+    },
+    {
+      "segment_id": "labels-in-motion",
+      "scene_id": 4,
+      "chapter_id": "kano-system-before-brazil",
+      "claim_refs": ["labels-overlapped-abroad"],
+      "citation_refs": ["citation-cairus-terms", "citation-stanlei-pioneers"],
+      "text": "Terminology was not settled. Contemporary and retrospective sources use judo, jiu-jitsu, Kano jiu-jitsu, and related spellings in overlapping ways. Accounts differ about what each public label implied, so this episode follows documented people and practices instead of treating a name as a perfectly stable technical system. That caution is not a footnote. Public names travel through advertisements, demonstrations, newspapers, translations, and later memories. A word can be used to sell an exhibition, identify a teacher, describe a lineage, or summarize a ruleset. The label tells us what someone called the practice; it does not automatically tell us that every participant understood the practice in exactly the same way."
+    },
+    {
+      "segment_id": "brazil-before-maeda",
+      "scene_id": 5,
+      "chapter_id": "maeda-and-the-belem-network",
+      "claim_refs": ["jiujitsu-in-brazil-before-maeda"],
+      "citation_refs": ["citation-cairus-rio-1909", "citation-penglase-pre-maeda"],
+      "text": "Maeda was important, but he did not enter an empty landscape. Scholarship documents Japanese jiu-jitsu demonstrations and contests in Brazil before his arrival, including a highly publicized 1909 encounter in Rio. That earlier presence complicates any claim that Brazilian grappling history begins on one day in 1914. It also gives the audience a better kind of origin story. Before the famous names become connected, there are public events, competing descriptions, and people whose roles are harder to preserve in a simplified narrative. The record asks us to see Brazil as a place where martial practices were already being displayed, discussed, and interpreted."
+    },
+    {
+      "segment_id": "first-teacher-question",
+      "scene_id": 6,
+      "chapter_id": "maeda-and-the-belem-network",
+      "claim_refs": ["first-teacher-status-contested"],
+      "citation_refs": ["citation-stanlei-pioneers", "citation-penglase-pre-maeda"],
+      "text": "The title of first teacher is disputed. Some accounts foreground Maeda and Satake; others identify earlier Japanese practitioners or distinguish public performers from immigrant-community instruction. The evidence is mixed, and a single winner would create more certainty than the sources allow. That does not make the history unknowable. It tells us which statements need qualification. We can describe a growing field of Japanese martial practice in Brazil without pretending that every demonstration was a school, or that every performer held the same teaching role. A careful documentary keeps the question open when the sources keep it open."
+    },
+    {
+      "segment_id": "maeda-arrival",
+      "scene_id": 7,
+      "chapter_id": "maeda-and-the-belem-network",
+      "claim_refs": ["maeda-satake-arrived-1914"],
+      "citation_refs": ["citation-cairus-arrival", "citation-stanlei-arrival"],
+      "text": "The record does support a major transition in 1914. Maeda and Soishiro Satake entered Brazil with other Japanese martial artists after travelling through the Americas. They were not simply missionaries following a modern curriculum; public demonstrations and professional contests were part of the network that carried their practice. Their movement across borders matters because it makes transmission physical and social. People carried skills, names, reputations, performance habits, and business arrangements. What arrived in Brazil was therefore not a sealed package labelled Brazilian jiu-jitsu. It was a set of practices moving through a changing international circuit, ready to be adapted again."
+    },
+    {
+      "segment_id": "belem-network",
+      "scene_id": 8,
+      "chapter_id": "maeda-and-the-belem-network",
+      "claim_refs": ["maeda-reached-belem-1915"],
+      "citation_refs": ["citation-cairus-arrival"],
+      "text": "By 1915, the troupe was in Belém, a city shaped by the Amazon rubber economy and a cosmopolitan entertainment circuit. Theaters, demonstrations, challenges, and advertised lessons put Japanese grappling in front of audiences who encountered it as education, spectacle, and practical combat at the same time. Belém is more than a pin on a migration map. It is a setting that helps explain why a practice could change as it moved. The audience, venue, local economy, and promise made by an instructor all influenced what was visible. The same art could be presented as disciplined study in one room and as a public test in another."
+    },
+    {
+      "segment_id": "public-contest-context",
+      "scene_id": 9,
+      "chapter_id": "maeda-and-the-belem-network",
+      "claim_refs": ["maeda-prizefighting-context"],
+      "citation_refs": ["citation-cairus-training", "citation-cairus-terms"],
+      "text": "That context shaped what students could receive. Cairus describes Maeda's Brazilian teaching alongside professional wrestling and prizefighting, with less emphasis on the full Kodokan pedagogical structure. This does not prove a secret combat system. It shows why techniques, labels, and teaching methods could shift as they moved. A public challenge rewards one kind of explanation; a regular class rewards another. A performer must demonstrate quickly, while a teacher may build habits over time. Treating those settings as interchangeable creates a false mystery. Treating them as different environments gives us a practical explanation for why later accounts do not line up perfectly."
+    },
+    {
+      "segment_id": "carlos-training",
+      "scene_id": 10,
+      "chapter_id": "maeda-and-the-belem-network",
+      "claim_refs": ["carlos-training-details-contested"],
+      "citation_refs": ["citation-cairus-training", "citation-penglase-inheritance"],
+      "text": "Accounts differ on the clean version of the handoff. The evidence places Carlos Gracie in the Belém training network associated with Maeda, while scholarship also identifies senior student Jacyntho Ferro and warns against treating later lineage tradition as a complete classroom record. We can say there was transmission; we should qualify its exact shape. The responsible claim is narrower than the familiar legend and stronger because of that restraint. It recognizes Carlos as part of an important network without erasing the people, settings, and uncertainties that the surviving scholarship places around the relationship."
+    },
+    {
+      "segment_id": "ferro-intermediary",
+      "scene_id": 11,
+      "chapter_id": "maeda-and-the-belem-network",
+      "claim_refs": ["jacyntho-ferro-role"],
+      "citation_refs": ["citation-cairus-training"],
+      "text": "Jacyntho Ferro matters because a network is not a single arrow on a family tree. Cairus identifies him as a senior local student who taught within Maeda's circle. Including that role does not erase Carlos Gracie; it prevents the visual grammar of lineage from deleting the intermediaries the scholarship names. Teaching networks are made of relationships that do not always fit a clean diagram. A student can become an instructor, a local teacher can carry practice into another community, and later memory can compress several stages into one famous connection. The historical task is to restore those stages where the evidence allows it."
+    },
+    {
+      "segment_id": "parallel-lineages",
+      "scene_id": 12,
+      "chapter_id": "from-network-to-brazilian-sport",
+      "claim_refs": ["multiple-japanese-lineages"],
+      "citation_refs": ["citation-stanlei-pioneers", "citation-penglase-pre-maeda"],
+      "text": "Brazilian development also extended beyond the best-known Rio lineage. Studies of Brazilian judo identify immigrant teachers, professional fighters, and community networks that spread related practices through different regions. That wider field is why the next episode treats forgotten branches as research questions rather than decorative side notes. The point is not to replace one heroic family with a different heroic list. It is to change the shape of the explanation. A national tradition can emerge from overlapping communities, and a later public identity can become dominant without being the only path by which practice travelled."
+    },
+    {
+      "segment_id": "brazilian-reinvention",
+      "scene_id": 13,
+      "chapter_id": "from-network-to-brazilian-sport",
+      "claim_refs": ["gracie-reinvention-1930s"],
+      "citation_refs": ["citation-cairus-2020-transformation", "citation-penglase-inheritance"],
+      "text": "The Brazilian identity of the art was not finished in Belém. Scholarship locates a major phase of reinvention in the 1930s, when public performances, institutions, promotion, and nationalism helped distinguish a Brazilian combat sport from Japanese immigrant traditions and from other local fighting practices. Reinvention means more than changing a technique. It can change the audience, the rules, the stories attached to the practice, and the institutions that preserve it. This is where a travelling practice becomes a public identity. The history is no longer only about arrival; it is about selection, promotion, memory, and the power to define what counts as Brazilian."
+    },
+    {
+      "segment_id": "transformation-conclusion",
+      "scene_id": 14,
+      "chapter_id": "from-network-to-brazilian-sport",
+      "claim_refs": ["transformation-thesis"],
+      "citation_refs": ["citation-ijf-1882", "citation-cairus-rio-1909", "citation-stanlei-pioneers", "citation-cairus-2020-transformation", "citation-penglase-inheritance"],
+      "text": "The most accurate conclusion is also the more interesting one. Kano's system was an adaptation; international travel changed its setting and emphasis; Brazil already contained competing practices and communities; and later institutions remade the public identity again. Brazilian jiu-jitsu was not copied once. It was transformed repeatedly. That conclusion is not an attempt to make the history less dramatic. It gives the drama more places to live: in institutions, ships, theaters, classrooms, challenges, immigrant communities, and the choices later promoters made about which connections to remember."
+    },
+    {
+      "segment_id": "series-cta",
+      "scene_id": 15,
+      "chapter_id": "from-network-to-brazilian-sport",
+      "claim_refs": [],
+      "citation_refs": [],
+      "text": "Explore the people, places, and sources behind jiu-jitsu at NationalBJJRegistry.com."
+    }
+  ]
+}

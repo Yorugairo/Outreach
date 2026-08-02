@@ -1,0 +1,94 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://outreach-program.internal/schemas/visual-treatment.v2.json",
+  "title": "History Documentary Visual Treatment v2",
+  "description": "Renderer-facing documentary shots. Asset references are approved IDs and citation references are claim IDs only.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "source_kind", "art_bible_id", "art_bible_hash", "shot_plan_hash", "research_hash", "asset_manifest_hash", "shots"],
+  "properties": {
+    "schema_version": { "type": "string", "const": "visual_treatment.v2" },
+    "source_kind": { "type": "string", "const": "documentary" },
+    "art_bible_id": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+    "art_bible_hash": { "$ref": "#/definitions/hash" },
+    "shot_plan_hash": { "$ref": "#/definitions/hash" },
+    "research_hash": { "$ref": "#/definitions/hash" },
+    "asset_manifest_hash": { "$ref": "#/definitions/hash" },
+    "coverage_plan_hash": { "$ref": "#/definitions/hash" },
+    "asset_selection_hash": { "$ref": "#/definitions/hash" },
+    "episode_id": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+    "duration_s": { "type": "number", "exclusiveMinimum": 0 },
+    "credits": { "type": ["object", "array"] },
+    "shots": { "type": "array", "minItems": 1, "items": { "$ref": "#/definitions/shot" } },
+    "artifact_hash": { "$ref": "#/definitions/hash" }
+  },
+  "definitions": {
+    "hash": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "citation": {
+      "anyOf": [
+        { "type": "string", "minLength": 1, "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+        { "type": "object", "additionalProperties": false, "required": ["citation_id"], "properties": { "citation_id": { "type": "string", "minLength": 1 }, "claim_ids": { "type": "array", "items": { "type": "string", "minLength": 1 } }, "label": { "type": "string", "minLength": 1 } } }
+      ]
+    },
+    "camera": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["framing", "anchor", "safe_zone"],
+      "properties": {
+        "framing": { "type": "string", "minLength": 1 },
+        "anchor": { "type": "string", "minLength": 1 },
+        "move": { "type": "string", "minLength": 1 },
+        "safe_zone": { "type": "string", "enum": ["center", "top", "bottom", "left", "right", "middle"] }
+      }
+    },
+    "depth": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["background", "subject", "overlay"],
+      "properties": { "background": { "type": "integer" }, "subject": { "type": "integer" }, "overlay": { "type": "integer" }, "artifact": { "type": "integer" } }
+    },
+    "motion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["phases", "transition"],
+      "properties": {
+        "phases": { "type": "array", "minItems": 1, "items": { "type": "string", "enum": ["anticipation", "reveal", "action", "contact", "recovery", "hold"] } },
+        "transition": { "type": "string", "minLength": 1 },
+        "easing": { "type": "string", "minLength": 1 }
+      }
+    },
+    "shot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["shot_id", "treatment_id", "function", "visual_type", "purpose", "composition", "scene_class", "style_atom_ids", "palette_roles", "camera", "depth", "motion", "asset_ids", "citations", "typography", "signature", "uniqueness_signature", "duration_s"],
+      "properties": {
+        "shot_id": { "type": ["string", "integer"] },
+        "scene_id": { "type": ["string", "integer"] },
+        "treatment_id": { "type": "string", "pattern": "^treatment-[a-z0-9]+(?:-[a-z0-9]+)*$" },
+        "function": { "type": "string", "enum": ["artifact_cold_open", "archival_portrait", "illustrated_reconstruction", "document_quote_closeup", "migration_map_timeline", "lineage_graph", "concept_mechanics_cutaway", "chapter_cta"] },
+        "visual_type": { "type": "string", "enum": ["artifact_cold_open", "archival_portrait", "illustrated_reconstruction", "document_quote_closeup", "migration_map_timeline", "lineage_graph", "concept_mechanics_cutaway", "chapter_cta"] },
+        "visual_function": { "type": "string", "enum": ["artifact_cold_open", "archival_portrait", "illustrated_reconstruction", "document_quote_closeup", "migration_map_timeline", "lineage_graph", "concept_mechanics_cutaway", "chapter_cta"] },
+        "source_kind": { "type": "string", "const": "documentary" },
+        "manim_class": { "type": "string", "const": "DocumentaryScene" },
+        "purpose": { "type": "string", "minLength": 1 },
+        "composition": { "type": "string", "minLength": 1 },
+        "scene_class": { "type": "string", "const": "DocumentaryScene" },
+        "style_atom_ids": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+        "palette_roles": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+        "camera": { "$ref": "#/definitions/camera" },
+        "depth": { "$ref": "#/definitions/depth" },
+        "motion": { "$ref": "#/definitions/motion" },
+        "asset_ids": { "type": "array", "uniqueItems": true, "items": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" } },
+        "citations": { "type": "array", "items": { "$ref": "#/definitions/citation" } },
+        "credit_ids": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "illustration_label": { "type": "string", "minLength": 1 },
+        "typography": { "type": "object", "additionalProperties": false, "required": ["caption_font", "measurement_font"], "properties": { "caption_font": { "type": "string", "minLength": 1 }, "measurement_font": { "type": "string", "minLength": 1 } } },
+        "signature": { "type": "string", "minLength": 1 },
+        "uniqueness_signature": { "type": "string", "minLength": 1 },
+        "phash": { "type": "string", "pattern": "^[0-9a-fA-F]{1,16}$" },
+        "duration_s": { "type": "number", "exclusiveMinimum": 0 },
+        "parameters": { "type": "object" }
+      }
+    }
+  }
+}

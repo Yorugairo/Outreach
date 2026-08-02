@@ -1,0 +1,27 @@
+{
+  "schema_version": "asset_manifest.v1",
+  "manifest_id": "history-of-bjj-episode-1-assets",
+  "project_id": "history-of-bjj",
+  "episode_id": "episode-1",
+  "job_id": "replace-with-job-id",
+  "assets": [
+    {
+      "id": "replace-with-asset-id",
+      "path": "assets/replace-with-local-file.jpg",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "kind": "archival_photo",
+      "role": "archive",
+      "origin": "replace-with-local-provenance",
+      "rights": {
+        "permission": "operator_owned",
+        "reviewed": false,
+        "reviewed_by": null,
+        "reviewed_at": null,
+        "license": null,
+        "attribution_required": false
+      },
+      "render_eligible": false,
+      "quarantine_reason": "template_requires_operator_rights_review"
+    }
+  ]
+}

@@ -1,0 +1,164 @@
+{
+  "schema_version": "style_pack_library.v1",
+  "id": "combat-woodblock-style-packs-v1",
+  "parent_style_key_id": "woodblock-comic-style-key",
+  "calibration_inventory_hash": "807d5abf89436167f51679f0bd5e0e51e3a10b3fe18a93c399346fde068cab4e",
+  "calibration_policy": {
+    "use": "human_directed_style_calibration",
+    "overlap_allowed": true,
+    "promotion_requires_asset_manifest": true,
+    "render_eligible": false
+  },
+  "shared_identity": {
+    "name": "Combat Woodblock",
+    "medium": "woodblock_print",
+    "palette": ["#E7D3A1", "#17324D", "#1B1A17", "#B64F36", "#D99B32", "#2F7F7A"],
+    "linework": "Thick carved outlines with readable silhouettes, selective fine hatching, and restrained contour detail.",
+    "texture": "Warm fibrous paper, imperfect ink density, flat layered color, and visible registration character without fake damage obscuring information.",
+    "visual_motifs": ["rising sun disc", "ink cloud and wave", "paper panel and scroll", "route ribbon", "circular portrait or evidence medallion"],
+    "factual_text_in_generated_pixels": false,
+    "creator_imitation": false
+  },
+  "packs": [
+    {
+      "id": "woodblock-anime-action-v1",
+      "label": "Woodblock Anime Action",
+      "primary_lanes": ["technique_analysis", "fight_analysis"],
+      "audience_job": "Make a decisive exchange, contact point, momentum shift, or tactical mistake immediately legible without relying on skeletal figures or generated instructional text.",
+      "composition": {
+        "panel_count_min": 1,
+        "panel_count_max": 4,
+        "negative_space_min": 0.12,
+        "negative_space_max": 0.35,
+        "depth_layers_min": 3,
+        "camera_default": "locked",
+        "layout_rules": [
+          "Use one dominant action silhouette per panel and preserve full limb ownership.",
+          "Reserve a clean edge or paper inset for local contact, force, score, or correction overlays.",
+          "Matched comparisons keep the same camera and start pose while changing only the decisive variable.",
+          "Technique sequences use anticipation, contact, recoil, and result panels rather than continuous generated choreography."
+        ]
+      },
+      "motion": {
+        "primary_drivers": ["character_prop", "information_reveal", "localized_environment"],
+        "background_motion": "localized_only",
+        "action_cut_points": ["anticipation", "contact", "recoil", "result"],
+        "transition_motifs": ["body arc becomes ink stroke", "impact burst becomes panel tear", "grip circle becomes contact marker", "stance silhouette match cut"]
+      },
+      "character_policy": {
+        "silhouette_priority": "high",
+        "identity_reference_required": true,
+        "fighter_color_ownership": true
+      },
+      "information_policy": {
+        "facts_rendered_locally": true,
+        "evidence_surfaces_local": true,
+        "preferred_surfaces": ["contact marker", "force arrow", "wrong-right folio", "score strip", "freeze-frame annotation"]
+      },
+      "production": {
+        "turnaround_class": "standard",
+        "required_asset_slots": ["fighter-a-reference", "fighter-b-reference", "arena-or-mat-world", "contact-overlay-kit", "action-entry-and-result-frames"],
+        "stress_tests": ["two-person limb ownership", "grip and contact accuracy", "action silhouette at phone size", "matched wrong-right comparison", "landscape-to-vertical crop"],
+        "fallback": "Use reviewed key poses as a four-panel woodblock comic with local arrows and contact markers; do not generate continuous multi-person choreography."
+      },
+      "prompt_core": "Original woodblock-print anime action illustration with carved indigo and rust silhouettes, warm paper, flat registered color, strong body ownership, one decisive combat action, and clean local overlay space.",
+      "negative_constraints": ["no generated text or captions", "no generated dates or numerals", "no generated labels or diagrams", "no generated logos or academy marks", "no extra limbs, fused hands, or ambiguous body ownership", "no camera shake or moving background plate"],
+      "status": "demanded",
+      "render_eligible": false
+    },
+    {
+      "id": "woodblock-historical-editorial-v1",
+      "label": "Woodblock Historical Editorial",
+      "primary_lanes": ["history"],
+      "audience_job": "Create a coherent illustrated historical world that can carry people, journeys, institutions, documents, uncertainty, and sourced chronology without pretending illustration is evidence.",
+      "composition": {
+        "panel_count_min": 1,
+        "panel_count_max": 3,
+        "negative_space_min": 0.18,
+        "negative_space_max": 0.45,
+        "depth_layers_min": 4,
+        "camera_default": "locked",
+        "layout_rules": [
+          "Build foreground, character plane, architecture or terrain, and atmosphere as separable layers.",
+          "Reserve paper fields, scroll edges, sun discs, or framed insets for local evidence surfaces.",
+          "Historical reconstructions remain visibly illustrated and are never treated as source material.",
+          "Travel worlds communicate atmosphere and direction while reviewed overlays own exact routes and dates."
+        ]
+      },
+      "motion": {
+        "primary_drivers": ["character_prop", "localized_environment", "information_reveal"],
+        "background_motion": "localized_only",
+        "action_cut_points": ["anticipation", "result"],
+        "transition_motifs": ["river becomes route ribbon", "page turn changes period", "artifact unfolds into scroll", "sun disc becomes date seal", "smoke becomes steam"]
+      },
+      "character_policy": {
+        "silhouette_priority": "medium",
+        "identity_reference_required": true,
+        "fighter_color_ownership": false
+      },
+      "information_policy": {
+        "facts_rendered_locally": true,
+        "evidence_surfaces_local": true,
+        "preferred_surfaces": ["date seal", "fact folio", "archive proof", "journey ribbon", "relationship scroll", "uncertainty card"]
+      },
+      "production": {
+        "turnaround_class": "premium",
+        "required_asset_slots": ["master-world", "clean-background", "character-staging-view", "prop-detail-view", "fact-anchor-mask", "ambient-region-mask"],
+        "stress_tests": ["historical reconstruction labeling", "archive-versus-illustration separation", "fact-anchor legibility", "localized ambient motion", "character identity continuity", "landscape-to-vertical crop"],
+        "fallback": "Use the approved clean world with a static illustrated character pose and locally rendered fact folio; never replace missing evidence with generated detail."
+      },
+      "prompt_core": "Original historical woodblock editorial illustration with warm paper, deep indigo, muted rust and ochre, carved outlines, layered period world-building, stable character staging, and deliberate blank evidence anchors.",
+      "negative_constraints": ["no generated text, handwriting, or captions", "no generated dates or numerals", "no generated labels, citations, or route names", "no generated logos, flags, or organization marks", "no photorealistic false archive", "no camera shake or whole-background drift"],
+      "status": "demanded",
+      "render_eligible": false
+    },
+    {
+      "id": "woodblock-comic-whitespace-v1",
+      "label": "Woodblock Comic Whitespace",
+      "primary_lanes": ["trending_response"],
+      "audience_job": "Turn approved people, screenshots, products, documents, or event facts into a fast branded explainer while preserving enough whitespace for late-breaking local editorial inserts.",
+      "composition": {
+        "panel_count_min": 1,
+        "panel_count_max": 4,
+        "negative_space_min": 0.4,
+        "negative_space_max": 0.65,
+        "depth_layers_min": 2,
+        "camera_default": "locked",
+        "layout_rules": [
+          "Use one anchor illustration and one large paper field rather than generating a complete cinematic world.",
+          "Accept modular approved cutouts, screenshots, charts, archive frames, and icon stickers in named slots.",
+          "Reuse the same title, color-icon, question, comparison, and source-card layouts across rapid responses.",
+          "Keep the primary subject inside the safe center so one composition supports landscape and vertical outputs."
+        ]
+      },
+      "motion": {
+        "primary_drivers": ["information_reveal", "character_prop", "localized_environment"],
+        "background_motion": "localized_only",
+        "action_cut_points": ["anticipation", "result"],
+        "transition_motifs": ["hard cut with color icon", "paper tear reveal", "question seal", "photo-to-diagram swap", "headline becomes route or arrow"]
+      },
+      "character_policy": {
+        "silhouette_priority": "high",
+        "identity_reference_required": true,
+        "fighter_color_ownership": false
+      },
+      "information_policy": {
+        "facts_rendered_locally": true,
+        "evidence_surfaces_local": true,
+        "preferred_surfaces": ["headline folio", "question card", "source card", "comparison panel", "quote card", "score strip"]
+      },
+      "production": {
+        "turnaround_class": "rapid",
+        "required_asset_slots": ["approved-anchor-subject", "paper-background", "headline-zone", "source-or-evidence-slot", "icon-and-transition-kit"],
+        "stress_tests": ["one-hour asset substitution", "phone-size headline zone", "source-card legibility", "landscape-to-vertical crop", "no-theme-drift with mixed cutouts"],
+        "fallback": "Use the recurring paper field, one approved subject cutout, a local headline folio, and a direct hard cut; do not generate a filler background."
+      },
+      "prompt_core": "Original modular woodblock comic composition with warm paper, carved indigo and rust accents, one strong subject silhouette, forty to sixty-five percent clean whitespace, and reusable editorial insert zones.",
+      "negative_constraints": ["no generated text or headlines", "no generated dates or numerals", "no generated labels, charts, or citations", "no generated logos or brand marks", "no cluttered full-frame background", "no camera shake or decorative motion without meaning"],
+      "status": "demanded",
+      "render_eligible": false
+    }
+  ],
+  "render_eligible": false,
+  "artifact_hash": "e3ee2b98b5ffaf767903dee3719b44d7b751eefe2fc4977ba4fdbe0865e0dfd7"
+}

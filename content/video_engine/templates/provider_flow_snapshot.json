@@ -1,0 +1,12 @@
+{
+  "schema_version": "provider_flow_snapshot.v1",
+  "provider": "magnific",
+  "flow_id": "replace-with-flow-id",
+  "flow_version": "replace-with-version",
+  "input_types": ["text", "image"],
+  "output_types": ["image"],
+  "evaluator_required": true,
+  "cost_ceiling_usd": 0,
+  "can_approve_assets": false,
+  "can_establish_facts": false
+}

@@ -1,0 +1,106 @@
+{
+  "schema_version": "history_episode.v1",
+  "id": "how-judo-became-brazilian-jiu-jitsu",
+  "title": "How Judo Became Brazilian Jiu-Jitsu",
+  "thesis": "Brazilian Jiu-Jitsu emerged through the movement, adaptation, and local teaching of judo and jujutsu rather than from a single uncontested origin story.",
+  "audience": {
+    "primary": "curious viewers with no specialist history background",
+    "secondary": ["BJJ practitioners", "martial-arts historians"],
+    "knowledge_level": "general"
+  },
+  "series": "history-of-bjj",
+  "episode_number": 1,
+  "status": "draft",
+  "chapters": [
+    {
+      "id": "kano-and-kodokan",
+      "title": "Kano and the Kodokan",
+      "summary": "Establish the institutional and pedagogical context for modern judo.",
+      "target_duration_s": 180,
+      "claim_ids": ["kano-kodokan"],
+      "visual_modes": ["artifact_cold_open", "archival_portrait", "timeline"]
+    },
+    {
+      "id": "maeda-migration",
+      "title": "Maeda's Migration",
+      "summary": "Follow the documented travel and teaching network that brought judo to Brazil.",
+      "target_duration_s": 210,
+      "claim_ids": ["maeda-travel"],
+      "visual_modes": ["archival_portrait", "migration_map", "document_closeup"]
+    },
+    {
+      "id": "early-brazilian-development",
+      "title": "Early Brazilian Development",
+      "summary": "Separate documented teaching relationships from later lineage traditions and legends.",
+      "target_duration_s": 210,
+      "claim_ids": ["early-brazil-development"],
+      "visual_modes": ["illustrated_reconstruction", "lineage_graph", "chapter_card"]
+    }
+  ],
+  "target_duration_s": 600,
+  "cta": {
+    "text": "Explore the sources and verify the history before the next episode.",
+    "kind": "informational"
+  },
+  "research_packet": {
+    "id": "how-judo-became-brazilian-jiu-jitsu-research",
+    "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+    "status": "pending"
+  },
+  "asset_manifest": {
+    "id": "how-judo-became-brazilian-jiu-jitsu-assets",
+    "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+    "status": "pending"
+  },
+  "outputs": [
+    {
+      "id": "landscape-master",
+      "format": "landscape",
+      "width": 1920,
+      "height": 1080,
+      "purpose": "master",
+      "native": true
+    },
+    {
+      "id": "vertical-clip-01",
+      "format": "vertical",
+      "width": 1080,
+      "height": 1920,
+      "purpose": "clip",
+      "native": true
+    },
+    {
+      "id": "vertical-clip-02",
+      "format": "vertical",
+      "width": 1080,
+      "height": 1920,
+      "purpose": "clip",
+      "native": true
+    },
+    {
+      "id": "chapter-kano-and-kodokan",
+      "format": "chapter_subvideo",
+      "width": 1920,
+      "height": 1080,
+      "purpose": "chapter_subvideo",
+      "native": true
+    },
+    {
+      "id": "chapter-maeda-migration",
+      "format": "chapter_subvideo",
+      "width": 1920,
+      "height": 1080,
+      "purpose": "chapter_subvideo",
+      "native": true
+    },
+    {
+      "id": "chapter-early-brazilian-development",
+      "format": "chapter_subvideo",
+      "width": 1920,
+      "height": 1080,
+      "purpose": "chapter_subvideo",
+      "native": true
+    }
+  ],
+  "tags": ["bjj", "judo", "history", "documentary"]
+}

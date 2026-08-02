@@ -1,0 +1,103 @@
+{
+  "schema_version": "style_presets.v1",
+  "presets": {
+    "technical_bjj_flat": {
+      "use_for": [
+        "result_preview",
+        "wide_setup",
+        "contact_closeup",
+        "mechanic_transition",
+        "wrong_right_compare",
+        "result_hold"
+      ],
+      "palette": {
+        "background": "#E5E7EB",
+        "mat": "#CBD5E1",
+        "attacker_gi": "#F8FAFC",
+        "attacker_belt": "#2563EB",
+        "defender_gi": "#111827",
+        "defender_belt": "#7C3AED",
+        "outline": "#0F172A",
+        "force": "#10B981",
+        "danger": "#EF4444"
+      },
+      "outline_width": 6,
+      "camera_moves": [
+        "hold",
+        "push_in",
+        "track_contact",
+        "pull_out"
+      ],
+      "transitions": [
+        "continuous",
+        "match_cut",
+        "hard_cut"
+      ]
+    },
+    "dark_geometry": {
+      "use_for": [
+        "force_diagram",
+        "mechanic_transition"
+      ],
+      "palette": {
+        "background": "#0F0F12",
+        "construction": "#FFFFFF",
+        "active": "#F97316",
+        "force": "#10B981",
+        "danger": "#EF4444"
+      },
+      "outline_width": 4,
+      "camera_moves": [
+        "hold",
+        "push_in",
+        "follow_line"
+      ],
+      "transitions": [
+        "continuous",
+        "match_cut"
+      ]
+    },
+    "chibi_story": {
+      "use_for": [
+        "story_or_persona_cutaway"
+      ],
+      "palette": {
+        "background": "#0F0F12",
+        "primary": "#3B82F6",
+        "secondary": "#10B981",
+        "outline": "#020617"
+      },
+      "outline_width": 7,
+      "camera_moves": [
+        "hold",
+        "snap_zoom"
+      ],
+      "transitions": [
+        "hard_cut",
+        "crossfade"
+      ]
+    },
+    "vintage_history": {
+      "use_for": [
+        "story_or_persona_cutaway",
+        "timeline"
+      ],
+      "palette": {
+        "background": "#D6C6A8",
+        "ink": "#30291F",
+        "primary": "#8B3A2B",
+        "secondary": "#607744"
+      },
+      "outline_width": 5,
+      "camera_moves": [
+        "hold",
+        "parallax_push",
+        "map_pan"
+      ],
+      "transitions": [
+        "match_cut",
+        "crossfade"
+      ]
+    }
+  }
+}

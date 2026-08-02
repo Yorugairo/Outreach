@@ -1,0 +1,12 @@
+{
+  "asset_id": "plate-technique-negation-landscape",
+  "asset_sha256": "05a76622a70c559d8a380ab157c878a9e74a2584beb5975f8fe1687005d6142d",
+  "evidence_eligible": false,
+  "generation_mode": "built_in_image_generation",
+  "human_promoted": true,
+  "origin": "original_subscription_image_generation",
+  "reference_asset_id": "plate-technique-negation",
+  "render_eligible": true,
+  "usage_note": "Original 16:9 interpretive illustration of the single-unchanged-technique misconception; not historical evidence or technique instruction.",
+  "prompt": "Create a new full-width 16:9 version of the not-one-unchanged-ancient-technique visual metaphor. Use the portrait image only as a concept and visual-language reference. Center a completely visible main grappling pair in the middle 45–50 percent of the landscape frame. Arrange six fully visible historical grappling vignettes around it, three on each side, each with a complete rust-red X inside an 8 percent safe margin. Keep the main pair unobstructed. Use a rising-sun arc, Japanese waves, distant Brazilian coastal mountains, tropical foliage, and horizontal torn-paper layers. Fill the complete landscape canvas with original anime-inflected Japanese woodblock editorial illustration in carved navy ink, warm aged washi, muted ochre, rust red, and restrained forest green. No text, logos, watermarks, borders, mobile proportions, cropped figures or X marks, empty side gutters, extra limbs, or fused bodies."
+}

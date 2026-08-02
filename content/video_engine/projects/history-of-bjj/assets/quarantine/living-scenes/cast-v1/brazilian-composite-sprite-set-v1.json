@@ -1,0 +1,37 @@
+{
+  "schema_version": "motion_sprite_set.v1",
+  "source_path": "content/video_engine/projects/history-of-bjj/assets/quarantine/living-scenes/cast-v1/brazilian-composite-motion-sheet-alpha-v1.png",
+  "source_sha256": "2ebb348b320aa9232c96feb49373e797986aa83ea7d394f36f5887ae8e27b8f3",
+  "prefix": "brazilian-composite",
+  "sprites": [
+    {
+      "pose": "idle",
+      "path": "content/video_engine/projects/history-of-bjj/assets/quarantine/living-scenes/cast-v1/sprites/brazilian-composite/brazilian-composite-idle-v1.png",
+      "sha256": "f87d6c3f2825cde63f60f57f90efd53e8422f3a511458c9d64a4dde2ac7921bf",
+      "width": 311,
+      "height": 760
+    },
+    {
+      "pose": "walk",
+      "path": "content/video_engine/projects/history-of-bjj/assets/quarantine/living-scenes/cast-v1/sprites/brazilian-composite/brazilian-composite-walk-v1.png",
+      "sha256": "019e257f7b38f7311b0cfca979c9c7b6c41e1616d682f25a1df39762042a8475",
+      "width": 372,
+      "height": 754
+    },
+    {
+      "pose": "explain",
+      "path": "content/video_engine/projects/history-of-bjj/assets/quarantine/living-scenes/cast-v1/sprites/brazilian-composite/brazilian-composite-explain-v1.png",
+      "sha256": "0b8e181cf0efcf2aaa026b2106b61c8142aa2fc9fe8ad3bc2b1813b0540e789e",
+      "width": 391,
+      "height": 761
+    },
+    {
+      "pose": "prop",
+      "path": "content/video_engine/projects/history-of-bjj/assets/quarantine/living-scenes/cast-v1/sprites/brazilian-composite/brazilian-composite-prop-v1.png",
+      "sha256": "641b33996094b71f8c42f8394d1318af0232fba37f0c69b613eaddd2ebc046be",
+      "width": 331,
+      "height": 761
+    }
+  ],
+  "render_eligible": false
+}

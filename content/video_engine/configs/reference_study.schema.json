@@ -1,0 +1,150 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://outreach-program.internal/schemas/reference-study.v1.json",
+  "title": "Abstract Reference Study v1",
+  "description": "A non-renderable, abstract study of visual communication rules. It contains no media provenance or reusable source assets.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "id",
+    "title",
+    "study_kind",
+    "render_policy",
+    "lessons"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "reference_study.v1"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "study_kind": {
+      "type": "string",
+      "const": "abstract_visual_language"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["draft", "reviewed", "approved"]
+    },
+    "review": {
+      "$ref": "#/definitions/review"
+    },
+    "render_policy": {
+      "$ref": "#/definitions/renderPolicy"
+    },
+    "lessons": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/definitions/lesson"
+      }
+    },
+    "observations": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/observation"
+      }
+    },
+    "artifact_hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    }
+  },
+  "definitions": {
+    "review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["reviewed", "reviewed_by"],
+      "properties": {
+        "reviewed": { "const": true },
+        "reviewed_by": { "type": "string", "minLength": 1 },
+        "reviewed_at": { "type": "string", "minLength": 1 },
+        "notes": { "type": "string", "minLength": 1 }
+      }
+    },
+    "renderPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["renderable", "allowed_inputs", "prohibited_inputs"],
+      "properties": {
+        "renderable": { "const": false },
+        "allowed_inputs": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "enum": ["abstract_rules", "design_principles", "timing_observations"]
+          }
+        },
+        "prohibited_inputs": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "enum": [
+              "renderable_media",
+              "source_frames",
+              "source_video",
+              "source_images",
+              "creator_assets",
+              "external_urls"
+            ]
+          }
+        }
+      }
+    },
+    "lesson": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "category", "principle", "application", "constraints"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "category": {
+          "type": "string",
+          "enum": ["composition", "motion", "continuity", "diagram", "pacing", "legibility"]
+        },
+        "principle": {
+          "type": "string",
+          "minLength": 1
+        },
+        "application": {
+          "type": "string",
+          "minLength": 1
+        },
+        "constraints": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "signals": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "observation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "signal", "design_rule"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "signal": { "type": "string", "minLength": 1 },
+        "design_rule": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}

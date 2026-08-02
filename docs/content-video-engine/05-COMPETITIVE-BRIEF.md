@@ -1,6 +1,11 @@
 # Competitive Brief — Animated Explainer Channels + 2026 Platform Economics
 
-*Date: 2026-07-28 · Method: three research streams run today — (1) benchmark giants, (2) emerging/stick-figure cohort (live YouTube pages + Wayback Machine growth curves), (3) platform policy & economics fact-check (official pages preferred). Every figure below carries its stream's sourcing; quantitative claims not verifiable were dropped or flagged. Full source lists live in the research stream outputs; key URLs inline.*
+*Date: 2026-07-28 · Method: three research streams run today — (1) benchmark giants,
+(2) emerging/stick-figure cohort (live YouTube pages + Wayback Machine growth curves),
+(3) platform policy & economics fact-check (official pages preferred) — plus separately labeled
+operator-provided strategy notes. Every verified figure below carries its stream's sourcing;
+quantitative claims not verifiable were dropped or flagged. Full source lists live in the
+research stream outputs; key URLs inline.*
 
 ---
 
@@ -99,6 +104,29 @@ says: link a Patreon-equivalent early, design sponsor-friendly formats, and neve
 Also: licensed mainstream music is a self-inflicted wound (PIERCE) — library/commissioned music
 only, which our compositor config already enforces.
 
+### 2.7 Operator-provided MKBHD / The Studio strategy input
+
+Source: [How To Start A Million Subscriber YouTube Channel by MKBHD / The Studio](https://www.youtube.com/watch?v=Puny-2wkMZA).
+The notes below were supplied by the operator and have **not** been independently checked against
+a transcript; they are decision inputs, not verified quotations or economic evidence.
+
+- **Outlier theory:** compare a video's views with its channel baseline rather than treating raw
+  view count as proof. **Trend theory:** translate a macro cultural topic into the channel's
+  audience promise.
+- **Inversion over imitation:** preserve the successful question or tension, then challenge its
+  premise with an original, source-backed angle.
+- **Skill stacking:** combine capabilities competitors rarely possess together; the combination,
+  not generic production polish, is the defensible moat.
+- **Pre-launch batching:** finish three to four videos before opening the public feedback loop.
+  This doc set adopts a minimum buffer of three Gate-B-approved, packaged videos.
+- **AI boundary:** AI is an execution tool; human perspective and judgment prevent regression
+  toward generic output.
+- **Brand and money:** a broad master identity can evolve while series playlists carry topical
+  specificity; the source of sponsorship revenue affects audience trust.
+
+The operator-provided CPM ranges are not added to the economics table without primary support.
+The existing verified planning assumptions remain authoritative.
+
 ---
 
 ## 3. 2026 platform economics (fact-checked; full details in stream 3 output)
@@ -127,3 +155,7 @@ only, which our compositor config already enforces.
 6. No fight-choreography competition; diagrams + persona positioning → `02` §3 (2.5).
 7. Early Patreon-equivalent + sponsor-friendly formats + library music only → `02` §1/§7 (2.6).
 8. All policy/economics rows → `01` metrics, `02` §5, `07` §3–4, schema disclosure fields (§3).
+9. Outlier/trend research + inversion rule → `00` §3.10, `02` §3, `06` §0.
+10. Three-video pre-launch buffer → `01` F15, `02` §6, `07` §2.1.
+11. Human-directs/AI-executes boundary + skill stacking → `00` §3.10, `02` §3, `06` §0/§9.
+12. Broad master brand and trust-first sponsorship policy → `02` §2/§7.

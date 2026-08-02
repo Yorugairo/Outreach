@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://outreach-program.internal/schemas/editorial-pacing-recipe.v1.json",
+  "title": "Editorial Pacing Recipe v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "id",
+    "preferred_shot_duration_s",
+    "maximum_shot_duration_s",
+    "max_consecutive_same_scale",
+    "max_consecutive_moving_shots",
+    "motion_density",
+    "transition_policy",
+    "chapter_reset_policy",
+    "provider_motion_policy",
+    "artifact_hash"
+  ],
+  "properties": {
+    "schema_version": {"const": "editorial_pacing_recipe.v1"},
+    "id": {"type": "string", "pattern": "^[a-z0-9]+(?:[._-][a-z0-9]+)*$"},
+    "preferred_shot_duration_s": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": {"type": "number", "exclusiveMinimum": 0}
+    },
+    "maximum_shot_duration_s": {"type": "number", "exclusiveMinimum": 0},
+    "max_consecutive_same_scale": {"type": "integer", "minimum": 1, "maximum": 4},
+    "max_consecutive_moving_shots": {"type": "integer", "minimum": 1, "maximum": 5},
+    "max_information_surfaces": {"type": "integer", "minimum": 0},
+    "max_non_evidence_prop_layers": {"type": "integer", "minimum": 0},
+    "motion_density": {"enum": ["restrained", "moderate"]},
+    "transition_policy": {"enum": ["hard_cuts_default", "motivated_only"]},
+    "chapter_reset_policy": {"enum": ["title_card", "paper_reset", "hard_reset"]},
+    "provider_motion_policy": {"const": "shot_level_exception_only"},
+    "reference_policy": {"const": "abstract_structure_only"},
+    "artifact_hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}

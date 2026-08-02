@@ -1,0 +1,37 @@
+{
+  "schema_version": "motion_sprite_set.v1",
+  "source_path": "content/video_engine/projects/history-of-bjj/assets/quarantine/living-scenes/props-v1/research-props-alpha-v1.png",
+  "source_sha256": "bcdadc49350cbc98b666fa45516ebb56d2e9e2b531146ac801509125d7d4bbdc",
+  "prefix": "prop",
+  "sprites": [
+    {
+      "pose": "ledger",
+      "path": "content/video_engine/projects/history-of-bjj/assets/quarantine/living-scenes/props-v1/sprites/prop-ledger-v1.png",
+      "sha256": "849f20074b9705aa6467dcf1ef3cbe622042251847c34fe8386fa101db60ef0a",
+      "width": 418,
+      "height": 416
+    },
+    {
+      "pose": "research-notebook",
+      "path": "content/video_engine/projects/history-of-bjj/assets/quarantine/living-scenes/props-v1/sprites/prop-research-notebook-v1.png",
+      "sha256": "f4b2490587be1174e96a8873a21ff19c7d50d9434ab2d77729494fef66cfcbc0",
+      "width": 418,
+      "height": 407
+    },
+    {
+      "pose": "archive-photo-frame",
+      "path": "content/video_engine/projects/history-of-bjj/assets/quarantine/living-scenes/props-v1/sprites/prop-archive-photo-frame-v1.png",
+      "sha256": "413b5a9b1bda3ea38d4adc8d2b5a2c6776ca649418ea996eda49961597719641",
+      "width": 418,
+      "height": 577
+    },
+    {
+      "pose": "theater-poster-frame",
+      "path": "content/video_engine/projects/history-of-bjj/assets/quarantine/living-scenes/props-v1/sprites/prop-theater-poster-frame-v1.png",
+      "sha256": "dedb97dc671035e79fae68660915b09c4ae878a867fab0544ee01c6a3d7e636c",
+      "width": 409,
+      "height": 577
+    }
+  ],
+  "render_eligible": false
+}

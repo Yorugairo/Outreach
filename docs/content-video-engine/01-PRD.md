@@ -1,5 +1,25 @@
 # PRD — Content-to-Video Flywheel Engine
 
+> **Active scope: History Documentary V4.** Earlier technique requirements describe
+> preserved V1–V3 compatibility, not the current acceptance target.
+
+## V4 product override
+
+The engine's primary product is an evidence-backed three-part History of BJJ
+documentary-explainer series. Each approved episode targets a 10-minute research
+master (8–12 minute acceptance band), two native vertical clips, and chapter-level
+subvideos compiled from approved claim clusters. Armbar V3 is frozen R&D; automated technique
+tutorials and `StickFigureScene` are excluded from V4 acceptance.
+
+V4 adds fail-closed `history_episode.v1`, `research_packet.v1`, and
+`asset_manifest.v1` inputs plus Research and Visual Direction gates before the
+existing motion and publication gates. Every historical narration claim resolves
+to the approved research hash and every rendered asset resolves through the
+approved local asset manifest. Editorial acceptance is owned by
+[`10-HISTORY-DOCUMENTARY-EDITORIAL-SPEC.md`](10-HISTORY-DOCUMENTARY-EDITORIAL-SPEC.md);
+rights acceptance is owned by
+[`11-ARCHIVAL-ASSET-AND-CITATION-SPEC.md`](11-ARCHIVAL-ASSET-AND-CITATION-SPEC.md).
+
 *Date: 2026-07-28 · Status: draft for operator review · Decisions + assumptions: `00-BRAINSTORM-AND-DECISIONS.md` · Build plan: `.claude/PRPs/plans/P13-CONTENT-VIDEO-FLYWHEEL.plan.md`*
 
 ## 1. Problem
@@ -57,6 +77,10 @@ weeks (directional only — Shorts links are not clickable, per confirmed 2026 m
 watch time. Revenue modeling uses ~$4–8 blended long-form RPM (2026-corrected), NOT the $8–18
 raw-spec figure; monetization application is deferred until eligibility + policy review.
 
+**G6 — Launch with a coherent catalog.** *Metric:* three distinct videos are Gate-B-approved,
+QC-passing, and packaged before the first public channel upload. Early analytics do not interrupt
+production of this initial buffer.
+
 ## 5. Non-goals (v1)
 
 1. YouTube upload API/OAuth automation (manual upload with generated checklist).
@@ -69,6 +93,8 @@ raw-spec figure; monetization application is deferred until eligibility + policy
 5. Automated writes to registry tables (embed payloads go through the registry's own gated import).
 6. Realistic re-creations of real people/events (format ban; also the disclosure trigger).
 7. Multi-agent orchestration frameworks; parallel render farm.
+8. Autonomous competitor/trend scraping or title copying. P0 accepts operator-supplied research;
+   P1 may produce provenance-preserving angle candidates, but the operator chooses the thesis.
 
 ## 6. Functional requirements
 
@@ -88,6 +114,7 @@ raw-spec figure; monetization application is deferred until eligibility + policy
 | F12 | Gate B: operator watches final, approves; publish emits upload checklist + embed payload | `publishing` |
 | F13 | Resumable jobs; stage events persisted; `cli.py run/resume/status/approve` | pipeline |
 | F14 | Per-stage cost + wall-time instrumentation into `job.json` | pipeline |
+| F15 | Channel-launch checklist blocks the first public upload until three distinct runs are Gate-B-approved, QC-passing, and packaged | operator release checklist |
 
 ## 7. Non-functional requirements
 
@@ -103,6 +130,8 @@ raw-spec figure; monetization application is deferred until eligibility + policy
 - **Graduated autonomy:** human-in-the-loop is minimized by design, not removed — P1 targets
   exception-based Gate A (auto-approve on green guards + model-scored rubric ≥ threshold), P2
   targets sampled Gate B. Review time trends toward seconds per video.
+- **Editorial authority:** AI may organize research, propose outlier inversions, draft, and
+  render; a human selects the angle, evidence, brand fit, and publish decision.
 - **Story flow:** scene boundaries are authored (`transition` contract) and render as continuous
   sequences by default — no random cuts (architecture §6, script spec §3 flow rules).
 
@@ -110,8 +139,8 @@ raw-spec figure; monetization application is deferred until eligibility + policy
 
 | Phase | Contents | Exit criteria |
 |---|---|---|
-| **P0 — Thin slice + pilot** (≈ wks 1–6) | minimal path (deterministic corpus storyboard → TTS → 2 scene classes → composite → captions → manual publish); pilot season per `07-PILOT-SEASON.md`; embed test on ~20 pages | pilot cohort published; metrics captured; kill criteria evaluated (`00` §5) |
-| **P1 — Productization** (wks 6–12) | essay→storyboard LLM path + full guard; remaining scene classes; packaging automation; analytics snapshots; cost dashboard; exception-based Gate A; reference-recipe pacing presets (operator-curated); MCP access to queue/job store for agent runtimes | 5+ videos/wk sustainable at ≤30 min human each; embeds rolling out beyond pilot pages |
+| **P0 — Thin slice + pilot** (≈ wks 1–6) | minimal path (deterministic corpus storyboard → TTS → 2 scene classes → composite → captions → manual publish); three-video pre-launch buffer; pilot season per `07-PILOT-SEASON.md`; embed test on ~20 pages | first three public-ready videos buffered before launch; pilot cohort published; metrics captured; kill criteria evaluated (`00` §5) |
+| **P1 — Productization** (wks 6–12) | essay→storyboard LLM path + full guard; remaining scene classes; packaging automation; analytics snapshots; cost dashboard; exception-based Gate A; operator-approved outlier/inversion briefs and reference-recipe pacing presets (structure only, provenance retained); MCP access to queue/job store for agent runtimes | 5+ videos/wk sustainable at ≤30 min human each; embeds rolling out beyond pilot pages |
 | **P2 — Scale + lane 2** | trades corpus + *Trade Science* lane (naming reconciled first); publish API + OAuth with momentum throttle (queue holds while prior upload climbs); sampled Gate B; render parallelism if needed | second lane live without pipeline changes; upload automation gated by sampled review |
 | **P3 — Expansions** | *Systems & Blowups* finance lane under the operator's named persona (no-recommendations rule); additional channels per `05` breadth evidence; monetization application | explicit operator go/no-go per expansion |
 

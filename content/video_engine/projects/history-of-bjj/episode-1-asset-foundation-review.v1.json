@@ -1,0 +1,1045 @@
+{
+  "schema_version": "asset_foundation_review.v1",
+  "id": "history-episode-1-asset-foundation-v1",
+  "series_id": "history-of-bjj",
+  "episode_id": "how-judo-became-brazilian-jiu-jitsu",
+  "immutable_inputs": {
+    "asset_map_hash": "67105651a451316ce065810e83e12a1f7c3c7047ad56795297e9382afc890304",
+    "world_pack_hash": "8488b9982566377608665145200e1c701a43c8f1d733884860ac278b17bf142a",
+    "style_pack_hash": "e3ee2b98b5ffaf767903dee3719b44d7b751eefe2fc4977ba4fdbe0865e0dfd7",
+    "calibration_inventory_hash": "807d5abf89436167f51679f0bd5e0e51e3a10b3fe18a93c399346fde068cab4e",
+    "asset_manifest_hash": "1f500b6d65bcb80ae6b3d8c2d8788cd8fccfbfe7d07ce4ca4cee80175292abc9"
+  },
+  "policy": {
+    "image_generation_authorized": true,
+    "animation_generation_authorized": false,
+    "voice_generation_authorized": false,
+    "automatic_promotion": false,
+    "facts_rendered_locally": true,
+    "generated_art_is_evidence": false
+  },
+  "candidates": [
+    {
+      "id": "candidate-world-archive-study-v1",
+      "demand_asset_id": "world-archive-study",
+      "candidate_class": "world_master",
+      "source_kind": "generated_quarantine",
+      "style_pack_id": "woodblock-historical-editorial-v1",
+      "manifest_asset_ids": [],
+      "rights_status": "provider_original_pending_operator",
+      "evidence_eligible": false,
+      "render_eligible": false,
+      "provider": {
+        "name": "OpenAI built-in image generation",
+        "model": "undisclosed by built-in tool",
+        "access_path": "codex_builtin"
+      },
+      "files": [
+        {
+          "role": "master",
+          "path": "content/video_engine/projects/history-of-bjj/assets/quarantine/living-scenes/worlds-v1/world-archive-study-master-v1.png",
+          "sha256": "126fadd694cd1d6b2f4a783502a5618d6055ca4ade3ff8bc693ae71a0cbb43d8",
+          "width": 1672,
+          "height": 941,
+          "alpha_required": false
+        }
+      ],
+      "identity_status": "not_applicable",
+      "composition_status": "strong_master",
+      "motion_status": "localized_regions_unmasked",
+      "factual_pixel_risks": [],
+      "required_followups": [
+        "operator composition approval",
+        "create localized lamp and paper masks before motion"
+      ]
+    },
+    {
+      "id": "candidate-world-kodokan-institution-v1",
+      "demand_asset_id": "world-kodokan-institution",
+      "candidate_class": "world_master",
+      "source_kind": "generated_quarantine",
+      "style_pack_id": "woodblock-historical-editorial-v1",
+      "manifest_asset_ids": [],
+      "rights_status": "provider_original_pending_operator",
+      "evidence_eligible": false,
+      "render_eligible": false,
+      "provider": {
+        "name": "OpenAI built-in image generation",
+        "model": "undisclosed by built-in tool",
+        "access_path": "codex_builtin"
+      },
+      "files": [
+        {
+          "role": "master",
+          "path": "content/video_engine/projects/history-of-bjj/assets/quarantine/living-scenes/worlds-v1/world-kodokan-institution-master-v1.png",
+          "sha256": "a3d113055a87a879ac4eb36571382322a61b752bf00a556990294a401392d8d2",
+          "width": 1672,
+          "height": 941,
+          "alpha_required": false
+        }
+      ],
+      "identity_status": "not_applicable",
+      "composition_status": "strong_master",
+      "motion_status": "localized_regions_unmasked",
+      "factual_pixel_risks": [],
+      "required_followups": [
+        "operator composition approval",
+        "create garden-leaf and window-light masks before motion"
+      ]
+    },
+    {
+      "id": "candidate-world-maritime-circuit-v1",
+      "demand_asset_id": "world-maritime-circuit",
+      "candidate_class": "world_master",
+      "source_kind": "generated_quarantine",
+      "style_pack_id": "woodblock-historical-editorial-v1",
+      "manifest_asset_ids": [],
+      "rights_status": "provider_original_pending_operator",
+      "evidence_eligible": false,
+      "render_eligible": false,
+      "provider": {
+        "name": "OpenAI built-in image generation",
+        "model": "undisclosed by built-in tool",
+        "access_path": "codex_builtin"
+      },
+      "files": [
+        {
+          "role": "master",
+          "path": "content/video_engine/projects/history-of-bjj/assets/quarantine/living-scenes/worlds-v1/world-maritime-circuit-master-v1.png",
+          "sha256": "5bb4d88115095cfea6aebcfd048d435283d410e6c64a328861c43a18f6c0a0d5",
+          "width": 1672,
+          "height": 941,
+          "alpha_required": false
+        }
+      ],
+      "identity_status": "not_applicable",
+      "composition_status": "strong_master",
+      "motion_status": "localized_regions_unmasked",
+      "factual_pixel_risks": [],
+      "required_followups": [
+        "operator composition approval",
+        "create sea, wake, and smoke masks before motion"
+      ]
+    },
+    {
+      "id": "candidate-world-belem-riverfront-v1",
+      "demand_asset_id": "world-belem-riverfront",
+      "candidate_class": "world_master",
+      "source_kind": "generated_quarantine",
+      "style_pack_id": "woodblock-historical-editorial-v1",
+      "manifest_asset_ids": [],
+      "rights_status": "provider_original_pending_operator",
+      "evidence_eligible": false,
+      "render_eligible": false,
+      "provider": {
+        "name": "OpenAI built-in image generation",
+        "model": "undisclosed by built-in tool",
+        "access_path": "codex_builtin"
+      },
+      "files": [
+        {
+          "role": "master",
+          "path": "content/video_engine/projects/history-of-bjj/assets/quarantine/living-scenes/worlds-v1/world-belem-riverfront-master-v1.png",
+          "sha256": "be7d3d53d1657be98ecbd387900b417c76eaa051c6bcbb05d65aeae675b4b2e0",
+          "width": 1672,
+          "height": 941,
+          "alpha_required": false
+        }
+      ],
+      "identity_status": "not_applicable",
+      "composition_status": "strong_master",
+      "motion_status": "localized_regions_unmasked",
+      "factual_pixel_risks": [],
+      "required_followups": [
+        "operator composition approval",
+        "create river, steam, awning, and foliage masks before motion"
+      ]
+    },
+    {
+      "id": "candidate-world-brazil-training-hall-v1",
+      "demand_asset_id": "world-brazil-training-hall",
+      "candidate_class": "world_master",
+      "source_kind": "generated_quarantine",
+      "style_pack_id": "woodblock-historical-editorial-v1",
+      "manifest_asset_ids": [],
+      "rights_status": "provider_original_pending_operator",
+      "evidence_eligible": false,
+      "render_eligible": false,
+      "provider": {
+        "name": "OpenAI built-in image generation",
+        "model": "undisclosed by built-in tool",
+        "access_path": "codex_builtin"
+      },
+      "files": [
+        {
+          "role": "master",
+          "path": "content/video_engine/projects/history-of-bjj/assets/quarantine/living-scenes/worlds-v1/world-brazil-training-hall-master-v1.png",
+          "sha256": "7fe1a19649b2fc6eec1d447fdf0bd6fb9c5b461ed889dcefe9362b55b478606a",
+          "width": 1672,
+          "height": 941,
+          "alpha_required": false
+        }
+      ],
+      "identity_status": "not_applicable",
+      "composition_status": "usable_with_constraints",
+      "motion_status": "localized_regions_unmasked",
+      "factual_pixel_risks": [
+        "foreground newspaper contains pseudo-print texture and cannot carry evidence"
+      ],
+      "required_followups": [
+        "operator composition approval",
+        "mask or replace the foreground newspaper",
+        "create curtain, window-light, and foliage masks before motion"
+      ]
+    },
+    {
+      "id": "candidate-battlefield-myth-v1",
+      "demand_asset_id": "plate-battlefield-myth",
+      "candidate_class": "scene_plate",
+      "source_kind": "generated_quarantine",
+      "style_pack_id": "woodblock-historical-editorial-v1",
+      "manifest_asset_ids": [],
+      "rights_status": "provider_original_pending_operator",
+      "evidence_eligible": false,
+      "render_eligible": false,
+      "provider": {
+        "name": "OpenAI built-in image generation",
+        "model": "undisclosed by built-in tool",
+        "access_path": "codex_builtin"
+      },
+      "files": [
+        {
+          "role": "master",
+          "path": "content/video_engine/projects/history-of-bjj/assets/quarantine/living-scenes/plates-v1/plate-battlefield-myth-v1.png",
+          "sha256": "8ac2f7d3291e72c41119acd8d7e4db259560df82e7e6c68b9062ebaef46ab9bb",
+          "width": 1672,
+          "height": 941,
+          "alpha_required": false
+        }
+      ],
+      "identity_status": "not_applicable",
+      "composition_status": "strong_master",
+      "motion_status": "localized_regions_unmasked",
+      "factual_pixel_risks": [
+        "mythic battlefield is an illustrated contrast and cannot be historical evidence"
+      ],
+      "required_followups": [
+        "operator tone approval",
+        "label as illustration or legend in the local edit",
+        "create smoke, banner, leaf, and character-region masks before motion"
+      ]
+    },
+    {
+      "id": "candidate-registry-learner-motion-v1",
+      "demand_asset_id": "registry-learner-narrator",
+      "candidate_class": "character_motion_sheet",
+      "source_kind": "generated_quarantine",
+      "style_pack_id": "woodblock-historical-editorial-v1",
+      "manifest_asset_ids": [],
+      "rights_status": "provider_original_pending_operator",
+      "evidence_eligible": false,
+      "render_eligible": false,
+      "provider": {
+        "name": "OpenAI built-in image generation",
+        "model": "undisclosed by built-in tool",
+        "access_path": "codex_builtin"
+      },
+      "files": [
+        {
+          "role": "motion_sheet",
+          "path": "content/video_engine/projects/history-of-bjj/assets/quarantine/living-scenes/cast-v1/registry-learner-motion-sheet-alpha-v1.png",
+          "sha256": "af5db346c05556d125b391d7b3441c90e54fc27fa1f4eca60a91a0d2237cfe7a",
+          "width": 1672,
+          "height": 941,
+          "alpha_required": true
+        }
+      ],
+      "identity_status": "pending_operator_review",
+      "composition_status": "strong_master",
+      "motion_status": "cutout_ready_unanimated",
+      "factual_pixel_risks": [],
+      "required_followups": [
+        "operator identity approval",
+        "use reviewed individual sprites from the bound sprite-set manifest",
+        "animate only after motion budget approval"
+      ]
+    },
+    {
+      "id": "candidate-kano-motion-v1",
+      "demand_asset_id": "kano-reconstruction",
+      "candidate_class": "character_motion_sheet",
+      "source_kind": "generated_quarantine",
+      "style_pack_id": "woodblock-historical-editorial-v1",
+      "manifest_asset_ids": [],
+      "rights_status": "provider_original_pending_operator",
+      "evidence_eligible": false,
+      "render_eligible": false,
+      "provider": {
+        "name": "OpenAI built-in image generation",
+        "model": "undisclosed by built-in tool",
+        "access_path": "codex_builtin"
+      },
+      "files": [
+        {
+          "role": "motion_sheet",
+          "path": "content/video_engine/projects/history-of-bjj/assets/quarantine/living-scenes/cast-v1/kano-motion-sheet-alpha-v1.png",
+          "sha256": "aacb403e3c56ce61b353de648fe70f47469519030abad7932f50285e5a2b0b4f",
+          "width": 1672,
+          "height": 941,
+          "alpha_required": true
+        }
+      ],
+      "identity_status": "pending_operator_review",
+      "composition_status": "strong_master",
+      "motion_status": "cutout_ready_unanimated",
+      "factual_pixel_risks": [],
+      "required_followups": [
+        "operator identity approval",
+        "use reviewed individual sprites from the bound sprite-set manifest",
+        "animate only after motion budget approval"
+      ]
+    },
+    {
+      "id": "candidate-maeda-motion-v1",
+      "demand_asset_id": "maeda-reconstruction",
+      "candidate_class": "character_motion_sheet",
+      "source_kind": "generated_quarantine",
+      "style_pack_id": "woodblock-historical-editorial-v1",
+      "manifest_asset_ids": [],
+      "rights_status": "provider_original_pending_operator",
+      "evidence_eligible": false,
+      "render_eligible": false,
+      "provider": {
+        "name": "OpenAI built-in image generation",
+        "model": "undisclosed by built-in tool",
+        "access_path": "codex_builtin"
+      },
+      "files": [
+        {
+          "role": "motion_sheet",
+          "path": "content/video_engine/projects/history-of-bjj/assets/quarantine/living-scenes/cast-v1/maeda-motion-sheet-alpha-v1.png",
+          "sha256": "c90512eab1fad14f15bac3a1f14e18eefcf7fca83775e455064aceedd5640758",
+          "width": 1724,
+          "height": 912,
+          "alpha_required": true
+        }
+      ],
+      "identity_status": "pending_operator_review",
+      "composition_status": "strong_master",
+      "motion_status": "cutout_ready_unanimated",
+      "factual_pixel_risks": [],
+      "required_followups": [
+        "operator identity approval",
+        "use reviewed individual sprites from the bound sprite-set manifest",
+        "animate only after motion budget approval"
+      ]
+    },
+    {
+      "id": "candidate-brazilian-composite-motion-v1",
+      "demand_asset_id": "brazilian-bridge-composite",
+      "candidate_class": "character_motion_sheet",
+      "source_kind": "generated_quarantine",
+      "style_pack_id": "woodblock-historical-editorial-v1",
+      "manifest_asset_ids": [],
+      "rights_status": "provider_original_pending_operator",
+      "evidence_eligible": false,
+      "render_eligible": false,
+      "provider": {
+        "name": "OpenAI built-in image generation",
+        "model": "undisclosed by built-in tool",
+        "access_path": "codex_builtin"
+      },
+      "files": [
+        {
+          "role": "motion_sheet",
+          "path": "content/video_engine/projects/history-of-bjj/assets/quarantine/living-scenes/cast-v1/brazilian-composite-motion-sheet-alpha-v1.png",
+          "sha256": "2ebb348b320aa9232c96feb49373e797986aa83ea7d394f36f5887ae8e27b8f3",
+          "width": 1725,
+          "height": 912,
+          "alpha_required": true
+        }
+      ],
+      "identity_status": "pending_operator_review",
+      "composition_status": "strong_master",
+      "motion_status": "cutout_ready_unanimated",
+      "factual_pixel_risks": [],
+      "required_followups": [
+        "operator identity approval",
+        "use reviewed individual sprites from the bound sprite-set manifest",
+        "animate only after motion budget approval"
+      ]
+    },
+    {
+      "id": "candidate-archive-photo-frame-sprite-v1",
+      "demand_asset_id": "prop-archive-photo-frame",
+      "candidate_class": "prop_sprite",
+      "source_kind": "generated_quarantine",
+      "style_pack_id": "woodblock-historical-editorial-v1",
+      "manifest_asset_ids": [],
+      "rights_status": "provider_original_pending_operator",
+      "evidence_eligible": false,
+      "render_eligible": false,
+      "provider": {
+        "name": "OpenAI built-in image generation",
+        "model": "undisclosed by built-in tool",
+        "access_path": "codex_builtin"
+      },
+      "files": [
+        {
+          "role": "sprite",
+          "path": "content/video_engine/projects/history-of-bjj/assets/quarantine/living-scenes/props-v1/sprites/prop-archive-photo-frame-v2.png",
+          "sha256": "68aa5e3da01b4cdcae1793628cdac88229a626e6188af2a1e68144027295af86",
+          "width": 327,
+          "height": 432,
+          "alpha_required": true
+        }
+      ],
+      "identity_status": "not_applicable",
+      "composition_status": "strong_master",
+      "motion_status": "cutout_ready_unanimated",
+      "factual_pixel_risks": [],
+      "required_followups": [
+        "operator prop approval",
+        "test scale and character contact before motion"
+      ]
+    },
+    {
+      "id": "candidate-gi-belt-sprite-v1",
+      "demand_asset_id": "prop-gi-belt",
+      "candidate_class": "prop_sprite",
+      "source_kind": "generated_quarantine",
+      "style_pack_id": "woodblock-historical-editorial-v1",
+      "manifest_asset_ids": [],
+      "rights_status": "provider_original_pending_operator",
+      "evidence_eligible": false,
+      "render_eligible": false,
+      "provider": {
+        "name": "OpenAI built-in image generation",
+        "model": "undisclosed by built-in tool",
+        "access_path": "codex_builtin"
+      },
+      "files": [
+        {
+          "role": "sprite",
+          "path": "content/video_engine/projects/history-of-bjj/assets/quarantine/living-scenes/props-v1/sprites/prop-gi-belt-trimmed-v1.png",
+          "sha256": "bd8fd75ea44f6964c1a17f812f0ea37b2f2d3179450d131225675feadbe524f7",
+          "width": 1266,
+          "height": 850,
+          "alpha_required": true
+        }
+      ],
+      "identity_status": "not_applicable",
+      "composition_status": "strong_master",
+      "motion_status": "cutout_ready_unanimated",
+      "factual_pixel_risks": [],
+      "required_followups": [
+        "operator prop approval",
+        "test scale and character contact before motion"
+      ]
+    },
+    {
+      "id": "candidate-ledger-sprite-v1",
+      "demand_asset_id": "prop-ledger",
+      "candidate_class": "prop_sprite",
+      "source_kind": "generated_quarantine",
+      "style_pack_id": "woodblock-historical-editorial-v1",
+      "manifest_asset_ids": [],
+      "rights_status": "provider_original_pending_operator",
+      "evidence_eligible": false,
+      "render_eligible": false,
+      "provider": {
+        "name": "OpenAI built-in image generation",
+        "model": "undisclosed by built-in tool",
+        "access_path": "codex_builtin"
+      },
+      "files": [
+        {
+          "role": "sprite",
+          "path": "content/video_engine/projects/history-of-bjj/assets/quarantine/living-scenes/props-v1/sprites/prop-ledger-v2.png",
+          "sha256": "1a771138e78a90a0972b4ee3a4c990ba41ebc3886ae799dfdd50cad25050bf26",
+          "width": 585,
+          "height": 416,
+          "alpha_required": true
+        }
+      ],
+      "identity_status": "not_applicable",
+      "composition_status": "strong_master",
+      "motion_status": "cutout_ready_unanimated",
+      "factual_pixel_risks": [],
+      "required_followups": [
+        "operator prop approval",
+        "test scale and character contact before motion"
+      ]
+    },
+    {
+      "id": "candidate-newspaper-sprite-v1",
+      "demand_asset_id": "prop-newspaper",
+      "candidate_class": "prop_sprite",
+      "source_kind": "generated_quarantine",
+      "style_pack_id": "woodblock-historical-editorial-v1",
+      "manifest_asset_ids": [],
+      "rights_status": "provider_original_pending_operator",
+      "evidence_eligible": false,
+      "render_eligible": false,
+      "provider": {
+        "name": "OpenAI built-in image generation",
+        "model": "undisclosed by built-in tool",
+        "access_path": "codex_builtin"
+      },
+      "files": [
+        {
+          "role": "sprite",
+          "path": "content/video_engine/projects/history-of-bjj/assets/quarantine/living-scenes/props-v1/sprites/prop-newspaper-v2.png",
+          "sha256": "869ff7b8c8661819dfdff8000099bbb6e89190c8f0b1807f149ea10a3fe6fd61",
+          "width": 406,
+          "height": 423,
+          "alpha_required": true
+        }
+      ],
+      "identity_status": "not_applicable",
+      "composition_status": "strong_master",
+      "motion_status": "cutout_ready_unanimated",
+      "factual_pixel_risks": [],
+      "required_followups": [
+        "operator prop approval",
+        "test scale and character contact before motion"
+      ]
+    },
+    {
+      "id": "candidate-research-notebook-sprite-v1",
+      "demand_asset_id": "prop-research-notebook",
+      "candidate_class": "prop_sprite",
+      "source_kind": "generated_quarantine",
+      "style_pack_id": "woodblock-historical-editorial-v1",
+      "manifest_asset_ids": [],
+      "rights_status": "provider_original_pending_operator",
+      "evidence_eligible": false,
+      "render_eligible": false,
+      "provider": {
+        "name": "OpenAI built-in image generation",
+        "model": "undisclosed by built-in tool",
+        "access_path": "codex_builtin"
+      },
+      "files": [
+        {
+          "role": "sprite",
+          "path": "content/video_engine/projects/history-of-bjj/assets/quarantine/living-scenes/props-v1/sprites/prop-research-notebook-v2.png",
+          "sha256": "8c38da133a4cd1db909d759082d91070f6758afaea5ea71f45804221c5d81115",
+          "width": 290,
+          "height": 406,
+          "alpha_required": true
+        }
+      ],
+      "identity_status": "not_applicable",
+      "composition_status": "strong_master",
+      "motion_status": "cutout_ready_unanimated",
+      "factual_pixel_risks": [],
+      "required_followups": [
+        "operator prop approval",
+        "test scale and character contact before motion"
+      ]
+    },
+    {
+      "id": "candidate-steamship-ticket-sprite-v1",
+      "demand_asset_id": "prop-steamship-ticket",
+      "candidate_class": "prop_sprite",
+      "source_kind": "generated_quarantine",
+      "style_pack_id": "woodblock-historical-editorial-v1",
+      "manifest_asset_ids": [],
+      "rights_status": "provider_original_pending_operator",
+      "evidence_eligible": false,
+      "render_eligible": false,
+      "provider": {
+        "name": "OpenAI built-in image generation",
+        "model": "undisclosed by built-in tool",
+        "access_path": "codex_builtin"
+      },
+      "files": [
+        {
+          "role": "sprite",
+          "path": "content/video_engine/projects/history-of-bjj/assets/quarantine/living-scenes/props-v1/sprites/prop-steamship-ticket-v2.png",
+          "sha256": "6c4c469b1c947174cd5312452c836966a1ccfd7c64dc0ec6d89c1feeefda6cb5",
+          "width": 374,
+          "height": 255,
+          "alpha_required": true
+        }
+      ],
+      "identity_status": "not_applicable",
+      "composition_status": "strong_master",
+      "motion_status": "cutout_ready_unanimated",
+      "factual_pixel_risks": [],
+      "required_followups": [
+        "operator prop approval",
+        "test scale and character contact before motion"
+      ]
+    },
+    {
+      "id": "candidate-theater-poster-frame-sprite-v1",
+      "demand_asset_id": "prop-theater-poster-frame",
+      "candidate_class": "prop_sprite",
+      "source_kind": "generated_quarantine",
+      "style_pack_id": "woodblock-historical-editorial-v1",
+      "manifest_asset_ids": [],
+      "rights_status": "provider_original_pending_operator",
+      "evidence_eligible": false,
+      "render_eligible": false,
+      "provider": {
+        "name": "OpenAI built-in image generation",
+        "model": "undisclosed by built-in tool",
+        "access_path": "codex_builtin"
+      },
+      "files": [
+        {
+          "role": "sprite",
+          "path": "content/video_engine/projects/history-of-bjj/assets/quarantine/living-scenes/props-v1/sprites/prop-theater-poster-frame-v2.png",
+          "sha256": "27e4b8bde259cfc75e1856d4315a1e62c293d5d3424048f75ea45d2e47e9f603",
+          "width": 454,
+          "height": 577,
+          "alpha_required": true
+        }
+      ],
+      "identity_status": "not_applicable",
+      "composition_status": "strong_master",
+      "motion_status": "cutout_ready_unanimated",
+      "factual_pixel_risks": [],
+      "required_followups": [
+        "operator prop approval",
+        "test scale and character contact before motion"
+      ]
+    },
+    {
+      "id": "candidate-tournament-bracket-sprite-v1",
+      "demand_asset_id": "prop-tournament-bracket",
+      "candidate_class": "prop_sprite",
+      "source_kind": "generated_quarantine",
+      "style_pack_id": "woodblock-historical-editorial-v1",
+      "manifest_asset_ids": [],
+      "rights_status": "provider_original_pending_operator",
+      "evidence_eligible": false,
+      "render_eligible": false,
+      "provider": {
+        "name": "OpenAI built-in image generation",
+        "model": "undisclosed by built-in tool",
+        "access_path": "codex_builtin"
+      },
+      "files": [
+        {
+          "role": "sprite",
+          "path": "content/video_engine/projects/history-of-bjj/assets/quarantine/living-scenes/props-v1/sprites/prop-tournament-bracket-trimmed-v1.png",
+          "sha256": "1a1bef3aab03b4488f08b437996d87580b23eb0a077a9a04c2302ce090bb9fe1",
+          "width": 1481,
+          "height": 941,
+          "alpha_required": true
+        }
+      ],
+      "identity_status": "not_applicable",
+      "composition_status": "strong_master",
+      "motion_status": "cutout_ready_unanimated",
+      "factual_pixel_risks": [],
+      "required_followups": [
+        "operator prop approval",
+        "test scale and character contact before motion"
+      ]
+    },
+    {
+      "id": "candidate-training-jacket-sprite-v1",
+      "demand_asset_id": "prop-training-jacket",
+      "candidate_class": "prop_sprite",
+      "source_kind": "generated_quarantine",
+      "style_pack_id": "woodblock-historical-editorial-v1",
+      "manifest_asset_ids": [],
+      "rights_status": "provider_original_pending_operator",
+      "evidence_eligible": false,
+      "render_eligible": false,
+      "provider": {
+        "name": "OpenAI built-in image generation",
+        "model": "undisclosed by built-in tool",
+        "access_path": "codex_builtin"
+      },
+      "files": [
+        {
+          "role": "sprite",
+          "path": "content/video_engine/projects/history-of-bjj/assets/quarantine/living-scenes/props-v1/sprites/prop-training-jacket-v2.png",
+          "sha256": "6c549d7d3bb19a9ff63a633d1c2d8dd0bfd4d0627a4df6aaacb9c5f5c9b4c092",
+          "width": 429,
+          "height": 427,
+          "alpha_required": true
+        }
+      ],
+      "identity_status": "not_applicable",
+      "composition_status": "strong_master",
+      "motion_status": "cutout_ready_unanimated",
+      "factual_pixel_risks": [],
+      "required_followups": [
+        "operator prop approval",
+        "test scale and character contact before motion"
+      ]
+    },
+    {
+      "id": "candidate-travel-trunk-sprite-v1",
+      "demand_asset_id": "prop-travel-trunk",
+      "candidate_class": "prop_sprite",
+      "source_kind": "generated_quarantine",
+      "style_pack_id": "woodblock-historical-editorial-v1",
+      "manifest_asset_ids": [],
+      "rights_status": "provider_original_pending_operator",
+      "evidence_eligible": false,
+      "render_eligible": false,
+      "provider": {
+        "name": "OpenAI built-in image generation",
+        "model": "undisclosed by built-in tool",
+        "access_path": "codex_builtin"
+      },
+      "files": [
+        {
+          "role": "sprite",
+          "path": "content/video_engine/projects/history-of-bjj/assets/quarantine/living-scenes/props-v1/sprites/prop-travel-trunk-v2.png",
+          "sha256": "bf58a89a0087e623e59b002c23e5b7009a0eb35fb4cdb322db5b755d7a22ce5b",
+          "width": 540,
+          "height": 409,
+          "alpha_required": true
+        }
+      ],
+      "identity_status": "not_applicable",
+      "composition_status": "strong_master",
+      "motion_status": "cutout_ready_unanimated",
+      "factual_pixel_risks": [],
+      "required_followups": [
+        "operator prop approval",
+        "test scale and character contact before motion"
+      ]
+    },
+    {
+      "id": "candidate-kano-archive-v1",
+      "demand_asset_id": "archive-kano-portrait",
+      "candidate_class": "archive_evidence",
+      "source_kind": "approved_manifest",
+      "provider": {
+        "name": "approved local asset manifest",
+        "model": "not applicable",
+        "access_path": "manifest"
+      },
+      "style_pack_id": "woodblock-historical-editorial-v1",
+      "files": [
+        {
+          "role": "archive",
+          "path": "content/video_engine/projects/history-of-bjj/assets/archive/jigoro-kano-public-domain.jpg",
+          "sha256": "029679163a5cf0a5a36ec7353d5b427d806351948fd19a7e492b4d3e8244560c",
+          "width": 858,
+          "height": 1101,
+          "alpha_required": false
+        }
+      ],
+      "manifest_asset_ids": [
+        "archive-jigoro-kano"
+      ],
+      "rights_status": "rights_reviewed",
+      "identity_status": "approved_source",
+      "composition_status": "approved_source",
+      "motion_status": "approved_still",
+      "evidence_eligible": true,
+      "factual_pixel_risks": [],
+      "required_followups": [
+        "preserve citation and source attribution in the local edit"
+      ],
+      "render_eligible": false
+    },
+    {
+      "id": "candidate-maeda-archive-v1",
+      "demand_asset_id": "archive-maeda-portrait",
+      "candidate_class": "archive_evidence",
+      "source_kind": "approved_manifest",
+      "provider": {
+        "name": "approved local asset manifest",
+        "model": "not applicable",
+        "access_path": "manifest"
+      },
+      "style_pack_id": "woodblock-historical-editorial-v1",
+      "files": [
+        {
+          "role": "archive",
+          "path": "content/video_engine/projects/history-of-bjj/assets/archive/mitsuyo-maeda-public-domain.jpg",
+          "sha256": "5ea1cd5f5400df1022e83de4ea31d774a5aaca0987d0df29b91a3e1ff046114e",
+          "width": 370,
+          "height": 532,
+          "alpha_required": false
+        }
+      ],
+      "manifest_asset_ids": [
+        "archive-mitsuyo-maeda"
+      ],
+      "rights_status": "rights_reviewed",
+      "identity_status": "approved_source",
+      "composition_status": "approved_source",
+      "motion_status": "approved_still",
+      "evidence_eligible": true,
+      "factual_pixel_risks": [],
+      "required_followups": [
+        "preserve citation and source attribution in the local edit"
+      ],
+      "render_eligible": false
+    }
+  ],
+  "gaps": [
+    {
+      "demand_asset_id": "world-archive-study",
+      "status": "partial",
+      "missing_deliverables": [
+        "localized ambient masks",
+        "medium character view",
+        "detail prop view"
+      ],
+      "requires_image_generation": true,
+      "requires_animation_generation": true,
+      "blocks_foundation": false
+    },
+    {
+      "demand_asset_id": "world-kodokan-institution",
+      "status": "partial",
+      "missing_deliverables": [
+        "localized ambient masks",
+        "medium character view",
+        "detail prop view"
+      ],
+      "requires_image_generation": true,
+      "requires_animation_generation": true,
+      "blocks_foundation": false
+    },
+    {
+      "demand_asset_id": "world-maritime-circuit",
+      "status": "partial",
+      "missing_deliverables": [
+        "localized ambient masks",
+        "medium character view",
+        "detail prop view"
+      ],
+      "requires_image_generation": true,
+      "requires_animation_generation": true,
+      "blocks_foundation": false
+    },
+    {
+      "demand_asset_id": "world-belem-riverfront",
+      "status": "partial",
+      "missing_deliverables": [
+        "localized ambient masks",
+        "medium character view",
+        "detail prop view"
+      ],
+      "requires_image_generation": true,
+      "requires_animation_generation": true,
+      "blocks_foundation": false
+    },
+    {
+      "demand_asset_id": "world-brazil-training-hall",
+      "status": "partial",
+      "missing_deliverables": [
+        "localized ambient masks",
+        "medium character view",
+        "detail prop view"
+      ],
+      "requires_image_generation": true,
+      "requires_animation_generation": true,
+      "blocks_foundation": false
+    },
+    {
+      "demand_asset_id": "registry-learner-narrator",
+      "status": "partial",
+      "missing_deliverables": [
+        "operator identity approval",
+        "motion proof"
+      ],
+      "requires_image_generation": false,
+      "requires_animation_generation": true,
+      "blocks_foundation": false
+    },
+    {
+      "demand_asset_id": "kano-reconstruction",
+      "status": "partial",
+      "missing_deliverables": [
+        "operator identity approval",
+        "motion proof"
+      ],
+      "requires_image_generation": false,
+      "requires_animation_generation": true,
+      "blocks_foundation": false
+    },
+    {
+      "demand_asset_id": "maeda-reconstruction",
+      "status": "partial",
+      "missing_deliverables": [
+        "operator identity approval",
+        "motion proof"
+      ],
+      "requires_image_generation": false,
+      "requires_animation_generation": true,
+      "blocks_foundation": false
+    },
+    {
+      "demand_asset_id": "brazilian-bridge-composite",
+      "status": "partial",
+      "missing_deliverables": [
+        "operator identity approval",
+        "motion proof"
+      ],
+      "requires_image_generation": false,
+      "requires_animation_generation": true,
+      "blocks_foundation": false
+    },
+    {
+      "demand_asset_id": "plate-battlefield-myth",
+      "status": "partial",
+      "missing_deliverables": [
+        "operator tone approval",
+        "localized motion masks"
+      ],
+      "requires_image_generation": false,
+      "requires_animation_generation": true,
+      "blocks_foundation": false
+    },
+    {
+      "demand_asset_id": "ambient-river-flow",
+      "status": "missing",
+      "missing_deliverables": [
+        "reviewed loop or deterministic local motion recipe"
+      ],
+      "requires_image_generation": false,
+      "requires_animation_generation": true,
+      "blocks_foundation": false
+    },
+    {
+      "demand_asset_id": "ambient-leaves-fabric",
+      "status": "missing",
+      "missing_deliverables": [
+        "reviewed loop or deterministic local motion recipe"
+      ],
+      "requires_image_generation": false,
+      "requires_animation_generation": true,
+      "blocks_foundation": false
+    },
+    {
+      "demand_asset_id": "ambient-steam-smoke",
+      "status": "missing",
+      "missing_deliverables": [
+        "reviewed loop or deterministic local motion recipe"
+      ],
+      "requires_image_generation": false,
+      "requires_animation_generation": true,
+      "blocks_foundation": false
+    },
+    {
+      "demand_asset_id": "ambient-water-wheel",
+      "status": "missing",
+      "missing_deliverables": [
+        "reviewed loop or deterministic local motion recipe"
+      ],
+      "requires_image_generation": false,
+      "requires_animation_generation": true,
+      "blocks_foundation": false
+    },
+    {
+      "demand_asset_id": "ambient-lantern-firelight",
+      "status": "missing",
+      "missing_deliverables": [
+        "reviewed loop or deterministic local motion recipe"
+      ],
+      "requires_image_generation": false,
+      "requires_animation_generation": true,
+      "blocks_foundation": false
+    },
+    {
+      "demand_asset_id": "ambient-ship-wake",
+      "status": "missing",
+      "missing_deliverables": [
+        "reviewed loop or deterministic local motion recipe"
+      ],
+      "requires_image_generation": false,
+      "requires_animation_generation": true,
+      "blocks_foundation": false
+    },
+    {
+      "demand_asset_id": "ambient-rain",
+      "status": "missing",
+      "missing_deliverables": [
+        "reviewed loop or deterministic local motion recipe"
+      ],
+      "requires_image_generation": false,
+      "requires_animation_generation": true,
+      "blocks_foundation": false
+    },
+    {
+      "demand_asset_id": "ambient-crowd-silhouettes",
+      "status": "missing",
+      "missing_deliverables": [
+        "reviewed loop or deterministic local motion recipe"
+      ],
+      "requires_image_generation": false,
+      "requires_animation_generation": true,
+      "blocks_foundation": false
+    },
+    {
+      "demand_asset_id": "george-gracie-reconstruction",
+      "status": "blocked_research",
+      "missing_deliverables": [
+        "approved research scope"
+      ],
+      "requires_image_generation": false,
+      "requires_animation_generation": false,
+      "blocks_foundation": false
+    },
+    {
+      "demand_asset_id": "world-modern-global-arena",
+      "status": "blocked_research",
+      "missing_deliverables": [
+        "approved research scope"
+      ],
+      "requires_image_generation": false,
+      "requires_animation_generation": false,
+      "blocks_foundation": false
+    },
+    {
+      "demand_asset_id": "plate-sao-paulo-print-city",
+      "status": "blocked_research",
+      "missing_deliverables": [
+        "approved research scope"
+      ],
+      "requires_image_generation": false,
+      "requires_animation_generation": false,
+      "blocks_foundation": false
+    },
+    {
+      "demand_asset_id": "plate-pnw-arrival",
+      "status": "blocked_research",
+      "missing_deliverables": [
+        "approved research scope"
+      ],
+      "requires_image_generation": false,
+      "requires_animation_generation": false,
+      "blocks_foundation": false
+    }
+  ],
+  "summary": {
+    "candidate_count": 22,
+    "by_candidate_class": {
+      "archive_evidence": 2,
+      "character_motion_sheet": 4,
+      "prop_sprite": 10,
+      "scene_plate": 1,
+      "world_master": 5
+    },
+    "gap_count": 22,
+    "blocking_gap_count": 0
+  },
+  "review": {
+    "status": "awaiting_asset_foundation_gate",
+    "gate": "asset_foundation",
+    "required_decisions": [
+      "approve or reject the five world compositions",
+      "approve or reject the four regenerated character identities",
+      "approve or reject the ten prop sprites",
+      "approve or reject the battlefield legend tone",
+      "accept the listed factual-pixel controls before promotion"
+    ]
+  },
+  "render_eligible": false,
+  "artifact_hash": "0a01e1f5bfdbddb3ac0a32345099c4954601ee52926ee1ae7019daca662c4129"
+}

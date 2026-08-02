@@ -1,0 +1,51 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://outreach-program.internal/schemas/asset-selection-review.v1.json",
+  "title": "Asset Selection Review v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "coverage_hash",
+    "candidate_batch_hash",
+    "approved",
+    "reviewed_by",
+    "reviewed_at",
+    "selections"
+  ],
+  "properties": {
+    "schema_version": {"const": "asset_selection_review.v1"},
+    "coverage_hash": {"$ref": "#/definitions/hash"},
+    "candidate_batch_hash": {"$ref": "#/definitions/hash"},
+    "approved": {"type": "boolean"},
+    "entitlement_snapshot": {
+      "type": "object",
+      "required": ["account_plan", "downloads_included", "daily_download_limit", "confirmed_by"],
+      "properties": {
+        "account_plan": {"type": "string", "minLength": 1},
+        "downloads_included": {"type": "boolean"},
+        "daily_download_limit": {"type": "integer", "minimum": 1},
+        "confirmed_by": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "reviewed_by": {"type": "string"},
+    "reviewed_at": {"type": "string"},
+    "selections": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["slot_id", "candidate_id", "approved_cost_usd"],
+        "properties": {
+          "slot_id": {"type": "string", "minLength": 1},
+          "candidate_id": {"type": "string"},
+          "approved_cost_usd": {"type": "number", "minimum": 0}
+        }
+      }
+    }
+  },
+  "definitions": {
+    "hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}

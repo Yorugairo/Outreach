@@ -1,0 +1,62 @@
+{
+  "schema_version": "production_profile.v1",
+  "id": "longform-illustrated-history-v1",
+  "title": "Long-form Illustrated History Baseline",
+  "source_identity": {
+    "channel": "Historically",
+    "studied_works": [
+      {
+        "reference_id": "EHLI2WZUtXs",
+        "title": "The ENTIRE History of ROME"
+      },
+      {
+        "reference_id": "w5mhZs73Qwc",
+        "title": "The CHAOTIC First World War"
+      }
+    ]
+  },
+  "render_policy": {
+    "render_eligible": false,
+    "source_media_allowed": false,
+    "source_assets_allowed": false
+  },
+  "cloneable_grammar": {
+    "composition": [
+      "Alternate maps, character tableaux, artifacts, and expressive close-ups.",
+      "Use foreground, midground, and background layers for economical parallax.",
+      "Give each historical proposition one dominant visual subject.",
+      "Let recurring environments and character silhouettes preserve chronology."
+    ],
+    "motion_economics": [
+      "Favor cutout pose changes, prop swaps, camera pushes, and parallax over continuous character animation.",
+      "Increase overlapping motion and atmospheric layers only when historical complexity increases.",
+      "Use a held consequence pose after a comic or consequential action."
+    ],
+    "editing": {
+      "mean_cut_interval_s": 8.5,
+      "patterns": [
+        "Map pan or zoom into a character, place, or artifact.",
+        "Hard-cut to a short reaction gag after a dense factual sentence.",
+        "Use page, smoke, geography, or object-shape transitions between related ideas.",
+        "Reset chapters with a title card or a materially different scale."
+      ]
+    },
+    "visual_hierarchy": [
+      "Thick dark outlines contain flat earthy color fields.",
+      "Warm historical environments carry muted green, tan, cream, red, and blue roles.",
+      "Faces and props carry the joke; maps and documents carry chronology."
+    ],
+    "sound_hierarchy": [
+      "Narration remains dominant over restrained music.",
+      "Paper, map, prop, and environmental cues make limited animation feel intentional.",
+      "Short comic punctuations and selective cinematic impacts mark consequences."
+    ]
+  },
+  "reserved_identity": [
+    "Exact character designs, silhouettes, facial constructions, and recurring cast",
+    "Exact palette values, textures, backgrounds, maps, props, and source frames",
+    "Logos, typography treatments, title cards, catchphrases, scripts, and jokes",
+    "Shot-for-shot recreation or tracing of any studied work"
+  ],
+  "artifact_hash": "6762c8c43e8d80aef7e0b8b39dc2cb5d5f77e46e259135cdc5fed0a4fab3cd35"
+}

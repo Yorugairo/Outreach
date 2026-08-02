@@ -1,0 +1,134 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://outreach-program.internal/schemas/asset-foundation-review.v1.json",
+  "title": "Asset Foundation Review v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "id", "series_id", "episode_id", "immutable_inputs", "policy", "candidates", "gaps", "summary", "review", "render_eligible", "artifact_hash"],
+  "properties": {
+    "schema_version": {"const": "asset_foundation_review.v1"},
+    "id": {"$ref": "#/definitions/id"},
+    "series_id": {"$ref": "#/definitions/id"},
+    "episode_id": {"$ref": "#/definitions/id"},
+    "immutable_inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["asset_map_hash", "world_pack_hash", "style_pack_hash", "calibration_inventory_hash", "asset_manifest_hash"],
+      "properties": {
+        "asset_map_hash": {"$ref": "#/definitions/hash"},
+        "world_pack_hash": {"$ref": "#/definitions/hash"},
+        "style_pack_hash": {"$ref": "#/definitions/hash"},
+        "calibration_inventory_hash": {"$ref": "#/definitions/hash"},
+        "asset_manifest_hash": {"$ref": "#/definitions/hash"}
+      }
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["image_generation_authorized", "animation_generation_authorized", "voice_generation_authorized", "automatic_promotion", "facts_rendered_locally", "generated_art_is_evidence"],
+      "properties": {
+        "image_generation_authorized": {"const": true},
+        "animation_generation_authorized": {"const": false},
+        "voice_generation_authorized": {"const": false},
+        "automatic_promotion": {"const": false},
+        "facts_rendered_locally": {"const": true},
+        "generated_art_is_evidence": {"const": false}
+      }
+    },
+    "candidates": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "demand_asset_id", "candidate_class", "source_kind", "style_pack_id", "files", "manifest_asset_ids", "rights_status", "identity_status", "composition_status", "motion_status", "evidence_eligible", "factual_pixel_risks", "required_followups", "render_eligible"],
+        "properties": {
+          "id": {"$ref": "#/definitions/id"},
+          "demand_asset_id": {"$ref": "#/definitions/id"},
+          "candidate_class": {"enum": ["world_master", "character_motion_sheet", "prop_sprite", "archive_evidence", "scene_plate"]},
+          "source_kind": {"enum": ["generated_quarantine", "approved_manifest"]},
+          "provider": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["name", "model", "access_path"],
+            "properties": {
+              "name": {"type": "string", "minLength": 1},
+              "model": {"type": "string", "minLength": 1},
+              "access_path": {"enum": ["codex_builtin", "manifest"]}
+            }
+          },
+          "style_pack_id": {"$ref": "#/definitions/id"},
+          "files": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["role", "path", "sha256", "width", "height", "alpha_required"],
+              "properties": {
+                "role": {"enum": ["master", "motion_sheet", "sprite", "sprite_manifest", "archive"]},
+                "path": {"type": "string", "minLength": 1},
+                "sha256": {"$ref": "#/definitions/hash"},
+                "width": {"type": "integer", "minimum": 1},
+                "height": {"type": "integer", "minimum": 1},
+                "alpha_required": {"type": "boolean"}
+              }
+            }
+          },
+          "manifest_asset_ids": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/definitions/id"}},
+          "rights_status": {"enum": ["provider_original_pending_operator", "rights_reviewed"]},
+          "identity_status": {"enum": ["not_applicable", "approved_source", "pending_operator_review"]},
+          "composition_status": {"enum": ["strong_master", "usable_with_constraints", "approved_source"]},
+          "motion_status": {"enum": ["localized_regions_unmasked", "cutout_ready_unanimated", "approved_still"]},
+          "evidence_eligible": {"type": "boolean"},
+          "factual_pixel_risks": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+          "required_followups": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+          "render_eligible": {"const": false}
+        }
+      }
+    },
+    "gaps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["demand_asset_id", "status", "missing_deliverables", "requires_image_generation", "requires_animation_generation", "blocks_foundation"],
+        "properties": {
+          "demand_asset_id": {"$ref": "#/definitions/id"},
+          "status": {"enum": ["partial", "missing", "ready_local_recipe", "blocked_research"]},
+          "missing_deliverables": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+          "requires_image_generation": {"type": "boolean"},
+          "requires_animation_generation": {"type": "boolean"},
+          "blocks_foundation": {"type": "boolean"}
+        }
+      }
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["candidate_count", "by_candidate_class", "gap_count", "blocking_gap_count"],
+      "properties": {
+        "candidate_count": {"type": "integer", "minimum": 1},
+        "by_candidate_class": {"type": "object", "additionalProperties": {"type": "integer", "minimum": 0}},
+        "gap_count": {"type": "integer", "minimum": 0},
+        "blocking_gap_count": {"type": "integer", "minimum": 0}
+      }
+    },
+    "review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "gate", "required_decisions"],
+      "properties": {
+        "status": {"enum": ["awaiting_asset_foundation_gate", "approved", "rejected"]},
+        "gate": {"const": "asset_foundation"},
+        "required_decisions": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}}
+      }
+    },
+    "render_eligible": {"const": false},
+    "artifact_hash": {"$ref": "#/definitions/hash"}
+  },
+  "definitions": {
+    "id": {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"},
+    "hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}

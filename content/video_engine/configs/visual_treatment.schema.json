@@ -1,0 +1,186 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://outreach-program.internal/schemas/visual-treatment.v1.json",
+  "title": "Compiled Visual Treatment v1",
+  "description": "Deterministic, renderer-facing per-shot treatment compiled from a shot plan and internal art atoms.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "art_bible_id",
+    "art_bible_hash",
+    "shot_plan_hash",
+    "shots"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "visual_treatment.v1"
+    },
+    "art_bible_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "art_bible_hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "shot_plan_hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "shots": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/definitions/shot" }
+    },
+    "artifact_hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    }
+  },
+  "definitions": {
+    "shot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "shot_id",
+        "treatment_id",
+        "function",
+        "purpose",
+        "composition",
+        "rig",
+        "style_atom_ids",
+        "palette_roles",
+        "camera",
+        "depth",
+        "motion",
+        "overlays",
+        "typography",
+        "signature",
+        "uniqueness_signature"
+      ],
+      "properties": {
+        "shot_id": {
+          "type": ["string", "integer"],
+          "minLength": 1
+        },
+        "treatment_id": {
+          "type": "string",
+          "pattern": "^treatment-[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "function": {
+          "type": "string",
+          "enum": [
+            "result_preview",
+            "wide_setup",
+            "contact_closeup",
+            "mechanic_transition",
+            "wrong_right_compare",
+            "force_diagram",
+            "result_hold",
+            "story_or_persona_cutaway"
+          ]
+        },
+        "purpose": { "type": "string", "minLength": 1 },
+        "composition": {
+          "type": "string",
+          "enum": [
+            "result_hero",
+            "wide_spatial_setup",
+            "contact_macro_context_inset",
+            "mechanic_transition",
+            "wrong_right_matched_split",
+            "living_geometry_reveal",
+            "held_recognition_frame",
+            "cta_card"
+          ]
+        },
+        "rig": {
+          "type": "string",
+          "enum": ["filled-cutout-v3", "graphic-card-v1"]
+        },
+        "style_atom_ids": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "palette_roles": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "camera": {
+          "$ref": "#/definitions/camera"
+        },
+        "depth": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["attacker", "defender", "overlay"],
+          "properties": {
+            "attacker": { "type": "integer" },
+            "defender": { "type": "integer" },
+            "overlay": { "type": "integer" }
+          }
+        },
+        "motion": {
+          "$ref": "#/definitions/motion"
+        },
+        "overlays": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "typography": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["caption_font", "measurement_font"],
+          "properties": {
+            "caption_font": { "const": "Inter" },
+            "measurement_font": { "const": "Roboto Mono" }
+          }
+        },
+        "signature": {
+          "type": "string",
+          "minLength": 1
+        },
+        "uniqueness_signature": {
+          "type": "string",
+          "minLength": 1
+        },
+        "living_diagram": { "type": "boolean" },
+        "state_from": { "type": "string", "minLength": 1 },
+        "action": { "type": "string", "minLength": 1 },
+        "state_to": { "type": "string", "minLength": 1 },
+        "duration_s": { "type": "number", "exclusiveMinimum": 0 }
+      }
+    },
+    "camera": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["framing", "anchor"],
+      "properties": {
+        "framing": { "type": "string", "minLength": 1 },
+        "anchor": { "type": "string", "minLength": 1 },
+        "move": { "type": "string", "minLength": 1 },
+        "safe_zone": { "type": "string", "enum": ["center", "top", "bottom", "left", "right"] }
+      }
+    },
+    "motion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["phases", "transition"],
+      "properties": {
+        "phases": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "enum": ["anticipation", "action", "contact", "recovery", "hold"]
+          }
+        },
+        "transition": { "type": "string", "minLength": 1 },
+        "easing": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}

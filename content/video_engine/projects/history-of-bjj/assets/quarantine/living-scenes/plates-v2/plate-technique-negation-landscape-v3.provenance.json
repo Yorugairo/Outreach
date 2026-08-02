@@ -1,0 +1,18 @@
+{
+  "asset_id": "plate-technique-negation-landscape-anatomy-reviewed",
+  "asset_sha256": "5244b1c53dca95bd2c7adf9ca46e5d2f358704615bcdea4496fce68cd29304e4",
+  "anatomy_review": {
+    "central_arms_total": 4,
+    "central_legs_total": 4,
+    "central_people_total": 2,
+    "status": "agent_visual_check_pending_operator_review"
+  },
+  "evidence_eligible": false,
+  "generation_mode": "built_in_image_generation_edit",
+  "human_promoted": true,
+  "origin": "original_subscription_image_generation",
+  "reference_asset_id": "plate-technique-negation-landscape",
+  "render_eligible": true,
+  "usage_note": "Original 16:9 interpretive illustration with simplified central open-guard anatomy; not historical evidence or technique instruction.",
+  "prompt": "Correct only the anatomy of the large central grappling pair. Replace it with exactly two practitioners, exactly four arms and four legs total, with every limb visibly attributable. Use a simple open-guard pose: dark/navy-gi practitioner kneeling with one knee on the mat and one foot planted; light/ivory-gi practitioner on the back with two clearly separated legs. Preserve the 16:9 composition, six surrounding vignettes and X marks, rising sun, waves, Brazilian mountains, foliage, torn paper, woodblock texture, palette, and framing. No text, mobile proportions, cropping, extra limbs, fused bodies, or detached anatomy."
+}

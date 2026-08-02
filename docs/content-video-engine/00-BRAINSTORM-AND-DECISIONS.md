@@ -1,10 +1,34 @@
 # Content-to-Video Flywheel — Brainstorm, Challenges, and Decisions
 
+> **V4 decision (2026-07-30):** the primary product is an evidence-backed
+> three-part History of BJJ documentary series. Automated technique tutorials are
+> no longer an active release target. Armbar V3 is frozen as an R&D artifact, and
+> `StickFigureScene` is legacy-compatible but prohibited in History V4. Research
+> evidence, asset permission, and creative study provenance are separate contracts.
+> See the [documentation index](README.md).
+
+## V4 pivot record
+
+The anchorable 2D experiment improved body ownership but did not remove the
+fundamental cost and ambiguity of programmatically depicting correct multi-person
+grappling choreography. The engine keeps the experiment's reusable art-bible
+hashing, visual treatments, style boards, human gates, Manim diagrams, Remotion
+editorial layer, and QC, while changing the acceptance product to history
+documentaries.
+
+The consultant outline is retained only as non-renderable creative study. Its
+scripts, prompts, stock voices, provider recommendations, and factual assertions
+are not production inputs. Visual references may inform abstract observations
+about composition, palette roles, silhouette, typography, motion, pacing,
+transitions, diagrams, and sound; they are never copied, traced, trained on, or
+passed to a renderer.
+
 *Date: 2026-07-28 · The decision record for the doc set in `docs/content-video-engine/`. Inputs:
-the operator's raw "Automated Content-to-Video Flywheel Engine" spec + three follow-up research
+the operator's raw "Automated Content-to-Video Flywheel Engine" spec + four follow-up research
 drops, this repo's existing systems, and three research streams run today (benchmarks, emerging
 channels, platform economics — synthesized in `05-COMPETITIVE-BRIEF.md`). Read this first; the
-other docs implement these decisions.*
+other docs implement these decisions. The operator-supplied YouTube visual reference pack is
+synthesized into implementation rules in `09-YOUTUBE-REFERENCE-PACK-LEARNINGS.md`.*
 
 ---
 
@@ -14,8 +38,9 @@ The raw spec describes "Write Once, Publish Thrice" as something to build. Repo 
 **step 1 exists and is production-shaped**: `content/bjj-registry/` is a working programmatic
 article engine — deterministic fact layer with provenance, guarded LLM prose (`llm_guard.py`),
 human publish gate, JSONL handoff into the registry's blog distribution. Its **technique axis**
-(`corpus/armbar-from-guard.json`: transcript, steps, `common_errors`, `related`, `taught_at`) is
-storyboards-in-waiting.
+(`corpus/armbar-from-guard.json`: transcript, steps, `common_errors`, `related`) is
+storyboards-in-waiting. Academy attribution remains deferred until a verified registry join
+exists; it is not inferred from corpus records.
 
 So this is not "build a content system" — it is **add a render axis to an existing corpus-driven
 content system**. Honest slogan: *generate once, publish N* — fact layer → article (built) →
@@ -103,11 +128,45 @@ agent runtimes prepare and monitor runs without prompt plumbing — approval and
 human. Reference-recipe extraction (operator-curated viral-video pacing presets — structure
 only, never content) also lands P1.
 
+### 3.10 Trend tools propose; the human owns the thesis
+The operator's MKBHD / The Studio research input adds a useful enterprise-brand correction to
+the earlier viral-growth material. Decision: outlier and trend research may generate candidate
+questions, but it does not choose the channel's point of view. The operator selects an
+**inversion** (an original counter-angle rather than a copied premise), verifies that it fits
+the source evidence, and owns the thesis at Gate A. AI executes research organization, drafting,
+timing, and rendering; it is not the editorial driver.
+
+The durable moat is **skill stacking**: combine capabilities competitors rarely hold together
+(for example, sports-medicine evidence + BJJ history, or institutional risk analysis + physical
+infrastructure) when the source material genuinely supports both. A cinematic dark-mode/vector
+look is a configurable brand preset, not a substitute for that information advantage.
+
+Launch policy is also revised: prepare **three Gate-B-approved, packaged videos before the first
+public channel upload**. This is a pilot operating gate, not a new per-run pipeline stage. It
+protects production habit and gives a new viewer a coherent catalog before early analytics can
+distort editorial choices. The public master brand may be broad within one audience promise;
+series lanes and playlists carry topical specificity. Future monetization remains trust-first:
+first-party products and vetted B2B sponsors outrank high-CPM but low-fit offers.
+
+### 3.11 Stick figures → anchorable 2D technique visuals
+
+The Armbar Gate-B review exposed a visual-system failure: generic stick figures collapse when
+limbs interlock, and repeated pose fades do not explain a grappling state change. Decision: the
+instructional default is a color-coded flat vector/chibi cast with persistent attacker/defender
+identity, reviewed pose/reference assets, and force/lever diagrams. Complex techniques are
+deconstructed into grip, frame, wedge, rotation, and alignment concepts rather than generated as
+one ambiguous multi-limb image.
+
+Generative image/video tools are optional assistants for licensed keyframes or short cut-ins. They
+do not own technique mechanics, anatomy, or the final visual claim. Operator-owned or explicitly
+licensed references may be analyzed into shot recipes; third-party downloads are not treated as a
+commercial training corpus without permission.
+
 ## 4. Assumption register (ranked by risk × uncertainty)
 
 | # | Assumption | If wrong | Confidence | Cheapest test |
 |---|---|---|---|---|
-| A1 | Programmatic stick-figure video can hit retention bars (shorts 30–60s APV ≥45%, first-3s ≥75%; long-form APV ≥40%) | Channel play dead; embeds-only fallback | Unknown — **the riskiest** | Pilot cohort (`07`), fresh channel |
+| A1 | Programmatic anchorable-2D technique video can hit retention bars (shorts 30–60s APV ≥45%, first-3s ≥75%; long-form APV ≥40%) | Channel play dead; embeds-only fallback | Unknown — **the riskiest** | Pilot cohort (`07`), fresh channel |
 | A2 | Embeds measurably lift pSEO page engagement | Base case weakens to rich-results + inventory value | Medium-high | ~20 embedded vs matched control pages, 4–6 wks |
 | A3 | Marginal cost ≤$5/finished-min | Scale economics break | High (TTS ≈$0.17/min confirmed; compute is the variable) | Instrument per-stage in pilot |
 | A4 | Gates hold at 5+ videos/wk within ≤30 min/video | Throughput capped | Medium | Time the gates in pilot |
@@ -142,7 +201,15 @@ retention/cost, not growth (cold-start evidence says growth verdicts before mont
 | MCP brand/context autonomy | **Adopted P1+** — bounded by gates (3.9) |
 | Lane rotation + badges + playlists | **Adopted** as the channel model, scoped to one audience promise (3.2) |
 | Custom-cloned voice guidance | **Adopted & strengthened** by voice finding + Default-voice retirement (3.6) |
+| Outlier + macro-trend research | **Adapted** — candidate generation only; operator-owned inversion and evidence review at Gate A (3.10) |
+| Skill stacking as the creative moat | **Adopted** — combine defensible domains when source-backed; never force a novelty mashup (3.10) |
+| Three-video pre-launch batch | **Adopted** as a pilot release gate; all three must be Gate-B-approved and packaged (3.10) |
+| "Human directs, AI executes" | **Adopted** as the editorial authority boundary; automation remains model-agnostic (3.9–3.10) |
+| Broad master brand + series playlists | **Adapted** — broad only within one audience promise; lanes preserve topical clarity (3.2, 3.10) |
+| Sponsorship/CPM optimization | **Adapted** — trust and fit govern sponsors; unverified CPM claims do not enter planning assumptions |
 | Blurred-background 9:16 padding | **Rejected** — recognizable slop pattern; vertical is a first-class layout |
+| Generic stick figures for intertwined limbs | **Rejected** — ambiguous depth and repeated white-line stacks; use a color-coded anchorable 2D cast + diagrams |
+| Text-only generative anatomy for grappling mechanics | **Rejected** — use licensed pose references or deterministic action/state assets |
 | "$8–18 RPM" planning number | **Rejected** — corrected to $4–8 blended; finance top-quartile only |
 | Shorts description/pinned-comment CTAs | **Rejected as impossible** — links not clickable since Aug 2023 |
 
@@ -151,6 +218,8 @@ retention/cost, not growth (cold-start evidence says growth verdicts before mont
 Reddit/X distribution automation (policy minefield; manual, value-dense only) · Substack Notes
 loops (human relationship work) · DTC supplements/affiliates (registry monetization planning,
 not this engine) · orchestration frameworks/render farm (until stage contracts prove out) ·
+autonomous competitor/title scraping (P1 candidate research only, with provenance and human
+angle selection) ·
 fight-choreography spectacle (Jhanzou territory — we win on diagrams + persona, not choreography)
 · realistic re-creations of real people/events (brand + disclosure trigger).
 

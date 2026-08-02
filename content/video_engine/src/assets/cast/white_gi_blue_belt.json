@@ -1,0 +1,27 @@
+{
+  "variant_id": "white_gi_blue_belt",
+  "cast_id": "attacker",
+  "cast_role": "attacker",
+  "gi_color": "#F4F7FA",
+  "belt_color": "#3B82F6",
+  "skin_color": "#F4C7A1",
+  "z_base": 20,
+  "body_parts": [
+    "head",
+    "torso",
+    "belt",
+    "upper_arm_left",
+    "forearm_left",
+    "upper_arm_right",
+    "forearm_right",
+    "thigh_left",
+    "shin_left",
+    "thigh_right",
+    "shin_right"
+  ],
+  "rights": {
+    "status": "operator_owned",
+    "permission": "internal_library",
+    "reference_refs": []
+  }
+}

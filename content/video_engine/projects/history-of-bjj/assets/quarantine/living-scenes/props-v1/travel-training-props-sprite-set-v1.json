@@ -1,0 +1,37 @@
+{
+  "schema_version": "motion_sprite_set.v1",
+  "source_path": "content/video_engine/projects/history-of-bjj/assets/quarantine/living-scenes/props-v1/travel-training-props-alpha-v1.png",
+  "source_sha256": "ebe4b0c4e6ec79eec1297a072a3a2f1df976f4dfa00096dedae9ed72e45616e0",
+  "prefix": "prop",
+  "sprites": [
+    {
+      "pose": "travel-trunk",
+      "path": "content/video_engine/projects/history-of-bjj/assets/quarantine/living-scenes/props-v1/sprites/prop-travel-trunk-v1.png",
+      "sha256": "0cf858dcaba8e672c977979080634557d6b6f9c49a086bfbd070645a952550ca",
+      "width": 441,
+      "height": 409
+    },
+    {
+      "pose": "steamship-ticket",
+      "path": "content/video_engine/projects/history-of-bjj/assets/quarantine/living-scenes/props-v1/sprites/prop-steamship-ticket-v1.png",
+      "sha256": "d12460635fe9c334fd799ce169467db909276c1150fc5cbdae6b7ae8e01a3e49",
+      "width": 443,
+      "height": 314
+    },
+    {
+      "pose": "training-jacket",
+      "path": "content/video_engine/projects/history-of-bjj/assets/quarantine/living-scenes/props-v1/sprites/prop-training-jacket-v1.png",
+      "sha256": "7853cc4939b0fee5da6dd44ff097635e27af1ea712b8be9300d12dc2f89b75c9",
+      "width": 443,
+      "height": 427
+    },
+    {
+      "pose": "newspaper",
+      "path": "content/video_engine/projects/history-of-bjj/assets/quarantine/living-scenes/props-v1/sprites/prop-newspaper-v1.png",
+      "sha256": "869ff7b8c8661819dfdff8000099bbb6e89190c8f0b1807f149ea10a3fe6fd61",
+      "width": 406,
+      "height": 423
+    }
+  ],
+  "render_eligible": false
+}

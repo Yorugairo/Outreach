@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
+  <rect width="1920" height="1080" fill="#0B0F14"/>
+  <g fill="none" stroke="#20D69B" stroke-width="12">
+    <path d="M420 300C680 300 650 500 920 500"/>
+    <path d="M420 780C680 780 650 580 920 580"/>
+    <path d="M1000 540C1270 540 1230 330 1510 330"/>
+    <path d="M1000 540C1270 540 1230 760 1510 760"/>
+  </g>
+  <g fill="#151C24" stroke="#F4F7FA" stroke-width="8">
+    <rect x="210" y="220" width="320" height="160" rx="34"/>
+    <rect x="210" y="700" width="320" height="160" rx="34"/>
+    <rect x="800" y="460" width="320" height="160" rx="34"/>
+    <rect x="1390" y="250" width="320" height="160" rx="34"/>
+    <rect x="1390" y="680" width="320" height="160" rx="34"/>
+  </g>
+  <g font-family="sans-serif" font-size="38" fill="#F4F7FA" text-anchor="middle">
+    <text x="370" y="315">Institution</text>
+    <text x="370" y="795">Public contests</text>
+    <text x="960" y="555">Teaching network</text>
+    <text x="1550" y="345">Recorded branch</text>
+    <text x="1550" y="775">Missing branch?</text>
+  </g>
+  <text x="960" y="990" text-anchor="middle" font-family="monospace" font-size="32" fill="#FF8A3D">RELATIONSHIPS, NOT MYTHIC BLOODLINES</text>
+</svg>

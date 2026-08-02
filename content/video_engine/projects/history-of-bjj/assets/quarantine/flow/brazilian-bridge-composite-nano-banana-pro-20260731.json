@@ -1,0 +1,23 @@
+{
+  "schema_version": "flow_character_output.v1",
+  "output_id": "flow-character-b02e4131-4172-409d-ba78-617e9b96fe53",
+  "character_pack_id": "history-episode-1-flow-cast-v1",
+  "character_id": "brazilian-bridge-composite",
+  "provider": "google_flow",
+  "builder_surface": "character_builder",
+  "model": "nano-banana-pro",
+  "provider_media_id": "b02e4131-4172-409d-ba78-617e9b96fe53",
+  "local_path": "content/video_engine/projects/history-of-bjj/assets/quarantine/flow/brazilian-bridge-composite-nano-banana-pro-20260731.png",
+  "sha256": "8a6b17d32b5e7e64c583b1eab8f248af4665120b45efb85108b5fc5226580e65",
+  "dimensions": {"width": 1376, "height": 768},
+  "source_kind": "generated_original",
+  "rights_policy": {
+    "likeness_status": "composite",
+    "label_as_illustration": true,
+    "operator_review_required": true
+  },
+  "render_eligible": false,
+  "quarantine_reason": ["provider_output_requires_visual_direction_review", "asset_not_promoted_to_manifest"],
+  "generated_at": "2026-07-31",
+  "notes": "Generated from the approved named-person-free Brazilian composite prompt. Illustration only; not archival evidence."
+}

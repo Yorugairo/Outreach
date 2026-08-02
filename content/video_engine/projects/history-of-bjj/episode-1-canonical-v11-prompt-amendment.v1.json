@@ -1,0 +1,57 @@
+{
+  "schema_version": "canonical_plate_prompt_amendment.v1",
+  "episode_id": "how-judo-became-brazilian-jiu-jitsu",
+  "canonical_visual_coverage_hash": "ffeb5bc4eb0707cd34e21a74a7fbbc17523de6fd2fdb1319fe355140348df784",
+  "supersedes": "episode-1-canonical-v9-prompt-amendment.v1.json",
+  "status": "active_for_candidate_generation_only",
+  "global_rules": [
+    "This chapter depicts early-to-mid twentieth-century Brazil: humid river and regional worlds can give way to Brazilian urban streets, civic courtyards, public halls, rail platforms, art-deco facades, mixed civilian dress, and local tropical vegetation where the narration moves beyond Belém.",
+    "Japanese woodblock editorial is the rendering language, never a geographic instruction. Do not generate Japanese tatami rooms, shoji, pagodas, kimonos, Japanese rooflines, Japanese crowd dress, or Japanese city views unless the narration explicitly calls for a Japanese visiting traveler.",
+    "Generated reconstruction is never historical evidence or a likeness. It may show anonymous social context but cannot identify a named person, assert a specific event, or contain factual text.",
+    "Do not generate readable writing, dates, flags, logos, citations, maps, route arrows, charts, relationship graphs, posters, blank books, cards, certificate-like surfaces, or fake archival documents. Local editorial layers own factual claims, citation, date, and map treatment.",
+    "Keep bodies, luggage, furniture, stages, platforms, and doors fully inside frame and visibly supported. History V4 prohibits multi-person grappling choreography and technical-instruction scenes.",
+    "Use crisp Combat Woodblock: sharp carved ink contours; broad flat deep indigo, ochre, rust, and jade fields; faint warm paper only; no photographic grit, heavy grain, muddy gradients, or faux archive damage."
+  ],
+  "slot_amendments": [
+    {
+      "slot_id": "canonical-117",
+      "world": "1930s Brazilian community crossroads",
+      "purpose": "show overlapping local community thresholds without a lineage graph or one heroic source"
+    },
+    {
+      "slot_id": "canonical-118",
+      "world": "1930s Brazilian public sporting life",
+      "purpose": "show a public identity becoming visible while preserving quieter neighborhood paths in the composition"
+    },
+    {
+      "slot_id": "canonical-119",
+      "world": "Brazilian neighborhood thresholds",
+      "purpose": "make several coexisting social entry points legible without portraying a single origin or active fighting"
+    },
+    {
+      "slot_id": "canonical-120",
+      "world": "Brazil beyond Belém",
+      "purpose": "use a grounded rail or street transition, not a map or route line, to show that the story continues"
+    },
+    {
+      "slot_id": "canonical-121",
+      "world": "1930s Brazilian public exhibition",
+      "purpose": "separate the public-performance action from later institutions, promotion, and civic identity"
+    },
+    {
+      "slot_id": "canonical-122",
+      "world": "1930s Brazilian civic and sporting spaces",
+      "purpose": "supply distinct visual actions for institution, promotion, and Brazilian public identity; never substitute blank posters, flags, or fake text"
+    },
+    {
+      "slot_id": "canonical-123",
+      "world": "Brazilian public sport alongside immigrant-community context",
+      "purpose": "show distinct social thresholds rather than a false visual lineage or a combat demonstration"
+    },
+    {
+      "slot_id": "canonical-124",
+      "world": "Brazilian transformation threshold",
+      "purpose": "prepare the abstract idea of reinvention through a grounded public-space consequence, not a blank explanatory object"
+    }
+  ]
+}

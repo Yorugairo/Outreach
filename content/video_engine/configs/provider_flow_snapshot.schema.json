@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://outreach-program.internal/schemas/provider-flow-snapshot.v1.json",
+  "title": "Provider Flow Snapshot v1",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "provider",
+    "flow_id",
+    "flow_version",
+    "evaluator_required",
+    "cost_ceiling_usd",
+    "can_approve_assets",
+    "can_establish_facts"
+  ],
+  "properties": {
+    "schema_version": {"const": "provider_flow_snapshot.v1"},
+    "provider": {"const": "magnific"},
+    "flow_id": {"type": "string", "minLength": 1},
+    "flow_version": {"type": "string", "minLength": 1},
+    "input_types": {"type": "array", "items": {"type": "string"}},
+    "output_types": {"type": "array", "items": {"type": "string"}},
+    "evaluator_required": {"const": true},
+    "cost_ceiling_usd": {"type": "number", "minimum": 0},
+    "can_approve_assets": {"const": false},
+    "can_establish_facts": {"const": false}
+  }
+}

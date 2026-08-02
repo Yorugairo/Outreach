@@ -1,0 +1,91 @@
+{
+  "schema_version": "technique_visual_manifest.v1",
+  "slug": "armbar-from-guard",
+  "name": "Armbar from Guard",
+  "style_preset": "technical_bjj_flat",
+  "rights": {
+    "permission": "internal",
+    "source": "content/bjj-registry/corpus/armbar-from-guard.json",
+    "reviewed": true,
+    "reviewed_by": "operator-gate-a",
+    "reviewed_at": null
+  },
+  "references": [
+    {
+      "id": "corpus-transcript",
+      "source": "content/bjj-registry/corpus/armbar-from-guard.json",
+      "permission": "internal",
+      "reviewed": true,
+      "reviewed_by": "operator-gate-a",
+      "reviewed_at": null
+    }
+  ],
+  "actions": [
+    {
+      "id": "establish-guard",
+      "state_from": "closed_guard_posture_broken",
+      "action": "establish_closed_guard",
+      "state_to": "closed_guard_posture_broken",
+      "contact": "leg_control",
+      "motion_path": "linear",
+      "reviewed": true,
+      "reference_refs": ["corpus-transcript"],
+      "beat_indices": [1]
+    },
+    {
+      "id": "break-posture",
+      "state_from": "closed_guard_posture_broken",
+      "action": "break_posture_and_frame",
+      "state_to": "wrist_control_hip_frame",
+      "contact": "hip_fulcrum",
+      "motion_path": "compression",
+      "reviewed": true,
+      "reference_refs": ["corpus-transcript"],
+      "beat_indices": [2]
+    },
+    {
+      "id": "secure-wrist",
+      "state_from": "wrist_control_hip_frame",
+      "action": "two_on_one_wrist_control",
+      "state_to": "wrist_control_hip_frame",
+      "contact": "wrist_control",
+      "motion_path": "linear",
+      "reviewed": true,
+      "reference_refs": ["corpus-transcript"],
+      "beat_indices": [3]
+    },
+    {
+      "id": "create-angle",
+      "state_from": "wrist_control_hip_frame",
+      "action": "hip_angle_and_leg_swing",
+      "state_to": "hip_angle_and_leg_control",
+      "contact": "hip_fulcrum",
+      "motion_path": "arc",
+      "reviewed": true,
+      "reference_refs": ["corpus-transcript"],
+      "beat_indices": [4, 5]
+    },
+    {
+      "id": "control-head-and-elbow",
+      "state_from": "hip_angle_and_leg_control",
+      "action": "leg_over_head_elbow_pin",
+      "state_to": "armbar_extension_contact",
+      "contact": "knee_over_head",
+      "motion_path": "pivot",
+      "reviewed": true,
+      "reference_refs": ["corpus-transcript"],
+      "beat_indices": [6, 8]
+    },
+    {
+      "id": "finish-and-hold",
+      "state_from": "armbar_extension_contact",
+      "action": "extend_and_settle",
+      "state_to": "armbar_extension_held",
+      "contact": "elbow_line",
+      "motion_path": "compression",
+      "reviewed": true,
+      "reference_refs": ["corpus-transcript"],
+      "beat_indices": [0, 7, 9, 10]
+    }
+  ]
+}

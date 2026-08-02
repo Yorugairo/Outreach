@@ -1,0 +1,34 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Episode-local ElevenLabs block audio manifest",
+  "type": "object",
+  "required": ["schema_version", "status", "provider", "block_plan_hash", "storyboard_hash", "items", "artifact_hash"],
+  "properties": {
+    "schema_version": {"const": "elevenlabs_block_audio.v1"},
+    "status": {"enum": ["awaiting_audio", "ready"]},
+    "provider": {"const": "elevenlabs"},
+    "episode_scope": {"const": "history-episode-1"},
+    "block_plan_hash": {"type": "string", "minLength": 1},
+    "storyboard_hash": {"type": "string"},
+    "voice_id": {"type": "string"},
+    "items": {"type": "array", "items": {"$ref": "#/$defs/item"}},
+    "artifact_hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  },
+  "$defs": {
+    "item": {
+      "type": "object",
+      "required": ["block_id", "audio_path", "sha256", "duration_s", "narration_hash", "voice_id", "storyboard_hash"],
+      "properties": {
+        "block_id": {"type": "string"},
+        "audio_path": {"type": "string"},
+        "words_path": {"type": "string"},
+        "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "duration_s": {"type": "number", "exclusiveMinimum": 0},
+        "narration_hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "voice_id": {"type": "string", "minLength": 1},
+        "storyboard_hash": {"type": "string"},
+        "word_timings": {"type": "array"}
+      }
+    }
+  }
+}

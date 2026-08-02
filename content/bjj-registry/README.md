@@ -165,33 +165,48 @@ node scripts/import-programmatic-blog-posts.mjs \
 
 ## Second axis: technique pages (corpus videos + transcripts)
 
-The same engine generates a **technique axis** from your corpus of technique videos
-(full transcripts + metadata). This multiplies coverage: 1 technique × N locations =
-long-tail "where to learn <technique> in <city>" pages, built by joining
-`taught_at` → academy → city (reusing the location spine).
+The same engine generates a **technique axis** from a corpus of technique videos
+(full transcripts + metadata). Technique pages remain transcript-derived. A future
+location cross-product requires a verified registry or curriculum join and is not
+inferred from corpus records.
 
 ```bash
 python generate.py --axis technique --corpus ../corpus --out ../output
 python generate.py --axis technique --corpus ../corpus --format jsonl --out ../output
+python ../validate_corpus.py --corpus ../corpus --json
 ```
 
+- Start new records from `templates/technique-corpus-record.json`. The canonical
+  contract is `schemas/technique-corpus.schema.json`; neither file lives in the
+  corpus directory, so the loader cannot mistake it for source content.
+- The validator returns exit code `0` only when every record is schema-valid,
+  filename/slug aligned, unique, and usable by the deterministic video transform.
 - **Fact source = the transcript.** Steps are extracted from the transcript (or taken
   verbatim from `metadata.steps`). The LLM may reword steps but **cannot add/invent**
   them — `llm_guard.guard_technique` checks every rendered step shares tokens with a
   sourced step (provenance), and rejects step-count inflation.
 - **HowTo JSON-LD** is emitted on technique pages (rich-result eligible — a real SEO
   leg up over location pages).
-- **`taught_at` join** drives a "Where to Train This" section + the `metadata.taught_at`
-  field in the JSONL row, enabling the location cross-product.
+- **No academy attribution in corpus records.** `taught_at` is rejected by the
+  canonical schema until a real registry join can supply and verify it.
 - Same `--writer llm` / `--only-priority` / guard / fallback behavior as the location axis.
 
 Expected corpus record:
 ```json
-{ "name": "Armbar from Guard", "slug": "armbar-from-guard", "position": "guard",
-  "belt": "white", "category": "submission", "transcript": "...",
-  "metadata": { "common_errors": [...], "key_terms": [...] },
-  "related": [{"name": "...", "slug": "..."}],
-  "taught_at": [{"name": "Renzo Gracie Austin", "city": "Austin", "state": "TX", "lineage": "Renzo Gracie"}] }
+{
+  "name": "Armbar from Guard",
+  "slug": "armbar-from-guard",
+  "position": "guard",
+  "belt": "white",
+  "category": "submission",
+  "summary": "A transcript-grounded summary.",
+  "transcript": "...",
+  "metadata": {
+    "common_errors": ["..."],
+    "key_terms": ["..."]
+  },
+  "related": [{"name": "Triangle Choke", "slug": "triangle-choke"}]
+}
 ```
 
 After switching sources: run generator, spot-check one page per tier, verify

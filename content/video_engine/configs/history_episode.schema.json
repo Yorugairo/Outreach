@@ -1,0 +1,138 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://outreach-program.internal/schemas/history-episode.v1.json",
+  "title": "History Documentary Episode v1",
+  "description": "Strict, renderer-neutral editorial intake for a History of BJJ documentary episode.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "id",
+    "title",
+    "thesis",
+    "audience",
+    "series",
+    "chapters",
+    "target_duration_s",
+    "cta",
+    "research_packet",
+    "asset_manifest",
+    "outputs"
+  ],
+  "properties": {
+    "schema_version": { "const": "history_episode.v1" },
+    "id": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+    "title": { "type": "string", "minLength": 1 },
+    "thesis": { "type": "string", "minLength": 1 },
+    "audience": {
+      "oneOf": [
+        { "type": "string", "minLength": 1 },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["primary"],
+          "properties": {
+            "primary": { "type": "string", "minLength": 1 },
+            "secondary": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+            "knowledge_level": { "type": "string", "enum": ["general", "beginner", "practitioner", "expert"] }
+          }
+        }
+      ]
+    },
+    "series": { "const": "history-of-bjj" },
+    "episode_number": { "type": "integer", "minimum": 1, "maximum": 3 },
+    "status": { "type": "string", "enum": ["brief", "draft", "research_ready", "approved", "blocked"] },
+    "chapters": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/definitions/chapter" }
+    },
+    "target_duration_s": { "type": "number", "exclusiveMinimum": 0, "maximum": 3600 },
+    "cta": {
+      "oneOf": [
+        { "type": "string", "minLength": 1 },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["text"],
+          "properties": {
+            "text": { "type": "string", "minLength": 1 },
+            "destination": { "type": "string", "minLength": 1 },
+            "kind": { "type": "string", "enum": ["registry", "next_episode", "subscribe", "informational"] }
+          }
+        }
+      ]
+    },
+    "research_packet": { "$ref": "#/definitions/artifactRef" },
+    "asset_manifest": { "$ref": "#/definitions/artifactRef" },
+    "research_packet_ref": { "$ref": "#/definitions/artifactRef" },
+    "asset_manifest_ref": { "$ref": "#/definitions/artifactRef" },
+    "outputs": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/definitions/output" }
+    },
+    "output_targets": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/definitions/output" }
+    },
+    "notes": { "type": "string" },
+    "tags": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+    "created_at": { "type": "string", "minLength": 1 },
+    "updated_at": { "type": "string", "minLength": 1 },
+    "artifact_hash": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+  },
+  "definitions": {
+    "idList": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+      "uniqueItems": true
+    },
+    "chapter": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "title", "summary", "target_duration_s"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+        "title": { "type": "string", "minLength": 1 },
+        "summary": { "type": "string", "minLength": 1 },
+        "target_duration_s": { "type": "number", "exclusiveMinimum": 0 },
+        "claim_ids": { "$ref": "#/definitions/idList" },
+        "research_claim_ids": { "$ref": "#/definitions/idList" },
+        "narration": { "type": "string", "minLength": 1 },
+        "visual_modes": {
+          "type": "array",
+          "items": { "type": "string", "enum": ["artifact_cold_open", "archival_portrait", "illustrated_reconstruction", "document_closeup", "migration_map", "timeline", "lineage_graph", "concept_mechanics", "chapter_card"] }
+        },
+        "research_questions": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "notes": { "type": "string" }
+      }
+    },
+    "artifactRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "hash"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+        "hash": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "path": { "type": "string", "minLength": 1 },
+        "status": { "type": "string", "enum": ["pending", "ready", "approved", "blocked"] }
+      }
+    },
+    "output": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "format", "width", "height"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+        "format": { "type": "string", "enum": ["landscape", "vertical", "chapter", "chapter_subvideo"] },
+        "width": { "type": "integer", "minimum": 1 },
+        "height": { "type": "integer", "minimum": 1 },
+        "purpose": { "type": "string", "enum": ["master", "clip", "short", "preview", "chapter_subvideo"] },
+        "duration_s": { "type": "number", "exclusiveMinimum": 0 },
+        "native": { "type": "boolean" }
+      }
+    }
+  }
+}

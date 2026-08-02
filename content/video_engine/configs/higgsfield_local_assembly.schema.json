@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Local Remotion assembly from Higgsfield clips",
+  "type": "object",
+  "required": ["schema_version", "status", "job_manifest_hash", "audio_manifest_hash", "clip_count", "clips", "assembly", "render_eligible", "artifact_hash"],
+  "properties": {
+    "schema_version": {"const": "higgsfield_local_assembly.v1"},
+    "status": {"const": "ready_for_local_edit"},
+    "job_manifest_hash": {"type": "string", "minLength": 1},
+    "audio_manifest_hash": {"type": "string", "minLength": 1},
+    "clip_count": {"const": 60},
+    "clips": {"type": "array", "minItems": 60, "maxItems": 60},
+    "assembly": {"type": "object", "required": ["editor", "narration_owner", "provider_audio_discarded"], "properties": {"editor": {"const": "remotion"}, "narration_owner": {"const": "elevenlabs"}, "provider_audio_discarded": {"const": true}}},
+    "render_eligible": {"const": false},
+    "artifact_hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}

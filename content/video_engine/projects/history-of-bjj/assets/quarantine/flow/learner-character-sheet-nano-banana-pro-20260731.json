@@ -1,0 +1,38 @@
+{
+  "schema_version": "flow_character_output.v1",
+  "output_id": "flow-character-5d020540-a2e5-4df6-bbc2-66bfd6cc2797",
+  "character_pack_id": "history-episode-1-flow-cast-v1",
+  "character_id": "registry-learner",
+  "provider": "google_flow",
+  "builder_surface": "character_builder",
+  "model": "nano-banana-pro",
+  "provider_media_id": "5d020540-a2e5-4df6-bbc2-66bfd6cc2797",
+  "local_path": "content/video_engine/projects/history-of-bjj/assets/quarantine/flow/learner-character-sheet-nano-banana-pro-20260731.png",
+  "sha256": "169f18a87d7a186fa4aba2283a10654a269eaf944f69abfa14bcdbb98a55b0c5",
+  "dimensions": {
+    "width": 1376,
+    "height": 768
+  },
+  "source_kind": "generated_original",
+  "rights_policy": {
+    "likeness_status": "fictional",
+    "label_as_illustration": true,
+    "operator_review_required": true
+  },
+  "render_eligible": false,
+  "quarantine_reason": [
+    "provider_output_requires_visual_direction_review",
+    "asset_not_promoted_to_manifest"
+  ],
+  "promotion": {
+    "status": "approved",
+    "approved_at": "2026-07-31",
+    "approved_by": "Operator approval",
+    "promoted_path": "content/video_engine/projects/history-of-bjj/assets/generated/flow/learner-character-sheet-nano-banana-pro-20260731.png",
+    "manifest_id": "how-judo-became-brazilian-jiu-jitsu-assets",
+    "manifest_asset_id": "flow-learner-character-sheet-20260731",
+    "render_eligible_in_manifest": true
+  },
+  "generated_at": "2026-07-31",
+  "notes": "Single bounded Flow character-builder generation using the approved registry learner brief. Preserved as a local review artifact; it is not a renderer input."
+}

@@ -1,9 +1,10 @@
 ---
 id: P13-CONTENT-VIDEO-FLYWHEEL
 title: Content-to-Video Flywheel Engine — Phase 0 thin slice + pilot
-status: draft
+status: blocked
 operation: feature
 risk: standard
+owner: parent
 branch: claude/content-generation-system-52f077
 created: 2026-07-28
 updated: 2026-07-28
@@ -13,7 +14,7 @@ updated: 2026-07-28
 
 ## Summary
 
-Build the minimal end-to-end render pipeline (`content/video-engine/`) that turns corpus
+Build the minimal end-to-end render pipeline (`content/video_engine/`) that turns corpus
 technique records and registry articles into landscape + native-vertical stick-figure explainer
 videos, gated by two human approvals, and use it to produce the pilot season
 (`docs/content-video-engine/07-PILOT-SEASON.md`). Architecture, contract, and strategy are fixed
@@ -24,7 +25,7 @@ them.
 
 - Intent: prove format retention (assumption A1) and embed value (A2) with the cheapest real
   pipeline, instrumented for cost and human-time.
-- Accepted when: `python content/video-engine/cli.py run --source content/bjj-registry/corpus/armbar-from-guard.json`
+- Accepted when: `python content/video_engine/cli.py run --source content/bjj-registry/corpus/armbar-from-guard.json`
   produces, after Gate A/B approvals, the full DoD artifact set (architecture §9) for both
   aspects; and the pilot cohort (5 long-form + 12–16 shorts) is produced through the pipeline
   with analytics snapshots scheduled.
@@ -79,27 +80,30 @@ modules; render/TTS integration tests marked slow with mocked providers by defau
 ## Task Slices
 
 ### T1: Scaffold + configs
-- Status: pending
+- Status: completed
+- Owner: parent
 - Depends on: plan approval
 - Write set: `content/video-engine/{configs,content_queue,src,runtime}/…`, `content/video-engine/AGENTS.md`
 - Acceptance: tree exists; `configs/storyboard.schema.json` (copied from docs) validates the
   worked example from `04-STORYBOARD-CONTRACT.md` §4 via `jsonschema`; channel + render-profile
   configs load.
-- Validate: `python -m pytest content/video-engine/tests/test_configs.py`
-- Evidence: pending
+- Validate: `python -m pytest content/video_engine/tests/test_configs.py`
+- Evidence: `test_configs.py` passed; runtime schema is a verbatim spec copy; armbar fixture validates; render profiles match the documented ladder.
 
 ### T2: Models, repository, pipeline skeleton, CLI
-- Status: pending
+- Status: completed
+- Owner: parent
 - Depends on: T1
 - Write set: `src/models.py`, `src/repositories/`, `src/pipeline.py`, `cli.py`, tests
 - Acceptance: `cli.py run` with stubbed stages creates `runtime/jobs/<id>/job.json` + ordered
   stage events; `resume` restarts at first incomplete stage; `approve --gate a|b` transitions
   the awaiting stages; per-stage wall-time + cost fields recorded.
-- Validate: `python -m pytest content/video-engine/tests/test_pipeline.py -q`
-- Evidence: pending
+- Validate: `python -m pytest content/video_engine/tests/test_pipeline.py -q`
+- Evidence: `test_pipeline.py` passed; CLI job `86af45cc-15ff-4c6b-82ea-6f42b1151f52` persisted under `.context/wpa-cli-evidence/` and parked at Gate A with ordered stage events.
 
 ### T3: Storyboard guard (TDD)
-- Status: pending
+- Status: completed
+- Owner: implementation_luna
 - Depends on: T1
 - Write set: `src/guards/storyboard_guard.py`, tests
 - Acceptance: rejects — schema violations; unledgered numeric/medical/financial narration;
@@ -107,21 +111,23 @@ modules; render/TTS integration tests marked slow with mocked providers by defau
   on >90s runs, order errors); credential framing without `expert`;
   `realistic_recreation` without disclosure; unknown poses/manim_class; pacing-budget breaches;
   shorts referencing missing scenes. Accepts the worked example.
-- Validate: `python -m pytest content/video-engine/tests/test_storyboard_guard.py -q`
-- Evidence: pending
+- Validate: `python -m pytest content/video_engine/tests/test_storyboard_guard.py -q`
+- Evidence: `test_storyboard_guard.py` + `test_qc_checks.py` → 20 passed; schema, claims, arc, credentials, assets, pacing, disclosure, duration, timing coverage, loudness, captions, metadata, and silent gaps covered.
 
 ### T4: Audio synthesis service
-- Status: pending
+- Status: completed
+- Owner: implementation_luna
 - Depends on: T2
 - Write set: `src/services/audio_synth.py`, tests (mocked ElevenLabs)
 - Acceptance: per-scene mp3 + `words.json` (character→word grouping) from `/with-timestamps`
   responses; sha256 cache keyed on voice+text+settings; retry ×3 then fail-closed with stage
   event; startup validation of `ELEVENLABS_API_KEY`.
-- Validate: `python -m pytest content/video-engine/tests/test_audio_synth.py -q`
-- Evidence: pending
+- Validate: `python -m pytest content/video_engine/tests/test_audio_synth.py -q`
+- Evidence: `test_audio_synth.py` → 9 passed with mocked API, cache, retry, Unicode/alignment, current endpoint-query contract, and fail-closed incomplete-cache coverage; no provider call made.
 
 ### T5: Scene library v1 + render service
-- Status: pending
+- Status: completed
+- Owner: implementation_luna
 - Depends on: T2; operator voice decision for real-audio smoke test
 - Write set: `src/scenes/{base,stick_figure,title_card}.py`, `src/assets/poses/` (initial set incl.
   `closed_guard`, `armbar_extension`, `tap_frantic`), `src/services/manim_render.py`, tests
@@ -131,10 +137,11 @@ modules; render/TTS integration tests marked slow with mocked providers by defau
   contract test); draft ladder renders the armbar storyboard's stick-figure + title scenes
   headless.
 - Validate: slow test `pytest -m render_smoke` renders `landscape_draft` for 2 scenes
-- Evidence: pending
+- Evidence: fast scene/render contracts → 11 passed; Manim Community 0.20.1 is installed in the project `.venv`; real two-scene `landscape_draft` smoke → 2 passed. Durable artifact `.context/p13-review/manim-smoke/video/landscape_draft/seq_1-2.mp4` is 854×480@15fps and 12.066667s against a 12.0s audio clock (within 1%). Operator voice input remains required only for provider-backed audio.
 
 ### T6: Compositor + captions
-- Status: pending
+- Status: completed
+- Owner: parent
 - Depends on: T4, T5
 - Write set: `src/services/compositor.py`, `src/services/captions.py`, tests
 - Acceptance: per-aspect finals with narration + optional music bed (−18 dB rel, ducked,
@@ -142,10 +149,11 @@ modules; render/TTS integration tests marked slow with mocked providers by defau
   (crossfade/match/hard only where the storyboard says); burned captions (vertical) from word
   timings, `.srt` (landscape); duration drift vs storyboard ≤2%.
 - Validate: `pytest -m assembly` on rendered draft scenes; ffprobe assertions on output
-- Evidence: pending
+- Evidence: `test_compositor.py` → 5 passed, including a local FFmpeg assembly artifact with two-pass −14 LUFS normalization and ≤2% duration enforcement.
 
 ### T7: Packaging + QC + publish (manual mode)
-- Status: pending
+- Status: blocked
+- Owner: parent
 - Depends on: T6
 - Write set: `src/services/{packaging,publish}.py`, `src/guards/qc_checks.py`, tests
 - Acceptance: thumbnail stills, `metadata.json` (title variants, UTM-injected description,
@@ -153,21 +161,41 @@ modules; render/TTS integration tests marked slow with mocked providers by defau
   `qc/report.json` gates Gate B; publish emits upload checklist.
 - Validate: full thin-slice run on armbar-from-guard reaches Gate B with QC pass; DoD checklist
   (architecture §9) verified on disk
-- Evidence: pending
+- Evidence: packaging, QC, and manual publish services are implemented; focused packaging tests → 4 passed and produce real 1280×720 `TitleConceptCard` stills (`.context/p13-review/thumbnail.png`). Offline end-to-end integration with mocked TTS/render boundaries → 1 passed and verifies finals, captions, metadata, embed payload, QC, repository state, and both gate transitions. Exact pytest-cov acceptance → 63 passed and 81% coverage; full repository suite including real Manim smoke and FFmpeg assembly → 519 passed. Real job `.context/wpg-cli-evidence/1687b272-eb0f-4bb1-aa3f-ee534ecf7991/job.json` completed the provider-backed render and QC with `qc/report.json` overall `pass`, and is parked at Gate B. One bounded ElevenLabs generation recorded `$0.1692` for 846 billable characters; no second provider call was made during local retries. Publication remains blocked only on operator Gate B review.
 
 ### T8: Pilot scene classes + pilot production
-- Status: pending
+- Status: blocked
+- Owner: parent
 - Depends on: T7; corpus inventory
 - Write set: `src/scenes/{joint_leverage,map_network}.py`, pose additions (`gym_enforcer`,
   `bowler_hat_maeda`, anatomy poses), pilot storyboards under `content_queue/`
 - Acceptance: E5 → E2 → E4 → E1 → E3 produced per `07-PILOT-SEASON.md` order + technique
   shorts; per-episode DoD met; analytics snapshot capture scheduled (day 7/28).
 - Validate: per-episode DoD checklist; weekly pilot report exists
-- Evidence: pending
+- Evidence: `JointLeverageScene` and `MapNetworkScene` contracts are implemented and covered by fast tests, but no E5 Open Mat Survival Guide source record or required corpus inventory exists in the repository. Pilot storyboards and production are intentionally not fabricated; they remain blocked on operator inputs and T7's real Gate-B DoD.
+
+### T9: Corpus intake readiness
+- Status: completed
+- Owner: parent
+- Depends on: T1–T7 implementation contracts
+- Write set: `content/bjj-registry/{schemas,templates,validate_corpus.py,README.md}`,
+  `tests/test_bjj_corpus_validation.py`, Gate A review evidence
+- Acceptance: canonical records validate before ingest; transcript, slug, related-reference,
+  duplicate, filename, and deterministic video-readiness failures are actionable; blank
+  operator template remains outside the live corpus; `taught_at` is not fabricated.
+- Validate: `python -m pytest tests/test_bjj_corpus_validation.py -q`; then
+  `python content/bjj-registry/validate_corpus.py --corpus content/bjj-registry/corpus --json`
+- Evidence: canonical Armbar inventory → 1 checked, 1 ready, 0 errors; real deterministic
+  technique generation → 1 article written; focused validator/ingest/integration coverage →
+  14 passed; final full repository suite including real Manim and FFmpeg coverage →
+  519 passed, 2 warnings in 74.20s. Independent review findings were addressed by enforcing
+  validation in generator and ingest entrypoints, failing closed in the shared loader, handling
+  invalid schemas deterministically, and reconciling remaining `taught_at` documentation; final
+  read-only re-review reported no remaining actionable findings.
 
 ## Verification
 
-- `python -m pytest content/video-engine/tests -q` green; coverage ≥80% on pure-python modules
+- `python -m pytest content/video_engine/tests -q` green; coverage ≥80% on pure-python modules
   (guards, services logic, pipeline) — render smoke tests excluded from coverage gate.
 - One full evidence-verified run (T7 acceptance) before any pilot storyboard is authored.
 - Kill/pivot evaluation at pilot end per `00-BRAINSTORM-AND-DECISIONS.md` §5 — recorded as a

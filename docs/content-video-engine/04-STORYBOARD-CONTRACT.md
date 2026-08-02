@@ -1,5 +1,35 @@
 # Storyboard Data Contract (v2) — Rationale and Usage
 
+> **Current extension: Storyboard 2.3.0.** Existing 2.0/2.1/2.2 artifacts
+> remain immutable and resumable. History V4.1 uses the additions below.
+
+## Storyboard 2.3 living-editorial extension
+
+Storyboard 2.3 adds immutable `coverage_plan_hash` and
+`asset_selection_hash` fields. Each evidence-backed narration scene retains
+one voiceover and contains one or more `visual_beats`. A beat binds a semantic
+coverage slot to approved asset IDs, a deterministic motion recipe,
+micro-event timing, and a transition. This permits sentence/clause-level cuts
+without repeating narration or converting nouns into literal asset requests.
+
+Candidate preview URLs, provider metadata, licenses, and prices remain in the
+Asset Selection packet. The storyboard sees only promoted local asset IDs.
+
+## Storyboard 2.2 documentary extension
+
+Storyboard 2.2 adds `history_episode` as a source kind and records immutable
+`research_hash`, `asset_manifest_hash`, and `art_bible_hash`. A documentary scene
+references one or more approved research claim IDs, approved asset IDs, and its
+`visual_treatment.v2` ID. Multi-source claims preserve all citation references.
+
+Allowed documentary visual functions are `artifact_cold_open`,
+`archival_portrait`, `illustrated_reconstruction`, `document_quote_closeup`,
+`migration_map_timeline`, `lineage_graph`, `concept_mechanics_cutaway`, and
+`chapter_cta`. `StickFigureScene` and instructional technique sequences are
+invalid for `history_episode` storyboards. Citation overlays resolve claim IDs;
+visuals resolve asset IDs. The two resolution domains never substitute for one
+another.
+
 *Date: 2026-07-28 · Schema: `storyboard.schema.json` (spec-of-record copy in this folder; canonical runtime copy will live at `content/video-engine/configs/`) · Consumers: `storyboard_guard.py`, every render-side service, both human gates.*
 
 The storyboard is the **single contract between judgment and machinery**. Everything upstream of
@@ -69,7 +99,8 @@ scene receives its measured `audio_duration` (+ `padding_s`) as a parameter it m
 
 Source: `content/bjj-registry/corpus/armbar-from-guard.json`. Deterministic floor: transcript
 steps become `develop` beats; `common_errors` becomes the payoff segment; `related` feeds end
-screens; `taught_at` feeds the CTA. LLM (if enabled) rewords narration only.
+screens. The CTA uses the registry-level URL; academy attribution is deferred until a verified
+registry join exists. LLM (if enabled) rewords narration only.
 
 ```json
 {

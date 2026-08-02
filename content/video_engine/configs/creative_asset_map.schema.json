@@ -1,0 +1,109 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://outreach-program.internal/schemas/creative-asset-map.v1.json",
+  "title": "Creative Asset Map v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "id", "series_id", "communication_grammar_hash", "policy", "assets", "summary", "render_eligible", "artifact_hash"],
+  "properties": {
+    "schema_version": {"const": "creative_asset_map.v1"},
+    "id": {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"},
+    "series_id": {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"},
+    "communication_grammar_hash": {"$ref": "#/definitions/hash"},
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["no_undemanded_generation", "actual_assets_resolve_through_manifest", "asset_ceilings", "fallbacks"],
+      "properties": {
+        "no_undemanded_generation": {"const": true},
+        "actual_assets_resolve_through_manifest": {"const": true},
+        "asset_ceilings": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["style_key", "narrator", "historical_character", "world", "prop", "ambient_loop", "fact_surface", "transition_motif"],
+          "properties": {
+            "style_key": {"type": "integer", "minimum": 0},
+            "narrator": {"type": "integer", "minimum": 0},
+            "historical_character": {"type": "integer", "minimum": 0},
+            "world": {"type": "integer", "minimum": 0},
+            "prop": {"type": "integer", "minimum": 0},
+            "ambient_loop": {"type": "integer", "minimum": 0},
+            "fact_surface": {"type": "integer", "minimum": 0},
+            "transition_motif": {"type": "integer", "minimum": 0}
+          }
+        },
+        "fallbacks": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["style_key", "character", "world", "prop", "archive", "ambient_loop", "fact_surface", "transition_motif", "scene_plate"],
+          "properties": {
+            "style_key": {"type": "string", "minLength": 1},
+            "character": {"type": "string", "minLength": 1},
+            "world": {"type": "string", "minLength": 1},
+            "prop": {"type": "string", "minLength": 1},
+            "archive": {"type": "string", "minLength": 1},
+            "ambient_loop": {"type": "string", "minLength": 1},
+            "fact_surface": {"type": "string", "minLength": 1},
+            "transition_motif": {"type": "string", "minLength": 1},
+            "scene_plate": {"type": "string", "minLength": 1}
+          }
+        }
+      }
+    },
+    "assets": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "label", "asset_class", "readiness", "episodes", "uses", "recurrence_count", "reuse_priority", "dependencies", "manifest_asset_ids", "source_strategy", "generation_needed", "motion_needed", "animation_ready", "evidence_eligible", "render_eligible"],
+        "properties": {
+          "id": {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"},
+          "label": {"type": "string", "minLength": 1},
+          "asset_class": {"enum": ["style_key", "character", "world", "prop", "archive", "ambient_loop", "fact_surface", "transition_motif", "scene_plate"]},
+          "character_role": {"enum": ["narrator", "historical_reconstruction", "composite"]},
+          "readiness": {"enum": ["demanded", "blocked_research", "manifest_approved", "visual_approved", "animation_tested", "production_ready", "rejected", "superseded"]},
+          "episodes": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "pattern": "^episode-[1-3]$"}},
+          "uses": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["episode_id", "role", "research_state"],
+              "properties": {
+                "episode_id": {"type": "string", "pattern": "^episode-[1-3]$"},
+                "role": {"type": "string", "minLength": 1},
+                "research_state": {"enum": ["approved", "question_only", "none"]}
+              }
+            }
+          },
+          "recurrence_count": {"type": "integer", "minimum": 1},
+          "reuse_priority": {"type": "integer", "minimum": 1, "maximum": 5},
+          "dependencies": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+          "manifest_asset_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+          "source_strategy": {"enum": ["reuse_existing", "gpt_image_2", "google_flow_image", "local_deterministic", "archive_manifest", "provider_motion_optional"]},
+          "generation_needed": {"type": "boolean"},
+          "motion_needed": {"type": "boolean"},
+          "animation_ready": {"type": "boolean"},
+          "evidence_eligible": {"type": "boolean"},
+          "render_eligible": {"const": false},
+          "notes": {"type": "string"}
+        }
+      }
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["total_assets", "by_class", "by_readiness"],
+      "properties": {
+        "total_assets": {"type": "integer", "minimum": 1},
+        "by_class": {"type": "object", "additionalProperties": {"type": "integer", "minimum": 0}},
+        "by_readiness": {"type": "object", "additionalProperties": {"type": "integer", "minimum": 0}}
+      }
+    },
+    "render_eligible": {"const": false},
+    "artifact_hash": {"$ref": "#/definitions/hash"}
+  },
+  "definitions": {"hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"}}
+}

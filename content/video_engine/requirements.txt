@@ -1,0 +1,5 @@
+jsonschema>=4.26,<5
+manim>=0.20,<0.21
+Pillow>=11,<13
+pydub>=0.25,<1
+playwright>=1.61,<2

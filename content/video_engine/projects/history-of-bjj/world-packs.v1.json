@@ -1,0 +1,256 @@
+{
+  "schema_version": "world_pack_library.v1",
+  "id": "history-of-bjj-world-packs-v1",
+  "communication_grammar_hash": "d1611cade9359c366f5e4964a179d7dd5cb2d848f0c2a8ab212094368d50221d",
+  "asset_map_id": "history-of-bjj-series-assets-v1",
+  "packs": [
+    {
+      "id": "world-archive-study",
+      "label": "Archive and research study",
+      "episodes": ["episode-1", "episode-2", "episode-3"],
+      "research_state": "mixed",
+      "reuse_priority": 5,
+      "narrative_functions": ["qualify evidence", "separate record from legend", "frame open research questions"],
+      "style_key_id": "woodblock-comic-style-key",
+      "style_pack_id": "woodblock-historical-editorial-v1",
+      "plates": [
+        {
+          "view": "master_establishing",
+          "composition": "Warm paper-lined study with ledger table foreground, archive shelves midground, and soft window depth; right-side narrator lane remains open.",
+          "character_staging": ["registry-learner-narrator seated at ledger", "historical reconstructions appear only as labeled inserts"],
+          "fact_anchors": ["fact-folio above ledger", "fact-archive-proof in frame", "fact-uncertainty-card near notebook"]
+        },
+        {
+          "view": "clean_background",
+          "composition": "Same locked study without people, factual writing, dates, labels, or inserted archive media.",
+          "character_staging": [],
+          "fact_anchors": ["clear center folio zone", "clear lower-third citation rail"]
+        },
+        {
+          "view": "medium_character",
+          "composition": "Desk-height view with narrator at left, ledger centered, and evidence card safe zone at right.",
+          "character_staging": ["registry-learner-narrator opens ledger or reacts to uncertainty stamp"],
+          "fact_anchors": ["fact-folio right", "fact-date-seal upper right"]
+        },
+        {
+          "view": "detail_prop",
+          "composition": "Close view of ledger, notebook, archival frame, and gloved hand with shallow illustrated depth.",
+          "character_staging": ["narrator hand points, turns page, or applies correction seal"],
+          "fact_anchors": ["fact-archive-proof centered", "fact-uncertainty-card as page overlay"]
+        }
+      ],
+      "ambient_candidates": ["ambient-lantern-firelight", "ambient-rain"],
+      "entry_motif_ids": ["transition-page-turn-period", "transition-photo-to-diagram"],
+      "exit_motif_ids": ["transition-artifact-to-scroll", "transition-title-icon-reset"],
+      "prompt_core": "Original flat-color woodblock-comic archive study, warm paper and indigo ink, thick readable outlines, layered desk and shelves, stable locked camera, generous local overlay zones.",
+      "negative_constraints": ["no generated text or handwriting", "no generated dates or numerals", "no generated labels, logos, seals, captions, or citations", "no photorealism", "no camera shake"],
+      "generation_status": "planned",
+      "render_eligible": false
+    },
+    {
+      "id": "world-kodokan-institution",
+      "label": "Kodokan institutional hall",
+      "episodes": ["episode-1"],
+      "research_state": "approved",
+      "reuse_priority": 5,
+      "narrative_functions": ["contrast legend with institution", "show deliberate system-building", "support education and practice scenes"],
+      "style_key_id": "woodblock-comic-style-key",
+      "style_pack_id": "woodblock-historical-editorial-v1",
+      "plates": [
+        {
+          "view": "master_establishing",
+          "composition": "Wide training hall with strong tatami geometry, Kano staging lane at center, student silhouettes at depth, and quiet architectural symmetry.",
+          "character_staging": ["kano-reconstruction centered but not monumental", "registry-learner-narrator enters along foreground mat seam"],
+          "fact_anchors": ["fact-date-seal on circular wall detail", "fact-folio at lower right"]
+        },
+        {
+          "view": "clean_background",
+          "composition": "Locked empty hall with separable foreground mat, midground pillars, rear screens, and window light layers.",
+          "character_staging": [],
+          "fact_anchors": ["uncluttered left title zone", "lower citation rail"]
+        },
+        {
+          "view": "medium_character",
+          "composition": "Three-quarter hall view with Kano beside folded training jacket and a learner reaction lane across the mat.",
+          "character_staging": ["kano-reconstruction gestures to practice area", "registry-learner-narrator carries notebook"],
+          "fact_anchors": ["fact-folio above training jacket", "fact-date-seal at rear circular motif"]
+        },
+        {
+          "view": "detail_prop",
+          "composition": "Folded training jacket, ledger, and mat seam arranged as an institutional still life.",
+          "character_staging": ["single hand straightens jacket or opens ledger"],
+          "fact_anchors": ["fact-folio beside ledger"]
+        }
+      ],
+      "ambient_candidates": ["ambient-leaves-fabric", "ambient-water-wheel", "ambient-lantern-firelight"],
+      "entry_motif_ids": ["transition-smoke-to-steam", "transition-title-icon-reset"],
+      "exit_motif_ids": ["transition-wheel-to-date-seal", "transition-photo-to-diagram"],
+      "prompt_core": "Original illustrated institutional training hall using flat indigo, warm paper, muted rust, and thick outlines; clean tatami geometry, stable layered depth, character-ready negative space.",
+      "negative_constraints": ["no generated text or calligraphy", "no generated dates or numerals", "no generated labels, logos, captions, or seals", "no overlapping anatomy", "no moving background camera"],
+      "generation_status": "planned",
+      "render_eligible": false
+    },
+    {
+      "id": "world-maritime-circuit",
+      "label": "Maritime global circuit",
+      "episodes": ["episode-1", "episode-3"],
+      "research_state": "mixed",
+      "reuse_priority": 5,
+      "narrative_functions": ["make travel tangible", "connect places without fake maps", "carry Maeda and narrator through a continuous journey"],
+      "style_key_id": "woodblock-comic-style-key",
+      "style_pack_id": "woodblock-historical-editorial-v1",
+      "plates": [
+        {
+          "view": "master_establishing",
+          "composition": "Steamship deck crossing a broad sea, receding wake and horizon direction left-to-right, layered clouds and rigging, clear character lane at rail.",
+          "character_staging": ["maeda-reconstruction at rail with travel trunk", "registry-learner-narrator struggles comically with ticket and wind"],
+          "fact_anchors": ["fact-journey-ribbon along wake", "fact-date-seal in sun disc"]
+        },
+        {
+          "view": "clean_background",
+          "composition": "Locked empty deck with isolated rigging, smoke, wake, sea, cloud, and distant-port layers.",
+          "character_staging": [],
+          "fact_anchors": ["open lower route ribbon", "open upper date seal"]
+        },
+        {
+          "view": "medium_character",
+          "composition": "Rail-height view with trunk foreground, character positions center-left, and distant port at right.",
+          "character_staging": ["maeda-reconstruction checks horizon", "narrator points from ticket to horizon"],
+          "fact_anchors": ["fact-folio tied visually to ticket", "fact-journey-ribbon along railing"]
+        },
+        {
+          "view": "detail_prop",
+          "composition": "Travel trunk, ticket bundle, rope, and compass-like circular object with wake line continuing through frame.",
+          "character_staging": ["hand stamps ticket or grips trunk handle"],
+          "fact_anchors": ["fact-date-seal on circular object", "fact-journey-ribbon follows rope"]
+        }
+      ],
+      "ambient_candidates": ["ambient-ship-wake", "ambient-steam-smoke", "ambient-leaves-fabric"],
+      "entry_motif_ids": ["transition-direction-match-travel", "transition-smoke-to-steam"],
+      "exit_motif_ids": ["transition-river-to-route", "transition-direction-match-travel"],
+      "prompt_core": "Original woodblock-comic steamship journey world with flat indigo sea, warm paper sky, rust accents, thick outlines, strong travel direction, locked composition, separable ambient regions.",
+      "negative_constraints": ["no generated text on tickets or hull", "no generated dates or numerals", "no generated labels, flags, logos, captions, or route names", "no invented map", "no camera shake"],
+      "generation_status": "planned",
+      "render_eligible": false
+    },
+    {
+      "id": "world-belem-riverfront",
+      "label": "Belém riverfront and port",
+      "episodes": ["episode-1", "episode-2"],
+      "research_state": "mixed",
+      "reuse_priority": 5,
+      "narrative_functions": ["establish arrival context", "support teaching-network scenes", "convert river motion into sourced routes"],
+      "style_key_id": "woodblock-comic-style-key",
+      "style_pack_id": "woodblock-historical-editorial-v1",
+      "plates": [
+        {
+          "view": "master_establishing",
+          "composition": "Layered riverfront with dock foreground, market and port architecture midground, broad river and vessel depth, stable horizon, open narrator lane.",
+          "character_staging": ["maeda-reconstruction steps from vessel with trunk", "registry-learner-narrator follows route ribbon along dock"],
+          "fact_anchors": ["fact-date-seal in upper sky disc", "fact-journey-ribbon follows dock and water"]
+        },
+        {
+          "view": "clean_background",
+          "composition": "Locked empty dock with separable water, boat, foliage, market awning, steam, and distant skyline layers.",
+          "character_staging": [],
+          "fact_anchors": ["open right-side folio zone", "lower citation rail"]
+        },
+        {
+          "view": "medium_character",
+          "composition": "Dock-level perspective with travel trunk foreground and market awning framing two character lanes.",
+          "character_staging": ["maeda-reconstruction carries trunk", "narrator consults notebook or points downriver"],
+          "fact_anchors": ["fact-folio beneath awning", "fact-journey-ribbon along dock boards"]
+        },
+        {
+          "view": "detail_prop",
+          "composition": "Wet dock boards, trunk, ticket, rope, and water edge arranged for object-driven transition.",
+          "character_staging": ["hand lifts trunk or releases ticket stamp"],
+          "fact_anchors": ["fact-date-seal as dock stamp", "fact-folio beside ticket"]
+        }
+      ],
+      "ambient_candidates": ["ambient-river-flow", "ambient-steam-smoke", "ambient-leaves-fabric", "ambient-rain"],
+      "entry_motif_ids": ["transition-direction-match-travel", "transition-river-to-route"],
+      "exit_motif_ids": ["transition-artifact-to-scroll", "transition-title-icon-reset"],
+      "prompt_core": "Original illustrated Belém riverfront world with broad river, port layers, humid atmosphere, flat indigo and ochre palette, thick clean outlines, locked camera, and distinct motion masks.",
+      "negative_constraints": ["no generated text on buildings or vessels", "no generated dates or numerals", "no generated labels, flags, logos, captions, or place names", "no invented geographic diagram", "no shaky pan"],
+      "generation_status": "planned",
+      "render_eligible": false
+    },
+    {
+      "id": "world-brazil-training-hall",
+      "label": "Early Brazilian training and social hall",
+      "episodes": ["episode-1", "episode-2"],
+      "research_state": "mixed",
+      "reuse_priority": 5,
+      "narrative_functions": ["show local adoption", "contrast practice and public contest", "host relationship and uncertainty reveals"],
+      "style_key_id": "woodblock-comic-style-key",
+      "style_pack_id": "woodblock-historical-editorial-v1",
+      "plates": [
+        {
+          "view": "master_establishing",
+          "composition": "Hybrid social and training hall with open mat, wooden chairs, poster frame, high windows, and public silhouettes at depth; no technique choreography.",
+          "character_staging": ["brazilian-bridge-composite handles jacket or greets visitor", "registry-learner-narrator observes from chair row"],
+          "fact_anchors": ["fact-relationship-scroll above mat edge", "fact-uncertainty-card on poster frame"]
+        },
+        {
+          "view": "clean_background",
+          "composition": "Locked empty hall with separable chairs, curtains, windows, mat, and poster frame.",
+          "character_staging": [],
+          "fact_anchors": ["open poster fact zone", "lower citation rail"]
+        },
+        {
+          "view": "medium_character",
+          "composition": "Matched two-position composition for comparison: same hall, same camera, one variable changes between public contest and institutional practice.",
+          "character_staging": ["composite practitioner handles jacket", "narrator swaps color-coded comparison icon"],
+          "fact_anchors": ["fact-folio upper left", "fact-relationship-scroll center"]
+        },
+        {
+          "view": "detail_prop",
+          "composition": "Training jacket, newspaper, poster frame, and chair ticket as evidence and transition objects.",
+          "character_staging": ["hand opens newspaper or turns poster frame"],
+          "fact_anchors": ["fact-archive-proof inside frame", "fact-uncertainty-card as correction overlay"]
+        }
+      ],
+      "ambient_candidates": ["ambient-leaves-fabric", "ambient-lantern-firelight", "ambient-crowd-silhouettes"],
+      "entry_motif_ids": ["transition-title-icon-reset", "transition-artifact-to-scroll"],
+      "exit_motif_ids": ["transition-photo-to-diagram", "transition-page-turn-period"],
+      "prompt_core": "Original flat-color woodblock-comic Brazilian social and training hall, thick readable outlines, modest period architecture, stable matched camera, layered chairs, windows, fabric, and clear overlay space.",
+      "negative_constraints": ["no generated text on posters or newspapers", "no generated dates or numerals", "no generated labels, logos, captions, academy marks, or citations", "no grappling limb tangles", "no background camera movement"],
+      "generation_status": "planned",
+      "render_eligible": false
+    },
+    {
+      "id": "world-modern-global-arena",
+      "label": "Modern global competition arena",
+      "episodes": ["episode-3"],
+      "research_state": "question_only",
+      "reuse_priority": 4,
+      "narrative_functions": ["potential global-sport scale", "potential competition-system comparison", "potential regional-expansion bridge"],
+      "style_key_id": "woodblock-comic-style-key",
+      "style_pack_id": "woodblock-historical-editorial-v1",
+      "plates": [
+        {
+          "view": "master_establishing",
+          "composition": "Demand-only concept for a modern arena layered through the same flat-color outline grammar, with narrator lane and factual overlay zones.",
+          "character_staging": ["registry-learner-narrator as scale anchor only after research approval"],
+          "fact_anchors": ["fact-folio", "fact-relationship-scroll"]
+        },
+        {
+          "view": "clean_background",
+          "composition": "Demand-only empty arena world with separable crowd, banners, lights, floor, and staging lanes.",
+          "character_staging": [],
+          "fact_anchors": ["clear comparison card zone", "lower citation rail"]
+        }
+      ],
+      "ambient_candidates": ["ambient-crowd-silhouettes", "ambient-leaves-fabric", "ambient-rain"],
+      "entry_motif_ids": ["transition-page-turn-period", "transition-title-icon-reset"],
+      "exit_motif_ids": ["transition-photo-to-diagram", "transition-direction-match-travel"],
+      "prompt_core": "Demand-only original flat-color global arena concept with thick outlines, stable camera, layered crowd and floor regions, recurring paper and indigo grammar, and local overlay zones.",
+      "negative_constraints": ["no generated text on banners or scoreboards", "no generated dates or numerals", "no generated labels, logos, event marks, captions, or academy names", "no production generation before research approval", "no shaky camera"],
+      "generation_status": "blocked_research",
+      "render_eligible": false
+    }
+  ],
+  "render_eligible": false,
+  "artifact_hash": "8488b9982566377608665145200e1c701a43c8f1d733884860ac278b17bf142a"
+}

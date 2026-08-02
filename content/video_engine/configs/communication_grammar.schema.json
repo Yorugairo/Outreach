@@ -1,0 +1,220 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://outreach-program.internal/schemas/communication-grammar.v1.json",
+  "title": "Communication Grammar v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "id",
+    "surfaces",
+    "documentary_beat_grammar",
+    "fact_surfaces",
+    "motion_hierarchy",
+    "scene_policy",
+    "humor_policy",
+    "generated_content_policy",
+    "visual_system_policy",
+    "transition_policy",
+    "sound_policy",
+    "cost_policy",
+    "render_eligible",
+    "artifact_hash"
+  ],
+  "properties": {
+    "schema_version": {"const": "communication_grammar.v1"},
+    "id": {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"},
+    "surfaces": {
+      "type": "array",
+      "minItems": 5,
+      "maxItems": 5,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "audience_function", "owns", "prohibits"],
+        "properties": {
+          "id": {"enum": ["world", "character", "evidence", "explanation", "transition"]},
+          "audience_function": {"type": "string", "minLength": 1},
+          "owns": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+          "prohibits": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}}
+        }
+      }
+    },
+    "documentary_beat_grammar": {
+      "type": "array",
+      "minItems": 5,
+      "maxItems": 5,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["order", "id", "purpose"],
+        "properties": {
+          "order": {"type": "integer", "minimum": 1, "maximum": 5},
+          "id": {"enum": ["picture_it", "name_it", "show_relationship", "qualify_it", "carry_forward"]},
+          "purpose": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "fact_surfaces": {
+      "type": "array",
+      "minItems": 6,
+      "maxItems": 6,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "owner", "content_rule", "citation_required"],
+        "properties": {
+          "id": {"enum": ["date_seal", "fact_folio", "archive_proof", "journey_ribbon", "relationship_scroll", "uncertainty_card"]},
+          "owner": {"enum": ["evidence", "explanation"]},
+          "content_rule": {"type": "string", "minLength": 1},
+          "citation_required": {"type": "boolean"}
+        }
+      }
+    },
+    "motion_hierarchy": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["rank", "id", "examples"],
+        "properties": {
+          "rank": {"type": "integer", "minimum": 1, "maximum": 4},
+          "id": {"enum": ["character_prop", "localized_environment", "information_reveal", "camera"]},
+          "examples": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}}
+        }
+      }
+    },
+    "scene_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "target_duration_s",
+        "minimum_duration_s",
+        "maximum_duration_s",
+        "narration_beats_min",
+        "narration_beats_max",
+        "camera_only_motion_satisfies_beat",
+        "whole_background_motion_default",
+        "required_meaningful_motion_layers"
+      ],
+      "properties": {
+        "target_duration_s": {"type": "number", "exclusiveMinimum": 0},
+        "minimum_duration_s": {"type": "number", "exclusiveMinimum": 0},
+        "maximum_duration_s": {"type": "number", "exclusiveMinimum": 0},
+        "narration_beats_min": {"type": "integer", "minimum": 1},
+        "narration_beats_max": {"type": "integer", "minimum": 1},
+        "camera_only_motion_satisfies_beat": {"const": false},
+        "whole_background_motion_default": {"const": false},
+        "required_meaningful_motion_layers": {
+          "type": "array",
+          "minItems": 3,
+          "items": {"enum": ["character_prop", "localized_environment", "information_reveal"]}
+        }
+      }
+    },
+    "humor_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["primary_owner", "may_authenticate_claims", "may_settle_contested_claims"],
+      "properties": {
+        "primary_owner": {"const": "character"},
+        "may_authenticate_claims": {"const": false},
+        "may_settle_contested_claims": {"const": false}
+      }
+    },
+    "generated_content_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "factual_text_in_generated_pixels",
+        "generated_maps_are_evidence",
+        "generated_documents_are_evidence",
+        "facts_rendered_locally"
+      ],
+      "properties": {
+        "factual_text_in_generated_pixels": {"const": false},
+        "generated_maps_are_evidence": {"const": false},
+        "generated_documents_are_evidence": {"const": false},
+        "facts_rendered_locally": {"const": true}
+      }
+    },
+    "visual_system_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["stable_outline_color_camera", "concept_controls_motion", "comparison_template_reused", "flat_colors", "thick_outlines"],
+      "properties": {
+        "stable_outline_color_camera": {"const": true},
+        "concept_controls_motion": {"const": true},
+        "comparison_template_reused": {"const": true},
+        "flat_colors": {"const": true},
+        "thick_outlines": {"const": true}
+      }
+    },
+    "transition_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["catalog_layout_reused", "subject_motivated", "structural_resets", "action_cut_points", "motifs_per_chapter_min", "motifs_per_chapter_max", "match_dimensions"],
+      "properties": {
+        "catalog_layout_reused": {"const": true},
+        "subject_motivated": {"const": true},
+        "structural_resets": {
+          "type": "array",
+          "minItems": 4,
+          "uniqueItems": true,
+          "items": {"enum": ["section_title_card", "color_coded_icon_change", "photo_to_diagram_swap", "direct_hard_cut"]}
+        },
+        "action_cut_points": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "uniqueItems": true,
+          "items": {"enum": ["anticipation", "contact", "recoil", "result"]}
+        },
+        "motifs_per_chapter_min": {"const": 1},
+        "motifs_per_chapter_max": {"const": 2},
+        "match_dimensions": {
+          "type": "array",
+          "minItems": 2,
+          "uniqueItems": true,
+          "items": {"enum": ["shape", "direction"]}
+        }
+      }
+    },
+    "sound_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mix", "music", "ui_card_sounds", "impact_accents"],
+      "properties": {
+        "mix": {"const": "narration_led"},
+        "music": {"const": "restrained"},
+        "ui_card_sounds": {"const": "subtle"},
+        "impact_accents": {"const": "demonstration_only"}
+      }
+    },
+    "cost_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "higgsfield_observed_credits",
+        "higgsfield_observed_duration_s",
+        "baseline_credits_per_second",
+        "full_runtime_provider_default",
+        "proof_max_paid_motion_s"
+      ],
+      "properties": {
+        "higgsfield_observed_credits": {"type": "number", "minimum": 0},
+        "higgsfield_observed_duration_s": {"type": "number", "exclusiveMinimum": 0},
+        "baseline_credits_per_second": {"type": "number", "minimum": 0},
+        "full_runtime_provider_default": {"const": false},
+        "proof_max_paid_motion_s": {"type": "number", "minimum": 0, "maximum": 30}
+      }
+    },
+    "render_eligible": {"const": false},
+    "artifact_hash": {"$ref": "#/definitions/hash"}
+  },
+  "definitions": {
+    "hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}

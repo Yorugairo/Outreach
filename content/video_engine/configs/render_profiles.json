@@ -1,0 +1,30 @@
+{
+  "landscape_draft": {
+    "target": "landscape",
+    "width": 854,
+    "height": 480,
+    "fps": 15,
+    "quality": "low_quality"
+  },
+  "landscape_final": {
+    "target": "landscape",
+    "width": 1920,
+    "height": 1080,
+    "fps": 60,
+    "quality": "high_quality"
+  },
+  "vertical_draft": {
+    "target": "vertical",
+    "width": 480,
+    "height": 854,
+    "fps": 15,
+    "quality": "low_quality"
+  },
+  "vertical_final": {
+    "target": "vertical",
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "quality": "high_quality"
+  }
+}

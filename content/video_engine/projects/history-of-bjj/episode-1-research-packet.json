@@ -1,0 +1,336 @@
+{
+  "schema_version": "research_packet.v1",
+  "id": "how-judo-became-brazilian-jiu-jitsu-research",
+  "episode_id": "how-judo-became-brazilian-jiu-jitsu",
+  "title": "How Judo Became Brazilian Jiu-Jitsu — Research Gate Packet",
+  "thesis": "Brazilian jiu-jitsu is better explained as a documented transnational transformation than as one uncontested handoff from one teacher to one family.",
+  "status": "ready_for_review",
+  "sources": [
+    {
+      "id": "source-ijf-kano-history",
+      "title": "History — Jigoro Kano and the Kodokan",
+      "source_kind": "authoritative_secondary",
+      "locator": "History page, paragraphs covering 1882 and Kodokan synthesis",
+      "url": "https://www.ijf.org/history/judo-corner/130",
+      "publisher": "International Judo Federation",
+      "accessed_at": "2026-07-30",
+      "independence_group": "international-judo-federation",
+      "source_quality": 4,
+      "role": "factual",
+      "is_factual_source": true,
+      "factual_eligible": true,
+      "render_eligible": false
+    },
+    {
+      "id": "source-tsukuba-kano",
+      "title": "Dr. KANO Jigoro, The Pioneer of Judo",
+      "source_kind": "authoritative_secondary",
+      "locator": "Education through Judo",
+      "url": "https://www.tsukuba.ac.jp/en/about/history/kano/index.html",
+      "publisher": "University of Tsukuba",
+      "accessed_at": "2026-07-30",
+      "independence_group": "university-of-tsukuba",
+      "source_quality": 4,
+      "role": "factual",
+      "is_factual_source": true,
+      "factual_eligible": true,
+      "render_eligible": false
+    },
+    {
+      "id": "source-cairus-2011",
+      "title": "Modernization, Nationalism and the Elite: the Genesis of Brazilian jiu-jitsu, 1905–1920",
+      "source_kind": "scholarly",
+      "locator": "Tempo e Argumento 3(2), sections Round 1 and Transnational Encounters",
+      "url": "https://doi.org/10.5965/2175180303022011100",
+      "author": "José Cairus",
+      "publisher": "Tempo e Argumento",
+      "publication_date": "2011",
+      "accessed_at": "2026-07-30",
+      "independence_group": "cairus-2011",
+      "source_quality": 4,
+      "role": "factual",
+      "is_factual_source": true,
+      "factual_eligible": true,
+      "render_eligible": false
+    },
+    {
+      "id": "source-stanlei-brazil-judo",
+      "title": "As origens do judô brasileiro: a árvore genealógica dos medalhistas olímpicos",
+      "source_kind": "scholarly",
+      "locator": "Introduction and Brazilian genealogy discussion",
+      "url": "https://www.scielo.br/j/rbefe/a/rsrMqNqf8TRqKZdHtRsbB4f/",
+      "publisher": "Revista Brasileira de Educação Física e Esporte / SciELO",
+      "publication_date": "2013",
+      "accessed_at": "2026-07-30",
+      "independence_group": "stanlei-brazil-judo-study",
+      "source_quality": 4,
+      "role": "factual",
+      "is_factual_source": true,
+      "factual_eligible": true,
+      "render_eligible": false
+    },
+    {
+      "id": "source-cairus-2020",
+      "title": "Nationalism, Immigration and Identity: The Gracies and the Making of Brazilian Jiu-Jitsu, 1934–1943",
+      "source_kind": "scholarly",
+      "locator": "Abstract and analysis of the 1934–1943 transformation",
+      "url": "https://doi.org/10.18573/mas.105",
+      "author": "José Cairus",
+      "publisher": "Martial Arts Studies",
+      "publication_date": "2020",
+      "accessed_at": "2026-07-30",
+      "independence_group": "cairus-2020",
+      "source_quality": 4,
+      "role": "factual",
+      "is_factual_source": true,
+      "factual_eligible": true,
+      "render_eligible": false
+    },
+    {
+      "id": "source-penglase-2025",
+      "title": "The Unspoken Whiteness of Brazilian Jiu-jitsu",
+      "source_kind": "scholarly",
+      "locator": "Discussion of pre-Maeda practice and the limits of a sole-inheritance narrative",
+      "url": "https://mas.cardiffuniversitypress.org/articles/300/files/693b11b853d09.pdf",
+      "author": "Ben Penglase",
+      "publisher": "Martial Arts Studies",
+      "publication_date": "2025",
+      "accessed_at": "2026-07-30",
+      "independence_group": "penglase-2025",
+      "source_quality": 4,
+      "role": "factual",
+      "is_factual_source": true,
+      "factual_eligible": true,
+      "render_eligible": false
+    },
+    {
+      "id": "source-consultant-outline",
+      "title": "Operator-supplied consultant outline",
+      "source_kind": "consultant_outline",
+      "locator": "Local attachment retained as creative-study input only",
+      "role": "consultant",
+      "is_factual_source": false,
+      "factual_eligible": false,
+      "render_eligible": false,
+      "notes": "No claim cites this source. Its scripts, prompts, voices, and factual assertions are excluded."
+    }
+  ],
+  "citations": [
+    {
+      "id": "citation-ijf-1882",
+      "source_id": "source-ijf-kano-history",
+      "locator": "Paragraphs 104–106"
+    },
+    {
+      "id": "citation-ijf-education",
+      "source_id": "source-ijf-kano-history",
+      "locator": "Paragraphs 107–120"
+    },
+    {
+      "id": "citation-tsukuba-education",
+      "source_id": "source-tsukuba-kano",
+      "locator": "Education through Judo"
+    },
+    {
+      "id": "citation-cairus-rio-1909",
+      "source_id": "source-cairus-2011",
+      "locator": "Round 1: Japanese jiu-jitsu versus Brazilian capoeira, Rio de Janeiro, 1909"
+    },
+    {
+      "id": "citation-cairus-arrival",
+      "source_id": "source-cairus-2011",
+      "locator": "Transnational encounters: the Gracies and Mayeda"
+    },
+    {
+      "id": "citation-cairus-training",
+      "source_id": "source-cairus-2011",
+      "locator": "Discussion of Carlos Gracie, Mayeda, and Jacyntho Ferro"
+    },
+    {
+      "id": "citation-cairus-terms",
+      "source_id": "source-cairus-2011",
+      "locator": "Count Koma to Mayeda Otavio Mitsuyo: from vaudeville jiu-jitsu to judo"
+    },
+    {
+      "id": "citation-stanlei-arrival",
+      "source_id": "source-stanlei-brazil-judo",
+      "locator": "Introduction: Maeda and Satake arrival, 14 November 1914"
+    },
+    {
+      "id": "citation-stanlei-pioneers",
+      "source_id": "source-stanlei-brazil-judo",
+      "locator": "Introduction: competing accounts of earlier teachers and Japanese immigrant lineages"
+    },
+    {
+      "id": "citation-cairus-2020-transformation",
+      "source_id": "source-cairus-2020",
+      "locator": "Abstract and 1934–1943 analysis"
+    },
+    {
+      "id": "citation-penglase-pre-maeda",
+      "source_id": "source-penglase-2025",
+      "locator": "Discussion of pre-Maeda jiu-jitsu and other Kodokan-derived styles in Brazil"
+    },
+    {
+      "id": "citation-penglase-inheritance",
+      "source_id": "source-penglase-2025",
+      "locator": "Discussion of the sole-inheritance narrative"
+    }
+  ],
+  "claims": [
+    {
+      "id": "kano-founded-kodokan-1882",
+      "text": "Jigoro Kano founded the Kodokan in 1882.",
+      "citation_ids": [
+        "citation-ijf-1882",
+        "citation-tsukuba-education"
+      ],
+      "status": "supported",
+      "narration": "The useful starting point is not a battlefield legend but an institution. In 1882, Jigoro Kano established the Kodokan. That date does not mean every older jujutsu practice vanished overnight. It marks the point at which Kano's system gained a durable home, teaching structure, and identity."
+    },
+    {
+      "id": "kodokan-synthesized-jujutsu",
+      "text": "Kodokan judo synthesized material from multiple jujutsu schools rather than preserving one school unchanged.",
+      "citation_ids": [
+        "citation-ijf-1882",
+        "citation-tsukuba-education"
+      ],
+      "status": "supported",
+      "narration": "Kodokan judo was already a transformation. Kano drew from multiple jujutsu schools, selected and reorganized techniques, and connected practice to a broader educational program. So the story begins with adaptation inside Japan, before the art ever reaches Brazil."
+    },
+    {
+      "id": "kano-education-project",
+      "text": "Kano framed judo as an educational project involving efficient use of energy and mutual benefit.",
+      "citation_ids": [
+        "citation-ijf-education",
+        "citation-tsukuba-education"
+      ],
+      "status": "supported",
+      "narration": "Kano's project was larger than a catalog of fighting moves. Institutional histories emphasize education, disciplined practice, efficient use of energy, and mutual benefit. Those ideas matter because later travelers could carry techniques, sporting rules, professional contests, or educational ideals in different proportions."
+    },
+    {
+      "id": "labels-overlapped-abroad",
+      "text": "In the early twentieth century, judo and jiu-jitsu were overlapping public labels in international demonstrations and professional fighting.",
+      "citation_ids": [
+        "citation-cairus-terms",
+        "citation-stanlei-pioneers"
+      ],
+      "contested": true,
+      "status": "contested",
+      "qualified_narration": "Terminology was not settled. Contemporary and retrospective sources use judo, jiu-jitsu, Kano jiu-jitsu, and related spellings in overlapping ways. Accounts differ about what each public label implied, so this episode follows documented people and practices instead of treating a name as a perfectly stable technical system."
+    },
+    {
+      "id": "jiujitsu-in-brazil-before-maeda",
+      "text": "Japanese jiu-jitsu was demonstrated and discussed in Brazil before Maeda's 1914 arrival.",
+      "citation_ids": [
+        "citation-cairus-rio-1909",
+        "citation-penglase-pre-maeda"
+      ],
+      "status": "supported",
+      "narration": "Maeda was important, but he did not enter an empty landscape. Scholarship documents Japanese jiu-jitsu demonstrations and contests in Brazil before his arrival, including a highly publicized 1909 encounter in Rio. That earlier presence complicates any claim that Brazilian grappling history begins on one day in 1914."
+    },
+    {
+      "id": "first-teacher-status-contested",
+      "text": "Sources disagree about who should count as the first judo or jiu-jitsu teacher in Brazil.",
+      "citation_ids": [
+        "citation-stanlei-pioneers",
+        "citation-penglase-pre-maeda"
+      ],
+      "contested": true,
+      "status": "contested",
+      "qualified_narration": "The title of first teacher is disputed. Some accounts foreground Maeda and Satake; others identify earlier Japanese practitioners or distinguish public performers from immigrant-community instruction. The evidence is mixed, and a single winner would create more certainty than the sources allow."
+    },
+    {
+      "id": "maeda-satake-arrived-1914",
+      "text": "Mitsuyo Maeda and Soishiro Satake entered Brazil in 1914 as part of a traveling group of Japanese martial artists.",
+      "citation_ids": [
+        "citation-cairus-arrival",
+        "citation-stanlei-arrival"
+      ],
+      "status": "supported",
+      "narration": "The record does support a major transition in 1914. Maeda and Soishiro Satake entered Brazil with other Japanese martial artists after traveling through the Americas. They were not simply missionaries following a modern curriculum; public demonstrations and professional contests were part of the network that carried their practice."
+    },
+    {
+      "id": "maeda-reached-belem-1915",
+      "text": "Maeda's troupe reached Belém in 1915 and became part of the city's public entertainment and teaching environment.",
+      "citation_ids": [
+        "citation-cairus-arrival"
+      ],
+      "status": "supported",
+      "narration": "By 1915, the troupe was in Belém, a city shaped by the Amazon rubber economy and a cosmopolitan entertainment circuit. Theaters, demonstrations, challenges, and advertised lessons put Japanese grappling in front of audiences who encountered it as education, spectacle, and practical combat at the same time."
+    },
+    {
+      "id": "maeda-prizefighting-context",
+      "text": "Maeda's teaching in Brazil was connected to his experience in professional contests and public exhibitions.",
+      "citation_ids": [
+        "citation-cairus-training",
+        "citation-cairus-terms"
+      ],
+      "status": "supported",
+      "narration": "That context shaped what students could receive. Cairus describes Maeda's Brazilian teaching alongside professional wrestling and prizefighting, with less emphasis on the full Kodokan pedagogical structure. This does not prove a secret combat system. It shows why techniques, labels, and teaching methods could shift as they moved."
+    },
+    {
+      "id": "carlos-training-details-contested",
+      "text": "Carlos Gracie trained in the Belém network associated with Maeda, but the directness, duration, and instructional roles are not established as one uncontested teacher-to-student handoff.",
+      "citation_ids": [
+        "citation-cairus-training",
+        "citation-penglase-inheritance"
+      ],
+      "contested": true,
+      "status": "contested",
+      "qualified_narration": "Accounts differ on the clean version of the handoff. The evidence places Carlos Gracie in the Belém training network associated with Maeda, while scholarship also identifies senior student Jacyntho Ferro and warns against treating later lineage tradition as a complete classroom record. We can say there was transmission; we should qualify its exact shape."
+    },
+    {
+      "id": "jacyntho-ferro-role",
+      "text": "Historical scholarship identifies Jacyntho Ferro as a senior local student and instructor within Maeda's Belém network.",
+      "citation_ids": [
+        "citation-cairus-training"
+      ],
+      "status": "supported",
+      "narration": "Jacyntho Ferro matters because a network is not a single arrow on a family tree. Cairus identifies him as a senior local student who taught within Maeda's circle. Including that role does not erase Carlos Gracie; it prevents the visual grammar of lineage from deleting the intermediaries the scholarship names."
+    },
+    {
+      "id": "multiple-japanese-lineages",
+      "text": "Japanese immigrant and professional-fighter communities produced multiple judo and jiu-jitsu teaching lineages in Brazil.",
+      "citation_ids": [
+        "citation-stanlei-pioneers",
+        "citation-penglase-pre-maeda"
+      ],
+      "status": "supported",
+      "narration": "Brazilian development also extended beyond the best-known Rio lineage. Studies of Brazilian judo identify immigrant teachers, professional fighters, and community networks that spread related practices through different regions. That wider field is why the next episode treats forgotten branches as research questions rather than decorative side notes."
+    },
+    {
+      "id": "gracie-reinvention-1930s",
+      "text": "In the 1930s, the Gracies participated in a broader reinvention of jiu-jitsu as a Brazilian combat sport within a nationalist political and cultural environment.",
+      "citation_ids": [
+        "citation-cairus-2020-transformation",
+        "citation-penglase-inheritance"
+      ],
+      "status": "supported",
+      "narration": "The Brazilian identity of the art was not finished in Belém. Scholarship locates a major phase of reinvention in the 1930s, when public performances, institutions, promotion, and nationalism helped distinguish a Brazilian combat sport from Japanese immigrant traditions and from other local fighting practices."
+    },
+    {
+      "id": "transformation-thesis",
+      "text": "The available evidence supports describing Brazilian jiu-jitsu as a transnational and local transformation rather than a single uncontested invention event.",
+      "citation_ids": [
+        "citation-ijf-1882",
+        "citation-cairus-rio-1909",
+        "citation-stanlei-pioneers",
+        "citation-cairus-2020-transformation",
+        "citation-penglase-inheritance"
+      ],
+      "status": "inference",
+      "narration": "The most accurate conclusion is also the more interesting one. Kano's system was an adaptation; international travel changed its setting and emphasis; Brazil already contained competing practices and communities; and later institutions remade the public identity again. Brazilian jiu-jitsu was not copied once. It was transformed repeatedly."
+    }
+  ],
+  "reviewer_state": {
+    "status": "pending",
+    "notes": "Awaiting operator Research Gate review. No claim is approved by implementation."
+  },
+  "research_questions": [
+    "Can a contemporary Belém archive provide a precise locator for the first advertised Maeda lessons?",
+    "Which surviving records most clearly distinguish direct Maeda instruction from Jacyntho Ferro's teaching role?",
+    "Which early Japanese immigrant lineages should be reserved for Episode 2 rather than compressed into Episode 1?"
+  ],
+  "notes": "No direct quotation is planned. Consultant and reference-pack sources are explicitly excluded from factual and render provenance."
+}

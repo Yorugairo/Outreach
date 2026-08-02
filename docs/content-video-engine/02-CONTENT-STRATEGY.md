@@ -1,6 +1,20 @@
 # Content Strategy — Channel Architecture, Editorial Standards, Compliance
 
-*Date: 2026-07-28 · Evidence base: `05-COMPETITIVE-BRIEF.md` (benchmarks + cold-start comps) and the 2026 policy/economics fact-check summarized there · Decisions trace to `00-BRAINSTORM-AND-DECISIONS.md`.*
+> **V4 lane priority:** Combat History is the launch lane. Technique tutorials are
+> not in the active cohort.
+
+The history lane's audience promise is: **show how grappling systems changed as
+people, institutions, and rules moved across places—without turning lineage legend
+into certainty.** The channel alternates rights-cleared archive material with
+clearly labeled original illustration, maps, documents, and relationship graphs.
+No named academy receives promotional preference; Episode 3 ends with global/PNW
+expansion and a generic Registry CTA. The current series and visual grammar are
+specified in [`07-PILOT-SEASON.md`](07-PILOT-SEASON.md) and
+[`10-HISTORY-DOCUMENTARY-EDITORIAL-SPEC.md`](10-HISTORY-DOCUMENTARY-EDITORIAL-SPEC.md).
+
+*Date: 2026-07-28 · Evidence base: `05-COMPETITIVE-BRIEF.md` (benchmarks + cold-start comps,
+plus separately tagged operator-provided strategy inputs) and the 2026 policy/economics
+fact-check summarized there · Decisions trace to `00-BRAINSTORM-AND-DECISIONS.md`.*
 
 ## 1. The funnel, corrected for 2026 mechanics
 
@@ -30,18 +44,23 @@ Evidence cuts both ways and the resolution is scoped breadth:
   (MinuteEarth, MinuteFood) rather than dilute one brand's promise.
 - The synthesis: **lanes rotate within one audience promise; new audience promises get new
   channels.** BJJ parents, adult grapplers, and combat-history nerds share a promise ("the
-  science and story of fighting, in stick figures"). Data-center electricians do not.
+  science and story of fighting, in an anchorable 2D cast"). Data-center electricians do not.
 
 **Decision:**
 
 | Channel | Promise | Lanes (badge-coded, rotation-scheduled) | Status |
 |---|---|---|---|
-| **Channel 1 — combat-science** | stick-figure science & story of grappling | *Physics of Grappling* (blue) · *Combat History* (green) · *The Honest Guide* (kids/parents + gym-culture, red) | launch now; pilot = first two lanes |
+| **Channel 1 — combat-science** | anchorable 2D science & story of grappling | *Physics of Grappling* (blue) · *Combat History* (green) · *The Honest Guide* (kids/parents + gym-culture, red) | launch now; pilot = first two lanes |
 | Channel 2 — trades | how the physical economy gets built | *Data-Center Trades* · *Licensing & Pay* | Phase 2, after pipeline proven + naming reconciled |
 | Finance lane — *Systems & Blowups* | how markets break (educational/historical) | famous blowups · market mechanics · energy/grid economics | post-pilot: **unblocked** — the operator (ex-JPMorgan Chase, business major) is the named human persona the 2026 policy bucket requires; hard no-recommendations rule; lane-vs-sister-channel placement decided at post-pilot review |
 
 Rotation applies within Channel 1 (e.g., Physics on Fridays, History on Saturdays), preserving
 the operator's predictable-return-day insight without mixing audience promises.
+
+**Naming rule:** `combat-science` is an internal channel key, not a requirement for the public
+handle. The public master name should be broad enough to survive topic evolution within the
+audience promise (for example, a durable name such as *Mat Logic* or the operator's name);
+series names, badges, playlists, and shelves do the niche-locking.
 
 ## 3. Editorial standards (the accretive tier, enforced)
 
@@ -64,6 +83,38 @@ the operator's predictable-return-day insight without mixing audience promises.
    are designed as their own 40–55s pieces (own hook line, reordered scenes) even when built
    from long-form scene subsets.
 5. **No realistic re-creations** of real people/events — brand rule and the disclosure trigger.
+6. **Outlier research supplies tension, not copy.** Compare a video's performance with its own
+   channel baseline, identify the underlying format or question, then write an original
+   **inversion angle** that the fact layer can support. Direct title/premise cloning fails Gate A.
+7. **Skill stack before spectacle.** Prefer angles that combine defensible capabilities rarely
+   held together—sports-medicine evidence + BJJ history, or institutional risk analysis +
+   physical infrastructure—when both are genuinely relevant. Novelty without evidence is not a
+   moat.
+8. **Human directs; AI executes.** Models may cluster research, suggest candidate inversions,
+   draft beats, generate timing data, and render vectors. The operator owns the thesis, source
+   selection, sponsor fit, and both approvals.
+9. **Cinematic vector identity is configurable.** Pilot a dark-mode palette with restrained neon
+   accents and an anchorable 2D/vector cast as a reviewed theme preset. Generic stick figures are
+   not the default for intertwined limbs: they create ambiguous depth and repeated white-line
+   stacks. Do not imitate another channel's set, and do not hard-code aesthetics into scene logic;
+   legibility and information gain win.
+10. **BJJ visual accuracy is a first-class requirement.** Use color-coded practitioners with
+    distinct gi/belt palettes, pose/reference assets for complex positions, and conceptual diagrams
+    for force, frames, wedges, and levers. Never ask a generative model to invent a multi-limb
+    submission from text alone; the renderer must preserve body ownership and the narrated state
+    change.
+
+### 3.1 Visual language by lane
+
+| Lane | Default visual language | Appropriate generative assist |
+|---|---|---|
+| Physics of Grappling | color-coded flat vector/chibi cast + technical overlays | licensed pose references only; optional short cut-ins |
+| Combat History | vintage comic/woodblock-inspired illustrations with verified labels | keyframes and atmosphere, never uncited historical depiction |
+| The Honest Guide | high-contrast infographic diagrams and simple cast reactions | none required for the first slice |
+
+The first implementation slice uses deterministic vector assets and Manim compositing. A model may
+propose a keyframe or a shot recipe, but it does not own anatomy, technique correctness, or the
+final visual claim.
 
 ## 4. Voice policy
 
@@ -100,6 +151,9 @@ Our mitigations, by design rather than by exception:
 
 - **Pilot (wks 1–6):** ~2–3 shorts/week + 1 long-form per ~10 days (5 episodes total), per
   `07-PILOT-SEASON.md`. Production order rises in claims complexity.
+- **Pre-launch buffer:** complete, QC, and Gate-B-approve three public-ready videos before the
+  first channel upload. Publish from the buffer at the planned cadence; do not let early view
+  counts interrupt production of those three.
 - **Post-pilot target (P1):** hold long-form at 1/week (quality-gated), shorts 3–5/week — the
   volume-funnel lane suits a programmatic pipeline (marginal cost is where we're unbeatable);
   the event-upload lane (OverSimplified: 3–4/yr spectacle) is not our comparative advantage.
@@ -114,6 +168,9 @@ Our mitigations, by design rather than by exception:
   articles gain a "watch the breakdown" block).
 - Substack/Medium essays and community posts (Reddit/X) remain **manual, value-dense, human** —
   no automation; they are relationship surfaces, not pipeline outputs.
+- **Post-pilot monetization trust rule:** prefer first-party Northwest Culture LLC products and
+  tightly vetted B2B sponsors whose incentives match the audience. CPM does not override brand
+  fit; low-trust affiliate inventory is rejected even when its headline rate is higher.
 
 ## 8. Measurement discipline
 

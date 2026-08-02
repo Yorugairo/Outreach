@@ -1,0 +1,121 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://outreach-program.internal/schemas/style-pack-library.v1.json",
+  "title": "Style Pack Library v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "id", "parent_style_key_id", "calibration_inventory_hash", "calibration_policy", "shared_identity", "packs", "render_eligible", "artifact_hash"],
+  "properties": {
+    "schema_version": {"const": "style_pack_library.v1"},
+    "id": {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"},
+    "parent_style_key_id": {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"},
+    "calibration_inventory_hash": {"$ref": "#/definitions/hash"},
+    "calibration_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["use", "overlap_allowed", "promotion_requires_asset_manifest", "render_eligible"],
+      "properties": {
+        "use": {"const": "human_directed_style_calibration"},
+        "overlap_allowed": {"const": true},
+        "promotion_requires_asset_manifest": {"const": true},
+        "render_eligible": {"const": false}
+      }
+    },
+    "shared_identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "medium", "palette", "linework", "texture", "visual_motifs", "factual_text_in_generated_pixels", "creator_imitation"],
+      "properties": {
+        "name": {"type": "string", "minLength": 1},
+        "medium": {"const": "woodblock_print"},
+        "palette": {"type": "array", "minItems": 4, "uniqueItems": true, "items": {"type": "string", "pattern": "^#[A-Fa-f0-9]{6}$"}},
+        "linework": {"type": "string", "minLength": 1},
+        "texture": {"type": "string", "minLength": 1},
+        "visual_motifs": {"type": "array", "minItems": 3, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "factual_text_in_generated_pixels": {"const": false},
+        "creator_imitation": {"const": false}
+      }
+    },
+    "packs": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "label", "primary_lanes", "audience_job", "composition", "motion", "character_policy", "information_policy", "production", "prompt_core", "negative_constraints", "status", "render_eligible"],
+        "properties": {
+          "id": {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"},
+          "label": {"type": "string", "minLength": 1},
+          "primary_lanes": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"enum": ["history", "technique_analysis", "fight_analysis", "trending_response"]}},
+          "audience_job": {"type": "string", "minLength": 1},
+          "composition": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["panel_count_min", "panel_count_max", "negative_space_min", "negative_space_max", "depth_layers_min", "camera_default", "layout_rules"],
+            "properties": {
+              "panel_count_min": {"type": "integer", "minimum": 1, "maximum": 6},
+              "panel_count_max": {"type": "integer", "minimum": 1, "maximum": 6},
+              "negative_space_min": {"type": "number", "minimum": 0, "maximum": 0.8},
+              "negative_space_max": {"type": "number", "minimum": 0, "maximum": 0.8},
+              "depth_layers_min": {"type": "integer", "minimum": 1, "maximum": 6},
+              "camera_default": {"enum": ["locked", "restrained_push_in"]},
+              "layout_rules": {"type": "array", "minItems": 2, "items": {"type": "string", "minLength": 1}}
+            }
+          },
+          "motion": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["primary_drivers", "background_motion", "action_cut_points", "transition_motifs"],
+            "properties": {
+              "primary_drivers": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"enum": ["character_prop", "localized_environment", "information_reveal", "camera"]}},
+              "background_motion": {"const": "localized_only"},
+              "action_cut_points": {"type": "array", "uniqueItems": true, "items": {"enum": ["anticipation", "contact", "recoil", "result"]}},
+              "transition_motifs": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}}
+            }
+          },
+          "character_policy": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["silhouette_priority", "identity_reference_required", "fighter_color_ownership"],
+            "properties": {
+              "silhouette_priority": {"enum": ["low", "medium", "high"]},
+              "identity_reference_required": {"type": "boolean"},
+              "fighter_color_ownership": {"type": "boolean"}
+            }
+          },
+          "information_policy": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["facts_rendered_locally", "evidence_surfaces_local", "preferred_surfaces"],
+            "properties": {
+              "facts_rendered_locally": {"const": true},
+              "evidence_surfaces_local": {"const": true},
+              "preferred_surfaces": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}}
+            }
+          },
+          "production": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["turnaround_class", "required_asset_slots", "stress_tests", "fallback"],
+            "properties": {
+              "turnaround_class": {"enum": ["rapid", "standard", "premium"]},
+              "required_asset_slots": {"type": "array", "minItems": 2, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+              "stress_tests": {"type": "array", "minItems": 3, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+              "fallback": {"type": "string", "minLength": 1}
+            }
+          },
+          "prompt_core": {"type": "string", "minLength": 60},
+          "negative_constraints": {"type": "array", "minItems": 4, "items": {"type": "string", "minLength": 1}},
+          "status": {"enum": ["demanded", "candidate", "approved", "retired"]},
+          "render_eligible": {"const": false}
+        }
+      }
+    },
+    "render_eligible": {"const": false},
+    "artifact_hash": {"$ref": "#/definitions/hash"}
+  },
+  "definitions": {
+    "hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}

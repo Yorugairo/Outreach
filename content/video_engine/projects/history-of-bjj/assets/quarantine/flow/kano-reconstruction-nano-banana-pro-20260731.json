@@ -1,0 +1,23 @@
+{
+  "schema_version": "flow_character_output.v1",
+  "output_id": "flow-character-ef3038b4-e868-4dc9-a599-99a8eab0d299",
+  "character_pack_id": "history-episode-1-flow-cast-v1",
+  "character_id": "kano-reconstruction",
+  "provider": "google_flow",
+  "builder_surface": "character_builder",
+  "model": "nano-banana-pro",
+  "provider_media_id": "ef3038b4-e868-4dc9-a599-99a8eab0d299",
+  "local_path": "content/video_engine/projects/history-of-bjj/assets/quarantine/flow/kano-reconstruction-nano-banana-pro-20260731.png",
+  "sha256": "62162d8d629074340b9ed0132df1f328cecf0bb81ba4d6afc1c202aa73f23a41",
+  "dimensions": {"width": 1376, "height": 768},
+  "source_kind": "generated_original",
+  "rights_policy": {
+    "likeness_status": "historical_reconstruction",
+    "label_as_illustration": true,
+    "operator_review_required": true
+  },
+  "render_eligible": false,
+  "quarantine_reason": ["provider_output_requires_visual_direction_review", "asset_not_promoted_to_manifest"],
+  "generated_at": "2026-07-31",
+  "notes": "Generated from the approved Kano reconstruction prompt. Illustration only; not archival evidence."
+}

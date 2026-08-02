@@ -1,0 +1,484 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://outreach-program.internal/schemas/storyboard-v2.2.json",
+  "title": "History Documentary Storyboard 2.2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "job_id",
+    "source",
+    "channel",
+    "research_hash",
+    "asset_manifest_hash",
+    "art_direction",
+    "global_settings",
+    "claims",
+    "scenes",
+    "derivatives",
+    "packaging"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "2.2.0"
+    },
+    "job_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "slug",
+        "kind",
+        "ref",
+        "content_hash"
+      ],
+      "properties": {
+        "slug": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "kind": {
+          "const": "history_episode"
+        },
+        "ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "content_hash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      }
+    },
+    "channel": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "series"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "series": {
+          "const": "history-of-bjj"
+        }
+      }
+    },
+    "research_hash": {
+      "$ref": "#/definitions/hash"
+    },
+    "asset_manifest_hash": {
+      "$ref": "#/definitions/hash"
+    },
+    "art_direction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "hash",
+        "treatment_contract_version",
+        "treatment_hash"
+      ],
+      "properties": {
+        "id": {
+          "enum": [
+            "combat-history-archival-editorial-v1",
+            "combat-history-branded-literature-v1",
+            "combat-history-longform-cutout-fork-v1"
+          ]
+        },
+        "hash": {
+          "$ref": "#/definitions/hash"
+        },
+        "treatment_contract_version": {
+          "const": "visual_treatment.v2"
+        },
+        "treatment_hash": {
+          "$ref": "#/definitions/hash"
+        }
+      }
+    },
+    "global_settings": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "voice",
+        "targets",
+        "target_duration_s",
+        "concept_mechanics_runtime_cap"
+      ],
+      "properties": {
+        "voice": {
+          "type": "object",
+          "additionalProperties": true,
+          "required": [
+            "provider",
+            "is_custom_voice"
+          ],
+          "properties": {
+            "provider": {
+              "enum": [
+                "elevenlabs",
+                "human_recorded"
+              ]
+            },
+            "voice_id": {
+              "type": "string"
+            },
+            "is_custom_voice": {
+              "const": true
+            }
+          }
+        },
+        "targets": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "landscape",
+              "vertical",
+              "chapter_subvideo"
+            ]
+          }
+        },
+        "target_duration_s": {
+          "type": "number",
+          "minimum": 480,
+          "maximum": 720
+        },
+        "concept_mechanics_runtime_cap": {
+          "type": "number",
+          "maximum": 0.15
+        }
+      }
+    },
+    "claims": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "text",
+          "citation_ids",
+          "status",
+          "verified"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/definitions/id"
+          },
+          "text": {
+            "type": "string",
+            "minLength": 1
+          },
+          "citation_ids": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+              "$ref": "#/definitions/id"
+            }
+          },
+          "status": {
+            "enum": [
+              "supported",
+              "contested",
+              "inference"
+            ]
+          },
+          "contested": {
+            "type": "boolean"
+          },
+          "qualified_narration": {
+            "type": "string"
+          },
+          "verified": {
+            "const": true
+          }
+        }
+      }
+    },
+    "scenes": {
+      "type": "array",
+      "minItems": 8,
+      "items": {
+        "$ref": "#/definitions/scene"
+      }
+    },
+    "derivatives": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "vertical_clips",
+        "chapter_subvideos"
+      ],
+      "properties": {
+        "vertical_clips": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "items": {
+            "$ref": "#/definitions/derivative"
+          }
+        },
+        "chapter_subvideos": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/definitions/derivative"
+          }
+        }
+      }
+    },
+    "packaging": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "titles",
+        "description_md",
+        "cta",
+        "credits_path",
+        "synthetic_content_disclosure"
+      ],
+      "properties": {
+        "titles": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 5,
+          "items": {
+            "type": "string",
+            "maxLength": 100
+          }
+        },
+        "description_md": {
+          "type": "string",
+          "minLength": 1
+        },
+        "cta": {
+          "type": "object",
+          "additionalProperties": true,
+          "required": [
+            "line",
+            "url"
+          ]
+        },
+        "credits_path": {
+          "const": "credits.json"
+        },
+        "synthetic_content_disclosure": {
+          "type": "object",
+          "additionalProperties": true,
+          "required": [
+            "required"
+          ]
+        }
+      }
+    }
+  },
+  "definitions": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "documentaryFunction": {
+      "enum": [
+        "artifact_cold_open",
+        "archival_portrait",
+        "illustrated_reconstruction",
+        "document_quote_closeup",
+        "migration_map_timeline",
+        "lineage_graph",
+        "concept_mechanics_cutaway",
+        "chapter_cta"
+      ]
+    },
+    "scene": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "scene_id",
+        "act",
+        "chapter_id",
+        "narration_text",
+        "visual_type",
+        "visual_function",
+        "manim_class",
+        "visual_treatment_id",
+        "parameters",
+        "timing",
+        "claim_refs",
+        "citation_refs",
+        "asset_ids",
+        "transition"
+      ],
+      "properties": {
+        "scene_id": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "act": {
+          "enum": [
+            "hook",
+            "develop",
+            "conflict",
+            "comeback",
+            "payoff",
+            "cta"
+          ]
+        },
+        "chapter_id": {
+          "$ref": "#/definitions/id"
+        },
+        "narration_text": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1400
+        },
+        "visual_type": {
+          "$ref": "#/definitions/documentaryFunction"
+        },
+        "visual_function": {
+          "$ref": "#/definitions/documentaryFunction"
+        },
+        "manim_class": {
+          "const": "DocumentaryScene"
+        },
+        "visual_treatment_id": {
+          "type": "string",
+          "pattern": "^treatment-[a-zA-Z0-9._-]+$"
+        },
+        "parameters": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "timing": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "target_s"
+          ],
+          "properties": {
+            "target_s": {
+              "type": "number",
+              "minimum": 1.5,
+              "maximum": 90
+            },
+            "padding_s": {
+              "type": "number",
+              "minimum": 0
+            }
+          }
+        },
+        "claim_refs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/definitions/id"
+          }
+        },
+        "citation_refs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/definitions/id"
+          }
+        },
+        "asset_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9._-]*$"
+          }
+        },
+        "illustration_label": {
+          "type": "string",
+          "minLength": 1
+        },
+        "transition": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "in",
+            "motif"
+          ],
+          "properties": {
+            "in": {
+              "enum": [
+                "continuous",
+                "crossfade",
+                "match_cut",
+                "hard_cut"
+              ]
+            },
+            "motif": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "derivative": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "scene_ids",
+        "claim_ids",
+        "title",
+        "hook_line",
+        "native_layout"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/definitions/id"
+        },
+        "scene_ids": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "integer",
+            "minimum": 1
+          }
+        },
+        "claim_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/definitions/id"
+          }
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "hook_line": {
+          "type": "string",
+          "minLength": 1
+        },
+        "native_layout": {
+          "enum": [
+            "9:16",
+            "16:9"
+          ]
+        }
+      }
+    }
+  }
+}

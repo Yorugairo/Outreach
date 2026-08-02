@@ -1,0 +1,56 @@
+{
+  "id": "combat-science",
+  "series": "physics-of-grappling",
+  "art_bible_id": "combat-science-technical-cinematic-v1",
+  "series_lanes": {
+    "physics-of-grappling": {
+      "art_bible_id": "combat-science-technical-cinematic-v1",
+      "pipeline_contract_version": 3
+    },
+    "history-of-bjj": {
+      "art_bible_id": "combat-history-longform-cutout-fork-v1",
+      "character_packs": {
+        "episode-1": {
+          "id": "history-episode-1-flow-cast-v1",
+          "path": "content/video_engine/projects/history-of-bjj/episode-1-flow-character-pack.json"
+        }
+      },
+      "pipeline_contract_version": "4.1",
+      "source_kinds": [
+        "history_episode"
+      ],
+      "cta_set": [
+        "Explore the people, places, and lineages behind jiu-jitsu at NationalBJJRegistry.com"
+      ],
+      "named_academy_promotion": false
+    }
+  },
+  "visual_v3_pilot_slugs": [
+    "armbar-from-guard"
+  ],
+  "theme": {
+    "background_color": "#0B0F14",
+    "surface_color": "#151C24",
+    "primary_text": "#F4F7FA",
+    "accent_color": "#3B82F6",
+    "secondary_accent": "#20D69B",
+    "defender_accent": "#8B5CF6",
+    "active_emphasis": "#FF8A3D",
+    "error_color": "#EF5B5B",
+    "font": "Inter",
+    "measurement_font": "Roboto Mono"
+  },
+  "voice": {
+    "provider": "elevenlabs",
+    "voice_id": "",
+    "is_custom_voice": true,
+    "settings": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
+  },
+  "cta_set": [
+    "Find verified academies near you at NationalBJJRegistry.com"
+  ],
+  "badge_color": "#3B82F6"
+}

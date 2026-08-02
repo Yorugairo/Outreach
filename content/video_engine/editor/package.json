@@ -1,0 +1,26 @@
+{
+  "name": "outreach-video-editor",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Pinned local Remotion editorial compositor for the Outreach video engine",
+  "scripts": {
+    "build": "tsc --noEmit",
+    "typecheck": "tsc --noEmit",
+    "start": "remotion studio src/index.tsx",
+    "render": "remotion render src/index.tsx Editorial"
+  },
+  "dependencies": {
+    "@remotion/media": "4.0.502",
+    "@remotion/transitions": "4.0.502",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "remotion": "4.0.502"
+  },
+  "devDependencies": {
+    "@remotion/cli": "4.0.502",
+    "@types/node": "22.13.4",
+    "@types/react": "18.3.18",
+    "@types/react-dom": "18.3.5",
+    "typescript": "5.7.3"
+  }
+}

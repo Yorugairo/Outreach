@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
+  <rect width="1920" height="1080" fill="#13202A"/>
+  <path d="M0 760C320 700 540 820 850 750S1390 700 1920 790V1080H0Z" fill="#24465A"/>
+  <circle cx="1480" cy="230" r="110" fill="#E6C98A"/>
+  <path d="M520 650H1360L1240 810H650Z" fill="#D6C3A0" stroke="#0B0F14" stroke-width="16"/>
+  <path d="M820 650V330M1080 650V270" stroke="#D6C3A0" stroke-width="22"/>
+  <path d="M840 350L1040 620H840ZM1100 290L1300 620H1100Z" fill="#B44B3A" stroke="#0B0F14" stroke-width="12"/>
+  <path d="M280 870C610 800 1280 820 1660 690" fill="none" stroke="#20D69B" stroke-width="12" stroke-dasharray="28 20"/>
+  <text x="110" y="130" font-family="sans-serif" font-size="52" fill="#F4F7FA">Movement changes the art</text>
+  <rect x="110" y="175" width="360" height="56" rx="8" fill="#FF8A3D"/>
+  <text x="290" y="215" text-anchor="middle" font-family="monospace" font-size="28" fill="#0B0F14">RECONSTRUCTION</text>
+</svg>

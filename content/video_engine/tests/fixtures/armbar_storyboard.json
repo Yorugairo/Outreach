@@ -1,0 +1,232 @@
+{
+  "schema_version": "2.0.0",
+  "job_id": "6f1c9a2e-6a1b-4b2f-9d3e-0c8b7a5d4e21",
+  "source": {
+    "slug": "armbar-from-guard",
+    "kind": "corpus_technique",
+    "ref": "content/bjj-registry/corpus/armbar-from-guard.json",
+    "content_hash": "7b9936155a9a61af7eab93f01bf9a2ae6ca5722cc3bb222fe102986188caf1c2"
+  },
+  "channel": {
+    "id": "combat-science",
+    "series": "physics-of-grappling"
+  },
+  "global_settings": {
+    "voice": {
+      "provider": "elevenlabs",
+      "voice_id": "CUSTOM_CLONE_01",
+      "is_custom_voice": true,
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75
+      }
+    },
+    "theme": {
+      "background_color": "#0F0F12",
+      "primary_text": "#FFFFFF",
+      "accent_color": "#3B82F6",
+      "secondary_accent": "#10B981"
+    },
+    "music": {
+      "track_id": null,
+      "gain_db_rel_voice": -18,
+      "ducking": true
+    },
+    "pacing": {
+      "wpm_target": 140,
+      "visual_change_max_s": 6,
+      "pattern_interrupt_max_s": 25,
+      "shorts_visual_change_max_s": 3
+    },
+    "targets": [
+      "landscape",
+      "vertical"
+    ]
+  },
+  "claims": [
+    {
+      "id": "c1",
+      "text": "The hips act as the fulcrum and the elbow as the load during an armbar.",
+      "kind": "biomechanical",
+      "source": "corpus",
+      "verified": true
+    }
+  ],
+  "scenes": [
+    {
+      "scene_id": 1,
+      "act": "hook",
+      "narration_text": "An armbar looks like a strength contest. It is leverage.",
+      "visual_type": "stick_figure_action",
+      "manim_class": "StickFigureScene",
+      "parameters": {
+        "poses": [
+          "closed_guard",
+          "posture_broken"
+        ]
+      },
+      "beats": [
+        {
+          "at_word": 2,
+          "action": "pose:closed_guard"
+        }
+      ],
+      "timing": {
+        "target_s": 5,
+        "padding_s": 0.3
+      },
+      "claim_refs": [],
+      "transition": {
+        "in": "continuous",
+        "motif": "cast:uke"
+      }
+    },
+    {
+      "scene_id": 2,
+      "act": "develop",
+      "narration_text": "Break their posture, keep the wrist, and turn your hips toward the shoulder.",
+      "visual_type": "stick_figure_action",
+      "manim_class": "StickFigureScene",
+      "parameters": {
+        "poses": [
+          "posture_broken",
+          "armbar_extension"
+        ]
+      },
+      "beats": [
+        {
+          "at_word": 4,
+          "action": "pose:armbar_extension"
+        }
+      ],
+      "timing": {
+        "target_s": 7,
+        "padding_s": 0.3
+      },
+      "claim_refs": [],
+      "transition": {
+        "in": "continuous",
+        "motif": "cast:uke"
+      }
+    },
+    {
+      "scene_id": 3,
+      "act": "conflict",
+      "narration_text": "The common escape is a straight pull. That motion gives the attacker the alignment they need.",
+      "visual_type": "stick_figure_action",
+      "manim_class": "StickFigureScene",
+      "parameters": {
+        "poses": [
+          "arm_yank_fail"
+        ]
+      },
+      "beats": [
+        {
+          "at_word": 5,
+          "action": "pose:arm_yank_fail"
+        }
+      ],
+      "timing": {
+        "target_s": 7,
+        "padding_s": 0.3
+      },
+      "claim_refs": [],
+      "transition": {
+        "in": "match_cut",
+        "motif": "lever_arrow"
+      }
+    },
+    {
+      "scene_id": 4,
+      "act": "payoff",
+      "narration_text": "The hips act as the fulcrum and the elbow as the load. Position creates the finish.",
+      "visual_type": "joint_leverage_diagram",
+      "manim_class": "JointLeverageScene",
+      "parameters": {
+        "lever": {
+          "fulcrum": "hips",
+          "load": "elbow",
+          "effort": "hip_drive"
+        }
+      },
+      "beats": [
+        {
+          "at_word": 6,
+          "action": "flash_label:fulcrum"
+        }
+      ],
+      "timing": {
+        "target_s": 8,
+        "padding_s": 0.3
+      },
+      "claim_refs": [
+        "c1"
+      ],
+      "transition": {
+        "in": "continuous",
+        "motif": "lever_arrow"
+      }
+    },
+    {
+      "scene_id": 5,
+      "act": "cta",
+      "narration_text": "Read the full steps and find a verified academy near you through the National BJJ Registry.",
+      "on_screen_text": "Learn it properly.",
+      "visual_type": "title_card",
+      "manim_class": "TitleConceptCard",
+      "parameters": {
+        "headline": "Learn it properly."
+      },
+      "timing": {
+        "target_s": 7,
+        "padding_s": 0.3
+      },
+      "claim_refs": [],
+      "transition": {
+        "in": "crossfade",
+        "motif": null
+      }
+    }
+  ],
+  "shorts": [
+    {
+      "clip_id": "armbar-lever-short",
+      "scene_ids": [
+        4,
+        1
+      ],
+      "hook_line": "Your hips are the fulcrum and their elbow is the load.",
+      "title": "The armbar is leverage",
+      "max_duration_s": 45
+    }
+  ],
+  "packaging": {
+    "titles": [
+      "The Armbar Is Leverage",
+      "Why Pulling Straight Makes the Armbar Worse"
+    ],
+    "thumbnail": {
+      "concept": "Lever diagram over a stick-figure armbar",
+      "variant_texts": [
+        "IT IS LEVERAGE"
+      ],
+      "badge_color": "#3B82F6"
+    },
+    "description_md": "Full written breakdown: {ARTICLE_URL}\nFind verified academies near you: {REGISTRY_URL}",
+    "tags": [
+      "bjj",
+      "armbar",
+      "biomechanics"
+    ],
+    "chapters_from_scenes": true,
+    "cta": {
+      "line": "Find verified academies near you at NationalBJJRegistry.com",
+      "url": "https://nationalbjjregistry.com",
+      "utm_campaign": "armbar-from-guard"
+    },
+    "synthetic_content_disclosure": {
+      "required": false,
+      "reason": "Fully animated and non-realistic with an own-voice clone."
+    }
+  }
+}

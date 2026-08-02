@@ -1,0 +1,35 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Higgsfield audio-driven provider job manifest",
+  "type": "object",
+  "required": ["schema_version", "status", "episode_id", "model", "block_plan_hash", "audio_manifest_hash", "block_count", "items", "artifact_hash"],
+  "properties": {
+    "schema_version": {"const": "higgsfield_audio_job.v1"},
+    "status": {"enum": ["awaiting_audio", "planned", "submitted", "running", "complete", "failed"]},
+    "episode_id": {"const": "history-of-bjj-episode-1"},
+    "model": {"enum": ["seedance_2_0", "wan2_6"]},
+    "block_plan_hash": {"type": "string", "minLength": 1},
+    "audio_manifest_hash": {"type": "string", "minLength": 1},
+    "block_count": {"const": 60},
+    "items": {"type": "array", "minItems": 60, "maxItems": 60, "items": {"$ref": "#/$defs/item"}},
+    "artifact_hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  },
+  "$defs": {
+    "item": {
+      "type": "object",
+      "required": ["block_id", "order", "duration_s", "plate_reference", "character_references", "audio_reference", "settings", "status", "render_eligible"],
+      "properties": {
+        "block_id": {"type": "string"},
+        "order": {"type": "integer", "minimum": 1, "maximum": 60},
+        "duration_s": {"const": 10},
+        "plate_reference": {"type": "object"},
+        "character_references": {"type": "array"},
+        "audio_reference": {"type": "object"},
+        "settings": {"type": "object", "required": ["generate_audio"], "properties": {"generate_audio": {"const": false}}},
+        "task_id": {"type": ["string", "null"]},
+        "status": {"type": "string"},
+        "render_eligible": {"const": false}
+      }
+    }
+  }
+}

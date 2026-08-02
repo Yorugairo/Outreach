@@ -90,3 +90,75 @@ non-deterministic, realistic output → disclosure label + SynthID watermark).
 Higgsfield Explainer REST/API + per-video cost · Gemini Omni Pro (length/res) · Gemini TTS
 timestamp support (would reopen the TTS decision) · official YouTube stance on auto-labeling
 SynthID uploads · Veo extension mechanics (~148s chained, third-party figure).
+
+## 7. Magnific: adopt as a governed media workbench
+
+**Verdict: USE for reviewed asset production and stock intake; do not make it the
+documentary renderer.** The initial raw-prompt bakeoff proved that Magnific can
+materially improve print/cut-paper texture, but also showed uncontrolled semantic
+drift. The production unit is therefore an approved reference set plus a versioned
+Space/Flow, not a prompt string.
+
+| Magnific capability | Best application in this system | Boundary |
+|---|---|---|
+| Style reference / custom style | Train only on original Combat History boards and approved derivatives to stabilize paper, ink, palette, and shape language | Never train on Reference Pack frames or creator identity |
+| Character reference | Recurring fictional narrator/cutout cast, if the series later needs one | Not historical evidence; living likeness requires separate approval |
+| Element reference | Reusable ships, books, dojo props, evidence stamps, map symbols, and recurring comedic objects | Each training/input asset must be rights-cleared |
+| Location reference | Consistent generic dojo, port, ship, archive room, or editorial stage across shots | Do not imply an invented space is a documented historical location |
+| Designer template | Operator-owned title cards, chapter folios, citation rails, thumbnail systems, and repeatable layouts | Remotion remains final timing/caption/citation owner |
+| Spaces / Flows | Repeatable still generation, evaluator pause, repair, upscale, export, and batch variants | Pin the flow/version and conservative cost; no self-approval |
+| Agent / context | Creative routing and shot-brief assistance | Cannot create facts, rights, or gate approvals |
+| Stock photos/vectors/templates | Fast cut-ins, texture, objects, maps, icons, and visual punctuation | Search result is a candidate; download, license review, local hash, and asset-manifest promotion are mandatory |
+| Reference-to-video | Bounded 5–10 second motion tests from already-approved local start frames | Only after still approval; never for factual grappling choreography; output remains a candidate |
+
+Magnific stock is licensed content, not public domain. Current Magnific usage
+rights allow stock in monetized YouTube videos; Free and Essential users require
+attribution, while plan entitlements and API download limits/costs vary. The
+pipeline records the acquisition-time license/plan state instead of assuming that
+“available in the catalog” means universally free.
+
+### Server-side video wrapper
+
+The browser workspace is not an authentication dependency. Google OAuth cookies
+remain in the operator's browser and are not copied into the isolated development
+browser. The engine uses the ignored `MAGNIFIC_API_KEY` from `.env`/`docs/local.env`
+through `content/video_engine/src/services/magnific_video.py` and the
+`magnific-video-generate` CLI command instead.
+
+The wrapper currently targets Magnific's Kling 2.5 Turbo Pro image-to-video API.
+That endpoint accepts one local image plus a motion prompt and returns a 5- or
+10-second asynchronous task; it does not turn a ten-minute narration script into
+a finished documentary. A script must therefore be compiled into reviewed shot
+prompts and source frames before calling it. Every downloaded result is hashed,
+cached, recorded with the provider/model snapshot, and marked
+`render_eligible: false` until a human review promotes it.
+
+Recommended flow:
+
+```text
+shot brief + deterministic composition plate
+→ approved style/element/location references
+→ image generation
+→ human evaluator node
+→ masked repair or upscale when needed
+→ local export + SHA-256
+→ rights/disclosure review
+→ asset_manifest.v1
+→ Remotion editorial assembly
+```
+
+The bounded REST adapter remains useful for deterministic experiments and CI-safe
+contract testing. Spaces/Flows are the preferred operator-facing production layer;
+their outputs still cross the same local-hash and human-review boundary.
+
+### Producer orchestration (V4.1)
+
+The engine now compiles `producer_plan.v1` from editorial coverage. This is the
+provider-neutral handoff for Option A: GPT image generation and Magnific Nano
+Banana 2 can compete for still plates; Magnific Kling or a future Higgsfield
+adapter can supply short motion candidates; stock, Manim, and Remotion remain
+first-class fallbacks. The plan pins the art-bible hash, keeps provider output
+quarantined, and leaves narration, captions, citations, credits, and final
+assembly to our local pipeline. See
+[`12-HIGGSFIELD-EXPLAINER-LEARNINGS.md`](12-HIGGSFIELD-EXPLAINER-LEARNINGS.md)
+for the durable rules.

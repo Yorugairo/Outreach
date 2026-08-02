@@ -1,0 +1,145 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://outreach-program.internal/schemas/technique-visual-manifest.v1.json",
+  "title": "Technique Visual Manifest",
+  "description": "Rights and operator-review sidecar for deterministic instructional technique visuals.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "slug", "rights", "actions"],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "technique_visual_manifest.v1"
+    },
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "name": { "type": "string", "minLength": 1 },
+    "style_preset": { "type": "string", "minLength": 1 },
+    "cast": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "attacker": { "$ref": "#/definitions/castMember" },
+        "defender": { "$ref": "#/definitions/castMember" }
+      }
+    },
+    "rights": { "$ref": "#/definitions/rights" },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "references": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/reference" }
+    },
+    "available": { "type": "boolean" },
+    "description": { "type": "string" },
+    "notes": { "type": ["string", "object", "array"] },
+    "review": { "type": ["string", "object", "array"] },
+    "source_ref": { "type": "string" },
+    "beat_actions": { "type": "object", "additionalProperties": { "type": "string" } },
+    "beat_map": { "type": "object", "additionalProperties": { "type": "string" } },
+    "compile_policy": { "type": "string" },
+    "states": {
+      "type": "object",
+      "additionalProperties": { "$ref": "#/definitions/state" }
+    },
+    "actions": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/definitions/action" }
+    }
+  },
+  "definitions": {
+    "castMember": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["id"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "color": { "type": "string", "minLength": 1 },
+        "gi": { "type": "string", "minLength": 1 },
+        "belt": { "type": "string", "minLength": 1 },
+        "depth": { "type": "integer" }
+      }
+    },
+    "rights": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["permission", "source"],
+      "properties": {
+        "permission": {
+          "type": "string",
+          "enum": ["operator_owned", "licensed", "internal", "public_domain", "cc0"]
+        },
+        "source": { "type": "string", "minLength": 1 },
+        "license": { "type": ["string", "null"] },
+        "reviewed": { "type": "boolean" },
+        "reviewed_by": { "type": ["string", "null"] },
+        "reviewed_at": { "type": ["string", "null"] }
+      }
+    },
+    "reference": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["id", "source", "permission", "reviewed"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "source": { "type": "string", "minLength": 1 },
+        "permission": {
+          "type": "string",
+          "enum": ["operator_owned", "licensed", "internal", "public_domain", "cc0"]
+        },
+        "license": { "type": ["string", "null"] },
+        "reviewed": { "type": "boolean" },
+        "reviewed_by": { "type": ["string", "null"] },
+        "reviewed_at": { "type": ["string", "null"] }
+      }
+    },
+    "state": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["id", "reviewed"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "reviewed": { "type": "boolean" },
+        "asset": { "type": ["string", "null"] },
+        "description": { "type": ["string", "null"] }
+      }
+    },
+    "action": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "id",
+        "state_from",
+        "action",
+        "state_to",
+        "contact",
+        "motion_path",
+        "reviewed"
+      ],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "state_from": { "type": "string", "minLength": 1 },
+        "action": { "type": "string", "minLength": 1 },
+        "state_to": { "type": "string", "minLength": 1 },
+        "contact": { "type": ["string", "array", "object"], "minLength": 1 },
+        "motion_path": { "type": ["string", "array", "object"], "minLength": 1 },
+        "reviewed": { "type": "boolean", "const": true },
+        "reviewed_by": { "type": ["string", "null"] },
+        "reviewed_at": { "type": ["string", "null"] },
+        "cast": { "type": "object", "additionalProperties": true },
+        "camera": { "type": "object", "additionalProperties": true },
+        "motion": { "type": "object", "additionalProperties": true },
+        "overlays": { "type": "array", "items": { "type": "string" } },
+        "sound_cues": { "type": "array", "items": { "type": "string" } },
+        "reference_refs": { "type": "array", "items": { "type": "string" } },
+        "function": { "type": "string" },
+        "beat_indices": { "type": "array", "items": { "type": "integer", "minimum": 0 } }
+      }
+    }
+  }
+}

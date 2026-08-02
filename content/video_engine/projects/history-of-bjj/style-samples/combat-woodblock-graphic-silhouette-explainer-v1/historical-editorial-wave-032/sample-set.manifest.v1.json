@@ -1,0 +1,34 @@
+{
+  "schema_version": "style_sample_set.v1",
+  "id": "history-episode-1-historical-editorial-wave-032-samples-v1",
+  "purpose": "Portable copy of the approved visual-review set for historical editorial calibration.",
+  "provenance": {
+    "origin": "OpenAI built-in image generation",
+    "access_path": "codex_builtin",
+    "evidence_eligible": false,
+    "render_eligible": false,
+    "operator_review_state": "approved_as_style_calibration"
+  },
+  "reuse_policy": {
+    "human_review_reference": true,
+    "automatic_provider_reference": false,
+    "requires_new_job_asset_manifest": true,
+    "requires_new_operator_selection": true,
+    "factual_claims_must_remain_local": true
+  },
+  "samples": [
+    { "path": "01-overlapping-communities.png", "sha256": "c9f04f27cf6fa6ff7748d0881748ea6efb4ac7d354c4ec4382d7e1bbc7e6258a", "role": "distinct social worlds" },
+    { "path": "02-public-identity.png", "sha256": "64cf23a5cc2d1d57770047f6c819f12ce7589217f29d5251f4b0e3e7dfca8258", "role": "public identity" },
+    { "path": "03-coexisting-paths.png", "sha256": "a68af76be90ce59656b2ae26d69d054666dd4c580659690a140066ae9834fc61", "role": "coexisting paths" },
+    { "path": "04-beyond-belem.png", "sha256": "4b5bb9d75d1194cbf7af0f8b618adade76d495ea24d7d0172483da2368513daa", "role": "regional transition" },
+    { "path": "05-reinvention-public-performance.png", "sha256": "af3ab6061a188eb59fa27eac6179ceaa7c45460b12892e75f877e2d8e37c9dc2", "role": "public performance" },
+    { "path": "06-civic-sporting-institution.png", "sha256": "13b1409bf6ed3f7252973530c57e8a9a8d218b94c9786a205f2933f43c3909aa", "role": "civic institution" },
+    { "path": "07-distinct-thresholds.png", "sha256": "44d30994bf369be3ffe0fe2e3f1df9503d6a22fc7ce7ce63cd3c8ae65422a953", "role": "distinct thresholds" },
+    { "path": "08-reinvention-consequence.png", "sha256": "97da8e5a1192a7e8775f351a78af38814bc27b8d2b61032967a279adbe8653f7", "role": "consequence" },
+    { "path": "09-action-public-performances.png", "sha256": "4d65324f1ea52576c74477898b2c46e13cf33bfbf598c4f5997c2766c9d35375", "role": "list action: public performances" },
+    { "path": "10-action-institutions.png", "sha256": "da8e727209eb2c10ad6ef3a4ec0beae07f82f5639c24de4428d948ab107a2f59", "role": "list action: institutions" },
+    { "path": "11-action-promotion.png", "sha256": "2f7dd0e0db81b05310c1a6507b6903c328c638ce3fa5b3ceaa3559fec324ef23", "role": "list action: promotion" },
+    { "path": "12-action-nationalism.png", "sha256": "e432df6f7b93472dfde9eae1c59de63a82dc1948c6783bd2083deaf454d71699", "role": "list action: nationalism" },
+    { "path": "wave-032-contact-sheet.png", "sha256": "a9c859de0e3923bf905d21df6be7b72127268d0634598d36b5da7abd09bb607f", "role": "human-review contact sheet" }
+  ]
+}

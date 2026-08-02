@@ -1,0 +1,77 @@
+{
+  "schema_version": "reference_study.v1",
+  "id": "external-explainer-retention-observations-v1",
+  "title": "External explainer retention observations",
+  "study_kind": "abstract_visual_language",
+  "status": "reviewed",
+  "review": {
+    "reviewed": true,
+    "reviewed_by": "operator-supplied research synthesis",
+    "reviewed_at": "2026-08-02",
+    "notes": "Abstract creative observations only. No imported media, identity, or third-party creative direction is retained for rendering."
+  },
+  "render_policy": {
+    "renderable": false,
+    "allowed_inputs": ["abstract_rules", "design_principles", "timing_observations"],
+    "prohibited_inputs": ["renderable_media", "source_frames", "source_video", "source_images", "creator_assets", "external_urls"]
+  },
+  "lessons": [
+    {
+      "id": "contrast-before-exposition",
+      "category": "pacing",
+      "principle": "A familiar present-day intuition can create a question before a historical, scientific, or conceptual correction answers it.",
+      "application": "Use an original hook-to-correction sequence with a world change or visual metaphor.",
+      "constraints": ["Never reproduce an observed sequence.", "Keep factual claims in the reviewed script and local overlays."],
+      "signals": ["hard contrast cut", "question object", "reframe"]
+    },
+    {
+      "id": "one-readable-action",
+      "category": "legibility",
+      "principle": "A beat becomes easier to follow when one action or causal relationship is visually dominant.",
+      "application": "Give each typed editorial beat one character, prop, route, environmental, or information action.",
+      "constraints": ["Do not turn every noun into a cut.", "Do not use a generic text panel instead of an action."],
+      "signals": ["one clear gesture", "one changed object", "one causal relation"]
+    },
+    {
+      "id": "fast-structural-resets",
+      "category": "motion",
+      "principle": "Hard cuts, recurring cards, and clear visual contrasts can reset attention without adding factual claims.",
+      "application": "Use the channel's own page, route, ink, seal, and silhouette transitions at structural narration boundaries.",
+      "constraints": ["No random transition effect.", "No repeated whole-background movement."],
+      "signals": ["shape match", "page turn", "route carry", "hard reset"]
+    },
+    {
+      "id": "audio-led-explanation",
+      "category": "pacing",
+      "principle": "Narration-led explainers benefit from a clear voice, restrained music, and selective impact sounds.",
+      "application": "Keep narration canonical and add a short sound only when a reviewed on-screen action needs emphasis.",
+      "constraints": ["Do not let provider audio replace canonical narration.", "Do not decorate every edit with a sound effect."],
+      "signals": ["verb-timed action", "brief impact", "quiet hold"]
+    },
+    {
+      "id": "taxonomy-through-repetition",
+      "category": "composition",
+      "principle": "A stable comparison template helps audiences compare distinct subjects without relearning the interface.",
+      "application": "Use a small recurring library of local fact folios, item slots, chapter markers, and correction cards.",
+      "constraints": ["Attach information to intentional scene geometry.", "Do not obscure the subject with a floating gray box."],
+      "signals": ["matched item slots", "recurring color role", "local card"]
+    }
+  ],
+  "observations": [
+    {
+      "id": "contrast-is-structural",
+      "signal": "Past/present or intuition/reality changes appear on meaningful narration pivots.",
+      "design_rule": "Make contrast a cut or visible state change, not a paragraph of explanatory type."
+    },
+    {
+      "id": "action-must-clarify",
+      "signal": "The audience can name what moved and why it matters after a beat.",
+      "design_rule": "Prefer one readable action over several decorative movements."
+    },
+    {
+      "id": "world-stays-stable",
+      "signal": "The scene retains a usable focal plane while foreground elements change.",
+      "design_rule": "Move characters, props, weather regions, or information—not the entire plate."
+    }
+  ]
+}

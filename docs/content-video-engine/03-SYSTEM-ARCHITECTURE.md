@@ -1,5 +1,45 @@
 # Content-to-Video Engine — System Architecture
 
+> **V4 architecture overlay:** V1–V3 remain resumable. New History V4 jobs use the
+> pipeline and contracts below; they never enter the legacy technique-manifest
+> stage and may not resolve `StickFigureScene`.
+
+## V4 history pipeline
+
+```text
+history episode intake
+→ research validation
+→ asset resolution and rights validation
+→ research review packet
+→ Research Gate
+→ editorial_coverage.v1
+→ quarantined stock candidates and contact sheet
+→ Asset Selection Gate
+→ selected asset download, hash, and manifest promotion
+→ documentary script transformation
+→ art-direction resolution
+→ documentary shot plan
+→ visual treatments
+→ Storyboard 2.3
+→ six-frame style board
+→ Visual Direction Gate
+→ motion animatic
+→ Gate A
+→ narration and final rendering
+→ documentary QC
+→ Gate B
+```
+
+`research_packet.v1`, `asset_manifest.v1`, and `art_bible.v2` are independently
+hashed. `shot_plan.v3`, `visual_treatment.v2`, and Storyboard 2.2 capture those
+immutable hashes. Renderer-facing treatments receive approved asset IDs only.
+Research URLs, study sources, consultant text, and unresolved asset paths are
+invalid renderer inputs. Remotion owns editorial assembly, citations, captions,
+and credits; Manim owns maps, timelines, relationship graphs, and concept diagrams.
+
+Gate states are independent and ordered. A stale upstream hash invalidates every
+downstream approval. See [`README.md`](README.md) for authoritative rule ownership.
+
 *Date: 2026-07-28 · Status: draft for operator review · Parent: `00-BRAINSTORM-AND-DECISIONS.md` · Contract: `04-STORYBOARD-CONTRACT.md` + `storyboard.schema.json`*
 
 The video engine adds a **render axis** to the existing corpus-driven content system. It converts
@@ -69,11 +109,15 @@ content/video-engine/
 │   │   └── publish.py                # v1: emits upload checklist + embed payload; v2: YouTube API
 │   ├── scenes/                       # Manim CE scene-class library (the only place Manim lives)
 │   │   ├── base.py                   # ThemedScene: palette, fonts, aspect frames, first-0.5s motion contract
-│   │   ├── stick_figure.py           # StickFigureScene + pose library loader
+│   │   ├── bjj_action.py             # BJJActionScene: color-coded cast + articulated state changes
+│   │   ├── stick_figure.py           # legacy/simple cast scene; not used for intertwined limbs
 │   │   ├── joint_leverage.py         # JointLeverageScene (levers, fulcrums, torque vectors)
 │   │   ├── map_network.py            # MapNetworkScene (geo nodes, migration lines)
 │   │   └── title_card.py            # TitleConceptCard (titles, stat cards)
-│   ├── assets/poses/                 # modular SVG pose library (guard_passed.svg, armbar_extension.svg …)
+│   ├── assets/cast/                  # anchorable practitioner parts and color-coded gi/belt variants
+│   ├── assets/poses/                 # reviewed pose/reference assets, not arbitrary generated limbs
+│   ├── assets/diagrams/              # frames, wedges, levers, arrows, wrong/right overlays
+│   ├── assets/references/            # licensed operator-supplied pose/video references + provenance
 │   └── guards/
 │       ├── storyboard_guard.py       # claims ledger + banned framing + budget checks (§7)
 │       └── qc_checks.py              # automated QC before Gate B (§8)
@@ -124,6 +168,15 @@ threshold — humans see only flagged storyboards) plus a `review_model` Gate-B 
 pilot); P2 = sampled Gate B (spot-check rate the operator ratchets down as trust accumulates). Gates are never *removed* — publishes stay
 human-accountable — but per-video review time is a pilot posture, not a permanent tax.
 
+Editorial authority is independent of gate latency. AI may propose and execute against an angle
+brief, but the operator owns the thesis and source selection. Exception-based Gate A may approve
+only a storyboard derived from an operator-approved brief; it may not autonomously choose or
+change the channel's point of view.
+
+The three-video pre-launch buffer is a **release-queue policy**, not a thirteenth per-run stage:
+P0 uses the operator checklist in `07-PILOT-SEASON.md` §2.1; a later publish queue may count
+persisted Gate-B-approved/package-complete runs before enabling the first external upload.
+
 **Why TTS precedes render (timing inversion).** Narration audio length is unknowable until
 synthesized; animation length is fully controllable. So audio is the clock: each scene's measured
 audio duration (+ configured padding) is passed to its Manim scene as `audio_duration`, and the
@@ -164,6 +217,8 @@ scene; aggregates character start/end times into word-level arrays; writes mp3 +
 Voice settings (stability/style) come from channel config, not code. Failure: retry w/ backoff
 (3×); on hard failure the run fails at this stage with the event recorded — never silently
 substitutes a different voice. Validates `ELEVENLABS_API_KEY` at startup (repo security rule).
+The video CLI loads provider settings from the repository-root `.env` on every invocation;
+already-set process environment variables take precedence.
 The words.json format is the input contract for `captions.py` — no re-transcription step exists.
 
 **`manim_render.py`** — renders each scene headlessly via the Manim CE Python API (not shell
@@ -179,6 +234,41 @@ music bed at **−18 dB relative to voice** with sidechain-style ducking optiona
 the draft: **no blurred-background padding of 16:9 into 9:16.** Blur-padding is the visually
 recognizable low-effort pattern the operator's own "3 Golden Rules" forbid (Rule 1: no
 recognizable generic canvas). Vertical is a first-class layout, not a crop (§6).
+
+### 5.1 Technique visual system (P13 v2)
+
+The first Armbar render exposed a contract gap: a narration beat can pass schema validation while
+remaining visually generic. Technique scenes therefore use a `BJJActionScene` contract instead of
+the legacy `StickFigureScene`:
+
+```json
+{
+  "shot": "grip_closeup",
+  "cast": {"attacker": "white_gi_blue_belt", "defender": "black_gi_purple_belt"},
+  "state_from": "closed_guard_posture_broken",
+  "action": "two_on_one_wrist_control",
+  "state_to": "wrist_control_hip_frame",
+  "camera": {"move": "push_in", "focus": "attacker_wrist"},
+  "overlays": ["wrist_lock", "hip_frame_arrow"]
+}
+```
+
+Required properties:
+
+1. **Anchored cast** — two practitioners have persistent IDs, opposing gi/belt colors, separate
+   depth layers, and reviewed body-part assets. White-line overlap is never treated as anatomy.
+2. **State change** — every instructional clause names a before/after position or a conceptual
+   diagram. A scene that only changes narration fails the visual-beat guard.
+3. **Shot coverage** — each 30–60 second explainer includes wide setup, one or more grip/hip
+   cut-ins, a transition shot, a wrong/right contrast, and a force/leverage diagram where relevant.
+4. **Reference provenance** — complex positions may use operator-supplied or licensed pose/video
+   references, recorded in `assets/references/` with source and permission metadata.
+5. **Generative boundary** — image/video models may propose keyframes or short atmospheric cut-ins;
+   they do not author limb placement, technique correctness, or safety-critical visuals. Manim/2D
+   vector assets remain the source of truth for instructional mechanics.
+
+The storyboard guard and QC must reject repeated pose-only beats, missing `state_from`/`state_to`,
+unresolved cast IDs, and a visual-change interval above the lane's configured budget.
 
 ---
 

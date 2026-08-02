@@ -1,0 +1,11 @@
+{
+  "asset_id": "world-ryozanpaku-gate-night",
+  "asset_sha256": "5c34497f4616b206b31e7429c738558cb453e0f7bfd8722312c8a8c3e4f71b36",
+  "evidence_eligible": false,
+  "human_promoted": true,
+  "origin": "original_subscription_image_generation",
+  "render_eligible": true,
+  "source_reference": "Operator-supplied nighttime gate image used only as a loose composition reference.",
+  "usage_note": "Interpretive fictional martial-arts compound exterior; not a historical Kodokan or Ryozanpaku record.",
+  "prompt": "Create an original 16:9 cinematic environment plate for the Combat History documentary. Use the supplied image only as a loose composition reference: a centered, closed wooden gate to a fictional Japanese martial-arts compound at night, viewed straight-on from a broad empty courtyard. Use an anime-inflected Japanese woodblock print and ukiyo-e-inspired editorial illustration with washi grain, carved ink contours, restrained flat colors, thick expressive outlines, a deep indigo sky, moonlit blue courtyard, weathered warm timber, muted charcoal roof tiles, and subtle warm lantern glow. Preserve a large stable foreground and lower-right negative space for a separate Kano character entrance. Keep foreground, gate, walls, and sky readable as depth planes. No people, text, signage, logos, captions, borders, watermarks, factual dates, battlefield content, weapons, fantasy creatures, or modern objects. Do not reproduce the source literally."
+}

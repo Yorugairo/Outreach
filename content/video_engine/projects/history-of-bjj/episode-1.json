@@ -1,0 +1,156 @@
+{
+  "schema_version": "history_episode.v1",
+  "id": "how-judo-became-brazilian-jiu-jitsu",
+  "title": "How Judo Became Brazilian Jiu-Jitsu",
+  "thesis": "Brazilian jiu-jitsu is better explained as a documented transnational transformation than as one uncontested handoff from one teacher to one family.",
+  "audience": {
+    "primary": "curious viewers with no specialist history background",
+    "secondary": [
+      "BJJ practitioners",
+      "martial-arts history viewers"
+    ],
+    "knowledge_level": "general"
+  },
+  "series": "history-of-bjj",
+  "episode_number": 1,
+  "status": "research_ready",
+  "chapters": [
+    {
+      "id": "kano-system-before-brazil",
+      "title": "Before Brazil: Kano Builds a System",
+      "summary": "Begin with the Kodokan as an educational and technical transformation, then establish why early international labels were unstable.",
+      "target_duration_s": 210,
+      "claim_ids": [
+        "kano-founded-kodokan-1882",
+        "kodokan-synthesized-jujutsu",
+        "kano-education-project",
+        "labels-overlapped-abroad"
+      ],
+      "visual_modes": [
+        "artifact_cold_open",
+        "archival_portrait",
+        "concept_mechanics",
+        "timeline"
+      ]
+    },
+    {
+      "id": "maeda-and-the-belem-network",
+      "title": "Maeda Enters a Larger Brazilian Story",
+      "summary": "Show the pre-existing Brazilian context, Maeda and Satake's arrival, Belém's entertainment network, and the qualified evidence for Carlos Gracie's training.",
+      "target_duration_s": 250,
+      "claim_ids": [
+        "jiujitsu-in-brazil-before-maeda",
+        "first-teacher-status-contested",
+        "maeda-satake-arrived-1914",
+        "maeda-reached-belem-1915",
+        "maeda-prizefighting-context",
+        "carlos-training-details-contested",
+        "jacyntho-ferro-role"
+      ],
+      "visual_modes": [
+        "archival_portrait",
+        "migration_map",
+        "illustrated_reconstruction",
+        "document_closeup",
+        "lineage_graph"
+      ]
+    },
+    {
+      "id": "from-network-to-brazilian-sport",
+      "title": "From Teaching Networks to a Brazilian Sport",
+      "summary": "Restore parallel Japanese lineages, describe the later Brazilian reinvention, and land on transformation rather than a single founding event.",
+      "target_duration_s": 140,
+      "claim_ids": [
+        "multiple-japanese-lineages",
+        "gracie-reinvention-1930s",
+        "transformation-thesis"
+      ],
+      "visual_modes": [
+        "lineage_graph",
+        "timeline",
+        "chapter_card"
+      ]
+    }
+  ],
+  "target_duration_s": 600,
+  "cta": {
+    "text": "Explore the people, places, and sources behind jiu-jitsu at NationalBJJRegistry.com.",
+    "destination": "https://nationalbjjregistry.com",
+    "kind": "registry"
+  },
+  "research_packet": {
+    "id": "how-judo-became-brazilian-jiu-jitsu-research",
+    "hash": "72660fc3eda71b8c13d7e1aa345e65aed4e3700397311be554ff97cd011a1aef",
+    "path": "content/video_engine/projects/history-of-bjj/episode-1-research-packet.json",
+    "status": "ready"
+  },
+  "asset_manifest": {
+    "id": "how-judo-became-brazilian-jiu-jitsu-assets-v2",
+    "hash": "7763c3a8913188561cbf8e6afd63cccd4f72045468be72bc5ccefff62f2e5ad1",
+    "path": "content/video_engine/projects/history-of-bjj/episode-1-asset-manifest.v2.json",
+    "status": "approved"
+  },
+  "outputs": [
+    {
+      "id": "landscape-master",
+      "format": "landscape",
+      "width": 1920,
+      "height": 1080,
+      "purpose": "master",
+      "duration_s": 600,
+      "native": true
+    },
+    {
+      "id": "vertical-kano-system",
+      "format": "vertical",
+      "width": 1080,
+      "height": 1920,
+      "purpose": "short",
+      "duration_s": 55,
+      "native": true
+    },
+    {
+      "id": "vertical-origin-myth",
+      "format": "vertical",
+      "width": 1080,
+      "height": 1920,
+      "purpose": "short",
+      "duration_s": 58,
+      "native": true
+    },
+    {
+      "id": "chapter-kano-system-before-brazil",
+      "format": "chapter_subvideo",
+      "width": 1920,
+      "height": 1080,
+      "purpose": "chapter_subvideo",
+      "duration_s": 210,
+      "native": true
+    },
+    {
+      "id": "chapter-maeda-and-the-belem-network",
+      "format": "chapter_subvideo",
+      "width": 1920,
+      "height": 1080,
+      "purpose": "chapter_subvideo",
+      "duration_s": 250,
+      "native": true
+    },
+    {
+      "id": "chapter-from-network-to-brazilian-sport",
+      "format": "chapter_subvideo",
+      "width": 1920,
+      "height": 1080,
+      "purpose": "chapter_subvideo",
+      "duration_s": 140,
+      "native": true
+    }
+  ],
+  "tags": [
+    "bjj",
+    "judo",
+    "history",
+    "documentary"
+  ],
+  "notes": "Acceptance pilot. Implementation may advance only to Research Gate without operator approval."
+}

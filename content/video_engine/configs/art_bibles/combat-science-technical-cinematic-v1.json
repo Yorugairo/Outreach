@@ -1,0 +1,147 @@
+{
+  "schema_version": "art_bible.v1",
+  "id": "combat-science-technical-cinematic-v1",
+  "title": "Combat Science Technical Cinematic",
+  "channel": "combat-science",
+  "study_ref": {
+    "id": "reference-pack-abstract-v1",
+    "hash": "a68d1278afd0f787ddb8b7b3804e664cc30a73780bd7645cbd2a6080b1c694ee"
+  },
+  "render_policy": {
+    "input_domain": "internal_style_atoms",
+    "allow_external_assets": false,
+    "allow_creator_imitation": false,
+    "allowed_asset_kinds": [
+      "vector_geometry",
+      "flat_fill",
+      "typography",
+      "diagram_overlay",
+      "mat_texture"
+    ]
+  },
+  "palette": {
+    "background": "#0B0F14",
+    "surface": "#151C24",
+    "ink": "#F4F7FA",
+    "attacker_ivory": "#F4F7FA",
+    "attacker_blue": "#3B82F6",
+    "defender_charcoal": "#151C24",
+    "defender_purple": "#8B5CF6",
+    "physics": "#20D69B",
+    "active": "#FF8A3D",
+    "error": "#EF5B5B"
+  },
+  "typography": {
+    "family": "Inter",
+    "caption_font": "Inter (local OFL)",
+    "measurement_font": "Roboto Mono (local OFL)",
+    "caption_source": "local OFL font asset",
+    "measurement_source": "local OFL font asset",
+    "weight": "semibold",
+    "case": "sentence",
+    "tracking": 0.02,
+    "safe_chars": 42
+  },
+  "style_atoms": [
+    {
+      "id": "matte-field",
+      "kind": "field",
+      "description": "A quiet deep field with a restrained mat grid and no decorative noise.",
+      "tokens": { "fill": "background", "grid": "surface", "grid_alpha": 0.28 },
+      "applies_to": ["wide_setup", "result_hold", "story_or_persona_cutaway"]
+    },
+    {
+      "id": "filled-cutout-cast",
+      "kind": "cast",
+      "description": "Filled anatomical masses with a persistent opposing color system and explicit depth order.",
+      "tokens": {
+        "attacker_fill": "attacker_ivory",
+        "defender_fill": "defender_charcoal",
+        "attacker_gi_panel": "attacker_blue",
+        "defender_gi_panel": "defender_purple",
+        "hands": "ink",
+        "feet": "ink",
+        "limbs": "tapered",
+        "outline_px_1080": 8,
+        "edge": "ink"
+      },
+      "applies_to": ["wide_setup", "mechanic_transition", "result_preview", "result_hold"]
+    },
+    {
+      "id": "contact-highlight",
+      "kind": "contact",
+      "description": "A bounded physics-green marker that identifies the decisive grip, frame, or support contact.",
+      "tokens": { "stroke": "physics", "fill": "physics", "radius": 8, "alpha": 0.94 },
+      "applies_to": ["contact_closeup", "wrong_right_compare", "mechanic_transition"]
+    },
+    {
+      "id": "force-linework",
+      "kind": "diagram",
+      "description": "Physics-green force and leverage linework anchored to the living cast.",
+      "tokens": { "stroke": "physics", "arrowhead": "physics", "width": 4, "dash": "solid" },
+      "applies_to": ["force_diagram", "mechanic_transition"]
+    },
+    {
+      "id": "comparison-split",
+      "kind": "accent",
+      "description": "A matched panel treatment that keeps the start state fixed while isolating one decisive variable.",
+      "tokens": { "divider": "ink", "wrong": "error", "right": "physics", "divider_width": 2 },
+      "applies_to": ["wrong_right_compare"]
+    },
+    {
+      "id": "technical-label",
+      "kind": "type",
+      "description": "Compact sentence-case labels that point to an anchor without covering anatomy.",
+      "tokens": { "fill": "ink", "muted": "surface", "size": 24, "leader": "surface" },
+      "applies_to": ["contact_closeup", "force_diagram", "result_hold"]
+    },
+    {
+      "id": "arc-match-transition",
+      "kind": "transition",
+      "description": "A subject arc or force path that persists across a motivated transition.",
+      "tokens": { "path": "physics", "stroke": "physics", "width": 3, "duration_frames": 12, "motif": "mat_line_transform" },
+      "applies_to": ["mechanic_transition", "force_diagram"]
+    },
+    {
+      "id": "result-accent",
+      "kind": "accent",
+      "description": "A restrained green recognition accent reserved for a verified final state.",
+      "tokens": { "stroke": "physics", "fill": "physics", "alpha": 0.9 },
+      "applies_to": ["result_preview", "result_hold"]
+    }
+  ],
+  "composition": {
+    "safe_margin": 0.08,
+    "anchor_grid": "four_anchor",
+    "max_repeated_framing": 2,
+    "functions": {
+      "result_preview": { "framing": "held_medium", "atom_ids": ["filled-cutout-cast", "result-accent"] },
+      "wide_setup": { "framing": "wide_context", "atom_ids": ["matte-field", "filled-cutout-cast"], "emphasis": "ownership" },
+      "contact_closeup": { "framing": "contact_close", "atom_ids": ["filled-cutout-cast", "contact-highlight", "technical-label"] },
+      "mechanic_transition": { "framing": "action_medium", "atom_ids": ["filled-cutout-cast", "contact-highlight", "arc-match-transition"] },
+      "wrong_right_compare": { "framing": "matched_split", "atom_ids": ["comparison-split", "filled-cutout-cast", "contact-highlight"] },
+      "force_diagram": { "framing": "living_diagram", "atom_ids": ["filled-cutout-cast", "force-linework", "technical-label"] },
+      "result_hold": { "framing": "held_medium", "atom_ids": ["matte-field", "filled-cutout-cast", "result-accent", "technical-label"] },
+      "story_or_persona_cutaway": { "framing": "graphic_interlude", "atom_ids": ["matte-field", "technical-label"] }
+    }
+  },
+  "motion": {
+    "phase_order": ["anticipation", "action", "contact", "recovery", "hold"],
+    "easing": {
+      "anticipation": "ease_out",
+      "action": "linear",
+      "contact": "ease_in_out",
+      "recovery": "ease_out",
+      "hold": "constant"
+    },
+    "transition_motifs": ["mat_line_transform", "arc_match", "contact_carry", "diagram_reveal", "hard_reset"]
+  },
+  "signature": [
+    "deep_matte_field",
+    "filled_opposing_cast",
+    "physics_contact_force",
+    "technical_sentence_labels",
+    "motivated_anchor_transitions"
+  ],
+  "artifact_hash": "e0621e4f69ed04cd081ba737d12b430d8614690a4fb57519d20f9e289471b978"
+}

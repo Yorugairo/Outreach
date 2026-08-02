@@ -1,0 +1,117 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://outreach-program.internal/schemas/scene-bundle.v1.json",
+  "title": "Scene Bundle v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "id", "episode_id", "communication_grammar_hash", "asset_map_hash", "style_pack_id", "duration_s", "narration_beats", "world_asset_id", "depth_layers", "character_slots", "prop_slots", "ambient_loops", "fact_anchors", "micro_events", "entry_state", "exit_state", "camera", "fallback", "render_eligible", "artifact_hash"],
+  "properties": {
+    "schema_version": {"const": "scene_bundle.v1"},
+    "id": {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"},
+    "episode_id": {"type": "string", "pattern": "^episode-[1-3]$"},
+    "communication_grammar_hash": {"$ref": "#/definitions/hash"},
+    "asset_map_hash": {"$ref": "#/definitions/hash"},
+    "style_pack_id": {"type": "string", "minLength": 1},
+    "duration_s": {"type": "number", "minimum": 20, "maximum": 30},
+    "narration_beats": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 4,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "text", "surface", "claim_refs", "citation_refs"],
+        "properties": {
+          "id": {"type": "string", "minLength": 1},
+          "text": {"type": "string", "minLength": 1},
+          "surface": {"enum": ["world", "character", "evidence", "explanation", "transition"]},
+          "claim_refs": {"type": "array", "items": {"type": "string", "minLength": 1}},
+          "citation_refs": {"type": "array", "items": {"type": "string", "minLength": 1}}
+        }
+      }
+    },
+    "world_asset_id": {"type": "string", "minLength": 1},
+    "depth_layers": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "character_slots": {"type": "array", "items": {"$ref": "#/definitions/slot"}},
+    "prop_slots": {"type": "array", "items": {"$ref": "#/definitions/slot"}},
+    "ambient_loops": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["asset_id", "mask_id", "region", "camera_locked"],
+        "properties": {
+          "asset_id": {"type": "string", "minLength": 1},
+          "mask_id": {"type": "string", "minLength": 1},
+          "region": {"type": "string", "minLength": 1},
+          "camera_locked": {"const": true}
+        }
+      }
+    },
+    "fact_anchors": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "fact_surface_id", "safe_zone"],
+        "properties": {
+          "id": {"type": "string", "minLength": 1},
+          "fact_surface_id": {"type": "string", "minLength": 1},
+          "safe_zone": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "micro_events": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["at_s", "motion_layer", "action"],
+        "properties": {
+          "at_s": {"type": "number", "minimum": 0},
+          "motion_layer": {"enum": ["character_prop", "localized_environment", "information_reveal", "camera"]},
+          "action": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "entry_state": {"$ref": "#/definitions/state"},
+    "exit_state": {"$ref": "#/definitions/state"},
+    "camera": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode", "reason"],
+      "properties": {
+        "mode": {"enum": ["locked", "restrained_push_in", "directed_motion"]},
+        "reason": {"type": "string"}
+      }
+    },
+    "fallback": {"type": "string", "minLength": 1},
+    "render_eligible": {"const": false},
+    "artifact_hash": {"$ref": "#/definitions/hash"}
+  },
+  "definitions": {
+    "hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "slot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "asset_id", "staging", "actions"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "asset_id": {"type": "string", "minLength": 1},
+        "staging": {"type": "string", "minLength": 1},
+        "actions": {"type": "array", "items": {"type": "string", "minLength": 1}}
+      }
+    },
+    "state": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["motif_id", "connector_type", "description"],
+      "properties": {
+        "motif_id": {"type": "string", "minLength": 1},
+        "connector_type": {"enum": ["direction", "shape", "material", "object", "color", "character", "structural_reset"]},
+        "description": {"type": "string", "minLength": 1}
+      }
+    }
+  }
+}

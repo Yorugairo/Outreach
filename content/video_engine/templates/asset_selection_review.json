@@ -1,0 +1,9 @@
+{
+  "schema_version": "asset_selection_review.v1",
+  "coverage_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+  "candidate_batch_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+  "approved": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
+  "selections": []
+}

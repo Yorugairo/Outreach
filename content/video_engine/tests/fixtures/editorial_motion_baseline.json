@@ -1,0 +1,44 @@
+{
+  "schema_version": "editorial_motion_baseline.v1",
+  "job_id": "6f02a2f3-6d87-4d46-a6fc-88b034ccc080",
+  "source_excerpt": {
+    "start_s": 0.0,
+    "target_duration_s": 40.716,
+    "selection_reason": "The opening contains battlefield/institution contrast, the 1882 fact, a correction, and a transition into the system thesis."
+  },
+  "immutable_inputs": {
+    "storyboard_sha256": "7a3649dc6620896b76e51d035a7ede9be7728c625ae36ee2fc9a2dac21f52809",
+    "editorial_beat_plan_sha256": "7af937ae6e793ba249a7e58ec3333e65104749d69fccdaa0eacced84511fb795",
+    "canonical_audio_manifest_file_sha256": "9911589fc0916f4a90b3c197ed15682a13feccc11ee6acfe434f6a7cad1984d3",
+    "baseline_motion_preview_sha256": "ebe6fca641efb10c05b014d75e952de2eeaef5fd2beea1c58b6e02f6e110df99"
+  },
+  "baseline_media": {
+    "duration_s": 608.333333,
+    "width": 854,
+    "height": 480,
+    "fps": 15,
+    "audio_stream_present": false,
+    "renderer_mode": "deterministic_fallback"
+  },
+  "known_failures": [
+    "whole-plate transforms use linear frame position rather than a reviewed focal point",
+    "most shots move continuously without hold and settle phases",
+    "the visual beat plan duration exceeds the canonical narration duration",
+    "duplicate narration excerpts are treated as independent repeated visual segments",
+    "hard concatenation has no inspectable transition reason"
+  ],
+  "proof_requirements": {
+    "provider_calls": 0,
+    "revision_only": true,
+    "gate_a_hashes_unchanged": true,
+    "required_scores": {
+      "camera_stability": 4,
+      "focal_clarity": 4,
+      "shot_hierarchy": 4,
+      "cut_motivation": 4,
+      "pacing": 4,
+      "evidence_legibility": 4,
+      "continuity": 4
+    }
+  }
+}

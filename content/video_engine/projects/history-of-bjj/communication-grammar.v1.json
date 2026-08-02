@@ -1,0 +1,270 @@
+{
+  "schema_version": "communication_grammar.v1",
+  "id": "combat-history-living-scenes-v1",
+  "surfaces": [
+    {
+      "id": "world",
+      "audience_function": "Establish place, period, mood, and scale.",
+      "owns": [
+        "architecture",
+        "terrain",
+        "weather",
+        "atmosphere",
+        "background activity"
+      ],
+      "prohibits": [
+        "factual text",
+        "exact routes",
+        "dates",
+        "citations"
+      ]
+    },
+    {
+      "id": "character",
+      "audience_function": "Create attention, empathy, humor, and human action.",
+      "owns": [
+        "gesture",
+        "reaction",
+        "travel",
+        "object handling",
+        "point of view"
+      ],
+      "prohibits": [
+        "unsourced claims",
+        "provider dialogue",
+        "provider lip-sync"
+      ]
+    },
+    {
+      "id": "evidence",
+      "audience_function": "State exactly what the historical record supports.",
+      "owns": [
+        "dates",
+        "claims",
+        "quotations",
+        "archive excerpts",
+        "citations",
+        "uncertainty"
+      ],
+      "prohibits": [
+        "invented documents",
+        "uncited quotations",
+        "generated facts"
+      ]
+    },
+    {
+      "id": "explanation",
+      "audience_function": "Make sequence, relationships, and causality legible.",
+      "owns": [
+        "reviewed routes",
+        "timelines",
+        "entity-verb graphs",
+        "comparisons"
+      ],
+      "prohibits": [
+        "keyword graphs",
+        "generated geography",
+        "unsourced edges"
+      ]
+    },
+    {
+      "id": "transition",
+      "audience_function": "Carry meaning and visual continuity into the next scene.",
+      "owns": [
+        "shared motion",
+        "shape",
+        "object",
+        "material",
+        "color"
+      ],
+      "prohibits": [
+        "unmotivated effects",
+        "random wipes",
+        "continuity-breaking movement"
+      ]
+    }
+  ],
+  "documentary_beat_grammar": [
+    {
+      "order": 1,
+      "id": "picture_it",
+      "purpose": "Establish the human situation through world or character."
+    },
+    {
+      "order": 2,
+      "id": "name_it",
+      "purpose": "Introduce the exact person, place, date, or proposition."
+    },
+    {
+      "order": 3,
+      "id": "show_relationship",
+      "purpose": "Make the consequence legible through action or explanation."
+    },
+    {
+      "order": 4,
+      "id": "qualify_it",
+      "purpose": "Show what the evidence can and cannot prove."
+    },
+    {
+      "order": 5,
+      "id": "carry_forward",
+      "purpose": "Transform the exit motif into the next scene's entry motif."
+    }
+  ],
+  "fact_surfaces": [
+    {
+      "id": "date_seal",
+      "owner": "evidence",
+      "content_rule": "One date and one short event label.",
+      "citation_required": true
+    },
+    {
+      "id": "fact_folio",
+      "owner": "evidence",
+      "content_rule": "One concise claim and a compact citation rail.",
+      "citation_required": true
+    },
+    {
+      "id": "archive_proof",
+      "owner": "evidence",
+      "content_rule": "A rights-reviewed image or excerpt with source identity.",
+      "citation_required": true
+    },
+    {
+      "id": "journey_ribbon",
+      "owner": "explanation",
+      "content_rule": "Reviewed places, direction, and dates over an interpretive world.",
+      "citation_required": true
+    },
+    {
+      "id": "relationship_scroll",
+      "owner": "explanation",
+      "content_rule": "Named entities joined only by sourced verbs.",
+      "citation_required": true
+    },
+    {
+      "id": "uncertainty_card",
+      "owner": "evidence",
+      "content_rule": "Display the approved claim state and qualification.",
+      "citation_required": true
+    }
+  ],
+  "motion_hierarchy": [
+    {
+      "rank": 1,
+      "id": "character_prop",
+      "examples": [
+        "enter",
+        "turn",
+        "point",
+        "carry",
+        "open",
+        "stamp",
+        "react",
+        "walk"
+      ]
+    },
+    {
+      "rank": 2,
+      "id": "localized_environment",
+      "examples": [
+        "water",
+        "leaves",
+        "fabric",
+        "steam",
+        "smoke",
+        "rain",
+        "firelight",
+        "mill wheel"
+      ]
+    },
+    {
+      "rank": 3,
+      "id": "information_reveal",
+      "examples": [
+        "date seal",
+        "evidence highlight",
+        "route trace",
+        "relationship branch",
+        "correction stamp"
+      ]
+    },
+    {
+      "rank": 4,
+      "id": "camera",
+      "examples": [
+        "locked frame",
+        "restrained push-in"
+      ]
+    }
+  ],
+  "scene_policy": {
+    "target_duration_s": 25,
+    "minimum_duration_s": 20,
+    "maximum_duration_s": 30,
+    "narration_beats_min": 2,
+    "narration_beats_max": 4,
+    "camera_only_motion_satisfies_beat": false,
+    "whole_background_motion_default": false,
+    "required_meaningful_motion_layers": [
+      "character_prop",
+      "localized_environment",
+      "information_reveal"
+    ]
+  },
+  "humor_policy": {
+    "primary_owner": "character",
+    "may_authenticate_claims": false,
+    "may_settle_contested_claims": false
+  },
+  "generated_content_policy": {
+    "factual_text_in_generated_pixels": false,
+    "generated_maps_are_evidence": false,
+    "generated_documents_are_evidence": false,
+    "facts_rendered_locally": true
+  },
+  "visual_system_policy": {
+    "stable_outline_color_camera": true,
+    "concept_controls_motion": true,
+    "comparison_template_reused": true,
+    "flat_colors": true,
+    "thick_outlines": true
+  },
+  "transition_policy": {
+    "catalog_layout_reused": true,
+    "subject_motivated": true,
+    "structural_resets": [
+      "section_title_card",
+      "color_coded_icon_change",
+      "photo_to_diagram_swap",
+      "direct_hard_cut"
+    ],
+    "action_cut_points": [
+      "anticipation",
+      "contact",
+      "recoil",
+      "result"
+    ],
+    "motifs_per_chapter_min": 1,
+    "motifs_per_chapter_max": 2,
+    "match_dimensions": [
+      "shape",
+      "direction"
+    ]
+  },
+  "sound_policy": {
+    "mix": "narration_led",
+    "music": "restrained",
+    "ui_card_sounds": "subtle",
+    "impact_accents": "demonstration_only"
+  },
+  "cost_policy": {
+    "higgsfield_observed_credits": 600,
+    "higgsfield_observed_duration_s": 180,
+    "baseline_credits_per_second": 3.333333,
+    "full_runtime_provider_default": false,
+    "proof_max_paid_motion_s": 30
+  },
+  "render_eligible": false,
+  "artifact_hash": "d1611cade9359c366f5e4964a179d7dd5cb2d848f0c2a8ab212094368d50221d"
+}

@@ -1,0 +1,198 @@
+{
+  "schema_version": "art_bible.v2",
+  "id": "combat-history-branded-literature-v1",
+  "title": "Combat History Branded Literature",
+  "channel": "history-of-bjj",
+  "render_policy": {
+    "input_domain": "internal_style_atoms_and_approved_asset_ids",
+    "allow_external_assets": false,
+    "allow_creator_imitation": false,
+    "approved_asset_ids": []
+  },
+  "palette": {
+    "paper": "#F1E3C5",
+    "ink": "#171A1D",
+    "background": "#0D1117",
+    "surface": "#202630",
+    "rust": "#B54832",
+    "indigo": "#304F78",
+    "jade": "#2F806C",
+    "ochre": "#D49A3A",
+    "muted": "#9B9488",
+    "comic_blue": "#78A7D8",
+    "comic_red": "#D7533F",
+    "highlighter": "#F4D35E"
+  },
+  "typography": {
+    "family": "Inter",
+    "caption_font": "Inter (local OFL)",
+    "measurement_font": "Roboto Mono (local OFL)",
+    "caption_source": "checked-in local OFL font assets",
+    "measurement_source": "checked-in local OFL font assets",
+    "weight": "semibold",
+    "case": "sentence",
+    "tracking": 0.01,
+    "safe_chars": 42
+  },
+  "style_atoms": [
+    {
+      "id": "lofi-comedy-aside",
+      "kind": "illustration",
+      "description": "Purposefully crude two-dimensional editorial gag with obvious handmade economy and one clear idea.",
+      "tokens": {
+        "line_quality": "wobbly",
+        "frame_rate_feel": "stepped",
+        "fill": "paper",
+        "accent": "highlighter",
+        "evidence_role": false
+      },
+      "applies_to": ["artifact_cold_open", "concept_mechanics_cutaway", "chapter_cta"]
+    },
+    {
+      "id": "historical-comic-block",
+      "kind": "illustration",
+      "description": "Authored period comic panel with limited color, halftone texture, strong silhouettes, and a reconstruction label.",
+      "tokens": {
+        "panel_count": [1, 2, 3],
+        "stroke": "ink",
+        "paper": "paper",
+        "accent": "comic_red",
+        "label": "ILLUSTRATION / RECONSTRUCTION"
+      },
+      "applies_to": ["illustrated_reconstruction", "migration_map_timeline", "lineage_graph"]
+    },
+    {
+      "id": "archive-evidence-block",
+      "kind": "archive",
+      "description": "Rights-reviewed archival material presented as proof, with restrained motion, provenance, and a legible citation rail.",
+      "tokens": {
+        "matte": "background",
+        "paper": "paper",
+        "citation": "jade",
+        "parallax_px": 16,
+        "evidence_role": true
+      },
+      "applies_to": ["artifact_cold_open", "archival_portrait", "document_quote_closeup"]
+    },
+    {
+      "id": "typed-relationship-diagram",
+      "kind": "diagram",
+      "description": "A diagram may render only named entities joined by an evidence-backed relationship label.",
+      "tokens": {
+        "node": "indigo",
+        "edge": "jade",
+        "edge_label_required": true,
+        "named_entities_required": 2,
+        "keyword_fallback": false
+      },
+      "applies_to": ["lineage_graph"]
+    },
+    {
+      "id": "comic-map-thread",
+      "kind": "diagram",
+      "description": "A deliberately illustrated travel strip combines a simplified map, date cards, and directional movement.",
+      "tokens": {
+        "route": "comic_red",
+        "node": "ochre",
+        "date": "ink",
+        "texture": "halftone"
+      },
+      "applies_to": ["migration_map_timeline"]
+    },
+    {
+      "id": "evidence-document-window",
+      "kind": "document",
+      "description": "A document close-up highlights the exact support while keeping its locator and qualification visible.",
+      "tokens": {
+        "paper": "paper",
+        "rule": "rust",
+        "highlight": "highlighter",
+        "citation": "jade"
+      },
+      "applies_to": ["document_quote_closeup"]
+    },
+    {
+      "id": "branded-literature-rhythm",
+      "kind": "transition",
+      "description": "The editorial rhythm alternates comic interpretation, historical illustration, and archival proof.",
+      "tokens": {
+        "preferred_sequence": ["lofi_comedy", "historical_comic", "archive_evidence"],
+        "maximum_adjacent_mode": 2,
+        "proof_mode": "archive_evidence"
+      },
+      "applies_to": ["all"]
+    },
+    {
+      "id": "literary-chapter-mark",
+      "kind": "type",
+      "description": "A recurring folio, chapter slug, and margin note make every scene feel like part of one authored volume.",
+      "tokens": {
+        "folio": true,
+        "chapter_rule": "rust",
+        "margin_note": "muted",
+        "safe_margin": 0.08
+      },
+      "applies_to": ["artifact_cold_open", "archival_portrait", "illustrated_reconstruction", "document_quote_closeup", "migration_map_timeline", "lineage_graph", "chapter_cta"]
+    }
+  ],
+  "composition": {
+    "safe_margin": 0.08,
+    "anchor_grid": "document_grid",
+    "max_repeated_framing": 2,
+    "functions": {
+      "artifact_cold_open": {
+        "framing": "lofi_cold_open",
+        "atom_ids": ["lofi-comedy-aside", "literary-chapter-mark"],
+        "asset_category": "original_illustration"
+      },
+      "archival_portrait": {
+        "framing": "archive_proof",
+        "atom_ids": ["archive-evidence-block", "literary-chapter-mark"],
+        "asset_category": "archival_photo"
+      },
+      "illustrated_reconstruction": {
+        "framing": "comic_triptych",
+        "atom_ids": ["historical-comic-block", "literary-chapter-mark"],
+        "asset_category": "original_illustration"
+      },
+      "document_quote_closeup": {
+        "framing": "document_proof",
+        "atom_ids": ["evidence-document-window", "archive-evidence-block"],
+        "asset_category": "document_scan"
+      },
+      "migration_map_timeline": {
+        "framing": "comic_map_strip",
+        "atom_ids": ["comic-map-thread", "historical-comic-block"],
+        "asset_category": "map"
+      },
+      "lineage_graph": {
+        "framing": "typed_relationship_card",
+        "atom_ids": ["typed-relationship-diagram", "historical-comic-block"],
+        "asset_category": "diagram"
+      },
+      "concept_mechanics_cutaway": {
+        "framing": "lofi_margin_explainer",
+        "atom_ids": ["lofi-comedy-aside", "literary-chapter-mark"],
+        "asset_category": "diagram"
+      },
+      "chapter_cta": {
+        "framing": "literary_colophon",
+        "atom_ids": ["literary-chapter-mark", "archive-evidence-block"],
+        "asset_category": "typography"
+      }
+    }
+  },
+  "motion": {
+    "phase_order": ["anticipation", "reveal", "action", "recovery", "hold"],
+    "easing": {
+      "anticipation": "stepped_hold",
+      "reveal": "ease_out",
+      "action": "linear",
+      "recovery": "ease_in_out",
+      "hold": "constant"
+    },
+    "transition_motifs": ["bad_photocopy_cut", "comic_panel_snap", "archive_match_cut", "page_turn", "hard_contrast"]
+  },
+  "approved_asset_categories": ["archival_photo", "original_illustration", "document_scan", "map", "diagram", "texture", "typography"],
+  "signature": ["branded_literature", "purposeful_lofi_humor", "period_comic_blocks", "archive_as_proof", "typed_relationships", "citation_rails"]
+}

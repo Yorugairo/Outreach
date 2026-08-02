@@ -97,8 +97,8 @@ def load_corpus(path: str) -> list[TechniqueFacts]:
         for fp in sorted(p.glob("*.json")):
             try:
                 recs.append(json.loads(fp.read_text(encoding="utf-8")))
-            except Exception:
-                continue
+            except (OSError, UnicodeDecodeError, json.JSONDecodeError) as exc:
+                raise ValueError(f"invalid corpus JSON record {fp}: {exc}") from exc
         for fp in sorted(p.glob("*.md")):
             txt = fp.read_text(encoding="utf-8")
             # naive frontmatter-ish: name from first H1, transcript from rest

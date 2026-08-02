@@ -1,0 +1,354 @@
+{
+  "schema_version": "asset_manifest.v1",
+  "manifest_id": "how-judo-became-brazilian-jiu-jitsu-assets",
+  "project_id": "history-of-bjj",
+  "episode_id": "how-judo-became-brazilian-jiu-jitsu",
+  "review": {
+    "status": "rights_reviewed",
+    "reviewed_by": "P13 evidence review",
+    "reviewed_at": "2026-07-30",
+    "policy": "rights-cleared-only pilot"
+  },
+  "assets": [
+    {
+      "id": "archive-jigoro-kano",
+      "path": "content/video_engine/projects/history-of-bjj/assets/archive/jigoro-kano-public-domain.jpg",
+      "sha256": "029679163a5cf0a5a36ec7353d5b427d806351948fd19a7e492b4d3e8244560c",
+      "kind": "archival_portrait",
+      "role": "kano-portrait",
+      "title": "Portrait of Kano Jigoro",
+      "creator": "Unknown",
+      "origin": "National Diet Library scan via Wikimedia Commons",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Jigoro_KANO.jpg",
+      "rights": {
+        "permission": "public_domain",
+        "reviewed": true,
+        "reviewed_by": "P13 evidence review",
+        "reviewed_at": "2026-07-30",
+        "source": "National Diet Library / Wikimedia Commons",
+        "source_url": "https://commons.wikimedia.org/wiki/File:Jigoro_KANO.jpg",
+        "license": "Public domain in Japan and the United States",
+        "attribution_required": false,
+        "attribution": {
+          "title": "Portrait of Kano Jigoro",
+          "creator": "Unknown",
+          "url": "https://commons.wikimedia.org/wiki/File:Jigoro_KANO.jpg",
+          "license": "Public domain"
+        }
+      },
+      "likeness": {
+        "living": false,
+        "approved": true,
+        "subjects": [
+          {
+            "name": "Jigoro Kano",
+            "living": false
+          }
+        ]
+      },
+      "alteration_policy": {
+        "allowed": true,
+        "reviewed": true,
+        "policy": "crop, tone, and parallax separation permitted; do not fabricate event context"
+      },
+      "render_eligible": true
+    },
+    {
+      "id": "archive-mitsuyo-maeda",
+      "path": "content/video_engine/projects/history-of-bjj/assets/archive/mitsuyo-maeda-public-domain.jpg",
+      "sha256": "5ea1cd5f5400df1022e83de4ea31d774a5aaca0987d0df29b91a3e1ff046114e",
+      "kind": "archival_portrait",
+      "role": "maeda-portrait",
+      "title": "Mitsuyo Maeda as a fourth dan",
+      "creator": "Unknown",
+      "origin": "Japanese publication scan via Wikimedia Commons",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Maeda_Mituyo.jpg",
+      "rights": {
+        "permission": "public_domain",
+        "reviewed": true,
+        "reviewed_by": "P13 evidence review",
+        "reviewed_at": "2026-07-30",
+        "source": "Wikimedia Commons",
+        "source_url": "https://commons.wikimedia.org/wiki/File:Maeda_Mituyo.jpg",
+        "license": "Public domain old Japanese photograph",
+        "attribution_required": false,
+        "attribution": {
+          "title": "Mitsuyo Maeda as a fourth dan",
+          "creator": "Unknown",
+          "url": "https://commons.wikimedia.org/wiki/File:Maeda_Mituyo.jpg",
+          "license": "Public domain"
+        }
+      },
+      "likeness": {
+        "living": false,
+        "approved": true,
+        "subjects": [
+          {
+            "name": "Mitsuyo Maeda",
+            "living": false
+          }
+        ]
+      },
+      "alteration_policy": {
+        "allowed": true,
+        "reviewed": true,
+        "policy": "crop, tone, and parallax separation permitted; do not fabricate event context"
+      },
+      "render_eligible": true
+    },
+    {
+      "id": "original-artifact-1882",
+      "path": "content/video_engine/projects/history-of-bjj/assets/original/artifact-1882.svg",
+      "sha256": "9bbf98e07be450cc8b0e9ae205abbd07a09cbe148c164bdf8dd172455a702e09",
+      "kind": "illustration",
+      "role": "artifact-cold-open",
+      "origin": "Original P13 vector artwork",
+      "rights": {
+        "permission": "original",
+        "reviewed": true,
+        "reviewed_by": "P13 implementation",
+        "reviewed_at": "2026-07-30",
+        "source": "Outreach Program",
+        "attribution_required": false
+      },
+      "likeness": {
+        "living": false,
+        "approved": true
+      },
+      "alteration_policy": {
+        "allowed": true,
+        "reviewed": true
+      },
+      "render_eligible": true
+    },
+    {
+      "id": "original-maeda-voyage",
+      "path": "content/video_engine/projects/history-of-bjj/assets/original/maeda-voyage-reconstruction.svg",
+      "sha256": "83736eaf083b42b81af2805dec8b4ad223442b7108209f63d86649b26a7da94b",
+      "kind": "illustrated_reconstruction",
+      "role": "migration-reconstruction",
+      "origin": "Original P13 vector artwork",
+      "rights": {
+        "permission": "original",
+        "reviewed": true,
+        "reviewed_by": "P13 implementation",
+        "reviewed_at": "2026-07-30",
+        "source": "Outreach Program",
+        "attribution_required": false
+      },
+      "likeness": {
+        "living": false,
+        "approved": true
+      },
+      "alteration_policy": {
+        "allowed": true,
+        "reviewed": true
+      },
+      "render_eligible": true
+    },
+    {
+      "id": "original-document-question",
+      "path": "content/video_engine/projects/history-of-bjj/assets/original/document-question-panel.svg",
+      "sha256": "1905e23bd23a15589cf1f18f0928a2ed524f03955133c11f2af1ce72c9700541",
+      "kind": "illustration",
+      "role": "document-question-panel",
+      "origin": "Original P13 vector artwork",
+      "rights": {
+        "permission": "original",
+        "reviewed": true,
+        "reviewed_by": "P13 implementation",
+        "reviewed_at": "2026-07-30",
+        "source": "Outreach Program",
+        "attribution_required": false
+      },
+      "likeness": {
+        "living": false,
+        "approved": true
+      },
+      "alteration_policy": {
+        "allowed": true,
+        "reviewed": true
+      },
+      "render_eligible": true
+    },
+    {
+      "id": "original-lineage-question",
+      "path": "content/video_engine/projects/history-of-bjj/assets/original/lineage-question.svg",
+      "sha256": "14286e99f23b452e0fc72648bd28b0500e481e244574ebc8ed2739475799d1c0",
+      "kind": "illustration",
+      "role": "lineage-relationship-graph",
+      "origin": "Original P13 vector artwork",
+      "rights": {
+        "permission": "original",
+        "reviewed": true,
+        "reviewed_by": "P13 implementation",
+        "reviewed_at": "2026-07-30",
+        "source": "Outreach Program",
+        "attribution_required": false
+      },
+      "likeness": {
+        "living": false,
+        "approved": true
+      },
+      "alteration_policy": {
+        "allowed": true,
+        "reviewed": true
+      },
+      "render_eligible": true
+    },
+    {
+      "id": "flow-learner-character-sheet-20260731",
+      "path": "content/video_engine/projects/history-of-bjj/assets/generated/flow/learner-character-sheet-nano-banana-pro-20260731.png",
+      "sha256": "169f18a87d7a186fa4aba2283a10654a269eaf944f69abfa14bcdbb98a55b0c5",
+      "kind": "generated_character_sheet",
+      "role": "recurring-cast-reference",
+      "title": "Registry Learner character sheet",
+      "creator": "Outreach Program",
+      "origin": "Google Flow character builder, Nano Banana Pro",
+      "rights": {
+        "permission": "original",
+        "reviewed": true,
+        "reviewed_by": "Operator approval",
+        "reviewed_at": "2026-07-31",
+        "source": "Operator-approved generated original",
+        "attribution_required": false
+      },
+      "likeness": {
+        "living": false,
+        "approved": true,
+        "subjects": [
+          {
+            "name": "Fictional Registry Learner",
+            "living": false
+          }
+        ]
+      },
+      "alteration_policy": {
+        "allowed": true,
+        "reviewed": true,
+        "policy": "scale, crop, and composite as a recurring fictional character reference; preserve identity and do not treat the illustration as historical evidence"
+      },
+      "altered": false,
+      "metadata": {
+        "provider": "google_flow",
+        "model": "nano-banana-pro",
+        "provider_media_id": "5d020540-a2e5-4df6-bbc2-66bfd6cc2797",
+        "character_pack_id": "history-episode-1-flow-cast-v1",
+        "output_record": "content/video_engine/projects/history-of-bjj/assets/quarantine/flow/learner-character-sheet-nano-banana-pro-20260731.json"
+      },
+      "render_eligible": true
+    },
+    {
+      "id": "flow-kano-reconstruction-20260731",
+      "path": "content/video_engine/projects/history-of-bjj/assets/generated/flow/kano-reconstruction-nano-banana-pro-20260731.png",
+      "sha256": "62162d8d629074340b9ed0132df1f328cecf0bb81ba4d6afc1c202aa73f23a41",
+      "kind": "generated_character_sheet",
+      "role": "kano-illustrated-reconstruction",
+      "title": "Jigoro Kano illustrated reconstruction character sheet",
+      "creator": "Outreach Program",
+      "origin": "Google Flow character builder, Nano Banana Pro",
+      "rights": {
+        "permission": "original",
+        "reviewed": true,
+        "reviewed_by": "Operator approval",
+        "reviewed_at": "2026-07-31",
+        "source": "Operator-approved generated original",
+        "attribution_required": false
+      },
+      "likeness": {
+        "living": false,
+        "approved": true,
+        "subjects": [{"name": "Jigoro Kano illustrated reconstruction", "living": false}]
+      },
+      "alteration_policy": {
+        "allowed": true,
+        "reviewed": true,
+        "policy": "scale, crop, and composite as an explicitly labeled illustration; never present as archival evidence"
+      },
+      "altered": false,
+      "metadata": {
+        "provider": "google_flow",
+        "model": "nano-banana-pro",
+        "provider_media_id": "ef3038b4-e868-4dc9-a599-99a8eab0d299",
+        "character_pack_id": "history-episode-1-flow-cast-v1",
+        "output_record": "content/video_engine/projects/history-of-bjj/assets/quarantine/flow/kano-reconstruction-nano-banana-pro-20260731.json"
+      },
+      "render_eligible": true
+    },
+    {
+      "id": "flow-maeda-reconstruction-20260731",
+      "path": "content/video_engine/projects/history-of-bjj/assets/generated/flow/maeda-reconstruction-nano-banana-pro-20260731.png",
+      "sha256": "a7253b9f42f359a32291e82a204b765109d37ae767de8abfd8ce932edb7d58ec",
+      "kind": "generated_character_sheet",
+      "role": "maeda-illustrated-reconstruction",
+      "title": "Mitsuyo Maeda illustrated reconstruction character sheet",
+      "creator": "Outreach Program",
+      "origin": "Google Flow character builder, Nano Banana Pro",
+      "rights": {
+        "permission": "original",
+        "reviewed": true,
+        "reviewed_by": "Operator approval",
+        "reviewed_at": "2026-07-31",
+        "source": "Operator-approved generated original",
+        "attribution_required": false
+      },
+      "likeness": {
+        "living": false,
+        "approved": true,
+        "subjects": [{"name": "Mitsuyo Maeda illustrated reconstruction", "living": false}]
+      },
+      "alteration_policy": {
+        "allowed": true,
+        "reviewed": true,
+        "policy": "scale, crop, and composite as an explicitly labeled illustration; never present as archival evidence"
+      },
+      "altered": false,
+      "metadata": {
+        "provider": "google_flow",
+        "model": "nano-banana-pro",
+        "provider_media_id": "7e841b23-24fa-4ac5-9bb6-fefda659ac23",
+        "character_pack_id": "history-episode-1-flow-cast-v1",
+        "output_record": "content/video_engine/projects/history-of-bjj/assets/quarantine/flow/maeda-reconstruction-nano-banana-pro-20260731.json"
+      },
+      "render_eligible": true
+    },
+    {
+      "id": "flow-brazilian-bridge-composite-20260731",
+      "path": "content/video_engine/projects/history-of-bjj/assets/generated/flow/brazilian-bridge-composite-nano-banana-pro-20260731.png",
+      "sha256": "8a6b17d32b5e7e64c583b1eab8f248af4665120b45efb85108b5fc5226580e65",
+      "kind": "generated_character_sheet",
+      "role": "brazilian-bridge-composite",
+      "title": "Brazilian bridge practitioner composite character sheet",
+      "creator": "Outreach Program",
+      "origin": "Google Flow character builder, Nano Banana Pro",
+      "rights": {
+        "permission": "original",
+        "reviewed": true,
+        "reviewed_by": "Operator approval",
+        "reviewed_at": "2026-07-31",
+        "source": "Operator-approved generated original",
+        "attribution_required": false
+      },
+      "likeness": {
+        "living": false,
+        "approved": true,
+        "subjects": [{"name": "Brazilian bridge practitioner composite", "living": false}]
+      },
+      "alteration_policy": {
+        "allowed": true,
+        "reviewed": true,
+        "policy": "scale, crop, and composite as an explicitly labeled illustration; never present as a named historical person or evidence"
+      },
+      "altered": false,
+      "metadata": {
+        "provider": "google_flow",
+        "model": "nano-banana-pro",
+        "provider_media_id": "b02e4131-4172-409d-ba78-617e9b96fe53",
+        "character_pack_id": "history-episode-1-flow-cast-v1",
+        "output_record": "content/video_engine/projects/history-of-bjj/assets/quarantine/flow/brazilian-bridge-composite-nano-banana-pro-20260731.json"
+      },
+      "render_eligible": true
+    }
+  ],
+  "notes": "Rights-cleared-only pilot. Research sources and YouTube reference material are not visual assets."
+}

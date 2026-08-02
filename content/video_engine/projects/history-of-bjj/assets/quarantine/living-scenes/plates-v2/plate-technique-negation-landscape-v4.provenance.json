@@ -1,0 +1,21 @@
+{
+  "schema_version": "generated_asset_provenance.v1",
+  "asset_id": "plate-technique-negation-landscape-grip-reviewed",
+  "asset_path": "content/video_engine/projects/history-of-bjj/assets/quarantine/living-scenes/plates-v2/plate-technique-negation-landscape-v4.png",
+  "sha256": "7260b60adce7f057cd4183753243364936b39ee1d8ab45ea1fd773a515a61eeb",
+  "generation_mode": "built-in image generation precise-object-edit",
+  "source_asset_id": "plate-technique-negation-landscape-anatomy-reviewed",
+  "source_asset_sha256": "5244b1c53dca95bd2c7adf9ca46e5d2f358704615bcdea4496fce68cd29304e4",
+  "prompt_summary": "Repair only the bottom light-gi practitioner's raised right arm so a five-finger hand emerging from a continuous ivory gi sleeve visibly grips a continuous dark gi lapel; preserve pose, limb count, surrounding vignettes, and 16:9 composition.",
+  "anatomy_constraints": {
+    "central_people": 2,
+    "central_arms": 4,
+    "central_legs": 4,
+    "bottom_right_arm": "complete ivory sleeve to wrist; hand visibly grips dark lapel",
+    "top_lapel": "continuous from collar across chest beneath gripping fingers"
+  },
+  "review_status": "agent_visual_check_pending_operator_review",
+  "render_eligible": true,
+  "evidence_eligible": false,
+  "usage_note": "Interpretive technique-negation illustration; not historical evidence or technique instruction."
+}

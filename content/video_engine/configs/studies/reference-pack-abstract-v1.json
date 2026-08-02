@@ -1,0 +1,136 @@
+{
+  "schema_version": "reference_study.v1",
+  "id": "reference-pack-abstract-v1",
+  "title": "Abstract Motion and Explanation Grammar",
+  "study_kind": "abstract_visual_language",
+  "status": "reviewed",
+  "review": {
+    "reviewed": true,
+    "reviewed_by": "internal-visual-review",
+    "reviewed_at": "2026-07-30"
+  },
+  "render_policy": {
+    "renderable": false,
+    "allowed_inputs": [
+      "abstract_rules",
+      "design_principles",
+      "timing_observations"
+    ],
+    "prohibited_inputs": [
+      "renderable_media",
+      "source_frames",
+      "source_video",
+      "source_images",
+      "creator_assets",
+      "external_urls"
+    ]
+  },
+  "lessons": [
+    {
+      "id": "causal-state-change",
+      "category": "motion",
+      "principle": "A visual beat is clearest when a stable state changes through a visible action into a new stable state.",
+      "application": "Represent technique shots as state_from, action, and state_to with a readable contact phase.",
+      "constraints": [
+        "Every action phase changes silhouette, contact, center of mass, camera, or overlay.",
+        "Hold the resulting state long enough to inspect it."
+      ],
+      "signals": ["anticipation", "contact", "consequence", "held_result"]
+    },
+    {
+      "id": "persistent-spatial-anchors",
+      "category": "continuity",
+      "principle": "Persistent subject colors, screen direction, and support points make intertwined motion legible.",
+      "application": "Keep practitioner ownership and the mat frame stable through close-ups and transitions.",
+      "constraints": [
+        "A close-up retains at least one ownership cue.",
+        "A spatial reset is explicit rather than accidental."
+      ],
+      "signals": ["cast_ownership", "depth_order", "support_contact"]
+    },
+    {
+      "id": "function-led-framing",
+      "category": "composition",
+      "principle": "Each framing answers one visual question before the next framing changes the question.",
+      "application": "Use a stable set of shot functions: setup, contact, transition, comparison, diagram, and result.",
+      "constraints": [
+        "Do not repeat one framing for more than two consecutive shots.",
+        "Use a wide view before detail views when ownership is ambiguous."
+      ],
+      "signals": ["wide_context", "detail_cut_in", "comparison", "result_hold"]
+    },
+    {
+      "id": "living-diagram",
+      "category": "diagram",
+      "principle": "A useful diagram reveals hidden structure on top of the action and then returns control to the action.",
+      "application": "Attach force arrows, fulcrums, and load markers to reviewed body contacts.",
+      "constraints": [
+        "An overlay has an anchored origin and direction.",
+        "The diagram cannot introduce an unsupported body position."
+      ],
+      "signals": ["fulcrum", "load", "effort", "trajectory"]
+    },
+    {
+      "id": "contact-hierarchy",
+      "category": "legibility",
+      "principle": "The decisive grip, frame, or support contact receives the strongest local contrast.",
+      "application": "Isolate one contact target while preserving the larger cast silhouette.",
+      "constraints": [
+        "Contact accents are bounded to the reviewed target.",
+        "An accent never changes practitioner identity."
+      ],
+      "signals": ["contact_marker", "contrast", "ownership"]
+    },
+    {
+      "id": "motivated-transition",
+      "category": "motion",
+      "principle": "A transition feels continuous when a shape, path, or anchor persists into the next shot.",
+      "application": "Carry a body arc, mat line, grip marker, or force arrow across a cut or diagram reveal.",
+      "constraints": [
+        "The inherited anchor is named in the treatment.",
+        "A hard reset is reserved for a documented chapter change."
+      ],
+      "signals": ["match_cut", "path_inheritance", "anchor_persistence"]
+    },
+    {
+      "id": "density-follows-complexity",
+      "category": "pacing",
+      "principle": "Visual density increases only when the lesson adds a causal relationship.",
+      "application": "Keep the field quiet for setup and add labels or overlays at the moment they explain change.",
+      "constraints": [
+        "No decorative overlay competes with an instructional contact.",
+        "Labels recede after the causal moment."
+      ],
+      "signals": ["quiet_setup", "causal_overlay", "receding_label"]
+    },
+    {
+      "id": "distinct-force-cues",
+      "category": "motion",
+      "principle": "Different force paths read better when their curves and accents are distinguishable.",
+      "application": "Use distinct motion tokens for linear drive, pivot, compression, and release.",
+      "constraints": [
+        "A force token is selected by the reviewed action.",
+        "Motion accents remain subordinate to anatomy and contact."
+      ],
+      "signals": ["linear", "pivot", "compression", "release"]
+    }
+  ],
+  "observations": [
+    {
+      "id": "rapid-exchange-cadence",
+      "signal": "Short physical exchanges remain readable when each cut carries a causal state change.",
+      "design_rule": "Shorten shots around contact and consequence while preserving a result hold."
+    },
+    {
+      "id": "continuous-construction",
+      "signal": "A sparse visual field can hold attention when its geometry changes continuously.",
+      "design_rule": "Reveal diagram primitives only when they explain a force, support, or trajectory."
+    },
+    {
+      "id": "stable-layout-language",
+      "signal": "Repeated layouts teach the viewer where to look for labels, actors, and outcomes.",
+      "design_rule": "Reuse composition roles while varying state, action, and focal target."
+    }
+  ],
+  "artifact_hash": "a68d1278afd0f787ddb8b7b3804e664cc30a73780bd7645cbd2a6080b1c694ee"
+}

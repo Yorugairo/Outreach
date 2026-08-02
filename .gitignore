@@ -62,3 +62,7 @@ logs/
 
 # Generated pSEO output; source and corpus remain versioned
 content/bjj-registry/output/
+content/video_engine/runtime/
+
+# Manim default cache/output when scenes are instantiated outside a job media_dir
+media/

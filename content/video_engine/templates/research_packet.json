@@ -1,0 +1,73 @@
+{
+  "schema_version": "research_packet.v1",
+  "id": "how-judo-became-brazilian-jiu-jitsu-research",
+  "episode_id": "how-judo-became-brazilian-jiu-jitsu",
+  "title": "How Judo Became Brazilian Jiu-Jitsu — Research Packet",
+  "thesis": "Brazilian Jiu-Jitsu emerged through the movement, adaptation, and local teaching of judo and jujutsu rather than from a single uncontested origin story.",
+  "status": "ready_for_review",
+  "sources": [
+    {
+      "id": "source-kano",
+      "title": "Operator-supplied Kano and Kodokan source",
+      "source_kind": "scholarly",
+      "locator": "operator-supplied locator",
+      "source_quality": 4,
+      "independence_group": "kano-scholarship",
+      "role": "factual",
+      "is_factual_source": true,
+      "factual_eligible": true
+    },
+    {
+      "id": "source-maeda",
+      "title": "Operator-supplied Maeda migration source",
+      "source_kind": "museum_archive",
+      "locator": "operator-supplied locator",
+      "source_quality": 4,
+      "independence_group": "maeda-archive",
+      "role": "factual",
+      "is_factual_source": true,
+      "factual_eligible": true
+    }
+  ],
+  "citations": [
+    {
+      "id": "citation-kano",
+      "source_id": "source-kano",
+      "locator": "operator-supplied page or section"
+    },
+    {
+      "id": "citation-maeda",
+      "source_id": "source-maeda",
+      "locator": "operator-supplied page or section"
+    }
+  ],
+  "claims": [
+    {
+      "id": "kano-kodokan",
+      "text": "The Kodokan was established in 1882 as the institutional home of Kano's judo.",
+      "citation_ids": ["citation-kano"],
+      "status": "supported"
+    },
+    {
+      "id": "maeda-travel",
+      "text": "Mitsuyo Maeda's documented travels connected Japanese martial-arts teaching with Brazil.",
+      "citation_ids": ["citation-maeda"],
+      "status": "supported"
+    },
+    {
+      "id": "early-brazil-development",
+      "text": "The early Brazilian development of the art should be narrated with care where sources disagree about lineage and naming.",
+      "citation_ids": ["citation-kano", "citation-maeda"],
+      "contested": true,
+      "status": "contested",
+      "qualified_narration": "Accounts differ, so this episode distinguishes documented relationships from later lineage traditions."
+    }
+  ],
+  "reviewer_state": {
+    "status": "pending"
+  },
+  "research_questions": [
+    "Which early Brazilian teaching relationships are supported by independent sources?",
+    "Where do later lineage traditions diverge from contemporaneous records?"
+  ]
+}

@@ -1,3 +1,15 @@
+---
+id: P13-VIDEO-ENGINE-IMPLEMENTATION
+title: Video Engine Implementation — Agent Work Packages
+status: blocked
+operation: feature
+risk: standard
+owner: parent
+branch: claude/content-generation-system-52f077
+created: 2026-07-28
+updated: 2026-07-28
+---
+
 # Plan: Video Engine Implementation — Agent Work Packages (P13 build)
 
 ## Summary
@@ -7,7 +19,7 @@ Implements P13 (`P13-CONTENT-VIDEO-FLYWHEEL.plan.md`) as **seven self-contained 
 Every package carries its own interface contracts, codebase patterns, gotchas, and validation —
 an agent should implement its package without searching the repo or asking questions.
 
-## User Story
+## Intent And Acceptance
 
 As the operator, I want the corpus→video pipeline built as parallel, contract-bounded work
 packages, so multiple agents can develop it quickly without colliding, and I get the thin slice
@@ -26,6 +38,25 @@ and one evidence-verified end-to-end run.
 - **Estimated Files**: ~35 source + ~15 test files
 - **UX**: N/A — operator-facing CLI + artifacts; no web UX
 
+## Scope
+
+Implement the importable `content/video_engine/` package, its deterministic pipeline,
+guarded provider boundaries, render/assembly services, operator CLI, fixtures, and tests
+defined by WP-A through WP-G.
+
+## Human Gates
+
+- This implementation request approves local code and test changes in the named worktree.
+- Gate A and Gate B remain operator-only per-video approvals.
+- Paid ElevenLabs calls, publishing, registry writes, deployment, and other external changes
+  require separate explicit approval and are not authorized by this implementation request.
+
+## Execution Path
+
+WP-A lands first because it owns the frozen contracts and shared foundation. WP-B, WP-C, WP-D,
+and WP-F then use disjoint write sets. WP-E follows the audio/render contracts, and parent-owned
+WP-G integrates, verifies, and records evidence.
+
 ---
 
 ## ⚠ Path correction (supersedes doc spelling)
@@ -43,7 +74,7 @@ pattern instead).
 
 ---
 
-## Mandatory Reading (per agent, before coding)
+## Mandatory Reads
 
 | Priority | File | Why |
 |---|---|---|
@@ -100,7 +131,7 @@ Change control: any contract change lands in THIS file first, then in affected p
 
 ---
 
-## Patterns to Mirror (real snippets)
+## Patterns To Mirror
 
 ### VERSION_CONSTANTS + REGISTRY (models)
 ```python
@@ -216,7 +247,7 @@ builders, descriptive behavior names, determinism asserted the same way. Markers
 
 ---
 
-## NOT Building (all packages)
+## Not Building
 
 Upload API/OAuth · Gemini QC pre-screener (P1) · MCP server (P1) · recipe extractor (P1) ·
 finance/trades content · parallel render farm · registry table writes · Windows-service/daemon
@@ -224,26 +255,34 @@ mode — CLI runs are foreground.
 
 ---
 
-## Work Packages
+## Task Slices
 
 > **Dependency graph:** WP-A → {WP-B, WP-C, WP-D, WP-F in parallel} → WP-E (needs C+D contracts,
 > stubs fine) → WP-G (integration, needs all). Suggested agent class is advisory — contracts are
 > what matter. Each package = one branch/session; merge order follows the graph.
 
-### WP-A — Foundation: configs, models, repository, pipeline, CLI
+### T1: WP-A — Foundation: configs, models, repository, pipeline, CLI
+- Status: completed
+- Owner: parent
+- Depends on: plan approval
 - **Agent**: Opus-class (architecture-shaping) · **Size**: Large · **Blocks**: everyone
-- **Write set**: `content/video_engine/{__init__.py, cli.py, configs/{storyboard.schema.json, channels/combat-science.json, render_profiles.json}, src/{__init__.py, models.py, pipeline.py, repositories/{base.py, file_repository.py}}, tests/{test_configs.py, test_pipeline.py, fixtures/armbar_storyboard.json}, AGENTS.md}` + append `.gitignore` (`content/video_engine/runtime/`)
+- Write set: `content/video_engine/{__init__.py, cli.py, configs/{storyboard.schema.json, channels/combat-science.json, render_profiles.json}, src/{__init__.py, models.py, pipeline.py, repositories/{base.py, file_repository.py}}, tests/{test_configs.py, test_pipeline.py, fixtures/armbar_storyboard.json}, AGENTS.md}` + append `.gitignore` (`content/video_engine/runtime/`)
 - **Tasks**:
   1. **ACTION** copy schema from docs; author channel + render-profile configs (values from `03` §6 table). **VALIDATE** `jsonschema` validates the armbar fixture.
   2. **ACTION** `models.py`: `VideoRun`, `VideoStageEvent`, `GateStatus`, version constants, `SCENE_CLASS_REGISTRY`. **MIRROR** VERSION_CONSTANTS + RUN CREATION. **GOTCHA** frozen dataclasses where practical (python rules); timestamps via injected `now_fn` for testability.
   3. **ACTION** `repositories/`: Protocol + file-backed (json files per contract #2, append-only events with zero-padded index prefix). **MIRROR** REPOSITORY PROTOCOL.
   4. **ACTION** `pipeline.py`: `STAGES` list incl. `awaiting_storyboard_approval`/`awaiting_publish_approval`; sequential executor; stages resolved from a `dict[str, StageFn]` so packages plug in; `resume` starts at first non-completed stage; gate stages park with `status="awaiting_gate_a|b"`; per-stage wall-time + `cost_usd` fields in `output_summary`. **MIRROR** STAGE LIST + RUN CREATION.
   5. **ACTION** `cli.py`: `run --source <path> [--channel combat-science] [--targets landscape,vertical]`, `resume <job_id>`, `status [job_id]`, `approve <job_id> --gate a|b`, `validate <storyboard.json>`. **MIRROR** CLI SHAPE.
-- **Acceptance**: `python content/video_engine/cli.py run --source ...fixture...` with stub stages produces job.json + ordered events; resume/approve transitions verified by tests. **VALIDATE** `python -m pytest content/video_engine/tests/test_pipeline.py -q`
+- Acceptance: `python content/video_engine/cli.py run --source ...fixture...` with stub stages produces job.json + ordered events; resume/approve transitions verified by tests. **VALIDATE** `python -m pytest content/video_engine/tests/test_pipeline.py -q`
+- Validate: `python -m pytest content/video_engine/tests/test_pipeline.py -q`
+- Evidence: `python -m pytest content/video_engine/tests/test_configs.py content/video_engine/tests/test_pipeline.py -q` → 8 passed; CLI validation → `OK`; Gate-A job `.context/wpa-cli-evidence/86af45cc-15ff-4c6b-82ea-6f42b1151f52/job.json`
 
-### WP-B — Guards: `storyboard_guard.py` + `qc_checks.py`
+### T2: WP-B — Guards: `storyboard_guard.py` + `qc_checks.py`
+- Status: completed
+- Owner: implementation_luna
+- Depends on: T1
 - **Agent**: Opus-class (rule-dense, TDD) · **Size**: Medium · **Depends**: WP-A models/fixture
-- **Write set**: `src/guards/{__init__.py, storyboard_guard.py, qc_checks.py}`, `tests/{test_storyboard_guard.py, test_qc_checks.py}`
+- Write set: `src/guards/{__init__.py, storyboard_guard.py, qc_checks.py}`, `tests/{test_storyboard_guard.py, test_qc_checks.py}`
 - **Tasks** (RED first — write the violation table as tests, then implement):
   1. Schema validation (jsonschema, all errors collected).
   2. Claims: every 2+ digit number / medical / financial / superlative sentence in `narration_text` must map via `claim_refs` to a `verified: true` claim; ledger entries unreferenced by any scene → warning not violation. **MIRROR** GUARD RETURNS + `_NUMBER`/`_SCORE_HINT` regexes; years allowlisted as in llm_guard.py:43-46.
@@ -252,56 +291,86 @@ mode — CLI runs are foreground.
   5. Asset resolution against `SCENE_CLASS_REGISTRY` + `assets/poses/` listing; beats `action` prefixes (`pose:`, `map:`, `flash_label:`) must resolve.
   6. Pacing budgets + hard-cut count (>1 `hard_cut` per act → violation) + `realistic_recreation` ⇒ `disclosure.required`.
   7. `qc_checks.py`: duration drift ≤2% (manifest vs storyboard), words.json coverage, loudness field check (reads compositor's measured LUFS from its summary), caption file presence, metadata completeness (contract #8), silent-gap list from words.json (>500ms between scenes flagged).
-- **Acceptance**: armbar fixture passes; each violation class has a failing fixture. **VALIDATE** `python -m pytest content/video_engine/tests/test_storyboard_guard.py -q`
+- Acceptance: armbar fixture passes; each violation class has a failing fixture. **VALIDATE** `python -m pytest content/video_engine/tests/test_storyboard_guard.py -q`
+- Validate: `python -m pytest content/video_engine/tests/test_storyboard_guard.py -q`
+- Evidence: delegated diff independently reviewed; `python -m pytest content/video_engine/tests/test_storyboard_guard.py content/video_engine/tests/test_qc_checks.py -q` → 20 passed; parent integration aligned QC duration with audio padding.
 
-### WP-C — Audio: `services/audio_synth.py`
+### T3: WP-C — Audio: `services/audio_synth.py`
+- Status: completed
+- Owner: implementation_luna
+- Depends on: T1
 - **Agent**: GPT-class (API tooling) · **Size**: Medium · **Depends**: WP-A
-- **Write set**: `src/services/{__init__.py, audio_synth.py}`, `tests/test_audio_synth.py`
+- Write set: `src/services/{__init__.py, audio_synth.py}`, `tests/test_audio_synth.py`
 - **Tasks**:
   1. `ElevenLabsConfig.from_env()` (**MIRROR** LLM CONFIG FROM ENV); fail-fast RuntimeError at stage start if key missing.
   2. Per-scene POST `with-timestamps`; decode base64 mp3 → `audio/scene_<id>.mp3`; char→word grouping: split narration on whitespace, walk `characters[]` accumulating boundaries; emit contract #3. **GOTCHA** alignment includes spaces/punctuation as characters — group on the narration's own tokenization, not the characters array alone; assert reconstructed text == narration (normalized).
   3. Cache: `sha256(voice_id + "|" + narration_text + "|" + json.dumps(settings, sort_keys=True))` → skip synth when `audio/.cache/<hash>.mp3` exists.
   4. Retry ×3 exponential backoff on 5xx/timeout; 4xx → fail stage with reason in event. No fallback voice ever.
   5. Record `cost_usd` estimate (chars × rate constant) in `StageOutput.summary`.
-- **Acceptance**: mocked-API tests green incl. cache hits, retry, grouping edge cases (multi-space, em-dash, unicode). **VALIDATE** `python -m pytest content/video_engine/tests/test_audio_synth.py -q`
+- Acceptance: mocked-API tests green incl. cache hits, retry, grouping edge cases (multi-space, em-dash, unicode). **VALIDATE** `python -m pytest content/video_engine/tests/test_audio_synth.py -q`
+- Validate: `python -m pytest content/video_engine/tests/test_audio_synth.py -q`
+- Evidence: delegated implementation independently reviewed; official ElevenLabs contract verified (`output_format` query parameter); `python -m pytest content/video_engine/tests/test_audio_synth.py -q` → 9 passed, including fail-closed incomplete-cache behavior.
 
-### WP-D — Scenes + Render: `scenes/*` + `services/manim_render.py`
+### T4: WP-D — Scenes + Render: `scenes/*` + `services/manim_render.py`
+- Status: completed
+- Owner: implementation_luna
+- Depends on: T1
 - **Agent**: GPT-class (Manim-heavy; largest creative-code surface) · **Size**: Large · **Depends**: WP-A (configs, registry); words.json contract only from WP-C
-- **Write set**: `src/scenes/{__init__.py, base.py, stick_figure.py, title_card.py, joint_leverage.py, map_network.py}`, `src/assets/poses/*.svg` (initial: `closed_guard, armbar_extension, arm_yank_fail, tap_frantic, posture_broken, gym_enforcer, bowler_hat_maeda`), `src/services/manim_render.py`, `tests/{test_scene_contracts.py, test_manim_render.py}`
+- Write set: `src/scenes/{__init__.py, base.py, stick_figure.py, title_card.py, joint_leverage.py, map_network.py}`, `src/assets/poses/*.svg` (initial: `closed_guard, armbar_extension, arm_yank_fail, tap_frantic, posture_broken, gym_enforcer, bowler_hat_maeda`), `src/services/manim_render.py`, `tests/{test_scene_contracts.py, test_manim_render.py}`
 - **Tasks**:
   1. `ThemedScene(base)`: reads theme + aspect frame config (`config.frame_width/height` via `tempconfig`); enforces **entrance contract** — subclasses implement `entrance()` and `body(audio_duration: float)`; base asserts first animation starts ≤0.5s; helper `pace_to(duration)` scales `self.play` run_times to fill `audio_duration` exactly.
   2. Scene classes take `(scene_spec: dict, layout: str, audio_duration: float, theme: dict)`; poses loaded from SVG via `SVGMobject`; beats schedule mid-scene actions at word-time offsets (from words.json passed in scene_spec at render time).
   3. `manim_render.py`: groups consecutive `transition.in == "continuous"` scenes with compatible classes into one render unit using `self.next_section()` per storyboard scene (segment files = contract #4 `seq_*.mp4`); renders via Python API under `tempconfig` (draft/final ladder from `render_profiles.json`); **never shell strings** (Windows host — pathlib everywhere). **GOTCHA** `-ql`≡854×480@15 draft only; final = 1080p60 landscape / 1080×1920@30 vertical; Manim caches partial movie files — set distinct `media_dir` per job to avoid cross-job cache bleed.
   4. Post-render assertion: ffprobe duration vs audio_duration ±1% per unit; mismatch → stage fail listing scene ids. Emit manifest (contract #4).
   5. Determinism: no `random` without fixed seed from job_id; no wall-clock in scene code.
-- **Acceptance**: `@pytest.mark.render_smoke` renders armbar scenes 1-2 landscape_draft headless; contract tests (fast) verify pacing math, grouping logic, entrance enforcement without rendering. **VALIDATE** `python -m pytest content/video_engine/tests -q -m "not render_smoke"` then `-m render_smoke` locally
+- Acceptance: `@pytest.mark.render_smoke` renders armbar scenes 1-2 landscape_draft headless; contract tests (fast) verify pacing math, grouping logic, entrance enforcement without rendering. **VALIDATE** `python -m pytest content/video_engine/tests -q -m "not render_smoke"` then `-m render_smoke` locally
+- Validate: `python -m pytest content/video_engine/tests/test_scene_contracts.py content/video_engine/tests/test_manim_render.py -q -m "not render_smoke"`
+- Evidence: delegated diff independently reviewed; fast scene/render contracts → 11 passed. Manim Community 0.20.1 is installed in the project `.venv`; the real two-scene `landscape_draft` smoke → 2 passed. Installing Manim exposed and led to correction of a `Scene.wait` redispatch bug that truncated the audio clock. Durable render evidence: `.context/p13-review/manim-smoke/video/landscape_draft/seq_1-2.mp4` (854×480, 15fps, 12.066667s; expected 12.0s, within 1%).
 
-### WP-E — Assembly: `services/compositor.py` + `services/captions.py`
+### T5: WP-E — Assembly: `services/compositor.py` + `services/captions.py`
+- Status: completed
+- Owner: parent
+- Depends on: T3, T4
+- Write set: `content/video_engine/src/services/{compositor.py,captions.py}`, `content/video_engine/tests/test_compositor.py`
 - **Agent**: GPT-class (ffmpeg/moviepy) · **Size**: Medium · **Depends**: contracts #3/#4 (stub inputs fine until WP-C/D merge)
 - **Tasks**:
   1. Concat manifest segments per profile honoring `transition.in` (`crossfade` 0.3s default, `match_cut`/`hard_cut` straight cut) — continuous scenes are already single files.
   2. Narration track laid at per-scene offsets (cumulative durations + `padding_s`); music bed continuous full-length at −18dB rel voice, ducking optional flag; two-pass ffmpeg `loudnorm` to −14 LUFS; write measured integrated LUFS into `StageOutput.summary` (WP-B qc reads it).
   3. `captions.py`: words.json → grouped caption lines (≤3 words/line vertical, ≤7 landscape, gaps ≥80ms merge-safe); burn on vertical via subtitles filter within safe-zone margins; sidecar `.srt` landscape.
   4. ffprobe final duration vs storyboard sum ≤2%.
-- **Acceptance**: `@pytest.mark.assembly` produces both finals from fixture segments (tiny synthetic mp4s in tests/fixtures) + srt/burned check via ffprobe stream inspection. **VALIDATE** `python -m pytest content/video_engine/tests/test_compositor.py -q -m assembly`
+- Acceptance: `@pytest.mark.assembly` produces both finals from fixture segments (tiny synthetic mp4s in tests/fixtures) + srt/burned check via ffprobe stream inspection. **VALIDATE** `python -m pytest content/video_engine/tests/test_compositor.py -q -m assembly`
+- Validate: `python -m pytest content/video_engine/tests/test_compositor.py -q`
+- Evidence: `python -m pytest content/video_engine/tests/test_compositor.py -q` → 5 passed, including local FFmpeg/ffprobe assembly, two-pass loudnorm, duration enforcement, caption grouping, and crossfade timeline preservation.
 
-### WP-F — Packaging + Publish (manual mode): `services/packaging.py` + `services/publish.py`
+### T6: WP-F — Packaging + Publish (manual mode): `services/packaging.py` + `services/publish.py`
+- Status: completed
+- Owner: parent
+- Depends on: T1
+- Write set: `content/video_engine/src/services/{packaging.py,publish.py}`, `content/video_engine/tests/test_packaging.py`
 - **Agent**: GPT-class · **Size**: Medium · **Depends**: WP-A
 - **Tasks**:
   1. Thumbnails: render TitleConceptCard stills (reuse WP-D class in image mode) per `thumbnail.variant_texts`.
   2. `metadata.json` (contract #8): UTM injection `{ARTICLE_URL}`/`{REGISTRY_URL}` → `utm_source=youtube&utm_medium=longform&utm_campaign=<job_slug>`; chapters from cumulative scene times at act boundaries; disclosure passthrough from storyboard determination.
   3. `embed_payload.json`: `VideoObject` JSON-LD (name from titles[0], description, thumbnailUrl placeholder, uploadDate null until publish, duration ISO-8601 `PT#M#S`); target slugs = technique slug + taught_at city slugs from source corpus record.
   4. `publish.py` v1: emit `upload_checklist` (title variant choice, disclosure toggle **only if** `disclosure.required`, spacing rule reminder ≥48h, playlist/lane badge) and mark run `packaged`; Gate B approval → `published` only via `cli approve`.
-- **Acceptance**: metadata/embed payloads schema-checked in tests; UTM links parse. **VALIDATE** `python -m pytest content/video_engine/tests/test_packaging.py -q`
+- Acceptance: metadata/embed payloads schema-checked in tests; UTM links parse. **VALIDATE** `python -m pytest content/video_engine/tests/test_packaging.py -q`
+- Validate: `python -m pytest content/video_engine/tests/test_packaging.py -q`
+- Evidence: `python -m pytest content/video_engine/tests/test_packaging.py -q` → 4 passed; metadata, UTM links, JSON-LD embed payload, 1280×720 `TitleConceptCard` thumbnail stills, conditional disclosure checklist, and Gate-B/QC publish guard verified. Visual evidence: `.context/p13-review/thumbnail.png`.
 
-### WP-G — Integration + thin-slice evidence + pilot enablement
+### T7: WP-G — Integration + thin-slice evidence + pilot enablement
+- Status: blocked
+- Owner: parent
+- Depends on: T2, T3, T4, T5, T6
+- Write set: `content/video_engine/src/{pipeline.py,services/ingest.py,services/script_transform.py,services/storyboard_build.py}`, `content/video_engine/content_queue/`, `.env.example`, P13 plans, integration tests
 - **Agent**: Opus-class (integrator; owns merge order) · **Size**: Medium · **Depends**: all
 - **Tasks**:
   1. Register real stage fns into pipeline dict; wire `transforming_script` deterministic corpus path (transcript steps → beats per `06` §3; LLM rewording optional behind `LLM_API_KEY` presence, guarded).
   2. Full run on `content/bjj-registry/corpus/armbar-from-guard.json` through both gates (operator approves via CLI) → verify **every** DoD artifact (`03` §9) on disk; store evidence paths in P13 T-slices.
   3. Cost/wall-time table printed by `cli status <job_id>`; coverage run; `.env.example` additions; update `P13-CONTENT-VIDEO-FLYWHEEL.plan.md` slice statuses + Evidence lines.
   4. Author pilot storyboard for E5 (Open Mat Survival Guide) as the first Gate A candidate.
-- **Acceptance**: evidence-verified end-to-end run; `pytest content/video_engine/tests -q` green; coverage ≥80% on guards/services/pipeline (render/assembly marks excluded). **VALIDATE** `python -m pytest content/video_engine/tests --cov=content/video_engine/src --cov-report=term-missing -m "not render_smoke and not assembly"`
+- Acceptance: evidence-verified end-to-end run; `pytest content/video_engine/tests -q` green; coverage ≥80% on guards/services/pipeline (render/assembly marks excluded). **VALIDATE** `python -m pytest content/video_engine/tests --cov=content/video_engine/src --cov-report=term-missing -m "not render_smoke and not assembly"`
+- Validate: `python -m pytest content/video_engine/tests --cov=content/video_engine/src --cov-report=term-missing -m "not render_smoke and not assembly"`
+- Evidence: real local CLI job `.context/wpg-cli-evidence/1687b272-eb0f-4bb1-aa3f-ee534ecf7991/job.json` completed ingest/transform/storyboard, Gate A approval, ElevenLabs audio, both Manim profiles, compositing, captions, packaging, and QC; it is now parked at Gate B with `qc/report.json` overall `pass`. ElevenLabs recorded one bounded generation of 846 billable characters at `$0.1692`; no second provider call was made during local compositor retries. Video-engine tests → **86 passed**; full repository suite is **519 passed**. The remaining provider-backed DoD blocker is operator Gate B review/publication approval. E5 is not fabricated because no Open Mat Survival Guide source record exists in the repository.
 
 ---
 
@@ -336,10 +405,27 @@ python content/video_engine/cli.py validate content/video_engine/tests/fixtures/
 EXPECT: `OK` + zero violations.
 
 ## Acceptance Criteria
-- [ ] All 7 packages merged in dependency order; unit suite green; coverage ≥80% (fast tests)
+- [x] All 7 packages merged in dependency order; unit suite green; coverage ≥80% (fast tests)
 - [ ] Evidence-verified armbar end-to-end run (DoD `03` §9 artifacts on disk)
 - [ ] E5 pilot storyboard authored and guard-passing, parked at Gate A
-- [ ] P13 slice statuses + Evidence fields updated
+- [x] P13 slice statuses + Evidence fields updated
+
+## Verification
+
+Run the focused command recorded on each task slice before the full fast suite and coverage
+gate. Slow render and assembly checks remain explicit local gates.
+
+## Evidence And Handoff
+
+Record exact commands, test counts, job IDs, and artifact paths on each task slice and in
+`P13-CONTENT-VIDEO-FLYWHEEL.plan.md`. Do not claim provider-backed or publish evidence without
+the separately authorized external action.
+
+## Blockers
+
+- Complete Gate B as the human operator; automated tests do not substitute for the final
+  landscape/vertical review or publication approval.
+- Provide the E5 source record/corpus inventory before authoring a claims-safe pilot storyboard.
 
 ## Risks
 | Risk | Likelihood | Impact | Mitigation |

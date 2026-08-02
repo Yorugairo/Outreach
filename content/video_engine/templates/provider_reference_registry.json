@@ -1,0 +1,16 @@
+{
+  "schema_version": "provider_reference_registry.v1",
+  "references": [
+    {
+      "id": "replace-with-reference-id",
+      "provider": "magnific",
+      "kind": "style",
+      "provider_id": null,
+      "input_hashes": [
+        "0000000000000000000000000000000000000000000000000000000000000000"
+      ],
+      "rights_reviewed": false,
+      "render_eligible": false
+    }
+  ]
+}

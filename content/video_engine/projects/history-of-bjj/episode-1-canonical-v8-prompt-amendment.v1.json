@@ -1,0 +1,25 @@
+{
+  "schema_version": "canonical_plate_prompt_amendment.v1",
+  "episode_id": "how-judo-became-brazilian-jiu-jitsu",
+  "canonical_visual_coverage_hash": "bc9837bd834f55b4937a3082e5d62a5b7103c501145a0659036eb32967b27829",
+  "supersedes": "episode-1-canonical-v7-prompt-amendment.v1.json",
+  "status": "active_for_candidate_generation_only",
+  "global_rules": [
+    "The narrated Belém chapter must read as a humid early-twentieth-century Brazilian Amazon river city: broad river light, palms, wooden wharves, river craft, mixed tropical and colonial street architecture, and locally varied civilian clothing.",
+    "Japanese woodblock editorial is a graphic medium and palette, not a geographic instruction. Do not generate tatami rooms, shoji screens, pagodas, topknots, kimonos, Japanese rooflines, Japanese crowd dress, or Japanese city views for Belém slots unless the prompt explicitly requires a visiting Japanese traveler.",
+    "Generated reconstruction is never historical evidence or a likeness. It may show anonymous social context but cannot identify a named person, assert a specific event, or contain factual text.",
+    "Qualified historical claims must not receive fake documents, certificate-like surfaces, source-looking tables, or visually complete handoffs that contradict incomplete or contested narration."
+  ],
+  "slot_amendments": [
+    {
+      "slot_id": "canonical-107",
+      "world": "Belém community threshold",
+      "purpose": "two distinct actions: a student becomes an instructor; a local teacher carries practice into another community"
+    },
+    {
+      "slot_id": "canonical-108",
+      "world": "Belém memory and public story",
+      "purpose": "later memory compresses several stages into one famous connection; do not represent the compression as factual evidence"
+    }
+  ]
+}

@@ -1,0 +1,88 @@
+{
+  "schema_version": "flow_character_pack.v1",
+  "provider": "google_flow",
+  "model": "nano-banana-pro",
+  "builder_surface": "character_builder",
+  "id": "history-episode-1-flow-cast-v1",
+  "episode_id": "how-judo-became-brazilian-jiu-jitsu",
+  "art_bible_id": "combat-history-longform-cutout-fork-v1",
+  "art_bible_hash": "e588e5d262b5de173022c34ecaa6e24d39f3ad447500dc13a44545ccbd62c559",
+  "characters": [
+    {
+      "id": "registry-learner",
+      "label": "The Registry Learner",
+      "role": "fictional_learner",
+      "prompt": "Original recurring fictional documentary guide for a history of Brazilian jiu-jitsu series. A curious young adult grappler with short dark hair, expressive eyebrows, warm medium-brown skin, and an approachable dry sense of humor. Wear a simple ivory judo gi with a muted indigo belt and one small rust-red folio tag; no real academy logo, no brand mark. Render as an original flat 2D woodblock-comic reconstruction: bold ink contours, limited paper/ink/indigo/rust/jade palette, visible carved-line texture, angular cutout anatomy, readable hands and feet, three-quarter body proportions, clear silhouette, restrained facial features, prop-led acting. Build a clean character sheet with front, three-quarter, profile, full-body, and three small reaction poses on a warm paper field. The character must remain recognizable at small video scale. No text, dates, labels, speech bubbles, or historical evidence in the image.",
+      "negative_prompt": "photorealism, live action, exact likeness of a real person, celebrity, academy logo, brand mark, watermark, generated lettering, illegible symbols, extra limbs, fused hands, duplicated face, costume changes, anatomy glitch, busy background, creator imitation, style-of language",
+      "reference_views": ["front", "three_quarter", "profile", "full_body", "expression_sheet"],
+      "style_atom_ids": ["combat-history-cutout-cast", "layered-history-tableau", "combat-history-folio"],
+      "scene_uses": ["artifact_cold_open", "illustrated_reconstruction", "concept_mechanics_cutaway", "chapter_cta"],
+      "rights_policy": {
+        "source_kind": "generated_original",
+        "likeness_status": "fictional",
+        "label_as_illustration": true
+      },
+      "reference_asset_ids": ["flow-learner-character-sheet-20260731"],
+      "render_eligible": false
+    },
+    {
+      "id": "kano-reconstruction",
+      "label": "Jigoro Kano — illustrated reconstruction",
+      "role": "historical_reconstruction",
+      "prompt": "Illustrated historical reconstruction of Jigoro Kano for an evidence-led documentary, not a photographic portrait. Japanese educator and martial arts system-builder in the late nineteenth century, slim upright posture, neat short moustache, calm observant expression, dark formal hakama and jacket with a restrained cream collar, one folded teaching ledger as a prop. Original flat 2D woodblock-comic reconstruction with bold carved ink contours, warm paper, indigo shadow, rust accent, jade evidence rail space, angular cutout body masses, clean silhouette, subtle period print grain, and a quiet dojo architectural suggestion behind him. Make a character sheet with front, three-quarter, profile, full-body, and neutral teaching pose. Preserve the same face shape, hair, clothing colors, and prop across every view. No text, seals, dates, logos, photographic artifacts, or invented documentary evidence.",
+      "negative_prompt": "photorealistic portrait, exact archival reproduction, modern sportswear, academy logo, national flag, generated text, calligraphy, watermark, extra fingers, extra limbs, face drift, costume drift, celebrity likeness, heroic fantasy armor, creator imitation",
+      "reference_views": ["front", "three_quarter", "profile", "full_body", "prop_detail"],
+      "style_atom_ids": ["combat-history-cutout-cast", "layered-history-tableau", "combat-history-folio"],
+      "scene_uses": ["archival_portrait", "illustrated_reconstruction", "document_quote_closeup", "lineage_graph"],
+      "rights_policy": {
+        "source_kind": "generated_original",
+        "likeness_status": "historical_reconstruction",
+        "label_as_illustration": true
+      },
+      "reference_asset_ids": ["flow-kano-reconstruction-20260731"],
+      "render_eligible": false
+    },
+    {
+      "id": "maeda-reconstruction",
+      "label": "Mitsuyo Maeda — illustrated reconstruction",
+      "role": "historical_reconstruction",
+      "prompt": "Illustrated historical reconstruction of Mitsuyo Maeda for a researched documentary, explicitly an interpretation rather than evidence. Early twentieth-century Japanese traveling judoka and professional performer, athletic compact build, swept-back dark hair, small moustache, focused but humane expression, dark navy jacket over a cream shirt with a period travel bag and folded training jacket. Original flat 2D woodblock-comic reconstruction: bold ink contours, limited paper/navy/rust/jade palette, carved-line texture, angular cutout anatomy, strong readable silhouette, expressive hands, and a hint of port-city architecture that can be replaced by a map in post. Produce front, three-quarter, profile, full-body, and walking-with-bag views with identical face, hair, clothing, and prop. No text, labels, logos, dates, or documentary claims inside the image.",
+      "negative_prompt": "photorealism, exact archival likeness, modern gi branding, flags, logos, lettering, watermark, extra limbs, fused hands, face drift, costume drift, generic samurai armor, fantasy weapon, creator imitation, busy crowd, generated facts",
+      "reference_views": ["front", "three_quarter", "profile", "full_body", "prop_detail"],
+      "style_atom_ids": ["combat-history-cutout-cast", "layered-history-tableau", "combat-history-folio"],
+      "scene_uses": ["archival_portrait", "migration_map_timeline", "illustrated_reconstruction", "lineage_graph"],
+      "rights_policy": {
+        "source_kind": "generated_original",
+        "likeness_status": "historical_reconstruction",
+        "label_as_illustration": true
+      },
+      "reference_asset_ids": ["flow-maeda-reconstruction-20260731"],
+      "render_eligible": false
+    },
+    {
+      "id": "brazilian-bridge-composite",
+      "label": "Brazilian bridge practitioner — composite reconstruction",
+      "role": "composite",
+      "prompt": "Original composite character representing the Brazilian teaching and sporting networks that shaped jiu-jitsu; do not depict a specific named person. A young Brazilian practitioner in the 1910s–1930s, medium-brown skin, curly dark hair, compact athletic build, cream training clothes with a rust sash and a worn notebook, alert eyes and an amused skeptical expression. Flat 2D woodblock-comic reconstruction with bold ink contours, warm paper, indigo and rust blocks, jade accent, period print grain, angular cutout anatomy, clear limbs and hands, and a strong profile silhouette. Create front, three-quarter, profile, full-body, and two prop-led teaching poses. Keep face, hair, clothing, palette, and notebook consistent. No logos, flags, labels, text, dates, or real-person likeness.",
+      "negative_prompt": "photorealism, named historical likeness, academy logo, national flag, modern rashguard, generated lettering, watermark, extra limbs, fused bodies, face drift, costume drift, caricature, creator imitation, martial-arts action sequence, invented evidence",
+      "reference_views": ["front", "three_quarter", "profile", "full_body", "expression_sheet", "prop_detail"],
+      "style_atom_ids": ["combat-history-cutout-cast", "layered-history-tableau", "combat-history-folio"],
+      "scene_uses": ["illustrated_reconstruction", "migration_map_timeline", "concept_mechanics_cutaway", "chapter_cta"],
+      "rights_policy": {
+        "source_kind": "generated_original",
+        "likeness_status": "composite",
+        "label_as_illustration": true
+      },
+      "reference_asset_ids": ["flow-brazilian-bridge-composite-20260731"],
+      "render_eligible": false
+    }
+  ],
+  "workflow": {
+    "generate_character_sheet_first": true,
+    "operator_review_required": true,
+    "ingredients_to_video_requires_approved_reference": true,
+    "provider_output_render_eligible": false
+  },
+  "render_eligible": false,
+  "artifact_hash": "98f1db351edaf0276af7dd7b9ce13ac0f5654195db0b9b817d8df74eca4d9b02"
+}

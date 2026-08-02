@@ -1,0 +1,37 @@
+{
+  "schema_version": "motion_sprite_set.v1",
+  "source_path": "content/video_engine/projects/history-of-bjj/assets/quarantine/living-scenes/cast-v1/kano-motion-sheet-alpha-v1.png",
+  "source_sha256": "aacb403e3c56ce61b353de648fe70f47469519030abad7932f50285e5a2b0b4f",
+  "prefix": "kano",
+  "sprites": [
+    {
+      "pose": "idle",
+      "path": "content/video_engine/projects/history-of-bjj/assets/quarantine/living-scenes/cast-v1/sprites/kano/kano-idle-v1.png",
+      "sha256": "8d7ebef7a7019ebe4c2c85bad41d10b4df7174933c0244a5138138a4a827b055",
+      "width": 329,
+      "height": 776
+    },
+    {
+      "pose": "walk",
+      "path": "content/video_engine/projects/history-of-bjj/assets/quarantine/living-scenes/cast-v1/sprites/kano/kano-walk-v1.png",
+      "sha256": "ab2d7b6990a4b78ef6734eb0c3b1c5b140206f67fa0a9e7955f781880bcd0e40",
+      "width": 342,
+      "height": 762
+    },
+    {
+      "pose": "explain",
+      "path": "content/video_engine/projects/history-of-bjj/assets/quarantine/living-scenes/cast-v1/sprites/kano/kano-explain-v1.png",
+      "sha256": "24cf28022f7c0e7274d012e494af4ffbf58ac817bd1773956d7b881d79aa2aab",
+      "width": 391,
+      "height": 769
+    },
+    {
+      "pose": "prop",
+      "path": "content/video_engine/projects/history-of-bjj/assets/quarantine/living-scenes/cast-v1/sprites/kano/kano-prop-v1.png",
+      "sha256": "468317c002997c615ba669ff9cc3f91f527794ff07397815eb1f6b8a51f08760",
+      "width": 308,
+      "height": 778
+    }
+  ],
+  "render_eligible": false
+}

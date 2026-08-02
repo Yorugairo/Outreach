@@ -1,0 +1,46 @@
+{
+  "schema_version": "style_sample_set.v1",
+  "id": "combat-woodblock-graphic-silhouette-explainer-samples-v1",
+  "style_profile_id": "combat-woodblock-graphic-silhouette-explainer-v1",
+  "purpose": "Original human-review calibration board for a reusable graphic-silhouette and woodblock explainer language.",
+  "provenance": {
+    "origin": "OpenAI built-in image generation",
+    "access_path": "codex_builtin",
+    "evidence_eligible": false,
+    "reference_study_inputs": false,
+    "creator_imitation_inputs": false
+  },
+  "render_policy": {
+    "render_eligible": false,
+    "automatic_provider_reference": false,
+    "requires_job_local_asset_manifest": true,
+    "requires_operator_selection": true,
+    "facts_must_be_local_overlays": true
+  },
+  "samples": [
+    {
+      "id": "threshold-hook",
+      "path": "content/video_engine/projects/history-of-bjj/style-samples/combat-woodblock-graphic-silhouette-explainer-v1/01-threshold-hook.png",
+      "sha256": "e1eb07e02825a547c601159c10d0e90f976486ef7c98dcc7ad9b95e5a171bc44",
+      "dimensions": [1672, 941],
+      "role": "modern-or-emotional-hook",
+      "illustrates": ["grounded cutout actor", "stable period world", "one gate action", "intentional local-type margin"]
+    },
+    {
+      "id": "community-route-correction",
+      "path": "content/video_engine/projects/history-of-bjj/style-samples/combat-woodblock-graphic-silhouette-explainer-v1/02-community-route-correction.png",
+      "sha256": "b396dafcd6dc6d62e0f2ea77ed9fe5ffdbcfee3c60519a86f2b06f8829f71846",
+      "dimensions": [1672, 941],
+      "role": "contrast-or-list-sequence",
+      "illustrates": ["separated silhouette roles", "route as a local story signal", "Brazilian world identity", "institutional destination"]
+    },
+    {
+      "id": "leverage-metaphor",
+      "path": "content/video_engine/projects/history-of-bjj/style-samples/combat-woodblock-graphic-silhouette-explainer-v1/03-leverage-metaphor.png",
+      "sha256": "f81c905c8f1d905b013bfa9746337c8483e66f58351e2fcdb0dc7cbcbc1c733a",
+      "dimensions": [1672, 941],
+      "role": "mechanism-or-correction",
+      "illustrates": ["one clear physical metaphor", "plausible contact and grounding", "negative space for local facts", "non-instructional mechanics"]
+    }
+  ]
+}

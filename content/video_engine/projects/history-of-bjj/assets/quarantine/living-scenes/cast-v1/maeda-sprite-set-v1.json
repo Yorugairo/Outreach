@@ -1,0 +1,37 @@
+{
+  "schema_version": "motion_sprite_set.v1",
+  "source_path": "content/video_engine/projects/history-of-bjj/assets/quarantine/living-scenes/cast-v1/maeda-motion-sheet-alpha-v1.png",
+  "source_sha256": "c90512eab1fad14f15bac3a1f14e18eefcf7fca83775e455064aceedd5640758",
+  "prefix": "maeda",
+  "sprites": [
+    {
+      "pose": "idle",
+      "path": "content/video_engine/projects/history-of-bjj/assets/quarantine/living-scenes/cast-v1/sprites/maeda/maeda-idle-v1.png",
+      "sha256": "e63bb058a0840db5b8b96c1fca3de3fb4a622770741290bb6bd12997e35f5717",
+      "width": 307,
+      "height": 703
+    },
+    {
+      "pose": "walk",
+      "path": "content/video_engine/projects/history-of-bjj/assets/quarantine/living-scenes/cast-v1/sprites/maeda/maeda-walk-v1.png",
+      "sha256": "d0af8c44f8fc806b6cd403eaa65b33d81935dd66717ce6ba29ec3da23aa78239",
+      "width": 337,
+      "height": 712
+    },
+    {
+      "pose": "explain",
+      "path": "content/video_engine/projects/history-of-bjj/assets/quarantine/living-scenes/cast-v1/sprites/maeda/maeda-explain-v1.png",
+      "sha256": "7e702a863e25746a7fb1b38a412a6de469ba458e9d50910f5b530f7f3f79818a",
+      "width": 431,
+      "height": 720
+    },
+    {
+      "pose": "prop",
+      "path": "content/video_engine/projects/history-of-bjj/assets/quarantine/living-scenes/cast-v1/sprites/maeda/maeda-prop-v1.png",
+      "sha256": "79938f3a13b6553ba771df92aa06666247e076bdcc03987ae80d61e3251effe0",
+      "width": 338,
+      "height": 709
+    }
+  ],
+  "render_eligible": false
+}
