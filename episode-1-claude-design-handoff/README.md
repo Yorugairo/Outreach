@@ -8,13 +8,16 @@ This package contains the render-resolved still artwork for **History – Episod
 - `plates-1080/` — 145 flat, 1920×1080 PNG plates. These are normal Git blobs, not LFS pointers.
 - `plates-1080-manifest.json` — direct mapping from an `asset_id` and `coverage_slot_id` to its flat plate path, plus SHA-256 hashes.
 - `audio/narration.m4a` — optional local reference only. Upload it directly to the chat if the repository reader cannot ingest M4A files.
+- `transcript/narration.srt` — 339 timestamped subtitle cues; the best design-tool-readable transcript.
+- `transcript/narration.words.json` — all 1,419 spoken words with exact start/end timing over the 559.922-second audio clock.
 
 ## Use in Claude Design
 
 1. Treat `canonical-visual-coverage.v12.json` as the timeline.
 2. Resolve a slot to its approved still(s) with `plates-1080-manifest.json` by matching `coverage_slot_id` to the slot's `slot_id`.
 3. Use the filename in `plate_path`; no wave-folder traversal or Git LFS download is required.
-4. If narration is needed, upload `audio/narration.m4a` directly into the design chat rather than relying on its repository reader.
-5. Preserve the plate hashes and mapping manifest when exporting a new design/edit package.
+4. Use `transcript/narration.srt` for timed story beats or `transcript/narration.words.json` for word-level alignment.
+5. If narration is needed, upload `audio/narration.m4a` directly into the design chat rather than relying on its repository reader.
+6. Preserve the plate hashes and mapping manifest when exporting a new design/edit package.
 
 This is a handoff copy of the approved Episode 1 final inputs, not an authorization to publish or alter the original production revision.

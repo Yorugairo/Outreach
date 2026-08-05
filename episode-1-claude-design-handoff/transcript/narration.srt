@@ -1,0 +1,1355 @@
+1
+00:00:00,000 --> 00:00:00,151
+The
+
+2
+00:00:00,232 --> 00:00:01,625
+useful starting point is not a
+
+3
+00:00:01,707 --> 00:00:03,913
+battlefield legend but an institution.
+
+4
+00:00:04,609 --> 00:00:05,747
+In 1882,
+
+5
+00:00:05,898 --> 00:00:06,687
+Jigoro Kano
+
+6
+00:00:06,769 --> 00:00:08,290
+established the Kodokan.
+
+7
+00:00:09,102 --> 00:00:10,170
+That date does not mean
+
+8
+00:00:10,263 --> 00:00:10,519
+every
+
+9
+00:00:10,600 --> 00:00:13,061
+older jujutsu practice vanished overnight.
+
+10
+00:00:13,340 --> 00:00:15,023
+It marks the point at which Kano's
+
+11
+00:00:15,046 --> 00:00:16,858
+system gained a durable home,
+
+12
+00:00:17,032 --> 00:00:17,113
+a
+
+13
+00:00:17,206 --> 00:00:18,181
+teaching structure,
+
+14
+00:00:18,297 --> 00:00:19,296
+and an identity.
+
+15
+00:00:19,737 --> 00:00:21,757
+That distinction changes the question we are
+
+16
+00:00:21,803 --> 00:00:22,384
+asking.
+
+17
+00:00:22,767 --> 00:00:23,766
+Instead of looking for a
+
+18
+00:00:23,847 --> 00:00:25,820
+single ancient technique that somehow
+
+19
+00:00:25,902 --> 00:00:26,308
+travelled
+
+20
+00:00:26,389 --> 00:00:28,293
+unchanged into Brazil,
+
+21
+00:00:28,468 --> 00:00:29,919
+we can follow a system as it
+
+22
+00:00:29,942 --> 00:00:32,148
+acquires schools, teachers, rules, and
+
+23
+00:00:32,229 --> 00:00:33,042
+public meaning.
+
+24
+00:00:33,286 --> 00:00:34,632
+The date is an anchor in the
+
+25
+00:00:34,691 --> 00:00:35,178
+record,
+
+26
+00:00:35,457 --> 00:00:35,689
+not a
+
+27
+00:00:35,770 --> 00:00:38,057
+magical beginning for every practice that later
+
+28
+00:00:38,115 --> 00:00:38,905
+received the name
+
+29
+00:00:39,021 --> 00:00:39,764
+jiu-jitsu.
+
+30
+00:00:40,716 --> 00:00:41,622
+Kodokan judo
+
+31
+00:00:41,865 --> 00:00:43,560
+was already a transformation.
+
+32
+00:00:44,373 --> 00:00:46,799
+Kano drew from multiple jujutsu schools,
+
+33
+00:00:46,927 --> 00:00:49,795
+selected and reorganized techniques, and connected practice
+
+34
+00:00:49,830 --> 00:00:49,888
+to
+
+35
+00:00:49,981 --> 00:00:51,710
+a broader educational program.
+
+36
+00:00:52,036 --> 00:00:54,497
+So the story begins with adaptation inside
+
+37
+00:00:54,532 --> 00:00:55,286
+Japan,
+
+38
+00:00:55,530 --> 00:00:56,018
+before the
+
+39
+00:00:56,099 --> 00:00:56,331
+art
+
+40
+00:00:56,412 --> 00:00:56,680
+ever
+
+41
+00:00:56,761 --> 00:00:57,748
+reaches Brazil.
+
+42
+00:00:58,189 --> 00:00:58,259
+A
+
+43
+00:00:58,340 --> 00:00:59,362
+system is not only a
+
+44
+00:00:59,443 --> 00:01:00,952
+list of movements. It is also
+
+45
+00:01:01,033 --> 00:01:02,345
+a way of deciding what should be
+
+46
+00:01:02,392 --> 00:01:02,856
+taught,
+
+47
+00:01:02,972 --> 00:01:04,969
+how students should practice, what counts as
+
+48
+00:01:05,039 --> 00:01:05,759
+progress,
+
+49
+00:01:06,003 --> 00:01:07,883
+and which ideas deserve to travel with
+
+50
+00:01:07,918 --> 00:01:07,988
+the
+
+51
+00:01:08,069 --> 00:01:08,870
+exercise.
+
+52
+00:01:09,683 --> 00:01:12,399
+When later observers describe judo or jiu-jitsu,
+
+53
+00:01:12,434 --> 00:01:14,268
+they may be describing different portions of
+
+54
+00:01:14,326 --> 00:01:14,466
+that
+
+55
+00:01:14,547 --> 00:01:15,534
+larger project.
+
+56
+00:01:15,708 --> 00:01:18,123
+Keeping the transformation visible prevents us from
+
+57
+00:01:18,181 --> 00:01:20,271
+mistaking a later label for an unchanged
+
+58
+00:01:20,329 --> 00:01:20,863
+original.
+
+59
+00:01:21,014 --> 00:01:23,208
+Kano's project was larger than a catalog
+
+60
+00:01:23,266 --> 00:01:24,369
+of fighting moves.
+
+61
+00:01:24,752 --> 00:01:27,399
+Institutional histories emphasize education,
+
+62
+00:01:27,550 --> 00:01:29,558
+disciplined practice, efficient use of
+
+63
+00:01:29,640 --> 00:01:31,497
+energy, and mutual benefit.
+
+64
+00:01:32,101 --> 00:01:32,844
+Those ideas
+
+65
+00:01:32,925 --> 00:01:33,274
+matter
+
+66
+00:01:33,448 --> 00:01:35,700
+because later travelers could carry techniques,
+
+67
+00:01:35,781 --> 00:01:38,069
+sporting rules, professional contests,
+
+68
+00:01:38,278 --> 00:01:38,441
+or
+
+69
+00:01:38,522 --> 00:01:39,160
+educational
+
+70
+00:01:39,242 --> 00:01:40,948
+ideals in different proportions.
+
+71
+00:01:41,273 --> 00:01:43,166
+The same practice could look different when
+
+72
+00:01:43,201 --> 00:01:44,246
+it entered a school,
+
+73
+00:01:44,327 --> 00:01:44,408
+a
+
+74
+00:01:44,489 --> 00:01:45,000
+theater,
+
+75
+00:01:45,116 --> 00:01:45,198
+a
+
+76
+00:01:45,279 --> 00:01:46,196
+challenge match,
+
+77
+00:01:46,370 --> 00:01:47,845
+or a community of immigrants.
+
+78
+00:01:48,228 --> 00:01:49,818
+This is why a history of Brazilian
+
+79
+00:01:49,876 --> 00:01:50,433
+jiu-jitsu
+
+80
+00:01:50,549 --> 00:01:52,511
+cannot be reduced to asking who knew
+
+81
+00:01:52,581 --> 00:01:53,661
+which move first.
+
+82
+00:01:53,905 --> 00:01:54,590
+We also have to
+
+83
+00:01:54,682 --> 00:01:56,401
+ask what the practice was being used
+
+84
+00:01:56,447 --> 00:01:57,840
+for, who was teaching it,
+
+85
+00:01:58,014 --> 00:02:00,453
+and what the surrounding institution rewarded.
+
+86
+00:02:01,149 --> 00:02:01,973
+Terminology
+
+87
+00:02:02,124 --> 00:02:03,158
+was not settled.
+
+88
+00:02:03,854 --> 00:02:06,629
+Contemporary and retrospective sources use judo,
+
+89
+00:02:06,780 --> 00:02:07,558
+jiu-jitsu,
+
+90
+00:02:07,674 --> 00:02:08,777
+Kano jiu-jitsu,
+
+91
+00:02:08,928 --> 00:02:11,331
+and related spellings in overlapping ways.
+
+92
+00:02:11,935 --> 00:02:14,129
+Accounts differ about what each public label
+
+93
+00:02:14,187 --> 00:02:14,849
+implied,
+
+94
+00:02:15,093 --> 00:02:17,461
+so this episode follows documented people and
+
+95
+00:02:17,507 --> 00:02:18,912
+practices instead of treating a
+
+96
+00:02:18,994 --> 00:02:21,339
+name as a perfectly stable technical system.
+
+97
+00:02:21,583 --> 00:02:22,349
+That caution is
+
+98
+00:02:22,430 --> 00:02:23,289
+not a footnote.
+
+99
+00:02:23,440 --> 00:02:27,248
+Public names travel through advertisements, demonstrations, newspapers,
+
+100
+00:02:27,271 --> 00:02:28,165
+translations, and
+
+101
+00:02:28,258 --> 00:02:29,187
+later memories.
+
+102
+00:02:29,396 --> 00:02:29,489
+A
+
+103
+00:02:29,582 --> 00:02:30,093
+word can be
+
+104
+00:02:30,174 --> 00:02:31,649
+used to sell an exhibition,
+
+105
+00:02:31,800 --> 00:02:33,030
+identify a teacher,
+
+106
+00:02:33,146 --> 00:02:34,307
+describe a lineage,
+
+107
+00:02:34,482 --> 00:02:36,049
+or summarize a ruleset.
+
+108
+00:02:36,490 --> 00:02:38,290
+The label tells us what someone called
+
+109
+00:02:38,336 --> 00:02:39,207
+the practice;
+
+110
+00:02:39,485 --> 00:02:41,343
+it does not automatically tell us that
+
+111
+00:02:41,413 --> 00:02:44,269
+every participant understood the practice in exactly
+
+112
+00:02:44,327 --> 00:02:45,221
+the same way.
+
+113
+00:02:46,034 --> 00:02:47,810
+Maeda was important, but he did not
+
+114
+00:02:47,880 --> 00:02:48,611
+enter an empty
+
+115
+00:02:48,692 --> 00:02:49,400
+landscape.
+
+116
+00:02:50,004 --> 00:02:52,315
+Scholarship documents Japanese jiu-jitsu
+
+117
+00:02:52,396 --> 00:02:53,278
+demonstrations and
+
+118
+00:02:53,359 --> 00:02:54,590
+contests in Brazil
+
+119
+00:02:54,683 --> 00:02:55,832
+before his arrival,
+
+120
+00:02:56,157 --> 00:02:56,715
+including a
+
+121
+00:02:56,796 --> 00:02:57,922
+highly publicized
+
+122
+00:02:58,015 --> 00:03:00,000
+1909 encounter in Rio.
+
+123
+00:03:00,697 --> 00:03:03,170
+That earlier presence complicates any claim that
+
+124
+00:03:03,216 --> 00:03:05,109
+Brazilian grappling history begins on
+
+125
+00:03:05,190 --> 00:03:06,874
+one day in 1914.
+
+126
+00:03:07,477 --> 00:03:07,907
+It also
+
+127
+00:03:07,988 --> 00:03:09,463
+gives the audience a better kind of
+
+128
+00:03:09,544 --> 00:03:09,985
+origin
+
+129
+00:03:10,066 --> 00:03:10,612
+story.
+
+130
+00:03:11,123 --> 00:03:13,236
+Before the famous names become connected,
+
+131
+00:03:13,619 --> 00:03:14,954
+there are public events,
+
+132
+00:03:15,070 --> 00:03:16,417
+competing descriptions,
+
+133
+00:03:16,742 --> 00:03:18,321
+and people whose roles are harder to
+
+134
+00:03:18,379 --> 00:03:20,376
+preserve in a simplified narrative.
+
+135
+00:03:21,188 --> 00:03:22,094
+The record asks
+
+136
+00:03:22,187 --> 00:03:23,638
+us to see Brazil as a place
+
+137
+00:03:23,661 --> 00:03:26,552
+where martial practices were already being displayed,
+
+138
+00:03:26,645 --> 00:03:28,456
+discussed, and interpreted.
+
+139
+00:03:29,059 --> 00:03:31,207
+The title of first teacher is disputed.
+
+140
+00:03:31,590 --> 00:03:34,040
+Some accounts foreground Maeda and Satake;
+
+141
+00:03:34,284 --> 00:03:35,143
+others identify
+
+142
+00:03:35,224 --> 00:03:35,561
+earlier
+
+143
+00:03:35,642 --> 00:03:37,662
+Japanese practitioners or distinguish
+
+144
+00:03:37,744 --> 00:03:40,565
+public performers from immigrant-community instruction.
+
+145
+00:03:41,076 --> 00:03:41,714
+The evidence is
+
+146
+00:03:41,795 --> 00:03:42,283
+mixed,
+
+147
+00:03:42,376 --> 00:03:44,059
+and a single winner would create more
+
+148
+00:03:44,106 --> 00:03:45,812
+certainty than the sources allow.
+
+149
+00:03:46,137 --> 00:03:48,204
+That does not make the history unknowable.
+
+150
+00:03:48,587 --> 00:03:51,199
+It tells us which statements need qualification.
+
+151
+00:03:51,640 --> 00:03:52,825
+We can describe a growing
+
+152
+00:03:52,906 --> 00:03:55,286
+field of Japanese martial practice in Brazil
+
+153
+00:03:55,460 --> 00:03:57,782
+without pretending that every demonstration was a
+
+154
+00:03:57,829 --> 00:03:59,895
+school, or that every performer held the
+
+155
+00:03:59,942 --> 00:04:01,068
+same teaching role.
+
+156
+00:04:01,393 --> 00:04:03,460
+A careful documentary keeps the question
+
+157
+00:04:03,541 --> 00:04:05,457
+open when the sources keep it open.
+
+158
+00:04:05,840 --> 00:04:06,409
+The record
+
+159
+00:04:06,525 --> 00:04:09,555
+does support a major transition in 1914.
+
+160
+00:04:10,158 --> 00:04:12,678
+Maeda and Soishiro Satake entered Brazil with
+
+161
+00:04:12,724 --> 00:04:15,743
+other Japanese martial artists after travelling through
+
+162
+00:04:15,778 --> 00:04:16,695
+the Americas.
+
+163
+00:04:17,810 --> 00:04:18,704
+They were not simply
+
+164
+00:04:18,785 --> 00:04:21,223
+missionaries following a modern curriculum;
+
+165
+00:04:21,664 --> 00:04:24,625
+public demonstrations and professional contests were part
+
+166
+00:04:24,659 --> 00:04:26,761
+of the network that carried their practice.
+
+167
+00:04:27,457 --> 00:04:28,885
+Their movement across borders
+
+168
+00:04:28,967 --> 00:04:31,358
+matters because it makes transmission physical and
+
+169
+00:04:31,428 --> 00:04:31,985
+social.
+
+170
+00:04:32,310 --> 00:04:33,668
+People carried skills,
+
+171
+00:04:33,819 --> 00:04:34,388
+names,
+
+172
+00:04:34,481 --> 00:04:37,546
+reputations, performance habits, and business arrangements.
+
+173
+00:04:37,755 --> 00:04:39,613
+What arrived in Brazil was therefore
+
+174
+00:04:39,729 --> 00:04:42,399
+not a sealed package labelled Brazilian jiu-jitsu.
+
+175
+00:04:42,724 --> 00:04:44,361
+It was a set of practices moving
+
+176
+00:04:44,408 --> 00:04:46,312
+through a changing international circuit,
+
+177
+00:04:46,521 --> 00:04:47,960
+ready to be adapted again.
+
+178
+00:04:48,239 --> 00:04:49,469
+By 1915,
+
+179
+00:04:49,586 --> 00:04:50,851
+the troupe was in Belém,
+
+180
+00:04:50,932 --> 00:04:51,002
+a
+
+181
+00:04:51,083 --> 00:04:53,289
+city shaped by the Amazon rubber economy
+
+182
+00:04:53,405 --> 00:04:55,657
+and a cosmopolitan entertainment circuit.
+
+183
+00:04:56,098 --> 00:04:56,679
+Theaters,
+
+184
+00:04:56,795 --> 00:04:57,747
+demonstrations,
+
+185
+00:04:57,828 --> 00:04:58,734
+challenges, and
+
+186
+00:04:58,815 --> 00:04:59,941
+advertised lessons
+
+187
+00:05:00,220 --> 00:05:02,008
+put Japanese grappling in front of
+
+188
+00:05:02,089 --> 00:05:03,563
+audiences who encountered it as
+
+189
+00:05:03,656 --> 00:05:04,388
+education,
+
+190
+00:05:04,504 --> 00:05:06,872
+spectacle, and practical combat at the same
+
+191
+00:05:06,907 --> 00:05:07,383
+time.
+
+192
+00:05:07,987 --> 00:05:08,509
+Belém is
+
+193
+00:05:08,591 --> 00:05:09,299
+more than a pin
+
+194
+00:05:09,380 --> 00:05:10,576
+on a migration map.
+
+195
+00:05:11,017 --> 00:05:12,631
+It is a setting that helps explain
+
+196
+00:05:12,701 --> 00:05:14,535
+why a practice could change as it
+
+197
+00:05:14,593 --> 00:05:15,139
+moved.
+
+198
+00:05:15,464 --> 00:05:16,300
+The audience,
+
+199
+00:05:16,474 --> 00:05:17,043
+venue,
+
+200
+00:05:17,159 --> 00:05:18,738
+local economy, and promise
+
+201
+00:05:18,854 --> 00:05:20,979
+made by an instructor all influenced what
+
+202
+00:05:21,014 --> 00:05:21,687
+was visible.
+
+203
+00:05:22,012 --> 00:05:23,707
+The same art could be presented as
+
+204
+00:05:23,824 --> 00:05:24,834
+disciplined study in
+
+205
+00:05:24,915 --> 00:05:25,356
+one room
+
+206
+00:05:25,507 --> 00:05:25,704
+and
+
+207
+00:05:25,786 --> 00:05:27,434
+as a public test in another.
+
+208
+00:05:28,038 --> 00:05:28,967
+That context
+
+209
+00:05:29,141 --> 00:05:31,057
+shaped what students could receive.
+
+210
+00:05:31,753 --> 00:05:35,132
+Cairus describes Maeda's Brazilian teaching alongside professional
+
+211
+00:05:35,178 --> 00:05:36,571
+wrestling and prizefighting,
+
+212
+00:05:36,745 --> 00:05:38,800
+with less emphasis on the full Kodokan
+
+213
+00:05:38,858 --> 00:05:40,112
+pedagogical structure.
+
+214
+00:05:40,925 --> 00:05:42,027
+This does not prove a
+
+215
+00:05:42,109 --> 00:05:43,479
+secret combat system.
+
+216
+00:05:43,920 --> 00:05:44,558
+It shows why
+
+217
+00:05:44,640 --> 00:05:45,301
+techniques,
+
+218
+00:05:45,418 --> 00:05:47,391
+labels, and teaching methods could shift as
+
+219
+00:05:47,449 --> 00:05:48,204
+they moved.
+
+220
+00:05:48,715 --> 00:05:48,784
+A
+
+221
+00:05:48,866 --> 00:05:51,524
+public challenge rewards one kind of explanation;
+
+222
+00:05:51,908 --> 00:05:51,978
+a
+
+223
+00:05:52,071 --> 00:05:53,835
+regular class rewards another.
+
+224
+00:05:54,532 --> 00:05:56,517
+A performer must demonstrate quickly,
+
+225
+00:05:56,842 --> 00:05:58,595
+while a teacher may build habits over
+
+226
+00:05:58,653 --> 00:05:59,199
+time.
+
+227
+00:06:00,151 --> 00:06:02,531
+Treating those settings as interchangeable creates a
+
+228
+00:06:02,601 --> 00:06:03,530
+false mystery.
+
+229
+00:06:04,133 --> 00:06:06,142
+Treating them as different environments gives us
+
+230
+00:06:06,188 --> 00:06:07,790
+a practical explanation for why
+
+231
+00:06:07,871 --> 00:06:08,661
+later accounts do
+
+232
+00:06:08,742 --> 00:06:10,008
+not line up perfectly.
+
+233
+00:06:10,820 --> 00:06:12,608
+Accounts differ on the clean version of
+
+234
+00:06:12,643 --> 00:06:13,409
+the handoff.
+
+235
+00:06:13,920 --> 00:06:15,964
+The evidence places Carlos Gracie in the
+
+236
+00:06:16,010 --> 00:06:18,587
+Belém training network associated with Maeda,
+
+237
+00:06:18,913 --> 00:06:20,050
+while scholarship also
+
+238
+00:06:20,131 --> 00:06:21,919
+identifies senior student Jacyntho
+
+239
+00:06:22,000 --> 00:06:24,438
+Ferro and warns against treating later lineage
+
+240
+00:06:24,473 --> 00:06:26,656
+tradition as a complete classroom record.
+
+241
+00:06:26,900 --> 00:06:28,560
+We can say there was transmission;
+
+242
+00:06:28,769 --> 00:06:30,685
+we should qualify its exact shape.
+
+243
+00:06:31,068 --> 00:06:33,030
+The responsible claim is narrower than the
+
+244
+00:06:33,076 --> 00:06:34,551
+familiar legend and stronger
+
+245
+00:06:34,760 --> 00:06:36,118
+because of that restraint.
+
+246
+00:06:36,722 --> 00:06:38,707
+It recognizes Carlos as part of an
+
+247
+00:06:38,742 --> 00:06:40,960
+important network without erasing the people,
+
+248
+00:06:41,076 --> 00:06:43,757
+settings, and uncertainties that the surviving scholarship
+
+249
+00:06:43,804 --> 00:06:45,418
+places around the relationship.
+
+250
+00:06:45,801 --> 00:06:46,346
+Jacyntho
+
+251
+00:06:46,428 --> 00:06:48,227
+Ferro matters because a network is
+
+252
+00:06:48,309 --> 00:06:49,969
+not a single arrow on a family
+
+253
+00:06:50,027 --> 00:06:50,503
+tree.
+
+254
+00:06:51,199 --> 00:06:53,301
+Cairus identifies him as a senior local
+
+255
+00:06:53,359 --> 00:06:53,754
+student
+
+256
+00:06:53,928 --> 00:06:55,634
+who taught within Maeda's circle.
+
+257
+00:06:56,145 --> 00:06:58,316
+Including that role does not erase Carlos
+
+258
+00:06:58,375 --> 00:06:58,862
+Gracie;
+
+259
+00:06:59,106 --> 00:07:00,731
+it prevents the visual grammar of
+
+260
+00:07:00,813 --> 00:07:03,564
+lineage from deleting the intermediaries the scholarship
+
+261
+00:07:03,622 --> 00:07:04,121
+names.
+
+262
+00:07:04,400 --> 00:07:06,502
+Teaching networks are made of relationships that
+
+263
+00:07:06,548 --> 00:07:08,545
+do not always fit a clean diagram.
+
+264
+00:07:08,824 --> 00:07:10,554
+A student can become an instructor,
+
+265
+00:07:10,670 --> 00:07:10,739
+a
+
+266
+00:07:10,821 --> 00:07:12,620
+local teacher can carry practice into
+
+267
+00:07:12,701 --> 00:07:13,746
+another community,
+
+268
+00:07:13,921 --> 00:07:16,289
+and later memory can compress several stages
+
+269
+00:07:16,335 --> 00:07:16,510
+into
+
+270
+00:07:16,626 --> 00:07:17,845
+one famous connection.
+
+271
+00:07:18,541 --> 00:07:19,935
+The historical task is to
+
+272
+00:07:20,016 --> 00:07:22,210
+restore those stages where the evidence allows
+
+273
+00:07:22,268 --> 00:07:22,512
+it.
+
+274
+00:07:23,116 --> 00:07:24,486
+Brazilian development also
+
+275
+00:07:24,567 --> 00:07:26,088
+extended beyond the best-known
+
+276
+00:07:26,169 --> 00:07:27,203
+Rio lineage.
+
+277
+00:07:27,713 --> 00:07:29,188
+Studies of Brazilian judo
+
+278
+00:07:29,316 --> 00:07:32,590
+identify immigrant teachers, professional fighters, and community
+
+279
+00:07:32,659 --> 00:07:35,190
+networks that spread related practices through different
+
+280
+00:07:35,237 --> 00:07:35,863
+regions.
+
+281
+00:07:36,374 --> 00:07:38,034
+That wider field is why the next
+
+282
+00:07:38,104 --> 00:07:40,031
+episode treats forgotten branches as
+
+283
+00:07:40,147 --> 00:07:41,099
+research questions
+
+284
+00:07:41,181 --> 00:07:42,957
+rather than decorative side notes.
+
+285
+00:07:43,282 --> 00:07:44,745
+The point is not to replace one
+
+286
+00:07:44,803 --> 00:07:46,602
+heroic family with a different heroic
+
+287
+00:07:46,684 --> 00:07:47,148
+list.
+
+288
+00:07:47,427 --> 00:07:48,704
+It is to change the shape of
+
+289
+00:07:48,750 --> 00:07:49,772
+the explanation.
+
+290
+00:07:50,376 --> 00:07:50,457
+A
+
+291
+00:07:50,550 --> 00:07:52,245
+national tradition can emerge from
+
+292
+00:07:52,361 --> 00:07:53,812
+overlapping communities,
+
+293
+00:07:54,056 --> 00:07:56,007
+and a later public identity can become
+
+294
+00:07:56,065 --> 00:07:58,027
+dominant without being the only path by
+
+295
+00:07:58,085 --> 00:07:59,339
+which practice travelled.
+
+296
+00:07:59,942 --> 00:08:01,788
+The Brazilian identity of the art was
+
+297
+00:08:01,858 --> 00:08:03,123
+not finished in Belém.
+
+298
+00:08:03,565 --> 00:08:04,691
+Scholarship locates a
+
+299
+00:08:04,772 --> 00:08:05,538
+major phase of
+
+300
+00:08:05,620 --> 00:08:07,454
+reinvention in the 1930s,
+
+301
+00:08:07,535 --> 00:08:08,952
+when public performances,
+
+302
+00:08:09,044 --> 00:08:11,297
+institutions, promotion, and nationalism
+
+303
+00:08:11,471 --> 00:08:13,967
+helped distinguish a Brazilian combat sport from
+
+304
+00:08:14,048 --> 00:08:15,593
+Japanese immigrant traditions
+
+305
+00:08:15,744 --> 00:08:16,092
+and from
+
+306
+00:08:16,173 --> 00:08:17,868
+other local fighting practices.
+
+307
+00:08:18,565 --> 00:08:21,259
+Reinvention means more than changing a technique.
+
+308
+00:08:21,642 --> 00:08:23,046
+It can change the audience,
+
+309
+00:08:23,139 --> 00:08:23,906
+the rules,
+
+310
+00:08:23,987 --> 00:08:26,320
+the stories attached to the practice,
+
+311
+00:08:26,494 --> 00:08:28,305
+and the institutions that preserve it.
+
+312
+00:08:28,909 --> 00:08:30,790
+This is where a travelling practice becomes
+
+313
+00:08:30,825 --> 00:08:32,009
+a public identity.
+
+314
+00:08:32,706 --> 00:08:33,541
+The history is no
+
+315
+00:08:33,623 --> 00:08:35,144
+longer only about arrival;
+
+316
+00:08:35,387 --> 00:08:36,490
+it is about selection,
+
+317
+00:08:36,606 --> 00:08:37,257
+promotion,
+
+318
+00:08:37,384 --> 00:08:37,976
+memory,
+
+319
+00:08:38,069 --> 00:08:39,799
+and the power to define what counts
+
+320
+00:08:39,845 --> 00:08:42,179
+as Brazilian. The most accurate conclusion is
+
+321
+00:08:42,237 --> 00:08:43,758
+also the more interesting one.
+
+322
+00:08:44,002 --> 00:08:46,068
+Kano's system was an adaptation;
+
+323
+00:08:46,219 --> 00:08:48,971
+international travel changed its setting and emphasis;
+
+324
+00:08:49,064 --> 00:08:51,943
+Brazil already contained competing practices and communities;
+
+325
+00:08:51,977 --> 00:08:52,094
+and
+
+326
+00:08:52,175 --> 00:08:53,080
+later institutions
+
+327
+00:08:53,162 --> 00:08:55,066
+remade the public identity again.
+
+328
+00:08:55,449 --> 00:08:57,922
+Brazilian jiu-jitsu was not copied once.
+
+329
+00:08:58,131 --> 00:08:59,965
+It was transformed repeatedly.
+
+330
+00:09:00,290 --> 00:09:01,892
+That conclusion is not an attempt to
+
+331
+00:09:01,950 --> 00:09:03,576
+make the history less dramatic.
+
+332
+00:09:03,901 --> 00:09:05,526
+It gives the drama more places to
+
+333
+00:09:05,596 --> 00:09:09,125
+live: in institutions, ships, theaters, classrooms, challenges,
+
+334
+00:09:09,160 --> 00:09:10,333
+immigrant communities,
+
+335
+00:09:10,576 --> 00:09:12,585
+and the choices later promoters made about
+
+336
+00:09:12,620 --> 00:09:13,374
+which connections to
+
+337
+00:09:13,456 --> 00:09:13,990
+remember.
+
+338
+00:09:14,268 --> 00:09:16,637
+Explore the people, places, and sources behind
+
+339
+00:09:16,695 --> 00:09:19,922
+jiu-jitsu at NationalBJJRegistry.com.
