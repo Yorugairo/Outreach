@@ -1,0 +1,1024 @@
+{
+  "schema_version": "episode1_claude_design_flat_plate_manifest.v1",
+  "source_asset_map_hash": "a8f4dd5e87936de7102975c0555a10f4484d4a096dff11171009bae6eae2337f",
+  "source_canonical_visual_coverage_hash": "0920b44f78db361fc82df8e2ac0463cf75b70a217a9ffec82c931b22d43167bd",
+  "plate_count": 145,
+  "coverage_slot_count": 139,
+  "plates": [
+    {
+      "asset_id": "action-wave-034-battlefield-legend",
+      "coverage_slot_id": "canonical-001",
+      "source_path": "generated_visuals/action_assets/wave-034/01-battlefield-legend-vs-institution.png",
+      "plate_path": "plates-1080/wave-034-01-battlefield-legend-vs-institution.png",
+      "sha256": "168bc0fac125e701ed0949654e0b5e63b4b93bbca751f156c6a1109a90be08ce"
+    },
+    {
+      "asset_id": "action-wave-034-kodokan-1882",
+      "coverage_slot_id": "canonical-002",
+      "source_path": "generated_visuals/action_assets/wave-034/02-kodokan-established-1882.png",
+      "plate_path": "plates-1080/wave-034-02-kodokan-established-1882.png",
+      "sha256": "5e1b11467b41680dfab1fe18eda1751951ce0012d8855aedf8776a08c05cdfb9"
+    },
+    {
+      "asset_id": "action-wave-034-older-practices",
+      "coverage_slot_id": "canonical-003",
+      "source_path": "generated_visuals/action_assets/wave-034/03-older-practices-remain.png",
+      "plate_path": "plates-1080/wave-034-03-older-practices-remain.png",
+      "sha256": "f55456116840f76e35be9fbc19e224f292f226f97ad2d74938f45a718a33e9c6"
+    },
+    {
+      "asset_id": "action-wave-034-durable-home",
+      "coverage_slot_id": "canonical-004",
+      "source_path": "generated_visuals/action_assets/wave-034/04-durable-home.png",
+      "plate_path": "plates-1080/wave-034-04-durable-home.png",
+      "sha256": "fabf70b23d4f56c2a35f594766666d97b442f8bdb65a8285057f05ab4fc1f786"
+    },
+    {
+      "asset_id": "action-wave-034-teaching-structure",
+      "coverage_slot_id": "canonical-005",
+      "source_path": "generated_visuals/action_assets/wave-034/05-teaching-structure.png",
+      "plate_path": "plates-1080/wave-034-05-teaching-structure.png",
+      "sha256": "7839623036f81448d8de85a2f362c41de098c62bbf6a794e6eeb4beda4bab594"
+    },
+    {
+      "asset_id": "action-wave-034-question-reframed",
+      "coverage_slot_id": "canonical-006",
+      "source_path": "generated_visuals/action_assets/wave-034/06-question-reframed.png",
+      "plate_path": "plates-1080/wave-034-06-question-reframed.png",
+      "sha256": "8145423eecc9de5bf717a007bcccb2a3b7c6441fa75e605688f33b0667961c3c"
+    },
+    {
+      "asset_id": "action-wave-034-traveling-system",
+      "coverage_slot_id": "canonical-007",
+      "source_path": "generated_visuals/action_assets/wave-034/07-traveling-system.png",
+      "plate_path": "plates-1080/wave-034-07-traveling-system.png",
+      "sha256": "70ef48a21d7bda9c53dbdf0490918d6a92c18a255887484f8e61085827e82270"
+    },
+    {
+      "asset_id": "action-wave-034-social-system",
+      "coverage_slot_id": "canonical-008",
+      "source_path": "generated_visuals/action_assets/wave-034/08-schools-teachers-rules.png",
+      "plate_path": "plates-1080/wave-034-08-schools-teachers-rules.png",
+      "sha256": "06e28645ea0793e0a2010b921ef8b432f93f78144361cfb0fc0adcf1306d5ec7"
+    },
+    {
+      "asset_id": "action-wave-034-record-anchor",
+      "coverage_slot_id": "canonical-009",
+      "source_path": "generated_visuals/action_assets/wave-034/09-record-anchor-v2.png",
+      "plate_path": "plates-1080/wave-034-09-record-anchor-v2.png",
+      "sha256": "6cc66b83be102079fcb7f6f46290f4592a9d0af3a7c2a6cb03b53ec76e53cc04"
+    },
+    {
+      "asset_id": "action-wave-034-kodokan-continuity",
+      "coverage_slot_id": "canonical-010",
+      "source_path": "generated_visuals/action_assets/wave-034/10-kodokan-continuity-v2.png",
+      "plate_path": "plates-1080/wave-034-10-kodokan-continuity-v2.png",
+      "sha256": "5ba0024608853f591c58933ce7b69745ccf7919376c5994a59f31db959f3f007"
+    },
+    {
+      "asset_id": "action-wave-034-transformation-selection",
+      "coverage_slot_id": "canonical-011",
+      "source_path": "generated_visuals/action_assets/wave-034/11-transformation-selection.png",
+      "plate_path": "plates-1080/wave-034-11-transformation-selection.png",
+      "sha256": "e1fb799e9604f35bfec366dfc60ba4e5e06db941c51f610dae2cc2b798dcae1f"
+    },
+    {
+      "asset_id": "action-wave-034-multiple-schools",
+      "coverage_slot_id": "canonical-012",
+      "source_path": "generated_visuals/action_assets/wave-034/12-multiple-schools.png",
+      "plate_path": "plates-1080/wave-034-12-multiple-schools.png",
+      "sha256": "4ef4e6a482618195017d098952b852785613b867f8360edc0c38d0f7575c55b5"
+    },
+    {
+      "asset_id": "action-wave-034-broader-education",
+      "coverage_slot_id": "canonical-013",
+      "source_path": "generated_visuals/action_assets/wave-034/13-broader-education.png",
+      "plate_path": "plates-1080/wave-034-13-broader-education.png",
+      "sha256": "2340a6c2052daf657cc1ac7e7dd3035033735e50ef72883d80702c5e7510285d"
+    },
+    {
+      "asset_id": "action-wave-034-adaptation-in-japan",
+      "coverage_slot_id": "canonical-014",
+      "source_path": "generated_visuals/action_assets/wave-034/14-adaptation-inside-japan.png",
+      "plate_path": "plates-1080/wave-034-14-adaptation-inside-japan.png",
+      "sha256": "03ebc12122690bd7036a09c2aa3ec75e3b6f1165cc7bb7e19f05d36f84e98196"
+    },
+    {
+      "asset_id": "action-wave-034-before-brazil",
+      "coverage_slot_id": "canonical-015",
+      "source_path": "generated_visuals/action_assets/wave-034/15-before-brazil.png",
+      "plate_path": "plates-1080/wave-034-15-before-brazil.png",
+      "sha256": "49a50bf670878d9757a44ffd6850e0005650a38278009fa694f0a313ed4f9558"
+    },
+    {
+      "asset_id": "action-wave-035-curriculum-decisions",
+      "coverage_slot_id": "canonical-016",
+      "source_path": "generated_visuals/action_assets/wave-035/16-curriculum-decisions.png",
+      "plate_path": "plates-1080/wave-035-16-curriculum-decisions.png",
+      "sha256": "ac90c377149b152d5d4d08cc7d566366a6125f45bfed23180a558a8ffe8dbdf2"
+    },
+    {
+      "asset_id": "action-wave-035-progress-travel",
+      "coverage_slot_id": "canonical-017",
+      "source_path": "generated_visuals/action_assets/wave-035/17-progress-and-travel.png",
+      "plate_path": "plates-1080/wave-035-17-progress-and-travel.png",
+      "sha256": "75647a708a85e8b6a331516fb2ceb0ac92f07f6dba69fc8f10b50fc662f6539d"
+    },
+    {
+      "asset_id": "action-wave-035-different-portions",
+      "coverage_slot_id": "canonical-018",
+      "source_path": "generated_visuals/action_assets/wave-035/18-different-portions.png",
+      "plate_path": "plates-1080/wave-035-18-different-portions.png",
+      "sha256": "ee08ac836c60054170635fa1ea0b3ccdfef263ddb9adb4637899c5f027156382"
+    },
+    {
+      "asset_id": "action-wave-035-transformation-visible",
+      "coverage_slot_id": "canonical-019",
+      "source_path": "generated_visuals/action_assets/wave-035/19-transformation-visible.png",
+      "plate_path": "plates-1080/wave-035-19-transformation-visible.png",
+      "sha256": "dc6979e0f45b2e830b79237021178e091a6b6553913dc841c60a5e4c1445bbd6"
+    },
+    {
+      "asset_id": "action-wave-035-not-unchanged-original",
+      "coverage_slot_id": "canonical-020",
+      "source_path": "generated_visuals/action_assets/wave-035/20-not-unchanged-original.png",
+      "plate_path": "plates-1080/wave-035-20-not-unchanged-original.png",
+      "sha256": "7052d3de9efd87b34ba4ce19bd5bcdbbe3ca19e2c35dec320db7a4fb78ec6ffb"
+    },
+    {
+      "asset_id": "action-wave-035-project-beyond-moves",
+      "coverage_slot_id": "canonical-021",
+      "source_path": "generated_visuals/action_assets/wave-035/21-project-beyond-moves.png",
+      "plate_path": "plates-1080/wave-035-21-project-beyond-moves.png",
+      "sha256": "523dedb88c8e9bc4fe28b068ad2fef7701eb8466e65a9aace36d176af5cffd04"
+    },
+    {
+      "asset_id": "action-wave-035-discipline-efficiency",
+      "coverage_slot_id": "canonical-022",
+      "source_path": "generated_visuals/action_assets/wave-035/22-discipline-and-efficiency.png",
+      "plate_path": "plates-1080/wave-035-22-discipline-and-efficiency.png",
+      "sha256": "5b39f93b68d7011f6f3b9c51795d28965ccf27c6d7b662d9bc7974050e44b666"
+    },
+    {
+      "asset_id": "action-wave-035-mutual-benefit",
+      "coverage_slot_id": "canonical-023",
+      "source_path": "generated_visuals/action_assets/wave-035/23-mutual-benefit.png",
+      "plate_path": "plates-1080/wave-035-23-mutual-benefit.png",
+      "sha256": "7406b87975934a22d16c4c4dc6cae81aa9d63df359c2052803ba3c821c2c28f9"
+    },
+    {
+      "asset_id": "action-wave-035-what-travelers-carry",
+      "coverage_slot_id": "canonical-024",
+      "source_path": "generated_visuals/action_assets/wave-035/24-what-travelers-carry.png",
+      "plate_path": "plates-1080/wave-035-24-what-travelers-carry.png",
+      "sha256": "740cb53dcdd62dfe63c67c7509b9ad83be77e87a46a5d76b2e07efc1dbe684d4"
+    },
+    {
+      "asset_id": "action-wave-035-different-proportions",
+      "coverage_slot_id": "canonical-025",
+      "source_path": "generated_visuals/action_assets/wave-035/25-different-proportions.png",
+      "plate_path": "plates-1080/wave-035-25-different-proportions.png",
+      "sha256": "ac025b44d07688e4a96ebf0c1617ead8174d5cc9b6cc6886c2419ec6dac91f47"
+    },
+    {
+      "asset_id": "action-wave-036-setting-changes-practice",
+      "coverage_slot_id": "canonical-026",
+      "source_path": "generated_visuals/action_assets/wave-036/26-setting-changes-practice.png",
+      "plate_path": "plates-1080/wave-036-26-setting-changes-practice.png",
+      "sha256": "4adf84010c33d6bfe986e3622905d6fba022d2880ba6402e3801310b30f4399f"
+    },
+    {
+      "asset_id": "action-wave-036-beyond-who-knew-first",
+      "coverage_slot_id": "canonical-027",
+      "source_path": "generated_visuals/action_assets/wave-036/27-beyond-who-knew-first.png",
+      "plate_path": "plates-1080/wave-036-27-beyond-who-knew-first.png",
+      "sha256": "fabb1466fd4cf510110817f7fb1aa17845ae62b8162304478490e3adeb0f7652"
+    },
+    {
+      "asset_id": "action-wave-036-uses-teachers-institutions",
+      "coverage_slot_id": "canonical-028",
+      "source_path": "generated_visuals/action_assets/wave-036/28-uses-teachers-institutions.png",
+      "plate_path": "plates-1080/wave-036-28-uses-teachers-institutions.png",
+      "sha256": "07cd172d3d2496ccdef0ddfafdb4c999b9efcff937eb7f795f90e8c1de9f84c1"
+    },
+    {
+      "asset_id": "action-wave-036-institution-rewards",
+      "coverage_slot_id": "canonical-029",
+      "source_path": "generated_visuals/action_assets/wave-036/29-institution-rewards.png",
+      "plate_path": "plates-1080/wave-036-29-institution-rewards.png",
+      "sha256": "5ec37eb55341a6cdf1015b85d4152619f731390f914f92a008c10285cb2c4028"
+    },
+    {
+      "asset_id": "action-wave-036-terminology-unsettled",
+      "coverage_slot_id": "canonical-030",
+      "source_path": "generated_visuals/action_assets/wave-036/30-terminology-unsettled.png",
+      "plate_path": "plates-1080/wave-036-30-terminology-unsettled.png",
+      "sha256": "a106bb124546553ff0558f0a8ac92773c93e2f2635c02633bb6cc0f88357d773"
+    },
+    {
+      "asset_id": "action-wave-036-overlapping-language",
+      "coverage_slot_id": "canonical-031",
+      "source_path": "generated_visuals/action_assets/wave-036/31-overlapping-language.png",
+      "plate_path": "plates-1080/wave-036-31-overlapping-language.png",
+      "sha256": "f4c3c0dcbf67e7ed76eb0c0ae8dc933535ba2c41ec1d6344c4d689cf8026aa25"
+    },
+    {
+      "asset_id": "action-wave-036-public-names-travel",
+      "coverage_slot_id": "canonical-032",
+      "source_path": "generated_visuals/action_assets/wave-036/32-public-names-travel.png",
+      "plate_path": "plates-1080/wave-036-32-public-names-travel.png",
+      "sha256": "20a0509338948c3c56869461ed28c5e5c968d557456bc3e0d06ea70e90442c15"
+    },
+    {
+      "asset_id": "action-wave-036-accounts-differ",
+      "coverage_slot_id": "canonical-033",
+      "source_path": "generated_visuals/action_assets/wave-036/33-accounts-differ.png",
+      "plate_path": "plates-1080/wave-036-33-accounts-differ.png",
+      "sha256": "456da464c6183f7b3ad84a851c2f68693f2159fb09d87958ccf9c317389e1a63"
+    },
+    {
+      "asset_id": "action-wave-036-people-and-practices",
+      "coverage_slot_id": "canonical-034",
+      "source_path": "generated_visuals/action_assets/wave-036/34-people-and-practices.png",
+      "plate_path": "plates-1080/wave-036-34-people-and-practices.png",
+      "sha256": "44e08a44097dfda1f786a187d7b5aeaf72b14d2b78b9d256d141256f102afe39"
+    },
+    {
+      "asset_id": "action-wave-036-caution-not-footnote",
+      "coverage_slot_id": "canonical-035",
+      "source_path": "generated_visuals/action_assets/wave-036/35-caution-not-footnote.png",
+      "plate_path": "plates-1080/wave-036-35-caution-not-footnote.png",
+      "sha256": "c42429d1a7ba8c600833a698d0551f13b492eb5b051fec07ef5411ed5c81888a"
+    },
+    {
+      "asset_id": "action-wave-037-public-names-circulate",
+      "coverage_slot_id": "canonical-036",
+      "source_path": "generated_visuals/action_assets/wave-037/36-public-names-circulate.png",
+      "plate_path": "plates-1080/wave-037-36-public-names-circulate.png",
+      "sha256": "b5a88db1560f6ee717b558b43ffae2f0fa75970e2c28923b2c7139f4cd1c6ee2"
+    },
+    {
+      "asset_id": "action-wave-037-public-names-multiple-channels",
+      "coverage_slot_id": "canonical-037",
+      "source_path": "generated_visuals/action_assets/wave-037/37-public-names-multiple-channels.png",
+      "plate_path": "plates-1080/wave-037-37-public-names-multiple-channels.png",
+      "sha256": "015eaa90eff7eaa8e2e1e1b8d6d574030c255aa53591d786e3f2a740bf9514fb"
+    },
+    {
+      "asset_id": "action-wave-037-exhibition-sells-public-attention",
+      "coverage_slot_id": "canonical-038",
+      "source_path": "generated_visuals/action_assets/wave-037/38-exhibition-sells-public-attention.png",
+      "plate_path": "plates-1080/wave-037-38-exhibition-sells-public-attention.png",
+      "sha256": "fcd110d88da2000ec9aacebf693defc4bbe20290d92d5fef0daab9c71c22d24f"
+    },
+    {
+      "asset_id": "action-wave-037-label-versus-practice",
+      "coverage_slot_id": "canonical-039",
+      "source_path": "generated_visuals/action_assets/wave-037/39-label-versus-practice.png",
+      "plate_path": "plates-1080/wave-037-39-label-versus-practice.png",
+      "sha256": "d8c52b087f4737ec3a5076dcb34cfd61bf81346526ff57675c9f52f21fa4e2b5"
+    },
+    {
+      "asset_id": "action-wave-037-no-single-understanding",
+      "coverage_slot_id": "canonical-040",
+      "source_path": "generated_visuals/action_assets/wave-037/40-no-single-understanding.png",
+      "plate_path": "plates-1080/wave-037-40-no-single-understanding.png",
+      "sha256": "ad2187a5c56914df41ec65a080c3641836cc7b9f8f0f0406fcd949415e1e246c"
+    },
+    {
+      "asset_id": "action-wave-037-maeda-important-not-alone",
+      "coverage_slot_id": "canonical-041",
+      "source_path": "generated_visuals/action_assets/wave-037/41-maeda-important-not-alone.png",
+      "plate_path": "plates-1080/wave-037-41-maeda-important-not-alone.png",
+      "sha256": "b03912cc68af286b906ee788ddfa30152d1c56ed9653ce4991a8af7224d20f0d"
+    },
+    {
+      "asset_id": "action-wave-037-not-empty-landscape",
+      "coverage_slot_id": "canonical-042",
+      "source_path": "generated_visuals/action_assets/wave-037/42-not-empty-landscape.png",
+      "plate_path": "plates-1080/wave-037-42-not-empty-landscape.png",
+      "sha256": "934d294b0b5717f746dc7936fcc4355593c75cd6689d8cd2f35c1c5153ad637a"
+    },
+    {
+      "asset_id": "action-wave-037-documented-public-presence",
+      "coverage_slot_id": "canonical-043",
+      "source_path": "generated_visuals/action_assets/wave-037/43-documented-public-presence.png",
+      "plate_path": "plates-1080/wave-037-43-documented-public-presence.png",
+      "sha256": "e88e3a833aa53f01ee3afe0b7202e885f29b9957360dbbbc550895b7441692bf"
+    },
+    {
+      "asset_id": "action-wave-037-before-arrival",
+      "coverage_slot_id": "canonical-044",
+      "source_path": "generated_visuals/action_assets/wave-037/44-before-arrival.png",
+      "plate_path": "plates-1080/wave-037-44-before-arrival.png",
+      "sha256": "838a70b0847c45558c28c465195f935c49db31f388f1722bbc974ac2d298c969"
+    },
+    {
+      "asset_id": "action-wave-037-earlier-presence-complicates",
+      "coverage_slot_id": "canonical-045",
+      "source_path": "generated_visuals/action_assets/wave-037/45-earlier-presence-complicates.png",
+      "plate_path": "plates-1080/wave-037-45-earlier-presence-complicates.png",
+      "sha256": "3b15ae5c7489a0b0eb4ba87034cc4b4320686e4bc0f8ac3ecb54d4cc052a55f5"
+    },
+    {
+      "asset_id": "action-wave-038-not-one-day",
+      "coverage_slot_id": "canonical-046",
+      "source_path": "generated_visuals/action_assets/wave-038/46-not-one-day-1914.png",
+      "plate_path": "plates-1080/wave-038-46-not-one-day-1914.png",
+      "sha256": "736d0c74549e819f15921e85b6cfe77e6f314a338dc761709b2b51e99d5895a5"
+    },
+    {
+      "asset_id": "action-wave-038-better-origin-story",
+      "coverage_slot_id": "canonical-047",
+      "source_path": "generated_visuals/action_assets/wave-038/47-better-origin-story.png",
+      "plate_path": "plates-1080/wave-038-47-better-origin-story.png",
+      "sha256": "d60f71f6afa6be76f606fca30462509349101117cac140e695a531e25bddf57e"
+    },
+    {
+      "asset_id": "action-wave-038-public-events",
+      "coverage_slot_id": "canonical-048",
+      "source_path": "generated_visuals/action_assets/wave-038/48-public-events-competing-descriptions.png",
+      "plate_path": "plates-1080/wave-038-48-public-events-competing-descriptions.png",
+      "sha256": "d8907de932e9b94e9503af68af8bb11cc41654cec3b22be1c37e727e6f9f9230"
+    },
+    {
+      "asset_id": "action-wave-038-hard-to-preserve-roles",
+      "coverage_slot_id": "canonical-049",
+      "source_path": "generated_visuals/action_assets/wave-038/49-hard-to-preserve-roles.png",
+      "plate_path": "plates-1080/wave-038-49-hard-to-preserve-roles.png",
+      "sha256": "a815f11d19a71dbfa994164324e0a83a15c120be49a63d28caaf2615f092fa11"
+    },
+    {
+      "asset_id": "action-wave-038-brazil-as-place",
+      "coverage_slot_id": "canonical-050",
+      "source_path": "generated_visuals/action_assets/wave-038/50-brazil-as-place.png",
+      "plate_path": "plates-1080/wave-038-50-brazil-as-place.png",
+      "sha256": "8f0cee7bd7abf27dd6176e1958490525fad642cb185de5bb6d256e55458847bf"
+    },
+    {
+      "asset_id": "action-wave-038-displayed-discussed-interpreted",
+      "coverage_slot_id": "canonical-051",
+      "source_path": "generated_visuals/action_assets/wave-038/51-displayed-discussed-interpreted.png",
+      "plate_path": "plates-1080/wave-038-51-displayed-discussed-interpreted.png",
+      "sha256": "2f70d6ed1e8c83608b2de05437437e1e4dfc358a0f97df0d8ba7e845deb95b5a"
+    },
+    {
+      "asset_id": "action-wave-038-first-teacher-disputed",
+      "coverage_slot_id": "canonical-052",
+      "source_path": "generated_visuals/action_assets/wave-038/52-first-teacher-disputed.png",
+      "plate_path": "plates-1080/wave-038-52-first-teacher-disputed.png",
+      "sha256": "1e5c962332705d525d2350f064753ae2cc2fa948fd2419f03234a6b154b2f969"
+    },
+    {
+      "asset_id": "action-wave-038-different-accounts",
+      "coverage_slot_id": "canonical-053",
+      "source_path": "generated_visuals/action_assets/wave-038/53-different-accounts-foreground.png",
+      "plate_path": "plates-1080/wave-038-53-different-accounts-foreground.png",
+      "sha256": "d8dd1bd855ee3e06461d0f117887e6b33894100d87945003028f06acd3f1dcf6"
+    },
+    {
+      "asset_id": "action-wave-038-distinct-contexts",
+      "coverage_slot_id": "canonical-054",
+      "source_path": "generated_visuals/action_assets/wave-038/54-practitioners-performers-instruction.png",
+      "plate_path": "plates-1080/wave-038-54-practitioners-performers-instruction.png",
+      "sha256": "b6681ccbec95f339c83f41a2ffd974e5d180c01bec00fa4e2e1bf7dfb33a4ed9"
+    },
+    {
+      "asset_id": "action-wave-038-no-single-winner",
+      "coverage_slot_id": "canonical-055",
+      "source_path": "generated_visuals/action_assets/wave-038/55-evidence-mixed-no-single-winner.png",
+      "plate_path": "plates-1080/wave-038-55-evidence-mixed-no-single-winner.png",
+      "sha256": "dad24e4a8063413250ab9b110101e9802966223f85db4daced098bb1078e0b54"
+    },
+    {
+      "asset_id": "action-wave-039-certainty",
+      "coverage_slot_id": "canonical-056",
+      "source_path": "generated_visuals/action_assets/wave-039/56-certainty-sources-allow.png",
+      "plate_path": "plates-1080/wave-039-56-certainty-sources-allow.png",
+      "sha256": "7cf4d17cfc16879642ad8d371098c9f5d4cb159e81b60626c29c34bda7368f08"
+    },
+    {
+      "asset_id": "action-wave-039-statements-qualified",
+      "coverage_slot_id": "canonical-057",
+      "source_path": "generated_visuals/action_assets/wave-039/57-statements-need-qualification.png",
+      "plate_path": "plates-1080/wave-039-57-statements-need-qualification.png",
+      "sha256": "d87b15b99f788b46d6ffe1ed86d75fe4347e99ec1e50df8820433755f97fc2aa"
+    },
+    {
+      "asset_id": "action-wave-039-growing-field",
+      "coverage_slot_id": "canonical-058",
+      "source_path": "generated_visuals/action_assets/wave-039/58-growing-field-in-brazil.png",
+      "plate_path": "plates-1080/wave-039-58-growing-field-in-brazil.png",
+      "sha256": "385d9b0da39de5bccfff1c8c36d5e8485a512c95e3fcb980bf92c048be6e59dc"
+    },
+    {
+      "asset_id": "action-wave-039-demonstration-not-school",
+      "coverage_slot_id": "canonical-059",
+      "source_path": "generated_visuals/action_assets/wave-039/59-demonstration-not-school.png",
+      "plate_path": "plates-1080/wave-039-59-demonstration-not-school.png",
+      "sha256": "f79eadd40a5d74a0b714719d0f35aa5ce0a0abe661e729bbbde8db4df341bb98"
+    },
+    {
+      "asset_id": "action-wave-039-question-open",
+      "coverage_slot_id": "canonical-060",
+      "source_path": "generated_visuals/action_assets/wave-039/60-question-kept-open.png",
+      "plate_path": "plates-1080/wave-039-60-question-kept-open.png",
+      "sha256": "feaab7cfc06fe493b402bb1d30793887f3a2088c56ee99af6fc91efbd565d3d2"
+    },
+    {
+      "asset_id": "action-wave-039-transition",
+      "coverage_slot_id": "canonical-061",
+      "source_path": "generated_visuals/action_assets/wave-039/61-major-transition.png",
+      "plate_path": "plates-1080/wave-039-61-major-transition.png",
+      "sha256": "030f9bf161870d0e4286e2d902cbc57f85d614650d05235183a10fe38f0584bd"
+    },
+    {
+      "asset_id": "action-wave-039-two-travelers",
+      "coverage_slot_id": "canonical-062",
+      "source_path": "generated_visuals/action_assets/wave-039/62-two-travelers-enter-brazil.png",
+      "plate_path": "plates-1080/wave-039-62-two-travelers-enter-brazil.png",
+      "sha256": "e324931c320fb691bf1a66fb8a9622bea2baada1742f159f4a749415663a0b5d"
+    },
+    {
+      "asset_id": "action-wave-039-americas-travel",
+      "coverage_slot_id": "canonical-063",
+      "source_path": "generated_visuals/action_assets/wave-039/63-traveled-through-americas.png",
+      "plate_path": "plates-1080/wave-039-63-traveled-through-americas.png",
+      "sha256": "a421f93afd2e7b1991bfe33866ddb32119de090d9887c3c044af8f3ed1a9a0d2"
+    },
+    {
+      "asset_id": "action-wave-039-not-missionaries",
+      "coverage_slot_id": "canonical-064",
+      "source_path": "generated_visuals/action_assets/wave-039/64-not-missionaries-fixed-curriculum.png",
+      "plate_path": "plates-1080/wave-039-64-not-missionaries-fixed-curriculum.png",
+      "sha256": "3d7d23e7d9032eb31bd1107c38bf1b32f3b32a9b711830fa8901a3c86e04a7c6"
+    },
+    {
+      "asset_id": "action-wave-040-network-carries-practice",
+      "coverage_slot_id": "canonical-066",
+      "source_path": "generated_visuals/action_assets/wave-040/66-network-carries-practice.png",
+      "plate_path": "plates-1080/wave-040-66-network-carries-practice.png",
+      "sha256": "18e2d7ab4c836cb4262a3443f01ca04f779050bec415ccfcb3fc7dc86217396a"
+    },
+    {
+      "asset_id": "action-wave-040-physical-social-transmission",
+      "coverage_slot_id": "canonical-067",
+      "source_path": "generated_visuals/action_assets/wave-040/67-physical-social-transmission.png",
+      "plate_path": "plates-1080/wave-040-67-physical-social-transmission.png",
+      "sha256": "6aa279480d1156c4e0c2a24c88452a65d453210e64e19e51fbb5c49d6fdd2c80"
+    },
+    {
+      "asset_id": "action-wave-040-skills-names-reputations",
+      "coverage_slot_id": "canonical-068",
+      "source_path": "generated_visuals/action_assets/wave-040/68-skills-names-reputations.png",
+      "plate_path": "plates-1080/wave-040-68-skills-names-reputations.png",
+      "sha256": "c3b27d98d37e032293fde7646df7f7976aa46f2e72e73652bd0b0bd5eb197dcf"
+    },
+    {
+      "asset_id": "action-wave-040-not-sealed-package",
+      "coverage_slot_id": "canonical-069",
+      "source_path": "generated_visuals/action_assets/wave-040/69-not-sealed-package.png",
+      "plate_path": "plates-1080/wave-040-69-not-sealed-package.png",
+      "sha256": "50af07bb1c181c9640f8b2f81b2f5cff35c192b0df214d1f1a2393faffc0837c"
+    },
+    {
+      "asset_id": "action-wave-040-changing-circuit",
+      "coverage_slot_id": "canonical-070",
+      "source_path": "generated_visuals/action_assets/wave-040/70-changing-circuit.png",
+      "plate_path": "plates-1080/wave-040-70-changing-circuit.png",
+      "sha256": "413458b0e684c47d799a157ebcfe197a4e656f0ef25f0bd239c66c46a037a9c2"
+    },
+    {
+      "asset_id": "action-wave-040-adapted-again",
+      "coverage_slot_id": "canonical-071",
+      "source_path": "generated_visuals/action_assets/wave-040/71-adapted-again.png",
+      "plate_path": "plates-1080/wave-040-71-adapted-again.png",
+      "sha256": "4ac2e19f4281fcf730c86ebef11d7cb16d645421fc263f9802e2692f615a37a9"
+    },
+    {
+      "asset_id": "action-wave-040-belem-amazon-city",
+      "coverage_slot_id": "canonical-072",
+      "source_path": "generated_visuals/action_assets/wave-040/72-belem-amazon-city.png",
+      "plate_path": "plates-1080/wave-040-72-belem-amazon-city.png",
+      "sha256": "69cc4e23957e3611cb66bb587c02dec41709b775d7f5387b1104320159e20c5f"
+    },
+    {
+      "asset_id": "action-wave-040-cosmopolitan-entertainment",
+      "coverage_slot_id": "canonical-073",
+      "source_path": "generated_visuals/action_assets/wave-040/73-cosmopolitan-entertainment.png",
+      "plate_path": "plates-1080/wave-040-73-cosmopolitan-entertainment.png",
+      "sha256": "fb00f23d5172e8341ff829d06e1161003b2c39f242ecf238222470149e06cbe4"
+    },
+    {
+      "asset_id": "action-wave-041-education-spectacle-practical",
+      "coverage_slot_id": "canonical-076",
+      "source_path": "generated_visuals/action_assets/wave-041/76-education-spectacle-practical.png",
+      "plate_path": "plates-1080/wave-041-76-education-spectacle-practical.png",
+      "sha256": "b7ed2ac224c9824f740ec2fe28ccdb4b3e4a3ebcf2be1a95ecb274e959be6c37"
+    },
+    {
+      "asset_id": "action-wave-041-belem-living-setting",
+      "coverage_slot_id": "canonical-077",
+      "source_path": "generated_visuals/action_assets/wave-041/77-belem-living-setting.png",
+      "plate_path": "plates-1080/wave-041-77-belem-living-setting.png",
+      "sha256": "86577a625e45cb20b68b9d34a01a4efd3d471a5f54120bff349ff30ff913c746"
+    },
+    {
+      "asset_id": "action-wave-041-context-changes-practice",
+      "coverage_slot_id": "canonical-078",
+      "source_path": "generated_visuals/action_assets/wave-041/78-context-changes-practice.png",
+      "plate_path": "plates-1080/wave-041-78-context-changes-practice.png",
+      "sha256": "aa7e4003830e7883b7d1446806a2ba71deccf467ee369332b9d9022535ced47d"
+    },
+    {
+      "asset_id": "action-wave-041-local-promise-visible",
+      "coverage_slot_id": "canonical-079",
+      "source_path": "generated_visuals/action_assets/wave-041/79-local-promise-visible.png",
+      "plate_path": "plates-1080/wave-041-79-local-promise-visible.png",
+      "sha256": "3428e661bc718a8d18d46192a7ef4332dddffdd820e19301217a2a3adba59c55"
+    },
+    {
+      "asset_id": "action-wave-041-disciplined-study",
+      "coverage_slot_id": "canonical-080",
+      "source_path": "generated_visuals/action_assets/wave-041/80-disciplined-study.png",
+      "plate_path": "plates-1080/wave-041-80-disciplined-study.png",
+      "sha256": "7c7e7f1b9031dc05cc80fef92996d057f3641ac8874e081a9700225db00dfd20"
+    },
+    {
+      "asset_id": "action-wave-041-public-test-context",
+      "coverage_slot_id": "canonical-081",
+      "source_path": "generated_visuals/action_assets/wave-041/81-public-test-context.png",
+      "plate_path": "plates-1080/wave-041-81-public-test-context.png",
+      "sha256": "acc20a45f31b2a0a2524fcd9d67ea2b1138dd7871a6c956cf8748d6c42be4a8d"
+    },
+    {
+      "asset_id": "action-wave-041-context-students-receive",
+      "coverage_slot_id": "canonical-082",
+      "source_path": "generated_visuals/action_assets/wave-041/82-context-students-receive.png",
+      "plate_path": "plates-1080/wave-041-82-context-students-receive.png",
+      "sha256": "4b1af7c050252a00b1c696af0cb5dedc5d778a3f1a0deed14115959f342f4a03"
+    },
+    {
+      "asset_id": "action-wave-041-public-performance-context",
+      "coverage_slot_id": "canonical-083",
+      "source_path": "generated_visuals/action_assets/wave-041/83-public-performance-context.png",
+      "plate_path": "plates-1080/wave-041-83-public-performance-context.png",
+      "sha256": "2864b5fd6b42f7f3721b49ce5721274709cc7f5cd625c25644e020ecda84834f"
+    },
+    {
+      "asset_id": "action-wave-041-situated-traveling-teaching",
+      "coverage_slot_id": "canonical-084",
+      "source_path": "generated_visuals/action_assets/wave-041/84-situated-traveling-teaching.png",
+      "plate_path": "plates-1080/wave-041-84-situated-traveling-teaching.png",
+      "sha256": "bf43bb39eff51b64ff1f0c16006e7c2f3fe42c274c0adb768224c135ec63b333"
+    },
+    {
+      "asset_id": "action-wave-041-ordinary-public-context",
+      "coverage_slot_id": "canonical-085",
+      "source_path": "generated_visuals/action_assets/wave-041/85-ordinary-public-context.png",
+      "plate_path": "plates-1080/wave-041-85-ordinary-public-context.png",
+      "sha256": "d64169fcf1c4a5132f988ffdebaf2837409bbc0e89f3b7eae512798b8f951cd9"
+    },
+    {
+      "asset_id": "action-wave-042-different-environments",
+      "coverage_slot_id": "canonical-091",
+      "source_path": "generated_visuals/action_assets/wave-042/91-different-environments.png",
+      "plate_path": "plates-1080/wave-042-91-different-environments.png",
+      "sha256": "03a128584dccca7e763b80840aaa7e2f517091e610741839dbc7314cf25cb7ce"
+    },
+    {
+      "asset_id": "action-wave-042-accounts-not-clean-handoff",
+      "coverage_slot_id": "canonical-092",
+      "source_path": "generated_visuals/action_assets/wave-042/92-accounts-not-clean-handoff.png",
+      "plate_path": "plates-1080/wave-042-92-accounts-not-clean-handoff.png",
+      "sha256": "f8fe6b22c606ba28bb2d56fa4d7a397b45a15b627446b79ee0be352eabb0bbe4"
+    },
+    {
+      "asset_id": "action-wave-042-training-network-setting",
+      "coverage_slot_id": "canonical-093",
+      "source_path": "generated_visuals/action_assets/wave-042/93-training-network-setting.png",
+      "plate_path": "plates-1080/wave-042-93-training-network-setting.png",
+      "sha256": "dcdac42a0a75043da91be0b6652b739604bb665070a6392e44321ce56fe361d7"
+    },
+    {
+      "asset_id": "action-wave-042-network-shared-work",
+      "coverage_slot_id": "canonical-094",
+      "source_path": "generated_visuals/action_assets/wave-042/94-network-shared-work.png",
+      "plate_path": "plates-1080/wave-042-94-network-shared-work.png",
+      "sha256": "da883683ac3ff5816c7bb39c614f97cf7d2247df8eac362066ac732aab592565"
+    },
+    {
+      "asset_id": "action-wave-042-partial-classroom-record",
+      "coverage_slot_id": "canonical-095",
+      "source_path": "generated_visuals/action_assets/wave-042/95-partial-classroom-record.png",
+      "plate_path": "plates-1080/wave-042-95-partial-classroom-record.png",
+      "sha256": "f8d70fc4004920332bea57ab28c20cf875482753b987aec8cc94b221752e2739"
+    },
+    {
+      "asset_id": "action-wave-042-transmission-in-context",
+      "coverage_slot_id": "canonical-096",
+      "source_path": "generated_visuals/action_assets/wave-042/96-transmission-in-context.png",
+      "plate_path": "plates-1080/wave-042-96-transmission-in-context.png",
+      "sha256": "139165131692d0d6e04e13589717999c2f4d7c1f5f0af20dde0a0d3fcc3aed16"
+    },
+    {
+      "asset_id": "action-wave-042-qualified-relationship",
+      "coverage_slot_id": "canonical-097",
+      "source_path": "generated_visuals/action_assets/wave-042/97-qualified-relationship.png",
+      "plate_path": "plates-1080/wave-042-97-qualified-relationship.png",
+      "sha256": "679375eaeb53a3d69d2da7253a4f392e3e97bc652d4be75d8a08c113aed305f2"
+    },
+    {
+      "asset_id": "action-wave-042-responsible-narrow-claim",
+      "coverage_slot_id": "canonical-098",
+      "source_path": "generated_visuals/action_assets/wave-042/98-responsible-narrow-claim.png",
+      "plate_path": "plates-1080/wave-042-98-responsible-narrow-claim.png",
+      "sha256": "cbe91b1f4b174aedd0b11aa6b45ec4e78b52c56e5da636424e623cfb03a59901"
+    },
+    {
+      "asset_id": "action-wave-042-network-not-hero",
+      "coverage_slot_id": "canonical-099",
+      "source_path": "generated_visuals/action_assets/wave-042/99-network-not-hero.png",
+      "plate_path": "plates-1080/wave-042-99-network-not-hero.png",
+      "sha256": "531d6a96b27c50575a1a854c382e6f7a131514df9eaa1219b3fd0386e5dac088"
+    },
+    {
+      "asset_id": "action-wave-042-people-settings-uncertainty",
+      "coverage_slot_id": "canonical-100",
+      "source_path": "generated_visuals/action_assets/wave-042/100-people-settings-uncertainty.png",
+      "plate_path": "plates-1080/wave-042-100-people-settings-uncertainty.png",
+      "sha256": "b5370051134142f6cbaec191b9b01b083e7d178fb78f514e8a73806e25d66985"
+    },
+    {
+      "asset_id": "canonical-v12-changing-audience",
+      "coverage_slot_id": "canonical-125",
+      "source_path": "generated_visuals/action_assets/wave-033/01-changing-audience.png",
+      "plate_path": "plates-1080/wave-033-01-changing-audience.png",
+      "sha256": "d812d00c18c4d966f1a530b7137066ae025f4dae5499e147e56954c6925e2938"
+    },
+    {
+      "asset_id": "canonical-v12-institution-preserves",
+      "coverage_slot_id": "canonical-126",
+      "source_path": "generated_visuals/action_assets/wave-033/02-institution-preserves.png",
+      "plate_path": "plates-1080/wave-033-02-institution-preserves.png",
+      "sha256": "ee27550ef9e1a8d5dff88b83979cf17adfb7b74b0e1cb20dc5df09f533aab62f"
+    },
+    {
+      "asset_id": "canonical-v12-travel-public-identity",
+      "coverage_slot_id": "canonical-127",
+      "source_path": "generated_visuals/action_assets/wave-033/03-travel-to-public-identity.png",
+      "plate_path": "plates-1080/wave-033-03-travel-to-public-identity.png",
+      "sha256": "bddf3536fb7dbd7b4cfb1a68832bc810db5bae4bbebf9b874fcb9a015c2afb16"
+    },
+    {
+      "asset_id": "canonical-v12-arrival-selection",
+      "coverage_slot_id": "canonical-128",
+      "source_path": "generated_visuals/action_assets/wave-033/04-arrival-to-selection.png",
+      "plate_path": "plates-1080/wave-033-04-arrival-to-selection.png",
+      "sha256": "09dcd37be8920a750982af25e673d6f3753056e12186f3a3772716044bce8d03"
+    },
+    {
+      "asset_id": "canonical-v12-public-definition",
+      "coverage_slot_id": "canonical-129",
+      "source_path": "generated_visuals/action_assets/wave-033/05-public-definition.png",
+      "plate_path": "plates-1080/wave-033-05-public-definition.png",
+      "sha256": "7cafa8d0abe470aa796d9157c43cca6093347e9357394b500775cc65eae5a611"
+    },
+    {
+      "asset_id": "canonical-v12-adaptation-education",
+      "coverage_slot_id": "canonical-130",
+      "source_path": "generated_visuals/action_assets/wave-033/06-adaptation-in-education.png",
+      "plate_path": "plates-1080/wave-033-06-adaptation-in-education.png",
+      "sha256": "bea3818121ae22c6221f5776534be752f8c5f6d17d053f5581d073c16c5ed572"
+    },
+    {
+      "asset_id": "canonical-v12-travel-setting",
+      "coverage_slot_id": "canonical-131",
+      "source_path": "generated_visuals/action_assets/wave-033/07-travel-changes-setting.png",
+      "plate_path": "plates-1080/wave-033-07-travel-changes-setting.png",
+      "sha256": "c108ae7f41ad53195661b8e73884170b9041be17e04fef737b37231a29402043"
+    },
+    {
+      "asset_id": "canonical-v12-competing-communities",
+      "coverage_slot_id": "canonical-132",
+      "source_path": "generated_visuals/action_assets/wave-033/08-competing-communities.png",
+      "plate_path": "plates-1080/wave-033-08-competing-communities.png",
+      "sha256": "66943ebeabd871ec2190f289a089aaa610876090fe3d2dea8145ff9ad89c8ae9"
+    },
+    {
+      "asset_id": "canonical-v12-public-identity-remade",
+      "coverage_slot_id": "canonical-133",
+      "source_path": "generated_visuals/action_assets/wave-033/09-public-identity-remade.png",
+      "plate_path": "plates-1080/wave-033-09-public-identity-remade.png",
+      "sha256": "85019a79f3902b442c77fe0a14c378cc3ea6e3df2421f092724d399d40b73179"
+    },
+    {
+      "asset_id": "canonical-v12-repeated-transformation",
+      "coverage_slot_id": "canonical-134",
+      "source_path": "generated_visuals/action_assets/wave-033/10-repeated-transformation.png",
+      "plate_path": "plates-1080/wave-033-10-repeated-transformation.png",
+      "sha256": "f8d113fe6b946927a45573f53f9db30dca903cd30fb9cba663b6f6e8cf983166"
+    },
+    {
+      "asset_id": "canonical-v12-drama-in-place",
+      "coverage_slot_id": "canonical-135",
+      "source_path": "generated_visuals/action_assets/wave-033/11-drama-in-place.png",
+      "plate_path": "plates-1080/wave-033-11-drama-in-place.png",
+      "sha256": "badc2c308823f1df4b9b5fd8b2d7287453754884a29543af71360beefdbc50ff"
+    },
+    {
+      "asset_id": "canonical-v12-places-to-live",
+      "coverage_slot_id": "canonical-136",
+      "source_path": "generated_visuals/action_assets/wave-033/12-places-to-live.png",
+      "plate_path": "plates-1080/wave-033-12-places-to-live.png",
+      "sha256": "c56f7c096e32004086cd59b7d8b3cee30cbd565dec8d4fff545d1982fc0f9ccf"
+    },
+    {
+      "asset_id": "canonical-v12-list-institutions",
+      "coverage_slot_id": "canonical-136",
+      "source_path": "generated_visuals/action_assets/wave-033/13-list-institutions.png",
+      "plate_path": "plates-1080/wave-033-13-list-institutions.png",
+      "sha256": "a0f57aab1a58ecd5c2fa75571949e66aab4dd3031779b18a0ac3fbbdd266396a"
+    },
+    {
+      "asset_id": "canonical-v12-list-ships",
+      "coverage_slot_id": "canonical-136",
+      "source_path": "generated_visuals/action_assets/wave-033/14-list-ships.png",
+      "plate_path": "plates-1080/wave-033-14-list-ships.png",
+      "sha256": "71bb4276c81feddc8d7863b2c44f8511b174b23efa45e968b0f41572c39aaaa6"
+    },
+    {
+      "asset_id": "canonical-v12-list-theaters",
+      "coverage_slot_id": "canonical-136",
+      "source_path": "generated_visuals/action_assets/wave-033/15-list-theaters.png",
+      "plate_path": "plates-1080/wave-033-15-list-theaters.png",
+      "sha256": "61f8ef1251b93afb3f03a611f5ddbacb4f9d2675df915ae504d69cdf2269be87"
+    },
+    {
+      "asset_id": "canonical-v12-list-classrooms",
+      "coverage_slot_id": "canonical-136",
+      "source_path": "generated_visuals/action_assets/wave-033/16-list-classrooms.png",
+      "plate_path": "plates-1080/wave-033-16-list-classrooms.png",
+      "sha256": "6049ce3ec00a6ec054b74c1df14451f81e8aae88ef30bce5d32d7bdf11e63cd2"
+    },
+    {
+      "asset_id": "canonical-v12-list-challenges",
+      "coverage_slot_id": "canonical-136",
+      "source_path": "generated_visuals/action_assets/wave-033/17-list-challenges.png",
+      "plate_path": "plates-1080/wave-033-17-list-challenges.png",
+      "sha256": "f42e3e2c3dc330e9f05981da3e6b8946c93a431579e942096cb0c59e01150990"
+    },
+    {
+      "asset_id": "canonical-v12-list-immigrant-communities",
+      "coverage_slot_id": "canonical-137",
+      "source_path": "generated_visuals/action_assets/wave-033/18-list-immigrant-communities.png",
+      "plate_path": "plates-1080/wave-033-18-list-immigrant-communities.png",
+      "sha256": "e24e2f40d3ac2c6151cc45d24c3bc32e4db316e9e4c5afcf5b90d22a52007eee"
+    },
+    {
+      "asset_id": "canonical-v12-list-remembered-connections",
+      "coverage_slot_id": "canonical-137",
+      "source_path": "generated_visuals/action_assets/wave-033/19-list-remembered-connections.png",
+      "plate_path": "plates-1080/wave-033-19-list-remembered-connections.png",
+      "sha256": "3f531d5b197b6f4463d8798645cbb03580571f1c0a7dc6849322fa0d0de1c56d"
+    },
+    {
+      "asset_id": "action-wave-043-methods-shift-through-travel",
+      "coverage_slot_id": "canonical-086",
+      "source_path": "generated_visuals/action_assets/wave-043/86-methods-shift-through-travel.png",
+      "plate_path": "plates-1080/wave-043-86-methods-shift-through-travel.png",
+      "sha256": "5ce167936172a3a94e3d699dace7aa6d4ddf085433dd679e36cd420e06be6e52"
+    },
+    {
+      "asset_id": "action-wave-043-public-challenge-regular-class",
+      "coverage_slot_id": "canonical-087",
+      "source_path": "generated_visuals/action_assets/wave-043/87-public-challenge-regular-class.png",
+      "plate_path": "plates-1080/wave-043-87-public-challenge-regular-class.png",
+      "sha256": "2571595736956b79b7452ffc4af5cb28575f2c6b74c15bb635c39ded6f47792e"
+    },
+    {
+      "asset_id": "action-wave-043-performer-immediacy",
+      "coverage_slot_id": "canonical-088",
+      "source_path": "generated_visuals/action_assets/wave-043/88-performer-immediacy.png",
+      "plate_path": "plates-1080/wave-043-88-performer-immediacy.png",
+      "sha256": "355100821edd9d13e950c9eed1336b84b8422158e0e2c7ac93a47fbc22ed5d8a"
+    },
+    {
+      "asset_id": "action-wave-043-teacher-habits-over-time",
+      "coverage_slot_id": "canonical-089",
+      "source_path": "generated_visuals/action_assets/wave-043/89-teacher-habits-over-time.png",
+      "plate_path": "plates-1080/wave-043-89-teacher-habits-over-time.png",
+      "sha256": "40ce85d1be377a1cef7e28372c21627c3016da83b85aee00e8c98954142351ef"
+    },
+    {
+      "asset_id": "action-wave-043-settings-not-interchangeable",
+      "coverage_slot_id": "canonical-090",
+      "source_path": "generated_visuals/action_assets/wave-043/90-settings-not-interchangeable.png",
+      "plate_path": "plates-1080/wave-043-90-settings-not-interchangeable.png",
+      "sha256": "7ca6f0b0a8305d638158b333e27b7aab0cafb17e02633777eceb8076f2b5e0c2"
+    },
+    {
+      "asset_id": "action-wave-044-intermediary-in-network",
+      "coverage_slot_id": "canonical-101",
+      "source_path": "generated_visuals/action_assets/wave-044/101-intermediary-in-network.png",
+      "plate_path": "plates-1080/wave-044-101-intermediary-in-network.png",
+      "sha256": "6d3c528e1af034208760660236bfd8bc3135da30db7d75d589b78d1a50cc1ba2"
+    },
+    {
+      "asset_id": "action-wave-044-network-not-arrow",
+      "coverage_slot_id": "canonical-102",
+      "source_path": "generated_visuals/action_assets/wave-044/102-network-not-arrow.png",
+      "plate_path": "plates-1080/wave-044-102-network-not-arrow.png",
+      "sha256": "5c1da7348c5f722de93df8a324d5c3459bcb64e9a85d24380d8a590c74999c12"
+    },
+    {
+      "asset_id": "action-wave-044-local-student-teaches",
+      "coverage_slot_id": "canonical-103",
+      "source_path": "generated_visuals/action_assets/wave-044/103-local-student-teaches.png",
+      "plate_path": "plates-1080/wave-044-103-local-student-teaches.png",
+      "sha256": "9fe0989dae9693e27ed7a1f0777b535501b87cb188e0c5cb611c4c4bad475f94"
+    },
+    {
+      "asset_id": "action-wave-044-include-intermediaries",
+      "coverage_slot_id": "canonical-104",
+      "source_path": "generated_visuals/action_assets/wave-044/104-include-intermediaries.png",
+      "plate_path": "plates-1080/wave-044-104-include-intermediaries.png",
+      "sha256": "445b27d4f94b333ae92c260c1de4c6ceb337631ac00e1807dfdf7739d70b2e1d"
+    },
+    {
+      "asset_id": "action-wave-044-teaching-stages-visible",
+      "coverage_slot_id": "canonical-105",
+      "source_path": "generated_visuals/action_assets/wave-044/105-teaching-stages-visible.png",
+      "plate_path": "plates-1080/wave-044-105-teaching-stages-visible.png",
+      "sha256": "2e632e794d9f17b7e66a271683bbd88ec4ca0357afc5a638094b4fbe076f677f"
+    },
+    {
+      "asset_id": "action-wave-044-networks-not-clean-diagram",
+      "coverage_slot_id": "canonical-106",
+      "source_path": "generated_visuals/action_assets/wave-044/106-networks-not-clean-diagram.png",
+      "plate_path": "plates-1080/wave-044-106-networks-not-clean-diagram.png",
+      "sha256": "b9dd2162bb86842028dbc1ea49483db3cd49dda654f45d69a3d87e6f2a1dbc79"
+    },
+    {
+      "asset_id": "action-wave-044-student-becomes-instructor",
+      "coverage_slot_id": "canonical-107",
+      "source_path": "generated_visuals/action_assets/wave-044/107-student-becomes-instructor.png",
+      "plate_path": "plates-1080/wave-044-107-student-becomes-instructor.png",
+      "sha256": "fd8a7bb2c23111304358ff12a8cec64060cb258593ffbf7dc9dbabe7763c13c9"
+    },
+    {
+      "asset_id": "action-wave-044-several-stages-compressed",
+      "coverage_slot_id": "canonical-108",
+      "source_path": "generated_visuals/action_assets/wave-044/108-several-stages-compressed.png",
+      "plate_path": "plates-1080/wave-044-108-several-stages-compressed.png",
+      "sha256": "e2de5c4eda640f8f601c5b11a1830e4063a307c6ccc0ee97acf126d3a04f2eba"
+    },
+    {
+      "asset_id": "action-wave-044-restore-evidence-stages",
+      "coverage_slot_id": "canonical-109",
+      "source_path": "generated_visuals/action_assets/wave-044/109-restore-evidence-stages.png",
+      "plate_path": "plates-1080/wave-044-109-restore-evidence-stages.png",
+      "sha256": "df18aacdac88980e2ad91798b6c15cf93459002825b3833a17aad78bb6c05a50"
+    },
+    {
+      "asset_id": "action-wave-044-wider-brazilian-development",
+      "coverage_slot_id": "canonical-110",
+      "source_path": "generated_visuals/action_assets/wave-044/110-wider-brazilian-development.png",
+      "plate_path": "plates-1080/wave-044-110-wider-brazilian-development.png",
+      "sha256": "cfac167a21c5c0f2200e109580b1864abd62299f1e1e8e844d2e7b660a67acd4"
+    },
+    {
+      "asset_id": "action-wave-045-beyond-famous-rio",
+      "coverage_slot_id": "canonical-111",
+      "source_path": "generated_visuals/action_assets/wave-045/111-beyond-famous-rio.png",
+      "plate_path": "plates-1080/wave-045-111-beyond-famous-rio.png",
+      "sha256": "f53ce159133ead98037e12329e01dd7e5bf84fe03bf293a990d9600592300927"
+    },
+    {
+      "asset_id": "action-wave-045-immigrant-teachers-performers-organizers",
+      "coverage_slot_id": "canonical-112",
+      "source_path": "generated_visuals/action_assets/wave-045/112-immigrant-teachers-performers-organizers.png",
+      "plate_path": "plates-1080/wave-045-112-immigrant-teachers-performers-organizers.png",
+      "sha256": "f71aa6dfabde952be44707ca30765907263191872a80db3cbf15af152156fe03"
+    },
+    {
+      "asset_id": "action-wave-045-practices-spread-through-regions",
+      "coverage_slot_id": "canonical-113",
+      "source_path": "generated_visuals/action_assets/wave-045/113-practices-spread-through-regions.png",
+      "plate_path": "plates-1080/wave-045-113-practices-spread-through-regions.png",
+      "sha256": "20579ad63eb998eb14ca9f097aaf3edc57a8c856602b59e64c5b2195a54ccc2e"
+    },
+    {
+      "asset_id": "action-wave-045-open-research-questions",
+      "coverage_slot_id": "canonical-114",
+      "source_path": "generated_visuals/action_assets/wave-045/114-open-research-questions.png",
+      "plate_path": "plates-1080/wave-045-114-open-research-questions.png",
+      "sha256": "7f521de7358d52b06a34f9e564920af4cb6137c1f6ccf3af104f2f9e7eb78abb"
+    },
+    {
+      "asset_id": "action-wave-045-not-decorative-side-notes",
+      "coverage_slot_id": "canonical-115",
+      "source_path": "generated_visuals/action_assets/wave-045/115-not-decorative-side-notes.png",
+      "plate_path": "plates-1080/wave-045-115-not-decorative-side-notes.png",
+      "sha256": "b00994d58eddf109bb9c95e5b8ff4f0ff61e2eccdd3566ff35f120e813004ad3"
+    },
+    {
+      "asset_id": "action-wave-045-one-heroic-family-rejected",
+      "coverage_slot_id": "canonical-116",
+      "source_path": "generated_visuals/action_assets/wave-045/116-one-heroic-family-rejected.png",
+      "plate_path": "plates-1080/wave-045-116-one-heroic-family-rejected.png",
+      "sha256": "e6b876ac7312c01183cbc80ecd201d760987840a15fc44d5b56ae583d112f314"
+    },
+    {
+      "asset_id": "action-wave-045-national-tradition-overlapping-communities",
+      "coverage_slot_id": "canonical-117",
+      "source_path": "generated_visuals/action_assets/wave-045/117-national-tradition-overlapping-communities.png",
+      "plate_path": "plates-1080/wave-045-117-national-tradition-overlapping-communities.png",
+      "sha256": "c345fc7f1c1de660a0f9cfb7934979ac6f59b0ba5d585360391d050b48d665ce"
+    },
+    {
+      "asset_id": "action-wave-045-public-identity-dominant",
+      "coverage_slot_id": "canonical-118",
+      "source_path": "generated_visuals/action_assets/wave-045/118-public-identity-dominant.png",
+      "plate_path": "plates-1080/wave-045-118-public-identity-dominant.png",
+      "sha256": "8f8b3839c40245d7dc9c49bb3f218f3b09756fbc27044c93438be74d2d04b1bd"
+    },
+    {
+      "asset_id": "action-wave-045-not-only-travel-path",
+      "coverage_slot_id": "canonical-119",
+      "source_path": "generated_visuals/action_assets/wave-045/119-not-only-travel-path.png",
+      "plate_path": "plates-1080/wave-045-119-not-only-travel-path.png",
+      "sha256": "5f3d985977df505cb585aa553647cb21ebcf3aedd53fe5b5fe9300aa40398328"
+    },
+    {
+      "asset_id": "action-wave-045-identity-not-finished-belem",
+      "coverage_slot_id": "canonical-120",
+      "source_path": "generated_visuals/action_assets/wave-045/120-identity-not-finished-belem.png",
+      "plate_path": "plates-1080/wave-045-120-identity-not-finished-belem.png",
+      "sha256": "2f158041c42c3410f94d5675b810248118acddb2c21f31ef94a16767b69995d6"
+    },
+    {
+      "asset_id": "action-wave-046-public-performance-reinvention",
+      "coverage_slot_id": "canonical-121",
+      "source_path": "generated_visuals/action_assets/wave-046/121-public-performance-reinvention.png",
+      "plate_path": "plates-1080/wave-046-121-public-performance-reinvention.png",
+      "sha256": "62a49a7e452c85e5b528579fa0299500545501d36cbaf68a7adc42561dc2b8f7"
+    },
+    {
+      "asset_id": "action-wave-046-institutions-promotion-public-culture",
+      "coverage_slot_id": "canonical-122",
+      "source_path": "generated_visuals/action_assets/wave-046/122-institutions-promotion-public-culture.png",
+      "plate_path": "plates-1080/wave-046-122-institutions-promotion-public-culture.png",
+      "sha256": "59914304110148638627a8ec14d706251c9e834ddbe3b329056b3dfc45b85f50"
+    },
+    {
+      "asset_id": "action-wave-046-distinct-public-forms",
+      "coverage_slot_id": "canonical-123",
+      "source_path": "generated_visuals/action_assets/wave-046/123-distinct-public-forms.png",
+      "plate_path": "plates-1080/wave-046-123-distinct-public-forms.png",
+      "sha256": "019082286b91a06c65f4b31fee0bb4eed0e5d6da02af5a974a4ac2325d922ece"
+    },
+    {
+      "asset_id": "action-wave-046-reinvention-more-than-technique",
+      "coverage_slot_id": "canonical-124",
+      "source_path": "generated_visuals/action_assets/wave-046/124-reinvention-more-than-technique.png",
+      "plate_path": "plates-1080/wave-046-124-reinvention-more-than-technique.png",
+      "sha256": "acd0133a46346826baa1cf6ab453062ce8f85c0c750d48ea0a1decf61c4dd326"
+    },
+    {
+      "asset_id": "action-wave-047-people-places-sources",
+      "coverage_slot_id": "canonical-138",
+      "source_path": "generated_visuals/action_assets/wave-047/138-people-places-sources.png",
+      "plate_path": "plates-1080/wave-047-138-people-places-sources.png",
+      "sha256": "585f90552f87731a6bc06bc14ef85d524d92cd3f8de3c7334d915650d292483e"
+    },
+    {
+      "asset_id": "action-wave-047-registry-cta-world",
+      "coverage_slot_id": "canonical-139",
+      "source_path": "generated_visuals/action_assets/wave-047/139-registry-cta-world.png",
+      "plate_path": "plates-1080/wave-047-139-registry-cta-world.png",
+      "sha256": "6e41c4e0e8833c263da86e8641bc9ced47829dfff532aa30c47bef2891c40d14"
+    },
+    {
+      "asset_id": "technique-wave-048-public-foot-sweep",
+      "coverage_slot_id": "canonical-065",
+      "source_path": "generated_visuals/action_assets/wave-049-technique-vignettes-revision/065-public-foot-sweep.png",
+      "plate_path": "plates-1080/wave-049-technique-vignettes-revision-065-public-foot-sweep.png",
+      "sha256": "28a788b0a6aaaec75dbdd7bbc588a91241e60f7dac89109303fe2c58fcadeae0"
+    },
+    {
+      "asset_id": "technique-wave-048-stage-hip-throw",
+      "coverage_slot_id": "canonical-074",
+      "source_path": "generated_visuals/action_assets/wave-049-technique-vignettes-revision/074-stage-hip-throw.png",
+      "plate_path": "plates-1080/wave-049-technique-vignettes-revision-074-stage-hip-throw.png",
+      "sha256": "be7f912395409d229edc9311ad09afd49ff467c2664ae16dba96c6a7badded34"
+    },
+    {
+      "asset_id": "technique-wave-048-audience-scarf-hold",
+      "coverage_slot_id": "canonical-075",
+      "source_path": "generated_visuals/action_assets/wave-049-technique-vignettes-revision/075-audience-scarf-hold.png",
+      "plate_path": "plates-1080/wave-049-technique-vignettes-revision-075-audience-scarf-hold.png",
+      "sha256": "ab61c6f32d96473c924265b23164650f0bb0d5819007d20d53ecd96ac1f7bed1"
+    }
+  ]
+}
