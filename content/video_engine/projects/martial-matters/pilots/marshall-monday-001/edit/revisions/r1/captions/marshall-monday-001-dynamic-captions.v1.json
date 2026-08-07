@@ -1,0 +1,3827 @@
+{
+  "schema_version": "dynamic_caption_track.v1",
+  "timing_authority": "canonical_elevenlabs_word_timings",
+  "word_timing_sha256": "9bf403c6e9299663d6f29770a0f42d68c4d03c22d96598903973c4d7cfcdc403",
+  "style": {
+    "mode": "cadence_pop",
+    "text_owner": "local_compositor",
+    "maximum_words": 3
+  },
+  "captions": [
+    {
+      "id": "vertical-001",
+      "start_s": 0.0,
+      "end_s": 0.604,
+      "text": "People hear a",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-002",
+      "start_s": 0.673,
+      "end_s": 1.73,
+      "text": "rapper say, “I",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-003",
+      "start_s": 1.846,
+      "end_s": 2.798,
+      "text": "killed him,” and",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-004",
+      "start_s": 2.844,
+      "end_s": 4.516,
+      "text": "immediately decide civilization",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-005",
+      "start_s": 4.574,
+      "end_s": 5.48,
+      "text": "has collapsed.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-006",
+      "start_s": 6.084,
+      "end_s": 6.711,
+      "text": "Wrong.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-007",
+      "start_s": 7.314,
+      "end_s": 7.93,
+      "text": "If two grown",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-008",
+      "start_s": 7.976,
+      "end_s": 8.707,
+      "text": "men can stand",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-009",
+      "start_s": 8.789,
+      "end_s": 9.834,
+      "text": "six inches apart,",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-010",
+      "start_s": 9.95,
+      "end_s": 10.844,
+      "text": "describe each other's",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-011",
+      "start_s": 10.89,
+      "end_s": 11.749,
+      "text": "ancestors as a",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-012",
+      "start_s": 11.819,
+      "end_s": 13.618,
+      "text": "generational disappointment, make",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-013",
+      "start_s": 13.653,
+      "end_s": 14.164,
+      "text": "a whole room",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-014",
+      "start_s": 14.222,
+      "end_s": 15.209,
+      "text": "scream, and then",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-015",
+      "start_s": 15.267,
+      "end_s": 16.265,
+      "text": "walk away arguing",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-016",
+      "start_s": 16.312,
+      "end_s": 16.892,
+      "text": "about who had",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-017",
+      "start_s": 16.927,
+      "end_s": 17.496,
+      "text": "the better third",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-018",
+      "start_s": 17.554,
+      "end_s": 18.564,
+      "text": "round—you're not looking",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-019",
+      "start_s": 18.611,
+      "end_s": 19.76,
+      "text": "at barbarism. You're",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-020",
+      "start_s": 19.783,
+      "end_s": 20.747,
+      "text": "looking at peace.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-021",
+      "start_s": 20.863,
+      "end_s": 21.966,
+      "text": "Not quiet peace.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-022",
+      "start_s": 22.14,
+      "end_s": 23.661,
+      "text": "Not scented-candle peace.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-023",
+      "start_s": 23.835,
+      "end_s": 24.253,
+      "text": "I mean the",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-024",
+      "start_s": 24.323,
+      "end_s": 25.902,
+      "text": "expensive, human, hard-won",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-025",
+      "start_s": 25.983,
+      "end_s": 26.888,
+      "text": "version: the kind",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-026",
+      "start_s": 26.923,
+      "end_s": 27.771,
+      "text": "where conflict gets",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-027",
+      "start_s": 27.817,
+      "end_s": 28.467,
+      "text": "promoted from a",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-028",
+      "start_s": 28.548,
+      "end_s": 29.361,
+      "text": "fistfight into a",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-029",
+      "start_s": 29.419,
+      "end_s": 30.441,
+      "text": "performance review.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-030",
+      "start_s": 31.393,
+      "end_s": 32.252,
+      "text": "Welcome to Marshall",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-031",
+      "start_s": 32.322,
+      "end_s": 33.436,
+      "text": "Matters, the only",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-032",
+      "start_s": 33.494,
+      "end_s": 34.04,
+      "text": "show that can",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-033",
+      "start_s": 34.086,
+      "end_s": 35.329,
+      "text": "explain battle rap,",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-034",
+      "start_s": 35.538,
+      "end_s": 37.105,
+      "text": "samurai strategy, and",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-035",
+      "start_s": 37.151,
+      "end_s": 37.813,
+      "text": "why your uncle",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-036",
+      "start_s": 37.848,
+      "end_s": 38.417,
+      "text": "thinks a diss",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-037",
+      "start_s": 38.452,
+      "end_s": 38.916,
+      "text": "track is a",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-038",
+      "start_s": 38.986,
+      "end_s": 40.112,
+      "text": "declaration of war.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-039",
+      "start_s": 40.623,
+      "end_s": 41.958,
+      "text": "Today, we're proving",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-040",
+      "start_s": 42.004,
+      "end_s": 42.875,
+      "text": "a simple point:",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-041",
+      "start_s": 43.2,
+      "end_s": 43.931,
+      "text": "in the battle-rap",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-042",
+      "start_s": 43.966,
+      "end_s": 45.499,
+      "text": "arena, violent language",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-043",
+      "start_s": 45.534,
+      "end_s": 46.451,
+      "text": "is often evidence",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-044",
+      "start_s": 46.486,
+      "end_s": 47.02,
+      "text": "that the fight",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-045",
+      "start_s": 47.054,
+      "end_s": 47.705,
+      "text": "has become a",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-046",
+      "start_s": 47.774,
+      "end_s": 48.796,
+      "text": "game with rules,",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-047",
+      "start_s": 48.842,
+      "end_s": 49.91,
+      "text": "an audience, and",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-048",
+      "start_s": 49.969,
+      "end_s": 50.456,
+      "text": "a winner who",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-049",
+      "start_s": 50.503,
+      "end_s": 51.362,
+      "text": "gets a reaction",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-050",
+      "start_s": 51.513,
+      "end_s": 52.047,
+      "text": "instead of a",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-051",
+      "start_s": 52.093,
+      "end_s": 52.813,
+      "text": "body count.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-052",
+      "start_s": 53.51,
+      "end_s": 54.264,
+      "text": "Nature figured this",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-053",
+      "start_s": 54.322,
+      "end_s": 54.915,
+      "text": "out before we",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-054",
+      "start_s": 54.973,
+      "end_s": 56.099,
+      "text": "did. A real",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-055",
+      "start_s": 56.168,
+      "end_s": 57.086,
+      "text": "fight is terrible",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-056",
+      "start_s": 57.121,
+      "end_s": 58.247,
+      "text": "business. You win",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-057",
+      "start_s": 58.293,
+      "end_s": 58.978,
+      "text": "the meat, the",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-058",
+      "start_s": 59.025,
+      "end_s": 60.65,
+      "text": "territory, the respect,",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-059",
+      "start_s": 60.696,
+      "end_s": 61.556,
+      "text": "whatever the prize",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-060",
+      "start_s": 61.614,
+      "end_s": 62.786,
+      "text": "is—and now you've",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-061",
+      "start_s": 62.809,
+      "end_s": 63.355,
+      "text": "got one eye",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-062",
+      "start_s": 63.401,
+      "end_s": 64.388,
+      "text": "closed, a leg",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-063",
+      "start_s": 64.435,
+      "end_s": 65.445,
+      "text": "infected, and a",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-064",
+      "start_s": 65.526,
+      "end_s": 66.385,
+      "text": "very short career",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-065",
+      "start_s": 66.42,
+      "end_s": 67.14,
+      "text": "as a successful",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-066",
+      "start_s": 67.198,
+      "end_s": 67.697,
+      "text": "animal.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-067",
+      "start_s": 68.08,
+      "end_s": 69.114,
+      "text": "So animals developed",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-068",
+      "start_s": 69.137,
+      "end_s": 70.147,
+      "text": "the original trailer:",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-069",
+      "start_s": 70.205,
+      "end_s": 70.925,
+      "text": "the chest beat,",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-070",
+      "start_s": 70.948,
+      "end_s": 71.656,
+      "text": "the roar, the",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-071",
+      "start_s": 71.738,
+      "end_s": 72.922,
+      "text": "antler display, the",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-072",
+      "start_s": 73.131,
+      "end_s": 73.781,
+      "text": "“you really want",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-073",
+      "start_s": 73.804,
+      "end_s": 74.547,
+      "text": "to find out?”",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-074",
+      "start_s": 74.663,
+      "end_s": 75.801,
+      "text": "walk forward. It",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-075",
+      "start_s": 75.859,
+      "end_s": 76.881,
+      "text": "is conflict before",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-076",
+      "start_s": 76.939,
+      "end_s": 78.239,
+      "text": "conflict. A public",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-077",
+      "start_s": 78.297,
+      "end_s": 79.4,
+      "text": "audition for violence.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-078",
+      "start_s": 79.423,
+      "end_s": 79.899,
+      "text": "That is the",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-079",
+      "start_s": 79.934,
+      "end_s": 81.072,
+      "text": "flex. It says:",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-080",
+      "start_s": 81.281,
+      "end_s": 81.874,
+      "text": "“I have enough",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-081",
+      "start_s": 81.92,
+      "end_s": 82.826,
+      "text": "force that actually",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-082",
+      "start_s": 82.872,
+      "end_s": 83.627,
+      "text": "testing this would",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-083",
+      "start_s": 83.661,
+      "end_s": 84.079,
+      "text": "be a bad",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-084",
+      "start_s": 84.137,
+      "end_s": 84.962,
+      "text": "decision for both",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-085",
+      "start_s": 85.008,
+      "end_s": 85.635,
+      "text": "of us.”",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-086",
+      "start_s": 85.985,
+      "end_s": 86.739,
+      "text": "A rap battle",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-087",
+      "start_s": 86.797,
+      "end_s": 87.436,
+      "text": "is a gorilla",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-088",
+      "start_s": 87.494,
+      "end_s": 88.678,
+      "text": "chest-beat with internal",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-089",
+      "start_s": 88.736,
+      "end_s": 90.222,
+      "text": "rhyme. Battle rap",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-090",
+      "start_s": 90.28,
+      "end_s": 90.965,
+      "text": "takes that ancient",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-091",
+      "start_s": 91.023,
+      "end_s": 91.987,
+      "text": "operating system and",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-092",
+      "start_s": 92.045,
+      "end_s": 92.8,
+      "text": "gives it internal",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-093",
+      "start_s": 92.858,
+      "end_s": 94.019,
+      "text": "rhyme. The chest",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-094",
+      "start_s": 94.077,
+      "end_s": 95.319,
+      "text": "beat becomes projection.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-095",
+      "start_s": 95.435,
+      "end_s": 96.271,
+      "text": "The threat becomes",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-096",
+      "start_s": 96.329,
+      "end_s": 98.036,
+      "text": "setup-and-punch. The fight",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-097",
+      "start_s": 98.082,
+      "end_s": 99.22,
+      "text": "becomes a scorecard",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-098",
+      "start_s": 99.278,
+      "end_s": 99.859,
+      "text": "in the crowd's",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-099",
+      "start_s": 99.917,
+      "end_s": 101.101,
+      "text": "nervous system. And",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-100",
+      "start_s": 101.159,
+      "end_s": 101.693,
+      "text": "that is why",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-101",
+      "start_s": 101.786,
+      "end_s": 102.541,
+      "text": "the aggression is",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-102",
+      "start_s": 102.599,
+      "end_s": 103.133,
+      "text": "the point.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-103",
+      "start_s": 103.516,
+      "end_s": 104.259,
+      "text": "Nobody came to",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-104",
+      "start_s": 104.317,
+      "end_s": 104.991,
+      "text": "see two people",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-105",
+      "start_s": 105.037,
+      "end_s": 106.361,
+      "text": "politely exchange LinkedIn",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-106",
+      "start_s": 106.43,
+      "end_s": 108.137,
+      "text": "recommendations. They came",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-107",
+      "start_s": 108.172,
+      "end_s": 108.996,
+      "text": "to see dominance",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-108",
+      "start_s": 109.043,
+      "end_s": 110.053,
+      "text": "performed so well",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-109",
+      "start_s": 110.122,
+      "end_s": 111.33,
+      "text": "that physical dominance",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-110",
+      "start_s": 111.376,
+      "end_s": 112.746,
+      "text": "becomes unnecessary.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-111",
+      "start_s": 113.443,
+      "end_s": 114.476,
+      "text": "The modern microphone",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-112",
+      "start_s": 114.511,
+      "end_s": 114.836,
+      "text": "is not a",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-113",
+      "start_s": 114.894,
+      "end_s": 115.672,
+      "text": "weapon because it",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-114",
+      "start_s": 115.707,
+      "end_s": 116.682,
+      "text": "hurts you. It",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-115",
+      "start_s": 116.728,
+      "end_s": 117.216,
+      "text": "is a weapon",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-116",
+      "start_s": 117.274,
+      "end_s": 117.889,
+      "text": "because it lets",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-117",
+      "start_s": 117.924,
+      "end_s": 118.783,
+      "text": "a room agree,",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-118",
+      "start_s": 118.899,
+      "end_s": 119.77,
+      "text": "all at once,",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-119",
+      "start_s": 120.095,
+      "end_s": 120.676,
+      "text": "on who just",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-120",
+      "start_s": 120.722,
+      "end_s": 121.674,
+      "text": "won without anyone",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-121",
+      "start_s": 121.721,
+      "end_s": 122.812,
+      "text": "needing an ambulance.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-122",
+      "start_s": 123.323,
+      "end_s": 124.066,
+      "text": "That agreement",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-123",
+      "start_s": 124.449,
+      "end_s": 125.018,
+      "text": "is the whole",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-124",
+      "start_s": 125.053,
+      "end_s": 125.923,
+      "text": "technology.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-125",
+      "start_s": 126.875,
+      "end_s": 127.711,
+      "text": "A real fight",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-126",
+      "start_s": 128.152,
+      "end_s": 128.826,
+      "text": "has only two",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-127",
+      "start_s": 128.872,
+      "end_s": 129.627,
+      "text": "witnesses:",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-128",
+      "start_s": 130.138,
+      "end_s": 130.846,
+      "text": "the people left",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-129",
+      "start_s": 130.881,
+      "end_s": 131.519,
+      "text": "standing.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-130",
+      "start_s": 131.902,
+      "end_s": 132.483,
+      "text": "A battle has",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-131",
+      "start_s": 132.564,
+      "end_s": 133.911,
+      "text": "fifty, five hundred,",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-132",
+      "start_s": 133.946,
+      "end_s": 134.747,
+      "text": "or five million",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-133",
+      "start_s": 134.805,
+      "end_s": 135.408,
+      "text": "people who can",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-134",
+      "start_s": 135.466,
+      "end_s": 136.291,
+      "text": "replay the moment,",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-135",
+      "start_s": 136.326,
+      "end_s": 137.173,
+      "text": "quote the line,",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-136",
+      "start_s": 137.347,
+      "end_s": 138.114,
+      "text": "argue about the",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-137",
+      "start_s": 138.183,
+      "end_s": 139.333,
+      "text": "round, and turn",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-138",
+      "start_s": 139.379,
+      "end_s": 139.878,
+      "text": "a flash of",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-139",
+      "start_s": 139.936,
+      "end_s": 141.016,
+      "text": "aggression into public",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-140",
+      "start_s": 141.086,
+      "end_s": 141.666,
+      "text": "memory.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-141",
+      "start_s": 142.363,
+      "end_s": 143.245,
+      "text": "The loser loses",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-142",
+      "start_s": 143.303,
+      "end_s": 143.988,
+      "text": "status.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-143",
+      "start_s": 144.371,
+      "end_s": 144.987,
+      "text": "The winner gets",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-144",
+      "start_s": 145.021,
+      "end_s": 146.461,
+      "text": "a reaction. Everybody",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-145",
+      "start_s": 146.508,
+      "end_s": 146.949,
+      "text": "gets to go",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-146",
+      "start_s": 147.007,
+      "end_s": 147.447,
+      "text": "home with all",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-147",
+      "start_s": 147.494,
+      "end_s": 148.202,
+      "text": "their teeth.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-148",
+      "start_s": 148.585,
+      "end_s": 149.177,
+      "text": "That is not",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-149",
+      "start_s": 149.247,
+      "end_s": 150.245,
+      "text": "less competitive. It",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-150",
+      "start_s": 150.292,
+      "end_s": 151.163,
+      "text": "is competition with",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-151",
+      "start_s": 151.221,
+      "end_s": 152.463,
+      "text": "better infrastructure.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-152",
+      "start_s": 153.16,
+      "end_s": 154.146,
+      "text": "Now, humans make",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-153",
+      "start_s": 154.181,
+      "end_s": 155.47,
+      "text": "everything more complicated,",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-154",
+      "start_s": 155.505,
+      "end_s": 156.387,
+      "text": "because we invented",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-155",
+      "start_s": 156.434,
+      "end_s": 158.117,
+      "text": "taxes, seating charts,",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-156",
+      "start_s": 158.152,
+      "end_s": 158.686,
+      "text": "and the guy",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-157",
+      "start_s": 158.721,
+      "end_s": 159.313,
+      "text": "who says “we",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-158",
+      "start_s": 159.359,
+      "end_s": 159.894,
+      "text": "don't do that",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-159",
+      "start_s": 159.963,
+      "end_s": 160.405,
+      "text": "here.”",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-160",
+      "start_s": 161.101,
+      "end_s": 162.82,
+      "text": "Sociologist Norbert Elias",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-161",
+      "start_s": 162.889,
+      "end_s": 163.539,
+      "text": "called the long",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-162",
+      "start_s": 163.609,
+      "end_s": 164.515,
+      "text": "historical shift the",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-163",
+      "start_s": 164.561,
+      "end_s": 166.43,
+      "text": "**civilizing process**.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-164",
+      "start_s": 167.034,
+      "end_s": 168.183,
+      "text": "His broad argument:",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-165",
+      "start_s": 168.218,
+      "end_s": 169.449,
+      "text": "as states concentrate",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-166",
+      "start_s": 169.495,
+      "end_s": 170.9,
+      "text": "power, private violence",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-167",
+      "start_s": 170.935,
+      "end_s": 172.026,
+      "text": "gets more expensive,",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-168",
+      "start_s": 172.142,
+      "end_s": 173.303,
+      "text": "less acceptable, and",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-169",
+      "start_s": 173.373,
+      "end_s": 174.174,
+      "text": "less useful.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-170",
+      "start_s": 174.685,
+      "end_s": 175.451,
+      "text": "You cannot simply",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-171",
+      "start_s": 175.509,
+      "end_s": 176.345,
+      "text": "stab your rival",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-172",
+      "start_s": 176.403,
+      "end_s": 177.112,
+      "text": "at dinner if",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-173",
+      "start_s": 177.158,
+      "end_s": 177.669,
+      "text": "the king has",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-174",
+      "start_s": 177.715,
+      "end_s": 178.331,
+      "text": "a monopoly on",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-175",
+      "start_s": 178.377,
+      "end_s": 179.352,
+      "text": "stabbing people.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-176",
+      "start_s": 179.735,
+      "end_s": 180.374,
+      "text": "So the warrior",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-177",
+      "start_s": 180.42,
+      "end_s": 181.198,
+      "text": "class has a",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-178",
+      "start_s": 181.245,
+      "end_s": 181.848,
+      "text": "problem.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-179",
+      "start_s": 182.232,
+      "end_s": 183.334,
+      "text": "The competitive energy",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-180",
+      "start_s": 183.381,
+      "end_s": 184.194,
+      "text": "is still there.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-181",
+      "start_s": 184.519,
+      "end_s": 185.18,
+      "text": "The ego has",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-182",
+      "start_s": 185.25,
+      "end_s": 186.597,
+      "text": "not retired. It",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-183",
+      "start_s": 186.655,
+      "end_s": 187.224,
+      "text": "just needs a",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-184",
+      "start_s": 187.293,
+      "end_s": 188.025,
+      "text": "new arena.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-185",
+      "start_s": 188.466,
+      "end_s": 189.29,
+      "text": "Enter the court.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-186",
+      "start_s": 189.534,
+      "end_s": 190.045,
+      "text": "You win with",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-187",
+      "start_s": 190.092,
+      "end_s": 191.671,
+      "text": "clothes, etiquette, poetry,",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-188",
+      "start_s": 191.74,
+      "end_s": 193.528,
+      "text": "rank, jokes, insults—every",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-189",
+      "start_s": 193.575,
+      "end_s": 194.144,
+      "text": "way of saying",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-190",
+      "start_s": 194.387,
+      "end_s": 194.933,
+      "text": "“I am better",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-191",
+      "start_s": 194.968,
+      "end_s": 195.804,
+      "text": "than you” that",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-192",
+      "start_s": 195.85,
+      "end_s": 196.779,
+      "text": "does not require",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-193",
+      "start_s": 196.849,
+      "end_s": 197.487,
+      "text": "a horse, a",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-194",
+      "start_s": 197.569,
+      "end_s": 198.381,
+      "text": "sword, and a",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-195",
+      "start_s": 198.451,
+      "end_s": 199.728,
+      "text": "very awkward funeral.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-196",
+      "start_s": 200.007,
+      "end_s": 200.459,
+      "text": "That is the",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-197",
+      "start_s": 200.518,
+      "end_s": 201.365,
+      "text": "bridge to battle",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-198",
+      "start_s": 201.4,
+      "end_s": 201.818,
+      "text": "rap.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-199",
+      "start_s": 202.259,
+      "end_s": 202.828,
+      "text": "Not because the",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-200",
+      "start_s": 202.874,
+      "end_s": 203.548,
+      "text": "South Bronx was",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-201",
+      "start_s": 203.606,
+      "end_s": 204.384,
+      "text": "secretly a French",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-202",
+      "start_s": 204.431,
+      "end_s": 205.208,
+      "text": "palace with better",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-203",
+      "start_s": 205.255,
+      "end_s": 206.253,
+      "text": "drums. Because both",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-204",
+      "start_s": 206.3,
+      "end_s": 207.217,
+      "text": "worlds understand the",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-205",
+      "start_s": 207.263,
+      "end_s": 208.297,
+      "text": "same hard truth:",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-206",
+      "start_s": 208.471,
+      "end_s": 209.701,
+      "text": "status conflict does",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-207",
+      "start_s": 209.771,
+      "end_s": 210.665,
+      "text": "not vanish because",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-208",
+      "start_s": 210.7,
+      "end_s": 211.222,
+      "text": "you ban the",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-209",
+      "start_s": 211.269,
+      "end_s": 211.722,
+      "text": "fight.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-210",
+      "start_s": 212.325,
+      "end_s": 213.243,
+      "text": "It gets smarter.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-211",
+      "start_s": 213.568,
+      "end_s": 214.705,
+      "text": "It gets theatrical.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-212",
+      "start_s": 214.984,
+      "end_s": 215.808,
+      "text": "It starts keeping",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-213",
+      "start_s": 215.866,
+      "end_s": 216.273,
+      "text": "time.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-214",
+      "start_s": 216.969,
+      "end_s": 217.596,
+      "text": "In the Bronx,",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-215",
+      "start_s": 217.631,
+      "end_s": 218.397,
+      "text": "young people turned",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-216",
+      "start_s": 218.444,
+      "end_s": 219.988,
+      "text": "pressure, competition, neighborhood",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-217",
+      "start_s": 220.023,
+      "end_s": 220.905,
+      "text": "identity, and raw",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-218",
+      "start_s": 220.963,
+      "end_s": 222.24,
+      "text": "talent into DJs,",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-219",
+      "start_s": 222.275,
+      "end_s": 223.912,
+      "text": "b-boys, writers, crews,",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-220",
+      "start_s": 223.935,
+      "end_s": 224.957,
+      "text": "and MCs.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-221",
+      "start_s": 225.468,
+      "end_s": 226.35,
+      "text": "The microphone did",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-222",
+      "start_s": 226.397,
+      "end_s": 226.989,
+      "text": "not remove the",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-223",
+      "start_s": 227.035,
+      "end_s": 228.022,
+      "text": "stakes. It gave",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-224",
+      "start_s": 228.068,
+      "end_s": 228.672,
+      "text": "the stakes a",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-225",
+      "start_s": 228.753,
+      "end_s": 229.973,
+      "text": "stage. That is",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-226",
+      "start_s": 230.019,
+      "end_s": 230.925,
+      "text": "not weakness. That",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-227",
+      "start_s": 230.971,
+      "end_s": 231.772,
+      "text": "is engineering.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-228",
+      "start_s": 232.376,
+      "end_s": 232.933,
+      "text": "You are taking",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-229",
+      "start_s": 232.98,
+      "end_s": 233.746,
+      "text": "the same fire",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-230",
+      "start_s": 233.769,
+      "end_s": 234.199,
+      "text": "and building a",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-231",
+      "start_s": 234.257,
+      "end_s": 235.174,
+      "text": "furnace around it.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-232",
+      "start_s": 235.557,
+      "end_s": 236.196,
+      "text": "And the furnace",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-233",
+      "start_s": 236.242,
+      "end_s": 236.823,
+      "text": "matters.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-234",
+      "start_s": 237.426,
+      "end_s": 238.158,
+      "text": "A beat gives",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-235",
+      "start_s": 238.227,
+      "end_s": 239.005,
+      "text": "people a shared",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-236",
+      "start_s": 239.052,
+      "end_s": 240.433,
+      "text": "clock. A circle",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-237",
+      "start_s": 240.48,
+      "end_s": 240.909,
+      "text": "gives them a",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-238",
+      "start_s": 240.956,
+      "end_s": 242.256,
+      "text": "shared place. A",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-239",
+      "start_s": 242.337,
+      "end_s": 243.104,
+      "text": "crowd gives them",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-240",
+      "start_s": 243.15,
+      "end_s": 244.09,
+      "text": "a shared memory.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-241",
+      "start_s": 244.532,
+      "end_s": 245.275,
+      "text": "A round gives",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-242",
+      "start_s": 245.298,
+      "end_s": 245.658,
+      "text": "them a way",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-243",
+      "start_s": 245.704,
+      "end_s": 246.354,
+      "text": "to stop.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-244",
+      "start_s": 246.865,
+      "end_s": 247.643,
+      "text": "Put those pieces",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-245",
+      "start_s": 247.69,
+      "end_s": 248.282,
+      "text": "together and a",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-246",
+      "start_s": 248.363,
+      "end_s": 249.268,
+      "text": "rivalry can become",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-247",
+      "start_s": 249.292,
+      "end_s": 250.023,
+      "text": "an event before",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-248",
+      "start_s": 250.058,
+      "end_s": 250.615,
+      "text": "it becomes an",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-249",
+      "start_s": 250.662,
+      "end_s": 251.207,
+      "text": "incident.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-250",
+      "start_s": 251.59,
+      "end_s": 252.856,
+      "text": "That is why",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-251",
+      "start_s": 252.972,
+      "end_s": 254.284,
+      "text": "hip-hop competition feels",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-252",
+      "start_s": 254.33,
+      "end_s": 254.957,
+      "text": "so much like",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-253",
+      "start_s": 255.015,
+      "end_s": 256.246,
+      "text": "martial competition.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-254",
+      "start_s": 256.85,
+      "end_s": 257.43,
+      "text": "It does not",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-255",
+      "start_s": 257.488,
+      "end_s": 259.102,
+      "text": "deny that pride,",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-256",
+      "start_s": 259.218,
+      "end_s": 260.669,
+      "text": "identity, territory, and",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-257",
+      "start_s": 260.75,
+      "end_s": 262.097,
+      "text": "reputation are real.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-258",
+      "start_s": 262.608,
+      "end_s": 263.154,
+      "text": "It gives them",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-259",
+      "start_s": 263.2,
+      "end_s": 264.826,
+      "text": "a higher-resolution language.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-260",
+      "start_s": 265.336,
+      "end_s": 265.987,
+      "text": "So why doesn't",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-261",
+      "start_s": 266.045,
+      "end_s": 266.904,
+      "text": "every rap battle",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-262",
+      "start_s": 266.939,
+      "end_s": 267.763,
+      "text": "become an actual",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-263",
+      "start_s": 267.844,
+      "end_s": 269.121,
+      "text": "fight? Because the",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-264",
+      "start_s": 269.191,
+      "end_s": 269.806,
+      "text": "battle has a",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-265",
+      "start_s": 269.864,
+      "end_s": 272.035,
+      "text": "border. Historian Johan",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-266",
+      "start_s": 272.117,
+      "end_s": 273.266,
+      "text": "Huizinga gave us",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-267",
+      "start_s": 273.347,
+      "end_s": 273.707,
+      "text": "one of the",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-268",
+      "start_s": 273.754,
+      "end_s": 274.683,
+      "text": "great concepts in",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-269",
+      "start_s": 274.764,
+      "end_s": 275.635,
+      "text": "all of culture:",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-270",
+      "start_s": 275.878,
+      "end_s": 276.865,
+      "text": "the play space.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-271",
+      "start_s": 277.109,
+      "end_s": 278.107,
+      "text": "A game creates",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-272",
+      "start_s": 278.177,
+      "end_s": 279.536,
+      "text": "a temporary world.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-273",
+      "start_s": 279.745,
+      "end_s": 280.522,
+      "text": "The normal world",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-274",
+      "start_s": 280.58,
+      "end_s": 281.683,
+      "text": "is still outside.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-275",
+      "start_s": 281.892,
+      "end_s": 282.647,
+      "text": "Rent is still",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-276",
+      "start_s": 282.717,
+      "end_s": 283.855,
+      "text": "due. Your phone",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-277",
+      "start_s": 283.901,
+      "end_s": 284.691,
+      "text": "still has three",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-278",
+      "start_s": 284.737,
+      "end_s": 285.724,
+      "text": "percent battery.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-279",
+      "start_s": 286.328,
+      "end_s": 287.036,
+      "text": "But inside the",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-280",
+      "start_s": 287.082,
+      "end_s": 288.127,
+      "text": "circle, a new",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-281",
+      "start_s": 288.208,
+      "end_s": 289.323,
+      "text": "order takes over.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-282",
+      "start_s": 289.602,
+      "end_s": 290.426,
+      "text": "On a basketball",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-283",
+      "start_s": 290.484,
+      "end_s": 291.343,
+      "text": "court, you can",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-284",
+      "start_s": 291.401,
+      "end_s": 292.121,
+      "text": "deny a man",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-285",
+      "start_s": 292.191,
+      "end_s": 293.317,
+      "text": "dignity for forty-eight",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-286",
+      "start_s": 293.363,
+      "end_s": 294.095,
+      "text": "minutes and then",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-287",
+      "start_s": 294.164,
+      "end_s": 295.023,
+      "text": "shake his hand.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-288",
+      "start_s": 295.407,
+      "end_s": 296.057,
+      "text": "In a boxing",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-289",
+      "start_s": 296.126,
+      "end_s": 297.032,
+      "text": "ring, a clean",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-290",
+      "start_s": 297.102,
+      "end_s": 298.216,
+      "text": "shot earns applause",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-291",
+      "start_s": 298.251,
+      "end_s": 298.704,
+      "text": "that would earn",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-292",
+      "start_s": 298.739,
+      "end_s": 299.54,
+      "text": "a police report",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-293",
+      "start_s": 299.575,
+      "end_s": 300.236,
+      "text": "at brunch.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-294",
+      "start_s": 300.678,
+      "end_s": 301.293,
+      "text": "In a battle",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-295",
+      "start_s": 301.339,
+      "end_s": 302.315,
+      "text": "circle, you can",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-296",
+      "start_s": 302.431,
+      "end_s": 303.905,
+      "text": "verbally demolish someone's",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-297",
+      "start_s": 303.963,
+      "end_s": 305.879,
+      "text": "outfit, relationships, career",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-298",
+      "start_s": 305.937,
+      "end_s": 306.854,
+      "text": "plan, and fictional",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-299",
+      "start_s": 306.912,
+      "end_s": 308.479,
+      "text": "tax records—and the",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-300",
+      "start_s": 308.538,
+      "end_s": 309.385,
+      "text": "room asks only",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-301",
+      "start_s": 309.466,
+      "end_s": 310.36,
+      "text": "one question:",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-302",
+      "start_s": 310.743,
+      "end_s": 311.382,
+      "text": "Was the line",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-303",
+      "start_s": 311.428,
+      "end_s": 312.729,
+      "text": "crazy? That is",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-304",
+      "start_s": 312.787,
+      "end_s": 313.878,
+      "text": "the magic. The",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-305",
+      "start_s": 313.948,
+      "end_s": 314.76,
+      "text": "threat is no",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-306",
+      "start_s": 314.853,
+      "end_s": 316.084,
+      "text": "longer evaluated as",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-307",
+      "start_s": 316.142,
+      "end_s": 316.85,
+      "text": "a plan.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-308",
+      "start_s": 317.233,
+      "end_s": 318.383,
+      "text": "It is evaluated",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-309",
+      "start_s": 318.708,
+      "end_s": 319.764,
+      "text": "as craft.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-310",
+      "start_s": 320.716,
+      "end_s": 321.854,
+      "text": "William Labov studied",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-311",
+      "start_s": 321.912,
+      "end_s": 323.224,
+      "text": "ritual insult traditions",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-312",
+      "start_s": 323.282,
+      "end_s": 324.385,
+      "text": "including the Dozens",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-313",
+      "start_s": 324.629,
+      "end_s": 325.453,
+      "text": "and showed why",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-314",
+      "start_s": 325.534,
+      "end_s": 326.045,
+      "text": "this is not",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-315",
+      "start_s": 326.103,
+      "end_s": 327.45,
+      "text": "just random cruelty.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-316",
+      "start_s": 327.891,
+      "end_s": 328.983,
+      "text": "The form matters.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-317",
+      "start_s": 329.308,
+      "end_s": 330.457,
+      "text": "Timing matters.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-318",
+      "start_s": 330.841,
+      "end_s": 332.013,
+      "text": "The language has",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-319",
+      "start_s": 332.094,
+      "end_s": 333.279,
+      "text": "to land. The",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-320",
+      "start_s": 333.36,
+      "end_s": 334.231,
+      "text": "listener has to",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-321",
+      "start_s": 334.289,
+      "end_s": 335.415,
+      "text": "know the exchange",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-322",
+      "start_s": 335.473,
+      "end_s": 336.669,
+      "text": "is happening inside",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-323",
+      "start_s": 336.704,
+      "end_s": 337.899,
+      "text": "a shared contest.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-324",
+      "start_s": 338.41,
+      "end_s": 339.049,
+      "text": "This is why",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-325",
+      "start_s": 339.13,
+      "end_s": 339.966,
+      "text": "a weak line",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-326",
+      "start_s": 340.012,
+      "end_s": 340.488,
+      "text": "can make the",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-327",
+      "start_s": 340.558,
+      "end_s": 341.301,
+      "text": "room groan",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-328",
+      "start_s": 341.684,
+      "end_s": 342.45,
+      "text": "but a brilliant",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-329",
+      "start_s": 342.509,
+      "end_s": 343.252,
+      "text": "line can make",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-330",
+      "start_s": 343.286,
+      "end_s": 344.32,
+      "text": "the opponent smile",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-331",
+      "start_s": 344.355,
+      "end_s": 345.167,
+      "text": "through pain.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-332",
+      "start_s": 345.864,
+      "end_s": 346.537,
+      "text": "The battle is",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-333",
+      "start_s": 346.607,
+      "end_s": 348.511,
+      "text": "testing emotional control,",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-334",
+      "start_s": 348.627,
+      "end_s": 350.566,
+      "text": "language, memory, timing,",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-335",
+      "start_s": 350.635,
+      "end_s": 351.959,
+      "text": "posture, and the",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-336",
+      "start_s": 352.017,
+      "end_s": 352.899,
+      "text": "ability to take",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-337",
+      "start_s": 352.934,
+      "end_s": 353.549,
+      "text": "a hit without",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-338",
+      "start_s": 353.584,
+      "end_s": 354.49,
+      "text": "turning the stage",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-339",
+      "start_s": 354.548,
+      "end_s": 355.128,
+      "text": "back into the",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-340",
+      "start_s": 355.163,
+      "end_s": 355.732,
+      "text": "street.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-341",
+      "start_s": 356.082,
+      "end_s": 356.651,
+      "text": "The crowd is",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-342",
+      "start_s": 356.721,
+      "end_s": 357.104,
+      "text": "part of the",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-343",
+      "start_s": 357.15,
+      "end_s": 358.672,
+      "text": "rulebook. The punchline",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-344",
+      "start_s": 358.706,
+      "end_s": 359.566,
+      "text": "has two targets",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-345",
+      "start_s": 359.6,
+      "end_s": 360.285,
+      "text": "at once.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-346",
+      "start_s": 360.889,
+      "end_s": 361.377,
+      "text": "It hits the",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-347",
+      "start_s": 361.423,
+      "end_s": 362.189,
+      "text": "opponent in front",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-348",
+      "start_s": 362.236,
+      "end_s": 363.153,
+      "text": "of you, but",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-349",
+      "start_s": 363.199,
+      "end_s": 363.942,
+      "text": "it also hits",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-350",
+      "start_s": 363.989,
+      "end_s": 364.964,
+      "text": "the audience behind",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-351",
+      "start_s": 365.011,
+      "end_s": 365.278,
+      "text": "them.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-352",
+      "start_s": 366.09,
+      "end_s": 366.752,
+      "text": "The rapper is",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-353",
+      "start_s": 366.822,
+      "end_s": 367.971,
+      "text": "not merely saying,",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-354",
+      "start_s": 368.215,
+      "end_s": 369.388,
+      "text": "“I dislike you.”",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-355",
+      "start_s": 369.991,
+      "end_s": 370.874,
+      "text": "They are saying,",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-356",
+      "start_s": 371.199,
+      "end_s": 371.942,
+      "text": "“Watch how much",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-357",
+      "start_s": 371.988,
+      "end_s": 372.894,
+      "text": "control I have",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-358",
+      "start_s": 372.94,
+      "end_s": 373.637,
+      "text": "over this room's",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-359",
+      "start_s": 373.672,
+      "end_s": 374.345,
+      "text": "attention.”",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-360",
+      "start_s": 375.158,
+      "end_s": 375.808,
+      "text": "That is why",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-361",
+      "start_s": 375.924,
+      "end_s": 376.656,
+      "text": "an angle can",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-362",
+      "start_s": 376.714,
+      "end_s": 377.596,
+      "text": "be more dangerous",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-363",
+      "start_s": 377.631,
+      "end_s": 378.455,
+      "text": "than a threat.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-364",
+      "start_s": 378.896,
+      "end_s": 379.663,
+      "text": "It recruits the",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-365",
+      "start_s": 379.721,
+      "end_s": 380.615,
+      "text": "whole crowd into",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-366",
+      "start_s": 380.696,
+      "end_s": 382.008,
+      "text": "a temporary verdict.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-367",
+      "start_s": 382.333,
+      "end_s": 383.343,
+      "text": "That is martial.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-368",
+      "start_s": 383.854,
+      "end_s": 384.69,
+      "text": "It is combat",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-369",
+      "start_s": 384.736,
+      "end_s": 385.282,
+      "text": "with a rule",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-370",
+      "start_s": 385.328,
+      "end_s": 385.793,
+      "text": "set.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-371",
+      "start_s": 386.234,
+      "end_s": 386.571,
+      "text": "It is a",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-372",
+      "start_s": 386.629,
+      "end_s": 387.639,
+      "text": "contest whose most",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-373",
+      "start_s": 387.708,
+      "end_s": 388.684,
+      "text": "valuable skill is",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-374",
+      "start_s": 388.754,
+      "end_s": 390.077,
+      "text": "making violence legible",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-375",
+      "start_s": 390.112,
+      "end_s": 391.18,
+      "text": "enough that nobody",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-376",
+      "start_s": 391.238,
+      "end_s": 391.935,
+      "text": "has to perform",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-377",
+      "start_s": 391.981,
+      "end_s": 392.713,
+      "text": "it physically.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-378",
+      "start_s": 393.316,
+      "end_s": 394.71,
+      "text": "And yes, that",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-379",
+      "start_s": 394.768,
+      "end_s": 395.511,
+      "text": "means the crowd",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-380",
+      "start_s": 395.569,
+      "end_s": 396.161,
+      "text": "matters.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-381",
+      "start_s": 396.857,
+      "end_s": 397.763,
+      "text": "The crowd is",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-382",
+      "start_s": 397.844,
+      "end_s": 398.924,
+      "text": "not decoration.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-383",
+      "start_s": 399.307,
+      "end_s": 400.155,
+      "text": "The crowd is",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-384",
+      "start_s": 400.213,
+      "end_s": 401.49,
+      "text": "the referee, the",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-385",
+      "start_s": 401.571,
+      "end_s": 403.266,
+      "text": "witness, the scoreboard,",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-386",
+      "start_s": 403.417,
+      "end_s": 404.624,
+      "text": "and occasionally the",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-387",
+      "start_s": 404.683,
+      "end_s": 405.611,
+      "text": "group chat that",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-388",
+      "start_s": 405.657,
+      "end_s": 406.54,
+      "text": "keeps a punchline",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-389",
+      "start_s": 406.574,
+      "end_s": 407.585,
+      "text": "alive for ten",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-390",
+      "start_s": 407.654,
+      "end_s": 408.246,
+      "text": "years.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-391",
+      "start_s": 409.198,
+      "end_s": 409.802,
+      "text": "Now for the",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-392",
+      "start_s": 409.86,
+      "end_s": 411.195,
+      "text": "most beautiful part.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-393",
+      "start_s": 411.892,
+      "end_s": 412.6,
+      "text": "The two people",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-394",
+      "start_s": 412.647,
+      "end_s": 413.401,
+      "text": "pretending to hate",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-395",
+      "start_s": 413.424,
+      "end_s": 414.295,
+      "text": "each other are",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-396",
+      "start_s": 414.33,
+      "end_s": 415.305,
+      "text": "working together.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-397",
+      "start_s": 416.257,
+      "end_s": 418.126,
+      "text": "Sociologist Erving Goffman",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-398",
+      "start_s": 418.451,
+      "end_s": 419.206,
+      "text": "looked at social",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-399",
+      "start_s": 419.276,
+      "end_s": 420.495,
+      "text": "life as performance.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-400",
+      "start_s": 420.936,
+      "end_s": 421.633,
+      "text": "He cared about",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-401",
+      "start_s": 421.691,
+      "end_s": 422.956,
+      "text": "front stage, back",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-402",
+      "start_s": 423.026,
+      "end_s": 424.024,
+      "text": "stage, and the",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-403",
+      "start_s": 424.071,
+      "end_s": 425.267,
+      "text": "tiny agreements people",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-404",
+      "start_s": 425.313,
+      "end_s": 425.929,
+      "text": "make to keep",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-405",
+      "start_s": 425.987,
+      "end_s": 426.614,
+      "text": "a scene from",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-406",
+      "start_s": 426.695,
+      "end_s": 427.879,
+      "text": "collapsing in public.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-407",
+      "start_s": 428.229,
+      "end_s": 428.949,
+      "text": "Battle rap is",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-408",
+      "start_s": 428.995,
+      "end_s": 429.587,
+      "text": "that idea with",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-409",
+      "start_s": 429.634,
+      "end_s": 430.226,
+      "text": "base.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-410",
+      "start_s": 430.576,
+      "end_s": 431.087,
+      "text": "On the front",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-411",
+      "start_s": 431.145,
+      "end_s": 432.213,
+      "text": "stage: “I am",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-412",
+      "start_s": 432.282,
+      "end_s": 433.176,
+      "text": "here to destroy",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-413",
+      "start_s": 433.246,
+      "end_s": 433.536,
+      "text": "you.”",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-414",
+      "start_s": 433.919,
+      "end_s": 435.289,
+      "text": "Back stage: “Please",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-415",
+      "start_s": 435.324,
+      "end_s": 436.497,
+      "text": "stand there, react",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-416",
+      "start_s": 436.578,
+      "end_s": 437.623,
+      "text": "correctly, and do",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-417",
+      "start_s": 437.739,
+      "end_s": 438.413,
+      "text": "not ruin the",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-418",
+      "start_s": 438.471,
+      "end_s": 439.341,
+      "text": "best show either",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-419",
+      "start_s": 439.4,
+      "end_s": 440.026,
+      "text": "of us has",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-420",
+      "start_s": 440.201,
+      "end_s": 441.025,
+      "text": "all year.”",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-421",
+      "start_s": 441.977,
+      "end_s": 443.08,
+      "text": "The opponent has",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-422",
+      "start_s": 443.138,
+      "end_s": 443.556,
+      "text": "to hold the",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-423",
+      "start_s": 443.614,
+      "end_s": 444.403,
+      "text": "line long enough",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-424",
+      "start_s": 444.427,
+      "end_s": 444.868,
+      "text": "for the bar",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-425",
+      "start_s": 444.914,
+      "end_s": 445.53,
+      "text": "to matter.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-426",
+      "start_s": 445.971,
+      "end_s": 446.609,
+      "text": "The crowd has",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-427",
+      "start_s": 446.667,
+      "end_s": 447.399,
+      "text": "to understand the",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-428",
+      "start_s": 447.457,
+      "end_s": 448.409,
+      "text": "rules well enough",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-429",
+      "start_s": 448.444,
+      "end_s": 449.187,
+      "text": "to reward it.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-430",
+      "start_s": 449.698,
+      "end_s": 450.359,
+      "text": "The host has",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-431",
+      "start_s": 450.417,
+      "end_s": 450.8,
+      "text": "to keep the",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-432",
+      "start_s": 450.835,
+      "end_s": 451.926,
+      "text": "temperature high without",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-433",
+      "start_s": 451.961,
+      "end_s": 452.623,
+      "text": "turning it into",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-434",
+      "start_s": 452.716,
+      "end_s": 453.412,
+      "text": "a fire code",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-435",
+      "start_s": 453.447,
+      "end_s": 454.341,
+      "text": "violation.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-436",
+      "start_s": 454.945,
+      "end_s": 455.909,
+      "text": "That is a",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-437",
+      "start_s": 455.99,
+      "end_s": 457.371,
+      "text": "secret alliance.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-438",
+      "start_s": 457.755,
+      "end_s": 458.358,
+      "text": "Not a soft",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-439",
+      "start_s": 458.428,
+      "end_s": 458.741,
+      "text": "one.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-440",
+      "start_s": 459.125,
+      "end_s": 460.402,
+      "text": "A brutal, professional",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-441",
+      "start_s": 460.483,
+      "end_s": 460.82,
+      "text": "one.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-442",
+      "start_s": 461.203,
+      "end_s": 462.352,
+      "text": "Every great round",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-443",
+      "start_s": 462.433,
+      "end_s": 463.293,
+      "text": "is a contract",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-444",
+      "start_s": 463.362,
+      "end_s": 464.163,
+      "text": "signed at full",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-445",
+      "start_s": 464.221,
+      "end_s": 464.825,
+      "text": "volume.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-446",
+      "start_s": 465.208,
+      "end_s": 466.056,
+      "text": "One person must",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-447",
+      "start_s": 466.137,
+      "end_s": 466.857,
+      "text": "risk a line",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-448",
+      "start_s": 466.903,
+      "end_s": 467.437,
+      "text": "big enough to",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-449",
+      "start_s": 467.518,
+      "end_s": 468.075,
+      "text": "fail.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-450",
+      "start_s": 468.517,
+      "end_s": 469.213,
+      "text": "The other must",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-451",
+      "start_s": 469.271,
+      "end_s": 470.003,
+      "text": "give the line",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-452",
+      "start_s": 470.038,
+      "end_s": 470.932,
+      "text": "enough composure to",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-453",
+      "start_s": 471.024,
+      "end_s": 471.605,
+      "text": "land.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-454",
+      "start_s": 472.116,
+      "end_s": 472.847,
+      "text": "The room must",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-455",
+      "start_s": 472.905,
+      "end_s": 473.695,
+      "text": "know the difference",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-456",
+      "start_s": 473.73,
+      "end_s": 474.461,
+      "text": "between a clean",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-457",
+      "start_s": 474.531,
+      "end_s": 475.959,
+      "text": "strike and somebody",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-458",
+      "start_s": 476.017,
+      "end_s": 476.945,
+      "text": "just being loud",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-459",
+      "start_s": 477.027,
+      "end_s": 478.188,
+      "text": "near a microphone.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-460",
+      "start_s": 478.884,
+      "end_s": 479.755,
+      "text": "If those agreements",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-461",
+      "start_s": 479.802,
+      "end_s": 481.473,
+      "text": "hold, hostility becomes",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-462",
+      "start_s": 481.531,
+      "end_s": 482.17,
+      "text": "craft.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-463",
+      "start_s": 482.553,
+      "end_s": 483.378,
+      "text": "If they break,",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-464",
+      "start_s": 483.471,
+      "end_s": 484.318,
+      "text": "the performance is",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-465",
+      "start_s": 484.4,
+      "end_s": 485.224,
+      "text": "over before the",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-466",
+      "start_s": 485.27,
+      "end_s": 486.187,
+      "text": "final bar.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-467",
+      "start_s": 486.571,
+      "end_s": 487.627,
+      "text": "If one performer",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-468",
+      "start_s": 487.697,
+      "end_s": 488.324,
+      "text": "pulls out a",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-469",
+      "start_s": 488.451,
+      "end_s": 489.845,
+      "text": "real weapon, nobody",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-470",
+      "start_s": 489.914,
+      "end_s": 490.379,
+      "text": "won.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-471",
+      "start_s": 490.762,
+      "end_s": 491.842,
+      "text": "The entire machine",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-472",
+      "start_s": 491.888,
+      "end_s": 493.13,
+      "text": "broke. The bar",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-473",
+      "start_s": 493.211,
+      "end_s": 494.361,
+      "text": "died. The crowd",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-474",
+      "start_s": 494.431,
+      "end_s": 495.475,
+      "text": "lost the game.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-475",
+      "start_s": 495.859,
+      "end_s": 496.741,
+      "text": "The enemies stopped",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-476",
+      "start_s": 496.764,
+      "end_s": 497.763,
+      "text": "being co-stars and",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-477",
+      "start_s": 497.809,
+      "end_s": 499.202,
+      "text": "became evidence. But",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-478",
+      "start_s": 499.237,
+      "end_s": 500.05,
+      "text": "when both people",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-479",
+      "start_s": 500.096,
+      "end_s": 501.083,
+      "text": "hold the ritual,",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-480",
+      "start_s": 501.13,
+      "end_s": 501.791,
+      "text": "they create the",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-481",
+      "start_s": 501.849,
+      "end_s": 502.743,
+      "text": "thing we actually",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-482",
+      "start_s": 502.801,
+      "end_s": 503.649,
+      "text": "came for:",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-483",
+      "start_s": 504.032,
+      "end_s": 505.228,
+      "text": "controlled danger.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-484",
+      "start_s": 505.611,
+      "end_s": 506.47,
+      "text": "Risk turned into",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-485",
+      "start_s": 506.563,
+      "end_s": 508.165,
+      "text": "art. Aggression turned",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-486",
+      "start_s": 508.2,
+      "end_s": 508.897,
+      "text": "into a public",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-487",
+      "start_s": 508.955,
+      "end_s": 509.791,
+      "text": "skill test.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-488",
+      "start_s": 510.174,
+      "end_s": 510.708,
+      "text": "So the next",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-489",
+      "start_s": 510.743,
+      "end_s": 511.59,
+      "text": "time somebody says",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-490",
+      "start_s": 511.683,
+      "end_s": 512.252,
+      "text": "rap is too",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-491",
+      "start_s": 512.322,
+      "end_s": 513.656,
+      "text": "violent, too aggressive,",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-492",
+      "start_s": 513.68,
+      "end_s": 515.247,
+      "text": "too much—do not",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-493",
+      "start_s": 515.317,
+      "end_s": 515.874,
+      "text": "panic.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-494",
+      "start_s": 516.315,
+      "end_s": 516.907,
+      "text": "Ask them what",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-495",
+      "start_s": 516.942,
+      "end_s": 517.94,
+      "text": "they would prefer.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-496",
+      "start_s": 518.544,
+      "end_s": 519.299,
+      "text": "Would they rather",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-497",
+      "start_s": 519.368,
+      "end_s": 520.135,
+      "text": "have the conflict",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-498",
+      "start_s": 520.193,
+      "end_s": 520.866,
+      "text": "hidden until it",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-499",
+      "start_s": 520.924,
+      "end_s": 521.749,
+      "text": "explodes?",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-500",
+      "start_s": 522.132,
+      "end_s": 522.608,
+      "text": "Or would they",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-501",
+      "start_s": 522.677,
+      "end_s": 523.304,
+      "text": "rather see it",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-502",
+      "start_s": 523.351,
+      "end_s": 524.047,
+      "text": "dragged into the",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-503",
+      "start_s": 524.117,
+      "end_s": 525.162,
+      "text": "open, sharpened into",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-504",
+      "start_s": 525.255,
+      "end_s": 526.497,
+      "text": "language, timed to",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-505",
+      "start_s": 526.59,
+      "end_s": 527.415,
+      "text": "a beat, judged",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-506",
+      "start_s": 527.473,
+      "end_s": 528.158,
+      "text": "by a crowd,",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-507",
+      "start_s": 528.181,
+      "end_s": 528.843,
+      "text": "and settled by",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-508",
+      "start_s": 528.901,
+      "end_s": 529.69,
+      "text": "whoever can keep",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-509",
+      "start_s": 529.737,
+      "end_s": 530.549,
+      "text": "their nerve?",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-510",
+      "start_s": 531.362,
+      "end_s": 531.943,
+      "text": "That is not",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-511",
+      "start_s": 531.989,
+      "end_s": 532.72,
+      "text": "the absence of",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-512",
+      "start_s": 532.778,
+      "end_s": 533.638,
+      "text": "conflict. It is",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-513",
+      "start_s": 533.696,
+      "end_s": 534.566,
+      "text": "the evolution of",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-514",
+      "start_s": 534.636,
+      "end_s": 536.261,
+      "text": "conflict. The gorilla",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-515",
+      "start_s": 536.331,
+      "end_s": 536.911,
+      "text": "gets a chest",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-516",
+      "start_s": 536.958,
+      "end_s": 538.049,
+      "text": "beat. The knight",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-517",
+      "start_s": 538.095,
+      "end_s": 538.978,
+      "text": "gets a sword.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-518",
+      "start_s": 539.582,
+      "end_s": 540.336,
+      "text": "The battle rapper",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-519",
+      "start_s": 540.406,
+      "end_s": 541.451,
+      "text": "gets a sixteen,",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-520",
+      "start_s": 541.567,
+      "end_s": 542.159,
+      "text": "a room full",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-521",
+      "start_s": 542.205,
+      "end_s": 543.366,
+      "text": "of witnesses, and",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-522",
+      "start_s": 543.448,
+      "end_s": 544.098,
+      "text": "one chance to",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-523",
+      "start_s": 544.168,
+      "end_s": 544.678,
+      "text": "make the other",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-524",
+      "start_s": 544.725,
+      "end_s": 545.491,
+      "text": "person look like",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-525",
+      "start_s": 545.526,
+      "end_s": 546.025,
+      "text": "they should have",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-526",
+      "start_s": 546.048,
+      "end_s": 546.896,
+      "text": "stayed home.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-527",
+      "start_s": 547.592,
+      "end_s": 548.243,
+      "text": "We traded the",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-528",
+      "start_s": 548.289,
+      "end_s": 549.113,
+      "text": "battlefield for the",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-529",
+      "start_s": 549.16,
+      "end_s": 549.578,
+      "text": "beat.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-530",
+      "start_s": 550.019,
+      "end_s": 551.459,
+      "text": "Peace won—but it",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-531",
+      "start_s": 551.505,
+      "end_s": 552.852,
+      "text": "still talks reckless.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-532",
+      "start_s": 553.026,
+      "end_s": 554.361,
+      "text": "I'm Marshall Matters.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-533",
+      "start_s": 554.872,
+      "end_s": 556.103,
+      "text": "This is Martial",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-534",
+      "start_s": 556.161,
+      "end_s": 556.718,
+      "text": "Matters.",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-535",
+      "start_s": 557.414,
+      "end_s": 558.401,
+      "text": "Next, we're going",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-536",
+      "start_s": 558.436,
+      "end_s": 558.924,
+      "text": "to the place",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-537",
+      "start_s": 558.947,
+      "end_s": 559.69,
+      "text": "where a fighter,",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-538",
+      "start_s": 559.76,
+      "end_s": 560.979,
+      "text": "a freestyle rapper,",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-539",
+      "start_s": 561.025,
+      "end_s": 561.989,
+      "text": "and an old-school",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-540",
+      "start_s": 562.058,
+      "end_s": 563.498,
+      "text": "swordsman all meet:",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-541",
+      "start_s": 563.881,
+      "end_s": 564.706,
+      "text": "the moment thinking",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-542",
+      "start_s": 564.764,
+      "end_s": 565.182,
+      "text": "gets out of",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-543",
+      "start_s": 565.216,
+      "end_s": 565.913,
+      "text": "the way and",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-544",
+      "start_s": 565.959,
+      "end_s": 567.109,
+      "text": "trained instinct takes",
+      "emphasis": "local_cadence_pop"
+    },
+    {
+      "id": "vertical-545",
+      "start_s": 567.155,
+      "end_s": 567.805,
+      "text": "the wheel.",
+      "emphasis": "local_cadence_pop"
+    }
+  ]
+}

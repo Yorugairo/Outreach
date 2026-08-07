@@ -1,0 +1,2446 @@
+{
+  "schema_version": "canonical_visual_coverage.v12",
+  "audio_manifest_hash": "5e35c5b027c695babe072cb645021dbec0f9d9bda7bb82259fc37f63f016685e",
+  "narration_hash": "4e9b08cea4233871ee554b5a8df254b5d2fb0f298bb3566e2bab66548b1ffb91",
+  "word_timing_hash": "be69051dd0e923581cd8f9a4cc37dd503e2993ab2330a85351c56019a8f0adf1",
+  "duration_s": 559.922,
+  "target_duration_s": 4.0,
+  "minimum_duration_s": 1.8,
+  "maximum_duration_s": 6.0,
+  "slot_count": 139,
+  "slots": [
+    {
+      "slot_id": "canonical-001",
+      "word_range": {
+        "start_index": 0,
+        "end_index": 11
+      },
+      "start_s": 0.0,
+      "end_s": 4.609,
+      "duration_s": 4.609,
+      "narration_excerpt": "The useful starting point is not a battlefield legend but an institution.",
+      "visual_intent": "academic",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-002",
+      "word_range": {
+        "start_index": 12,
+        "end_index": 18
+      },
+      "start_s": 4.609,
+      "end_s": 9.102,
+      "duration_s": 4.493,
+      "narration_excerpt": "In 1882, Jigoro Kano established the Kodokan.",
+      "visual_intent": "evidence",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-003",
+      "word_range": {
+        "start_index": 19,
+        "end_index": 29
+      },
+      "start_s": 9.102,
+      "end_s": 13.34,
+      "duration_s": 4.238,
+      "narration_excerpt": "That date does not mean every older jujutsu practice vanished overnight.",
+      "visual_intent": "martial",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-004",
+      "word_range": {
+        "start_index": 30,
+        "end_index": 42
+      },
+      "start_s": 13.34,
+      "end_s": 17.206,
+      "duration_s": 3.866,
+      "narration_excerpt": "It marks the point at which Kano's system gained a durable home, a",
+      "visual_intent": "academic",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-005",
+      "word_range": {
+        "start_index": 43,
+        "end_index": 51
+      },
+      "start_s": 17.206,
+      "end_s": 21.107,
+      "duration_s": 3.901,
+      "narration_excerpt": "teaching structure, and an identity. That distinction changes the",
+      "visual_intent": "academic",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-006",
+      "word_range": {
+        "start_index": 52,
+        "end_index": 63
+      },
+      "start_s": 21.107,
+      "end_s": 25.263,
+      "duration_s": 4.156,
+      "narration_excerpt": "question we are asking. Instead of looking for a single ancient technique",
+      "visual_intent": "academic",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-007",
+      "word_range": {
+        "start_index": 64,
+        "end_index": 73
+      },
+      "start_s": 25.263,
+      "end_s": 29.222,
+      "duration_s": 3.959,
+      "narration_excerpt": "that somehow travelled unchanged into Brazil, we can follow a",
+      "visual_intent": "journey",
+      "required_visual_actions": [
+        {
+          "kind": "map_cut_in",
+          "subject": "Brazil"
+        }
+      ],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-008",
+      "word_range": {
+        "start_index": 74,
+        "end_index": 83
+      },
+      "start_s": 29.222,
+      "end_s": 33.286,
+      "duration_s": 4.064,
+      "narration_excerpt": "system as it acquires schools, teachers, rules, and public meaning.",
+      "visual_intent": "academic",
+      "required_visual_actions": [
+        {
+          "kind": "list_item_popout",
+          "subject": "schools"
+        },
+        {
+          "kind": "list_item_popout",
+          "subject": "teachers"
+        },
+        {
+          "kind": "list_item_popout",
+          "subject": "rules"
+        },
+        {
+          "kind": "list_item_popout",
+          "subject": "public meaning"
+        }
+      ],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-009",
+      "word_range": {
+        "start_index": 84,
+        "end_index": 97
+      },
+      "start_s": 33.286,
+      "end_s": 37.152,
+      "duration_s": 3.866,
+      "narration_excerpt": "The date is an anchor in the record, not a magical beginning for every",
+      "visual_intent": "evidence",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-010",
+      "word_range": {
+        "start_index": 98,
+        "end_index": 105
+      },
+      "start_s": 37.152,
+      "end_s": 41.273,
+      "duration_s": 4.121,
+      "narration_excerpt": "practice that later received the name jiu-jitsu. Kodokan",
+      "visual_intent": "evidence",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-011",
+      "word_range": {
+        "start_index": 106,
+        "end_index": 113
+      },
+      "start_s": 41.273,
+      "end_s": 45.232,
+      "duration_s": 3.959,
+      "narration_excerpt": "judo was already a transformation. Kano drew from",
+      "visual_intent": "martial",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-012",
+      "word_range": {
+        "start_index": 114,
+        "end_index": 122
+      },
+      "start_s": 45.232,
+      "end_s": 49.33,
+      "duration_s": 4.098,
+      "narration_excerpt": "multiple jujutsu schools, selected and reorganized techniques, and connected",
+      "visual_intent": "academic",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-013",
+      "word_range": {
+        "start_index": 123,
+        "end_index": 133
+      },
+      "start_s": 49.33,
+      "end_s": 53.405,
+      "duration_s": 4.075,
+      "narration_excerpt": "practice to a broader educational program. So the story begins with",
+      "visual_intent": "academic",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-014",
+      "word_range": {
+        "start_index": 134,
+        "end_index": 141
+      },
+      "start_s": 53.405,
+      "end_s": 57.132,
+      "duration_s": 3.727,
+      "narration_excerpt": "adaptation inside Japan, before the art ever reaches",
+      "visual_intent": "explanation",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-015",
+      "word_range": {
+        "start_index": 142,
+        "end_index": 155
+      },
+      "start_s": 57.132,
+      "end_s": 61.126,
+      "duration_s": 3.994,
+      "narration_excerpt": "Brazil. A system is not only a list of movements. It is also a",
+      "visual_intent": "transition",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-016",
+      "word_range": {
+        "start_index": 156,
+        "end_index": 169
+      },
+      "start_s": 61.126,
+      "end_s": 65.039,
+      "duration_s": 3.913,
+      "narration_excerpt": "way of deciding what should be taught, how students should practice, what counts as",
+      "visual_intent": "martial",
+      "required_visual_actions": [
+        {
+          "kind": "list_item_popout",
+          "subject": "what should be taught"
+        },
+        {
+          "kind": "list_item_popout",
+          "subject": "how students should practice"
+        },
+        {
+          "kind": "list_item_popout",
+          "subject": "what counts as progress"
+        }
+      ],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-017",
+      "word_range": {
+        "start_index": 170,
+        "end_index": 179
+      },
+      "start_s": 65.039,
+      "end_s": 69.683,
+      "duration_s": 4.644,
+      "narration_excerpt": "progress, and which ideas deserve to travel with the exercise.",
+      "visual_intent": "martial",
+      "required_visual_actions": [
+        {
+          "kind": "list_item_popout",
+          "subject": "which ideas deserve to travel with the exercise"
+        }
+      ],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-018",
+      "word_range": {
+        "start_index": 180,
+        "end_index": 191
+      },
+      "start_s": 69.683,
+      "end_s": 73.769,
+      "duration_s": 4.086,
+      "narration_excerpt": "When later observers describe judo or jiu-jitsu, they may be describing different",
+      "visual_intent": "martial",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-019",
+      "word_range": {
+        "start_index": 192,
+        "end_index": 201
+      },
+      "start_s": 73.769,
+      "end_s": 77.833,
+      "duration_s": 4.064,
+      "narration_excerpt": "portions of that larger project. Keeping the transformation visible prevents",
+      "visual_intent": "martial",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-020",
+      "word_range": {
+        "start_index": 202,
+        "end_index": 213
+      },
+      "start_s": 77.833,
+      "end_s": 81.931,
+      "duration_s": 4.098,
+      "narration_excerpt": "us from mistaking a later label for an unchanged original. Kano's project",
+      "visual_intent": "explanation",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-021",
+      "word_range": {
+        "start_index": 214,
+        "end_index": 223
+      },
+      "start_s": 81.931,
+      "end_s": 86.029,
+      "duration_s": 4.098,
+      "narration_excerpt": "was larger than a catalog of fighting moves. Institutional histories",
+      "visual_intent": "academic",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-022",
+      "word_range": {
+        "start_index": 224,
+        "end_index": 231
+      },
+      "start_s": 86.029,
+      "end_s": 90.232,
+      "duration_s": 4.203,
+      "narration_excerpt": "emphasize education, disciplined practice, efficient use of energy,",
+      "visual_intent": "academic",
+      "required_visual_actions": [
+        {
+          "kind": "list_item_popout",
+          "subject": "education"
+        },
+        {
+          "kind": "list_item_popout",
+          "subject": "disciplined practice"
+        },
+        {
+          "kind": "list_item_popout",
+          "subject": "efficient use of energy"
+        }
+      ],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-023",
+      "word_range": {
+        "start_index": 232,
+        "end_index": 239
+      },
+      "start_s": 90.232,
+      "end_s": 94.11,
+      "duration_s": 3.878,
+      "narration_excerpt": "and mutual benefit. Those ideas matter because later",
+      "visual_intent": "academic",
+      "required_visual_actions": [
+        {
+          "kind": "list_item_popout",
+          "subject": "mutual benefit"
+        }
+      ],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-024",
+      "word_range": {
+        "start_index": 240,
+        "end_index": 247
+      },
+      "start_s": 94.11,
+      "end_s": 98.278,
+      "duration_s": 4.168,
+      "narration_excerpt": "travelers could carry techniques, sporting rules, professional contests,",
+      "visual_intent": "academic",
+      "required_visual_actions": [
+        {
+          "kind": "list_item_popout",
+          "subject": "techniques"
+        },
+        {
+          "kind": "list_item_popout",
+          "subject": "sporting rules"
+        },
+        {
+          "kind": "list_item_popout",
+          "subject": "professional contests"
+        }
+      ],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-025",
+      "word_range": {
+        "start_index": 248,
+        "end_index": 256
+      },
+      "start_s": 98.278,
+      "end_s": 102.237,
+      "duration_s": 3.959,
+      "narration_excerpt": "or educational ideals in different proportions. The same practice",
+      "visual_intent": "academic",
+      "required_visual_actions": [
+        {
+          "kind": "list_item_popout",
+          "subject": "educational ideals in different proportions"
+        }
+      ],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-026",
+      "word_range": {
+        "start_index": 257,
+        "end_index": 269
+      },
+      "start_s": 102.237,
+      "end_s": 106.37,
+      "duration_s": 4.133,
+      "narration_excerpt": "could look different when it entered a school, a theater, a challenge match,",
+      "visual_intent": "academic",
+      "required_visual_actions": [
+        {
+          "kind": "list_item_popout",
+          "subject": "a school"
+        },
+        {
+          "kind": "list_item_popout",
+          "subject": "a theater"
+        },
+        {
+          "kind": "list_item_popout",
+          "subject": "a challenge match"
+        }
+      ],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-027",
+      "word_range": {
+        "start_index": 270,
+        "end_index": 282
+      },
+      "start_s": 106.37,
+      "end_s": 110.549,
+      "duration_s": 4.179,
+      "narration_excerpt": "or a community of immigrants. This is why a history of Brazilian jiu-jitsu",
+      "visual_intent": "academic",
+      "required_visual_actions": [
+        {
+          "kind": "list_item_popout",
+          "subject": "a community of immigrants"
+        }
+      ],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-028",
+      "word_range": {
+        "start_index": 283,
+        "end_index": 295
+      },
+      "start_s": 110.549,
+      "end_s": 114.543,
+      "duration_s": 3.994,
+      "narration_excerpt": "cannot be reduced to asking who knew which move first. We also have",
+      "visual_intent": "martial",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-029",
+      "word_range": {
+        "start_index": 296,
+        "end_index": 311
+      },
+      "start_s": 114.543,
+      "end_s": 118.549,
+      "duration_s": 4.006,
+      "narration_excerpt": "to ask what the practice was being used for, who was teaching it, and what the",
+      "visual_intent": "academic",
+      "required_visual_actions": [
+        {
+          "kind": "list_item_popout",
+          "subject": "to ask what the practice was being used for"
+        },
+        {
+          "kind": "list_item_popout",
+          "subject": "who was teaching it"
+        },
+        {
+          "kind": "list_item_popout",
+          "subject": "what the surrounding institution rewarded"
+        }
+      ],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-030",
+      "word_range": {
+        "start_index": 312,
+        "end_index": 317
+      },
+      "start_s": 118.549,
+      "end_s": 122.577,
+      "duration_s": 4.028,
+      "narration_excerpt": "surrounding institution rewarded. Terminology was not",
+      "visual_intent": "academic",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-031",
+      "word_range": {
+        "start_index": 318,
+        "end_index": 324
+      },
+      "start_s": 122.577,
+      "end_s": 126.78,
+      "duration_s": 4.203,
+      "narration_excerpt": "settled. Contemporary and retrospective sources use judo,",
+      "visual_intent": "transition",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-032",
+      "word_range": {
+        "start_index": 325,
+        "end_index": 332
+      },
+      "start_s": 126.78,
+      "end_s": 130.774,
+      "duration_s": 3.994,
+      "narration_excerpt": "jiu-jitsu, Kano jiu-jitsu, and related spellings in overlapping",
+      "visual_intent": "evidence",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-033",
+      "word_range": {
+        "start_index": 333,
+        "end_index": 341
+      },
+      "start_s": 130.774,
+      "end_s": 135.093,
+      "duration_s": 4.319,
+      "narration_excerpt": "ways. Accounts differ about what each public label implied,",
+      "visual_intent": "evidence",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-034",
+      "word_range": {
+        "start_index": 342,
+        "end_index": 353
+      },
+      "start_s": 135.093,
+      "end_s": 138.994,
+      "duration_s": 3.901,
+      "narration_excerpt": "so this episode follows documented people and practices instead of treating a",
+      "visual_intent": "evidence",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-035",
+      "word_range": {
+        "start_index": 354,
+        "end_index": 365
+      },
+      "start_s": 138.994,
+      "end_s": 142.744,
+      "duration_s": 3.75,
+      "narration_excerpt": "name as a perfectly stable technical system. That caution is not a",
+      "visual_intent": "evidence",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-036",
+      "word_range": {
+        "start_index": 366,
+        "end_index": 372
+      },
+      "start_s": 142.744,
+      "end_s": 146.621,
+      "duration_s": 3.877,
+      "narration_excerpt": "footnote. Public names travel through advertisements, demonstrations,",
+      "visual_intent": "transition",
+      "required_visual_actions": [
+        {
+          "kind": "list_item_popout",
+          "subject": "advertisements"
+        },
+        {
+          "kind": "list_item_popout",
+          "subject": "demonstrations"
+        }
+      ],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-037",
+      "word_range": {
+        "start_index": 373,
+        "end_index": 383
+      },
+      "start_s": 146.621,
+      "end_s": 150.604,
+      "duration_s": 3.983,
+      "narration_excerpt": "newspapers, translations, and later memories. A word can be used to",
+      "visual_intent": "academic",
+      "required_visual_actions": [
+        {
+          "kind": "list_item_popout",
+          "subject": "newspapers"
+        },
+        {
+          "kind": "list_item_popout",
+          "subject": "translations"
+        },
+        {
+          "kind": "list_item_popout",
+          "subject": "later memories"
+        }
+      ],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-038",
+      "word_range": {
+        "start_index": 384,
+        "end_index": 393
+      },
+      "start_s": 150.604,
+      "end_s": 154.679,
+      "duration_s": 4.075,
+      "narration_excerpt": "sell an exhibition, identify a teacher, describe a lineage, or",
+      "visual_intent": "academic",
+      "required_visual_actions": [
+        {
+          "kind": "list_item_popout",
+          "subject": "sell an exhibition"
+        },
+        {
+          "kind": "list_item_popout",
+          "subject": "identify a teacher"
+        },
+        {
+          "kind": "list_item_popout",
+          "subject": "describe a lineage"
+        }
+      ],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-039",
+      "word_range": {
+        "start_index": 394,
+        "end_index": 404
+      },
+      "start_s": 154.679,
+      "end_s": 158.452,
+      "duration_s": 3.773,
+      "narration_excerpt": "summarize a ruleset. The label tells us what someone called the",
+      "visual_intent": "academic",
+      "required_visual_actions": [
+        {
+          "kind": "list_item_popout",
+          "subject": "summarize a ruleset"
+        }
+      ],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-040",
+      "word_range": {
+        "start_index": 405,
+        "end_index": 414
+      },
+      "start_s": 158.452,
+      "end_s": 162.446,
+      "duration_s": 3.994,
+      "narration_excerpt": "practice; it does not automatically tell us that every participant",
+      "visual_intent": "martial",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-041",
+      "word_range": {
+        "start_index": 415,
+        "end_index": 423
+      },
+      "start_s": 162.446,
+      "end_s": 166.452,
+      "duration_s": 4.006,
+      "narration_excerpt": "understood the practice in exactly the same way. Maeda",
+      "visual_intent": "martial",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-042",
+      "word_range": {
+        "start_index": 424,
+        "end_index": 434
+      },
+      "start_s": 166.452,
+      "end_s": 170.689,
+      "duration_s": 4.237,
+      "narration_excerpt": "was important, but he did not enter an empty landscape. Scholarship",
+      "visual_intent": "scenic",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-043",
+      "word_range": {
+        "start_index": 435,
+        "end_index": 442
+      },
+      "start_s": 170.689,
+      "end_s": 174.683,
+      "duration_s": 3.994,
+      "narration_excerpt": "documents Japanese jiu-jitsu demonstrations and contests in Brazil",
+      "visual_intent": "journey",
+      "required_visual_actions": [
+        {
+          "kind": "map_cut_in",
+          "subject": "Brazil"
+        }
+      ],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-044",
+      "word_range": {
+        "start_index": 443,
+        "end_index": 450
+      },
+      "start_s": 174.683,
+      "end_s": 178.932,
+      "duration_s": 4.249,
+      "narration_excerpt": "before his arrival, including a highly publicized 1909",
+      "visual_intent": "evidence",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-045",
+      "word_range": {
+        "start_index": 451,
+        "end_index": 459
+      },
+      "start_s": 178.932,
+      "end_s": 183.065,
+      "duration_s": 4.133,
+      "narration_excerpt": "encounter in Rio. That earlier presence complicates any claim",
+      "visual_intent": "evidence",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-046",
+      "word_range": {
+        "start_index": 460,
+        "end_index": 469
+      },
+      "start_s": 183.065,
+      "end_s": 187.477,
+      "duration_s": 4.412,
+      "narration_excerpt": "that Brazilian grappling history begins on one day in 1914.",
+      "visual_intent": "evidence",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-047",
+      "word_range": {
+        "start_index": 470,
+        "end_index": 481
+      },
+      "start_s": 187.477,
+      "end_s": 191.471,
+      "duration_s": 3.994,
+      "narration_excerpt": "It also gives the audience a better kind of origin story. Before",
+      "visual_intent": "explanation",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-048",
+      "word_range": {
+        "start_index": 482,
+        "end_index": 491
+      },
+      "start_s": 191.471,
+      "end_s": 195.569,
+      "duration_s": 4.098,
+      "narration_excerpt": "the famous names become connected, there are public events, competing",
+      "visual_intent": "explanation",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-049",
+      "word_range": {
+        "start_index": 492,
+        "end_index": 503
+      },
+      "start_s": 195.569,
+      "end_s": 199.749,
+      "duration_s": 4.18,
+      "narration_excerpt": "descriptions, and people whose roles are harder to preserve in a simplified",
+      "visual_intent": "explanation",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-050",
+      "word_range": {
+        "start_index": 504,
+        "end_index": 514
+      },
+      "start_s": 199.749,
+      "end_s": 203.661,
+      "duration_s": 3.912,
+      "narration_excerpt": "narrative. The record asks us to see Brazil as a place",
+      "visual_intent": "evidence",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-051",
+      "word_range": {
+        "start_index": 515,
+        "end_index": 523
+      },
+      "start_s": 203.661,
+      "end_s": 207.655,
+      "duration_s": 3.994,
+      "narration_excerpt": "where martial practices were already being displayed, discussed, and",
+      "visual_intent": "evidence",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-052",
+      "word_range": {
+        "start_index": 524,
+        "end_index": 531
+      },
+      "start_s": 207.655,
+      "end_s": 211.59,
+      "duration_s": 3.935,
+      "narration_excerpt": "interpreted. The title of first teacher is disputed.",
+      "visual_intent": "evidence",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-053",
+      "word_range": {
+        "start_index": 532,
+        "end_index": 540
+      },
+      "start_s": 211.59,
+      "end_s": 215.642,
+      "duration_s": 4.052,
+      "narration_excerpt": "Some accounts foreground Maeda and Satake; others identify earlier",
+      "visual_intent": "explanation",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-054",
+      "word_range": {
+        "start_index": 541,
+        "end_index": 548
+      },
+      "start_s": 215.642,
+      "end_s": 219.822,
+      "duration_s": 4.18,
+      "narration_excerpt": "Japanese practitioners or distinguish public performers from immigrant-community",
+      "visual_intent": "explanation",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-055",
+      "word_range": {
+        "start_index": 549,
+        "end_index": 559
+      },
+      "start_s": 219.822,
+      "end_s": 223.897,
+      "duration_s": 4.075,
+      "narration_excerpt": "instruction. The evidence is mixed, and a single winner would create",
+      "visual_intent": "evidence",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-056",
+      "word_range": {
+        "start_index": 560,
+        "end_index": 571
+      },
+      "start_s": 223.897,
+      "end_s": 227.507,
+      "duration_s": 3.61,
+      "narration_excerpt": "more certainty than the sources allow. That does not make the history",
+      "visual_intent": "evidence",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-057",
+      "word_range": {
+        "start_index": 572,
+        "end_index": 579
+      },
+      "start_s": 227.507,
+      "end_s": 231.64,
+      "duration_s": 4.133,
+      "narration_excerpt": "unknowable. It tells us which statements need qualification.",
+      "visual_intent": "transition",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-058",
+      "word_range": {
+        "start_index": 580,
+        "end_index": 591
+      },
+      "start_s": 231.64,
+      "end_s": 235.46,
+      "duration_s": 3.82,
+      "narration_excerpt": "We can describe a growing field of Japanese martial practice in Brazil",
+      "visual_intent": "academic",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-059",
+      "word_range": {
+        "start_index": 592,
+        "end_index": 603
+      },
+      "start_s": 235.46,
+      "end_s": 239.617,
+      "duration_s": 4.157,
+      "narration_excerpt": "without pretending that every demonstration was a school, or that every performer",
+      "visual_intent": "academic",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-060",
+      "word_range": {
+        "start_index": 604,
+        "end_index": 614
+      },
+      "start_s": 239.617,
+      "end_s": 243.541,
+      "duration_s": 3.924,
+      "narration_excerpt": "held the same teaching role. A careful documentary keeps the question",
+      "visual_intent": "academic",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-061",
+      "word_range": {
+        "start_index": 615,
+        "end_index": 627
+      },
+      "start_s": 243.541,
+      "end_s": 247.674,
+      "duration_s": 4.133,
+      "narration_excerpt": "open when the sources keep it open. The record does support a major",
+      "visual_intent": "evidence",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-062",
+      "word_range": {
+        "start_index": 628,
+        "end_index": 634
+      },
+      "start_s": 247.674,
+      "end_s": 251.842,
+      "duration_s": 4.168,
+      "narration_excerpt": "transition in 1914. Maeda and Soishiro Satake",
+      "visual_intent": "evidence",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-063",
+      "word_range": {
+        "start_index": 635,
+        "end_index": 645
+      },
+      "start_s": 251.842,
+      "end_s": 255.905,
+      "duration_s": 4.063,
+      "narration_excerpt": "entered Brazil with other Japanese martial artists after travelling through the",
+      "visual_intent": "journey",
+      "required_visual_actions": [
+        {
+          "kind": "map_cut_in",
+          "subject": "Brazil"
+        },
+        {
+          "kind": "map_cut_in",
+          "subject": "the Americas"
+        }
+      ],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-064",
+      "word_range": {
+        "start_index": 646,
+        "end_index": 652
+      },
+      "start_s": 255.905,
+      "end_s": 259.946,
+      "duration_s": 4.041,
+      "narration_excerpt": "Americas. They were not simply missionaries following",
+      "visual_intent": "journey",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-065",
+      "word_range": {
+        "start_index": 653,
+        "end_index": 660
+      },
+      "start_s": 259.946,
+      "end_s": 264.253,
+      "duration_s": 4.307,
+      "narration_excerpt": "a modern curriculum; public demonstrations and professional contests",
+      "visual_intent": "martial",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-066",
+      "word_range": {
+        "start_index": 661,
+        "end_index": 671
+      },
+      "start_s": 264.253,
+      "end_s": 268.108,
+      "duration_s": 3.855,
+      "narration_excerpt": "were part of the network that carried their practice. Their movement",
+      "visual_intent": "martial",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-067",
+      "word_range": {
+        "start_index": 672,
+        "end_index": 681
+      },
+      "start_s": 268.108,
+      "end_s": 272.31,
+      "duration_s": 4.202,
+      "narration_excerpt": "across borders matters because it makes transmission physical and social.",
+      "visual_intent": "explanation",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-068",
+      "word_range": {
+        "start_index": 682,
+        "end_index": 688
+      },
+      "start_s": 272.31,
+      "end_s": 276.304,
+      "duration_s": 3.994,
+      "narration_excerpt": "People carried skills, names, reputations, performance habits,",
+      "visual_intent": "explanation",
+      "required_visual_actions": [
+        {
+          "kind": "list_item_popout",
+          "subject": "skills"
+        },
+        {
+          "kind": "list_item_popout",
+          "subject": "names"
+        },
+        {
+          "kind": "list_item_popout",
+          "subject": "reputations"
+        },
+        {
+          "kind": "list_item_popout",
+          "subject": "performance habits"
+        }
+      ],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-069",
+      "word_range": {
+        "start_index": 689,
+        "end_index": 700
+      },
+      "start_s": 276.304,
+      "end_s": 280.356,
+      "duration_s": 4.052,
+      "narration_excerpt": "and business arrangements. What arrived in Brazil was therefore not a sealed",
+      "visual_intent": "journey",
+      "required_visual_actions": [
+        {
+          "kind": "list_item_popout",
+          "subject": "business arrangements"
+        },
+        {
+          "kind": "map_cut_in",
+          "subject": "Brazil"
+        }
+      ],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-070",
+      "word_range": {
+        "start_index": 701,
+        "end_index": 711
+      },
+      "start_s": 280.356,
+      "end_s": 284.408,
+      "duration_s": 4.052,
+      "narration_excerpt": "package labelled Brazilian jiu-jitsu. It was a set of practices moving",
+      "visual_intent": "journey",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-071",
+      "word_range": {
+        "start_index": 712,
+        "end_index": 722
+      },
+      "start_s": 284.408,
+      "end_s": 288.425,
+      "duration_s": 4.017,
+      "narration_excerpt": "through a changing international circuit, ready to be adapted again. By",
+      "visual_intent": "martial",
+      "required_visual_actions": [
+        {
+          "kind": "list_item_popout",
+          "subject": "By 1915"
+        }
+      ],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-072",
+      "word_range": {
+        "start_index": 723,
+        "end_index": 734
+      },
+      "start_s": 288.425,
+      "end_s": 292.465,
+      "duration_s": 4.04,
+      "narration_excerpt": "1915, the troupe was in Belém, a city shaped by the Amazon",
+      "visual_intent": "evidence",
+      "required_visual_actions": [
+        {
+          "kind": "list_item_popout",
+          "subject": "the troupe"
+        }
+      ],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-073",
+      "word_range": {
+        "start_index": 735,
+        "end_index": 742
+      },
+      "start_s": 292.465,
+      "end_s": 296.795,
+      "duration_s": 4.33,
+      "narration_excerpt": "rubber economy and a cosmopolitan entertainment circuit. Theaters,",
+      "visual_intent": "evidence",
+      "required_visual_actions": [
+        {
+          "kind": "list_item_popout",
+          "subject": "Theaters"
+        }
+      ],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-074",
+      "word_range": {
+        "start_index": 743,
+        "end_index": 749
+      },
+      "start_s": 296.795,
+      "end_s": 301.021,
+      "duration_s": 4.226,
+      "narration_excerpt": "demonstrations, challenges, and advertised lessons put Japanese",
+      "visual_intent": "academic",
+      "required_visual_actions": [
+        {
+          "kind": "list_item_popout",
+          "subject": "demonstrations"
+        },
+        {
+          "kind": "list_item_popout",
+          "subject": "challenges"
+        },
+        {
+          "kind": "list_item_popout",
+          "subject": "advertised lessons"
+        }
+      ],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-075",
+      "word_range": {
+        "start_index": 750,
+        "end_index": 760
+      },
+      "start_s": 301.021,
+      "end_s": 305.27,
+      "duration_s": 4.249,
+      "narration_excerpt": "grappling in front of audiences who encountered it as education, spectacle,",
+      "visual_intent": "academic",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-076",
+      "word_range": {
+        "start_index": 761,
+        "end_index": 773
+      },
+      "start_s": 305.27,
+      "end_s": 309.38,
+      "duration_s": 4.11,
+      "narration_excerpt": "and practical combat at the same time. Belém is more than a pin",
+      "visual_intent": "academic",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-077",
+      "word_range": {
+        "start_index": 774,
+        "end_index": 787
+      },
+      "start_s": 309.38,
+      "end_s": 313.537,
+      "duration_s": 4.157,
+      "narration_excerpt": "on a migration map. It is a setting that helps explain why a practice",
+      "visual_intent": "martial",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-078",
+      "word_range": {
+        "start_index": 788,
+        "end_index": 796
+      },
+      "start_s": 313.537,
+      "end_s": 317.496,
+      "duration_s": 3.959,
+      "narration_excerpt": "could change as it moved. The audience, venue, local",
+      "visual_intent": "martial",
+      "required_visual_actions": [
+        {
+          "kind": "list_item_popout",
+          "subject": "The audience"
+        },
+        {
+          "kind": "list_item_popout",
+          "subject": "venue"
+        },
+        {
+          "kind": "list_item_popout",
+          "subject": "local economy"
+        }
+      ],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-079",
+      "word_range": {
+        "start_index": 797,
+        "end_index": 807
+      },
+      "start_s": 317.496,
+      "end_s": 321.188,
+      "duration_s": 3.692,
+      "narration_excerpt": "economy, and promise made by an instructor all influenced what was",
+      "visual_intent": "explanation",
+      "required_visual_actions": [
+        {
+          "kind": "list_item_popout",
+          "subject": "promise"
+        }
+      ],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-080",
+      "word_range": {
+        "start_index": 808,
+        "end_index": 819
+      },
+      "start_s": 321.188,
+      "end_s": 325.124,
+      "duration_s": 3.936,
+      "narration_excerpt": "visible. The same art could be presented as disciplined study in one",
+      "visual_intent": "explanation",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-081",
+      "word_range": {
+        "start_index": 820,
+        "end_index": 829
+      },
+      "start_s": 325.124,
+      "end_s": 329.141,
+      "duration_s": 4.017,
+      "narration_excerpt": "room and as a public test in another. That context",
+      "visual_intent": "explanation",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-082",
+      "word_range": {
+        "start_index": 830,
+        "end_index": 837
+      },
+      "start_s": 329.141,
+      "end_s": 333.088,
+      "duration_s": 3.947,
+      "narration_excerpt": "shaped what students could receive. Cairus describes Maeda's",
+      "visual_intent": "academic",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-083",
+      "word_range": {
+        "start_index": 838,
+        "end_index": 845
+      },
+      "start_s": 333.088,
+      "end_s": 337.001,
+      "duration_s": 3.913,
+      "narration_excerpt": "Brazilian teaching alongside professional wrestling and prizefighting, with",
+      "visual_intent": "academic",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-084",
+      "word_range": {
+        "start_index": 846,
+        "end_index": 853
+      },
+      "start_s": 337.001,
+      "end_s": 340.925,
+      "duration_s": 3.924,
+      "narration_excerpt": "less emphasis on the full Kodokan pedagogical structure.",
+      "visual_intent": "academic",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-085",
+      "word_range": {
+        "start_index": 854,
+        "end_index": 864
+      },
+      "start_s": 340.925,
+      "end_s": 344.64,
+      "duration_s": 3.715,
+      "narration_excerpt": "This does not prove a secret combat system. It shows why",
+      "visual_intent": "transition",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-086",
+      "word_range": {
+        "start_index": 865,
+        "end_index": 874
+      },
+      "start_s": 344.64,
+      "end_s": 348.715,
+      "duration_s": 4.075,
+      "narration_excerpt": "techniques, labels, and teaching methods could shift as they moved.",
+      "visual_intent": "academic",
+      "required_visual_actions": [
+        {
+          "kind": "list_item_popout",
+          "subject": "techniques"
+        },
+        {
+          "kind": "list_item_popout",
+          "subject": "labels"
+        },
+        {
+          "kind": "list_item_popout",
+          "subject": "teaching methods"
+        }
+      ],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-087",
+      "word_range": {
+        "start_index": 875,
+        "end_index": 885
+      },
+      "start_s": 348.715,
+      "end_s": 352.848,
+      "duration_s": 4.133,
+      "narration_excerpt": "A public challenge rewards one kind of explanation; a regular class",
+      "visual_intent": "explanation",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-088",
+      "word_range": {
+        "start_index": 886,
+        "end_index": 892
+      },
+      "start_s": 352.848,
+      "end_s": 356.842,
+      "duration_s": 3.994,
+      "narration_excerpt": "rewards another. A performer must demonstrate quickly,",
+      "visual_intent": "academic",
+      "required_visual_actions": [
+        {
+          "kind": "list_item_popout",
+          "subject": "A performer must demonstrate quickly"
+        }
+      ],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-089",
+      "word_range": {
+        "start_index": 893,
+        "end_index": 902
+      },
+      "start_s": 356.842,
+      "end_s": 360.743,
+      "duration_s": 3.901,
+      "narration_excerpt": "while a teacher may build habits over time. Treating those",
+      "visual_intent": "academic",
+      "required_visual_actions": [
+        {
+          "kind": "list_item_popout",
+          "subject": "while a teacher may build habits over time"
+        }
+      ],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-090",
+      "word_range": {
+        "start_index": 903,
+        "end_index": 912
+      },
+      "start_s": 360.743,
+      "end_s": 364.818,
+      "duration_s": 4.075,
+      "narration_excerpt": "settings as interchangeable creates a false mystery. Treating them as",
+      "visual_intent": "transition",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-091",
+      "word_range": {
+        "start_index": 913,
+        "end_index": 924
+      },
+      "start_s": 364.818,
+      "end_s": 368.742,
+      "duration_s": 3.924,
+      "narration_excerpt": "different environments gives us a practical explanation for why later accounts do",
+      "visual_intent": "transition",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-092",
+      "word_range": {
+        "start_index": 925,
+        "end_index": 936
+      },
+      "start_s": 368.742,
+      "end_s": 372.771,
+      "duration_s": 4.029,
+      "narration_excerpt": "not line up perfectly. Accounts differ on the clean version of the",
+      "visual_intent": "transition",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-093",
+      "word_range": {
+        "start_index": 937,
+        "end_index": 946
+      },
+      "start_s": 372.771,
+      "end_s": 376.799,
+      "duration_s": 4.028,
+      "narration_excerpt": "handoff. The evidence places Carlos Gracie in the Belém training",
+      "visual_intent": "evidence",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-094",
+      "word_range": {
+        "start_index": 947,
+        "end_index": 954
+      },
+      "start_s": 376.799,
+      "end_s": 380.746,
+      "duration_s": 3.947,
+      "narration_excerpt": "network associated with Maeda, while scholarship also identifies",
+      "visual_intent": "evidence",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-095",
+      "word_range": {
+        "start_index": 955,
+        "end_index": 965
+      },
+      "start_s": 380.746,
+      "end_s": 384.972,
+      "duration_s": 4.226,
+      "narration_excerpt": "senior student Jacyntho Ferro and warns against treating later lineage tradition",
+      "visual_intent": "evidence",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-096",
+      "word_range": {
+        "start_index": 966,
+        "end_index": 977
+      },
+      "start_s": 384.972,
+      "end_s": 388.908,
+      "duration_s": 3.936,
+      "narration_excerpt": "as a complete classroom record. We can say there was transmission; we",
+      "visual_intent": "evidence",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-097",
+      "word_range": {
+        "start_index": 978,
+        "end_index": 988
+      },
+      "start_s": 388.908,
+      "end_s": 392.96,
+      "duration_s": 4.052,
+      "narration_excerpt": "should qualify its exact shape. The responsible claim is narrower than",
+      "visual_intent": "explanation",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-098",
+      "word_range": {
+        "start_index": 989,
+        "end_index": 998
+      },
+      "start_s": 392.96,
+      "end_s": 396.931,
+      "duration_s": 3.971,
+      "narration_excerpt": "the familiar legend and stronger because of that restraint. It",
+      "visual_intent": "evidence",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-099",
+      "word_range": {
+        "start_index": 999,
+        "end_index": 1010
+      },
+      "start_s": 396.931,
+      "end_s": 401.076,
+      "duration_s": 4.145,
+      "narration_excerpt": "recognizes Carlos as part of an important network without erasing the people,",
+      "visual_intent": "evidence",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-100",
+      "word_range": {
+        "start_index": 1011,
+        "end_index": 1020
+      },
+      "start_s": 401.076,
+      "end_s": 404.628,
+      "duration_s": 3.552,
+      "narration_excerpt": "settings, and uncertainties that the surviving scholarship places around the",
+      "visual_intent": "evidence",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-101",
+      "word_range": {
+        "start_index": 1021,
+        "end_index": 1030
+      },
+      "start_s": 404.628,
+      "end_s": 408.622,
+      "duration_s": 3.994,
+      "narration_excerpt": "relationship. Jacyntho Ferro matters because a network is not a",
+      "visual_intent": "evidence",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-102",
+      "word_range": {
+        "start_index": 1031,
+        "end_index": 1040
+      },
+      "start_s": 408.622,
+      "end_s": 412.604,
+      "duration_s": 3.982,
+      "narration_excerpt": "single arrow on a family tree. Cairus identifies him as",
+      "visual_intent": "transition",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-103",
+      "word_range": {
+        "start_index": 1041,
+        "end_index": 1050
+      },
+      "start_s": 412.604,
+      "end_s": 416.668,
+      "duration_s": 4.064,
+      "narration_excerpt": "a senior local student who taught within Maeda's circle. Including",
+      "visual_intent": "evidence",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-104",
+      "word_range": {
+        "start_index": 1051,
+        "end_index": 1062
+      },
+      "start_s": 416.668,
+      "end_s": 420.673,
+      "duration_s": 4.005,
+      "narration_excerpt": "that role does not erase Carlos Gracie; it prevents the visual grammar",
+      "visual_intent": "evidence",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-105",
+      "word_range": {
+        "start_index": 1063,
+        "end_index": 1072
+      },
+      "start_s": 420.673,
+      "end_s": 424.818,
+      "duration_s": 4.145,
+      "narration_excerpt": "of lineage from deleting the intermediaries the scholarship names. Teaching",
+      "visual_intent": "evidence",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-106",
+      "word_range": {
+        "start_index": 1073,
+        "end_index": 1085
+      },
+      "start_s": 424.818,
+      "end_s": 428.824,
+      "duration_s": 4.006,
+      "narration_excerpt": "networks are made of relationships that do not always fit a clean diagram.",
+      "visual_intent": "academic",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-107",
+      "word_range": {
+        "start_index": 1086,
+        "end_index": 1098
+      },
+      "start_s": 428.824,
+      "end_s": 432.701,
+      "duration_s": 3.877,
+      "narration_excerpt": "A student can become an instructor, a local teacher can carry practice into",
+      "visual_intent": "academic",
+      "required_visual_actions": [
+        {
+          "kind": "list_item_popout",
+          "subject": "A student can become an instructor"
+        },
+        {
+          "kind": "list_item_popout",
+          "subject": "a local teacher can carry practice into another community"
+        }
+      ],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-108",
+      "word_range": {
+        "start_index": 1099,
+        "end_index": 1108
+      },
+      "start_s": 432.701,
+      "end_s": 436.626,
+      "duration_s": 3.925,
+      "narration_excerpt": "another community, and later memory can compress several stages into",
+      "visual_intent": "academic",
+      "required_visual_actions": [
+        {
+          "kind": "list_item_popout",
+          "subject": "later memory can compress several stages into one famous connection"
+        }
+      ],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-109",
+      "word_range": {
+        "start_index": 1109,
+        "end_index": 1118
+      },
+      "start_s": 436.626,
+      "end_s": 440.631,
+      "duration_s": 4.005,
+      "narration_excerpt": "one famous connection. The historical task is to restore those",
+      "visual_intent": "academic",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-110",
+      "word_range": {
+        "start_index": 1119,
+        "end_index": 1127
+      },
+      "start_s": 440.631,
+      "end_s": 444.567,
+      "duration_s": 3.936,
+      "narration_excerpt": "stages where the evidence allows it. Brazilian development also",
+      "visual_intent": "evidence",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-111",
+      "word_range": {
+        "start_index": 1128,
+        "end_index": 1136
+      },
+      "start_s": 444.567,
+      "end_s": 448.816,
+      "duration_s": 4.249,
+      "narration_excerpt": "extended beyond the best-known Rio lineage. Studies of Brazilian",
+      "visual_intent": "academic",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-112",
+      "word_range": {
+        "start_index": 1137,
+        "end_index": 1144
+      },
+      "start_s": 448.816,
+      "end_s": 452.659,
+      "duration_s": 3.843,
+      "narration_excerpt": "judo identify immigrant teachers, professional fighters, and community",
+      "visual_intent": "academic",
+      "required_visual_actions": [
+        {
+          "kind": "list_item_popout",
+          "subject": "immigrant teachers"
+        },
+        {
+          "kind": "list_item_popout",
+          "subject": "professional fighters"
+        },
+        {
+          "kind": "list_item_popout",
+          "subject": "community networks"
+        }
+      ],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-113",
+      "word_range": {
+        "start_index": 1145,
+        "end_index": 1153
+      },
+      "start_s": 452.659,
+      "end_s": 456.641,
+      "duration_s": 3.982,
+      "narration_excerpt": "networks that spread related practices through different regions. That",
+      "visual_intent": "academic",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-114",
+      "word_range": {
+        "start_index": 1154,
+        "end_index": 1165
+      },
+      "start_s": 456.641,
+      "end_s": 460.623,
+      "duration_s": 3.982,
+      "narration_excerpt": "wider field is why the next episode treats forgotten branches as research",
+      "visual_intent": "scenic",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-115",
+      "word_range": {
+        "start_index": 1166,
+        "end_index": 1177
+      },
+      "start_s": 460.623,
+      "end_s": 464.559,
+      "duration_s": 3.936,
+      "narration_excerpt": "questions rather than decorative side notes. The point is not to replace",
+      "visual_intent": "scenic",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-116",
+      "word_range": {
+        "start_index": 1178,
+        "end_index": 1191
+      },
+      "start_s": 464.559,
+      "end_s": 468.646,
+      "duration_s": 4.087,
+      "narration_excerpt": "one heroic family with a different heroic list. It is to change the shape",
+      "visual_intent": "transition",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-117",
+      "word_range": {
+        "start_index": 1192,
+        "end_index": 1200
+      },
+      "start_s": 468.646,
+      "end_s": 472.361,
+      "duration_s": 3.715,
+      "narration_excerpt": "of the explanation. A national tradition can emerge from",
+      "visual_intent": "martial",
+      "required_visual_actions": [
+        {
+          "kind": "list_item_popout",
+          "subject": "A national tradition can emerge from overlapping communities"
+        }
+      ],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-118",
+      "word_range": {
+        "start_index": 1201,
+        "end_index": 1210
+      },
+      "start_s": 472.361,
+      "end_s": 476.564,
+      "duration_s": 4.203,
+      "narration_excerpt": "overlapping communities, and a later public identity can become dominant",
+      "visual_intent": "martial",
+      "required_visual_actions": [
+        {
+          "kind": "list_item_popout",
+          "subject": "a later public identity can become dominant without being the only path by which practice travelled"
+        }
+      ],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-119",
+      "word_range": {
+        "start_index": 1211,
+        "end_index": 1221
+      },
+      "start_s": 476.564,
+      "end_s": 480.685,
+      "duration_s": 4.121,
+      "narration_excerpt": "without being the only path by which practice travelled. The Brazilian",
+      "visual_intent": "martial",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-120",
+      "word_range": {
+        "start_index": 1222,
+        "end_index": 1232
+      },
+      "start_s": 480.685,
+      "end_s": 484.656,
+      "duration_s": 3.971,
+      "narration_excerpt": "identity of the art was not finished in Belém. Scholarship locates",
+      "visual_intent": "transition",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-121",
+      "word_range": {
+        "start_index": 1233,
+        "end_index": 1243
+      },
+      "start_s": 484.656,
+      "end_s": 489.044,
+      "duration_s": 4.388,
+      "narration_excerpt": "a major phase of reinvention in the 1930s, when public performances,",
+      "visual_intent": "academic",
+      "required_visual_actions": [
+        {
+          "kind": "list_item_popout",
+          "subject": "public performances"
+        }
+      ],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-122",
+      "word_range": {
+        "start_index": 1244,
+        "end_index": 1251
+      },
+      "start_s": 489.044,
+      "end_s": 493.027,
+      "duration_s": 3.983,
+      "narration_excerpt": "institutions, promotion, and nationalism helped distinguish a Brazilian",
+      "visual_intent": "academic",
+      "required_visual_actions": [
+        {
+          "kind": "list_item_popout",
+          "subject": "institutions"
+        },
+        {
+          "kind": "list_item_popout",
+          "subject": "promotion"
+        },
+        {
+          "kind": "list_item_popout",
+          "subject": "nationalism"
+        }
+      ],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-123",
+      "word_range": {
+        "start_index": 1252,
+        "end_index": 1262
+      },
+      "start_s": 493.027,
+      "end_s": 497.079,
+      "duration_s": 4.052,
+      "narration_excerpt": "combat sport from Japanese immigrant traditions and from other local fighting",
+      "visual_intent": "academic",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-124",
+      "word_range": {
+        "start_index": 1263,
+        "end_index": 1269
+      },
+      "start_s": 497.079,
+      "end_s": 500.597,
+      "duration_s": 3.518,
+      "narration_excerpt": "practices. Reinvention means more than changing a",
+      "visual_intent": "academic",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-125",
+      "word_range": {
+        "start_index": 1270,
+        "end_index": 1279
+      },
+      "start_s": 500.597,
+      "end_s": 504.892,
+      "duration_s": 4.295,
+      "narration_excerpt": "technique. It can change the audience, the rules, the stories",
+      "visual_intent": "martial",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-126",
+      "word_range": {
+        "start_index": 1280,
+        "end_index": 1289
+      },
+      "start_s": 504.892,
+      "end_s": 508.909,
+      "duration_s": 4.017,
+      "narration_excerpt": "attached to the practice, and the institutions that preserve it.",
+      "visual_intent": "academic",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-127",
+      "word_range": {
+        "start_index": 1290,
+        "end_index": 1300
+      },
+      "start_s": 508.909,
+      "end_s": 512.891,
+      "duration_s": 3.982,
+      "narration_excerpt": "This is where a travelling practice becomes a public identity. The",
+      "visual_intent": "martial",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-128",
+      "word_range": {
+        "start_index": 1301,
+        "end_index": 1311
+      },
+      "start_s": 512.891,
+      "end_s": 516.606,
+      "duration_s": 3.715,
+      "narration_excerpt": "history is no longer only about arrival; it is about selection,",
+      "visual_intent": "journey",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-129",
+      "word_range": {
+        "start_index": 1312,
+        "end_index": 1322
+      },
+      "start_s": 516.606,
+      "end_s": 520.67,
+      "duration_s": 4.064,
+      "narration_excerpt": "promotion, memory, and the power to define what counts as Brazilian.",
+      "visual_intent": "journey",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-130",
+      "word_range": {
+        "start_index": 1323,
+        "end_index": 1334
+      },
+      "start_s": 520.67,
+      "end_s": 524.849,
+      "duration_s": 4.179,
+      "narration_excerpt": "The most accurate conclusion is also the more interesting one. Kano's system",
+      "visual_intent": "journey",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-131",
+      "word_range": {
+        "start_index": 1335,
+        "end_index": 1344
+      },
+      "start_s": 524.849,
+      "end_s": 529.064,
+      "duration_s": 4.215,
+      "narration_excerpt": "was an adaptation; international travel changed its setting and emphasis;",
+      "visual_intent": "journey",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-132",
+      "word_range": {
+        "start_index": 1345,
+        "end_index": 1354
+      },
+      "start_s": 529.064,
+      "end_s": 533.162,
+      "duration_s": 4.098,
+      "narration_excerpt": "Brazil already contained competing practices and communities; and later institutions",
+      "visual_intent": "journey",
+      "required_visual_actions": [
+        {
+          "kind": "map_cut_in",
+          "subject": "Brazil"
+        }
+      ],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-133",
+      "word_range": {
+        "start_index": 1355,
+        "end_index": 1363
+      },
+      "start_s": 533.162,
+      "end_s": 536.958,
+      "duration_s": 3.796,
+      "narration_excerpt": "remade the public identity again. Brazilian jiu-jitsu was not",
+      "visual_intent": "journey",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-134",
+      "word_range": {
+        "start_index": 1364,
+        "end_index": 1371
+      },
+      "start_s": 536.958,
+      "end_s": 541.08,
+      "duration_s": 4.122,
+      "narration_excerpt": "copied once. It was transformed repeatedly. That conclusion",
+      "visual_intent": "martial",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-135",
+      "word_range": {
+        "start_index": 1372,
+        "end_index": 1386
+      },
+      "start_s": 541.08,
+      "end_s": 545.027,
+      "duration_s": 3.947,
+      "narration_excerpt": "is not an attempt to make the history less dramatic. It gives the drama more",
+      "visual_intent": "transition",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-136",
+      "word_range": {
+        "start_index": 1387,
+        "end_index": 1395
+      },
+      "start_s": 545.027,
+      "end_s": 549.16,
+      "duration_s": 4.133,
+      "narration_excerpt": "places to live: in institutions, ships, theaters, classrooms, challenges,",
+      "visual_intent": "academic",
+      "required_visual_actions": [
+        {
+          "kind": "list_item_popout",
+          "subject": "in institutions"
+        },
+        {
+          "kind": "list_item_popout",
+          "subject": "ships"
+        },
+        {
+          "kind": "list_item_popout",
+          "subject": "theaters"
+        },
+        {
+          "kind": "list_item_popout",
+          "subject": "classrooms"
+        },
+        {
+          "kind": "list_item_popout",
+          "subject": "challenges"
+        }
+      ],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-137",
+      "word_range": {
+        "start_index": 1396,
+        "end_index": 1406
+      },
+      "start_s": 549.16,
+      "end_s": 553.316,
+      "duration_s": 4.156,
+      "narration_excerpt": "immigrant communities, and the choices later promoters made about which connections",
+      "visual_intent": "academic",
+      "required_visual_actions": [
+        {
+          "kind": "list_item_popout",
+          "subject": "immigrant communities"
+        },
+        {
+          "kind": "list_item_popout",
+          "subject": "the choices later promoters made about which connections to remember"
+        }
+      ],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-138",
+      "word_range": {
+        "start_index": 1407,
+        "end_index": 1417
+      },
+      "start_s": 553.316,
+      "end_s": 557.368,
+      "duration_s": 4.052,
+      "narration_excerpt": "to remember. Explore the people, places, and sources behind jiu-jitsu at",
+      "visual_intent": "academic",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    },
+    {
+      "slot_id": "canonical-139",
+      "word_range": {
+        "start_index": 1418,
+        "end_index": 1418
+      },
+      "start_s": 557.368,
+      "end_s": 559.922,
+      "duration_s": 2.554,
+      "narration_excerpt": "NationalBJJRegistry.com.",
+      "visual_intent": "evidence",
+      "required_visual_actions": [],
+      "asset_status": "generation_required",
+      "asset_assignment_policy": "explicit_approved_assignment_only"
+    }
+  ],
+  "render_ready": false,
+  "artifact_hash": "0920b44f78db361fc82df8e2ac0463cf75b70a217a9ffec82c931b22d43167bd"
+}
