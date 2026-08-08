@@ -34,6 +34,8 @@ COMMANDS = {
     "resume",
     "status",
     "approve",
+    "render-unit",
+    "verify-editor",
     "validate",
     "validate-study",
     "validate-art-bible",
@@ -282,6 +284,12 @@ def build_parser() -> argparse.ArgumentParser:
 
     validate_parser = subparsers.add_parser("validate")
     validate_parser.add_argument("storyboard")
+    render_unit_parser = subparsers.add_parser("render-unit")
+    render_unit_parser.add_argument("unit")
+    render_unit_parser.add_argument("--dry-run", action="store_true")
+    render_unit_parser.add_argument("--skip-check", action="store_true")
+    verify_editor_parser = subparsers.add_parser("verify-editor")
+    verify_editor_parser.add_argument("--smoke", action="store_true")
     study_parser = subparsers.add_parser("validate-study")
     study_parser.add_argument("file")
     art_bible_parser = subparsers.add_parser("validate-art-bible")
@@ -686,6 +694,52 @@ def main(argv: Sequence[str] | None = None) -> int:
         return 0
     if args.command == "resume":
         print(json.dumps(pipeline.resume(args.job_id).to_dict(), indent=2))
+        return 0
+    if args.command == "render-unit":
+        from content.video_engine.src.services.hyperframes_render import (
+            HyperframesCliError,
+            HyperframesConfig,
+            HyperframesUnitError,
+            render_unit,
+        )
+
+        try:
+            summary = render_unit(
+                args.unit,
+                config=HyperframesConfig.from_env(),
+                dry_run=args.dry_run,
+                skip_check=args.skip_check,
+            )
+        except (HyperframesUnitError, HyperframesCliError) as exc:
+            errors = getattr(exc, "errors", None) or [str(exc)]
+            print(json.dumps({"valid": False, "errors": errors}, indent=2))
+            return 1
+        print(json.dumps(summary, indent=2))
+        return 0
+    if args.command == "verify-editor":
+        import shutil as _shutil
+
+        npm = _shutil.which("npm")
+        if npm is None:
+            print(json.dumps({"valid": False, "errors": ["npm not found on PATH"]}))
+            return 1
+        editor_dir = VIDEO_ENGINE_ROOT / "editor"
+        checks: dict[str, str] = {}
+        scripts = ["typecheck"] + (["render:smoke"] if args.smoke else [])
+        for script in scripts:
+            result = subprocess.run(
+                [npm, "run", script],
+                cwd=editor_dir,
+                capture_output=True,
+                text=True,
+                timeout=900,
+            )
+            checks[script] = "pass" if result.returncode == 0 else "fail"
+            if result.returncode != 0:
+                tail = (result.stderr or result.stdout or "").strip().splitlines()[-6:]
+                print(json.dumps({"valid": False, "checks": checks, "errors": tail}, indent=2))
+                return 1
+        print(json.dumps({"valid": True, "checks": checks}, indent=2))
         return 0
     if args.command == "approve":
         try:

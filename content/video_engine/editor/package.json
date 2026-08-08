@@ -7,7 +7,8 @@
     "build": "tsc --noEmit",
     "typecheck": "tsc --noEmit",
     "start": "remotion studio src/index.tsx",
-    "render": "remotion render src/index.tsx Editorial"
+    "render": "remotion render src/index.tsx Editorial",
+    "render:smoke": "remotion render src/index.tsx Documentary out/smoke.mp4 --frames=0-30"
   },
   "dependencies": {
     "@remotion/media": "4.0.502",

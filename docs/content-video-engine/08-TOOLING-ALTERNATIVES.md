@@ -162,3 +162,11 @@ quarantined, and leaves narration, captions, citations, credits, and final
 assembly to our local pipeline. See
 [`12-HIGGSFIELD-EXPLAINER-LEARNINGS.md`](12-HIGGSFIELD-EXPLAINER-LEARNINGS.md)
 for the durable rules.
+
+## 8. HyperFrames: adopted for the unit lane (2026-08-08)
+
+HyperFrames (pinned 0.7.101) is now the renderer for short/caption/motion **units** —
+vertical shorts, title cards, caption units, animatic previews — via the asset-ID-only
+`hyperframes_unit.v1` contract. Remotion remains the documentary editorial renderer
+unchanged. Full lane spec, timing rules, evidence, and the (deferred) port-spike verdict:
+[`19-HYPERFRAMES-LANE.md`](19-HYPERFRAMES-LANE.md).

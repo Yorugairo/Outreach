@@ -1,0 +1,114 @@
+{
+  "schema_version": "hyperframes_unit.v1",
+  "unit_id": "ep1-teaser-animatic-v1",
+  "unit_kind": "animatic_preview",
+  "project_id": "history-of-bjj",
+  "manifest_path": "content/video_engine/projects/history-of-bjj/episode-1-asset-manifest.v2.json",
+  "narration": {
+    "canonical_hash": "1d132cebbfbe41199f9458e3cbc5b177aad4482aab5b2924f84725928acb04c0",
+    "words": [
+      {
+        "w": "The",
+        "start_s": 0.0,
+        "end_s": 0.429
+      },
+      {
+        "w": "useful",
+        "start_s": 0.429,
+        "end_s": 0.857
+      },
+      {
+        "w": "starting",
+        "start_s": 0.857,
+        "end_s": 1.286
+      },
+      {
+        "w": "point",
+        "start_s": 1.286,
+        "end_s": 1.714
+      },
+      {
+        "w": "is",
+        "start_s": 1.714,
+        "end_s": 2.143
+      },
+      {
+        "w": "not",
+        "start_s": 2.143,
+        "end_s": 2.571
+      },
+      {
+        "w": "a",
+        "start_s": 2.571,
+        "end_s": 3.0
+      },
+      {
+        "w": "battlefield",
+        "start_s": 3.0,
+        "end_s": 3.429
+      },
+      {
+        "w": "legend",
+        "start_s": 3.429,
+        "end_s": 3.857
+      },
+      {
+        "w": "but",
+        "start_s": 3.857,
+        "end_s": 4.286
+      },
+      {
+        "w": "an",
+        "start_s": 4.286,
+        "end_s": 4.714
+      },
+      {
+        "w": "institution",
+        "start_s": 4.714,
+        "end_s": 5.143
+      },
+      {
+        "w": "In",
+        "start_s": 5.143,
+        "end_s": 5.571
+      },
+      {
+        "w": "1882",
+        "start_s": 5.571,
+        "end_s": 6.0
+      },
+      {
+        "w": "Jigoro",
+        "start_s": 6.0,
+        "end_s": 6.429
+      },
+      {
+        "w": "Kano",
+        "start_s": 6.429,
+        "end_s": 6.857
+      }
+    ]
+  },
+  "plates": [
+    {
+      "asset_id": "archive-jigoro-kano",
+      "start_s": 0.0,
+      "end_s": 3.429
+    },
+    {
+      "asset_id": "archive-mitsuyo-maeda",
+      "start_s": 3.429,
+      "end_s": 6.857
+    }
+  ],
+  "captions": true,
+  "layout": {
+    "aspect": "vertical",
+    "background": "#0F0F12"
+  },
+  "output": {
+    "quality": "draft",
+    "format": "mp4",
+    "max_duration_s": 58
+  }
+}
