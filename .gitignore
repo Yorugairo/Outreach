@@ -66,3 +66,13 @@ content/video_engine/runtime/
 
 # Manim default cache/output when scenes are instantiated outside a job media_dir
 media/
+
+# Local Remotion bundler and benchmark caches
+/.cache/
+/.remotion/
+
+# Regenerable P29 deck renders and local console bundles
+/content/video_engine/projects/systems-and-blowups/sources/decks/teacher-stamped-production-visuals/*/slides/
+/content/video_engine/projects/systems-and-blowups/sources/decks/teacher-stamped-production-visuals/*-teacher-stamped-slides.png
+/content/video_engine/production_console/node_modules/
+/content/video_engine/production_console/dist/

@@ -1,0 +1,36 @@
+{
+  "schema_version": "production_console_snapshot.v1",
+  "snapshot_id": "current-bubble-mechanism-v1",
+  "project_id": "current-bubble-mechanism",
+  "composition_id": "EditorialMotion",
+  "base_artifact_hashes": {
+    "scene_flow": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  "artifacts": [
+    {
+      "artifact_id": "scene_flow",
+      "kind": "scene_flow_graph",
+      "path": "edit/word-timed-v1/scene-flow-graph.v1.json",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "status": "available",
+      "degraded_reason": null
+    }
+  ],
+  "scenes": [
+    {
+      "scene_id": "scene-001",
+      "title": "Opening mechanism",
+      "start_s": 0,
+      "end_s": 8,
+      "cue_refs": ["cue-001"],
+      "claim_refs": ["claim-001"],
+      "asset_ids": [],
+      "review_state": "unreviewed"
+    }
+  ],
+  "words": [],
+  "assets": [],
+  "reviews": [],
+  "degraded_inputs": [],
+  "artifact_hash": "0000000000000000000000000000000000000000000000000000000000000000"
+}

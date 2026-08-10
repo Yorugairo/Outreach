@@ -283,58 +283,58 @@ the source of truth.
 - Evidence: `.claude/PRPs/evidence/P29/gate-0/decision.md`; `.claude/PRPs/evidence/P29/baseline/baseline.md`; `.claude/PRPs/evidence/P29/baseline/editorial-motion-baseline.mp4`. Exact Remotion parity and TypeScript/composition checks passed; fixed render completed; initial concurrency results were 3.82121s (1), 1.19331s (4), and 0.83799s (8).
 
 ### T2: Define console snapshot, patch, and render-job contracts
-- Status: pending
+- Status: complete
 - Owner: implementation_luna
 - Depends on: T1
 - Write set: `content/video_engine/configs/production_console_snapshot.schema.json`; `content/video_engine/configs/editorial_visual_revision.schema.json`; `content/video_engine/configs/local_render_job.schema.json`; `content/video_engine/templates/production_console_snapshot.v1.json`; `content/video_engine/templates/editorial_visual_revision.v1.json`; `content/video_engine/tests/test_production_console_contracts.py`
 - Acceptance: Schemas bind snapshots to canonical paths/hashes; distinguish production-visual approval, evidence eligibility, rights, and review state; model only allowlisted visual operations; require base hashes and append-only revision identity; and reject protected fields, unknown operations, stale versions, out-of-bounds timing/transforms, and malformed render states. Templates validate.
 - Validate: `python -m pytest content/video_engine/tests/test_production_console_contracts.py -q`
-- Evidence: pending
+- Evidence: `python -m pytest content/video_engine/tests/test_production_console_contracts.py -q` -> 7 passed. Schemas reject protected fields, arbitrary operations/commands, unsafe paths, and out-of-bounds transforms; both templates validate.
 
 ### T3: Compile a deterministic current-bubble console snapshot
-- Status: pending
+- Status: complete
 - Owner: implementation_luna
 - Depends on: T2
 - Write set: `content/video_engine/src/services/production_console_snapshot.py`; `content/video_engine/tests/test_production_console_snapshot.py`; fixture snapshots under `content/video_engine/tests/fixtures/production_console/**`; generated pilot snapshot under `content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/edit/production-console/`
 - Acceptance: The compiler reads the existing scene, cue, edit, claim, asset, audio, word, approval, and review artifacts; emits stable ordering and hashes; records missing/degraded inputs explicitly; does not fabricate labels or approvals; and produces byte-identical output for unchanged inputs. No canonical source artifact is written.
 - Validate: `python -m pytest content/video_engine/tests/test_production_console_snapshot.py content/video_engine/tests/test_production_console_contracts.py -q`
-- Evidence: pending
+- Evidence: focused T2/T3/T5 contract tests -> 16 passed. Generated `edit/production-console/current-bubble.snapshot.v1.json` with hash `701befe9e657efd4ead0971a2645de843dc643ed486e3f3386e38e2e044d2f52`, 11 scenes, 2,445 canonical words, and 86 hash-verified production visuals; absent legacy project media is an explicit degradation.
 
 ### T4: Correct and centralize the Remotion composition registry
-- Status: pending
+- Status: complete
 - Owner: implementation_luna
 - Depends on: T1, T2, and recorded P16 ownership transfer
 - Write set: `content/video_engine/editor/src/Root.tsx`; `content/video_engine/editor/src/compositions.ts`; `content/video_engine/editor/src/EditorialMotion.tsx`; `content/video_engine/editor/src/types.ts`; `content/video_engine/editor/src/__fixtures__/production-console/**`; `content/video_engine/editor/src/__tests__/compositionRegistry.test.ts`; `content/video_engine/editor/package.json`; `content/video_engine/editor/package-lock.json`
 - Acceptance: `EditorialMotion` uses `EditorialMotionComposition`; one typed browser-safe registry supplies IDs, components, default props, metadata, and folders; Player and renderer consume the same component contract; JSON props remain serializable; sequences needing early asset readiness premount; no CSS animation/transition controls render motion; exact Remotion version parity is enforced; legacy compositions still list and typecheck.
 - Validate: `npm --prefix content/video_engine/editor ci; npm --prefix content/video_engine/editor run typecheck; npm --prefix content/video_engine/editor run test; npx --prefix content/video_engine/editor remotion versions; npx --prefix content/video_engine/editor remotion compositions content/video_engine/editor/src/index.tsx`
-- Evidence: pending
+- Evidence: `npm --prefix content/video_engine/editor run typecheck` passed; registry tests -> 3 passed; exact Remotion parity remains `4.0.502`. All six legacy compositions are preserved, `EditorialMotion` maps to `EditorialMotionComposition`, and the shared `ProductionEvidence` Player/render composition is registered as a seventh console composition.
 
 ### T5: Register approved teacher-stamped slides as production visuals
-- Status: pending
+- Status: complete
 - Owner: junior_developer
 - Depends on: T2
 - Write set: `content/video_engine/scripts/extract_teacher_stamped_visuals.py`; `content/video_engine/tests/test_extract_teacher_stamped_visuals.py`; generated catalog and slide images under `content/video_engine/projects/systems-and-blowups/sources/decks/teacher-stamped-production-visuals/`
 - Acceptance: All six approved teacher-stamped PPTX files are read without mutation; slide images receive stable deck/slide IDs, dimensions, hashes, source PPTX hash, and approval reference; unchanged reruns are deterministic; the catalog labels them `production_visuals` and preserves separate evidence/rights fields; missing approval, stale PPTX hash, duplicate IDs, or ambiguous slide media fails closed.
 - Validate: `python -m pytest content/video_engine/tests/test_extract_teacher_stamped_visuals.py content/video_engine/tests/test_extract_deck_assets.py -q`
-- Evidence: pending
+- Evidence: `python -m pytest content/video_engine/tests/test_extract_teacher_stamped_visuals.py -q` -> 4 passed. Six approved decks produced 86 deterministic, context-labelled visuals under `sources/decks/teacher-stamped-production-visuals/`; catalog hash `1ece077d6db23320030dc64abd57ac6845dccfbbdc11773087bcd7ac57b6ab96`. Every record is `render_eligible=true` and `evidence_render_eligible=false`.
 
 ### T6: Build the loopback-only Production Console bridge
-- Status: pending
+- Status: complete
 - Owner: implementation_luna
 - Depends on: T3, T4, T5
 - Write set: `content/video_engine/src/services/production_console.py`; `content/video_engine/src/services/local_render_queue.py`; `content/video_engine/cli.py`; `content/video_engine/tests/test_production_console.py`; `content/video_engine/tests/test_local_render_queue.py`
 - Acceptance: A documented CLI starts only on `127.0.0.1`; read routes return typed snapshots/assets/revisions/reviews; media routes resolve only snapshot-known asset IDs and verify expected hashes without disclosing paths; render routes accept only typed operation IDs and root-contained artifact IDs; unsupported hosts, paths, commands, patch types, stale hashes, or queue overflow fail closed; writes are atomic; the one-worker queue supports queued/running/succeeded/failed/cancelled states; subprocesses use argument arrays; provider and publish commands are unreachable.
 - Validate: `python -m pytest content/video_engine/tests/test_production_console.py content/video_engine/tests/test_local_render_queue.py content/video_engine/tests/test_editorial_motion_qc.py -q; python -m content.video_engine.cli production-console --help`
-- Evidence: pending
+- Evidence: `python -m pytest content/video_engine/tests/test_production_console.py content/video_engine/tests/test_local_render_queue.py content/video_engine/tests/test_editorial_motion_qc.py -q` -> 23 passed. `python -m content.video_engine.cli production-console --help` exposes no host option; real health response confirms `loopback_only=true`. Browser payloads omit filesystem routing fields; media remains asset-ID and hash gated.
 
 ### T7: Build and approve the read-only React Production Console
-- Status: pending
+- Status: awaiting Gate A
 - Owner: implementation_luna
 - Depends on: T3, T4, T5, T6
 - Write set: `content/video_engine/production_console/**`, excluding generated runtime evidence
 - Acceptance: A separate Vite React app pins `@remotion/player` to `4.0.502`; displays the scene queue, shared composition preview, inspector in disabled/read-only mode, word/cue timeline, approved asset/evidence drawer, review state, hashes, and bridge health; uses same-origin proxied API/media routes so the browser sees asset IDs rather than local paths; clearly distinguishes production-visual approval from evidence eligibility; uses a single derived state model, memoized selectors, virtualized long lists, explicit failure/loading/empty/stale states, keyboard navigation, visible focus, and no fabricated data. Gate A screenshots and operator decision are recorded before T8.
 - Validate: `npm --prefix content/video_engine/production_console ci; npm --prefix content/video_engine/production_console run typecheck; npm --prefix content/video_engine/production_console run test; npm --prefix content/video_engine/production_console run build; npm --prefix content/video_engine/production_console run test:e2e`
-- Evidence: pending
+- Evidence: Console `npm ci`, typecheck, 2 UI tests, production build, real headless browser smoke, and zero-vulnerability audit passed. Real current-bubble screenshots: `.claude/PRPs/evidence/P29/gate-a/production-console-read-only.png` and `production-console-scene-asset-navigation.png`. Snapshot hash `701befe9e657efd4ead0971a2645de843dc643ed486e3f3386e38e2e044d2f52`; operator decision remains pending before T8.
 
 ### T8: Implement immutable visual patches and recompilation
 - Status: pending

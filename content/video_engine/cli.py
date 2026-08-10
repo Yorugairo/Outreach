@@ -31,6 +31,7 @@ DEFAULT_SCHEMA = VIDEO_ENGINE_ROOT / "configs" / "storyboard.schema.json"
 DEFAULT_DOTENV = PROJECT_ROOT / ".env"
 COMMANDS = {
     "run",
+    "production-console",
     "resume",
     "status",
     "approve",
@@ -271,6 +272,26 @@ def build_parser() -> argparse.ArgumentParser:
     run_parser.add_argument("--source", required=True)
     run_parser.add_argument("--channel", default="combat-science")
     run_parser.add_argument("--targets", default="landscape,vertical")
+
+    production_console_parser = subparsers.add_parser(
+        "production-console",
+        help="serve the read-only Production Console on IPv4 loopback",
+        description=(
+            "Start the local Production Console bridge. The host is fixed to "
+            "127.0.0.1 and cannot be configured."
+        ),
+    )
+    production_console_parser.add_argument("--project-root", required=True)
+    production_console_parser.add_argument("--repository-root", required=True)
+    production_console_parser.add_argument("--snapshot", required=True)
+    production_console_parser.add_argument("--runtime-root", required=True)
+    production_console_parser.add_argument("--console-dist", required=True)
+    production_console_parser.add_argument(
+        "--port",
+        type=int,
+        default=8765,
+        help="loopback TCP port (default: 8765); host is always 127.0.0.1",
+    )
 
     resume_parser = subparsers.add_parser("resume")
     resume_parser.add_argument("job_id")
@@ -745,6 +766,38 @@ def _print_status_table(run: VideoRun, events: list[VideoStageEvent]) -> None:
 def main(argv: Sequence[str] | None = None) -> int:
     load_video_environment()
     args = build_parser().parse_args(argv)
+
+    if args.command == "production-console":
+        from content.video_engine.src.services.production_console import (
+            ProductionConsoleError,
+            serve_production_console,
+        )
+
+        try:
+            serve_production_console(
+                project_root=args.project_root,
+                repository_root=args.repository_root,
+                snapshot=args.snapshot,
+                runtime_root=args.runtime_root,
+                console_dist=args.console_dist,
+                port=args.port,
+            )
+        except (OSError, TypeError, ValueError, ProductionConsoleError) as exc:
+            print(
+                json.dumps(
+                    {
+                        "valid": False,
+                        "error": {
+                            "code": getattr(exc, "code", "CONSOLE_START_FAILED"),
+                            "message": "production console could not start",
+                        },
+                    },
+                    indent=2,
+                )
+            )
+            return 1
+        return 0
+
     repository = _repository(args.artifact_root)
     pipeline = _pipeline(repository)
 
