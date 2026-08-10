@@ -72,7 +72,16 @@ def _write_source_manifest(path: Path, deck_id: str, *, slide_count: int = 2) ->
     path.write_text(json.dumps(manifest, indent=2), encoding="utf-8")
 
 
-def _approval_record(path: Path, *, deck_id: str, pptx: Path, contact_sheet: str, scope: str = "production_visuals", status: str = "approved") -> dict[str, Any]:
+def _approval_record(
+    path: Path,
+    *,
+    deck_id: str,
+    pptx: Path,
+    contact_sheet: str,
+    scope: str = "production_visuals",
+    status: str = "approved",
+    evidence_approved: bool = False,
+) -> dict[str, Any]:
     payload: dict[str, Any] = {
         "schema_version": "teacher_stamped_deck_approval.v1",
         "approved_at": "2026-08-10",
@@ -88,6 +97,13 @@ def _approval_record(path: Path, *, deck_id: str, pptx: Path, contact_sheet: str
         ],
         "note": "fixture",
     }
+    if evidence_approved:
+        payload["evidence_approval"] = {
+            "status": "approved",
+            "scope": "all_factual_contents",
+            "approved_at": "2026-08-10",
+            "basis": "operator_attestation",
+        }
     path.write_text(json.dumps(payload), encoding="utf-8")
     return payload
 
@@ -105,6 +121,7 @@ def test_extract_teacher_stamped_visuals_success(tmp_path: Path) -> None:
         deck_id=deck_id,
         pptx=pptx,
         contact_sheet="fixture-teacher-stamped-slides.png",
+        evidence_approved=True,
     )
     output = tmp_path / "outputs"
     manifest = extract_teacher_stamped_visuals(
@@ -118,12 +135,39 @@ def test_extract_teacher_stamped_visuals_success(tmp_path: Path) -> None:
     assert manifest["decks"][0]["slide_count"] == 2
     assert manifest["decks"][0]["contact_sheet"] == "fixture-teacher-stamped-slides.png"
     assert manifest["visuals"][0]["approval_scope"] == "production_visuals"
-    assert manifest["visuals"][0]["evidence_render_eligible"] is False
+    assert manifest["evidence_approval_status"] == "approved"
+    assert manifest["visuals"][0]["evidence_render_eligible"] is True
+    assert manifest["visuals"][0]["context"]["evidence_scope"] == "all_factual_contents"
+    assert manifest["visuals"][0]["context"]["context_status"] == "operator_verified"
     assert manifest["visuals"][0]["render_eligible"] is True
     assert (output / manifest["decks"][0]["contact_sheet"]).exists()
     first = manifest["visuals"][0]
     assert (output / first["extracted_path"]).exists()
     assert first["context"]["label"].startswith("Fixture")
+
+
+def test_visual_approval_alone_does_not_promote_factual_contents(tmp_path: Path) -> None:
+    deck_id = "visual-only-deck"
+    pptx = tmp_path / "visual-only.teacher-stamped.pptx"
+    _write_fixture_pptx(pptx, slide_count=1)
+    approval_path = tmp_path / "approval.json"
+    approval = _approval_record(
+        approval_path,
+        deck_id=deck_id,
+        pptx=pptx,
+        contact_sheet="visual-only.png",
+    )
+
+    manifest = extract_teacher_stamped_visuals(
+        approval,
+        output_root=tmp_path / "outputs",
+        source_manifest_root=tmp_path / "sources",
+        approval_record_path=approval_path,
+    )
+
+    assert manifest["evidence_approval_status"] == "not_granted"
+    assert manifest["visuals"][0]["evidence_render_eligible"] is False
+    assert manifest["visuals"][0]["context"]["evidence_scope"] == "source_review_only"
 
 
 def test_missing_approval_scope_fails() -> None:
@@ -134,6 +178,23 @@ def test_missing_approval_scope_fails() -> None:
                 "approved_at": "2026-08-10",
                 "approval_scope": "evidence",
                 "status": "approved",
+                "decks": [{"deck_id": "x", "title": "X", "pptx": "x", "contact_sheet": "x.png"}],
+            },
+            output_root=Path("does-not-matter"),
+            source_manifest_root=Path("does-not-matter"),
+            approval_record_path=Path("does-not-matter/approval.json"),
+        )
+
+
+def test_approved_evidence_requires_full_content_scope() -> None:
+    with pytest.raises(TeacherStampedExtractionError, match="all_factual_contents"):
+        extract_teacher_stamped_visuals(
+            {
+                "schema_version": "teacher_stamped_deck_approval.v1",
+                "approved_at": "2026-08-10",
+                "approval_scope": "production_visuals",
+                "status": "approved",
+                "evidence_approval": {"status": "approved", "scope": "selected_claims"},
                 "decks": [{"deck_id": "x", "title": "X", "pptx": "x", "contact_sheet": "x.png"}],
             },
             output_root=Path("does-not-matter"),

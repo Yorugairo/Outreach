@@ -3,7 +3,14 @@
   "approved_at": "2026-08-10",
   "approval_scope": "production_visuals",
   "status": "approved",
-  "note": "All six teacher-stamped deck groups were visually approved by the operator. This approval applies to the stamped production visuals and does not promote the underlying source/evidence assets beyond their existing review gates.",
+  "note": "All six teacher-stamped deck groups and their factual contents were approved by the operator for production and claim-support use.",
+  "evidence_approval": {
+    "status": "approved",
+    "scope": "all_factual_contents",
+    "approved_at": "2026-08-10",
+    "basis": "operator_attestation",
+    "note": "Exact text, metrics, charts, comparisons, and conclusions in the six approved decks may be used as claim-support surfaces. This records operator acceptance and does not assert independent pipeline re-verification of every claim."
+  },
   "decks": [
     {
       "deck_id": "silicon-antidote",

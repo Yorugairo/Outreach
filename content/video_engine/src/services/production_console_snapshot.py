@@ -278,6 +278,7 @@ def _compile_production_visuals(
         context = record.get("context", {})
         if not isinstance(context, Mapping):
             context = {}
+        evidence_eligible = record.get("evidence_render_eligible") is True
         assets.append(
             {
                 "asset_id": asset_id,
@@ -287,7 +288,7 @@ def _compile_production_visuals(
                 "sha256": sha256,
                 "source_kind": "production_visual",
                 "approval_scope": "production_visuals",
-                "evidence_eligible": False,
+                "evidence_eligible": evidence_eligible,
                 "rights_state": "operator_authorized" if record.get("render_eligible") is True else str(record.get("rights_state") or "review_only"),
                 "context_status": str(context.get("context_status") or record.get("context_status") or "review_only"),
                 "deck_id": str(record.get("deck_id")) if record.get("deck_id") else None,
@@ -385,6 +386,21 @@ def compile_production_console_snapshot(
                 "sha256": _file_sha256(approval_path),
             }
         )
+        evidence_approval = approval.get("evidence_approval", {})
+        if isinstance(evidence_approval, Mapping):
+            reviews.append(
+                {
+                    "review_id": "teacher-stamped-decks-factual-content",
+                    "scope": "evidence",
+                    "state": (
+                        "approved"
+                        if evidence_approval.get("status") == "approved"
+                        else "unreviewed"
+                    ),
+                    "artifact_path": approval_relative,
+                    "sha256": _file_sha256(approval_path),
+                }
+            )
     else:
         degraded.append(f"review: missing {approval_relative}")
 

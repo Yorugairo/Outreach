@@ -1,8 +1,8 @@
 """Extract approved teacher-stamped deck slides as production visuals.
 
 The approved deck record gates which source PPTX files are eligible for
-render-level use. Extracted visuals are stamped as production-only and are
-explicitly separated from evidence eligibility.
+render-level use. Factual-content eligibility is promoted only when the same
+record carries an explicit operator evidence approval.
 """
 
 from __future__ import annotations
@@ -72,6 +72,25 @@ def _coerce_value(value: Any, key: str) -> str:
     return value.strip()
 
 
+def _evidence_approval(payload: Mapping[str, Any]) -> tuple[bool, str]:
+    raw = payload.get("evidence_approval")
+    if raw is None:
+        return False, "source_review_only"
+    if not isinstance(raw, Mapping):
+        raise TeacherStampedExtractionError("evidence_approval must be an object")
+    status = _coerce_value(raw.get("status"), "evidence_approval.status")
+    scope = _coerce_value(raw.get("scope"), "evidence_approval.scope")
+    if status == "approved" and scope != "all_factual_contents":
+        raise TeacherStampedExtractionError(
+            "Approved evidence scope must be 'all_factual_contents'"
+        )
+    if status not in {"approved", "not_approved"}:
+        raise TeacherStampedExtractionError(
+            f"Unsupported evidence approval status: {status!r}"
+        )
+    return status == "approved", scope
+
+
 def read_approval_record(path: Path) -> dict[str, Any]:
     payload = load_json(path)
     status = _coerce_value(payload.get("status"), "status")
@@ -83,6 +102,7 @@ def read_approval_record(path: Path) -> dict[str, Any]:
         raise TeacherStampedExtractionError(
             f"Approval scope mismatch: expected 'production_visuals', found {scope!r}"
         )
+    _evidence_approval(payload)
 
     decks = payload.get("decks")
     if not isinstance(decks, list) or not decks:
@@ -242,6 +262,7 @@ def extract_teacher_stamped_visuals(
         raise TeacherStampedExtractionError(
             f"Approval scope mismatch: expected 'production_visuals', found {scope!r}"
         )
+    evidence_eligible, evidence_scope = _evidence_approval(approval_record)
 
     seen_deck_ids: set[str] = set()
     seen_image_ids: set[str] = set()
@@ -294,11 +315,16 @@ def extract_teacher_stamped_visuals(
                 )
                 context_payload = {
                     **slide_context,
+                    "context_status": (
+                        "operator_verified"
+                        if evidence_eligible
+                        else slide_context.get("context_status", "review_only")
+                    ),
                     "approval_scope": scope,
                     "source_image_id": source_image_ids.get(number),
                     "source_review_status": slide_context.get("context_status", "review_only"),
                     "production_scope": "production_visuals",
-                    "evidence_scope": "source_review_only",
+                    "evidence_scope": evidence_scope,
                 }
                 relative_path = Path(deck_id) / "slides" / f"slide-{number:03d}.png"
                 output_path = output_root / relative_path
@@ -326,7 +352,7 @@ def extract_teacher_stamped_visuals(
                     "rights_state": "source_review_only",
                     "approval_scope": scope,
                     "render_eligible": scope == "production_visuals",
-                    "evidence_render_eligible": False,
+                    "evidence_render_eligible": evidence_eligible,
                 }
                 visuals.append(entry)
                 deck_visuals.append(entry)
@@ -348,6 +374,7 @@ def extract_teacher_stamped_visuals(
                 "slide_count": len(deck_visuals),
                 "contact_sheet": contact_sheet,
                 "scope": scope,
+                "evidence_scope": evidence_scope,
                 "pptx_sha256": deck_sha,
                 "source_manifest": str((source_manifest_root / deck_id / "source-manifest.json").as_posix()),
             }
@@ -359,6 +386,8 @@ def extract_teacher_stamped_visuals(
         "approved_at": _coerce_value(approval_record.get("approved_at"), "approved_at"),
         "status": status,
         "approval_scope": scope,
+        "evidence_approval_status": "approved" if evidence_eligible else "not_granted",
+        "evidence_scope": evidence_scope,
         "scope": scope,
         "decks": deck_refs,
         "visuals": visuals,

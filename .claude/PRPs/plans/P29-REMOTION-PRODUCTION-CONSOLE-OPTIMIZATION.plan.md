@@ -298,7 +298,7 @@ the source of truth.
 - Write set: `content/video_engine/src/services/production_console_snapshot.py`; `content/video_engine/tests/test_production_console_snapshot.py`; fixture snapshots under `content/video_engine/tests/fixtures/production_console/**`; generated pilot snapshot under `content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/edit/production-console/`
 - Acceptance: The compiler reads the existing scene, cue, edit, claim, asset, audio, word, approval, and review artifacts; emits stable ordering and hashes; records missing/degraded inputs explicitly; does not fabricate labels or approvals; and produces byte-identical output for unchanged inputs. No canonical source artifact is written.
 - Validate: `python -m pytest content/video_engine/tests/test_production_console_snapshot.py content/video_engine/tests/test_production_console_contracts.py -q`
-- Evidence: focused T2/T3/T5 contract tests -> 16 passed. Generated `edit/production-console/current-bubble.snapshot.v1.json` with hash `701befe9e657efd4ead0971a2645de843dc643ed486e3f3386e38e2e044d2f52`, 11 scenes, 2,445 canonical words, and 86 hash-verified production visuals; absent legacy project media is an explicit degradation.
+- Evidence: focused approval/catalog/snapshot contract tests -> 18 passed after grouped factual-content approval. Generated `edit/production-console/current-bubble.snapshot.v1.json` with hash `d1e618286334a811374bb9a02842386a45a5e83d2532b2a509972966eb2a0f27`, 11 scenes, 2,445 canonical words, and 86 hash-verified production visuals; all 86 carry explicit operator-approved claim-support eligibility; absent legacy project media is an explicit degradation.
 
 ### T4: Correct and centralize the Remotion composition registry
 - Status: complete
@@ -316,7 +316,7 @@ the source of truth.
 - Write set: `content/video_engine/scripts/extract_teacher_stamped_visuals.py`; `content/video_engine/tests/test_extract_teacher_stamped_visuals.py`; generated catalog and slide images under `content/video_engine/projects/systems-and-blowups/sources/decks/teacher-stamped-production-visuals/`
 - Acceptance: All six approved teacher-stamped PPTX files are read without mutation; slide images receive stable deck/slide IDs, dimensions, hashes, source PPTX hash, and approval reference; unchanged reruns are deterministic; the catalog labels them `production_visuals` and preserves separate evidence/rights fields; missing approval, stale PPTX hash, duplicate IDs, or ambiguous slide media fails closed.
 - Validate: `python -m pytest content/video_engine/tests/test_extract_teacher_stamped_visuals.py content/video_engine/tests/test_extract_deck_assets.py -q`
-- Evidence: `python -m pytest content/video_engine/tests/test_extract_teacher_stamped_visuals.py -q` -> 4 passed. Six approved decks produced 86 deterministic, context-labelled visuals under `sources/decks/teacher-stamped-production-visuals/`; catalog hash `1ece077d6db23320030dc64abd57ac6845dccfbbdc11773087bcd7ac57b6ab96`. Every record is `render_eligible=true` and `evidence_render_eligible=false`.
+- Evidence: `python -m pytest content/video_engine/tests/test_extract_teacher_stamped_visuals.py -q` -> 6 passed. Six approved decks produced 86 deterministic, context-labelled visuals under `sources/decks/teacher-stamped-production-visuals/`; catalog hash `33ef6f4f45ac191e75cf95688b776e701d731086d56d78b198ab870c8d617760`. Following the operator's grouped factual-content approval on 2026-08-10, every record is `render_eligible=true`, `evidence_render_eligible=true`, and `context_status=operator_verified`; visual-only records without that explicit evidence approval remain fail-closed.
 
 ### T6: Build the loopback-only Production Console bridge
 - Status: complete
@@ -328,13 +328,13 @@ the source of truth.
 - Evidence: `python -m pytest content/video_engine/tests/test_production_console.py content/video_engine/tests/test_local_render_queue.py content/video_engine/tests/test_editorial_motion_qc.py -q` -> 23 passed. `python -m content.video_engine.cli production-console --help` exposes no host option; real health response confirms `loopback_only=true`. Browser payloads omit filesystem routing fields; media remains asset-ID and hash gated.
 
 ### T7: Build and approve the read-only React Production Console
-- Status: awaiting Gate A
+- Status: complete
 - Owner: implementation_luna
 - Depends on: T3, T4, T5, T6
 - Write set: `content/video_engine/production_console/**`, excluding generated runtime evidence
 - Acceptance: A separate Vite React app pins `@remotion/player` to `4.0.502`; displays the scene queue, shared composition preview, inspector in disabled/read-only mode, word/cue timeline, approved asset/evidence drawer, review state, hashes, and bridge health; uses same-origin proxied API/media routes so the browser sees asset IDs rather than local paths; clearly distinguishes production-visual approval from evidence eligibility; uses a single derived state model, memoized selectors, virtualized long lists, explicit failure/loading/empty/stale states, keyboard navigation, visible focus, and no fabricated data. Gate A screenshots and operator decision are recorded before T8.
 - Validate: `npm --prefix content/video_engine/production_console ci; npm --prefix content/video_engine/production_console run typecheck; npm --prefix content/video_engine/production_console run test; npm --prefix content/video_engine/production_console run build; npm --prefix content/video_engine/production_console run test:e2e`
-- Evidence: Console `npm ci`, typecheck, 2 UI tests, production build, real headless browser smoke, and zero-vulnerability audit passed. Real current-bubble screenshots: `.claude/PRPs/evidence/P29/gate-a/production-console-read-only.png` and `production-console-scene-asset-navigation.png`. Snapshot hash `701befe9e657efd4ead0971a2645de843dc643ed486e3f3386e38e2e044d2f52`; operator decision remains pending before T8.
+- Evidence: Console `npm ci`, typecheck, 2 UI tests, production build, real headless browser smoke, and zero-vulnerability audit passed. Real current-bubble screenshots: `.claude/PRPs/evidence/P29/gate-a/production-console-read-only.png` and `production-console-scene-asset-navigation.png`. Live browser verification shows `Claim support · Approved factual content` against snapshot `d1e618286334a811374bb9a02842386a45a5e83d2532b2a509972966eb2a0f27`. On 2026-08-10 the operator stated that the editor is the right direction and requested the P30 expansion; this records Gate A approval while moving the broader mutation surface to P30.
 
 ### T8: Implement immutable visual patches and recompilation
 - Status: pending

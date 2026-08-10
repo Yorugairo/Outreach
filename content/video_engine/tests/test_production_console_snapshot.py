@@ -43,7 +43,7 @@ def test_compile_real_current_bubble_snapshot_is_deterministic(tmp_path: Path) -
     validate_production_console_snapshot(first)
 
 
-def test_snapshot_never_promotes_production_visual_to_evidence(tmp_path: Path) -> None:
+def test_snapshot_requires_explicit_catalog_evidence_eligibility(tmp_path: Path) -> None:
     catalog_dir = PROJECT / "edit" / "production-console-test-catalog"
     catalog_dir.mkdir(parents=True, exist_ok=True)
     image_path = catalog_dir / "slide.png"
@@ -89,7 +89,7 @@ def test_snapshot_never_promotes_production_visual_to_evidence(tmp_path: Path) -
     assert asset["path_root"] == "repository"
 
 
-def test_real_teacher_stamped_catalog_retains_context_without_evidence_promotion(tmp_path: Path) -> None:
+def test_real_teacher_stamped_catalog_retains_context_and_factual_approval(tmp_path: Path) -> None:
     catalog = (
         ROOT
         / "content"
@@ -112,7 +112,8 @@ def test_real_teacher_stamped_catalog_retains_context_without_evidence_promotion
     assert len(visuals) == 86
     assert all(asset["path_root"] == "repository" for asset in visuals)
     assert all(asset["approval_scope"] == "production_visuals" for asset in visuals)
-    assert all(asset["evidence_eligible"] is False for asset in visuals)
+    assert all(asset["evidence_eligible"] is True for asset in visuals)
+    assert all(asset["context_status"] == "operator_verified" for asset in visuals)
     assert visuals[0]["label"] != visuals[0]["asset_id"]
 
 

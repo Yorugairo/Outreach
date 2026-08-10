@@ -98,8 +98,8 @@ function Console({snapshot, bridgeStatus}: {snapshot: Snapshot; bridgeStatus: st
           <h3>{selectedAsset.label}</h3>
           <p>{selectedAsset.what_it_is}</p>
           <dl><div><dt>Source</dt><dd>{selectedAsset.deck_id} · slide {selectedAsset.slide_number}</dd></div><div><dt>Asset hash</dt><dd className="mono">{shortHash(selectedAsset.sha256)}</dd></div><div><dt>Rights</dt><dd>{selectedAsset.rights_state.replace('_', ' ')}</dd></div></dl>
-          <div className="scope-grid"><div className="scope-ok"><b>Production use</b><span>Approved visual</span></div><div className="scope-no"><b>Evidence use</b><span>{selectedAsset.evidence_eligible ? 'Eligible' : 'Not granted'}</span></div></div>
-          <p className="scope-explainer">A production approval permits the visual in the edit. It does not verify the slide as claim evidence.</p>
+          <div className="scope-grid"><div className="scope-ok"><b>Production use</b><span>Approved visual</span></div><div className={selectedAsset.evidence_eligible ? 'scope-ok' : 'scope-no'}><b>Claim support</b><span>{selectedAsset.evidence_eligible ? 'Approved factual content' : 'Not granted'}</span></div></div>
+          <p className="scope-explainer">{selectedAsset.evidence_eligible ? 'The operator approved this deck’s factual contents for claim-support use.' : 'The visual may appear in the edit, but its factual contents are not approved as claim support.'}</p>
         </div>
       </section>
 

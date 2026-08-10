@@ -4,6 +4,8 @@
   "approved_at": "2026-08-10",
   "status": "approved",
   "approval_scope": "production_visuals",
+  "evidence_approval_status": "approved",
+  "evidence_scope": "all_factual_contents",
   "scope": "production_visuals",
   "decks": [
     {
@@ -13,6 +15,7 @@
       "slide_count": 15,
       "contact_sheet": "silicon-antidote-teacher-stamped-slides.png",
       "scope": "production_visuals",
+      "evidence_scope": "all_factual_contents",
       "pptx_sha256": "06f1a2a4fa2c973e61ea9b99c28f35344fd5b6379ad0755eee7d85f6b29ab3f8",
       "source_manifest": "content/video_engine/projects/systems-and-blowups/sources/decks/silicon-antidote/source-manifest.json"
     },
@@ -23,6 +26,7 @@
       "slide_count": 15,
       "contact_sheet": "memory-supercycle-teacher-stamped-slides.png",
       "scope": "production_visuals",
+      "evidence_scope": "all_factual_contents",
       "pptx_sha256": "96300bbe2419f022f646648f6aa60d652fa462427189501dc20ccd6857f151b2",
       "source_manifest": "content/video_engine/projects/systems-and-blowups/sources/decks/memory-supercycle/source-manifest.json"
     },
@@ -33,6 +37,7 @@
       "slide_count": 14,
       "contact_sheet": "sovereign-memory-infrastructure-teacher-stamped-slides.png",
       "scope": "production_visuals",
+      "evidence_scope": "all_factual_contents",
       "pptx_sha256": "699e9461c72feb5d24c8db4d7d2237429bec9daf0dc3f08470712be077d36135",
       "source_manifest": "content/video_engine/projects/systems-and-blowups/sources/decks/sovereign-memory-infrastructure/source-manifest.json"
     },
@@ -43,6 +48,7 @@
       "slide_count": 12,
       "contact_sheet": "silicon-silent-triopoly-teacher-stamped-slides.png",
       "scope": "production_visuals",
+      "evidence_scope": "all_factual_contents",
       "pptx_sha256": "325d48c27f84db9424920f1d13ac65f45257b73d59b7dbb5b217adacc429aad2",
       "source_manifest": "content/video_engine/projects/systems-and-blowups/sources/decks/silicon-silent-triopoly/source-manifest.json"
     },
@@ -53,6 +59,7 @@
       "slide_count": 15,
       "contact_sheet": "silicon-value-software-bubble-teacher-stamped-slides.png",
       "scope": "production_visuals",
+      "evidence_scope": "all_factual_contents",
       "pptx_sha256": "d1a000f01d2bef61f70e35fbdaf1073884f42a6dea858fb550a75de960bcf15e",
       "source_manifest": "content/video_engine/projects/systems-and-blowups/sources/decks/silicon-value-software-bubble/source-manifest.json"
     },
@@ -63,6 +70,7 @@
       "slide_count": 15,
       "contact_sheet": "silicon-reality-gap-teacher-stamped-slides.png",
       "scope": "production_visuals",
+      "evidence_scope": "all_factual_contents",
       "pptx_sha256": "c2d260b4ad31e99b132cb2d9163dbdd79109332b99da09b8df4276ad8371571c",
       "source_manifest": "content/video_engine/projects/systems-and-blowups/sources/decks/silicon-reality-gap/source-manifest.json"
     }
@@ -86,19 +94,19 @@
       "context": {
         "label": "The Ultimate Antidote to an S&P 500 Bubble",
         "summary": "Opening source plate framing physical memory infrastructure as the counterpoint to a software-led market bubble.",
-        "context_status": "review_only",
+        "context_status": "operator_verified",
         "claim_refs": [],
         "cue_refs": [],
         "approval_scope": "production_visuals",
         "source_image_id": "silicon-antidote-s01-original",
         "source_review_status": "review_only",
         "production_scope": "production_visuals",
-        "evidence_scope": "source_review_only"
+        "evidence_scope": "all_factual_contents"
       },
       "rights_state": "source_review_only",
       "approval_scope": "production_visuals",
       "render_eligible": true,
-      "evidence_render_eligible": false
+      "evidence_render_eligible": true
     },
     {
       "image_id": "silicon-antidote-s02-teacher-stamped",
@@ -118,19 +126,19 @@
       "context": {
         "label": "The Great Valuation Paradox",
         "summary": "A source plate contrasting the S&P 500 valuation bubble with the memory triopoly and its operating-margin/valuation cards.",
-        "context_status": "review_only",
+        "context_status": "operator_verified",
         "claim_refs": [],
         "cue_refs": [],
         "approval_scope": "production_visuals",
         "source_image_id": "silicon-antidote-s02-original",
         "source_review_status": "review_only",
         "production_scope": "production_visuals",
-        "evidence_scope": "source_review_only"
+        "evidence_scope": "all_factual_contents"
       },
       "rights_state": "source_review_only",
       "approval_scope": "production_visuals",
       "render_eligible": true,
-      "evidence_render_eligible": false
+      "evidence_render_eligible": true
     },
     {
       "image_id": "silicon-antidote-s03-teacher-stamped",
@@ -150,19 +158,19 @@
       "context": {
         "label": "Flashing Red on Extreme Concentration",
         "summary": "Source plate showing top-ten mega-cap concentration and the mismatch between index weight and earnings contribution.",
-        "context_status": "review_only",
+        "context_status": "operator_verified",
         "claim_refs": [],
         "cue_refs": [],
         "approval_scope": "production_visuals",
         "source_image_id": "silicon-antidote-s03-original",
         "source_review_status": "review_only",
         "production_scope": "production_visuals",
-        "evidence_scope": "source_review_only"
+        "evidence_scope": "all_factual_contents"
       },
       "rights_state": "source_review_only",
       "approval_scope": "production_visuals",
       "render_eligible": true,
-      "evidence_render_eligible": false
+      "evidence_render_eligible": true
     },
     {
       "image_id": "silicon-antidote-s04-teacher-stamped",
@@ -182,19 +190,19 @@
       "context": {
         "label": "The Market’s Historical Blind Spot",
         "summary": "Source warning plate linking high prices, debt-financed overinvestment, and industry oversupply to prior market cycles.",
-        "context_status": "review_only",
+        "context_status": "operator_verified",
         "claim_refs": [],
         "cue_refs": [],
         "approval_scope": "production_visuals",
         "source_image_id": "silicon-antidote-s04-original",
         "source_review_status": "review_only",
         "production_scope": "production_visuals",
-        "evidence_scope": "source_review_only"
+        "evidence_scope": "all_factual_contents"
       },
       "rights_state": "source_review_only",
       "approval_scope": "production_visuals",
       "render_eligible": true,
-      "evidence_render_eligible": false
+      "evidence_render_eligible": true
     },
     {
       "image_id": "silicon-antidote-s05-teacher-stamped",
@@ -214,19 +222,19 @@
       "context": {
         "label": "The Crucible of Compute",
         "summary": "Source consolidation plate showing the funnel from many competitors to the Samsung, Micron, and SK hynix triopoly.",
-        "context_status": "review_only",
+        "context_status": "operator_verified",
         "claim_refs": [],
         "cue_refs": [],
         "approval_scope": "production_visuals",
         "source_image_id": "silicon-antidote-s05-original",
         "source_review_status": "review_only",
         "production_scope": "production_visuals",
-        "evidence_scope": "source_review_only"
+        "evidence_scope": "all_factual_contents"
       },
       "rights_state": "source_review_only",
       "approval_scope": "production_visuals",
       "render_eligible": true,
-      "evidence_render_eligible": false
+      "evidence_render_eligible": true
     },
     {
       "image_id": "silicon-antidote-s06-teacher-stamped",
@@ -246,19 +254,19 @@
       "context": {
         "label": "The Strange Genesis of Silicon’s Most Brutal Cartel",
         "summary": "Source history plate describing the debt-fueled, founder-led, and abandoned-asset paths of the surviving memory makers.",
-        "context_status": "review_only",
+        "context_status": "operator_verified",
         "claim_refs": [],
         "cue_refs": [],
         "approval_scope": "production_visuals",
         "source_image_id": "silicon-antidote-s06-original",
         "source_review_status": "review_only",
         "production_scope": "production_visuals",
-        "evidence_scope": "source_review_only"
+        "evidence_scope": "all_factual_contents"
       },
       "rights_state": "source_review_only",
       "approval_scope": "production_visuals",
       "render_eligible": true,
-      "evidence_render_eligible": false
+      "evidence_render_eligible": true
     },
     {
       "image_id": "silicon-antidote-s07-teacher-stamped",
@@ -278,19 +286,19 @@
       "context": {
         "label": "The AI Catalyst: Breaking the Physical Bottleneck",
         "summary": "Source mechanism plate contrasting traditional planar DRAM with the stacked HBM structure feeding AI accelerators.",
-        "context_status": "review_only",
+        "context_status": "operator_verified",
         "claim_refs": [],
         "cue_refs": [],
         "approval_scope": "production_visuals",
         "source_image_id": "silicon-antidote-s07-original",
         "source_review_status": "review_only",
         "production_scope": "production_visuals",
-        "evidence_scope": "source_review_only"
+        "evidence_scope": "all_factual_contents"
       },
       "rights_state": "source_review_only",
       "approval_scope": "production_visuals",
       "render_eligible": true,
-      "evidence_render_eligible": false
+      "evidence_render_eligible": true
     },
     {
       "image_id": "silicon-antidote-s08-teacher-stamped",
@@ -310,19 +318,19 @@
       "context": {
         "label": "The Brutal Physics of the Moat",
         "summary": "Source process plate showing backgrinding, TSV etching, and packaging as yield-sensitive HBM bottlenecks.",
-        "context_status": "review_only",
+        "context_status": "operator_verified",
         "claim_refs": [],
         "cue_refs": [],
         "approval_scope": "production_visuals",
         "source_image_id": "silicon-antidote-s08-original",
         "source_review_status": "review_only",
         "production_scope": "production_visuals",
-        "evidence_scope": "source_review_only"
+        "evidence_scope": "all_factual_contents"
       },
       "rights_state": "source_review_only",
       "approval_scope": "production_visuals",
       "render_eligible": true,
-      "evidence_render_eligible": false
+      "evidence_render_eligible": true
     },
     {
       "image_id": "silicon-antidote-s09-teacher-stamped",
@@ -342,19 +350,19 @@
       "context": {
         "label": "The Three-to-One Capacity Penalty",
         "summary": "A source plate comparing standard DRAM capacity with the wafer cost of HBM.",
-        "context_status": "review_only",
+        "context_status": "operator_verified",
         "claim_refs": [],
         "cue_refs": [],
         "approval_scope": "production_visuals",
         "source_image_id": "silicon-antidote-s09-original",
         "source_review_status": "review_only",
         "production_scope": "production_visuals",
-        "evidence_scope": "source_review_only"
+        "evidence_scope": "all_factual_contents"
       },
       "rights_state": "source_review_only",
       "approval_scope": "production_visuals",
       "render_eligible": true,
-      "evidence_render_eligible": false
+      "evidence_render_eligible": true
     },
     {
       "image_id": "silicon-antidote-s10-teacher-stamped",
@@ -374,19 +382,19 @@
       "context": {
         "label": "Welcome to RAM-ageddon",
         "summary": "A source plate showing supply pressure, AI and consumer demand, and the RAM-ageddon price shock.",
-        "context_status": "review_only",
+        "context_status": "operator_verified",
         "claim_refs": [],
         "cue_refs": [],
         "approval_scope": "production_visuals",
         "source_image_id": "silicon-antidote-s10-original",
         "source_review_status": "review_only",
         "production_scope": "production_visuals",
-        "evidence_scope": "source_review_only"
+        "evidence_scope": "all_factual_contents"
       },
       "rights_state": "source_review_only",
       "approval_scope": "production_visuals",
       "render_eligible": true,
-      "evidence_render_eligible": false
+      "evidence_render_eligible": true
     },
     {
       "image_id": "silicon-antidote-s11-teacher-stamped",
@@ -406,19 +414,19 @@
       "context": {
         "label": "Locking Down the Financial Paradigm",
         "summary": "Source comparison of volatile spot-market pricing with multi-year supply agreements and strategic co-engineering.",
-        "context_status": "review_only",
+        "context_status": "operator_verified",
         "claim_refs": [],
         "cue_refs": [],
         "approval_scope": "production_visuals",
         "source_image_id": "silicon-antidote-s11-original",
         "source_review_status": "review_only",
         "production_scope": "production_visuals",
-        "evidence_scope": "source_review_only"
+        "evidence_scope": "all_factual_contents"
       },
       "rights_state": "source_review_only",
       "approval_scope": "production_visuals",
       "render_eligible": true,
-      "evidence_render_eligible": false
+      "evidence_render_eligible": true
     },
     {
       "image_id": "silicon-antidote-s12-teacher-stamped",
@@ -438,19 +446,19 @@
       "context": {
         "label": "The Strategic Hardware Choke Point",
         "summary": "Source plate showing memory as a large share of the AI server bill of materials and a dominant compute input.",
-        "context_status": "review_only",
+        "context_status": "operator_verified",
         "claim_refs": [],
         "cue_refs": [],
         "approval_scope": "production_visuals",
         "source_image_id": "silicon-antidote-s12-original",
         "source_review_status": "review_only",
         "production_scope": "production_visuals",
-        "evidence_scope": "source_review_only"
+        "evidence_scope": "all_factual_contents"
       },
       "rights_state": "source_review_only",
       "approval_scope": "production_visuals",
       "render_eligible": true,
-      "evidence_render_eligible": false
+      "evidence_render_eligible": true
     },
     {
       "image_id": "silicon-antidote-s13-teacher-stamped",
@@ -470,19 +478,19 @@
       "context": {
         "label": "The Modern Market Racetrack",
         "summary": "Source market-share plate comparing DRAM and NAND tracks across the major memory manufacturers.",
-        "context_status": "review_only",
+        "context_status": "operator_verified",
         "claim_refs": [],
         "cue_refs": [],
         "approval_scope": "production_visuals",
         "source_image_id": "silicon-antidote-s13-original",
         "source_review_status": "review_only",
         "production_scope": "production_visuals",
-        "evidence_scope": "source_review_only"
+        "evidence_scope": "all_factual_contents"
       },
       "rights_state": "source_review_only",
       "approval_scope": "production_visuals",
       "render_eligible": true,
-      "evidence_render_eligible": false
+      "evidence_render_eligible": true
     },
     {
       "image_id": "silicon-antidote-s14-teacher-stamped",
@@ -502,19 +510,19 @@
       "context": {
         "label": "The Ultimate Diagnostic Matrix",
         "summary": "A source plate comparing the S&P 500 index and memory triopoly across valuation, earnings quality, market structure, and pricing model.",
-        "context_status": "review_only",
+        "context_status": "operator_verified",
         "claim_refs": [],
         "cue_refs": [],
         "approval_scope": "production_visuals",
         "source_image_id": "silicon-antidote-s14-original",
         "source_review_status": "review_only",
         "production_scope": "production_visuals",
-        "evidence_scope": "source_review_only"
+        "evidence_scope": "all_factual_contents"
       },
       "rights_state": "source_review_only",
       "approval_scope": "production_visuals",
       "render_eligible": true,
-      "evidence_render_eligible": false
+      "evidence_render_eligible": true
     },
     {
       "image_id": "silicon-antidote-s15-teacher-stamped",
@@ -534,19 +542,19 @@
       "context": {
         "label": "The Physical Antidote to a Paper Bubble",
         "summary": "Closing source plate pairing the S&P 500 bubble with the physical constraints and moat of memory infrastructure.",
-        "context_status": "review_only",
+        "context_status": "operator_verified",
         "claim_refs": [],
         "cue_refs": [],
         "approval_scope": "production_visuals",
         "source_image_id": "silicon-antidote-s15-original",
         "source_review_status": "review_only",
         "production_scope": "production_visuals",
-        "evidence_scope": "source_review_only"
+        "evidence_scope": "all_factual_contents"
       },
       "rights_state": "source_review_only",
       "approval_scope": "production_visuals",
       "render_eligible": true,
-      "evidence_render_eligible": false
+      "evidence_render_eligible": true
     },
     {
       "image_id": "memory-supercycle-s01-teacher-stamped",
@@ -566,19 +574,19 @@
       "context": {
         "label": "The Decadal Realignment",
         "summary": "Opening source plate framing the structural shift in global semiconductor memory and the outlook through 2030.",
-        "context_status": "review_only",
+        "context_status": "operator_verified",
         "claim_refs": [],
         "cue_refs": [],
         "approval_scope": "production_visuals",
         "source_image_id": "memory-supercycle-s01-original",
         "source_review_status": "review_only",
         "production_scope": "production_visuals",
-        "evidence_scope": "source_review_only"
+        "evidence_scope": "all_factual_contents"
       },
       "rights_state": "source_review_only",
       "approval_scope": "production_visuals",
       "render_eligible": true,
-      "evidence_render_eligible": false
+      "evidence_render_eligible": true
     },
     {
       "image_id": "memory-supercycle-s02-teacher-stamped",
@@ -598,19 +606,19 @@
       "context": {
         "label": "Memory Is No Longer an Interchangeable Commodity",
         "summary": "Source plate contrasting legacy consumer memory with specialized infrastructure-grade memory.",
-        "context_status": "review_only",
+        "context_status": "operator_verified",
         "claim_refs": [],
         "cue_refs": [],
         "approval_scope": "production_visuals",
         "source_image_id": "memory-supercycle-s02-original",
         "source_review_status": "review_only",
         "production_scope": "production_visuals",
-        "evidence_scope": "source_review_only"
+        "evidence_scope": "all_factual_contents"
       },
       "rights_state": "source_review_only",
       "approval_scope": "production_visuals",
       "render_eligible": true,
-      "evidence_render_eligible": false
+      "evidence_render_eligible": true
     },
     {
       "image_id": "memory-supercycle-s03-teacher-stamped",
@@ -630,19 +638,19 @@
       "context": {
         "label": "The Root of the Shortage: The Three-to-One Physics Penalty",
         "summary": "Source plate illustrating how HBM packaging consumes more wafer capacity than standard DDR5 and constrains supply.",
-        "context_status": "review_only",
+        "context_status": "operator_verified",
         "claim_refs": [],
         "cue_refs": [],
         "approval_scope": "production_visuals",
         "source_image_id": "memory-supercycle-s03-original",
         "source_review_status": "review_only",
         "production_scope": "production_visuals",
-        "evidence_scope": "source_review_only"
+        "evidence_scope": "all_factual_contents"
       },
       "rights_state": "source_review_only",
       "approval_scope": "production_visuals",
       "render_eligible": true,
-      "evidence_render_eligible": false
+      "evidence_render_eligible": true
     },
     {
       "image_id": "memory-supercycle-s04-teacher-stamped",
@@ -662,19 +670,19 @@
       "context": {
         "label": "The Revenue Paradox: Market Share in the AI Era",
         "summary": "Source chart showing the changing revenue share of memory manufacturers during the AI-era mix shift.",
-        "context_status": "review_only",
+        "context_status": "operator_verified",
         "claim_refs": [],
         "cue_refs": [],
         "approval_scope": "production_visuals",
         "source_image_id": "memory-supercycle-s04-original",
         "source_review_status": "review_only",
         "production_scope": "production_visuals",
-        "evidence_scope": "source_review_only"
+        "evidence_scope": "all_factual_contents"
       },
       "rights_state": "source_review_only",
       "approval_scope": "production_visuals",
       "render_eligible": true,
-      "evidence_render_eligible": false
+      "evidence_render_eligible": true
     },
     {
       "image_id": "memory-supercycle-s05-teacher-stamped",
@@ -694,19 +702,19 @@
       "context": {
         "label": "The Bottom Falls as the Top Accelerates",
         "summary": "Source plate comparing enterprise demand acceleration with the declining commodity-memory base beneath it.",
-        "context_status": "review_only",
+        "context_status": "operator_verified",
         "claim_refs": [],
         "cue_refs": [],
         "approval_scope": "production_visuals",
         "source_image_id": "memory-supercycle-s05-original",
         "source_review_status": "review_only",
         "production_scope": "production_visuals",
-        "evidence_scope": "source_review_only"
+        "evidence_scope": "all_factual_contents"
       },
       "rights_state": "source_review_only",
       "approval_scope": "production_visuals",
       "render_eligible": true,
-      "evidence_render_eligible": false
+      "evidence_render_eligible": true
     },
     {
       "image_id": "memory-supercycle-s06-teacher-stamped",
@@ -726,19 +734,19 @@
       "context": {
         "label": "The End of Transactional Memory",
         "summary": "Source plate showing the transition away from spot-market memory toward contracted and strategic supply relationships.",
-        "context_status": "review_only",
+        "context_status": "operator_verified",
         "claim_refs": [],
         "cue_refs": [],
         "approval_scope": "production_visuals",
         "source_image_id": "memory-supercycle-s06-original",
         "source_review_status": "review_only",
         "production_scope": "production_visuals",
-        "evidence_scope": "source_review_only"
+        "evidence_scope": "all_factual_contents"
       },
       "rights_state": "source_review_only",
       "approval_scope": "production_visuals",
       "render_eligible": true,
-      "evidence_render_eligible": false
+      "evidence_render_eligible": true
     },
     {
       "image_id": "memory-supercycle-s07-teacher-stamped",
@@ -758,19 +766,19 @@
       "context": {
         "label": "Diverging Roadmaps: The HBM4 Logic Base Die",
         "summary": "Source comparison of Samsung, SK hynix, and Micron roadmaps for custom logic and HBM integration.",
-        "context_status": "review_only",
+        "context_status": "operator_verified",
         "claim_refs": [],
         "cue_refs": [],
         "approval_scope": "production_visuals",
         "source_image_id": "memory-supercycle-s07-original",
         "source_review_status": "review_only",
         "production_scope": "production_visuals",
-        "evidence_scope": "source_review_only"
+        "evidence_scope": "all_factual_contents"
       },
       "rights_state": "source_review_only",
       "approval_scope": "production_visuals",
       "render_eligible": true,
-      "evidence_render_eligible": false
+      "evidence_render_eligible": true
     },
     {
       "image_id": "memory-supercycle-s08-teacher-stamped",
@@ -790,19 +798,19 @@
       "context": {
         "label": "Bridging the AI Bandwidth Gap",
         "summary": "Source mechanism plate contrasting traditional DRAM with HBM and high-capacity storage in an AI memory stack.",
-        "context_status": "review_only",
+        "context_status": "operator_verified",
         "claim_refs": [],
         "cue_refs": [],
         "approval_scope": "production_visuals",
         "source_image_id": "memory-supercycle-s08-original",
         "source_review_status": "review_only",
         "production_scope": "production_visuals",
-        "evidence_scope": "source_review_only"
+        "evidence_scope": "all_factual_contents"
       },
       "rights_state": "source_review_only",
       "approval_scope": "production_visuals",
       "render_eligible": true,
-      "evidence_render_eligible": false
+      "evidence_render_eligible": true
     },
     {
       "image_id": "memory-supercycle-s09-teacher-stamped",
@@ -822,19 +830,19 @@
       "context": {
         "label": "The 10 fF Wall",
         "summary": "Source plate describing the physical limits of two-dimensional DRAM and the move toward three-dimensional structures.",
-        "context_status": "review_only",
+        "context_status": "operator_verified",
         "claim_refs": [],
         "cue_refs": [],
         "approval_scope": "production_visuals",
         "source_image_id": "memory-supercycle-s09-original",
         "source_review_status": "review_only",
         "production_scope": "production_visuals",
-        "evidence_scope": "source_review_only"
+        "evidence_scope": "all_factual_contents"
       },
       "rights_state": "source_review_only",
       "approval_scope": "production_visuals",
       "render_eligible": true,
-      "evidence_render_eligible": false
+      "evidence_render_eligible": true
     },
     {
       "image_id": "memory-supercycle-s10-teacher-stamped",
@@ -854,19 +862,19 @@
       "context": {
         "label": "The Next Supercycle Vector: Automotive and Robotics",
         "summary": "Source plate mapping memory demand from AI infrastructure into automotive, robotics, and edge systems.",
-        "context_status": "review_only",
+        "context_status": "operator_verified",
         "claim_refs": [],
         "cue_refs": [],
         "approval_scope": "production_visuals",
         "source_image_id": "memory-supercycle-s10-original",
         "source_review_status": "review_only",
         "production_scope": "production_visuals",
-        "evidence_scope": "source_review_only"
+        "evidence_scope": "all_factual_contents"
       },
       "rights_state": "source_review_only",
       "approval_scope": "production_visuals",
       "render_eligible": true,
-      "evidence_render_eligible": false
+      "evidence_render_eligible": true
     },
     {
       "image_id": "memory-supercycle-s11-teacher-stamped",
@@ -886,19 +894,19 @@
       "context": {
         "label": "One Hundred Billion Dollar Blueprints",
         "summary": "Source map of planned cleanroom and fabrication investment supporting the memory buildout.",
-        "context_status": "review_only",
+        "context_status": "operator_verified",
         "claim_refs": [],
         "cue_refs": [],
         "approval_scope": "production_visuals",
         "source_image_id": "memory-supercycle-s11-original",
         "source_review_status": "review_only",
         "production_scope": "production_visuals",
-        "evidence_scope": "source_review_only"
+        "evidence_scope": "all_factual_contents"
       },
       "rights_state": "source_review_only",
       "approval_scope": "production_visuals",
       "render_eligible": true,
-      "evidence_render_eligible": false
+      "evidence_render_eligible": true
     },
     {
       "image_id": "memory-supercycle-s12-teacher-stamped",
@@ -918,19 +926,19 @@
       "context": {
         "label": "Subsidies, Sunset Clauses, and Civil Friction",
         "summary": "Source plate comparing public subsidies, expiration conditions, and local-government friction around new capacity.",
-        "context_status": "review_only",
+        "context_status": "operator_verified",
         "claim_refs": [],
         "cue_refs": [],
         "approval_scope": "production_visuals",
         "source_image_id": "memory-supercycle-s12-original",
         "source_review_status": "review_only",
         "production_scope": "production_visuals",
-        "evidence_scope": "source_review_only"
+        "evidence_scope": "all_factual_contents"
       },
       "rights_state": "source_review_only",
       "approval_scope": "production_visuals",
       "render_eligible": true,
-      "evidence_render_eligible": false
+      "evidence_render_eligible": true
     },
     {
       "image_id": "memory-supercycle-s13-teacher-stamped",
@@ -950,19 +958,19 @@
       "context": {
         "label": "Global Supply Chains Collide with Municipal Governance",
         "summary": "Source plate showing how local permitting and infrastructure constraints interact with global memory supply chains.",
-        "context_status": "review_only",
+        "context_status": "operator_verified",
         "claim_refs": [],
         "cue_refs": [],
         "approval_scope": "production_visuals",
         "source_image_id": "memory-supercycle-s13-original",
         "source_review_status": "review_only",
         "production_scope": "production_visuals",
-        "evidence_scope": "source_review_only"
+        "evidence_scope": "all_factual_contents"
       },
       "rights_state": "source_review_only",
       "approval_scope": "production_visuals",
       "render_eligible": true,
-      "evidence_render_eligible": false
+      "evidence_render_eligible": true
     },
     {
       "image_id": "memory-supercycle-s14-teacher-stamped",
@@ -982,19 +990,19 @@
       "context": {
         "label": "The Fragile Balance: From Shortage to Structural Glut?",
         "summary": "Source timeline modeling the risk that new capacity could move the market from undersupply to oversupply.",
-        "context_status": "review_only",
+        "context_status": "operator_verified",
         "claim_refs": [],
         "cue_refs": [],
         "approval_scope": "production_visuals",
         "source_image_id": "memory-supercycle-s14-original",
         "source_review_status": "review_only",
         "production_scope": "production_visuals",
-        "evidence_scope": "source_review_only"
+        "evidence_scope": "all_factual_contents"
       },
       "rights_state": "source_review_only",
       "approval_scope": "production_visuals",
       "render_eligible": true,
-      "evidence_render_eligible": false
+      "evidence_render_eligible": true
     },
     {
       "image_id": "memory-supercycle-s15-teacher-stamped",
@@ -1014,19 +1022,19 @@
       "context": {
         "label": "The Winning Formula Through 2030",
         "summary": "Closing source plate summarizing process leadership, foundry symbiosis, and capital discipline through 2030.",
-        "context_status": "review_only",
+        "context_status": "operator_verified",
         "claim_refs": [],
         "cue_refs": [],
         "approval_scope": "production_visuals",
         "source_image_id": "memory-supercycle-s15-original",
         "source_review_status": "review_only",
         "production_scope": "production_visuals",
-        "evidence_scope": "source_review_only"
+        "evidence_scope": "all_factual_contents"
       },
       "rights_state": "source_review_only",
       "approval_scope": "production_visuals",
       "render_eligible": true,
-      "evidence_render_eligible": false
+      "evidence_render_eligible": true
     },
     {
       "image_id": "sovereign-memory-infrastructure-s01-teacher-stamped",
@@ -1046,19 +1054,19 @@
       "context": {
         "label": "The Memory Chokepoint",
         "summary": "Opening source plate framing memory as the strategic bottleneck in sovereign compute infrastructure.",
-        "context_status": "review_only",
+        "context_status": "operator_verified",
         "claim_refs": [],
         "cue_refs": [],
         "approval_scope": "production_visuals",
         "source_image_id": "sovereign-memory-infrastructure-s01-original",
         "source_review_status": "review_only",
         "production_scope": "production_visuals",
-        "evidence_scope": "source_review_only"
+        "evidence_scope": "all_factual_contents"
       },
       "rights_state": "source_review_only",
       "approval_scope": "production_visuals",
       "render_eligible": true,
-      "evidence_render_eligible": false
+      "evidence_render_eligible": true
     },
     {
       "image_id": "sovereign-memory-infrastructure-s02-teacher-stamped",
@@ -1078,19 +1086,19 @@
       "context": {
         "label": "Compute Has Crossed the Rubicon",
         "summary": "Source plate contrasting legacy IT operating expense with sovereign infrastructure capital expense.",
-        "context_status": "review_only",
+        "context_status": "operator_verified",
         "claim_refs": [],
         "cue_refs": [],
         "approval_scope": "production_visuals",
         "source_image_id": "sovereign-memory-infrastructure-s02-original",
         "source_review_status": "review_only",
         "production_scope": "production_visuals",
-        "evidence_scope": "source_review_only"
+        "evidence_scope": "all_factual_contents"
       },
       "rights_state": "source_review_only",
       "approval_scope": "production_visuals",
       "render_eligible": true,
-      "evidence_render_eligible": false
+      "evidence_render_eligible": true
     },
     {
       "image_id": "sovereign-memory-infrastructure-s03-teacher-stamped",
@@ -1110,19 +1118,19 @@
       "context": {
         "label": "The Nine-Layer Compute Stack",
         "summary": "Source mechanism plate mapping accelerator silicon, HBM, thermal management, packaging, and power layers.",
-        "context_status": "review_only",
+        "context_status": "operator_verified",
         "claim_refs": [],
         "cue_refs": [],
         "approval_scope": "production_visuals",
         "source_image_id": "sovereign-memory-infrastructure-s03-original",
         "source_review_status": "review_only",
         "production_scope": "production_visuals",
-        "evidence_scope": "source_review_only"
+        "evidence_scope": "all_factual_contents"
       },
       "rights_state": "source_review_only",
       "approval_scope": "production_visuals",
       "render_eligible": true,
-      "evidence_render_eligible": false
+      "evidence_render_eligible": true
     },
     {
       "image_id": "sovereign-memory-infrastructure-s04-teacher-stamped",
@@ -1142,19 +1150,19 @@
       "context": {
         "label": "Hitting the Physical Limits of AI",
         "summary": "Source plate showing compute throughput, interconnect, and memory-bandwidth walls in scaled AI systems.",
-        "context_status": "review_only",
+        "context_status": "operator_verified",
         "claim_refs": [],
         "cue_refs": [],
         "approval_scope": "production_visuals",
         "source_image_id": "sovereign-memory-infrastructure-s04-original",
         "source_review_status": "review_only",
         "production_scope": "production_visuals",
-        "evidence_scope": "source_review_only"
+        "evidence_scope": "all_factual_contents"
       },
       "rights_state": "source_review_only",
       "approval_scope": "production_visuals",
       "render_eligible": true,
-      "evidence_render_eligible": false
+      "evidence_render_eligible": true
     },
     {
       "image_id": "sovereign-memory-infrastructure-s05-teacher-stamped",
@@ -1174,19 +1182,19 @@
       "context": {
         "label": "The Geographic Monopoly",
         "summary": "Source map showing the geographic concentration of advanced memory and packaging supply chains.",
-        "context_status": "review_only",
+        "context_status": "operator_verified",
         "claim_refs": [],
         "cue_refs": [],
         "approval_scope": "production_visuals",
         "source_image_id": "sovereign-memory-infrastructure-s05-original",
         "source_review_status": "review_only",
         "production_scope": "production_visuals",
-        "evidence_scope": "source_review_only"
+        "evidence_scope": "all_factual_contents"
       },
       "rights_state": "source_review_only",
       "approval_scope": "production_visuals",
       "render_eligible": true,
-      "evidence_render_eligible": false
+      "evidence_render_eligible": true
     },
     {
       "image_id": "sovereign-memory-infrastructure-s06-teacher-stamped",
@@ -1206,19 +1214,19 @@
       "context": {
         "label": "Financial Physics: S&P 500 versus Sovereign Scalers",
         "summary": "Source comparison of the S&P 500 allocator and the capital requirements of strategic memory infrastructure.",
-        "context_status": "review_only",
+        "context_status": "operator_verified",
         "claim_refs": [],
         "cue_refs": [],
         "approval_scope": "production_visuals",
         "source_image_id": "sovereign-memory-infrastructure-s06-original",
         "source_review_status": "review_only",
         "production_scope": "production_visuals",
-        "evidence_scope": "source_review_only"
+        "evidence_scope": "all_factual_contents"
       },
       "rights_state": "source_review_only",
       "approval_scope": "production_visuals",
       "render_eligible": true,
-      "evidence_render_eligible": false
+      "evidence_render_eligible": true
     },
     {
       "image_id": "sovereign-memory-infrastructure-s07-teacher-stamped",
@@ -1238,19 +1246,19 @@
       "context": {
         "label": "The Accretive Burn Framework",
         "summary": "Source framework separating incremental return, backlog-to-burn conversion, and capital-growth metrics.",
-        "context_status": "review_only",
+        "context_status": "operator_verified",
         "claim_refs": [],
         "cue_refs": [],
         "approval_scope": "production_visuals",
         "source_image_id": "sovereign-memory-infrastructure-s07-original",
         "source_review_status": "review_only",
         "production_scope": "production_visuals",
-        "evidence_scope": "source_review_only"
+        "evidence_scope": "all_factual_contents"
       },
       "rights_state": "source_review_only",
       "approval_scope": "production_visuals",
       "render_eligible": true,
-      "evidence_render_eligible": false
+      "evidence_render_eligible": true
     },
     {
       "image_id": "sovereign-memory-infrastructure-s08-teacher-stamped",
@@ -1270,19 +1278,19 @@
       "context": {
         "label": "CapEx Mechanics of the Memory Giants",
         "summary": "Source plate comparing capital expenditure and manufacturing posture across Micron, Samsung, and SK hynix.",
-        "context_status": "review_only",
+        "context_status": "operator_verified",
         "claim_refs": [],
         "cue_refs": [],
         "approval_scope": "production_visuals",
         "source_image_id": "sovereign-memory-infrastructure-s08-original",
         "source_review_status": "review_only",
         "production_scope": "production_visuals",
-        "evidence_scope": "source_review_only"
+        "evidence_scope": "all_factual_contents"
       },
       "rights_state": "source_review_only",
       "approval_scope": "production_visuals",
       "render_eligible": true,
-      "evidence_render_eligible": false
+      "evidence_render_eligible": true
     },
     {
       "image_id": "sovereign-memory-infrastructure-s09-teacher-stamped",
@@ -1302,19 +1310,19 @@
       "context": {
         "label": "The Structural Re-Rating Cycle",
         "summary": "Source cycle diagram showing how memory technology, physical capacity, and earnings can drive a structural re-rating.",
-        "context_status": "review_only",
+        "context_status": "operator_verified",
         "claim_refs": [],
         "cue_refs": [],
         "approval_scope": "production_visuals",
         "source_image_id": "sovereign-memory-infrastructure-s09-original",
         "source_review_status": "review_only",
         "production_scope": "production_visuals",
-        "evidence_scope": "source_review_only"
+        "evidence_scope": "all_factual_contents"
       },
       "rights_state": "source_review_only",
       "approval_scope": "production_visuals",
       "render_eligible": true,
-      "evidence_render_eligible": false
+      "evidence_render_eligible": true
     },
     {
       "image_id": "sovereign-memory-infrastructure-s10-teacher-stamped",
@@ -1334,19 +1342,19 @@
       "context": {
         "label": "Trend One: Reshoring versus Sovereign Stacks",
         "summary": "Source supply-chain map contrasting domestic reshoring with integrated sovereign AI stacks.",
-        "context_status": "review_only",
+        "context_status": "operator_verified",
         "claim_refs": [],
         "cue_refs": [],
         "approval_scope": "production_visuals",
         "source_image_id": "sovereign-memory-infrastructure-s10-original",
         "source_review_status": "review_only",
         "production_scope": "production_visuals",
-        "evidence_scope": "source_review_only"
+        "evidence_scope": "all_factual_contents"
       },
       "rights_state": "source_review_only",
       "approval_scope": "production_visuals",
       "render_eligible": true,
-      "evidence_render_eligible": false
+      "evidence_render_eligible": true
     },
     {
       "image_id": "sovereign-memory-infrastructure-s11-teacher-stamped",
@@ -1366,19 +1374,19 @@
       "context": {
         "label": "Trend Two: The Advanced Packaging Bottleneck",
         "summary": "Source mechanism plate showing advanced packaging as the critical interface between HBM stacks and AI logic.",
-        "context_status": "review_only",
+        "context_status": "operator_verified",
         "claim_refs": [],
         "cue_refs": [],
         "approval_scope": "production_visuals",
         "source_image_id": "sovereign-memory-infrastructure-s11-original",
         "source_review_status": "review_only",
         "production_scope": "production_visuals",
-        "evidence_scope": "source_review_only"
+        "evidence_scope": "all_factual_contents"
       },
       "rights_state": "source_review_only",
       "approval_scope": "production_visuals",
       "render_eligible": true,
-      "evidence_render_eligible": false
+      "evidence_render_eligible": true
     },
     {
       "image_id": "sovereign-memory-infrastructure-s12-teacher-stamped",
@@ -1398,19 +1406,19 @@
       "context": {
         "label": "Trend Three: Co-Packaged Optics",
         "summary": "Source mechanism plate showing the optical interconnect wall and the proposed co-packaged optics response.",
-        "context_status": "review_only",
+        "context_status": "operator_verified",
         "claim_refs": [],
         "cue_refs": [],
         "approval_scope": "production_visuals",
         "source_image_id": "sovereign-memory-infrastructure-s12-original",
         "source_review_status": "review_only",
         "production_scope": "production_visuals",
-        "evidence_scope": "source_review_only"
+        "evidence_scope": "all_factual_contents"
       },
       "rights_state": "source_review_only",
       "approval_scope": "production_visuals",
       "render_eligible": true,
-      "evidence_render_eligible": false
+      "evidence_render_eligible": true
     },
     {
       "image_id": "sovereign-memory-infrastructure-s13-teacher-stamped",
@@ -1430,19 +1438,19 @@
       "context": {
         "label": "Risk and Sensitivity Analysis",
         "summary": "Source risk plate covering concentration, power and energy density, and capex normalization risks.",
-        "context_status": "review_only",
+        "context_status": "operator_verified",
         "claim_refs": [],
         "cue_refs": [],
         "approval_scope": "production_visuals",
         "source_image_id": "sovereign-memory-infrastructure-s13-original",
         "source_review_status": "review_only",
         "production_scope": "production_visuals",
-        "evidence_scope": "source_review_only"
+        "evidence_scope": "all_factual_contents"
       },
       "rights_state": "source_review_only",
       "approval_scope": "production_visuals",
       "render_eligible": true,
-      "evidence_render_eligible": false
+      "evidence_render_eligible": true
     },
     {
       "image_id": "sovereign-memory-infrastructure-s14-teacher-stamped",
@@ -1462,19 +1470,19 @@
       "context": {
         "label": "Synthesis: The Sovereign Memory Playbook",
         "summary": "Closing source plate summarizing the shift from commodity memory to infrastructure-grade strategic demand.",
-        "context_status": "review_only",
+        "context_status": "operator_verified",
         "claim_refs": [],
         "cue_refs": [],
         "approval_scope": "production_visuals",
         "source_image_id": "sovereign-memory-infrastructure-s14-original",
         "source_review_status": "review_only",
         "production_scope": "production_visuals",
-        "evidence_scope": "source_review_only"
+        "evidence_scope": "all_factual_contents"
       },
       "rights_state": "source_review_only",
       "approval_scope": "production_visuals",
       "render_eligible": true,
-      "evidence_render_eligible": false
+      "evidence_render_eligible": true
     },
     {
       "image_id": "silicon-silent-triopoly-s01-teacher-stamped",
@@ -1494,19 +1502,19 @@
       "context": {
         "label": "The Ultimate Antidote to the S&P 500 Bubble",
         "summary": "Opening source plate framing silicon memory as the physical counterpoint to a software-led market bubble.",
-        "context_status": "review_only",
+        "context_status": "operator_verified",
         "claim_refs": [],
         "cue_refs": [],
         "approval_scope": "production_visuals",
         "source_image_id": "silicon-silent-triopoly-s01-original",
         "source_review_status": "review_only",
         "production_scope": "production_visuals",
-        "evidence_scope": "source_review_only"
+        "evidence_scope": "all_factual_contents"
       },
       "rights_state": "source_review_only",
       "approval_scope": "production_visuals",
       "render_eligible": true,
-      "evidence_render_eligible": false
+      "evidence_render_eligible": true
     },
     {
       "image_id": "silicon-silent-triopoly-s02-teacher-stamped",
@@ -1526,19 +1534,19 @@
       "context": {
         "label": "The Great Valuation Paradox",
         "summary": "Source plate contrasting an extreme S&P 500 CAPE ratio with memory-triopoly forward valuation and margins.",
-        "context_status": "review_only",
+        "context_status": "operator_verified",
         "claim_refs": [],
         "cue_refs": [],
         "approval_scope": "production_visuals",
         "source_image_id": "silicon-silent-triopoly-s02-original",
         "source_review_status": "review_only",
         "production_scope": "production_visuals",
-        "evidence_scope": "source_review_only"
+        "evidence_scope": "all_factual_contents"
       },
       "rights_state": "source_review_only",
       "approval_scope": "production_visuals",
       "render_eligible": true,
-      "evidence_render_eligible": false
+      "evidence_render_eligible": true
     },
     {
       "image_id": "silicon-silent-triopoly-s03-teacher-stamped",
@@ -1558,19 +1566,19 @@
       "context": {
         "label": "The Strange Genesis of a Cartel",
         "summary": "Source history plate describing how Samsung, Micron, and SK hynix emerged from separate survival paths.",
-        "context_status": "review_only",
+        "context_status": "operator_verified",
         "claim_refs": [],
         "cue_refs": [],
         "approval_scope": "production_visuals",
         "source_image_id": "silicon-silent-triopoly-s03-original",
         "source_review_status": "review_only",
         "production_scope": "production_visuals",
-        "evidence_scope": "source_review_only"
+        "evidence_scope": "all_factual_contents"
       },
       "rights_state": "source_review_only",
       "approval_scope": "production_visuals",
       "render_eligible": true,
-      "evidence_render_eligible": false
+      "evidence_render_eligible": true
     },
     {
       "image_id": "silicon-silent-triopoly-s04-teacher-stamped",
@@ -1590,19 +1598,19 @@
       "context": {
         "label": "The Capital Cycle Meat Grinder",
         "summary": "Source mechanism plate showing price wars, excess capital expenditure, and the collapse of weaker memory rivals.",
-        "context_status": "review_only",
+        "context_status": "operator_verified",
         "claim_refs": [],
         "cue_refs": [],
         "approval_scope": "production_visuals",
         "source_image_id": "silicon-silent-triopoly-s04-original",
         "source_review_status": "review_only",
         "production_scope": "production_visuals",
-        "evidence_scope": "source_review_only"
+        "evidence_scope": "all_factual_contents"
       },
       "rights_state": "source_review_only",
       "approval_scope": "production_visuals",
       "render_eligible": true,
-      "evidence_render_eligible": false
+      "evidence_render_eligible": true
     },
     {
       "image_id": "silicon-silent-triopoly-s05-teacher-stamped",
@@ -1622,19 +1630,19 @@
       "context": {
         "label": "The Physical Moat of HBM",
         "summary": "Source mechanism plate showing the stacked HBM structure and the physical fragility of ultra-thin silicon.",
-        "context_status": "review_only",
+        "context_status": "operator_verified",
         "claim_refs": [],
         "cue_refs": [],
         "approval_scope": "production_visuals",
         "source_image_id": "silicon-silent-triopoly-s05-original",
         "source_review_status": "review_only",
         "production_scope": "production_visuals",
-        "evidence_scope": "source_review_only"
+        "evidence_scope": "all_factual_contents"
       },
       "rights_state": "source_review_only",
       "approval_scope": "production_visuals",
       "render_eligible": true,
-      "evidence_render_eligible": false
+      "evidence_render_eligible": true
     },
     {
       "image_id": "silicon-silent-triopoly-s06-teacher-stamped",
@@ -1654,19 +1662,19 @@
       "context": {
         "label": "The Packaging Battle Matrix",
         "summary": "Source comparison of Samsung film-based packaging and SK hynix liquid-epoxy packaging approaches.",
-        "context_status": "review_only",
+        "context_status": "operator_verified",
         "claim_refs": [],
         "cue_refs": [],
         "approval_scope": "production_visuals",
         "source_image_id": "silicon-silent-triopoly-s06-original",
         "source_review_status": "review_only",
         "production_scope": "production_visuals",
-        "evidence_scope": "source_review_only"
+        "evidence_scope": "all_factual_contents"
       },
       "rights_state": "source_review_only",
       "approval_scope": "production_visuals",
       "render_eligible": true,
-      "evidence_render_eligible": false
+      "evidence_render_eligible": true
     },
     {
       "image_id": "silicon-silent-triopoly-s07-teacher-stamped",
@@ -1686,19 +1694,19 @@
       "context": {
         "label": "The RAM-ageddon Penalty",
         "summary": "Source plate illustrating the three-to-one wafer-capacity penalty created by HBM production.",
-        "context_status": "review_only",
+        "context_status": "operator_verified",
         "claim_refs": [],
         "cue_refs": [],
         "approval_scope": "production_visuals",
         "source_image_id": "silicon-silent-triopoly-s07-original",
         "source_review_status": "review_only",
         "production_scope": "production_visuals",
-        "evidence_scope": "source_review_only"
+        "evidence_scope": "all_factual_contents"
       },
       "rights_state": "source_review_only",
       "approval_scope": "production_visuals",
       "render_eligible": true,
-      "evidence_render_eligible": false
+      "evidence_render_eligible": true
     },
     {
       "image_id": "silicon-silent-triopoly-s08-teacher-stamped",
@@ -1718,19 +1726,19 @@
       "context": {
         "label": "The Expanding DRAM Battlefield",
         "summary": "Source market-share map showing the memory triopoly, CXMT, and the expanding DRAM competitive field.",
-        "context_status": "review_only",
+        "context_status": "operator_verified",
         "claim_refs": [],
         "cue_refs": [],
         "approval_scope": "production_visuals",
         "source_image_id": "silicon-silent-triopoly-s08-original",
         "source_review_status": "review_only",
         "production_scope": "production_visuals",
-        "evidence_scope": "source_review_only"
+        "evidence_scope": "all_factual_contents"
       },
       "rights_state": "source_review_only",
       "approval_scope": "production_visuals",
       "render_eligible": true,
-      "evidence_render_eligible": false
+      "evidence_render_eligible": true
     },
     {
       "image_id": "silicon-silent-triopoly-s09-teacher-stamped",
@@ -1750,19 +1758,19 @@
       "context": {
         "label": "The NAND Counteroffensive",
         "summary": "Source plate showing the NAND market lanes, leading manufacturers, and a disruptive challenger.",
-        "context_status": "review_only",
+        "context_status": "operator_verified",
         "claim_refs": [],
         "cue_refs": [],
         "approval_scope": "production_visuals",
         "source_image_id": "silicon-silent-triopoly-s09-original",
         "source_review_status": "review_only",
         "production_scope": "production_visuals",
-        "evidence_scope": "source_review_only"
+        "evidence_scope": "all_factual_contents"
       },
       "rights_state": "source_review_only",
       "approval_scope": "production_visuals",
       "render_eligible": true,
-      "evidence_render_eligible": false
+      "evidence_render_eligible": true
     },
     {
       "image_id": "silicon-silent-triopoly-s10-teacher-stamped",
@@ -1782,19 +1790,19 @@
       "context": {
         "label": "The S&P 500 Liquidity Mirage",
         "summary": "Source plate contrasting reported index earnings growth with the underlying composition of market liquidity.",
-        "context_status": "review_only",
+        "context_status": "operator_verified",
         "claim_refs": [],
         "cue_refs": [],
         "approval_scope": "production_visuals",
         "source_image_id": "silicon-silent-triopoly-s10-original",
         "source_review_status": "review_only",
         "production_scope": "production_visuals",
-        "evidence_scope": "source_review_only"
+        "evidence_scope": "all_factual_contents"
       },
       "rights_state": "source_review_only",
       "approval_scope": "production_visuals",
       "render_eligible": true,
-      "evidence_render_eligible": false
+      "evidence_render_eligible": true
     },
     {
       "image_id": "silicon-silent-triopoly-s11-teacher-stamped",
@@ -1814,19 +1822,19 @@
       "context": {
         "label": "The Unbreakable Chokepoint",
         "summary": "Source comparison of the outdated commodity view with the memory triopoly's contracted, integrated, and capacity-bound moat.",
-        "context_status": "review_only",
+        "context_status": "operator_verified",
         "claim_refs": [],
         "cue_refs": [],
         "approval_scope": "production_visuals",
         "source_image_id": "silicon-silent-triopoly-s11-original",
         "source_review_status": "review_only",
         "production_scope": "production_visuals",
-        "evidence_scope": "source_review_only"
+        "evidence_scope": "all_factual_contents"
       },
       "rights_state": "source_review_only",
       "approval_scope": "production_visuals",
       "render_eligible": true,
-      "evidence_render_eligible": false
+      "evidence_render_eligible": true
     },
     {
       "image_id": "silicon-silent-triopoly-s12-teacher-stamped",
@@ -1846,19 +1854,19 @@
       "context": {
         "label": "The Crucible of Compute",
         "summary": "Closing source plate framing memory as the physical bottleneck that controls the economics of AI compute.",
-        "context_status": "review_only",
+        "context_status": "operator_verified",
         "claim_refs": [],
         "cue_refs": [],
         "approval_scope": "production_visuals",
         "source_image_id": "silicon-silent-triopoly-s12-original",
         "source_review_status": "review_only",
         "production_scope": "production_visuals",
-        "evidence_scope": "source_review_only"
+        "evidence_scope": "all_factual_contents"
       },
       "rights_state": "source_review_only",
       "approval_scope": "production_visuals",
       "render_eligible": true,
-      "evidence_render_eligible": false
+      "evidence_render_eligible": true
     },
     {
       "image_id": "silicon-value-software-bubble-s01-teacher-stamped",
@@ -1878,19 +1886,19 @@
       "context": {
         "label": "The Physical Bottleneck versus the Software Bubble",
         "summary": "Opening source plate contrasting the physical scarcity of AI memory with the software market’s elevated valuation.",
-        "context_status": "review_only",
+        "context_status": "operator_verified",
         "claim_refs": [],
         "cue_refs": [],
         "approval_scope": "production_visuals",
         "source_image_id": "silicon-value-software-bubble-s01-original",
         "source_review_status": "review_only",
         "production_scope": "production_visuals",
-        "evidence_scope": "source_review_only"
+        "evidence_scope": "all_factual_contents"
       },
       "rights_state": "source_review_only",
       "approval_scope": "production_visuals",
       "render_eligible": true,
-      "evidence_render_eligible": false
+      "evidence_render_eligible": true
     },
     {
       "image_id": "silicon-value-software-bubble-s02-teacher-stamped",
@@ -1910,19 +1918,19 @@
       "context": {
         "label": "The Earnings Concentration Funnel",
         "summary": "Source plate showing passive flows, top-ten mega-cap concentration, and reported earnings growth around the index bubble.",
-        "context_status": "review_only",
+        "context_status": "operator_verified",
         "claim_refs": [],
         "cue_refs": [],
         "approval_scope": "production_visuals",
         "source_image_id": "silicon-value-software-bubble-s02-original",
         "source_review_status": "review_only",
         "production_scope": "production_visuals",
-        "evidence_scope": "source_review_only"
+        "evidence_scope": "all_factual_contents"
       },
       "rights_state": "source_review_only",
       "approval_scope": "production_visuals",
       "render_eligible": true,
-      "evidence_render_eligible": false
+      "evidence_render_eligible": true
     },
     {
       "image_id": "silicon-value-software-bubble-s03-teacher-stamped",
@@ -1942,19 +1950,19 @@
       "context": {
         "label": "The Inescapable Physical Reality",
         "summary": "Source plate using an hourglass to connect software layers, AI compute, and the global physical memory stack beneath them.",
-        "context_status": "review_only",
+        "context_status": "operator_verified",
         "claim_refs": [],
         "cue_refs": [],
         "approval_scope": "production_visuals",
         "source_image_id": "silicon-value-software-bubble-s03-original",
         "source_review_status": "review_only",
         "production_scope": "production_visuals",
-        "evidence_scope": "source_review_only"
+        "evidence_scope": "all_factual_contents"
       },
       "rights_state": "source_review_only",
       "approval_scope": "production_visuals",
       "render_eligible": true,
-      "evidence_render_eligible": false
+      "evidence_render_eligible": true
     },
     {
       "image_id": "silicon-value-software-bubble-s04-teacher-stamped",
@@ -1974,19 +1982,19 @@
       "context": {
         "label": "The Triopoly Was Forged through Risk and Survival",
         "summary": "Source history plate showing how Samsung, Micron, and SK hynix survived through distinct capital-cycle paths.",
-        "context_status": "review_only",
+        "context_status": "operator_verified",
         "claim_refs": [],
         "cue_refs": [],
         "approval_scope": "production_visuals",
         "source_image_id": "silicon-value-software-bubble-s04-original",
         "source_review_status": "review_only",
         "production_scope": "production_visuals",
-        "evidence_scope": "source_review_only"
+        "evidence_scope": "all_factual_contents"
       },
       "rights_state": "source_review_only",
       "approval_scope": "production_visuals",
       "render_eligible": true,
-      "evidence_render_eligible": false
+      "evidence_render_eligible": true
     },
     {
       "image_id": "silicon-value-software-bubble-s05-teacher-stamped",
@@ -2006,19 +2014,19 @@
       "context": {
         "label": "The Price-Deflation Capital Cycle",
         "summary": "Source cycle diagram linking Moore’s Law, price deflation, bankruptcies, and industry consolidation.",
-        "context_status": "review_only",
+        "context_status": "operator_verified",
         "claim_refs": [],
         "cue_refs": [],
         "approval_scope": "production_visuals",
         "source_image_id": "silicon-value-software-bubble-s05-original",
         "source_review_status": "review_only",
         "production_scope": "production_visuals",
-        "evidence_scope": "source_review_only"
+        "evidence_scope": "all_factual_contents"
       },
       "rights_state": "source_review_only",
       "approval_scope": "production_visuals",
       "render_eligible": true,
-      "evidence_render_eligible": false
+      "evidence_render_eligible": true
     },
     {
       "image_id": "silicon-value-software-bubble-s06-teacher-stamped",
@@ -2038,19 +2046,19 @@
       "context": {
         "label": "The Physical Breakdown of Moore’s Law",
         "summary": "Source chart showing process volatility, declining gains, and the structural transition toward stacked silicon.",
-        "context_status": "review_only",
+        "context_status": "operator_verified",
         "claim_refs": [],
         "cue_refs": [],
         "approval_scope": "production_visuals",
         "source_image_id": "silicon-value-software-bubble-s06-original",
         "source_review_status": "review_only",
         "production_scope": "production_visuals",
-        "evidence_scope": "source_review_only"
+        "evidence_scope": "all_factual_contents"
       },
       "rights_state": "source_review_only",
       "approval_scope": "production_visuals",
       "render_eligible": true,
-      "evidence_render_eligible": false
+      "evidence_render_eligible": true
     },
     {
       "image_id": "silicon-value-software-bubble-s07-teacher-stamped",
@@ -2070,19 +2078,19 @@
       "context": {
         "label": "HBM Breaks the Historical Commodity Pattern",
         "summary": "Source mechanism plate comparing planar DRAM with the stacked HBM architecture and its physical constraints.",
-        "context_status": "review_only",
+        "context_status": "operator_verified",
         "claim_refs": [],
         "cue_refs": [],
         "approval_scope": "production_visuals",
         "source_image_id": "silicon-value-software-bubble-s07-original",
         "source_review_status": "review_only",
         "production_scope": "production_visuals",
-        "evidence_scope": "source_review_only"
+        "evidence_scope": "all_factual_contents"
       },
       "rights_state": "source_review_only",
       "approval_scope": "production_visuals",
       "render_eligible": true,
-      "evidence_render_eligible": false
+      "evidence_render_eligible": true
     },
     {
       "image_id": "silicon-value-software-bubble-s08-teacher-stamped",
@@ -2102,19 +2110,19 @@
       "context": {
         "label": "Physical Failure Points",
         "summary": "A source plate showing three physical failure points introduced by stacked silicon: backgrinding, TSV etching, and wafer-level testing.",
-        "context_status": "review_only",
+        "context_status": "operator_verified",
         "claim_refs": [],
         "cue_refs": [],
         "approval_scope": "production_visuals",
         "source_image_id": "silicon-value-software-bubble-s08-original",
         "source_review_status": "review_only",
         "production_scope": "production_visuals",
-        "evidence_scope": "source_review_only"
+        "evidence_scope": "all_factual_contents"
       },
       "rights_state": "source_review_only",
       "approval_scope": "production_visuals",
       "render_eligible": true,
-      "evidence_render_eligible": false
+      "evidence_render_eligible": true
     },
     {
       "image_id": "silicon-value-software-bubble-s09-teacher-stamped",
@@ -2134,19 +2142,19 @@
       "context": {
         "label": "Connecting the Dies Is the Hardest Step",
         "summary": "Source process plate comparing Samsung and SK hynix interconnect methods and their thermal and yield constraints.",
-        "context_status": "review_only",
+        "context_status": "operator_verified",
         "claim_refs": [],
         "cue_refs": [],
         "approval_scope": "production_visuals",
         "source_image_id": "silicon-value-software-bubble-s09-original",
         "source_review_status": "review_only",
         "production_scope": "production_visuals",
-        "evidence_scope": "source_review_only"
+        "evidence_scope": "all_factual_contents"
       },
       "rights_state": "source_review_only",
       "approval_scope": "production_visuals",
       "render_eligible": true,
-      "evidence_render_eligible": false
+      "evidence_render_eligible": true
     },
     {
       "image_id": "silicon-value-software-bubble-s10-teacher-stamped",
@@ -2166,19 +2174,19 @@
       "context": {
         "label": "The RAM-ageddon Effect",
         "summary": "Source mechanism plate linking HBM’s wafer penalty to a structural supply shortage in standard memory.",
-        "context_status": "review_only",
+        "context_status": "operator_verified",
         "claim_refs": [],
         "cue_refs": [],
         "approval_scope": "production_visuals",
         "source_image_id": "silicon-value-software-bubble-s10-original",
         "source_review_status": "review_only",
         "production_scope": "production_visuals",
-        "evidence_scope": "source_review_only"
+        "evidence_scope": "all_factual_contents"
       },
       "rights_state": "source_review_only",
       "approval_scope": "production_visuals",
       "render_eligible": true,
-      "evidence_render_eligible": false
+      "evidence_render_eligible": true
     },
     {
       "image_id": "silicon-value-software-bubble-s11-teacher-stamped",
@@ -2198,19 +2206,19 @@
       "context": {
         "label": "The DRAM Triopoly Is Rebalancing",
         "summary": "Source market-share plate showing how Samsung, SK hynix, Micron, and CXMT fit into shifting DRAM supply chains.",
-        "context_status": "review_only",
+        "context_status": "operator_verified",
         "claim_refs": [],
         "cue_refs": [],
         "approval_scope": "production_visuals",
         "source_image_id": "silicon-value-software-bubble-s11-original",
         "source_review_status": "review_only",
         "production_scope": "production_visuals",
-        "evidence_scope": "source_review_only"
+        "evidence_scope": "all_factual_contents"
       },
       "rights_state": "source_review_only",
       "approval_scope": "production_visuals",
       "render_eligible": true,
-      "evidence_render_eligible": false
+      "evidence_render_eligible": true
     },
     {
       "image_id": "silicon-value-software-bubble-s12-teacher-stamped",
@@ -2230,19 +2238,19 @@
       "context": {
         "label": "The NAND Disruption Track",
         "summary": "Source market-share plate showing the NAND storage competitive field and fast-moving challengers.",
-        "context_status": "review_only",
+        "context_status": "operator_verified",
         "claim_refs": [],
         "cue_refs": [],
         "approval_scope": "production_visuals",
         "source_image_id": "silicon-value-software-bubble-s12-original",
         "source_review_status": "review_only",
         "production_scope": "production_visuals",
-        "evidence_scope": "source_review_only"
+        "evidence_scope": "all_factual_contents"
       },
       "rights_state": "source_review_only",
       "approval_scope": "production_visuals",
       "render_eligible": true,
-      "evidence_render_eligible": false
+      "evidence_render_eligible": true
     },
     {
       "image_id": "silicon-value-software-bubble-s13-teacher-stamped",
@@ -2262,19 +2270,19 @@
       "context": {
         "label": "Cash Generation versus Paper Gains",
         "summary": "Source comparison showing the market discount applied to memory cash generation versus software-style index gains.",
-        "context_status": "review_only",
+        "context_status": "operator_verified",
         "claim_refs": [],
         "cue_refs": [],
         "approval_scope": "production_visuals",
         "source_image_id": "silicon-value-software-bubble-s13-original",
         "source_review_status": "review_only",
         "production_scope": "production_visuals",
-        "evidence_scope": "source_review_only"
+        "evidence_scope": "all_factual_contents"
       },
       "rights_state": "source_review_only",
       "approval_scope": "production_visuals",
       "render_eligible": true,
-      "evidence_render_eligible": false
+      "evidence_render_eligible": true
     },
     {
       "image_id": "silicon-value-software-bubble-s14-teacher-stamped",
@@ -2294,19 +2302,19 @@
       "context": {
         "label": "Memory Is a Strategic Asset, Not a Cheap Input",
         "summary": "Source moat plate showing long-term agreements, custom co-engineering, logic integration, and expanding bill-of-materials importance.",
-        "context_status": "review_only",
+        "context_status": "operator_verified",
         "claim_refs": [],
         "cue_refs": [],
         "approval_scope": "production_visuals",
         "source_image_id": "silicon-value-software-bubble-s14-original",
         "source_review_status": "review_only",
         "production_scope": "production_visuals",
-        "evidence_scope": "source_review_only"
+        "evidence_scope": "all_factual_contents"
       },
       "rights_state": "source_review_only",
       "approval_scope": "production_visuals",
       "render_eligible": true,
-      "evidence_render_eligible": false
+      "evidence_render_eligible": true
     },
     {
       "image_id": "silicon-value-software-bubble-s15-teacher-stamped",
@@ -2326,19 +2334,19 @@
       "context": {
         "label": "Vulnerability versus Opportunity",
         "summary": "A source plate showing the contrasting S&P 500 vulnerability path and memory triopoly opportunity path.",
-        "context_status": "review_only",
+        "context_status": "operator_verified",
         "claim_refs": [],
         "cue_refs": [],
         "approval_scope": "production_visuals",
         "source_image_id": "silicon-value-software-bubble-s15-original",
         "source_review_status": "review_only",
         "production_scope": "production_visuals",
-        "evidence_scope": "source_review_only"
+        "evidence_scope": "all_factual_contents"
       },
       "rights_state": "source_review_only",
       "approval_scope": "production_visuals",
       "render_eligible": true,
-      "evidence_render_eligible": false
+      "evidence_render_eligible": true
     },
     {
       "image_id": "silicon-reality-gap-s01-teacher-stamped",
@@ -2358,19 +2366,19 @@
       "context": {
         "label": "The Great Valuation Paradox",
         "summary": "Opening source plate contrasting the S&P 500 bubble with the physical memory triopoly opportunity.",
-        "context_status": "review_only",
+        "context_status": "operator_verified",
         "claim_refs": [],
         "cue_refs": [],
         "approval_scope": "production_visuals",
         "source_image_id": "silicon-reality-gap-s01-original",
         "source_review_status": "review_only",
         "production_scope": "production_visuals",
-        "evidence_scope": "source_review_only"
+        "evidence_scope": "all_factual_contents"
       },
       "rights_state": "source_review_only",
       "approval_scope": "production_visuals",
       "render_eligible": true,
-      "evidence_render_eligible": false
+      "evidence_render_eligible": true
     },
     {
       "image_id": "silicon-reality-gap-s02-teacher-stamped",
@@ -2390,19 +2398,19 @@
       "context": {
         "label": "The S&P 500 Paper Bubble versus Physical Compute",
         "summary": "Source comparison of index narrative expansion with the physical bottleneck inside modern compute systems.",
-        "context_status": "review_only",
+        "context_status": "operator_verified",
         "claim_refs": [],
         "cue_refs": [],
         "approval_scope": "production_visuals",
         "source_image_id": "silicon-reality-gap-s02-original",
         "source_review_status": "review_only",
         "production_scope": "production_visuals",
-        "evidence_scope": "source_review_only"
+        "evidence_scope": "all_factual_contents"
       },
       "rights_state": "source_review_only",
       "approval_scope": "production_visuals",
       "render_eligible": true,
-      "evidence_render_eligible": false
+      "evidence_render_eligible": true
     },
     {
       "image_id": "silicon-reality-gap-s03-teacher-stamped",
@@ -2422,19 +2430,19 @@
       "context": {
         "label": "Record Earnings versus Historic Valuation Discounts",
         "summary": "Source matrix comparing valuation, operating performance, market-cap contribution, and forward multiples.",
-        "context_status": "review_only",
+        "context_status": "operator_verified",
         "claim_refs": [],
         "cue_refs": [],
         "approval_scope": "production_visuals",
         "source_image_id": "silicon-reality-gap-s03-original",
         "source_review_status": "review_only",
         "production_scope": "production_visuals",
-        "evidence_scope": "source_review_only"
+        "evidence_scope": "all_factual_contents"
       },
       "rights_state": "source_review_only",
       "approval_scope": "production_visuals",
       "render_eligible": true,
-      "evidence_render_eligible": false
+      "evidence_render_eligible": true
     },
     {
       "image_id": "silicon-reality-gap-s04-teacher-stamped",
@@ -2454,19 +2462,19 @@
       "context": {
         "label": "The Market’s Cyclical Trauma",
         "summary": "Source cycle diagram linking high returns, excess capital, oversupply, and debt-financed capacity expansion.",
-        "context_status": "review_only",
+        "context_status": "operator_verified",
         "claim_refs": [],
         "cue_refs": [],
         "approval_scope": "production_visuals",
         "source_image_id": "silicon-reality-gap-s04-original",
         "source_review_status": "review_only",
         "production_scope": "production_visuals",
-        "evidence_scope": "source_review_only"
+        "evidence_scope": "all_factual_contents"
       },
       "rights_state": "source_review_only",
       "approval_scope": "production_visuals",
       "render_eligible": true,
-      "evidence_render_eligible": false
+      "evidence_render_eligible": true
     },
     {
       "image_id": "silicon-reality-gap-s05-teacher-stamped",
@@ -2486,19 +2494,19 @@
       "context": {
         "label": "The Triopoly Genesis",
         "summary": "A source plate describing the consolidation from many semiconductor rivals to Samsung, Micron, and SK hynix.",
-        "context_status": "review_only",
+        "context_status": "operator_verified",
         "claim_refs": [],
         "cue_refs": [],
         "approval_scope": "production_visuals",
         "source_image_id": "silicon-reality-gap-s05-original",
         "source_review_status": "review_only",
         "production_scope": "production_visuals",
-        "evidence_scope": "source_review_only"
+        "evidence_scope": "all_factual_contents"
       },
       "rights_state": "source_review_only",
       "approval_scope": "production_visuals",
       "render_eligible": true,
-      "evidence_render_eligible": false
+      "evidence_render_eligible": true
     },
     {
       "image_id": "silicon-reality-gap-s06-teacher-stamped",
@@ -2518,19 +2526,19 @@
       "context": {
         "label": "The Breakdown of Moore’s Law",
         "summary": "Source historical chart showing slowing process gains and the shift toward capital discipline in memory manufacturing.",
-        "context_status": "review_only",
+        "context_status": "operator_verified",
         "claim_refs": [],
         "cue_refs": [],
         "approval_scope": "production_visuals",
         "source_image_id": "silicon-reality-gap-s06-original",
         "source_review_status": "review_only",
         "production_scope": "production_visuals",
-        "evidence_scope": "source_review_only"
+        "evidence_scope": "all_factual_contents"
       },
       "rights_state": "source_review_only",
       "approval_scope": "production_visuals",
       "render_eligible": true,
-      "evidence_render_eligible": false
+      "evidence_render_eligible": true
     },
     {
       "image_id": "silicon-reality-gap-s07-teacher-stamped",
@@ -2550,19 +2558,19 @@
       "context": {
         "label": "The Anatomy of a Bottleneck",
         "summary": "A source plate showing the stacked HBM physical structure and its manufacturing constraints.",
-        "context_status": "review_only",
+        "context_status": "operator_verified",
         "claim_refs": [],
         "cue_refs": [],
         "approval_scope": "production_visuals",
         "source_image_id": "silicon-reality-gap-s07-original",
         "source_review_status": "review_only",
         "production_scope": "production_visuals",
-        "evidence_scope": "source_review_only"
+        "evidence_scope": "all_factual_contents"
       },
       "rights_state": "source_review_only",
       "approval_scope": "production_visuals",
       "render_eligible": true,
-      "evidence_render_eligible": false
+      "evidence_render_eligible": true
     },
     {
       "image_id": "silicon-reality-gap-s08-teacher-stamped",
@@ -2582,19 +2590,19 @@
       "context": {
         "label": "The Three-Dimensional Packaging War",
         "summary": "Source comparison of Samsung and SK hynix packaging approaches, thermal constraints, yield, and market dominance.",
-        "context_status": "review_only",
+        "context_status": "operator_verified",
         "claim_refs": [],
         "cue_refs": [],
         "approval_scope": "production_visuals",
         "source_image_id": "silicon-reality-gap-s08-original",
         "source_review_status": "review_only",
         "production_scope": "production_visuals",
-        "evidence_scope": "source_review_only"
+        "evidence_scope": "all_factual_contents"
       },
       "rights_state": "source_review_only",
       "approval_scope": "production_visuals",
       "render_eligible": true,
-      "evidence_render_eligible": false
+      "evidence_render_eligible": true
     },
     {
       "image_id": "silicon-reality-gap-s09-teacher-stamped",
@@ -2614,19 +2622,19 @@
       "context": {
         "label": "The Three-to-One Capacity Penalty",
         "summary": "Source plate showing HBM consuming the wafer capacity of multiple standard DRAM units and contributing to RAM-ageddon.",
-        "context_status": "review_only",
+        "context_status": "operator_verified",
         "claim_refs": [],
         "cue_refs": [],
         "approval_scope": "production_visuals",
         "source_image_id": "silicon-reality-gap-s09-original",
         "source_review_status": "review_only",
         "production_scope": "production_visuals",
-        "evidence_scope": "source_review_only"
+        "evidence_scope": "all_factual_contents"
       },
       "rights_state": "source_review_only",
       "approval_scope": "production_visuals",
       "render_eligible": true,
-      "evidence_render_eligible": false
+      "evidence_render_eligible": true
     },
     {
       "image_id": "silicon-reality-gap-s10-teacher-stamped",
@@ -2646,19 +2654,19 @@
       "context": {
         "label": "The Global DRAM Battlefield",
         "summary": "Source market map showing Samsung, SK hynix, Micron, CXMT, and the shifting global DRAM competitive field.",
-        "context_status": "review_only",
+        "context_status": "operator_verified",
         "claim_refs": [],
         "cue_refs": [],
         "approval_scope": "production_visuals",
         "source_image_id": "silicon-reality-gap-s10-original",
         "source_review_status": "review_only",
         "production_scope": "production_visuals",
-        "evidence_scope": "source_review_only"
+        "evidence_scope": "all_factual_contents"
       },
       "rights_state": "source_review_only",
       "approval_scope": "production_visuals",
       "render_eligible": true,
-      "evidence_render_eligible": false
+      "evidence_render_eligible": true
     },
     {
       "image_id": "silicon-reality-gap-s11-teacher-stamped",
@@ -2678,19 +2686,19 @@
       "context": {
         "label": "The Dual-Front NAND War",
         "summary": "Source market structure plate showing the leading NAND manufacturers and the challenger tiers around them.",
-        "context_status": "review_only",
+        "context_status": "operator_verified",
         "claim_refs": [],
         "cue_refs": [],
         "approval_scope": "production_visuals",
         "source_image_id": "silicon-reality-gap-s11-original",
         "source_review_status": "review_only",
         "production_scope": "production_visuals",
-        "evidence_scope": "source_review_only"
+        "evidence_scope": "all_factual_contents"
       },
       "rights_state": "source_review_only",
       "approval_scope": "production_visuals",
       "render_eligible": true,
-      "evidence_render_eligible": false
+      "evidence_render_eligible": true
     },
     {
       "image_id": "silicon-reality-gap-s12-teacher-stamped",
@@ -2710,19 +2718,19 @@
       "context": {
         "label": "The S&P 500 Paper Bubble Mechanics",
         "summary": "Source mechanism plate showing mega-cap concentration, passive indexing, and the gap between earnings contribution and index weight.",
-        "context_status": "review_only",
+        "context_status": "operator_verified",
         "claim_refs": [],
         "cue_refs": [],
         "approval_scope": "production_visuals",
         "source_image_id": "silicon-reality-gap-s12-original",
         "source_review_status": "review_only",
         "production_scope": "production_visuals",
-        "evidence_scope": "source_review_only"
+        "evidence_scope": "all_factual_contents"
       },
       "rights_state": "source_review_only",
       "approval_scope": "production_visuals",
       "render_eligible": true,
-      "evidence_render_eligible": false
+      "evidence_render_eligible": true
     },
     {
       "image_id": "silicon-reality-gap-s13-teacher-stamped",
@@ -2742,19 +2750,19 @@
       "context": {
         "label": "Advanced Memory Is No Longer Swappable",
         "summary": "Source plate contrasting commodity memory with custom co-engineering, foundry integration, and hardware supremacy.",
-        "context_status": "review_only",
+        "context_status": "operator_verified",
         "claim_refs": [],
         "cue_refs": [],
         "approval_scope": "production_visuals",
         "source_image_id": "silicon-reality-gap-s13-original",
         "source_review_status": "review_only",
         "production_scope": "production_visuals",
-        "evidence_scope": "source_review_only"
+        "evidence_scope": "all_factual_contents"
       },
       "rights_state": "source_review_only",
       "approval_scope": "production_visuals",
       "render_eligible": true,
-      "evidence_render_eligible": false
+      "evidence_render_eligible": true
     },
     {
       "image_id": "silicon-reality-gap-s14-teacher-stamped",
@@ -2774,19 +2782,19 @@
       "context": {
         "label": "Memory as a Strategic Chokepoint",
         "summary": "Source comparison showing the transition from a volatile commodity cycle to an AI-hardware choke point.",
-        "context_status": "review_only",
+        "context_status": "operator_verified",
         "claim_refs": [],
         "cue_refs": [],
         "approval_scope": "production_visuals",
         "source_image_id": "silicon-reality-gap-s14-original",
         "source_review_status": "review_only",
         "production_scope": "production_visuals",
-        "evidence_scope": "source_review_only"
+        "evidence_scope": "all_factual_contents"
       },
       "rights_state": "source_review_only",
       "approval_scope": "production_visuals",
       "render_eligible": true,
-      "evidence_render_eligible": false
+      "evidence_render_eligible": true
     },
     {
       "image_id": "silicon-reality-gap-s15-teacher-stamped",
@@ -2806,20 +2814,20 @@
       "context": {
         "label": "The Ultimate Hedge against an Index Bubble",
         "summary": "Closing source plate summarizing the S&P 500 illusion, memory physical moat, and opportunity framing.",
-        "context_status": "review_only",
+        "context_status": "operator_verified",
         "claim_refs": [],
         "cue_refs": [],
         "approval_scope": "production_visuals",
         "source_image_id": "silicon-reality-gap-s15-original",
         "source_review_status": "review_only",
         "production_scope": "production_visuals",
-        "evidence_scope": "source_review_only"
+        "evidence_scope": "all_factual_contents"
       },
       "rights_state": "source_review_only",
       "approval_scope": "production_visuals",
       "render_eligible": true,
-      "evidence_render_eligible": false
+      "evidence_render_eligible": true
     }
   ],
-  "artifact_hash": "1ece077d6db23320030dc64abd57ac6845dccfbbdc11773087bcd7ac57b6ab96"
+  "artifact_hash": "33ef6f4f45ac191e75cf95688b776e701d731086d56d78b198ab870c8d617760"
 }

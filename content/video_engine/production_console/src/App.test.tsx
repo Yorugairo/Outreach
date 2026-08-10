@@ -11,7 +11,7 @@ const snapshot = {
   base_artifact_hashes: {flow: 'a'.repeat(64)}, artifact_hash: 'b'.repeat(64), degraded_inputs: [], reviews: [],
   scenes: [{scene_id: 'scene-1', title: 'Valuation paradox', start_s: 0, end_s: 4, cue_refs: ['cue-1'], claim_refs: [], asset_ids: [], review_state: 'unreviewed'}],
   words: [{word_id: 'word-1', text: 'Market', start_s: 0, end_s: .2}],
-  assets: [{asset_id: 'visual-1', label: 'Bubble comparison', sha256: 'c'.repeat(64), source_kind: 'production_visual', approval_scope: 'production_visuals', evidence_eligible: false, rights_state: 'operator_authorized', context_status: 'review_only', deck_id: 'deck', slide_number: 1, width: 1376, height: 768, what_it_is: 'A comparison plate.', claim_refs: [], cue_refs: []}],
+  assets: [{asset_id: 'visual-1', label: 'Bubble comparison', sha256: 'c'.repeat(64), source_kind: 'production_visual', approval_scope: 'production_visuals', evidence_eligible: true, rights_state: 'operator_authorized', context_status: 'operator_verified', deck_id: 'deck', slide_number: 1, width: 1376, height: 768, what_it_is: 'A comparison plate.', claim_refs: [], cue_refs: []}],
 };
 
 afterEach(() => {
@@ -20,12 +20,13 @@ afterEach(() => {
 });
 
 describe('Production Console read-only gate', () => {
-  it('shows production approval separately from evidence eligibility', async () => {
+  it('shows production and factual-content approval separately', async () => {
     vi.stubGlobal('fetch', vi.fn((url: string) => Promise.resolve({ok: true, json: () => Promise.resolve(url.includes('snapshot') ? snapshot : {status: 'ready'})})));
     render(<App />);
     await waitFor(() => expect(screen.getByText('Production Console')).toBeInTheDocument());
     expect(screen.getByText('Approved visual')).toBeInTheDocument();
-    expect(screen.getByText('Not granted')).toBeInTheDocument();
+    expect(screen.getByText('Claim support')).toBeInTheDocument();
+    expect(screen.getByText('Approved factual content')).toBeInTheDocument();
     expect(screen.getByRole('button', {name: 'Save immutable revision'})).toBeDisabled();
   });
 

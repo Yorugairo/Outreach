@@ -39,7 +39,8 @@ try {
   await page.goto(`http://127.0.0.1:${address.port}`, {waitUntil: 'networkidle'});
   await page.getByText('Production Console', {exact: true}).waitFor();
   if (!(await page.getByText('Approved visual', {exact: true}).isVisible())) throw new Error('Production approval is not visible.');
-  if (!(await page.getByText('Not granted', {exact: true}).isVisible())) throw new Error('Evidence boundary is not visible.');
+  if (!(await page.getByText('Claim support', {exact: true}).isVisible())) throw new Error('Claim-support boundary is not visible.');
+  if (!(await page.getByText('Not granted', {exact: true}).isVisible())) throw new Error('Negative claim-support state is not visible.');
   if (await page.getByRole('button', {name: 'Save immutable revision'}).isEnabled()) throw new Error('Gate A mutation control is enabled.');
   if (process.env.E2E_SCREENSHOT) await page.screenshot({path: process.env.E2E_SCREENSHOT, fullPage: true});
   console.log('Gate A browser smoke: PASS');
