@@ -1,0 +1,122 @@
+{
+  "schema_version": "google_flow_provider_batch.v1",
+  "batch_id": "hg3-zero-credit-reliability-01",
+  "channel_id": "systems-and-blowups",
+  "episode_id": "human-gate-3-zero-credit-reliability",
+  "action": "image_generation",
+  "project_url": "https://labs.google/fx/tools/flow/project/62f78040-f462-4de1-a281-82551986ac2b",
+  "capability_snapshot": {
+    "path": "content/video_engine/projects/systems-and-blowups/provider-jobs/flow-extension-smoke-001.google-flow-capability.v1.json",
+    "sha256": "10c1f83c9f7e22cf7090ce1a1c25963f8c14e99c4ed09aa5e78be099bc054ff5",
+    "artifact_hash": "f69f53a03ca70a286d22a248d3ab84766a1e41779c5a00358377e209d859a1c5"
+  },
+  "requested_settings": {
+    "model": "Nano Banana Pro",
+    "mode": "image",
+    "aspect_ratio": "16:9",
+    "duration_seconds": null,
+    "quantity": 1
+  },
+  "items": [
+    {
+      "item_id": "hg3-01-memory-becomes-infrastructure",
+      "ordinal": 0,
+      "semantic_binding": {
+        "beat_id": "hg3-01-beat-01",
+        "sentence_id": "hg3-01-sentence-01",
+        "start_word_index": 0,
+        "end_word_index": 0,
+        "narration_excerpt": "Memory is no longer merely a replaceable consumer component; it is becoming critical AI infrastructure.",
+        "visual_job": {
+          "purpose": "Create a zero-credit reliability proof that visually explains: Memory is no longer merely a replaceable consumer component; it is becoming critical AI infrastructure.",
+          "active_nouns": [
+            "consumer computer",
+            "HBM memory stack",
+            "AI data center"
+          ],
+          "causal_verb": "transforms",
+          "viewer_understanding": "The viewer sees memory move from a small replaceable PC part into the central infrastructure feeding an AI data center."
+        }
+      },
+      "prompt": "Show an old desktop computer opening on the left as its small memory module rises, enlarges, and transforms into a tall layered HBM stack that plugs directly into a luminous AI data center on the right. The physical transformation must make the change from consumer component to infrastructure unmistakable. Sophisticated but friendly 2.5D crinkle-cut paper illustration for a finance and economics explainer. Hand-cut fibrous paper edges, subtle Japanese woodblock ink texture, charcoal outlines, tactile layered depth. Palette: cobalt, teal, sunflower gold, coral, warm cream, and restrained charcoal. One immediately readable hero mechanism with complete foreground, midground, and background. Cinematic 16:9 composition with phone-readable silhouettes and safe margins. No written words, letters, numbers, dates, tickers, logos, citations, watermarks, decorative flowers, empty third, generic cards, glossy plastic, clay-toy look, kawaii proportions, malformed anatomy, duplicate objects, or clipped hero elements.",
+      "prompt_sha256": "89c3033645892a971aac289e5299b7de16d8280419d1d03d54c3b5474d20b2d6",
+      "references": [],
+      "output_path": "content/video_engine/projects/systems-and-blowups/provider-jobs/hg3-zero-credit-reliability-01/quarantine/hg3-01-memory-becomes-infrastructure.png",
+      "idempotency_key": "2096b2da6a39ae408fe7f03d4f248fa126fc96579d3202c1d2b5f7e0b497d22a"
+    },
+    {
+      "item_id": "hg3-01-hbm-displaces-standard-dram",
+      "ordinal": 1,
+      "semantic_binding": {
+        "beat_id": "hg3-01-beat-02",
+        "sentence_id": "hg3-01-sentence-02",
+        "start_word_index": 1,
+        "end_word_index": 1,
+        "narration_excerpt": "Building high-bandwidth memory consumes more scarce wafer capacity and displaces standard memory production.",
+        "visual_job": {
+          "purpose": "Create a zero-credit reliability proof that visually explains: Building high-bandwidth memory consumes more scarce wafer capacity and displaces standard memory production.",
+          "active_nouns": [
+            "semiconductor wafer",
+            "HBM stack",
+            "standard DRAM chips",
+            "factory line"
+          ],
+          "causal_verb": "displaces",
+          "viewer_understanding": "The viewer sees one complex HBM stack occupy the scarce factory path while several ordinary memory chips are forced off the production line."
+        }
+      },
+      "prompt": "Show a semiconductor factory line built across one circular wafer. A tall complex HBM stack occupies the main production lane and physically pushes several smaller standard DRAM chips onto a side lane. Use clear scale and directional movement without any numeric labels. Sophisticated but friendly 2.5D crinkle-cut paper illustration for a finance and economics explainer. Hand-cut fibrous paper edges, subtle Japanese woodblock ink texture, charcoal outlines, tactile layered depth. Palette: cobalt, teal, sunflower gold, coral, warm cream, and restrained charcoal. One immediately readable hero mechanism with complete foreground, midground, and background. Cinematic 16:9 composition with phone-readable silhouettes and safe margins. No written words, letters, numbers, dates, tickers, logos, citations, watermarks, decorative flowers, empty third, generic cards, glossy plastic, clay-toy look, kawaii proportions, malformed anatomy, duplicate objects, or clipped hero elements.",
+      "prompt_sha256": "ef1b92a6eb0b9319fb8dc4b30c6ec0e649cac9fa49e16ea624be00d764c78b31",
+      "references": [],
+      "output_path": "content/video_engine/projects/systems-and-blowups/provider-jobs/hg3-zero-credit-reliability-01/quarantine/hg3-01-hbm-displaces-standard-dram.png",
+      "idempotency_key": "0e1f8a1a86dadd40802436b9583dd02feb5dc25fc2b68332e26228a264b21b14"
+    },
+    {
+      "item_id": "hg3-01-bandwidth-bottleneck",
+      "ordinal": 2,
+      "semantic_binding": {
+        "beat_id": "hg3-01-beat-03",
+        "sentence_id": "hg3-01-sentence-03",
+        "start_word_index": 2,
+        "end_word_index": 2,
+        "narration_excerpt": "AI compute can only move as fast as the memory bandwidth feeding it.",
+        "visual_job": {
+          "purpose": "Create a zero-credit reliability proof that visually explains: AI compute can only move as fast as the memory bandwidth feeding it.",
+          "active_nouns": [
+            "AI accelerators",
+            "data packets",
+            "narrow memory bridge",
+            "HBM stack"
+          ],
+          "causal_verb": "bottlenecks",
+          "viewer_understanding": "The viewer sees powerful AI accelerators waiting behind a narrow memory bridge, making bandwidth—not compute—the limiting passage."
+        }
+      },
+      "prompt": "Show multiple powerful AI accelerator blocks sending bright data packets toward a narrow physical bridge made of memory channels. Traffic backs up before the bridge, while a wider HBM stack on the far side begins clearing the flow. The bottleneck must read instantly without labels. Sophisticated but friendly 2.5D crinkle-cut paper illustration for a finance and economics explainer. Hand-cut fibrous paper edges, subtle Japanese woodblock ink texture, charcoal outlines, tactile layered depth. Palette: cobalt, teal, sunflower gold, coral, warm cream, and restrained charcoal. One immediately readable hero mechanism with complete foreground, midground, and background. Cinematic 16:9 composition with phone-readable silhouettes and safe margins. No written words, letters, numbers, dates, tickers, logos, citations, watermarks, decorative flowers, empty third, generic cards, glossy plastic, clay-toy look, kawaii proportions, malformed anatomy, duplicate objects, or clipped hero elements.",
+      "prompt_sha256": "e7cf01f537abea9b90ef045e739ed3277e1359d5b3c55c95047780b6d1c2db27",
+      "references": [],
+      "output_path": "content/video_engine/projects/systems-and-blowups/provider-jobs/hg3-zero-credit-reliability-01/quarantine/hg3-01-bandwidth-bottleneck.png",
+      "idempotency_key": "4a42fc1db9691563f447bca23bdd66d9089c42b9c1c88c2dc90df73bc76867da"
+    }
+  ],
+  "output_root": "content/video_engine/projects/systems-and-blowups/provider-jobs/hg3-zero-credit-reliability-01/quarantine",
+  "budget_policy": {
+    "kind": "zero_credit",
+    "expected_credits": 0,
+    "max_credits": 0,
+    "standing_policy_id": "human-gate-3-zero-credit-reliability-only"
+  },
+  "approval_policy": {
+    "state": "standing_policy_approved",
+    "approval_id": null,
+    "expected_account_verified": true
+  },
+  "fallback": {
+    "provider": "desktop_image_generation",
+    "reason": "Human Gate 3 reliability output remains quarantined if Flow execution fails."
+  },
+  "status": "planned",
+  "review_state": "quarantined",
+  "render_eligible": false,
+  "artifact_hash": "1d744e3e08d4f33b375de3ff59e853d013baf9c1cb2cac28f418cda3082e7bea"
+}

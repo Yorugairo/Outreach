@@ -1,0 +1,10 @@
+{
+  "schema_version": "finance_claim_ledger.v1",
+  "episode_id": "index-fund-risk",
+  "research_state": "not_started",
+  "contrarian_frame": true,
+  "countercase": "Broad low-cost indexes can materially reduce company-specific risk fees taxes and selection error for many long-horizon investors.",
+  "failure_conditions": ["The selected example is not representative of broad indexing.", "The claimed risk disappears when leverage timing and index concentration are held constant."],
+  "claims": [],
+  "artifact_hash": "6153c5ef938a907121858ad3214d41430dd26478fbf4bd4c9729edd5f26fe967"
+}

@@ -1,0 +1,645 @@
+{
+  "schema_version": "finance_depth_layer_package.v1",
+  "episode_id": "systems-and-blowups:current-bubble-mechanism",
+  "wave_id": "current-bubble-mechanism-semantic-wave-06",
+  "review_state": "operator_approved_for_composition",
+  "render_eligible": true,
+  "promotion_eligible": false,
+  "layer_contract": [
+    "foreground",
+    "midground",
+    "background",
+    "negative_space",
+    "contact_shadow"
+  ],
+  "background_strategy": "softened_background_anchor_under_authored_irregular_polygon_trace_cuts; no whole-frame block crops",
+  "caption_band": {
+    "top_pct": 84,
+    "bottom_pct": 94
+  },
+  "qa": {
+    "full_frame_alpha_rejected": true,
+    "foreground_alpha_edges_inspected": true,
+    "midground_alpha_edges_inspected": true,
+    "objects_clipped_by_accident": false,
+    "negative_space_exceeds_15_percent": false,
+    "generated_factual_text": "none_observed",
+    "depth_order": "foreground > midground > background; negative_space and contact_shadow are local compositor layers",
+    "status": "pass_for_composition; trace-cut QA complete; catalog promotion remains gated",
+    "alpha_qc": {
+      "files_checked": 30,
+      "dimensions": "all 1672x941",
+      "sha256_matches": true,
+      "rgba_layers_nonempty": true,
+      "full_frame_opaque_rgba_rejected": true,
+      "negative_space_frame_pct": 10.0,
+      "caption_band_px": [
+        790,
+        885
+      ],
+      "manual_observation": "Authored irregular polygon masks separate semantic object groups; source claims remain deterministic compositor responsibilities."
+    }
+  },
+  "plates": [
+    {
+      "plate_id": "beat-05-015-016-simple-joke-complex-mechanism-v1",
+      "depth_order": {
+        "foreground": "shop fa\u00e7ade, moving production floor, nearest city blocks, and conveyor edge",
+        "midground": "opened interior, gears, logistics pipes, factory modules, and robotic assembly",
+        "background": "distant city and sun behind the opened fa\u00e7ade"
+      },
+      "layers": {
+        "foreground": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-06/beat-05-015-016-simple-joke-complex-mechanism-v1--foreground.png",
+          "sha256": "1af04f123071789db91698ad317a2f9ba3df5c006f16eb364206c6cbbeef84fb",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              431,
+              1672,
+              941
+            ],
+            "alpha_min": 0,
+            "alpha_max": 255,
+            "nonzero_pixels": 375964
+          }
+        },
+        "midground": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-06/beat-05-015-016-simple-joke-complex-mechanism-v1--midground.png",
+          "sha256": "addb25f8530ae03ac43b5514930d12e1a2826d1107c271669e2d5b00af52f905",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              359,
+              74,
+              1520,
+              833
+            ],
+            "alpha_min": 0,
+            "alpha_max": 255,
+            "nonzero_pixels": 704471
+          }
+        },
+        "background": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-06/beat-05-015-016-simple-joke-complex-mechanism-v1--background.png",
+          "sha256": "b0eb82d0571ab6da4c8f62580fa3ac691bf7b151d33a4ea79904cf49a19cb3a2",
+          "mode": "RGB",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              0,
+              1672,
+              941
+            ],
+            "alpha_min": 255,
+            "alpha_max": 255,
+            "nonzero_pixels": 1573352
+          }
+        },
+        "negative_space": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-06/beat-05-015-016-simple-joke-complex-mechanism-v1--negative-space.png",
+          "sha256": "9ae555aa62eed1b7deaabf601ffe81de216932c5728212dbe87a063a048c5877",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              790,
+              1672,
+              886
+            ],
+            "alpha_min": 0,
+            "alpha_max": 64,
+            "nonzero_pixels": 160512
+          }
+        },
+        "contact_shadow": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-06/beat-05-015-016-simple-joke-complex-mechanism-v1--contact-shadow.png",
+          "sha256": "685c4d2f16fa8039e04125abbd9c060c53eecfdbefbf09a91fc28a499150b32d",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              642,
+              1610,
+              941
+            ],
+            "alpha_min": 0,
+            "alpha_max": 68,
+            "nonzero_pixels": 399606
+          }
+        }
+      }
+    },
+    {
+      "plate_id": "beat-05-017-018-market-prices-cashflows-v1",
+      "depth_order": {
+        "foreground": "solar market lift, near pipes, and productive token streams",
+        "midground": "industry, research, server, and power production routes entering the pricing machine",
+        "background": "civic buildings, city, and paper sky deliberately held behind causal activity"
+      },
+      "layers": {
+        "foreground": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-06/beat-05-017-018-market-prices-cashflows-v1--foreground.png",
+          "sha256": "6d35701597195689115b7e3c396ae927fc6857ea341153433675732b81dfcc17",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              558,
+              1672,
+              941
+            ],
+            "alpha_min": 0,
+            "alpha_max": 255,
+            "nonzero_pixels": 434066
+          }
+        },
+        "midground": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-06/beat-05-017-018-market-prices-cashflows-v1--midground.png",
+          "sha256": "e75653c504309f330cdeb4bf60faba2ca7969eb8066ac54bccabc16ac23dbe95",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              90,
+              1672,
+              741
+            ],
+            "alpha_min": 0,
+            "alpha_max": 255,
+            "nonzero_pixels": 887632
+          }
+        },
+        "background": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-06/beat-05-017-018-market-prices-cashflows-v1--background.png",
+          "sha256": "b8652a167fc3dd1def6683721456cb2494d76d5c8e2430474df9eca1865f41d1",
+          "mode": "RGB",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              0,
+              1672,
+              941
+            ],
+            "alpha_min": 255,
+            "alpha_max": 255,
+            "nonzero_pixels": 1573352
+          }
+        },
+        "negative_space": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-06/beat-05-017-018-market-prices-cashflows-v1--negative-space.png",
+          "sha256": "9ae555aa62eed1b7deaabf601ffe81de216932c5728212dbe87a063a048c5877",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              790,
+              1672,
+              886
+            ],
+            "alpha_min": 0,
+            "alpha_max": 64,
+            "nonzero_pixels": 160512
+          }
+        },
+        "contact_shadow": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-06/beat-05-017-018-market-prices-cashflows-v1--contact-shadow.png",
+          "sha256": "e9b12d2f0c5358361df2f34eaffe5fc62483bed7eed84c42ce0d093a9f5fb13c",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              505,
+              1575,
+              890
+            ],
+            "alpha_min": 0,
+            "alpha_max": 68,
+            "nonzero_pixels": 497197
+          }
+        }
+      }
+    },
+    {
+      "plate_id": "beat-05-020-tech-corridor-v1",
+      "depth_order": {
+        "foreground": "power substation, wafer platform, cable landing, and near water layers",
+        "midground": "fab, data center, robotics, satellite gateway, freight port, and luminous technology route",
+        "background": "rising paper terrain and distant city anchors"
+      },
+      "layers": {
+        "foreground": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-06/beat-05-020-tech-corridor-v1--foreground.png",
+          "sha256": "485d91b04130675b989233c7437db30934ecccf471b0347f22ec729e31e1ef86",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              581,
+              1672,
+              941
+            ],
+            "alpha_min": 0,
+            "alpha_max": 255,
+            "nonzero_pixels": 403946
+          }
+        },
+        "midground": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-06/beat-05-020-tech-corridor-v1--midground.png",
+          "sha256": "6ce8ca62a5e75ac90a724a6fe1b71b44d006d15e65446404c43a00532a91c84f",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              213,
+              1672,
+              784
+            ],
+            "alpha_min": 0,
+            "alpha_max": 255,
+            "nonzero_pixels": 778004
+          }
+        },
+        "background": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-06/beat-05-020-tech-corridor-v1--background.png",
+          "sha256": "e18509914e56b830346ffc4c759b14ea308f8881becf132b34e29d1e1bd7fee2",
+          "mode": "RGB",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              0,
+              1672,
+              941
+            ],
+            "alpha_min": 255,
+            "alpha_max": 255,
+            "nonzero_pixels": 1573352
+          }
+        },
+        "negative_space": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-06/beat-05-020-tech-corridor-v1--negative-space.png",
+          "sha256": "9ae555aa62eed1b7deaabf601ffe81de216932c5728212dbe87a063a048c5877",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              790,
+              1672,
+              886
+            ],
+            "alpha_min": 0,
+            "alpha_max": 64,
+            "nonzero_pixels": 160512
+          }
+        },
+        "contact_shadow": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-06/beat-05-020-tech-corridor-v1--contact-shadow.png",
+          "sha256": "59255d37b3c5b3069892281df702e25b20856b5af5fb761a73d0d212384dfd57",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              619,
+              1672,
+              921
+            ],
+            "alpha_min": 0,
+            "alpha_max": 68,
+            "nonzero_pixels": 365049
+          }
+        }
+      }
+    },
+    {
+      "plate_id": "beat-05-021-subcontractor-strategic-upgrade-v1",
+      "depth_order": {
+        "foreground": "component dock, worker ramp, crates, gears, and port edge",
+        "midground": "mechanical upward transition to research, fabrication, energy, data, and port coordination",
+        "background": "sea, supplier skyline, and torn paper cloud field"
+      },
+      "layers": {
+        "foreground": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-06/beat-05-021-subcontractor-strategic-upgrade-v1--foreground.png",
+          "sha256": "1b208018b9d7e354f3fbca4fa6866cecad047fe9a6eb0537b74f3f011ff3ec56",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              598,
+              1672,
+              941
+            ],
+            "alpha_min": 0,
+            "alpha_max": 255,
+            "nonzero_pixels": 372188
+          }
+        },
+        "midground": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-06/beat-05-021-subcontractor-strategic-upgrade-v1--midground.png",
+          "sha256": "26d8bbe46e94765d7c79bc85a43b22e90f7e64194b316617865708324e0c9924",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              161,
+              1672,
+              767
+            ],
+            "alpha_min": 0,
+            "alpha_max": 255,
+            "nonzero_pixels": 828177
+          }
+        },
+        "background": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-06/beat-05-021-subcontractor-strategic-upgrade-v1--background.png",
+          "sha256": "6cf5fbcf2926df9922c2da6ab58a086b409e11723c4afe53d563261ff3c7ca46",
+          "mode": "RGB",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              0,
+              1672,
+              941
+            ],
+            "alpha_min": 255,
+            "alpha_max": 255,
+            "nonzero_pixels": 1573352
+          }
+        },
+        "negative_space": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-06/beat-05-021-subcontractor-strategic-upgrade-v1--negative-space.png",
+          "sha256": "9ae555aa62eed1b7deaabf601ffe81de216932c5728212dbe87a063a048c5877",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              790,
+              1672,
+              886
+            ],
+            "alpha_min": 0,
+            "alpha_max": 64,
+            "nonzero_pixels": 160512
+          }
+        },
+        "contact_shadow": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-06/beat-05-021-subcontractor-strategic-upgrade-v1--contact-shadow.png",
+          "sha256": "d5f6a67d4ce351260197735b639457237d1da8c9b3bd8888cb7027489528ba03",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              632,
+              1672,
+              936
+            ],
+            "alpha_min": 0,
+            "alpha_max": 68,
+            "nonzero_pixels": 377498
+          }
+        }
+      }
+    },
+    {
+      "plate_id": "beat-05-022-memory-enables-work-v1",
+      "depth_order": {
+        "foreground": "idle accelerator side, dark conveyor, cable paths, and near workshop floor",
+        "midground": "layered memory stack, copper vertical connections, lit data tiles, and activated robot line",
+        "background": "dark-to-amber industrial interior and torn ceiling field"
+      },
+      "layers": {
+        "foreground": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-06/beat-05-022-memory-enables-work-v1--foreground.png",
+          "sha256": "130fb38b51ebcbc35fc534077d4f1aed02510651c216d064ad8ec903ec00d1ad",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              551,
+              1672,
+              941
+            ],
+            "alpha_min": 0,
+            "alpha_max": 255,
+            "nonzero_pixels": 442920
+          }
+        },
+        "midground": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-06/beat-05-022-memory-enables-work-v1--midground.png",
+          "sha256": "0d16ac4b118ce8b5dac86a3b58b561e9e712cc89e30a0a87901c5f0bd98bfe7b",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              340,
+              189,
+              1672,
+              768
+            ],
+            "alpha_min": 0,
+            "alpha_max": 255,
+            "nonzero_pixels": 645416
+          }
+        },
+        "background": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-06/beat-05-022-memory-enables-work-v1--background.png",
+          "sha256": "65abc38ea8e7317d7a524e01e33c8bb3d32d425792eef10b35442468739d6e4d",
+          "mode": "RGB",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              0,
+              1672,
+              941
+            ],
+            "alpha_min": 255,
+            "alpha_max": 255,
+            "nonzero_pixels": 1573352
+          }
+        },
+        "negative_space": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-06/beat-05-022-memory-enables-work-v1--negative-space.png",
+          "sha256": "9ae555aa62eed1b7deaabf601ffe81de216932c5728212dbe87a063a048c5877",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              790,
+              1672,
+              886
+            ],
+            "alpha_min": 0,
+            "alpha_max": 64,
+            "nonzero_pixels": 160512
+          }
+        },
+        "contact_shadow": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-06/beat-05-022-memory-enables-work-v1--contact-shadow.png",
+          "sha256": "19932fededb3c4c016c32706e235b8cce15cb08e1e5deb593a07a326e7a76a5e",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              577,
+              1672,
+              909
+            ],
+            "alpha_min": 0,
+            "alpha_max": 68,
+            "nonzero_pixels": 439388
+          }
+        }
+      }
+    },
+    {
+      "plate_id": "beat-05-024-stranded-compute-bridge-v2",
+      "depth_order": {
+        "foreground": "disconnected cable, idle conveyor, broken bridge edge, and active factory conveyor edge",
+        "midground": "powerful stranded accelerator, empty socket, layered memory stack, narrow bridge, and working robotics line",
+        "background": "dense factory structure with minimal parchment corner reserved for local caption"
+      },
+      "layers": {
+        "foreground": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-06/beat-05-024-stranded-compute-bridge-v2--foreground.png",
+          "sha256": "0e77c190fa05ff5b46f6c8a5ecba0e574c6c67cbca77f29b4f25090da1ba97d7",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              518,
+              1672,
+              941
+            ],
+            "alpha_min": 0,
+            "alpha_max": 255,
+            "nonzero_pixels": 529331
+          }
+        },
+        "midground": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-06/beat-05-024-stranded-compute-bridge-v2--midground.png",
+          "sha256": "3990e3741f3bb1c292a06e8b9a544728b22db1474acfe4f0f5030fb6bd567c30",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              34,
+              1672,
+              751
+            ],
+            "alpha_min": 0,
+            "alpha_max": 255,
+            "nonzero_pixels": 972986
+          }
+        },
+        "background": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-06/beat-05-024-stranded-compute-bridge-v2--background.png",
+          "sha256": "7f91fdeffa1d2349290b403e76d81a951bf8783bd7997fd9d3ade7f3bfcb9644",
+          "mode": "RGB",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              0,
+              1672,
+              941
+            ],
+            "alpha_min": 255,
+            "alpha_max": 255,
+            "nonzero_pixels": 1573352
+          }
+        },
+        "negative_space": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-06/beat-05-024-stranded-compute-bridge-v2--negative-space.png",
+          "sha256": "9ae555aa62eed1b7deaabf601ffe81de216932c5728212dbe87a063a048c5877",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              790,
+              1672,
+              886
+            ],
+            "alpha_min": 0,
+            "alpha_max": 64,
+            "nonzero_pixels": 160512
+          }
+        },
+        "contact_shadow": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-06/beat-05-024-stranded-compute-bridge-v2--contact-shadow.png",
+          "sha256": "38f83f2d361e45451297452e4d7d83f44099b173526dc89f293cddd8109ebbdf",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              579,
+              1672,
+              941
+            ],
+            "alpha_min": 0,
+            "alpha_max": 68,
+            "nonzero_pixels": 449722
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,127 @@
+{
+  "schema_version": "finance_stealth_wealth_composition_render_manifest.v1",
+  "proof_id": "finance-stealth-wealth-proof-v1",
+  "renderer": "remotion:FinanceStealthWealthProof",
+  "source_window": {
+    "start_s": 0.0,
+    "end_s": 105.0,
+    "duration_s": 105.0,
+    "word_start_index": 0,
+    "word_end_index": 276
+  },
+  "input_hashes": {
+    "canonical_audio": "ecacf46c49aee85b912404bfa0e47c37acbae0397b637e2a966c51a625077ce1",
+    "canonical_words": "3773bdd611c96d5e431ed56749d9991825215bb3756043086f14fbbdbe0d1da3",
+    "deep_research_report": "f153216f319f96b52a1a420f58a2fe6809084a60273ca8cb5f321cc4774f8c96"
+  },
+  "logical_profile": {
+    "width": 1920,
+    "height": 1080,
+    "fps": 24
+  },
+  "review_profile": {
+    "width": 1280,
+    "height": 720,
+    "fps": 24,
+    "label": "review-720p"
+  },
+  "delivery_fps": 24,
+  "props_path": "proof-props.v1.json",
+  "primitive_manifest_path": "primitive-manifest.v1.json",
+  "source_binding_path": "source-binding.v1.json",
+  "provider_calls": 0,
+  "generated_assets": [
+    {
+      "asset_id": "finance-host-presenter-plate-v1",
+      "path": "assets/finance-host-presenter-plate-v1.png",
+      "source_path": "content/video_engine/projects/systems-and-blowups/assets/generated/host/finance-host-presenter-plate-v1.png",
+      "sha256": "16c94909dcdcd2e6ce369467c3971ce949dfbe5f5a13b7a32b6baea2649009c8",
+      "kind": "presenter_full_body",
+      "source_kind": "built_in_imagegen",
+      "contains_factual_text": false,
+      "render_state": "draft"
+    },
+    {
+      "asset_id": "finance-host-presenter-direct-v1",
+      "path": "assets/generated/stealth-wealth-v1/presenter-direct-v1.png",
+      "source_path": "content/video_engine/projects/systems-and-blowups/assets/generated/stealth-wealth-v1/presenter-direct-v1.png",
+      "sha256": "9d9721031dcd3fe58e8208684b605888fd70539d1092df63a45c2a7c7e8fc9b3",
+      "kind": "presenter_direct_to_camera",
+      "source_kind": "built_in_imagegen_identity_preserve",
+      "contains_factual_text": false,
+      "render_state": "draft"
+    },
+    {
+      "asset_id": "stealth-wealth-warm-study-v1",
+      "path": "assets/generated/stealth-wealth-v1/warm-oak-study-v1.png",
+      "source_path": "content/video_engine/projects/systems-and-blowups/assets/generated/stealth-wealth-v1/warm-oak-study-v1.png",
+      "sha256": "ead65484b509200df5cf36276779b573c638e5f39cb39296ba8b996ea3670317",
+      "kind": "world_warm_oak_study",
+      "source_kind": "built_in_imagegen",
+      "contains_factual_text": false,
+      "render_state": "draft"
+    },
+    {
+      "asset_id": "stealth-wealth-cool-wafer-v1",
+      "path": "assets/generated/stealth-wealth-v1/cool-wafer-lab-v1.png",
+      "source_path": "content/video_engine/projects/systems-and-blowups/assets/generated/stealth-wealth-v1/cool-wafer-lab-v1.png",
+      "sha256": "eb0ab9a6e574c92a31d23a98eabbbad308a06d3b8f2e9baf73d6f44d016b52ce",
+      "kind": "world_cool_wafer_lab",
+      "source_kind": "built_in_imagegen",
+      "contains_factual_text": false,
+      "render_state": "draft"
+    }
+  ],
+  "status": "review_render_complete",
+  "render": {
+    "path": "render/finance-stealth-wealth-presenter-proof.mp4",
+    "sha256": "7b24c09f61a89b3bfb69e53b72c61dc3e3edcd7d783bcfbb497853bd2aaa47fa",
+    "ffprobe": {
+      "width": 1280,
+      "height": 720,
+      "r_frame_rate": "24/1",
+      "avg_frame_rate": "24/1",
+      "nb_frames": 2520,
+      "duration_s": 105.002667
+    },
+    "duration_error_s": 0.002667
+  },
+  "boundary_frames": [
+    {
+      "beat_id": "hook",
+      "timestamp_s": 0.5,
+      "frame_index": 12,
+      "path": "review/boundaries/01-hook-f0012.png",
+      "sha256": "f6143755cf141ba1fef0435dde7fa09a82ebc656492ace2acdcad7cf35dd7261"
+    },
+    {
+      "beat_id": "authority",
+      "timestamp_s": 8.5,
+      "frame_index": 204,
+      "path": "review/boundaries/02-authority-f0204.png",
+      "sha256": "df990c9da50c633f647cf306c0f14ad117633115b7281b22c0b435b2896a5051"
+    },
+    {
+      "beat_id": "physical",
+      "timestamp_s": 16.5,
+      "frame_index": 396,
+      "path": "review/boundaries/03-physical-f0396.png",
+      "sha256": "866d9af6da501e2c9d771abfed58b321aca03ddd2c76fec1a09ad4c4db62570d"
+    },
+    {
+      "beat_id": "concentration",
+      "timestamp_s": 45.5,
+      "frame_index": 1092,
+      "path": "review/boundaries/04-concentration-f1092.png",
+      "sha256": "0e4399b78966d9a58e2090df8e1248caa05bf4fd0b63701b9ce4ff365c2aa973"
+    },
+    {
+      "beat_id": "triopoly",
+      "timestamp_s": 78.0,
+      "frame_index": 1872,
+      "path": "review/boundaries/05-triopoly-f1872.png",
+      "sha256": "bc9181c8b64a4765a7d9e782e575d48463a66b5cd7418a0ca3d5ab5fc1e02e49"
+    }
+  ],
+  "watch_draft_path": "review/watch-review-draft.v1.json"
+}

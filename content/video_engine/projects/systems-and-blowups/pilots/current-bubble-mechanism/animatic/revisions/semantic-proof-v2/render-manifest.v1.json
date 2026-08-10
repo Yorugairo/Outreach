@@ -1,0 +1,17 @@
+{
+  "schema_version": "finance_semantic_proof_render.v1",
+  "episode_id": "current-bubble-mechanism",
+  "review_scope": "first 89.803 seconds only; v2 motion-cut comparison, not a full-episode render or publication candidate",
+  "video_path": "current-bubble-mechanism-first-90s-semantic-proof-v2.mp4",
+  "sha256": "c6a243b058cb98be741af85cdaf22d06ef76deb22d7bbf3ffb7719504ce48a7f",
+  "duration_s": 89.802993,
+  "format": {"width": 1280, "height": 720, "fps": 24, "video_codec": "h264", "audio_codec": "aac"},
+  "cut_grammar": {
+    "entry": "Incoming plate begins offset, then decelerates into its intended focal point.",
+    "cut": "Outgoing plate accelerates through a 0.24-second swing window; the semantic cut occurs at maximum visual velocity.",
+    "exit": "Movement direction is authored per cue transition, with a small motion blur only during the swing window.",
+    "overlay": "Risk and diagnostic cards reveal in spoken order instead of appearing all at once."
+  },
+  "source_renderer": "content/video_engine/scripts/render_current_bubble_mechanism_semantic_proof.py",
+  "artifact_hash": "dbf4eb31868c3816ec78524a47001f9f406f3acd47c458f233b899e43b519ee2"
+}

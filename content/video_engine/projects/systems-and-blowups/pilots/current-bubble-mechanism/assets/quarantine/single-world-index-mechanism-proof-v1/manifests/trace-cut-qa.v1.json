@@ -1,0 +1,73 @@
+{
+  "schema_version": "trace_cut_qa.v1",
+  "assets": {
+    "cash-stream": {
+      "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/single-world-index-mechanism-proof-v1/alpha-trim/incoming-cash-stream.alpha.v1.png",
+      "sha256": "787c6ac7cad3671f6e8cd4ddcfdf9b8558b606371e0c8d63dc421d209090da16",
+      "width": 1075,
+      "height": 495,
+      "transparent_pixels": 349026,
+      "opaque_pixels": 179899,
+      "partial_pixels": 3200,
+      "transparent_ratio": 0.65591,
+      "opaque_ratio": 0.338077,
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "top-ten-blocks": {
+      "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/single-world-index-mechanism-proof-v1/alpha-trim/top-ten-weighted-blocks.alpha.v1.png",
+      "sha256": "f46a12b5d005f5d9de2f586ea9b1fb8daac91cae56c74f6ef158c4a98cbf8052",
+      "width": 1557,
+      "height": 587,
+      "transparent_pixels": 242865,
+      "opaque_pixels": 664113,
+      "partial_pixels": 6981,
+      "transparent_ratio": 0.265729,
+      "opaque_ratio": 0.726633,
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "long-tail-field": {
+      "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/single-world-index-mechanism-proof-v1/alpha-trim/long-tail-holdings.alpha.v1.png",
+      "sha256": "ca54437a61062f140bb02ee7dbbc450ad2d31465e5aac722be9642b0a3b3a1ab",
+      "width": 1469,
+      "height": 353,
+      "transparent_pixels": 130186,
+      "opaque_pixels": 384821,
+      "partial_pixels": 3550,
+      "transparent_ratio": 0.251054,
+      "opaque_ratio": 0.7421,
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "output-routes": {
+      "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/single-world-index-mechanism-proof-v1/alpha/output-route-token-flows.alpha.v1.png",
+      "sha256": "4c66645d7e2e50d949b5983d223a4c9af951933e6efd19f2e424e4454bc1d0b0",
+      "width": 1672,
+      "height": 941,
+      "transparent_pixels": 1564817,
+      "opaque_pixels": 8535,
+      "partial_pixels": 0,
+      "transparent_ratio": 0.994575,
+      "opaque_ratio": 0.005425,
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ]
+    }
+  }
+}

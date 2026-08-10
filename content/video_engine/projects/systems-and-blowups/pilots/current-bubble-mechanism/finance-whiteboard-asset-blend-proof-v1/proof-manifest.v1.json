@@ -1,0 +1,279 @@
+{
+  "schema_version": "finance_whiteboard_asset_blend_manifest.v1",
+  "proof_id": "finance-whiteboard-asset-blend-proof-v1",
+  "renderer": "hyperframes:html-gsap",
+  "duration_s": 18.0,
+  "delivery_fps": 24,
+  "authoring_profile": {
+    "width": 1920,
+    "height": 1080,
+    "fps": 24
+  },
+  "render_profile": {
+    "width": 1280,
+    "height": 720,
+    "fps": 24,
+    "label": "review"
+  },
+  "canonical_audio": {
+    "path": "assets/history_episode_1_master.mp3",
+    "start_s": 0.0,
+    "duration_s": 18.0,
+    "volume": 1.0
+  },
+  "hand": {
+    "path": "assets/draw-hand-a-v1.png",
+    "sha256": "f50d4f592b0bb62eddc15cc31aa062943c339be079fb38672bf212bb5e7e9a68",
+    "nib": {
+      "source_px": {
+        "x": 432,
+        "y": 1369
+      },
+      "display_px": {
+        "x": 135,
+        "y": 428
+      },
+      "display_size_px": {
+        "width": 320,
+        "height": 480
+      },
+      "asset": "generated hand cutout; chroma-key removed"
+    }
+  },
+  "source_window": {
+    "start_s": 0.0,
+    "end_s": 18.0,
+    "duration_s": 18.0,
+    "word_start_index": 0,
+    "word_end_index": 50
+  },
+  "cards": [
+    {
+      "id": "valuation-paradox",
+      "path": "assets/valuation-paradox.png",
+      "sha256": "a892a6ce387d5519533ef3d7016392b9a321bec925133cb49e7895270f3bd9a6",
+      "source_pdf": "The_Silicon_Reality_Gap.pdf",
+      "source_pdf_sha256": "157cdfa87fd58bc92f84a479ba617033df7923c7297e0a6741e813e46744d5fb",
+      "page": 1,
+      "crop_normalized": [
+        0.02,
+        0.05,
+        0.52,
+        0.94
+      ],
+      "crop_px": [
+        55,
+        77,
+        1431,
+        1444
+      ],
+      "source_locator": "The Silicon Reality Gap.pdf, p.1, left valuation-paradox panel",
+      "text_owner": "supplied source card",
+      "render_state": "proof_only",
+      "start_s": 0.0,
+      "end_s": 2.4,
+      "caption": "The market may be labeling the wrong bubble."
+    },
+    {
+      "id": "capacity-penalty",
+      "path": "assets/capacity-penalty.png",
+      "sha256": "0f2ca478819f6402426767a5974ea691e30131ab0c2c0757227e8b86f3c0670f",
+      "source_pdf": "The_Silicon_Reality_Gap.pdf",
+      "source_pdf_sha256": "157cdfa87fd58bc92f84a479ba617033df7923c7297e0a6741e813e46744d5fb",
+      "page": 9,
+      "crop_normalized": [
+        0.02,
+        0.04,
+        0.98,
+        0.96
+      ],
+      "crop_px": [
+        55,
+        61,
+        2697,
+        1475
+      ],
+      "source_locator": "The Silicon Reality Gap.pdf, p.9, three-to-one capacity penalty panel",
+      "text_owner": "supplied source card",
+      "render_state": "proof_only",
+      "start_s": 2.4,
+      "end_s": 11.6,
+      "caption": "AI memory stocks have gone vertical. That is normally where sensible people step back and say: bubble."
+    },
+    {
+      "id": "physical-antidote",
+      "path": "assets/physical-antidote.png",
+      "sha256": "3332efaa07f13dfaa9f0f43acb59eb9772a579ff9b02a599cf2404f72b9d0d8a",
+      "source_pdf": "The_Silicon_Antidote.pdf",
+      "source_pdf_sha256": "f77536dd8123f9c5ff3cc4cc674a6e65117ecbdb0bf1982e8593098bf6ba244f",
+      "page": 15,
+      "crop_normalized": [
+        0.02,
+        0.05,
+        0.98,
+        0.94
+      ],
+      "crop_px": [
+        55,
+        77,
+        2697,
+        1444
+      ],
+      "source_locator": "The Silicon Antidote.pdf, p.15, physical-antidote closing panel",
+      "text_owner": "supplied source card",
+      "render_state": "proof_only",
+      "start_s": 11.6,
+      "end_s": 18.0,
+      "caption": "But underneath the chart is a product customers cannot get enough of."
+    }
+  ],
+  "provider_calls": 0,
+  "generated_assets": [],
+  "status": "review_render_complete",
+  "render": {
+    "path": "render/finance-whiteboard-asset-blend-proof.mp4",
+    "authoring_path": "render/hf-authoring.mp4",
+    "sha256": "0bbe65929a5f91f6eeca7138e48163b212b63ba044fa2a23107150d92f6837a3",
+    "ffprobe": {
+      "streams": [
+        {
+          "index": 0,
+          "codec_name": "h264",
+          "codec_long_name": "H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10",
+          "profile": "High",
+          "codec_type": "video",
+          "codec_tag_string": "avc1",
+          "codec_tag": "0x31637661",
+          "mime_codec_string": "avc1.64001f",
+          "width": 1280,
+          "height": 720,
+          "coded_width": 1280,
+          "coded_height": 720,
+          "has_b_frames": 2,
+          "sample_aspect_ratio": "1:1",
+          "display_aspect_ratio": "16:9",
+          "pix_fmt": "yuv420p",
+          "level": 31,
+          "color_range": "tv",
+          "color_space": "bt709",
+          "color_transfer": "bt709",
+          "color_primaries": "bt709",
+          "chroma_location": "left",
+          "field_order": "progressive",
+          "is_avc": "true",
+          "nal_length_size": "4",
+          "id": "0x1",
+          "r_frame_rate": "24/1",
+          "avg_frame_rate": "24/1",
+          "time_base": "1/12288",
+          "start_pts": 0,
+          "start_time": "0.000000",
+          "duration_ts": 221184,
+          "duration": "18.000000",
+          "bit_rate": "462415",
+          "bits_per_raw_sample": "8",
+          "nb_frames": "432",
+          "extradata_size": 49,
+          "disposition": {
+            "default": 1,
+            "dub": 0,
+            "original": 0,
+            "comment": 0,
+            "lyrics": 0,
+            "karaoke": 0,
+            "forced": 0,
+            "hearing_impaired": 0,
+            "visual_impaired": 0,
+            "clean_effects": 0,
+            "attached_pic": 0,
+            "timed_thumbnails": 0,
+            "non_diegetic": 0,
+            "captions": 0,
+            "descriptions": 0,
+            "metadata": 0,
+            "dependent": 0,
+            "still_image": 0,
+            "multilayer": 0
+          },
+          "tags": {
+            "language": "und",
+            "handler_name": "VideoHandler",
+            "encoder": "Lavc62.28.102 libx264"
+          }
+        },
+        {
+          "index": 1,
+          "codec_name": "aac",
+          "codec_long_name": "AAC (Advanced Audio Coding)",
+          "profile": "LC",
+          "codec_type": "audio",
+          "codec_tag_string": "mp4a",
+          "codec_tag": "0x6134706d",
+          "mime_codec_string": "mp4a.40.2",
+          "sample_fmt": "fltp",
+          "sample_rate": "48000",
+          "channels": 2,
+          "channel_layout": "stereo",
+          "bits_per_sample": 0,
+          "initial_padding": 0,
+          "id": "0x2",
+          "r_frame_rate": "0/0",
+          "avg_frame_rate": "0/0",
+          "time_base": "1/48000",
+          "start_pts": 0,
+          "start_time": "0.000000",
+          "duration_ts": 864240,
+          "duration": "18.005000",
+          "bit_rate": "193388",
+          "nb_frames": "845",
+          "extradata_size": 5,
+          "disposition": {
+            "default": 1,
+            "dub": 0,
+            "original": 0,
+            "comment": 0,
+            "lyrics": 0,
+            "karaoke": 0,
+            "forced": 0,
+            "hearing_impaired": 0,
+            "visual_impaired": 0,
+            "clean_effects": 0,
+            "attached_pic": 0,
+            "timed_thumbnails": 0,
+            "non_diegetic": 0,
+            "captions": 0,
+            "descriptions": 0,
+            "metadata": 0,
+            "dependent": 0,
+            "still_image": 0,
+            "multilayer": 0
+          },
+          "tags": {
+            "language": "und",
+            "handler_name": "SoundHandler"
+          }
+        }
+      ],
+      "format": {
+        "filename": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\finance-whiteboard-asset-blend-proof-v1\\render\\finance-whiteboard-asset-blend-proof.mp4",
+        "nb_streams": 2,
+        "nb_programs": 0,
+        "nb_stream_groups": 0,
+        "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+        "format_long_name": "QuickTime / MOV",
+        "start_time": "0.000000",
+        "duration": "18.005000",
+        "size": "1489608",
+        "bit_rate": "661864",
+        "probe_score": 100,
+        "tags": {
+          "major_brand": "isom",
+          "minor_version": "512",
+          "compatible_brands": "isomiso2avc1mp41",
+          "encoder": "Lavf62.12.102"
+        }
+      }
+    },
+    "boundary_dir": "review/boundaries"
+  }
+}

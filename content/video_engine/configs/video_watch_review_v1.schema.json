@@ -1,0 +1,145 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "video_watch_review.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "review_id",
+    "project_id",
+    "lane_id",
+    "episode_id",
+    "created_at",
+    "reviewer",
+    "review_purpose",
+    "watch_detail",
+    "source",
+    "summary",
+    "findings",
+    "operator_decision",
+    "artifact_hash"
+  ],
+  "properties": {
+    "schema_version": {"const": "video_watch_review.v1"},
+    "review_id": {"$ref": "#/definitions/id"},
+    "project_id": {"$ref": "#/definitions/id"},
+    "lane_id": {"$ref": "#/definitions/id"},
+    "episode_id": {"$ref": "#/definitions/id"},
+    "created_at": {"type": "string", "format": "date-time"},
+    "reviewer": {"type": "string", "minLength": 1},
+    "review_purpose": {"type": "string", "minLength": 1},
+    "watch_detail": {"enum": ["transcript", "efficient", "balanced", "token-burner", "focused"]},
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "uri", "sha256", "duration_s"],
+      "properties": {
+        "kind": {"enum": ["local", "url"]},
+        "uri": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/definitions/hash"},
+        "duration_s": {"type": "number", "exclusiveMinimum": 0}
+      }
+    },
+    "transcript": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "required": ["path", "sha256", "source"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/definitions/hash"},
+        "source": {"enum": ["native_captions", "whisper_groq", "whisper_openai", "manual"]}
+      }
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["assessment", "strengths", "priority_issues", "overall_state"],
+      "properties": {
+        "assessment": {"type": "string", "minLength": 1},
+        "strengths": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true},
+        "priority_issues": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true},
+        "overall_state": {"enum": ["pass", "pass_with_notes", "revision_required", "blocked"]}
+      }
+    },
+    "findings": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/definitions/finding"}
+    },
+    "operator_decision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["state", "approved_at", "notes"],
+      "properties": {
+        "state": {"enum": ["draft", "approved", "changes_requested"]},
+        "approved_at": {"type": ["string", "null"], "format": "date-time"},
+        "notes": {"type": "string"}
+      }
+    },
+    "artifact_hash": {"$ref": "#/definitions/hash"}
+  },
+  "definitions": {
+    "id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]*$"},
+    "hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "evidence_frame": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256", "timestamp_s"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/definitions/hash"},
+        "timestamp_s": {"type": "number", "minimum": 0}
+      }
+    },
+    "finding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "finding_id",
+        "start_s",
+        "end_s",
+        "transcript_excerpt",
+        "evidence_frames",
+        "kind",
+        "scope",
+        "severity",
+        "symptom",
+        "root_cause",
+        "impact",
+        "proposed_fix",
+        "acceptance",
+        "confidence",
+        "recurrence_key",
+        "recurrence_count",
+        "learning_trigger",
+        "learning_action",
+        "requires_human_decision",
+        "promotion_state",
+        "status"
+      ],
+      "properties": {
+        "finding_id": {"$ref": "#/definitions/id"},
+        "start_s": {"type": "number", "minimum": 0},
+        "end_s": {"type": "number", "exclusiveMinimum": 0},
+        "transcript_excerpt": {"type": "string"},
+        "evidence_frames": {"type": "array", "minItems": 1, "items": {"$ref": "#/definitions/evidence_frame"}},
+        "kind": {"enum": ["semantic_mismatch", "timing", "composition", "asset_selection", "caption", "evidence", "motion", "audio", "retention", "continuity", "accessibility", "other"]},
+        "scope": {"enum": ["episode", "lane", "engine", "global"]},
+        "severity": {"enum": ["blocking", "high", "medium", "low"]},
+        "symptom": {"type": "string", "minLength": 1},
+        "root_cause": {"type": "string", "minLength": 1},
+        "impact": {"type": "string", "minLength": 1},
+        "proposed_fix": {"type": "string", "minLength": 1},
+        "acceptance": {"type": "string", "minLength": 1},
+        "confidence": {"enum": ["tentative", "probable", "confirmed"]},
+        "recurrence_key": {"$ref": "#/definitions/id"},
+        "recurrence_count": {"type": "integer", "minimum": 1},
+        "learning_trigger": {"type": "string", "minLength": 1},
+        "learning_action": {"type": "string", "minLength": 1},
+        "requires_human_decision": {"type": "boolean"},
+        "promotion_state": {"enum": ["observation", "candidate_rule", "approved_rule", "implemented"]},
+        "status": {"enum": ["open", "planned", "implemented", "verified", "wont_fix"]}
+      }
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "schema_version": "finance_local_surface_manifest.v1",
+  "episode_id": "current-bubble-mechanism",
+  "state": "approved_for_motion_proof",
+  "surfaces": [
+    {
+      "surface_id": "memory-risk-qualifiers-v1",
+      "path": "memory-risk-qualifiers-v1.svg",
+      "cue_id": "cbm-a-006",
+      "entry_sequence": ["correction", "overpriced", "cyclical"],
+      "purpose": "Keep all three spoken qualifications visible before the bottleneck thesis lands.",
+      "factual_scope": "Narration labels only; no probabilities, price targets, or external data."
+    },
+    {
+      "surface_id": "bubble-mechanism-diagnostic-v1",
+      "path": "bubble-mechanism-diagnostic-v1.svg",
+      "cue_id": "cbm-a-009",
+      "entry_sequence": ["symptom", "question"],
+      "purpose": "Move the viewer from price-up shorthand to inspection of the causal mechanism.",
+      "factual_scope": "A channel framing device; not a regulatory definition or quantitative claim."
+    }
+  ],
+  "artifact_hash": "8f885e7d27b4e2abbe253e8b27956bf9e447ebb809ff2dd87d65d74015b4ea7d"
+}

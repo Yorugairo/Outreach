@@ -1,0 +1,121 @@
+{
+  "schema_version": "finance_sentence_native_asset_wave_review.v1",
+  "episode_id": "systems-and-blowups:current-bubble-mechanism",
+  "wave_id": "current-bubble-mechanism-semantic-wave-06",
+  "review_state": "operator_approved_for_composition",
+  "operator_decision": "approved",
+  "semantic_beat_ledger_artifact_hash": "f83b2dad210f0d77bec0e9d8a1b7b799f1da54b0c19372ded9e4a7ec103f6cdb",
+  "selection_policy": "exact spoken nouns and causal relationship before style; no convenient reuse, fabricated factual text, or symbolic filler",
+  "generation_route": "imagegen_builtin",
+  "depth_layer_manifest": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-06/wave-06-depth-layer-manifest.v1.json",
+  "generation_wave": {
+    "batch_size": 6,
+    "source_resolution": "1672x941",
+    "accepted_jobs": 6,
+    "reference_policy": "finance paper-theatre continuity; adult-editorial washi and woodblock materiality; no generated claims, figures, names, citations, or faux UI",
+    "rejected_provider_output": "exec-02f6d210-5457-45fb-a037-443726770f68.png",
+    "rejected_reason": "The first stranded-compute candidate consumed too much of the frame with empty parchment, violating the full-image plate rule."
+  },
+  "global_qa": {
+    "generated_factual_text": "none_observed_in_selected_six",
+    "semantic_fit": "pass_initial_inspection",
+    "unrecognizable_symbol_gate": "pass; selected causal objects are physical and recognizable",
+    "anatomy_and_prop_gate": "pass_initial_inspection",
+    "depth_separability": "pass_trace_cut_qa",
+    "render_eligible": true,
+    "promotion_eligible": false
+  },
+  "accepted_candidates": [
+    {
+      "beat_ids": ["cbm-semantic-beat-05-015", "cbm-semantic-beat-05-016"],
+      "filename": "beat-05-015-016-simple-joke-complex-mechanism-v1.png",
+      "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-06/beat-05-015-016-simple-joke-complex-mechanism-v1.png",
+      "sha256": "d4787df4c650710de12e4d99062c23e90da0a908c8b79b0847537a7ad82a0a58",
+      "width": 1672,
+      "height": 941,
+      "start_s": 367.059,
+      "end_s": 370.136,
+      "narration_excerpt": "There is a simple joke sitting on top of a complicated mechanism.",
+      "semantic_job": "Open a modest storefront façade to reveal the dense logistics, factory, power, data, and automation machinery underneath.",
+      "visual_verb": "open",
+      "review_state": "operator_approved_for_composition"
+    },
+    {
+      "beat_ids": ["cbm-semantic-beat-05-017", "cbm-semantic-beat-05-018"],
+      "filename": "beat-05-017-018-market-prices-cashflows-v1.png",
+      "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-06/beat-05-017-018-market-prices-cashflows-v1.png",
+      "sha256": "09de16b8c8dc064661a837bbcb1de3d5be55eb5eda6ac927caeddcb713c361a0",
+      "width": 1672,
+      "height": 941,
+      "start_s": 370.136,
+      "end_s": 375.662,
+      "narration_excerpt": "Markets are not rewarding countries for cultural prestige. They are pricing expected cash flows.",
+      "semantic_job": "Route the output of labs, data centers, and industry into a physical market-pricing machine, leaving civic architecture as non-causal background.",
+      "visual_verb": "route",
+      "review_state": "operator_approved_for_composition"
+    },
+    {
+      "beat_ids": ["cbm-semantic-beat-05-020"],
+      "filename": "beat-05-020-tech-corridor-v1.png",
+      "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-06/beat-05-020-tech-corridor-v1.png",
+      "sha256": "0ff91d7abb454d84ba2fe3a7575ba06e3e0779be0cf3465c55f502220ebd4b96",
+      "width": 1672,
+      "height": 941,
+      "start_s": 387.563,
+      "end_s": 390.755,
+      "narration_excerpt": "The global order has aligned around forward technology.",
+      "semantic_job": "Make the power, fab, data-center, robotics, satellite, port, and subsea-cable corridor a single visible system.",
+      "visual_verb": "align",
+      "review_state": "operator_approved_for_composition"
+    },
+    {
+      "beat_ids": ["cbm-semantic-beat-05-021"],
+      "filename": "beat-05-021-subcontractor-strategic-upgrade-v1.png",
+      "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-06/beat-05-021-subcontractor-strategic-upgrade-v1.png",
+      "sha256": "a0f477570e6e5d02702387ef17fb8a262aef2db287735a11029cdc8fb6d1daad",
+      "width": 1672,
+      "height": 941,
+      "start_s": 390.755,
+      "end_s": 396.572,
+      "narration_excerpt": "Former subcontractors are becoming strategic powers.",
+      "semantic_job": "Turn a component-supply dock into a technology, research, energy, fabrication, and port coordination hub by way of a literal upward mechanical ramp.",
+      "visual_verb": "upgrade",
+      "review_state": "operator_approved_for_composition"
+    },
+    {
+      "beat_ids": ["cbm-semantic-beat-05-022"],
+      "filename": "beat-05-022-memory-enables-work-v1.png",
+      "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-06/beat-05-022-memory-enables-work-v1.png",
+      "sha256": "14e945a06b5e5ed795905d40e898363b73a20ebe481275cf6cb372a57d812ea9",
+      "width": 1672,
+      "height": 941,
+      "start_s": 396.572,
+      "end_s": 403.666,
+      "narration_excerpt": "Memory does not burn like oil. It enables machines to do useful work.",
+      "semantic_job": "Use a layered memory stack and copper connections to bring a dark accelerator-and-robotics workshop into active production.",
+      "visual_verb": "enable",
+      "review_state": "operator_approved_for_composition"
+    },
+    {
+      "beat_ids": ["cbm-semantic-beat-05-024"],
+      "filename": "beat-05-024-stranded-compute-bridge-v2.png",
+      "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-06/beat-05-024-stranded-compute-bridge-v2.png",
+      "sha256": "99c2e59fc65bc2d1e9a15c294644efb3417eac6a71b3e8002dcb3381b20bc5a3",
+      "width": 1672,
+      "height": 941,
+      "start_s": 407.578,
+      "end_s": 410.260,
+      "narration_excerpt": "Without enough of it, powerful compute turns into stranded machinery.",
+      "semantic_job": "Keep a powerful accelerator and idle robot physically separated from an active factory by a narrow broken memory bridge.",
+      "visual_verb": "strand",
+      "review_state": "operator_approved_for_composition"
+    }
+  ],
+  "deterministic_source_surface_dependencies": [
+    {
+      "beat_ids": ["cbm-semantic-beat-05-019", "cbm-semantic-beat-05-023"],
+      "reason": "Any named-country, company, allocation, share, or technical-claim evidence remains a locally rendered source-bound surface; original art carries only the physical analogy."
+    }
+  ],
+  "next_wave_authorized": false
+}

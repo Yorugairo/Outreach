@@ -1,0 +1,99 @@
+{
+  "schema_version": "finance_2d_stick_render_manifest.v1",
+  "proof_id": "finance-2d-stick-proof-v1",
+  "renderer": "remotion:Finance2DStickProof",
+  "source_window": {
+    "start_s": 410.26,
+    "end_s": 470.992,
+    "duration_s": 60.732,
+    "word_start_index": 1025,
+    "word_end_index": 1188
+  },
+  "input_hashes": {
+    "canonical_audio": "ecacf46c49aee85b912404bfa0e47c37acbae0397b637e2a966c51a625077ce1",
+    "canonical_words": "3773bdd611c96d5e431ed56749d9991825215bb3756043086f14fbbdbe0d1da3",
+    "claim_ledger": "0f5c49a3ab764ba5ad6ed9d4b14b2fc24fa6c921b9d83342975a7cfe0080edcc"
+  },
+  "logical_profile": {
+    "width": 1920,
+    "height": 1080,
+    "fps": 24
+  },
+  "review_profile": {
+    "width": 1280,
+    "height": 720,
+    "fps": 24,
+    "label": "review-720p-12-on-24"
+  },
+  "delivery_fps": 24,
+  "props_path": "proof-props.v1.json",
+  "primitive_manifest_path": "primitive-manifest.v1.json",
+  "source_binding_path": "source-binding.v1.json",
+  "provider_calls": 0,
+  "generated_assets": [],
+  "status": "review_render_complete",
+  "render": {
+    "path": "render/finance-2d-stick-proof.mp4",
+    "sha256": "c0e25cdbe2bfed4793904de6e8baf12adc9363d71548618104114419963c228e",
+    "ffprobe": {
+      "width": 1280,
+      "height": 720,
+      "r_frame_rate": "24/1",
+      "avg_frame_rate": "24/1",
+      "nb_frames": 1458,
+      "duration_s": 60.757333
+    },
+    "duration_error_s": 0.025333
+  },
+  "boundary_frames": [
+    {
+      "state_id": "basket-product-qualities",
+      "relative_time_s": 7.0,
+      "source_time_s": 417.26,
+      "frame_index": 168,
+      "path": "review/boundaries/01-basket-product-qualities-f0168.png",
+      "sha256": "99e3f5f17903c6b94f04a4a6c34fc61320bd1da72e79e9cceeea696ffd66c80b"
+    },
+    {
+      "state_id": "two-jobs",
+      "relative_time_s": 16.374,
+      "source_time_s": 426.634,
+      "frame_index": 393,
+      "path": "review/boundaries/02-two-jobs-f0393.png",
+      "sha256": "4c1c475235ce2d5f13ef4a686bb26d73115c14c79dc72bfc3d0dd8431f19eee8"
+    },
+    {
+      "state_id": "concentration",
+      "relative_time_s": 26.774,
+      "source_time_s": 437.034,
+      "frame_index": 643,
+      "path": "review/boundaries/03-concentration-f0643.png",
+      "sha256": "dfc944b51242ae1baf72ab71a7fea884c26bd81cb140127e1c86e95e3c034e9f"
+    },
+    {
+      "state_id": "shared-exposure",
+      "relative_time_s": 42.854,
+      "source_time_s": 453.114,
+      "frame_index": 1028,
+      "path": "review/boundaries/04-shared-exposure-f1028.png",
+      "sha256": "c252926e6c7b831c7cc2b640ebd2ba9b06605820f5303604f0c8f121efed5911"
+    },
+    {
+      "state_id": "long-tail",
+      "relative_time_s": 53.458,
+      "source_time_s": 463.718,
+      "frame_index": 1283,
+      "path": "review/boundaries/05-long-tail-f1283.png",
+      "sha256": "3680c285cf3545f0af6e24d6f2f893c3379e8ab839a57b347e787b2fdecceab4"
+    },
+    {
+      "state_id": "admission-versus-weighting",
+      "relative_time_s": 58.788,
+      "source_time_s": 469.048,
+      "frame_index": 1411,
+      "path": "review/boundaries/06-admission-versus-weighting-f1411.png",
+      "sha256": "85a28b09d6e1fccd477f91ef9630b834e7b47ad3aaddeb865747c8ebb5600297"
+    }
+  ],
+  "watch_draft_path": "review/watch-review-draft.v1.json"
+}

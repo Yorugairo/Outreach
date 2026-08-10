@@ -1,0 +1,81 @@
+{
+  "bundles": [
+    {
+      "schema_version": "scene_bundle.v1",
+      "id": "finance-scene-01",
+      "episode_id": "current-bubble-mechanism",
+      "chapter": "cbm-01-0-00-0-48-cold-open",
+      "artifact_hash": "af77d58798a385cfd1ea3daed67daaa3fb2b007bdbf2b846f644f8f05ce39105"
+    },
+    {
+      "schema_version": "scene_bundle.v1",
+      "id": "finance-scene-02",
+      "episode_id": "current-bubble-mechanism",
+      "chapter": "cbm-02-0-48-1-42-what-a-bubble-actually-is",
+      "artifact_hash": "5e416d8a11afb15aebd2f66076f70d734188efa7393c5c87a6f48eea7e79fc99"
+    },
+    {
+      "schema_version": "scene_bundle.v1",
+      "id": "finance-scene-03",
+      "episode_id": "current-bubble-mechanism",
+      "chapter": "cbm-03-1-42-3-36-memory-is-not-a-story-it-is-a-constraint",
+      "artifact_hash": "f60ddec7786b0539b58fdb7d602b327a86648d9c8368ea3fd46da8f67656cd56"
+    },
+    {
+      "schema_version": "scene_bundle.v1",
+      "id": "finance-scene-04",
+      "episode_id": "current-bubble-mechanism",
+      "chapter": "cbm-04-3-36-5-02-the-contracts-change-the-cycle",
+      "artifact_hash": "23732136449798c553d705afc4ac779f05a321b2d2ddf150073e4d72f3f6af35"
+    },
+    {
+      "schema_version": "scene_bundle.v1",
+      "id": "finance-scene-05",
+      "episode_id": "current-bubble-mechanism",
+      "chapter": "cbm-05-5-02-6-52-the-global-market-is-repricing-technical-power",
+      "artifact_hash": "a37dc9a376fd81375ea662a4b344a56b42ed24b2d46b0d96dd2d4e6b8a5bde30"
+    },
+    {
+      "schema_version": "scene_bundle.v1",
+      "id": "finance-scene-06",
+      "episode_id": "current-bubble-mechanism",
+      "chapter": "cbm-06-6-52-8-31-the-s-p-500-can-fail-both-jobs",
+      "artifact_hash": "c607439a4cd078949f032d23472b7103d5904ad730dcb7c9ae762d74cff1c64f"
+    },
+    {
+      "schema_version": "scene_bundle.v1",
+      "id": "finance-scene-07",
+      "episode_id": "current-bubble-mechanism",
+      "chapter": "cbm-07-8-31-9-23-embedded-short-too-concentrated-and-too-diluted",
+      "artifact_hash": "c267af127fa8f612b3b272acfc803aec4bd218b7dca38a74568d121c59cee725"
+    },
+    {
+      "schema_version": "scene_bundle.v1",
+      "id": "finance-scene-08",
+      "episode_id": "current-bubble-mechanism",
+      "chapter": "cbm-08-9-23-10-39-retirement-math-is-not-generational-wealth-math",
+      "artifact_hash": "54a14f7d4424e880d8340e7ee4cf578c9975185cdba2009b746b105acfb7cba2"
+    },
+    {
+      "schema_version": "scene_bundle.v1",
+      "id": "finance-scene-09",
+      "episode_id": "current-bubble-mechanism",
+      "chapter": "cbm-09-10-39-12-06-separate-the-upside-engine-from-the-defense",
+      "artifact_hash": "3d9fff4a47ba0bd2cc73fb1d0194745a5cfdf93802f977d7fddd8ce29abad2c7"
+    },
+    {
+      "schema_version": "scene_bundle.v1",
+      "id": "finance-scene-10",
+      "episode_id": "current-bubble-mechanism",
+      "chapter": "cbm-10-12-06-13-34-the-strongest-case-against-this-thesis",
+      "artifact_hash": "a178aa36ab242be160c350e238425d7e5b0290c2fddb109f460270efa428a7d3"
+    },
+    {
+      "schema_version": "scene_bundle.v1",
+      "id": "finance-scene-11",
+      "episode_id": "current-bubble-mechanism",
+      "chapter": "cbm-11-13-34-14-32-payoff",
+      "artifact_hash": "f51b41dad25b8fc5d4adac73d8698d39e7fa68c5a8ec3e167fdf8665ef15d253"
+    }
+  ]
+}

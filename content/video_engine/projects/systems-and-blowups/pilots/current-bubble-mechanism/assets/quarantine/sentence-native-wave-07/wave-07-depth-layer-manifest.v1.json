@@ -1,0 +1,645 @@
+{
+  "schema_version": "finance_depth_layer_package.v1",
+  "episode_id": "systems-and-blowups:current-bubble-mechanism",
+  "wave_id": "current-bubble-mechanism-semantic-wave-07",
+  "review_state": "operator_approved_for_composition",
+  "render_eligible": true,
+  "promotion_eligible": false,
+  "layer_contract": [
+    "foreground",
+    "midground",
+    "background",
+    "negative_space",
+    "contact_shadow"
+  ],
+  "background_strategy": "softened_background_anchor_under_authored_irregular_polygon_trace_cuts; no whole-frame block crops",
+  "caption_band": {
+    "top_pct": 84,
+    "bottom_pct": 94
+  },
+  "qa": {
+    "full_frame_alpha_rejected": true,
+    "foreground_alpha_edges_inspected": true,
+    "midground_alpha_edges_inspected": true,
+    "objects_clipped_by_accident": false,
+    "negative_space_exceeds_15_percent": false,
+    "generated_factual_text": "none_observed",
+    "depth_order": "foreground > midground > background; negative_space and contact_shadow are local compositor layers",
+    "status": "pass_for_composition; trace-cut QA complete; catalog promotion remains gated",
+    "alpha_qc": {
+      "files_checked": 30,
+      "dimensions": "all 1672x941",
+      "sha256_matches": true,
+      "rgba_layers_nonempty": true,
+      "full_frame_opaque_rgba_rejected": true,
+      "negative_space_frame_pct": 10.0,
+      "caption_band_px": [
+        790,
+        885
+      ],
+      "manual_observation": "Authored irregular polygon masks separate semantic object groups; source claims remain deterministic compositor responsibilities."
+    }
+  },
+  "plates": [
+    {
+      "plate_id": "beat-06-001-003-index-product-elevator-v1",
+      "depth_order": {
+        "foreground": "near elevator threshold, broad basket rim, and active-manager maze edge",
+        "midground": "opened index elevator, accessible investment basket, and subordinate selection maze",
+        "background": "city, lifted tower structure, and intentionally quiet paper sky"
+      },
+      "layers": {
+        "foreground": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-07/beat-06-001-003-index-product-elevator-v1--foreground.png",
+          "sha256": "6c828c9ed7b3979109719c15e0f4d5651d4ca8373ec44d9656877b5b4786017f",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              609,
+              1672,
+              941
+            ],
+            "alpha_min": 0,
+            "alpha_max": 255,
+            "nonzero_pixels": 355718
+          }
+        },
+        "midground": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-07/beat-06-001-003-index-product-elevator-v1--midground.png",
+          "sha256": "f74b755fc744cb8113cd7eb04e4bf98af6287d8eb757a8f6d0cf6a4f60e1b231",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              255,
+              107,
+              1672,
+              768
+            ],
+            "alpha_min": 0,
+            "alpha_max": 255,
+            "nonzero_pixels": 717603
+          }
+        },
+        "background": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-07/beat-06-001-003-index-product-elevator-v1--background.png",
+          "sha256": "de0b12309e72bdd0a6d1635caa50e4b9db5b149a35cd20feba3b6a3d7628b729",
+          "mode": "RGB",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              0,
+              1672,
+              941
+            ],
+            "alpha_min": 255,
+            "alpha_max": 255,
+            "nonzero_pixels": 1573352
+          }
+        },
+        "negative_space": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-07/beat-06-001-003-index-product-elevator-v1--negative-space.png",
+          "sha256": "9ae555aa62eed1b7deaabf601ffe81de216932c5728212dbe87a063a048c5877",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              790,
+              1672,
+              886
+            ],
+            "alpha_min": 0,
+            "alpha_max": 64,
+            "nonzero_pixels": 160512
+          }
+        },
+        "contact_shadow": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-07/beat-06-001-003-index-product-elevator-v1--contact-shadow.png",
+          "sha256": "92736ebcfefc911d5186372ed139350b9d163d41b470a65bf102dffb0ad7a581",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              605,
+              1672,
+              933
+            ],
+            "alpha_min": 0,
+            "alpha_max": 68,
+            "nonzero_pixels": 414392
+          }
+        }
+      }
+    },
+    {
+      "plate_id": "beat-06-004-007-dual-failure-v2",
+      "depth_order": {
+        "foreground": "cracked basket rim, ballast chain, and near market floor",
+        "midground": "oversized concentration blocks, constrained upside engine, and the two-sided failure relationship",
+        "background": "dark paper theatre field behind a clearly separated mechanism"
+      },
+      "layers": {
+        "foreground": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-07/beat-06-004-007-dual-failure-v2--foreground.png",
+          "sha256": "5d524d29edb8deec2bf48c114acd6ff8632a8399ba75ee5a9683f020a23d8da6",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              567,
+              1672,
+              941
+            ],
+            "alpha_min": 0,
+            "alpha_max": 255,
+            "nonzero_pixels": 516367
+          }
+        },
+        "midground": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-07/beat-06-004-007-dual-failure-v2--midground.png",
+          "sha256": "ac6d6f9c2e642e33b0aabf16831e288148d7d547035201279b6bf19a82ce950a",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              126,
+              1672,
+              772
+            ],
+            "alpha_min": 0,
+            "alpha_max": 255,
+            "nonzero_pixels": 863690
+          }
+        },
+        "background": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-07/beat-06-004-007-dual-failure-v2--background.png",
+          "sha256": "8d5d640afc301def16652eeecdb0f6e908cf972f294a66a3a5f94bcdbf7cefd0",
+          "mode": "RGB",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              0,
+              1672,
+              941
+            ],
+            "alpha_min": 255,
+            "alpha_max": 255,
+            "nonzero_pixels": 1573352
+          }
+        },
+        "negative_space": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-07/beat-06-004-007-dual-failure-v2--negative-space.png",
+          "sha256": "9ae555aa62eed1b7deaabf601ffe81de216932c5728212dbe87a063a048c5877",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              790,
+              1672,
+              886
+            ],
+            "alpha_min": 0,
+            "alpha_max": 64,
+            "nonzero_pixels": 160512
+          }
+        },
+        "contact_shadow": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-07/beat-06-004-007-dual-failure-v2--contact-shadow.png",
+          "sha256": "32022156122b6a7bf4f183d50636d4ec765da3d070699407ec81809ead888c9b",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              604,
+              1672,
+              933
+            ],
+            "alpha_min": 0,
+            "alpha_max": 68,
+            "nonzero_pixels": 449895
+          }
+        }
+      }
+    },
+    {
+      "plate_id": "beat-06-010-shared-causal-weather-v1",
+      "depth_order": {
+        "foreground": "near factory and data-world edges receiving the same conditions",
+        "midground": "shared weather machine, five connected productive worlds, and visible causal conduits",
+        "background": "paper atmosphere and distant infrastructure kept behind the common cause"
+      },
+      "layers": {
+        "foreground": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-07/beat-06-010-shared-causal-weather-v1--foreground.png",
+          "sha256": "a4cce7d0048ca6a840d12b26aa0c503232ff315fc27de604e5d1286d2775eb5c",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              635,
+              1672,
+              941
+            ],
+            "alpha_min": 0,
+            "alpha_max": 255,
+            "nonzero_pixels": 365898
+          }
+        },
+        "midground": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-07/beat-06-010-shared-causal-weather-v1--midground.png",
+          "sha256": "a1ca04e5e553d3a9ee6680892e37968cdf9d9f2ee8cca0cdbcedf89c023ef8e1",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              82,
+              1672,
+              770
+            ],
+            "alpha_min": 0,
+            "alpha_max": 255,
+            "nonzero_pixels": 956990
+          }
+        },
+        "background": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-07/beat-06-010-shared-causal-weather-v1--background.png",
+          "sha256": "2c30e31bc42aae95a0d9ee743cb15aea0517f3c0ef0df6f4f842f8ff42bd97dd",
+          "mode": "RGB",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              0,
+              1672,
+              941
+            ],
+            "alpha_min": 255,
+            "alpha_max": 255,
+            "nonzero_pixels": 1573352
+          }
+        },
+        "negative_space": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-07/beat-06-010-shared-causal-weather-v1--negative-space.png",
+          "sha256": "9ae555aa62eed1b7deaabf601ffe81de216932c5728212dbe87a063a048c5877",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              790,
+              1672,
+              886
+            ],
+            "alpha_min": 0,
+            "alpha_max": 64,
+            "nonzero_pixels": 160512
+          }
+        },
+        "contact_shadow": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-07/beat-06-010-shared-causal-weather-v1--contact-shadow.png",
+          "sha256": "e25de05bdf46a646d1ed28169dc3d9c8f4141ab4744bddb0c2ff48d8ddad3da7",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              627,
+              1672,
+              935
+            ],
+            "alpha_min": 0,
+            "alpha_max": 68,
+            "nonzero_pixels": 381328
+          }
+        }
+      }
+    },
+    {
+      "plate_id": "beat-06-011-016-automatic-size-weighting-v1",
+      "depth_order": {
+        "foreground": "near basket gate, diverse eligible-company floor, and incoming paths",
+        "midground": "size-weighting machine, workshop, plant, incumbent tower, and broad basket",
+        "background": "pale paper margin preserved only for a local evidence card, not story emptiness"
+      },
+      "layers": {
+        "foreground": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-07/beat-06-011-016-automatic-size-weighting-v1--foreground.png",
+          "sha256": "4ea893c56c8562d386b1010044fd85989d4a32ba23c4e130c40d378185e43c7b",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              617,
+              1672,
+              941
+            ],
+            "alpha_min": 0,
+            "alpha_max": 255,
+            "nonzero_pixels": 395101
+          }
+        },
+        "midground": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-07/beat-06-011-016-automatic-size-weighting-v1--midground.png",
+          "sha256": "e894de1f5695bda92a46be32f4858c1e356182af6bb75c603e7b054be78df324",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              96,
+              1672,
+              772
+            ],
+            "alpha_min": 0,
+            "alpha_max": 255,
+            "nonzero_pixels": 918400
+          }
+        },
+        "background": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-07/beat-06-011-016-automatic-size-weighting-v1--background.png",
+          "sha256": "2ada8efadc25c6fa5a498d23aabf5af05e2f6044c102ade79f1c5e1f92684de0",
+          "mode": "RGB",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              0,
+              1672,
+              941
+            ],
+            "alpha_min": 255,
+            "alpha_max": 255,
+            "nonzero_pixels": 1573352
+          }
+        },
+        "negative_space": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-07/beat-06-011-016-automatic-size-weighting-v1--negative-space.png",
+          "sha256": "9ae555aa62eed1b7deaabf601ffe81de216932c5728212dbe87a063a048c5877",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              790,
+              1672,
+              886
+            ],
+            "alpha_min": 0,
+            "alpha_max": 64,
+            "nonzero_pixels": 160512
+          }
+        },
+        "contact_shadow": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-07/beat-06-011-016-automatic-size-weighting-v1--contact-shadow.png",
+          "sha256": "9b963bff6551d5fceb179ee4be88cbcf5921500170c6ec7f28884b6e3aedfa4e",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              630,
+              1672,
+              933
+            ],
+            "alpha_min": 0,
+            "alpha_max": 68,
+            "nonzero_pixels": 374323
+          }
+        }
+      }
+    },
+    {
+      "plate_id": "beat-06-017-018-diworsification-v1",
+      "depth_order": {
+        "foreground": "compact support basket, overloaded basket, and near load-bearing floor",
+        "midground": "strong independent supports contrasted with redundant weak rods and excess weight",
+        "background": "quiet paper theatre field behind two readable mechanical cases"
+      },
+      "layers": {
+        "foreground": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-07/beat-06-017-018-diworsification-v1--foreground.png",
+          "sha256": "51d6ec858714aa4f33f2b4dbedf95e898fd80cede80c94db670a7277aed8f948",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              597,
+              1672,
+              941
+            ],
+            "alpha_min": 0,
+            "alpha_max": 255,
+            "nonzero_pixels": 460937
+          }
+        },
+        "midground": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-07/beat-06-017-018-diworsification-v1--midground.png",
+          "sha256": "4b29655d64526a9a235e0e6b5406fcb82612e8607dd42c0d6d02e6ff0aa28822",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              141,
+              1672,
+              776
+            ],
+            "alpha_min": 0,
+            "alpha_max": 255,
+            "nonzero_pixels": 897432
+          }
+        },
+        "background": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-07/beat-06-017-018-diworsification-v1--background.png",
+          "sha256": "9e71bb7d4cde33ce62b43cf0da39ee973d03bfb791c019a05a88a0e52988361c",
+          "mode": "RGB",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              0,
+              1672,
+              941
+            ],
+            "alpha_min": 255,
+            "alpha_max": 255,
+            "nonzero_pixels": 1573352
+          }
+        },
+        "negative_space": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-07/beat-06-017-018-diworsification-v1--negative-space.png",
+          "sha256": "9ae555aa62eed1b7deaabf601ffe81de216932c5728212dbe87a063a048c5877",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              790,
+              1672,
+              886
+            ],
+            "alpha_min": 0,
+            "alpha_max": 64,
+            "nonzero_pixels": 160512
+          }
+        },
+        "contact_shadow": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-07/beat-06-017-018-diworsification-v1--contact-shadow.png",
+          "sha256": "5be93d5bf55648348552f5f3c684551141d4c7e970737bce46832e4e46cb9e0b",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              612,
+              1672,
+              933
+            ],
+            "alpha_min": 0,
+            "alpha_max": 68,
+            "nonzero_pixels": 435391
+          }
+        }
+      }
+    },
+    {
+      "plate_id": "beat-06-019-024-basketball-roster-v1",
+      "depth_order": {
+        "foreground": "near bench, equipment bags, court edge, and resource-consuming reserve space",
+        "midground": "five active players, oversized inactive bench, and the roster's visible causal contrast",
+        "background": "arena and paper depth behind the single sports analogy"
+      },
+      "layers": {
+        "foreground": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-07/beat-06-019-024-basketball-roster-v1--foreground.png",
+          "sha256": "cac313e74a19603a6dbcad01528fbed81a04fdfcef878c50bb013d7c2e7cc3ad",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              619,
+              1672,
+              941
+            ],
+            "alpha_min": 0,
+            "alpha_max": 255,
+            "nonzero_pixels": 381670
+          }
+        },
+        "midground": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-07/beat-06-019-024-basketball-roster-v1--midground.png",
+          "sha256": "ae53de2ebaace635b13d6cb8239161bbcfc531268551dc90c12b1a58af656c03",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              115,
+              1672,
+              779
+            ],
+            "alpha_min": 0,
+            "alpha_max": 255,
+            "nonzero_pixels": 922935
+          }
+        },
+        "background": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-07/beat-06-019-024-basketball-roster-v1--background.png",
+          "sha256": "301fab537e58f7e01e229ed2a16d4024bb8805c9c0fe8e5351615a19522caddf",
+          "mode": "RGB",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              0,
+              1672,
+              941
+            ],
+            "alpha_min": 255,
+            "alpha_max": 255,
+            "nonzero_pixels": 1573352
+          }
+        },
+        "negative_space": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-07/beat-06-019-024-basketball-roster-v1--negative-space.png",
+          "sha256": "9ae555aa62eed1b7deaabf601ffe81de216932c5728212dbe87a063a048c5877",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              790,
+              1672,
+              886
+            ],
+            "alpha_min": 0,
+            "alpha_max": 64,
+            "nonzero_pixels": 160512
+          }
+        },
+        "contact_shadow": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-07/beat-06-019-024-basketball-roster-v1--contact-shadow.png",
+          "sha256": "e902a499d68c6ff348547cdee314f4073992709c30169c00ee00aa18950eabd4",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              627,
+              1672,
+              933
+            ],
+            "alpha_min": 0,
+            "alpha_max": 68,
+            "nonzero_pixels": 384901
+          }
+        }
+      }
+    }
+  ]
+}

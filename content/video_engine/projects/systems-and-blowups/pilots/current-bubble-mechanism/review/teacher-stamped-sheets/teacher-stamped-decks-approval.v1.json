@@ -1,0 +1,45 @@
+{
+  "schema_version": "teacher_stamped_deck_approval.v1",
+  "approved_at": "2026-08-10",
+  "approval_scope": "production_visuals",
+  "status": "approved",
+  "note": "All six teacher-stamped deck groups were visually approved by the operator. This approval applies to the stamped production visuals and does not promote the underlying source/evidence assets beyond their existing review gates.",
+  "decks": [
+    {
+      "deck_id": "silicon-antidote",
+      "title": "The Silicon Antidote",
+      "pptx": "C:/Users/Snipe/Downloads/The_Silicon_Antidote.teacher-stamped.pptx",
+      "contact_sheet": "silicon-antidote-teacher-stamped-slides.png"
+    },
+    {
+      "deck_id": "memory-supercycle",
+      "title": "The Memory Supercycle",
+      "pptx": "C:/Users/Snipe/Downloads/The_Memory_Supercycle (1).teacher-stamped.pptx",
+      "contact_sheet": "memory-supercycle-teacher-stamped-slides.png"
+    },
+    {
+      "deck_id": "sovereign-memory-infrastructure",
+      "title": "Sovereign Memory Infrastructure",
+      "pptx": "C:/Users/Snipe/Downloads/Sovereign_Memory_Infrastructure.teacher-stamped.pptx",
+      "contact_sheet": "sovereign-memory-infrastructure-teacher-stamped-slides.png"
+    },
+    {
+      "deck_id": "silicon-silent-triopoly",
+      "title": "Silicon’s Silent Triopoly",
+      "pptx": "C:/Users/Snipe/Downloads/Silicon’s_Silent_Triopoly.teacher-stamped.pptx",
+      "contact_sheet": "silicon-silent-triopoly-teacher-stamped-slides.png"
+    },
+    {
+      "deck_id": "silicon-value-software-bubble",
+      "title": "Silicon Value in a Software Bubble",
+      "pptx": "C:/Users/Snipe/Downloads/Silicon_Value_in_a_Software_Bubble.teacher-stamped.pptx",
+      "contact_sheet": "silicon-value-software-bubble-teacher-stamped-slides.png"
+    },
+    {
+      "deck_id": "silicon-reality-gap",
+      "title": "The Silicon Reality Gap",
+      "pptx": "C:/Users/Snipe/Downloads/The_Silicon_Reality_Gap.teacher-stamped.pptx",
+      "contact_sheet": "silicon-reality-gap-teacher-stamped-slides.png"
+    }
+  ]
+}

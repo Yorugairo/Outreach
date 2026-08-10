@@ -1,0 +1,48 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "finance_research_resolution.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "episode_id", "source_bindings", "source_records", "beat_bindings", "review_state", "artifact_hash"],
+  "properties": {
+    "schema_version": {"const": "finance_research_resolution.v1"},
+    "episode_id": {"type": "string", "minLength": 1},
+    "source_bindings": {"type": "array", "minItems": 3, "items": {"$ref": "#/definitions/file_binding"}},
+    "source_records": {"type": "array", "minItems": 1, "items": {"$ref": "#/definitions/source_record"}},
+    "beat_bindings": {"type": "array", "minItems": 1, "items": {"$ref": "#/definitions/beat_binding"}},
+    "review_state": {"enum": ["draft", "operator_approved"]},
+    "artifact_hash": {"$ref": "#/definitions/sha256"}
+  },
+  "definitions": {
+    "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "file_binding": {
+      "type": "object", "additionalProperties": false, "required": ["kind", "path", "sha256"],
+      "properties": {"kind": {"type": "string", "minLength": 1}, "path": {"type": "string", "minLength": 1}, "sha256": {"$ref": "#/definitions/sha256"}, "artifact_hash": {"$ref": "#/definitions/sha256"}, "as_of": {"type": ["string", "null"]}}
+    },
+    "source_record": {
+      "type": "object", "additionalProperties": false,
+      "required": ["source_id", "claim_id", "publisher", "title", "url", "location", "published_at", "accessed_at", "primary", "locator_sha256"],
+      "properties": {
+        "source_id": {"type": "string", "minLength": 1}, "claim_id": {"type": "string", "minLength": 1},
+        "publisher": {"type": "string", "minLength": 1}, "title": {"type": "string", "minLength": 1},
+        "url": {"type": "string", "minLength": 1}, "location": {"type": "string", "minLength": 1},
+        "published_at": {"type": ["string", "null"]}, "accessed_at": {"type": ["string", "null"]},
+        "primary": {"type": "boolean"}, "locator_sha256": {"$ref": "#/definitions/sha256"}
+      }
+    },
+    "beat_binding": {
+      "type": "object", "additionalProperties": false,
+      "required": ["request_id", "beat_id", "claim_refs", "source_ids", "evidence_surface_ids", "as_of_dates", "binding_kind", "status"],
+      "properties": {
+        "request_id": {"type": "string", "pattern": "^research-cbm-semantic-beat-[0-9]{2}-[0-9]{3}$"},
+        "beat_id": {"type": "string", "pattern": "^cbm-semantic-beat-[0-9]{2}-[0-9]{3}$"},
+        "claim_refs": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}},
+        "source_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+        "evidence_surface_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+        "as_of_dates": {"type": "array", "uniqueItems": true, "items": {"type": ["string", "null"]}},
+        "binding_kind": {"enum": ["primary_source", "verified_calculation", "channel_inference", "scenario"]},
+        "status": {"const": "locator_bound"}
+      }
+    }
+  }
+}

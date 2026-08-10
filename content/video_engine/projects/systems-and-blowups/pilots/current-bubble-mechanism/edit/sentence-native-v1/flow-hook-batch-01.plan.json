@@ -1,0 +1,129 @@
+{
+  "schema_version": "finance_flow_hook_batch.v1",
+  "episode_id": "current-bubble-mechanism",
+  "purpose": "Prepare and review a bounded set of semantic motion-hook candidates for the first five seconds of the episode.",
+  "clock_authority": {
+    "kind": "canonical_word_timing",
+    "semantic_ledger_path": "edit/sentence-native-v1/semantic-beat-ledger.v1.json",
+    "audio_duration_s": 980.806,
+    "source_hashes_required": [
+      "semantic-beat-ledger.v1.json",
+      "canonical-audio-manifest.json"
+    ]
+  },
+  "provider": {
+    "name": "google-flow",
+    "preflight_only": false,
+    "generation_submitted": true,
+    "credit_spend_authorized": true,
+    "daily_budget_policy": "Use at most three 6-second Omni Flash semantic hook studies in the first batch; trim to the strongest five seconds in the edit.",
+    "model_preference": "Omni Flash",
+    "preflight_results": [
+      {
+        "shot_id": "flow-hook-01-memory-vertical",
+        "status": "generated_quarantined",
+        "model_used": "Omni Flash",
+        "flow_project_id": "d171ec1f-d4a2-4b79-b76e-32460193dccc",
+        "flow_media_id": "9ff59194-91a3-43a9-8697-32612ad60d11",
+        "credit_spent": true,
+        "output_path": "assets/quarantine/sentence-native-wave-01/flow-hook-01-memory-vertical-omni-flash-v1.mp4",
+        "sha256": "496346ac122b797404bdc894c2c5a846616e1c92ceef3705edd983d5a0b57a2c",
+        "duration_s": 6.016,
+        "width": 1280,
+        "height": 720,
+        "frame_rate": "24/1",
+        "review_state": "quarantined_operator_review"
+      },
+      {
+        "shot_id": "flow-hook-02-bubble-reflex",
+        "status": "ready_for_confirmation",
+        "model_used": "Veo 3.1 - Fast",
+        "screenshot": ".codex/mcp-runtime/google-flow-browser-mcp/screenshots-debug/2026-08-09T05-28-57-756Z_video-ready.png",
+        "credit_spent": false
+      },
+      {
+        "shot_id": "flow-hook-03-capacity-gate",
+        "status": "blocked_ui_menu",
+        "error": "Flow duration/settings menu intercepted the prompt editor; no generation was submitted.",
+        "credit_spent": false
+      },
+      {
+        "shot_id": "flow-hook-omni-batch-01",
+        "status": "blocked_ui_menu",
+        "model_used": "Omni Flash",
+        "error": "Flow duration/settings menu remained open while switching the approved batch to Omni Flash; no generation was submitted.",
+        "credit_spent": false
+      }
+    ]
+  },
+  "global_visual_contract": [
+    "Use the current bright, friendly woodblock-paper finance world and 2.5D authored depth.",
+    "One causal action per shot; camera motion supports the action but never substitutes for it.",
+    "No factual text, numbers, tickers, logos, captions, or fabricated chart labels in generated pixels.",
+    "Use existing approved sentence-native plates as visual references for continuity, not as generic wallpaper.",
+    "Return a clean final frame suitable for a hard cut into the corresponding local Remotion composition."
+  ],
+  "shots": [
+    {
+      "shot_id": "flow-hook-01-memory-vertical",
+      "beat_id": "cbm-semantic-beat-01-002",
+      "spoken_window": {
+        "start_word_index": 8,
+        "end_word_index": 20,
+        "start_s": 2.403,
+        "end_s": 7.442,
+        "excerpt": "AI memory stocks have gone vertical and the earnings numbers look almost fake."
+      },
+      "semantic_job": "Make the opening claim physically legible: demand and valuation rise sharply around a narrow memory-module bottleneck.",
+      "duration_s": 6,
+      "ratio": "16:9",
+      "prompt": "Cinematic 2.5D paper-theatre motion in the established friendly finance woodblock style. Begin close on a recognizable stack of memory modules and a server rack in a bright blue industrial data-center world. As the narration describes memory stocks going vertical, demand streams from several servers visibly converge into one narrow memory-module bottleneck; the module stack lifts sharply while the surrounding factory remains grounded. Finish on a clean upward physical composition with depth-separated foreground chip, midground server aisle, and background fabrication floor. Smooth motivated acceleration into the rise, then hold the final causal state for a hard editorial cut. No written text, no numbers, no tickers, no logos, no abstract symbols.",
+      "reference_images": [
+        "assets/quarantine/sentence-native-wave-01/beat-01-002-memory-stocks-vertical-v1.png"
+      ],
+      "fallback_plate": "assets/quarantine/sentence-native-wave-01/beat-01-002-memory-stocks-vertical-v1.png",
+      "output_path": "assets/quarantine/sentence-native-wave-01/flow-hook-01-memory-vertical-omni-flash-v1.mp4",
+      "review_state": "quarantined_operator_review"
+    },
+    {
+      "shot_id": "flow-hook-02-bubble-reflex",
+      "beat_id": "cbm-semantic-beat-01-003",
+      "spoken_window": {
+        "start_word_index": 20,
+        "end_word_index": 29,
+        "start_s": 7.442,
+        "end_s": 11.61,
+        "excerpt": "That is usually when everyone starts whispering the word bubble."
+      },
+      "semantic_job": "Turn the reflexive bubble label into a visible social reaction without asserting the conclusion.",
+      "duration_s": 6,
+      "ratio": "16:9",
+      "prompt": "2.5D paper-theatre shot in the established finance woodblock style. Start with the same grounded memory-module factory world. A crowd of small investor figures leans toward a bright rising object and passes a plain paper bubble from hand to hand; the bubble grows as a social reflex, then its surface turns transparent to reveal the real industrial bottleneck still operating underneath. The visual must communicate people labeling the rise before diagnosing the mechanism. Use clear foreground crowd silhouettes, midground bubble, and background factory depth. One continuous motivated handoff and reveal; no decorative pulses. No written text, no numbers, no tickers, no logos, no fabricated chart labels.",
+      "reference_images": [
+        "assets/quarantine/sentence-native-wave-01/beat-01-003-bubble-reflex-v1.png"
+      ],
+      "fallback_plate": "assets/quarantine/sentence-native-wave-01/beat-01-003-bubble-reflex-v1.png",
+      "review_state": "prepared_not_submitted"
+    },
+    {
+      "shot_id": "flow-hook-03-capacity-gate",
+      "beat_id": "cbm-semantic-beat-01-004",
+      "spoken_window": {
+        "start_word_index": 29,
+        "end_word_index": 44,
+        "start_s": 11.61,
+        "end_s": 18.239,
+        "excerpt": "Sometimes the answer is simpler: the world needs more of a physical thing, and the factories cannot make it fast enough."
+      },
+      "semantic_job": "Replace the bubble abstraction with a simple supply-capacity explanation that can lead directly into the episode thesis.",
+      "duration_s": 6,
+      "ratio": "16:9",
+      "prompt": "2.5D finance paper-theatre mechanism shot. A bright, friendly fabrication line receives a growing stream of server orders from the left, but a clearly physical production gate in the center cannot pass components quickly enough. Workers, trays, and memory modules queue visibly; the queue compresses against the gate while the factory remains honest and readable. End with the bottleneck opening into a clean explanatory composition for the next local evidence card. Distinct foreground trays and hands, midground gate and modules, background factory architecture, generous negative space for local captions. No written text, no numbers, no tickers, no logos, no abstract chart glyphs.",
+      "reference_images": [
+        "assets/quarantine/sentence-native-wave-01/beat-01-004-factory-capacity-v1.png"
+      ],
+      "fallback_plate": "assets/quarantine/sentence-native-wave-01/beat-01-004-factory-capacity-v1.png",
+      "review_state": "prepared_not_submitted"
+    }
+  ]
+}

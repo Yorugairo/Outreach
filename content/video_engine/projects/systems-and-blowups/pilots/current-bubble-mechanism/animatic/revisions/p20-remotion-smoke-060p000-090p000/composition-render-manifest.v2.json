@@ -1,0 +1,34 @@
+{
+  "schema_version": "finance_remotion_composition_render.v2",
+  "episode_id": "current-bubble-mechanism",
+  "renderer": "remotion:EditorialMotion",
+  "render_path": "C:/Users/Snipe/.codex/worktrees/f10b/Outreach Program/content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/animatic/revisions/p20-remotion-smoke-060p000-090p000/current-bubble-mechanism-remotion-smoke.mp4",
+  "render_sha256": "57b6ff6fa7be1d65c57c257b90f6e833bcb5e317086d43a30bf2b74729badbb9",
+  "source_start_s": 60.0,
+  "source_end_s": 90.0,
+  "duration_s": 30.0,
+  "full_episode_duration_s": 980.806,
+  "declared_profile": {
+    "width": 1280,
+    "height": 720,
+    "fps": 24
+  },
+  "ffprobe": {
+    "width": 1280,
+    "height": 720,
+    "r_frame_rate": "24/1",
+    "avg_frame_rate": "24/1",
+    "nb_frames": 720,
+    "duration_s": 30.058667
+  },
+  "canonical_motion_plan_path": "C:/Users/Snipe/.codex/worktrees/f10b/Outreach Program/content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/edit/word-timed-v1/editorial-motion-plan.v1.json",
+  "canonical_motion_plan_artifact_hash": "1de45ffcdc057255246e1fda578ee97f21d509cf4150df3efb8135f16926fb61",
+  "canonical_motion_plan_file_sha256": "1a60604031de15fe1ff5baa4aefbbba1f9dfbf3a546a689e0ae6b897e229877b",
+  "remotion_props_path": "C:/Users/Snipe/.codex/worktrees/f10b/Outreach Program/content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/animatic/revisions/full-review-v1/remotion-props-review.json",
+  "remotion_props_sha256": "3c6b00394a4e1354154c3d7510c12f1361bd464058df07ffe213c88f7b1f7469",
+  "props_motion_plan_artifact_hash": "1de45ffcdc057255246e1fda578ee97f21d509cf4150df3efb8135f16926fb61",
+  "public_dir": "C:/Users/Snipe/.codex/worktrees/f10b/Outreach Program/content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/animatic/revisions/full-review-v1/public",
+  "boundary_review_path": "C:/Users/Snipe/.codex/worktrees/f10b/Outreach Program/content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/animatic/revisions/p20-remotion-smoke-060p000-090p000/boundary-review.v1.json",
+  "boundary_review_status": "pass",
+  "status": "review_render_complete"
+}

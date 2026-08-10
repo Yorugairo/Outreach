@@ -1,0 +1,27 @@
+{
+  "schema_version": "finance_semantic_proof_render.v1",
+  "episode_id": "current-bubble-mechanism",
+  "review_scope": "first 89.803 seconds only; not a full-episode render or publication candidate",
+  "video_path": "current-bubble-mechanism-first-90s-semantic-proof-v1.mp4",
+  "sha256": "e31d835ea8e8597fa774272a0ffedfc6dd1de8235098526cae2cdd65e94c1d20",
+  "duration_s": 89.802993,
+  "format": {"width": 1280, "height": 720, "fps": 24, "video_codec": "h264", "audio_codec": "aac"},
+  "clock": {
+    "audio_path": "../../audio/canonical/history_episode_1_master.mp3",
+    "word_timing_path": "../../audio/canonical/history_episode_1_master.words.json",
+    "cue_coverage": "cbm-a-001 through cbm-a-011"
+  },
+  "semantic_inputs": {
+    "motion_proof_plan": "../../edit/semantic-v2/first-90s-motion-proof-plan.v1.json",
+    "motion_proof_plan_hash": "79cc0d84bdeeb3b91f39cb6dd684cd3d07446bdc88aeaf0a6161b368e6d878c0",
+    "asset_catalog": "../../edit/semantic-v2/asset-catalog.v2.json",
+    "asset_catalog_hash": "cdc7937def5e3a5c84f4be68e9c2f6bee1703fc695784a139c05d60fa94083f0"
+  },
+  "verification": [
+    "Canonical narration is used without re-recording.",
+    "Verified MU, KOSPI, and S&P 500 one-year snapshots are rendered as local text only.",
+    "Risk and diagnostic cards are deterministic local layers, not generated factual text.",
+    "Every state resolves to a named semantic cue; no legacy visual rotation is used."
+  ],
+  "artifact_hash": "e9e58739b550e09f36b21c32718e96248d78e0e7f58e19d69aba78cabb6aa672"
+}

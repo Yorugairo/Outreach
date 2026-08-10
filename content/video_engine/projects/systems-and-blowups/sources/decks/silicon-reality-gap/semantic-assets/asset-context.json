@@ -1,0 +1,113 @@
+{
+  "schema_version": "deck_asset_context.v1",
+  "deck_id": "silicon-reality-gap",
+  "assets": [
+    {
+      "asset_id": "silicon-reality-gap-s05-triopoly-formation-v1",
+      "kind": "semantic_crop",
+      "path": "silicon-reality-gap/semantic-assets/assets/silicon-reality-gap-s05-triopoly-formation-v1.png",
+      "sha256": "8783d2cc349e614906f7d8654bb54566e79eb346c5788892bada57699db9c990",
+      "deck_id": "silicon-reality-gap",
+      "slide_id": "silicon-reality-gap-s05",
+      "slide_number": 5,
+      "parent_source_image_id": "silicon-reality-gap-s05-cleaned",
+      "source_variant": "cleaned",
+      "extraction": {
+        "method": "rect_crop",
+        "bbox_px": [
+          110,
+          192,
+          1156,
+          492
+        ],
+        "bbox_norm": [
+          0.08,
+          0.25,
+          0.84,
+          0.64
+        ],
+        "polygon_norm": null,
+        "mask_path": null,
+        "source_sha256": "05f3659639814d1ab0a1950c30304d0f966f6bf70d91bdaf6317d17cf56c9702"
+      },
+      "context": {
+        "what_it_is": "A hand-drawn consolidation scene with a crushing funnel, failed rivals, and the Samsung/Micron/SK hynix survivors.",
+        "visual_role": "mechanism",
+        "representation_mode": "accurate_mechanism",
+        "factual_text": true,
+        "claim_refs": [],
+        "cue_refs": [],
+        "not_what_it_means": [
+          "It is a visual explanation of consolidation, not a complete historical dataset."
+        ],
+        "context_status": "review_only",
+        "reuse_policy": {
+          "scope": "source_only",
+          "max_total_uses": 1,
+          "min_nonadjacent_gap": 0,
+          "allowed_reasons": [
+            "evidence_hold"
+          ],
+          "claim_bound": false
+        }
+      },
+      "rights_state": "source_review_only",
+      "review_state": "review_only",
+      "render_eligible": false
+    },
+    {
+      "asset_id": "silicon-reality-gap-s07-hbm-stack-v1",
+      "kind": "semantic_crop",
+      "path": "silicon-reality-gap/semantic-assets/assets/silicon-reality-gap-s07-hbm-stack-v1.png",
+      "sha256": "cb8adea734d4db3f1efb70d5ce6e36e91e41446fba6315dea47848f6e076ce35",
+      "deck_id": "silicon-reality-gap",
+      "slide_id": "silicon-reality-gap-s07",
+      "slide_number": 7,
+      "parent_source_image_id": "silicon-reality-gap-s07-cleaned",
+      "source_variant": "cleaned",
+      "extraction": {
+        "method": "rect_crop",
+        "bbox_px": [
+          427,
+          184,
+          550,
+          515
+        ],
+        "bbox_norm": [
+          0.31,
+          0.24,
+          0.4,
+          0.67
+        ],
+        "polygon_norm": null,
+        "mask_path": null,
+        "source_sha256": "0cdf1e2d5ee4ee126b90d22e0c267a56f6be483da6c0928db58c943b7ca6c7de"
+      },
+      "context": {
+        "what_it_is": "The central illustrated HBM stack with layered dies, TSV connections, and a base package.",
+        "visual_role": "mechanism",
+        "representation_mode": "accurate_mechanism",
+        "factual_text": false,
+        "claim_refs": [],
+        "cue_refs": [],
+        "not_what_it_means": [
+          "The crop does not by itself establish the numeric bandwidth or yield claims around it."
+        ],
+        "context_status": "review_only",
+        "reuse_policy": {
+          "scope": "source_only",
+          "max_total_uses": 1,
+          "min_nonadjacent_gap": 0,
+          "allowed_reasons": [
+            "evidence_hold"
+          ],
+          "claim_bound": false
+        }
+      },
+      "rights_state": "source_review_only",
+      "review_state": "review_only",
+      "render_eligible": false
+    }
+  ],
+  "artifact_hash": "56533ad73b93a6f1315aff8fd24eb951c08b4784728dcae18bfad40433879173"
+}

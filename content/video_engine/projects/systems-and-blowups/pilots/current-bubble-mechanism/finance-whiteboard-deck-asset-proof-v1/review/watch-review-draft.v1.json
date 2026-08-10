@@ -1,0 +1,14 @@
+{
+  "schema_version": "watch_review_draft.v1",
+  "proof_id": "finance-whiteboard-deck-asset-proof-v1",
+  "status": "draft",
+  "review_required": true,
+  "render_path": "render/finance-whiteboard-deck-asset-proof.mp4",
+  "checks": [
+    "baked source text remains legible",
+    "hand rides every active asset reveal",
+    "plate remains stable with no camera drift",
+    "selected asset IDs resolve to the P28 manifest",
+    "deck crops are treated as evidence plates rather than promoted reusable components"
+  ]
+}

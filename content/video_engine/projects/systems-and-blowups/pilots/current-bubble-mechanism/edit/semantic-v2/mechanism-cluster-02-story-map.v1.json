@@ -1,0 +1,56 @@
+{
+  "schema_version": "finance_semantic_story_map.v1",
+  "episode_id": "current-bubble-mechanism",
+  "state": "asset_wave_in_progress",
+  "coverage": {
+    "start_word": 239,
+    "end_word": 392,
+    "start_s": 89.803,
+    "end_s": 154.726,
+    "canonical_cue_sheet_path": "../word-timed-v1/finance-visual-cue-sheet.v1.json"
+  },
+  "design_rule": "Each image exists to explain an exact economic/technical mechanism. No stock finance symbols, price-line decoration, or reused plate may stand in for a missing concept.",
+  "clusters": [
+    {
+      "cluster_id": "cbm-b-001",
+      "cue_ids": ["cbm-cue-028", "cbm-cue-029", "cbm-cue-030", "cbm-cue-031", "cbm-cue-032"],
+      "words": [239, 283],
+      "time_s": [89.803, 108.182],
+      "purpose": "Move below both elevators and name the causal questions: memory is supported by demand/capacity/contracts/cash flow, while an index can turn diversification into concentration under automatic flows.",
+      "visual_sequence": ["callback to the two-elevator cutaway", "local four-cable mechanism labels on the memory foundation", "deterministic index-fund concentration continuation"],
+      "asset_strategy": "approved callback plus local compositor surfaces; no new generic plate",
+      "must_not_imply": ["either causal system guarantees returns", "automatic contributions cause price outcomes by themselves"]
+    },
+    {
+      "cluster_id": "cbm-b-002",
+      "cue_ids": ["cbm-cue-033", "cbm-cue-034", "cbm-cue-035", "cbm-cue-036"],
+      "words": [284, 315],
+      "time_s": [108.182, 121.104],
+      "purpose": "Teach HBM as stacked working memory physically adjacent to an AI accelerator, differentiated from ordinary storage through placement and data-transfer role—not text-heavy pseudo-diagrams.",
+      "asset_demand": "hbm-adjacent-accelerator-v1",
+      "must_show": ["visible stacked memory layers", "nearby accelerator package", "short, dense data path", "one local explainer anchor"],
+      "must_not_imply": ["an exact chip die layout", "a named vendor", "throughput number without a source"]
+    },
+    {
+      "cluster_id": "cbm-b-003",
+      "cue_ids": ["cbm-cue-037", "cbm-cue-038", "cbm-cue-039", "cbm-cue-040", "cbm-cue-041", "cbm-cue-042", "cbm-cue-043"],
+      "words": [316, 375],
+      "time_s": [121.104, 144.613],
+      "purpose": "Translate the GPU-engine/HBM-fuel-system analogy into an AI machine whose larger engine visibly starves at a narrow supply line, then expand the constraint to every accelerator class.",
+      "asset_demand": "accelerator-memory-bandwidth-gate-v1",
+      "must_show": ["accelerator engine", "narrow memory supply channel", "working data units queued at the channel", "multiple generic accelerator forms resolving to the same memory gate"],
+      "must_not_imply": ["HBM is literal fuel", "all AI architectures are identical", "permanent shortage"]
+    },
+    {
+      "cluster_id": "cbm-b-004",
+      "cue_ids": ["cbm-cue-044", "cbm-cue-045", "cbm-cue-046"],
+      "words": [376, 392],
+      "time_s": [144.613, 154.726],
+      "purpose": "Make the shortage physical: advanced wafers, clean-room space, packaging, equipment, engineers, and time converge at one constrained HBM output gate.",
+      "asset_demand": "hbm-physical-inputs-gate-v1",
+      "must_show": ["distinct physical-input pathways", "clean-room/factory context", "one constrained output gate", "room for local labels that appear only as each input is named"],
+      "must_not_imply": ["inputs are equal in value", "capacity can never expand", "specific production volumes"]
+    }
+  ],
+  "artifact_hash": "2a273964f9921cf591c73b34e445887c4fa6cfdb3df2b93bad01877096124d9d"
+}

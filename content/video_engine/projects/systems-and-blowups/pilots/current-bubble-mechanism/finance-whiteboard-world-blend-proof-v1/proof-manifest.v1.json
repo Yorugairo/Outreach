@@ -1,0 +1,410 @@
+{
+  "schema_version": "finance_whiteboard_world_blend_manifest.v1",
+  "proof_id": "finance-whiteboard-world-blend-proof-v1",
+  "renderer": "hyperframes:html-gsap",
+  "duration_s": 18.0,
+  "delivery_fps": 24,
+  "authoring_profile": {
+    "width": 1920,
+    "height": 1080,
+    "fps": 24
+  },
+  "render_profile": {
+    "width": 1280,
+    "height": 720,
+    "fps": 24,
+    "label": "review"
+  },
+  "source_manifest": {
+    "path": "content/video_engine/projects/systems-and-blowups/sources/decks/deck-asset-manifest.json",
+    "sha256": "272a6365d0c063ec4c4f54b24fee5ea7a28d7d86f0dd6acb79db6bdcfa19e7fb"
+  },
+  "world_assets": [
+    {
+      "asset_id": "woodblock-finance-analyst-v1",
+      "source": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\assets\\generated\\cutouts\\actor-institutional-analyst-v1.png",
+      "path": "assets/world/finance-analyst-v1.png",
+      "kind": "world_character",
+      "x": 1415,
+      "y": 285,
+      "width": 390,
+      "sha256": "6222e7ff7d939783b0721aa8575dbd2fa78850ce6b2097314f2994c6e0d559ff"
+    },
+    {
+      "asset_id": "woodblock-whiteboard-easel-v2",
+      "source": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\assets\\generated\\cutouts\\whiteboard-easel-v2.png",
+      "path": "assets/world/whiteboard-easel-v2.png",
+      "kind": "world_evidence_surface",
+      "x": 35,
+      "y": 38,
+      "width": 1300,
+      "sha256": "5f41ac8882ba1118f01ace46d41aaf86b4dec1e12f99199f8a82befc062157cc"
+    }
+  ],
+  "deck_assets": [
+    {
+      "asset_id": "silicon-antidote-s02-valuation-bubble-v1",
+      "filename": "valuation-bubble.png",
+      "display_name": "S&P 500 valuation balloon",
+      "x": 465,
+      "y": 245,
+      "width": 405,
+      "height": 400,
+      "rect": [
+        -55,
+        -55,
+        460,
+        455
+      ],
+      "rows": 8,
+      "stroke_width": 105,
+      "start_s": 0.28,
+      "duration_s": 0.88,
+      "scene": "valuation",
+      "path": "assets/deck/valuation-bubble.png",
+      "sha256": "237df91e6c7beeeff9b9a837739d8c155089d74caf1230d4191e3e79d716ce31",
+      "source_asset_id": "silicon-antidote-s02-valuation-bubble-v1",
+      "source_asset_path": "silicon-antidote/semantic-assets/assets/silicon-antidote-s02-valuation-bubble-v1.png",
+      "source_asset_sha256": "237df91e6c7beeeff9b9a837739d8c155089d74caf1230d4191e3e79d716ce31",
+      "source_slide_id": "silicon-antidote-s02",
+      "context": {
+        "what_it_is": "A red S&P 500 valuation balloon labeled with the source deck's CAPE comparison.",
+        "visual_role": "evidence",
+        "representation_mode": "literal_evidence",
+        "factual_text": true,
+        "claim_refs": [],
+        "cue_refs": [],
+        "not_what_it_means": [
+          "The crop preserves the source claim but is not independent verification of the metric."
+        ],
+        "context_status": "review_only",
+        "reuse_policy": {
+          "scope": "source_only",
+          "max_total_uses": 1,
+          "min_nonadjacent_gap": 0,
+          "allowed_reasons": [
+            "evidence_hold"
+          ],
+          "claim_bound": false
+        }
+      },
+      "rights_state": "source_review_only",
+      "review_state": "review_only",
+      "render_eligible": false,
+      "asset_mode": "evidence_plate_on_world_whiteboard"
+    },
+    {
+      "asset_id": "silicon-antidote-s09-capacity-penalty-v1",
+      "filename": "capacity-penalty.png",
+      "display_name": "three-to-one capacity penalty",
+      "x": 275,
+      "y": 235,
+      "width": 750,
+      "height": 415,
+      "rect": [
+        -65,
+        -65,
+        815,
+        480
+      ],
+      "rows": 8,
+      "stroke_width": 110,
+      "start_s": 3.62,
+      "duration_s": 1.25,
+      "scene": "physical",
+      "path": "assets/deck/capacity-penalty.png",
+      "sha256": "e79f750cc11016a73f966d03c89b136779ff0c716a7011859cedb10ee4c61e89",
+      "source_asset_id": "silicon-antidote-s09-capacity-penalty-v1",
+      "source_asset_path": "silicon-antidote/semantic-assets/assets/silicon-antidote-s09-capacity-penalty-v1.png",
+      "source_asset_sha256": "e79f750cc11016a73f966d03c89b136779ff0c716a7011859cedb10ee4c61e89",
+      "source_slide_id": "silicon-antidote-s09",
+      "context": {
+        "what_it_is": "A balance-scale illustration comparing one HBM unit with three standard DDR5 units and the stated capacity penalty.",
+        "visual_role": "mechanism",
+        "representation_mode": "literal_evidence",
+        "factual_text": true,
+        "claim_refs": [],
+        "cue_refs": [],
+        "not_what_it_means": [
+          "The visual comparison does not replace the underlying wafer-capacity calculation."
+        ],
+        "context_status": "review_only",
+        "reuse_policy": {
+          "scope": "source_only",
+          "max_total_uses": 1,
+          "min_nonadjacent_gap": 0,
+          "allowed_reasons": [
+            "evidence_hold"
+          ],
+          "claim_bound": false
+        }
+      },
+      "rights_state": "source_review_only",
+      "review_state": "review_only",
+      "render_eligible": false,
+      "asset_mode": "evidence_plate_on_world_whiteboard"
+    },
+    {
+      "asset_id": "silicon-reality-gap-s07-hbm-stack-v1",
+      "filename": "hbm-stack.png",
+      "display_name": "HBM physical stack",
+      "x": 965,
+      "y": 405,
+      "width": 190,
+      "height": 178,
+      "rect": [
+        -45,
+        -45,
+        235,
+        223
+      ],
+      "rows": 7,
+      "stroke_width": 78,
+      "start_s": 5.28,
+      "duration_s": 0.94,
+      "scene": "physical",
+      "path": "assets/deck/hbm-stack.png",
+      "sha256": "cb8adea734d4db3f1efb70d5ce6e36e91e41446fba6315dea47848f6e076ce35",
+      "source_asset_id": "silicon-reality-gap-s07-hbm-stack-v1",
+      "source_asset_path": "silicon-reality-gap/semantic-assets/assets/silicon-reality-gap-s07-hbm-stack-v1.png",
+      "source_asset_sha256": "cb8adea734d4db3f1efb70d5ce6e36e91e41446fba6315dea47848f6e076ce35",
+      "source_slide_id": "silicon-reality-gap-s07",
+      "context": {
+        "what_it_is": "The central illustrated HBM stack with layered dies, TSV connections, and a base package.",
+        "visual_role": "mechanism",
+        "representation_mode": "accurate_mechanism",
+        "factual_text": false,
+        "claim_refs": [],
+        "cue_refs": [],
+        "not_what_it_means": [
+          "The crop does not by itself establish the numeric bandwidth or yield claims around it."
+        ],
+        "context_status": "review_only",
+        "reuse_policy": {
+          "scope": "source_only",
+          "max_total_uses": 1,
+          "min_nonadjacent_gap": 0,
+          "allowed_reasons": [
+            "evidence_hold"
+          ],
+          "claim_bound": false
+        }
+      },
+      "rights_state": "source_review_only",
+      "review_state": "review_only",
+      "render_eligible": false,
+      "asset_mode": "evidence_plate_on_world_whiteboard"
+    },
+    {
+      "asset_id": "silicon-antidote-s10-ram-ageddon-v1",
+      "filename": "ram-ageddon.png",
+      "display_name": "RAM-ageddon supply-demand shock",
+      "x": 275,
+      "y": 245,
+      "width": 820,
+      "height": 394,
+      "rect": [
+        -65,
+        -65,
+        885,
+        459
+      ],
+      "rows": 8,
+      "stroke_width": 110,
+      "start_s": 11.98,
+      "duration_s": 1.28,
+      "scene": "choke-point",
+      "path": "assets/deck/ram-ageddon.png",
+      "sha256": "78c75d10d427ed4b9f599bd58ba2b1df66bc77f613e92253feb9d9cba62e8147",
+      "source_asset_id": "silicon-antidote-s10-ram-ageddon-v1",
+      "source_asset_path": "silicon-antidote/semantic-assets/assets/silicon-antidote-s10-ram-ageddon-v1.png",
+      "source_asset_sha256": "78c75d10d427ed4b9f599bd58ba2b1df66bc77f613e92253feb9d9cba62e8147",
+      "source_slide_id": "silicon-antidote-s10",
+      "context": {
+        "what_it_is": "A central RAM-ageddon burst with opposing blue supply arrows, red demand arrows, and pinned source notes.",
+        "visual_role": "mechanism",
+        "representation_mode": "accurate_mechanism",
+        "factual_text": true,
+        "claim_refs": [],
+        "cue_refs": [],
+        "not_what_it_means": [
+          "RAM-ageddon is a declared explanatory label, not a formal market classification."
+        ],
+        "context_status": "review_only",
+        "reuse_policy": {
+          "scope": "source_only",
+          "max_total_uses": 1,
+          "min_nonadjacent_gap": 0,
+          "allowed_reasons": [
+            "evidence_hold"
+          ],
+          "claim_bound": false
+        }
+      },
+      "rights_state": "source_review_only",
+      "review_state": "review_only",
+      "render_eligible": false,
+      "asset_mode": "evidence_plate_on_world_whiteboard"
+    }
+  ],
+  "canonical_audio": {
+    "path": "assets/history_episode_1_master.mp3",
+    "sha256": "ecacf46c49aee85b912404bfa0e47c37acbae0397b637e2a966c51a625077ce1",
+    "duration_s": 18.0
+  },
+  "hand": {
+    "a_path": "assets/draw-hand-a-v1.png",
+    "b_path": "assets/draw-hand-b-v1.png",
+    "source_sha256": "f50d4f592b0bb62eddc15cc31aa062943c339be079fb38672bf212bb5e7e9a68"
+  },
+  "composition_rule": "continuous woodblock research world with whiteboard evidence layer; no world reset between evidence plates",
+  "asset_policy": "NotebookLM/PPTX crops remain review-only source evidence; generated cutouts are world props",
+  "provider_calls": 0,
+  "status": "review_render_complete",
+  "render": {
+    "path": "render/finance-whiteboard-world-blend-proof.mp4",
+    "authoring_path": "render/hf-authoring.mp4",
+    "sha256": "40c70f1127146b87416a315dfa21fbe900109bd8fe20b94346744c70e12a641d",
+    "ffprobe": {
+      "streams": [
+        {
+          "index": 0,
+          "codec_name": "h264",
+          "codec_long_name": "H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10",
+          "profile": "High",
+          "codec_type": "video",
+          "codec_tag_string": "avc1",
+          "codec_tag": "0x31637661",
+          "mime_codec_string": "avc1.64001f",
+          "width": 1280,
+          "height": 720,
+          "coded_width": 1280,
+          "coded_height": 720,
+          "has_b_frames": 2,
+          "sample_aspect_ratio": "1:1",
+          "display_aspect_ratio": "16:9",
+          "pix_fmt": "yuv420p",
+          "level": 31,
+          "color_range": "tv",
+          "color_space": "bt709",
+          "color_transfer": "bt709",
+          "color_primaries": "bt709",
+          "chroma_location": "left",
+          "field_order": "progressive",
+          "is_avc": "true",
+          "nal_length_size": "4",
+          "id": "0x1",
+          "r_frame_rate": "24/1",
+          "avg_frame_rate": "24/1",
+          "time_base": "1/12288",
+          "start_pts": 0,
+          "start_time": "0.000000",
+          "duration_ts": 221184,
+          "duration": "18.000000",
+          "bit_rate": "550644",
+          "bits_per_raw_sample": "8",
+          "nb_frames": "432",
+          "extradata_size": 49,
+          "disposition": {
+            "default": 1,
+            "dub": 0,
+            "original": 0,
+            "comment": 0,
+            "lyrics": 0,
+            "karaoke": 0,
+            "forced": 0,
+            "hearing_impaired": 0,
+            "visual_impaired": 0,
+            "clean_effects": 0,
+            "attached_pic": 0,
+            "timed_thumbnails": 0,
+            "non_diegetic": 0,
+            "captions": 0,
+            "descriptions": 0,
+            "metadata": 0,
+            "dependent": 0,
+            "still_image": 0,
+            "multilayer": 0
+          },
+          "tags": {
+            "language": "und",
+            "handler_name": "VideoHandler",
+            "encoder": "Lavc62.28.102 libx264"
+          }
+        },
+        {
+          "index": 1,
+          "codec_name": "aac",
+          "codec_long_name": "AAC (Advanced Audio Coding)",
+          "profile": "LC",
+          "codec_type": "audio",
+          "codec_tag_string": "mp4a",
+          "codec_tag": "0x6134706d",
+          "mime_codec_string": "mp4a.40.2",
+          "sample_fmt": "fltp",
+          "sample_rate": "48000",
+          "channels": 2,
+          "channel_layout": "stereo",
+          "bits_per_sample": 0,
+          "initial_padding": 0,
+          "id": "0x2",
+          "r_frame_rate": "0/0",
+          "avg_frame_rate": "0/0",
+          "time_base": "1/48000",
+          "start_pts": 0,
+          "start_time": "0.000000",
+          "duration_ts": 864240,
+          "duration": "18.005000",
+          "bit_rate": "193388",
+          "nb_frames": "845",
+          "extradata_size": 5,
+          "disposition": {
+            "default": 1,
+            "dub": 0,
+            "original": 0,
+            "comment": 0,
+            "lyrics": 0,
+            "karaoke": 0,
+            "forced": 0,
+            "hearing_impaired": 0,
+            "visual_impaired": 0,
+            "clean_effects": 0,
+            "attached_pic": 0,
+            "timed_thumbnails": 0,
+            "non_diegetic": 0,
+            "captions": 0,
+            "descriptions": 0,
+            "metadata": 0,
+            "dependent": 0,
+            "still_image": 0,
+            "multilayer": 0
+          },
+          "tags": {
+            "language": "und",
+            "handler_name": "SoundHandler"
+          }
+        }
+      ],
+      "format": {
+        "filename": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\finance-whiteboard-world-blend-proof-v1\\render\\finance-whiteboard-world-blend-proof.mp4",
+        "nb_streams": 2,
+        "nb_programs": 0,
+        "nb_stream_groups": 0,
+        "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+        "format_long_name": "QuickTime / MOV",
+        "start_time": "0.000000",
+        "duration": "18.005000",
+        "size": "1688475",
+        "bit_rate": "750224",
+        "probe_score": 100,
+        "tags": {
+          "major_brand": "isom",
+          "minor_version": "512",
+          "compatible_brands": "isomiso2avc1mp41",
+          "encoder": "Lavf62.12.102"
+        }
+      }
+    },
+    "boundary_dir": "review/boundaries"
+  }
+}

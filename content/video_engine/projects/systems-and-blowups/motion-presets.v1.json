@@ -1,0 +1,13 @@
+{
+  "schema_version": "finance_motion_presets.v1",
+  "presets": [
+    {"id": "money-transfer", "job": "Move a unit between two actors while the source decreases and recipient increases."},
+    {"id": "ownership-reveal", "job": "Separate nested ownership layers to expose the controlling actor."},
+    {"id": "balance-sheet-open", "job": "Open one paper ledger into assets liabilities and equity regions."},
+    {"id": "index-expand", "job": "Expand a basket into weighted holdings to reveal concentration."},
+    {"id": "distribution-split", "job": "Divide one growth stream among owners workers lenders and government."},
+    {"id": "risk-transfer", "job": "Move a risk marker from the originator to the party that ultimately absorbs it."},
+    {"id": "evidence-lock", "job": "Bring a local chart or filing surface in after the spoken claim and clear it before the next claim."}
+  ],
+  "forbidden": ["decorative pulse", "unmotivated scroll", "constant camera drift", "drawing hand without explanatory purpose", "fake depth warp"]
+}

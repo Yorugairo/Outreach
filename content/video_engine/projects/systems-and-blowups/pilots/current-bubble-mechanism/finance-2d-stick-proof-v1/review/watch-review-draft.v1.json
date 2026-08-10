@@ -1,0 +1,95 @@
+{
+  "schema_version": "video_watch_review.v1",
+  "review_id": "finance-2d-stick-proof-v1-draft",
+  "project_id": "outreach-program",
+  "lane_id": "systems-and-blowups-finance",
+  "episode_id": "finance-2d-stick-proof-v1",
+  "created_at": "2026-08-09T00:00:00Z",
+  "reviewer": "operator-and-watch",
+  "review_purpose": "Review the simple native 2D stick grammar against the reference production pattern.",
+  "watch_detail": "focused",
+  "source": {
+    "kind": "local",
+    "uri": "../render/finance-2d-stick-proof.mp4",
+    "sha256": "c0e25cdbe2bfed4793904de6e8baf12adc9363d71548618104114419963c228e",
+    "duration_s": 60.757333
+  },
+  "transcript": {
+    "path": "../../audio/canonical/history_episode_1_master.words.json",
+    "sha256": "3773bdd611c96d5e431ed56749d9991825215bb3756043086f14fbbdbe0d1da3",
+    "source": "canonical_word_timing"
+  },
+  "summary": {
+    "assessment": "Operator review is pending. This packet preserves the full native 2D proof and exact scene-boundary evidence.",
+    "strengths": [
+      "The character and all props are deterministic SVG primitives.",
+      "The proof uses the same audio clock and source-bound state boundaries."
+    ],
+    "priority_issues": [
+      "Operator must review face readability, object clarity, and whether the style is passable enough to scale."
+    ],
+    "overall_state": "revision_required"
+  },
+  "findings": [
+    {
+      "finding_id": "operator-review-pending",
+      "start_s": 0.0,
+      "end_s": 60.732,
+      "transcript_excerpt": "Now open the other elevator: the S&P 500 index fund.",
+      "evidence_frames": [
+        {
+          "path": "boundaries/01-basket-product-qualities-f0168.png",
+          "sha256": "99e3f5f17903c6b94f04a4a6c34fc61320bd1da72e79e9cceeea696ffd66c80b",
+          "timestamp_s": 7.0
+        },
+        {
+          "path": "boundaries/02-two-jobs-f0393.png",
+          "sha256": "4c1c475235ce2d5f13ef4a686bb26d73115c14c79dc72bfc3d0dd8431f19eee8",
+          "timestamp_s": 16.374
+        },
+        {
+          "path": "boundaries/03-concentration-f0643.png",
+          "sha256": "dfc944b51242ae1baf72ab71a7fea884c26bd81cb140127e1c86e95e3c034e9f",
+          "timestamp_s": 26.774
+        },
+        {
+          "path": "boundaries/04-shared-exposure-f1028.png",
+          "sha256": "c252926e6c7b831c7cc2b640ebd2ba9b06605820f5303604f0c8f121efed5911",
+          "timestamp_s": 42.854
+        },
+        {
+          "path": "boundaries/05-long-tail-f1283.png",
+          "sha256": "3680c285cf3545f0af6e24d6f2f893c3379e8ab839a57b347e787b2fdecceab4",
+          "timestamp_s": 53.458
+        },
+        {
+          "path": "boundaries/06-admission-versus-weighting-f1411.png",
+          "sha256": "85a28b09d6e1fccd477f91ef9630b834e7b47ad3aaddeb865747c8ebb5600297",
+          "timestamp_s": 58.788
+        }
+      ],
+      "kind": "other",
+      "scope": "episode",
+      "severity": "medium",
+      "symptom": "The render has not received an explicit operator decision.",
+      "root_cause": "P25 stops at the isolated proof review boundary.",
+      "impact": "The easy 2D grammar must not be promoted until the user confirms it is passable.",
+      "proposed_fix": "Review the full proxy and six boundary frames for face readability, object clarity, pacing, and source-bound number treatment.",
+      "acceptance": "Operator records approved or changes_requested.",
+      "confidence": "confirmed",
+      "recurrence_key": "p25-operator-review-gate",
+      "recurrence_count": 1,
+      "learning_trigger": "When a native 2D proof reaches visual review.",
+      "learning_action": "Promote only the approved subset of the easy 2D grammar.",
+      "requires_human_decision": true,
+      "promotion_state": "observation",
+      "status": "open"
+    }
+  ],
+  "operator_decision": {
+    "state": "draft",
+    "approved_at": null,
+    "notes": "Awaiting explicit visual review."
+  },
+  "artifact_hash": "0000000000000000000000000000000000000000000000000000000000000000"
+}

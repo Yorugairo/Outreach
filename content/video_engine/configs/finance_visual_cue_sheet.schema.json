@@ -1,0 +1,51 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "finance_visual_cue_sheet.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "episode_id", "narration", "caption_safe_band", "short_ranges", "cues", "artifact_hash"],
+  "properties": {
+    "schema_version": {"const": "finance_visual_cue_sheet.v1"},
+    "episode_id": {"type": "string"},
+    "narration": {
+      "type": "object", "additionalProperties": false,
+      "required": ["audio_sha256", "words_sha256", "word_count", "duration_s"],
+      "properties": {
+        "audio_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "words_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "word_count": {"type": "integer", "minimum": 1},
+        "duration_s": {"type": "number", "exclusiveMinimum": 0}
+      }
+    },
+    "caption_safe_band": {
+      "type": "object", "additionalProperties": false,
+      "required": ["top", "bottom"],
+      "properties": {"top": {"type": "number", "minimum": 0.8, "maximum": 0.94}, "bottom": {"type": "number", "minimum": 0.9, "maximum": 1}}
+    },
+    "short_ranges": {
+      "type": "array",
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["short_id", "start_word", "end_word", "start_s", "end_s"],
+        "properties": {"short_id": {"type": "string"}, "start_word": {"type": "integer", "minimum": 0}, "end_word": {"type": "integer", "minimum": 0}, "start_s": {"type": "number", "minimum": 0}, "end_s": {"type": "number", "exclusiveMinimum": 0}}
+      }
+    },
+    "cues": {
+      "type": "array", "minItems": 1,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["cue_id", "start_word", "end_word", "start_s", "end_s", "excerpt", "claim_refs", "state_type", "visual_world", "entry_action", "micro_events", "exit_transition", "fact_surface", "short_membership"],
+        "properties": {
+          "cue_id": {"type": "string"}, "start_word": {"type": "integer", "minimum": 0}, "end_word": {"type": "integer", "minimum": 0},
+          "start_s": {"type": "number", "minimum": 0}, "end_s": {"type": "number", "exclusiveMinimum": 0}, "excerpt": {"type": "string", "minLength": 1},
+          "claim_refs": {"type": "array", "items": {"type": "string"}}, "state_type": {"enum": ["narrative", "mechanism", "evidence", "transition"]},
+          "visual_world": {"enum": ["story", "mechanism", "evidence"]}, "entry_action": {"type": "string", "minLength": 3},
+          "micro_events": {"type": "array", "minItems": 1, "items": {"type": "object", "additionalProperties": false, "required": ["at_s", "action"], "properties": {"at_s": {"type": "number", "minimum": 0}, "action": {"type": "string", "minLength": 3}}}},
+          "exit_transition": {"type": "string", "minLength": 3}, "fact_surface": {"type": ["string", "null"]},
+          "short_membership": {"type": "array", "items": {"type": "string"}}
+        }
+      }
+    },
+    "artifact_hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}

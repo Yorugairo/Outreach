@@ -1,0 +1,21 @@
+{
+  "schema_version": "deck_asset_coverage.v1",
+  "deck_id": "silicon-reality-gap",
+  "slide_count": 15,
+  "source_image_count": 15,
+  "semantic_asset_count": 2,
+  "render_eligible_count": 0,
+  "status": "needs_human_review",
+  "checks": {
+    "source_slides_present": true,
+    "semantic_context_complete": true,
+    "render_eligibility_gated": true
+  },
+  "human_gates": {
+    "H1": false,
+    "H2": false,
+    "H3": false,
+    "H4": false
+  },
+  "artifact_hash": "39ff6c09a1ac377e8f28e0f47a014034725da707e7cdb9dbe7b8d1efdf382992"
+}

@@ -1,0 +1,463 @@
+{
+  "schema_version": "finance_asset_catalog.v1",
+  "channel_id": "systems-and-blowups",
+  "project_root": ".",
+  "resolution_order": [
+    "exact_semantic_match",
+    "reusable_component_composition",
+    "deterministic_evidence_or_mechanism",
+    "bespoke_plate"
+  ],
+  "assets": [
+    {
+      "asset_id": "actor-worker-household-v2",
+      "path": "assets/generated/cutouts/actor-worker-household-v2.png",
+      "sha256": "40d6e93abc0127e47f2e6604b67c429b323aeedcbc6191bc6f4b6884ea7ee04d",
+      "kind": "actor",
+      "visual_worlds": [
+        "story"
+      ],
+      "semantic_tags": [
+        "worker",
+        "household",
+        "wage-envelope",
+        "commuter"
+      ],
+      "identity_lenses": [
+        "black-household",
+        "working-household"
+      ],
+      "resolution_tier": 2,
+      "generated": true,
+      "contains_factual_text": false,
+      "rights_state": "original_review_only",
+      "review_state": "review_only",
+      "render_eligible": false
+    },
+    {
+      "asset_id": "actor-founder-v2",
+      "path": "assets/generated/cutouts/actor-founder-v2.png",
+      "sha256": "8b97f1449b91425a2c6946f3a5429e86c61fa88ebbc1a15b04b534e1c4aeedde",
+      "kind": "actor",
+      "visual_worlds": [
+        "story"
+      ],
+      "semantic_tags": [
+        "founder",
+        "small-business-owner",
+        "ownership",
+        "ledger"
+      ],
+      "identity_lenses": [
+        "black-entrepreneurship",
+        "small-business-owner"
+      ],
+      "resolution_tier": 2,
+      "generated": true,
+      "contains_factual_text": false,
+      "rights_state": "original_review_only",
+      "review_state": "review_only",
+      "render_eligible": false
+    },
+    {
+      "asset_id": "building-family-home-v1",
+      "path": "assets/generated/cutouts/building-family-home-v1.png",
+      "sha256": "a5315451181c2c2d16d9e886c118b6a890503c4d11796d816d86d43baf189649",
+      "kind": "prop",
+      "visual_worlds": [
+        "story",
+        "mechanism"
+      ],
+      "semantic_tags": [
+        "family-home",
+        "homeownership",
+        "housing",
+        "household-balance-sheet"
+      ],
+      "identity_lenses": [
+        "homeowner",
+        "family-household"
+      ],
+      "resolution_tier": 2,
+      "generated": true,
+      "contains_factual_text": false,
+      "rights_state": "original_review_only",
+      "review_state": "review_only",
+      "render_eligible": false
+    },
+    {
+      "asset_id": "building-rental-apartment-v1",
+      "path": "assets/generated/cutouts/building-rental-apartment-v1.png",
+      "sha256": "ef1b197e1950559b6044b3be416f33048403ffb4d16c1e8b8dda5a52ed406a26",
+      "kind": "prop",
+      "visual_worlds": [
+        "story",
+        "mechanism"
+      ],
+      "semantic_tags": [
+        "rental-apartment",
+        "rent",
+        "housing",
+        "tenant"
+      ],
+      "identity_lenses": [
+        "renter",
+        "multifamily-household"
+      ],
+      "resolution_tier": 2,
+      "generated": true,
+      "contains_factual_text": false,
+      "rights_state": "original_review_only",
+      "review_state": "review_only",
+      "render_eligible": false
+    },
+    {
+      "asset_id": "building-neighborhood-workshop-v1",
+      "path": "assets/generated/cutouts/building-neighborhood-workshop-v1.png",
+      "sha256": "5348461973dbb55286276216571b159c16f5d2b41e11e1a8b245f1aac587a783",
+      "kind": "prop",
+      "visual_worlds": [
+        "story",
+        "mechanism"
+      ],
+      "semantic_tags": [
+        "small-business",
+        "workshop",
+        "storefront",
+        "local-economy"
+      ],
+      "identity_lenses": [
+        "small-business-owner",
+        "community-business"
+      ],
+      "resolution_tier": 2,
+      "generated": true,
+      "contains_factual_text": false,
+      "rights_state": "original_review_only",
+      "review_state": "review_only",
+      "render_eligible": false
+    },
+    {
+      "asset_id": "building-civic-bank-v1",
+      "path": "assets/generated/cutouts/building-civic-bank-v1.png",
+      "sha256": "35f5c599c89aae81aa4645517332d16deca730b72720aaed826de1cc75494553",
+      "kind": "prop",
+      "visual_worlds": [
+        "story",
+        "mechanism"
+      ],
+      "semantic_tags": [
+        "bank",
+        "government",
+        "regulator",
+        "civic-institution"
+      ],
+      "identity_lenses": [
+        "institutional-access",
+        "community-finance"
+      ],
+      "resolution_tier": 2,
+      "generated": true,
+      "contains_factual_text": false,
+      "rights_state": "original_review_only",
+      "review_state": "review_only",
+      "render_eligible": false
+    },
+    {
+      "asset_id": "mechanism-index-basket-v2",
+      "path": "assets/generated/cutouts/mechanism-index-basket-v2.png",
+      "sha256": "27fba8656654fc0ff02a429884a6180f68cede8024bfdf4e9b4d634d078df8fa",
+      "kind": "mechanism",
+      "visual_worlds": [
+        "mechanism"
+      ],
+      "semantic_tags": [
+        "index-basket",
+        "diversification",
+        "concentration",
+        "shares"
+      ],
+      "identity_lenses": [
+        "first-generation-investor"
+      ],
+      "resolution_tier": 3,
+      "generated": true,
+      "contains_factual_text": false,
+      "rights_state": "original_review_only",
+      "review_state": "review_only",
+      "render_eligible": false
+    },
+    {
+      "asset_id": "mechanism-balance-ledger-v1",
+      "path": "assets/generated/cutouts/mechanism-balance-ledger-v1.png",
+      "sha256": "2735aa89f282b217cfdd4e9e41c01373a257ef5a0394c90cc1b3f1ea0d0dc0ce",
+      "kind": "mechanism",
+      "visual_worlds": [
+        "mechanism",
+        "evidence"
+      ],
+      "semantic_tags": [
+        "balance-sheet",
+        "assets",
+        "liabilities",
+        "capital"
+      ],
+      "identity_lenses": [],
+      "resolution_tier": 3,
+      "generated": true,
+      "contains_factual_text": false,
+      "rights_state": "original_review_only",
+      "review_state": "review_only",
+      "render_eligible": false
+    },
+    {
+      "asset_id": "mechanism-ownership-tree-v1",
+      "path": "assets/generated/cutouts/mechanism-ownership-tree-v1.png",
+      "sha256": "25c3a7e1e11b5aaca20cb450248a33fde4130e09e016cc67c75f9b9d4b264bb5",
+      "kind": "mechanism",
+      "visual_worlds": [
+        "mechanism"
+      ],
+      "semantic_tags": [
+        "ownership-tree",
+        "beneficial-owner",
+        "control",
+        "cash-flow"
+      ],
+      "identity_lenses": [
+        "wealth-transfer",
+        "worker-to-owner"
+      ],
+      "resolution_tier": 3,
+      "generated": true,
+      "contains_factual_text": false,
+      "rights_state": "original_review_only",
+      "review_state": "review_only",
+      "render_eligible": false
+    },
+    {
+      "asset_id": "mechanism-economic-elevator-v1",
+      "path": "assets/generated/cutouts/mechanism-economic-elevator-v1.png",
+      "sha256": "5b20a22f049dbef3ef9910de14c99b667cc6d985c63452306fe1a362117ebeca",
+      "kind": "mechanism",
+      "visual_worlds": [
+        "mechanism"
+      ],
+      "semantic_tags": [
+        "asset-growth",
+        "wage-growth",
+        "distribution",
+        "divergence"
+      ],
+      "identity_lenses": [
+        "working-household",
+        "asset-owner"
+      ],
+      "resolution_tier": 3,
+      "generated": true,
+      "contains_factual_text": false,
+      "rights_state": "original_review_only",
+      "review_state": "review_only",
+      "render_eligible": false
+    },
+    {
+      "asset_id": "whiteboard-easel-v2",
+      "path": "assets/generated/cutouts/whiteboard-easel-v2.png",
+      "sha256": "5f41ac8882ba1118f01ace46d41aaf86b4dec1e12f99199f8a82befc062157cc",
+      "kind": "prop",
+      "visual_worlds": [
+        "story",
+        "mechanism",
+        "evidence"
+      ],
+      "semantic_tags": [
+        "whiteboard",
+        "drawing-surface",
+        "sticker-stage",
+        "explainer"
+      ],
+      "identity_lenses": [],
+      "resolution_tier": 2,
+      "generated": true,
+      "contains_factual_text": false,
+      "rights_state": "original_review_only",
+      "review_state": "review_only",
+      "render_eligible": false
+    },
+    {
+      "asset_id": "whiteboard-world-v2",
+      "path": "assets/generated/worlds/whiteboard-world-v2.png",
+      "sha256": "d1d69e60d012664abae85d7b934d74d514e21fd0a9391c136f09f6056522e1f6",
+      "kind": "world_board",
+      "visual_worlds": [
+        "story",
+        "mechanism",
+        "evidence"
+      ],
+      "semantic_tags": [
+        "whiteboard-world",
+        "drawing-surface",
+        "sticker-composition",
+        "evidence-stage"
+      ],
+      "identity_lenses": [],
+      "resolution_tier": 2,
+      "generated": true,
+      "contains_factual_text": false,
+      "rights_state": "original_review_only",
+      "review_state": "review_only",
+      "render_eligible": false
+    },
+    {
+      "asset_id": "story-neighborhood-v1",
+      "path": "assets/generated/worlds/story-neighborhood-v1.png",
+      "sha256": "0fc8c2d605560cd3efe69c10036f74618d0a747717aca1d1ad03bb1264a821e8",
+      "kind": "world_board",
+      "visual_worlds": [
+        "story"
+      ],
+      "semantic_tags": [
+        "neighborhood",
+        "household-story",
+        "small-business",
+        "public-transit"
+      ],
+      "identity_lenses": [
+        "black-household",
+        "community-business",
+        "urban-household"
+      ],
+      "resolution_tier": 2,
+      "generated": true,
+      "contains_factual_text": false,
+      "rights_state": "original_review_only",
+      "review_state": "review_only",
+      "render_eligible": false
+    },
+    {
+      "asset_id": "mechanism-town-v1",
+      "path": "assets/generated/worlds/mechanism-town-v1.png",
+      "sha256": "e82ef03926ccd39363b3f5e2368d30848916f416395f2d7cb46d5fa8d86024c8",
+      "kind": "world_board",
+      "visual_worlds": [
+        "mechanism"
+      ],
+      "semantic_tags": [
+        "mechanism-town",
+        "capital-flow",
+        "economic-actors",
+        "causal-machine"
+      ],
+      "identity_lenses": [
+        "worker-to-owner",
+        "local-economy"
+      ],
+      "resolution_tier": 2,
+      "generated": true,
+      "contains_factual_text": false,
+      "rights_state": "original_review_only",
+      "review_state": "review_only",
+      "render_eligible": false
+    },
+    {
+      "asset_id": "finance-host-identity-master-v3",
+      "path": "assets/generated/host/finance-host-identity-master-v3.png",
+      "sha256": "86242df3292ab528c0645fc8b9f65e8344a4e3f0b60478efb2beb78435c0e403",
+      "kind": "cast_board",
+      "visual_worlds": [
+        "story",
+        "mechanism",
+        "evidence"
+      ],
+      "semantic_tags": [
+        "finance-host",
+        "presenter",
+        "explainer",
+        "black-analyst",
+        "floral-footwear"
+      ],
+      "identity_lenses": [
+        "black-faceless-creator",
+        "operator-avatar"
+      ],
+      "resolution_tier": 2,
+      "generated": true,
+      "contains_factual_text": false,
+      "rights_state": "original_review_only",
+      "review_state": "review_only",
+      "render_eligible": false
+    },
+    {
+      "asset_id": "finance-host-presenter-direct-v1",
+      "path": "assets/generated/stealth-wealth-v1/presenter-direct-v1.png",
+      "sha256": "9d9721031dcd3fe58e8208684b605888fd70539d1092df63a45c2a7c7e8fc9b3",
+      "kind": "actor",
+      "visual_worlds": [
+        "story",
+        "mechanism",
+        "evidence"
+      ],
+      "semantic_tags": [
+        "stealth-wealth",
+        "finance-presenter",
+        "matte-glass-stage"
+      ],
+      "identity_lenses": [
+        "finance-host"
+      ],
+      "resolution_tier": 2,
+      "generated": true,
+      "contains_factual_text": false,
+      "rights_state": "original_review_only",
+      "review_state": "review_only",
+      "render_eligible": false
+    },
+    {
+      "asset_id": "stealth-wealth-warm-study-v1",
+      "path": "assets/generated/stealth-wealth-v1/warm-oak-study-v1.png",
+      "sha256": "ead65484b509200df5cf36276779b573c638e5f39cb39296ba8b996ea3670317",
+      "kind": "world",
+      "visual_worlds": [
+        "story",
+        "mechanism",
+        "evidence"
+      ],
+      "semantic_tags": [
+        "stealth-wealth",
+        "blurred-world",
+        "matte-glass-stage"
+      ],
+      "identity_lenses": [],
+      "resolution_tier": 2,
+      "generated": true,
+      "contains_factual_text": false,
+      "rights_state": "original_review_only",
+      "review_state": "review_only",
+      "render_eligible": false
+    },
+    {
+      "asset_id": "stealth-wealth-cool-wafer-v1",
+      "path": "assets/generated/stealth-wealth-v1/cool-wafer-lab-v1.png",
+      "sha256": "eb0ab9a6e574c92a31d23a98eabbbad308a06d3b8f2e9baf73d6f44d016b52ce",
+      "kind": "world",
+      "visual_worlds": [
+        "story",
+        "mechanism",
+        "evidence"
+      ],
+      "semantic_tags": [
+        "stealth-wealth",
+        "blurred-world",
+        "matte-glass-stage"
+      ],
+      "identity_lenses": [],
+      "resolution_tier": 2,
+      "generated": true,
+      "contains_factual_text": false,
+      "rights_state": "original_review_only",
+      "review_state": "review_only",
+      "render_eligible": false
+    }
+  ],
+  "artifact_hash": "a8b116fae95bc01f02b2e2ecdb7d3d7713ac87b7c054a2b5df6b3473081d6335"
+}

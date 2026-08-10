@@ -1,0 +1,35 @@
+{
+  "schema_version": "operator_provided_hook_intake.v1",
+  "episode_id": "current-bubble-mechanism",
+  "source_policy": "operator_supplied_local_media",
+  "review_state": "quarantined_operator_review",
+  "promotion_rule": "Do not compose or promote until semantic fit, rights/source provenance, and visual continuity are approved.",
+  "clips": [
+    {
+      "clip_id": "operator-hook-memory-rise-v1",
+      "source_name": "memory rise.mp4",
+      "path": "assets/quarantine/sentence-native-wave-01/operator-hook-memory-rise-v1.mp4",
+      "sha256": "496346ac122b797404bdc894c2c5a846616e1c92ceef3705edd983d5a0b57a2c",
+      "duration_s": 6.016,
+      "width": 1280,
+      "height": 720,
+      "frame_rate": "24/1",
+      "candidate_semantic_role": "memory-demand-streams-converge-on-module-bottleneck",
+      "candidate_beat_ids": ["cbm-semantic-beat-01-002", "cbm-semantic-beat-01-004"],
+      "review_notes": "Strong opening candidate; no generated factual text observed in sampled frame. Confirm motion and continuity across the full clip."
+    },
+    {
+      "clip_id": "operator-hook-earnings-surprise-v1",
+      "source_name": "Earnings Surprise (1).mp4",
+      "path": "assets/quarantine/sentence-native-wave-01/operator-hook-earnings-surprise-v1.mp4",
+      "sha256": "f69797f5b1c6bc5f9de1d98b04fe9656d1149b91c347da271c865951997cce77",
+      "duration_s": 6.016,
+      "width": 1280,
+      "height": 720,
+      "frame_rate": "24/1",
+      "candidate_semantic_role": "memory-stacks-rise-as-earnings-surprise-metaphor",
+      "candidate_beat_ids": ["cbm-semantic-beat-01-002"],
+      "review_notes": "Potential first-five-second escalation or cutaway. Keep factual earnings figures in deterministic compositor layers, not the clip."
+    }
+  ]
+}

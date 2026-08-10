@@ -1,0 +1,122 @@
+{
+  "schema_version": "finance_sentence_native_asset_wave_review.v1",
+  "episode_id": "systems-and-blowups:current-bubble-mechanism",
+  "wave_id": "current-bubble-mechanism-semantic-wave-05",
+  "review_state": "operator_approved_for_composition",
+  "operator_decision": "approved",
+  "semantic_beat_ledger_artifact_hash": "f83b2dad210f0d77bec0e9d8a1b7b799f1da54b0c19372ded9e4a7ec103f6cdb",
+  "selection_policy": "exact spoken nouns and causal relationship before style; no convenient reuse, fabricated factual text, or symbolic filler",
+  "generation_route": "imagegen_builtin",
+  "depth_layer_manifest": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-05/wave-05-depth-layer-manifest.v1.json",
+  "generation_wave": {
+    "batch_size": 6,
+    "source_resolution": "1672x941",
+    "independent_jobs": 7,
+    "accepted_jobs": 6,
+    "reference_policy": "finance paper-theatre continuity; adult-editorial washi and woodblock materiality; no generated claims, figures, names, or citations",
+    "superseded_provider_output": "exec-d60da106-0d9a-4d39-b61d-85be3b2d013c.png",
+    "superseded_reason": "Pseudo-certificates with unreadable markings violated the no-fake-symbol gate."
+  },
+  "global_qa": {
+    "generated_factual_text": "none_observed_in_selected_six",
+    "semantic_fit": "pass_initial_inspection",
+    "unrecognizable_symbol_gate": "pass; all selected causal objects are physical and recognizable",
+    "anatomy_and_prop_gate": "pass_initial_inspection",
+    "depth_separability": "pass_trace_cut_qa",
+    "render_eligible": true,
+    "promotion_eligible": false
+  },
+  "accepted_candidates": [
+    {
+      "beat_ids": ["cbm-semantic-beat-05-001"],
+      "filename": "beat-05-001-beyond-three-memory-companies-v1.png",
+      "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-05/beat-05-001-beyond-three-memory-companies-v1.png",
+      "sha256": "d941af1874bacb9a2d35a1a7082ba0b2b778ce57d8b0985817e24dc47d5dad17",
+      "width": 1672,
+      "height": 941,
+      "start_s": 288.344,
+      "end_s": 291.014,
+      "narration_excerpt": "This is also bigger than three memory companies.",
+      "semantic_job": "Make three chip workshops visibly subordinate to the larger connected power, logistics, packaging, data-center, and robotics system.",
+      "visual_verb": "expand",
+      "review_state": "operator_approved_for_composition"
+    },
+    {
+      "beat_ids": ["cbm-semantic-beat-05-002"],
+      "filename": "beat-05-002-strategic-chokepoints-v1.png",
+      "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-05/beat-05-002-strategic-chokepoints-v1.png",
+      "sha256": "f0ee8fe9eae041ce78a3859f78f205d46162bc26d8c2f02df1dd174d64f46a0d",
+      "width": 1672,
+      "height": 941,
+      "start_s": 291.014,
+      "end_s": 299.582,
+      "narration_excerpt": "The world economy is reorganizing around strategic chokepoints.",
+      "semantic_job": "Show physical trade, data, and power routes converging on advanced chips, memory, packaging, power equipment, robotics, and defense hardware.",
+      "visual_verb": "reroute",
+      "review_state": "operator_approved_for_composition"
+    },
+    {
+      "beat_ids": ["cbm-semantic-beat-05-003"],
+      "filename": "beat-05-003-market-reprices-control-v2.png",
+      "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-05/beat-05-003-market-reprices-control-v2.png",
+      "sha256": "1f5e04e8992e4cfc70eda793b589943da562bb6316243d693d289b418c41b33b",
+      "width": 1672,
+      "height": 941,
+      "start_s": 299.582,
+      "end_s": 306.571,
+      "narration_excerpt": "Capital markets are beginning to raise the countries that control those chokepoints.",
+      "semantic_job": "Use a document-free mechanical market lift to show investment revaluing control of tangible productive chokepoints.",
+      "visual_verb": "raise",
+      "review_state": "operator_approved_for_composition"
+    },
+    {
+      "beat_ids": ["cbm-semantic-beat-05-005"],
+      "filename": "beat-05-005-not-civilization-ranking-v1.png",
+      "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-05/beat-05-005-not-civilization-ranking-v1.png",
+      "sha256": "c64756f84f70ff3d918277996ae296efd834699fbe6ca98cd9c8d46a0c0ae002",
+      "width": 1672,
+      "height": 941,
+      "start_s": 308.359,
+      "end_s": 313.456,
+      "narration_excerpt": "This is not a GDP comparison, and it is not a vote on which civilization matters more.",
+      "semantic_job": "Keep two civic-industrial ecosystems equally intact while a separate transparent market lens narrows the comparison to listed-market mechanics.",
+      "visual_verb": "separate",
+      "review_state": "operator_approved_for_composition"
+    },
+    {
+      "beat_ids": ["cbm-semantic-beat-05-006"],
+      "filename": "beat-05-006-listed-cash-flow-market-v1.png",
+      "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-05/beat-05-006-listed-cash-flow-market-v1.png",
+      "sha256": "7f9eeb05bf62211f9920565b4cf63c3b18c1d8d08860e568fd348198c19f8ae8",
+      "width": 1672,
+      "height": 941,
+      "start_s": 313.456,
+      "end_s": 320.643,
+      "narration_excerpt": "It is a comparison of listed equity markets—what investors believe future public-company cash flows are worth.",
+      "semantic_job": "Show cash pipes from distinct public-company operations converging into a physically lifting market basket.",
+      "visual_verb": "capitalize",
+      "review_state": "operator_approved_for_composition"
+    },
+    {
+      "beat_ids": ["cbm-semantic-beat-05-012"],
+      "filename": "beat-05-012-different-cash-flow-structures-v1.png",
+      "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-05/beat-05-012-different-cash-flow-structures-v1.png",
+      "sha256": "1512b9b945760eeb5fded217bdbb01e695488f264803640076f236dac176a146",
+      "width": 1672,
+      "height": 941,
+      "start_s": 348.379,
+      "end_s": 356.994,
+      "narration_excerpt": "The company producing memory that feeds the digital age is being capitalized differently from a country with other productive strengths.",
+      "semantic_job": "Show two equally dignified productive ecosystems feeding separate market paths, so the viewer sees different expected cash-flow structures rather than a cultural ranking.",
+      "visual_verb": "differentiate",
+      "review_state": "operator_approved_for_composition"
+    }
+  ],
+  "deterministic_source_surface_dependencies": [
+    {
+      "beat_ids": ["cbm-semantic-beat-05-004", "cbm-semantic-beat-05-007", "cbm-semantic-beat-05-008", "cbm-semantic-beat-05-009", "cbm-semantic-beat-05-010", "cbm-semantic-beat-05-013", "cbm-semantic-beat-05-014", "cbm-semantic-beat-05-019"],
+      "reason": "Named countries, exchanges, company anchors, market-capitalization figures, exchange rate, and research/export claims must be compositor-rendered from the verified research packet with date and source locators."
+    }
+  ],
+  "next_wave_authorized": true
+}

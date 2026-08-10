@@ -1,0 +1,20 @@
+{
+  "schema_version": "finance_semantic_wave_review.v1",
+  "episode_id": "current-bubble-mechanism",
+  "wave_id": "semantic-wave-10",
+  "status": "operator_approved_for_composition",
+  "generation_method": "built_in_image_gen",
+  "decision_rule": "The two-sleeve barbell is a non-prescriptive visual framework. The evidence card, not the raster, carries reported index history and all its material limitations.",
+  "candidates": [
+    {
+      "candidate_id": "two-sleeve-barbell-v1",
+      "path": "two-sleeve-barbell-v1.png",
+      "sha256": "b290127adfd80e66583cdedfe85803e38b2ae4bccb5dedba735e0b8a44208b36",
+      "cluster_id": "cbm-h-001",
+      "purpose": "Explain the separate productive-upside and deliberate-defense sleeves, with a physical rebalancing pivot rather than a single all-purpose basket.",
+      "status": "selected",
+      "qa": ["both sleeves are visibly separate", "neither side is portrayed as superior", "no recommended allocation or asset ticker", "no factual text"]
+    }
+  ],
+  "artifact_hash": "c51237b8217fca11316783c6d42d0854ff17c9a2fd13fe93b1d92dc441223d3b"
+}

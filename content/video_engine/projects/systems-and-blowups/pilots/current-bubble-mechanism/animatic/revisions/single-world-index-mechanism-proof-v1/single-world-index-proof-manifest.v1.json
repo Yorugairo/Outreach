@@ -1,0 +1,130 @@
+{
+  "schema_version": "single_world_index_mechanism_proof.v1",
+  "episode_id": "systems-and-blowups:current-bubble-mechanism",
+  "status": "review_render_complete",
+  "source_window": {
+    "start_s": 423.867,
+    "end_s": 437.809,
+    "duration_s": 13.942,
+    "word_range": {
+      "start_index": 1072,
+      "end_index": 1121
+    }
+  },
+  "render_profile": {
+    "width": 1280,
+    "height": 720,
+    "fps": 24,
+    "label": "single-world-index-proof-720p-12-on-24"
+  },
+  "paper_motion_fps": 12,
+  "delivery_fps": 24,
+  "composition_rule": "one uninterrupted weighted-fund-machine world; no panels, wipes, fades, or generic parallax",
+  "deprecated_compositing_assets": [
+    "sentence-native-wave-07/index",
+    "sentence-native-wave-07/dual",
+    "sentence-native-wave-07/weather"
+  ],
+  "source_assets": {
+    "machine-world": {
+      "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/single-world-index-mechanism-proof-v1/source/fund-machine-base.v1.png",
+      "sha256": "1c5c1897205713ca1fb550b47e83725a01103fc23994a30838c4c54bfe4d7137"
+    },
+    "cash-stream": {
+      "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/single-world-index-mechanism-proof-v1/alpha-trim/incoming-cash-stream.alpha.v1.png",
+      "sha256": "787c6ac7cad3671f6e8cd4ddcfdf9b8558b606371e0c8d63dc421d209090da16"
+    },
+    "top-ten-blocks": {
+      "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/single-world-index-mechanism-proof-v1/alpha-trim/top-ten-weighted-blocks.alpha.v1.png",
+      "sha256": "f46a12b5d005f5d9de2f586ea9b1fb8daac91cae56c74f6ef158c4a98cbf8052"
+    },
+    "long-tail-field": {
+      "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/single-world-index-mechanism-proof-v1/alpha-trim/long-tail-holdings.alpha.v1.png",
+      "sha256": "ca54437a61062f140bb02ee7dbbc450ad2d31465e5aac722be9642b0a3b3a1ab"
+    },
+    "output-routes": {
+      "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/single-world-index-mechanism-proof-v1/alpha/output-route-token-flows.alpha.v1.png",
+      "sha256": "4c66645d7e2e50d949b5983d223a4c9af951933e6efd19f2e424e4454bc1d0b0"
+    }
+  },
+  "alpha_trace_cut_qa": {
+    "cash-stream": {
+      "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/single-world-index-mechanism-proof-v1/alpha-trim/incoming-cash-stream.alpha.v1.png",
+      "sha256": "787c6ac7cad3671f6e8cd4ddcfdf9b8558b606371e0c8d63dc421d209090da16",
+      "width": 1075,
+      "height": 495,
+      "transparent_pixels": 349026,
+      "opaque_pixels": 179899,
+      "partial_pixels": 3200,
+      "transparent_ratio": 0.65591,
+      "opaque_ratio": 0.338077,
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "top-ten-blocks": {
+      "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/single-world-index-mechanism-proof-v1/alpha-trim/top-ten-weighted-blocks.alpha.v1.png",
+      "sha256": "f46a12b5d005f5d9de2f586ea9b1fb8daac91cae56c74f6ef158c4a98cbf8052",
+      "width": 1557,
+      "height": 587,
+      "transparent_pixels": 242865,
+      "opaque_pixels": 664113,
+      "partial_pixels": 6981,
+      "transparent_ratio": 0.265729,
+      "opaque_ratio": 0.726633,
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "long-tail-field": {
+      "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/single-world-index-mechanism-proof-v1/alpha-trim/long-tail-holdings.alpha.v1.png",
+      "sha256": "ca54437a61062f140bb02ee7dbbc450ad2d31465e5aac722be9642b0a3b3a1ab",
+      "width": 1469,
+      "height": 353,
+      "transparent_pixels": 130186,
+      "opaque_pixels": 384821,
+      "partial_pixels": 3550,
+      "transparent_ratio": 0.251054,
+      "opaque_ratio": 0.7421,
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "output-routes": {
+      "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/single-world-index-mechanism-proof-v1/alpha/output-route-token-flows.alpha.v1.png",
+      "sha256": "4c66645d7e2e50d949b5983d223a4c9af951933e6efd19f2e424e4454bc1d0b0",
+      "width": 1672,
+      "height": 941,
+      "transparent_pixels": 1564817,
+      "opaque_pixels": 8535,
+      "partial_pixels": 0,
+      "transparent_ratio": 0.994575,
+      "opaque_ratio": 0.005425,
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ]
+    }
+  },
+  "deterministic_surfaces": [
+    "two-job labels",
+    "10-of-500 count",
+    "mid-2025 concentration source card",
+    "lower-band captions"
+  ],
+  "props_path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/animatic/revisions/single-world-index-mechanism-proof-v1/remotion-props.single-world-index.v1.json",
+  "props_sha256": "47fdbe7d106b0e41a30954fe815dfbd489d303a518cb99aa308e57228f38c3c8",
+  "render_path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/animatic/revisions/single-world-index-mechanism-proof-v1/single-world-index-mechanism-proof-review.mp4",
+  "render_sha256": "37143c37cefc2fe429029c71614cefc90b05ae4b2033d2ec9a12d8a7c5f541fa"
+}

@@ -1,0 +1,29 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "finance_asset_catalog.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "channel_id", "project_root", "resolution_order", "assets", "artifact_hash"],
+  "properties": {
+    "schema_version": {"const": "finance_asset_catalog.v1"}, "channel_id": {"type": "string"}, "project_root": {"type": "string"},
+    "resolution_order": {"type": "array", "minItems": 4, "maxItems": 4, "items": {"enum": ["exact_semantic_match", "reusable_component_composition", "deterministic_evidence_or_mechanism", "bespoke_plate"]}},
+    "assets": {
+      "type": "array",
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["asset_id", "path", "sha256", "kind", "visual_worlds", "semantic_tags", "identity_lenses", "resolution_tier", "generated", "contains_factual_text", "rights_state", "review_state", "render_eligible"],
+        "properties": {
+          "asset_id": {"type": "string", "pattern": "^[a-z0-9-]+$"}, "path": {"type": "string", "minLength": 1}, "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+          "kind": {"enum": ["cast_board", "component_board", "world_board", "actor", "prop", "mechanism", "evidence_template", "hero_plate"]},
+          "visual_worlds": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"enum": ["story", "mechanism", "evidence"]}},
+          "semantic_tags": {"type": "array", "minItems": 2, "uniqueItems": true, "items": {"type": "string"}},
+          "identity_lenses": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+          "resolution_tier": {"type": "integer", "minimum": 1, "maximum": 4}, "generated": {"type": "boolean"},
+          "contains_factual_text": {"type": "boolean"}, "rights_state": {"enum": ["original_review_only", "approved"]},
+          "review_state": {"enum": ["review_only", "approved_reusable"]}, "render_eligible": {"type": "boolean"}
+        }
+      }
+    },
+    "artifact_hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}

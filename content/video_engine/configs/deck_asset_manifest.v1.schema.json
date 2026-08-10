@@ -1,0 +1,173 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://outreach-program.internal/schemas/deck-asset-manifest.v1.json",
+  "title": "Deck Asset Manifest v1",
+  "description": "Deterministic PPTX source inventory and context-preserving semantic crop manifest.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "manifest_id", "project_id", "source_decks", "slides", "source_images", "cleaned_images", "assets", "review", "artifact_hash"],
+  "properties": {
+    "schema_version": {"const": "deck_asset_manifest.v1"},
+    "manifest_id": {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"},
+    "project_id": {"type": "string", "minLength": 1},
+    "source_decks": {"type": "array", "minItems": 1, "items": {"$ref": "#/definitions/source_deck"}},
+    "slides": {"type": "array", "minItems": 1, "items": {"$ref": "#/definitions/slide"}},
+    "source_images": {"type": "array", "minItems": 1, "items": {"$ref": "#/definitions/source_image"}},
+    "cleaned_images": {"type": "array", "items": {"$ref": "#/definitions/source_image"}},
+    "assets": {"type": "array", "items": {"$ref": "#/definitions/asset"}},
+    "review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["slide_contact_sheet", "semantic_contact_sheet", "coverage_report", "promotion_policy"],
+      "properties": {
+        "slide_contact_sheet": {"type": "string", "minLength": 1},
+        "semantic_contact_sheet": {"type": "string", "minLength": 1},
+        "coverage_report": {"type": "string", "minLength": 1},
+        "promotion_policy": {"type": "string", "minLength": 1}
+      }
+    },
+    "artifact_hash": {"$ref": "#/definitions/hash"}
+  },
+  "definitions": {
+    "hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "source_deck": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["deck_id", "title", "source_path", "source_sha256", "source_family", "rights_state", "cleanup"],
+      "properties": {
+        "deck_id": {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"},
+        "title": {"type": "string", "minLength": 1},
+        "source_path": {"type": "string", "minLength": 1},
+        "source_sha256": {"$ref": "#/definitions/hash"},
+        "source_family": {"type": "string", "minLength": 1},
+        "rights_state": {"enum": ["source_review_only", "approved"]},
+        "cleanup": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["requested", "policy"],
+          "properties": {
+            "requested": {"type": "boolean"},
+            "input_path": {"type": ["string", "null"]},
+            "original_sha256": {"anyOf": [{"$ref": "#/definitions/hash"}, {"type": "null"}]},
+            "cleaned_sha256": {"anyOf": [{"$ref": "#/definitions/hash"}, {"type": "null"}]},
+            "policy": {"type": "string", "minLength": 1},
+            "approved": {"type": "boolean"}
+          }
+        }
+      }
+    },
+    "context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["what_it_is", "visual_role", "representation_mode", "factual_text", "claim_refs", "cue_refs", "not_what_it_means", "context_status", "reuse_policy"],
+      "properties": {
+        "what_it_is": {"type": "string", "minLength": 1},
+        "visual_role": {"enum": ["hero", "mechanism", "evidence", "transition", "label", "reference"]},
+        "representation_mode": {"enum": ["literal_evidence", "accurate_mechanism", "declared_metaphor"]},
+        "factual_text": {"type": "boolean"},
+        "claim_refs": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+        "cue_refs": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+        "not_what_it_means": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+        "context_status": {"enum": ["machine_proposed", "review_only", "operator_verified"]},
+        "reuse_policy": {"$ref": "#/definitions/reuse_policy"}
+      }
+    },
+    "reuse_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["scope", "max_total_uses", "min_nonadjacent_gap", "allowed_reasons", "claim_bound"],
+      "properties": {
+        "scope": {"enum": ["source_only", "scene", "episode", "channel"]},
+        "max_total_uses": {"type": "integer", "minimum": 1},
+        "min_nonadjacent_gap": {"type": "integer", "minimum": 0},
+        "allowed_reasons": {"type": "array", "uniqueItems": true, "items": {"enum": ["continuation", "callback", "comparison", "evidence_hold"]}},
+        "claim_bound": {"type": "boolean"}
+      }
+    },
+    "slide": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["slide_id", "deck_id", "slide_number", "slide_label", "source_image_id", "context"],
+      "properties": {
+        "slide_id": {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"},
+        "deck_id": {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"},
+        "slide_number": {"type": "integer", "minimum": 1},
+        "slide_label": {"type": "string", "minLength": 1},
+        "source_image_id": {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"},
+        "context": {"$ref": "#/definitions/slide_context"}
+      }
+    },
+    "slide_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["label", "summary", "context_status", "claim_refs", "cue_refs"],
+      "properties": {
+        "label": {"type": "string", "minLength": 1},
+        "summary": {"type": "string", "minLength": 1},
+        "context_status": {"enum": ["machine_proposed", "review_only", "operator_verified"]},
+        "claim_refs": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+        "cue_refs": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+        "review_notes": {"type": "string"}
+      }
+    },
+    "source_image": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["image_id", "deck_id", "slide_id", "slide_number", "variant", "pptx_member", "extracted_path", "sha256", "width", "height", "mode"],
+      "properties": {
+        "image_id": {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"},
+        "deck_id": {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"},
+        "slide_id": {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"},
+        "slide_number": {"type": "integer", "minimum": 1},
+        "variant": {"enum": ["original", "cleaned"]},
+        "pptx_member": {"type": "string", "pattern": "^ppt/media/.+"},
+        "extracted_path": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/definitions/hash"},
+        "width": {"type": "integer", "minimum": 1},
+        "height": {"type": "integer", "minimum": 1},
+        "mode": {"type": "string", "minLength": 1},
+        "parent_image_id": {"type": ["string", "null"]}
+      }
+    },
+    "asset": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["asset_id", "kind", "path", "sha256", "deck_id", "slide_id", "slide_number", "parent_source_image_id", "source_variant", "extraction", "context", "rights_state", "review_state", "render_eligible"],
+      "properties": {
+        "asset_id": {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"},
+        "kind": {"const": "semantic_crop"},
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/definitions/hash"},
+        "deck_id": {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"},
+        "slide_id": {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"},
+        "slide_number": {"type": "integer", "minimum": 1},
+        "parent_source_image_id": {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"},
+        "source_variant": {"enum": ["original", "cleaned"]},
+        "extraction": {"$ref": "#/definitions/extraction"},
+        "context": {"$ref": "#/definitions/context"},
+        "rights_state": {"enum": ["source_review_only", "approved"]},
+        "review_state": {"enum": ["review_only", "approved_reusable", "reference_only", "rejected"]},
+        "render_eligible": {"type": "boolean"}
+      }
+    },
+    "extraction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["method", "bbox_px", "bbox_norm", "source_sha256"],
+      "properties": {
+        "method": {"enum": ["rect_crop", "polygon_crop", "alpha_mask_crop"]},
+        "bbox_px": {"$ref": "#/definitions/box"},
+        "bbox_norm": {"$ref": "#/definitions/box"},
+        "polygon_norm": {"type": ["array", "null"], "items": {"type": "array", "minItems": 2, "maxItems": 2, "items": {"type": "number", "minimum": 0, "maximum": 1}}},
+        "mask_path": {"type": ["string", "null"]},
+        "source_sha256": {"$ref": "#/definitions/hash"}
+      }
+    },
+    "box": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "items": {"type": "number", "minimum": 0}
+    }
+  }
+}

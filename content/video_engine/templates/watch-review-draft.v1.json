@@ -1,0 +1,61 @@
+{
+  "schema_version": "video_watch_review.v1",
+  "review_id": "replace-review-id",
+  "project_id": "replace-project-id",
+  "lane_id": "replace-lane-id",
+  "episode_id": "replace-episode-id",
+  "created_at": "2026-08-08T00:00:00Z",
+  "reviewer": "operator-and-watch",
+  "review_purpose": "Evaluate the current review render and produce durable corrections.",
+  "watch_detail": "balanced",
+  "source": {
+    "kind": "local",
+    "uri": "replace-with-video-path",
+    "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+    "duration_s": 1.0
+  },
+  "transcript": null,
+  "summary": {
+    "assessment": "Replace with the overall assessment.",
+    "strengths": [],
+    "priority_issues": ["Replace with the highest-priority correction."],
+    "overall_state": "revision_required"
+  },
+  "findings": [
+    {
+      "finding_id": "finding-001",
+      "start_s": 0.0,
+      "end_s": 1.0,
+      "transcript_excerpt": "",
+      "evidence_frames": [
+        {
+          "path": "replace-with-watch-frame-path.jpg",
+          "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+          "timestamp_s": 0.5
+        }
+      ],
+      "kind": "other",
+      "scope": "episode",
+      "severity": "medium",
+      "symptom": "Describe only what is observable in the render.",
+      "root_cause": "Describe the most likely production cause.",
+      "impact": "Explain the viewer or production consequence.",
+      "proposed_fix": "Specify the bounded correction.",
+      "acceptance": "State an observable rewatch condition.",
+      "confidence": "tentative",
+      "recurrence_key": "replace-recurrence-key",
+      "recurrence_count": 1,
+      "learning_trigger": "When this production condition occurs",
+      "learning_action": "Apply this reusable response",
+      "requires_human_decision": false,
+      "promotion_state": "observation",
+      "status": "open"
+    }
+  ],
+  "operator_decision": {
+    "state": "draft",
+    "approved_at": null,
+    "notes": ""
+  },
+  "artifact_hash": "0000000000000000000000000000000000000000000000000000000000000000"
+}

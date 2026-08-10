@@ -1,0 +1,721 @@
+{
+  "schema_version": "deck_asset_manifest.v1",
+  "manifest_id": "silicon-decks-source-manifest-v2-silicon-silent-triopoly",
+  "project_id": "systems-and-blowups",
+  "source_decks": [
+    {
+      "deck_id": "silicon-silent-triopoly",
+      "title": "Silicon’s Silent Triopoly",
+      "source_path": "C:\\Users\\Snipe\\Downloads\\Silicon’s_Silent_Triopoly.pptx",
+      "source_sha256": "23ddf6ec66c3a068f11fa884b74323b8c5097ef5764013ef34dbd6aa151a4f0a",
+      "source_family": "operator-supplied-notebooklm-research-deck",
+      "rights_state": "source_review_only",
+      "cleanup": {
+        "requested": true,
+        "input_path": "C:\\Users\\Snipe\\Downloads\\Silicon’s_Silent_Triopoly.no-watermark.pptx",
+        "original_sha256": "23ddf6ec66c3a068f11fa884b74323b8c5097ef5764013ef34dbd6aa151a4f0a",
+        "cleaned_sha256": "4988e674d13071f41e7b945ef56e0a4cfe7330a0188925c2bcfa2205ae139ccf",
+        "policy": "Derived from an operator-approved non-destructive footer cleanup.",
+        "approved": true
+      }
+    }
+  ],
+  "slides": [
+    {
+      "slide_id": "silicon-silent-triopoly-s01",
+      "deck_id": "silicon-silent-triopoly",
+      "slide_number": 1,
+      "slide_label": "The Ultimate Antidote to the S&P 500 Bubble",
+      "source_image_id": "silicon-silent-triopoly-s01-original",
+      "context": {
+        "label": "The Ultimate Antidote to the S&P 500 Bubble",
+        "summary": "Opening source plate framing silicon memory as the physical counterpoint to a software-led market bubble.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "slide_id": "silicon-silent-triopoly-s02",
+      "deck_id": "silicon-silent-triopoly",
+      "slide_number": 2,
+      "slide_label": "The Great Valuation Paradox",
+      "source_image_id": "silicon-silent-triopoly-s02-original",
+      "context": {
+        "label": "The Great Valuation Paradox",
+        "summary": "Source plate contrasting an extreme S&P 500 CAPE ratio with memory-triopoly forward valuation and margins.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "slide_id": "silicon-silent-triopoly-s03",
+      "deck_id": "silicon-silent-triopoly",
+      "slide_number": 3,
+      "slide_label": "The Strange Genesis of a Cartel",
+      "source_image_id": "silicon-silent-triopoly-s03-original",
+      "context": {
+        "label": "The Strange Genesis of a Cartel",
+        "summary": "Source history plate describing how Samsung, Micron, and SK hynix emerged from separate survival paths.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "slide_id": "silicon-silent-triopoly-s04",
+      "deck_id": "silicon-silent-triopoly",
+      "slide_number": 4,
+      "slide_label": "The Capital Cycle Meat Grinder",
+      "source_image_id": "silicon-silent-triopoly-s04-original",
+      "context": {
+        "label": "The Capital Cycle Meat Grinder",
+        "summary": "Source mechanism plate showing price wars, excess capital expenditure, and the collapse of weaker memory rivals.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "slide_id": "silicon-silent-triopoly-s05",
+      "deck_id": "silicon-silent-triopoly",
+      "slide_number": 5,
+      "slide_label": "The Physical Moat of HBM",
+      "source_image_id": "silicon-silent-triopoly-s05-original",
+      "context": {
+        "label": "The Physical Moat of HBM",
+        "summary": "Source mechanism plate showing the stacked HBM structure and the physical fragility of ultra-thin silicon.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "slide_id": "silicon-silent-triopoly-s06",
+      "deck_id": "silicon-silent-triopoly",
+      "slide_number": 6,
+      "slide_label": "The Packaging Battle Matrix",
+      "source_image_id": "silicon-silent-triopoly-s06-original",
+      "context": {
+        "label": "The Packaging Battle Matrix",
+        "summary": "Source comparison of Samsung film-based packaging and SK hynix liquid-epoxy packaging approaches.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "slide_id": "silicon-silent-triopoly-s07",
+      "deck_id": "silicon-silent-triopoly",
+      "slide_number": 7,
+      "slide_label": "The RAM-ageddon Penalty",
+      "source_image_id": "silicon-silent-triopoly-s07-original",
+      "context": {
+        "label": "The RAM-ageddon Penalty",
+        "summary": "Source plate illustrating the three-to-one wafer-capacity penalty created by HBM production.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "slide_id": "silicon-silent-triopoly-s08",
+      "deck_id": "silicon-silent-triopoly",
+      "slide_number": 8,
+      "slide_label": "The Expanding DRAM Battlefield",
+      "source_image_id": "silicon-silent-triopoly-s08-original",
+      "context": {
+        "label": "The Expanding DRAM Battlefield",
+        "summary": "Source market-share map showing the memory triopoly, CXMT, and the expanding DRAM competitive field.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "slide_id": "silicon-silent-triopoly-s09",
+      "deck_id": "silicon-silent-triopoly",
+      "slide_number": 9,
+      "slide_label": "The NAND Counteroffensive",
+      "source_image_id": "silicon-silent-triopoly-s09-original",
+      "context": {
+        "label": "The NAND Counteroffensive",
+        "summary": "Source plate showing the NAND market lanes, leading manufacturers, and a disruptive challenger.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "slide_id": "silicon-silent-triopoly-s10",
+      "deck_id": "silicon-silent-triopoly",
+      "slide_number": 10,
+      "slide_label": "The S&P 500 Liquidity Mirage",
+      "source_image_id": "silicon-silent-triopoly-s10-original",
+      "context": {
+        "label": "The S&P 500 Liquidity Mirage",
+        "summary": "Source plate contrasting reported index earnings growth with the underlying composition of market liquidity.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "slide_id": "silicon-silent-triopoly-s11",
+      "deck_id": "silicon-silent-triopoly",
+      "slide_number": 11,
+      "slide_label": "The Unbreakable Chokepoint",
+      "source_image_id": "silicon-silent-triopoly-s11-original",
+      "context": {
+        "label": "The Unbreakable Chokepoint",
+        "summary": "Source comparison of the outdated commodity view with the memory triopoly's contracted, integrated, and capacity-bound moat.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "slide_id": "silicon-silent-triopoly-s12",
+      "deck_id": "silicon-silent-triopoly",
+      "slide_number": 12,
+      "slide_label": "The Crucible of Compute",
+      "source_image_id": "silicon-silent-triopoly-s12-original",
+      "context": {
+        "label": "The Crucible of Compute",
+        "summary": "Closing source plate framing memory as the physical bottleneck that controls the economics of AI compute.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    }
+  ],
+  "source_images": [
+    {
+      "image_id": "silicon-silent-triopoly-s01-original",
+      "deck_id": "silicon-silent-triopoly",
+      "slide_id": "silicon-silent-triopoly-s01",
+      "slide_number": 1,
+      "variant": "original",
+      "pptx_member": "ppt/media/image1.png",
+      "extracted_path": "silicon-silent-triopoly/slides/slide-001.png",
+      "sha256": "9bcfb99e52338eff771263aef73e697df635c90fe560563bbda32a18ef84f0d4",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "selection_label": "Silicon’s Silent Triopoly · S01 · The Ultimate Antidote to the S&P 500 Bubble",
+      "context": {
+        "label": "The Ultimate Antidote to the S&P 500 Bubble",
+        "summary": "Opening source plate framing silicon memory as the physical counterpoint to a software-led market bubble.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-silent-triopoly-s02-original",
+      "deck_id": "silicon-silent-triopoly",
+      "slide_id": "silicon-silent-triopoly-s02",
+      "slide_number": 2,
+      "variant": "original",
+      "pptx_member": "ppt/media/image2.png",
+      "extracted_path": "silicon-silent-triopoly/slides/slide-002.png",
+      "sha256": "2dfcf98d57ce8203fccb1e67e29932dcc65307fe029756c550a875050c9f7f9f",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "selection_label": "Silicon’s Silent Triopoly · S02 · The Great Valuation Paradox",
+      "context": {
+        "label": "The Great Valuation Paradox",
+        "summary": "Source plate contrasting an extreme S&P 500 CAPE ratio with memory-triopoly forward valuation and margins.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-silent-triopoly-s03-original",
+      "deck_id": "silicon-silent-triopoly",
+      "slide_id": "silicon-silent-triopoly-s03",
+      "slide_number": 3,
+      "variant": "original",
+      "pptx_member": "ppt/media/image3.png",
+      "extracted_path": "silicon-silent-triopoly/slides/slide-003.png",
+      "sha256": "2e10599e2bdd82b8e4dc1ea76f009ba1abf794d1c8c0f2a73be7017a831bac98",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "selection_label": "Silicon’s Silent Triopoly · S03 · The Strange Genesis of a Cartel",
+      "context": {
+        "label": "The Strange Genesis of a Cartel",
+        "summary": "Source history plate describing how Samsung, Micron, and SK hynix emerged from separate survival paths.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-silent-triopoly-s04-original",
+      "deck_id": "silicon-silent-triopoly",
+      "slide_id": "silicon-silent-triopoly-s04",
+      "slide_number": 4,
+      "variant": "original",
+      "pptx_member": "ppt/media/image4.png",
+      "extracted_path": "silicon-silent-triopoly/slides/slide-004.png",
+      "sha256": "199c2cfcc9da851d9b83dffc6d0e8fa02d162280db003de2517fe850df7139a5",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "selection_label": "Silicon’s Silent Triopoly · S04 · The Capital Cycle Meat Grinder",
+      "context": {
+        "label": "The Capital Cycle Meat Grinder",
+        "summary": "Source mechanism plate showing price wars, excess capital expenditure, and the collapse of weaker memory rivals.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-silent-triopoly-s05-original",
+      "deck_id": "silicon-silent-triopoly",
+      "slide_id": "silicon-silent-triopoly-s05",
+      "slide_number": 5,
+      "variant": "original",
+      "pptx_member": "ppt/media/image5.png",
+      "extracted_path": "silicon-silent-triopoly/slides/slide-005.png",
+      "sha256": "c93dcc6d3088cda0e99f175e97da6db236c3598211ea0f8b5af8ec08de3adb21",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "selection_label": "Silicon’s Silent Triopoly · S05 · The Physical Moat of HBM",
+      "context": {
+        "label": "The Physical Moat of HBM",
+        "summary": "Source mechanism plate showing the stacked HBM structure and the physical fragility of ultra-thin silicon.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-silent-triopoly-s06-original",
+      "deck_id": "silicon-silent-triopoly",
+      "slide_id": "silicon-silent-triopoly-s06",
+      "slide_number": 6,
+      "variant": "original",
+      "pptx_member": "ppt/media/image6.png",
+      "extracted_path": "silicon-silent-triopoly/slides/slide-006.png",
+      "sha256": "e7458b43beac90c3471b1f4a46c3a2dc6a85558ed606cfdbfe5e7cc5239adb75",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "selection_label": "Silicon’s Silent Triopoly · S06 · The Packaging Battle Matrix",
+      "context": {
+        "label": "The Packaging Battle Matrix",
+        "summary": "Source comparison of Samsung film-based packaging and SK hynix liquid-epoxy packaging approaches.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-silent-triopoly-s07-original",
+      "deck_id": "silicon-silent-triopoly",
+      "slide_id": "silicon-silent-triopoly-s07",
+      "slide_number": 7,
+      "variant": "original",
+      "pptx_member": "ppt/media/image7.png",
+      "extracted_path": "silicon-silent-triopoly/slides/slide-007.png",
+      "sha256": "9b3471e8b3b346b6b74a6045160d24e5a2aaf74ba3a82f317615f62cdb50cd04",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "selection_label": "Silicon’s Silent Triopoly · S07 · The RAM-ageddon Penalty",
+      "context": {
+        "label": "The RAM-ageddon Penalty",
+        "summary": "Source plate illustrating the three-to-one wafer-capacity penalty created by HBM production.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-silent-triopoly-s08-original",
+      "deck_id": "silicon-silent-triopoly",
+      "slide_id": "silicon-silent-triopoly-s08",
+      "slide_number": 8,
+      "variant": "original",
+      "pptx_member": "ppt/media/image8.png",
+      "extracted_path": "silicon-silent-triopoly/slides/slide-008.png",
+      "sha256": "2986649298a7c527d42a8bddb61db2d8fa9396410c6f548acf19299129374ac9",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "selection_label": "Silicon’s Silent Triopoly · S08 · The Expanding DRAM Battlefield",
+      "context": {
+        "label": "The Expanding DRAM Battlefield",
+        "summary": "Source market-share map showing the memory triopoly, CXMT, and the expanding DRAM competitive field.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-silent-triopoly-s09-original",
+      "deck_id": "silicon-silent-triopoly",
+      "slide_id": "silicon-silent-triopoly-s09",
+      "slide_number": 9,
+      "variant": "original",
+      "pptx_member": "ppt/media/image9.png",
+      "extracted_path": "silicon-silent-triopoly/slides/slide-009.png",
+      "sha256": "49a592d8ccef76d4b2fcafcd3c41239f270a8ca87fb722a93af27bc3a712fa67",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "selection_label": "Silicon’s Silent Triopoly · S09 · The NAND Counteroffensive",
+      "context": {
+        "label": "The NAND Counteroffensive",
+        "summary": "Source plate showing the NAND market lanes, leading manufacturers, and a disruptive challenger.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-silent-triopoly-s10-original",
+      "deck_id": "silicon-silent-triopoly",
+      "slide_id": "silicon-silent-triopoly-s10",
+      "slide_number": 10,
+      "variant": "original",
+      "pptx_member": "ppt/media/image10.png",
+      "extracted_path": "silicon-silent-triopoly/slides/slide-010.png",
+      "sha256": "8429311109b4d1d9fc045aab409ebc772b79a1aa67ae1e422a7468582c4eff35",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "selection_label": "Silicon’s Silent Triopoly · S10 · The S&P 500 Liquidity Mirage",
+      "context": {
+        "label": "The S&P 500 Liquidity Mirage",
+        "summary": "Source plate contrasting reported index earnings growth with the underlying composition of market liquidity.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-silent-triopoly-s11-original",
+      "deck_id": "silicon-silent-triopoly",
+      "slide_id": "silicon-silent-triopoly-s11",
+      "slide_number": 11,
+      "variant": "original",
+      "pptx_member": "ppt/media/image11.png",
+      "extracted_path": "silicon-silent-triopoly/slides/slide-011.png",
+      "sha256": "5c8c3a9bfefcd0cc8c8564ecf3eb9a419b6742917839408bfb25d8b8e0852541",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "selection_label": "Silicon’s Silent Triopoly · S11 · The Unbreakable Chokepoint",
+      "context": {
+        "label": "The Unbreakable Chokepoint",
+        "summary": "Source comparison of the outdated commodity view with the memory triopoly's contracted, integrated, and capacity-bound moat.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-silent-triopoly-s12-original",
+      "deck_id": "silicon-silent-triopoly",
+      "slide_id": "silicon-silent-triopoly-s12",
+      "slide_number": 12,
+      "variant": "original",
+      "pptx_member": "ppt/media/image12.png",
+      "extracted_path": "silicon-silent-triopoly/slides/slide-012.png",
+      "sha256": "1632879e4570b6fde9ad025c0297b2235cdf199f35c44def1b187bd21e232a93",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "selection_label": "Silicon’s Silent Triopoly · S12 · The Crucible of Compute",
+      "context": {
+        "label": "The Crucible of Compute",
+        "summary": "Closing source plate framing memory as the physical bottleneck that controls the economics of AI compute.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    }
+  ],
+  "cleaned_images": [
+    {
+      "image_id": "silicon-silent-triopoly-s01-cleaned",
+      "deck_id": "silicon-silent-triopoly",
+      "slide_id": "silicon-silent-triopoly-s01",
+      "slide_number": 1,
+      "variant": "cleaned",
+      "pptx_member": "ppt/media/image1.png",
+      "extracted_path": "silicon-silent-triopoly/slides-cleaned/slide-001.png",
+      "sha256": "eac7d46d6c4e34b315a3def49f1fbde556851d42cf634171c4ec61177b6e5260",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "parent_image_id": "silicon-silent-triopoly-s01-original",
+      "selection_label": "Silicon’s Silent Triopoly · S01 · The Ultimate Antidote to the S&P 500 Bubble",
+      "context": {
+        "label": "The Ultimate Antidote to the S&P 500 Bubble",
+        "summary": "Opening source plate framing silicon memory as the physical counterpoint to a software-led market bubble.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-silent-triopoly-s02-cleaned",
+      "deck_id": "silicon-silent-triopoly",
+      "slide_id": "silicon-silent-triopoly-s02",
+      "slide_number": 2,
+      "variant": "cleaned",
+      "pptx_member": "ppt/media/image2.png",
+      "extracted_path": "silicon-silent-triopoly/slides-cleaned/slide-002.png",
+      "sha256": "9dbb5cccb3f03c2d24c913a12ffeb72f1f762c7f6e58b6069faea2df36263730",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "parent_image_id": "silicon-silent-triopoly-s02-original",
+      "selection_label": "Silicon’s Silent Triopoly · S02 · The Great Valuation Paradox",
+      "context": {
+        "label": "The Great Valuation Paradox",
+        "summary": "Source plate contrasting an extreme S&P 500 CAPE ratio with memory-triopoly forward valuation and margins.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-silent-triopoly-s03-cleaned",
+      "deck_id": "silicon-silent-triopoly",
+      "slide_id": "silicon-silent-triopoly-s03",
+      "slide_number": 3,
+      "variant": "cleaned",
+      "pptx_member": "ppt/media/image3.png",
+      "extracted_path": "silicon-silent-triopoly/slides-cleaned/slide-003.png",
+      "sha256": "f3a04628a77910144c4c2280b12fd8b4952e5eaa6f0bac54ae4843be2fb7da3a",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "parent_image_id": "silicon-silent-triopoly-s03-original",
+      "selection_label": "Silicon’s Silent Triopoly · S03 · The Strange Genesis of a Cartel",
+      "context": {
+        "label": "The Strange Genesis of a Cartel",
+        "summary": "Source history plate describing how Samsung, Micron, and SK hynix emerged from separate survival paths.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-silent-triopoly-s04-cleaned",
+      "deck_id": "silicon-silent-triopoly",
+      "slide_id": "silicon-silent-triopoly-s04",
+      "slide_number": 4,
+      "variant": "cleaned",
+      "pptx_member": "ppt/media/image4.png",
+      "extracted_path": "silicon-silent-triopoly/slides-cleaned/slide-004.png",
+      "sha256": "47ae15eda0375b359844cc164fe84483f6a9efec4605c5a39b23ffe532b35b25",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "parent_image_id": "silicon-silent-triopoly-s04-original",
+      "selection_label": "Silicon’s Silent Triopoly · S04 · The Capital Cycle Meat Grinder",
+      "context": {
+        "label": "The Capital Cycle Meat Grinder",
+        "summary": "Source mechanism plate showing price wars, excess capital expenditure, and the collapse of weaker memory rivals.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-silent-triopoly-s05-cleaned",
+      "deck_id": "silicon-silent-triopoly",
+      "slide_id": "silicon-silent-triopoly-s05",
+      "slide_number": 5,
+      "variant": "cleaned",
+      "pptx_member": "ppt/media/image5.png",
+      "extracted_path": "silicon-silent-triopoly/slides-cleaned/slide-005.png",
+      "sha256": "21a88ab01a78d17157ebfad6fe8229105c345ce3e1333e75732f902d5efc46e8",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "parent_image_id": "silicon-silent-triopoly-s05-original",
+      "selection_label": "Silicon’s Silent Triopoly · S05 · The Physical Moat of HBM",
+      "context": {
+        "label": "The Physical Moat of HBM",
+        "summary": "Source mechanism plate showing the stacked HBM structure and the physical fragility of ultra-thin silicon.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-silent-triopoly-s06-cleaned",
+      "deck_id": "silicon-silent-triopoly",
+      "slide_id": "silicon-silent-triopoly-s06",
+      "slide_number": 6,
+      "variant": "cleaned",
+      "pptx_member": "ppt/media/image6.png",
+      "extracted_path": "silicon-silent-triopoly/slides-cleaned/slide-006.png",
+      "sha256": "53041cfb9d1391cf019a3dfb085c3de231a0dff69bfcfb3f6633e9de5ae4f213",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "parent_image_id": "silicon-silent-triopoly-s06-original",
+      "selection_label": "Silicon’s Silent Triopoly · S06 · The Packaging Battle Matrix",
+      "context": {
+        "label": "The Packaging Battle Matrix",
+        "summary": "Source comparison of Samsung film-based packaging and SK hynix liquid-epoxy packaging approaches.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-silent-triopoly-s07-cleaned",
+      "deck_id": "silicon-silent-triopoly",
+      "slide_id": "silicon-silent-triopoly-s07",
+      "slide_number": 7,
+      "variant": "cleaned",
+      "pptx_member": "ppt/media/image7.png",
+      "extracted_path": "silicon-silent-triopoly/slides-cleaned/slide-007.png",
+      "sha256": "db1ec25c8dafe61d8b501727bd9a4e19d2acac7ed9d06c234d6c707b5c883c8d",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "parent_image_id": "silicon-silent-triopoly-s07-original",
+      "selection_label": "Silicon’s Silent Triopoly · S07 · The RAM-ageddon Penalty",
+      "context": {
+        "label": "The RAM-ageddon Penalty",
+        "summary": "Source plate illustrating the three-to-one wafer-capacity penalty created by HBM production.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-silent-triopoly-s08-cleaned",
+      "deck_id": "silicon-silent-triopoly",
+      "slide_id": "silicon-silent-triopoly-s08",
+      "slide_number": 8,
+      "variant": "cleaned",
+      "pptx_member": "ppt/media/image8.png",
+      "extracted_path": "silicon-silent-triopoly/slides-cleaned/slide-008.png",
+      "sha256": "a9ebd3df7c7c8d7479ead38060c379487fa92ec1e6303b644d781d5a32b9d65c",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "parent_image_id": "silicon-silent-triopoly-s08-original",
+      "selection_label": "Silicon’s Silent Triopoly · S08 · The Expanding DRAM Battlefield",
+      "context": {
+        "label": "The Expanding DRAM Battlefield",
+        "summary": "Source market-share map showing the memory triopoly, CXMT, and the expanding DRAM competitive field.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-silent-triopoly-s09-cleaned",
+      "deck_id": "silicon-silent-triopoly",
+      "slide_id": "silicon-silent-triopoly-s09",
+      "slide_number": 9,
+      "variant": "cleaned",
+      "pptx_member": "ppt/media/image9.png",
+      "extracted_path": "silicon-silent-triopoly/slides-cleaned/slide-009.png",
+      "sha256": "f6382fc975499412828c4ee23bb4c33138de56b34ad62bc0cfb807e40113a592",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "parent_image_id": "silicon-silent-triopoly-s09-original",
+      "selection_label": "Silicon’s Silent Triopoly · S09 · The NAND Counteroffensive",
+      "context": {
+        "label": "The NAND Counteroffensive",
+        "summary": "Source plate showing the NAND market lanes, leading manufacturers, and a disruptive challenger.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-silent-triopoly-s10-cleaned",
+      "deck_id": "silicon-silent-triopoly",
+      "slide_id": "silicon-silent-triopoly-s10",
+      "slide_number": 10,
+      "variant": "cleaned",
+      "pptx_member": "ppt/media/image10.png",
+      "extracted_path": "silicon-silent-triopoly/slides-cleaned/slide-010.png",
+      "sha256": "bab33dd51d6ad465338706031553a39f99903f38b262470348e310c6f3f23514",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "parent_image_id": "silicon-silent-triopoly-s10-original",
+      "selection_label": "Silicon’s Silent Triopoly · S10 · The S&P 500 Liquidity Mirage",
+      "context": {
+        "label": "The S&P 500 Liquidity Mirage",
+        "summary": "Source plate contrasting reported index earnings growth with the underlying composition of market liquidity.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-silent-triopoly-s11-cleaned",
+      "deck_id": "silicon-silent-triopoly",
+      "slide_id": "silicon-silent-triopoly-s11",
+      "slide_number": 11,
+      "variant": "cleaned",
+      "pptx_member": "ppt/media/image11.png",
+      "extracted_path": "silicon-silent-triopoly/slides-cleaned/slide-011.png",
+      "sha256": "2901fcef5e27efcc5e1691211d34a6bdfad3562277150f4df9edb7132ae10821",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "parent_image_id": "silicon-silent-triopoly-s11-original",
+      "selection_label": "Silicon’s Silent Triopoly · S11 · The Unbreakable Chokepoint",
+      "context": {
+        "label": "The Unbreakable Chokepoint",
+        "summary": "Source comparison of the outdated commodity view with the memory triopoly's contracted, integrated, and capacity-bound moat.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-silent-triopoly-s12-cleaned",
+      "deck_id": "silicon-silent-triopoly",
+      "slide_id": "silicon-silent-triopoly-s12",
+      "slide_number": 12,
+      "variant": "cleaned",
+      "pptx_member": "ppt/media/image12.png",
+      "extracted_path": "silicon-silent-triopoly/slides-cleaned/slide-012.png",
+      "sha256": "bfd876e9631525ecb5df5c58c1e5073df1cbc9d492b0c6a0346270e65098454e",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "parent_image_id": "silicon-silent-triopoly-s12-original",
+      "selection_label": "Silicon’s Silent Triopoly · S12 · The Crucible of Compute",
+      "context": {
+        "label": "The Crucible of Compute",
+        "summary": "Closing source plate framing memory as the physical bottleneck that controls the economics of AI compute.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    }
+  ],
+  "assets": [],
+  "review": {
+    "slide_contact_sheet": "silicon-silent-triopoly/review/slide-contact-sheet.png",
+    "semantic_contact_sheet": "silicon-silent-triopoly/review/semantic-contact-sheet.png",
+    "coverage_report": "silicon-silent-triopoly/review/coverage-report.json",
+    "promotion_policy": "Source plates remain review-only. A crop becomes render-eligible only after operator-verified context, approved rights, and visual promotion review."
+  },
+  "artifact_hash": "ac75dbab172a9e8b1f420a808c5098ddd540fb6345b054cb69b92d24ddea00b5"
+}

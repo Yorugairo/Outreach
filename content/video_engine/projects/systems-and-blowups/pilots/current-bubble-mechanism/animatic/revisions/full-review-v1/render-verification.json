@@ -1,0 +1,33 @@
+{
+  "schema_version": "finance_render_verification.v1",
+  "episode_id": "current-bubble-mechanism",
+  "render_path": "C:/Users/Snipe/.codex/worktrees/f10b/Outreach Program/content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/animatic/revisions/full-review-v1/current-bubble-mechanism-review-master.mp4",
+  "render_sha256": "32c40572a0fa0532075a4bd5f83fe678fd52b2f7ea4bc4a8ff2b97f36de96a63",
+  "size_bytes": 570492867,
+  "duration_s": 980.842667,
+  "canonical_audio_duration_s": 980.806,
+  "video": {
+    "index": 0,
+    "codec_name": "h264",
+    "codec_type": "video",
+    "width": 1280,
+    "height": 720,
+    "r_frame_rate": "15/1",
+    "side_data_list": [
+      {}
+    ]
+  },
+  "audio": {
+    "index": 1,
+    "codec_name": "aac",
+    "codec_type": "audio",
+    "sample_rate": "48000",
+    "channels": 2,
+    "r_frame_rate": "0/0"
+  },
+  "plan_hash": "ac167f004383a63cc2bdecd38ef5f10d8d57ff19107fc29d1d81db548a54ef1e",
+  "cue_sheet_hash": "ba556d225d576af17f20a277d0de900b9ecd240e59e723bdf5fe761c9b3fa4b1",
+  "audio_sha256": "ecacf46c49aee85b912404bfa0e47c37acbae0397b637e2a966c51a625077ce1",
+  "status": "verified",
+  "artifact_hash": "6477aecaaed1eab6e6ba4b5ff93ca02fb213687b68f9356dbb66899916b215f0"
+}

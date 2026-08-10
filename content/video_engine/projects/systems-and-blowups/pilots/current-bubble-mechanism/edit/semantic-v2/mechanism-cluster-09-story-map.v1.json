@@ -1,0 +1,35 @@
+{
+  "schema_version": "finance_semantic_story_map.v1",
+  "episode_id": "current-bubble-mechanism",
+  "state": "asset_wave_in_progress",
+  "coverage": {"start_word": 1845, "end_word": 2277, "start_s": 797.137, "end_s": 980.806, "canonical_cue_sheet_path": "../word-timed-v1/finance-visual-cue-sheet.v1.json"},
+  "design_rule": "The finale strengthens—not suppresses—the countercase. It returns to the original elevator only for the explicit spoken callback, and it ends on an inspection method rather than an asset recommendation.",
+  "clusters": [
+    {
+      "cluster_id": "cbm-i-001",
+      "cue_ids": ["cbm-cue-235", "cbm-cue-236", "cbm-cue-237", "cbm-cue-238", "cbm-cue-239", "cbm-cue-240", "cbm-cue-241", "cbm-cue-242", "cbm-cue-243", "cbm-cue-244", "cbm-cue-245", "cbm-cue-246", "cbm-cue-247", "cbm-cue-248", "cbm-cue-249", "cbm-cue-250", "cbm-cue-251", "cbm-cue-252", "cbm-cue-253", "cbm-cue-254", "cbm-cue-255", "cbm-cue-256", "cbm-cue-257", "cbm-cue-258", "cbm-cue-259", "cbm-cue-260", "cbm-cue-261", "cbm-cue-262", "cbm-cue-263"],
+      "words": [1845, 2090], "time_s": [797.137, 888.881],
+      "purpose": "Put the concentrated-basket, defensive-asset, long-tail, and memory-cycle counterarguments on screen before returning to the thesis.",
+      "asset_demand": "memory-three-failure-points-v1",
+      "asset_strategy": "use the countercase plate only for the memory-specific risks; use deterministic source cards or neutral reframes for equal-weight and index-healing claims; never use the plate as evidence for those separate mechanisms.",
+      "must_not_imply": ["concentrated baskets are safe", "defensive assets always defend", "the long tail is dead weight", "memory demand prevents bubble pricing"]
+    },
+    {
+      "cluster_id": "cbm-i-002",
+      "cue_ids": ["cbm-cue-264", "cbm-cue-265", "cbm-cue-266", "cbm-cue-267", "cbm-cue-268", "cbm-cue-269", "cbm-cue-270", "cbm-cue-271", "cbm-cue-272", "cbm-cue-273", "cbm-cue-274", "cbm-cue-275", "cbm-cue-276", "cbm-cue-277", "cbm-cue-278", "cbm-cue-279", "cbm-cue-280", "cbm-cue-281", "cbm-cue-282", "cbm-cue-283"],
+      "words": [2091, 2220], "time_s": [888.881, 956.600],
+      "purpose": "Restate the bounded thesis: broad indexing solves low-cost participation; a two-sleeve framework is a testable design hypothesis, not a model portfolio; both trades can bubble.",
+      "asset_strategy": "use purpose-matched returns to the memory capacity, index container, and barbell worlds only as each underlying mechanism is named; no decorative montage or unsupported asset reuse.",
+      "must_not_imply": ["sell the index and buy memory", "model portfolio", "one trade is certainly a bubble"]
+    },
+    {
+      "cluster_id": "cbm-i-003",
+      "cue_ids": ["cbm-cue-284", "cbm-cue-285", "cbm-cue-286", "cbm-cue-287", "cbm-cue-288", "cbm-cue-289", "cbm-cue-290"],
+      "words": [2221, 2277], "time_s": [956.600, 980.806],
+      "purpose": "Close on the reusable inspection method: look under the elevator, identify who pays, what is scarce, how supply responds, and whether cash flow or resale belief sustains demand.",
+      "asset_strategy": "return to wrong-bubble-elevators-v2 only on the explicit elevator callback, with the caption/evidence field used for the four inspection questions; final frame holds the two separate upside-and-defense jobs.",
+      "must_not_imply": ["a certain answer", "financial advice", "a price forecast"]
+    }
+  ],
+  "artifact_hash": "9deeb047edd1ffe14d79bd9adc851868f35899132da990774c33f41f36eb1eae"
+}

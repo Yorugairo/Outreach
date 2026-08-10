@@ -1,0 +1,43 @@
+{
+  "schema_version": "finance_semantic_wave_review.v1",
+  "episode_id": "current-bubble-mechanism",
+  "wave_id": "semantic-wave-02",
+  "status": "operator_approved_for_motion_proof",
+  "generation_method": "built_in_image_gen",
+  "decision_rule": "Each candidate is an exact-cue visual sentence, not reusable wallpaper. Generated art contains no factual text; numbers and source treatment remain local deterministic layers.",
+  "candidates": [
+    {
+      "candidate_id": "bottleneck-repricing-v1",
+      "path": "bottleneck-repricing-v1.png",
+      "sha256": "b7c1cf004a4eeef70ff497dff98345687c10950a82683376f32c3cb1ceef53d0",
+      "cue_id": "cbm-a-007",
+      "purpose": "A physical memory production choke point connects queued modules to qualified output without turning it into a price chart.",
+      "status": "selected"
+    },
+    {
+      "candidate_id": "safe-default-inspection-v1",
+      "path": "safe-default-inspection-v1.png",
+      "sha256": "54262034c0a94bb9571155fdabc5c2062bad61edf15f1d6e99c8e995151f2d35",
+      "cue_id": "cbm-a-008",
+      "purpose": "An ordinary broad-index container opens under an inspection lamp without asserting that it is unsafe.",
+      "status": "selected"
+    },
+    {
+      "candidate_id": "belief-versus-support-v1",
+      "path": "not-retained",
+      "cue_id": "cbm-a-010",
+      "purpose": "Initial belief-versus-support concept.",
+      "status": "rejected",
+      "rejection_reason": "Pseudo-text on tickets is not permitted in generated illustration."
+    },
+    {
+      "candidate_id": "belief-versus-support-v2",
+      "path": "belief-versus-support-v2.png",
+      "sha256": "e85dae1630974425e9390b921e7d6edae639dae6e50b3089a129b2b634947abb",
+      "cue_id": "cbm-a-010",
+      "purpose": "Two equal street-level outcomes reveal two different foundation systems: crowd support versus factory/commitment support.",
+      "status": "selected"
+    }
+  ],
+  "artifact_hash": "08d49831145ea2ac2ede6e0012c858c0d60222f8fb90521d32637a68d1a88c56"
+}

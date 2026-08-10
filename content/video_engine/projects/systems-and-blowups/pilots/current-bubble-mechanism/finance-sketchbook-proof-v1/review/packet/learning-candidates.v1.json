@@ -1,0 +1,36 @@
+{
+  "schema_version": "video_review_learning.v1",
+  "project_id": "outreach-program",
+  "generated_at": "2026-08-10T03:32:15.176427Z",
+  "source_review_hashes": [
+    "73fd2304e6666f967586fe2229353c2956a3cb221c975ea5c5e2014793f56b2d"
+  ],
+  "candidates": [
+    {
+      "candidate_id": "learning-p23-operator-review-gate",
+      "recurrence_key": "p23-operator-review-gate",
+      "kind": "other",
+      "trigger": "When a proof render reaches its visual review boundary",
+      "action": "Require operator review before promoting the grammar beyond the isolated proof",
+      "scope": "episode",
+      "confidence": 0.3,
+      "observations": [
+        {
+          "review_id": "finance-sketchbook-proof-v1-draft",
+          "review_hash": "73fd2304e6666f967586fe2229353c2956a3cb221c975ea5c5e2014793f56b2d",
+          "finding_id": "operator-review-pending",
+          "episode_id": "finance-sketchbook-proof-v1",
+          "lane_id": "systems-and-blowups-finance",
+          "scope": "episode",
+          "status": "open"
+        }
+      ],
+      "distinct_episode_count": 1,
+      "distinct_lane_count": 1,
+      "recommended_destination": "episode_edit_delta",
+      "promotion_state": "observation",
+      "operator_gate": "required"
+    }
+  ],
+  "artifact_hash": "f737b2857e7e533d17a711936122acf467c8fb1c309c31a9f94390f178c6b9a2"
+}

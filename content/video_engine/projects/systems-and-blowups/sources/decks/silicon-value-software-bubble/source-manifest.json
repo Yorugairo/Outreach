@@ -1,0 +1,999 @@
+{
+  "schema_version": "deck_asset_manifest.v1",
+  "manifest_id": "silicon-decks-source-manifest-v2-silicon-value-software-bubble",
+  "project_id": "systems-and-blowups",
+  "source_decks": [
+    {
+      "deck_id": "silicon-value-software-bubble",
+      "title": "Silicon Value in a Software Bubble",
+      "source_path": "C:\\Users\\Snipe\\Downloads\\Silicon_Value_in_a_Software_Bubble.pptx",
+      "source_sha256": "3dd6edf7dc2898d5c62732220eec6f3f7308dc1f7288647166e28affafbdd161",
+      "source_family": "operator-supplied-notebooklm-research-deck",
+      "rights_state": "source_review_only",
+      "cleanup": {
+        "requested": true,
+        "input_path": "C:\\Users\\Snipe\\Downloads\\Silicon_Value_in_a_Software_Bubble.no-watermark.pptx",
+        "original_sha256": "3dd6edf7dc2898d5c62732220eec6f3f7308dc1f7288647166e28affafbdd161",
+        "cleaned_sha256": "3ad0184b7e5581b82b96e200f817e58f87407cfb1d94eae9719eba05cd06173f",
+        "policy": "Derived from an operator-approved non-destructive footer cleanup.",
+        "approved": true
+      }
+    }
+  ],
+  "slides": [
+    {
+      "slide_id": "silicon-value-software-bubble-s01",
+      "deck_id": "silicon-value-software-bubble",
+      "slide_number": 1,
+      "slide_label": "The Physical Bottleneck versus the Software Bubble",
+      "source_image_id": "silicon-value-software-bubble-s01-original",
+      "context": {
+        "label": "The Physical Bottleneck versus the Software Bubble",
+        "summary": "Opening source plate contrasting the physical scarcity of AI memory with the software market’s elevated valuation.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "slide_id": "silicon-value-software-bubble-s02",
+      "deck_id": "silicon-value-software-bubble",
+      "slide_number": 2,
+      "slide_label": "The Earnings Concentration Funnel",
+      "source_image_id": "silicon-value-software-bubble-s02-original",
+      "context": {
+        "label": "The Earnings Concentration Funnel",
+        "summary": "Source plate showing passive flows, top-ten mega-cap concentration, and reported earnings growth around the index bubble.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "slide_id": "silicon-value-software-bubble-s03",
+      "deck_id": "silicon-value-software-bubble",
+      "slide_number": 3,
+      "slide_label": "The Inescapable Physical Reality",
+      "source_image_id": "silicon-value-software-bubble-s03-original",
+      "context": {
+        "label": "The Inescapable Physical Reality",
+        "summary": "Source plate using an hourglass to connect software layers, AI compute, and the global physical memory stack beneath them.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "slide_id": "silicon-value-software-bubble-s04",
+      "deck_id": "silicon-value-software-bubble",
+      "slide_number": 4,
+      "slide_label": "The Triopoly Was Forged through Risk and Survival",
+      "source_image_id": "silicon-value-software-bubble-s04-original",
+      "context": {
+        "label": "The Triopoly Was Forged through Risk and Survival",
+        "summary": "Source history plate showing how Samsung, Micron, and SK hynix survived through distinct capital-cycle paths.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "slide_id": "silicon-value-software-bubble-s05",
+      "deck_id": "silicon-value-software-bubble",
+      "slide_number": 5,
+      "slide_label": "The Price-Deflation Capital Cycle",
+      "source_image_id": "silicon-value-software-bubble-s05-original",
+      "context": {
+        "label": "The Price-Deflation Capital Cycle",
+        "summary": "Source cycle diagram linking Moore’s Law, price deflation, bankruptcies, and industry consolidation.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "slide_id": "silicon-value-software-bubble-s06",
+      "deck_id": "silicon-value-software-bubble",
+      "slide_number": 6,
+      "slide_label": "The Physical Breakdown of Moore’s Law",
+      "source_image_id": "silicon-value-software-bubble-s06-original",
+      "context": {
+        "label": "The Physical Breakdown of Moore’s Law",
+        "summary": "Source chart showing process volatility, declining gains, and the structural transition toward stacked silicon.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "slide_id": "silicon-value-software-bubble-s07",
+      "deck_id": "silicon-value-software-bubble",
+      "slide_number": 7,
+      "slide_label": "HBM Breaks the Historical Commodity Pattern",
+      "source_image_id": "silicon-value-software-bubble-s07-original",
+      "context": {
+        "label": "HBM Breaks the Historical Commodity Pattern",
+        "summary": "Source mechanism plate comparing planar DRAM with the stacked HBM architecture and its physical constraints.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "slide_id": "silicon-value-software-bubble-s08",
+      "deck_id": "silicon-value-software-bubble",
+      "slide_number": 8,
+      "slide_label": "Physical Failure Points",
+      "source_image_id": "silicon-value-software-bubble-s08-original",
+      "context": {
+        "label": "Physical Failure Points",
+        "summary": "A source plate showing three physical failure points introduced by stacked silicon: backgrinding, TSV etching, and wafer-level testing.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "slide_id": "silicon-value-software-bubble-s09",
+      "deck_id": "silicon-value-software-bubble",
+      "slide_number": 9,
+      "slide_label": "Connecting the Dies Is the Hardest Step",
+      "source_image_id": "silicon-value-software-bubble-s09-original",
+      "context": {
+        "label": "Connecting the Dies Is the Hardest Step",
+        "summary": "Source process plate comparing Samsung and SK hynix interconnect methods and their thermal and yield constraints.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "slide_id": "silicon-value-software-bubble-s10",
+      "deck_id": "silicon-value-software-bubble",
+      "slide_number": 10,
+      "slide_label": "The RAM-ageddon Effect",
+      "source_image_id": "silicon-value-software-bubble-s10-original",
+      "context": {
+        "label": "The RAM-ageddon Effect",
+        "summary": "Source mechanism plate linking HBM’s wafer penalty to a structural supply shortage in standard memory.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "slide_id": "silicon-value-software-bubble-s11",
+      "deck_id": "silicon-value-software-bubble",
+      "slide_number": 11,
+      "slide_label": "The DRAM Triopoly Is Rebalancing",
+      "source_image_id": "silicon-value-software-bubble-s11-original",
+      "context": {
+        "label": "The DRAM Triopoly Is Rebalancing",
+        "summary": "Source market-share plate showing how Samsung, SK hynix, Micron, and CXMT fit into shifting DRAM supply chains.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "slide_id": "silicon-value-software-bubble-s12",
+      "deck_id": "silicon-value-software-bubble",
+      "slide_number": 12,
+      "slide_label": "The NAND Disruption Track",
+      "source_image_id": "silicon-value-software-bubble-s12-original",
+      "context": {
+        "label": "The NAND Disruption Track",
+        "summary": "Source market-share plate showing the NAND storage competitive field and fast-moving challengers.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "slide_id": "silicon-value-software-bubble-s13",
+      "deck_id": "silicon-value-software-bubble",
+      "slide_number": 13,
+      "slide_label": "Cash Generation versus Paper Gains",
+      "source_image_id": "silicon-value-software-bubble-s13-original",
+      "context": {
+        "label": "Cash Generation versus Paper Gains",
+        "summary": "Source comparison showing the market discount applied to memory cash generation versus software-style index gains.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "slide_id": "silicon-value-software-bubble-s14",
+      "deck_id": "silicon-value-software-bubble",
+      "slide_number": 14,
+      "slide_label": "Memory Is a Strategic Asset, Not a Cheap Input",
+      "source_image_id": "silicon-value-software-bubble-s14-original",
+      "context": {
+        "label": "Memory Is a Strategic Asset, Not a Cheap Input",
+        "summary": "Source moat plate showing long-term agreements, custom co-engineering, logic integration, and expanding bill-of-materials importance.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "slide_id": "silicon-value-software-bubble-s15",
+      "deck_id": "silicon-value-software-bubble",
+      "slide_number": 15,
+      "slide_label": "Vulnerability versus Opportunity",
+      "source_image_id": "silicon-value-software-bubble-s15-original",
+      "context": {
+        "label": "Vulnerability versus Opportunity",
+        "summary": "A source plate showing the contrasting S&P 500 vulnerability path and memory triopoly opportunity path.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    }
+  ],
+  "source_images": [
+    {
+      "image_id": "silicon-value-software-bubble-s01-original",
+      "deck_id": "silicon-value-software-bubble",
+      "slide_id": "silicon-value-software-bubble-s01",
+      "slide_number": 1,
+      "variant": "original",
+      "pptx_member": "ppt/media/image1.png",
+      "extracted_path": "silicon-value-software-bubble/slides/slide-001.png",
+      "sha256": "56fc6933eb2871cc898d3838f5b07aee89cc0492be8c8acaa4072fb41bc0641b",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "selection_label": "Silicon Value in a Software Bubble · S01 · The Physical Bottleneck versus the Software Bubble",
+      "context": {
+        "label": "The Physical Bottleneck versus the Software Bubble",
+        "summary": "Opening source plate contrasting the physical scarcity of AI memory with the software market’s elevated valuation.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-value-software-bubble-s02-original",
+      "deck_id": "silicon-value-software-bubble",
+      "slide_id": "silicon-value-software-bubble-s02",
+      "slide_number": 2,
+      "variant": "original",
+      "pptx_member": "ppt/media/image2.png",
+      "extracted_path": "silicon-value-software-bubble/slides/slide-002.png",
+      "sha256": "0c85a631f72287c4e12cfddee7bf36415caadefb55c3604d3e8faae470a3d225",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "selection_label": "Silicon Value in a Software Bubble · S02 · The Earnings Concentration Funnel",
+      "context": {
+        "label": "The Earnings Concentration Funnel",
+        "summary": "Source plate showing passive flows, top-ten mega-cap concentration, and reported earnings growth around the index bubble.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-value-software-bubble-s03-original",
+      "deck_id": "silicon-value-software-bubble",
+      "slide_id": "silicon-value-software-bubble-s03",
+      "slide_number": 3,
+      "variant": "original",
+      "pptx_member": "ppt/media/image3.png",
+      "extracted_path": "silicon-value-software-bubble/slides/slide-003.png",
+      "sha256": "d91594dafa3b8df9da9f11bec51e9fdf0de4ceb171812bf61633c1405e8edc90",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "selection_label": "Silicon Value in a Software Bubble · S03 · The Inescapable Physical Reality",
+      "context": {
+        "label": "The Inescapable Physical Reality",
+        "summary": "Source plate using an hourglass to connect software layers, AI compute, and the global physical memory stack beneath them.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-value-software-bubble-s04-original",
+      "deck_id": "silicon-value-software-bubble",
+      "slide_id": "silicon-value-software-bubble-s04",
+      "slide_number": 4,
+      "variant": "original",
+      "pptx_member": "ppt/media/image4.png",
+      "extracted_path": "silicon-value-software-bubble/slides/slide-004.png",
+      "sha256": "547859c997477c2cb60114a6067870977a9d851297e2b39fb3756295ced4c723",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "selection_label": "Silicon Value in a Software Bubble · S04 · The Triopoly Was Forged through Risk and Survival",
+      "context": {
+        "label": "The Triopoly Was Forged through Risk and Survival",
+        "summary": "Source history plate showing how Samsung, Micron, and SK hynix survived through distinct capital-cycle paths.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-value-software-bubble-s05-original",
+      "deck_id": "silicon-value-software-bubble",
+      "slide_id": "silicon-value-software-bubble-s05",
+      "slide_number": 5,
+      "variant": "original",
+      "pptx_member": "ppt/media/image5.png",
+      "extracted_path": "silicon-value-software-bubble/slides/slide-005.png",
+      "sha256": "3c5feb0d1b5d3c4f2f7957d740efce8071fa7b0b75ff4ea8eadaf0557d463752",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "selection_label": "Silicon Value in a Software Bubble · S05 · The Price-Deflation Capital Cycle",
+      "context": {
+        "label": "The Price-Deflation Capital Cycle",
+        "summary": "Source cycle diagram linking Moore’s Law, price deflation, bankruptcies, and industry consolidation.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-value-software-bubble-s06-original",
+      "deck_id": "silicon-value-software-bubble",
+      "slide_id": "silicon-value-software-bubble-s06",
+      "slide_number": 6,
+      "variant": "original",
+      "pptx_member": "ppt/media/image6.png",
+      "extracted_path": "silicon-value-software-bubble/slides/slide-006.png",
+      "sha256": "86572eeddfd1328ecdc34422cdf6d1890283c5cda86c34b6c4bba68e4d829e5e",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "selection_label": "Silicon Value in a Software Bubble · S06 · The Physical Breakdown of Moore’s Law",
+      "context": {
+        "label": "The Physical Breakdown of Moore’s Law",
+        "summary": "Source chart showing process volatility, declining gains, and the structural transition toward stacked silicon.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-value-software-bubble-s07-original",
+      "deck_id": "silicon-value-software-bubble",
+      "slide_id": "silicon-value-software-bubble-s07",
+      "slide_number": 7,
+      "variant": "original",
+      "pptx_member": "ppt/media/image7.png",
+      "extracted_path": "silicon-value-software-bubble/slides/slide-007.png",
+      "sha256": "408631a367f8fc5146b213ae89f1990cd44eb8f164b45ee35e4f9658adfd34b9",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "selection_label": "Silicon Value in a Software Bubble · S07 · HBM Breaks the Historical Commodity Pattern",
+      "context": {
+        "label": "HBM Breaks the Historical Commodity Pattern",
+        "summary": "Source mechanism plate comparing planar DRAM with the stacked HBM architecture and its physical constraints.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-value-software-bubble-s08-original",
+      "deck_id": "silicon-value-software-bubble",
+      "slide_id": "silicon-value-software-bubble-s08",
+      "slide_number": 8,
+      "variant": "original",
+      "pptx_member": "ppt/media/image8.png",
+      "extracted_path": "silicon-value-software-bubble/slides/slide-008.png",
+      "sha256": "d66f7141cd4de5be4c4445e7733b1179959cf86ef21bd6f92dbab3b65b7809d9",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "selection_label": "Silicon Value in a Software Bubble · S08 · Physical Failure Points",
+      "context": {
+        "label": "Physical Failure Points",
+        "summary": "A source plate showing three physical failure points introduced by stacked silicon: backgrinding, TSV etching, and wafer-level testing.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-value-software-bubble-s09-original",
+      "deck_id": "silicon-value-software-bubble",
+      "slide_id": "silicon-value-software-bubble-s09",
+      "slide_number": 9,
+      "variant": "original",
+      "pptx_member": "ppt/media/image9.png",
+      "extracted_path": "silicon-value-software-bubble/slides/slide-009.png",
+      "sha256": "901bf9be23993a832d393f02a422d1e82c26f7110b9f42a2bb276739541cef2e",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "selection_label": "Silicon Value in a Software Bubble · S09 · Connecting the Dies Is the Hardest Step",
+      "context": {
+        "label": "Connecting the Dies Is the Hardest Step",
+        "summary": "Source process plate comparing Samsung and SK hynix interconnect methods and their thermal and yield constraints.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-value-software-bubble-s10-original",
+      "deck_id": "silicon-value-software-bubble",
+      "slide_id": "silicon-value-software-bubble-s10",
+      "slide_number": 10,
+      "variant": "original",
+      "pptx_member": "ppt/media/image10.png",
+      "extracted_path": "silicon-value-software-bubble/slides/slide-010.png",
+      "sha256": "e4712920a8d9f8e3b20cf8a36d45a926aea51503815bd85d2aa05e3a40e82671",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "selection_label": "Silicon Value in a Software Bubble · S10 · The RAM-ageddon Effect",
+      "context": {
+        "label": "The RAM-ageddon Effect",
+        "summary": "Source mechanism plate linking HBM’s wafer penalty to a structural supply shortage in standard memory.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-value-software-bubble-s11-original",
+      "deck_id": "silicon-value-software-bubble",
+      "slide_id": "silicon-value-software-bubble-s11",
+      "slide_number": 11,
+      "variant": "original",
+      "pptx_member": "ppt/media/image11.png",
+      "extracted_path": "silicon-value-software-bubble/slides/slide-011.png",
+      "sha256": "2f888fbad0030362bb61e0d0fa28e1bdd8b10caecc1ef9512ef3dea811dd2f3f",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "selection_label": "Silicon Value in a Software Bubble · S11 · The DRAM Triopoly Is Rebalancing",
+      "context": {
+        "label": "The DRAM Triopoly Is Rebalancing",
+        "summary": "Source market-share plate showing how Samsung, SK hynix, Micron, and CXMT fit into shifting DRAM supply chains.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-value-software-bubble-s12-original",
+      "deck_id": "silicon-value-software-bubble",
+      "slide_id": "silicon-value-software-bubble-s12",
+      "slide_number": 12,
+      "variant": "original",
+      "pptx_member": "ppt/media/image12.png",
+      "extracted_path": "silicon-value-software-bubble/slides/slide-012.png",
+      "sha256": "d8a1dc17b40e1402b975864c8f95a59f86e86a8ab57df00d913ab8c0485e9e04",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "selection_label": "Silicon Value in a Software Bubble · S12 · The NAND Disruption Track",
+      "context": {
+        "label": "The NAND Disruption Track",
+        "summary": "Source market-share plate showing the NAND storage competitive field and fast-moving challengers.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-value-software-bubble-s13-original",
+      "deck_id": "silicon-value-software-bubble",
+      "slide_id": "silicon-value-software-bubble-s13",
+      "slide_number": 13,
+      "variant": "original",
+      "pptx_member": "ppt/media/image13.png",
+      "extracted_path": "silicon-value-software-bubble/slides/slide-013.png",
+      "sha256": "263f01586248435a515c10f544618cd24f62a3655e3bcc18f346d0fdf6f68991",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "selection_label": "Silicon Value in a Software Bubble · S13 · Cash Generation versus Paper Gains",
+      "context": {
+        "label": "Cash Generation versus Paper Gains",
+        "summary": "Source comparison showing the market discount applied to memory cash generation versus software-style index gains.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-value-software-bubble-s14-original",
+      "deck_id": "silicon-value-software-bubble",
+      "slide_id": "silicon-value-software-bubble-s14",
+      "slide_number": 14,
+      "variant": "original",
+      "pptx_member": "ppt/media/image14.png",
+      "extracted_path": "silicon-value-software-bubble/slides/slide-014.png",
+      "sha256": "d94f12035be4d4f1cdd3cd4b5a9ca297f6e4cfd3d7045919fa4a350093ac3eaa",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "selection_label": "Silicon Value in a Software Bubble · S14 · Memory Is a Strategic Asset, Not a Cheap Input",
+      "context": {
+        "label": "Memory Is a Strategic Asset, Not a Cheap Input",
+        "summary": "Source moat plate showing long-term agreements, custom co-engineering, logic integration, and expanding bill-of-materials importance.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-value-software-bubble-s15-original",
+      "deck_id": "silicon-value-software-bubble",
+      "slide_id": "silicon-value-software-bubble-s15",
+      "slide_number": 15,
+      "variant": "original",
+      "pptx_member": "ppt/media/image15.png",
+      "extracted_path": "silicon-value-software-bubble/slides/slide-015.png",
+      "sha256": "4112718478c67beae707a1725ebdcf0a8cf0cefafbe3dd9a9d65806fe7a15c53",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "selection_label": "Silicon Value in a Software Bubble · S15 · Vulnerability versus Opportunity",
+      "context": {
+        "label": "Vulnerability versus Opportunity",
+        "summary": "A source plate showing the contrasting S&P 500 vulnerability path and memory triopoly opportunity path.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    }
+  ],
+  "cleaned_images": [
+    {
+      "image_id": "silicon-value-software-bubble-s01-cleaned",
+      "deck_id": "silicon-value-software-bubble",
+      "slide_id": "silicon-value-software-bubble-s01",
+      "slide_number": 1,
+      "variant": "cleaned",
+      "pptx_member": "ppt/media/image1.png",
+      "extracted_path": "silicon-value-software-bubble/slides-cleaned/slide-001.png",
+      "sha256": "6cc93c73a951855039668a6048e43f016ca96cdba0bc71a871ccc8c0a5c579c8",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "parent_image_id": "silicon-value-software-bubble-s01-original",
+      "selection_label": "Silicon Value in a Software Bubble · S01 · The Physical Bottleneck versus the Software Bubble",
+      "context": {
+        "label": "The Physical Bottleneck versus the Software Bubble",
+        "summary": "Opening source plate contrasting the physical scarcity of AI memory with the software market’s elevated valuation.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-value-software-bubble-s02-cleaned",
+      "deck_id": "silicon-value-software-bubble",
+      "slide_id": "silicon-value-software-bubble-s02",
+      "slide_number": 2,
+      "variant": "cleaned",
+      "pptx_member": "ppt/media/image2.png",
+      "extracted_path": "silicon-value-software-bubble/slides-cleaned/slide-002.png",
+      "sha256": "e5205a6a6e25f29a68f38b717a6b4b0b668e1c40bb6dc9bad4debb940dfdcd33",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "parent_image_id": "silicon-value-software-bubble-s02-original",
+      "selection_label": "Silicon Value in a Software Bubble · S02 · The Earnings Concentration Funnel",
+      "context": {
+        "label": "The Earnings Concentration Funnel",
+        "summary": "Source plate showing passive flows, top-ten mega-cap concentration, and reported earnings growth around the index bubble.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-value-software-bubble-s03-cleaned",
+      "deck_id": "silicon-value-software-bubble",
+      "slide_id": "silicon-value-software-bubble-s03",
+      "slide_number": 3,
+      "variant": "cleaned",
+      "pptx_member": "ppt/media/image3.png",
+      "extracted_path": "silicon-value-software-bubble/slides-cleaned/slide-003.png",
+      "sha256": "6d8c8f09a774b0af92dba0ac6eb7a35ee033ef531b768979d23a20631d1c8a39",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "parent_image_id": "silicon-value-software-bubble-s03-original",
+      "selection_label": "Silicon Value in a Software Bubble · S03 · The Inescapable Physical Reality",
+      "context": {
+        "label": "The Inescapable Physical Reality",
+        "summary": "Source plate using an hourglass to connect software layers, AI compute, and the global physical memory stack beneath them.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-value-software-bubble-s04-cleaned",
+      "deck_id": "silicon-value-software-bubble",
+      "slide_id": "silicon-value-software-bubble-s04",
+      "slide_number": 4,
+      "variant": "cleaned",
+      "pptx_member": "ppt/media/image4.png",
+      "extracted_path": "silicon-value-software-bubble/slides-cleaned/slide-004.png",
+      "sha256": "8f996c3d1a65b891547904d83acedbc292b017335df9ad43014d88d52c5d2944",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "parent_image_id": "silicon-value-software-bubble-s04-original",
+      "selection_label": "Silicon Value in a Software Bubble · S04 · The Triopoly Was Forged through Risk and Survival",
+      "context": {
+        "label": "The Triopoly Was Forged through Risk and Survival",
+        "summary": "Source history plate showing how Samsung, Micron, and SK hynix survived through distinct capital-cycle paths.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-value-software-bubble-s05-cleaned",
+      "deck_id": "silicon-value-software-bubble",
+      "slide_id": "silicon-value-software-bubble-s05",
+      "slide_number": 5,
+      "variant": "cleaned",
+      "pptx_member": "ppt/media/image5.png",
+      "extracted_path": "silicon-value-software-bubble/slides-cleaned/slide-005.png",
+      "sha256": "0e41160b96128c0965167d370ac1f446e1f20decb5766c80a645100f65644ce1",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "parent_image_id": "silicon-value-software-bubble-s05-original",
+      "selection_label": "Silicon Value in a Software Bubble · S05 · The Price-Deflation Capital Cycle",
+      "context": {
+        "label": "The Price-Deflation Capital Cycle",
+        "summary": "Source cycle diagram linking Moore’s Law, price deflation, bankruptcies, and industry consolidation.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-value-software-bubble-s06-cleaned",
+      "deck_id": "silicon-value-software-bubble",
+      "slide_id": "silicon-value-software-bubble-s06",
+      "slide_number": 6,
+      "variant": "cleaned",
+      "pptx_member": "ppt/media/image6.png",
+      "extracted_path": "silicon-value-software-bubble/slides-cleaned/slide-006.png",
+      "sha256": "e628aaf4f4d7c233c7ec797ce28d67ee7cd33c967e547d280f1ecaa23c1b46f9",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "parent_image_id": "silicon-value-software-bubble-s06-original",
+      "selection_label": "Silicon Value in a Software Bubble · S06 · The Physical Breakdown of Moore’s Law",
+      "context": {
+        "label": "The Physical Breakdown of Moore’s Law",
+        "summary": "Source chart showing process volatility, declining gains, and the structural transition toward stacked silicon.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-value-software-bubble-s07-cleaned",
+      "deck_id": "silicon-value-software-bubble",
+      "slide_id": "silicon-value-software-bubble-s07",
+      "slide_number": 7,
+      "variant": "cleaned",
+      "pptx_member": "ppt/media/image7.png",
+      "extracted_path": "silicon-value-software-bubble/slides-cleaned/slide-007.png",
+      "sha256": "91280ee88cd7f9d6288e36cc0917021fb6961b1439420349ac90efb53d04a1d8",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "parent_image_id": "silicon-value-software-bubble-s07-original",
+      "selection_label": "Silicon Value in a Software Bubble · S07 · HBM Breaks the Historical Commodity Pattern",
+      "context": {
+        "label": "HBM Breaks the Historical Commodity Pattern",
+        "summary": "Source mechanism plate comparing planar DRAM with the stacked HBM architecture and its physical constraints.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-value-software-bubble-s08-cleaned",
+      "deck_id": "silicon-value-software-bubble",
+      "slide_id": "silicon-value-software-bubble-s08",
+      "slide_number": 8,
+      "variant": "cleaned",
+      "pptx_member": "ppt/media/image8.png",
+      "extracted_path": "silicon-value-software-bubble/slides-cleaned/slide-008.png",
+      "sha256": "118efbaf47430c4d1e5f918c865153e38345dca66000019e17b5580e41c86ed5",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "parent_image_id": "silicon-value-software-bubble-s08-original",
+      "selection_label": "Silicon Value in a Software Bubble · S08 · Physical Failure Points",
+      "context": {
+        "label": "Physical Failure Points",
+        "summary": "A source plate showing three physical failure points introduced by stacked silicon: backgrinding, TSV etching, and wafer-level testing.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-value-software-bubble-s09-cleaned",
+      "deck_id": "silicon-value-software-bubble",
+      "slide_id": "silicon-value-software-bubble-s09",
+      "slide_number": 9,
+      "variant": "cleaned",
+      "pptx_member": "ppt/media/image9.png",
+      "extracted_path": "silicon-value-software-bubble/slides-cleaned/slide-009.png",
+      "sha256": "f065cc39315105b398216db86297883f8da615880238c1723eccf46400c8a891",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "parent_image_id": "silicon-value-software-bubble-s09-original",
+      "selection_label": "Silicon Value in a Software Bubble · S09 · Connecting the Dies Is the Hardest Step",
+      "context": {
+        "label": "Connecting the Dies Is the Hardest Step",
+        "summary": "Source process plate comparing Samsung and SK hynix interconnect methods and their thermal and yield constraints.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-value-software-bubble-s10-cleaned",
+      "deck_id": "silicon-value-software-bubble",
+      "slide_id": "silicon-value-software-bubble-s10",
+      "slide_number": 10,
+      "variant": "cleaned",
+      "pptx_member": "ppt/media/image10.png",
+      "extracted_path": "silicon-value-software-bubble/slides-cleaned/slide-010.png",
+      "sha256": "c8f49e4b85a75e26d11a30baa9c4827612901961e217eae9b934243a7969899d",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "parent_image_id": "silicon-value-software-bubble-s10-original",
+      "selection_label": "Silicon Value in a Software Bubble · S10 · The RAM-ageddon Effect",
+      "context": {
+        "label": "The RAM-ageddon Effect",
+        "summary": "Source mechanism plate linking HBM’s wafer penalty to a structural supply shortage in standard memory.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-value-software-bubble-s11-cleaned",
+      "deck_id": "silicon-value-software-bubble",
+      "slide_id": "silicon-value-software-bubble-s11",
+      "slide_number": 11,
+      "variant": "cleaned",
+      "pptx_member": "ppt/media/image11.png",
+      "extracted_path": "silicon-value-software-bubble/slides-cleaned/slide-011.png",
+      "sha256": "31b5a04e325d413dc535d0084863802cc23be61daa55c84d02fe4f4a87a355b7",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "parent_image_id": "silicon-value-software-bubble-s11-original",
+      "selection_label": "Silicon Value in a Software Bubble · S11 · The DRAM Triopoly Is Rebalancing",
+      "context": {
+        "label": "The DRAM Triopoly Is Rebalancing",
+        "summary": "Source market-share plate showing how Samsung, SK hynix, Micron, and CXMT fit into shifting DRAM supply chains.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-value-software-bubble-s12-cleaned",
+      "deck_id": "silicon-value-software-bubble",
+      "slide_id": "silicon-value-software-bubble-s12",
+      "slide_number": 12,
+      "variant": "cleaned",
+      "pptx_member": "ppt/media/image12.png",
+      "extracted_path": "silicon-value-software-bubble/slides-cleaned/slide-012.png",
+      "sha256": "614df2b1cf5ff8997d49d6b44d3ec4f3c6b78772008c5776fe2362a878d83673",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "parent_image_id": "silicon-value-software-bubble-s12-original",
+      "selection_label": "Silicon Value in a Software Bubble · S12 · The NAND Disruption Track",
+      "context": {
+        "label": "The NAND Disruption Track",
+        "summary": "Source market-share plate showing the NAND storage competitive field and fast-moving challengers.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-value-software-bubble-s13-cleaned",
+      "deck_id": "silicon-value-software-bubble",
+      "slide_id": "silicon-value-software-bubble-s13",
+      "slide_number": 13,
+      "variant": "cleaned",
+      "pptx_member": "ppt/media/image13.png",
+      "extracted_path": "silicon-value-software-bubble/slides-cleaned/slide-013.png",
+      "sha256": "b3c7071a0a6a50397374721a837ea0e73edfbb2e6170e2897efdd4a5740555eb",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "parent_image_id": "silicon-value-software-bubble-s13-original",
+      "selection_label": "Silicon Value in a Software Bubble · S13 · Cash Generation versus Paper Gains",
+      "context": {
+        "label": "Cash Generation versus Paper Gains",
+        "summary": "Source comparison showing the market discount applied to memory cash generation versus software-style index gains.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-value-software-bubble-s14-cleaned",
+      "deck_id": "silicon-value-software-bubble",
+      "slide_id": "silicon-value-software-bubble-s14",
+      "slide_number": 14,
+      "variant": "cleaned",
+      "pptx_member": "ppt/media/image14.png",
+      "extracted_path": "silicon-value-software-bubble/slides-cleaned/slide-014.png",
+      "sha256": "bd0427bcf290836621ea9d37c36ba76d8dc6c4903ca0c1f0bd0f7747964f888d",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "parent_image_id": "silicon-value-software-bubble-s14-original",
+      "selection_label": "Silicon Value in a Software Bubble · S14 · Memory Is a Strategic Asset, Not a Cheap Input",
+      "context": {
+        "label": "Memory Is a Strategic Asset, Not a Cheap Input",
+        "summary": "Source moat plate showing long-term agreements, custom co-engineering, logic integration, and expanding bill-of-materials importance.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-value-software-bubble-s15-cleaned",
+      "deck_id": "silicon-value-software-bubble",
+      "slide_id": "silicon-value-software-bubble-s15",
+      "slide_number": 15,
+      "variant": "cleaned",
+      "pptx_member": "ppt/media/image15.png",
+      "extracted_path": "silicon-value-software-bubble/slides-cleaned/slide-015.png",
+      "sha256": "ee0d1c49e312c17bcb05ebea7d6b509356957d459d8f6ee8da4f652c4a6c46f6",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "parent_image_id": "silicon-value-software-bubble-s15-original",
+      "selection_label": "Silicon Value in a Software Bubble · S15 · Vulnerability versus Opportunity",
+      "context": {
+        "label": "Vulnerability versus Opportunity",
+        "summary": "A source plate showing the contrasting S&P 500 vulnerability path and memory triopoly opportunity path.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    }
+  ],
+  "assets": [
+    {
+      "asset_id": "silicon-value-software-bubble-s08-failure-triptych-v1",
+      "kind": "semantic_crop",
+      "path": "silicon-value-software-bubble/semantic-assets/assets/silicon-value-software-bubble-s08-failure-triptych-v1.png",
+      "sha256": "45746a15bb744a46c9d151b54f8dead0d84577a4dc67ce21f9e85d8fd922d5a4",
+      "deck_id": "silicon-value-software-bubble",
+      "slide_id": "silicon-value-software-bubble-s08",
+      "slide_number": 8,
+      "parent_source_image_id": "silicon-value-software-bubble-s08-cleaned",
+      "source_variant": "cleaned",
+      "extraction": {
+        "method": "rect_crop",
+        "bbox_px": [
+          69,
+          138,
+          1252,
+          538
+        ],
+        "bbox_norm": [
+          0.05,
+          0.18,
+          0.91,
+          0.7
+        ],
+        "polygon_norm": null,
+        "mask_path": null,
+        "source_sha256": "118efbaf47430c4d1e5f918c865153e38345dca66000019e17b5580e41c86ed5"
+      },
+      "context": {
+        "what_it_is": "A three-panel failure-point plate covering backgrinding, TSV etching, and wafer-level testing.",
+        "visual_role": "mechanism",
+        "representation_mode": "accurate_mechanism",
+        "factual_text": true,
+        "claim_refs": [],
+        "cue_refs": [],
+        "not_what_it_means": [
+          "The three panels are a compact explanatory sequence, not a complete process specification."
+        ],
+        "context_status": "review_only",
+        "reuse_policy": {
+          "scope": "source_only",
+          "max_total_uses": 1,
+          "min_nonadjacent_gap": 0,
+          "allowed_reasons": [
+            "evidence_hold"
+          ],
+          "claim_bound": false
+        }
+      },
+      "rights_state": "source_review_only",
+      "review_state": "review_only",
+      "render_eligible": false
+    },
+    {
+      "asset_id": "silicon-value-software-bubble-s15-opportunity-path-v1",
+      "kind": "semantic_crop",
+      "path": "silicon-value-software-bubble/semantic-assets/assets/silicon-value-software-bubble-s15-opportunity-path-v1.png",
+      "sha256": "73ac862f5599fac4928d864669470bc672a234dde29f969989873404b77ccde8",
+      "deck_id": "silicon-value-software-bubble",
+      "slide_id": "silicon-value-software-bubble-s15",
+      "slide_number": 15,
+      "parent_source_image_id": "silicon-value-software-bubble-s15-cleaned",
+      "source_variant": "cleaned",
+      "extraction": {
+        "method": "rect_crop",
+        "bbox_px": [
+          41,
+          177,
+          1307,
+          461
+        ],
+        "bbox_norm": [
+          0.03,
+          0.23,
+          0.95,
+          0.6
+        ],
+        "polygon_norm": null,
+        "mask_path": null,
+        "source_sha256": "ee0d1c49e312c17bcb05ebea7d6b509356957d459d8f6ee8da4f652c4a6c46f6"
+      },
+      "context": {
+        "what_it_is": "A paired red vulnerability path and blue opportunity path linking valuation, liquidity, physical constraints, and compressed multiples.",
+        "visual_role": "evidence",
+        "representation_mode": "literal_evidence",
+        "factual_text": true,
+        "claim_refs": [],
+        "cue_refs": [],
+        "not_what_it_means": [
+          "The path is the deck's thesis summary, not an investment recommendation."
+        ],
+        "context_status": "review_only",
+        "reuse_policy": {
+          "scope": "source_only",
+          "max_total_uses": 1,
+          "min_nonadjacent_gap": 0,
+          "allowed_reasons": [
+            "evidence_hold"
+          ],
+          "claim_bound": false
+        }
+      },
+      "rights_state": "source_review_only",
+      "review_state": "review_only",
+      "render_eligible": false
+    }
+  ],
+  "review": {
+    "slide_contact_sheet": "silicon-value-software-bubble/review/slide-contact-sheet.png",
+    "semantic_contact_sheet": "silicon-value-software-bubble/review/semantic-contact-sheet.png",
+    "coverage_report": "silicon-value-software-bubble/review/coverage-report.json",
+    "promotion_policy": "Source plates remain review-only. A crop becomes render-eligible only after operator-verified context, approved rights, and visual promotion review."
+  },
+  "artifact_hash": "64376585248fd44b7d3a965a3ca48519f4234463ccc6d8ed2fa830fb34285a98"
+}

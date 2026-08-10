@@ -1,0 +1,999 @@
+{
+  "schema_version": "deck_asset_manifest.v1",
+  "manifest_id": "silicon-decks-source-manifest-v2-silicon-reality-gap",
+  "project_id": "systems-and-blowups",
+  "source_decks": [
+    {
+      "deck_id": "silicon-reality-gap",
+      "title": "The Silicon Reality Gap",
+      "source_path": "C:\\Users\\Snipe\\Downloads\\The_Silicon_Reality_Gap.pptx",
+      "source_sha256": "4f16c4681e64129ea8078ecc2ccfeba428724ebf18a21fd38b9b519836d77b9b",
+      "source_family": "operator-supplied-notebooklm-research-deck",
+      "rights_state": "source_review_only",
+      "cleanup": {
+        "requested": true,
+        "input_path": "C:\\Users\\Snipe\\Downloads\\The_Silicon_Reality_Gap.no-watermark.pptx",
+        "original_sha256": "4f16c4681e64129ea8078ecc2ccfeba428724ebf18a21fd38b9b519836d77b9b",
+        "cleaned_sha256": "9018f0d7b9d8aae46480312a86e5754939f80fa81d98ee659417091b40be191c",
+        "policy": "Derived from an operator-approved non-destructive footer cleanup.",
+        "approved": true
+      }
+    }
+  ],
+  "slides": [
+    {
+      "slide_id": "silicon-reality-gap-s01",
+      "deck_id": "silicon-reality-gap",
+      "slide_number": 1,
+      "slide_label": "The Great Valuation Paradox",
+      "source_image_id": "silicon-reality-gap-s01-original",
+      "context": {
+        "label": "The Great Valuation Paradox",
+        "summary": "Opening source plate contrasting the S&P 500 bubble with the physical memory triopoly opportunity.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "slide_id": "silicon-reality-gap-s02",
+      "deck_id": "silicon-reality-gap",
+      "slide_number": 2,
+      "slide_label": "The S&P 500 Paper Bubble versus Physical Compute",
+      "source_image_id": "silicon-reality-gap-s02-original",
+      "context": {
+        "label": "The S&P 500 Paper Bubble versus Physical Compute",
+        "summary": "Source comparison of index narrative expansion with the physical bottleneck inside modern compute systems.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "slide_id": "silicon-reality-gap-s03",
+      "deck_id": "silicon-reality-gap",
+      "slide_number": 3,
+      "slide_label": "Record Earnings versus Historic Valuation Discounts",
+      "source_image_id": "silicon-reality-gap-s03-original",
+      "context": {
+        "label": "Record Earnings versus Historic Valuation Discounts",
+        "summary": "Source matrix comparing valuation, operating performance, market-cap contribution, and forward multiples.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "slide_id": "silicon-reality-gap-s04",
+      "deck_id": "silicon-reality-gap",
+      "slide_number": 4,
+      "slide_label": "The Market’s Cyclical Trauma",
+      "source_image_id": "silicon-reality-gap-s04-original",
+      "context": {
+        "label": "The Market’s Cyclical Trauma",
+        "summary": "Source cycle diagram linking high returns, excess capital, oversupply, and debt-financed capacity expansion.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "slide_id": "silicon-reality-gap-s05",
+      "deck_id": "silicon-reality-gap",
+      "slide_number": 5,
+      "slide_label": "The Triopoly Genesis",
+      "source_image_id": "silicon-reality-gap-s05-original",
+      "context": {
+        "label": "The Triopoly Genesis",
+        "summary": "A source plate describing the consolidation from many semiconductor rivals to Samsung, Micron, and SK hynix.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "slide_id": "silicon-reality-gap-s06",
+      "deck_id": "silicon-reality-gap",
+      "slide_number": 6,
+      "slide_label": "The Breakdown of Moore’s Law",
+      "source_image_id": "silicon-reality-gap-s06-original",
+      "context": {
+        "label": "The Breakdown of Moore’s Law",
+        "summary": "Source historical chart showing slowing process gains and the shift toward capital discipline in memory manufacturing.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "slide_id": "silicon-reality-gap-s07",
+      "deck_id": "silicon-reality-gap",
+      "slide_number": 7,
+      "slide_label": "The Anatomy of a Bottleneck",
+      "source_image_id": "silicon-reality-gap-s07-original",
+      "context": {
+        "label": "The Anatomy of a Bottleneck",
+        "summary": "A source plate showing the stacked HBM physical structure and its manufacturing constraints.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "slide_id": "silicon-reality-gap-s08",
+      "deck_id": "silicon-reality-gap",
+      "slide_number": 8,
+      "slide_label": "The Three-Dimensional Packaging War",
+      "source_image_id": "silicon-reality-gap-s08-original",
+      "context": {
+        "label": "The Three-Dimensional Packaging War",
+        "summary": "Source comparison of Samsung and SK hynix packaging approaches, thermal constraints, yield, and market dominance.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "slide_id": "silicon-reality-gap-s09",
+      "deck_id": "silicon-reality-gap",
+      "slide_number": 9,
+      "slide_label": "The Three-to-One Capacity Penalty",
+      "source_image_id": "silicon-reality-gap-s09-original",
+      "context": {
+        "label": "The Three-to-One Capacity Penalty",
+        "summary": "Source plate showing HBM consuming the wafer capacity of multiple standard DRAM units and contributing to RAM-ageddon.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "slide_id": "silicon-reality-gap-s10",
+      "deck_id": "silicon-reality-gap",
+      "slide_number": 10,
+      "slide_label": "The Global DRAM Battlefield",
+      "source_image_id": "silicon-reality-gap-s10-original",
+      "context": {
+        "label": "The Global DRAM Battlefield",
+        "summary": "Source market map showing Samsung, SK hynix, Micron, CXMT, and the shifting global DRAM competitive field.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "slide_id": "silicon-reality-gap-s11",
+      "deck_id": "silicon-reality-gap",
+      "slide_number": 11,
+      "slide_label": "The Dual-Front NAND War",
+      "source_image_id": "silicon-reality-gap-s11-original",
+      "context": {
+        "label": "The Dual-Front NAND War",
+        "summary": "Source market structure plate showing the leading NAND manufacturers and the challenger tiers around them.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "slide_id": "silicon-reality-gap-s12",
+      "deck_id": "silicon-reality-gap",
+      "slide_number": 12,
+      "slide_label": "The S&P 500 Paper Bubble Mechanics",
+      "source_image_id": "silicon-reality-gap-s12-original",
+      "context": {
+        "label": "The S&P 500 Paper Bubble Mechanics",
+        "summary": "Source mechanism plate showing mega-cap concentration, passive indexing, and the gap between earnings contribution and index weight.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "slide_id": "silicon-reality-gap-s13",
+      "deck_id": "silicon-reality-gap",
+      "slide_number": 13,
+      "slide_label": "Advanced Memory Is No Longer Swappable",
+      "source_image_id": "silicon-reality-gap-s13-original",
+      "context": {
+        "label": "Advanced Memory Is No Longer Swappable",
+        "summary": "Source plate contrasting commodity memory with custom co-engineering, foundry integration, and hardware supremacy.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "slide_id": "silicon-reality-gap-s14",
+      "deck_id": "silicon-reality-gap",
+      "slide_number": 14,
+      "slide_label": "Memory as a Strategic Chokepoint",
+      "source_image_id": "silicon-reality-gap-s14-original",
+      "context": {
+        "label": "Memory as a Strategic Chokepoint",
+        "summary": "Source comparison showing the transition from a volatile commodity cycle to an AI-hardware choke point.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "slide_id": "silicon-reality-gap-s15",
+      "deck_id": "silicon-reality-gap",
+      "slide_number": 15,
+      "slide_label": "The Ultimate Hedge against an Index Bubble",
+      "source_image_id": "silicon-reality-gap-s15-original",
+      "context": {
+        "label": "The Ultimate Hedge against an Index Bubble",
+        "summary": "Closing source plate summarizing the S&P 500 illusion, memory physical moat, and opportunity framing.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    }
+  ],
+  "source_images": [
+    {
+      "image_id": "silicon-reality-gap-s01-original",
+      "deck_id": "silicon-reality-gap",
+      "slide_id": "silicon-reality-gap-s01",
+      "slide_number": 1,
+      "variant": "original",
+      "pptx_member": "ppt/media/image1.png",
+      "extracted_path": "silicon-reality-gap/slides/slide-001.png",
+      "sha256": "40dd345fa8b3d35b25aaca0710db3923731cb9e99ed427deea21eab2d5d77fc7",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "selection_label": "The Silicon Reality Gap · S01 · The Great Valuation Paradox",
+      "context": {
+        "label": "The Great Valuation Paradox",
+        "summary": "Opening source plate contrasting the S&P 500 bubble with the physical memory triopoly opportunity.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-reality-gap-s02-original",
+      "deck_id": "silicon-reality-gap",
+      "slide_id": "silicon-reality-gap-s02",
+      "slide_number": 2,
+      "variant": "original",
+      "pptx_member": "ppt/media/image2.png",
+      "extracted_path": "silicon-reality-gap/slides/slide-002.png",
+      "sha256": "3f4b261ab6db966e7a932b0e657a55a2f4307471d31c9b36dabc126b71818208",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "selection_label": "The Silicon Reality Gap · S02 · The S&P 500 Paper Bubble versus Physical Compute",
+      "context": {
+        "label": "The S&P 500 Paper Bubble versus Physical Compute",
+        "summary": "Source comparison of index narrative expansion with the physical bottleneck inside modern compute systems.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-reality-gap-s03-original",
+      "deck_id": "silicon-reality-gap",
+      "slide_id": "silicon-reality-gap-s03",
+      "slide_number": 3,
+      "variant": "original",
+      "pptx_member": "ppt/media/image3.png",
+      "extracted_path": "silicon-reality-gap/slides/slide-003.png",
+      "sha256": "86faf5bcf54f055a45fe79aa4babd05e282d2c95d848ae89552f205047f68cf9",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "selection_label": "The Silicon Reality Gap · S03 · Record Earnings versus Historic Valuation Discounts",
+      "context": {
+        "label": "Record Earnings versus Historic Valuation Discounts",
+        "summary": "Source matrix comparing valuation, operating performance, market-cap contribution, and forward multiples.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-reality-gap-s04-original",
+      "deck_id": "silicon-reality-gap",
+      "slide_id": "silicon-reality-gap-s04",
+      "slide_number": 4,
+      "variant": "original",
+      "pptx_member": "ppt/media/image4.png",
+      "extracted_path": "silicon-reality-gap/slides/slide-004.png",
+      "sha256": "0c71eee36b4711c869a4d8a11851e24c830f0065d71fb329e0434d04333f49df",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "selection_label": "The Silicon Reality Gap · S04 · The Market’s Cyclical Trauma",
+      "context": {
+        "label": "The Market’s Cyclical Trauma",
+        "summary": "Source cycle diagram linking high returns, excess capital, oversupply, and debt-financed capacity expansion.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-reality-gap-s05-original",
+      "deck_id": "silicon-reality-gap",
+      "slide_id": "silicon-reality-gap-s05",
+      "slide_number": 5,
+      "variant": "original",
+      "pptx_member": "ppt/media/image5.png",
+      "extracted_path": "silicon-reality-gap/slides/slide-005.png",
+      "sha256": "c2ac7e442ff42fba95d5042e64e88d1d22efd9913d6d8dc41542a2c45c4dda4a",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "selection_label": "The Silicon Reality Gap · S05 · The Triopoly Genesis",
+      "context": {
+        "label": "The Triopoly Genesis",
+        "summary": "A source plate describing the consolidation from many semiconductor rivals to Samsung, Micron, and SK hynix.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-reality-gap-s06-original",
+      "deck_id": "silicon-reality-gap",
+      "slide_id": "silicon-reality-gap-s06",
+      "slide_number": 6,
+      "variant": "original",
+      "pptx_member": "ppt/media/image6.png",
+      "extracted_path": "silicon-reality-gap/slides/slide-006.png",
+      "sha256": "be6ad192adada7cfe1350aa1dc0a259c96959212f4f7b19e70b8f9902eacce6c",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "selection_label": "The Silicon Reality Gap · S06 · The Breakdown of Moore’s Law",
+      "context": {
+        "label": "The Breakdown of Moore’s Law",
+        "summary": "Source historical chart showing slowing process gains and the shift toward capital discipline in memory manufacturing.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-reality-gap-s07-original",
+      "deck_id": "silicon-reality-gap",
+      "slide_id": "silicon-reality-gap-s07",
+      "slide_number": 7,
+      "variant": "original",
+      "pptx_member": "ppt/media/image7.png",
+      "extracted_path": "silicon-reality-gap/slides/slide-007.png",
+      "sha256": "77149fb0097fcb90f57bc4f5f6cf0659596ace3dceba7dee606b4c39cc3b750e",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "selection_label": "The Silicon Reality Gap · S07 · The Anatomy of a Bottleneck",
+      "context": {
+        "label": "The Anatomy of a Bottleneck",
+        "summary": "A source plate showing the stacked HBM physical structure and its manufacturing constraints.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-reality-gap-s08-original",
+      "deck_id": "silicon-reality-gap",
+      "slide_id": "silicon-reality-gap-s08",
+      "slide_number": 8,
+      "variant": "original",
+      "pptx_member": "ppt/media/image8.png",
+      "extracted_path": "silicon-reality-gap/slides/slide-008.png",
+      "sha256": "d59ea715fa322977ab32ba2ff7804bde71b6626c6d2c59296bf06ee5b85527c2",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "selection_label": "The Silicon Reality Gap · S08 · The Three-Dimensional Packaging War",
+      "context": {
+        "label": "The Three-Dimensional Packaging War",
+        "summary": "Source comparison of Samsung and SK hynix packaging approaches, thermal constraints, yield, and market dominance.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-reality-gap-s09-original",
+      "deck_id": "silicon-reality-gap",
+      "slide_id": "silicon-reality-gap-s09",
+      "slide_number": 9,
+      "variant": "original",
+      "pptx_member": "ppt/media/image9.png",
+      "extracted_path": "silicon-reality-gap/slides/slide-009.png",
+      "sha256": "edaeb230498209434adf89dbdf934ca54580513efaaaa53e07a244d95cbe3a68",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "selection_label": "The Silicon Reality Gap · S09 · The Three-to-One Capacity Penalty",
+      "context": {
+        "label": "The Three-to-One Capacity Penalty",
+        "summary": "Source plate showing HBM consuming the wafer capacity of multiple standard DRAM units and contributing to RAM-ageddon.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-reality-gap-s10-original",
+      "deck_id": "silicon-reality-gap",
+      "slide_id": "silicon-reality-gap-s10",
+      "slide_number": 10,
+      "variant": "original",
+      "pptx_member": "ppt/media/image10.png",
+      "extracted_path": "silicon-reality-gap/slides/slide-010.png",
+      "sha256": "169b5fb84d1eb02cebebe1df443238e29ea209f7e5e47279e5dc7b13d0597da7",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "selection_label": "The Silicon Reality Gap · S10 · The Global DRAM Battlefield",
+      "context": {
+        "label": "The Global DRAM Battlefield",
+        "summary": "Source market map showing Samsung, SK hynix, Micron, CXMT, and the shifting global DRAM competitive field.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-reality-gap-s11-original",
+      "deck_id": "silicon-reality-gap",
+      "slide_id": "silicon-reality-gap-s11",
+      "slide_number": 11,
+      "variant": "original",
+      "pptx_member": "ppt/media/image11.png",
+      "extracted_path": "silicon-reality-gap/slides/slide-011.png",
+      "sha256": "5b736ba7288c7d0049cb15c11df34c51bbdf7fb32790a184767ef5941eb6ea62",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "selection_label": "The Silicon Reality Gap · S11 · The Dual-Front NAND War",
+      "context": {
+        "label": "The Dual-Front NAND War",
+        "summary": "Source market structure plate showing the leading NAND manufacturers and the challenger tiers around them.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-reality-gap-s12-original",
+      "deck_id": "silicon-reality-gap",
+      "slide_id": "silicon-reality-gap-s12",
+      "slide_number": 12,
+      "variant": "original",
+      "pptx_member": "ppt/media/image12.png",
+      "extracted_path": "silicon-reality-gap/slides/slide-012.png",
+      "sha256": "7af2ef73d317f6d0dcdf72696a379ed39b5d20ef59780c5b5eec325c4b08a6d3",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "selection_label": "The Silicon Reality Gap · S12 · The S&P 500 Paper Bubble Mechanics",
+      "context": {
+        "label": "The S&P 500 Paper Bubble Mechanics",
+        "summary": "Source mechanism plate showing mega-cap concentration, passive indexing, and the gap between earnings contribution and index weight.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-reality-gap-s13-original",
+      "deck_id": "silicon-reality-gap",
+      "slide_id": "silicon-reality-gap-s13",
+      "slide_number": 13,
+      "variant": "original",
+      "pptx_member": "ppt/media/image13.png",
+      "extracted_path": "silicon-reality-gap/slides/slide-013.png",
+      "sha256": "be051f15180e0a7a28881a023ba3b9b2f3424248c5d3f7d16ad6ff78e85fa04c",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "selection_label": "The Silicon Reality Gap · S13 · Advanced Memory Is No Longer Swappable",
+      "context": {
+        "label": "Advanced Memory Is No Longer Swappable",
+        "summary": "Source plate contrasting commodity memory with custom co-engineering, foundry integration, and hardware supremacy.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-reality-gap-s14-original",
+      "deck_id": "silicon-reality-gap",
+      "slide_id": "silicon-reality-gap-s14",
+      "slide_number": 14,
+      "variant": "original",
+      "pptx_member": "ppt/media/image14.png",
+      "extracted_path": "silicon-reality-gap/slides/slide-014.png",
+      "sha256": "e6e860724021f85254caaf714b1cd7367c130158035d6b48e890f3c5596d3ed9",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "selection_label": "The Silicon Reality Gap · S14 · Memory as a Strategic Chokepoint",
+      "context": {
+        "label": "Memory as a Strategic Chokepoint",
+        "summary": "Source comparison showing the transition from a volatile commodity cycle to an AI-hardware choke point.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-reality-gap-s15-original",
+      "deck_id": "silicon-reality-gap",
+      "slide_id": "silicon-reality-gap-s15",
+      "slide_number": 15,
+      "variant": "original",
+      "pptx_member": "ppt/media/image15.png",
+      "extracted_path": "silicon-reality-gap/slides/slide-015.png",
+      "sha256": "a328cf561767b70298758a006a48e816dcba05aaaa2fff8e64ced6b03c0f53dc",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "selection_label": "The Silicon Reality Gap · S15 · The Ultimate Hedge against an Index Bubble",
+      "context": {
+        "label": "The Ultimate Hedge against an Index Bubble",
+        "summary": "Closing source plate summarizing the S&P 500 illusion, memory physical moat, and opportunity framing.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    }
+  ],
+  "cleaned_images": [
+    {
+      "image_id": "silicon-reality-gap-s01-cleaned",
+      "deck_id": "silicon-reality-gap",
+      "slide_id": "silicon-reality-gap-s01",
+      "slide_number": 1,
+      "variant": "cleaned",
+      "pptx_member": "ppt/media/image1.png",
+      "extracted_path": "silicon-reality-gap/slides-cleaned/slide-001.png",
+      "sha256": "1e2b5e27d655f7118b68fa45684fc899e378dfbb456fe1de68c5a60ce4811789",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "parent_image_id": "silicon-reality-gap-s01-original",
+      "selection_label": "The Silicon Reality Gap · S01 · The Great Valuation Paradox",
+      "context": {
+        "label": "The Great Valuation Paradox",
+        "summary": "Opening source plate contrasting the S&P 500 bubble with the physical memory triopoly opportunity.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-reality-gap-s02-cleaned",
+      "deck_id": "silicon-reality-gap",
+      "slide_id": "silicon-reality-gap-s02",
+      "slide_number": 2,
+      "variant": "cleaned",
+      "pptx_member": "ppt/media/image2.png",
+      "extracted_path": "silicon-reality-gap/slides-cleaned/slide-002.png",
+      "sha256": "861ef6f706f3544c8810b7493f0faf5ed1cf4de6c2d1eea13eb7e3a206096373",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "parent_image_id": "silicon-reality-gap-s02-original",
+      "selection_label": "The Silicon Reality Gap · S02 · The S&P 500 Paper Bubble versus Physical Compute",
+      "context": {
+        "label": "The S&P 500 Paper Bubble versus Physical Compute",
+        "summary": "Source comparison of index narrative expansion with the physical bottleneck inside modern compute systems.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-reality-gap-s03-cleaned",
+      "deck_id": "silicon-reality-gap",
+      "slide_id": "silicon-reality-gap-s03",
+      "slide_number": 3,
+      "variant": "cleaned",
+      "pptx_member": "ppt/media/image3.png",
+      "extracted_path": "silicon-reality-gap/slides-cleaned/slide-003.png",
+      "sha256": "340d17cabdaa79e7d0113fc2478eaacbc9ef2a49a8864fe825504b2a091867fe",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "parent_image_id": "silicon-reality-gap-s03-original",
+      "selection_label": "The Silicon Reality Gap · S03 · Record Earnings versus Historic Valuation Discounts",
+      "context": {
+        "label": "Record Earnings versus Historic Valuation Discounts",
+        "summary": "Source matrix comparing valuation, operating performance, market-cap contribution, and forward multiples.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-reality-gap-s04-cleaned",
+      "deck_id": "silicon-reality-gap",
+      "slide_id": "silicon-reality-gap-s04",
+      "slide_number": 4,
+      "variant": "cleaned",
+      "pptx_member": "ppt/media/image4.png",
+      "extracted_path": "silicon-reality-gap/slides-cleaned/slide-004.png",
+      "sha256": "9cb435e42c6f12cf150390b9b3868689004cf845ecfa389dae32c4a7d060980f",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "parent_image_id": "silicon-reality-gap-s04-original",
+      "selection_label": "The Silicon Reality Gap · S04 · The Market’s Cyclical Trauma",
+      "context": {
+        "label": "The Market’s Cyclical Trauma",
+        "summary": "Source cycle diagram linking high returns, excess capital, oversupply, and debt-financed capacity expansion.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-reality-gap-s05-cleaned",
+      "deck_id": "silicon-reality-gap",
+      "slide_id": "silicon-reality-gap-s05",
+      "slide_number": 5,
+      "variant": "cleaned",
+      "pptx_member": "ppt/media/image5.png",
+      "extracted_path": "silicon-reality-gap/slides-cleaned/slide-005.png",
+      "sha256": "05f3659639814d1ab0a1950c30304d0f966f6bf70d91bdaf6317d17cf56c9702",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "parent_image_id": "silicon-reality-gap-s05-original",
+      "selection_label": "The Silicon Reality Gap · S05 · The Triopoly Genesis",
+      "context": {
+        "label": "The Triopoly Genesis",
+        "summary": "A source plate describing the consolidation from many semiconductor rivals to Samsung, Micron, and SK hynix.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-reality-gap-s06-cleaned",
+      "deck_id": "silicon-reality-gap",
+      "slide_id": "silicon-reality-gap-s06",
+      "slide_number": 6,
+      "variant": "cleaned",
+      "pptx_member": "ppt/media/image6.png",
+      "extracted_path": "silicon-reality-gap/slides-cleaned/slide-006.png",
+      "sha256": "b3c337258ebf18ff74451daefb16485b4306d980e6479685ccd641a278d50b1c",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "parent_image_id": "silicon-reality-gap-s06-original",
+      "selection_label": "The Silicon Reality Gap · S06 · The Breakdown of Moore’s Law",
+      "context": {
+        "label": "The Breakdown of Moore’s Law",
+        "summary": "Source historical chart showing slowing process gains and the shift toward capital discipline in memory manufacturing.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-reality-gap-s07-cleaned",
+      "deck_id": "silicon-reality-gap",
+      "slide_id": "silicon-reality-gap-s07",
+      "slide_number": 7,
+      "variant": "cleaned",
+      "pptx_member": "ppt/media/image7.png",
+      "extracted_path": "silicon-reality-gap/slides-cleaned/slide-007.png",
+      "sha256": "0cdf1e2d5ee4ee126b90d22e0c267a56f6be483da6c0928db58c943b7ca6c7de",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "parent_image_id": "silicon-reality-gap-s07-original",
+      "selection_label": "The Silicon Reality Gap · S07 · The Anatomy of a Bottleneck",
+      "context": {
+        "label": "The Anatomy of a Bottleneck",
+        "summary": "A source plate showing the stacked HBM physical structure and its manufacturing constraints.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-reality-gap-s08-cleaned",
+      "deck_id": "silicon-reality-gap",
+      "slide_id": "silicon-reality-gap-s08",
+      "slide_number": 8,
+      "variant": "cleaned",
+      "pptx_member": "ppt/media/image8.png",
+      "extracted_path": "silicon-reality-gap/slides-cleaned/slide-008.png",
+      "sha256": "ef61cef8ca7581ca1a49ee755e1f2d07d8847be47f9ef9c086e5749f70c8d18d",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "parent_image_id": "silicon-reality-gap-s08-original",
+      "selection_label": "The Silicon Reality Gap · S08 · The Three-Dimensional Packaging War",
+      "context": {
+        "label": "The Three-Dimensional Packaging War",
+        "summary": "Source comparison of Samsung and SK hynix packaging approaches, thermal constraints, yield, and market dominance.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-reality-gap-s09-cleaned",
+      "deck_id": "silicon-reality-gap",
+      "slide_id": "silicon-reality-gap-s09",
+      "slide_number": 9,
+      "variant": "cleaned",
+      "pptx_member": "ppt/media/image9.png",
+      "extracted_path": "silicon-reality-gap/slides-cleaned/slide-009.png",
+      "sha256": "bc17943a02d8dff7cd1f007e701dbedc5b6b17a2334aa28c710cd9c429c2e778",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "parent_image_id": "silicon-reality-gap-s09-original",
+      "selection_label": "The Silicon Reality Gap · S09 · The Three-to-One Capacity Penalty",
+      "context": {
+        "label": "The Three-to-One Capacity Penalty",
+        "summary": "Source plate showing HBM consuming the wafer capacity of multiple standard DRAM units and contributing to RAM-ageddon.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-reality-gap-s10-cleaned",
+      "deck_id": "silicon-reality-gap",
+      "slide_id": "silicon-reality-gap-s10",
+      "slide_number": 10,
+      "variant": "cleaned",
+      "pptx_member": "ppt/media/image10.png",
+      "extracted_path": "silicon-reality-gap/slides-cleaned/slide-010.png",
+      "sha256": "e2f3c5d768bfbdeedfd4e0f0579b504f1007e670c003e50f8f412ec0aa6d81df",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "parent_image_id": "silicon-reality-gap-s10-original",
+      "selection_label": "The Silicon Reality Gap · S10 · The Global DRAM Battlefield",
+      "context": {
+        "label": "The Global DRAM Battlefield",
+        "summary": "Source market map showing Samsung, SK hynix, Micron, CXMT, and the shifting global DRAM competitive field.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-reality-gap-s11-cleaned",
+      "deck_id": "silicon-reality-gap",
+      "slide_id": "silicon-reality-gap-s11",
+      "slide_number": 11,
+      "variant": "cleaned",
+      "pptx_member": "ppt/media/image11.png",
+      "extracted_path": "silicon-reality-gap/slides-cleaned/slide-011.png",
+      "sha256": "6f17479bc4fbb28b8a33387064104fdeb1553f5ca9311b98160a617049d82ba1",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "parent_image_id": "silicon-reality-gap-s11-original",
+      "selection_label": "The Silicon Reality Gap · S11 · The Dual-Front NAND War",
+      "context": {
+        "label": "The Dual-Front NAND War",
+        "summary": "Source market structure plate showing the leading NAND manufacturers and the challenger tiers around them.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-reality-gap-s12-cleaned",
+      "deck_id": "silicon-reality-gap",
+      "slide_id": "silicon-reality-gap-s12",
+      "slide_number": 12,
+      "variant": "cleaned",
+      "pptx_member": "ppt/media/image12.png",
+      "extracted_path": "silicon-reality-gap/slides-cleaned/slide-012.png",
+      "sha256": "63ff3f06c4433f128a5ffbfdce4f9f4ecceef8534ddc03b8362cd4bf78695b3c",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "parent_image_id": "silicon-reality-gap-s12-original",
+      "selection_label": "The Silicon Reality Gap · S12 · The S&P 500 Paper Bubble Mechanics",
+      "context": {
+        "label": "The S&P 500 Paper Bubble Mechanics",
+        "summary": "Source mechanism plate showing mega-cap concentration, passive indexing, and the gap between earnings contribution and index weight.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-reality-gap-s13-cleaned",
+      "deck_id": "silicon-reality-gap",
+      "slide_id": "silicon-reality-gap-s13",
+      "slide_number": 13,
+      "variant": "cleaned",
+      "pptx_member": "ppt/media/image13.png",
+      "extracted_path": "silicon-reality-gap/slides-cleaned/slide-013.png",
+      "sha256": "34b29bd3889a18fb69079fcb38578ff9cf7f8bbc79277d0e78b0d1ad0eac9035",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "parent_image_id": "silicon-reality-gap-s13-original",
+      "selection_label": "The Silicon Reality Gap · S13 · Advanced Memory Is No Longer Swappable",
+      "context": {
+        "label": "Advanced Memory Is No Longer Swappable",
+        "summary": "Source plate contrasting commodity memory with custom co-engineering, foundry integration, and hardware supremacy.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-reality-gap-s14-cleaned",
+      "deck_id": "silicon-reality-gap",
+      "slide_id": "silicon-reality-gap-s14",
+      "slide_number": 14,
+      "variant": "cleaned",
+      "pptx_member": "ppt/media/image14.png",
+      "extracted_path": "silicon-reality-gap/slides-cleaned/slide-014.png",
+      "sha256": "6fb548179bc1c01df8082e1cb6a5a62178e056fcdfb5d938ed059f7e31cbe5ac",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "parent_image_id": "silicon-reality-gap-s14-original",
+      "selection_label": "The Silicon Reality Gap · S14 · Memory as a Strategic Chokepoint",
+      "context": {
+        "label": "Memory as a Strategic Chokepoint",
+        "summary": "Source comparison showing the transition from a volatile commodity cycle to an AI-hardware choke point.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-reality-gap-s15-cleaned",
+      "deck_id": "silicon-reality-gap",
+      "slide_id": "silicon-reality-gap-s15",
+      "slide_number": 15,
+      "variant": "cleaned",
+      "pptx_member": "ppt/media/image15.png",
+      "extracted_path": "silicon-reality-gap/slides-cleaned/slide-015.png",
+      "sha256": "c7b23f5ee9e0b560ec93387d168e6f0f7d60afaed4ad14dd2cd768e8631538ec",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "parent_image_id": "silicon-reality-gap-s15-original",
+      "selection_label": "The Silicon Reality Gap · S15 · The Ultimate Hedge against an Index Bubble",
+      "context": {
+        "label": "The Ultimate Hedge against an Index Bubble",
+        "summary": "Closing source plate summarizing the S&P 500 illusion, memory physical moat, and opportunity framing.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    }
+  ],
+  "assets": [
+    {
+      "asset_id": "silicon-reality-gap-s05-triopoly-formation-v1",
+      "kind": "semantic_crop",
+      "path": "silicon-reality-gap/semantic-assets/assets/silicon-reality-gap-s05-triopoly-formation-v1.png",
+      "sha256": "8783d2cc349e614906f7d8654bb54566e79eb346c5788892bada57699db9c990",
+      "deck_id": "silicon-reality-gap",
+      "slide_id": "silicon-reality-gap-s05",
+      "slide_number": 5,
+      "parent_source_image_id": "silicon-reality-gap-s05-cleaned",
+      "source_variant": "cleaned",
+      "extraction": {
+        "method": "rect_crop",
+        "bbox_px": [
+          110,
+          192,
+          1156,
+          492
+        ],
+        "bbox_norm": [
+          0.08,
+          0.25,
+          0.84,
+          0.64
+        ],
+        "polygon_norm": null,
+        "mask_path": null,
+        "source_sha256": "05f3659639814d1ab0a1950c30304d0f966f6bf70d91bdaf6317d17cf56c9702"
+      },
+      "context": {
+        "what_it_is": "A hand-drawn consolidation scene with a crushing funnel, failed rivals, and the Samsung/Micron/SK hynix survivors.",
+        "visual_role": "mechanism",
+        "representation_mode": "accurate_mechanism",
+        "factual_text": true,
+        "claim_refs": [],
+        "cue_refs": [],
+        "not_what_it_means": [
+          "It is a visual explanation of consolidation, not a complete historical dataset."
+        ],
+        "context_status": "review_only",
+        "reuse_policy": {
+          "scope": "source_only",
+          "max_total_uses": 1,
+          "min_nonadjacent_gap": 0,
+          "allowed_reasons": [
+            "evidence_hold"
+          ],
+          "claim_bound": false
+        }
+      },
+      "rights_state": "source_review_only",
+      "review_state": "review_only",
+      "render_eligible": false
+    },
+    {
+      "asset_id": "silicon-reality-gap-s07-hbm-stack-v1",
+      "kind": "semantic_crop",
+      "path": "silicon-reality-gap/semantic-assets/assets/silicon-reality-gap-s07-hbm-stack-v1.png",
+      "sha256": "cb8adea734d4db3f1efb70d5ce6e36e91e41446fba6315dea47848f6e076ce35",
+      "deck_id": "silicon-reality-gap",
+      "slide_id": "silicon-reality-gap-s07",
+      "slide_number": 7,
+      "parent_source_image_id": "silicon-reality-gap-s07-cleaned",
+      "source_variant": "cleaned",
+      "extraction": {
+        "method": "rect_crop",
+        "bbox_px": [
+          427,
+          184,
+          550,
+          515
+        ],
+        "bbox_norm": [
+          0.31,
+          0.24,
+          0.4,
+          0.67
+        ],
+        "polygon_norm": null,
+        "mask_path": null,
+        "source_sha256": "0cdf1e2d5ee4ee126b90d22e0c267a56f6be483da6c0928db58c943b7ca6c7de"
+      },
+      "context": {
+        "what_it_is": "The central illustrated HBM stack with layered dies, TSV connections, and a base package.",
+        "visual_role": "mechanism",
+        "representation_mode": "accurate_mechanism",
+        "factual_text": false,
+        "claim_refs": [],
+        "cue_refs": [],
+        "not_what_it_means": [
+          "The crop does not by itself establish the numeric bandwidth or yield claims around it."
+        ],
+        "context_status": "review_only",
+        "reuse_policy": {
+          "scope": "source_only",
+          "max_total_uses": 1,
+          "min_nonadjacent_gap": 0,
+          "allowed_reasons": [
+            "evidence_hold"
+          ],
+          "claim_bound": false
+        }
+      },
+      "rights_state": "source_review_only",
+      "review_state": "review_only",
+      "render_eligible": false
+    }
+  ],
+  "review": {
+    "slide_contact_sheet": "silicon-reality-gap/review/slide-contact-sheet.png",
+    "semantic_contact_sheet": "silicon-reality-gap/review/semantic-contact-sheet.png",
+    "coverage_report": "silicon-reality-gap/review/coverage-report.json",
+    "promotion_policy": "Source plates remain review-only. A crop becomes render-eligible only after operator-verified context, approved rights, and visual promotion review."
+  },
+  "artifact_hash": "5fa81894af234cef70e1f305f8dcbe3e88ba6b844bc853d272ace1136b1e61f9"
+}

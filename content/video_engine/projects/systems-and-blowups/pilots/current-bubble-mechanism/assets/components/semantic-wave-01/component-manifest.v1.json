@@ -1,0 +1,45 @@
+{
+  "schema_version": "finance_motion_component_manifest.v1",
+  "episode_id": "current-bubble-mechanism",
+  "state": "review_only",
+  "background_removal": {
+    "method": "built_in_image_gen chroma key plus remove_chroma_key.py",
+    "key_strategy": "auto-key border with soft matte and despill",
+    "validation": "RGBA alpha, transparent corners, and non-empty subject bounds verified"
+  },
+  "components": [
+    {
+      "component_id": "memory-module-queue-alpha-v1",
+      "file": "memory-module-queue-alpha-v1.png",
+      "sha256": "231a910bdaae155ea27f8f2fc86eba0d551806f937106500bc31b78792e28b36",
+      "motion_role": "queue modules into and stop them before the qualification gate",
+      "cue_ids": ["cbm-a-004", "cbm-a-007"],
+      "allowed_motion": ["left-to-right translate", "short stop", "depth reveal"]
+    },
+    {
+      "component_id": "top-ten-weighted-tiles-alpha-v1",
+      "file": "top-ten-weighted-tiles-alpha-v1.png",
+      "sha256": "b8fa7ba538f73c001d60e65fbe39aec3ce90b3d28ddbb5d4eb00685dfb6d089a",
+      "motion_role": "assemble the dominant holding tier inside the index-fund container",
+      "cue_ids": ["cbm-a-005"],
+      "allowed_motion": ["individual tile stagger", "container insertion", "inspection-lens reveal"]
+    },
+    {
+      "component_id": "crowd-support-alpha-v1",
+      "file": "crowd-support-alpha-v1.png",
+      "sha256": "528af2c873c053f0d93bd27c723ced533f15e4f331074ff043e8f5ee65192724",
+      "motion_role": "reveal social support under a metaphorical platform",
+      "cue_ids": ["cbm-a-001", "cbm-a-010", "cbm-a-011"],
+      "allowed_motion": ["vertical lift", "small hand/shoulder bounce", "hard reframe"]
+    },
+    {
+      "component_id": "industrial-support-stack-alpha-v1",
+      "file": "industrial-support-stack-alpha-v1.png",
+      "sha256": "6c60f207e8f2c0b2424c03398bec714d5d6c0e7b37615297831f8c3819acb196",
+      "motion_role": "reveal a qualification gate, delivery crate, and commitment token as one support stack",
+      "cue_ids": ["cbm-a-004", "cbm-a-010", "cbm-a-011"],
+      "allowed_motion": ["piece-by-piece build", "gate close", "crate slide"]
+    }
+  ],
+  "artifact_hash": "326fff10cffedf22e4f86ce36e6daec5feb48a9cebf9d6a42f41dfabf8d1aec5"
+}

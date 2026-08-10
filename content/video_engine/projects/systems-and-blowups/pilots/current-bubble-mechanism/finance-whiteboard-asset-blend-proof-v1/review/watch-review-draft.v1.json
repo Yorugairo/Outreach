@@ -1,0 +1,14 @@
+{
+  "schema_version": "watch_review_draft.v1",
+  "proof_id": "finance-whiteboard-asset-blend-proof-v1",
+  "status": "draft",
+  "review_required": true,
+  "render_path": "render/finance-whiteboard-asset-blend-proof.mp4",
+  "checks": [
+    "source card text remains readable",
+    "one semantic asset is active at a time",
+    "marker reveal does not expose later cards early",
+    "recurring character remains face-readable",
+    "the result reads as whiteboard/2D rather than a static infographic"
+  ]
+}

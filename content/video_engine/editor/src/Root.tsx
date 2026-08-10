@@ -6,6 +6,21 @@ import {
 import { EditorialComposition } from "./Editorial";
 import { DocumentaryComposition, DocumentaryMotionComposition } from "./Documentary";
 import {
+  calculateFinanceSketchbookMetadata,
+  defaultFinanceSketchbookProps,
+  FinanceSketchbookProof,
+} from "./FinanceSketchbookProof";
+import {
+  calculateFinanceStealthWealthMetadata,
+  defaultFinanceStealthWealthProps,
+  FinanceStealthWealthProof,
+} from "./FinanceStealthWealthProof";
+import {
+  calculateFinance2DStickMetadata,
+  defaultFinance2DStickProps,
+  Finance2DStickProof,
+} from "./Finance2DStickProof";
+import {
   calculateEditorialMotionMetadata,
   defaultEditorialMotionProps,
 } from "./EditorialMotion";
@@ -105,6 +120,36 @@ export const RemotionRoot: React.FC = () => {
         height={1080}
         defaultProps={defaultEditorialMotionProps}
         calculateMetadata={calculateEditorialMotionMetadata}
+      />
+      <Composition
+        id="FinanceSketchbookProof"
+        component={FinanceSketchbookProof}
+        durationInFrames={1458}
+        fps={24}
+        width={1920}
+        height={1080}
+        defaultProps={defaultFinanceSketchbookProps}
+        calculateMetadata={calculateFinanceSketchbookMetadata}
+      />
+      <Composition
+        id="FinanceStealthWealthProof"
+        component={FinanceStealthWealthProof}
+        durationInFrames={2520}
+        fps={24}
+        width={1920}
+        height={1080}
+        defaultProps={defaultFinanceStealthWealthProps}
+        calculateMetadata={calculateFinanceStealthWealthMetadata}
+      />
+      <Composition
+        id="Finance2DStickProof"
+        component={Finance2DStickProof}
+        durationInFrames={1458}
+        fps={24}
+        width={1920}
+        height={1080}
+        defaultProps={defaultFinance2DStickProps}
+        calculateMetadata={calculateFinance2DStickMetadata}
       />
     </>
   );

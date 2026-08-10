@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
+  <defs>
+    <filter id="paper"><feTurbulence baseFrequency="0.7" numOctaves="3" seed="19" result="noise"/><feColorMatrix in="noise" type="saturate" values="0"/><feComponentTransfer><feFuncA type="table" tableValues="0 0.13"/></feComponentTransfer></filter>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="18" stdDeviation="14" flood-color="#18222b" flood-opacity="0.22"/></filter>
+    <pattern id="grid" width="64" height="64" patternUnits="userSpaceOnUse"><path d="M64 0H0V64" fill="none" stroke="#143a52" stroke-opacity="0.09" stroke-width="2"/></pattern>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#d3a329"/></marker>
+  </defs>
+  <rect width="1920" height="1080" fill="#f4ead7"/>
+  <rect width="1920" height="1080" fill="url(#grid)"/>
+  <rect width="1920" height="1080" filter="url(#paper)" opacity="0.7"/>
+  <rect x="64" y="54" width="1792" height="972" rx="34" fill="none" stroke="#173d58" stroke-width="8"/>
+  <path d="M96 190H1824" stroke="#d19b2a" stroke-width="6"/>
+  <text x="110" y="112" font-family="Inter,Arial,sans-serif" font-size="28" font-weight="800" letter-spacing="5" fill="#bb4934">INDEX-FUND SCALE</text>
+  <text x="110" y="172" font-family="Inter,Arial,sans-serif" font-size="54" font-weight="900" fill="#172934">The Default Machine Is Enormous</text>
+  <g filter="url(#shadow)">
+  <circle cx="590" cy="535" r="300" fill="#173d58"/>
+  <text x="590" y="510" text-anchor="middle" font-family="Inter,Arial" font-size="155" font-weight="900" fill="#f5c34f">$19.1T</text>
+  <text x="590" y="585" text-anchor="middle" font-family="Inter,Arial" font-size="34" font-weight="800" fill="#fff6df">INDEX MUTUAL FUNDS + ETFs</text>
+  <rect x="1020" y="265" width="670" height="240" rx="34" fill="#0f6674"/>
+  <text x="1080" y="400" font-family="Inter,Arial" font-size="118" font-weight="900" fill="#fff6df">52%</text>
+  <text x="1380" y="385" font-family="Inter,Arial" font-size="34" font-weight="800" fill="#fff6df">OF LONG-TERM</text>
+  <text x="1380" y="430" font-family="Inter,Arial" font-size="34" font-weight="800" fill="#fff6df">FUND ASSETS</text>
+  <rect x="1020" y="570" width="670" height="220" rx="34" fill="#d36a4a"/>
+  <text x="1080" y="700" font-family="Inter,Arial" font-size="105" font-weight="900" fill="#fff6df">~19%</text>
+  <text x="1425" y="665" font-family="Inter,Arial" font-size="31" font-weight="800" fill="#fff6df">OF U.S. STOCK VALUE</text>
+  <text x="1425" y="713" font-family="Inter,Arial" font-size="25" fill="#fff6df">domestic equity index funds</text>
+</g>
+<text x="960" y="890" text-anchor="middle" font-family="Inter,Arial" font-size="29" font-weight="700" fill="#172934">Large does not mean all-owning or all-price-setting.</text>
+  <rect x="94" y="952" width="1732" height="54" rx="12" fill="#173d58"/>
+  <text x="120" y="987" font-family="Roboto Mono,Consolas,monospace" font-size="21" fill="#f7eddb">Investment Company Institute · 2026 Fact Book · year-end 2025</text>
+</svg>

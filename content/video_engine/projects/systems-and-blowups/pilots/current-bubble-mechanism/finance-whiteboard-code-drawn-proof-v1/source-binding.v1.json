@@ -1,0 +1,202 @@
+{
+  "schema_version": "finance_whiteboard_code_drawn_binding.v1",
+  "proof_id": "finance-whiteboard-code-drawn-proof-v1",
+  "source_receipts": {
+    "audio_sha256": "ecacf46c49aee85b912404bfa0e47c37acbae0397b637e2a966c51a625077ce1",
+    "canonical_words_sha256": "3773bdd611c96d5e431ed56749d9991825215bb3756043086f14fbbdbe0d1da3",
+    "p24_words_sha256": "547f2103d39778246ad80ab3e92c6a38906e90b3d4970d9384ab77177111d78a",
+    "p24_narration_sha256": "a08a708b2302f5e63a13b888d5c8aa88f1e4047f11c17dcd8a54644ace463302",
+    "p24_claim_ledger_sha256": "100288f9c76bfded155afdc8ab438d35d531f9bcdaf63912baf01d4ac777d619",
+    "hand_source_sha256": "f50d4f592b0bb62eddc15cc31aa062943c339be079fb38672bf212bb5e7e9a68",
+    "source_window": {
+      "start_s": 0.0,
+      "end_s": 18.0,
+      "duration_s": 18.0,
+      "word_start_index": 0,
+      "word_end_index": 50
+    }
+  },
+  "art": [
+    {
+      "id": "bubble",
+      "file": "bubble.png",
+      "width": 900,
+      "height": 560,
+      "x": 560,
+      "y": 315,
+      "rect": [
+        -90,
+        -90,
+        990,
+        650
+      ],
+      "sw": 180,
+      "start_s": 0.22,
+      "duration_s": 0.78,
+      "path": "assets/art/bubble.png",
+      "sha256": "057a66b7c3fbf61703e8e8ad7db4fd26b08262b4ea15920dcdc4b9f37115ee25",
+      "art_mode": "code-assisted detailed raster with transparent surround"
+    },
+    {
+      "id": "valuation-tag",
+      "file": "valuation-tag.png",
+      "width": 520,
+      "height": 300,
+      "x": 1290,
+      "y": 350,
+      "rect": [
+        -80,
+        -80,
+        600,
+        380
+      ],
+      "sw": 150,
+      "start_s": 0.92,
+      "duration_s": 0.42,
+      "path": "assets/art/valuation-tag.png",
+      "sha256": "f32b9590f027b9827eec633bfa283bc181b47b8b7d330263a0a95387ca80b8fb",
+      "art_mode": "code-assisted detailed raster with transparent surround"
+    },
+    {
+      "id": "arrow",
+      "file": "arrow.png",
+      "width": 520,
+      "height": 280,
+      "x": 760,
+      "y": 640,
+      "rect": [
+        -80,
+        -80,
+        600,
+        360
+      ],
+      "sw": 150,
+      "start_s": 1.43,
+      "duration_s": 0.38,
+      "path": "assets/art/arrow.png",
+      "sha256": "4f786d31faddf8e105cfa182ee35d1fb0a2e41a930a39dffca44651e8e71d432",
+      "art_mode": "code-assisted detailed raster with transparent surround"
+    },
+    {
+      "id": "memory-stack",
+      "file": "memory-stack.png",
+      "width": 980,
+      "height": 580,
+      "x": 270,
+      "y": 310,
+      "rect": [
+        -90,
+        -90,
+        1070,
+        670
+      ],
+      "sw": 180,
+      "start_s": 2.58,
+      "duration_s": 1.2,
+      "path": "assets/art/memory-stack.png",
+      "sha256": "dfa65c3f800efe3d025ae351214e2d0f53f7ea5ed0d9de27892a863b2a7b3c5d",
+      "art_mode": "code-assisted detailed raster with transparent surround"
+    },
+    {
+      "id": "capacity-arrow",
+      "file": "capacity-arrow.png",
+      "width": 540,
+      "height": 300,
+      "x": 1040,
+      "y": 520,
+      "rect": [
+        -80,
+        -80,
+        620,
+        380
+      ],
+      "sw": 160,
+      "start_s": 4.06,
+      "duration_s": 0.45,
+      "path": "assets/art/capacity-arrow.png",
+      "sha256": "37e55dc5bafccb2bfe4e6f3a8b645cc9f4efc11ec5e366c9f218a79810ddda9a",
+      "art_mode": "code-assisted detailed raster with transparent surround"
+    },
+    {
+      "id": "price-spike",
+      "file": "price-spike.png",
+      "width": 820,
+      "height": 500,
+      "x": 865,
+      "y": 290,
+      "rect": [
+        -90,
+        -90,
+        910,
+        590
+      ],
+      "sw": 180,
+      "start_s": 5.05,
+      "duration_s": 1.18,
+      "path": "assets/art/price-spike.png",
+      "sha256": "b8df6c404a1c1a7bde0743000b0ef027c9aaf0f16d631601ee43488b5b56dc11",
+      "art_mode": "code-assisted detailed raster with transparent surround"
+    },
+    {
+      "id": "factories",
+      "file": "factories.png",
+      "width": 700,
+      "height": 380,
+      "x": 375,
+      "y": 645,
+      "rect": [
+        -80,
+        -80,
+        780,
+        460
+      ],
+      "sw": 150,
+      "start_s": 8.5,
+      "duration_s": 0.95,
+      "path": "assets/art/factories.png",
+      "sha256": "979abce51816ab8f5c98181c935aa918ed2d90b1b1dea35d64c34866e1e8a944",
+      "art_mode": "code-assisted detailed raster with transparent surround"
+    },
+    {
+      "id": "magnifier",
+      "file": "magnifier.png",
+      "width": 760,
+      "height": 560,
+      "x": 335,
+      "y": 325,
+      "rect": [
+        -90,
+        -90,
+        850,
+        650
+      ],
+      "sw": 180,
+      "start_s": 11.88,
+      "duration_s": 0.98,
+      "path": "assets/art/magnifier.png",
+      "sha256": "d4597f01ecf22c73214add5aec095d5fac07635362a15a0b599c650a7966eb9d",
+      "art_mode": "code-assisted detailed raster with transparent surround"
+    },
+    {
+      "id": "memory-lock",
+      "file": "memory-lock.png",
+      "width": 760,
+      "height": 540,
+      "x": 1080,
+      "y": 355,
+      "rect": [
+        -90,
+        -90,
+        850,
+        630
+      ],
+      "sw": 180,
+      "start_s": 13.78,
+      "duration_s": 1.18,
+      "path": "assets/art/memory-lock.png",
+      "sha256": "69567c1cedb9b8e168b81967a41b241555e0e3ef0a6a27dffb8bf56897747489",
+      "art_mode": "code-assisted detailed raster with transparent surround"
+    }
+  ],
+  "asset_policy": "one finished isolated local artblock per semantic drawable"
+}

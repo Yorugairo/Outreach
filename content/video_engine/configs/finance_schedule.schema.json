@@ -1,0 +1,47 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "finance_schedule.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "channel_id", "timezone", "policy", "releases", "operation_cycle", "queues", "artifact_hash"],
+  "properties": {
+    "schema_version": {"const": "finance_schedule.v1"},
+    "channel_id": {"type": "string"},
+    "timezone": {"const": "America/New_York"},
+    "policy": {"const": "weekend_first_investor_information_cycle"},
+    "releases": {
+      "type": "array", "minItems": 6, "maxItems": 6,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["slot_id", "day", "local_time", "kind", "format", "parent_slot_id", "rationale"],
+        "properties": {
+          "slot_id": {"type": "string", "pattern": "^[a-z0-9-]+$"},
+          "day": {"enum": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]},
+          "local_time": {"type": "string", "pattern": "^(?:[01]\\d|2[0-3]):[0-5]\\d$"},
+          "kind": {"enum": ["long", "short"]},
+          "format": {"enum": ["economic_anatomy", "one_level_deeper", "current_mechanism", "embedded_short"]},
+          "parent_slot_id": {"type": ["string", "null"]},
+          "rationale": {"type": "string", "minLength": 10}
+        }
+      }
+    },
+    "operation_cycle": {
+      "type": "array", "minItems": 4,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["day", "job"],
+        "properties": {"day": {"type": "string"}, "job": {"type": "string", "minLength": 5}}
+      }
+    },
+    "queues": {
+      "type": "object", "additionalProperties": false,
+      "required": ["evergreen_days", "contrarian_days", "current_hours"],
+      "properties": {
+        "evergreen_days": {"type": "array", "minItems": 2, "maxItems": 2, "items": {"type": "integer", "minimum": 1}},
+        "contrarian_days": {"type": "array", "minItems": 2, "maxItems": 2, "items": {"type": "integer", "minimum": 1}},
+        "current_hours": {"type": "array", "minItems": 2, "maxItems": 2, "items": {"type": "integer", "minimum": 1}}
+      }
+    },
+    "artifact_hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}

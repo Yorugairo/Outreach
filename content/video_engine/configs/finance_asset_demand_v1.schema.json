@@ -1,0 +1,95 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "finance_asset_demand.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "episode_id", "source_bindings", "planning_outputs", "resolution_order", "summary", "demands", "review_state", "render_eligible", "artifact_hash"],
+  "properties": {
+    "schema_version": {"const": "finance_asset_demand.v1"},
+    "episode_id": {"type": "string", "minLength": 1},
+    "source_bindings": {
+      "type": "object", "additionalProperties": false,
+      "required": ["semantic_beat_ledger", "asset_catalog", "claim_ledger", "numeric_evidence_register", "research_evidence_supplement"],
+      "properties": {
+        "semantic_beat_ledger": {"$ref": "#/definitions/artifact_binding"},
+        "asset_catalog": {"$ref": "#/definitions/artifact_binding"},
+        "claim_ledger": {"$ref": "#/definitions/file_binding"},
+        "numeric_evidence_register": {"$ref": "#/definitions/artifact_binding"},
+        "research_evidence_supplement": {"$ref": "#/definitions/artifact_binding"}
+      }
+    },
+    "planning_outputs": {
+      "type": "object", "additionalProperties": false,
+      "required": ["research_resolution", "generation_prompt_spine"],
+      "properties": {
+        "research_resolution": {"$ref": "#/definitions/artifact_binding"},
+        "generation_prompt_spine": {"$ref": "#/definitions/artifact_binding"}
+      }
+    },
+    "resolution_order": {
+      "type": "array", "minItems": 5, "maxItems": 5, "uniqueItems": true,
+      "items": {"enum": ["exact_asset", "component_composition", "deterministic_surface", "source_retrieval_request", "original_generation_request"]}
+    },
+    "summary": {
+      "type": "object", "additionalProperties": false,
+      "required": ["beat_count", "strategy_counts", "all_beats_have_resolution_path", "unapproved_asset_count"],
+      "properties": {
+        "beat_count": {"type": "integer", "minimum": 1},
+        "strategy_counts": {"type": "object", "additionalProperties": {"type": "integer", "minimum": 0}},
+        "all_beats_have_resolution_path": {"const": true},
+        "unapproved_asset_count": {"type": "integer", "minimum": 0}
+      }
+    },
+    "demands": {"type": "array", "minItems": 1, "items": {"$ref": "#/definitions/demand"}},
+    "review_state": {"enum": ["draft", "operator_approved"]},
+    "render_eligible": {"type": "boolean"},
+    "artifact_hash": {"$ref": "#/definitions/sha256"}
+  },
+  "definitions": {
+    "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "file_binding": {
+      "type": "object", "additionalProperties": false, "required": ["path", "sha256"],
+      "properties": {"path": {"type": "string", "minLength": 1}, "sha256": {"$ref": "#/definitions/sha256"}}
+    },
+    "artifact_binding": {
+      "type": "object", "additionalProperties": false, "required": ["path", "sha256", "artifact_hash"],
+      "properties": {"path": {"type": "string", "minLength": 1}, "sha256": {"$ref": "#/definitions/sha256"}, "artifact_hash": {"$ref": "#/definitions/sha256"}}
+    },
+    "semantic_target": {
+      "type": "object", "additionalProperties": false,
+      "required": ["active_nouns", "causal_verb", "viewer_understanding", "required_visual_anchors", "prohibited_implications"],
+      "properties": {
+        "active_nouns": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "causal_verb": {"type": "string", "minLength": 1},
+        "viewer_understanding": {"type": "string", "minLength": 12},
+        "required_visual_anchors": {"type": "array", "minItems": 2, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "prohibited_implications": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}}
+      }
+    },
+    "demand": {
+      "type": "object", "additionalProperties": false,
+      "required": ["demand_id", "beat_id", "chapter_id", "start_word_index", "end_word_index", "start_s", "end_s", "excerpt", "claim_refs", "semantic_target", "representation_mode", "strategy", "resolution_reason", "selected_asset_ids", "reuse_reason", "evidence_surface_ids", "source_request_ids", "prompt_id", "status"],
+      "properties": {
+        "demand_id": {"type": "string", "pattern": "^asset-demand-cbm-semantic-beat-[0-9]{2}-[0-9]{3}$"},
+        "beat_id": {"type": "string", "pattern": "^cbm-semantic-beat-[0-9]{2}-[0-9]{3}$"},
+        "chapter_id": {"type": "string", "minLength": 1},
+        "start_word_index": {"type": "integer", "minimum": 0},
+        "end_word_index": {"type": "integer", "minimum": 0},
+        "start_s": {"type": "number", "minimum": 0},
+        "end_s": {"type": "number", "exclusiveMinimum": 0},
+        "excerpt": {"type": "string", "minLength": 1},
+        "claim_refs": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "semantic_target": {"$ref": "#/definitions/semantic_target"},
+        "representation_mode": {"enum": ["literal_evidence", "accurate_mechanism", "declared_metaphor"]},
+        "strategy": {"enum": ["exact_asset", "component_composition", "deterministic_surface", "source_retrieval_request", "original_generation_request"]},
+        "resolution_reason": {"type": "string", "minLength": 20},
+        "selected_asset_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "reuse_reason": {"type": ["string", "null"], "enum": [null, "continuation", "callback", "comparison", "evidence_hold"]},
+        "evidence_surface_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "source_request_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "prompt_id": {"type": ["string", "null"]},
+        "status": {"enum": ["existing_approved", "planned_pending_review"]}
+      }
+    }
+  }
+}

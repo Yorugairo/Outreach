@@ -1,0 +1,77 @@
+{
+  "schema_version": "finance_episode_brief.v1",
+  "episode_id": "current-bubble-mechanism",
+  "format": "current_mechanism",
+  "working_title": "Memory Is Not the Bubble. Your S&P 500 Fund Might Be.",
+  "audience_tension": "AI memory looks like the obvious speculative bubble, while the S&P 500 index fund is marketed and experienced as the boring diversified default.",
+  "lived_contradiction": "The dangerous-looking memory trade has physical scarcity, shipped products, cash flow, and contracted demand, while the safe-looking index is simultaneously concentrated in a few causal drivers and diluted by a long tail that may add little independent defense.",
+  "popular_explanation": "Rapid memory-stock appreciation proves the AI trade is a bubble, while owning five hundred S&P 500 companies provides broad diversification and sufficient long-run growth for any wealth objective.",
+  "missing_mechanism": "HBM consumes constrained wafer, clean-room, packaging, and engineering capacity. The S&P 500's float-adjusted market-cap weighting can weaken diversification through mega-cap concentration while allocating the remaining dollar to hundreds of companies without screening for expected return or independent defense.",
+  "thesis_state": "operator_approved",
+  "thesis": "The current memory boom is better explained as a physical bottleneck repricing than a demand-free bubble. The S&P 500 may fail both of its implied jobs: mega-cap concentration weakens diversification, while the long tail can dilute exceptional return drivers without supplying independent protection or the return required by an ambitious generational-wealth target.",
+  "actors": [
+    "memory manufacturers",
+    "hyperscalers and AI accelerator buyers",
+    "conventional DRAM and NAND customers",
+    "S&P 500 index providers and funds",
+    "retirement savers and index investors",
+    "mega-cap technology companies",
+    "Korean and Italian listed companies"
+  ],
+  "distribution_question": "Who receives the AI infrastructure spending, who secures scarce memory supply, who loses conventional memory capacity, and who carries concentrated valuation risk through index ownership?",
+  "countercase": "Real scarcity can coexist with bubble pricing; memory remains cyclical and vulnerable to overbuilding or efficiency gains. The S&P 500 can self-heal as leaders change, the long tail can produce future winners, and any concentrated-plus-defensive alternative introduces selection, tracking-error, tax, correlation, and behavior risk.",
+  "failure_conditions": [
+    "Memory capacity expands faster than durable AI and non-AI demand.",
+    "AI memory efficiency or customer capital-spending cuts materially reduce the projected bottleneck.",
+    "Valuation evidence shows memory prices require implausible cash-flow growth despite the physical shortage.",
+    "S&P 500 concentration falls without broad index losses as new leadership emerges.",
+    "A specified concentrated-plus-defensive portfolio fails to improve return or drawdown after costs across multiple regimes."
+  ],
+  "plain_language_translation": "Two elevators can rise together: memory may be pulled by a steel cable of scarcity and contracts, while the index may have five powerful motors doing the lifting, hundreds of passengers adding weight, and no dedicated emergency brake.",
+  "visual_metaphor": "A split elevator reveals memory's capacity, contract, and cash-flow cables on one side. The index elevator has a few giant motors, a crowded long tail, and a separate proposed brake system made from defensive sovereign and geopolitical assets.",
+  "packages": [
+    {
+      "id": "pkg-a",
+      "family": "contradiction",
+      "title": "Memory Is Not the Bubble. Your S&P 500 Fund Might Be.",
+      "thumbnail_text": "WRONG BUBBLE",
+      "promise_key": "memory-vs-index-bubble-test"
+    },
+    {
+      "id": "pkg-b",
+      "family": "identity",
+      "title": "Everyone Thinks AI Memory Is a Bubble. Look at Your Index Fund Instead.",
+      "thumbnail_text": "YOUR SAFE BET?",
+      "promise_key": "memory-vs-index-bubble-test"
+    },
+    {
+      "id": "pkg-c",
+      "family": "mechanism",
+      "title": "The AI Trade With Real Scarcity—and the Safe Trade With Hidden Risk",
+      "thumbnail_text": "SCARCITY VS FLOWS",
+      "promise_key": "memory-vs-index-bubble-test"
+    }
+  ],
+  "embedded_short": {
+    "working_title": "How the S&P 500 Can Be Too Concentrated and Too Diluted",
+    "capsule_state": "planned",
+    "target_seconds": 51,
+    "recorded_in_long_master": true
+  },
+  "research_blockers": [
+    "Operator must review the primary-source locator packet and the distinction between market capitalization and GDP.",
+    "Lock any valuation multiples to a dated market snapshot before final narration.",
+    "Title, thumbnail, and financial-risk language remain human-gated."
+  ],
+  "human_gates": [
+    "market selection",
+    "thesis",
+    "primary sources",
+    "financial risk language",
+    "title and thumbnail",
+    "publication"
+  ],
+  "state": "draft",
+  "render_eligible": false,
+  "artifact_hash": "c8a395d421871c8d09bb0621db30c4ec68901acdc56848b182d66dbd00856fc2"
+}

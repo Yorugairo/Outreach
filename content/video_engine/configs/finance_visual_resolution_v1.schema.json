@@ -1,0 +1,49 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "finance_visual_resolution.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "episode_id", "cue_sheet_hash", "asset_catalog_hash", "numeric_evidence_register_hash", "resolutions", "review_state", "render_eligible", "artifact_hash"],
+  "properties": {
+    "schema_version": {"const": "finance_visual_resolution.v1"},
+    "episode_id": {"type": "string", "minLength": 1},
+    "cue_sheet_hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "asset_catalog_hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "numeric_evidence_register_hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "resolutions": {
+      "type": "array", "minItems": 1,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["resolution_id", "cue_id", "call_cue_id", "status", "representation_mode", "strategy", "selected_asset_ids", "composition_recipe_id", "reuse_reason", "evidence_surface_ids", "demand"],
+        "properties": {
+          "resolution_id": {"type": "string", "pattern": "^[a-z0-9-]+$"},
+          "cue_id": {"type": "string", "pattern": "^[a-z0-9-]+$"},
+          "call_cue_id": {"type": "string", "pattern": "^[a-z0-9-]+$"},
+          "status": {"enum": ["resolved", "unresolved", "waived"]},
+          "representation_mode": {"enum": ["literal_evidence", "accurate_mechanism", "declared_metaphor"]},
+          "strategy": {"enum": ["exact_asset", "component_composition", "deterministic_surface", "source_retrieval_request", "original_generation_request", "local_compositor_request", "script_revision_request"]},
+          "selected_asset_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string", "pattern": "^[a-z0-9-]+$"}},
+          "composition_recipe_id": {"type": ["string", "null"]},
+          "reuse_reason": {"type": ["string", "null"], "enum": [null, "continuation", "callback", "comparison", "evidence_hold"]},
+          "evidence_surface_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string", "pattern": "^[a-z0-9-]+$"}},
+          "demand": {
+            "type": ["object", "null"], "additionalProperties": false,
+            "required": ["demand_id", "kind", "brief", "required_visual_anchors", "prohibited_implications", "depth_layers", "review_state"],
+            "properties": {
+              "demand_id": {"type": "string", "pattern": "^[a-z0-9-]+$"},
+              "kind": {"enum": ["source_retrieval_request", "original_generation_request", "local_compositor_request", "script_revision_request"]},
+              "brief": {"type": "string", "minLength": 20},
+              "required_visual_anchors": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}},
+              "prohibited_implications": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+              "depth_layers": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"enum": ["foreground", "midground", "background", "negative_space"]}},
+              "review_state": {"enum": ["draft", "operator_approved"]}
+            }
+          }
+        }
+      }
+    },
+    "review_state": {"enum": ["draft", "operator_approved"]},
+    "render_eligible": {"type": "boolean"},
+    "artifact_hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}

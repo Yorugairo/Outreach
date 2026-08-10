@@ -1,0 +1,25 @@
+{
+  "schema_version": "finance_semantic_wave_review.v1",
+  "episode_id": "current-bubble-mechanism",
+  "wave_id": "semantic-wave-03",
+  "status": "operator_approved_for_motion_proof",
+  "generation_method": "built_in_image_gen",
+  "decision_rule": "This is an exact-cue bridge from the reasonable bubble reflex into the physical mechanism. It must not be reused as generic analyst art.",
+  "candidates": [
+    {
+      "candidate_id": "default-bubble-reaction-v1",
+      "path": "default-bubble-reaction-v1.png",
+      "sha256": "fd59df1c4e822c4b733f0c965b4aa4c20d2985dd420e8fcda273e0244d2fa1d9",
+      "cue_id": "cbm-a-003",
+      "purpose": "A cautious analyst holds a completely blank, creased parchment placard whose torn edge points directly into an opening factory door.",
+      "status": "selected",
+      "qa": [
+        "placard contains no generated text, chart, ticker, or number",
+        "analyst reads as cautious rather than foolish",
+        "factory door gives the next spoken mechanism a motivated entrance",
+        "paper placard is a single visual transition—not a generic empty panel"
+      ]
+    }
+  ],
+  "artifact_hash": "3fe1b304bd43226a1a23005afb69498ba52be60dbd17ae73c34136af01cc69a9"
+}

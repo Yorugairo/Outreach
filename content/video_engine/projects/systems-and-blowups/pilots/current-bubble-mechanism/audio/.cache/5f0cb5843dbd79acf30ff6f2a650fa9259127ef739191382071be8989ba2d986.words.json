@@ -1,0 +1,3286 @@
+{
+  "scene_id": 9001,
+  "duration_s": 266.006,
+  "words": [
+    {
+      "w": "The",
+      "start_s": 0.0,
+      "end_s": 0.139
+    },
+    {
+      "w": "market",
+      "start_s": 0.197,
+      "end_s": 0.499
+    },
+    {
+      "w": "may",
+      "start_s": 0.557,
+      "end_s": 0.673
+    },
+    {
+      "w": "be",
+      "start_s": 0.731,
+      "end_s": 0.824
+    },
+    {
+      "w": "labeling",
+      "start_s": 0.882,
+      "end_s": 1.254
+    },
+    {
+      "w": "the",
+      "start_s": 1.3,
+      "end_s": 1.37
+    },
+    {
+      "w": "wrong",
+      "start_s": 1.405,
+      "end_s": 1.637
+    },
+    {
+      "w": "bubble.",
+      "start_s": 1.695,
+      "end_s": 2.159
+    },
+    {
+      "w": "AI",
+      "start_s": 2.403,
+      "end_s": 2.775
+    },
+    {
+      "w": "memory",
+      "start_s": 2.856,
+      "end_s": 3.135
+    },
+    {
+      "w": "stocks",
+      "start_s": 3.181,
+      "end_s": 3.576
+    },
+    {
+      "w": "have",
+      "start_s": 3.622,
+      "end_s": 3.75
+    },
+    {
+      "w": "gone",
+      "start_s": 3.785,
+      "end_s": 3.994
+    },
+    {
+      "w": "vertical",
+      "start_s": 4.029,
+      "end_s": 4.481
+    },
+    {
+      "w": "and",
+      "start_s": 4.656,
+      "end_s": 4.818
+    },
+    {
+      "w": "the",
+      "start_s": 4.865,
+      "end_s": 4.934
+    },
+    {
+      "w": "earnings",
+      "start_s": 5.004,
+      "end_s": 5.329
+    },
+    {
+      "w": "numbers",
+      "start_s": 5.375,
+      "end_s": 5.7
+    },
+    {
+      "w": "look",
+      "start_s": 5.77,
+      "end_s": 5.944
+    },
+    {
+      "w": "almost",
+      "start_s": 5.991,
+      "end_s": 6.258
+    },
+    {
+      "w": "fake.",
+      "start_s": 6.316,
+      "end_s": 6.838
+    },
+    {
+      "w": "That",
+      "start_s": 7.442,
+      "end_s": 7.639
+    },
+    {
+      "w": "is",
+      "start_s": 7.686,
+      "end_s": 7.767
+    },
+    {
+      "w": "normally",
+      "start_s": 7.837,
+      "end_s": 8.197
+    },
+    {
+      "w": "where",
+      "start_s": 8.243,
+      "end_s": 8.406
+    },
+    {
+      "w": "sensible",
+      "start_s": 8.44,
+      "end_s": 8.847
+    },
+    {
+      "w": "people",
+      "start_s": 8.893,
+      "end_s": 9.195
+    },
+    {
+      "w": "step",
+      "start_s": 9.23,
+      "end_s": 9.462
+    },
+    {
+      "w": "back",
+      "start_s": 9.532,
+      "end_s": 9.729
+    },
+    {
+      "w": "and",
+      "start_s": 9.787,
+      "end_s": 9.868
+    },
+    {
+      "w": "say:",
+      "start_s": 9.938,
+      "end_s": 10.344
+    },
+    {
+      "w": "bubble.",
+      "start_s": 10.553,
+      "end_s": 11.099
+    },
+    {
+      "w": "But",
+      "start_s": 11.61,
+      "end_s": 11.784
+    },
+    {
+      "w": "underneath",
+      "start_s": 11.842,
+      "end_s": 12.237
+    },
+    {
+      "w": "the",
+      "start_s": 12.272,
+      "end_s": 12.341
+    },
+    {
+      "w": "chart",
+      "start_s": 12.388,
+      "end_s": 12.748
+    },
+    {
+      "w": "is",
+      "start_s": 12.875,
+      "end_s": 13.038
+    },
+    {
+      "w": "a",
+      "start_s": 13.084,
+      "end_s": 13.119
+    },
+    {
+      "w": "product",
+      "start_s": 13.189,
+      "end_s": 13.56
+    },
+    {
+      "w": "customers",
+      "start_s": 13.618,
+      "end_s": 14.117
+    },
+    {
+      "w": "cannot",
+      "start_s": 14.175,
+      "end_s": 14.5
+    },
+    {
+      "w": "get",
+      "start_s": 14.558,
+      "end_s": 14.675
+    },
+    {
+      "w": "enough",
+      "start_s": 14.721,
+      "end_s": 14.965
+    },
+    {
+      "w": "of,",
+      "start_s": 15.023,
+      "end_s": 15.301
+    },
+    {
+      "w": "factories",
+      "start_s": 15.452,
+      "end_s": 15.998
+    },
+    {
+      "w": "that",
+      "start_s": 16.033,
+      "end_s": 16.161
+    },
+    {
+      "w": "cannot",
+      "start_s": 16.219,
+      "end_s": 16.509
+    },
+    {
+      "w": "expand",
+      "start_s": 16.555,
+      "end_s": 17.008
+    },
+    {
+      "w": "quickly",
+      "start_s": 17.078,
+      "end_s": 17.426
+    },
+    {
+      "w": "enough,",
+      "start_s": 17.473,
+      "end_s": 17.867
+    },
+    {
+      "w": "and",
+      "start_s": 17.995,
+      "end_s": 18.158
+    },
+    {
+      "w": "buyers",
+      "start_s": 18.239,
+      "end_s": 18.645
+    },
+    {
+      "w": "signing",
+      "start_s": 18.68,
+      "end_s": 19.005
+    },
+    {
+      "w": "multi-year",
+      "start_s": 19.075,
+      "end_s": 19.609
+    },
+    {
+      "w": "take-or-pay",
+      "start_s": 19.678,
+      "end_s": 20.166
+    },
+    {
+      "w": "contracts",
+      "start_s": 20.236,
+      "end_s": 20.886
+    },
+    {
+      "w": "just",
+      "start_s": 21.095,
+      "end_s": 21.339
+    },
+    {
+      "w": "to",
+      "start_s": 21.374,
+      "end_s": 21.432
+    },
+    {
+      "w": "guarantee",
+      "start_s": 21.501,
+      "end_s": 21.966
+    },
+    {
+      "w": "supply.",
+      "start_s": 22.0,
+      "end_s": 22.593
+    },
+    {
+      "w": "Meanwhile,",
+      "start_s": 23.034,
+      "end_s": 23.765
+    },
+    {
+      "w": "the",
+      "start_s": 23.881,
+      "end_s": 23.997
+    },
+    {
+      "w": "trade",
+      "start_s": 24.044,
+      "end_s": 24.346
+    },
+    {
+      "w": "marketed",
+      "start_s": 24.404,
+      "end_s": 24.856
+    },
+    {
+      "w": "as",
+      "start_s": 24.903,
+      "end_s": 24.996
+    },
+    {
+      "w": "boring",
+      "start_s": 25.077,
+      "end_s": 25.495
+    },
+    {
+      "w": "and",
+      "start_s": 25.553,
+      "end_s": 25.623
+    },
+    {
+      "w": "diversified—the",
+      "start_s": 25.669,
+      "end_s": 26.946
+    },
+    {
+      "w": "S&P",
+      "start_s": 27.016,
+      "end_s": 27.399
+    },
+    {
+      "w": "500",
+      "start_s": 27.608,
+      "end_s": 28.142
+    },
+    {
+      "w": "index",
+      "start_s": 28.2,
+      "end_s": 28.548
+    },
+    {
+      "w": "fund—has",
+      "start_s": 28.606,
+      "end_s": 29.396
+    },
+    {
+      "w": "nearly",
+      "start_s": 29.466,
+      "end_s": 29.744
+    },
+    {
+      "w": "forty",
+      "start_s": 29.814,
+      "end_s": 30.069
+    },
+    {
+      "w": "percent",
+      "start_s": 30.127,
+      "end_s": 30.464
+    },
+    {
+      "w": "of",
+      "start_s": 30.499,
+      "end_s": 30.545
+    },
+    {
+      "w": "its",
+      "start_s": 30.592,
+      "end_s": 30.708
+    },
+    {
+      "w": "weight",
+      "start_s": 30.754,
+      "end_s": 30.986
+    },
+    {
+      "w": "concentrated",
+      "start_s": 31.044,
+      "end_s": 31.741
+    },
+    {
+      "w": "in",
+      "start_s": 31.799,
+      "end_s": 31.88
+    },
+    {
+      "w": "ten",
+      "start_s": 31.95,
+      "end_s": 32.171
+    },
+    {
+      "w": "companies,",
+      "start_s": 32.252,
+      "end_s": 32.89
+    },
+    {
+      "w": "while",
+      "start_s": 33.065,
+      "end_s": 33.332
+    },
+    {
+      "w": "automatic",
+      "start_s": 33.366,
+      "end_s": 33.854
+    },
+    {
+      "w": "contributions",
+      "start_s": 33.901,
+      "end_s": 34.62
+    },
+    {
+      "w": "keep",
+      "start_s": 34.678,
+      "end_s": 34.853
+    },
+    {
+      "w": "buying",
+      "start_s": 34.899,
+      "end_s": 35.224
+    },
+    {
+      "w": "them",
+      "start_s": 35.282,
+      "end_s": 35.445
+    },
+    {
+      "w": "because",
+      "start_s": 35.688,
+      "end_s": 36.025
+    },
+    {
+      "w": "they",
+      "start_s": 36.06,
+      "end_s": 36.199
+    },
+    {
+      "w": "are",
+      "start_s": 36.234,
+      "end_s": 36.339
+    },
+    {
+      "w": "already",
+      "start_s": 36.385,
+      "end_s": 36.722
+    },
+    {
+      "w": "the",
+      "start_s": 36.768,
+      "end_s": 36.838
+    },
+    {
+      "w": "biggest.",
+      "start_s": 36.896,
+      "end_s": 37.442
+    },
+    {
+      "w": "So",
+      "start_s": 37.72,
+      "end_s": 37.883
+    },
+    {
+      "w": "here",
+      "start_s": 37.952,
+      "end_s": 38.103
+    },
+    {
+      "w": "is",
+      "start_s": 38.138,
+      "end_s": 38.219
+    },
+    {
+      "w": "the",
+      "start_s": 38.254,
+      "end_s": 38.324
+    },
+    {
+      "w": "argument:",
+      "start_s": 38.394,
+      "end_s": 38.904
+    },
+    {
+      "w": "the",
+      "start_s": 39.148,
+      "end_s": 39.253
+    },
+    {
+      "w": "memory",
+      "start_s": 39.311,
+      "end_s": 39.601
+    },
+    {
+      "w": "trade",
+      "start_s": 39.659,
+      "end_s": 40.135
+    },
+    {
+      "w": "can",
+      "start_s": 40.216,
+      "end_s": 40.414
+    },
+    {
+      "w": "absolutely",
+      "start_s": 40.495,
+      "end_s": 41.169
+    },
+    {
+      "w": "correct.",
+      "start_s": 41.227,
+      "end_s": 41.773
+    },
+    {
+      "w": "It",
+      "start_s": 42.098,
+      "end_s": 42.214
+    },
+    {
+      "w": "can",
+      "start_s": 42.26,
+      "end_s": 42.376
+    },
+    {
+      "w": "become",
+      "start_s": 42.423,
+      "end_s": 42.748
+    },
+    {
+      "w": "overpriced.",
+      "start_s": 42.794,
+      "end_s": 43.572
+    },
+    {
+      "w": "It",
+      "start_s": 43.723,
+      "end_s": 43.839
+    },
+    {
+      "w": "can",
+      "start_s": 43.874,
+      "end_s": 43.99
+    },
+    {
+      "w": "still",
+      "start_s": 44.036,
+      "end_s": 44.257
+    },
+    {
+      "w": "be",
+      "start_s": 44.327,
+      "end_s": 44.42
+    },
+    {
+      "w": "brutally",
+      "start_s": 44.478,
+      "end_s": 44.849
+    },
+    {
+      "w": "cyclical.",
+      "start_s": 44.896,
+      "end_s": 45.523
+    },
+    {
+      "w": "But",
+      "start_s": 45.766,
+      "end_s": 45.917
+    },
+    {
+      "w": "what",
+      "start_s": 45.952,
+      "end_s": 46.091
+    },
+    {
+      "w": "we",
+      "start_s": 46.138,
+      "end_s": 46.219
+    },
+    {
+      "w": "are",
+      "start_s": 46.266,
+      "end_s": 46.37
+    },
+    {
+      "w": "seeing",
+      "start_s": 46.405,
+      "end_s": 46.649
+    },
+    {
+      "w": "today",
+      "start_s": 46.695,
+      "end_s": 47.078
+    },
+    {
+      "w": "looks",
+      "start_s": 47.16,
+      "end_s": 47.369
+    },
+    {
+      "w": "more",
+      "start_s": 47.438,
+      "end_s": 47.612
+    },
+    {
+      "w": "like",
+      "start_s": 47.647,
+      "end_s": 47.787
+    },
+    {
+      "w": "a",
+      "start_s": 47.821,
+      "end_s": 47.845
+    },
+    {
+      "w": "physical",
+      "start_s": 47.891,
+      "end_s": 48.286
+    },
+    {
+      "w": "bottleneck",
+      "start_s": 48.367,
+      "end_s": 48.901
+    },
+    {
+      "w": "being",
+      "start_s": 48.971,
+      "end_s": 49.191
+    },
+    {
+      "w": "repriced",
+      "start_s": 49.261,
+      "end_s": 49.818
+    },
+    {
+      "w": "than",
+      "start_s": 49.853,
+      "end_s": 50.004
+    },
+    {
+      "w": "a",
+      "start_s": 50.05,
+      "end_s": 50.085
+    },
+    {
+      "w": "demand-free",
+      "start_s": 50.143,
+      "end_s": 50.805
+    },
+    {
+      "w": "fantasy.",
+      "start_s": 50.863,
+      "end_s": 51.537
+    },
+    {
+      "w": "Bubble",
+      "start_s": 51.92,
+      "end_s": 52.233
+    },
+    {
+      "w": "logic",
+      "start_s": 52.268,
+      "end_s": 52.628
+    },
+    {
+      "w": "may",
+      "start_s": 52.709,
+      "end_s": 52.848
+    },
+    {
+      "w": "be",
+      "start_s": 52.907,
+      "end_s": 52.988
+    },
+    {
+      "w": "hiding",
+      "start_s": 53.046,
+      "end_s": 53.394
+    },
+    {
+      "w": "inside",
+      "start_s": 53.464,
+      "end_s": 53.975
+    },
+    {
+      "w": "the",
+      "start_s": 54.009,
+      "end_s": 54.079
+    },
+    {
+      "w": "thing",
+      "start_s": 54.126,
+      "end_s": 54.346
+    },
+    {
+      "w": "investors",
+      "start_s": 54.404,
+      "end_s": 54.891
+    },
+    {
+      "w": "stopped",
+      "start_s": 54.915,
+      "end_s": 55.228
+    },
+    {
+      "w": "examining",
+      "start_s": 55.263,
+      "end_s": 55.762
+    },
+    {
+      "w": "because",
+      "start_s": 55.82,
+      "end_s": 56.122
+    },
+    {
+      "w": "they",
+      "start_s": 56.157,
+      "end_s": 56.273
+    },
+    {
+      "w": "were",
+      "start_s": 56.308,
+      "end_s": 56.436
+    },
+    {
+      "w": "told",
+      "start_s": 56.47,
+      "end_s": 56.737
+    },
+    {
+      "w": "it",
+      "start_s": 56.784,
+      "end_s": 56.842
+    },
+    {
+      "w": "was",
+      "start_s": 56.877,
+      "end_s": 56.981
+    },
+    {
+      "w": "safe.",
+      "start_s": 57.039,
+      "end_s": 57.527
+    },
+    {
+      "w": "A",
+      "start_s": 58.038,
+      "end_s": 58.131
+    },
+    {
+      "w": "bubble",
+      "start_s": 58.247,
+      "end_s": 58.595
+    },
+    {
+      "w": "is",
+      "start_s": 58.642,
+      "end_s": 58.746
+    },
+    {
+      "w": "not",
+      "start_s": 58.816,
+      "end_s": 59.071
+    },
+    {
+      "w": "“a",
+      "start_s": 59.315,
+      "end_s": 59.512
+    },
+    {
+      "w": "price",
+      "start_s": 59.594,
+      "end_s": 59.884
+    },
+    {
+      "w": "went",
+      "start_s": 59.93,
+      "end_s": 60.081
+    },
+    {
+      "w": "up",
+      "start_s": 60.128,
+      "end_s": 60.244
+    },
+    {
+      "w": "a",
+      "start_s": 60.313,
+      "end_s": 60.337
+    },
+    {
+      "w": "lot.”",
+      "start_s": 60.395,
+      "end_s": 60.882
+    },
+    {
+      "w": "That",
+      "start_s": 61.579,
+      "end_s": 61.753
+    },
+    {
+      "w": "is",
+      "start_s": 61.799,
+      "end_s": 61.881
+    },
+    {
+      "w": "a",
+      "start_s": 61.927,
+      "end_s": 61.962
+    },
+    {
+      "w": "symptom,",
+      "start_s": 62.02,
+      "end_s": 62.624
+    },
+    {
+      "w": "not",
+      "start_s": 62.902,
+      "end_s": 63.088
+    },
+    {
+      "w": "a",
+      "start_s": 63.135,
+      "end_s": 63.158
+    },
+    {
+      "w": "diagnosis.",
+      "start_s": 63.216,
+      "end_s": 64.179
+    },
+    {
+      "w": "A",
+      "start_s": 64.876,
+      "end_s": 64.957
+    },
+    {
+      "w": "real",
+      "start_s": 65.05,
+      "end_s": 65.236
+    },
+    {
+      "w": "bubble",
+      "start_s": 65.294,
+      "end_s": 65.596
+    },
+    {
+      "w": "forms",
+      "start_s": 65.642,
+      "end_s": 66.037
+    },
+    {
+      "w": "when",
+      "start_s": 66.072,
+      "end_s": 66.223
+    },
+    {
+      "w": "the",
+      "start_s": 66.258,
+      "end_s": 66.327
+    },
+    {
+      "w": "price",
+      "start_s": 66.374,
+      "end_s": 66.664
+    },
+    {
+      "w": "increasingly",
+      "start_s": 66.71,
+      "end_s": 67.314
+    },
+    {
+      "w": "depends",
+      "start_s": 67.372,
+      "end_s": 67.825
+    },
+    {
+      "w": "on",
+      "start_s": 67.871,
+      "end_s": 67.953
+    },
+    {
+      "w": "the",
+      "start_s": 67.988,
+      "end_s": 68.057
+    },
+    {
+      "w": "belief",
+      "start_s": 68.115,
+      "end_s": 68.487
+    },
+    {
+      "w": "that",
+      "start_s": 68.533,
+      "end_s": 68.673
+    },
+    {
+      "w": "somebody",
+      "start_s": 68.731,
+      "end_s": 69.113
+    },
+    {
+      "w": "else",
+      "start_s": 69.183,
+      "end_s": 69.38
+    },
+    {
+      "w": "will",
+      "start_s": 69.404,
+      "end_s": 69.555
+    },
+    {
+      "w": "pay",
+      "start_s": 69.589,
+      "end_s": 69.764
+    },
+    {
+      "w": "more,",
+      "start_s": 69.845,
+      "end_s": 70.286
+    },
+    {
+      "w": "while",
+      "start_s": 70.669,
+      "end_s": 70.878
+    },
+    {
+      "w": "the",
+      "start_s": 70.901,
+      "end_s": 70.971
+    },
+    {
+      "w": "cash",
+      "start_s": 71.006,
+      "end_s": 71.285
+    },
+    {
+      "w": "flow,",
+      "start_s": 71.331,
+      "end_s": 71.714
+    },
+    {
+      "w": "productive",
+      "start_s": 71.784,
+      "end_s": 72.271
+    },
+    {
+      "w": "use,",
+      "start_s": 72.318,
+      "end_s": 72.666
+    },
+    {
+      "w": "or",
+      "start_s": 72.84,
+      "end_s": 72.991
+    },
+    {
+      "w": "scarcity",
+      "start_s": 73.049,
+      "end_s": 73.572
+    },
+    {
+      "w": "underneath",
+      "start_s": 73.63,
+      "end_s": 74.036
+    },
+    {
+      "w": "it",
+      "start_s": 74.106,
+      "end_s": 74.245
+    },
+    {
+      "w": "cannot",
+      "start_s": 74.419,
+      "end_s": 74.744
+    },
+    {
+      "w": "keep",
+      "start_s": 74.791,
+      "end_s": 74.976
+    },
+    {
+      "w": "up.",
+      "start_s": 75.058,
+      "end_s": 75.36
+    },
+    {
+      "w": "Think",
+      "start_s": 75.87,
+      "end_s": 76.103
+    },
+    {
+      "w": "of",
+      "start_s": 76.161,
+      "end_s": 76.219
+    },
+    {
+      "w": "two",
+      "start_s": 76.277,
+      "end_s": 76.405
+    },
+    {
+      "w": "elevators",
+      "start_s": 76.486,
+      "end_s": 76.962
+    },
+    {
+      "w": "rising",
+      "start_s": 77.043,
+      "end_s": 77.449
+    },
+    {
+      "w": "at",
+      "start_s": 77.507,
+      "end_s": 77.6
+    },
+    {
+      "w": "the",
+      "start_s": 77.647,
+      "end_s": 77.728
+    },
+    {
+      "w": "same",
+      "start_s": 77.774,
+      "end_s": 78.03
+    },
+    {
+      "w": "speed.",
+      "start_s": 78.076,
+      "end_s": 78.61
+    },
+    {
+      "w": "One",
+      "start_s": 78.935,
+      "end_s": 79.156
+    },
+    {
+      "w": "is",
+      "start_s": 79.191,
+      "end_s": 79.261
+    },
+    {
+      "w": "being",
+      "start_s": 79.319,
+      "end_s": 79.528
+    },
+    {
+      "w": "pulled",
+      "start_s": 79.586,
+      "end_s": 79.887
+    },
+    {
+      "w": "by",
+      "start_s": 79.934,
+      "end_s": 80.05
+    },
+    {
+      "w": "a",
+      "start_s": 80.108,
+      "end_s": 80.131
+    },
+    {
+      "w": "steel",
+      "start_s": 80.178,
+      "end_s": 80.456
+    },
+    {
+      "w": "cable.",
+      "start_s": 80.526,
+      "end_s": 80.99
+    },
+    {
+      "w": "The",
+      "start_s": 81.269,
+      "end_s": 81.397
+    },
+    {
+      "w": "other",
+      "start_s": 81.466,
+      "end_s": 81.664
+    },
+    {
+      "w": "is",
+      "start_s": 81.722,
+      "end_s": 81.803
+    },
+    {
+      "w": "rising",
+      "start_s": 81.873,
+      "end_s": 82.279
+    },
+    {
+      "w": "because",
+      "start_s": 82.372,
+      "end_s": 82.72
+    },
+    {
+      "w": "everyone",
+      "start_s": 82.767,
+      "end_s": 83.185
+    },
+    {
+      "w": "inside",
+      "start_s": 83.22,
+      "end_s": 83.672
+    },
+    {
+      "w": "jumped",
+      "start_s": 83.73,
+      "end_s": 83.998
+    },
+    {
+      "w": "at",
+      "start_s": 84.032,
+      "end_s": 84.102
+    },
+    {
+      "w": "once.",
+      "start_s": 84.172,
+      "end_s": 84.613
+    },
+    {
+      "w": "The",
+      "start_s": 84.996,
+      "end_s": 85.112
+    },
+    {
+      "w": "chart",
+      "start_s": 85.159,
+      "end_s": 85.391
+    },
+    {
+      "w": "looks",
+      "start_s": 85.426,
+      "end_s": 85.623
+    },
+    {
+      "w": "identical",
+      "start_s": 85.669,
+      "end_s": 86.111
+    },
+    {
+      "w": "for",
+      "start_s": 86.169,
+      "end_s": 86.273
+    },
+    {
+      "w": "half",
+      "start_s": 86.331,
+      "end_s": 86.505
+    },
+    {
+      "w": "a",
+      "start_s": 86.552,
+      "end_s": 86.575
+    },
+    {
+      "w": "second.",
+      "start_s": 86.633,
+      "end_s": 87.167
+    },
+    {
+      "w": "The",
+      "start_s": 87.492,
+      "end_s": 87.608
+    },
+    {
+      "w": "mechanism",
+      "start_s": 87.655,
+      "end_s": 88.177
+    },
+    {
+      "w": "is",
+      "start_s": 88.258,
+      "end_s": 88.363
+    },
+    {
+      "w": "completely",
+      "start_s": 88.421,
+      "end_s": 88.85
+    },
+    {
+      "w": "different.",
+      "start_s": 88.897,
+      "end_s": 89.361
+    },
+    {
+      "w": "So",
+      "start_s": 89.803,
+      "end_s": 89.919
+    },
+    {
+      "w": "we",
+      "start_s": 89.965,
+      "end_s": 90.023
+    },
+    {
+      "w": "need",
+      "start_s": 90.046,
+      "end_s": 90.174
+    },
+    {
+      "w": "to",
+      "start_s": 90.209,
+      "end_s": 90.255
+    },
+    {
+      "w": "look",
+      "start_s": 90.313,
+      "end_s": 90.499
+    },
+    {
+      "w": "under",
+      "start_s": 90.569,
+      "end_s": 90.743
+    },
+    {
+      "w": "both",
+      "start_s": 90.813,
+      "end_s": 91.045
+    },
+    {
+      "w": "elevators.",
+      "start_s": 91.103,
+      "end_s": 91.788
+    },
+    {
+      "w": "For",
+      "start_s": 92.066,
+      "end_s": 92.206
+    },
+    {
+      "w": "memory,",
+      "start_s": 92.264,
+      "end_s": 92.717
+    },
+    {
+      "w": "the",
+      "start_s": 92.833,
+      "end_s": 92.937
+    },
+    {
+      "w": "cables",
+      "start_s": 92.984,
+      "end_s": 93.332
+    },
+    {
+      "w": "are",
+      "start_s": 93.367,
+      "end_s": 93.471
+    },
+    {
+      "w": "demand,",
+      "start_s": 93.518,
+      "end_s": 94.052
+    },
+    {
+      "w": "capacity,",
+      "start_s": 94.133,
+      "end_s": 94.911
+    },
+    {
+      "w": "contracts,",
+      "start_s": 95.12,
+      "end_s": 95.875
+    },
+    {
+      "w": "and",
+      "start_s": 95.967,
+      "end_s": 96.13
+    },
+    {
+      "w": "cash",
+      "start_s": 96.211,
+      "end_s": 96.525
+    },
+    {
+      "w": "flow.",
+      "start_s": 96.56,
+      "end_s": 96.931
+    },
+    {
+      "w": "For",
+      "start_s": 97.314,
+      "end_s": 97.453
+    },
+    {
+      "w": "the",
+      "start_s": 97.488,
+      "end_s": 97.558
+    },
+    {
+      "w": "S&P",
+      "start_s": 97.616,
+      "end_s": 97.942
+    },
+    {
+      "w": "500",
+      "start_s": 98.092,
+      "end_s": 98.569
+    },
+    {
+      "w": "complex,",
+      "start_s": 98.615,
+      "end_s": 99.149
+    },
+    {
+      "w": "the",
+      "start_s": 99.172,
+      "end_s": 99.242
+    },
+    {
+      "w": "question",
+      "start_s": 99.3,
+      "end_s": 99.648
+    },
+    {
+      "w": "is",
+      "start_s": 99.695,
+      "end_s": 99.753
+    },
+    {
+      "w": "whether",
+      "start_s": 99.799,
+      "end_s": 100.02
+    },
+    {
+      "w": "diversification",
+      "start_s": 100.066,
+      "end_s": 100.914
+    },
+    {
+      "w": "has",
+      "start_s": 100.972,
+      "end_s": 101.088
+    },
+    {
+      "w": "quietly",
+      "start_s": 101.158,
+      "end_s": 101.622
+    },
+    {
+      "w": "become",
+      "start_s": 101.68,
+      "end_s": 102.005
+    },
+    {
+      "w": "concentration—and",
+      "start_s": 102.052,
+      "end_s": 103.282
+    },
+    {
+      "w": "whether",
+      "start_s": 103.34,
+      "end_s": 103.596
+    },
+    {
+      "w": "automatic",
+      "start_s": 103.665,
+      "end_s": 104.153
+    },
+    {
+      "w": "demand",
+      "start_s": 104.199,
+      "end_s": 104.536
+    },
+    {
+      "w": "is",
+      "start_s": 104.606,
+      "end_s": 104.687
+    },
+    {
+      "w": "helping",
+      "start_s": 104.745,
+      "end_s": 105.035
+    },
+    {
+      "w": "investors",
+      "start_s": 105.082,
+      "end_s": 105.581
+    },
+    {
+      "w": "ignore",
+      "start_s": 105.662,
+      "end_s": 106.022
+    },
+    {
+      "w": "the",
+      "start_s": 106.057,
+      "end_s": 106.127
+    },
+    {
+      "w": "price",
+      "start_s": 106.173,
+      "end_s": 106.475
+    },
+    {
+      "w": "of",
+      "start_s": 106.521,
+      "end_s": 106.579
+    },
+    {
+      "w": "that",
+      "start_s": 106.626,
+      "end_s": 106.765
+    },
+    {
+      "w": "concentration.",
+      "start_s": 106.823,
+      "end_s": 107.74
+    },
+    {
+      "w": "Start",
+      "start_s": 108.182,
+      "end_s": 108.541
+    },
+    {
+      "w": "with",
+      "start_s": 108.6,
+      "end_s": 108.75
+    },
+    {
+      "w": "the",
+      "start_s": 108.785,
+      "end_s": 108.855
+    },
+    {
+      "w": "product.",
+      "start_s": 108.89,
+      "end_s": 109.517
+    },
+    {
+      "w": "High-bandwidth",
+      "start_s": 109.958,
+      "end_s": 110.805
+    },
+    {
+      "w": "memory,",
+      "start_s": 110.887,
+      "end_s": 111.27
+    },
+    {
+      "w": "or",
+      "start_s": 111.305,
+      "end_s": 111.479
+    },
+    {
+      "w": "HBM,",
+      "start_s": 111.572,
+      "end_s": 112.327
+    },
+    {
+      "w": "is",
+      "start_s": 112.373,
+      "end_s": 112.535
+    },
+    {
+      "w": "not",
+      "start_s": 112.628,
+      "end_s": 112.826
+    },
+    {
+      "w": "ordinary",
+      "start_s": 112.895,
+      "end_s": 113.36
+    },
+    {
+      "w": "storage.",
+      "start_s": 113.406,
+      "end_s": 113.929
+    },
+    {
+      "w": "It",
+      "start_s": 113.964,
+      "end_s": 114.114
+    },
+    {
+      "w": "is",
+      "start_s": 114.161,
+      "end_s": 114.242
+    },
+    {
+      "w": "stacked",
+      "start_s": 114.277,
+      "end_s": 114.614
+    },
+    {
+      "w": "working",
+      "start_s": 114.672,
+      "end_s": 114.974
+    },
+    {
+      "w": "memory",
+      "start_s": 115.032,
+      "end_s": 115.345
+    },
+    {
+      "w": "placed",
+      "start_s": 115.426,
+      "end_s": 115.717
+    },
+    {
+      "w": "beside",
+      "start_s": 115.751,
+      "end_s": 116.123
+    },
+    {
+      "w": "an",
+      "start_s": 116.158,
+      "end_s": 116.216
+    },
+    {
+      "w": "AI",
+      "start_s": 116.286,
+      "end_s": 116.68
+    },
+    {
+      "w": "accelerator",
+      "start_s": 116.738,
+      "end_s": 117.354
+    },
+    {
+      "w": "so",
+      "start_s": 117.412,
+      "end_s": 117.586
+    },
+    {
+      "w": "enormous",
+      "start_s": 117.702,
+      "end_s": 118.166
+    },
+    {
+      "w": "amounts",
+      "start_s": 118.213,
+      "end_s": 118.526
+    },
+    {
+      "w": "of",
+      "start_s": 118.561,
+      "end_s": 118.619
+    },
+    {
+      "w": "data",
+      "start_s": 118.677,
+      "end_s": 119.002
+    },
+    {
+      "w": "can",
+      "start_s": 119.246,
+      "end_s": 119.409
+    },
+    {
+      "w": "reach",
+      "start_s": 119.49,
+      "end_s": 119.699
+    },
+    {
+      "w": "the",
+      "start_s": 119.757,
+      "end_s": 119.827
+    },
+    {
+      "w": "processor",
+      "start_s": 119.873,
+      "end_s": 120.372
+    },
+    {
+      "w": "quickly.",
+      "start_s": 120.442,
+      "end_s": 120.86
+    },
+    {
+      "w": "Plain",
+      "start_s": 121.104,
+      "end_s": 121.406
+    },
+    {
+      "w": "English:",
+      "start_s": 121.464,
+      "end_s": 121.905
+    },
+    {
+      "w": "the",
+      "start_s": 122.079,
+      "end_s": 122.172
+    },
+    {
+      "w": "GPU",
+      "start_s": 122.241,
+      "end_s": 122.892
+    },
+    {
+      "w": "may",
+      "start_s": 122.973,
+      "end_s": 123.112
+    },
+    {
+      "w": "be",
+      "start_s": 123.182,
+      "end_s": 123.286
+    },
+    {
+      "w": "the",
+      "start_s": 123.321,
+      "end_s": 123.402
+    },
+    {
+      "w": "engine,",
+      "start_s": 123.484,
+      "end_s": 123.867
+    },
+    {
+      "w": "but",
+      "start_s": 123.902,
+      "end_s": 124.053
+    },
+    {
+      "w": "HBM",
+      "start_s": 124.111,
+      "end_s": 124.761
+    },
+    {
+      "w": "is",
+      "start_s": 124.842,
+      "end_s": 125.005
+    },
+    {
+      "w": "the",
+      "start_s": 125.074,
+      "end_s": 125.144
+    },
+    {
+      "w": "pressure-rated",
+      "start_s": 125.214,
+      "end_s": 125.852
+    },
+    {
+      "w": "fuel",
+      "start_s": 125.91,
+      "end_s": 126.2
+    },
+    {
+      "w": "system.",
+      "start_s": 126.258,
+      "end_s": 126.711
+    },
+    {
+      "w": "Build",
+      "start_s": 126.92,
+      "end_s": 127.152
+    },
+    {
+      "w": "a",
+      "start_s": 127.199,
+      "end_s": 127.222
+    },
+    {
+      "w": "larger",
+      "start_s": 127.268,
+      "end_s": 127.593
+    },
+    {
+      "w": "engine",
+      "start_s": 127.663,
+      "end_s": 127.93
+    },
+    {
+      "w": "without",
+      "start_s": 127.953,
+      "end_s": 128.232
+    },
+    {
+      "w": "widening",
+      "start_s": 128.302,
+      "end_s": 128.696
+    },
+    {
+      "w": "the",
+      "start_s": 128.731,
+      "end_s": 128.801
+    },
+    {
+      "w": "fuel",
+      "start_s": 128.847,
+      "end_s": 129.138
+    },
+    {
+      "w": "line",
+      "start_s": 129.196,
+      "end_s": 129.486
+    },
+    {
+      "w": "and",
+      "start_s": 129.532,
+      "end_s": 129.648
+    },
+    {
+      "w": "the",
+      "start_s": 129.695,
+      "end_s": 129.765
+    },
+    {
+      "w": "expensive",
+      "start_s": 129.834,
+      "end_s": 130.38
+    },
+    {
+      "w": "engine",
+      "start_s": 130.426,
+      "end_s": 130.717
+    },
+    {
+      "w": "sits",
+      "start_s": 130.763,
+      "end_s": 130.984
+    },
+    {
+      "w": "there",
+      "start_s": 131.03,
+      "end_s": 131.204
+    },
+    {
+      "w": "starving.",
+      "start_s": 131.239,
+      "end_s": 131.82
+    },
+    {
+      "w": "That",
+      "start_s": 132.098,
+      "end_s": 132.249
+    },
+    {
+      "w": "is",
+      "start_s": 132.284,
+      "end_s": 132.354
+    },
+    {
+      "w": "why",
+      "start_s": 132.4,
+      "end_s": 132.597
+    },
+    {
+      "w": "every",
+      "start_s": 132.713,
+      "end_s": 133.027
+    },
+    {
+      "w": "serious",
+      "start_s": 133.12,
+      "end_s": 133.584
+    },
+    {
+      "w": "AI",
+      "start_s": 133.654,
+      "end_s": 134.002
+    },
+    {
+      "w": "architecture—whether",
+      "start_s": 134.072,
+      "end_s": 134.919
+    },
+    {
+      "w": "it",
+      "start_s": 134.966,
+      "end_s": 135.024
+    },
+    {
+      "w": "uses",
+      "start_s": 135.082,
+      "end_s": 135.361
+    },
+    {
+      "w": "GPUs,",
+      "start_s": 135.419,
+      "end_s": 136.231
+    },
+    {
+      "w": "custom",
+      "start_s": 136.405,
+      "end_s": 136.754
+    },
+    {
+      "w": "accelerators,",
+      "start_s": 136.8,
+      "end_s": 137.532
+    },
+    {
+      "w": "or",
+      "start_s": 137.566,
+      "end_s": 137.648
+    },
+    {
+      "w": "specialized",
+      "start_s": 137.706,
+      "end_s": 138.379
+    },
+    {
+      "w": "processors—has",
+      "start_s": 138.426,
+      "end_s": 139.516
+    },
+    {
+      "w": "to",
+      "start_s": 139.574,
+      "end_s": 139.633
+    },
+    {
+      "w": "solve",
+      "start_s": 139.702,
+      "end_s": 140.004
+    },
+    {
+      "w": "memory",
+      "start_s": 140.062,
+      "end_s": 140.364
+    },
+    {
+      "w": "bandwidth",
+      "start_s": 140.434,
+      "end_s": 140.898
+    },
+    {
+      "w": "and",
+      "start_s": 140.944,
+      "end_s": 141.014
+    },
+    {
+      "w": "capacity.",
+      "start_s": 141.049,
+      "end_s": 141.78
+    },
+    {
+      "w": "And",
+      "start_s": 141.955,
+      "end_s": 142.105
+    },
+    {
+      "w": "this",
+      "start_s": 142.164,
+      "end_s": 142.338
+    },
+    {
+      "w": "is",
+      "start_s": 142.396,
+      "end_s": 142.477
+    },
+    {
+      "w": "where",
+      "start_s": 142.512,
+      "end_s": 142.663
+    },
+    {
+      "w": "the",
+      "start_s": 142.698,
+      "end_s": 142.767
+    },
+    {
+      "w": "shortage",
+      "start_s": 142.814,
+      "end_s": 143.22
+    },
+    {
+      "w": "becomes",
+      "start_s": 143.266,
+      "end_s": 143.626
+    },
+    {
+      "w": "physical.",
+      "start_s": 143.684,
+      "end_s": 144.23
+    },
+    {
+      "w": "HBM",
+      "start_s": 144.613,
+      "end_s": 145.112
+    },
+    {
+      "w": "competes",
+      "start_s": 145.17,
+      "end_s": 145.588
+    },
+    {
+      "w": "for",
+      "start_s": 145.635,
+      "end_s": 145.763
+    },
+    {
+      "w": "advanced",
+      "start_s": 145.809,
+      "end_s": 146.181
+    },
+    {
+      "w": "wafers,",
+      "start_s": 146.239,
+      "end_s": 146.877
+    },
+    {
+      "w": "clean-room",
+      "start_s": 147.028,
+      "end_s": 147.574
+    },
+    {
+      "w": "space,",
+      "start_s": 147.643,
+      "end_s": 148.177
+    },
+    {
+      "w": "packaging",
+      "start_s": 148.386,
+      "end_s": 148.862
+    },
+    {
+      "w": "capacity,",
+      "start_s": 148.897,
+      "end_s": 149.64
+    },
+    {
+      "w": "equipment,",
+      "start_s": 149.756,
+      "end_s": 150.395
+    },
+    {
+      "w": "engineers,",
+      "start_s": 150.523,
+      "end_s": 151.266
+    },
+    {
+      "w": "and",
+      "start_s": 151.382,
+      "end_s": 151.568
+    },
+    {
+      "w": "time.",
+      "start_s": 151.637,
+      "end_s": 152.16
+    },
+    {
+      "w": "New",
+      "start_s": 152.972,
+      "end_s": 153.147
+    },
+    {
+      "w": "generations",
+      "start_s": 153.205,
+      "end_s": 153.901
+    },
+    {
+      "w": "also",
+      "start_s": 153.971,
+      "end_s": 154.354
+    },
+    {
+      "w": "use",
+      "start_s": 154.447,
+      "end_s": 154.667
+    },
+    {
+      "w": "larger",
+      "start_s": 154.726,
+      "end_s": 155.062
+    },
+    {
+      "w": "dies",
+      "start_s": 155.132,
+      "end_s": 155.55
+    },
+    {
+      "w": "and",
+      "start_s": 155.666,
+      "end_s": 155.84
+    },
+    {
+      "w": "more",
+      "start_s": 155.898,
+      "end_s": 156.072
+    },
+    {
+      "w": "complicated",
+      "start_s": 156.13,
+      "end_s": 156.734
+    },
+    {
+      "w": "stacks.",
+      "start_s": 156.78,
+      "end_s": 157.465
+    },
+    {
+      "w": "Imagine",
+      "start_s": 157.906,
+      "end_s": 158.324
+    },
+    {
+      "w": "a",
+      "start_s": 158.348,
+      "end_s": 158.382
+    },
+    {
+      "w": "bakery",
+      "start_s": 158.441,
+      "end_s": 158.858
+    },
+    {
+      "w": "with",
+      "start_s": 158.905,
+      "end_s": 159.033
+    },
+    {
+      "w": "a",
+      "start_s": 159.067,
+      "end_s": 159.102
+    },
+    {
+      "w": "fixed",
+      "start_s": 159.184,
+      "end_s": 159.474
+    },
+    {
+      "w": "number",
+      "start_s": 159.532,
+      "end_s": 159.787
+    },
+    {
+      "w": "of",
+      "start_s": 159.845,
+      "end_s": 159.903
+    },
+    {
+      "w": "ovens.",
+      "start_s": 159.973,
+      "end_s": 160.577
+    },
+    {
+      "w": "Yesterday",
+      "start_s": 160.96,
+      "end_s": 161.436
+    },
+    {
+      "w": "it",
+      "start_s": 161.482,
+      "end_s": 161.54
+    },
+    {
+      "w": "made",
+      "start_s": 161.587,
+      "end_s": 161.784
+    },
+    {
+      "w": "simple",
+      "start_s": 161.819,
+      "end_s": 162.144
+    },
+    {
+      "w": "loaves.",
+      "start_s": 162.179,
+      "end_s": 162.713
+    },
+    {
+      "w": "Today",
+      "start_s": 162.864,
+      "end_s": 163.212
+    },
+    {
+      "w": "its",
+      "start_s": 163.282,
+      "end_s": 163.421
+    },
+    {
+      "w": "most",
+      "start_s": 163.491,
+      "end_s": 163.7
+    },
+    {
+      "w": "valuable",
+      "start_s": 163.769,
+      "end_s": 164.245
+    },
+    {
+      "w": "customer",
+      "start_s": 164.292,
+      "end_s": 164.721
+    },
+    {
+      "w": "wants",
+      "start_s": 164.78,
+      "end_s": 165.012
+    },
+    {
+      "w": "twelve-layer",
+      "start_s": 165.058,
+      "end_s": 165.697
+    },
+    {
+      "w": "wedding",
+      "start_s": 165.755,
+      "end_s": 166.01
+    },
+    {
+      "w": "cakes.",
+      "start_s": 166.068,
+      "end_s": 166.591
+    },
+    {
+      "w": "Each",
+      "start_s": 166.916,
+      "end_s": 167.125
+    },
+    {
+      "w": "cake",
+      "start_s": 167.183,
+      "end_s": 167.461
+    },
+    {
+      "w": "earns",
+      "start_s": 167.508,
+      "end_s": 167.775
+    },
+    {
+      "w": "more,",
+      "start_s": 167.845,
+      "end_s": 168.332
+    },
+    {
+      "w": "but",
+      "start_s": 168.506,
+      "end_s": 168.669
+    },
+    {
+      "w": "it",
+      "start_s": 168.715,
+      "end_s": 168.785
+    },
+    {
+      "w": "also",
+      "start_s": 168.831,
+      "end_s": 169.11
+    },
+    {
+      "w": "occupies",
+      "start_s": 169.203,
+      "end_s": 169.725
+    },
+    {
+      "w": "more",
+      "start_s": 169.783,
+      "end_s": 169.958
+    },
+    {
+      "w": "oven",
+      "start_s": 170.004,
+      "end_s": 170.248
+    },
+    {
+      "w": "space,",
+      "start_s": 170.283,
+      "end_s": 170.817
+    },
+    {
+      "w": "takes",
+      "start_s": 170.898,
+      "end_s": 171.177
+    },
+    {
+      "w": "longer,",
+      "start_s": 171.235,
+      "end_s": 171.792
+    },
+    {
+      "w": "and",
+      "start_s": 171.943,
+      "end_s": 172.082
+    },
+    {
+      "w": "has",
+      "start_s": 172.129,
+      "end_s": 172.268
+    },
+    {
+      "w": "more",
+      "start_s": 172.338,
+      "end_s": 172.5
+    },
+    {
+      "w": "opportunities",
+      "start_s": 172.535,
+      "end_s": 173.185
+    },
+    {
+      "w": "to",
+      "start_s": 173.22,
+      "end_s": 173.29
+    },
+    {
+      "w": "fail.",
+      "start_s": 173.371,
+      "end_s": 173.894
+    },
+    {
+      "w": "Producing",
+      "start_s": 174.59,
+      "end_s": 175.066
+    },
+    {
+      "w": "more",
+      "start_s": 175.113,
+      "end_s": 175.287
+    },
+    {
+      "w": "cakes",
+      "start_s": 175.333,
+      "end_s": 175.693
+    },
+    {
+      "w": "can",
+      "start_s": 175.751,
+      "end_s": 175.891
+    },
+    {
+      "w": "mean",
+      "start_s": 175.937,
+      "end_s": 176.1
+    },
+    {
+      "w": "producing",
+      "start_s": 176.158,
+      "end_s": 176.599
+    },
+    {
+      "w": "fewer",
+      "start_s": 176.668,
+      "end_s": 176.935
+    },
+    {
+      "w": "loaves.",
+      "start_s": 177.005,
+      "end_s": 177.586
+    },
+    {
+      "w": "As",
+      "start_s": 178.096,
+      "end_s": 178.247
+    },
+    {
+      "w": "manufacturers",
+      "start_s": 178.329,
+      "end_s": 179.269
+    },
+    {
+      "w": "devote",
+      "start_s": 179.327,
+      "end_s": 179.652
+    },
+    {
+      "w": "more",
+      "start_s": 179.699,
+      "end_s": 179.873
+    },
+    {
+      "w": "capacity",
+      "start_s": 179.908,
+      "end_s": 180.465
+    },
+    {
+      "w": "to",
+      "start_s": 180.511,
+      "end_s": 180.581
+    },
+    {
+      "w": "HBM,",
+      "start_s": 180.651,
+      "end_s": 181.51
+    },
+    {
+      "w": "they",
+      "start_s": 181.754,
+      "end_s": 181.916
+    },
+    {
+      "w": "also",
+      "start_s": 181.963,
+      "end_s": 182.253
+    },
+    {
+      "w": "pressure",
+      "start_s": 182.334,
+      "end_s": 182.694
+    },
+    {
+      "w": "conventional",
+      "start_s": 182.74,
+      "end_s": 183.309
+    },
+    {
+      "w": "DRAM",
+      "start_s": 183.367,
+      "end_s": 183.658
+    },
+    {
+      "w": "supply.",
+      "start_s": 183.716,
+      "end_s": 184.435
+    },
+    {
+      "w": "The",
+      "start_s": 185.132,
+      "end_s": 185.271
+    },
+    {
+      "w": "AI",
+      "start_s": 185.353,
+      "end_s": 185.689
+    },
+    {
+      "w": "boom",
+      "start_s": 185.759,
+      "end_s": 186.014
+    },
+    {
+      "w": "pulls",
+      "start_s": 186.072,
+      "end_s": 186.339
+    },
+    {
+      "w": "the",
+      "start_s": 186.398,
+      "end_s": 186.467
+    },
+    {
+      "w": "same",
+      "start_s": 186.525,
+      "end_s": 186.757
+    },
+    {
+      "w": "production",
+      "start_s": 186.781,
+      "end_s": 187.222
+    },
+    {
+      "w": "system",
+      "start_s": 187.292,
+      "end_s": 187.605
+    },
+    {
+      "w": "toward",
+      "start_s": 187.651,
+      "end_s": 187.895
+    },
+    {
+      "w": "more",
+      "start_s": 187.942,
+      "end_s": 188.104
+    },
+    {
+      "w": "complex",
+      "start_s": 188.151,
+      "end_s": 188.592
+    },
+    {
+      "w": "products.",
+      "start_s": 188.662,
+      "end_s": 189.172
+    },
+    {
+      "w": "Micron",
+      "start_s": 189.288,
+      "end_s": 189.799
+    },
+    {
+      "w": "says",
+      "start_s": 189.857,
+      "end_s": 190.113
+    },
+    {
+      "w": "HBM’s",
+      "start_s": 190.194,
+      "end_s": 190.809
+    },
+    {
+      "w": "growing",
+      "start_s": 190.856,
+      "end_s": 191.134
+    },
+    {
+      "w": "trade",
+      "start_s": 191.181,
+      "end_s": 191.436
+    },
+    {
+      "w": "ratio",
+      "start_s": 191.471,
+      "end_s": 191.854
+    },
+    {
+      "w": "is",
+      "start_s": 191.924,
+      "end_s": 191.994
+    },
+    {
+      "w": "pressuring",
+      "start_s": 192.063,
+      "end_s": 192.516
+    },
+    {
+      "w": "non-HBM",
+      "start_s": 192.609,
+      "end_s": 193.375
+    },
+    {
+      "w": "supply",
+      "start_s": 193.433,
+      "end_s": 193.874
+    },
+    {
+      "w": "and",
+      "start_s": 194.153,
+      "end_s": 194.432
+    },
+    {
+      "w": "new",
+      "start_s": 194.525,
+      "end_s": 194.675
+    },
+    {
+      "w": "fabs",
+      "start_s": 194.757,
+      "end_s": 195.186
+    },
+    {
+      "w": "take",
+      "start_s": 195.256,
+      "end_s": 195.535
+    },
+    {
+      "w": "years.",
+      "start_s": 195.593,
+      "end_s": 196.069
+    },
+    {
+      "w": "Samsung",
+      "start_s": 196.185,
+      "end_s": 196.719
+    },
+    {
+      "w": "says",
+      "start_s": 196.777,
+      "end_s": 197.009
+    },
+    {
+      "w": "concentrating",
+      "start_s": 197.09,
+      "end_s": 197.775
+    },
+    {
+      "w": "capacity",
+      "start_s": 197.822,
+      "end_s": 198.402
+    },
+    {
+      "w": "on",
+      "start_s": 198.472,
+      "end_s": 198.565
+    },
+    {
+      "w": "HBM",
+      "start_s": 198.623,
+      "end_s": 199.169
+    },
+    {
+      "w": "and",
+      "start_s": 199.227,
+      "end_s": 199.308
+    },
+    {
+      "w": "server",
+      "start_s": 199.378,
+      "end_s": 199.703
+    },
+    {
+      "w": "products",
+      "start_s": 199.749,
+      "end_s": 200.237
+    },
+    {
+      "w": "limits",
+      "start_s": 200.62,
+      "end_s": 200.968
+    },
+    {
+      "w": "cutting-edge",
+      "start_s": 201.026,
+      "end_s": 201.526
+    },
+    {
+      "w": "supply",
+      "start_s": 201.549,
+      "end_s": 201.897
+    },
+    {
+      "w": "for",
+      "start_s": 201.967,
+      "end_s": 202.083
+    },
+    {
+      "w": "PCs",
+      "start_s": 202.153,
+      "end_s": 202.606
+    },
+    {
+      "w": "and",
+      "start_s": 202.652,
+      "end_s": 202.733
+    },
+    {
+      "w": "phones.",
+      "start_s": 202.78,
+      "end_s": 203.337
+    },
+    {
+      "w": "This",
+      "start_s": 203.581,
+      "end_s": 203.743
+    },
+    {
+      "w": "is",
+      "start_s": 203.801,
+      "end_s": 203.883
+    },
+    {
+      "w": "not",
+      "start_s": 203.952,
+      "end_s": 204.103
+    },
+    {
+      "w": "proof",
+      "start_s": 204.161,
+      "end_s": 204.405
+    },
+    {
+      "w": "that",
+      "start_s": 204.452,
+      "end_s": 204.579
+    },
+    {
+      "w": "any",
+      "start_s": 204.626,
+      "end_s": 204.777
+    },
+    {
+      "w": "stock",
+      "start_s": 204.835,
+      "end_s": 205.113
+    },
+    {
+      "w": "price",
+      "start_s": 205.16,
+      "end_s": 205.438
+    },
+    {
+      "w": "is",
+      "start_s": 205.473,
+      "end_s": 205.554
+    },
+    {
+      "w": "fair.",
+      "start_s": 205.613,
+      "end_s": 206.1
+    },
+    {
+      "w": "It",
+      "start_s": 206.379,
+      "end_s": 206.507
+    },
+    {
+      "w": "is",
+      "start_s": 206.553,
+      "end_s": 206.634
+    },
+    {
+      "w": "proof",
+      "start_s": 206.704,
+      "end_s": 206.936
+    },
+    {
+      "w": "that",
+      "start_s": 206.983,
+      "end_s": 207.11
+    },
+    {
+      "w": "the",
+      "start_s": 207.145,
+      "end_s": 207.226
+    },
+    {
+      "w": "underlying",
+      "start_s": 207.319,
+      "end_s": 207.865
+    },
+    {
+      "w": "shortage",
+      "start_s": 207.935,
+      "end_s": 208.352
+    },
+    {
+      "w": "is",
+      "start_s": 208.387,
+      "end_s": 208.457
+    },
+    {
+      "w": "not",
+      "start_s": 208.527,
+      "end_s": 208.724
+    },
+    {
+      "w": "imaginary.",
+      "start_s": 208.782,
+      "end_s": 209.722
+    },
+    {
+      "w": "Now",
+      "start_s": 210.164,
+      "end_s": 210.315
+    },
+    {
+      "w": "look",
+      "start_s": 210.361,
+      "end_s": 210.524
+    },
+    {
+      "w": "at",
+      "start_s": 210.57,
+      "end_s": 210.616
+    },
+    {
+      "w": "buyer",
+      "start_s": 210.686,
+      "end_s": 210.965
+    },
+    {
+      "w": "behavior.",
+      "start_s": 211.023,
+      "end_s": 211.627
+    },
+    {
+      "w": "In",
+      "start_s": 212.01,
+      "end_s": 212.149
+    },
+    {
+      "w": "a",
+      "start_s": 212.195,
+      "end_s": 212.219
+    },
+    {
+      "w": "classic",
+      "start_s": 212.265,
+      "end_s": 212.671
+    },
+    {
+      "w": "commodity",
+      "start_s": 212.718,
+      "end_s": 213.171
+    },
+    {
+      "w": "memory",
+      "start_s": 213.24,
+      "end_s": 213.519
+    },
+    {
+      "w": "cycle,",
+      "start_s": 213.577,
+      "end_s": 214.041
+    },
+    {
+      "w": "suppliers",
+      "start_s": 214.134,
+      "end_s": 214.738
+    },
+    {
+      "w": "add",
+      "start_s": 214.796,
+      "end_s": 215.017
+    },
+    {
+      "w": "capacity,",
+      "start_s": 215.075,
+      "end_s": 215.829
+    },
+    {
+      "w": "prices",
+      "start_s": 215.945,
+      "end_s": 216.363
+    },
+    {
+      "w": "spike,",
+      "start_s": 216.409,
+      "end_s": 216.909
+    },
+    {
+      "w": "everybody",
+      "start_s": 217.118,
+      "end_s": 217.582
+    },
+    {
+      "w": "gets",
+      "start_s": 217.628,
+      "end_s": 217.803
+    },
+    {
+      "w": "excited,",
+      "start_s": 217.849,
+      "end_s": 218.395
+    },
+    {
+      "w": "too",
+      "start_s": 218.476,
+      "end_s": 218.638
+    },
+    {
+      "w": "much",
+      "start_s": 218.685,
+      "end_s": 218.859
+    },
+    {
+      "w": "supply",
+      "start_s": 218.906,
+      "end_s": 219.242
+    },
+    {
+      "w": "arrives,",
+      "start_s": 219.312,
+      "end_s": 219.916
+    },
+    {
+      "w": "and",
+      "start_s": 219.95,
+      "end_s": 220.113
+    },
+    {
+      "w": "margins",
+      "start_s": 220.194,
+      "end_s": 220.601
+    },
+    {
+      "w": "collapse.",
+      "start_s": 220.659,
+      "end_s": 221.355
+    },
+    {
+      "w": "That",
+      "start_s": 221.796,
+      "end_s": 222.005
+    },
+    {
+      "w": "history",
+      "start_s": 222.063,
+      "end_s": 222.377
+    },
+    {
+      "w": "is",
+      "start_s": 222.412,
+      "end_s": 222.481
+    },
+    {
+      "w": "the",
+      "start_s": 222.528,
+      "end_s": 222.597
+    },
+    {
+      "w": "strongest",
+      "start_s": 222.656,
+      "end_s": 223.132
+    },
+    {
+      "w": "argument",
+      "start_s": 223.19,
+      "end_s": 223.596
+    },
+    {
+      "w": "against",
+      "start_s": 223.654,
+      "end_s": 224.014
+    },
+    {
+      "w": "this",
+      "start_s": 224.06,
+      "end_s": 224.223
+    },
+    {
+      "w": "entire",
+      "start_s": 224.293,
+      "end_s": 224.699
+    },
+    {
+      "w": "video.",
+      "start_s": 224.745,
+      "end_s": 225.326
+    },
+    {
+      "w": "But",
+      "start_s": 225.477,
+      "end_s": 225.628
+    },
+    {
+      "w": "customers",
+      "start_s": 225.674,
+      "end_s": 226.127
+    },
+    {
+      "w": "are",
+      "start_s": 226.162,
+      "end_s": 226.266
+    },
+    {
+      "w": "behaving",
+      "start_s": 226.289,
+      "end_s": 226.696
+    },
+    {
+      "w": "differently",
+      "start_s": 226.754,
+      "end_s": 227.149
+    },
+    {
+      "w": "this",
+      "start_s": 227.207,
+      "end_s": 227.358
+    },
+    {
+      "w": "time.",
+      "start_s": 227.416,
+      "end_s": 227.81
+    },
+    {
+      "w": "Micron",
+      "start_s": 228.252,
+      "end_s": 228.762
+    },
+    {
+      "w": "says",
+      "start_s": 228.844,
+      "end_s": 229.169
+    },
+    {
+      "w": "it",
+      "start_s": 229.262,
+      "end_s": 229.378
+    },
+    {
+      "w": "has",
+      "start_s": 229.424,
+      "end_s": 229.54
+    },
+    {
+      "w": "completed",
+      "start_s": 229.609,
+      "end_s": 230.074
+    },
+    {
+      "w": "sixteen",
+      "start_s": 230.155,
+      "end_s": 230.724
+    },
+    {
+      "w": "strategic",
+      "start_s": 230.794,
+      "end_s": 231.351
+    },
+    {
+      "w": "customer",
+      "start_s": 231.397,
+      "end_s": 231.804
+    },
+    {
+      "w": "agreements",
+      "start_s": 231.85,
+      "end_s": 232.257
+    },
+    {
+      "w": "across",
+      "start_s": 232.303,
+      "end_s": 232.616
+    },
+    {
+      "w": "data",
+      "start_s": 232.675,
+      "end_s": 232.93
+    },
+    {
+      "w": "centers,",
+      "start_s": 232.976,
+      "end_s": 233.51
+    },
+    {
+      "w": "consumer",
+      "start_s": 233.627,
+      "end_s": 234.056
+    },
+    {
+      "w": "devices,",
+      "start_s": 234.114,
+      "end_s": 234.706
+    },
+    {
+      "w": "and",
+      "start_s": 234.753,
+      "end_s": 234.892
+    },
+    {
+      "w": "automotive",
+      "start_s": 234.962,
+      "end_s": 235.461
+    },
+    {
+      "w": "markets.",
+      "start_s": 235.496,
+      "end_s": 236.065
+    },
+    {
+      "w": "Most",
+      "start_s": 236.39,
+      "end_s": 236.61
+    },
+    {
+      "w": "run",
+      "start_s": 236.668,
+      "end_s": 236.819
+    },
+    {
+      "w": "for",
+      "start_s": 236.877,
+      "end_s": 236.982
+    },
+    {
+      "w": "five",
+      "start_s": 237.051,
+      "end_s": 237.377
+    },
+    {
+      "w": "years.",
+      "start_s": 237.423,
+      "end_s": 237.945
+    },
+    {
+      "w": "They",
+      "start_s": 238.154,
+      "end_s": 238.294
+    },
+    {
+      "w": "cover",
+      "start_s": 238.352,
+      "end_s": 238.561
+    },
+    {
+      "w": "roughly",
+      "start_s": 238.607,
+      "end_s": 238.863
+    },
+    {
+      "w": "twenty",
+      "start_s": 238.909,
+      "end_s": 239.164
+    },
+    {
+      "w": "percent",
+      "start_s": 239.223,
+      "end_s": 239.536
+    },
+    {
+      "w": "of",
+      "start_s": 239.571,
+      "end_s": 239.617
+    },
+    {
+      "w": "its",
+      "start_s": 239.664,
+      "end_s": 239.78
+    },
+    {
+      "w": "DRAM",
+      "start_s": 239.838,
+      "end_s": 240.117
+    },
+    {
+      "w": "volume",
+      "start_s": 240.186,
+      "end_s": 240.639
+    },
+    {
+      "w": "and",
+      "start_s": 240.709,
+      "end_s": 240.871
+    },
+    {
+      "w": "one-third",
+      "start_s": 240.964,
+      "end_s": 241.394
+    },
+    {
+      "w": "of",
+      "start_s": 241.428,
+      "end_s": 241.475
+    },
+    {
+      "w": "its",
+      "start_s": 241.533,
+      "end_s": 241.649
+    },
+    {
+      "w": "NAND",
+      "start_s": 241.719,
+      "end_s": 242.044
+    },
+    {
+      "w": "volume",
+      "start_s": 242.102,
+      "end_s": 242.531
+    },
+    {
+      "w": "over",
+      "start_s": 242.578,
+      "end_s": 242.763
+    },
+    {
+      "w": "the",
+      "start_s": 242.81,
+      "end_s": 242.879
+    },
+    {
+      "w": "contract",
+      "start_s": 242.926,
+      "end_s": 243.413
+    },
+    {
+      "w": "period.",
+      "start_s": 243.46,
+      "end_s": 243.913
+    },
+    {
+      "w": "They",
+      "start_s": 244.029,
+      "end_s": 244.168
+    },
+    {
+      "w": "are",
+      "start_s": 244.203,
+      "end_s": 244.296
+    },
+    {
+      "w": "take-or-pay",
+      "start_s": 244.331,
+      "end_s": 244.783
+    },
+    {
+      "w": "agreements:",
+      "start_s": 244.83,
+      "end_s": 245.352
+    },
+    {
+      "w": "buyers",
+      "start_s": 245.468,
+      "end_s": 245.886
+    },
+    {
+      "w": "commit",
+      "start_s": 245.944,
+      "end_s": 246.223
+    },
+    {
+      "w": "to",
+      "start_s": 246.269,
+      "end_s": 246.339
+    },
+    {
+      "w": "specific",
+      "start_s": 246.409,
+      "end_s": 246.896
+    },
+    {
+      "w": "volumes",
+      "start_s": 246.966,
+      "end_s": 247.454
+    },
+    {
+      "w": "rather",
+      "start_s": 247.512,
+      "end_s": 247.767
+    },
+    {
+      "w": "than",
+      "start_s": 247.814,
+      "end_s": 247.941
+    },
+    {
+      "w": "casually",
+      "start_s": 248.011,
+      "end_s": 248.475
+    },
+    {
+      "w": "promising",
+      "start_s": 248.522,
+      "end_s": 248.963
+    },
+    {
+      "w": "they",
+      "start_s": 249.009,
+      "end_s": 249.137
+    },
+    {
+      "w": "might",
+      "start_s": 249.207,
+      "end_s": 249.427
+    },
+    {
+      "w": "show",
+      "start_s": 249.485,
+      "end_s": 249.706
+    },
+    {
+      "w": "up",
+      "start_s": 249.787,
+      "end_s": 249.892
+    },
+    {
+      "w": "later.",
+      "start_s": 249.973,
+      "end_s": 250.368
+    },
+    {
+      "w": "Translation:",
+      "start_s": 250.971,
+      "end_s": 251.807
+    },
+    {
+      "w": "customers",
+      "start_s": 252.249,
+      "end_s": 252.725
+    },
+    {
+      "w": "are",
+      "start_s": 252.771,
+      "end_s": 252.864
+    },
+    {
+      "w": "reserving",
+      "start_s": 252.899,
+      "end_s": 253.317
+    },
+    {
+      "w": "oven",
+      "start_s": 253.386,
+      "end_s": 253.619
+    },
+    {
+      "w": "time",
+      "start_s": 253.665,
+      "end_s": 253.955
+    },
+    {
+      "w": "through",
+      "start_s": 253.99,
+      "end_s": 254.199
+    },
+    {
+      "w": "2030.",
+      "start_s": 254.245,
+      "end_s": 255.023
+    },
+    {
+      "w": "SK",
+      "start_s": 255.72,
+      "end_s": 256.045
+    },
+    {
+      "w": "hynix",
+      "start_s": 256.219,
+      "end_s": 256.649
+    },
+    {
+      "w": "reported",
+      "start_s": 256.73,
+      "end_s": 257.124
+    },
+    {
+      "w": "record",
+      "start_s": 257.194,
+      "end_s": 257.484
+    },
+    {
+      "w": "first-quarter",
+      "start_s": 257.542,
+      "end_s": 258.076
+    },
+    {
+      "w": "performance",
+      "start_s": 258.134,
+      "end_s": 258.61
+    },
+    {
+      "w": "driven",
+      "start_s": 258.634,
+      "end_s": 258.889
+    },
+    {
+      "w": "by",
+      "start_s": 258.935,
+      "end_s": 259.052
+    },
+    {
+      "w": "AI",
+      "start_s": 259.133,
+      "end_s": 259.411
+    },
+    {
+      "w": "memory,",
+      "start_s": 259.493,
+      "end_s": 259.864
+    },
+    {
+      "w": "high-capacity",
+      "start_s": 259.911,
+      "end_s": 260.677
+    },
+    {
+      "w": "server",
+      "start_s": 260.735,
+      "end_s": 261.025
+    },
+    {
+      "w": "DRAM,",
+      "start_s": 261.095,
+      "end_s": 261.629
+    },
+    {
+      "w": "and",
+      "start_s": 261.803,
+      "end_s": 261.954
+    },
+    {
+      "w": "enterprise",
+      "start_s": 262.024,
+      "end_s": 262.535
+    },
+    {
+      "w": "SSDs,",
+      "start_s": 262.593,
+      "end_s": 263.405
+    },
+    {
+      "w": "while",
+      "start_s": 263.521,
+      "end_s": 263.754
+    },
+    {
+      "w": "saying",
+      "start_s": 263.788,
+      "end_s": 264.021
+    },
+    {
+      "w": "demand",
+      "start_s": 264.079,
+      "end_s": 264.508
+    },
+    {
+      "w": "exceeded",
+      "start_s": 264.636,
+      "end_s": 265.17
+    },
+    {
+      "w": "supply",
+      "start_s": 265.216,
+      "end_s": 266.006
+    }
+  ]
+}

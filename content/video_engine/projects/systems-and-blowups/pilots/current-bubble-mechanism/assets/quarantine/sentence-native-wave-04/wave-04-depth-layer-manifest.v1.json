@@ -1,0 +1,627 @@
+{
+  "schema_version": "finance_depth_layer_package.v1",
+  "episode_id": "systems-and-blowups:current-bubble-mechanism",
+  "wave_id": "current-bubble-mechanism-semantic-wave-04",
+  "review_state": "operator_approved_for_composition",
+  "render_eligible": true,
+  "promotion_eligible": false,
+  "layer_contract": [
+    "foreground",
+    "midground",
+    "background",
+    "negative_space",
+    "contact_shadow"
+  ],
+  "background_strategy": "softened_background_anchor_under_trace_cut_objects; no whole-frame block crops",
+  "caption_band": {
+    "top_pct": 84,
+    "bottom_pct": 94
+  },
+  "qa": {
+    "full_frame_alpha_rejected": true,
+    "foreground_alpha_edges_inspected": true,
+    "midground_alpha_edges_inspected": true,
+    "objects_clipped_by_accident": false,
+    "negative_space_exceeds_15_percent": false,
+    "generated_factual_text": "none_observed",
+    "depth_order": "foreground > midground > background; negative_space and contact_shadow are local compositor layers",
+    "status": "pass_for_composition; trace-cut QA complete; catalog promotion remains gated",
+    "alpha_qc": {
+      "files_checked": 30,
+      "dimensions": "all 1672x941",
+      "sha256_matches": true,
+      "rgba_layers_nonempty": true,
+      "full_frame_opaque_rgba_rejected": true,
+      "negative_space_frame_pct": 10.1,
+      "caption_band_px": [
+        790,
+        885
+      ],
+      "manual_observation": "Non-rectangular masks preserve the semantic foreground and midground objects; revised guidance and evidence plates have no unexplained token symbols or duplicate chip lane."
+    }
+  },
+  "plates": [
+    {
+      "plate_id": "beat-04-001-buyer-behavior-v1",
+      "depth_order": {
+        "foreground": "buyer hands and reservation discs",
+        "midground": "buyers and wafer lane",
+        "background": "factory and clean-room architecture"
+      },
+      "layers": {
+        "foreground": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-04/beat-04-001-buyer-behavior-v1--foreground.png",
+          "sha256": "56388429de58dfcd398ab02e10ed0493798c7bdf10f41409d0d5a72c85f10502",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              297,
+              458,
+              1672,
+              941
+            ],
+            "alpha_min": 0,
+            "alpha_max": 255,
+            "nonzero_pixels": 403965
+          }
+        },
+        "midground": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-04/beat-04-001-buyer-behavior-v1--midground.png",
+          "sha256": "3eaa3ea5e8f8e603632e7be61d2f88a56c4a505c5dcbb8739a2e17587fa32d65",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              178,
+              1672,
+              723
+            ],
+            "alpha_min": 0,
+            "alpha_max": 255,
+            "nonzero_pixels": 831297
+          }
+        },
+        "background": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-04/beat-04-001-buyer-behavior-v1--background.png",
+          "sha256": "04f1037db7009803f084550cedf3cf964fe0190c7fa063a62801c01833311e81",
+          "mode": "RGB",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              0,
+              1672,
+              941
+            ]
+          }
+        },
+        "negative_space": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-04/beat-04-001-buyer-behavior-v1--negative-space.png",
+          "sha256": "0889865d55880942ded5af1c86bde116441afd7b06a1cd8be5b78079eee2498b",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              790,
+              1672,
+              886
+            ],
+            "alpha_min": 0,
+            "alpha_max": 64,
+            "nonzero_pixels": 160512
+          }
+        },
+        "contact_shadow": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-04/beat-04-001-buyer-behavior-v1--contact-shadow.png",
+          "sha256": "dd27da9bf86fed97d15ba8d7a1bd68824a07da4a560f069ceeba7677998dfa91",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              508,
+              698,
+              1672,
+              873
+            ],
+            "alpha_min": 0,
+            "alpha_max": 71,
+            "nonzero_pixels": 143161
+          }
+        }
+      }
+    },
+    {
+      "plate_id": "beat-04-003-classic-cycle-counterargument-v1",
+      "depth_order": {
+        "foreground": "analyst and warning gate",
+        "midground": "four-cycle production islands",
+        "background": "industrial skyline and paper field"
+      },
+      "layers": {
+        "foreground": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-04/beat-04-003-classic-cycle-counterargument-v1--foreground.png",
+          "sha256": "a820693d2c356f4b0c5cf348a2cb1817ccb233082a53ababa8e6d2fb29f01b62",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              358,
+              1143,
+              941
+            ],
+            "alpha_min": 0,
+            "alpha_max": 255,
+            "nonzero_pixels": 366793
+          }
+        },
+        "midground": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-04/beat-04-003-classic-cycle-counterargument-v1--midground.png",
+          "sha256": "01c1626345fa7be6b78f06572b6644643dc78731cd6c01139a670b75039d86c4",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              357,
+              37,
+              1653,
+              763
+            ],
+            "alpha_min": 0,
+            "alpha_max": 255,
+            "nonzero_pixels": 671470
+          }
+        },
+        "background": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-04/beat-04-003-classic-cycle-counterargument-v1--background.png",
+          "sha256": "5f62a383fae401d649fbe26b107dc0d637fb3d174ca6b06fa599a823262e966b",
+          "mode": "RGB",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              0,
+              1672,
+              941
+            ]
+          }
+        },
+        "negative_space": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-04/beat-04-003-classic-cycle-counterargument-v1--negative-space.png",
+          "sha256": "bf14c00b7584a0d5454352426792755711f1b62fa9801e5228d6d63e685a1537",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              790,
+              1672,
+              886
+            ],
+            "alpha_min": 0,
+            "alpha_max": 64,
+            "nonzero_pixels": 160512
+          }
+        },
+        "contact_shadow": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-04/beat-04-003-classic-cycle-counterargument-v1--contact-shadow.png",
+          "sha256": "6a0cc99e8e5ab53ce5da92e2519c380b6140e88304f7c337453d96793dad4f81",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              278,
+              418,
+              1263,
+              928
+            ],
+            "alpha_min": 0,
+            "alpha_max": 71,
+            "nonzero_pixels": 204139
+          }
+        }
+      }
+    },
+    {
+      "plate_id": "beat-04-004-changed-customer-behavior-v1",
+      "depth_order": {
+        "foreground": "lock and chip trays",
+        "midground": "casual buyers, committed buyers, and gate",
+        "background": "market hall and data-center architecture"
+      },
+      "layers": {
+        "foreground": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-04/beat-04-004-changed-customer-behavior-v1--foreground.png",
+          "sha256": "619f5ecdcf7eb5d5591b8f56d156756abb88ab012c065a7b0622e7b96730f6be",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              497,
+              1672,
+              823
+            ],
+            "alpha_min": 0,
+            "alpha_max": 255,
+            "nonzero_pixels": 446670
+          }
+        },
+        "midground": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-04/beat-04-004-changed-customer-behavior-v1--midground.png",
+          "sha256": "2444a64b263429e92db3dc143779dae1bdb6306f44a47ce9ed3d9ef17273cf82",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              118,
+              1672,
+              563
+            ],
+            "alpha_min": 0,
+            "alpha_max": 255,
+            "nonzero_pixels": 586800
+          }
+        },
+        "background": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-04/beat-04-004-changed-customer-behavior-v1--background.png",
+          "sha256": "1df72ef31c987e99fc5771d9cb5f1dd17ae1d88140406c1ae87ced9cea54a1da",
+          "mode": "RGB",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              0,
+              1672,
+              941
+            ]
+          }
+        },
+        "negative_space": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-04/beat-04-004-changed-customer-behavior-v1--negative-space.png",
+          "sha256": "7863eeaeeff48a5fde3b38afd030a064b2cf16feb6f4ac313cd06d3726d544c0",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              790,
+              1672,
+              886
+            ],
+            "alpha_min": 0,
+            "alpha_max": 64,
+            "nonzero_pixels": 160512
+          }
+        },
+        "contact_shadow": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-04/beat-04-004-changed-customer-behavior-v1--contact-shadow.png",
+          "sha256": "e83a80ab3905c9fbc01a5731b0fddb57eced17cbdb4ca8ae8f3c20ea23a359b3",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              38,
+              698,
+              1663,
+              903
+            ],
+            "alpha_min": 0,
+            "alpha_max": 71,
+            "nonzero_pixels": 238578
+          }
+        }
+      }
+    },
+    {
+      "plate_id": "beat-04-013-guidance-not-gospel-v2",
+      "depth_order": {
+        "foreground": "single memory-module conveyor and crate",
+        "midground": "factory and balance",
+        "background": "forecast sheet pinned above the dock"
+      },
+      "layers": {
+        "foreground": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-04/beat-04-013-guidance-not-gospel-v2--foreground.png",
+          "sha256": "7874ed4e70bd1991afe167bd300f4034e6b02d3a0f62485bd92b1fb6c93b18f2",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              417,
+              1672,
+              823
+            ],
+            "alpha_min": 0,
+            "alpha_max": 255,
+            "nonzero_pixels": 636757
+          }
+        },
+        "midground": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-04/beat-04-013-guidance-not-gospel-v2--midground.png",
+          "sha256": "f53dbd08272946f3bb02d6e78b9b6ef4ff73f8301e7cd82f4418c8dd2a5aa78a",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              18,
+              1672,
+              603
+            ],
+            "alpha_min": 0,
+            "alpha_max": 255,
+            "nonzero_pixels": 636152
+          }
+        },
+        "background": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-04/beat-04-013-guidance-not-gospel-v2--background.png",
+          "sha256": "08283d5d9249e872b17ea75810632f68c68693f4a5d3d55d1ec4c460236ed31f",
+          "mode": "RGB",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              0,
+              1672,
+              941
+            ]
+          }
+        },
+        "negative_space": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-04/beat-04-013-guidance-not-gospel-v2--negative-space.png",
+          "sha256": "26e5ddc3f349331a481257f24b7c0ef0d372d562b0a8de7d31ee555df5203f1e",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              790,
+              1672,
+              886
+            ],
+            "alpha_min": 0,
+            "alpha_max": 64,
+            "nonzero_pixels": 160512
+          }
+        },
+        "contact_shadow": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-04/beat-04-013-guidance-not-gospel-v2--contact-shadow.png",
+          "sha256": "39ab303e4663f7327108c872798dab03f2a76c9e04220899b7ab120de4a6a4b7",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              698,
+              1653,
+              903
+            ],
+            "alpha_min": 0,
+            "alpha_max": 71,
+            "nonzero_pixels": 253053
+          }
+        }
+      }
+    },
+    {
+      "plate_id": "beat-04-014-evidence-hierarchy-v2",
+      "depth_order": {
+        "foreground": "contract, shipping crate, revenue ledger, and truck",
+        "midground": "grounded evidence platform",
+        "background": "empty pitch presentation stage"
+      },
+      "layers": {
+        "foreground": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-04/beat-04-014-evidence-hierarchy-v2--foreground.png",
+          "sha256": "614901531a0b486176b64b2921ccab1b30eb2c0bb9603a2943ec9c522c6da7ca",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              248,
+              1672,
+              823
+            ],
+            "alpha_min": 0,
+            "alpha_max": 255,
+            "nonzero_pixels": 813082
+          }
+        },
+        "midground": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-04/beat-04-014-evidence-hierarchy-v2--midground.png",
+          "sha256": "72d6a1f83070ba53fbf2eb7c836fbc72b14192438169e6cebbb5509861b57b17",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              117,
+              1672,
+              703
+            ],
+            "alpha_min": 0,
+            "alpha_max": 255,
+            "nonzero_pixels": 979792
+          }
+        },
+        "background": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-04/beat-04-014-evidence-hierarchy-v2--background.png",
+          "sha256": "13b777615dbe587f9af860ae9d2c32e0be5127979e6c778879682d9fad6ef248",
+          "mode": "RGB",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              0,
+              1672,
+              941
+            ]
+          }
+        },
+        "negative_space": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-04/beat-04-014-evidence-hierarchy-v2--negative-space.png",
+          "sha256": "22459d6c564715a4fe40b9f61b9c6ca4d7829556b850f0f012dce380af24b301",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              790,
+              1672,
+              886
+            ],
+            "alpha_min": 0,
+            "alpha_max": 64,
+            "nonzero_pixels": 160512
+          }
+        },
+        "contact_shadow": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-04/beat-04-014-evidence-hierarchy-v2--contact-shadow.png",
+          "sha256": "7abae2a83a3f0d9be2122a0d4d47f4e11668cabdf9ce21adc7e9808a8b947a93",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              738,
+              1672,
+              923
+            ],
+            "alpha_min": 0,
+            "alpha_max": 71,
+            "nonzero_pixels": 243029
+          }
+        }
+      }
+    },
+    {
+      "plate_id": "beat-04-015-bottleneck-boom-v1",
+      "depth_order": {
+        "foreground": "bottleneck gate and memory modules",
+        "midground": "factory and supply queue",
+        "background": "mountain/market backdrop"
+      },
+      "layers": {
+        "foreground": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-04/beat-04-015-bottleneck-boom-v1--foreground.png",
+          "sha256": "462676bdd3e60a49da179b0b021f0121a8bf7ec6bb1ada1ef7096e683eadf946",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              418,
+              1653,
+              903
+            ],
+            "alpha_min": 0,
+            "alpha_max": 255,
+            "nonzero_pixels": 559068
+          }
+        },
+        "midground": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-04/beat-04-015-bottleneck-boom-v1--midground.png",
+          "sha256": "9c5482975453bc556785847a23681500c22c59889a98e3a3c34f5a2a9a273728",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              48,
+              1672,
+              613
+            ],
+            "alpha_min": 0,
+            "alpha_max": 255,
+            "nonzero_pixels": 844978
+          }
+        },
+        "background": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-04/beat-04-015-bottleneck-boom-v1--background.png",
+          "sha256": "a785fb7f2fdb42ae76c8d19c2aec7d375af39068d6a861fe1c474bbb62a57930",
+          "mode": "RGB",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              0,
+              1672,
+              941
+            ]
+          }
+        },
+        "negative_space": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-04/beat-04-015-bottleneck-boom-v1--negative-space.png",
+          "sha256": "e977a7758ec48be4bafa1e55bb45b8097b27b60abe9340d0678721d57b71cd85",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              790,
+              1672,
+              886
+            ],
+            "alpha_min": 0,
+            "alpha_max": 64,
+            "nonzero_pixels": 160512
+          }
+        },
+        "contact_shadow": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-04/beat-04-015-bottleneck-boom-v1--contact-shadow.png",
+          "sha256": "6ad76bfa37407059c9a885ec1a1d43fb48245161e59b4fdef7c409c3941c4091",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              718,
+              1643,
+              903
+            ],
+            "alpha_min": 0,
+            "alpha_max": 71,
+            "nonzero_pixels": 241089
+          }
+        }
+      }
+    }
+  ]
+}

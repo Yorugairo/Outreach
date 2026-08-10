@@ -1,0 +1,109 @@
+{
+  "schema_version": "finance_sketchbook_composition_render_manifest.v1",
+  "proof_id": "finance-sketchbook-proof-v1",
+  "renderer": "remotion:FinanceSketchbookProof",
+  "source_window": {
+    "start_s": 410.26,
+    "end_s": 470.992,
+    "duration_s": 60.732,
+    "word_start_index": 1025,
+    "word_end_index": 1188
+  },
+  "input_hashes": {
+    "canonical_audio": "ecacf46c49aee85b912404bfa0e47c37acbae0397b637e2a966c51a625077ce1",
+    "canonical_words": "3773bdd611c96d5e431ed56749d9991825215bb3756043086f14fbbdbe0d1da3",
+    "claim_ledger": "0f5c49a3ab764ba5ad6ed9d4b14b2fc24fa6c921b9d83342975a7cfe0080edcc"
+  },
+  "logical_profile": {
+    "width": 1920,
+    "height": 1080,
+    "fps": 24
+  },
+  "review_profile": {
+    "width": 1280,
+    "height": 720,
+    "fps": 24,
+    "label": "review-720p-12-on-24"
+  },
+  "paper_motion_fps": 12,
+  "delivery_fps": 24,
+  "props_path": "proof-props.v1.json",
+  "primitive_manifest_path": "primitive-manifest.v1.json",
+  "source_binding_path": "source-binding.v1.json",
+  "provider_calls": 0,
+  "generated_assets": [
+    {
+      "asset_id": "finance-host-presenter-plate-v1",
+      "path": "public/assets/finance-host-presenter-plate-v1.png",
+      "sha256": "16c94909dcdcd2e6ce369467c3971ce949dfbe5f5a13b7a32b6baea2649009c8",
+      "source_kind": "built_in_imagegen",
+      "background_removal": "flat_chroma_key_plus_local_alpha",
+      "render_state": "draft"
+    }
+  ],
+  "status": "review_render_complete",
+  "render": {
+    "path": "render/finance-sketchbook-index-proof.mp4",
+    "sha256": "be73dd475a6167c136232054c576f3aa8a998a21e73d683a4a66b2fc436b0365",
+    "ffprobe": {
+      "width": 1280,
+      "height": 720,
+      "r_frame_rate": "24/1",
+      "avg_frame_rate": "24/1",
+      "nb_frames": 1458,
+      "duration_s": 60.757333
+    },
+    "duration_error_s": 0.025333
+  },
+  "boundary_frames": [
+    {
+      "state_id": "basket-product-qualities",
+      "relative_time_s": 0.0,
+      "source_time_s": 410.26,
+      "frame_index": 0,
+      "path": "review/boundaries/01-basket-product-qualities-f0000.png",
+      "sha256": "4f0b39aaf35bb125d9cda22d70d5e33b83aeb13d7de420cfe87cc4e37ff3fbe4"
+    },
+    {
+      "state_id": "two-jobs",
+      "relative_time_s": 12.574,
+      "source_time_s": 422.834,
+      "frame_index": 302,
+      "path": "review/boundaries/02-two-jobs-f0302.png",
+      "sha256": "28ce37f24b2600358870e68fb5dbfd107611e0ff21d025f5b3e32f3ad44d6f3c"
+    },
+    {
+      "state_id": "concentration",
+      "relative_time_s": 18.274,
+      "source_time_s": 428.534,
+      "frame_index": 439,
+      "path": "review/boundaries/03-concentration-f0439.png",
+      "sha256": "36f49f370d1a17dfc2d39c76639d1efa6098be14cc93ddb2c5874ff1a107ada3"
+    },
+    {
+      "state_id": "shared-exposure",
+      "relative_time_s": 34.354,
+      "source_time_s": 444.614,
+      "frame_index": 824,
+      "path": "review/boundaries/04-shared-exposure-f0824.png",
+      "sha256": "96a7152dd81f4b80410012059bd7a1b3f62cd0ec8f261709ee9cd7f63869f127"
+    },
+    {
+      "state_id": "long-tail",
+      "relative_time_s": 49.958,
+      "source_time_s": 460.218,
+      "frame_index": 1199,
+      "path": "review/boundaries/05-long-tail-f1199.png",
+      "sha256": "2e04bc6c82fb73442b511eecab0e71f6ed3a8cd9e8514c88c3ebe969345f82a6"
+    },
+    {
+      "state_id": "admission-versus-weighting",
+      "relative_time_s": 54.288,
+      "source_time_s": 464.548,
+      "frame_index": 1303,
+      "path": "review/boundaries/06-admission-versus-weighting-f1303.png",
+      "sha256": "6f8ec574baf69a40f9d92d150ec7cc445e757a4e498d4d6ac59cd32c87fc0190"
+    }
+  ],
+  "watch_draft_path": "review/watch-review-draft.v1.json"
+}

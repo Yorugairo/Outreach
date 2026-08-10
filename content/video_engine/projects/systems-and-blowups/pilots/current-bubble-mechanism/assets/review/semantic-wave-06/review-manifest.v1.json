@@ -1,0 +1,29 @@
+{
+  "schema_version": "finance_semantic_wave_review.v1",
+  "episode_id": "current-bubble-mechanism",
+  "wave_id": "semantic-wave-06",
+  "status": "operator_approved_for_composition",
+  "generation_method": "built_in_image_gen",
+  "decision_rule": "Generated plates describe a mechanism but never supply the authoritative claim. Specific agreement and listed-market figures live in source-bound local evidence surfaces.",
+  "candidates": [
+    {
+      "candidate_id": "buyer-reservation-rail-v1",
+      "path": "buyer-reservation-rail-v1.png",
+      "sha256": "143705a3feae964db36c341c50edcee0b30d3d0b02bf67f807d9361c552a1db9",
+      "cluster_id": "cbm-d-001",
+      "purpose": "Show commitments reserving some future factory capacity, in contrast to a separate pile of uncommitted interest.",
+      "status": "selected",
+      "qa": ["reserved and open capacity are distinct", "commitment is not portrayed as total capacity", "no corporate claim, text, or number is embedded"]
+    },
+    {
+      "candidate_id": "strategic-chokepoint-network-v1",
+      "path": "strategic-chokepoint-network-v1.png",
+      "sha256": "71b184f543d8497e451a3e6391ae4f634f0fbaf3130e6f131d2cde1b1ad090b6",
+      "cluster_id": "cbm-d-002",
+      "purpose": "Show capital routes converging on physically distinct strategic technology bottlenecks: chips, memory, packaging, power, robotics, and defense communications.",
+      "status": "selected",
+      "qa": ["six nodes remain physically recognizable", "no country ranking or market valuation is embedded", "capital follows capability is framed as a visual metaphor"]
+    }
+  ],
+  "artifact_hash": "476641f22c7d78ec4729ca2134de97a8116f9bb686978c81f0ecef6ee0ceb21a"
+}

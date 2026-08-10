@@ -1,0 +1,61 @@
+{
+  "schema_version": "scene_flow_graph.v1",
+  "id": "current-bubble-causal-flow-v1",
+  "episode_id": "current-bubble-mechanism",
+  "nodes": [
+    "finance-scene-01",
+    "finance-scene-02",
+    "finance-scene-03",
+    "finance-scene-04",
+    "finance-scene-05",
+    "finance-scene-06",
+    "finance-scene-07",
+    "finance-scene-08",
+    "finance-scene-09",
+    "finance-scene-10",
+    "finance-scene-11"
+  ],
+  "edges": [
+    {
+      "from": "finance-scene-01",
+      "to": "finance-scene-02"
+    },
+    {
+      "from": "finance-scene-02",
+      "to": "finance-scene-03"
+    },
+    {
+      "from": "finance-scene-03",
+      "to": "finance-scene-04"
+    },
+    {
+      "from": "finance-scene-04",
+      "to": "finance-scene-05"
+    },
+    {
+      "from": "finance-scene-05",
+      "to": "finance-scene-06"
+    },
+    {
+      "from": "finance-scene-06",
+      "to": "finance-scene-07"
+    },
+    {
+      "from": "finance-scene-07",
+      "to": "finance-scene-08"
+    },
+    {
+      "from": "finance-scene-08",
+      "to": "finance-scene-09"
+    },
+    {
+      "from": "finance-scene-09",
+      "to": "finance-scene-10"
+    },
+    {
+      "from": "finance-scene-10",
+      "to": "finance-scene-11"
+    }
+  ],
+  "artifact_hash": "95a2af54a91d59b192d24383ee71a511705851d049f6875d61fb3424ae1964d9"
+}

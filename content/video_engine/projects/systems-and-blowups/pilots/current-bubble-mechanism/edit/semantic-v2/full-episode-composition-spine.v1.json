@@ -1,0 +1,257 @@
+{
+  "schema_version": "finance_composition_spine.v1",
+  "episode_id": "current-bubble-mechanism",
+  "state": "composition_ready",
+  "timing_authority": {
+    "words_path": "../../audio/canonical/history_episode_1_master.words.json",
+    "sha256": "3773bdd611c96d5e431ed56749d9991825215bb3756043086f14fbbdbe0d1da3",
+    "duration_s": 980.806,
+    "rule": "A cut may occur only at a mapped causal turn. Within one plate, use authored parallax, depth movement, or local evidence reveals; never insert an artificial same-plate cut."
+  },
+  "global_edit_rules": [
+    "Raster plates carry only atmosphere, action, and bounded visual metaphors. All factual text, sources, numbers, and qualifiers are local deterministic layers.",
+    "Each plate enters on the decisive noun or causal verb that makes it relevant, gains at least one narrative-native movement, and exits only when the narrator changes economic mechanism.",
+    "A reused plate is permitted only for an explicit callback or a new constrained continuation named below. No decorative montage, random asset rotation, or unmatched finance iconography.",
+    "Use the lower caption band; never cover a decision actor, money-flow path, input gate, or evidence card."
+  ],
+  "composition_groups": [
+    {
+      "group_id": "a-opening-diagnosis",
+      "time_s": [0.0, 89.803],
+      "source_map": "first-90s-visual-story-map.v1.json",
+      "source_motion_plan": "first-90s-motion-proof-plan.v1.json",
+      "primary_assets": ["wrong-bubble-elevators-v2", "memory-skepticism-v2", "memory-three-supports-v1", "index-fund-weighted-inflows-v2"],
+      "edit_instruction": "Preserve the approved first-90-second proof sequencing. Treat the two-elevator cutaway as a diagnosis, not background wallpaper."
+    },
+    {
+      "group_id": "b-001-under-the-elevators",
+      "time_s": [89.803, 108.182],
+      "cue_ids": ["cbm-cue-028", "cbm-cue-029", "cbm-cue-030", "cbm-cue-031", "cbm-cue-032"],
+      "primary_assets": ["wrong-bubble-elevators-v2", "index-fund-weighted-inflows-v2"],
+      "local_layers": ["four-cable-memory-foundation-labels", "index-allocation-mechanism-labels"],
+      "entry": "Return below the two elevators when the narration asks the causal questions.",
+      "motion": "Reveal one physical support cable per named memory support; countercut once to the index allocation container only when automatic flows are named.",
+      "exit": "Zoom into the memory elevator's technical foundation on the word introducing HBM.",
+      "reuse_reason": "Explicit diagnostic callback."
+    },
+    {
+      "group_id": "b-002-hbm-adjacent",
+      "time_s": [108.182, 121.104],
+      "cue_ids": ["cbm-cue-033", "cbm-cue-034", "cbm-cue-035", "cbm-cue-036"],
+      "primary_assets": ["hbm-adjacent-accelerator-v1"],
+      "entry": "Expose stacked working memory beside the accelerator as HBM is named.",
+      "motion": "Short data-path lights travel between distinct stack layers and the adjacent accelerator; local anchor points to placement only.",
+      "exit": "Follow the data path into the narrow channel on the engine analogy.",
+      "reuse_reason": "Unique technical explanation."
+    },
+    {
+      "group_id": "b-003-memory-bandwidth-gate",
+      "time_s": [121.104, 144.613],
+      "cue_ids": ["cbm-cue-037", "cbm-cue-038", "cbm-cue-039", "cbm-cue-040", "cbm-cue-041", "cbm-cue-042", "cbm-cue-043"],
+      "primary_assets": ["accelerator-memory-bandwidth-gate-v1"],
+      "entry": "Cut as the engine/fuel analogy begins.",
+      "motion": "Queue units accumulate at the visibly narrow memory channel, then a second generic accelerator resolves to the same gate; do not depict literal fuel.",
+      "exit": "Pan downstream to physical production inputs when the shortage is made physical.",
+      "reuse_reason": "Unique technical explanation."
+    },
+    {
+      "group_id": "b-004-physical-inputs",
+      "time_s": [144.613, 154.726],
+      "cue_ids": ["cbm-cue-044", "cbm-cue-045", "cbm-cue-046"],
+      "primary_assets": ["hbm-physical-inputs-gate-v1"],
+      "entry": "Reveal a distinct physical input on each named constraint.",
+      "motion": "Inputs converge one at a time on the output gate; the gate narrows visually but does not permanently close.",
+      "exit": "Match-cut the constrained gate into the bakery oven door.",
+      "reuse_reason": "Unique technical explanation."
+    },
+    {
+      "group_id": "c-001-complexity-capacity",
+      "time_s": [154.726, 178.096],
+      "cue_ids": ["cbm-cue-047", "cbm-cue-048", "cbm-cue-049"],
+      "primary_assets": ["fixed-oven-capacity-wedding-cake-v1"],
+      "entry": "Open on the bakery analogy; no source card yet.",
+      "motion": "Simple loaves slide aside as layered cakes consume a fixed oven schedule; use physical capacity allocation, not a price-line metaphor.",
+      "exit": "Dissolve cake layers into HBM stack layers at the return to the actual production system.",
+      "reuse_reason": "Unique analogy."
+    },
+    {
+      "group_id": "c-002-hbm-qualified-return",
+      "time_s": [178.096, 210.164],
+      "cue_ids": ["cbm-cue-050", "cbm-cue-051", "cbm-cue-052"],
+      "primary_assets": ["hbm-physical-inputs-gate-v1"],
+      "local_layers": ["hbm-capacity-trade-ratio-source-rail", "not-a-valuation-verdict-qualifier"],
+      "entry": "Return from the analogy only as shared advanced capacity is spoken.",
+      "motion": "Continue the physical inputs to the output gate, then reveal the source rail after the reported capacity trade is named.",
+      "exit": "Separate the production corridor into a repeated commodity cycle versus commitment rail.",
+      "reuse_reason": "Same physical-capacity mechanism, now source-qualified."
+    },
+    {
+      "group_id": "c-003-cycle-versus-commitment",
+      "time_s": [210.164, 239.664],
+      "cue_ids": ["cbm-cue-053", "cbm-cue-054", "cbm-cue-055", "cbm-cue-056"],
+      "primary_assets": ["commodity-cycle-versus-qualified-agreements-v1"],
+      "entry": "Split the frame when the classic cycle is introduced.",
+      "motion": "Let the left lane repeat boom-to-supply-to-price pressure while the right lane exposes the agreement structure only when reported buyer behavior is named.",
+      "exit": "Track the agreement rail forward into reservations; retain the cycle on screen through the caveat.",
+      "reuse_reason": "Unique counterargument comparison."
+    },
+    {
+      "group_id": "d-001-buyer-reservations",
+      "time_s": [239.664, 286.649],
+      "cue_ids": ["cbm-cue-057", "cbm-cue-058", "cbm-cue-059", "cbm-cue-060", "cbm-cue-061"],
+      "primary_assets": ["buyer-reservation-rail-v1"],
+      "local_layers": ["buyer-commitment-evidence-card-v1"],
+      "entry": "Open the reservation rail on reported commitments, then reveal the evidence card after its scope is spoken.",
+      "motion": "Buyer tokens reserve capacity ahead of production; hold the guidance caveat at the evidence layer rather than converting it into a forecast image.",
+      "exit": "Pull out along the rail as the narration widens from memory to strategic production.",
+      "reuse_reason": "Unique evidence-backed mechanism."
+    },
+    {
+      "group_id": "d-002-strategic-network",
+      "time_s": [286.649, 304.203],
+      "cue_ids": ["cbm-cue-062", "cbm-cue-063", "cbm-cue-064"],
+      "primary_assets": ["strategic-chokepoint-network-v1"],
+      "entry": "Expand the reservation rail into the network when strategic chokepoints are named.",
+      "motion": "Light one production node per named domain; keep the network descriptive, not geopolitical prediction.",
+      "exit": "Settle on the regional market stage before any comparative figure appears.",
+      "reuse_reason": "Unique strategic-production scope."
+    },
+    {
+      "group_id": "d-003-listed-market-scope",
+      "time_s": [304.203, 325.612],
+      "cue_ids": ["cbm-cue-065", "cbm-cue-066", "cbm-cue-067"],
+      "primary_assets": ["capitalizes-industrial-cashflows-v1"],
+      "local_layers": ["korea-italy-listed-market-card-v1"],
+      "entry": "Enter the neutral market stage before the narrow public-equity comparison is made.",
+      "motion": "Open the deterministic market card only after the listed-market scope and date are spoken.",
+      "exit": "Keep the stage while the narration corrects the reductive comparison.",
+      "reuse_reason": "Evidence card requires this specific public-market scope."
+    },
+    {
+      "group_id": "e-001-market-what-it-prices",
+      "time_s": [325.612, 375.662],
+      "cue_ids": ["cbm-cue-068", "cbm-cue-069", "cbm-cue-070", "cbm-cue-071"],
+      "primary_assets": ["capitalizes-industrial-cashflows-v1"],
+      "local_layers": ["korea-italy-listed-market-card-v1"],
+      "entry": "Hold the market-stage causal lens through the correction, not through a caricature of either country.",
+      "motion": "Capital flow resolves into distinct industrial cash-flow layers; clear the comparative card before the broader strategic conclusion.",
+      "exit": "Pull one capital-flow strand into the strategic network.",
+      "reuse_reason": "Continuing the question of what public markets price."
+    },
+    {
+      "group_id": "e-002-technology-intensity",
+      "time_s": [375.662, 396.572],
+      "cue_ids": ["cbm-cue-072", "cbm-cue-073", "cbm-cue-074"],
+      "primary_assets": ["strategic-chokepoint-network-v1"],
+      "local_layers": ["korea-technology-intensity-card-v1"],
+      "entry": "Return to strategic-production nodes on the cautious macro claim.",
+      "motion": "Reveal the dated context card after technology intensity and semiconductor export context are named.",
+      "exit": "Route the compute node into a memory reservoir.",
+      "reuse_reason": "Named strategic-production callback."
+    },
+    {
+      "group_id": "f-001-memory-reservoir",
+      "time_s": [396.572, 410.26],
+      "cue_ids": ["cbm-cue-075", "cbm-cue-076"],
+      "primary_assets": ["hbm-pipeline-and-reservoir-v1"],
+      "entry": "Show compute machinery constrained by its memory reservoir.",
+      "motion": "A compute pipeline pauses only while its reservoir starves; then resume to preserve the qualified-system, not-magic claim.",
+      "exit": "The reservoir's frame becomes the index elevator frame at the fair S&P introduction.",
+      "reuse_reason": "Unique pipeline/reservoir analogy."
+    },
+    {
+      "group_id": "f-002-index-two-jobs",
+      "time_s": [410.26, 448.12],
+      "cue_ids": ["cbm-cue-077", "cbm-cue-078", "cbm-cue-079", "cbm-cue-080"],
+      "primary_assets": ["index-fund-weighted-inflows-v2"],
+      "local_layers": ["index-fund-two-jobs-card-v1"],
+      "entry": "Open the index elevator on its low-cost, liquid, tax-efficient job before introducing critique.",
+      "motion": "Automatic cash streams sort into weighted holdings; reveal the two-jobs card only after the concentration claim is spoken.",
+      "exit": "Keep the container, then allow shared weather to appear on the causal-exposure turn.",
+      "reuse_reason": "Unique fair framing of the index mechanism."
+    },
+    {
+      "group_id": "f-003-shared-cause-automatic-allocation",
+      "time_s": [448.12, 502.919],
+      "cue_ids": ["cbm-cue-081", "cbm-cue-082", "cbm-cue-083", "cbm-cue-084"],
+      "primary_assets": ["shared-cause-automatic-allocation-v1"],
+      "local_layers": ["index-fund-two-jobs-card-v1"],
+      "entry": "Cut to the shared-cause weather at the causal-exposure turn, never as a generic storm transition.",
+      "motion": "Weather crosses several distinct company tiles at once while the transparent automatic allocator continues routing equal-looking cash streams; evidence card states the qualified limit.",
+      "exit": "Push into the roster when ticker-count diversification is named.",
+      "reuse_reason": "Required new causal-weather/automatic-allocation explanation."
+    },
+    {
+      "group_id": "g-001-roster-diworsification",
+      "time_s": [502.919, 570.082],
+      "cue_ids": ["cbm-cue-085", "cbm-cue-086", "cbm-cue-087", "cbm-cue-088", "cbm-cue-089"],
+      "primary_assets": ["index-roster-diworsification-v1"],
+      "entry": "Open the roster only when ticker-count diversification is contrasted with shared causes.",
+      "motion": "Individual tiles separate, then the same causal weather aligns them; use automatic allocation only for its explicitly described remaining role.",
+      "exit": "Collapse the tile set into an illustrative compounding calculation.",
+      "reuse_reason": "Unique two-jobs mnemonic."
+    },
+    {
+      "group_id": "g-002-wealth-objective-and-jobs",
+      "time_s": [570.082, 695.91],
+      "cue_ids": ["cbm-cue-090", "cbm-cue-091", "cbm-cue-092", "cbm-cue-093", "cbm-cue-094", "cbm-cue-095"],
+      "primary_assets": ["return-hurdle-calculation-card-v1", "two-sleeve-barbell-v1"],
+      "entry": "Open the calculation card only when the starting value, target, and time horizon are actually narrated.",
+      "motion": "Use an on-card deterministic reveal for the conditional math; then build two neutral sleeves only after upside and defense become separate jobs.",
+      "exit": "Separate the sleeves at the introduction of the two-sleeve framework.",
+      "reuse_reason": "The card is claim-bound; the sleeves establish the next mechanism."
+    },
+    {
+      "group_id": "h-001-two-sleeve-framework",
+      "time_s": [695.91, 715.554],
+      "cue_ids": ["cbm-cue-096", "cbm-cue-097"],
+      "primary_assets": ["two-sleeve-barbell-v1"],
+      "entry": "Show only a neutral rebalanced framework; no holdings list, allocation percent, or recommendation language.",
+      "motion": "Productive-upside and defensive sleeves slide to independent positions, then rebalance around a central goal marker with no numerical content.",
+      "exit": "Reserve the center for the qualified comparison card.",
+      "reuse_reason": "Unique design-hypothesis mechanism."
+    },
+    {
+      "group_id": "h-002-market-leaders-qualification",
+      "time_s": [715.554, 797.137],
+      "cue_ids": ["cbm-cue-098", "cbm-cue-099", "cbm-cue-100", "cbm-cue-101", "cbm-cue-102"],
+      "primary_assets": ["market-leaders-qualified-comparison-card-v1", "two-sleeve-barbell-v1"],
+      "entry": "Let the deterministic performance/risk card become the center of gravity when the example is named.",
+      "motion": "Reveal historical-return comparison, construction, drawdown, and research-burden limits in spoken order; return to the sleeves only on tracking error and effort cost.",
+      "exit": "Move the card aside for counterarguments before returning to the thesis.",
+      "reuse_reason": "Card is claim-bound; sleeves recur only for named framework costs."
+    },
+    {
+      "group_id": "i-001-counterarguments",
+      "time_s": [797.137, 888.881],
+      "cue_ids": ["cbm-cue-103", "cbm-cue-104", "cbm-cue-105", "cbm-cue-106", "cbm-cue-107"],
+      "primary_assets": ["memory-three-failure-points-v1", "index-roster-diworsification-v1"],
+      "entry": "Lead with memory failure points, then isolate the concentrated-basket and long-tail countercases as spoken.",
+      "motion": "Failure points surface one at a time; the roster returns only for the named equal-weight/long-tail counterargument and must not imply equivalence or a recommendation.",
+      "exit": "Clear countercase elements before the bounded thesis restatement.",
+      "reuse_reason": "Explicit counterargument inspection."
+    },
+    {
+      "group_id": "i-002-bounded-thesis",
+      "time_s": [888.881, 956.6],
+      "cue_ids": ["cbm-cue-108", "cbm-cue-109", "cbm-cue-110", "cbm-cue-111"],
+      "primary_assets": ["hbm-physical-inputs-gate-v1", "index-fund-weighted-inflows-v2", "two-sleeve-barbell-v1"],
+      "entry": "Return to each world only at its named thesis clause: capacity, low-cost participation, then testable two-sleeve hypothesis.",
+      "motion": "Use three clean causal callbacks separated by hard reframes; no montage and no claim of a model portfolio.",
+      "exit": "Collapse the three worlds back into the original two-elevator diagnosis.",
+      "reuse_reason": "Spoken bounded-thesis callbacks."
+    },
+    {
+      "group_id": "i-003-inspection-method",
+      "time_s": [956.6, 980.806],
+      "cue_ids": ["cbm-cue-112", "cbm-cue-113", "cbm-cue-114"],
+      "primary_assets": ["wrong-bubble-elevators-v2", "two-sleeve-barbell-v1"],
+      "local_layers": ["four-inspection-questions"],
+      "entry": "Return under the elevators exactly on the spoken callback.",
+      "motion": "Reveal who-pays, what-is-scarce, supply-response, and cash-flow-versus-resale questions one at a time; final frame holds the two distinct upside/defense jobs.",
+      "exit": "End card after the final job distinction—not on a predicted market outcome.",
+      "reuse_reason": "Final diagnostic callback."
+    }
+  ],
+  "artifact_hash": "b103bf6d0ac93bdb899057eda5eebbe85e00704123ca58aed63b716dc24e7c44"
+}

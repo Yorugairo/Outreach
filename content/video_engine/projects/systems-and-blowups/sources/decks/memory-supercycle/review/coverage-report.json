@@ -1,0 +1,21 @@
+{
+  "schema_version": "deck_asset_coverage.v1",
+  "deck_id": "memory-supercycle",
+  "slide_count": 15,
+  "source_image_count": 15,
+  "semantic_asset_count": 0,
+  "render_eligible_count": 0,
+  "status": "needs_human_review",
+  "checks": {
+    "source_slides_present": true,
+    "semantic_context_complete": true,
+    "render_eligibility_gated": true
+  },
+  "human_gates": {
+    "H1": false,
+    "H2": false,
+    "H3": false,
+    "H4": false
+  },
+  "artifact_hash": "99586b82c9f78aa95555ae52f37651a4758fb6f7b62864f3b47cbdb9a254c902"
+}

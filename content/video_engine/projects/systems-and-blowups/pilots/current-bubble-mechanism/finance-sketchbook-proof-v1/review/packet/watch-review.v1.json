@@ -1,0 +1,95 @@
+{
+  "schema_version": "video_watch_review.v1",
+  "review_id": "finance-sketchbook-proof-v1-draft",
+  "project_id": "outreach-program",
+  "lane_id": "systems-and-blowups-finance",
+  "episode_id": "finance-sketchbook-proof-v1",
+  "created_at": "2026-08-09T00:00:00Z",
+  "reviewer": "operator-and-watch",
+  "review_purpose": "Review the complete P23 proxy and its six canonical state boundaries.",
+  "watch_detail": "focused",
+  "source": {
+    "kind": "local",
+    "uri": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\finance-sketchbook-proof-v1\\render\\finance-sketchbook-index-proof.mp4",
+    "sha256": "be73dd475a6167c136232054c576f3aa8a998a21e73d683a4a66b2fc436b0365",
+    "duration_s": 60.757333
+  },
+  "transcript": {
+    "path": "evidence/transcript.json",
+    "sha256": "3773bdd611c96d5e431ed56749d9991825215bb3756043086f14fbbdbe0d1da3",
+    "source": "manual"
+  },
+  "summary": {
+    "assessment": "Operator review is pending. This packet preserves the full proxy and exact boundary evidence for the six-state continuous-canvas proof.",
+    "strengths": [
+      "The review artifact is bound to the canonical audio and word-timing inputs.",
+      "The six boundaries are extracted from the same 24 fps review MP4."
+    ],
+    "priority_issues": [
+      "Operator must review object readability, caption clearance, and causal continuity before approval."
+    ],
+    "overall_state": "revision_required"
+  },
+  "findings": [
+    {
+      "finding_id": "operator-review-pending",
+      "start_s": 0.0,
+      "end_s": 60.732,
+      "transcript_excerpt": "Now open the other elevator: the S&P 500 index fund.",
+      "evidence_frames": [
+        {
+          "path": "evidence/operator-review-pending-frame-01.png",
+          "sha256": "4f0b39aaf35bb125d9cda22d70d5e33b83aeb13d7de420cfe87cc4e37ff3fbe4",
+          "timestamp_s": 0.0
+        },
+        {
+          "path": "evidence/operator-review-pending-frame-02.png",
+          "sha256": "28ce37f24b2600358870e68fb5dbfd107611e0ff21d025f5b3e32f3ad44d6f3c",
+          "timestamp_s": 12.574
+        },
+        {
+          "path": "evidence/operator-review-pending-frame-03.png",
+          "sha256": "36f49f370d1a17dfc2d39c76639d1efa6098be14cc93ddb2c5874ff1a107ada3",
+          "timestamp_s": 18.274
+        },
+        {
+          "path": "evidence/operator-review-pending-frame-04.png",
+          "sha256": "96a7152dd81f4b80410012059bd7a1b3f62cd0ec8f261709ee9cd7f63869f127",
+          "timestamp_s": 34.354
+        },
+        {
+          "path": "evidence/operator-review-pending-frame-05.png",
+          "sha256": "2e04bc6c82fb73442b511eecab0e71f6ed3a8cd9e8514c88c3ebe969345f82a6",
+          "timestamp_s": 49.958
+        },
+        {
+          "path": "evidence/operator-review-pending-frame-06.png",
+          "sha256": "6f8ec574baf69a40f9d92d150ec7cc445e757a4e498d4d6ac59cd32c87fc0190",
+          "timestamp_s": 54.288
+        }
+      ],
+      "kind": "other",
+      "scope": "episode",
+      "severity": "medium",
+      "symptom": "The render has not yet received the required operator decision; visual acceptance remains unverified.",
+      "root_cause": "P23 intentionally stops at a review-only draft after deterministic rendering and evidence extraction.",
+      "impact": "The grammar must not be reused or promoted until the full proxy and six boundary frames are accepted.",
+      "proposed_fix": "Review the complete proxy and six boundary frames for continuous canvas, readable objects, timing, caption clearance, and absence of prohibited media.",
+      "acceptance": "Operator records approved or changes_requested after the full proxy and exact boundary frames have been reviewed.",
+      "confidence": "confirmed",
+      "recurrence_key": "p23-operator-review-gate",
+      "recurrence_count": 1,
+      "learning_trigger": "When a proof render reaches its visual review boundary",
+      "learning_action": "Require operator review before promoting the grammar beyond the isolated proof",
+      "requires_human_decision": true,
+      "promotion_state": "observation",
+      "status": "open"
+    }
+  ],
+  "operator_decision": {
+    "state": "draft",
+    "approved_at": null,
+    "notes": "Awaiting explicit visual review."
+  },
+  "artifact_hash": "73fd2304e6666f967586fe2229353c2956a3cb221c975ea5c5e2014793f56b2d"
+}

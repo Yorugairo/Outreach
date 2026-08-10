@@ -1,0 +1,37 @@
+{
+  "schema_version": "p20_focused_gate_summary.v1",
+  "status": "pass",
+  "reviewed_at": "2026-08-08",
+  "plan_hash": "1de45ffcdc057255246e1fda578ee97f21d509cf4150df3efb8135f16926fb61",
+  "delivery_fps": 24,
+  "authored_paper_motion_fps": 12,
+  "criteria": {
+    "blank_or_dark_unless_authored": "pass",
+    "semantic_progression": "pass",
+    "compact_lower_band_captions": "pass",
+    "elevator_scope": "opening analogy and final callback only",
+    "evidence_surfaces": "claim-bound and deterministic",
+    "manual_contact_sheet_review": "pass"
+  },
+  "focused_reviews": [
+    {"name": "opening", "start_s": 0.0, "end_s": 30.0, "boundary_count": 10, "status": "pass", "watch_dir": "p20-watch-opening"},
+    {"name": "dark-window-65", "start_s": 60.0, "end_s": 90.0, "boundary_count": 9, "status": "pass"},
+    {"name": "hbm-mechanism", "start_s": 105.0, "end_s": 225.0, "boundary_count": 34, "status": "pass", "watch_dir": "p20-watch-hbm"},
+    {"name": "dark-window-376", "start_s": 366.0, "end_s": 386.0, "boundary_count": 7, "status": "pass"},
+    {"name": "index-section", "start_s": 448.0, "end_s": 570.0, "boundary_count": 36, "status": "pass", "watch_dir": "p20-watch-index"},
+    {"name": "wealth-objective", "start_s": 570.0, "end_s": 630.0, "boundary_count": 18, "status": "pass", "watch_dir": "p20-watch-wealth"},
+    {"name": "market-leaders", "start_s": 715.0, "end_s": 765.0, "boundary_count": 15, "status": "pass", "watch_dir": "p20-watch-leaders"},
+    {"name": "countercase", "start_s": 797.0, "end_s": 889.0, "boundary_count": 29, "status": "pass", "watch_dir": "p20-watch-countercase"},
+    {"name": "final-callback", "start_s": 951.0, "end_s": 980.7916666666666, "boundary_count": 8, "status": "pass", "watch_dir": "p20-watch-callback"}
+  ],
+  "evidence_bindings": [
+    "edit/semantic-v2/research-evidence-supplement.v1.json",
+    "edit/semantic-v2/remotion-semantic-resolution-map.v3.json",
+    "edit/word-timed-v1/editorial-motion-plan.v1.json"
+  ],
+  "notes": [
+    "The supplied semiconductor-realignment report and verified yfinance snapshot are the source authorities for rendered financial claims.",
+    "Generated images provide story and mechanism context; factual numbers, qualifiers, and citations are local compositor layers.",
+    "The 24 fps deliverable preserves 12 fps stepped paper-theatre motion while retaining normal caption and transition timing."
+  ]
+}

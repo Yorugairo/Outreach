@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="420" viewBox="0 0 1920 420" role="img" aria-label="Illustrative compound-return hurdle calculation">
+  <rect width="1920" height="420" rx="34" fill="#071a2c"/>
+  <rect x="38" y="38" width="12" height="344" rx="6" fill="#c87932"/>
+  <text x="86" y="96" fill="#f6e4be" font-family="Arial, sans-serif" font-size="35" font-weight="700" letter-spacing="3">ILLUSTRATIVE COMPOUND-RETURN HURDLE</text>
+  <text x="86" y="143" fill="#95d4d2" font-family="Arial, sans-serif" font-size="23">Starting value: $25,000 · Target: $1,000,000 · 25 years · no additional contributions</text>
+  <rect x="86" y="184" width="390" height="154" rx="20" fill="#10324a" stroke="#c87932" stroke-width="2"/>
+  <text x="116" y="251" fill="#f6e4be" font-family="Arial, sans-serif" font-size="64" font-weight="700">15.9%</text>
+  <text x="116" y="302" fill="#dce9e6" font-family="Arial, sans-serif" font-size="24">annual growth required</text>
+  <rect x="516" y="184" width="550" height="154" rx="20" fill="#10324a" stroke="#18a7ad" stroke-width="2"/>
+  <text x="546" y="246" fill="#f6e4be" font-family="Arial, sans-serif" font-size="36" font-weight="700">10% for 25 years</text>
+  <text x="546" y="302" fill="#95d4d2" font-family="Arial, sans-serif" font-size="43" font-weight="700">≈ $271,000</text>
+  <rect x="1106" y="184" width="728" height="154" rx="20" fill="#10324a" stroke="#8697a2" stroke-width="2"/>
+  <text x="1136" y="246" fill="#f6e4be" font-family="Arial, sans-serif" font-size="34" font-weight="700">13.58% price return, repeated*</text>
+  <text x="1136" y="302" fill="#95d4d2" font-family="Arial, sans-serif" font-size="43" font-weight="700">≈ $600,000</text>
+  <text x="86" y="374" fill="#b7c6c8" font-family="Arial, sans-serif" font-size="20">*Counterfactual illustration only. Excludes dividends, contributions, taxes, inflation, and fees; past return is not a forecast.</text>
+</svg>

@@ -1,0 +1,1984 @@
+{
+  "schema_version": "finance_research_resolution.v1",
+  "episode_id": "systems-and-blowups:current-bubble-mechanism",
+  "source_bindings": [
+    {
+      "kind": "claim_ledger",
+      "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/claim-ledger.v1.json",
+      "sha256": "0f5c49a3ab764ba5ad6ed9d4b14b2fc24fa6c921b9d83342975a7cfe0080edcc",
+      "artifact_hash": "7071bb052eda8190225d8d4847cee1643a41ecf802293932283a6bae030c467e"
+    },
+    {
+      "kind": "numeric_evidence_register",
+      "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/edit/semantic-v2/numeric-evidence-register.v1.json",
+      "sha256": "4140077a4ef0729cce4b00c39269206dda5dac08c17839e9d831bb26d257af19",
+      "artifact_hash": "1ec697889f6671890203d12d3e1b79c431048a2a74d8b07f7b4bfab6f508fd9e"
+    },
+    {
+      "kind": "research_evidence_supplement",
+      "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/edit/semantic-v2/research-evidence-supplement.v1.json",
+      "sha256": "b382de2128ed003ab0909fdc9b156766c6c0de3b3ab8c6b61ad7013ff5d616a7",
+      "artifact_hash": "a7d02d9933c7362e41a73b4e54b94dba4d00212a885091c60b1416ec8dfdcf0e"
+    }
+  ],
+  "source_records": [
+    {
+      "source_id": "memory-architecture-dependency--micron-q3-2026-remarks",
+      "claim_id": "memory-architecture-dependency",
+      "publisher": "Micron Technology",
+      "title": "Fiscal Q3 2026 Earnings Call Prepared Remarks",
+      "url": "https://investors.micron.com/static-files/631b1a32-5537-46ae-8f40-82e42fc79dfe",
+      "location": "PDF page 1, lines 56-60 in extracted text",
+      "published_at": "2026-06-24",
+      "accessed_at": "2026-08-07",
+      "primary": true,
+      "locator_sha256": "342b199f18ef777b60c0b11f28db90d50b40bb2a000209884b2b5ce346051ea6"
+    },
+    {
+      "source_id": "hbm-capacity-trade-ratio--micron-q3-2026-remarks",
+      "claim_id": "hbm-capacity-trade-ratio",
+      "publisher": "Micron Technology",
+      "title": "Fiscal Q3 2026 Earnings Call Prepared Remarks",
+      "url": "https://investors.micron.com/static-files/631b1a32-5537-46ae-8f40-82e42fc79dfe",
+      "location": "PDF page 1, lines 41-55 in extracted text",
+      "published_at": "2026-06-24",
+      "accessed_at": "2026-08-07",
+      "primary": true,
+      "locator_sha256": "9ad06062c0df2975900099ed6598c378fe40aebd59ec269865453feb6f4733e2"
+    },
+    {
+      "source_id": "micron-strategic-customer-agreements--micron-q3-2026-remarks",
+      "claim_id": "micron-strategic-customer-agreements",
+      "publisher": "Micron Technology",
+      "title": "Fiscal Q3 2026 Earnings Call Prepared Remarks",
+      "url": "https://investors.micron.com/static-files/631b1a32-5537-46ae-8f40-82e42fc79dfe",
+      "location": "PDF pages 1-2, lines 61-100 in extracted text",
+      "published_at": "2026-06-24",
+      "accessed_at": "2026-08-07",
+      "primary": true,
+      "locator_sha256": "ec66da43d683f52af53b69d9360b1d389341a8ec8132514d906c723953b7c4ff"
+    },
+    {
+      "source_id": "samsung-hbm4-growth--samsung-hbm4-2026",
+      "claim_id": "samsung-hbm4-growth",
+      "publisher": "Samsung Electronics",
+      "title": "Samsung Ships Industry-First Commercial HBM4 With Ultimate Performance for AI Computing",
+      "url": "https://news.samsung.com/global/samsung-ships-industry-first-commercial-hbm4-with-ultimate-performance-for-ai-computing",
+      "location": "Comprehensive Yet Agile Production Capabilities, paragraph containing 2026 sales outlook",
+      "published_at": "2026-02-12",
+      "accessed_at": "2026-08-07",
+      "primary": true,
+      "locator_sha256": "126180c42645c72dc90ba49be7c7f9f687f47a7d2d6daf1b8a7a3cbb4fbb9290"
+    },
+    {
+      "source_id": "sk-hynix-demand-exceeds-supply--sk-hynix-q1-2026",
+      "claim_id": "sk-hynix-demand-exceeds-supply",
+      "publisher": "SK hynix",
+      "title": "SK hynix Announces 1Q26 Financial Results",
+      "url": "https://news.skhynix.com/en/q1-2026-business-results/",
+      "location": "News highlights and body paragraphs describing AI demand, high-value products, and demand exceeding supply capacity",
+      "published_at": "2026-04-23",
+      "accessed_at": "2026-08-07",
+      "primary": true,
+      "locator_sha256": "ba16882cc27933d0f2d09ff8b3289dd6bf07ced644a6485ead875fadf61dc02b"
+    },
+    {
+      "source_id": "sp500-top-ten-concentration--spdj-vanguard-concentration-2026",
+      "claim_id": "sp500-top-ten-concentration",
+      "publisher": "S&P Dow Jones Indices and Vanguard",
+      "title": "In the Shadows of Giants",
+      "url": "https://www.spglobal.com/content/dam/spglobal/global-assets/en/special-reports/partner-perspectives/Partner-Perspectives_UnlockingPotentialAhead.pdf",
+      "location": "PDF page 4, highlights and top-ten concentration chart",
+      "published_at": "2026-01-01",
+      "accessed_at": "2026-08-07",
+      "primary": true,
+      "locator_sha256": "8ff1d12791c807bbf314c17f8eba5c85183b200657697ae2c3a4b09df6ff9d57"
+    },
+    {
+      "source_id": "index-fund-asset-scale--ici-2026-factbook",
+      "claim_id": "index-fund-asset-scale",
+      "publisher": "Investment Company Institute",
+      "title": "2026 Investment Company Fact Book",
+      "url": "https://www.ici.org/system/files/2026-04/2026-factbook.pdf",
+      "location": "Growth of Index Funds, figures 2.5 and 2.6",
+      "published_at": "2026-04-27",
+      "accessed_at": "2026-08-07",
+      "primary": true,
+      "locator_sha256": "b3d68db82b02cd7902bce4780732b56efd45cd95fe7c5ab136c75ac839377e2f"
+    },
+    {
+      "source_id": "sp500-trailing-return-snapshot--spdj-sp500-index-page-2026",
+      "claim_id": "sp500-trailing-return-snapshot",
+      "publisher": "S&P Dow Jones Indices",
+      "title": "S&P 500",
+      "url": "https://www.spglobal.com/spdji/en/indices/equity/sp-500/",
+      "location": "Performance and risk tables, 10-year annualized price return and risk as of June 30, 2026",
+      "published_at": null,
+      "accessed_at": "2026-08-07",
+      "primary": true,
+      "locator_sha256": "039486fb9defd015eba6ea0c64942ea1125de6345c58c78f22181401f59f3f76"
+    },
+    {
+      "source_id": "generational-wealth-return-hurdle--sec-compound-interest-calculator",
+      "claim_id": "generational-wealth-return-hurdle",
+      "publisher": "U.S. Securities and Exchange Commission",
+      "title": "Compound Interest Calculator",
+      "url": "https://www.investor.gov/financial-tools-calculators/calculators/compound-interest-calculator",
+      "location": "Compound-growth inputs and calculation method",
+      "published_at": null,
+      "accessed_at": "2026-08-07",
+      "primary": true,
+      "locator_sha256": "d5d9388095c9a9abae786a63cbd3809642317458a010f679a4ab015548a360c2"
+    },
+    {
+      "source_id": "sp500-market-leaders-comparison--spdj-market-leaders-index-page-2026",
+      "claim_id": "sp500-market-leaders-comparison",
+      "publisher": "S&P Dow Jones Indices",
+      "title": "S&P 500 Market Leaders Index",
+      "url": "https://www.spglobal.com/spdji/en/indices/dividends-factors/sp-500-market-leaders-index/",
+      "location": "Index description plus performance and risk tables as of June 30, 2026",
+      "published_at": null,
+      "accessed_at": "2026-08-07",
+      "primary": true,
+      "locator_sha256": "82b812e0758cfab64a73d8df0b9ab7a36036e58f956e1ce9bd1eeb169c160b0c"
+    },
+    {
+      "source_id": "sp500-market-leaders-comparison--spdj-market-leaders-brochure-2026",
+      "claim_id": "sp500-market-leaders-comparison",
+      "publisher": "S&P Dow Jones Indices",
+      "title": "S&P 500 Market Leaders Index Brochure",
+      "url": "https://www.spglobal.com/spdji/en/documents/brochure/brochure-sp-500-market-leaders-index.pdf",
+      "location": "Methodology summary, performance comparison, simulated-history disclosure, and maximum drawdown table",
+      "published_at": null,
+      "accessed_at": "2026-08-07",
+      "primary": true,
+      "locator_sha256": "76d53badc9caeddf00dcf2dece55c65ffc7ee611929d2dfb1bc7cf720a885a49"
+    },
+    {
+      "source_id": "equal-weight-long-tail-countercase--spdj-equal-weight-faq",
+      "claim_id": "equal-weight-long-tail-countercase",
+      "publisher": "S&P Dow Jones Indices",
+      "title": "S&P 500 Equal Weight Index FAQ",
+      "url": "https://www.spglobal.com/spdji/en/education/article/sp-500-equal-weight-index-faq/",
+      "location": "Live-history performance and diversification discussion",
+      "published_at": null,
+      "accessed_at": "2026-08-07",
+      "primary": true,
+      "locator_sha256": "82fc4ff353591a14846d2208113c74e5f41c2b1fd732e8f22a351cf5bb67e431"
+    },
+    {
+      "source_id": "equal-weight-long-tail-countercase--spdj-factor-dashboard-2026-02",
+      "claim_id": "equal-weight-long-tail-countercase",
+      "publisher": "S&P Dow Jones Indices",
+      "title": "S&P 500 Factor Dashboard February 2026",
+      "url": "https://www.spglobal.com/spdji/en/documents/performance-reports/dashboard-sp-500-factor-2026-02.pdf",
+      "location": "Equal Weight annualized total return and relative return table",
+      "published_at": "2026-02-28",
+      "accessed_at": "2026-08-07",
+      "primary": true,
+      "locator_sha256": "434b49b5fd87aacbe06fbc301dc705b2c0cffa37ba2dd9310deaec8fcf22c3eb"
+    },
+    {
+      "source_id": "korea-italy-listed-market-comparison--krx-market-cap-2026",
+      "claim_id": "korea-italy-listed-market-comparison",
+      "publisher": "Korea Exchange",
+      "title": "Global KRX market overview",
+      "url": "https://global.krx.co.kr/",
+      "location": "Market capitalization: KRW 5,370 trillion, KOSPI plus KOSDAQ plus KONEX",
+      "published_at": null,
+      "accessed_at": "2026-08-07",
+      "primary": true,
+      "locator_sha256": "72e08d422368db2d643e295bf53e65fc99202c223b43caa36596eb16b64b2a53"
+    },
+    {
+      "source_id": "korea-italy-listed-market-comparison--borsa-italiana-market-cap-2026",
+      "claim_id": "korea-italy-listed-market-comparison",
+      "publisher": "Borsa Italiana",
+      "title": "Partecipate statali: valore di Borsa sale a 394,8 miliardi",
+      "url": "https://www.borsaitaliana.it/borsa/notizie/teleborsa/finanza/partecipate-statali-valore-di-borsa-sale-a3948-miliardi-quota-stato-a1334miliardi-83_2026-07-10_TLB.html?lang=it",
+      "location": "Total Milan-market capitalization EUR 1,157.8 billion at the beginning of July 2026",
+      "published_at": "2026-07-10",
+      "accessed_at": "2026-08-07",
+      "primary": false,
+      "locator_sha256": "77164d48d1558f319b3e705c32d7e4abe0df153a030a828b08547d276a8edf45"
+    },
+    {
+      "source_id": "korea-italy-listed-market-comparison--ecb-eur-krw-2026",
+      "claim_id": "korea-italy-listed-market-comparison",
+      "publisher": "European Central Bank",
+      "title": "Euro foreign exchange reference rates",
+      "url": "https://www.ecb.europa.eu/stats/policy_and_exchange_rates/euro_reference_exchange_rates/html/index.en.html",
+      "location": "27 July 2026 EUR/KRW reference rate: 1 EUR = 1,674.31 KRW",
+      "published_at": "2026-07-27",
+      "accessed_at": "2026-08-07",
+      "primary": true,
+      "locator_sha256": "a15885fd43d1c8925e4eefb58fd55a009a2c3b273d3bd59d10595a93b913c36b"
+    },
+    {
+      "source_id": "korea-technology-intensity--oecd-sti-outlook-2025",
+      "claim_id": "korea-technology-intensity",
+      "publisher": "OECD",
+      "title": "OECD Science, Technology and Innovation Outlook 2025",
+      "url": "https://www.oecd.org/en/publications/oecd-science-technology-and-innovation-outlook-2025_5fe57b90-en/full-report/mobilising-science-technology-and-innovation-policies-for-transformative-change_7c5f5933.html",
+      "location": "Figure 1.2 discussion: Korea R&D intensity approximately 5% in 2023",
+      "published_at": "2025-10-01",
+      "accessed_at": "2026-08-07",
+      "primary": true,
+      "locator_sha256": "3c3e7d83b1ccd64ef2223011c739421d9069ca9717e9a091daac2d3d51240f34"
+    },
+    {
+      "source_id": "korea-technology-intensity--oecd-korea-snapshot-2026",
+      "claim_id": "korea-technology-intensity",
+      "publisher": "OECD",
+      "title": "Korea Economic Snapshot",
+      "url": "https://www.oecd.org/en/topics/sub-issues/economic-surveys/korea-economic-snapshot.html",
+      "location": "June 2026 outlook: semiconductor exports continue to drive growth and private investment",
+      "published_at": "2026-07-01",
+      "accessed_at": "2026-08-07",
+      "primary": true,
+      "locator_sha256": "babe1725a54b44803c13ae1ec9f4a2bee6c54b0c6328766218865dadab5b42b7"
+    },
+    {
+      "source_id": "timely-trailing-market-return-comparison--yfinance-trailing-market-data-2026-08-07",
+      "claim_id": "timely-trailing-market-return-comparison",
+      "publisher": "Yahoo Finance via yfinance",
+      "title": "Stored one-year adjusted-close market-data packet",
+      "url": "https://finance.yahoo.com/",
+      "location": "current-bubble-mechanism/edit/semantic-v2/market-data-yfinance-trailing-2026-08-07.v1.json; daily observations for MU, ^KS11, and ^GSPC, ending 2026-08-07",
+      "published_at": null,
+      "accessed_at": "2026-08-08",
+      "primary": false,
+      "locator_sha256": "89aa3ab65e608fdd8f87439f3a0cc49888dc1a493404895c6d37262eca46fb86"
+    },
+    {
+      "source_id": "sp500-countercase--spdj-vanguard-concentration-2026",
+      "claim_id": "sp500-countercase",
+      "publisher": "S&P Dow Jones Indices and Vanguard",
+      "title": "In the Shadows of Giants",
+      "url": "https://www.spglobal.com/content/dam/spglobal/global-assets/en/special-reports/partner-perspectives/Partner-Perspectives_UnlockingPotentialAhead.pdf",
+      "location": "PDF pages 5-9, historical top-ten cohort and index-performance discussion",
+      "published_at": "2026-01-01",
+      "accessed_at": "2026-08-07",
+      "primary": true,
+      "locator_sha256": "30e2003713f799e339ca0db77e0d28072c7e665a2e3c379d584b6db12c568d74"
+    },
+    {
+      "source_id": "korea-conglomerate-concentration-risk--oecd-korea-innovation-2023",
+      "claim_id": "korea-conglomerate-concentration-risk",
+      "publisher": "OECD",
+      "title": "OECD Reviews of Innovation Policy: Korea 2023",
+      "url": "https://www.oecd.org/en/publications/oecd-reviews-of-innovation-policy-korea-2023_bdcf9685-en/full-report/component-4.html",
+      "location": "Overall assessment discussion of business R&D concentration among chaebols",
+      "published_at": "2023-07-01",
+      "accessed_at": "2026-08-07",
+      "primary": true,
+      "locator_sha256": "29fd417b66b447a65b36fbb3edc5e2767f8b8b5b0a0b56e334b1ec315a0d9298"
+    }
+  ],
+  "beat_bindings": [
+    {
+      "request_id": "research-cbm-semantic-beat-01-002",
+      "beat_id": "cbm-semantic-beat-01-002",
+      "claim_refs": [
+        "memory-bottleneck-not-bubble-inference"
+      ],
+      "source_ids": [],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        "2026-08-07"
+      ],
+      "binding_kind": "channel_inference",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-01-005",
+      "beat_id": "cbm-semantic-beat-01-005",
+      "claim_refs": [
+        "micron-strategic-customer-agreements"
+      ],
+      "source_ids": [
+        "micron-strategic-customer-agreements--micron-q3-2026-remarks"
+      ],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        "2026-06-24"
+      ],
+      "binding_kind": "primary_source",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-01-006",
+      "beat_id": "cbm-semantic-beat-01-006",
+      "claim_refs": [
+        "sp500-hidden-bubble-risk-inference"
+      ],
+      "source_ids": [],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        "2026-08-07"
+      ],
+      "binding_kind": "channel_inference",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-01-007",
+      "beat_id": "cbm-semantic-beat-01-007",
+      "claim_refs": [
+        "sp500-top-ten-concentration"
+      ],
+      "source_ids": [
+        "sp500-top-ten-concentration--spdj-vanguard-concentration-2026"
+      ],
+      "evidence_surface_ids": [
+        "sp500-top-ten-weight-2025"
+      ],
+      "as_of_dates": [
+        "2025-06-30"
+      ],
+      "binding_kind": "verified_calculation",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-01-009",
+      "beat_id": "cbm-semantic-beat-01-009",
+      "claim_refs": [
+        "memory-bottleneck-not-bubble-inference"
+      ],
+      "source_ids": [],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        "2026-08-07"
+      ],
+      "binding_kind": "channel_inference",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-01-012",
+      "beat_id": "cbm-semantic-beat-01-012",
+      "claim_refs": [
+        "memory-bottleneck-not-bubble-inference"
+      ],
+      "source_ids": [],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        "2026-08-07"
+      ],
+      "binding_kind": "channel_inference",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-02-006",
+      "beat_id": "cbm-semantic-beat-02-006",
+      "claim_refs": [
+        "memory-bottleneck-not-bubble-inference"
+      ],
+      "source_ids": [],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        "2026-08-07"
+      ],
+      "binding_kind": "channel_inference",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-02-011",
+      "beat_id": "cbm-semantic-beat-02-011",
+      "claim_refs": [
+        "hbm-capacity-trade-ratio",
+        "memory-bottleneck-not-bubble-inference"
+      ],
+      "source_ids": [
+        "hbm-capacity-trade-ratio--micron-q3-2026-remarks"
+      ],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        "2026-06-24",
+        "2026-08-07"
+      ],
+      "binding_kind": "primary_source",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-02-012",
+      "beat_id": "cbm-semantic-beat-02-012",
+      "claim_refs": [
+        "sp500-top-ten-concentration",
+        "sp500-hidden-bubble-risk-inference"
+      ],
+      "source_ids": [
+        "sp500-top-ten-concentration--spdj-vanguard-concentration-2026"
+      ],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        "2025-06-30",
+        "2026-08-07"
+      ],
+      "binding_kind": "primary_source",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-02-013",
+      "beat_id": "cbm-semantic-beat-02-013",
+      "claim_refs": [
+        "sp500-top-ten-concentration"
+      ],
+      "source_ids": [
+        "sp500-top-ten-concentration--spdj-vanguard-concentration-2026"
+      ],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        "2025-06-30"
+      ],
+      "binding_kind": "primary_source",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-03-002",
+      "beat_id": "cbm-semantic-beat-03-002",
+      "claim_refs": [
+        "memory-architecture-dependency",
+        "memory-bottleneck-not-bubble-inference"
+      ],
+      "source_ids": [
+        "memory-architecture-dependency--micron-q3-2026-remarks"
+      ],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        "2026-06-24",
+        "2026-08-07"
+      ],
+      "binding_kind": "primary_source",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-03-003",
+      "beat_id": "cbm-semantic-beat-03-003",
+      "claim_refs": [
+        "memory-architecture-dependency",
+        "memory-bottleneck-not-bubble-inference"
+      ],
+      "source_ids": [
+        "memory-architecture-dependency--micron-q3-2026-remarks"
+      ],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        "2026-06-24",
+        "2026-08-07"
+      ],
+      "binding_kind": "primary_source",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-03-004",
+      "beat_id": "cbm-semantic-beat-03-004",
+      "claim_refs": [
+        "memory-architecture-dependency"
+      ],
+      "source_ids": [
+        "memory-architecture-dependency--micron-q3-2026-remarks"
+      ],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        "2026-06-24"
+      ],
+      "binding_kind": "primary_source",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-03-007",
+      "beat_id": "cbm-semantic-beat-03-007",
+      "claim_refs": [
+        "memory-architecture-dependency",
+        "hbm-capacity-trade-ratio",
+        "memory-bottleneck-not-bubble-inference"
+      ],
+      "source_ids": [
+        "memory-architecture-dependency--micron-q3-2026-remarks",
+        "hbm-capacity-trade-ratio--micron-q3-2026-remarks"
+      ],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        "2026-06-24",
+        "2026-08-07"
+      ],
+      "binding_kind": "primary_source",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-03-008",
+      "beat_id": "cbm-semantic-beat-03-008",
+      "claim_refs": [
+        "memory-bottleneck-not-bubble-inference"
+      ],
+      "source_ids": [],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        "2026-08-07"
+      ],
+      "binding_kind": "channel_inference",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-03-009",
+      "beat_id": "cbm-semantic-beat-03-009",
+      "claim_refs": [
+        "memory-architecture-dependency",
+        "hbm-capacity-trade-ratio"
+      ],
+      "source_ids": [
+        "memory-architecture-dependency--micron-q3-2026-remarks",
+        "hbm-capacity-trade-ratio--micron-q3-2026-remarks"
+      ],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        "2026-06-24"
+      ],
+      "binding_kind": "primary_source",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-03-016",
+      "beat_id": "cbm-semantic-beat-03-016",
+      "claim_refs": [
+        "memory-architecture-dependency",
+        "hbm-capacity-trade-ratio"
+      ],
+      "source_ids": [
+        "memory-architecture-dependency--micron-q3-2026-remarks",
+        "hbm-capacity-trade-ratio--micron-q3-2026-remarks"
+      ],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        "2026-06-24"
+      ],
+      "binding_kind": "primary_source",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-03-018",
+      "beat_id": "cbm-semantic-beat-03-018",
+      "claim_refs": [
+        "memory-architecture-dependency",
+        "hbm-capacity-trade-ratio"
+      ],
+      "source_ids": [
+        "memory-architecture-dependency--micron-q3-2026-remarks",
+        "hbm-capacity-trade-ratio--micron-q3-2026-remarks"
+      ],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        "2026-06-24"
+      ],
+      "binding_kind": "primary_source",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-03-019",
+      "beat_id": "cbm-semantic-beat-03-019",
+      "claim_refs": [
+        "memory-architecture-dependency",
+        "hbm-capacity-trade-ratio",
+        "samsung-hbm4-growth",
+        "sp500-top-ten-concentration"
+      ],
+      "source_ids": [
+        "memory-architecture-dependency--micron-q3-2026-remarks",
+        "hbm-capacity-trade-ratio--micron-q3-2026-remarks",
+        "samsung-hbm4-growth--samsung-hbm4-2026",
+        "sp500-top-ten-concentration--spdj-vanguard-concentration-2026"
+      ],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        "2026-06-24",
+        "2026-02-12",
+        "2025-06-30"
+      ],
+      "binding_kind": "primary_source",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-03-021",
+      "beat_id": "cbm-semantic-beat-03-021",
+      "claim_refs": [
+        "memory-bottleneck-not-bubble-inference"
+      ],
+      "source_ids": [],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        "2026-08-07"
+      ],
+      "binding_kind": "channel_inference",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-04-002",
+      "beat_id": "cbm-semantic-beat-04-002",
+      "claim_refs": [
+        "hbm-capacity-trade-ratio",
+        "memory-bottleneck-not-bubble-inference"
+      ],
+      "source_ids": [
+        "hbm-capacity-trade-ratio--micron-q3-2026-remarks"
+      ],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        "2026-06-24",
+        "2026-08-07"
+      ],
+      "binding_kind": "primary_source",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-04-005",
+      "beat_id": "cbm-semantic-beat-04-005",
+      "claim_refs": [
+        "micron-strategic-customer-agreements"
+      ],
+      "source_ids": [
+        "micron-strategic-customer-agreements--micron-q3-2026-remarks"
+      ],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        "2026-06-24"
+      ],
+      "binding_kind": "primary_source",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-04-006",
+      "beat_id": "cbm-semantic-beat-04-006",
+      "claim_refs": [
+        "micron-strategic-customer-agreements"
+      ],
+      "source_ids": [
+        "micron-strategic-customer-agreements--micron-q3-2026-remarks"
+      ],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        "2026-06-24"
+      ],
+      "binding_kind": "primary_source",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-04-007",
+      "beat_id": "cbm-semantic-beat-04-007",
+      "claim_refs": [
+        "micron-strategic-customer-agreements"
+      ],
+      "source_ids": [
+        "micron-strategic-customer-agreements--micron-q3-2026-remarks"
+      ],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        "2026-06-24"
+      ],
+      "binding_kind": "primary_source",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-04-008",
+      "beat_id": "cbm-semantic-beat-04-008",
+      "claim_refs": [
+        "micron-strategic-customer-agreements"
+      ],
+      "source_ids": [
+        "micron-strategic-customer-agreements--micron-q3-2026-remarks"
+      ],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        "2026-06-24"
+      ],
+      "binding_kind": "primary_source",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-04-010",
+      "beat_id": "cbm-semantic-beat-04-010",
+      "claim_refs": [
+        "hbm-capacity-trade-ratio",
+        "sk-hynix-demand-exceeds-supply",
+        "memory-bottleneck-not-bubble-inference"
+      ],
+      "source_ids": [
+        "hbm-capacity-trade-ratio--micron-q3-2026-remarks",
+        "sk-hynix-demand-exceeds-supply--sk-hynix-q1-2026"
+      ],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        "2026-06-24",
+        "2026-04-23",
+        "2026-08-07"
+      ],
+      "binding_kind": "primary_source",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-04-011",
+      "beat_id": "cbm-semantic-beat-04-011",
+      "claim_refs": [
+        "hbm-capacity-trade-ratio",
+        "sk-hynix-demand-exceeds-supply"
+      ],
+      "source_ids": [
+        "hbm-capacity-trade-ratio--micron-q3-2026-remarks",
+        "sk-hynix-demand-exceeds-supply--sk-hynix-q1-2026"
+      ],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        "2026-06-24",
+        "2026-04-23"
+      ],
+      "binding_kind": "primary_source",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-04-012",
+      "beat_id": "cbm-semantic-beat-04-012",
+      "claim_refs": [
+        "memory-architecture-dependency",
+        "samsung-hbm4-growth"
+      ],
+      "source_ids": [
+        "memory-architecture-dependency--micron-q3-2026-remarks",
+        "samsung-hbm4-growth--samsung-hbm4-2026"
+      ],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        "2026-06-24",
+        "2026-02-12"
+      ],
+      "binding_kind": "primary_source",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-04-015",
+      "beat_id": "cbm-semantic-beat-04-015",
+      "claim_refs": [
+        "memory-bottleneck-not-bubble-inference"
+      ],
+      "source_ids": [],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        "2026-08-07"
+      ],
+      "binding_kind": "channel_inference",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-05-001",
+      "beat_id": "cbm-semantic-beat-05-001",
+      "claim_refs": [
+        "memory-bottleneck-not-bubble-inference"
+      ],
+      "source_ids": [],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        "2026-08-07"
+      ],
+      "binding_kind": "channel_inference",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-05-002",
+      "beat_id": "cbm-semantic-beat-05-002",
+      "claim_refs": [
+        "memory-bottleneck-not-bubble-inference"
+      ],
+      "source_ids": [],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        "2026-08-07"
+      ],
+      "binding_kind": "channel_inference",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-05-004",
+      "beat_id": "cbm-semantic-beat-05-004",
+      "claim_refs": [
+        "korea-italy-listed-market-comparison"
+      ],
+      "source_ids": [
+        "korea-italy-listed-market-comparison--krx-market-cap-2026",
+        "korea-italy-listed-market-comparison--borsa-italiana-market-cap-2026",
+        "korea-italy-listed-market-comparison--ecb-eur-krw-2026"
+      ],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        "2026-07-27"
+      ],
+      "binding_kind": "primary_source",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-05-005",
+      "beat_id": "cbm-semantic-beat-05-005",
+      "claim_refs": [
+        "cross-exchange-comparability-limit"
+      ],
+      "source_ids": [],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        null
+      ],
+      "binding_kind": "channel_inference",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-05-006",
+      "beat_id": "cbm-semantic-beat-05-006",
+      "claim_refs": [
+        "cross-exchange-comparability-limit"
+      ],
+      "source_ids": [],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        null
+      ],
+      "binding_kind": "channel_inference",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-05-007",
+      "beat_id": "cbm-semantic-beat-05-007",
+      "claim_refs": [
+        "korea-italy-listed-market-comparison"
+      ],
+      "source_ids": [
+        "korea-italy-listed-market-comparison--krx-market-cap-2026",
+        "korea-italy-listed-market-comparison--borsa-italiana-market-cap-2026",
+        "korea-italy-listed-market-comparison--ecb-eur-krw-2026"
+      ],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        "2026-07-27"
+      ],
+      "binding_kind": "primary_source",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-05-008",
+      "beat_id": "cbm-semantic-beat-05-008",
+      "claim_refs": [
+        "korea-italy-listed-market-comparison"
+      ],
+      "source_ids": [
+        "korea-italy-listed-market-comparison--krx-market-cap-2026",
+        "korea-italy-listed-market-comparison--borsa-italiana-market-cap-2026",
+        "korea-italy-listed-market-comparison--ecb-eur-krw-2026"
+      ],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        "2026-07-27"
+      ],
+      "binding_kind": "primary_source",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-05-009",
+      "beat_id": "cbm-semantic-beat-05-009",
+      "claim_refs": [
+        "korea-italy-listed-market-comparison"
+      ],
+      "source_ids": [
+        "korea-italy-listed-market-comparison--krx-market-cap-2026",
+        "korea-italy-listed-market-comparison--borsa-italiana-market-cap-2026",
+        "korea-italy-listed-market-comparison--ecb-eur-krw-2026"
+      ],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        "2026-07-27"
+      ],
+      "binding_kind": "primary_source",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-05-010",
+      "beat_id": "cbm-semantic-beat-05-010",
+      "claim_refs": [
+        "samsung-hbm4-growth",
+        "sk-hynix-demand-exceeds-supply"
+      ],
+      "source_ids": [
+        "samsung-hbm4-growth--samsung-hbm4-2026",
+        "sk-hynix-demand-exceeds-supply--sk-hynix-q1-2026"
+      ],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        "2026-02-12",
+        "2026-04-23"
+      ],
+      "binding_kind": "primary_source",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-05-012",
+      "beat_id": "cbm-semantic-beat-05-012",
+      "claim_refs": [
+        "memory-bottleneck-not-bubble-inference"
+      ],
+      "source_ids": [],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        "2026-08-07"
+      ],
+      "binding_kind": "channel_inference",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-05-013",
+      "beat_id": "cbm-semantic-beat-05-013",
+      "claim_refs": [
+        "korea-italy-listed-market-comparison"
+      ],
+      "source_ids": [
+        "korea-italy-listed-market-comparison--krx-market-cap-2026",
+        "korea-italy-listed-market-comparison--borsa-italiana-market-cap-2026",
+        "korea-italy-listed-market-comparison--ecb-eur-krw-2026"
+      ],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        "2026-07-27"
+      ],
+      "binding_kind": "primary_source",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-05-014",
+      "beat_id": "cbm-semantic-beat-05-014",
+      "claim_refs": [
+        "korea-italy-listed-market-comparison"
+      ],
+      "source_ids": [
+        "korea-italy-listed-market-comparison--krx-market-cap-2026",
+        "korea-italy-listed-market-comparison--borsa-italiana-market-cap-2026",
+        "korea-italy-listed-market-comparison--ecb-eur-krw-2026"
+      ],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        "2026-07-27"
+      ],
+      "binding_kind": "primary_source",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-05-019",
+      "beat_id": "cbm-semantic-beat-05-019",
+      "claim_refs": [
+        "korea-italy-listed-market-comparison",
+        "korea-technology-intensity"
+      ],
+      "source_ids": [
+        "korea-italy-listed-market-comparison--krx-market-cap-2026",
+        "korea-italy-listed-market-comparison--borsa-italiana-market-cap-2026",
+        "korea-italy-listed-market-comparison--ecb-eur-krw-2026",
+        "korea-technology-intensity--oecd-sti-outlook-2025",
+        "korea-technology-intensity--oecd-korea-snapshot-2026"
+      ],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        "2026-07-27",
+        "2026-07-01"
+      ],
+      "binding_kind": "primary_source",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-05-021",
+      "beat_id": "cbm-semantic-beat-05-021",
+      "claim_refs": [
+        "memory-bottleneck-not-bubble-inference"
+      ],
+      "source_ids": [],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        "2026-08-07"
+      ],
+      "binding_kind": "channel_inference",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-05-022",
+      "beat_id": "cbm-semantic-beat-05-022",
+      "claim_refs": [
+        "memory-bottleneck-not-bubble-inference"
+      ],
+      "source_ids": [],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        "2026-08-07"
+      ],
+      "binding_kind": "channel_inference",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-05-023",
+      "beat_id": "cbm-semantic-beat-05-023",
+      "claim_refs": [
+        "memory-architecture-dependency"
+      ],
+      "source_ids": [
+        "memory-architecture-dependency--micron-q3-2026-remarks"
+      ],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        "2026-06-24"
+      ],
+      "binding_kind": "primary_source",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-06-001",
+      "beat_id": "cbm-semantic-beat-06-001",
+      "claim_refs": [
+        "sp500-hidden-bubble-risk-inference"
+      ],
+      "source_ids": [],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        "2026-08-07"
+      ],
+      "binding_kind": "channel_inference",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-06-002",
+      "beat_id": "cbm-semantic-beat-06-002",
+      "claim_refs": [
+        "sp500-hidden-bubble-risk-inference"
+      ],
+      "source_ids": [],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        "2026-08-07"
+      ],
+      "binding_kind": "channel_inference",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-06-004",
+      "beat_id": "cbm-semantic-beat-06-004",
+      "claim_refs": [
+        "sp500-top-ten-concentration"
+      ],
+      "source_ids": [
+        "sp500-top-ten-concentration--spdj-vanguard-concentration-2026"
+      ],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        "2025-06-30"
+      ],
+      "binding_kind": "primary_source",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-06-006",
+      "beat_id": "cbm-semantic-beat-06-006",
+      "claim_refs": [
+        "sp500-top-ten-concentration",
+        "sp500-hidden-bubble-risk-inference"
+      ],
+      "source_ids": [
+        "sp500-top-ten-concentration--spdj-vanguard-concentration-2026"
+      ],
+      "evidence_surface_ids": [
+        "sp500-top-ten-weight-2025"
+      ],
+      "as_of_dates": [
+        "2025-06-30",
+        "2026-08-07"
+      ],
+      "binding_kind": "verified_calculation",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-06-008",
+      "beat_id": "cbm-semantic-beat-06-008",
+      "claim_refs": [
+        "sp500-top-ten-concentration",
+        "sp500-hidden-bubble-risk-inference"
+      ],
+      "source_ids": [
+        "sp500-top-ten-concentration--spdj-vanguard-concentration-2026"
+      ],
+      "evidence_surface_ids": [
+        "sp500-top-ten-weight-2025"
+      ],
+      "as_of_dates": [
+        "2025-06-30",
+        "2026-08-07"
+      ],
+      "binding_kind": "verified_calculation",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-06-012",
+      "beat_id": "cbm-semantic-beat-06-012",
+      "claim_refs": [
+        "sp500-hidden-bubble-risk-inference"
+      ],
+      "source_ids": [],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        "2026-08-07"
+      ],
+      "binding_kind": "channel_inference",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-06-017",
+      "beat_id": "cbm-semantic-beat-06-017",
+      "claim_refs": [
+        "sp500-hidden-bubble-risk-inference"
+      ],
+      "source_ids": [],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        "2026-08-07"
+      ],
+      "binding_kind": "channel_inference",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-06-018",
+      "beat_id": "cbm-semantic-beat-06-018",
+      "claim_refs": [
+        "sp500-hidden-bubble-risk-inference"
+      ],
+      "source_ids": [],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        "2026-08-07"
+      ],
+      "binding_kind": "channel_inference",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-06-022",
+      "beat_id": "cbm-semantic-beat-06-022",
+      "claim_refs": [
+        "sp500-hidden-bubble-risk-inference"
+      ],
+      "source_ids": [],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        "2026-08-07"
+      ],
+      "binding_kind": "channel_inference",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-06-023",
+      "beat_id": "cbm-semantic-beat-06-023",
+      "claim_refs": [
+        "sp500-top-ten-concentration"
+      ],
+      "source_ids": [
+        "sp500-top-ten-concentration--spdj-vanguard-concentration-2026"
+      ],
+      "evidence_surface_ids": [
+        "sp500-top-ten-weight-2025"
+      ],
+      "as_of_dates": [
+        "2025-06-30"
+      ],
+      "binding_kind": "verified_calculation",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-07-001",
+      "beat_id": "cbm-semantic-beat-07-001",
+      "claim_refs": [
+        "sp500-hidden-bubble-risk-inference"
+      ],
+      "source_ids": [],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        "2026-08-07"
+      ],
+      "binding_kind": "channel_inference",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-07-002",
+      "beat_id": "cbm-semantic-beat-07-002",
+      "claim_refs": [
+        "sp500-top-ten-concentration"
+      ],
+      "source_ids": [
+        "sp500-top-ten-concentration--spdj-vanguard-concentration-2026"
+      ],
+      "evidence_surface_ids": [
+        "sp500-top-ten-weight-2025"
+      ],
+      "as_of_dates": [
+        "2025-06-30"
+      ],
+      "binding_kind": "verified_calculation",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-07-003",
+      "beat_id": "cbm-semantic-beat-07-003",
+      "claim_refs": [
+        "sp500-top-ten-concentration",
+        "sp500-hidden-bubble-risk-inference"
+      ],
+      "source_ids": [
+        "sp500-top-ten-concentration--spdj-vanguard-concentration-2026"
+      ],
+      "evidence_surface_ids": [
+        "sp500-top-ten-weight-2025"
+      ],
+      "as_of_dates": [
+        "2025-06-30",
+        "2026-08-07"
+      ],
+      "binding_kind": "verified_calculation",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-07-006",
+      "beat_id": "cbm-semantic-beat-07-006",
+      "claim_refs": [
+        "sp500-top-ten-concentration",
+        "sp500-hidden-bubble-risk-inference"
+      ],
+      "source_ids": [
+        "sp500-top-ten-concentration--spdj-vanguard-concentration-2026"
+      ],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        "2025-06-30",
+        "2026-08-07"
+      ],
+      "binding_kind": "primary_source",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-07-007",
+      "beat_id": "cbm-semantic-beat-07-007",
+      "claim_refs": [
+        "sp500-hidden-bubble-risk-inference"
+      ],
+      "source_ids": [],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        "2026-08-07"
+      ],
+      "binding_kind": "channel_inference",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-08-001",
+      "beat_id": "cbm-semantic-beat-08-001",
+      "claim_refs": [
+        "sp500-hidden-bubble-risk-inference"
+      ],
+      "source_ids": [],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        "2026-08-07"
+      ],
+      "binding_kind": "channel_inference",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-08-005",
+      "beat_id": "cbm-semantic-beat-08-005",
+      "claim_refs": [
+        "micron-strategic-customer-agreements",
+        "generational-wealth-return-hurdle"
+      ],
+      "source_ids": [
+        "micron-strategic-customer-agreements--micron-q3-2026-remarks",
+        "generational-wealth-return-hurdle--sec-compound-interest-calculator"
+      ],
+      "evidence_surface_ids": [
+        "generational-wealth-return-hurdle"
+      ],
+      "as_of_dates": [
+        "2026-06-24",
+        null
+      ],
+      "binding_kind": "verified_calculation",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-08-006",
+      "beat_id": "cbm-semantic-beat-08-006",
+      "claim_refs": [
+        "generational-wealth-return-hurdle"
+      ],
+      "source_ids": [
+        "generational-wealth-return-hurdle--sec-compound-interest-calculator"
+      ],
+      "evidence_surface_ids": [
+        "generational-wealth-return-hurdle"
+      ],
+      "as_of_dates": [
+        null
+      ],
+      "binding_kind": "verified_calculation",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-08-007",
+      "beat_id": "cbm-semantic-beat-08-007",
+      "claim_refs": [
+        "generational-wealth-return-hurdle"
+      ],
+      "source_ids": [
+        "generational-wealth-return-hurdle--sec-compound-interest-calculator"
+      ],
+      "evidence_surface_ids": [
+        "generational-wealth-return-hurdle",
+        "ten-percent-compound-example"
+      ],
+      "as_of_dates": [
+        null
+      ],
+      "binding_kind": "verified_calculation",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-08-008",
+      "beat_id": "cbm-semantic-beat-08-008",
+      "claim_refs": [
+        "micron-strategic-customer-agreements",
+        "generational-wealth-return-hurdle",
+        "sp500-trailing-return-snapshot",
+        "sp500-hidden-bubble-risk-inference"
+      ],
+      "source_ids": [
+        "micron-strategic-customer-agreements--micron-q3-2026-remarks",
+        "generational-wealth-return-hurdle--sec-compound-interest-calculator",
+        "sp500-trailing-return-snapshot--spdj-sp500-index-page-2026"
+      ],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        "2026-06-24",
+        null,
+        "2026-06-30",
+        "2026-08-07"
+      ],
+      "binding_kind": "primary_source",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-08-012",
+      "beat_id": "cbm-semantic-beat-08-012",
+      "claim_refs": [
+        "sp500-top-ten-concentration"
+      ],
+      "source_ids": [
+        "sp500-top-ten-concentration--spdj-vanguard-concentration-2026"
+      ],
+      "evidence_surface_ids": [
+        "sp500-top-ten-weight-2025"
+      ],
+      "as_of_dates": [
+        "2025-06-30"
+      ],
+      "binding_kind": "verified_calculation",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-08-014",
+      "beat_id": "cbm-semantic-beat-08-014",
+      "claim_refs": [
+        "index-fund-asset-scale"
+      ],
+      "source_ids": [
+        "index-fund-asset-scale--ici-2026-factbook"
+      ],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        "2025-12-31"
+      ],
+      "binding_kind": "primary_source",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-08-016",
+      "beat_id": "cbm-semantic-beat-08-016",
+      "claim_refs": [
+        "index-fund-asset-scale"
+      ],
+      "source_ids": [
+        "index-fund-asset-scale--ici-2026-factbook"
+      ],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        "2025-12-31"
+      ],
+      "binding_kind": "primary_source",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-09-002",
+      "beat_id": "cbm-semantic-beat-09-002",
+      "claim_refs": [
+        "sp500-hidden-bubble-risk-inference"
+      ],
+      "source_ids": [],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        "2026-08-07"
+      ],
+      "binding_kind": "channel_inference",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-09-004",
+      "beat_id": "cbm-semantic-beat-09-004",
+      "claim_refs": [
+        "memory-bottleneck-not-bubble-inference"
+      ],
+      "source_ids": [],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        "2026-08-07"
+      ],
+      "binding_kind": "channel_inference",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-09-006",
+      "beat_id": "cbm-semantic-beat-09-006",
+      "claim_refs": [
+        "concentrated-defensive-barbell-hypothesis"
+      ],
+      "source_ids": [],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        "2026-08-07"
+      ],
+      "binding_kind": "scenario",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-09-008",
+      "beat_id": "cbm-semantic-beat-09-008",
+      "claim_refs": [
+        "sp500-top-ten-concentration",
+        "concentrated-defensive-barbell-hypothesis"
+      ],
+      "source_ids": [
+        "sp500-top-ten-concentration--spdj-vanguard-concentration-2026"
+      ],
+      "evidence_surface_ids": [
+        "sp500-top-ten-weight-2025"
+      ],
+      "as_of_dates": [
+        "2025-06-30",
+        "2026-08-07"
+      ],
+      "binding_kind": "verified_calculation",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-09-010",
+      "beat_id": "cbm-semantic-beat-09-010",
+      "claim_refs": [
+        "sp500-market-leaders-comparison"
+      ],
+      "source_ids": [
+        "sp500-market-leaders-comparison--spdj-market-leaders-index-page-2026",
+        "sp500-market-leaders-comparison--spdj-market-leaders-brochure-2026"
+      ],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        "2026-06-30"
+      ],
+      "binding_kind": "primary_source",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-09-011",
+      "beat_id": "cbm-semantic-beat-09-011",
+      "claim_refs": [
+        "sp500-trailing-return-snapshot",
+        "sp500-market-leaders-comparison",
+        "sp500-hidden-bubble-risk-inference"
+      ],
+      "source_ids": [
+        "sp500-trailing-return-snapshot--spdj-sp500-index-page-2026",
+        "sp500-market-leaders-comparison--spdj-market-leaders-index-page-2026",
+        "sp500-market-leaders-comparison--spdj-market-leaders-brochure-2026"
+      ],
+      "evidence_surface_ids": [
+        "sp500-ten-year-price-gain-compound-example",
+        "market-leaders-ten-year-price-return-2026-06-30",
+        "sp500-ten-year-price-return-2026-06-30"
+      ],
+      "as_of_dates": [
+        "2026-06-30",
+        "2026-08-07"
+      ],
+      "binding_kind": "verified_calculation",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-09-013",
+      "beat_id": "cbm-semantic-beat-09-013",
+      "claim_refs": [
+        "sp500-market-leaders-comparison"
+      ],
+      "source_ids": [
+        "sp500-market-leaders-comparison--spdj-market-leaders-index-page-2026",
+        "sp500-market-leaders-comparison--spdj-market-leaders-brochure-2026"
+      ],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        "2026-06-30"
+      ],
+      "binding_kind": "primary_source",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-09-014",
+      "beat_id": "cbm-semantic-beat-09-014",
+      "claim_refs": [
+        "sp500-market-leaders-comparison"
+      ],
+      "source_ids": [
+        "sp500-market-leaders-comparison--spdj-market-leaders-index-page-2026",
+        "sp500-market-leaders-comparison--spdj-market-leaders-brochure-2026"
+      ],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        "2026-06-30"
+      ],
+      "binding_kind": "primary_source",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-09-016",
+      "beat_id": "cbm-semantic-beat-09-016",
+      "claim_refs": [
+        "equal-weight-long-tail-countercase"
+      ],
+      "source_ids": [
+        "equal-weight-long-tail-countercase--spdj-equal-weight-faq",
+        "equal-weight-long-tail-countercase--spdj-factor-dashboard-2026-02"
+      ],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        "2026-02-28"
+      ],
+      "binding_kind": "primary_source",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-09-017",
+      "beat_id": "cbm-semantic-beat-09-017",
+      "claim_refs": [
+        "concentrated-defensive-barbell-hypothesis"
+      ],
+      "source_ids": [],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        "2026-08-07"
+      ],
+      "binding_kind": "scenario",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-09-020",
+      "beat_id": "cbm-semantic-beat-09-020",
+      "claim_refs": [
+        "sp500-top-ten-concentration"
+      ],
+      "source_ids": [
+        "sp500-top-ten-concentration--spdj-vanguard-concentration-2026"
+      ],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        "2025-06-30"
+      ],
+      "binding_kind": "primary_source",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-10-001",
+      "beat_id": "cbm-semantic-beat-10-001",
+      "claim_refs": [
+        "sp500-top-ten-concentration"
+      ],
+      "source_ids": [
+        "sp500-top-ten-concentration--spdj-vanguard-concentration-2026"
+      ],
+      "evidence_surface_ids": [
+        "sp500-top-ten-weight-2025"
+      ],
+      "as_of_dates": [
+        "2025-06-30"
+      ],
+      "binding_kind": "verified_calculation",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-10-002",
+      "beat_id": "cbm-semantic-beat-10-002",
+      "claim_refs": [
+        "sp500-countercase"
+      ],
+      "source_ids": [
+        "sp500-countercase--spdj-vanguard-concentration-2026"
+      ],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        null
+      ],
+      "binding_kind": "primary_source",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-10-003",
+      "beat_id": "cbm-semantic-beat-10-003",
+      "claim_refs": [
+        "sp500-countercase"
+      ],
+      "source_ids": [
+        "sp500-countercase--spdj-vanguard-concentration-2026"
+      ],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        null
+      ],
+      "binding_kind": "primary_source",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-10-004",
+      "beat_id": "cbm-semantic-beat-10-004",
+      "claim_refs": [
+        "sp500-countercase",
+        "sp500-hidden-bubble-risk-inference"
+      ],
+      "source_ids": [
+        "sp500-countercase--spdj-vanguard-concentration-2026"
+      ],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        null,
+        "2026-08-07"
+      ],
+      "binding_kind": "primary_source",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-10-007",
+      "beat_id": "cbm-semantic-beat-10-007",
+      "claim_refs": [
+        "concentrated-defensive-barbell-hypothesis"
+      ],
+      "source_ids": [],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        "2026-08-07"
+      ],
+      "binding_kind": "scenario",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-10-009",
+      "beat_id": "cbm-semantic-beat-10-009",
+      "claim_refs": [
+        "equal-weight-long-tail-countercase"
+      ],
+      "source_ids": [
+        "equal-weight-long-tail-countercase--spdj-equal-weight-faq",
+        "equal-weight-long-tail-countercase--spdj-factor-dashboard-2026-02"
+      ],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        "2026-02-28"
+      ],
+      "binding_kind": "primary_source",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-10-010",
+      "beat_id": "cbm-semantic-beat-10-010",
+      "claim_refs": [
+        "equal-weight-long-tail-countercase",
+        "sp500-hidden-bubble-risk-inference"
+      ],
+      "source_ids": [
+        "equal-weight-long-tail-countercase--spdj-equal-weight-faq",
+        "equal-weight-long-tail-countercase--spdj-factor-dashboard-2026-02"
+      ],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        "2026-02-28",
+        "2026-08-07"
+      ],
+      "binding_kind": "primary_source",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-10-012",
+      "beat_id": "cbm-semantic-beat-10-012",
+      "claim_refs": [
+        "sp500-hidden-bubble-risk-inference"
+      ],
+      "source_ids": [],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        "2026-08-07"
+      ],
+      "binding_kind": "channel_inference",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-10-014",
+      "beat_id": "cbm-semantic-beat-10-014",
+      "claim_refs": [
+        "memory-countercase",
+        "memory-bottleneck-not-bubble-inference"
+      ],
+      "source_ids": [],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        "2026-08-07"
+      ],
+      "binding_kind": "scenario",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-10-015",
+      "beat_id": "cbm-semantic-beat-10-015",
+      "claim_refs": [
+        "hbm-capacity-trade-ratio",
+        "memory-countercase"
+      ],
+      "source_ids": [
+        "hbm-capacity-trade-ratio--micron-q3-2026-remarks"
+      ],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        "2026-06-24",
+        "2026-08-07"
+      ],
+      "binding_kind": "primary_source",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-10-016",
+      "beat_id": "cbm-semantic-beat-10-016",
+      "claim_refs": [
+        "memory-countercase"
+      ],
+      "source_ids": [],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        "2026-08-07"
+      ],
+      "binding_kind": "scenario",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-10-017",
+      "beat_id": "cbm-semantic-beat-10-017",
+      "claim_refs": [
+        "memory-countercase"
+      ],
+      "source_ids": [],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        "2026-08-07"
+      ],
+      "binding_kind": "scenario",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-10-018",
+      "beat_id": "cbm-semantic-beat-10-018",
+      "claim_refs": [
+        "memory-countercase"
+      ],
+      "source_ids": [],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        "2026-08-07"
+      ],
+      "binding_kind": "scenario",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-10-022",
+      "beat_id": "cbm-semantic-beat-10-022",
+      "claim_refs": [
+        "memory-bottleneck-not-bubble-inference"
+      ],
+      "source_ids": [],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        "2026-08-07"
+      ],
+      "binding_kind": "channel_inference",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-10-026",
+      "beat_id": "cbm-semantic-beat-10-026",
+      "claim_refs": [
+        "sp500-top-ten-concentration",
+        "concentrated-defensive-barbell-hypothesis"
+      ],
+      "source_ids": [
+        "sp500-top-ten-concentration--spdj-vanguard-concentration-2026"
+      ],
+      "evidence_surface_ids": [
+        "sp500-top-ten-weight-2025"
+      ],
+      "as_of_dates": [
+        "2025-06-30",
+        "2026-08-07"
+      ],
+      "binding_kind": "verified_calculation",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-11-001",
+      "beat_id": "cbm-semantic-beat-11-001",
+      "claim_refs": [
+        "memory-bottleneck-not-bubble-inference"
+      ],
+      "source_ids": [],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        "2026-08-07"
+      ],
+      "binding_kind": "channel_inference",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-11-002",
+      "beat_id": "cbm-semantic-beat-11-002",
+      "claim_refs": [
+        "hbm-capacity-trade-ratio"
+      ],
+      "source_ids": [
+        "hbm-capacity-trade-ratio--micron-q3-2026-remarks"
+      ],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        "2026-06-24"
+      ],
+      "binding_kind": "primary_source",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-11-004",
+      "beat_id": "cbm-semantic-beat-11-004",
+      "claim_refs": [
+        "sp500-hidden-bubble-risk-inference"
+      ],
+      "source_ids": [],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        "2026-08-07"
+      ],
+      "binding_kind": "channel_inference",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-11-005",
+      "beat_id": "cbm-semantic-beat-11-005",
+      "claim_refs": [
+        "sp500-top-ten-concentration"
+      ],
+      "source_ids": [
+        "sp500-top-ten-concentration--spdj-vanguard-concentration-2026"
+      ],
+      "evidence_surface_ids": [
+        "sp500-top-ten-weight-2025"
+      ],
+      "as_of_dates": [
+        "2025-06-30"
+      ],
+      "binding_kind": "verified_calculation",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-11-007",
+      "beat_id": "cbm-semantic-beat-11-007",
+      "claim_refs": [
+        "memory-bottleneck-not-bubble-inference"
+      ],
+      "source_ids": [],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        "2026-08-07"
+      ],
+      "binding_kind": "channel_inference",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-11-008",
+      "beat_id": "cbm-semantic-beat-11-008",
+      "claim_refs": [
+        "sp500-top-ten-concentration",
+        "sp500-hidden-bubble-risk-inference"
+      ],
+      "source_ids": [
+        "sp500-top-ten-concentration--spdj-vanguard-concentration-2026"
+      ],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        "2025-06-30",
+        "2026-08-07"
+      ],
+      "binding_kind": "primary_source",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-11-013",
+      "beat_id": "cbm-semantic-beat-11-013",
+      "claim_refs": [
+        "memory-bottleneck-not-bubble-inference"
+      ],
+      "source_ids": [],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        "2026-08-07"
+      ],
+      "binding_kind": "channel_inference",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-11-016",
+      "beat_id": "cbm-semantic-beat-11-016",
+      "claim_refs": [
+        "memory-bottleneck-not-bubble-inference"
+      ],
+      "source_ids": [],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        "2026-08-07"
+      ],
+      "binding_kind": "channel_inference",
+      "status": "locator_bound"
+    },
+    {
+      "request_id": "research-cbm-semantic-beat-11-017",
+      "beat_id": "cbm-semantic-beat-11-017",
+      "claim_refs": [
+        "sp500-hidden-bubble-risk-inference"
+      ],
+      "source_ids": [],
+      "evidence_surface_ids": [],
+      "as_of_dates": [
+        "2026-08-07"
+      ],
+      "binding_kind": "channel_inference",
+      "status": "locator_bound"
+    }
+  ],
+  "review_state": "draft",
+  "artifact_hash": "3efa1f112b7b283c581631055f1749729300461a37a94dd2016664a84bd2e361"
+}

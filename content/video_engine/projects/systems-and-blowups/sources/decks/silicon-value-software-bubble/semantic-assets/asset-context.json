@@ -1,0 +1,113 @@
+{
+  "schema_version": "deck_asset_context.v1",
+  "deck_id": "silicon-value-software-bubble",
+  "assets": [
+    {
+      "asset_id": "silicon-value-software-bubble-s08-failure-triptych-v1",
+      "kind": "semantic_crop",
+      "path": "silicon-value-software-bubble/semantic-assets/assets/silicon-value-software-bubble-s08-failure-triptych-v1.png",
+      "sha256": "45746a15bb744a46c9d151b54f8dead0d84577a4dc67ce21f9e85d8fd922d5a4",
+      "deck_id": "silicon-value-software-bubble",
+      "slide_id": "silicon-value-software-bubble-s08",
+      "slide_number": 8,
+      "parent_source_image_id": "silicon-value-software-bubble-s08-cleaned",
+      "source_variant": "cleaned",
+      "extraction": {
+        "method": "rect_crop",
+        "bbox_px": [
+          69,
+          138,
+          1252,
+          538
+        ],
+        "bbox_norm": [
+          0.05,
+          0.18,
+          0.91,
+          0.7
+        ],
+        "polygon_norm": null,
+        "mask_path": null,
+        "source_sha256": "118efbaf47430c4d1e5f918c865153e38345dca66000019e17b5580e41c86ed5"
+      },
+      "context": {
+        "what_it_is": "A three-panel failure-point plate covering backgrinding, TSV etching, and wafer-level testing.",
+        "visual_role": "mechanism",
+        "representation_mode": "accurate_mechanism",
+        "factual_text": true,
+        "claim_refs": [],
+        "cue_refs": [],
+        "not_what_it_means": [
+          "The three panels are a compact explanatory sequence, not a complete process specification."
+        ],
+        "context_status": "review_only",
+        "reuse_policy": {
+          "scope": "source_only",
+          "max_total_uses": 1,
+          "min_nonadjacent_gap": 0,
+          "allowed_reasons": [
+            "evidence_hold"
+          ],
+          "claim_bound": false
+        }
+      },
+      "rights_state": "source_review_only",
+      "review_state": "review_only",
+      "render_eligible": false
+    },
+    {
+      "asset_id": "silicon-value-software-bubble-s15-opportunity-path-v1",
+      "kind": "semantic_crop",
+      "path": "silicon-value-software-bubble/semantic-assets/assets/silicon-value-software-bubble-s15-opportunity-path-v1.png",
+      "sha256": "73ac862f5599fac4928d864669470bc672a234dde29f969989873404b77ccde8",
+      "deck_id": "silicon-value-software-bubble",
+      "slide_id": "silicon-value-software-bubble-s15",
+      "slide_number": 15,
+      "parent_source_image_id": "silicon-value-software-bubble-s15-cleaned",
+      "source_variant": "cleaned",
+      "extraction": {
+        "method": "rect_crop",
+        "bbox_px": [
+          41,
+          177,
+          1307,
+          461
+        ],
+        "bbox_norm": [
+          0.03,
+          0.23,
+          0.95,
+          0.6
+        ],
+        "polygon_norm": null,
+        "mask_path": null,
+        "source_sha256": "ee0d1c49e312c17bcb05ebea7d6b509356957d459d8f6ee8da4f652c4a6c46f6"
+      },
+      "context": {
+        "what_it_is": "A paired red vulnerability path and blue opportunity path linking valuation, liquidity, physical constraints, and compressed multiples.",
+        "visual_role": "evidence",
+        "representation_mode": "literal_evidence",
+        "factual_text": true,
+        "claim_refs": [],
+        "cue_refs": [],
+        "not_what_it_means": [
+          "The path is the deck's thesis summary, not an investment recommendation."
+        ],
+        "context_status": "review_only",
+        "reuse_policy": {
+          "scope": "source_only",
+          "max_total_uses": 1,
+          "min_nonadjacent_gap": 0,
+          "allowed_reasons": [
+            "evidence_hold"
+          ],
+          "claim_bound": false
+        }
+      },
+      "rights_state": "source_review_only",
+      "review_state": "review_only",
+      "render_eligible": false
+    }
+  ],
+  "artifact_hash": "a7bbed2ce844282e91b177bddba7eb47b7ec6dd2c9c0a11e73bb8f7e7e857386"
+}

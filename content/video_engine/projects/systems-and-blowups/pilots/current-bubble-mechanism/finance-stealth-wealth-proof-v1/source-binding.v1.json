@@ -1,0 +1,140 @@
+{
+  "schema_version": "finance_stealth_wealth_source_binding.v1",
+  "proof_id": "finance-stealth-wealth-proof-v1",
+  "inputs": {
+    "canonical_audio": {
+      "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/audio/canonical/history_episode_1_master.mp3",
+      "sha256": "ecacf46c49aee85b912404bfa0e47c37acbae0397b637e2a966c51a625077ce1"
+    },
+    "canonical_words": {
+      "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/audio/canonical/history_episode_1_master.words.json",
+      "sha256": "3773bdd611c96d5e431ed56749d9991825215bb3756043086f14fbbdbe0d1da3"
+    },
+    "deep_research_report": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Memory Deep Research.txt",
+      "sha256": "f153216f319f96b52a1a420f58a2fe6809084a60273ca8cb5f321cc4774f8c96"
+    }
+  },
+  "source_window": {
+    "start_s": 0.0,
+    "end_s": 105.0,
+    "duration_s": 105.0,
+    "word_start_index": 0,
+    "word_end_index": 276
+  },
+  "report_claims": [
+    {
+      "claim_id": "sp500-cape",
+      "display_text": "41.18",
+      "claim_text": "By mid-2026, the S&P 500 Shiller CAPE ratio climbed to 41.18; the report compares this with the 44.2 peak of the December 1999 dot-com bubble.",
+      "source_locator": "Memory Deep Research.txt:L159-L160",
+      "citation": "[cite:7,8]",
+      "as_of": "mid-2026",
+      "qualifier": "CAPE is a long-horizon index valuation measure, not a single-stock multiple.",
+      "kind": "metric"
+    },
+    {
+      "claim_id": "memory-forward-pe",
+      "display_text": "4×–7×",
+      "claim_text": "SK hynix and Micron have traded at forward P/E ratios ranging between 4× and 7×.",
+      "source_locator": "Memory Deep Research.txt:L5; L171-L172",
+      "citation": "[cite:1,5]",
+      "as_of": "mid-2026",
+      "qualifier": "The report presents this as a valuation comparison; memory earnings remain cyclical.",
+      "kind": "metric"
+    },
+    {
+      "claim_id": "top-ten-weight",
+      "display_text": "41%",
+      "claim_text": "In 2025, the top ten stocks represented roughly 41% of the S&P 500's total weight.",
+      "source_locator": "Memory Deep Research.txt:L168",
+      "citation": "[cite:49]",
+      "as_of": "2025",
+      "qualifier": "The report uses roughly 41% for the 2025 expected-weight comparison.",
+      "kind": "metric"
+    },
+    {
+      "claim_id": "top-ten-earnings",
+      "display_text": "32%",
+      "claim_text": "In 2025, the top ten stocks were expected to generate roughly 32% of aggregate S&P 500 earnings.",
+      "source_locator": "Memory Deep Research.txt:L168",
+      "citation": "[cite:49]",
+      "as_of": "2025",
+      "qualifier": "This is an expected aggregate earnings contribution, not a claim about every constituent.",
+      "kind": "metric"
+    },
+    {
+      "claim_id": "passive-flow",
+      "display_text": "$40 / $100",
+      "claim_text": "The report says passive-indexing inflows systematically direct forty dollars of every one hundred invested dollars into the top ten companies.",
+      "source_locator": "Memory Deep Research.txt:L168",
+      "citation": "[cite:49]",
+      "as_of": "2025",
+      "qualifier": "The report presents this as a feedback-loop mechanism supporting index weights.",
+      "kind": "mechanism"
+    },
+    {
+      "claim_id": "memory-triopoly",
+      "display_text": "3 COMPANIES",
+      "claim_text": "Samsung Electronics, SK hynix, and Micron Technology control the critical memory bottleneck described by the report.",
+      "source_locator": "Memory Deep Research.txt:L3",
+      "citation": "[cite:1,2,3]",
+      "as_of": "mid-2026",
+      "qualifier": "The report calls the structure a highly consolidated oligopoly; it also documents emerging challengers elsewhere in memory.",
+      "kind": "mechanism"
+    },
+    {
+      "claim_id": "thirty-rivals",
+      "display_text": ">30 RIVALS",
+      "claim_text": "The mid-1980s DRAM market had more than thirty active manufacturers; price wars, capital requirements, and technology transitions drove almost every player into bankruptcy or forced mergers.",
+      "source_locator": "Memory Deep Research.txt:L26-L27",
+      "citation": "[cite:26,27,28,29]",
+      "as_of": "mid-1980s through 2014",
+      "qualifier": "The report's historical consolidation thesis is the setup for the triopoly argument.",
+      "kind": "comparison"
+    },
+    {
+      "claim_id": "hbm-capacity-penalty",
+      "display_text": "3× CAPACITY",
+      "claim_text": "Producing a single bit of HBM consumes roughly three times the wafer capacity required to produce a single bit of standard DDR5.",
+      "source_locator": "Memory Deep Research.txt:L88",
+      "citation": "[cite:10,36,39]",
+      "as_of": "mid-2026",
+      "qualifier": "This is the report's physical capacity-penalty mechanism, not a claim about a stock's fair value.",
+      "kind": "mechanism"
+    },
+    {
+      "claim_id": "thesis-undervalued",
+      "display_text": "UNDERPRICED CHOKE POINT",
+      "claim_text": "The report concludes that the three dominant memory manufacturers remain structurally undervalued relative to their role as AI-infrastructure enablers.",
+      "source_locator": "Memory Deep Research.txt:L204-L207",
+      "citation": "[cite:1,3,5,10,36,39,40,56]",
+      "as_of": "mid-2026",
+      "qualifier": "This is the report's investment thesis and is presented as such.",
+      "kind": "thesis"
+    }
+  ],
+  "selected_assets": [
+    {
+      "asset_id": "finance-host-presenter-plate-v1",
+      "path": "assets/finance-host-presenter-plate-v1.png",
+      "sha256": "16c94909dcdcd2e6ce369467c3971ce949dfbe5f5a13b7a32b6baea2649009c8"
+    },
+    {
+      "asset_id": "finance-host-presenter-direct-v1",
+      "path": "assets/generated/stealth-wealth-v1/presenter-direct-v1.png",
+      "sha256": "9d9721031dcd3fe58e8208684b605888fd70539d1092df63a45c2a7c7e8fc9b3"
+    },
+    {
+      "asset_id": "stealth-wealth-warm-study-v1",
+      "path": "assets/generated/stealth-wealth-v1/warm-oak-study-v1.png",
+      "sha256": "ead65484b509200df5cf36276779b573c638e5f39cb39296ba8b996ea3670317"
+    },
+    {
+      "asset_id": "stealth-wealth-cool-wafer-v1",
+      "path": "assets/generated/stealth-wealth-v1/cool-wafer-lab-v1.png",
+      "sha256": "eb0ab9a6e574c92a31d23a98eabbbad308a06d3b8f2e9baf73d6f44d016b52ce"
+    }
+  ],
+  "status": "source_bound"
+}

@@ -1,0 +1,20 @@
+{
+  "schema_version": "finance_semantic_wave_review.v1",
+  "episode_id": "current-bubble-mechanism",
+  "wave_id": "semantic-wave-07",
+  "status": "operator_approved_for_composition",
+  "generation_method": "built_in_image_gen",
+  "decision_rule": "The illustration establishes that markets price industrial cash-flow systems. It does not contain a country ranking, numeric comparison, or cultural stereotype; those claims have separately bounded local evidence surfaces.",
+  "candidates": [
+    {
+      "candidate_id": "capitalizes-industrial-cashflows-v1",
+      "path": "capitalizes-industrial-cashflows-v1.png",
+      "sha256": "3f5b51f946bca0a3de19fb03b3bb758abd275121145ef9975bd5cfe270e2adc7",
+      "cluster_id": "cbm-e-001",
+      "purpose": "An impartial capital-market lens views two advanced industrial ecosystems through expected future cash flows, not cultural value.",
+      "status": "selected",
+      "qa": ["two sides are dignified and visually balanced", "no named country, flag, or numeric market comparison", "industries are recognizable without text"]
+    }
+  ],
+  "artifact_hash": "bca08d776d3444d49aadc6a401588756f4fddc4c2ed175eee32736a486788078"
+}

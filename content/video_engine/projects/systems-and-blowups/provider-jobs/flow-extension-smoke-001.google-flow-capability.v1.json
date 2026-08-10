@@ -1,0 +1,30 @@
+{
+  "schema_version": "google_flow_capability_snapshot.v1",
+  "snapshot_id": "flow-20260809171435846-62f78040-f462-4de1-a281-82551986ac2b",
+  "observed_at": "2026-08-09T17:14:35.846Z",
+  "expires_at": "2026-08-09T17:29:35.846Z",
+  "project_url": "https://labs.google/fx/tools/flow/project/62f78040-f462-4de1-a281-82551986ac2b",
+  "project_id": "62f78040-f462-4de1-a281-82551986ac2b",
+  "account": {
+    "marker": "finance-primary",
+    "verified": true
+  },
+  "extension_version": "0.1.0",
+  "selector_version": "flow-selectors.v2",
+  "offerings": [
+    {
+      "action": "image_generation",
+      "model": "Nano Banana Pro",
+      "mode": "image",
+      "aspect_ratio": "16:9",
+      "duration_seconds": null,
+      "quantity": 1,
+      "displayed_credit_label": "0 credits",
+      "credit_state": "zero",
+      "credits_per_generation": 0
+    }
+  ],
+  "review_state": "operator_confirmed",
+  "render_eligible": false,
+  "artifact_hash": "f69f53a03ca70a286d22a248d3ab84766a1e41779c5a00358377e209d859a1c5"
+}

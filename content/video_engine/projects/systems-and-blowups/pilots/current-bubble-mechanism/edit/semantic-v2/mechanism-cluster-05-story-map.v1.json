@@ -1,0 +1,28 @@
+{
+  "schema_version": "finance_semantic_story_map.v1",
+  "episode_id": "current-bubble-mechanism",
+  "state": "asset_wave_in_progress",
+  "coverage": {"start_word": 790, "end_word": 974, "start_s": 325.612, "end_s": 396.572, "canonical_cue_sheet_path": "../word-timed-v1/finance-visual-cue-sheet.v1.json"},
+  "design_rule": "Use the market lens to explain expected future cash-flow capitalization, then place the Korea–Italy comparison and OECD context in small deterministic source cards. The visual story never treats listed-market value as a judgment on national worth.",
+  "clusters": [
+    {
+      "cluster_id": "cbm-e-001",
+      "cue_ids": ["cbm-cue-096", "cbm-cue-097", "cbm-cue-098", "cbm-cue-099", "cbm-cue-100", "cbm-cue-101", "cbm-cue-102", "cbm-cue-103", "cbm-cue-104", "cbm-cue-105", "cbm-cue-106", "cbm-cue-107", "cbm-cue-108", "cbm-cue-109", "cbm-cue-110", "cbm-cue-111"],
+      "words": [790, 928], "time_s": [325.612, 375.662],
+      "purpose": "Show the limited listed-market comparison as a way of asking what public markets price, then correct the reductive Italy joke with its advanced industrial reality.",
+      "asset_demand": "capitalizes-industrial-cashflows-v1",
+      "local_surfaces": ["korea-italy-listed-market-card-v1"],
+      "must_not_imply": ["GDP comparison", "cultural hierarchy", "that the market is always right", "that Italy lacks strategic industries"]
+    },
+    {
+      "cluster_id": "cbm-e-002",
+      "cue_ids": ["cbm-cue-112", "cbm-cue-113", "cbm-cue-114", "cbm-cue-115", "cbm-cue-116", "cbm-cue-117"],
+      "words": [929, 974], "time_s": [375.662, 396.572],
+      "purpose": "Move from the comparison to the cautious macro case: technology intensity and semiconductor exports are part of a larger repricing of strategic production capacity.",
+      "asset_strategy": "reframe from the neutral market lens to the strategic-chokepoint network, then reveal the dated OECD context card.",
+      "local_surfaces": ["korea-technology-intensity-card-v1"],
+      "must_not_imply": ["country outperformance guarantee", "single-cause explanation", "complete accounting of Korea’s risks"]
+    }
+  ],
+  "artifact_hash": "a085ea24a9980a433817b7e01e9e8de645e72fb5ff2023f2e9410dfe81f4447c"
+}

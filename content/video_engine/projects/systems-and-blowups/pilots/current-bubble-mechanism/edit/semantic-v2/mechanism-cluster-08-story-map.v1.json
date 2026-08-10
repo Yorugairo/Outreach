@@ -1,0 +1,27 @@
+{
+  "schema_version": "finance_semantic_story_map.v1",
+  "episode_id": "current-bubble-mechanism",
+  "state": "asset_wave_in_progress",
+  "coverage": {"start_word": 1620, "end_word": 1844, "start_s": 695.910, "end_s": 797.137, "canonical_cue_sheet_path": "../word-timed-v1/finance-visual-cue-sheet.v1.json"},
+  "design_rule": "The barbell is an analytic framework, never a personal allocation. Reported performance comparison remains local, dated, and inseparable from its back-test and drawdown cautions.",
+  "clusters": [
+    {
+      "cluster_id": "cbm-h-001",
+      "cue_ids": ["cbm-cue-205", "cbm-cue-206", "cbm-cue-207", "cbm-cue-208", "cbm-cue-209", "cbm-cue-210", "cbm-cue-211"],
+      "words": [1620, 1696], "time_s": [695.910, 715.554],
+      "purpose": "Make the proposed separation of concentrated productive upside and deliberate defense visible as a rebalanced two-sleeve framework.",
+      "asset_demand": "two-sleeve-barbell-v1",
+      "must_not_imply": ["asset allocation recommendation", "that any listed defensive item must be held", "a guaranteed downside outcome"]
+    },
+    {
+      "cluster_id": "cbm-h-002",
+      "cue_ids": ["cbm-cue-212", "cbm-cue-213", "cbm-cue-214", "cbm-cue-215", "cbm-cue-216", "cbm-cue-217", "cbm-cue-218", "cbm-cue-219", "cbm-cue-220", "cbm-cue-221", "cbm-cue-222", "cbm-cue-223", "cbm-cue-224", "cbm-cue-225", "cbm-cue-226", "cbm-cue-227", "cbm-cue-228", "cbm-cue-229", "cbm-cue-230", "cbm-cue-231", "cbm-cue-232", "cbm-cue-233", "cbm-cue-234", "cbm-cue-235"],
+      "words": [1697, 1844], "time_s": [715.554, 797.137],
+      "purpose": "Use the Market Leaders example to demonstrate that the five-hundred-stock boundary is not sacred while holding all performance and risk disclosures in a deterministic card.",
+      "asset_strategy": "keep the barbell scene for the conceptual transition, then use the performance card as the center of gravity; return to the scene only for the stated tracking-error and research-burden costs.",
+      "local_surfaces": ["market-leaders-qualified-comparison-card-v1"],
+      "must_not_imply": ["that a smaller screen is superior", "clean live outperformance", "less volatility in all conditions", "that concentration is suitable"]
+    }
+  ],
+  "artifact_hash": "926f2daeb2620e6c853da42d4530549771192dc2161b8276c504a284dcd988b9"
+}

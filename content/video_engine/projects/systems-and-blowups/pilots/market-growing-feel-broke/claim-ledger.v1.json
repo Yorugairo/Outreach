@@ -1,0 +1,10 @@
+{
+  "schema_version": "finance_claim_ledger.v1",
+  "episode_id": "market-growing-feel-broke",
+  "research_state": "not_started",
+  "contrarian_frame": true,
+  "countercase": "Broad wage employment and disinflation improvements may reach households even when asset ownership remains concentrated.",
+  "failure_conditions": ["Distribution data do not support the proposed ownership mechanism.", "The conventional inflation and rate explanation has stronger explanatory power."],
+  "claims": [],
+  "artifact_hash": "e0d5641df9d67086760a88cfca805d1ca4cde5a56f3a21d1264e9e73fa4cd8dd"
+}

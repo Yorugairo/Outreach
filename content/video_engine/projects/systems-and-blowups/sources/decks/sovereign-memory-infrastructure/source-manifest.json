@@ -1,0 +1,835 @@
+{
+  "schema_version": "deck_asset_manifest.v1",
+  "manifest_id": "silicon-decks-source-manifest-v2-sovereign-memory-infrastructure",
+  "project_id": "systems-and-blowups",
+  "source_decks": [
+    {
+      "deck_id": "sovereign-memory-infrastructure",
+      "title": "Sovereign Memory Infrastructure",
+      "source_path": "C:\\Users\\Snipe\\Downloads\\Sovereign_Memory_Infrastructure.pptx",
+      "source_sha256": "2bd54f98ec42a01800859f8d85fc62875c1d93b5680c4e14387c71ab911f1fdc",
+      "source_family": "operator-supplied-notebooklm-research-deck",
+      "rights_state": "source_review_only",
+      "cleanup": {
+        "requested": true,
+        "input_path": "C:\\Users\\Snipe\\Downloads\\Sovereign_Memory_Infrastructure.no-watermark.pptx",
+        "original_sha256": "2bd54f98ec42a01800859f8d85fc62875c1d93b5680c4e14387c71ab911f1fdc",
+        "cleaned_sha256": "fd984d14f47f3d9e1b6f41a3419bcebc7651f29276c3c7dac588b3a3288590bc",
+        "policy": "Derived from an operator-approved non-destructive footer cleanup.",
+        "approved": true
+      }
+    }
+  ],
+  "slides": [
+    {
+      "slide_id": "sovereign-memory-infrastructure-s01",
+      "deck_id": "sovereign-memory-infrastructure",
+      "slide_number": 1,
+      "slide_label": "The Memory Chokepoint",
+      "source_image_id": "sovereign-memory-infrastructure-s01-original",
+      "context": {
+        "label": "The Memory Chokepoint",
+        "summary": "Opening source plate framing memory as the strategic bottleneck in sovereign compute infrastructure.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "slide_id": "sovereign-memory-infrastructure-s02",
+      "deck_id": "sovereign-memory-infrastructure",
+      "slide_number": 2,
+      "slide_label": "Compute Has Crossed the Rubicon",
+      "source_image_id": "sovereign-memory-infrastructure-s02-original",
+      "context": {
+        "label": "Compute Has Crossed the Rubicon",
+        "summary": "Source plate contrasting legacy IT operating expense with sovereign infrastructure capital expense.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "slide_id": "sovereign-memory-infrastructure-s03",
+      "deck_id": "sovereign-memory-infrastructure",
+      "slide_number": 3,
+      "slide_label": "The Nine-Layer Compute Stack",
+      "source_image_id": "sovereign-memory-infrastructure-s03-original",
+      "context": {
+        "label": "The Nine-Layer Compute Stack",
+        "summary": "Source mechanism plate mapping accelerator silicon, HBM, thermal management, packaging, and power layers.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "slide_id": "sovereign-memory-infrastructure-s04",
+      "deck_id": "sovereign-memory-infrastructure",
+      "slide_number": 4,
+      "slide_label": "Hitting the Physical Limits of AI",
+      "source_image_id": "sovereign-memory-infrastructure-s04-original",
+      "context": {
+        "label": "Hitting the Physical Limits of AI",
+        "summary": "Source plate showing compute throughput, interconnect, and memory-bandwidth walls in scaled AI systems.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "slide_id": "sovereign-memory-infrastructure-s05",
+      "deck_id": "sovereign-memory-infrastructure",
+      "slide_number": 5,
+      "slide_label": "The Geographic Monopoly",
+      "source_image_id": "sovereign-memory-infrastructure-s05-original",
+      "context": {
+        "label": "The Geographic Monopoly",
+        "summary": "Source map showing the geographic concentration of advanced memory and packaging supply chains.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "slide_id": "sovereign-memory-infrastructure-s06",
+      "deck_id": "sovereign-memory-infrastructure",
+      "slide_number": 6,
+      "slide_label": "Financial Physics: S&P 500 versus Sovereign Scalers",
+      "source_image_id": "sovereign-memory-infrastructure-s06-original",
+      "context": {
+        "label": "Financial Physics: S&P 500 versus Sovereign Scalers",
+        "summary": "Source comparison of the S&P 500 allocator and the capital requirements of strategic memory infrastructure.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "slide_id": "sovereign-memory-infrastructure-s07",
+      "deck_id": "sovereign-memory-infrastructure",
+      "slide_number": 7,
+      "slide_label": "The Accretive Burn Framework",
+      "source_image_id": "sovereign-memory-infrastructure-s07-original",
+      "context": {
+        "label": "The Accretive Burn Framework",
+        "summary": "Source framework separating incremental return, backlog-to-burn conversion, and capital-growth metrics.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "slide_id": "sovereign-memory-infrastructure-s08",
+      "deck_id": "sovereign-memory-infrastructure",
+      "slide_number": 8,
+      "slide_label": "CapEx Mechanics of the Memory Giants",
+      "source_image_id": "sovereign-memory-infrastructure-s08-original",
+      "context": {
+        "label": "CapEx Mechanics of the Memory Giants",
+        "summary": "Source plate comparing capital expenditure and manufacturing posture across Micron, Samsung, and SK hynix.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "slide_id": "sovereign-memory-infrastructure-s09",
+      "deck_id": "sovereign-memory-infrastructure",
+      "slide_number": 9,
+      "slide_label": "The Structural Re-Rating Cycle",
+      "source_image_id": "sovereign-memory-infrastructure-s09-original",
+      "context": {
+        "label": "The Structural Re-Rating Cycle",
+        "summary": "Source cycle diagram showing how memory technology, physical capacity, and earnings can drive a structural re-rating.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "slide_id": "sovereign-memory-infrastructure-s10",
+      "deck_id": "sovereign-memory-infrastructure",
+      "slide_number": 10,
+      "slide_label": "Trend One: Reshoring versus Sovereign Stacks",
+      "source_image_id": "sovereign-memory-infrastructure-s10-original",
+      "context": {
+        "label": "Trend One: Reshoring versus Sovereign Stacks",
+        "summary": "Source supply-chain map contrasting domestic reshoring with integrated sovereign AI stacks.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "slide_id": "sovereign-memory-infrastructure-s11",
+      "deck_id": "sovereign-memory-infrastructure",
+      "slide_number": 11,
+      "slide_label": "Trend Two: The Advanced Packaging Bottleneck",
+      "source_image_id": "sovereign-memory-infrastructure-s11-original",
+      "context": {
+        "label": "Trend Two: The Advanced Packaging Bottleneck",
+        "summary": "Source mechanism plate showing advanced packaging as the critical interface between HBM stacks and AI logic.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "slide_id": "sovereign-memory-infrastructure-s12",
+      "deck_id": "sovereign-memory-infrastructure",
+      "slide_number": 12,
+      "slide_label": "Trend Three: Co-Packaged Optics",
+      "source_image_id": "sovereign-memory-infrastructure-s12-original",
+      "context": {
+        "label": "Trend Three: Co-Packaged Optics",
+        "summary": "Source mechanism plate showing the optical interconnect wall and the proposed co-packaged optics response.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "slide_id": "sovereign-memory-infrastructure-s13",
+      "deck_id": "sovereign-memory-infrastructure",
+      "slide_number": 13,
+      "slide_label": "Risk and Sensitivity Analysis",
+      "source_image_id": "sovereign-memory-infrastructure-s13-original",
+      "context": {
+        "label": "Risk and Sensitivity Analysis",
+        "summary": "Source risk plate covering concentration, power and energy density, and capex normalization risks.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "slide_id": "sovereign-memory-infrastructure-s14",
+      "deck_id": "sovereign-memory-infrastructure",
+      "slide_number": 14,
+      "slide_label": "Synthesis: The Sovereign Memory Playbook",
+      "source_image_id": "sovereign-memory-infrastructure-s14-original",
+      "context": {
+        "label": "Synthesis: The Sovereign Memory Playbook",
+        "summary": "Closing source plate summarizing the shift from commodity memory to infrastructure-grade strategic demand.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    }
+  ],
+  "source_images": [
+    {
+      "image_id": "sovereign-memory-infrastructure-s01-original",
+      "deck_id": "sovereign-memory-infrastructure",
+      "slide_id": "sovereign-memory-infrastructure-s01",
+      "slide_number": 1,
+      "variant": "original",
+      "pptx_member": "ppt/media/image1.png",
+      "extracted_path": "sovereign-memory-infrastructure/slides/slide-001.png",
+      "sha256": "9abc141fc53f022825e56e4a40d88b6ff7344e2d91b16b6ba74fd18f8b92468c",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "selection_label": "Sovereign Memory Infrastructure · S01 · The Memory Chokepoint",
+      "context": {
+        "label": "The Memory Chokepoint",
+        "summary": "Opening source plate framing memory as the strategic bottleneck in sovereign compute infrastructure.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "sovereign-memory-infrastructure-s02-original",
+      "deck_id": "sovereign-memory-infrastructure",
+      "slide_id": "sovereign-memory-infrastructure-s02",
+      "slide_number": 2,
+      "variant": "original",
+      "pptx_member": "ppt/media/image2.png",
+      "extracted_path": "sovereign-memory-infrastructure/slides/slide-002.png",
+      "sha256": "314a092cab98ec0e8a4ad75a85cde9b75d6c0b30f7378669dadce139e067619a",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "selection_label": "Sovereign Memory Infrastructure · S02 · Compute Has Crossed the Rubicon",
+      "context": {
+        "label": "Compute Has Crossed the Rubicon",
+        "summary": "Source plate contrasting legacy IT operating expense with sovereign infrastructure capital expense.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "sovereign-memory-infrastructure-s03-original",
+      "deck_id": "sovereign-memory-infrastructure",
+      "slide_id": "sovereign-memory-infrastructure-s03",
+      "slide_number": 3,
+      "variant": "original",
+      "pptx_member": "ppt/media/image3.png",
+      "extracted_path": "sovereign-memory-infrastructure/slides/slide-003.png",
+      "sha256": "8b36e8550d70e3125d5af533dce66438c631186afb29f52dbb5215b4f92ad2c4",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "selection_label": "Sovereign Memory Infrastructure · S03 · The Nine-Layer Compute Stack",
+      "context": {
+        "label": "The Nine-Layer Compute Stack",
+        "summary": "Source mechanism plate mapping accelerator silicon, HBM, thermal management, packaging, and power layers.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "sovereign-memory-infrastructure-s04-original",
+      "deck_id": "sovereign-memory-infrastructure",
+      "slide_id": "sovereign-memory-infrastructure-s04",
+      "slide_number": 4,
+      "variant": "original",
+      "pptx_member": "ppt/media/image4.png",
+      "extracted_path": "sovereign-memory-infrastructure/slides/slide-004.png",
+      "sha256": "c5a8422dd0396830e73ddb277c208bd7b1e967ef576e4872ec2b446f6c1c88df",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "selection_label": "Sovereign Memory Infrastructure · S04 · Hitting the Physical Limits of AI",
+      "context": {
+        "label": "Hitting the Physical Limits of AI",
+        "summary": "Source plate showing compute throughput, interconnect, and memory-bandwidth walls in scaled AI systems.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "sovereign-memory-infrastructure-s05-original",
+      "deck_id": "sovereign-memory-infrastructure",
+      "slide_id": "sovereign-memory-infrastructure-s05",
+      "slide_number": 5,
+      "variant": "original",
+      "pptx_member": "ppt/media/image5.png",
+      "extracted_path": "sovereign-memory-infrastructure/slides/slide-005.png",
+      "sha256": "8f65437bf208b9a0a55c4da3c5c313f2dce28b8837121edf59df0b1d02b19a15",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "selection_label": "Sovereign Memory Infrastructure · S05 · The Geographic Monopoly",
+      "context": {
+        "label": "The Geographic Monopoly",
+        "summary": "Source map showing the geographic concentration of advanced memory and packaging supply chains.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "sovereign-memory-infrastructure-s06-original",
+      "deck_id": "sovereign-memory-infrastructure",
+      "slide_id": "sovereign-memory-infrastructure-s06",
+      "slide_number": 6,
+      "variant": "original",
+      "pptx_member": "ppt/media/image6.png",
+      "extracted_path": "sovereign-memory-infrastructure/slides/slide-006.png",
+      "sha256": "20b6904b61c68728864128450f5559301187934810234822bdd0b3d7ba4ee7b4",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "selection_label": "Sovereign Memory Infrastructure · S06 · Financial Physics: S&P 500 versus Sovereign Scalers",
+      "context": {
+        "label": "Financial Physics: S&P 500 versus Sovereign Scalers",
+        "summary": "Source comparison of the S&P 500 allocator and the capital requirements of strategic memory infrastructure.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "sovereign-memory-infrastructure-s07-original",
+      "deck_id": "sovereign-memory-infrastructure",
+      "slide_id": "sovereign-memory-infrastructure-s07",
+      "slide_number": 7,
+      "variant": "original",
+      "pptx_member": "ppt/media/image7.png",
+      "extracted_path": "sovereign-memory-infrastructure/slides/slide-007.png",
+      "sha256": "9a4a416eefe91f7c1de8fece232e9848bcdac0f7943f705be2375f755fe1ee66",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "selection_label": "Sovereign Memory Infrastructure · S07 · The Accretive Burn Framework",
+      "context": {
+        "label": "The Accretive Burn Framework",
+        "summary": "Source framework separating incremental return, backlog-to-burn conversion, and capital-growth metrics.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "sovereign-memory-infrastructure-s08-original",
+      "deck_id": "sovereign-memory-infrastructure",
+      "slide_id": "sovereign-memory-infrastructure-s08",
+      "slide_number": 8,
+      "variant": "original",
+      "pptx_member": "ppt/media/image8.png",
+      "extracted_path": "sovereign-memory-infrastructure/slides/slide-008.png",
+      "sha256": "1e048fe81e56f7be3416a332115f2e4474595107bb9d44c6d175474a0a7b4827",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "selection_label": "Sovereign Memory Infrastructure · S08 · CapEx Mechanics of the Memory Giants",
+      "context": {
+        "label": "CapEx Mechanics of the Memory Giants",
+        "summary": "Source plate comparing capital expenditure and manufacturing posture across Micron, Samsung, and SK hynix.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "sovereign-memory-infrastructure-s09-original",
+      "deck_id": "sovereign-memory-infrastructure",
+      "slide_id": "sovereign-memory-infrastructure-s09",
+      "slide_number": 9,
+      "variant": "original",
+      "pptx_member": "ppt/media/image9.png",
+      "extracted_path": "sovereign-memory-infrastructure/slides/slide-009.png",
+      "sha256": "5e35f2572db8ba54febef675916636d587b02acdca5212d50848417f05423d70",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "selection_label": "Sovereign Memory Infrastructure · S09 · The Structural Re-Rating Cycle",
+      "context": {
+        "label": "The Structural Re-Rating Cycle",
+        "summary": "Source cycle diagram showing how memory technology, physical capacity, and earnings can drive a structural re-rating.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "sovereign-memory-infrastructure-s10-original",
+      "deck_id": "sovereign-memory-infrastructure",
+      "slide_id": "sovereign-memory-infrastructure-s10",
+      "slide_number": 10,
+      "variant": "original",
+      "pptx_member": "ppt/media/image10.png",
+      "extracted_path": "sovereign-memory-infrastructure/slides/slide-010.png",
+      "sha256": "6e8f69dc21baa678fc16fde863cb9234aba81f939f4283c20c40026adcfa5950",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "selection_label": "Sovereign Memory Infrastructure · S10 · Trend One: Reshoring versus Sovereign Stacks",
+      "context": {
+        "label": "Trend One: Reshoring versus Sovereign Stacks",
+        "summary": "Source supply-chain map contrasting domestic reshoring with integrated sovereign AI stacks.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "sovereign-memory-infrastructure-s11-original",
+      "deck_id": "sovereign-memory-infrastructure",
+      "slide_id": "sovereign-memory-infrastructure-s11",
+      "slide_number": 11,
+      "variant": "original",
+      "pptx_member": "ppt/media/image11.png",
+      "extracted_path": "sovereign-memory-infrastructure/slides/slide-011.png",
+      "sha256": "8944e481c0509b7f9edeb788cbcaa5c13517dad76b3c9047d492d2736b2d3f1b",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "selection_label": "Sovereign Memory Infrastructure · S11 · Trend Two: The Advanced Packaging Bottleneck",
+      "context": {
+        "label": "Trend Two: The Advanced Packaging Bottleneck",
+        "summary": "Source mechanism plate showing advanced packaging as the critical interface between HBM stacks and AI logic.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "sovereign-memory-infrastructure-s12-original",
+      "deck_id": "sovereign-memory-infrastructure",
+      "slide_id": "sovereign-memory-infrastructure-s12",
+      "slide_number": 12,
+      "variant": "original",
+      "pptx_member": "ppt/media/image12.png",
+      "extracted_path": "sovereign-memory-infrastructure/slides/slide-012.png",
+      "sha256": "6c70f6135d48a59d024d222e53bdda7079d9316f552fe4a7507cb190c336e5c0",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "selection_label": "Sovereign Memory Infrastructure · S12 · Trend Three: Co-Packaged Optics",
+      "context": {
+        "label": "Trend Three: Co-Packaged Optics",
+        "summary": "Source mechanism plate showing the optical interconnect wall and the proposed co-packaged optics response.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "sovereign-memory-infrastructure-s13-original",
+      "deck_id": "sovereign-memory-infrastructure",
+      "slide_id": "sovereign-memory-infrastructure-s13",
+      "slide_number": 13,
+      "variant": "original",
+      "pptx_member": "ppt/media/image13.png",
+      "extracted_path": "sovereign-memory-infrastructure/slides/slide-013.png",
+      "sha256": "98deee233070869b85f6a86b051d58b39bcaedcecfb25da1548d8c5ae23be75f",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "selection_label": "Sovereign Memory Infrastructure · S13 · Risk and Sensitivity Analysis",
+      "context": {
+        "label": "Risk and Sensitivity Analysis",
+        "summary": "Source risk plate covering concentration, power and energy density, and capex normalization risks.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "sovereign-memory-infrastructure-s14-original",
+      "deck_id": "sovereign-memory-infrastructure",
+      "slide_id": "sovereign-memory-infrastructure-s14",
+      "slide_number": 14,
+      "variant": "original",
+      "pptx_member": "ppt/media/image14.png",
+      "extracted_path": "sovereign-memory-infrastructure/slides/slide-014.png",
+      "sha256": "ee649300a1d4c337339acc48637353a3dc127c95f245929b5e89928baa934d93",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "selection_label": "Sovereign Memory Infrastructure · S14 · Synthesis: The Sovereign Memory Playbook",
+      "context": {
+        "label": "Synthesis: The Sovereign Memory Playbook",
+        "summary": "Closing source plate summarizing the shift from commodity memory to infrastructure-grade strategic demand.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    }
+  ],
+  "cleaned_images": [
+    {
+      "image_id": "sovereign-memory-infrastructure-s01-cleaned",
+      "deck_id": "sovereign-memory-infrastructure",
+      "slide_id": "sovereign-memory-infrastructure-s01",
+      "slide_number": 1,
+      "variant": "cleaned",
+      "pptx_member": "ppt/media/image1.png",
+      "extracted_path": "sovereign-memory-infrastructure/slides-cleaned/slide-001.png",
+      "sha256": "33480dc5ad5df0f380c65eb792fa4ef411ced6ef716ea56162fda68e4e6d496c",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "parent_image_id": "sovereign-memory-infrastructure-s01-original",
+      "selection_label": "Sovereign Memory Infrastructure · S01 · The Memory Chokepoint",
+      "context": {
+        "label": "The Memory Chokepoint",
+        "summary": "Opening source plate framing memory as the strategic bottleneck in sovereign compute infrastructure.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "sovereign-memory-infrastructure-s02-cleaned",
+      "deck_id": "sovereign-memory-infrastructure",
+      "slide_id": "sovereign-memory-infrastructure-s02",
+      "slide_number": 2,
+      "variant": "cleaned",
+      "pptx_member": "ppt/media/image2.png",
+      "extracted_path": "sovereign-memory-infrastructure/slides-cleaned/slide-002.png",
+      "sha256": "6de08cde9cda8e74bc627b0465a21be3da8c8506d4c3f5b6b02f4004d965a302",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "parent_image_id": "sovereign-memory-infrastructure-s02-original",
+      "selection_label": "Sovereign Memory Infrastructure · S02 · Compute Has Crossed the Rubicon",
+      "context": {
+        "label": "Compute Has Crossed the Rubicon",
+        "summary": "Source plate contrasting legacy IT operating expense with sovereign infrastructure capital expense.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "sovereign-memory-infrastructure-s03-cleaned",
+      "deck_id": "sovereign-memory-infrastructure",
+      "slide_id": "sovereign-memory-infrastructure-s03",
+      "slide_number": 3,
+      "variant": "cleaned",
+      "pptx_member": "ppt/media/image3.png",
+      "extracted_path": "sovereign-memory-infrastructure/slides-cleaned/slide-003.png",
+      "sha256": "6735b03428e10fb0e2cd58794d5412bf28828dc378f559e8d20b78b741c58ed3",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "parent_image_id": "sovereign-memory-infrastructure-s03-original",
+      "selection_label": "Sovereign Memory Infrastructure · S03 · The Nine-Layer Compute Stack",
+      "context": {
+        "label": "The Nine-Layer Compute Stack",
+        "summary": "Source mechanism plate mapping accelerator silicon, HBM, thermal management, packaging, and power layers.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "sovereign-memory-infrastructure-s04-cleaned",
+      "deck_id": "sovereign-memory-infrastructure",
+      "slide_id": "sovereign-memory-infrastructure-s04",
+      "slide_number": 4,
+      "variant": "cleaned",
+      "pptx_member": "ppt/media/image4.png",
+      "extracted_path": "sovereign-memory-infrastructure/slides-cleaned/slide-004.png",
+      "sha256": "8adfe916acfe4f751634b42104a5d55f58af1469335f2f28e792082e286d177c",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "parent_image_id": "sovereign-memory-infrastructure-s04-original",
+      "selection_label": "Sovereign Memory Infrastructure · S04 · Hitting the Physical Limits of AI",
+      "context": {
+        "label": "Hitting the Physical Limits of AI",
+        "summary": "Source plate showing compute throughput, interconnect, and memory-bandwidth walls in scaled AI systems.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "sovereign-memory-infrastructure-s05-cleaned",
+      "deck_id": "sovereign-memory-infrastructure",
+      "slide_id": "sovereign-memory-infrastructure-s05",
+      "slide_number": 5,
+      "variant": "cleaned",
+      "pptx_member": "ppt/media/image5.png",
+      "extracted_path": "sovereign-memory-infrastructure/slides-cleaned/slide-005.png",
+      "sha256": "9cfc003dc753bd729d3d0ec301b0fa823a0dff869704ceadc2a461d211009c1d",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "parent_image_id": "sovereign-memory-infrastructure-s05-original",
+      "selection_label": "Sovereign Memory Infrastructure · S05 · The Geographic Monopoly",
+      "context": {
+        "label": "The Geographic Monopoly",
+        "summary": "Source map showing the geographic concentration of advanced memory and packaging supply chains.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "sovereign-memory-infrastructure-s06-cleaned",
+      "deck_id": "sovereign-memory-infrastructure",
+      "slide_id": "sovereign-memory-infrastructure-s06",
+      "slide_number": 6,
+      "variant": "cleaned",
+      "pptx_member": "ppt/media/image6.png",
+      "extracted_path": "sovereign-memory-infrastructure/slides-cleaned/slide-006.png",
+      "sha256": "c96929ba647ba9c96a485bc12428a9a17b1ca5da9d56d60ac851727c4fdadcca",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "parent_image_id": "sovereign-memory-infrastructure-s06-original",
+      "selection_label": "Sovereign Memory Infrastructure · S06 · Financial Physics: S&P 500 versus Sovereign Scalers",
+      "context": {
+        "label": "Financial Physics: S&P 500 versus Sovereign Scalers",
+        "summary": "Source comparison of the S&P 500 allocator and the capital requirements of strategic memory infrastructure.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "sovereign-memory-infrastructure-s07-cleaned",
+      "deck_id": "sovereign-memory-infrastructure",
+      "slide_id": "sovereign-memory-infrastructure-s07",
+      "slide_number": 7,
+      "variant": "cleaned",
+      "pptx_member": "ppt/media/image7.png",
+      "extracted_path": "sovereign-memory-infrastructure/slides-cleaned/slide-007.png",
+      "sha256": "30a789d7b6b3ac9c1ea72419584f26103b1bfe23447fadc7a3e5d0864e806799",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "parent_image_id": "sovereign-memory-infrastructure-s07-original",
+      "selection_label": "Sovereign Memory Infrastructure · S07 · The Accretive Burn Framework",
+      "context": {
+        "label": "The Accretive Burn Framework",
+        "summary": "Source framework separating incremental return, backlog-to-burn conversion, and capital-growth metrics.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "sovereign-memory-infrastructure-s08-cleaned",
+      "deck_id": "sovereign-memory-infrastructure",
+      "slide_id": "sovereign-memory-infrastructure-s08",
+      "slide_number": 8,
+      "variant": "cleaned",
+      "pptx_member": "ppt/media/image8.png",
+      "extracted_path": "sovereign-memory-infrastructure/slides-cleaned/slide-008.png",
+      "sha256": "dfcb720cdc88c6cc1c9d205144f429353318c7dd7051138a06bd36959726df21",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "parent_image_id": "sovereign-memory-infrastructure-s08-original",
+      "selection_label": "Sovereign Memory Infrastructure · S08 · CapEx Mechanics of the Memory Giants",
+      "context": {
+        "label": "CapEx Mechanics of the Memory Giants",
+        "summary": "Source plate comparing capital expenditure and manufacturing posture across Micron, Samsung, and SK hynix.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "sovereign-memory-infrastructure-s09-cleaned",
+      "deck_id": "sovereign-memory-infrastructure",
+      "slide_id": "sovereign-memory-infrastructure-s09",
+      "slide_number": 9,
+      "variant": "cleaned",
+      "pptx_member": "ppt/media/image9.png",
+      "extracted_path": "sovereign-memory-infrastructure/slides-cleaned/slide-009.png",
+      "sha256": "741a79a492d6754bb2fad576734338c959ddf1fff00fa51fdefade2fe9e35634",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "parent_image_id": "sovereign-memory-infrastructure-s09-original",
+      "selection_label": "Sovereign Memory Infrastructure · S09 · The Structural Re-Rating Cycle",
+      "context": {
+        "label": "The Structural Re-Rating Cycle",
+        "summary": "Source cycle diagram showing how memory technology, physical capacity, and earnings can drive a structural re-rating.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "sovereign-memory-infrastructure-s10-cleaned",
+      "deck_id": "sovereign-memory-infrastructure",
+      "slide_id": "sovereign-memory-infrastructure-s10",
+      "slide_number": 10,
+      "variant": "cleaned",
+      "pptx_member": "ppt/media/image10.png",
+      "extracted_path": "sovereign-memory-infrastructure/slides-cleaned/slide-010.png",
+      "sha256": "5c4a72e8ffba23dd0d9861f84654873d474039b6d43da60ddd8d2a6e5d028231",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "parent_image_id": "sovereign-memory-infrastructure-s10-original",
+      "selection_label": "Sovereign Memory Infrastructure · S10 · Trend One: Reshoring versus Sovereign Stacks",
+      "context": {
+        "label": "Trend One: Reshoring versus Sovereign Stacks",
+        "summary": "Source supply-chain map contrasting domestic reshoring with integrated sovereign AI stacks.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "sovereign-memory-infrastructure-s11-cleaned",
+      "deck_id": "sovereign-memory-infrastructure",
+      "slide_id": "sovereign-memory-infrastructure-s11",
+      "slide_number": 11,
+      "variant": "cleaned",
+      "pptx_member": "ppt/media/image11.png",
+      "extracted_path": "sovereign-memory-infrastructure/slides-cleaned/slide-011.png",
+      "sha256": "99bee03de784ca38109fddea41e25d6c237054e1081c6d8210e1d00dd26dbe79",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "parent_image_id": "sovereign-memory-infrastructure-s11-original",
+      "selection_label": "Sovereign Memory Infrastructure · S11 · Trend Two: The Advanced Packaging Bottleneck",
+      "context": {
+        "label": "Trend Two: The Advanced Packaging Bottleneck",
+        "summary": "Source mechanism plate showing advanced packaging as the critical interface between HBM stacks and AI logic.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "sovereign-memory-infrastructure-s12-cleaned",
+      "deck_id": "sovereign-memory-infrastructure",
+      "slide_id": "sovereign-memory-infrastructure-s12",
+      "slide_number": 12,
+      "variant": "cleaned",
+      "pptx_member": "ppt/media/image12.png",
+      "extracted_path": "sovereign-memory-infrastructure/slides-cleaned/slide-012.png",
+      "sha256": "8fe51bf9bd6fe94361f5451e18543814172351d2e305c901a8cc5b0984e6b519",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "parent_image_id": "sovereign-memory-infrastructure-s12-original",
+      "selection_label": "Sovereign Memory Infrastructure · S12 · Trend Three: Co-Packaged Optics",
+      "context": {
+        "label": "Trend Three: Co-Packaged Optics",
+        "summary": "Source mechanism plate showing the optical interconnect wall and the proposed co-packaged optics response.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "sovereign-memory-infrastructure-s13-cleaned",
+      "deck_id": "sovereign-memory-infrastructure",
+      "slide_id": "sovereign-memory-infrastructure-s13",
+      "slide_number": 13,
+      "variant": "cleaned",
+      "pptx_member": "ppt/media/image13.png",
+      "extracted_path": "sovereign-memory-infrastructure/slides-cleaned/slide-013.png",
+      "sha256": "e606e9c04ac31f326d8df27edf04eaa516f385658c5655f767a566abaa5612c6",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "parent_image_id": "sovereign-memory-infrastructure-s13-original",
+      "selection_label": "Sovereign Memory Infrastructure · S13 · Risk and Sensitivity Analysis",
+      "context": {
+        "label": "Risk and Sensitivity Analysis",
+        "summary": "Source risk plate covering concentration, power and energy density, and capex normalization risks.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "sovereign-memory-infrastructure-s14-cleaned",
+      "deck_id": "sovereign-memory-infrastructure",
+      "slide_id": "sovereign-memory-infrastructure-s14",
+      "slide_number": 14,
+      "variant": "cleaned",
+      "pptx_member": "ppt/media/image14.png",
+      "extracted_path": "sovereign-memory-infrastructure/slides-cleaned/slide-014.png",
+      "sha256": "de7279fabf3923a76897b506dddfe5afce040b99c2880f6d61d6f5df233043e9",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "parent_image_id": "sovereign-memory-infrastructure-s14-original",
+      "selection_label": "Sovereign Memory Infrastructure · S14 · Synthesis: The Sovereign Memory Playbook",
+      "context": {
+        "label": "Synthesis: The Sovereign Memory Playbook",
+        "summary": "Closing source plate summarizing the shift from commodity memory to infrastructure-grade strategic demand.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    }
+  ],
+  "assets": [],
+  "review": {
+    "slide_contact_sheet": "sovereign-memory-infrastructure/review/slide-contact-sheet.png",
+    "semantic_contact_sheet": "sovereign-memory-infrastructure/review/semantic-contact-sheet.png",
+    "coverage_report": "sovereign-memory-infrastructure/review/coverage-report.json",
+    "promotion_policy": "Source plates remain review-only. A crop becomes render-eligible only after operator-verified context, approved rights, and visual promotion review."
+  },
+  "artifact_hash": "d10708582afde003f9a3895a60a0845d7b381a393b66c1dc568c801e87787b11"
+}
