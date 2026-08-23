@@ -10,6 +10,7 @@ from pathlib import Path
 from urllib.parse import quote
 
 import pytest
+import content.video_engine.src.services.production_console as production_console_module
 
 from content.video_engine.src.services.production_console import (
     ProductionConsoleService,
@@ -129,6 +130,66 @@ def test_media_resolves_snapshot_asset_and_rejects_unknown_or_traversal(running_
     status, body = _request(server, "GET", "/media/not-a-snapshot-asset")
     assert status == 404
     assert body["error"]["code"] == "ASSET_NOT_FOUND"
+
+
+def test_editor_snapshot_catalog_and_immutable_revision_routes(running_console) -> None:
+    service, server = running_console
+    status, body = _request(server, "GET", "/api/editor/snapshot")
+    assert status == 200
+    snapshot = body["data"]
+    assert snapshot["schema_version"] == "production_console_snapshot.v2"
+    assert len(snapshot["tracks"]) == 8
+    assert len(snapshot["words"]) == 2445
+    assert "path" not in snapshot["assets"][0]
+    assert "path" not in snapshot["project_profile"]["audio"]
+    assert str(PROJECT) not in json.dumps(snapshot)
+
+    status, body = _request(server, "GET", "/api/editor/components")
+    assert status == 200
+    assert len([component for component in body["data"]["components"] if component["source"] == "remotion_bits"]) == 11
+
+    item = {
+        "id": "bridge-overlay-001", "trackId": "track-overlays", "kind": "overlay",
+        "range": {"startFrame": 30, "endFrame": 180}, "label": "Bridge annotation", "locked": False,
+        "overlayKind": "text", "text": "The valuation paradox",
+        "transform": {"x": 0, "y": 0, "scaleX": 1, "scaleY": 1, "rotation": 0, "opacity": 1, "zIndex": 60, "crop": {"x": 0, "y": 0, "width": 0.7, "height": 0.2}},
+        "keyframes": {},
+    }
+    core = {
+        "schema_version": "editorial_timeline_revision.v1", "revision_id": "bridge-revision-001", "revision_only": True,
+        "base_snapshot_hash": snapshot["artifact_hash"], "base_artifact_hashes": snapshot["base_artifact_hashes"], "source_artifact_hashes": snapshot["base_artifact_hashes"],
+        "operator": {"operator_id": "test-operator", "created_at": "2026-08-10T12:00:00Z"},
+        "operations": [{"op": "insert_item", "item": item}], "note": "bridge proof",
+    }
+    revision = {**core, "artifact_hash": hashlib.sha256(json.dumps(core, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode()).hexdigest()}
+    status, body = _request(server, "POST", "/api/editor/revisions/validate", revision)
+    assert status == 200
+    assert body["data"]["valid"] is True
+
+    status, body = _request(server, "POST", "/api/editor/revisions", revision)
+    assert status == 201
+    assert body["data"]["revision_id"] == "bridge-revision-001"
+    status, body = _request(server, "GET", "/api/editor/revisions")
+    assert status == 200
+    assert body["data"][0]["revision_id"] == "bridge-revision-001"
+
+
+def test_editor_snapshot_refresh_recompiles_source_hash_boundary(running_console, monkeypatch) -> None:
+    service, _server = running_console
+    cached = service.editor_snapshot()
+    refreshed = copy.deepcopy(cached)
+    refreshed["artifact_hash"] = "f" * 64
+    calls = 0
+
+    def compile_refresh(*_args, **_kwargs):
+        nonlocal calls
+        calls += 1
+        return refreshed
+
+    monkeypatch.setattr(production_console_module, "compile_production_editor_snapshot", compile_refresh)
+    assert service.editor_snapshot()["artifact_hash"] == cached["artifact_hash"]
+    assert service.editor_snapshot(refresh=True)["artifact_hash"] == "f" * 64
+    assert calls == 1
 
 
 def test_job_api_is_typed_allowlisted_and_has_no_revision_mutation_route(running_console) -> None:

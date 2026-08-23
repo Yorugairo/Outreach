@@ -76,3 +76,29 @@ media/
 /content/video_engine/projects/systems-and-blowups/sources/decks/teacher-stamped-production-visuals/*-teacher-stamped-slides.png
 /content/video_engine/production_console/node_modules/
 /content/video_engine/production_console/dist/
+
+# Generated media: promoted vs provisional.
+# Promoted catalogue assets ARE tracked — asset-catalog.v1.json binds them by
+# sha256, so a missing file breaks resolution. Review and quarantine deliveries
+# are provisional by definition and are replaced, not versioned.
+content/video_engine/**/assets/review/
+content/video_engine/**/assets/quarantine/
+content/video_engine/**/assets/generated/review/
+content/video_engine/**/assets/generated/quarantine/
+
+# Runtime output is never hand-edited and never committed (AGENTS.md).
+content/video_engine/runtime/
+content/video_engine/**/runtime/
+
+# Node dependencies, anywhere in the tree.
+node_modules/
+
+# Playwright CLI scratch output.
+.playwright-cli/
+
+# Rendered video is regenerable output, not source. One pilot's render folder
+# alone is 5.7GB; committing these permanently bloats every clone.
+content/video_engine/**/render/
+*.mp4
+*.mov
+*.webm

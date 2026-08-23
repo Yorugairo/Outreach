@@ -1,0 +1,97 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "editorial_timeline_revision.v1",
+  "title": "Immutable Editorial Timeline Revision v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "revision_id", "revision_only", "base_snapshot_hash", "base_artifact_hashes", "source_artifact_hashes", "operator", "operations", "artifact_hash"],
+  "properties": {
+    "schema_version": {"const": "editorial_timeline_revision.v1"},
+    "revision_id": {"$ref": "#/$defs/id"},
+    "revision_only": {"const": true},
+    "base_snapshot_hash": {"$ref": "#/$defs/sha256"},
+    "base_artifact_hashes": {"$ref": "#/$defs/hashMap"},
+    "source_artifact_hashes": {"$ref": "#/$defs/hashMap"},
+    "operator": {
+      "type": "object", "additionalProperties": false, "required": ["operator_id", "created_at"],
+      "properties": {"operator_id": {"type": "string", "minLength": 1, "maxLength": 128}, "created_at": {"type": "string", "format": "date-time"}}
+    },
+    "operations": {"type": "array", "minItems": 1, "maxItems": 1000, "items": {"$ref": "#/$defs/operation"}},
+    "note": {"type": ["string", "null"], "maxLength": 2000},
+    "artifact_hash": {"$ref": "#/$defs/sha256"}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$"},
+    "hashMap": {"type": "object", "minProperties": 1, "maxProperties": 128, "additionalProperties": {"$ref": "#/$defs/sha256"}},
+    "startFrame": {"type": "integer", "minimum": 0, "maximum": 100000000},
+    "endFrame": {"type": "integer", "exclusiveMinimum": 0, "maximum": 100000000},
+    "crop": {
+      "type": "object", "additionalProperties": false,
+      "properties": {"x": {"type": "number", "minimum": 0, "maximum": 1}, "y": {"type": "number", "minimum": 0, "maximum": 1}, "width": {"type": "number", "exclusiveMinimum": 0, "maximum": 1}, "height": {"type": "number", "exclusiveMinimum": 0, "maximum": 1}}
+    },
+    "transform": {
+      "type": "object", "additionalProperties": false,
+      "properties": {
+        "x": {"type": "number", "minimum": -2, "maximum": 2}, "y": {"type": "number", "minimum": -2, "maximum": 2},
+        "scaleX": {"type": "number", "exclusiveMinimum": 0, "maximum": 4}, "scaleY": {"type": "number", "exclusiveMinimum": 0, "maximum": 4},
+        "rotation": {"type": "number", "minimum": -360, "maximum": 360}, "opacity": {"type": "number", "minimum": 0, "maximum": 1},
+        "zIndex": {"type": "integer", "minimum": -100, "maximum": 100}, "crop": {"$ref": "#/$defs/crop"}
+      }
+    },
+    "componentProps": {
+      "type": "object", "maxProperties": 32, "additionalProperties": false,
+      "properties": {
+        "text": {"type": "string", "maxLength": 2000}, "durationInFrames": {"type": "integer", "minimum": 1, "maximum": 100000},
+        "color": {"type": "string", "maxLength": 64}, "backgroundColor": {"type": "string", "maxLength": 64}, "fontSize": {"type": "number", "exclusiveMinimum": 0, "maximum": 512},
+        "blurAmount": {"type": "number", "minimum": 0, "maximum": 200}, "staggerFrames": {"type": "integer", "minimum": 0, "maximum": 10000}, "distance": {"type": "number", "minimum": -4000, "maximum": 4000},
+        "typeSpeedFrames": {"type": "integer", "minimum": 1, "maximum": 1000}, "showCursor": {"type": "boolean"},
+        "from": {"type": "number"}, "to": {"type": "number"}, "prefix": {"type": "string", "maxLength": 64}, "postfix": {"type": "string", "maxLength": 64}, "decimals": {"type": "integer", "minimum": 0, "maximum": 8},
+        "items": {"type": "array", "maxItems": 100, "items": {"type": "string", "maxLength": 1000}}, "images": {"type": "array", "maxItems": 100, "items": {"type": "string", "maxLength": 128}}, "cards": {"type": "array", "maxItems": 100, "items": {"type": "string", "maxLength": 1000}},
+        "columns": {"type": "integer", "minimum": 1, "maximum": 20}, "tileCount": {"type": "integer", "minimum": 1, "maximum": 100}, "scaleFrom": {"type": "number", "minimum": 0.1, "maximum": 4}, "scaleTo": {"type": "number", "minimum": 0.1, "maximum": 4}, "direction": {"enum": ["left", "right", "up", "down"]}, "styleId": {"type": "string", "maxLength": 128}
+      }
+    },
+    "keyframe": {
+      "type": "object", "additionalProperties": false, "required": ["frame", "value"],
+      "properties": {"frame": {"type": "integer", "minimum": 0, "maximum": 100000000}, "value": {"type": "number"}, "easing": {"enum": ["linear", "ease_in", "ease_out", "ease_in_out"]}, "springPreset": {"enum": ["gentle", "snappy", "bouncy"]}}
+    },
+    "keyframes": {
+      "type": "object", "additionalProperties": false,
+      "properties": {
+        "x": {"type": "array", "maxItems": 1000, "items": {"$ref": "#/$defs/keyframe"}}, "y": {"type": "array", "maxItems": 1000, "items": {"$ref": "#/$defs/keyframe"}},
+        "scaleX": {"type": "array", "maxItems": 1000, "items": {"$ref": "#/$defs/keyframe"}}, "scaleY": {"type": "array", "maxItems": 1000, "items": {"$ref": "#/$defs/keyframe"}},
+        "rotation": {"type": "array", "maxItems": 1000, "items": {"$ref": "#/$defs/keyframe"}}, "opacity": {"type": "array", "maxItems": 1000, "items": {"$ref": "#/$defs/keyframe"}}, "zIndex": {"type": "array", "maxItems": 1000, "items": {"$ref": "#/$defs/keyframe"}}
+      }
+    },
+    "timelineItem": {
+      "type": "object", "minProperties": 6, "maxProperties": 24,
+      "required": ["id", "trackId", "kind", "range", "label", "locked"],
+      "properties": {
+        "id": {"$ref": "#/$defs/id"}, "trackId": {"$ref": "#/$defs/id"}, "kind": {"enum": ["overlay", "teacher_stamp", "evidence", "world_plate", "remotion_bit"]},
+        "range": {"type": "object", "additionalProperties": false, "required": ["startFrame", "endFrame"], "properties": {"startFrame": {"type": "integer", "minimum": 0}, "endFrame": {"type": "integer", "exclusiveMinimum": 0}}},
+        "label": {"type": "string", "maxLength": 1000}, "locked": {"const": false}, "overlayKind": {"enum": ["text", "annotation", "shape", "arrow"]}, "text": {"type": "string", "maxLength": 2000},
+        "assetId": {"$ref": "#/$defs/id"}, "claimRefs": {"type": "array", "maxItems": 1000, "items": {"type": "string", "maxLength": 256}}, "evidenceEligible": {"type": "boolean"}, "fit": {"enum": ["contain", "cover"]},
+        "binding": {"type": "object", "additionalProperties": false, "required": ["bindingId", "bindingHash", "slotId", "worldAssetId"], "properties": {"bindingId": {"$ref": "#/$defs/id"}, "bindingHash": {"$ref": "#/$defs/sha256"}, "slotId": {"$ref": "#/$defs/id"}, "worldAssetId": {"$ref": "#/$defs/id"}}},
+        "componentId": {"$ref": "#/$defs/id"}, "presetId": {"$ref": "#/$defs/id"}, "props": {"$ref": "#/$defs/componentProps"}, "transform": {"$ref": "#/$defs/transform"}, "keyframes": {"$ref": "#/$defs/keyframes"}
+      },
+      "additionalProperties": false
+    },
+    "operation": {
+      "oneOf": [
+        {"type": "object", "additionalProperties": false, "required": ["op", "scene_id", "start_frame", "end_frame"], "properties": {"op": {"const": "set_scene_boundary"}, "scene_id": {"$ref": "#/$defs/id"}, "start_frame": {"$ref": "#/$defs/startFrame"}, "end_frame": {"$ref": "#/$defs/endFrame"}}},
+        {"type": "object", "additionalProperties": false, "required": ["op", "cue_id", "start_frame", "end_frame"], "properties": {"op": {"const": "set_cue_range"}, "cue_id": {"$ref": "#/$defs/id"}, "start_frame": {"$ref": "#/$defs/startFrame"}, "end_frame": {"$ref": "#/$defs/endFrame"}}},
+        {"type": "object", "additionalProperties": false, "required": ["op", "item_id", "start_frame", "end_frame", "volume"], "properties": {"op": {"const": "set_narration_trim_volume"}, "item_id": {"$ref": "#/$defs/id"}, "start_frame": {"$ref": "#/$defs/startFrame"}, "end_frame": {"$ref": "#/$defs/endFrame"}, "volume": {"type": "number", "minimum": 0, "maximum": 1}}},
+        {"type": "object", "additionalProperties": false, "required": ["op", "item"], "properties": {"op": {"const": "insert_item"}, "item": {"$ref": "#/$defs/timelineItem"}}},
+        {"type": "object", "additionalProperties": false, "required": ["op", "item_id"], "properties": {"op": {"const": "remove_item"}, "item_id": {"$ref": "#/$defs/id"}}},
+        {"type": "object", "additionalProperties": false, "required": ["op", "item_id", "start_frame", "end_frame"], "properties": {"op": {"const": "move_trim_item"}, "item_id": {"$ref": "#/$defs/id"}, "start_frame": {"$ref": "#/$defs/startFrame"}, "end_frame": {"$ref": "#/$defs/endFrame"}}},
+        {"type": "object", "additionalProperties": false, "required": ["op", "item_id", "props"], "properties": {"op": {"const": "set_item_props"}, "item_id": {"$ref": "#/$defs/id"}, "props": {"type": "object", "additionalProperties": false, "properties": {"label": {"type": "string", "maxLength": 1000}, "text": {"type": "string", "maxLength": 2000}, "transform": {"$ref": "#/$defs/transform"}, "component_id": {"$ref": "#/$defs/id"}, "preset_id": {"$ref": "#/$defs/id"}, "props": {"$ref": "#/$defs/componentProps"}}}}},
+        {"type": "object", "additionalProperties": false, "required": ["op", "item_id", "keyframes"], "properties": {"op": {"const": "set_item_keyframes"}, "item_id": {"$ref": "#/$defs/id"}, "keyframes": {"$ref": "#/$defs/keyframes"}}},
+        {"type": "object", "additionalProperties": false, "required": ["op", "track_id", "item_ids"], "properties": {"op": {"const": "reorder_item"}, "track_id": {"$ref": "#/$defs/id"}, "item_ids": {"type": "array", "maxItems": 100000, "uniqueItems": true, "items": {"$ref": "#/$defs/id"}}}},
+        {"type": "object", "additionalProperties": false, "required": ["op", "item_id", "component_id", "preset_id"], "properties": {"op": {"const": "apply_component_preset"}, "item_id": {"$ref": "#/$defs/id"}, "component_id": {"$ref": "#/$defs/id"}, "preset_id": {"$ref": "#/$defs/id"}}},
+        {"type": "object", "additionalProperties": false, "required": ["op", "item_id", "style_id"], "properties": {"op": {"const": "set_caption_layout"}, "item_id": {"$ref": "#/$defs/id"}, "style_id": {"enum": ["default", "compact", "upper_safe", "lower_safe", "emphasis", "word_by_word"]}, "line_breaks": {"type": "array", "maxItems": 100, "uniqueItems": true, "items": {"type": "integer", "minimum": 1}}, "group_id": {"type": ["string", "null"], "maxLength": 128}}},
+        {"type": "object", "additionalProperties": false, "required": ["op", "text"], "properties": {"op": {"const": "add_review_note"}, "item_id": {"$ref": "#/$defs/id"}, "text": {"type": "string", "minLength": 1, "maxLength": 2000}}},
+        {"type": "object", "additionalProperties": false, "required": ["op", "status"], "properties": {"op": {"const": "set_review_status"}, "status": {"enum": ["draft", "review_required", "approved", "revision_required"]}}}
+      ]
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "schema_version": "production_console_snapshot.v2",
+  "width": 1920,
+  "height": 1080,
+  "fps": 30,
+  "durationInFrames": 180,
+  "backgroundColor": "#0b1015",
+  "diagnosticMode": false,
+  "assetMap": {
+    "hero-fab-constraint-v1": "p31-proof/hero-fab-constraint-v1.png",
+    "hbm-stack-evidence": "p31-proof/hbm-stack-v1.png",
+    "whiteboard-draw-hand-a-v1": "p31-proof/draw-hand-a-v1.png"
+  },
+  "items": [
+    {"id": "fab-world", "type": "world_plate", "from": 0, "durationInFrames": 180, "assetId": "hero-fab-constraint-v1", "zIndex": 0, "layout": {"fit": "cover"}},
+    {"id": "hbm-stack-evidence", "type": "evidence", "from": 0, "durationInFrames": 150, "assetId": "hbm-stack-evidence", "zIndex": 40, "layout": {"x": 0.33, "y": 0.135, "width": 0.22, "height": 0.23}},
+    {"id": "fab-leader", "type": "annotation", "from": 0, "durationInFrames": 150, "overlayKind": "arrow", "zIndex": 55, "layout": {"x": 0.18, "y": 0.03, "width": 0.12, "height": 0.12, "rotate": 180}}
+  ]
+}

@@ -29,6 +29,28 @@ import {
   ProductionEvidenceComposition,
   type ProductionEvidenceCompositionProps,
 } from "./ProductionEvidenceComposition";
+import {
+  calculateProductionTimelineMetadata,
+  defaultProductionTimelineProps,
+  ProductionTimelineComposition,
+  type ProductionTimelineCompositionProps,
+} from "./ProductionTimelineComposition";
+import {
+  defaultKenBurnsEffectProofProps,
+  KenBurnsEffectProof,
+  type KenBurnsEffectProofProps,
+} from "./KenBurnsEffectProof";
+import {
+  defaultTransitionEvidence60sProofProps,
+  TransitionEvidence60sProof,
+  type TransitionEvidence60sProofProps,
+} from "./TransitionEvidence60sProof";
+import {
+  calculateAutopilotElevenLabsRecutMetadata,
+  defaultAutopilotElevenLabsRecutProps,
+  AutopilotElevenLabsRecut,
+  type AutopilotElevenLabsRecutProps,
+} from "./AutopilotElevenLabsRecut";
 import type {
   DocumentaryProps,
   DocumentaryTreatment,
@@ -43,7 +65,7 @@ import type {
 /** The editor, Player, and renderer must stay on this exact Remotion release. */
 export const REMOTION_VERSION = "4.0.502" as const;
 
-export type CompositionFolder = "Editorial" | "Documentary" | "Finance" | "Console";
+export type CompositionFolder = "Editorial" | "Documentary" | "Finance" | "Console" | "Autopilot";
 
 export type CompositionMetadata<Props extends Record<string, unknown>> = {
   readonly durationInFrames: number;
@@ -82,7 +104,11 @@ export type CompositionRegistryEntry =
   | RegistryDefinition<"FinanceSketchbookProof", "Finance", FinanceSketchbookProofProps>
   | RegistryDefinition<"FinanceStealthWealthProof", "Finance", FinanceStealthWealthProofProps>
   | RegistryDefinition<"Finance2DStickProof", "Finance", Finance2DStickProofProps>
-  | RegistryDefinition<"ProductionEvidence", "Console", ProductionEvidenceCompositionProps>;
+  | RegistryDefinition<"ProductionEvidence", "Console", ProductionEvidenceCompositionProps>
+  | RegistryDefinition<"ProductionTimeline", "Console", ProductionTimelineCompositionProps>
+  | RegistryDefinition<"KenBurnsEffectProof", "Console", KenBurnsEffectProofProps>
+  | RegistryDefinition<"TransitionEvidence60sProof", "Console", TransitionEvidence60sProofProps>
+  | RegistryDefinition<"AutopilotElevenLabsRecut", "Autopilot", AutopilotElevenLabsRecutProps>;
 
 const defaultManifest: EditManifest = {
   schema_version: "edit_manifest.v1",
@@ -240,6 +266,58 @@ export const COMPOSITION_REGISTRY = [
       width: 1376,
       height: 768,
       calculateMetadata: () => ({ durationInFrames: 240, fps: 30, width: 1376, height: 768 }),
+    },
+  },
+  {
+    id: "ProductionTimeline",
+    folder: "Console",
+    component: ProductionTimelineComposition,
+    defaultProps: defaultProductionTimelineProps,
+    metadata: {
+      durationInFrames: 300,
+      fps: 30,
+      width: 1920,
+      height: 1080,
+      calculateMetadata: calculateProductionTimelineMetadata,
+    },
+  },
+  {
+    id: "KenBurnsEffectProof",
+    folder: "Console",
+    component: KenBurnsEffectProof,
+    defaultProps: defaultKenBurnsEffectProofProps,
+    metadata: {
+      durationInFrames: 360,
+      fps: 30,
+      width: 1920,
+      height: 1080,
+      calculateMetadata: () => ({ durationInFrames: 360, fps: 30, width: 1920, height: 1080 }),
+    },
+  },
+  {
+    id: "TransitionEvidence60sProof",
+    folder: "Console",
+    component: TransitionEvidence60sProof,
+    defaultProps: defaultTransitionEvidence60sProofProps,
+    metadata: {
+      durationInFrames: 1800,
+      fps: 30,
+      width: 1920,
+      height: 1080,
+      calculateMetadata: calculateProductionTimelineMetadata,
+    },
+  },
+  {
+    id: "AutopilotElevenLabsRecut",
+    folder: "Autopilot",
+    component: AutopilotElevenLabsRecut,
+    defaultProps: defaultAutopilotElevenLabsRecutProps,
+    metadata: {
+      durationInFrames: 1,
+      fps: 24,
+      width: 1920,
+      height: 1080,
+      calculateMetadata: calculateAutopilotElevenLabsRecutMetadata,
     },
   },
 ] as const satisfies readonly CompositionRegistryEntry[];

@@ -1,0 +1,33 @@
+{
+  "schema_version": "production_console_snapshot.v2",
+  "width": 1280,
+  "height": 720,
+  "fps": 30,
+  "durationInFrames": 90,
+  "backgroundColor": "#15211d",
+  "items": [
+    {
+      "id": "caption-proof",
+      "type": "caption",
+      "from": 0,
+      "durationInFrames": 90,
+      "text": "One HBM bit can consume roughly three times the wafer capacity.",
+      "caption_preset": "word_by_word",
+      "layout": {"x": 0, "y": 0.31, "width": 0.76, "height": 0.18},
+      "word_tokens": [
+        {"text": "One", "startFrame": 0, "endFrame": 6},
+        {"text": "HBM", "startFrame": 6, "endFrame": 12},
+        {"text": "bit", "startFrame": 12, "endFrame": 17},
+        {"text": "can", "startFrame": 17, "endFrame": 22},
+        {"text": "consume", "startFrame": 22, "endFrame": 31},
+        {"text": "roughly", "startFrame": 31, "endFrame": 40},
+        {"text": "three", "startFrame": 40, "endFrame": 47},
+        {"text": "times", "startFrame": 47, "endFrame": 54},
+        {"text": "the", "startFrame": 54, "endFrame": 58},
+        {"text": "wafer", "startFrame": 58, "endFrame": 66},
+        {"text": "capacity.", "startFrame": 66, "endFrame": 78}
+      ]
+    }
+  ],
+  "assetMap": {}
+}

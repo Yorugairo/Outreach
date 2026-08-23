@@ -1,0 +1,576 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "production_console_snapshot.v2",
+  "title": "Production Console Snapshot v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "snapshot_id",
+    "project_id",
+    "composition_id",
+    "project_profile",
+    "base_artifact_hashes",
+    "artifacts",
+    "scenes",
+    "cues",
+    "words",
+    "tracks",
+    "assets",
+    "approved_assets",
+    "reviews",
+    "locks",
+    "waveform",
+    "component_catalog",
+    "component_catalog_hash",
+    "plate_layout_profiles",
+    "semantic_evidence_bindings",
+    "degraded_inputs",
+    "artifact_hash"
+  ],
+  "properties": {
+    "schema_version": {"const": "production_console_snapshot.v2"},
+    "snapshot_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]{2,127}$"},
+    "project_id": {"type": "string", "minLength": 1, "maxLength": 128},
+    "composition_id": {"type": "string", "minLength": 1, "maxLength": 128},
+    "project_profile": {"$ref": "#/$defs/projectProfile"},
+    "base_artifact_hashes": {
+      "type": "object",
+      "minProperties": 1,
+      "maxProperties": 128,
+      "additionalProperties": {"$ref": "#/$defs/sha256"}
+    },
+    "artifacts": {
+      "type": "array",
+      "maxItems": 128,
+      "items": {"$ref": "#/$defs/artifact"}
+    },
+    "scenes": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 10000,
+      "items": {"$ref": "#/$defs/scene"}
+    },
+    "cues": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 100000,
+      "items": {"$ref": "#/$defs/cue"}
+    },
+    "words": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 1000000,
+      "items": {"$ref": "#/$defs/word"}
+    },
+    "tracks": {
+      "type": "array",
+      "minItems": 8,
+      "maxItems": 8,
+      "items": {"$ref": "#/$defs/track"}
+    },
+    "assets": {
+      "type": "array",
+      "maxItems": 100000,
+      "items": {"$ref": "#/$defs/asset"}
+    },
+    "approved_assets": {
+      "type": "array",
+      "maxItems": 100000,
+      "items": {"$ref": "#/$defs/asset"}
+    },
+    "reviews": {
+      "type": "array",
+      "maxItems": 256,
+      "items": {"$ref": "#/$defs/review"}
+    },
+    "locks": {"$ref": "#/$defs/locks"},
+    "waveform": {"$ref": "#/$defs/waveform"},
+    "component_catalog": {"$ref": "#/$defs/componentCatalog"},
+    "component_catalog_hash": {"$ref": "#/$defs/sha256"},
+    "plate_layout_profiles": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["schema_version", "profiles", "artifact_hash"],
+      "properties": {
+        "schema_version": {"const": "plate_layout_profiles.v1"},
+        "profiles": {"type": "array", "minItems": 1, "items": {"type": "object"}},
+        "artifact_hash": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "semantic_evidence_bindings": {
+      "type": "array",
+      "maxItems": 100000,
+      "items": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": ["schema_version", "binding_id", "cue_id", "recommendation_state", "artifact_hash"],
+        "properties": {
+          "schema_version": {"const": "semantic_evidence_binding.v1"},
+          "binding_id": {"$ref": "#/$defs/id"},
+          "cue_id": {"$ref": "#/$defs/id"},
+          "recommendation_state": {"enum": ["recommended", "unmatched", "manual_only"]},
+          "artifact_hash": {"$ref": "#/$defs/sha256"}
+        }
+      }
+    },
+    "degraded_inputs": {
+      "type": "array",
+      "maxItems": 256,
+      "items": {"type": "string", "minLength": 1, "maxLength": 1000}
+    },
+    "artifact_hash": {"$ref": "#/$defs/sha256"}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "relativePath": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1024,
+      "pattern": "^(?![A-Za-z]:)(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"
+    },
+    "id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$"},
+    "stringList": {
+      "type": "array",
+      "maxItems": 10000,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1, "maxLength": 256}
+    },
+    "frameRange": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["start_frame", "end_frame"],
+      "properties": {
+        "start_frame": {"type": "integer", "minimum": 0, "maximum": 100000000},
+        "end_frame": {"type": "integer", "minimum": 0, "maximum": 100000000}
+      }
+    },
+    "audioTrim": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["start_s", "end_s", "start_frame", "end_frame"],
+      "properties": {
+        "start_s": {"type": "number", "minimum": 0},
+        "end_s": {"type": "number", "exclusiveMinimum": 0},
+        "start_frame": {"type": "integer", "minimum": 0, "maximum": 100000000},
+        "end_frame": {"type": "integer", "exclusiveMinimum": 0, "maximum": 100000000}
+      }
+    },
+    "projectProfile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "profile_id",
+        "fps",
+        "width",
+        "height",
+        "duration_s",
+        "duration_frames",
+        "audio",
+        "audio_trim"
+      ],
+      "properties": {
+        "profile_id": {"type": "string", "minLength": 1, "maxLength": 128},
+        "fps": {"type": "integer", "minimum": 1, "maximum": 240},
+        "width": {"type": "integer", "minimum": 1, "maximum": 16384},
+        "height": {"type": "integer", "minimum": 1, "maximum": 16384},
+        "duration_s": {"type": "number", "exclusiveMinimum": 0},
+        "duration_frames": {"type": "integer", "exclusiveMinimum": 0, "maximum": 100000000},
+        "audio": {"$ref": "#/$defs/audio"},
+        "audio_trim": {"$ref": "#/$defs/audioTrim"}
+      }
+    },
+    "audio": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["audio_id", "path", "sha256", "duration_s", "status"],
+      "properties": {
+        "audio_id": {"$ref": "#/$defs/id"},
+        "path": {"$ref": "#/$defs/relativePath"},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "duration_s": {"type": "number", "exclusiveMinimum": 0},
+        "status": {"enum": ["available", "missing"]}
+      }
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["artifact_id", "kind", "path_root", "path", "sha256", "status"],
+      "properties": {
+        "artifact_id": {"$ref": "#/$defs/id"},
+        "kind": {"type": "string", "minLength": 1, "maxLength": 128},
+        "path_root": {"enum": ["project", "project_family", "repository"]},
+        "path": {"$ref": "#/$defs/relativePath"},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "status": {"enum": ["available", "degraded", "missing"]},
+        "degraded_reason": {"type": ["string", "null"], "maxLength": 1000}
+      }
+    },
+    "scene": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "scene_id",
+        "title",
+        "start_s",
+        "end_s",
+        "start_frame",
+        "end_frame",
+        "cue_refs",
+        "claim_refs",
+        "asset_ids",
+        "review_state"
+      ],
+      "properties": {
+        "scene_id": {"$ref": "#/$defs/id"},
+        "title": {"type": "string", "minLength": 1, "maxLength": 512},
+        "start_s": {"type": "number", "minimum": 0},
+        "end_s": {"type": "number", "exclusiveMinimum": 0},
+        "start_frame": {"type": "integer", "minimum": 0, "maximum": 100000000},
+        "end_frame": {"type": "integer", "minimum": 0, "maximum": 100000000},
+        "cue_refs": {"$ref": "#/$defs/stringList"},
+        "claim_refs": {"$ref": "#/$defs/stringList"},
+        "asset_ids": {"$ref": "#/$defs/stringList"},
+        "review_state": {"enum": ["unreviewed", "review_only", "revision_required", "approved"]}
+      }
+    },
+    "cue": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "cue_id",
+        "start_word",
+        "end_word",
+        "start_s",
+        "end_s",
+        "start_frame",
+        "end_frame",
+        "excerpt",
+        "claim_refs",
+        "state_type",
+        "visual_world",
+        "entry_action",
+        "exit_transition",
+        "micro_events",
+        "short_membership"
+      ],
+      "properties": {
+        "cue_id": {"$ref": "#/$defs/id"},
+        "start_word": {"type": "integer", "minimum": 0, "maximum": 1000000},
+        "end_word": {"type": "integer", "minimum": 0, "maximum": 1000000},
+        "start_s": {"type": "number", "minimum": 0},
+        "end_s": {"type": "number", "exclusiveMinimum": 0},
+        "start_frame": {"type": "integer", "minimum": 0, "maximum": 100000000},
+        "end_frame": {"type": "integer", "minimum": 0, "maximum": 100000000},
+        "excerpt": {"type": "string", "maxLength": 4000},
+        "claim_refs": {"$ref": "#/$defs/stringList"},
+        "state_type": {"type": "string", "minLength": 1, "maxLength": 128},
+        "visual_world": {"type": "string", "minLength": 1, "maxLength": 128},
+        "entry_action": {"type": "string", "minLength": 1, "maxLength": 512},
+        "exit_transition": {"type": "string", "minLength": 1, "maxLength": 512},
+        "fact_surface": {"type": ["string", "null"], "maxLength": 2000},
+        "micro_events": {
+          "type": "array",
+          "maxItems": 32,
+          "items": {"$ref": "#/$defs/microEvent"}
+        },
+        "short_membership": {"$ref": "#/$defs/stringList"}
+      }
+    },
+    "microEvent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["at_s", "frame", "action"],
+      "properties": {
+        "at_s": {"type": "number", "minimum": 0},
+        "frame": {"type": "integer", "minimum": 0, "maximum": 100000000},
+        "action": {"type": "string", "minLength": 1, "maxLength": 1000}
+      }
+    },
+    "word": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["word_id", "text", "start_s", "end_s", "start_frame", "end_frame"],
+      "properties": {
+        "word_id": {"$ref": "#/$defs/id"},
+        "text": {"type": "string", "maxLength": 512},
+        "start_s": {"type": "number", "minimum": 0},
+        "end_s": {"type": "number", "minimum": 0},
+        "start_frame": {"type": "integer", "minimum": 0, "maximum": 100000000},
+        "end_frame": {"type": "integer", "minimum": 0, "maximum": 100000000}
+      }
+    },
+    "asset": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "asset_id",
+        "label",
+        "path_root",
+        "path",
+        "sha256",
+        "source_kind",
+        "approval_scope",
+        "evidence_eligible",
+        "rights_state",
+        "context_status",
+        "claim_refs",
+        "cue_refs"
+      ],
+      "properties": {
+        "asset_id": {"$ref": "#/$defs/id"},
+        "label": {"type": "string", "minLength": 1, "maxLength": 512},
+        "path_root": {"enum": ["project", "project_family", "repository"]},
+        "path": {"$ref": "#/$defs/relativePath"},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "source_kind": {"enum": ["project_asset", "deck_source", "production_visual", "evidence_surface"]},
+        "approval_scope": {"enum": ["none", "review_only", "production_visuals", "evidence"]},
+        "evidence_eligible": {"type": "boolean"},
+        "rights_state": {"enum": ["unknown", "review_only", "operator_authorized", "approved"]},
+        "context_status": {"enum": ["machine_proposed", "review_only", "operator_verified"]},
+        "deck_id": {"type": ["string", "null"], "maxLength": 256},
+        "slide_number": {"type": ["integer", "null"], "minimum": 1},
+        "width": {"type": ["integer", "null"], "minimum": 1},
+        "height": {"type": ["integer", "null"], "minimum": 1},
+        "what_it_is": {"type": ["string", "null"], "maxLength": 2000},
+        "claim_refs": {"$ref": "#/$defs/stringList"},
+        "cue_refs": {"$ref": "#/$defs/stringList"}
+      }
+    },
+    "review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["review_id", "scope", "state", "artifact_path", "sha256"],
+      "properties": {
+        "review_id": {"$ref": "#/$defs/id"},
+        "scope": {"type": "string", "minLength": 1, "maxLength": 128},
+        "state": {"enum": ["unreviewed", "revision_required", "approved"]},
+        "artifact_path": {"$ref": "#/$defs/relativePath"},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "track": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["track_id", "kind", "label", "order", "editable", "items"],
+      "properties": {
+        "track_id": {"$ref": "#/$defs/id"},
+        "kind": {"enum": ["scenes", "cues", "captions", "overlays", "teacher_stamp", "evidence", "world_plates", "narration"]},
+        "label": {"type": "string", "minLength": 1, "maxLength": 128},
+        "order": {"type": "integer", "minimum": 0, "maximum": 7},
+        "editable": {"type": "boolean"},
+        "items": {
+          "type": "array",
+          "maxItems": 100000,
+          "items": {"$ref": "#/$defs/trackItem"}
+        }
+      }
+    },
+    "trackItem": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["item_id", "item_type", "start_frame", "end_frame", "locked", "locked_fields"],
+      "properties": {
+        "item_id": {"$ref": "#/$defs/id"},
+        "item_type": {"enum": ["scene", "cue", "caption", "overlay", "teacher_stamp", "evidence", "world_plate", "remotion_bit", "narration"]},
+        "start_frame": {"type": "integer", "minimum": 0, "maximum": 100000000},
+        "end_frame": {"type": "integer", "minimum": 0, "maximum": 100000000},
+        "locked": {"type": "boolean"},
+        "locked_fields": {
+          "type": "array",
+          "maxItems": 16,
+          "uniqueItems": true,
+          "items": {"enum": ["text", "word_timing", "asset_id", "asset_hash", "approval", "evidence_eligibility", "source_ref", "audio_source"]}
+        },
+        "source_ref": {"type": "string", "minLength": 1, "maxLength": 1024},
+        "scene_id": {"$ref": "#/$defs/id"},
+        "cue_id": {"$ref": "#/$defs/id"},
+        "asset_id": {"$ref": "#/$defs/id"},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "component_id": {"$ref": "#/$defs/id"},
+        "preset_id": {"$ref": "#/$defs/id"},
+        "start_word": {"type": "integer", "minimum": 0, "maximum": 1000000},
+        "end_word": {"type": "integer", "minimum": 0, "maximum": 1000000},
+        "text": {"type": "string", "maxLength": 4000},
+        "display_text": {"type": "string", "minLength": 1, "maxLength": 4000},
+        "citation_id": {"$ref": "#/$defs/id"},
+        "diagnostic_label": {"type": "string", "minLength": 1, "maxLength": 1024},
+        "caption_preset": {"enum": ["compact", "word_by_word"]},
+        "excerpt": {"type": "string", "maxLength": 4000},
+        "style_id": {"type": "string", "minLength": 1, "maxLength": 128},
+        "overlay_kind": {"enum": ["text", "annotation", "shape", "arrow"]},
+        "layout": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["x", "y", "width", "height"],
+          "properties": {
+            "x": {"type": "number", "minimum": -1, "maximum": 1},
+            "y": {"type": "number", "minimum": -1, "maximum": 1},
+            "width": {"type": "number", "exclusiveMinimum": 0, "maximum": 1},
+            "height": {"type": "number", "exclusiveMinimum": 0, "maximum": 1}
+          }
+        },
+        "evidence_eligible": {"type": "boolean"}
+      }
+    },
+    "locks": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["narration", "transcript", "word_timing", "canonical_audio", "source_artifacts", "approved_assets", "evidence_eligibility"],
+      "properties": {
+        "narration": {"const": true},
+        "transcript": {"const": true},
+        "word_timing": {"const": true},
+        "canonical_audio": {"const": true},
+        "source_artifacts": {"const": true},
+        "approved_assets": {"const": true},
+        "evidence_eligibility": {"const": true}
+      }
+    },
+    "waveform": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["audio_sha256", "source_audio_sha256", "cache_key", "sample_count", "peaks", "algorithm", "status"],
+      "properties": {
+        "audio_sha256": {"$ref": "#/$defs/sha256"},
+        "source_audio_sha256": {"$ref": "#/$defs/sha256"},
+        "cache_key": {"$ref": "#/$defs/sha256"},
+        "sample_count": {"type": "integer", "minimum": 1, "maximum": 8192},
+        "peaks": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 8192,
+          "items": {"type": "number", "minimum": 0, "maximum": 1}
+        },
+        "algorithm": {"enum": ["cached_peaks", "word_timing_envelope"]},
+        "status": {"enum": ["cached", "derived"]}
+      }
+    },
+    "componentCatalog": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "catalog_id", "catalog_version", "remotion_version", "components", "presets", "catalog_hash", "artifact_hash"],
+      "properties": {
+        "schema_version": {"const": "editor_component_catalog.v1"},
+        "catalog_id": {"$ref": "#/$defs/id"},
+        "catalog_version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+        "remotion_version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+        "components": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 128,
+          "items": {"$ref": "#/$defs/component"}
+        },
+        "presets": {
+          "type": "array",
+          "maxItems": 256,
+          "items": {"$ref": "#/$defs/presetReference"}
+        },
+        "catalog_hash": {"$ref": "#/$defs/sha256"},
+        "artifact_hash": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "component": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["component_id", "label", "kind", "adapter_id", "source", "version", "deterministic", "allowed_prop_keys", "preset_ids"],
+      "properties": {
+        "component_id": {"$ref": "#/$defs/id"},
+        "label": {"type": "string", "minLength": 1, "maxLength": 256},
+        "kind": {"enum": ["caption", "text", "annotation", "teacher_stamp", "world_plate", "evidence_plate", "shape", "chart", "remotion_bit"]},
+        "adapter_id": {"$ref": "#/$defs/id"},
+        "source": {"enum": ["builtin", "remotion_bits"]},
+        "version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+        "package_name": {"type": "string", "minLength": 1, "maxLength": 128},
+        "package_version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+        "deterministic": {"const": true},
+        "allowed_prop_keys": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 64,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/propKey"}
+        },
+        "preset_ids": {"$ref": "#/$defs/stringList"}
+      }
+    },
+    "presetReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["preset_id", "component_id", "label", "props"],
+      "properties": {
+        "preset_id": {"$ref": "#/$defs/id"},
+        "component_id": {"$ref": "#/$defs/id"},
+        "label": {"type": "string", "minLength": 1, "maxLength": 256},
+        "props": {"$ref": "#/$defs/props"}
+      }
+    },
+    "propKey": {
+      "enum": [
+        "style_id",
+        "font_size",
+        "line_height",
+        "color",
+        "background_color",
+        "variant",
+        "stroke_color",
+        "opacity",
+        "x",
+        "y",
+        "scale",
+        "rotation",
+        "z",
+        "asset_role",
+        "motion_recipe",
+        "text",
+        "durationInFrames",
+        "style",
+        "fontSize",
+        "blurAmount",
+        "staggerFrames",
+        "distance",
+        "typeSpeedFrames",
+        "showCursor",
+        "from",
+        "to",
+        "prefix",
+        "postfix",
+        "decimals",
+        "items",
+        "backgroundColor",
+        "columns",
+        "images",
+        "assetMap",
+        "tileCount",
+        "cards",
+        "scaleFrom",
+        "scaleTo",
+        "direction"
+      ]
+    },
+    "props": {
+      "type": "object",
+      "minProperties": 1,
+      "maxProperties": 32,
+      "additionalProperties": false,
+      "properties": {
+        "style_id": {"type": "string", "minLength": 1, "maxLength": 128},
+        "variant": {"type": "string", "minLength": 1, "maxLength": 128},
+        "font_size": {"type": "number", "exclusiveMinimum": 0, "maximum": 512},
+        "line_height": {"type": "number", "exclusiveMinimum": 0, "maximum": 4},
+        "padding": {"type": "number", "minimum": 0, "maximum": 512},
+        "color": {"type": "string", "pattern": "^#[0-9a-fA-F]{6}$"},
+        "background_color": {"type": "string", "pattern": "^#[0-9a-fA-F]{6}$"},
+        "stroke_color": {"type": "string", "pattern": "^#[0-9a-fA-F]{6}$"},
+        "opacity": {"type": "number", "minimum": 0, "maximum": 1},
+        "x": {"type": "number", "minimum": -2, "maximum": 2},
+        "y": {"type": "number", "minimum": -2, "maximum": 2},
+        "scale": {"type": "number", "exclusiveMinimum": 0, "maximum": 4},
+        "rotation": {"type": "number", "minimum": -360, "maximum": 360},
+        "z": {"type": "integer", "minimum": -100, "maximum": 100},
+        "asset_role": {"enum": ["world", "evidence", "annotation", "teacher_stamp"]},
+        "motion_recipe": {"enum": ["hold", "marker_reveal", "slow_push", "evidence_slide", "whiteboard_trace"]}
+      }
+    }
+  }
+}

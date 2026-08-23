@@ -38,6 +38,16 @@ from content.video_engine.src.services.production_console_snapshot import (
     ProductionConsoleSnapshotError,
     validate_production_console_snapshot,
 )
+from content.video_engine.src.services.production_editor import (
+    ProductionEditorError,
+    compile_production_editor_snapshot,
+)
+from content.video_engine.src.services.production_editor_revisions import (
+    ProductionEditorRevisionError,
+    list_revisions,
+    persist_revision,
+    validate_and_replay_revision,
+)
 
 
 LOOPBACK_HOST = "127.0.0.1"
@@ -259,6 +269,7 @@ class ProductionConsoleService:
         self.config = config
         self._validate_startup_roots()
         self._queue_owned = render_queue is None
+        self._editor_snapshot_cache: dict[str, Any] | None = None
         self.queue = render_queue or LocalRenderQueue(
             self._job_handlers(),
             max_pending=config.queue_capacity,
@@ -340,7 +351,7 @@ class ProductionConsoleService:
             _safe_relative(review.get("artifact_path"))
         for asset in snapshot.get("assets", []):
             _safe_relative(asset.get("path"))
-            if asset.get("path_root") not in {"project", "repository"}:
+            if asset.get("path_root") not in {"project", "project_family", "repository"}:
                 raise ProductionConsoleError("SNAPSHOT_INVALID", "snapshot asset root is invalid")
 
     def health(self) -> dict[str, Any]:
@@ -370,17 +381,72 @@ class ProductionConsoleService:
             review.pop("artifact_path", None)
         return snapshot
 
+    def editor_snapshot(self, *, refresh: bool = False) -> dict[str, Any]:
+        if refresh or self._editor_snapshot_cache is None:
+            try:
+                self._editor_snapshot_cache = compile_production_editor_snapshot(
+                    self.config.project_root,
+                    repository_root=self.config.repository_root,
+                )
+            except ProductionEditorError as exc:
+                raise ProductionConsoleError(
+                    "EDITOR_SNAPSHOT_INVALID",
+                    "production editor snapshot is unavailable",
+                    status=HTTPStatus.CONFLICT,
+                ) from exc
+        return copy.deepcopy(self._editor_snapshot_cache)
+
+    def public_editor_snapshot(self) -> dict[str, Any]:
+        # Browser reloads and revision boundaries must observe current source
+        # hashes. Media requests may reuse this newly refreshed snapshot.
+        snapshot = self.editor_snapshot(refresh=True)
+        for artifact in snapshot.get("artifacts", []):
+            artifact.pop("path", None)
+        for asset in snapshot.get("assets", []):
+            asset.pop("path", None)
+            asset.pop("path_root", None)
+        for asset in snapshot.get("approved_assets", []):
+            asset.pop("path", None)
+            asset.pop("path_root", None)
+        snapshot.get("project_profile", {}).get("audio", {}).pop("path", None)
+        for track in snapshot.get("tracks", []):
+            for item in track.get("items", []):
+                item.pop("source_ref", None)
+        return snapshot
+
+    def public_component_catalog(self) -> dict[str, Any]:
+        return copy.deepcopy(self.editor_snapshot()["component_catalog"])
+
     def public_assets(self) -> list[dict[str, Any]]:
         return list(self.public_snapshot().get("assets", []))
 
     def public_reviews(self) -> list[dict[str, Any]]:
         return list(self.public_snapshot().get("reviews", []))
 
-    @staticmethod
-    def public_revisions() -> list[dict[str, Any]]:
-        # Gate A has no immutable revision artifacts yet. Returning a typed
-        # empty collection is preferable to inventing browser-local state.
-        return []
+    def public_revisions(self) -> list[dict[str, Any]]:
+        return list_revisions(self.config.runtime_root)
+
+    def validate_editor_revision(self, revision: Mapping[str, Any]) -> dict[str, Any]:
+        try:
+            validated, document = validate_and_replay_revision(revision, self.editor_snapshot(refresh=True))
+        except ProductionEditorRevisionError as exc:
+            return {
+                "valid": False,
+                "errors": [{"code": exc.code, "message": exc.message, "path": exc.path}],
+            }
+        return {
+            "valid": True,
+            "revision_id": validated["revision_id"],
+            "artifact_hash": validated["artifact_hash"],
+            "timeline_hash": document["artifact_hash"],
+        }
+
+    def save_editor_revision(self, revision: Mapping[str, Any]) -> dict[str, Any]:
+        try:
+            return persist_revision(revision, self.editor_snapshot(refresh=True), self.config.runtime_root)
+        except ProductionEditorRevisionError as exc:
+            status = HTTPStatus.CONFLICT if exc.code in {"STALE_SNAPSHOT", "STALE_SOURCE", "HASH_MISMATCH", "REVISION_EXISTS"} else HTTPStatus.BAD_REQUEST
+            raise ProductionConsoleError(exc.code, exc.message, status=status, details={"path": exc.path} if exc.path else None) from exc
 
     @staticmethod
     def _asset_map(snapshot: Mapping[str, Any]) -> dict[str, Mapping[str, Any]]:
@@ -411,6 +477,7 @@ class ProductionConsoleService:
         path_root = asset.get("path_root")
         root = {
             "project": self.config.project_root,
+            "project_family": self.config.project_root.parents[1],
             "repository": self.config.repository_root,
         }.get(path_root)
         if root is None:
@@ -436,7 +503,32 @@ class ProductionConsoleService:
 
     def media(self, asset_id: str) -> MediaPayload:
         asset = _safe_identifier(asset_id, "asset_id")
-        path, _record = self._resolve_asset(asset)
+        try:
+            path, _record = self._resolve_asset(asset)
+        except ProductionConsoleError as exc:
+            if exc.code != "ASSET_NOT_FOUND":
+                raise
+            editor_snapshot = self.editor_snapshot()
+            audio = editor_snapshot.get("project_profile", {}).get("audio", {})
+            if asset != audio.get("audio_id"):
+                path, _record = self._resolve_asset(asset, snapshot=editor_snapshot)
+                content_type = _MEDIA_TYPES.get(path.suffix.casefold())
+                if content_type is None:
+                    raise ProductionConsoleError(
+                        "MEDIA_TYPE_NOT_ALLOWED",
+                        "snapshot asset media type is not allowed",
+                        status=HTTPStatus.UNSUPPORTED_MEDIA_TYPE,
+                    )
+                return MediaPayload(body=path.read_bytes(), content_type=content_type, asset_id=asset)
+            relative = _safe_relative(audio.get("path"))
+            path = (self.config.project_root / relative).resolve()
+            if not _inside(path, self.config.project_root) or not path.is_file():
+                raise ProductionConsoleError("ASSET_NOT_FOUND", "canonical narration was not found", status=HTTPStatus.NOT_FOUND)
+            body = path.read_bytes()
+            if _sha256_bytes(body) != audio.get("sha256"):
+                raise ProductionConsoleError("ASSET_HASH_MISMATCH", "canonical narration hash does not match", status=HTTPStatus.CONFLICT)
+            content_type = _MEDIA_TYPES.get(path.suffix.casefold(), "audio/wav")
+            return MediaPayload(body=body, content_type=content_type, asset_id=asset)
         content_type = _MEDIA_TYPES.get(path.suffix.casefold())
         if content_type is None:
             raise ProductionConsoleError(
@@ -804,6 +896,15 @@ class _ConsoleRequestHandler(BaseHTTPRequestHandler):
             if path == "/api/snapshot":
                 self._success(self.service.public_snapshot())
                 return
+            if path == "/api/editor/snapshot":
+                self._success(self.service.public_editor_snapshot())
+                return
+            if path == "/api/editor/components":
+                self._success(self.service.public_component_catalog())
+                return
+            if path == "/api/editor/revisions":
+                self._success(self.service.public_revisions())
+                return
             if path == "/api/assets":
                 self._success(self.service.public_assets())
                 return
@@ -854,6 +955,12 @@ class _ConsoleRequestHandler(BaseHTTPRequestHandler):
         try:
             self._begin_request()
             path = unquote(urlsplit(self.path).path)
+            if path == "/api/editor/revisions/validate":
+                self._success(self.service.validate_editor_revision(self._read_json_body()))
+                return
+            if path == "/api/editor/revisions":
+                self._success(self.service.save_editor_revision(self._read_json_body()), status=HTTPStatus.CREATED)
+                return
             if path != "/api/jobs":
                 self._not_found(self._request_id_value)
                 return

@@ -76,6 +76,34 @@ const renderRegistryEntry = (definition: CompositionRegistryEntry): React.ReactE
           {...definition.metadata}
         />
       );
+    case "ProductionTimeline":
+      return (
+        <Composition
+          id={definition.id}
+          component={definition.component}
+          defaultProps={definition.defaultProps}
+          {...definition.metadata}
+        />
+      );
+    case "KenBurnsEffectProof":
+    case "TransitionEvidence60sProof":
+      return (
+        <Composition
+          id={definition.id}
+          component={definition.component}
+          defaultProps={definition.defaultProps}
+          {...definition.metadata}
+        />
+      );
+    case "AutopilotElevenLabsRecut":
+      return (
+        <Composition
+          id={definition.id}
+          component={definition.component}
+          defaultProps={definition.defaultProps}
+          {...definition.metadata}
+        />
+      );
     default:
       throw new Error(`Unknown composition: ${String(definition)}`);
   }

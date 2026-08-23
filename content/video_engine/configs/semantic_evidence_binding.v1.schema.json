@@ -1,0 +1,258 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://outreach-program.internal/schemas/semantic-evidence-binding.v1.json",
+  "title": "Semantic Evidence Binding v1",
+  "description": "Deterministic, inspectable evidence recommendations derived from approved deck semantic contexts.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "binding_id",
+    "project_id",
+    "snapshot_id",
+    "cue_id",
+    "beat_ids",
+    "claim_refs",
+    "world_plate",
+    "source_hashes",
+    "normalized_features",
+    "thresholds",
+    "eligible_candidates",
+    "rejected_candidates",
+    "recommendation_state",
+    "recommendation_reason",
+    "proposed_binding",
+    "accepted_binding",
+    "binding_errors",
+    "compiler_version",
+    "artifact_hash"
+  ],
+  "properties": {
+    "schema_version": {"const": "semantic_evidence_binding.v1"},
+    "binding_id": {"$ref": "#/$defs/id"},
+    "project_id": {"type": "string", "minLength": 1, "maxLength": 200},
+    "snapshot_id": {"type": "string", "minLength": 1, "maxLength": 200},
+    "cue_id": {"$ref": "#/$defs/id"},
+    "beat_ids": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/id"}},
+    "claim_refs": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+    "world_plate": {"$ref": "#/$defs/worldPlate"},
+    "source_hashes": {"$ref": "#/$defs/sourceHashes"},
+    "normalized_features": {"$ref": "#/$defs/features"},
+    "thresholds": {"$ref": "#/$defs/thresholds"},
+    "eligible_candidates": {"type": "array", "items": {"$ref": "#/$defs/candidate"}},
+    "rejected_candidates": {"type": "array", "items": {"$ref": "#/$defs/rejectedCandidate"}},
+    "recommendation_state": {"enum": ["recommended", "unmatched", "manual_only"]},
+    "recommendation_reason": {"type": "string", "minLength": 1, "maxLength": 500},
+    "proposed_binding": {"anyOf": [{"$ref": "#/$defs/proposedBinding"}, {"type": "null"}]},
+    "accepted_binding": {"type": "null"},
+    "binding_errors": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+    "compiler_version": {"type": "string", "minLength": 1},
+    "artifact_hash": {"$ref": "#/$defs/sha256"}
+  },
+  "$defs": {
+    "id": {"type": "string", "pattern": "^[a-z0-9]+(?:[._-][a-z0-9]+)*$"},
+    "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "rect": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["x", "y", "width", "height"],
+      "properties": {
+        "x": {"type": "number", "minimum": 0, "maximum": 1},
+        "y": {"type": "number", "minimum": 0, "maximum": 1},
+        "width": {"type": "number", "exclusiveMinimum": 0, "maximum": 1},
+        "height": {"type": "number", "exclusiveMinimum": 0, "maximum": 1}
+      }
+    },
+    "point": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["x", "y"],
+      "properties": {
+        "x": {"type": "number", "minimum": 0, "maximum": 1},
+        "y": {"type": "number", "minimum": 0, "maximum": 1}
+      }
+    },
+    "tokens": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["tokens", "concepts"],
+      "properties": {
+        "tokens": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "concepts": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}}
+      }
+    },
+    "features": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["cue", "beat", "claim", "world", "motion"],
+      "properties": {
+        "cue": {"$ref": "#/$defs/tokens"},
+        "beat": {"$ref": "#/$defs/tokens"},
+        "claim": {"$ref": "#/$defs/tokens"},
+        "world": {"$ref": "#/$defs/tokens"},
+        "motion": {"$ref": "#/$defs/tokens"}
+      }
+    },
+    "worldPlate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["asset_id", "sha256", "profile_id", "profile_status"],
+      "properties": {
+        "asset_id": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "profile_id": {"$ref": "#/$defs/id"},
+        "profile_status": {"enum": ["reviewed", "experimental", "manual_only", "unavailable"]}
+      }
+    },
+    "sourceHashes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["snapshot", "cue", "beat", "claim", "motion_plan", "plate_profile", "asset_catalog", "approval"],
+      "properties": {
+        "snapshot": {"$ref": "#/$defs/sha256"},
+        "cue": {"$ref": "#/$defs/sha256"},
+        "beat": {"$ref": "#/$defs/sha256"},
+        "claim": {"$ref": "#/$defs/sha256"},
+        "motion_plan": {"$ref": "#/$defs/sha256"},
+        "plate_profile": {"$ref": "#/$defs/sha256"},
+        "asset_catalog": {"$ref": "#/$defs/sha256"},
+        "approval": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "thresholds": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["min_score", "min_lead_margin"],
+      "properties": {
+        "min_score": {"type": "number", "minimum": 0, "maximum": 100},
+        "min_lead_margin": {"type": "number", "minimum": 0, "maximum": 100}
+      }
+    },
+    "breakdown": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["points", "matched", "details"],
+      "properties": {
+        "points": {"type": "number", "minimum": -100, "maximum": 100},
+        "matched": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+        "details": {"type": "string", "minLength": 1, "maxLength": 500}
+      }
+    },
+    "candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "asset_id",
+        "deck_id",
+        "slide_id",
+        "path",
+        "sha256",
+        "rank",
+        "total_score",
+        "lead_margin",
+        "score_breakdown",
+        "rejection_reasons"
+      ],
+      "properties": {
+        "asset_id": {"type": "string", "minLength": 1},
+        "deck_id": {"type": "string", "minLength": 1},
+        "slide_id": {"type": "string", "minLength": 1},
+        "slide_number": {"type": ["integer", "null"], "minimum": 1},
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "source_sha256": {"anyOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]},
+        "rank": {"type": "integer", "minimum": 1},
+        "total_score": {"type": "number", "minimum": -100, "maximum": 100},
+        "lead_margin": {"type": "number", "minimum": -100, "maximum": 100},
+        "score_breakdown": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "exact_cue_reference",
+            "exact_claim_reference",
+            "claim_relationship",
+            "evidence_role_compatibility",
+            "concept_overlap",
+            "world_plate_compatibility",
+            "slot_compatibility",
+            "reuse_policy",
+            "adjacency",
+            "readability",
+            "clutter",
+            "total"
+          ],
+          "properties": {
+            "exact_cue_reference": {"$ref": "#/$defs/breakdown"},
+            "exact_claim_reference": {"$ref": "#/$defs/breakdown"},
+            "claim_relationship": {"$ref": "#/$defs/breakdown"},
+            "evidence_role_compatibility": {"$ref": "#/$defs/breakdown"},
+            "concept_overlap": {"$ref": "#/$defs/breakdown"},
+            "world_plate_compatibility": {"$ref": "#/$defs/breakdown"},
+            "slot_compatibility": {"$ref": "#/$defs/breakdown"},
+            "reuse_policy": {"$ref": "#/$defs/breakdown"},
+            "adjacency": {"$ref": "#/$defs/breakdown"},
+            "readability": {"$ref": "#/$defs/breakdown"},
+            "clutter": {"$ref": "#/$defs/breakdown"},
+            "total": {"type": "number", "minimum": -100, "maximum": 100}
+          }
+        },
+        "rejection_reasons": {"type": "array", "uniqueItems": true, "items": {"type": "string"}}
+      }
+    },
+    "rejectedCandidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["asset_id", "deck_id", "slide_id", "path", "sha256", "rejection_reasons"],
+      "properties": {
+        "asset_id": {"type": "string", "minLength": 1},
+        "deck_id": {"type": "string", "minLength": 1},
+        "slide_id": {"type": "string", "minLength": 1},
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "rejection_reasons": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}}
+      }
+    },
+    "proposedBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["asset_id", "asset_sha256", "slot_id", "slot_rect", "caption_zone", "annotation_anchor", "source_marker", "frame_range"],
+      "properties": {
+        "asset_id": {"type": "string", "minLength": 1},
+        "asset_sha256": {"$ref": "#/$defs/sha256"},
+        "slot_id": {"$ref": "#/$defs/id"},
+        "slot_rect": {"$ref": "#/$defs/rect"},
+        "caption_zone": {"$ref": "#/$defs/regionRef"},
+        "annotation_anchor": {"$ref": "#/$defs/point"},
+        "source_marker": {"$ref": "#/$defs/sourceMarkerPlacement"},
+        "frame_range": {"$ref": "#/$defs/frameRange"}
+      }
+    },
+    "regionRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["region_id", "rect"],
+      "properties": {
+        "region_id": {"$ref": "#/$defs/id"},
+        "rect": {"$ref": "#/$defs/rect"}
+      }
+    },
+    "sourceMarkerPlacement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["placement", "inset"],
+      "properties": {
+        "placement": {"const": "inside_slot"},
+        "inset": {"type": "number", "minimum": 0, "maximum": 0.25}
+      }
+    },
+    "frameRange": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["start_frame", "end_frame"],
+      "properties": {
+        "start_frame": {"type": "integer", "minimum": 0},
+        "end_frame": {"type": "integer", "exclusiveMinimum": 0}
+      }
+    }
+  }
+}

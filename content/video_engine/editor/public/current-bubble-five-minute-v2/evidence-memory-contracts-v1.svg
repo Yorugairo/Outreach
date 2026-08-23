@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
+  <defs>
+    <filter id="paper"><feTurbulence baseFrequency="0.7" numOctaves="3" seed="19" result="noise"/><feColorMatrix in="noise" type="saturate" values="0"/><feComponentTransfer><feFuncA type="table" tableValues="0 0.13"/></feComponentTransfer></filter>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="18" stdDeviation="14" flood-color="#18222b" flood-opacity="0.22"/></filter>
+    <pattern id="grid" width="64" height="64" patternUnits="userSpaceOnUse"><path d="M64 0H0V64" fill="none" stroke="#143a52" stroke-opacity="0.09" stroke-width="2"/></pattern>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#d3a329"/></marker>
+  </defs>
+  <rect width="1920" height="1080" fill="#f4ead7"/>
+  <rect width="1920" height="1080" fill="url(#grid)"/>
+  <rect width="1920" height="1080" filter="url(#paper)" opacity="0.7"/>
+  <rect x="64" y="54" width="1792" height="972" rx="34" fill="none" stroke="#173d58" stroke-width="8"/>
+  <path d="M96 190H1824" stroke="#d19b2a" stroke-width="6"/>
+  <text x="110" y="112" font-family="Inter,Arial,sans-serif" font-size="28" font-weight="800" letter-spacing="5" fill="#bb4934">COMMITMENT EVIDENCE</text>
+  <text x="110" y="172" font-family="Inter,Arial,sans-serif" font-size="54" font-weight="900" fill="#172934">Buyers Are Reserving the Ovens</text>
+  <g filter="url(#shadow)">
+  <rect x="130" y="250" width="500" height="590" rx="30" fill="#0f6674"/>
+  <text x="190" y="430" font-family="Inter,Arial" font-size="210" font-weight="900" fill="#f6d36b">16</text>
+  <text x="190" y="490" font-family="Inter,Arial" font-size="34" font-weight="800" fill="#fff6df">STRATEGIC AGREEMENTS</text>
+  <rect x="700" y="250" width="500" height="590" rx="30" fill="#d36a4a"/>
+  <text x="755" y="430" font-family="Inter,Arial" font-size="210" font-weight="900" fill="#fff6df">5</text>
+  <text x="755" y="490" font-family="Inter,Arial" font-size="34" font-weight="800" fill="#fff6df">YEARS, TYPICALLY</text>
+  <rect x="1270" y="250" width="500" height="590" rx="30" fill="#173d58"/>
+  <text x="1325" y="402" font-family="Inter,Arial" font-size="115" font-weight="900" fill="#f6d36b">20%</text>
+  <text x="1325" y="455" font-family="Inter,Arial" font-size="30" font-weight="800" fill="#fff6df">DRAM VOLUME</text>
+  <text x="1325" y="610" font-family="Inter,Arial" font-size="115" font-weight="900" fill="#f6d36b">⅓</text>
+  <text x="1325" y="663" font-family="Inter,Arial" font-size="30" font-weight="800" fill="#fff6df">NAND VOLUME</text>
+</g>
+<text x="960" y="905" text-anchor="middle" font-family="Inter,Arial" font-size="31" font-weight="700" fill="#172934">Take-or-pay signals buyer commitment. It does not guarantee revenue or returns.</text>
+  <rect x="94" y="952" width="1732" height="54" rx="12" fill="#173d58"/>
+  <text x="120" y="987" font-family="Roboto Mono,Consolas,monospace" font-size="21" fill="#f7eddb">Micron Technology · Fiscal Q3 2026 prepared remarks · pp. 1–2 · as of 2026-06-24</text>
+</svg>

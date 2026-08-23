@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "editor_component_preset.v1",
+  "title": "Typed Editor Component Preset v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "preset_id", "component_id", "label", "props", "artifact_hash"],
+  "properties": {
+    "schema_version": {"const": "editor_component_preset.v1"},
+    "preset_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]{2,127}$"},
+    "component_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]{2,127}$"},
+    "label": {"type": "string", "minLength": 1, "maxLength": 256},
+    "props": {"$ref": "#/$defs/props"},
+    "protected_props": {
+      "type": "array",
+      "maxItems": 16,
+      "uniqueItems": true,
+      "items": {"enum": ["asset_id", "asset_sha256", "approval_scope", "evidence_eligible", "audio_sha256", "word_timing"]}
+    },
+    "artifact_hash": {"$ref": "#/$defs/sha256"}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "props": {
+      "type": "object",
+      "minProperties": 1,
+      "maxProperties": 32,
+      "additionalProperties": false,
+      "properties": {
+        "style_id": {"type": "string", "minLength": 1, "maxLength": 128},
+        "variant": {"type": "string", "minLength": 1, "maxLength": 128},
+        "font_size": {"type": "number", "exclusiveMinimum": 0, "maximum": 512},
+        "line_height": {"type": "number", "exclusiveMinimum": 0, "maximum": 4},
+        "padding": {"type": "number", "minimum": 0, "maximum": 512},
+        "color": {"type": "string", "pattern": "^#[0-9a-fA-F]{6}$"},
+        "background_color": {"type": "string", "pattern": "^#[0-9a-fA-F]{6}$"},
+        "stroke_color": {"type": "string", "pattern": "^#[0-9a-fA-F]{6}$"},
+        "opacity": {"type": "number", "minimum": 0, "maximum": 1},
+        "x": {"type": "number", "minimum": -2, "maximum": 2},
+        "y": {"type": "number", "minimum": -2, "maximum": 2},
+        "scale": {"type": "number", "exclusiveMinimum": 0, "maximum": 4},
+        "rotation": {"type": "number", "minimum": -360, "maximum": 360},
+        "z": {"type": "integer", "minimum": -100, "maximum": 100},
+        "asset_role": {"enum": ["world", "evidence", "annotation", "teacher_stamp"]},
+        "motion_recipe": {"enum": ["hold", "marker_reveal", "slow_push", "evidence_slide", "whiteboard_trace"]}
+      }
+    }
+  }
+}

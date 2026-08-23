@@ -318,12 +318,10 @@ def compile_production_console_snapshot(
     repository = Path(repository_root).resolve() if repository_root else Path(__file__).resolve().parents[3]
     if not repository.is_dir():
         raise ProductionConsoleSnapshotError(f"repository root does not exist: {repository}")
-    try:
-        root.relative_to(repository)
-    except ValueError as exc:
-        if repository_root is not None:
-            raise ProductionConsoleSnapshotError("project root must be contained by repository root") from exc
-        repository = root
+    # The episode and reusable production-visual catalog may live in separate
+    # explicitly configured workspace roots.  Every resolved artifact is still
+    # constrained to its declared root below; requiring one root to contain the
+    # other would make multi-worktree editing impossible without copying media.
 
     degraded: list[str] = []
     specs = [

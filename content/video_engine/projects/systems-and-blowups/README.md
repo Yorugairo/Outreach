@@ -50,6 +50,8 @@ keep one canonical woodblock world full-frame, then reveal one literal source
 crop at a time in a reserved callout or inset. The durable contract and proof
 links live in
 [`learning/world-plate-evidence-rail-breakthrough.v1.md`](learning/world-plate-evidence-rail-breakthrough.v1.md).
+The current motion rules, including the approved semantic transition palette,
+live in [`learning/world-plate-evidence-caption-grammar.v1.md`](learning/world-plate-evidence-caption-grammar.v1.md).
 
 Recommended order for each episode:
 

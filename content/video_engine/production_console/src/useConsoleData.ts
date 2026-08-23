@@ -1,16 +1,16 @@
 import {useEffect, useMemo, useState} from 'react';
-import {getHealth, getSnapshot} from './api';
-import type {Health, Snapshot} from './types';
+import {getEditorSnapshot, getHealth} from './api';
+import type {Health, SnapshotV2} from './types';
 
 export function useConsoleData() {
-  const [snapshot, setSnapshot] = useState<Snapshot | null>(null);
+  const [snapshot, setSnapshot] = useState<SnapshotV2 | null>(null);
   const [health, setHealth] = useState<Health | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     let alive = true;
-    Promise.all([getSnapshot(), getHealth()])
+    Promise.all([getEditorSnapshot(), getHealth()])
       .then(([nextSnapshot, nextHealth]) => {
         if (!alive) return;
         setSnapshot(nextSnapshot);

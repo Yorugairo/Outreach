@@ -1,0 +1,31 @@
+{
+  "schema_version": "production_console_snapshot.v2",
+  "width": 1920,
+  "height": 1080,
+  "fps": 30,
+  "durationInFrames": 180,
+  "backgroundColor": "#0b1015",
+  "diagnosticMode": true,
+  "assetMap": {
+    "memory-skepticism-v2": "p31-proof/memory-skepticism-v2.png",
+    "valuation-evidence": "p31-proof/valuation-bubble-v1.png",
+    "whiteboard-draw-hand-a-v1": "p31-proof/draw-hand-a-v1.png"
+  },
+  "items": [
+    {"id": "memory-world", "type": "world_plate", "from": 0, "durationInFrames": 180, "assetId": "memory-skepticism-v2", "zIndex": 0, "layout": {"fit": "cover"}},
+    {"id": "valuation-evidence", "type": "evidence", "from": 15, "durationInFrames": 120, "assetId": "valuation-evidence", "zIndex": 40, "layout": {"x": -0.335, "y": 0.39, "width": 0.25, "height": 0.20}},
+    {"id": "valuation-leader", "type": "annotation", "from": 15, "durationInFrames": 120, "overlayKind": "arrow", "zIndex": 55, "layout": {"x": -0.19, "y": 0.18, "width": 0.14, "height": 0.14}},
+    {"id": "caption-proof", "type": "caption", "from": 0, "durationInFrames": 135, "caption_preset": "word_by_word", "text": "The index looks expensive. The memory bottleneck is physical.", "word_tokens": [
+      {"text": "The", "startFrame": 0, "endFrame": 7},
+      {"text": "index", "startFrame": 8, "endFrame": 16},
+      {"text": "looks", "startFrame": 17, "endFrame": 25},
+      {"text": "expensive.", "startFrame": 26, "endFrame": 39},
+      {"text": "The", "startFrame": 48, "endFrame": 55},
+      {"text": "memory", "startFrame": 56, "endFrame": 67},
+      {"text": "bottleneck", "startFrame": 68, "endFrame": 83},
+      {"text": "is", "startFrame": 84, "endFrame": 89},
+      {"text": "physical.", "startFrame": 90, "endFrame": 105}
+    ], "fontSize": 24, "zIndex": 72, "layout": {"x": -0.31, "y": -0.42, "width": 0.38, "height": 0.12}},
+    {"id": "citation-metadata", "type": "annotation", "from": 0, "durationInFrames": 180, "citation_id": "memory-bottleneck-not-bubble-inference", "diagnostic_label": "claim · memory-bottleneck-not-bubble-inference", "zIndex": 90, "layout": {"x": 0.28, "y": -0.42, "width": 0.42, "height": 0.08}}
+  ]
+}

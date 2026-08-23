@@ -1,0 +1,432 @@
+{
+  "schema_version": "p32_gate_b_review.v1",
+  "coverage_hash": "ab547e586cefbb53e699bc69b88633648d4ac2a4c5114929a58281bc87d18254",
+  "approval_boundary": "Review only. No item is promoted or render-eligible from this packet.",
+  "crops": [
+    {
+      "asset_id": "silicon-reality-gap-s05-triopoly-formation-v1",
+      "deck_id": "silicon-reality-gap",
+      "slide_number": 5,
+      "source_variant": "cleaned",
+      "bbox_norm": [
+        0.08,
+        0.25,
+        0.84,
+        0.64
+      ],
+      "what_it_is": "A hand-drawn consolidation scene with a crushing funnel, failed rivals, and the Samsung/Micron/SK hynix survivors.",
+      "visual_role": "mechanism",
+      "representation_mode": "accurate_mechanism",
+      "factual_text": true,
+      "claim_refs": [],
+      "cue_refs": [],
+      "not_what_it_means": [
+        "It is a visual explanation of consolidation, not a complete historical dataset."
+      ],
+      "context_status": "review_only",
+      "rights_state": "source_review_only",
+      "review_state": "review_only",
+      "render_eligible": false,
+      "deck_title": "The Silicon Reality Gap",
+      "path": "crops/silicon-reality-gap-s05-triopoly-formation-v1.png",
+      "parent_path": "content/video_engine/projects/systems-and-blowups/sources/decks/teacher-stamped-production-visuals/silicon-reality-gap/slides/slide-005.png",
+      "parent_sha256": "6f1be79349e27cb212fd6462d393a1a5456e8813c275a311bc2ef73cddc109ec",
+      "crop_sha256": "edd48196bfad2e59c465766a9045f5597de3735018ca957953e07aa71cf76d90",
+      "pixel_bounds": {
+        "left": 110,
+        "top": 192,
+        "right": 1266,
+        "bottom": 684,
+        "width": 1156,
+        "height": 492
+      },
+      "cue_candidates": []
+    },
+    {
+      "asset_id": "silicon-reality-gap-s07-hbm-stack-v1",
+      "deck_id": "silicon-reality-gap",
+      "slide_number": 7,
+      "source_variant": "cleaned",
+      "bbox_norm": [
+        0.31,
+        0.24,
+        0.4,
+        0.67
+      ],
+      "what_it_is": "The central illustrated HBM stack with layered dies, TSV connections, and a base package.",
+      "visual_role": "mechanism",
+      "representation_mode": "accurate_mechanism",
+      "factual_text": false,
+      "claim_refs": [],
+      "cue_refs": [],
+      "not_what_it_means": [
+        "The crop does not by itself establish the numeric bandwidth or yield claims around it."
+      ],
+      "context_status": "review_only",
+      "rights_state": "source_review_only",
+      "review_state": "review_only",
+      "render_eligible": false,
+      "deck_title": "The Silicon Reality Gap",
+      "path": "crops/silicon-reality-gap-s07-hbm-stack-v1.png",
+      "parent_path": "content/video_engine/projects/systems-and-blowups/sources/decks/teacher-stamped-production-visuals/silicon-reality-gap/slides/slide-007.png",
+      "parent_sha256": "4489a74e68017b570188b946787c7e6ffa46d71318ffe8029ea035a35ad16168",
+      "crop_sha256": "37bf75cbeae14216f6a52bfb9bdbd02e79898d937896ceedbc06be095aecde28",
+      "pixel_bounds": {
+        "left": 427,
+        "top": 184,
+        "right": 977,
+        "bottom": 699,
+        "width": 550,
+        "height": 515
+      },
+      "cue_candidates": []
+    },
+    {
+      "asset_id": "silicon-antidote-s02-valuation-bubble-v1",
+      "deck_id": "silicon-antidote",
+      "slide_number": 2,
+      "source_variant": "cleaned",
+      "bbox_norm": [
+        0.04,
+        0.17,
+        0.43,
+        0.76
+      ],
+      "what_it_is": "A red S&P 500 valuation balloon labeled with the source deck's CAPE comparison.",
+      "visual_role": "evidence",
+      "representation_mode": "literal_evidence",
+      "factual_text": true,
+      "claim_refs": [],
+      "cue_refs": [],
+      "not_what_it_means": [
+        "The crop preserves the source claim but is not independent verification of the metric."
+      ],
+      "context_status": "review_only",
+      "rights_state": "source_review_only",
+      "review_state": "review_only",
+      "render_eligible": false,
+      "deck_title": "The Silicon Antidote",
+      "path": "crops/silicon-antidote-s02-valuation-bubble-v1.png",
+      "parent_path": "content/video_engine/projects/systems-and-blowups/sources/decks/teacher-stamped-production-visuals/silicon-antidote/slides/slide-002.png",
+      "parent_sha256": "abceb7c3be9c30ac5874eef12be7ab357fd28e30c3de5530f7cf1b23d222e6fc",
+      "crop_sha256": "efcd106246d93c45d9021c53fbe93836abc42e248852959b6281e060514558b5",
+      "pixel_bounds": {
+        "left": 55,
+        "top": 131,
+        "right": 647,
+        "bottom": 714,
+        "width": 592,
+        "height": 583
+      },
+      "cue_candidates": []
+    },
+    {
+      "asset_id": "silicon-antidote-s02-memory-triopoly-v1",
+      "deck_id": "silicon-antidote",
+      "slide_number": 2,
+      "source_variant": "cleaned",
+      "bbox_norm": [
+        0.5,
+        0.15,
+        0.48,
+        0.8
+      ],
+      "what_it_is": "Three illustrated memory-company vaults with source valuation and margin cards.",
+      "visual_role": "evidence",
+      "representation_mode": "literal_evidence",
+      "factual_text": true,
+      "claim_refs": [],
+      "cue_refs": [],
+      "not_what_it_means": [
+        "The companies and figures remain source-deck evidence and should not be generalized beyond the cited research."
+      ],
+      "context_status": "review_only",
+      "rights_state": "source_review_only",
+      "review_state": "review_only",
+      "render_eligible": false,
+      "deck_title": "The Silicon Antidote",
+      "path": "crops/silicon-antidote-s02-memory-triopoly-v1.png",
+      "parent_path": "content/video_engine/projects/systems-and-blowups/sources/decks/teacher-stamped-production-visuals/silicon-antidote/slides/slide-002.png",
+      "parent_sha256": "abceb7c3be9c30ac5874eef12be7ab357fd28e30c3de5530f7cf1b23d222e6fc",
+      "crop_sha256": "234ae1b5801d6f5d3486000b54f8fec89df8c4eee4a9e5baa29119ccc882fc09",
+      "pixel_bounds": {
+        "left": 688,
+        "top": 115,
+        "right": 1348,
+        "bottom": 730,
+        "width": 660,
+        "height": 615
+      },
+      "cue_candidates": [
+        {
+          "cue_id": "cbm-cue-086",
+          "scene_id": "finance-scene-05",
+          "start_s": 288.344,
+          "end_s": 291.014,
+          "excerpt": "This is also bigger than three memory companies.",
+          "match_basis": "lexical_context_only"
+        },
+        {
+          "cue_id": "cbm-cue-254",
+          "scene_id": "finance-scene-10",
+          "start_s": 856.256,
+          "end_s": 859.019,
+          "excerpt": "Memory has its own three failure points.",
+          "match_basis": "lexical_context_only"
+        }
+      ]
+    },
+    {
+      "asset_id": "silicon-antidote-s09-capacity-penalty-v1",
+      "deck_id": "silicon-antidote",
+      "slide_number": 9,
+      "source_variant": "cleaned",
+      "bbox_norm": [
+        0.02,
+        0.02,
+        0.96,
+        0.95
+      ],
+      "what_it_is": "A balance-scale illustration comparing one HBM unit with three standard DDR5 units and the stated capacity penalty.",
+      "visual_role": "mechanism",
+      "representation_mode": "literal_evidence",
+      "factual_text": true,
+      "claim_refs": [],
+      "cue_refs": [],
+      "not_what_it_means": [
+        "The visual comparison does not replace the underlying wafer-capacity calculation."
+      ],
+      "context_status": "review_only",
+      "rights_state": "source_review_only",
+      "review_state": "review_only",
+      "render_eligible": false,
+      "deck_title": "The Silicon Antidote",
+      "path": "crops/silicon-antidote-s09-capacity-penalty-v1.png",
+      "parent_path": "content/video_engine/projects/systems-and-blowups/sources/decks/teacher-stamped-production-visuals/silicon-antidote/slides/slide-009.png",
+      "parent_sha256": "979d3b9bdb5d190c5b3a5d56935ccb39a968d960d591235b870e2b428acdd66c",
+      "crop_sha256": "c97bc44d239f2890f85ac16b817f7a867020bd220558e786424165ca360896a0",
+      "pixel_bounds": {
+        "left": 28,
+        "top": 15,
+        "right": 1348,
+        "bottom": 745,
+        "width": 1320,
+        "height": 730
+      },
+      "cue_candidates": [
+        {
+          "cue_id": "cbm-cue-054",
+          "scene_id": "finance-scene-03",
+          "start_s": 178.096,
+          "end_s": 181.754,
+          "excerpt": "As manufacturers devote more capacity to HBM,",
+          "match_basis": "lexical_context_only"
+        },
+        {
+          "cue_id": "cbm-cue-059",
+          "scene_id": "finance-scene-03",
+          "start_s": 196.185,
+          "end_s": 199.749,
+          "excerpt": "Samsung says concentrating capacity on HBM and server",
+          "match_basis": "lexical_context_only"
+        }
+      ]
+    },
+    {
+      "asset_id": "silicon-antidote-s10-ram-ageddon-v1",
+      "deck_id": "silicon-antidote",
+      "slide_number": 10,
+      "source_variant": "cleaned",
+      "bbox_norm": [
+        0.12,
+        0.18,
+        0.86,
+        0.74
+      ],
+      "what_it_is": "A central RAM-ageddon burst with opposing blue supply arrows, red demand arrows, and pinned source notes.",
+      "visual_role": "mechanism",
+      "representation_mode": "accurate_mechanism",
+      "factual_text": true,
+      "claim_refs": [],
+      "cue_refs": [],
+      "not_what_it_means": [
+        "RAM-ageddon is a declared explanatory label, not a formal market classification."
+      ],
+      "context_status": "review_only",
+      "rights_state": "source_review_only",
+      "review_state": "review_only",
+      "render_eligible": false,
+      "deck_title": "The Silicon Antidote",
+      "path": "crops/silicon-antidote-s10-ram-ageddon-v1.png",
+      "parent_path": "content/video_engine/projects/systems-and-blowups/sources/decks/teacher-stamped-production-visuals/silicon-antidote/slides/slide-010.png",
+      "parent_sha256": "97de14b862c64cc704f2c336b23cf90de994672fabad625499ecb0f8dc84d1d2",
+      "crop_sha256": "211ee46af92e2263812f1c453f9d5c086a833ad2dae7016115fe73a560565dfa",
+      "pixel_bounds": {
+        "left": 165,
+        "top": 138,
+        "right": 1348,
+        "bottom": 707,
+        "width": 1183,
+        "height": 569
+      },
+      "cue_candidates": [
+        {
+          "cue_id": "cbm-cue-078",
+          "scene_id": "finance-scene-04",
+          "start_s": 263.521,
+          "end_s": 267.051,
+          "excerpt": "while saying demand exceeded supply capacity.",
+          "match_basis": "lexical_context_only"
+        }
+      ]
+    },
+    {
+      "asset_id": "silicon-antidote-s14-diagnostic-matrix-v1",
+      "deck_id": "silicon-antidote",
+      "slide_number": 14,
+      "source_variant": "cleaned",
+      "bbox_norm": [
+        0.06,
+        0.16,
+        0.88,
+        0.76
+      ],
+      "what_it_is": "A two-column diagnostic matrix contrasting the S&P 500 index with the memory triopoly.",
+      "visual_role": "evidence",
+      "representation_mode": "literal_evidence",
+      "factual_text": true,
+      "claim_refs": [],
+      "cue_refs": [],
+      "not_what_it_means": [
+        "The matrix is a source summary and should remain bound to the report's evidence register."
+      ],
+      "context_status": "review_only",
+      "rights_state": "source_review_only",
+      "review_state": "review_only",
+      "render_eligible": false,
+      "deck_title": "The Silicon Antidote",
+      "path": "crops/silicon-antidote-s14-diagnostic-matrix-v1.png",
+      "parent_path": "content/video_engine/projects/systems-and-blowups/sources/decks/teacher-stamped-production-visuals/silicon-antidote/slides/slide-014.png",
+      "parent_sha256": "e66c67c872b79c0bcf9e2bfebd800e0b7b8db85915df857dc395080b8e189024",
+      "crop_sha256": "6ec8e5b2f7a3baefdb4d3c5835a26bf9aff09cfa899bf257c2cb72c6150754f1",
+      "pixel_bounds": {
+        "left": 83,
+        "top": 123,
+        "right": 1293,
+        "bottom": 707,
+        "width": 1210,
+        "height": 584
+      },
+      "cue_candidates": [
+        {
+          "cue_id": "cbm-cue-288",
+          "scene_id": "finance-scene-11",
+          "start_s": 970.695,
+          "end_s": 974.479,
+          "excerpt": "memory has a cable. The \u201csafe\u201d index trade deserves a closer",
+          "match_basis": "lexical_context_only"
+        }
+      ]
+    },
+    {
+      "asset_id": "silicon-value-software-bubble-s08-failure-triptych-v1",
+      "deck_id": "silicon-value-software-bubble",
+      "slide_number": 8,
+      "source_variant": "cleaned",
+      "bbox_norm": [
+        0.05,
+        0.18,
+        0.91,
+        0.7
+      ],
+      "what_it_is": "A three-panel failure-point plate covering backgrinding, TSV etching, and wafer-level testing.",
+      "visual_role": "mechanism",
+      "representation_mode": "accurate_mechanism",
+      "factual_text": true,
+      "claim_refs": [],
+      "cue_refs": [],
+      "not_what_it_means": [
+        "The three panels are a compact explanatory sequence, not a complete process specification."
+      ],
+      "context_status": "review_only",
+      "rights_state": "source_review_only",
+      "review_state": "review_only",
+      "render_eligible": false,
+      "deck_title": "Silicon Value in a Software Bubble",
+      "path": "crops/silicon-value-software-bubble-s08-failure-triptych-v1.png",
+      "parent_path": "content/video_engine/projects/systems-and-blowups/sources/decks/teacher-stamped-production-visuals/silicon-value-software-bubble/slides/slide-008.png",
+      "parent_sha256": "7dce1ef9ffcdb923b8f5bc238b77ada8648c6b743d99b936eeb0cc5353b94e4d",
+      "crop_sha256": "45746a15bb744a46c9d151b54f8dead0d84577a4dc67ce21f9e85d8fd922d5a4",
+      "pixel_bounds": {
+        "left": 69,
+        "top": 138,
+        "right": 1321,
+        "bottom": 676,
+        "width": 1252,
+        "height": 538
+      },
+      "cue_candidates": []
+    },
+    {
+      "asset_id": "silicon-value-software-bubble-s15-opportunity-path-v1",
+      "deck_id": "silicon-value-software-bubble",
+      "slide_number": 15,
+      "source_variant": "cleaned",
+      "bbox_norm": [
+        0.03,
+        0.23,
+        0.95,
+        0.6
+      ],
+      "what_it_is": "A paired red vulnerability path and blue opportunity path linking valuation, liquidity, physical constraints, and compressed multiples.",
+      "visual_role": "evidence",
+      "representation_mode": "literal_evidence",
+      "factual_text": true,
+      "claim_refs": [],
+      "cue_refs": [],
+      "not_what_it_means": [
+        "The path is the deck's thesis summary, not an investment recommendation."
+      ],
+      "context_status": "review_only",
+      "rights_state": "source_review_only",
+      "review_state": "review_only",
+      "render_eligible": false,
+      "deck_title": "Silicon Value in a Software Bubble",
+      "path": "crops/silicon-value-software-bubble-s15-opportunity-path-v1.png",
+      "parent_path": "content/video_engine/projects/systems-and-blowups/sources/decks/teacher-stamped-production-visuals/silicon-value-software-bubble/slides/slide-015.png",
+      "parent_sha256": "8fac0f890b74cfa7e77e5e710dcdd364e88fa8477901b289f642624cf2c94857",
+      "crop_sha256": "b382d7cb522fc818bd42e12000fdde2e49912f95c325995e633d7dbbd1873249",
+      "pixel_bounds": {
+        "left": 41,
+        "top": 177,
+        "right": 1348,
+        "bottom": 637,
+        "width": 1307,
+        "height": 460
+      },
+      "cue_candidates": []
+    }
+  ],
+  "generated_illustration_candidates": [
+    {
+      "asset_id": "passive-index-feedback-loop-illustration-candidate-v1",
+      "path": "generated/passive-index-feedback-loop-illustration-candidate-v1.png",
+      "story_need": "Illustrate automatic capital-flow feedback while the index-concentration mechanism is discussed.",
+      "permitted_use": "Explanatory illustration only; it carries no factual claim, metric, source citation, or literal evidence status.",
+      "target_range": "S&P 500 mechanism scenes, subject to later semantic-binding review.",
+      "sha256": "54ff2a2a20f4b76cdae27a34cc30fed115ef86f32b8cf725184708b744f7dd97",
+      "evidence_state": "illustration_candidate",
+      "render_eligible": false
+    },
+    {
+      "asset_id": "capacity-reservations-illustration-candidate-v1",
+      "path": "generated/capacity-reservations-illustration-candidate-v1.png",
+      "story_need": "Illustrate buyer commitments consuming open capacity while contracts/reservations are discussed.",
+      "permitted_use": "Explanatory illustration only; it carries no factual claim, metric, source citation, or literal evidence status.",
+      "target_range": "Contracts and capacity scenes, subject to later semantic-binding review.",
+      "sha256": "3b2ded5153de13d25708b6d6e6e5f117ecc69825261012f75fc1ed76cc03e7ae",
+      "evidence_state": "illustration_candidate",
+      "render_eligible": false
+    }
+  ]
+}

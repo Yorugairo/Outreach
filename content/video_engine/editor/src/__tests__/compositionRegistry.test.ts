@@ -12,6 +12,9 @@ import { Finance2DStickProof } from "../Finance2DStickProof";
 import { FinanceSketchbookProof } from "../FinanceSketchbookProof";
 import { FinanceStealthWealthProof } from "../FinanceStealthWealthProof";
 import { ProductionEvidenceComposition } from "../ProductionEvidenceComposition";
+import { ProductionTimelineComposition } from "../ProductionTimelineComposition";
+import { KenBurnsEffectProof } from "../KenBurnsEffectProof";
+import { TransitionEvidence60sProof } from "../TransitionEvidence60sProof";
 
 const editorRoot = new URL("../../", import.meta.url);
 
@@ -27,9 +30,12 @@ describe("composition registry", () => {
         "FinanceStealthWealthProof",
         "Finance2DStickProof",
         "ProductionEvidence",
+        "ProductionTimeline",
+        "KenBurnsEffectProof",
+        "TransitionEvidence60sProof",
       ],
     );
-    assert.equal(new Set(COMPOSITION_REGISTRY.map((definition) => definition.id)).size, 7);
+    assert.equal(new Set(COMPOSITION_REGISTRY.map((definition) => definition.id)).size, 10);
 
     const components = new Map(COMPOSITION_REGISTRY.map((definition) => [definition.id, definition.component]));
     assert.equal(components.get("Editorial"), EditorialComposition);
@@ -39,12 +45,15 @@ describe("composition registry", () => {
     assert.equal(components.get("FinanceStealthWealthProof"), FinanceStealthWealthProof);
     assert.equal(components.get("Finance2DStickProof"), Finance2DStickProof);
     assert.equal(components.get("ProductionEvidence"), ProductionEvidenceComposition);
+    assert.equal(components.get("ProductionTimeline"), ProductionTimelineComposition);
+    assert.equal(components.get("KenBurnsEffectProof"), KenBurnsEffectProof);
+    assert.equal(components.get("TransitionEvidence60sProof"), TransitionEvidence60sProof);
   });
 
   test("defaults are JSON-safe and folders are deterministic", () => {
     assert.deepEqual(
       COMPOSITION_REGISTRY.map((definition) => definition.folder),
-      ["Editorial", "Documentary", "Editorial", "Finance", "Finance", "Finance", "Console"],
+      ["Editorial", "Documentary", "Editorial", "Finance", "Finance", "Finance", "Console", "Console", "Console", "Console"],
     );
 
     for (const definition of COMPOSITION_REGISTRY) {

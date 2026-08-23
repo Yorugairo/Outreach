@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="420" viewBox="0 0 1920 420" role="img" aria-label="Company-reported buyer commitment evidence card">
+  <rect width="1920" height="420" rx="34" fill="#071a2c"/>
+  <rect x="38" y="38" width="12" height="344" rx="6" fill="#c87932"/>
+  <text x="86" y="96" fill="#f6e4be" font-family="Arial, sans-serif" font-size="35" font-weight="700" letter-spacing="3">COMPANY-REPORTED BUYER COMMITMENT</text>
+  <text x="86" y="143" fill="#95d4d2" font-family="Arial, sans-serif" font-size="23">Micron fiscal Q3 2026 prepared remarks · June 24, 2026</text>
+  <g font-family="Arial, sans-serif">
+    <rect x="86" y="188" width="440" height="142" rx="20" fill="#10324a" stroke="#c87932" stroke-width="2"/>
+    <text x="116" y="240" fill="#f6e4be" font-size="55" font-weight="700">16</text><text x="216" y="240" fill="#dce9e6" font-size="26">strategic agreements</text>
+    <text x="116" y="285" fill="#95d4d2" font-size="22">reported by the company</text>
+    <rect x="566" y="188" width="440" height="142" rx="20" fill="#10324a" stroke="#c87932" stroke-width="2"/>
+    <text x="596" y="240" fill="#f6e4be" font-size="55" font-weight="700">~5 years</text>
+    <text x="596" y="285" fill="#95d4d2" font-size="22">most reported agreement terms</text>
+    <rect x="1046" y="188" width="788" height="142" rx="20" fill="#10324a" stroke="#c87932" stroke-width="2"/>
+    <text x="1076" y="237" fill="#f6e4be" font-size="42" font-weight="700">take-or-pay commitments</text>
+    <text x="1076" y="280" fill="#dce9e6" font-size="24">source reports volume commitments rather than casual interest</text>
+  </g>
+  <text x="86" y="370" fill="#b7c6c8" font-family="Arial, sans-serif" font-size="20">Evidence of buyer commitment, not a guarantee of realized revenue, equity value, or an end to cyclicality.</text>
+</svg>
