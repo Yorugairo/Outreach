@@ -1,0 +1,979 @@
+{
+  "schema_version": "editorial_review_authorization.v1",
+  "authorization_id": "marshall-monday-001-r1-internal-review-20260807",
+  "episode_id": "marshall-monday-001",
+  "scope": "internal_revision_render_only",
+  "reviewer": "Snipe",
+  "reviewed_at": "2026-08-07T09:00:50.274Z",
+  "reason": "Operator approved the exact r1 handoff for the P16 Gate A internal revision proof; no publication or catalog promotion.",
+  "base_edit_package_hash": "748fe4afe7f864b859d56d8ab0458bdf6b50460a5ffb2e2857934c50ab3ec9b1",
+  "canonical_audio_manifest_hash": "3a04fe2318b8a01abc3113712fa8e7a86f2d1879b7bf07828af3a2e0a43bef31",
+  "canonical_audio_hash": "b5d8e372217e92529efaafee2493cbcb1c160ba21c6e084802a833d2413fda48",
+  "word_timing_sha256": "9bf403c6e9299663d6f29770a0f42d68c4d03c22d96598903973c4d7cfcdc403",
+  "cue_sheet_hash": "49a46788f24f08083c28465dc6dafffe96e07c5cd1cb130ae2b1d7c4e43b02c3",
+  "selected_assets": [
+    {
+      "cue_id": "mm001-word-001",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-001-word-timed/001_mm001-word-001.png",
+      "sha256": "4df4927ef2ad19b750d2211dac4ffe1ad7ceab1703ea026323ba8a0136070fdd"
+    },
+    {
+      "cue_id": "mm001-word-002",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-001-word-timed/002_mm001-word-002.png",
+      "sha256": "91dbd13d87ea74483743ad2480fd64ea9c77424bfe4ef7d01d3ba4eeb0648abd"
+    },
+    {
+      "cue_id": "mm001-word-003",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-001-word-timed/003_mm001-word-003.png",
+      "sha256": "51e04bd24a096802deec6bdbd163068f60f067af71b8fb254f8c2823d2b253ed"
+    },
+    {
+      "cue_id": "mm001-word-004",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-001-word-timed/004_mm001-word-004.png",
+      "sha256": "62741f7cbc700783f1a2d79b53fb10ca4f97905a7c96efe1e4a83d8f70a4e235"
+    },
+    {
+      "cue_id": "mm001-word-005",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-001-word-timed/005_mm001-word-005.png",
+      "sha256": "906d0aff9d479d3cd9413f9a3e370df8b182de07de5ce918a28cb2276802d453"
+    },
+    {
+      "cue_id": "mm001-word-006",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-001-word-timed/006_mm001-word-006.png",
+      "sha256": "01fdf87bd38f150ce4e057d639bfb7c891c3b78fca81400b7e2309599e7d5699"
+    },
+    {
+      "cue_id": "mm001-word-007",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-001-word-timed/007_mm001-word-007.png",
+      "sha256": "15c6ef8b770e652b16f76d3a65c9832f4d58b9bba379daf82d6deea8213bbdc0"
+    },
+    {
+      "cue_id": "mm001-word-008",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-002-word-timed/001_mm001-word-008-contained-peace.png",
+      "sha256": "d8e547241fb5f1bffdac258812944af3313ca86c08d21a4abc3e15264eb943a5"
+    },
+    {
+      "cue_id": "mm001-word-009",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-001-word-timed/008_mm001-word-009.png",
+      "sha256": "ce271357119a1ee4db09ac6f22892cb00f4bf02a3533be538f05e2a0485826cc"
+    },
+    {
+      "cue_id": "mm001-word-010",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-001-word-timed/009_mm001-word-010.png",
+      "sha256": "85c06b7eaf38da6e88d27fc769b9a32ffba32462bd45fa06ddd8f9a5f498964c"
+    },
+    {
+      "cue_id": "mm001-word-011",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-001-word-timed/010_mm001-word-011.png",
+      "sha256": "ec5112260244148dd234af3bd5df1b726641b3a3c9ed0e67b6532ca59c4c09b8"
+    },
+    {
+      "cue_id": "mm001-word-012",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-001-word-timed/011_mm001-word-012.png",
+      "sha256": "30de476d35ef4064060b669b379b064c362569f3ae2b9f87a462d3c233c9d01f"
+    },
+    {
+      "cue_id": "mm001-word-013",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-002-word-timed/002_mm001-word-013-comparison.png",
+      "sha256": "6570f14d6bd3c93fade13bb7c587e5ab352e0428bf09b131e98e1fa4ea0d20c8"
+    },
+    {
+      "cue_id": "mm001-word-014",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-001-word-timed/012_mm001-word-014.png",
+      "sha256": "b4bd7c98730fe8b06bedf0b48a8d97a0d6243b35566a76308d445548a74b9304"
+    },
+    {
+      "cue_id": "mm001-word-015",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-002-word-timed/003_mm001-word-015-game-rules.png",
+      "sha256": "c3110f818d32bab5b8dd86cabd5de2bf51d6a39ab9602c989e422ae7782b9673"
+    },
+    {
+      "cue_id": "mm001-word-016",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-002-word-timed/004_mm001-word-016-empty-host.png",
+      "sha256": "672eae30244fc573ce53406c86ba79334e12d027a7919d74d656a808eed69da9"
+    },
+    {
+      "cue_id": "mm001-word-017",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-002-word-timed/005_mm001-word-017-rules-audience.png",
+      "sha256": "9e878748ca0f0791c0eff9b92c664011e0d2b2a10896c42cc93e7cd833dfb980"
+    },
+    {
+      "cue_id": "mm001-word-018",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-002-word-timed/006_mm001-word-018-reaction-wave.png",
+      "sha256": "e63d1d7cd8ca5a7859afcc80fa00e88917ed907a928ddf71eadeead281e6ff78"
+    },
+    {
+      "cue_id": "mm001-word-019",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-002-word-timed/007_mm001-word-019-nature-display.png",
+      "sha256": "c872b972e62627839462d2e1bfc1818b4c0005e07ce715321f8f505de33aed34"
+    },
+    {
+      "cue_id": "mm001-word-020",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-002-word-timed/008_mm001-word-020-costly-prize.png",
+      "sha256": "6e37689a180b6eb09f0c92af763a0136cba0d0aacdc9f09ea27137152a2de7e8"
+    },
+    {
+      "cue_id": "mm001-word-021",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-002-word-timed/009_mm001-word-021-aftermath.png",
+      "sha256": "f9647dd9d54b96d28a390e63a9b42603ed7e0f4667e378aa898ea96cdfd8680a"
+    },
+    {
+      "cue_id": "mm001-word-022",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-002-word-timed/010_mm001-word-022-cost-ledger.png",
+      "sha256": "8ee8a5ae9b9cb63875d402890386291ad18c77de43340f33261fd33fceafe4ea"
+    },
+    {
+      "cue_id": "mm001-word-023",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-002-word-timed/011_mm001-word-023-display-montage.png",
+      "sha256": "1157657a29e9776b402add48ffba6ecf86c6171e13e801d75250e4615c9ed2bf"
+    },
+    {
+      "cue_id": "mm001-word-024",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-002-word-timed/012_mm001-word-024-decision-map.png",
+      "sha256": "2a74a0a9695a51f0be21f3c4ebe72ec768cea4749bdacaa9018999702199c36f"
+    },
+    {
+      "cue_id": "mm001-word-025",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-003-word-timed/001_mm001-word-025-animal-display.png",
+      "sha256": "174beb60d0e7d167be67551b606866acd4f5ac479540449dcb728aa0cbe07bea"
+    },
+    {
+      "cue_id": "mm001-word-026",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-003-word-timed/002_mm001-word-026-preconflict-walk.png",
+      "sha256": "b07c10bcb9ecb1af62ce34c710f7605a0a022ae121930e00145508bb7924bdd9"
+    },
+    {
+      "cue_id": "mm001-word-027",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-003-word-timed/003_mm001-word-027-public-audition.png",
+      "sha256": "8137b23dea9b3f916f0ff28623f63710c9e836bb2e578edf5cb2a96acb3ee883"
+    },
+    {
+      "cue_id": "mm001-word-028",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-003-word-timed/004_mm001-word-028-flex-deterrence.png",
+      "sha256": "be8912621b3f6c573683730767bc068bcf0d3121b7af12c4976f66a04700b83b"
+    },
+    {
+      "cue_id": "mm001-word-029",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-003-word-timed/005_mm001-word-029-bad-decision.png",
+      "sha256": "ed53bcd19735e0b51be71fac9a6b5d6ad97a3df5d109a3548a7f015523148f6b"
+    },
+    {
+      "cue_id": "mm001-word-030",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-003-word-timed/006_mm001-word-030-translation-station.png",
+      "sha256": "5bc4beec03ab26a1f42cdbb1657a974b9d720d68488ce67823165d3b48ea2462"
+    },
+    {
+      "cue_id": "mm001-word-031",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-003-word-timed/007_mm001-word-031-rap-chestbeat.png",
+      "sha256": "2af5b96db9f436b65e4a3c4148150eb96e97dfabe3221e310b943d024ecaa997"
+    },
+    {
+      "cue_id": "mm001-word-032",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-003-word-timed/008_mm001-word-032-ancient-os.png",
+      "sha256": "b50683b42ed06b5b0237309ac7bd57e1f6f482dc6a71e40abfd58bf3cceda4f2"
+    },
+    {
+      "cue_id": "mm001-word-033",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-003-word-timed/009_mm001-word-033-rhyme-machine.png",
+      "sha256": "69deafd29c0be918200ea1e4d11eeee318a49d98d999f918ef94f402ba6bb4d6"
+    },
+    {
+      "cue_id": "mm001-word-034",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-003-word-timed/010_mm001-word-034-projection.png",
+      "sha256": "8d5baa750905493f3f0199b220c7061745aa502350a2fc14b29f692d956d3ea1"
+    },
+    {
+      "cue_id": "mm001-word-035",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-003-word-timed/011_mm001-word-035-crowd-scorecard.png",
+      "sha256": "207d7d7b382ee543e3d2ad52cfee8f9ed73b2cc56b6f31a8fa949ecfde5b49c4"
+    },
+    {
+      "cue_id": "mm001-word-036",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-003-word-timed/012_mm001-word-036-aggression-point.png",
+      "sha256": "c05ce0709a63b3d65921e945e45a6cb7c0932c79e14082aa53949c3ccd0834fb"
+    },
+    {
+      "cue_id": "mm001-word-037",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-004-word-timed/001_mm001-word-037-linkedin-contrast.png",
+      "sha256": "c69857e0e665576ce23a7b4ebb44cf46736e7bcb22c09f4bae92fad1d72659e5"
+    },
+    {
+      "cue_id": "mm001-word-038",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-004-word-timed/002_mm001-word-038-dominance-performed.png",
+      "sha256": "4329dcf17b78f767edcc56deb16d4b20c816215c9676c6d2324468de3229a355"
+    },
+    {
+      "cue_id": "mm001-word-039",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-004-word-timed/003_mm001-word-039-mic-not-harm.png",
+      "sha256": "c72a81598d37eef4d536b90684bb4730dfd6d8724d1a03fe246ce40a8abf41fe"
+    },
+    {
+      "cue_id": "mm001-word-040",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-004-word-timed/004_mm001-word-040-room-agree.png",
+      "sha256": "ffc7d97c1eed8e0e23fc470fce5ddbe0177d4562dbfe236c193d8286903f564c"
+    },
+    {
+      "cue_id": "mm001-word-041",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-004-word-timed/005_mm001-word-041-consensus.png",
+      "sha256": "dc3c2aa3f11b7e7e06719c4b03ee7f5daf05452a64cef5da2c3f43a0e7deed10"
+    },
+    {
+      "cue_id": "mm001-word-042",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-004-word-timed/006_mm001-word-042-winner-without-contact.png",
+      "sha256": "2d60f624976e743c080c18266b0bb9d48ddd321444b78c1cab6105078062310a"
+    },
+    {
+      "cue_id": "mm001-word-043",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-004-word-timed/007_mm001-word-043-no-ambulance.png",
+      "sha256": "d27d1cc9be0c324e0110af909c066bcdfbc5cd42429e44fbac575b42b7db0023"
+    },
+    {
+      "cue_id": "mm001-word-044",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-004-word-timed/008_mm001-word-044-agreement-machine.png",
+      "sha256": "8aec5719f8af5c9bdc89baf565e0dc59586a4e8901ebbd8d0f3e29015d4e9023"
+    },
+    {
+      "cue_id": "mm001-word-045",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-004-word-timed/009_mm001-word-045-two-witnesses.png",
+      "sha256": "099e090555b3a94f9d059aa769fc6d6817a4cc2758a6b374eb1825b5c48fbd57"
+    },
+    {
+      "cue_id": "mm001-word-046",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-004-word-timed/010_mm001-word-046-left-standing.png",
+      "sha256": "63de6a65f8ef94d4f187ed538ce0a95dadeb07f1bc92de9c85801ff2c41599df"
+    },
+    {
+      "cue_id": "mm001-word-047",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-004-word-timed/011_mm001-word-047-many-witnesses.png",
+      "sha256": "fcee8091440f8e395ca316b592c1839b0c70d2a495a7a930970bfd186eb6ed43"
+    },
+    {
+      "cue_id": "mm001-word-048",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-004-word-timed/012_mm001-word-048-public-memory.png",
+      "sha256": "1ffb4e3e132508a2e0fec79db434aa86701259ffdaaf8108c565967afaddab3e"
+    },
+    {
+      "cue_id": "mm001-word-049",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-005-word-timed/001_mm001-word-049-public-memory.png",
+      "sha256": "df50c9159732573e07341e055d42260a82cc50e92ca15ab3ff5d91315f884d27"
+    },
+    {
+      "cue_id": "mm001-word-050",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-005-word-timed/002_mm001-word-050-loser-status.png",
+      "sha256": "5a012d5603073fff367e8b32a98596de535d8a3f2d7a5a59e23559f315797a11"
+    },
+    {
+      "cue_id": "mm001-word-051",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-005-word-timed/003_mm001-word-051-winner-reaction.png",
+      "sha256": "1c5d0f18081444a7afbb47032d1a4a02cf342210ee7ecadaa6fdcc6a8a090332"
+    },
+    {
+      "cue_id": "mm001-word-052",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-005-word-timed/004_mm001-word-052-contained-exit.png",
+      "sha256": "4bd6d7c72ec366fc0c684ee4e8ea241e71a8671582f594fb85d66a1f7c883e73"
+    },
+    {
+      "cue_id": "mm001-word-053",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-005-word-timed/005_mm001-word-053-infrastructure.png",
+      "sha256": "72867108005d5a0c9235f7cd30a20c644b78cd999ba1076da67fa94ac463b45b"
+    },
+    {
+      "cue_id": "mm001-word-054",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-005-word-timed/006_mm001-word-054-human-complexity.png",
+      "sha256": "7876301381d113439a619c99ef9a8b68e92e02dc93ee1fd8ee31228713691862"
+    },
+    {
+      "cue_id": "mm001-word-055",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-005-word-timed/007_mm001-word-055-court-seating.png",
+      "sha256": "08739b7d63109708e4e628406e9893867cb1b2c3ee10493eb437a705bb26fe47"
+    },
+    {
+      "cue_id": "mm001-word-056",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-005-word-timed/008_mm001-word-056-elias-translation.png",
+      "sha256": "d94650d6fefdf98b544ea0b530bfc689b687ffe2a1a27795347193f9516f3cf2"
+    },
+    {
+      "cue_id": "mm001-word-057",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-005-word-timed/009_mm001-word-057-broad-argument.png",
+      "sha256": "0f0140c83c23701fb4b200b8c622f80c7fe5b182a20ae300b1782b8656c6c78f"
+    },
+    {
+      "cue_id": "mm001-word-058",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-005-word-timed/010_mm001-word-058-state-power.png",
+      "sha256": "5932d74ae6a5644e297c14ac47260f48c7a16efb129cd3c0196835f527030d5a"
+    },
+    {
+      "cue_id": "mm001-word-059",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-005-word-timed/011_mm001-word-059-etiquette-boundary.png",
+      "sha256": "93642369ae369176aadbd0b695f0d5a52f0511eb26ba91cf3429ac5c795adf51"
+    },
+    {
+      "cue_id": "mm001-word-060",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-005-word-timed/012_mm001-word-060-tools-change.png",
+      "sha256": "b09a7812dc7dda8570f0d3a490070e8fc26dd808273a4d26d65b04d7fe09917b"
+    },
+    {
+      "cue_id": "mm001-word-061",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-006-word-timed/001_mm001-word-061-dinner-boundary.png",
+      "sha256": "2cbcaa960d62c1630e77acb9122b0aec9d20673ba0cbe535f992d83a6a8e1ff0"
+    },
+    {
+      "cue_id": "mm001-word-062",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-006-word-timed/002_mm001-word-062-anonymous-king-boundary.png",
+      "sha256": "3139a44d8c70696a765dd7a2db31347945c61940b4f3eebb932ad2319b147a9a"
+    },
+    {
+      "cue_id": "mm001-word-063",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-006-word-timed/003_mm001-word-063-warrior-energy.png",
+      "sha256": "a29caa5e40b52c5d3bd68feae64ab240a574d2fceeffe56e56451b8cb773835e"
+    },
+    {
+      "cue_id": "mm001-word-064",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-006-word-timed/004_mm001-word-064-ego-not-retired.png",
+      "sha256": "341094d71431facb67a31de0fe592fa946b4dae1759f426865615e6f20da4543"
+    },
+    {
+      "cue_id": "mm001-word-065",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-006-word-timed/005_mm001-word-065-new-arena-court.png",
+      "sha256": "cb72b3b9feb6db7d7267ddaa40d6901aea2cad3f95fcb3f7b0b21cfe6f7b357c"
+    },
+    {
+      "cue_id": "mm001-word-066",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-006-word-timed/006_mm001-word-066-courtly-status-games.png",
+      "sha256": "7214726d51146df660b5ffe52c0a62c37437ea08af86f82bcf4745a8db683735"
+    },
+    {
+      "cue_id": "mm001-word-067",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-006-word-timed/007_mm001-word-067-symbolic-insult.png",
+      "sha256": "f196bb5c2ce1e8bb07c763a0b6f168df235c5bb5ecba725eaeec38b6bb22ce7e"
+    },
+    {
+      "cue_id": "mm001-word-068",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-006-word-timed/008_mm001-word-068-anonymous-host-gag.png",
+      "sha256": "95a8b7762f5ae21635e8713a6bf25964be585e5062378869f62316675739b3a2"
+    },
+    {
+      "cue_id": "mm001-word-069",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-006-word-timed/009_mm001-word-069-court-to-cypher-bridge.png",
+      "sha256": "11fc1e35a385b4aa23812f073baf453a73813db30b157f03adf741884e08daba"
+    },
+    {
+      "cue_id": "mm001-word-070",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-006-word-timed/010_mm001-word-070-not-palace-cypher.png",
+      "sha256": "8245e9b2233c069f47e33675044abab36345a97e327a1581005c6c008a246456"
+    },
+    {
+      "cue_id": "mm001-word-071",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-006-word-timed/011_mm001-word-071-shared-hard-truth.png",
+      "sha256": "e2414e62b16f629daabd1df53cd378ae8b842fb2742c596b1a65ffaf55690fe7"
+    },
+    {
+      "cue_id": "mm001-word-072",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-006-word-timed/012_mm001-word-072-anonymous-host-station.png",
+      "sha256": "f9b2bad36a91c7fd7064d35e62e7b645d1b8313bbb9b6c3e9658bf7bdf673aa5"
+    },
+    {
+      "cue_id": "mm001-word-073",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-007-word-timed/001_mm001-word-073-fight-gets-smarter.png",
+      "sha256": "31e252d6097935f36ab84ea47ba205dc1d64a39c754b22aa1a7b8d30db22c562"
+    },
+    {
+      "cue_id": "mm001-word-074",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-007-word-timed/002_mm001-word-074-theatrical-shared-time.png",
+      "sha256": "bc93ccddeca93aa8f03c7f17c1d61a54cd2f9576fe94aa8d3425c66dd7bdb3fd"
+    },
+    {
+      "cue_id": "mm001-word-075",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-007-word-timed/003_mm001-word-075-pressure-opens-arena.png",
+      "sha256": "bc147af66b6a8b623bf99f99eb84034db2ad0a3893f26e2f125bc4c85ac175cb"
+    },
+    {
+      "cue_id": "mm001-word-076",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-007-word-timed/004_mm001-word-076-dj-bboy-talent.png",
+      "sha256": "e49efcb2eb2b0dcd88fc5625ae0a7bdef198340f145dd9dc48a8c75a2a61db2a"
+    },
+    {
+      "cue_id": "mm001-word-077",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-007-word-timed/005_mm001-word-077-anonymous-roles.png",
+      "sha256": "78c7340c39512eec1e470cbcae62632ba4ee122e07fa9452a24df5c0178d13d4"
+    },
+    {
+      "cue_id": "mm001-word-078",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-007-word-timed/006_mm001-word-078-stakes-get-stage.png",
+      "sha256": "1ff3c676694de92dc5b31bbd4ec73c9b0a79414cbac293f7157b7fc75aecd943"
+    },
+    {
+      "cue_id": "mm001-word-079",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-007-word-timed/007_mm001-word-079-engineering-not-weakness.png",
+      "sha256": "6464adee37cbd81942e6c14dd2b33223c9de00ea8103fae4659fa3692248997e"
+    },
+    {
+      "cue_id": "mm001-word-080",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-007-word-timed/008_mm001-word-080-fire-into-furnace.png",
+      "sha256": "25257f372ed7ab9ca975c345b7c645a964781f3040ec474e1df3e62acbcf9ecc"
+    },
+    {
+      "cue_id": "mm001-word-081",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-007-word-timed/009_mm001-word-081-furnace-matters.png",
+      "sha256": "89331a1da802002e5d2c8b212689c87cbff0de9078c99cf2740de9a39a7a06be"
+    },
+    {
+      "cue_id": "mm001-word-082",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-007-word-timed/010_mm001-word-082-shared-clock.png",
+      "sha256": "b7c590371f14183cd622aad42c560afa7afc4e3b4f97e2040ed26c6c1f71c260"
+    },
+    {
+      "cue_id": "mm001-word-083",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-007-word-timed/011_mm001-word-083-shared-place-memory.png",
+      "sha256": "46dfedf6d956c5dccb305949664f8672d82fb844e3e5b78be1c310dba3af775a"
+    },
+    {
+      "cue_id": "mm001-word-084",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-007-word-timed/012_mm001-word-084-round-can-stop.png",
+      "sha256": "05238127c11f123dada3982dc5052cf79ce162b3d21a315ee0e8bfedc53f876a"
+    },
+    {
+      "cue_id": "mm001-word-085",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-008-word-timed/001_mm001-word-085-rivalry-event.png",
+      "sha256": "e05aab79478b6b9b4dede3a0a9bbd12d88611169545f5ebb8e12347dd19b1709"
+    },
+    {
+      "cue_id": "mm001-word-086",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-008-word-timed/002_mm001-word-086-stop-before-incident.png",
+      "sha256": "8945b28e26dbc2320b30eb19bfbe330d3e8aa83d090dc6dd73514a01913b5c6c"
+    },
+    {
+      "cue_id": "mm001-word-087",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-008-word-timed/003_mm001-word-087-martial-hiphop-comparison.png",
+      "sha256": "41e2622c79c3eb975f6c8f651d96ad7c38cf124104e5727d1fd8e9a3d9ffcd00"
+    },
+    {
+      "cue_id": "mm001-word-088",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-008-word-timed/004_mm001-word-088-stakes-acknowledged.png",
+      "sha256": "045f45e13d38605fdec1b8983394877df18e1c5980b7bca4e973f80770277c8e"
+    },
+    {
+      "cue_id": "mm001-word-089",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-008-word-timed/005_mm001-word-089-stakes-real.png",
+      "sha256": "f0ad5c764fdc328e37cbcaca584c075ae14c967ea0a7a058700c6d9524165c35"
+    },
+    {
+      "cue_id": "mm001-word-090",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-008-word-timed/006_mm001-word-090-higher-resolution-language.png",
+      "sha256": "685f45e84036be2fac227a1905de25db4f15e3965b7bb244433539ba6b34e1f4"
+    },
+    {
+      "cue_id": "mm001-word-091",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-008-word-timed/007_mm001-word-091-near-fight-question.png",
+      "sha256": "9cad33a7a77b9eebc8b7f36a52dcda809a741b4f1c70c676e4c967382b607724"
+    },
+    {
+      "cue_id": "mm001-word-092",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-008-word-timed/008_mm001-word-092-battle-border.png",
+      "sha256": "80b6594e3c1e55c39f23e128c76b79320e3507f27d4f0faf90d78fc49276a11c"
+    },
+    {
+      "cue_id": "mm001-word-093",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-008-word-timed/009_mm001-word-093-play-theorist-entry.png",
+      "sha256": "853f6b8a10f94aaf0b3ac6da3bdd65f7635d1b251b3012ee3dd87aa7f0a8d16b"
+    },
+    {
+      "cue_id": "mm001-word-094",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-008-word-timed/010_mm001-word-094-play-space.png",
+      "sha256": "71bbe1a75302fa59390a66b267dfea6dfad85aaee64dc3ff1001aed07cc1e21b"
+    },
+    {
+      "cue_id": "mm001-word-095",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-008-word-timed/011_mm001-word-095-temporary-world.png",
+      "sha256": "c6d551597d843488971d6fc183c1b2963c2fd223f7aa0c58a9898518c5aad3ba"
+    },
+    {
+      "cue_id": "mm001-word-096",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-008-word-timed/012_mm001-word-096-normal-world-outside.png",
+      "sha256": "f038421db0805bdc8bd9698f97c8476d902e055545b84f466584505cd71e9dd4"
+    },
+    {
+      "cue_id": "mm001-word-097",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-009-word-timed/001_mm001-word-097-outside-battery.png",
+      "sha256": "c97df3b67b961afc92bf493b9e55d610eb73c5c63200a860b74144c574e703d3"
+    },
+    {
+      "cue_id": "mm001-word-098",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-009-word-timed/002_mm001-word-098-new-order-inside-circle.png",
+      "sha256": "4ea098d9944017397d21080d97766176693a72a2caa9aeae5d74b845b2ae0618"
+    },
+    {
+      "cue_id": "mm001-word-099",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-009-word-timed/003_mm001-word-099-basketball-court.png",
+      "sha256": "fb0f4707566bd96f0ed54562f9155a0b59a9ca8a09e218e52648d7f687e796ac"
+    },
+    {
+      "cue_id": "mm001-word-100",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-009-word-timed/004_mm001-word-100-handshake-after-contest.png",
+      "sha256": "e5f8cd88b8aab1404a6f56a4186699d4a36cc31d8947fa65e35935f6b95eb05d"
+    },
+    {
+      "cue_id": "mm001-word-101",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-009-word-timed/005_mm001-word-101-boxing-clean-shot.png",
+      "sha256": "6b758cf2b8e1a02f70c26b0e2df7735583706b5af25cf761573e60041a037789"
+    },
+    {
+      "cue_id": "mm001-word-102",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-009-word-timed/006_mm001-word-102-context-contrast.png",
+      "sha256": "78744381162c8793703482085b697350733d459210d5bcc4f5e08247253066f9"
+    },
+    {
+      "cue_id": "mm001-word-103",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-009-word-timed/007_mm001-word-103-outfit-battle.png",
+      "sha256": "719e03304bc35e141946fb27453b5102c069a65720a4f48e84113aa4549a82dd"
+    },
+    {
+      "cue_id": "mm001-word-104",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-009-word-timed/008_mm001-word-104-symbolic-insults.png",
+      "sha256": "548961ef0e633189f1f4d4b0dd5bd0c075baa66bd3aaff54d4f9a9948ad504c5"
+    },
+    {
+      "cue_id": "mm001-word-105",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-009-word-timed/009_mm001-word-105-crowd-verdict.png",
+      "sha256": "8b2b253e58e6ef6823eeeb47816663455d7f9e8e836bcc8d069042ece5c0d07a"
+    },
+    {
+      "cue_id": "mm001-word-106",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-009-word-timed/010_mm001-word-106-craft-spectacle.png",
+      "sha256": "a53985f9921255f6f73ba7515ce23845ac1083733a1475005782dc75e99084e8"
+    },
+    {
+      "cue_id": "mm001-word-107",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-009-word-timed/011_mm001-word-107-threat-reclassified.png",
+      "sha256": "e2875740f21534ccbecf74b2d3f9a96cc549bab0abe4b3e0810f4b5cde696644"
+    },
+    {
+      "cue_id": "mm001-word-108",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-009-word-timed/012_mm001-word-108-evaluated-as-craft.png",
+      "sha256": "ce3525a12cbe1d9ead06551e573448b8c8106f070a0064e25370b2ef71e24be9"
+    },
+    {
+      "cue_id": "mm001-word-109",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-010-word-timed/001_mm001-word-109-ritual-study.png",
+      "sha256": "beb58c5784d0422eecd87cd1ff2de515868388e15c2dc05a7e314a5a180a1afe"
+    },
+    {
+      "cue_id": "mm001-word-110",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-010-word-timed/002_mm001-word-110-tradition-form.png",
+      "sha256": "9eb62922e7e0fb8bbf857250a1d0e2ef3b9fe5a89864c01fe75b10fad22b4094"
+    },
+    {
+      "cue_id": "mm001-word-111",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-010-word-timed/003_mm001-word-111-form-matters.png",
+      "sha256": "f0dd17c8622c9f1459e996eadf2b9587dff2ec98e0da187c719b01efc2f29bfc"
+    },
+    {
+      "cue_id": "mm001-word-112",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-010-word-timed/004_mm001-word-112-timing-matters.png",
+      "sha256": "5776a88c9f7a80eedd5948d1ae82679e6723c4d45d7b4ec33a8f88df2ddefd23"
+    },
+    {
+      "cue_id": "mm001-word-113",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-010-word-timed/005_mm001-word-113-language-lands.png",
+      "sha256": "ff4e8a7d0c635dccf681cadbc86028543b5d78212203287c31527a19d8e7dd3a"
+    },
+    {
+      "cue_id": "mm001-word-114",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-010-word-timed/006_mm001-word-114-shared-contest.png",
+      "sha256": "02b7b5a719d64647b8bdb2f9f1f9839de83656f506aae57e767696b249cc5e7f"
+    },
+    {
+      "cue_id": "mm001-word-115",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-010-word-timed/007_mm001-word-115-weak-line-groan.png",
+      "sha256": "c35211242631cc8c8a63efc7c9a6b4790a02933c9eb900ef3ee799e493e2520d"
+    },
+    {
+      "cue_id": "mm001-word-116",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-010-word-timed/008_mm001-word-116-brilliant-line.png",
+      "sha256": "e365409f4f646365bdc02904e09ba0340120ad4627e21b42dd7742a24dcbfc29"
+    },
+    {
+      "cue_id": "mm001-word-117",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-010-word-timed/009_mm001-word-117-smile-through-pressure.png",
+      "sha256": "ea7d1fbfff30af916e4b6fa1f74264167a032c9840d71d208a055fb9f413df25"
+    },
+    {
+      "cue_id": "mm001-word-118",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-010-word-timed/010_mm001-word-118-emotional-control.png",
+      "sha256": "0956df12d79b54742138fe86e54788fddadd5a26d2b86771e2c1baabecf9fa7c"
+    },
+    {
+      "cue_id": "mm001-word-119",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-010-word-timed/011_mm001-word-119-four-craft-tests.png",
+      "sha256": "c1f58ac93ae68487b35f4c670f24b5a5cb0e4b01bb124a2609ce5b53c04a0dfd"
+    },
+    {
+      "cue_id": "mm001-word-120",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-010-word-timed/012_mm001-word-120-stage-not-street.png",
+      "sha256": "763875a7aa794b4ecac4c1a1e96d1c44453405953871d519c65018650e869257"
+    },
+    {
+      "cue_id": "mm001-word-121",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-011-word-timed/001_mm001-word-121-empty-host-translation.png",
+      "sha256": "d9a28b1b8449e6ffffe3a6f8b4804f2dcac1a20125cda444b5e317d5cbe2823b"
+    },
+    {
+      "cue_id": "mm001-word-122",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-011-word-timed/002_mm001-word-122-crowd-rulebook.png",
+      "sha256": "36e8313cd2b8f9147af4d181b303c58c1ff0953c3a82e71c392517fa552de576"
+    },
+    {
+      "cue_id": "mm001-word-123",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-011-word-timed/003_mm001-word-123-two-targets.png",
+      "sha256": "d87be2952b65a70eb1f93b6a6bec39cfcd7fc4308baf1973fcf21d69367e0e0b"
+    },
+    {
+      "cue_id": "mm001-word-124",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-011-word-timed/004_mm001-word-124-opponent-target.png",
+      "sha256": "398998d68342a795bdaf452b6dd1d8e01174087bc2eee6c82a511a8a35ff75dc"
+    },
+    {
+      "cue_id": "mm001-word-125",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-011-word-timed/005_mm001-word-125-audience-target.png",
+      "sha256": "64265a376e57ca07629e2a7511e90dc1788919fd85defcb69b4f05938b29a87c"
+    },
+    {
+      "cue_id": "mm001-word-126",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-011-word-timed/006_mm001-word-126-not-merely-saying.png",
+      "sha256": "e61ad4ad63838d964f3dbe8f3d42d737ca849aa2bd22442156b58a2b3de73f18"
+    },
+    {
+      "cue_id": "mm001-word-127",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-011-word-timed/007_mm001-word-127-attention-control.png",
+      "sha256": "eeff4214bddc3511cc940b64bea7ff6caf15c3711cafbb6e3556d1e26fc1b7de"
+    },
+    {
+      "cue_id": "mm001-word-128",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-011-word-timed/008_mm001-word-128-room-attention.png",
+      "sha256": "651660be5b0c7b310b362bf07842a01366b31474c64449196cac3448477f8405"
+    },
+    {
+      "cue_id": "mm001-word-129",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-011-word-timed/009_mm001-word-129-angle-not-threat.png",
+      "sha256": "c8c5f3c9e20f63af5cf40e9e3d6b7dafb2add1d1550b963845c424d4311acff8"
+    },
+    {
+      "cue_id": "mm001-word-130",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-011-word-timed/010_mm001-word-130-temporary-verdict.png",
+      "sha256": "5f505ca2f0711370b4987e0b11d8c6a881e01d627205ed82d310ca7a2f576fa1"
+    },
+    {
+      "cue_id": "mm001-word-131",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-011-word-timed/011_mm001-word-131-that-is-martial.png",
+      "sha256": "2190a6a09b67c27ec7cecc0f6b8713fc7d4e5f2e9c350dc3d24f4625856a2434"
+    },
+    {
+      "cue_id": "mm001-word-132",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-011-word-timed/012_mm001-word-132-combat-rule-set.png",
+      "sha256": "3da21d9ed89255022cab3642fc2f578e252cb43a19745eb91630fb253c5bd7b0"
+    },
+    {
+      "cue_id": "mm001-word-133",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-012-word-timed/001_mm001-word-133-legible-violence.png",
+      "sha256": "6b6613935d5af7bc77d1ea3ed24f74169d8c92a0d3f33e12e46a5aca257bfb6a"
+    },
+    {
+      "cue_id": "mm001-word-134",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-012-word-timed/002_mm001-word-134-no-physical-performance.png",
+      "sha256": "227ac54e3bf034a24bf4fb684ca9d6683b7cc95ef81a08abca8d500c848e5feb"
+    },
+    {
+      "cue_id": "mm001-word-135",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-012-word-timed/003_mm001-word-135-crowd-matters.png",
+      "sha256": "10f169fee2f7586e2e7186f5697509e32fa3116ff0c651baa368327c32ba4042"
+    },
+    {
+      "cue_id": "mm001-word-136",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-012-word-timed/004_mm001-word-136-crowd-not-decoration.png",
+      "sha256": "af8d108b9d9597f111edfe98e44238618a65c20104ead059da554c1baac0cfa0"
+    },
+    {
+      "cue_id": "mm001-word-137",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-012-word-timed/005_mm001-word-137-referee-witness.png",
+      "sha256": "1e7a8fb9c67bd0cfb97779d12356f93d7dfebc05417e0f3970895caf816a87eb"
+    },
+    {
+      "cue_id": "mm001-word-138",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-012-word-timed/006_mm001-word-138-scoreboard-memory.png",
+      "sha256": "df4d85312eb9bf6294d53603a042c80b198032b8b187766cde9033176d26135c"
+    },
+    {
+      "cue_id": "mm001-word-139",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-012-word-timed/007_mm001-word-139-punchline-lives-on.png",
+      "sha256": "fe87a3c6c1daf1f9554f08ff2c92a54fdd4fb4d10321580e04d873cab671c542"
+    },
+    {
+      "cue_id": "mm001-word-140",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-012-word-timed/008_mm001-word-140-beautiful-part.png",
+      "sha256": "1e7f8f6ba18a550ab1250258f656271db5740a636c91ef8c503391b40a498f77"
+    },
+    {
+      "cue_id": "mm001-word-141",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-012-word-timed/009_mm001-word-141-co-performance.png",
+      "sha256": "f21afd3f05400353129964af39d9d467015cec25f49b463d9a345f9ffc832528"
+    },
+    {
+      "cue_id": "mm001-word-142",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-012-word-timed/010_mm001-word-142-generic-sociologist.png",
+      "sha256": "9942c11e52ba57a05d92006cbab697ef3fd2ab5a1b912cec8ec74e46dac2c793"
+    },
+    {
+      "cue_id": "mm001-word-143",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-012-word-timed/011_mm001-word-143-social-performance.png",
+      "sha256": "e7081497942391aeb2213686730dea131f13b7598ac63b6bbd15cc052e01a39f"
+    },
+    {
+      "cue_id": "mm001-word-144",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-012-word-timed/012_mm001-word-144-front-back-stage.png",
+      "sha256": "ba04952aa66f41e368a078396d9b107e6567d8d2a383b353c392bfb98e6f7a93"
+    },
+    {
+      "cue_id": "mm001-word-145",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-013-word-timed/001_mm001-word-145-scene-agreements.png",
+      "sha256": "a7e4b97d2a956cecd11804728cfec8194440e18e8ba2f22738d1b7f707b009d1"
+    },
+    {
+      "cue_id": "mm001-word-146",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-013-word-timed/002_mm001-word-146-battle-rap-bass.png",
+      "sha256": "31147ffe9e17b575d398eb5d07f50e6d67de05692150370925c768f26cef9189"
+    },
+    {
+      "cue_id": "mm001-word-147",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-013-word-timed/003_mm001-word-147-front-stage.png",
+      "sha256": "f3402b4d90cd5b222cb03999ceb399e46530e8e43b93050157564201317f7d96"
+    },
+    {
+      "cue_id": "mm001-word-148",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-013-word-timed/004_mm001-word-148-back-stage-turn.png",
+      "sha256": "f55fd55cf167524c1d9e404328c0e7ab8c2d81bc77c3d082219fa7b101f841c2"
+    },
+    {
+      "cue_id": "mm001-word-149",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-013-word-timed/005_mm001-word-149-reaction-contract.png",
+      "sha256": "62623e0e0a40b790679ca16463f70b1a044f5784faaba31cb0c9a2a252e95af3"
+    },
+    {
+      "cue_id": "mm001-word-150",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-013-word-timed/006_mm001-word-150-do-not-ruin-show.png",
+      "sha256": "1fed6b390525ae40baca47f51fdc9839bf94c8a562d7a12ddff0fbaecc6648de"
+    },
+    {
+      "cue_id": "mm001-word-151",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-013-word-timed/007_mm001-word-151-hold-the-line.png",
+      "sha256": "786ece4a2a22c5990ebda78e3e14d474e76e55c1fbe8422a6d988e6c05ecb565"
+    },
+    {
+      "cue_id": "mm001-word-152",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-013-word-timed/008_mm001-word-152-crowd-understands.png",
+      "sha256": "a0107986043c3afe38a8ba1e7dc5b360812cfc56676d5982d16d0210c7168cb3"
+    },
+    {
+      "cue_id": "mm001-word-153",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-013-word-timed/009_mm001-word-153-reward-rules.png",
+      "sha256": "c7c5ab455f9b17f3655dfe3618e32bded2d9a3b3f7dd01cc7910915789236ef3"
+    },
+    {
+      "cue_id": "mm001-word-154",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-013-word-timed/010_mm001-word-154-host-temperature.png",
+      "sha256": "6e0a6ae01d2382fb5c752b3e12731f155b1734d9ef2b5a20b861b290061bae18"
+    },
+    {
+      "cue_id": "mm001-word-155",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-013-word-timed/011_mm001-word-155-secret-alliance.png",
+      "sha256": "5cf6027f6826e24164816ca78d84bd7bfc4995d3f3a3b4998ac376f1f7e6c7ab"
+    },
+    {
+      "cue_id": "mm001-word-156",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-013-word-timed/012_mm001-word-156-not-soft.png",
+      "sha256": "b52722bf9f478fa6b5e596cb2bd9d4cd7c75d253d318d2c3f8170a595aea1fab"
+    },
+    {
+      "cue_id": "mm001-word-157",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-014-word-timed/001_mm001-word-157-professional-contest.png",
+      "sha256": "ac8d8b84156c412532329e56b6d8467df0e2a8a662f8832c3120baf60dfb05f1"
+    },
+    {
+      "cue_id": "mm001-word-158",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-014-word-timed/002_mm001-word-158-full-volume-contract.png",
+      "sha256": "0ffa6ec5115526dec07ba06308d7abdad00d05c012d882691b923254eb067bc0"
+    },
+    {
+      "cue_id": "mm001-word-159",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-014-word-timed/003_mm001-word-159-risk-the-line.png",
+      "sha256": "d83ff15fd08c2ad654839687216aa969fed0b4bb0283288111ddcb66ae8d9eae"
+    },
+    {
+      "cue_id": "mm001-word-160",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-014-word-timed/004_mm001-word-160-composure-to-land.png",
+      "sha256": "130e30293eb3c3cb3e5e4b29bc2b1de0949730657cfa2e364ea134839f7948b4"
+    },
+    {
+      "cue_id": "mm001-word-161",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-014-word-timed/005_mm001-word-161-room-knows-difference.png",
+      "sha256": "6bef1450a86372449f90993684355eda7d5cac75655264977436fd12168b493f"
+    },
+    {
+      "cue_id": "mm001-word-162",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-014-word-timed/006_mm001-word-162-clean-strike-vs-noise.png",
+      "sha256": "a7674e08960d3e0cafaa2c8348451505fd2dae23375bbde97c59bfbc3da8f429"
+    },
+    {
+      "cue_id": "mm001-word-163",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-014-word-timed/007_mm001-word-163-agreements-hold.png",
+      "sha256": "ff144bd1385e4f8037bb0dc0a85702c562e4fc9c06fc2c937628f90463bc811d"
+    },
+    {
+      "cue_id": "mm001-word-164",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-014-word-timed/008_mm001-word-164-hostility-craft.png",
+      "sha256": "9a25b911c0bbd4879ececf3639d9be02c99da163b0cf074e79e75653820e56a9"
+    },
+    {
+      "cue_id": "mm001-word-165",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-014-word-timed/009_mm001-word-165-performance-over.png",
+      "sha256": "f1abf250cc9c0413fe4dfd543336f3ff40abf7b99be3c23393598b70ef4d9d37"
+    },
+    {
+      "cue_id": "mm001-word-166",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-014-word-timed/010_mm001-word-166-real-world-boundary.png",
+      "sha256": "ffa4fd6c5348786544f32d88a1c3f0ce22d22331df98974599dd88669c2aac9a"
+    },
+    {
+      "cue_id": "mm001-word-167",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-014-word-timed/011_mm001-word-167-machine-broke.png",
+      "sha256": "bee6433f4e79a0f466c30ddb4963506f931f09dc35ef68d1cb1b9523c0db43ad"
+    },
+    {
+      "cue_id": "mm001-word-168",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-014-word-timed/012_mm001-word-168-bar-died.png",
+      "sha256": "680d2b796e582ee00bec4c3b9c950cf6398e5e1623c3136216112cc82ed99c7f"
+    },
+    {
+      "cue_id": "mm001-word-169",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-015-word-timed/001_mm001-word-169-not-co-stars.png",
+      "sha256": "d9db30a159fffbe525233cdfbfa55d245623fd534d884e886ec74c0d90a6c527"
+    },
+    {
+      "cue_id": "mm001-word-170",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-015-word-timed/002_mm001-word-170-hold-the-ritual.png",
+      "sha256": "d262af05cc4a111736cca5b2b1e61241297387ce67bd99cd940dff3c430ae700"
+    },
+    {
+      "cue_id": "mm001-word-171",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-015-word-timed/003_mm001-word-171-create-the-thing.png",
+      "sha256": "7c8bc3c908815b3ef9cb6250fa05e4174aa8411a1485f891c85325ed456a6ff2"
+    },
+    {
+      "cue_id": "mm001-word-172",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-015-word-timed/004_mm001-word-172-controlled-danger-art.png",
+      "sha256": "5d3a4fe993a96f915191f31243ea99ff0498480b20e5781ac58199d05cd2413a"
+    },
+    {
+      "cue_id": "mm001-word-173",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-015-word-timed/005_mm001-word-173-public-skill-test.png",
+      "sha256": "077f6da59f68e9e0a5685b3b853d611d99d984854c01d99f94648c598c633daf"
+    },
+    {
+      "cue_id": "mm001-word-174",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-015-word-timed/006_mm001-word-174-rap-too-violent.png",
+      "sha256": "e25e26e973e6339c5bd3efc710442e8d407186f844868662e115676525d3fcab"
+    },
+    {
+      "cue_id": "mm001-word-175",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-015-word-timed/007_mm001-word-175-do-not-panic.png",
+      "sha256": "0e28e9b52a7dfff183fc7e2e6b55a4ccc52c298ac5fb87345e591476dede8bc3"
+    },
+    {
+      "cue_id": "mm001-word-176",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-015-word-timed/008_mm001-word-176-prefer-what.png",
+      "sha256": "0c695a6a328e50bbee9d0eade29b3e9b677ff4fbae891bf07f74f38cb3c58922"
+    },
+    {
+      "cue_id": "mm001-word-177",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-015-word-timed/009_mm001-word-177-hidden-until-explodes.png",
+      "sha256": "f85a43a1f6e9a177557454aa7458023e59659c6c571a22df180c7859c27a3565"
+    },
+    {
+      "cue_id": "mm001-word-178",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-015-word-timed/010_mm001-word-178-open-language.png",
+      "sha256": "eb81d1267b748d24a520522fb243d728259574556490c3321e90604464221ef3"
+    },
+    {
+      "cue_id": "mm001-word-179",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-015-word-timed/011_mm001-word-179-beat-crowd.png",
+      "sha256": "af01206dd4031f17e726684fd26fe6ccc87f8764fe8cc0ca30a28e7089f0274f"
+    },
+    {
+      "cue_id": "mm001-word-180",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-015-word-timed/012_mm001-word-180-keep-your-nerve.png",
+      "sha256": "5dd208aada5a63198fd3875390205af647c25e3dee58ffd65884a53de40e9699"
+    },
+    {
+      "cue_id": "mm001-word-181",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-016-word-timed/001_mm001-word-181-evolution-conflict.png",
+      "sha256": "539aa2376b18730cfa79d7134a57cfc7247cd932f831b6bed6571ba7a5cba637"
+    },
+    {
+      "cue_id": "mm001-word-182",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-016-word-timed/002_mm001-word-182-gorilla-chestbeat.png",
+      "sha256": "215affb13bbce7b836a41234175606adcc73af47e70fdaaafa4f6019d456e3aa"
+    },
+    {
+      "cue_id": "mm001-word-183",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-016-word-timed/003_mm001-word-183-knight-sword-rapper.png",
+      "sha256": "5d8952294290a7ff78aa8e20bf9e37cdc105784eb238553ee88d52c5518be1aa"
+    },
+    {
+      "cue_id": "mm001-word-184",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-016-word-timed/004_mm001-word-184-witnesses.png",
+      "sha256": "ae361aa27f6f37f47c6244f76b834ce41c15900ae33cf4a4276eb7d98d5b3e20"
+    },
+    {
+      "cue_id": "mm001-word-185",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-016-word-timed/005_mm001-word-185-public-outperform.png",
+      "sha256": "7c796fa9befbd994972659d7cb95176c6e0464b3fd9e00a5c193864498cfee3e"
+    },
+    {
+      "cue_id": "mm001-word-186",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-016-word-timed/006_mm001-word-186-battlefield-to-beat.png",
+      "sha256": "9fd2e4bb3050e8af3067928db329c1a93d3e3979f6c6883ad0c2624756767c2e"
+    },
+    {
+      "cue_id": "mm001-word-187",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-016-word-timed/007_mm001-word-187-peace-talks-reckless.png",
+      "sha256": "e3dafe93dbeea2084bbc53fae6182c98e3c487c9efb8b2786283fece3eb2629c"
+    },
+    {
+      "cue_id": "mm001-word-188",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-016-word-timed/008_mm001-word-188-host-fallback.png",
+      "sha256": "db1d4ecd14e44478c830aae38b7aeff1db871a2bcc9c177d7c031888e3b1defa"
+    },
+    {
+      "cue_id": "mm001-word-189",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-016-word-timed/009_mm001-word-189-martial-matters.png",
+      "sha256": "7dfd9a9716bf5127434d213752fbd78742bd225453cb3bc2394643fa70c4efaa"
+    },
+    {
+      "cue_id": "mm001-word-190",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-016-word-timed/010_mm001-word-190-three-archetypes.png",
+      "sha256": "dbdb8f6f42d9596be9aba0bd081d91b1d5963979addb61c23143091d994834a2"
+    },
+    {
+      "cue_id": "mm001-word-191",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-016-word-timed/011_mm001-word-191-meet-practice-circle.png",
+      "sha256": "1a290133434d3b4f7d6cc05b3a460575392249f63199382c5715d0b3bde7bf4e"
+    },
+    {
+      "cue_id": "mm001-word-192",
+      "candidate_path": "content/video_engine/projects/martial-matters/assets/kits/combat-words-woodblock-v1/candidates/marshall-monday-001-wave-016-word-timed/012_mm001-word-192-trained-instinct.png",
+      "sha256": "ac65ea255426365abbc75e3cf9691ad58fce743d1ea7dd4c01aa8c82c21effc9"
+    }
+  ],
+  "publication_authorized": false,
+  "catalog_promotion_authorized": false,
+  "artifact_hash": "d0e78c315b92bd75fffb25c62aa05666cc7868398280ebd50f4d3cca95dc798c"
+}

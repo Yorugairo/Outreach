@@ -7,7 +7,8 @@
     "build": "tsc --noEmit",
     "typecheck": "tsc --noEmit",
     "start": "remotion studio src/index.tsx",
-    "render": "remotion render src/index.tsx Editorial"
+    "render": "remotion render src/index.tsx Editorial",
+    "render:editorial-motion-fixture": "node fixtures/editorial-motion-two-shot/render.mjs"
   },
   "dependencies": {
     "@remotion/media": "4.0.502",

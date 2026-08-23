@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import re
 import subprocess
 import sys
 from pathlib import Path
@@ -65,6 +66,7 @@ COMMANDS = {
     "validate-plate-motion-manifest",
     "validate-editorial-motion",
     "compile-editorial-motion",
+    "compile-martial-editorial",
     "compile-canonical-visual-coverage",
     "analyze-timestamped-semantic-coverage",
     "render-editorial-motion-revision",
@@ -423,8 +425,12 @@ def build_parser() -> argparse.ArgumentParser:
     plate_motion_manifest_parser.add_argument("file")
     plate_motion_manifest_parser.add_argument("--job-dir", required=True)
     editorial_motion_parser = subparsers.add_parser("validate-editorial-motion")
-    editorial_motion_parser.add_argument("file")
+    editorial_motion_parser.add_argument("file", nargs="?")
     editorial_motion_parser.add_argument("--asset-map")
+    editorial_motion_parser.add_argument("--pacing-recipe")
+    editorial_motion_parser.add_argument("--adapter-manifest")
+    editorial_motion_parser.add_argument("--job-root")
+    editorial_motion_parser.add_argument("--revision-id")
     editorial_motion_sample_parser = subparsers.add_parser(
         "sample-editorial-motion",
         help="Create an immutable review sample ending on an authored cut boundary",
@@ -460,6 +466,22 @@ def build_parser() -> argparse.ArgumentParser:
     compile_timestamped_editorial_motion_parser.add_argument("--words", required=True)
     compile_timestamped_editorial_motion_parser.add_argument("--pacing-recipe", required=True)
     compile_timestamped_editorial_motion_parser.add_argument("--output", required=True)
+    compile_martial_editorial_parser = subparsers.add_parser(
+        "compile-martial-editorial",
+        help="Compile an exact hash-authorized Martial Matters edit package into one job revision",
+    )
+    compile_martial_editorial_parser.add_argument("--edit-package", required=True)
+    compile_martial_editorial_parser.add_argument("--cue-sheet", required=True)
+    compile_martial_editorial_parser.add_argument("--audio-manifest", required=True)
+    compile_martial_editorial_parser.add_argument("--word-timings", required=True)
+    compile_martial_editorial_parser.add_argument("--caption-plan", required=True)
+    compile_martial_editorial_parser.add_argument("--caption-output", required=True)
+    compile_martial_editorial_parser.add_argument("--authorization", required=True)
+    compile_martial_editorial_parser.add_argument("--pacing-recipe", required=True)
+    compile_martial_editorial_parser.add_argument("--job-root", required=True)
+    compile_martial_editorial_parser.add_argument("--revision-id", required=True)
+    compile_martial_editorial_parser.add_argument("--sample-max-seconds", type=float)
+    compile_martial_editorial_parser.add_argument("--sample-max-cues", type=int)
     timestamped_coverage_parser = subparsers.add_parser(
         "analyze-timestamped-semantic-coverage",
         help="Report canonical narration spans that need new semantic plate assignments",
@@ -480,13 +502,16 @@ def build_parser() -> argparse.ArgumentParser:
     editorial_revision_parser = subparsers.add_parser(
         "render-editorial-motion-revision"
     )
-    editorial_revision_parser.add_argument("--plan", required=True)
-    editorial_revision_parser.add_argument("--asset-map", required=True)
-    editorial_revision_parser.add_argument("--pacing-recipe", required=True)
-    editorial_revision_parser.add_argument("--audio", required=True)
-    editorial_revision_parser.add_argument("--asset-root", required=True)
-    editorial_revision_parser.add_argument("--job-dir", required=True)
-    editorial_revision_parser.add_argument("--output-dir", required=True)
+    editorial_revision_parser.add_argument("--plan")
+    editorial_revision_parser.add_argument("--asset-map")
+    editorial_revision_parser.add_argument("--pacing-recipe")
+    editorial_revision_parser.add_argument("--audio")
+    editorial_revision_parser.add_argument("--asset-root")
+    editorial_revision_parser.add_argument("--job-dir")
+    editorial_revision_parser.add_argument("--output-dir")
+    editorial_revision_parser.add_argument("--job-root")
+    editorial_revision_parser.add_argument("--revision-id")
+    editorial_revision_parser.add_argument("--diagnostic", action="store_true")
     editorial_revision_parser.add_argument("--overlay-map")
     editorial_revision_parser.add_argument("--editor-root")
     editorial_revision_parser.add_argument("--browser-executable")
@@ -869,6 +894,53 @@ def main(argv: Sequence[str] | None = None) -> int:
         )
         return 0
 
+    if args.command == "compile-martial-editorial":
+        from content.video_engine.src.services.martial_editorial_adapter import (
+            MartialEditorialAdapterError,
+            compile_martial_editorial,
+        )
+
+        try:
+            packet = compile_martial_editorial(
+                edit_package=args.edit_package,
+                cue_sheet=args.cue_sheet,
+                audio_manifest=args.audio_manifest,
+                word_timings=args.word_timings,
+                caption_plan=args.caption_plan,
+                caption_output=args.caption_output,
+                authorization=args.authorization,
+                pacing_recipe=args.pacing_recipe,
+                job_root=args.job_root,
+                revision_id=args.revision_id,
+                sample_max_seconds=args.sample_max_seconds,
+                sample_max_cues=args.sample_max_cues,
+            )
+        except (OSError, TypeError, ValueError, MartialEditorialAdapterError) as exc:
+            print(
+                json.dumps(
+                    {"valid": False, "errors": list(getattr(exc, "errors", [str(exc)]))},
+                    indent=2,
+                )
+            )
+            return 1
+        print(
+            json.dumps(
+                {
+                    "valid": True,
+                    "episode_id": packet["episode_id"],
+                    "revision_id": packet["revision_id"],
+                    "authorization_id": packet["authorization_id"],
+                    "motion_plan_hash": packet["motion_plan"]["artifact_hash"],
+                    "adapter_manifest_hash": packet["adapter_manifest"]["artifact_hash"],
+                    "shot_count": len(packet["motion_plan"]["shots"]),
+                    "duration_s": packet["motion_plan"]["duration_s"],
+                    "output_dir": packet["output_dir"],
+                },
+                indent=2,
+            )
+        )
+        return 0
+
     if args.command in {"compile-editorial-motion", "validate-editorial-motion"}:
         from content.video_engine.src.services.editorial_motion import (
             EditorialMotionError,
@@ -902,6 +974,37 @@ def main(argv: Sequence[str] | None = None) -> int:
                     encoding="utf-8",
                 )
             else:
+                if args.job_root or args.revision_id:
+                    if not args.job_root or not args.revision_id:
+                        raise ValueError("--job-root and --revision-id must be supplied together")
+                    if re.fullmatch(r"[a-z0-9]+(?:[._-][a-z0-9]+)*", args.revision_id) is None:
+                        raise ValueError("--revision-id must be a safe lowercase ID")
+                    job_root = Path(args.job_root).resolve()
+                    try:
+                        job_root.relative_to(DEFAULT_ARTIFACT_ROOT.resolve())
+                    except ValueError as exc:
+                        raise ValueError("--job-root must remain under content/video_engine/runtime/jobs") from exc
+                    revision_dir = job_root / "animatic" / "revisions" / args.revision_id
+                    plan_path = revision_dir / "editorial-motion-plan.json"
+                    asset_map_path = Path(args.asset_map) if args.asset_map else revision_dir / "asset-map.json"
+                    pacing_path = Path(args.pacing_recipe) if args.pacing_recipe else revision_dir / "pacing-recipe.json"
+                    manifest_path = Path(args.adapter_manifest) if args.adapter_manifest else revision_dir / "martial-editorial-adapter-manifest.json"
+                    from content.video_engine.src.guards.editorial_motion_qc import run_editorial_motion_qc
+
+                    qc = run_editorial_motion_qc(
+                        plan_path,
+                        pacing_recipe=pacing_path,
+                        asset_map=asset_map_path,
+                        asset_root=revision_dir / "public",
+                        revision_dir=revision_dir,
+                        job_dir=job_root,
+                        adapter_manifest=manifest_path,
+                        check_files=True,
+                    )
+                    print(json.dumps({"valid": qc["overall"] == "pass", **qc}, indent=2))
+                    return 0 if qc["overall"] == "pass" else 1
+                if not args.file:
+                    raise ValueError("validate-editorial-motion requires FILE or --job-root/--revision-id")
                 known_assets = None
                 if args.asset_map:
                     asset_payload = _load_json(args.asset_map)
@@ -1004,15 +1107,76 @@ def main(argv: Sequence[str] | None = None) -> int:
         )
 
         try:
-            overlays = _load_json(args.overlay_map) if args.overlay_map else {}
+            adapter_manifest = None
+            if args.job_root or args.revision_id:
+                if not args.job_root or not args.revision_id:
+                    raise ValueError("--job-root and --revision-id must be supplied together")
+                if re.fullmatch(r"[a-z0-9]+(?:[._-][a-z0-9]+)*", args.revision_id) is None:
+                    raise ValueError("--revision-id must be a safe lowercase ID")
+                job_root = Path(args.job_root).resolve()
+                try:
+                    job_root.relative_to(DEFAULT_ARTIFACT_ROOT.resolve())
+                except ValueError as exc:
+                    raise ValueError("--job-root must remain under content/video_engine/runtime/jobs") from exc
+                revision_dir = job_root / "animatic" / "revisions" / args.revision_id
+                plan = revision_dir / "editorial-motion-plan.json"
+                asset_map = revision_dir / "asset-map.json"
+                pacing_recipe = revision_dir / "pacing-recipe.json"
+                audio = revision_dir / "canonical-audio-manifest.json"
+                asset_root = revision_dir / "public"
+                job_dir = job_root
+                output_dir = revision_dir / "render"
+                overlay_map_path = revision_dir / "overlay-map.json"
+                adapter_manifest = revision_dir / "martial-editorial-adapter-manifest.json"
+                adapter_revision_dir = revision_dir
+            else:
+                required = {
+                    "--plan": args.plan,
+                    "--asset-map": args.asset_map,
+                    "--pacing-recipe": args.pacing_recipe,
+                    "--audio": args.audio,
+                    "--asset-root": args.asset_root,
+                    "--job-dir": args.job_dir,
+                    "--output-dir": args.output_dir,
+                }
+                missing = [flag for flag, value in required.items() if not value]
+                if missing:
+                    raise ValueError("missing required render arguments: " + ", ".join(missing))
+                plan = args.plan
+                asset_map = args.asset_map
+                pacing_recipe = args.pacing_recipe
+                audio = args.audio
+                asset_root = args.asset_root
+                job_dir = args.job_dir
+                output_dir = args.output_dir
+                overlay_map_path = args.overlay_map
+            overlays = _load_json(overlay_map_path) if overlay_map_path else {}
+            if adapter_manifest is not None:
+                from content.video_engine.src.guards.editorial_motion_qc import run_editorial_motion_qc
+
+                qc = run_editorial_motion_qc(
+                    plan,
+                    pacing_recipe=pacing_recipe,
+                    asset_map=asset_map,
+                    asset_root=asset_root,
+                    revision_dir=adapter_revision_dir,
+                    job_dir=job_dir,
+                    adapter_manifest=adapter_manifest,
+                    check_files=True,
+                )
+                if qc["overall"] != "pass":
+                    failures = [
+                        item["detail"] for item in qc["checks"] if item.get("status") == "fail"
+                    ]
+                    raise AnimaticError("martial adapter QC failed: " + "; ".join(failures))
             packet = AnimaticService().render_editorial_motion_revision(
-                args.plan,
-                asset_map=args.asset_map,
-                pacing_recipe=args.pacing_recipe,
-                audio_manifest=args.audio,
-                asset_root=args.asset_root,
-                job_dir=args.job_dir,
-                output_dir=args.output_dir,
+                plan,
+                asset_map=asset_map,
+                pacing_recipe=pacing_recipe,
+                audio_manifest=audio,
+                asset_root=asset_root,
+                job_dir=job_dir,
+                output_dir=output_dir,
                 editor_root=args.editor_root,
                 overlay_map=overlays,
                 browser_executable=args.browser_executable,

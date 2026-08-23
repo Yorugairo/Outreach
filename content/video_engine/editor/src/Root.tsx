@@ -4,10 +4,11 @@ import {
   type CalculateMetadataFunction,
 } from "remotion";
 import { EditorialComposition } from "./Editorial";
-import { DocumentaryComposition, DocumentaryMotionComposition } from "./Documentary";
+import { DocumentaryComposition } from "./Documentary";
 import {
   calculateEditorialMotionMetadata,
   defaultEditorialMotionProps,
+  EditorialMotionComposition,
 } from "./EditorialMotion";
 import type { DocumentaryProps, EditManifest, EditorialProps } from "./types";
 
@@ -98,7 +99,7 @@ export const RemotionRoot: React.FC = () => {
       />
       <Composition
         id="EditorialMotion"
-        component={DocumentaryMotionComposition}
+        component={EditorialMotionComposition}
         durationInFrames={60}
         fps={30}
         width={1920}

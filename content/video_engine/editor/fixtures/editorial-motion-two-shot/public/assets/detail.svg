@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720">
+  <defs>
+    <linearGradient id="desk" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#425b6c"/>
+      <stop offset="1" stop-color="#172129"/>
+    </linearGradient>
+  </defs>
+  <rect width="1280" height="720" fill="url(#desk)"/>
+  <rect x="226" y="88" width="828" height="548" rx="10" fill="#f4ebdd" transform="rotate(-4 640 360)"/>
+  <path d="M360 238h540M336 304h610M354 370h480M388 436h526" stroke="#324c73" stroke-width="12" stroke-linecap="round" opacity=".74"/>
+  <path d="M410 512h320" stroke="#a44a32" stroke-width="18" stroke-linecap="round"/>
+  <circle cx="916" cy="510" r="38" fill="#a44a32"/>
+  <text x="58" y="672" fill="#f4ebdd" font-family="Arial, sans-serif" font-size="34" letter-spacing="8">DETAIL / EVIDENCE PLATE</text>
+</svg>

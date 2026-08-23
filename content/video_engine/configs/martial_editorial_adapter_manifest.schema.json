@@ -1,0 +1,75 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://outreach-program.internal/schemas/martial_editorial_adapter_manifest.v1.json",
+  "title": "Martial editorial adapter manifest v1",
+  "description": "Hash-bound evidence for a job-local Martial Matters editorial compilation.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "episode_id",
+    "revision_id",
+    "authorization_id",
+    "base_edit_package_hash",
+    "cue_sheet_hash",
+    "canonical_audio_manifest_hash",
+    "canonical_audio_hash",
+    "word_timing_sha256",
+    "caption_plan_sha256",
+    "caption_output_sha256",
+    "pacing_recipe_hash",
+    "normalized_plate_plan_hash",
+    "asset_map_hash",
+    "overlay_map_hash",
+    "props_hash",
+    "motion_plan_hash",
+    "duration_s",
+    "cue_count",
+    "staged_asset_count",
+    "contained_file_hashes",
+    "artifact_hash"
+  ],
+  "properties": {
+    "schema_version": {"const": "martial_editorial_adapter_manifest.v1"},
+    "episode_id": {"type": "string", "minLength": 1},
+    "revision_id": {"$ref": "#/definitions/safe_id"},
+    "authorization_id": {"$ref": "#/definitions/safe_id"},
+    "base_edit_package_hash": {"$ref": "#/definitions/hash"},
+    "cue_sheet_hash": {"$ref": "#/definitions/hash"},
+    "canonical_audio_manifest_hash": {"$ref": "#/definitions/hash"},
+    "canonical_audio_hash": {"$ref": "#/definitions/hash"},
+    "word_timing_sha256": {"$ref": "#/definitions/hash"},
+    "caption_plan_sha256": {"$ref": "#/definitions/hash"},
+    "caption_output_sha256": {"$ref": "#/definitions/hash"},
+    "pacing_recipe_hash": {"$ref": "#/definitions/hash"},
+    "normalized_plate_plan_hash": {"$ref": "#/definitions/hash"},
+    "asset_map_hash": {"$ref": "#/definitions/hash"},
+    "overlay_map_hash": {"$ref": "#/definitions/hash"},
+    "props_hash": {"$ref": "#/definitions/hash"},
+    "motion_plan_hash": {"$ref": "#/definitions/hash"},
+    "duration_s": {"type": "number", "exclusiveMinimum": 0},
+    "coverage_start_s": {"type": "number", "minimum": 0},
+    "coverage_end_s": {"type": "number", "exclusiveMinimum": 0},
+    "cue_count": {"const": 192},
+    "staged_asset_count": {"const": 192},
+    "contained_file_hashes": {
+      "type": "array",
+      "minItems": 193,
+      "items": {"$ref": "#/definitions/contained_file"}
+    },
+    "artifact_hash": {"$ref": "#/definitions/hash"}
+  },
+  "definitions": {
+    "hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "safe_id": {"type": "string", "pattern": "^[a-z0-9]+(?:[._-][a-z0-9]+)*$"},
+    "contained_file": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/definitions/hash"}
+      }
+    }
+  }
+}

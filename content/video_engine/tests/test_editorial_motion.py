@@ -145,6 +145,46 @@ def test_compile_binds_explicit_shots_to_words_without_repeating_audio() -> None
     assert plan["provider_calls"] == 0
 
 
+def test_compile_explicit_shot_timing_preserves_authored_midpoint_pause() -> None:
+    inputs = _inputs()
+    legacy = compile_editorial_motion_plan(**inputs)
+    explicit = compile_editorial_motion_plan(
+        **inputs,
+        explicit_shot_timing=[
+            {"start_s": 0.0, "end_s": 1.2},
+            {"start_s": 1.2, "end_s": 3.0},
+        ],
+    )
+
+    assert legacy["shots"][1]["start_s"] == 1.4
+    assert explicit["shots"][0]["duration_s"] == 1.2
+    assert explicit["shots"][1]["start_s"] == 1.2
+    assert explicit["duration_s"] == 3.0
+
+
+def test_explicit_timing_allows_subframe_final_word_rounding_only() -> None:
+    inputs = _inputs()
+    inputs["word_timings"]["words"][-1]["end_s"] = 3.001
+    explicit = compile_editorial_motion_plan(
+        **inputs,
+        explicit_shot_timing=[
+            {"start_s": 0.0, "end_s": 1.2},
+            {"start_s": 1.2, "end_s": 3.0},
+        ],
+    )
+    assert explicit["duration_s"] == 3.0
+
+    inputs["word_timings"]["words"][-1]["end_s"] = 3.02
+    with pytest.raises(EditorialMotionError, match="cuts off"):
+        compile_editorial_motion_plan(
+            **inputs,
+            explicit_shot_timing=[
+                {"start_s": 0.0, "end_s": 1.2},
+                {"start_s": 1.2, "end_s": 3.0},
+            ],
+        )
+
+
 def test_compile_is_deterministic() -> None:
     first = compile_editorial_motion_plan(**_inputs())
     second = compile_editorial_motion_plan(**_inputs())

@@ -1,0 +1,67 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://outreach-program.internal/schemas/editorial_review_authorization.v1.json",
+  "title": "Editorial review authorization v1",
+  "description": "Narrow internal-review permission for an exact immutable edit package and selected local files.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "authorization_id",
+    "episode_id",
+    "scope",
+    "reviewer",
+    "reviewed_at",
+    "reason",
+    "base_edit_package_hash",
+    "canonical_audio_manifest_hash",
+    "canonical_audio_hash",
+    "word_timing_sha256",
+    "cue_sheet_hash",
+    "selected_assets",
+    "publication_authorized",
+    "catalog_promotion_authorized",
+    "artifact_hash"
+  ],
+  "properties": {
+    "schema_version": {"const": "editorial_review_authorization.v1"},
+    "authorization_id": {"$ref": "#/definitions/safe_id"},
+    "episode_id": {"type": "string", "minLength": 1},
+    "scope": {"const": "internal_revision_render_only"},
+    "reviewer": {"type": "string", "minLength": 1},
+    "reviewed_at": {"type": "string", "minLength": 1},
+    "reason": {"type": "string", "minLength": 1},
+    "base_edit_package_hash": {"$ref": "#/definitions/hash"},
+    "canonical_audio_manifest_hash": {"$ref": "#/definitions/hash"},
+    "canonical_audio_hash": {"$ref": "#/definitions/hash"},
+    "word_timing_sha256": {"$ref": "#/definitions/hash"},
+    "cue_sheet_hash": {"$ref": "#/definitions/hash"},
+    "selected_assets": {
+      "type": "array",
+      "minItems": 192,
+      "maxItems": 192,
+      "items": {"$ref": "#/definitions/selected_asset"}
+    },
+    "publication_authorized": {"const": false},
+    "catalog_promotion_authorized": {"const": false},
+    "artifact_hash": {"$ref": "#/definitions/hash"}
+  },
+  "definitions": {
+    "hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "safe_id": {"type": "string", "pattern": "^[a-z0-9]+(?:[._-][a-z0-9]+)*$"},
+    "selected_asset": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["cue_id", "candidate_path", "sha256"],
+      "properties": {
+        "cue_id": {"$ref": "#/definitions/safe_id"},
+        "candidate_path": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^(?!/)(?![A-Za-z]:/)(?!.*(?:^|/)(?:\\.\\.?)(?:/|$)).+"
+        },
+        "sha256": {"$ref": "#/definitions/hash"}
+      }
+    }
+  }
+}

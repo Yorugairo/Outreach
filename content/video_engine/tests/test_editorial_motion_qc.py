@@ -110,6 +110,69 @@ def test_qc_passes_structural_fixture_but_requires_human_review(tmp_path: Path) 
     assert result["quality_claim"].startswith("none")
 
 
+def test_qc_verifies_adapter_manifest_and_contained_file_hashes(tmp_path: Path) -> None:
+    plan, assets, asset_root, job, revision = _fixture(tmp_path)
+    contained = revision / "public" / "proof.bin"
+    contained.parent.mkdir(parents=True, exist_ok=True)
+    contained.write_bytes(b"proof")
+    recipe = build_default_pacing_recipe()
+    manifest_core = {
+        "schema_version": "martial_editorial_adapter_manifest.v1",
+        "revision_id": revision.name,
+        "motion_plan_hash": plan["artifact_hash"],
+        "asset_map_hash": assets["artifact_hash"],
+        "pacing_recipe_hash": recipe["artifact_hash"],
+        "contained_file_hashes": [
+            {"path": "public/proof.bin", "sha256": hashlib.sha256(b"proof").hexdigest()}
+        ],
+    }
+    manifest = _hashed(manifest_core)
+
+    result = _run(
+        tmp_path,
+        plan=plan,
+        asset_map=assets,
+        asset_root=asset_root,
+        job_dir=job,
+        revision_dir=revision,
+        pacing_recipe=recipe,
+        adapter_manifest=manifest,
+    )
+
+    assert result["overall"] == "pass"
+    assert "hash-bound" in _detail(result, "adapter_manifest_integrity")
+
+
+def test_qc_rejects_stale_adapter_contained_file(tmp_path: Path) -> None:
+    plan, assets, asset_root, job, revision = _fixture(tmp_path)
+    contained = revision / "public" / "proof.bin"
+    contained.parent.mkdir(parents=True, exist_ok=True)
+    contained.write_bytes(b"changed")
+    recipe = build_default_pacing_recipe()
+    manifest_core = {
+        "schema_version": "martial_editorial_adapter_manifest.v1",
+        "revision_id": revision.name,
+        "motion_plan_hash": plan["artifact_hash"],
+        "asset_map_hash": assets["artifact_hash"],
+        "pacing_recipe_hash": recipe["artifact_hash"],
+        "contained_file_hashes": [{"path": "public/proof.bin", "sha256": "0" * 64}],
+    }
+
+    result = _run(
+        tmp_path,
+        plan=plan,
+        asset_map=assets,
+        asset_root=asset_root,
+        job_dir=job,
+        revision_dir=revision,
+        pacing_recipe=recipe,
+        adapter_manifest=_hashed(manifest_core),
+    )
+
+    assert result["overall"] == "fail"
+    assert "stale hash" in _detail(result, "adapter_manifest_integrity")
+
+
 def test_qc_accepts_localized_ambient_actions(tmp_path: Path) -> None:
     plan, assets, asset_root, job, revision = _fixture(tmp_path)
     plan["shots"][0]["ambient_actions"] = ["cloud_drift", "river_flow", "ship_wake"]

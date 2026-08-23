@@ -66,3 +66,40 @@ content/video_engine/runtime/
 
 # Manim default cache/output when scenes are instantiated outside a job media_dir
 media/
+
+# Generated media: promoted vs provisional.
+# Promoted catalogue assets ARE tracked — asset-catalog.v1.json binds them by
+# sha256, so a missing file breaks resolution. Review and quarantine deliveries
+# are provisional by definition and are replaced, not versioned.
+content/video_engine/**/assets/review/
+content/video_engine/**/assets/quarantine/
+content/video_engine/**/assets/generated/review/
+content/video_engine/**/assets/generated/quarantine/
+
+# Runtime output is never hand-edited and never committed (AGENTS.md).
+content/video_engine/runtime/
+content/video_engine/**/runtime/
+
+# Node dependencies, anywhere in the tree.
+node_modules/
+
+# Rendered video is regenerable output, not source. One pilot's render folder
+# alone is 5.7GB; committing these permanently bloats every clone.
+content/video_engine/**/render/
+*.mp4
+*.mov
+*.webm
+
+# Generated imagery is not source and is not byte-reproducible.
+# A regenerated plate never matches its recorded sha256, so git provides
+# storage, not reproducibility — and .git is already 19GB. Asset durability is
+# a backup concern, handled outside version control.
+# Images already tracked stay tracked; this stops the tree growing.
+*.png
+*.jpg
+*.jpeg
+*.webp
+*.gif
+*.psd
+*.tif
+*.tiff
