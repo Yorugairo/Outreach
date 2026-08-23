@@ -42,6 +42,37 @@ for a small bounded fix that still requires implementation reasoning, and
 `implementation_luna` for coherent moderate slices. Use `explorer`,
 `docs_researcher`, and `reviewer` as read-only evidence producers.
 
+### Dispatch mapping
+
+**The names above are roles, not dispatchable agent types.** A harness exposes
+its own set — commonly `general-purpose`, `Explore`, and `Plan`. A slice owned by
+a role name alone cannot be delegated, so map the role to a type the harness
+actually has, and keep the role because it still carries the intent: how much
+judgement the slice needs, and whether it may write.
+
+| Role | Typical type | Write access |
+| --- | --- | --- |
+| `speedster`, `junior_developer`, `implementation_luna` | `general-purpose` | Yes — the slice's write set only |
+| `explorer`, `docs_researcher`, `reviewer` | `Explore` | No |
+| `architect_sol` | `Plan` | Plan and planning evidence only |
+| `release_steward` | **parent only** | Git operations stay with the parent |
+
+Check the harness's available types before dispatching; if a role has no
+equivalent, the parent keeps the slice rather than substituting a weaker agent.
+
+Whatever the mapping, four rules survive it:
+
+- **Every delegated diff is reviewed before integration.** A completion claim is
+  not evidence. The parent reads the diff and runs the slice's validation itself.
+- **Write sets never overlap.** Dispatch together only slices that touch disjoint
+  files. Shared integration points — router registration, module exports, config
+  files — stay with the parent, because two agents editing one file is how a
+  parallel run corrupts itself.
+- **A dispatch brief names the plan path, task id, allowed files, acceptance, and
+  the exact validation command.** Never a vague brief.
+- Architecture, protected boundaries, human gates, and ambiguous debugging stay
+  with the parent regardless of slice size.
+
 ## PRP Format
 
 New plans use YAML frontmatter:

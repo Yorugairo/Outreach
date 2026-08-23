@@ -1,0 +1,55 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://outreach-program.internal/schemas/pronunciation-dictionary.v1.json",
+  "title": "Pronunciation Dictionary v1",
+  "description": "Repo-held, versioned pronunciation rules synced to ElevenLabs. Accretive: each episode's corrections are inherited by every later episode. Phoneme rules are silently ignored by models other than eleven_flash_v2 and eleven_v3, so the model is declared here and unusable rules are rejected at authoring time.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "name",
+    "model_id",
+    "rules",
+    "artifact_hash"
+  ],
+  "properties": {
+    "schema_version": {"const": "pronunciation_dictionary.v1"},
+    "name": {"type": "string", "minLength": 1},
+    "model_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The TTS model these rules will be used with. eleven_multilingual_v2 skips phoneme tags entirely."
+    },
+    "rules": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["string_to_replace", "type"],
+        "properties": {
+          "string_to_replace": {"type": "string", "minLength": 1},
+          "type": {"enum": ["alias", "phoneme"]},
+          "alias": {"type": "string", "minLength": 1},
+          "phoneme": {"type": "string", "minLength": 1},
+          "alphabet": {"enum": ["ipa", "cmu"]},
+          "note": {
+            "type": "string",
+            "description": "Why this rule exists — which episode surfaced the mispronunciation."
+          },
+          "added_episode": {"type": "string"}
+        }
+      }
+    },
+    "dictionary_id": {
+      "type": ["string", "null"],
+      "description": "ElevenLabs dictionary id, returned on first sync."
+    },
+    "version_id": {"type": ["string", "null"]},
+    "synced_rules_hash": {
+      "type": ["string", "null"],
+      "description": "Hash of the rules at last successful sync. Sync is a no-op while this matches."
+    },
+    "artifact_hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}

@@ -34,6 +34,14 @@ COMMANDS = {
     "resume",
     "status",
     "approve",
+    "ingest-script",
+    "compile-director-request",
+    "record-director-proposal",
+    "compile-provisional-coverage",
+    "compile-visual-prompt-pack",
+    "validate-candidate-batch",
+    "render-scene-board",
+    "record-scene-selection",
     "render-unit",
     "verify-editor",
     "validate",
@@ -52,6 +60,13 @@ COMMANDS = {
     "compile-communication-grammar",
     "validate-communication-grammar",
     "validate-style-packs",
+    "validate-video-style-packs",
+    "resolve-episode-assets",
+    "ingest-canonical-audio",
+    "preview-pronunciation",
+    "compile-pronunciation-sync",
+    "register-assets",
+    "compose-plate",
     "validate-asset-map",
     "validate-foundation-review",
     "validate-world-packs",
@@ -288,6 +303,64 @@ def build_parser() -> argparse.ArgumentParser:
     render_unit_parser.add_argument("unit")
     render_unit_parser.add_argument("--dry-run", action="store_true")
     render_unit_parser.add_argument("--skip-check", action="store_true")
+    # --- P14 paste lane: script -> director -> coverage -> board -> selection ---
+    ingest_parser = subparsers.add_parser("ingest-script")
+    ingest_parser.add_argument("--script", required=True)
+    ingest_parser.add_argument("--attest", required=True)
+    ingest_parser.add_argument("--output", required=True)
+    ingest_parser.add_argument("--brief-id", required=True)
+    ingest_parser.add_argument("--title", required=True)
+    ingest_parser.add_argument("--lane", required=True)
+    ingest_parser.add_argument("--aspect", default="landscape")
+    ingest_parser.add_argument("--wpm", type=int, default=140)
+    ingest_parser.add_argument("--hold-s", type=float, default=6.0)
+
+    director_request_parser = subparsers.add_parser("compile-director-request")
+    director_request_parser.add_argument("--brief", required=True)
+    director_request_parser.add_argument("--output")
+    director_request_parser.add_argument("--style-note")
+
+    director_proposal_parser = subparsers.add_parser("record-director-proposal")
+    director_proposal_parser.add_argument("--proposal", required=True)
+    director_proposal_parser.add_argument("--brief", required=True)
+    director_proposal_parser.add_argument("--output", required=True)
+
+    provisional_parser = subparsers.add_parser("compile-provisional-coverage")
+    provisional_parser.add_argument("--proposal", required=True)
+    provisional_parser.add_argument("--brief", required=True)
+    provisional_parser.add_argument("--output", required=True)
+
+    prompt_pack_parser = subparsers.add_parser("compile-visual-prompt-pack")
+    prompt_pack_parser.add_argument("--coverage", required=True)
+    prompt_pack_parser.add_argument("--lane", required=True)
+    prompt_pack_parser.add_argument("--output", required=True)
+    prompt_pack_parser.add_argument("--variants", type=int, default=3)
+    prompt_pack_parser.add_argument("--style-note")
+
+    candidate_batch_parser = subparsers.add_parser("validate-candidate-batch")
+    candidate_batch_parser.add_argument("--batch", required=True)
+    candidate_batch_parser.add_argument("--pack", required=True)
+    candidate_batch_parser.add_argument("--job-root", required=True)
+
+    scene_board_parser = subparsers.add_parser("render-scene-board")
+    scene_board_parser.add_argument("--coverage", required=True)
+    scene_board_parser.add_argument("--pack", required=True)
+    scene_board_parser.add_argument("--batch", required=True)
+    scene_board_parser.add_argument("--brief", required=True)
+    scene_board_parser.add_argument("--attestation", required=True)
+    scene_board_parser.add_argument("--output", required=True)
+
+    scene_selection_parser = subparsers.add_parser("record-scene-selection")
+    scene_selection_parser.add_argument("--board", required=True)
+    scene_selection_parser.add_argument("--output", required=True)
+    scene_selection_parser.add_argument("--reviewed-by", required=True)
+    scene_selection_parser.add_argument("--selection")
+    scene_selection_parser.add_argument(
+        "--approve",
+        action="store_true",
+        help="Operator action. Product code never sets this.",
+    )
+
     verify_editor_parser = subparsers.add_parser("verify-editor")
     verify_editor_parser.add_argument("--smoke", action="store_true")
     study_parser = subparsers.add_parser("validate-study")
@@ -341,6 +414,51 @@ def build_parser() -> argparse.ArgumentParser:
     compile_grammar_parser.add_argument("--output", required=True)
     validate_grammar_parser = subparsers.add_parser("validate-communication-grammar")
     validate_grammar_parser.add_argument("file")
+    compose_plate_parser = subparsers.add_parser("compose-plate")
+    compose_plate_parser.add_argument("--plate", required=True)
+    compose_plate_parser.add_argument("--output", required=True)
+
+    preview_pron_parser = subparsers.add_parser("preview-pronunciation")
+    preview_pron_parser.add_argument("--dictionary", required=True)
+    preview_pron_parser.add_argument("--script", required=True)
+
+    compile_pron_parser = subparsers.add_parser("compile-pronunciation-sync")
+    compile_pron_parser.add_argument("--dictionary", required=True)
+    compile_pron_parser.add_argument("--output")
+
+    canonical_ingest_parser = subparsers.add_parser("ingest-canonical-audio")
+    canonical_ingest_parser.add_argument("--coverage", required=True)
+    canonical_ingest_parser.add_argument("--audio", required=True)
+    canonical_ingest_parser.add_argument("--brief", required=True)
+    canonical_ingest_parser.add_argument("--output", required=True)
+    canonical_ingest_parser.add_argument(
+        "--project-root",
+        help="Root the audio's words_path resolves against. Prefers the master word list over reassembling overlapping block timings.",
+    )
+
+    resolve_assets_parser = subparsers.add_parser("resolve-episode-assets")
+    resolve_assets_parser.add_argument("--coverage", required=True)
+    resolve_assets_parser.add_argument("--catalog", required=True)
+    resolve_assets_parser.add_argument("--output")
+    resolve_assets_parser.add_argument("--episode-number", type=int)
+    resolve_assets_parser.add_argument(
+        "--for-render",
+        action="store_true",
+        help="Only resolve assets already promoted to render_eligible.",
+    )
+
+    register_assets_parser = subparsers.add_parser("register-assets")
+    register_assets_parser.add_argument("--catalog", required=True)
+    register_assets_parser.add_argument("--assets", required=True)
+    register_assets_parser.add_argument("--output", required=True)
+
+    video_style_packs_parser = subparsers.add_parser("validate-video-style-packs")
+    video_style_packs_parser.add_argument(
+        "--pack-dir",
+        help="Defaults to content/video_engine/configs/style_packs.",
+    )
+    video_style_packs_parser.add_argument("--lane")
+
     validate_style_packs_parser = subparsers.add_parser("validate-style-packs")
     validate_style_packs_parser.add_argument("file")
     validate_style_packs_parser.add_argument("--calibration-inventory")
@@ -681,6 +799,105 @@ def _print_status_table(run: VideoRun, events: list[VideoStageEvent]) -> None:
     )
 
 
+
+def _paste_lane_services():
+    """Import the paste-lane services lazily so unrelated commands stay cheap."""
+
+    from content.video_engine.src.services import (
+        director,
+        provisional_coverage,
+        scene_board,
+        scene_selection,
+        script_ingest,
+        visual_prompt_pack,
+    )
+
+    return director, provisional_coverage, scene_board, scene_selection, script_ingest, visual_prompt_pack
+
+
+def _paste_lane_summary(args: argparse.Namespace) -> dict:
+    """Run one paste-lane command and return its summary."""
+
+    director, coverage_mod, board_mod, selection_mod, ingest_mod, pack_mod = (
+        _paste_lane_services()
+    )
+
+    if args.command == "ingest-script":
+        return ingest_mod.ingest_script(
+            script_path=args.script,
+            attestation=args.attest,
+            output_dir=args.output,
+            brief_id=args.brief_id,
+            title=args.title,
+            lane=args.lane,
+            aspect=args.aspect,
+            words_per_minute=args.wpm,
+            target_slot_hold_s=args.hold_s,
+        )
+    if args.command == "compile-director-request":
+        request = director.compile_director_request(args.brief, style_note=args.style_note)
+        if args.output:
+            target = Path(args.output)
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_text(json.dumps(request, indent=2), encoding="utf-8")
+        return {
+            "brief_hash": request["brief_hash"],
+            "suggested_beat_count": request["suggested_beat_count"],
+            "operator_writes_on_screen_copy": request["operator_writes_on_screen_copy"],
+            "output": str(args.output or ""),
+        }
+    if args.command == "record-director-proposal":
+        return director.record_director_proposal(
+            args.proposal, brief=args.brief, output_dir=args.output
+        )
+    if args.command == "compile-provisional-coverage":
+        return coverage_mod.compile_and_write(
+            args.proposal, brief=args.brief, output_dir=args.output
+        )
+    if args.command == "compile-visual-prompt-pack":
+        return pack_mod.compile_and_write(
+            args.coverage,
+            lane=args.lane,
+            output_dir=args.output,
+            variants_per_slot=args.variants,
+            style_note=args.style_note,
+        )
+    if args.command == "validate-candidate-batch":
+        normalized = pack_mod.validate_candidate_batch(
+            args.batch, pack=args.pack, job_root=args.job_root
+        )
+        return {"valid": True, "item_count": len(normalized["items"])}
+    if args.command == "render-scene-board":
+        return board_mod.render_scene_board(
+            coverage=args.coverage,
+            pack=args.pack,
+            batch=args.batch,
+            brief=args.brief,
+            attestation=args.attestation,
+            output_dir=args.output,
+        )
+    return selection_mod.record_scene_selection(
+        board=args.board,
+        output_dir=args.output,
+        reviewed_by=args.reviewed_by,
+        operator_payload=args.selection,
+        approved=args.approve,
+    )
+
+
+def _run_paste_lane_command(args: argparse.Namespace) -> int:
+    """Shared error envelope for the P14 paste-lane commands."""
+
+    try:
+        summary = _paste_lane_summary(args)
+    except ValueError as exc:
+        errors = getattr(exc, "errors", None) or [str(exc)]
+        print(json.dumps({"valid": False, "errors": errors}, indent=2))
+        return 1
+    print(json.dumps(summary, indent=2))
+    return 0
+
+
 def main(argv: Sequence[str] | None = None) -> int:
     load_video_environment()
     args = build_parser().parse_args(argv)
@@ -695,6 +912,142 @@ def main(argv: Sequence[str] | None = None) -> int:
     if args.command == "resume":
         print(json.dumps(pipeline.resume(args.job_id).to_dict(), indent=2))
         return 0
+    if args.command in {
+        "ingest-script",
+        "compile-director-request",
+        "record-director-proposal",
+        "compile-provisional-coverage",
+        "compile-visual-prompt-pack",
+        "validate-candidate-batch",
+        "render-scene-board",
+        "record-scene-selection",
+    }:
+        return _run_paste_lane_command(args)
+
+    if args.command == "compose-plate":
+        from content.video_engine.src.services.composed_plate import (
+            ComposedPlateError,
+            compose_and_write,
+        )
+
+        try:
+            summary = compose_and_write(args.plate, output_dir=args.output)
+        except ComposedPlateError as exc:
+            print(json.dumps({"valid": False, "errors": exc.errors}, indent=2))
+            return 1
+        print(json.dumps(summary, indent=2))
+        return 0
+
+    if args.command in {"preview-pronunciation", "compile-pronunciation-sync"}:
+        from content.video_engine.src.services.pronunciation_dictionary import (
+            PronunciationDictionaryError,
+            compile_sync_request,
+            preview as preview_pronunciation,
+        )
+
+        try:
+            if args.command == "preview-pronunciation":
+                summary = preview_pronunciation(
+                    args.dictionary, Path(args.script).read_text(encoding="utf-8")
+                )
+            else:
+                summary = compile_sync_request(args.dictionary)
+                if args.output:
+                    target = Path(args.output)
+                    target.parent.mkdir(parents=True, exist_ok=True)
+                    target.write_text(json.dumps(summary["body"], indent=2), encoding="utf-8")
+        except (PronunciationDictionaryError, ValueError, OSError) as exc:
+            errors = getattr(exc, "errors", None) or [str(exc)]
+            print(json.dumps({"valid": False, "errors": errors}, indent=2))
+            return 1
+        print(json.dumps(summary, indent=2))
+        return 0
+
+    if args.command == "ingest-canonical-audio":
+        from content.video_engine.src.services.canonical_coverage_ingest import (
+            CanonicalIngestError,
+            ingest_canonical_audio,
+        )
+
+        try:
+            summary = ingest_canonical_audio(
+                args.coverage,
+                audio=args.audio,
+                brief=args.brief,
+                output_dir=args.output,
+                project_root=args.project_root,
+            )
+        except (CanonicalIngestError, ValueError) as exc:
+            errors = getattr(exc, "errors", None) or [str(exc)]
+            print(json.dumps({"valid": False, "errors": errors}, indent=2))
+            return 1
+        print(json.dumps(summary, indent=2))
+        return 0
+
+    if args.command in {"resolve-episode-assets", "register-assets"}:
+        from content.video_engine.src.services.artifact_io import load_json
+        from content.video_engine.src.services.asset_catalog import (
+            AssetCatalogError,
+            register_assets,
+            resolve_episode_assets,
+        )
+
+        try:
+            if args.command == "resolve-episode-assets":
+                report = resolve_episode_assets(
+                    args.coverage,
+                    args.catalog,
+                    for_render=args.for_render,
+                    episode_number=args.episode_number,
+                )
+                if args.output:
+                    target = Path(args.output)
+                    target.parent.mkdir(parents=True, exist_ok=True)
+                    target.write_text(json.dumps(report, indent=2), encoding="utf-8")
+                summary = {
+                    "slot_count": report["slot_count"],
+                    "resolved_count": report["resolved_count"],
+                    "coverage_ratio": report["coverage_ratio"],
+                    "tier_counts": report["tier_counts"],
+                    "style_version": report["style_version"],
+                    "gap_count": len(report["gaps"]),
+                    "gap_slot_ids": [gap["slot_id"] for gap in report["gaps"]],
+                    "pruning_candidates": len(report["pruning_candidates"]),
+                    "output": str(args.output or ""),
+                }
+            else:
+                incoming = load_json(args.assets, "new assets")
+                summary = register_assets(
+                    args.catalog,
+                    incoming.get("assets") or [],
+                    output_path=args.output,
+                )
+        except (AssetCatalogError, ValueError) as exc:
+            errors = getattr(exc, "errors", None) or [str(exc)]
+            print(json.dumps({"valid": False, "errors": errors}, indent=2))
+            return 1
+        print(json.dumps(summary, indent=2))
+        return 0
+
+    if args.command == "validate-video-style-packs":
+        from content.video_engine.src.services.style_packs import (
+            StylePackError,
+            get_pack,
+            registry_summary,
+        )
+
+        try:
+            if args.lane:
+                pack = get_pack(args.lane, args.pack_dir)
+                summary = {"lane": pack["lane"], "artifact_hash": pack["artifact_hash"]}
+            else:
+                summary = registry_summary(args.pack_dir)
+        except StylePackError as exc:
+            print(json.dumps({"valid": False, "errors": exc.errors}, indent=2))
+            return 1
+        print(json.dumps(summary, indent=2))
+        return 0
+
     if args.command == "render-unit":
         from content.video_engine.src.services.hyperframes_render import (
             HyperframesCliError,

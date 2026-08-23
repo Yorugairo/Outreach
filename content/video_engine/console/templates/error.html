@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block main %}
+<h2>{{ title }}</h2>
+<ul class="errors">
+  {% for error in errors %}<li>{{ error }}</li>{% endfor %}
+</ul>
+{% endblock %}

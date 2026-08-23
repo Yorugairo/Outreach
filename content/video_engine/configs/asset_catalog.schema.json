@@ -1,0 +1,251 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://outreach-program.internal/schemas/asset-catalog.v1.json",
+  "title": "Asset Catalog v1",
+  "description": "The reusable asset library a project resolves coverage slots against. Extends the project-local catalogue already in use by adding a required style_version, so assets generated under different art directions cannot be silently mixed in one episode.",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "schema_version",
+    "project_root",
+    "resolution_order",
+    "assets"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "channel_id": {
+      "type": "string"
+    },
+    "project_root": {
+      "type": "string",
+      "minLength": 1
+    },
+    "resolution_order": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "exact_semantic_match",
+          "reusable_component_composition",
+          "deterministic_evidence_or_mechanism",
+          "bespoke_plate"
+        ]
+      }
+    },
+    "assets": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "asset_id",
+          "path",
+          "sha256",
+          "kind",
+          "style_version",
+          "semantic_tags",
+          "resolution_tier",
+          "render_eligible"
+        ],
+        "properties": {
+          "asset_id": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9._-]*$"
+          },
+          "path": {
+            "type": "string",
+            "minLength": 1
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "kind": {
+            "enum": [
+              "actor",
+              "prop",
+              "mechanism",
+              "world",
+              "world_board",
+              "cast_board"
+            ]
+          },
+          "style_version": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Art direction this asset was generated under. Mixing versions inside one episode is rejected \u2014 a sparse actor over a dense world does not read as one picture."
+          },
+          "semantic_tags": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "visual_worlds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "identity_lenses": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "resolution_tier": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 4
+          },
+          "generated": {
+            "type": "boolean"
+          },
+          "contains_factual_text": {
+            "type": "boolean"
+          },
+          "rights_state": {
+            "type": "string"
+          },
+          "review_state": {
+            "type": "string"
+          },
+          "render_eligible": {
+            "type": "boolean"
+          },
+          "last_used_episode": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "Sequence number of the most recent episode that resolved to this asset. Null means never used."
+          },
+          "placement": {
+            "type": "object",
+            "description": "Where a figure may stand on a world plate. Without this a compositor has no way to know the left of the frame is furniture, and figures end up standing on it.",
+            "additionalProperties": false,
+            "required": [
+              "figure_zone",
+              "baseline_y",
+              "figure_height"
+            ],
+            "properties": {
+              "figure_zone": {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "items": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                },
+                "description": "[x0, x1] as a fraction of frame width \u2014 the span of clear floor."
+              },
+              "baseline_y": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1,
+                "description": "Where a foreground figure's feet land, as a fraction of frame height."
+              },
+              "max_figures": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "figure_height": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1,
+                "description": "Standing figure height as a fraction of frame height. 0.50 is the channel standard: it is the largest scale at which a three-figure frame still fits a 55%-clear world, and two figures fit every world."
+              }
+            }
+          },
+          "scale_reference": {
+            "type": "object",
+            "description": "One real object in the plate, used to check the world was drawn at the intended human scale. implied_figure_height = drawn_height * (1.75 / real_height_m), and must sit within 15% of placement.figure_height.",
+            "additionalProperties": false,
+            "required": [
+              "object",
+              "real_height_m",
+              "drawn_height"
+            ],
+            "properties": {
+              "object": {
+                "type": "string",
+                "minLength": 1
+              },
+              "real_height_m": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              "drawn_height": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "maximum": 1,
+                "description": "Measured height in the plate, as a fraction of frame height."
+              }
+            }
+          },
+          "layers": {
+            "type": "array",
+            "minItems": 2,
+            "description": "2.5D depth planes, back to front. Present only on layered world plates; a flat plate omits it. Gives the renderer's bounded parallax something to separate and binds straight into a composite recipe.",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "depth_layer",
+                "path",
+                "sha256"
+              ],
+              "properties": {
+                "depth_layer": {
+                  "enum": [
+                    "building_or_environment",
+                    "evidence_safe_region",
+                    "actor_or_machine",
+                    "foreground_cutout"
+                  ]
+                },
+                "path": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "sha256": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "parallax_factor": {
+                  "type": "number",
+                  "minimum": 0,
+                  "description": "Relative lateral travel against the background plane. 1.0 moves with the background."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "artifact_hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "style_families": {
+      "type": "object",
+      "description": "Optional grouping of style_versions known to composite together. An episode may mix versions within one family; mixing families is rejected. A version absent from every family is treated as its own family.",
+      "additionalProperties": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    }
+  }
+}

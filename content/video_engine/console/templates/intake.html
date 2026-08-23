@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block bar_right %}{% if delivery %}<span class="path mono">{{ delivery }}</span>{% endif %}{% endblock %}
+{% block main %}
+
+<form method="get" action="/intake" class="summary">
+  <div style="flex:1;min-width:32ch">
+    <label class="k" for="delivery">Delivery folder</label>
+    <input class="mono" type="text" id="delivery" name="delivery" value="{{ delivery }}"
+           placeholder="path containing a *.manifest.json" style="width:100%">
+  </div>
+  <div><button type="submit">Scan</button></div>
+</form>
+
+{% if report %}
+<section class="summary">
+  <div><span class="k">Assets</span><span class="v">{{ report.asset_count }}</span></div>
+  <div><span class="k">Fail</span><span class="v">{{ report.counts.fail }}</span></div>
+  <div><span class="k">Flag</span><span class="v">{{ report.counts.flag }}</span></div>
+  <div><span class="k">Clean</span><span class="v">{{ report.counts.clean }}</span></div>
+  <div><span class="k">Style version</span><span class="mono" style="font-size:12px">{{ style_version }}</span></div>
+</section>
+
+{% for row in report.assets %}
+<details {% if row.status != 'clean' %}open{% endif %}>
+  <summary>
+    {% if row.status == 'fail' %}<span class="chip chip-fail">FAIL</span>
+    {% elif row.status == 'flag' %}<span class="chip chip-flag">FLAG</span>
+    {% else %}<span class="chip chip-clean">OK</span>{% endif %}
+    <span class="mono">{{ row.asset_id }}</span>
+    <span class="k">{{ row.kind }}</span>
+  </summary>
+  <table>
+    <thead><tr><th scope="col">Check</th><th scope="col">Status</th><th scope="col">Measured</th><th scope="col">Expected</th><th scope="col">Note</th></tr></thead>
+    <tbody>
+    {% for c in row.checks %}
+      <tr>
+        <td>{{ c.check }}</td>
+        <td>
+          {% if c.status == 'fail' %}<span class="chip chip-fail">FAIL</span>
+          {% elif c.status == 'flag' %}<span class="chip chip-flag">FLAG</span>
+          {% else %}<span class="chip chip-clean">OK</span>{% endif %}
+        </td>
+        <td class="mono">{{ c.measured }}</td>
+        <td class="mono">{{ c.expected }}</td>
+        <td>{{ c.note }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</details>
+{% endfor %}
+{% elif not delivery %}
+<div class="empty">
+  <p>Point the scanner at a delivery folder containing a <code>*.manifest.json</code>.
+     Every asset is verified — digests, dimensions, alpha, scale, planes, tier,
+     promotion state — and flagged assets sort first.</p>
+</div>
+{% endif %}
+{% endblock %}

@@ -43,6 +43,15 @@ _DURATION_DRIFT_RATIO = 0.02
 _CAPTION_GROUP_WORDS = 4
 _IMAGE_EXTENSIONS = {".jpg", ".jpeg", ".png", ".webp"}
 _APPROVED_REVIEW_STATUSES = {"rights_reviewed"}
+#: The one intent that lets an animatic_preview see un-promoted assets. The
+#: console exists to judge assets *before* promotion, and the resolver fails
+#: closed on review status — a real conflict, resolved by an explicit opt-in
+#: rather than by loosening the gate: quarantined output, provisional stamp,
+#: every publishable kind unchanged.
+PREVIEW_INTENT = "quarantined_review_preview"
+#: Renders under this directory are previews of unreviewed material. Nothing
+#: may promote them: the resolver refuses any manifest entry pointing here.
+QUARANTINE_DIR = "renders/quarantine"
 
 _PROFILES = {
     "landscape": {"width": 1920, "height": 1080, "fps": 30},
@@ -146,10 +155,25 @@ def validate_unit(unit: Mapping[str, Any], *, schema_path: Path | None = None) -
     return errors
 
 
+def _is_quarantined_preview(unit: Mapping[str, Any]) -> bool:
+    """True only for an animatic_preview that explicitly opts in."""
+
+    return (
+        str(unit.get("unit_kind")) == "animatic_preview"
+        and unit.get("preview_intent") == PREVIEW_INTENT
+    )
+
+
 def resolve_assets(
     unit: Mapping[str, Any], *, repo_root: Path | None = None
 ) -> dict[str, dict[str, Any]]:
-    """Bind plate asset ids to approved manifest entries; fail closed on any drift."""
+    """Bind plate asset ids to approved manifest entries; fail closed on any drift.
+
+    One carve-out, and only one: a quarantined preview may reference assets
+    whose manifest is still under review. Everything else about the binding —
+    presence, extension, sha256 — stays enforced even then, because a preview
+    of the wrong bytes is worse than no preview.
+    """
 
     root = repo_root or _REPO_ROOT
     manifest_path = root / unit["manifest_path"]
@@ -157,9 +181,17 @@ def resolve_assets(
     if not manifest_path.is_file():
         raise HyperframesUnitError([f"manifest: {unit['manifest_path']} not found"])
 
+    quarantined = _is_quarantined_preview(unit)
+    if unit.get("preview_intent") == PREVIEW_INTENT and not quarantined:
+        raise HyperframesUnitError([
+            f"unit: preview_intent '{PREVIEW_INTENT}' is only valid on an "
+            f"animatic_preview; '{unit.get('unit_kind')}' publishes and must "
+            "keep failing closed on review status"
+        ])
+
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     review_status = str(manifest.get("review", {}).get("status", ""))
-    if review_status not in _APPROVED_REVIEW_STATUSES:
+    if review_status not in _APPROVED_REVIEW_STATUSES and not quarantined:
         errors.append(
             f"manifest: review.status '{review_status}' is not an approved status"
         )
@@ -173,6 +205,12 @@ def resolve_assets(
             errors.append(f"assets: '{asset_id}' is not in the approved manifest")
             continue
         asset_path = root / entry["path"]
+        if QUARANTINE_DIR in Path(entry["path"]).as_posix():
+            errors.append(
+                f"assets: '{asset_id}' points into {QUARANTINE_DIR}; quarantined "
+                "previews are provisional and can never be promoted into a manifest"
+            )
+            continue
         suffix = asset_path.suffix.lower()
         if suffix not in _IMAGE_EXTENSIONS:
             errors.append(f"assets: '{asset_id}' has unsupported extension '{suffix}'")
@@ -404,7 +442,10 @@ def render_unit(
         _run_cli(["check"], config=cfg)
         summary["check"] = "pass"
 
-    output_rel = f"renders/unit-{compiled.unit_id}.mp4"
+    if _is_quarantined_preview(unit):
+        output_rel = f"{QUARANTINE_DIR}/unit-{compiled.unit_id}-preview.mp4"
+    else:
+        output_rel = f"renders/unit-{compiled.unit_id}.mp4"
     _run_cli(
         [
             "render",
@@ -431,6 +472,12 @@ def render_unit(
             "duration_drift_ratio": round(drift, 4),
         }
     )
+    if _is_quarantined_preview(unit):
+        summary.update({
+            "provisional": True,
+            "publishable": False,
+            "quarantined": True,
+        })
     if drift > _DURATION_DRIFT_RATIO:
         raise HyperframesUnitError(
             [

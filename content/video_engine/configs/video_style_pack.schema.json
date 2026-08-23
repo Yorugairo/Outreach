@@ -1,0 +1,165 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://outreach-program.internal/schemas/video-style-pack.v1.json",
+  "title": "Video Style Pack v1",
+  "description": "One art lane: renderer, character policy, background policy, caption policy, colour semantics and permitted motion. Derived from the 2026-08-22 reference review. Distinct from style_pack_library.v1, which governs calibration packs for the woodblock art bible.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "lane",
+    "label",
+    "renderer",
+    "character",
+    "background",
+    "captions",
+    "colour_semantics",
+    "motion_recipes",
+    "plate_kinds",
+    "artifact_hash"
+  ],
+  "properties": {
+    "schema_version": {"const": "video_style_pack.v1"},
+    "lane": {
+      "enum": [
+        "expert_explainer",
+        "presenter_infographic",
+        "flat_cartoon_explainer",
+        "stick_explainer",
+        "cutout_history",
+        "woodblock",
+        "whiteboard"
+      ]
+    },
+    "label": {"type": "string", "minLength": 1},
+    "reference_note": {"type": "string"},
+    "renderer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["engine"],
+      "properties": {
+        "engine": {"enum": ["hyperframes", "remotion"]},
+        "runtime_adapter": {
+          "enum": [
+            "gsap",
+            "lottie",
+            "three",
+            "animejs",
+            "css",
+            "waapi",
+            "typegpu"
+          ],
+          "description": "One of the seven HyperFrames adapters. Rive is absent by design: .riv is a compiled binary authored only in Rive's editor, so it cannot be produced programmatically."
+        }
+      }
+    },
+    "character": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["policy", "identity_anchor"],
+      "properties": {
+        "policy": {
+          "enum": [
+            "stick_colour_block",
+            "blank_face",
+            "outlined_flat",
+            "soft_shaded_presenter",
+            "silhouette",
+            "none"
+          ]
+        },
+        "identity_anchor": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Costume block and silhouette every plate must preserve, so facial drift cannot break continuity."
+        },
+        "episode_scoped_garment": {
+          "type": "boolean",
+          "description": "True when the outer garment may be swapped between episodes but is locked within one."
+        },
+        "rendition": {
+          "enum": ["flat", "shaded", "painterly"],
+          "description": "Descriptive only. Rendition level is not restricted: reference conditioning holds identity at any level, and legibility is protected by caption and evidence zoning, not by flattening."
+        }
+      }
+    },
+    "background": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["policy"],
+      "properties": {
+        "policy": {
+          "enum": [
+            "plain",
+            "floating_props",
+            "detailed_environment",
+            "content_zone",
+            "flat_fill"
+          ]
+        },
+        "palette": {
+          "type": "array",
+          "items": {"type": "string", "pattern": "^#[0-9a-fA-F]{6}$"}
+        },
+        "evidence_safe_region": {
+          "type": "boolean",
+          "description": "True when the lane reserves a zone for composited figures, kept clear of the character."
+        }
+      }
+    },
+    "captions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode"],
+      "properties": {
+        "mode": {"enum": ["none", "burned_in"]},
+        "position": {"enum": ["top", "bottom"]},
+        "case": {"enum": ["sentence", "upper"]},
+        "highlight": {
+          "enum": ["none", "keyword", "karaoke"],
+          "description": "keyword highlights one word per phrase; karaoke advances word by word."
+        },
+        "highlight_colour": {"type": "string", "pattern": "^#[0-9a-fA-F]{6}$"},
+        "words_per_group": {"type": "integer", "minimum": 1, "maximum": 12}
+      }
+    },
+    "colour_semantics": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "positive": {"type": "string", "pattern": "^#[0-9a-fA-F]{6}$"},
+        "negative": {"type": "string", "pattern": "^#[0-9a-fA-F]{6}$"},
+        "accent": {"type": "string", "pattern": "^#[0-9a-fA-F]{6}$"}
+      }
+    },
+    "motion_recipes": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "parallax_push",
+          "detail_punch",
+          "masked_reveal",
+          "evidence_highlight",
+          "map_trace",
+          "comic_pop",
+          "split_compare",
+          "type_build",
+          "paper_transition"
+        ]
+      }
+    },
+    "plate_kinds": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"enum": ["generated_plate", "composed_plate"]}
+    },
+    "operator_writes_on_screen_copy": {
+      "type": "boolean",
+      "description": "True where model-written copy is not trusted for this lane, so the director proposes structure only."
+    },
+    "artifact_hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}

@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{{ title }} &middot; Video Engine Console</title>
+<link rel="stylesheet" href="/static/console.css">
+</head>
+<body>
+<header class="bar">
+  <h1>Video Engine Console</h1>
+  <nav>
+    <a href="/catalog">Catalogue</a>
+    <a href="/intake">Intake</a>
+    <a href="/board">Board</a>
+    <a href="/generate">Generate</a>
+    <a href="/preview/motion">Motion</a>
+    <a href="/runs">Runs</a>
+  </nav>
+  {% block bar_right %}{% endblock %}
+</header>
+<main>
+{% block main %}{% endblock %}
+</main>
+</body>
+</html>

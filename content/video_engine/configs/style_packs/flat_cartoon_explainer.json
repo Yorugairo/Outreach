@@ -1,0 +1,46 @@
+{
+  "schema_version": "video_style_pack.v1",
+  "lane": "flat_cartoon_explainer",
+  "label": "Flat cartoon explainer \u2014 heavy outline character on white with floating props",
+  "reference_note": "Nick Invests. Green means money and growth, red means loss; props carry the metaphor.",
+  "renderer": {
+    "engine": "hyperframes",
+    "runtime_adapter": "gsap"
+  },
+  "character": {
+    "policy": "outlined_flat",
+    "identity_anchor": "heavy uniform black outline, flat fills, large oval eyes, strong jaw; hair block and garment colour carry identity",
+    "episode_scoped_garment": true,
+    "rendition": "flat"
+  },
+  "background": {
+    "policy": "floating_props",
+    "palette": [
+      "#FFFFFF"
+    ],
+    "evidence_safe_region": true
+  },
+  "captions": {
+    "mode": "burned_in",
+    "position": "bottom",
+    "case": "sentence",
+    "highlight": "none",
+    "words_per_group": 6
+  },
+  "colour_semantics": {
+    "positive": "#22C55E",
+    "negative": "#EF4444",
+    "accent": "#22C55E"
+  },
+  "motion_recipes": [
+    "comic_pop",
+    "detail_punch",
+    "split_compare",
+    "masked_reveal"
+  ],
+  "plate_kinds": [
+    "generated_plate",
+    "composed_plate"
+  ],
+  "artifact_hash": "9bb1fecff67d69b4d6651874025d69072e0ad7454e2a9c3eead8037b13799e8d"
+}

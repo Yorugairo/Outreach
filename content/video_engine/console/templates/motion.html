@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block main %}
+{% if pending %}<meta http-equiv="refresh" content="2">{% endif %}
+
+<h2>Motion preview — rendered by the lanes, never by the console</h2>
+<div class="empty">
+  <p>Camera transforms and layer composition belong to <strong>Remotion</strong>;
+     a quick provisional look belongs to <strong>HyperFrames</strong> as an
+     <code>animatic_preview</code> unit — estimated timing, never publishable.
+     The console only presses the button.</p>
+</div>
+
+<form method="post" action="/preview/motion" class="summary">
+  <div style="flex:1;min-width:32ch">
+    <label class="k" for="unit">HyperFrames unit JSON</label>
+    <input class="mono" type="text" id="unit" name="unit" value="{{ unit }}"
+           placeholder="path to a hyperframes_unit.v1 file" style="width:100%">
+  </div>
+  <div>
+    <label><input type="checkbox" name="dry_run" value="true" checked>
+      dry run (would this render?)</label>
+  </div>
+  <div>
+    <button type="submit" name="lane" value="hyperframes">Animatic preview</button>
+    <button type="submit" name="lane" value="remotion">Remotion smoke</button>
+  </div>
+</form>
+
+{% if job %}
+<section class="summary">
+  <div><span class="k">Status</span>
+    {% if job.status == 'running' %}<span class="chip chip-flag">RUNNING</span>
+    {% elif job.status == 'failed' %}<span class="chip chip-fail">FAILED</span>
+    {% else %}<span class="chip chip-clean">DONE</span>{% endif %}
+  </div>
+  <div><span class="k">Command</span><span class="mono" style="font-size:11px">{{ job.cmd | join(' ') }}</span></div>
+</section>
+
+{% if job.status == 'running' %}
+<p class="empty">Render in flight; this page refreshes itself. The console stays usable in another tab.</p>
+{% endif %}
+{% if job.stderr %}
+<h3>Lane stderr, verbatim</h3>
+<ul class="errors"><li><pre class="mono" style="white-space:pre-wrap">{{ job.stderr }}</pre></li></ul>
+{% endif %}
+{% if job.stdout %}
+<h3>Lane stdout</h3>
+<pre class="mono" style="white-space:pre-wrap;font-size:11px">{{ job.stdout }}</pre>
+{% endif %}
+{% endif %}
+{% endblock %}

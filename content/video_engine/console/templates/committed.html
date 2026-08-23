@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block main %}
+<h2>Committed</h2>
+<section class="summary">
+  <div><span class="k">Registered and promoted</span><span class="v">{{ added | length }}</span></div>
+  <div><span class="k">Catalogue now holds</span><span class="v">{{ asset_count }}</span></div>
+</section>
+<p class="mono">{{ added | join(', ') }}</p>
+{% if rejected %}<p>Rejected, not registered: <span class="mono">{{ rejected | join(', ') }}</span></p>{% endif %}
+{% if skipped %}<p>Skipped, decide later: <span class="mono">{{ skipped | join(', ') }}</span></p>{% endif %}
+<p><a href="/catalog">Back to the catalogue</a></p>
+{% endblock %}

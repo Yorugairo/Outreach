@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block bar_right %}<span class="path mono">{{ runs_dir }}</span>{% endblock %}
+{% block main %}
+
+<h2>Runs</h2>
+
+{% if not jobs %}
+<div class="empty">
+  <p>No jobs recorded under <code>{{ runs_dir }}</code>.</p>
+  <p>The pipeline writes one per run:</p>
+  <p><code>python -m content.video_engine.cli run --source-ref &lt;ref&gt;</code></p>
+  <p>To read another project's jobs, start the console with
+     <code>--project-root &lt;project dir&gt;</code>; runs are read from
+     <code>&lt;project root&gt;/runtime/jobs</code>.</p>
+  <p>This view is read-only. It never advances a stage, approves a gate, or
+     edits anything under <code>runtime/</code>.</p>
+</div>
+{% else %}
+
+<section class="summary">
+  <div><span class="k">Jobs</span><span class="v">{{ summary.total }}</span></div>
+  <div><span class="k">Failed</span><span class="v">{{ summary.failed }}</span></div>
+  <div><span class="k">Flagged</span><span class="v">{{ summary.flagged }}</span></div>
+  <div><span class="k">Clean</span><span class="v">{{ summary.clean }}</span></div>
+  <div><span class="k">Stage events</span><span class="v">{{ summary.events }}</span></div>
+</section>
+
+<table>
+  <thead>
+    <tr>
+      <th scope="col">State</th>
+      <th scope="col">Job</th>
+      <th scope="col">Run status</th>
+      <th scope="col">Stage</th>
+      <th scope="col">Events</th>
+      <th scope="col">Gates pending</th>
+      <th scope="col">Updated</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for job in jobs %}
+    <tr>
+      <td><span class="chip {{ job.chip_class }}">{{ job.chip_label }}</span></td>
+      <td class="mono">{{ job.id }}</td>
+      <td class="mono">{{ job.status }}</td>
+      <td class="mono">{{ job.current_stage }}{% if job.latest_event_status %} &middot; {% if job.latest_event_stage != job.current_stage %}{{ job.latest_event_stage }} {% endif %}{{ job.latest_event_status }}{% endif %}</td>
+      <td class="num">{{ job.event_count }}</td>
+      <td class="mono">{{ job.pending_gates | join(', ') if job.pending_gates else '—' }}</td>
+      <td class="mono">{{ job.updated_at }}</td>
+    </tr>
+    {% if job.exceptions %}
+    <tr>
+      <td></td>
+      <td colspan="6">
+        <span class="mono" style="font-size:12px;color:var(--text-dim)">{{ job.exceptions | join(' · ') }}</span>
+        {% if job.failures or job.run_error_text %}
+        <ul class="errors">
+          {% for failure in job.failures %}
+          <li>{{ failure.stage_name }} {{ failure.status }} &mdash; {{ failure.error_text if failure.error_text else 'no error text recorded on the stage event' }}</li>
+          {% endfor %}
+          {% if job.run_error_text %}
+          <li>run {{ job.status }} &mdash; {{ job.run_error_text }}</li>
+          {% endif %}
+        </ul>
+        {% endif %}
+      </td>
+    </tr>
+    {% endif %}
+  {% endfor %}
+  </tbody>
+</table>
+
+<p class="empty" style="margin-top:24px">Read-only view. Stages, gates and
+   runtime output are advanced by the pipeline and the operator, never here.</p>
+{% endif %}
+{% endblock %}

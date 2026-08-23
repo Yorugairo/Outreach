@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+{% block bar_right %}{% if coverage %}<span class="path mono">{{ coverage }}</span>{% endif %}{% endblock %}
+{% block main %}
+
+<form method="get" action="/generate" class="summary">
+  <div style="flex:1;min-width:32ch">
+    <label class="k" for="coverage">Coverage artifact</label>
+    <input class="mono" type="text" id="coverage" name="coverage" value="{{ coverage }}"
+           placeholder="path to an editorial coverage .json" style="width:100%">
+  </div>
+  <div>
+    <label class="k" for="lane">Lane</label>
+    {% if lanes %}
+    <select id="lane" name="lane">
+      {% for option in lanes %}
+      <option value="{{ option }}" {% if option == lane %}selected{% endif %}>{{ option }}</option>
+      {% endfor %}
+    </select>
+    {% else %}
+    <input class="mono" type="text" id="lane" name="lane" value="{{ lane }}">
+    {% endif %}
+  </div>
+  <div>
+    <label class="k" for="variants">Variants per slot</label>
+    <input class="mono" type="number" id="variants" name="variants" value="{{ variants }}" min="2" style="width:6ch">
+  </div>
+  <div><button type="submit">Compile</button></div>
+</form>
+
+<p class="empty" style="max-width:none">
+  The provider API adapter is <strong>deferred</strong> — no provider client, no
+  API key, no paid call leaves this console. This view only compiles the request
+  pack; the operator pastes each prompt into a browser generation session and
+  drops the results into a delivery folder for <a href="/intake">/intake</a>.
+</p>
+
+{% if exported %}
+<section class="summary">
+  <div><span class="k">Exported</span><span class="mono" style="font-size:12px">{{ exported }}</span></div>
+</section>
+{% endif %}
+
+{% if pack %}
+<section class="summary">
+  <div><span class="k">Lane</span><span class="v">{{ pack.lane }}</span></div>
+  <div><span class="k">Prompt groups</span><span class="v">{{ pack.groups | length }}</span></div>
+  <div><span class="k">Variants / slot</span><span class="v">{{ pack.variants_per_slot }}</span></div>
+  <div><span class="k">Requested generations</span><span class="v">{{ requested_generations }}</span></div>
+  <div><span class="k">Composed slots (skipped)</span><span class="v">{{ pack.composed_slot_count }}</span></div>
+  <div><span class="k">Coverage hash</span><span class="mono" style="font-size:12px">{{ pack.coverage_hash }}</span></div>
+</section>
+
+<h2>Identity anchor</h2>
+<p>Repeated in every prompt so face drift cannot break continuity.</p>
+<textarea readonly class="mono" rows="2" style="width:100%">{{ pack.identity_anchor }}</textarea>
+
+<h2>Negative prompt</h2>
+<p>Carried by every prompt. Generated text in a plate is never render-eligible —
+   typography is composited by the renderer.</p>
+<textarea readonly class="mono" rows="2" style="width:100%">{{ pack.negative_prompt }}</textarea>
+
+<h2>Prompts</h2>
+{% for group in pack.groups %}
+<details open>
+  <summary>
+    <span class="mono">{{ group.slot_id }}</span>
+    <span class="k">{{ group.visual_archetype }}</span>
+    <span class="k mono">{{ group.duration_s }}s</span>
+    <span class="k">{{ group.variant_count }} variants</span>
+  </summary>
+  <textarea readonly class="mono" rows="5" style="width:100%">{{ group.prompt }}</textarea>
+</details>
+{% endfor %}
+
+<h2>Export the pack</h2>
+<form method="post" action="/generate/export" class="summary">
+  <input type="hidden" name="coverage" value="{{ coverage }}">
+  <input type="hidden" name="lane" value="{{ lane }}">
+  <input type="hidden" name="variants" value="{{ variants }}">
+  <div style="flex:1;min-width:32ch">
+    <label class="k" for="name">File name</label>
+    <input class="mono" type="text" id="name" name="name" placeholder="{{ delivery.batch }}.json" style="width:100%">
+  </div>
+  <div><button type="submit">Export</button></div>
+</form>
+<p class="empty" style="max-width:none">
+  Written under <code>runtime/generation-requests/</code> in the project root.
+  A request pack is derived and disposable; it is never a catalogue artifact.
+</p>
+
+<h2>Expected delivery layout</h2>
+<p>Drop the generated results in one folder shaped like this and
+   <a href="/intake">/intake</a> can scan and bind the batch:</p>
+<pre class="mono">{{ delivery.folder }}
+  {{ delivery.manifest }}
+{% for file in delivery.files %}  {{ file }}
+{% endfor %}</pre>
+
+<p>The manifest names every file with its digest, in the shape delivery intake
+   reads (<code>kind</code> defaults to <code>{{ delivery.kind }}</code> for
+   ungrouped entries):</p>
+<pre class="mono">{
+  "style_family": "&lt;style version the batch was generated in&gt;",
+  "assets": [
+    {"asset_id": "{{ delivery.files[0][:-4] }}", "path": "{{ delivery.files[0] }}",
+     "sha256": "&lt;sha256 of the file&gt;", "kind": "{{ delivery.kind }}"}
+  ]
+}</pre>
+
+<h2>Expected dimensions per kind</h2>
+<table>
+  <thead><tr><th scope="col">Kind</th><th scope="col">Width</th><th scope="col">Height</th></tr></thead>
+  <tbody>
+  {% for kind, size in delivery.dimensions %}
+    <tr><td>{{ kind }}</td><td class="mono">{{ size[0] }}</td><td class="mono">{{ size[1] }}</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+
+{% elif not coverage %}
+<div class="empty">
+  <p>Point the compiler at a coverage artifact. Every non-composed slot fans out
+     into one prompt group requesting N variants; composed slots are drawn by the
+     renderer and never enter the generation budget.</p>
+</div>
+{% endif %}
+{% endblock %}

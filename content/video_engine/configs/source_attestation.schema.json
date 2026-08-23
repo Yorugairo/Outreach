@@ -1,0 +1,56 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://outreach-program.internal/schemas/source-attestation.v1.json",
+  "title": "Source Attestation v1",
+  "description": "Operator assertion that a pasted script is already sourced. Replaces the research gate for the paste lane; it never grants evidence status to any generated pixel.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "asserted_by",
+    "asserted_at",
+    "source_kind",
+    "source_ref",
+    "claim_basis",
+    "script_sha256",
+    "artifact_hash"
+  ],
+  "properties": {
+    "schema_version": {"const": "source_attestation.v1"},
+    "asserted_by": {"type": "string", "minLength": 1},
+    "asserted_at": {"type": "string", "minLength": 1},
+    "source_kind": {
+      "enum": [
+        "own_research",
+        "published_article",
+        "internal_run",
+        "transcript",
+        "other"
+      ]
+    },
+    "source_ref": {"type": "string", "minLength": 1},
+    "claim_basis": {"type": "string", "minLength": 1},
+    "script_sha256": {"$ref": "#/definitions/hash"},
+    "references": {
+      "type": "array",
+      "description": "Attached reference documents (infographics, slide decks, prior runs). Hashed at paste time; nothing reads them yet.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["kind", "ref"],
+        "properties": {
+          "kind": {
+            "enum": ["infographic", "slide_deck", "article", "dataset", "run", "other"]
+          },
+          "ref": {"type": "string", "minLength": 1},
+          "sha256": {"$ref": "#/definitions/hash"},
+          "note": {"type": "string"}
+        }
+      }
+    },
+    "artifact_hash": {"$ref": "#/definitions/hash"}
+  },
+  "definitions": {
+    "hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}

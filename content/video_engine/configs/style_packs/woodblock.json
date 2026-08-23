@@ -1,0 +1,44 @@
+{
+  "schema_version": "video_style_pack.v1",
+  "lane": "woodblock",
+  "label": "Woodblock \u2014 existing graphic silhouette house style",
+  "reference_note": "Existing art bible. Carved ink contours, warm paper, restrained indigo/rust/jade accents.",
+  "renderer": {
+    "engine": "hyperframes",
+    "runtime_adapter": "gsap"
+  },
+  "character": {
+    "policy": "silhouette",
+    "identity_anchor": "graphic silhouette with carved ink contours; identity carried by silhouette and costume block per the active art bible",
+    "episode_scoped_garment": false,
+    "rendition": "flat"
+  },
+  "background": {
+    "policy": "detailed_environment",
+    "palette": [
+      "#F4E6C7",
+      "#25313C",
+      "#178C83"
+    ],
+    "evidence_safe_region": true
+  },
+  "captions": {
+    "mode": "none"
+  },
+  "colour_semantics": {
+    "positive": "#178C83",
+    "negative": "#ED6A4A",
+    "accent": "#F5B72E"
+  },
+  "motion_recipes": [
+    "parallax_push",
+    "paper_transition",
+    "masked_reveal",
+    "map_trace"
+  ],
+  "plate_kinds": [
+    "generated_plate",
+    "composed_plate"
+  ],
+  "artifact_hash": "7094bd4e06a3db653ea3716efc9928d1858db7d473ab628299899659faec7e76"
+}

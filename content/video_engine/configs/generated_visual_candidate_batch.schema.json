@@ -121,6 +121,28 @@
           },
           "prompt_summary": {
             "type": "string"
+          },
+          "slot_id": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Coverage slot this candidate answers. Optional here so the documentary lane's existing batches stay valid; required by the paste lane via visual_prompt_pack.validate_candidate_batch."
+          },
+          "variant_index": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Zero-based variant number within slot_id. Must be distinct per slot."
+          },
+          "qc_flags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Machine or agent QC signals, e.g. suspected_generated_text, identity_anchor_violation."
+          },
+          "confidence": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
           }
         }
       }

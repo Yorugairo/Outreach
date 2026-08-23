@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block main %}
+<h2>No catalogue configured</h2>
+<div class="empty">
+  <p>Point the console at a project, then reload:</p>
+  <p><code>python -m content.video_engine.console --project-root &lt;project dir&gt;</code></p>
+  <p>Or name a catalogue file directly with <code>--catalog</code>, or set
+     <code>VIDEO_ENGINE_PROJECT_ROOT</code> in the environment.</p>
+</div>
+{% endblock %}

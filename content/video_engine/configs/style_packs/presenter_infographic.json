@@ -1,0 +1,49 @@
+{
+  "schema_version": "video_style_pack.v1",
+  "lane": "presenter_infographic",
+  "label": "Presenter infographic \u2014 host anchored beside icon panels",
+  "reference_note": "Alicia Invests. Comparison panels and icon sets; top captions with one keyword highlighted.",
+  "renderer": {
+    "engine": "hyperframes",
+    "runtime_adapter": "gsap"
+  },
+  "character": {
+    "policy": "soft_shaded_presenter",
+    "identity_anchor": "business suit in a fixed colour, anchored to one side of frame, gesturing at the content zone",
+    "episode_scoped_garment": true,
+    "rendition": "shaded"
+  },
+  "background": {
+    "policy": "content_zone",
+    "palette": [
+      "#FFFFFF",
+      "#4A5A66",
+      "#131317"
+    ],
+    "evidence_safe_region": true
+  },
+  "captions": {
+    "mode": "burned_in",
+    "position": "top",
+    "case": "upper",
+    "highlight": "keyword",
+    "highlight_colour": "#22D3EE",
+    "words_per_group": 4
+  },
+  "colour_semantics": {
+    "positive": "#22C55E",
+    "negative": "#EF4444",
+    "accent": "#22D3EE"
+  },
+  "motion_recipes": [
+    "split_compare",
+    "evidence_highlight",
+    "masked_reveal",
+    "type_build"
+  ],
+  "plate_kinds": [
+    "generated_plate",
+    "composed_plate"
+  ],
+  "artifact_hash": "73f8ff9cd14041d47419f3b861b02d658214b6aacf110c19633610361057e75f"
+}

@@ -1,0 +1,49 @@
+{
+  "schema_version": "video_style_pack.v1",
+  "lane": "stick_explainer",
+  "label": "Stick explainer \u2014 colour-block stick figure, psychology or comedy register",
+  "reference_note": "Ceiling: Mr. Finance (~262K). Floor: Stick Trader (101K-159K). Comedy register shares the plumbing. Operator writes on-screen copy: model humour is not trusted.",
+  "renderer": {
+    "engine": "hyperframes",
+    "runtime_adapter": "gsap"
+  },
+  "character": {
+    "policy": "stick_colour_block",
+    "identity_anchor": "circle head, single-weight black line limbs, solid flat colour t-shirt block as the only identity marker; two dot eyes and one curved mouth",
+    "episode_scoped_garment": false,
+    "rendition": "flat"
+  },
+  "background": {
+    "policy": "flat_fill",
+    "palette": [
+      "#EAF2F8",
+      "#F5F0E1",
+      "#C8CDD4"
+    ],
+    "evidence_safe_region": true
+  },
+  "captions": {
+    "mode": "burned_in",
+    "position": "bottom",
+    "case": "sentence",
+    "highlight": "none",
+    "words_per_group": 7
+  },
+  "colour_semantics": {
+    "positive": "#2E7D32",
+    "negative": "#C62828",
+    "accent": "#C62828"
+  },
+  "motion_recipes": [
+    "comic_pop",
+    "detail_punch",
+    "type_build",
+    "split_compare"
+  ],
+  "plate_kinds": [
+    "generated_plate",
+    "composed_plate"
+  ],
+  "operator_writes_on_screen_copy": true,
+  "artifact_hash": "25d2cb1122fe4027824ea3180e947bc33394cdb0ed451dbaf4a245500e8b6eff"
+}

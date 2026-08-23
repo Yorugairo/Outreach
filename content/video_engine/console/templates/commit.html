@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block bar_right %}<span class="path mono">{{ delivery }}</span>{% endblock %}
+{% block main %}
+<h2>Commit — every change named before anything is written</h2>
+
+<section class="summary">
+  <div><span class="k">Promote</span><span class="v">{{ promote | length }}</span></div>
+  <div><span class="k">of which bulk (clean default)</span><span class="v">{{ bulk_clean | length }}</span></div>
+  <div><span class="k">Reject</span><span class="v">{{ reject | length }}</span></div>
+  <div><span class="k">Skip</span><span class="v">{{ skip | length }}</span></div>
+  <div><span class="k">Undecided</span><span class="v">{{ undecided | length }}</span></div>
+</section>
+
+{% if undecided %}
+<ul class="errors">
+  <li>{{ undecided | length }} asset(s) still undecided: {{ undecided | join(', ') }}.
+      They will be left out of this commit.</li>
+</ul>
+{% endif %}
+
+<h3>Will be registered and promoted</h3>
+<table>
+  <thead><tr><th scope="col">Asset</th><th scope="col">Fields set</th></tr></thead>
+  <tbody>
+  {% for row in promote %}
+    <tr>
+      <td class="mono">{{ row.asset_id }}
+        {% if row.asset_id in bulk_clean %}<span class="k">(bulk, zero exceptions)</span>{% endif %}
+      </td>
+      <td class="mono">rights_state=approved · review_state=approved_reusable · render_eligible=true</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+
+{% if reject %}
+<h3>Rejected — not registered</h3>
+<p class="mono">{{ reject | map(attribute='asset_id') | join(', ') }}</p>
+{% endif %}
+{% if skip %}
+<h3>Skipped — not registered, decide later</h3>
+<p class="mono">{{ skip | map(attribute='asset_id') | join(', ') }}</p>
+{% endif %}
+
+<form method="post" action="/intake/commit">
+  <input type="hidden" name="delivery" value="{{ delivery }}">
+  <button type="submit">Write {{ promote | length }} asset(s) to the catalogue</button>
+</form>
+{% endblock %}

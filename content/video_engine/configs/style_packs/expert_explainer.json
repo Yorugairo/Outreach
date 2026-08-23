@@ -1,0 +1,49 @@
+{
+  "schema_version": "video_style_pack.v1",
+  "lane": "expert_explainer",
+  "label": "Expert explainer \u2014 recurring host beside a data zone",
+  "reference_note": "Wealth Logic (83.3K subs; 1.57M and 426K views) and Alicia Invests (99.6K subs; 104K-1.95M). Recommended target: costume-anchored cast, composited figures, plate-from-model.",
+  "renderer": {
+    "engine": "hyperframes",
+    "runtime_adapter": "gsap"
+  },
+  "character": {
+    "policy": "soft_shaded_presenter",
+    "identity_anchor": "deep-indigo suit, copper tie, black rectangular glasses, sculpted loc twists, goatee, gold lapel pin",
+    "episode_scoped_garment": true,
+    "rendition": "painterly"
+  },
+  "background": {
+    "policy": "content_zone",
+    "palette": [
+      "#F4E6C7",
+      "#25313C",
+      "#1769C2"
+    ],
+    "evidence_safe_region": true
+  },
+  "captions": {
+    "mode": "burned_in",
+    "position": "bottom",
+    "case": "upper",
+    "highlight": "keyword",
+    "highlight_colour": "#178C83",
+    "words_per_group": 5
+  },
+  "colour_semantics": {
+    "positive": "#178C83",
+    "negative": "#ED6A4A",
+    "accent": "#F5B72E"
+  },
+  "motion_recipes": [
+    "detail_punch",
+    "split_compare",
+    "type_build",
+    "evidence_highlight"
+  ],
+  "plate_kinds": [
+    "generated_plate",
+    "composed_plate"
+  ],
+  "artifact_hash": "ae7ce5ac8e5484ec97d30a4b567d4416592752436c26dfaaf255a55a00185a49"
+}

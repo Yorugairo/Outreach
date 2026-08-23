@@ -1,0 +1,44 @@
+{
+  "schema_version": "video_style_pack.v1",
+  "lane": "cutout_history",
+  "label": "Cutout history \u2014 blank-faced actors against detailed period sets",
+  "reference_note": "Depression-era explainer. Detailed environments, near-blank characters; blank faces make drift structurally impossible.",
+  "renderer": {
+    "engine": "hyperframes",
+    "runtime_adapter": "gsap"
+  },
+  "character": {
+    "policy": "blank_face",
+    "identity_anchor": "dot eyes, no mouth, no nose; identity carried by silhouette, hair shape and period costume only",
+    "episode_scoped_garment": false,
+    "rendition": "flat"
+  },
+  "background": {
+    "policy": "detailed_environment",
+    "palette": [
+      "#6B6357",
+      "#8C7B63",
+      "#4A4A44"
+    ],
+    "evidence_safe_region": true
+  },
+  "captions": {
+    "mode": "none"
+  },
+  "colour_semantics": {
+    "positive": "#5A7D5A",
+    "negative": "#A63A2E",
+    "accent": "#C9A227"
+  },
+  "motion_recipes": [
+    "parallax_push",
+    "detail_punch",
+    "masked_reveal",
+    "paper_transition"
+  ],
+  "plate_kinds": [
+    "generated_plate",
+    "composed_plate"
+  ],
+  "artifact_hash": "37457c1c128a6847663639532cc2b1d9ca09ad3ee0077987775b281dfb23d4fa"
+}

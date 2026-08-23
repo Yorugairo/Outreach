@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+{% block bar_right %}<span class="path mono">{{ delivery }}</span>{% endblock %}
+{% block main %}
+<style>
+/* Triage-only layout. Tokens come from console.css; nothing here colours the
+ * stage — the surround stays achromatic so the asset is judged, not tinted. */
+.triage { display: grid; grid-template-columns: 240px 1fr 340px; gap: 0; height: calc(100dvh - 96px); }
+.strip { border-right: 1px solid var(--hairline); overflow-y: auto; }
+.strip a { display: flex; align-items: center; gap: var(--s2); padding: var(--s2) var(--s3);
+           color: var(--text); text-decoration: none; border-left: 2px solid transparent; }
+.strip a[aria-current="true"] { border-left-color: var(--accent); background: var(--panel); }
+.strip .id { font-family: var(--mono); font-size: 11px; overflow: hidden; text-overflow: ellipsis; }
+.strip .mark { margin-left: auto; font-family: var(--mono); font-size: 10px; color: var(--text-dim); }
+.stage { background: var(--stage); display: flex; align-items: center; justify-content: center; overflow: hidden; }
+.stage img { max-width: 100%; max-height: 100%; }
+.verdict { border-left: 1px solid var(--hairline); overflow-y: auto; padding: var(--s4); }
+.verdict h2 { margin: 0 0 var(--s3); font-size: 13px; font-family: var(--mono); }
+.verdict table { font-size: 12px; }
+.actions { display: flex; gap: var(--s2); margin: var(--s4) 0; }
+.actions button { padding: var(--s2) var(--s4); background: var(--panel); color: var(--text);
+                  border: 1px solid var(--hairline); cursor: pointer; }
+.actions button:hover { border-color: var(--accent); }
+.stagebar { display: flex; gap: var(--s3); padding: var(--s2) var(--s3); color: var(--text-dim);
+            font-size: 11px; border-top: 1px solid var(--hairline); }
+.kbd { font-family: var(--mono); border: 1px solid var(--hairline); padding: 0 4px; }
+</style>
+
+<div class="triage">
+  <nav class="strip" aria-label="Assets, flagged first">
+    {% for row in rows %}
+    <a href="{{ row.url }}" aria-current="{{ 'true' if row.asset_id == selected else 'false' }}"
+       {% if row.asset_id == selected %}id="strip-selected"{% endif %}>
+      {% if row.status == 'fail' %}<span class="chip chip-fail">FAIL</span>
+      {% elif row.status == 'flag' %}<span class="chip chip-flag">FLAG</span>
+      {% else %}<span class="chip chip-clean">OK</span>{% endif %}
+      <span class="id">{{ row.asset_id }}</span>
+      <span class="mark">{% if row.explicit %}{{ row.decision }}{% elif row.effective %}({{ row.effective }}){% endif %}</span>
+    </a>
+    {% endfor %}
+  </nav>
+
+  <section>
+    <div class="stage">
+      {% if current %}
+      <img src="/intake/stage.png?delivery={{ delivery | urlencode }}&asset={{ selected | urlencode }}&mode={{ mode }}&world={{ world_index }}"
+           alt="{{ mode }} view of {{ selected }}">
+      {% endif %}
+    </div>
+    <div class="stagebar">
+      <span>{{ 'placement check' if mode == 'composite' else 'isolated 1:1' }}{% if mode == 'composite' %} · world {{ world_id }}{% endif %}</span>
+      <span><span class="kbd">J</span>/<span class="kbd">K</span> next/prev</span>
+      <span><span class="kbd">1</span> promote</span>
+      <span><span class="kbd">0</span> reject</span>
+      <span><span class="kbd">.</span> skip</span>
+      {% if compositable %}<span><span class="kbd">Space</span> 1:1</span>
+      <span><span class="kbd">C</span> world</span>{% endif %}
+      <span><span class="kbd">Enter</span> commit</span>
+    </div>
+  </section>
+
+  <aside class="verdict">
+    {% if current %}
+    <h2>{{ selected }}</h2>
+    <div class="actions">
+      <form method="post" action="/intake/decide" id="form-promote">
+        <input type="hidden" name="delivery" value="{{ delivery }}">
+        <input type="hidden" name="asset_id" value="{{ selected }}">
+        <input type="hidden" name="decision" value="promote">
+        <input type="hidden" name="next_url" value="{{ next_url }}">
+        <button type="submit" {% if current.status == 'fail' %}disabled title="a failed asset cannot be promoted"{% endif %}>Promote</button>
+      </form>
+      <form method="post" action="/intake/decide" id="form-reject">
+        <input type="hidden" name="delivery" value="{{ delivery }}">
+        <input type="hidden" name="asset_id" value="{{ selected }}">
+        <input type="hidden" name="decision" value="reject">
+        <input type="hidden" name="next_url" value="{{ next_url }}">
+        <button type="submit">Reject</button>
+      </form>
+      <form method="post" action="/intake/decide" id="form-skip">
+        <input type="hidden" name="delivery" value="{{ delivery }}">
+        <input type="hidden" name="asset_id" value="{{ selected }}">
+        <input type="hidden" name="decision" value="skip">
+        <input type="hidden" name="next_url" value="{{ next_url }}">
+        <button type="submit">Skip</button>
+      </form>
+      {% if current.asset_id in summary.explicit %}
+      <form method="post" action="/intake/undo">
+        <input type="hidden" name="delivery" value="{{ delivery }}">
+        <input type="hidden" name="asset_id" value="{{ selected }}">
+        <input type="hidden" name="return_url" value="{{ '/intake/triage?delivery=' ~ (delivery | urlencode) ~ '&asset=' ~ (selected | urlencode) ~ '&mode=' ~ mode ~ '&world=' ~ world_index }}">
+        <button type="submit">Undo</button>
+      </form>
+      {% endif %}
+    </div>
+
+    <table>
+      <thead><tr><th scope="col">Check</th><th scope="col"></th><th scope="col">Measured</th><th scope="col">Expected</th></tr></thead>
+      <tbody>
+      {% for c in current.checks %}
+        <tr>
+          <td>{{ c.check }}</td>
+          <td>
+            {% if c.status == 'fail' %}<span class="chip chip-fail">FAIL</span>
+            {% elif c.status == 'flag' %}<span class="chip chip-flag">FLAG</span>
+            {% else %}<span class="chip chip-clean">OK</span>{% endif %}
+          </td>
+          <td class="mono">{{ c.measured }}</td>
+          <td class="mono">{{ c.expected }}</td>
+        </tr>
+        {% if c.note %}<tr><td colspan="4" style="color:var(--text-dim)">{{ c.note }}</td></tr>{% endif %}
+      {% endfor %}
+      </tbody>
+    </table>
+
+    <p class="mono" style="color:var(--text-dim);font-size:11px">
+      {{ summary.promote }} promote · {{ summary.reject }} reject · {{ summary.skip }} skip ·
+      {{ summary.undecided | length }} undecided
+    </p>
+    <p><a id="commit-link" href="/intake/commit?delivery={{ delivery | urlencode }}">Review and commit</a></p>
+    {% endif %}
+  </aside>
+</div>
+
+<div hidden id="nav-data"
+     data-prev="{{ prev_url }}" data-next="{{ next_url }}"
+     data-toggle="{{ toggle_url }}" data-cycle="{{ cycle_url }}"
+     data-compositable="{{ '1' if compositable else '' }}"></div>
+<script src="/static/console.js"></script>
+{% endblock %}

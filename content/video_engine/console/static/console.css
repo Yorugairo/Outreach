@@ -1,0 +1,124 @@
+/* Video Engine Console — dense operator tooling.
+ *
+ * Dark theme locked. The stage behind any asset is achromatic on purpose: a
+ * tinted surround shifts the perceived colour and value of the thing under
+ * judgement. The accent sits outside the library palette (cream, charcoal,
+ * cobalt, teal, sunflower, coral) so console chrome is never mistaken for art.
+ *
+ * No @import, no CDN, no external font. This file must work offline.
+ */
+
+:root {
+  --stage: #1b1b1d;
+  --surface: #0e0e10;
+  --panel: #151517;
+  --hairline: rgb(255 255 255 / 0.09);
+  --text: #e8e8ea;
+  --text-dim: #9a9aa2;
+  --accent: #8b5cf6;
+  --fail: #f0616d;
+  --flag: #e5a13a;
+  --clean: #4ade80;
+
+  --s1: 4px;
+  --s2: 8px;
+  --s3: 12px;
+  --s4: 16px;
+  --s5: 24px;
+  --s6: 32px;
+
+  --font: ui-sans-serif, system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --mono: ui-monospace, "Cascadia Mono", "Segoe UI Mono", Consolas, monospace;
+
+  --ease: cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  background: var(--surface);
+  color: var(--text);
+  font: 400 14px/1.5 var(--font);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Every number is monospaced. Comparing 0.92 against 0.50 in a proportional
+ * face is needless friction. */
+.num, td.num, .mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+
+a { color: var(--accent); }
+
+/* Focus is never removed without replacement — this tool is keyboard-driven. */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+header.bar {
+  display: flex;
+  align-items: baseline;
+  gap: var(--s5);
+  padding: var(--s4) var(--s5);
+  border-bottom: 1px solid var(--hairline);
+  background: var(--panel);
+}
+
+header.bar h1 { margin: 0; font-size: 15px; font-weight: 600; letter-spacing: 0.01em; }
+header.bar nav { display: flex; gap: var(--s4); }
+header.bar .path { margin-left: auto; color: var(--text-dim); font-size: 12px; }
+
+main { padding: var(--s5); }
+
+/* Density 9: hairlines and alignment carry grouping, not cards. */
+.summary { display: flex; gap: var(--s6); margin-bottom: var(--s5); flex-wrap: wrap; }
+.summary div { display: flex; flex-direction: column; gap: var(--s1); }
+.summary dt, .summary .k { color: var(--text-dim); font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; }
+.summary .v { font-family: var(--mono); font-size: 20px; }
+
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+thead th {
+  text-align: left;
+  padding: var(--s2) var(--s3);
+  color: var(--text-dim);
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  border-bottom: 1px solid var(--hairline);
+  position: sticky;
+  top: 0;
+  background: var(--surface);
+}
+tbody td { padding: var(--s2) var(--s3); border-bottom: 1px solid var(--hairline); }
+tbody tr:hover { background: var(--panel); }
+
+/* Status is never colour alone: glyph + colour + text, readable in greyscale. */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+}
+.chip::before { font-size: 10px; line-height: 1; }
+.chip-clean { color: var(--clean); }
+.chip-clean::before { content: "\2713"; }        /* check */
+.chip-flag { color: var(--flag); }
+.chip-flag::before { content: "\25B3"; }         /* hollow triangle */
+.chip-fail { color: var(--fail); }
+.chip-fail::before { content: "\25A0"; }         /* filled square */
+
+.errors { border-left: 2px solid var(--fail); padding: var(--s3) var(--s4); background: var(--panel); }
+.errors li { margin-bottom: var(--s2); font-family: var(--mono); font-size: 12px; }
+
+.empty { max-width: 60ch; color: var(--text-dim); }
+.empty code { font-family: var(--mono); color: var(--text); }
+
+@media (prefers-reduced-motion: reduce) {
+  /* Chrome only. Video preview content is never altered by a display
+   * preference — suppressing it would hide the thing under review. */
+  *, *::before, *::after { transition-duration: 0ms !important; animation-duration: 0ms !important; }
+}

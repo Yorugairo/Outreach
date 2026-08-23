@@ -31,6 +31,8 @@ record instead of copying it.
 | Deterministic shot plans, focal-point camera motion, cut motivation, pacing recipes, and provider-motion exceptions | [`16-EDITORIAL-MOTION-SYSTEM.md`](16-EDITORIAL-MOTION-SYSTEM.md) |
 | Timestamp-bound primary plates, prompt continuity, generation waves, and review schedule | [`17-TIMESTAMPED-PLATE-PRODUCTION.md`](17-TIMESTAMPED-PLATE-PRODUCTION.md) |
 | Original Graphic Silhouette + Combat Woodblock retention and motion grammar | [`18-GRAPHIC-SILHOUETTE-WOODBLOCK-EXPLAINER-SPEC.md`](18-GRAPHIC-SILHOUETTE-WOODBLOCK-EXPLAINER-SPEC.md) |
+| Figure scale, world placement, rendering-weight hierarchy, and 2.5D depth planes | [`24-COMPOSITION-AND-SCALE-SPEC.md`](24-COMPOSITION-AND-SCALE-SPEC.md) |
+| Current asset-generation brief | [`prompts/LIBRARY-BUILD-EP1-V3-REGENERATION.md`](prompts/LIBRARY-BUILD-EP1-V3-REGENERATION.md) |
 | Executable state and validation evidence | [`P13-HISTORY-DOCUMENTARY-SYSTEM.plan.md`](../../.claude/PRPs/plans/P13-HISTORY-DOCUMENTARY-SYSTEM.plan.md) |
 | Active living-scene foundation execution | [`P13-LIVING-SCENE-COMMUNICATION-SYSTEM.plan.md`](../../.claude/PRPs/plans/P13-LIVING-SCENE-COMMUNICATION-SYSTEM.plan.md) |
 | Active editorial-motion execution | [`P13-EDITORIAL-MOTION-SYSTEM.plan.md`](../../.claude/PRPs/plans/P13-EDITORIAL-MOTION-SYSTEM.plan.md) |

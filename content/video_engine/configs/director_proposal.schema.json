@@ -1,0 +1,149 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://outreach-program.internal/schemas/director-proposal.v1.json",
+  "title": "Director Proposal v1",
+  "description": "An external agent's segmentation of an attested script into directed beats. The director may segment and direct; it may never rewrite narration. Persisted as the replayable input every downstream stage reads, which keeps the pipeline deterministic while the model stays upstream of it.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "brief_hash",
+    "lane",
+    "editorial_direction",
+    "beats",
+    "artifact_hash"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "director_proposal.v1"
+    },
+    "brief_hash": {
+      "$ref": "#/definitions/hash"
+    },
+    "lane": {
+      "enum": [
+        "expert_explainer",
+        "presenter_infographic",
+        "flat_cartoon_explainer",
+        "stick_explainer",
+        "cutout_history",
+        "woodblock",
+        "whiteboard"
+      ]
+    },
+    "editorial_direction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "pacing_note",
+        "palette_note",
+        "identity_note"
+      ],
+      "properties": {
+        "pacing_note": {
+          "type": "string",
+          "minLength": 1
+        },
+        "palette_note": {
+          "type": "string",
+          "minLength": 1
+        },
+        "identity_note": {
+          "type": "string",
+          "minLength": 1,
+          "description": "How character identity is carried without relying on facial features."
+        },
+        "structure_note": {
+          "type": "string"
+        }
+      }
+    },
+    "beats": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "beat_id",
+          "act",
+          "narration_text",
+          "visual_intent",
+          "semantic_purpose",
+          "motion_recipe",
+          "copy_deferred"
+        ],
+        "properties": {
+          "beat_id": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9._-]*$"
+          },
+          "act": {
+            "enum": [
+              "hook",
+              "develop",
+              "conflict",
+              "comeback",
+              "payoff",
+              "cta"
+            ]
+          },
+          "narration_text": {
+            "type": "string",
+            "minLength": 1,
+            "description": "A contiguous span of the attested script. Validation rejects any rewrite."
+          },
+          "visual_intent": {
+            "type": "string",
+            "minLength": 1
+          },
+          "semantic_purpose": {
+            "enum": [
+              "evidence",
+              "setting",
+              "person",
+              "object",
+              "transition",
+              "humor",
+              "explanation",
+              "correction"
+            ]
+          },
+          "motion_recipe": {
+            "enum": [
+              "parallax_push",
+              "detail_punch",
+              "masked_reveal",
+              "evidence_highlight",
+              "map_trace",
+              "comic_pop",
+              "split_compare",
+              "type_build",
+              "paper_transition"
+            ]
+          },
+          "on_screen_text": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Composited by the renderer as real typography. Never generated into a plate."
+          },
+          "copy_deferred": {
+            "type": "boolean",
+            "description": "True when the operator writes this beat's on-screen copy — required for the comedy register, where model-written humour is not trusted."
+          }
+        }
+      }
+    },
+    "artifact_hash": {
+      "$ref": "#/definitions/hash"
+    }
+  },
+  "definitions": {
+    "hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    }
+  }
+}

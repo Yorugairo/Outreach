@@ -1,0 +1,123 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://outreach-program.internal/schemas/composed-plate.v1.json",
+  "title": "Composed Plate v1",
+  "description": "A plate the renderer draws deterministically from structured values — figures, arithmetic and comparisons as real type. No image model is involved, so there is nothing to garble and nothing to drift. Derived from the Wealth Logic and Alicia Invests references, whose content zones are typography rather than illustration.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "plate_id",
+    "lane",
+    "layout",
+    "content",
+    "artifact_hash"
+  ],
+  "properties": {
+    "schema_version": {"const": "composed_plate.v1"},
+    "plate_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]*$"},
+    "slot_id": {"type": "string", "minLength": 1},
+    "lane": {
+      "enum": [
+        "expert_explainer",
+        "presenter_infographic",
+        "flat_cartoon_explainer",
+        "stick_explainer",
+        "cutout_history",
+        "woodblock",
+        "whiteboard"
+      ]
+    },
+    "layout": {
+      "enum": ["figure_board", "arithmetic_stack", "comparison_pair", "stat_row"]
+    },
+    "title": {"type": "string"},
+    "content": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "rows": {
+          "type": "array",
+          "description": "figure_board: label plus formatted value, optional direction marker.",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["label", "value"],
+            "properties": {
+              "label": {"type": "string", "minLength": 1},
+              "value": {"type": "string", "minLength": 1},
+              "direction": {"enum": ["up", "down", "flat"]},
+              "tone": {"enum": ["positive", "negative", "neutral"]}
+            }
+          }
+        },
+        "operands": {
+          "type": "array",
+          "description": "arithmetic_stack: terms summed to produce total.",
+          "minItems": 2,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["label", "amount"],
+            "properties": {
+              "label": {"type": "string", "minLength": 1},
+              "amount": {"type": "number"},
+              "tone": {"enum": ["positive", "negative", "neutral"]}
+            }
+          }
+        },
+        "total": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["label", "amount"],
+          "properties": {
+            "label": {"type": "string", "minLength": 1},
+            "amount": {"type": "number"}
+          }
+        },
+        "pair": {
+          "type": "array",
+          "description": "comparison_pair: exactly two labelled items.",
+          "minItems": 2,
+          "maxItems": 2,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["label", "value"],
+            "properties": {
+              "label": {"type": "string", "minLength": 1},
+              "value": {"type": "string", "minLength": 1},
+              "tone": {"enum": ["positive", "negative", "neutral"]}
+            }
+          }
+        },
+        "stats": {
+          "type": "array",
+          "description": "stat_row: compact tiles.",
+          "minItems": 1,
+          "maxItems": 4,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["value", "caption"],
+            "properties": {
+              "value": {"type": "string", "minLength": 1},
+              "caption": {"type": "string", "minLength": 1},
+              "tone": {"enum": ["positive", "negative", "neutral"]}
+            }
+          }
+        }
+      }
+    },
+    "source": {
+      "type": "object",
+      "description": "Where the figures came from. Present when the slot is claim-bound.",
+      "additionalProperties": false,
+      "properties": {
+        "claim_id": {"type": "string"},
+        "note": {"type": "string"}
+      }
+    },
+    "artifact_hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}

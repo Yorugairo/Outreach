@@ -1,0 +1,45 @@
+{
+  "schema_version": "video_style_pack.v1",
+  "lane": "whiteboard",
+  "label": "Whiteboard \u2014 SVG draw-on, marker line on white",
+  "reference_note": "Operator request; not present in any reviewed reference. The only lane needing new render code (stroke-dashoffset draw-on).",
+  "renderer": {
+    "engine": "hyperframes",
+    "runtime_adapter": "css"
+  },
+  "character": {
+    "policy": "none",
+    "identity_anchor": "single-weight marker line on white; garment colour block only when a figure appears",
+    "episode_scoped_garment": false,
+    "rendition": "flat"
+  },
+  "background": {
+    "policy": "plain",
+    "palette": [
+      "#FFFFFF"
+    ],
+    "evidence_safe_region": true
+  },
+  "captions": {
+    "mode": "burned_in",
+    "position": "bottom",
+    "case": "sentence",
+    "highlight": "none",
+    "words_per_group": 6
+  },
+  "colour_semantics": {
+    "positive": "#2E7D32",
+    "negative": "#C62828",
+    "accent": "#1769C2"
+  },
+  "motion_recipes": [
+    "masked_reveal",
+    "type_build",
+    "detail_punch"
+  ],
+  "plate_kinds": [
+    "composed_plate",
+    "generated_plate"
+  ],
+  "artifact_hash": "4ec1d7eae45c472c9bf0cb7b07e738ec6aff779dfc517bf2d38b773b0e87aef5"
+}

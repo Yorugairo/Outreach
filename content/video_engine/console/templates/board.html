@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+{% block bar_right %}{% if job %}<span class="path mono">{{ job }}</span>{% endif %}{% endblock %}
+{% block main %}
+
+<h2>Scene board</h2>
+
+{% if board is none %}
+<div class="empty">
+  <p>Point the board at a job directory:</p>
+  <form method="get" action="/board">
+    <label>Job directory
+      <input type="text" name="job" value="{{ job }}" size="60" class="mono">
+    </label>
+    <button type="submit">Open board</button>
+  </form>
+  <p>The five board artifacts are found by their conventional filenames
+     under that directory:</p>
+  <p><code>director_brief.json</code> &middot; <code>source_attestation.json</code>
+     &middot; <code>canonical_coverage.json</code> or
+     <code>provisional_coverage.json</code> &middot;
+     <code>visual_prompt_pack.json</code> &middot;
+     <code>generated_visuals/candidate_batch.json</code> or
+     <code>candidate_batch.json</code></p>
+  <p>These are what <code>python -m content.video_engine.cli</code> writes for a
+     job; the console reads them, never produces them.</p>
+</div>
+{% else %}
+
+<section class="summary">
+  <div><span class="k">Title</span><span class="v" style="font-size:14px">{{ board.title }}</span></div>
+  <div><span class="k">Lane</span><span class="v" style="font-size:14px">{{ board.lane }}</span></div>
+  <div><span class="k">Slots</span><span class="v num">{{ board.slot_count }}</span></div>
+  <div><span class="k">Need review</span><span class="v num">{{ board.exception_count }}</span></div>
+  <div><span class="k">Coverage</span><span class="v mono" style="font-size:14px">{{ board.coverage_hash[:12] }}</span></div>
+  <div><span class="k">Timing basis</span><span class="v mono" style="font-size:14px">{{ board.timing_basis }}</span></div>
+</section>
+
+{% if board.timing_basis == 'estimated' %}
+<p class="errors" style="border-left-color:var(--flag)">
+  <span class="chip chip-flag">FLAG</span>
+  <span class="mono">timing_basis: estimated</span> &mdash; {{ timing_warning }}
+</p>
+{% endif %}
+
+<p><strong class="num">{{ board.exception_count }}</strong> of
+   <span class="num">{{ board.slot_count }}</span> slots need review. Every other
+   slot already has an auto-selected default; you only have to touch the flagged
+   ones. Changing a selection records the full review to
+   <code>{{ job }}/selection/</code> through the selection service
+   as <span class="mono">{{ reviewed_by }}</span>.
+   <a href="/board/static?job={{ job_q }}">Static board</a> for offline sharing
+   (unchanged <code>render_board_html</code> output).</p>
+
+{% if last_record %}
+<p class="empty">
+  Recorded: <span class="num">{{ last_record.selection_count }}</span> selections
+  (<span class="num">{{ last_record.operator_selected }}</span> operator,
+  <span class="num">{{ last_record.auto_selected }}</span> auto) to
+  <code>{{ last_record.review_path }}</code>
+</p>
+{% endif %}
+
+{% for row in slots %}
+<section id="slot-{{ row.slot_id }}" style="border-top:1px solid var(--hairline);padding:var(--s4) 0">
+  <h3 style="margin:0 0 var(--s1)">
+    <span class="mono">{{ row.slot_id }}</span>
+    {% if row.exceptions %}
+      <span class="chip chip-flag">FLAG needs review</span>
+    {% else %}
+      <span class="chip chip-clean">OK</span>
+    {% endif %}
+  </h3>
+  <p class="empty" style="margin:0 0 var(--s2)">
+    {{ row.visual_archetype }} &middot; {{ row.motion_recipe }} &middot;
+    <span class="num">{{ row.duration_s }}</span>s
+  </p>
+  {% if row.exceptions %}
+  <ul class="errors" style="border-left-color:var(--flag)">
+    {% for code in row.exceptions %}
+    <li><span class="chip chip-flag">FLAG</span> {{ reasons.get(code, code) }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+  {% if row.copy_deferred %}
+  <p class="empty">On-screen copy deferred to the operator.</p>
+  {% endif %}
+  <blockquote style="margin:var(--s2) 0;padding-left:var(--s3);border-left:2px solid var(--hairline);color:var(--text-dim)">
+    {{ row.narration_excerpt }}
+  </blockquote>
+
+  {% if row.candidates %}
+  <form method="post" action="/board/select">
+    <input type="hidden" name="job" value="{{ job }}">
+    <input type="hidden" name="slot_id" value="{{ row.slot_id }}">
+    <input type="hidden" name="reviewed_by" value="{{ reviewed_by }}">
+    {% set operator_choice = choices.get(row.slot_id) %}
+    {% set effective = operator_choice if operator_choice else row.selected_candidate_id %}
+    {% for cand in row.candidates %}
+    <label style="display:flex;gap:var(--s2);align-items:baseline;padding:var(--s1) 0">
+      <input type="radio" name="candidate_id" value="{{ cand.id }}"
+             {% if cand.id == effective %}checked{% endif %}>
+      <span class="mono">v<span class="num">{{ cand.variant_index }}</span> &middot; {{ cand.id }}</span>
+      {% if cand.qc_flags %}
+        <span class="chip chip-flag">FLAG {{ cand.qc_flags | join(', ') }}</span>
+      {% else %}
+        <span class="chip chip-clean">OK clean</span>
+      {% endif %}
+      {% if cand.id == operator_choice %}
+        <span class="chip chip-clean">OK operator-selected</span>
+      {% elif cand.id == row.selected_candidate_id %}
+        <span class="empty">(auto default)</span>
+      {% endif %}
+    </label>
+    {% endfor %}
+    <button type="submit">Record selection</button>
+  </form>
+  {% else %}
+  <p class="errors"><span class="chip chip-fail">FAIL</span>
+     No candidates returned for this slot.</p>
+  {% endif %}
+</section>
+{% endfor %}
+
+<p class="empty" style="margin-top:var(--s5)">
+  Selections are recorded through <code>scene_selection.record_scene_selection</code>;
+  this view never writes the review artifact itself. <code>approved</code> stays
+  false — Gate A and Gate B remain operator actions outside this screen.
+</p>
+{% endif %}
+{% endblock %}

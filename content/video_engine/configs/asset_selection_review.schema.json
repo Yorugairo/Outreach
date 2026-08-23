@@ -14,38 +14,101 @@
     "selections"
   ],
   "properties": {
-    "schema_version": {"const": "asset_selection_review.v1"},
-    "coverage_hash": {"$ref": "#/definitions/hash"},
-    "candidate_batch_hash": {"$ref": "#/definitions/hash"},
-    "approved": {"type": "boolean"},
+    "schema_version": {
+      "const": "asset_selection_review.v1"
+    },
+    "coverage_hash": {
+      "$ref": "#/definitions/hash"
+    },
+    "candidate_batch_hash": {
+      "$ref": "#/definitions/hash"
+    },
+    "approved": {
+      "type": "boolean"
+    },
     "entitlement_snapshot": {
       "type": "object",
-      "required": ["account_plan", "downloads_included", "daily_download_limit", "confirmed_by"],
+      "required": [
+        "account_plan",
+        "downloads_included",
+        "daily_download_limit",
+        "confirmed_by"
+      ],
       "properties": {
-        "account_plan": {"type": "string", "minLength": 1},
-        "downloads_included": {"type": "boolean"},
-        "daily_download_limit": {"type": "integer", "minimum": 1},
-        "confirmed_by": {"type": "string", "minLength": 1}
+        "account_plan": {
+          "type": "string",
+          "minLength": 1
+        },
+        "downloads_included": {
+          "type": "boolean"
+        },
+        "daily_download_limit": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "confirmed_by": {
+          "type": "string",
+          "minLength": 1
+        }
       },
       "additionalProperties": false
     },
-    "reviewed_by": {"type": "string"},
-    "reviewed_at": {"type": "string"},
+    "reviewed_by": {
+      "type": "string"
+    },
+    "reviewed_at": {
+      "type": "string"
+    },
     "selections": {
       "type": "array",
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["slot_id", "candidate_id", "approved_cost_usd"],
+        "required": [
+          "slot_id",
+          "candidate_id",
+          "approved_cost_usd"
+        ],
         "properties": {
-          "slot_id": {"type": "string", "minLength": 1},
-          "candidate_id": {"type": "string"},
-          "approved_cost_usd": {"type": "number", "minimum": 0}
+          "slot_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "candidate_id": {
+            "type": "string"
+          },
+          "approved_cost_usd": {
+            "type": "number",
+            "minimum": 0
+          },
+          "selection_source": {
+            "enum": [
+              "auto",
+              "operator"
+            ],
+            "description": "Optional; absent means operator, preserving existing artifacts."
+          }
         }
       }
+    },
+    "timing_basis": {
+      "enum": [
+        "canonical",
+        "estimated"
+      ]
+    },
+    "auto_selected_slot_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Slots that took the auto-selected default because the operator raised no exception. A 150-slot board records cleanly with zero operator input."
     }
   },
   "definitions": {
-    "hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+    "hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    }
   }
 }

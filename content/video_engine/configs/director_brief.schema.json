@@ -1,0 +1,99 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://outreach-program.internal/schemas/director-brief.v1.json",
+  "title": "Director Brief v1",
+  "description": "Normalized paste-lane input: the script plus the lane, aspect, and timing basis a director proposal must respect. Timing here is a word-count estimate and is never the render clock.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "brief_id",
+    "title",
+    "lane",
+    "aspect",
+    "words_per_minute",
+    "target_slot_hold_s",
+    "script",
+    "attestation_hash",
+    "artifact_hash"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "director_brief.v1"
+    },
+    "brief_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "lane": {
+      "enum": [
+        "expert_explainer",
+        "presenter_infographic",
+        "flat_cartoon_explainer",
+        "stick_explainer",
+        "cutout_history",
+        "woodblock",
+        "whiteboard"
+      ]
+    },
+    "aspect": {
+      "enum": [
+        "landscape",
+        "vertical"
+      ]
+    },
+    "words_per_minute": {
+      "type": "integer",
+      "minimum": 90,
+      "maximum": 200
+    },
+    "target_slot_hold_s": {
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "maximum": 8
+    },
+    "script": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "text",
+        "word_count",
+        "estimated_duration_s",
+        "sha256"
+      ],
+      "properties": {
+        "text": {
+          "type": "string",
+          "minLength": 1
+        },
+        "word_count": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "estimated_duration_s": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "sha256": {
+          "$ref": "#/definitions/hash"
+        }
+      }
+    },
+    "attestation_hash": {
+      "$ref": "#/definitions/hash"
+    },
+    "artifact_hash": {
+      "$ref": "#/definitions/hash"
+    }
+  },
+  "definitions": {
+    "hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    }
+  }
+}

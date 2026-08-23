@@ -1,0 +1,134 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://outreach-program.internal/schemas/visual-prompt-pack.v1.json",
+  "title": "Visual Prompt Pack v1",
+  "description": "One prompt group per coverage slot, each requesting multiple variants. This is the fan-out contract the run agent answers; the engine never calls an image provider itself.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "coverage_hash",
+    "lane",
+    "variants_per_slot",
+    "negative_prompt",
+    "identity_anchor",
+    "groups",
+    "artifact_hash"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "visual_prompt_pack.v1"
+    },
+    "coverage_hash": {
+      "$ref": "#/definitions/hash"
+    },
+    "timing_basis": {
+      "enum": [
+        "canonical",
+        "estimated"
+      ]
+    },
+    "lane": {
+      "enum": [
+        "expert_explainer",
+        "presenter_infographic",
+        "flat_cartoon_explainer",
+        "stick_explainer",
+        "cutout_history",
+        "woodblock",
+        "whiteboard"
+      ]
+    },
+    "variants_per_slot": {
+      "type": "integer",
+      "minimum": 2
+    },
+    "negative_prompt": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Shared negative clause. Must forbid lettering, numerals, logos and watermarks — generated text in a plate is never render-eligible."
+    },
+    "identity_anchor": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Costume colour block and silhouette that every plate must preserve, so face drift cannot break continuity."
+    },
+    "style_note": {
+      "type": "string"
+    },
+    "groups": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "slot_id",
+          "variant_count",
+          "prompt",
+          "narration_excerpt",
+          "visual_intent",
+          "visual_archetype",
+          "motion_recipe",
+          "duration_s"
+        ],
+        "properties": {
+          "slot_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "variant_count": {
+            "type": "integer",
+            "minimum": 2
+          },
+          "prompt": {
+            "type": "string",
+            "minLength": 1
+          },
+          "narration_excerpt": {
+            "type": "string",
+            "minLength": 1
+          },
+          "visual_intent": {
+            "type": "string"
+          },
+          "visual_archetype": {
+            "type": "string",
+            "minLength": 1
+          },
+          "motion_recipe": {
+            "type": "string",
+            "minLength": 1
+          },
+          "duration_s": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "on_screen_text": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "copy_deferred": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "artifact_hash": {
+      "$ref": "#/definitions/hash"
+    },
+    "composed_slot_count": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Coverage slots excluded from this pack because the renderer composes them. They carry no generation cost."
+    }
+  },
+  "definitions": {
+    "hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    }
+  }
+}

@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block bar_right %}<span class="path mono">{{ catalog_path }}</span>{% endblock %}
+{% block main %}
+
+<section class="summary">
+  <div><span class="k">Assets</span><span class="v">{{ summary.total }}</span></div>
+  <div><span class="k">Render eligible</span><span class="v">{{ summary.render_eligible }}</span></div>
+  <div><span class="k">Review only</span><span class="v">{{ summary.review_only }}</span></div>
+  <div><span class="k">Layered worlds</span><span class="v">{{ summary.layered }}</span></div>
+  <div><span class="k">Style versions</span><span class="v">{{ summary.style_versions | length }}</span></div>
+</section>
+
+{% if style_families %}
+<section class="summary">
+  {% for family, versions in style_families.items() %}
+  <div><span class="k">{{ family }}</span><span class="mono" style="font-size:12px">{{ versions | join(', ') }}</span></div>
+  {% endfor %}
+</section>
+{% endif %}
+
+<table>
+  <thead>
+    <tr>
+      <th scope="col">Asset</th>
+      <th scope="col">Kind</th>
+      <th scope="col">Tier</th>
+      <th scope="col">Style version</th>
+      <th scope="col">Figure height</th>
+      <th scope="col">Planes</th>
+      <th scope="col">Review state</th>
+      <th scope="col">Render</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for a in assets %}
+    <tr>
+      <td class="mono">{{ a.asset_id }}</td>
+      <td>{{ a.kind }}</td>
+      <td class="num">{{ a.resolution_tier }}</td>
+      <td class="mono">{{ a.style_version or '—' }}</td>
+      <td class="num">{{ '%.2f' % a.placement.figure_height if a.placement and a.placement.figure_height else '—' }}</td>
+      <td class="num">{{ a.layers | length if a.layers else '—' }}</td>
+      <td>{{ a.review_state or 'review_only' }}</td>
+      <td>
+        {% if a.render_eligible %}
+        <span class="chip chip-clean">RENDER</span>
+        {% else %}
+        <span class="chip chip-flag">REVIEW</span>
+        {% endif %}
+      </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
