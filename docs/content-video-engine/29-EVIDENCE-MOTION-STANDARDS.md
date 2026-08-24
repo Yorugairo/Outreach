@@ -337,3 +337,31 @@ Note the honest side effect: badge count fell to 1. Slides are chosen by
 meaning, not by whether a verified numeral happens to exist for them — and
 that is the correct precedence. Raising badge coverage means OCRing the
 catalogue, not biasing selection toward slides that already have badges.
+
+### 8.8 No production chrome in the frame (operator correction, 2026-08-24)
+
+The v4 dock shipped with a citation footer reading
+`Memory Supercycle deck &middot; slide 003` and a `STAMPED` tag, plus an
+`EVIDENCE 1` / `EVIDENCE 2` chip in the header. All of it is removed.
+
+This was already ruled out and got re-introduced anyway: the shipped p32/p33/
+p34 manifests all carry `visible_source_badge: false`, and Part 4 states that
+a cream document against the dark world produces the provenance contrast
+without a badge.
+
+Three reasons it has to go:
+
+1. **It is our filing system, not a source.** "Memory Supercycle deck, slide
+   003" is an internal artifact path. A viewer cannot check it, and naming a
+   deck we produced as if it were a citation is worse than showing nothing.
+2. **`STAMPED` is an internal QA state.** The stamp is already visible in the
+   artwork; restating its approval status is production plumbing on screen.
+3. **`EVIDENCE 1` / `EVIDENCE 2` is scaffolding.** The slot index is a
+   generator concept. The dock title carries the meaning.
+
+**Provenance lives in the manifest, not the frame.** The timeline still binds
+every document by `path` + `sha256` and records `match_score`; the render
+stays clean. If real attribution is wanted on screen later, it must name the
+external source the slide draws on (a filing, an index methodology, a dated
+transcript) — which needs a per-slide source field the catalogue does not
+carry today. Do not substitute the deck name for it.
