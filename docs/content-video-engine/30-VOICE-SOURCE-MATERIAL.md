@@ -201,9 +201,10 @@ delivery vehicle for exactly that.
 
 ## How to use this
 
-Feed to `brand-voice` as source material to produce a reusable `VOICE PROFILE`.
-The profile is the artefact scripts and work orders reference by path, so this
-material stops being re-derived by hand each session.
+Fed to `brand-voice`; the resulting profile lives at
+[33-VOICE-PROFILE.md](33-VOICE-PROFILE.md) — **that** is what scripts and work
+orders reference by path. This document remains the evidence base: new
+rejections land here first, then the profile is re-derived from it.
 
 Related: [`briefs/ALICIA-FORMAT-RECREATION-BRIEF.md`](briefs/ALICIA-FORMAT-RECREATION-BRIEF.md),
 [`28-AOY-MCP-EVALUATION.md`](28-AOY-MCP-EVALUATION.md) (source-of-truth check on the AOY material in §9),
