@@ -105,6 +105,91 @@ the source format**, not an absolute judgement:
 6. **Title audit quality** — it returns three alternatives; judged against
    their own title rules, which `review_title` violated.
 
+## 4b. Baseline analysis — the chart-story reference (`Jw8ykhoOVBQ`)
+
+Analysed before the AOY script lands, so the comparison is measured rather
+than impressionistic. Structural observations only; no transcript text is
+reproduced or committed.
+
+### The finding that matters most: this is our topic
+
+The reference video is **not** a neutral format sample. It argues the same
+claim cluster as our current-bubble work — the semiconductor-vs-hyperscaler
+performance divergence, AI capex without demonstrated ROI, and AI builders
+at **20% of the S&P 500 against a 2–4% historical norm**. It is a direct
+competitor to the video we are planning, and it is a strong one.
+
+That changes its value: it is both a format reference *and* the best
+available benchmark for what our own video has to beat.
+
+### Beat map
+
+| Beat | Move |
+| --- | --- |
+| Hook | Two lines that tracked since 2021 stopped tracking. First sentence, present tense, no greeting. |
+| Identify | Names both lines concretely — chipmakers vs hyperscalers, actual tickers. |
+| Stake | If the spenders aren't earning a return, the infrastructure meltup is a house of cards. |
+| Evidence run | Three real instances: a named CEO's on-air remark, a company that burned its annual AI budget in four months, a second restricting internal AI tools on cost. |
+| Escalate | Concentration — 20% of the index vs 2–4% historically, so a pop now transmits to everything. |
+| **Reframe** | Pivots from news to a **model**: the Gartner hype cycle, laid out in full. |
+| **Analogue 1** | 1840s railway mania — capital scale in today's money, the doubling, the ~70% decade-long crash. |
+| The lesson | The technology was real; the *timing* was mispriced — ~3 years expected against ~20 actual. |
+| **Measurement** | One number carries the thesis: capital into the tech as a share of GDP. Today ~8%; dot-com and railways both peaked near 7%. |
+| **Trigger** | Rate cycles. Both prior bubbles turned when the central bank raised *above the level where the boom began*. |
+| **Falsifiable tell** | Names the specific threshold to watch, and says the conditions are **not** met yet. |
+| De-escalate | Explicitly refuses the panic close. |
+| Action | Don't try to time the peak; don't be passive either. |
+| CTA | Single ask — book a call. |
+
+### What it does better than our current script
+
+1. **Analogy is the spine, not decoration.** Railways and dot-com are not
+   garnish; they supply the model, the measurement, and the trigger. This
+   also **resolves the open analogy question** from doc 28 — whether or not
+   AOY prompts for analogy, the best competitor in this lane runs on it.
+2. **A falsifiable tell.** It names a specific, checkable threshold and
+   states plainly that it has not been crossed. Enormous authority per word:
+   it can be wrong, in public, on a date. Our receipt device does this for
+   personal finance; we have no macro equivalent.
+3. **It declines the sensational move.** "Not the end of the world, not a
+   time to panic sell" — refusing the obvious doom close is what makes the
+   warning credible, and it inoculates against the standard criticism.
+4. **One number carries the argument.** The GDP-share threshold does more
+   work than any other line. Compare our tendency to distribute evidence
+   across many surfaces.
+5. **Escalation is structural.** Anecdote → concentration → model →
+   history → measurement → trigger. Each beat raises the altitude. Nothing
+   is merely additional.
+
+### Where it is weak — the gaps we can take
+
+- **The close is a pitch, not a peak.** Roughly the last 8% of the runtime
+  is sales copy for a strategy call. By Peak-End Theory (doc 31 §8b) that
+  is the single worst place to sag, and by ring doctrine (doc 32 §5) the
+  ending should return transformed to the opening chart. It never does.
+  **The strongest structural opening we have against this competitor.**
+- **Attribution is loose in places** — "many are concerned," "we think" —
+  where our claim registry forces a source.
+- **The headline GDP-share figure is a contested construction** and arrives
+  unsourced. Our verbatim-figure and `[verify]` discipline is genuinely
+  stronger here.
+- **No reflection beat.** It is all mechanism and evidence; it never stops
+  to say what this means for the viewer's life. Doc 32 §5 predicts that
+  costs it emotional range, and the abrupt swerve into a sales pitch is
+  arguably the symptom.
+
+### Consequences for our own work
+
+- Adopt the **falsifiable tell** as a format device: every macro video names
+  one checkable threshold and states where we currently sit.
+- Adopt **analogy-as-spine** for mechanism explainers — a historical
+  parallel that supplies model, measurement, and trigger, not a passing
+  comparison.
+- Keep our **sourcing discipline** as the visible differentiator; the
+  competitor's weakest seam is exactly our strongest system.
+- **Ring the close.** Return to the opening chart transformed, and put the
+  CTA inside the action window rather than in place of the ending.
+
 ## 5. Findings
 
 *Pending — Run 1 in flight.*
