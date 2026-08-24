@@ -70,6 +70,71 @@ content to us as a customer; we take notes like any student):
 5. **Niche DB sampling via `Niche_Hunter`** — a handful of scans on niches we
    care about; the reports persist.
 
+## Long-form script structure — what `ask_tim` returns (2026-08-24)
+
+Probe: *"On a 16-minute finance explainer, where does the writing effort go —
+hook and CTA, or the 13 minutes in between? How many retention devices between
+minute 2 and 14, and what are they called?"*
+
+Operator hypothesis going in: their prompting is really only about the opening,
+the close, hooks and CTAs. **Half confirmed.**
+
+### Confirmed: the templates stop before our runtime
+
+Both named long-form structures are timestamped only to roughly the 12-13
+minute mark before handing off to a CTA — one framed as a video essay
+(10-15 min), one as a framework reveal (12-15 min). **A 16-minute script is
+off the end of their map.** For our 16:21 cut their system prescribes nothing
+for the final three-plus minutes. The likely Tim answer to "rewrite our 16
+minutes" is *compress it to fit a template* — a formatting answer, not a
+structural one.
+
+### Not confirmed: the middle is managed, by cadence rather than content
+
+Real constraints do exist for the middle. They are density rules, not content
+architecture — the writer still decides what goes in:
+
+- **STR loops** (setup → tension → resolution) nested at two scales: micro
+  loops closing every 30-60s, and **4-6 macro loops per 15 minutes**, each
+  closing on a partial answer that opens a larger question.
+- **Rehooks every 60-90s**, BUT/THEREFORE transitions, varied sentence rhythm.
+- **Point ordering:** open with a strong example but *not* the best, put the
+  best in the middle where retention peaks, close with the third-best. Leading
+  with the best leaves nowhere to go.
+- **Retention-graph diagnostics:** five named failure shapes (cliff, slow
+  bleed, mid-video cliff, re-engagement spike, plateau), each with a fix.
+  Genuinely useful, and not hook-craft.
+
+### Where this lands on the moat question
+
+The point-ordering rule and the loop-density numbers are the most transferable
+things extracted from `ask_tim` so far — real editorial constraints rather than
+rubric text. They are also, once written down, ours. Consistent with the
+running verdict: **content real, delivery a RAG dump, no recurring moat.**
+
+The template ceiling is itself a finding. Their system is built for 10-15
+minute videos; we are producing longer, so beyond that runtime we are on our
+own regardless of membership.
+
+### What our pipeline does not yet encode
+
+Measured against the 16:21 p34 cut: one visual event every 9.2s (60 evidence
+beats, 47 world beats over 981s). Denser than their 30-60s loop cadence — but
+visual events are not narrative loops, and we currently have **no named macro
+loops at all**. Structure is scene-and-evidence driven, so nothing holds an
+open question across the middle.
+
+Evidence distribution by third was 33 / 12 / 15 — front-loaded into exactly
+the region the point-ordering rule warns about. **This is an artefact of asset
+availability, not an editorial decision:** evidence clustered where usable
+assets existed. Re-plan distribution once the slide-registration pack lands and
+the full 86-slide catalogue is selectable. Do not read the current shape as a
+choice.
+
+Open follow-up: encode loop structure in `scene_evidence_timeline.v1` — a
+macro-loop id per scene with its open/close beats — so the generator can report
+loop count and spacing the way it now reports bare-plate gaps.
+
 ## Verdict (running)
 
 Pending the script comparison and Niche_Hunter test. Early lean: the
