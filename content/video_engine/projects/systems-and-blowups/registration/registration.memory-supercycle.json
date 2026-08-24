@@ -1,0 +1,1070 @@
+{
+  "schema_version": "slide_semantic_registration.v1",
+  "deck_id": "memory-supercycle",
+  "registered_at": "2026-08-24",
+  "registered_by": "antigravity",
+  "slides": [
+    {
+      "slide_id": "memory-supercycle-s01",
+      "semantic_id": "memory-architecture-dependency.context.diagram-v1",
+      "headline": "Semiconductor memory transitions into a decadal infrastructure supercycle through 2030.",
+      "claim_refs": [
+        "memory-architecture-dependency",
+        "hbm-capacity-trade-ratio",
+        "samsung-hbm4-growth"
+      ],
+      "taxonomy": {
+        "actors": [
+          "supplier",
+          "customer"
+        ],
+        "objects": [
+          "commodity",
+          "factory"
+        ],
+        "mechanisms": [
+          "supply-demand"
+        ],
+        "worlds": [
+          "factory"
+        ]
+      },
+      "figures": [
+        {
+          "value": "2030",
+          "label": "outlook horizon year",
+          "period": "2030",
+          "context_sentence": "The Structural Shift of Global Semiconductor Memory and the Outlook Through 2030.",
+          "location": "lower-left",
+          "is_headline": false
+        }
+      ],
+      "confidence": "high",
+      "sha256": "d6083c86be837873f533635451d322e1bd9707228118961707f89db2096216c6"
+    },
+    {
+      "slide_id": "memory-supercycle-s02",
+      "semantic_id": "micron-strategic-customer-agreements.evidence.chart-v2",
+      "headline": "Memory shifts from 10% of system value in consumer PCs to 50% in AI infrastructure.",
+      "claim_refs": [
+        "micron-strategic-customer-agreements",
+        "memory-architecture-dependency",
+        "memory-bottleneck-not-bubble-inference"
+      ],
+      "taxonomy": {
+        "actors": [
+          "supplier",
+          "customer"
+        ],
+        "objects": [
+          "commodity",
+          "share"
+        ],
+        "mechanisms": [
+          "supply-demand",
+          "price-wage-productivity"
+        ],
+        "worlds": [
+          "factory",
+          "office"
+        ]
+      },
+      "figures": [
+        {
+          "value": "~10%",
+          "label": "past memory system value share",
+          "context_sentence": "Memory = ~10% of total system value.",
+          "location": "lower-left",
+          "is_headline": true
+        },
+        {
+          "value": "~50%",
+          "label": "present memory system value share",
+          "context_sentence": "Memory = ~50% of total system value.",
+          "location": "centre",
+          "is_headline": true
+        }
+      ],
+      "confidence": "high",
+      "sha256": "30b99070364691130ecfbc126b5b2f50f48f99934705da69af4aa202ad653449"
+    },
+    {
+      "slide_id": "memory-supercycle-s03",
+      "semantic_id": "hbm-capacity-trade-ratio.evidence.diagram-v9",
+      "headline": "HBM consumes 23% of wafers with 3-to-1 penalty, leaving standard clients 50-70% allocated.",
+      "claim_refs": [
+        "hbm-capacity-trade-ratio",
+        "memory-bottleneck-not-bubble-inference",
+        "memory-architecture-dependency"
+      ],
+      "taxonomy": {
+        "actors": [
+          "supplier",
+          "customer"
+        ],
+        "objects": [
+          "commodity",
+          "factory"
+        ],
+        "mechanisms": [
+          "supply-demand",
+          "price-wage-productivity"
+        ],
+        "worlds": [
+          "factory"
+        ]
+      },
+      "figures": [
+        {
+          "value": "3-to-1",
+          "label": "Physics Penalty ratio",
+          "context_sentence": "The Root of the Shortage: The 3-to-1 Physics Penalty",
+          "location": "upper-left",
+          "is_headline": true
+        },
+        {
+          "value": "16-High",
+          "label": "packaging layer count",
+          "context_sentence": "- 16-High Packaging Yield Loss",
+          "location": "upper-left",
+          "is_headline": false
+        },
+        {
+          "value": "18%",
+          "label": "HBM wafer consumption",
+          "period": "2025",
+          "context_sentence": "Advanced DRAM wafer consumption for HBM production rose from 18% (2025) to 23% (2026).",
+          "location": "upper-right",
+          "is_headline": false
+        },
+        {
+          "value": "23%",
+          "label": "HBM wafer consumption",
+          "period": "2026",
+          "context_sentence": "Advanced DRAM wafer consumption for HBM production rose from 18% (2025) to 23% (2026).",
+          "location": "upper-right",
+          "is_headline": true
+        },
+        {
+          "value": "2 to 3",
+          "label": "standard DRAM wafers ejected",
+          "unit": "wafers",
+          "context_sentence": "Result: Building one HBM wafer physically ejects 2 to 3 standard DRAM wafers from the production line.",
+          "location": "upper-right",
+          "is_headline": true
+        },
+        {
+          "value": "50% to 70%",
+          "label": "DRAM allocation fulfillment",
+          "context_sentence": "Standard PC, smartphone, and server clients are receiving only 50% to 70% of requested DRAM allocations.",
+          "location": "lower-right",
+          "is_headline": true
+        },
+        {
+          "value": "2030",
+          "label": "projected tight conditions horizon",
+          "period": "2030",
+          "context_sentence": "Tight conditions are projected to persist through 2030.",
+          "location": "lower-right",
+          "is_headline": false
+        }
+      ],
+      "confidence": "high",
+      "sha256": "cd42f4b52741cdab138948edbd5aaa101d0a283c044549a16a7ac8fd50a46c35"
+    },
+    {
+      "slide_id": "memory-supercycle-s04",
+      "semantic_id": "sk-hynix-demand-exceeds-supply.evidence.chart-v5",
+      "headline": "Samsung takes 39% DRAM share, SK Hynix earns +214% YoY at 26%, and Micron reaches 25%.",
+      "claim_refs": [
+        "sk-hynix-demand-exceeds-supply",
+        "micron-strategic-customer-agreements",
+        "samsung-hbm4-growth"
+      ],
+      "taxonomy": {
+        "actors": [
+          "supplier",
+          "competitor",
+          "customer"
+        ],
+        "objects": [
+          "commodity",
+          "share"
+        ],
+        "mechanisms": [
+          "supply-demand",
+          "asset-growth-comparison"
+        ],
+        "worlds": [
+          "exchange",
+          "factory"
+        ]
+      },
+      "figures": [
+        {
+          "value": "39%",
+          "label": "Samsung DRAM Market Share",
+          "period": "Q2 2026",
+          "context_sentence": "Samsung (39%)",
+          "location": "upper-right",
+          "is_headline": true
+        },
+        {
+          "value": "25%",
+          "label": "Micron DRAM Market Share",
+          "period": "Q2 2026",
+          "context_sentence": "Micron (25%)",
+          "location": "centre",
+          "is_headline": true
+        },
+        {
+          "value": "5x",
+          "label": "Micron revenue multiplier",
+          "context_sentence": "A 5x revenue explosion driven by 1-beta HBM4 and high-capacity RDIMMs, rapidly closing the gap.",
+          "location": "centre",
+          "is_headline": false
+        },
+        {
+          "value": "26%",
+          "label": "SK Hynix DRAM Market Share",
+          "period": "Q2 2026",
+          "context_sentence": "SK Hynix (26%)",
+          "location": "lower-right",
+          "is_headline": true
+        },
+        {
+          "value": "+214%",
+          "label": "SK Hynix quarterly revenue YoY growth",
+          "period": "Q2 2026",
+          "context_sentence": "Market share dropped to 26%, yet quarterly revenue surged +214% YoY.",
+          "location": "lower-right",
+          "is_headline": true
+        }
+      ],
+      "confidence": "high",
+      "sha256": "64c956ba69280d2190359d77d3917ea51378490d095f4d1417bc685b03e97899"
+    },
+    {
+      "slide_id": "memory-supercycle-s05",
+      "semantic_id": "memory-countercase.evidence.diagram-v7",
+      "headline": "CXMT grows 716% YoY in commodity memory with 70% of shipments on mature 1z nodes.",
+      "claim_refs": [
+        "memory-countercase",
+        "micron-strategic-customer-agreements",
+        "sk-hynix-demand-exceeds-supply"
+      ],
+      "taxonomy": {
+        "actors": [
+          "supplier",
+          "competitor",
+          "customer"
+        ],
+        "objects": [
+          "commodity",
+          "factory"
+        ],
+        "mechanisms": [
+          "supply-demand",
+          "price-wage-productivity"
+        ],
+        "worlds": [
+          "factory",
+          "exchange"
+        ]
+      },
+      "figures": [
+        {
+          "value": "716%",
+          "label": "CXMT YoY growth",
+          "context_sentence": "CXMT (China) grew 716% YoY, securing Apple and PC commodity orders to fill the domestic void.",
+          "location": "lower-left",
+          "is_headline": true
+        },
+        {
+          "value": "1z",
+          "label": "CXMT manufacturing node",
+          "context_sentence": "CXMT is structurally confined to the mature 1z node, with 70% of shipments stuck on legacy LPDDR4(X).",
+          "location": "lower-right",
+          "is_headline": false
+        },
+        {
+          "value": "70%",
+          "label": "CXMT legacy shipments share",
+          "context_sentence": "with 70% of shipments stuck on legacy LPDDR4(X).",
+          "location": "lower-right",
+          "is_headline": true
+        }
+      ],
+      "confidence": "high",
+      "sha256": "4545324f5d5dc71d73495546dca401bbbe587671d61fef96949aaf04a5ccba7f"
+    },
+    {
+      "slide_id": "memory-supercycle-s06",
+      "semantic_id": "micron-strategic-customer-agreements.evidence.diagram-v5",
+      "headline": "Micron locks 40% of sales in 5-year SCAs while HBM ASPs project up 87-100% in 2027.",
+      "claim_refs": [
+        "micron-strategic-customer-agreements",
+        "sk-hynix-demand-exceeds-supply",
+        "memory-architecture-dependency"
+      ],
+      "taxonomy": {
+        "actors": [
+          "supplier",
+          "customer",
+          "public-company"
+        ],
+        "objects": [
+          "commodity",
+          "equity"
+        ],
+        "mechanisms": [
+          "supply-demand",
+          "price-wage-productivity"
+        ],
+        "worlds": [
+          "factory",
+          "office"
+        ]
+      },
+      "figures": [
+        {
+          "value": "40%",
+          "label": "sales locked in SCAs",
+          "context_sentence": "40% of sales locked in 5-year Strategic Customer Agreements.",
+          "location": "centre",
+          "is_headline": true
+        },
+        {
+          "value": "5-year",
+          "label": "Strategic Customer Agreement duration",
+          "context_sentence": "40% of sales locked in 5-year Strategic Customer Agreements.",
+          "location": "centre",
+          "is_headline": true
+        },
+        {
+          "value": "50%",
+          "label": "capacity locked",
+          "context_sentence": "50% of capacity locked with 10 tier-one clients.",
+          "location": "centre",
+          "is_headline": true
+        },
+        {
+          "value": "10",
+          "label": "tier-one clients count",
+          "context_sentence": "50% of capacity locked with 10 tier-one clients.",
+          "location": "centre",
+          "is_headline": false
+        },
+        {
+          "value": "14%",
+          "label": "Smartphone Shipment Declines",
+          "context_sentence": "Smartphone Shipment Declines (Down 14%)",
+          "location": "upper-right",
+          "is_headline": false
+        },
+        {
+          "value": "87-100%",
+          "label": "projected Blended HBM ASP YoY increase",
+          "period": "2027",
+          "context_sentence": "Blended HBM Average Selling Prices (ASPs) are projecting up 87-100% YoY in 2027,",
+          "location": "lower-right",
+          "is_headline": true
+        },
+        {
+          "value": "$2.90",
+          "label": "Blended HBM ASP",
+          "unit": "$",
+          "period": "2027",
+          "context_sentence": "approaching $2.90 per Gigabit (Gb).",
+          "location": "lower-right",
+          "is_headline": false
+        }
+      ],
+      "confidence": "high",
+      "sha256": "8cbaef89595ea573d67e9415ad26ff5d4e24028b3e93138716985f06e6b158f4"
+    },
+    {
+      "slide_id": "memory-supercycle-s07",
+      "semantic_id": "samsung-hbm4-growth.evidence.diagram-v1",
+      "headline": "2048-bit HBM4 base dies split industry between TSMC foundry partners and Samsung's 4nm.",
+      "claim_refs": [
+        "samsung-hbm4-growth",
+        "micron-strategic-customer-agreements",
+        "memory-architecture-dependency"
+      ],
+      "taxonomy": {
+        "actors": [
+          "supplier",
+          "competitor",
+          "customer"
+        ],
+        "objects": [
+          "commodity",
+          "factory"
+        ],
+        "mechanisms": [
+          "supply-demand",
+          "price-wage-productivity"
+        ],
+        "worlds": [
+          "factory"
+        ]
+      },
+      "figures": [
+        {
+          "value": "2048-bit",
+          "label": "HBM4 interface width",
+          "unit": "bit",
+          "context_sentence": "The transition to a 2048-bit wide interface splits the industry's strategic approach.",
+          "location": "upper-left",
+          "is_headline": true
+        },
+        {
+          "value": "1.5x",
+          "label": "efficiency gain",
+          "context_sentence": "Benefit: High efficiency (1.5x gain via 0.8V CoWoS), low execution risk.",
+          "location": "lower-left",
+          "is_headline": false
+        },
+        {
+          "value": "0.8V",
+          "label": "CoWoS voltage",
+          "unit": "V",
+          "context_sentence": "Benefit: High efficiency (1.5x gain via 0.8V CoWoS), low execution risk.",
+          "location": "lower-left",
+          "is_headline": false
+        },
+        {
+          "value": "3nm",
+          "label": "Micron base die node",
+          "unit": "nm",
+          "context_sentence": "Process: 3nm class base dies integrated with 1-beta DRAM nodes.",
+          "location": "centre",
+          "is_headline": false
+        },
+        {
+          "value": "2.8 TB/s",
+          "label": "Micron HBM4 bandwidth",
+          "unit": "TB/s",
+          "context_sentence": "achieving 2.8 TB/s in 12-high, 36GB configurations.",
+          "location": "centre",
+          "is_headline": true
+        },
+        {
+          "value": "12-high",
+          "label": "Micron HBM4 stack height",
+          "context_sentence": "achieving 2.8 TB/s in 12-high, 36GB configurations.",
+          "location": "centre",
+          "is_headline": false
+        },
+        {
+          "value": "36GB",
+          "label": "Micron HBM4 configuration capacity",
+          "unit": "GB",
+          "context_sentence": "achieving 2.8 TB/s in 12-high, 36GB configurations.",
+          "location": "centre",
+          "is_headline": false
+        },
+        {
+          "value": "4nm",
+          "label": "Samsung proprietary foundry node",
+          "unit": "nm",
+          "context_sentence": "Process: Proprietary 4nm foundry.",
+          "location": "upper-right",
+          "is_headline": false
+        },
+        {
+          "value": "8x",
+          "label": "zHBM speed multiplier",
+          "context_sentence": "enabling next-gen zHBM (stacking HBM directly on AI accelerators for 8x speed and 10x density).",
+          "location": "lower-right",
+          "is_headline": false
+        },
+        {
+          "value": "10x",
+          "label": "zHBM density multiplier",
+          "context_sentence": "enabling next-gen zHBM (stacking HBM directly on AI accelerators for 8x speed and 10x density).",
+          "location": "lower-right",
+          "is_headline": false
+        }
+      ],
+      "confidence": "high",
+      "sha256": "a21d04b2c7390d343d7fb706096a8d3c72fe1392fe1cc9a01b9ebf539a4e43ae"
+    },
+    {
+      "slide_id": "memory-supercycle-s08",
+      "semantic_id": "memory-architecture-dependency.evidence.diagram-v4",
+      "headline": "HBF provides 512GB at 3.0 TB/s while enterprise QLC SSDs scale to 256TB capacities.",
+      "claim_refs": [
+        "memory-architecture-dependency",
+        "samsung-hbm4-growth",
+        "micron-strategic-customer-agreements"
+      ],
+      "taxonomy": {
+        "actors": [
+          "supplier",
+          "customer"
+        ],
+        "objects": [
+          "commodity",
+          "factory"
+        ],
+        "mechanisms": [
+          "supply-demand"
+        ],
+        "worlds": [
+          "factory"
+        ]
+      },
+      "figures": [
+        {
+          "value": "512GB",
+          "label": "HBF capacity",
+          "unit": "GB",
+          "context_sentence": "Delivers up to 512GB capacities at 3.0 TB/s.",
+          "location": "centre",
+          "is_headline": true
+        },
+        {
+          "value": "3.0 TB/s",
+          "label": "HBF data bandwidth",
+          "unit": "TB/s",
+          "context_sentence": "Delivers up to 512GB capacities at 3.0 TB/s.",
+          "location": "centre",
+          "is_headline": true
+        },
+        {
+          "value": "75%",
+          "label": "HBM4E speed retained",
+          "context_sentence": "Maintains 75% of HBM4E speed but offers 8x capacity directly inside accelerators.",
+          "location": "centre",
+          "is_headline": false
+        },
+        {
+          "value": "8x",
+          "label": "capacity multiplier over HBM",
+          "context_sentence": "Maintains 75% of HBM4E speed but offers 8x capacity directly inside accelerators.",
+          "location": "centre",
+          "is_headline": true
+        },
+        {
+          "value": "300+",
+          "label": "layer stacking count",
+          "unit": "layer",
+          "context_sentence": "Spec: Driven by QLC and 300+ layer stacking.",
+          "location": "lower-right",
+          "is_headline": false
+        },
+        {
+          "value": "256TB",
+          "label": "Samsung QLC eSSD capacity",
+          "unit": "TB",
+          "context_sentence": "Featuring Samsung's 256TB QLC eSSD and Micron's PCIe Gen6 9550 (28 GB/s sequential reads).",
+          "location": "lower-right",
+          "is_headline": true
+        },
+        {
+          "value": "28 GB/s",
+          "label": "Micron sequential read speed",
+          "unit": "GB/s",
+          "context_sentence": "and Micron's PCIe Gen6 9550 (28 GB/s sequential reads).",
+          "location": "lower-right",
+          "is_headline": true
+        }
+      ],
+      "confidence": "high",
+      "sha256": "f3bc1a627ae812171e67d062a8a21e1363ae9655b180a65d2217e52c30cc0b23"
+    },
+    {
+      "slide_id": "memory-supercycle-s09",
+      "semantic_id": "memory-architecture-dependency.evidence.diagram-v5",
+      "headline": "DRAM scaling hits the 10 fF wall at sub-10nm, driving 3D monolithic architectures by 2030.",
+      "claim_refs": [
+        "memory-architecture-dependency",
+        "memory-bottleneck-not-bubble-inference",
+        "hbm-capacity-trade-ratio"
+      ],
+      "taxonomy": {
+        "actors": [
+          "supplier"
+        ],
+        "objects": [
+          "commodity",
+          "factory"
+        ],
+        "mechanisms": [
+          "supply-demand",
+          "price-wage-productivity"
+        ],
+        "worlds": [
+          "factory"
+        ]
+      },
+      "figures": [
+        {
+          "value": "10 fF",
+          "label": "capacitance wall",
+          "unit": "fF",
+          "context_sentence": "The 10 fF Wall: The End of 2D DRAM",
+          "location": "upper-left",
+          "is_headline": true
+        },
+        {
+          "value": "sub-10nm",
+          "label": "scaling limit node",
+          "unit": "nm",
+          "context_sentence": "As the cell shrinks to sub-10nm (0a node),",
+          "location": "centre",
+          "is_headline": false
+        },
+        {
+          "value": "10-15 fF",
+          "label": "minimum electrical charge",
+          "unit": "fF",
+          "context_sentence": "to hold the minimum 10-15 fF electrical charge.",
+          "location": "centre",
+          "is_headline": true
+        },
+        {
+          "value": "4F²",
+          "label": "VCT footprint",
+          "context_sentence": "Immediate Fix: VCT (Vertical Channel Transistors) shrinking footprint to 4F².",
+          "location": "lower-right",
+          "is_headline": false
+        },
+        {
+          "value": "2030",
+          "label": "Monolithic 3D DRAM rollout year",
+          "period": "2030",
+          "context_sentence": "Ultimate Fix (2030): Monolithic 3D DRAM.",
+          "location": "lower-right",
+          "is_headline": false
+        },
+        {
+          "value": "100GB+",
+          "label": "single-die capacity",
+          "unit": "GB",
+          "context_sentence": "enabling single-die capacities of 100GB+.",
+          "location": "lower-right",
+          "is_headline": true
+        }
+      ],
+      "confidence": "high",
+      "sha256": "4251b9fba98fe607cc07966ad1307a19a8c5a7bab697f58c9f69fd38eea50c16"
+    },
+    {
+      "slide_id": "memory-supercycle-s10",
+      "semantic_id": "memory-architecture-dependency.evidence.diagram-v6",
+      "headline": "Level 4 autonomy demands 300GB+ DRAM, driving durable SLC NAND prices up 120% to 170%.",
+      "claim_refs": [
+        "memory-architecture-dependency",
+        "micron-strategic-customer-agreements",
+        "memory-countercase"
+      ],
+      "taxonomy": {
+        "actors": [
+          "supplier",
+          "customer"
+        ],
+        "objects": [
+          "commodity",
+          "factory"
+        ],
+        "mechanisms": [
+          "supply-demand",
+          "price-wage-productivity"
+        ],
+        "worlds": [
+          "factory",
+          "office"
+        ]
+      },
+      "figures": [
+        {
+          "value": "Level 2",
+          "label": "ADAS baseline level",
+          "context_sentence": "Baseline: Level 2 ADAS",
+          "location": "upper-left",
+          "is_headline": false
+        },
+        {
+          "value": "~16GB",
+          "label": "Level 2 DRAM requirement",
+          "unit": "GB",
+          "context_sentence": "Requirement: ~16GB DRAM.",
+          "location": "upper-left",
+          "is_headline": true
+        },
+        {
+          "value": "Level 4",
+          "label": "autonomy future level",
+          "context_sentence": "The Future: Level 4 Autonomy",
+          "location": "lower-left",
+          "is_headline": false
+        },
+        {
+          "value": "300GB+",
+          "label": "Level 4 DRAM requirement",
+          "unit": "GB",
+          "context_sentence": "Requirement: 300GB+ high-speed DRAM.",
+          "location": "lower-left",
+          "is_headline": true
+        },
+        {
+          "value": "120% to 170%",
+          "label": "projected SLC NAND price rise",
+          "period": "late 2026",
+          "context_sentence": "Contract prices for durable SLC NAND (used in ECUs) are projected to rise 120% to 170% in late 2026",
+          "location": "lower-right",
+          "is_headline": true
+        }
+      ],
+      "confidence": "high",
+      "sha256": "738cabeddaa84be79e6143a32a442da139712295433eaa81e19e6f3fbee609f9"
+    },
+    {
+      "slide_id": "memory-supercycle-s11",
+      "semantic_id": "memory-bottleneck-not-bubble-inference.evidence.diagram-v4",
+      "headline": "SK Hynix commits $38.1B to Yongin and Micron expands FY26 CapEx beyond $25B.",
+      "claim_refs": [
+        "memory-bottleneck-not-bubble-inference",
+        "memory-countercase",
+        "korea-technology-intensity"
+      ],
+      "taxonomy": {
+        "actors": [
+          "supplier",
+          "public-company"
+        ],
+        "objects": [
+          "factory",
+          "commodity"
+        ],
+        "mechanisms": [
+          "capital-flow",
+          "balance-sheet"
+        ],
+        "worlds": [
+          "factory"
+        ]
+      },
+      "figures": [
+        {
+          "value": "$100 Billion",
+          "label": "Blueprints scale",
+          "unit": "Billion",
+          "context_sentence": "$100 Billion Blueprints: The Race for Cleanroom Space",
+          "location": "upper-left",
+          "is_headline": true
+        },
+        {
+          "value": "$100B",
+          "label": "New York mega-site",
+          "unit": "B",
+          "period": "2030",
+          "context_sentence": "New York $100B mega-site (2030).",
+          "location": "upper-left",
+          "is_headline": true
+        },
+        {
+          "value": "$3.87B",
+          "label": "SK Hynix Indiana facility",
+          "unit": "B",
+          "period": "2028",
+          "context_sentence": "SK Hynix: Indiana $3.87B advanced packaging facility (2028).",
+          "location": "upper-left",
+          "is_headline": false
+        },
+        {
+          "value": "$9.4B",
+          "label": "Micron Hiroshima expansion",
+          "unit": "B",
+          "context_sentence": "Japan Hiroshima $9.4B expansion;",
+          "location": "upper-right",
+          "is_headline": false
+        },
+        {
+          "value": "$38.1B",
+          "label": "SK Hynix Yongin cluster",
+          "unit": "B",
+          "context_sentence": "SK Hynix: Yongin $38.1B cluster (Y1 in 2027, Y2 in 2029).",
+          "location": "upper-right",
+          "is_headline": true
+        },
+        {
+          "value": "$25B",
+          "label": "Micron FY26 CapEx",
+          "unit": "B",
+          "period": "FY26",
+          "context_sentence": "Micron is expanding FY26 CapEx to over $25B,",
+          "location": "lower-left",
+          "is_headline": true
+        },
+        {
+          "value": "~$32-34B",
+          "label": "SK Hynix CapEx",
+          "unit": "B",
+          "context_sentence": "and SK Hynix is raising to ~$32-34B.",
+          "location": "lower-left",
+          "is_headline": true
+        }
+      ],
+      "confidence": "high",
+      "sha256": "22f74ea71d8b3456ffc79ec33b93a6bd537e1ee7f7257eb0c6dc0c2772600fec"
+    },
+    {
+      "slide_id": "memory-supercycle-s12",
+      "semantic_id": "korea-technology-intensity.evidence.diagram-v1",
+      "headline": "U.S. CHIPS Act 35% tax credit faces 2026 sunset while Korea offers 50% regional premiums.",
+      "claim_refs": [
+        "korea-technology-intensity",
+        "korea-conglomerate-concentration-risk",
+        "memory-countercase"
+      ],
+      "taxonomy": {
+        "actors": [
+          "government",
+          "supplier",
+          "public-company"
+        ],
+        "objects": [
+          "factory",
+          "commodity"
+        ],
+        "mechanisms": [
+          "capital-flow",
+          "balance-sheet"
+        ],
+        "worlds": [
+          "policy-room",
+          "factory"
+        ]
+      },
+      "figures": [
+        {
+          "value": "35%",
+          "label": "refundable tax credit",
+          "context_sentence": "The U.S. CHIPS Act offers a 35% refundable tax credit,",
+          "location": "upper-left",
+          "is_headline": true
+        },
+        {
+          "value": "Dec 31, 2026",
+          "label": "construction start sunset date",
+          "period": "2026-12-31",
+          "context_sentence": "construction must begin by Dec 31, 2026.",
+          "location": "upper-left",
+          "is_headline": false
+        },
+        {
+          "value": "2031",
+          "label": "lobbied extension year",
+          "period": "2031",
+          "context_sentence": "The industry is aggressively lobbying to push this to 2031.",
+          "location": "lower-left",
+          "is_headline": false
+        },
+        {
+          "value": "2036",
+          "label": "Korea tax credit duration year",
+          "period": "2036",
+          "context_sentence": "The 2026 Tax Revision Bill offers production tax credits through 2036.",
+          "location": "centre",
+          "is_headline": false
+        },
+        {
+          "value": "50%",
+          "label": "regional premium",
+          "context_sentence": "Crucially, it includes up to a 50% regional premium to keep semiconductor manufacturing in domestic, non-capital regions.",
+          "location": "centre",
+          "is_headline": true
+        },
+        {
+          "value": "1a",
+          "label": "Wuxi fab node",
+          "context_sentence": "SK Hynix's Wuxi fab (1a node) operates on a U.S. annual licensing regime valid only through 2026.",
+          "location": "upper-right",
+          "is_headline": false
+        },
+        {
+          "value": "2026",
+          "label": "licensing regime validity year",
+          "period": "2026",
+          "context_sentence": "valid only through 2026.",
+          "location": "upper-right",
+          "is_headline": false
+        }
+      ],
+      "confidence": "high",
+      "sha256": "11beabb1e135226d1b8e1e4276815c6b404df09d52713bbf868a0c7cbeee3bbc"
+    },
+    {
+      "slide_id": "memory-supercycle-s13",
+      "semantic_id": "unregistered.context.diagram-v1",
+      "headline": "$450M federal CHIPS grant accelerates site work despite 133-acre local rezoning disputes.",
+      "claim_refs": [],
+      "unmatched_reason": "Municipal rezoning and local permitting litigation affecting fab buildout schedules not covered by the 21 closed claims.",
+      "taxonomy": {
+        "actors": [
+          "government",
+          "supplier",
+          "public-company"
+        ],
+        "objects": [
+          "factory",
+          "debt"
+        ],
+        "mechanisms": [
+          "capital-flow"
+        ],
+        "worlds": [
+          "policy-room",
+          "factory"
+        ]
+      },
+      "figures": [
+        {
+          "value": "$450M",
+          "label": "federal CHIPS grants",
+          "context_sentence": "Backed by $450M in federal CHIPS grants",
+          "location": "centre",
+          "is_headline": true
+        },
+        {
+          "value": "$98M",
+          "label": "fast-tracked local permits",
+          "context_sentence": "and $98M in fast-tracked local permits to accelerate foundation work",
+          "location": "centre",
+          "is_headline": false
+        },
+        {
+          "value": "133-acre",
+          "label": "rezoning area",
+          "unit": "acre",
+          "context_sentence": "Residents filed lawsuits over a lack of transparency during 133-acre rezoning hearings",
+          "location": "lower-left",
+          "is_headline": false
+        },
+        {
+          "value": "30-foot",
+          "label": "road expansion width",
+          "unit": "foot",
+          "context_sentence": "and civil disputes regarding eminent domain for a 30-foot road expansion.",
+          "location": "lower-left",
+          "is_headline": false
+        }
+      ],
+      "confidence": "high",
+      "sha256": "25190f4a63c6e03d8309f69d0068016a5e5704dbe1895b5e9df39cba513ffbf7"
+    },
+    {
+      "slide_id": "memory-supercycle-s14",
+      "semantic_id": "memory-countercase.evidence.timeline-v1",
+      "headline": "HBM cannibalization causes a 70% allocation drop before 2028-2030 greenfield supply ramps.",
+      "claim_refs": [
+        "memory-countercase",
+        "hbm-capacity-trade-ratio",
+        "memory-bottleneck-not-bubble-inference"
+      ],
+      "taxonomy": {
+        "actors": [
+          "supplier",
+          "customer"
+        ],
+        "objects": [
+          "factory",
+          "commodity"
+        ],
+        "mechanisms": [
+          "supply-demand",
+          "price-wage-productivity"
+        ],
+        "worlds": [
+          "factory"
+        ]
+      },
+      "figures": [
+        {
+          "value": "70%",
+          "label": "drop in standard chip allocations",
+          "context_sentence": "(up to 70% drop in std chip allocations)",
+          "location": "upper-left",
+          "is_headline": true
+        },
+        {
+          "value": "2024",
+          "label": "timeline start year",
+          "period": "2024",
+          "context_sentence": "2024",
+          "location": "chart-axis",
+          "is_headline": false
+        },
+        {
+          "value": "2030",
+          "label": "timeline end year",
+          "period": "2030",
+          "context_sentence": "2030",
+          "location": "chart-axis",
+          "is_headline": false
+        }
+      ],
+      "confidence": "high",
+      "sha256": "abcc737f9bf6a88c89bc1296a6150e52df5c9e53f9318fb04d91af5728d2e6c5"
+    },
+    {
+      "slide_id": "memory-supercycle-s15",
+      "semantic_id": "memory-architecture-dependency.context.diagram-v7",
+      "headline": "Winning through 2030 requires 1-gamma nodes, foundry packaging, and capital discipline.",
+      "claim_refs": [
+        "memory-architecture-dependency",
+        "micron-strategic-customer-agreements",
+        "samsung-hbm4-growth"
+      ],
+      "taxonomy": {
+        "actors": [
+          "supplier",
+          "competitor"
+        ],
+        "objects": [
+          "factory",
+          "commodity"
+        ],
+        "mechanisms": [
+          "supply-demand",
+          "price-wage-productivity"
+        ],
+        "worlds": [
+          "factory"
+        ]
+      },
+      "figures": [
+        {
+          "value": "2030",
+          "label": "winning formula target year",
+          "period": "2030",
+          "context_sentence": "The Winning Formula Through 2030",
+          "location": "upper-left",
+          "is_headline": false
+        },
+        {
+          "value": "10 fF",
+          "label": "capacitance limit",
+          "unit": "fF",
+          "context_sentence": "to successfully bypass the 10 fF capacitance limit.",
+          "location": "lower-left",
+          "is_headline": true
+        },
+        {
+          "value": "2028-2030",
+          "label": "greenfield ramp-up period",
+          "period": "2028-2030",
+          "context_sentence": "Navigate the perilous 2028-2030 greenfield ramp-up without overbuilding",
+          "location": "lower-right",
+          "is_headline": false
+        }
+      ],
+      "confidence": "high",
+      "sha256": "0b484737898e79a9d18153679db8b93f0f9debb998a72088a9e8ac9a6e7cd470"
+    }
+  ]
+}

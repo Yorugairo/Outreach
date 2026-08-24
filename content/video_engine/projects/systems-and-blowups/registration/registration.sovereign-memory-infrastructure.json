@@ -1,0 +1,512 @@
+{
+  "schema_version": "slide_semantic_registration.v1",
+  "deck_id": "sovereign-memory-infrastructure",
+  "registered_at": "2026-08-24",
+  "registered_by": "antigravity",
+  "slides": [
+    {
+      "slide_id": "sovereign-memory-infrastructure-s01",
+      "semantic_id": "memory-architecture-dependency.context.diagram-v8",
+      "headline": "Memory emerges as the primary geopolitical chokepoint of global sovereign compute.",
+      "claim_refs": [
+        "memory-architecture-dependency",
+        "korea-technology-intensity",
+        "micron-strategic-customer-agreements"
+      ],
+      "taxonomy": {
+        "actors": [
+          "supplier",
+          "government"
+        ],
+        "objects": [
+          "commodity",
+          "factory"
+        ],
+        "mechanisms": [
+          "supply-demand"
+        ],
+        "worlds": [
+          "factory",
+          "policy-room"
+        ]
+      },
+      "figures": [],
+      "confidence": "high",
+      "sha256": "eb8e47264fdb26e994721b0e87385cb4e0000f30d67ba66ba3f5a28b3a3798d6"
+    },
+    {
+      "slide_id": "sovereign-memory-infrastructure-s02",
+      "semantic_id": "memory-bottleneck-not-bubble-inference.context.diagram-v5",
+      "headline": "Generative AI transforms memory from IT OpEx into sovereign infrastructure CapEx.",
+      "claim_refs": [
+        "memory-bottleneck-not-bubble-inference",
+        "memory-architecture-dependency"
+      ],
+      "taxonomy": {
+        "actors": [
+          "customer",
+          "supplier",
+          "government"
+        ],
+        "objects": [
+          "commodity",
+          "factory"
+        ],
+        "mechanisms": [
+          "capital-flow",
+          "supply-demand"
+        ],
+        "worlds": [
+          "factory",
+          "office"
+        ]
+      },
+      "figures": [],
+      "confidence": "high",
+      "sha256": "7f378953775b79afe999e4026a1d06ccaa487f428db4c606cebc2ce6706fbff2"
+    },
+    {
+      "slide_id": "sovereign-memory-infrastructure-s03",
+      "semantic_id": "memory-architecture-dependency.evidence.diagram-v9",
+      "headline": "HBM forms the critical second layer beneath accelerators in the 9-layer compute stack.",
+      "claim_refs": [
+        "memory-architecture-dependency",
+        "memory-bottleneck-not-bubble-inference"
+      ],
+      "taxonomy": {
+        "actors": [
+          "supplier",
+          "customer"
+        ],
+        "objects": [
+          "commodity",
+          "factory"
+        ],
+        "mechanisms": [
+          "supply-demand"
+        ],
+        "worlds": [
+          "factory"
+        ]
+      },
+      "figures": [
+        {
+          "value": "9",
+          "label": "compute stack layers count",
+          "context_sentence": "The 9-Layer GenAI Compute Stack",
+          "location": "upper-left",
+          "is_headline": false
+        },
+        {
+          "value": ">1500W",
+          "label": "thermal management liquid cooling TDP",
+          "unit": "W",
+          "context_sentence": "(liquid cooling >1500W TDP)",
+          "location": "lower-right",
+          "is_headline": false
+        },
+        {
+          "value": "800V",
+          "label": "HVDC power delivery voltage",
+          "unit": "V",
+          "context_sentence": "(800V HVDC GaN/SiC transition)",
+          "location": "lower-right",
+          "is_headline": false
+        }
+      ],
+      "confidence": "high",
+      "sha256": "8a1d3727d17881784b1abbc83f1d01f93298877bf592f093daa72d3728010899"
+    },
+    {
+      "slide_id": "sovereign-memory-infrastructure-s04",
+      "semantic_id": "memory-architecture-dependency.context.diagram-v10",
+      "headline": "Frontier model scaling breaks compute logic limits and hits the memory bandwidth wall.",
+      "claim_refs": [
+        "memory-architecture-dependency",
+        "hbm-capacity-trade-ratio",
+        "memory-bottleneck-not-bubble-inference"
+      ],
+      "taxonomy": {
+        "actors": [
+          "customer",
+          "supplier"
+        ],
+        "objects": [
+          "commodity"
+        ],
+        "mechanisms": [
+          "supply-demand"
+        ],
+        "worlds": [
+          "factory"
+        ]
+      },
+      "figures": [],
+      "confidence": "high",
+      "sha256": "a4dffdd8cdba168ccb14c93b48e431780b7c403b82ac3702582dea6d84b6258b"
+    },
+    {
+      "slide_id": "sovereign-memory-infrastructure-s05",
+      "semantic_id": "korea-technology-intensity.context.diagram-v1",
+      "headline": "A geographic oligopoly across Korea, Taiwan, and the US dictates global AI scaling.",
+      "claim_refs": [
+        "korea-technology-intensity",
+        "micron-strategic-customer-agreements",
+        "sk-hynix-demand-exceeds-supply"
+      ],
+      "taxonomy": {
+        "actors": [
+          "supplier",
+          "government"
+        ],
+        "objects": [
+          "factory",
+          "commodity"
+        ],
+        "mechanisms": [
+          "supply-demand",
+          "capital-flow"
+        ],
+        "worlds": [
+          "factory",
+          "policy-room"
+        ]
+      },
+      "figures": [],
+      "confidence": "high",
+      "sha256": "7c6aa4b3dc3ece200956b43e5ae21f7df3042659e731be9a732905459f802f58"
+    },
+    {
+      "slide_id": "sovereign-memory-infrastructure-s06",
+      "semantic_id": "memory-bottleneck-not-bubble-inference.context.diagram-v6",
+      "headline": "Strategic memory scalers prioritize accretive cash burn to secure physical bottlenecks.",
+      "claim_refs": [
+        "memory-bottleneck-not-bubble-inference",
+        "sp500-hidden-bubble-risk-inference"
+      ],
+      "taxonomy": {
+        "actors": [
+          "supplier",
+          "public-company",
+          "index-investor"
+        ],
+        "objects": [
+          "equity",
+          "debt",
+          "factory"
+        ],
+        "mechanisms": [
+          "capital-flow",
+          "balance-sheet"
+        ],
+        "worlds": [
+          "exchange",
+          "factory"
+        ]
+      },
+      "figures": [],
+      "confidence": "high",
+      "sha256": "e0ce93e6ebf12b1504d20ce4753d309d315825385fbf5109f22e13e5bcc61225"
+    },
+    {
+      "slide_id": "sovereign-memory-infrastructure-s07",
+      "semantic_id": "memory-bottleneck-not-bubble-inference.context.diagram-v7",
+      "headline": "The Accretive Burn framework audits ROIIC, backlog-to-burn ratios, and fab debt stacking.",
+      "claim_refs": [
+        "memory-bottleneck-not-bubble-inference",
+        "micron-strategic-customer-agreements"
+      ],
+      "taxonomy": {
+        "actors": [
+          "supplier",
+          "public-company"
+        ],
+        "objects": [
+          "debt",
+          "factory",
+          "equity"
+        ],
+        "mechanisms": [
+          "balance-sheet",
+          "capital-flow"
+        ],
+        "worlds": [
+          "office",
+          "factory"
+        ]
+      },
+      "figures": [],
+      "confidence": "high",
+      "sha256": "4ced95c0669aa0d0c2b23a037e11353ae42996b250c167aaa75c2939a110de09"
+    },
+    {
+      "slide_id": "sovereign-memory-infrastructure-s08",
+      "semantic_id": "memory-bottleneck-not-bubble-inference.context.diagram-v8",
+      "headline": "Memory giants deploy subsidies, syndicated debt, and accretive burn to expand fab moats.",
+      "claim_refs": [
+        "memory-bottleneck-not-bubble-inference",
+        "micron-strategic-customer-agreements",
+        "samsung-hbm4-growth",
+        "sk-hynix-demand-exceeds-supply"
+      ],
+      "taxonomy": {
+        "actors": [
+          "supplier",
+          "government",
+          "lender"
+        ],
+        "objects": [
+          "debt",
+          "factory",
+          "commodity"
+        ],
+        "mechanisms": [
+          "capital-flow",
+          "balance-sheet"
+        ],
+        "worlds": [
+          "factory",
+          "policy-room"
+        ]
+      },
+      "figures": [],
+      "confidence": "high",
+      "sha256": "117c07dfa26c76230a4d537d8bced751900a034444fabe0eb3982296350b2dab"
+    },
+    {
+      "slide_id": "sovereign-memory-infrastructure-s09",
+      "semantic_id": "memory-bottleneck-not-bubble-inference.context.chart-v1",
+      "headline": "Memory assets transition through a three-phase structural re-rating to sovereign premiums.",
+      "claim_refs": [
+        "memory-bottleneck-not-bubble-inference",
+        "concentrated-defensive-barbell-hypothesis"
+      ],
+      "taxonomy": {
+        "actors": [
+          "supplier",
+          "index-investor",
+          "government"
+        ],
+        "objects": [
+          "equity",
+          "commodity"
+        ],
+        "mechanisms": [
+          "asset-growth-comparison",
+          "capital-flow"
+        ],
+        "worlds": [
+          "exchange",
+          "factory"
+        ]
+      },
+      "figures": [],
+      "confidence": "high",
+      "sha256": "e0df120370ae39c7e484354e100ccca61db56348e3ead6112634b7e51998024b"
+    },
+    {
+      "slide_id": "sovereign-memory-infrastructure-s10",
+      "semantic_id": "memory-countercase.context.diagram-v8",
+      "headline": "Export controls create dual supply chains across US CHIPS reshoring and China stacks.",
+      "claim_refs": [
+        "memory-countercase",
+        "micron-strategic-customer-agreements",
+        "korea-technology-intensity"
+      ],
+      "taxonomy": {
+        "actors": [
+          "government",
+          "supplier",
+          "competitor"
+        ],
+        "objects": [
+          "factory",
+          "commodity"
+        ],
+        "mechanisms": [
+          "supply-demand",
+          "capital-flow"
+        ],
+        "worlds": [
+          "policy-room",
+          "factory"
+        ]
+      },
+      "figures": [],
+      "confidence": "high",
+      "sha256": "810023ce67b0fec1d6e6e6b82ae7683ad9441aaee7342861698fa0db21268647"
+    },
+    {
+      "slide_id": "sovereign-memory-infrastructure-s11",
+      "semantic_id": "memory-architecture-dependency.evidence.diagram-v11",
+      "headline": "CoWoS and 3D advanced packaging define the indispensable physical moat for memory dies.",
+      "claim_refs": [
+        "memory-architecture-dependency",
+        "hbm-capacity-trade-ratio",
+        "samsung-hbm4-growth"
+      ],
+      "taxonomy": {
+        "actors": [
+          "supplier",
+          "customer"
+        ],
+        "objects": [
+          "commodity",
+          "factory"
+        ],
+        "mechanisms": [
+          "supply-demand"
+        ],
+        "worlds": [
+          "factory"
+        ]
+      },
+      "figures": [],
+      "confidence": "high",
+      "sha256": "79cbf336da9ead663ca91107f0ef4dbb1d8b5746e7ab1871b46973e9daa972a3"
+    },
+    {
+      "slide_id": "sovereign-memory-infrastructure-s12",
+      "semantic_id": "memory-architecture-dependency.evidence.diagram-v12",
+      "headline": "224 Gbps copper limit forces the shift to co-packaged optics and photonic fabrics.",
+      "claim_refs": [
+        "memory-architecture-dependency",
+        "memory-bottleneck-not-bubble-inference"
+      ],
+      "taxonomy": {
+        "actors": [
+          "supplier",
+          "public-company"
+        ],
+        "objects": [
+          "commodity",
+          "equity"
+        ],
+        "mechanisms": [
+          "supply-demand",
+          "asset-growth-comparison"
+        ],
+        "worlds": [
+          "factory",
+          "exchange"
+        ]
+      },
+      "figures": [
+        {
+          "value": "224 Gbps",
+          "label": "electrical signaling limit",
+          "unit": "Gbps",
+          "context_sentence": "The Copper Wall (224 Gbps electrical limit)",
+          "location": "centre",
+          "is_headline": true
+        },
+        {
+          "value": "$1 Trillion",
+          "label": "targeted Marvell Market Cap",
+          "unit": "Trillion",
+          "context_sentence": "Marvell: Targeting $1 Trillion Market Cap / $16.5B Rev by FY28 (NVLink Fusion integration).",
+          "location": "upper-right",
+          "is_headline": true
+        },
+        {
+          "value": "$16.5B",
+          "label": "targeted Marvell Revenue",
+          "unit": "B",
+          "period": "FY28",
+          "context_sentence": "Marvell: Targeting $1 Trillion Market Cap / $16.5B Rev by FY28 (NVLink Fusion integration).",
+          "location": "upper-right",
+          "is_headline": false
+        },
+        {
+          "value": "$8.5B",
+          "label": "Fabrinet capacity",
+          "unit": "B",
+          "context_sentence": "Fabrinet: OSAT Pivot ($8.5B capacity, $32M Raytek Semiconductor stake to secure CPO packaging).",
+          "location": "lower-right",
+          "is_headline": false
+        },
+        {
+          "value": "$32M",
+          "label": "Raytek Semiconductor stake",
+          "unit": "M",
+          "context_sentence": "Fabrinet: OSAT Pivot ($8.5B capacity, $32M Raytek Semiconductor stake to secure CPO packaging).",
+          "location": "lower-right",
+          "is_headline": false
+        }
+      ],
+      "confidence": "high",
+      "sha256": "b64028046d7ce7d1eed23bfd55c66cacc11f289b90bcbbb5981569ac4c808a0f"
+    },
+    {
+      "slide_id": "sovereign-memory-infrastructure-s13",
+      "semantic_id": "memory-countercase.evidence.diagram-v9",
+      "headline": "Sovereign compute faces single points of failure in Taiwan packaging and 1500W+ grids.",
+      "claim_refs": [
+        "memory-countercase",
+        "memory-architecture-dependency"
+      ],
+      "taxonomy": {
+        "actors": [
+          "government",
+          "supplier"
+        ],
+        "objects": [
+          "factory",
+          "commodity"
+        ],
+        "mechanisms": [
+          "supply-demand",
+          "risk-concentration"
+        ],
+        "worlds": [
+          "policy-room",
+          "factory"
+        ]
+      },
+      "figures": [
+        {
+          "value": "1500W+",
+          "label": "AI clusters power requirement",
+          "unit": "W",
+          "context_sentence": "power 1500W+ AI clusters.",
+          "location": "upper-left",
+          "is_headline": true
+        }
+      ],
+      "confidence": "high",
+      "sha256": "ff01e2be9569b6cabe1db22dbb315e4e15198966c73b4f26a21b5cb21826ff51"
+    },
+    {
+      "slide_id": "sovereign-memory-infrastructure-s14",
+      "semantic_id": "memory-bottleneck-not-bubble-inference.context.diagram-v9",
+      "headline": "Memory leaders evolve from cyclical commodity makers to sovereign compute architects.",
+      "claim_refs": [
+        "memory-bottleneck-not-bubble-inference",
+        "concentrated-defensive-barbell-hypothesis",
+        "korea-technology-intensity"
+      ],
+      "taxonomy": {
+        "actors": [
+          "supplier",
+          "government",
+          "public-company"
+        ],
+        "objects": [
+          "commodity",
+          "factory"
+        ],
+        "mechanisms": [
+          "supply-demand",
+          "capital-flow"
+        ],
+        "worlds": [
+          "factory",
+          "policy-room"
+        ]
+      },
+      "figures": [],
+      "confidence": "high",
+      "sha256": "0d09eebb4c8924713849603e62f1a4767bc976e86d18e0bc965bd22cb2a6d172"
+    }
+  ]
+}

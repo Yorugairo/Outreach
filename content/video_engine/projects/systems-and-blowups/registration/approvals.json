@@ -1,0 +1,15 @@
+{
+  "decks_completed": [
+    "silicon-silent-triopoly",
+    "silicon-value-software-bubble",
+    "silicon-reality-gap",
+    "silicon-antidote",
+    "memory-supercycle",
+    "sovereign-memory-infrastructure"
+  ],
+  "slides_registered": 86,
+  "slides_unmatched": 4,
+  "figures_extracted": 340,
+  "low_confidence": [],
+  "notes": "All 86 approved slides registered across 6 decks. 340 verbatim figures extracted with exact string and digit fidelity. 4 historical background / narrative slides without quantitative ledger equivalents registered under unmatched reasons conforming strictly to the schema."
+}

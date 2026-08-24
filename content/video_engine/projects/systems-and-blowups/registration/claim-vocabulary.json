@@ -1,0 +1,174 @@
+{
+ "closed_set": true,
+ "count": 21,
+ "claims": [
+  {
+   "claim_id": "memory-architecture-dependency",
+   "text": "AI system performance depends on memory-subsystem performance and capacity across GPU, ASIC, and CPU designs.",
+   "classification": "observed_fact",
+   "as_of": "2026-06-24",
+   "publisher": "Micron Technology",
+   "source_title": "Fiscal Q3 2026 Earnings Call Prepared Remarks"
+  },
+  {
+   "claim_id": "hbm-capacity-trade-ratio",
+   "text": "HBM growth and increasing trade ratio pressure non-HBM supply while greenfield fabs remain slow and complex to build.",
+   "classification": "observed_fact",
+   "as_of": "2026-06-24",
+   "publisher": "Micron Technology",
+   "source_title": "Fiscal Q3 2026 Earnings Call Prepared Remarks"
+  },
+  {
+   "claim_id": "micron-strategic-customer-agreements",
+   "text": "Micron reported 16 strategic customer agreements, usually five years, covering about 20% of DRAM volume and one-third of NAND volume over the period, with take-or-pay commitments.",
+   "classification": "observed_fact",
+   "as_of": "2026-06-24",
+   "publisher": "Micron Technology",
+   "source_title": "Fiscal Q3 2026 Earnings Call Prepared Remarks"
+  },
+  {
+   "claim_id": "samsung-hbm4-growth",
+   "text": "Samsung began commercial HBM4 shipments and said it expected 2026 HBM sales to more than triple from 2025.",
+   "classification": "observed_fact",
+   "as_of": "2026-02-12",
+   "publisher": "Samsung Electronics",
+   "source_title": "Samsung Ships Industry-First Commercial HBM4 With Ultimate Performance for AI Computing"
+  },
+  {
+   "claim_id": "sk-hynix-demand-exceeds-supply",
+   "text": "SK hynix reported record first-quarter 2026 performance driven by AI-related memory and said customer demand exceeded supply capacity.",
+   "classification": "observed_fact",
+   "as_of": "2026-04-23",
+   "publisher": "SK hynix",
+   "source_title": "SK hynix Announces 1Q26 Financial Results"
+  },
+  {
+   "claim_id": "sp500-top-ten-concentration",
+   "text": "The ten largest S&P 500 companies represented almost 40% of the index by mid-2025, a concentration level not seen since the mid-1960s.",
+   "classification": "observed_fact",
+   "as_of": "2025-06-30",
+   "publisher": "S&P Dow Jones Indices and Vanguard",
+   "source_title": "In the Shadows of Giants"
+  },
+  {
+   "claim_id": "index-fund-asset-scale",
+   "text": "Index mutual funds and ETFs held $19.1 trillion and 52% of long-term fund assets at year-end 2025; domestic equity index funds held about 19% of U.S. stock value.",
+   "classification": "observed_fact",
+   "as_of": "2025-12-31",
+   "publisher": "Investment Company Institute",
+   "source_title": "2026 Investment Company Fact Book"
+  },
+  {
+   "claim_id": "sp500-trailing-return-snapshot",
+   "text": "The S&P 500's annualized price return for the ten years ending June 30, 2026 was 13.58%, with annualized risk of 15.36%.",
+   "classification": "observed_fact",
+   "as_of": "2026-06-30",
+   "publisher": "S&P Dow Jones Indices",
+   "source_title": "S&P 500"
+  },
+  {
+   "claim_id": "generational-wealth-return-hurdle",
+   "text": "Growing $25,000 to $1,000,000 over 25 years with no additional contributions requires approximately 15.9% annual compound growth before taxes and inflation.",
+   "classification": "calculation",
+   "as_of": null,
+   "publisher": "U.S. Securities and Exchange Commission",
+   "source_title": "Compound Interest Calculator"
+  },
+  {
+   "claim_id": "sp500-market-leaders-comparison",
+   "text": "As of June 30, 2026, the S&P 500 Market Leaders Index showed a 16.01% ten-year annualized price return versus 13.58% for the S&P 500, with slightly lower measured ten-year volatility.",
+   "classification": "observed_fact",
+   "as_of": "2026-06-30",
+   "publisher": "S&P Dow Jones Indices",
+   "source_title": "S&P 500 Market Leaders Index"
+  },
+  {
+   "claim_id": "equal-weight-long-tail-countercase",
+   "text": "The S&P 500 Equal Weight Index outperformed the cap-weighted S&P 500 over its full live history beginning in 2003, although it materially lagged during the recent mega-cap-led period.",
+   "classification": "sourced_interpretation",
+   "as_of": "2026-02-28",
+   "publisher": "S&P Dow Jones Indices",
+   "source_title": "S&P 500 Equal Weight Index FAQ"
+  },
+  {
+   "claim_id": "korea-italy-listed-market-comparison",
+   "text": "Recent exchange data imply Korean listed-market capitalization of about EUR 3.2 trillion versus about EUR 1.16 trillion for the Milan market.",
+   "classification": "calculation",
+   "as_of": "2026-07-27",
+   "publisher": "Korea Exchange",
+   "source_title": "Global KRX market overview"
+  },
+  {
+   "claim_id": "korea-technology-intensity",
+   "text": "Korea's R&D intensity was about 5% of GDP in 2023, among the OECD's highest, and the OECD says semiconductor exports are driving 2026 growth and private investment.",
+   "classification": "sourced_interpretation",
+   "as_of": "2026-07-01",
+   "publisher": "OECD",
+   "source_title": "OECD Science, Technology and Innovation Outlook 2025"
+  },
+  {
+   "claim_id": "timely-trailing-market-return-comparison",
+   "text": "Over the one-year trading windows ending August 7, 2026, stored adjusted-close observations show Micron up 685.7%, the KOSPI up 93.9%, and the S&P 500 Price Index up 22.4%.",
+   "classification": "market_snapshot",
+   "as_of": "2026-08-07",
+   "publisher": "Yahoo Finance via yfinance",
+   "source_title": "Stored one-year adjusted-close market-data packet"
+  },
+  {
+   "claim_id": "memory-bottleneck-not-bubble-inference",
+   "text": "The current memory boom is better described as physical bottleneck repricing than a demand-free speculative bubble.",
+   "classification": "channel_inference",
+   "as_of": "2026-08-07",
+   "publisher": null,
+   "source_title": null
+  },
+  {
+   "claim_id": "sp500-hidden-bubble-risk-inference",
+   "text": "The S&P 500 may fail both implied portfolio jobs: mega-cap concentration weakens the diversification benefit, while the remaining long tail can dilute exceptional return drivers without necessarily supplying independent defense or enough growth for an ambitious wealth target.",
+   "classification": "channel_inference",
+   "as_of": "2026-08-07",
+   "publisher": null,
+   "source_title": null
+  },
+  {
+   "claim_id": "concentrated-defensive-barbell-hypothesis",
+   "text": "A rules-based basket of exceptional companies combined with a separately designed defensive basket can be tested as a way to seek more upside with less portfolio-level downside than a single broad cap-weighted index.",
+   "classification": "scenario",
+   "as_of": "2026-08-07",
+   "publisher": null,
+   "source_title": null
+  },
+  {
+   "claim_id": "memory-countercase",
+   "text": "Memory can still experience bubble pricing or a severe cyclical reversal if new capacity, efficiency gains, customer capital-spending cuts, qualification failures, or buyer concentration overwhelm the current shortage.",
+   "classification": "scenario",
+   "as_of": "2026-08-07",
+   "publisher": null,
+   "source_title": null
+  },
+  {
+   "claim_id": "sp500-countercase",
+   "text": "Historic concentration has not automatically prevented strong long-run S&P 500 returns because declining leaders lose weight and new winners can enter and grow.",
+   "classification": "sourced_interpretation",
+   "as_of": null,
+   "publisher": "S&P Dow Jones Indices and Vanguard",
+   "source_title": "In the Shadows of Giants"
+  },
+  {
+   "claim_id": "cross-exchange-comparability-limit",
+   "text": "KRX and Milan market-capitalization totals are not perfectly harmonized exchange universes and must not be presented as GDP or national-wealth rankings.",
+   "classification": "channel_inference",
+   "as_of": null,
+   "publisher": null,
+   "source_title": null
+  },
+  {
+   "claim_id": "korea-conglomerate-concentration-risk",
+   "text": "Korea's technology intensity is concentrated in large industrial groups, which can make national R&D strength vulnerable to firm-specific execution and governance risk.",
+   "classification": "sourced_interpretation",
+   "as_of": null,
+   "publisher": "OECD",
+   "source_title": "OECD Reviews of Innovation Policy: Korea 2023"
+  }
+ ]
+}

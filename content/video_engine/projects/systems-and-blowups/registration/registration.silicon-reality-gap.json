@@ -1,0 +1,1116 @@
+{
+  "schema_version": "slide_semantic_registration.v1",
+  "deck_id": "silicon-reality-gap",
+  "registered_at": "2026-08-24",
+  "registered_by": "antigravity",
+  "slides": [
+    {
+      "slide_id": "silicon-reality-gap-s01",
+      "semantic_id": "sp500-hidden-bubble-risk-inference.evidence.diagram-v3",
+      "headline": "S&P 500 CAPE reaches 41.18 while memory triopoly generates 76% margins at 4.0x P/E.",
+      "claim_refs": [
+        "sp500-hidden-bubble-risk-inference",
+        "memory-bottleneck-not-bubble-inference",
+        "sk-hynix-demand-exceeds-supply"
+      ],
+      "taxonomy": {
+        "actors": [
+          "index-investor",
+          "supplier",
+          "public-company"
+        ],
+        "objects": [
+          "equity",
+          "share",
+          "commodity"
+        ],
+        "mechanisms": [
+          "asset-growth-comparison",
+          "risk-concentration"
+        ],
+        "worlds": [
+          "exchange",
+          "factory"
+        ]
+      },
+      "figures": [
+        {
+          "value": "41.18",
+          "label": "CAPE Ratio",
+          "context_sentence": "CAPE Ratio: 41.18 (Highest since 1999)",
+          "location": "upper-left",
+          "is_headline": true
+        },
+        {
+          "value": "1999",
+          "label": "comparison year",
+          "period": "1999",
+          "context_sentence": "CAPE Ratio: 41.18 (Highest since 1999)",
+          "location": "upper-left",
+          "is_headline": false
+        },
+        {
+          "value": "76%",
+          "label": "SK hynix Operating Margin",
+          "context_sentence": "SK hynix Operating Margin: 76% / Fwd P/E: 4.0x",
+          "location": "centre",
+          "is_headline": true
+        },
+        {
+          "value": "4.0x",
+          "label": "SK hynix Fwd P/E",
+          "context_sentence": "SK hynix Operating Margin: 76% / Fwd P/E: 4.0x",
+          "location": "centre",
+          "is_headline": true
+        }
+      ],
+      "confidence": "high",
+      "sha256": "67765611891763a3c2693e7c0666e8439540cfc985c4bae28aacbfc746a8f6a2"
+    },
+    {
+      "slide_id": "silicon-reality-gap-s02",
+      "semantic_id": "memory-bottleneck-not-bubble-inference.context.diagram-v3",
+      "headline": "Physical memory hardware is an inescapable bottleneck mispriced as a dying commodity.",
+      "claim_refs": [
+        "memory-bottleneck-not-bubble-inference",
+        "sp500-hidden-bubble-risk-inference",
+        "memory-architecture-dependency"
+      ],
+      "taxonomy": {
+        "actors": [
+          "supplier",
+          "customer",
+          "index-investor"
+        ],
+        "objects": [
+          "commodity",
+          "equity",
+          "factory"
+        ],
+        "mechanisms": [
+          "supply-demand",
+          "risk-concentration"
+        ],
+        "worlds": [
+          "exchange",
+          "factory"
+        ]
+      },
+      "figures": [],
+      "confidence": "high",
+      "sha256": "628a7a463824b105ce72f9b140c484247962dc69a328b6219bf561efd672e8a0"
+    },
+    {
+      "slide_id": "silicon-reality-gap-s03",
+      "semantic_id": "sk-hynix-demand-exceeds-supply.evidence.table-v2",
+      "headline": "SK hynix posts 76% margin on $42B profit at 4.0x P/E while S&P 500 CAPE reaches 41.18.",
+      "claim_refs": [
+        "sk-hynix-demand-exceeds-supply",
+        "sp500-hidden-bubble-risk-inference",
+        "sp500-top-ten-concentration"
+      ],
+      "taxonomy": {
+        "actors": [
+          "supplier",
+          "public-company",
+          "index-investor"
+        ],
+        "objects": [
+          "equity",
+          "income",
+          "share"
+        ],
+        "mechanisms": [
+          "asset-growth-comparison",
+          "balance-sheet"
+        ],
+        "worlds": [
+          "exchange",
+          "office"
+        ]
+      },
+      "figures": [
+        {
+          "value": "41.18",
+          "label": "S&P 500 CAPE",
+          "period": "Mid-2026",
+          "context_sentence": "CAPE is 41.18",
+          "location": "upper-left",
+          "is_headline": true
+        },
+        {
+          "value": "4.0x",
+          "label": "Memory Triopoly Forward P/E",
+          "context_sentence": "Forward P/E compressed at 4.0x",
+          "location": "upper-right",
+          "is_headline": true
+        },
+        {
+          "value": "1999",
+          "label": "historical peak year",
+          "period": "1999",
+          "context_sentence": "Peak 1999 bubble CAPE at 44.2",
+          "location": "upper-right",
+          "is_headline": false
+        },
+        {
+          "value": "44.2",
+          "label": "Peak 1999 bubble CAPE",
+          "period": "1999",
+          "context_sentence": "Peak 1999 bubble CAPE at 44.2",
+          "location": "upper-right",
+          "is_headline": false
+        },
+        {
+          "value": "~20.57x",
+          "label": "S&P 500 Aggregate forward P/E",
+          "context_sentence": "Aggregate forward P/E is ~20.57x",
+          "location": "centre",
+          "is_headline": false
+        },
+        {
+          "value": "$42B",
+          "label": "SK hynix operating profits",
+          "unit": "$",
+          "period": "mid-2026",
+          "context_sentence": "SK hynix mid-2026 operating profits of $42B on $55B revenue (76% margin).",
+          "location": "centre",
+          "is_headline": false
+        },
+        {
+          "value": "$55B",
+          "label": "SK hynix revenue",
+          "unit": "$",
+          "period": "mid-2026",
+          "context_sentence": "SK hynix mid-2026 operating profits of $42B on $55B revenue (76% margin).",
+          "location": "centre",
+          "is_headline": false
+        },
+        {
+          "value": "76%",
+          "label": "SK hynix operating margin",
+          "period": "mid-2026",
+          "context_sentence": "SK hynix mid-2026 operating profits of $42B on $55B revenue (76% margin).",
+          "location": "centre",
+          "is_headline": true
+        },
+        {
+          "value": "86%",
+          "label": "Micron gross margins",
+          "context_sentence": "Micron gross margins near 86%.",
+          "location": "centre",
+          "is_headline": true
+        },
+        {
+          "value": "10",
+          "label": "top mega-caps count",
+          "context_sentence": "Driven by top 10 mega-caps",
+          "location": "lower-left",
+          "is_headline": false
+        },
+        {
+          "value": "$26.5B",
+          "label": "SK hynix ADR listing",
+          "unit": "$",
+          "context_sentence": "$26.5B ADR listing (SK hynix) & $1T market cap (Micron) juxtaposition against 1.4x to 2.1x Price-to-Book.",
+          "location": "lower-right",
+          "is_headline": false
+        },
+        {
+          "value": "$1T",
+          "label": "Micron market cap",
+          "unit": "$",
+          "context_sentence": "$26.5B ADR listing (SK hynix) & $1T market cap (Micron) juxtaposition against 1.4x to 2.1x Price-to-Book.",
+          "location": "lower-right",
+          "is_headline": false
+        },
+        {
+          "value": "1.4x to 2.1x",
+          "label": "Price-to-Book ratio",
+          "context_sentence": "juxtaposition against 1.4x to 2.1x Price-to-Book.",
+          "location": "lower-right",
+          "is_headline": false
+        }
+      ],
+      "confidence": "high",
+      "sha256": "3a0c666183f435f662c1153de5c013bd71844bb3e4d749b90ae69d49f91cad46"
+    },
+    {
+      "slide_id": "silicon-reality-gap-s04",
+      "semantic_id": "memory-countercase.context.diagram-v3",
+      "headline": "Past cycles drove 12-million-fold DRAM price drops, conditioning market trauma.",
+      "claim_refs": [
+        "memory-countercase",
+        "memory-bottleneck-not-bubble-inference"
+      ],
+      "taxonomy": {
+        "actors": [
+          "competitor",
+          "supplier",
+          "public-company"
+        ],
+        "objects": [
+          "factory",
+          "commodity"
+        ],
+        "mechanisms": [
+          "price-wage-productivity",
+          "supply-demand",
+          "capital-flow"
+        ],
+        "worlds": [
+          "factory",
+          "exchange"
+        ]
+      },
+      "figures": [
+        {
+          "value": "12 million",
+          "label": "price decline factor",
+          "period": "1974-2013",
+          "context_sentence": "Between 1974 and 2013, the price of a megabyte of DRAM plummeted by a factor of 12 million.",
+          "location": "centre",
+          "is_headline": true
+        },
+        {
+          "value": "50%",
+          "label": "cost reductions",
+          "context_sentence": "Historically amplified by Moore's Law passing 50% cost reductions directly to customers.",
+          "location": "lower-right",
+          "is_headline": true
+        }
+      ],
+      "confidence": "high",
+      "sha256": "6bda70a74a3d4b0b03d569cb6f666e89bf957167146ec4adaefc8701fee0828d"
+    },
+    {
+      "slide_id": "silicon-reality-gap-s05",
+      "semantic_id": "memory-countercase.context.diagram-v4",
+      "headline": "Consolidation eliminated 30 rivals to create a 97% global DRAM triopoly by 2014.",
+      "claim_refs": [
+        "memory-countercase",
+        "memory-bottleneck-not-bubble-inference"
+      ],
+      "taxonomy": {
+        "actors": [
+          "competitor",
+          "supplier",
+          "public-company"
+        ],
+        "objects": [
+          "factory",
+          "commodity",
+          "share"
+        ],
+        "mechanisms": [
+          "supply-demand",
+          "price-wage-productivity"
+        ],
+        "worlds": [
+          "factory",
+          "exchange"
+        ]
+      },
+      "figures": [
+        {
+          "value": "2009",
+          "label": "Qimonda Liquidation year",
+          "period": "2009",
+          "context_sentence": "Qimonda (2009 Liquidation)",
+          "location": "centre",
+          "is_headline": false
+        },
+        {
+          "value": "2012",
+          "label": "Elpida Bankruptcy year",
+          "period": "2012",
+          "context_sentence": "Elpida (2012 Bankruptcy)",
+          "location": "centre",
+          "is_headline": false
+        },
+        {
+          "value": "1983",
+          "label": "Samsung Deathbed Gambit year",
+          "period": "1983",
+          "context_sentence": "Samsung: Survived via the 1983 'Deathbed Gambit' and relentless counter-cyclical investment.",
+          "location": "lower-left",
+          "is_headline": false
+        },
+        {
+          "value": "1999",
+          "label": "SK hynix forced merger year",
+          "period": "1999",
+          "context_sentence": "SK hynix: Survived a 1999 forced merger, 11T won in debt, and a 2001 near-bankruptcy.",
+          "location": "lower-right",
+          "is_headline": false
+        },
+        {
+          "value": "11T won",
+          "label": "forced merger debt",
+          "unit": "won",
+          "context_sentence": "SK hynix: Survived a 1999 forced merger, 11T won in debt, and a 2001 near-bankruptcy.",
+          "location": "lower-right",
+          "is_headline": true
+        },
+        {
+          "value": "2001",
+          "label": "SK hynix near-bankruptcy year",
+          "period": "2001",
+          "context_sentence": "SK hynix: Survived a 1999 forced merger, 11T won in debt, and a 2001 near-bankruptcy.",
+          "location": "lower-right",
+          "is_headline": false
+        },
+        {
+          "value": "2014",
+          "label": "triopoly dominance year",
+          "period": "2014",
+          "context_sentence": "By 2014, these three controlled 97% of global DRAM.",
+          "location": "lower-right",
+          "is_headline": false
+        },
+        {
+          "value": "97%",
+          "label": "DRAM supply control",
+          "period": "2014",
+          "context_sentence": "By 2014, these three controlled 97% of global DRAM.",
+          "location": "lower-right",
+          "is_headline": true
+        }
+      ],
+      "confidence": "high",
+      "sha256": "6f1be79349e27cb212fd6462d393a1a5456e8813c275a311bc2ef73cddc109ec"
+    },
+    {
+      "slide_id": "silicon-reality-gap-s06",
+      "semantic_id": "memory-bottleneck-not-bubble-inference.evidence.chart-v2",
+      "headline": "Physical 10-nanometer limits forced memory makers toward capital discipline after 2014.",
+      "claim_refs": [
+        "memory-bottleneck-not-bubble-inference",
+        "memory-countercase"
+      ],
+      "taxonomy": {
+        "actors": [
+          "supplier",
+          "competitor"
+        ],
+        "objects": [
+          "factory",
+          "commodity"
+        ],
+        "mechanisms": [
+          "supply-demand",
+          "price-wage-productivity"
+        ],
+        "worlds": [
+          "factory"
+        ]
+      },
+      "figures": [
+        {
+          "value": "10-nanometer",
+          "label": "physical scaling limit",
+          "unit": "nanometer",
+          "context_sentence": "10-nanometer physical limit reached.",
+          "location": "centre",
+          "is_headline": true
+        },
+        {
+          "value": "2014",
+          "label": "transition year",
+          "period": "2014",
+          "context_sentence": "2014",
+          "location": "chart-axis",
+          "is_headline": false
+        },
+        {
+          "value": "2026",
+          "label": "current outlook year",
+          "period": "2026",
+          "context_sentence": "2026",
+          "location": "chart-axis",
+          "is_headline": false
+        }
+      ],
+      "confidence": "high",
+      "sha256": "548318c4cc86e6dc01f72bb4211ef140c62cf07a4c41f538884248a34262758c"
+    },
+    {
+      "slide_id": "silicon-reality-gap-s07",
+      "semantic_id": "memory-architecture-dependency.evidence.diagram-v2",
+      "headline": "HBM delivers 1 terabyte per second bandwidth across 1,024+ TSVs thinned to 50 μm.",
+      "claim_refs": [
+        "memory-architecture-dependency",
+        "hbm-capacity-trade-ratio"
+      ],
+      "taxonomy": {
+        "actors": [
+          "supplier",
+          "customer"
+        ],
+        "objects": [
+          "commodity",
+          "factory"
+        ],
+        "mechanisms": [
+          "supply-demand"
+        ],
+        "worlds": [
+          "factory"
+        ]
+      },
+      "figures": [
+        {
+          "value": "1 terabyte per second",
+          "label": "bandwidth requirement",
+          "unit": "terabyte per second",
+          "context_sentence": "Over 1 terabyte per second bandwidth requirement breaks traditional planar DRAM.",
+          "location": "upper-right",
+          "is_headline": true
+        },
+        {
+          "value": "1,024+",
+          "label": "active data lines per die",
+          "context_sentence": "1,024+ active data lines per die.",
+          "location": "centre",
+          "is_headline": true
+        },
+        {
+          "value": "16-layer",
+          "label": "stack layer count",
+          "unit": "layer",
+          "context_sentence": "One void in a 16-layer stack renders the entire package useless.",
+          "location": "centre",
+          "is_headline": false
+        },
+        {
+          "value": "50 μm",
+          "label": "die thickness",
+          "unit": "μm",
+          "context_sentence": "Die thinned to 50 μm (DISCO TAIKO process).",
+          "location": "lower-right",
+          "is_headline": true
+        }
+      ],
+      "confidence": "high",
+      "sha256": "4489a74e68017b570188b946787c7e6ffa46d71318ffe8029ea035a35ad16168"
+    },
+    {
+      "slide_id": "silicon-reality-gap-s08",
+      "semantic_id": "sk-hynix-demand-exceeds-supply.evidence.diagram-v3",
+      "headline": "SK hynix MR-MUF packaging achieves 2x better heat conduction and 80% yields.",
+      "claim_refs": [
+        "sk-hynix-demand-exceeds-supply",
+        "samsung-hbm4-growth",
+        "hbm-capacity-trade-ratio"
+      ],
+      "taxonomy": {
+        "actors": [
+          "supplier",
+          "competitor"
+        ],
+        "objects": [
+          "factory",
+          "commodity"
+        ],
+        "mechanisms": [
+          "price-wage-productivity",
+          "supply-demand"
+        ],
+        "worlds": [
+          "factory"
+        ]
+      },
+      "figures": [
+        {
+          "value": "50-μm",
+          "label": "silicon thickness",
+          "unit": "μm",
+          "context_sentence": "Pressure cracks 50-μm silicon.",
+          "location": "lower-left",
+          "is_headline": false
+        },
+        {
+          "value": "2x",
+          "label": "heat conduction multiplier",
+          "context_sentence": "Conducts heat 2x better.",
+          "location": "lower-right",
+          "is_headline": true
+        },
+        {
+          "value": "80%",
+          "label": "manufacturing yields",
+          "context_sentence": "Result: Dominant 80% manufacturing yields.",
+          "location": "lower-right",
+          "is_headline": true
+        }
+      ],
+      "confidence": "high",
+      "sha256": "b88c8631f446ab2bc216fc1c7b724b2df07002811cdbb31fa06e1dad37157e93"
+    },
+    {
+      "slide_id": "silicon-reality-gap-s09",
+      "semantic_id": "hbm-capacity-trade-ratio.evidence.diagram-v5",
+      "headline": "3x wafer penalty and 25% cleanroom reallocation push contract DRAM prices up 58-63%.",
+      "claim_refs": [
+        "hbm-capacity-trade-ratio",
+        "memory-bottleneck-not-bubble-inference"
+      ],
+      "taxonomy": {
+        "actors": [
+          "supplier",
+          "customer"
+        ],
+        "objects": [
+          "commodity",
+          "factory"
+        ],
+        "mechanisms": [
+          "supply-demand",
+          "price-wage-productivity"
+        ],
+        "worlds": [
+          "factory",
+          "store"
+        ]
+      },
+      "figures": [
+        {
+          "value": "1 bit",
+          "label": "HBM bit unit",
+          "context_sentence": "1 bit of HBM consumes 3x the wafer capacity of 1 bit of DDR5 due to larger die sizes and longer manufacturing cycles.",
+          "location": "upper-right",
+          "is_headline": false
+        },
+        {
+          "value": "3x",
+          "label": "wafer capacity multiplier",
+          "context_sentence": "1 bit of HBM consumes 3x the wafer capacity of 1 bit of DDR5 due to larger die sizes and longer manufacturing cycles.",
+          "location": "upper-right",
+          "is_headline": true
+        },
+        {
+          "value": "25%",
+          "label": "Triopoly capacity shifted",
+          "context_sentence": "25% of Triopoly capacity shifted to HBM",
+          "location": "lower-left",
+          "is_headline": true
+        },
+        {
+          "value": "58-63%",
+          "label": "Contract DRAM price increase",
+          "period": "Q2 2026",
+          "context_sentence": "Contract DRAM prices up 58-63% in Q2 2026",
+          "location": "lower-right",
+          "is_headline": true
+        },
+        {
+          "value": "$100",
+          "label": "baseline MacBook price increase",
+          "unit": "$",
+          "context_sentence": "Apple forced to raise baseline MacBook pricing by $100 and Mac Studio by $1,300 simply to absorb the cost of physical memory.",
+          "location": "lower-left",
+          "is_headline": false
+        },
+        {
+          "value": "$1,300",
+          "label": "Mac Studio price increase",
+          "unit": "$",
+          "context_sentence": "Apple forced to raise baseline MacBook pricing by $100 and Mac Studio by $1,300 simply to absorb the cost of physical memory.",
+          "location": "lower-left",
+          "is_headline": false
+        }
+      ],
+      "confidence": "high",
+      "sha256": "cce154439968d47ebdb44bc923879c36a12971a3ca72f0b01062646e8534123e"
+    },
+    {
+      "slide_id": "silicon-reality-gap-s10",
+      "semantic_id": "sk-hynix-demand-exceeds-supply.evidence.chart-v3",
+      "headline": "SK hynix grew 214% and Micron ~500% YoY while CXMT targets 7% share and HBM3 ramp.",
+      "claim_refs": [
+        "sk-hynix-demand-exceeds-supply",
+        "micron-strategic-customer-agreements",
+        "samsung-hbm4-growth",
+        "memory-countercase"
+      ],
+      "taxonomy": {
+        "actors": [
+          "supplier",
+          "competitor",
+          "customer"
+        ],
+        "objects": [
+          "commodity",
+          "share"
+        ],
+        "mechanisms": [
+          "supply-demand",
+          "asset-growth-comparison"
+        ],
+        "worlds": [
+          "exchange",
+          "factory"
+        ]
+      },
+      "figures": [
+        {
+          "value": "39%",
+          "label": "Samsung DRAM share",
+          "period": "mid-2026",
+          "context_sentence": "Rank 1: Samsung (39% share)",
+          "location": "centre",
+          "is_headline": false
+        },
+        {
+          "value": "26%",
+          "label": "SK hynix DRAM share",
+          "period": "mid-2026",
+          "context_sentence": "Rank 2: SK hynix (26% share)",
+          "location": "centre",
+          "is_headline": false
+        },
+        {
+          "value": "214%",
+          "label": "SK hynix YoY growth",
+          "context_sentence": "214% YoY growth.",
+          "location": "centre",
+          "is_headline": true
+        },
+        {
+          "value": "25%",
+          "label": "Micron DRAM share",
+          "period": "mid-2026",
+          "context_sentence": "Rank 3: Micron (25% share)",
+          "location": "centre",
+          "is_headline": false
+        },
+        {
+          "value": "~500%",
+          "label": "Micron YoY growth",
+          "context_sentence": "~500% YoY growth.",
+          "location": "centre",
+          "is_headline": true
+        },
+        {
+          "value": "7%",
+          "label": "CXMT DRAM share",
+          "period": "mid-2026",
+          "context_sentence": "The Dark Horse: CXMT (China) (7% share)",
+          "location": "centre",
+          "is_headline": false
+        },
+        {
+          "value": "+716%",
+          "label": "CXMT YoY growth",
+          "context_sentence": "+716% YoY growth.",
+          "location": "lower-right",
+          "is_headline": false
+        }
+      ],
+      "confidence": "high",
+      "sha256": "4ac6cc79f83c1ab434f9e247e6bb385cba9ed57853cf535658dfc2c79b4c5ef1"
+    },
+    {
+      "slide_id": "silicon-reality-gap-s11",
+      "semantic_id": "memory-countercase.evidence.diagram-v5",
+      "headline": "NAND incumbents face Kioxia's 876.2B yen profit and YMTC's 10-20% price advantage.",
+      "claim_refs": [
+        "memory-countercase",
+        "micron-strategic-customer-agreements"
+      ],
+      "taxonomy": {
+        "actors": [
+          "supplier",
+          "competitor"
+        ],
+        "objects": [
+          "commodity",
+          "share"
+        ],
+        "mechanisms": [
+          "price-wage-productivity",
+          "supply-demand"
+        ],
+        "worlds": [
+          "factory",
+          "exchange"
+        ]
+      },
+      "figures": [
+        {
+          "value": "29%",
+          "label": "Samsung NAND share",
+          "context_sentence": "Samsung (29%) maintaining the lead via massive enterprise SSD volume.",
+          "location": "upper-right",
+          "is_headline": false
+        },
+        {
+          "value": "18%",
+          "label": "SK hynix/Solidigm NAND share",
+          "context_sentence": "SK hynix/Solidigm (18%) dominating enterprise AI server SSDs.",
+          "location": "upper-right",
+          "is_headline": false
+        },
+        {
+          "value": "14%",
+          "label": "Kioxia NAND share",
+          "context_sentence": "Kioxia (14%)",
+          "location": "centre",
+          "is_headline": false
+        },
+        {
+          "value": "876.2B yen",
+          "label": "Kioxia operating profit",
+          "unit": "yen",
+          "context_sentence": "Record operating profit of 876.2B yen driven by proprietary 'Wafer Bonding' on 200-300 layer platforms.",
+          "location": "lower-left",
+          "is_headline": true
+        },
+        {
+          "value": "200-300",
+          "label": "Wafer Bonding platform layers",
+          "context_sentence": "on 200-300 layer platforms.",
+          "location": "lower-left",
+          "is_headline": false
+        },
+        {
+          "value": "13%",
+          "label": "Micron NAND share",
+          "context_sentence": "Micron (13%) pushing advanced 232-layer nodes.",
+          "location": "centre",
+          "is_headline": false
+        },
+        {
+          "value": "232-layer",
+          "label": "Micron NAND nodes",
+          "context_sentence": "Micron (13%) pushing advanced 232-layer nodes.",
+          "location": "centre",
+          "is_headline": false
+        },
+        {
+          "value": "13%",
+          "label": "Western Digital NAND share",
+          "context_sentence": "Western Digital (13%) relying on hybrid integration.",
+          "location": "centre",
+          "is_headline": false
+        },
+        {
+          "value": "13%",
+          "label": "YMTC NAND share",
+          "context_sentence": "The Disruptor: YMTC (China, 13%)",
+          "location": "centre",
+          "is_headline": false
+        },
+        {
+          "value": "10-20%",
+          "label": "YMTC price advantage",
+          "context_sentence": "Operating with a 10-20% price advantage;",
+          "location": "lower-right",
+          "is_headline": true
+        },
+        {
+          "value": "294-layer",
+          "label": "YMTC hybrid bonded NAND",
+          "context_sentence": "mass production of 294-layer hybrid bonded NAND;",
+          "location": "lower-right",
+          "is_headline": false
+        },
+        {
+          "value": "20%",
+          "label": "YMTC targeted global capacity",
+          "context_sentence": "aiming for 20% global capacity.",
+          "location": "lower-right",
+          "is_headline": false
+        }
+      ],
+      "confidence": "high",
+      "sha256": "955e5a80360e5d865e14d094e2d999281cb0de566d951a8dbfee976cb32a9a2d"
+    },
+    {
+      "slide_id": "silicon-reality-gap-s12",
+      "semantic_id": "sp500-top-ten-concentration.evidence.diagram-v2",
+      "headline": "Top 10 stocks draw $40 of every $100 passive inflow but generate only 32% of earnings.",
+      "claim_refs": [
+        "sp500-top-ten-concentration",
+        "index-fund-asset-scale",
+        "sp500-hidden-bubble-risk-inference"
+      ],
+      "taxonomy": {
+        "actors": [
+          "index-investor",
+          "public-company"
+        ],
+        "objects": [
+          "equity",
+          "index-basket",
+          "share"
+        ],
+        "mechanisms": [
+          "capital-flow",
+          "risk-concentration"
+        ],
+        "worlds": [
+          "exchange"
+        ]
+      },
+      "figures": [
+        {
+          "value": "26%",
+          "label": "2000 tech bubble peak concentration",
+          "period": "2000",
+          "context_sentence": "Far exceeds the 26% peak of the 2000 tech bubble.",
+          "location": "upper-left",
+          "is_headline": false
+        },
+        {
+          "value": "2000",
+          "label": "tech bubble year",
+          "period": "2000",
+          "context_sentence": "Far exceeds the 26% peak of the 2000 tech bubble.",
+          "location": "upper-left",
+          "is_headline": false
+        },
+        {
+          "value": "32%",
+          "label": "Top 10 earnings share",
+          "context_sentence": "Top 10 only generate 32% of aggregate earnings.",
+          "location": "lower-left",
+          "is_headline": true
+        },
+        {
+          "value": "$40",
+          "label": "passive inflow allocation",
+          "unit": "$",
+          "context_sentence": "systematically directing $40 of every $100 directly into the Top 10",
+          "location": "centre",
+          "is_headline": true
+        },
+        {
+          "value": "$100",
+          "label": "passive baseline allocation",
+          "unit": "$",
+          "context_sentence": "systematically directing $40 of every $100 directly into the Top 10",
+          "location": "centre",
+          "is_headline": false
+        },
+        {
+          "value": "50.4%",
+          "label": "reported earnings growth",
+          "context_sentence": "the S&P 500's reported 50.4% earnings growth drops to just 32%.",
+          "location": "lower-right",
+          "is_headline": false
+        },
+        {
+          "value": "32%",
+          "label": "adjusted earnings growth",
+          "context_sentence": "the S&P 500's reported 50.4% earnings growth drops to just 32%.",
+          "location": "lower-right",
+          "is_headline": false
+        }
+      ],
+      "confidence": "high",
+      "sha256": "2718244eb2acdab57072e9bbabb6dd94058b6aa7e934096dff81e84bbceb3527"
+    },
+    {
+      "slide_id": "silicon-reality-gap-s13",
+      "semantic_id": "micron-strategic-customer-agreements.evidence.diagram-v2",
+      "headline": "5-year LTAs lock in 2027/2028 supply as memory reaches 30% to 40% of device BOM.",
+      "claim_refs": [
+        "micron-strategic-customer-agreements",
+        "memory-architecture-dependency",
+        "samsung-hbm4-growth"
+      ],
+      "taxonomy": {
+        "actors": [
+          "supplier",
+          "customer",
+          "public-company"
+        ],
+        "objects": [
+          "commodity",
+          "equity"
+        ],
+        "mechanisms": [
+          "supply-demand",
+          "price-wage-productivity"
+        ],
+        "worlds": [
+          "factory",
+          "office"
+        ]
+      },
+      "figures": [
+        {
+          "value": "2027/2028",
+          "label": "sold-out period",
+          "period": "2027-2028",
+          "context_sentence": "Advanced HBM and server DDR5 are sold out through 2027/2028 via 5-year Long Term Agreements (LTAs) with hyperscalers, insulating bottom-line earnings.",
+          "location": "upper-left",
+          "is_headline": true
+        },
+        {
+          "value": "5-year",
+          "label": "LTA contract length",
+          "context_sentence": "via 5-year Long Term Agreements (LTAs) with hyperscalers",
+          "location": "upper-left",
+          "is_headline": true
+        },
+        {
+          "value": "3nm",
+          "label": "TSMC logic node",
+          "unit": "nm",
+          "context_sentence": "transitioning to TSMC 3nm / Samsung 4nm active logic nodes",
+          "location": "lower-left",
+          "is_headline": false
+        },
+        {
+          "value": "4nm",
+          "label": "Samsung logic node",
+          "unit": "nm",
+          "context_sentence": "transitioning to TSMC 3nm / Samsung 4nm active logic nodes",
+          "location": "lower-left",
+          "is_headline": false
+        },
+        {
+          "value": "30% to 40%",
+          "label": "Bill of Materials share",
+          "context_sentence": "Memory now represents 30% to 40% of total PC and smartphone Bill of Materials (BOM) costs, doubling its historical average.",
+          "location": "lower-right",
+          "is_headline": true
+        },
+        {
+          "value": "2x",
+          "label": "BOM share increase",
+          "context_sentence": "2x Increase",
+          "location": "lower-right",
+          "is_headline": false
+        }
+      ],
+      "confidence": "high",
+      "sha256": "b00a6539b8d1ceaf2bf4cd56359e58446df586f600d13a2b3520b2ca327a877a"
+    },
+    {
+      "slide_id": "silicon-reality-gap-s14",
+      "semantic_id": "micron-strategic-customer-agreements.evidence.diagram-v3",
+      "headline": "Memory evolves from commodity spot market to 5-year LTAs with 3-to-1 wafer penalties.",
+      "claim_refs": [
+        "micron-strategic-customer-agreements",
+        "hbm-capacity-trade-ratio",
+        "memory-bottleneck-not-bubble-inference"
+      ],
+      "taxonomy": {
+        "actors": [
+          "supplier",
+          "customer"
+        ],
+        "objects": [
+          "commodity",
+          "factory"
+        ],
+        "mechanisms": [
+          "supply-demand",
+          "price-wage-productivity"
+        ],
+        "worlds": [
+          "factory",
+          "office"
+        ]
+      },
+      "figures": [
+        {
+          "value": "1990-2015",
+          "label": "Old Memory Cycle era",
+          "period": "1990-2015",
+          "context_sentence": "The Old Memory Cycle (1990-2015)",
+          "location": "upper-left",
+          "is_headline": false
+        },
+        {
+          "value": "100%",
+          "label": "spot-market pricing share",
+          "context_sentence": "Sales Model: 100% volatile spot-market pricing.",
+          "location": "upper-left",
+          "is_headline": false
+        },
+        {
+          "value": "2026+",
+          "label": "AI Hardware Reality era",
+          "period": "2026+",
+          "context_sentence": "The AI Hardware Reality (2026+)",
+          "location": "upper-right",
+          "is_headline": false
+        },
+        {
+          "value": "16-layer",
+          "label": "HBM packaging layers",
+          "context_sentence": "Product: Custom-packaged, 16-layer HBM co-engineered with logic.",
+          "location": "upper-right",
+          "is_headline": false
+        },
+        {
+          "value": "5-Year",
+          "label": "guaranteed volume LTA period",
+          "context_sentence": "Sales Model: 5-Year guaranteed volume LTAs with upfront deposits.",
+          "location": "centre",
+          "is_headline": true
+        },
+        {
+          "value": "3-to-1",
+          "label": "wafer capacity penalty",
+          "context_sentence": "Margin Driver: Extreme 3-to-1 wafer capacity penalty constricting global supply.",
+          "location": "centre",
+          "is_headline": true
+        }
+      ],
+      "confidence": "high",
+      "sha256": "90add80c1fad5e025cca24653f3508713f0400116e6dfcc0156a8878864ba868"
+    },
+    {
+      "slide_id": "silicon-reality-gap-s15",
+      "semantic_id": "sp500-hidden-bubble-risk-inference.context.diagram-v2",
+      "headline": "Triopoly delivers 76% margins at 4x P/E, offering a hedge against S&P 500 bubble risks.",
+      "claim_refs": [
+        "sp500-hidden-bubble-risk-inference",
+        "memory-bottleneck-not-bubble-inference",
+        "concentrated-defensive-barbell-hypothesis"
+      ],
+      "taxonomy": {
+        "actors": [
+          "index-investor",
+          "supplier",
+          "public-company"
+        ],
+        "objects": [
+          "equity",
+          "share",
+          "commodity"
+        ],
+        "mechanisms": [
+          "asset-growth-comparison",
+          "risk-concentration"
+        ],
+        "worlds": [
+          "exchange"
+        ]
+      },
+      "figures": [
+        {
+          "value": "76%",
+          "label": "Triopoly Margins",
+          "context_sentence": "76% Triopoly Margins @ 4x P/E",
+          "location": "centre",
+          "is_headline": true
+        },
+        {
+          "value": "4x",
+          "label": "Triopoly P/E",
+          "context_sentence": "76% Triopoly Margins @ 4x P/E",
+          "location": "centre",
+          "is_headline": true
+        }
+      ],
+      "confidence": "high",
+      "sha256": "13762f332a3ef6ce915760f54ac0d466fc42e835ada3732299497e9935980e98"
+    }
+  ]
+}
