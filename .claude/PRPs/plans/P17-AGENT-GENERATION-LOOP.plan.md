@@ -63,6 +63,15 @@ a CLI update must be a config edit, not a code change. Where the image tool
 itself bills is account-side and unobservable locally; any "free via Spark"
 claim is verified only by the operator's usage meters, never assumed.
 
+**Intentional text (operator policy, 2026-08-24):** the blanket no-text rule
+relaxes to *no unintentional text*. A slot may declare exact intended
+text/numerals (`intentional_text: ["$40", "HIS PAY"]`); the negative block
+then excepts precisely those strings and nothing else, and the deterministic
+scan gains a validation step confirming the generation used the right string
+in the right place (OCR or vision check) — wrong number or extra text is a
+FAIL, not a FLAG. Until that validation ships, intentional text stays in the
+motion layer (captions, labels) where it is authored, not generated.
+
 **No second-model judge in the loop** (operator decision, 2026-08-23, after
 the v2 probe). The generating agent's self-judgment proved calibrated under
 test — it failed its own v1 delivery and caught its own v2 extraction defect —
