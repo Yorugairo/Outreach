@@ -86,6 +86,25 @@ The ladder explains itself: he doesn't cover money as a topic —
 > people who've earned $200k a year, every year. That is the thesis
 > demonstrated, not argued.
 
+**Standing story — the LeanFIRE conversion** (the strongest T2/T12 vehicle
+on record, and it is his own ledger):
+
+He was "THE BIGGEST PROPONENT" of LeanFIRE — stuffed **70%+ of income**
+into tax-advantaged S&P 500 index accounts, the strategy run harder than
+almost anyone runs it. Then sold it all and moved to a standard brokerage
+where risk could actually be adjusted — leverage, overweighted individual
+positions. Not because indexing failed him, but because his analysis said
+the risk:reward had changed: asymmetric opportunities plus index bloat.
+"Pure index was really solid advice in 2010."
+
+Usage: this is the apostate's authority — he critiques index-and-forget
+from *inside*, having out-executed its own adherents. Deploy it exactly the
+way the JPMorgan/dispensary bio deploys (twist after the paradox). It
+converts "index funds are a trap" (attackable, tribal) into "I did this
+harder than you, and here is the nuance that moved" (unanswerable). It is
+also T9 demonstrated on himself: loyal to the idea until the analysis
+turned, then a plain statement of the change and the reason.
+
 ## 3. The core theses — the lens every script argues through
 
 These are the persona's standing claims. Scripts don't re-derive them; they
@@ -159,6 +178,24 @@ ride massive boom-bust cycles — "they allow the time and the risk for their
 winners to win." The retail investor's structural advantage is the freedom
 to do the same. Pairs with T6/T7; it is the *why* behind tolerating the
 drawdowns.
+
+**T12 — The conditional contrarian.** Not a true contrarian, and never
+contrarian for its own sake. The contrarian bias fires only when BOTH
+conditions hold: **the market is calling weakness on the strength of
+growth, and the risk is asymmetric.** Otherwise the consensus stands.
+"I'm contrarian because my analysis says the risk:reward has changed" —
+the surface may look contrarian; the substance is a position update under
+T9. Two rules ride with it:
+
+- **Shoulders of giants, always.** He doesn't call Dalio dumb for bonds or
+  Buffett dumb for telling the average person to buy the S&P 500. He
+  explains **the nuance of the shift** — investment level, scale, growth vs
+  protection, how risk adjusts to time, age, and level of wealth. Advice is
+  rarely wrong; it is scoped, and the scope moved. (This is doc 35 beats
+  1–3 as an epistemic stance, not just a content format.)
+- **Acknowledge before dissenting.** "It will still be better than what most
+  people do — which is get burnt, then quit." The consensus strategy beats
+  the failure mode even when it no longer beats the opportunity set.
 
 ## 3b. Portfolio doctrine — named frameworks (operator-defined, 2026-08-24)
 
@@ -274,7 +311,10 @@ faster than the cash depletes.
 - **Non-tribalist.** No perma-bull, no perma-bear, no party, no fandom.
   Leans into facts and humor. Sides with whoever the evidence sides with —
   which is what makes the answer format (doc 35) natural: agree where
-  they're right, relocate where they're not.
+  they're right, relocate where they're not. T12 is the precision
+  instrument here: dissent requires both trigger conditions, and every
+  dissent is delivered standing on the shoulders of the person being
+  answered.
 - **Philosophical, but always landing.** Reflection is welcome — this
   persona *earns* the Glass reflection beats (doc 32 §5) — but every
   philosophical climb must land on logic, reality, and a forward move.
