@@ -398,3 +398,47 @@ Data-model consequence: `scenes[].docks[]` replaces per-beat `docks`/`badges`
 masks entirely. The renderer derives dock state from time — hidden,
 revealing, held, exiting — so nothing has to be re-declared per beat, and a
 generator only has to emit an enter/exit pair per document.
+
+### 8.10 The hand follows the reveal-engine contract (correction, 2026-08-24)
+
+The first hand pass slid a marker along a straight clip-path edge. That is
+not how the hand works. The `whiteboard-explainer` skill
+(`~/.codex/skills/whiteboard-explainer`) already carries the debugged
+architecture and this project's own evidence grammar; use it, do not
+improvise. Everything below is now implemented in the player template.
+
+**The mechanic.** Professional whiteboard tools do not animate stroke paths.
+They reveal a finished, detailed image through an **animated mask sweeping a
+serpentine path**, with a photographed hand riding the mask tip. Line quality
+comes from the artwork; the animation only controls WHEN each region appears.
+
+What that means concretely, and what the first pass got wrong:
+
+| Contract | First pass |
+| --- | --- |
+| SVG `<mask>` + serpentine path, revealed by `stroke-dashoffset`, ease `none` | straight `clip-path` wipe |
+| Hand position from `getPointAtLength` on the mask path | hand slid along a linear interpolation |
+| A/B pose swap by stroke direction (`ahead.x - pt.x`) — the swap IS the wrist motion | one pose for every direction |
+| Nib pixel-calibrated, pinned to the path tip, `transform-origin` on the nib | hardcoded -66px guess |
+| Hand ~40-60% of frame height, forearm running off the frame edge | 300px sticker, arm cropped mid-canvas |
+| `mix-blend-mode: multiply` on the WRAPPER — on the masked `<image>` Chrome leaks the mask | absent |
+| Camera LOCKED during a stroke; never reveal while it travels | ken-burns ran straight through reveals |
+| Rows are stroke centerlines inset by sw/2; row step <= stroke width | n/a |
+
+Measured on `draw-hand-a-v1`: nib at (0.287, 0.886) of the cutout. The cut
+keeps full image height so the sleeve leaves the frame — cropping to the
+alpha bbox ends the forearm mid-canvas, which the skill names as the number
+one amateur tell.
+
+**Still outstanding:** a real B pose. The engine swaps to it on right-to-left
+rows and is currently fed a mirrored A, which flips the sleeve to the wrong
+shoulder. Generate a true B ("the SAME hand, same sleeve, same lighting, wrist
+tilted a few degrees") from the A reference through the codex lane, plus an
+erase pose if erase beats are ever wanted.
+
+**Note on skill choice:** the local `whiteboard-explainer` skill is the better
+base than a generic upstream one — it already carries our evidence-led
+world-plate grammar (attention budget, source-card crop rule, semantic
+transition palette, the full-scene hand-draw exclusion) alongside the generic
+mechanics, and its `templates/reveal-engine.js` has the Chrome mask-leak and
+cap-scallop fixes baked in.

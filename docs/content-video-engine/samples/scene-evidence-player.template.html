@@ -44,9 +44,13 @@
 
   .dock-head { margin-bottom: 9px; }
   .dock-title { font-size: 25px; font-weight: 800; color: var(--charcoal); line-height: 1.12; }
-  /* literal evidence is never translucent — only the chrome around it is */
+  /* literal evidence is never translucent — only the chrome around it is.
+     multiply goes on the WRAPPER, never the masked <image>: blending the
+     masked element forces a separate compositor layer and Chrome leaks the
+     mask, showing art before it is drawn. */
   .slide-frame { border: 2px solid var(--charcoal); border-radius: 6px; overflow: hidden; background: #fff; }
-  .slide-frame img { display: block; width: 100%; height: auto; }
+  .artwrap { mix-blend-mode: multiply; display: block; }
+  .artwrap svg { display: block; width: 100%; height: auto; }
 
   .rail { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; margin-top: 11px; }
   .rail.single { grid-template-columns: 1fr; }
@@ -61,10 +65,14 @@
   .pill-tag { font-size: 13px; font-weight: 700; letter-spacing: .05em; padding: 2px 6px; border-radius: 4px; background: rgba(244,230,199,.14); }
 
 
-  #hand {
-    position: absolute; width: 300px; height: auto; pointer-events: none;
-    opacity: 0; z-index: 40; transform-origin: 22% 96%;
-    filter: drop-shadow(-10px 14px 16px rgba(0,0,0,.45));
+  /* near life-size: ~56% of frame height including forearm, so the sleeve
+     plausibly reaches in from off-frame. transform-origin sits on the nib so
+     jitter pivots around the pen tip. */
+  .hand {
+    position: absolute; height: 604px; width: auto; pointer-events: none;
+    opacity: 0; visibility: hidden; z-index: 40;
+    transform-origin: 28.7% 88.6%;
+    filter: drop-shadow(-12px 16px 20px rgba(0,0,0,.42));
   }
 
   #seam { position: absolute; top: 0; bottom: 0; width: 6px; background: var(--charcoal); box-shadow: 0 0 22px rgba(5,19,30,.9); opacity: 0; }
@@ -98,16 +106,17 @@
 
   <div class="dock" id="dock-1">
     <div class="dock-head"><span class="dock-title" id="t1"></span></div>
-    <div class="slide-frame"><img id="i1" alt="evidence one" /></div>
+    <div class="slide-frame"><div class="artwrap"><svg id="sv1" viewBox="0 0 1376 768"><defs><mask id="mk1" maskUnits="userSpaceOnUse" x="-80" y="-80" width="1536" height="928"><rect x="-80" y="-80" width="1536" height="928" fill="black"></rect><path id="pth1" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="130"></path></mask></defs><image id="i1" x="0" y="0" width="1376" height="768" mask="url(#mk1)" preserveAspectRatio="xMidYMid slice"></image></svg></div></div>
     <div class="rail" id="r1"></div>
   </div>
   <div class="dock" id="dock-2">
     <div class="dock-head"><span class="dock-title" id="t2"></span></div>
-    <div class="slide-frame"><img id="i2" alt="evidence two" /></div>
+    <div class="slide-frame"><div class="artwrap"><svg id="sv2" viewBox="0 0 1376 768"><defs><mask id="mk2" maskUnits="userSpaceOnUse" x="-80" y="-80" width="1536" height="928"><rect x="-80" y="-80" width="1536" height="928" fill="black"></rect><path id="pth2" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="130"></path></mask></defs><image id="i2" x="0" y="0" width="1376" height="768" mask="url(#mk2)" preserveAspectRatio="xMidYMid slice"></image></svg></div></div>
     <div class="rail" id="r2"></div>
   </div>
 
-  <img id="hand" alt="" />
+  <img class="hand" id="handA" alt="" />
+  <img class="hand" id="handB" alt="" />
   <div id="seam"></div>
   <div id="caption"></div>
 </div></div></div>
@@ -143,8 +152,34 @@
   const docks = [$("dock-1"), $("dock-2")];
   const WIPE = 0.9;
 
-  const REVEAL = 1.05, EXIT = 0.55;
-  const hand = $("hand"); hand.src = A["__hand__"] || "";
+  const REVEAL = 1.35, EXIT = 0.55;
+  const handA = $("handA"), handB = $("handB");
+  handA.src = A["__handA__"] || ""; handB.src = A["__handB__"] || "";
+  const NIB = { x: 0.287, y: 0.886 };   // measured on the cutout
+
+  /* Serpentine reveal path. Rows are stroke CENTERLINES inset by sw/2 so the
+     painted coverage (body + round caps) lands exactly inside the rect, and
+     the row step stays <= stroke width or thin unrevealed stripes cross the
+     art. The rect overshoots the image into blank space on every side. */
+  const serp = (x0, y0, x1, y1, rows, sw) => {
+    const ix0 = x0 + sw / 2, ix1 = x1 - sw / 2, iy0 = y0 + sw / 2, iy1 = y1 - sw / 2;
+    const step = (iy1 - iy0) / Math.max(1, rows - 1);
+    let d = "M" + ix0 + " " + Math.round(iy0);
+    for (let i = 0; i < rows; i++) {
+      d += " H" + (i % 2 === 0 ? ix1 : ix0);
+      if (i < rows - 1) d += " V" + Math.round(iy0 + step * (i + 1));
+    }
+    return d;
+  };
+  const PATHS = {};
+  for (const n of ["1", "2"]) {
+    const el = document.getElementById("pth" + n);
+    el.setAttribute("d", serp(-80, -80, 1456, 848, 8, 130));
+    PATHS[n] = { el: el, len: 0 };
+  }
+  const hideHands = () => {
+    for (const h of [handA, handB]) { h.style.opacity = 0; h.style.visibility = "hidden"; }
+  };
 
   /* every dock carries its own lifetime: enter -> hand-led reveal -> hold
      (7s cap) -> exit. Nothing lives to the end of a scene. */
@@ -163,7 +198,7 @@
     const ev = TL.evidence[aid]; if (!ev) return;
     const n = slot + 1;
     $("t" + n).textContent = ev.title;
-    $("i" + n).src = A[aid] || "";
+    $("i" + n).setAttribute("href", A[aid] || "");
     const rail = $("r" + n); rail.innerHTML = "";
     rail.classList.toggle("single", ev.badges.length === 1);
     ev.badges.forEach((bd, bi) => {
@@ -183,10 +218,14 @@
     const sc = TL.scenes[si];
 
     /* LAYER 1 — one continuous ken-burns per scene; incoming world wipes in */
+    /* camera LOCKS while a document is being drawn: a travelling canvas
+       during a reveal breaks the drawn-on-paper illusion */
+    const drawing = (TL.scenes[si].docks || []).find((d) => t >= d.enter && t < d.enter + REVEAL);
+    const camT = drawing ? drawing.enter : t;
     const paint = (el, scene) => {
       el.style.backgroundImage = `url("${A[scene.world.asset_id]}")`;
       const kb = scene.world.ken_burns;
-      const p = clamp01((t - scene.span[0]) / Math.max(0.1, scene.span[1] - scene.span[0]));
+      const p = clamp01((camT - scene.span[0]) / Math.max(0.1, scene.span[1] - scene.span[0]));
       el.style.transform = `scale(${(1 + p*kb.scale).toFixed(4)}) translate(${(p*kb.x).toFixed(1)}px, ${(p*kb.y).toFixed(1)}px)`;
     };
     const prev = TL.scenes[si - 1];
@@ -212,21 +251,40 @@
       if (d.slide !== shown[s]) { fillDock(s, d.slide); shown[s] = d.slide; }
       el.classList.toggle("solo", live.length === 1 && s === 0);
 
-      const rk = clamp01((t - d.enter) / REVEAL);          /* hand-led wipe   */
+      const rk = clamp01((t - d.enter) / REVEAL);                /* mask sweep */
       const xk = t > d.exit ? clamp01((t - d.exit) / EXIT) : 0;  /* clean exit */
       el.style.opacity = 1 - xk;
-      el.style.clipPath = `inset(0 ${(1 - io(rk)) * 100}% 0 0)`;
-      el.style.transform = xk ? `translateY(${-14 * xk}px) scale(${1 - 0.04 * xk})` : "none";
+      el.style.transform = xk ? "translateY(" + (-14 * xk) + "px) scale(" + (1 - 0.04 * xk) + ")" : "none";
 
-      /* the hand exists only while an artifact is being revealed */
+      /* reveal = stroke-dashoffset on the mask path, linear (ease "none") */
+      const P = PATHS[String(s + 1)];
+      if (!P.len) P.len = (P.el.getTotalLength() || 9000) * 1.02;
+      P.el.style.strokeDasharray = String(P.len);
+      P.el.style.strokeDashoffset = String(P.len * (1 - rk));
+
+      /* the hand rides the mask tip and exists IFF a stroke is in progress */
       if (rk > 0 && rk < 1 && !handSet) {
         handSet = true;
-        const r = el.getBoundingClientRect(), f = fit.getBoundingClientRect();
-        const scale = fit.clientWidth / 1920;
-        const left = (r.left - f.left) / scale, width = r.width / scale, top = (r.top - f.top) / scale;
-        hand.style.opacity = Math.min(1, rk * 6, (1 - rk) * 6);
-        hand.style.left = `${left + width * io(rk) - 66}px`;
-        hand.style.top = `${top + r.height / scale - 96}px`;
+        const L = P.el.getTotalLength();
+        const dpos = Math.min(L, rk * L);
+        const pt = P.el.getPointAtLength(dpos);
+        const ahead = P.el.getPointAtLength(Math.min(L, dpos + 3));
+        const back = (ahead.x - pt.x) < -0.5;   /* right-to-left row -> B pose */
+        const active = back ? handB : handA, idle = back ? handA : handB;
+        idle.style.opacity = 0; idle.style.visibility = "hidden";
+
+        const sv = document.getElementById("sv" + (s + 1)).getBoundingClientRect();
+        const f = fit.getBoundingClientRect(), k = fit.clientWidth / 1920;
+        const ax = (sv.left - f.left) / k, ay = (sv.top - f.top) / k;
+        const kx = (sv.width / k) / 1376, ky = (sv.height / k) / 768;
+        const hw = active.naturalWidth && active.naturalHeight
+          ? 604 * active.naturalWidth / active.naturalHeight : 320;
+        const jitter = Math.sin(rk * 34) * 2.2;   /* hand wobble, never canvas */
+        active.style.visibility = "visible";
+        active.style.opacity = Math.min(1, rk * 8, (1 - rk) * 8);
+        active.style.left = (ax + pt.x * kx - hw * NIB.x) + "px";
+        active.style.top = (ay + pt.y * ky - 604 * NIB.y) + "px";
+        active.style.transform = "rotate(" + jitter + "deg)";
       }
 
       const badges = (TL.evidence[d.slide] || {}).badges || [];
@@ -236,7 +294,7 @@
         if (pill) pill.classList.toggle("on", at != null && t >= at && t < d.exit);
       });
     }
-    if (!handSet) hand.style.opacity = 0;
+    if (!handSet) hideHands();
     const active = live;
 
     /* LAYER 5 — canonical caption track: resolved by time at its own
