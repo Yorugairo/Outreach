@@ -44,12 +44,18 @@
 
   .dock-head { margin-bottom: 9px; }
   .dock-title { font-size: 25px; font-weight: 800; color: var(--charcoal); line-height: 1.12; }
-  /* literal evidence is never translucent — only the chrome around it is.
-     multiply goes on the WRAPPER, never the masked <image>: blending the
-     masked element forces a separate compositor layer and Chrome leaks the
-     mask, showing art before it is drawn. */
-  .slide-frame { border: 2px solid var(--charcoal); border-radius: 6px; overflow: hidden; background: #fff; }
-  .artwrap { mix-blend-mode: multiply; display: block; }
+  /* The skill puts mix-blend-mode: multiply on the artblock wrapper — correct
+     for hand-drawn INK on a paper canvas. It does not transfer to a literal
+     source document: (a) a blend group escapes the white frame and multiplies
+     the artwork against the dark world plate behind the translucent dock,
+     which renders it near-black; (b) literal evidence must stay literal, and
+     multiply tints it. So: no blend here, and isolate the frame so nothing
+     downstream can reintroduce one. */
+  .slide-frame {
+    border: 2px solid var(--charcoal); border-radius: 6px; overflow: hidden;
+    background: #fff; isolation: isolate;
+  }
+  .artwrap { display: block; }
   .artwrap svg { display: block; width: 100%; height: auto; }
 
   .rail { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; margin-top: 11px; }

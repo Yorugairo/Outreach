@@ -442,3 +442,30 @@ world-plate grammar (attention budget, source-card crop rule, semantic
 transition palette, the full-scene hand-draw exclusion) alongside the generic
 mechanics, and its `templates/reveal-engine.js` has the Chrome mask-leak and
 cap-scallop fixes baked in.
+
+### 8.11 Do not blend a literal document (bug, 2026-08-24)
+
+The first reveal-engine build drew nothing visible. The mask was correct —
+sampling the rendered SVG at full reveal showed 12.9% ink, exactly right for
+a typeset slide. The fault was `mix-blend-mode: multiply`.
+
+The skill puts multiply on the artblock wrapper, and that is right *in its
+context*: hand-drawn ink art sitting on a white paper canvas, where multiply
+is what makes ink read as ink. It does not transfer to this lane:
+
+1. **A blend group escapes its parent.** The dock background is translucent
+   cream over a dark world plate, so the artwork multiplied against the
+   *plate*, not the white frame, and rendered near-black. `isolation: isolate`
+   on the white `.slide-frame` confines any blend group to it.
+2. **Literal evidence must stay literal.** Multiply tints a source document.
+   Part 4 already forbids altering it; a blend mode is an alteration.
+
+Fix: no blend mode on a literal-document artwrap, plus `isolation: isolate`
+on the frame so nothing downstream can reintroduce one. The serpentine mask,
+the hand follower, and the camera lock are unchanged — only the compositing
+was wrong.
+
+**General rule:** skill mechanics written for drawn artwork must be re-checked
+before being applied to a literal source document. Reveal timing, hand
+choreography, and mask geometry transfer directly. Anything that changes the
+document's pixels — blend modes, filters, recolors — does not.
