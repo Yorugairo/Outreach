@@ -27,15 +27,43 @@
     {
       "string_to_replace": "AVAV",
       "type": "alias",
-      "alias": "A V A V",
-      "note": "ticker spoken as letters",
+      "alias": "AeroVironment",
+      "note": "ticker convention: spoken company names, not letters (probe 2026-08-24, operator ear verdict)",
+      "added_episode": "current-bubble-mechanism"
+    },
+    {
+      "string_to_replace": "APLD",
+      "type": "alias",
+      "alias": "Applied",
+      "note": "ticker spoken name (probe 2026-08-24, operator ear verdict)",
+      "added_episode": "current-bubble-mechanism"
+    },
+    {
+      "string_to_replace": "LASE",
+      "type": "alias",
+      "alias": "laze",
+      "note": "ticker spoken name (probe 2026-08-24, operator ear verdict)",
+      "added_episode": "current-bubble-mechanism"
+    },
+    {
+      "string_to_replace": "IonQ",
+      "type": "alias",
+      "alias": "Ionic",
+      "note": "operator wants 'Ion-ick' (probe 2026-08-24, operator ear verdict)",
+      "added_episode": "current-bubble-mechanism"
+    },
+    {
+      "string_to_replace": "ASIC",
+      "type": "alias",
+      "alias": "ay-sick",
+      "note": "spoken 'Ay-Sick', never spelled letters (probe 2026-08-24, operator ear verdict)",
       "added_episode": "current-bubble-mechanism"
     },
     {
       "string_to_replace": "TSMC",
       "type": "alias",
       "alias": "T S M C",
-      "note": "ticker/initialism spoken as letters",
+      "note": "initialism IS its spoken name; letters intended",
       "added_episode": "current-bubble-mechanism"
     },
     {
@@ -53,5 +81,5 @@
       "added_episode": "current-bubble-mechanism"
     }
   ],
-  "artifact_hash": "f31f680d7d1b21f010e64bd534beb10aa630d2a5deece40f87d08d7cd3fb2025"
+  "artifact_hash": "f4c87e7e023a4b7bf8b9cc00c377ea69b8ff37cd830c945e23713d72e2201440"
 }

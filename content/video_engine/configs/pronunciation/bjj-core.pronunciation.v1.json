@@ -1,0 +1,15 @@
+{
+  "schema_version": "pronunciation_dictionary.v1",
+  "name": "bjj-core",
+  "model_id": "eleven_multilingual_v2",
+  "rules": [
+    {
+      "string_to_replace": "vale tudo",
+      "type": "alias",
+      "alias": "valé tudo",
+      "note": "operator wants Vahl-aye (probe 2026-08-24, operator ear verdict); scoped to the phrase — Japanese/Portuguese names (Maeda, Kano, Kodokan, Helio, kimura) all verified fine on multilingual v2, no rules needed",
+      "added_episode": "history-of-bjj-ep1"
+    }
+  ],
+  "artifact_hash": "a7cf856251506d30769f457fc05ecd904f9923f735dc588ee5b88401bf6702f9"
+}

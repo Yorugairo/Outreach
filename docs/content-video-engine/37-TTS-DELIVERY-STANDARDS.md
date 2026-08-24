@@ -181,10 +181,13 @@ All five gaps closed in `content/video_engine/src/services/audio_synth.py`:
 3. **`apply_text_normalization: "on"`** sent by default
    (`ELEVENLABS_TEXT_NORMALIZATION` overrides; validated auto/on/off).
 4. **Dictionary attachment** — `pronunciation_dictionary_locators` (≤3
-   enforced) from config/env; first dictionary shipped at
-   `configs/pronunciation/finance-core.pronunciation.v1.json` (scoped won
-   aliases per §4b/doc 22 + AVAV, TSMC, KOSPI, SK hynix). Sync to ElevenLabs
-   via the existing `compile-pronunciation-sync` CLI, then set the locators.
+   enforced) from config/env; dictionaries shipped at
+   `configs/pronunciation/` — **finance-core** (scoped won aliases per
+   §4b/doc 22; tickers by SPOKEN NAME per operator ear-probe 2026-08-24:
+   Applied, laze, Ionic, ay-sick, AeroVironment; TSMC/KOSPI/SK hynix) and
+   **bjj-core** ("vale tudo" → "valé tudo"; all Japanese/Portuguese names
+   verified fine). Probe verdicts: `configs/pronunciation/CANDIDATES.md`.
+   Sync via the existing `compile-pronunciation-sync` CLI, then set locators.
 5. **`seed`** — config/env (`ELEVENLABS_SEED`), passed when set.
 
 Remaining manual step: run the dictionary sync (operator-gated API write),

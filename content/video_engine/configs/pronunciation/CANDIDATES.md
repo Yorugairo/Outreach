@@ -70,9 +70,25 @@ Multilingual v2 is language-aware, so some Japanese/Portuguese names may
 come out right without help — that is exactly what the probe determines
 before any rule is written.
 
+## Probe verdicts — 2026-08-24 (both probes synthesized, operator eared)
+
+**Convention decision (supersedes the letters convention above): tickers use
+their SPOKEN NAMES, never spelled letters.** Rules added to finance-core:
+APLD → "Applied" · LASE → "laze" · IonQ → "Ionic" (spoken Ion-ick) ·
+ASIC → "ay-sick" · AVAV → "AeroVironment" (convention applied). TSMC stays
+letters because letters ARE its spoken name.
+
+**BJJ passed almost clean** — Maeda, Jigoro Kano, Kodokan, Helio, kimura,
+jiu-jitsu, americana all verified fine on multilingual v2. One rule:
+"vale tudo" → "valé tudo" (operator: Vahl-aye), scoped to the phrase.
+`bjj-core.pronunciation.v1.json` created with that single rule.
+
+**Verified fine, no rules:** S&P 500, ROIC, capex, FHFA, EBRI, Bravos, DRAM,
+NAND, HBM4, Tier III, Nvidia, Micron, Broadcom, and the whole BJJ name set.
+
 ## Status
 
-- [ ] finance/datacenter probe synthesized and eared (`probe-finance-datacenter.txt`)
-- [ ] BJJ probe synthesized and eared (`probe-bjj.txt`)
-- [ ] failures promoted to rules; verified-fine terms recorded above
-- [ ] finance-core re-synced after any additions
+- [x] finance/datacenter probe synthesized and eared ($0.11, request DRHfwl8b…)
+- [x] BJJ probe synthesized and eared ($0.10, request lsqFwGJh…)
+- [x] failures promoted to rules; verified-fine terms recorded
+- [ ] finance-core + bjj-core synced to ElevenLabs (operator-gated API write)
