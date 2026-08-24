@@ -644,3 +644,36 @@ Two constraints hold at any value:
 `DRAW_LAG` is **0.30s** against a 0.75s card entrance: the card reaches ~0.61
 opacity before the first ink appears, so the sheet reads as landing before the
 hand starts on it.
+
+### 8.17 The hand is retired from this lane (operator decision, 2026-08-24)
+
+After building the reveal engine correctly (8.10-8.16), the hand-drawn
+reveal was cut. Reviewed against
+`samples/gemini-scene-evidence-pipeline-showcase.html`, the plain card
+entrance reads cleaner.
+
+**What the lane is now.** A dock's entire entrance is the card settle: a
+0.75s expo-out rise (`translateY 32 -> 0`, `scale .96 -> 1`) with the
+hard-edge shadow growing `0 -> 12px` alongside, and the document simply
+present on the card. Exit is a 0.72s expo-out lift. Everything else stands —
+7s dock lifetime, translucent washi chrome, sequenced badges, canonical
+caption track, continuous plate parallax, quart wipe between scenes.
+
+**Why it wins here.** The mask sweep spends about 1.5s per document
+performing the *arrival* of evidence. In a whiteboard explainer that
+performance IS the content. In this lane the world plate is the content and
+the document is a citation dropped onto it — a long draw makes a supporting
+element behave like a headline, and at two docks a scene it competes with
+both the plate and the narration.
+
+**When to bring it back.** The machinery is not lost — the full engine sits
+in git history (`7880c01`, `1e6612f`) and the pose set with nib calibration
+stays in `hyperframes/assets/hands/`. It earns its place when the artwork is
+*drawn* rather than sourced (an isolated illustration built to be revealed),
+or in a dedicated whiteboard format where drawing is the format itself. It
+does not earn its place decorating a stamped slide.
+
+**Cost note:** dropping the hand removed ~2.6MB of embedded pose assets from
+the cut and simplified the render to CSS-driveable transforms — relevant for
+the Remotion port, where a serpentine SVG mask plus a per-frame
+`getPointAtLength` follower is meaningfully more work than a transform.

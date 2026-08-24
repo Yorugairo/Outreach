@@ -54,8 +54,7 @@
     border: 2px solid var(--charcoal); border-radius: 6px; overflow: hidden;
     background: #fff; isolation: isolate;
   }
-  .artwrap { display: block; }
-  .artwrap svg { display: block; width: 100%; height: auto; }
+  .slide-frame img { display: block; width: 100%; height: auto; }
 
   .rail { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; margin-top: 11px; }
   .rail.single { grid-template-columns: 1fr; }
@@ -70,16 +69,6 @@
   .pill-tag { font-size: 13px; font-weight: 700; letter-spacing: .05em; padding: 2px 6px; border-radius: 4px; background: rgba(244,230,199,.14); }
 
 
-  /* near life-size: ~56% of frame height including forearm, so the sleeve
-     plausibly reaches in from off-frame. transform-origin sits on the nib so
-     jitter pivots around the pen tip. */
-  .hand {
-    position: absolute; height: 604px; width: auto; pointer-events: none;
-    opacity: 0; visibility: hidden; z-index: 40;
-  }
-  /* transform-origin sits on each pose's own nib so jitter pivots on the tip */
-  #handA { transform-origin: 28.7% 89.1%; }
-  #handB { transform-origin: 32.2% 87.6%; }
   .hand-unused {
     filter: drop-shadow(-12px 16px 20px rgba(0,0,0,.42));
   }
@@ -115,17 +104,15 @@
 
   <div class="dock" id="dock-1">
     <div class="dock-head"><span class="dock-title" id="t1"></span></div>
-    <div class="slide-frame"><div class="artwrap"><svg id="sv1" viewBox="0 0 1376 768"><defs><mask id="mk1" maskUnits="userSpaceOnUse" x="-80" y="-80" width="1536" height="928"><rect x="-80" y="-80" width="1536" height="928" fill="black"></rect><path id="pth1" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="130"></path></mask></defs><image id="i1" x="0" y="0" width="1376" height="768" mask="url(#mk1)" preserveAspectRatio="xMidYMid slice"></image></svg></div></div>
+    <div class="slide-frame"><img id="i1" alt="evidence" /></div>
     <div class="rail" id="r1"></div>
   </div>
   <div class="dock" id="dock-2">
     <div class="dock-head"><span class="dock-title" id="t2"></span></div>
-    <div class="slide-frame"><div class="artwrap"><svg id="sv2" viewBox="0 0 1376 768"><defs><mask id="mk2" maskUnits="userSpaceOnUse" x="-80" y="-80" width="1536" height="928"><rect x="-80" y="-80" width="1536" height="928" fill="black"></rect><path id="pth2" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="130"></path></mask></defs><image id="i2" x="0" y="0" width="1376" height="768" mask="url(#mk2)" preserveAspectRatio="xMidYMid slice"></image></svg></div></div>
+    <div class="slide-frame"><img id="i2" alt="evidence" /></div>
     <div class="rail" id="r2"></div>
   </div>
 
-  <img class="hand" id="handA" alt="" />
-  <img class="hand" id="handB" alt="" />
   <div id="seam"></div>
   <div id="caption"></div>
 </div></div></div>
@@ -133,11 +120,6 @@
 <div id="bar">
   <button id="play">&#9654; Play with narration</button>
   <button id="mute">Mute</button>
-  <label style="display:flex;align-items:center;gap:6px;font:600 11px/1 Inter,system-ui,sans-serif;letter-spacing:.06em;color:#7d95a6">
-    SWEEP EASE
-    <input id="ease" type="range" min="0" max="0.30" step="0.01" value="0.08" style="width:104px;accent-color:var(--sunflower)" />
-    <span id="easeVal" style="font:600 11px/1 ui-monospace,Consolas,monospace;color:var(--sunflower);min-width:30px">0.08</span>
-  </label>
   <input id="scrub" type="range" min="0" max="300" step="0.01" value="0" aria-label="timeline scrub" />
   <div id="clock">0:00 / 5:00</div>
 </div>
@@ -171,46 +153,7 @@
   const docks = [$("dock-1"), $("dock-2")];
   const WIPE = 0.62;
 
-  const REVEAL = 1.5, EXIT = 0.72, CARD_IN = 0.75, DRAW_LAG = 0.3;
-  /* Blend of linear and ease-in-out for the mask sweep. Settled by eye at
-     0.08: the ends soften just perceptibly while the body of the stroke holds
-     a near-constant rate, so it still reads as drawing rather than sliding.
-     For reference, measured percent-drawn per sample:
-       0.00 -> 17,16,17,17,16 (spread 1)   linear
-       0.08 -> 16,16,18,18,16 (spread 2)   shipped
-       0.22 -> 14,17,19,19,17 (spread 5)   ends ~40% slower; read as hesitation
-     The dial stays in the control bar for re-tuning. */
-  let SWEEP_EASE = 0.08;
-  const handA = $("handA"), handB = $("handB");
-  handA.src = A["__handA__"] || ""; handB.src = A["__handB__"] || "";
-  /* nib measured per pose: the wrist rotation moves the marker tip, so B
-     cannot reuse A's calibration or the ink lands off the path */
-  const NIB = { a: { x: 0.2868, y: 0.8913 },
-                b: { x: 0.3222, y: 0.8763 } };
-
-  /* Serpentine reveal path. Rows are stroke CENTERLINES inset by sw/2 so the
-     painted coverage (body + round caps) lands exactly inside the rect, and
-     the row step stays <= stroke width or thin unrevealed stripes cross the
-     art. The rect overshoots the image into blank space on every side. */
-  const serp = (x0, y0, x1, y1, rows, sw) => {
-    const ix0 = x0 + sw / 2, ix1 = x1 - sw / 2, iy0 = y0 + sw / 2, iy1 = y1 - sw / 2;
-    const step = (iy1 - iy0) / Math.max(1, rows - 1);
-    let d = "M" + ix0 + " " + Math.round(iy0);
-    for (let i = 0; i < rows; i++) {
-      d += " H" + (i % 2 === 0 ? ix1 : ix0);
-      if (i < rows - 1) d += " V" + Math.round(iy0 + step * (i + 1));
-    }
-    return d;
-  };
-  const PATHS = {};
-  for (const n of ["1", "2"]) {
-    const el = document.getElementById("pth" + n);
-    el.setAttribute("d", serp(-80, -80, 1456, 848, 8, 130));
-    PATHS[n] = { el: el, len: 0 };
-  }
-  const hideHands = () => {
-    for (const h of [handA, handB]) { h.style.opacity = 0; h.style.visibility = "hidden"; }
-  };
+  const EXIT = 0.72, CARD_IN = 0.75;
 
   /* every dock carries its own lifetime: enter -> hand-led reveal -> hold
      (7s cap) -> exit. Nothing lives to the end of a scene. */
@@ -229,7 +172,7 @@
     const ev = TL.evidence[aid]; if (!ev) return;
     const n = slot + 1;
     $("t" + n).textContent = ev.title;
-    $("i" + n).setAttribute("href", A[aid] || "");
+    $("i" + n).src = A[aid] || "";
     const rail = $("r" + n); rail.innerHTML = "";
     rail.classList.toggle("single", ev.badges.length === 1);
     ev.badges.forEach((bd, bi) => {
@@ -275,7 +218,6 @@
     /* LAYER 2/3 — docks live on their own schedule */
     const live = DOCKS.filter((d) => t >= d.enter && t < d.exit + EXIT);
     wash.classList.toggle("on", live.length > 0);
-    let handSet = false;
 
     for (let s = 0; s < 2; s++) {
       const d = live.find((x) => x.slot === s);
@@ -284,55 +226,20 @@
       if (d.slide !== shown[s]) { fillDock(s, d.slide); shown[s] = d.slide; }
       el.classList.toggle("solo", live.length === 1 && s === 0);
 
-      const rl = clamp01((t - d.enter - DRAW_LAG) / REVEAL);
-      const rk = SWEEP_EASE ? rl * (1 - SWEEP_EASE) + io(rl) * SWEEP_EASE : rl;
-      const xk = t > d.exit ? clamp01((t - d.exit) / EXIT) : 0;  /* clean exit */
-      /* clear the hidden-state clip: the SVG mask owns the reveal now, and a
-         leftover inset() from the empty branch keeps the dock at zero width */
-      el.style.clipPath = "none";
-      /* the sheet is placed first, then drawn on: a short micro-scale card
-         entrance, and the mask sweep starts once the card has landed */
+      /* Card settle — the whole entrance. The document is simply present on
+         the card; no mask, no drawing hand. Reference timing: a 0.75s
+         expo-out rise with the hard-edge shadow growing alongside, so the
+         card reads as a physical object landing on the plate. */
       const ck = expoOut(clamp01((t - d.enter) / CARD_IN));
+      const xk = t > d.exit ? clamp01((t - d.exit) / EXIT) : 0;
       const xe = expoOut(xk);
+      el.style.clipPath = "none";
       el.style.opacity = (1 - xe) * clamp01((t - d.enter) / (CARD_IN * 0.55));
       el.style.transform = xk
         ? "translateY(" + (-22 * xe) + "px) scale(" + (1 - 0.05 * xe) + ")"
         : "translateY(" + (32 * (1 - ck)) + "px) scale(" + (0.96 + 0.04 * ck) + ")";
-      /* the shadow settles with the card instead of snapping to final depth */
       const sh = 12 * ck;
       el.style.boxShadow = sh.toFixed(1) + "px " + sh.toFixed(1) + "px 0 rgba(37,49,60,.82)";
-
-      /* reveal = stroke-dashoffset on the mask path, linear (ease "none") */
-      const P = PATHS[String(s + 1)];
-      if (!P.len) P.len = (P.el.getTotalLength() || 9000) * 1.02;
-      P.el.style.strokeDasharray = String(P.len);
-      P.el.style.strokeDashoffset = String(P.len * (1 - rk));
-
-      /* the hand rides the mask tip and exists IFF a stroke is in progress */
-      if (rk > 0 && rk < 1 && !handSet) {
-        handSet = true;
-        const L = P.el.getTotalLength();
-        const dpos = Math.min(L, rk * L);
-        const pt = P.el.getPointAtLength(dpos);
-        const ahead = P.el.getPointAtLength(Math.min(L, dpos + 3));
-        const back = (ahead.x - pt.x) < -0.5;   /* right-to-left row -> B pose */
-        const active = back ? handB : handA, idle = back ? handA : handB;
-        idle.style.opacity = 0; idle.style.visibility = "hidden";
-
-        const sv = document.getElementById("sv" + (s + 1)).getBoundingClientRect();
-        const f = fit.getBoundingClientRect(), k = fit.clientWidth / 1920;
-        const ax = (sv.left - f.left) / k, ay = (sv.top - f.top) / k;
-        const kx = (sv.width / k) / 1376, ky = (sv.height / k) / 768;
-        const hw = active.naturalWidth && active.naturalHeight
-          ? 604 * active.naturalWidth / active.naturalHeight : 320;
-        const jitter = Math.sin(rk * 34) * 2.2;   /* hand wobble, never canvas */
-        active.style.visibility = "visible";
-        active.style.opacity = Math.min(1, rk * 8, (1 - rk) * 8);
-        const nib = back ? NIB.b : NIB.a;
-        active.style.left = (ax + pt.x * kx - hw * nib.x) + "px";
-        active.style.top = (ay + pt.y * ky - 604 * nib.y) + "px";
-        active.style.transform = "rotate(" + jitter + "deg)";
-      }
 
       const badges = (TL.evidence[d.slide] || {}).badges || [];
       badges.forEach((_, bi) => {
@@ -341,7 +248,6 @@
         if (pill) pill.classList.toggle("on", at != null && t >= at && t < d.exit);
       });
     }
-    if (!handSet) hideHands();
     const active = live;
 
     /* LAYER 5 — canonical caption track: resolved by time at its own
@@ -379,11 +285,6 @@
       playing = true; vo.currentTime = t; vo.play().catch(() => {});
       playBtn.textContent = "Pause"; raf = requestAnimationFrame(tick);
     }
-  });
-  $("ease").addEventListener("input", (e) => {
-    SWEEP_EASE = +e.target.value;
-    $("easeVal").textContent = SWEEP_EASE.toFixed(2);
-    sync();
   });
   $("mute").addEventListener("click", () => { vo.muted = !vo.muted; $("mute").textContent = vo.muted ? "Unmute" : "Mute"; });
   scrub.addEventListener("input", () => { seek(+scrub.value); });
