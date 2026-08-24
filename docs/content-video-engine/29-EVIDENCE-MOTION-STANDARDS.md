@@ -365,3 +365,36 @@ stays clean. If real attribution is wanted on screen later, it must name the
 external source the slide draws on (a filing, an index methodology, a dated
 transcript) — which needs a per-slide source field the catalogue does not
 carry today. Do not substitute the deck name for it.
+
+### 8.9 Documents draw on, and they leave (operator correction, 2026-08-24)
+
+Two failures in the v4 build, one cause: the dock was a state, not an event.
+It appeared instantly and then squatted on the plate until the scene ended.
+
+**The hand comes back for evidence reveals.** This was always sanctioned —
+the rail doc calls for "a hand-led mask or trace reveal", and the
+not-production-ready exclusion covers only *full-scene* hand-draw
+replacement, never the evidence card itself. A dock now reveals under a
+left-to-right clip wipe (~1.05s, ease-in-out) with the hand riding the
+leading edge, and the hand **exists only while an artifact is being
+revealed** — it fades in and out inside the wipe and is never on screen
+during a hold. `draw-hand-a-v1` is trace-cut off its black ground by an
+edge flood-fill; a luminance key eats the sleeve.
+
+**Seven seconds, then out.** Every dock carries an explicit lifetime in the
+timeline — `enter`, `exit`, and `badge_at[]` — capped at
+`DOCK_HOLD_MAX = 7.0s` including the reveal, and forced to clear at least
+0.6s before the scene's exit so the transition still lands on an
+evidence-free boundary (Part 6). A dock whose window would be shorter than
+2.2s is dropped rather than flashed.
+
+**The plate gets its screen time back.** On the five-minute cut this is the
+whole point: scene 15 runs 47s with documents present only from 241s to
+253s — 33 seconds of pure plate with its ken-burns move. Across the cut, 23
+docks average a 6.8s hold. The world is the hero again by scheduling, not
+by opacity.
+
+Data-model consequence: `scenes[].docks[]` replaces per-beat `docks`/`badges`
+masks entirely. The renderer derives dock state from time — hidden,
+revealing, held, exiting — so nothing has to be re-declared per beat, and a
+generator only has to emit an enter/exit pair per document.

@@ -38,6 +38,11 @@ V3_PROPS = PILOT / "five-minute-semantic-demo-v3/render/current-bubble-five-minu
 OUT = Path(__file__).parent
 ASSETS = OUT / "assets"
 
+# A document is a guest, not a tenant: it draws on, is read, and leaves.
+DOCK_REVEAL = 1.05   # hand-led wipe
+DOCK_HOLD_MAX = 7.0  # total time on screen, reveal included
+DOCK_EXIT = 0.55
+
 KB_CYCLE = [
     {"scale": 0.085, "x": -22, "y": -10},
     {"scale": 0.105, "x": 18, "y": -13},
@@ -234,8 +239,7 @@ def build(spine, cat, weights) -> dict:
             continue
 
         span = end - start
-        beats = [{"at": round(start, 2), "docks": [], "badges": "----"}]
-        mask = ["-", "-", "-", "-"]
+        docks = []
         for slot, s in enumerate(picks):
             badges = VERIFIED_BADGES.get(s["slide_id"], [])
             evidence[s["slide_id"]] = {
@@ -245,14 +249,19 @@ def build(spine, cat, weights) -> dict:
                 "badges": [dict(b, verbatim_in_document=True) for b in badges],
                 "match_score": s.get("_score"),
             }
-            at = start + 1.6 + slot * (span * 0.42)
-            docks = [p["slide_id"] for p in picks[: slot + 1]]
-            beats.append({"at": round(at, 2), "docks": docks, "badges": "".join(mask)})
-            for bi in range(min(2, len(badges))):
-                mask[slot * 2 + bi] = "X"
-                step = at + 1.5 * (bi + 1)
-                if step < end - 1.0:
-                    beats.append({"at": round(step, 2), "docks": docks, "badges": "".join(mask)})
+            # stagger entries; each dock lives at most DOCK_HOLD_MAX and must
+            # be gone before the scene's exit transition (evidence-free boundary)
+            enter = start + 1.5 + slot * min(DOCK_HOLD_MAX * 0.62, span * 0.42)
+            exit_at = min(enter + DOCK_HOLD_MAX, end - 0.6)
+            if exit_at - enter < 2.2:
+                continue
+            docks.append({
+                "slide": s["slide_id"], "slot": slot,
+                "enter": round(enter, 2), "exit": round(exit_at, 2),
+                "badge_at": [round(enter + DOCK_REVEAL + 0.45 + 1.5 * i, 2)
+                             for i in range(min(2, len(badges)))
+                             if enter + DOCK_REVEAL + 0.45 + 1.5 * i < exit_at - 0.7],
+            })
 
         scenes.append({
             "scene_id": f"s{len(scenes) + 1:02d}",
@@ -260,7 +269,7 @@ def build(spine, cat, weights) -> dict:
                       "ken_burns": KB_CYCLE[len(scenes) % len(KB_CYCLE)]},
             "exit": "wipe_left" if len(scenes) % 2 == 0 else "wipe_right",
             "span": [round(start, 2), round(end, 2)],
-            "beats": sorted(beats, key=lambda b: b["at"]),
+            "docks": docks,
         })
 
     return {
@@ -292,6 +301,10 @@ def media(tl, spine) -> dict:
     for sid, ev in tl["evidence"].items():
         uris[sid] = enc(sid, DECKS / ev["document"]["path"], 700, 74)
 
+    hand = ASSETS / "draw-hand.png"
+    if hand.is_file():
+        uris["__hand__"] = "data:image/png;base64," + base64.b64encode(hand.read_bytes()).decode()
+
     dst = ASSETS / "narration.m4a"
     subprocess.run(["ffmpeg", "-y", "-v", "error", "-i",
                     str(PUBLIC / "current-bubble-fresh-60s-v1/history_episode_1_master.mp3"),
@@ -308,12 +321,15 @@ if __name__ == "__main__":
     (OUT / "timeline.v4.json").write_text(json.dumps(tl, indent=1), encoding="utf-8")
 
     ev = tl["evidence"]
-    print(f"scenes={len(tl['scenes'])} beats={sum(len(s['beats']) for s in tl['scenes'])}")
+    docks = [d for sc in tl["scenes"] for d in sc["docks"]]
+    print(f"scenes={len(tl['scenes'])} docks={len(docks)} "
+          f"avg_hold={sum(d['exit']-d['enter'] for d in docks)/max(1,len(docks)):.1f}s "
+          f"max_hold={max((d['exit']-d['enter'] for d in docks), default=0):.1f}s")
     print(f"evidence={len(ev)} slides, {len(set(e['document']['path'] for e in ev.values()))} distinct files")
     print(f"captions={len(tl['captions'])} at canonical timings")
     print(f"badged={sum(1 for e in ev.values() if e['badges'])} (verified numerals only)")
     for sc in tl["scenes"]:
-        ids = sorted({d for b in sc["beats"] for d in b["docks"]})
+        ids = [f'{d["slide"]}({d["enter"]:.0f}-{d["exit"]:.0f})' for d in sc["docks"]]
         print(f"  {sc['scene_id']} {sc['span'][0]:6.1f}-{sc['span'][1]:6.1f}  {', '.join(ids) or '(none)'}")
     uris = media(tl, spine)
     (OUT / "uris.json").write_text(json.dumps(uris), encoding="utf-8")

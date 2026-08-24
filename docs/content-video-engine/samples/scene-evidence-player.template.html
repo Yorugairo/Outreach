@@ -36,10 +36,9 @@
     border: 4px solid var(--charcoal); border-radius: 14px;
     box-shadow: 12px 12px 0 rgba(37,49,60,.82);
     padding: 13px 15px 13px;
-    opacity: 0; transform: scale(.88) translateY(16px);
-    transition: opacity .45s cubic-bezier(.16,1,.3,1), transform .58s cubic-bezier(.16,1,.3,1);
+    opacity: 0;
+    will-change: opacity, transform, clip-path;
   }
-  .dock.on { opacity: 1; transform: none; }
   .dock.solo { width: 940px; left: 490px; top: 196px; }
   #dock-1 { left: 136px; } #dock-2 { left: 1064px; }
 
@@ -55,11 +54,18 @@
           opacity: 0; transform: translateY(13px);
           transition: opacity .6s cubic-bezier(.16,1,.3,1), transform .6s cubic-bezier(.16,1,.3,1); }
   .pill.on { opacity: 1; transform: none; }
+  .dock.solo .rail { grid-template-columns: 1fr 1fr; }
   .pill-label { font-size: 13px; font-weight: 700; letter-spacing: .08em; color: #9fb4c4; }
   .pill-row { display: flex; align-items: baseline; gap: 9px; margin-top: 3px; }
   .pill-num { font-size: 29px; font-weight: 800; font-family: ui-monospace, Consolas, monospace; font-variant-numeric: tabular-nums; }
   .pill-tag { font-size: 13px; font-weight: 700; letter-spacing: .05em; padding: 2px 6px; border-radius: 4px; background: rgba(244,230,199,.14); }
 
+
+  #hand {
+    position: absolute; width: 300px; height: auto; pointer-events: none;
+    opacity: 0; z-index: 40; transform-origin: 22% 96%;
+    filter: drop-shadow(-10px 14px 16px rgba(0,0,0,.45));
+  }
 
   #seam { position: absolute; top: 0; bottom: 0; width: 6px; background: var(--charcoal); box-shadow: 0 0 22px rgba(5,19,30,.9); opacity: 0; }
 
@@ -101,6 +107,7 @@
     <div class="rail" id="r2"></div>
   </div>
 
+  <img id="hand" alt="" />
   <div id="seam"></div>
   <div id="caption"></div>
 </div></div></div>
@@ -136,10 +143,13 @@
   const docks = [$("dock-1"), $("dock-2")];
   const WIPE = 0.9;
 
-  /* flatten the declarative scene tree into one ordered beat list */
-  const BEATS = [];
-  TL.scenes.forEach((sc, si) => sc.beats.forEach((b) => BEATS.push({ ...b, si, scene: sc })));
-  BEATS.sort((a, b) => a.at - b.at);
+  const REVEAL = 1.05, EXIT = 0.55;
+  const hand = $("hand"); hand.src = A["__hand__"] || "";
+
+  /* every dock carries its own lifetime: enter -> hand-led reveal -> hold
+     (7s cap) -> exit. Nothing lives to the end of a scene. */
+  const DOCKS = [];
+  TL.scenes.forEach((sc, si) => (sc.docks || []).forEach((d) => DOCKS.push({ ...d, si, scene: sc })));
 
   const chips = $("scenes");
   TL.scenes.forEach((sc, i) => {
@@ -168,9 +178,9 @@
 
   let shown = ["", ""];
   const render = (t) => {
-    let b = BEATS[0];
-    for (const x of BEATS) if (t >= x.at) b = x;
-    const sc = b.scene, si = b.si;
+    let si = 0;
+    for (let i = 0; i < TL.scenes.length; i++) if (t >= TL.scenes[i].span[0]) si = i;
+    const sc = TL.scenes[si];
 
     /* LAYER 1 — one continuous ken-burns per scene; incoming world wipes in */
     const paint = (el, scene) => {
@@ -190,22 +200,44 @@
     seam.style.opacity = seaming ? 1 : 0;
     seam.style.transform = `translateX(${(sc.exit === "wipe_right" ? (1-wk) : wk) * 1920}px)`;
 
-    /* LAYER 2/3 — wash rides the docks; docks carry evidence */
-    const active = b.docks || [];
-    wash.classList.toggle("on", active.length > 0);
+    /* LAYER 2/3 — docks live on their own schedule */
+    const live = DOCKS.filter((d) => t >= d.enter && t < d.exit + EXIT);
+    wash.classList.toggle("on", live.length > 0);
+    let handSet = false;
+
     for (let s = 0; s < 2; s++) {
-      const aid = active[s];
-      if (aid && aid !== shown[s]) { fillDock(s, aid); shown[s] = aid; }
-      docks[s].classList.toggle("on", !!aid);
-      docks[s].classList.toggle("solo", active.length === 1 && s === 0);
-    }
-    const mask = b.badges || "----";
-    for (let s = 0; s < 2; s++) {
-      for (let bi = 0; bi < 2; bi++) {
-        const el = document.getElementById(`p${s+1}${bi}`);
-        if (el) el.classList.toggle("on", mask[s*2+bi] === "X");
+      const d = live.find((x) => x.slot === s);
+      const el = docks[s];
+      if (!d) { el.style.opacity = 0; el.style.clipPath = "inset(0 100% 0 0)"; continue; }
+      if (d.slide !== shown[s]) { fillDock(s, d.slide); shown[s] = d.slide; }
+      el.classList.toggle("solo", live.length === 1 && s === 0);
+
+      const rk = clamp01((t - d.enter) / REVEAL);          /* hand-led wipe   */
+      const xk = t > d.exit ? clamp01((t - d.exit) / EXIT) : 0;  /* clean exit */
+      el.style.opacity = 1 - xk;
+      el.style.clipPath = `inset(0 ${(1 - io(rk)) * 100}% 0 0)`;
+      el.style.transform = xk ? `translateY(${-14 * xk}px) scale(${1 - 0.04 * xk})` : "none";
+
+      /* the hand exists only while an artifact is being revealed */
+      if (rk > 0 && rk < 1 && !handSet) {
+        handSet = true;
+        const r = el.getBoundingClientRect(), f = fit.getBoundingClientRect();
+        const scale = fit.clientWidth / 1920;
+        const left = (r.left - f.left) / scale, width = r.width / scale, top = (r.top - f.top) / scale;
+        hand.style.opacity = Math.min(1, rk * 6, (1 - rk) * 6);
+        hand.style.left = `${left + width * io(rk) - 66}px`;
+        hand.style.top = `${top + r.height / scale - 96}px`;
       }
+
+      const badges = (TL.evidence[d.slide] || {}).badges || [];
+      badges.forEach((_, bi) => {
+        const pill = document.getElementById(`p${s+1}${bi}`);
+        const at = (d.badge_at || [])[bi];
+        if (pill) pill.classList.toggle("on", at != null && t >= at && t < d.exit);
+      });
     }
+    if (!handSet) hand.style.opacity = 0;
+    const active = live;
 
     /* LAYER 5 — canonical caption track: resolved by time at its own
        timings, never resampled onto beat boundaries (doc 29 Part 5). */

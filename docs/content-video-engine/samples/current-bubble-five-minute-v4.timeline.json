@@ -717,18 +717,13 @@
     2.4,
     11.6
    ],
-   "beats": [
+   "docks": [
     {
-     "at": 2.4,
-     "docks": [],
-     "badges": "----"
-    },
-    {
-     "at": 4.0,
-     "docks": [
-      "silicon-value-software-bubble-s02"
-     ],
-     "badges": "----"
+     "slide": "silicon-value-software-bubble-s02",
+     "slot": 0,
+     "enter": 3.9,
+     "exit": 10.9,
+     "badge_at": []
     }
    ]
   },
@@ -748,18 +743,13 @@
     11.6,
     23.03
    ],
-   "beats": [
+   "docks": [
     {
-     "at": 11.6,
-     "docks": [],
-     "badges": "----"
-    },
-    {
-     "at": 13.2,
-     "docks": [
-      "silicon-antidote-s11"
-     ],
-     "badges": "----"
+     "slide": "silicon-antidote-s11",
+     "slot": 0,
+     "enter": 13.1,
+     "exit": 20.1,
+     "badge_at": []
     }
    ]
   },
@@ -779,26 +769,20 @@
     23.03,
     37.73
    ],
-   "beats": [
+   "docks": [
     {
-     "at": 23.03,
-     "docks": [],
-     "badges": "----"
+     "slide": "silicon-reality-gap-s12",
+     "slot": 0,
+     "enter": 24.53,
+     "exit": 31.53,
+     "badge_at": []
     },
     {
-     "at": 24.63,
-     "docks": [
-      "silicon-reality-gap-s12"
-     ],
-     "badges": "----"
-    },
-    {
-     "at": 30.81,
-     "docks": [
-      "silicon-reality-gap-s12",
-      "silicon-value-software-bubble-s03"
-     ],
-     "badges": "----"
+     "slide": "silicon-value-software-bubble-s03",
+     "slot": 1,
+     "enter": 28.87,
+     "exit": 35.87,
+     "badge_at": []
     }
    ]
   },
@@ -818,18 +802,13 @@
     37.73,
     45.77
    ],
-   "beats": [
+   "docks": [
     {
-     "at": 37.73,
-     "docks": [],
-     "badges": "----"
-    },
-    {
-     "at": 39.33,
-     "docks": [
-      "silicon-reality-gap-s04"
-     ],
-     "badges": "----"
+     "slide": "silicon-reality-gap-s04",
+     "slot": 0,
+     "enter": 39.23,
+     "exit": 45.17,
+     "badge_at": []
     }
    ]
   },
@@ -849,18 +828,13 @@
     45.77,
     51.93
    ],
-   "beats": [
+   "docks": [
     {
-     "at": 45.77,
-     "docks": [],
-     "badges": "----"
-    },
-    {
-     "at": 47.37,
-     "docks": [
-      "silicon-antidote-s15"
-     ],
-     "badges": "----"
+     "slide": "silicon-antidote-s15",
+     "slot": 0,
+     "enter": 47.27,
+     "exit": 51.33,
+     "badge_at": []
     }
    ]
   },
@@ -880,18 +854,13 @@
     51.93,
     64.87
    ],
-   "beats": [
+   "docks": [
     {
-     "at": 51.93,
-     "docks": [],
-     "badges": "----"
-    },
-    {
-     "at": 53.53,
-     "docks": [
-      "silicon-reality-gap-s02"
-     ],
-     "badges": "----"
+     "slide": "silicon-reality-gap-s02",
+     "slot": 0,
+     "enter": 53.43,
+     "exit": 60.43,
+     "badge_at": []
     }
    ]
   },
@@ -911,26 +880,20 @@
     64.87,
     98.8
    ],
-   "beats": [
+   "docks": [
     {
-     "at": 64.87,
-     "docks": [],
-     "badges": "----"
+     "slide": "silicon-value-software-bubble-s13",
+     "slot": 0,
+     "enter": 66.37,
+     "exit": 73.37,
+     "badge_at": []
     },
     {
-     "at": 66.47,
-     "docks": [
-      "silicon-value-software-bubble-s13"
-     ],
-     "badges": "----"
-    },
-    {
-     "at": 80.72,
-     "docks": [
-      "silicon-value-software-bubble-s13",
-      "sovereign-memory-infrastructure-s14"
-     ],
-     "badges": "----"
+     "slide": "sovereign-memory-infrastructure-s14",
+     "slot": 1,
+     "enter": 70.71,
+     "exit": 77.71,
+     "badge_at": []
     }
    ]
   },
@@ -950,18 +913,13 @@
     98.8,
     108.17
    ],
-   "beats": [
+   "docks": [
     {
-     "at": 98.8,
-     "docks": [],
-     "badges": "----"
-    },
-    {
-     "at": 100.4,
-     "docks": [
-      "silicon-antidote-s03"
-     ],
-     "badges": "----"
+     "slide": "silicon-antidote-s03",
+     "slot": 0,
+     "enter": 100.3,
+     "exit": 107.3,
+     "badge_at": []
     }
    ]
   },
@@ -981,18 +939,13 @@
     108.17,
     121.1
    ],
-   "beats": [
+   "docks": [
     {
-     "at": 108.17,
-     "docks": [],
-     "badges": "----"
-    },
-    {
-     "at": 109.77,
-     "docks": [
-      "memory-supercycle-s08"
-     ],
-     "badges": "----"
+     "slide": "memory-supercycle-s08",
+     "slot": 0,
+     "enter": 109.67,
+     "exit": 116.67,
+     "badge_at": []
     }
    ]
   },
@@ -1012,26 +965,20 @@
     121.1,
     144.6
    ],
-   "beats": [
+   "docks": [
     {
-     "at": 121.1,
-     "docks": [],
-     "badges": "----"
+     "slide": "silicon-antidote-s10",
+     "slot": 0,
+     "enter": 122.6,
+     "exit": 129.6,
+     "badge_at": []
     },
     {
-     "at": 122.7,
-     "docks": [
-      "silicon-antidote-s10"
-     ],
-     "badges": "----"
-    },
-    {
-     "at": 132.57,
-     "docks": [
-      "silicon-antidote-s10",
-      "memory-supercycle-s14"
-     ],
-     "badges": "----"
+     "slide": "memory-supercycle-s14",
+     "slot": 1,
+     "enter": 126.94,
+     "exit": 133.94,
+     "badge_at": []
     }
    ]
   },
@@ -1051,18 +998,13 @@
     144.6,
     154.73
    ],
-   "beats": [
+   "docks": [
     {
-     "at": 144.6,
-     "docks": [],
-     "badges": "----"
-    },
-    {
-     "at": 146.2,
-     "docks": [
-      "sovereign-memory-infrastructure-s11"
-     ],
-     "badges": "----"
+     "slide": "sovereign-memory-infrastructure-s11",
+     "slot": 0,
+     "enter": 146.1,
+     "exit": 153.1,
+     "badge_at": []
     }
    ]
   },
@@ -1082,26 +1024,20 @@
     154.73,
     178.1
    ],
-   "beats": [
+   "docks": [
     {
-     "at": 154.73,
-     "docks": [],
-     "badges": "----"
+     "slide": "sovereign-memory-infrastructure-s10",
+     "slot": 0,
+     "enter": 156.23,
+     "exit": 163.23,
+     "badge_at": []
     },
     {
-     "at": 156.33,
-     "docks": [
-      "sovereign-memory-infrastructure-s10"
-     ],
-     "badges": "----"
-    },
-    {
-     "at": 166.15,
-     "docks": [
-      "sovereign-memory-infrastructure-s10",
-      "memory-supercycle-s02"
-     ],
-     "badges": "----"
+     "slide": "memory-supercycle-s02",
+     "slot": 1,
+     "enter": 160.57,
+     "exit": 167.57,
+     "badge_at": []
     }
    ]
   },
@@ -1121,42 +1057,23 @@
     178.1,
     210.17
    ],
-   "beats": [
+   "docks": [
     {
-     "at": 178.1,
-     "docks": [],
-     "badges": "----"
+     "slide": "silicon-value-software-bubble-s07",
+     "slot": 0,
+     "enter": 179.6,
+     "exit": 186.6,
+     "badge_at": []
     },
     {
-     "at": 179.7,
-     "docks": [
-      "silicon-value-software-bubble-s07"
-     ],
-     "badges": "----"
-    },
-    {
-     "at": 193.17,
-     "docks": [
-      "silicon-value-software-bubble-s07",
-      "memory-supercycle-s03"
-     ],
-     "badges": "----"
-    },
-    {
-     "at": 194.67,
-     "docks": [
-      "silicon-value-software-bubble-s07",
-      "memory-supercycle-s03"
-     ],
-     "badges": "--X-"
-    },
-    {
-     "at": 196.17,
-     "docks": [
-      "silicon-value-software-bubble-s07",
-      "memory-supercycle-s03"
-     ],
-     "badges": "--XX"
+     "slide": "memory-supercycle-s03",
+     "slot": 1,
+     "enter": 183.94,
+     "exit": 190.94,
+     "badge_at": [
+      185.44,
+      186.94
+     ]
     }
    ]
   },
@@ -1176,26 +1093,20 @@
     210.17,
     239.67
    ],
-   "beats": [
+   "docks": [
     {
-     "at": 210.17,
-     "docks": [],
-     "badges": "----"
+     "slide": "sovereign-memory-infrastructure-s09",
+     "slot": 0,
+     "enter": 211.67,
+     "exit": 218.67,
+     "badge_at": []
     },
     {
-     "at": 211.77,
-     "docks": [
-      "sovereign-memory-infrastructure-s09"
-     ],
-     "badges": "----"
-    },
-    {
-     "at": 224.16,
-     "docks": [
-      "sovereign-memory-infrastructure-s09",
-      "silicon-reality-gap-s15"
-     ],
-     "badges": "----"
+     "slide": "silicon-reality-gap-s15",
+     "slot": 1,
+     "enter": 216.01,
+     "exit": 223.01,
+     "badge_at": []
     }
    ]
   },
@@ -1215,26 +1126,20 @@
     239.67,
     286.63
    ],
-   "beats": [
+   "docks": [
     {
-     "at": 239.67,
-     "docks": [],
-     "badges": "----"
+     "slide": "silicon-value-software-bubble-s11",
+     "slot": 0,
+     "enter": 241.17,
+     "exit": 248.17,
+     "badge_at": []
     },
     {
-     "at": 241.27,
-     "docks": [
-      "silicon-value-software-bubble-s11"
-     ],
-     "badges": "----"
-    },
-    {
-     "at": 260.99,
-     "docks": [
-      "silicon-value-software-bubble-s11",
-      "silicon-antidote-s09"
-     ],
-     "badges": "----"
+     "slide": "silicon-antidote-s09",
+     "slot": 1,
+     "enter": 245.51,
+     "exit": 252.51,
+     "badge_at": []
     }
    ]
   },
@@ -1254,18 +1159,13 @@
     286.63,
     300.0
    ],
-   "beats": [
+   "docks": [
     {
-     "at": 286.63,
-     "docks": [],
-     "badges": "----"
-    },
-    {
-     "at": 288.23,
-     "docks": [
-      "memory-supercycle-s10"
-     ],
-     "badges": "----"
+     "slide": "memory-supercycle-s10",
+     "slot": 0,
+     "enter": 288.13,
+     "exit": 295.13,
+     "badge_at": []
     }
    ]
   }
