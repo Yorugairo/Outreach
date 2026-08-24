@@ -190,6 +190,66 @@ available benchmark for what our own video has to beat.
 - **Ring the close.** Return to the opening chart transformed, and put the
   CTA inside the action window rather than in place of the ending.
 
+## 4c. The competitor template, extracted (`Jw8ykhoOVBQ` + `YXFvwJQBzJc`)
+
+Two videos from the same channel (Braavos Research, self-identified in the
+narration) run **the same formula with different variables**. Two samples is
+enough to extract it, and the formula is good enough to adopt.
+
+### The template
+
+| # | Beat | Video A (AI capex) | Video B (confidence gap) |
+| --- | --- | --- | --- |
+| 1 | Cold open on a **divergence** — two lines that used to track | relationship "completely broken" since 2021 | "first time in over 30 years" |
+| 2 | Name both lines concretely, with their source | chipmakers vs hyperscalers | consumer stock-confidence vs U. Michigan personal outlook |
+| 3 | State the paradox plainly | infra +300%, spenders flat | confident about stocks, depressed about own prospects |
+| 4 | Assert depth — this is a symptom, not a blip | "house of cards" | "extremely deep roots… requires a reset" |
+| 5 | **Name a formal framework** for authority | Gartner hype cycle | Friedman's permanent income (1957) |
+| 6 | Establish the long-run baseline it violates | 2–4% index share historically | 2.8%/yr real income since the 1960s |
+| 7 | Mid-roll CTA | — | service discount (~50% mark) |
+| 8 | **Mechanism chain**, each link causal | cheap debt → capex → no ROI → unwind | profits → shareholders → assets → housing → no savings → stuck |
+| 9 | **Historical analogue with dates and magnitudes** | railway mania, dot-com | 1929 peak, 1930s tax rise |
+| 10 | **Reduce to ONE policy trigger variable** | central-bank rate | top corporate tax rate |
+| 11 | **Name the threshold and where we sit now** | above 5.5% → unwind; not there yet | when the line reverses |
+| 12 | **State current position** — refuse the doom close | hyperscalers may be a near-term catch-up | "we remain long" stocks, gold, crypto |
+| 13 | Name the flip condition | — | "our strategy will flip to defensive" |
+| 14 | Closing CTA | book a call | service |
+
+### The core device, and it is worth stealing
+
+> **Reduce the macro thesis to one policy variable, one threshold, your
+> current position, and the condition that would flip it.**
+
+That single move does an enormous amount of work at once. It converts an
+unfalsifiable vibe ("stocks look bubbly") into a dated, checkable claim; it
+gives the viewer something to *do* — watch one number; it earns trust by
+declining the doom close; and it makes the channel's next video inevitable,
+because the threshold is a standing open loop across the catalogue.
+
+It is the macro equivalent of our receipt device. We do not have one, and we
+should: **every macro video names one variable, one threshold, where we sit
+today, and what would change our mind.**
+
+### Two secondary devices
+
+- **Concept-naming for authority.** Both videos invoke a *named formal
+  framework* — Gartner, Friedman — rather than a person to follow. This
+  refines our entity-seeding rule (doc 30 §6): seed *concepts* as well as
+  people. A named framework is citable, non-competitive, and makes the
+  narrator sound like someone who reads.
+- **The stated position as a trust device.** Saying what they currently hold,
+  and that the bearish conditions are *not yet met*, is the single strongest
+  credibility move in either script. A warning from someone who refuses to
+  panic reads as analysis; the same warning from a perma-bear reads as noise.
+
+### Where our system still wins
+
+Both scripts carry unsourced headline constructions — a capex-to-GDP share,
+a wealth-share series, a "likely" causal attribution for the Great
+Depression — presented with the same confidence as the sourced figures. Our
+verbatim-figure extraction and `[verify]` gate are genuinely stronger, and
+that gap is the differentiator to make visible on screen.
+
 ## 5. Findings
 
 *Pending — Run 1 in flight.*
