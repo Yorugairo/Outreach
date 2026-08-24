@@ -605,3 +605,34 @@ Current constants: `CARD_IN 0.75`, `DRAW_LAG 0.42`, `REVEAL 1.5`,
 `EXIT 0.72`, `WIPE 0.62`. The mask sweep itself stays LINEAR (`ease: none`)
 per the reveal-engine contract — easing the sweep makes the hand accelerate
 against its own stroke.
+
+### 8.16 Region reveals may ease; line traces may not
+
+8.15 kept the mask sweep strictly linear, citing the reveal-engine contract.
+That contract is right for what it was written against and over-strict here.
+
+**Why the rule exists:** when the hand traces line art, the pen speed must
+match the rate ink appears. Any easing makes the nib visibly outrun or lag
+the line it is supposedly drawing.
+
+**Why it relaxes for us:** we reveal a finished document through a region
+mask. There is no line being traced, so there is nothing for the hand to be
+out of step with. A light ease reads as natural wrist acceleration into and
+out of the gesture.
+
+Implemented as a blend, not a swap: `rk = linear*(1-w) + easeInOut(linear)*w`
+with `w = SWEEP_EASE = 0.22`. Measured sweep: 3 / 17 / 35 / 54 / 73 / 89 /
+100 percent — a gentle S, still clearly a steady drawing motion.
+
+Two constraints hold:
+
+1. **Keep the deviation small.** Heavy easing puts a visible stall at each
+   end of the sweep and the hand starts to read as sliding rather than
+   drawing. 0.22 is comfortable; past roughly 0.35 it shows.
+2. **Hand and mask must read the same progress value.** Both derive from
+   `rk`, so they stay locked whatever the curve. Easing them separately —
+   or easing one and not the other — is the failure this note exists to
+   prevent.
+
+`DRAW_LAG` also drops 0.42s -> 0.20s: the hand now enters while the card is
+around 60% settled, so the sheet and the drawing arrive as one motion.

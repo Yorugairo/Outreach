@@ -166,7 +166,14 @@
   const docks = [$("dock-1"), $("dock-2")];
   const WIPE = 0.62;
 
-  const REVEAL = 1.5, EXIT = 0.72, CARD_IN = 0.75, DRAW_LAG = 0.42;
+  const REVEAL = 1.5, EXIT = 0.72, CARD_IN = 0.75, DRAW_LAG = 0.2;
+  /* The reveal-engine contract specifies a LINEAR sweep, which is right when
+     the hand traces line art: pen speed must match ink appearing. We reveal a
+     finished region instead, so a light ease reads as natural wrist
+     acceleration rather than a mismatch. Keep the deviation small — heavy
+     easing makes the hand visibly outrun the reveal edge. Hand and mask read
+     the SAME progress value, so they stay locked whatever the curve. */
+  const SWEEP_EASE = 0.22;
   const handA = $("handA"), handB = $("handB");
   handA.src = A["__handA__"] || ""; handB.src = A["__handB__"] || "";
   /* nib measured per pose: the wrist rotation moves the marker tip, so B
@@ -270,7 +277,8 @@
       if (d.slide !== shown[s]) { fillDock(s, d.slide); shown[s] = d.slide; }
       el.classList.toggle("solo", live.length === 1 && s === 0);
 
-      const rk = clamp01((t - d.enter - DRAW_LAG) / REVEAL);     /* mask sweep */
+      const rl = clamp01((t - d.enter - DRAW_LAG) / REVEAL);
+      const rk = rl * (1 - SWEEP_EASE) + io(rl) * SWEEP_EASE;    /* mask sweep */
       const xk = t > d.exit ? clamp01((t - d.exit) / EXIT) : 0;  /* clean exit */
       /* clear the hidden-state clip: the SVG mask owns the reveal now, and a
          leftover inset() from the empty branch keeps the dock at zero width */
