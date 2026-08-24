@@ -163,6 +163,24 @@ the predicted floor.
   research-pool/discard pattern, the bonus-volatility insight. Everything
   else we already do or do better.
 
+**Process lesson (operator-caught):** panels A and B both violated "open
+with concrete action" — a rule sitting in our own extracted rubric. C
+followed it ("Two people are counting money…"). Extracting a rule is not
+applying it; A's hook is rewritten to open in-scene (counting the drawer)
+with the first-person moat intact. Also adopted from C: naming Mr. Money
+Mustache — passed authority plus algorithmic topic-graph adjacency to the
+FIRE cluster, seeded into A's rule-two tease.
+
+**Reviewer-tool finding (second pass):** re-scoring the revised A dropped
+7 → 6.5 while suggesting, as its hook fix, our own sentence reordered
+verb-first — a valid syntax note, applied. But the judge is **stateless**: it
+scored a 3-minute opening segment as a complete video (ending 5/10 for
+"setting up the next topic" — which is the serialization device Tim's own
+doctrine prescribes), counts stage directions as script words, and its
+rewrite suggestions remain slop. Conclusion for the build-vs-buy file: the
+rubric is worth keeping; the judge is one-pass-useful, then noise. Our own
+review skill should score *segments in context*, which theirs cannot.
+
 **$3,800/month verdict input:** the flagship's structure was predictable from
 one day of doctrine extraction; its genuinely good ideas are one-time
 learnings now recorded here.

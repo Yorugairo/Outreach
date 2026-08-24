@@ -22,6 +22,11 @@ varied cadence, active voice, no stock AI phrasing — **tuned for YouTube
 retention**: cold-open hook, open loops, planted callbacks, second person,
 specific numbers. Spoken register, not editorial prose. Claims are either
 self-contained arithmetic or tagged `[verify]` for the research gate.
+**Hook rule (applied, not just extracted): open on concrete action in
+progress — someone doing something — never on a claim or setup.**
+**Entity seeding: name one bigger adjacent authority per video (here Mr.
+Money Mustache) — passed authority plus topic-graph adjacency; cite the
+primary source in rule 2.**
 
 ---
 
@@ -67,13 +72,14 @@ both of their apartments — that claim is the hook.
 
 ## Script (original, ~560 words, ~3:00 at spoken pace)
 
-**[s01 — black screen, captions punching in word groups]**
+**[s01 — black screen, captions punching in word groups; till sounds under]**
 
-Two apartments. I've stood inside both. Same city, same gray carpet in
-the hallway. One belongs to a second-year banker pulling ninety-five grand.
-The other belongs to a woman who sold weed for me — legally — at
-twenty-two dollars an hour. One of them is on track to never need a paycheck
-again. It's not the banker.
+I'm counting a cash drawer at ten p.m. on a Friday, in the back of a
+dispensary I own. Mostly twenties. My Fridays used to end differently — on
+a trading floor at JPMorgan, next to a guy who moved more money before lunch
+than this store sees in a year. He's still broke. The woman who closed this
+register is not. I've stood inside both of their apartments. Let me show you
+what I saw.
 
 **[s02 — the banker's apartment]**
 
@@ -141,8 +147,11 @@ on it every month. The invoice just never arrives.
 **[s10 — host, direct]**
 
 That's your second receipt — and it's the small one. Rule two is what the
-budtender does with money the banker never even sees. It isn't "spend less."
-She'd tell you spending less is how you stay exactly where you are.
+budtender does with the gap — the money the banker never even sees. It isn't
+"spend less." She'd tell you spending less is how you stay exactly where you
+are. There's a retired engineer the internet calls Mr. Money Mustache who
+proved what it actually is — one number that moves your retirement date more
+than your salary ever will. That's next.
 
 ---
 
