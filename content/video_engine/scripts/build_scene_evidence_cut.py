@@ -104,6 +104,7 @@ def load_catalogue() -> list[dict]:
             "sha256": v["sha256"],
             "deck": v["deck_id"],
             "tokens": Counter(tokens(ctx["label"] + " " + ctx["summary"])),
+            "label_tokens": set(tokens(ctx["label"])),
         })
     return cat
 
@@ -116,30 +117,87 @@ def idf_weights(cat: list[dict]) -> dict[str, float]:
     return {w: math.log(n / (1 + c)) + 1.0 for w, c in df.items()}
 
 
-def pick(cat, weights, said: str, used: set[str], k: int) -> list[dict]:
-    q = Counter(tokens(said))
-    if not q:
-        return []
-    scored = []
-    for s in cat:
-        if s["slide_id"] in used:
-            continue
-        overlap = sum(weights.get(w, 1.0) * min(c, s["tokens"][w]) for w, c in q.items() if w in s["tokens"])
-        if overlap <= 0:
-            continue
-        scored.append((overlap / (math.sqrt(sum(s["tokens"].values())) or 1), s))
-    scored.sort(key=lambda x: -x[0])
+LABEL_BOOST = 2.2    # a hit in the curated title means more than one in prose
+MIN_DISTINCT = 2     # a single common word is a coincidence, not a match
+RARE_IDF = 3.4       # ...unless the one shared word is genuinely rare
+MIN_SCORE = 0.14
+FLOOR_SCORE = 0.06   # coverage pass: better a weak match than a bare scene
 
-    chosen: list[dict] = []
-    for score, s in scored:
-        if score < 0.3:
-            break
-        if any(c["deck"] == s["deck"] for c in chosen):
-            continue  # a pair should not be two near-identical slides of one deck
-        chosen.append(s)
-        if len(chosen) == k:
-            break
-    return chosen
+
+def score_pair(q: Counter, weights, s: dict) -> float:
+    """IDF-weighted cosine, with hits in the slide's curated label boosted.
+
+    Cosine (rather than raw overlap) stops long summaries and short titles
+    from being scored on different scales, which is what let two generic
+    hits beat one specific one.
+    """
+    shared = [w for w in q if w in s["tokens"]]
+    if len(shared) < MIN_DISTINCT:
+        # one shared word only counts when it is a rare, specific term
+        if not (shared and weights.get(shared[0], 1.0) >= RARE_IDF):
+            return 0.0
+    dot = 0.0
+    for w in shared:
+        boost = LABEL_BOOST if w in s["label_tokens"] else 1.0
+        iw = weights.get(w, 1.0)
+        dot += (q[w] * iw) * (s["tokens"][w] * iw * boost)
+    qn = math.sqrt(sum((c * weights.get(w, 1.0)) ** 2 for w, c in q.items()))
+    sn = math.sqrt(sum((c * weights.get(w, 1.0)) ** 2 for w, c in s["tokens"].items()))
+    return dot / (qn * sn) if qn and sn else 0.0
+
+
+def assign(slots: list[dict], cat, weights) -> dict[int, dict]:
+    """Global strongest-unused-match assignment.
+
+    Every (slot, slide) pair is scored, then pairs are consumed in descending
+    score order. The strongest match anywhere in the episode is placed first,
+    so an early scene can no longer take a slide a later scene needed more.
+    """
+    pairs = []
+    for i, slot in enumerate(slots):
+        q = Counter(tokens(slot["said"]))
+        if not q:
+            continue
+        for s in cat:
+            sc = score_pair(q, weights, s)
+            if sc >= MIN_SCORE:
+                pairs.append((sc, i, s))
+    pairs.sort(key=lambda x: (-x[0], x[1], x[2]["slide_id"]))
+
+    out: dict[int, dict] = {}
+    used_slides: set[str] = set()
+    used_decks: dict[int, set[str]] = {}
+
+    def place(sc, i, s) -> bool:
+        scene = slots[i]["scene"]
+        if i in out or s["slide_id"] in used_slides:
+            return False
+        if s["deck"] in used_decks.get(scene, set()):
+            return False  # never pair two slides from one deck in the same scene
+        out[i] = dict(s, _score=round(sc, 3))
+        used_slides.add(s["slide_id"])
+        used_decks.setdefault(scene, set()).add(s["deck"])
+        return True
+
+    for sc, i, s in pairs:
+        place(sc, i, s)
+
+    # coverage pass — a scene left with no evidence at all takes its best
+    # remaining slide above a lower floor. Scenes whose narration matches
+    # nothing stay bare rather than getting a misleading document.
+    covered = {slots[i]["scene"] for i in out}
+    for i, slot in enumerate(slots):
+        if slot["scene"] in covered:
+            continue
+        q = Counter(tokens(slot["said"]))
+        if not q:
+            continue
+        best = sorted(
+            ((score_pair(q, weights, s), s) for s in cat if s["slide_id"] not in used_slides),
+            key=lambda x: (-x[0], x[1]["slide_id"]))
+        if best and best[0][0] >= FLOOR_SCORE and place(best[0][0], i, best[0][1]):
+            covered.add(slot["scene"])
+    return out
 
 
 def build(spine, cat, weights) -> dict:
@@ -148,18 +206,30 @@ def build(spine, cat, weights) -> dict:
              c.get("text", ""))
             for c in spine["captions"]]
 
-    scenes: list[dict] = []
-    evidence: dict[str, dict] = {}
-    used: set[str] = set()
-
-    for w in spine["worlds"]:
+    # pass 1 — every dock slot declares the narration it must illustrate.
+    # A two-dock scene splits its window so each slot matches what is being
+    # said while THAT dock is on screen, not a blob of the whole scene.
+    slots: list[dict] = []
+    windows: list[tuple] = []
+    for wi, w in enumerate(spine["worlds"]):
         start = w["from"] / FPS
         end = min(start + w["durationInFrames"] / FPS, CUT_SECONDS)
         if end - start < 4.0:
             continue
-        said = " ".join(t for a, b, t in caps if a < end and b > start)
-        slots = 2 if end - start >= 14 else 1
-        picks = pick(cat, weights, said, used, slots)
+        n = 2 if end - start >= 14 else 1
+        windows.append((wi, w, start, end, n, len(slots)))
+        for k in range(n):
+            a = start + (end - start) * (k / n)
+            b = start + (end - start) * ((k + 1) / n)
+            slots.append({"scene": wi, "said": " ".join(t for x, y, t in caps if x < b and y > a)})
+
+    placed = assign(slots, cat, weights)
+
+    scenes: list[dict] = []
+    evidence: dict[str, dict] = {}
+
+    for wi, w, start, end, n, base in windows:
+        picks = [placed[base + k] for k in range(n) if base + k in placed]
         if not picks:
             continue
 
@@ -167,13 +237,13 @@ def build(spine, cat, weights) -> dict:
         beats = [{"at": round(start, 2), "docks": [], "badges": "----"}]
         mask = ["-", "-", "-", "-"]
         for slot, s in enumerate(picks):
-            used.add(s["slide_id"])
             badges = VERIFIED_BADGES.get(s["slide_id"], [])
             evidence[s["slide_id"]] = {
                 "title": s["label"],
                 "document": {"path": s["path"], "sha256": s["sha256"]},
                 "source": f'{s["deck"].replace("-", " ").title()} &middot; slide {s["slide_id"].rsplit("-s", 1)[-1]}',
                 "badges": [dict(b, verbatim_in_document=True) for b in badges],
+                "match_score": s.get("_score"),
             }
             at = start + 1.6 + slot * (span * 0.42)
             docks = [p["slide_id"] for p in picks[: slot + 1]]

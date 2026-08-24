@@ -454,14 +454,15 @@
   }
  ],
  "evidence": {
-  "silicon-reality-gap-s12": {
-   "title": "The S&P 500 Paper Bubble Mechanics",
+  "silicon-value-software-bubble-s02": {
+   "title": "The Earnings Concentration Funnel",
    "document": {
-    "path": "silicon-reality-gap/slides/slide-012.png",
-    "sha256": "2718244eb2acdab57072e9bbabb6dd94058b6aa7e934096dff81e84bbceb3527"
+    "path": "silicon-value-software-bubble/slides/slide-002.png",
+    "sha256": "d67068386c5020298e1cdd6e89d7a7c86dbe0c1df315f90966160f5c3c8caff9"
    },
-   "source": "Silicon Reality Gap &middot; slide 12",
-   "badges": []
+   "source": "Silicon Value Software Bubble &middot; slide 02",
+   "badges": [],
+   "match_score": 0.388
   },
   "silicon-antidote-s11": {
    "title": "Locking Down the Financial Paradigm",
@@ -470,25 +471,28 @@
     "sha256": "22fab40b2424fe8c3e7844e738e92839d6d966d03215a304cec3910e31b24157"
    },
    "source": "Silicon Antidote &middot; slide 11",
-   "badges": []
+   "badges": [],
+   "match_score": 0.336
   },
-  "silicon-antidote-s03": {
-   "title": "Flashing Red on Extreme Concentration",
+  "silicon-reality-gap-s12": {
+   "title": "The S&P 500 Paper Bubble Mechanics",
    "document": {
-    "path": "silicon-antidote/slides/slide-003.png",
-    "sha256": "f6b2f59f0672ebb731945014b02a61ea58602ce5ce7238bac7f2bca84c8deef5"
+    "path": "silicon-reality-gap/slides/slide-012.png",
+    "sha256": "2718244eb2acdab57072e9bbabb6dd94058b6aa7e934096dff81e84bbceb3527"
    },
-   "source": "Silicon Antidote &middot; slide 03",
-   "badges": []
+   "source": "Silicon Reality Gap &middot; slide 12",
+   "badges": [],
+   "match_score": 0.305
   },
-  "silicon-value-software-bubble-s02": {
-   "title": "The Earnings Concentration Funnel",
+  "silicon-value-software-bubble-s03": {
+   "title": "The Inescapable Physical Reality",
    "document": {
-    "path": "silicon-value-software-bubble/slides/slide-002.png",
-    "sha256": "d67068386c5020298e1cdd6e89d7a7c86dbe0c1df315f90966160f5c3c8caff9"
+    "path": "silicon-value-software-bubble/slides/slide-003.png",
+    "sha256": "b84bb1e3cd9ff357f598a71764782da0255f8a86c063ca9bf29cff0ebc697d2a"
    },
-   "source": "Silicon Value Software Bubble &middot; slide 02",
-   "badges": []
+   "source": "Silicon Value Software Bubble &middot; slide 03",
+   "badges": [],
+   "match_score": 0.141
   },
   "silicon-reality-gap-s04": {
    "title": "The Market\u2019s Cyclical Trauma",
@@ -497,25 +501,28 @@
     "sha256": "6bda70a74a3d4b0b03d569cb6f666e89bf957167146ec4adaefc8701fee0828d"
    },
    "source": "Silicon Reality Gap &middot; slide 04",
-   "badges": []
+   "badges": [],
+   "match_score": 0.543
   },
-  "silicon-value-software-bubble-s01": {
-   "title": "The Physical Bottleneck versus the Software Bubble",
+  "silicon-antidote-s15": {
+   "title": "The Physical Antidote to a Paper Bubble",
    "document": {
-    "path": "silicon-value-software-bubble/slides/slide-001.png",
-    "sha256": "f1ed89a0a8955464d59f569e82716498d2e22c13aac083ec7098244030f55506"
+    "path": "silicon-antidote/slides/slide-015.png",
+    "sha256": "364afa1b47396fe18883cd7e316c1efa3c4741bacad50f6a36a2a602fbfeeb85"
    },
-   "source": "Silicon Value Software Bubble &middot; slide 01",
-   "badges": []
+   "source": "Silicon Antidote &middot; slide 15",
+   "badges": [],
+   "match_score": 0.652
   },
-  "silicon-antidote-s10": {
-   "title": "Welcome to RAM-ageddon",
+  "silicon-reality-gap-s02": {
+   "title": "The S&P 500 Paper Bubble versus Physical Compute",
    "document": {
-    "path": "silicon-antidote/slides/slide-010.png",
-    "sha256": "97de14b862c64cc704f2c336b23cf90de994672fabad625499ecb0f8dc84d1d2"
+    "path": "silicon-reality-gap/slides/slide-002.png",
+    "sha256": "628a7a463824b105ce72f9b140c484247962dc69a328b6219bf561efd672e8a0"
    },
-   "source": "Silicon Antidote &middot; slide 10",
-   "badges": []
+   "source": "Silicon Reality Gap &middot; slide 02",
+   "badges": [],
+   "match_score": 0.38
   },
   "silicon-value-software-bubble-s13": {
    "title": "Cash Generation versus Paper Gains",
@@ -524,25 +531,28 @@
     "sha256": "4f2edf3d15b97efd82058c646c55d46a532fab99d22243e26af9515c64e2383b"
    },
    "source": "Silicon Value Software Bubble &middot; slide 13",
-   "badges": []
+   "badges": [],
+   "match_score": 0.487
   },
-  "silicon-silent-triopoly-s04": {
-   "title": "The Capital Cycle Meat Grinder",
+  "sovereign-memory-infrastructure-s14": {
+   "title": "Synthesis: The Sovereign Memory Playbook",
    "document": {
-    "path": "silicon-silent-triopoly/slides/slide-004.png",
-    "sha256": "640e605b59d87fe2f9f914f700958c2a6603525c3909fa23a7728c69e2818a4d"
+    "path": "sovereign-memory-infrastructure/slides/slide-014.png",
+    "sha256": "0d09eebb4c8924713849603e62f1a4767bc976e86d18e0bc965bd22cb2a6d172"
    },
-   "source": "Silicon Silent Triopoly &middot; slide 04",
-   "badges": []
+   "source": "Sovereign Memory Infrastructure &middot; slide 14",
+   "badges": [],
+   "match_score": 0.187
   },
-  "sovereign-memory-infrastructure-s05": {
-   "title": "The Geographic Monopoly",
+  "silicon-antidote-s03": {
+   "title": "Flashing Red on Extreme Concentration",
    "document": {
-    "path": "sovereign-memory-infrastructure/slides/slide-005.png",
-    "sha256": "7c6aa4b3dc3ece200956b43e5ae21f7df3042659e731be9a732905459f802f58"
+    "path": "silicon-antidote/slides/slide-003.png",
+    "sha256": "f6b2f59f0672ebb731945014b02a61ea58602ce5ce7238bac7f2bca84c8deef5"
    },
-   "source": "Sovereign Memory Infrastructure &middot; slide 05",
-   "badges": []
+   "source": "Silicon Antidote &middot; slide 03",
+   "badges": [],
+   "match_score": 0.703
   },
   "memory-supercycle-s08": {
    "title": "Bridging the AI Bandwidth Gap",
@@ -551,25 +561,28 @@
     "sha256": "f3bc1a627ae812171e67d062a8a21e1363ae9655b180a65d2217e52c30cc0b23"
    },
    "source": "Memory Supercycle &middot; slide 08",
-   "badges": []
+   "badges": [],
+   "match_score": 0.603
   },
-  "silicon-antidote-s07": {
-   "title": "The AI Catalyst: Breaking the Physical Bottleneck",
+  "silicon-antidote-s10": {
+   "title": "Welcome to RAM-ageddon",
    "document": {
-    "path": "silicon-antidote/slides/slide-007.png",
-    "sha256": "ec4ab5765ec0dec26e58e57f574e3308986135973a49f07b9f67837e6efedbcb"
+    "path": "silicon-antidote/slides/slide-010.png",
+    "sha256": "97de14b862c64cc704f2c336b23cf90de994672fabad625499ecb0f8dc84d1d2"
    },
-   "source": "Silicon Antidote &middot; slide 07",
-   "badges": []
+   "source": "Silicon Antidote &middot; slide 10",
+   "badges": [],
+   "match_score": 0.178
   },
-  "silicon-value-software-bubble-s07": {
-   "title": "HBM Breaks the Historical Commodity Pattern",
+  "memory-supercycle-s14": {
+   "title": "The Fragile Balance: From Shortage to Structural Glut?",
    "document": {
-    "path": "silicon-value-software-bubble/slides/slide-007.png",
-    "sha256": "f2a4e23624bfdb1fd8e6213c3249c4fcb56f20c8b95f66fb0b6cf278ed10c760"
+    "path": "memory-supercycle/slides/slide-014.png",
+    "sha256": "abcc737f9bf6a88c89bc1296a6150e52df5c9e53f9318fb04d91af5728d2e6c5"
    },
-   "source": "Silicon Value Software Bubble &middot; slide 07",
-   "badges": []
+   "source": "Memory Supercycle &middot; slide 14",
+   "badges": [],
+   "match_score": 0.235
   },
   "sovereign-memory-infrastructure-s11": {
    "title": "Trend Two: The Advanced Packaging Bottleneck",
@@ -578,49 +591,38 @@
     "sha256": "79cbf336da9ead663ca91107f0ef4dbb1d8b5746e7ab1871b46973e9daa972a3"
    },
    "source": "Sovereign Memory Infrastructure &middot; slide 11",
-   "badges": []
+   "badges": [],
+   "match_score": 0.935
   },
-  "silicon-value-software-bubble-s09": {
-   "title": "Connecting the Dies Is the Hardest Step",
+  "sovereign-memory-infrastructure-s10": {
+   "title": "Trend One: Reshoring versus Sovereign Stacks",
    "document": {
-    "path": "silicon-value-software-bubble/slides/slide-009.png",
-    "sha256": "111981562d88f37e7c6e444ac7b38ac1338d960b9170e946c09fe9b6c8d9eabf"
+    "path": "sovereign-memory-infrastructure/slides/slide-010.png",
+    "sha256": "810023ce67b0fec1d6e6e6b82ae7683ad9441aaee7342861698fa0db21268647"
    },
-   "source": "Silicon Value Software Bubble &middot; slide 09",
-   "badges": []
+   "source": "Sovereign Memory Infrastructure &middot; slide 10",
+   "badges": [],
+   "match_score": 0.438
   },
-  "sovereign-memory-infrastructure-s03": {
-   "title": "The Nine-Layer Compute Stack",
+  "memory-supercycle-s02": {
+   "title": "Memory Is No Longer an Interchangeable Commodity",
    "document": {
-    "path": "sovereign-memory-infrastructure/slides/slide-003.png",
-    "sha256": "8a1d3727d17881784b1abbc83f1d01f93298877bf592f093daa72d3728010899"
+    "path": "memory-supercycle/slides/slide-002.png",
+    "sha256": "30b99070364691130ecfbc126b5b2f50f48f99934705da69af4aa202ad653449"
    },
-   "source": "Sovereign Memory Infrastructure &middot; slide 03",
-   "badges": [
-    {
-     "label": "HBM POSITION",
-     "value": "Layer 2",
-     "tag": "BELOW SILICON",
-     "accent": "cobalt",
-     "verbatim_in_document": true
-    },
-    {
-     "label": "THERMAL ENVELOPE",
-     "value": "1500W",
-     "tag": "LIQUID COOLED",
-     "accent": "sunflower",
-     "verbatim_in_document": true
-    }
-   ]
+   "source": "Memory Supercycle &middot; slide 02",
+   "badges": [],
+   "match_score": 0.38
   },
-  "silicon-antidote-s09": {
-   "title": "The Three-to-One Capacity Penalty",
+  "silicon-value-software-bubble-s07": {
+   "title": "HBM Breaks the Historical Commodity Pattern",
    "document": {
-    "path": "silicon-antidote/slides/slide-009.png",
-    "sha256": "979d3b9bdb5d190c5b3a5d56935ccb39a968d960d591235b870e2b428acdd66c"
+    "path": "silicon-value-software-bubble/slides/slide-007.png",
+    "sha256": "f2a4e23624bfdb1fd8e6213c3249c4fcb56f20c8b95f66fb0b6cf278ed10c760"
    },
-   "source": "Silicon Antidote &middot; slide 09",
-   "badges": []
+   "source": "Silicon Value Software Bubble &middot; slide 07",
+   "badges": [],
+   "match_score": 0.461
   },
   "memory-supercycle-s03": {
    "title": "The Root of the Shortage: The Three-to-One Physics Penalty",
@@ -644,40 +646,28 @@
      "accent": "coral",
      "verbatim_in_document": true
     }
-   ]
+   ],
+   "match_score": 0.345
   },
-  "silicon-reality-gap-s14": {
-   "title": "Memory as a Strategic Chokepoint",
+  "sovereign-memory-infrastructure-s09": {
+   "title": "The Structural Re-Rating Cycle",
    "document": {
-    "path": "silicon-reality-gap/slides/slide-014.png",
-    "sha256": "90add80c1fad5e025cca24653f3508713f0400116e6dfcc0156a8878864ba868"
+    "path": "sovereign-memory-infrastructure/slides/slide-009.png",
+    "sha256": "e0df120370ae39c7e484354e100ccca61db56348e3ead6112634b7e51998024b"
    },
-   "source": "Silicon Reality Gap &middot; slide 14",
-   "badges": []
+   "source": "Sovereign Memory Infrastructure &middot; slide 09",
+   "badges": [],
+   "match_score": 0.269
   },
-  "silicon-value-software-bubble-s04": {
-   "title": "The Triopoly Was Forged through Risk and Survival",
+  "silicon-reality-gap-s15": {
+   "title": "The Ultimate Hedge against an Index Bubble",
    "document": {
-    "path": "silicon-value-software-bubble/slides/slide-004.png",
-    "sha256": "f8a2711188066b13ab0d31782010f9c08d6d4cea143245c0ec2cea9673e542b7"
+    "path": "silicon-reality-gap/slides/slide-015.png",
+    "sha256": "13762f332a3ef6ce915760f54ac0d466fc42e835ada3732299497e9935980e98"
    },
-   "source": "Silicon Value Software Bubble &middot; slide 04",
-   "badges": [
-    {
-     "label": "SAMSUNG COMMITMENT",
-     "value": "$400M",
-     "tag": "1983",
-     "accent": "sunflower",
-     "verbatim_in_document": true
-    },
-    {
-     "label": "SK HYNIX DEBT",
-     "value": "11T won",
-     "tag": "IMF MERGER",
-     "accent": "coral",
-     "verbatim_in_document": true
-    }
-   ]
+   "source": "Silicon Reality Gap &middot; slide 15",
+   "badges": [],
+   "match_score": 0.289
   },
   "silicon-value-software-bubble-s11": {
    "title": "The DRAM Triopoly Is Rebalancing",
@@ -686,25 +676,28 @@
     "sha256": "8779f5e88e5a3774e1022318b8797b45eb61b2e66776b7c4b8bfe6d89a16afe0"
    },
    "source": "Silicon Value Software Bubble &middot; slide 11",
-   "badges": []
+   "badges": [],
+   "match_score": 0.387
   },
-  "silicon-reality-gap-s10": {
-   "title": "The Global DRAM Battlefield",
+  "silicon-antidote-s09": {
+   "title": "The Three-to-One Capacity Penalty",
    "document": {
-    "path": "silicon-reality-gap/slides/slide-010.png",
-    "sha256": "4ac6cc79f83c1ab434f9e247e6bb385cba9ed57853cf535658dfc2c79b4c5ef1"
+    "path": "silicon-antidote/slides/slide-009.png",
+    "sha256": "979d3b9bdb5d190c5b3a5d56935ccb39a968d960d591235b870e2b428acdd66c"
    },
-   "source": "Silicon Reality Gap &middot; slide 10",
-   "badges": []
+   "source": "Silicon Antidote &middot; slide 09",
+   "badges": [],
+   "match_score": 0.555
   },
-  "sovereign-memory-infrastructure-s06": {
-   "title": "Financial Physics: S&P 500 versus Sovereign Scalers",
+  "memory-supercycle-s10": {
+   "title": "The Next Supercycle Vector: Automotive and Robotics",
    "document": {
-    "path": "sovereign-memory-infrastructure/slides/slide-006.png",
-    "sha256": "e0ce93e6ebf12b1504d20ce4753d309d315825385fbf5109f22e13e5bcc61225"
+    "path": "memory-supercycle/slides/slide-010.png",
+    "sha256": "738cabeddaa84be79e6143a32a442da139712295433eaa81e19e6f3fbee609f9"
    },
-   "source": "Sovereign Memory Infrastructure &middot; slide 06",
-   "badges": []
+   "source": "Memory Supercycle &middot; slide 10",
+   "badges": [],
+   "match_score": 0.448
   }
  },
  "scenes": [
@@ -733,7 +726,7 @@
     {
      "at": 4.0,
      "docks": [
-      "silicon-reality-gap-s12"
+      "silicon-value-software-bubble-s02"
      ],
      "badges": "----"
     }
@@ -795,15 +788,15 @@
     {
      "at": 24.63,
      "docks": [
-      "silicon-antidote-s03"
+      "silicon-reality-gap-s12"
      ],
      "badges": "----"
     },
     {
      "at": 30.81,
      "docks": [
-      "silicon-antidote-s03",
-      "silicon-value-software-bubble-s02"
+      "silicon-reality-gap-s12",
+      "silicon-value-software-bubble-s03"
      ],
      "badges": "----"
     }
@@ -865,7 +858,7 @@
     {
      "at": 47.37,
      "docks": [
-      "silicon-value-software-bubble-s01"
+      "silicon-antidote-s15"
      ],
      "badges": "----"
     }
@@ -896,7 +889,7 @@
     {
      "at": 53.53,
      "docks": [
-      "silicon-antidote-s10"
+      "silicon-reality-gap-s02"
      ],
      "badges": "----"
     }
@@ -935,7 +928,7 @@
      "at": 80.72,
      "docks": [
       "silicon-value-software-bubble-s13",
-      "silicon-silent-triopoly-s04"
+      "sovereign-memory-infrastructure-s14"
      ],
      "badges": "----"
     }
@@ -966,7 +959,7 @@
     {
      "at": 100.4,
      "docks": [
-      "sovereign-memory-infrastructure-s05"
+      "silicon-antidote-s03"
      ],
      "badges": "----"
     }
@@ -1028,15 +1021,15 @@
     {
      "at": 122.7,
      "docks": [
-      "silicon-antidote-s07"
+      "silicon-antidote-s10"
      ],
      "badges": "----"
     },
     {
      "at": 132.57,
      "docks": [
-      "silicon-antidote-s07",
-      "silicon-value-software-bubble-s07"
+      "silicon-antidote-s10",
+      "memory-supercycle-s14"
      ],
      "badges": "----"
     }
@@ -1098,33 +1091,17 @@
     {
      "at": 156.33,
      "docks": [
-      "silicon-value-software-bubble-s09"
+      "sovereign-memory-infrastructure-s10"
      ],
      "badges": "----"
     },
     {
      "at": 166.15,
      "docks": [
-      "silicon-value-software-bubble-s09",
-      "sovereign-memory-infrastructure-s03"
+      "sovereign-memory-infrastructure-s10",
+      "memory-supercycle-s02"
      ],
      "badges": "----"
-    },
-    {
-     "at": 167.65,
-     "docks": [
-      "silicon-value-software-bubble-s09",
-      "sovereign-memory-infrastructure-s03"
-     ],
-     "badges": "--X-"
-    },
-    {
-     "at": 169.15,
-     "docks": [
-      "silicon-value-software-bubble-s09",
-      "sovereign-memory-infrastructure-s03"
-     ],
-     "badges": "--XX"
     }
    ]
   },
@@ -1153,14 +1130,14 @@
     {
      "at": 179.7,
      "docks": [
-      "silicon-antidote-s09"
+      "silicon-value-software-bubble-s07"
      ],
      "badges": "----"
     },
     {
      "at": 193.17,
      "docks": [
-      "silicon-antidote-s09",
+      "silicon-value-software-bubble-s07",
       "memory-supercycle-s03"
      ],
      "badges": "----"
@@ -1168,7 +1145,7 @@
     {
      "at": 194.67,
      "docks": [
-      "silicon-antidote-s09",
+      "silicon-value-software-bubble-s07",
       "memory-supercycle-s03"
      ],
      "badges": "--X-"
@@ -1176,7 +1153,7 @@
     {
      "at": 196.17,
      "docks": [
-      "silicon-antidote-s09",
+      "silicon-value-software-bubble-s07",
       "memory-supercycle-s03"
      ],
      "badges": "--XX"
@@ -1208,33 +1185,17 @@
     {
      "at": 211.77,
      "docks": [
-      "silicon-reality-gap-s14"
+      "sovereign-memory-infrastructure-s09"
      ],
      "badges": "----"
     },
     {
      "at": 224.16,
      "docks": [
-      "silicon-reality-gap-s14",
-      "silicon-value-software-bubble-s04"
+      "sovereign-memory-infrastructure-s09",
+      "silicon-reality-gap-s15"
      ],
      "badges": "----"
-    },
-    {
-     "at": 225.66,
-     "docks": [
-      "silicon-reality-gap-s14",
-      "silicon-value-software-bubble-s04"
-     ],
-     "badges": "--X-"
-    },
-    {
-     "at": 227.16,
-     "docks": [
-      "silicon-reality-gap-s14",
-      "silicon-value-software-bubble-s04"
-     ],
-     "badges": "--XX"
     }
    ]
   },
@@ -1271,7 +1232,7 @@
      "at": 260.99,
      "docks": [
       "silicon-value-software-bubble-s11",
-      "silicon-reality-gap-s10"
+      "silicon-antidote-s09"
      ],
      "badges": "----"
     }
@@ -1302,7 +1263,7 @@
     {
      "at": 288.23,
      "docks": [
-      "sovereign-memory-infrastructure-s06"
+      "memory-supercycle-s10"
      ],
      "badges": "----"
     }

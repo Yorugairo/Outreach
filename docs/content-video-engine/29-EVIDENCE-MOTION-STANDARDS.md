@@ -297,3 +297,43 @@ The first v4 pass failed review on three counts. Each is now enforced in
 
 Layout follow-on: a single-dock beat uses a wide centred dock (940px) so a
 16:9 stamped slide reads large; paired docks stay side by side at 720px.
+
+### 8.7 Evidence matching is a global assignment, not a per-scene pick
+
+Reviewing the first stamped build, the opening beat ("AI memory stocks have
+gone vertical and the **earnings** numbers look almost fake") was illustrated
+with *The S&P 500 Paper Bubble Mechanics*. Two defects produced that:
+
+1. **Scoring compared unlike things.** Raw overlap divided by slide length let
+   two generic hits (`earnings`, `bubble`) beat one specific hit, and the top
+   candidates were effectively tied (1.52 / 1.48 / 1.45). Scoring is now an
+   IDF-weighted **cosine**, with hits inside the slide's curated label boosted
+   2.2x — the label is operator-written and carries more signal than prose.
+2. **Allocation was greedy in time order.** Each scene took its own local best,
+   so an early scene could consume a slide a later scene needed far more.
+   Selection is now a **global assignment**: every (dock-slot, slide) pair is
+   scored, pairs are consumed in descending score order across the whole
+   episode, and the strongest match anywhere is placed first. A slot whose
+   top slide is taken falls through to its next-best unused one.
+
+Supporting rules:
+
+- **Per-slot windows.** A two-dock scene splits its window so each slot
+  matches what is being said while *that* dock is on screen, not a blob of
+  the whole scene.
+- **Rare-token exception.** A single shared word normally fails
+  `MIN_DISTINCT`, unless that word is genuinely rare (IDF >= 3.4).
+- **Coverage pass.** A scene left with no evidence takes its best remaining
+  slide above a lower floor; a scene whose narration matches nothing stays
+  bare rather than showing a misleading document.
+- **`match_score` is written into every evidence record** so the weakest
+  matches can be reviewed instead of trusted. On the v4 cut the range is
+  0.14 to 0.94; anything below ~0.2 deserves an operator look.
+
+Result on the five-minute cut: 16 scenes, 23 unique stamped slides, no
+repeats, opening beat now on *The Earnings Concentration Funnel*.
+
+Note the honest side effect: badge count fell to 1. Slides are chosen by
+meaning, not by whether a verified numeral happens to exist for them — and
+that is the correct precedence. Raising badge coverage means OCRing the
+catalogue, not biasing selection toward slides that already have badges.
