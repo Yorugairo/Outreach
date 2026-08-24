@@ -103,6 +103,39 @@ printed on screen**. It must NOT be applied to narration text sent to TTS:
   document). The badge carries the verbatim typography; the voice carries
   the words. Never let a script line be both.
 
+## 4b. Non-US currencies — the won problem (observed failure, resolved)
+
+Operator recall checked against the record: the actual observed failure
+([22-AUDIO-FIX-RUNBOOK.md](22-AUDIO-FIX-RUNBOOK.md)) was **"5,370 trillion
+won" read as the past tense of *win*** — a homograph error, not symbol
+mangling. Two research facts frame it:
+
+- ElevenLabs' own sample currency normalizer maps `$ £ € ¥` — **₩ is absent
+  from their own example code**. Non-big-four currencies are underserved by
+  normalization on every model.
+- Official troubleshooting: multilingual models "may mispronounce certain
+  words, even in English… especially words that also appear in other
+  languages." The homograph class is a known model behaviour.
+
+**Is v3 the fix? No.** v3 shares the English phonetic bias, drops break-tag
+support (§1), and its clone quality is officially not optimized. The one
+thing v3 adds — native inline IPA — is solvable on v2 by alias. Fix
+hierarchy, in order:
+
+1. **Writer-side spell-out** (§4) handles the *symbol*: "₩5,370T" never
+   reaches TTS; "five thousand three hundred seventy trillion won" does.
+2. **Scoped alias rules** handle the *homograph*: doc 22's designed fix —
+   `"trillion won"` → `"trillion wahn"` — scoped to the collocation so it
+   can never fire on "he won the race." Extend the same pattern per
+   currency-context: "billion won", "million won", "in won". Aliases work
+   on every model, including multilingual v2 (phoneme rules do not).
+3. **Doc 32 §1 doctrine backstop**: eliminate phonetic ambiguity at the
+   writing desk. Where a collision is structural (a currency literally
+   named "won"), prefer constructions that disambiguate by context —
+   "Korean won" on first mention gives the model its language cue.
+
+Model policy (§6) is unchanged by this finding.
+
 ## 5. Pronunciation — wire the dictionary we already version
 
 The repo schema is model-aware and correct: **phoneme rules** (IPA/CMU) work
@@ -114,7 +147,7 @@ Standard: maintain the dictionary as alias-first (aliases work everywhere),
 sync to ElevenLabs, and attach via `pronunciation_dictionary_locators`
 (max 3 per request) on every narration job. Finance-name candidates already
 observed: tickers ("AVAV" → "A-V-A-V" or "AeroVironment"), "SK hynix,"
-"KOSPI," "TSMC."
+"KOSPI," "TSMC," and the scoped won aliases from §4b / doc 22.
 
 ## 6. Model policy
 
