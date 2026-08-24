@@ -79,15 +79,27 @@ minute 2 and 14, and what are they called?"*
 Operator hypothesis going in: their prompting is really only about the opening,
 the close, hooks and CTAs. **Half confirmed.**
 
-### Confirmed: the templates stop before our runtime
+### Partly confirmed — CORRECTED 2026-08-24 after a second probe
 
-Both named long-form structures are timestamped only to roughly the 12-13
-minute mark before handing off to a CTA — one framed as a video essay
-(10-15 min), one as a framework reveal (12-15 min). **A 16-minute script is
-off the end of their map.** For our 16:21 cut their system prescribes nothing
-for the final three-plus minutes. The likely Tim answer to "rewrite our 16
-minutes" is *compress it to fit a template* — a formatting answer, not a
-structural one.
+The first probe surfaced only two long-form structures, both timestamped to
+roughly the 12-13 minute mark — a video essay (10-15 min) and a framework
+reveal (12-15 min) — and this doc originally recorded that a 16-minute script
+was "off the end of their map."
+
+**That was a retrieval artefact, not a fact.** A second probe surfaced further
+templates at longer runtimes (expose 15-20, documentary 12-20, true crime
+15-25) plus an explicit **length-tier system: T1 8-10 min, T2 12-18 min,
+T3 20+**. Our 16:21 cut sits inside T2 and IS covered — by documentary and
+expose shapes rather than by the essay/framework shapes that surfaced first.
+
+Two lessons: their long-form coverage is broader than one probe suggests, and
+**a single `ask_tim` query does not enumerate a topic** — the RAG returns a
+slice, so absence in one response is not evidence of absence. Re-probe before
+recording a ceiling.
+
+Their stated position on runtime is relevant to us at 16:21: match length to
+the story rather than the reverse, because padding for ad revenue "gets felt
+within 60 seconds and tanks retention." 
 
 ### Not confirmed: the middle is managed, by cadence rather than content
 
@@ -134,6 +146,61 @@ choice.
 Open follow-up: encode loop structure in `scene_evidence_timeline.v1` — a
 macro-loop id per scene with its open/close beats — so the generator can report
 loop count and spacing the way it now reports bare-plate gaps.
+
+## Production loop and analogy prompting — probed 2026-08-24
+
+Two operator hypotheses tested: (a) they prompt explicitly for analogies, for
+both scripts and image scenes; (b) the ~30-minute `write_script_v2` turnaround
+implies generating several script candidates and ranking them.
+
+### Analogies — not a named concept in the doctrine
+
+A direct probe (rules, counts, placement, whether analogy is prompted when
+explaining a mechanism the viewer cannot see) returned ten chunks, **none of
+which mention analogy or metaphor**. On a RAG that size, absence is the more
+likely reading than a miss.
+
+Caveat worth keeping: the doctrine base and the `write_script_v2` system prompt
+are different artefacts. Analogy may well be in the pipeline prompt without
+being in the course. One checkpoint would also produce analogies as a side
+effect without naming them — "easy to follow / no curse of knowledge for a
+fresh viewer."
+
+**Unresolved.** Testable later by inspecting analogy density in a delivered
+script rather than by asking.
+
+### Ranking — disconfirmed; the loop is linear refinement
+
+No variants, no candidate pools, no comparative scoring appear anywhere in the
+returned process. What exists is **three filter passes on a single draft**
+before it is recording-ready:
+
+1. **Red Tape Theory, four checkpoints** — Connecting Thread (one through-line
+   statable in a single sentence), Easy to Follow, Deep Identification,
+   Perspective Change.
+2. **The Never Repeat Rule / Highlighter Method** — highlight every concept in
+   the draft; cut or merge anything highlighted twice. Deliberate callbacks
+   stay, unconscious repetition is filler.
+3. **The "Would I Watch This?" test** — read the opening 50 words and the
+   mid-video rehook *out loud*.
+
+So the ~30 minutes is better explained by search-first research plus sequential
+passes plus queue time than by N-candidate ranking.
+
+**The hypothesis was off by one layer, not wrong.** We already recorded
+"pool-then-discard research" in the script comparison: they pool *facts* and
+select, then refine *one* script linearly. The generate-many-select pattern is
+real — it sits at the research stage, not the script stage.
+
+### Worth adopting
+
+- **The Never Repeat Rule** is the most directly implementable thing extracted
+  from `ask_tim` so far, and it is mechanical enough to automate: tag concepts
+  across a script, flag any that appear twice without being a marked callback.
+  Our `intentional_text` policy already establishes the marked-exception
+  pattern this would need.
+- **Connecting Thread** — one through-line statable in a single sentence — is a
+  cheap check we do not currently run on a script before it enters production.
 
 ## Verdict (running)
 
