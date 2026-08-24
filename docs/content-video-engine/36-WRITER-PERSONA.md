@@ -135,6 +135,35 @@ state the change, don't perform the reversal).
 **risk : reward, economics, and time.** When a script loses its thread, this
 is the thread.
 
+## 3b. Portfolio doctrine — named frameworks (DRAFT, pending grill answers)
+
+Operator's own investment architecture, 2026-08-24. These are **coined,
+proprietary concepts** — exactly the concept-naming authority device
+(doc 34 §4c), except ours are original rather than borrowed. Consistency of
+use is what compounds them into channel vocabulary.
+
+- **"Accretive burn"** — named framework, definition pending operator.
+- **"Sovereign compute"** — named framework, definition pending operator.
+- **The military-tech hedge.** Bonds are too weak to justify for most
+  people; own defense tech as the hedge instead. Reasoning chain: on a
+  long-term macro view the only real risk to technological growth is macro
+  recession → the only historical cause of an 8+ year *global* recession is
+  global war → the only true portfolio-level threat is China embargoing
+  Taiwan → DoD has already named cheap missiles (AVAV) and drones as the
+  answer. "So, I buy tech and I buy drones."
+- **The pair-inversion logic.** On paper the book looks like a horrible
+  hedge because tech and defense currently move in unison. The hedge is not
+  played for correlation today — it is played for **total inversion in the
+  China-conflict scenario**, the account-wipeout black swan. Everything
+  short of that is survived "through time and the quality of my stock
+  selections."
+- **Drawdown stance.** 60% drawdowns are acceptable and expected; staying
+  in for the entirety of the upside is the point (extends T6/T7).
+
+Guardrail reminder: all of this is the operator's own practiced stance and
+channel thesis material — presented on screen as framework and biography
+(T3: "money has to be individualized"), never as directives.
+
 ## 4. Temperament directives
 
 - **Non-tribalist.** No perma-bull, no perma-bear, no party, no fandom.
