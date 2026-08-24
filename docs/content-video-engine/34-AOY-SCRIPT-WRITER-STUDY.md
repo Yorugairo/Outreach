@@ -119,8 +119,9 @@ performance divergence, AI capex without demonstrated ROI, and AI builders
 at **20% of the S&P 500 against a 2–4% historical norm**. It is a direct
 competitor to the video we are planning, and it is a strong one.
 
-That changes its value: it is both a format reference *and* the best
-available benchmark for what our own video has to beat.
+That changes its value: it is both a format reference *and* the specific
+video our first answer-format piece should respond to
+([35-ANSWER-FORMAT-DOCTRINE.md](35-ANSWER-FORMAT-DOCTRINE.md)).
 
 ### Beat map
 
@@ -242,13 +243,21 @@ today, and what would change our mind.**
   credibility move in either script. A warning from someone who refuses to
   panic reads as analysis; the same warning from a perma-bear reads as noise.
 
-### Where our system still wins
+### On their sourcing — corrected 2026-08-24
 
-Both scripts carry unsourced headline constructions — a capex-to-GDP share,
-a wealth-share series, a "likely" causal attribution for the Great
-Depression — presented with the same confidence as the sourced figures. Our
-verbatim-figure extraction and `[verify]` gate are genuinely stronger, and
-that gap is the differentiator to make visible on screen.
+An earlier version of this section marked them down for presenting their own
+constructed series (capex-to-GDP share, wealth-share, causal attributions)
+without external citation. **That was a misread.** They have earned the
+track record that makes their own analysis a legitimate source tier, and
+consistency compounds it. See
+[35-ANSWER-FORMAT-DOCTRINE.md](35-ANSWER-FORMAT-DOCTRINE.md) §1 — our
+sourcing discipline is the bridge to that same standing, not a stick to beat
+them with.
+
+### Strategic consequence
+
+We do not race them; we answer them. The competitive read that used to live
+here is superseded by doc 35.
 
 ## 5. Findings
 
