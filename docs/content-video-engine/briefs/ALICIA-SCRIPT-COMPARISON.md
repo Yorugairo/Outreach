@@ -105,6 +105,64 @@ dispensary survives only as "handling cash all day."
 5. Shootability — how directly it maps to coverage slots in our pipeline
 6. AI-tell density — humanizer violations per 100 words
 
-## Verdict
+## Panel C landed — prediction scorecard (2026-08-24)
 
-Pending C.
+| Tell | Predicted | Actual | Score |
+| --- | --- | --- | --- |
+| Third-person vignette open | yes | "Two people are counting money…" | **HIT** |
+| Persona diluted to zero | yes | No "I" anywhere; dispensary is a set, not a biography | **HIT (the core bet)** |
+| ≥2 named-source stats | yes | Four (Comptroller, Marijuana Herald, ERD, LendingClub) | **HIT** |
+| Rhetorical-question re-hooks | yes | Declarative re-hooks instead ("Here is where the bonus ambushes him") | MISS |
+| Stock AI commentary line | yes | None; repetition device instead ("Fifty one years. Fifty one.") | MISS |
+| Compound-dollar math beat | yes | $200/mo → $60,000 off the finish line | **HIT** |
+| Soft CTA ending | yes | "Tell me in the comments… hit the like button" | **HIT** |
+| 10–15% AI-tell density | yes | Cleaner than predicted; genuinely decent prose | PARTIAL |
+
+5 hits, 1 partial, 2 misses — structure fully predicted; prose quality above
+the predicted floor.
+
+## Backend prompting, inferred from the output
+
+1. **Numbers written as words** ("two thousand twenty five", "two hundred and
+   forty five thousand") — the script is pre-formatted for TTS. Their writer
+   knows a voiceover pipeline sits downstream.
+2. **Verbatim quotation as policy armor** — claims embedded as literal quoted
+   sentences with dates and named sources, exactly matching the
+   advice-rules disclosure at submission. The writer is instructed to quote,
+   not paraphrase, anything factual.
+3. **Research is search-first, not primary-source** — the Comptroller figure
+   cites a Spectrum News reprint, not osc.ny.gov; the retirement model cites
+   a blog reproducing another blog's model; budtender wages cite The
+   Marijuana Herald. The researcher takes the first quotable credible-ish
+   hit. Our provenance gate would flag two of the six.
+4. **Pool-then-discard research** — the sources block lists a "Not used"
+   entry (IRS 280E cannabis-business guidance). The pipeline researches a
+   pool, the writer selects, the audit reports discards. Ironic detail: 280E
+   means they researched the dispensary-OWNER angle — the operator's actual
+   biography — and threw it away.
+5. **Reference-following is structural, not conceptual** — Alicia's video is
+   about stuff-vs-money; their script pivoted to savings-rate math and bonus
+   volatility. The "reading your references" stage extracted pacing, not the
+   thesis.
+
+## Four-way verdict
+
+- **Voice (the moat test):** A wins by construction; C scored zero first-person
+  sentences — the system erased the one non-replicable asset, as predicted.
+  D has her own signature; B predicted C's erasure exactly.
+- **Best single idea:** C, credit where due — "promises get signed in a good
+  year… priced at the top of the swing" (bonus volatility vs. fixed wage) is
+  genuinely sharp and worth adapting into A's rule two.
+- **Retention:** A plants and prices open loops; C's refrain ("a number small
+  enough to fit on a receipt") is good but its quote blocks read stiff aloud.
+- **Grounding:** C has real URLs but weak tiering; A is self-contained
+  arithmetic + one flagged claim.
+- **Shootability:** A maps 1:1 to coverage slots by design; C offers a
+  spreadsheet, a till, a drawer, a receipt — thin scene material.
+- **Extraction status:** complete. Adopt from C: TTS number-spelling, the
+  research-pool/discard pattern, the bonus-volatility insight. Everything
+  else we already do or do better.
+
+**$3,800/month verdict input:** the flagship's structure was predictable from
+one day of doctrine extraction; its genuinely good ideas are one-time
+learnings now recorded here.
