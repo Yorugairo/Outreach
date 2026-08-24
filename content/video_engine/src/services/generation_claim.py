@@ -273,7 +273,10 @@ automatic regeneration. Save each chosen original as
 
 Matte each chosen source to a true-alpha cutout (rembg or equivalent), trim to
 the subject's bounding box, pad onto a square transparent canvas with ~5%
-margin, and save as `objects/<asset_id>.png`.
+margin, then **resize the padded canvas to exactly 1024x1024 (LANCZOS)**
+unless the slot states another size — downscaling also cleans hard matte
+edges. Save as `objects/<asset_id>.png`. World-board slots that declare an
+override keep their stated landscape size and skip matting.
 
 ## Stage C — Self-judge the cutout (max {EXTRACTION_ATTEMPT_CAP} extraction attempts per slot)
 
@@ -287,6 +290,17 @@ margin, and save as `objects/<asset_id>.png`.
 If extraction fails {EXTRACTION_ATTEMPT_CAP} times on a good source, **deliver
 the source anyway** and list the cutout under `unresolved` — a delivered
 source is recoverable; a withheld one is not.
+
+## Prompt adaptation — permission with a boundary
+
+When an attempt fails your own judgment, you may **strengthen** the prompt
+before retrying: add emphasis, spatial constraints, density language, or
+clarifying description that pushes the result toward what the slot asks for.
+You may never weaken or drop the NEGATIVE block, never alter the STYLE or
+LIGHT blocks, and never change the subject itself. Record every adapted
+prompt verbatim in `approvals.json` under
+`"prompt_adaptations": {{"<asset_id>": ["<adapted prompt>"]}}` — the
+adaptations that worked become next batch's starting prompts.
 
 ## Stage D — Deliver
 

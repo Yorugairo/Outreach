@@ -159,3 +159,25 @@ def test_promotion_refuses_a_claim_from_another_root_or_branch(tmp_path, monkeyp
     monkeypatch.setattr(claims, "_run_git", lambda args, cwd: "some-other-branch")
     errors = verify_claim_matches_worktree(claim, root)
     assert any("some-other-branch" in e for e in errors)
+
+
+def test_the_work_order_grants_strengthen_only_prompt_adaptation(tmp_path):
+    """The agent may push prompts harder, never loosen the guardrails."""
+
+    claim = open_claim(_root(tmp_path), claim_id="adapt-probe", style_family="f",
+                       slots=SLOTS, env=_env(tmp_path))
+    order = render_work_order(claim)
+
+    assert "strengthen" in order
+    assert "never weaken or drop the NEGATIVE block" in order
+    assert "prompt_adaptations" in order
+
+
+def test_the_work_order_normalises_cutout_sizes(tmp_path):
+    """Exact-size resize after padding — the probe's tolerance gap, closed."""
+
+    claim = open_claim(_root(tmp_path), claim_id="size-probe", style_family="f",
+                       slots=SLOTS, env=_env(tmp_path))
+    order = render_work_order(claim)
+
+    assert "resize the padded canvas to exactly 1024x1024" in order
