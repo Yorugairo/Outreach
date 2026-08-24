@@ -721,8 +721,8 @@
     {
      "slide": "silicon-value-software-bubble-s02",
      "slot": 0,
-     "enter": 3.9,
-     "exit": 10.9,
+     "enter": 4.1,
+     "exit": 8.9,
      "badge_at": []
     }
    ]
@@ -747,8 +747,8 @@
     {
      "slide": "silicon-antidote-s11",
      "slot": 0,
-     "enter": 13.1,
-     "exit": 20.1,
+     "enter": 13.3,
+     "exit": 18.1,
      "badge_at": []
     }
    ]
@@ -773,15 +773,15 @@
     {
      "slide": "silicon-reality-gap-s12",
      "slot": 0,
-     "enter": 24.53,
-     "exit": 31.53,
+     "enter": 24.73,
+     "exit": 33.23,
      "badge_at": []
     },
     {
      "slide": "silicon-value-software-bubble-s03",
      "slot": 1,
-     "enter": 28.87,
-     "exit": 35.87,
+     "enter": 28.43,
+     "exit": 33.23,
      "badge_at": []
     }
    ]
@@ -806,8 +806,8 @@
     {
      "slide": "silicon-reality-gap-s04",
      "slot": 0,
-     "enter": 39.23,
-     "exit": 45.17,
+     "enter": 39.43,
+     "exit": 44.23,
      "badge_at": []
     }
    ]
@@ -832,8 +832,8 @@
     {
      "slide": "silicon-antidote-s15",
      "slot": 0,
-     "enter": 47.27,
-     "exit": 51.33,
+     "enter": 47.47,
+     "exit": 51.13,
      "badge_at": []
     }
    ]
@@ -858,8 +858,8 @@
     {
      "slide": "silicon-reality-gap-s02",
      "slot": 0,
-     "enter": 53.43,
-     "exit": 60.43,
+     "enter": 53.63,
+     "exit": 58.43,
      "badge_at": []
     }
    ]
@@ -884,15 +884,15 @@
     {
      "slide": "silicon-value-software-bubble-s13",
      "slot": 0,
-     "enter": 66.37,
-     "exit": 73.37,
+     "enter": 66.57,
+     "exit": 75.07,
      "badge_at": []
     },
     {
      "slide": "sovereign-memory-infrastructure-s14",
      "slot": 1,
-     "enter": 70.71,
-     "exit": 77.71,
+     "enter": 70.27,
+     "exit": 75.07,
      "badge_at": []
     }
    ]
@@ -917,8 +917,8 @@
     {
      "slide": "silicon-antidote-s03",
      "slot": 0,
-     "enter": 100.3,
-     "exit": 107.3,
+     "enter": 100.5,
+     "exit": 105.3,
      "badge_at": []
     }
    ]
@@ -943,8 +943,8 @@
     {
      "slide": "memory-supercycle-s08",
      "slot": 0,
-     "enter": 109.67,
-     "exit": 116.67,
+     "enter": 109.87,
+     "exit": 114.67,
      "badge_at": []
     }
    ]
@@ -969,15 +969,15 @@
     {
      "slide": "silicon-antidote-s10",
      "slot": 0,
-     "enter": 122.6,
-     "exit": 129.6,
+     "enter": 122.8,
+     "exit": 131.3,
      "badge_at": []
     },
     {
      "slide": "memory-supercycle-s14",
      "slot": 1,
-     "enter": 126.94,
-     "exit": 133.94,
+     "enter": 126.5,
+     "exit": 131.3,
      "badge_at": []
     }
    ]
@@ -1002,8 +1002,8 @@
     {
      "slide": "sovereign-memory-infrastructure-s11",
      "slot": 0,
-     "enter": 146.1,
-     "exit": 153.1,
+     "enter": 146.3,
+     "exit": 151.1,
      "badge_at": []
     }
    ]
@@ -1028,15 +1028,15 @@
     {
      "slide": "sovereign-memory-infrastructure-s10",
      "slot": 0,
-     "enter": 156.23,
-     "exit": 163.23,
+     "enter": 156.43,
+     "exit": 164.93,
      "badge_at": []
     },
     {
      "slide": "memory-supercycle-s02",
      "slot": 1,
-     "enter": 160.57,
-     "exit": 167.57,
+     "enter": 160.13,
+     "exit": 164.93,
      "badge_at": []
     }
    ]
@@ -1061,18 +1061,18 @@
     {
      "slide": "silicon-value-software-bubble-s07",
      "slot": 0,
-     "enter": 179.6,
-     "exit": 186.6,
+     "enter": 179.8,
+     "exit": 188.3,
      "badge_at": []
     },
     {
      "slide": "memory-supercycle-s03",
      "slot": 1,
-     "enter": 183.94,
-     "exit": 190.94,
+     "enter": 183.5,
+     "exit": 188.3,
      "badge_at": [
-      185.44,
-      186.94
+      184.8,
+      186.1
      ]
     }
    ]
@@ -1097,15 +1097,15 @@
     {
      "slide": "sovereign-memory-infrastructure-s09",
      "slot": 0,
-     "enter": 211.67,
-     "exit": 218.67,
+     "enter": 211.87,
+     "exit": 220.37,
      "badge_at": []
     },
     {
      "slide": "silicon-reality-gap-s15",
      "slot": 1,
-     "enter": 216.01,
-     "exit": 223.01,
+     "enter": 215.57,
+     "exit": 220.37,
      "badge_at": []
     }
    ]
@@ -1130,15 +1130,15 @@
     {
      "slide": "silicon-value-software-bubble-s11",
      "slot": 0,
-     "enter": 241.17,
-     "exit": 248.17,
+     "enter": 241.37,
+     "exit": 249.87,
      "badge_at": []
     },
     {
      "slide": "silicon-antidote-s09",
      "slot": 1,
-     "enter": 245.51,
-     "exit": 252.51,
+     "enter": 245.07,
+     "exit": 249.87,
      "badge_at": []
     }
    ]
@@ -1163,8 +1163,8 @@
     {
      "slide": "memory-supercycle-s10",
      "slot": 0,
-     "enter": 288.13,
-     "exit": 295.13,
+     "enter": 288.33,
+     "exit": 293.13,
      "badge_at": []
     }
    ]

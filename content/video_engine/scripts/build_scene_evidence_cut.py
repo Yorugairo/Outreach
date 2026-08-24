@@ -38,10 +38,20 @@ V3_PROPS = PILOT / "five-minute-semantic-demo-v3/render/current-bubble-five-minu
 OUT = Path(__file__).parent
 ASSETS = OUT / "assets"
 
-# A document is a guest, not a tenant: it draws on, is read, and leaves.
-DOCK_REVEAL = 1.05   # hand-led wipe
-DOCK_HOLD_MAX = 7.0  # total time on screen, reveal included
-DOCK_EXIT = 0.55
+# Choreographic rhythm, matched to the reference cut:
+#   world intro -> card 1 -> badge -> badge -> SETTLE -> card 2 -> badge ->
+#   badge -> SAVOR (whole board) -> wipe
+# A document is still a guest, not a tenant. A solo card caps at 7s. A paired
+# build runs longer so both proofs can sit together for the savour beat --
+# without it the first card leaves before the second finishes building and the
+# viewer never sees the pair.
+INTRO = 1.7          # world plate alone before any evidence
+BADGE_1 = 1.3        # first badge, after the card settles
+BADGE_2 = 2.6        # second badge
+SETTLE = 1.1         # beat to read card 1 before card 2 arrives
+SAVOR = 2.2          # whole board held after the last badge
+DOCK_HOLD_SOLO = 7.0
+DOCK_EXIT = 0.72
 
 KB_CYCLE = [
     {"scale": 0.085, "x": -22, "y": -10},
@@ -240,6 +250,14 @@ def build(spine, cat, weights) -> dict:
 
         span = end - start
         docks = []
+        # lay the cadence out first so both cards can share the savour beat
+        e1 = start + INTRO
+        e2 = e1 + BADGE_2 + SETTLE
+        last_badge = (e2 if len(picks) > 1 else e1) + BADGE_2
+        board_end = min(last_badge + SAVOR, end - 0.8)
+        if len(picks) == 1:
+            board_end = min(board_end, e1 + DOCK_HOLD_SOLO)
+
         for slot, s in enumerate(picks):
             badges = VERIFIED_BADGES.get(s["slide_id"], [])
             evidence[s["slide_id"]] = {
@@ -249,18 +267,16 @@ def build(spine, cat, weights) -> dict:
                 "badges": [dict(b, verbatim_in_document=True) for b in badges],
                 "match_score": s.get("_score"),
             }
-            # stagger entries; each dock lives at most DOCK_HOLD_MAX and must
-            # be gone before the scene's exit transition (evidence-free boundary)
-            enter = start + 1.5 + slot * min(DOCK_HOLD_MAX * 0.62, span * 0.42)
-            exit_at = min(enter + DOCK_HOLD_MAX, end - 0.6)
-            if exit_at - enter < 2.2:
+            enter = e1 if slot == 0 else e2
+            exit_at = board_end          # the board clears as one, after the savour
+            if exit_at - enter < 2.4:
                 continue
             docks.append({
                 "slide": s["slide_id"], "slot": slot,
                 "enter": round(enter, 2), "exit": round(exit_at, 2),
-                "badge_at": [round(enter + DOCK_REVEAL + 0.45 + 1.5 * i, 2)
-                             for i in range(min(2, len(badges)))
-                             if enter + DOCK_REVEAL + 0.45 + 1.5 * i < exit_at - 0.7],
+                "badge_at": [round(enter + b, 2)
+                             for b in (BADGE_1, BADGE_2)[:min(2, len(badges))]
+                             if enter + b < exit_at - 0.6],
             })
 
         scenes.append({

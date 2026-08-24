@@ -21,13 +21,27 @@
 
   .world { position: absolute; inset: -5%; background-size: cover; background-position: center; will-change: transform, clip-path; }
 
+  /* Regional shading, not a global dim. The world half stays fully lit;
+     darkening only begins around the midpoint and deepens toward whichever
+     side the evidence occupies. --wx is the evidence side (0 = left, 1 =
+     right) and --sx/--sy locate the spotlight on the active card. */
   #wash {
     position: absolute; inset: 0; opacity: 0; pointer-events: none;
-    background: linear-gradient(to bottom, rgba(5,19,30,0) 6%, rgba(5,19,30,.20) 20%,
-                rgba(5,19,30,.34) 52%, rgba(5,19,30,.30) 78%, rgba(5,19,30,.46) 100%);
+    background: linear-gradient(var(--wdir, 90deg),
+                rgba(5,19,30,0) 0%, rgba(5,19,30,0) 44%,
+                rgba(5,19,30,.34) 68%, rgba(5,19,30,.62) 100%);
     transition: opacity .75s cubic-bezier(.16,1,.3,1);
   }
   #wash.on { opacity: 1; }
+  /* spotlight: clear over the card, falling off into the surround */
+  #spot {
+    position: absolute; inset: 0; opacity: 0; pointer-events: none;
+    background: radial-gradient(58% 62% at var(--sx, 50%) var(--sy, 50%),
+                rgba(5,19,30,0) 0%, rgba(5,19,30,0) 46%,
+                rgba(5,19,30,.26) 78%, rgba(5,19,30,.44) 100%);
+    transition: opacity .75s cubic-bezier(.16,1,.3,1);
+  }
+  #spot.on { opacity: 1; }
 
   .dock {
     position: absolute; top: 226px; width: 720px;
@@ -38,7 +52,10 @@
     opacity: 0;
     will-change: opacity, transform, clip-path;
   }
-  .dock.solo { width: 940px; left: 490px; top: 196px; }
+  /* ID-scoped: #dock-1's own left rule would otherwise outrank a class chain */
+  #dock-1.solo { width: 880px; top: 196px; }
+  #dock-1.solo.side-r { left: 940px; }
+  #dock-1.solo.side-l { left: 100px; }
   #dock-1 { left: 136px; } #dock-2 { left: 1064px; }
 
   .dock-head { margin-bottom: 9px; }
@@ -58,10 +75,14 @@
 
   .rail { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; margin-top: 11px; }
   .rail.single { grid-template-columns: 1fr; }
+  /* Badges SPRING in: a back-out curve overshoots ~4% and settles. A pure
+     decay curve reads as a fade; the small overshoot is what makes the pill
+     land like a stamp. */
   .pill { background: rgba(37,49,60,.94); border-radius: 7px; padding: 8px 11px; display: flex; flex-direction: column;
-          opacity: 0; transform: translateY(13px);
-          transition: opacity .6s cubic-bezier(.16,1,.3,1), transform .6s cubic-bezier(.16,1,.3,1); }
-  .pill.on { opacity: 1; transform: none; }
+          opacity: 0; transform: translateY(15px) scale(.9);
+          transition: opacity .34s cubic-bezier(.16,1,.3,1),
+                      transform .58s cubic-bezier(.34,1.56,.64,1); }
+  .pill.on { opacity: 1; transform: translateY(0) scale(1); }
   .dock.solo .rail { grid-template-columns: 1fr 1fr; }
   .pill-label { font-size: 13px; font-weight: 700; letter-spacing: .08em; color: #9fb4c4; }
   .pill-row { display: flex; align-items: baseline; gap: 9px; margin-top: 3px; }
@@ -101,6 +122,7 @@
   <div class="world" id="wA"></div>
   <div class="world" id="wB"></div>
   <div id="wash"></div>
+  <div id="spot"></div>
 
   <div class="dock" id="dock-1">
     <div class="dock-head"><span class="dock-title" id="t1"></span></div>
@@ -218,13 +240,31 @@
     /* LAYER 2/3 — docks live on their own schedule */
     const live = DOCKS.filter((d) => t >= d.enter && t < d.exit + EXIT);
     wash.classList.toggle("on", live.length > 0);
+    spot.classList.toggle("on", live.length > 0);
+
+    /* Which side does the evidence occupy? A solo card alternates sides by
+       scene so the world is not always cropped the same way; a pair spans
+       the frame, so the gradient runs bottom-up instead of sideways. */
+    const soloRight = si % 2 === 0;
+    if (live.length === 1) {
+      wash.style.setProperty("--wdir", soloRight ? "90deg" : "270deg");
+      spot.style.setProperty("--sx", soloRight ? "72%" : "28%");
+      spot.style.setProperty("--sy", "46%");
+    } else if (live.length > 1) {
+      wash.style.setProperty("--wdir", "180deg");
+      spot.style.setProperty("--sx", "50%");
+      spot.style.setProperty("--sy", "44%");
+    }
 
     for (let s = 0; s < 2; s++) {
       const d = live.find((x) => x.slot === s);
       const el = docks[s];
       if (!d) { el.style.opacity = 0; el.style.clipPath = "inset(0 100% 0 0)"; continue; }
       if (d.slide !== shown[s]) { fillDock(s, d.slide); shown[s] = d.slide; }
-      el.classList.toggle("solo", live.length === 1 && s === 0);
+      const solo = live.length === 1 && s === 0;
+      el.classList.toggle("solo", solo);
+      el.classList.toggle("side-r", solo && soloRight);
+      el.classList.toggle("side-l", solo && !soloRight);
 
       /* Card settle — the whole entrance. The document is simply present on
          the card; no mask, no drawing hand. Reference timing: a 0.75s

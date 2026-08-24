@@ -677,3 +677,55 @@ does not earn its place decorating a stamped slide.
 the cut and simplified the render to CSS-driveable transforms — relevant for
 the Remotion port, where a serpentine SVG mask plus a per-frame
 `getPointAtLength` follower is meaningfully more work than a transform.
+
+### 8.18 Regional shading, and the choreographic rhythm
+
+Two corrections from review, both about restraint rather than mechanism.
+
+**Shading is regional, never global.** The bottom-banded wash darkened the
+whole frame including the half doing narrative work. Replaced with two
+layers that only touch the evidence region:
+
+1. **Directional gradient** — fully clear to 44% of the frame, then deepening
+   to `rgba(5,19,30,.62)` at the evidence side. Nothing darkens until past
+   the midpoint, so the world half is untouched.
+2. **Radial spotlight** — clear to 46% of a `58% x 62%` ellipse centred on
+   the active card, falling to `.44` at the edges. The card sits in light and
+   the surround recedes.
+
+Consequence for layout: a solo card **anchors to a side** rather than
+centring, so the gradient has a direction to run toward. Sides alternate by
+scene index so the world is not always cropped the same way. A paired build
+spans the frame, so its gradient runs bottom-up and the spotlight centres.
+
+**The badge spring was missing.** Pills used the same expo-out decay as the
+card, which reads as a fade. They now use a back-out curve —
+`cubic-bezier(.34,1.56,.64,1)` over 0.58s from `translateY(15px) scale(.9)` —
+overshooting about 4% before settling. The overshoot is what makes a pill
+land like a stamp; the opacity still rides a plain 0.34s decay so only the
+motion springs, not the ink.
+
+**The cadence now matches the reference rhythm**, including the two beats
+that were missing entirely:
+
+| beat | duration |
+| --- | --- |
+| world plate alone | 1.7s |
+| card 1 settles | -> |
+| badge 1a | +1.3s |
+| badge 1b | +2.6s |
+| **settle — read card 1** | **1.1s** |
+| card 2 enters (card 1 stays) | -> |
+| badge 2a / 2b | +1.3 / +2.6s |
+| **savour — whole board** | **2.2s** |
+| wipe | 0.62s |
+
+The settle and savour beats are the difference between a build that reads as
+a sequence of arrivals and one that reads as an argument being assembled and
+then presented.
+
+**Hold-time exception.** A solo card still caps at 7s (8.9). A *paired* build
+now runs to a shared `board_end` — both cards clear together after the savour
+— which can reach ~8.5s for the first card. Without that, card 1 exits while
+card 2 is still building and the viewer never sees the pair, which is the
+whole point of a two-dock scene.
