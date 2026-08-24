@@ -6,14 +6,596 @@
   "canonical_hash": "0000000000000000000000000000000000000000000000000000000000000000",
   "words_path": "edit/semantic-v2/words.json"
  },
+ "captions": [
+  {
+   "at": 0.0,
+   "until": 2.4,
+   "text": "The market may be labeling the wrong bubble."
+  },
+  {
+   "at": 2.4,
+   "until": 5.77,
+   "text": "AI memory stocks have gone vertical and the earnings numbers"
+  },
+  {
+   "at": 5.77,
+   "until": 9.53,
+   "text": "look almost fake. That is normally where sensible people step"
+  },
+  {
+   "at": 9.53,
+   "until": 12.87,
+   "text": "back and say: bubble. But underneath the chart"
+  },
+  {
+   "at": 12.87,
+   "until": 15.47,
+   "text": "is a product customers cannot get enough of,"
+  },
+  {
+   "at": 15.47,
+   "until": 19.07,
+   "text": "factories that cannot expand quickly enough, and buyers signing"
+  },
+  {
+   "at": 19.07,
+   "until": 23.03,
+   "text": "multi-year take-or-pay contracts just to guarantee supply."
+  },
+  {
+   "at": 23.03,
+   "until": 25.67,
+   "text": "Meanwhile, the trade marketed as boring and"
+  },
+  {
+   "at": 25.67,
+   "until": 28.6,
+   "text": "diversified\u2014the S&P 500 index"
+  },
+  {
+   "at": 28.6,
+   "until": 31.97,
+   "text": "fund\u2014has nearly forty percent of its weight concentrated in"
+  },
+  {
+   "at": 31.97,
+   "until": 35.7,
+   "text": "ten companies, while automatic contributions keep buying them"
+  },
+  {
+   "at": 35.7,
+   "until": 39.13,
+   "text": "because they are already the biggest. So here is the argument:"
+  },
+  {
+   "at": 39.13,
+   "until": 42.1,
+   "text": "the memory trade can absolutely correct."
+  },
+  {
+   "at": 42.1,
+   "until": 45.77,
+   "text": "It can become overpriced. It can still be brutally cyclical."
+  },
+  {
+   "at": 45.77,
+   "until": 49.87,
+   "text": "But what we are seeing today looks more like a physical bottleneck being repriced"
+  },
+  {
+   "at": 49.87,
+   "until": 53.03,
+   "text": "than a demand-free fantasy. Bubble logic may be"
+  },
+  {
+   "at": 53.03,
+   "until": 56.17,
+   "text": "hiding inside the thing investors stopped examining because"
+  },
+  {
+   "at": 56.17,
+   "until": 58.03,
+   "text": "they were told it was safe."
+  },
+  {
+   "at": 58.03,
+   "until": 61.57,
+   "text": "A bubble is not \u201ca price went up a lot.\u201d"
+  },
+  {
+   "at": 61.57,
+   "until": 64.87,
+   "text": "That is a symptom, not a diagnosis."
+  },
+  {
+   "at": 64.87,
+   "until": 68.73,
+   "text": "A real bubble forms when the price increasingly depends on the belief that"
+  },
+  {
+   "at": 68.73,
+   "until": 71.8,
+   "text": "somebody else will pay more, while the cash flow,"
+  },
+  {
+   "at": 71.8,
+   "until": 74.8,
+   "text": "productive use, or scarcity underneath it cannot"
+  },
+  {
+   "at": 74.8,
+   "until": 78.93,
+   "text": "keep up. Think of two elevators rising at the same speed."
+  },
+  {
+   "at": 78.93,
+   "until": 82.77,
+   "text": "One is being pulled by a steel cable. The other is rising because"
+  },
+  {
+   "at": 82.77,
+   "until": 86.17,
+   "text": "everyone inside jumped at once. The chart looks identical"
+  },
+  {
+   "at": 86.17,
+   "until": 89.8,
+   "text": "for half a second. The mechanism is completely different."
+  },
+  {
+   "at": 89.8,
+   "until": 92.83,
+   "text": "So we need to look under both elevators. For memory,"
+  },
+  {
+   "at": 92.83,
+   "until": 97.3,
+   "text": "the cables are demand, capacity, contracts, and cash flow."
+  },
+  {
+   "at": 97.3,
+   "until": 100.97,
+   "text": "For the S&P 500 complex, the question is whether diversification"
+  },
+  {
+   "at": 100.97,
+   "until": 104.2,
+   "text": "has quietly become concentration\u2014and whether automatic"
+  },
+  {
+   "at": 104.2,
+   "until": 108.17,
+   "text": "demand is helping investors ignore the price of that concentration."
+  },
+  {
+   "at": 108.17,
+   "until": 111.3,
+   "text": "Start with the product. High-bandwidth memory,"
+  },
+  {
+   "at": 111.3,
+   "until": 113.97,
+   "text": "or HBM, is not ordinary storage."
+  },
+  {
+   "at": 113.97,
+   "until": 117.7,
+   "text": "It is stacked working memory placed beside an AI accelerator so"
+  },
+  {
+   "at": 117.7,
+   "until": 121.1,
+   "text": "enormous amounts of data can reach the processor quickly."
+  },
+  {
+   "at": 121.1,
+   "until": 123.9,
+   "text": "Plain English: the GPU may be the engine,"
+  },
+  {
+   "at": 123.9,
+   "until": 126.93,
+   "text": "but HBM is the pressure-rated fuel system."
+  },
+  {
+   "at": 126.93,
+   "until": 130.77,
+   "text": "Build a larger engine without widening the fuel line and the expensive engine"
+  },
+  {
+   "at": 130.77,
+   "until": 134.07,
+   "text": "sits there starving. That is why every serious AI"
+  },
+  {
+   "at": 134.07,
+   "until": 137.57,
+   "text": "architecture\u2014whether it uses GPUs, custom accelerators,"
+  },
+  {
+   "at": 137.57,
+   "until": 141.03,
+   "text": "or specialized processors\u2014has to solve memory bandwidth and"
+  },
+  {
+   "at": 141.03,
+   "until": 144.6,
+   "text": "capacity. And this is where the shortage becomes physical."
+  },
+  {
+   "at": 144.6,
+   "until": 148.4,
+   "text": "HBM competes for advanced wafers, clean-room space,"
+  },
+  {
+   "at": 148.4,
+   "until": 151.37,
+   "text": "packaging capacity, equipment, engineers,"
+  },
+  {
+   "at": 151.37,
+   "until": 154.73,
+   "text": "and time. New generations also use"
+  },
+  {
+   "at": 154.73,
+   "until": 157.9,
+   "text": "larger dies and more complicated stacks."
+  },
+  {
+   "at": 157.9,
+   "until": 160.97,
+   "text": "Imagine a bakery with a fixed number of ovens."
+  },
+  {
+   "at": 160.97,
+   "until": 163.77,
+   "text": "Yesterday it made simple loaves. Today its most"
+  },
+  {
+   "at": 163.77,
+   "until": 166.9,
+   "text": "valuable customer wants twelve-layer wedding cakes."
+  },
+  {
+   "at": 166.9,
+   "until": 170.9,
+   "text": "Each cake earns more, but it also occupies more oven space,"
+  },
+  {
+   "at": 170.9,
+   "until": 174.6,
+   "text": "takes longer, and has more opportunities to fail."
+  },
+  {
+   "at": 174.6,
+   "until": 178.1,
+   "text": "Producing more cakes can mean producing fewer loaves."
+  },
+  {
+   "at": 178.1,
+   "until": 181.77,
+   "text": "As manufacturers devote more capacity to HBM,"
+  },
+  {
+   "at": 181.77,
+   "until": 185.13,
+   "text": "they also pressure conventional DRAM supply."
+  },
+  {
+   "at": 185.13,
+   "until": 189.3,
+   "text": "The AI boom pulls the same production system toward more complex products."
+  },
+  {
+   "at": 189.3,
+   "until": 192.6,
+   "text": "Micron says HBM\u2019s growing trade ratio is pressuring"
+  },
+  {
+   "at": 192.6,
+   "until": 196.2,
+   "text": "non-HBM supply and new fabs take years."
+  },
+  {
+   "at": 196.2,
+   "until": 199.73,
+   "text": "Samsung says concentrating capacity on HBM and server"
+  },
+  {
+   "at": 199.73,
+   "until": 203.57,
+   "text": "products limits cutting-edge supply for PCs and phones."
+  },
+  {
+   "at": 203.57,
+   "until": 206.37,
+   "text": "This is not proof that any stock price is fair."
+  },
+  {
+   "at": 206.37,
+   "until": 210.17,
+   "text": "It is proof that the underlying shortage is not imaginary."
+  },
+  {
+   "at": 210.17,
+   "until": 213.23,
+   "text": "Now look at buyer behavior. In a classic commodity"
+  },
+  {
+   "at": 213.23,
+   "until": 217.13,
+   "text": "memory cycle, suppliers add capacity, prices spike,"
+  },
+  {
+   "at": 217.13,
+   "until": 221.8,
+   "text": "everybody gets excited, too much supply arrives, and margins collapse."
+  },
+  {
+   "at": 221.8,
+   "until": 225.47,
+   "text": "That history is the strongest argument against this entire video."
+  },
+  {
+   "at": 225.47,
+   "until": 228.27,
+   "text": "But customers are behaving differently this time."
+  },
+  {
+   "at": 228.27,
+   "until": 231.87,
+   "text": "Micron says it has completed sixteen strategic customer"
+  },
+  {
+   "at": 231.87,
+   "until": 236.4,
+   "text": "agreements across data centers, consumer devices, and automotive markets."
+  },
+  {
+   "at": 236.4,
+   "until": 239.67,
+   "text": "Most run for five years. They cover roughly twenty percent of"
+  },
+  {
+   "at": 239.67,
+   "until": 242.8,
+   "text": "its DRAM volume and one-third of its NAND volume over"
+  },
+  {
+   "at": 242.8,
+   "until": 246.27,
+   "text": "the contract period. They are take-or-pay agreements: buyers commit"
+  },
+  {
+   "at": 246.27,
+   "until": 249.97,
+   "text": "to specific volumes rather than casually promising they might show up"
+  },
+  {
+   "at": 249.97,
+   "until": 253.4,
+   "text": "later. Translation: customers are reserving"
+  },
+  {
+   "at": 253.4,
+   "until": 255.73,
+   "text": "oven time through 2030."
+  },
+  {
+   "at": 255.73,
+   "until": 259.13,
+   "text": "SK hynix reported record first-quarter performance driven by"
+  },
+  {
+   "at": 259.13,
+   "until": 263.53,
+   "text": "AI memory, high-capacity server DRAM, and enterprise SSDs,"
+  },
+  {
+   "at": 263.53,
+   "until": 267.07,
+   "text": "while saying demand exceeded supply capacity."
+  },
+  {
+   "at": 267.07,
+   "until": 270.27,
+   "text": "Samsung began commercial HBM4 shipments and expects"
+  },
+  {
+   "at": 270.27,
+   "until": 273.83,
+   "text": "its HBM sales to more than triple in 2026."
+  },
+  {
+   "at": 273.83,
+   "until": 277.3,
+   "text": "Company guidance is not gospel. But contracts, shipments,"
+  },
+  {
+   "at": 277.3,
+   "until": 280.3,
+   "text": "and reported revenue are stronger evidence than clicks,"
+  },
+  {
+   "at": 280.3,
+   "until": 283.33,
+   "text": "token prices, or a pitch deck promising a market that does"
+  },
+  {
+   "at": 283.33,
+   "until": 286.63,
+   "text": "not exist. That is why I would call this a bottleneck boom"
+  },
+  {
+   "at": 286.63,
+   "until": 288.33,
+   "text": "before I call it a bubble."
+  },
+  {
+   "at": 288.33,
+   "until": 291.0,
+   "text": "This is also bigger than three memory companies."
+  },
+  {
+   "at": 291.0,
+   "until": 294.5,
+   "text": "The world economy is reorganizing around strategic chokepoints:"
+  },
+  {
+   "at": 294.5,
+   "until": 298.0,
+   "text": "advanced chips, memory, packaging, power equipment, robotics,"
+  },
+  {
+   "at": 298.0,
+   "until": 300.0,
+   "text": "and defense technology. Capital markets are beginning to raise"
+  }
+ ],
  "evidence": {
-  "hbm-stack-v1": {
-   "title": "The Physical Memory Stack",
+  "silicon-reality-gap-s12": {
+   "title": "The S&P 500 Paper Bubble Mechanics",
    "document": {
-    "path": "current-bubble-fresh-60s-v1/hbm-stack-v1.png",
-    "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+    "path": "silicon-reality-gap/slides/slide-012.png",
+    "sha256": "2718244eb2acdab57072e9bbabb6dd94058b6aa7e934096dff81e84bbceb3527"
    },
-   "source": "Episode evidence pack",
+   "source": "Silicon Reality Gap &middot; slide 12",
+   "badges": []
+  },
+  "silicon-antidote-s11": {
+   "title": "Locking Down the Financial Paradigm",
+   "document": {
+    "path": "silicon-antidote/slides/slide-011.png",
+    "sha256": "22fab40b2424fe8c3e7844e738e92839d6d966d03215a304cec3910e31b24157"
+   },
+   "source": "Silicon Antidote &middot; slide 11",
+   "badges": []
+  },
+  "silicon-antidote-s03": {
+   "title": "Flashing Red on Extreme Concentration",
+   "document": {
+    "path": "silicon-antidote/slides/slide-003.png",
+    "sha256": "f6b2f59f0672ebb731945014b02a61ea58602ce5ce7238bac7f2bca84c8deef5"
+   },
+   "source": "Silicon Antidote &middot; slide 03",
+   "badges": []
+  },
+  "silicon-value-software-bubble-s02": {
+   "title": "The Earnings Concentration Funnel",
+   "document": {
+    "path": "silicon-value-software-bubble/slides/slide-002.png",
+    "sha256": "d67068386c5020298e1cdd6e89d7a7c86dbe0c1df315f90966160f5c3c8caff9"
+   },
+   "source": "Silicon Value Software Bubble &middot; slide 02",
+   "badges": []
+  },
+  "silicon-reality-gap-s04": {
+   "title": "The Market\u2019s Cyclical Trauma",
+   "document": {
+    "path": "silicon-reality-gap/slides/slide-004.png",
+    "sha256": "6bda70a74a3d4b0b03d569cb6f666e89bf957167146ec4adaefc8701fee0828d"
+   },
+   "source": "Silicon Reality Gap &middot; slide 04",
+   "badges": []
+  },
+  "silicon-value-software-bubble-s01": {
+   "title": "The Physical Bottleneck versus the Software Bubble",
+   "document": {
+    "path": "silicon-value-software-bubble/slides/slide-001.png",
+    "sha256": "f1ed89a0a8955464d59f569e82716498d2e22c13aac083ec7098244030f55506"
+   },
+   "source": "Silicon Value Software Bubble &middot; slide 01",
+   "badges": []
+  },
+  "silicon-antidote-s10": {
+   "title": "Welcome to RAM-ageddon",
+   "document": {
+    "path": "silicon-antidote/slides/slide-010.png",
+    "sha256": "97de14b862c64cc704f2c336b23cf90de994672fabad625499ecb0f8dc84d1d2"
+   },
+   "source": "Silicon Antidote &middot; slide 10",
+   "badges": []
+  },
+  "silicon-value-software-bubble-s13": {
+   "title": "Cash Generation versus Paper Gains",
+   "document": {
+    "path": "silicon-value-software-bubble/slides/slide-013.png",
+    "sha256": "4f2edf3d15b97efd82058c646c55d46a532fab99d22243e26af9515c64e2383b"
+   },
+   "source": "Silicon Value Software Bubble &middot; slide 13",
+   "badges": []
+  },
+  "silicon-silent-triopoly-s04": {
+   "title": "The Capital Cycle Meat Grinder",
+   "document": {
+    "path": "silicon-silent-triopoly/slides/slide-004.png",
+    "sha256": "640e605b59d87fe2f9f914f700958c2a6603525c3909fa23a7728c69e2818a4d"
+   },
+   "source": "Silicon Silent Triopoly &middot; slide 04",
+   "badges": []
+  },
+  "sovereign-memory-infrastructure-s05": {
+   "title": "The Geographic Monopoly",
+   "document": {
+    "path": "sovereign-memory-infrastructure/slides/slide-005.png",
+    "sha256": "7c6aa4b3dc3ece200956b43e5ae21f7df3042659e731be9a732905459f802f58"
+   },
+   "source": "Sovereign Memory Infrastructure &middot; slide 05",
+   "badges": []
+  },
+  "memory-supercycle-s08": {
+   "title": "Bridging the AI Bandwidth Gap",
+   "document": {
+    "path": "memory-supercycle/slides/slide-008.png",
+    "sha256": "f3bc1a627ae812171e67d062a8a21e1363ae9655b180a65d2217e52c30cc0b23"
+   },
+   "source": "Memory Supercycle &middot; slide 08",
+   "badges": []
+  },
+  "silicon-antidote-s07": {
+   "title": "The AI Catalyst: Breaking the Physical Bottleneck",
+   "document": {
+    "path": "silicon-antidote/slides/slide-007.png",
+    "sha256": "ec4ab5765ec0dec26e58e57f574e3308986135973a49f07b9f67837e6efedbcb"
+   },
+   "source": "Silicon Antidote &middot; slide 07",
+   "badges": []
+  },
+  "silicon-value-software-bubble-s07": {
+   "title": "HBM Breaks the Historical Commodity Pattern",
+   "document": {
+    "path": "silicon-value-software-bubble/slides/slide-007.png",
+    "sha256": "f2a4e23624bfdb1fd8e6213c3249c4fcb56f20c8b95f66fb0b6cf278ed10c760"
+   },
+   "source": "Silicon Value Software Bubble &middot; slide 07",
+   "badges": []
+  },
+  "sovereign-memory-infrastructure-s11": {
+   "title": "Trend Two: The Advanced Packaging Bottleneck",
+   "document": {
+    "path": "sovereign-memory-infrastructure/slides/slide-011.png",
+    "sha256": "79cbf336da9ead663ca91107f0ef4dbb1d8b5746e7ab1871b46973e9daa972a3"
+   },
+   "source": "Sovereign Memory Infrastructure &middot; slide 11",
+   "badges": []
+  },
+  "silicon-value-software-bubble-s09": {
+   "title": "Connecting the Dies Is the Hardest Step",
+   "document": {
+    "path": "silicon-value-software-bubble/slides/slide-009.png",
+    "sha256": "111981562d88f37e7c6e444ac7b38ac1338d960b9170e946c09fe9b6c8d9eabf"
+   },
+   "source": "Silicon Value Software Bubble &middot; slide 09",
+   "badges": []
+  },
+  "sovereign-memory-infrastructure-s03": {
+   "title": "The Nine-Layer Compute Stack",
+   "document": {
+    "path": "sovereign-memory-infrastructure/slides/slide-003.png",
+    "sha256": "8a1d3727d17881784b1abbc83f1d01f93298877bf592f093daa72d3728010899"
+   },
+   "source": "Sovereign Memory Infrastructure &middot; slide 03",
    "badges": [
     {
      "label": "HBM POSITION",
@@ -21,17 +603,40 @@
      "tag": "BELOW SILICON",
      "accent": "cobalt",
      "verbatim_in_document": true
+    },
+    {
+     "label": "THERMAL ENVELOPE",
+     "value": "1500W",
+     "tag": "LIQUID COOLED",
+     "accent": "sunflower",
+     "verbatim_in_document": true
     }
    ]
   },
-  "capacity-penalty-v1": {
-   "title": "The Capacity Penalty",
+  "silicon-antidote-s09": {
+   "title": "The Three-to-One Capacity Penalty",
    "document": {
-    "path": "current-bubble-fresh-60s-v1/capacity-penalty-v1.png",
-    "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+    "path": "silicon-antidote/slides/slide-009.png",
+    "sha256": "979d3b9bdb5d190c5b3a5d56935ccb39a968d960d591235b870e2b428acdd66c"
    },
-   "source": "Episode evidence pack",
+   "source": "Silicon Antidote &middot; slide 09",
+   "badges": []
+  },
+  "memory-supercycle-s03": {
+   "title": "The Root of the Shortage: The Three-to-One Physics Penalty",
+   "document": {
+    "path": "memory-supercycle/slides/slide-003.png",
+    "sha256": "cd42f4b52741cdab138948edbd5aaa101d0a283c044549a16a7ac8fd50a46c35"
+   },
+   "source": "Memory Supercycle &middot; slide 03",
    "badges": [
+    {
+     "label": "HBM WAFER SHARE",
+     "value": "18% \u2192 23%",
+     "tag": "2025\u20132026",
+     "accent": "sunflower",
+     "verbatim_in_document": true
+    },
     {
      "label": "WAFERS EJECTED",
      "value": "2 to 3",
@@ -41,150 +646,65 @@
     }
    ]
   },
-  "memory-contracts-evidence-v1": {
-   "title": "Commitment Evidence",
+  "silicon-reality-gap-s14": {
+   "title": "Memory as a Strategic Chokepoint",
    "document": {
-    "path": "current-bubble-five-minute-v2/evidence-memory-contracts-v1.svg",
-    "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+    "path": "silicon-reality-gap/slides/slide-014.png",
+    "sha256": "90add80c1fad5e025cca24653f3508713f0400116e6dfcc0156a8878864ba868"
    },
-   "source": "Company-reported supply agreements",
+   "source": "Silicon Reality Gap &middot; slide 14",
+   "badges": []
+  },
+  "silicon-value-software-bubble-s04": {
+   "title": "The Triopoly Was Forged through Risk and Survival",
+   "document": {
+    "path": "silicon-value-software-bubble/slides/slide-004.png",
+    "sha256": "f8a2711188066b13ab0d31782010f9c08d6d4cea143245c0ec2cea9673e542b7"
+   },
+   "source": "Silicon Value Software Bubble &middot; slide 04",
    "badges": [
     {
-     "label": "STRATEGIC AGREEMENTS",
-     "value": "16",
-     "tag": "COMPANY-REPORTED",
+     "label": "SAMSUNG COMMITMENT",
+     "value": "$400M",
+     "tag": "1983",
      "accent": "sunflower",
      "verbatim_in_document": true
     },
     {
-     "label": "TYPICAL TERM",
-     "value": "5 years",
-     "tag": "TAKE-OR-PAY",
-     "accent": "teal",
-     "verbatim_in_document": true
-    }
-   ]
-  },
-  "sp500-concentration-evidence-v1": {
-   "title": "Concentration Evidence",
-   "document": {
-    "path": "current-bubble-five-minute-v2/evidence-sp500-concentration-v1.svg",
-    "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
-   },
-   "source": "S&amp;P Dow Jones Indices",
-   "badges": [
-    {
-     "label": "TOP-10 INDEX WEIGHT",
-     "value": "~40%",
-     "tag": "CONCENTRATION",
+     "label": "SK HYNIX DEBT",
+     "value": "11T won",
+     "tag": "IMF MERGER",
      "accent": "coral",
      "verbatim_in_document": true
     }
    ]
   },
-  "float-weighting-evidence-v1": {
-   "title": "Automatic Allocation",
+  "silicon-value-software-bubble-s11": {
+   "title": "The DRAM Triopoly Is Rebalancing",
    "document": {
-    "path": "current-bubble-five-minute-v2/evidence-float-weighting-v1.svg",
-    "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+    "path": "silicon-value-software-bubble/slides/slide-011.png",
+    "sha256": "8779f5e88e5a3774e1022318b8797b45eb61b2e66776b7c4b8bfe6d89a16afe0"
    },
-   "source": "Index construction methodology",
-   "badges": [
-    {
-     "label": "EVERY NEW DOLLAR",
-     "value": "$1",
-     "tag": "FLOAT-WEIGHTED",
-     "accent": "cobalt",
-     "verbatim_in_document": true
-    }
-   ]
-  },
-  "automatic-business-mix-evidence-v1": {
-   "title": "What the Same Dollar Owns",
-   "document": {
-    "path": "current-bubble-five-minute-v2/evidence-automatic-business-mix-v1.svg",
-    "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
-   },
-   "source": "Episode evidence pack",
+   "source": "Silicon Value Software Bubble &middot; slide 11",
    "badges": []
   },
-  "triopoly-formation-evidence-v1": {
-   "title": "How the Triopoly Formed",
+  "silicon-reality-gap-s10": {
+   "title": "The Global DRAM Battlefield",
    "document": {
-    "path": "current-bubble-five-minute-v2/silicon-reality-gap-s05-triopoly-formation-v1.png",
-    "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+    "path": "silicon-reality-gap/slides/slide-010.png",
+    "sha256": "4ac6cc79f83c1ab434f9e247e6bb385cba9ed57853cf535658dfc2c79b4c5ef1"
    },
-   "source": "Silicon Reality Gap deck &middot; s05",
+   "source": "Silicon Reality Gap &middot; slide 10",
    "badges": []
   },
-  "diagnostic-matrix-evidence-v1": {
-   "title": "Symptom Versus Diagnosis",
+  "sovereign-memory-infrastructure-s06": {
+   "title": "Financial Physics: S&P 500 versus Sovereign Scalers",
    "document": {
-    "path": "current-bubble-five-minute-v2/silicon-antidote-s14-diagnostic-matrix-v1.png",
-    "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+    "path": "sovereign-memory-infrastructure/slides/slide-006.png",
+    "sha256": "e0ce93e6ebf12b1504d20ce4753d309d315825385fbf5109f22e13e5bcc61225"
    },
-   "source": "Silicon Antidote deck &middot; s14",
+   "source": "Sovereign Memory Infrastructure &middot; slide 06",
    "badges": []
-  },
-  "index-inclusion-gate-evidence-v1": {
-   "title": "Index Inclusion Mechanics",
-   "document": {
-    "path": "current-bubble-five-minute-v2/evidence-index-inclusion-gate-v1.svg",
-    "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
-   },
-   "source": "Episode evidence pack",
-   "badges": []
-  },
-  "two-elevators-model-proposed-v1": {
-   "title": "Two Elevators, One Shape",
-   "document": {
-    "path": "current-bubble-five-minute-v2/two-elevators-mechanism-explainer-proposed-v1.png",
-    "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
-   },
-   "source": "Episode evidence pack",
-   "badges": []
-  },
-  "manufacturing-failure-evidence-v1": {
-   "title": "Manufacturing Failure Modes",
-   "document": {
-    "path": "current-bubble-five-minute-v2/silicon-value-software-bubble-s08-failure-triptych-v1.png",
-    "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
-   },
-   "source": "Silicon Value / Software Bubble &middot; s08",
-   "badges": []
-  },
-  "ram-ageddon-v1": {
-   "title": "The Commodity Squeeze",
-   "document": {
-    "path": "current-bubble-fresh-60s-v1/ram-ageddon-v1.png",
-    "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
-   },
-   "source": "Episode evidence pack",
-   "badges": []
-  },
-  "buyer-commitment-evidence-card-v1": {
-   "title": "Company-Reported Buyer Commitment",
-   "document": {
-    "path": "current-bubble-five-minute-v1/buyer-commitment-evidence-card-v1.svg",
-    "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
-   },
-   "source": "Micron fiscal Q3 2026 prepared remarks",
-   "badges": [
-    {
-     "label": "STRATEGIC AGREEMENTS",
-     "value": "16",
-     "tag": "MICRON Q3 FY26",
-     "accent": "sunflower",
-     "verbatim_in_document": true
-    },
-    {
-     "label": "MOST TERMS",
-     "value": "~5 years",
-     "tag": "VOLUME COMMITTED",
-     "accent": "coral",
-     "verbatim_in_document": true
-    }
-   ]
   }
  },
  "scenes": [
@@ -208,8 +728,14 @@
     {
      "at": 2.4,
      "docks": [],
-     "badges": "----",
-     "caption": "AI memory stocks have gone vertical and the earnings numbers"
+     "badges": "----"
+    },
+    {
+     "at": 4.0,
+     "docks": [
+      "silicon-reality-gap-s12"
+     ],
+     "badges": "----"
     }
    ]
   },
@@ -233,42 +759,14 @@
     {
      "at": 11.6,
      "docks": [],
-     "badges": "----",
-     "caption": "back and say: bubble. But underneath the chart"
+     "badges": "----"
     },
     {
-     "at": 12.13,
+     "at": 13.2,
      "docks": [
-      "hbm-stack-v1"
+      "silicon-antidote-s11"
      ],
-     "badges": "----",
-     "caption": "back and say: bubble. But underneath the chart"
-    },
-    {
-     "at": 13.43,
-     "docks": [
-      "hbm-stack-v1"
-     ],
-     "badges": "X---",
-     "caption": "is a product customers cannot get enough of,"
-    },
-    {
-     "at": 15.73,
-     "docks": [
-      "hbm-stack-v1",
-      "capacity-penalty-v1"
-     ],
-     "badges": "X---",
-     "caption": "factories that cannot expand quickly enough, and buyers signing"
-    },
-    {
-     "at": 17.03,
-     "docks": [
-      "hbm-stack-v1",
-      "capacity-penalty-v1"
-     ],
-     "badges": "X-X-",
-     "caption": "factories that cannot expand quickly enough, and buyers signing"
+     "badges": "----"
     }
    ]
   },
@@ -292,42 +790,22 @@
     {
      "at": 23.03,
      "docks": [],
-     "badges": "----",
-     "caption": "Meanwhile, the trade marketed as boring and"
+     "badges": "----"
     },
     {
-     "at": 23.73,
+     "at": 24.63,
      "docks": [
-      "sp500-concentration-evidence-v1"
+      "silicon-antidote-s03"
      ],
-     "badges": "----",
-     "caption": "Meanwhile, the trade marketed as boring and"
+     "badges": "----"
     },
     {
-     "at": 25.03,
+     "at": 30.81,
      "docks": [
-      "sp500-concentration-evidence-v1"
+      "silicon-antidote-s03",
+      "silicon-value-software-bubble-s02"
      ],
-     "badges": "X---",
-     "caption": "Meanwhile, the trade marketed as boring and"
-    },
-    {
-     "at": 27.73,
-     "docks": [
-      "sp500-concentration-evidence-v1",
-      "float-weighting-evidence-v1"
-     ],
-     "badges": "X---",
-     "caption": "diversified\u2014the S&P 500 index"
-    },
-    {
-     "at": 29.03,
-     "docks": [
-      "sp500-concentration-evidence-v1",
-      "float-weighting-evidence-v1"
-     ],
-     "badges": "X-X-",
-     "caption": "fund\u2014has nearly forty percent of its weight concentrated in"
+     "badges": "----"
     }
    ]
   },
@@ -351,8 +829,14 @@
     {
      "at": 37.73,
      "docks": [],
-     "badges": "----",
-     "caption": "because they are already the biggest. So here is the argument:"
+     "badges": "----"
+    },
+    {
+     "at": 39.33,
+     "docks": [
+      "silicon-reality-gap-s04"
+     ],
+     "badges": "----"
     }
    ]
   },
@@ -376,16 +860,14 @@
     {
      "at": 45.77,
      "docks": [],
-     "badges": "----",
-     "caption": "But what we are seeing today looks more like a physical bottleneck being repriced"
+     "badges": "----"
     },
     {
-     "at": 46.53,
+     "at": 47.37,
      "docks": [
-      "triopoly-formation-evidence-v1"
+      "silicon-value-software-bubble-s01"
      ],
-     "badges": "----",
-     "caption": "But what we are seeing today looks more like a physical bottleneck being repriced"
+     "badges": "----"
     }
    ]
   },
@@ -409,25 +891,14 @@
     {
      "at": 51.93,
      "docks": [],
-     "badges": "----",
-     "caption": "than a demand-free fantasy. Bubble logic may be"
+     "badges": "----"
     },
     {
-     "at": 53.07,
+     "at": 53.53,
      "docks": [
-      "diagnostic-matrix-evidence-v1"
+      "silicon-antidote-s10"
      ],
-     "badges": "----",
-     "caption": "hiding inside the thing investors stopped examining because"
-    },
-    {
-     "at": 58.8,
-     "docks": [
-      "diagnostic-matrix-evidence-v1",
-      "index-inclusion-gate-evidence-v1"
-     ],
-     "badges": "----",
-     "caption": "A bubble is not \u201ca price went up a lot.\u201d"
+     "badges": "----"
     }
    ]
   },
@@ -451,43 +922,22 @@
     {
      "at": 64.87,
      "docks": [],
-     "badges": "----",
-     "caption": "A real bubble forms when the price increasingly depends on the belief that"
+     "badges": "----"
     },
     {
-     "at": 75.8,
+     "at": 66.47,
      "docks": [
-      "two-elevators-model-proposed-v1"
+      "silicon-value-software-bubble-s13"
      ],
-     "badges": "----",
-     "caption": "keep up. Think of two elevators rising at the same speed."
+     "badges": "----"
     },
     {
-     "at": 93.1,
+     "at": 80.72,
      "docks": [
-      "two-elevators-model-proposed-v1",
-      "memory-contracts-evidence-v1"
+      "silicon-value-software-bubble-s13",
+      "silicon-silent-triopoly-s04"
      ],
-     "badges": "----",
-     "caption": "the cables are demand, capacity, contracts, and cash flow."
-    },
-    {
-     "at": 94.4,
-     "docks": [
-      "two-elevators-model-proposed-v1",
-      "memory-contracts-evidence-v1"
-     ],
-     "badges": "--X-",
-     "caption": "the cables are demand, capacity, contracts, and cash flow."
-    },
-    {
-     "at": 95.7,
-     "docks": [
-      "two-elevators-model-proposed-v1",
-      "memory-contracts-evidence-v1"
-     ],
-     "badges": "--XX",
-     "caption": "the cables are demand, capacity, contracts, and cash flow."
+     "badges": "----"
     }
    ]
   },
@@ -511,16 +961,14 @@
     {
      "at": 98.8,
      "docks": [],
-     "badges": "----",
-     "caption": "For the S&P 500 complex, the question is whether diversification"
+     "badges": "----"
     },
     {
-     "at": 100.0,
+     "at": 100.4,
      "docks": [
-      "automatic-business-mix-evidence-v1"
+      "sovereign-memory-infrastructure-s05"
      ],
-     "badges": "----",
-     "caption": "For the S&P 500 complex, the question is whether diversification"
+     "badges": "----"
     }
    ]
   },
@@ -544,24 +992,14 @@
     {
      "at": 108.17,
      "docks": [],
-     "badges": "----",
-     "caption": "Start with the product. High-bandwidth memory,"
+     "badges": "----"
     },
     {
-     "at": 109.2,
+     "at": 109.77,
      "docks": [
-      "hbm-stack-v1"
+      "memory-supercycle-s08"
      ],
-     "badges": "----",
-     "caption": "Start with the product. High-bandwidth memory,"
-    },
-    {
-     "at": 110.5,
-     "docks": [
-      "hbm-stack-v1"
-     ],
-     "badges": "X---",
-     "caption": "Start with the product. High-bandwidth memory,"
+     "badges": "----"
     }
    ]
   },
@@ -585,24 +1023,22 @@
     {
      "at": 121.1,
      "docks": [],
-     "badges": "----",
-     "caption": "Plain English: the GPU may be the engine,"
+     "badges": "----"
     },
     {
-     "at": 122.0,
+     "at": 122.7,
      "docks": [
-      "capacity-penalty-v1"
+      "silicon-antidote-s07"
      ],
-     "badges": "----",
-     "caption": "Plain English: the GPU may be the engine,"
+     "badges": "----"
     },
     {
-     "at": 123.3,
+     "at": 132.57,
      "docks": [
-      "capacity-penalty-v1"
+      "silicon-antidote-s07",
+      "silicon-value-software-bubble-s07"
      ],
-     "badges": "X---",
-     "caption": "Plain English: the GPU may be the engine,"
+     "badges": "----"
     }
    ]
   },
@@ -626,16 +1062,14 @@
     {
      "at": 144.6,
      "docks": [],
-     "badges": "----",
-     "caption": "HBM competes for advanced wafers, clean-room space,"
+     "badges": "----"
     },
     {
-     "at": 145.2,
+     "at": 146.2,
      "docks": [
-      "manufacturing-failure-evidence-v1"
+      "sovereign-memory-infrastructure-s11"
      ],
-     "badges": "----",
-     "caption": "HBM competes for advanced wafers, clean-room space,"
+     "badges": "----"
     }
    ]
   },
@@ -659,8 +1093,38 @@
     {
      "at": 154.73,
      "docks": [],
-     "badges": "----",
-     "caption": "larger dies and more complicated stacks."
+     "badges": "----"
+    },
+    {
+     "at": 156.33,
+     "docks": [
+      "silicon-value-software-bubble-s09"
+     ],
+     "badges": "----"
+    },
+    {
+     "at": 166.15,
+     "docks": [
+      "silicon-value-software-bubble-s09",
+      "sovereign-memory-infrastructure-s03"
+     ],
+     "badges": "----"
+    },
+    {
+     "at": 167.65,
+     "docks": [
+      "silicon-value-software-bubble-s09",
+      "sovereign-memory-infrastructure-s03"
+     ],
+     "badges": "--X-"
+    },
+    {
+     "at": 169.15,
+     "docks": [
+      "silicon-value-software-bubble-s09",
+      "sovereign-memory-infrastructure-s03"
+     ],
+     "badges": "--XX"
     }
    ]
   },
@@ -684,42 +1148,38 @@
     {
      "at": 178.1,
      "docks": [],
-     "badges": "----",
-     "caption": "As manufacturers devote more capacity to HBM,"
+     "badges": "----"
     },
     {
-     "at": 180.2,
+     "at": 179.7,
      "docks": [
-      "hbm-stack-v1"
+      "silicon-antidote-s09"
      ],
-     "badges": "----",
-     "caption": "As manufacturers devote more capacity to HBM,"
+     "badges": "----"
     },
     {
-     "at": 181.5,
+     "at": 193.17,
      "docks": [
-      "hbm-stack-v1"
+      "silicon-antidote-s09",
+      "memory-supercycle-s03"
      ],
-     "badges": "X---",
-     "caption": "As manufacturers devote more capacity to HBM,"
+     "badges": "----"
     },
     {
-     "at": 187.8,
+     "at": 194.67,
      "docks": [
-      "hbm-stack-v1",
-      "capacity-penalty-v1"
+      "silicon-antidote-s09",
+      "memory-supercycle-s03"
      ],
-     "badges": "X---",
-     "caption": "The AI boom pulls the same production system toward more complex products."
+     "badges": "--X-"
     },
     {
-     "at": 189.1,
+     "at": 196.17,
      "docks": [
-      "hbm-stack-v1",
-      "capacity-penalty-v1"
+      "silicon-antidote-s09",
+      "memory-supercycle-s03"
      ],
-     "badges": "X-X-",
-     "caption": "The AI boom pulls the same production system toward more complex products."
+     "badges": "--XX"
     }
    ]
   },
@@ -743,43 +1203,38 @@
     {
      "at": 210.17,
      "docks": [],
-     "badges": "----",
-     "caption": "Now look at buyer behavior. In a classic commodity"
+     "badges": "----"
     },
     {
-     "at": 216.0,
+     "at": 211.77,
      "docks": [
-      "ram-ageddon-v1"
+      "silicon-reality-gap-s14"
      ],
-     "badges": "----",
-     "caption": "memory cycle, suppliers add capacity, prices spike,"
+     "badges": "----"
     },
     {
-     "at": 225.0,
+     "at": 224.16,
      "docks": [
-      "ram-ageddon-v1",
-      "buyer-commitment-evidence-card-v1"
+      "silicon-reality-gap-s14",
+      "silicon-value-software-bubble-s04"
      ],
-     "badges": "----",
-     "caption": "That history is the strongest argument against this entire video."
+     "badges": "----"
     },
     {
-     "at": 226.3,
+     "at": 225.66,
      "docks": [
-      "ram-ageddon-v1",
-      "buyer-commitment-evidence-card-v1"
+      "silicon-reality-gap-s14",
+      "silicon-value-software-bubble-s04"
      ],
-     "badges": "--X-",
-     "caption": "But customers are behaving differently this time."
+     "badges": "--X-"
     },
     {
-     "at": 227.6,
+     "at": 227.16,
      "docks": [
-      "ram-ageddon-v1",
-      "buyer-commitment-evidence-card-v1"
+      "silicon-reality-gap-s14",
+      "silicon-value-software-bubble-s04"
      ],
-     "badges": "--XX",
-     "caption": "But customers are behaving differently this time."
+     "badges": "--XX"
     }
    ]
   },
@@ -803,32 +1258,22 @@
     {
      "at": 239.67,
      "docks": [],
-     "badges": "----",
-     "caption": "its DRAM volume and one-third of its NAND volume over"
+     "badges": "----"
     },
     {
-     "at": 247.0,
+     "at": 241.27,
      "docks": [
-      "buyer-commitment-evidence-card-v1"
+      "silicon-value-software-bubble-s11"
      ],
-     "badges": "----",
-     "caption": "to specific volumes rather than casually promising they might show up"
+     "badges": "----"
     },
     {
-     "at": 248.3,
+     "at": 260.99,
      "docks": [
-      "buyer-commitment-evidence-card-v1"
+      "silicon-value-software-bubble-s11",
+      "silicon-reality-gap-s10"
      ],
-     "badges": "X---",
-     "caption": "to specific volumes rather than casually promising they might show up"
-    },
-    {
-     "at": 249.6,
-     "docks": [
-      "buyer-commitment-evidence-card-v1"
-     ],
-     "badges": "XX--",
-     "caption": "to specific volumes rather than casually promising they might show up"
+     "badges": "----"
     }
    ]
   },
@@ -852,8 +1297,14 @@
     {
      "at": 286.63,
      "docks": [],
-     "badges": "----",
-     "caption": "before I call it a bubble."
+     "badges": "----"
+    },
+    {
+     "at": 288.23,
+     "docks": [
+      "sovereign-memory-infrastructure-s06"
+     ],
+     "badges": "----"
     }
    ]
   }

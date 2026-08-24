@@ -269,3 +269,31 @@ AND traceable to a source, without a visible source badge.
 | argument shape | sequence of exhibits | chain with relations |
 | cost per episode | near zero above evidence prep | high |
 | use for | weekly cadence, dense factual runs | opening 60–90s, structured arguments |
+
+### 8.6 Evidence selection rules (operator correction, 2026-08-24)
+
+The first v4 pass failed review on three counts. Each is now enforced in
+`scripts/build_scene_evidence_cut.py` rather than left to judgement:
+
+1. **Captions keep their canonical timings.** The first pass attached the
+   nearest caption to each beat, collapsing 89 word-timed lines onto 48 beat
+   boundaries — captions held ~6s and drifted off the narration. Captions are
+   a SEPARATE track resolved by time; beats never resample them.
+2. **Evidence comes from the approved stamped catalogue, and never repeats.**
+   The first pass inherited v3's asset list — 13 items with several used two
+   or three times, including cropped, unstamped one-offs whose edges ran off
+   frame. The project holds **86 render-eligible teacher-stamped slides**
+   (`sources/decks/teacher-stamped-production-visuals/`), each carrying a
+   label, summary, sha256, and `evidence_render_eligible`. Selection is an
+   IDF-weighted match of each slide's label+summary against the narration
+   inside that scene's window, with a used-set so no slide repeats and a
+   one-slide-per-deck rule inside a pair.
+3. **No badge without a read numeral.** Only 5 of 86 slides carry a quotable
+   figure in their metadata, so badges cannot be auto-derived. Emit a badge
+   only where the numeral was read off the bound slide; otherwise ship the
+   dock with no rail. The stamped slide already carries its own typeset
+   figures — inventing a figure to fill the rail is the failure this
+   prevents.
+
+Layout follow-on: a single-dock beat uses a wide centred dock (940px) so a
+16:9 stamped slide reads large; paired docks stay side by side at 720px.
