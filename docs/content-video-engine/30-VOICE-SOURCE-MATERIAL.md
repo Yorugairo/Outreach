@@ -154,7 +154,8 @@ change and the reason, don't perform the reversal.**
 
 Everything above is operator-derived. This section is the one piece of
 external doctrine worth folding in: AOY's "Faceless Personality — Writing
-Techniques" (course framework #49), retrieved verbatim 2026-08-24 and adopted
+Techniques" (course framework #49; full niche-agnostic doctrine:
+[31-FACELESS-CHANNEL-DOCTRINE.md](31-FACELESS-CHANNEL-DOCTRINE.md)), retrieved verbatim 2026-08-24 and adopted
 because the channel is 99% faceless. Premise: *"The channel has no face, so
 personality has to come from the words."*
 
