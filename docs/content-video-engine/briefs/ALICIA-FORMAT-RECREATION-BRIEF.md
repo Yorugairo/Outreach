@@ -146,6 +146,15 @@ She'd tell you spending less is how you stay exactly where you are.
 
 ---
 
+## Source signature patterns (top-5 catalog scan, 2026-08-24)
+
+Across her five most-viewed videos (1.9M / 325K / 295K / 290K / 256K):
+vivid comparative vignette cold-open (two of five literally open "I want you
+to picture…" — a verbal tic we deliberately do **not** copy); statistics
+injected to ground the story; explicitly numbered rule frameworks; specific
+compound-dollar calculations; binary two-paths framing; actionable close.
+Our script matches the structure with an original voice — that is the test.
+
 ## Test acceptance
 
 1. Every pipeline stage runs on this brief with no hand-carried files except
