@@ -189,3 +189,83 @@ not-production-ready (unchanged exclusion).
   passes `--format`. A composition rendered via `-c` needs its own GSAP
   script tag or it renders silently static under `--best-effort` — gate
   overlay renders with `--no-best-effort` or a no-timeline lint.
+
+---
+
+## Part 8 — The scene-evidence lane (default production pattern)
+
+Status: accepted 2026-08-24. Proven by
+`claude.ai/code/artifact/a2c4e4b1-a528-4b8f-a87c-966533522c21` (27s, two
+scenes, real teacher-stamped slides and current-bubble world plates).
+Origin: `samples/gemini-scene-evidence-pipeline-showcase.html`.
+
+Parts 1–7 describe **linked choreography** — cards entering in semantic
+relation to each other, hand-tuned per beat. This part describes the pattern
+that carries the weekly schedule.
+
+### 8.1 The shape
+
+```
+ken-burns world plate
+  → evidence build 1 (dock + badge a + badge b)
+  → evidence build 2 (dock + badge a + badge b)
+  → wipe
+  → repeat
+```
+
+One continuous ken-burns move per **scene**, not per beat, with a distinct
+vector and amplitude per scene (§1.4). Docks enter with the micro-scale snap
+(§1.3). Badges reveal one at a time and never retract inside a scene. The
+wipe fires only after both docks clear.
+
+### 8.2 The timeline is data, not tweens
+
+This is the whole reason the lane is repeatable. Every visual state is one
+row in a declarative array:
+
+```js
+{ t: 5.0, scene: "s1", wash: 1, d1: "e1", d2: 0, p: "XX--", cap: "..." }
+```
+
+`p` is a four-slot badge mask (dock1.a, dock1.b, dock2.a, dock2.b).
+Everything else is CSS transitions. A generator emits the array from
+`configs/scene_evidence_timeline.schema.json`; nobody authors motion per
+episode. Linked choreography, by contrast, needs per-card entry vectors,
+demotion directions, and yield offsets — authored, not generated. Use it for
+openings and structurally argued sequences; use this lane for everything else.
+
+### 8.3 Do not bury the plate (operator correction, 2026-08-24)
+
+The first build washed the world to ~86% and used opaque docks. The plates
+are the expensive, reusable layer — covering them wastes the asset.
+
+- **Wash is light and banded**: peak ~34% over the dock band, feathered to
+  zero at the top and ~44% at the very bottom. Never a full-frame dim.
+- **Dock chrome is translucent washi**: `rgba(244,230,199,.90)` with a 3px
+  backdrop blur. This is *more* in register, not less — the style profile
+  builds the world from "thin hand-cut washi, layered rice paper", and thin
+  washi is translucent. Plate texture reads through the document.
+- **The literal document inside the dock stays fully opaque.** Source
+  evidence is never translucent; only the chrome around it is.
+- Docks are sized and seated so the plate stays legible around them
+  (~726px wide on a 1920 stage, top ~232px).
+
+### 8.4 Badge provenance — the checkable property
+
+Every badge numeral is quoted **verbatim** from the stamped document it sits
+under (`18% → 23%`, `2 to 3`, `716%`, `70%`, `$400M`, `11T won` all appear in
+their source slides). The schema requires `verbatim_in_document: true` per
+badge, and the validator OCRs the bound slide and fails the build when the
+string is absent. This extends the code-drawn-numeral guarantee from single
+counters to the entire evidence layer: the numbers are exact by construction
+AND traceable to a source, without a visible source badge.
+
+### 8.5 Lane selection
+
+| | scene-evidence lane | linked choreography |
+| --- | --- | --- |
+| authoring | generated from schema | hand-tuned per beat |
+| world presence | co-star (translucent docks) | co-star (roaming cards) |
+| argument shape | sequence of exhibits | chain with relations |
+| cost per episode | near zero above evidence prep | high |
+| use for | weekly cadence, dense factual runs | opening 60–90s, structured arguments |

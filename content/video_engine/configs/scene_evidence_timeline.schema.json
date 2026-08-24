@@ -1,0 +1,148 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://outreach-program.internal/schemas/scene_evidence_timeline.schema.json",
+  "title": "SceneEvidenceTimeline",
+  "description": "Generator input for the scene-evidence production lane (doc 29 Part 8). One episode's worth of scenes; each scene is a ken-burns world plate plus up to two evidence builds with sequenced stat badges, closed by a directional wipe. The renderer derives every visual state from this document — no per-episode motion authoring. Badge numerals must be quoted verbatim from the bound evidence document so the value is checkable against its source.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "episode_id", "project_id", "scenes"],
+  "properties": {
+    "schema_version": { "const": "scene_evidence_timeline.v1" },
+    "episode_id": { "type": "string", "pattern": "^[a-z0-9]+(?:[._-][a-z0-9]+)*$" },
+    "project_id": { "type": "string", "pattern": "^[a-z0-9]+(?:[._-][a-z0-9]+)*$" },
+    "narration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["canonical_hash", "words_path"],
+      "description": "Audio is the render clock. Beat times below are validated against these word timings; captions are derived, never hand-timed.",
+      "properties": {
+        "canonical_hash": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "words_path": { "type": "string" }
+      }
+    },
+    "scenes": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/definitions/scene" }
+    }
+  },
+  "definitions": {
+    "scene": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["scene_id", "world", "beats"],
+      "properties": {
+        "scene_id": { "type": "string", "pattern": "^[a-z0-9]+(?:[._-][a-z0-9]+)*$" },
+        "world": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["asset_id", "sha256"],
+          "description": "Resolved from the tagged plate catalogue. Never a sentence-native name.",
+          "properties": {
+            "asset_id": { "type": "string" },
+            "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+            "ken_burns": {
+              "type": "object",
+              "additionalProperties": false,
+              "description": "One continuous move per scene. Vector and amplitude MUST differ between adjacent scenes; uniform ken burns reads as drift, not direction (doc 29 §1.4).",
+              "properties": {
+                "scale": { "type": "number", "minimum": 0.02, "maximum": 0.14 },
+                "x": { "type": "number", "minimum": -40, "maximum": 40 },
+                "y": { "type": "number", "minimum": -40, "maximum": 40 }
+              }
+            }
+          }
+        },
+        "exit": {
+          "type": "string",
+          "enum": ["wipe_left", "wipe_right", "cut", "book_flip"],
+          "default": "wipe_left",
+          "description": "Semantic transition palette. Always fires on an evidence-free boundary: docks clear first (doc 29 Part 6)."
+        },
+        "beats": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/definitions/beat" }
+        }
+      }
+    },
+    "beat": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["at", "caption"],
+      "properties": {
+        "at": { "type": "number", "minimum": 0, "description": "Seconds from episode start. Must fall on a word boundary in words_path." },
+        "caption": { "type": "string", "description": "Spoken line for this beat. Keywords wrapped in {{ }} render in the accent color." },
+        "dock_1": { "$ref": "#/definitions/dock_ref" },
+        "dock_2": { "$ref": "#/definitions/dock_ref" },
+        "badges": {
+          "type": "string",
+          "pattern": "^[X-]{4}$",
+          "default": "----",
+          "description": "Four-slot visibility mask: dock1.a, dock1.b, dock2.a, dock2.b. 'X' lit, '-' hidden. Badges only reveal, never retract within a scene."
+        }
+      }
+    },
+    "dock_ref": {
+      "oneOf": [
+        { "type": "null", "description": "Dock is empty at this beat." },
+        { "type": "string", "description": "Key into the evidence table below." },
+        { "$ref": "#/definitions/evidence" }
+      ]
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["title", "document", "source", "badges"],
+      "properties": {
+        "title": { "type": "string", "maxLength": 64, "description": "Operator-written dock title. Not a claim; a handle." },
+        "document": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["path", "sha256"],
+          "description": "The literal teacher-stamped slide. Rendered fully opaque — literal evidence is never translucent, only the dock chrome is (doc 29 §8.3).",
+          "properties": {
+            "path": { "type": "string" },
+            "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+            "crop": {
+              "type": "object",
+              "additionalProperties": false,
+              "description": "Optional source-bound crop. Must not clip the teacher stamp.",
+              "required": ["x", "y", "w", "h"],
+              "properties": {
+                "x": { "type": "integer", "minimum": 0 },
+                "y": { "type": "integer", "minimum": 0 },
+                "w": { "type": "integer", "minimum": 1 },
+                "h": { "type": "integer", "minimum": 1 }
+              }
+            }
+          }
+        },
+        "source": { "type": "string", "description": "Provenance line shown in the citation footer." },
+        "badges": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 2,
+          "items": { "$ref": "#/definitions/badge" }
+        }
+      }
+    },
+    "badge": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["label", "value", "tag", "verbatim_in_document"],
+      "description": "Code-drawn stat pill. The value is authored in code so it is exact by construction (generated imagery may not carry numerals — finance style profile generated_text_rule).",
+      "properties": {
+        "label": { "type": "string", "maxLength": 28 },
+        "value": { "type": "string", "maxLength": 16 },
+        "tag": { "type": "string", "maxLength": 20 },
+        "accent": { "type": "string", "enum": ["sunflower", "coral", "teal", "cobalt"] },
+        "verbatim_in_document": {
+          "type": "boolean",
+          "const": true,
+          "description": "Assertion that `value` appears verbatim in the bound document. The validator OCRs the slide and fails the build when it does not — this is what makes the evidence layer mechanically checkable rather than merely plausible."
+        }
+      }
+    }
+  }
+}

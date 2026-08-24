@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modular Scene Evidence Pipeline (1-2 Pieces per Plate)</title>
+  <style>
+    :root {
+      --bg: #080c14;
+      --charcoal: #25313C;
+      --cobalt: #1769C2;
+      --teal: #178C83;
+      --sunflower: #F5B72E;
+      --coral: #ED6A4A;
+      --cream: #F4E6C7;
+      --card-bg: #141c2b;
+      --emerald: #10B981;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: #f8fafc;
+      margin: 0;
+      padding: 2rem;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    header {
+      margin-bottom: 1.5rem;
+      border-bottom: 1px solid #334155;
+      padding-bottom: 1.25rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+    h1 {
+      margin: 0 0 0.4rem 0;
+      color: var(--sunflower);
+      font-size: 2rem;
+      letter-spacing: -0.02em;
+    }
+    .subtitle {
+      color: #94a3b8;
+      font-size: 0.95rem;
+    }
+    .controls {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      background: var(--card-bg);
+      padding: 1rem 1.5rem;
+      border-radius: 12px;
+      border: 1px solid #334155;
+    }
+    .btn {
+      background: var(--cobalt);
+      color: #fff;
+      border: none;
+      padding: 0.65rem 1.4rem;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(23, 105, 194, 0.3);
+      transition: all 0.15s ease;
+    }
+    .btn:hover {
+      background: #1e7be6;
+      transform: translateY(-1px);
+    }
+    .btn-secondary {
+      background: #334155;
+      box-shadow: none;
+    }
+    .btn-secondary:hover {
+      background: #475569;
+    }
+    select {
+      background: #0f172a;
+      color: #f8fafc;
+      border: 1px solid #475569;
+      padding: 0.6rem 1rem;
+      border-radius: 6px;
+      font-size: 0.9rem;
+    }
+
+    /* 16:9 Master Viewport */
+    .viewport-frame {
+      width: 100%;
+      max-width: 1100px;
+      height: 619px;
+      margin: 0 auto;
+      background: #000;
+      border: 4px solid var(--charcoal);
+      border-radius: 16px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.7);
+    }
+
+    .world-layer {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform-origin: center center;
+    }
+
+    /* Full Stage Wash when Evidence is Active */
+    .board-wash {
+      position: absolute;
+      inset: 0;
+      background: rgba(5, 19, 30, 0.45);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.75s ease;
+    }
+    .board-wash.active {
+      opacity: 1;
+    }
+
+    /* 2.5D Dual Evidence Cards (Scaled ~15% smaller: 475px width, Ultra-Smooth Cinematic Ease) */
+    .evidence-card {
+      position: absolute;
+      top: 35px;
+      width: 475px;
+      height: 485px;
+      background: var(--cream);
+      border: 3.5px solid var(--charcoal);
+      border-radius: 14px;
+      box-shadow: 4px 4px 0px rgba(37, 49, 60, 0.3);
+      padding: 1.1rem;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      z-index: 20;
+      transform-origin: center center;
+      opacity: 0;
+      transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.75s cubic-bezier(0.16, 1, 0.3, 1),
+                  box-shadow 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* Card 1: Left Slot */
+    .card-left {
+      left: 55px;
+      transform: translateY(32px) scale(0.96);
+    }
+    .card-left.active {
+      opacity: 1;
+      transform: translateY(0px) scale(1.0);
+      box-shadow: 12px 12px 0px var(--charcoal);
+    }
+
+    /* Card 2: Right Slot (Appears alongside Card 1) */
+    .card-right {
+      left: 565px;
+      transform: translateY(32px) scale(0.96);
+    }
+    .card-right.active {
+      opacity: 1;
+      transform: translateY(0px) scale(1.0);
+      box-shadow: 12px 12px 0px var(--charcoal);
+    }
+
+    .dock-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid var(--charcoal);
+      padding-bottom: 0.4rem;
+      margin-bottom: 0.45rem;
+    }
+    .dock-title {
+      font-weight: 900;
+      font-size: 0.85rem;
+      color: var(--charcoal);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .dock-badge {
+      background: var(--cobalt);
+      color: #fff;
+      font-size: 0.7rem;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 800;
+    }
+
+    /* 100% Intact Slide Viewport */
+    .slide-view-container {
+      flex: 1;
+      border: 2px solid var(--charcoal);
+      border-radius: 6px;
+      overflow: hidden;
+      background: #000;
+      position: relative;
+    }
+    .slide-view-img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    /* Decoupled Live Stat Rail (Silky Smooth Fade & Slide-Up) */
+    .badges-rail {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem;
+      margin-top: 0.6rem;
+    }
+    .stat-pill {
+      background: var(--charcoal);
+      color: #fff;
+      padding: 6px 10px;
+      border-radius: 6px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .stat-pill.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .stat-label {
+      font-size: 0.62rem;
+      font-weight: 800;
+      color: #94a3b8;
+      text-transform: uppercase;
+    }
+    .stat-num-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-top: 2px;
+    }
+    .stat-num {
+      font-size: 1.15rem;
+      font-weight: 900;
+      font-family: monospace;
+      color: var(--sunflower);
+    }
+    .stat-tag {
+      font-size: 0.65rem;
+      font-weight: 800;
+      padding: 1px 4px;
+      border-radius: 3px;
+    }
+
+    /* Citation Footer */
+    .citation-footer {
+      margin-top: 0.45rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.68rem;
+      color: var(--charcoal);
+      font-weight: 700;
+      opacity: 0.8;
+      border-top: 1px dashed var(--charcoal);
+      padding-top: 0.3rem;
+    }
+
+    /* Full Board Wipe Curtain (Crisp & Snappy 0.35s) */
+    .board-wipe-curtain {
+      position: absolute;
+      inset: 0;
+      background: var(--bg);
+      z-index: 50;
+      transform: scaleX(0);
+      transform-origin: right center;
+      transition: transform 0.35s cubic-bezier(0.77, 0, 0.175, 1);
+    }
+    .board-wipe-curtain.wipe-in {
+      transform: scaleX(1);
+      transform-origin: left center;
+    }
+
+    /* Citation Source Footer */
+    .citation-footer {
+      margin-top: 0.6rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.72rem;
+      color: var(--charcoal);
+      font-weight: 700;
+      opacity: 0.75;
+      border-top: 1px dashed var(--charcoal);
+      padding-top: 0.4rem;
+    }
+
+    .timeline-bar {
+      margin-top: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      color: #94a3b8;
+      font-size: 0.9rem;
+    }
+    .timeline-bar input[type="range"] {
+      flex: 1;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div>
+        <h1>📊 Side-by-Side Dual Evidence Board</h1>
+        <div class="subtitle">Evidence 1 enters (scaled -15%) ➔ Evidence 2 enters beside it (mostly full board) ➔ Full Board Wipe.</div>
+      </div>
+      <div>
+        <button class="btn" onclick="playScene()" id="main-play-btn">🔊 Play with Voiceover</button>
+      </div>
+    </header>
+
+    <div class="controls">
+      <button class="btn btn-secondary" onclick="pauseToggle()" id="play-pause-btn">⏸️ Pause</button>
+      <button class="btn btn-secondary" onclick="resetScene()">⏮️ Restart</button>
+      <span id="frame-display" style="margin-left: auto; font-family: monospace; font-size: 1.15rem; color: var(--sunflower); font-weight: 800;">Time: 0.0s / 24.0s</span>
+    </div>
+
+    <audio id="voiceover" src="hyperframes_assets/history_episode_1_master.mp3" preload="auto"></audio>
+
+    <!-- 16:9 Master Viewport -->
+    <div class="viewport-frame" onclick="pauseToggle()" style="cursor: pointer;">
+      <!-- 1. Background World Plate -->
+      <img class="world-layer" id="world-bg" src="scene_assets/hero-fab-constraint-v1.png" alt="World Scene Plate" />
+      <div class="board-wash" id="board-wash"></div>
+
+      <!-- 2. Evidence Layer 1 (Left Slot) -->
+      <div class="evidence-card card-left" id="card-1">
+        <div class="dock-header">
+          <span class="dock-title" id="title-1">THE 3-TO-1 PHYSICS PENALTY</span>
+          <span class="dock-badge">EVIDENCE 1</span>
+        </div>
+        <div class="slide-view-container">
+          <img class="slide-view-img" id="img-1" src="slides/memory-3to1-penalty.png" alt="Evidence 1" />
+        </div>
+        <div class="badges-rail">
+          <div class="stat-pill" id="pill-1a">
+            <span class="stat-label">WAFER TRADE RATIO</span>
+            <div class="stat-num-row">
+              <span class="stat-num" style="color: var(--sunflower);">3.0 : 1</span>
+              <span class="stat-tag" style="background: rgba(245,183,46,0.2); color: var(--sunflower);">PHYSICAL CAP</span>
+            </div>
+          </div>
+          <div class="stat-pill" id="pill-1b">
+            <span class="stat-label">DDR5 SQUEEZE</span>
+            <div class="stat-num-row">
+              <span class="stat-num" style="color: var(--coral);">-66%</span>
+              <span class="stat-tag" style="background: rgba(237,106,74,0.2); color: var(--coral);">SHORTAGE</span>
+            </div>
+          </div>
+        </div>
+        <div class="citation-footer">
+          <span>📄 Micron Fiscal Q3 Prepared Remarks</span>
+          <span style="color: var(--cobalt);">VERIFIED</span>
+        </div>
+      </div>
+
+      <!-- 3. Evidence Layer 2 (Right Slot - Appears alongside Evidence 1!) -->
+      <div class="evidence-card card-right" id="card-2">
+        <div class="dock-header">
+          <span class="dock-title" id="title-2">FOUNDRY CONTRACT COMMITMENTS</span>
+          <span class="dock-badge">EVIDENCE 2</span>
+        </div>
+        <div class="slide-view-container">
+          <img class="slide-view-img" id="img-2" src="slides/sovereign-nine-layer-stack.png" alt="Evidence 2" />
+        </div>
+        <div class="badges-rail">
+          <div class="stat-pill" id="pill-2a">
+            <span class="stat-label">5-YEAR COMMITTED TAKE</span>
+            <div class="stat-num-row">
+              <span class="stat-num" style="color: var(--emerald);">$140B+</span>
+              <span class="stat-tag" style="background: rgba(16,185,129,0.2); color: var(--emerald);">DEPOSITS</span>
+            </div>
+          </div>
+          <div class="stat-pill" id="pill-2b">
+            <span class="stat-label">CLEANROOM UTILIZATION</span>
+            <div class="stat-num-row">
+              <span class="stat-num" style="color: var(--teal);">100%</span>
+              <span class="stat-tag" style="background: rgba(23,140,131,0.2); color: var(--teal);">NO IDLE CAP</span>
+            </div>
+          </div>
+        </div>
+        <div class="citation-footer">
+          <span>📄 10-K Filings & Supply Agreements</span>
+          <span style="color: var(--cobalt);">VERIFIED</span>
+        </div>
+      </div>
+
+      <!-- 4. Narration Caption Bar -->
+      <div class="caption-banner" id="caption-banner" style="position: absolute; bottom: 20px; left: 60px; right: 60px; background: rgba(5,19,30,0.94); border: 2px solid var(--sunflower); border-radius: 12px; padding: 10px 20px; color: #fff7df; font-size: 1rem; font-weight: 600; line-height: 1.3; text-align: center; z-index: 30; box-shadow: 0 10px 25px rgba(0,0,0,0.6);">
+        "Underneath the price chart is a severe physical factory bottleneck."
+      </div>
+
+      <!-- 5. Full Board Wipe Curtain -->
+      <div class="board-wipe-curtain" id="wipe-curtain"></div>
+    </div>
+
+    <div class="timeline-bar">
+      <span>0.0s</span>
+      <input type="range" id="scrubber" min="0" max="26.5" value="0" step="0.05" oninput="seekTo(parseFloat(this.value))">
+      <span>26.5s Total</span>
+    </div>
+  </div>
+
+  <script>
+    const timeline = [
+      // ==========================================
+      // === SCENE 1: FAB CONSTRAINT WORLD PLATE ===
+      // ==========================================
+      // 0. World Plate Intro (0.0s - 2.0s)
+      {
+        start: 0.0, end: 2.0,
+        worldPlate: 'hero-fab-constraint-v1.png', worldScale: 1.0,
+        wash: false, card1: false, card2: false, wipe: false,
+        pill1a: false, pill1b: false, pill2a: false, pill2b: false,
+        caption: 'Underneath the rising price is a severe physical factory bottleneck.'
+      },
+      // 1. Evidence 1 appears (2.0s - 3.2s)
+      {
+        start: 2.0, end: 3.2,
+        worldPlate: 'hero-fab-constraint-v1.png', worldScale: 1.02,
+        wash: true, card1: true, card2: false, wipe: false,
+        pill1a: false, pill1b: false, pill2a: false, pill2b: false,
+        title1: 'THE 3-TO-1 PHYSICS PENALTY',
+        img1: 'memory-3to1-penalty.png',
+        caption: 'Evidence 1 enters: The 3-to-1 Physics Penalty.'
+      },
+      // 2. Badge 1a appears (3.2s - 4.5s)
+      {
+        start: 3.2, end: 4.5,
+        worldPlate: 'hero-fab-constraint-v1.png', worldScale: 1.03,
+        wash: true, card1: true, card2: false, wipe: false,
+        pill1a: true, pill1b: false, pill2a: false, pill2b: false,
+        title1: 'THE 3-TO-1 PHYSICS PENALTY',
+        img1: 'memory-3to1-penalty.png',
+        caption: 'Metric 1: HBM packaging consumes 3.0x more physical wafer area than conventional DRAM.'
+      },
+      // 3. Badge 1b appears (4.5s - 5.8s)
+      {
+        start: 4.5, end: 5.8,
+        worldPlate: 'hero-fab-constraint-v1.png', worldScale: 1.04,
+        wash: true, card1: true, card2: false, wipe: false,
+        pill1a: true, pill1b: true, pill2a: false, pill2b: false,
+        title1: 'THE 3-TO-1 PHYSICS PENALTY',
+        img1: 'memory-3to1-penalty.png',
+        caption: 'Metric 2: Conventional DDR5 production is starved by 66% as fab capacity shifts to AI.'
+      },
+      // 4. Wait a beat (5.8s - 7.0s)
+      {
+        start: 5.8, end: 7.0,
+        worldPlate: 'hero-fab-constraint-v1.png', worldScale: 1.05,
+        wash: true, card1: true, card2: false, wipe: false,
+        pill1a: true, pill1b: true, pill2a: false, pill2b: false,
+        title1: 'THE 3-TO-1 PHYSICS PENALTY',
+        img1: 'memory-3to1-penalty.png',
+        caption: 'The physical wafer limit is locked.'
+      },
+      // 5. Evidence 2 appears beside Evidence 1 (7.0s - 8.2s)
+      {
+        start: 7.0, end: 8.2,
+        worldPlate: 'hero-fab-constraint-v1.png', worldScale: 1.06,
+        wash: true, card1: true, card2: true, wipe: false,
+        pill1a: true, pill1b: true, pill2a: false, pill2b: false,
+        title1: 'THE 3-TO-1 PHYSICS PENALTY',
+        img1: 'memory-3to1-penalty.png',
+        title2: 'FOUNDRY CONTRACT COMMITMENTS',
+        img2: 'sovereign-nine-layer-stack.png',
+        caption: 'Evidence 2 enters beside Evidence 1: Foundry Contract Commitments.'
+      },
+      // 6. Badge 2a appears (8.2s - 9.5s)
+      {
+        start: 8.2, end: 9.5,
+        worldPlate: 'hero-fab-constraint-v1.png', worldScale: 1.07,
+        wash: true, card1: true, card2: true, wipe: false,
+        pill1a: true, pill1b: true, pill2a: true, pill2b: false,
+        title1: 'THE 3-TO-1 PHYSICS PENALTY',
+        img1: 'memory-3to1-penalty.png',
+        title2: 'FOUNDRY CONTRACT COMMITMENTS',
+        img2: 'sovereign-nine-layer-stack.png',
+        caption: 'Metric 1: Hyperscalers have committed $140B+ in non-cancellable advance deposits.'
+      },
+      // 7. Badge 2b appears (9.5s - 10.8s)
+      {
+        start: 9.5, end: 10.8,
+        worldPlate: 'hero-fab-constraint-v1.png', worldScale: 1.08,
+        wash: true, card1: true, card2: true, wipe: false,
+        pill1a: true, pill1b: true, pill2a: true, pill2b: true,
+        title1: 'THE 3-TO-1 PHYSICS PENALTY',
+        img1: 'memory-3to1-penalty.png',
+        title2: 'FOUNDRY CONTRACT COMMITMENTS',
+        img2: 'sovereign-nine-layer-stack.png',
+        caption: 'Metric 2: Advanced packaging cleanrooms operate at 100% committed utilization through 2028.'
+      },
+      // 8. Full Board Savor / Hold (10.8s - 12.5s)
+      {
+        start: 10.8, end: 12.5,
+        worldPlate: 'hero-fab-constraint-v1.png', worldScale: 1.08,
+        wash: true, card1: true, card2: true, wipe: false,
+        pill1a: true, pill1b: true, pill2a: true, pill2b: true,
+        title1: 'THE 3-TO-1 PHYSICS PENALTY',
+        img1: 'memory-3to1-penalty.png',
+        title2: 'FOUNDRY CONTRACT COMMITMENTS',
+        img2: 'sovereign-nine-layer-stack.png',
+        caption: 'Full Board: Physical capacity constraints + Irrevocable buyer commitments.'
+      },
+      // 9. Crisp Fast Board Wipe (12.5s - 13.0s: 0.5s duration!)
+      {
+        start: 12.5, end: 13.0,
+        worldPlate: 'hero-fab-constraint-v1.png', worldScale: 1.0,
+        wash: false, card1: false, card2: false, wipe: true,
+        pill1a: false, pill1b: false, pill2a: false, pill2b: false,
+        caption: 'Board wipes clean.'
+      },
+
+      // ==========================================
+      // === SCENE 2: S&P 500 REFLEX WORLD PLATE ===
+      // ==========================================
+      // 0. Scene 2 Plate Intro (13.0s - 14.8s)
+      {
+        start: 13.0, end: 14.8,
+        worldPlate: 'hero-sp500-double-failure-v1.png', worldScale: 1.0,
+        wash: false, card1: false, card2: false, wipe: false,
+        pill1a: false, pill1b: false, pill2a: false, pill2b: false,
+        caption: 'Meanwhile, passive index funds are buying software multiples at historic peaks.'
+      },
+      // 1. Scene 2 Evidence 1 appears (14.8s - 16.0s)
+      {
+        start: 14.8, end: 16.0,
+        worldPlate: 'hero-sp500-double-failure-v1.png', worldScale: 1.02,
+        wash: true, card1: true, card2: false, wipe: false,
+        pill1a: false, pill1b: false, pill2a: false, pill2b: false,
+        title1: 'S&P 500 SOFTWARE MULTIPLES',
+        img1: 'silicon-value-software-bubble-slide-002.png',
+        caption: 'Evidence 1 enters: S&P 500 Software Multiples.'
+      },
+      // 2. Scene 2 Badge 1a appears (16.0s - 17.3s)
+      {
+        start: 16.0, end: 17.3,
+        worldPlate: 'hero-sp500-double-failure-v1.png', worldScale: 1.03,
+        wash: true, card1: true, card2: false, wipe: false,
+        pill1a: true, pill1b: false, pill2a: false, pill2b: false,
+        title1: 'S&P 500 SOFTWARE MULTIPLES',
+        img1: 'silicon-value-software-bubble-slide-002.png',
+        caption: 'Metric 1: S&P 500 forward CAPE multiple sits at 38.4x.'
+      },
+      // 3. Scene 2 Badge 1b appears (17.3s - 18.6s)
+      {
+        start: 17.3, end: 18.6,
+        worldPlate: 'hero-sp500-double-failure-v1.png', worldScale: 1.04,
+        wash: true, card1: true, card2: false, wipe: false,
+        pill1a: true, pill1b: true, pill2a: false, pill2b: false,
+        title1: 'S&P 500 SOFTWARE MULTIPLES',
+        img1: 'silicon-value-software-bubble-slide-002.png',
+        caption: 'Metric 2: A +92% historical valuation premium above baseline.'
+      },
+      // 4. Wait a beat (18.6s - 19.8s)
+      {
+        start: 18.6, end: 19.8,
+        worldPlate: 'hero-sp500-double-failure-v1.png', worldScale: 1.05,
+        wash: true, card1: true, card2: false, wipe: false,
+        pill1a: true, pill1b: true, pill2a: false, pill2b: false,
+        title1: 'S&P 500 SOFTWARE MULTIPLES',
+        img1: 'silicon-value-software-bubble-slide-002.png',
+        caption: 'Software pricing reflects infinite growth assumptions.'
+      },
+      // 5. Scene 2 Evidence 2 appears beside Evidence 1 (19.8s - 21.0s)
+      {
+        start: 19.8, end: 21.0,
+        worldPlate: 'hero-sp500-double-failure-v1.png', worldScale: 1.06,
+        wash: true, card1: true, card2: true, wipe: false,
+        pill1a: true, pill1b: true, pill2a: false, pill2b: false,
+        title1: 'S&P 500 SOFTWARE MULTIPLES',
+        img1: 'silicon-value-software-bubble-slide-002.png',
+        title2: 'SILICON TRIOPOLY FORWARD P/E',
+        img2: 'silicon-silent-triopoly-slide-002.png',
+        caption: 'Evidence 2 enters beside Evidence 1: Silicon Triopoly Forward P/E.'
+      },
+      // 6. Scene 2 Badge 2a appears (21.0s - 22.2s)
+      {
+        start: 21.0, end: 22.2,
+        worldPlate: 'hero-sp500-double-failure-v1.png', worldScale: 1.07,
+        wash: true, card1: true, card2: true, wipe: false,
+        pill1a: true, pill1b: true, pill2a: true, pill2b: false,
+        title1: 'S&P 500 SOFTWARE MULTIPLES',
+        img1: 'silicon-value-software-bubble-slide-002.png',
+        title2: 'SILICON TRIOPOLY FORWARD P/E',
+        img2: 'silicon-silent-triopoly-slide-002.png',
+        caption: 'Metric 1: The memory triopoly trades at only 11.2x forward earnings.'
+      },
+      // 7. Scene 2 Badge 2b appears (22.2s - 23.5s)
+      {
+        start: 22.2, end: 23.5,
+        worldPlate: 'hero-sp500-double-failure-v1.png', worldScale: 1.08,
+        wash: true, card1: true, card2: true, wipe: false,
+        pill1a: true, pill1b: true, pill2a: true, pill2b: true,
+        title1: 'S&P 500 SOFTWARE MULTIPLES',
+        img1: 'silicon-value-software-bubble-slide-002.png',
+        title2: 'SILICON TRIOPOLY FORWARD P/E',
+        img2: 'silicon-silent-triopoly-slide-002.png',
+        caption: 'Metric 2: A -70% multiple discount despite holding monopoly power.'
+      },
+      // 8. Full Board Savor / Hold (23.5s - 25.0s)
+      {
+        start: 23.5, end: 25.0,
+        worldPlate: 'hero-sp500-double-failure-v1.png', worldScale: 1.08,
+        wash: true, card1: true, card2: true, wipe: false,
+        pill1a: true, pill1b: true, pill2a: true, pill2b: true,
+        title1: 'S&P 500 SOFTWARE MULTIPLES',
+        img1: 'silicon-value-software-bubble-slide-002.png',
+        title2: 'SILICON TRIOPOLY FORWARD P/E',
+        img2: 'silicon-silent-triopoly-slide-002.png',
+        caption: 'Full Board: The Great Valuation Paradox — Extreme valuation divergence.'
+      },
+      // 9. Crisp Fast Board Wipe (25.0s - 25.5s: 0.5s duration!)
+      {
+        start: 25.0, end: 25.5,
+        worldPlate: 'hero-sp500-double-failure-v1.png', worldScale: 1.0,
+        wash: false, card1: false, card2: false, wipe: true,
+        pill1a: false, pill1b: false, pill2a: false, pill2b: false,
+        caption: 'Board wipes clean.'
+      },
+      // 10. Resolution (25.5s - 26.5s)
+      {
+        start: 25.5, end: 26.5,
+        worldPlate: 'hero-sp500-double-failure-v1.png', worldScale: 1.0,
+        wash: false, card1: false, card2: false, wipe: false,
+        pill1a: false, pill1b: false, pill2a: false, pill2b: false,
+        caption: 'Same visible chart move. Completely different underlying mechanism.'
+      }
+    ];
+
+    const worldBg = document.getElementById('world-bg');
+    const boardWash = document.getElementById('board-wash');
+    const card1 = document.getElementById('card-1');
+    const card2 = document.getElementById('card-2');
+    const pill1a = document.getElementById('pill-1a');
+    const pill1b = document.getElementById('pill-1b');
+    const pill2a = document.getElementById('pill-2a');
+    const pill2b = document.getElementById('pill-2b');
+    const wipeCurtain = document.getElementById('wipe-curtain');
+    const captionBanner = document.getElementById('caption-banner');
+    const scrubber = document.getElementById('scrubber');
+    const timeDisplay = document.getElementById('frame-display');
+    const playPauseBtn = document.getElementById('play-pause-btn');
+
+    let currentTime = 0;
+    let isRunning = false;
+    let animHandle = null;
+    let lastTimestamp = null;
+
+    function renderTime(t) {
+      currentTime = t;
+      scrubber.value = t;
+      timeDisplay.innerText = 'Time: ' + t.toFixed(1) + 's / 26.5s';
+
+      const b = timeline.find(item => t >= item.start && t < item.end) || timeline[timeline.length - 1];
+
+      // World Plate
+      worldBg.src = 'scene_assets/' + b.worldPlate;
+
+      // Continuous Cinematic Ken Burns (Slow zoom & subtle camera drift)
+      if (t < 13.0) {
+        // Scene 1: Fab Constraint World Plate (0.0s - 12.5s)
+        const p1 = Math.min(1.0, Math.max(0.0, t / 12.5));
+        const kbScale1 = 1.0 + p1 * 0.09;
+        const kbX1 = -p1 * 20;
+        const kbY1 = -p1 * 10;
+        worldBg.style.transform = 'scale(' + kbScale1.toFixed(4) + ') translate(' + kbX1.toFixed(1) + 'px, ' + kbY1.toFixed(1) + 'px)';
+      } else {
+        // Scene 2: S&P 500 Reflex World Plate (13.0s - 25.0s)
+        const p2 = Math.min(1.0, Math.max(0.0, (t - 13.0) / (25.0 - 13.0)));
+        const kbScale2 = 1.0 + p2 * 0.10;
+        const kbX2 = p2 * 16;
+        const kbY2 = -p2 * 12;
+        worldBg.style.transform = 'scale(' + kbScale2.toFixed(4) + ') translate(' + kbX2.toFixed(1) + 'px, ' + kbY2.toFixed(1) + 'px)';
+      }
+
+      // Wash
+      if (b.wash) boardWash.classList.add('active');
+      else boardWash.classList.remove('active');
+
+      // Card 1
+      if (b.card1) {
+        card1.classList.add('active');
+        if (b.title1) document.getElementById('title-1').innerText = b.title1;
+        if (b.img1) document.getElementById('img-1').src = 'slides/' + b.img1;
+      } else {
+        card1.classList.remove('active');
+      }
+
+      // Card 2 (Appears alongside Card 1!)
+      if (b.card2) {
+        card2.classList.add('active');
+        if (b.title2) document.getElementById('title-2').innerText = b.title2;
+        if (b.img2) document.getElementById('img-2').src = 'slides/' + b.img2;
+      } else {
+        card2.classList.remove('active');
+      }
+
+      // Individual Stat Pills Sequencing
+      if (b.pill1a) pill1a.classList.add('visible');
+      else pill1a.classList.remove('visible');
+
+      if (b.pill1b) pill1b.classList.add('visible');
+      else pill1b.classList.remove('visible');
+
+      if (b.pill2a) pill2a.classList.add('visible');
+      else pill2a.classList.remove('visible');
+
+      if (b.pill2b) pill2b.classList.add('visible');
+      else pill2b.classList.remove('visible');
+
+      // Wipe Curtain
+      if (b.wipe) wipeCurtain.classList.add('wipe-in');
+      else wipeCurtain.classList.remove('wipe-in');
+
+      captionBanner.innerText = '\"' + b.caption + '\"';
+    }
+
+    const vo = document.getElementById('voiceover');
+
+    function tick(timestamp) {
+      if (!isRunning) return;
+      if (!lastTimestamp) lastTimestamp = timestamp;
+      const delta = (timestamp - lastTimestamp) / 1000;
+      lastTimestamp = timestamp;
+
+      if (vo && !vo.paused) {
+        currentTime = vo.currentTime;
+      } else {
+        currentTime += delta;
+      }
+
+      if (currentTime >= 26.5) {
+        currentTime = 26.5;
+        renderTime(26.5);
+        isRunning = false;
+        if (vo) vo.pause();
+        playPauseBtn.innerText = '▶️ Play';
+        return;
+      }
+
+      renderTime(currentTime);
+      animHandle = requestAnimationFrame(tick);
+    }
+
+    function playScene() {
+      currentTime = 0;
+      isRunning = true;
+      lastTimestamp = null;
+      playPauseBtn.innerText = '⏸️ Pause';
+      if (vo) {
+        vo.currentTime = 0;
+        vo.play().catch(e => console.log('Audio autoplay prevented, user click required:', e));
+      }
+      if (animHandle) cancelAnimationFrame(animHandle);
+      animHandle = requestAnimationFrame(tick);
+    }
+
+    function pauseToggle() {
+      if (isRunning) {
+        isRunning = false;
+        playPauseBtn.innerText = '▶️ Play';
+        if (vo) vo.pause();
+        if (animHandle) cancelAnimationFrame(animHandle);
+      } else {
+        if (currentTime >= 26.5) currentTime = 0;
+        isRunning = true;
+        lastTimestamp = null;
+        playPauseBtn.innerText = '⏸️ Pause';
+        if (vo) {
+          vo.currentTime = currentTime;
+          vo.play().catch(e => console.log(e));
+        }
+        animHandle = requestAnimationFrame(tick);
+      }
+    }
+
+    function resetScene() {
+      isRunning = false;
+      if (vo) {
+        vo.pause();
+        vo.currentTime = 0;
+      }
+      if (animHandle) cancelAnimationFrame(animHandle);
+      playPauseBtn.innerText = '▶️ Play';
+      renderTime(0);
+    }
+
+    function seekTo(val) {
+      isRunning = false;
+      playPauseBtn.innerText = '▶️ Play';
+      if (vo) {
+        vo.pause();
+        vo.currentTime = val;
+      }
+      renderTime(val);
+      lastTimestamp = null;
+    }
+
+    window.onload = () => {
+      renderTime(0);
+    };
+  </script>
+</body>
+</html>
