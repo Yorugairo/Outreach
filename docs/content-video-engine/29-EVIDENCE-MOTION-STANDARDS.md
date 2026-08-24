@@ -469,3 +469,33 @@ was wrong.
 before being applied to a literal source document. Reveal timing, hand
 choreography, and mask geometry transfer directly. Anything that changes the
 document's pixels — blend modes, filters, recolors — does not.
+
+### 8.12 The actual bug: a stale hide-state clip (2026-08-24)
+
+8.11 fixed a real compositing fault but not the reported symptom. The reveal
+still showed nothing. The cause was mine, not the skill's:
+
+```js
+if (!d) { el.style.opacity = 0; el.style.clipPath = "inset(0 100% 0 0)"; continue; }
+```
+
+The empty-dock branch clips the dock to zero width. When the clip-path wipe
+was replaced by the SVG mask, the live branch stopped clearing it — so every
+dock stayed clipped to nothing for its whole lifetime while the mask swept
+correctly underneath. Computed style read `clip-path: inset(0px 100% 0px 0px)`
+with `opacity: 1`.
+
+Two things worth carrying forward:
+
+1. **When a reveal mechanism is replaced, audit the hide state too.** The
+   hidden and visible branches must write the same property set. A property
+   set only in one branch persists into the other.
+2. **Verify the composited element, not the mechanism in isolation.** The
+   earlier check rendered the SVG standalone and measured 12.9% ink, which
+   proved the mask worked and hid the fact that its container was invisible
+   on the page. Sample the live element's computed style, not a detached copy.
+
+Also added while fixing: the card lands before it is drawn on. A 0.3s
+micro-scale entrance places the sheet, then the mask sweep begins — the paper
+arrives, then the hand writes on it, rather than an empty card sitting through
+the whole reveal.

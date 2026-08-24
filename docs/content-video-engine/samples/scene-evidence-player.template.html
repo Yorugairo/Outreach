@@ -158,7 +158,7 @@
   const docks = [$("dock-1"), $("dock-2")];
   const WIPE = 0.9;
 
-  const REVEAL = 1.35, EXIT = 0.55;
+  const REVEAL = 1.35, EXIT = 0.55, CARD_IN = 0.3;
   const handA = $("handA"), handB = $("handB");
   handA.src = A["__handA__"] || ""; handB.src = A["__handB__"] || "";
   const NIB = { x: 0.287, y: 0.886 };   // measured on the cutout
@@ -257,10 +257,18 @@
       if (d.slide !== shown[s]) { fillDock(s, d.slide); shown[s] = d.slide; }
       el.classList.toggle("solo", live.length === 1 && s === 0);
 
-      const rk = clamp01((t - d.enter) / REVEAL);                /* mask sweep */
+      const rk = clamp01((t - d.enter - CARD_IN) / REVEAL);      /* mask sweep */
       const xk = t > d.exit ? clamp01((t - d.exit) / EXIT) : 0;  /* clean exit */
-      el.style.opacity = 1 - xk;
-      el.style.transform = xk ? "translateY(" + (-14 * xk) + "px) scale(" + (1 - 0.04 * xk) + ")" : "none";
+      /* clear the hidden-state clip: the SVG mask owns the reveal now, and a
+         leftover inset() from the empty branch keeps the dock at zero width */
+      el.style.clipPath = "none";
+      /* the sheet is placed first, then drawn on: a short micro-scale card
+         entrance, and the mask sweep starts once the card has landed */
+      const ck = clamp01((t - d.enter) / CARD_IN);
+      el.style.opacity = (1 - xk) * ck;
+      el.style.transform = xk
+        ? "translateY(" + (-14 * xk) + "px) scale(" + (1 - 0.04 * xk) + ")"
+        : "scale(" + (0.94 + 0.06 * io(ck)) + ")";
 
       /* reveal = stroke-dashoffset on the mask path, linear (ease "none") */
       const P = PATHS[String(s + 1)];
