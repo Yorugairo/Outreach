@@ -499,3 +499,43 @@ Also added while fixing: the card lands before it is drawn on. A 0.3s
 micro-scale entrance places the sheet, then the mask sweep begins — the paper
 arrives, then the hand writes on it, rather than an empty card sitting through
 the whole reveal.
+
+### 8.13 Hand pose set v2 — host-consistent, two poses, per-pose nib
+
+The asset pack shipped exactly one hand: `draw-hand-a-v1`, light-skinned, and
+no B pose. Both gaps are now closed by a single generation
+(`scripts/mat_drawing_hands.py` does the cut and calibration).
+
+**Skin tone is a continuity fix, not a preference.** The teacher-stamp
+presenter in the corner of all 86 stamped slides is a Black man in a suit. A
+light-skinned drawing hand contradicts the host identity the evidence layer
+already establishes on screen. This is not the `identity_rule`'s prohibited
+"cosmetic recoloring" of a character — it is matching the hand to the
+presenter the deck already shows.
+
+**One generation, both poses, same person.** `hand-prep.md` requires the pose
+set be generated from ONE reference so skin, sleeve, marker, and lighting
+match. The work order supplied `draw-hand-a-v1` as the reference and asked for
+A (default, left-to-right) and B (same hand, wrist rotated a few degrees for
+right-to-left rows), with hard rejects for: an arm ending inside the frame, a
+non-flat background, the two hands reading as different people, an unnatural
+grip, an illustrated look, or B being a mirror of A rather than a rotation.
+
+**Per-pose nib calibration is mandatory.** The wrist rotation moves the marker
+tip, so B cannot reuse A's numbers or the ink lands off the path:
+
+| pose | cut | nib (fraction) |
+| --- | --- | --- |
+| A | 816x1536 | 0.2868, 0.8913 |
+| B | 807x1536 | 0.3222, 0.8763 |
+
+Stored in `hyperframes/assets/hands/nib-calibration.v1.json`; each pose's CSS
+`transform-origin` is set from its own nib so jitter pivots on the tip.
+
+**Matting:** edge flood-fill from the black ground, never a luminance key —
+the heather sleeve is dark and a threshold key eats it. Horizontal slack is
+trimmed but **full image height is kept** so the forearm still runs off the
+frame edge.
+
+Remaining pose gap: an erase pose (hand gripping a folded cloth) if erase
+beats are ever wanted. Not needed by the current lane.

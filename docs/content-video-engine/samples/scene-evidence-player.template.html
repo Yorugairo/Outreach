@@ -77,7 +77,11 @@
   .hand {
     position: absolute; height: 604px; width: auto; pointer-events: none;
     opacity: 0; visibility: hidden; z-index: 40;
-    transform-origin: 28.7% 88.6%;
+  }
+  /* transform-origin sits on each pose's own nib so jitter pivots on the tip */
+  #handA { transform-origin: 28.7% 89.1%; }
+  #handB { transform-origin: 32.2% 87.6%; }
+  .hand-unused {
     filter: drop-shadow(-12px 16px 20px rgba(0,0,0,.42));
   }
 
@@ -161,7 +165,10 @@
   const REVEAL = 1.35, EXIT = 0.55, CARD_IN = 0.3;
   const handA = $("handA"), handB = $("handB");
   handA.src = A["__handA__"] || ""; handB.src = A["__handB__"] || "";
-  const NIB = { x: 0.287, y: 0.886 };   // measured on the cutout
+  /* nib measured per pose: the wrist rotation moves the marker tip, so B
+     cannot reuse A's calibration or the ink lands off the path */
+  const NIB = { a: { x: 0.2868, y: 0.8913 },
+                b: { x: 0.3222, y: 0.8763 } };
 
   /* Serpentine reveal path. Rows are stroke CENTERLINES inset by sw/2 so the
      painted coverage (body + round caps) lands exactly inside the rect, and
@@ -296,8 +303,9 @@
         const jitter = Math.sin(rk * 34) * 2.2;   /* hand wobble, never canvas */
         active.style.visibility = "visible";
         active.style.opacity = Math.min(1, rk * 8, (1 - rk) * 8);
-        active.style.left = (ax + pt.x * kx - hw * NIB.x) + "px";
-        active.style.top = (ay + pt.y * ky - 604 * NIB.y) + "px";
+        const nib = back ? NIB.b : NIB.a;
+        active.style.left = (ax + pt.x * kx - hw * nib.x) + "px";
+        active.style.top = (ay + pt.y * ky - 604 * nib.y) + "px";
         active.style.transform = "rotate(" + jitter + "deg)";
       }
 
