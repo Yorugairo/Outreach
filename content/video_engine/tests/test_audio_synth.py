@@ -13,7 +13,9 @@ from content.video_engine.src.services.audio_synth import (
     AudioSynthesisError,
     ElevenLabsConfig,
     ELEVENLABS_RATE_PER_CHARACTER_USD,
+    compile_pause_marks,
     group_word_timings,
+    strip_pause_markup,
 )
 
 
@@ -234,3 +236,134 @@ def test_run_stage_loads_job_storyboard_and_returns_stage_output(tmp_path: Path)
     output = service.run_stage(job, context)
 
     assert output.summary["scene_count"] == 1
+
+
+# --- TTS delivery standards (doc 37): pause marks, stitching, payload params ---
+
+
+def test_compile_pause_marks_translates_and_strip_recovers_clean_text() -> None:
+    text = "The peak. [post-key] And here is why. [pre-key] The number."
+    compiled = compile_pause_marks(text)
+
+    assert '<break time="1.2s" />' in compiled
+    assert '<break time="0.6s" />' in compiled
+    assert "[post-key]" not in compiled and "[pre-key]" not in compiled
+    assert strip_pause_markup(compiled) == "The peak. And here is why. The number."
+    assert strip_pause_markup(text) == "The peak. And here is why. The number."
+
+
+def test_compile_pause_marks_warns_when_ration_exceeded(
+    caplog: pytest.LogCaptureFixture,
+) -> None:
+    import logging
+
+    text = "A. [pre-key] B. [pre-key] C. [pre-key] D. [pre-key] E."
+    with caplog.at_level(logging.WARNING):
+        compiled = compile_pause_marks(text)
+    assert compiled.count("<break") == 4
+    assert any("break" in record.message.lower() for record in caplog.records)
+
+
+def test_pause_marks_reach_provider_but_never_the_word_timings(tmp_path: Path) -> None:
+    sent: dict = {}
+
+    def post(url: str, *, headers: dict, payload: dict, timeout: float):
+        sent["payload"] = payload
+        return _response(payload["text"])
+
+    service = AudioSynthService(_config(), request_fn=post)
+    service.synthesize_storyboard(
+        _storyboard("Watch the gap. [post-key] It closes."), tmp_path
+    )
+
+    assert '<break time="1.2s" />' in sent["payload"]["text"]
+    words = json.loads((tmp_path / "audio/scene_1.words.json").read_text())
+    tokens = [word["w"] for word in words["words"]]
+    assert tokens == ["Watch", "the", "gap.", "It", "closes."]
+
+
+def test_alignment_fallback_when_provider_strips_break_tags(tmp_path: Path) -> None:
+    def post(url: str, *, headers: dict, payload: dict, timeout: float):
+        return _response(strip_pause_markup(payload["text"]))
+
+    service = AudioSynthService(_config(), request_fn=post)
+    service.synthesize_storyboard(_storyboard("Hold it. [pre-key] Now look."), tmp_path)
+
+    words = json.loads((tmp_path / "audio/scene_1.words.json").read_text())
+    assert [word["w"] for word in words["words"]] == ["Hold", "it.", "Now", "look."]
+
+
+def test_request_stitching_chains_at_most_three_request_ids(tmp_path: Path) -> None:
+    calls: list[dict] = []
+
+    def post(url: str, *, headers: dict, payload: dict, timeout: float):
+        calls.append(payload)
+        status, body = _response(payload["text"])
+        return status, body, {"request-id": f"req-{len(calls)}"}
+
+    service = AudioSynthService(_config(), request_fn=post)
+    summary = service.synthesize_storyboard(
+        _storyboard("One.", "Two.", "Three.", "Four.", "Five."), tmp_path
+    )
+
+    assert "previous_request_ids" not in calls[0]
+    assert calls[1]["previous_request_ids"] == ["req-1"]
+    assert calls[4]["previous_request_ids"] == ["req-2", "req-3", "req-4"]
+    assert summary["scenes"][0]["request_id"] == "req-1"
+    words = json.loads((tmp_path / "audio/scene_1.words.json").read_text())
+    assert words["request_id"] == "req-1"
+
+
+def test_payload_carries_normalization_seed_and_dictionaries(tmp_path: Path) -> None:
+    seen: dict = {}
+
+    def post(url: str, *, headers: dict, payload: dict, timeout: float):
+        seen["payload"] = payload
+        return _response(payload["text"])
+
+    config = ElevenLabsConfig(
+        api_key="test-key",
+        retry_backoff_s=0.0,
+        seed=42,
+        pronunciation_dictionary_locators=(
+            {"pronunciation_dictionary_id": "dict-1", "version_id": "v1"},
+        ),
+    )
+    service = AudioSynthService(config, request_fn=post)
+    service.synthesize_storyboard(_storyboard("Numbers ahead."), tmp_path)
+
+    payload = seen["payload"]
+    assert payload["apply_text_normalization"] == "on"
+    assert payload["seed"] == 42
+    assert payload["pronunciation_dictionary_locators"] == [
+        {"pronunciation_dictionary_id": "dict-1", "version_id": "v1"}
+    ]
+
+
+def test_more_than_three_pronunciation_dictionaries_rejected(tmp_path: Path) -> None:
+    config = ElevenLabsConfig(
+        api_key="test-key",
+        pronunciation_dictionary_locators=tuple(
+            {"pronunciation_dictionary_id": f"dict-{index}", "version_id": "v"}
+            for index in range(4)
+        ),
+    )
+    service = AudioSynthService(config, request_fn=lambda *a, **k: _response("x"))
+    with pytest.raises(RuntimeError, match="at most 3"):
+        service.synthesize_storyboard(_storyboard("Hi there."), tmp_path)
+
+
+def test_cache_hit_with_pause_marks_compares_stripped_narration(tmp_path: Path) -> None:
+    def post(url: str, *, headers: dict, payload: dict, timeout: float):
+        return _response(payload["text"])
+
+    service = AudioSynthService(_config(), request_fn=post)
+    board = _storyboard("Steady now. [post-key] Breathe.")
+    service.synthesize_storyboard(board, tmp_path)
+
+    def fail_post(*args, **kwargs):
+        raise AssertionError("provider must not be called on a cache hit")
+
+    cached_service = AudioSynthService(_config(), request_fn=fail_post)
+    summary = cached_service.synthesize_storyboard(board, tmp_path)
+    assert summary["cache_hits"] == 1

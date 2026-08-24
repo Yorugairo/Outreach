@@ -1,0 +1,57 @@
+{
+  "schema_version": "pronunciation_dictionary.v1",
+  "name": "finance-core",
+  "model_id": "eleven_multilingual_v2",
+  "rules": [
+    {
+      "string_to_replace": "trillion won",
+      "type": "alias",
+      "alias": "trillion wahn",
+      "note": "ep1 read as past tense of 'win'; scoped to the currency context (doc 22)",
+      "added_episode": "current-bubble-mechanism"
+    },
+    {
+      "string_to_replace": "billion won",
+      "type": "alias",
+      "alias": "billion wahn",
+      "note": "same homograph, scoped per doc 37 4b",
+      "added_episode": "current-bubble-mechanism"
+    },
+    {
+      "string_to_replace": "million won",
+      "type": "alias",
+      "alias": "million wahn",
+      "note": "same homograph, scoped per doc 37 4b",
+      "added_episode": "current-bubble-mechanism"
+    },
+    {
+      "string_to_replace": "AVAV",
+      "type": "alias",
+      "alias": "A V A V",
+      "note": "ticker spoken as letters",
+      "added_episode": "current-bubble-mechanism"
+    },
+    {
+      "string_to_replace": "TSMC",
+      "type": "alias",
+      "alias": "T S M C",
+      "note": "ticker/initialism spoken as letters",
+      "added_episode": "current-bubble-mechanism"
+    },
+    {
+      "string_to_replace": "KOSPI",
+      "type": "alias",
+      "alias": "Kospee",
+      "note": "index name, spoken KOSS-pee not spelled out",
+      "added_episode": "current-bubble-mechanism"
+    },
+    {
+      "string_to_replace": "SK hynix",
+      "type": "alias",
+      "alias": "S K hynix",
+      "note": "letters then name; prevents 'sk' being read as a word",
+      "added_episode": "current-bubble-mechanism"
+    }
+  ],
+  "artifact_hash": "f31f680d7d1b21f010e64bd534beb10aa630d2a5deece40f87d08d7cd3fb2025"
+}

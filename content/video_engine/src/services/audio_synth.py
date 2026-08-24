@@ -55,6 +55,91 @@ COST_PER_CHARACTER = ELEVENLABS_RATE_PER_CHARACTER_USD
 
 _TOKEN = re.compile(r"\S+", re.UNICODE)
 
+# Pause-mark compilation (doc 37 §1).  Scripts carry semantic marks; the
+# provider receives SSML break tags.  v3 has no SSML — this table is the
+# multilingual-v2 column; a v3 column would map to [pause]-style audio tags.
+PAUSE_MARK_BREAKS: dict[str, str] = {
+    "[pre-key]": '<break time="0.6s" />',
+    "[post-key]": '<break time="1.2s" />',
+}
+# Official guidance: excessive break tags cause speed-ups and artifacts.
+MAX_BREAK_TAGS_PER_SEGMENT = 3
+
+_BREAK_TAG = re.compile(r'<break\s+time="\d+(?:\.\d+)?s"\s*/>')
+_PAUSE_MARK = re.compile(r"\[(?:pre|post)-key\]")
+
+
+def compile_pause_marks(narration: str) -> str:
+    """Translate script pause marks into provider break tags.
+
+    Unknown bracketed text passes through untouched so future v3 audio tags
+    or editorial annotations are not silently destroyed.
+    """
+
+    compiled = narration
+    for mark, tag in PAUSE_MARK_BREAKS.items():
+        compiled = compiled.replace(mark, tag)
+    tag_count = len(_BREAK_TAG.findall(compiled))
+    if tag_count > MAX_BREAK_TAGS_PER_SEGMENT:
+        LOGGER.warning(
+            "segment compiles to %d break tags (ration is %d); excessive breaks "
+            "cause provider speed-ups and artifacts — split the segment or cut marks",
+            tag_count,
+            MAX_BREAK_TAGS_PER_SEGMENT,
+        )
+    return compiled
+
+
+def strip_pause_markup(text: str) -> str:
+    """Remove pause marks and break tags, collapsing the leftover whitespace.
+
+    Used for caption-facing text and for comparing narration against cached
+    word timings; the marks are delivery directives, never viewer text.
+    """
+
+    stripped = _BREAK_TAG.sub(" ", text)
+    stripped = _PAUSE_MARK.sub(" ", stripped)
+    return " ".join(stripped.split())
+
+
+def _pause_word_indices(compiled: str) -> set[int]:
+    """Token indices in ``compiled`` that belong to break-tag markup."""
+
+    tag_spans = [match.span() for match in _BREAK_TAG.finditer(compiled)]
+    if not tag_spans:
+        return set()
+    indices: set[int] = set()
+    for index, token in enumerate(_TOKEN.finditer(compiled)):
+        token_start, token_end = token.span()
+        if any(start < token_end and token_start < end for start, end in tag_spans):
+            indices.add(index)
+    return indices
+
+
+def _optional_int_env(name: str) -> int | None:
+    raw = os.environ.get(name)
+    if raw in (None, ""):
+        return None
+    try:
+        return int(raw)
+    except ValueError as exc:
+        raise RuntimeError(f"{name} must be an integer") from exc
+
+
+def _locators_env(name: str) -> tuple[Mapping[str, Any], ...]:
+    raw = os.environ.get(name)
+    if raw in (None, ""):
+        return ()
+    try:
+        loaded = json.loads(raw)
+    except json.JSONDecodeError as exc:
+        raise RuntimeError(f"{name} must be a JSON array of locator objects") from exc
+    if not isinstance(loaded, list) or not all(
+        isinstance(item, Mapping) for item in loaded
+    ):
+        raise RuntimeError(f"{name} must be a JSON array of locator objects")
+    return tuple(loaded)
+
 
 class AudioSynthesisError(RuntimeError):
     """A provider or artifact failure that should fail the audio stage."""
@@ -102,6 +187,12 @@ class ElevenLabsConfig:
     retry_backoff_s: float = DEFAULT_RETRY_BACKOFF_S
     rate_per_character_usd: float = ELEVENLABS_RATE_PER_CHARACTER_USD
     request_headers: dict[str, str] = field(default_factory=dict)
+    # doc 37: explicit normalization for narration jobs; "auto"/"on"/"off".
+    text_normalization: str = "on"
+    # doc 37: optional deterministic retakes.
+    seed: int | None = None
+    # doc 37 §5: locators for dictionaries already synced to ElevenLabs.
+    pronunciation_dictionary_locators: tuple[Mapping[str, Any], ...] = ()
 
     @classmethod
     def from_env(cls) -> "ElevenLabsConfig":
@@ -162,6 +253,13 @@ class ElevenLabsConfig:
                 "ELEVENLABS_RATE_PER_CHARACTER_USD",
                 ELEVENLABS_RATE_PER_CHARACTER_USD,
             ),
+            text_normalization=(
+                os.environ.get("ELEVENLABS_TEXT_NORMALIZATION") or "on"
+            ).strip(),
+            seed=_optional_int_env("ELEVENLABS_SEED"),
+            pronunciation_dictionary_locators=_locators_env(
+                "ELEVENLABS_PRONUNCIATION_DICTIONARIES"
+            ),
         )
 
     @classmethod
@@ -184,10 +282,16 @@ class ElevenLabsConfig:
             "retry_backoff_s",
             "rate_per_character_usd",
             "request_headers",
+            "text_normalization",
+            "seed",
+            "pronunciation_dictionary_locators",
         }
         payload = {key: value for key, value in values.items() if key in known}
         if "base_url" in payload and payload["base_url"]:
             payload["base_url"] = str(payload["base_url"]).rstrip("/")
+        locators = payload.get("pronunciation_dictionary_locators")
+        if locators is not None:
+            payload["pronunciation_dictionary_locators"] = tuple(locators)
         return cls(**payload)
 
 
@@ -202,6 +306,7 @@ class SceneAudioResult:
     character_count: int
     cache_hit: bool
     cost_usd: float
+    request_id: str | None = None
 
     def to_dict(self) -> dict[str, Any]:
         payload = asdict(self)
@@ -342,6 +447,17 @@ def _cache_key(voice_id: str, narration_text: str, settings: Mapping[str, Any]) 
     return hashlib.sha256(material.encode("utf-8")).hexdigest()
 
 
+def _request_id_from_headers(headers: Mapping[str, str] | None) -> str | None:
+    """Extract the provider request id (case-insensitive) for stitching."""
+
+    if not headers:
+        return None
+    for key, value in headers.items():
+        if str(key).casefold() == "request-id" and str(value).strip():
+            return str(value).strip()
+    return None
+
+
 def _decode_provider_payload(payload: Mapping[str, Any] | bytes) -> dict[str, Any]:
     if isinstance(payload, bytes):
         try:
@@ -440,6 +556,9 @@ class AudioSynthService:
         total_chars = 0
         cache_hits = 0
         billable_chars = 0
+        # Request-stitching chain (doc 37 §3): carry the last <=3 provider
+        # request ids forward so prosody stays continuous across scenes.
+        stitch_chain: list[str] = []
         for scene in scenes:
             if not isinstance(scene, Mapping):
                 raise AudioSynthesisError("each storyboard scene must be an object")
@@ -458,7 +577,10 @@ class AudioSynthService:
                 audio_dir=audio_dir,
                 cache_dir=cache_dir,
                 config=config,
+                previous_request_ids=tuple(stitch_chain[-3:]),
             )
+            if result.request_id:
+                stitch_chain.append(result.request_id)
             scene_results.append(result)
             total_chars += result.character_count
             if result.cache_hit:
@@ -493,37 +615,53 @@ class AudioSynthService:
         audio_dir: Path,
         cache_dir: Path,
         config: ElevenLabsConfig | None = None,
+        previous_request_ids: tuple[str, ...] = (),
     ) -> SceneAudioResult:
         config = config or self.config or ElevenLabsConfig.from_env()
         self._validate_config(config)
         if not narration.strip():
             raise AudioSynthesisError(f"scene {scene_id} narration is empty")
-        cache_hash = _cache_key(voice_id, narration, settings)
+        # Pause marks compile to provider break tags (doc 37 §1); the caption
+        # text is the mark-free form.  The cache key uses the compiled text so
+        # a pause edit re-synthesizes rather than reusing stale prosody.
+        compiled = compile_pause_marks(narration)
+        caption_text = strip_pause_markup(narration)
+        if not caption_text:
+            raise AudioSynthesisError(
+                f"scene {scene_id} narration contains only pause markup"
+            )
+        cache_hash = _cache_key(voice_id, compiled, settings)
         cache_path = Path(cache_dir) / f"{cache_hash}.mp3"
         audio_path = Path(audio_dir) / f"scene_{scene_id}.mp3"
         words_path = Path(audio_dir) / f"scene_{scene_id}.words.json"
         cache_sidecar = cache_path.with_suffix(".words.json")
 
+        request_id: str | None = None
         cache_hit = cache_path.exists()
         if cache_hit:
             audio_bytes = cache_path.read_bytes()
             words, duration_s = self._load_cached_words(
                 words_path,
                 cache_sidecar,
-                narration,
+                caption_text,
             )
         else:
-            payload = self._request_with_retries(
+            payload, request_id = self._request_with_retries(
                 voice_id=voice_id,
-                narration=narration,
+                narration=compiled,
                 settings=settings,
                 config=config,
+                previous_request_ids=previous_request_ids,
             )
             audio_bytes = _decode_audio(payload)
             alignment = payload.get("alignment") or payload.get("normalized_alignment")
             if not isinstance(alignment, Mapping):
                 raise AlignmentError("ElevenLabs response is missing alignment")
-            words, duration_s = group_word_timings(narration, alignment)
+            words, duration_s = self._words_from_alignment(
+                compiled,
+                caption_text,
+                alignment,
+            )
             cache_path.write_bytes(audio_bytes)
             cache_sidecar.write_text(
                 json.dumps(
@@ -531,6 +669,7 @@ class AudioSynthService:
                         "scene_id": int(scene_id),
                         "duration_s": duration_s,
                         "words": words,
+                        "request_id": request_id,
                     },
                     ensure_ascii=False,
                     indent=2,
@@ -545,21 +684,47 @@ class AudioSynthService:
             "scene_id": int(scene_id),
             "duration_s": float(duration_s),
             "words": words,
+            "request_id": request_id,
         }
         words_path.write_text(
             json.dumps(words_payload, ensure_ascii=False, indent=2),
             encoding="utf-8",
         )
-        cost = 0.0 if cache_hit else len(narration) * config.rate_per_character_usd
+        cost = 0.0 if cache_hit else len(compiled) * config.rate_per_character_usd
         return SceneAudioResult(
             scene_id=int(scene_id),
             audio_path=audio_path,
             words_path=words_path,
             duration_s=float(duration_s),
-            character_count=len(narration),
+            character_count=len(compiled),
             cache_hit=cache_hit,
             cost_usd=round(cost, 8),
+            request_id=request_id,
         )
+
+    @staticmethod
+    def _words_from_alignment(
+        compiled: str,
+        caption_text: str,
+        alignment: Mapping[str, Any],
+    ) -> tuple[list[dict[str, Any]], float]:
+        """Word timings for viewer-facing text, however the provider aligned.
+
+        The provider may echo the break tags in its alignment or strip them
+        first; both are reconciled here, and break-tag tokens never reach the
+        caption-facing word list.
+        """
+
+        try:
+            words, duration_s = group_word_timings(compiled, alignment)
+        except AlignmentError:
+            if compiled == caption_text:
+                raise
+            return group_word_timings(caption_text, alignment)
+        skip = _pause_word_indices(compiled)
+        if skip:
+            words = [word for index, word in enumerate(words) if index not in skip]
+        return words, duration_s
 
     def _load_cached_words(
         self,
@@ -603,7 +768,8 @@ class AudioSynthService:
         narration: str,
         settings: Mapping[str, Any],
         config: ElevenLabsConfig,
-    ) -> dict[str, Any]:
+        previous_request_ids: tuple[str, ...] = (),
+    ) -> tuple[dict[str, Any], str | None]:
         endpoint = (
             config.base_url.rstrip("/")
             + "/text-to-speech/"
@@ -617,18 +783,30 @@ class AudioSynthService:
             "text": narration,
             "model_id": config.model_id,
             "voice_settings": dict(settings),
+            "apply_text_normalization": config.text_normalization,
         }
+        if config.seed is not None:
+            payload["seed"] = int(config.seed)
+        if config.pronunciation_dictionary_locators:
+            payload["pronunciation_dictionary_locators"] = [
+                dict(locator) for locator in config.pronunciation_dictionary_locators
+            ]
+        if previous_request_ids:
+            payload["previous_request_ids"] = list(previous_request_ids[-3:])
         last_error: Exception | None = None
         attempts = max(1, int(config.max_attempts))
         for attempt in range(1, attempts + 1):
             try:
-                status, response_payload = self._request_once(
+                status, response_payload, response_headers = self._request_once(
                     url,
                     payload,
                     config=config,
                 )
                 if 200 <= status < 300:
-                    return _decode_provider_payload(response_payload)
+                    return (
+                        _decode_provider_payload(response_payload),
+                        _request_id_from_headers(response_headers),
+                    )
                 error = AudioSynthesisError(
                     f"ElevenLabs request failed with HTTP {status}"
                 )
@@ -684,7 +862,7 @@ class AudioSynthService:
         payload: Mapping[str, Any],
         *,
         config: ElevenLabsConfig,
-    ) -> tuple[int, Mapping[str, Any] | bytes]:
+    ) -> tuple[int, Mapping[str, Any] | bytes, Mapping[str, str] | None]:
         headers = {
             "xi-api-key": str(config.api_key or ""),
             "Content-Type": "application/json",
@@ -725,16 +903,23 @@ class AudioSynthService:
                 status_value = response.getcode()
             status = int(status_value)
             body = response.read()
-        return status, body
+            response_headers = dict(response.headers.items())
+        return status, body, response_headers
 
     @staticmethod
-    def _coerce_response(result: Any) -> tuple[int, Mapping[str, Any] | bytes]:
+    def _coerce_response(
+        result: Any,
+    ) -> tuple[int, Mapping[str, Any] | bytes, Mapping[str, str] | None]:
+        if isinstance(result, tuple) and len(result) == 3:
+            status, payload, headers = result
+            return int(status), payload, headers
         if isinstance(result, tuple) and len(result) == 2:
             status, payload = result
-            return int(status), payload
+            return int(status), payload, None
         if isinstance(result, Mapping) or isinstance(result, bytes):
-            return 200, result
+            return 200, result, None
         status = int(getattr(result, "status_code", getattr(result, "status", 200)))
+        headers = getattr(result, "headers", None)
         if hasattr(result, "json"):
             payload = result.json()
         elif hasattr(result, "content"):
@@ -743,7 +928,7 @@ class AudioSynthService:
             payload = result.read()
         else:
             payload = result
-        return status, payload
+        return status, payload, headers if isinstance(headers, Mapping) else None
 
     @staticmethod
     def _validate_config(config: ElevenLabsConfig) -> None:
@@ -756,6 +941,16 @@ class AudioSynthService:
             raise RuntimeError("ElevenLabs base_url must not be empty")
         if int(config.max_attempts) < 1:
             raise RuntimeError("ElevenLabs max_attempts must be at least 1")
+        if config.text_normalization not in ("auto", "on", "off"):
+            raise RuntimeError(
+                "ElevenLabs text_normalization must be one of auto/on/off, "
+                f"got {config.text_normalization!r}"
+            )
+        if len(config.pronunciation_dictionary_locators) > 3:
+            raise RuntimeError(
+                "ElevenLabs accepts at most 3 pronunciation dictionary locators "
+                f"per request, got {len(config.pronunciation_dictionary_locators)}"
+            )
 
     @staticmethod
     def _load_storyboard(job: VideoRun, ctx: StageContext) -> dict[str, Any]:
@@ -801,8 +996,12 @@ __all__ = [
     "DEFAULT_ELEVENLABS_OUTPUT_FORMAT",
     "ELEVENLABS_RATE_PER_CHARACTER_USD",
     "ElevenLabsConfig",
+    "MAX_BREAK_TAGS_PER_SEGMENT",
+    "PAUSE_MARK_BREAKS",
     "SceneAudioResult",
     "TTS_COST_PER_CHARACTER_USD",
+    "compile_pause_marks",
     "group_word_timings",
     "run_stage",
+    "strip_pause_markup",
 ]

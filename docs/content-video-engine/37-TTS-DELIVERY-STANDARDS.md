@@ -52,20 +52,25 @@ is wanted, which in this voice is nearly never.
 Official guidance ([voice settings](https://elevenlabs.io/docs/eleven-creative/playground/text-to-speech),
 [best practices](https://elevenlabs.io/docs/overview/capabilities/text-to-speech/best-practices)):
 
-| Setting | Our standard | Source guidance |
+**Operator baseline (2026-08-24 — supersedes the generic canon below):**
+
+| Setting | Our standard | Official reference |
 | --- | --- | --- |
-| stability | **0.50** baseline; raise to 0.60–0.65 only if chunks drift | narration band 0.4–0.7; "most common setting is stability around 50" |
+| stability | **0.40** | narration band 0.4–0.7 — we sit at the expressive end, deliberately |
 | similarity_boost | **0.75** | "similarity around 75"; ≥0.75 for branded voices |
-| style | **0, always** | official: "we recommend keeping this setting at 0 at all times" — destabilizes, adds artifacts |
-| use_speaker_boost | **off** | effect "generally rather subtle," adds latency |
-| speed | **1.0** global; 0.9–1.1 is the natural band; per-segment override only, never global tuning | min 0.7 / max 1.2; extremes degrade quality |
+| style | **0.20** | official default advice is 0 ("at all times"); operator overrides by ear — watch for the documented instability/artifacts and drop back if they appear |
+| use_speaker_boost | **on** | official calls the effect "subtle" with added latency; operator keeps it on |
+| speed | **1.0** global; 0.9–1.1 natural band; per-segment override only | min 0.7 / max 1.2; extremes degrade quality |
+
+Two of these (style 0.20, boost on) knowingly diverge from ElevenLabs'
+written guidance — recorded as an ear decision under the judge-by-ear rule,
+not an oversight. The tripwire: if generations show inconsistent speed,
+mispronunciation, or extra sounds, style is the first dial to zero (their
+troubleshooting names it specifically).
 
 Settings are a randomization *range*, not a dial — the API is
 non-deterministic. For retakes that must match, pass **`seed`** (supported on
 our endpoint).
-
-**Verdict on current config: our 0.5/0.75 is exactly canon.** The codification
-adds the style=0 and speed rules so nobody "improves" them later.
 
 ## 3. Long-form consistency — request stitching (unused, highest-value gap)
 
@@ -161,15 +166,30 @@ compiler changes), professional voice clones "not fully optimized" on v3
 Revisit when PVC support matures; the compilation table above already
 carries the v3 column for that day.
 
-## 7. Implementation gaps (follow-ups, not yet built)
+## 7. Implementation status (built 2026-08-24, TDD, 18/18 tests green)
 
-1. Pause-mark compiler: `[pre-key]`/`[post-key]` → break tags at synth time
-   (strip from captions/subtitle derivations).
-2. Request stitching: thread request ids through `audio_synth.py`, persist
-   in the audio manifest.
-3. Send `apply_text_normalization: "on"` for narration.
-4. Attach pronunciation dictionary locators; add the ticker aliases.
-5. Optional: `seed` capture for reproducible retakes.
+All five gaps closed in `content/video_engine/src/services/audio_synth.py`:
+
+1. **Pause-mark compiler** — `compile_pause_marks` / `strip_pause_markup`:
+   `[pre-key]` → 0.6s, `[post-key]` → 1.2s break tags; ration warning above
+   3 tags/segment; break-tag tokens never reach the word-timing sidecars
+   (alignment reconciles whether the provider echoes or strips the tags);
+   cache key uses compiled text so a pause edit re-synthesizes.
+2. **Request stitching** — `previous_request_ids` (≤3) chained across scenes
+   in storyboard order; provider `request-id` captured from response headers
+   and persisted in the words sidecars for retake stitching.
+3. **`apply_text_normalization: "on"`** sent by default
+   (`ELEVENLABS_TEXT_NORMALIZATION` overrides; validated auto/on/off).
+4. **Dictionary attachment** — `pronunciation_dictionary_locators` (≤3
+   enforced) from config/env; first dictionary shipped at
+   `configs/pronunciation/finance-core.pronunciation.v1.json` (scoped won
+   aliases per §4b/doc 22 + AVAV, TSMC, KOSPI, SK hynix). Sync to ElevenLabs
+   via the existing `compile-pronunciation-sync` CLI, then set the locators.
+5. **`seed`** — config/env (`ELEVENLABS_SEED`), passed when set.
+
+Remaining manual step: run the dictionary sync (operator-gated API write),
+then record the returned `dictionary_id`/`version_id` via
+`record_sync_result` and set `ELEVENLABS_PRONUNCIATION_DICTIONARIES`.
 
 ## Sources
 
