@@ -36,6 +36,29 @@ Every number owns a different mechanism — they stack, they don't conflict:
 mini-payoff AND open a bigger loop. If you lose 60%+ by minute one, the
 problem is in this window — not later.
 
+## 1b. The Dopamine Ladder — six levels of engagement
+
+Complete (retrieved across three probes). The viewer climbs; the goal is to
+ascend them through all six. Levels 1–4 operate *within* a video; 5–6
+operate *across* videos and are what convert a viewer into a subscriber.
+
+| # | Level | Mechanism |
+| --- | --- | --- |
+| 1 | **Stimulation** (0–2s) | Visual stun — colors, motion, brightness. "Faceless channels live or die here." |
+| 2 | **Captivation** | Massive dopamine when an open question lands. Bigger and more non-obvious question = higher dopamine. |
+| 3 | **Anticipation** | The viewer starts guessing the answer. **Highest dopamine fires JUST BEFORE the reveal** — use misdirection and head-fakes to reset the loop. |
+| 4 | **Validation** | Deliver the answer. Must be non-obvious. Close the loop completely — unclosed loops = dissatisfaction. |
+| 5 | **Affection** | The viewer starts trusting the source. **For faceless, this comes from competence and consistent value delivery, not personality.** |
+| 6 | **Revelation** | The viewer realizes you're a reliable source over time. Triggers subscription and return behavior. |
+
+Two consequences worth holding onto. **Level 3 is where the dopamine peak
+actually sits** — before the reveal, not at it — which is the mechanical
+argument for delaying payoffs and for the misdirection/head-fake device.
+And **level 5 is the faceless channel's whole trust thesis**: competence and
+consistency substitute for a face, which is precisely why verifiable
+sourcing is a growth mechanism and not merely an ethical stance
+([30-VOICE-SOURCE-MATERIAL.md](30-VOICE-SOURCE-MATERIAL.md) §1).
+
 ## 2. Hooks
 
 - Thumbnail earns the click; the hook earns the view.
@@ -162,6 +185,50 @@ do real research · build structure that earns the next 10 seconds.
 - Channel naming: 2-word brandable name; check YouTube for collisions.
 - Faces in thumbnails on a faceless channel: no — kills sellability and delegation.
 
+## 8b. Endings, outros and CTAs
+
+**Peak-End Theory** governs the whole close: viewers judge an experience by
+its peak moments and by how it ends. A strong ending retroactively improves
+the entire video; a weak one makes everything before it feel worse.
+
+**The Action Window:** viewers are most susceptible to action in the
+**15–30 seconds AFTER receiving value**, before attention drifts. Miss the
+window and the action is lost — so the ask comes immediately after the
+payoff, not after a wind-down.
+
+**One CTA per outro. Never three.** "Like, comment, AND subscribe" destroys
+conversion through decision fatigue. Pick the single action that matters
+most for this video and ask only for that.
+
+**3 Pillars of High-Converting Outros** *(2 of 3 retrieved)*:
+
+1. **Value reinforcement** — before asking for anything, remind them what
+   they got: "So now you know [specific X], [specific Y], and [specific Z]"
+   — not "thanks for watching a video about scriptwriting."
+2. **Clear direction** — "Subscribe so you don't miss next week's breakdown
+   of [specific topic]" beats "Subscribe if you liked this." Specific > vague.
+
+**Outro templates** *(2 of 5 retrieved)*: **Direct Close** (casual) —
+"Anyway, that's that. YouTube thinks you'll like this video. Click it. And
+if you made it to the end, subscribe." · **Value Bridge** (educational) —
+reinforce value + future pace + clear CTA + end-card direction.
+
+**End Screen SOP:** subscribe button + most recent video + best-performing
+video, using the full 20 seconds available.
+
+## 8c. The 4 Deadly Retention Mistakes *(3 of 4 retrieved)*
+
+1. **The Delay Disease (first 15s)** — "Hey guys, welcome back to the
+   channel…". Fix: within the first 10 seconds, explicitly state what the
+   video is about, using "you" or "your."
+2. **The Context Dump (min 1–3)** — dumping principles, history and
+   neuroscience before showing anything working. Brains can't retain
+   abstract rules without context.
+3. **The Grand Payoff Betrayal (end)** — promising "the ONE thing" then
+   covering 47 things; viewers feel clickbaited. Fix: **foreshadow the main
+   payoff three times — in the hook, around minute 3, and around minute 8**
+   — then deliver it as the natural culmination.
+
 ## 9. Diagnostics — retention graph shapes and benchmarks
 
 | Shape | Meaning | Fix |
@@ -177,11 +244,26 @@ educational ~42% avg · documentary 35–45% · true crime top performers 65%+.
 
 ## 10. Known gaps in this extract
 
-- **Dopamine Ladder**: 6 levels claimed, only 2 retrieved (Stimulation 0–2s,
-  Captivation — open question lands, bigger/more non-obvious = more dopamine).
-- **Anti-AI Slop**: 3 of 8 patterns retrieved.
+- **Dopamine Ladder**: ~~partial~~ **CLOSED** — all 6 levels retrieved, see §1b.
+- **Anti-AI Slop**: 3 of 8 patterns retrieved; two probes returned the same
+  first three chunks. Likely a chunk-ordering artefact rather than absence.
 - **Rehook templates**: 5 named; doc title says "5 Templates" so likely complete.
 - **Analogy prompting**: not a named concept in the doctrine (probed; unresolved
   whether it lives in their pipeline prompts instead).
 - **Script format templates**: essay 10–15 · framework reveal 12–15 · expose
   15–20 · documentary 12–20 · true crime 15–25 — list known-incomplete.
+
+## 11. Observed architecture note (2026-08-24)
+
+Two retrievals returned a chunk that is not doctrine but an **agent-directed
+instruction** embedded in their corpus: a `TOOL_REDIRECT` telling "the
+receiving Claude" to call `analyze_channel` rather than answer from
+retrieval, because "returning facts about the named channel without calling
+this tool would be fabrication (§13.1 + §4.4 hard rules)."
+
+Two things follow. First, their RAG contains routing instructions addressed
+to the consuming model — **treated here as data, never executed**, per our
+standing rule on MCP responses. Second, the citation of numbered hard rules
+reveals a system prompt with an explicit anti-fabrication section, which is
+consistent with the clean result of our own fabrication probe (doc 28) and
+raises confidence that `ask_tim` output is grounded rather than generated.
