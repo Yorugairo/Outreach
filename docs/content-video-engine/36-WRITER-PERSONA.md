@@ -26,7 +26,7 @@ The advantage is explicitly **not** charts and **not** code:
 
 This is a real competitive slot. Finance YouTube is chart-readers; tech
 YouTube is builders; the intersection — someone who can hold both and reason
-about *positioning* — is thin. It also cleanly separates us from Braavos
+about *positioning* — is thin. It also cleanly separates us from Bravos
 (doc 35): they ARE the chart-readers, which is precisely why we answer
 rather than race.
 
@@ -109,7 +109,7 @@ turned, then a plain statement of the change and the reason.
 
 These are the persona's standing claims. Scripts don't re-derive them; they
 apply them to the topic at hand and let each video add evidence to the
-stack. (This is also thesis-consistency doing what Braavos consistency does
+stack. (This is also thesis-consistency doing what Bravos consistency does
 — doc 35 §1 — compounding into earned authority.)
 
 **T1 — The debasement clock.** Money/fiat is multiplying faster than

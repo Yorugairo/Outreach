@@ -10,7 +10,7 @@ Operator direction, 2026-08-24. Supersedes the competitive read in
 
 ## 1. Correction: earned credibility is a real source tier
 
-An earlier draft of doc 34 marked Braavos Research down for presenting their
+An earlier draft of doc 34 marked Bravos Research down for presenting their
 own constructed series — capex-to-GDP share, wealth-share, causal
 attributions — without external citation. **That reading was wrong**, and the
 correction matters because it changes what we are competing on.
@@ -21,7 +21,7 @@ correction matters because it changes what we are competing on.
 
 The mechanism: a track record converts the analyst's own chart into a primary
 source. Once earned, self-sourcing is not a shortcut — it *is* the product,
-and consistency compounds it. Braavos publish a position, state the threshold
+and consistency compounds it. Bravos publish a position, state the threshold
 that would flip it, and then keep showing up. That is what buys the right to
 be cited rather than to cite.
 
@@ -68,7 +68,7 @@ From the operator's own worked example:
 
 | # | Beat | The move | From the example |
 | --- | --- | --- | --- |
-| 1 | **Credit** | Name them, state their finding accurately | "Braavos Research clearly shows that X" |
+| 1 | **Credit** | Name them, state their finding accurately | "Bravos Research clearly shows that X" |
 | 2 | **Steelman** | Acknowledge the objection they already anticipated — proves we watched | "and they even point out that Y" |
 | 3 | **Agree** | Explicitly endorse what is right. Not a concession; the foundation | "their position on the current risk climate is fair" |
 | 4 | **Locate** | The precise seam — not wrong, working from a prior-cycle model | "but they're citing Old Memory" |

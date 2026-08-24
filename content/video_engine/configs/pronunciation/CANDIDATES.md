@@ -33,7 +33,7 @@ Dictionary layout (locator cap is 3 per request):
 | LASE | letters (ticker convention) | may read "laze" |
 | APLD | letters | likely fine |
 | FHFA / EBRI | letters | likely fine |
-| Braavos | "BRAH-vohs" | may read "BRAY-vohs" (cited channel, doc 35) |
+| Bravos | "BRAH-vohs" | may read "BRAY-vohs" (cited channel, doc 35) |
 | Nvidia / Micron / Broadcom | natural | verify only |
 
 ## Datacenter / silicon candidates (memory thesis vocabulary)

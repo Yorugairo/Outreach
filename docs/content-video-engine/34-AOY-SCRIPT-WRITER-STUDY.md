@@ -193,7 +193,7 @@ video our first answer-format piece should respond to
 
 ## 4c. The competitor template, extracted (`Jw8ykhoOVBQ` + `YXFvwJQBzJc`)
 
-Two videos from the same channel (Braavos Research, self-identified in the
+Two videos from the same channel (Bravos Research, self-identified in the
 narration) run **the same formula with different variables**. Two samples is
 enough to extract it, and the formula is good enough to adopt.
 
@@ -276,7 +276,7 @@ rates should cool a market; here they froze supply so hard that the supply
 effect outweighed the demand effect and prices rose.
 
 That is a genuine insight, correctly explained, and it is the same
-"one policy variable, one threshold" device as the Braavos template — arrived
+"one policy variable, one threshold" device as the Bravos template — arrived
 at **independently**, which is evidence the device is convergent best
 practice rather than one channel's signature.
 
@@ -384,7 +384,7 @@ already sold"); a genuine steelman slot (idea five takes the strongest
 objection and answers it with annuities and longevity math — not a straw
 man); and a **peak-end close that refuses comfort**: "The comfortable
 ending here would be that it is never too late… That isn't what the data
-says." That refusal is the same credibility move as Braavos declining the
+says." That refusal is the same credibility move as Bravos declining the
 doom close, inverted.
 
 **Failures, consistent with Run 1.** CTA sprawl is *worse*: an early
