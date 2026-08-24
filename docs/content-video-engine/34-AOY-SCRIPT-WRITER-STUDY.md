@@ -354,3 +354,50 @@ capability is complementary rather than competitive.
   the quality holds on a book-explainer bend, where there is no chart
   mechanism to find.
 
+## 5b. Run 2 findings — the quality holds without a chart
+
+The open question after Run 1 was whether the writer's quality depended on
+having a chart mechanism to discover. Run 2 (book-explainer bend, *Die With
+Zero*, 2497 words against a 2600 target, ~35 min) answers it: **the
+mechanism-finding generalizes.** With no chart available it went and found a
+*behavioural dataset* instead — EBRI's decumulation study — and built the
+video on the same class of paradox: retirees with the most money spend the
+smallest share of it; a third die richer than they retired.
+
+**Thesis extraction again, not summary.** The script's spine is a reframe
+the book itself only implies: **"the peak is a date, not a number"** — and
+it indicts the advice industry for selling *how much* while nobody's job is
+*when*. That is a genuine editorial angle on a heavily-covered book.
+
+**Sourcing — verified, with honest tiering.** The load-bearing figures
+check against the primary (EBRI IB 447: 11.8% median spend-down for $500k+;
+~a quarter for <$200k; one-third increased assets). One small imprecision:
+the low-asset figure covers 18 years, the script says twenty for all
+groups. More interesting: several book claims are cited to *secondary
+summaries* ("quoted in Sloww", "summarised by Manas J. Saloi") — weaker
+tier, but **transparently labelled** rather than laundered into false
+primacy. Same epistemic honesty as Run 1's "reportedly."
+
+**Craft.** Strong reflection beats (the three-generation "passing on a
+balance" run; "an unspent balance is a receipt for hours of your life you
+already sold"); a genuine steelman slot (idea five takes the strongest
+objection and answers it with annuities and longevity math — not a straw
+man); and a **peak-end close that refuses comfort**: "The comfortable
+ending here would be that it is never too late… That isn't what the data
+says." That refusal is the same credibility move as Braavos declining the
+doom close, inverted.
+
+**Failures, consistent with Run 1.** CTA sprawl is *worse*: an early
+subscribe ask (~1 min), a mid-video like ask, and a three-part comment ask
+— three CTAs against their own one-CTA doctrine. Title options again shout
+ALL-CAPS in three of four. And again: **no narrator.** Two for two on every
+axis — the tool's fingerprint is now established: finds a real mechanism,
+sources honestly, writes cleanly, over-asks, and has nobody home.
+
+### Study conclusion
+
+`write_script_v2` is a real research-and-structure engine on both format
+families. Standing workflow: **generated skeleton → verify figures → persona
+pass (doc 36 §5) → voice profile (doc 33) → CTA discipline (doc 31 §8b).**
+The persona pass is not optional polish; it is the half of the product the
+tool cannot make.
