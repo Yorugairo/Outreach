@@ -1,0 +1,861 @@
+{
+ "schema_version": "scene_evidence_timeline.v1",
+ "episode_id": "current-bubble-five-minute-v4",
+ "project_id": "systems-and-blowups",
+ "narration": {
+  "canonical_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+  "words_path": "edit/semantic-v2/words.json"
+ },
+ "evidence": {
+  "hbm-stack-v1": {
+   "title": "The Physical Memory Stack",
+   "document": {
+    "path": "current-bubble-fresh-60s-v1/hbm-stack-v1.png",
+    "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+   },
+   "source": "Episode evidence pack",
+   "badges": [
+    {
+     "label": "HBM POSITION",
+     "value": "Layer 2",
+     "tag": "BELOW SILICON",
+     "accent": "cobalt",
+     "verbatim_in_document": true
+    }
+   ]
+  },
+  "capacity-penalty-v1": {
+   "title": "The Capacity Penalty",
+   "document": {
+    "path": "current-bubble-fresh-60s-v1/capacity-penalty-v1.png",
+    "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+   },
+   "source": "Episode evidence pack",
+   "badges": [
+    {
+     "label": "WAFERS EJECTED",
+     "value": "2 to 3",
+     "tag": "PER HBM WAFER",
+     "accent": "coral",
+     "verbatim_in_document": true
+    }
+   ]
+  },
+  "memory-contracts-evidence-v1": {
+   "title": "Commitment Evidence",
+   "document": {
+    "path": "current-bubble-five-minute-v2/evidence-memory-contracts-v1.svg",
+    "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+   },
+   "source": "Company-reported supply agreements",
+   "badges": [
+    {
+     "label": "STRATEGIC AGREEMENTS",
+     "value": "16",
+     "tag": "COMPANY-REPORTED",
+     "accent": "sunflower",
+     "verbatim_in_document": true
+    },
+    {
+     "label": "TYPICAL TERM",
+     "value": "5 years",
+     "tag": "TAKE-OR-PAY",
+     "accent": "teal",
+     "verbatim_in_document": true
+    }
+   ]
+  },
+  "sp500-concentration-evidence-v1": {
+   "title": "Concentration Evidence",
+   "document": {
+    "path": "current-bubble-five-minute-v2/evidence-sp500-concentration-v1.svg",
+    "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+   },
+   "source": "S&amp;P Dow Jones Indices",
+   "badges": [
+    {
+     "label": "TOP-10 INDEX WEIGHT",
+     "value": "~40%",
+     "tag": "CONCENTRATION",
+     "accent": "coral",
+     "verbatim_in_document": true
+    }
+   ]
+  },
+  "float-weighting-evidence-v1": {
+   "title": "Automatic Allocation",
+   "document": {
+    "path": "current-bubble-five-minute-v2/evidence-float-weighting-v1.svg",
+    "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+   },
+   "source": "Index construction methodology",
+   "badges": [
+    {
+     "label": "EVERY NEW DOLLAR",
+     "value": "$1",
+     "tag": "FLOAT-WEIGHTED",
+     "accent": "cobalt",
+     "verbatim_in_document": true
+    }
+   ]
+  },
+  "automatic-business-mix-evidence-v1": {
+   "title": "What the Same Dollar Owns",
+   "document": {
+    "path": "current-bubble-five-minute-v2/evidence-automatic-business-mix-v1.svg",
+    "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+   },
+   "source": "Episode evidence pack",
+   "badges": []
+  },
+  "triopoly-formation-evidence-v1": {
+   "title": "How the Triopoly Formed",
+   "document": {
+    "path": "current-bubble-five-minute-v2/silicon-reality-gap-s05-triopoly-formation-v1.png",
+    "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+   },
+   "source": "Silicon Reality Gap deck &middot; s05",
+   "badges": []
+  },
+  "diagnostic-matrix-evidence-v1": {
+   "title": "Symptom Versus Diagnosis",
+   "document": {
+    "path": "current-bubble-five-minute-v2/silicon-antidote-s14-diagnostic-matrix-v1.png",
+    "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+   },
+   "source": "Silicon Antidote deck &middot; s14",
+   "badges": []
+  },
+  "index-inclusion-gate-evidence-v1": {
+   "title": "Index Inclusion Mechanics",
+   "document": {
+    "path": "current-bubble-five-minute-v2/evidence-index-inclusion-gate-v1.svg",
+    "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+   },
+   "source": "Episode evidence pack",
+   "badges": []
+  },
+  "two-elevators-model-proposed-v1": {
+   "title": "Two Elevators, One Shape",
+   "document": {
+    "path": "current-bubble-five-minute-v2/two-elevators-mechanism-explainer-proposed-v1.png",
+    "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+   },
+   "source": "Episode evidence pack",
+   "badges": []
+  },
+  "manufacturing-failure-evidence-v1": {
+   "title": "Manufacturing Failure Modes",
+   "document": {
+    "path": "current-bubble-five-minute-v2/silicon-value-software-bubble-s08-failure-triptych-v1.png",
+    "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+   },
+   "source": "Silicon Value / Software Bubble &middot; s08",
+   "badges": []
+  },
+  "ram-ageddon-v1": {
+   "title": "The Commodity Squeeze",
+   "document": {
+    "path": "current-bubble-fresh-60s-v1/ram-ageddon-v1.png",
+    "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+   },
+   "source": "Episode evidence pack",
+   "badges": []
+  },
+  "buyer-commitment-evidence-card-v1": {
+   "title": "Company-Reported Buyer Commitment",
+   "document": {
+    "path": "current-bubble-five-minute-v1/buyer-commitment-evidence-card-v1.svg",
+    "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+   },
+   "source": "Micron fiscal Q3 2026 prepared remarks",
+   "badges": [
+    {
+     "label": "STRATEGIC AGREEMENTS",
+     "value": "16",
+     "tag": "MICRON Q3 FY26",
+     "accent": "sunflower",
+     "verbatim_in_document": true
+    },
+    {
+     "label": "MOST TERMS",
+     "value": "~5 years",
+     "tag": "VOLUME COMMITTED",
+     "accent": "coral",
+     "verbatim_in_document": true
+    }
+   ]
+  }
+ },
+ "scenes": [
+  {
+   "scene_id": "s01",
+   "world": {
+    "asset_id": "memory-skepticism-v2",
+    "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+    "ken_burns": {
+     "scale": 0.085,
+     "x": -22,
+     "y": -10
+    }
+   },
+   "exit": "wipe_left",
+   "span": [
+    2.4,
+    11.6
+   ],
+   "beats": [
+    {
+     "at": 2.4,
+     "docks": [],
+     "badges": "----",
+     "caption": "AI memory stocks have gone vertical and the earnings numbers"
+    }
+   ]
+  },
+  {
+   "scene_id": "s02",
+   "world": {
+    "asset_id": "memory-three-supports-v1",
+    "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+    "ken_burns": {
+     "scale": 0.105,
+     "x": 18,
+     "y": -13
+    }
+   },
+   "exit": "wipe_right",
+   "span": [
+    11.6,
+    23.03
+   ],
+   "beats": [
+    {
+     "at": 11.6,
+     "docks": [],
+     "badges": "----",
+     "caption": "back and say: bubble. But underneath the chart"
+    },
+    {
+     "at": 12.13,
+     "docks": [
+      "hbm-stack-v1"
+     ],
+     "badges": "----",
+     "caption": "back and say: bubble. But underneath the chart"
+    },
+    {
+     "at": 13.43,
+     "docks": [
+      "hbm-stack-v1"
+     ],
+     "badges": "X---",
+     "caption": "is a product customers cannot get enough of,"
+    },
+    {
+     "at": 15.73,
+     "docks": [
+      "hbm-stack-v1",
+      "capacity-penalty-v1"
+     ],
+     "badges": "X---",
+     "caption": "factories that cannot expand quickly enough, and buyers signing"
+    },
+    {
+     "at": 17.03,
+     "docks": [
+      "hbm-stack-v1",
+      "capacity-penalty-v1"
+     ],
+     "badges": "X-X-",
+     "caption": "factories that cannot expand quickly enough, and buyers signing"
+    }
+   ]
+  },
+  {
+   "scene_id": "s03",
+   "world": {
+    "asset_id": "index-fund-weighted-inflows-v2",
+    "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+    "ken_burns": {
+     "scale": 0.075,
+     "x": 14,
+     "y": 12
+    }
+   },
+   "exit": "wipe_left",
+   "span": [
+    23.03,
+    37.73
+   ],
+   "beats": [
+    {
+     "at": 23.03,
+     "docks": [],
+     "badges": "----",
+     "caption": "Meanwhile, the trade marketed as boring and"
+    },
+    {
+     "at": 23.73,
+     "docks": [
+      "sp500-concentration-evidence-v1"
+     ],
+     "badges": "----",
+     "caption": "Meanwhile, the trade marketed as boring and"
+    },
+    {
+     "at": 25.03,
+     "docks": [
+      "sp500-concentration-evidence-v1"
+     ],
+     "badges": "X---",
+     "caption": "Meanwhile, the trade marketed as boring and"
+    },
+    {
+     "at": 27.73,
+     "docks": [
+      "sp500-concentration-evidence-v1",
+      "float-weighting-evidence-v1"
+     ],
+     "badges": "X---",
+     "caption": "diversified\u2014the S&P 500 index"
+    },
+    {
+     "at": 29.03,
+     "docks": [
+      "sp500-concentration-evidence-v1",
+      "float-weighting-evidence-v1"
+     ],
+     "badges": "X-X-",
+     "caption": "fund\u2014has nearly forty percent of its weight concentrated in"
+    }
+   ]
+  },
+  {
+   "scene_id": "s04",
+   "world": {
+    "asset_id": "memory-three-supports-v1",
+    "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+    "ken_burns": {
+     "scale": 0.115,
+     "x": -16,
+     "y": 11
+    }
+   },
+   "exit": "wipe_right",
+   "span": [
+    37.73,
+    45.77
+   ],
+   "beats": [
+    {
+     "at": 37.73,
+     "docks": [],
+     "badges": "----",
+     "caption": "because they are already the biggest. So here is the argument:"
+    }
+   ]
+  },
+  {
+   "scene_id": "s05",
+   "world": {
+    "asset_id": "bottleneck-repricing-v1",
+    "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+    "ken_burns": {
+     "scale": 0.09,
+     "x": 20,
+     "y": -8
+    }
+   },
+   "exit": "wipe_left",
+   "span": [
+    45.77,
+    51.93
+   ],
+   "beats": [
+    {
+     "at": 45.77,
+     "docks": [],
+     "badges": "----",
+     "caption": "But what we are seeing today looks more like a physical bottleneck being repriced"
+    },
+    {
+     "at": 46.53,
+     "docks": [
+      "triopoly-formation-evidence-v1"
+     ],
+     "badges": "----",
+     "caption": "But what we are seeing today looks more like a physical bottleneck being repriced"
+    }
+   ]
+  },
+  {
+   "scene_id": "s06",
+   "world": {
+    "asset_id": "hidden-index-bubble-inspection-world-v1",
+    "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+    "ken_burns": {
+     "scale": 0.085,
+     "x": -22,
+     "y": -10
+    }
+   },
+   "exit": "wipe_right",
+   "span": [
+    51.93,
+    64.87
+   ],
+   "beats": [
+    {
+     "at": 51.93,
+     "docks": [],
+     "badges": "----",
+     "caption": "than a demand-free fantasy. Bubble logic may be"
+    },
+    {
+     "at": 53.07,
+     "docks": [
+      "diagnostic-matrix-evidence-v1"
+     ],
+     "badges": "----",
+     "caption": "hiding inside the thing investors stopped examining because"
+    },
+    {
+     "at": 58.8,
+     "docks": [
+      "diagnostic-matrix-evidence-v1",
+      "index-inclusion-gate-evidence-v1"
+     ],
+     "badges": "----",
+     "caption": "A bubble is not \u201ca price went up a lot.\u201d"
+    }
+   ]
+  },
+  {
+   "scene_id": "s07",
+   "world": {
+    "asset_id": "wrong-bubble-elevators-v2",
+    "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+    "ken_burns": {
+     "scale": 0.105,
+     "x": 18,
+     "y": -13
+    }
+   },
+   "exit": "wipe_left",
+   "span": [
+    64.87,
+    98.8
+   ],
+   "beats": [
+    {
+     "at": 64.87,
+     "docks": [],
+     "badges": "----",
+     "caption": "A real bubble forms when the price increasingly depends on the belief that"
+    },
+    {
+     "at": 75.8,
+     "docks": [
+      "two-elevators-model-proposed-v1"
+     ],
+     "badges": "----",
+     "caption": "keep up. Think of two elevators rising at the same speed."
+    },
+    {
+     "at": 93.1,
+     "docks": [
+      "two-elevators-model-proposed-v1",
+      "memory-contracts-evidence-v1"
+     ],
+     "badges": "----",
+     "caption": "the cables are demand, capacity, contracts, and cash flow."
+    },
+    {
+     "at": 94.4,
+     "docks": [
+      "two-elevators-model-proposed-v1",
+      "memory-contracts-evidence-v1"
+     ],
+     "badges": "--X-",
+     "caption": "the cables are demand, capacity, contracts, and cash flow."
+    },
+    {
+     "at": 95.7,
+     "docks": [
+      "two-elevators-model-proposed-v1",
+      "memory-contracts-evidence-v1"
+     ],
+     "badges": "--XX",
+     "caption": "the cables are demand, capacity, contracts, and cash flow."
+    }
+   ]
+  },
+  {
+   "scene_id": "s08",
+   "world": {
+    "asset_id": "index-fund-weighted-inflows-v2",
+    "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+    "ken_burns": {
+     "scale": 0.075,
+     "x": 14,
+     "y": 12
+    }
+   },
+   "exit": "wipe_right",
+   "span": [
+    98.8,
+    108.17
+   ],
+   "beats": [
+    {
+     "at": 98.8,
+     "docks": [],
+     "badges": "----",
+     "caption": "For the S&P 500 complex, the question is whether diversification"
+    },
+    {
+     "at": 100.0,
+     "docks": [
+      "automatic-business-mix-evidence-v1"
+     ],
+     "badges": "----",
+     "caption": "For the S&P 500 complex, the question is whether diversification"
+    }
+   ]
+  },
+  {
+   "scene_id": "s09",
+   "world": {
+    "asset_id": "hbm-adjacent-accelerator-v1",
+    "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+    "ken_burns": {
+     "scale": 0.115,
+     "x": -16,
+     "y": 11
+    }
+   },
+   "exit": "wipe_left",
+   "span": [
+    108.17,
+    121.1
+   ],
+   "beats": [
+    {
+     "at": 108.17,
+     "docks": [],
+     "badges": "----",
+     "caption": "Start with the product. High-bandwidth memory,"
+    },
+    {
+     "at": 109.2,
+     "docks": [
+      "hbm-stack-v1"
+     ],
+     "badges": "----",
+     "caption": "Start with the product. High-bandwidth memory,"
+    },
+    {
+     "at": 110.5,
+     "docks": [
+      "hbm-stack-v1"
+     ],
+     "badges": "X---",
+     "caption": "Start with the product. High-bandwidth memory,"
+    }
+   ]
+  },
+  {
+   "scene_id": "s10",
+   "world": {
+    "asset_id": "accelerator-memory-bandwidth-gate-v1",
+    "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+    "ken_burns": {
+     "scale": 0.09,
+     "x": 20,
+     "y": -8
+    }
+   },
+   "exit": "wipe_right",
+   "span": [
+    121.1,
+    144.6
+   ],
+   "beats": [
+    {
+     "at": 121.1,
+     "docks": [],
+     "badges": "----",
+     "caption": "Plain English: the GPU may be the engine,"
+    },
+    {
+     "at": 122.0,
+     "docks": [
+      "capacity-penalty-v1"
+     ],
+     "badges": "----",
+     "caption": "Plain English: the GPU may be the engine,"
+    },
+    {
+     "at": 123.3,
+     "docks": [
+      "capacity-penalty-v1"
+     ],
+     "badges": "X---",
+     "caption": "Plain English: the GPU may be the engine,"
+    }
+   ]
+  },
+  {
+   "scene_id": "s11",
+   "world": {
+    "asset_id": "hbm-physical-inputs-gate-v1",
+    "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+    "ken_burns": {
+     "scale": 0.085,
+     "x": -22,
+     "y": -10
+    }
+   },
+   "exit": "wipe_left",
+   "span": [
+    144.6,
+    154.73
+   ],
+   "beats": [
+    {
+     "at": 144.6,
+     "docks": [],
+     "badges": "----",
+     "caption": "HBM competes for advanced wafers, clean-room space,"
+    },
+    {
+     "at": 145.2,
+     "docks": [
+      "manufacturing-failure-evidence-v1"
+     ],
+     "badges": "----",
+     "caption": "HBM competes for advanced wafers, clean-room space,"
+    }
+   ]
+  },
+  {
+   "scene_id": "s12",
+   "world": {
+    "asset_id": "fixed-oven-capacity-wedding-cake-v1",
+    "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+    "ken_burns": {
+     "scale": 0.105,
+     "x": 18,
+     "y": -13
+    }
+   },
+   "exit": "wipe_right",
+   "span": [
+    154.73,
+    178.1
+   ],
+   "beats": [
+    {
+     "at": 154.73,
+     "docks": [],
+     "badges": "----",
+     "caption": "larger dies and more complicated stacks."
+    }
+   ]
+  },
+  {
+   "scene_id": "s13",
+   "world": {
+    "asset_id": "hbm-physical-inputs-gate-v1",
+    "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+    "ken_burns": {
+     "scale": 0.075,
+     "x": 14,
+     "y": 12
+    }
+   },
+   "exit": "wipe_left",
+   "span": [
+    178.1,
+    210.17
+   ],
+   "beats": [
+    {
+     "at": 178.1,
+     "docks": [],
+     "badges": "----",
+     "caption": "As manufacturers devote more capacity to HBM,"
+    },
+    {
+     "at": 180.2,
+     "docks": [
+      "hbm-stack-v1"
+     ],
+     "badges": "----",
+     "caption": "As manufacturers devote more capacity to HBM,"
+    },
+    {
+     "at": 181.5,
+     "docks": [
+      "hbm-stack-v1"
+     ],
+     "badges": "X---",
+     "caption": "As manufacturers devote more capacity to HBM,"
+    },
+    {
+     "at": 187.8,
+     "docks": [
+      "hbm-stack-v1",
+      "capacity-penalty-v1"
+     ],
+     "badges": "X---",
+     "caption": "The AI boom pulls the same production system toward more complex products."
+    },
+    {
+     "at": 189.1,
+     "docks": [
+      "hbm-stack-v1",
+      "capacity-penalty-v1"
+     ],
+     "badges": "X-X-",
+     "caption": "The AI boom pulls the same production system toward more complex products."
+    }
+   ]
+  },
+  {
+   "scene_id": "s14",
+   "world": {
+    "asset_id": "commodity-cycle-versus-qualified-agreements-v1",
+    "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+    "ken_burns": {
+     "scale": 0.115,
+     "x": -16,
+     "y": 11
+    }
+   },
+   "exit": "wipe_right",
+   "span": [
+    210.17,
+    239.67
+   ],
+   "beats": [
+    {
+     "at": 210.17,
+     "docks": [],
+     "badges": "----",
+     "caption": "Now look at buyer behavior. In a classic commodity"
+    },
+    {
+     "at": 216.0,
+     "docks": [
+      "ram-ageddon-v1"
+     ],
+     "badges": "----",
+     "caption": "memory cycle, suppliers add capacity, prices spike,"
+    },
+    {
+     "at": 225.0,
+     "docks": [
+      "ram-ageddon-v1",
+      "buyer-commitment-evidence-card-v1"
+     ],
+     "badges": "----",
+     "caption": "That history is the strongest argument against this entire video."
+    },
+    {
+     "at": 226.3,
+     "docks": [
+      "ram-ageddon-v1",
+      "buyer-commitment-evidence-card-v1"
+     ],
+     "badges": "--X-",
+     "caption": "But customers are behaving differently this time."
+    },
+    {
+     "at": 227.6,
+     "docks": [
+      "ram-ageddon-v1",
+      "buyer-commitment-evidence-card-v1"
+     ],
+     "badges": "--XX",
+     "caption": "But customers are behaving differently this time."
+    }
+   ]
+  },
+  {
+   "scene_id": "s15",
+   "world": {
+    "asset_id": "buyer-reservation-rail-v1",
+    "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+    "ken_burns": {
+     "scale": 0.09,
+     "x": 20,
+     "y": -8
+    }
+   },
+   "exit": "wipe_left",
+   "span": [
+    239.67,
+    286.63
+   ],
+   "beats": [
+    {
+     "at": 239.67,
+     "docks": [],
+     "badges": "----",
+     "caption": "its DRAM volume and one-third of its NAND volume over"
+    },
+    {
+     "at": 247.0,
+     "docks": [
+      "buyer-commitment-evidence-card-v1"
+     ],
+     "badges": "----",
+     "caption": "to specific volumes rather than casually promising they might show up"
+    },
+    {
+     "at": 248.3,
+     "docks": [
+      "buyer-commitment-evidence-card-v1"
+     ],
+     "badges": "X---",
+     "caption": "to specific volumes rather than casually promising they might show up"
+    },
+    {
+     "at": 249.6,
+     "docks": [
+      "buyer-commitment-evidence-card-v1"
+     ],
+     "badges": "XX--",
+     "caption": "to specific volumes rather than casually promising they might show up"
+    }
+   ]
+  },
+  {
+   "scene_id": "s16",
+   "world": {
+    "asset_id": "strategic-chokepoint-network-v1",
+    "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+    "ken_burns": {
+     "scale": 0.085,
+     "x": -22,
+     "y": -10
+    }
+   },
+   "exit": "wipe_right",
+   "span": [
+    286.63,
+    300.0
+   ],
+   "beats": [
+    {
+     "at": 286.63,
+     "docks": [],
+     "badges": "----",
+     "caption": "before I call it a bubble."
+    }
+   ]
+  }
+ ]
+}
