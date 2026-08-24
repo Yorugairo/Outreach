@@ -391,6 +391,119 @@ Faceless Personality (#49) extracted in full and folded into
 rules (rationed reaction lines, finance-register dark humor, rhetorical
 questions as dated loop-openers).
 
+## The decisive test, run: `review_script` + `review_title` on our own work — 2026-08-24
+
+Phase 2 of the harvest plan. Fed the Alicia-format script (narration only,
+675 words, the operator-approved v5 hook) to `review_script`, and the title
+"She Earns Half His Salary. She Retires First." to `review_title`.
+
+**Results: script 6.5/10, title 5.7/10.** The scores are the least
+interesting part. What matters is that **the evaluator's concrete rewrites
+violate the doctrine it cites** — and in one case fabricate a fact.
+
+### Finding 1 — a hard bug: the duration calculation
+
+The header reads `Word Count: 675 | Duration: ~6-7s`. 675 spoken words is
+roughly **4.5 minutes**, not 6–7 seconds — off by a factor of ~45. Any
+pacing or runtime judgement downstream of that number is unreliable, and
+this is a script-review tool whose entire subject is pacing.
+
+### Finding 2 — the suggested hook fabricates a claim
+
+| | Text |
+| --- | --- |
+| Ours | "She earns half of what he does. She retires first." |
+| Their "improvement" | "Watch as her tips add up to ten times his salary." |
+
+Three failures against **their own rules**: hooks must tease not spoil
+(this spoils the payoff); "Watch as…" is a delay construction of exactly
+the kind their Delay Disease rule forbids; and the claim is **not in the
+script and is not true of it** — the script says she holds ten times his
+*margin*, not that her tips reach ten times his *salary*.
+
+On a finance channel that is not a style note. Their own Clickbait/Metadata
+doctrine says promise only what you deliver; the rewrite invents a
+deliverable. **Treat `review_script` rewrites as unverified generation, never
+as copy to paste.**
+
+### Finding 3 — the "anti-fluff" rewrite is more generic, not less
+
+Ours: *"Every object in here was, at some point, a reward for surviving the
+week."* → theirs: *"Each item here is a trophy of survival."*
+
+The rewrite trades a concrete, specific, spoken-register sentence for a
+compressed aphorism — thinner, more abstract, and squarely in the
+short-fragment aphorism register their own Anti-AI-Slop audit exists to
+kill. It cites the "every line adds new information" rule to justify a
+change that removes information.
+
+### Finding 4 — the ending rewrite contradicts two of their own frameworks
+
+Ours: *"That's next."* → theirs: *"And it's the secret that could retire you
+years early."*
+
+- Their **Outro Templates** name **Cliffhanger Bridge** (tease next content +
+  curiosity gap + bridge) as a legitimate format for series content. Our
+  ending *is* that template, executed. It was marked down anyway.
+- Their **title/metadata doctrine** says specificity beats sensationalism and
+  vague promises are machine-detected. "The secret that could retire you
+  years early" is precisely the vague-hype construction.
+
+### Finding 5 — same pattern in `review_title`
+
+Scores were more reasonable, but the "improved versions" include
+*"The Surprising Truth: She Earns Half, Retires First!"* — which uses the
+colon construction their Anti-AI-Slop audit caps at 2–3 per entire script,
+opens with stock clickbait ("The Surprising Truth"), and adds an
+exclamation mark. Their own **Title Formatting Rules** and
+**specificity-beats-sensationalism** rule both argue against it.
+
+The one **legitimate** title hit: our title carries no format-pattern
+signature, which does limit scalability across a channel. Worth acting on.
+
+### Finding 6 — what it failed to catch
+
+The script contains one genuinely risky line: the self-storage-vs-fast-food
+statistic, tagged `[verify]` in our brief and stripped for submission. **A
+finance script reviewer flagged nothing about an unsourced national
+statistic.** It also never applied Peak-End Theory, never checked
+audio-visual tautology, and produced neither the "beat-by-beat analysis" nor
+the "retention risk map" its own tool description promises.
+
+### Findings worth keeping (the honest bucket)
+
+1. **Rehook gap in the rule-delivery stretch.** Between the receipt rule and
+   the storage callback the script delivers content without re-justifying
+   the next 60 seconds. Real, and matches their positional-rehook doctrine.
+2. **One genuinely abstract line** — "the relationship between stuff and
+   money" — in an otherwise concrete script. Fair catch.
+3. **Specificity could go up** in the budtender section, which is
+   qualitative where the banker section is numeric.
+4. **Title needs a format-pattern spine** for channel-level scalability.
+
+### What this settles about the moat
+
+The split is now clean and evidenced:
+
+- **The RAG doctrine layer is real, grounded, and extractable** — verbatim
+  chunks, source-labelled, no fabrication under trap (see the fact-check
+  section above). That material is now ours in docs 31 and 32.
+- **The generative layer on top of it is not doctrine-bound.** `review_script`
+  attaches rule names to suggestions that contradict those rules, invents a
+  claim, and ships a broken duration calculation. It is an LLM with a rubric
+  in its prompt, not a system that enforces the course.
+
+**Practical rule for us:** use the rubric *dimensions* (hook, structure,
+anti-fluff, visual verbs, retention, ending, animatability, specificity) as
+a checklist — they are a reasonable decomposition and we have adopted
+equivalents. Ignore the rewrites. Never paste generated copy from it into a
+script without checking every factual claim against our own claim registry.
+
+**Verdict on further harvest: complete.** Doctrine extraction has hit
+diminishing returns (two probes now return the same chunks), the evaluator
+layer is demonstrably weaker than our own standards, and the remaining
+gated content is a purchase decision with no information pending.
+
 ## Verdict (running)
 
 Pending the script comparison and Niche_Hunter test. Early lean: the
@@ -398,6 +511,10 @@ Pending the script comparison and Niche_Hunter test. Early lean: the
 trial use; the **software** is thin wrappers with hobbyist limits; the
 **price** buys a membership community and hiring templates, not
 infrastructure. Our own stack already exceeds the generation half.
+
+Final addendum (2026-08-24): harvest closed. See the decisive-test section —
+doctrine real and extracted; evaluator layer contradicts its own doctrine and
+fabricates. Nothing further to learn without buying the program.
 
 Fact-check addendum (2026-08-24): `ask_tim` is verified retrieval-backed —
 verbatim-stable chunks with source labels, no fabrication under a trap probe.

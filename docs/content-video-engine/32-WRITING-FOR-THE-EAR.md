@@ -122,7 +122,15 @@ Two shapes for the whole piece:
   alternating anecdote → reflection → next anecdote.
 
 **Ring composition (chiasmus):** themes introduced in the first half return
-in reverse order in the second, around a central revelation. Cognitive
+in reverse order in the second, around a central revelation.
+
+> **Independent convergence:** AOY arrives at the same place from platform
+> data rather than oral tradition — their **Story Close** outro template
+> (documentary register) is "return to opening theme + reflective statement
+> + soft CTA woven into content" (doc 31 §8b). Two unrelated traditions
+> prescribing the same ending shape is the strongest cross-validation in
+> either document, and it makes the ring the default close for our format.
+ Cognitive
 closure without visual aids — and it prescribes exactly what the ending
 does: echo the opening image, transformed. (Our v5 hook's "single receipt"
 is the natural ring anchor: open on it, close on it calculated.)

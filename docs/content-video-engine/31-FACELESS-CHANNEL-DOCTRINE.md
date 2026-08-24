@@ -200,18 +200,31 @@ payoff, not after a wind-down.
 conversion through decision fatigue. Pick the single action that matters
 most for this video and ask only for that.
 
-**3 Pillars of High-Converting Outros** *(2 of 3 retrieved)*:
+**3 Pillars of High-Converting Outros** — complete:
 
 1. **Value reinforcement** — before asking for anything, remind them what
    they got: "So now you know [specific X], [specific Y], and [specific Z]"
    — not "thanks for watching a video about scriptwriting."
 2. **Clear direction** — "Subscribe so you don't miss next week's breakdown
    of [specific topic]" beats "Subscribe if you liked this." Specific > vague.
+3. **Future pacing** — paint a quick picture of their future after taking
+   action. Not hype: a concrete connection between action and outcome.
 
-**Outro templates** *(2 of 5 retrieved)*: **Direct Close** (casual) —
-"Anyway, that's that. YouTube thinks you'll like this video. Click it. And
-if you made it to the end, subscribe." · **Value Bridge** (educational) —
-reinforce value + future pace + clear CTA + end-card direction.
+**Outro templates** *(4 of 5 retrieved)*:
+
+- **Direct Close** (casual) — "Anyway, that's that. YouTube thinks you'll
+  like this video. Click it. And if you made it to the end, subscribe."
+- **Value Bridge** (educational) — reinforce value + future pace + clear CTA
+  + end-card direction.
+- **Story Close** (documentary) — return to the opening theme + reflective
+  statement + soft CTA woven into content.
+- **Cliffhanger Bridge** (series) — tease next content + curiosity gap +
+  bridge to the next video.
+
+**Story Close is ring composition** under another name — the chiastic
+structure in [32-WRITING-FOR-THE-EAR.md](32-WRITING-FOR-THE-EAR.md) §5.
+Two independent traditions converging on "end by returning to the opening,
+transformed" is the strongest single endorsement either doc offers.
 
 **End Screen SOP:** subscribe button + most recent video + best-performing
 video, using the full 20 seconds available.
@@ -248,6 +261,13 @@ educational ~42% avg · documentary 35–45% · true crime top performers 65%+.
 - **Anti-AI Slop**: 3 of 8 patterns retrieved; two probes returned the same
   first three chunks. Likely a chunk-ordering artefact rather than absence.
 - **Rehook templates**: 5 named; doc title says "5 Templates" so likely complete.
+- **Outro templates**: 4 of 5 retrieved (Direct Close, Value Bridge, Story
+  Close, Cliffhanger Bridge).
+- **Peak-End Theory**: the Action Window is numbered "1." in its source doc,
+  so at least one further principle exists there unretrieved.
+- **4 Deadly Retention Mistakes**: 3 of 4 retrieved (the mid-video one is
+  missing; Delay Disease, Context Dump and Grand Payoff Betrayal cover
+  open/early/end).
 - **Analogy prompting**: not a named concept in the doctrine (probed; unresolved
   whether it lives in their pipeline prompts instead).
 - **Script format templates**: essay 10–15 · framework reveal 12–15 · expose
