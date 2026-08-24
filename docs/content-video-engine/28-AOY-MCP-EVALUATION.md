@@ -512,7 +512,15 @@ trial use; the **software** is thin wrappers with hobbyist limits; the
 **price** buys a membership community and hiring templates, not
 infrastructure. Our own stack already exceeds the generation half.
 
-Final addendum (2026-08-24): harvest closed. See the decisive-test section —
+Verdict revised (2026-08-24, after the script-writer run): **"software thin"
+was wrong about one tool.** `write_script_v2` produced a sourced,
+thesis-driven 1886-word script in 35 minutes, and its central claim verified
+exactly against the primary source (FHFA WP 24-03). It also flags its own
+weakest claim unprompted. The reviewers remain thin; the writer is real. Full
+analysis in [34-AOY-SCRIPT-WRITER-STUDY.md](34-AOY-SCRIPT-WRITER-STUDY.md).
+What it cannot supply is a narrator — which is exactly our differentiator.
+
+Final addendum (2026-08-24): doctrine harvest closed. See the decisive-test section —
 doctrine real and extracted; evaluator layer contradicts its own doctrine and
 fabricates. Nothing further to learn without buying the program.
 

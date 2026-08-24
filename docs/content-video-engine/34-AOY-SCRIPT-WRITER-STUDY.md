@@ -259,6 +259,98 @@ them with.
 We do not race them; we answer them. The competitive read that used to live
 here is superseded by doc 35.
 
-## 5. Findings
+## 5. Findings — Run 1 landed (35 min, 1886 words against a 1900 target)
 
-*Pending — Run 1 in flight.*
+**Verdict: `write_script_v2` is real.** It is the one genuinely valuable
+capability in the AOY toolchain, and it is not close. Where `review_script`
+attached rule names to suggestions that broke those rules and invented a
+claim, the writer produced a sourced, structurally sophisticated script with
+a real thesis.
+
+### It found a thesis, not a summary
+
+Asked for "home prices vs wages," it did not narrate the divergence. It
+located the **mortgage rate lock-in effect** and built the entire video on a
+paradox: *the interest rate hike that made houses more expensive.* Higher
+rates should cool a market; here they froze supply so hard that the supply
+effect outweighed the demand effect and prices rose.
+
+That is a genuine insight, correctly explained, and it is the same
+"one policy variable, one threshold" device as the Braavos template — arrived
+at **independently**, which is evidence the device is convergent best
+practice rather than one channel's signature.
+
+### Sourcing verified — it holds
+
+The load-bearing claim was checked against the primary source. FHFA Working
+Paper 24-03, *The Lock-In Effect of Rising Mortgage Rates* (Batzer, Coste,
+Doerner, Seiler, 18 March 2024). **Every figure matches exactly**: 18.1%
+fall in sale probability per percentage point of rate gap; 1.33 million
+sales prevented 2022Q2–2023Q4; supply constraint +5.7% on prices against
+−3.3% from elevated rates.
+
+Two things raise this further:
+
+- **It flags its own weakest claim.** The one survey-based figure carries
+  "reportedly" in the narration *and* an explicit note in the sources block:
+  stated intent from a survey, not recorded behaviour.
+- **It flags a date-coverage gap** between the narration's "since 2021"
+  framing and a source that brackets 2020–2026, stating that no standalone
+  2021 figure is claimed.
+
+That is real epistemic hygiene — closer to our `[verify]` discipline than
+anything else in their stack.
+
+### Craft — measured against doc 32
+
+Strong on the fundamentals we care about. Terminal stress lands repeatedly
+("The tool ran backwards", "a cage with a very nice kitchen", "in rooms that
+nobody sleeps in"). Anecdote↔reflection alternation is present and genuine —
+the couple with the four-bedroom colonial, then the meaning beat. It
+steelmans and dismisses on **timing** rather than merit ("three of them are
+real… and not one of them changed in 2021"), which is the same move doc 35
+§3 beat 4 asks for. It closes by **inverting its own title question**, which
+is a ring close.
+
+### Where it fails — and the failures are instructive
+
+1. **Two CTAs, breaking their own rule.** "Hit like" *and* a three-part
+   comment ask. Doc 31 §8b, from their own corpus: *"One CTA per outro.
+   Never three."* The writer does not obey the doctrine the RAG teaches
+   either — the difference is that here it costs a few points, rather than
+   corrupting the output.
+2. **Title tics.** A colon in the lead title against their own colon cap,
+   and ALL-CAPS shouting in three of four options.
+3. **No narrator.** This is the important one. The script has no identity,
+   no biography, no reason for *this* voice to be telling you. It is a very
+   good disembodied explainer.
+4. Minor: an unforced editorial swipe at the Fed, and an audience wobble —
+   second-person address assumes a homeowner while the sympathy sits with
+   people who cannot buy.
+
+### Honest comparison against our own script
+
+On **structure and sourcing it beats our Alicia script.** The thesis is
+sharper, the evidence chain tighter, every figure traceable.
+
+On **voice it is not close.** Our script has a narrator who owns the
+dispensary and worked in risk, who has stood in both apartments. Theirs has
+nobody. **The gap the tool cannot fill is precisely our differentiator** —
+which is the most reassuring finding in this study, because it means the
+capability is complementary rather than competitive.
+
+### Consequences
+
+- **Revise the running verdict.** "Content real, software thin" was right
+  about the doctrine and the reviewers, wrong about the writer.
+- **Use it as a research-and-structure engine, never as final copy.** It
+  produces a sourced skeleton with a real thesis in 35 minutes. Our voice
+  profile (doc 33) and biography go on top.
+- **Verify anyway.** One clean verification is not a track record, and their
+  own reviewer fabricated. Every figure still goes through our gate.
+- **Dependency risk is real**: 3/day, beta, their infrastructure, their view
+  of our topics. Treat it as a borrowed instrument.
+- **Run 2 is worth the remaining daily run** — the question now is whether
+  the quality holds on a book-explainer bend, where there is no chart
+  mechanism to find.
+
