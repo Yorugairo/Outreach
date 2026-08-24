@@ -35,6 +35,13 @@ and financial fluency so they can get ahead. Bring authenticity to the
 faceless niche; show true financial, business, and economic risks *and*
 opportunities.
 
+**"My people," scoped for YouTube (operator, 2026-08-24):** everyone
+drowning under T4 — the falling-behind feeling as structural fact. The term
+means different things in different spaces and the playlists define who it
+means at any given time. Race is never explicit text unless the operator has
+specifically chosen it as the topic; the biography carries it silently
+otherwise.
+
 ## 2. The biography — now three altitudes
 
 The two-altitude bio (doc 30 §1) gains its foundation layer:
@@ -65,6 +72,13 @@ The ladder explains itself: he doesn't cover money as a topic —
 - "Morals branded on their soul" and "the most authentic person there is"
   are the *effect* the writing must produce, never lines the narrator says
   about himself. Authenticity asserted is authenticity destroyed.
+- **The primary use of altitude 1 is off-screen** (operator, on the record):
+  everything can be on record, but little of it belongs in a script. It is
+  context that shapes the voice — "a harder, more grounded edge than finance
+  prose." A writer who has lived the downside doesn't romanticize risk,
+  doesn't perform empathy for struggle, and reflexively fights cliché
+  financial advice rather than reciting it. Pertinence decides on-screen
+  use; the edge is always on.
 
 **Standing proof-point** (usable on screen, it is his own ledger):
 
@@ -135,34 +149,125 @@ state the change, don't perform the reversal).
 **risk : reward, economics, and time.** When a script loses its thread, this
 is the thread.
 
-## 3b. Portfolio doctrine — named frameworks (DRAFT, pending grill answers)
+**T11 — The institutional cage.** "Beating the market is easy when you're
+not competing with it or judged against it." Professional managers struggle
+because being wrong costs them their job; their trading is restricted by
+size, sector, and quarterly reporting; and they still get the bonus on a
+down year as long as everyone else is down too. So the vast majority of
+professionals sit within a set range of each other, while the truly elite
+ride massive boom-bust cycles — "they allow the time and the risk for their
+winners to win." The retail investor's structural advantage is the freedom
+to do the same. Pairs with T6/T7; it is the *why* behind tolerating the
+drawdowns.
 
-Operator's own investment architecture, 2026-08-24. These are **coined,
-proprietary concepts** — exactly the concept-naming authority device
-(doc 34 §4c), except ours are original rather than borrowed. Consistency of
-use is what compounds them into channel vocabulary.
+## 3b. Portfolio doctrine — named frameworks (operator-defined, 2026-08-24)
 
-- **"Accretive burn"** — named framework, definition pending operator.
-- **"Sovereign compute"** — named framework, definition pending operator.
-- **The military-tech hedge.** Bonds are too weak to justify for most
-  people; own defense tech as the hedge instead. Reasoning chain: on a
-  long-term macro view the only real risk to technological growth is macro
-  recession → the only historical cause of an 8+ year *global* recession is
-  global war → the only true portfolio-level threat is China embargoing
-  Taiwan → DoD has already named cheap missiles (AVAV) and drones as the
-  answer. "So, I buy tech and I buy drones."
-- **The pair-inversion logic.** On paper the book looks like a horrible
-  hedge because tech and defense currently move in unison. The hedge is not
-  played for correlation today — it is played for **total inversion in the
-  China-conflict scenario**, the account-wipeout black swan. Everything
-  short of that is survived "through time and the quality of my stock
-  selections."
-- **Drawdown stance.** 60% drawdowns are acceptable and expected; staying
-  in for the entirety of the upside is the point (extends T6/T7).
+Coined, proprietary concepts — the concept-naming authority device
+(doc 34 §4c) with original coinage. Consistency of use compounds them into
+channel vocabulary. **All ticker-level figures below are operator-supplied
+and carry `[verify]` before any on-screen use.**
 
-Guardrail reminder: all of this is the operator's own practiced stance and
-channel thesis material — presented on screen as framework and biography
-(T3: "money has to be individualized"), never as directives.
+### "Accretive burn"
+
+A capital-allocation dynamic where a company — typically early-stage — runs
+negative operational cash flow to fund physical capacity, M&A, or technology
+that compounds contracted backlogs and long-term per-share value
+significantly faster than cash is depleted. Big-tech AI capex is the same
+dynamic at scale, "and that is causing fear" — which is the content angle:
+the market reads accretive burn as bleeding.
+
+- **Exemplars:** IonQ ($IONQ) — burns cash and issues stock for strategic
+  M&A (SkyWater Technology, Oxford Ionics) to secure a captive domestic
+  supply chain while contracted RPOs surge (cited: +554% to $470M).
+  Applied Digital ($APLD) — front-loads capex to secure energized
+  data-center footprints, expanding contracted lease backlogs to
+  multi-billions via non-dilutive project-level financing.
+- **The fence (failing case):** Laser Photonics ($LASE) — heavy burn against
+  a ~$2.5M backlog and deeply negative ROIC (cited: −71.86%). Dilution
+  without a compounding pipeline. **Burn without backlog is just burn** —
+  the counterexample is what keeps the term from stretching.
+
+### "Sovereign compute"
+
+High-performance computational infrastructure — chips, data centers, and
+baseload energy — owned, secured, and operated domestically to safeguard
+national security, AI independence, and regulatory data sovereignty.
+
+- **Exemplars:** Fabrinet ($FN) — the trusted domestic cleanroom and
+  advanced optical-packaging manufacturing bottleneck for next-gen sovereign
+  AI hardware. HIVE Digital ($HIVE) — dedicated Tier III domestic AI stack
+  contracted directly with Bell Canada and Cohere: sovereign Canadian GPU
+  compute under strict local data governance.
+- **The fence:** Plug Power ($PLUG) — commercial hydrogen fuel cells and
+  electrolyzers; adjacent-sounding, but not baseload power, not foundries,
+  not compute pipelines. Energy-adjacent ≠ sovereign compute.
+
+### The military-tech hedge — complete architecture
+
+Bonds are too weak to justify for most people; own defense tech as the
+hedge. The chain, now with its evidence layer:
+
+- **Why war is the only 8+ year risk.** 2008 did not produce an 8-year
+  global recession; the US is not structured the way Japan is; and a century
+  of economists and financial professionals have engineered a system built
+  to never respond the way it did in the 1930s. **The risk has inverted:**
+  the Depression was contraction — scarcity of money relative to business
+  operations. Today money multiplies so fast the system *needs* massive
+  business and investment demand; if demand slows, everything falls. (In
+  this reading, the Department of War rebrand and the South America / Iran
+  injections are strategic demand decisions, not random impulses — present
+  on screen as the operator's macro interpretation, not established fact.)
+- **The Korea leg is covered — by design.** The drones ARE part of the
+  Korean hedge. The drone position is sized large for dual reasons: natural
+  growth potential ~2032+ AND asymmetric growth in war.
+- **The memory thesis is a trade, not a marriage.** Planned major reduction
+  by ~2029, ahead of rising conflict risk. It breaks earlier on either
+  trigger: RAM prices drop, or Korean leverage contagion crosses the
+  comfort line. This is the falsifiable-tell device (doc 35 rule 2) applied
+  to our own book — the thresholds go on screen.
+- **Baseline conviction:** in the risk:reward analysis, being out of the
+  market costs more than being in.
+- **Drawdown stance:** 60% drawdowns are acceptable; the pair looks like a
+  horrible hedge on paper because it is hedging only the account-wipeout
+  black swan. Everything short of that is survived "through time and the
+  quality of my stock selections."
+
+### De-risking without bonds (the T6 rotation, answered)
+
+Defensive thematic balancing + large index + cash. For the properly
+positioned and sophisticated, cycle-dependent: long credit yields, rare
+earth / battery metals, energy. The principle: **"You put into things that
+can't go to 0 and will still grow"** — and buy opportunistically on big
+downside of relatively safe assets with long-term holding ideas. The
+meta-rule, quotable and central: **"Specific prescriptions are the poison,
+not the medicine — and that's more true the younger and the older you
+are."**
+
+### Disclosure posture — decided
+
+Positions stated publicly, on the record. Planned format: a small tracked
+investment account, ~**$100 per week**, that the audience follows as we
+**"Build our world."** The account is the track record and the curriculum at
+once — the earned-credibility mechanism (doc 35 §1) started deliberately
+small enough that a viewer can run it too. Guardrails hold: his account, his
+decisions, shown as education, never as instruction.
+
+### The $500 19-year-old — personal accretive burn
+
+The youth register, resolved: they don't need to buy current earnings or
+future growth. **"Investing $500 when it's all you have is how you end up
+selling at the low, and stop investing for 10 years altogether."** Instead:
+trade time and money for real, accretive resources — an AI subscription,
+free certification programs; "all you need is a phone and $20–50/month to
+have a revenue opportunity now." Spend money becoming valuable to somebody;
+build income so you never have to sell before your ideas have had time to
+defend themselves; use the cash those resources cast off to start the
+world-model and the long-term positions that make sense today AND in 30
+years (the young see those better than the old do).
+
+The frame that unifies the channel: **the youth lane IS accretive burn
+applied to a person** — run negative cash flow into capacity that compounds
+faster than the cash depletes.
 
 ## 4. Temperament directives
 
@@ -184,6 +289,38 @@ channel thesis material — presented on screen as framework and biography
   they are the narrator's natural register. Key theses should land as
   *lines* — compressed, rhythmic, repeatable — the way T7 already does.
   Judge by ear is now doubly binding.
+
+- **Humor: cutting AND playful.** "It's not all doom and gloom, but
+  sometimes, when you smile at the world, it doesn't smile back." The
+  signature is the turn — playful setup, cutting landing. Never doom for
+  its own sake, never softness that dodges the truth.
+- **Delivery north stars (operator-chosen):** Obama and Dave Chappelle for
+  speaking; Vox-style narration for the explainer register. The synthesis
+  to aim at: **Vox's evidence-forward clarity, carried in Obama's measured
+  build-and-pause cadence, with Chappelle's story loops that wander and
+  then snap shut on a hard truth.** (Structure from the loops, gravity from
+  the pauses, trust from the evidence.)
+
+## 4b. Voice synthesis — how the life shapes the prose
+
+The operator's own ask: extrapolate influence, not transcript. The lived
+context licenses these standing inferences for any script pass:
+
+- **This person writes from consequences, not concepts.** Risk is something
+  he has eaten, not modeled — so drawdown talk is calm, and safety talk is
+  suspicious. The edge is grounded, harder than finance prose.
+- **He would fight the cliché, not recite it.** Any beat that lands on
+  standard prescribed advice gets challenged in the next line (T2
+  personified). "Save 10%, buy index funds, wait" is a *foil* in this voice,
+  never a conclusion.
+- **He respects hustle economics.** The loan-shark arithmetic, the register,
+  the side income — small-money ingenuity gets the same analytical
+  seriousness as balance sheets, because that is where he started.
+- **No romanticizing in either direction.** Poverty is not noble, wealth is
+  not evil; both are positions in a system, and the system is the subject.
+- **Philosophy earns its seat by landing.** He climbs to the reflective
+  register often — and always comes down with a decision, a number, or a
+  date.
 
 ## 5. What this changes in generated scripts — the persona pass
 
@@ -212,14 +349,24 @@ Applied to any skeleton (ours or `write_script_v2` output):
    instruction. Credentials exact; scenes concrete; authenticity is
    produced, never claimed.
 
-## 6. Open threads
+## 6. Thread status (grill of 2026-08-24 — answered)
 
-- The operator's message contains an unfinished thought — *"Beating the
-  market is easy,"* — with the completing clause missing. Do not extrapolate
-  it into doctrine; get the second half before using the line.
-- Whether the youth-empowerment mission gets its own content lane (shorts,
-  a series) or stays the through-line of the main lane — operator decision
-  pending.
-- Persona ↔ answer-format interaction: the non-tribalist temperament makes
-  the "agreeing but contrarian" slot (doc 35) the persona's home turf;
-  first answer video should be written through this document.
+Resolved this date: the "beating the market" completion (→ T11) · both
+framework definitions with exemplars and fences (§3b) · the Korea-leg
+coverage and the memory-trade triggers (§3b) · the war-recession evidence
+chain (§3b) · de-risking without bonds (§3b) · disclosure posture and the
+"Build our world" tracked account (§3b) · "my people" scoping (§1) · the
+youth register (§3b) · altitude-1 usage (§2) · humor and delivery north
+stars (§4/§4b).
+
+Still open:
+
+- **"Build our world" format spec** — cadence, production shape, and how the
+  $100/week account appears on screen. Needs its own doc before the first
+  episode.
+- **`[verify]` pass** on the six framework ticker claims (IONQ RPO figure,
+  APLD backlogs, LASE ROIC, FN role, HIVE contracts, PLUG scoping) before
+  first on-screen use — operator-supplied, not yet gated.
+- Persona ↔ answer-format: first answer video (doc 35) should be written
+  through this document; the non-tribalist temperament makes that slot home
+  turf.
