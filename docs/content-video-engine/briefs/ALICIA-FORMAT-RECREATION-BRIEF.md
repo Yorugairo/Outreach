@@ -22,11 +22,12 @@ varied cadence, active voice, no stock AI phrasing — **tuned for YouTube
 retention**: cold-open hook, open loops, planted callbacks, second person,
 specific numbers. Spoken register, not editorial prose. Claims are either
 self-contained arithmetic or tagged `[verify]` for the research gate.
-**Hook rule (v3, operator-corrected): the hook is a shot list, not prose.
-Present tense, one cut per sentence, viewer-facing — a parallel image
-collision, never memoir interiority. Biography is the twist that lands
-AFTER the paradox, never the opener. Plant the video's open loop inside the
-hook itself. Judge hooks by ear at YouTube tempo, not on the page.**
+**The retention clock (operator doctrine, governs every beat): the grab is
+the FIRST sentence — 0-3s, no atmosphere first; answer it by 10s; promise
+the payout by 30s; then the cycle repeats per beat — hook, prove it, promise
+more, deliver, over and over. Hooks are shot lists — present tense, one cut
+per sentence, viewer-facing; biography is the twist after the paradox.
+Judge by ear against synthesized audio, never on the page.**
 **Entity seeding: name one bigger adjacent authority per video (here Mr.
 Money Mustache) — passed authority plus topic-graph adjacency; cite the
 primary source in rule 2.**
@@ -63,7 +64,8 @@ Motion library deposits (first registered units): `kinetic-caption`,
 First person, earned from the operator's actual biography — the rare
 two-altitude view of money:
 
-- **ex-JPMorgan**: watched high earners hold zero margin, up close
+- **ex-JPMorgan, business risk analyst / product manager**: measured
+  downside professionally; watched high earners hold zero margin, up close
 - **ex-dispensary owner**: an all-cash business; employed the people finance
   YouTube never talks about; counted the register
 - **product manager who builds with AI**: systems beat intentions; money
@@ -77,16 +79,15 @@ both of their apartments — that claim is the hook.
 
 **[s01 — black screen, captions punching in word groups; till sounds under]**
 
-Ten p.m. Two people are counting money. A banker in Manhattan, counting
-his bonus. A budtender, counting the till in my dispensary. He takes home
-almost twice what she does. She retires first. I know both worlds — I traded
-at JPMorgan, and I own the store she counts for. I've stood in both of their
-apartments, and what separates them fits on a single receipt. Let me show
-you.
+She earns half of what he does. She retires first. He's a banker in
+Manhattan, counting his bonus. She's a budtender, counting the till in my
+dispensary — I own it, and I worked in risk at JPMorgan. The difference isn't
+discipline and it isn't the salary — it fits on a single receipt, and by the
+end of this video you'll calculate yours.
 
 **[s02 — the banker's apartment]**
 
-The banker first. I know this apartment before the door opens. There's a
+The banker first. I've stood in this apartment — I know it before the door opens. There's a
 suit rack that cost a paycheck, a watch box with a loan inside it, a
 television wider than the couch, and a rowing machine holding up laundry.
 Half the closet still has tags on. Every object in here was, at some point,
@@ -110,8 +111,8 @@ a day, you stop worshipping it.
 
 **[s05 — trading desk vs register, bar vs shields]**
 
-I've watched money from both sides of the counter — the trading floor and
-the cash register. Run these two side by side: he out-earns her almost two to
+I've watched money from both sides of the counter — JPMorgan risk reports
+and a dispensary register. Run these two side by side: he out-earns her almost two to
 one. She holds ten times his margin. Not because she's smarter. Because of
 one relationship he never noticed he was in.
 
