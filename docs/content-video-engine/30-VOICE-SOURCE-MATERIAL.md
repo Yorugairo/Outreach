@@ -150,12 +150,61 @@ change and the reason, don't perform the reversal.**
 
 ---
 
+## 9. Faceless personality mechanisms — external doctrine (AOY), adapted
+
+Everything above is operator-derived. This section is the one piece of
+external doctrine worth folding in: AOY's "Faceless Personality — Writing
+Techniques" (course framework #49), retrieved verbatim 2026-08-24 and adopted
+because the channel is 99% faceless. Premise: *"The channel has no face, so
+personality has to come from the words."*
+
+Three mechanisms, with the course's own example lines:
+
+1. **Commentary / reaction lines** — "Absolute shocker, right?" / "Who
+   would've guessed?" / "Yeah, you read that right." / "Let that sink in for
+   a second." A recurring aside voice the viewer remembers.
+2. **Rhetorical questions** — "But here's the question — how did he get away
+   with it?" / "Sound crazy? It gets worse." Pulls the viewer into the
+   thinking rather than lecturing at them.
+3. **Dark humor when appropriate** — the course example sets up a false fact
+   and snaps it ("died of old age in 1955... just kidding. He died from a
+   rattlesnake bite."). Irony creates personality without a face.
+
+Plus the texture rules: direct "you", "Imagine this:" for scene-setting, and
+varied rhythm — short punchy sentences against longer breathing ones.
+
+**Adaptation rules for THIS voice (operator constraints applied):**
+
+- These are *texture devices layered on top of* the identity in §1–§6, not a
+  substitute for it. The differentiator remains the verifiable biography and
+  the two-rooms claim; these mechanisms are how the asides sound.
+- Reaction lines are rationed. Stock exclamations ("Absolute shocker,
+  right?") drift toward the AI-slop register the same corpus warns against —
+  and toward the copied-tic anti-pattern (§7). Prefer reactions carrying the
+  operator's own dry, blunt cadence (§8): a flat "yeah — that's the whole
+  trick" over a gasp.
+- Dark humor bends to finance: not rattlesnake irony but the dry reversal —
+  the bonus that rounds to zero after the lifestyle ledger, the risk analyst
+  who watched high earners carry no margin. The setup-snap *shape* is what's
+  adopted, not the morbid register.
+- Rhetorical questions double as loop-openers, which means they must obey the
+  retention clock (§3): a question asked is a promise dated.
+
+Related course context worth keeping with it: finance explainers run on
+*curiosity + insight* — "open with a question the viewer can't answer
+themselves; pay it off with a specific mechanism, not a generic wrap"
+(Content-Type Identification, #58). The rhetorical-question mechanism is the
+delivery vehicle for exactly that.
+
+---
+
 ## How to use this
 
 Feed to `brand-voice` as source material to produce a reusable `VOICE PROFILE`.
 The profile is the artefact scripts and work orders reference by path, so this
 material stops being re-derived by hand each session.
 
-Related: [`briefs/ALICIA-FORMAT-RECREATION-BRIEF.md`](briefs/ALICIA-FORMAT-RECREATION-BRIEF.md)
+Related: [`briefs/ALICIA-FORMAT-RECREATION-BRIEF.md`](briefs/ALICIA-FORMAT-RECREATION-BRIEF.md),
+[`28-AOY-MCP-EVALUATION.md`](28-AOY-MCP-EVALUATION.md) (source-of-truth check on the AOY material in §9),
 (the v5 hook in situ, plus the beat sheet), the `humanizer` skill, and the
 memory files `operator-bio` and `youtube-retention-clock`.

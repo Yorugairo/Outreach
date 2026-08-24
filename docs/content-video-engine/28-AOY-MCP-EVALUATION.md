@@ -323,6 +323,74 @@ the course's own justification for our mechanism-first script shape.
 Rate limit discovered: **5 requests per 3 minutes across all AOY tools
 combined**. Batch probes accordingly.
 
+## Voiceover and title doctrine — probed 2026-08-24
+
+Follow-up probes after the fact-check, plus one live run of the
+`Titles_Format_Library` generator against our niche.
+
+### Voiceover — delivery rules exist; ElevenLabs settings do not
+
+What came back, all chunk-stable:
+
+- **Voice selection is deliberately unopinionated**: "pick any voice you find
+  good or interesting — it becomes the personality of the channel." One hard
+  line: **generic AI voice is fine, real-person voice cloning is not** —
+  consistent with the July 2025 inauthentic-content enforcement they track.
+- **Write for the edit**: paragraphs 2–3 lines maximum, because on screen the
+  script becomes voiceover with **cuts every 2–4 seconds**. Paragraph length
+  is effectively a shot-length constraint — directly relevant to our
+  scene-evidence timeline, whose dock cadence already lives in that range.
+- **Pacing is a two-gear system**: short sentences = tension, longer
+  sentences = context, used deliberately.
+- **The Breathing Room Principle**: "you cannot be intense for 10 minutes
+  straight — the viewer's brain habituates. The quiet verse is what makes the
+  chorus hit." Scripts that pile on from minute 1 to 12 *underperform*
+  scripts with intentional dips. This is the course's own argument for savor
+  beats between evidence docks, which our generator already encodes
+  (SETTLE/SAVOR constants).
+- **Absent**: no ElevenLabs parameter guidance (stability/similarity/style
+  numbers) anywhere in the returned chunks. Voice-config remains our own
+  problem; the course only governs the words.
+
+### Titles — mechanical rules plus a native A/B doctrine
+
+- **Formatting**: never put a word before a number — "Top 20", not "The Top
+  20"; "20 Most", not "The 20 Most".
+- **Honesty as strategy, not ethics**: mismatched clickbait is flagged by
+  YouTube's own detection and penalized. "Specificity beats sensationalism"
+  — their example pits a 12-week-experiment title against 'Doctors HATE
+  This One Weird Trick.' Promise only what the video delivers.
+- **Post-upload iteration is doctrine**: changing title/thumbnail on
+  underperformers is encouraged, via YouTube's native **Test & Compare**
+  feature rather than gut swaps.
+- **Top-performing formulas** on record: regret frames ("X REGRETS: Top 5
+  regrets from [group]", "[Aspirational action] and Now I Regret It"), and
+  exodus frames ("Why is EVERYONE Leaving X?").
+
+### `Titles_Format_Library` live run — template quality check
+
+Ran against "finance and investing (market bubbles, wealth mechanics)",
+20 titles across 10 categories. Verdict on the generator:
+
+- The **frames** are the value: Superlative ("The Most Dangerous Market
+  Bubble in History"), Explanation ("{X} Explained in {N} Minutes"),
+  Rise & Fall, Timeline, Survival Horror ("The {N} Minutes That Changed
+  Everything"). Our current-bubble video maps cleanly onto the Superlative
+  and Explanation frames.
+- The **fills** are stock (Enron, 2008, Bitcoin, dot-com) — topic hints from
+  their viral DB, not our angle. The scores rank template fit, not
+  channel fit. Use it as a frame catalogue, hand-fill with our claims.
+- All 150 patterns are browsable unauthenticated at
+  https://ai.theartofyt.com/static/format_patterns.html — the full template
+  library is effectively public.
+
+### Extraction status
+
+Faceless Personality (#49) extracted in full and folded into
+[30-VOICE-SOURCE-MATERIAL.md](30-VOICE-SOURCE-MATERIAL.md) §9 with adaptation
+rules (rationed reaction lines, finance-register dark humor, rhetorical
+questions as dated loop-openers).
+
 ## Verdict (running)
 
 Pending the script comparison and Niche_Hunter test. Early lean: the
