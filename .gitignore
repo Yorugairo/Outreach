@@ -115,3 +115,7 @@ content/video_engine/**/render/
 *.m4a
 *.aac
 *.flac
+
+# third-party caption transcripts — research inputs, never committed
+youtube-captions/
+*.vtt
