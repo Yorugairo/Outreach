@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      /* Transparent ground — the world plate is the layer underneath. */
+      html, body {
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: transparent;
+      }
+
+      #root { position: relative; }
+
+      /* Cream washi chips with the hard-edge woodblock shadow (accepted
+         evidence-dock treatment): physical paper depth, no fake 3D blur. */
+      .chip {
+        position: absolute;
+        background: #F4E6C7;
+        border: 4px solid #25313C;
+        border-radius: 14px;
+        box-shadow: 14px 14px 0px #25313C;
+      }
+      #chip-source { left: 320px; bottom: 300px; width: 380px; height: 480px; }
+      #chip-sink   { left: 1220px; bottom: 300px; width: 380px; height: 480px; }
+      #chip-readout { left: 1252px; bottom: 830px; width: 316px; height: 160px; }
+
+      /* Bottom-anchored reveal window: growing the window grows the column.
+         The artwork never scales, so paper grain keeps its true size. */
+      .stack {
+        position: absolute;
+        width: 160px;
+        overflow: hidden;
+      }
+      .stack img.column {
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 160px;
+        height: 620px;
+        display: block;
+      }
+      /* The cap: a complete top coin pinned to the window's slice line, so
+         the stack always ends in a full coin face — the window's raw top
+         edge (a guillotined half-coin) is never visible. */
+      img.cap {
+        position: absolute;
+        width: 156px;
+        height: auto;
+        display: block;
+      }
+      #cap-source { left: 432px; }
+      #cap-sink   { left: 1332px; }
+
+      #stack-source { left: 430px; bottom: 322px; height: 438px; }
+      #stack-sink   { left: 1330px; bottom: 322px; height: 438px; }
+
+      /* The only code-drawn element: the figure must be exact, and the style
+         profile forbids numbers inside generated imagery. */
+      .readout {
+        position: absolute;
+        left: 1252px;
+        bottom: 868px;
+        width: 316px;
+        text-align: center;
+        font-family: Georgia, "Times New Roman", serif;
+        font-weight: 700;
+        font-size: 96px;
+        line-height: 1;
+        color: #25313C;
+        font-variant-numeric: tabular-nums;
+      }
+
+      .rule {
+        position: absolute;
+        left: 1300px;
+        bottom: 854px;
+        width: 220px;
+        height: 7px;
+        background: #ED6A4A;
+        transform-origin: left center;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="overlay-money-transfer-woodblock-v5"
+      data-start="0"
+      data-duration="3.5"
+      data-width="1920"
+      data-height="1080"
+      data-fps="24"
+    >
+      <div class="clip" data-start="0" data-duration="3.5" data-track-index="1">
+        <div class="chip" id="chip-source"></div>
+        <div class="chip" id="chip-sink"></div>
+        <div class="stack" id="stack-source">
+          <img class="column" src="assets/overlays/money-transfer/coin-column-cut-v1.png" alt="household savings" />
+        </div>
+        <div class="stack" id="stack-sink">
+          <img class="column" src="assets/overlays/money-transfer/coin-column-cut-v1.png" alt="receiving balance" />
+        </div>
+        <img class="cap" id="cap-source" src="assets/overlays/money-transfer/coin-column-cap-v1.png" alt="" />
+        <img class="cap" id="cap-sink" src="assets/overlays/money-transfer/coin-column-cap-v1.png" alt="" />
+        <div class="chip" id="chip-readout"></div>
+        <div class="readout" id="readout">0</div>
+        <div class="rule" id="rule"></div>
+      </div>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      window.__timelines["overlay-money-transfer-woodblock-v5"] = tl;
+
+      const FULL = 438;
+      const LOW = 110;
+      const WINDOW_BOTTOM = 1080 - 322; // css bottom → top-coordinate space
+      const CAP_H = 101; // rendered cap height at 156px width (370x240 source)
+
+      // The cap rides the window's top edge: its top sits just above the
+      // slice so the full coin face covers the guillotined edge below it.
+      const capY = (h) => WINDOW_BOTTOM - h - CAP_H + 62;
+
+      gsap.set("#chip-source, #chip-sink", { autoAlpha: 0, scale: 0.88, transformOrigin: "50% 100%" });
+      gsap.set("#chip-readout", { autoAlpha: 0, scale: 0.88, transformOrigin: "50% 0%" });
+      gsap.set("#stack-source", { height: FULL, autoAlpha: 0 });
+      gsap.set("#stack-sink", { height: LOW, autoAlpha: 0 });
+      gsap.set("#cap-source", { autoAlpha: 0, top: capY(FULL) });
+      gsap.set("#cap-sink", { autoAlpha: 0, top: capY(LOW) });
+      gsap.set("#readout", { autoAlpha: 0, y: 10 });
+      gsap.set("#rule", { autoAlpha: 0, scaleX: 0 });
+
+      const counter = { value: 0 };
+      const readout = document.getElementById("readout");
+      // Micro-scale spring entrance: 0.88 → 1.0, small damped overshoot —
+      // the document snaps into focus instead of floating in from space.
+      const SNAP = "back.out(1.4)";
+
+      tl.to("#chip-source, #chip-sink", { autoAlpha: 1, scale: 1, duration: 0.42, ease: SNAP, stagger: 0.08 }, 0)
+        .to("#stack-source, #stack-sink, #cap-source, #cap-sink", { autoAlpha: 1, duration: 0.2 }, 0.34)
+        // One causal step: value leaves the household column, lands opposite.
+        // Cap and window move as one so the stack always ends in a whole coin.
+        .to("#stack-source", { height: LOW + 37, duration: 1.25, ease: "power2.inOut" }, 0.6)
+        .to("#cap-source", { top: capY(LOW + 37), duration: 1.25, ease: "power2.inOut" }, 0.6)
+        .to("#stack-sink", { height: FULL, duration: 1.25, ease: "power2.inOut" }, 0.6)
+        .to("#cap-sink", { top: capY(FULL), duration: 1.25, ease: "power2.inOut" }, 0.6)
+        // Settle: the receiving column takes the weight.
+        .to("#stack-sink", { height: FULL - 10, duration: 0.16, ease: "power2.out" }, 1.85)
+        .to("#cap-sink", { top: capY(FULL - 10), duration: 0.16, ease: "power2.out" }, 1.85)
+        .to("#stack-sink", { height: FULL, duration: 0.42, ease: "elastic.out(1, 0.5)" }, 2.01)
+        .to("#cap-sink", { top: capY(FULL), duration: 0.42, ease: "elastic.out(1, 0.5)" }, 2.01)
+        // The figure arrives with the value, on its own quiet chip.
+        .to("#chip-readout", { autoAlpha: 1, scale: 1, duration: 0.34, ease: SNAP }, 1.0)
+        .to("#readout", { autoAlpha: 1, y: 0, duration: 0.22, ease: "power2.out" }, 1.15)
+        .to(
+          counter,
+          {
+            value: 40,
+            duration: 1.0,
+            ease: "power2.out",
+            onUpdate: () => {
+              readout.textContent = String(Math.round(counter.value));
+            },
+          },
+          1.2
+        )
+        .to("#rule", { autoAlpha: 1, scaleX: 1, duration: 0.4, ease: "power3.out" }, 2.4);
+
+      // Hard kills so a seek past the end cannot land mid-tween.
+      tl.set("#stack-sink", { height: FULL }, 3.5);
+      tl.set("#cap-sink", { top: capY(FULL) }, 3.5);
+    </script>
+  </body>
+</html>

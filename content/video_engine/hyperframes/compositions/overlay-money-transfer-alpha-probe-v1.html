@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      /* Transparent ground: the plate lives underneath this overlay in the
+         Remotion timeline, so nothing here may paint a background. */
+      html, body {
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: transparent;
+      }
+      body { font-family: "Inter", "Segoe UI", sans-serif; }
+
+      #root { position: relative; }
+
+      /* The overlay occupies a bounded region; frame corners stay empty so a
+         failed alpha channel shows up immediately as an opaque box. */
+      .rig {
+        position: absolute;
+        left: 460px;
+        top: 380px;
+        width: 1000px;
+        height: 320px;
+      }
+
+      .node {
+        position: absolute;
+        top: 120px;
+        width: 132px;
+        height: 132px;
+        border-radius: 50%;
+        border: 7px solid #25313C;
+        background: #F4E6C7;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .node--source { left: 0; }
+      .node--sink { right: 0; border-color: #178C83; }
+
+      .node__glyph {
+        width: 58px;
+        height: 58px;
+        border-radius: 8px;
+        background: #25313C;
+      }
+      .node--sink .node__glyph { background: #178C83; }
+
+      .coin {
+        position: absolute;
+        left: 92px;
+        top: 168px;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background: #F5B72E;
+        border: 5px solid #25313C;
+      }
+
+      .readout {
+        position: absolute;
+        right: 0;
+        top: 8px;
+        width: 300px;
+        text-align: center;
+        color: #25313C;
+        font-size: 92px;
+        font-weight: 800;
+        font-variant-numeric: tabular-nums;
+        letter-spacing: -0.02em;
+      }
+
+      .rule {
+        position: absolute;
+        right: 26px;
+        top: 112px;
+        width: 248px;
+        height: 9px;
+        background: #ED6A4A;
+        transform-origin: left center;
+        border-radius: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="overlay-money-transfer-alpha-probe-v1"
+      data-start="0"
+      data-duration="3"
+      data-width="1920"
+      data-height="1080"
+      data-fps="24"
+    >
+      <div class="clip" data-start="0" data-duration="3" data-track-index="1">
+        <div class="rig">
+          <div class="node node--source" id="src"><div class="node__glyph"></div></div>
+          <div class="node node--sink" id="sink"><div class="node__glyph"></div></div>
+          <div class="coin" id="coin"></div>
+          <div class="readout" id="readout">0</div>
+          <div class="rule" id="rule"></div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      window.__timelines["overlay-money-transfer-alpha-probe-v1"] = tl;
+
+      // Seek-safe initial state: every animated property is explicitly set.
+      gsap.set("#coin", { autoAlpha: 0, x: 0, y: 0, scale: 0.6 });
+      gsap.set("#rule", { autoAlpha: 0, scaleX: 0 });
+      gsap.set("#readout", { autoAlpha: 0 });
+      gsap.set("#src, #sink", { autoAlpha: 0, scale: 0.9 });
+
+      const counter = { value: 0 };
+      const readout = document.getElementById("readout");
+
+      tl.to("#src, #sink", {
+          autoAlpha: 1,
+          scale: 1,
+          duration: 0.34,
+          ease: "back.out(2)",
+          stagger: 0.08,
+        })
+        .to("#coin", { autoAlpha: 1, scale: 1, duration: 0.18 }, 0.42)
+        // The transfer: a coin leaves the source and lands in the sink.
+        .to("#coin", { x: 780, duration: 0.86, ease: "power1.inOut" }, 0.5)
+        .to("#coin", { y: -74, duration: 0.43, ease: "power2.out" }, 0.5)
+        .to("#coin", { y: 0, duration: 0.43, ease: "power2.in" }, 0.93)
+        .to("#coin", { autoAlpha: 0, scale: 0.5, duration: 0.16 }, 1.32)
+        .to("#sink", { scale: 1.12, duration: 0.14, ease: "power2.out" }, 1.34)
+        .to("#sink", { scale: 1, duration: 0.3, ease: "elastic.out(1, 0.45)" }, 1.48)
+        // The number is authored in code, so the figure is exact by
+        // construction rather than hoped for out of an image generator.
+        .to("#readout", { autoAlpha: 1, duration: 0.16 }, 1.4)
+        .to(
+          counter,
+          {
+            value: 40,
+            duration: 0.72,
+            ease: "power2.out",
+            onUpdate: () => {
+              readout.textContent = String(Math.round(counter.value));
+            },
+          },
+          1.46
+        )
+        .to("#rule", { autoAlpha: 1, scaleX: 1, duration: 0.44, ease: "power3.out" }, 2.12);
+
+      // Hard kills so a seek past the end cannot leave a half-built frame.
+      tl.set("#coin", { autoAlpha: 0 }, 3);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      /* Transparent ground — the world plate is the layer underneath. */
+      html, body {
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: transparent;
+      }
+
+      #root { position: relative; }
+
+      /* Bottom-anchored reveal windows. Animating the window height makes the
+         stack itself grow and shrink; the artwork never scales, so the paper
+         grain and coin relief keep their true size. */
+      .stack {
+        position: absolute;
+        width: 460px;
+        overflow: hidden;
+      }
+      .stack img {
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 460px;
+        height: 329px;
+        display: block;
+      }
+      #stack-source { left: 300px; bottom: 320px; height: 329px; }
+      #stack-sink   { left: 1140px; bottom: 320px; height: 329px; }
+
+      /* The only code-drawn element: the figure has to be exact, and the
+         style profile forbids numbers inside generated imagery. Editorial
+         serif rather than a UI sans, to sit with printed newsprint. */
+      .readout {
+        position: absolute;
+        left: 1140px;
+        bottom: 690px;
+        width: 460px;
+        text-align: center;
+        font-family: Georgia, "Times New Roman", serif;
+        font-weight: 700;
+        font-size: 132px;
+        line-height: 1;
+        color: #25313C;
+        font-variant-numeric: tabular-nums;
+      }
+
+      .rule {
+        position: absolute;
+        left: 1258px;
+        bottom: 664px;
+        width: 224px;
+        height: 7px;
+        background: #ED6A4A;
+        transform-origin: left center;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="overlay-money-transfer-woodblock-v3"
+      data-start="0"
+      data-duration="3.5"
+      data-width="1920"
+      data-height="1080"
+      data-fps="24"
+    >
+      <div class="clip" data-start="0" data-duration="3.5" data-track-index="1">
+        <div class="stack" id="stack-source">
+          <img src="assets/overlays/money-transfer/coin-stack-trimmed-v1.png" alt="household savings" />
+        </div>
+        <div class="stack" id="stack-sink">
+          <img src="assets/overlays/money-transfer/coin-stack-trimmed-v1.png" alt="receiving balance" />
+        </div>
+        <div class="readout" id="readout">0</div>
+        <div class="rule" id="rule"></div>
+      </div>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      window.__timelines["overlay-money-transfer-woodblock-v3"] = tl;
+
+      // Coins occupy the upper ~58% of the trimmed artwork and the newsprint
+      // base the lower ~42%. So a window below 42% shows paper with no coins,
+      // and every point above that is a readable quantity of coins.
+      const FULL = 329;
+      const BASE = Math.round(FULL * 0.42);
+
+      // Seek-safe: every animated property gets an explicit start value.
+      gsap.set("#stack-source", { height: FULL, autoAlpha: 1 });
+      gsap.set("#stack-sink", { height: BASE, autoAlpha: 1 });
+      gsap.set("#readout", { autoAlpha: 0, y: 14 });
+      gsap.set("#rule", { autoAlpha: 0, scaleX: 0 });
+
+      const counter = { value: 0 };
+      const readout = document.getElementById("readout");
+
+      // One causal step: value leaves the household and lands in the balance.
+      // The two heights move together because they are the same event.
+      tl.to("#stack-source", { height: BASE + 18, duration: 1.25, ease: "power2.inOut" }, 0.35)
+        .to("#stack-sink", { height: FULL, duration: 1.25, ease: "power2.inOut" }, 0.35)
+        // Settle: the receiving stack takes the weight.
+        .to("#stack-sink", { height: FULL - 9, duration: 0.16, ease: "power2.out" }, 1.6)
+        .to("#stack-sink", { height: FULL, duration: 0.42, ease: "elastic.out(1, 0.5)" }, 1.76)
+        // The figure arrives with the value, not before it.
+        .to("#readout", { autoAlpha: 1, y: 0, duration: 0.24, ease: "power2.out" }, 0.9)
+        .to(
+          counter,
+          {
+            value: 40,
+            duration: 1.0,
+            ease: "power2.out",
+            onUpdate: () => {
+              readout.textContent = String(Math.round(counter.value));
+            },
+          },
+          0.95
+        )
+        .to("#rule", { autoAlpha: 1, scaleX: 1, duration: 0.4, ease: "power3.out" }, 2.3);
+
+      // Hard kill so a seek past the end cannot land mid-tween.
+      tl.set("#stack-sink", { height: FULL }, 3.5);
+    </script>
+  </body>
+</html>

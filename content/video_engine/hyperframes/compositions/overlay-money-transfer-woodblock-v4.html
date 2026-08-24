@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      /* Transparent ground — the world plate is the layer underneath. */
+      html, body {
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: transparent;
+      }
+
+      #root { position: relative; }
+
+      /* Cream washi chips (whiteboard_compositor register): the quiet local
+         surface that keeps overlays legible over busy plate detail. The chip
+         is the backing card; clipped stack edges read as the card boundary. */
+      .chip {
+        position: absolute;
+        background: #F4E6C7;
+        border: 5px solid #3a3226;
+        border-radius: 10px;
+        box-shadow:
+          0 2px 0 rgba(37, 49, 60, 0.25),
+          0 10px 22px rgba(0, 0, 0, 0.35);
+      }
+      #chip-source { left: 320px; bottom: 300px; width: 380px; height: 480px; }
+      #chip-sink   { left: 1220px; bottom: 300px; width: 380px; height: 480px; }
+      #chip-readout { left: 1252px; bottom: 810px; width: 316px; height: 170px; }
+
+      /* Bottom-anchored reveal windows inside the chips. Animating the window
+         height grows/shrinks the column; the artwork itself never scales, so
+         paper grain and coin relief keep their true size. */
+      .stack {
+        position: absolute;
+        width: 160px;
+        overflow: hidden;
+      }
+      .stack img {
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 160px;
+        height: 620px;
+        display: block;
+      }
+      #stack-source { left: 430px; bottom: 322px; height: 438px; }
+      #stack-sink   { left: 1330px; bottom: 322px; height: 438px; }
+
+      /* The only code-drawn element: the figure must be exact, and the style
+         profile forbids numbers inside generated imagery. */
+      .readout {
+        position: absolute;
+        left: 1252px;
+        bottom: 852px;
+        width: 316px;
+        text-align: center;
+        font-family: Georgia, "Times New Roman", serif;
+        font-weight: 700;
+        font-size: 104px;
+        line-height: 1;
+        color: #25313C;
+        font-variant-numeric: tabular-nums;
+      }
+
+      .rule {
+        position: absolute;
+        left: 1300px;
+        bottom: 836px;
+        width: 220px;
+        height: 7px;
+        background: #ED6A4A;
+        transform-origin: left center;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="overlay-money-transfer-woodblock-v4"
+      data-start="0"
+      data-duration="3.5"
+      data-width="1920"
+      data-height="1080"
+      data-fps="24"
+    >
+      <div class="clip" data-start="0" data-duration="3.5" data-track-index="1">
+        <div class="chip" id="chip-source"></div>
+        <div class="chip" id="chip-sink"></div>
+        <div class="stack" id="stack-source">
+          <img src="assets/overlays/money-transfer/coin-column-cut-v1.png" alt="household savings" />
+        </div>
+        <div class="stack" id="stack-sink">
+          <img src="assets/overlays/money-transfer/coin-column-cut-v1.png" alt="receiving balance" />
+        </div>
+        <div class="chip" id="chip-readout"></div>
+        <div class="readout" id="readout">0</div>
+        <div class="rule" id="rule"></div>
+      </div>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      window.__timelines["overlay-money-transfer-woodblock-v4"] = tl;
+
+      const FULL = 438;   // 12 coins at ~36.5px pitch
+      const LOW = 110;   // 3 coins
+
+      // Seek-safe: every animated property gets an explicit start value.
+      gsap.set("#chip-source, #chip-sink", { autoAlpha: 0, scale: 0.96, transformOrigin: "50% 100%" });
+      gsap.set("#chip-readout", { autoAlpha: 0, scale: 0.92, transformOrigin: "50% 0%" });
+      gsap.set("#stack-source", { height: FULL, autoAlpha: 0 });
+      gsap.set("#stack-sink", { height: LOW, autoAlpha: 0 });
+      gsap.set("#readout", { autoAlpha: 0, y: 12 });
+      gsap.set("#rule", { autoAlpha: 0, scaleX: 0 });
+
+      const counter = { value: 0 };
+      const readout = document.getElementById("readout");
+
+      // Chips land first, then the columns, then one causal step: value
+      // leaves the household column and lands in the receiving column.
+      tl.to("#chip-source, #chip-sink", { autoAlpha: 1, scale: 1, duration: 0.3, ease: "power2.out", stagger: 0.08 }, 0)
+        .to("#stack-source, #stack-sink", { autoAlpha: 1, duration: 0.2 }, 0.28)
+        .to("#stack-source", { height: LOW + 37, duration: 1.25, ease: "power2.inOut" }, 0.6)
+        .to("#stack-sink", { height: FULL, duration: 1.25, ease: "power2.inOut" }, 0.6)
+        // Settle: the receiving column takes the weight.
+        .to("#stack-sink", { height: FULL - 10, duration: 0.16, ease: "power2.out" }, 1.85)
+        .to("#stack-sink", { height: FULL, duration: 0.42, ease: "elastic.out(1, 0.5)" }, 2.01)
+        // The figure arrives with the value, on its own quiet chip.
+        .to("#chip-readout", { autoAlpha: 1, scale: 1, duration: 0.26, ease: "power2.out" }, 1.0)
+        .to("#readout", { autoAlpha: 1, y: 0, duration: 0.22, ease: "power2.out" }, 1.15)
+        .to(
+          counter,
+          {
+            value: 40,
+            duration: 1.0,
+            ease: "power2.out",
+            onUpdate: () => {
+              readout.textContent = String(Math.round(counter.value));
+            },
+          },
+          1.2
+        )
+        .to("#rule", { autoAlpha: 1, scaleX: 1, duration: 0.4, ease: "power3.out" }, 2.4);
+
+      // Hard kill so a seek past the end cannot land mid-tween.
+      tl.set("#stack-sink", { height: FULL }, 3.5);
+    </script>
+  </body>
+</html>

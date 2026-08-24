@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Decoupled Evidence & Stat Badge System</title>
+  <style>
+    :root {
+      --bg: #080c14;
+      --charcoal: #25313C;
+      --cobalt: #1769C2;
+      --teal: #178C83;
+      --sunflower: #F5B72E;
+      --coral: #ED6A4A;
+      --cream: #F4E6C7;
+      --card-bg: #141c2b;
+      --emerald: #10B981;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: #f8fafc;
+      margin: 0;
+      padding: 2rem;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    header {
+      margin-bottom: 1.5rem;
+      border-bottom: 1px solid #334155;
+      padding-bottom: 1.25rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+    h1 {
+      margin: 0 0 0.4rem 0;
+      color: var(--sunflower);
+      font-size: 2rem;
+      letter-spacing: -0.02em;
+    }
+    .subtitle {
+      color: #94a3b8;
+      font-size: 0.95rem;
+    }
+    .controls {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      background: var(--card-bg);
+      padding: 1rem 1.5rem;
+      border-radius: 12px;
+      border: 1px solid #334155;
+    }
+    .btn {
+      background: var(--cobalt);
+      color: #fff;
+      border: none;
+      padding: 0.65rem 1.4rem;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(23, 105, 194, 0.3);
+      transition: all 0.15s ease;
+    }
+    .btn:hover {
+      background: #1e7be6;
+      transform: translateY(-1px);
+    }
+    .btn-secondary {
+      background: #334155;
+      box-shadow: none;
+    }
+    .btn-secondary:hover {
+      background: #475569;
+    }
+    select {
+      background: #0f172a;
+      color: #f8fafc;
+      border: 1px solid #475569;
+      padding: 0.6rem 1rem;
+      border-radius: 6px;
+      font-size: 0.9rem;
+    }
+
+    /* 16:9 Master Viewport */
+    .viewport-frame {
+      width: 100%;
+      max-width: 1100px;
+      height: 619px;
+      margin: 0 auto;
+      background: #000;
+      border: 4px solid var(--charcoal);
+      border-radius: 16px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.7);
+    }
+
+    .world-layer {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform-origin: center center;
+    }
+
+    .rail-scrim {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 60%;
+      height: 100%;
+      background: linear-gradient(to right, rgba(8, 12, 20, 0) 0%, rgba(8, 12, 20, 0.65) 35%, rgba(8, 12, 20, 0.92) 100%);
+      pointer-events: none;
+    }
+
+    /* 2.5D Evidence Dock Card */
+    .evidence-dock {
+      position: absolute;
+      top: 35px;
+      right: 40px;
+      width: 550px;
+      height: 530px;
+      background: var(--cream);
+      border: 3.5px solid var(--charcoal);
+      border-radius: 14px;
+      box-shadow: 14px 14px 0px var(--charcoal);
+      padding: 1.25rem;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      transform-origin: center center;
+    }
+
+    .evidence-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid var(--charcoal);
+      padding-bottom: 0.5rem;
+      margin-bottom: 0.6rem;
+    }
+    .evidence-title {
+      font-weight: 900;
+      font-size: 0.95rem;
+      color: var(--charcoal);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .evidence-badge {
+      background: var(--cobalt);
+      color: #fff;
+      font-size: 0.72rem;
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-weight: 800;
+    }
+
+    /* Fully Intact Slide View (100% visible, zero cropping) */
+    .slide-view-container {
+      flex: 1;
+      position: relative;
+      border: 2px solid var(--charcoal);
+      border-radius: 8px;
+      overflow: hidden;
+      background: #000;
+    }
+    .slide-view-img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain; /* Keeps entire slide intact! */
+      display: block;
+      background: #111;
+    }
+
+    /* Decoupled Live Stat Badges Rail */
+    .badges-rail {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.6rem;
+      margin-top: 0.75rem;
+    }
+    .stat-card {
+      background: var(--charcoal);
+      color: #fff;
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: 1.5px solid rgba(255,255,255,0.1);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      opacity: 0;
+      transform: translateY(12px) scale(0.95);
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .stat-card.visible {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+    .stat-label {
+      font-size: 0.7rem;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      color: #94a3b8;
+      text-transform: uppercase;
+    }
+    .stat-value-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-top: 2px;
+    }
+    .stat-num {
+      font-size: 1.25rem;
+      font-weight: 900;
+      font-family: monospace;
+      color: var(--sunflower);
+    }
+    .stat-tag {
+      font-size: 0.7rem;
+      font-weight: 800;
+      padding: 1px 5px;
+      border-radius: 3px;
+    }
+
+    /* Citation Source Footer */
+    .citation-footer {
+      margin-top: 0.6rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.72rem;
+      color: var(--charcoal);
+      font-weight: 700;
+      opacity: 0.75;
+      border-top: 1px dashed var(--charcoal);
+      padding-top: 0.4rem;
+    }
+
+    .timeline-bar {
+      margin-top: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      color: #94a3b8;
+      font-size: 0.9rem;
+    }
+    .timeline-bar input[type="range"] {
+      flex: 1;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div>
+        <h1>📊 Decoupled Evidence & Stat Badge System</h1>
+        <div class="subtitle">100% intact, uncropped slide evidence paired with animated Remotion stat counters and citation source rails.</div>
+      </div>
+      <div>
+        <button class="btn" onclick="playScene()">▶️ Play Scene Sequence</button>
+      </div>
+    </header>
+
+    <div class="controls">
+      <label><strong>Select Evidence Scenario:</strong></label>
+      <select id="scenario-select" onchange="changeScenario(this.value)">
+        <option value="valuation_gap">1. The Great Valuation Paradox (S&P 500 CAPE vs Triopoly)</option>
+        <option value="physics_penalty">2. The 3-to-1 Physics Penalty (Wafer Consumption Ratio)</option>
+        <option value="triopoly_supply">3. Sovereign Triopoly Dominance (Global DRAM Supply)</option>
+      </select>
+
+      <button class="btn btn-secondary" onclick="resetScene()">⏮️ Reset</button>
+      <span id="frame-display" style="margin-left: auto; font-family: monospace; color: var(--sunflower);">Frame: 0/120 (0.00s)</span>
+    </div>
+
+    <!-- 16:9 Composited Video Viewport -->
+    <div class="viewport-frame">
+      <img class="world-layer" id="world-bg" src="scene_assets/hero-sp500-double-failure-v1.png" alt="World Plate" />
+      <div class="rail-scrim"></div>
+
+      <!-- 2.5D Evidence Dock -->
+      <div class="evidence-dock" id="evidence-dock">
+        <div class="evidence-header">
+          <span class="evidence-title" id="evidence-title">THE GREAT VALUATION PARADOX</span>
+          <span class="evidence-badge" id="evidence-badge">EXHIBIT #01</span>
+        </div>
+
+        <!-- Fully Intact Uncropped Slide Viewport -->
+        <div class="slide-view-container">
+          <img class="slide-view-img" id="slide-img" src="slides/triopoly-paradox.png" alt="Slide Evidence" />
+        </div>
+
+        <!-- Decoupled Live Code Stat Badges (No Coordinate Dependencies) -->
+        <div class="badges-rail">
+          <div class="stat-card" id="card-1">
+            <span class="stat-label" id="label-1">S&P 500 FORWARD CAPE</span>
+            <div class="stat-value-row">
+              <span class="stat-num" id="val-1" style="color: #ED6A4A;">38.4x</span>
+              <span class="stat-tag" id="tag-1" style="background: rgba(237, 106, 74, 0.2); color: #ED6A4A;">+92% HIST.</span>
+            </div>
+          </div>
+
+          <div class="stat-card" id="card-2">
+            <span class="stat-label" id="label-2">TRIOPOLY FORWARD P/E</span>
+            <div class="stat-value-row">
+              <span class="stat-num" id="val-2" style="color: #10B981;">11.2x</span>
+              <span class="stat-tag" id="tag-2" style="background: rgba(16, 185, 129, 0.2); color: #10B981;">-70% DISCOUNT</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Citation Verification Rail -->
+        <div class="citation-footer" id="citation-footer">
+          <span id="citation-src">📄 SOURCE: FactSet & MacroMicro Market Valuations</span>
+          <span style="color: var(--cobalt);">VERIFIED FILING</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-bar">
+      <span>0s</span>
+      <input type="range" id="scrubber" min="0" max="120" value="0" oninput="renderFrame(parseInt(this.value))">
+      <span>4.0s (120 Frames @ 30fps)</span>
+    </div>
+  </div>
+
+  <script>
+    const scenarios = {
+      valuation_gap: {
+        worldPlate: 'hero-sp500-double-failure-v1.png',
+        slideImage: 'triopoly-paradox.png',
+        title: 'THE GREAT VALUATION PARADOX',
+        badge: 'EXHIBIT #01',
+        label1: 'S&P 500 FORWARD CAPE',
+        val1: '38.4x',
+        val1Color: '#ED6A4A',
+        tag1: '+92% HIST.',
+        tag1Bg: 'rgba(237, 106, 74, 0.2)',
+        tag1Color: '#ED6A4A',
+        label2: 'TRIOPOLY FORWARD P/E',
+        val2: '11.2x',
+        val2Color: '#10B981',
+        tag2: '-70% DISCOUNT',
+        tag2Bg: 'rgba(16, 185, 129, 0.2)',
+        tag2Color: '#10B981',
+        citation: '📄 SOURCE: FactSet & MacroMicro Valuations (Q2 2026)'
+      },
+      physics_penalty: {
+        worldPlate: 'hero-fab-constraint-v1.png',
+        slideImage: 'memory-3to1-penalty.png',
+        title: 'THE 3-TO-1 PHYSICS PENALTY',
+        badge: 'EXHIBIT #02',
+        label1: 'HBM WAFER TRADE RATIO',
+        val1: '3.0 : 1',
+        val1Color: '#F5B72E',
+        tag1: 'PHYSICAL CAP',
+        tag1Bg: 'rgba(245, 183, 46, 0.2)',
+        tag1Color: '#F5B72E',
+        label2: 'DDR5 CANNIBALIZATION',
+        val2: '-66%',
+        val2Color: '#ED6A4A',
+        tag2: 'NON-HBM SHORTAGE',
+        tag2Bg: 'rgba(237, 106, 74, 0.2)',
+        tag2Color: '#ED6A4A',
+        citation: '📄 SOURCE: Micron Q3 Prepared Remarks & TrendForce'
+      },
+      triopoly_supply: {
+        worldPlate: 'hero-contract-ovens-v1.png',
+        slideImage: 'triopoly-paradox.png',
+        title: 'SILICON SILENT TRIOPOLY',
+        badge: 'EXHIBIT #03',
+        label1: 'GLOBAL DRAM MARKET SHARE',
+        val1: '96.2%',
+        val1Color: '#1769C2',
+        tag1: 'SAMSUNG / SK / MU',
+        tag1Bg: 'rgba(23, 105, 194, 0.2)',
+        tag1Color: '#1769C2',
+        label2: 'CAPEX COMMITMENT (5-YR)',
+        val2: '$140B+',
+        val2Color: '#10B981',
+        tag2: 'SECURED DEPOSITS',
+        tag2Bg: 'rgba(16, 185, 129, 0.2)',
+        tag2Color: '#10B981',
+        citation: '📄 SOURCE: Company 10-K Filings & TrendForce Global'
+      }
+    };
+
+    let activeKey = 'valuation_gap';
+
+    function remotionSpring(progress, damping = 20, stiffness = 85) {
+      return 1 - Math.exp(-progress * (damping / 3)) * Math.cos(progress * Math.sqrt(stiffness) * 0.4);
+    }
+
+    const worldBg = document.getElementById('world-bg');
+    const slideImg = document.getElementById('slide-img');
+    const evidenceDock = document.getElementById('evidence-dock');
+    const evidenceTitle = document.getElementById('evidence-title');
+    const evidenceBadge = document.getElementById('evidence-badge');
+    const label1 = document.getElementById('label-1');
+    const val1 = document.getElementById('val-1');
+    const tag1 = document.getElementById('tag-1');
+    const label2 = document.getElementById('label-2');
+    const val2 = document.getElementById('val-2');
+    const tag2 = document.getElementById('tag-2');
+    const citationSrc = document.getElementById('citation-src');
+    const card1 = document.getElementById('card-1');
+    const card2 = document.getElementById('card-2');
+    const scrubber = document.getElementById('scrubber');
+    const frameDisplay = document.getElementById('frame-display');
+
+    function applyScenarioData(key) {
+      const s = scenarios[key];
+      worldBg.src = `scene_assets/${s.worldPlate}`;
+      slideImg.src = `slides/${s.slideImage}`;
+      evidenceTitle.innerText = s.title;
+      evidenceBadge.innerText = s.badge;
+      
+      label1.innerText = s.label1;
+      val1.innerText = s.val1;
+      val1.style.color = s.val1Color;
+      tag1.innerText = s.tag1;
+      tag1.style.background = s.tag1Bg;
+      tag1.style.color = s.tag1Color;
+
+      label2.innerText = s.label2;
+      val2.innerText = s.val2;
+      val2.style.color = s.val2Color;
+      tag2.innerText = s.tag2;
+      tag2.style.background = s.tag2Bg;
+      tag2.style.color = s.tag2Color;
+
+      citationSrc.innerText = s.citation;
+    }
+
+    function renderFrame(frame) {
+      frameDisplay.innerText = `Frame: ${frame}/120 (${(frame/30).toFixed(2)}s)`;
+      scrubber.value = frame;
+
+      // 1. World Plate Subtle Ken Burns (0 - 120)
+      const worldScale = 1.0 + 0.04 * (frame / 120);
+      const worldX = -8 * (frame / 120);
+      worldBg.style.transform = `scale(${worldScale}) translate(${worldX}px, 0px)`;
+
+      // 2. Evidence Card Entrance Spring (Frames 12 - 38)
+      if (frame >= 12) {
+        const t = Math.min((frame - 12) / 24, 1);
+        const springVal = remotionSpring(t * 4, 18, 90);
+        const scale = 0.88 + 0.12 * Math.min(Math.max(springVal, 0), 1);
+        const opacity = Math.min((frame - 12) / 8, 1);
+        evidenceDock.style.transform = `scale(${scale})`;
+        evidenceDock.style.opacity = opacity;
+      } else {
+        evidenceDock.style.transform = 'scale(0.85)';
+        evidenceDock.style.opacity = '0';
+      }
+
+      // 3. Stat Badge 1 Pop & Counter Trigger (Frames 40 - 65)
+      if (frame >= 40) {
+        card1.classList.add('visible');
+      } else {
+        card1.classList.remove('visible');
+      }
+
+      // 4. Stat Badge 2 Pop (Frames 58 - 85)
+      if (frame >= 58) {
+        card2.classList.add('visible');
+      } else {
+        card2.classList.remove('visible');
+      }
+    }
+
+    let isPlaying = false;
+    let timer = null;
+
+    function playScene() {
+      if (isPlaying) cancelAnimationFrame(timer);
+      isPlaying = true;
+      let f = 0;
+      function loop() {
+        renderFrame(f);
+        f++;
+        if (f <= 120 && isPlaying) {
+          timer = setTimeout(() => requestAnimationFrame(loop), 1000 / 30);
+        } else {
+          isPlaying = false;
+        }
+      }
+      loop();
+    }
+
+    function resetScene() {
+      isPlaying = false;
+      if (timer) clearTimeout(timer);
+      renderFrame(0);
+    }
+
+    function changeScenario(key) {
+      activeKey = key;
+      applyScenarioData(key);
+      resetScene();
+      playScene();
+    }
+
+    window.onload = () => {
+      applyScenarioData(activeKey);
+      renderFrame(0);
+      setTimeout(playScene, 400);
+    };
+  </script>
+</body>
+</html>
