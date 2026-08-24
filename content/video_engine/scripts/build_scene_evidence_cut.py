@@ -28,6 +28,7 @@ from pathlib import Path
 
 FPS = 30
 CUT_SECONDS = 300.0
+CUES: list = []
 
 P29 = Path(r"C:/Users/Snipe/.codex/worktrees/p29-remotion-console/Outreach Program")
 PUBLIC = P29 / "content/video_engine/editor/public"
@@ -35,6 +36,7 @@ PROJ = P29 / "content/video_engine/projects/systems-and-blowups"
 DECKS = PROJ / "sources/decks/teacher-stamped-production-visuals"
 PILOT = PROJ / "pilots/current-bubble-mechanism"
 V3_PROPS = PILOT / "five-minute-semantic-demo-v3/render/current-bubble-five-minute-v3.props.json"
+COVERAGE = PILOT / "edit/evidence-coverage-v1/full-episode-evidence-coverage.v1.json"
 OUT = Path(__file__).parent
 ASSETS = OUT / "assets"
 
@@ -52,6 +54,15 @@ SETTLE = 1.1         # beat to read card 1 before card 2 arrives
 SAVOR = 2.2          # whole board held after the last badge
 DOCK_HOLD_SOLO = 7.0
 DOCK_EXIT = 0.72
+
+# The plate is the hero, but a plate with nothing happening on it stops being
+# cinema and becomes a screensaver. Long scenes run repeated build cycles
+# separated by a short breathing gap; no stretch of bare plate may exceed
+# MAX_BARE anywhere in the cut.
+MAX_BARE = 12.0      # hard ceiling on plate-with-no-evidence
+GAP = 3.4            # intended breathing gap between build cycles
+CYCLE_PAIR = BADGE_2 + SETTLE + BADGE_2 + SAVOR
+CYCLE_SOLO = BADGE_2 + SAVOR
 
 KB_CYCLE = [
     {"scale": 0.085, "x": -22, "y": -10},
@@ -103,6 +114,45 @@ def load_spine() -> dict:
         "captions": sorted((x for x in items if x["type"] == "caption" and inside(x)), key=lambda x: x["from"]),
         "assetMap": props["assetMap"],
     }
+
+
+# Narration-side semantics are registered: every cue carries claim_refs from an
+# 18-term controlled vocabulary plus the plate's semantic_action. Those are far
+# stronger query signal than transcript prose, which is mostly connective
+# tissue. (The evidence side carries no claim_refs -- see the protocol note in
+# doc 29 -- so this is a one-sided join for now.)
+CLAIM_WEIGHT = 3.0
+ACTION_WEIGHT = 2.0
+
+
+def load_cues() -> list[dict]:
+    if not COVERAGE.is_file():
+        return []
+    d = json.loads(COVERAGE.read_text(encoding="utf-8"))
+    out = []
+    for c in d.get("cues", []):
+        if c["start_s"] >= CUT_SECONDS:
+            continue
+        out.append({
+            "a": c["start_s"], "b": c["end_s"],
+            "claims": c.get("claim_refs", []),
+            "action": (c.get("active_world_plate") or {}).get("semantic_action", ""),
+        })
+    return out
+
+
+def semantic_query(cues: list[dict], a: float, b: float, said: str) -> Counter:
+    """Weighted query: registered claims and semantic actions dominate; the
+    spoken excerpt fills in around them."""
+    q = Counter(tokens(said))
+    for c in cues:
+        if c["a"] < b and c["b"] > a:
+            for claim in c["claims"]:
+                for w in tokens(claim.replace("-", " ")):
+                    q[w] += CLAIM_WEIGHT
+            for w in tokens(c["action"].replace("≠", " ")):
+                q[w] += ACTION_WEIGHT
+    return q
 
 
 def load_catalogue() -> list[dict]:
@@ -170,7 +220,7 @@ def assign(slots: list[dict], cat, weights) -> dict[int, dict]:
     """
     pairs = []
     for i, slot in enumerate(slots):
-        q = Counter(tokens(slot["said"]))
+        q = semantic_query(CUES, slot.get("a", 0), slot.get("b", 0), slot["said"])
         if not q:
             continue
         for s in cat:
@@ -204,7 +254,7 @@ def assign(slots: list[dict], cat, weights) -> dict[int, dict]:
     for i, slot in enumerate(slots):
         if slot["scene"] in covered:
             continue
-        q = Counter(tokens(slot["said"]))
+        q = semantic_query(CUES, slot.get("a", 0), slot.get("b", 0), slot["said"])
         if not q:
             continue
         best = sorted(
@@ -213,6 +263,92 @@ def assign(slots: list[dict], cat, weights) -> dict[int, dict]:
         if best and best[0][0] >= FLOOR_SCORE and place(best[0][0], i, best[0][1]):
             covered.add(slot["scene"])
     return out
+
+
+def _cycle_docks(picks, e1, e2, board_end, evidence) -> list[dict]:
+    """Emit one build cycle: card(s) enter staggered, badges fire, board clears
+    together after the savour."""
+    out = []
+    for slot, s in enumerate(picks):
+        badges = VERIFIED_BADGES.get(s["slide_id"], [])
+        evidence[s["slide_id"]] = {
+            "title": s["label"],
+            "document": {"path": s["path"], "sha256": s["sha256"]},
+            "source": f'{s["deck"].replace("-", " ").title()} &middot; slide {s["slide_id"].rsplit("-s", 1)[-1]}',
+            "badges": [dict(b, verbatim_in_document=True) for b in badges],
+            "match_score": s.get("_score"),
+        }
+        enter = e1 if slot == 0 else e2
+        if board_end - enter < 2.4:
+            continue
+        out.append({
+            "slide": s["slide_id"], "slot": slot,
+            "enter": round(enter, 2), "exit": round(board_end, 2),
+            "badge_at": [round(enter + b, 2)
+                         for b in (BADGE_1, BADGE_2)[:min(2, len(badges))]
+                         if enter + b < board_end - 0.6],
+        })
+    return out
+
+
+def fill_gaps(tl, caps, cat, weights, evidence) -> int:
+    """Insert solo builds into any bare stretch longer than MAX_BARE."""
+    used = set(evidence)
+    added = 0
+    for _pass in range(4):                       # a fill can leave a smaller gap
+        spans = sorted((d["enter"], d["exit"]) for sc in tl["scenes"] for d in sc["docks"])
+        gaps, cursor = [], 0.0
+        for a, b in spans:
+            if a - cursor > MAX_BARE:
+                gaps.append((cursor, a))
+            cursor = max(cursor, b)
+        if CUT_SECONDS - cursor > MAX_BARE:
+            gaps.append((cursor, CUT_SECONDS))
+        if not gaps:
+            break
+
+        for g0, g1 in gaps:
+            at = g0 + GAP
+            board_end = min(at + CYCLE_SOLO, g1 - 0.8)
+            if board_end - at < 2.4:
+                continue
+            # A gap can straddle a scene boundary: the scene holding `at` may
+            # end before a cycle fits. Take whichever scene overlapping the gap
+            # offers the most room, and start the cycle inside it.
+            best_sc, best_at, best_end = None, at, 0.0
+            for x in tl["scenes"]:
+                s0, s1 = max(x["span"][0], g0), min(x["span"][1], g1)
+                if s1 - s0 < 2.4:
+                    continue
+                cand_at = max(at, s0 + 0.6)
+                cand_end = min(cand_at + CYCLE_SOLO, s1 - 0.8)
+                if cand_end - cand_at > best_end - best_at:
+                    best_sc, best_at, best_end = x, cand_at, cand_end
+            if best_sc is None or best_end - best_at < 2.4:
+                continue
+            sc, at, board_end = best_sc, best_at, best_end
+
+            said = " ".join(t for x, y, t in caps if x < board_end and y > at)
+            q = semantic_query(CUES, at, board_end, said)
+            best = sorted(((score_pair(q, weights, c), c) for c in cat
+                           if c["slide_id"] not in used),
+                          key=lambda z: (-z[0], z[1]["slide_id"]))
+            if not best:
+                continue
+            if best[0][0] < FLOOR_SCORE:
+                # Nothing scores here, but a long dead stretch is worse than a
+                # loose match. Prefer a slide from a deck this scene already
+                # draws on (topical adjacency), and record the real score so
+                # review can catch it.
+                sibling = {d["slide"].rsplit("-s", 1)[0] for d in sc["docks"]}
+                near = [z for z in best if z[1]["deck"] in sibling]
+                best = near or best
+            pick = dict(best[0][1], _score=round(best[0][0], 3))
+            used.add(pick["slide_id"])
+            sc["docks"].extend(_cycle_docks([pick], at, at, board_end, evidence))
+            sc["docks"].sort(key=lambda d: d["enter"])
+            added += 1
+    return added
 
 
 def build(spine, cat, weights) -> dict:
@@ -231,53 +367,54 @@ def build(spine, cat, weights) -> dict:
         end = min(start + w["durationInFrames"] / FPS, CUT_SECONDS)
         if end - start < 4.0:
             continue
-        n = 2 if end - start >= 14 else 1
-        windows.append((wi, w, start, end, n, len(slots)))
-        for k in range(n):
-            a = start + (end - start) * (k / n)
-            b = start + (end - start) * ((k + 1) / n)
-            slots.append({"scene": wi, "said": " ".join(t for x, y, t in caps if x < b and y > a)})
+
+        # lay out as many build cycles as fit, pairs first while there is room
+        cycles, cursor = [], start + INTRO
+        while end - cursor > CYCLE_SOLO * 0.8:
+            paired = (end - cursor) >= CYCLE_PAIR + 0.8
+            length = CYCLE_PAIR if paired else CYCLE_SOLO
+            cycles.append({"at": cursor, "pair": paired,
+                           "end": min(cursor + length, end - 0.8)})
+            cursor += length + GAP
+        if not cycles:
+            cycles = [{"at": start + INTRO, "pair": False, "end": end - 0.8}]
+
+        base = len(slots)
+        for cy in cycles:
+            for k in range(2 if cy["pair"] else 1):
+                a, b = cy["at"], cy["end"]
+                slots.append({"scene": wi, "a": a, "b": b,
+                              "said": " ".join(t for x, y, t in caps if x < b and y > a)})
+        windows.append((wi, w, start, end, cycles, base))
 
     placed = assign(slots, cat, weights)
 
     scenes: list[dict] = []
     evidence: dict[str, dict] = {}
 
-    for wi, w, start, end, n, base in windows:
-        picks = [placed[base + k] for k in range(n) if base + k in placed]
-        if not picks:
-            continue
-
-        span = end - start
+    for wi, w, start, end, cycles, base in windows:
         docks = []
-        # lay the cadence out first so both cards can share the savour beat
-        e1 = start + INTRO
-        e2 = e1 + BADGE_2 + SETTLE
-        last_badge = (e2 if len(picks) > 1 else e1) + BADGE_2
-        board_end = min(last_badge + SAVOR, end - 0.8)
-        if len(picks) == 1:
-            board_end = min(board_end, e1 + DOCK_HOLD_SOLO)
-
-        for slot, s in enumerate(picks):
-            badges = VERIFIED_BADGES.get(s["slide_id"], [])
-            evidence[s["slide_id"]] = {
-                "title": s["label"],
-                "document": {"path": s["path"], "sha256": s["sha256"]},
-                "source": f'{s["deck"].replace("-", " ").title()} &middot; slide {s["slide_id"].rsplit("-s", 1)[-1]}',
-                "badges": [dict(b, verbatim_in_document=True) for b in badges],
-                "match_score": s.get("_score"),
-            }
-            enter = e1 if slot == 0 else e2
-            exit_at = board_end          # the board clears as one, after the savour
-            if exit_at - enter < 2.4:
+        idx = base
+        for cy in cycles:
+            width = 2 if cy["pair"] else 1
+            picks = [placed[idx + k] for k in range(width) if idx + k in placed]
+            idx += width
+            if not picks:
                 continue
-            docks.append({
-                "slide": s["slide_id"], "slot": slot,
-                "enter": round(enter, 2), "exit": round(exit_at, 2),
-                "badge_at": [round(enter + b, 2)
-                             for b in (BADGE_1, BADGE_2)[:min(2, len(badges))]
-                             if enter + b < exit_at - 0.6],
-            })
+
+            e1 = cy["at"]
+            e2 = e1 + BADGE_2 + SETTLE
+            last_badge = (e2 if len(picks) > 1 else e1) + BADGE_2
+            board_end = min(last_badge + SAVOR, end - 0.8)
+            if len(picks) == 1:
+                board_end = min(board_end, e1 + DOCK_HOLD_SOLO)
+            docks.extend(_cycle_docks(picks, e1, e2, board_end, evidence))
+
+        if not docks:
+            continue
+        span = end - start
+        for _unused in ():
+            badges = None
 
         scenes.append({
             "scene_id": f"s{len(scenes) + 1:02d}",
@@ -333,7 +470,14 @@ def media(tl, spine) -> dict:
 if __name__ == "__main__":
     spine = load_spine()
     cat = load_catalogue()
-    tl = build(spine, cat, idf_weights(cat))
+    globals()["CUES"] = load_cues()
+    CUES = globals()["CUES"]
+    print(f"registered cues loaded: {len(CUES)} (claim_refs + semantic_action)")
+    weights = idf_weights(cat)
+    tl = build(spine, cat, weights)
+    caps_t = [(c["at"], c["until"], c["text"]) for c in tl["captions"]]
+    filled = fill_gaps(tl, caps_t, cat, weights, tl["evidence"])
+    print(f"gap-fill inserted {filled} solo build(s)")
     (OUT / "timeline.v4.json").write_text(json.dumps(tl, indent=1), encoding="utf-8")
 
     ev = tl["evidence"]
@@ -344,6 +488,21 @@ if __name__ == "__main__":
     print(f"evidence={len(ev)} slides, {len(set(e['document']['path'] for e in ev.values()))} distinct files")
     print(f"captions={len(tl['captions'])} at canonical timings")
     print(f"badged={sum(1 for e in ev.values() if e['badges'])} (verified numerals only)")
+    spans = sorted((d["enter"], d["exit"]) for sc in tl["scenes"] for d in sc["docks"])
+    bare, cursor, worst = [], 0.0, 0.0
+    for a, b in spans:
+        if a > cursor:
+            bare.append((round(cursor, 1), round(a, 1), round(a - cursor, 1)))
+            worst = max(worst, a - cursor)
+        cursor = max(cursor, b)
+    if CUT_SECONDS > cursor:
+        bare.append((round(cursor, 1), CUT_SECONDS, round(CUT_SECONDS - cursor, 1)))
+        worst = max(worst, CUT_SECONDS - cursor)
+    over = [g for g in bare if g[2] > MAX_BARE]
+    print(f"longest bare plate: {worst:.1f}s  (ceiling {MAX_BARE}s) "
+          f"| stretches over ceiling: {len(over)}")
+    for g in over:
+        print(f"    {g[0]}s -> {g[1]}s  ({g[2]}s bare)")
     for sc in tl["scenes"]:
         ids = [f'{d["slide"]}({d["enter"]:.0f}-{d["exit"]:.0f})' for d in sc["docks"]]
         print(f"  {sc['scene_id']} {sc['span'][0]:6.1f}-{sc['span'][1]:6.1f}  {', '.join(ids) or '(none)'}")

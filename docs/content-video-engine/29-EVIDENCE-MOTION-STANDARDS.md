@@ -729,3 +729,53 @@ now runs to a shared `board_end` — both cards clear together after the savour
 — which can reach ~8.5s for the first card. Without that, card 1 exits while
 card 2 is still building and the viewer never sees the pair, which is the
 whole point of a two-dock scene.
+
+### 8.19 Dead-air ceiling, and the one-sided semantic join
+
+**Dead air is bounded.** A long scene previously ran one build and then sat
+untouched — up to 38s of bare plate. Two mechanisms fix it:
+
+1. **Build cycles.** A scene now runs as many cycles as fit
+   (`world -> card(s) -> badges -> savour -> GAP 3.4s -> next cycle`), pairs
+   while there is room, solos after.
+2. **Gap-fill pass.** Cycle planning still leaves holes when the assigner
+   finds no match for a slot, so a second pass works on the *finished
+   schedule*: it finds every bare stretch over `MAX_BARE = 12s` and drops a
+   solo build into it, matched against that specific window. A gap that
+   straddles a scene boundary takes whichever overlapping scene offers the
+   most room.
+
+Result on the five-minute cut: **longest bare stretch 8.2s**, median 4.2s,
+39 unique slides (was 23). Industry practice is a visual event every 6-8s;
+12s is our justified ceiling because reading a stamped document costs time
+those channels do not spend.
+
+**The scoring problem was a join failure, not a tuning problem.** Zero-score
+fallbacks were not evidence of a weak scorer — they were evidence that the
+semantics are registered on only one side:
+
+| side | registered |
+| --- | --- |
+| cues (`full-episode-evidence-coverage.v1.json`) | **290/290** carry `claim_refs` from an 18-term controlled vocabulary, plus `active_world_plate.semantic_action` |
+| approved source surfaces | **0/95** carry `claim_refs` or `cue_refs` |
+| world plate library | 40/76 carry `semantic_tags` |
+
+Selection was matching transcript prose against slide prose while a
+controlled vocabulary sat unused on the narration side. The query is now
+weighted — `claim_refs` x3.0, `semantic_action` x2.0, spoken excerpt x1.0 —
+which took zero-score picks from 2 to **0** and lifted the median match from
+0.19 to 0.26.
+
+**The protocol gap that remains.** Evidence carries no `claim_refs`, so the
+join is one-sided: we infer the evidence's meaning from its label and summary
+rather than reading a registered claim. The real fix is to register the 86
+stamped slides against the same 18-claim vocabulary the cues already use,
+which turns selection from a lexical guess into a lookup. Also note
+`candidate_evidence` already exists on 59/290 cues but is itself
+`match_basis: lexical_*` — a cached version of the same guess, not a
+registration.
+
+Naming protocol to adopt alongside it: slide ids are deck-and-number
+(`memory-supercycle-s03`), which says where a slide lives but nothing about
+what it claims. Registration should attach meaning as data
+(`claim_refs`, `semantic_tags`), never encode it in the filename.
