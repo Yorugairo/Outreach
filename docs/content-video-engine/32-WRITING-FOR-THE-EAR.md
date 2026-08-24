@@ -56,9 +56,11 @@ Humes' three power pauses:
 3. **Post-key pause** — silence immediately after the heavy point;
    lets it settle into memory before new load arrives.
 
-**Pipeline encoding:** these are directly implementable as SSML/break tags
-in ElevenLabs input and as beat gaps in the timeline — a `pre-key` pause is
-a scripted mark, not a performance accident. Pauses also pair with the
+**Pipeline encoding:** these are directly implementable as break tags in
+ElevenLabs input (model-dependent — codified with the compilation table in
+[37-TTS-DELIVERY-STANDARDS.md](37-TTS-DELIVERY-STANDARDS.md)) and as beat
+gaps in the timeline — a `pre-key` pause is a scripted mark, not a
+performance accident. Pauses also pair with the
 savor beats: post-key silence over a bare plate IS the breathing-room dip.
 
 ## 3. Rhetorical figures — engineering acoustic memory

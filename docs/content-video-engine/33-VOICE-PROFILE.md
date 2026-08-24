@@ -126,6 +126,7 @@ Channel Notes
   link the biography rather than restating it.
 - Pause marks: script carries explicit [pre-key] / [post-key] annotations;
   they become TTS breaks and timeline beat gaps, not performance accidents.
+  Compilation table and all synth settings: 37-TTS-DELIVERY-STANDARDS.md.
 ```
 
 ---
