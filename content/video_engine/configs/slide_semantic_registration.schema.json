@@ -1,0 +1,109 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://outreach-program.internal/schemas/slide_semantic_registration.schema.json",
+  "title": "SlideSemanticRegistration",
+  "description": "Registration of teacher-stamped source slides against the episode claim ledger, plus verbatim figure extraction. Closes the one-sided semantic join recorded in doc 29 section 8.19: cues carry claim_refs, evidence surfaces do not. One document per deck. Files are never renamed — slide_id and the bound sha256 stay frozen and semantic_id is an added alias.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "deck_id", "registered_at", "slides"],
+  "properties": {
+    "schema_version": { "const": "slide_semantic_registration.v1" },
+    "deck_id": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+    "registered_at": { "type": "string", "format": "date" },
+    "registered_by": { "type": "string", "description": "Model or operator that produced this registration." },
+    "slides": { "type": "array", "minItems": 1, "items": { "$ref": "#/definitions/slide" } }
+  },
+  "definitions": {
+    "slide": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["slide_id", "sha256", "semantic_id", "headline", "claim_refs", "taxonomy", "figures", "confidence"],
+      "properties": {
+        "slide_id": {
+          "type": "string",
+          "description": "Existing id from the deck manifest. Copied verbatim, never altered — it is the join key to the bound asset.",
+          "pattern": "^[a-z0-9-]+-s\\d{2}$"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "description": "Copied verbatim from the supplied index. The validator rejects any mismatch; a wrong hash means the wrong slide was read."
+        },
+        "semantic_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*\\.(evidence|context|countercase)\\.(chart|table|diagram|timeline|quote|photo|composite)-v\\d+$",
+          "description": "Added alias, NOT a filename. Form: <primary-claim>.<role>.<form>-v<n>. The claim segment MUST be claim_refs[0] so the id is a lookup key rather than a label."
+        },
+        "headline": {
+          "type": "string",
+          "maxLength": 90,
+          "description": "The single assertion this slide makes, in the operator's voice. Not the slide's printed title unless the title is itself the assertion."
+        },
+        "claim_refs": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Claim ids from the supplied ledger ONLY, ordered by centrality — claim_refs[0] is what the slide principally evidences. Never invent an id. An empty array is valid and must be paired with unmatched_reason."
+        },
+        "unmatched_reason": {
+          "type": "string",
+          "description": "Required when claim_refs is empty. Says what the slide is about and why no ledger claim covers it. This is the sanctioned escape hatch; guessing a claim is not."
+        },
+        "taxonomy": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "Terms from the supplied taxonomy only. Omit an axis rather than inventing a term.",
+          "properties": {
+            "actors": { "type": "array", "items": { "type": "string" } },
+            "objects": { "type": "array", "items": { "type": "string" } },
+            "mechanisms": { "type": "array", "items": { "type": "string" } },
+            "worlds": { "type": "array", "items": { "type": "string" } }
+          }
+        },
+        "figures": {
+          "type": "array",
+          "description": "Every numeral printed on the slide that states a fact. Decorative numbers (page numbers, axis ticks, footnote markers) are excluded. An empty array is valid for a slide with no figures.",
+          "items": { "$ref": "#/definitions/figure" }
+        },
+        "confidence": {
+          "type": "string",
+          "enum": ["high", "medium", "low"],
+          "description": "Self-assessed. Use low when the slide is dense, ambiguous, or the claim match is a stretch — low-confidence rows get human review rather than silent trust."
+        },
+        "notes": { "type": "string", "maxLength": 300 }
+      }
+    },
+    "figure": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["value", "label", "context_sentence", "location", "is_headline"],
+      "properties": {
+        "value": {
+          "type": "string",
+          "maxLength": 24,
+          "description": "The numeral EXACTLY as typeset on the slide, including symbols, separators and qualifiers: \"18%\", \"$140B+\", \"2 to 3\", \"~5 years\", \"11 Trillion won\", \"3.0 : 1\". Never normalise, convert, round, or expand — this string is asserted to appear verbatim in the image and is checked against the badge that quotes it."
+        },
+        "label": {
+          "type": "string",
+          "maxLength": 40,
+          "description": "What the number measures, taken from the slide's own wording where possible."
+        },
+        "unit": { "type": "string", "maxLength": 24, "description": "Unit or denomination when not already inside value." },
+        "period": { "type": "string", "maxLength": 32, "description": "Time period the figure covers, if stated (e.g. \"2025-2026\", \"mid-2026\", \"FY Q3 2026\")." },
+        "context_sentence": {
+          "type": "string",
+          "maxLength": 240,
+          "description": "The sentence or caption on the slide that carries this figure, transcribed. Establishes that the number means what the label says."
+        },
+        "location": {
+          "type": "string",
+          "enum": ["title", "upper-left", "upper-right", "centre", "lower-left", "lower-right", "callout", "chart-axis", "chart-label", "footnote"],
+          "description": "Where on the slide the figure appears. Required so a later crop can find it and a reviewer can verify it."
+        },
+        "is_headline": {
+          "type": "boolean",
+          "description": "True for the one or two figures a viewer should take away. These are the badge candidates."
+        }
+      }
+    }
+  }
+}
