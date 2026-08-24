@@ -10,12 +10,22 @@ Sync happens **on promote**: the moment an asset becomes canonical is the
 moment it becomes irreplaceable, so that is the moment it uploads. There is no
 scheduled sync and no drift window.
 
-Credentials come from environment variables only and are never logged:
+Two backends behind one protocol:
 
+- **Local directory** (``VIDEO_ENGINE_STORE_DIR``): a content-addressed folder,
+  ideally on a different physical drive. No credentials, no network. The
+  operator's choice while the pipeline is still settling (2026-08-24).
+- **Cloudflare R2** (the ``VIDEO_ENGINE_R2_*`` variables below): same layout
+  over S3. Switching later is an environment change, never a code change.
+
+    VIDEO_ENGINE_STORE_DIR              local content-addressed store root
     VIDEO_ENGINE_R2_ENDPOINT            https://<account>.r2.cloudflarestorage.com
     VIDEO_ENGINE_R2_BUCKET              bucket name
     VIDEO_ENGINE_R2_ACCESS_KEY_ID
     VIDEO_ENGINE_R2_SECRET_ACCESS_KEY
+
+When both are set, the local directory wins — explicit local intent beats
+stale cloud credentials.
 
 With no configuration, promotion fails closed. The explicit opt-out
 ``VIDEO_ENGINE_ALLOW_UNSYNCED_PROMOTE=1`` lets a promote proceed offline; the
@@ -34,6 +44,7 @@ import re
 from pathlib import Path
 from typing import Any, Mapping, Protocol, Sequence
 
+ENV_STORE_DIR = "VIDEO_ENGINE_STORE_DIR"
 ENV_ENDPOINT = "VIDEO_ENGINE_R2_ENDPOINT"
 ENV_BUCKET = "VIDEO_ENGINE_R2_BUCKET"
 ENV_KEY_ID = "VIDEO_ENGINE_R2_ACCESS_KEY_ID"
@@ -117,6 +128,31 @@ class AssetStore:
         return target
 
 
+class LocalDirClient:
+    """Content-addressed store in a plain directory; same keys as the bucket."""
+
+    def __init__(self, root: str | Path):
+        self.root = Path(root)
+
+    def _path(self, key: str) -> Path:
+        return self.root / key
+
+    def head(self, key: str) -> bool:
+        return self._path(key).exists()
+
+    def put(self, key: str, path: Path) -> None:
+        target = self._path(key)
+        target.parent.mkdir(parents=True, exist_ok=True)
+        import shutil as _shutil
+
+        _shutil.copy2(path, target)
+
+    def get(self, key: str, path: Path) -> None:
+        import shutil as _shutil
+
+        _shutil.copy2(self._path(key), path)
+
+
 def _build_client(env: Mapping[str, str]) -> StoreClient:
     """The single network boundary. Imports boto3 lazily; names its absence."""
 
@@ -159,6 +195,11 @@ def from_env(env: Mapping[str, str] | None = None) -> AssetStore | None:
     """The configured store, or ``None`` when no configuration is present."""
 
     source = os.environ if env is None else env
+    local = source.get(ENV_STORE_DIR)
+    if local:
+        root = Path(local).expanduser()
+        root.mkdir(parents=True, exist_ok=True)
+        return AssetStore(LocalDirClient(root), f"dir:{root}")
     names = (ENV_ENDPOINT, ENV_BUCKET, ENV_KEY_ID, ENV_SECRET)
     present = [name for name in names if source.get(name)]
     if not present:

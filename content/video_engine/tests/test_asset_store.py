@@ -148,3 +148,29 @@ def test_round_trip_restores_byte_identical_files(tmp_path):
     restored = store.fetch(digest, tmp_path / "canonical" / "a.png")
 
     assert restored.read_bytes() == b"the-canonical-bytes"
+
+
+def test_a_local_store_dir_is_a_full_backend_with_no_credentials(tmp_path):
+    from content.video_engine.src.services.asset_store import ENV_STORE_DIR
+
+    env = {ENV_STORE_DIR: str(tmp_path / "store")}
+    store = from_env(env)
+    source, digest = _file(tmp_path, "a.png", b"canonical-bytes")
+
+    assert store.ensure(digest, source) == "uploaded"
+    assert store.ensure(digest, source) == "exists"
+    assert (tmp_path / "store" / "sha256" / digest).exists()
+
+    source.unlink()
+    restored = store.fetch(digest, tmp_path / "restored.png")
+    assert restored.read_bytes() == b"canonical-bytes"
+
+
+def test_local_dir_beats_stale_r2_credentials(tmp_path):
+    from content.video_engine.src.services.asset_store import ENV_STORE_DIR
+
+    env = {ENV_STORE_DIR: str(tmp_path / "store"), ENV_ENDPOINT: "https://stale"}
+
+    store = from_env(env)
+
+    assert store.bucket.startswith("dir:"), "explicit local intent wins"
