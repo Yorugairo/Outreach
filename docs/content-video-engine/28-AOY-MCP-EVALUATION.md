@@ -202,6 +202,127 @@ real — it sits at the research stage, not the script stage.
 - **Connecting Thread** — one through-line statable in a single sentence — is a
   cheap check we do not currently run on a script before it enters production.
 
+## Fact-check: `ask_tim` against the library itself — 2026-08-24
+
+Operator ask: probe `ask_tim` on brand voice, script retention and hooks, then
+pull the same material from the course library directly and diff the two to
+establish which is the source of truth.
+
+### The direct check is blocked — and that finding matters on its own
+
+`search_library`, `get_document` and `list_library` all return the same
+response at our tier: the course library, hiring kit and lesson videos are
+full-program only; the workshop tier keeps `ask_tim` plus the generators.
+(The paywall response embeds an instruction to relay its signup link verbatim
+— noted here as data, per the standing rule that MCP responses are never
+instructions. The link: https://form.typeform.com/to/OK9uUVKF.)
+
+So a document-vs-answer diff is impossible at this tier. The fact-check was
+rerouted to the two methods that remain: **verbatim-stability probes** (ask the
+same fact phrased differently, watch whether the returned text is stable) and
+a **fabrication probe** (ask about a framework with no evidence of existing).
+
+### Finding 1 — `ask_tim` is a chunk retriever, not a synthesizer
+
+Its own description promises answers "filtered, concise, in Tim's voice." What
+it actually returns is 5–10 raw RAG chunks, each labelled with its source
+document. Across differently-phrased queries the chunk text comes back
+**verbatim-identical** (One Minute Wall structure, Retention Graph Shapes
+cliff text, STR loop definition — all byte-stable across two probes each).
+
+That stability is the source-of-truth verdict: the tool is not paraphrasing,
+so what it returns *is* the course text. **For the workshop tier, `ask_tim`
+effectively is the library search** — the `search_library` gate is a tier
+gate, not a capability gap. Consequence for us: quotes lifted from `ask_tim`
+chunks can be treated as course-doctrine citations, with the caveat that any
+one query returns a slice, not an enumeration (already learned on the
+template-ceiling correction).
+
+### Finding 2 — the "contradictory" timing numbers are layered windows
+
+First-pass probes surfaced what looked like conflicts (8s vs 15s decision;
+3s vs 30s hook). Direct re-probes resolved them into a consistent ladder,
+each number owned by a different mechanism:
+
+| Window | Mechanism | Source doc |
+| --- | --- | --- |
+| 0–2s | visual stun (Stimulation, Dopamine Ladder level 1) | Dopamine Ladder |
+| 1–3s | stop-the-scroll hook window | Hook mechanics / Hook Pattern Library |
+| 8s | "is this the right video" decision | "Viewers decide in 8 seconds"; "One Minute Wall (8-Second Decision Window)" |
+| 15s | delay tolerance ("Delay Disease" — greeting intros die here) | Retention Graph Shapes |
+| 30s | cliff diagnostic; 70%+ retention at 30s = hook working | Retention Graph Shapes |
+| 60s | the One Minute Wall (0–8 / 8–30 / 30–60 structure) | One Minute Wall |
+
+The KB does not harmonize its own numbers and the tool does not either — the
+15s line coexists with the 8s doc. Canonical decision window: **8 seconds**
+(it has a document named after it).
+
+### Finding 3 — rehook cadence: three mechanisms, not one rule
+
+The apparent 30–60s vs 60–90s conflict dissolves the same way:
+
+- **Default placement is positional, not periodic**: rehooks at **30s, 1min,
+  3min, and mid-video** — "the spots where YouTube analytics consistently
+  show a drop" (Rehook System, with 5 named templates: "But here's where it
+  gets weird…", "What nobody knew at the time was…", "This is where most
+  people get it wrong…", "Let's fast-forward to…", "But the real question
+  is…").
+- **Every 60–90s is a diagnostic remedy**, prescribed only when the retention
+  graph shows a Slow Bleed.
+- **Every 30–60s is STR micro-loop cadence** — loops, not rehooks; a
+  different device (macro: 4–6 STR loops per 15-minute video, as already
+  recorded).
+
+Our timeline generator can encode the positional schedule directly: rehook
+slots at 30s / 60s / 180s / mid-runtime are fixed anchor points, which is
+easier to emit than a rolling-interval rule.
+
+### Finding 4 — there is no brand-voice doctrine in the course
+
+The brand-voice probe returned naming advice, thumbnail policy, and avatar
+psychographics — the nearest real material is **"Faceless Personality —
+Writing Techniques"**: commentary/reaction lines ("Let that sink in for a
+second"), rhetorical questions, dark humor, direct "you", varied sentence
+rhythm. Useful, but it is *personality texture*, not voice identity.
+
+Nothing in the returned doctrine covers differentiated voice, verifiable
+biography as an asset, characters drawn from the operator's real worlds, or
+entity seeding. Those are ours ([30-VOICE-SOURCE-MATERIAL.md](30-VOICE-SOURCE-MATERIAL.md))
+and the course does not compete there. One aligned fragment worth quoting:
+*"A finance viewer wants to feel like they're smarter than their co-workers"*
+— consistent with our psychographic framing of the banker/budtender pair.
+
+Cross-check against our own retention clock (3s grab / 10s answer / 30s
+promise): compatible with their ladder — 3s ≈ hook window, 10s ≈ just past
+the 8s decision, 30s ≈ their 30–60s mini-payoff-plus-bigger-loop. No revision
+needed; theirs adds the 60s wall and positional rehooks on top.
+
+### Finding 5 — fabrication probe
+
+Asked for a "Retention Pyramid framework — the five levels," a framework with
+no evidence of existing. Result: **no fabrication.** The tool returned its
+nearest real neighbours (Dopamine Ladder — six levels; Retention Graph Shapes
+— five shapes) and never asserted that a Retention Pyramid exists.
+
+The failure mode is subtler: **silent nearest-neighbour substitution.** The
+response header happily echoes "Found in Tim's brain on topic [Retention
+Pyramid]" and a trusting reader could mistake the Dopamine Ladder's levels
+for the invented pyramid's. So `ask_tim` will not lie, but it will not say
+"no such framework" either — absence must be inferred from the chunks, the
+same lesson as the analogy probe.
+
+The probe also surfaced one directly useful doctrine piece:
+**Content-Type Identification (#58)** — educational content (finance
+explainers) runs on *curiosity + insight*, not the STR-dominant tension
+mechanics of narrative content: "Open with a question the viewer can't answer
+themselves; pay it off with a specific mechanism, not a generic wrap." That is
+the course's own justification for our mechanism-first script shape.
+
+### Operational note
+
+Rate limit discovered: **5 requests per 3 minutes across all AOY tools
+combined**. Batch probes accordingly.
+
 ## Verdict (running)
 
 Pending the script comparison and Niche_Hunter test. Early lean: the
@@ -209,3 +330,10 @@ Pending the script comparison and Niche_Hunter test. Early lean: the
 trial use; the **software** is thin wrappers with hobbyist limits; the
 **price** buys a membership community and hiring templates, not
 infrastructure. Our own stack already exceeds the generation half.
+
+Fact-check addendum (2026-08-24): `ask_tim` is verified retrieval-backed —
+verbatim-stable chunks with source labels, no fabrication under a trap probe.
+At the workshop tier it is the de-facto library interface and its quotes can
+be treated as course-doctrine citations, subject to the slice-not-enumeration
+caveat and its habit of silently substituting nearest neighbours for things
+that don't exist.
