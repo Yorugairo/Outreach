@@ -54,7 +54,7 @@ def test_the_form_renders_without_a_coverage_artifact(client):
     body = client.get("/generate").text
 
     assert "Coverage artifact" in body
-    assert "deferred" in body
+    assert "no provider client" in body
 
 
 def test_renders_one_copyable_prompt_per_slot(client, coverage, coverage_path):
@@ -86,12 +86,14 @@ def test_shows_the_expected_delivery_layout_for_intake(client, coverage, coverag
     assert "1536" in body and "1024" in body
 
 
-def test_the_provider_adapter_is_stated_as_deferred(client, coverage, coverage_path):
+def test_generation_is_stated_as_claims_with_no_provider_client(client, coverage, coverage_path):
+    """The P17 promise: subscription-agent claims, never a metered API call."""
+
     body = client.get(
         "/generate", params={"coverage": str(coverage_path), "lane": LANE}
     ).text
 
-    assert "deferred" in body
+    assert "claims" in body
     assert "no provider client" in body
 
 
@@ -169,3 +171,72 @@ def test_variants_below_the_service_minimum_are_refused(client, coverage_path):
     ).text
 
     assert "at least 2" in body
+
+
+# --- Claims (P17 T2) ---------------------------------------------------------
+
+def _claims_env(monkeypatch, tmp_path):
+    from content.video_engine.src.services import generation_claim as gc
+
+    monkeypatch.setenv(gc.ENV_CLAIMS_DIR, str(tmp_path / "claims-registry"))
+    monkeypatch.setattr(gc, "_run_git", lambda args, cwd: "test-branch")
+
+
+def test_a_claim_opens_from_explicit_slots_and_shows_its_work_order(tmp_path, monkeypatch, client):
+    import json as _json
+
+    _claims_env(monkeypatch, tmp_path)
+
+    r = client.post("/generate/claims/open", data={
+        "claim_id": "probe-claim",
+        "style_family": "fam-v3",
+        "slots_json": _json.dumps([
+            {"asset_id": "object-a-v1", "kind": "prop", "prompt": "an abacus"},
+        ]),
+    }, follow_redirects=True)
+
+    assert r.status_code == 200
+    assert "Work Order" in r.text
+    assert "object-a-v1" in r.text
+    assert "approvals.json" in r.text
+
+
+def test_an_invalid_claim_is_refused_with_named_errors(tmp_path, monkeypatch, client):
+    _claims_env(monkeypatch, tmp_path)
+
+    r = client.post("/generate/claims/open", data={
+        "claim_id": "probe-claim", "style_family": "fam", "slots_json": "",
+    })
+
+    assert "Claim refused" in r.text
+
+
+def test_open_claims_are_listed_on_the_generate_page(tmp_path, monkeypatch, client):
+    import json as _json
+
+    _claims_env(monkeypatch, tmp_path)
+    client.post("/generate/claims/open", data={
+        "claim_id": "listed-claim", "style_family": "fam",
+        "slots_json": _json.dumps([{"asset_id": "x-v1", "kind": "prop", "prompt": "p"}]),
+    })
+
+    body = client.get("/generate").text
+
+    assert "listed-claim" in body
+
+
+def test_closing_a_claim_returns_to_the_generate_page(tmp_path, monkeypatch, client):
+    import json as _json
+
+    _claims_env(monkeypatch, tmp_path)
+    client.post("/generate/claims/open", data={
+        "claim_id": "closing-claim", "style_family": "fam",
+        "slots_json": _json.dumps([{"asset_id": "x-v1", "kind": "prop", "prompt": "p"}]),
+    })
+
+    r = client.post("/generate/claims/close", data={"claim_id": "closing-claim"},
+                    follow_redirects=True)
+
+    assert r.status_code == 200
+    from content.video_engine.src.services.generation_claim import load_claim
+    assert load_claim("closing-claim")["status"] == "closed"

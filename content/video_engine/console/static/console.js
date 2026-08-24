@@ -45,6 +45,10 @@
       case "c": case "C":
         if (nav.dataset.compositable) go(nav.dataset.cycle);
         break;
+      // Ground is a link, not client state: it survives a reload, a shared URL
+      // and a browser with scripting off, like every other control here.
+      case "g": case "G": go(nav.dataset.ground); break;
+      case "g": case "G": go(nav.dataset.ground); break;
       case "Enter": {
         var commit = document.getElementById("commit-link");
         if (commit) go(commit.getAttribute("href"));

@@ -1,21 +1,48 @@
 /* Video Engine Console — dense operator tooling.
  *
- * Dark theme locked. The stage behind any asset is achromatic on purpose: a
- * tinted surround shifts the perceived colour and value of the thing under
- * judgement. The accent sits outside the library palette (cream, charcoal,
- * cobalt, teal, sunflower, coral) so console chrome is never mistaken for art.
+ * Two grounds, one screen. Operator chrome is dark so it recedes; the review
+ * stage is light because light is what the work ships onto.
+ *
+ * The stage was #1b1b1d, chosen so a cream matte rim would leap out. That
+ * traded the wrong way. The rim is already a measured number — the halo check
+ * reports edge_mean_rgb into the verdict table — so spending the stage on it
+ * duplicates an automated check while corrupting the one job only an eye can
+ * do: deciding whether an asset reads correctly against the ground it will
+ * actually sit on. Judged over black, a figure looks luminous that will look
+ * muddy on paper, and the operator's verdict does not transfer.
+ *
+ * The stage is paper, not the library's cream (#f4e6c7): close in value, so
+ * the figure reads at the weight it will ship at, but lower in chroma, so the
+ * surround does not tint the thing under judgement. That was the point of the
+ * old achromatic stage and it survives the change — what changes is the value,
+ * from near-black to near-paper.
+ *
+ * A paper stage cannot show a cream matte rim; measured against this ground the
+ * rim is invisible. That is a deliberate division of labour, not an oversight:
+ * the halo check reports it as a number, and G swaps in --stage-dark, where the
+ * same rim is unmissable. Detection is the dark ground's job and the verdict
+ * table's. The default ground's job is predicting delivery.
+ *
+ * The accent sits outside the library palette (cream, charcoal, cobalt, teal,
+ * sunflower, coral) so console chrome is never mistaken for art.
  *
  * No @import, no CDN, no external font. This file must work offline.
  */
 
 :root {
-  --stage: #1b1b1d;
+  /* Operator chrome — dark, so it recedes behind the work. */
   --surface: #0e0e10;
   --panel: #151517;
   --hairline: rgb(255 255 255 / 0.09);
   --text: #e8e8ea;
   --text-dim: #9a9aa2;
   --accent: #8b5cf6;
+
+  /* Review stage — the ground an asset is judged against. Paper by default;
+   * --stage-dark is the opt-in high-contrast ground, not the normal one. */
+  --stage: #e9e4da;
+  --stage-dark: #1b1b1d;
+
   --fail: #f0616d;
   --flag: #e5a13a;
   --clean: #4ade80;

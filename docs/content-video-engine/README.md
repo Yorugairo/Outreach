@@ -32,6 +32,9 @@ record instead of copying it.
 | Timestamp-bound primary plates, prompt continuity, generation waves, and review schedule | [`17-TIMESTAMPED-PLATE-PRODUCTION.md`](17-TIMESTAMPED-PLATE-PRODUCTION.md) |
 | Original Graphic Silhouette + Combat Woodblock retention and motion grammar | [`18-GRAPHIC-SILHOUETTE-WOODBLOCK-EXPLAINER-SPEC.md`](18-GRAPHIC-SILHOUETTE-WOODBLOCK-EXPLAINER-SPEC.md) |
 | Figure scale, world placement, rendering-weight hierarchy, and 2.5D depth planes | [`24-COMPOSITION-AND-SCALE-SPEC.md`](24-COMPOSITION-AND-SCALE-SPEC.md) |
+| Editor embedding decision: deep links, no iframe, with revisit triggers | [`25-EDITOR-EMBEDDING-SPIKE.md`](25-EDITOR-EMBEDDING-SPIKE.md) |
+| Subscription-agent generation loop: claims, work orders, two gates, paid gate | [`26-AGENT-GENERATION-LOOP.md`](26-AGENT-GENERATION-LOOP.md) |
+| Durability classes, path contract, migration, and the R2 disaster-recovery contract | [`27-DURABILITY-AND-LAYOUT.md`](27-DURABILITY-AND-LAYOUT.md) |
 | Current asset-generation brief | [`prompts/LIBRARY-BUILD-EP1-V3-REGENERATION.md`](prompts/LIBRARY-BUILD-EP1-V3-REGENERATION.md) |
 | Executable state and validation evidence | [`P13-HISTORY-DOCUMENTARY-SYSTEM.plan.md`](../../.claude/PRPs/plans/P13-HISTORY-DOCUMENTARY-SYSTEM.plan.md) |
 | Active living-scene foundation execution | [`P13-LIVING-SCENE-COMMUNICATION-SYSTEM.plan.md`](../../.claude/PRPs/plans/P13-LIVING-SCENE-COMMUNICATION-SYSTEM.plan.md) |

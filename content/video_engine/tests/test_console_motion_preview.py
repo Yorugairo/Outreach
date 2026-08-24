@@ -36,6 +36,21 @@ def _wait_done(client, unit, tries=50):
     raise AssertionError("preview job never finished")
 
 
+def _motion_swept_files():
+    """Console package plus the P17 loop modules: none may compute motion."""
+
+    services = CONSOLE_PKG.parent / "src" / "services"
+    watchdog = CONSOLE_PKG.parent / "watchdog"
+    extra = [
+        services / "claim_resume.py",
+        services / "delivery_scan.py",
+        services / "generation_claim.py",
+        services / "paid_gate.py",
+        *sorted(watchdog.rglob("*.py")),
+    ]
+    return [*CONSOLE_PKG.rglob("*.py"), *[p for p in extra if p.exists()]]
+
+
 def test_the_console_package_implements_no_motion_arithmetic():
     """The structural guarantee: no camera, easing or parallax code in here.
 
@@ -48,7 +63,7 @@ def test_the_console_package_implements_no_motion_arithmetic():
 
     banned = re.compile(r"easing|\binterpolate\b|cubic[-_]?bezier|keyframe", re.I)
     parallax_math = re.compile(r"parallax\w*\s*[*+/-]|[*+/-]\s*[\w\[\]\"']*parallax", re.I)
-    for path in CONSOLE_PKG.rglob("*.py"):
+    for path in _motion_swept_files():
         source = path.read_text(encoding="utf-8")
         # Strip comments and docstrings' explanatory prose is allowed to name
         # the concept; executable lines are not.

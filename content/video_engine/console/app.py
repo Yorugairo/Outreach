@@ -19,6 +19,8 @@ from fastapi.templating import Jinja2Templates
 
 from content.video_engine.console.routes import board as board_routes
 from content.video_engine.console.routes import catalog as catalog_routes
+from content.video_engine.console.routes import editor as editor_routes
+from content.video_engine.console.routes import gate as gate_routes
 from content.video_engine.console.routes import generate as generate_routes
 from content.video_engine.console.routes import intake as intake_routes
 from content.video_engine.console.routes import preview as preview_routes
@@ -50,6 +52,8 @@ def create_app(settings: ConsoleSettings | None = None) -> FastAPI:
     app.include_router(board_routes.router)
     app.include_router(intake_routes.router)
     app.include_router(generate_routes.router)
+    app.include_router(gate_routes.router)
+    app.include_router(editor_routes.router)
     app.include_router(preview_routes.router)
     app.include_router(runs_routes.router)
 

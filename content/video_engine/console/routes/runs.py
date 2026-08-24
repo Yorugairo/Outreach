@@ -32,6 +32,7 @@ from typing import Any
 from fastapi import APIRouter, Request
 from fastapi.responses import HTMLResponse
 
+from content.video_engine.src.services import paths as _paths
 from content.video_engine.src.models import VideoRun, VideoStageEvent
 from content.video_engine.src.repositories.file_repository import (
     FileBackedVideoJobRepository,
@@ -43,7 +44,7 @@ router = APIRouter()
 _ENGINE_ROOT = Path(__file__).resolve().parents[2]
 
 #: Where the pipeline writes jobs, relative to a project root.
-RUNS_SUBPATH = ("runtime", "jobs")
+RUNS_SUBPATH = _paths.RUNS_SUBPATH
 
 #: Fallback when no project root is configured. Must equal
 #: ``cli.DEFAULT_ARTIFACT_ROOT``; a test asserts the two have not drifted.
@@ -242,6 +243,23 @@ def load_job_views(runs_dir: Path) -> list[dict[str, Any]]:
     ]
 
 
+def _editor_url() -> str | None:
+    """Deep link into Studio, only while it serves (read-only probe)."""
+
+    from content.video_engine.console.routes.editor import studio_link
+    from content.video_engine.src.services import editor_studio
+
+    return studio_link(editor_studio.status(), "EditorialMotion")
+
+
+def _paid_jobs() -> list[dict]:
+    """Pending paid work waiting at the gate; releasing is a POST, never a GET."""
+
+    from content.video_engine.src.services.paid_gate import list_jobs
+
+    return list_jobs()
+
+
 @router.get("/runs", response_class=HTMLResponse)
 def runs(request: Request) -> HTMLResponse:
     templates = request.app.state.templates
@@ -252,7 +270,9 @@ def runs(request: Request) -> HTMLResponse:
         return templates.TemplateResponse(
             request=request,
             name="runs.html",
-            context={"title": "Runs", "runs_dir": str(runs_dir), "jobs": [], "summary": None},
+            context={"title": "Runs", "runs_dir": str(runs_dir), "jobs": [],
+                     "summary": None, "paid_jobs": _paid_jobs(),
+                     "editor_url": _editor_url()},
         )
 
     try:
@@ -278,5 +298,8 @@ def runs(request: Request) -> HTMLResponse:
             "runs_dir": str(runs_dir),
             "jobs": order_jobs(jobs),
             "summary": summarise(jobs),
+            "paid_jobs": _paid_jobs(),
+            "editor_url": _editor_url(),
         },
     )
+

@@ -22,6 +22,7 @@ from typing import Any, Mapping, Sequence
 
 from PIL import Image
 
+from content.video_engine.src.services.paths import is_runtime_path
 from content.video_engine.src.services.asset_catalog import DEPTH_LAYERS
 
 #: Preview frames are rendered at delivery resolution so measurements transfer.
@@ -326,8 +327,9 @@ def render_composite(
     out_dir = Path(output_dir)
     # A preview is a scratch artifact, never an asset. Enforcing the location here
     # rather than trusting the caller keeps a preview frame out of the asset tree,
-    # where it could be mistaken for something the catalogue owns.
-    if "runtime" not in out_dir.parts:
+    # where it could be mistaken for something the catalogue owns. The rule is
+    # the path contract's runtime-class check; only the error stays local.
+    if not is_runtime_path(out_dir):
         raise CompositePreviewError([
             f"preview output must live under a 'runtime' directory; got {out_dir}. "
             "Previews are scratch artifacts and are never catalogue assets."

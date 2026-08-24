@@ -1,6 +1,20 @@
 from __future__ import annotations
 
 import json
+
+from content.video_engine.src.services.asset_store import ENV_ALLOW_UNSYNCED
+
+
+@__import__("pytest").fixture(autouse=True)
+def _allow_unsynced_promotes(monkeypatch):
+    """These tests exercise the catalogue write, not the backup store.
+
+    Promotion now fails closed without a configured store; the explicit
+    opt-out is the supported way to commit offline, and the entries it writes
+    carry ``unsynced: true`` for the audit to surface.
+    """
+
+    monkeypatch.setenv(ENV_ALLOW_UNSYNCED, "1")
 from pathlib import Path
 
 from content.video_engine.tests.test_console_intake_routes import _project

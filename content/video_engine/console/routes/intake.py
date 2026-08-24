@@ -15,6 +15,9 @@ from fastapi import APIRouter, Form, Query, Request
 from fastapi.responses import FileResponse, HTMLResponse, RedirectResponse
 
 from content.video_engine.console.triage import PROMOTE, REJECT, SKIP, TriageError, TriageStore
+from content.video_engine.src.services import paths as _paths
+from content.video_engine.src.services.asset_store import AssetStoreError, sync_promoted_entries
+from content.video_engine.src.services.generation_claim import claim_for_delivery, verify_claim_matches_worktree
 from content.video_engine.src.services.asset_catalog import (
     AssetCatalogError,
     register_assets,
@@ -34,7 +37,7 @@ router = APIRouter()
 #: Kinds whose default stage view is a composited frame, not a bare thumbnail.
 _COMPOSITABLE = {"actor", "prop", "mechanism", "cast_board"}
 
-_ENGINE_RUNTIME = Path(__file__).resolve().parents[2] / "runtime" / "console-previews"
+_ENGINE_RUNTIME = Path(__file__).resolve().parents[2].joinpath(*_paths.CONSOLE_PREVIEWS_SUBPATH)
 
 
 def _store(request: Request) -> TriageStore:
@@ -135,10 +138,15 @@ def _triage_session(request: Request, delivery: str):
     return session
 
 
-def _triage_url(delivery: str, asset_id: str, mode: str, world: int) -> str:
+#: The ground an asset is judged against. ``paper`` is the delivery-realistic
+#: default; ``dark`` is the opt-in high-contrast ground for reading silhouettes.
+STAGE_GROUNDS = ("paper", "dark")
+
+
+def _triage_url(delivery: str, asset_id: str, mode: str, world: int, ground: str) -> str:
     return (
         f"/intake/triage?delivery={quote(delivery)}&asset={quote(asset_id)}"
-        f"&mode={mode}&world={world}"
+        f"&mode={mode}&world={world}&ground={ground}"
     )
 
 
@@ -149,6 +157,7 @@ def triage(
     asset: str | None = Query(default=None),
     mode: str = Query(default="composite"),
     world: int = Query(default=0),
+    ground: str = Query(default="paper"),
 ) -> HTMLResponse:
     templates = request.app.state.templates
     try:
@@ -158,6 +167,9 @@ def triage(
             request=request, name="error.html",
             context={"title": "Delivery rejected", "errors": exc.errors}, status_code=200,
         )
+
+    # An unknown ground is a typo in a hand-edited URL, not a reason to 500.
+    ground = ground if ground in STAGE_GROUNDS else "paper"
 
     rows = session.report["assets"]
     ids = [str(r["asset_id"]) for r in rows]
@@ -177,7 +189,7 @@ def triage(
                 "decision": session.decisions.get(str(row["asset_id"])),
                 "effective": session.effective(str(row["asset_id"])),
                 "explicit": session.is_explicit(str(row["asset_id"])),
-                "url": _triage_url(delivery, str(row["asset_id"]), mode, world),
+                "url": _triage_url(delivery, str(row["asset_id"]), mode, world, ground),
             }
             for row in rows
         ],
@@ -188,12 +200,21 @@ def triage(
         "world_index": world % len(worlds) if worlds else 0,
         "world_count": len(worlds),
         "world_id": worlds[world % len(worlds)]["asset_id"] if worlds else None,
-        "prev_url": _triage_url(delivery, ids[index - 1], mode, world) if ids else "",
-        "next_url": _triage_url(delivery, ids[(index + 1) % len(ids)], mode, world) if ids else "",
+        "prev_url": _triage_url(delivery, ids[index - 1], mode, world, ground) if ids else "",
+        "next_url": _triage_url(delivery, ids[(index + 1) % len(ids)], mode, world, ground) if ids else "",
         "toggle_url": _triage_url(
-            delivery, selected or "", "isolated" if effective_mode == "composite" else "composite", world
+            delivery, selected or "", "isolated" if effective_mode == "composite" else "composite",
+            world, ground,
         ),
-        "cycle_url": _triage_url(delivery, selected or "", mode, world + 1),
+        "cycle_url": _triage_url(delivery, selected or "", mode, world + 1, ground),
+        "ground": ground,
+        # Built here, not in the template: a hand-assembled twin drifts the
+        # moment a parameter is added — as ``ground`` just proved.
+        "return_url": _triage_url(delivery, selected or "", mode, world, ground),
+        "ground_url": _triage_url(
+            delivery, selected or "", mode, world,
+            "dark" if ground == "paper" else "paper",
+        ),
         "summary": session.summary(),
     }
     return templates.TemplateResponse(
@@ -416,12 +437,24 @@ def commit_confirm(request: Request, delivery: str = Form(...)) -> HTMLResponse:
         session, plan = _commit_plan(request, delivery)
         if not plan["entries"]:
             raise DeliveryIntakeError(["nothing is marked for promotion; nothing to write"])
+        # A claimed delivery may only promote into the world its claim named.
+        # Capturing into the wrong folder is recoverable; promoting into the
+        # wrong catalogue is not, so the strict check sits here.
+        claim = claim_for_delivery(delivery)
+        if claim is not None:
+            mismatch = verify_claim_matches_worktree(claim, settings.project_root)
+            if mismatch:
+                raise DeliveryIntakeError(mismatch)
+        # Sync before the catalogue write: the moment an asset becomes
+        # canonical is the moment it becomes irreplaceable. Failure here fails
+        # the promotion — never a silently unprotected canonical asset.
+        entries = sync_promoted_entries(plan["entries"], settings.project_root)
         result = register_assets(
             settings.catalog_path,
-            plan["entries"],
+            entries,
             output_path=settings.catalog_path,
         )
-    except (DeliveryIntakeError, AssetCatalogError) as exc:
+    except (DeliveryIntakeError, AssetCatalogError, AssetStoreError) as exc:
         return templates.TemplateResponse(
             request=request, name="error.html",
             context={"title": "Commit refused", "errors": exc.errors}, status_code=200,

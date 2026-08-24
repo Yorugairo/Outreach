@@ -1,10 +1,12 @@
 """Generation request pack — compile and export, never call.
 
 Mirrors the compile / record split ``pronunciation_dictionary`` established:
-``compile_visual_prompt_pack`` builds the request and performs no network call;
-the operator executes it in a browser generation session. The provider API
-adapter is deferred until a provider and spend control are chosen, so nothing
-in this module imports a provider client, reads an API key, or opens a socket.
+``compile_visual_prompt_pack`` builds the request and performs no network call.
+The provider question is settled by P17: generation runs on the operator's
+subscription agents via **claims** — a compiled pack opens a claim whose work
+order the agent follows, delivering into a review-class folder for /intake.
+No provider client, no API key, no socket in this module; the paid gate exists
+elsewhere and only ever for audio/video, never images.
 
 The route computes no prompt of its own: ``visual_prompt_pack`` owns the fan-out
 and the negative-prompt rule; this view renders the pack, offers it for copy and
@@ -17,9 +19,18 @@ import re
 from pathlib import Path
 
 from fastapi import APIRouter, Form, Query, Request
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, RedirectResponse
 
+from content.video_engine.src.services import paths as _paths
 from content.video_engine.src.services.artifact_io import write_artifact
+from content.video_engine.src.services.generation_claim import (
+    GenerationClaimError,
+    close_claim,
+    list_claims,
+    load_claim,
+    open_claim,
+    render_work_order,
+)
 from content.video_engine.src.services.delivery_intake import CLASS_DIMENSIONS
 from content.video_engine.src.services.style_packs import StylePackError, load_registry
 from content.video_engine.src.services.visual_prompt_pack import (
@@ -35,8 +46,9 @@ _ENGINE_ROOT = Path(__file__).resolve().parents[2]
 
 #: Exports land under a ``runtime/`` directory only, mirroring
 #: ``composite_preview``'s refusal — a request pack is derived and disposable,
-#: never a catalogue artifact.
-EXPORT_SUBPATH = ("runtime", "generation-requests")
+#: never a catalogue artifact. The subpath literal is owned by the path
+#: contract; this is a re-export for callers and tests.
+EXPORT_SUBPATH = _paths.EXPORT_SUBPATH
 
 #: A bare filename: no separators, no traversal, nothing shell-hostile.
 _SAFE_NAME = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]*$")
@@ -143,6 +155,7 @@ def generate(
         "lanes": _lanes(),
         "pack": None,
         "exported": None,
+        "claims": list_claims(),
     }
     if not coverage:
         return templates.TemplateResponse(request=request, name="generate.html", context=base)
@@ -190,3 +203,94 @@ def export(
             **compiled,
         },
     )
+
+
+def _slot_id(text: str) -> str:
+    """A pack slot id as a claim asset id: lowercase kebab, nothing else."""
+
+    import re as _re
+
+    return _re.sub(r"[^a-z0-9-]+", "-", str(text).lower()).strip("-")
+
+
+@router.post("/generate/claims/open", response_class=HTMLResponse)
+def claim_open(
+    request: Request,
+    claim_id: str = Form(...),
+    style_family: str = Form(...),
+    coverage: str = Form(default=""),
+    lane: str = Form(default=""),
+    variants: int = Form(default=DEFAULT_VARIANTS_PER_SLOT),
+    slots_json: str = Form(default=""),
+    reference_images: str = Form(default=""),
+) -> HTMLResponse:
+    """Open a claim from a compiled pack, or from explicit slots.
+
+    The route computes no prompt of its own: pack slots carry prompts composed
+    by ``visual_prompt_pack``; explicit slots carry the operator's.
+    """
+
+    settings = request.app.state.settings
+    if not settings.project_root:
+        return _error(request, "Claim refused", [
+            "no project root configured; set VIDEO_ENGINE_PROJECT_ROOT"
+        ])
+    try:
+        if coverage:
+            pack = compile_visual_prompt_pack(coverage, lane=lane, variants_per_slot=variants)
+            slots = [
+                {
+                    "asset_id": _slot_id(group["slot_id"]),
+                    "kind": _DEFAULT_DELIVERY_KIND,
+                    "prompt": group["prompt"],
+                    "semantic": group.get("visual_intent") or group.get("narration_excerpt") or "",
+                }
+                for group in pack["groups"]
+            ]
+        elif slots_json.strip():
+            import json as _json
+
+            slots = _json.loads(slots_json)
+        else:
+            return _error(request, "Claim refused", [
+                "give a coverage artifact to compile, or explicit slots JSON"
+            ])
+        references = [line.strip() for line in reference_images.splitlines() if line.strip()]
+        claim = open_claim(
+            settings.project_root,
+            claim_id=claim_id.strip(),
+            style_family=style_family.strip(),
+            slots=slots,
+            reference_images=references,
+        )
+    except (GenerationClaimError, VisualPromptPackError, StylePackError) as exc:
+        return _error(request, "Claim refused", exc.errors)
+    except ValueError as exc:
+        return _error(request, "Claim refused", [str(exc)])
+    return RedirectResponse(url=f"/generate/claims/{claim['claim_id']}", status_code=303)
+
+
+@router.get("/generate/claims/{claim_id}", response_class=HTMLResponse)
+def claim_view(request: Request, claim_id: str) -> HTMLResponse:
+    try:
+        claim = load_claim(claim_id)
+    except GenerationClaimError as exc:
+        return _error(request, "No such claim", exc.errors)
+    return request.app.state.templates.TemplateResponse(
+        request=request,
+        name="claim.html",
+        context={
+            "title": f"Claim {claim_id}",
+            "claim": claim,
+            "work_order": render_work_order(claim),
+        },
+    )
+
+
+@router.post("/generate/claims/close", response_class=HTMLResponse)
+def claim_close(request: Request, claim_id: str = Form(...)) -> HTMLResponse:
+    try:
+        close_claim(claim_id)
+    except GenerationClaimError as exc:
+        return _error(request, "Close refused", exc.errors)
+    return RedirectResponse(url="/generate", status_code=303)

@@ -1,13 +1,13 @@
 ---
 id: P16-CONSOLE-EDITOR-CONVERGENCE
 title: One operator surface — console shells, links, and round-trips the Remotion editor
-status: draft
+status: complete
 operation: feature
 risk: standard
 owner: parent
 branch: claude/content-generation-system-52f077
 created: 2026-08-23
-updated: 2026-08-23
+updated: 2026-08-24
 ---
 
 # Console + Editor Convergence
@@ -109,58 +109,58 @@ runtime/console-state/  studio.pid.json (tracked state, never hand-edited)
 ## Task Slices
 
 ### T1: Studio lifecycle service
-- Status: pending
+- Status: complete
 - Owner: parent
 - Depends on: none
 - Write set: `content/video_engine/src/services/editor_studio.py`, `content/video_engine/tests/test_editor_studio.py`
 - Acceptance: `start()` launches `npm run start` in the editor directory and records pid + port + started_at under `runtime/console-state/studio.pid.json`; `status()` reports stopped / starting / serving / failed, probing the recorded pid and port without spawning anything; `stop()` terminates the **process tree** (Windows: `taskkill /T`; POSIX: process group) and proves the pid is gone before returning; a stale pid file (machine rebooted, pid reused) is detected rather than trusted, by matching process identity, and reported as stale; a second `start()` while serving is a no-op returning the existing state; npm missing on PATH is a named error, not a stack trace. All process operations pass through one module-level boundary that tests monkeypatch; tests use a fake long-running process, never real npm.
 - Validate: `python -m pytest content/video_engine/tests/test_editor_studio.py -q`
-- Evidence: pending
+- Evidence: 9 tests green over a fake process table: pid+port+identity recorded, second start no-op, dead pid reads failed with stderr tail, reused pid reads stale (never serving), stop proves death or raises, npm absence named, status never spawns
 
 ### T2: Console editor controls
-- Status: pending
+- Status: complete
 - Owner: junior_developer (dispatches as `general-purpose`)
 - Depends on: T1
 - Write set: `content/video_engine/console/routes/editor.py`, `content/video_engine/console/templates/editor.html`, `content/video_engine/tests/test_console_editor.py`
 - Acceptance: an Editor view shows Studio state with the existing chip vocabulary (glyph + text + colour), start and stop as explicit POST forms, the serving URL as a plain link when up, and stderr verbatim on failure; routes are thin over T1 and contain no process logic; the offline template scan passes; a status GET constructs nothing and writes nothing (byte-snapshot test). Parent wires router and nav.
 - Validate: `python -m pytest content/video_engine/tests/test_console_editor.py -q`
-- Evidence: pending
+- Evidence: 6 tests green: chip vocabulary, start/stop as POST forms, serving URL as plain link, stderr verbatim, byte-snapshot status GET; router and nav wired in app.py/base.html
 
 ### T3: --with-editor entrypoint
-- Status: pending
+- Status: complete
 - Owner: junior_developer (dispatches as `general-purpose`)
 - Depends on: T1
 - Write set: `content/video_engine/console/__main__.py`, `content/video_engine/tests/test_console_entrypoint.py`
 - Acceptance: `--with-editor` starts Studio via T1 before serving and stops it on shutdown (normal exit and KeyboardInterrupt both covered); without the flag behaviour is byte-for-byte today's; startup failure of Studio is reported and the console still serves — a dead editor never takes the review surface down with it.
 - Validate: `python -m pytest content/video_engine/tests/test_console_entrypoint.py -q`
-- Evidence: pending
+- Evidence: 4 tests green: without the flag studio is never touched and serving is unchanged; start→serve→stop ordering held on normal exit and KeyboardInterrupt; a dead editor reports and the console serves anyway
 
 ### T4: Deep links into Studio
-- Status: pending
+- Status: complete
 - Owner: parent (verification step routed as `Explore`/docs check first)
 - Depends on: T2
 - Write set: `content/video_engine/console/routes/board.py`, `content/video_engine/console/routes/runs.py`, `content/video_engine/console/templates/board.html`, `content/video_engine/console/templates/runs.html`, `content/video_engine/tests/test_console_deeplinks.py`
 - Acceptance: **first, a recorded verification** of what Studio 4.0.502 actually supports in URLs (composition path, props payload, neither) — from the pinned version's documentation or the installed package, cited in evidence; then board slots and runs render "Open in editor" links using the deepest supported form, falling back to Studio root; links appear only while Studio reports serving; link construction lives in one tested helper, not in templates.
 - Validate: `python -m pytest content/video_engine/tests/test_console_deeplinks.py -q`
-- Evidence: pending
+- Evidence: Verification recorded from the installed pin, not docs-from-memory: `@remotion/studio/dist/helpers/url-state.js` routes the SPA by pathname, so `/{CompositionId}` is the deepest supported form; props-in-URL unevidenced and not offered. `studio_link` is the single tested helper; board and runs render the link only while serving. 4 tests incl. the evidence check against the installed file
 
 ### T5: Headless render round-trip
-- Status: pending
+- Status: complete
 - Owner: parent
 - Depends on: T1
 - Write set: `content/video_engine/src/services/editor_render.py`, `content/video_engine/console/routes/editor.py`, `content/video_engine/tests/test_editor_render.py`
 - Acceptance: `compose_props()` builds an `EditorialMotion` input-props JSON from a job's artifacts (coverage, catalogue-resolved assets, canonical audio when present) and writes it under `runtime/`; composition is pure translation — any timing or camera value is copied from artifacts, never computed, and the P15 structural motion-arithmetic test is extended to cover the new modules; the render route invokes `npm run render` (or `npx remotion render` with explicit args) through the T1-style boundary with `--props` pointing at the composed file; output lands under `runtime/` and appears in Runs; failures surface the renderer's stderr verbatim; a render is operator-triggered, with the threaded pending-state pattern from preview.py.
 - Validate: `python -m pytest content/video_engine/tests/test_editor_render.py content/video_engine/tests/test_console_motion_preview.py -q`
-- Evidence: pending
+- Evidence: 7 tests green: compose_props is pure translation (digests copied, never recomputed), render through the single `_run_command` boundary with `--props`, stderr tail verbatim on failure, unknown composition refused by name; `render_for_claim` closes the P17 claim-resume hook (opt-in via `editor_composition`, recorded skip otherwise); output lands under runtime/editor-renders via the path contract
 
 ### T6: Embedding spike — decide, don't drift
-- Status: pending
+- Status: complete
 - Owner: parent
 - Depends on: T2
 - Write set: `docs/content-video-engine/25-EDITOR-EMBEDDING-SPIKE.md`
 - Acceptance: a timeboxed evaluation of iframing Studio into a console tab — same-origin constraints, CSP, WebSocket behaviour, and whether it beats a deep link on a dual-monitor desktop — written up with a recommendation and **presented to the operator as a gate**; no iframe ships in this plan regardless of outcome; the doc records the decision either way so it is not relitigated.
 - Validate: `python scripts/prp_validate.py .claude/PRPs/plans/P16-CONSOLE-EDITOR-CONVERGENCE.plan.md`
-- Evidence: pending
+- Evidence: `25-EDITOR-EMBEDDING-SPIKE.md` written and indexed: recommendation is deep links, no iframe (SPA pathname routing invisible to a shell, cross-origin by construction, websocket topology, offline-CSP spirit, dual-monitor reality); revisit triggers named; iframe ships only on explicit operator approval regardless
 
 ## Verification
 
@@ -183,6 +183,21 @@ python scripts/prp_validate.py .claude/PRPs/plans/P16-CONSOLE-EDITOR-CONVERGENCE
 | Scope creep toward "console renders video" | High if unwatched | Lanes render; console presses buttons — the T10 rule, restated as acceptance |
 | Editor upgrade breaks lifecycle assumptions | Low | Only npm scripts are the interface; no Studio internals parsed |
 
+## Deviations
+
+- **Deep links are page-level, not per-slot.** The pinned root defines three
+  fixed compositions; board slots do not map 1:1 onto compositions, so board
+  and runs carry one "Open in editor" link into `EditorialMotion` rather than
+  inventing a per-slot mapping the editor does not have.
+- **`compose_props` reads the claim delivery manifest** (the P17 shape) as its
+  job-artifact source; coverage/audio inputs are optional parameters copied
+  verbatim when supplied.
+
 ## Evidence And Handoff
 
-Pending. Nothing implements while `status: draft`.
+All six slices implemented and validated: 804 tests pass (5 pre-existing
+`test_history_v4_pipeline` failures unrelated). Manual checks that need a live
+operator session remain open: run `--with-editor`, kill the console, confirm
+no orphaned node.exe in Task Manager; trigger one real headless render and see
+its output in Runs. The structural guarantees those checks exercise are
+covered by the fake-boundary tests above.

@@ -66,3 +66,52 @@ content/video_engine/runtime/
 
 # Manim default cache/output when scenes are instantiated outside a job media_dir
 media/
+
+# Durability classes (P18): the class is readable from the path alone, so the
+# ignore rules are class prefixes, not per-feature patterns.
+#   canonical/ — catalogue-referenced binaries; untracked here, protected by
+#                the content-addressed store (synced on promote), not by git.
+#   review/   — in-flight deliveries; provisional by definition.
+#   runtime/  — disposable derived output; never hand-edited, never committed.
+content/video_engine/**/canonical/
+content/video_engine/**/review/
+content/video_engine/**/runtime/
+content/video_engine/runtime/
+
+# Legacy pre-migration locations, kept until every project tree has migrated.
+content/video_engine/**/assets/review/
+content/video_engine/**/assets/quarantine/
+content/video_engine/**/assets/generated/review/
+content/video_engine/**/assets/generated/quarantine/
+
+# Node dependencies, anywhere in the tree.
+node_modules/
+
+# Rendered video is regenerable output, not source. One pilot's render folder
+# alone is 5.7GB; committing these permanently bloats every clone.
+content/video_engine/**/render/
+*.mp4
+*.mov
+*.webm
+
+# Generated imagery is not source and is not byte-reproducible.
+# A regenerated plate never matches its recorded sha256, so git provides
+# storage, not reproducibility — and .git is already 19GB. Asset durability is
+# a backup concern, handled outside version control.
+# Images already tracked stay tracked; this stops the tree growing.
+*.png
+*.jpg
+*.jpeg
+*.webp
+*.gif
+*.psd
+*.tif
+*.tiff
+
+# Generated audio, same reasoning as imagery: synthesised narration is not
+# source, is not byte-reproducible, and 242 takes weigh 161MB.
+*.mp3
+*.wav
+*.m4a
+*.aac
+*.flac

@@ -199,4 +199,63 @@ def test_every_key_action_has_a_visible_control(tmp_path):
     assert 'id="form-reject"' in body
     assert 'id="form-skip"' in body
     assert 'id="commit-link"' in body
+    assert 'id="ground-link"' in body
     assert "console.js" in body
+
+
+def test_every_url_the_key_layer_reads_is_actually_rendered(tmp_path):
+    """Derived, not hand-listed.
+
+    The previous version of this rule was a list a human kept in sync, so a key
+    added without its data attribute would sail through. Read the dataset keys
+    out of the script instead: a navigation key that reads an attribute the
+    server never renders is a silent dead key, which is worse than a broken one.
+    """
+
+    import re
+
+    from content.video_engine.console.app import STATIC_DIR
+
+    script = (STATIC_DIR / "console.js").read_text(encoding="utf-8")
+    keys = set(re.findall(r"nav\.dataset\.(\w+)", script))
+    assert keys, "the key layer reads no dataset attributes; this test is watching nothing"
+
+    client, delivery = _project(tmp_path)
+    body = client.get("/intake/triage", params={"delivery": delivery}).text
+
+    # Scope to the element ``nav.dataset`` actually reads. A page-wide substring
+    # search passes on an attribute of the same name somewhere else entirely —
+    # ``data-ground`` also sits on the stage — and proves nothing.
+    element = re.search(r"<div[^>]*id=\"nav-data\"[^>]*>", body)
+    assert element, "the key layer's data element is not rendered at all"
+    element = element.group(0)
+
+    for key in sorted(keys):
+        attribute = "data-" + re.sub(r"(?<!^)(?=[A-Z])", "-", key).lower()
+        assert attribute in element, (
+            f"console.js reads nav.dataset.{key} but #nav-data does not carry {attribute}"
+        )
+
+
+def test_the_stage_ground_is_paper_by_default_and_survives_navigation(tmp_path):
+    """The ground is a URL parameter, so it holds while stepping the filmstrip."""
+
+    client, delivery = _project(tmp_path)
+
+    body = client.get("/intake/triage", params={"delivery": delivery}).text
+    assert 'class="stage" data-ground="paper"' in body
+
+    dark = client.get("/intake/triage", params={"delivery": delivery, "ground": "dark"}).text
+    assert 'class="stage" data-ground="dark"' in dark
+    # Every onward link keeps the operator on the ground they chose.
+    assert "ground=paper" not in dark.split('id="ground-link"')[0]
+
+
+def test_an_unknown_ground_falls_back_rather_than_failing(tmp_path):
+    client, delivery = _project(tmp_path)
+
+    body = client.get(
+        "/intake/triage", params={"delivery": delivery, "ground": "chartreuse"}
+    ).text
+
+    assert 'class="stage" data-ground="paper"' in body

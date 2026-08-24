@@ -21,6 +21,8 @@ import shutil
 import subprocess
 from dataclasses import dataclass, field
 from pathlib import Path
+
+from content.video_engine.src.services import paths as _paths
 from typing import Any, Mapping, Sequence
 
 from jsonschema import Draft7Validator
@@ -51,7 +53,9 @@ _APPROVED_REVIEW_STATUSES = {"rights_reviewed"}
 PREVIEW_INTENT = "quarantined_review_preview"
 #: Renders under this directory are previews of unreviewed material. Nothing
 #: may promote them: the resolver refuses any manifest entry pointing here.
-QUARANTINE_DIR = "renders/quarantine"
+# Owned by the path contract; re-exported here so callers and tests keep
+# their import site. The location itself is unchanged.
+QUARANTINE_DIR = _paths.QUARANTINE_DIR
 
 _PROFILES = {
     "landscape": {"width": 1920, "height": 1080, "fps": 30},

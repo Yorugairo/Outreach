@@ -2,8 +2,8 @@
 {% block bar_right %}<span class="path mono">{{ delivery }}</span>{% endblock %}
 {% block main %}
 <style>
-/* Triage-only layout. Tokens come from console.css; nothing here colours the
- * stage — the surround stays achromatic so the asset is judged, not tinted. */
+/* Triage-only layout. Grounds are tokens from console.css; this file chooses
+ * between them, it does not invent a colour. */
 .triage { display: grid; grid-template-columns: 240px 1fr 340px; gap: 0; height: calc(100dvh - 96px); }
 .strip { border-right: 1px solid var(--hairline); overflow-y: auto; }
 .strip a { display: flex; align-items: center; gap: var(--s2); padding: var(--s2) var(--s3);
@@ -12,6 +12,7 @@
 .strip .id { font-family: var(--mono); font-size: 11px; overflow: hidden; text-overflow: ellipsis; }
 .strip .mark { margin-left: auto; font-family: var(--mono); font-size: 10px; color: var(--text-dim); }
 .stage { background: var(--stage); display: flex; align-items: center; justify-content: center; overflow: hidden; }
+.stage[data-ground="dark"] { background: var(--stage-dark); }
 .stage img { max-width: 100%; max-height: 100%; }
 .verdict { border-left: 1px solid var(--hairline); overflow-y: auto; padding: var(--s4); }
 .verdict h2 { margin: 0 0 var(--s3); font-size: 13px; font-family: var(--mono); }
@@ -40,7 +41,7 @@
   </nav>
 
   <section>
-    <div class="stage">
+    <div class="stage" data-ground="{{ ground }}">
       {% if current %}
       <img src="/intake/stage.png?delivery={{ delivery | urlencode }}&asset={{ selected | urlencode }}&mode={{ mode }}&world={{ world_index }}"
            alt="{{ mode }} view of {{ selected }}">
@@ -54,6 +55,7 @@
       <span><span class="kbd">.</span> skip</span>
       {% if compositable %}<span><span class="kbd">Space</span> 1:1</span>
       <span><span class="kbd">C</span> world</span>{% endif %}
+      <span><a id="ground-link" href="{{ ground_url }}"><span class="kbd">G</span> {{ 'dark' if ground == 'paper' else 'paper' }} ground</a></span>
       <span><span class="kbd">Enter</span> commit</span>
     </div>
   </section>
@@ -87,7 +89,7 @@
       <form method="post" action="/intake/undo">
         <input type="hidden" name="delivery" value="{{ delivery }}">
         <input type="hidden" name="asset_id" value="{{ selected }}">
-        <input type="hidden" name="return_url" value="{{ '/intake/triage?delivery=' ~ (delivery | urlencode) ~ '&asset=' ~ (selected | urlencode) ~ '&mode=' ~ mode ~ '&world=' ~ world_index }}">
+        <input type="hidden" name="return_url" value="{{ return_url }}">
         <button type="submit">Undo</button>
       </form>
       {% endif %}
@@ -124,6 +126,7 @@
 <div hidden id="nav-data"
      data-prev="{{ prev_url }}" data-next="{{ next_url }}"
      data-toggle="{{ toggle_url }}" data-cycle="{{ cycle_url }}"
-     data-compositable="{{ '1' if compositable else '' }}"></div>
+     data-compositable="{{ '1' if compositable else '' }}"
+     data-ground="{{ ground_url }}"></div>
 <script src="/static/console.js"></script>
 {% endblock %}

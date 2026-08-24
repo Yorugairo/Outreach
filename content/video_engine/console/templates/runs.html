@@ -1,6 +1,38 @@
 {% extends "base.html" %}
-{% block bar_right %}<span class="path mono">{{ runs_dir }}</span>{% endblock %}
+{% block bar_right %}<span class="path mono">{{ runs_dir }}</span>
+{% if paid_jobs %}
+<section>
+  <h2 style="font-size:13px">Paid gate</h2>
+  <p class="empty" style="max-width:none">Registered paid work waiting for release.
+     Machine release works at any cost; Telegram approval only at or under the
+     configured ceiling. Flow-lane jobs refuse release while the queue is paused.</p>
+  <table>
+    <thead><tr><th scope="col">Job</th><th scope="col">Lane</th>
+      <th scope="col">Description</th><th scope="col">Est. cost</th>
+      <th scope="col">Status</th><th scope="col"></th></tr></thead>
+    <tbody>
+    {% for j in paid_jobs %}
+      <tr>
+        <td class="mono">{{ j.job_id }}</td>
+        <td>{{ j.lane }}</td>
+        <td>{{ j.description }}</td>
+        <td class="num">${{ j.estimated_cost_usd }}</td>
+        <td>{{ j.status }}</td>
+        <td>{% if j.status == 'pending' %}
+          <form method="post" action="/gate/release">
+            <input type="hidden" name="job_id" value="{{ j.job_id }}">
+            <button type="submit">Release</button>
+          </form>
+        {% endif %}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endif %}
+{% endblock %}
 {% block main %}
+{% if editor_url %}<p><a href="{{ editor_url }}">Open in editor</a></p>{% endif %}
 
 <h2>Runs</h2>
 

@@ -44,6 +44,15 @@ from content.video_engine.src.services.scene_selection import (
 
 router = APIRouter()
 
+
+def _editor_url() -> str | None:
+    """Deep link into Studio's EditorialMotion, only while it serves."""
+
+    from content.video_engine.console.routes.editor import studio_link
+    from content.video_engine.src.services import editor_studio
+
+    return studio_link(editor_studio.status(), "EditorialMotion")
+
 #: Coverage candidates, most authoritative first. Canonical timing beats the
 #: word-count estimate when a job carries both.
 COVERAGE_FILENAMES = ("canonical_coverage.json", "provisional_coverage.json")
@@ -154,7 +163,7 @@ def board(request: Request, job: str | None = Query(default=None)) -> HTMLRespon
         return templates.TemplateResponse(
             request=request,
             name="board.html",
-            context={"title": "Board", "board": None, "job": ""},
+            context={"title": "Board", "board": None, "job": "", "editor_url": _editor_url()},
         )
 
     job_dir = Path(job).expanduser()
@@ -170,6 +179,7 @@ def board(request: Request, job: str | None = Query(default=None)) -> HTMLRespon
         name="board.html",
         context={
             "title": "Board",
+            "editor_url": _editor_url(),
             "job": str(job_dir),
             "job_q": quote(str(job_dir)),
             "board": payload,

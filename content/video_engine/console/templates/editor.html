@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block main %}
+
+<section class="summary">
+  <div>
+    <span class="k">Studio</span>
+    {% if studio.state == 'serving' %}<span class="chip chip-clean">SERVING</span>
+    {% elif studio.state == 'starting' %}<span class="chip chip-flag">STARTING</span>
+    {% elif studio.state == 'failed' %}<span class="chip chip-fail">FAILED</span>
+    {% elif studio.state == 'stale' %}<span class="chip chip-flag">STALE</span>
+    {% else %}<span class="chip">&#9633; STOPPED</span>{% endif %}
+  </div>
+  {% if studio.pid %}<div><span class="k">Pid</span><span class="v num">{{ studio.pid }}</span></div>{% endif %}
+  {% if studio.port %}<div><span class="k">Port</span><span class="v num">{{ studio.port }}</span></div>{% endif %}
+  {% if studio_root %}<div><span class="k">URL</span><a class="mono" href="{{ studio_root }}">{{ studio_root }}</a></div>{% endif %}
+</section>
+
+<div class="actions" style="display:flex;gap:var(--s2);margin:var(--s4) 0">
+  {% if studio.state in ('stopped', 'failed', 'stale') %}
+  <form method="post" action="/editor/start"><button type="submit">Start Studio</button></form>
+  {% endif %}
+  {% if studio.state in ('serving', 'starting', 'stale') %}
+  <form method="post" action="/editor/stop"><button type="submit">Stop Studio</button></form>
+  {% endif %}
+</div>
+
+{% if studio.detail %}<p class="empty" style="max-width:none">{{ studio.detail }}</p>{% endif %}
+{% if studio.stderr %}
+<div class="errors"><ul>{% for line in studio.stderr.splitlines() %}<li>{{ line }}</li>{% endfor %}</ul></div>
+{% endif %}
+
+<section>
+  <h2 style="font-size:13px">Headless render</h2>
+  <p class="empty" style="max-width:none">Runs the editor's own npm render script;
+     props are composed from job artifacts, never invented here. Output lands under
+     <code>runtime/</code> and appears in <a href="/runs">Runs</a>.</p>
+  <form method="post" action="/editor/render" class="summary">
+    <div>
+      <label class="k" for="composition">Composition</label>
+      <select id="composition" name="composition">
+        <option>EditorialMotion</option>
+        <option>Editorial</option>
+        <option>Documentary</option>
+      </select>
+    </div>
+    <div style="flex:1;min-width:32ch">
+      <label class="k" for="props_path">Props file (optional, composed JSON)</label>
+      <input class="mono" type="text" id="props_path" name="props_path" style="width:100%">
+    </div>
+    <div><button type="submit">Render</button></div>
+  </form>
+  {% if renders %}
+  <table>
+    <thead><tr><th scope="col">Composition</th><th scope="col">Status</th><th scope="col">Output / errors</th></tr></thead>
+    <tbody>
+    {% for name, job in renders.items() %}
+      <tr>
+        <td class="mono">{{ name }}</td>
+        <td>{% if job.status == 'done' %}<span class="chip chip-clean">DONE</span>
+            {% elif job.status == 'failed' %}<span class="chip chip-fail">FAILED</span>
+            {% else %}<span class="chip chip-flag">RUNNING</span>{% endif %}</td>
+        <td class="mono" style="font-size:11px">{{ job.output or (job.errors | join('; ') if job.errors else '') }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+</section>
+
+{% endblock %}

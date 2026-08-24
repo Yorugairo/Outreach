@@ -418,6 +418,26 @@ def build_parser() -> argparse.ArgumentParser:
     compose_plate_parser.add_argument("--plate", required=True)
     compose_plate_parser.add_argument("--output", required=True)
 
+    claim_resume_parser = subparsers.add_parser(
+        "claim-resume",
+        help="scan a claim's delivery, compose free artifacts, stop at the paid gate",
+    )
+    claim_resume_parser.add_argument("claim_id")
+
+    store_audit_parser = subparsers.add_parser(
+        "store-audit",
+        help="verify every catalogue sha256 exists in the asset store (read-only)",
+    )
+    store_audit_parser.add_argument("--catalog", required=True)
+    store_restore_parser = subparsers.add_parser(
+        "store-restore",
+        help="rebuild catalogue-named files from the asset store, verifying bytes",
+    )
+    store_restore_parser.add_argument("--catalog", required=True)
+    store_restore_parser.add_argument("--project-root", required=True)
+    store_restore_parser.add_argument("--digest", action="append", default=[])
+    store_restore_parser.add_argument("--force", action="store_true")
+
     preview_pron_parser = subparsers.add_parser("preview-pronunciation")
     preview_pron_parser.add_argument("--dictionary", required=True)
     preview_pron_parser.add_argument("--script", required=True)
@@ -898,6 +918,44 @@ def _run_paste_lane_command(args: argparse.Namespace) -> int:
     return 0
 
 
+def _run_store_command(args: argparse.Namespace) -> int:
+    """store-audit / store-restore: thin over the asset_store service."""
+
+    from content.video_engine.src.services.asset_store import (
+        AssetStoreError,
+        audit_catalog,
+        from_env,
+        restore_catalog,
+    )
+
+    try:
+        store = from_env()
+        if store is None:
+            raise AssetStoreError([
+                "no asset store configured; set the VIDEO_ENGINE_R2_* variables"
+            ])
+        catalog = json.loads(Path(args.catalog).read_text(encoding="utf-8"))
+        if args.command == "store-audit":
+            payload = audit_catalog(catalog, store)
+            print(json.dumps(payload, indent=2))
+            return 0 if not payload["missing"] else 1
+        payload = restore_catalog(
+            catalog,
+            args.project_root,
+            store,
+            digests=args.digest or None,
+            force=args.force,
+        )
+        print(json.dumps(payload, indent=2))
+        return 0
+    except (OSError, ValueError, AssetStoreError) as exc:
+        print(json.dumps({
+            "valid": False,
+            "errors": list(getattr(exc, "errors", [str(exc)])),
+        }, indent=2))
+        return 1
+
+
 def main(argv: Sequence[str] | None = None) -> int:
     load_video_environment()
     args = build_parser().parse_args(argv)
@@ -911,6 +969,21 @@ def main(argv: Sequence[str] | None = None) -> int:
         return 0
     if args.command == "resume":
         print(json.dumps(pipeline.resume(args.job_id).to_dict(), indent=2))
+        return 0
+    if args.command in {"store-audit", "store-restore"}:
+        return _run_store_command(args)
+    if args.command == "claim-resume":
+        from content.video_engine.src.services.claim_resume import (
+            ClaimResumeError,
+            resume_claim,
+        )
+
+        try:
+            summary = resume_claim(args.claim_id)
+        except ClaimResumeError as exc:
+            print(json.dumps({"valid": False, "errors": exc.errors}, indent=2))
+            return 1
+        print(json.dumps(summary, indent=2))
         return 0
     if args.command in {
         "ingest-script",

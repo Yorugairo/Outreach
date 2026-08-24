@@ -147,14 +147,40 @@ def test_no_template_or_stylesheet_reaches_off_origin(path):
     assert "@import" not in stripped
 
 
-def test_the_stylesheet_defines_the_achromatic_stage_and_an_off_palette_accent():
-    css = (STATIC_DIR / "console.css").read_text(encoding="utf-8")
+def test_the_review_stage_is_lighter_than_the_operator_chrome_around_it():
+    """The stage is the delivery ground, not a darkroom.
 
-    assert "--stage: #1b1b1d" in css, "the surround behind an asset must be neutral grey"
+    An asset judged over near-black reads luminous and ships muddy, so the
+    default ground approximates paper while the chrome stays dark. The
+    high-contrast ground survives as an opt-in, not as the default.
+    """
+
+    css = (STATIC_DIR / "console.css").read_text(encoding="utf-8")
+    tokens = dict(re.findall(r"(--[a-z-]+):\s*(#[0-9a-fA-F]{6})", css))
+
+    def luminance(hex_colour: str) -> float:
+        r, g, b = (int(hex_colour[i:i + 2], 16) / 255 for i in (1, 3, 5))
+        return 0.2126 * r + 0.7152 * g + 0.0722 * b
+
+    assert luminance(tokens["--stage"]) > 0.6, "the default stage must read as paper"
+    assert luminance(tokens["--surface"]) < 0.2, "operator chrome must stay dark"
+    assert luminance(tokens["--stage-dark"]) < 0.2, "the opt-in ground is the dark one"
+
+
+def test_console_chrome_never_borrows_a_library_colour():
+    """Chrome must never be mistaken for art — including the paper stage.
+
+    The stage deliberately sits near the library cream without matching it: an
+    exact match would camouflage the cream rim a bad matte leaves behind.
+    """
+
+    css = (STATIC_DIR / "console.css").read_text(encoding="utf-8")
     library_palette = ("#f4e6c7", "#25313c", "#1769c2", "#178c83", "#f5b72e", "#ed6a4a")
     lowered = css.lower()
     for colour in library_palette:
-        assert colour not in lowered, f"console chrome must not use the library colour {colour}"
+        assert lowered.count(colour) == lowered.count(f"({colour}"), (
+            f"console chrome must not use the library colour {colour}"
+        )
 
 
 def test_static_assets_are_served(tmp_path):

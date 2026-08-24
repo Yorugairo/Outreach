@@ -3,6 +3,7 @@
 {% block main %}
 
 <h2>Scene board</h2>
+{% if editor_url %}<p><a href="{{ editor_url }}">Open in editor</a></p>{% endif %}
 
 {% if board is none %}
 <div class="empty">

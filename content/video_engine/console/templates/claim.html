@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block bar_right %}<span class="path mono">{{ claim.delivery_dir }}</span>{% endblock %}
+{% block main %}
+
+<section class="summary">
+  <div><span class="k">Claim</span><span class="v mono">{{ claim.claim_id }}</span></div>
+  <div><span class="k">Status</span><span class="v">{{ claim.status }}</span></div>
+  <div><span class="k">Style family</span><span class="mono" style="font-size:12px">{{ claim.style_family }}</span></div>
+  <div><span class="k">Branch</span><span class="mono" style="font-size:12px">{{ claim.branch }}</span></div>
+  <div><span class="k">Slots</span><span class="v">{{ claim.slots | length }}</span></div>
+  <div><span class="k">Opened</span><span class="mono" style="font-size:12px">{{ claim.opened_at }}</span></div>
+</section>
+
+<p class="empty" style="max-width:none">
+  Paste the work order below into the generating agent (Codex headless, GPT
+  desktop, or Antigravity) verbatim. When <code>approvals.json</code> lands in
+  the delivery folder, scan it from <a href="/intake?delivery={{ claim.delivery_dir | urlencode }}">/intake</a>.
+</p>
+
+{% if claim.status == 'open' %}
+<form method="post" action="/generate/claims/close">
+  <input type="hidden" name="claim_id" value="{{ claim.claim_id }}">
+  <button type="submit">Close claim</button>
+</form>
+{% endif %}
+
+<pre class="mono" style="white-space:pre-wrap;border:1px solid var(--hairline);
+     padding:var(--s4);font-size:12px;user-select:all">{{ work_order }}</pre>
+
+{% endblock %}

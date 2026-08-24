@@ -30,6 +30,24 @@
   test — one coherent cast can span two version strings. Group them in `style_families`
   and compare families.
 
+## Generation loop and the paid gate
+
+[26-AGENT-GENERATION-LOOP.md](../../docs/content-video-engine/26-AGENT-GENERATION-LOOP.md)
+is the loop of record. Images generate on subscription agents via claims —
+never a metered API. The human gate sits at spend authorization (operator
+decision 2026-08-23); per-asset triage is the override surface, not the
+default. `approved` is still never set by product code: promotion flows
+through the same operator-confirmed commit, and the paid gate releases
+nothing by itself. Flow-lane jobs refuse release while the pause stands.
+
+## Layout and durability
+
+[27-DURABILITY-AND-LAYOUT.md](../../docs/content-video-engine/27-DURABILITY-AND-LAYOUT.md)
+is the layout of record. A file's durability class is readable from its path
+alone: `canonical/` survives hardware death (synced to the store on promote),
+`review/` is in-flight, `runtime/` may vanish. Class-root paths resolve through
+`src/services/paths.py` — never by hand; a structural test enforces this.
+
 ## Composition
 
 [24-COMPOSITION-AND-SCALE-SPEC.md](../../docs/content-video-engine/24-COMPOSITION-AND-SCALE-SPEC.md)

@@ -28,11 +28,34 @@
 </form>
 
 <p class="empty" style="max-width:none">
-  The provider API adapter is <strong>deferred</strong> — no provider client, no
-  API key, no paid call leaves this console. This view only compiles the request
-  pack; the operator pastes each prompt into a browser generation session and
-  drops the results into a delivery folder for <a href="/intake">/intake</a>.
+  Image generation runs on the operator's subscription agents via
+  <strong>claims</strong> — no provider client, no API key, no paid call
+  leaves this console. Compile a pack, open a claim from it, and hand the
+  claim's work order to the agent; the delivery lands in a
+  <code>review/claims/</code> folder for <a href="/intake">/intake</a>.
 </p>
+
+{% if claims %}
+<section>
+  <h2 style="font-size:13px">Claims</h2>
+  <table>
+    <thead><tr><th scope="col">Claim</th><th scope="col">Status</th>
+      <th scope="col">Style family</th><th scope="col">Slots</th>
+      <th scope="col">Opened</th></tr></thead>
+    <tbody>
+    {% for c in claims %}
+      <tr>
+        <td><a class="mono" href="/generate/claims/{{ c.claim_id }}">{{ c.claim_id }}</a></td>
+        <td>{{ c.status }}</td>
+        <td class="mono" style="font-size:11px">{{ c.style_family }}</td>
+        <td class="num">{{ c.slots | length }}</td>
+        <td class="mono" style="font-size:11px">{{ c.opened_at }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endif %}
 
 {% if exported %}
 <section class="summary">
@@ -48,6 +71,28 @@
   <div><span class="k">Requested generations</span><span class="v">{{ requested_generations }}</span></div>
   <div><span class="k">Composed slots (skipped)</span><span class="v">{{ pack.composed_slot_count }}</span></div>
   <div><span class="k">Coverage hash</span><span class="mono" style="font-size:12px">{{ pack.coverage_hash }}</span></div>
+</section>
+
+<section>
+  <h2 style="font-size:13px">Open a claim from this pack</h2>
+  <form method="post" action="/generate/claims/open" class="summary">
+    <input type="hidden" name="coverage" value="{{ coverage }}">
+    <input type="hidden" name="lane" value="{{ lane }}">
+    <input type="hidden" name="variants" value="{{ variants }}">
+    <div>
+      <label class="k" for="claim_id">Claim id</label>
+      <input class="mono" type="text" id="claim_id" name="claim_id" placeholder="ep1-batch-4">
+    </div>
+    <div style="min-width:32ch">
+      <label class="k" for="style_family">Style family</label>
+      <input class="mono" type="text" id="style_family" name="style_family" value="{{ pack.lane }}">
+    </div>
+    <div style="flex:1;min-width:32ch">
+      <label class="k" for="reference_images">Reference images (one path per line)</label>
+      <textarea class="mono" id="reference_images" name="reference_images" rows="2" style="width:100%"></textarea>
+    </div>
+    <div><button type="submit">Open claim</button></div>
+  </form>
 </section>
 
 <h2>Identity anchor</h2>
