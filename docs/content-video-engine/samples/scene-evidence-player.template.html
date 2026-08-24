@@ -133,6 +133,11 @@
 <div id="bar">
   <button id="play">&#9654; Play with narration</button>
   <button id="mute">Mute</button>
+  <label style="display:flex;align-items:center;gap:6px;font:600 11px/1 Inter,system-ui,sans-serif;letter-spacing:.06em;color:#7d95a6">
+    SWEEP EASE
+    <input id="ease" type="range" min="0" max="0.30" step="0.01" value="0.08" style="width:104px;accent-color:var(--sunflower)" />
+    <span id="easeVal" style="font:600 11px/1 ui-monospace,Consolas,monospace;color:var(--sunflower);min-width:30px">0.08</span>
+  </label>
   <input id="scrub" type="range" min="0" max="300" step="0.01" value="0" aria-label="timeline scrub" />
   <div id="clock">0:00 / 5:00</div>
 </div>
@@ -166,14 +171,16 @@
   const docks = [$("dock-1"), $("dock-2")];
   const WIPE = 0.62;
 
-  const REVEAL = 1.5, EXIT = 0.72, CARD_IN = 0.75, DRAW_LAG = 0.2;
-  /* The reveal-engine contract specifies a LINEAR sweep, which is right when
-     the hand traces line art: pen speed must match ink appearing. We reveal a
-     finished region instead, so a light ease reads as natural wrist
-     acceleration rather than a mismatch. Keep the deviation small — heavy
-     easing makes the hand visibly outrun the reveal edge. Hand and mask read
-     the SAME progress value, so they stay locked whatever the curve. */
-  const SWEEP_EASE = 0.22;
+  const REVEAL = 1.5, EXIT = 0.72, CARD_IN = 0.75, DRAW_LAG = 0.3;
+  /* Blend of linear and ease-in-out for the mask sweep. Settled by eye at
+     0.08: the ends soften just perceptibly while the body of the stroke holds
+     a near-constant rate, so it still reads as drawing rather than sliding.
+     For reference, measured percent-drawn per sample:
+       0.00 -> 17,16,17,17,16 (spread 1)   linear
+       0.08 -> 16,16,18,18,16 (spread 2)   shipped
+       0.22 -> 14,17,19,19,17 (spread 5)   ends ~40% slower; read as hesitation
+     The dial stays in the control bar for re-tuning. */
+  let SWEEP_EASE = 0.08;
   const handA = $("handA"), handB = $("handB");
   handA.src = A["__handA__"] || ""; handB.src = A["__handB__"] || "";
   /* nib measured per pose: the wrist rotation moves the marker tip, so B
@@ -278,7 +285,7 @@
       el.classList.toggle("solo", live.length === 1 && s === 0);
 
       const rl = clamp01((t - d.enter - DRAW_LAG) / REVEAL);
-      const rk = rl * (1 - SWEEP_EASE) + io(rl) * SWEEP_EASE;    /* mask sweep */
+      const rk = SWEEP_EASE ? rl * (1 - SWEEP_EASE) + io(rl) * SWEEP_EASE : rl;
       const xk = t > d.exit ? clamp01((t - d.exit) / EXIT) : 0;  /* clean exit */
       /* clear the hidden-state clip: the SVG mask owns the reveal now, and a
          leftover inset() from the empty branch keeps the dock at zero width */
@@ -372,6 +379,11 @@
       playing = true; vo.currentTime = t; vo.play().catch(() => {});
       playBtn.textContent = "Pause"; raf = requestAnimationFrame(tick);
     }
+  });
+  $("ease").addEventListener("input", (e) => {
+    SWEEP_EASE = +e.target.value;
+    $("easeVal").textContent = SWEEP_EASE.toFixed(2);
+    sync();
   });
   $("mute").addEventListener("click", () => { vo.muted = !vo.muted; $("mute").textContent = vo.muted ? "Unmute" : "Mute"; });
   scrub.addEventListener("input", () => { seek(+scrub.value); });
