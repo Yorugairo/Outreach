@@ -25,7 +25,7 @@
     position: absolute; inset: 0; opacity: 0; pointer-events: none;
     background: linear-gradient(to bottom, rgba(5,19,30,0) 6%, rgba(5,19,30,.20) 20%,
                 rgba(5,19,30,.34) 52%, rgba(5,19,30,.30) 78%, rgba(5,19,30,.46) 100%);
-    transition: opacity .5s cubic-bezier(.16,1,.3,1);
+    transition: opacity .75s cubic-bezier(.16,1,.3,1);
   }
   #wash.on { opacity: 1; }
 
@@ -34,7 +34,6 @@
     background: rgba(244,230,199,.90);
     -webkit-backdrop-filter: blur(3px) saturate(1.06); backdrop-filter: blur(3px) saturate(1.06);
     border: 4px solid var(--charcoal); border-radius: 14px;
-    box-shadow: 12px 12px 0 rgba(37,49,60,.82);
     padding: 13px 15px 13px;
     opacity: 0;
     will-change: opacity, transform, clip-path;
@@ -155,14 +154,19 @@
 
   const clamp01 = (v) => Math.min(1, Math.max(0, v));
   const io = (k) => k < 0.5 ? 2*k*k : 1 - Math.pow(-2*k+2, 2)/2;
+  /* cubic-bezier(.16,1,.3,1) ~ expo-out: a long soft settle, the reference's
+     signature. cubic-bezier(.77,0,.175,1) ~ quart-in-out for the scene wipe:
+     snappy, not sluggish. */
+  const expoOut = (k) => (k >= 1 ? 1 : 1 - Math.pow(2, -10 * k));
+  const quartIO = (k) => (k < 0.5 ? 8*k*k*k*k : 1 - Math.pow(-2*k+2, 4)/2);
   const ACCENT = { sunflower: "var(--sunflower)", coral: "var(--coral)", teal: "var(--teal)", cobalt: "var(--cobalt)" };
 
   const vo = $("vo"); vo.src = A["__audio__"];
   const wA = $("wA"), wB = $("wB"), wash = $("wash"), seam = $("seam"), cap = $("caption");
   const docks = [$("dock-1"), $("dock-2")];
-  const WIPE = 0.9;
+  const WIPE = 0.62;
 
-  const REVEAL = 1.35, EXIT = 0.55, CARD_IN = 0.3;
+  const REVEAL = 1.5, EXIT = 0.72, CARD_IN = 0.75, DRAW_LAG = 0.42;
   const handA = $("handA"), handB = $("handB");
   handA.src = A["__handA__"] || ""; handB.src = A["__handB__"] || "";
   /* nib measured per pose: the wrist rotation moves the marker tip, so B
@@ -246,7 +250,7 @@
     const prev = TL.scenes[si - 1];
     paint(wA, prev || sc);
     paint(wB, sc);
-    const wk = prev ? io(clamp01((t - sc.span[0]) / WIPE)) : 1;
+    const wk = prev ? quartIO(clamp01((t - sc.span[0]) / WIPE)) : 1;
     const dir = sc.exit === "wipe_right" ? "0 0 0 " : "0 ";
     wB.style.clipPath = sc.exit === "wipe_right"
       ? `inset(0 0 0 ${(1-wk)*100}%)` : `inset(0 ${(1-wk)*100}% 0 0)`;
@@ -266,18 +270,22 @@
       if (d.slide !== shown[s]) { fillDock(s, d.slide); shown[s] = d.slide; }
       el.classList.toggle("solo", live.length === 1 && s === 0);
 
-      const rk = clamp01((t - d.enter - CARD_IN) / REVEAL);      /* mask sweep */
+      const rk = clamp01((t - d.enter - DRAW_LAG) / REVEAL);     /* mask sweep */
       const xk = t > d.exit ? clamp01((t - d.exit) / EXIT) : 0;  /* clean exit */
       /* clear the hidden-state clip: the SVG mask owns the reveal now, and a
          leftover inset() from the empty branch keeps the dock at zero width */
       el.style.clipPath = "none";
       /* the sheet is placed first, then drawn on: a short micro-scale card
          entrance, and the mask sweep starts once the card has landed */
-      const ck = clamp01((t - d.enter) / CARD_IN);
-      el.style.opacity = (1 - xk) * ck;
+      const ck = expoOut(clamp01((t - d.enter) / CARD_IN));
+      const xe = expoOut(xk);
+      el.style.opacity = (1 - xe) * clamp01((t - d.enter) / (CARD_IN * 0.55));
       el.style.transform = xk
-        ? "translateY(" + (-14 * xk) + "px) scale(" + (1 - 0.04 * xk) + ")"
-        : "scale(" + (0.94 + 0.06 * io(ck)) + ")";
+        ? "translateY(" + (-22 * xe) + "px) scale(" + (1 - 0.05 * xe) + ")"
+        : "translateY(" + (32 * (1 - ck)) + "px) scale(" + (0.96 + 0.04 * ck) + ")";
+      /* the shadow settles with the card instead of snapping to final depth */
+      const sh = 12 * ck;
+      el.style.boxShadow = sh.toFixed(1) + "px " + sh.toFixed(1) + "px 0 rgba(37,49,60,.82)";
 
       /* reveal = stroke-dashoffset on the mask path, linear (ease "none") */
       const P = PATHS[String(s + 1)];

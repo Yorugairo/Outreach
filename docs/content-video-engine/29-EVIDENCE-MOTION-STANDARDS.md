@@ -570,3 +570,38 @@ pattern is now explicit:
 > hand-visible-iff-drawing — transfer directly. Mechanics that govern the
 > *canvas as a whole* — camera lock, blend modes, full-frame erase — do not,
 > because our canvas is a card inside a live world, not the world itself.
+
+### 8.15 Timing constants, measured against the reference
+
+Reviewed side by side, our build read less polished than
+`samples/gemini-scene-evidence-pipeline-showcase.html` despite doing more.
+The gap was not the mechanics — it was durations and curves. Reading the
+reference's actual CSS gave the numbers:
+
+| element | reference | ours (before) | ours (now) |
+| --- | --- | --- | --- |
+| dock entrance | 0.75s expo-out, `translateY(32px) scale(.96)` | 0.30s, scale only | 0.75s expo-out, y32 + scale |
+| dock shadow | animated over the same 0.75s | static | animated with the card |
+| wash fade | 0.75s | 0.50s | 0.75s |
+| stat pill | 0.65s expo-out, `translateY(12px)` | 0.60s (matched) | 0.65s |
+| scene wipe | 0.35s quart-in-out | 1.25s quad-in-out | 0.62s quart-in-out |
+| dock exit | n/a | 0.55s | 0.72s expo-out |
+
+Three principles fall out of that table:
+
+1. **Settles are slow, moves are fast.** Every arrival uses expo-out
+   (`cubic-bezier(.16,1,.3,1)`) at 0.65-0.75s — long enough to read as
+   weight. Every transition uses quart-in-out at well under a second. Our
+   1.25s wipe was the single most sluggish thing in the cut.
+2. **Animate the shadow with the card.** A hard-edge paper shadow that snaps
+   to full depth on frame one reads as a sticker; growing 0 -> 12px across
+   the settle is what sells the card as a physical object landing.
+3. **Overlap the phases.** The draw no longer waits for the card to finish
+   arriving: `DRAW_LAG = 0.42s` against a 0.75s entrance, so the hand starts
+   as the sheet settles. Sequential phases read as a machine executing steps;
+   overlapped phases read as one gesture.
+
+Current constants: `CARD_IN 0.75`, `DRAW_LAG 0.42`, `REVEAL 1.5`,
+`EXIT 0.72`, `WIPE 0.62`. The mask sweep itself stays LINEAR (`ease: none`)
+per the reveal-engine contract — easing the sweep makes the hand accelerate
+against its own stroke.
