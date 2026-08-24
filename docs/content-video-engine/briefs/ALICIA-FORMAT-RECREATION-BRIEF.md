@@ -22,8 +22,11 @@ varied cadence, active voice, no stock AI phrasing — **tuned for YouTube
 retention**: cold-open hook, open loops, planted callbacks, second person,
 specific numbers. Spoken register, not editorial prose. Claims are either
 self-contained arithmetic or tagged `[verify]` for the research gate.
-**Hook rule (applied, not just extracted): open on concrete action in
-progress — someone doing something — never on a claim or setup.**
+**Hook rule (v3, operator-corrected): the hook is a shot list, not prose.
+Present tense, one cut per sentence, viewer-facing — a parallel image
+collision, never memoir interiority. Biography is the twist that lands
+AFTER the paradox, never the opener. Plant the video's open loop inside the
+hook itself. Judge hooks by ear at YouTube tempo, not on the page.**
 **Entity seeding: name one bigger adjacent authority per video (here Mr.
 Money Mustache) — passed authority plus topic-graph adjacency; cite the
 primary source in rule 2.**
@@ -74,16 +77,16 @@ both of their apartments — that claim is the hook.
 
 **[s01 — black screen, captions punching in word groups; till sounds under]**
 
-I'm counting a cash drawer at ten p.m. on a Friday, in the back of a
-dispensary I own. Mostly twenties. My Fridays used to end differently — on
-a trading floor at JPMorgan, next to a guy who moved more money before lunch
-than this store sees in a year. He's still broke. The woman who closed this
-register is not. I've stood inside both of their apartments. Let me show you
-what I saw.
+Ten p.m. Two people are counting money. A banker in Manhattan, counting
+his bonus. A budtender, counting the till in my dispensary. He takes home
+almost twice what she does. She retires first. I know both worlds — I traded
+at JPMorgan, and I own the store she counts for. I've stood in both of their
+apartments, and what separates them fits on a single receipt. Let me show
+you.
 
 **[s02 — the banker's apartment]**
 
-I worked at JPMorgan. I know this apartment before the door opens. There's a
+The banker first. I know this apartment before the door opens. There's a
 suit rack that cost a paycheck, a watch box with a loan inside it, a
 television wider than the couch, and a rowing machine holding up laundry.
 Half the closet still has tags on. Every object in here was, at some point,
