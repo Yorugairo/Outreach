@@ -231,14 +231,16 @@
     const sc = TL.scenes[si];
 
     /* LAYER 1 — one continuous ken-burns per scene; incoming world wipes in */
-    /* camera LOCKS while a document is being drawn: a travelling canvas
-       during a reveal breaks the drawn-on-paper illusion */
-    const drawing = (TL.scenes[si].docks || []).find((d) => t >= d.enter && t < d.enter + REVEAL);
-    const camT = drawing ? drawing.enter : t;
+    /* The skill's camera lock does NOT apply here. In a whiteboard
+       composition the camera moves the drawing surface, so travelling during
+       a stroke breaks the illusion. In this lane the drawing surface is the
+       dock — already fixed in screen space — and the world plate is a
+       separate layer behind it. Its parallax never moves the paper, so it
+       runs continuously and independently of any reveal. */
     const paint = (el, scene) => {
       el.style.backgroundImage = `url("${A[scene.world.asset_id]}")`;
       const kb = scene.world.ken_burns;
-      const p = clamp01((camT - scene.span[0]) / Math.max(0.1, scene.span[1] - scene.span[0]));
+      const p = clamp01((t - scene.span[0]) / Math.max(0.1, scene.span[1] - scene.span[0]));
       el.style.transform = `scale(${(1 + p*kb.scale).toFixed(4)}) translate(${(p*kb.x).toFixed(1)}px, ${(p*kb.y).toFixed(1)}px)`;
     };
     const prev = TL.scenes[si - 1];

@@ -539,3 +539,34 @@ frame edge.
 
 Remaining pose gap: an erase pose (hand gripping a folded cloth) if erase
 beats are ever wanted. Not needed by the current lane.
+
+### 8.14 The camera lock does not apply to this lane (correction, 2026-08-24)
+
+8.10 imported the skill's camera rule verbatim — "camera LOCKED between
+moves; never run a mask reveal while the camera travels" — and froze the
+world plate's ken-burns for the duration of every stroke. Two problems.
+
+**It produced a visible fault.** The implementation pinned the ken-burns
+parameter to the reveal's start time and released it at the end, so the plate
+froze for 1.35s and then jumped forward by the whole locked interval in a
+single frame. Reviewed as "freeze, then jutter back in".
+
+**The rule should never have been applied.** In a whiteboard composition the
+camera moves the *drawing surface*: travelling during a stroke slides the
+paper under the pen and destroys the illusion. In this lane the drawing
+surface is the **dock**, which is fixed in screen space and never moves, and
+the world plate is a separate layer *behind* it. Plate parallax cannot move
+the paper, so it has nothing to do with the reveal. Parallax now runs
+continuously and independently — verified linear across a stroke (scale
+1.01480 -> 1.02400 -> 1.03330 over 4-6s, max frame delta 0.001).
+
+This is the third instance of the same mistake (see 8.11, blend mode). The
+pattern is now explicit:
+
+> **Porting rule.** The whiteboard skill assumes the composition *is* the
+> drawing surface. In the scene-evidence lane the drawing surface is one
+> layer among several. Mechanics that govern the pen and the paper — mask
+> geometry, serpentine coverage, hand follower, pose swap, nib calibration,
+> hand-visible-iff-drawing — transfer directly. Mechanics that govern the
+> *canvas as a whole* — camera lock, blend modes, full-frame erase — do not,
+> because our canvas is a card inside a live world, not the world itself.
