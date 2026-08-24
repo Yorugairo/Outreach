@@ -1,7 +1,10 @@
 # 33 — Voice Profile
 
 The reusable artefact. Scripts and work orders reference **this file by
-path** instead of re-deriving voice each session.
+path** instead of re-deriving voice each session. This governs how the voice
+sounds; [36-WRITER-PERSONA.md](36-WRITER-PERSONA.md) governs who is speaking
+— worldview, standing theses, and the persona pass for generated scripts.
+Apply both.
 
 Built by `brand-voice` from [30-VOICE-SOURCE-MATERIAL.md](30-VOICE-SOURCE-MATERIAL.md)
 (operator-derived evidence: worked hook example, corrections, observed
