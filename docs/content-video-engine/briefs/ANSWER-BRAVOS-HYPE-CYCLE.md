@@ -29,7 +29,7 @@ FORMAT = standalone · TELL = memory-price trigger (standing catalogue tell).
 
 ---
 
-## SCRIPT v1 (~1,190 words, ~8:00)
+## SCRIPT A (v1 baseline — A/B test arm A)
 
 **[P1 · s01 — macro: an iron railway spike on dark wood, already rotating
 slowly; image breathes 0.6s. Counterpoint: the future, shown as scrap.]**
@@ -263,6 +263,235 @@ image, not the ask; no new information)*
 *(hard stop)*
 
 ---
+
+## SCRIPT B (sentence-strength pass — A/B test arm B)
+
+Every sentence of A walked through the ten gates of the kit's
+SENTENCE-STRENGTH-CHECK; failures rewritten until clean. Structure, beats,
+ledger, and stage directions unchanged — the delta is line strength only,
+so the two arms compare cleanly at the ear. Full rewrite log in the
+Strength Log section below.
+
+**[P1 · s01 — macro: an iron railway spike on dark wood, already rotating
+slowly; image breathes 0.6s. Counterpoint: the future, shown as scrap.]**
+
+In 1845, the smartest trade in England was this iron spike. It ruined
+almost everyone who touched it. `[post-key]`
+
+Last week, two million people watched a chart claim AI is next. The chart
+is right. The warning points at the wrong address.
+
+The chart comes from Bravos Research — credit where due, the sharpest
+macro chart on YouTube. Two lines. One is the builders of AI — chips,
+racks, power — up three hundred percent since April. The other is the
+hyperscalers writing the checks — and for a year, they've gone exactly
+nowhere.
+
+If you own an index fund, this chart already owns a piece of you.
+
+So here's the next eight minutes: not a rebuttal, not a victory lap, not
+a panic. `[pre-key]` One test — three questions — that sorts every
+holding you own into steel or paper. `[post-key]` By the end, you'll run
+it yourself: thirty seconds a stock.
+
+And the opponent here isn't Bravos, and it isn't Nvidia. It's a machine —
+the hype cycle — capital arriving faster than the value it's chasing.
+
+**[P2 · s02 — their dual-line divergence chart, recreated clean; then the
+Gartner curve. Counterpoint: archive carries the data, voice carries the
+verdict.]**
+
+Take their case at its strongest first, because it deserves it. Every
+transformative technology overshoots. Railways in the 1840s drew a
+quarter-billion pounds — more than a trillion in today's money. Then the
+stocks crashed seventy percent. The internet crossed seven percent of GDP
+in two thousand. Then the tower came down. And by Bravos' math, AI
+spending just crossed eight.
+
+Their sharpest line is the trigger. The mania never dies of old age — it
+dies when rates cross back above where the borrowing began. Bank of
+England above six percent: railways rolled over. The Fed at six and a
+half in two thousand: the internet trade rolled over. So their tripwire
+for this cycle: the Fed back above five and a half.
+
+Put my agreement on the record. The cycle is real. The threshold is real.
+And "don't try to call the top" is the most honest sentence a macro
+channel has said all year.
+
+I used to risk-score portfolios for a bank. Here's the thing about risk
+charts: they rarely fail by lying. They fail by pointing. `[post-key]`
+
+So the obvious move looks like this: take profits on the AI builders. Up
+three hundred percent with flat customers — textbook profit-taking. Any
+adviser would sign it.
+
+But here's where their own chart gets strange — and the strangeness is
+the whole story.
+
+**[P3 · one pattern unit · s03 — a broadcast set; a budget line burning
+down; an internal memo. Counterpoint: the plates show confidence, the
+voice counts costs.]**
+
+Walk their evidence like a claims adjuster. Alex Karp of Palantir, on
+national television: companies buying AI tokens can't yet see a clear
+return. Uber burned its whole annual AI budget by April. Its own COO
+admits the spending hasn't shown up in the product. Microsoft now rations
+AI tools inside its own walls — the bills got hard to justify.
+
+But look at what those three stories actually are. That isn't the peak of
+inflated expectations. That's the trough already doing its job — the
+tourists finding out, one budget at a time.
+
+Which flips the question. Not "when does the disappointment arrive" —
+it's arriving. The question is what survives it. And in 1849, the answer
+wasn't the paper. It was the steel. The trains ran straight through the
+crash — and the towns kept growing around the stations.
+
+The steel kept working. The paper stopped pretending. `[post-key]`
+
+And that's where most people — including, this one time, Bravos — get
+the whole thing wrong.
+
+**[P4 · s04 — visual register shift: charts give way to paper — a wall
+of ornate railway share certificates; then a modern brokerage statement
+in the same framing. Counterpoint: the shift IS the argument.]**
+
+`[pre-key]` It was never the AI stocks. The bubble isn't in the steel.
+It's in the paper wrapped around it.
+
+What broke England in 1845 wasn't rail. It was railway certificates —
+paper promises priced off the best year, held by people who never checked
+what they owned. And Bravos' own number tells you where that paper lives
+today: AI builders are now twenty percent of the S&P five hundred.
+Historically, two to four. Every index fund and every target-date plan
+now carries a fifth of its weight in one bet — and calls it the market.
+
+Run the arithmetic. At a fifth of the index, a fifty percent AI drawdown
+erases ten percent of "the market." The other four hundred ninety
+companies never get a vote.
+
+So look at the spike again. `[post-key]` The spike was never the risk.
+The certificates were.
+
+**[P5 · s05 — slow macro imagery: molten steel pour; then a ledger page.
+Counterpoint: abstract synthesis — the screen aggregates, the voice
+stays personal.]**
+
+`[pre-key]` A bubble is not a technology failing. A bubble is ownership
+outrunning understanding. `[post-key]`
+
+And this is where the railway map, good as it is, skips a gear. Railway
+steel sat waiting for twenty years while the economy grew around it.
+That's why the return took two decades. Today's compute doesn't sit. It
+depreciates in about five years. And the builders' order books are sold
+out into next year `[verify]`. Governments are standing up national AI
+programs on the same hardware `[verify]`. Different demand, different
+clock. The moat under the builders runs deeper than the paper holders can
+see. And the paper stacked on top runs taller than the builders admit.
+Both are true at once. That's the whole point.
+
+Now the test — the one from the top. Take any holding and ask it three
+questions. One: is what it sells scarce — sold out, priced up, fought
+over — or abundant the moment belief fades? Two: does it fund its growth
+from cash it earns, or from paper it issues? Three: if the hype died
+tonight, would the asset still get used tomorrow morning? `[post-key]`
+Steel answers scarce, cash, used. Paper answers abundant, issued,
+believed. Thirty seconds a holding. Run your top five tonight.
+
+Run it on their divergence chart and it reads differently. Semis up three
+hundred percent: that's scarcity getting repriced. Hyperscalers flat
+while spending hundreds of billions: that's the market demanding an
+answer to question three. The divergence isn't a house of cards. It's the
+test, administered in public. `[post-key]`
+
+Bravos put their tripwire on the record: the Fed back above five and a
+half. Write it down — it's real. Mine is stricter, and it's the one this
+channel already stands on. The variable is memory — the RAM inside every
+one of these data centers. The threshold: contract memory prices falling
+for two straight quarters while the buildout continues. The position:
+prices have climbed all year on sold-out supply — sources pinned in the
+description. The flip: if memory breaks while the buildout holds, the
+scarcity story is wrong — and so am I. That week, I de-risk the builders
+on camera.
+
+The certificates wear nicer names now — target-date, "the market" — but
+paper is paper.
+
+**[P6 · s06 — ring: the spike on dark wood again, same frame as 0:00,
+one light lower; a certificate curls beside it. Counterpoint: time — the
+same image, meaning changed by everything between.]**
+
+So — the spike, one more time. `[post-key]` In 1850 it was still carrying
+trains across England, while the certificates that financed it papered
+the walls of bankrupt clubs. The technology delivered. The owners of its
+paper paid for it.
+
+Which is why I'll go further than Bravos — in both directions. More
+bullish: builders with sold-out order books are not a house of cards.
+They're the steel — and I own them on purpose, positions disclosed every
+week. More worried: the index they sold you as the safe version of this
+trade is the certificate — and nobody holding it thinks they're
+speculating. That's what a top actually looks like: not euphoria —
+accidental concentration, sold as safety.
+
+The steel gets used. The paper gets believed. `[pre-key]` And the
+difference gets discovered all at once.
+
+You now have the test — three questions, thirty seconds, any holding.
+Subscribe for the tripwire watch: the week either line moves — theirs at
+five and a half, mine on memory — that video posts. Bring your top five;
+next time we run the test on the whole index.
+
+**[final beat — the spike, resting on the dark wood]**
+
+The spike stays on the desk.
+
+**[end screen 20s: subscribe + latest + best performer; narration over]**
+
+## Strength Log (A → B, gates per SENTENCE-STRENGTH-CHECK)
+
+| # | A (original) | Gates failed | B (final) |
+| --- | --- | --- | --- |
+| 1 | "…this iron spike was the smartest trade in England." | S3 (ends on scenery) | "…the smartest trade in England was this iron spike." |
+| 2 | "…watched a chart arguing that AI is about to repeat it." | S3, S6 ("arguing that" flab) | "…watched a chart claim AI is next." |
+| 3 | "The warning is aimed at the wrong address." | S2 (passive) | "The warning points at the wrong address." |
+| 4 | "…and credit where it's due — it's the sharpest macro chart on YouTube right now." | S1, S3 ("right now" tail) | "— credit where due, the sharpest macro chart on YouTube." |
+| 5 | "The companies building AI… up over three hundred percent since April." | S2 (verbless), S3 | "One is the builders of AI — chips, racks, power — up three hundred percent since April." (chart-read licensed) |
+| 6 | "And the hyperscalers actually writing the checks: flat for a year." | S3 ("for a year" tail) | "…the hyperscalers writing the checks — and for a year, they've gone exactly nowhere." |
+| 7 | "…you're in this chart whether you clicked or not. That's the stakes." | S3, S8 (second sentence fails delete test) | "…this chart already owns a piece of you." (stakes sentence deleted) |
+| 8 | "One test, three questions, that sorts every holding… — and by the end you'll run it yourself, in about thirty seconds a stock." | S1, S5 (two ideas, 28 words) | split at the dash; "By the end, you'll run it yourself: thirty seconds a stock." |
+| 9 | "Steelman their case first…" | S6 (jargon for the ear) | "Take their case at its strongest first…" |
+| 10 | "Railways in the 1840s: a quarter-billion pounds of investment — over a trillion in today's money — then a seventy percent crash across the next decade." | S1, S5 (24 words, two events) | split: "…drew a quarter-billion pounds — more than a trillion in today's money. Then the stocks crashed seventy percent." |
+| 11 | "The internet: spending crossed seven percent of GDP in the year two thousand, and then the tower came down." | S1, S5 | split into two sentences |
+| 12 | "Put my agreement on the record: the cycle is real, the threshold is real, and…all year." | S5 (30 words) | split into four sentences (licensed 2-fragment run) |
+| 13 | "I used to risk-score portfolios at a bank, and here's the thing about…" | S1 | split at "and" |
+| 14 | "Up three hundred percent, customers flat — you sell that. Right?" | S10 (bait question) | "…textbook profit-taking. Any adviser would sign it." (head-fake offered straight, no bait) |
+| 15 | "…companies buying AI tokens can't see a clear return yet." | S3 ("yet" tail) | "…can't yet see a clear return." |
+| 16 | "Uber: burned its entire annual AI budget in the first four months of twenty twenty-six — and its own COO says the link to the product isn't there yet." | S1, S5, S3 | split: "Uber burned its whole annual AI budget by April. Its own COO admits the spending hasn't shown up in the product." |
+| 17 | "Microsoft: rationing AI tools inside its own walls because the bills got hard to justify." | S2 (verbless lead) | "Microsoft now rations AI tools inside its own walls — the bills got hard to justify." |
+| 18 | "And in 1849 the answer wasn't the certificates." | S8-adjacent (pre-leaks the pivot's reveal word) | "…the answer wasn't the paper." (keeps the seeded word; "certificates" debuts at the pivot) |
+| 19 | "Trains ran, freight moved, towns grew — straight through the crash." | figure budget (unlicensed P3 tricolon) | "The trains ran straight through the crash — and the towns kept growing around the stations." |
+| 20 | "Every index fund, every target-date account, every 'diversified' retirement plan…" | figure budget (unlicensed P4 triad) | "Every index fund and every target-date plan…" |
+| 21 | "At twenty percent concentration, a fifty percent AI drawdown takes ten percent off 'the market' before the other four hundred and ninety companies get a vote." | S5 (24 words) | split: "…erases ten percent of 'the market.' The other four hundred ninety companies never get a vote." |
+| 22 | "…the railway map, good as it is, drops one gear." | S6 (muddled idiom) | "…skips a gear." |
+| 23 | "Railway steel sat idle for twenty years while the economy grew around it — that's why the return took two decades." | S1 | split at the dash |
+| 24 | "It depreciates in about five years, and the builders' order books are sold out into next year." | S1 | split at "and" |
+| 25 | "The moat under the builders runs deeper than the certificate holders can see — and the paper stacked on top of them stands taller than the builders admit." | S1, S5 (27 words) | split into the parallel pair "…deeper than the paper holders can see. / …taller than the builders admit." |
+| 26 | "Bravos put their tripwire on the record — …five and a half — and you should write it down, because it's real." | S1, S8 ("you should…because") | "…on the record: the Fed back above five and a half. Write it down — it's real." |
+| 27 | "…that arithmetic is in our registered sources below." | S6 (page-ism "below") | "…sources pinned in the description." |
+| 28 | "The flip: if memory breaks while capex holds, the scarcity story is wrong — I'm wrong — and I de-risk the builders that same week, on camera." | S5 (25 words) | split: "…the scarcity story is wrong — and so am I. That week, I de-risk the builders on camera." |
+| 29 | "The certificates have nicer names now — ETF, target-date, 'the market' —…" | figure budget (unlicensed P5 triad) | "…wear nicer names now — target-date, 'the market' —…" |
+| 30 | "More bullish: …house of cards; they're the steel, and I own them on purpose — positions disclosed, every week." | S1, S5 | split into two sentences |
+| 31 | "…the index you were sold as the safe version of this trade…" | S2 (agent-hiding passive — never licensed) | "…the index they sold you as the safe version of this trade…" |
+| 32 | "…not euphoria — accidental concentration, wearing a seatbelt logo." | S6 (muddled image) | "…accidental concentration, sold as safety." |
+
+Licensed exceptions claimed: P4 contraction run (three short declaratives
+at the reversal) · P6 get-parallelism ("gets used / gets believed / gets
+discovered" — the anaphora's spine) · enumeration answers ("scarce, cash,
+used") mirror the three declared questions · chart-read fragments
+("Historically, two to four." · "Two lines." · "Different demand,
+different clock."). Sentences of A not listed passed all ten gates
+unchanged.
 
 ## Final ledger audit (P6 out)
 

@@ -14,6 +14,7 @@ channel, or any future lane.
 | `LLM-CONTEXT-CLASSICAL.md` | Layer 1 — the timeless craft context (broadcast mechanics, story machinery, rhetoric, documentary VO, ring composition), densified for LLM injection |
 | `INJECTION.md` | Layer 3 — the parameter surface: everything channel-specific, one block per script |
 | `phase-guides/P1.md` … `P6.md` | The six generation contracts — beat templates, mandatory device slots, hard gates, QC lines, worked micro-examples |
+| `SENTENCE-STRENGTH-CHECK.md` | The line-by-line gate: ten per-sentence strength checks run after structure conforms, before audio; every failing sentence is rewritten until it passes, with a logged audit trail |
 | this file | The binder: flow, geometry, duty roster, changelog |
 
 Layer 2 (the platform micro-rules) is not a separate file: it is already
@@ -32,7 +33,10 @@ fused INTO the phase guides — that fusion is the kit's entire point.
 4. LINT the assembled script (mechanical gates: sentence stats, passive
    scan, CTA count, pause-mark ration, tautology, ring check). Fix and
    re-run until clean.
-5. JUDGE BY EAR: synthesize a scratch voiceover and listen before
+5. STRENGTH PASS (SENTENCE-STRENGTH-CHECK.md): walk every sentence
+   through the ten gates; rewrite failures until they pass; log the
+   rewrites; re-run the lint after.
+6. JUDGE BY EAR: synthesize a scratch voiceover and listen before
    production. Page-conformance is necessary, never sufficient.
 ```
 
