@@ -52,7 +52,8 @@
         "start_s": 444.477,
         "duration_s": 1.672
       }
-    ]
+    ],
+    "status": "REVIEW-SCRATCH ONLY - segmented synthesis deprecated by doc 37 \u00a78; re-record as ONE master take (~7k chars, single mv2 request, seed 4242) when credits allow"
   },
   "plates": {
     "generated_claims": {
@@ -86,5 +87,6 @@
     "v0_v1": "DEPRECATED - still-frame concat (history-lane pattern); operator correction 2026-08-25: every channel uses the finance production standards (doc 29); lanes differ only in scripting",
     "v2": "scene-evidence lane review build (doc 29 Part 8): 17 ken-burns scenes over wave-1/1b plates, 10 washi docks (charts + code-drawn quote cards), 9 with verbatim-verified badges, 319 canonical captions, scrubbable player HTML from the proven template"
   },
-  "evidence_deficit": "longest bare-plate stretch 83s vs the 12s ceiling - next carry work: expand the per-episode evidence layer (more chart recreations + quote cards from the sources block) toward ~30 docks, then gap-fill per build_scene_evidence_cut.py"
+  "evidence_deficit": "longest bare-plate stretch 83s vs the 12s ceiling - next carry work: expand the per-episode evidence layer (more chart recreations + quote cards from the sources block) toward ~30 docks, then gap-fill per build_scene_evidence_cut.py",
+  "bravos_chart_shots": "operator reaching out to Bravos for clean chart exports (promotion angle); watch-frame grabs are mid-draw stand-ins until then"
 }
