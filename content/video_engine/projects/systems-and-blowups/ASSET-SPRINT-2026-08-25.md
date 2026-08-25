@@ -20,3 +20,22 @@ origin-centering fix noted before production use.
 
 Open operator calls: wave-1 plate verdicts · glasses canon · thumbnail
 pick · exp-2b (verified-text lane, doc 29 §9.8) not yet run.
+
+## Channel identity decisions (operator, 2026-08-25)
+
+- **Channel name: MONEY PHYSICS** — researched pick: two-word brandable
+  (AOY naming rule), "money" search keyword, collision-free (verified),
+  and native to our own evidence language ("Decoding Market Physics",
+  "Index Physics"). Rejected: Money Systems / Money Mechanics (taken),
+  Market Physics (weak search), Asymmetric* (crowded), personal-name
+  formats (AOY: faceless = no personal-brand dependency).
+- **Glasses canon: BLACK** rectangular frames (spine anchor already says
+  black — cobalt renders are deviations; regenerate on selection).
+- **Host-in-world: approved.** All sprint plates approved EXCEPT the
+  channel-asset wave: the spike reads as channel identity when it is one
+  hook of one episode of one series. Channel assets rebuild around the
+  Money Physics identity (banner/logo design pass in flight).
+- "Trader" is acceptable vocabulary for channel naming/positioning
+  (operator: a decade of personal trading; no elevated compliance context
+  now) — supersedes the earlier never-'trader' bio note WITHIN naming;
+  the persona bio still leads with risk analyst.
