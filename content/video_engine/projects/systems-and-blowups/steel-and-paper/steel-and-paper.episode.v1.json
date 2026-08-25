@@ -83,7 +83,8 @@
   "citation_clip": "3-5s of the Bravos frame at the P1 credit beat, pillarboxed with attribution card (operator sourcing ruling 2026-08-24)",
   "rough_cut": "scratch v0 only - not an asset; quarantined outside the repo",
   "rough_cuts": {
-    "v0": "placeholders + charts",
-    "v1": "14 real plates + 4 draft charts, 19 cuts, scratch only"
-  }
+    "v0_v1": "DEPRECATED - still-frame concat (history-lane pattern); operator correction 2026-08-25: every channel uses the finance production standards (doc 29); lanes differ only in scripting",
+    "v2": "scene-evidence lane review build (doc 29 Part 8): 17 ken-burns scenes over wave-1/1b plates, 10 washi docks (charts + code-drawn quote cards), 9 with verbatim-verified badges, 319 canonical captions, scrubbable player HTML from the proven template"
+  },
+  "evidence_deficit": "longest bare-plate stretch 83s vs the 12s ceiling - next carry work: expand the per-episode evidence layer (more chart recreations + quote cards from the sources block) toward ~30 docks, then gap-fill per build_scene_evidence_cut.py"
 }
