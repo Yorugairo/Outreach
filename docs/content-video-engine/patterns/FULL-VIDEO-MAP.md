@@ -270,3 +270,26 @@ micro mechanics) · [32-WRITING-FOR-THE-EAR.md](../32-WRITING-FOR-THE-EAR.md)
   close absolute, midpoint pinned by percent, P3 units elastic (operator's
   "repeat the process or increase pattern ratio" implemented as the unit
   knob + mini-pivot rule). Awaiting gate-2 ratio approval and retro-fit (T5).
+- 2026-08-24 — v1.2, T5 retro-fit. **Alicia v2** (3:00 serialized segment,
+  written pre-map): P1 conforms (microhook/paradox/dated promise/A1), but
+  the ring token enters mid-video instead of the open, there is no
+  head-fake, the rule-one reveal arrives as a lecture beat rather than a
+  45–55% reversal, no anaphora arc, no ring echo. Lint confirms
+  independently: RING fail, 2 TAUTOLOGY fails (s07/s08 stage directions
+  caption their narration at 75% overlap), zero rehook-family lines.
+  All deviations EXPLAINED by provenance: v2's persona pass changed voice
+  only — every miss is a rule this map added afterward, which is evidence
+  the map constrains rather than describes. **16:21 p34 cut** (981s, T2
+  tier; narration on the p34 branch — mapped from its recorded
+  measurements): visual cadence 9.2s is denser than required, but zero
+  named macro loops, no midpoint pivot, no ring, and evidence distribution
+  by thirds of 33/12/15 — front-loaded into exactly the shape this map
+  forbids (best evidence belongs in the final pre-pivot unit; the payoff
+  at 60–70%; the middle third is where this cut starves). Deviation
+  explained: scene-and-evidence-driven structure predates the map; the P3
+  pattern unit + duty roster is the prescribed fix, and evidence
+  re-distribution stays the standing follow-up. **Alicia v3** (the
+  calculus pass, written FROM this map) lints clean — the kit's QC tier
+  validates the kit's own output. Fix landed from the retro-fit: none
+  required to the map itself; the v3 density finding (short runtimes merge
+  systems) was already encoded in the phase guides.

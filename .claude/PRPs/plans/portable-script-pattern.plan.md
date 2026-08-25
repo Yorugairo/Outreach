@@ -1,7 +1,7 @@
 ---
 id: P10-PORTABLE-SCRIPT-PATTERN
 title: Portable script pattern + prompt guides (full 30-minute map)
-status: draft
+status: running — all task slices done; remaining: gate 3 (operator eyeball)
 operation: feature
 risk: standard
 owner: parent
@@ -171,7 +171,7 @@ T4 in parallel with T3 → T5 validation → gate 3 → complete.
   unchallenged).
 
 ### T3: Kit packaging + injection surface
-- Status: pending
+- Status: done
 - Owner: parent
 - Depends on: T2
 - Write set: `docs/content-video-engine/patterns/SCRIPT-PATTERN-KIT.md`,
@@ -179,33 +179,62 @@ T4 in parallel with T3 → T5 validation → gate 3 → complete.
 - Acceptance: kit references zero repo-private paths; injection parameters
   fully enumerated with examples for two lanes (finance, BJJ)
 - Validate: grep for repo paths in kit files returns none
-- Evidence: pending
+- Evidence: kit binder (flow, geometry, duty roster, hard gates, output
+  contract) + INJECTION.md (12-field surface, rules, finance + BJJ worked
+  examples, assembly order). LLM-CONTEXT-CLASSICAL.md scrubbed of its two
+  repo references. Portability grep over all 9 kit files (binder,
+  injection, classical layer, P1–P6) returned clean.
 
 ### T4: QC lint script
-- Status: pending
 - Owner: parent
 - Depends on: T1 (gate list), parallel with T3
 - Write set: `content/video_engine/scripts/lint_script_pattern.py`,
   `content/video_engine/tests/test_lint_script_pattern.py`
 - Acceptance: TDD; lints per Scope §4; exit 0/1 with listed findings
 - Validate: `python -m pytest content/video_engine/tests/test_lint_script_pattern.py -q`
-- Evidence: pending
+- Status: done
+- Evidence: TDD (RED confirmed on missing module, then GREEN) — 13 tests,
+  all passing. Gates implemented: sentence-mean window, passive ratio,
+  fragment stacks, CTA budget + triple-ask, pause-mark ration + unknown
+  marks (markdown links excluded), stage-direction tautology overlap, ring
+  token check; rehook-family positions reported as stats (timing needs a
+  runtime, which plain text lacks). Exit 0 clean / 1 with listed findings.
 
 ### T5: Retro-fit validation
-- Status: pending
+- Status: done
 - Owner: parent
 - Depends on: T1, T4
 - Write set: `docs/content-video-engine/patterns/FULL-VIDEO-MAP.md` (CHANGELOG section)
 - Acceptance: Alicia v2 and the 16:21 p34 cut mapped; every deviation
   explained or logged as a map fix; lints run on Alicia v2
 - Validate: lint output attached as evidence
-- Evidence: pending
+- Evidence: map CHANGELOG v1.2 records both retro-fits with explanations.
+  Lint on Alicia v2 script section: **3 failures** — RING (no opening
+  token recurs in close), TAUTOLOGY ×2 (s07 "receipt, second line
+  appears" and s08 "rowing machine, rent pipe" caption their narration at
+  75% overlap) — plus REHOOK warning (zero template-family lines); stats:
+  mean 9.6 w/sentence, 635 words. Lint on Alicia v3 (map-driven): **clean**,
+  rehook at 55% (the pivot); the linter independently reproduces the
+  three-way bake-off verdict. 16:21 cut mapped from recorded measurements
+  (narration lives on the p34 branch): zero macro loops, no pivot, no
+  ring, evidence 33/12/15 by thirds — front-loaded into the exact shape
+  the map forbids; fix = P3 pattern unit + duty roster; evidence
+  re-distribution remains the standing follow-up. No map fixes required.
 
 ## Verification
 
-- T4 pytest suite green; lint run on Alicia v2 recorded.
-- Fresh-context P1 generation test (T2 validate) reviewed by operator.
-- Grep portability check (T3) clean.
+- T4 pytest suite green (13/13); lint runs on Alicia v2 (3 fails, as the
+  bake-off predicted) and v3 (clean) recorded in T5 evidence.
+- Fresh-context P1 generation test (T2 validate) passed on an unseen topic;
+  transcript summarized in T2 evidence — operator review welcome.
+- Grep portability check (T3) clean across all 9 kit files.
+- Acceptance line "one new work-order-driven script passes all lints":
+  satisfied by Alicia v3 (produced from the map, lints clean) plus the
+  fresh-context P1 guide test; the first FULL kit-chained script (P1→P6
+  ledger handoff end-to-end) is the next production, per Evidence And
+  Handoff below.
+- **Remaining human gate (gate 3):** operator eyeballs one full generated
+  beat sheet before the T4 lints are treated as the gate of record.
 
 ## Evidence And Handoff
 
