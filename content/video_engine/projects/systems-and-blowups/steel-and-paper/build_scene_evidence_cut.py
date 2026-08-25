@@ -1,4 +1,4 @@
-"""Steel and Paper — scene-evidence v5: DMP deck evidence, sharp SVG charts,
+"""Steel and Paper — scene-evidence v6: DMP deck evidence, sharp SVG charts,
 word-punch captions, clean re-synth timings."""
 from __future__ import annotations
 
@@ -170,8 +170,8 @@ EVIDENCE = {
         "src": E1 / "evclip-railway-stocks-clean.png",
         "source": "Bravos Research video frame · verified clean-draw (evidence agent)",
         "badges": [b("RAILWAY STOCKS", "+100%", "IN 3 YEARS · 1843–1846", "sunflower")]},
-    "bravos-frame-fed": {"title": "The Rate Trigger — Bravos Research", "kind": "dmp",
-        "src": E1 / "evclip-fed-trigger-clean.png",
+    "bravos-frame-fed": {"title": "The Rate Trigger — Bravos Research", "kind": "dmp",  # era-correct frame @634s (pills + 2000 marker as focus)
+        "src": BUILD / "evclip-fed-trigger-v2.png",
         "source": "Bravos Research video frame · verified clean-draw (evidence agent)",
         "badges": [b("FED, 1999", "4.5%", "", "sunflower"),
                     b("FED, 2000 — THE POP", "6.5%", "", "coral")]},
@@ -345,7 +345,7 @@ def main() -> int:
                        "source": s["source"], "badges": s["badges"], "match_score": 1.0}
                 for eid, s in EVIDENCE.items()}
     tl = {"schema_version": "scene_evidence_timeline.v1",
-          "episode_id": "steel-and-paper-scene-evidence-v5",
+          "episode_id": "steel-and-paper-scene-evidence-v6",
           "project_id": "systems-and-blowups",
           "narration": {"canonical_hash": ZERO, "words_path": "steel-and-paper/vo"},
           "captions": build_captions(), "evidence": evidence, "scenes": scenes}
@@ -381,10 +381,21 @@ def main() -> int:
     mins, secs = divmod(round(total), 60)
     clock = f"{mins}:{secs:02d}"
     html = TEMPLATE.read_text(encoding="utf-8")
-    html = html.replace("Current Bubble v4", "Steel and Paper — scene-evidence v5")
+    # finance-niche dock scale +20% (operator, 2026-08-25): charts must read
+    html = html.replace(
+        "position: absolute; top: 226px; width: 720px;",
+        "position: absolute; top: 186px; width: 864px;")
+    html = html.replace("#dock-1.solo { width: 880px; top: 196px; }",
+                         "#dock-1.solo { width: 1056px; top: 156px; }")
+    html = html.replace("#dock-1.solo.side-r { left: 940px; }",
+                         "#dock-1.solo.side-r { left: 820px; }")
+    html = html.replace("#dock-1 { left: 136px; } #dock-2 { left: 1064px; }",
+                         "#dock-1 { left: 70px; } #dock-2 { left: 990px; }")
+
+    html = html.replace("Current Bubble v4", "Steel and Paper — scene-evidence v6")
     html = html.replace(
         "<b>Current Bubble &mdash; five minute v4</b> &middot; scene-evidence lane &middot; generated from timeline.v4.json",
-        "<b>Steel and Paper</b> &middot; scene-evidence lane &middot; review build v5")
+        "<b>Steel and Paper</b> &middot; scene-evidence lane &middot; review build v6")
     html = html.replace('max="300"', f'max="{total:.2f}"')
     html = html.replace("const DUR = 300;", f"const DUR = {total:.2f};")
     html = html.replace("0:00 / 5:00", f"0:00 / {clock}")
@@ -394,7 +405,7 @@ def main() -> int:
     html = html.replace("  #bar {", CAPTION_CSS + "\n  #bar {")
     html = html.replace("{{TIMELINE}}", json.dumps(tl))
     html = html.replace("{{URIS}}", json.dumps(uris))
-    out = BUILD / "steel-and-paper-scene-evidence-v5.html"
+    out = BUILD / "steel-and-paper-scene-evidence-v6.html"
     out.write_text(html, encoding="utf-8")
 
     docks = [d for sc in scenes for d in sc["docks"]]

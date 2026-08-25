@@ -872,3 +872,20 @@ craft for the default: blank surface as flat-on as composition allows,
 simple charcoal frame, explicit "the blankness is the deliverable,"
 gesture vocabulary named (presenting, pointing, holding toward camera,
 fingertips beside).
+
+### 9.10 Finance-niche dock scale + era-correct clip extraction (operator, 2026-08-25)
+
+1. **Dock scale is niche-tuned.** Chart-reading niches (finance) run
+   evidence docks ~20% larger than the base grammar: paired docks ~864px
+   (base 720), solo ~1056px (base 880) on a 1920 stage, tops raised to
+   keep them seated. The plate-is-hero rule still binds — the wash stays
+   banded and the chrome translucent.
+2. **"First stable frame" is NOT a sufficient extraction criterion.** An
+   animated source chart's stable end-state often shows the PRESENT-DAY
+   view, which contradicts a badge naming a historical era (caught: a
+   "Fed 1999" dock showing a chart panned to 2026). The criterion is
+   ERA-CORRECT FOCUS: capture at the moment the claimed figures are the
+   visual focus (callouts drawn, era marker highlighted), inside the
+   narration span, and verify the visible era matches the badge before
+   binding. Evidence orders must state the claimed era per clip slot and
+   require the agent to record which visual state was captured.
