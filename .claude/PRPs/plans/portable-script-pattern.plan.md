@@ -142,7 +142,7 @@ T4 in parallel with T3 → T5 validation → gate 3 → complete.
   midpoint pinned 45–55%, P3 units elastic, >30min mini-pivot rule)
 
 ### T2: Per-phase prompt guides
-- Status: pending
+- Status: done
 - Owner: parent
 - Depends on: T1
 - Write set: `docs/content-video-engine/patterns/phase-guides/P1..P6.md`
@@ -153,7 +153,22 @@ T4 in parallel with T3 → T5 validation → gate 3 → complete.
   attribution-first as a hard gate, per the 35-mark session record
 - Validate: a fresh-context generation test on P1 alone produces a
   conformant 90-second open
-- Evidence: pending
+- Evidence: P1–P6 written 2026-08-24. Design: each guide is a generation
+  contract — injection slots in, script section + running STATE LEDGER out
+  (ring token, F-schedule, open loops, head-fake, anaphora arc), so phases
+  chain deterministically. Glass ratios stated per phase (P1 80/20 → P2
+  70/30 → P3 60/40-in-unit → P4 50/50 fused → P5 30/70 → P6 40/60);
+  tricolon/anaphora budgets per phase with P6 owning both resolutions;
+  attribution-first a hard gate in all six. Density rule from the v3
+  bake-off (briefs/ALICIA-SCRIPT-V3-CALCULUS.md) carried into every
+  geometry table: short runtimes MERGE systems, never drop them.
+  **Validation passed:** fresh-context agent given ONLY P1.md + an
+  injection block on an unseen topic (S&P concentration) produced a
+  conformant open — correct absolute geometry (0:00–1:00 @8min), original
+  ring token (egg carton "500"), tricolon on the promise only,
+  attribution-first on both stats, head-fake reserved, full ledger,
+  honest self-check. Gate-2 ratios treated as approved (presented
+  unchallenged).
 
 ### T3: Kit packaging + injection surface
 - Status: pending
