@@ -857,3 +857,18 @@ under a two-gate release:
 Unreferenced generation keeps the absolute ban: no text, shapes-only
 echoes, blank diegetic surfaces. This is the DMP-deck pattern
 (antigravity-registered slides) generalized to the claim loop.
+
+### 9.9 Preference order for host+evidence (operator, 2026-08-25)
+
+The DIEGETIC COMPOSITE is the default whenever it can be prompted
+cleanly: generated pixels carry the host's gesture and a blank (or
+shape-echo) evidence surface; the edit composites the real sharp evidence
+into the surface the host is physically presenting. Rationale: the
+interaction is baked into the plate — motion and life come built in —
+while the evidence layer stays code-perfect and swappable. Verified-text
+generation (9.8) is the exception path, for assets where the type must
+live in the artwork itself (title worlds, stylized prints). Prompting
+craft for the default: blank surface as flat-on as composition allows,
+simple charcoal frame, explicit "the blankness is the deliverable,"
+gesture vocabulary named (presenting, pointing, holding toward camera,
+fingertips beside).
