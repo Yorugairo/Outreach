@@ -1,0 +1,630 @@
+{
+  "schema_version": "slide_semantic_registration.v1",
+  "deck_id": "decoding-market-physics",
+  "registered_at": "2026-08-24",
+  "registered_by": "antigravity",
+  "slides": [
+    {
+      "slide_id": "decoding-market-physics-s01",
+      "semantic_id": "memory-bottleneck-not-bubble-inference.context.diagram-v10",
+      "headline": "Violent tech drawdowns reflect mechanical failures rather than pure hype pops.",
+      "claim_refs": [
+        "memory-bottleneck-not-bubble-inference",
+        "sp500-hidden-bubble-risk-inference",
+        "memory-countercase"
+      ],
+      "taxonomy": {
+        "actors": [
+          "index-investor",
+          "small-investor"
+        ],
+        "objects": [
+          "equity",
+          "index-basket"
+        ],
+        "mechanisms": [
+          "risk-concentration",
+          "asset-growth-comparison"
+        ],
+        "worlds": [
+          "exchange"
+        ]
+      },
+      "figures": [],
+      "confidence": "high",
+      "sha256": "6cf90d41f109000c221333bc030c928aa45102c9823202dded71171953c121e0"
+    },
+    {
+      "slide_id": "decoding-market-physics-s02",
+      "semantic_id": "sp500-hidden-bubble-risk-inference.context.diagram-v3",
+      "headline": "Market volatility stems from top-heavy index physics rather than flawed technology.",
+      "claim_refs": [
+        "sp500-hidden-bubble-risk-inference",
+        "sp500-top-ten-concentration",
+        "memory-bottleneck-not-bubble-inference"
+      ],
+      "taxonomy": {
+        "actors": [
+          "index-investor",
+          "small-investor"
+        ],
+        "objects": [
+          "index-basket",
+          "equity"
+        ],
+        "mechanisms": [
+          "risk-concentration",
+          "asset-growth-comparison"
+        ],
+        "worlds": [
+          "exchange"
+        ]
+      },
+      "figures": [],
+      "confidence": "high",
+      "sha256": "7edd62206823c61ab2d015983911cb1039fc94833f2024fe84d6d3bf18613b6d"
+    },
+    {
+      "slide_id": "decoding-market-physics-s03",
+      "semantic_id": "memory-bottleneck-not-bubble-inference.evidence.diagram-v5",
+      "headline": "A 50% drawdown after a 10x run reflects routine structural digestion.",
+      "claim_refs": [
+        "memory-bottleneck-not-bubble-inference",
+        "memory-countercase",
+        "sp500-hidden-bubble-risk-inference"
+      ],
+      "taxonomy": {
+        "actors": [
+          "small-investor",
+          "customer",
+          "index-investor"
+        ],
+        "objects": [
+          "equity",
+          "share"
+        ],
+        "mechanisms": [
+          "risk-concentration",
+          "asset-growth-comparison"
+        ],
+        "worlds": [
+          "exchange",
+          "office"
+        ]
+      },
+      "figures": [
+        {
+          "value": "Q1 2026",
+          "label": "Uber budget burn period",
+          "period": "Q1 2026",
+          "context_sentence": "Uber: Burned entire AI budget by Q1 2026 with no product improvement.",
+          "location": "lower-left",
+          "is_headline": false
+        },
+        {
+          "value": "50%",
+          "label": "correction magnitude",
+          "context_sentence": "In a high-beta, capacity-constrained sector, a 50% correction on an asset that has run 10x is not a structural failure.",
+          "location": "lower-right",
+          "is_headline": true
+        },
+        {
+          "value": "10x",
+          "label": "prior asset run multiplier",
+          "context_sentence": "In a high-beta, capacity-constrained sector, a 50% correction on an asset that has run 10x is not a structural failure.",
+          "location": "lower-right",
+          "is_headline": true
+        }
+      ],
+      "confidence": "high",
+      "sha256": "ae2b7d09bc5e7d6846666b2a9449b12ac7f88be06ea77af8f581ade139b694af"
+    },
+    {
+      "slide_id": "decoding-market-physics-s04",
+      "semantic_id": "memory-bottleneck-not-bubble-inference.evidence.table-v1",
+      "headline": "AI capital reaches 8% of GDP, backed by physical supply constraints.",
+      "claim_refs": [
+        "memory-bottleneck-not-bubble-inference",
+        "memory-countercase",
+        "sp500-hidden-bubble-risk-inference"
+      ],
+      "taxonomy": {
+        "actors": [
+          "small-investor",
+          "index-investor",
+          "supplier"
+        ],
+        "objects": [
+          "index-basket",
+          "commodity",
+          "factory"
+        ],
+        "mechanisms": [
+          "capital-flow",
+          "supply-demand",
+          "asset-growth-comparison"
+        ],
+        "worlds": [
+          "exchange",
+          "factory"
+        ]
+      },
+      "figures": [
+        {
+          "value": "7%",
+          "label": "Great Britain railway GDP share",
+          "period": "1840s",
+          "context_sentence": "Hit 7% of Great Britain’s GDP",
+          "location": "upper-left",
+          "is_headline": true
+        },
+        {
+          "value": "7%",
+          "label": "US dot-com GDP share",
+          "period": "1999",
+          "context_sentence": "Reached 7% of US GDP",
+          "location": "upper-left",
+          "is_headline": true
+        },
+        {
+          "value": "8%",
+          "label": "US AI infrastructure GDP share",
+          "period": "2024",
+          "context_sentence": "Reached 8% of US GDP",
+          "location": "upper-right",
+          "is_headline": true
+        },
+        {
+          "value": "3-year",
+          "label": "railways priced return horizon",
+          "context_sentence": "Market priced in 3-year returns; reality took 20 years",
+          "location": "centre",
+          "is_headline": false
+        },
+        {
+          "value": "20 years",
+          "label": "railways actual return horizon",
+          "context_sentence": "Market priced in 3-year returns; reality took 20 years",
+          "location": "centre",
+          "is_headline": false
+        },
+        {
+          "value": "70%",
+          "label": "railway crash drawdown",
+          "context_sentence": "70% Crash",
+          "location": "lower-left",
+          "is_headline": false
+        },
+        {
+          "value": "7-8%",
+          "label": "capital flow GDP threshold",
+          "context_sentence": "While aggregate capital flows cross the historic 7-8% GDP threshold,",
+          "location": "lower-right",
+          "is_headline": true
+        }
+      ],
+      "confidence": "high",
+      "sha256": "48a98470f9ab9392b68bb3e3b105d2da2329dd5f73fe948f797fbe2f2b98072a"
+    },
+    {
+      "slide_id": "decoding-market-physics-s05",
+      "semantic_id": "micron-strategic-customer-agreements.evidence.diagram-v6",
+      "headline": "HBM3e/HBM4 capacity is 100% committed through 2027 with $77B operating profit.",
+      "claim_refs": [
+        "micron-strategic-customer-agreements",
+        "memory-bottleneck-not-bubble-inference",
+        "sk-hynix-demand-exceeds-supply",
+        "samsung-hbm4-growth"
+      ],
+      "taxonomy": {
+        "actors": [
+          "supplier",
+          "customer",
+          "public-company"
+        ],
+        "objects": [
+          "commodity",
+          "factory",
+          "equity"
+        ],
+        "mechanisms": [
+          "supply-demand",
+          "capital-flow",
+          "balance-sheet"
+        ],
+        "worlds": [
+          "factory",
+          "exchange"
+        ]
+      },
+      "figures": [
+        {
+          "value": "3-year",
+          "label": "market priced return horizon",
+          "context_sentence": "The macro view suggests investors are pricing in 3-year returns for a transformation that requires 20 years to materialize.",
+          "location": "lower-left",
+          "is_headline": false
+        },
+        {
+          "value": "20 years",
+          "label": "transformation horizon",
+          "context_sentence": "for a transformation that requires 20 years to materialize.",
+          "location": "lower-left",
+          "is_headline": false
+        },
+        {
+          "value": "$107 Billion",
+          "label": "expected FY26 revenue",
+          "unit": "Billion",
+          "period": "FY26",
+          "context_sentence": "Expected $107 Billion in revenue and $77 Billion in pure operating profit for FY26 (compared to a net loss in 2023).",
+          "location": "upper-right",
+          "is_headline": true
+        },
+        {
+          "value": "$77 Billion",
+          "label": "expected FY26 operating profit",
+          "unit": "Billion",
+          "period": "FY26",
+          "context_sentence": "and $77 Billion in pure operating profit for FY26 (compared to a net loss in 2023).",
+          "location": "upper-right",
+          "is_headline": true
+        },
+        {
+          "value": "2023",
+          "label": "prior net loss year",
+          "period": "2023",
+          "context_sentence": "(compared to a net loss in 2023).",
+          "location": "upper-right",
+          "is_headline": false
+        },
+        {
+          "value": "100%",
+          "label": "HBM capacity sold out share",
+          "context_sentence": "High-end HBM3e/HBM4 capacity is 100% sold out and committed through the end of 2027 under binding, long-term strategic contracts.",
+          "location": "lower-right",
+          "is_headline": true
+        },
+        {
+          "value": "2027",
+          "label": "contract commitment end year",
+          "period": "2027",
+          "context_sentence": "committed through the end of 2027 under binding, long-term strategic contracts.",
+          "location": "lower-right",
+          "is_headline": false
+        }
+      ],
+      "confidence": "high",
+      "sha256": "61c3d95caced2fd66ea6e8014a237688c094e49a3fcbe0849f1558936192a6c8"
+    },
+    {
+      "slide_id": "decoding-market-physics-s06",
+      "semantic_id": "sp500-top-ten-concentration.evidence.chart-v4",
+      "headline": "Tech infrastructure makes up 20% of the S&P 500, up from 2% to 4% historically.",
+      "claim_refs": [
+        "sp500-top-ten-concentration",
+        "index-fund-asset-scale",
+        "sp500-hidden-bubble-risk-inference"
+      ],
+      "taxonomy": {
+        "actors": [
+          "index-investor",
+          "public-company"
+        ],
+        "objects": [
+          "index-basket",
+          "equity",
+          "share"
+        ],
+        "mechanisms": [
+          "risk-concentration",
+          "capital-flow"
+        ],
+        "worlds": [
+          "exchange"
+        ]
+      },
+      "figures": [
+        {
+          "value": "20%",
+          "label": "Tech Infrastructure S&P share",
+          "context_sentence": "Today, they represent a massive 20% of the entire index.",
+          "location": "upper-left",
+          "is_headline": true
+        },
+        {
+          "value": "80%",
+          "label": "Broader Market share",
+          "context_sentence": "80% Broader Market",
+          "location": "lower-left",
+          "is_headline": false
+        },
+        {
+          "value": "2% to 4%",
+          "label": "historical tech S&P share",
+          "context_sentence": "Historically, technology infrastructure builders made up 2% to 4% of the S&P 500.",
+          "location": "lower-left",
+          "is_headline": true
+        }
+      ],
+      "confidence": "high",
+      "sha256": "171f22db63406b18e0ab974ef8b737780fcfcdb269bc84ac90e9bc318f56b341"
+    },
+    {
+      "slide_id": "decoding-market-physics-s07",
+      "semantic_id": "sp500-top-ten-concentration.evidence.diagram-v5",
+      "headline": "Subchapter M 50/5/10 rules force active managers to sell top winners.",
+      "claim_refs": [
+        "sp500-top-ten-concentration",
+        "index-fund-asset-scale",
+        "sp500-hidden-bubble-risk-inference"
+      ],
+      "taxonomy": {
+        "actors": [
+          "government",
+          "regulator",
+          "index-investor"
+        ],
+        "objects": [
+          "index-basket",
+          "equity",
+          "share"
+        ],
+        "mechanisms": [
+          "risk-concentration",
+          "wealth-transfer"
+        ],
+        "worlds": [
+          "policy-room",
+          "exchange"
+        ]
+      },
+      "figures": [
+        {
+          "value": "1940",
+          "label": "Investment Company Act year",
+          "period": "1940",
+          "context_sentence": "The Subchapter M / 1940 Act Brick Wall",
+          "location": "upper-left",
+          "is_headline": false
+        },
+        {
+          "value": "5%",
+          "label": "stock portfolio weight threshold",
+          "context_sentence": "A single stock inside a mutual fund grows to exceed a 5% portfolio weight.",
+          "location": "upper-left",
+          "is_headline": true
+        },
+        {
+          "value": "50/5/10",
+          "label": "Subchapter M 50/5/10 rule",
+          "context_sentence": "The 50/5/10 rule dictates that no more than 50% of a fund's total assets can be held in these 'large positions' (>5%).",
+          "location": "centre",
+          "is_headline": true
+        },
+        {
+          "value": "50%",
+          "label": "fund assets cap in large positions",
+          "context_sentence": "that no more than 50% of a fund's total assets can be held in these 'large positions' (>5%).",
+          "location": "centre",
+          "is_headline": false
+        },
+        {
+          "value": ">5%",
+          "label": "large position threshold",
+          "context_sentence": "held in these 'large positions' (>5%).",
+          "location": "centre",
+          "is_headline": false
+        }
+      ],
+      "confidence": "high",
+      "sha256": "f41561065b71d11175168cb2bd1e141f84f6a06afcb2b14a7fddb589c97a3a1e"
+    },
+    {
+      "slide_id": "decoding-market-physics-s08",
+      "semantic_id": "sp500-hidden-bubble-risk-inference.context.diagram-v4",
+      "headline": "Passive cap-weighted funds absorb 50% corrections due to peak concentration.",
+      "claim_refs": [
+        "sp500-hidden-bubble-risk-inference",
+        "sp500-top-ten-concentration",
+        "index-fund-asset-scale"
+      ],
+      "taxonomy": {
+        "actors": [
+          "index-investor",
+          "small-investor"
+        ],
+        "objects": [
+          "index-basket",
+          "equity"
+        ],
+        "mechanisms": [
+          "risk-concentration",
+          "asset-growth-comparison"
+        ],
+        "worlds": [
+          "exchange"
+        ]
+      },
+      "figures": [
+        {
+          "value": "50%",
+          "label": "correction brunt absorbed",
+          "context_sentence": "They hold maximum concentration at the exact peak, absorbing the absolute brunt of a 50% correction.",
+          "location": "lower-right",
+          "is_headline": true
+        }
+      ],
+      "confidence": "high",
+      "sha256": "ed90a644a156f268c1e3605b35f91bfae55794bbbdc0a8b2b50e13b99026ff63"
+    },
+    {
+      "slide_id": "decoding-market-physics-s09",
+      "semantic_id": "sp500-hidden-bubble-risk-inference.evidence.diagram-v5",
+      "headline": "Under the Inelastic Markets Hypothesis, each $1 outflow destroys $5 in market value.",
+      "claim_refs": [
+        "sp500-hidden-bubble-risk-inference",
+        "index-fund-asset-scale",
+        "sp500-top-ten-concentration"
+      ],
+      "taxonomy": {
+        "actors": [
+          "index-investor",
+          "central-bank",
+          "public-company"
+        ],
+        "objects": [
+          "debt",
+          "index-basket",
+          "equity"
+        ],
+        "mechanisms": [
+          "capital-flow",
+          "risk-concentration"
+        ],
+        "worlds": [
+          "exchange",
+          "policy-room"
+        ]
+      },
+      "figures": [
+        {
+          "value": "5.5%",
+          "label": "Fed interest rate ceiling",
+          "context_sentence": "The Interest Rate Ceiling",
+          "location": "centre",
+          "is_headline": true
+        },
+        {
+          "value": ">6.5%",
+          "label": "Fed rate in 2000",
+          "period": "2000",
+          "context_sentence": "Historical bubbles popped when debt became too expensive (Fed >6.5% in 2000).",
+          "location": "lower-left",
+          "is_headline": false
+        },
+        {
+          "value": "2000",
+          "label": "dot-com bubble pop year",
+          "period": "2000",
+          "context_sentence": "(Fed >6.5% in 2000).",
+          "location": "lower-left",
+          "is_headline": false
+        },
+        {
+          "value": "$244B",
+          "label": "hyperscaler AI debt in 2026",
+          "unit": "B",
+          "period": "2026",
+          "context_sentence": "Hyperscalers raised $244B in AI debt in 2026.",
+          "location": "lower-left",
+          "is_headline": true
+        },
+        {
+          "value": "2026",
+          "label": "AI debt record year",
+          "period": "2026",
+          "context_sentence": "Hyperscalers raised $244B in AI debt in 2026.",
+          "location": "lower-left",
+          "is_headline": false
+        },
+        {
+          "value": "2023",
+          "label": "prior rate peak year",
+          "period": "2023",
+          "context_sentence": "The consensus states that if the Fed pushes rates back above the 2023 peak of 5.5%,",
+          "location": "lower-left",
+          "is_headline": false
+        },
+        {
+          "value": "$1",
+          "label": "inelastic inflow base",
+          "unit": "$",
+          "context_sentence": "Under the Inelastic Markets Hypothesis, every $1 inflow pushes market value up $5.",
+          "location": "lower-right",
+          "is_headline": false
+        },
+        {
+          "value": "$5",
+          "label": "inelastic market value impact",
+          "unit": "$",
+          "context_sentence": "every $1 inflow pushes market value up $5.",
+          "location": "lower-right",
+          "is_headline": true
+        }
+      ],
+      "confidence": "high",
+      "sha256": "e6f730799f607bbc4fc1a969c0849823021708b0f65901b4da8fbb084f101b3e"
+    },
+    {
+      "slide_id": "decoding-market-physics-s10",
+      "semantic_id": "concentrated-defensive-barbell-hypothesis.evidence.diagram-v3",
+      "headline": "A barbell of cash, volatility strikes, and sub-$3B sovereign assets beats indexes.",
+      "claim_refs": [
+        "concentrated-defensive-barbell-hypothesis",
+        "sp500-hidden-bubble-risk-inference",
+        "equal-weight-long-tail-countercase"
+      ],
+      "taxonomy": {
+        "actors": [
+          "index-investor",
+          "asset-owner"
+        ],
+        "objects": [
+          "equity",
+          "debt",
+          "bond"
+        ],
+        "mechanisms": [
+          "asset-growth-comparison",
+          "capital-flow"
+        ],
+        "worlds": [
+          "exchange"
+        ]
+      },
+      "figures": [
+        {
+          "value": "sub-$3B",
+          "label": "micro-to-mid-cap ceiling",
+          "unit": "B",
+          "context_sentence": "Concentrate active capital in sub-$3B micro-to-mid-cap assets backed by domestic defense and energy backlogs.",
+          "location": "lower-right",
+          "is_headline": true
+        }
+      ],
+      "confidence": "high",
+      "sha256": "9f727ac3e10c4370bea7f75561b367445ad58e67d85cb116484ec09fa7eb4187"
+    },
+    {
+      "slide_id": "decoding-market-physics-s11",
+      "semantic_id": "sp500-hidden-bubble-risk-inference.context.diagram-v6",
+      "headline": "Market risk stems from mechanical limits and inelastic liquidations of index funds.",
+      "claim_refs": [
+        "sp500-hidden-bubble-risk-inference",
+        "concentrated-defensive-barbell-hypothesis",
+        "memory-bottleneck-not-bubble-inference"
+      ],
+      "taxonomy": {
+        "actors": [
+          "index-investor",
+          "small-investor"
+        ],
+        "objects": [
+          "index-basket",
+          "equity"
+        ],
+        "mechanisms": [
+          "risk-concentration",
+          "capital-flow"
+        ],
+        "worlds": [
+          "exchange"
+        ]
+      },
+      "figures": [],
+      "confidence": "high",
+      "sha256": "9a94c8800f9c9afbaf994da8f215c9242d092db6f8d433d314cd1e9b416d889a"
+    }
+  ]
+}
