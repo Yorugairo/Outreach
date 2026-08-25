@@ -166,6 +166,22 @@ def test_rehook_positions_reported_in_stats():
     assert all(0 <= p <= 100 for p in report.stats["rehook_positions_pct"])
 
 
+def test_multiline_stage_directions_stay_out_of_narration():
+    text = """
+**[till plate, drawer sounds under, macro lens on the receipt
+resting against the register key]**
+
+She counts the drawer while the bank across the street counts its bonus.
+
+The receipt closes the story where the drawer opened it tonight.
+"""
+
+    report = lint_script(text)
+
+    assert "RING" not in _codes(report)
+    assert report.stats["word_count"] < 30, "direction spillover counted as narration"
+
+
 def test_main_returns_zero_on_clean_and_one_on_findings(tmp_path: Path, capsys):
     clean = tmp_path / "clean.md"
     clean.write_text(CONFORMANT, encoding="utf-8")

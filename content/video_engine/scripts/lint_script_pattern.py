@@ -87,6 +87,7 @@ def parse_script(text: str) -> tuple[list[tuple[str, str]], list[str]]:
     pairs: list[tuple[str, str]] = []
     pending_direction = ""
     current: list[str] = []
+    in_direction = False
 
     def flush() -> None:
         nonlocal pending_direction
@@ -101,11 +102,15 @@ def parse_script(text: str) -> tuple[list[tuple[str, str]], list[str]]:
 
     for line in cleaned.splitlines():
         stripped = line.strip()
-        if not stripped:
+        if in_direction:
+            pending_direction += " " + stripped.strip("*[]")
+            in_direction = not stripped.endswith("]**")
+        elif not stripped:
             flush()
         elif stripped.startswith("**["):
             flush()
             pending_direction = stripped.strip("*[]")
+            in_direction = not stripped.endswith("]**")
         elif not _is_structural(stripped):
             current.append(stripped)
     flush()
