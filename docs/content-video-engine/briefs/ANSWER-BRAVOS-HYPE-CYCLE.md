@@ -390,9 +390,8 @@ And this is where the railway map, good as it is, skips a gear. Railway
 steel sat waiting for twenty years while the economy grew around it.
 That's why the return took two decades. Today's compute doesn't sit. It
 depreciates in about five years. And the builders' order books are sold
-out into next year `[verify]`. Governments are standing up national AI
-programs on the same hardware `[verify]`. Different demand, different
-clock. The moat under the builders runs deeper than the paper holders can
+out into next year. Governments are standing up national AI programs on
+the same hardware. Different demand, different clock. The moat under the builders runs deeper than the paper holders can
 see. And the paper stacked on top runs taller than the builders admit.
 Both are true at once. That's the whole point.
 
@@ -527,10 +526,18 @@ unchanged.
 | Railway £250M ≈ $1.1T; stocks 2× 1843–46; −70% crash; BoE 6% trigger | Bravos video 5:27–6:02, 9:26–9:35 | attributed |
 | Internet 4%→7% GDP; Fed 4.5→6.5% 1999–2000; AI ≈ 8% GDP | Bravos video 7:29–8:35, 10:26–10:33 | attributed |
 | Hyperscaler AI debt $150B '24–25, $244B '26 YTD; 5.5% tripwire | Bravos video 11:05–11:48 | attributed |
-| Compute ~5yr depreciation; order books sold out | `[verify]` | resolve before production |
-| Sovereign/national AI programs on same hardware | `[verify]` | resolve before production |
-| Memory prices climbing on sold-out supply | registered memory-supercycle claim cluster | resolve refs in registration pack |
+| Compute ~5yr depreciation; order books sold out | operator-verified 2026-08-24 | **cleared** |
+| Sovereign/national AI programs on same hardware | operator-verified 2026-08-24 | **cleared** |
+| Memory prices climbing on sold-out supply | registered memory-supercycle claim cluster | cleared (registered) |
 | 20% × 50% = 10% index arithmetic | arithmetic on their attributed figure | self-contained |
+
+**Sourcing ruling (operator, 2026-08-24):** Bravos Research is accepted
+as a primary source of truth for this format — their figures need no
+independent spot-check. Naming and citing them openly is deliberate
+strategy: the network effect of visible, generous attribution serves the
+answer format, and this channel does not compete on chart reading — it
+competes on the next click after the chart. **The production gate is
+clear.**
 
 ## Notes
 

@@ -33,6 +33,18 @@ stops being a compliance chore and starts being the growth mechanism it
 actually is (and it is exactly Dopamine Ladder level 5: for a faceless
 channel, trust comes from competence and consistency — doc 31 §1b).
 
+**Standing ruling (operator, 2026-08-24, first applied on the "Steel and
+Paper" script):** Bravos Research is accepted as a **primary source of
+truth** for the answer format — their published figures need no
+independent spot-check before we build on them. Naming them openly and
+generously is deliberate strategy, not concession: the network effect of
+visible attribution (their audience finding us as the next click, the
+algorithm's topic-graph adjacency, the credibility rub-off of crediting
+well) is worth more than any independence we'd signal by re-deriving
+their charts. **We do not compete on chart reading.** We compete on what
+the chart means and what to do about it — the answer. Their evidence,
+our relocation.
+
 ## 2. We cannot win on time to market, so we do not race
 
 They build the chart and talk about it, on Bloomberg terminal data. Their
