@@ -229,6 +229,12 @@ two files first — they are model-agnostic and are the source of truth:**
   — the standing corrections ledger; each ruling carries the reason it
   was made, because the reason is what generalizes.
 
+- [`docs/portable/VOICE-PACK.md`](docs/portable/VOICE-PACK.md) — loaded
+  before writing any narration, title, or description. Voice transfers by
+  exemplar, not description: a rejected/accepted hook pair, the five
+  hardest lines from an approved script, and the ear-judgments converted
+  to text-checkable rules.
+
 Task routing into the deeper doctrine, plus the work-order interop
 contract, is in [`GEMINI.md`](GEMINI.md) — that routing table applies to
 every agent, not just Google-side ones.

@@ -12,7 +12,13 @@ working on the video/content side of this repo. (Antigravity also reads
    Small enough to paste into a system-instruction box verbatim.
 2. **`docs/portable/OPERATOR-RULINGS.md`** — always. The standing
    corrections ledger with the reason behind each ruling.
-3. **Task route only** — do not preload the doc tree:
+3. **`docs/portable/VOICE-PACK.md`** — before writing ANY narration,
+   title, or description. Voice does not transfer as description, so this
+   file is exemplars and contrast pairs: a rejected/accepted hook pair,
+   the five hardest lines from an approved script, and the ear-judgments
+   converted into text-checkable rules. Run its §6 calibration before
+   trusting a fresh model with production copy.
+4. **Task route only** — do not preload the doc tree:
 
 | Task | Read |
 |---|---|
