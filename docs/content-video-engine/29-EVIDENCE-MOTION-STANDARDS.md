@@ -824,3 +824,16 @@ what it claims. Registration should attach meaning as data
    the ≤3-break-tag ration (split the segment rather than exceed it —
    overload causes audible speed-ups); full-episode audio is re-encoded
    through one concat pass so seams never emit fragments.
+
+### 9.7 Host-in-world plates approved (operator, 2026-08-25)
+
+The host-in-world experiment passed: generated host shots inside world
+scenes are an approved PLATE species (claim `finance-host-in-world-exp-1`
+is the reference wave — identity held across six scenes via reference
+conditioning). Follow-on standard under test (exp-2): host-EVIDENCE
+interaction plates — the host gestures at diegetic evidence surfaces.
+Generated pixels carry only stylized chart SHAPES or BLANK framed
+surfaces (generated_text_rule holds); the edit composites the real sharp
+evidence into the blank surface, so the host physically presents the
+evidence layer. Open item: glasses render cobalt vs spec black — pending
+operator canon call.
