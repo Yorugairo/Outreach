@@ -837,3 +837,23 @@ surfaces (generated_text_rule holds); the edit composites the real sharp
 evidence into the blank surface, so the host physically presents the
 evidence layer. Open item: glasses render cobalt vs spec black — pending
 operator canon call.
+
+### 9.8 Generated text, conditionally re-licensed (operator, 2026-08-25)
+
+Amendment to the generated-text prohibition: when a generation is
+conditioned on ACTUAL reference images (a real chart, a registered slide,
+a verified evidence frame), the generated output MAY carry typeset text —
+under a two-gate release:
+
+1. **Codex verification**: the generating/verifying agent reads every
+   legible string and numeral off the generated image and checks each one
+   against the reference images and the claim's figure manifest; any
+   string not present in a reference is a FAIL (regenerate or blank the
+   surface). The verification report ships with the delivery.
+2. **Operator approval**: verified-text assets remain quarantined until
+   explicitly approved on the contact sheet — text assets never ride a
+   wave approval implicitly.
+
+Unreferenced generation keeps the absolute ban: no text, shapes-only
+echoes, blank diegetic surfaces. This is the DMP-deck pattern
+(antigravity-registered slides) generalized to the claim loop.
