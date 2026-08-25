@@ -203,3 +203,54 @@ then record the returned `dictionary_id`/`version_id` via
 5. [Request stitching guide](https://elevenlabs.io/docs/eleven-api/guides/how-to/text-to-speech/request-stitching) — previous/next_request_ids mechanics
 6. [Models](https://elevenlabs.io/docs/overview/models) — normalization by model, model selection
 7. [Pauses & phonemes via API](https://elevenlabs.io/docs/help-center/technical/do-pauses-and-ssml-phoneme-tags-work-with-the-api) — per-model phoneme/break support
+
+## §8 — Recording Standards v2 (post-Steel-and-Paper, 2026-08-25)
+
+The first episode's audio failed review: spoken editorial flags, speed-ups
+from break-tag overload, and fragments at segment seams. Root cause was
+architectural — the episode was synthesized as seven stitched segments and
+concatenated, a pattern inherited from the storyboard lane. Provider limits
+(verified against ElevenLabs docs, 2026-08-25) make that unnecessary:
+
+| Model | Hard cap per request | ≈ audio |
+| --- | --- | --- |
+| eleven_multilingual_v2 (ours) | **10,000 chars** | **~10 min** |
+| eleven_v3 | 5,000 chars | ~5 min |
+| eleven_flash_v2_5 | 40,000 chars | ~40 min (less stable; mv2 is "most stable on long-form") |
+
+Request stitching accepts ≤3 previous_request_ids — it mitigates cross-
+request prosody drift; it does not remove seams.
+
+### The MASTER TAKE rule
+
+1. **An episode of ≤ ~9,000 compiled characters records as ONE request**
+   (with-timestamps endpoint). Scene boundaries become TIMESTAMPS in the
+   words file — cut points in data, never cuts in audio. No concat, no
+   seams, one prosody arc, one alignment stream.
+2. **Episodes over the cap** split into CHAPTER takes at paragraph ends
+   that carry a settle pause, stitched via previous_request_ids, joined
+   at detected silence (≥300 ms) with a short crossfade in ONE re-encode
+   pass. Never mid-argument, never mid-scene.
+3. **Silence belongs to the edit, not the voice.** Break tags are rationed
+   (~3 per 1,000 chars, ≤12 per master) and capped at 1.2 s; savor beats,
+   breathing dips, and any silence over 1.2 s are timeline gaps between
+   words, placed by the editor from the word timings. Overloading breaks
+   is the proven cause of provider speed-ups.
+4. **Synthesis preflight (mechanical, before any spend):** script lint
+   clean · zero bracket flags (the audio layer strips leaks and warns,
+   but a warned synthesis is a failed preflight) · numbers written as
+   speech · compiled character count vs model cap · break-tag budget
+   check · seed pinned · dictionaries attached.
+5. **Post-take verification (before the take is accepted):** duration
+   sanity (compiled chars / ~14 chars-per-second within ±15%) · alignment
+   covers the final word (no clipped tail) · spot-listen the first beat,
+   the pivot, and the close · judge-by-ear on the full master before any
+   production use. A failed check = seed-locked retake, not repair.
+6. **Retakes are per-chapter and seed-locked**; the cache key already
+   re-synthesizes on any text change. Repairing a broken take by splicing
+   is banned — a seam introduced in repair is the same defect that
+   triggered the retake.
+
+Steel and Paper's VO is scheduled for a full master-take re-record under
+this standard (single request, ~7k chars) when credits allow; the existing
+segmented VO is review-scratch only.
