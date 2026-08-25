@@ -1,4 +1,4 @@
-"""Steel and Paper — scene-evidence v4: DMP deck evidence, sharp SVG charts,
+"""Steel and Paper — scene-evidence v5: DMP deck evidence, sharp SVG charts,
 word-punch captions, clean re-synth timings."""
 from __future__ import annotations
 
@@ -97,7 +97,8 @@ def svg_ai_debt() -> str:
 </svg>"""
 
 
-FRAMES = Path(r"C:\Users\Snipe\AppData\Local\Temp\watch-lf8sp3p6\frames")
+E1 = (REPO / "content/video_engine/projects/systems-and-blowups/review/claims"
+      / "steel-paper-evidence-agent-e1/objects")
 
 
 def _svg_shell(title: str, subtitle: str, body: str, source: str) -> str:
@@ -166,18 +167,22 @@ EVIDENCE = {
         "badges": [b("AI DEBT '24–'25", "$150B", "5× PRIOR PACE", "sunflower"),
                     b("2026 YTD", "$244B", "AND RISING", "coral")]},
     "bravos-frame-railway": {"title": "Railway Stocks — Bravos Research", "kind": "dmp",
-        "src": FRAMES / "frame_0042.jpg",
-        "source": "Bravos Research video frame · their chart, their credit",
+        "src": E1 / "evclip-railway-stocks-clean.png",
+        "source": "Bravos Research video frame · verified clean-draw (evidence agent)",
         "badges": [b("RAILWAY STOCKS", "+100%", "IN 3 YEARS · 1843–1846", "sunflower")]},
     "bravos-frame-fed": {"title": "The Rate Trigger — Bravos Research", "kind": "dmp",
-        "src": FRAMES / "frame_0074.jpg",
-        "source": "Bravos Research video frame · their chart, their credit",
+        "src": E1 / "evclip-fed-trigger-clean.png",
+        "source": "Bravos Research video frame · verified clean-draw (evidence agent)",
         "badges": [b("FED, 1999", "4.5%", "", "sunflower"),
                     b("FED, 2000 — THE POP", "6.5%", "", "coral")]},
     "bravos-frame-uber": {"title": "The Uber Burn — Bravos Research", "kind": "dmp",
-        "src": FRAMES / "frame_0015.jpg",
-        "source": "Bravos Research video frame · their chart, their credit",
+        "src": E1 / "evclip-uber-burn-clean.png",
+        "source": "Bravos Research video frame · verified clean-draw (evidence agent)",
         "badges": []},
+    "evchart-spy-rsp": {"title": "Cap-Weight vs Equal-Weight, Live", "kind": "dmp",
+        "src": E1 / "evchart-concentration-ratio.png",
+        "source": "Yahoo Finance, SPY/RSP, 2020-01-01 to 2026-08-24 (evidence agent)",
+        "badges": [b("SPY vs EQUAL WEIGHT", "122.9", "INDEXED TO 100 - SINCE 2020", "coral")]},
     "card-index-arithmetic": {"title": "Run The Arithmetic", "kind": "svg",
         "src": svg_arithmetic,
         "source": "Arithmetic on the attributed figure",
@@ -244,7 +249,8 @@ WINDOWS = [
     (3, 0.0, 30.0, "world-certificate-wall-v1", (0.06, -16, -10),
      [("dmp-s06", 0, 10.0, 22.0, [12.5, 15.5])]),
     (3, 30.0, None, "world-modern-certificate-v1", (0.06, 8, -12),
-     [("card-index-arithmetic", 0, 33.0, 42.0, [35.5])]),
+     [("card-index-arithmetic", 0, 33.0, 42.0, [35.5]),
+      ("evchart-spy-rsp", 1, 43.0, 49.5, [45.0])]),
     (4, 0.0, 27.0, "world-molten-pour-v1", (0.04, -8, -6),
      [("dmp-s11", 0, 17.0, 25.0, [])]),
     (4, 27.0, 62.0, "world-circuit-terrain-v1", (0.06, 14, 6),
@@ -339,7 +345,7 @@ def main() -> int:
                        "source": s["source"], "badges": s["badges"], "match_score": 1.0}
                 for eid, s in EVIDENCE.items()}
     tl = {"schema_version": "scene_evidence_timeline.v1",
-          "episode_id": "steel-and-paper-scene-evidence-v4",
+          "episode_id": "steel-and-paper-scene-evidence-v5",
           "project_id": "systems-and-blowups",
           "narration": {"canonical_hash": ZERO, "words_path": "steel-and-paper/vo"},
           "captions": build_captions(), "evidence": evidence, "scenes": scenes}
@@ -375,10 +381,10 @@ def main() -> int:
     mins, secs = divmod(round(total), 60)
     clock = f"{mins}:{secs:02d}"
     html = TEMPLATE.read_text(encoding="utf-8")
-    html = html.replace("Current Bubble v4", "Steel and Paper — scene-evidence v4")
+    html = html.replace("Current Bubble v4", "Steel and Paper — scene-evidence v5")
     html = html.replace(
         "<b>Current Bubble &mdash; five minute v4</b> &middot; scene-evidence lane &middot; generated from timeline.v4.json",
-        "<b>Steel and Paper</b> &middot; scene-evidence lane &middot; review build v4")
+        "<b>Steel and Paper</b> &middot; scene-evidence lane &middot; review build v5")
     html = html.replace('max="300"', f'max="{total:.2f}"')
     html = html.replace("const DUR = 300;", f"const DUR = {total:.2f};")
     html = html.replace("0:00 / 5:00", f"0:00 / {clock}")
@@ -388,7 +394,7 @@ def main() -> int:
     html = html.replace("  #bar {", CAPTION_CSS + "\n  #bar {")
     html = html.replace("{{TIMELINE}}", json.dumps(tl))
     html = html.replace("{{URIS}}", json.dumps(uris))
-    out = BUILD / "steel-and-paper-scene-evidence-v4.html"
+    out = BUILD / "steel-and-paper-scene-evidence-v5.html"
     out.write_text(html, encoding="utf-8")
 
     docks = [d for sc in scenes for d in sc["docks"]]
