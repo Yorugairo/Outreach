@@ -933,3 +933,25 @@ the context in memory."*
   means: stop/let the claim finish → reject at review → open a NEW
   claim (fresh id) with the corrected order. Never edit a dispatched
   order and hope the agent re-reads it.
+
+### 9.13 Plate density is runtime-derived, not a flat floor (operator, 2026-08-25)
+
+The ">=10 plates per episode" floor in 9.2 is a MINIMUM for a short
+episode, never a target. Operator correction on the Steel and Paper
+build: *"You don't have enough plates if you're running 80 second
+deficits. You need 1 plate for every 12 seconds at least."* And the
+ceiling: *"20 seconds on 1 plate would be the max, and that would be
+expecting 2 pieces of strong evidence to cover."*
+
+- **Target: runtime / 12s.** A 446s episode needs ~38 world plates, not
+  10. Compute the target from runtime before opening any plate claim.
+- **Hard ceiling: 20s on a single plate**, and only when TWO strong
+  evidence documents dock over that stretch. A bare plate held past 12s
+  with nothing docking is a defect.
+- The 12s bare-stretch ceiling (9.2/Part 8) governs BOTH layers. A long
+  bare stretch is not automatically an evidence shortfall — diagnose
+  which layer is thin before ordering work. On Steel and Paper the
+  83s stretch was read as an evidence deficit when the plate count (14
+  world plates against a 38 target) was the larger half of the problem.
+- Thumbnails, avatars, and banners are NOT world plates. Count only
+  plates that can carry a scene.
