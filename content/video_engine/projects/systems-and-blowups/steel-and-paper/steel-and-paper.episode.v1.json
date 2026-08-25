@@ -1,0 +1,75 @@
+{
+  "schema_version": "episode_build.v1",
+  "episode_id": "steel-and-paper",
+  "title": "Steel and Paper",
+  "format": "answer",
+  "answer_target": "Bravos Research - History is About to Be Made (Jw8ykhoOVBQ)",
+  "script": "docs/content-video-engine/briefs/ANSWER-BRAVOS-HYPE-CYCLE.md#script-b",
+  "script_arm": "B (won A/B ear test 2026-08-24)",
+  "runtime_s": 446.149,
+  "voiceover": {
+    "provider": "elevenlabs",
+    "seed": 4242,
+    "settings": {
+      "stability": 0.4,
+      "similarity_boost": 0.75,
+      "style": 0.2,
+      "use_speaker_boost": true
+    },
+    "scenes": [
+      {
+        "scene": "s01-open",
+        "start_s": 0.0,
+        "duration_s": 60.975
+      },
+      {
+        "scene": "s02-engine",
+        "start_s": 60.975,
+        "duration_s": 75.882
+      },
+      {
+        "scene": "s03-gap",
+        "start_s": 136.857,
+        "duration_s": 58.05
+      },
+      {
+        "scene": "s04-pivot",
+        "start_s": 194.907,
+        "duration_s": 50.017
+      },
+      {
+        "scene": "s05-reflection",
+        "start_s": 244.924,
+        "duration_s": 135.466
+      },
+      {
+        "scene": "s06-close",
+        "start_s": 380.39,
+        "duration_s": 64.087
+      },
+      {
+        "scene": "s07-story-close",
+        "start_s": 444.477,
+        "duration_s": 1.672
+      }
+    ]
+  },
+  "plates": {
+    "generated_claim": "steel-and-paper-plates-wave-1",
+    "wave_1_slots": 12,
+    "wave_2_pending": [
+      "world-certificate-shadow-v1",
+      "world-canal-lock-v1"
+    ],
+    "status": "quarantined_review_required"
+  },
+  "charts_draft": [
+    "chart-divergence-draft",
+    "chart-sp-concentration-draft",
+    "chart-ai-debt-draft",
+    "chart-gdp-share-draft"
+  ],
+  "chart_rule": "in-house evidence plates from Bravos-attributed figures; 'Data: Bravos Research' chip on every plate; drafts pending number verification against source frames",
+  "citation_clip": "3-5s of the Bravos frame at the P1 credit beat, pillarboxed with attribution card (operator sourcing ruling 2026-08-24)",
+  "rough_cut": "scratch v0 only - not an asset; quarantined outside the repo"
+}

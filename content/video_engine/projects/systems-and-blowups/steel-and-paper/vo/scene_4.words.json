@@ -1,0 +1,712 @@
+{
+  "scene_id": 4,
+  "duration_s": 50.017,
+  "words": [
+    {
+      "w": "It",
+      "start_s": 0.627,
+      "end_s": 0.743
+    },
+    {
+      "w": "was",
+      "start_s": 0.778,
+      "end_s": 0.882
+    },
+    {
+      "w": "never",
+      "start_s": 0.964,
+      "end_s": 1.161
+    },
+    {
+      "w": "the",
+      "start_s": 1.207,
+      "end_s": 1.289
+    },
+    {
+      "w": "AI",
+      "start_s": 1.335,
+      "end_s": 1.66
+    },
+    {
+      "w": "stocks.",
+      "start_s": 1.73,
+      "end_s": 2.252
+    },
+    {
+      "w": "The",
+      "start_s": 2.368,
+      "end_s": 2.473
+    },
+    {
+      "w": "bubble",
+      "start_s": 2.531,
+      "end_s": 2.786
+    },
+    {
+      "w": "isn't",
+      "start_s": 2.821,
+      "end_s": 3.042
+    },
+    {
+      "w": "in",
+      "start_s": 3.088,
+      "end_s": 3.158
+    },
+    {
+      "w": "the",
+      "start_s": 3.204,
+      "end_s": 3.274
+    },
+    {
+      "w": "steel.",
+      "start_s": 3.32,
+      "end_s": 3.855
+    },
+    {
+      "w": "It's",
+      "start_s": 4.365,
+      "end_s": 4.563
+    },
+    {
+      "w": "in",
+      "start_s": 4.609,
+      "end_s": 4.667
+    },
+    {
+      "w": "the",
+      "start_s": 4.714,
+      "end_s": 4.783
+    },
+    {
+      "w": "paper",
+      "start_s": 4.83,
+      "end_s": 5.19
+    },
+    {
+      "w": "wrapped",
+      "start_s": 5.283,
+      "end_s": 5.642
+    },
+    {
+      "w": "around",
+      "start_s": 5.666,
+      "end_s": 5.979
+    },
+    {
+      "w": "it.",
+      "start_s": 6.037,
+      "end_s": 6.269
+    },
+    {
+      "w": "What",
+      "start_s": 6.966,
+      "end_s": 7.152
+    },
+    {
+      "w": "broke",
+      "start_s": 7.198,
+      "end_s": 7.442
+    },
+    {
+      "w": "England",
+      "start_s": 7.488,
+      "end_s": 7.837
+    },
+    {
+      "w": "in",
+      "start_s": 7.906,
+      "end_s": 7.988
+    },
+    {
+      "w": "1845",
+      "start_s": 8.057,
+      "end_s": 8.429
+    },
+    {
+      "w": "wasn't",
+      "start_s": 8.499,
+      "end_s": 9.416
+    },
+    {
+      "w": "rail.",
+      "start_s": 9.485,
+      "end_s": 9.996
+    },
+    {
+      "w": "It",
+      "start_s": 10.205,
+      "end_s": 10.333
+    },
+    {
+      "w": "was",
+      "start_s": 10.379,
+      "end_s": 10.484
+    },
+    {
+      "w": "railway",
+      "start_s": 10.553,
+      "end_s": 10.902
+    },
+    {
+      "w": "certificates",
+      "start_s": 10.96,
+      "end_s": 11.598
+    },
+    {
+      "w": "—",
+      "start_s": 11.773,
+      "end_s": 11.854
+    },
+    {
+      "w": "paper",
+      "start_s": 11.912,
+      "end_s": 12.191
+    },
+    {
+      "w": "promises",
+      "start_s": 12.237,
+      "end_s": 12.679
+    },
+    {
+      "w": "priced",
+      "start_s": 12.737,
+      "end_s": 13.015
+    },
+    {
+      "w": "off",
+      "start_s": 13.05,
+      "end_s": 13.178
+    },
+    {
+      "w": "the",
+      "start_s": 13.213,
+      "end_s": 13.282
+    },
+    {
+      "w": "best",
+      "start_s": 13.329,
+      "end_s": 13.549
+    },
+    {
+      "w": "year,",
+      "start_s": 13.596,
+      "end_s": 13.932
+    },
+    {
+      "w": "held",
+      "start_s": 13.99,
+      "end_s": 14.211
+    },
+    {
+      "w": "by",
+      "start_s": 14.257,
+      "end_s": 14.362
+    },
+    {
+      "w": "people",
+      "start_s": 14.432,
+      "end_s": 14.71
+    },
+    {
+      "w": "who",
+      "start_s": 14.733,
+      "end_s": 14.85
+    },
+    {
+      "w": "never",
+      "start_s": 14.931,
+      "end_s": 15.128
+    },
+    {
+      "w": "checked",
+      "start_s": 15.186,
+      "end_s": 15.442
+    },
+    {
+      "w": "what",
+      "start_s": 15.465,
+      "end_s": 15.604
+    },
+    {
+      "w": "they",
+      "start_s": 15.639,
+      "end_s": 15.767
+    },
+    {
+      "w": "owned.",
+      "start_s": 15.825,
+      "end_s": 16.301
+    },
+    {
+      "w": "And",
+      "start_s": 16.626,
+      "end_s": 16.765
+    },
+    {
+      "w": "Bravos'",
+      "start_s": 16.812,
+      "end_s": 17.404
+    },
+    {
+      "w": "own",
+      "start_s": 17.439,
+      "end_s": 17.659
+    },
+    {
+      "w": "number",
+      "start_s": 17.717,
+      "end_s": 17.973
+    },
+    {
+      "w": "tells",
+      "start_s": 18.031,
+      "end_s": 18.275
+    },
+    {
+      "w": "you",
+      "start_s": 18.321,
+      "end_s": 18.402
+    },
+    {
+      "w": "where",
+      "start_s": 18.449,
+      "end_s": 18.611
+    },
+    {
+      "w": "that",
+      "start_s": 18.646,
+      "end_s": 18.762
+    },
+    {
+      "w": "paper",
+      "start_s": 18.832,
+      "end_s": 19.099
+    },
+    {
+      "w": "lives",
+      "start_s": 19.157,
+      "end_s": 19.377
+    },
+    {
+      "w": "today:",
+      "start_s": 19.412,
+      "end_s": 19.935
+    },
+    {
+      "w": "AI",
+      "start_s": 20.376,
+      "end_s": 20.736
+    },
+    {
+      "w": "builders",
+      "start_s": 20.806,
+      "end_s": 21.142
+    },
+    {
+      "w": "are",
+      "start_s": 21.189,
+      "end_s": 21.282
+    },
+    {
+      "w": "now",
+      "start_s": 21.328,
+      "end_s": 21.479
+    },
+    {
+      "w": "twenty",
+      "start_s": 21.549,
+      "end_s": 21.804
+    },
+    {
+      "w": "percent",
+      "start_s": 21.862,
+      "end_s": 22.187
+    },
+    {
+      "w": "of",
+      "start_s": 22.234,
+      "end_s": 22.292
+    },
+    {
+      "w": "the",
+      "start_s": 22.35,
+      "end_s": 22.431
+    },
+    {
+      "w": "S&P",
+      "start_s": 22.547,
+      "end_s": 23.023
+    },
+    {
+      "w": "five",
+      "start_s": 23.197,
+      "end_s": 23.464
+    },
+    {
+      "w": "hundred.",
+      "start_s": 23.499,
+      "end_s": 23.929
+    },
+    {
+      "w": "Historically,",
+      "start_s": 24.312,
+      "end_s": 25.113
+    },
+    {
+      "w": "two",
+      "start_s": 25.171,
+      "end_s": 25.334
+    },
+    {
+      "w": "to",
+      "start_s": 25.392,
+      "end_s": 25.438
+    },
+    {
+      "w": "four.",
+      "start_s": 25.496,
+      "end_s": 25.937
+    },
+    {
+      "w": "Every",
+      "start_s": 26.262,
+      "end_s": 26.541
+    },
+    {
+      "w": "index",
+      "start_s": 26.599,
+      "end_s": 26.924
+    },
+    {
+      "w": "fund",
+      "start_s": 26.994,
+      "end_s": 27.284
+    },
+    {
+      "w": "and",
+      "start_s": 27.342,
+      "end_s": 27.435
+    },
+    {
+      "w": "every",
+      "start_s": 27.505,
+      "end_s": 27.725
+    },
+    {
+      "w": "target-date",
+      "start_s": 27.783,
+      "end_s": 28.317
+    },
+    {
+      "w": "plan",
+      "start_s": 28.352,
+      "end_s": 28.619
+    },
+    {
+      "w": "now",
+      "start_s": 28.689,
+      "end_s": 28.852
+    },
+    {
+      "w": "carries",
+      "start_s": 28.921,
+      "end_s": 29.246
+    },
+    {
+      "w": "a",
+      "start_s": 29.293,
+      "end_s": 29.316
+    },
+    {
+      "w": "fifth",
+      "start_s": 29.397,
+      "end_s": 29.641
+    },
+    {
+      "w": "of",
+      "start_s": 29.687,
+      "end_s": 29.734
+    },
+    {
+      "w": "its",
+      "start_s": 29.792,
+      "end_s": 29.896
+    },
+    {
+      "w": "weight",
+      "start_s": 29.943,
+      "end_s": 30.163
+    },
+    {
+      "w": "in",
+      "start_s": 30.21,
+      "end_s": 30.314
+    },
+    {
+      "w": "one",
+      "start_s": 30.43,
+      "end_s": 30.616
+    },
+    {
+      "w": "bet",
+      "start_s": 30.663,
+      "end_s": 30.883
+    },
+    {
+      "w": "—",
+      "start_s": 31.011,
+      "end_s": 31.104
+    },
+    {
+      "w": "and",
+      "start_s": 31.382,
+      "end_s": 31.522
+    },
+    {
+      "w": "calls",
+      "start_s": 31.591,
+      "end_s": 31.847
+    },
+    {
+      "w": "it",
+      "start_s": 31.905,
+      "end_s": 32.021
+    },
+    {
+      "w": "the",
+      "start_s": 32.137,
+      "end_s": 32.253
+    },
+    {
+      "w": "market.",
+      "start_s": 32.323,
+      "end_s": 32.88
+    },
+    {
+      "w": "Run",
+      "start_s": 33.577,
+      "end_s": 33.763
+    },
+    {
+      "w": "the",
+      "start_s": 33.809,
+      "end_s": 33.89
+    },
+    {
+      "w": "arithmetic.",
+      "start_s": 33.948,
+      "end_s": 34.726
+    },
+    {
+      "w": "At",
+      "start_s": 35.237,
+      "end_s": 35.376
+    },
+    {
+      "w": "a",
+      "start_s": 35.411,
+      "end_s": 35.446
+    },
+    {
+      "w": "fifth",
+      "start_s": 35.516,
+      "end_s": 35.748
+    },
+    {
+      "w": "of",
+      "start_s": 35.794,
+      "end_s": 35.841
+    },
+    {
+      "w": "the",
+      "start_s": 35.887,
+      "end_s": 35.957
+    },
+    {
+      "w": "index,",
+      "start_s": 36.026,
+      "end_s": 36.572
+    },
+    {
+      "w": "a",
+      "start_s": 36.642,
+      "end_s": 36.723
+    },
+    {
+      "w": "fifty",
+      "start_s": 36.839,
+      "end_s": 37.153
+    },
+    {
+      "w": "percent",
+      "start_s": 37.211,
+      "end_s": 37.547
+    },
+    {
+      "w": "AI",
+      "start_s": 37.605,
+      "end_s": 37.919
+    },
+    {
+      "w": "drawdown",
+      "start_s": 37.977,
+      "end_s": 38.592
+    },
+    {
+      "w": "erases",
+      "start_s": 38.674,
+      "end_s": 39.173
+    },
+    {
+      "w": "ten",
+      "start_s": 39.242,
+      "end_s": 39.417
+    },
+    {
+      "w": "percent",
+      "start_s": 39.475,
+      "end_s": 39.8
+    },
+    {
+      "w": "of",
+      "start_s": 39.87,
+      "end_s": 39.974
+    },
+    {
+      "w": "\"the",
+      "start_s": 40.032,
+      "end_s": 40.137
+    },
+    {
+      "w": "market.\"",
+      "start_s": 40.206,
+      "end_s": 40.682
+    },
+    {
+      "w": "The",
+      "start_s": 41.123,
+      "end_s": 41.24
+    },
+    {
+      "w": "other",
+      "start_s": 41.298,
+      "end_s": 41.472
+    },
+    {
+      "w": "four",
+      "start_s": 41.507,
+      "end_s": 41.669
+    },
+    {
+      "w": "hundred",
+      "start_s": 41.727,
+      "end_s": 41.959
+    },
+    {
+      "w": "ninety",
+      "start_s": 42.006,
+      "end_s": 42.25
+    },
+    {
+      "w": "companies",
+      "start_s": 42.308,
+      "end_s": 42.691
+    },
+    {
+      "w": "never",
+      "start_s": 42.749,
+      "end_s": 42.946
+    },
+    {
+      "w": "get",
+      "start_s": 42.993,
+      "end_s": 43.109
+    },
+    {
+      "w": "a",
+      "start_s": 43.144,
+      "end_s": 43.167
+    },
+    {
+      "w": "vote.",
+      "start_s": 43.213,
+      "end_s": 43.527
+    },
+    {
+      "w": "So",
+      "start_s": 43.678,
+      "end_s": 43.805
+    },
+    {
+      "w": "look",
+      "start_s": 43.863,
+      "end_s": 44.014
+    },
+    {
+      "w": "at",
+      "start_s": 44.049,
+      "end_s": 44.096
+    },
+    {
+      "w": "the",
+      "start_s": 44.13,
+      "end_s": 44.2
+    },
+    {
+      "w": "spike",
+      "start_s": 44.223,
+      "end_s": 44.525
+    },
+    {
+      "w": "again.",
+      "start_s": 44.56,
+      "end_s": 45.001
+    },
+    {
+      "w": "The",
+      "start_s": 46.278,
+      "end_s": 46.394
+    },
+    {
+      "w": "spike",
+      "start_s": 46.429,
+      "end_s": 46.743
+    },
+    {
+      "w": "was",
+      "start_s": 46.778,
+      "end_s": 46.905
+    },
+    {
+      "w": "never",
+      "start_s": 46.975,
+      "end_s": 47.172
+    },
+    {
+      "w": "the",
+      "start_s": 47.219,
+      "end_s": 47.288
+    },
+    {
+      "w": "risk.",
+      "start_s": 47.358,
+      "end_s": 47.881
+    },
+    {
+      "w": "The",
+      "start_s": 48.391,
+      "end_s": 48.519
+    },
+    {
+      "w": "certificates",
+      "start_s": 48.565,
+      "end_s": 49.169
+    },
+    {
+      "w": "were.",
+      "start_s": 49.227,
+      "end_s": 50.017
+    }
+  ],
+  "request_id": "EOhJR8988rtS2tHroY1S"
+}

@@ -1,0 +1,837 @@
+{
+  "scene_id": 3,
+  "duration_s": 58.05,
+  "words": [
+    {
+      "w": "Walk",
+      "start_s": 0.0,
+      "end_s": 0.232
+    },
+    {
+      "w": "their",
+      "start_s": 0.279,
+      "end_s": 0.43
+    },
+    {
+      "w": "evidence",
+      "start_s": 0.476,
+      "end_s": 0.813
+    },
+    {
+      "w": "like",
+      "start_s": 0.848,
+      "end_s": 0.987
+    },
+    {
+      "w": "a",
+      "start_s": 1.022,
+      "end_s": 1.045
+    },
+    {
+      "w": "claims",
+      "start_s": 1.103,
+      "end_s": 1.428
+    },
+    {
+      "w": "adjuster.",
+      "start_s": 1.463,
+      "end_s": 1.985
+    },
+    {
+      "w": "Alex",
+      "start_s": 2.264,
+      "end_s": 2.589
+    },
+    {
+      "w": "Karp",
+      "start_s": 2.659,
+      "end_s": 2.879
+    },
+    {
+      "w": "of",
+      "start_s": 2.949,
+      "end_s": 3.007
+    },
+    {
+      "w": "Palantir,",
+      "start_s": 3.065,
+      "end_s": 3.738
+    },
+    {
+      "w": "on",
+      "start_s": 3.762,
+      "end_s": 3.855
+    },
+    {
+      "w": "national",
+      "start_s": 3.913,
+      "end_s": 4.261
+    },
+    {
+      "w": "television:",
+      "start_s": 4.307,
+      "end_s": 4.888
+    },
+    {
+      "w": "companies",
+      "start_s": 4.957,
+      "end_s": 5.41
+    },
+    {
+      "w": "buying",
+      "start_s": 5.457,
+      "end_s": 5.759
+    },
+    {
+      "w": "AI",
+      "start_s": 5.828,
+      "end_s": 6.177
+    },
+    {
+      "w": "tokens",
+      "start_s": 6.223,
+      "end_s": 6.618
+    },
+    {
+      "w": "can't",
+      "start_s": 6.676,
+      "end_s": 6.92
+    },
+    {
+      "w": "yet",
+      "start_s": 6.978,
+      "end_s": 7.175
+    },
+    {
+      "w": "see",
+      "start_s": 7.233,
+      "end_s": 7.419
+    },
+    {
+      "w": "a",
+      "start_s": 7.454,
+      "end_s": 7.488
+    },
+    {
+      "w": "clear",
+      "start_s": 7.535,
+      "end_s": 7.732
+    },
+    {
+      "w": "return.",
+      "start_s": 7.79,
+      "end_s": 8.429
+    },
+    {
+      "w": "Uber",
+      "start_s": 8.638,
+      "end_s": 8.905
+    },
+    {
+      "w": "burned",
+      "start_s": 8.963,
+      "end_s": 9.253
+    },
+    {
+      "w": "its",
+      "start_s": 9.288,
+      "end_s": 9.416
+    },
+    {
+      "w": "whole",
+      "start_s": 9.451,
+      "end_s": 9.718
+    },
+    {
+      "w": "annual",
+      "start_s": 9.787,
+      "end_s": 10.159
+    },
+    {
+      "w": "AI",
+      "start_s": 10.228,
+      "end_s": 10.577
+    },
+    {
+      "w": "budget",
+      "start_s": 10.635,
+      "end_s": 10.96
+    },
+    {
+      "w": "by",
+      "start_s": 11.006,
+      "end_s": 11.134
+    },
+    {
+      "w": "April.",
+      "start_s": 11.215,
+      "end_s": 11.61
+    },
+    {
+      "w": "Its",
+      "start_s": 11.633,
+      "end_s": 11.807
+    },
+    {
+      "w": "own",
+      "start_s": 11.865,
+      "end_s": 12.016
+    },
+    {
+      "w": "COO",
+      "start_s": 12.074,
+      "end_s": 12.666
+    },
+    {
+      "w": "admits",
+      "start_s": 12.841,
+      "end_s": 13.247
+    },
+    {
+      "w": "the",
+      "start_s": 13.293,
+      "end_s": 13.375
+    },
+    {
+      "w": "spending",
+      "start_s": 13.409,
+      "end_s": 13.804
+    },
+    {
+      "w": "hasn't",
+      "start_s": 13.862,
+      "end_s": 14.141
+    },
+    {
+      "w": "shown",
+      "start_s": 14.164,
+      "end_s": 14.396
+    },
+    {
+      "w": "up",
+      "start_s": 14.431,
+      "end_s": 14.524
+    },
+    {
+      "w": "in",
+      "start_s": 14.57,
+      "end_s": 14.617
+    },
+    {
+      "w": "the",
+      "start_s": 14.652,
+      "end_s": 14.721
+    },
+    {
+      "w": "product.",
+      "start_s": 14.756,
+      "end_s": 15.174
+    },
+    {
+      "w": "Microsoft",
+      "start_s": 15.244,
+      "end_s": 15.836
+    },
+    {
+      "w": "now",
+      "start_s": 15.882,
+      "end_s": 16.033
+    },
+    {
+      "w": "rations",
+      "start_s": 16.115,
+      "end_s": 16.544
+    },
+    {
+      "w": "AI",
+      "start_s": 16.614,
+      "end_s": 17.02
+    },
+    {
+      "w": "tools",
+      "start_s": 17.09,
+      "end_s": 17.38
+    },
+    {
+      "w": "inside",
+      "start_s": 17.438,
+      "end_s": 17.81
+    },
+    {
+      "w": "its",
+      "start_s": 17.833,
+      "end_s": 17.949
+    },
+    {
+      "w": "own",
+      "start_s": 18.007,
+      "end_s": 18.146
+    },
+    {
+      "w": "walls",
+      "start_s": 18.216,
+      "end_s": 18.646
+    },
+    {
+      "w": "—",
+      "start_s": 18.797,
+      "end_s": 18.901
+    },
+    {
+      "w": "the",
+      "start_s": 19.029,
+      "end_s": 19.133
+    },
+    {
+      "w": "bills",
+      "start_s": 19.191,
+      "end_s": 19.505
+    },
+    {
+      "w": "got",
+      "start_s": 19.563,
+      "end_s": 19.714
+    },
+    {
+      "w": "hard",
+      "start_s": 19.772,
+      "end_s": 19.981
+    },
+    {
+      "w": "to",
+      "start_s": 20.016,
+      "end_s": 20.074
+    },
+    {
+      "w": "justify.",
+      "start_s": 20.155,
+      "end_s": 20.944
+    },
+    {
+      "w": "But",
+      "start_s": 21.386,
+      "end_s": 21.56
+    },
+    {
+      "w": "look",
+      "start_s": 21.606,
+      "end_s": 21.769
+    },
+    {
+      "w": "at",
+      "start_s": 21.815,
+      "end_s": 21.862
+    },
+    {
+      "w": "what",
+      "start_s": 21.896,
+      "end_s": 22.036
+    },
+    {
+      "w": "those",
+      "start_s": 22.082,
+      "end_s": 22.291
+    },
+    {
+      "w": "three",
+      "start_s": 22.338,
+      "end_s": 22.57
+    },
+    {
+      "w": "stories",
+      "start_s": 22.605,
+      "end_s": 23.011
+    },
+    {
+      "w": "actually",
+      "start_s": 23.069,
+      "end_s": 23.499
+    },
+    {
+      "w": "are.",
+      "start_s": 23.58,
+      "end_s": 24.067
+    },
+    {
+      "w": "That",
+      "start_s": 24.311,
+      "end_s": 24.497
+    },
+    {
+      "w": "isn't",
+      "start_s": 24.555,
+      "end_s": 24.799
+    },
+    {
+      "w": "the",
+      "start_s": 24.834,
+      "end_s": 24.904
+    },
+    {
+      "w": "peak",
+      "start_s": 24.962,
+      "end_s": 25.171
+    },
+    {
+      "w": "of",
+      "start_s": 25.217,
+      "end_s": 25.264
+    },
+    {
+      "w": "inflated",
+      "start_s": 25.322,
+      "end_s": 25.763
+    },
+    {
+      "w": "expectations.",
+      "start_s": 25.809,
+      "end_s": 26.877
+    },
+    {
+      "w": "That's",
+      "start_s": 27.261,
+      "end_s": 27.539
+    },
+    {
+      "w": "the",
+      "start_s": 27.586,
+      "end_s": 27.655
+    },
+    {
+      "w": "trough",
+      "start_s": 27.702,
+      "end_s": 27.992
+    },
+    {
+      "w": "already",
+      "start_s": 28.05,
+      "end_s": 28.398
+    },
+    {
+      "w": "doing",
+      "start_s": 28.456,
+      "end_s": 28.665
+    },
+    {
+      "w": "its",
+      "start_s": 28.723,
+      "end_s": 28.84
+    },
+    {
+      "w": "job",
+      "start_s": 28.886,
+      "end_s": 29.211
+    },
+    {
+      "w": "—",
+      "start_s": 29.42,
+      "end_s": 29.467
+    },
+    {
+      "w": "the",
+      "start_s": 29.617,
+      "end_s": 29.722
+    },
+    {
+      "w": "tourists",
+      "start_s": 29.768,
+      "end_s": 30.151
+    },
+    {
+      "w": "finding",
+      "start_s": 30.198,
+      "end_s": 30.558
+    },
+    {
+      "w": "out,",
+      "start_s": 30.628,
+      "end_s": 30.964
+    },
+    {
+      "w": "one",
+      "start_s": 31.034,
+      "end_s": 31.254
+    },
+    {
+      "w": "budget",
+      "start_s": 31.301,
+      "end_s": 31.603
+    },
+    {
+      "w": "at",
+      "start_s": 31.638,
+      "end_s": 31.719
+    },
+    {
+      "w": "a",
+      "start_s": 31.765,
+      "end_s": 31.8
+    },
+    {
+      "w": "time.",
+      "start_s": 31.858,
+      "end_s": 32.439
+    },
+    {
+      "w": "Which",
+      "start_s": 32.682,
+      "end_s": 32.891
+    },
+    {
+      "w": "flips",
+      "start_s": 32.926,
+      "end_s": 33.217
+    },
+    {
+      "w": "the",
+      "start_s": 33.263,
+      "end_s": 33.333
+    },
+    {
+      "w": "question.",
+      "start_s": 33.379,
+      "end_s": 33.971
+    },
+    {
+      "w": "Not",
+      "start_s": 34.18,
+      "end_s": 34.482
+    },
+    {
+      "w": "\"when",
+      "start_s": 34.633,
+      "end_s": 34.946
+    },
+    {
+      "w": "does",
+      "start_s": 35.004,
+      "end_s": 35.179
+    },
+    {
+      "w": "the",
+      "start_s": 35.213,
+      "end_s": 35.283
+    },
+    {
+      "w": "disappointment",
+      "start_s": 35.33,
+      "end_s": 35.922
+    },
+    {
+      "w": "arrive\"",
+      "start_s": 35.968,
+      "end_s": 36.688
+    },
+    {
+      "w": "—",
+      "start_s": 36.932,
+      "end_s": 36.99
+    },
+    {
+      "w": "it's",
+      "start_s": 37.106,
+      "end_s": 37.28
+    },
+    {
+      "w": "arriving.",
+      "start_s": 37.315,
+      "end_s": 37.953
+    },
+    {
+      "w": "The",
+      "start_s": 38.337,
+      "end_s": 38.441
+    },
+    {
+      "w": "question",
+      "start_s": 38.487,
+      "end_s": 38.859
+    },
+    {
+      "w": "is",
+      "start_s": 38.905,
+      "end_s": 38.975
+    },
+    {
+      "w": "what",
+      "start_s": 39.022,
+      "end_s": 39.172
+    },
+    {
+      "w": "survives",
+      "start_s": 39.219,
+      "end_s": 39.695
+    },
+    {
+      "w": "it.",
+      "start_s": 39.753,
+      "end_s": 39.974
+    },
+    {
+      "w": "And",
+      "start_s": 40.148,
+      "end_s": 40.299
+    },
+    {
+      "w": "in",
+      "start_s": 40.368,
+      "end_s": 40.426
+    },
+    {
+      "w": "1849,",
+      "start_s": 40.484,
+      "end_s": 41.68
+    },
+    {
+      "w": "the",
+      "start_s": 41.738,
+      "end_s": 41.854
+    },
+    {
+      "w": "answer",
+      "start_s": 41.924,
+      "end_s": 42.214
+    },
+    {
+      "w": "wasn't",
+      "start_s": 42.272,
+      "end_s": 42.539
+    },
+    {
+      "w": "the",
+      "start_s": 42.574,
+      "end_s": 42.644
+    },
+    {
+      "w": "paper.",
+      "start_s": 42.679,
+      "end_s": 43.131
+    },
+    {
+      "w": "It",
+      "start_s": 43.224,
+      "end_s": 43.352
+    },
+    {
+      "w": "was",
+      "start_s": 43.399,
+      "end_s": 43.515
+    },
+    {
+      "w": "the",
+      "start_s": 43.584,
+      "end_s": 43.654
+    },
+    {
+      "w": "steel.",
+      "start_s": 43.7,
+      "end_s": 44.281
+    },
+    {
+      "w": "The",
+      "start_s": 44.664,
+      "end_s": 44.803
+    },
+    {
+      "w": "trains",
+      "start_s": 44.85,
+      "end_s": 45.163
+    },
+    {
+      "w": "ran",
+      "start_s": 45.221,
+      "end_s": 45.407
+    },
+    {
+      "w": "straight",
+      "start_s": 45.477,
+      "end_s": 45.755
+    },
+    {
+      "w": "through",
+      "start_s": 45.79,
+      "end_s": 45.988
+    },
+    {
+      "w": "the",
+      "start_s": 46.022,
+      "end_s": 46.092
+    },
+    {
+      "w": "crash",
+      "start_s": 46.127,
+      "end_s": 46.545
+    },
+    {
+      "w": "—",
+      "start_s": 46.638,
+      "end_s": 46.684
+    },
+    {
+      "w": "and",
+      "start_s": 46.707,
+      "end_s": 46.847
+    },
+    {
+      "w": "the",
+      "start_s": 46.893,
+      "end_s": 46.963
+    },
+    {
+      "w": "towns",
+      "start_s": 47.009,
+      "end_s": 47.369
+    },
+    {
+      "w": "kept",
+      "start_s": 47.427,
+      "end_s": 47.601
+    },
+    {
+      "w": "growing",
+      "start_s": 47.648,
+      "end_s": 47.961
+    },
+    {
+      "w": "around",
+      "start_s": 47.996,
+      "end_s": 48.205
+    },
+    {
+      "w": "the",
+      "start_s": 48.24,
+      "end_s": 48.31
+    },
+    {
+      "w": "stations.",
+      "start_s": 48.344,
+      "end_s": 49.076
+    },
+    {
+      "w": "The",
+      "start_s": 49.25,
+      "end_s": 49.378
+    },
+    {
+      "w": "steel",
+      "start_s": 49.424,
+      "end_s": 49.703
+    },
+    {
+      "w": "kept",
+      "start_s": 49.772,
+      "end_s": 49.97
+    },
+    {
+      "w": "working.",
+      "start_s": 50.028,
+      "end_s": 50.492
+    },
+    {
+      "w": "The",
+      "start_s": 50.539,
+      "end_s": 50.655
+    },
+    {
+      "w": "paper",
+      "start_s": 50.713,
+      "end_s": 50.98
+    },
+    {
+      "w": "stopped",
+      "start_s": 51.015,
+      "end_s": 51.328
+    },
+    {
+      "w": "pretending.",
+      "start_s": 51.363,
+      "end_s": 51.955
+    },
+    {
+      "w": "And",
+      "start_s": 53.22,
+      "end_s": 53.36
+    },
+    {
+      "w": "that's",
+      "start_s": 53.406,
+      "end_s": 53.592
+    },
+    {
+      "w": "where",
+      "start_s": 53.627,
+      "end_s": 53.801
+    },
+    {
+      "w": "most",
+      "start_s": 53.859,
+      "end_s": 54.068
+    },
+    {
+      "w": "people",
+      "start_s": 54.114,
+      "end_s": 54.44
+    },
+    {
+      "w": "—",
+      "start_s": 54.486,
+      "end_s": 54.532
+    },
+    {
+      "w": "including,",
+      "start_s": 54.602,
+      "end_s": 55.09
+    },
+    {
+      "w": "this",
+      "start_s": 55.113,
+      "end_s": 55.252
+    },
+    {
+      "w": "one",
+      "start_s": 55.322,
+      "end_s": 55.496
+    },
+    {
+      "w": "time,",
+      "start_s": 55.519,
+      "end_s": 55.786
+    },
+    {
+      "w": "Bravos",
+      "start_s": 55.809,
+      "end_s": 56.355
+    },
+    {
+      "w": "—",
+      "start_s": 56.436,
+      "end_s": 56.483
+    },
+    {
+      "w": "get",
+      "start_s": 56.564,
+      "end_s": 56.727
+    },
+    {
+      "w": "the",
+      "start_s": 56.762,
+      "end_s": 56.831
+    },
+    {
+      "w": "whole",
+      "start_s": 56.889,
+      "end_s": 57.133
+    },
+    {
+      "w": "thing",
+      "start_s": 57.168,
+      "end_s": 57.354
+    },
+    {
+      "w": "wrong.",
+      "start_s": 57.412,
+      "end_s": 58.05
+    }
+  ],
+  "request_id": "KPQl6oS2LiFSoGl9JAFu"
+}
