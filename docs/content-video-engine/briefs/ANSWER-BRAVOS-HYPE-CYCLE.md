@@ -264,7 +264,13 @@ image, not the ask; no new information)*
 
 ---
 
-## SCRIPT B (sentence-strength pass — A/B test arm B)
+## SCRIPT B — **PRODUCTION TEXT** (sentence-strength pass; won the A/B ear test)
+
+A/B verdict (operator, 2026-08-24, by ear): three matched pairs — open,
+pivot, close — same voice, settings, and seed 4242; **B won**. B also ran
+~4% shorter at identical content. Consequence recorded in the kit: the
+sentence-strength pass is a STANDING step of the generation flow, not
+optional polish. Arm A retained above as the baseline record.
 
 Every sentence of A walked through the ten gates of the kit's
 SENTENCE-STRENGTH-CHECK; failures rewritten until clean. Structure, beats,

@@ -119,3 +119,8 @@ different model — continues the same video.
 - v1 — kit assembled: binder + injection surface + six phase guides.
   Fresh-context P1 generation test passed on an unseen topic (correct
   geometry, original ring token, budgets held, complete ledger).
+- v1.1 — SENTENCE-STRENGTH-CHECK added as flow step 5. Validated by A/B
+  ear test on the first production script: matched segment pairs (open,
+  pivot, close), identical voice/settings/seed — the strength-passed arm
+  won by ear and ran ~4% shorter at identical content. The pass is
+  standing, not optional.
