@@ -3,8 +3,8 @@
 Provenance: Gemini densification of the operator's writing-for-the-ear deep
 research (2026-08-24), supplied by the operator. This is **layer 1 of the
 portable kit's context**: the timeless craft, framework mechanics preserved,
-metadiscourse stripped. Layer 2 (platform fill, doc 31 densified) and layer 3
-(injection parameters) are produced under the P10 plan.
+metadiscourse stripped. Layer 2 (the platform fill) is fused into the kit's
+phase guides; layer 3 is the injection surface (INJECTION.md).
 
 Densification method (record it — it is how layer 2 gets built too):
 structural densification into nested lists/key-value parameters ·
@@ -71,8 +71,8 @@ ACOUSTIC NARRATIVE ARCHITECTURE (LLM KNOWLEDGE CONTEXT)
 
 ---
 
-Repo-side bends already ruled (apply on top of this block; full context in
-docs 31/32): Pre-Opener Pause is visual-only on YouTube (never open on dead
+Standing bends already ruled (apply on top of this block; operative detail
+lives in the phase guides): Pre-Opener Pause is visual-only on YouTube (never open on dead
 air or black) · pauses compile to break tags with a 3s cap and a 3/segment
 ration · the pattern's timing capillaries (3s microhook, 8s decision,
 positional rehooks, One Minute Wall, one-CTA Action Window) come from the
