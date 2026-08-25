@@ -56,3 +56,16 @@ splits into TWO channels, both names verified collision-free:
 
 Rejected channel-asset wave (spike marks) stays retired; avatar decision
 for each channel still open (MP: MP-orbit or host bust; BM: TBD).
+
+## Standing correction: the hook prop is not the brand (operator, 2026-08-25, twice)
+
+The spike is Steel and Paper's ring token — one hook of one episode. It
+never anchors channel identity, series identity, OTHER episodes'
+references, or even its own episode's thumbnails. Thumbnails sell the
+episode's QUESTION/THESIS (where does the bubble actually live; steel vs
+paper), not its opening prop. Batch remediation: spike slot + spike
+reference removed from mp-thumbs-wave-2 (replaced with the
+paper-wrapped-beam thesis thumbnail) before dispatch reached it;
+bm-launch-worlds-1 had already dispatched with the spike plate as a
+style-only reference (prompts never mention it) — reject any spike drift
+at the contact sheet.
