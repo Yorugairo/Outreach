@@ -101,9 +101,17 @@ layer in every episode.
 timings, numerals accented. A caption that swaps as a static block is a
 defect. Never resample timings.
 
-**C3 — Plate floor: ≥10 distinct world plates per episode**, OR a
-vision-passed semantic plate board approved BEFORE production with gaps
-filled by generation.
+**C3 — Plate density is runtime-derived.** Target **runtime / 12s** of
+distinct world plates (a 7-minute episode needs ~38, not 10). Hard
+ceiling: 20s on one plate, and only when TWO strong evidence documents
+dock over that stretch. The old ">=10" figure is a minimum for a short
+episode, never a target.
+*Why:* operator — "you don't have enough plates if you're running 80
+second deficits." A long bare stretch can be a PLATE shortfall, not an
+evidence shortfall; diagnose which layer is thin before ordering work.
+*Apply:* compute the target from runtime before opening a plate claim.
+Thumbnails, avatars, and banners are not world plates — count only
+plates that can carry a scene.
 
 **C4 — Style vocabulary split.** World plates are prompted as **woodblock
 vox newsprint** (carved ink contours, flat editorial color). **Washi
