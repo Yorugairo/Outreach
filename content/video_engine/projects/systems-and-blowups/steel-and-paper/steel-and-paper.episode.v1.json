@@ -55,13 +55,23 @@
     ]
   },
   "plates": {
-    "generated_claim": "steel-and-paper-plates-wave-1",
-    "wave_1_slots": 12,
+    "generated_claims": {
+      "steel-and-paper-plates-wave-1": {
+        "slots": 12,
+        "scan": "12 clean / 0 flagged / 0 failed",
+        "review_notes": "10 accepted by build review; world-spike-certificate-ring-v1 and world-spike-rest-v1 rejected (ring continuity), superseded by wave-1b"
+      },
+      "steel-and-paper-plates-wave-1b": {
+        "slots": 2,
+        "scan": "2 clean / 0 flagged / 0 failed",
+        "review_notes": "ring plates v2, conditioned on delivered spike master; continuity verified by eye"
+      }
+    },
     "wave_2_pending": [
       "world-certificate-shadow-v1",
       "world-canal-lock-v1"
     ],
-    "status": "quarantined_review_required"
+    "status": "quarantined_review_required - operator wave approval then promotion"
   },
   "charts_draft": [
     "chart-divergence-draft",
@@ -71,5 +81,9 @@
   ],
   "chart_rule": "in-house evidence plates from Bravos-attributed figures; 'Data: Bravos Research' chip on every plate; drafts pending number verification against source frames",
   "citation_clip": "3-5s of the Bravos frame at the P1 credit beat, pillarboxed with attribution card (operator sourcing ruling 2026-08-24)",
-  "rough_cut": "scratch v0 only - not an asset; quarantined outside the repo"
+  "rough_cut": "scratch v0 only - not an asset; quarantined outside the repo",
+  "rough_cuts": {
+    "v0": "placeholders + charts",
+    "v1": "14 real plates + 4 draft charts, 19 cuts, scratch only"
+  }
 }
