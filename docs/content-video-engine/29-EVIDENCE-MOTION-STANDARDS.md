@@ -893,3 +893,43 @@ fingertips beside).
    tag on a single baseline (slim padding, value ~23px) so the document
    fills its own card; the stacked two-row pill is retired. The badge
    remains a stamp, not a panel.
+
+### 9.11 Rebuild source charts — do not extract frames (operator, 2026-08-25)
+
+Operator ruling, superseding the clip-extraction workflow in 9.10:
+*"We should stop trying to take the images from their video, we will
+either get the approval or simply remake the charts — there is no
+copyright on charts, and we aren't using the animation effect they're
+using anyways. We could literally just rebuild the charts using
+hyperframes / yfinance."*
+
+- **Default: rebuild.** Every evidence chart is OURS — built sharp
+  (hyperframes/SVG/plot code) from real data (yfinance, public series,
+  or the source's cited verbatim figures), labeled with the underlying
+  source and window. Chart data carries no copyright; the source's
+  *rendered pixels* are what we stop taking.
+- **Frame extraction from a third-party video is retired** for the
+  evidence layer. It returns only for the brief on-screen citation
+  moment (crediting the source video, their branding visible) or when
+  the source grants chart exports (outreach pending — their exports
+  then supersede our rebuilds).
+- Rebuilds citing a source's own figures use the verified-text lane
+  (9.8): numerals verbatim from the cited claim, attribution label on
+  the chart ("figures via Bravos Research / <their cited source>").
+- Series we cannot fetch or verify are NOT approximated by eyeballing
+  the source's chart — they wait for the export grant or
+  operator-supplied data, and narration is written to survive their
+  absence (doc 35 sources-to-verify discipline).
+
+### 9.12 Work orders are immutable after dispatch (operator, 2026-08-25)
+
+The mp-thumbs-wave-2 order was patched in place after the batch
+dispatcher launched; the BM claim in the same batch delivered rotated
+filenames and reference drift. Operator diagnosis: *"you tried to swap
+after you already sent the workorder to codex, it probably already had
+the context in memory."*
+
+- Once a claim is dispatched, its WORK-ORDER.md is frozen. A correction
+  means: stop/let the claim finish → reject at review → open a NEW
+  claim (fresh id) with the corrected order. Never edit a dispatched
+  order and hope the agent re-reads it.
