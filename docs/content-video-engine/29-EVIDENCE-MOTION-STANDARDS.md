@@ -889,3 +889,7 @@ fingertips beside).
    narration span, and verify the visible era matches the badge before
    binding. Evidence orders must state the claimed era per clip slot and
    require the agent to record which visual state was captured.
+3. **Pills are sleek, one-baseline rows.** Badge pills run label · value ·
+   tag on a single baseline (slim padding, value ~23px) so the document
+   fills its own card; the stacked two-row pill is retired. The badge
+   remains a stamp, not a panel.

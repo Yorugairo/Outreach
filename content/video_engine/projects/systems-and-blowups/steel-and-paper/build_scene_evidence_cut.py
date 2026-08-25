@@ -1,4 +1,4 @@
-"""Steel and Paper — scene-evidence v6: DMP deck evidence, sharp SVG charts,
+"""Steel and Paper — scene-evidence v7: DMP deck evidence, sharp SVG charts,
 word-punch captions, clean re-synth timings."""
 from __future__ import annotations
 
@@ -345,7 +345,7 @@ def main() -> int:
                        "source": s["source"], "badges": s["badges"], "match_score": 1.0}
                 for eid, s in EVIDENCE.items()}
     tl = {"schema_version": "scene_evidence_timeline.v1",
-          "episode_id": "steel-and-paper-scene-evidence-v6",
+          "episode_id": "steel-and-paper-scene-evidence-v7",
           "project_id": "systems-and-blowups",
           "narration": {"canonical_hash": ZERO, "words_path": "steel-and-paper/vo"},
           "captions": build_captions(), "evidence": evidence, "scenes": scenes}
@@ -382,6 +382,32 @@ def main() -> int:
     clock = f"{mins}:{secs:02d}"
     html = TEMPLATE.read_text(encoding="utf-8")
     # finance-niche dock scale +20% (operator, 2026-08-25): charts must read
+    # sleeker pills (operator, 2026-08-25): one-baseline badges, document fills the card
+    html = html.replace(
+        ".dock-head { margin-bottom: 9px; }",
+        ".dock-head { margin-bottom: 6px; }")
+    html = html.replace(
+        ".dock-title { font-size: 25px;",
+        ".dock-title { font-size: 21px;")
+    html = html.replace(
+        ".rail { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; margin-top: 11px; }",
+        ".rail { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 7px; }")
+    html = html.replace(
+        ".pill { background: rgba(37,49,60,.94); border-radius: 7px; padding: 8px 11px; display: flex; flex-direction: column;",
+        ".pill { background: rgba(37,49,60,.92); border-radius: 6px; padding: 5px 10px; display: flex; flex-direction: row; align-items: baseline; gap: 8px; white-space: nowrap; overflow: hidden;")
+    html = html.replace(
+        ".pill-label { font-size: 13px; font-weight: 700; letter-spacing: .08em; color: #9fb4c4; }",
+        ".pill-label { font-size: 11px; font-weight: 700; letter-spacing: .06em; color: #9fb4c4; }")
+    html = html.replace(
+        ".pill-row { display: flex; align-items: baseline; gap: 9px; margin-top: 3px; }",
+        ".pill-row { display: flex; align-items: baseline; gap: 7px; margin-top: 0; }")
+    html = html.replace(
+        ".pill-num { font-size: 29px;",
+        ".pill-num { font-size: 23px;")
+    html = html.replace(
+        ".pill-tag { font-size: 13px;",
+        ".pill-tag { font-size: 11px;")
+
     html = html.replace(
         "position: absolute; top: 226px; width: 720px;",
         "position: absolute; top: 186px; width: 864px;")
@@ -392,10 +418,10 @@ def main() -> int:
     html = html.replace("#dock-1 { left: 136px; } #dock-2 { left: 1064px; }",
                          "#dock-1 { left: 70px; } #dock-2 { left: 990px; }")
 
-    html = html.replace("Current Bubble v4", "Steel and Paper — scene-evidence v6")
+    html = html.replace("Current Bubble v4", "Steel and Paper — scene-evidence v7")
     html = html.replace(
         "<b>Current Bubble &mdash; five minute v4</b> &middot; scene-evidence lane &middot; generated from timeline.v4.json",
-        "<b>Steel and Paper</b> &middot; scene-evidence lane &middot; review build v6")
+        "<b>Steel and Paper</b> &middot; scene-evidence lane &middot; review build v7")
     html = html.replace('max="300"', f'max="{total:.2f}"')
     html = html.replace("const DUR = 300;", f"const DUR = {total:.2f};")
     html = html.replace("0:00 / 5:00", f"0:00 / {clock}")
@@ -405,7 +431,7 @@ def main() -> int:
     html = html.replace("  #bar {", CAPTION_CSS + "\n  #bar {")
     html = html.replace("{{TIMELINE}}", json.dumps(tl))
     html = html.replace("{{URIS}}", json.dumps(uris))
-    out = BUILD / "steel-and-paper-scene-evidence-v6.html"
+    out = BUILD / "steel-and-paper-scene-evidence-v7.html"
     out.write_text(html, encoding="utf-8")
 
     docks = [d for sc in scenes for d in sc["docks"]]
