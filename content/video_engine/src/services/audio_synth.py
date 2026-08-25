@@ -67,18 +67,32 @@ MAX_BREAK_TAGS_PER_SEGMENT = 3
 
 _BREAK_TAG = re.compile(r'<break\s+time="\d+(?:\.\d+)?s"\s*/>')
 _PAUSE_MARK = re.compile(r"\[(?:pre|post)-key\]")
+# Editorial flags ([verify], [check-me], ...) are workflow markup. They must
+# never be spoken: the provider reads unknown brackets aloud (operator-caught,
+# 2026-08-25). Scripts should not contain them at synthesis time at all; this
+# strip is the defensive gate, and finding one is warned as a script defect.
+_EDITORIAL_FLAG = re.compile(r"\[[a-z][a-z-]*\]")
 
 
 def compile_pause_marks(narration: str) -> str:
     """Translate script pause marks into provider break tags.
 
-    Unknown bracketed text passes through untouched so future v3 audio tags
-    or editorial annotations are not silently destroyed.
+    Pause marks become break tags; any OTHER bracketed lowercase token is an
+    editorial flag that leaked past scripting and is stripped with a warning —
+    the provider would read it aloud verbatim.
     """
 
     compiled = narration
     for mark, tag in PAUSE_MARK_BREAKS.items():
         compiled = compiled.replace(mark, tag)
+    leaked = _EDITORIAL_FLAG.findall(compiled)
+    if leaked:
+        LOGGER.warning(
+            "editorial flags %s found in narration at synthesis time; stripped "
+            "— verification belongs before scripting, never in the script",
+            sorted(set(leaked)),
+        )
+        compiled = " ".join(_EDITORIAL_FLAG.sub(" ", compiled).split())
     tag_count = len(_BREAK_TAG.findall(compiled))
     if tag_count > MAX_BREAK_TAGS_PER_SEGMENT:
         LOGGER.warning(
@@ -99,6 +113,7 @@ def strip_pause_markup(text: str) -> str:
 
     stripped = _BREAK_TAG.sub(" ", text)
     stripped = _PAUSE_MARK.sub(" ", stripped)
+    stripped = _EDITORIAL_FLAG.sub(" ", stripped)
     return " ".join(stripped.split())
 
 

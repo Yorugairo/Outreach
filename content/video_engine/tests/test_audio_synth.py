@@ -282,6 +282,25 @@ def test_pause_marks_reach_provider_but_never_the_word_timings(tmp_path: Path) -
     assert tokens == ["Watch", "the", "gap.", "It", "closes."]
 
 
+def test_editorial_flags_never_reach_the_provider_or_captions(tmp_path: Path) -> None:
+    sent: dict = {}
+
+    def post(url: str, *, headers: dict, payload: dict, timeout: float):
+        sent["payload"] = payload
+        return _response(payload["text"])
+
+    service = AudioSynthService(_config(), request_fn=post)
+    service.synthesize_storyboard(
+        _storyboard("Order books are sold out [verify]. Prices climbed [check-me] all year."),
+        tmp_path,
+    )
+
+    assert "[verify]" not in sent["payload"]["text"]
+    assert "[check-me]" not in sent["payload"]["text"]
+    words = json.loads((tmp_path / "audio/scene_1.words.json").read_text())
+    assert all("verify" not in word["w"] for word in words["words"])
+
+
 def test_alignment_fallback_when_provider_strips_break_tags(tmp_path: Path) -> None:
     def post(url: str, *, headers: dict, payload: dict, timeout: float):
         return _response(strip_pause_markup(payload["text"]))

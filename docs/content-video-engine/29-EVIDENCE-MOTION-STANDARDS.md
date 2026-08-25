@@ -779,3 +779,38 @@ Naming protocol to adopt alongside it: slide ids are deck-and-number
 (`memory-supercycle-s03`), which says where a slide lives but nothing about
 what it claims. Registration should attach meaning as data
 (`claim_refs`, `semantic_tags`), never encode it in the filename.
+
+## Part 9 — Operator corrections, 2026-08-25 (Steel and Paper build)
+
+1. **Dynamic captions are mandatory, always.** Word-by-word (or word-group
+   with per-word punch-in at canonical timestamps) — the Alicia kinetic
+   grammar. A caption that swaps as a static block is a defect. Numeral
+   words take the accent color.
+2. **Plate floor: every episode ships ≥10 distinct world plates minimum**,
+   OR a semantic-match plate board (existing plates, vision-passed against
+   the script's scenes) approved BEFORE production, with gaps filled by
+   generation.
+3. **The evidence layer is sharp, never soft.** No rasterized
+   soft-rendered charts ("paper toys"). Evidence charts are crisp vector
+   surfaces (hyperframes/Remotion in production; sharp SVG in review
+   builds) with typeset numerals. When a public data series exists, pull
+   REAL data (yfinance needs no key) and label the source and window
+   exactly — a live-ticker chart with computed figures beats a shape
+   recreation.
+4. **Style vocabulary split**: generated world plates are prompted as
+   **woodblock vox newsprint** (the style family's actual register —
+   carved ink contours, flat editorial color). **Washi paper is reserved
+   for the evidence-dock chrome** — the translucent layer evidence is
+   pasted onto. Prompting plates as "paper collage" drifts the world
+   toward paper toys; the paper texture belongs to the dock, not the
+   world.
+5. **Editorial flags never reach narration.** `[verify]` and kin are
+   pre-production workflow marks; verification completes BEFORE
+   scripting. The TTS layer now strips any leaked bracket flag with a
+   warning (audio_synth `_EDITORIAL_FLAG`), but the standard is that
+   scripts arrive clean.
+6. **Structure narration around the provider's cut points.** Scene/segment
+   boundaries fall on paragraph ends with a settle pause; segments respect
+   the ≤3-break-tag ration (split the segment rather than exceed it —
+   overload causes audible speed-ups); full-episode audio is re-encoded
+   through one concat pass so seams never emit fragments.
