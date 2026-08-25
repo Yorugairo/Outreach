@@ -96,6 +96,16 @@ TTS segment · one breathing dip per P3/P5 unit — intentional dips beat
 pile-on · new information every 15–30s (relaxing to 30–45s only in P5
 reflection stretches, never to zero).
 
+**Rhetorical figures budget (operator-priority, from the marked session):**
+tricolon at the thesis-grade lines — P1 promise, P2 momentum build, P6 final
+triad (third stroke completes or subverts) · the anaphora arc spans P3 units
+(constant opening, evolving tails) and resolves as P6's closing triad ·
+phonetic anchors (alliteration/assonance) only on the promise, the payoff,
+and the tell. **The Glass alternation is the master engine at every scale:**
+P2 runs anecdote-heavy, P3 units alternate inside themselves (u1–u3
+anecdote, u4 reflection), P5 runs reflection-heavy — the RATIO shifts by
+phase; the alternation never stops.
+
 **Counterpoint per phase:** irony (P1) → contextual mapping (P2) → subtext
 layering (P3) → visual register shift (P4) → abstract synthesis (P5) →
 ring symmetry (P6). A line that captions its own visual fails everywhere.
@@ -242,7 +252,11 @@ triad present · nothing new after the CTA · runtime inside tier — padding
 
 ## Provenance
 
-Built from: the operator's 12 marked passages on the shared reading copy
+Built from: the operator's marked passages — final count **35**
+([HIGHLIGHT-SESSION-2026-08-24.md](HIGHLIGHT-SESSION-2026-08-24.md)), with
+operator-named priorities (Glass dual engine; tricolon/anaphora) and
+double-marked emphasis (attribution-first, Truby's seven steps, A/V
+counterpoint) weighted into §2. Originally drafted from the first 12 on the shared reading copy
 (the acoustic layer as lint tier; the McKee-hierarchy extension mandate) ·
 [31-FACELESS-CHANNEL-DOCTRINE.md](../31-FACELESS-CHANNEL-DOCTRINE.md) (all
 micro mechanics) · [32-WRITING-FOR-THE-EAR.md](../32-WRITING-FOR-THE-EAR.md)

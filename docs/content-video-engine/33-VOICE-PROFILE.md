@@ -44,6 +44,14 @@ Rhythm
   script is a performance document, not prose.
 - Fragments are allowed singly for impact, never stacked. Three
   short-period fragments in a row is the AI-slop tell.
+- Tricolon (operator-priority device): baseline, extension, then completion
+  — or SUBVERSION for the humor turn. One per thesis-grade line; the final
+  triad closes every video.
+- Anaphora (operator-priority device): hold the opening phrase constant so
+  the listener processes only the evolving ends; run it across a video's
+  progressive points, land it as the closing triad.
+- Phonetic anchors: alliteration/assonance reserved for the lines that must
+  be remembered — the promise, the payoff, the tell.
 
 Compression
 - Dense with concrete nouns, thin on abstraction. A suit rack, a watch
@@ -94,8 +102,10 @@ Personality (faceless — the words carry it)
 Structure defaults
 - Retention clock per beat: grab in the FIRST sentence (0-3s), answer by
   10s, promise the payout by 30s, repeat.
-- Anecdote ↔ reflection alternation. The reflection beat is where
-  authority is earned; a run of pure anecdote is a shallow list.
+- Anecdote ↔ reflection alternation — THE engine (operator-priority,
+  Glass): anecdote is chronological bait that keeps raising unresolved
+  questions; reflection interrupts to say why it matters. All-anecdote =
+  shallow list; all-reflection = alienating lecture. Alternate continuously.
 - Ring close: the ending echoes the opening image, transformed. The
   receipt opens the video and the viewer calculates theirs at the end.
 - One CTA per outro, never three, placed inside the 15-30s action window

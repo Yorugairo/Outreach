@@ -128,8 +128,8 @@ T4 in parallel with T3 → T5 validation → gate 3 → complete.
 ### T1: Full-video map (ratio-based, 30:00 reference)
 - Status: done (pending gate-2 ratio approval)
 - Owner: parent
-- Depends on: brainstorm gate — SATISFIED via highlighter session (12 marked
-  passages) + operator direction: "fill in the Macro 6 with ALL of the
+- Depends on: brainstorm gate — SATISFIED via highlighter session (final:
+  35 marked passages, archived in patterns/HIGHLIGHT-SESSION-2026-08-24.md) + operator direction: "fill in the Macro 6 with ALL of the
   expected micro hook/callback/CTA rules… extending McKee to the YouTube era"
 - Write set: `docs/content-video-engine/patterns/FULL-VIDEO-MAP.md`
 - Acceptance: all six phases at doc 38 §2 beat-level; ratios + repeat rule
@@ -147,7 +147,10 @@ T4 in parallel with T3 → T5 validation → gate 3 → complete.
 - Depends on: T1
 - Write set: `docs/content-video-engine/patterns/phase-guides/P1..P6.md`
 - Acceptance: each guide is self-contained (no doc references in the
-  operative text), slotted, with a worked micro-example
+  operative text), slotted, with a worked micro-example; MANDATORY slots for
+  the operator-priority devices — Glass anecdote/reflection alternation
+  (with the phase's ratio stated) and tricolon/anaphora placements — plus
+  attribution-first as a hard gate, per the 35-mark session record
 - Validate: a fresh-context generation test on P1 alone produces a
   conformant 90-second open
 - Evidence: pending
