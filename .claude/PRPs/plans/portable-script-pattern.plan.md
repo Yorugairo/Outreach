@@ -126,15 +126,20 @@ T4 in parallel with T3 → T5 validation → gate 3 → complete.
 ## Task Slices
 
 ### T1: Full-video map (ratio-based, 30:00 reference)
-- Status: pending
+- Status: done (pending gate-2 ratio approval)
 - Owner: parent
-- Depends on: brainstorm gate
+- Depends on: brainstorm gate — SATISFIED via highlighter session (12 marked
+  passages) + operator direction: "fill in the Macro 6 with ALL of the
+  expected micro hook/callback/CTA rules… extending McKee to the YouTube era"
 - Write set: `docs/content-video-engine/patterns/FULL-VIDEO-MAP.md`
 - Acceptance: all six phases at doc 38 §2 beat-level; ratios + repeat rule
   explicit; every beat carries craft citation, voice constraint, pause
   marks, counterpoint directive
 - Validate: manual read against doc 38 §2 bar; gate 2 approval
-- Evidence: pending
+- Evidence: FULL-VIDEO-MAP.md v1 committed 2026-08-24 — 6 phases at micro
+  density, extended unit hierarchy (line→beat→loop→unit→phase→video→
+  catalogue), duty roster with counts, scaling law (open/close absolute,
+  midpoint pinned 45–55%, P3 units elastic, >30min mini-pivot rule)
 
 ### T2: Per-phase prompt guides
 - Status: pending
