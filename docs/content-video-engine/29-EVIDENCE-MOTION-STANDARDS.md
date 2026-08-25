@@ -955,3 +955,31 @@ expecting 2 pieces of strong evidence to cover."*
   world plates against a 38 target) was the larger half of the problem.
 - Thumbnails, avatars, and banners are NOT world plates. Count only
   plates that can carry a scene.
+
+### 9.14 World plates MAY show screens, boards, and trend imagery (operator, 2026-08-25)
+
+Correction to an over-triggered review guard. On the wave-3 contact sheet
+I rejected two good plates — a broadcast set whose monitor wall showed
+charts, and a whiteboard with a descending trend arrow — reasoning that a
+plate must not "assert a data claim it cannot source." That reasoning was
+wrong. Operator: *"we should not be trying to cancel out screens and
+chart type things. The way our evidence layers work will be more than
+enough to prevent the clash"* and *"the downtrend arrow is not a real
+chart and doesn't claim it, it's a vague image that the narration
+covers."*
+
+- **Screens, monitor walls, exchange boards, whiteboards, gauges,
+  gestural trend lines and arrows are legitimate world-plate scenery.**
+  They set a room. They do not claim a figure.
+- **The evidence layer is what separates claim from décor.** Docks are
+  visually distinct by construction — sharp vector inside washi chrome,
+  verbatim badges, source-and-window labels. A soft carved arrow behind a
+  translucent dock will never be mistaken for the dock's document, so the
+  clash the guard was defending against does not exist.
+- **The line that still holds is 9.8/C6**: no *legible* numerals or
+  labels asserting a specific figure baked into a plate. Vague is fine;
+  specific-and-unsourced is not.
+- Review lesson: a rule's REASON is its scope. "The evidence layer is
+  sharp, never soft" governs the evidence layer — extending it to police
+  the world layer cost two good plates and would have thinned an episode
+  already short on plate density (9.13).
