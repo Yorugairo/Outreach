@@ -39,3 +39,20 @@ pick · exp-2b (verified-text lane, doc 29 §9.8) not yet run.
   (operator: a decade of personal trading; no elevated compliance context
   now) — supersedes the earlier never-'trader' bio note WITHIN naming;
   the persona bio still leads with risk analyst.
+
+## Two-channel structure (operator confirmed, 2026-08-25)
+
+Per AOY content-wall doctrine (one avatar per channel), the finance effort
+splits into TWO channels, both names verified collision-free:
+
+1. **MONEY PHYSICS** — investors/market-watchers. Formats: answer format,
+   tripwire watch, deep explainers. Tagline: "The market isn't magic.
+   It's mechanics." Banner exported (triad layout, 2560x1440,
+   safe-zone centered). Launches first.
+2. **BUILDING MONEY** — youth/young adults. Formats: trades-vs-school,
+   path building, build-in-public with real costs, the $100/week tracked
+   account. Tagline: "Build your world." Launch series = the documented
+   build of Money Physics (cost data on record).
+
+Rejected channel-asset wave (spike marks) stays retired; avatar decision
+for each channel still open (MP: MP-orbit or host bust; BM: TBD).
