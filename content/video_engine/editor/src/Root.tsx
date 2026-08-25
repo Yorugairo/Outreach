@@ -4,6 +4,7 @@ import {
   type CalculateMetadataFunction,
 } from "remotion";
 import { EditorialComposition } from "./Editorial";
+import { EvidenceCarousel3D, LongPlateOrbit } from "./Evidence3DProto";
 import { DocumentaryComposition, DocumentaryMotionComposition } from "./Documentary";
 import {
   calculateEditorialMotionMetadata,
@@ -95,6 +96,23 @@ export const RemotionRoot: React.FC = () => {
         height={1080}
         defaultProps={{ treatment: defaultDocumentaryTreatment }}
         calculateMetadata={calculateDocumentaryMetadata}
+      />
+      <Composition
+        id="EvidenceCarousel3D"
+        component={EvidenceCarousel3D}
+        durationInFrames={240}
+        fps={30}
+        width={1920}
+        height={1080}
+      />
+      <Composition
+        id="LongPlateOrbit"
+        component={LongPlateOrbit}
+        durationInFrames={300}
+        fps={30}
+        width={1920}
+        height={1080}
+        defaultProps={{}}
       />
       <Composition
         id="EditorialMotion"
