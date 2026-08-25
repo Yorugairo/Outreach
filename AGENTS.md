@@ -209,3 +209,35 @@ Bound a structural sweep and preserve its raw output before optional compression
 ast-grep run --lang python --pattern 'class $C: $$$BODY' src/services --json=stream > .context/ast-grep-classes.jsonl
 sqz compress --mode safe --verify --no-cache --cmd ast-grep < .context/ast-grep-classes.jsonl
 ```
+
+---
+
+## Content video engine (second workstream)
+
+This repo also hosts a faceless YouTube production operation (three
+channels: Money Physics, Building Money, Martial Matters). It is a
+separate workstream from the SEO platform above and has its own doctrine.
+
+**Any agent doing script, visual, evidence, or channel work loads these
+two files first — they are model-agnostic and are the source of truth:**
+
+- [`docs/portable/DOCTRINE-CORE.md`](docs/portable/DOCTRINE-CORE.md) —
+  ~10k chars, always loaded: channels, narrator, retention clock,
+  six-phase architecture, sentence gates, packaging, production
+  standards, never-list. Sized to paste into any system-instruction box.
+- [`docs/portable/OPERATOR-RULINGS.md`](docs/portable/OPERATOR-RULINGS.md)
+  — the standing corrections ledger; each ruling carries the reason it
+  was made, because the reason is what generalizes.
+
+Task routing into the deeper doctrine, plus the work-order interop
+contract, is in [`GEMINI.md`](GEMINI.md) — that routing table applies to
+every agent, not just Google-side ones.
+
+Three rules bind agents generating assets here:
+
+1. A dispatched `WORK-ORDER.md` is **frozen**. Corrections open a new
+   claim; never patch an order a running agent already holds.
+2. Output stays in **review quarantine** until the operator approves a
+   contact sheet. Free generation does not remove the review step.
+3. `approved` is set by the operator, never by product code, and figures
+   are never fabricated — unverified claims go under SOURCES-TO-VERIFY.
