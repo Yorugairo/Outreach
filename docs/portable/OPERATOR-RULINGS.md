@@ -124,6 +124,23 @@ gestures at a blank framed surface; real evidence composites into it.
 *Why:* motion and life come built into the plate while the evidence layer
 stays code-perfect and swappable.
 
+**C7 — World plates MAY show screens, boards, and trend imagery.**
+(2026-08-25.) Monitor walls, exchange boards, whiteboards, gauges, and
+gestural trend arrows are legitimate scenery. They set a room; they do
+not claim a figure.
+*Why:* operator — "we should not be trying to cancel out screens and
+chart type things. The way our evidence layers work will be more than
+enough to prevent the clash," and "the downtrend arrow is not a real
+chart and doesn't claim it." Docks are visually distinct by construction
+(sharp vector in washi chrome, verbatim badges, source labels), so a soft
+carved arrow behind one is never mistaken for its document.
+*Apply:* the line that holds is C6 — no LEGIBLE numerals or labels
+asserting a specific figure baked into a plate. Vague is fine;
+specific-and-unsourced is not. Review lesson: **a rule's reason is its
+scope.** "The evidence layer is sharp, never soft" governs the evidence
+layer; extending it to police the world layer rejected two good plates
+and would have thinned an episode already short on plate density (C3).
+
 **C6 — Generated text is conditionally licensed.** With real reference
 images, generated art may carry text — but every string is verified
 against the required list by the agent, reported, and operator-approved
