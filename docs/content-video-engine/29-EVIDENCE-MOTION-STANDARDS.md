@@ -790,13 +790,23 @@ what it claims. Registration should attach meaning as data
    OR a semantic-match plate board (existing plates, vision-passed against
    the script's scenes) approved BEFORE production, with gaps filled by
    generation.
-3. **The evidence layer is sharp, never soft.** No rasterized
-   soft-rendered charts ("paper toys"). Evidence charts are crisp vector
-   surfaces (hyperframes/Remotion in production; sharp SVG in review
-   builds) with typeset numerals. When a public data series exists, pull
-   REAL data (yfinance needs no key) and label the source and window
-   exactly — a live-ticker chart with computed figures beats a shape
-   recreation.
+3. **The evidence layer is sharp, never soft — and never an info card.**
+   Text-on-a-rectangle "info cards" are banned as evidence documents
+   ("fill-in paper toys", operator, 2026-08-25). An evidence document is
+   one of exactly three species, in preference order:
+   a. **the cited source's real chart** — for answer-format videos, a
+      clean frame from the target's own video, their branding and source
+      line intact (the frame IS the citation; matches the open-attribution
+      ruling in doc 35);
+   b. **a real chart we build** — crisp vector (hyperframes/Remotion in
+      production; sharp SVG in review builds), typeset numerals, and REAL
+      data wherever a public series exists (yfinance needs no key) with
+      the source and window labeled exactly;
+   c. **a registered generated infographic** — the DMP/teacher-stamped
+      deck pattern: typeset slides produced by the generation loop, then
+      figure-verified and registered before use.
+   A statement that is pure prose (no figure, no chart) belongs in
+   narration or captions, not in a dock.
 4. **Style vocabulary split**: generated world plates are prompted as
    **woodblock vox newsprint** (the style family's actual register —
    carved ink contours, flat editorial color). **Washi paper is reserved
