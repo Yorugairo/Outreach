@@ -44,31 +44,29 @@ not a methodology lecture — that distinction is the whole craft here.
 4. **Give the verdict** in plain words: killed, kept, or downgraded.
 5. **Say what it costs the claim** — the argument survives, narrows, or dies.
 
-Worked example, from the memory tripwire:
+Worked example, from the equipment-and-IP chart:
 
-> So my own tool tells me HBM prices are up twenty-six percent. Great.
-> Twenty-six percent against what, though? `[pre-key]` I go look at the
-> average it's measuring from. Eleven months of NAND. `[post-key]`
-> Different chip. Same customs code — Korea changed what that code covers
-> partway through, and nothing in my setup caught it. So that number isn't
-> a price move. It's two different products averaged together and called a
-> trend. Threw it out. The DRAM number held up though: twelve straight
-> months, same product. That one I'll stand on.
-
-**Register note (operator, 2026-08-25).** An earlier draft ended "the
-average never noticed. That number is dead. The DRAM one, on the same
-test, lives." That is final-triad density spent on a technical aside, and
-the personification points at a trailing mean we computed — no character
-lives there, so the phrase borrows the human sense of *average* without
-earning it. Audit beats run **plain**; the figure of speech gets
-relocated to where there is someone to carry it (the index holder who
-never checked what they owned). See VOICE-PACK §4b, the referent test.
+> PIMCO says investment in equipment and software is about to pass its
+> dot-com peak. `[pre-key]` So I pulled the series myself — BEA, straight
+> off FRED. `[post-key]` The peak was eleven point five four, back in
+> 2000. Today we're at eleven point five one. Three hundredths of a point
+> short. So it hasn't passed it. It's level with it — which is still the
+> story, just not the one I was about to tell you.
 
 Note the shape: it opens on a fact the viewer briefly believes, turns on a
-real question, and still lands on terminal stress — "That one I'll stand
-on." Plain register does not mean a slack ending. The beat obeys the
-sentence gates like any other narration; it is not exempt because it is
-technical.
+real check, and still lands on terminal stress — "not the one I was about
+to tell you." Plain register does not mean a slack ending. The beat obeys
+the sentence gates like any other narration; it is not exempt because it
+is technical.
+
+**Register note (operator, 2026-08-25).** An earlier draft of an audit
+beat ended "the average never noticed. That number is dead. The DRAM one,
+on the same test, lives." That is final-triad density spent on a technical
+aside, and the personification points at a trailing mean we computed — no
+character lives there, so the phrase borrows the human sense of *average*
+without earning it. Audit beats run **plain**; the figure of speech gets
+relocated to where there is someone to carry it (the index holder who
+never checked what they owned). See VOICE-PACK §4b, the referent test.
 
 ## 3. Budget and placement
 
@@ -124,14 +122,36 @@ to bury. Today's session produced four real instances, all publishable:
 
 | Catch | What it killed |
 |---|---|
-| HBM change vs a NAND trailing mean | our own headline figure |
 | "has passed its dot-com peak" vs 11.505 / 11.539 | our own chart title |
 | eval date vs data period | a stale reading shown as current |
 | Microsoft rationing, forum-sourced only | a scripted claim, cut |
+| **an audit that was itself wrong** (below) | our own audit |
 
 **A channel that shows the audit that killed its own number buys
 credibility no confident chart can.** That is the trade this doctrine
 makes.
+
+### The audit that was wrong — and why it belongs here
+
+The fourth row is the sharpest lesson this doctrine has produced. A
+reported defect ("that HBM figure averages against NAND") was accepted,
+written into doc 39 as a rule, used as this document's worked example, and
+built into an exhibit — **all without checking it against the source.**
+The operator then retracted it: same HS code, same product, stale labels
+from an old parser. The figure was correct the whole time.
+
+Three things follow, and they are the real doctrine:
+
+1. **An audit is a claim like any other, and gets audited.** Scepticism
+   pointed at someone else's number is easy; the discipline is applying
+   the same standard to the correction that flatters your scepticism.
+2. **A stored label is evidence, not authority.** The metadata was the
+   stale thing; the data was fine. Resolve labels against the
+   authoritative map before drawing conclusions from them.
+3. **Retraction is content too.** "I said this number was fabricated. I
+   was wrong — here is what I missed" is a stronger beat than the original
+   catch would have been, and it is the only version that earns the
+   channel's claim to audit anything.
 
 ## 7. Anti-patterns
 

@@ -483,41 +483,38 @@ period was **2026-05**, roughly a three-month publication lag.
 > evaluation date as a data date states a stale number as current, which
 > is the same class of error as the GDP-peak overclaim (§ dossier).
 
-### CORRECTED — what I got wrong, and the real bug
+### CORRECTED TWICE — a label is not a fact
 
-My first pass called the paired rows in `trade_facts` "duplicates" and told
-the operator not to publish a single figure. **That was wrong.** Operator
-correction, 2026-08-25: the pairs are **import vs export**, and the
-tripwire already uses export-only, correctly. The only defect there is
-that no CLI or UI view labels the flow, so the pair *reads* as a
-contradiction. Cheap display fix. Every instrument card must therefore
-**label the flow on every reading.**
+**First correction (operator):** the paired rows in `trade_facts` are
+**import vs export**, not duplicates. The tripwire already uses
+export-only, correctly. The defect is that no view labels the flow, so
+the pair *reads* as a contradiction. Every instrument card therefore
+labels the flow on every reading.
 
-**The real bug, which I missed and the operator found:** HS 8542.32.3000
-holds three regimes in one series —
+**Second correction (operator, retracting their own first report):** I was
+told HS 8542.32.3000 mixed HBM and NAND, wrote a rule against it, and
+built an exhibit arguing the "+26.5%" was fabricated. **All of that was
+wrong.** `HS_LABELS` in `scml/parse/customs_stats.py` maps 8542.32.3000 →
+`multi-component IC (HBM-class)`, and the parser's own comment records
+that *"the old NAND guess for 3000 was wrong."* The 22 rows stored as
+"NAND" are **stale annotations from a superseded parser** — same code,
+same product. The series is continuous, and the arithmetic verifies
+exactly: trailing four-month mean 66,218.7, and 83,779.3 / 66,218.7 − 1 =
+**+26.52%**. The only live defect is a mis-annotating comment at
+`scml/ingest/korea_customs.py:28`.
 
-| period | label | export $/kg |
-|---|---|---|
-| 2025-03 → 2025-05 | HBM-class | 226 – 237 |
-| 2025-06 → 2026-04 | **NAND** | 41,367 – 72,712 |
-| 2026-05 | HBM-class | 83,779 |
+> **RULE — a stored label is evidence, not authority.** A label change is
+> a **flag to investigate**, never a verdict. Resolve it against the
+> authoritative map and the underlying values before concluding anything:
+> ask whether the *product* changed or only the *annotation*. My earlier
+> rule ("never compute a change across a label change") was backwards —
+> applied literally it rejects correct figures every time a parser
+> improves its labels.
 
-The tripwire groups by **HS code only**, so its "HBM +26.5% vs trailing
-mean" was HBM measured against **eleven months of NAND** — a trend
-fabricated by mixing. A card carrying that figure was built and delivered
-before the operator caught it.
-
-> **RULE — never compute a change across a label change.** A trailing
-> mean is only valid over rows sharing HS code **and** product label
-> **and** flow. Where a series changes regime, the latest print is a
-> **level with no baseline**, and must be shown as one. Say "no
-> comparable baseline" on the card; never silently span the break.
-
-DRAM (8542.32.1010) passes this test — twelve consecutive months, same
-label, same flow — so its +51.1% stands. Note both codes also carry an
-early `2025-03..05 / P1-P3` regime at 226–640 $/kg on a different unit
-basis; any trailing window must exclude it. DRAM's window happened to,
-by luck rather than design.
+What survives: a trailing window must still share **flow**, and must
+exclude a genuine unit-basis break (both codes carry a pre-revision
+`2025-03..05 / P1-P3` regime at 226–640 $/kg that belongs to no live
+series).
 
 ### The date bug, confirmed at schema level
 
