@@ -1,0 +1,199 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Data document — word-timed line draw (motion prototype)</title>
+<style>
+  :root{
+    --surface:#16181c; --ink1:#f2f2ef; --ink2:#b9bcc4; --mute:#8b8f98;
+    --grid:#24262b; --base:#33363d; --crimson:#e5484d;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{background:#0d0d0f;}
+  body{display:flex;flex-direction:column;align-items:center;gap:16px;padding:22px;
+       font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:#c9c9c4;}
+  .stage{width:1056px;height:480px;background:var(--surface);
+         box-shadow:0 18px 60px rgba(0,0,0,.55);position:relative;}
+  svg{display:block;width:100%;height:100%;}
+  .ttl{fill:var(--ink1);font-size:32px;font-weight:600;}
+  .sub{fill:var(--ink2);font-size:20px;}
+  .src{fill:var(--mute);font-size:15px;}
+  .tick{fill:var(--mute);font-size:18px;font-variant-numeric:tabular-nums;}
+  .ann{fill:var(--ink1);font-size:26px;font-weight:600;}
+  .annsub{fill:var(--ink2);font-size:20px;}
+  .band{fill:#ffffff;opacity:.04;}
+  .bandlbl{fill:var(--mute);font-size:17px;letter-spacing:.14em;}
+  .narr{font-size:13px;color:#8b8f98;max-width:1056px;line-height:1.5;}
+  .narr b{color:#e6e6e2;font-weight:600;}
+  .bar{display:flex;gap:10px;align-items:center;font-size:13px;}
+  button{font:inherit;padding:7px 15px;border-radius:7px;border:1px solid #3a3a3e;
+         background:#1b1b1f;color:#e6e6e2;cursor:pointer;}
+  button:hover{background:#26262b;}
+  .t{font-variant-numeric:tabular-nums;color:#8b8f98;}
+</style>
+
+<div class="stage"><svg id="s" viewBox="0 0 1056 480"></svg></div>
+<div class="bar">
+  <button id="replay">Replay</button><span class="t" id="clock">0.00s</span>
+  <span>&nbsp;the line is drawn by narration beats — the crash lands on the words</span>
+</div>
+<div class="narr" id="narr"></div>
+
+<script>
+/* ---- narration for this beat, with canonical word timings (seconds) ---- */
+const WORDS = [
+ ["Railways",0.00],["in",0.42],["the",0.55],["eighteen-forties",0.70],["drew",1.45],
+ ["a",1.70],["quarter-billion",1.82],["pounds",2.55],["—",2.95],["more",3.10],
+ ["than",3.35],["a",3.52],["trillion",3.64],["in",4.15],["today's",4.28],["money.",4.65],
+ ["Then",5.40],["the",5.65],["stocks",5.80],["crashed",6.20],
+ ["more",6.70],["than",6.95],["sixty",7.12],["percent.",7.55]
+];
+const END = 8.30;
+
+/* ---- the chart's own clock is keyed to narration BEATS, not linear time ----
+   [narration seconds, progress along the data 0..1]                          */
+const DRAW_KEYS = [
+  [0.30, 0.00],   // chrome settled, pen down
+  [4.00, 0.355],  // reaches the Oct-1845 peak as "trillion / today's money" lands
+  [5.40, 0.355],  // holds while the voice turns ("Then the stocks…")
+  [8.00, 1.00]    // completes the decline on "sixty percent"
+];
+const PEAK_AT = 4.15, TROUGH_AT = 7.30, CHROME_AT = 0.05;
+
+/* ---- Campbell & Turner index anchors ---- */
+const ANCH = [[1843.00,1000],[1843.50,1080],[1844.00,1210],[1844.50,1430],
+ [1845.00,1760],[1845.76,2062],[1845.85,1846],[1846.00,1700],[1846.50,1480],
+ [1847.00,1280],[1847.50,1090],[1848.00,960],[1848.50,880],[1849.00,820],
+ [1849.50,775],[1850.25,741]];
+
+const X0=1842.85, X1=1851.1, Y0=400, Y1=2400;
+const PL={l:96,r:36,t:118,b:74};
+const W=1056,H=480, PW=W-PL.l-PL.r, PH=H-PL.t-PL.b;
+const sx = v => PL.l + (v-X0)/(X1-X0)*PW;
+const sy = v => PL.t + (1-(v-Y0)/(Y1-Y0))*PH;
+
+const NS="http://www.w3.org/2000/svg";
+const svg=document.getElementById('s');
+function el(n,a={},txt){const e=document.createElementNS(NS,n);
+  for(const k in a) e.setAttribute(k,a[k]); if(txt!=null) e.textContent=txt; return e;}
+
+/* dense polyline through the anchors */
+const PTS=[];
+for(let i=0;i<600;i++){
+  const x = ANCH[0][0] + (ANCH[ANCH.length-1][0]-ANCH[0][0])*i/599;
+  let j=0; while(j<ANCH.length-2 && ANCH[j+1][0]<x) j++;
+  const [xa,ya]=ANCH[j],[xb,yb]=ANCH[j+1];
+  const p=(x-xa)/(xb-xa);
+  PTS.push([x, ya+(yb-ya)*p]);
+}
+const D = PTS.map((p,i)=>(i?'L':'M')+sx(p[0]).toFixed(2)+' '+sy(p[1]).toFixed(2)).join(' ');
+const AREA_D = D + ` L ${sx(PTS[PTS.length-1][0]).toFixed(2)} ${sy(Y0)} L ${sx(PTS[0][0]).toFixed(2)} ${sy(Y0)} Z`;
+
+let path, area, clipRect, peakG, troughG, chromeG, totalLen;
+function build(){
+  svg.innerHTML='';
+  chromeG = el('g',{opacity:0});
+  // era band
+  chromeG.append(el('rect',{class:'band',x:sx(1844.6),y:PL.t,
+      width:sx(1845.76)-sx(1844.6),height:PH}));
+  chromeG.append(el('text',{class:'bandlbl',x:(sx(1844.6)+sx(1845.76))/2,y:PL.t+26,
+      'text-anchor':'middle'},'THE MANIA'));
+  // gridlines + ticks
+  [500,1000,1500,2000].forEach(v=>{
+    chromeG.append(el('line',{x1:PL.l,x2:W-PL.r,y1:sy(v),y2:sy(v),
+      stroke:'var(--grid)','stroke-width':2}));
+    chromeG.append(el('text',{class:'tick',x:PL.l-16,y:sy(v)+7,'text-anchor':'end'},
+      v.toLocaleString()));
+  });
+  [1843,1845,1847,1849].forEach(v=>chromeG.append(
+    el('text',{class:'tick',x:sx(v),y:H-PL.b+34,'text-anchor':'middle'},v)));
+  chromeG.append(el('line',{x1:PL.l,x2:W-PL.r,y1:H-PL.b,y2:H-PL.b,
+    stroke:'var(--base)','stroke-width':2}));
+  // threshold (dashed = reference level, never data)
+  chromeG.append(el('line',{x1:PL.l,x2:W-PL.r,y1:sy(1000),y2:sy(1000),
+    stroke:'var(--mute)','stroke-width':2,'stroke-dasharray':'9 7'}));
+  chromeG.append(el('text',{class:'tick',x:W-PL.r,y:sy(1000)+28,'text-anchor':'end'},
+    '1843 level'));
+  svg.append(chromeG);
+
+  // clip so the area wash reveals with the line
+  const defs=el('defs'); const cp=el('clipPath',{id:'rev'});
+  clipRect=el('rect',{x:PL.l,y:0,width:0,height:H}); cp.append(clipRect);
+  defs.append(cp); svg.append(defs);
+
+  area=el('path',{d:AREA_D,fill:'var(--crimson)','fill-opacity':.10,
+    'clip-path':'url(#rev)'});
+  svg.append(area);
+
+  path=el('path',{d:D,fill:'none',stroke:'var(--crimson)','stroke-width':5,
+    'stroke-linecap':'round','stroke-linejoin':'round'});
+  svg.append(path);
+  totalLen=path.getTotalLength();
+  path.setAttribute('stroke-dasharray',totalLen);
+  path.setAttribute('stroke-dashoffset',totalLen);
+
+  // annotations (hidden until their word lands)
+  peakG=el('g',{opacity:0});
+  peakG.append(el('circle',{cx:sx(1845.76),cy:sy(2062),r:11,fill:'var(--crimson)',
+    stroke:'var(--surface)','stroke-width':5}));
+  peakG.append(el('line',{x1:sx(1845.76)+14,y1:sy(2062),x2:sx(1846.75),y2:sy(2062)-10,
+    stroke:'var(--mute)','stroke-width':2}));
+  peakG.append(el('text',{class:'ann',x:sx(1846.85),y:sy(2062)-14},'2,062'));
+  peakG.append(el('text',{class:'annsub',x:sx(1846.85),y:sy(2062)+12},'6 Oct 1845'));
+  svg.append(peakG);
+
+  troughG=el('g',{opacity:0});
+  troughG.append(el('circle',{cx:sx(1850.25),cy:sy(741),r:11,fill:'var(--crimson)',
+    stroke:'var(--surface)','stroke-width':5}));
+  troughG.append(el('line',{x1:sx(1850.25)-12,y1:sy(741)-8,x2:sx(1848.55),y2:sy(1430),
+    stroke:'var(--mute)','stroke-width':2}));
+  troughG.append(el('text',{class:'ann',x:sx(1848.45),y:sy(1470),'text-anchor':'middle'},'741'));
+  troughG.append(el('text',{class:'annsub',x:sx(1848.45),y:sy(1470)+26,'text-anchor':'middle'},'Apr 1850'));
+  svg.append(troughG);
+
+  // titles + source
+  svg.append(el('text',{class:'ttl',x:PL.l-48,y:52},'British railway shares fell 64% from their peak'));
+  svg.append(el('text',{class:'sub',x:PL.l-48,y:86},'Daily index of 442 railway companies · January 1843 = 1,000'));
+  svg.append(el('text',{class:'src',x:PL.l-48,y:H-14},'Campbell & Turner railway share index, 1843–1850'));
+}
+
+const easeOut = p => 1-Math.pow(1-p,3);
+function drawProgress(t){
+  if (t<=DRAW_KEYS[0][0]) return 0;
+  for(let i=0;i<DRAW_KEYS.length-1;i++){
+    const [ta,pa]=DRAW_KEYS[i],[tb,pb]=DRAW_KEYS[i+1];
+    if(t<=tb){ const k=(t-ta)/(tb-ta); return pa+(pb-pa)*k; }
+  }
+  return 1;
+}
+function fade(t,at,dur=.35){return Math.max(0,Math.min(1,(t-at)/dur));}
+
+const clock=document.getElementById('clock'), narr=document.getElementById('narr');
+function renderNarr(t){
+  narr.innerHTML = WORDS.map(([w,ts]) =>
+    t>=ts ? `<b>${w}</b>` : w).join(' ');
+}
+function render(t){
+  const p = drawProgress(t);
+  path.setAttribute('stroke-dashoffset', totalLen*(1-p));
+  const xStart = sx(PTS[0][0]), xEnd = sx(PTS[PTS.length-1][0]);
+  clipRect.setAttribute('x', PL.l);
+  clipRect.setAttribute('width', Math.max(0, (xStart - PL.l) + (xEnd - xStart) * p));
+  chromeG.setAttribute('opacity', fade(t,CHROME_AT,.5));
+  peakG.setAttribute('opacity', fade(t,PEAK_AT));
+  troughG.setAttribute('opacity', fade(t,TROUGH_AT));
+  clock.textContent=t.toFixed(2)+'s';
+  renderNarr(t);
+}
+
+const FREEZE=(()=>{const m=/[?&]t=([0-9.]+)/.exec(location.search);
+                   return m?parseFloat(m[1]):null;})();
+let raf=null;
+function run(){
+  cancelAnimationFrame(raf); build();
+  if(FREEZE!==null){ render(FREEZE); return; }
+  const t0=performance.now();
+  (function f(now){ const t=(now-t0)/1000; render(t);
+    if(t<END+2) raf=requestAnimationFrame(f); })(performance.now());
+}
+document.getElementById('replay').addEventListener('click',run);
+run();
+</script>

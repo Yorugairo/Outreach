@@ -362,3 +362,77 @@ filmstrip export, since headless capture cannot record motion.
 renderer for captions; the record document is a second consumer of that
 same timing feed, not a new pipeline. Remotion remains available for the
 editor lane.
+
+## 11. Data documents animate too — the line is drawn by narration beats
+
+Operator question, 2026-08-25: keep charts as they are, or move to manim?
+**Answer: keep them code-rendered, and animate them in the player.**
+
+Manim is installed (0.20.1) and was considered. It is the wrong tool for
+evidence documents, for one decisive reason and three supporting ones:
+
+- **It renders on its own clock.** Manim emits a video file on an
+  internal timeline. Our motion must run off the canonical word timings
+  (§10.1), so a manim chart would need render → align → re-render on
+  every timing change. The player consumes the words sidecar directly.
+- Its visual identity is strongly recognisable and is not ours; restyling
+  it to §1–§2 fights the framework.
+- Its strength is constructing mathematical objects, not financial time
+  series. (No LaTeX on PATH here either, so its typesetting is degraded.)
+- Video output is harder to dock, mask and layer than a live SVG element.
+
+**Manim keeps a place in the kit for mechanism explainers** — a named
+Money Physics format — where genuine math exposition is the content.
+Not for evidence documents.
+
+### The beat-keyed draw
+
+The important idea, and the thing that makes this better than a chart
+appearing whole: **the chart's own clock is keyed to narration beats, not
+to linear playback.** The draw is defined as a small keyframe table
+mapping narration seconds to progress along the data:
+
+```js
+const DRAW_KEYS = [
+  [0.30, 0.00],   // chrome settled, pen down
+  [4.00, 0.355],  // reaches the Oct-1845 peak as "today's money" lands
+  [5.40, 0.355],  // HOLDS while the voice turns ("Then the stocks…")
+  [8.00, 1.00]    // completes the decline on "sixty percent"
+];
+```
+
+The hold at the peak is the point. The line waits at its high while the
+narration pivots, then falls exactly as the words describe the fall. A
+chart that merely animates left-to-right at constant speed does not do
+this, and it is the difference between decoration and evidence.
+
+### Mechanics
+
+| Element | Technique |
+|---|---|
+| Line draw | SVG `stroke-dashoffset` from `getTotalLength()` → 0 |
+| Area wash | same path closed to the baseline, revealed by an animated `clipPath` rect that tracks the line's x |
+| Bars | `transform: scaleY` with `transform-origin: bottom` |
+| Annotation arrival | opacity fade, 0.35s, at the timestamp of the word that names it |
+| Chrome (grid, ticks, band, threshold) | fades in first, before the pen goes down |
+
+Annotations are **triggered by their word**, not by the line reaching
+them: the peak label lands on "today's money", the trough label on "sixty
+percent". Cap at two per chart (§5).
+
+### Two bugs worth not repeating
+
+1. **Building the point list, do not add the axis origin to the data x.**
+   `X0 + ANCH[0][0] + …` silently produced x ≈ 3685 and drew the whole
+   path off-canvas — the chart rendered with correct chrome and an
+   invisible line, which looks like a draw bug rather than a data bug.
+2. **Watch operator precedence in the clip width.**
+   `PW*p + PL.l>0 ? a : b` evaluates `(PW*p + PL.l) > 0` and always takes
+   the first branch. Compute the clip explicitly from the path's own x
+   range.
+
+Both were caught only by rendering and looking (§8, last check). The
+validator cannot see either.
+
+**Prototype:** `evidence/prototypes/data-document-motion.html`, with the
+same `?t=SECONDS` freeze for filmstrip export.
