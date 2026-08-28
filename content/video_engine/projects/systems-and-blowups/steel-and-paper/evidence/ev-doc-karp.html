@@ -1,0 +1,41 @@
+<!doctype html>
+<meta charset="utf-8">
+<style>
+  :root{
+    --paper:#f0eadc; --ink:#17150f; --meta:#6b665c; --rule:#cdc5b4;
+    --hl:rgba(245,201,63,.72);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{width:2112px;height:960px;background:var(--paper);}
+  body{
+    font-family:"Lucida Sans Typewriter","Courier New",monospace;
+    color:var(--ink);
+    padding:86px 104px 76px;
+    display:flex;flex-direction:column;
+  }
+  .hdr{display:flex;justify-content:space-between;align-items:baseline;
+       font-size:30px;letter-spacing:.16em;text-transform:uppercase;
+       color:var(--meta);}
+  .rule{height:3px;background:var(--rule);margin:26px 0 54px;}
+  .kicker{font-size:34px;letter-spacing:.04em;color:var(--meta);margin-bottom:30px;}
+  blockquote{font-size:62px;line-height:1.44;letter-spacing:-.005em;}
+  mark{
+    background:linear-gradient(101deg,
+      transparent 0.4%, var(--hl) 1.8%, var(--hl) 98.2%, transparent 99.6%);
+    color:inherit;padding:.06em .12em;border-radius:2px;
+  }
+  .attr{margin-top:auto;font-size:36px;line-height:1.5;}
+  .attr b{font-weight:700;}
+  .src{margin-top:34px;padding-top:26px;border-top:3px solid var(--rule);
+       font-size:28px;color:var(--meta);letter-spacing:.03em;}
+</style>
+<div class="hdr"><span>CNBC &nbsp;·&nbsp; Squawk Box</span><span>1 July 2026</span></div>
+<div class="rule"></div>
+<div class="kicker">Palantir CEO Alex Karp, on how AI is sold:</div>
+<blockquote>
+  &ldquo;Something has gone completely wrong. Every single enterprise in this
+  country &mdash; these people are livid. They are
+  <mark>paying for tokens that create no value</mark>.&rdquo;
+</blockquote>
+<div class="attr"><b>Alex Karp</b>, Chief Executive Officer, Palantir Technologies</div>
+<div class="src">Transcript &mdash; CNBC Squawk Box, 1 July 2026 &nbsp;·&nbsp; PLTR closed +8&ndash;9% that session</div>

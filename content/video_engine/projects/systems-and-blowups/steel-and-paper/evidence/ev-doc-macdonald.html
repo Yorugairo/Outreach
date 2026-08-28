@@ -1,0 +1,42 @@
+<!doctype html>
+<meta charset="utf-8">
+<style>
+  :root{
+    --paper:#f0eadc; --ink:#17150f; --meta:#6b665c; --rule:#cdc5b4;
+    --hl:rgba(245,201,63,.72);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{width:2112px;height:960px;background:var(--paper);}
+  body{
+    font-family:"Lucida Sans Typewriter","Courier New",monospace;
+    color:var(--ink);
+    padding:86px 104px 76px;
+    display:flex;flex-direction:column;
+  }
+  .hdr{display:flex;justify-content:space-between;align-items:baseline;
+       font-size:30px;letter-spacing:.16em;text-transform:uppercase;
+       color:var(--meta);}
+  .rule{height:3px;background:var(--rule);margin:26px 0 54px;}
+  .kicker{font-size:34px;letter-spacing:.04em;color:var(--meta);margin-bottom:30px;}
+  blockquote{font-size:58px;line-height:1.46;letter-spacing:-.005em;}
+  mark{
+    background:linear-gradient(101deg,
+      transparent 0.4%, var(--hl) 1.8%, var(--hl) 98.2%, transparent 99.6%);
+    color:inherit;padding:.06em .12em;border-radius:2px;
+  }
+  .attr{margin-top:auto;font-size:36px;line-height:1.5;}
+  .attr b{font-weight:700;}
+  .src{margin-top:34px;padding-top:26px;border-top:3px solid var(--rule);
+       font-size:28px;color:var(--meta);letter-spacing:.03em;}
+</style>
+<div class="hdr"><span>The Verge &nbsp;·&nbsp; interview</span><span>May 2026</span></div>
+<div class="rule"></div>
+<div class="kicker">Uber COO Andrew Macdonald, on the cost of AI coding tools:</div>
+<blockquote>
+  &ldquo;We&rsquo;re going to have to start talking about token consumption and the
+  associated cost versus headcount. So if you&rsquo;re not actually able to draw a
+  direct line to how much useful features and functionality you&rsquo;re shipping to
+  your users, <mark>that trade becomes harder to justify</mark>.&rdquo;
+</blockquote>
+<div class="attr"><b>Andrew Macdonald</b>, Chief Operating Officer, Uber</div>
+<div class="src">The Verge, May 2026 &nbsp;·&nbsp; Uber R&amp;D was $3.4bn in 2025; the company capped employee AI spending in June 2026</div>

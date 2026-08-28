@@ -1,0 +1,44 @@
+<!doctype html>
+<meta charset="utf-8">
+<style>
+  :root{
+    --paper:#f0eadc; --ink:#17150f; --meta:#6b665c; --rule:#cdc5b4;
+    --hl:rgba(245,201,63,.72);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{width:2112px;height:760px;background:var(--paper);}
+  body{
+    font-family:"Lucida Sans Typewriter","Courier New",monospace;
+    color:var(--ink);
+    padding:86px 104px 76px;
+    display:flex;flex-direction:column;
+  }
+  .hdr{display:flex;justify-content:space-between;align-items:baseline;
+       font-size:30px;letter-spacing:.16em;text-transform:uppercase;
+       color:var(--meta);}
+  .rule{height:3px;background:var(--rule);margin:26px 0 48px;}
+  .kicker{font-size:34px;letter-spacing:.04em;color:var(--meta);margin-bottom:34px;}
+  .lines{font-size:46px;line-height:1.62;}
+  .row{display:flex;align-items:baseline;}
+  .row .k{white-space:nowrap;}
+  .row .dots{flex:1;border-bottom:4px dotted var(--rule);margin:0 26px 16px;}
+  .row .v{white-space:nowrap;font-weight:700;}
+  mark{
+    background:linear-gradient(101deg,
+      transparent 0.4%, var(--hl) 1.8%, var(--hl) 98.2%, transparent 99.6%);
+    color:inherit;padding:.06em .14em;border-radius:2px;
+  }
+  .note{margin-top:52px;font-size:36px;line-height:1.5;}
+  .src{margin-top:auto;padding-top:26px;border-top:3px solid var(--rule);
+       font-size:28px;color:var(--meta);letter-spacing:.03em;}
+</style>
+<div class="hdr"><span>Hyperscaler 10-Q filings &nbsp;·&nbsp; extract</span><span>2026</span></div>
+<div class="rule"></div>
+<div class="kicker">Future non-discounted lease commitments, not yet on balance sheet:</div>
+<div class="lines">
+  <div class="row"><span class="k">As of end February 2026</span><span class="dots"></span><span class="v">$675 billion</span></div>
+  <div class="row"><span class="k">Latest filings</span><span class="dots"></span><span class="v"><mark>$822 billion</mark></span></div>
+</div>
+<div class="note">Recorded as future commitments &mdash; they have <b>not</b> yet been
+recognised on hyperscaler balance sheets.</div>
+<div class="src">PIMCO, &ldquo;AI Credit Expansion: Assessing the Micro and Macro Risks&rdquo;, from company 10-Q filings</div>

@@ -155,19 +155,19 @@ supply" and gives the flip condition a real, watchable series.
 
 ## Production queue
 
-| # | Document | Species | Source |
-|---|---|---|---|
-| 1 | Railway share index 1843–1850 (+106% then −64.1%) | our chart | Campbell & Turner |
-| 2 | Railway investment ≈7% of British GDP, 1844–47 | our chart | Campbell/Turner lit. |
-| 3 | Authorised vs built mileage, 1844–46 | our chart | Jackman (1916) |
-| 4 | Equipment & software investment as % of US GDP vs 1990s peak | our chart | PIMCO Fig. 1 |
-| 5 | Hyperscaler capex 2026E $690B / 2027E $870B; 94% of OCF | our chart | PIMCO Fig. 2–3 |
-| 6 | **Debt issuance REBUILD**: $28B avg → $121B 2025 → $130–150B 2026E | our chart | MS IM / Mellon |
-| 7 | $822B off-balance-sheet lease commitments | our chart | PIMCO / 10-Qs |
-| 8 | DRAM contract price change by quarter (+55–60%, +89% peak) | our chart | TrendForce |
-| 9 | Karp verbatim: "tokens that create no value" | quote card | CNBC 2026-07-01 |
-| 10 | Macdonald verbatim: "that trade becomes harder to justify" | quote card | The Verge |
-| 11 | Uber Claude Code adoption 32% → 84% | our chart | The Information |
+| # | Document | Species | Source | Built |
+|---|---|---|---|---|
+| 1 | Railway share index 1843–1850 (+106% then −64.1%) | our chart | Campbell & Turner | ✅ |
+| 2 | Railway investment ≈7% of British GDP, 1844–47 | stat tile | Campbell/Turner lit. | ✅ |
+| 3 | Authorised vs built mileage, 1844–46 | our chart | Jackman (1916) | ✅ |
+| 4 | Equipment + IPP as % of US GDP vs 2000 peak | our chart | **BEA via FRED (recomputed)** | ✅ |
+| 5 | Hyperscaler capex 2026E $690B / 2027E $870B; 94% of OCF | our chart | PIMCO Fig. 2–3 | ✅ |
+| 6 | **Debt issuance REBUILD**: $28B avg → $121B 2025 → $130–150B 2026E | our chart | MS IM / Mellon | ✅ |
+| 7 | $822B off-balance-sheet lease commitments | record doc | PIMCO / 10-Qs | ✅ |
+| 8 | DRAM contract price change by quarter (+55–60%, +89% peak) | our chart | TrendForce | ✅ |
+| 9 | Karp verbatim: "tokens that create no value" | record doc | CNBC 2026-07-01 | ✅ |
+| 10 | Macdonald verbatim: "that trade becomes harder to justify" | record doc | The Verge | ✅ |
+| 11 | Uber Claude Code adoption 32% → 84% | dumbbell | The Information | ✅ |
 | 12 | SMH drawdown · ^TNX two eras · mega-cap vs SPY · memory trade | our chart | delivered ✓ |
 
 ## Script fixes required before the master take
@@ -180,3 +180,14 @@ supply" and gives the flip condition a real, watchable series.
 6. Consider replacing the loose "seven percent of GDP / just crossed
    eight" with the PIMCO equipment-and-software series, which is
    institutional, current, and chartable.
+
+## Correction found while building (2026-08-25)
+
+**The GDP-share claim needed weakening, not strengthening.** Recomputing
+PIMCO's series from source (BEA via FRED: equipment + intellectual
+property products ÷ GDP) gives a Q2 2000 peak of **11.539%** against a
+latest reading of **11.505%** — the series is **0.03pp BELOW** its
+dot-com peak, not past it. A draft chart titled "has passed its dot-com
+peak" was corrected to "is back at its dot-com peak" before shipping.
+PIMCO's own wording — "on track to surpass" — is the accurate framing.
+Narration must not claim the peak has been exceeded.
