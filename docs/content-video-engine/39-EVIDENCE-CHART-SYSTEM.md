@@ -436,3 +436,76 @@ validator cannot see either.
 
 **Prototype:** `evidence/prototypes/data-document-motion.html`, with the
 same `?t=SECONDS` freeze for filmstrip export.
+
+## 12. The instrument reading — our own measurement
+
+A third species, added 2026-08-25 after the operator surfaced the SCML
+ledger (`~/.claude/Claude Work/Claude Files/scml-ledger/scml-ledger`) —
+a live alt-data pipeline: 27 workers, a 42-name watchlist, and a memory
+tripwire that derives **$/kg by grade from Korea Customs export
+statistics** (HS 8542.32).
+
+| Species | Ground | Face | Carries |
+|---|---|---|---|
+| Data document (§1–§9) | dark | sans | a measurement from public data |
+| Record document (§10) | paper | typewriter | something said or filed |
+| **Instrument reading** (§12) | dark | sans | **our own measurement** |
+
+**Why it is its own species.** A data document says "here is the public
+record." An instrument reading says "here is a number nobody else
+publishes, and here is the apparatus that produced it." The apparatus is
+part of the evidence — a reading without its method and its as-of date is
+not evidence, it is an assertion. This is the format that lets Money
+Physics compete on something other than chart-reading (ruling A3).
+
+### Mandatory chrome — all six, no exceptions
+
+1. **Reading period**, in the eyebrow, top right — the period the DATA
+   covers, never the date it was computed.
+2. **Method line** — source, series/HS code, and what the number is.
+3. **The tripwire** — the threshold, stated as a falsifiable condition.
+4. **Status** — triggered or not, in plain words.
+5. **Signal class** — `leading` / `confirming`, per the ledger's own
+   framing (`scml/research/memory_watch.py` labels every alert).
+6. **The caveat that would embarrass us if omitted** — publication lag,
+   and what the measure is *not*.
+
+### The lag rule (learned the hard way)
+
+`scml.cli memtrend` prints `eval_date` — the date the monitor ran. The
+underlying customs release is for a much earlier period. On 2026-08-28
+the CLI showed readings stamped 08-28, 07-01 and 06-30 with **identical
+values**; querying `trade_facts` directly showed the actual reporting
+period was **2026-05**, roughly a three-month publication lag.
+
+> **Never take the CLI's display date as the reading date.** Query
+> `period_label` / `period_start` and publish that. Publishing an
+> evaluation date as a data date states a stale number as current, which
+> is the same class of error as the GDP-peak overclaim (§ dossier).
+
+### Open data-quality issue
+
+`trade_facts` currently holds **two rows per grade per period** with
+different unit values (2026-05 HBM-class: 123,622 and 83,779; DRAM:
+31,374 and 77,557). The CLI surfaces one. Until that is resolved, an
+instrument card must not present a single figure as definitive — either
+reconcile upstream, or show the range. **Flagged to the operator, not
+silently resolved.**
+
+### Standing constraints
+
+- **Refresh before publishing.** `scml.cli status` reported source health
+  DEGRADED with 27 stale/empty workers. A stale instrument is worse than
+  no instrument, because it looks live.
+- **Licensing pass** before air: DART, KRX, Comtrade and FINRA carry
+  redistribution terms. Derived charts are near-certainly fine;
+  republishing feeds may not be.
+- **No advice framing.** The ledger emits BULL/BEAR/RISK theses and a
+  watchlist. On air these become mechanisms and disclosed positions,
+  never recommendations (DOCTRINE-CORE, "no advice framing").
+- **The `.env` never appears on screen.** It holds live keys (DART, FRED,
+  data.go.kr, OpenRouter, Gemini). Any screen capture of the CLI is
+  checked for it first.
+
+**Built:** `evidence/ev-instrument-memory.html` → `objects/`, sized to
+content at 2112 × 1150.

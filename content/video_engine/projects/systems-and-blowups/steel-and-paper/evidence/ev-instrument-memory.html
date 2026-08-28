@@ -1,0 +1,84 @@
+<!doctype html>
+<meta charset="utf-8">
+<style>
+  :root{
+    --surface:#16181c; --ink1:#f2f2ef; --ink2:#b9bcc4; --mute:#8b8f98;
+    --grid:#24262b; --base:#33363d; --crimson:#e5484d; --teal:#1fa892;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{width:2112px;height:1150px;background:var(--surface);}
+  body{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;
+       color:var(--ink1);padding:74px 92px 60px;display:flex;flex-direction:column;}
+
+  .eyebrow{display:flex;justify-content:space-between;align-items:baseline;
+           font-size:28px;letter-spacing:.18em;text-transform:uppercase;color:var(--mute);}
+  h1{font-size:63px;font-weight:600;margin-top:26px;letter-spacing:-.01em;}
+  .deck{font-size:40px;color:var(--ink2);margin-top:12px;}
+
+  .rows{margin-top:40px;border-top:2px solid var(--grid);}
+  .row{display:flex;align-items:baseline;gap:28px;padding:26px 0;
+       border-bottom:2px solid var(--grid);}
+  .grade{flex:0 0 620px;font-size:44px;}
+  .grade small{display:block;font-size:26px;color:var(--mute);margin-top:8px;
+               letter-spacing:.02em;}
+  .val{flex:0 0 430px;text-align:right;font-size:56px;font-weight:600;
+       color:var(--crimson);font-variant-numeric:tabular-nums;}
+  .unit{font-size:30px;color:var(--mute);font-weight:400;margin-left:8px;}
+  .chg{flex:1;text-align:right;font-size:40px;color:var(--ink2);
+       font-variant-numeric:tabular-nums;}
+  .tag{display:inline-block;margin-left:22px;font-size:24px;letter-spacing:.12em;
+       text-transform:uppercase;color:var(--mute);border:2px solid var(--base);
+       border-radius:5px;padding:5px 12px;vertical-align:middle;}
+
+  .state{margin-top:auto;display:flex;gap:64px;align-items:flex-start;
+         padding-top:38px;}
+  .state div{flex:1;}
+  .k{font-size:26px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);}
+  .v{font-size:38px;margin-top:12px;line-height:1.35;}
+  .v b{color:var(--ink1);font-weight:600;}
+
+  .foot{margin-top:34px;padding-top:24px;border-top:2px solid var(--grid);
+        font-size:26px;color:var(--mute);line-height:1.5;}
+</style>
+
+<div class="eyebrow"><span>Instrument &nbsp;·&nbsp; our own reading</span>
+  <span>Reading period: May 2026</span></div>
+
+<h1>Memory leaving Korea, by the kilo</h1>
+<div class="deck">Customs export unit value · HS 8542.32 · against its trailing mean</div>
+
+<div class="rows">
+  <div class="row">
+    <div class="grade">DRAM<small>HS 8542.32.1010</small></div>
+    <div class="val">77,557<span class="unit">$/kg</span></div>
+    <div class="chg">+51.1%</div>
+  </div>
+  <div class="row">
+    <div class="grade">Multi-component IC<small>HS 8542.32.3000 · HBM-class, stacked</small></div>
+    <div class="val">83,779<span class="unit">$/kg</span></div>
+    <div class="chg">+26.5%<span class="tag">binding constraint</span></div>
+  </div>
+</div>
+
+<div class="state">
+  <div>
+    <div class="k">The tripwire</div>
+    <div class="v">A sustained fall in export unit value,<br>2% or more below the trailing mean</div>
+  </div>
+  <div>
+    <div class="k">Status</div>
+    <div class="v"><b>Not triggered.</b><br>Both grades are rising, not falling</div>
+  </div>
+  <div>
+    <div class="k">Signal class</div>
+    <div class="v"><b>Leading</b><br>the earliest the public record offers</div>
+  </div>
+</div>
+
+<div class="foot">
+  Korea Customs Service export statistics, HS 8542.32 · reading is for
+  <b>May 2026</b>, the latest published release — customs data carries roughly a
+  three-month publication lag, so this is not a live price.
+  An export <i>unit value</i> is not a contract price; TrendForce contract prints
+  are the confirming series, shown separately.
+</div>
