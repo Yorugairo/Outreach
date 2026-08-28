@@ -208,3 +208,96 @@ Re-run it whenever a hue changes:
 ```bash
 node scripts/validate_palette.js "#e5484d,#1fa892,#c98500,#4a7fd6" --mode dark --surface "#16181c"
 ```
+
+---
+
+## 10. The record document — typewriter + highlighter
+
+Operator design call, 2026-08-25: *"for quotes and earnings documents etc
+where we want to produce direct information, we should do typewriter +
+highlighter."*
+
+This gives the evidence layer **two species**, and the split is
+information design, not decoration — a viewer knows within a beat which
+kind of claim they are looking at:
+
+| Species | Ground | Face | Carries |
+|---|---|---|---|
+| **Data document** (§1–§9) | dark `#16181c` | system sans | a measurement |
+| **Record document** (this section) | paper `#f0eadc` | typewriter | something said or filed |
+
+It also resolves the standing tension with ruling B2. A record document
+is not a manufactured info card: it is a *record* — dated, attributed,
+verbatim, with the marked phrase being the one the narration speaks. The
+ban in B2 targets prose we wrote and dressed up as evidence. This is the
+opposite: words someone else is on record saying, presented as the
+document they came from.
+
+### Tokens
+
+| Role | Hex | Contrast on paper |
+|---|---|---|
+| Paper | `#f0eadc` | — |
+| Ink (body, values) | `#17150f` | 15.22:1 |
+| Meta (header, kicker, source) | `#6b665c` | 4.76:1 |
+| Rule / dot leaders | `#cdc5b4` | — |
+| Highlighter | `rgba(245,201,63,0.72)` | ink over it: **12.5:1** |
+
+Highlighter is a CSS gradient with soft ends
+(`linear-gradient(101deg, transparent .4%, var(--hl) 1.8%, var(--hl)
+98.2%, transparent 99.6%)`) so it reads as a marker stroke rather than a
+filled rectangle. Where the phrase wraps, each line gets its own stroke —
+correct, and what a real marker does.
+
+### Rules
+
+1. **One highlight per document**, and it marks *exactly* the phrase or
+   figure the narration speaks. Never a second, never decorative. The
+   highlight is the callout — it replaces the badge for this species.
+2. **Verbatim or nothing.** The body text is the source's words or the
+   filing's figures, unedited. Ellipses are allowed; paraphrase is not.
+   If we cannot quote it exactly, it is not a record document.
+3. **Required chrome:** outlet/source + date in the header rule;
+   a kicker naming the speaker and context; the body; an attribution
+   line (name, title, organisation); a source line at the foot.
+4. **Size to content.** A transcript runs `2112 × 960`; a short filing
+   extract runs `2112 × 760`. Never pad a short document to a tall canvas
+   — the dead space reads as a design error.
+5. **Dot leaders** (`4px dotted`) between label and value on any
+   filing/figure extract. They carry the eye and reinforce the species.
+6. **No charts on paper, no prose on the dark ground.** A document that
+   wants both is two documents.
+
+### Type (at W=2112)
+
+| Role | Size | Notes |
+|---|---|---|
+| Header (outlet · date) | 30px | uppercase, `.16em` tracking, meta |
+| Kicker | 34px | meta |
+| Quote body | 62px | line-height 1.44 |
+| Figure rows | 46px | line-height 1.62, values bold |
+| Attribution | 36px | name bold |
+| Source line | 28px | meta, above a hairline |
+
+Face: `"Lucida Sans Typewriter", "Courier New", monospace`. Chosen over
+Courier New alone, which is too thin to survive the placement downscale.
+
+**On §3's "no serif or display face anywhere":** that rule governs
+*charts*, and its reason is that a decorative face on a hero figure
+undercuts a measurement. A record document has the opposite job — the
+typewriter is what makes it read as a record rather than a graphic. Same
+lesson as doc 29 §9.14: a rule's reason is its scope.
+
+### Production
+
+HTML + CSS, exported headless:
+
+```bash
+msedge.exe --headless=new --disable-gpu --hide-scrollbars \
+  --screenshot="<out>.png" --window-size=2112,960 \
+  --virtual-time-budget=6000 "file:///<in>.html"
+```
+
+Matplotlib is the wrong tool here — inline phrase highlighting needs real
+text flow. Note: the exporter will silently keep a stale PNG if the file
+already exists; delete the target first, or verify the timestamp.
