@@ -77,6 +77,20 @@ chart we build with typeset numerals and real data, source and window
 labeled; or a registered generated infographic, figure-verified before
 use. Pure prose with no figure belongs in narration, not a dock.
 
+**B5 — The record document is a fourth evidence species.** (2026-08-25.)
+Quotes, transcripts, and filing extracts render as **typewriter on paper
+with a single highlighter stroke** on the exact phrase the narration
+speaks — dated, attributed, verbatim. Full spec: doc 39 §10.
+*Why:* operator — "for quotes and earnings documents etc where we want to
+produce direct information, we should do typewriter + highlighter." It
+resolves B2's gap: B2 bans prose WE wrote dressed up as evidence; a record
+document is words someone else is on record saying, shown as the document
+they came from. The species split (dark sans = a measurement, paper
+typewriter = something said) tells a viewer in one beat which kind of
+claim they are looking at.
+*Apply:* verbatim or nothing — if we cannot quote it exactly, it is not a
+record document. One highlight, never decorative.
+
 **B3 — Evidence badges carry verbatim numerals.** A badge's numeral must
 appear verbatim in the document behind it. Era-marked evidence must show
 the claimed era as the visual focus, not the animation's end state.
