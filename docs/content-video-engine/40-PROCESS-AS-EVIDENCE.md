@@ -64,9 +64,11 @@ earning it. Audit beats run **plain**; the figure of speech gets
 relocated to where there is someone to carry it (the index holder who
 never checked what they owned). See VOICE-PACK §4b, the referent test.
 
-Note the shape: it opens on a fact, turns on BUT/THEREFORE, and lands on
-terminal stress ("lives"). It obeys the sentence gates like any other
-narration; it is not exempt because it is technical.
+Note the shape: it opens on a fact the viewer briefly believes, turns on a
+real question, and still lands on terminal stress — "That one I'll stand
+on." Plain register does not mean a slack ending. The beat obeys the
+sentence gates like any other narration; it is not exempt because it is
+technical.
 
 ## 3. Budget and placement
 
