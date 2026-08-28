@@ -1,5 +1,7 @@
 # Art Style Reference Review
 
+> **STATUS: RECORD.** A point-in-time research note, review, or planning document. Not maintained, and not current doctrine — read it for how a decision was reached, not for what to do now. Live doctrine is indexed in [README.md](README.md).
+
 Status: current
 Reviewed: 2026-08-22
 Method: keyframe extraction and visual review of three operator-supplied videos plus three

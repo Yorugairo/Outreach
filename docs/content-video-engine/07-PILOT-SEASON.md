@@ -1,5 +1,7 @@
 # Pilot Season — Phase 0 Validation Cohort
 
+> **STATUS: RECORD.** A point-in-time research note, review, or planning document. Not maintained, and not current doctrine — read it for how a decision was reached, not for what to do now. Live doctrine is indexed in [README.md](README.md).
+
 > **Superseded cohort:** the technique-heavy cohort below is retained as historical
 > planning context. The active V4 cohort is the three-part series defined here.
 

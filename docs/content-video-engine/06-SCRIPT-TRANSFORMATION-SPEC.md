@@ -1,5 +1,7 @@
 # Script Transformation Spec — Essay/Corpus → Beat Sheet → Storyboard
 
+> **STATUS: RECORD.** A point-in-time research note, review, or planning document. Not maintained, and not current doctrine — read it for how a decision was reached, not for what to do now. Live doctrine is indexed in [README.md](README.md).
+
 > **History V4 override:** documentary transformation consumes an
 > operator-approved `research_packet.v1`; it does not infer facts from essays,
 > consultant material, reference videos, or visual assets.

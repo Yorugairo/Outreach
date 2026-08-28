@@ -1,5 +1,7 @@
 # Storyboard Data Contract (v2) — Rationale and Usage
 
+> **STATUS: RECORD.** A point-in-time research note, review, or planning document. Not maintained, and not current doctrine — read it for how a decision was reached, not for what to do now. Live doctrine is indexed in [README.md](README.md).
+
 > **Current extension: Storyboard 2.3.0.** Existing 2.0/2.1/2.2 artifacts
 > remain immutable and resumable. History V4.1 uses the additions below.
 

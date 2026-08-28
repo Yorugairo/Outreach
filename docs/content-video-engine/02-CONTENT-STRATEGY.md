@@ -1,5 +1,7 @@
 # Content Strategy — Channel Architecture, Editorial Standards, Compliance
 
+> **STATUS: RECORD.** A point-in-time research note, review, or planning document. Not maintained, and not current doctrine — read it for how a decision was reached, not for what to do now. Live doctrine is indexed in [README.md](README.md).
+
 > **V4 lane priority:** Combat History is the launch lane. Technique tutorials are
 > not in the active cohort.
 

@@ -1,5 +1,7 @@
 # Higgsfield Explainer Learnings and Producer Orchestration
 
+> **STATUS: RECORD.** A point-in-time research note, review, or planning document. Not maintained, and not current doctrine — read it for how a decision was reached, not for what to do now. Live doctrine is indexed in [README.md](README.md).
+
 This document records the transferable production ideas from the official
 Higgsfield explainer skill and prompt templates. It is a creative and systems
 reference, not a renderer license. Higgsfield source material, creator names,

@@ -8,6 +8,78 @@ after 2026-08-16. It consolidates the Gemini evidence-dock findings, the
 hyperframes-opening-v1 momentum mechanics, and the rules discovered while
 rebuilding the braid with real teacher-stamped evidence.
 
+> **STATUS: DOCTRINE — the production bar for every channel.**
+> This document grew by amendment: Parts 1–8 are the original build,
+> Part 9 is fourteen operator corrections layered on top. **Read the
+> current state below and stop there.** Everything under it is the
+> reasoning trail — go there to learn *why* a rule exists, never to learn
+> what the rule is.
+
+## Current state — what actually governs production
+
+Consolidated 2026-08-28. Where this section and anything below it
+disagree, this section wins.
+
+**The lane.** Every channel ships on the scene-evidence lane (Part 8):
+one ken-burns vector per scene, translucent washi docks with opaque
+documents inside, verbatim badges, word-timed kinetic captions, wipes on
+evidence-free boundaries. Held stills with hard cuts are a defect. Lanes
+differ only in scripting — theme, audience, voice. *(§9 C1)*
+
+**Plate density is runtime-derived.** Target **runtime ÷ 12s** distinct
+world plates — a 7-minute episode needs ~38, not 10. Hard ceiling 20s on
+one plate, and only when two strong evidence documents dock over it.
+Thumbnails, avatars and banners are not world plates. *(§9.13)*
+
+**Captions are dynamic, always** — word-by-word punch at canonical
+timings from the voice-track words sidecar, numerals accented, never
+resampled. A caption that swaps as a static block is a defect. *(§9.1)*
+
+**Evidence is sharp, never an info card.** Three species, all specified
+in doc **39**: the *data document* (dark ground, sans, a measurement), the
+*record document* (paper, typewriter, one highlighter stroke — quotes,
+transcripts, filings), and the *instrument reading* (our own measurement,
+with method, period, tripwire, status, signal class and its caveat).
+Prose on a rectangle is banned. *(§9.3, 39 §10/§12)*
+
+**Rebuild, don't extract.** Every chart is ours, built from real data or
+cited verbatim figures with attribution. Frame extraction from
+third-party video is retired except the brief on-screen citation moment.
+Series we cannot fetch wait — they are never eyeballed. *(§9.11)*
+
+**A stored label is evidence, not authority.** A label change is a flag to
+investigate, not a verdict: check whether the product changed or only the
+annotation, and resolve against the authoritative map. *(39 §12 —
+recorded after a wrong retraction in both directions)*
+
+**Style vocabulary.** World plates are prompted **woodblock vox
+newsprint**; washi paper is reserved for dock chrome only. World plates
+**may** show screens, monitor walls, boards, gauges and gestural trend
+lines as scenery — what they may not carry is a *legible* numeral or
+label asserting an unsourced figure. *(§9.4, §9.14)*
+
+**Host and evidence.** Host-in-world plates are approved; the **diegetic
+composite** is the default form — host gestures at a surface, real
+evidence composites into it. Generated text is licensed only with real
+reference images, agent-verified against the required string list, and
+operator-approved. *(§9.7–§9.9)*
+
+**Docks.** Finance-niche single-plate episodes run docks ~20% larger
+(paired 864px, solo 1056px) with sleek one-baseline pills. *(§9.10)*
+
+**Narration hygiene.** Editorial flags (`[verify]` and kin) never reach
+narration — verification precedes scripting. Recording follows the
+MASTER TAKE rule in doc **37 §8**: episodes ≤~9k characters record as one
+request; scene cuts are timestamps, never audio seams; splice-repair is
+banned. *(§9.5, §9.6)*
+
+**Process.** A dispatched `WORK-ORDER.md` is frozen — corrections open a
+new claim, never a patch to an order a running agent already holds.
+Nothing promotes out of review quarantine without an operator-approved
+contact sheet. *(§9.12)*
+
+---
+
 ## The format thesis (operator decision)
 
 Complex, semantically related world plates overlaid with clear, clean evidence

@@ -1,5 +1,7 @@
 # 34 — AOY Script Writer Study
 
+> **STATUS: RECORD.** A point-in-time research note, review, or planning document. Not maintained, and not current doctrine — read it for how a decision was reached, not for what to do now. Live doctrine is indexed in [README.md](README.md).
+
 Focused study of `write_script_v2`, the one AOY capability our own evaluation
 rated as possibly real. Everything else in their toolchain has now been
 assessed: doctrine is extractable (docs 31), the reviewers contradict their

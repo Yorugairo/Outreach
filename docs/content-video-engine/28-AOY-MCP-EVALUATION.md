@@ -1,5 +1,7 @@
 # 28 — Art of YouTube MCP: Trial Evaluation
 
+> **STATUS: RECORD.** A point-in-time research note, review, or planning document. Not maintained, and not current doctrine — read it for how a decision was reached, not for what to do now. Live doctrine is indexed in [README.md](README.md).
+
 **Decision at stake:** $3,800/month membership. Trial window: 2 weeks from
 2026-08-24. Their pitch: cheaper hiring + the AOY toolset. Working
 hypothesis (operator's): the tools are vibe-coded wrappers around Claude/GPT

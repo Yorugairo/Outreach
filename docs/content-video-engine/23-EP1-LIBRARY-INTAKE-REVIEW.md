@@ -1,5 +1,7 @@
 # Episode 1 Library — Intake Review
 
+> **STATUS: RECORD.** A point-in-time research note, review, or planning document. Not maintained, and not current doctrine — read it for how a decision was reached, not for what to do now. Live doctrine is indexed in [README.md](README.md).
+
 Batch: `library-build-ep1-index-funds-v2`
 Reviewed: 2026-08-22
 Spec: [LIBRARY-BUILD-EP1-INDEX-FUNDS.md](prompts/LIBRARY-BUILD-EP1-INDEX-FUNDS.md)

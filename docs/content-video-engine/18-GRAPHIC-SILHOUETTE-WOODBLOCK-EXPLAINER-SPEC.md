@@ -1,5 +1,7 @@
 # Graphic Silhouette + Combat Woodblock Explainer
 
+> **STATUS: RECORD.** A point-in-time research note, review, or planning document. Not maintained, and not current doctrine — read it for how a decision was reached, not for what to do now. Live doctrine is indexed in [README.md](README.md).
+
 Status: active production grammar for original explainers
 Style ID: `combat-woodblock-graphic-silhouette-explainer-v1`
 

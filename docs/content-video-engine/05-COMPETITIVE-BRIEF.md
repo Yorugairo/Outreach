@@ -1,5 +1,7 @@
 # Competitive Brief — Animated Explainer Channels + 2026 Platform Economics
 
+> **STATUS: RECORD.** A point-in-time research note, review, or planning document. Not maintained, and not current doctrine — read it for how a decision was reached, not for what to do now. Live doctrine is indexed in [README.md](README.md).
+
 *Date: 2026-07-28 · Method: three research streams run today — (1) benchmark giants,
 (2) emerging/stick-figure cohort (live YouTube pages + Wayback Machine growth curves),
 (3) platform policy & economics fact-check (official pages preferred) — plus separately labeled

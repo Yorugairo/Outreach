@@ -1,5 +1,7 @@
 # History Documentary Editorial Specification
 
+> **STATUS: DEPRECATED.** Kept for the reasoning trail; the history lane's editorial pattern was retired 2026-08-25 — every channel now uses the scene-evidence lane (**29** Part 9 / C1). Do not follow this document as current doctrine.
+
 *Specification of record for History Documentary V4 editorial behavior.*
 
 ## 1. Product

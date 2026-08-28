@@ -1,5 +1,7 @@
 # P13 Gate A Review — Armbar From Guard
 
+> **STATUS: RECORD.** A point-in-time research note, review, or planning document. Not maintained, and not current doctrine — read it for how a decision was reached, not for what to do now. Live doctrine is indexed in [README.md](README.md).
+
 Status: **approved by operator; provider generation has not been authorized**
 
 Approval record: The operator approved Gate A in the Codex task on 2026-07-29.

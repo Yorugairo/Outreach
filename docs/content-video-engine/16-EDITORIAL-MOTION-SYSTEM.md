@@ -1,5 +1,7 @@
 # Editorial Motion System
 
+> **STATUS: DEPRECATED.** Kept for the reasoning trail; motion doctrine now lives in **29** (evidence & motion standards). Do not follow this document as current doctrine.
+
 *Specification of record for deterministic shot timing, local cinematography,
 and provider-motion exceptions in the History documentary lane.*
 

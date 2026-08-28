@@ -1,5 +1,7 @@
 # Audio Fix Runbook — `current-bubble-mechanism` mispronunciation
 
+> **STATUS: DEPRECATED.** Kept for the reasoning trail; superseded by **37 §8**, Recording Standards v2 (master-take rule; splice-repair banned). Do not follow this document as current doctrine.
+
 Status: ready to execute
 Written: 2026-08-22
 Scope: fix one mispronounced word without re-recording a 16-minute episode

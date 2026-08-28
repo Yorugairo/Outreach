@@ -1,5 +1,7 @@
 # YouTube Reference Pack — P13 Visual-System Learnings
 
+> **STATUS: RECORD.** A point-in-time research note, review, or planning document. Not maintained, and not current doctrine — read it for how a decision was reached, not for what to do now. Live doctrine is indexed in [README.md](README.md).
+
 > **Research-only provenance:** this document informs abstract creative decisions.
 > Every source is `render_eligible: false`. Frames, audio, creator names, prompts,
 > and paths from the Reference Pack may not enter an art bible, treatment, asset

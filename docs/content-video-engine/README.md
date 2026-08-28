@@ -1,98 +1,101 @@
-# Content Video Engine — Authoritative Documentation
+# Content video engine — document index
 
-This directory is the specification set for the content-video engine. The active
-product is the **History Documentary V4** lane. The Armbar V3 is retained as a
-frozen research artifact; technique-tutorial automation is not an active release
-target.
+43 files live here. **Fewer than half are current doctrine.** This index
+says which is which, because the numbering does not — numbers are creation
+order and carry no meaning about status or priority.
 
-## Rule ownership
+Every document is one of three things:
 
-Each rule has one specification of record. Other documents should link to that
-record instead of copying it.
-
-| Rule family | Specification of record |
+| Status | Meaning |
 |---|---|
-| Product decision, pivot, assumptions | [`00-BRAINSTORM-AND-DECISIONS.md`](00-BRAINSTORM-AND-DECISIONS.md) |
-| Product requirements and acceptance | [`01-PRD.md`](01-PRD.md) |
-| Channel, audience, and release strategy | [`02-CONTENT-STRATEGY.md`](02-CONTENT-STRATEGY.md) |
-| Runtime stages, compatibility, and artifact ownership | [`03-SYSTEM-ARCHITECTURE.md`](03-SYSTEM-ARCHITECTURE.md) |
-| Storyboard 2.2/2.3 interfaces | [`04-STORYBOARD-CONTRACT.md`](04-STORYBOARD-CONTRACT.md) |
-| Benchmark evidence only | [`05-COMPETITIVE-BRIEF.md`](05-COMPETITIVE-BRIEF.md) |
-| Evidence-constrained script transformation | [`06-SCRIPT-TRANSFORMATION-SPEC.md`](06-SCRIPT-TRANSFORMATION-SPEC.md) |
-| Three-part history series and acceptance pilot | [`07-PILOT-SEASON.md`](07-PILOT-SEASON.md) |
-| Tooling decisions | [`08-TOOLING-ALTERNATIVES.md`](08-TOOLING-ALTERNATIVES.md) |
-| Research-only visual learning | [`09-YOUTUBE-REFERENCE-PACK-LEARNINGS.md`](09-YOUTUBE-REFERENCE-PACK-LEARNINGS.md) |
-| Documentary grammar and human gate rubrics | [`10-HISTORY-DOCUMENTARY-EDITORIAL-SPEC.md`](10-HISTORY-DOCUMENTARY-EDITORIAL-SPEC.md) |
-| Archival rights, likeness, attribution, and credits | [`11-ARCHIVAL-ASSET-AND-CITATION-SPEC.md`](11-ARCHIVAL-ASSET-AND-CITATION-SPEC.md) |
-| Higgsfield learnings and producer orchestration | [`12-HIGGSFIELD-EXPLAINER-LEARNINGS.md`](12-HIGGSFIELD-EXPLAINER-LEARNINGS.md) |
-| Higgsfield audio-driven Episode 1 lane | [`14-HIGGSFIELD-AUDIO-DRIVEN-LANE.md`](14-HIGGSFIELD-AUDIO-DRIVEN-LANE.md) |
-| Google Flow character-builder prompts and promotion boundary | [`13-GOOGLE-FLOW-CHARACTER-BUILDER-SPEC.md`](13-GOOGLE-FLOW-CHARACTER-BUILDER-SPEC.md) |
-| Living-scene surfaces, Combat Woodblock pack variants, fact treatments, motion hierarchy, and transitions | [`15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md`](15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md) |
-| Deterministic shot plans, focal-point camera motion, cut motivation, pacing recipes, and provider-motion exceptions | [`16-EDITORIAL-MOTION-SYSTEM.md`](16-EDITORIAL-MOTION-SYSTEM.md) |
-| Timestamp-bound primary plates, prompt continuity, generation waves, and review schedule | [`17-TIMESTAMPED-PLATE-PRODUCTION.md`](17-TIMESTAMPED-PLATE-PRODUCTION.md) |
-| Original Graphic Silhouette + Combat Woodblock retention and motion grammar | [`18-GRAPHIC-SILHOUETTE-WOODBLOCK-EXPLAINER-SPEC.md`](18-GRAPHIC-SILHOUETTE-WOODBLOCK-EXPLAINER-SPEC.md) |
-| Figure scale, world placement, rendering-weight hierarchy, and 2.5D depth planes | [`24-COMPOSITION-AND-SCALE-SPEC.md`](24-COMPOSITION-AND-SCALE-SPEC.md) |
-| Editor embedding decision: deep links, no iframe, with revisit triggers | [`25-EDITOR-EMBEDDING-SPIKE.md`](25-EDITOR-EMBEDDING-SPIKE.md) |
-| Subscription-agent generation loop: claims, work orders, two gates, paid gate | [`26-AGENT-GENERATION-LOOP.md`](26-AGENT-GENERATION-LOOP.md) |
-| Durability classes, path contract, migration, and the R2 disaster-recovery contract | [`27-DURABILITY-AND-LAYOUT.md`](27-DURABILITY-AND-LAYOUT.md) |
-| AOY MCP moat-vs-wrapper evaluation | [`28-AOY-MCP-EVALUATION.md`](28-AOY-MCP-EVALUATION.md) |
-| Evidence motion standards: Gemini dock grammar, v1 momentum, linked choreography, yield rules | [`29-EVIDENCE-MOTION-STANDARDS.md`](29-EVIDENCE-MOTION-STANDARDS.md) |
-| Current asset-generation brief | [`prompts/LIBRARY-BUILD-EP1-V3-REGENERATION.md`](prompts/LIBRARY-BUILD-EP1-V3-REGENERATION.md) |
-| Executable state and validation evidence | [`P13-HISTORY-DOCUMENTARY-SYSTEM.plan.md`](../../.claude/PRPs/plans/P13-HISTORY-DOCUMENTARY-SYSTEM.plan.md) |
-| Active living-scene foundation execution | [`P13-LIVING-SCENE-COMMUNICATION-SYSTEM.plan.md`](../../.claude/PRPs/plans/P13-LIVING-SCENE-COMMUNICATION-SYSTEM.plan.md) |
-| Active editorial-motion execution | [`P13-EDITORIAL-MOTION-SYSTEM.plan.md`](../../.claude/PRPs/plans/P13-EDITORIAL-MOTION-SYSTEM.plan.md) |
+| **DOCTRINE** | A live rule set. Maintained. Follow it. |
+| **RECORD** | A point-in-time note, review or plan. Not maintained. Read it for *how* a decision was reached, never for what to do now. |
+| **DEPRECATED** | Superseded. Kept only for the reasoning trail. |
 
-## Authority and provenance boundaries
+RECORD and DEPRECATED files carry a status banner at the top. Nothing is
+deleted — the archive is cheap to keep and expensive to reconstruct.
 
-The V4 pipeline has three separate provenance domains:
+---
 
-- `research_packet.v1` proves narration claims and quotations.
-- `asset_manifest.v1` proves that a local visual or audio asset may be rendered.
-- `reference_study.v1` records abstract creative observations and is always
-  `render_eligible: false`.
-- `generated_visual_candidates.v1` records job-local, hash-bound illustration
-  previews for the Visual Direction Gate. It is never evidence and remains
-  non-renderable until explicit asset-manifest promotion.
-- `production_profile.v1` records a coherent, research-only production grammar
-  that may be hash-bound and forked. It can preserve composition, motion
-  economics, editing, hierarchy, and sound rules, but never supplies source
-  media or identity assets to a renderer.
+## Start here, not at doc 00
 
-A citation is not a visual license. A public URL is not an asset. An illustration
-is not historical evidence. Renderer-facing treatments contain approved local
-asset IDs, not URLs, source snapshots, consultant prompts, creator names, or
-unresolved paths.
+The working doctrine is **not** in this folder. It is three files in
+[`docs/portable/`](../portable/), and they are the primary source:
 
-## V4.1 gate order
+| File | Size | What it carries |
+|---|---|---|
+| **`DOCTRINE-CORE.md`** | 9,999 chars | Channels, narrator, retention clock, six-phase architecture, sentence gates, packaging, production standards, never-list |
+| **`OPERATOR-RULINGS.md`** | ~12k | Every standing correction, with the reason it was made |
+| **`VOICE-PACK.md`** | ~10k | Voice by exemplar and contrast pair, plus the calibration protocol |
 
-```text
-Research Gate
-→ editorial coverage and quarantined stock previews
-→ producer plan and optional still/motion producers
-→ Flow character-sheet generation (optional, quarantined)
-→ Asset Selection Gate
-→ generated illustration previews (optional)
-→ Visual Direction Gate
-→ Gate A (motion and story)
-→ Gate B (publication candidate)
-```
+They are model-agnostic and sized to paste into a system-instruction box.
+When a document in *this* folder disagrees with the portable tier, the
+portable tier wins.
 
-Stock search uses the Magnific REST API key directly; MCP OAuth is not a
-dependency. Candidate previews are never renderable. Only selected,
-rights-reviewed, locally downloaded and hashed assets may enter
-`asset_manifest.v1`.
+## DOCTRINE — the live set
 
-Google Flow character sheets follow the same boundary. The character pack is a
-prompt/reference plan, not evidence and not a render manifest. Nano Banana Pro
-may generate a reusable fictional or explicitly labeled historical
-reconstruction, but the output stays quarantined until the operator reviews
-identity consistency, historical labeling, rights/likeness policy, and the
-intended scene uses. Ingredients-to-Video may receive only an approved,
-content-hashed character asset ID; captions, citations, dates, logos, and
-claims remain local Remotion overlays.
+| Doc | Subject |
+|---|---|
+| **26** | Agent generation loop — claims, work orders, the review gate |
+| **29** | Evidence & motion standards — the production bar for every channel. **Start at "Current state" at the top**; Part 9 below it is the amendment trail |
+| **30** | Voice source material — the evidence the voice profile is derived from |
+| **31** | Faceless channel doctrine (platform layer) |
+| **32** | Writing for the ear (craft layer) |
+| **33** | Voice profile |
+| **35** | Answer-format doctrine — credit, steelman, relocate |
+| **36** | Writer persona |
+| **37** | TTS delivery standards — §8 is Recording Standards v2 |
+| **38** | Script architecture — the six phases |
+| **39** | Evidence chart system — palette, type scale, the three document species |
+| **40** | Process as evidence — the audit beat |
 
-No gate may be inferred from an earlier approval. A Research approval may carry
-forward only when its hash is unchanged. The V4 Visual Direction approval does
-not carry into V4.1 because coverage, assets, and motion have changed. Only the
-operator can approve a gate. Paid provider calls, publication, registry writes,
-commits, and pushes remain separate operator-controlled actions.
+Plus [`patterns/`](patterns/): the script pattern kit, phase guides P1–P6,
+the sentence strength check, and the full video map.
+
+## Supporting specs (live, narrower scope)
+
+**03** system architecture · **08** tooling alternatives · **11** archival
+asset & citation spec · **13** Google Flow character builder · **19**
+hyperframes lane · **24** composition & scale · **27** durability & layout
+
+## DEPRECATED
+
+| Doc | Superseded by |
+|---|---|
+| **10** history-documentary editorial spec | **29** Part 9 / C1 — every lane uses the scene-evidence pattern |
+| **16** editorial motion system | **29** |
+| **17** timestamped plate production | **29** Part 8–9 — held stills with hard cuts are a defect |
+| **22** audio fix runbook | **37 §8** — master-take rule; splice-repair banned |
+
+## RECORD — not maintained
+
+**00** brainstorm · **01** PRD · **02** content strategy · **04**
+storyboard contract · **05** competitive brief · **06** script
+transformation spec · **07** pilot season · **09** YouTube reference-pack
+learnings · **12** Higgsfield explainer learnings · **14** Higgsfield
+audio-driven lane · **15** living-scene communication language · **18**
+graphic-silhouette woodblock spec · **21** art-style reference review ·
+**23** EP1 library intake review · **25** editor embedding spike · **28**
+AOY MCP evaluation · **34** AOY script-writer study · **P13** gate A/B
+armbar reviews
+
+Twenty of these were written on 2026-08-02 and never revisited. That is
+the correct lifecycle for a planning document — it is not a defect, but it
+is why they must not be read as instructions.
+
+---
+
+## Rules for adding to this folder
+
+1. **Amend before you number.** A new ruling on an existing subject
+   belongs in that subject's doc plus `OPERATOR-RULINGS.md`. A new number
+   is for a genuinely new subject only. (Docs 39 and 40 were both created
+   in a single day; the second could arguably have been a section in 35.)
+2. **A doc that stops being followed gets a STATUS banner** the day it
+   stops, with a pointer to what replaced it.
+3. **Numbering is append-only.** Never renumber — every path in this repo
+   and in commit history points at these names. Number 20 is missing and
+   stays missing.
+4. **If a rule matters, it goes in the portable tier**, not only here.
+   This folder is where reasoning lives; the portable tier is what gets
+   loaded.

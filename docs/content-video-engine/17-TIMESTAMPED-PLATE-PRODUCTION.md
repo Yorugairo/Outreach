@@ -1,5 +1,7 @@
 # Timestamped Plate Production
 
+> **STATUS: DEPRECATED.** Kept for the reasoning trail; the held-still / hard-cut pattern is deprecated — see **29** Part 8–9. Do not follow this document as current doctrine.
+
 *Specification of record for the still-image production schedule in the History
 documentary lane.*
 

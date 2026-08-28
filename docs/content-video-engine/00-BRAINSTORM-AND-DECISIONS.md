@@ -1,5 +1,7 @@
 # Content-to-Video Flywheel — Brainstorm, Challenges, and Decisions
 
+> **STATUS: RECORD.** A point-in-time research note, review, or planning document. Not maintained, and not current doctrine — read it for how a decision was reached, not for what to do now. Live doctrine is indexed in [README.md](README.md).
+
 > **V4 decision (2026-07-30):** the primary product is an evidence-backed
 > three-part History of BJJ documentary series. Automated technique tutorials are
 > no longer an active release target. Armbar V3 is frozen as an R&D artifact, and
