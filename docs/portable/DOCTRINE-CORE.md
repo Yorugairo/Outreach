@@ -53,7 +53,7 @@ By 0:10 answer it enough to prove the video keeps promises. By 0:30 an
 explicit promise of payout (named open loop). The cycle then repeats
 every beat — hook, show it's worth it, promise more, deliver — forever.
 Hooks that pass on the page fail by ear; time beats against synthesized
-audio, not word counts.
+audio, never word counts.
 
 ## ARCHITECTURE (six phases)
 
@@ -85,7 +85,7 @@ Best evidence BANKED for the last pre-pivot unit. Final promise-tease
 ~27%; after it, zero re-promises.
 
 **P4 PIVOT** (45–55%) — signpost, scripted pause, then the reversal in
-contracted punchy sentences; the head-fake resolves INTO it. The reversal
+contracted sentences; the head-fake resolves INTO it. The reversal
 IS the mid-video rehook. The central object flips meaning — same object,
 opposite significance. Stakes in concrete numbers. Zero CTAs; verified
 ground only.
