@@ -213,6 +213,10 @@ node scripts/validate_palette.js "#e5484d,#1fa892,#c98500,#4a7fd6" --mode dark -
 
 ## 10. The record document — typewriter + highlighter
 
+> **APPROVED by the operator, 2026-08-25** — species and motion both.
+> This is the standing treatment for quotes, transcripts, and filing
+> extracts.
+
 Operator design call, 2026-08-25: *"for quotes and earnings documents etc
 where we want to produce direct information, we should do typewriter +
 highlighter."*
