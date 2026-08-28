@@ -68,6 +68,37 @@ reversal, never a methodology lecture. It must cut both ways: when an
 audit kills OUR number, that is the content. A channel that publishes the
 check that killed its own figure buys credibility no confident chart can.
 
+**A5 — The ghost in the machine.** (2026-08-28.) Operator: *"the voice,
+brand, style should translate across all channels… we build the 'Ghost in
+the Machine' — essentially my world view, voice, and logic standards. That
+doesn't change whether we are in finance, BJJ, or history. What changes is
+delivery style and evidence precision requirements."*
+
+**INVARIANT across every channel and series — this is the brand:**
+- **World view** — rooms as portfolios, markets as machines; conditional
+  contrarian; non-tribal; never doom without a dial to turn.
+- **Voice** — the register, the sentence gates, the referent test, the
+  dual engine, terminal stress.
+- **Logic standards** — attribution before assertion, falsifiable tells,
+  the audit beat, "a claim you are unsure is verified isn't."
+- **Production craft** — worlds, evidence documents, docks, motion,
+  recording, the generation loop (C1).
+
+**CALIBRATED per lane — only these two:**
+- **Delivery style** — pacing, vocabulary, humour calibration, the
+  reference set a given audience shares.
+- **Evidence precision** — the *bar*, never the *system*. Finance runs the
+  strictest: verbatim numerals, sourced series, as-of dates, falsifiable
+  tripwires. A lineage documentary needs primary sourcing on who taught
+  whom; a history episode needs archival provenance and flagged
+  contested interpretation. Different bars, different species emphasis —
+  same doc 39 species and same doc 40 audit beat underneath.
+
+*Why it matters:* a new channel inherits the ghost whole. It does not get
+its own voice, its own logic standards, or its own world-building system —
+it gets these, and calibrates two dials. That is what makes the work
+compound across lanes instead of restarting.
+
 ## B. Evidence
 
 **B1 — Rebuild charts; do not extract frames.** (2026-08-25. SUPERSEDES

@@ -32,25 +32,33 @@ They are model-agnostic and sized to paste into a system-instruction box.
 When a document in *this* folder disagrees with the portable tier, the
 portable tier wins.
 
-## The two layers (the organising principle)
+## The ghost in the machine (the organising principle)
 
-Operator, 2026-08-28: *"everything we've been learning about how to build
-the worlds + evidence layers is meant to be transferrable across all of
-our channels and series."*
+Operator, 2026-08-28: *"the voice, brand, style should translate across all
+channels… we build the 'Ghost in the Machine' — essentially my world view,
+voice, and logic standards. That doesn't change whether we are in finance,
+BJJ, or history. What changes is delivery style and evidence precision
+requirements."*
 
-That splits every document here in two:
-
-| Layer | Applies to | Docs |
+| | Scope | Docs |
 |---|---|---|
-| **Production — universal** | Every channel, every series, forever | **26** loop · **29** worlds, docks, motion · **37** recording · **39** evidence documents · **40** audit beat |
-| **Scripting — lane-specific** | One lane's theme, audience, voice | **10** history/documentary · **31 · 35 · 36 · 38** finance formats and persona · **32 · 33** craft and voice |
+| **World view · voice · logic standards** | **Invariant.** This is the brand | **30 · 32 · 33 · 36 · 38 · 40** + `patterns/` |
+| **Production craft** | **Invariant.** Worlds, evidence, docks, motion, recording | **26 · 29 · 37 · 39** |
+| **Delivery style** | Calibrated per lane — pacing, vocabulary, humour, shared references | **10** history · **31 · 35** finance formats |
+| **Evidence precision** | Calibrated per lane — the *bar*, never the *system* | applied against **39 · 40** |
 
-A lane is never retired because its *production* pattern was replaced —
-the production layer was never lane-specific in the first place. The
-history lane is live; it is simply outside the finance set right now, and
-it inherits **29** and **39** wholesale the day it ships again. The same
-is true of Martial Matters and Building Money: they do not get their own
-world or evidence standards, they get these.
+Two consequences worth stating plainly:
+
+**A lane is never retired because its production pattern changed.** The
+production layer was never lane-specific. The history lane is live — just
+outside the finance set right now — and picks up **29** and **39** whole
+the day it ships again.
+
+**A new channel inherits the ghost, not a blank page.** Martial Matters and
+Building Money do not author their own voice, logic standards, or
+world-building system. They get these and calibrate two dials. That is why
+work done on one lane compounds across all of them rather than restarting —
+the strictest lane (finance) raises the floor everywhere.
 
 ## DOCTRINE — the live set
 

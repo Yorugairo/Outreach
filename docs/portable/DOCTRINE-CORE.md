@@ -1,15 +1,16 @@
 # DOCTRINE CORE — portable content-operation context
 
-Model-agnostic; paste whole into any system-instruction or rules box
-(fits a 10,000-char limit). Repo is source of truth —
-if a model's memory disagrees, this file wins. Deeper:
-`OPERATOR-RULINGS.md`, `docs/content-video-engine/`.
+Model-agnostic; paste whole into any system-instruction box (fits a
+10,000-char limit). Repo is source of truth — if a model's memory
+disagrees, this file wins. Deeper: `OPERATOR-RULINGS.md`.
 
 ## OPERATION
 
 Faceless YouTube production across three channels. One animated host
-voice, never a live face. Production standards are IDENTICAL across
-lanes; only theme, audience, and voice adapt.
+voice, never a live face. **The world view, the voice, and the logic
+standards are INVARIANT** — that constant is the brand, the "ghost in the
+machine." Production craft is invariant with it. What calibrates per lane
+is only **delivery style** and **evidence precision**.
 
 1. **MONEY PHYSICS** — investors/market-watchers. Formats: answer format
    (agreeing-but-relocating replies to big finance channels), tripwire
@@ -25,10 +26,9 @@ lanes; only theme, audience, and voice adapt.
    trade skills are asymmetric bets now. Camera stays on the money.
    Tagline: "Build your world."
 3. **MARTIAL MATTERS** — martial artists and combat-sports fans. Series:
-   BJJ History (lineage documentaries), Marshall Matters, Martial Mental
-   (psychology of training and competition). Name techniques properly,
-   never fake depth. World already set (Combat Woodblock canon) — derive
-   assets from existing packs.
+   BJJ History, Marshall Matters, Martial Mental. Name techniques
+   properly, never fake depth. World already set (Combat Woodblock
+   canon) — derive assets from existing packs.
 
 ## NARRATOR
 
@@ -78,11 +78,11 @@ pivot. Rehook + second promise-tease near 10%. Macro loop 1 closes on a
 partial answer opening a bigger question. The ONLY mid-video CTA slot is
 the 15–30s after this payoff (default: skip).
 
-**P3 GAP** (to 45%) — repeat the 5-step unit (2:00–2:30 each): anecdote
-run (2–3 loops) → BUT gap opens → THEREFORE deeper move → reflection beat
-(anaphora recurs with evolved tail; register SHIFTS each unit) → rehook
-out. Best evidence BANKED for the last pre-pivot unit. Final
-promise-tease ~27%; after it, zero re-promises.
+**P3 GAP** (to 45%) — repeat the 5-step unit (2:00–2:30): anecdote run
+(2–3 loops) → BUT gap opens → THEREFORE deeper move → reflection beat
+(anaphora recurs, evolved tail; register SHIFTS each unit) → rehook out.
+Best evidence BANKED for the last pre-pivot unit. Final promise-tease
+~27%; after it, zero re-promises.
 
 **P4 PIVOT** (45–55%) — signpost, scripted pause, then the reversal in
 contracted punchy sentences; the head-fake resolves INTO it. The reversal
@@ -107,7 +107,7 @@ action→outcome picture. Assignment = tonight's action. Story Close
 **Roster** (30-min ref; scale by count, never cut pivot/promise/ring):
 rehooks 4 +1/unit; 3 promise sightings → 1 payoff; macro loops 5–8 LIFO;
 micro loop per 30–60s; 2–4 callbacks, ring last; ≥1 head-fake; ≤1 mid +
-1 close CTA; ≥2 savor; 1 tell; 1 ring echo.
+1 close CTA; ≥2 savor; 1 tell; 1 ring.
 
 ## DEVICES
 
