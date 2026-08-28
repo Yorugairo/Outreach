@@ -46,11 +46,23 @@ not a methodology lecture — that distinction is the whole craft here.
 
 Worked example, from the memory tripwire:
 
-> The instrument said HBM prices were up twenty-six percent.
-> `[pre-key]` So I looked at what it was averaging against.
-> Eleven months of NAND. `[post-key]` Same customs code, different
-> product — the code changed what it carried and the average never
-> noticed. That number is dead. The DRAM one, on the same test, lives.
+> So my own tool tells me HBM prices are up twenty-six percent. Great.
+> Twenty-six percent against what, though? `[pre-key]` I go look at the
+> average it's measuring from. Eleven months of NAND. `[post-key]`
+> Different chip. Same customs code — Korea changed what that code covers
+> partway through, and nothing in my setup caught it. So that number isn't
+> a price move. It's two different products averaged together and called a
+> trend. Threw it out. The DRAM number held up though: twelve straight
+> months, same product. That one I'll stand on.
+
+**Register note (operator, 2026-08-25).** An earlier draft ended "the
+average never noticed. That number is dead. The DRAM one, on the same
+test, lives." That is final-triad density spent on a technical aside, and
+the personification points at a trailing mean we computed — no character
+lives there, so the phrase borrows the human sense of *average* without
+earning it. Audit beats run **plain**; the figure of speech gets
+relocated to where there is someone to carry it (the index holder who
+never checked what they owned). See VOICE-PACK §4b, the referent test.
 
 Note the shape: it opens on a fact, turns on BUT/THEREFORE, and lands on
 terminal stress ("lives"). It obeys the sentence gates like any other

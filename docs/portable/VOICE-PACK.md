@@ -5,23 +5,16 @@ Third portable file, loaded with `DOCTRINE-CORE.md` and
 
 ## Why this file is mostly examples
 
-Voice does not transfer as description. A model handed "direct,
-compressed, concrete" writes generic copy and believes it complied,
-because every adjective in a voice description is one the model already
-thinks it satisfies. Voice transfers as **exemplars** (this is the
-target) and **contrast pairs** (this is the boundary) — a rejected and
-an accepted version of the SAME beat, which shows where the line sits
-rather than where the center is.
+Voice does not transfer as description — every adjective in a voice
+description is one the model already believes it satisfies. It transfers
+as **exemplars** (the target) and **contrast pairs** (the boundary): the
+same beat rejected and accepted, showing where the line sits.
 
-Our own voice doc says it plainly: the worked example "carries the line
-more reliably than any rule list."
-
-The catch for any model that cannot hear: this voice is **judged by ear
-against synthesized audio, never on the page.** A line that reads well
-and sounds wrong is wrong, and the operator has caught hooks that passed
-both a written review and the extracted rubric. Section 4 converts the
-ear-judgments we have already made into text-checkable rules. Trust those
-over your own read of a sentence.
+And this voice is **judged by ear against synthesized audio, never on the
+page.** A line that reads well and sounds wrong is wrong; the operator has
+caught hooks that passed both a written review and the rubric. §4 converts
+those ear-judgments into text-checkable rules — trust them over your own
+read of a sentence.
 
 ---
 
@@ -50,25 +43,23 @@ What separates them — these are the rules, in priority order:
 | biography as credential up front | **biography as the twist after the paradox** |
 | closes an idea | **opens a loop with a dated payout** |
 
-Note what the accepted version does with the résumé: JPMorgan arrives in
-a subordinate clause, *after* the paradox has already hooked, attached to
-a woman counting a till. The credential never gets its own sentence.
-That is the biography rule in miniature — material, never trophy.
+Note the résumé: JPMorgan arrives in a subordinate clause, *after* the
+paradox hooks, attached to a woman counting a till. The credential never
+gets its own sentence — biography as material, never trophy.
 
 ---
 
 ## 2. Approved production lines, by function
 
 From Script B ("Steel and Paper"), which won a seed-locked A/B by ear
-against a structurally identical arm. These are the five hardest lines in
-any script — write these first, and match this register.
+against a structurally identical arm. Write these hardest lines first, and
+match this register.
 
 **MICROHOOK** (0–3s; concrete, surprising word last):
 > In 1845, the smartest trade in England was this iron spike. It ruined
 > almost everyone who touched it.
 
-**PROMISE** (dated, calculable, doubles as rehook; the phase's licensed
-triad):
+**PROMISE** (dated, calculable, doubles as rehook; licensed triad):
 > So here's the next eight minutes: not a rebuttal, not a victory lap,
 > not a panic. One test — three questions — that sorts every holding you
 > own into steel or paper. By the end, you'll run it yourself: thirty
@@ -102,19 +93,13 @@ narrates its own symmetry):
 > So — the spike, one more time. In 1850 it was still carrying trains
 > across England, while the certificates that financed it papered the
 > walls of bankrupt clubs. The technology delivered. The owners of its
-> paper paid for it.
->
-> […] That's what a top actually looks like: not euphoria — accidental
-> concentration, sold as safety.
+> paper paid for it. […] That's what a top actually looks like: not
+> euphoria — accidental concentration, sold as safety.
 
 ---
 
 ## 3. What the exemplars are doing (the patterns worth naming)
 
-- **Abstractions get cashed inside the sentence.** Never "enormous
-  investment" — "a quarter-billion pounds, more than a trillion in
-  today's money." Never "concentration risk" — "a fifth of its weight in
-  one bet, and calls it the market."
 - **The opponent is a mechanism, never a person.** Not "Bravos is wrong"
   — the antagonist is paper, concentration, ownership outrunning
   understanding. Named people are credited, then relocated.
@@ -124,23 +109,17 @@ narrates its own symmetry):
 - **Terminal stress everywhere.** "…sold as safety." "…and so am I."
   "…paid for it." The surprising word ends the line, at sentence scale
   and at video scale.
-- **The escalation goes both directions.** More bullish AND more worried
-  than the source. This is the signature move of the answer format and it
-  is what keeps the channel non-tribal.
 - **Position and fallibility are disclosed in the voice, not a
-  disclaimer.** "I own them on purpose, positions disclosed every week."
-  "…and so am I. That week, I de-risk the builders on camera."
+  disclaimer.** "…and so am I. That week, I de-risk the builders on camera."
 - **Second person carries the payoff.** "Run your top five tonight." The
-  video ends on an action the viewer takes, not a summary.
-- **The register is spoken, not written.** Dashes and fragments do work
-  a comma cannot: "So — the spike, one more time."
+  video ends on an action, not a summary.
 
 ---
 
 ## 4. Ear-judgments converted to text rules
 
-Every one of these came from hearing a failure, so apply them even when
-the sentence looks fine on the page.
+Each came from hearing a failure — apply them even when the sentence looks
+fine on the page.
 
 1. **The first sentence is the grab.** No atmosphere, no scene-setting,
    no black screen, no greeting. If sentence one could be deleted without
@@ -159,13 +138,56 @@ the sentence looks fine on the page.
    bracket gets read aloud by the voice model. This happened.
 8. **Never caption the visual.** If the plate shows a spike and the line
    says "this spike," the line is doing the image's job.
-9. **Max three triads per video.** They are the strongest device
-   available; spending them on ordinary lines makes the real ones land
-   flat.
+9. **Max three triads per video** — spending them on ordinary lines makes
+   the real ones land flat.
 10. **Anaphora holds its opening constant and evolves its tail**, and
     resolves only in the final triad.
 
 ---
+
+## 4b. The referent test — where a figure of speech may land
+
+Operator, 2026-08-25, on the line *"the average never noticed"*: it is
+good writing, but only when it points at **the average investor**. Aimed
+at a trailing mean we computed ourselves, it "isn't adding value."
+
+The device was never the problem — **the referent was.** The phrase puns
+two senses of *average*: the statistic and the typical person. Attached to
+a computation, only the technical sense is live, so the line borrows
+resonance it never earned. Clever-sounding, pointing at nothing.
+
+**The test, before spending any figure of speech:** what is it attached to?
+
+| Referent | Treatment |
+|---|---|
+| A person, a crowd, an institution, a market of holders | The device carries real weight — spend it |
+| A metric, a model, a spreadsheet, a number we built | Plain speech. No character lives there |
+
+Watch the double-sense words especially — *average, market, index,
+position, interest, security, exposure*. Personifying them always feels
+clever because the human meaning sits right beside the technical one; if
+only the technical sense is live in your sentence, you are borrowing.
+
+**Relocate rather than delete.** The failure-to-notice in this episode
+belongs to the index holder, and Script B already puts it there: "held by
+people who never checked what they owned" · "and calls it the market."
+
+- **Audit beats run plain** — it is one person and a tool, no character
+  in it: "nothing in my setup caught it," not "the average never noticed."
+- **Density is budgeted by beat function.** Peaks (microhook, pivot,
+  thesis, tell, final triad) keep full compression. Explanatory and
+  connective prose drops to the spoken register — the polish lands harder
+  when it is not constant.
+- **The table test:** would you say this out loud, to one person, across a
+  table? "The DRAM one, on the same test, lives" — no. "That one I'll
+  stand on" — yes.
+- **Keep the connective tissue people actually use** ("so", "though",
+  "here's the thing"). That is not the banned filler: *"So I checked"* is
+  a handhold; *"let that sink in"* is filler. A real question you ask and
+  immediately answer is not a bait question.
+
+The expertise is already in the material. When the prose performs it too,
+the doubling reads as showing off — and that is friction.
 
 ## 5. Hard bans (voice-specific; the never-list in CORE also applies)
 
@@ -199,9 +221,7 @@ If any appear, the model has the rules but not the voice. Feed it §1 and
 
 ## 7. Maintenance
 
-This pack is downstream of evidence, never a substitute for it. When the
-operator rejects a line, the rejection goes into
-`docs/content-video-engine/30-VOICE-SOURCE-MATERIAL.md` §7 first, then a
-contrast pair comes here. Widen the exemplar set after three or four more
-approved scripts and re-derive — breadth confidence stays MEDIUM until
-then. Full profile: `33-VOICE-PROFILE.md`.
+Downstream of evidence, never a substitute for it. A rejected line goes
+into `30-VOICE-SOURCE-MATERIAL.md` §7 first, then a contrast pair comes
+here. Widen the exemplar set after three or four more approved scripts and
+re-derive. Full profile: `33-VOICE-PROFILE.md`.
