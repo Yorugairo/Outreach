@@ -1,0 +1,144 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Record document — typewriter + highlighter (motion prototype)</title>
+<style>
+  :root{
+    --paper:#f0eadc; --ink:#17150f; --meta:#6b665c; --rule:#cdc5b4;
+    --hl:rgba(245,201,63,.72);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{background:#0d0d0f;}
+  body{display:flex;flex-direction:column;align-items:center;gap:18px;padding:22px;
+       font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:#c9c9c4;}
+  .stage{width:1056px;height:480px;background:var(--paper);color:var(--ink);
+         font-family:"Lucida Sans Typewriter","Courier New",monospace;
+         padding:43px 52px 38px;display:flex;flex-direction:column;
+         box-shadow:0 18px 60px rgba(0,0,0,.55);}
+  .hdr{display:flex;justify-content:space-between;align-items:baseline;
+       font-size:15px;letter-spacing:.16em;text-transform:uppercase;color:var(--meta);}
+  .rule{height:2px;background:var(--rule);margin:13px 0 27px;}
+  .kicker{font-size:17px;letter-spacing:.04em;color:var(--meta);margin-bottom:15px;}
+  blockquote{font-size:31px;line-height:1.5;min-height:4.6em;}
+
+  /* per-word marker stroke — sweeps left to right, wraps correctly by construction */
+  .hw{
+    background-image:linear-gradient(101deg,
+      transparent 1.5%, var(--hl) 6%, var(--hl) 94%, transparent 98.5%);
+    background-repeat:no-repeat;background-position:left center;
+    background-size:0% 100%;
+    padding:.06em .04em;border-radius:2px;
+  }
+  .cursor{display:inline-block;width:.55em;height:1.0em;background:var(--ink);
+          vertical-align:-.14em;margin-left:.04em;}
+  .cursor.idle{animation:blink .9s steps(1,end) infinite;}
+  @keyframes blink{0%,50%{opacity:1}50.01%,100%{opacity:0}}
+
+  .attr{margin-top:auto;font-size:18px;opacity:0;transition:opacity .35s ease-out;}
+  .attr b{font-weight:700;}
+  .src{margin-top:16px;padding-top:13px;border-top:2px solid var(--rule);
+       font-size:14px;color:var(--meta);letter-spacing:.03em;
+       opacity:0;transition:opacity .35s ease-out;}
+  .shown{opacity:1 !important;}
+  .bar{display:flex;gap:10px;align-items:center;font-size:13px;}
+  button{font:inherit;padding:7px 15px;border-radius:7px;border:1px solid #3a3a3e;
+         background:#1b1b1f;color:#e6e6e2;cursor:pointer;}
+  button:hover{background:#26262b;}
+  .t{font-variant-numeric:tabular-nums;color:#8b8f98;}
+  @media (prefers-reduced-motion:reduce){ .cursor{display:none;} }
+</style>
+
+<div class="stage">
+  <div class="hdr"><span>CNBC &nbsp;·&nbsp; Squawk Box</span><span>1 July 2026</span></div>
+  <div class="rule"></div>
+  <div class="kicker">Palantir CEO Alex Karp, on how AI is sold:</div>
+  <blockquote id="q"></blockquote>
+  <div class="attr" id="attr"><b>Alex Karp</b>, Chief Executive Officer, Palantir Technologies</div>
+  <div class="src" id="src">Transcript &mdash; CNBC Squawk Box, 1 July 2026 &nbsp;·&nbsp; PLTR closed +8&ndash;9% that session</div>
+</div>
+
+<div class="bar">
+  <button id="replay">Replay</button>
+  <span class="t" id="clock">0.00s</span>
+  <span>&nbsp;driven by canonical word timings — not frames-per-character</span>
+</div>
+
+<script>
+// Canonical word timings (seconds). In production these come straight from the
+// voice-track words sidecar — the SAME source the kinetic captions use.
+const WORDS = [
+  ["“Something",0.00],["has",0.42],["gone",0.63],["completely",0.90],["wrong.",1.42],
+  ["Every",2.05],["single",2.36],["enterprise",2.70],["in",3.24],["this",3.38],
+  ["country",3.60],["—",4.05],["these",4.20],["people",4.45],["are",4.75],
+  ["livid.",4.94],
+  ["They",5.75],["are",6.00],
+  ["paying",6.25],["for",6.62],["tokens",6.84],["that",7.24],["create",7.46],["no",7.86],
+  ["value.”",8.06]
+];
+const END = 8.80;
+const HL_FROM = 18, HL_TO = 24;   // "paying" .. "value.”"
+const HL_WORD_SWEEP = 0.20;       // seconds for one word's marker stroke
+
+const q     = document.getElementById('q');
+const clock = document.getElementById('clock');
+const attr  = document.getElementById('attr');
+const src   = document.getElementById('src');
+
+const FREEZE = (() => {
+  const m = /[?&]t=([0-9.]+)/.exec(location.search);
+  return m ? parseFloat(m[1]) : null;
+})();
+
+function partial(word, ts, next, t){
+  // string slicing — never per-character opacity
+  const span = Math.max(0.08, (next - ts) * 0.72);
+  const p = Math.max(0, Math.min(1, (t - ts) / span));
+  return word.slice(0, Math.round(word.length * p));
+}
+
+function render(t){
+  let i = 0;
+  while (i + 1 < WORDS.length && WORDS[i + 1][1] <= t) i++;
+
+  const frag = document.createDocumentFragment();
+  for (let k = 0; k <= i && k < WORDS.length; k++){
+    const [w, ts] = WORDS[k];
+    const next = WORDS[k + 1] ? WORDS[k + 1][1] : END;
+    const txt  = (k < i) ? w : partial(w, ts, next, t);
+
+    if (k >= HL_FROM && k <= HL_TO){
+      const sp = document.createElement('span');
+      sp.className = 'hw';
+      sp.textContent = (k < i && k < HL_TO) ? txt + ' ' : txt;
+      const swept = Math.max(0, Math.min(1, (t - ts) / HL_WORD_SWEEP));
+      sp.style.backgroundSize = ((1 - Math.pow(1 - swept, 3)) * 100) + '% 100%';
+      frag.append(sp);
+    } else {
+      frag.append(document.createTextNode(txt));
+    }
+    if (k < i && !(k >= HL_FROM && k < HL_TO)) frag.append(document.createTextNode(' '));
+  }
+  const cur = document.createElement('span');
+  cur.className = 'cursor' + (t > END ? ' idle' : '');
+  frag.append(cur);
+
+  q.replaceChildren(frag);
+  attr.classList.toggle('shown', t > END + 0.15);
+  src .classList.toggle('shown', t > END + 0.45);
+}
+
+let raf = null;
+function run(){
+  cancelAnimationFrame(raf);
+  if (FREEZE !== null){ clock.textContent = FREEZE.toFixed(2)+'s'; render(FREEZE); return; }
+  const startedAt = performance.now();
+  (function frame(now){
+    const t = (now - startedAt) / 1000;
+    clock.textContent = t.toFixed(2) + 's';
+    render(t);
+    if (t < END + 2.4) raf = requestAnimationFrame(frame);
+  })(performance.now());
+}
+
+document.getElementById('replay').addEventListener('click', run);
+run();
+</script>

@@ -301,3 +301,60 @@ msedge.exe --headless=new --disable-gpu --hide-scrollbars \
 Matplotlib is the wrong tool here — inline phrase highlighting needs real
 text flow. Note: the exporter will silently keep a stale PNG if the file
 already exists; delete the target first, or verify the timestamp.
+
+### 10.1 The record document is ANIMATED — it reads along with the voice
+
+Operator clarification, 2026-08-25: typewriter + highlighter are
+**motion**, not a static treatment. The document types on and the marker
+sweeps as the narration speaks the words. A still document held for 15
+seconds is dead air; a document that reads along is synchronised evidence.
+
+**The timing source is the words sidecar, never frames-per-character.**
+This is the whole point. A generic typewriter runs at N frames per
+character; ours runs off the canonical word timings already driving the
+kinetic captions (doc 29 C2). The document and the captions therefore
+cannot drift from each other or from the voice, because all three read
+the same file.
+
+| Parameter | Value | Why |
+|---|---|---|
+| Character reveal | word's own span × 0.72 | finishes each word just before the next begins |
+| Marker sweep, per word | **0.20s**, ease-out cubic | fast enough to feel like a stroke, not a wipe |
+| Marker trigger | that word's timestamp | the mark lands as the word is said |
+| Attribution fade-in | END + 0.15s, 0.35s ease-out | settles after the quote lands |
+| Source line fade-in | END + 0.45s | last, quietest |
+| Cursor | solid block, follows the text | blinks **only** when idle (t > END) |
+
+**Implementation rules**
+
+1. **String slicing, never per-character opacity.** Per-character opacity
+   jitters layout and destroys subpixel rendering. (Rule carried over
+   verbatim from the `remotion-video-creation` reference, which is
+   installed locally at `~/.codex/skills/remotion-video-creation`.)
+2. **Per-word strokes, not one stroke across the phrase.** A single
+   absolutely-positioned stroke measures the inline box as one rectangle
+   and breaks the moment the phrase wraps to a new line — it overshoots
+   the line end. Each highlighted word carries its own stroke; wrapping
+   then works by construction. Fold the trailing space *into* the span so
+   consecutive words read as one marker pass rather than separate boxes.
+3. **Animate `transform: scaleX` with `transformOrigin: left center`,
+   not `background-size`.** The reference implementation does this and it
+   is correct: a transform is GPU-composited, while animating
+   `background-size` forces a repaint every frame. The prototype uses
+   `background-size` for brevity; **production must use scaleX.**
+4. **Spring, not linear.** The reference uses
+   `spring({fps, frame, config:{damping:200}, delay, durationInFrames})`.
+   Ease-out cubic is an acceptable substitute where spring is unavailable.
+5. **Honour `prefers-reduced-motion`** — render the settled final state,
+   no typing, no sweep, no cursor.
+6. **One phrase marked, still.** §10 rule 1 holds under motion: one
+   highlight per document, on exactly the words the narration speaks.
+
+**Prototype:** `evidence/prototypes/record-document-motion.html`. Append
+`?t=SECONDS` to freeze any frame — used for contact-sheet review and
+filmstrip export, since headless capture cannot record motion.
+
+**Production route:** the scene-evidence player already owns a word-timed
+renderer for captions; the record document is a second consumer of that
+same timing feed, not a new pipeline. Remotion remains available for the
+editor lane.
