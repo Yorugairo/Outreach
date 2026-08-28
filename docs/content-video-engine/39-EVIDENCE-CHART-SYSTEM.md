@@ -1,0 +1,210 @@
+# 39 — Evidence Chart System
+
+The house design system for every evidence document that docks over a world
+plate. One system, all species. Derived by running the `dataviz` method
+against our own surface and validating with its script — not by taste.
+
+Companion to doc 29 (evidence & motion standards). Where 29 says *what
+counts as evidence*, this says *what it looks like*.
+
+---
+
+## 0. What makes our case different
+
+The reference method assumes a dashboard: hover tooltips, a table view, a
+filter row, light and dark modes. **We have none of those.** Our charts
+are rendered frames in a video. Three consequences drive every decision
+below:
+
+1. **No tooltip, no table view.** The method allows tooltips to carry the
+   values a chart doesn't directly label. We have no such fallback, so
+   **selective direct labelling is mandatory, not optional** — if a value
+   matters, it is drawn on the chart or it is unreadable forever.
+2. **Dwell is 12–20 seconds, often less** (doc 29 §9.13). A reader gets
+   one pass. This makes **emphasis the default form** and rules out dense
+   multi-series categorical work.
+3. **Single theme, dark, deliberately.** The document is opaque on a dark
+   ground so it separates from the illustrated plate behind it. No light
+   mode, no `prefers-color-scheme` — a committed single look, painted
+   explicitly.
+
+---
+
+## 1. Surface and ink
+
+Chart surface is `#16181c` — the same ground the delivered charts already
+use. All contrast figures measured against it.
+
+| Role | Hex | Contrast |
+|---|---|---|
+| Chart surface | `#16181c` | — |
+| Primary ink (title, values) | `#f2f2ef` | 15.85:1 |
+| Secondary ink (subtitle, legend) | `#b9bcc4` | 9.35:1 |
+| Muted ink (axis ticks, source line) | `#8b8f98` | 5.48:1 |
+| De-emphasis series (context in emphasis form) | `#6b6f78` | 3.53:1 |
+| Gridline (hairline, solid) | `#24262b` | 1.17:1 — recessive |
+| Baseline / axis rule | `#33363d` | 1.47:1 |
+
+## 2. Categorical palette — validated, fixed order
+
+Four slots. Hues carry the channel's plate accents so an episode reads as
+one object, while sharpness and the opaque ground do the separating.
+
+| Slot | Hue | Hex | Contrast |
+|---|---|---|---|
+| 1 | crimson | `#e5484d` | 4.54:1 |
+| 2 | teal | `#1fa892` | 5.99:1 |
+| 3 | amber | `#c98500` | 5.79:1 |
+| 4 | cobalt | `#4a7fd6` | 4.48:1 |
+
+Validator, dark mode, surface `#16181c`:
+- **Adjacent pairlist (bars, lines, stacks) — all four slots PASS.**
+  Worst adjacent CVD ΔE 9.7 (deutan); worst adjacent normal-vision ΔE 20.5.
+- **All-pairs (scatter, small multiples) — first three PASS**, with one
+  **WARN**: crimson ↔ amber sits at CVD ΔE 6.3 (deutan), inside the 6–8
+  band. That is legal **only with secondary encoding** — which our medium
+  already forces, since every series is direct-labelled.
+
+Two standing rules from that warn:
+- **Assign in fixed order, never cycled.** Colour follows the entity.
+- **In a two-series chart, prefer crimson + teal** (ΔE 9.7). Reach for
+  amber as a third, never as the partner to crimson alone.
+
+**Never** a fifth generated hue. Past four: fold to "Other", facet into
+small multiples, or change the form.
+
+Text never wears a series colour. Identity comes from the coloured mark
+beside the text.
+
+## 3. Type scale — sized for video, not a screen
+
+Expressed as a fraction of authored chart width `W` so it survives any
+render size. **Author at 2× the dock's placed width** (a solo finance dock
+is 1056px per doc 29 §9.10, so author at **2112 × 960**; the delivered
+1760 × 800 charts are acceptable legacy). **Stat tiles author shorter —
+2112 × 640** — since a tile has no plot to give height to.
+
+| Role | Fraction of W | at W=2112 | Weight |
+|---|---|---|---|
+| Title | 0.030 | 63px | 600 |
+| Subtitle / deck | 0.019 | 40px | 400 |
+| **Direct label / value** | 0.024 | 51px | 600 |
+| Legend | 0.018 | 38px | 500 |
+| Axis tick | 0.017 | 36px | 400 |
+| Source line | 0.014 | 30px | 400 |
+| Hero figure (stat tile) | 0.085 | 180px | 600 |
+
+Rationale: at a 0.5 placement downscale on a 1080p frame, the smallest
+essential text lands near 18px — the practical floor for phone viewing.
+Anything below the source line is decoration and does not belong.
+
+Typeface: the system sans throughout (`system-ui, -apple-system,
+"Segoe UI", sans-serif`). **No serif or display face anywhere**, including
+hero figures — a display face reads as decoration and undercuts the
+document's credibility. Proportional figures on hero and standalone
+values; `tabular-nums` only in axis ticks and any aligned column.
+
+## 4. Marks
+
+| Mark | Spec (at W=2112; scale proportionally) |
+|---|---|
+| Line | 5px, round join/cap |
+| Bar / column | **≤ 45% of its band** (never an absolute px cap — see note), rounded data-end where the renderer supports it, square at baseline |
+| Marker / end-dot | r ≥ 11px, filled, with a 5px surface-colour ring |
+| Area fill | series hue at ~10% opacity — a wash, never a block |
+| Gridline / axis | 2px **solid** hairline, recessive. Never dashed |
+| Surface gap | 5px in surface colour between touching bars/segments |
+
+Weights are the reference specs scaled for video (the reference's 2px line
+would vanish at broadcast downscale). Never draw a border around a mark to
+separate it — the gap and the ring are the mechanism.
+
+Two notes from building the first samples:
+
+- **Bar width is proportional, not absolute.** The reference's "≤24px"
+  assumes a dashboard with many bars; translated literally to a 2112px
+  video document it produces threads. The rule's *reason* is "never fill
+  the slot; leave the band's leftover as air," so we express it as a
+  fraction of the band. A three-column document at 44% of band is correct.
+- **Rounded data-ends are renderer-dependent.** HTML/SVG rounds natively;
+  matplotlib output ships square ends, which is acceptable — the surface
+  gap, not the corner radius, is what separates marks. Do not contort a
+  renderer to chase the radius.
+
+## 5. Threshold and annotation marks (our addition)
+
+The reference method has no vocabulary for "this crossed a historic line,"
+which several of our documents need.
+
+- **Threshold rule.** A 2px **dashed** horizontal line in muted ink with a
+  right-aligned label above it. Dashing is *reserved for thresholds* —
+  which is exactly why gridlines must stay solid. A dash on this system
+  always means "reference level, not data."
+- **Peak / trough annotation.** A 2px leader from the point to a label set
+  in secondary ink, with the date and value on two lines. Maximum **two
+  per chart** — past that the eye has nowhere to rest in 15 seconds.
+- **Era band.** A `rgba(255,255,255,0.04)` vertical band behind a named
+  span, labelled in muted ink at the top of the plot. For "the mania",
+  "the dot-com peak", and similar.
+- **Callout value.** The single number the narration is speaking gets the
+  direct-label treatment at 0.024W in primary ink, never a series colour.
+
+## 6. Form selection — the 15-second test
+
+Given the dwell budget, form is chosen by what a reader can finish.
+
+| The document's job | Form | Colour job |
+|---|---|---|
+| One number is the whole point | **Stat tile / hero figure** | none — ink only |
+| A single value against a limit | **Meter** | one hue + track |
+| One series is the story | **Emphasis** — accent + `#6b6f78` context | 1 hue + gray |
+| Trend over time, one subject | Line, optional 10% area | slot 1 |
+| Two subjects compared | Two lines, both direct-labelled | slots 1 + 2 |
+| Magnitude across ≤ 6 categories | Column | slot 1 for all |
+| Before → after | Dumbbell | one hue, two shades |
+| Part-to-whole | Stacked bar, ≤ 4 segments | slots in order |
+
+**Emphasis is the default.** If a chart has more than two colours, justify
+it. If the story is "this one number," it is a stat tile — a one-bar bar
+chart is an anti-pattern, and several documents in the Steel and Paper
+queue (7% of GDP, $822B in leases, 94% of operating cash flow) are stat
+tiles, not charts.
+
+**Never** a dual axis. Two measures of different scale become two
+documents, small multiples, or both indexed to 100 at t0 on one axis.
+
+## 7. Required chrome on every evidence document
+
+A document is only evidence if a viewer can check it. Every render carries,
+without exception:
+
+1. **Title** — the claim in plain words, sentence case.
+2. **Source line**, bottom-left, muted: publisher, series, and window —
+   e.g. `Data: Yahoo Finance, ^TNX · 1998-01 to 2002-01`, or
+   `Figures via Bravos Research`, or `Campbell & Turner railway share index`.
+3. **Verbatim numerals.** Any figure a badge quotes must appear on the
+   document exactly as the badge states it (doc 29 §9.8 / ruling B3).
+4. **No production scaffolding** — no slot ids, no claim ids, no approval
+   state, ever.
+
+## 8. Checks before a document ships
+
+- [ ] Form chosen by §6 — and it is not a chart when it should be a tile
+- [ ] Palette slots assigned in fixed order; ≤ 4; crimson+teal for a pair
+- [ ] Validator re-run if any hue changed
+- [ ] Every value the narration speaks is **directly labelled** (no
+      tooltip exists to fall back on)
+- [ ] Gridlines solid; dashes only on thresholds
+- [ ] Title + source line present; numerals verbatim
+- [ ] Rendered and **looked at** — label collisions, overflow, geometry
+- [ ] Checked against the reference anti-pattern list
+
+## 9. Provenance
+
+Palette and checks produced with the `dataviz` skill's validator
+(`validate_palette.js`), dark mode, surface `#16181c`, 2026-08-25.
+Re-run it whenever a hue changes:
+
+```bash
+node scripts/validate_palette.js "#e5484d,#1fa892,#c98500,#4a7fd6" --mode dark --surface "#16181c"
+```
