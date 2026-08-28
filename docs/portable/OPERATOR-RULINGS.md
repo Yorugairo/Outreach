@@ -53,6 +53,21 @@ technique; and open attribution creates a network effect with the source.
 *Apply:* their evidence, our relocation. Credit → steelman → agree on
 record → locate → relocate using their own attributed numbers.
 
+**A4 — Process IS the product.** (2026-08-25.) A3 said we do not compete
+on chart-reading. A4 says what we compete on instead: **showing how a
+number is interrogated.** Full doctrine: doc 40.
+*Why:* operator — "our edge is not in the pure charts/numbers. It's in the
+idea of thinking about how to view and monitor risk in a fashion that most
+people don't." The market is saturated with confident numbers and starved
+of audited ones, and a risk analyst's actual edge is knowing what would
+make a number wrong.
+*Apply:* the **audit beat** — state the number plainly, ask the question
+nobody asks, show what you found, give the verdict, say what it costs the
+claim. One or two per video, never more; it is an anecdote with a
+reversal, never a methodology lecture. It must cut both ways: when an
+audit kills OUR number, that is the content. A channel that publishes the
+check that killed its own figure buys credibility no confident chart can.
+
 ## B. Evidence
 
 **B1 — Rebuild charts; do not extract frames.** (2026-08-25. SUPERSEDES
