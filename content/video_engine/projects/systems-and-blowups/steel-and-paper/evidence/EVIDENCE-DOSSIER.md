@@ -168,7 +168,7 @@ supply" and gives the flip condition a real, watchable series.
 | 9 | Karp verbatim: "tokens that create no value" | record doc | CNBC 2026-07-01 | ✅ |
 | 10 | Macdonald verbatim: "that trade becomes harder to justify" | record doc | The Verge | ✅ |
 | 11 | Uber Claude Code adoption 32% → 84% | dumbbell | The Information | ✅ |
-| 12 | SMH drawdown · ^TNX two eras · mega-cap vs SPY · memory trade | our chart | delivered ✓ |
+| 12 | SMH drawdown · ^TNX two eras · mega-cap vs SPY · memory trade | our chart | Yahoo Finance | ✅ rebuilt on the validated palette |
 
 ## Script fixes required before the master take
 

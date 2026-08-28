@@ -222,10 +222,135 @@ def railway_mileage():
     save(fig, "ev-railway-mileage-v1")
 
 
+# =========================================================================
+# 6-9. Market series  (REAL — Yahoo Finance via yfinance)
+# =========================================================================
+def _px(ticker, start):
+    import yfinance as yf
+    d = yf.download(ticker, start=start, progress=False, auto_adjust=True)
+    c = d["Close"]
+    if hasattr(c, "columns"):          # yfinance returns MultiIndex columns
+        c = c.iloc[:, 0]
+    return c.dropna()
+
+def _yr(idx):
+    return [t.year + (t.dayofyear - 1) / 365.25 for t in idx]
+
+def _year_ticks(ax, idx, step=1):
+    """Axis must show years, not decimal-year floats."""
+    yrs = list(range(idx[0].year, idx[-1].year + 1, step))
+    ax.set_xticks(yrs)
+    ax.set_xticklabels([str(y) for y in yrs], fontfamily=FAM)
+
+def _endlabel(ax, x, y, text, color, dy=0):
+    ax.plot([x], [y], "o", ms=20, color=color, mec=SURFACE, mew=5, zorder=6)
+    ax.annotate(text, xy=(x, y), xytext=(10, dy), textcoords="offset points",
+                color=INK_1, fontsize=T_LABEL, fontweight=600,
+                fontfamily=FAM, va="center", ha="left")
+
+def _legend(ax, entries):
+    """Legend is mandatory for >=2 series; a coloured key beside text ink."""
+    h = [plt.Line2D([0], [0], color=c, lw=6, solid_capstyle="round")
+         for _, c in entries]
+    lg = ax.legend(h, [n for n, _ in entries], loc="upper left",
+                   frameon=False, fontsize=T_LEG, labelcolor=INK_2,
+                   handlelength=1.1, handletextpad=0.7, borderaxespad=0.9)
+    for t in lg.get_texts(): t.set_fontfamily(FAM)
+
+
+def krx_memory():
+    a, b = _px("000660.KS", "2024-01-01"), _px("MU", "2024-01-01")
+    ai, bi = a / a.iloc[0] * 100, b / b.iloc[0] * 100
+    fig = frame(); ax = fig.add_axes([0.075, 0.155, 0.845, 0.645]); chrome(ax)
+    ax.plot(_yr(ai.index), ai.values, color=CRIMSON, lw=5, solid_capstyle="round")
+    ax.plot(_yr(bi.index), bi.values, color=TEAL, lw=5, solid_capstyle="round")
+    _endlabel(ax, _yr(ai.index)[-1], ai.iloc[-1], f"{ai.iloc[-1]:,.0f}", CRIMSON, dy=24)
+    _endlabel(ax, _yr(bi.index)[-1], bi.iloc[-1], f"{bi.iloc[-1]:,.0f}", TEAL, dy=-24)
+    _year_ticks(ax, ai.index)
+    _legend(ax, [("SK hynix (000660.KS)", CRIMSON), ("Micron (MU)", TEAL)])
+    ax.yaxis.set_major_formatter(FuncFormatter(lambda v, p: f"{int(v):,}"))
+    titles(fig, "The memory trade, live",
+           "SK hynix and Micron, indexed to 100 at January 2024")
+    source(fig, f"Data: Yahoo Finance, 000660.KS, MU · 2024-01 to "
+                f"{ai.index[-1].date().isoformat()}")
+    save(fig, "ev-krx-memory-v3")
+
+
+def mega_vs_spy():
+    names = ["AMZN", "MSFT", "GOOGL", "META"]
+    ser = [_px(t, "2023-01-01") for t in names]
+    idx = ser[0].index
+    for x in ser[1:]: idx = idx.intersection(x.index)
+    basket = sum((x.reindex(idx) / x.reindex(idx).iloc[0]) for x in ser) / len(ser) * 100
+    spy = _px("SPY", "2023-01-01").reindex(idx).ffill()
+    spy = spy / spy.iloc[0] * 100
+    fig = frame(); ax = fig.add_axes([0.075, 0.155, 0.845, 0.645]); chrome(ax)
+    ax.plot(_yr(idx), basket.values, color=CRIMSON, lw=5, solid_capstyle="round")
+    ax.plot(_yr(idx), spy.values, color=TEAL, lw=5, solid_capstyle="round")
+    _endlabel(ax, _yr(idx)[-1], basket.iloc[-1], f"{basket.iloc[-1]:,.0f}", CRIMSON)
+    _endlabel(ax, _yr(idx)[-1], spy.iloc[-1], f"{spy.iloc[-1]:,.0f}", TEAL)
+    _legend(ax, [("Equal-weight AMZN / MSFT / GOOGL / META", CRIMSON),
+                 ("S&P 500 (SPY)", TEAL)])
+    ax.yaxis.set_major_formatter(FuncFormatter(lambda v, p: f"{int(v):,}"))
+    _year_ticks(ax, idx)
+    titles(fig, "The builders against the index",
+           "Equal-weight mega-cap basket vs the S&P 500, indexed to 100 at January 2023")
+    source(fig, f"Data: Yahoo Finance, AMZN, MSFT, GOOGL, META, SPY · 2023-01 to "
+                f"{idx[-1].date().isoformat()}")
+    save(fig, "ev-mega-vs-spy-v3")
+
+
+def smh_drawdown():
+    s = _px("SMH", "2024-01-01")
+    dd = (s / s.cummax() - 1) * 100
+    x = _yr(dd.index)
+    fig = frame(); ax = fig.add_axes([0.075, 0.155, 0.885, 0.645]); chrome(ax)
+    ax.fill_between(x, dd.values, 0, color=CRIMSON, alpha=0.10, lw=0)
+    ax.plot(x, dd.values, color=CRIMSON, lw=5, solid_capstyle="round")
+    ax.axhline(0, color=BASELINE, lw=2)
+    worst = dd.min()
+    ax.set_ylim(worst - 7.5, 2.2)
+    ax.annotate(f"worst {worst:.0f}%", xy=(x[int(dd.values.argmin())], worst),
+                xytext=(0, -40), textcoords="offset points",
+                color=INK_2, fontsize=T_TICK, fontfamily=FAM, ha="center")
+    _year_ticks(ax, dd.index)
+    _endlabel(ax, x[-1], dd.iloc[-1], f"{dd.iloc[-1]:.0f}%", CRIMSON)
+    ax.yaxis.set_major_formatter(FuncFormatter(lambda v, p: f"{int(v)}%"))
+    titles(fig, "Semiconductors, distance from their own peak",
+           "SMH drawdown from running high — a single series, so no legend")
+    source(fig, f"Data: Yahoo Finance, SMH · 2024-01 to {dd.index[-1].date().isoformat()}")
+    save(fig, "ev-smh-drawdown-v3")
+
+
+def tnx_two_eras():
+    """Two eras = small multiples, never a dual axis (doc 39 §6)."""
+    a = _px("^TNX", "1998-01-01")
+    a = a[a.index < "2002-01-01"]
+    b = _px("^TNX", "2021-01-01")
+    fig = frame()
+    for i, (ser, lbl) in enumerate(((a, "Dot-com era · 1998–2001"),
+                                    (b, "AI era · 2021–today"))):
+        ax = fig.add_axes([0.075 + i * 0.475, 0.175, 0.395, 0.545]); chrome(ax)
+        x = _yr(ser.index)
+        ax.plot(x, ser.values, color=CRIMSON, lw=5, solid_capstyle="round")
+        _endlabel(ax, x[-1], ser.iloc[-1], f"{ser.iloc[-1]:.1f}%", CRIMSON)
+        ax.set_title(lbl, color=INK_2, fontsize=T_LEG, fontfamily=FAM,
+                     loc="left", pad=22)
+        ax.set_ylim(0, 7.2)
+        ax.yaxis.set_major_formatter(FuncFormatter(lambda v, p: f"{int(v)}%"))
+        if i: ax.set_yticklabels([])
+    titles(fig, "The 10-year Treasury yield, two eras",
+           "Same scale, side by side — never two y-axes on one plot")
+    source(fig, f"Data: Yahoo Finance, ^TNX · 1998-01 to 2001-12 and 2021-01 to "
+                f"{b.index[-1].date().isoformat()}")
+    save(fig, "ev-tnx-two-eras-v3")
+
+
 if __name__ == "__main__":
     print("building evidence documents ->", OUT)
     for fn in (equip_ipp_gdp, capex_trajectory, dram_prices,
-               uber_adoption, railway_mileage):
+               uber_adoption, railway_mileage,
+               krx_memory, mega_vs_spy, smh_drawdown, tnx_two_eras):
         try:
             fn()
         except Exception as e:
