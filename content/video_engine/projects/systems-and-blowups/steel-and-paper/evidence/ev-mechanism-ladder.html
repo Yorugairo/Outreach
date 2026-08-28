@@ -1,0 +1,76 @@
+<!doctype html>
+<meta charset="utf-8">
+<style>
+  :root{
+    --surface:#16181c; --ink1:#f2f2ef; --ink2:#b9bcc4; --mute:#8b8f98;
+    --grid:#24262b; --base:#33363d; --crimson:#e5484d; --teal:#1fa892; --amber:#c98500;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{width:2112px;height:1060px;background:var(--surface);}
+  body{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink1);
+       padding:74px 92px 56px;display:flex;flex-direction:column;}
+  .eyebrow{font-size:28px;letter-spacing:.18em;text-transform:uppercase;color:var(--mute);}
+  h1{font-size:63px;font-weight:600;margin-top:24px;letter-spacing:-.01em;}
+  .deck{font-size:38px;color:var(--ink2);margin-top:12px;}
+
+  .steps{display:flex;gap:0;margin-top:64px;align-items:stretch;}
+  .step{flex:1;padding:0 46px;border-left:3px solid var(--grid);}
+  .step:first-child{padding-left:0;border-left:none;}
+  .ord{display:flex;align-items:center;gap:18px;}
+  .num{width:62px;height:62px;border-radius:50%;display:grid;place-items:center;
+       font-size:34px;font-weight:600;color:var(--surface);}
+  .when{font-size:25px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);}
+  h2{font-size:46px;font-weight:600;margin-top:30px;line-height:1.2;}
+  .who{font-size:30px;color:var(--ink2);margin-top:18px;line-height:1.45;}
+  .why{font-size:30px;color:var(--mute);margin-top:22px;line-height:1.45;font-style:italic;}
+
+  .arrowrow{display:flex;align-items:center;gap:26px;margin-top:56px;color:var(--mute);
+            font-size:26px;letter-spacing:.13em;text-transform:uppercase;}
+  .arrowrow .line{flex:1;height:3px;background:linear-gradient(90deg,
+      var(--crimson), var(--amber) 55%, var(--base));border-radius:2px;}
+
+  .foot{margin-top:auto;padding-top:26px;border-top:2px solid var(--grid);
+        font-size:26px;color:var(--mute);line-height:1.5;}
+</style>
+
+<div class="eyebrow">Mechanism &nbsp;·&nbsp; how a memory unwind actually arrives</div>
+<h1>The froth cracks before the giants do</h1>
+<div class="deck">Three stages, in the order they fire — not the order people watch them</div>
+
+<div class="steps">
+  <div class="step">
+    <div class="ord"><div class="num" style="background:var(--crimson)">1</div>
+      <span class="when">Earliest</span></div>
+    <h2>Affiliate tremor</h2>
+    <div class="who">The chaebol family names roll over while the giants stay green.</div>
+    <div class="why">Froth furthest from the cash flows evaporates first — it was
+      never buying the business, only proximity to it.</div>
+  </div>
+
+  <div class="step">
+    <div class="ord"><div class="num" style="background:var(--amber)">2</div>
+      <span class="when">Leading</span></div>
+    <h2>Emperor / broad distortion</h2>
+    <div class="who">The giants hold green while the broad market bleeds.</div>
+    <div class="why">The maximum-distortion state: index flows propping a handful
+      of names while everything around them gives way.</div>
+  </div>
+
+  <div class="step">
+    <div class="ord"><div class="num" style="background:var(--base)">3</div>
+      <span class="when">Late</span></div>
+    <h2>Within-complex rollover</h2>
+    <div class="who">The memory names themselves finally crack.</div>
+    <div class="why">By the time this is legible on a chart, the lead is gone —
+      this is the stage most people call "the start."</div>
+  </div>
+</div>
+
+<div class="arrowrow"><span>Early warning</span><span class="line"></span><span>Already priced</span></div>
+
+<div class="foot">
+  Model: the operator's own contagion monitor (SCML ledger,
+  <span style="color:var(--ink2)">scml/research/contagion.py</span>) — a
+  falsifiable risk framework, not a prediction. Tier membership is a small proxy
+  basket, not an index. Shown as a mechanism; no position is recommended.
+</div>

@@ -24,6 +24,7 @@
   .val{flex:0 0 430px;text-align:right;font-size:56px;font-weight:600;
        color:var(--crimson);font-variant-numeric:tabular-nums;}
   .unit{font-size:30px;color:var(--mute);font-weight:400;margin-left:8px;}
+  .nobase{color:var(--mute);font-size:30px;font-style:italic;}
   .chg{flex:1;text-align:right;font-size:40px;color:var(--ink2);
        font-variant-numeric:tabular-nums;}
   .tag{display:inline-block;margin-left:22px;font-size:24px;letter-spacing:.12em;
@@ -49,14 +50,14 @@
 
 <div class="rows">
   <div class="row">
-    <div class="grade">DRAM<small>HS 8542.32.1010</small></div>
+    <div class="grade">DRAM<small>HS 8542.32.1010 · export</small></div>
     <div class="val">77,557<span class="unit">$/kg</span></div>
     <div class="chg">+51.1%</div>
   </div>
   <div class="row">
-    <div class="grade">Multi-component IC<small>HS 8542.32.3000 · HBM-class, stacked</small></div>
+    <div class="grade">Multi-component IC<small>HS 8542.32.3000 · export · HBM-class, stacked</small></div>
     <div class="val">83,779<span class="unit">$/kg</span></div>
-    <div class="chg">+26.5%<span class="tag">binding constraint</span></div>
+    <div class="chg"><span class="nobase">no comparable baseline</span><span class="tag">binding constraint</span></div>
   </div>
 </div>
 
@@ -67,7 +68,7 @@
   </div>
   <div>
     <div class="k">Status</div>
-    <div class="v"><b>Not triggered.</b><br>Both grades are rising, not falling</div>
+    <div class="v"><b>Not triggered.</b><br>DRAM is rising, not falling</div>
   </div>
   <div>
     <div class="k">Signal class</div>
@@ -76,9 +77,12 @@
 </div>
 
 <div class="foot">
-  Korea Customs Service export statistics, HS 8542.32 · reading is for
-  <b>May 2026</b>, the latest published release — customs data carries roughly a
-  three-month publication lag, so this is not a live price.
-  An export <i>unit value</i> is not a contract price; TrendForce contract prints
-  are the confirming series, shown separately.
+  Korea Customs Service export statistics · reading is for <b>May 2026</b>, the
+  latest published release — customs data carries roughly a three-month lag, so
+  this is not a live price. An export <i>unit value</i> is not a contract price;
+  TrendForce contract prints are the confirming series, shown separately.<br>
+  <b>DRAM change is measured against twelve consecutive months of the same grade
+  and flow.</b> The HBM-class code carried NAND from 2025-06 to 2026-04, so
+  May 2026 is its first print in this regime — a level, with no honest baseline
+  to compare it to.
 </div>

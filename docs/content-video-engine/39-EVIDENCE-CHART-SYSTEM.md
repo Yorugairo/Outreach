@@ -483,14 +483,50 @@ period was **2026-05**, roughly a three-month publication lag.
 > evaluation date as a data date states a stale number as current, which
 > is the same class of error as the GDP-peak overclaim (§ dossier).
 
-### Open data-quality issue
+### CORRECTED — what I got wrong, and the real bug
 
-`trade_facts` currently holds **two rows per grade per period** with
-different unit values (2026-05 HBM-class: 123,622 and 83,779; DRAM:
-31,374 and 77,557). The CLI surfaces one. Until that is resolved, an
-instrument card must not present a single figure as definitive — either
-reconcile upstream, or show the range. **Flagged to the operator, not
-silently resolved.**
+My first pass called the paired rows in `trade_facts` "duplicates" and told
+the operator not to publish a single figure. **That was wrong.** Operator
+correction, 2026-08-25: the pairs are **import vs export**, and the
+tripwire already uses export-only, correctly. The only defect there is
+that no CLI or UI view labels the flow, so the pair *reads* as a
+contradiction. Cheap display fix. Every instrument card must therefore
+**label the flow on every reading.**
+
+**The real bug, which I missed and the operator found:** HS 8542.32.3000
+holds three regimes in one series —
+
+| period | label | export $/kg |
+|---|---|---|
+| 2025-03 → 2025-05 | HBM-class | 226 – 237 |
+| 2025-06 → 2026-04 | **NAND** | 41,367 – 72,712 |
+| 2026-05 | HBM-class | 83,779 |
+
+The tripwire groups by **HS code only**, so its "HBM +26.5% vs trailing
+mean" was HBM measured against **eleven months of NAND** — a trend
+fabricated by mixing. A card carrying that figure was built and delivered
+before the operator caught it.
+
+> **RULE — never compute a change across a label change.** A trailing
+> mean is only valid over rows sharing HS code **and** product label
+> **and** flow. Where a series changes regime, the latest print is a
+> **level with no baseline**, and must be shown as one. Say "no
+> comparable baseline" on the card; never silently span the break.
+
+DRAM (8542.32.1010) passes this test — twelve consecutive months, same
+label, same flow — so its +51.1% stands. Note both codes also carry an
+early `2025-03..05 / P1-P3` regime at 226–640 $/kg on a different unit
+basis; any trailing window must exclude it. DRAM's window happened to,
+by luck rather than design.
+
+### The date bug, confirmed at schema level
+
+Operator, same pass: `memory_history` **has no period column at all**.
+`persist_memory_reading` stamps `eval_date = today` and discards the
+`latest_period` the tripwire already computed, so `memtrend` literally
+cannot show the data's date. That is why three eval dates carried
+identical May values. The rule stands and is now root-caused: query
+`trade_facts.period_label`, never the history table's date.
 
 ### Standing constraints
 
