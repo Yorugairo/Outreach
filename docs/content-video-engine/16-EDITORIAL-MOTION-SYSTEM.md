@@ -1,6 +1,6 @@
 # Editorial Motion System
 
-> **STATUS: DEPRECATED.** Kept for the reasoning trail; motion doctrine now lives in **29** (evidence & motion standards). Do not follow this document as current doctrine.
+> **STATUS: PARTIALLY SUPERSEDED.** The production pattern is now the scene-evidence lane in **29**. Sections that 29 does not replace — timing authority, plan contract, provider boundary, revision proof and QC, on-screen text policy — still apply. Where this doc and 29 disagree on motion, 29 wins.
 
 *Specification of record for deterministic shot timing, local cinematography,
 and provider-motion exceptions in the History documentary lane.*

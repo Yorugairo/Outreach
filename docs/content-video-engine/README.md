@@ -32,6 +32,26 @@ They are model-agnostic and sized to paste into a system-instruction box.
 When a document in *this* folder disagrees with the portable tier, the
 portable tier wins.
 
+## The two layers (the organising principle)
+
+Operator, 2026-08-28: *"everything we've been learning about how to build
+the worlds + evidence layers is meant to be transferrable across all of
+our channels and series."*
+
+That splits every document here in two:
+
+| Layer | Applies to | Docs |
+|---|---|---|
+| **Production — universal** | Every channel, every series, forever | **26** loop · **29** worlds, docks, motion · **37** recording · **39** evidence documents · **40** audit beat |
+| **Scripting — lane-specific** | One lane's theme, audience, voice | **10** history/documentary · **31 · 35 · 36 · 38** finance formats and persona · **32 · 33** craft and voice |
+
+A lane is never retired because its *production* pattern was replaced —
+the production layer was never lane-specific in the first place. The
+history lane is live; it is simply outside the finance set right now, and
+it inherits **29** and **39** wholesale the day it ships again. The same
+is true of Martial Matters and Building Money: they do not get their own
+world or evidence standards, they get these.
+
 ## DOCTRINE — the live set
 
 | Doc | Subject |
@@ -62,10 +82,12 @@ hyperframes lane · **24** composition & scale · **27** durability & layout
 
 | Doc | Superseded by |
 |---|---|
-| **10** history-documentary editorial spec | **29** Part 9 / C1 — every lane uses the scene-evidence pattern |
-| **16** editorial motion system | **29** |
 | **17** timestamped plate production | **29** Part 8–9 — held stills with hard cuts are a defect |
 | **22** audio fix runbook | **37 §8** — master-take rule; splice-repair banned |
+
+**Partially superseded:** **16** editorial motion system — its motion
+pattern is now **29**, but its timing authority, plan contract, provider
+boundary and QC sections still apply.
 
 ## RECORD — not maintained
 

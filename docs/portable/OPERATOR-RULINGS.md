@@ -116,8 +116,21 @@ charts stay readable.
 
 ## C. Production
 
-**C1 — Doc 29's scene-evidence lane is the bar for EVERY channel.**
-(2026-08-25.) Lanes differ only in scripting — theme, audience, voice.
+**C1 — The production layer is universal; only scripting is lane-specific.**
+(2026-08-25, sharpened 2026-08-28.) Doc 29's scene-evidence lane is the bar
+for EVERY channel. Operator: *"everything we've been learning about how to
+build the worlds + evidence layers is meant to be transferrable across all
+of our channels and series."*
+**Two layers, and the split is the point:**
+- **Production (universal, forever):** world-building, evidence documents,
+  docks, motion, recording, the generation loop — docs 26, 29, 37, 39, 40.
+  A new channel or series inherits these whole; it never authors its own.
+- **Scripting (lane-specific):** theme, audience, voice, format.
+*Corollary:* **a lane is never retired because its production pattern was
+replaced** — the production layer was never lane-specific to begin with.
+The history lane is live, just outside the finance set right now, and it
+picks up 29 and 39 the day it ships again. Same for Martial Matters and
+Building Money.
 *Why:* operator — "the animation you're running is fake and looks like
 flashing. You have no evidence call out. EVERY channel needs to use the
 standards we've developed for finance." The legacy history-lane pattern
