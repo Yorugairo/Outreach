@@ -23,7 +23,7 @@ disagree, this section wins.
 **The lane.** Every channel ships on the scene-evidence lane (Part 8):
 one ken-burns vector per scene, translucent washi docks with opaque
 documents inside, verbatim badges, word-timed kinetic captions, wipes on
-evidence-free boundaries. Held stills with hard cuts are a defect. Lanes
+evidence-free boundaries - except evidence that PERSISTS across a boundary, which rides above the curtain wipe (s9.15). Held stills with hard cuts are a defect. Lanes
 differ only in scripting — theme, audience, voice. *(§9 C1)*
 
 **Plate density is runtime-derived.** Target **runtime ÷ 12s** distinct
@@ -896,6 +896,45 @@ what it claims. Registration should attach meaning as data
    the ≤3-break-tag ration (split the segment rather than exceed it —
    overload causes audible speed-ups); full-episode audio is re-encoded
    through one concat pass so seams never emit fragments.
+
+### 9.15 The curtain, persistence, and the recovered showcase mechanisms (operator, 2026-08-29)
+
+Re-reading `samples/gemini-scene-evidence-pipeline-showcase.html` (the
+actual Gemini artifact, not this doc's summary of it) recovered two
+mechanisms Parts 6/8 lost in translation, and the operator issued three
+rulings. Where these conflict with anything above, THESE win.
+
+1. **The wipe is an opaque CURTAIN, not a cross-reveal.** The showcase
+   sweeps a solid panel across the whole stage; every boundary state change
+   (world swap, wash reset, dock turnover) happens hidden behind it. This
+   doc kept the wipe's duration and ease but lost the mechanism, and every
+   boundary defect since - mask reads, repaste flashes, clipped cards - was
+   the cost of choreographing exits in the open. The player now covers
+   through the outgoing scene's last half-wipe and reveals through the
+   incoming scene's first, one continuous edge.
+2. **Evidence may persist across a boundary** (operator): a document whose
+   claim spans scenes holds while the world wipes beneath it - it rides
+   ABOVE the curtain. Same-slide docks in adjacent scenes coalesce into one
+   span; the entrance never re-runs. This supersedes Part 6's evidence-free-
+   boundary rule FOR SPANNING EVIDENCE ONLY; a card ending at the boundary
+   is simply covered by the curtain and swapped away hidden.
+3. **Near-boundary exits snap to the boundary.** An exit authored within
+   ~1.4s of a scene turn used to fire fade + wash-off + wipe in under a
+   second (the "repaste" flash). Those exits snap to the boundary; exits
+   further out are deliberate early clears and keep their fade.
+4. **The world leans in with the argument** (showcase `worldScale` steps
+   1.02 -> 1.08 across a build): each card landing and badge stamping eases
+   the plate in another notch (+0.008, 0.6s expo-out) on top of the
+   authored drift. Continuous drift alone reads as weather.
+5. **No title layer on the dock** (operator): the card IS the document; a
+   label above it spends the frame's best real estate restating what the
+   viewer sees. `title` lives in the timeline for manifests, never drawn.
+   (The showcase's EVIDENCE-n chips and citation footers were already
+   retired by 8.8; the title bar follows them.)
+6. **The plate cadence** (operator): two evidence pieces per 12-20s plate,
+   two badges each, a breath between, then wipe; a plate that cannot field
+   two honestly carries ONE BIG piece (solo 1056px); under ~8s, one or
+   none. Documents with no readable figure clear early and small.
 
 ### 9.7 Host-in-world plates approved (operator, 2026-08-25)
 
