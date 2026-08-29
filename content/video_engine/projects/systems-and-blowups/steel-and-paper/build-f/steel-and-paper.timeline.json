@@ -20846,34 +20846,73 @@
    ]
   },
   "silicon-reality-gap-s04-teacher-stamped": {
-   "title": "silicon-reality-gap-s04-teacher-stamped",
-   "source": "",
+   "title": "The Capital Cycle",
+   "source": "Silicon Reality Gap",
    "species": "deck",
    "document": {
     "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\sources\\decks\\teacher-stamped-production-visuals\\silicon-reality-gap\\slides\\slide-004.png",
     "sha256": "6bda70a74a3d4b0b03d569cb6f666e89bf957167146ec4adaefc8701fee0828d"
    },
-   "badges": []
+   "badges": [
+    {
+     "label": "DRAM, 1974-2013",
+     "value": "12 million",
+     "tag": "factor, per megabyte",
+     "accent": "sunflower"
+    },
+    {
+     "label": "MOORE'S LAW",
+     "value": "50%",
+     "tag": "cost cuts passed on",
+     "accent": "sunflower"
+    }
+   ]
   },
   "silicon-antidote-s14-teacher-stamped": {
-   "title": "silicon-antidote-s14-teacher-stamped",
-   "source": "",
+   "title": "The Diagnostic Matrix",
+   "source": "Silicon Antidote",
    "species": "deck",
    "document": {
     "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\sources\\decks\\teacher-stamped-production-visuals\\silicon-antidote\\slides\\slide-014.png",
     "sha256": "e66c67c872b79c0bcf9e2bfebd800e0b7b8db85915df857dc395080b8e189024"
    },
-   "badges": []
+   "badges": [
+    {
+     "label": "S&P 500",
+     "value": "20.5x",
+     "tag": "forward P/E",
+     "accent": "coral"
+    },
+    {
+     "label": "MEMORY",
+     "value": "4.0x - 7.0x",
+     "tag": "forward P/E",
+     "accent": "teal"
+    }
+   ]
   },
   "silicon-value-software-bubble-s05-teacher-stamped": {
-   "title": "silicon-value-software-bubble-s05-teacher-stamped",
-   "source": "",
+   "title": "What The Treadmill Killed",
+   "source": "Silicon Value",
    "species": "deck",
    "document": {
     "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\sources\\decks\\teacher-stamped-production-visuals\\silicon-value-software-bubble\\slides\\slide-005.png",
     "sha256": "b7f9c153d0ecd5c400a658843a3507fa5e4376514aa34ec96758227124d2a271"
    },
-   "badges": []
+   "badges": [
+    {
+     "label": "QIMONDA",
+     "value": "'09",
+     "tag": "liquidation",
+     "accent": "coral"
+    },
+    {
+     "label": "ELPIDA",
+     "value": "'12",
+     "tag": "bankruptcy",
+     "accent": "coral"
+    }
+   ]
   },
   "ev-railway-index-v1": {
    "title": "The Railway Index",
@@ -20960,24 +20999,50 @@
    ]
   },
   "silicon-antidote-s13-teacher-stamped": {
-   "title": "silicon-antidote-s13-teacher-stamped",
-   "source": "",
+   "title": "The Racetrack",
+   "source": "Silicon Antidote",
    "species": "deck",
    "document": {
     "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\sources\\decks\\teacher-stamped-production-visuals\\silicon-antidote\\slides\\slide-013.png",
     "sha256": "495e870141163b7c74ccced5191a0cc7fddf42b6ffee28f5c3d11861fdc5319c"
    },
-   "badges": []
+   "badges": [
+    {
+     "label": "SAMSUNG",
+     "value": "39%",
+     "tag": "DRAM share",
+     "accent": "sunflower"
+    },
+    {
+     "label": "MICRON",
+     "value": "500%",
+     "tag": "YoY growth",
+     "accent": "teal"
+    }
+   ]
   },
   "silicon-reality-gap-s03-teacher-stamped": {
-   "title": "silicon-reality-gap-s03-teacher-stamped",
-   "source": "",
+   "title": "Valuation Reality Check",
+   "source": "Silicon Reality Gap",
    "species": "deck",
    "document": {
     "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\sources\\decks\\teacher-stamped-production-visuals\\silicon-reality-gap\\slides\\slide-003.png",
     "sha256": "3a0c666183f435f662c1153de5c013bd71844bb3e4d749b90ae69d49f91cad46"
    },
-   "badges": []
+   "badges": [
+    {
+     "label": "S&P 500 CAPE",
+     "value": "41.18",
+     "tag": "vs 44.2 at the 1999 peak",
+     "accent": "coral"
+    },
+    {
+     "label": "MEMORY FWD P/E",
+     "value": "4.0x",
+     "tag": "compressed",
+     "accent": "teal"
+    }
+   ]
   },
   "ev-doc-karp": {
    "title": "Alex Karp, Palantir",
@@ -21038,24 +21103,44 @@
    ]
   },
   "silicon-value-software-bubble-s03-teacher-stamped": {
-   "title": "silicon-value-software-bubble-s03-teacher-stamped",
-   "source": "",
+   "title": "The Physical Bottleneck",
+   "source": "Silicon Value",
    "species": "deck",
    "document": {
     "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\sources\\decks\\teacher-stamped-production-visuals\\silicon-value-software-bubble\\slides\\slide-003.png",
     "sha256": "b84bb1e3cd9ff357f598a71764782da0255f8a86c063ca9bf29cff0ebc697d2a"
    },
-   "badges": []
+   "badges": [
+    {
+     "label": "THE TRIOPOLY",
+     "value": "97%",
+     "tag": "of global supply",
+     "accent": "teal"
+    }
+   ]
   },
   "silicon-value-software-bubble-s13-teacher-stamped": {
-   "title": "silicon-value-software-bubble-s13-teacher-stamped",
-   "source": "",
+   "title": "Cash Against Paper",
+   "source": "Silicon Value",
    "species": "deck",
    "document": {
     "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\sources\\decks\\teacher-stamped-production-visuals\\silicon-value-software-bubble\\slides\\slide-013.png",
     "sha256": "4f2edf3d15b97efd82058c646c55d46a532fab99d22243e26af9515c64e2383b"
    },
-   "badges": []
+   "badges": [
+    {
+     "label": "SK HYNIX",
+     "value": "76%",
+     "tag": "operating margin",
+     "accent": "teal"
+    },
+    {
+     "label": "S&P 500",
+     "value": "32%",
+     "tag": "actual earnings growth",
+     "accent": "coral"
+    }
+   ]
   },
   "ev-debt-issuance-v2": {
    "title": "Hyperscaler Borrowing",
@@ -21163,8 +21248,8 @@
    ]
   },
   "silicon-antidote-s04-teacher-stamped": {
-   "title": "silicon-antidote-s04-teacher-stamped",
-   "source": "",
+   "title": "The Blind Spot",
+   "source": "Silicon Antidote",
    "species": "deck",
    "document": {
     "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\sources\\decks\\teacher-stamped-production-visuals\\silicon-antidote\\slides\\slide-004.png",
@@ -21278,14 +21363,27 @@
    ]
   },
   "silicon-reality-gap-s10-teacher-stamped": {
-   "title": "silicon-reality-gap-s10-teacher-stamped",
-   "source": "",
+   "title": "The DRAM Battlefield",
+   "source": "Silicon Reality Gap",
    "species": "deck",
    "document": {
     "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\sources\\decks\\teacher-stamped-production-visuals\\silicon-reality-gap\\slides\\slide-010.png",
     "sha256": "4ac6cc79f83c1ab434f9e247e6bb385cba9ed57853cf535658dfc2c79b4c5ef1"
    },
-   "badges": []
+   "badges": [
+    {
+     "label": "MICRON",
+     "value": "~500%",
+     "tag": "YoY growth",
+     "accent": "teal"
+    },
+    {
+     "label": "CXMT (CHINA)",
+     "value": "+716%",
+     "tag": "YoY growth",
+     "accent": "coral"
+    }
+   ]
   },
   "ev-krx-memory-v3": {
    "title": "SK hynix",
@@ -21399,18 +21497,31 @@
    ]
   },
   "silicon-reality-gap-s12-teacher-stamped": {
-   "title": "silicon-reality-gap-s12-teacher-stamped",
-   "source": "",
+   "title": "The Paper Bubble",
+   "source": "Silicon Reality Gap",
    "species": "deck",
    "document": {
     "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\sources\\decks\\teacher-stamped-production-visuals\\silicon-reality-gap\\slides\\slide-012.png",
     "sha256": "2718244eb2acdab57072e9bbabb6dd94058b6aa7e934096dff81e84bbceb3527"
    },
-   "badges": []
+   "badges": [
+    {
+     "label": "PASSIVE FLOWS",
+     "value": "$40",
+     "tag": "of every $100 to the Top 10",
+     "accent": "coral"
+    },
+    {
+     "label": "TOP 10 EARNINGS",
+     "value": "32%",
+     "tag": "of the aggregate",
+     "accent": "coral"
+    }
+   ]
   },
   "sovereign-memory-infrastructure-s05-teacher-stamped": {
-   "title": "sovereign-memory-infrastructure-s05-teacher-stamped",
-   "source": "",
+   "title": "The Geographic Oligopoly",
+   "source": "Sovereign Memory",
    "species": "deck",
    "document": {
     "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\sources\\decks\\teacher-stamped-production-visuals\\sovereign-memory-infrastructure\\slides\\slide-005.png",
@@ -21466,34 +21577,21 @@
    ]
   },
   "silicon-reality-gap-s13-teacher-stamped": {
-   "title": "silicon-reality-gap-s13-teacher-stamped",
-   "source": "",
+   "title": "No Longer A Commodity",
+   "source": "Silicon Reality Gap",
    "species": "deck",
    "document": {
     "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\sources\\decks\\teacher-stamped-production-visuals\\silicon-reality-gap\\slides\\slide-013.png",
     "sha256": "b00a6539b8d1ceaf2bf4cd56359e58446df586f600d13a2b3520b2ca327a877a"
    },
-   "badges": []
-  },
-  "silicon-value-software-bubble-s15-teacher-stamped": {
-   "title": "silicon-value-software-bubble-s15-teacher-stamped",
-   "source": "",
-   "species": "deck",
-   "document": {
-    "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\sources\\decks\\teacher-stamped-production-visuals\\silicon-value-software-bubble\\slides\\slide-015.png",
-    "sha256": "8fac0f890b74cfa7e77e5e710dcdd364e88fa8477901b289f642624cf2c94857"
-   },
-   "badges": []
-  },
-  "silicon-antidote-s15-teacher-stamped": {
-   "title": "silicon-antidote-s15-teacher-stamped",
-   "source": "",
-   "species": "deck",
-   "document": {
-    "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\sources\\decks\\teacher-stamped-production-visuals\\silicon-antidote\\slides\\slide-015.png",
-    "sha256": "364afa1b47396fe18883cd7e316c1efa3c4741bacad50f6a36a2a602fbfeeb85"
-   },
-   "badges": []
+   "badges": [
+    {
+     "label": "MEMORY BOM SHARE",
+     "value": "30% to 40%",
+     "tag": "2x its historical average",
+     "accent": "teal"
+    }
+   ]
   }
  },
  "scenes": [
@@ -21711,7 +21809,10 @@
      "slot": 1,
      "enter": 63.5,
      "exit": 71.2,
-     "badge_at": []
+     "badge_at": [
+      65.55,
+      66.85
+     ]
     }
    ]
   },
@@ -21737,7 +21838,10 @@
      "slot": 0,
      "enter": 71.5,
      "exit": 78.2,
-     "badge_at": []
+     "badge_at": [
+      73.55,
+      74.85
+     ]
     }
    ]
   },
@@ -21763,7 +21867,10 @@
      "slot": 1,
      "enter": 79.0,
      "exit": 90.0,
-     "badge_at": []
+     "badge_at": [
+      81.05,
+      82.35
+     ]
     }
    ]
   },
@@ -21954,7 +22061,10 @@
      "slot": 0,
      "enter": 157.5,
      "exit": 166.7,
-     "badge_at": []
+     "badge_at": [
+      159.55,
+      160.85
+     ]
     }
    ]
   },
@@ -21980,7 +22090,10 @@
      "slot": 1,
      "enter": 167.2,
      "exit": 175.8,
-     "badge_at": []
+     "badge_at": [
+      169.25,
+      170.55
+     ]
     }
    ]
   },
@@ -22167,8 +22280,10 @@
      "slide": "silicon-value-software-bubble-s03-teacher-stamped",
      "slot": 0,
      "enter": 234.5,
-     "exit": 244.4,
-     "badge_at": []
+     "exit": 241.4,
+     "badge_at": [
+      236.55
+     ]
     }
    ]
   },
@@ -22212,7 +22327,10 @@
      "slot": 0,
      "enter": 248.5,
      "exit": 255.7,
-     "badge_at": []
+     "badge_at": [
+      250.55,
+      251.85
+     ]
     }
    ]
   },
@@ -22941,10 +23059,13 @@
    "docks": [
     {
      "slide": "silicon-reality-gap-s10-teacher-stamped",
-     "slot": 1,
+     "slot": 0,
      "enter": 504.6,
-     "exit": 507.8,
-     "badge_at": []
+     "exit": 513.6,
+     "badge_at": [
+      506.65,
+      507.95
+     ]
     }
    ]
   },
@@ -23168,7 +23289,10 @@
      "slot": 0,
      "enter": 577.5,
      "exit": 588.0,
-     "badge_at": []
+     "badge_at": [
+      579.55,
+      580.85
+     ]
     }
    ]
   },
@@ -23191,9 +23315,9 @@
    "docks": [
     {
      "slide": "sovereign-memory-infrastructure-s05-teacher-stamped",
-     "slot": 1,
+     "slot": 0,
      "enter": 588.2,
-     "exit": 600.0,
+     "exit": 595.2,
      "badge_at": []
     }
    ]
@@ -23279,7 +23403,9 @@
      "slot": 1,
      "enter": 628.5,
      "exit": 633.2,
-     "badge_at": []
+     "badge_at": [
+      630.55
+     ]
     }
    ]
   },
@@ -23341,7 +23467,10 @@
      "slot": 0,
      "enter": 649.2,
      "exit": 656.0,
-     "badge_at": []
+     "badge_at": [
+      651.25,
+      652.55
+     ]
     }
    ]
   },
@@ -23356,20 +23485,12 @@
      "y": 8
     }
    },
-   "exit": "wipe_right",
+   "exit": "cut",
    "span": [
     656.0,
     663.8
    ],
-   "docks": [
-    {
-     "slide": "silicon-value-software-bubble-s15-teacher-stamped",
-     "slot": 1,
-     "enter": 656.0,
-     "exit": 663.5,
-     "badge_at": []
-    }
-   ]
+   "docks": []
   },
   {
    "scene_id": "s70",
@@ -23382,20 +23503,12 @@
      "y": -6
     }
    },
-   "exit": "wipe_right",
+   "exit": "cut",
    "span": [
     663.8,
     675.0
    ],
-   "docks": [
-    {
-     "slide": "silicon-antidote-s15-teacher-stamped",
-     "slot": 0,
-     "enter": 664.2,
-     "exit": 675.0,
-     "badge_at": []
-    }
-   ]
+   "docks": []
   },
   {
    "scene_id": "s71",

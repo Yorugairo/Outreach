@@ -599,5 +599,207 @@
     "tag": "not lit"
    }
   ]
+ },
+ {
+  "asset": "silicon-reality-gap-s04-teacher-stamped",
+  "species": "deck",
+  "title": "The Capital Cycle",
+  "source": "Silicon Reality Gap",
+  "badges": [
+   {
+    "label": "DRAM, 1974-2013",
+    "value": "12 million",
+    "tag": "factor, per megabyte",
+    "accent": "sunflower"
+   },
+   {
+    "label": "MOORE'S LAW",
+    "value": "50%",
+    "tag": "cost cuts passed on",
+    "accent": "sunflower"
+   }
+  ]
+ },
+ {
+  "asset": "silicon-antidote-s14-teacher-stamped",
+  "species": "deck",
+  "title": "The Diagnostic Matrix",
+  "source": "Silicon Antidote",
+  "badges": [
+   {
+    "label": "S&P 500",
+    "value": "20.5x",
+    "tag": "forward P/E",
+    "accent": "coral"
+   },
+   {
+    "label": "MEMORY",
+    "value": "4.0x - 7.0x",
+    "tag": "forward P/E",
+    "accent": "teal"
+   }
+  ]
+ },
+ {
+  "asset": "silicon-value-software-bubble-s05-teacher-stamped",
+  "species": "deck",
+  "title": "What The Treadmill Killed",
+  "source": "Silicon Value",
+  "badges": [
+   {
+    "label": "QIMONDA",
+    "value": "'09",
+    "tag": "liquidation",
+    "accent": "coral"
+   },
+   {
+    "label": "ELPIDA",
+    "value": "'12",
+    "tag": "bankruptcy",
+    "accent": "coral"
+   }
+  ]
+ },
+ {
+  "asset": "silicon-antidote-s13-teacher-stamped",
+  "species": "deck",
+  "title": "The Racetrack",
+  "source": "Silicon Antidote",
+  "badges": [
+   {
+    "label": "SAMSUNG",
+    "value": "39%",
+    "tag": "DRAM share",
+    "accent": "sunflower"
+   },
+   {
+    "label": "MICRON",
+    "value": "500%",
+    "tag": "YoY growth",
+    "accent": "teal"
+   }
+  ]
+ },
+ {
+  "asset": "silicon-reality-gap-s03-teacher-stamped",
+  "species": "deck",
+  "title": "Valuation Reality Check",
+  "source": "Silicon Reality Gap",
+  "badges": [
+   {
+    "label": "S&P 500 CAPE",
+    "value": "41.18",
+    "tag": "vs 44.2 at the 1999 peak",
+    "accent": "coral"
+   },
+   {
+    "label": "MEMORY FWD P/E",
+    "value": "4.0x",
+    "tag": "compressed",
+    "accent": "teal"
+   }
+  ]
+ },
+ {
+  "asset": "silicon-value-software-bubble-s03-teacher-stamped",
+  "species": "deck",
+  "title": "The Physical Bottleneck",
+  "source": "Silicon Value",
+  "badges": [
+   {
+    "label": "THE TRIOPOLY",
+    "value": "97%",
+    "tag": "of global supply",
+    "accent": "teal"
+   }
+  ]
+ },
+ {
+  "asset": "silicon-value-software-bubble-s13-teacher-stamped",
+  "species": "deck",
+  "title": "Cash Against Paper",
+  "source": "Silicon Value",
+  "badges": [
+   {
+    "label": "SK HYNIX",
+    "value": "76%",
+    "tag": "operating margin",
+    "accent": "teal"
+   },
+   {
+    "label": "S&P 500",
+    "value": "32%",
+    "tag": "actual earnings growth",
+    "accent": "coral"
+   }
+  ]
+ },
+ {
+  "asset": "silicon-antidote-s04-teacher-stamped",
+  "species": "deck",
+  "title": "The Blind Spot",
+  "source": "Silicon Antidote",
+  "badges": []
+ },
+ {
+  "asset": "silicon-reality-gap-s10-teacher-stamped",
+  "species": "deck",
+  "title": "The DRAM Battlefield",
+  "source": "Silicon Reality Gap",
+  "badges": [
+   {
+    "label": "MICRON",
+    "value": "~500%",
+    "tag": "YoY growth",
+    "accent": "teal"
+   },
+   {
+    "label": "CXMT (CHINA)",
+    "value": "+716%",
+    "tag": "YoY growth",
+    "accent": "coral"
+   }
+  ]
+ },
+ {
+  "asset": "silicon-reality-gap-s12-teacher-stamped",
+  "species": "deck",
+  "title": "The Paper Bubble",
+  "source": "Silicon Reality Gap",
+  "badges": [
+   {
+    "label": "PASSIVE FLOWS",
+    "value": "$40",
+    "tag": "of every $100 to the Top 10",
+    "accent": "coral"
+   },
+   {
+    "label": "TOP 10 EARNINGS",
+    "value": "32%",
+    "tag": "of the aggregate",
+    "accent": "coral"
+   }
+  ]
+ },
+ {
+  "asset": "sovereign-memory-infrastructure-s05-teacher-stamped",
+  "species": "deck",
+  "title": "The Geographic Oligopoly",
+  "source": "Sovereign Memory",
+  "badges": []
+ },
+ {
+  "asset": "silicon-reality-gap-s13-teacher-stamped",
+  "species": "deck",
+  "title": "No Longer A Commodity",
+  "source": "Silicon Reality Gap",
+  "badges": [
+   {
+    "label": "MEMORY BOM SHARE",
+    "value": "30% to 40%",
+    "tag": "2x its historical average",
+    "accent": "teal"
+   }
+  ]
  }
 ]

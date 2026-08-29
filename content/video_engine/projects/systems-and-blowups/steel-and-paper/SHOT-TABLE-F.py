@@ -40,7 +40,7 @@ W = [
 (203.0, 213.6, "world-empty-racks-v1",           (.04,  10,  -8), [("ev-uber-adoption-v1",1,203.0,212.0)]),  # "can't draw a line to what you're shipping"
 (213.9, 223.7, "world-exhibition-hall-morning-v1",(.05, -14,   6), [("ev-three-manias",0,214.0,223.5)]),      # the fair the morning after = the trough
 (223.8, 234.0, "hero-countercase-v1",                  (.05,  14,  -6), [("ev-three-manias",0,224.0,234.0)]),      # the trains ran through the crash  # ^REGISTER: the wave, the ruin, one green shoot - WHAT SURVIVES
-(234.0, 244.5, "world-dawn-factory-v1"  ,           (.04, -10,   8), [("silicon-value-software-bubble-s03-teacher-stamped",0,234.5,244.4)]),  # the inescapable physical reality
+(234.0, 244.5, "world-dawn-factory-v1"  ,           (.04, -10,   8), [("silicon-value-software-bubble-s03-teacher-stamped",0,234.5,241.4)]),  # the inescapable physical reality  # s03 carries ONE figure (97%); clears at 7.0s so the plate breathes
 (244.8, 248.0, "world-molten-pour-v2",       (.05,  10,   6), []),                       # u5 rehook: "who's paying for the steel this time"
 # ── P3 GAP · unit 2: the debt unit ─────────────────────────────────────
 (248.1, 255.8, "world-treasury-cash-count",      (.05, -12,  -8), [("silicon-value-software-bubble-s13-teacher-stamped",0,248.5,255.7)]),  # cash generation vs paper gains
@@ -72,7 +72,7 @@ W = [
 (476.0, 486.8, "world-workbench-triad-v1",       (.04,  10,   8), [("ev-mechanism-ladder",1,476.0,486.5)]),                       # "thirty seconds a holding. run your top five tonight"
 (486.9, 496.0, "world-two-rooms-divergence-v1",  (.05, -12,   6), [("silicon-antidote-s14-diagnostic-matrix-v1",0,487.0,496.0)]),
 (496.0, 503.2, "beat-04-015-bottleneck-boom-v1",                        (.04,  12,  -8), [("silicon-antidote-s14-diagnostic-matrix-v1",0,496.0,503.0)]),  # the test, administered in public  # POOL: a bottleneck boom before a bubble
-(504.4, 507.9, "world-seoul-fab-skyline-v1",     (.05, -10,   6), [("silicon-reality-gap-s10-teacher-stamped",1,504.6,507.8)]),  # the global DRAM battlefield
+(504.4, 513.9, "world-seoul-fab-skyline-v1",     (.05, -10,   6), [("silicon-reality-gap-s10-teacher-stamped",0,504.6,513.6)]),  # the global DRAM battlefield  # extended to 9.0s so 500% / +716% can actually land
 (508.2, 522.0, "hero-fab-constraint-v1",                 (.05,  14,   8), [("ev-krx-memory-v3",0,508.5,522.0)]),     # SK hynix, +517%  # ^REGISTER: the cleanroom line - SK hynix, the constraint itself
 (523.3, 533.0, "hero-hbm-bandwidth-v1",                        (.06, -8,   -6), [("silicon-reality-gap-s07-hbm-stack-v1",1,523.5,533.0)]),   # dies stacked edge-on  # ^REGISTER: the die with bandwidth streaming - HBM physics
 (533.0, 543.9, "world-dram-terrain-v1",          (.05,  10,   6), [("ev-hbm-wafer-ratio-v1",0,533.0,540.0),("silicon-antidote-s09-capacity-penalty-v1",1,540.0,543.8)]),
@@ -82,7 +82,7 @@ W = [
 (567.9, 576.7, "beat-04-013-guidance-not-gospel-v1",                       (.04,  10,   8), []),                       # "it doesn't care what you were hoping to conclude"  # POOL: guidance is not gospel - the test doesn't care what you hoped
 # ── P5 · the tell ──────────────────────────────────────────────────────
 (577.1, 588.0, "beat-04-003-classic-cycle-counterargument-v1",         (.05, -14,  -6), [("silicon-reality-gap-s12-teacher-stamped",0,577.5,588.0)]),  # paper-bubble mechanics - their tripwire, then ours  # POOL: the strongest argument against this video - their tripwire
-(588.0, 600.0, "world-korea-port-v1",            (.05,  12,   6), [("sovereign-memory-infrastructure-s05-teacher-stamped",1,588.2,600.0)]),  # the geographic monopoly - memory leaving Korea
+(588.0, 600.0, "world-korea-port-v1",            (.05,  12,   6), [("sovereign-memory-infrastructure-s05-teacher-stamped",0,588.2,595.2)]),  # the geographic monopoly - memory leaving Korea  # s05 carries NO figure at all; 7.0s and gone, and it takes the stage alone rather than the narrow rail
 (600.0, 612.0, "world-memory-wafer-v1",          (.04, -10,   8), [("ev-instrument-memory",0,600.0,612.0)]), # the instrument, method and threshold
 (612.0, 628.0, "world-unwind-desk-v2",           (.05,  10,  -8), [("ev-hbm-export-series",1,612.0,622.0)]), # THE FLIP: a position deliberately reduced
 # ── P6 CLOSE ───────────────────────────────────────────────────────────
@@ -90,8 +90,8 @@ W = [
 (633.6, 641.0, "world-spike-certificate-ring-v2",(.05,  12,   8), []),                       # RING ECHO: the spike, one more time
 (641.0, 648.7, "world-club-interior-papered",    (.05, -10,  -6), []),                       # papered the walls of bankrupt clubs
 (649.0, 656.0, "beat-03-008-009-physical-capacity-gate-v1",                       (.04,  10,   6), [("silicon-antidote-s14-teacher-stamped",0,649.2,656.0)]),  # POOL: the gate to physical capacity - scarcity is what they sell
-(656.0, 663.6, "world-scales-coin-paper-v1",     (.05, -12,   8), [("silicon-value-software-bubble-s15-teacher-stamped",1,656.0,663.5)]),  # vulnerability vs opportunity
-(663.8, 675.0, "beat-05-002-strategic-chokepoints-v1",                    (.05,  14,  -6), [("silicon-antidote-s15-teacher-stamped",0,664.2,675.0)]),  # the physical antidote to a paper bubble  # POOL: the world reorganizing around chokepoints - they're the steel
+(656.0, 663.6, "world-scales-coin-paper-v1",     (.05, -12,   8), []),  # vulnerability vs opportunity - EVIDENCE PULLED: the s15 slide reads "Opportunity."
+(663.8, 675.0, "beat-05-002-strategic-chokepoints-v1",                    (.05,  14,  -6), []),  # EVIDENCE PULLED: antidote-s15 is a buy directive + third-party branding  # POOL: the world reorganizing around chokepoints - they're the steel
 (675.0, 691.2, "world-listing-barge-v1",         (.05, -10,   6), [("silicon-antidote-s14-diagnostic-matrix-v1",1,676.9,691.0)]),  # accidental concentration, sold as safety
 (691.3, 697.2, "beat-06-017-018-diworsification-v1",             (.06,  10,   8), []),                       # FINAL TRIAD: steel used / paper believed  # POOL: diworsification - the paper gets believed
 (697.7, 712.0, "beat-04-001-buyer-behavior-v1",                       (.04, -12,   6), []),                       # CTA: you now have the test  # POOL: now look at buyer behaviour - the assignment
