@@ -200,6 +200,46 @@ L3  [S8 weak 3-word tail from my own S21 split; the merge also sharpens the stee
   to  : Start with their case at full strength — the version they would defend.
 ```
 
+## Loop pass 5 — the hook, after the operator reframed the episode
+
+Operator: *"this isn't truly a historical parallel episode, it's a real-time
+response to current events, with echoes of prior boom-bust cycles as
+**evidence**."* That settles the beat-1 question — no doc exception is
+warranted, and the old hook was opening on the evidence layer rather than
+the claim layer.
+
+**Was:** "England's smartest trade was this iron spike." — past tense,
+third-party. Two of doc 38 beat 1's four properties.
+
+**Now:** "The safest thing you own looks like this. An iron spike. It
+ruined almost everyone who touched it. `[post-key]` That was 1845."
+
+| | |
+|---|---|
+| Microhook | 2.73s (cap 3.0) |
+| Paradox paid wrong | 6.31s (gate 8.0) |
+| Direct address | **1.1s**, was 10.5s |
+| beat-1 properties | present ✓ viewer-facing ✓ concrete ✓ terminal stress ✓ |
+
+Two exceptions claimed on the new sentences:
+
+- **S3 on "…looks like this."** The terminal "this" is *deictic* — it hands
+  off to the object on screen, which is where the stress genuinely lands.
+  A deictic terminal is the counterpoint rule working, not a weak pronoun.
+- **S9 on "looks like."** A stronger verb would assert identity; the
+  comparison is what keeps the claim honest, since the viewer does not own
+  an 1845 spike. The weaker verb is the accurate one.
+
+"An iron spike." is a licensed reveal fragment (S5) after a loaded setup.
+
+**A second callback arrived free.** "The safest thing you own" at 0.0%
+now pays off against the close's "accidental concentration, **sold as
+safety**" at 96.5% — a second token spanning the whole episode, planted by
+the hook rather than added.
+
+Chain and ring intact: F1 7.4% · F2 9.2% · F3 29.1% · delivery 64.6% ·
+ring plant 0.0% → close 99.8% · pivot 50.1%.
+
 ## Loop pass 4 — found by reading the assembled text
 
 My S113 split orphaned the next sentence: "And calls it the market."
