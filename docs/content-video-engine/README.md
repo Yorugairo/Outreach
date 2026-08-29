@@ -32,6 +32,21 @@ They are model-agnostic and sized to paste into a system-instruction box.
 When a document in *this* folder disagrees with the portable tier, the
 portable tier wins.
 
+## Building anything? Read PIPELINE.md first
+
+[`PIPELINE.md`](PIPELINE.md) is the one-page map of every stage, what owns
+it, and what consumes what. It exists because seven established components
+were bypassed and rebuilt from scratch in one session — including the
+renderer, which has been in `samples/` the whole time.
+
+**There is already a player** (`samples/scene-evidence-player.template.html`)
+and a worked timeline (`samples/current-bubble-five-minute-v4.timeline.json`).
+Do not write another.
+
+**Enumerate before you grep.** `ls` the directory and read the index first.
+Grep confirms what you already suspect; it cannot surface a component you
+don't know exists. Every bypass this session was a folder never listed.
+
 ## To WRITE or REVIEW a script, start at the kit
 
 [`patterns/SCRIPT-PATTERN-KIT.md`](patterns/SCRIPT-PATTERN-KIT.md) is the
