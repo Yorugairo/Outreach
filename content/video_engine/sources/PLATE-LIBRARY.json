@@ -97,7 +97,7 @@
   {
    "id": "hero-barbell-v1",
    "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\pilot-hero-plates-borrowed\\objects\\hero-barbell-v1.png",
-   "semantic": "",
+   "semantic": "a balance scale, gold blocks one pan and paper the other - weighing steel against paper",
    "register": "cut-paper-ukiyo",
    "source": "steel-and-paper/pilot-hero-plates-borrowed",
    "state": "approved",
@@ -106,7 +106,7 @@
   {
    "id": "hero-contract-ovens-v1",
    "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\pilot-hero-plates-borrowed\\objects\\hero-contract-ovens-v1.png",
-   "semantic": "",
+   "semantic": "an oven line issuing sealed discs to a queue of buyers - forward contracts, locked",
    "register": "cut-paper-ukiyo",
    "source": "steel-and-paper/pilot-hero-plates-borrowed",
    "state": "approved",
@@ -115,7 +115,7 @@
   {
    "id": "hero-countercase-v1",
    "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\pilot-hero-plates-borrowed\\objects\\hero-countercase-v1.png",
-   "semantic": "",
+   "semantic": "a figure before a wave and collapsing towers, one green shoot rising - what survives",
    "register": "cut-paper-ukiyo",
    "source": "steel-and-paper/pilot-hero-plates-borrowed",
    "state": "approved",
@@ -124,7 +124,7 @@
   {
    "id": "hero-fab-constraint-v1",
    "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\pilot-hero-plates-borrowed\\objects\\hero-fab-constraint-v1.png",
-   "semantic": "",
+   "semantic": "a cleanroom wafer line in full production - the physical constraint itself",
    "register": "cut-paper-ukiyo",
    "source": "steel-and-paper/pilot-hero-plates-borrowed",
    "state": "approved",
@@ -133,7 +133,7 @@
   {
    "id": "hero-hbm-bandwidth-v1",
    "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\pilot-hero-plates-borrowed\\objects\\hero-hbm-bandwidth-v1.png",
-   "semantic": "",
+   "semantic": "a die at centre with bandwidth streaming to server towers - HBM as the bottleneck",
    "register": "cut-paper-ukiyo",
    "source": "steel-and-paper/pilot-hero-plates-borrowed",
    "state": "approved",
@@ -142,7 +142,7 @@
   {
    "id": "hero-korea-italy-v1",
    "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\pilot-hero-plates-borrowed\\objects\\hero-korea-italy-v1.png",
-   "semantic": "",
+   "semantic": "split frame, Korean industrial coast against Italian classical city - two continents, one hardware",
    "register": "cut-paper-ukiyo",
    "source": "steel-and-paper/pilot-hero-plates-borrowed",
    "state": "approved",
@@ -151,7 +151,7 @@
   {
    "id": "hero-sp500-double-failure-v1",
    "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\pilot-hero-plates-borrowed\\objects\\hero-sp500-double-failure-v1.png",
-   "semantic": "",
+   "semantic": "many towers cascading paper onto a crowd below - the index as a waterfall of claims",
    "register": "cut-paper-ukiyo",
    "source": "steel-and-paper/pilot-hero-plates-borrowed",
    "state": "approved",
@@ -160,7 +160,7 @@
   {
    "id": "hero-wrong-bubble-v1",
    "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\pilot-hero-plates-borrowed\\objects\\hero-wrong-bubble-v1.png",
-   "semantic": "",
+   "semantic": "a lit chip tower beside a basket stuffed with paper slips - the bubble is in the paper, not the silicon",
    "register": "cut-paper-ukiyo",
    "source": "steel-and-paper/pilot-hero-plates-borrowed",
    "state": "approved",
@@ -718,16 +718,46 @@
   {
    "id": "crowd-support-alpha-v1",
    "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\components\\semantic-wave-01\\crowd-support-alpha-v1.png",
-   "semantic": "",
+   "semantic": "crowd, support-metaphor, trace-cut",
    "register": "keyed-overlay",
    "source": "pilot/current-bubble-mechanism/components/semantic-wave-01",
    "state": "unstated",
-   "render_eligible": false
+   "render_eligible": false,
+   "kind": "component",
+   "worlds": [
+    "story",
+    "mechanism"
+   ],
+   "anchors": [
+    "crowd-supported-foundation",
+    "small-crowd-bounce"
+   ],
+   "modes": [
+    "declared_metaphor",
+    "accurate_mechanism"
+   ],
+   "prohibited": [
+    "crowd-is-always-irrational",
+    "measured-price-performance",
+    "forecast"
+   ],
+   "reuse_policy": {
+    "max_total_uses": 2,
+    "min_nonadjacent_gap": 0,
+    "allowed_reasons": [
+     "callback"
+    ],
+    "allow_adjacent_continuation": false,
+    "claim_bound": true
+   },
+   "claim_refs": [
+    "memory-bottleneck-not-bubble-inference"
+   ]
   },
   {
    "id": "crowd-support-keyed-v1",
    "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\components\\semantic-wave-01\\crowd-support-keyed-v1.png",
-   "semantic": "",
+   "semantic": "crowd, support-metaphor, trace-cut",
    "register": "keyed-overlay",
    "source": "pilot/current-bubble-mechanism/components/semantic-wave-01",
    "state": "unstated",
@@ -736,16 +766,48 @@
   {
    "id": "industrial-support-stack-alpha-v1",
    "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\components\\semantic-wave-01\\industrial-support-stack-alpha-v1.png",
-   "semantic": "",
+   "semantic": "factory, qualification-gate, buyer-commitment, trace-cut",
    "register": "keyed-overlay",
    "source": "pilot/current-bubble-mechanism/components/semantic-wave-01",
    "state": "unstated",
-   "render_eligible": false
+   "render_eligible": false,
+   "kind": "component",
+   "worlds": [
+    "mechanism"
+   ],
+   "anchors": [
+    "piecewise-support-stack",
+    "gate-close",
+    "crate-slide"
+   ],
+   "modes": [
+    "accurate_mechanism",
+    "declared_metaphor"
+   ],
+   "prohibited": [
+    "named-contract",
+    "guaranteed-revenue",
+    "capacity-cannot-expand"
+   ],
+   "reuse_policy": {
+    "max_total_uses": 2,
+    "min_nonadjacent_gap": 0,
+    "allowed_reasons": [
+     "continuation",
+     "callback"
+    ],
+    "allow_adjacent_continuation": false,
+    "claim_bound": true
+   },
+   "claim_refs": [
+    "memory-bottleneck-not-bubble-inference",
+    "micron-strategic-customer-agreements"
+   ]
   },
   {
    "id": "industrial-support-stack-keyed-v1",
    "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\components\\semantic-wave-01\\industrial-support-stack-keyed-v1.png",
-   "semantic": "",
+   "semantic": "factory, qualification-gate, buyer-commitment, trace-cut",
    "register": "keyed-overlay",
    "source": "pilot/current-bubble-mechanism/components/semantic-wave-01",
    "state": "unstated",
@@ -754,16 +816,45 @@
   {
    "id": "memory-module-queue-alpha-v1",
    "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\components\\semantic-wave-01\\memory-module-queue-alpha-v1.png",
-   "semantic": "",
+   "semantic": "memory-module, production-queue, trace-cut",
    "register": "keyed-overlay",
    "source": "pilot/current-bubble-mechanism/components/semantic-wave-01",
    "state": "unstated",
-   "render_eligible": false
+   "render_eligible": false,
+   "kind": "component",
+   "worlds": [
+    "mechanism"
+   ],
+   "anchors": [
+    "queueable-memory-modules",
+    "component-depth-reveal"
+   ],
+   "modes": [
+    "accurate_mechanism"
+   ],
+   "prohibited": [
+    "measured-output",
+    "named-customer",
+    "guaranteed-revenue"
+   ],
+   "reuse_policy": {
+    "max_total_uses": 2,
+    "min_nonadjacent_gap": 0,
+    "allowed_reasons": [
+     "continuation"
+    ],
+    "allow_adjacent_continuation": true,
+    "claim_bound": true
+   },
+   "claim_refs": [
+    "memory-architecture-dependency",
+    "hbm-capacity-trade-ratio"
+   ]
   },
   {
    "id": "memory-module-queue-keyed-v1",
    "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\components\\semantic-wave-01\\memory-module-queue-keyed-v1.png",
-   "semantic": "",
+   "semantic": "memory-module, production-queue, trace-cut",
    "register": "keyed-overlay",
    "source": "pilot/current-bubble-mechanism/components/semantic-wave-01",
    "state": "unstated",
@@ -772,16 +863,45 @@
   {
    "id": "top-ten-weighted-tiles-alpha-v1",
    "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\components\\semantic-wave-01\\top-ten-weighted-tiles-alpha-v1.png",
-   "semantic": "",
+   "semantic": "top-ten, weighted-holdings, index-fund, trace-cut",
    "register": "keyed-overlay",
    "source": "pilot/current-bubble-mechanism/components/semantic-wave-01",
    "state": "unstated",
-   "render_eligible": false
+   "render_eligible": false,
+   "kind": "component",
+   "worlds": [
+    "mechanism",
+    "evidence"
+   ],
+   "anchors": [
+    "ten-dominant-holding-tiles",
+    "staggered-index-fund-insertion"
+   ],
+   "modes": [
+    "accurate_mechanism"
+   ],
+   "prohibited": [
+    "named-ticker-list",
+    "automatic-price-causation",
+    "all-index-funds-identical"
+   ],
+   "reuse_policy": {
+    "max_total_uses": 1,
+    "min_nonadjacent_gap": 0,
+    "allowed_reasons": [
+     "evidence_hold"
+    ],
+    "allow_adjacent_continuation": true,
+    "claim_bound": true
+   },
+   "claim_refs": [
+    "sp500-top-ten-concentration"
+   ]
   },
   {
    "id": "top-ten-weighted-tiles-keyed-v1",
    "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\components\\semantic-wave-01\\top-ten-weighted-tiles-keyed-v1.png",
-   "semantic": "",
+   "semantic": "top-ten, weighted-holdings, index-fund, trace-cut",
    "register": "keyed-overlay",
    "source": "pilot/current-bubble-mechanism/components/semantic-wave-01",
    "state": "unstated",
@@ -790,119 +910,248 @@
   {
    "id": "beat-01-002-memory-stocks-vertical-v1",
    "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-01\\beat-01-002-memory-stocks-vertical-v1.png",
-   "semantic": "",
+   "semantic": "AI memory stocks have gone vertical and the earnings numbers look almost fake.",
    "register": "sentence-native",
    "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-01",
    "state": "approved",
-   "render_eligible": false
+   "render_eligible": false,
+   "beat_at": 2.403,
+   "nouns": [
+    {
+     "surface": "AI memory stocks",
+     "canonical": "ai-memory-stocks",
+     "start_word_index": 8,
+     "end_word_index": 10
+    }
+   ]
   },
   {
    "id": "beat-01-003-bubble-reflex-v1",
    "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-01\\beat-01-003-bubble-reflex-v1.png",
-   "semantic": "",
+   "semantic": "That is normally where sensible people step back and say: bubble.",
    "register": "sentence-native",
    "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-01",
    "state": "approved",
-   "render_eligible": false
+   "render_eligible": false,
+   "beat_at": 7.442,
+   "nouns": [
+    {
+     "surface": "bubble.",
+     "canonical": "bubble",
+     "start_word_index": 31,
+     "end_word_index": 31
+    }
+   ]
   },
   {
    "id": "beat-01-004-factory-capacity-v1",
    "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-01\\beat-01-004-factory-capacity-v1.png",
-   "semantic": "",
+   "semantic": "But underneath the chart is a product customers cannot get enough of, factories that cannot expand quickly enough, and",
    "register": "sentence-native",
    "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-01",
    "state": "approved",
-   "render_eligible": false
+   "render_eligible": false,
+   "beat_at": 11.61,
+   "nouns": [
+    {
+     "surface": "customers",
+     "canonical": "customers",
+     "start_word_index": 39,
+     "end_word_index": 39
+    }
+   ]
   },
   {
    "id": "beat-01-006-index-safe-default-rejected-v1",
    "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-01\\beat-01-006-index-safe-default-rejected-v1.png",
-   "semantic": "",
+   "semantic": "Meanwhile, the trade marketed as boring and diversified\u2014the S&P 500 index fund\u2014has",
    "register": "sentence-native",
    "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-01",
    "state": "approved",
-   "render_eligible": false
+   "render_eligible": false,
+   "beat_at": 23.034,
+   "nouns": [
+    {
+     "surface": "S&P 500",
+     "canonical": "s&p-500",
+     "start_word_index": 68,
+     "end_word_index": 69
+    }
+   ]
   },
   {
    "id": "beat-01-006-index-safe-default-v2",
    "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-01\\beat-01-006-index-safe-default-v2.png",
-   "semantic": "",
+   "semantic": "Meanwhile, the trade marketed as boring and diversified\u2014the S&P 500 index fund\u2014has",
    "register": "sentence-native",
    "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-01",
    "state": "approved",
-   "render_eligible": false
+   "render_eligible": false,
+   "beat_at": 23.034,
+   "nouns": [
+    {
+     "surface": "S&P 500",
+     "canonical": "s&p-500",
+     "start_word_index": 68,
+     "end_word_index": 69
+    }
+   ]
   },
   {
    "id": "beat-01-008-automatic-inflow-feedback-v1",
    "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-01\\beat-01-008-automatic-inflow-feedback-v1.png",
-   "semantic": "",
+   "semantic": "automatic contributions keep buying them because they are already the biggest.",
    "register": "sentence-native",
    "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-01",
    "state": "approved",
-   "render_eligible": false
+   "render_eligible": false,
+   "beat_at": 33.366,
+   "nouns": [
+    {
+     "surface": "automatic contributions",
+     "canonical": "automatic-contributions",
+     "start_word_index": 83,
+     "end_word_index": 84
+    }
+   ]
   },
   {
    "id": "beat-01-009-memory-correction-v1",
    "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-01\\beat-01-009-memory-correction-v1.png",
-   "semantic": "",
+   "semantic": "So here is the argument: the memory trade can absolutely correct.",
    "register": "sentence-native",
    "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-01",
    "state": "approved",
-   "render_eligible": false
+   "render_eligible": false,
+   "beat_at": 37.72,
+   "nouns": [
+    {
+     "surface": "memory trade",
+     "canonical": "memory-trade",
+     "start_word_index": 100,
+     "end_word_index": 101
+    }
+   ]
   },
   {
    "id": "beat-01-010-memory-overpriced-v1",
    "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-01\\beat-01-010-memory-overpriced-v1.png",
-   "semantic": "",
+   "semantic": "It can become overpriced.",
    "register": "sentence-native",
    "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-01",
    "state": "approved",
-   "render_eligible": false
+   "render_eligible": false,
+   "beat_at": 42.098,
+   "nouns": [
+    {
+     "surface": "overpriced.",
+     "canonical": "overpriced",
+     "start_word_index": 108,
+     "end_word_index": 108
+    }
+   ]
   },
   {
    "id": "beat-01-011-memory-cycle-v1",
    "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-01\\beat-01-011-memory-cycle-v1.png",
-   "semantic": "",
+   "semantic": "It can still be brutally cyclical.",
    "register": "sentence-native",
    "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-01",
    "state": "approved",
-   "render_eligible": false
+   "render_eligible": false,
+   "beat_at": 43.723,
+   "nouns": [
+    {
+     "surface": "cyclical.",
+     "canonical": "cyclical",
+     "start_word_index": 114,
+     "end_word_index": 114
+    }
+   ]
   },
   {
    "id": "beat-01-012-physical-bottleneck-repriced-v1",
    "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-01\\beat-01-012-physical-bottleneck-repriced-v1.png",
-   "semantic": "",
+   "semantic": "But what we are seeing today looks more like a physical bottleneck being repriced than a demand-free fantasy.",
    "register": "sentence-native",
    "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-01",
    "state": "approved",
-   "render_eligible": false
+   "render_eligible": false,
+   "beat_at": 45.766,
+   "nouns": [
+    {
+     "surface": "physical bottleneck",
+     "canonical": "physical-bottleneck",
+     "start_word_index": 125,
+     "end_word_index": 126
+    }
+   ]
   },
   {
    "id": "beat-01-013-hidden-safe-index-loop-v1",
    "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-01\\beat-01-013-hidden-safe-index-loop-v1.png",
-   "semantic": "",
+   "semantic": "Bubble logic may be hiding inside the thing investors stopped examining because they were told it was safe.",
    "register": "sentence-native",
    "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-01",
    "state": "approved",
-   "render_eligible": false
+   "render_eligible": false,
+   "beat_at": 51.92,
+   "nouns": [
+    {
+     "surface": "Bubble",
+     "canonical": "bubble",
+     "start_word_index": 133,
+     "end_word_index": 133
+    },
+    {
+     "surface": "investors",
+     "canonical": "investors",
+     "start_word_index": 141,
+     "end_word_index": 141
+    }
+   ]
   },
   {
    "id": "beat-02-002-symptom-not-diagnosis-v1",
    "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-01\\beat-02-002-symptom-not-diagnosis-v1.png",
-   "semantic": "",
+   "semantic": "That is a symptom, not a diagnosis.",
    "register": "sentence-native",
    "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-01",
    "state": "approved",
-   "render_eligible": false
+   "render_eligible": false,
+   "beat_at": 61.579,
+   "nouns": [
+    {
+     "surface": "diagnosis.",
+     "canonical": "diagnosis",
+     "start_word_index": 167,
+     "end_word_index": 167
+    }
+   ]
   },
   {
    "id": "beat-02-003-next-buyer-belief-v1",
    "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-01\\beat-02-003-next-buyer-belief-v1.png",
-   "semantic": "",
+   "semantic": "A real bubble forms when the price increasingly depends on the belief that somebody else will pay more, while",
    "register": "sentence-native",
    "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-01",
    "state": "approved",
-   "render_eligible": false
+   "render_eligible": false,
+   "beat_at": 64.876,
+   "nouns": [
+    {
+     "surface": "bubble",
+     "canonical": "bubble",
+     "start_word_index": 170,
+     "end_word_index": 170
+    },
+    {
+     "surface": "price",
+     "canonical": "price",
+     "start_word_index": 174,
+     "end_word_index": 174
+    }
+   ]
   },
   {
    "id": "flow-hook-01-memory-vertical-omni-flash-v1-frame-001",
@@ -943,38 +1192,98 @@
   {
    "id": "beat-03-002-hbm-stack-accelerator-v1",
    "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-02\\beat-03-002-hbm-stack-accelerator-v1.png",
-   "semantic": "",
+   "semantic": "High-bandwidth memory, or HBM, is not ordinary storage.",
    "register": "sentence-native",
    "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-02",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "beat_at": 109.958,
+   "nouns": [
+    {
+     "surface": "High-bandwidth memory,",
+     "canonical": "high-bandwidth-memory",
+     "start_word_index": 288,
+     "end_word_index": 289
+    },
+    {
+     "surface": "HBM,",
+     "canonical": "hbm",
+     "start_word_index": 291,
+     "end_word_index": 291
+    }
+   ]
   },
   {
    "id": "beat-03-004-gpu-hbm-fuel-system-v1",
    "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-02\\beat-03-004-gpu-hbm-fuel-system-v1.png",
-   "semantic": "",
+   "semantic": "Plain English: the GPU may be the engine, but HBM is the pressure-rated fuel system.",
    "register": "sentence-native",
    "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-02",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "beat_at": 121.104,
+   "nouns": [
+    {
+     "surface": "GPU",
+     "canonical": "gpu",
+     "start_word_index": 319,
+     "end_word_index": 319
+    },
+    {
+     "surface": "HBM",
+     "canonical": "hbm",
+     "start_word_index": 325,
+     "end_word_index": 325
+    },
+    {
+     "surface": "fuel system.",
+     "canonical": "fuel-system",
+     "start_word_index": 329,
+     "end_word_index": 330
+    }
+   ]
   },
   {
    "id": "beat-03-008-009-physical-capacity-gate-v1",
    "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-02\\beat-03-008-009-physical-capacity-gate-v1.png",
-   "semantic": "",
+   "semantic": "And this is where the shortage becomes physical.",
    "register": "sentence-native",
    "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-02",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "beat_at": 141.955,
+   "nouns": [
+    {
+     "surface": "physical.",
+     "canonical": "physical",
+     "start_word_index": 375,
+     "end_word_index": 375
+    }
+   ]
   },
   {
    "id": "beat-03-011-015-bakery-capacity-analogy-v1",
    "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-02\\beat-03-011-015-bakery-capacity-analogy-v1.png",
-   "semantic": "",
+   "semantic": "Imagine a bakery with a fixed number of ovens.",
    "register": "sentence-native",
    "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-02",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "beat_at": 157.906,
+   "nouns": [
+    {
+     "surface": "bakery",
+     "canonical": "bakery",
+     "start_word_index": 401,
+     "end_word_index": 401
+    },
+    {
+     "surface": "ovens.",
+     "canonical": "ovens",
+     "start_word_index": 407,
+     "end_word_index": 407
+    }
+   ]
   },
   {
    "id": "wave-02-depth-contact-sheet",
@@ -988,38 +1297,86 @@
   {
    "id": "beat-03-016-hbm-pressures-dram-v1",
    "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-03\\beat-03-016-hbm-pressures-dram-v1.png",
-   "semantic": "",
+   "semantic": "As manufacturers devote more capacity to HBM, they also pressure conventional DRAM supply.",
    "register": "sentence-native",
    "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-03",
    "state": "approved",
-   "render_eligible": false
+   "render_eligible": false,
+   "beat_at": 178.096,
+   "nouns": [
+    {
+     "surface": "capacity",
+     "canonical": "capacity",
+     "start_word_index": 453,
+     "end_word_index": 453
+    },
+    {
+     "surface": "HBM,",
+     "canonical": "hbm",
+     "start_word_index": 455,
+     "end_word_index": 455
+    },
+    {
+     "surface": "DRAM",
+     "canonical": "dram",
+     "start_word_index": 460,
+     "end_word_index": 460
+    }
+   ]
   },
   {
    "id": "beat-03-017-production-pull-complexity-v1",
    "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-03\\beat-03-017-production-pull-complexity-v1.png",
-   "semantic": "",
+   "semantic": "The AI boom pulls the same production system toward more complex products.",
    "register": "sentence-native",
    "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-03",
    "state": "approved",
-   "render_eligible": false
+   "render_eligible": false,
+   "beat_at": 185.132,
+   "nouns": [
+    {
+     "surface": "production",
+     "canonical": "production",
+     "start_word_index": 468,
+     "end_word_index": 468
+    }
+   ]
   },
   {
    "id": "beat-03-020-price-fairness-separation-v1",
    "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-03\\beat-03-020-price-fairness-separation-v1.png",
-   "semantic": "",
+   "semantic": "This is not proof that any stock price is fair.",
    "register": "sentence-native",
    "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-03",
    "state": "approved",
-   "render_eligible": false
+   "render_eligible": false,
+   "beat_at": 203.581,
+   "nouns": [
+    {
+     "surface": "price",
+     "canonical": "price",
+     "start_word_index": 512,
+     "end_word_index": 512
+    }
+   ]
   },
   {
    "id": "beat-03-021-shortage-not-imaginary-v1",
    "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-03\\beat-03-021-shortage-not-imaginary-v1.png",
-   "semantic": "",
+   "semantic": "It is proof that the underlying shortage is not imaginary.",
    "register": "sentence-native",
    "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-03",
    "state": "approved",
-   "render_eligible": false
+   "render_eligible": false,
+   "beat_at": 206.379,
+   "nouns": [
+    {
+     "surface": "underlying",
+     "canonical": "underlying",
+     "start_word_index": 520,
+     "end_word_index": 520
+    }
+   ]
   },
   {
    "id": "wave-03-review-contact-sheet",
@@ -1033,74 +1390,170 @@
   {
    "id": "beat-04-001-buyer-behavior-v1",
    "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-04\\beat-04-001-buyer-behavior-v1.png",
-   "semantic": "",
+   "semantic": "Now look at buyer behavior.",
    "register": "sentence-native",
    "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-04",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "beat_at": 210.164,
+   "nouns": [
+    {
+     "surface": "behavior.",
+     "canonical": "behavior",
+     "start_word_index": 529,
+     "end_word_index": 529
+    }
+   ]
   },
   {
    "id": "beat-04-003-classic-cycle-counterargument-v1",
    "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-04\\beat-04-003-classic-cycle-counterargument-v1.png",
-   "semantic": "",
+   "semantic": "That history is the strongest argument against this entire video.",
    "register": "sentence-native",
    "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-04",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "beat_at": 221.796,
+   "nouns": [
+    {
+     "surface": "strongest",
+     "canonical": "strongest",
+     "start_word_index": 555,
+     "end_word_index": 555
+    }
+   ]
   },
   {
    "id": "beat-04-004-changed-customer-behavior-v1",
    "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-04\\beat-04-004-changed-customer-behavior-v1.png",
-   "semantic": "",
+   "semantic": "But customers are behaving differently this time.",
    "register": "sentence-native",
    "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-04",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "beat_at": 225.477,
+   "nouns": [
+    {
+     "surface": "customers",
+     "canonical": "customers",
+     "start_word_index": 562,
+     "end_word_index": 562
+    }
+   ]
   },
   {
    "id": "beat-04-013-guidance-not-gospel-v1",
    "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-04\\beat-04-013-guidance-not-gospel-v1.png",
-   "semantic": "",
+   "semantic": "Company guidance is not gospel.",
    "register": "sentence-native",
    "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-04",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "beat_at": 273.82,
+   "nouns": [
+    {
+     "surface": "guidance",
+     "canonical": "guidance",
+     "start_word_index": 674,
+     "end_word_index": 674
+    }
+   ]
   },
   {
    "id": "beat-04-013-guidance-not-gospel-v2",
    "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-04\\beat-04-013-guidance-not-gospel-v2.png",
-   "semantic": "",
+   "semantic": "Company guidance is not gospel.",
    "register": "sentence-native",
    "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-04",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "beat_at": 273.82,
+   "nouns": [
+    {
+     "surface": "guidance",
+     "canonical": "guidance",
+     "start_word_index": 674,
+     "end_word_index": 674
+    }
+   ]
   },
   {
    "id": "beat-04-014-evidence-hierarchy-v1",
    "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-04\\beat-04-014-evidence-hierarchy-v1.png",
-   "semantic": "",
+   "semantic": "But contracts, shipments, and reported revenue are stronger evidence than clicks, token prices, or a pitch deck promising a market that does not exist.",
    "register": "sentence-native",
    "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-04",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "beat_at": 275.735,
+   "nouns": [
+    {
+     "surface": "contracts,",
+     "canonical": "contracts",
+     "start_word_index": 679,
+     "end_word_index": 679
+    },
+    {
+     "surface": "revenue",
+     "canonical": "revenue",
+     "start_word_index": 683,
+     "end_word_index": 683
+    },
+    {
+     "surface": "market",
+     "canonical": "market",
+     "start_word_index": 697,
+     "end_word_index": 697
+    }
+   ]
   },
   {
    "id": "beat-04-014-evidence-hierarchy-v2",
    "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-04\\beat-04-014-evidence-hierarchy-v2.png",
-   "semantic": "",
+   "semantic": "But contracts, shipments, and reported revenue are stronger evidence than clicks, token prices, or a pitch deck promising a market that does not exist.",
    "register": "sentence-native",
    "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-04",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "beat_at": 275.735,
+   "nouns": [
+    {
+     "surface": "contracts,",
+     "canonical": "contracts",
+     "start_word_index": 679,
+     "end_word_index": 679
+    },
+    {
+     "surface": "revenue",
+     "canonical": "revenue",
+     "start_word_index": 683,
+     "end_word_index": 683
+    },
+    {
+     "surface": "market",
+     "canonical": "market",
+     "start_word_index": 697,
+     "end_word_index": 697
+    }
+   ]
   },
   {
    "id": "beat-04-015-bottleneck-boom-v1",
    "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-04\\beat-04-015-bottleneck-boom-v1.png",
-   "semantic": "",
+   "semantic": "That is why I would call this a bottleneck boom before I call it a bubble.",
    "register": "sentence-native",
    "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-04",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "beat_at": 284.408,
+   "nouns": [
+    {
+     "surface": "bubble.",
+     "canonical": "bubble",
+     "start_word_index": 717,
+     "end_word_index": 717
+    }
+   ]
   },
   {
    "id": "wave-04-depth-contact-sheet",
@@ -1123,164 +1576,374 @@
   {
    "id": "beat-05-001-beyond-three-memory-companies-v1",
    "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-05\\beat-05-001-beyond-three-memory-companies-v1.png",
-   "semantic": "",
+   "semantic": "This is also bigger than three memory companies.",
    "register": "sentence-native",
    "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-05",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "beat_at": 288.344,
+   "nouns": [
+    {
+     "surface": "memory",
+     "canonical": "memory",
+     "start_word_index": 724,
+     "end_word_index": 724
+    },
+    {
+     "surface": "companies.",
+     "canonical": "companies",
+     "start_word_index": 725,
+     "end_word_index": 725
+    }
+   ]
   },
   {
    "id": "beat-05-002-strategic-chokepoints-v1",
    "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-05\\beat-05-002-strategic-chokepoints-v1.png",
-   "semantic": "",
+   "semantic": "The world economy is reorganizing around strategic chokepoints: advanced chips, memory, packaging, power equipment, robotics, and defense technology.",
    "register": "sentence-native",
    "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-05",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "beat_at": 291.014,
+   "nouns": [
+    {
+     "surface": "chokepoints:",
+     "canonical": "chokepoints",
+     "start_word_index": 733,
+     "end_word_index": 733
+    },
+    {
+     "surface": "memory,",
+     "canonical": "memory",
+     "start_word_index": 736,
+     "end_word_index": 736
+    },
+    {
+     "surface": "equipment,",
+     "canonical": "equipment",
+     "start_word_index": 739,
+     "end_word_index": 739
+    }
+   ]
   },
   {
    "id": "beat-05-003-market-reprices-control-v2",
    "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-05\\beat-05-003-market-reprices-control-v2.png",
-   "semantic": "",
+   "semantic": "Capital markets are beginning to raise the countries that control those chokepoints toward the position their technical importance already implied.",
    "register": "sentence-native",
    "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-05",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "beat_at": 299.582,
+   "nouns": [
+    {
+     "surface": "Capital markets",
+     "canonical": "capital-markets",
+     "start_word_index": 744,
+     "end_word_index": 745
+    },
+    {
+     "surface": "countries",
+     "canonical": "countries",
+     "start_word_index": 751,
+     "end_word_index": 751
+    },
+    {
+     "surface": "chokepoints",
+     "canonical": "chokepoints",
+     "start_word_index": 755,
+     "end_word_index": 755
+    }
+   ]
   },
   {
    "id": "beat-05-005-not-civilization-ranking-v1",
    "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-05\\beat-05-005-not-civilization-ranking-v1.png",
-   "semantic": "",
+   "semantic": "This is not a GDP comparison, and it is not a vote on which civilization matters more.",
    "register": "sentence-native",
    "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-05",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "beat_at": 308.359,
+   "nouns": [
+    {
+     "surface": "civilization",
+     "canonical": "civilization",
+     "start_word_index": 784,
+     "end_word_index": 784
+    }
+   ]
   },
   {
    "id": "beat-05-006-listed-cash-flow-market-v1",
    "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-05\\beat-05-006-listed-cash-flow-market-v1.png",
-   "semantic": "",
+   "semantic": "It is a comparison of listed equity markets\u2014what investors believe future public-company cash flows are worth.",
    "register": "sentence-native",
    "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-05",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "beat_at": 313.456,
+   "nouns": [
+    {
+     "surface": "investors",
+     "canonical": "investors",
+     "start_word_index": 795,
+     "end_word_index": 795
+    },
+    {
+     "surface": "cash",
+     "canonical": "cash",
+     "start_word_index": 799,
+     "end_word_index": 799
+    }
+   ]
   },
   {
    "id": "beat-05-012-different-cash-flow-structures-v1",
    "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-05\\beat-05-012-different-cash-flow-structures-v1.png",
-   "semantic": "",
+   "semantic": "The company producing the memory that feeds the digital age is being capitalized differently from the country famous for luxury handbags, pizza, and pasta.",
    "register": "sentence-native",
    "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-05",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "beat_at": 348.379,
+   "nouns": [
+    {
+     "surface": "memory",
+     "canonical": "memory",
+     "start_word_index": 877,
+     "end_word_index": 877
+    },
+    {
+     "surface": "digital age",
+     "canonical": "digital-age",
+     "start_word_index": 881,
+     "end_word_index": 882
+    }
+   ]
   },
   {
    "id": "beat-05-015-016-simple-joke-complex-mechanism-v1",
    "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-06\\beat-05-015-016-simple-joke-complex-mechanism-v1.png",
-   "semantic": "",
+   "semantic": "The joke is simple.",
    "register": "sentence-native",
    "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-06",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "beat_at": 367.059,
+   "nouns": [
+    {
+     "surface": "simple.",
+     "canonical": "simple",
+     "start_word_index": 919,
+     "end_word_index": 919
+    }
+   ]
   },
   {
    "id": "beat-05-017-018-market-prices-cashflows-v1",
    "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-06\\beat-05-017-018-market-prices-cashflows-v1.png",
-   "semantic": "",
+   "semantic": "Markets do not award points for cultural importance.",
    "register": "sentence-native",
    "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-06",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "beat_at": 370.136,
+   "nouns": [
+    {
+     "surface": "importance.",
+     "canonical": "importance",
+     "start_word_index": 931,
+     "end_word_index": 931
+    }
+   ]
   },
   {
    "id": "beat-05-020-tech-corridor-v1",
    "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-06\\beat-05-020-tech-corridor-v1.png",
-   "semantic": "",
+   "semantic": "The global order has aligned around forward technology.",
    "register": "sentence-native",
    "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-06",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "beat_at": 387.563,
+   "nouns": [
+    {
+     "surface": "technology.",
+     "canonical": "technology",
+     "start_word_index": 977,
+     "end_word_index": 977
+    }
+   ]
   },
   {
    "id": "beat-05-021-subcontractor-strategic-upgrade-v1",
    "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-06\\beat-05-021-subcontractor-strategic-upgrade-v1.png",
-   "semantic": "",
+   "semantic": "Countries manufacturing the bottlenecks are being repriced from subcontractors into strategic powers.",
    "register": "sentence-native",
    "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-06",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "beat_at": 390.755,
+   "nouns": [
+    {
+     "surface": "Countries",
+     "canonical": "countries",
+     "start_word_index": 978,
+     "end_word_index": 978
+    }
+   ]
   },
   {
    "id": "beat-05-022-memory-enables-work-v1",
    "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-06\\beat-05-022-memory-enables-work-v1.png",
-   "semantic": "",
+   "semantic": "Memory is the oil of the digital age\u2014not because it is literally burned, but because it turns machinery into usable work.",
    "register": "sentence-native",
    "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-06",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "beat_at": 396.572,
+   "nouns": [
+    {
+     "surface": "Memory",
+     "canonical": "memory",
+     "start_word_index": 990,
+     "end_word_index": 990
+    }
+   ]
   },
   {
    "id": "beat-05-024-stranded-compute-bridge-v2",
    "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-06\\beat-05-024-stranded-compute-bridge-v2.png",
-   "semantic": "",
+   "semantic": "Compute without it is stranded machinery.",
    "register": "sentence-native",
    "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-06",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "beat_at": 407.578,
+   "nouns": [
+    {
+     "surface": "machinery.",
+     "canonical": "machinery",
+     "start_word_index": 1024,
+     "end_word_index": 1024
+    }
+   ]
   },
   {
    "id": "beat-06-001-003-index-product-elevator-v1",
    "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-07\\beat-06-001-003-index-product-elevator-v1.png",
-   "semantic": "",
+   "semantic": "Now open the other elevator: the S&P 500 index fund.",
    "register": "sentence-native",
    "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-07",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "beat_at": 410.26,
+   "nouns": [
+    {
+     "surface": "elevator:",
+     "canonical": "elevator",
+     "start_word_index": 1029,
+     "end_word_index": 1029
+    },
+    {
+     "surface": "S&P 500 index fund.",
+     "canonical": "s&p-500-index-fund",
+     "start_word_index": 1031,
+     "end_word_index": 1034
+    }
+   ]
   },
   {
    "id": "beat-06-004-007-dual-failure-v2",
    "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-07\\beat-06-004-007-dual-failure-v2.png",
-   "semantic": "",
+   "semantic": "But the problem is more subtle than concentration alone.",
    "register": "sentence-native",
    "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-07",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "beat_at": 422.834,
+   "nouns": [
+    {
+     "surface": "concentration",
+     "canonical": "concentration",
+     "start_word_index": 1066,
+     "end_word_index": 1066
+    }
+   ]
   },
   {
    "id": "beat-06-010-shared-causal-weather-v1",
    "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-07\\beat-06-010-shared-causal-weather-v1.png",
-   "semantic": "",
+   "semantic": "Many of those leaders also share the same causal weather system: AI spending, cloud capital expenditure, semiconductor supply, digital advertising, and premium valuations for long-duration growth.",
    "register": "sentence-native",
    "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-07",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "beat_at": 448.12,
+   "nouns": [
+    {
+     "surface": "semiconductor",
+     "canonical": "semiconductor",
+     "start_word_index": 1146,
+     "end_word_index": 1146
+    }
+   ]
   },
   {
    "id": "beat-06-011-016-automatic-size-weighting-v1",
    "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-07\\beat-06-011-016-automatic-size-weighting-v1.png",
-   "semantic": "",
+   "semantic": "But the other four hundred and ninety companies still consume most of the remaining dollar.",
    "register": "sentence-native",
    "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-07",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "beat_at": 460.218,
+   "nouns": [
+    {
+     "surface": "companies",
+     "canonical": "companies",
+     "start_word_index": 1163,
+     "end_word_index": 1163
+    }
+   ]
   },
   {
    "id": "beat-06-017-018-diworsification-v1",
    "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-07\\beat-06-017-018-diworsification-v1.png",
-   "semantic": "",
+   "semantic": "That is the logic behind what investors call \u201cdiworsification\u201d:",
    "register": "sentence-native",
    "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-07",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "beat_at": 493.155,
+   "nouns": [
+    {
+     "surface": "investors",
+     "canonical": "investors",
+     "start_word_index": 1255,
+     "end_word_index": 1255
+    }
+   ]
   },
   {
    "id": "beat-06-019-024-basketball-roster-v1",
    "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-07\\beat-06-019-024-basketball-roster-v1.png",
-   "semantic": "",
+   "semantic": "Picture a basketball roster with five superstars and four hundred and ninety reserve players.",
    "register": "sentence-native",
    "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-07",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "beat_at": 505.357,
+   "nouns": [
+    {
+     "surface": "superstars",
+     "canonical": "superstars",
+     "start_word_index": 1284,
+     "end_word_index": 1284
+    }
+   ]
   }
  ]
 }

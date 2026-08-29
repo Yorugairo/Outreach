@@ -73,7 +73,7 @@ def scan_claim_waves(root: Path, source: str, register: str) -> list[dict]:
         if "register" in ap:
             reg = ap["register"]
         mans = [load(f) for f in wave.glob("*.json")]
-        sem = {}
+        sem = dict(ap.get("semantics") or {})   # the claim may author its own
         for d in mans:
             for a in d.get("assets", []):
                 if a.get("asset_id"):
@@ -93,7 +93,66 @@ def scan_claim_waves(root: Path, source: str, register: str) -> list[dict]:
     return out
 
 
-def scan_pilot(root: Path) -> list[dict]:
+def pilot_semantics(edit: Path) -> dict:
+    """The pilot writes richer semantics than a `semantic` string.
+
+    `edit/semantic-v2/asset-catalog.v2.json` carries semantic_tags,
+    capability_anchors, representation_modes, prohibited_implications and a
+    reuse_policy per asset. `edit/sentence-native-v1/semantic-beat-ledger.v1
+    .json` carries 202 beats with their spoken excerpt and active nouns, and
+    plate ids encode their beat (beat-03-002-... -> chapter 03, beat 002).
+    Both are read; neither is guessed at.
+    """
+    sem: dict[str, dict] = {}
+    cat = load(edit / "semantic-v2/asset-catalog.v2.json")
+    for a in cat.get("assets", []):
+        aid = a.get("asset_id")
+        if not aid:
+            continue
+        sem[aid] = {
+            "semantic": ", ".join(a.get("semantic_tags") or []),
+            "kind": a.get("kind", ""),
+            "worlds": a.get("visual_worlds") or [],
+            "anchors": a.get("capability_anchors") or [],
+            "modes": a.get("representation_modes") or [],
+            "prohibited": a.get("prohibited_implications") or [],
+            "reuse_policy": a.get("reuse_policy") or {},
+            "claim_refs": a.get("claim_refs") or [],
+        }
+    # beat ledger: map "beat-<chapter>-<local>" prefixes to the spoken line
+    led = load(edit / "sentence-native-v1/semantic-beat-ledger.v1.json")
+    beats = {}
+    for b in led.get("beats", []):
+        # Key off the beat_id itself - `cbm-semantic-beat-01-002` matches the
+        # filename prefix `beat-01-002`. Deriving it from chapter_index is an
+        # off-by-one, because the id numbers chapters from 1 and the field
+        # from 0, and the wrong excerpt then reads plausibly.
+        bid = b.get("beat_id", "")
+        if "-beat-" not in bid:
+            continue
+        beats["beat-" + bid.split("-beat-", 1)[1]] = {
+            "excerpt": b.get("excerpt", ""),
+            "nouns": b.get("active_nouns") or [],
+            "verb": b.get("causal_verb", ""),
+            "at": b.get("start_s"),
+        }
+    sem["__beats__"] = beats
+    # assets/hero postdates the catalog (different ids), so these are authored
+    # from the plates. Each is the DRAMATIC register (ruling C9).
+    sem.update({k: {"semantic": v, "kind": "hero_plate"} for k, v in {
+        "hero-barbell-v1": "a balance scale, gold blocks one pan and paper the other - weighing steel against paper",
+        "hero-contract-ovens-v1": "an oven line issuing sealed discs to a queue of buyers - forward contracts, locked",
+        "hero-countercase-v1": "a figure before a wave and collapsing towers, one green shoot rising - what survives",
+        "hero-fab-constraint-v1": "a cleanroom wafer line in full production - the physical constraint itself",
+        "hero-hbm-bandwidth-v1": "a die at centre with bandwidth streaming out to server towers - HBM as the bottleneck",
+        "hero-korea-italy-v1": "split frame, Korean industrial coast against Italian classical city - two continents, one hardware",
+        "hero-sp500-double-failure-v1": "many towers cascading paper down onto a crowd below - the index as a waterfall of claims",
+        "hero-wrong-bubble-v1": "a lit chip tower beside a basket stuffed with paper slips - the bubble is in the paper, not the silicon",
+    }.items()})
+    return sem
+
+
+def scan_pilot(root: Path, sem: dict | None = None) -> list[dict]:
     """The pilot library. `quarantine/` is MISNAMED — read the manifests."""
     out = []
     for sub, reg in (("hero", "cut-paper-ukiyo"),
@@ -113,12 +172,24 @@ def scan_pilot(root: Path) -> list[dict]:
                                       "--foreground", "--contact-shadow",
                                       "--negative-space")):
                     continue          # depth layers, not standalone plates
-                out.append({
+                rec = {
                     "id": png.stem, "path": str(png), "semantic": "",
                     "register": reg,
                     "source": f"pilot/current-bubble-mechanism/{sub}/{wave.name}",
                     "state": st, "render_eligible": render,
-                })
+                }
+                s = (sem or {}).get(png.stem)
+                if s:
+                    rec.update({k: v for k, v in s.items() if v})
+                else:
+                    # plate ids encode their beat: beat-03-002-hbm-stack-...
+                    key = "-".join(png.stem.split("-")[:3])
+                    bt = (sem or {}).get("__beats__", {}).get(key)
+                    if bt:
+                        rec["semantic"] = bt["excerpt"]
+                        rec["beat_at"] = bt["at"]
+                        rec["nouns"] = bt["nouns"]
+                out.append(rec)
     return out
 
 
@@ -140,7 +211,16 @@ def main() -> int:
     pilot = CODEX / ("content/video_engine/projects/systems-and-blowups/"
                      "pilots/current-bubble-mechanism/assets")
     if pilot.is_dir():
-        plates += scan_pilot(pilot)
+        sem = pilot_semantics(pilot.parent / "edit")
+        plates += scan_pilot(pilot, sem)
+
+    # a keyed (chroma) plate is the same subject as its alpha twin
+    by_id = {p["id"]: p for p in plates}
+    for p in plates:
+        if not p["semantic"] and p["id"].endswith("-keyed-v1"):
+            twin = by_id.get(p["id"].replace("-keyed-v1", "-alpha-v1"))
+            if twin and twin["semantic"]:
+                p["semantic"] = twin["semantic"]
 
     seen, uniq = set(), []
     for p in plates:
