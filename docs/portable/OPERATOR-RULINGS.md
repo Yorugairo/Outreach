@@ -145,6 +145,26 @@ the claimed era as the visual focus, not the animation's end state.
 ~20% larger (paired 864px, solo 1056px) with sleek one-baseline pills, so
 charts stay readable.
 
+**B6 — Species variety is the density mechanism.** (2026-08-29.)
+An episode should carry several *kinds* of proof, not many instances of
+one kind: chart, table, record document, instrument reading, and
+registered plate all read as different classes of claim. A viewer who
+moves between species stays engaged on one plate far longer than one
+watching a fifth chart.
+*Why:* operator, clearing the deck library's review gate — "it's good to
+have mostly created our new evidence, it gives us multiple evidence
+types, and we now have charts, tables, and quote/report readouts to go
+along with the powerpoint evidence. With this, we should be able to
+support the density level and time expansion no problem." Building our
+own evidence alongside a harvested library was not duplicated work; the
+variety is what buys runtime.
+*Apply:* this is what makes C3's 20s ceiling reachable — a plate holds
+20s when two strong evidence pieces of *different species* cover it. When
+a stretch runs long, reach for a different species before reaching for
+another plate. Approval clears a rights and context gate; it never lifts
+per-asset reuse caps or the requirement to figure-verify a registered
+plate against the dossier before docking.
+
 ## C. Production
 
 **C1 — The production layer is universal; only scripting is lane-specific.**
