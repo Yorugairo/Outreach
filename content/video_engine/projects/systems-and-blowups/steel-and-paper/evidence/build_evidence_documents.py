@@ -346,11 +346,60 @@ def tnx_two_eras():
     save(fig, "ev-tnx-two-eras-v3")
 
 
+# =========================================================================
+# 10. Tech's share of the investment-grade index  (CITED - MS IM / LPL)
+# =========================================================================
+def ig_credit_weighting():
+    labels = ["2024", "Now", "Projected"]
+    vals, notes = [9.0, 10.0, 12.0], ["9%", "10%", ">12%"]
+    fig = frame(); ax = fig.add_axes([0.075, 0.215, 0.885, 0.585])
+    chrome(ax, ygrid=False)
+    xs = np.arange(3)
+    rounded_bars(ax, xs, vals, [DEEMPH, CRIMSON, CRIMSON], bw=0.42)
+    for x, v, n in zip(xs, vals, notes):
+        ax.text(x, v + 0.25, esc(n), color=INK_1, fontsize=T_LABEL, fontweight=600,
+                fontfamily=FAM, ha="center", va="bottom")
+    ax.set_xticks(xs); ax.set_xticklabels(labels, fontsize=T_TICK,
+                                          fontfamily=FAM, color=INK_MUTE)
+    ax.set_yticks([]); ax.spines["left"].set_visible(False)
+    ax.set_ylim(0, 14.6); ax.set_xlim(-0.62, 2.62)
+    titles(fig, "Technology's share of the investment-grade bond index",
+           "The pool a bond fund buys from - reweighting toward data centres")
+    source(fig, "Morgan Stanley Investment Management; LPL / Investing.com - "
+                "Bloomberg Corporate Bond Index; the third bar is a projection")
+    save(fig, "ev-ig-credit-weighting-v1")
+
+
+# =========================================================================
+# 11. HBM wafer ratio  (CITED - Micron) - a stat tile, not a chart
+# =========================================================================
+def hbm_wafer_ratio():
+    fig = frame(640)
+    fig.text(0.055, 0.815, "Wafer capacity per gigabyte, HBM against standard DRAM",
+             color=INK_2, fontsize=T_SUB, fontfamily=FAM, va="center")
+    fig.text(0.055, 0.525, "3x", color=CRIMSON, fontsize=T_HERO,
+             fontweight=600, fontfamily=FAM, va="center")
+    fig.text(0.225, 0.525, "the silicon, for the same gigabyte",
+             color=INK_1, fontsize=T_TITLE, fontweight=600, fontfamily=FAM, va="center")
+    fig.text(0.055, 0.245,
+             "Stacking the dies is what makes it scarce - every accelerator fed",
+             color=INK_2, fontsize=T_SUB, fontfamily=FAM, va="center")
+    fig.text(0.055, 0.175,
+             "takes wafer away from everything else on the line.",
+             color=INK_2, fontsize=T_SUB, fontfamily=FAM, va="center")
+    fig.add_artist(plt.Line2D([0.055, 0.945], [0.108, 0.108],
+                              color=GRID, lw=2, transform=fig.transFigure))
+    fig.text(0.045, 0.045, "Micron, via industry reporting - approximate ratio",
+             color=INK_MUTE, fontsize=T_SOURCE, fontfamily=FAM, va="center")
+    save(fig, "ev-hbm-wafer-ratio-v1")
+
+
 if __name__ == "__main__":
     print("building evidence documents ->", OUT)
     for fn in (equip_ipp_gdp, capex_trajectory, dram_prices,
                uber_adoption, railway_mileage,
-               krx_memory, mega_vs_spy, smh_drawdown, tnx_two_eras):
+               krx_memory, mega_vs_spy, smh_drawdown, tnx_two_eras,
+               ig_credit_weighting, hbm_wafer_ratio):
         try:
             fn()
         except Exception as e:
