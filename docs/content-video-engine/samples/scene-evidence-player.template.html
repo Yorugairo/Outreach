@@ -98,9 +98,19 @@
 
   #caption {
     position: absolute; left: 145px; right: 145px; bottom: 38px; text-align: center;
-    line-height: 1.24; color: var(--cream);
+    line-height: 1.24; color: var(--cream); font-size: 40px; font-weight: 700;
     text-shadow: 0 2px 14px rgba(0,0,0,.94), 0 0 5px rgba(0,0,0,.85);
+    transition: font-size .3s, font-weight .3s;
   }
+  /* doc 29 Part 5 - kinetic groups at ONE fixed anchor. No pill, no panel. */
+  #caption .cg { display: inline-block; }
+  #caption .cw { display: inline-block; color: rgba(255,255,255,.80); transition: color .12s linear; }
+  #caption .cw.ck { color: #c98500; }        /* keyword accent */
+  #caption .cw.on { color: #fff; }           /* the word being spoken now */
+  #caption .cw.ck.on { color: #e9a020; }
+  /* 4.2 quiet mode - smaller, static, single fade, keywords still coloured */
+  #caption.quiet { font-size: 33px; font-weight: 600; }
+  #caption.quiet .cg { transform: none !important; opacity: 1 !important; }
 
   #bar { width: min(96vw,1400px); display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
          background: #0a1620; border: 1px solid #14293a; border-radius: 6px; padding: 10px 13px; }
@@ -292,15 +302,44 @@
 
     /* LAYER 5 — canonical caption track: resolved by time at its own
        timings, never resampled onto beat boundaries (doc 29 Part 5). */
-    let line = null;
-    for (const c of TL.captions) { if (t >= c.at && t < c.until) { line = c; break; } }
-    cap.textContent = line ? line.text : "";
     const quiet = active.length > 0;
-    cap.style.fontSize = quiet ? "33px" : "40px";
-    cap.style.fontWeight = quiet ? "600" : "700";
-    cap.style.opacity = line
-      ? Math.min(clamp01((t - line.at) / 0.22), clamp01((line.until - t) / 0.18))
-      : 0;
+    const PG = TL.caption_pages;
+    if (PG) {
+      /* KINETIC (doc 29 Part 5): 2-4 word groups punch into the fixed anchor,
+         power3.out, scale 1.14 -> 1.0, y 12 -> 0; keywords in the accent.
+         Active token by fromMs <= now < toMs (remotion page/token model).
+         QUIET (4.2): while a document holds the stage the group is static -
+         single fade, keywords still coloured, no punch-in. */
+      let pi = -1;
+      for (let i = 0; i < PG.length; i++) if (PG[i].s <= t) pi = i;
+      const pg = pi >= 0 ? PG[pi] : null;
+      if (pi !== cap._pi) {
+        cap._pi = pi;
+        cap.innerHTML = pg ? '<span class="cg">' + pg.t.map((x) =>
+          '<span class="cw' + (x.k ? " ck" : "") + '">' + x.w + "</span>").join(" ")
+          + "</span>" : "";
+        const g = cap.firstChild;
+        if (g && !quiet) {
+          g.style.transition = "none";
+          g.style.opacity = 0; g.style.transform = "translateY(12px) scale(1.14)";
+          requestAnimationFrame(() => {
+            g.style.transition = "opacity .28s cubic-bezier(.215,.61,.355,1)," +
+                                 "transform .34s cubic-bezier(.215,.61,.355,1)";
+            g.style.opacity = 1; g.style.transform = "translateY(0) scale(1)";
+          });
+        }
+      }
+      if (pg) { const ws = cap.querySelectorAll(".cw");
+        pg.t.forEach((x, j) => { if (ws[j]) ws[j].classList.toggle("on", x.s <= t && t < x.e); }); }
+      cap.style.opacity = pg ? 1 : 0;
+    } else {
+      let line = null;
+      for (const c of TL.captions) { if (t >= c.at && t < c.until) { line = c; break; } }
+      cap.textContent = line ? line.text : "";
+      cap.style.opacity = line
+        ? Math.min(clamp01((t - line.at) / 0.22), clamp01((line.until - t) / 0.18)) : 0;
+    }
+    cap.classList.toggle("quiet", quiet);
 
     [...chips.children].forEach((c, i) => c.classList.toggle("on", i === si));
   };
