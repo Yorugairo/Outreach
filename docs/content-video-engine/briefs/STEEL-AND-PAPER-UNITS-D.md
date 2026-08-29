@@ -1,11 +1,12 @@
 # Steel and Paper — the two extension units (Revision D)
 
-Two P3/P5 pattern units taking Script C from 8m 24s to ~12m 50s. Units go
-on **both sides of the pivot** — loading them all into P3 would push the
-pivot to ~76% of runtime and break the 45–55% pin (doc 38).
+Two P3/P5 pattern units extending Script C. Units go on **both sides of
+the pivot** — loading them all into P3 would push the pivot to ~76% of
+runtime and break the 45–55% pin (doc 38).
 
-Requires a **two-part chained take** — 12,400 characters exceeds mv2's
-10,000 cap. See §3.
+**As drafted: 9,916 characters, ~10m 19s, one master take.** Built out to
+the doctrinal 2:00–2:30 unit length: ~12,400 characters, ~12m 50s, needing
+a chained take. See §3 for the fork.
 
 ---
 
@@ -159,11 +160,11 @@ safer and available today.
 at the ceiling. Option A wants ~12 more plates, option B ~25. A wave-5
 claim is required before either ships.
 
-## 4. Delivery
+## 4. Delivery — only if option B
 
 | | |
 |---|---|
-| Characters | ~12,400 (Script C 8,078 + ~2,050 + ~2,270) |
+| Characters | ~12,400 (Script C 8,078 + two units at ~2,100 each) |
 | Runtime | **~12m 50s** at 16.02 chars/sec |
 | mv2 cap | 10,000 — **exceeded** |
 | Delivery | **two chained requests**, part two conditioned on part one's `previous_request_ids` |
