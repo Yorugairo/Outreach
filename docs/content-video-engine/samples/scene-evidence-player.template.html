@@ -373,17 +373,11 @@
          scene - a card landing, a badge stamping - eases the plate in one
          more notch on top of the authored drift. The world reacts to the
          evidence (doc 29 s2.4); drift alone reads as weather. */
-      /* One notch per NEW piece of evidence - nothing else. Reading the raw
-         scene docks re-triggered the lean on every scene a persisting card
-         crossed into, and badge stamps added more: notches at seemingly
-         random times (operator, 2026-08-29). The COALESCED dock list has
-         one entry per actual arrival, so the lean fires exactly when a new
-         document lands, eased long (1.1s) into the drift. */
-      let lean = 0;
-      for (const d of DOCKS)
-        if (d.enter >= scene.span[0] && d.enter < scene.span[1] && t >= d.enter)
-          lean += expoOut(clamp01((t - d.enter) / 1.1));
-      const z = 1 + p * kb.scale + 0.008 * lean;
+      /* The lean-in is CUT until proven (operator, 2026-08-29): it ships
+         nothing this episode and returns, if ever, as a side-by-side A/B
+         of one scene judged in isolation. The authored Ken Burns is the
+         only world motion. */
+      const z = 1 + p * kb.scale;
       el.style.transform = `scale(${z.toFixed(4)}) translate(${(p*kb.x).toFixed(1)}px, ${(p*kb.y).toFixed(1)}px)`;
     };
     const prev = TL.scenes[si - 1];
@@ -459,7 +453,21 @@
          never touched: it holds while the world changes behind it. */
       const swept = seaming && Math.abs(d.exit - boundary) < 0.35;
       if (swept) {
-        el.style.clipPath = frontClip;
+        /* THE FRONT IS A STAGE POSITION; the card clip must be computed in
+           the CARD's own space. inset(0 wk% 0 0) hides wk% OF THE CARD -
+           whether that lines up with the seam depends on where the card
+           happens to sit, which is how a card got severed mid-air with the
+           front nowhere near it (operator screenshot, 0:41). Map the
+           front's stage X into element coordinates. */
+        const fx = (sc.exit === "wipe_right" ? (1 - wk) : wk) * 1920;
+        const L = el.offsetLeft, W2 = el.offsetWidth || 1;
+        if (sc.exit === "wipe_right") {   // incoming spreads from the right
+          const hide = clamp01(((L + W2) - fx) / W2);
+          el.style.clipPath = `inset(0 ${(hide * 100).toFixed(2)}% 0 0)`;
+        } else {                          // incoming spreads from the left
+          const hide = clamp01((fx - L) / W2);
+          el.style.clipPath = `inset(0 0 0 ${(hide * 100).toFixed(2)}%)`;
+        }
         el.style.opacity = clamp01((t - d.enter) / (CARD_IN * 0.55));
       } else {
         el.style.clipPath = "none";

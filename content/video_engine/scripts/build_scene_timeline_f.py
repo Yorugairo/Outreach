@@ -87,7 +87,13 @@ def main() -> int:
         return 1
 
     evidence, uris, scenes = {}, {}, []
-    for i, (a, b, plate, ken, ds) in enumerate(plan):
+    for i, row in enumerate(plan):
+        # exit style is HYBRID (operator, 2026-08-29): mechanical default
+        # (docks -> wipe, bare -> cut), with an optional authored 6th element
+        # per window for boundaries where the MEANING differs - doc 29 Part 6:
+        # cut = contrast/correction, wipe = process continuation.
+        a, b, plate, ken, ds = row[:5]
+        authored_exit = row[5] if len(row) > 5 else None
         # each window runs to the next so the world layer never drops out
         b = plan[i + 1][0] if i + 1 < len(plan) else tl["runtime_s"]
         wp = R.find_asset(plate)
@@ -129,7 +135,7 @@ def main() -> int:
             # Ken Burns is AUTHORED per shot in the table, not one constant.
             "world": {"asset_id": plate, "sha256": sha(wp),
                       "ken_burns": {"scale": ken[0], "x": ken[1], "y": ken[2]}},
-            "exit": "wipe_right" if docks else "cut",
+            "exit": authored_exit or ("wipe_right" if docks else "cut"),
             "span": [round(a, 2), round(b, 2)],
             "docks": docks,
         })

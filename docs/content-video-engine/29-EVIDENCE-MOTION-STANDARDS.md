@@ -940,6 +940,29 @@ rulings. Where these conflict with anything above, THESE win.
    two honestly carries ONE BIG piece (solo 1056px); under ~8s, one or
    none. Documents with no readable figure clear early and small.
 
+### 9.16 Motion verification and authority (operator decisions, 2026-08-29)
+
+1. **The gold standard is a RENDERED reference, not a table of constants.**
+   `current-bubble-five-minute-v4` (the reviewed Gemini-era build) is the
+   motion reference; any motion change ships with a side-by-side boundary
+   comparison against it. Constants describe the reference; they do not
+   replace it.
+2. **The boundary filmstrip is a HARD GATE.** Any change touching motion
+   produces played-through frame strips of all three boundary classes -
+   bare-to-bare, evidence-ending, evidence-persisting - judged by eye
+   before it reports done. A single still at a chosen instant is how a
+   mis-mapped clip shipped twice in one day: the swept-card clip was
+   computed in the card's own coordinate space and only happened to align
+   with the stage front at the verified frame. The front is a STAGE
+   position; per-element clips map it into element coordinates.
+3. **Exit style is hybrid-authored.** Mechanical default (docks wipe, bare
+   cut) with an authored per-window override in the shot table where the
+   meaning differs (Part 6: cut = contrast, wipe = continuation) - the
+   register shifts take cuts.
+4. **The lean-in is cut until proven.** It returns, if ever, as a
+   side-by-side A/B of one scene judged in isolation. Item 4 of 9.15 is
+   suspended accordingly.
+
 ### 9.7 Host-in-world plates approved (operator, 2026-08-25)
 
 The host-in-world experiment passed: generated host shots inside world

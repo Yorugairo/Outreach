@@ -38,7 +38,7 @@ W = [
 (181.0, 192.0, "world-internal-memo-v1",         (.04,  12,   6), [("ev-doc-karp",0,181.0,195.8)]),          # Karp on CNBC
 (192.0, 203.0, "world-budget-burndown-v1",       (.05, -12,   8), [("ev-uber-adoption-v1",1,192.5,203.0)]),  # Uber burned the annual budget by April
 (203.0, 213.6, "world-empty-racks-v1",           (.04,  10,  -8), [("ev-uber-adoption-v1",1,203.0,212.0)]),  # "can't draw a line to what you're shipping"
-(213.9, 223.7, "world-exhibition-hall-morning-v1",(.05, -14,   6), [("ev-three-manias",0,214.0,223.5)]),      # the fair the morning after = the trough
+(213.9, 223.7, "world-exhibition-hall-morning-v1",(.05, -14,   6), [("ev-three-manias",0,214.0,223.5)], "cut"),      # the fair the morning after = the trough
 (223.8, 234.0, "hero-countercase-v1",                  (.05,  14,  -6), [("ev-three-manias",0,224.0,234.0)]),      # the trains ran through the crash  # ^REGISTER: the wave, the ruin, one green shoot - WHAT SURVIVES
 (234.0, 244.5, "world-dawn-factory-v1"  ,           (.04, -10,   8), [("silicon-value-software-bubble-s03-teacher-stamped",0,234.5,241.4)]),  # the inescapable physical reality  # s03 carries ONE figure (97%); clears at 7.0s so the plate breathes
 (244.8, 248.0, "world-molten-pour-v2",       (.05,  10,   6), []),                       # u5 rehook: "who's paying for the steel this time"
@@ -59,21 +59,21 @@ W = [
 (358.6, 364.2, "hero-wrong-bubble-v1",              (.06,  10,   6), []),                       # THE REVERSAL: paper endless, hardware exact  # ^REGISTER: THE REVERSAL - the chip tower beside the basket of paper
 (364.7, 375.0, "world-certificate-wall-v1",      (.05, -14,   8), [("ev-railway-mileage-v1",0,365.0,375.0)]),# it was railway CERTIFICATES
 (375.0, 383.0, "world-exchange-floor-1845"   ,    (.05,  12,  -6), [("silicon-antidote-s02-valuation-bubble-v1",0,375.0,383.0)]),
-(383.0, 392.2, "world-target-date-envelope-v1",  (.04, -10,   6), [("silicon-antidote-s02-valuation-bubble-v1",0,383.0,392.0)]),  # the default your retirement sits in
+(383.0, 392.2, "world-target-date-envelope-v1",  (.04, -10,   6), [("silicon-antidote-s02-valuation-bubble-v1",0,383.0,392.0)], "cut"),  # the default your retirement sits in
 (392.5, 402.2, "hero-sp500-double-failure-v1",          (.05,  14,   8), [("ev-smh-drawdown-v3",1,392.5,402.0)]),   # if the names fall by half  # ^REGISTER: the index as towers cascading paper onto a crowd
 (402.4, 408.7, "world-spike-certificate-ring-v2",(.06, -8,   -6), []),                       # RING TOKEN RECONTEXTUALIZED: certificate curls onto the spike
 (409.7, 420.7, "world-railway-acts-desk-v1",     (.05,  10,   8), [("ev-railway-index-v1",0,410.0,420.5)]),  # 1845 is the proof
 # ── P5 REFLECTION ──────────────────────────────────────────────────────
-(421.2, 432.0, "world-circuit-terrain-v1",       (.05, -12,   6), [("ev-railway-mileage-v1",1,421.5,431.5)]),                       # railway steel sat 20 years; compute depreciates
-(432.0, 443.0, "hero-contract-ovens-v1",                   (.04,  12,  -8), [("silicon-antidote-s11-teacher-stamped",1,434.9,443.0)]),  # orders in, slots gone  # ^REGISTER: the line issuing sealed contracts - orders in, slots gone
-(443.0, 454.6, "hero-korea-italy-v1",                        (.05, -10,   8), [("sovereign-memory-infrastructure-s10-teacher-stamped",1,443.0,454.5)]),  # sovereign stacks  # ^REGISTER: two continents, one hardware - sovereign stacks
+(421.2, 432.0, "world-circuit-terrain-v1",       (.05, -12,   6), [("ev-railway-mileage-v1",1,421.5,431.5)], "cut"),                       # railway steel sat 20 years; compute depreciates
+(432.0, 443.0, "hero-contract-ovens-v1",                   (.04,  12,  -8), [("silicon-antidote-s11-teacher-stamped",1,434.9,443.0)], "cut"),  # orders in, slots gone  # ^REGISTER: the line issuing sealed contracts - orders in, slots gone
+(443.0, 454.6, "hero-korea-italy-v1",                        (.05, -10,   8), [("sovereign-memory-infrastructure-s10-teacher-stamped",1,443.0,454.5)], "cut"),  # sovereign stacks  # ^REGISTER: two continents, one hardware - sovereign stacks
 (454.9, 466.0, "hero-barbell-v1",                       (.05,  12,   6), [("ev-mechanism-ladder",0,455.0,466.0)]),  # the three questions  # ^REGISTER: the balance: gold one side, paper the other - THE TEST
 (466.0, 476.0, "beat-04-014-evidence-hierarchy-v1",                        (.05, -14,  -6), [("ev-mechanism-ladder",0,466.0,476.0)]),  # steel answers / paper answers - the sort  # POOL: contracts and shipments beat narrative - the test's own logic
 (476.0, 486.8, "world-workbench-triad-v1",       (.04,  10,   8), [("ev-mechanism-ladder",1,476.0,486.5)]),                       # "thirty seconds a holding. run your top five tonight"
 (486.9, 496.0, "world-two-rooms-divergence-v1",  (.05, -12,   6), [("silicon-antidote-s14-diagnostic-matrix-v1",0,487.0,496.0)]),
 (496.0, 503.2, "beat-04-015-bottleneck-boom-v1",                        (.04,  12,  -8), [("silicon-antidote-s14-diagnostic-matrix-v1",0,496.0,503.0)]),  # the test, administered in public  # POOL: a bottleneck boom before a bubble
-(504.4, 513.9, "world-seoul-fab-skyline-v1",     (.05, -10,   6), [("silicon-reality-gap-s10-teacher-stamped",0,504.6,513.6)]),  # the global DRAM battlefield  # extended to 9.0s so 500% / +716% can actually land
-(508.2, 522.0, "hero-fab-constraint-v1",                 (.05,  14,   8), [("ev-krx-memory-v3",0,508.5,522.0)]),     # SK hynix, +517%  # ^REGISTER: the cleanroom line - SK hynix, the constraint itself
+(504.4, 513.9, "world-seoul-fab-skyline-v1",     (.05, -10,   6), [("silicon-reality-gap-s10-teacher-stamped",0,504.6,513.6)], "cut"),  # the global DRAM battlefield  # extended to 9.0s so 500% / +716% can actually land
+(508.2, 522.0, "hero-fab-constraint-v1",                 (.05,  14,   8), [("ev-krx-memory-v3",0,508.5,522.0)], "cut"),     # SK hynix, +517%  # ^REGISTER: the cleanroom line - SK hynix, the constraint itself
 (523.3, 533.0, "hero-hbm-bandwidth-v1",                        (.06, -8,   -6), [("silicon-reality-gap-s07-hbm-stack-v1",1,523.5,533.0)]),   # dies stacked edge-on  # ^REGISTER: the die with bandwidth streaming - HBM physics
 (533.0, 543.9, "world-dram-terrain-v1",          (.05,  10,   6), [("ev-hbm-wafer-ratio-v1",0,533.0,540.0),("silicon-antidote-s09-capacity-penalty-v1",1,540.0,543.8)]),
 (544.3, 554.0, "world-allocation-board",         (.05, -12,   8), [("ev-dram-contract-v1",0,544.5,554.0)]),  # every line marked through - sold out
