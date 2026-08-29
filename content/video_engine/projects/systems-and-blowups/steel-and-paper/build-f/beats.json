@@ -1,0 +1,302 @@
+[
+ {
+  "i": 1,
+  "a": 0.0,
+  "b": 11.8,
+  "t": "The safest thing you own looks like this. An iron spike. It ruined almost everyone who touched it. That was 1845."
+ },
+ {
+  "i": 2,
+  "a": 11.9,
+  "b": 20.5,
+  "t": "Last week, two million people watched a chart claim AI is next. You may have been one of them. The chart is right. The warning points at the wrong address."
+ },
+ {
+  "i": 3,
+  "a": 20.6,
+  "b": 41.4,
+  "t": "The chart comes from Bravos Research \u2014 credit where due, the sharpest macro chart on YouTube. Two lines. One is the builders of AI \u2014 chips, racks, power. Since April, up three hundred percent. The other is the hyperscalers \u2014 Amazon, Microsoft, Google, Meta, the ones actually writing the checks. And for a year, they've gone exactly nowhere."
+ },
+ {
+  "i": 4,
+  "a": 41.9,
+  "b": 45.5,
+  "t": "If you own an index fund, this chart already owns a piece of you."
+ },
+ {
+  "i": 5,
+  "a": 45.6,
+  "b": 63.0,
+  "t": "So here's what you're getting: not a rebuttal, not a victory lap, not a panic. One test \u2014 three questions \u2014 that sorts every holding you own into steel or paper. By the end, you'll run it yourself: thirty seconds a stock."
+ },
+ {
+  "i": 6,
+  "a": 63.1,
+  "b": 71.3,
+  "t": "And the opponent here isn't Bravos, and it isn't Nvidia. It's a machine \u2014 the hype cycle \u2014 capital arriving faster than the value it's chasing."
+ },
+ {
+  "i": 7,
+  "a": 71.3,
+  "b": 78.3,
+  "t": "But a machine you can test. That's the job of the three questions. They have to survive their argument before they survive mine."
+ },
+ {
+  "i": 8,
+  "a": 78.5,
+  "b": 102.8,
+  "t": "Start with their case at full strength \u2014 the version they would defend. Every transformative technology overshoots. Railways in the 1840s drew a quarter-billion pounds \u2014 more than a trillion in today's money. Then the stocks crashed by nearly two-thirds. In two thousand, the internet crossed seven percent of GDP. Then the tower came down. And by Bravos' math, AI spending just crossed eight."
+ },
+ {
+  "i": 9,
+  "a": 103.0,
+  "b": 128.8,
+  "t": "So I went and pulled a version of that myself: equipment and software investment as a share of GDP. The number comes from the government's own statisticians. Back in 2000, the dot-com peak was eleven point five four. Today we're at eleven point five one. Three hundredths of a point short. So we're not past that peak. We're level with it. That's still the story \u2014 just not the bigger one I was hunting."
+ },
+ {
+  "i": 10,
+  "a": 128.9,
+  "b": 147.6,
+  "t": "Their sharpest line is the trigger. The mania never dies of old age \u2014 it dies when rates cross back above where the borrowing began. Bank of England above six percent: railways rolled over. The Fed at six and a half in two thousand: the internet trade rolled over. So their tripwire for this cycle: the Fed back above five and a half."
+ },
+ {
+  "i": 11,
+  "a": 147.7,
+  "b": 160.1,
+  "t": "Put my agreement on the record. The cycle is real. The threshold is real. And here's the most honest sentence a macro channel has said all year. \"Don't try to call the top.\""
+ },
+ {
+  "i": 12,
+  "a": 166.8,
+  "b": 175.9,
+  "t": "So the obvious move looks like this: take profits on the AI builders. Up three hundred percent with flat customers \u2014 textbook profit-taking. Any adviser would sign it."
+ },
+ {
+  "i": 13,
+  "a": 176.2,
+  "b": 180.9,
+  "t": "But here's where their own chart gets strange \u2014 and the strangeness is the whole story."
+ },
+ {
+  "i": 14,
+  "a": 181.0,
+  "b": 213.6,
+  "t": "Walk their evidence like a claims adjuster. Alex Karp of Palantir, live on CNBC: enterprises are \u2014 his words \u2014 paying for tokens that create no value. Something, he says, has gone completely wrong. Uber's CTO says they burned the entire annual AI budget by April. Four months. And the COO, on whether any of it is showing up in the product. His answer: if you can't draw a direct line to what you're shipping, that trade gets harder to justify. Remember that line. He's reaching for question three without having it."
+ },
+ {
+  "i": 15,
+  "a": 213.9,
+  "b": 223.7,
+  "t": "But look harder at those two stories. That isn't the peak of inflated expectations. That's the trough already doing its job \u2014 the tourists finding out, one budget at a time."
+ },
+ {
+  "i": 16,
+  "a": 223.8,
+  "b": 241.6,
+  "t": "Which flips the question. Not \"when does the disappointment arrive\" \u2014 it's arriving. The question is what survives. And in 1849, the answer wasn't the paper. It was the steel. The trains ran straight through the crash \u2014 and the towns kept growing around the stations."
+ },
+ {
+  "i": 17,
+  "a": 241.7,
+  "b": 244.5,
+  "t": "The steel kept working. The paper stopped pretending."
+ },
+ {
+  "i": 18,
+  "a": 244.8,
+  "b": 248.0,
+  "t": "But the real question is who's paying for the steel this time."
+ },
+ {
+  "i": 19,
+  "a": 248.1,
+  "b": 255.8,
+  "t": "For years the giants paid for all this out of pocket. Cash on hand, no borrowing \u2014 that was the whole flex. Then the bills got bigger than the cash."
+ },
+ {
+  "i": 20,
+  "a": 255.8,
+  "b": 265.7,
+  "t": "Between 2020 and 2024, the biggest builders borrowed about twenty-eight billion dollars a year. Last year: a hundred and twenty-one billion. This year they're tracking toward a hundred and fifty."
+ },
+ {
+  "i": 21,
+  "a": 265.8,
+  "b": 285.7,
+  "t": "That is not a rounding error in someone's capital structure. It is big enough to bend the bond market. Technology used to be about nine percent of the investment-grade index \u2014 the pool that feeds your bond fund. It's ten now, and the projections run past twelve. Money that used to sit in utilities and banks is quietly becoming a bet on data centers."
+ },
+ {
+  "i": 22,
+  "a": 286.0,
+  "b": 297.2,
+  "t": "And none of this is slowing down. When the year opened, the street had them spending about four hundred and eighty billion. Consensus now says six hundred and ninety. The estimate went up faster than the year went by."
+ },
+ {
+  "i": 23,
+  "a": 299.1,
+  "b": 300.8,
+  "t": "And that's the borrowing you can see."
+ },
+ {
+  "i": 24,
+  "a": 303.0,
+  "b": 319.0,
+  "t": "Go into the filings and there's another eight hundred and twenty-two billion in lease commitments. Data centers they've already agreed to pay for, on contracts already signed, that have never landed on a balance sheet. Not hidden \u2014 the number is right there in the filing. Just not where anyone looks."
+ },
+ {
+  "i": 25,
+  "a": 319.1,
+  "b": 335.9,
+  "t": "Put it together and the arithmetic gets tight. Over the next two years, PIMCO has this buildout consuming ninety-four percent of every dollar these companies generate from operations. Ninety-four. That is not a company investing its surplus. That is a company spending all of it, and borrowing the difference."
+ },
+ {
+  "i": 26,
+  "a": 336.2,
+  "b": 342.3,
+  "t": "So when you hear the buildout is funded out of profits \u2014 that was true. It stopped being true about eighteen months ago."
+ },
+ {
+  "i": 27,
+  "a": 342.7,
+  "b": 352.6,
+  "t": "Nobody here committed fraud. They signed a promise, in a year that looked good. The steel kept building. The paper just got heavier. And promises are the part of this that nobody is charting."
+ },
+ {
+  "i": 28,
+  "a": 352.6,
+  "b": 357.8,
+  "t": "And that's where most people \u2014 including, this one time, Bravos \u2014 get the whole thing wrong."
+ },
+ {
+  "i": 29,
+  "a": 358.6,
+  "b": 364.2,
+  "t": "It was never the AI stocks. The bubble isn't in the steel. It's in the paper wrapped around the steel."
+ },
+ {
+  "i": 30,
+  "a": 364.7,
+  "b": 392.2,
+  "t": "What broke England in 1845 wasn't rail. It was railway certificates \u2014 paper promises priced off the best year, held by people who never checked what they owned. And Bravos' own number tells you where that paper lives today. AI builders are now twenty percent of the S&P five hundred. Historically, two to four. Every index fund carries a fifth of its weight in one bet, and calls it the market. So does every target-date fund \u2014 the default your retirement money hopefully doesn't sit in."
+ },
+ {
+  "i": 31,
+  "a": 392.5,
+  "b": 402.2,
+  "t": "Run the arithmetic. At a fifth of the index, if the AI names fall by half, that erases ten percent of \"the market.\" The other four hundred ninety companies never get a vote."
+ },
+ {
+  "i": 32,
+  "a": 402.4,
+  "b": 408.7,
+  "t": "So look at the spike again. The spike was never the risk. The certificates were."
+ },
+ {
+  "i": 33,
+  "a": 409.7,
+  "b": 420.7,
+  "t": "A bubble is not a technology failing. A bubble is ownership outrunning understanding. 1845 is the proof: the rails worked, and the paper still lost two-thirds."
+ },
+ {
+  "i": 34,
+  "a": 421.2,
+  "b": 454.6,
+  "t": "And this is where the railway map, good as it is, skips a gear. Railway steel sat waiting twenty years while the economy caught up. That's why the return took two decades. Today's compute doesn't sit. It depreciates in about five years. And the builders are already sold out into next year \u2014 the orders are in, the slots are gone. Governments are standing up national AI programs on the same hardware. Different demand, different clock. The moat under the builders runs deeper than the paper holders can see. And the paper stacked on top runs taller than the builders admit. Both are true at once. That's the whole point."
+ },
+ {
+  "i": 35,
+  "a": 454.9,
+  "b": 486.8,
+  "t": "Now the test \u2014 the one from the top. Take any holding and ask it three questions. One: is what it sells scarce \u2014 sold out, priced up, fought over \u2014 or abundant the moment belief fades? Two: does it fund its growth from cash it earns, or from paper it issues? Three: if the hype died tonight, would the asset still get used tomorrow morning? Steel answers scarce, cash, used. Paper answers abundant, issued, believed. Thirty seconds a holding. Run your top five tonight."
+ },
+ {
+  "i": 36,
+  "a": 486.9,
+  "b": 503.2,
+  "t": "Run it on their divergence chart and it reads differently. The chipmakers up three hundred percent: that's scarcity getting repriced. Hyperscalers flat while spending hundreds of billions: that's the market demanding an answer to question three. The divergence isn't a house of cards. It's the test, administered in public."
+ },
+ {
+  "i": 37,
+  "a": 504.4,
+  "b": 507.9,
+  "t": "Run it on the most extreme number in this whole trade and see what happens."
+ },
+ {
+  "i": 38,
+  "a": 508.2,
+  "b": 522.0,
+  "t": "SK hynix. They make the stacked memory the AI racks need. Over the last year the stock is up more than five hundred percent. Not fifty. Five hundred. If anything in this story is a bubble, it should be that number."
+ },
+ {
+  "i": 39,
+  "a": 523.3,
+  "b": 543.9,
+  "t": "And the scarcity underneath it isn't a mood \u2014 it's physics. High-bandwidth memory stacks the dies vertically. So a gigabyte of it eats about three times the wafer capacity of the ordinary kind. Every accelerator they feed takes silicon away from everything else on the line. That's not a forecast. That's why the memory in a new laptop costs what it does this year."
+ },
+ {
+  "i": 40,
+  "a": 544.3,
+  "b": 562.0,
+  "t": "So ask it the three questions. Scarce? Their own earnings call says capacity is essentially sold out for the year \u2014 you cannot buy what they haven't got. Cash or paper? They're selling product, not issuing stock to survive. Used tomorrow morning? The memory is going into racks that are already under construction."
+ },
+ {
+  "i": 41,
+  "a": 562.0,
+  "b": 567.8,
+  "t": "Scarce, cash, used. It passes. The most vertical line on the board is steel."
+ },
+ {
+  "i": 42,
+  "a": 567.9,
+  "b": 576.7,
+  "t": "That's the uncomfortable part of this test \u2014 it doesn't care what you were hoping to conclude. Run it honestly and it'll clear names you wanted to short, and flag things you're already holding."
+ },
+ {
+  "i": 43,
+  "a": 577.1,
+  "b": 628.0,
+  "t": "Bravos put their tripwire on the record: the Fed back above five and a half. Write it down \u2014 it's real. Mine is stricter, and it's the one this channel already stands on. The variable is memory \u2014 the RAM inside every one of these data centers. And I don't take that one on trust. I built a monitor for it: it reads what memory costs leaving Korea, by the kilo, straight off customs export data. The threshold is that number falling below its own trailing average, two quarters running, while the buildout keeps going. Right now it's going the other way \u2014 DRAM up seventeen percent, and the stacked memory the AI racks actually need up fourteen. That's the July release; customs runs about a month behind. The flip: if memory breaks while the buildout holds, the scarcity story is wrong \u2014 and so am I. That week, I de-risk the builders on camera."
+ },
+ {
+  "i": 44,
+  "a": 628.3,
+  "b": 633.3,
+  "t": "The certificates wear nicer names now \u2014 target-date, \"the market\" \u2014 but paper is paper."
+ },
+ {
+  "i": 45,
+  "a": 633.6,
+  "b": 648.7,
+  "t": "So \u2014 the spike, one more time. In 1850 it was still carrying trains across England, while the certificates that financed it papered the walls of bankrupt clubs. The technology delivered. The owners of its paper paid the bill."
+ },
+ {
+  "i": 46,
+  "a": 649.0,
+  "b": 663.6,
+  "t": "Everything we checked holds. The builders sell scarcity, and they sell it for cash. About eighteen months ago the money behind them turned into debt. A fifth of your index rides on one bet you never placed. And the one number that would prove me wrong is moving the other way."
+ },
+ {
+  "i": 47,
+  "a": 663.8,
+  "b": 691.2,
+  "t": "Which is why I'll go further than Bravos \u2014 in both directions. More bullish: builders with sold-out order books are not a house of cards. They're the steel \u2014 and I own them on purpose, positions disclosed every week. More worried: the index they sold you as the safe version of this trade is the certificate. Nobody holding it thinks they're speculating. That's what a top actually looks like: not euphoria \u2014 accidental concentration, sold as safety."
+ },
+ {
+  "i": 48,
+  "a": 691.3,
+  "b": 697.2,
+  "t": "The steel gets used. The paper gets believed. And the difference gets discovered all at once."
+ },
+ {
+  "i": 49,
+  "a": 697.7,
+  "b": 721.3,
+  "t": "You now have the test \u2014 three questions, thirty seconds, any holding. Subscribe for the tripwire watch: the week either line moves \u2014 theirs at five and a half, mine on memory \u2014 that video posts. Bring your top five; next time we run the test on the whole index. Do that, and the next time a chart like this goes viral, you won't need anyone to tell you where it's pointing. You'll already know which half of your portfolio is steel."
+ },
+ {
+  "i": 50,
+  "a": 721.4,
+  "b": 723.1,
+  "t": "The spike stays on the desk."
+ }
+]
