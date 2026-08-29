@@ -3,6 +3,12 @@
   :root {
     --charcoal: #25313C; --cobalt: #1769C2; --teal: #178C83;
     --sunflower: #F5B72E; --coral: #ED6A4A; --cream: #F4E6C7;
+    /* TEXT TIER - accents lifted for numerals on the charcoal pill. The
+       graphic tier above is tuned for lines and chips, where 3:1 passes;
+       text needs 4.5:1 and cobalt #1769C2 measures 2.42:1 on the pill -
+       unreadable (operator, 2026-08-29). Lifted values measure 5.7-7.4:1. */
+    --t-sunflower: #F5B72E; --t-coral: #FF8A70;
+    --t-teal: #3BC9B0; --t-cobalt: #8FB3F0;
     --ink: #05131e; --slate: #081824;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -229,7 +235,8 @@
      snappy, not sluggish. */
   const expoOut = (k) => (k >= 1 ? 1 : 1 - Math.pow(2, -10 * k));
   const quartIO = (k) => (k < 0.5 ? 8*k*k*k*k : 1 - Math.pow(-2*k+2, 4)/2);
-  const ACCENT = { sunflower: "var(--sunflower)", coral: "var(--coral)", teal: "var(--teal)", cobalt: "var(--cobalt)" };
+  /* Pills draw TEXT, so they take the text tier - never the graphic tier. */
+  const ACCENT = { sunflower: "var(--t-sunflower)", coral: "var(--t-coral)", teal: "var(--t-teal)", cobalt: "var(--t-cobalt)" };
 
   const vo = $("vo"); vo.src = A["__audio__"];
   const wA = $("wA"), wB = $("wB"), wash = $("wash"), seam = $("seam"), cap = $("caption");

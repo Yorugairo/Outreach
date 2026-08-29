@@ -211,6 +211,13 @@ crimson `#e5484d` · teal `#1fa892` · amber `#c98500` · cobalt `#4a7fd6`
 Ink `#f2f2ef` / `#b9bcc4` / `#8b8f98` · de-emphasis `#6b6f78` ·
 grid `#24262b` · baseline `#33363d`. Caption keyword accent: amber.
 
+**Two tiers.** The values above are the GRAPHIC tier - chart lines, chips,
+fills, where 3:1 contrast passes. Text on a dark pill needs 4.5:1 and deep
+cobalt fails it badly (2.4:1). Badge numerals and tags take the TEXT tier:
+sunflower `#F5B72E` · coral `#FF8A70` · teal `#3BC9B0` · cobalt `#8FB3F0`
+(5.7-7.4:1 on the charcoal pill). Never put a graphic-tier accent on text
+over a dark ground.
+
 ## Verify before reporting
 
 1. Every asset resolves **and opens as a valid image**.
