@@ -56,6 +56,16 @@ McKee: beat → scene → sequence → act → story. Extended:
 | P5 REFLECTION | 55–~87% | 16:30–26:00 | 8:45–14:00 | 4:30–6:45 |
 | P6 CLOSE | final 60–90s + card | 26:00–30:00 | 14:00–16:00 | 6:45–8:00 |
 
+**P2 boundary — the "~17%" label is approximate, the columns are the
+authority** (found 2026-08-29 by linting the map against itself). The label
+reproduces the @30:00 column and drifts below it: the authored @16:00 column
+ends P2 at 18.8% and @8:00 at 28.1%. Applying a flat 17% under ~15 minutes
+squeezes P2 below a minute — at 11:40 it yields a 29-second engine, and the
+A3 anchor at 3:00 then lands past the end of the phase it belongs to. Fit
+the authored columns instead: **P2 end ≈ 0.125 × runtime + 75s**, which
+reproduces all three within 15 seconds. `audit_script_doctrine.py` uses the
+fit. P1, P4 and P6 are unaffected — they are pinned.
+
 ## 2. Cross-phase constants (the constants of integration)
 
 **Rehook anchors (positional, AOY):** A1 ≈ 0:30 · A2 ≈ 1:00 · A3 ≈ 3:00 ·
@@ -86,7 +96,7 @@ L3 anticipation runs P2→P4 (head-fakes reset it) · L4 validation in P5
 (close loops COMPLETELY) · L5 affection = the falsifiable tell, competence
 on record · L6 revelation = the close + assignment that brings them back.
 
-**The score (every line, every phase):** 15–16 word average in a wave ·
+**The score (every line, every phase):** 10–15 word average in a wave ·
 one idea per sentence · active S-V-O · attribution-first · terminal stress ·
 punctuation as performance notation · direct "you" · homophone kill ·
 `[pre-key]`/`[post-key]` marks compiled per doc 37.

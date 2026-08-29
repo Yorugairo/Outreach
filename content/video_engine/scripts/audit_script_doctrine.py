@@ -23,6 +23,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import re
 import statistics
 from dataclasses import dataclass
@@ -66,6 +67,24 @@ CTA = (r"\bsubscribe\b", r"\blike button\b", r"\bhit (?:the )?like\b",
 # doc 37 sec 4: narration takes words, badges take digits
 DIGIT_NUMERAL = re.compile(r"(?<![\w.$-])\d[\d,]*(?:\.\d+)?\s*(?:%|percent)?")
 YEAR = re.compile(r"^(?:1[5-9]|20)\d\d$")
+# FULL-VIDEO-MAP sec 1 — the scaling law. P1 and P6 are pinned in ABSOLUTE
+# seconds at every runtime ("the attention ladder is physics, not
+# proportion"); everything between them is a share of runtime.
+P1_OPEN_S = (60.0, 90.0)          # absolute, both ends
+# P2's end is FITTED to the map's authored columns (300s@30m, 180s@16m,
+# 135s@8m), not taken from its "~17%" label. That label only reproduces the
+# @30:00 column: the authored @8:00 column ends P2 at 28%, and applying a
+# flat 17% below ~15 minutes squeezes P2 under a minute — short enough that
+# the A3 anchor at 3:00 would land past the end of the phase it belongs to.
+# See FULL-VIDEO-MAP sec 1, "P2 boundary".
+P2_ENGINE_SLOPE, P2_ENGINE_INTERCEPT_S = 0.125, 75.0
+P3_GAP_PCT = (17.0, 45.0)
+P4_PIVOT_PCT = (45.0, 55.0)
+P5_REFLECTION_PCT = (55.0, 87.0)
+P6_CLOSE_S = (60.0, 90.0)         # absolute, from the end
+# sec 2 — rehook anchors A1..A4. A4 is the pivot itself, checked separately.
+REHOOK_ANCHORS = {"A1": 30.0, "A2": 60.0, "A3": 180.0}
+REHOOK_TOLERANCE_S = 45.0
 # doc 38: rehook slots at ~0:30, ~1:00, 3:00 and mid-video
 REHOOKS = (r"but here's where", r"here's where it gets",
            r"this is where most people", r"what nobody", r"fast-?forward",
@@ -254,12 +273,61 @@ def audit(text: str) -> tuple[list[Finding], dict]:
                       for m in re.finditer(pat, sp, re.I)})
     times = [secs(sp[:i]) for i in rehooks]
     stats["rehooks"] = [f"{t / 60:.1f}m" for t in times]
-    early = [t for t in times if t <= 150]
-    if len(early) < 2:
-        add("WARN", "doc 38 beats 4-5",
-            f"only {len(early)} rehook construction(s) before 2:30 — the "
-            f"~0:30 and ~1:00 slots are the highest-value ones and the "
-            f"first thing a long steelman crowds out")
+    # ---- FULL-VIDEO-MAP: the documented shape ----------------------------
+    # Phase geometry, derived from THIS script's runtime by the scaling law.
+    p1_end = min(P1_OPEN_S[1], runtime * 0.13)
+    phases = {
+        "P1 OPEN": (0.0, p1_end),
+        "P2 ENGINE": (p1_end,
+                      runtime * P2_ENGINE_SLOPE + P2_ENGINE_INTERCEPT_S),
+        "P3 GAP": (runtime * P3_GAP_PCT[0] / 100, runtime * P3_GAP_PCT[1] / 100),
+        "P4 PIVOT": (runtime * P4_PIVOT_PCT[0] / 100,
+                     runtime * P4_PIVOT_PCT[1] / 100),
+        "P5 REFLECTION": (runtime * P5_REFLECTION_PCT[0] / 100,
+                          runtime * P5_REFLECTION_PCT[1] / 100),
+        "P6 CLOSE": (runtime - P6_CLOSE_S[1], runtime),
+    }
+    stats["phase_map"] = {k: f"{a / 60:.1f}-{b / 60:.1f}m"
+                          for k, (a, b) in phases.items()}
+    if not (P1_OPEN_S[0] <= p1_end <= P1_OPEN_S[1]):
+        add("WARN", "MAP sec 1",
+            f"P1 computes to {p1_end:.0f}s; the open is pinned 60-90s at "
+            f"every runtime")
+
+    # sec 1 — the elastic knob: how many P3 pattern units this runtime wants.
+    want_units = max(1, math.ceil((runtime / 60 - 9) / 2.5))
+    stats["p3_units_expected"] = want_units
+
+    # sec 2 — rehook anchors A1/A2/A3 (A4 is the pivot, pinned separately).
+    missing = [name for name, target in REHOOK_ANCHORS.items()
+               if not any(abs(t_ - target) <= REHOOK_TOLERANCE_S
+                          for t_ in times)]
+    if missing:
+        add("WARN", "MAP sec 2",
+            f"no rehook construction within {REHOOK_TOLERANCE_S:.0f}s of "
+            f"anchor(s) {', '.join(missing)} "
+            f"(A1 ~0:30, A2 ~1:00, A3 ~3:00) — found at "
+            f"{[f'{t_ / 60:.1f}m' for t_ in times] or 'none'}")
+
+    # sec 2 — CTA budget: at most one micro-CTA in the P2 tail, exactly one
+    # outro CTA inside P6. Anything outside those windows is unbudgeted.
+    p6_start = phases["P6 CLOSE"][0]
+    for m in hits:
+        t_cta = secs(sp[:m.start()])
+        in_p6 = t_cta >= p6_start
+        in_p2_tail = phases["P2 ENGINE"][0] <= t_cta <= phases["P2 ENGINE"][1]
+        if not (in_p6 or in_p2_tail):
+            add("WARN", "MAP sec 2",
+                f"CTA at {t_cta / 60:.1f}m sits outside both budgeted "
+                f"windows (P2 tail, or P6 from {p6_start / 60:.1f}m)")
+
+    # sec 2 — ceiling: no TTS segment carries more than three break tags.
+    paras = [x for x in re.split(r"\n\s*\n", text) if x.strip()]
+    for i, para in enumerate(paras, start=1):
+        k = len(re.findall(r"\[(?:pre|post)-key\]", para))
+        if k > 3:
+            add("FAIL", "MAP sec 2",
+                f"paragraph {i} carries {k} break tags (ceiling 3)")
 
     # ---- doc 35: answer format -------------------------------------------
     if not re.search(r"\bthreshold\b|\btripwire\b|\bthe flip\b", sp, re.I):
