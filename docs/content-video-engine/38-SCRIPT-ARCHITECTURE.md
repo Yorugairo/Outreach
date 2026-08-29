@@ -22,7 +22,7 @@ Honest state, per the operator's question:
 
 | Layer | Where it lives | Enforcement today |
 | --- | --- | --- |
-| Acoustic sentence rules (active voice, one idea, terminal stress, 15–16 words) | doc 32 §1, doc 33 Rhythm | **Manual.** Applied by hand in the persona pass; nothing lints for them |
+| Acoustic sentence rules (active voice, one idea, terminal stress, 10–15 words) | doc 32 §1, doc 33 Rhythm | **Linted.** `audit_script_doctrine.py` checks mean, spread and the over-20 share; voice and terminal stress stay manual |
 | Macro frameworks (gap, midpoint, anecdote↔reflection, ring) | doc 32 §4–5 | **Manual**, and the timeline generator has no macro-loop encoding yet (doc 28 follow-up, still open) |
 | Platform timing (ladder, rehooks, One Minute Wall, CTA rules) | doc 31 | **Manual** at write time; only the TTS layer (doc 37) is enforced in code |
 | Voice/persona | docs 33 + 36 | Manual persona pass; `brand-voice` skill points at the profiles but produces prose guidance, not structure |
@@ -90,7 +90,7 @@ mini-payoff, and the One Minute Wall. Fused, beat by beat:
 - **Stakes named** by ~0:25 (hook anatomy: Target + Transformation + Stakes).
   Identity videos deploy **biography as the twist** here — after the
   paradox, never before it.
-- Sentence mechanics fully active: one idea each, active voice, 15–16 word
+- Sentence mechanics fully active: one idea each, active voice, 10–15 word
   average in a wave.
 - Curiosity gap must be **open and demanding** by 0:30 — the cliff
   diagnostic reads retention at this timestamp; 70%+ means these three

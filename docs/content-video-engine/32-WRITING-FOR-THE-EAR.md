@@ -27,12 +27,21 @@ rule below exists to keep working memory from overloading:
 | Rule | Spoken standard | Why |
 | --- | --- | --- |
 | One idea per sentence | no nested clauses, no parentheticals | a missed clause can't be re-read |
-| Sentence length | **15–16 words average**, varied rhythm | breath control + discrete processing units |
+| Sentence length | **10–15 words average**, deliberately varied | breath control + discrete processing units. 15–20 is where listener comprehension starts DROPPING, not the target — a written-prose number misapplied to speech. Mix 5-word punchy with 15-word medium; the variance matters more than the mean |
 | Voice | active, strictly — Subject-Verb-Object | passive holds the actor in suspense |
 | Attribution | **first, not trailing** — "The Fed's own data shows…" not "…, according to the Fed" | frame before assertion; trailing attribution forces retroactive re-processing |
 | Word choice | concrete nouns, strong verbs, plain language | faster mental imagery |
 | Ambiguity | eliminate homophones and phonetic collisions | they're invisible on the page, fatal aloud |
 | Punctuation | full stops over commas/semicolons; punctuation = breath and inflection cues, not grammar | the script is a performance document |
+
+**Correction, 2026-08-29 — the sentence-length number.** This doc carried
+**15–16 words** through several revisions. That is a written-prose figure.
+For speech the band is **10–15**, because 15–20 is where listener
+comprehension measurably falls off — the listener cannot reread a clause
+they lost. Two consequences: the target is the LOW half of the old number,
+and the mean alone is not the check. A flat 12-word script and one mixing
+5-word punches with 15-word carries have the same mean and do not sound
+alike. Lint the spread and the over-20 share, not just the average.
 
 **Terminal Stress Principle:** the ear anchors hardest to the last word
 before a pause. Put the critical/surprising word at the END of the sentence;
@@ -155,7 +164,7 @@ own visual as a defect.
 
 | This doc | vs AOY (doc 31) | Status |
 | --- | --- | --- |
-| Sentence mechanics (§1: 15–16 words, active, attribution-first, terminal stress, homophones, punctuation-as-breath) | AOY has only "short = tension, long = context" | **additive** — whole layer |
+| Sentence mechanics (§1: 10–15 words, active, attribution-first, terminal stress, homophones, punctuation-as-breath) | AOY has only "short = tension, long = context" | **additive** — whole layer |
 | Power pauses (§2) | absent from AOY corpus | **additive** — fills the VO hole |
 | Tricolon / anaphora / phonetic anchors (§3) | absent | **additive** |
 | Cadence wave (§3) | two-gear pacing | refines |

@@ -4,8 +4,8 @@
 passive scan, fragment stacks, CTA budget, pause-mark ration, tautology,
 ring. This covers what only reads against the DOCS and a RUNTIME:
 
-  doc 32  ear mechanics (sentence mean vs the 15-16 standard, attribution
-          position, signposting)
+  doc 32  ear mechanics (sentence mean, SPREAD and long-tail share against
+          the 10-15 speech band; attribution position; signposting)
   doc 33  voice profile calibration
   doc 35  answer-format rules (falsifiable tell, one answer, steelman)
   doc 37  TTS delivery (mv2 cap, break ration, spoken numerals)
@@ -24,6 +24,7 @@ from __future__ import annotations
 import argparse
 import json
 import re
+import statistics
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -38,7 +39,16 @@ CHARS_PER_SEC = 16.05
 WORDS_PER_MIN = 165.6
 TIMING_SPREAD_WARN = 0.08    # 8%
 MV2_CAP = 10_000             # eleven_multilingual_v2
-SENTENCE_MEAN_TARGET = (13.0, 18.0)   # doc 32 sec 1 / doc 33: "15-16 average"
+# doc 32 sec 1 (corrected 2026-08-29): speech wants 10-15 words average, not
+# the 15-16 the doc carried — that was a written-prose figure, and 15-20 is
+# where listener comprehension falls off rather than where it peaks.
+SENTENCE_MEAN_TARGET = (10.0, 15.0)
+# The mean alone does not hear anything: a flat 12-word script and one mixing
+# 5-word punches with 15-word carries score identically. Doctrine asks for
+# deliberate variation, so the spread and the tail are gates too.
+SENTENCE_STDEV_MIN = 3.5
+LONG_SENTENCE_WORDS = 20        # comprehension drop-off
+LONG_SENTENCE_SHARE_MAX = 0.12
 PIVOT_PIN = (45.0, 55.0)     # doc 38 sec 3 phase 4
 BREAK_RATION_MAX = 3.0       # doc 37 sec 1
 MARKS = frozenset({"pre-key", "post-key", "verify"})
@@ -155,7 +165,22 @@ def audit(text: str) -> tuple[list[Finding], dict]:
     if not (lo <= mean <= hi):
         add("WARN", "doc 32 sec 1 / doc 33",
             f"sentence mean {mean:.1f} words is outside the {lo:g}-{hi:g} "
-            f"band; doctrine calls for a 15-16 word average, varied")
+            f"band for speech")
+    stdev = statistics.pstdev(words) if len(words) > 1 else 0.0
+    stats["sentence_stdev"] = round(stdev, 1)
+    if stdev < SENTENCE_STDEV_MIN:
+        add("WARN", "doc 32 sec 1",
+            f"sentence-length spread {stdev:.1f} is flat (min "
+            f"{SENTENCE_STDEV_MIN}) — doctrine wants 5-word punches mixed "
+            f"with 15-word carries, not an even cadence")
+    long_share = (sum(1 for w in words if w > LONG_SENTENCE_WORDS)
+                  / len(words) if words else 0.0)
+    stats["over_20_share"] = f"{long_share:.1%}"
+    if long_share > LONG_SENTENCE_SHARE_MAX:
+        add("WARN", "doc 32 sec 1",
+            f"{long_share:.0%} of sentences run past {LONG_SENTENCE_WORDS} "
+            f"words (max {LONG_SENTENCE_SHARE_MAX:.0%}) — the range where "
+            f"listener comprehension drops")
     for pat in TRAILING_ATTR:
         for m in re.finditer(pat, sp):
             add("WARN", "doc 32 sec 1",

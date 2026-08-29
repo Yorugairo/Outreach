@@ -36,7 +36,7 @@ Rhythm
   frame someone has to render.
 - Present tense, viewer-facing. "She earns half of what he does." Not
   "she earned" and not "let's consider."
-- 15-16 words average, deliberately varied: short punchy for tension,
+- 10-15 words average, deliberately varied: short punchy for tension,
   longer breathing for context, in a wave rather than an alternation.
 - Terminal stress — the surprising word lands last. "…and no floor under
   any of it." Never end on a qualifier or preposition.
