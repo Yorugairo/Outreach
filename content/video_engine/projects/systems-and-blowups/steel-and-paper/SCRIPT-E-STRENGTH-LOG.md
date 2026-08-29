@@ -248,3 +248,29 @@ lost its subject when "every target-date fund" came between it and
 moved the target-date clause after it. **A mechanical gate cannot see
 a dangling subject created two sentences away — only reading the
 assembled script end to end catches it.**
+
+## Loop pass 6 — orphan sweep
+
+Checked all 76 dependency-opening sentences (those beginning on a
+connector or bare pronoun) against their antecedents, focusing on the
+adjacencies my own splits created. One real break:
+
+My batch-1 split of S23 — made for S3 terminal stress — put a currency
+conversion between an event and its "Then":
+
+> Railways in the 1840s drew a quarter-billion pounds. **In today's
+> money, more than a trillion.** Then the stocks crashed...
+
+"Then" after a conversion, not after an event. The internet pair two
+sentences later does it correctly ("...crossed seven percent of GDP.
+Then the tower came down"), so the asymmetry is audible.
+
+**Reverted the split.** S3 vs comprehension: a listener who loses the
+temporal thread loses the argument, while a soft terminal costs only
+emphasis. Comprehension wins, and the S3 exception is logged.
+
+The other splits check out — every 'It', 'That', 'They', 'So does' and
+'Which is why' resolves to the sentence directly before it. The
+enumeratio insertion actually improved one link: 'And this is where the
+railway map skips a gear' now follows a railway statement rather than
+the bubble definition.

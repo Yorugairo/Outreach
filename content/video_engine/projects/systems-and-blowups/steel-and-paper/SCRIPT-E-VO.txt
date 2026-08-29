@@ -12,7 +12,7 @@ And the opponent here isn't Bravos, and it isn't Nvidia. It's a machine — the 
 
 But a machine you can test. That's the job of the three questions. They have to survive their argument before they survive mine.
 
-Start with their case at full strength — the version they would defend. Every transformative technology overshoots. Railways in the 1840s drew a quarter-billion pounds. In today's money, more than a trillion. Then the stocks crashed by nearly two-thirds. In two thousand, the internet crossed seven percent of GDP. Then the tower came down. And by Bravos' math, AI spending just crossed eight.
+Start with their case at full strength — the version they would defend. Every transformative technology overshoots. Railways in the 1840s drew a quarter-billion pounds — more than a trillion in today's money. Then the stocks crashed by nearly two-thirds. In two thousand, the internet crossed seven percent of GDP. Then the tower came down. And by Bravos' math, AI spending just crossed eight.
 
 So I went and pulled a version of that myself: equipment and software investment as a share of GDP. The number comes from the government's own statisticians. `[pre-key]` Back in 2000, the dot-com peak was eleven point five four. Today we're at eleven point five one. `[post-key]` Three hundredths of a point short. So we're not past that peak. We're level with it. That's still the story — just not the bigger one I was hunting.
 
