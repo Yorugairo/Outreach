@@ -22394,8 +22394,8 @@
   {
    "scene_id": "s33",
    "world": {
-    "asset_id": "world-treasury-cash-count",
-    "sha256": "13515928ae8effe827115175b4e20070d674e0076ca989ca9231181b0986bb19",
+    "asset_id": "beat-05-017-018-market-prices-cashflows-v1",
+    "sha256": "09de16b8c8dc064661a837bbcb1de3d5be55eb5eda6ac927caeddcb713c361a0",
     "ken_burns": {
      "scale": 0.05,
      "x": -10,
@@ -22422,8 +22422,8 @@
   {
    "scene_id": "s34",
    "world": {
-    "asset_id": "world-ledger-page-v1",
-    "sha256": "6d64ccdeea464b6152301cc94d6641de7cf5c6eca6d0f0969bce54fad475aa4f",
+    "asset_id": "beat-05-006-listed-cash-flow-market-v1",
+    "sha256": "7f9eeb05bf62211f9920565b4cf63c3b18c1d8d08860e568fd348198c19f8ae8",
     "ken_burns": {
      "scale": 0.04,
      "x": 10,
@@ -22809,8 +22809,8 @@
   {
    "scene_id": "s49",
    "world": {
-    "asset_id": "world-assay-sort-v1",
-    "sha256": "631c76db038263e94fdf0ce5d66bd82b6ff579ad7629a2185a5697641693ca69",
+    "asset_id": "beat-04-014-evidence-hierarchy-v1",
+    "sha256": "5d82ea9ab54f33846286c1c65dfc4c783678531e0a52c584dfd3d1fcb49827ff",
     "ken_burns": {
      "scale": 0.05,
      "x": -14,
@@ -22896,8 +22896,8 @@
   {
    "scene_id": "s52",
    "world": {
-    "asset_id": "world-broadcast-set-v2",
-    "sha256": "8e89fb53f54e9ad9212c4aa7c019cc127d163fc421d6bb14d7c768bddcbea3e2",
+    "asset_id": "beat-04-015-bottleneck-boom-v1",
+    "sha256": "a81d71ac4c98dfe1016c4e7f90934f60a2da2ad8c58107dc4efe280782b00206",
     "ken_burns": {
      "scale": 0.04,
      "x": 12,
@@ -23131,8 +23131,8 @@
   {
    "scene_id": "s60",
    "world": {
-    "asset_id": "world-spike-desk-v1",
-    "sha256": "c1b0707093635d2de2558d33ddeaea67568a8be8adad4cc610687e9316f95bd8",
+    "asset_id": "beat-04-013-guidance-not-gospel-v1",
+    "sha256": "941b9937c4f17833e3baee8cf49dc703fe3c50ffdafc467ed9c5bdbdbd96bd2b",
     "ken_burns": {
      "scale": 0.04,
      "x": 10,
@@ -23149,8 +23149,8 @@
   {
    "scene_id": "s61",
    "world": {
-    "asset_id": "world-pressure-gauge-v1",
-    "sha256": "ce288e1cf2f4ae71d83f29668446f962f5a246948cf1f92c787e824dab1da3c2",
+    "asset_id": "beat-04-003-classic-cycle-counterargument-v1",
+    "sha256": "445a89c02ae180a4432cc71fc3b6accb9689c2fcfa9a283e40b5c4d8b6f9617a",
     "ken_burns": {
      "scale": 0.05,
      "x": -14,
@@ -23322,8 +23322,8 @@
   {
    "scene_id": "s68",
    "world": {
-    "asset_id": "world-three-notch-slate-v1",
-    "sha256": "b9004b2ee761378cba8c796a82f270e4f2ac247fbec38403a20d9a8c0dda7046",
+    "asset_id": "beat-03-008-009-physical-capacity-gate-v1",
+    "sha256": "74dd859c87abcce6a827ca45aabd3825fee25c315dd20e00509f3627e36e1e50",
     "ken_burns": {
      "scale": 0.04,
      "x": 10,
@@ -23374,8 +23374,8 @@
   {
    "scene_id": "s70",
    "world": {
-    "asset_id": "world-steel-mill-night",
-    "sha256": "23edea595e6f5b8e93fca964e593fc813f36d76b3c96b272c856f92563af53dc",
+    "asset_id": "beat-05-002-strategic-chokepoints-v1",
+    "sha256": "f0ee8fe9eae041ce78a3859f78f205d46162bc26d8c2f02df1dd174d64f46a0d",
     "ken_burns": {
      "scale": 0.05,
      "x": 14,
@@ -23429,8 +23429,8 @@
   {
    "scene_id": "s72",
    "world": {
-    "asset_id": "world-molten-pour-v2",
-    "sha256": "ba15fa7aa44403966a031183c1f9433ac74225450aa04a0f9aba40d47c962e63",
+    "asset_id": "beat-06-017-018-diworsification-v1",
+    "sha256": "c093de734fa68890bd7bc74d3ebb589eae386143fc4df31edf4d5c8e99d7a68a",
     "ken_burns": {
      "scale": 0.06,
      "x": 10,
@@ -23447,8 +23447,8 @@
   {
    "scene_id": "s73",
    "world": {
-    "asset_id": "world-workbench-triad-v1",
-    "sha256": "01d08817c8e2a0d0a1e3ede3ba56cf98a792991824f8defbe1e52618ba22830c",
+    "asset_id": "beat-04-001-buyer-behavior-v1",
+    "sha256": "96881b32d1df0a95d7df2e8a52ba05a2eee6a9082ea51f96d310ae51a9809b6b",
     "ken_burns": {
      "scale": 0.04,
      "x": -12,
@@ -23465,8 +23465,8 @@
   {
    "scene_id": "s74",
    "world": {
-    "asset_id": "world-statement-kitchen",
-    "sha256": "93305afa8f35c6af9bf4a3406f727e00d358377c1dd64439930674dc77bd6b72",
+    "asset_id": "beat-06-001-003-index-product-elevator-v1",
+    "sha256": "853db3f6f46daf2eb5f4bbe0a3b2b7272e7cafc23dd0f49bcc34be650019bf1d",
     "ken_burns": {
      "scale": 0.05,
      "x": 12,

@@ -36,6 +36,12 @@ M = {
 STAMPED = json.loads((BUILD / "stamped-index.json").read_text(encoding="utf-8"))     if (BUILD / "stamped-index.json").exists() else {}
 
 
+LIBRARY = json.loads(
+    (REPO / "content/video_engine/sources/PLATE-LIBRARY.json").read_text(
+        encoding="utf-8"))["plates"] if (
+    REPO / "content/video_engine/sources/PLATE-LIBRARY.json").exists() else []
+
+
 def find_asset(name: str) -> Path | None:
     # Teacher-stamped visuals are stored by slide path, keyed by image_id.
     if name in STAMPED and Path(STAMPED[name]).exists():
@@ -49,6 +55,14 @@ def find_asset(name: str) -> Path | None:
         return p
     for p in DECKS.rglob(f"{name}.png"):
         return p
+    # THE PLATE LIBRARY is the last resort and the widest one: it indexes every
+    # generated plate across every worktree by id, so a plate resolves by WHAT
+    # IT IS rather than by which directory happened to hold it. Without this,
+    # borrowing from the pool silently fails and the shot table cannot reach
+    # 134 approved plates - which is the whole reason the library exists.
+    for pl in LIBRARY:
+        if pl["id"] == name and Path(pl["path"]).exists():
+            return Path(pl["path"])
     return None
 
 
