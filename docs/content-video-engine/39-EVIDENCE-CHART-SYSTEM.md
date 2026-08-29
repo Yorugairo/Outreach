@@ -185,7 +185,18 @@ without exception:
 3. **Verbatim numerals.** Any figure a badge quotes must appear on the
    document exactly as the badge states it (doc 29 §9.8 / ruling B3).
 4. **No production scaffolding** — no slot ids, no claim ids, no approval
-   state, ever.
+   state, ever. **This includes version history.** A document must never
+   say what it supersedes, name an internal deck, or reference a prior
+   figure we corrected. Operator, 2026-08-29, on a footer reading "this
+   supersedes the 70% crash figure on the DMP deck": *"they have no idea
+   what you're talking about — we shouldn't take them out of their video
+   context unless we have to."*
+
+   The distinction that matters: **auditing a claim on screen is content;
+   annotating our own file history on screen is scaffolding.** The audit
+   beat (doc 40) shows a check the viewer benefits from watching. A
+   supersession note serves only us, and it belongs in the manifest or the
+   registration file — where it already is.
 
 ## 8. Checks before a document ships
 
