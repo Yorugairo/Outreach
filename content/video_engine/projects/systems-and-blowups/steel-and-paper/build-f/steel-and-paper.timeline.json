@@ -21907,7 +21907,7 @@
    "docks": [
     {
      "slide": "silicon-reality-gap-s04-teacher-stamped",
-     "slot": 1,
+     "slot": 0,
      "enter": 63.5,
      "exit": 71.2,
      "badge_at": [
@@ -22004,7 +22004,7 @@
     },
     {
      "slide": "ev-railway-gdp-tile-v1",
-     "slot": 1,
+     "slot": 0,
      "enter": 96.5,
      "exit": 102.5,
      "badge_at": [
@@ -22149,7 +22149,7 @@
    "docks": [
     {
      "slide": "ev-tnx-two-eras-v3",
-     "slot": 1,
+     "slot": 0,
      "enter": 148.0,
      "exit": 157.0,
      "badge_at": [
@@ -22188,7 +22188,7 @@
    "docks": [
     {
      "slide": "silicon-reality-gap-s03-teacher-stamped",
-     "slot": 1,
+     "slot": 0,
      "enter": 167.2,
      "exit": 175.8,
      "badge_at": [
@@ -22289,7 +22289,7 @@
    "docks": [
     {
      "slide": "ev-uber-adoption-v1",
-     "slot": 1,
+     "slot": 0,
      "enter": 203.0,
      "exit": 212.0,
      "badge_at": [
@@ -22542,7 +22542,7 @@
    "docks": [
     {
      "slide": "ev-capex-consensus-v1",
-     "slot": 1,
+     "slot": 0,
      "enter": 286.0,
      "exit": 297.0,
      "badge_at": [
@@ -22683,7 +22683,7 @@
    "docks": [
     {
      "slide": "silicon-antidote-s04-teacher-stamped",
-     "slot": 1,
+     "slot": 0,
      "enter": 336.2,
      "exit": 342.6,
      "badge_at": []
@@ -22850,7 +22850,7 @@
    "docks": [
     {
      "slide": "ev-smh-drawdown-v3",
-     "slot": 1,
+     "slot": 0,
      "enter": 392.5,
      "exit": 402.0,
      "badge_at": [
@@ -22926,7 +22926,7 @@
    "docks": [
     {
      "slide": "ev-railway-mileage-v1",
-     "slot": 1,
+     "slot": 0,
      "enter": 421.5,
      "exit": 431.5,
      "badge_at": [
@@ -22955,7 +22955,7 @@
    "docks": [
     {
      "slide": "silicon-antidote-s11-teacher-stamped",
-     "slot": 1,
+     "slot": 0,
      "enter": 434.9,
      "exit": 443.0,
      "badge_at": [
@@ -22984,7 +22984,7 @@
    "docks": [
     {
      "slide": "sovereign-memory-infrastructure-s10-teacher-stamped",
-     "slot": 1,
+     "slot": 0,
      "enter": 443.0,
      "exit": 454.5,
      "badge_at": [
@@ -23071,7 +23071,7 @@
    "docks": [
     {
      "slide": "ev-mechanism-ladder",
-     "slot": 1,
+     "slot": 0,
      "enter": 476.0,
      "exit": 486.5,
      "badge_at": [
@@ -23216,7 +23216,7 @@
    "docks": [
     {
      "slide": "silicon-reality-gap-s07-hbm-stack-v1",
-     "slot": 1,
+     "slot": 0,
      "enter": 523.5,
      "exit": 533.0,
      "badge_at": [
@@ -23253,7 +23253,7 @@
     },
     {
      "slide": "silicon-antidote-s09-capacity-penalty-v1",
-     "slot": 1,
+     "slot": 0,
      "enter": 540.0,
      "exit": 543.8,
      "badge_at": [
@@ -23337,7 +23337,7 @@
    "docks": [
     {
      "slide": "silicon-antidote-s02-memory-triopoly-v1",
-     "slot": 1,
+     "slot": 0,
      "enter": 562.0,
      "exit": 567.5,
      "badge_at": [
@@ -23469,7 +23469,7 @@
    "docks": [
     {
      "slide": "ev-hbm-export-series",
-     "slot": 1,
+     "slot": 0,
      "enter": 612.0,
      "exit": 622.0,
      "badge_at": [
@@ -23499,7 +23499,7 @@
    "docks": [
     {
      "slide": "silicon-reality-gap-s13-teacher-stamped",
-     "slot": 1,
+     "slot": 0,
      "enter": 628.5,
      "exit": 633.2,
      "badge_at": [
@@ -23628,7 +23628,7 @@
    "docks": [
     {
      "slide": "silicon-antidote-s14-diagnostic-matrix-v1",
-     "slot": 1,
+     "slot": 0,
      "enter": 676.9,
      "exit": 691.0,
      "badge_at": [

@@ -963,6 +963,30 @@ rulings. Where these conflict with anything above, THESE win.
    side-by-side A/B of one scene judged in isolation. Item 4 of 9.15 is
    suspended accordingly.
 
+### 9.17 The choreography statement, and the scrim serves the evidence (operator, 2026-08-29)
+
+1. **Every build emits a CHOREOGRAPHY STATEMENT** (`emit_choreography.py` ->
+   `build-f/CHOREOGRAPHY.md`): the time-ordered ledger of every element
+   entering and exiting - slot, side, hold, HOW it leaves (carried by the
+   front vs fades in place), when light rises and falls - with slot-level
+   gates run on it (min hold, drive-by, awkward-zone exits, wash-gap
+   merging, same-slide re-entry). This is s8.2's "the timeline is data"
+   made enforceable: the reference builds were auditable because state was
+   declared; state that is only derived per-frame cannot be reviewed, and
+   every motion defect of 2026-08-29 was caught by the operator's eye
+   instead of a gate. On its FIRST emission the ledger exposed a swept
+   card re-landing 0.3s later on the opposite side.
+2. **A lone dock takes slot 0** - the stage - always. Coalescing keys on
+   the SLIDE alone: the same document persists across an authored slot
+   change rather than being swept and re-landed.
+3. **The scrim quiets the evidence zone; it is not stage lighting.**
+   Gradient peak .34 (was .62), spotlight edge .24 (was .44). At the old
+   strength every card arrival and departure was a lighting event - with
+   evidence on screen ~80% of runtime, darkness sloshed across every
+   scene. The document is opaque cream on a dark plate; it needs a
+   whisper. If removing the scrim would not hurt legibility, it is still
+   too strong.
+
 ### 9.7 Host-in-world plates approved (operator, 2026-08-25)
 
 The host-in-world experiment passed: generated host shots inside world
