@@ -66,6 +66,11 @@ CTA = (r"\bsubscribe\b", r"\blike button\b", r"\bhit (?:the )?like\b",
 # doc 37 sec 4: narration takes words, badges take digits
 DIGIT_NUMERAL = re.compile(r"(?<![\w.$-])\d[\d,]*(?:\.\d+)?\s*(?:%|percent)?")
 YEAR = re.compile(r"^(?:1[5-9]|20)\d\d$")
+# doc 38: rehook slots at ~0:30, ~1:00, 3:00 and mid-video
+REHOOKS = (r"but here's where", r"here's where it gets",
+           r"this is where most people", r"what nobody", r"fast-?forward",
+           r"but the real question", r"which flips the question",
+           r"and that's where", r"but look at what", r"and this is where")
 
 
 @dataclass(frozen=True)
@@ -241,6 +246,20 @@ def audit(text: str) -> tuple[list[Finding], dict]:
                 f"CTA at {t_cta:.0f}s sits {runtime - t_cta:.0f}s before the "
                 f"end — the action window is the final 90s, after the payoff")
     stats["cta_count"] = len(hits)
+
+    # ---- doc 38: rehook slots --------------------------------------------
+    # The two most retention-critical slots are the earliest ones, and they
+    # are the easiest to lose to a steelman that ran long.
+    rehooks = sorted({m.start() for pat in REHOOKS
+                      for m in re.finditer(pat, sp, re.I)})
+    times = [secs(sp[:i]) for i in rehooks]
+    stats["rehooks"] = [f"{t / 60:.1f}m" for t in times]
+    early = [t for t in times if t <= 150]
+    if len(early) < 2:
+        add("WARN", "doc 38 beats 4-5",
+            f"only {len(early)} rehook construction(s) before 2:30 — the "
+            f"~0:30 and ~1:00 slots are the highest-value ones and the "
+            f"first thing a long steelman crowds out")
 
     # ---- doc 35: answer format -------------------------------------------
     if not re.search(r"\bthreshold\b|\btripwire\b|\bthe flip\b", sp, re.I):

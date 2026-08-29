@@ -145,6 +145,36 @@ reaction video.
    compressing them into a sentence turns authority transfer into a
    drive-by.
 
+   **Clarified 2026-08-29 — "before contesting" is not "before paying."**
+   This rule was being read as *one contiguous steelman block, up front,
+   ahead of any value of ours*, and in that reading it collides head-on
+   with doc 38: it pushes the beat-4 mini-payoff past 0:60 and leaves the
+   0:30 and 1:00 rehook slots carrying nothing but the opponent's case.
+   That collision is an artefact of the misreading, not a real tension
+   between the docs.
+
+   What the rule requires is **weight and completeness**, not position: the
+   opponent's case must be generous, must occupy real runtime, and must
+   land before **beat 4 (Locate)** — the first moment we contest anything.
+   It says nothing about contiguity, and §3's own table treats the
+   steelman as one beat among eight rather than as a phase.
+
+   Two legal shapes, and both keep beats 1–3 generous:
+
+   - **Distributed.** Thread the steelman through the first third, paying
+     our own value between its pieces. Preferred, because our strongest
+     steelman material is usually *us verifying their number ourselves* —
+     which is simultaneously their case made stronger and a payoff only we
+     can deliver. One beat doing both jobs.
+   - **Thesis-then-steelman.** intro → idea → our read → steelman →
+     argument. Legal, because the "read" is a teased thesis and not yet a
+     contest. Riskier: lead too hard with the opinion and beats 1–3 stop
+     reading as authority transfer and start reading as a reaction video.
+
+   **Illegal in both shapes:** compressing the steelman to a sentence, or
+   contesting (beat 4+) before it has run. Those are what the rule exists
+   to stop.
+
 ## 6. Open
 
 - Response-video titling and metadata for the next-click slot — should the
