@@ -4,7 +4,7 @@ Two P3/P5 pattern units extending Script C. Units go on **both sides of
 the pivot** — loading them all into P3 would push the pivot to ~76% of
 runtime and break the 45–55% pin (doc 38).
 
-**Assembled and measured: Script D is 11,239 characters, 11m 42s.** The
+**Assembled and measured: Script D is 11,188 characters, 11m 38s.** The
 pivot lands at 49.4% — units on both sides of it is what held the 45–55%
 pin. See §3.
 
@@ -138,21 +138,21 @@ Both units are spliced into `SCRIPT-D-VO.txt`. Linter clean: sentence mean
 | | chars | runtime | position |
 |---|---|---|---|
 | Script C | 8,078 | 8m 24s | — |
-| P3 debt unit | 1,920 | ~2m 0s | opens at 32.3% |
-| P5 winner unit | 1,239 | ~1m 17s | opens at 71.2% |
-| **Script D** | **11,239** | **11m 42s** | pivot at **49.4%** |
+| P3 debt unit | 1,869 | ~2m 0s | opens at 32.3% |
+| P5 winner unit | 1,239 | ~1m 17s | opens at 71.4% |
+| **Script D** | **11,188** | **11m 38s** | pivot at **49.2%** |
 
 Drafts: `steel-and-paper/unit-debt-draft.txt`,
 `steel-and-paper/unit-winner-draft.txt`.
 
 ## 4. Delivery — chained
 
-11,239 exceeds the mv2 10,000 cap, so the take is two requests split at
+11,188 exceeds the mv2 10,000 cap, so the take is two requests split at
 `Now the test — the one from the top.` (the P4→P5 boundary):
 
 | | chars | runtime |
 |---|---|---|
-| `SCRIPT-D-VO-part1.txt` | 7,206 | 450s |
+| `SCRIPT-D-VO-part1.txt` | 7,155 | 447s |
 | `SCRIPT-D-VO-part2.txt` | 4,032 | 252s |
 
 Part two passes part one's `previous_request_ids`.
@@ -165,7 +165,7 @@ carries prosody across the join.
 
 ## 5. Plate density — resolved
 
-56 usable plates at 11m 42s is 12.5s each, inside the 20s ceiling and at the
+56 usable plates at 11m 38s is 12.5s each, inside the 20s ceiling and at the
 12s target once evidence cut-ins are counted. With the evidence review gate
 cleared on 2026-08-29 there are 202 approved evidence objects across four
 species, so no stretch has to run bare. Density is no longer the constraint

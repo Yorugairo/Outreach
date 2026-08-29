@@ -1,11 +1,11 @@
 # Steel and Paper — wave 5 state (plates + evidence)
 
-**Script D is assembled and linter-clean.** `SCRIPT-D-VO.txt`, 11,239 spoken
-characters, **11m 42s** at the measured 16.02 chars/sec.
+**Script D is assembled and linter-clean.** `SCRIPT-D-VO.txt`, 11,188 spoken
+characters, **11m 38s** at the measured 16.02 chars/sec.
 
 | | |
 |---|---|
-| Pivot position | **49.4%** — dead centre of the 45–55% pin (doc 38) |
+| Pivot position | **49.2%** — dead centre of the 45–55% pin (doc 38) |
 | Plates usable | **56** → **12.5s each** (ceiling 20, target 12) |
 | Evidence available | **202 approved objects** — see §2 |
 | Delivery | two-part chained take, split at P4→P5 |
@@ -32,12 +32,12 @@ alone would have pushed it to ~76%.
 Linter: **clean.** Sentence mean 10.5 words, 187 sentences, break ration
 1.87/1k (limit 3.0), no stray editorial flags.
 
-**Chained take.** 11,239 chars exceeds the mv2 10,000 cap. Split at
+**Chained take.** 11,188 chars exceeds the mv2 10,000 cap. Split at
 `Now the test — the one from the top.`:
 
 | | chars | runtime |
 |---|---|---|
-| `SCRIPT-D-VO-part1.txt` | 7,206 | 450s |
+| `SCRIPT-D-VO-part1.txt` | 7,155 | 447s |
 | `SCRIPT-D-VO-part2.txt` | 4,032 | 252s |
 
 Part two passes part one's `previous_request_ids` so prosody carries across
@@ -108,7 +108,7 @@ constraint.**
 
 1. ~~Wave-5 claim~~ — **delivered**, 15 plates.
 2. ~~Clear the evidence review gate~~ — **done**, 2026-08-29.
-3. ~~Assemble Script D~~ — **done**, linter clean, pivot at 49.4%.
+3. ~~Assemble Script D~~ — **done**, linter clean, pivot at 49.2%.
 4. Operator review of the two wave-6 plates.
 5. Figure-verify each deck slide against the dossier *at docking time* —
    per slide, not as a batch pass.
