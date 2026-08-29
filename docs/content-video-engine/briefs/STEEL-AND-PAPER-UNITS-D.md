@@ -121,7 +121,45 @@ filing.
 
 ---
 
-## 3. What this requires
+## 3. What this actually costs — measured, not estimated
+
+| | |
+|---|---|
+| P3 debt unit | **969 chars** (~1m 0s) |
+| P5 winner unit | **869 chars** (~0m 54s) |
+| Script D total | **9,916 chars** → **~10m 19s** |
+| mv2 cap 10,000 | **fits — single master take**, with 84 characters of headroom |
+| Plates | 39 at 10m 19s = **15.9s each** (target 12, ceiling 20) |
+
+**These units are half the doctrinal length.** Doc 38 specifies a P3
+pattern unit at **2:00–2:30**; these run 1:00 and 0:54. They have the
+correct five-step shape but only one anecdote loop each where the spec
+calls for two or three.
+
+That leaves a genuine fork:
+
+**A — ship them as drafted.** 9,916 characters, ~10m 19s, **one master
+take**, 84 characters under the cap. Misses the 11–13 minute ad target by
+about a minute. No chaining risk.
+
+**B — build them to spec** (2:00–2:30 each, ~2,100 chars apiece).
+Script D becomes ~12,400 characters, **~12m 50s**, which hits the ad
+target — and **exceeds mv2's 10,000 cap**, so it needs the two-part
+chained take in §4. Each unit gains two more anecdote loops; the debt unit
+has the material (the bond market's tech weighting, the 94%-of-cash-flow
+figure), the winner unit would need one more verified case.
+
+I would take **B**. The units are under-built against our own spec, the
+runtime target is a real business constraint, and chaining is the
+provider's supported path rather than a workaround. But A is genuinely
+safer and available today.
+
+**Plate density is the binding cost either way.** 39 plates was sized for
+8 minutes. At 10m 19s that is 15.9s per plate; at 12m 50s it is 19.7s —
+at the ceiling. Option A wants ~12 more plates, option B ~25. A wave-5
+claim is required before either ships.
+
+## 4. Delivery
 
 | | |
 |---|---|
