@@ -4,9 +4,9 @@ Run it on their divergence chart and it reads differently. The chipmakers up thr
 
 Run it on the most extreme number in this whole trade and see what happens.
 
-SK hynix. They make the stacked memory the AI racks need. Over the last year the stock is up more than five hundred percent. Not fifty. Five hundred. `[pre-key]` If anything in this story is a bubble, it should be that. `[post-key]`
+SK hynix. They make the stacked memory the AI racks need. Over the last year the stock is up more than five hundred percent. Not fifty. Five hundred. `[pre-key]` If anything in this story is a bubble, it should be that number. `[post-key]`
 
-And the scarcity underneath it isn't a mood — it's physics. High-bandwidth memory stacks the dies vertically, so a gigabyte of it eats about three times the wafer capacity of the ordinary kind. Every accelerator that gets fed takes silicon away from everything else on the line. That's not a forecast. That's why the memory in a new laptop costs what it does this year.
+And the scarcity underneath it isn't a mood — it's physics. High-bandwidth memory stacks the dies vertically. So a gigabyte of it eats about three times the wafer capacity of the ordinary kind. Every accelerator they feed takes silicon away from everything else on the line. That's not a forecast. That's why the memory in a new laptop costs what it does this year.
 
 So ask it the three questions. Scarce? Their own earnings call says capacity is essentially sold out for the year — you cannot buy what they haven't got. Cash or paper? They're selling product, not issuing stock to survive. Used tomorrow morning? The memory is going into racks that are already under construction.
 
@@ -18,9 +18,9 @@ Bravos put their tripwire on the record: the Fed back above five and a half. Wri
 
 The certificates wear nicer names now — target-date, "the market" — but paper is paper.
 
-So — the spike, one more time. `[post-key]` In 1850 it was still carrying trains across England, while the certificates that financed it papered the walls of bankrupt clubs. The technology delivered. The owners of its paper paid for it.
+So — the spike, one more time. `[post-key]` In 1850 it was still carrying trains across England, while the certificates that financed it papered the walls of bankrupt clubs. The technology delivered. The owners of its paper paid the bill.
 
-Which is why I'll go further than Bravos — in both directions. More bullish: builders with sold-out order books are not a house of cards. They're the steel — and I own them on purpose, positions disclosed every week. More worried: the index they sold you as the safe version of this trade is the certificate — and nobody holding it thinks they're speculating. That's what a top actually looks like: not euphoria — accidental concentration, sold as safety.
+Which is why I'll go further than Bravos — in both directions. More bullish: builders with sold-out order books are not a house of cards. They're the steel — and I own them on purpose, positions disclosed every week. More worried: the index they sold you as the safe version of this trade is the certificate. Nobody holding it thinks they're speculating. That's what a top actually looks like: not euphoria — accidental concentration, sold as safety.
 
 The steel gets used. The paper gets believed. `[pre-key]` And the difference gets discovered all at once.
 

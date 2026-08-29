@@ -210,10 +210,22 @@ def audit(text: str) -> tuple[list[Finding], dict]:
 
     # ---- doc 32 / 33: ear mechanics --------------------------------------
     lo, hi = SENTENCE_MEAN_TARGET
-    if not (lo <= mean <= hi):
+    # Two gates disagree unless the short figures are held out. S5 of the
+    # strength check LICENSES sentences under five words when they are
+    # deliberate figures — anaphora pairs, enumerations, snaps, chart-reads —
+    # and a script that uses them well is dragged under the band by its own
+    # good practice. So gate the mean of the carrying sentences and report
+    # the raw mean beside it. Unlicensed short sentences are S5's job, not
+    # this one's.
+    carrying = [w for w in words if w >= 5]
+    mean_carrying = sum(carrying) / len(carrying) if carrying else 0.0
+    stats["sentence_mean_carrying"] = round(mean_carrying, 1)
+    stats["short_figure_share"] = f"{1 - len(carrying) / len(words):.1%}"         if words else "0%"
+    if not (lo <= mean_carrying <= hi):
         add("WARN", "doc 32 sec 1 / doc 33",
-            f"sentence mean {mean:.1f} words is outside the {lo:g}-{hi:g} "
-            f"band for speech")
+            f"sentence mean {mean_carrying:.1f} words (excluding sub-5-word "
+            f"figures) is outside the {lo:g}-{hi:g} band for speech; raw "
+            f"mean {mean:.1f}")
     stdev = statistics.pstdev(words) if len(words) > 1 else 0.0
     stats["sentence_stdev"] = round(stdev, 1)
     if stdev < SENTENCE_STDEV_MIN:
