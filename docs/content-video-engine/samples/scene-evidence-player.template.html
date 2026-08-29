@@ -243,6 +243,16 @@
       DOCKS.splice(i, 1);
     }
   }
+  /* SNAP NEAR-BOUNDARY EXITS TO THE BOUNDARY. A card exiting moments before
+     a scene turn fires three light events in under a second - fade-exit,
+     wash-off (the bare plate flashes fully bright), then the wipe - and the
+     scene appears to repaste itself before turning. Snap those exits to the
+     boundary so the turn carries card, wash and shadow in ONE motion. An
+     exit more than ~1.4s out is a deliberate early clear and still fades. */
+  const BOUNDS = TL.scenes.map((x) => x.span[0]);
+  for (const d of DOCKS)
+    for (const b of BOUNDS)
+      if (d.enter < b && b - d.exit > 0.05 && b - d.exit <= 1.4) { d.exit = b; break; }
 
   const chips = $("scenes");
   TL.scenes.forEach((sc, i) => {
