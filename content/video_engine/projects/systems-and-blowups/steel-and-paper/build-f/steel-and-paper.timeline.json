@@ -1,5 +1,8 @@
 {
  "schema_version": "scene_evidence_timeline.v1",
+ "runtime_s": 723.085,
+ "title": "Steel and Paper",
+ "subtitle": "Money Physics \u00b7 answer to Bravos Research",
  "episode_id": "steel-and-paper",
  "project_id": "systems-and-blowups",
  "narration": {
@@ -20780,274 +20783,577 @@
  ],
  "evidence": {
   "ev-mega-vs-spy-v3": {
-   "title": "Mega Vs Spy",
-   "source": "Money Physics \u2014 built evidence",
+   "title": "The Divergence",
+   "source": "Bravos Research \u00b7 builders vs hyperscalers",
    "species": "chart",
    "document": {
     "path": "Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-mega-vs-spy-v3.png",
     "sha256": "e4bbff008541151e385442360cebe87d0ac8a73bb719ee2e2091a7a09e3262f2"
    },
-   "badges": []
+   "badges": [
+    {
+     "label": "BUILDERS",
+     "value": "+300%",
+     "tag": "since April"
+    },
+    {
+     "label": "HYPERSCALERS",
+     "value": "flat",
+     "tag": "12 months"
+    }
+   ]
   },
   "ev-railway-index-v1": {
-   "title": "Railway Index",
-   "source": "Money Physics \u2014 built evidence",
+   "title": "The Railway Index",
+   "source": "Campbell & Turner \u00b7 442 companies",
    "species": "chart",
    "document": {
     "path": "Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-railway-index-v1.png",
     "sha256": "b1f0d752a85e2fc344f9f5c9a7c7bfea6dfd407f8b9fd02af00b68f7e9d7e7e0"
    },
-   "badges": []
+   "badges": [
+    {
+     "label": "PEAK",
+     "value": "6 Oct 1845",
+     "tag": ""
+    },
+    {
+     "label": "TROUGH",
+     "value": "\u221264.1%",
+     "tag": "April 1850"
+    }
+   ]
   },
   "ev-railway-gdp-tile-v1": {
-   "title": "Railway Gdp Tile",
-   "source": "Money Physics \u2014 built evidence",
+   "title": "Capital Committed",
+   "source": "share of GDP at the peak",
    "species": "tile",
    "document": {
     "path": "Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-railway-gdp-tile-v1.png",
     "sha256": "ef22010ad7a7f4c6ee52a30e5cc06c29e89f195f1ba7816d3beca179925a269d"
    },
-   "badges": []
+   "badges": [
+    {
+     "label": "RAILWAYS",
+     "value": "~7%",
+     "tag": "of British GDP"
+    },
+    {
+     "label": "AI BUILD",
+     "value": "~8%",
+     "tag": "of US GDP"
+    }
+   ]
   },
   "ev-equip-ipp-gdp-v1": {
-   "title": "Equip Ipp Gdp",
-   "source": "Money Physics \u2014 built evidence",
+   "title": "Equipment + Software / GDP",
+   "source": "BEA \u00b7 government statisticians",
    "species": "chart",
    "document": {
     "path": "Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-equip-ipp-gdp-v1.png",
     "sha256": "13437f6971b6f3e4cb5d036a8cd9f1589f4707f8d11fd9eeae7cef47c666200e"
    },
-   "badges": []
+   "badges": [
+    {
+     "label": "2000 PEAK",
+     "value": "11.54%",
+     "tag": ""
+    },
+    {
+     "label": "TODAY",
+     "value": "11.51%",
+     "tag": "0.03pp short"
+    }
+   ]
   },
   "ev-tnx-two-eras-v3": {
-   "title": "Tnx Two Eras",
-   "source": "Money Physics \u2014 built evidence",
+   "title": "The Rate Trigger",
+   "source": "two manias, one threshold",
    "species": "chart",
    "document": {
     "path": "Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-tnx-two-eras-v3.png",
     "sha256": "1855258421ba215f72a5fb66dcda634a6419c7164b8a5b9f51dec8e07adaac90"
    },
-   "badges": []
+   "badges": [
+    {
+     "label": "BoE 1845",
+     "value": ">6%",
+     "tag": "railways rolled"
+    },
+    {
+     "label": "FED 2000",
+     "value": "6.5%",
+     "tag": "internet rolled"
+    }
+   ]
   },
   "ev-doc-karp": {
-   "title": "Doc Karp",
-   "source": "Money Physics \u2014 built evidence",
+   "title": "Alex Karp, Palantir",
+   "source": "CNBC, live",
    "species": "record",
    "document": {
     "path": "Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-doc-karp.png",
     "sha256": "a3b128019868c478e6f785df8e8a95b2e48f13773a8b8366b73dee51cf30101b"
    },
-   "badges": []
+   "badges": [
+    {
+     "label": "VERBATIM",
+     "value": "\u201cpaying for tokens that create no value\u201d",
+     "tag": ""
+    }
+   ]
   },
   "ev-uber-adoption-v1": {
-   "title": "Uber Adoption",
-   "source": "Money Physics \u2014 built evidence",
+   "title": "Uber's AI Budget",
+   "source": "CTO, on the record",
    "species": "chart",
    "document": {
     "path": "Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-uber-adoption-v1.png",
     "sha256": "c16dd5f9a01d450bac24189952b1d3bd2a3f23c383c656c63c8e5c50a448b426"
    },
-   "badges": []
+   "badges": [
+    {
+     "label": "ANNUAL BUDGET",
+     "value": "spent by April",
+     "tag": "4 months"
+    }
+   ]
   },
   "ev-three-manias": {
-   "title": "Three Manias",
-   "source": "Money Physics \u2014 built evidence",
+   "title": "Three Manias, One Test",
+   "source": "capital \u00b7 pricing \u00b7 outcome",
    "species": "table",
    "document": {
     "path": "Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-three-manias.png",
     "sha256": "235a8d3fafa6eca0abcf5e3a0590369db7e9792182375b162978d0116bb99657"
    },
-   "badges": []
+   "badges": [
+    {
+     "label": "1840s",
+     "value": "\u221264.1%",
+     "tag": ""
+    },
+    {
+     "label": "1999",
+     "value": "collapse",
+     "tag": ""
+    },
+    {
+     "label": "2024\u201326",
+     "value": "open",
+     "tag": ""
+    }
+   ]
   },
   "ev-debt-issuance-v2": {
-   "title": "Debt Issuance",
-   "source": "Money Physics \u2014 built evidence",
+   "title": "Hyperscaler Borrowing",
+   "source": "Morgan Stanley IM \u00b7 Mellon",
    "species": "chart",
    "document": {
     "path": "Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-debt-issuance-v2.png",
     "sha256": "d1ff929433b67d2fa4257bd97c4a5295090123906fbbcb6bab20bc2b31df7df3"
    },
-   "badges": []
+   "badges": [
+    {
+     "label": "2020\u201324 AVG",
+     "value": "$28B",
+     "tag": "a year"
+    },
+    {
+     "label": "2025",
+     "value": "$121B",
+     "tag": ""
+    },
+    {
+     "label": "2026E",
+     "value": "$130\u2013150B",
+     "tag": ""
+    }
+   ]
   },
   "ev-ig-credit-weighting-v1": {
-   "title": "Ig Credit Weighting",
-   "source": "Money Physics \u2014 built evidence",
+   "title": "Tech in the IG Index",
+   "source": "the pool your bond fund buys from",
    "species": "chart",
    "document": {
     "path": "Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-ig-credit-weighting-v1.png",
     "sha256": "e050dffe718214a75e548a19dfeed4967be4352aa64414ad4bb4eab0189b6076"
    },
-   "badges": []
+   "badges": [
+    {
+     "label": "2024",
+     "value": "~9%",
+     "tag": ""
+    },
+    {
+     "label": "NOW",
+     "value": "10%",
+     "tag": ""
+    },
+    {
+     "label": "PROJECTED",
+     "value": ">12%",
+     "tag": ""
+    }
+   ]
   },
   "ev-capex-consensus-v1": {
    "title": "Capex Consensus",
-   "source": "Money Physics \u2014 built evidence",
+   "source": "PIMCO \u00b7 five largest hyperscalers",
    "species": "chart",
    "document": {
     "path": "Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-capex-consensus-v1.png",
     "sha256": "ef832b23da098d772433c10c05ebb215913ec4c296403af6ab5a3ba012670182"
    },
-   "badges": []
+   "badges": [
+    {
+     "label": "YEAR OPEN",
+     "value": "$480B",
+     "tag": ""
+    },
+    {
+     "label": "NOW",
+     "value": "$690B",
+     "tag": "this year"
+    }
+   ]
   },
   "ev-doc-leases": {
-   "title": "Doc Leases",
-   "source": "Money Physics \u2014 built evidence",
+   "title": "Off-Balance-Sheet Leases",
+   "source": "PIMCO, from 10-Qs",
    "species": "record",
    "document": {
     "path": "Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-doc-leases.png",
     "sha256": "75e98c9e44fd3eb7ad7c65fa9ca6300a9205433f9ff4b48d29e2fa899a0349f8"
    },
-   "badges": []
+   "badges": [
+    {
+     "label": "COMMITMENTS",
+     "value": "$822B",
+     "tag": "not on a balance sheet"
+    }
+   ]
   },
   "ev-doc-macdonald": {
-   "title": "Doc Macdonald",
-   "source": "Money Physics \u2014 built evidence",
+   "title": "Buildout vs Operating Cash",
+   "source": "PIMCO \u00b7 next two years",
    "species": "record",
    "document": {
     "path": "Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-doc-macdonald.png",
     "sha256": "c82a64869507df6a41ce078012babcc95b38e332a47ed8dcaa3c3efd196398a0"
    },
-   "badges": []
+   "badges": [
+    {
+     "label": "CONSUMES",
+     "value": "94%",
+     "tag": "of operating cash flow"
+    }
+   ]
+  },
+  "ev-railway-mileage-v1": {
+   "title": "Railway Certificates",
+   "source": "paper priced off the best year",
+   "species": "chart",
+   "document": {
+    "path": "Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-railway-mileage-v1.png",
+    "sha256": "4a7f35085b42c35d7a4ac39791239c28f1676502eb212c1fb6bee307a2e52121"
+   },
+   "badges": [
+    {
+     "label": "RETURNS PRICED",
+     "value": "3 years",
+     "tag": ""
+    },
+    {
+     "label": "RETURNS ARRIVED",
+     "value": "20 years",
+     "tag": ""
+    }
+   ]
   },
   "silicon-antidote-s02-valuation-bubble-v1": {
-   "title": "Silicon Antidote S02 Valuation Bubble V1",
-   "source": "Research deck",
+   "title": "Index Concentration",
+   "source": "AI builders in the S&P 500",
    "species": "deck",
    "document": {
     "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\sources\\decks\\silicon-antidote\\semantic-assets\\assets\\silicon-antidote-s02-valuation-bubble-v1.png",
     "sha256": "237df91e6c7beeeff9b9a837739d8c155089d74caf1230d4191e3e79d716ce31"
    },
-   "badges": []
+   "badges": [
+    {
+     "label": "NOW",
+     "value": "20%",
+     "tag": "of the index"
+    },
+    {
+     "label": "HISTORIC",
+     "value": "2\u20134%",
+     "tag": ""
+    }
+   ]
   },
   "ev-smh-drawdown-v3": {
-   "title": "Smh Drawdown",
-   "source": "Money Physics \u2014 built evidence",
+   "title": "If The Names Fall By Half",
+   "source": "arithmetic on a fifth of the index",
    "species": "chart",
    "document": {
     "path": "Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-smh-drawdown-v3.png",
     "sha256": "1d466bbad73ce5650c3051dcf65598245b84c9cd99aab52d59f24d2c64351484"
    },
-   "badges": []
+   "badges": [
+    {
+     "label": "ERASES",
+     "value": "10%",
+     "tag": "of \u201cthe market\u201d"
+    },
+    {
+     "label": "NO VOTE",
+     "value": "490",
+     "tag": "other companies"
+    }
+   ]
   },
   "silicon-antidote-s11-teacher-stamped": {
-   "title": "S11",
-   "source": "Silicon Antidote",
+   "title": "Locked Forward",
+   "source": "multi-year agreements, not spot",
    "species": "deck",
    "document": {
     "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\sources\\decks\\teacher-stamped-production-visuals\\silicon-antidote\\slides\\slide-011.png",
     "sha256": "22fab40b2424fe8c3e7844e738e92839d6d966d03215a304cec3910e31b24157"
    },
-   "badges": []
+   "badges": [
+    {
+     "label": "ORDERS",
+     "value": "in",
+     "tag": ""
+    },
+    {
+     "label": "SLOTS",
+     "value": "gone",
+     "tag": ""
+    }
+   ]
   },
   "sovereign-memory-infrastructure-s10-teacher-stamped": {
-   "title": "S10",
-   "source": "Sovereign Memory Infrastructure",
+   "title": "Sovereign Stacks",
+   "source": "national AI programs, same hardware",
    "species": "deck",
    "document": {
     "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\sources\\decks\\teacher-stamped-production-visuals\\sovereign-memory-infrastructure\\slides\\slide-010.png",
     "sha256": "810023ce67b0fec1d6e6e6b82ae7683ad9441aaee7342861698fa0db21268647"
    },
-   "badges": []
+   "badges": [
+    {
+     "label": "DEMAND",
+     "value": "different",
+     "tag": ""
+    },
+    {
+     "label": "CLOCK",
+     "value": "different",
+     "tag": ""
+    }
+   ]
   },
   "ev-mechanism-ladder": {
-   "title": "Mechanism Ladder",
-   "source": "Money Physics \u2014 built evidence",
+   "title": "The Test",
+   "source": "three questions, thirty seconds",
    "species": "table",
    "document": {
     "path": "Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-mechanism-ladder.png",
     "sha256": "38f6b2247b3bd2c05ffccd029ecbbd6c4bf21e03d561b401c0c370fabd563d03"
    },
-   "badges": []
-  },
-  "ev-krx-memory-v3": {
-   "title": "Krx Memory",
-   "source": "Money Physics \u2014 built evidence",
-   "species": "chart",
-   "document": {
-    "path": "Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-krx-memory-v3.png",
-    "sha256": "b587976af8b365482bcefa1551df1df85b99b6d65e687b261ae7c6b150d4c567"
-   },
-   "badges": []
-  },
-  "silicon-reality-gap-s07-hbm-stack-v1": {
-   "title": "Silicon Reality Gap S07 Hbm Stack V1",
-   "source": "Research deck",
-   "species": "deck",
-   "document": {
-    "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\sources\\decks\\silicon-reality-gap\\semantic-assets\\assets\\silicon-reality-gap-s07-hbm-stack-v1.png",
-    "sha256": "cb8adea734d4db3f1efb70d5ce6e36e91e41446fba6315dea47848f6e076ce35"
-   },
-   "badges": []
-  },
-  "ev-hbm-wafer-ratio-v1": {
-   "title": "Hbm Wafer Ratio",
-   "source": "Money Physics \u2014 built evidence",
-   "species": "tile",
-   "document": {
-    "path": "Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-hbm-wafer-ratio-v1.png",
-    "sha256": "f676e8fa7f4b77a24c564614f985eefe63d001747153389e56daa8f2dc89b5aa"
-   },
-   "badges": []
-  },
-  "silicon-antidote-s09-capacity-penalty-v1": {
-   "title": "Silicon Antidote S09 Capacity Penalty V1",
-   "source": "Research deck",
-   "species": "deck",
-   "document": {
-    "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\sources\\decks\\silicon-antidote\\semantic-assets\\assets\\silicon-antidote-s09-capacity-penalty-v1.png",
-    "sha256": "e79f750cc11016a73f966d03c89b136779ff0c716a7011859cedb10ee4c61e89"
-   },
-   "badges": []
-  },
-  "ev-dram-contract-v1": {
-   "title": "Dram Contract",
-   "source": "Money Physics \u2014 built evidence",
-   "species": "chart",
-   "document": {
-    "path": "Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-dram-contract-v1.png",
-    "sha256": "7dc87e3a80487feac0c5a191c33dc094a36409f025829e0fbad4cbc9643d6fc6"
-   },
-   "badges": []
+   "badges": [
+    {
+     "label": "STEEL",
+     "value": "scarce \u00b7 cash \u00b7 used",
+     "tag": ""
+    },
+    {
+     "label": "PAPER",
+     "value": "abundant \u00b7 issued \u00b7 believed",
+     "tag": ""
+    }
+   ]
   },
   "silicon-antidote-s02-memory-triopoly-v1": {
-   "title": "Silicon Antidote S02 Memory Triopoly V1",
-   "source": "Research deck",
+   "title": "The Memory Triopoly",
+   "source": "Samsung \u00b7 Micron \u00b7 SK hynix",
    "species": "deck",
    "document": {
     "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\sources\\decks\\silicon-antidote\\semantic-assets\\assets\\silicon-antidote-s02-memory-triopoly-v1.png",
     "sha256": "f37858b19c7507251746f9a8ff786644d683b4a107134ba935b1a064d37e0788"
    },
-   "badges": []
-  },
-  "ev-instrument-memory": {
-   "title": "Instrument Memory",
-   "source": "Money Physics \u2014 built evidence",
-   "species": "instrument",
-   "document": {
-    "path": "Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-instrument-memory.png",
-    "sha256": "1f56a1a811c90a8d68e4c90cc177dd96b126a33b7821094d8388585e64b371fd"
-   },
-   "badges": []
-  },
-  "ev-hbm-export-series": {
-   "title": "Hbm Export Series",
-   "source": "Money Physics \u2014 built evidence",
-   "species": "chart",
-   "document": {
-    "path": "Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-hbm-export-series.png",
-    "sha256": "70dbc5b0c3839a887162e20b30fc19cdaa4981bf01450bab7a6c0851f8d7ff3b"
-   },
-   "badges": []
+   "badges": [
+    {
+     "label": "SCARCE",
+     "value": "yes",
+     "tag": ""
+    },
+    {
+     "label": "CASH",
+     "value": "yes",
+     "tag": ""
+    },
+    {
+     "label": "USED",
+     "value": "yes",
+     "tag": ""
+    }
+   ]
   },
   "silicon-antidote-s14-diagnostic-matrix-v1": {
-   "title": "Silicon Antidote S14 Diagnostic Matrix V1",
-   "source": "Research deck",
+   "title": "The Divergence, Read Again",
+   "source": "scarcity repriced vs question three",
    "species": "deck",
    "document": {
     "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\sources\\decks\\silicon-antidote\\semantic-assets\\assets\\silicon-antidote-s14-diagnostic-matrix-v1.png",
     "sha256": "319b14a29db724e922a4f7e4bd9262b4354fb667a1aeacd3b704e54d74531b5d"
    },
-   "badges": []
+   "badges": [
+    {
+     "label": "CHIPMAKERS",
+     "value": "+300%",
+     "tag": "scarcity repriced"
+    },
+    {
+     "label": "HYPERSCALERS",
+     "value": "flat",
+     "tag": "answering Q3"
+    }
+   ]
+  },
+  "ev-krx-memory-v3": {
+   "title": "SK hynix",
+   "source": "the most extreme number on the board",
+   "species": "chart",
+   "document": {
+    "path": "Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-krx-memory-v3.png",
+    "sha256": "b587976af8b365482bcefa1551df1df85b99b6d65e687b261ae7c6b150d4c567"
+   },
+   "badges": [
+    {
+     "label": "1-YEAR",
+     "value": "+517.5%",
+     "tag": ""
+    },
+    {
+     "label": "NOT",
+     "value": "+50%",
+     "tag": ""
+    }
+   ]
+  },
+  "silicon-reality-gap-s07-hbm-stack-v1": {
+   "title": "High-Bandwidth Memory",
+   "source": "dies stacked vertically",
+   "species": "deck",
+   "document": {
+    "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\sources\\decks\\silicon-reality-gap\\semantic-assets\\assets\\silicon-reality-gap-s07-hbm-stack-v1.png",
+    "sha256": "cb8adea734d4db3f1efb70d5ce6e36e91e41446fba6315dea47848f6e076ce35"
+   },
+   "badges": [
+    {
+     "label": "STRUCTURE",
+     "value": "stacked die + TSV",
+     "tag": ""
+    }
+   ]
+  },
+  "ev-hbm-wafer-ratio-v1": {
+   "title": "The Capacity Penalty",
+   "source": "per gigabyte, against standard DRAM",
+   "species": "tile",
+   "document": {
+    "path": "Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-hbm-wafer-ratio-v1.png",
+    "sha256": "f676e8fa7f4b77a24c564614f985eefe63d001747153389e56daa8f2dc89b5aa"
+   },
+   "badges": [
+    {
+     "label": "HBM EATS",
+     "value": "~3\u00d7",
+     "tag": "the wafer capacity"
+    }
+   ]
+  },
+  "silicon-antidote-s09-capacity-penalty-v1": {
+   "title": "Three To One",
+   "source": "every accelerator fed takes silicon",
+   "species": "deck",
+   "document": {
+    "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\sources\\decks\\silicon-antidote\\semantic-assets\\assets\\silicon-antidote-s09-capacity-penalty-v1.png",
+    "sha256": "e79f750cc11016a73f966d03c89b136779ff0c716a7011859cedb10ee4c61e89"
+   },
+   "badges": [
+    {
+     "label": "PENALTY",
+     "value": "3:1",
+     "tag": "vs standard DRAM"
+    }
+   ]
+  },
+  "ev-dram-contract-v1": {
+   "title": "Sold Out For The Year",
+   "source": "SK hynix, October earnings call",
+   "species": "chart",
+   "document": {
+    "path": "Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-dram-contract-v1.png",
+    "sha256": "7dc87e3a80487feac0c5a191c33dc094a36409f025829e0fbad4cbc9643d6fc6"
+   },
+   "badges": [
+    {
+     "label": "VERBATIM",
+     "value": "\u201cessentially sold out\u201d",
+     "tag": "for the year"
+    }
+   ]
+  },
+  "ev-instrument-memory": {
+   "title": "Memory Export Instrument",
+   "source": "Korea Customs HS 8542.32 \u00b7 value-weighted",
+   "species": "instrument",
+   "document": {
+    "path": "Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-instrument-memory.png",
+    "sha256": "1f56a1a811c90a8d68e4c90cc177dd96b126a33b7821094d8388585e64b371fd"
+   },
+   "badges": [
+    {
+     "label": "METHOD",
+     "value": "$USD \u00f7 \u03a3kg",
+     "tag": ""
+    },
+    {
+     "label": "TRIPWIRE",
+     "value": "below trailing avg",
+     "tag": "2 quarters"
+    }
+   ]
+  },
+  "ev-hbm-export-series": {
+   "title": "Latest Reading",
+   "source": "data period 2026-07 \u00b7 customs ~1mo behind",
+   "species": "chart",
+   "document": {
+    "path": "Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-hbm-export-series.png",
+    "sha256": "70dbc5b0c3839a887162e20b30fc19cdaa4981bf01450bab7a6c0851f8d7ff3b"
+   },
+   "badges": [
+    {
+     "label": "DRAM",
+     "value": "+17.4%",
+     "tag": ""
+    },
+    {
+     "label": "HBM-CLASS",
+     "value": "+14.1%",
+     "tag": ""
+    },
+    {
+     "label": "STATUS",
+     "value": "armed",
+     "tag": "not lit"
+    }
+   ]
   }
  },
  "scenes": [
@@ -21107,9 +21413,12 @@
     {
      "slide": "ev-mega-vs-spy-v3",
      "slot": 0,
-     "enter": 26.55,
-     "exit": 33.9,
-     "badge_at": []
+     "enter": 26.4,
+     "exit": 42.01,
+     "badge_at": [
+      28.45,
+      29.75
+     ]
     }
    ]
   },
@@ -21205,9 +21514,12 @@
     {
      "slide": "ev-railway-index-v1",
      "slot": 0,
-     "enter": 85.16,
-     "exit": 92.51,
-     "badge_at": []
+     "enter": 85.01,
+     "exit": 94.02,
+     "badge_at": [
+      87.06,
+      88.36
+     ]
     }
    ]
   },
@@ -21231,9 +21543,22 @@
     {
      "slide": "ev-railway-gdp-tile-v1",
      "slot": 0,
-     "enter": 99.31,
-     "exit": 106.66,
-     "badge_at": []
+     "enter": 93.3,
+     "exit": 103.43,
+     "badge_at": [
+      95.35,
+      96.65
+     ]
+    },
+    {
+     "slide": "ev-equip-ipp-gdp-v1",
+     "slot": 1,
+     "enter": 102.6,
+     "exit": 129.39,
+     "badge_at": [
+      104.65,
+      105.95
+     ]
     }
    ]
   },
@@ -21248,20 +21573,12 @@
      "y": -10
     }
    },
-   "exit": "wipe_right",
+   "exit": "cut",
    "span": [
     105.56,
     118.89
    ],
-   "docks": [
-    {
-     "slide": "ev-equip-ipp-gdp-v1",
-     "slot": 0,
-     "enter": 112.64,
-     "exit": 119.99,
-     "badge_at": []
-    }
-   ]
+   "docks": []
   },
   {
    "scene_id": "s11",
@@ -21301,9 +21618,12 @@
     {
      "slide": "ev-tnx-two-eras-v3",
      "slot": 0,
-     "enter": 136.07,
-     "exit": 143.42,
-     "badge_at": []
+     "enter": 130.07,
+     "exit": 148.2,
+     "badge_at": [
+      132.12,
+      133.42
+     ]
     }
    ]
   },
@@ -21381,9 +21701,11 @@
     {
      "slide": "ev-doc-karp",
      "slot": 0,
-     "enter": 183.42,
-     "exit": 192.85,
-     "badge_at": []
+     "enter": 183.27,
+     "exit": 195.8,
+     "badge_at": [
+      185.32
+     ]
     }
    ]
   },
@@ -21407,9 +21729,11 @@
     {
      "slide": "ev-uber-adoption-v1",
      "slot": 0,
-     "enter": 195.39,
-     "exit": 202.74,
-     "badge_at": []
+     "enter": 195.24,
+     "exit": 214.18,
+     "badge_at": [
+      197.29
+     ]
     }
    ]
   },
@@ -21442,12 +21766,24 @@
      "y": -10
     }
    },
-   "exit": "cut",
+   "exit": "wipe_right",
    "span": [
     211.71,
     221.79
    ],
-   "docks": []
+   "docks": [
+    {
+     "slide": "ev-three-manias",
+     "slot": 0,
+     "enter": 215.35,
+     "exit": 242.18,
+     "badge_at": [
+      217.4,
+      218.7,
+      220.0
+     ]
+    }
+   ]
   },
   {
    "scene_id": "s20",
@@ -21460,20 +21796,12 @@
      "y": -10
     }
    },
-   "exit": "wipe_right",
+   "exit": "cut",
    "span": [
     221.79,
     237.86
    ],
-   "docks": [
-    {
-     "slide": "ev-three-manias",
-     "slot": 0,
-     "enter": 231.61,
-     "exit": 238.96,
-     "badge_at": []
-    }
-   ]
+   "docks": []
   },
   {
    "scene_id": "s21",
@@ -21513,9 +21841,13 @@
     {
      "slide": "ev-debt-issuance-v2",
      "slot": 0,
-     "enter": 255.55,
-     "exit": 262.9,
-     "badge_at": []
+     "enter": 255.4,
+     "exit": 266.28,
+     "badge_at": [
+      257.45,
+      258.75,
+      260.05
+     ]
     }
    ]
   },
@@ -21539,9 +21871,13 @@
     {
      "slide": "ev-ig-credit-weighting-v1",
      "slot": 0,
-     "enter": 270.96,
-     "exit": 278.31,
-     "badge_at": []
+     "enter": 265.36,
+     "exit": 286.3,
+     "badge_at": [
+      267.41,
+      268.71,
+      270.01
+     ]
     }
    ]
   },
@@ -21583,9 +21919,12 @@
     {
      "slide": "ev-capex-consensus-v1",
      "slot": 0,
-     "enter": 291.88,
-     "exit": 299.23,
-     "badge_at": []
+     "enter": 285.62,
+     "exit": 297.85,
+     "badge_at": [
+      287.67,
+      288.97
+     ]
     }
    ]
   },
@@ -21609,9 +21948,11 @@
     {
      "slide": "ev-doc-leases",
      "slot": 0,
-     "enter": 302.74,
-     "exit": 310.09,
-     "badge_at": []
+     "enter": 302.59,
+     "exit": 319.56,
+     "badge_at": [
+      304.64
+     ]
     }
    ]
   },
@@ -21653,9 +21994,11 @@
     {
      "slide": "ev-doc-macdonald",
      "slot": 0,
-     "enter": 322.12,
-     "exit": 330.53,
-     "badge_at": []
+     "enter": 318.73,
+     "exit": 336.55,
+     "badge_at": [
+      320.78
+     ]
     }
    ]
   },
@@ -21724,12 +22067,23 @@
      "y": -10
     }
    },
-   "exit": "cut",
+   "exit": "wipe_right",
    "span": [
     358.63,
     368.37
    ],
-   "docks": []
+   "docks": [
+    {
+     "slide": "ev-railway-mileage-v1",
+     "slot": 0,
+     "enter": 364.34,
+     "exit": 375.2,
+     "badge_at": [
+      366.39,
+      367.69
+     ]
+    }
+   ]
   },
   {
    "scene_id": "s33",
@@ -21751,9 +22105,12 @@
     {
      "slide": "silicon-antidote-s02-valuation-bubble-v1",
      "slot": 0,
-     "enter": 377.85,
-     "exit": 385.2,
-     "badge_at": []
+     "enter": 374.25,
+     "exit": 392.84,
+     "badge_at": [
+      376.3,
+      377.6
+     ]
     }
    ]
   },
@@ -21777,9 +22134,12 @@
     {
      "slide": "ev-smh-drawdown-v3",
      "slot": 0,
-     "enter": 393.49,
-     "exit": 403.29,
-     "badge_at": []
+     "enter": 392.05,
+     "exit": 402.79,
+     "badge_at": [
+      394.1,
+      395.4
+     ]
     }
    ]
   },
@@ -21839,16 +22199,22 @@
     {
      "slide": "silicon-antidote-s11-teacher-stamped",
      "slot": 0,
-     "enter": 434.66,
-     "exit": 442.01,
-     "badge_at": []
+     "enter": 434.51,
+     "exit": 445.9,
+     "badge_at": [
+      436.56,
+      437.86
+     ]
     },
     {
      "slide": "sovereign-memory-infrastructure-s10-teacher-stamped",
      "slot": 1,
-     "enter": 439.69,
-     "exit": 447.04,
-     "badge_at": []
+     "enter": 439.54,
+     "exit": 444.01,
+     "badge_at": [
+      441.59,
+      442.89
+     ]
     }
    ]
   },
@@ -21872,9 +22238,12 @@
     {
      "slide": "ev-mechanism-ladder",
      "slot": 0,
-     "enter": 457.45,
-     "exit": 464.8,
-     "badge_at": []
+     "enter": 454.53,
+     "exit": 487.43,
+     "badge_at": [
+      456.58,
+      457.88
+     ]
     }
    ]
   },
@@ -21907,12 +22276,24 @@
      "y": -10
     }
    },
-   "exit": "cut",
+   "exit": "wipe_right",
    "span": [
     473.48,
     483.26
    ],
-   "docks": []
+   "docks": [
+    {
+     "slide": "silicon-antidote-s02-memory-triopoly-v1",
+     "slot": 0,
+     "enter": 478.38,
+     "exit": 568.41,
+     "badge_at": [
+      480.43,
+      481.73,
+      483.03
+     ]
+    }
+   ]
   },
   {
    "scene_id": "s41",
@@ -21925,12 +22306,23 @@
      "y": -10
     }
    },
-   "exit": "cut",
+   "exit": "wipe_right",
    "span": [
     483.26,
     493.04
    ],
-   "docks": []
+   "docks": [
+    {
+     "slide": "silicon-antidote-s14-diagnostic-matrix-v1",
+     "slot": 0,
+     "enter": 486.51,
+     "exit": 503.75,
+     "badge_at": [
+      488.56,
+      489.86
+     ]
+    }
+   ]
   },
   {
    "scene_id": "s42",
@@ -21970,9 +22362,12 @@
     {
      "slide": "ev-krx-memory-v3",
      "slot": 0,
-     "enter": 512.35,
-     "exit": 519.7,
-     "badge_at": []
+     "enter": 507.78,
+     "exit": 522.55,
+     "badge_at": [
+      509.83,
+      511.13
+     ]
     }
    ]
   },
@@ -21996,23 +22391,29 @@
     {
      "slide": "silicon-reality-gap-s07-hbm-stack-v1",
      "slot": 0,
-     "enter": 526.81,
-     "exit": 534.16,
-     "badge_at": []
+     "enter": 522.9,
+     "exit": 530.34,
+     "badge_at": [
+      524.95
+     ]
     },
     {
      "slide": "ev-hbm-wafer-ratio-v1",
      "slot": 1,
-     "enter": 529.61,
-     "exit": 536.96,
-     "badge_at": []
+     "enter": 529.46,
+     "exit": 544.54,
+     "badge_at": [
+      531.51
+     ]
     },
     {
      "slide": "silicon-antidote-s09-capacity-penalty-v1",
      "slot": 0,
-     "enter": 534.21,
-     "exit": 541.56,
-     "badge_at": []
+     "enter": 534.06,
+     "exit": 539.41,
+     "badge_at": [
+      536.11
+     ]
     }
    ]
   },
@@ -22036,9 +22437,11 @@
     {
      "slide": "ev-dram-contract-v1",
      "slot": 0,
-     "enter": 547.44,
-     "exit": 554.98,
-     "badge_at": []
+     "enter": 543.93,
+     "exit": 562.62,
+     "badge_at": [
+      545.98
+     ]
     }
    ]
   },
@@ -22053,20 +22456,12 @@
      "y": -10
     }
    },
-   "exit": "wipe_right",
+   "exit": "cut",
    "span": [
     553.88,
     571.51
    ],
-   "docks": [
-    {
-     "slide": "silicon-antidote-s02-memory-triopoly-v1",
-     "slot": 0,
-     "enter": 565.26,
-     "exit": 572.61,
-     "badge_at": []
-    }
-   ]
+   "docks": []
   },
   {
    "scene_id": "s47",
@@ -22124,9 +22519,12 @@
     {
      "slide": "ev-instrument-memory",
      "slot": 0,
-     "enter": 602.08,
-     "exit": 609.43,
-     "badge_at": []
+     "enter": 594.2,
+     "exit": 608.73,
+     "badge_at": [
+      596.25,
+      597.55
+     ]
     }
    ]
   },
@@ -22150,9 +22548,13 @@
     {
      "slide": "ev-hbm-export-series",
      "slot": 0,
-     "enter": 609.25,
-     "exit": 617.3,
-     "badge_at": []
+     "enter": 609.1,
+     "exit": 620.16,
+     "badge_at": [
+      611.15,
+      612.45,
+      613.75
+     ]
     }
    ]
   },
@@ -22257,20 +22659,12 @@
      "y": -10
     }
    },
-   "exit": "wipe_right",
+   "exit": "cut",
    "span": [
     666.76,
     682.87
    ],
-   "docks": [
-    {
-     "slide": "silicon-antidote-s14-diagnostic-matrix-v1",
-     "slot": 0,
-     "enter": 676.62,
-     "exit": 683.97,
-     "badge_at": []
-    }
-   ]
+   "docks": []
   },
   {
    "scene_id": "s57",

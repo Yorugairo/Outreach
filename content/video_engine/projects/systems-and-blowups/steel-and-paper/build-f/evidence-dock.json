@@ -2,190 +2,602 @@
  {
   "asset": "ev-mega-vs-spy-v3",
   "species": "chart",
-  "at": 26.8,
-  "end": 30.15,
-  "anchor": "One is the builders of AI \u2014 chips, racks, power."
+  "at": 26.4,
+  "end": 42.01,
+  "anchor": "One is the builders of AI \u2014 chips, racks, power.",
+  "hold": 15.62,
+  "title": "The Divergence",
+  "source": "Bravos Research \u00b7 builders vs hyperscalers",
+  "badges": [
+   {
+    "label": "BUILDERS",
+    "value": "+300%",
+    "tag": "since April"
+   },
+   {
+    "label": "HYPERSCALERS",
+    "value": "flat",
+    "tag": "12 months"
+   }
+  ]
  },
  {
   "asset": "ev-railway-index-v1",
   "species": "chart",
-  "at": 85.41,
-  "end": 90.56,
-  "anchor": "Railways in the 1840s drew a quarter-billion pounds \u2014 mo"
+  "at": 85.01,
+  "end": 94.02,
+  "anchor": "Railways in the 1840s drew a quarter-billion pounds \u2014 ",
+  "hold": 9.01,
+  "title": "The Railway Index",
+  "source": "Campbell & Turner \u00b7 442 companies",
+  "badges": [
+   {
+    "label": "PEAK",
+    "value": "6 Oct 1845",
+    "tag": ""
+   },
+   {
+    "label": "TROUGH",
+    "value": "\u221264.1%",
+    "tag": "April 1850"
+   }
+  ]
  },
  {
   "asset": "ev-railway-gdp-tile-v1",
   "species": "tile",
-  "at": 99.56,
-  "end": 102.83,
-  "anchor": "And by Bravos' math, AI spending just crossed eight."
+  "at": 93.3,
+  "end": 103.43,
+  "anchor": "In two thousand, the internet crossed seven percent of",
+  "hold": 10.13,
+  "title": "Capital Committed",
+  "source": "share of GDP at the peak",
+  "badges": [
+   {
+    "label": "RAILWAYS",
+    "value": "~7%",
+    "tag": "of British GDP"
+   },
+   {
+    "label": "AI BUILD",
+    "value": "~8%",
+    "tag": "of US GDP"
+   }
+  ]
  },
  {
   "asset": "ev-equip-ipp-gdp-v1",
   "species": "chart",
-  "at": 112.89,
-  "end": 116.45,
-  "anchor": "Back in 2000, the dot-com peak was eleven point five fou"
+  "at": 102.6,
+  "end": 129.39,
+  "anchor": "So I went and pulled a version of that myself: equipme",
+  "hold": 26.78,
+  "title": "Equipment + Software / GDP",
+  "source": "BEA \u00b7 government statisticians",
+  "badges": [
+   {
+    "label": "2000 PEAK",
+    "value": "11.54%",
+    "tag": ""
+   },
+   {
+    "label": "TODAY",
+    "value": "11.51%",
+    "tag": "0.03pp short"
+   }
+  ]
  },
  {
   "asset": "ev-tnx-two-eras-v3",
   "species": "chart",
-  "at": 136.32,
-  "end": 139.77,
-  "anchor": "Bank of England above six percent: railways rolled over."
+  "at": 130.07,
+  "end": 148.2,
+  "anchor": "The mania never dies of old age \u2014 it dies when rates c",
+  "hold": 18.12,
+  "title": "The Rate Trigger",
+  "source": "two manias, one threshold",
+  "badges": [
+   {
+    "label": "BoE 1845",
+    "value": ">6%",
+    "tag": "railways rolled"
+   },
+   {
+    "label": "FED 2000",
+    "value": "6.5%",
+    "tag": "internet rolled"
+   }
+  ]
  },
  {
   "asset": "ev-doc-karp",
   "species": "record",
-  "at": 183.67,
-  "end": 191.75,
-  "anchor": "Alex Karp of Palantir, live on CNBC: enterprises are \u2014 h"
+  "at": 183.27,
+  "end": 195.8,
+  "anchor": "Alex Karp of Palantir, live on CNBC: enterprises are \u2014",
+  "hold": 12.53,
+  "title": "Alex Karp, Palantir",
+  "source": "CNBC, live",
+  "badges": [
+   {
+    "label": "VERBATIM",
+    "value": "\u201cpaying for tokens that create no value\u201d",
+    "tag": ""
+   }
+  ]
  },
  {
   "asset": "ev-uber-adoption-v1",
   "species": "chart",
-  "at": 195.64,
-  "end": 200.25,
-  "anchor": "Uber's CTO says they burned the entire annual AI budget "
+  "at": 195.24,
+  "end": 214.18,
+  "anchor": "Uber's CTO says they burned the entire annual AI budge",
+  "hold": 18.94,
+  "title": "Uber's AI Budget",
+  "source": "CTO, on the record",
+  "badges": [
+   {
+    "label": "ANNUAL BUDGET",
+    "value": "spent by April",
+    "tag": "4 months"
+   }
+  ]
  },
  {
   "asset": "ev-three-manias",
   "species": "table",
-  "at": 231.86,
-  "end": 235.17,
-  "anchor": "And in 1849, the answer wasn't the paper."
+  "at": 215.35,
+  "end": 242.18,
+  "anchor": "That isn't the peak of inflated expectations.",
+  "hold": 26.83,
+  "title": "Three Manias, One Test",
+  "source": "capital \u00b7 pricing \u00b7 outcome",
+  "badges": [
+   {
+    "label": "1840s",
+    "value": "\u221264.1%",
+    "tag": ""
+   },
+   {
+    "label": "1999",
+    "value": "collapse",
+    "tag": ""
+   },
+   {
+    "label": "2024\u201326",
+    "value": "open",
+    "tag": ""
+   }
+  ]
  },
  {
   "asset": "ev-debt-issuance-v2",
   "species": "chart",
-  "at": 255.8,
-  "end": 261.12,
-  "anchor": "Between 2020 and 2024, the biggest builders borrowed abo"
+  "at": 255.4,
+  "end": 266.28,
+  "anchor": "Between 2020 and 2024, the biggest builders borrowed a",
+  "hold": 10.88,
+  "title": "Hyperscaler Borrowing",
+  "source": "Morgan Stanley IM \u00b7 Mellon",
+  "badges": [
+   {
+    "label": "2020\u201324 AVG",
+    "value": "$28B",
+    "tag": "a year"
+   },
+   {
+    "label": "2025",
+    "value": "$121B",
+    "tag": ""
+   },
+   {
+    "label": "2026E",
+    "value": "$130\u2013150B",
+    "tag": ""
+   }
+  ]
  },
  {
   "asset": "ev-ig-credit-weighting-v1",
   "species": "chart",
-  "at": 271.21,
-  "end": 276.88,
-  "anchor": "Technology used to be about nine percent of the investme"
+  "at": 265.36,
+  "end": 286.3,
+  "anchor": "That is not a rounding error in someone's capital stru",
+  "hold": 20.93,
+  "title": "Tech in the IG Index",
+  "source": "the pool your bond fund buys from",
+  "badges": [
+   {
+    "label": "2024",
+    "value": "~9%",
+    "tag": ""
+   },
+   {
+    "label": "NOW",
+    "value": "10%",
+    "tag": ""
+   },
+   {
+    "label": "PROJECTED",
+    "value": ">12%",
+    "tag": ""
+   }
+  ]
  },
  {
   "asset": "ev-capex-consensus-v1",
   "species": "chart",
-  "at": 292.13,
-  "end": 294.6,
-  "anchor": "Consensus now says six hundred and ninety."
+  "at": 285.62,
+  "end": 297.85,
+  "anchor": "And none of this is slowing down.",
+  "hold": 12.23,
+  "title": "Capex Consensus",
+  "source": "PIMCO \u00b7 five largest hyperscalers",
+  "badges": [
+   {
+    "label": "YEAR OPEN",
+    "value": "$480B",
+    "tag": ""
+   },
+   {
+    "label": "NOW",
+    "value": "$690B",
+    "tag": "this year"
+   }
+  ]
  },
  {
   "asset": "ev-doc-leases",
   "species": "record",
-  "at": 302.99,
-  "end": 307.43,
-  "anchor": "Go into the filings and there's another eight hundred an"
+  "at": 302.59,
+  "end": 319.56,
+  "anchor": "Go into the filings and there's another eight hundred ",
+  "hold": 16.97,
+  "title": "Off-Balance-Sheet Leases",
+  "source": "PIMCO, from 10-Qs",
+  "badges": [
+   {
+    "label": "COMMITMENTS",
+    "value": "$822B",
+    "tag": "not on a balance sheet"
+   }
+  ]
  },
  {
   "asset": "ev-doc-macdonald",
   "species": "record",
-  "at": 322.37,
-  "end": 329.43,
-  "anchor": "Over the next two years, PIMCO has this buildout consumi"
+  "at": 318.73,
+  "end": 336.55,
+  "anchor": "Put it together and the arithmetic gets tight.",
+  "hold": 17.81,
+  "title": "Buildout vs Operating Cash",
+  "source": "PIMCO \u00b7 next two years",
+  "badges": [
+   {
+    "label": "CONSUMES",
+    "value": "94%",
+    "tag": "of operating cash flow"
+   }
+  ]
+ },
+ {
+  "asset": "ev-railway-mileage-v1",
+  "species": "chart",
+  "at": 364.34,
+  "end": 375.2,
+  "anchor": "What broke England in 1845 wasn't rail.",
+  "hold": 10.86,
+  "title": "Railway Certificates",
+  "source": "paper priced off the best year",
+  "badges": [
+   {
+    "label": "RETURNS PRICED",
+    "value": "3 years",
+    "tag": ""
+   },
+   {
+    "label": "RETURNS ARRIVED",
+    "value": "20 years",
+    "tag": ""
+   }
+  ]
  },
  {
   "asset": "silicon-antidote-s02-valuation-bubble-v1",
   "species": "deck",
-  "at": 378.1,
-  "end": 381.41,
-  "anchor": "AI builders are now twenty percent of the S&P five hundr"
+  "at": 374.25,
+  "end": 392.84,
+  "anchor": "And Bravos' own number tells you where that paper live",
+  "hold": 18.59,
+  "title": "Index Concentration",
+  "source": "AI builders in the S&P 500",
+  "badges": [
+   {
+    "label": "NOW",
+    "value": "20%",
+    "tag": "of the index"
+   },
+   {
+    "label": "HISTORIC",
+    "value": "2\u20134%",
+    "tag": ""
+   }
+  ]
  },
  {
   "asset": "ev-smh-drawdown-v3",
   "species": "chart",
-  "at": 393.74,
-  "end": 402.19,
-  "anchor": "At a fifth of the index, if the AI names fall by half, t"
+  "at": 392.05,
+  "end": 402.79,
+  "anchor": "Run the arithmetic.",
+  "hold": 10.74,
+  "title": "If The Names Fall By Half",
+  "source": "arithmetic on a fifth of the index",
+  "badges": [
+   {
+    "label": "ERASES",
+    "value": "10%",
+    "tag": "of \u201cthe market\u201d"
+   },
+   {
+    "label": "NO VOTE",
+    "value": "490",
+    "tag": "other companies"
+   }
+  ]
  },
  {
   "asset": "silicon-antidote-s11-teacher-stamped",
   "species": "deck",
-  "at": 434.91,
-  "end": 439.61,
-  "anchor": "And the builders are already sold out into next year \u2014 t"
+  "at": 434.51,
+  "end": 445.9,
+  "anchor": "And the builders are already sold out into next year \u2014",
+  "hold": 11.39,
+  "title": "Locked Forward",
+  "source": "multi-year agreements, not spot",
+  "badges": [
+   {
+    "label": "ORDERS",
+    "value": "in",
+    "tag": ""
+   },
+   {
+    "label": "SLOTS",
+    "value": "gone",
+    "tag": ""
+   }
+  ]
  },
  {
   "asset": "sovereign-memory-infrastructure-s10-teacher-stamped",
   "species": "deck",
-  "at": 439.94,
-  "end": 443.41,
-  "anchor": "Governments are standing up national AI programs on the "
+  "at": 439.54,
+  "end": 444.01,
+  "anchor": "Governments are standing up national AI programs on th",
+  "hold": 4.47,
+  "title": "Sovereign Stacks",
+  "source": "national AI programs, same hardware",
+  "badges": [
+   {
+    "label": "DEMAND",
+    "value": "different",
+    "tag": ""
+   },
+   {
+    "label": "CLOCK",
+    "value": "different",
+    "tag": ""
+   }
+  ]
  },
  {
   "asset": "ev-mechanism-ladder",
   "species": "table",
-  "at": 457.7,
-  "end": 460.13,
-  "anchor": "Take any holding and ask it three questions."
- },
- {
-  "asset": "ev-krx-memory-v3",
-  "species": "chart",
-  "at": 512.6,
-  "end": 515.92,
-  "anchor": "Over the last year the stock is up more than five hundre"
- },
- {
-  "asset": "silicon-reality-gap-s07-hbm-stack-v1",
-  "species": "deck",
-  "at": 527.06,
-  "end": 529.74,
-  "anchor": "High-bandwidth memory stacks the dies vertically."
- },
- {
-  "asset": "ev-hbm-wafer-ratio-v1",
-  "species": "tile",
-  "at": 529.86,
-  "end": 534.31,
-  "anchor": "So a gigabyte of it eats about three times the wafer cap"
- },
- {
-  "asset": "silicon-antidote-s09-capacity-penalty-v1",
-  "species": "deck",
-  "at": 534.46,
-  "end": 538.81,
-  "anchor": "Every accelerator they feed takes silicon away from ever"
- },
- {
-  "asset": "ev-dram-contract-v1",
-  "species": "chart",
-  "at": 547.69,
-  "end": 553.88,
-  "anchor": "Their own earnings call says capacity is essentially sol"
+  "at": 454.53,
+  "end": 487.43,
+  "anchor": "Now the test \u2014 the one from the top.",
+  "hold": 32.9,
+  "title": "The Test",
+  "source": "three questions, thirty seconds",
+  "badges": [
+   {
+    "label": "STEEL",
+    "value": "scarce \u00b7 cash \u00b7 used",
+    "tag": ""
+   },
+   {
+    "label": "PAPER",
+    "value": "abundant \u00b7 issued \u00b7 believed",
+    "tag": ""
+   }
+  ]
  },
  {
   "asset": "silicon-antidote-s02-memory-triopoly-v1",
   "species": "deck",
-  "at": 565.51,
-  "end": 567.81,
-  "anchor": "The most vertical line on the board is steel."
- },
- {
-  "asset": "ev-instrument-memory",
-  "species": "instrument",
-  "at": 602.33,
-  "end": 608.13,
-  "anchor": "The threshold is that number falling below its own trail"
- },
- {
-  "asset": "ev-hbm-export-series",
-  "species": "chart",
-  "at": 609.5,
-  "end": 616.2,
-  "anchor": "Right now it's going the other way \u2014 DRAM up seventeen p"
+  "at": 478.38,
+  "end": 568.41,
+  "anchor": "Steel answers scarce, cash, used.",
+  "hold": 90.03,
+  "title": "The Memory Triopoly",
+  "source": "Samsung \u00b7 Micron \u00b7 SK hynix",
+  "badges": [
+   {
+    "label": "SCARCE",
+    "value": "yes",
+    "tag": ""
+   },
+   {
+    "label": "CASH",
+    "value": "yes",
+    "tag": ""
+   },
+   {
+    "label": "USED",
+    "value": "yes",
+    "tag": ""
+   }
+  ]
  },
  {
   "asset": "silicon-antidote-s14-diagnostic-matrix-v1",
   "species": "deck",
-  "at": 676.87,
-  "end": 682.39,
-  "anchor": "More worried: the index they sold you as the safe versio"
+  "at": 486.51,
+  "end": 503.75,
+  "anchor": "Run it on their divergence chart and it reads differen",
+  "hold": 17.24,
+  "title": "The Divergence, Read Again",
+  "source": "scarcity repriced vs question three",
+  "badges": [
+   {
+    "label": "CHIPMAKERS",
+    "value": "+300%",
+    "tag": "scarcity repriced"
+   },
+   {
+    "label": "HYPERSCALERS",
+    "value": "flat",
+    "tag": "answering Q3"
+   }
+  ]
+ },
+ {
+  "asset": "ev-krx-memory-v3",
+  "species": "chart",
+  "at": 507.78,
+  "end": 522.55,
+  "anchor": "SK hynix.",
+  "hold": 14.77,
+  "title": "SK hynix",
+  "source": "the most extreme number on the board",
+  "badges": [
+   {
+    "label": "1-YEAR",
+    "value": "+517.5%",
+    "tag": ""
+   },
+   {
+    "label": "NOT",
+    "value": "+50%",
+    "tag": ""
+   }
+  ]
+ },
+ {
+  "asset": "silicon-reality-gap-s07-hbm-stack-v1",
+  "species": "deck",
+  "at": 522.9,
+  "end": 530.34,
+  "anchor": "And the scarcity underneath it isn't a mood \u2014 it's phy",
+  "hold": 7.44,
+  "title": "High-Bandwidth Memory",
+  "source": "dies stacked vertically",
+  "badges": [
+   {
+    "label": "STRUCTURE",
+    "value": "stacked die + TSV",
+    "tag": ""
+   }
+  ]
+ },
+ {
+  "asset": "ev-hbm-wafer-ratio-v1",
+  "species": "tile",
+  "at": 529.46,
+  "end": 544.54,
+  "anchor": "So a gigabyte of it eats about three times the wafer c",
+  "hold": 15.08,
+  "title": "The Capacity Penalty",
+  "source": "per gigabyte, against standard DRAM",
+  "badges": [
+   {
+    "label": "HBM EATS",
+    "value": "~3\u00d7",
+    "tag": "the wafer capacity"
+   }
+  ]
+ },
+ {
+  "asset": "silicon-antidote-s09-capacity-penalty-v1",
+  "species": "deck",
+  "at": 534.06,
+  "end": 539.41,
+  "anchor": "Every accelerator they feed takes silicon away from ev",
+  "hold": 5.35,
+  "title": "Three To One",
+  "source": "every accelerator fed takes silicon",
+  "badges": [
+   {
+    "label": "PENALTY",
+    "value": "3:1",
+    "tag": "vs standard DRAM"
+   }
+  ]
+ },
+ {
+  "asset": "ev-dram-contract-v1",
+  "species": "chart",
+  "at": 543.93,
+  "end": 562.62,
+  "anchor": "So ask it the three questions.",
+  "hold": 18.69,
+  "title": "Sold Out For The Year",
+  "source": "SK hynix, October earnings call",
+  "badges": [
+   {
+    "label": "VERBATIM",
+    "value": "\u201cessentially sold out\u201d",
+    "tag": "for the year"
+   }
+  ]
+ },
+ {
+  "asset": "ev-instrument-memory",
+  "species": "instrument",
+  "at": 594.2,
+  "end": 608.73,
+  "anchor": "I built a monitor for it: it reads what memory costs l",
+  "hold": 14.54,
+  "title": "Memory Export Instrument",
+  "source": "Korea Customs HS 8542.32 \u00b7 value-weighted",
+  "badges": [
+   {
+    "label": "METHOD",
+    "value": "$USD \u00f7 \u03a3kg",
+    "tag": ""
+   },
+   {
+    "label": "TRIPWIRE",
+    "value": "below trailing avg",
+    "tag": "2 quarters"
+   }
+  ]
+ },
+ {
+  "asset": "ev-hbm-export-series",
+  "species": "chart",
+  "at": 609.1,
+  "end": 620.16,
+  "anchor": "Right now it's going the other way \u2014 DRAM up seventeen",
+  "hold": 11.05,
+  "title": "Latest Reading",
+  "source": "data period 2026-07 \u00b7 customs ~1mo behind",
+  "badges": [
+   {
+    "label": "DRAM",
+    "value": "+17.4%",
+    "tag": ""
+   },
+   {
+    "label": "HBM-CLASS",
+    "value": "+14.1%",
+    "tag": ""
+   },
+   {
+    "label": "STATUS",
+    "value": "armed",
+    "tag": "not lit"
+   }
+  ]
  }
 ]

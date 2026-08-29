@@ -1,4 +1,4 @@
-<title>Current Bubble v4</title>
+<title id="doctitle">Episode</title>
 <style>
   :root {
     --charcoal: #25313C; --cobalt: #1769C2; --teal: #178C83;
@@ -126,7 +126,7 @@
   .chip.on { color: var(--ink); background: var(--sunflower); border-color: var(--sunflower); }
 </style>
 
-<h1><b>Current Bubble &mdash; five minute v4</b> &middot; scene-evidence lane &middot; generated from timeline.v4.json</h1>
+<h1><b id="eptitle">Episode</b> &middot; scene-evidence lane &middot; <span id="epsub"></span></h1>
 
 <div id="shell"><div id="fit"><div id="stage">
   <div class="world" id="wA"></div>
@@ -152,8 +152,8 @@
 <div id="bar">
   <button id="play">&#9654; Play with narration</button>
   <button id="mute">Mute</button>
-  <input id="scrub" type="range" min="0" max="300" step="0.01" value="0" aria-label="timeline scrub" />
-  <div id="clock">0:00 / 5:00</div>
+  <input id="scrub" type="range" min="0" max="1" step="0.01" value="0" aria-label="timeline scrub" />
+  <div id="clock">0:00 / 0:00</div>
 </div>
 <div id="scenes"></div>
 <audio id="vo" preload="auto"></audio>
@@ -165,7 +165,13 @@
   "use strict";
   const TL = JSON.parse(document.getElementById("timeline-data").textContent);
   const A  = JSON.parse(document.getElementById("asset-data").textContent);
-  const DUR = 300;
+  /* Runtime comes from the TIMELINE, never hardcoded. A template that
+     carries the sample's duration clamps every episode to it. */
+  if (TL.title) { document.title = TL.title; $("eptitle").textContent = TL.title;
+    $("epsub").textContent = TL.subtitle || ""; }
+  const scrub = $("scrub");
+  const DUR = TL.runtime_s || (TL.scenes.length ? TL.scenes[TL.scenes.length-1].span[1] : 0);
+  scrub.max = DUR;
   const $ = (id) => document.getElementById(id);
   const stage = $("stage"), fit = $("fit");
   const fitStage = () => { stage.style.transform = `scale(${fit.clientWidth / 1920})`; };
@@ -346,9 +352,9 @@
 
   /* transport — audio is the clock while playing */
   let t = 0, playing = false, raf = 0;
-  const scrub = $("scrub"), clock = $("clock"), playBtn = $("play");
+  const clock = $("clock"), playBtn = $("play");
   const fmt = (s) => `${Math.floor(s/60)}:${String(Math.floor(s%60)).padStart(2,"0")}`;
-  const sync = () => { scrub.value = t; clock.textContent = `${fmt(t)} / 5:00`; render(t); };
+  const sync = () => { scrub.value = t; clock.textContent = `${fmt(t)} / ${fmt(DUR)}`; render(t); };
   const seek = (v) => { t = Math.min(DUR, Math.max(0, v)); vo.currentTime = t; sync(); };
   const tick = () => {
     if (!playing) return;

@@ -20,9 +20,46 @@ cannot surface a component you don't know exists.
 | 3 | **Lint** | `scripts/lint_script_pattern.py` | script text | pass/fail, mechanical tier |
 | 4 | **Audit** | `scripts/audit_script_doctrine.py` (+ `scripts/kit_spec.py`) | script text, the kit's tables, any take on disk | timed-gate findings |
 | 5 | **Record** | `scripts/record_chained_take.py` | script text | `vo-*/audio/*.mp3` + `*.words.json` |
-| 6 | **Timeline** | `scripts/build_timeline_f.py` | word timings, plate inventory | merged word timeline, plate plan |
-| 7 | **Motion** | `scripts/build_render_f.py` | timeline, plate plan, evidence dock | motion plan |
+| 6 | **Word timeline** | `scripts/build_timeline_f.py` | the take | merged word timeline (mechanical, safe to automate) |
+| 7 | **SHOT TABLE — AUTHORED** | **a human or model reading the narration** | word timeline · plate `semantic` fields · evidence `context` fields | the window table: plate + Ken Burns + docks + badge times, per beat |
+| 7b | Motion | `scripts/build_render_f.py` | the authored table | motion plan |
 | 8 | **Render** | **`samples/scene-evidence-player.template.html`** | a `scene_evidence_timeline.v1` + base64 asset map | a self-contained preview |
+
+## Stage 7 is AUTHORED. There is no allocator.
+
+**This is the step that was replaced with a loop and broke the build.**
+
+Every prior episode was built from a hand-written window table — see
+`projects/*/steel-and-paper/build_scene_evidence_cut.py`:
+
+```python
+WINDOWS = [
+    (0, 0.0, 10.0, "world-spike-desk-v1", (0.05, 14, -8), []),
+    (0, 10.0, 40.0, "world-two-rooms-divergence-v1", (0.06, -18, 6),
+     [("svg-divergence", 0, 13.5, 25.0, [16.0, 19.0])]),
+    ...
+```
+
+The spike opens the video because **someone wrote that line** after reading
+the narration. Every entry is a semantic decision: which plate depicts this
+beat, which evidence proves this claim, when the badges land.
+
+**The density rules are a CHECKLIST on authored work, not a generator.**
+One plate per 12s, 20s ceiling, 1–2 evidence per plate — these tell you your
+authoring is *wrong*. They cannot tell you what to author. An allocator that
+fills slots by count can never produce the right answer at any quality of
+tuning, because it is answering "how many fit," not "which one belongs."
+
+**Author from the saved semantics — they exist for this.**
+
+- Every plate manifest carries a `semantic` field. All 74 of them.
+  `world-spike-desk-v1` → *"antique iron railway spike on dark desk, the
+  ring token, macro"*. That IS the shot list.
+- Every deck asset carries `context.what_it_is` and a `visual_role`.
+- `sources/decks/asset-selection-index.md` describes every slide.
+
+Reading filenames instead of manifests is what put the hype machine over
+the opening line about an iron spike.
 
 ## The render contract — READ THIS BEFORE WRITING A PLAYER
 

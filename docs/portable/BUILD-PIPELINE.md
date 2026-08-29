@@ -29,9 +29,9 @@ already exists.**
 | 2 | Strength loop | draft | fixpoint draft + rewrite log |
 | 3 | Lint / audit | script text | gate findings |
 | 4 | Record | script text | audio + word timings (`*.words.json`) |
-| 5 | Timeline | word timings, plate inventory | merged timeline, plate plan |
-| 6 | Evidence dock | timeline, evidence libraries | dock list |
-| 7 | Motion | timeline, plates, docks | motion plan |
+| 5 | Word timeline | word timings | merged timeline (mechanical) |
+| 6 | **SHOT TABLE — AUTHORED** | narration + plate `semantic` fields + evidence `context` | plate, Ken Burns, docks and badge times per beat |
+| 7 | Motion | the authored table | motion plan |
 | 8 | Render | timeline + base64 assets | self-contained player |
 
 ## Stage 4 → 5: the take is ground truth
@@ -50,7 +50,26 @@ carries. To merge:
 3. Join with **one re-encode pass** and a short crossfade. Never a raw
    concat of independently generated segments.
 
-## Stage 5: plate density (operator rule)
+## Stage 6 is AUTHORED — there is no allocator
+
+Someone reads the narration beat by beat and chooses the plate that depicts
+it and the evidence that proves it. Every asset carries a saved `semantic`
+or `context` description written for exactly this. **Read those, never
+filenames.**
+
+**The density rules below are a CHECKLIST on authored work, not a
+generator.** They tell you the authoring is wrong; they cannot tell you what
+to author. An allocator filling slots by count answers "how many fit," not
+"which one belongs," and cannot be tuned into correctness.
+
+Shape of the artifact — one row per window:
+
+```
+(beat_start, beat_end, plate_id, ken_burns(scale,x,y),
+ [ (evidence_id, slot, enter, exit, [badge_times...]) ])
+```
+
+## The density CHECK (operator rule) — run it against the authored table
 
 - **One plate per 12 seconds of runtime, minimum.**
 - **20 seconds is the absolute ceiling**, and only when **two strong
@@ -62,7 +81,7 @@ carries. To merge:
   under evidence and drifts while the evidence holds locked. It does not
   stop where evidence begins.
 
-## Stage 6: evidence
+## Evidence — what to reach for when authoring
 
 Dock each object to **the sentence whose claim it proves**. No anchor in the
 narration means the dock is wrong — do not place it anyway.

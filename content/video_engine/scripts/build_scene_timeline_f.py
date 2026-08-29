@@ -78,19 +78,27 @@ def main() -> int:
             if p["start"] <= d["at"] < p["end"]:
                 if d["asset"] not in evidence:
                     ap = R.find_asset(d["asset"])
-                    t_, s_ = title_for(d["asset"])
                     evidence[d["asset"]] = {
-                        "title": t_, "source": s_, "species": d["species"],
+                        # Authored in the dock - a machine-mangled asset id is
+                        # not a title, and empty badges leave the card's whole
+                        # information layer blank (ruling B3: a badge numeral
+                        # must appear verbatim in the document behind it).
+                        "title": d["title"], "source": d["source"],
+                        "species": d["species"],
                         "document": {"path": str(ap.relative_to(ap.anchor)),
                                      "sha256": sha(ap)},
-                        "badges": [],
+                        "badges": d["badges"],
                     }
                     uris[d["asset"]] = data_uri(ap)
+                # Spans come from the dock: evidence enters before its claim
+                # and holds through the whole discussion. A flat hold drops the
+                # document mid-argument, which is what left 42% of claims naked.
                 docks.append({
                     "slide": d["asset"], "slot": len(docks) % 2,
-                    "enter": round(d["at"] - 0.25, 2),
-                    "exit": round(max(d["end"], d["at"] + 6.0) + R.M["settle"], 2),
-                    "badge_at": [],
+                    "enter": round(d["at"], 2), "exit": round(d["end"], 2),
+                    # doc 29 cadence: badges land +1.3s and +2.6s after settle
+                    "badge_at": [round(d["at"] + 0.75 + 1.3 * (i + 1), 2)
+                                 for i in range(len(d["badges"]))],
                 })
         scenes.append({
             "scene_id": f"s{i+1:02d}",
@@ -104,6 +112,9 @@ def main() -> int:
 
     timeline = {
         "schema_version": "scene_evidence_timeline.v1",
+        "runtime_s": tl["runtime_s"],
+        "title": "Steel and Paper",
+        "subtitle": "Money Physics · answer to Bravos Research",
         "episode_id": "steel-and-paper", "project_id": "systems-and-blowups",
         "narration": {"canonical_hash": sha(audio),
                       "words_path": "build-f/timeline.json"},

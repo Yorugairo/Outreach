@@ -360,3 +360,35 @@ Never compare its scores between drafts. Never paste its rewrites: across
 five runs, eleven of eleven broke doctrine, including four bait
 constructions and two "stay tuned"s. Where a measurable gate disagrees with
 an unstable score, **the gate wins**.
+
+**C8 — The shot table is AUTHORED. There is no allocator.**
+(2026-08-29, after a build was assembled by one.) Someone reads the
+narration beat by beat and chooses the plate that depicts it and the
+evidence that proves it. Every prior episode was built from a hand-written
+window table — plate, Ken Burns move, docks, badge times, one row per beat.
+*Why:* replaced with a loop that walked the plate inventory in order, the
+build put the hype-machine plate over the opening line about an iron spike
+and left 60% of plates carrying no evidence while using 14% of an approved
+library. It passed every gate — density, coverage, zero uncovered frames,
+valid images — because those gates measure whether the machinery ran, never
+whether the output means anything.
+*Apply:* **the density rules are a CHECKLIST on authored work, not a
+generator.** One plate per 12s, the 20s ceiling, 1–2 evidence per plate —
+they tell you the authoring is wrong; they cannot tell you what to author.
+An allocator answers "how many fit," never "which one belongs," and cannot
+be tuned into correctness. **Author from the saved semantics** — every plate
+manifest carries a `semantic` field and every deck asset a
+`context.what_it_is`, written for exactly this. Reading filenames instead of
+manifests is what produced the failure.
+
+**E9 — A green check on the machinery is not a check on the work.**
+(2026-08-29.) Structural verification says the pipeline ran. It says nothing
+about whether the result is right, and the two feel identical in a terminal.
+*Why:* in one session a player passed every structural check and rendered
+black; two generated plates passed a deterministic hash-and-format scan
+while meaning the wrong thing; a shot table passed density, coverage and
+asset-integrity checks with every plate in the wrong place.
+*Apply:* **open it and look** before reporting. For a rendered build that
+means composited frames, not a JSON dump. Report what was verified BY EYE
+separately from what was verified by check, and never let the second stand
+in for the first.
