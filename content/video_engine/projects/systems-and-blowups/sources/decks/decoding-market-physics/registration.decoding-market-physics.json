@@ -154,7 +154,7 @@
           "value": "7%",
           "label": "Great Britain railway GDP share",
           "period": "1840s",
-          "context_sentence": "Hit 7% of Great Britain’s GDP",
+          "context_sentence": "Hit 7% of Great Britain\u2019s GDP",
           "location": "upper-left",
           "is_headline": true
         },
@@ -626,5 +626,46 @@
       "confidence": "high",
       "sha256": "9a94c8800f9c9afbaf994da8f215c9242d092db6f8d433d314cd1e9b416d889a"
     }
-  ]
+  ],
+  "figure_verification": {
+    "verified_at": "2026-08-29",
+    "verified_against": "steel-and-paper/evidence/EVIDENCE-DOSSIER.md",
+    "conflicts": [
+      {
+        "slide": "decoding-market-physics-s04",
+        "figure": "70% railway crash drawdown",
+        "verified_value": "64.1%",
+        "source": "Campbell & Turner daily railway share index, 2062 peak 6 Oct 1845 -> 741 trough Apr 1850",
+        "status": "SUPERSEDED",
+        "replacement": "steel-and-paper/evidence/objects/ev-three-manias.png",
+        "action": "do not dock s04; the rebuilt table carries the corrected figure"
+      },
+      {
+        "slide": "decoding-market-physics-s09",
+        "figure": "$244B hyperscaler AI debt in 2026",
+        "verified_value": "$130-150B projected net supply (Morgan Stanley IM; Mellon; LPL)",
+        "status": "CONFLICT-UNRESOLVED",
+        "action": "scope differs or figure differs - do not dock s09 alongside ev-debt-issuance-v2; resolve before use"
+      },
+      {
+        "slide": "decoding-market-physics-s03",
+        "figure": "Microsoft restricting internal AI tools",
+        "verified_value": "not adequately sourced - forum and LinkedIn only",
+        "status": "CUT-FROM-SCRIPT",
+        "action": "slide cannot air as drawn; the claim was removed from narration"
+      },
+      {
+        "slide": "decoding-market-physics-s05",
+        "figure": "HBM 100% committed through 2027; $107B revenue / $77B operating profit FY26",
+        "verified_value": "earnings call supports 'essentially sold out' for 2026 only",
+        "status": "STRONGER-THAN-SOURCED",
+        "action": "usable as a plate; narration must not adopt the 2027/profit claims without a filing"
+      }
+    ],
+    "cleared": [
+      "s06 20% of S&P vs 2-4% historically",
+      "s09 5.5% Fed ceiling",
+      "s09 >6.5% Fed in 2000"
+    ]
+  }
 }

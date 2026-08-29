@@ -1,0 +1,73 @@
+<!doctype html>
+<meta charset="utf-8">
+<style>
+  :root{
+    --surface:#16181c; --ink1:#f2f2ef; --ink2:#b9bcc4; --mute:#8b8f98;
+    --grid:#24262b; --base:#33363d; --crimson:#e5484d; --amber:#c98500;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{width:2112px;height:1200px;background:var(--surface);}
+  body{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink1);
+       padding:74px 92px 56px;display:flex;flex-direction:column;}
+  h1{font-size:63px;font-weight:600;letter-spacing:-.01em;}
+  .deck{font-size:40px;color:var(--ink2);margin-top:12px;}
+  table{width:100%;border-collapse:collapse;margin-top:52px;}
+  th,td{text-align:left;padding:26px 30px 26px 0;vertical-align:top;
+        border-bottom:2px solid var(--grid);}
+  thead th{font-size:38px;font-weight:600;color:var(--ink1);
+           border-bottom:3px solid var(--base);padding-bottom:20px;}
+  thead th:first-child{color:var(--mute);font-size:26px;font-weight:400;
+        letter-spacing:.14em;text-transform:uppercase;}
+  tbody th{font-size:28px;font-weight:400;color:var(--mute);width:340px;
+           letter-spacing:.04em;}
+  td{font-size:34px;color:var(--ink2);line-height:1.35;}
+  td b{color:var(--ink1);font-weight:600;}
+  .hit{color:var(--crimson);font-weight:600;}
+  .live{color:var(--amber);font-weight:600;}
+  tbody tr:last-child td,tbody tr:last-child th{border-bottom:none;}
+  .foot{margin-top:auto;padding-top:24px;border-top:2px solid var(--grid);
+        font-size:26px;color:var(--mute);line-height:1.5;}
+</style>
+
+<h1>Three manias, measured the same way</h1>
+<div class="deck">Capital committed, what the market priced, and what happened next</div>
+
+<table>
+  <thead>
+    <tr><th>&nbsp;</th><th>1840s railways</th><th>1999 dot-com</th><th>2024&ndash;26 AI build</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Capital committed</th>
+      <td><b>~7%</b> of Britain&rsquo;s GDP<br>at the peak</td>
+      <td><b>~7%</b> of US GDP</td>
+      <td><b>~8%</b> of US GDP<br><span style="font-size:26px;color:var(--mute)">per Bravos Research</span></td>
+    </tr>
+    <tr>
+      <th>What the market priced</th>
+      <td>Returns inside<br><b>three years</b></td>
+      <td>Adoption that had<br>not happened yet</td>
+      <td>Physical supply,<br>sold out and contracted</td>
+    </tr>
+    <tr>
+      <th>What actually arrived</th>
+      <td>The returns took<br><b>twenty years</b></td>
+      <td>Capacity first,<br>revenue much later</td>
+      <td><span class="live">Still open</span></td>
+    </tr>
+    <tr>
+      <th>How the paper ended</th>
+      <td>Index fell <span class="hit">64%</span><br>peak to trough, and finished<br><b>below where it began</b></td>
+      <td>Bubble collapse</td>
+      <td><span class="live">Still open</span></td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="foot">
+  Railway figures: Campbell &amp; Turner daily railway share index, 442 companies &mdash;
+  peak 6 October 1845, trough April 1850, a <b>64.1%</b> decline. Dot-com and AI
+  GDP shares as cited by Bravos Research.
+  <b>This supersedes the &ldquo;70% crash&rdquo; figure carried on the Decoding Market
+  Physics deck (slide 4)</b>, which predates the source check.
+</div>
