@@ -20803,6 +20803,78 @@
     }
    ]
   },
+  "silicon-antidote-s02-valuation-bubble-v1": {
+   "title": "Index Concentration",
+   "source": "AI builders in the S&P 500",
+   "species": "deck",
+   "document": {
+    "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\sources\\decks\\silicon-antidote\\semantic-assets\\assets\\silicon-antidote-s02-valuation-bubble-v1.png",
+    "sha256": "237df91e6c7beeeff9b9a837739d8c155089d74caf1230d4191e3e79d716ce31"
+   },
+   "badges": [
+    {
+     "label": "NOW",
+     "value": "20%",
+     "tag": "of the index"
+    },
+    {
+     "label": "HISTORIC",
+     "value": "2\u20134%",
+     "tag": ""
+    }
+   ]
+  },
+  "ev-mechanism-ladder": {
+   "title": "The Test",
+   "source": "three questions, thirty seconds",
+   "species": "table",
+   "document": {
+    "path": "Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-mechanism-ladder.png",
+    "sha256": "38f6b2247b3bd2c05ffccd029ecbbd6c4bf21e03d561b401c0c370fabd563d03"
+   },
+   "badges": [
+    {
+     "label": "STEEL",
+     "value": "scarce \u00b7 cash \u00b7 used",
+     "tag": ""
+    },
+    {
+     "label": "PAPER",
+     "value": "abundant \u00b7 issued \u00b7 believed",
+     "tag": ""
+    }
+   ]
+  },
+  "silicon-reality-gap-s04-teacher-stamped": {
+   "title": "silicon-reality-gap-s04-teacher-stamped",
+   "source": "",
+   "species": "deck",
+   "document": {
+    "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\sources\\decks\\teacher-stamped-production-visuals\\silicon-reality-gap\\slides\\slide-004.png",
+    "sha256": "6bda70a74a3d4b0b03d569cb6f666e89bf957167146ec4adaefc8701fee0828d"
+   },
+   "badges": []
+  },
+  "silicon-antidote-s14-teacher-stamped": {
+   "title": "silicon-antidote-s14-teacher-stamped",
+   "source": "",
+   "species": "deck",
+   "document": {
+    "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\sources\\decks\\teacher-stamped-production-visuals\\silicon-antidote\\slides\\slide-014.png",
+    "sha256": "e66c67c872b79c0bcf9e2bfebd800e0b7b8db85915df857dc395080b8e189024"
+   },
+   "badges": []
+  },
+  "silicon-value-software-bubble-s05-teacher-stamped": {
+   "title": "silicon-value-software-bubble-s05-teacher-stamped",
+   "source": "",
+   "species": "deck",
+   "document": {
+    "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\sources\\decks\\teacher-stamped-production-visuals\\silicon-value-software-bubble\\slides\\slide-005.png",
+    "sha256": "b7f9c153d0ecd5c400a658843a3507fa5e4376514aa34ec96758227124d2a271"
+   },
+   "badges": []
+  },
   "ev-railway-index-v1": {
    "title": "The Railway Index",
    "source": "Campbell & Turner \u00b7 442 companies",
@@ -20887,6 +20959,26 @@
     }
    ]
   },
+  "silicon-antidote-s13-teacher-stamped": {
+   "title": "silicon-antidote-s13-teacher-stamped",
+   "source": "",
+   "species": "deck",
+   "document": {
+    "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\sources\\decks\\teacher-stamped-production-visuals\\silicon-antidote\\slides\\slide-013.png",
+    "sha256": "495e870141163b7c74ccced5191a0cc7fddf42b6ffee28f5c3d11861fdc5319c"
+   },
+   "badges": []
+  },
+  "silicon-reality-gap-s03-teacher-stamped": {
+   "title": "silicon-reality-gap-s03-teacher-stamped",
+   "source": "",
+   "species": "deck",
+   "document": {
+    "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\sources\\decks\\teacher-stamped-production-visuals\\silicon-reality-gap\\slides\\slide-003.png",
+    "sha256": "3a0c666183f435f662c1153de5c013bd71844bb3e4d749b90ae69d49f91cad46"
+   },
+   "badges": []
+  },
   "ev-doc-karp": {
    "title": "Alex Karp, Palantir",
    "source": "CNBC, live",
@@ -20944,6 +21036,26 @@
      "tag": ""
     }
    ]
+  },
+  "silicon-value-software-bubble-s03-teacher-stamped": {
+   "title": "silicon-value-software-bubble-s03-teacher-stamped",
+   "source": "",
+   "species": "deck",
+   "document": {
+    "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\sources\\decks\\teacher-stamped-production-visuals\\silicon-value-software-bubble\\slides\\slide-003.png",
+    "sha256": "b84bb1e3cd9ff357f598a71764782da0255f8a86c063ca9bf29cff0ebc697d2a"
+   },
+   "badges": []
+  },
+  "silicon-value-software-bubble-s13-teacher-stamped": {
+   "title": "silicon-value-software-bubble-s13-teacher-stamped",
+   "source": "",
+   "species": "deck",
+   "document": {
+    "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\sources\\decks\\teacher-stamped-production-visuals\\silicon-value-software-bubble\\slides\\slide-013.png",
+    "sha256": "4f2edf3d15b97efd82058c646c55d46a532fab99d22243e26af9515c64e2383b"
+   },
+   "badges": []
   },
   "ev-debt-issuance-v2": {
    "title": "Hyperscaler Borrowing",
@@ -21050,6 +21162,16 @@
     }
    ]
   },
+  "silicon-antidote-s04-teacher-stamped": {
+   "title": "silicon-antidote-s04-teacher-stamped",
+   "source": "",
+   "species": "deck",
+   "document": {
+    "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\sources\\decks\\teacher-stamped-production-visuals\\silicon-antidote\\slides\\slide-004.png",
+    "sha256": "4e04577a4a7c1dde0a5ef5d7039d253bd0f1c5cdb0ff2e2d951c673617d19eaa"
+   },
+   "badges": []
+  },
   "ev-railway-mileage-v1": {
    "title": "Railway Certificates",
    "source": "paper priced off the best year",
@@ -21067,27 +21189,6 @@
     {
      "label": "RETURNS ARRIVED",
      "value": "20 years",
-     "tag": ""
-    }
-   ]
-  },
-  "silicon-antidote-s02-valuation-bubble-v1": {
-   "title": "Index Concentration",
-   "source": "AI builders in the S&P 500",
-   "species": "deck",
-   "document": {
-    "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\sources\\decks\\silicon-antidote\\semantic-assets\\assets\\silicon-antidote-s02-valuation-bubble-v1.png",
-    "sha256": "237df91e6c7beeeff9b9a837739d8c155089d74caf1230d4191e3e79d716ce31"
-   },
-   "badges": [
-    {
-     "label": "NOW",
-     "value": "20%",
-     "tag": "of the index"
-    },
-    {
-     "label": "HISTORIC",
-     "value": "2\u20134%",
      "tag": ""
     }
    ]
@@ -21155,53 +21256,6 @@
     }
    ]
   },
-  "ev-mechanism-ladder": {
-   "title": "The Test",
-   "source": "three questions, thirty seconds",
-   "species": "table",
-   "document": {
-    "path": "Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-mechanism-ladder.png",
-    "sha256": "38f6b2247b3bd2c05ffccd029ecbbd6c4bf21e03d561b401c0c370fabd563d03"
-   },
-   "badges": [
-    {
-     "label": "STEEL",
-     "value": "scarce \u00b7 cash \u00b7 used",
-     "tag": ""
-    },
-    {
-     "label": "PAPER",
-     "value": "abundant \u00b7 issued \u00b7 believed",
-     "tag": ""
-    }
-   ]
-  },
-  "silicon-antidote-s02-memory-triopoly-v1": {
-   "title": "The Memory Triopoly",
-   "source": "Samsung \u00b7 Micron \u00b7 SK hynix",
-   "species": "deck",
-   "document": {
-    "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\sources\\decks\\silicon-antidote\\semantic-assets\\assets\\silicon-antidote-s02-memory-triopoly-v1.png",
-    "sha256": "f37858b19c7507251746f9a8ff786644d683b4a107134ba935b1a064d37e0788"
-   },
-   "badges": [
-    {
-     "label": "SCARCE",
-     "value": "yes",
-     "tag": ""
-    },
-    {
-     "label": "CASH",
-     "value": "yes",
-     "tag": ""
-    },
-    {
-     "label": "USED",
-     "value": "yes",
-     "tag": ""
-    }
-   ]
-  },
   "silicon-antidote-s14-diagnostic-matrix-v1": {
    "title": "The Divergence, Read Again",
    "source": "scarcity repriced vs question three",
@@ -21222,6 +21276,16 @@
      "tag": "answering Q3"
     }
    ]
+  },
+  "silicon-reality-gap-s10-teacher-stamped": {
+   "title": "silicon-reality-gap-s10-teacher-stamped",
+   "source": "",
+   "species": "deck",
+   "document": {
+    "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\sources\\decks\\teacher-stamped-production-visuals\\silicon-reality-gap\\slides\\slide-010.png",
+    "sha256": "4ac6cc79f83c1ab434f9e247e6bb385cba9ed57853cf535658dfc2c79b4c5ef1"
+   },
+   "badges": []
   },
   "ev-krx-memory-v3": {
    "title": "SK hynix",
@@ -21308,6 +21372,52 @@
     }
    ]
   },
+  "silicon-antidote-s02-memory-triopoly-v1": {
+   "title": "The Memory Triopoly",
+   "source": "Samsung \u00b7 Micron \u00b7 SK hynix",
+   "species": "deck",
+   "document": {
+    "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\sources\\decks\\silicon-antidote\\semantic-assets\\assets\\silicon-antidote-s02-memory-triopoly-v1.png",
+    "sha256": "f37858b19c7507251746f9a8ff786644d683b4a107134ba935b1a064d37e0788"
+   },
+   "badges": [
+    {
+     "label": "SCARCE",
+     "value": "yes",
+     "tag": ""
+    },
+    {
+     "label": "CASH",
+     "value": "yes",
+     "tag": ""
+    },
+    {
+     "label": "USED",
+     "value": "yes",
+     "tag": ""
+    }
+   ]
+  },
+  "silicon-reality-gap-s12-teacher-stamped": {
+   "title": "silicon-reality-gap-s12-teacher-stamped",
+   "source": "",
+   "species": "deck",
+   "document": {
+    "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\sources\\decks\\teacher-stamped-production-visuals\\silicon-reality-gap\\slides\\slide-012.png",
+    "sha256": "2718244eb2acdab57072e9bbabb6dd94058b6aa7e934096dff81e84bbceb3527"
+   },
+   "badges": []
+  },
+  "sovereign-memory-infrastructure-s05-teacher-stamped": {
+   "title": "sovereign-memory-infrastructure-s05-teacher-stamped",
+   "source": "",
+   "species": "deck",
+   "document": {
+    "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\sources\\decks\\teacher-stamped-production-visuals\\sovereign-memory-infrastructure\\slides\\slide-005.png",
+    "sha256": "7c6aa4b3dc3ece200956b43e5ae21f7df3042659e731be9a732905459f802f58"
+   },
+   "badges": []
+  },
   "ev-instrument-memory": {
    "title": "Memory Export Instrument",
    "source": "Korea Customs HS 8542.32 \u00b7 value-weighted",
@@ -21354,70 +21464,111 @@
      "tag": "not lit"
     }
    ]
+  },
+  "silicon-reality-gap-s13-teacher-stamped": {
+   "title": "silicon-reality-gap-s13-teacher-stamped",
+   "source": "",
+   "species": "deck",
+   "document": {
+    "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\sources\\decks\\teacher-stamped-production-visuals\\silicon-reality-gap\\slides\\slide-013.png",
+    "sha256": "b00a6539b8d1ceaf2bf4cd56359e58446df586f600d13a2b3520b2ca327a877a"
+   },
+   "badges": []
+  },
+  "silicon-value-software-bubble-s15-teacher-stamped": {
+   "title": "silicon-value-software-bubble-s15-teacher-stamped",
+   "source": "",
+   "species": "deck",
+   "document": {
+    "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\sources\\decks\\teacher-stamped-production-visuals\\silicon-value-software-bubble\\slides\\slide-015.png",
+    "sha256": "8fac0f890b74cfa7e77e5e710dcdd364e88fa8477901b289f642624cf2c94857"
+   },
+   "badges": []
+  },
+  "silicon-antidote-s15-teacher-stamped": {
+   "title": "silicon-antidote-s15-teacher-stamped",
+   "source": "",
+   "species": "deck",
+   "document": {
+    "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\sources\\decks\\teacher-stamped-production-visuals\\silicon-antidote\\slides\\slide-015.png",
+    "sha256": "364afa1b47396fe18883cd7e316c1efa3c4741bacad50f6a36a2a602fbfeeb85"
+   },
+   "badges": []
   }
  },
  "scenes": [
   {
    "scene_id": "s01",
    "world": {
-    "asset_id": "world-hype-machine-v2",
-    "sha256": "48944940be3d063096b5703eb233aefc5ad337dc17861611c2cf04dffae984de",
+    "asset_id": "world-spike-desk-v1",
+    "sha256": "c1b0707093635d2de2558d33ddeaea67568a8be8adad4cc610687e9316f95bd8",
     "ken_burns": {
-     "scale": 0.04,
-     "x": 14,
-     "y": -10
+     "scale": 0.05,
+     "x": 10,
+     "y": -6
     }
    },
    "exit": "cut",
    "span": [
     0.0,
-    8.93
+    11.9
    ],
    "docks": []
   },
   {
    "scene_id": "s02",
    "world": {
-    "asset_id": "world-unwind-desk-v2",
-    "sha256": "9c2688be24f88724511de139f483fbb0db956c19deede0eff4c613f599504979",
+    "asset_id": "world-adviser-signature-v1",
+    "sha256": "02516ddf660bda77b9dc5cfa1956f056cc72d3ed8ea54910010df6f292a948a3",
     "ken_burns": {
      "scale": 0.04,
-     "x": 14,
-     "y": -10
-    }
-   },
-   "exit": "cut",
-   "span": [
-    8.93,
-    17.87
-   ],
-   "docks": []
-  },
-  {
-   "scene_id": "s03",
-   "world": {
-    "asset_id": "world-assay-sort-v1",
-    "sha256": "631c76db038263e94fdf0ce5d66bd82b6ff579ad7629a2185a5697641693ca69",
-    "ken_burns": {
-     "scale": 0.04,
-     "x": 14,
-     "y": -10
+     "x": -14,
+     "y": 6
     }
    },
    "exit": "wipe_right",
    "span": [
-    17.87,
-    32.8
+    11.9,
+    20.6
    ],
    "docks": [
     {
      "slide": "ev-mega-vs-spy-v3",
      "slot": 0,
-     "enter": 26.4,
-     "exit": 42.01,
+     "enter": 14.6,
+     "exit": 20.4,
      "badge_at": [
-      28.45,
-      29.75
+      16.65,
+      17.95
+     ]
+    }
+   ]
+  },
+  {
+   "scene_id": "s03",
+   "world": {
+    "asset_id": "world-share-office-queue-v1",
+    "sha256": "9b6332c81a012e947d14580318afc7cae4feb21327abdc52f7e7ac87ca887fff",
+    "ken_burns": {
+     "scale": 0.05,
+     "x": 16,
+     "y": -8
+    }
+   },
+   "exit": "wipe_right",
+   "span": [
+    20.6,
+    31.0
+   ],
+   "docks": [
+    {
+     "slide": "ev-mega-vs-spy-v3",
+     "slot": 0,
+     "enter": 22.0,
+     "exit": 31.0,
+     "badge_at": [
+      24.05,
+      25.35
      ]
     }
    ]
@@ -21425,204 +21576,261 @@
   {
    "scene_id": "s04",
    "world": {
-    "asset_id": "world-steelman-build-v1",
-    "sha256": "de16d3274c0a9f7a9c5a10475a2d86bbc35e13f530581b1b1ba74aadd03cba6d",
+    "asset_id": "world-gpu-crate-dock-v1",
+    "sha256": "f9eb6673feab7a5f568c2b47f80df793fb0cf36185935164752578578b8ba1a3",
     "ken_burns": {
      "scale": 0.04,
-     "x": 14,
-     "y": -10
+     "x": -12,
+     "y": 8
     }
    },
-   "exit": "cut",
+   "exit": "wipe_right",
    "span": [
-    32.8,
-    43.32
+    31.0,
+    41.4
    ],
-   "docks": []
+   "docks": [
+    {
+     "slide": "ev-mega-vs-spy-v3",
+     "slot": 0,
+     "enter": 31.0,
+     "exit": 41.0,
+     "badge_at": [
+      33.05,
+      34.35
+     ]
+    }
+   ]
   },
   {
    "scene_id": "s05",
    "world": {
-    "asset_id": "world-paper-and-steel-press-v1",
-    "sha256": "3d3362b8d8504df0e1919fc68b46dc05626631edd4eff8ee1d55e43a297321fc",
+    "asset_id": "world-statement-kitchen",
+    "sha256": "93305afa8f35c6af9bf4a3406f727e00d358377c1dd64439930674dc77bd6b72",
     "ken_burns": {
-     "scale": 0.04,
-     "x": 14,
-     "y": -10
-    }
-   },
-   "exit": "cut",
-   "span": [
-    43.32,
-    53.84
-   ],
-   "docks": []
-  },
-  {
-   "scene_id": "s06",
-   "world": {
-    "asset_id": "world-signature-nib-v2",
-    "sha256": "1ae3cb7c378da4f03f670b112e9173bb1686b4031fca7af6175d3d400d4bb3f8",
-    "ken_burns": {
-     "scale": 0.04,
-     "x": 14,
-     "y": -10
-    }
-   },
-   "exit": "cut",
-   "span": [
-    53.84,
-    64.37
-   ],
-   "docks": []
-  },
-  {
-   "scene_id": "s07",
-   "world": {
-    "asset_id": "world-allocation-board",
-    "sha256": "fadff1af8b69cbfababae2f2b3afb063f694bcd7864352b457f098a3c8f72fc0",
-    "ken_burns": {
-     "scale": 0.04,
-     "x": 14,
-     "y": -10
-    }
-   },
-   "exit": "cut",
-   "span": [
-    64.37,
-    74.89
-   ],
-   "docks": []
-  },
-  {
-   "scene_id": "s08",
-   "world": {
-    "asset_id": "world-bond-prospectus",
-    "sha256": "fb85d6d517464fd31fd36198406bf5e7c0bf6fc79a104358c761fed8d7aff6e4",
-    "ken_burns": {
-     "scale": 0.04,
-     "x": 14,
+     "scale": 0.06,
+     "x": 8,
      "y": -10
     }
    },
    "exit": "wipe_right",
    "span": [
-    74.89,
-    91.41
+    41.4,
+    45.6
    ],
    "docks": [
     {
-     "slide": "ev-railway-index-v1",
-     "slot": 0,
-     "enter": 85.01,
-     "exit": 94.02,
+     "slide": "silicon-antidote-s02-valuation-bubble-v1",
+     "slot": 1,
+     "enter": 42.2,
+     "exit": 45.4,
      "badge_at": [
-      87.06,
-      88.36
+      44.25,
+      45.55
      ]
+    }
+   ]
+  },
+  {
+   "scene_id": "s06",
+   "world": {
+    "asset_id": "world-three-notch-slate-v1",
+    "sha256": "b9004b2ee761378cba8c796a82f270e4f2ac247fbec38403a20d9a8c0dda7046",
+    "ken_burns": {
+     "scale": 0.05,
+     "x": -10,
+     "y": 6
+    }
+   },
+   "exit": "wipe_right",
+   "span": [
+    45.6,
+    54.0
+   ],
+   "docks": [
+    {
+     "slide": "ev-mechanism-ladder",
+     "slot": 0,
+     "enter": 46.5,
+     "exit": 54.0,
+     "badge_at": [
+      48.55,
+      49.85
+     ]
+    }
+   ]
+  },
+  {
+   "scene_id": "s07",
+   "world": {
+    "asset_id": "world-signature-nib-v2",
+    "sha256": "1ae3cb7c378da4f03f670b112e9173bb1686b4031fca7af6175d3d400d4bb3f8",
+    "ken_burns": {
+     "scale": 0.04,
+     "x": 12,
+     "y": 8
+    }
+   },
+   "exit": "wipe_right",
+   "span": [
+    54.0,
+    63.1
+   ],
+   "docks": [
+    {
+     "slide": "ev-mechanism-ladder",
+     "slot": 0,
+     "enter": 54.0,
+     "exit": 62.5,
+     "badge_at": [
+      56.05,
+      57.35
+     ]
+    }
+   ]
+  },
+  {
+   "scene_id": "s08",
+   "world": {
+    "asset_id": "world-hype-machine-v2",
+    "sha256": "48944940be3d063096b5703eb233aefc5ad337dc17861611c2cf04dffae984de",
+    "ken_burns": {
+     "scale": 0.05,
+     "x": -16,
+     "y": -6
+    }
+   },
+   "exit": "wipe_right",
+   "span": [
+    63.1,
+    71.3
+   ],
+   "docks": [
+    {
+     "slide": "silicon-reality-gap-s04-teacher-stamped",
+     "slot": 1,
+     "enter": 63.5,
+     "exit": 71.2,
+     "badge_at": []
     }
    ]
   },
   {
    "scene_id": "s09",
    "world": {
-    "asset_id": "world-club-interior-papered",
-    "sha256": "9ab63afd0c96b32d1881988a38c39ccc461de0f7118198bad0e571883f2b45af",
+    "asset_id": "world-assay-sort-v1",
+    "sha256": "631c76db038263e94fdf0ce5d66bd82b6ff579ad7629a2185a5697641693ca69",
     "ken_burns": {
      "scale": 0.04,
-     "x": 14,
-     "y": -10
+     "x": 10,
+     "y": 6
     }
    },
    "exit": "wipe_right",
    "span": [
-    91.41,
-    105.56
+    71.3,
+    78.5
    ],
    "docks": [
     {
-     "slide": "ev-railway-gdp-tile-v1",
+     "slide": "silicon-antidote-s14-teacher-stamped",
      "slot": 0,
-     "enter": 93.3,
-     "exit": 103.43,
-     "badge_at": [
-      95.35,
-      96.65
-     ]
-    },
-    {
-     "slide": "ev-equip-ipp-gdp-v1",
-     "slot": 1,
-     "enter": 102.6,
-     "exit": 129.39,
-     "badge_at": [
-      104.65,
-      105.95
-     ]
+     "enter": 71.5,
+     "exit": 78.2,
+     "badge_at": []
     }
    ]
   },
   {
    "scene_id": "s10",
    "world": {
-    "asset_id": "world-datacenter-shell",
-    "sha256": "2ec9fbb3c6a08e1b010b42a2fe9327a1b12ab048f22e355b083ea00b3e3bf10d",
+    "asset_id": "world-steelman-build-v1",
+    "sha256": "de16d3274c0a9f7a9c5a10475a2d86bbc35e13f530581b1b1ba74aadd03cba6d",
     "ken_burns": {
-     "scale": 0.04,
-     "x": 14,
-     "y": -10
-    }
-   },
-   "exit": "cut",
-   "span": [
-    105.56,
-    118.89
-   ],
-   "docks": []
-  },
-  {
-   "scene_id": "s11",
-   "world": {
-    "asset_id": "world-exchange-floor-1845",
-    "sha256": "e8f7f361d46600bc9fb6c762caaea4e42edfa60b79b95910f4443ac37ddd2bf5",
-    "ken_burns": {
-     "scale": 0.04,
-     "x": 14,
-     "y": -10
-    }
-   },
-   "exit": "cut",
-   "span": [
-    118.89,
-    127.6
-   ],
-   "docks": []
-  },
-  {
-   "scene_id": "s12",
-   "world": {
-    "asset_id": "world-hbm-die-stack",
-    "sha256": "7c68322e18976364d06b2dbc7b7ce439ff8d7f5f4bad91133f7b3f8e5c49dcc4",
-    "ken_burns": {
-     "scale": 0.04,
-     "x": 14,
-     "y": -10
+     "scale": 0.05,
+     "x": -12,
+     "y": 8
     }
    },
    "exit": "wipe_right",
    "span": [
-    127.6,
-    142.32
+    78.5,
+    90.0
    ],
    "docks": [
     {
-     "slide": "ev-tnx-two-eras-v3",
+     "slide": "silicon-value-software-bubble-s05-teacher-stamped",
+     "slot": 1,
+     "enter": 79.0,
+     "exit": 90.0,
+     "badge_at": []
+    }
+   ]
+  },
+  {
+   "scene_id": "s11",
+   "world": {
+    "asset_id": "world-navvy-cutting-v1",
+    "sha256": "718f448042d78a51c10822dffe5285813220b186b56c47bcceb20319c57593d5",
+    "ken_burns": {
+     "scale": 0.05,
+     "x": 14,
+     "y": -8
+    }
+   },
+   "exit": "wipe_right",
+   "span": [
+    90.0,
+    103.0
+   ],
+   "docks": [
+    {
+     "slide": "ev-railway-index-v1",
      "slot": 0,
-     "enter": 130.07,
-     "exit": 148.2,
+     "enter": 85.4,
+     "exit": 96.0,
      "badge_at": [
-      132.12,
-      133.42
+      87.45,
+      88.75
+     ]
+    },
+    {
+     "slide": "ev-railway-gdp-tile-v1",
+     "slot": 1,
+     "enter": 96.5,
+     "exit": 102.5,
+     "badge_at": [
+      98.55,
+      99.85
+     ]
+    }
+   ]
+  },
+  {
+   "scene_id": "s12",
+   "world": {
+    "asset_id": "world-dotcom-server-room-v1",
+    "sha256": "c5019dcb822d315a424cfb5d611a3d802c1d68b534b1d22e2d6a8a95ca2db680",
+    "ken_burns": {
+     "scale": 0.04,
+     "x": -10,
+     "y": 6
+    }
+   },
+   "exit": "wipe_right",
+   "span": [
+    103.0,
+    115.0
+   ],
+   "docks": [
+    {
+     "slide": "ev-equip-ipp-gdp-v1",
+     "slot": 0,
+     "enter": 103.0,
+     "exit": 115.0,
+     "badge_at": [
+      105.05,
+      106.35
      ]
     }
    ]
@@ -21630,157 +21838,194 @@
   {
    "scene_id": "s13",
    "world": {
-    "asset_id": "world-index-board-swelling",
-    "sha256": "f2793246e57336925ad0dcbd2e54a236f1f9f2468b59f52ea3bbfac8304bdbbc",
+    "asset_id": "world-ledger-page-v1",
+    "sha256": "6d64ccdeea464b6152301cc94d6641de7cf5c6eca6d0f0969bce54fad475aa4f",
     "ken_burns": {
-     "scale": 0.04,
-     "x": 14,
-     "y": -10
-    }
-   },
-   "exit": "cut",
-   "span": [
-    142.32,
-    152.66
-   ],
-   "docks": []
-  },
-  {
-   "scene_id": "s14",
-   "world": {
-    "asset_id": "world-laptop-shelf",
-    "sha256": "8ebb31778cb733ea9f05138ce82cad4159d1bb7bbb07c2001649240331c8d057",
-    "ken_burns": {
-     "scale": 0.04,
-     "x": 14,
-     "y": -10
-    }
-   },
-   "exit": "cut",
-   "span": [
-    152.66,
-    163.0
-   ],
-   "docks": []
-  },
-  {
-   "scene_id": "s15",
-   "world": {
-    "asset_id": "world-lease-contracts-bound",
-    "sha256": "d8e2f3040c6857c4be3afad41b317eb6e2ccf414da14a1d6c1045ba84a9f3bcb",
-    "ken_burns": {
-     "scale": 0.04,
-     "x": 14,
-     "y": -10
-    }
-   },
-   "exit": "cut",
-   "span": [
-    163.0,
-    173.33
-   ],
-   "docks": []
-  },
-  {
-   "scene_id": "s16",
-   "world": {
-    "asset_id": "world-molten-pour-v2",
-    "sha256": "ba15fa7aa44403966a031183c1f9433ac74225450aa04a0f9aba40d47c962e63",
-    "ken_burns": {
-     "scale": 0.04,
-     "x": 14,
-     "y": -10
+     "scale": 0.05,
+     "x": 10,
+     "y": -6
     }
    },
    "exit": "wipe_right",
    "span": [
-    173.33,
-    191.75
+    115.0,
+    128.9
    ],
    "docks": [
     {
-     "slide": "ev-doc-karp",
+     "slide": "ev-equip-ipp-gdp-v1",
      "slot": 0,
-     "enter": 183.27,
-     "exit": 195.8,
+     "enter": 115.0,
+     "exit": 128.5,
      "badge_at": [
-      185.32
+      117.05,
+      118.35
      ]
+    }
+   ]
+  },
+  {
+   "scene_id": "s14",
+   "world": {
+    "asset_id": "world-pressure-gauge-v1",
+    "sha256": "ce288e1cf2f4ae71d83f29668446f962f5a246948cf1f92c787e824dab1da3c2",
+    "ken_burns": {
+     "scale": 0.05,
+     "x": -14,
+     "y": 8
+    }
+   },
+   "exit": "wipe_right",
+   "span": [
+    128.9,
+    140.0
+   ],
+   "docks": [
+    {
+     "slide": "ev-tnx-two-eras-v3",
+     "slot": 0,
+     "enter": 129.0,
+     "exit": 140.0,
+     "badge_at": [
+      131.05,
+      132.35
+     ]
+    }
+   ]
+  },
+  {
+   "scene_id": "s15",
+   "world": {
+    "asset_id": "world-viaduct-train-rain-v1",
+    "sha256": "87b75720130c907837788b355d84dc72f442c3afaf838eecdf88a9f532b0511f",
+    "ken_burns": {
+     "scale": 0.04,
+     "x": 12,
+     "y": 6
+    }
+   },
+   "exit": "wipe_right",
+   "span": [
+    140.0,
+    147.7
+   ],
+   "docks": [
+    {
+     "slide": "ev-tnx-two-eras-v3",
+     "slot": 0,
+     "enter": 140.0,
+     "exit": 147.5,
+     "badge_at": [
+      142.05,
+      143.35
+     ]
+    }
+   ]
+  },
+  {
+   "scene_id": "s16",
+   "world": {
+    "asset_id": "world-broadcast-set-v2",
+    "sha256": "8e89fb53f54e9ad9212c4aa7c019cc127d163fc421d6bb14d7c768bddcbea3e2",
+    "ken_burns": {
+     "scale": 0.04,
+     "x": -12,
+     "y": -8
+    }
+   },
+   "exit": "wipe_right",
+   "span": [
+    147.7,
+    166.8
+   ],
+   "docks": [
+    {
+     "slide": "ev-tnx-two-eras-v3",
+     "slot": 1,
+     "enter": 148.0,
+     "exit": 157.0,
+     "badge_at": [
+      150.05,
+      151.35
+     ]
+    },
+    {
+     "slide": "silicon-antidote-s13-teacher-stamped",
+     "slot": 0,
+     "enter": 157.5,
+     "exit": 166.7,
+     "badge_at": []
     }
    ]
   },
   {
    "scene_id": "s17",
    "world": {
-    "asset_id": "world-signature-close",
-    "sha256": "f0fece2618bd287d2ac77a49911842820f257e4562b1c29c6f08724efadc9f9a",
+    "asset_id": "world-sell-ticket-v1",
+    "sha256": "3b1081e57a3cba6215eb59d6ffcf1c8302f9fd404fbc24441ff2592513f36059",
     "ken_burns": {
-     "scale": 0.04,
-     "x": 14,
-     "y": -10
+     "scale": 0.05,
+     "x": 10,
+     "y": 8
     }
    },
    "exit": "wipe_right",
    "span": [
-    191.75,
-    201.64
+    166.8,
+    176.2
    ],
    "docks": [
     {
-     "slide": "ev-uber-adoption-v1",
-     "slot": 0,
-     "enter": 195.24,
-     "exit": 214.18,
-     "badge_at": [
-      197.29
-     ]
+     "slide": "silicon-reality-gap-s03-teacher-stamped",
+     "slot": 1,
+     "enter": 167.2,
+     "exit": 175.8,
+     "badge_at": []
     }
    ]
   },
   {
    "scene_id": "s18",
    "world": {
-    "asset_id": "world-statement-kitchen",
-    "sha256": "93305afa8f35c6af9bf4a3406f727e00d358377c1dd64439930674dc77bd6b72",
+    "asset_id": "world-trading-desk-dark",
+    "sha256": "7f08b99d0615e062070e966f442f658022ba6fc40335f9c8ef5b73edf954f8a5",
     "ken_burns": {
-     "scale": 0.04,
-     "x": 14,
-     "y": -10
+     "scale": 0.05,
+     "x": -10,
+     "y": -6
     }
    },
    "exit": "cut",
    "span": [
-    201.64,
-    211.71
+    176.2,
+    181.0
    ],
    "docks": []
   },
   {
    "scene_id": "s19",
    "world": {
-    "asset_id": "world-steel-mill-night",
-    "sha256": "23edea595e6f5b8e93fca964e593fc813f36d76b3c96b272c856f92563af53dc",
+    "asset_id": "world-internal-memo-v1",
+    "sha256": "361b11c646d2db991b3ec7a27240379d3d15b6259483650e21ddd0ad47b9a3f8",
     "ken_burns": {
      "scale": 0.04,
-     "x": 14,
-     "y": -10
+     "x": 12,
+     "y": 6
     }
    },
    "exit": "wipe_right",
    "span": [
-    211.71,
-    221.79
+    181.0,
+    192.0
    ],
    "docks": [
     {
-     "slide": "ev-three-manias",
+     "slide": "ev-doc-karp",
      "slot": 0,
-     "enter": 215.35,
-     "exit": 242.18,
+     "enter": 181.0,
+     "exit": 192.0,
      "badge_at": [
-      217.4,
-      218.7,
-      220.0
+      183.05
      ]
     }
    ]
@@ -21788,65 +22033,85 @@
   {
    "scene_id": "s20",
    "world": {
-    "asset_id": "world-trading-desk-dark",
-    "sha256": "7f08b99d0615e062070e966f442f658022ba6fc40335f9c8ef5b73edf954f8a5",
+    "asset_id": "world-budget-burndown-v1",
+    "sha256": "890c0fce359bdd12aef98d60173e7948bce58ac97db22c479dff86c2aa017d2a",
     "ken_burns": {
-     "scale": 0.04,
-     "x": 14,
-     "y": -10
-    }
-   },
-   "exit": "cut",
-   "span": [
-    221.79,
-    237.86
-   ],
-   "docks": []
-  },
-  {
-   "scene_id": "s21",
-   "world": {
-    "asset_id": "world-treasury-cash-count",
-    "sha256": "13515928ae8effe827115175b4e20070d674e0076ca989ca9231181b0986bb19",
-    "ken_burns": {
-     "scale": 0.04,
-     "x": 14,
-     "y": -10
-    }
-   },
-   "exit": "cut",
-   "span": [
-    237.86,
-    246.83
-   ],
-   "docks": []
-  },
-  {
-   "scene_id": "s22",
-   "world": {
-    "asset_id": "world-broadcast-set-v2",
-    "sha256": "8e89fb53f54e9ad9212c4aa7c019cc127d163fc421d6bb14d7c768bddcbea3e2",
-    "ken_burns": {
-     "scale": 0.04,
-     "x": 14,
-     "y": -10
+     "scale": 0.05,
+     "x": -12,
+     "y": 8
     }
    },
    "exit": "wipe_right",
    "span": [
-    246.83,
-    261.8
+    192.0,
+    203.0
    ],
    "docks": [
     {
-     "slide": "ev-debt-issuance-v2",
-     "slot": 0,
-     "enter": 255.4,
-     "exit": 266.28,
+     "slide": "ev-uber-adoption-v1",
+     "slot": 1,
+     "enter": 192.5,
+     "exit": 203.0,
      "badge_at": [
-      257.45,
-      258.75,
-      260.05
+      194.55
+     ]
+    }
+   ]
+  },
+  {
+   "scene_id": "s21",
+   "world": {
+    "asset_id": "world-empty-racks-v1",
+    "sha256": "6c8ac7fbe9b23c74b61bb7704d312b3ff3d428e6cebf08c837cd8c886e7eed4b",
+    "ken_burns": {
+     "scale": 0.04,
+     "x": 10,
+     "y": -8
+    }
+   },
+   "exit": "wipe_right",
+   "span": [
+    203.0,
+    213.9
+   ],
+   "docks": [
+    {
+     "slide": "ev-uber-adoption-v1",
+     "slot": 1,
+     "enter": 203.0,
+     "exit": 212.0,
+     "badge_at": [
+      205.05
+     ]
+    }
+   ]
+  },
+  {
+   "scene_id": "s22",
+   "world": {
+    "asset_id": "world-exhibition-hall-morning-v1",
+    "sha256": "f753c90e487546f46f89172a42881d1844301e6e1e3f7a5d22dbdd57480ff664",
+    "ken_burns": {
+     "scale": 0.05,
+     "x": -14,
+     "y": 6
+    }
+   },
+   "exit": "wipe_right",
+   "span": [
+    213.9,
+    223.8
+   ],
+   "docks": [
+    {
+     "slide": "ev-three-manias",
+     "slot": 0,
+     "enter": 214.0,
+     "exit": 223.5,
+     "badge_at": [
+      216.05,
+      217.35,
+      218.65
      ]
     }
    ]
@@ -21854,29 +22119,29 @@
   {
    "scene_id": "s23",
    "world": {
-    "asset_id": "world-listing-barge-v1",
-    "sha256": "36bc08427c04ddfd35debb664c426c92feecbab7e3831ea7c6defd80e66817b5",
+    "asset_id": "world-viaduct-train-rain-v1",
+    "sha256": "87b75720130c907837788b355d84dc72f442c3afaf838eecdf88a9f532b0511f",
     "ken_burns": {
-     "scale": 0.04,
+     "scale": 0.05,
      "x": 14,
-     "y": -10
+     "y": -6
     }
    },
    "exit": "wipe_right",
    "span": [
-    261.8,
-    277.21
+    223.8,
+    234.0
    ],
    "docks": [
     {
-     "slide": "ev-ig-credit-weighting-v1",
+     "slide": "ev-three-manias",
      "slot": 0,
-     "enter": 265.36,
-     "exit": 286.3,
+     "enter": 224.0,
+     "exit": 234.0,
      "badge_at": [
-      267.41,
-      268.71,
-      270.01
+      226.05,
+      227.35,
+      228.65
      ]
     }
    ]
@@ -21884,120 +22149,129 @@
   {
    "scene_id": "s24",
    "world": {
-    "asset_id": "world-adviser-signature-v1",
-    "sha256": "02516ddf660bda77b9dc5cfa1956f056cc72d3ed8ea54910010df6f292a948a3",
+    "asset_id": "world-dawn-factory-v1",
+    "sha256": "94619fcde7dcbd7b26c2fddda69da5173b78b4d632197eed6b04a1f3b0921ee2",
     "ken_burns": {
      "scale": 0.04,
-     "x": 14,
-     "y": -10
-    }
-   },
-   "exit": "cut",
-   "span": [
-    277.21,
-    284.67
-   ],
-   "docks": []
-  },
-  {
-   "scene_id": "s25",
-   "world": {
-    "asset_id": "world-budget-burndown-v1",
-    "sha256": "890c0fce359bdd12aef98d60173e7948bce58ac97db22c479dff86c2aa017d2a",
-    "ken_burns": {
-     "scale": 0.04,
-     "x": 14,
-     "y": -10
+     "x": -10,
+     "y": 8
     }
    },
    "exit": "wipe_right",
    "span": [
-    284.67,
-    298.13
+    234.0,
+    244.8
    ],
    "docks": [
     {
-     "slide": "ev-capex-consensus-v1",
+     "slide": "silicon-value-software-bubble-s03-teacher-stamped",
      "slot": 0,
-     "enter": 285.62,
-     "exit": 297.85,
-     "badge_at": [
-      287.67,
-      288.97
-     ]
+     "enter": 234.5,
+     "exit": 244.4,
+     "badge_at": []
     }
    ]
   },
   {
+   "scene_id": "s25",
+   "world": {
+    "asset_id": "world-molten-pour-v2",
+    "sha256": "ba15fa7aa44403966a031183c1f9433ac74225450aa04a0f9aba40d47c962e63",
+    "ken_burns": {
+     "scale": 0.05,
+     "x": 10,
+     "y": 6
+    }
+   },
+   "exit": "cut",
+   "span": [
+    244.8,
+    248.1
+   ],
+   "docks": []
+  },
+  {
    "scene_id": "s26",
    "world": {
-    "asset_id": "world-datacenter-aisle-v1",
-    "sha256": "a7fc1a81b17ff05f087a10336c0e46cb94b5941624d60a7b5ba7f5544e49a9a2",
+    "asset_id": "world-treasury-cash-count",
+    "sha256": "13515928ae8effe827115175b4e20070d674e0076ca989ca9231181b0986bb19",
     "ken_burns": {
-     "scale": 0.04,
-     "x": 14,
-     "y": -10
+     "scale": 0.05,
+     "x": -12,
+     "y": -8
     }
    },
    "exit": "wipe_right",
    "span": [
-    298.13,
-    308.99
+    248.1,
+    255.8
    ],
    "docks": [
     {
-     "slide": "ev-doc-leases",
+     "slide": "silicon-value-software-bubble-s13-teacher-stamped",
      "slot": 0,
-     "enter": 302.59,
-     "exit": 319.56,
-     "badge_at": [
-      304.64
-     ]
+     "enter": 248.5,
+     "exit": 255.7,
+     "badge_at": []
     }
    ]
   },
   {
    "scene_id": "s27",
    "world": {
-    "asset_id": "world-dawn-factory-v1",
-    "sha256": "94619fcde7dcbd7b26c2fddda69da5173b78b4d632197eed6b04a1f3b0921ee2",
+    "asset_id": "world-bond-prospectus",
+    "sha256": "fb85d6d517464fd31fd36198406bf5e7c0bf6fc79a104358c761fed8d7aff6e4",
     "ken_burns": {
-     "scale": 0.04,
-     "x": 14,
-     "y": -10
-    }
-   },
-   "exit": "cut",
-   "span": [
-    308.99,
-    315.68
-   ],
-   "docks": []
-  },
-  {
-   "scene_id": "s28",
-   "world": {
-    "asset_id": "world-dotcom-server-room-v1",
-    "sha256": "c5019dcb822d315a424cfb5d611a3d802c1d68b534b1d22e2d6a8a95ca2db680",
-    "ken_burns": {
-     "scale": 0.04,
-     "x": 14,
-     "y": -10
+     "scale": 0.05,
+     "x": 12,
+     "y": 6
     }
    },
    "exit": "wipe_right",
    "span": [
-    315.68,
-    329.43
+    255.8,
+    265.8
    ],
    "docks": [
     {
-     "slide": "ev-doc-macdonald",
+     "slide": "ev-debt-issuance-v2",
      "slot": 0,
-     "enter": 318.73,
-     "exit": 336.55,
+     "enter": 256.0,
+     "exit": 265.5,
      "badge_at": [
-      320.78
+      258.05,
+      259.35,
+      260.65
+     ]
+    }
+   ]
+  },
+  {
+   "scene_id": "s28",
+   "world": {
+    "asset_id": "world-index-board-swelling",
+    "sha256": "f2793246e57336925ad0dcbd2e54a236f1f9f2468b59f52ea3bbfac8304bdbbc",
+    "ken_burns": {
+     "scale": 0.04,
+     "x": -10,
+     "y": 8
+    }
+   },
+   "exit": "wipe_right",
+   "span": [
+    265.8,
+    276.0
+   ],
+   "docks": [
+    {
+     "slide": "ev-ig-credit-weighting-v1",
+     "slot": 0,
+     "enter": 266.0,
+     "exit": 276.0,
+     "badge_at": [
+      268.05,
+      269.35,
+      270.65
      ]
     }
    ]
@@ -22005,82 +22279,114 @@
   {
    "scene_id": "s29",
    "world": {
-    "asset_id": "world-empty-racks-v1",
-    "sha256": "6c8ac7fbe9b23c74b61bb7704d312b3ff3d428e6cebf08c837cd8c886e7eed4b",
+    "asset_id": "world-substation-feed-v1",
+    "sha256": "7e6ce6f13c3b1869fbbe4fa722fbec186906752547ed9ed1e91568184fb4300e",
     "ken_burns": {
-     "scale": 0.04,
+     "scale": 0.05,
      "x": 14,
-     "y": -10
-    }
-   },
-   "exit": "cut",
-   "span": [
-    329.43,
-    339.16
-   ],
-   "docks": []
-  },
-  {
-   "scene_id": "s30",
-   "world": {
-    "asset_id": "world-fiber-trench-v1",
-    "sha256": "7b0d04577e66a8d9ccfb21b3270168da85ca8867df905da309205697f728aa45",
-    "ken_burns": {
-     "scale": 0.04,
-     "x": 14,
-     "y": -10
-    }
-   },
-   "exit": "cut",
-   "span": [
-    339.16,
-    348.9
-   ],
-   "docks": []
-  },
-  {
-   "scene_id": "s31",
-   "world": {
-    "asset_id": "world-gpu-crate-dock-v1",
-    "sha256": "f9eb6673feab7a5f568c2b47f80df793fb0cf36185935164752578578b8ba1a3",
-    "ken_burns": {
-     "scale": 0.04,
-     "x": 14,
-     "y": -10
-    }
-   },
-   "exit": "cut",
-   "span": [
-    348.9,
-    358.63
-   ],
-   "docks": []
-  },
-  {
-   "scene_id": "s32",
-   "world": {
-    "asset_id": "world-internal-memo-v1",
-    "sha256": "361b11c646d2db991b3ec7a27240379d3d15b6259483650e21ddd0ad47b9a3f8",
-    "ken_burns": {
-     "scale": 0.04,
-     "x": 14,
-     "y": -10
+     "y": -6
     }
    },
    "exit": "wipe_right",
    "span": [
-    358.63,
-    368.37
+    276.0,
+    285.7
    ],
    "docks": [
     {
-     "slide": "ev-railway-mileage-v1",
+     "slide": "ev-ig-credit-weighting-v1",
      "slot": 0,
-     "enter": 364.34,
-     "exit": 375.2,
+     "enter": 276.0,
+     "exit": 285.5,
      "badge_at": [
-      366.39,
-      367.69
+      278.05,
+      279.35,
+      280.65
+     ]
+    }
+   ]
+  },
+  {
+   "scene_id": "s30",
+   "world": {
+    "asset_id": "world-datacenter-aisle-v1",
+    "sha256": "a7fc1a81b17ff05f087a10336c0e46cb94b5941624d60a7b5ba7f5544e49a9a2",
+    "ken_burns": {
+     "scale": 0.04,
+     "x": -12,
+     "y": 6
+    }
+   },
+   "exit": "wipe_right",
+   "span": [
+    285.7,
+    303.0
+   ],
+   "docks": [
+    {
+     "slide": "ev-capex-consensus-v1",
+     "slot": 1,
+     "enter": 286.0,
+     "exit": 297.0,
+     "badge_at": [
+      288.05,
+      289.35
+     ]
+    }
+   ]
+  },
+  {
+   "scene_id": "s31",
+   "world": {
+    "asset_id": "world-lease-contracts-bound",
+    "sha256": "d8e2f3040c6857c4be3afad41b317eb6e2ccf414da14a1d6c1045ba84a9f3bcb",
+    "ken_burns": {
+     "scale": 0.05,
+     "x": -14,
+     "y": 8
+    }
+   },
+   "exit": "wipe_right",
+   "span": [
+    303.0,
+    312.0
+   ],
+   "docks": [
+    {
+     "slide": "ev-doc-leases",
+     "slot": 0,
+     "enter": 303.0,
+     "exit": 312.0,
+     "badge_at": [
+      305.05
+     ]
+    }
+   ]
+  },
+  {
+   "scene_id": "s32",
+   "world": {
+    "asset_id": "world-datacenter-shell",
+    "sha256": "2ec9fbb3c6a08e1b010b42a2fe9327a1b12ab048f22e355b083ea00b3e3bf10d",
+    "ken_burns": {
+     "scale": 0.05,
+     "x": 12,
+     "y": -8
+    }
+   },
+   "exit": "wipe_right",
+   "span": [
+    312.0,
+    319.0
+   ],
+   "docks": [
+    {
+     "slide": "ev-doc-leases",
+     "slot": 0,
+     "enter": 312.0,
+     "exit": 319.0,
+     "badge_at": [
+      314.05
      ]
     }
    ]
@@ -22088,28 +22394,27 @@
   {
    "scene_id": "s33",
    "world": {
-    "asset_id": "world-ledger-page-v1",
-    "sha256": "6d64ccdeea464b6152301cc94d6641de7cf5c6eca6d0f0969bce54fad475aa4f",
+    "asset_id": "world-treasury-cash-count",
+    "sha256": "13515928ae8effe827115175b4e20070d674e0076ca989ca9231181b0986bb19",
     "ken_burns": {
-     "scale": 0.04,
-     "x": 14,
-     "y": -10
+     "scale": 0.05,
+     "x": -10,
+     "y": 6
     }
    },
    "exit": "wipe_right",
    "span": [
-    368.37,
-    384.1
+    319.0,
+    328.0
    ],
    "docks": [
     {
-     "slide": "silicon-antidote-s02-valuation-bubble-v1",
+     "slide": "ev-doc-macdonald",
      "slot": 0,
-     "enter": 374.25,
-     "exit": 392.84,
+     "enter": 319.0,
+     "exit": 328.0,
      "badge_at": [
-      376.3,
-      377.6
+      321.05
      ]
     }
    ]
@@ -22117,28 +22422,27 @@
   {
    "scene_id": "s34",
    "world": {
-    "asset_id": "world-license-cabinet-v1",
-    "sha256": "61b44ca623b7de06cacaa7e908a3fea8f6b6753945a580439ebed9c7abc162fe",
+    "asset_id": "world-ledger-page-v1",
+    "sha256": "6d64ccdeea464b6152301cc94d6641de7cf5c6eca6d0f0969bce54fad475aa4f",
     "ken_burns": {
      "scale": 0.04,
-     "x": 14,
-     "y": -10
+     "x": 10,
+     "y": 8
     }
    },
    "exit": "wipe_right",
    "span": [
-    384.1,
-    402.19
+    328.0,
+    335.9
    ],
    "docks": [
     {
-     "slide": "ev-smh-drawdown-v3",
+     "slide": "ev-doc-macdonald",
      "slot": 0,
-     "enter": 392.05,
-     "exit": 402.79,
+     "enter": 328.0,
+     "exit": 335.5,
      "badge_at": [
-      394.1,
-      395.4
+      330.05
      ]
     }
    ]
@@ -22146,151 +22450,137 @@
   {
    "scene_id": "s35",
    "world": {
-    "asset_id": "world-memory-wafer-v1",
-    "sha256": "38676eaf76b932354a57df105e312ad96e3d32167600c05fe27097bd6e49d928",
+    "asset_id": "world-orderbook-stamped-v1",
+    "sha256": "b28c981f870c8dd973e8e1337814aae42eee0802944c702a89e248edc86d2bba",
     "ken_burns": {
-     "scale": 0.04,
-     "x": 14,
-     "y": -10
+     "scale": 0.05,
+     "x": -12,
+     "y": -6
     }
    },
-   "exit": "cut",
+   "exit": "wipe_right",
    "span": [
-    402.19,
-    413.1
+    335.9,
+    342.7
    ],
-   "docks": []
+   "docks": [
+    {
+     "slide": "silicon-antidote-s04-teacher-stamped",
+     "slot": 1,
+     "enter": 336.2,
+     "exit": 342.6,
+     "badge_at": []
+    }
+   ]
   },
   {
    "scene_id": "s36",
    "world": {
-    "asset_id": "world-navvy-cutting-v1",
-    "sha256": "718f448042d78a51c10822dffe5285813220b186b56c47bcceb20319c57593d5",
+    "asset_id": "world-signature-close",
+    "sha256": "f0fece2618bd287d2ac77a49911842820f257e4562b1c29c6f08724efadc9f9a",
     "ken_burns": {
-     "scale": 0.04,
-     "x": 14,
-     "y": -10
+     "scale": 0.05,
+     "x": 12,
+     "y": 6
     }
    },
    "exit": "cut",
    "span": [
-    413.1,
-    424.0
+    342.7,
+    352.6
    ],
    "docks": []
   },
   {
    "scene_id": "s37",
    "world": {
-    "asset_id": "world-orderbook-stamped-v1",
-    "sha256": "b28c981f870c8dd973e8e1337814aae42eee0802944c702a89e248edc86d2bba",
+    "asset_id": "world-license-cabinet-v1",
+    "sha256": "61b44ca623b7de06cacaa7e908a3fea8f6b6753945a580439ebed9c7abc162fe",
     "ken_burns": {
-     "scale": 0.04,
-     "x": 14,
-     "y": -10
-    }
-   },
-   "exit": "wipe_right",
-   "span": [
-    424.0,
-    445.94
-   ],
-   "docks": [
-    {
-     "slide": "silicon-antidote-s11-teacher-stamped",
-     "slot": 0,
-     "enter": 434.51,
-     "exit": 445.9,
-     "badge_at": [
-      436.56,
-      437.86
-     ]
-    },
-    {
-     "slide": "sovereign-memory-infrastructure-s10-teacher-stamped",
-     "slot": 1,
-     "enter": 439.54,
-     "exit": 444.01,
-     "badge_at": [
-      441.59,
-      442.89
-     ]
-    }
-   ]
-  },
-  {
-   "scene_id": "s38",
-   "world": {
-    "asset_id": "world-pressure-gauge-v1",
-    "sha256": "ce288e1cf2f4ae71d83f29668446f962f5a246948cf1f92c787e824dab1da3c2",
-    "ken_burns": {
-     "scale": 0.04,
-     "x": 14,
-     "y": -10
-    }
-   },
-   "exit": "wipe_right",
-   "span": [
-    445.94,
-    463.7
-   ],
-   "docks": [
-    {
-     "slide": "ev-mechanism-ladder",
-     "slot": 0,
-     "enter": 454.53,
-     "exit": 487.43,
-     "badge_at": [
-      456.58,
-      457.88
-     ]
-    }
-   ]
-  },
-  {
-   "scene_id": "s39",
-   "world": {
-    "asset_id": "world-railway-acts-desk-v1",
-    "sha256": "e7d765b971e9931408ade190877184d119680b86f2367fba30b8574b5d3e41b2",
-    "ken_burns": {
-     "scale": 0.04,
-     "x": 14,
-     "y": -10
+     "scale": 0.06,
+     "x": -10,
+     "y": -8
     }
    },
    "exit": "cut",
    "span": [
-    463.7,
-    473.48
+    352.6,
+    358.6
    ],
    "docks": []
   },
   {
-   "scene_id": "s40",
+   "scene_id": "s38",
    "world": {
-    "asset_id": "world-scales-coin-paper-v1",
-    "sha256": "fd697f3fb5ba1a7d9aef9a3ce4586ec3c1543771b3506997c7c0e8965f6a6ceb",
+    "asset_id": "world-paper-and-steel-press-v1",
+    "sha256": "3d3362b8d8504df0e1919fc68b46dc05626631edd4eff8ee1d55e43a297321fc",
     "ken_burns": {
-     "scale": 0.04,
-     "x": 14,
-     "y": -10
+     "scale": 0.06,
+     "x": 10,
+     "y": 6
+    }
+   },
+   "exit": "cut",
+   "span": [
+    358.6,
+    364.7
+   ],
+   "docks": []
+  },
+  {
+   "scene_id": "s39",
+   "world": {
+    "asset_id": "world-certificate-wall-v1",
+    "sha256": "5a17afca6f5366fe95258923b50d1d8e92bee4fee4b560bfa6f8b02aa2bcae59",
+    "ken_burns": {
+     "scale": 0.05,
+     "x": -14,
+     "y": 8
     }
    },
    "exit": "wipe_right",
    "span": [
-    473.48,
-    483.26
+    364.7,
+    375.0
    ],
    "docks": [
     {
-     "slide": "silicon-antidote-s02-memory-triopoly-v1",
+     "slide": "ev-railway-mileage-v1",
      "slot": 0,
-     "enter": 478.38,
-     "exit": 568.41,
+     "enter": 365.0,
+     "exit": 375.0,
      "badge_at": [
-      480.43,
-      481.73,
-      483.03
+      367.05,
+      368.35
+     ]
+    }
+   ]
+  },
+  {
+   "scene_id": "s40",
+   "world": {
+    "asset_id": "world-exchange-floor-1845",
+    "sha256": "e8f7f361d46600bc9fb6c762caaea4e42edfa60b79b95910f4443ac37ddd2bf5",
+    "ken_burns": {
+     "scale": 0.05,
+     "x": 12,
+     "y": -6
+    }
+   },
+   "exit": "wipe_right",
+   "span": [
+    375.0,
+    383.0
+   ],
+   "docks": [
+    {
+     "slide": "silicon-antidote-s02-valuation-bubble-v1",
+     "slot": 0,
+     "enter": 375.0,
+     "exit": 383.0,
+     "badge_at": [
+      377.05,
+      378.35
      ]
     }
    ]
@@ -22298,28 +22588,28 @@
   {
    "scene_id": "s41",
    "world": {
-    "asset_id": "world-sell-ticket-v1",
-    "sha256": "3b1081e57a3cba6215eb59d6ffcf1c8302f9fd404fbc24441ff2592513f36059",
+    "asset_id": "world-target-date-envelope-v1",
+    "sha256": "4850210b55ef1392aa30d64ee7109a50e75bef9765026e62e5fb12e9d01161d2",
     "ken_burns": {
      "scale": 0.04,
-     "x": 14,
-     "y": -10
+     "x": -10,
+     "y": 6
     }
    },
    "exit": "wipe_right",
    "span": [
-    483.26,
-    493.04
+    383.0,
+    392.5
    ],
    "docks": [
     {
-     "slide": "silicon-antidote-s14-diagnostic-matrix-v1",
+     "slide": "silicon-antidote-s02-valuation-bubble-v1",
      "slot": 0,
-     "enter": 486.51,
-     "exit": 503.75,
+     "enter": 383.0,
+     "exit": 392.0,
      "badge_at": [
-      488.56,
-      489.86
+      385.05,
+      386.35
      ]
     }
    ]
@@ -22327,92 +22617,75 @@
   {
    "scene_id": "s42",
    "world": {
-    "asset_id": "world-share-office-queue-v1",
-    "sha256": "9b6332c81a012e947d14580318afc7cae4feb21327abdc52f7e7ac87ca887fff",
+    "asset_id": "world-index-board-swelling",
+    "sha256": "f2793246e57336925ad0dcbd2e54a236f1f9f2468b59f52ea3bbfac8304bdbbc",
     "ken_burns": {
-     "scale": 0.04,
+     "scale": 0.05,
      "x": 14,
-     "y": -10
-    }
-   },
-   "exit": "cut",
-   "span": [
-    493.04,
-    502.82
-   ],
-   "docks": []
-  },
-  {
-   "scene_id": "s43",
-   "world": {
-    "asset_id": "world-substation-feed-v1",
-    "sha256": "7e6ce6f13c3b1869fbbe4fa722fbec186906752547ed9ed1e91568184fb4300e",
-    "ken_burns": {
-     "scale": 0.04,
-     "x": 14,
-     "y": -10
+     "y": 8
     }
    },
    "exit": "wipe_right",
    "span": [
-    502.82,
-    518.6
+    392.5,
+    402.4
    ],
    "docks": [
     {
-     "slide": "ev-krx-memory-v3",
-     "slot": 0,
-     "enter": 507.78,
-     "exit": 522.55,
+     "slide": "ev-smh-drawdown-v3",
+     "slot": 1,
+     "enter": 392.5,
+     "exit": 402.0,
      "badge_at": [
-      509.83,
-      511.13
+      394.55,
+      395.85
      ]
     }
    ]
   },
   {
+   "scene_id": "s43",
+   "world": {
+    "asset_id": "world-spike-certificate-ring-v2",
+    "sha256": "7f8c3e6d6ee91e9da62b0ce0196a3c55f20f97cf4d77113231888bec32192137",
+    "ken_burns": {
+     "scale": 0.06,
+     "x": -8,
+     "y": -6
+    }
+   },
+   "exit": "cut",
+   "span": [
+    402.4,
+    409.7
+   ],
+   "docks": []
+  },
+  {
    "scene_id": "s44",
    "world": {
-    "asset_id": "world-target-date-envelope-v1",
-    "sha256": "4850210b55ef1392aa30d64ee7109a50e75bef9765026e62e5fb12e9d01161d2",
+    "asset_id": "world-railway-acts-desk-v1",
+    "sha256": "e7d765b971e9931408ade190877184d119680b86f2367fba30b8574b5d3e41b2",
     "ken_burns": {
-     "scale": 0.04,
-     "x": 14,
-     "y": -10
+     "scale": 0.05,
+     "x": 10,
+     "y": 8
     }
    },
    "exit": "wipe_right",
    "span": [
-    518.6,
-    540.46
+    409.7,
+    421.2
    ],
    "docks": [
     {
-     "slide": "silicon-reality-gap-s07-hbm-stack-v1",
+     "slide": "ev-railway-index-v1",
      "slot": 0,
-     "enter": 522.9,
-     "exit": 530.34,
+     "enter": 410.0,
+     "exit": 420.5,
      "badge_at": [
-      524.95
-     ]
-    },
-    {
-     "slide": "ev-hbm-wafer-ratio-v1",
-     "slot": 1,
-     "enter": 529.46,
-     "exit": 544.54,
-     "badge_at": [
-      531.51
-     ]
-    },
-    {
-     "slide": "silicon-antidote-s09-capacity-penalty-v1",
-     "slot": 0,
-     "enter": 534.06,
-     "exit": 539.41,
-     "badge_at": [
-      536.11
+      412.05,
+      413.35
      ]
     }
    ]
@@ -22420,27 +22693,28 @@
   {
    "scene_id": "s45",
    "world": {
-    "asset_id": "world-three-notch-slate-v1",
-    "sha256": "b9004b2ee761378cba8c796a82f270e4f2ac247fbec38403a20d9a8c0dda7046",
+    "asset_id": "world-circuit-terrain-v1",
+    "sha256": "8f2441a16e93055ff4958a57796ff385e16971f052ca24496c5d75f1b1cb7285",
     "ken_burns": {
-     "scale": 0.04,
-     "x": 14,
-     "y": -10
+     "scale": 0.05,
+     "x": -12,
+     "y": 6
     }
    },
    "exit": "wipe_right",
    "span": [
-    540.46,
-    553.88
+    421.2,
+    432.0
    ],
    "docks": [
     {
-     "slide": "ev-dram-contract-v1",
-     "slot": 0,
-     "enter": 543.93,
-     "exit": 562.62,
+     "slide": "ev-railway-mileage-v1",
+     "slot": 1,
+     "enter": 421.5,
+     "exit": 431.5,
      "badge_at": [
-      545.98
+      423.55,
+      424.85
      ]
     }
    ]
@@ -22448,82 +22722,115 @@
   {
    "scene_id": "s46",
    "world": {
-    "asset_id": "world-spike-certificate-ring-v2",
-    "sha256": "7f8c3e6d6ee91e9da62b0ce0196a3c55f20f97cf4d77113231888bec32192137",
-    "ken_burns": {
-     "scale": 0.04,
-     "x": 14,
-     "y": -10
-    }
-   },
-   "exit": "cut",
-   "span": [
-    553.88,
-    571.51
-   ],
-   "docks": []
-  },
-  {
-   "scene_id": "s47",
-   "world": {
-    "asset_id": "world-spike-rest-v2",
-    "sha256": "fc195cd02d1783a88e4abaedd11e64cdd4eace5482c2f49c77fecf7c03e87a25",
-    "ken_burns": {
-     "scale": 0.04,
-     "x": 14,
-     "y": -10
-    }
-   },
-   "exit": "cut",
-   "span": [
-    571.51,
-    581.78
-   ],
-   "docks": []
-  },
-  {
-   "scene_id": "s48",
-   "world": {
     "asset_id": "world-bankrupt-club-v1",
     "sha256": "98aa54b6af7b2517fd7906671630e82b9165fe46de69b927983a4f7b745955ff",
     "ken_burns": {
      "scale": 0.04,
-     "x": 14,
-     "y": -10
-    }
-   },
-   "exit": "cut",
-   "span": [
-    581.78,
-    592.06
-   ],
-   "docks": []
-  },
-  {
-   "scene_id": "s49",
-   "world": {
-    "asset_id": "world-certificate-wall-v1",
-    "sha256": "5a17afca6f5366fe95258923b50d1d8e92bee4fee4b560bfa6f8b02aa2bcae59",
-    "ken_burns": {
-     "scale": 0.04,
-     "x": 14,
-     "y": -10
+     "x": 12,
+     "y": -8
     }
    },
    "exit": "wipe_right",
    "span": [
-    592.06,
-    608.33
+    432.0,
+    443.0
    ],
    "docks": [
     {
-     "slide": "ev-instrument-memory",
-     "slot": 0,
-     "enter": 594.2,
-     "exit": 608.73,
+     "slide": "silicon-antidote-s11-teacher-stamped",
+     "slot": 1,
+     "enter": 434.9,
+     "exit": 443.0,
      "badge_at": [
-      596.25,
-      597.55
+      436.95,
+      438.25
+     ]
+    }
+   ]
+  },
+  {
+   "scene_id": "s47",
+   "world": {
+    "asset_id": "world-fiber-trench-v1",
+    "sha256": "7b0d04577e66a8d9ccfb21b3270168da85ca8867df905da309205697f728aa45",
+    "ken_burns": {
+     "scale": 0.05,
+     "x": -10,
+     "y": 8
+    }
+   },
+   "exit": "wipe_right",
+   "span": [
+    443.0,
+    454.9
+   ],
+   "docks": [
+    {
+     "slide": "sovereign-memory-infrastructure-s10-teacher-stamped",
+     "slot": 1,
+     "enter": 443.0,
+     "exit": 454.5,
+     "badge_at": [
+      445.05,
+      446.35
+     ]
+    }
+   ]
+  },
+  {
+   "scene_id": "s48",
+   "world": {
+    "asset_id": "world-scales-coin-paper-v1",
+    "sha256": "fd697f3fb5ba1a7d9aef9a3ce4586ec3c1543771b3506997c7c0e8965f6a6ceb",
+    "ken_burns": {
+     "scale": 0.05,
+     "x": 12,
+     "y": 6
+    }
+   },
+   "exit": "wipe_right",
+   "span": [
+    454.9,
+    466.0
+   ],
+   "docks": [
+    {
+     "slide": "ev-mechanism-ladder",
+     "slot": 0,
+     "enter": 455.0,
+     "exit": 466.0,
+     "badge_at": [
+      457.05,
+      458.35
+     ]
+    }
+   ]
+  },
+  {
+   "scene_id": "s49",
+   "world": {
+    "asset_id": "world-assay-sort-v1",
+    "sha256": "631c76db038263e94fdf0ce5d66bd82b6ff579ad7629a2185a5697641693ca69",
+    "ken_burns": {
+     "scale": 0.05,
+     "x": -14,
+     "y": -6
+    }
+   },
+   "exit": "wipe_right",
+   "span": [
+    466.0,
+    476.0
+   ],
+   "docks": [
+    {
+     "slide": "ev-mechanism-ladder",
+     "slot": 0,
+     "enter": 466.0,
+     "exit": 476.0,
+     "badge_at": [
+      468.05,
+      469.35
      ]
     }
    ]
@@ -22531,29 +22838,28 @@
   {
    "scene_id": "s50",
    "world": {
-    "asset_id": "world-circuit-terrain-v1",
-    "sha256": "8f2441a16e93055ff4958a57796ff385e16971f052ca24496c5d75f1b1cb7285",
+    "asset_id": "world-workbench-triad-v1",
+    "sha256": "01d08817c8e2a0d0a1e3ede3ba56cf98a792991824f8defbe1e52618ba22830c",
     "ken_burns": {
      "scale": 0.04,
-     "x": 14,
-     "y": -10
+     "x": 10,
+     "y": 8
     }
    },
    "exit": "wipe_right",
    "span": [
-    608.33,
-    616.2
+    476.0,
+    486.9
    ],
    "docks": [
     {
-     "slide": "ev-hbm-export-series",
-     "slot": 0,
-     "enter": 609.1,
-     "exit": 620.16,
+     "slide": "ev-mechanism-ladder",
+     "slot": 1,
+     "enter": 476.0,
+     "exit": 486.5,
      "badge_at": [
-      611.15,
-      612.45,
-      613.75
+      478.05,
+      479.35
      ]
     }
    ]
@@ -22561,179 +22867,633 @@
   {
    "scene_id": "s51",
    "world": {
-    "asset_id": "world-exhibition-hall-morning-v1",
-    "sha256": "f753c90e487546f46f89172a42881d1844301e6e1e3f7a5d22dbdd57480ff664",
+    "asset_id": "world-two-rooms-divergence-v1",
+    "sha256": "b3d1f871177d16bca4cacdd03729d8036281d26521629ffda2970c4c4f3bd27a",
     "ken_burns": {
-     "scale": 0.04,
-     "x": 14,
-     "y": -10
+     "scale": 0.05,
+     "x": -12,
+     "y": 6
     }
    },
-   "exit": "cut",
+   "exit": "wipe_right",
    "span": [
-    616.2,
-    626.31
+    486.9,
+    496.0
    ],
-   "docks": []
+   "docks": [
+    {
+     "slide": "silicon-antidote-s14-diagnostic-matrix-v1",
+     "slot": 0,
+     "enter": 487.0,
+     "exit": 496.0,
+     "badge_at": [
+      489.05,
+      490.35
+     ]
+    }
+   ]
   },
   {
    "scene_id": "s52",
    "world": {
-    "asset_id": "world-modern-certificate-v1",
-    "sha256": "1304f77034eb577ccef31ee30f6337d5e2c010fd174d40f9fd78dc131583c7ed",
+    "asset_id": "world-broadcast-set-v2",
+    "sha256": "8e89fb53f54e9ad9212c4aa7c019cc127d163fc421d6bb14d7c768bddcbea3e2",
     "ken_burns": {
      "scale": 0.04,
-     "x": 14,
-     "y": -10
+     "x": 12,
+     "y": -8
     }
    },
-   "exit": "cut",
+   "exit": "wipe_right",
    "span": [
-    626.31,
-    636.42
+    496.0,
+    504.4
    ],
-   "docks": []
+   "docks": [
+    {
+     "slide": "silicon-antidote-s14-diagnostic-matrix-v1",
+     "slot": 0,
+     "enter": 496.0,
+     "exit": 503.0,
+     "badge_at": [
+      498.05,
+      499.35
+     ]
+    }
+   ]
   },
   {
    "scene_id": "s53",
+   "world": {
+    "asset_id": "world-seoul-fab-skyline-v1",
+    "sha256": "b03278f2734b545abc93c0eac214912366639395003a676dadb9be1551b3d11e",
+    "ken_burns": {
+     "scale": 0.05,
+     "x": -10,
+     "y": 6
+    }
+   },
+   "exit": "wipe_right",
+   "span": [
+    504.4,
+    508.2
+   ],
+   "docks": [
+    {
+     "slide": "silicon-reality-gap-s10-teacher-stamped",
+     "slot": 1,
+     "enter": 504.6,
+     "exit": 507.8,
+     "badge_at": []
+    }
+   ]
+  },
+  {
+   "scene_id": "s54",
+   "world": {
+    "asset_id": "world-memory-fab-floor-v1",
+    "sha256": "950cfc215705cb2ddded6bc806a58f24041b3110798f8f0e5438f0a8221e2e49",
+    "ken_burns": {
+     "scale": 0.05,
+     "x": 14,
+     "y": 8
+    }
+   },
+   "exit": "wipe_right",
+   "span": [
+    508.2,
+    523.3
+   ],
+   "docks": [
+    {
+     "slide": "ev-krx-memory-v3",
+     "slot": 0,
+     "enter": 508.5,
+     "exit": 522.0,
+     "badge_at": [
+      510.55,
+      511.85
+     ]
+    }
+   ]
+  },
+  {
+   "scene_id": "s55",
+   "world": {
+    "asset_id": "world-hbm-die-stack",
+    "sha256": "7c68322e18976364d06b2dbc7b7ce439ff8d7f5f4bad91133f7b3f8e5c49dcc4",
+    "ken_burns": {
+     "scale": 0.06,
+     "x": -8,
+     "y": -6
+    }
+   },
+   "exit": "wipe_right",
+   "span": [
+    523.3,
+    533.0
+   ],
+   "docks": [
+    {
+     "slide": "silicon-reality-gap-s07-hbm-stack-v1",
+     "slot": 1,
+     "enter": 523.5,
+     "exit": 533.0,
+     "badge_at": [
+      525.55
+     ]
+    }
+   ]
+  },
+  {
+   "scene_id": "s56",
+   "world": {
+    "asset_id": "world-dram-terrain-v1",
+    "sha256": "db502ef68cfbbfc1f6e11973173c7dbd9711fa86ba7e2416f79b1ea229aef3b6",
+    "ken_burns": {
+     "scale": 0.05,
+     "x": 10,
+     "y": 6
+    }
+   },
+   "exit": "wipe_right",
+   "span": [
+    533.0,
+    544.3
+   ],
+   "docks": [
+    {
+     "slide": "ev-hbm-wafer-ratio-v1",
+     "slot": 0,
+     "enter": 533.0,
+     "exit": 540.0,
+     "badge_at": [
+      535.05
+     ]
+    },
+    {
+     "slide": "silicon-antidote-s09-capacity-penalty-v1",
+     "slot": 1,
+     "enter": 540.0,
+     "exit": 543.8,
+     "badge_at": [
+      542.05
+     ]
+    }
+   ]
+  },
+  {
+   "scene_id": "s57",
+   "world": {
+    "asset_id": "world-allocation-board",
+    "sha256": "fadff1af8b69cbfababae2f2b3afb063f694bcd7864352b457f098a3c8f72fc0",
+    "ken_burns": {
+     "scale": 0.05,
+     "x": -12,
+     "y": 8
+    }
+   },
+   "exit": "wipe_right",
+   "span": [
+    544.3,
+    554.0
+   ],
+   "docks": [
+    {
+     "slide": "ev-dram-contract-v1",
+     "slot": 0,
+     "enter": 544.5,
+     "exit": 554.0,
+     "badge_at": [
+      546.55
+     ]
+    }
+   ]
+  },
+  {
+   "scene_id": "s58",
+   "world": {
+    "asset_id": "world-laptop-shelf",
+    "sha256": "8ebb31778cb733ea9f05138ce82cad4159d1bb7bbb07c2001649240331c8d057",
+    "ken_burns": {
+     "scale": 0.04,
+     "x": 12,
+     "y": -6
+    }
+   },
+   "exit": "wipe_right",
+   "span": [
+    554.0,
+    562.0
+   ],
+   "docks": [
+    {
+     "slide": "ev-dram-contract-v1",
+     "slot": 0,
+     "enter": 554.0,
+     "exit": 562.0,
+     "badge_at": [
+      556.05
+     ]
+    }
+   ]
+  },
+  {
+   "scene_id": "s59",
+   "world": {
+    "asset_id": "world-steel-mill-night",
+    "sha256": "23edea595e6f5b8e93fca964e593fc813f36d76b3c96b272c856f92563af53dc",
+    "ken_burns": {
+     "scale": 0.05,
+     "x": -10,
+     "y": 6
+    }
+   },
+   "exit": "wipe_right",
+   "span": [
+    562.0,
+    567.9
+   ],
+   "docks": [
+    {
+     "slide": "silicon-antidote-s02-memory-triopoly-v1",
+     "slot": 1,
+     "enter": 562.0,
+     "exit": 567.5,
+     "badge_at": [
+      564.05,
+      565.35,
+      566.65
+     ]
+    }
+   ]
+  },
+  {
+   "scene_id": "s60",
    "world": {
     "asset_id": "world-spike-desk-v1",
     "sha256": "c1b0707093635d2de2558d33ddeaea67568a8be8adad4cc610687e9316f95bd8",
     "ken_burns": {
      "scale": 0.04,
-     "x": 14,
-     "y": -10
+     "x": 10,
+     "y": 8
     }
    },
    "exit": "cut",
    "span": [
-    636.42,
-    646.54
+    567.9,
+    577.1
    ],
    "docks": []
   },
   {
-   "scene_id": "s54",
+   "scene_id": "s61",
    "world": {
-    "asset_id": "world-two-rooms-divergence-v1",
-    "sha256": "b3d1f871177d16bca4cacdd03729d8036281d26521629ffda2970c4c4f3bd27a",
+    "asset_id": "world-pressure-gauge-v1",
+    "sha256": "ce288e1cf2f4ae71d83f29668446f962f5a246948cf1f92c787e824dab1da3c2",
+    "ken_burns": {
+     "scale": 0.05,
+     "x": -14,
+     "y": -6
+    }
+   },
+   "exit": "wipe_right",
+   "span": [
+    577.1,
+    588.0
+   ],
+   "docks": [
+    {
+     "slide": "silicon-reality-gap-s12-teacher-stamped",
+     "slot": 0,
+     "enter": 577.5,
+     "exit": 588.0,
+     "badge_at": []
+    }
+   ]
+  },
+  {
+   "scene_id": "s62",
+   "world": {
+    "asset_id": "world-korea-port-v1",
+    "sha256": "f4b2db5d7fe51ce1e3fc2d2ffa41ca427ec776818b62124e4c4507cbf95247bf",
+    "ken_burns": {
+     "scale": 0.05,
+     "x": 12,
+     "y": 6
+    }
+   },
+   "exit": "wipe_right",
+   "span": [
+    588.0,
+    600.0
+   ],
+   "docks": [
+    {
+     "slide": "sovereign-memory-infrastructure-s05-teacher-stamped",
+     "slot": 1,
+     "enter": 588.2,
+     "exit": 600.0,
+     "badge_at": []
+    }
+   ]
+  },
+  {
+   "scene_id": "s63",
+   "world": {
+    "asset_id": "world-memory-wafer-v1",
+    "sha256": "38676eaf76b932354a57df105e312ad96e3d32167600c05fe27097bd6e49d928",
     "ken_burns": {
      "scale": 0.04,
-     "x": 14,
-     "y": -10
+     "x": -10,
+     "y": 8
+    }
+   },
+   "exit": "wipe_right",
+   "span": [
+    600.0,
+    612.0
+   ],
+   "docks": [
+    {
+     "slide": "ev-instrument-memory",
+     "slot": 0,
+     "enter": 600.0,
+     "exit": 612.0,
+     "badge_at": [
+      602.05,
+      603.35
+     ]
+    }
+   ]
+  },
+  {
+   "scene_id": "s64",
+   "world": {
+    "asset_id": "world-unwind-desk-v2",
+    "sha256": "9c2688be24f88724511de139f483fbb0db956c19deede0eff4c613f599504979",
+    "ken_burns": {
+     "scale": 0.05,
+     "x": 10,
+     "y": -8
+    }
+   },
+   "exit": "wipe_right",
+   "span": [
+    612.0,
+    628.3
+   ],
+   "docks": [
+    {
+     "slide": "ev-hbm-export-series",
+     "slot": 1,
+     "enter": 612.0,
+     "exit": 622.0,
+     "badge_at": [
+      614.05,
+      615.35,
+      616.65
+     ]
+    }
+   ]
+  },
+  {
+   "scene_id": "s65",
+   "world": {
+    "asset_id": "world-modern-certificate-v1",
+    "sha256": "1304f77034eb577ccef31ee30f6337d5e2c010fd174d40f9fd78dc131583c7ed",
+    "ken_burns": {
+     "scale": 0.05,
+     "x": -12,
+     "y": 6
+    }
+   },
+   "exit": "wipe_right",
+   "span": [
+    628.3,
+    633.6
+   ],
+   "docks": [
+    {
+     "slide": "silicon-reality-gap-s13-teacher-stamped",
+     "slot": 1,
+     "enter": 628.5,
+     "exit": 633.2,
+     "badge_at": []
+    }
+   ]
+  },
+  {
+   "scene_id": "s66",
+   "world": {
+    "asset_id": "world-spike-certificate-ring-v2",
+    "sha256": "7f8c3e6d6ee91e9da62b0ce0196a3c55f20f97cf4d77113231888bec32192137",
+    "ken_burns": {
+     "scale": 0.05,
+     "x": 12,
+     "y": 8
     }
    },
    "exit": "cut",
    "span": [
-    646.54,
-    656.65
+    633.6,
+    641.0
    ],
    "docks": []
   },
   {
-   "scene_id": "s55",
+   "scene_id": "s67",
    "world": {
-    "asset_id": "world-viaduct-train-rain-v1",
-    "sha256": "87b75720130c907837788b355d84dc72f442c3afaf838eecdf88a9f532b0511f",
+    "asset_id": "world-club-interior-papered",
+    "sha256": "9ab63afd0c96b32d1881988a38c39ccc461de0f7118198bad0e571883f2b45af",
+    "ken_burns": {
+     "scale": 0.05,
+     "x": -10,
+     "y": -6
+    }
+   },
+   "exit": "cut",
+   "span": [
+    641.0,
+    649.0
+   ],
+   "docks": []
+  },
+  {
+   "scene_id": "s68",
+   "world": {
+    "asset_id": "world-three-notch-slate-v1",
+    "sha256": "b9004b2ee761378cba8c796a82f270e4f2ac247fbec38403a20d9a8c0dda7046",
     "ken_burns": {
      "scale": 0.04,
+     "x": 10,
+     "y": 6
+    }
+   },
+   "exit": "wipe_right",
+   "span": [
+    649.0,
+    656.0
+   ],
+   "docks": [
+    {
+     "slide": "silicon-antidote-s14-teacher-stamped",
+     "slot": 0,
+     "enter": 649.2,
+     "exit": 656.0,
+     "badge_at": []
+    }
+   ]
+  },
+  {
+   "scene_id": "s69",
+   "world": {
+    "asset_id": "world-scales-coin-paper-v1",
+    "sha256": "fd697f3fb5ba1a7d9aef9a3ce4586ec3c1543771b3506997c7c0e8965f6a6ceb",
+    "ken_burns": {
+     "scale": 0.05,
+     "x": -12,
+     "y": 8
+    }
+   },
+   "exit": "wipe_right",
+   "span": [
+    656.0,
+    663.8
+   ],
+   "docks": [
+    {
+     "slide": "silicon-value-software-bubble-s15-teacher-stamped",
+     "slot": 1,
+     "enter": 656.0,
+     "exit": 663.5,
+     "badge_at": []
+    }
+   ]
+  },
+  {
+   "scene_id": "s70",
+   "world": {
+    "asset_id": "world-steel-mill-night",
+    "sha256": "23edea595e6f5b8e93fca964e593fc813f36d76b3c96b272c856f92563af53dc",
+    "ken_burns": {
+     "scale": 0.05,
      "x": 14,
-     "y": -10
+     "y": -6
+    }
+   },
+   "exit": "wipe_right",
+   "span": [
+    663.8,
+    675.0
+   ],
+   "docks": [
+    {
+     "slide": "silicon-antidote-s15-teacher-stamped",
+     "slot": 0,
+     "enter": 664.2,
+     "exit": 675.0,
+     "badge_at": []
+    }
+   ]
+  },
+  {
+   "scene_id": "s71",
+   "world": {
+    "asset_id": "world-listing-barge-v1",
+    "sha256": "36bc08427c04ddfd35debb664c426c92feecbab7e3831ea7c6defd80e66817b5",
+    "ken_burns": {
+     "scale": 0.05,
+     "x": -10,
+     "y": 6
+    }
+   },
+   "exit": "wipe_right",
+   "span": [
+    675.0,
+    691.3
+   ],
+   "docks": [
+    {
+     "slide": "silicon-antidote-s14-diagnostic-matrix-v1",
+     "slot": 1,
+     "enter": 676.9,
+     "exit": 691.0,
+     "badge_at": [
+      678.95,
+      680.25
+     ]
+    }
+   ]
+  },
+  {
+   "scene_id": "s72",
+   "world": {
+    "asset_id": "world-molten-pour-v2",
+    "sha256": "ba15fa7aa44403966a031183c1f9433ac74225450aa04a0f9aba40d47c962e63",
+    "ken_burns": {
+     "scale": 0.06,
+     "x": 10,
+     "y": 8
     }
    },
    "exit": "cut",
    "span": [
-    656.65,
-    666.76
+    691.3,
+    697.7
    ],
    "docks": []
   },
   {
-   "scene_id": "s56",
+   "scene_id": "s73",
    "world": {
     "asset_id": "world-workbench-triad-v1",
     "sha256": "01d08817c8e2a0d0a1e3ede3ba56cf98a792991824f8defbe1e52618ba22830c",
     "ken_burns": {
      "scale": 0.04,
-     "x": 14,
-     "y": -10
+     "x": -12,
+     "y": 6
     }
    },
    "exit": "cut",
    "span": [
-    666.76,
-    682.87
+    697.7,
+    712.0
    ],
    "docks": []
   },
   {
-   "scene_id": "s57",
+   "scene_id": "s74",
    "world": {
-    "asset_id": "world-dram-terrain-v1",
-    "sha256": "db502ef68cfbbfc1f6e11973173c7dbd9711fa86ba7e2416f79b1ea229aef3b6",
+    "asset_id": "world-statement-kitchen",
+    "sha256": "93305afa8f35c6af9bf4a3406f727e00d358377c1dd64439930674dc77bd6b72",
     "ken_burns": {
-     "scale": 0.04,
-     "x": 14,
-     "y": -10
+     "scale": 0.05,
+     "x": 12,
+     "y": -8
     }
    },
    "exit": "cut",
    "span": [
-    682.87,
-    692.92
+    712.0,
+    721.4
    ],
    "docks": []
   },
   {
-   "scene_id": "s58",
+   "scene_id": "s75",
    "world": {
-    "asset_id": "world-korea-port-v1",
-    "sha256": "f4b2db5d7fe51ce1e3fc2d2ffa41ca427ec776818b62124e4c4507cbf95247bf",
+    "asset_id": "world-spike-rest-v2",
+    "sha256": "fc195cd02d1783a88e4abaedd11e64cdd4eace5482c2f49c77fecf7c03e87a25",
     "ken_burns": {
-     "scale": 0.04,
-     "x": 14,
-     "y": -10
+     "scale": 0.03,
+     "x": 6,
+     "y": 4
     }
    },
    "exit": "cut",
    "span": [
-    692.92,
-    702.98
-   ],
-   "docks": []
-  },
-  {
-   "scene_id": "s59",
-   "world": {
-    "asset_id": "world-memory-fab-floor-v1",
-    "sha256": "950cfc215705cb2ddded6bc806a58f24041b3110798f8f0e5438f0a8221e2e49",
-    "ken_burns": {
-     "scale": 0.04,
-     "x": 14,
-     "y": -10
-    }
-   },
-   "exit": "cut",
-   "span": [
-    702.98,
-    713.03
-   ],
-   "docks": []
-  },
-  {
-   "scene_id": "s60",
-   "world": {
-    "asset_id": "world-seoul-fab-skyline-v1",
-    "sha256": "b03278f2734b545abc93c0eac214912366639395003a676dadb9be1551b3d11e",
-    "ken_burns": {
-     "scale": 0.04,
-     "x": 14,
-     "y": -10
-    }
-   },
-   "exit": "cut",
-   "span": [
-    713.03,
+    721.4,
     723.09
    ],
    "docks": []

@@ -56,29 +56,33 @@ def title_for(asset: str) -> tuple[str, str]:
 
 def main() -> int:
     tl = json.loads((BUILD / "timeline.json").read_text(encoding="utf-8"))
-    plan = json.loads((BUILD / "plate-plan.json").read_text(encoding="utf-8"))
+    # THE AUTHORED SHOT TABLE is the source. Not an allocator.
+    import importlib.util
+    sp = importlib.util.spec_from_file_location("shot", EP / "SHOT-TABLE-F.py")
+    shot = importlib.util.module_from_spec(sp); sp.loader.exec_module(shot)
+    plan = sorted(shot.W)
     dock = json.loads((BUILD / "evidence-dock.json").read_text(encoding="utf-8"))
+    META = {d["asset"]: d for d in dock}
     pages = json.loads((BUILD / "caption-pages.json").read_text(encoding="utf-8"))
     audio = BUILD / "audio/episode.mp3"
     if not audio.exists():
         print(f"FAIL: {audio} missing — join the chained parts first")
         return 1
 
-    # Plates tile continuously; each is a scene.
-    plan = sorted(plan, key=lambda x: x["start"])
-    for i, p in enumerate(plan):
-        p["end"] = plan[i + 1]["start"] if i + 1 < len(plan) else tl["runtime_s"]
-
     evidence, uris, scenes = {}, {}, []
-    for i, p in enumerate(plan):
-        wp = R.find_asset(p["plate"])
-        uris[p["plate"]] = data_uri(wp)
+    for i, (a, b, plate, ken, ds) in enumerate(plan):
+        # each window runs to the next so the world layer never drops out
+        b = plan[i + 1][0] if i + 1 < len(plan) else tl["runtime_s"]
+        wp = R.find_asset(plate)
+        uris[plate] = data_uri(wp)
         docks = []
-        for d in dock:
-            if p["start"] <= d["at"] < p["end"]:
-                if d["asset"] not in evidence:
-                    ap = R.find_asset(d["asset"])
-                    evidence[d["asset"]] = {
+        for aid, slot, enter, exitt in ds:
+            d = META.get(aid, {"title": aid, "source": "", "species": "deck",
+                               "badges": []})
+            if True:
+                if aid not in evidence:
+                    ap = R.find_asset(aid)
+                    evidence[aid] = {
                         # Authored in the dock - a machine-mangled asset id is
                         # not a title, and empty badges leave the card's whole
                         # information layer blank (ruling B3: a badge numeral
@@ -89,22 +93,23 @@ def main() -> int:
                                      "sha256": sha(ap)},
                         "badges": d["badges"],
                     }
-                    uris[d["asset"]] = data_uri(ap)
+                    uris[aid] = data_uri(ap)
                 # Spans come from the dock: evidence enters before its claim
                 # and holds through the whole discussion. A flat hold drops the
                 # document mid-argument, which is what left 42% of claims naked.
                 docks.append({
-                    "slide": d["asset"], "slot": len(docks) % 2,
-                    "enter": round(d["at"], 2), "exit": round(d["end"], 2),
-                    # doc 29 cadence: badges land +1.3s and +2.6s after settle
-                    "badge_at": [round(d["at"] + 0.75 + 1.3 * (i + 1), 2)
-                                 for i in range(len(d["badges"]))],
+                    "slide": aid, "slot": slot,
+                    "enter": round(enter, 2), "exit": round(exitt, 2),
+                    "badge_at": [round(enter + 0.75 + 1.3 * (n + 1), 2)
+                                 for n in range(len(d["badges"]))],
                 })
         scenes.append({
             "scene_id": f"s{i+1:02d}",
-            "world": {"asset_id": p["plate"], "sha256": sha(wp), "ken_burns": KEN},
+            # Ken Burns is AUTHORED per shot in the table, not one constant.
+            "world": {"asset_id": plate, "sha256": sha(wp),
+                      "ken_burns": {"scale": ken[0], "x": ken[1], "y": ken[2]}},
             "exit": "wipe_right" if docks else "cut",
-            "span": [round(p["start"], 2), round(p["end"], 2)],
+            "span": [round(a, 2), round(b, 2)],
             "docks": docks,
         })
 
