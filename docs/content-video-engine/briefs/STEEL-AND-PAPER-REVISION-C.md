@@ -109,14 +109,21 @@ all year on sold-out supply — sources pinned in the description."
 > it reads what memory costs leaving Korea, by the kilo, straight off
 > customs export data. `[pre-key]` The threshold is that number falling
 > below its own trailing average, two quarters running, while the
-> buildout keeps going. `[post-key]` Right now it's going the other way.
-> DRAM up fifty-one percent — that's the May release, customs data runs
-> about three months behind. The flip: if memory breaks while the
-> buildout holds, the scarcity story is wrong — and so am I. That week, I
-> de-risk the builders on camera.
+> buildout keeps going. `[post-key]` Right now it's going the other way —
+> DRAM up seventeen percent, and the stacked memory the AI racks actually
+> need up fourteen. That's the July release; customs runs about a month
+> behind. The flip: if memory breaks while the buildout holds, the
+> scarcity story is wrong — and so am I. That week, I de-risk the
+> builders on camera.
 
 - The lag is **spoken, not buried** — finance runs the strictest evidence
   precision (ruling A5), and a reading without its as-of is an assertion.
+- **Figures re-verified 2026-08-29** against the rebuilt ledger. The
+  earlier draft cited May 2026 at +51.1% / +26.5%; the corrected store
+  reads **July 2026, DRAM 86,970 $/kg (+17.4%), HBM-class 95,408 $/kg
+  (+14.1%)**, value-weighted (total USD ÷ total kg across partners), and
+  the publication lag is about a month rather than three. Both figures on
+  screen and in narration must come from the same pull.
 - Evidence: `ev-instrument-memory` docks here; `ev-dram-contract-v1`
   (TrendForce) is the confirming series alongside.
 - "I built a monitor for it" is the moat stated plainly — process as the

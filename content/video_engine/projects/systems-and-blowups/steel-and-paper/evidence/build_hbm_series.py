@@ -29,13 +29,11 @@ OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "objects")
 
 # HS 8542.32.3000, export flow, verbatim from trade_facts
 SERIES = [
-    ("2025-06", 43840.7, "s"), ("2025-07", 42087.7, "s"),
-    ("2025-08", 44118.5, "s"), ("2025-09", 41367.1, "s"),
-    ("2025-10", 44348.5, "s"), ("2025-11", 50392.7, "s"),
-    ("2025-12", 58868.7, "s"), ("2026-01", 55748.6, "w"),
-    ("2026-02", 72665.7, "w"), ("2026-03", 63748.3, "w"),
-    ("2026-04", 72712.3, "w"),
-    ("2026-05", 83779.3, "latest"),
+    ("2025-06", 43840.7), ("2025-07", 42087.7), ("2025-08", 44118.5),
+    ("2025-09", 41367.1), ("2025-10", 44348.5), ("2025-11", 50392.7),
+    ("2025-12", 58868.7), ("2026-01", 55748.6), ("2026-02", 72665.7),
+    ("2026-03", 63748.3), ("2026-04", 72716.4), ("2026-05", 83786.1),
+    ("2026-06", 94138.4), ("2026-07", 95407.8),
 ]
 
 def build():
@@ -51,42 +49,42 @@ def build():
     ax.set_axisbelow(True)
 
     xs = np.arange(len(SERIES))
-    ys = [v for _, v, _ in SERIES]
-    MEAN = 66218.7
+    ys = [v for _, v in SERIES]
+    MEAN = 83606.4
 
     # the trailing window the reading is measured against
-    ax.axvspan(6.5, 10.5, color="#ffffff", alpha=0.045, lw=0)
+    ax.axvspan(9.5, 12.5, color="#ffffff", alpha=0.045, lw=0)
     ax.axhline(MEAN, xmin=0.02, xmax=0.98, color=INK_MUTE, lw=2, ls=(0, (7, 6)))
-    ax.text(0.15, MEAN + 2400, f"trailing four-month mean · {MEAN:,.0f} $/kg",
+    ax.text(0.15, MEAN + 2400, f"trailing mean · {MEAN:,.0f} $/kg",
             color=INK_MUTE, fontsize=T_TICK, fontfamily=FAM, va="bottom")
-    ax.text(8.5, 30000, "the four months\nthe reading averages",
+    ax.text(11.2, 45000, "the window the\nreading averages",
             color=INK_2, fontsize=T_LEG, fontfamily=FAM, ha="center")
 
     ax.fill_between(xs, ys, 28000, color=CRIMSON, alpha=0.10, lw=0)
     ax.plot(xs, ys, color=CRIMSON, lw=5, solid_capstyle="round",
             solid_joinstyle="round", zorder=3)
-    for x, y, k in zip(xs, ys, [k for _, _, k in SERIES]):
+    for x, y in zip(xs, ys):
         ax.plot([x], [y], "o", ms=13, color=CRIMSON, mec=SURFACE, mew=4, zorder=5)
 
-    ax.annotate("83,779\n+26.5% vs the mean", xy=(11, 83779), xytext=(9.05, 96000),
+    ax.annotate("95,408\n+14.1% vs the mean", xy=(13, 95407.8), xytext=(10.4, 112000),
                 color=INK_1, fontsize=T_LABEL, fontweight=600, fontfamily=FAM,
                 ha="center", arrowprops=dict(arrowstyle="-", color=INK_MUTE, lw=2))
 
-    ax.set_ylim(28000, 108000)
-    ax.set_yticks([40000, 60000, 80000, 100000])
+    ax.set_ylim(28000, 126000)
+    ax.set_yticks([40000, 60000, 80000, 100000, 120000])
     ax.yaxis.set_major_formatter(FuncFormatter(lambda v, p: f"{int(v):,}"))
-    ax.set_xticks([0, 3, 6, 9, 11])
-    ax.set_xticklabels(["2025-06", "2025-09", "2025-12", "2026-03", "2026-05"],
+    ax.set_xticks([0, 3, 6, 9, 13])
+    ax.set_xticklabels(["2025-06", "2025-09", "2025-12", "2026-03", "2026-07"],
                        fontfamily=FAM)
     for t in ax.get_yticklabels() + ax.get_xticklabels(): t.set_fontfamily(FAM)
 
     fig.text(0.045, 1 - 62 / H, "HBM-class memory leaving Korea, by the kilo",
              color=INK_1, fontsize=T_TITLE, fontweight=600, fontfamily=FAM, va="center")
     fig.text(0.045, 1 - 126 / H,
-             "HS 8542.32.3000 export unit value · multi-component IC, where "
-             "stacked HBM is classified",
+             "HS 8542.32.3000, value-weighted export unit value · multi-component "
+             "IC, where stacked HBM is classified",
              color=INK_2, fontsize=T_SUB, fontfamily=FAM, va="center")
-    fig.text(0.045, 0.128, "One product throughout.",
+    fig.text(0.045, 0.128, "One product throughout · reading period July 2026.",
              color=INK_2, fontsize=T_SUB, fontfamily=FAM, va="center")
     fig.text(0.045, 0.091,
              "Rows still stored as “NAND” are stale labels from a "
