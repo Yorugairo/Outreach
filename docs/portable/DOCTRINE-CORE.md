@@ -152,13 +152,12 @@ register their tell beside ours (stricter).
 ## TITLES + THUMBNAILS = ONE CLICK-CONTRACT
 
 Judge them together. Title: tension in the first ~40 chars, ≤~55 total;
-specificity (numbers, named entities) beats cleverness; every promise is
-paid in the video. Patterns: relocation claim, falsifiable stake,
-paradox, cost receipt. Thumbnail: ONE subject, extreme value contrast,
-reads at 168px; ≤3 punch words and only if the image is ambiguous; title
-and thumb split the work, never repeat each other; motifs compound
-across the catalogue; no real faces. **Thumbnails
-sell the episode's question or thesis — never its opening prop.**
+specificity beats cleverness; every promise is paid. Patterns: relocation
+claim, falsifiable stake, paradox, cost receipt. Thumbnail: ONE subject,
+extreme value contrast, reads at 168px; ≤3 punch words and only if the
+image is ambiguous; title and thumb split the work, never repeat; motifs
+compound across the catalogue; no real faces. **Thumbnails sell the
+episode's question or thesis — never its opening prop.**
 
 ## PRODUCTION AWARENESS
 
