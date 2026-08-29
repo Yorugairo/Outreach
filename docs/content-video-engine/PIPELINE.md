@@ -1,5 +1,9 @@
 # PIPELINE — what exists, what consumes what
 
+> **Before building anything, read `CAPABILITIES.md`** — the index of
+> every built renderer, engine, gate and prototype. Three capabilities were
+> rebuilt from scratch in one session because nothing indexed them.
+
 **Read this before building anything in this folder.** It exists because
 seven established components were bypassed and rebuilt from scratch in a
 single session — not because they were hard to find, but because nothing
