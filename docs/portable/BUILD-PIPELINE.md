@@ -50,6 +50,13 @@ carries. To merge:
 3. Join with **one re-encode pass** and a short crossfade. Never a raw
    concat of independently generated segments.
 
+## The plate library
+
+One index of every generated plate: `sources/PLATE-LIBRARY.json` — id,
+**semantic**, style register, approval state as the manifest records it, and
+path. **Search it by meaning before generating anything.** Status lives in
+the manifest, never in the directory name.
+
 ## Stage 6 is AUTHORED — there is no allocator
 
 Someone reads the narration beat by beat and chooses the plate that depicts

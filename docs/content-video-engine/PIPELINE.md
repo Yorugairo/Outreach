@@ -116,7 +116,31 @@ carries **badges** and a **source line**.
 Word-by-word model: `remotion-video-creation/rules/display-captions.md` —
 `createTikTokStyleCaptions` pages, active token by `fromMs <= now < toMs`.
 
-## Asset libraries — check before you generate
+## The plate library — ONE index, search it before generating
+
+`content/video_engine/sources/PLATE-LIBRARY.json` — every generated plate
+across every source, with its **semantic** (what it depicts), its style
+register, its approval state **as the manifest records it**, and its real
+path.
+
+```bash
+python content/video_engine/scripts/build_plate_library.py            # rebuild
+python content/video_engine/scripts/build_plate_library.py "memory"   # search
+```
+
+Search it by MEANING, not filename. That is the field you author against.
+
+**Status comes from the manifest, never the path** (E10). The library exists
+because the pilot's 195 approved plates sat in a directory named
+`quarantine/` and were skipped, the stamped visuals resolve by `image_id`
+rather than filename, and a shot table was authored from `objects/*.png`
+while the `semantic` describing each plate sat unread beside it.
+
+**A claim may declare its own `register`** in `approvals.json` — a borrowed
+lane (ruling C9) keeps its own style label rather than inheriting the
+folder's.
+
+## Asset libraries — the sources the index reads
 
 | Library | Where | Count |
 |---|---|---|

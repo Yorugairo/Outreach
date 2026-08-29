@@ -1,0 +1,1286 @@
+{
+ "schema_version": "plate_library.v1",
+ "built": "2026-08-29",
+ "note": "Status comes from the MANIFEST, never the path (ruling E10). The pilot's quarantine/ directory is misnamed - every manifest inside reads operator_approved.",
+ "count": 142,
+ "plates": [
+  {
+   "id": "world-banker-apartment-v2",
+   "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\finance-episodes-plates-wave-1\\objects\\world-banker-apartment-v2.png",
+   "semantic": "overstuffed banker apartment, dense left / empty right",
+   "register": "woodblock-vox-newsprint",
+   "source": "steel-and-paper/finance-episodes-plates-wave-1",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "world-budtender-apartment-v1",
+   "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\finance-episodes-plates-wave-1\\objects\\world-budtender-apartment-v1.png",
+   "semantic": "sparse calm apartment, floor and light",
+   "register": "woodblock-vox-newsprint",
+   "source": "steel-and-paper/finance-episodes-plates-wave-1",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "world-dram-terrain-v1",
+   "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\finance-episodes-plates-wave-1\\objects\\world-dram-terrain-v1.png",
+   "semantic": "memory wafer as vast landscape",
+   "register": "woodblock-vox-newsprint",
+   "source": "steel-and-paper/finance-episodes-plates-wave-1",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "world-korea-port-v1",
+   "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\finance-episodes-plates-wave-1\\objects\\world-korea-port-v1.png",
+   "semantic": "container port at dusk, memory supply chain",
+   "register": "woodblock-vox-newsprint",
+   "source": "steel-and-paper/finance-episodes-plates-wave-1",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "world-memory-fab-floor-v1",
+   "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\finance-episodes-plates-wave-1\\objects\\world-memory-fab-floor-v1.png",
+   "semantic": "HBM fab cleanroom aisle, scale and precision",
+   "register": "woodblock-vox-newsprint",
+   "source": "steel-and-paper/finance-episodes-plates-wave-1",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "world-receipt-macro-v1",
+   "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\finance-episodes-plates-wave-1\\objects\\world-receipt-macro-v1.png",
+   "semantic": "single tall receipt on dark ground, hidden second line",
+   "register": "woodblock-vox-newsprint",
+   "source": "steel-and-paper/finance-episodes-plates-wave-1",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "world-seoul-fab-skyline-v1",
+   "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\finance-episodes-plates-wave-1\\objects\\world-seoul-fab-skyline-v1.png",
+   "semantic": "industrial skyline at dawn, fab country",
+   "register": "woodblock-vox-newsprint",
+   "source": "steel-and-paper/finance-episodes-plates-wave-1",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "world-signal-box-dusk-v1",
+   "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\finance-episodes-plates-wave-1\\objects\\world-signal-box-dusk-v1.png",
+   "semantic": "signal box exterior at dusk over rails \u2014 title world",
+   "register": "woodblock-vox-newsprint",
+   "source": "steel-and-paper/finance-episodes-plates-wave-1",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "world-signal-box-levers-v1",
+   "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\finance-episodes-plates-wave-1\\objects\\world-signal-box-levers-v1.png",
+   "semantic": "two signal levers in a railway signal box \u2014 the tripwires",
+   "register": "woodblock-vox-newsprint",
+   "source": "steel-and-paper/finance-episodes-plates-wave-1",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "world-till-drawer-v1",
+   "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\finance-episodes-plates-wave-1\\objects\\world-till-drawer-v1.png",
+   "semantic": "open till drawer macro, counting cash",
+   "register": "woodblock-vox-newsprint",
+   "source": "steel-and-paper/finance-episodes-plates-wave-1",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "hero-barbell-v1",
+   "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\pilot-hero-plates-borrowed\\objects\\hero-barbell-v1.png",
+   "semantic": "",
+   "register": "cut-paper-ukiyo",
+   "source": "steel-and-paper/pilot-hero-plates-borrowed",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "hero-contract-ovens-v1",
+   "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\pilot-hero-plates-borrowed\\objects\\hero-contract-ovens-v1.png",
+   "semantic": "",
+   "register": "cut-paper-ukiyo",
+   "source": "steel-and-paper/pilot-hero-plates-borrowed",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "hero-countercase-v1",
+   "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\pilot-hero-plates-borrowed\\objects\\hero-countercase-v1.png",
+   "semantic": "",
+   "register": "cut-paper-ukiyo",
+   "source": "steel-and-paper/pilot-hero-plates-borrowed",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "hero-fab-constraint-v1",
+   "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\pilot-hero-plates-borrowed\\objects\\hero-fab-constraint-v1.png",
+   "semantic": "",
+   "register": "cut-paper-ukiyo",
+   "source": "steel-and-paper/pilot-hero-plates-borrowed",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "hero-hbm-bandwidth-v1",
+   "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\pilot-hero-plates-borrowed\\objects\\hero-hbm-bandwidth-v1.png",
+   "semantic": "",
+   "register": "cut-paper-ukiyo",
+   "source": "steel-and-paper/pilot-hero-plates-borrowed",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "hero-korea-italy-v1",
+   "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\pilot-hero-plates-borrowed\\objects\\hero-korea-italy-v1.png",
+   "semantic": "",
+   "register": "cut-paper-ukiyo",
+   "source": "steel-and-paper/pilot-hero-plates-borrowed",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "hero-sp500-double-failure-v1",
+   "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\pilot-hero-plates-borrowed\\objects\\hero-sp500-double-failure-v1.png",
+   "semantic": "",
+   "register": "cut-paper-ukiyo",
+   "source": "steel-and-paper/pilot-hero-plates-borrowed",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "hero-wrong-bubble-v1",
+   "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\pilot-hero-plates-borrowed\\objects\\hero-wrong-bubble-v1.png",
+   "semantic": "",
+   "register": "cut-paper-ukiyo",
+   "source": "steel-and-paper/pilot-hero-plates-borrowed",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "world-bankrupt-club-v1",
+   "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\steel-and-paper-plates-wave-1\\objects\\world-bankrupt-club-v1.png",
+   "semantic": "derelict victorian smoking room, walls papered with certificates",
+   "register": "woodblock-vox-newsprint",
+   "source": "steel-and-paper/steel-and-paper-plates-wave-1",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "world-certificate-wall-v1",
+   "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\steel-and-paper-plates-wave-1\\objects\\world-certificate-wall-v1.png",
+   "semantic": "wall papered floor-to-ceiling with ornate illegible share certificates",
+   "register": "woodblock-vox-newsprint",
+   "source": "steel-and-paper/steel-and-paper-plates-wave-1",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "world-circuit-terrain-v1",
+   "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\steel-and-paper-plates-wave-1\\objects\\world-circuit-terrain-v1.png",
+   "semantic": "circuit board as night terrain, one socket row dark - the memory tell",
+   "register": "woodblock-vox-newsprint",
+   "source": "steel-and-paper/steel-and-paper-plates-wave-1",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "world-exhibition-hall-morning-v1",
+   "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\steel-and-paper-plates-wave-1\\objects\\world-exhibition-hall-morning-v1.png",
+   "semantic": "technology fair the morning after: banners down, crates out, the trough",
+   "register": "woodblock-vox-newsprint",
+   "source": "steel-and-paper/steel-and-paper-plates-wave-1",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "world-modern-certificate-v1",
+   "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\steel-and-paper-plates-wave-1\\objects\\world-modern-certificate-v1.png",
+   "semantic": "one pristine modern document under museum-glass framing, the index as paper",
+   "register": "woodblock-vox-newsprint",
+   "source": "steel-and-paper/steel-and-paper-plates-wave-1",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "world-spike-certificate-ring-v1",
+   "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\steel-and-paper-plates-wave-1\\objects\\world-spike-certificate-ring-v1.png",
+   "semantic": "the same spike, lamp lower, a curled certificate touching its point - ring echo",
+   "register": "woodblock-vox-newsprint",
+   "source": "steel-and-paper/steel-and-paper-plates-wave-1",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "world-spike-desk-v1",
+   "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\steel-and-paper-plates-wave-1\\objects\\world-spike-desk-v1.png",
+   "semantic": "antique iron railway spike on dark desk, the ring token, macro",
+   "register": "woodblock-vox-newsprint",
+   "source": "steel-and-paper/steel-and-paper-plates-wave-1",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "world-spike-rest-v1",
+   "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\steel-and-paper-plates-wave-1\\objects\\world-spike-rest-v1.png",
+   "semantic": "the spike at rest, lamp almost out - story close and end-screen underlay",
+   "register": "woodblock-vox-newsprint",
+   "source": "steel-and-paper/steel-and-paper-plates-wave-1",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "world-two-rooms-divergence-v1",
+   "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\steel-and-paper-plates-wave-1\\objects\\world-two-rooms-divergence-v1.png",
+   "semantic": "split frame: roaring foundry vs silent empty boardroom, builders vs spenders",
+   "register": "woodblock-vox-newsprint",
+   "source": "steel-and-paper/steel-and-paper-plates-wave-1",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "world-viaduct-train-rain-v1",
+   "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\steel-and-paper-plates-wave-1\\objects\\world-viaduct-train-rain-v1.png",
+   "semantic": "victorian freight train crossing stone viaduct in rain, steel survives",
+   "register": "woodblock-vox-newsprint",
+   "source": "steel-and-paper/steel-and-paper-plates-wave-1",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "world-workbench-triad-v1",
+   "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\steel-and-paper-plates-wave-1\\objects\\world-workbench-triad-v1.png",
+   "semantic": "workbench holding iron ingot, banded paper stack, lit oil lamp - the test",
+   "register": "woodblock-vox-newsprint",
+   "source": "steel-and-paper/steel-and-paper-plates-wave-1",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "world-spike-certificate-ring-v2",
+   "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\steel-and-paper-plates-wave-1b\\objects\\world-spike-certificate-ring-v2.png",
+   "semantic": "same spike scene, lamp lower, one curled certificate touching its point - ring echo",
+   "register": "woodblock-vox-newsprint",
+   "source": "steel-and-paper/steel-and-paper-plates-wave-1b",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "world-spike-rest-v2",
+   "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\steel-and-paper-plates-wave-1b\\objects\\world-spike-rest-v2.png",
+   "semantic": "same spike scene, lamp almost out - story close, end-screen underlay",
+   "register": "woodblock-vox-newsprint",
+   "source": "steel-and-paper/steel-and-paper-plates-wave-1b",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "world-adviser-signature-v1",
+   "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\steel-and-paper-plates-wave-3\\objects\\world-adviser-signature-v1.png",
+   "semantic": "an adviser sliding a form across a desk",
+   "register": "woodblock-vox-newsprint",
+   "source": "steel-and-paper/steel-and-paper-plates-wave-3",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "world-broadcast-set-v1",
+   "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\steel-and-paper-plates-wave-3\\objects\\world-broadcast-set-v1.png",
+   "semantic": "an empty finance broadcast set",
+   "register": "woodblock-vox-newsprint",
+   "source": "steel-and-paper/steel-and-paper-plates-wave-3",
+   "state": "approved",
+   "render_eligible": false
+  },
+  {
+   "id": "world-budget-burndown-v1",
+   "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\steel-and-paper-plates-wave-3\\objects\\world-budget-burndown-v1.png",
+   "semantic": "a budget line burning down on a whiteboard",
+   "register": "woodblock-vox-newsprint",
+   "source": "steel-and-paper/steel-and-paper-plates-wave-3",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "world-datacenter-aisle-v1",
+   "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\steel-and-paper-plates-wave-3\\objects\\world-datacenter-aisle-v1.png",
+   "semantic": "a modern AI datacenter hot aisle",
+   "register": "woodblock-vox-newsprint",
+   "source": "steel-and-paper/steel-and-paper-plates-wave-3",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "world-dawn-factory-v1",
+   "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\steel-and-paper-plates-wave-3\\objects\\world-dawn-factory-v1.png",
+   "semantic": "a works running at dawn",
+   "register": "woodblock-vox-newsprint",
+   "source": "steel-and-paper/steel-and-paper-plates-wave-3",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "world-dotcom-server-room-v1",
+   "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\steel-and-paper-plates-wave-3\\objects\\world-dotcom-server-room-v1.png",
+   "semantic": "a year-2000 server room",
+   "register": "woodblock-vox-newsprint",
+   "source": "steel-and-paper/steel-and-paper-plates-wave-3",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "world-empty-racks-v1",
+   "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\steel-and-paper-plates-wave-3\\objects\\world-empty-racks-v1.png",
+   "semantic": "sold-out, as empty warehouse racking",
+   "register": "woodblock-vox-newsprint",
+   "source": "steel-and-paper/steel-and-paper-plates-wave-3",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "world-fiber-trench-v1",
+   "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\steel-and-paper-plates-wave-3\\objects\\world-fiber-trench-v1.png",
+   "semantic": "fibre optic cable laid into a city trench",
+   "register": "woodblock-vox-newsprint",
+   "source": "steel-and-paper/steel-and-paper-plates-wave-3",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "world-gpu-crate-dock-v1",
+   "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\steel-and-paper-plates-wave-3\\objects\\world-gpu-crate-dock-v1.png",
+   "semantic": "accelerator crates on a loading dock",
+   "register": "woodblock-vox-newsprint",
+   "source": "steel-and-paper/steel-and-paper-plates-wave-3",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "world-index-weights-v1",
+   "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\steel-and-paper-plates-wave-3\\objects\\world-index-weights-v1.png",
+   "semantic": "an index shown as physical weights",
+   "register": "woodblock-vox-newsprint",
+   "source": "steel-and-paper/steel-and-paper-plates-wave-3",
+   "state": "approved",
+   "render_eligible": false
+  },
+  {
+   "id": "world-internal-memo-v1",
+   "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\steel-and-paper-plates-wave-3\\objects\\world-internal-memo-v1.png",
+   "semantic": "an internal memo face-up on a desk",
+   "register": "woodblock-vox-newsprint",
+   "source": "steel-and-paper/steel-and-paper-plates-wave-3",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "world-ledger-page-v1",
+   "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\steel-and-paper-plates-wave-3\\objects\\world-ledger-page-v1.png",
+   "semantic": "a ledger page under lamplight",
+   "register": "woodblock-vox-newsprint",
+   "source": "steel-and-paper/steel-and-paper-plates-wave-3",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "world-license-cabinet-v1",
+   "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\steel-and-paper-plates-wave-3\\objects\\world-license-cabinet-v1.png",
+   "semantic": "rationed access, as a locked cabinet",
+   "register": "woodblock-vox-newsprint",
+   "source": "steel-and-paper/steel-and-paper-plates-wave-3",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "world-memory-wafer-v1",
+   "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\steel-and-paper-plates-wave-3\\objects\\world-memory-wafer-v1.png",
+   "semantic": "a memory wafer held in gloved hands",
+   "register": "woodblock-vox-newsprint",
+   "source": "steel-and-paper/steel-and-paper-plates-wave-3",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "world-navvy-cutting-v1",
+   "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\steel-and-paper-plates-wave-3\\objects\\world-navvy-cutting-v1.png",
+   "semantic": "1840s navvies cutting a railway trench by hand",
+   "register": "woodblock-vox-newsprint",
+   "source": "steel-and-paper/steel-and-paper-plates-wave-3",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "world-orderbook-stamped-v1",
+   "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\steel-and-paper-plates-wave-3\\objects\\world-orderbook-stamped-v1.png",
+   "semantic": "an order book, every line spoken for",
+   "register": "woodblock-vox-newsprint",
+   "source": "steel-and-paper/steel-and-paper-plates-wave-3",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "world-pressure-gauge-v1",
+   "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\steel-and-paper-plates-wave-3\\objects\\world-pressure-gauge-v1.png",
+   "semantic": "a large pressure gauge near its limit",
+   "register": "woodblock-vox-newsprint",
+   "source": "steel-and-paper/steel-and-paper-plates-wave-3",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "world-price-board-wiped-v1",
+   "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\steel-and-paper-plates-wave-3\\objects\\world-price-board-wiped-v1.png",
+   "semantic": "a chalk price board being wiped down",
+   "register": "woodblock-vox-newsprint",
+   "source": "steel-and-paper/steel-and-paper-plates-wave-3",
+   "state": "approved",
+   "render_eligible": false
+  },
+  {
+   "id": "world-railway-acts-desk-v1",
+   "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\steel-and-paper-plates-wave-3\\objects\\world-railway-acts-desk-v1.png",
+   "semantic": "stack of railway acts on a clerk's desk",
+   "register": "woodblock-vox-newsprint",
+   "source": "steel-and-paper/steel-and-paper-plates-wave-3",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "world-scales-coin-paper-v1",
+   "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\steel-and-paper-plates-wave-3\\objects\\world-scales-coin-paper-v1.png",
+   "semantic": "scales weighing coin against paper",
+   "register": "woodblock-vox-newsprint",
+   "source": "steel-and-paper/steel-and-paper-plates-wave-3",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "world-sell-ticket-v1",
+   "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\steel-and-paper-plates-wave-3\\objects\\world-sell-ticket-v1.png",
+   "semantic": "a sell order ticket on a trading desk",
+   "register": "woodblock-vox-newsprint",
+   "source": "steel-and-paper/steel-and-paper-plates-wave-3",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "world-share-office-queue-v1",
+   "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\steel-and-paper-plates-wave-3\\objects\\world-share-office-queue-v1.png",
+   "semantic": "queue outside a railway share subscription office",
+   "register": "woodblock-vox-newsprint",
+   "source": "steel-and-paper/steel-and-paper-plates-wave-3",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "world-substation-feed-v1",
+   "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\steel-and-paper-plates-wave-3\\objects\\world-substation-feed-v1.png",
+   "semantic": "a substation feeding the buildout",
+   "register": "woodblock-vox-newsprint",
+   "source": "steel-and-paper/steel-and-paper-plates-wave-3",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "world-target-date-envelope-v1",
+   "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\steel-and-paper-plates-wave-3\\objects\\world-target-date-envelope-v1.png",
+   "semantic": "a retirement plan statement on a kitchen table",
+   "register": "woodblock-vox-newsprint",
+   "source": "steel-and-paper/steel-and-paper-plates-wave-3",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "world-three-notch-slate-v1",
+   "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\steel-and-paper-plates-wave-3\\objects\\world-three-notch-slate-v1.png",
+   "semantic": "a slate carved with three notches",
+   "register": "woodblock-vox-newsprint",
+   "source": "steel-and-paper/steel-and-paper-plates-wave-3",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "world-broadcast-set-v2",
+   "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\steel-and-paper-plates-wave-4\\objects\\world-broadcast-set-v2.png",
+   "semantic": "an empty finance broadcast set between takes",
+   "register": "woodblock-vox-newsprint",
+   "source": "steel-and-paper/steel-and-paper-plates-wave-4",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "world-listing-barge-v1",
+   "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\steel-and-paper-plates-wave-4\\objects\\world-listing-barge-v1.png",
+   "semantic": "accidental concentration - a barge loaded all at one end",
+   "register": "woodblock-vox-newsprint",
+   "source": "steel-and-paper/steel-and-paper-plates-wave-4",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "world-allocation-board",
+   "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\steel-and-paper-plates-wave-5\\objects\\world-allocation-board.png",
+   "semantic": "every line spoken for",
+   "register": "woodblock-vox-newsprint",
+   "source": "steel-and-paper/steel-and-paper-plates-wave-5",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "world-bond-prospectus",
+   "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\steel-and-paper-plates-wave-5\\objects\\world-bond-prospectus.png",
+   "semantic": "the borrowing, as an object",
+   "register": "woodblock-vox-newsprint",
+   "source": "steel-and-paper/steel-and-paper-plates-wave-5",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "world-club-interior-papered",
+   "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\steel-and-paper-plates-wave-5\\objects\\world-club-interior-papered.png",
+   "semantic": "what was left afterwards",
+   "register": "woodblock-vox-newsprint",
+   "source": "steel-and-paper/steel-and-paper-plates-wave-5",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "world-datacenter-shell",
+   "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\steel-and-paper-plates-wave-5\\objects\\world-datacenter-shell.png",
+   "semantic": "promised, not yet paid for",
+   "register": "woodblock-vox-newsprint",
+   "source": "steel-and-paper/steel-and-paper-plates-wave-5",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "world-exchange-floor-1845",
+   "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\steel-and-paper-plates-wave-5\\objects\\world-exchange-floor-1845.png",
+   "semantic": "the mania at street level",
+   "register": "woodblock-vox-newsprint",
+   "source": "steel-and-paper/steel-and-paper-plates-wave-5",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "world-hbm-die-stack",
+   "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\steel-and-paper-plates-wave-5\\objects\\world-hbm-die-stack.png",
+   "semantic": "stacked memory dies",
+   "register": "woodblock-vox-newsprint",
+   "source": "steel-and-paper/steel-and-paper-plates-wave-5",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "world-index-board-swelling",
+   "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\steel-and-paper-plates-wave-5\\objects\\world-index-board-swelling.png",
+   "semantic": "one sector crowding the index",
+   "register": "woodblock-vox-newsprint",
+   "source": "steel-and-paper/steel-and-paper-plates-wave-5",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "world-laptop-shelf",
+   "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\steel-and-paper-plates-wave-5\\objects\\world-laptop-shelf.png",
+   "semantic": "what the shortage costs at retail",
+   "register": "woodblock-vox-newsprint",
+   "source": "steel-and-paper/steel-and-paper-plates-wave-5",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "world-lease-contracts-bound",
+   "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\steel-and-paper-plates-wave-5\\objects\\world-lease-contracts-bound.png",
+   "semantic": "commitments already signed",
+   "register": "woodblock-vox-newsprint",
+   "source": "steel-and-paper/steel-and-paper-plates-wave-5",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "world-molten-pour-v2",
+   "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\steel-and-paper-plates-wave-5\\objects\\world-molten-pour-v2.png",
+   "semantic": "molten steel pour, workers watching - supersedes v1 (paper-collage style drift)",
+   "register": "woodblock-vox-newsprint",
+   "source": "steel-and-paper/steel-and-paper-plates-wave-5",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "world-signature-close",
+   "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\steel-and-paper-plates-wave-5\\objects\\world-signature-close.png",
+   "semantic": "a promise made in a good year",
+   "register": "woodblock-vox-newsprint",
+   "source": "steel-and-paper/steel-and-paper-plates-wave-5",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "world-statement-kitchen",
+   "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\steel-and-paper-plates-wave-5\\objects\\world-statement-kitchen.png",
+   "semantic": "where it actually lands",
+   "register": "woodblock-vox-newsprint",
+   "source": "steel-and-paper/steel-and-paper-plates-wave-5",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "world-steel-mill-night",
+   "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\steel-and-paper-plates-wave-5\\objects\\world-steel-mill-night.png",
+   "semantic": "the thing that keeps working",
+   "register": "woodblock-vox-newsprint",
+   "source": "steel-and-paper/steel-and-paper-plates-wave-5",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "world-trading-desk-dark",
+   "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\steel-and-paper-plates-wave-5\\objects\\world-trading-desk-dark.png",
+   "semantic": "the modern room, after",
+   "register": "woodblock-vox-newsprint",
+   "source": "steel-and-paper/steel-and-paper-plates-wave-5",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "world-treasury-cash-count",
+   "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\steel-and-paper-plates-wave-5\\objects\\world-treasury-cash-count.png",
+   "semantic": "the era this was paid for out of pocket",
+   "register": "woodblock-vox-newsprint",
+   "source": "steel-and-paper/steel-and-paper-plates-wave-5",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "world-paper-and-steel-press-v1",
+   "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\steel-and-paper-plates-wave-6\\objects\\world-paper-and-steel-press-v1.png",
+   "semantic": "one machine, two outputs - paper endless, hardware exact",
+   "register": "woodblock-vox-newsprint",
+   "source": "steel-and-paper/steel-and-paper-plates-wave-6",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "world-signature-nib-v2",
+   "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\steel-and-paper-plates-wave-6\\objects\\world-signature-nib-v2.png",
+   "semantic": "a promise about to be made - no mark on the page yet",
+   "register": "woodblock-vox-newsprint",
+   "source": "steel-and-paper/steel-and-paper-plates-wave-6",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "world-assay-sort-v1",
+   "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\steel-and-paper-plates-wave-7\\objects\\world-assay-sort-v1.png",
+   "semantic": "the test producing two verdicts - heavy and few, weightless and endless",
+   "register": "woodblock-vox-newsprint",
+   "source": "steel-and-paper/steel-and-paper-plates-wave-7",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "world-steelman-build-v1",
+   "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\steel-and-paper-plates-wave-7\\objects\\world-steelman-build-v1.png",
+   "semantic": "their case built at full strength, by someone who does not own it",
+   "register": "woodblock-vox-newsprint",
+   "source": "steel-and-paper/steel-and-paper-plates-wave-7",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "world-hype-machine-v2",
+   "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\steel-and-paper-plates-wave-7b\\objects\\world-hype-machine-v2.png",
+   "semantic": "paper in by the ton, one solid made thing out",
+   "register": "woodblock-vox-newsprint",
+   "source": "steel-and-paper/steel-and-paper-plates-wave-7b",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "world-unwind-desk-v2",
+   "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\steel-and-paper-plates-wave-7b\\objects\\world-unwind-desk-v2.png",
+   "semantic": "a position deliberately reduced - tall stack diminished, short stack beside it",
+   "register": "woodblock-vox-newsprint",
+   "source": "steel-and-paper/steel-and-paper-plates-wave-7b",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "crowd-support-alpha-v1",
+   "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\components\\semantic-wave-01\\crowd-support-alpha-v1.png",
+   "semantic": "",
+   "register": "keyed-overlay",
+   "source": "pilot/current-bubble-mechanism/components/semantic-wave-01",
+   "state": "unstated",
+   "render_eligible": false
+  },
+  {
+   "id": "crowd-support-keyed-v1",
+   "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\components\\semantic-wave-01\\crowd-support-keyed-v1.png",
+   "semantic": "",
+   "register": "keyed-overlay",
+   "source": "pilot/current-bubble-mechanism/components/semantic-wave-01",
+   "state": "unstated",
+   "render_eligible": false
+  },
+  {
+   "id": "industrial-support-stack-alpha-v1",
+   "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\components\\semantic-wave-01\\industrial-support-stack-alpha-v1.png",
+   "semantic": "",
+   "register": "keyed-overlay",
+   "source": "pilot/current-bubble-mechanism/components/semantic-wave-01",
+   "state": "unstated",
+   "render_eligible": false
+  },
+  {
+   "id": "industrial-support-stack-keyed-v1",
+   "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\components\\semantic-wave-01\\industrial-support-stack-keyed-v1.png",
+   "semantic": "",
+   "register": "keyed-overlay",
+   "source": "pilot/current-bubble-mechanism/components/semantic-wave-01",
+   "state": "unstated",
+   "render_eligible": false
+  },
+  {
+   "id": "memory-module-queue-alpha-v1",
+   "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\components\\semantic-wave-01\\memory-module-queue-alpha-v1.png",
+   "semantic": "",
+   "register": "keyed-overlay",
+   "source": "pilot/current-bubble-mechanism/components/semantic-wave-01",
+   "state": "unstated",
+   "render_eligible": false
+  },
+  {
+   "id": "memory-module-queue-keyed-v1",
+   "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\components\\semantic-wave-01\\memory-module-queue-keyed-v1.png",
+   "semantic": "",
+   "register": "keyed-overlay",
+   "source": "pilot/current-bubble-mechanism/components/semantic-wave-01",
+   "state": "unstated",
+   "render_eligible": false
+  },
+  {
+   "id": "top-ten-weighted-tiles-alpha-v1",
+   "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\components\\semantic-wave-01\\top-ten-weighted-tiles-alpha-v1.png",
+   "semantic": "",
+   "register": "keyed-overlay",
+   "source": "pilot/current-bubble-mechanism/components/semantic-wave-01",
+   "state": "unstated",
+   "render_eligible": false
+  },
+  {
+   "id": "top-ten-weighted-tiles-keyed-v1",
+   "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\components\\semantic-wave-01\\top-ten-weighted-tiles-keyed-v1.png",
+   "semantic": "",
+   "register": "keyed-overlay",
+   "source": "pilot/current-bubble-mechanism/components/semantic-wave-01",
+   "state": "unstated",
+   "render_eligible": false
+  },
+  {
+   "id": "beat-01-002-memory-stocks-vertical-v1",
+   "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-01\\beat-01-002-memory-stocks-vertical-v1.png",
+   "semantic": "",
+   "register": "sentence-native",
+   "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-01",
+   "state": "approved",
+   "render_eligible": false
+  },
+  {
+   "id": "beat-01-003-bubble-reflex-v1",
+   "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-01\\beat-01-003-bubble-reflex-v1.png",
+   "semantic": "",
+   "register": "sentence-native",
+   "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-01",
+   "state": "approved",
+   "render_eligible": false
+  },
+  {
+   "id": "beat-01-004-factory-capacity-v1",
+   "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-01\\beat-01-004-factory-capacity-v1.png",
+   "semantic": "",
+   "register": "sentence-native",
+   "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-01",
+   "state": "approved",
+   "render_eligible": false
+  },
+  {
+   "id": "beat-01-006-index-safe-default-rejected-v1",
+   "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-01\\beat-01-006-index-safe-default-rejected-v1.png",
+   "semantic": "",
+   "register": "sentence-native",
+   "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-01",
+   "state": "approved",
+   "render_eligible": false
+  },
+  {
+   "id": "beat-01-006-index-safe-default-v2",
+   "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-01\\beat-01-006-index-safe-default-v2.png",
+   "semantic": "",
+   "register": "sentence-native",
+   "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-01",
+   "state": "approved",
+   "render_eligible": false
+  },
+  {
+   "id": "beat-01-008-automatic-inflow-feedback-v1",
+   "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-01\\beat-01-008-automatic-inflow-feedback-v1.png",
+   "semantic": "",
+   "register": "sentence-native",
+   "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-01",
+   "state": "approved",
+   "render_eligible": false
+  },
+  {
+   "id": "beat-01-009-memory-correction-v1",
+   "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-01\\beat-01-009-memory-correction-v1.png",
+   "semantic": "",
+   "register": "sentence-native",
+   "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-01",
+   "state": "approved",
+   "render_eligible": false
+  },
+  {
+   "id": "beat-01-010-memory-overpriced-v1",
+   "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-01\\beat-01-010-memory-overpriced-v1.png",
+   "semantic": "",
+   "register": "sentence-native",
+   "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-01",
+   "state": "approved",
+   "render_eligible": false
+  },
+  {
+   "id": "beat-01-011-memory-cycle-v1",
+   "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-01\\beat-01-011-memory-cycle-v1.png",
+   "semantic": "",
+   "register": "sentence-native",
+   "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-01",
+   "state": "approved",
+   "render_eligible": false
+  },
+  {
+   "id": "beat-01-012-physical-bottleneck-repriced-v1",
+   "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-01\\beat-01-012-physical-bottleneck-repriced-v1.png",
+   "semantic": "",
+   "register": "sentence-native",
+   "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-01",
+   "state": "approved",
+   "render_eligible": false
+  },
+  {
+   "id": "beat-01-013-hidden-safe-index-loop-v1",
+   "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-01\\beat-01-013-hidden-safe-index-loop-v1.png",
+   "semantic": "",
+   "register": "sentence-native",
+   "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-01",
+   "state": "approved",
+   "render_eligible": false
+  },
+  {
+   "id": "beat-02-002-symptom-not-diagnosis-v1",
+   "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-01\\beat-02-002-symptom-not-diagnosis-v1.png",
+   "semantic": "",
+   "register": "sentence-native",
+   "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-01",
+   "state": "approved",
+   "render_eligible": false
+  },
+  {
+   "id": "beat-02-003-next-buyer-belief-v1",
+   "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-01\\beat-02-003-next-buyer-belief-v1.png",
+   "semantic": "",
+   "register": "sentence-native",
+   "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-01",
+   "state": "approved",
+   "render_eligible": false
+  },
+  {
+   "id": "flow-hook-01-memory-vertical-omni-flash-v1-frame-001",
+   "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-01\\flow-hook-01-memory-vertical-omni-flash-v1-frame-001.png",
+   "semantic": "",
+   "register": "sentence-native",
+   "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-01",
+   "state": "approved",
+   "render_eligible": false
+  },
+  {
+   "id": "wave-01a-review-contact-sheet",
+   "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-01\\wave-01a-review-contact-sheet.png",
+   "semantic": "",
+   "register": "sentence-native",
+   "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-01",
+   "state": "approved",
+   "render_eligible": false
+  },
+  {
+   "id": "wave-01b-review-contact-sheet",
+   "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-01\\wave-01b-review-contact-sheet.png",
+   "semantic": "",
+   "register": "sentence-native",
+   "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-01",
+   "state": "approved",
+   "render_eligible": false
+  },
+  {
+   "id": "wave-01c-review-contact-sheet",
+   "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-01\\wave-01c-review-contact-sheet.png",
+   "semantic": "",
+   "register": "sentence-native",
+   "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-01",
+   "state": "approved",
+   "render_eligible": false
+  },
+  {
+   "id": "beat-03-002-hbm-stack-accelerator-v1",
+   "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-02\\beat-03-002-hbm-stack-accelerator-v1.png",
+   "semantic": "",
+   "register": "sentence-native",
+   "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-02",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "beat-03-004-gpu-hbm-fuel-system-v1",
+   "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-02\\beat-03-004-gpu-hbm-fuel-system-v1.png",
+   "semantic": "",
+   "register": "sentence-native",
+   "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-02",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "beat-03-008-009-physical-capacity-gate-v1",
+   "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-02\\beat-03-008-009-physical-capacity-gate-v1.png",
+   "semantic": "",
+   "register": "sentence-native",
+   "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-02",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "beat-03-011-015-bakery-capacity-analogy-v1",
+   "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-02\\beat-03-011-015-bakery-capacity-analogy-v1.png",
+   "semantic": "",
+   "register": "sentence-native",
+   "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-02",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "wave-02-depth-contact-sheet",
+   "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-02\\wave-02-depth-contact-sheet.png",
+   "semantic": "",
+   "register": "sentence-native",
+   "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-02",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "beat-03-016-hbm-pressures-dram-v1",
+   "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-03\\beat-03-016-hbm-pressures-dram-v1.png",
+   "semantic": "",
+   "register": "sentence-native",
+   "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-03",
+   "state": "approved",
+   "render_eligible": false
+  },
+  {
+   "id": "beat-03-017-production-pull-complexity-v1",
+   "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-03\\beat-03-017-production-pull-complexity-v1.png",
+   "semantic": "",
+   "register": "sentence-native",
+   "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-03",
+   "state": "approved",
+   "render_eligible": false
+  },
+  {
+   "id": "beat-03-020-price-fairness-separation-v1",
+   "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-03\\beat-03-020-price-fairness-separation-v1.png",
+   "semantic": "",
+   "register": "sentence-native",
+   "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-03",
+   "state": "approved",
+   "render_eligible": false
+  },
+  {
+   "id": "beat-03-021-shortage-not-imaginary-v1",
+   "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-03\\beat-03-021-shortage-not-imaginary-v1.png",
+   "semantic": "",
+   "register": "sentence-native",
+   "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-03",
+   "state": "approved",
+   "render_eligible": false
+  },
+  {
+   "id": "wave-03-review-contact-sheet",
+   "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-03\\wave-03-review-contact-sheet.png",
+   "semantic": "",
+   "register": "sentence-native",
+   "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-03",
+   "state": "approved",
+   "render_eligible": false
+  },
+  {
+   "id": "beat-04-001-buyer-behavior-v1",
+   "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-04\\beat-04-001-buyer-behavior-v1.png",
+   "semantic": "",
+   "register": "sentence-native",
+   "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-04",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "beat-04-003-classic-cycle-counterargument-v1",
+   "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-04\\beat-04-003-classic-cycle-counterargument-v1.png",
+   "semantic": "",
+   "register": "sentence-native",
+   "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-04",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "beat-04-004-changed-customer-behavior-v1",
+   "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-04\\beat-04-004-changed-customer-behavior-v1.png",
+   "semantic": "",
+   "register": "sentence-native",
+   "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-04",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "beat-04-013-guidance-not-gospel-v1",
+   "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-04\\beat-04-013-guidance-not-gospel-v1.png",
+   "semantic": "",
+   "register": "sentence-native",
+   "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-04",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "beat-04-013-guidance-not-gospel-v2",
+   "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-04\\beat-04-013-guidance-not-gospel-v2.png",
+   "semantic": "",
+   "register": "sentence-native",
+   "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-04",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "beat-04-014-evidence-hierarchy-v1",
+   "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-04\\beat-04-014-evidence-hierarchy-v1.png",
+   "semantic": "",
+   "register": "sentence-native",
+   "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-04",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "beat-04-014-evidence-hierarchy-v2",
+   "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-04\\beat-04-014-evidence-hierarchy-v2.png",
+   "semantic": "",
+   "register": "sentence-native",
+   "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-04",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "beat-04-015-bottleneck-boom-v1",
+   "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-04\\beat-04-015-bottleneck-boom-v1.png",
+   "semantic": "",
+   "register": "sentence-native",
+   "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-04",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "wave-04-depth-contact-sheet",
+   "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-04\\wave-04-depth-contact-sheet.png",
+   "semantic": "",
+   "register": "sentence-native",
+   "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-04",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "wave-04-review-contact-sheet",
+   "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-04\\wave-04-review-contact-sheet.png",
+   "semantic": "",
+   "register": "sentence-native",
+   "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-04",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "beat-05-001-beyond-three-memory-companies-v1",
+   "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-05\\beat-05-001-beyond-three-memory-companies-v1.png",
+   "semantic": "",
+   "register": "sentence-native",
+   "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-05",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "beat-05-002-strategic-chokepoints-v1",
+   "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-05\\beat-05-002-strategic-chokepoints-v1.png",
+   "semantic": "",
+   "register": "sentence-native",
+   "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-05",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "beat-05-003-market-reprices-control-v2",
+   "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-05\\beat-05-003-market-reprices-control-v2.png",
+   "semantic": "",
+   "register": "sentence-native",
+   "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-05",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "beat-05-005-not-civilization-ranking-v1",
+   "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-05\\beat-05-005-not-civilization-ranking-v1.png",
+   "semantic": "",
+   "register": "sentence-native",
+   "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-05",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "beat-05-006-listed-cash-flow-market-v1",
+   "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-05\\beat-05-006-listed-cash-flow-market-v1.png",
+   "semantic": "",
+   "register": "sentence-native",
+   "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-05",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "beat-05-012-different-cash-flow-structures-v1",
+   "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-05\\beat-05-012-different-cash-flow-structures-v1.png",
+   "semantic": "",
+   "register": "sentence-native",
+   "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-05",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "beat-05-015-016-simple-joke-complex-mechanism-v1",
+   "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-06\\beat-05-015-016-simple-joke-complex-mechanism-v1.png",
+   "semantic": "",
+   "register": "sentence-native",
+   "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-06",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "beat-05-017-018-market-prices-cashflows-v1",
+   "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-06\\beat-05-017-018-market-prices-cashflows-v1.png",
+   "semantic": "",
+   "register": "sentence-native",
+   "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-06",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "beat-05-020-tech-corridor-v1",
+   "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-06\\beat-05-020-tech-corridor-v1.png",
+   "semantic": "",
+   "register": "sentence-native",
+   "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-06",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "beat-05-021-subcontractor-strategic-upgrade-v1",
+   "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-06\\beat-05-021-subcontractor-strategic-upgrade-v1.png",
+   "semantic": "",
+   "register": "sentence-native",
+   "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-06",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "beat-05-022-memory-enables-work-v1",
+   "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-06\\beat-05-022-memory-enables-work-v1.png",
+   "semantic": "",
+   "register": "sentence-native",
+   "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-06",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "beat-05-024-stranded-compute-bridge-v2",
+   "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-06\\beat-05-024-stranded-compute-bridge-v2.png",
+   "semantic": "",
+   "register": "sentence-native",
+   "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-06",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "beat-06-001-003-index-product-elevator-v1",
+   "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-07\\beat-06-001-003-index-product-elevator-v1.png",
+   "semantic": "",
+   "register": "sentence-native",
+   "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-07",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "beat-06-004-007-dual-failure-v2",
+   "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-07\\beat-06-004-007-dual-failure-v2.png",
+   "semantic": "",
+   "register": "sentence-native",
+   "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-07",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "beat-06-010-shared-causal-weather-v1",
+   "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-07\\beat-06-010-shared-causal-weather-v1.png",
+   "semantic": "",
+   "register": "sentence-native",
+   "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-07",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "beat-06-011-016-automatic-size-weighting-v1",
+   "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-07\\beat-06-011-016-automatic-size-weighting-v1.png",
+   "semantic": "",
+   "register": "sentence-native",
+   "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-07",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "beat-06-017-018-diworsification-v1",
+   "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-07\\beat-06-017-018-diworsification-v1.png",
+   "semantic": "",
+   "register": "sentence-native",
+   "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-07",
+   "state": "approved",
+   "render_eligible": true
+  },
+  {
+   "id": "beat-06-019-024-basketball-roster-v1",
+   "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-07\\beat-06-019-024-basketball-roster-v1.png",
+   "semantic": "",
+   "register": "sentence-native",
+   "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-07",
+   "state": "approved",
+   "render_eligible": true
+  }
+ ]
+}
