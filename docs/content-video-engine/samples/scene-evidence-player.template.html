@@ -259,6 +259,30 @@
       DOCKS.splice(i, 1);
     }
   }
+  /* EACH DOCK OWNS ITS PRESENTATION STATE. Solo side alternates by dock
+     order (so the world is not always cropped the same way) and NEVER
+     changes during a dock's life - deriving it from the current scene
+     index teleported a persisting card at every boundary it crossed and
+     flipped the lit wash's direction mid-hold. Paired docks (overlapping
+     another) take their authored slot geometry and a bottom-up wash. */
+  {
+    let flip = 0;
+    for (const d of DOCKS) {
+      const paired = DOCKS.some((o) => o !== d &&
+        o.enter < d.exit && o.exit > d.enter);
+      d.side = paired ? "pair" : (flip++ % 2 === 0 ? "r" : "l");
+    }
+  }
+  /* THE WASH IS AN INTERVAL TRACK, not a per-frame toggle. Consecutive
+     docks separated by a sub-1.2s turnover share one wash - the gap used
+     to pulse it off and back on (two of the six flashes at s06's open). */
+  const WASHES = [];
+  for (const d of [...DOCKS].sort((a, b) => a.enter - b.enter)) {
+    const last = WASHES[WASHES.length - 1];
+    if (last && d.enter - last[1] < 1.2) last[1] = Math.max(last[1], d.exit);
+    else WASHES.push([d.enter, d.exit]);
+  }
+
   /* SNAP NEAR-BOUNDARY EXITS TO THE BOUNDARY. A card exiting moments before
      a scene turn fires three light events in under a second - fade-exit,
      wash-off (the bare plate flashes fully bright), then the wipe - and the
@@ -393,8 +417,9 @@
 
     /* LAYER 2/3 — docks live on their own schedule */
     const live = DOCKS.filter((d) => t >= d.enter && t < d.exit + EXIT);
-    wash.classList.toggle("on", live.length > 0);
-    spot.classList.toggle("on", live.length > 0);
+    const washOn = WASHES.some(([a, b]) => t >= a && t < b + EXIT);
+    wash.classList.toggle("on", washOn);
+    spot.classList.toggle("on", washOn);
 
     /* THE PAGE TURN CARRIES ITS OWN LIGHT. When every live card ends at
        the boundary being wiped, the wash and spotlight belong to the
@@ -412,12 +437,12 @@
     /* Which side does the evidence occupy? A solo card alternates sides by
        scene so the world is not always cropped the same way; a pair spans
        the frame, so the gradient runs bottom-up instead of sideways. */
-    const soloRight = si % 2 === 0;
-    if (live.length === 1) {
-      wash.style.setProperty("--wdir", soloRight ? "90deg" : "270deg");
-      spot.style.setProperty("--sx", soloRight ? "72%" : "28%");
+    if (live.length === 1 && live[0].side !== "pair") {
+      const right = live[0].side === "r";
+      wash.style.setProperty("--wdir", right ? "90deg" : "270deg");
+      spot.style.setProperty("--sx", right ? "72%" : "28%");
       spot.style.setProperty("--sy", "46%");
-    } else if (live.length > 1) {
+    } else if (live.length > 0) {
       wash.style.setProperty("--wdir", "180deg");
       spot.style.setProperty("--sx", "50%");
       spot.style.setProperty("--sy", "44%");
@@ -429,10 +454,10 @@
       if (!d) { el.style.opacity = 0; el.style.clipPath = "inset(0 100% 0 0)"; continue; }
       if (d.slide !== shown[s]) { fillDock(s, d.slide); shown[s] = d.slide; }
       drawRecord(s, t);
-      const solo = live.length === 1 && s === 0;
+      const solo = d.side !== "pair" && s === 0;
       el.classList.toggle("solo", solo);
-      el.classList.toggle("side-r", solo && soloRight);
-      el.classList.toggle("side-l", solo && !soloRight);
+      el.classList.toggle("side-r", solo && d.side === "r");
+      el.classList.toggle("side-l", solo && d.side === "l");
 
       /* Card settle — the whole entrance. The document is simply present on
          the card; no mask, no drawing hand. Reference timing: a 0.75s

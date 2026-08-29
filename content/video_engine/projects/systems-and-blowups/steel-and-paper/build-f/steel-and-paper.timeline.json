@@ -20805,27 +20805,6 @@
     }
    ]
   },
-  "silicon-antidote-s02-valuation-bubble-v1": {
-   "title": "Index Concentration",
-   "source": "AI builders in the S&P 500",
-   "species": "deck",
-   "document": {
-    "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\sources\\decks\\silicon-antidote\\semantic-assets\\assets\\silicon-antidote-s02-valuation-bubble-v1.png",
-    "sha256": "237df91e6c7beeeff9b9a837739d8c155089d74caf1230d4191e3e79d716ce31"
-   },
-   "badges": [
-    {
-     "label": "NOW",
-     "value": "20%",
-     "tag": "of the index"
-    },
-    {
-     "label": "HISTORIC",
-     "value": "2\u20134%",
-     "tag": ""
-    }
-   ]
-  },
   "ev-mechanism-ladder": {
    "title": "The Test",
    "source": "three questions, thirty seconds",
@@ -21390,6 +21369,27 @@
     }
    ]
   },
+  "silicon-antidote-s02-valuation-bubble-v1": {
+   "title": "Index Concentration",
+   "source": "AI builders in the S&P 500",
+   "species": "deck",
+   "document": {
+    "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\sources\\decks\\silicon-antidote\\semantic-assets\\assets\\silicon-antidote-s02-valuation-bubble-v1.png",
+    "sha256": "237df91e6c7beeeff9b9a837739d8c155089d74caf1230d4191e3e79d716ce31"
+   },
+   "badges": [
+    {
+     "label": "NOW",
+     "value": "20%",
+     "tag": "of the index"
+    },
+    {
+     "label": "HISTORIC",
+     "value": "2\u20134%",
+     "tag": ""
+    }
+   ]
+  },
   "ev-smh-drawdown-v3": {
    "title": "If The Names Fall By Half",
    "source": "arithmetic on a fifth of the index",
@@ -21823,23 +21823,12 @@
      "y": -10
     }
    },
-   "exit": "wipe_right",
+   "exit": "cut",
    "span": [
     41.4,
     45.6
    ],
-   "docks": [
-    {
-     "slide": "silicon-antidote-s02-valuation-bubble-v1",
-     "slot": 1,
-     "enter": 42.2,
-     "exit": 45.4,
-     "badge_at": [
-      44.25,
-      45.55
-     ]
-    }
-   ]
+   "docks": []
   },
   {
    "scene_id": "s06",
