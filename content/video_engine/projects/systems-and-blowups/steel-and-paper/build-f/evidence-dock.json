@@ -1,0 +1,191 @@
+[
+ {
+  "asset": "ev-mega-vs-spy-v3",
+  "species": "chart",
+  "at": 26.8,
+  "end": 30.15,
+  "anchor": "One is the builders of AI \u2014 chips, racks, power."
+ },
+ {
+  "asset": "ev-railway-index-v1",
+  "species": "chart",
+  "at": 85.41,
+  "end": 90.56,
+  "anchor": "Railways in the 1840s drew a quarter-billion pounds \u2014 mo"
+ },
+ {
+  "asset": "ev-railway-gdp-tile-v1",
+  "species": "tile",
+  "at": 99.56,
+  "end": 102.83,
+  "anchor": "And by Bravos' math, AI spending just crossed eight."
+ },
+ {
+  "asset": "ev-equip-ipp-gdp-v1",
+  "species": "chart",
+  "at": 112.89,
+  "end": 116.45,
+  "anchor": "Back in 2000, the dot-com peak was eleven point five fou"
+ },
+ {
+  "asset": "ev-tnx-two-eras-v3",
+  "species": "chart",
+  "at": 136.32,
+  "end": 139.77,
+  "anchor": "Bank of England above six percent: railways rolled over."
+ },
+ {
+  "asset": "ev-doc-karp",
+  "species": "record",
+  "at": 183.67,
+  "end": 191.75,
+  "anchor": "Alex Karp of Palantir, live on CNBC: enterprises are \u2014 h"
+ },
+ {
+  "asset": "ev-uber-adoption-v1",
+  "species": "chart",
+  "at": 195.64,
+  "end": 200.25,
+  "anchor": "Uber's CTO says they burned the entire annual AI budget "
+ },
+ {
+  "asset": "ev-three-manias",
+  "species": "table",
+  "at": 231.86,
+  "end": 235.17,
+  "anchor": "And in 1849, the answer wasn't the paper."
+ },
+ {
+  "asset": "ev-debt-issuance-v2",
+  "species": "chart",
+  "at": 255.8,
+  "end": 261.12,
+  "anchor": "Between 2020 and 2024, the biggest builders borrowed abo"
+ },
+ {
+  "asset": "ev-ig-credit-weighting-v1",
+  "species": "chart",
+  "at": 271.21,
+  "end": 276.88,
+  "anchor": "Technology used to be about nine percent of the investme"
+ },
+ {
+  "asset": "ev-capex-consensus-v1",
+  "species": "chart",
+  "at": 292.13,
+  "end": 294.6,
+  "anchor": "Consensus now says six hundred and ninety."
+ },
+ {
+  "asset": "ev-doc-leases",
+  "species": "record",
+  "at": 302.99,
+  "end": 307.43,
+  "anchor": "Go into the filings and there's another eight hundred an"
+ },
+ {
+  "asset": "ev-doc-macdonald",
+  "species": "record",
+  "at": 322.37,
+  "end": 329.43,
+  "anchor": "Over the next two years, PIMCO has this buildout consumi"
+ },
+ {
+  "asset": "silicon-antidote-s02-valuation-bubble-v1",
+  "species": "deck",
+  "at": 378.1,
+  "end": 381.41,
+  "anchor": "AI builders are now twenty percent of the S&P five hundr"
+ },
+ {
+  "asset": "ev-smh-drawdown-v3",
+  "species": "chart",
+  "at": 393.74,
+  "end": 402.19,
+  "anchor": "At a fifth of the index, if the AI names fall by half, t"
+ },
+ {
+  "asset": "silicon-antidote-s11-teacher-stamped",
+  "species": "deck",
+  "at": 434.91,
+  "end": 439.61,
+  "anchor": "And the builders are already sold out into next year \u2014 t"
+ },
+ {
+  "asset": "sovereign-memory-infrastructure-s10-teacher-stamped",
+  "species": "deck",
+  "at": 439.94,
+  "end": 443.41,
+  "anchor": "Governments are standing up national AI programs on the "
+ },
+ {
+  "asset": "ev-mechanism-ladder",
+  "species": "table",
+  "at": 457.7,
+  "end": 460.13,
+  "anchor": "Take any holding and ask it three questions."
+ },
+ {
+  "asset": "ev-krx-memory-v3",
+  "species": "chart",
+  "at": 512.6,
+  "end": 515.92,
+  "anchor": "Over the last year the stock is up more than five hundre"
+ },
+ {
+  "asset": "silicon-reality-gap-s07-hbm-stack-v1",
+  "species": "deck",
+  "at": 527.06,
+  "end": 529.74,
+  "anchor": "High-bandwidth memory stacks the dies vertically."
+ },
+ {
+  "asset": "ev-hbm-wafer-ratio-v1",
+  "species": "tile",
+  "at": 529.86,
+  "end": 534.31,
+  "anchor": "So a gigabyte of it eats about three times the wafer cap"
+ },
+ {
+  "asset": "silicon-antidote-s09-capacity-penalty-v1",
+  "species": "deck",
+  "at": 534.46,
+  "end": 538.81,
+  "anchor": "Every accelerator they feed takes silicon away from ever"
+ },
+ {
+  "asset": "ev-dram-contract-v1",
+  "species": "chart",
+  "at": 547.69,
+  "end": 553.88,
+  "anchor": "Their own earnings call says capacity is essentially sol"
+ },
+ {
+  "asset": "silicon-antidote-s02-memory-triopoly-v1",
+  "species": "deck",
+  "at": 565.51,
+  "end": 567.81,
+  "anchor": "The most vertical line on the board is steel."
+ },
+ {
+  "asset": "ev-instrument-memory",
+  "species": "instrument",
+  "at": 602.33,
+  "end": 608.13,
+  "anchor": "The threshold is that number falling below its own trail"
+ },
+ {
+  "asset": "ev-hbm-export-series",
+  "species": "chart",
+  "at": 609.5,
+  "end": 616.2,
+  "anchor": "Right now it's going the other way \u2014 DRAM up seventeen p"
+ },
+ {
+  "asset": "silicon-antidote-s14-diagnostic-matrix-v1",
+  "species": "deck",
+  "at": 676.87,
+  "end": 682.39,
+  "anchor": "More worried: the index they sold you as the safe versio"
+ }
+]
