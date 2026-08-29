@@ -22,12 +22,16 @@ Exit 0 = no FAILs. Warnings do not fail the run.
 from __future__ import annotations
 
 import argparse
+import sys
+sys.path.insert(0, str(__import__("pathlib").Path(__file__).resolve().parent))
 import json
 import math
 import re
 import statistics
 from dataclasses import dataclass
 from pathlib import Path
+
+import kit_spec
 
 # Two independent estimators, both measured off the Steel and Paper take
 # (1,231 words / 7,161 chars / 446.1s). No audio is needed to check a timed
@@ -36,21 +40,22 @@ from pathlib import Path
 # characters and about a second of speech), words/min under-reads long words.
 # When they disagree by more than TIMING_SPREAD_WARN the estimate is soft and
 # the audit says so rather than pretending to a precision it does not have.
-CHARS_PER_SEC = 16.05
-WORDS_PER_MIN = 165.6
+# MEASURED (a fact about the voice, not doctrine) — see kit_spec.
+CHARS_PER_SEC = kit_spec.CHARS_PER_SEC
+WORDS_PER_MIN = kit_spec.WORDS_PER_MIN
 TIMING_SPREAD_WARN = 0.08    # 8%
 MV2_CAP = 10_000             # eleven_multilingual_v2
 # doc 32 sec 1 (corrected 2026-08-29): speech wants 10-15 words average, not
 # the 15-16 the doc carried — that was a written-prose figure, and 15-20 is
 # where listener comprehension falls off rather than where it peaks.
-SENTENCE_MEAN_TARGET = (10.0, 15.0)
+SENTENCE_MEAN_TARGET = kit_spec.sentence_band()
 # The mean alone does not hear anything: a flat 12-word script and one mixing
 # 5-word punches with 15-word carries score identically. Doctrine asks for
 # deliberate variation, so the spread and the tail are gates too.
 SENTENCE_STDEV_MIN = 3.5
 LONG_SENTENCE_WORDS = 20        # comprehension drop-off
 LONG_SENTENCE_SHARE_MAX = 0.12
-PIVOT_PIN = (45.0, 55.0)     # doc 38 sec 3 phase 4
+PIVOT_PIN = kit_spec.pivot_pin()          # kit geometry
 BREAK_RATION_MAX = 3.0       # doc 37 sec 1
 MARKS = frozenset({"pre-key", "post-key", "verify"})
 
@@ -70,7 +75,7 @@ YEAR = re.compile(r"^(?:1[5-9]|20)\d\d$")
 # FULL-VIDEO-MAP sec 1 — the scaling law. P1 and P6 are pinned in ABSOLUTE
 # seconds at every runtime ("the attention ladder is physics, not
 # proportion"); everything between them is a share of runtime.
-P1_OPEN_S = (60.0, 90.0)          # absolute, both ends
+P1_OPEN_S = kit_spec.open_close_seconds()   # absolute, both ends
 # P2's end is FITTED to the map's authored columns (300s@30m, 180s@16m,
 # 135s@8m), not taken from its "~17%" label. That label only reproduces the
 # @30:00 column: the authored @8:00 column ends P2 at 28%, and applying a
@@ -81,7 +86,7 @@ P2_ENGINE_SLOPE, P2_ENGINE_INTERCEPT_S = 0.125, 75.0
 P3_GAP_PCT = (17.0, 45.0)
 P4_PIVOT_PCT = (45.0, 55.0)
 P5_REFLECTION_PCT = (55.0, 87.0)
-P6_CLOSE_S = (60.0, 90.0)         # absolute, from the end
+P6_CLOSE_S = kit_spec.open_close_seconds()  # absolute, from the end
 # sec 2 — rehook anchors A1..A4. A4 is the pivot itself, checked separately.
 REHOOK_ANCHORS = {"A1": 30.0, "A2": 60.0, "A3": 180.0}
 REHOOK_TOLERANCE_S = 45.0
@@ -295,7 +300,7 @@ def audit(text: str) -> tuple[list[Finding], dict]:
             f"every runtime")
 
     # sec 1 — the elastic knob: how many P3 pattern units this runtime wants.
-    want_units = max(1, math.ceil((runtime / 60 - 9) / 2.5))
+    want_units = kit_spec.unit_count(runtime / 60)
     stats["p3_units_expected"] = want_units
 
     # sec 2 — rehook anchors A1/A2/A3 (A4 is the pivot, pinned separately).
