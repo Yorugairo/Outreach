@@ -164,7 +164,7 @@ episode's question or thesis — never its opening prop.**
 Narration is synthesized: numbers as spoken words, exact numerals on
 on-screen evidence, one continuous take up to the model's cap and two
 chained parts above it — split on a settle, never spliced (scene cuts are
-data, not audio seams). Build contract: BUILD-PIPELINE.md. Visuals are stylized world plates — host may appear in-world presenting,
+data, not audio seams). Build: BUILD-PIPELINE.md. Visuals are stylized world plates — host may appear in-world presenting,
 pointing, holding — plus a separate SHARP evidence layer: real charts
 built from real data, verified documents, cited source frames. Never info cards. Preferred is the DIEGETIC COMPOSITE: host gestures at a surface, real
 evidence lands in it. Each evidence moment names its document, exact
