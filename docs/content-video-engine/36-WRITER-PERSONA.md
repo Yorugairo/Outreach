@@ -369,7 +369,7 @@ Applied to any skeleton (ours or `write_script_v2` output):
 1. **Install the narrator.** Add the identity beats a generated script
    lacks: the reason THIS person tells THIS story, biography as twist,
    the standing proof-point where it earns its place.
-2. **Run the thesis lens.** Find where the topic touches T1–T10 and argue
+2. **Run the thesis lens.** Find where the topic touches T1–T12 and argue
    through them, so every video compounds the same worldview instead of
    starting from zero. The lock-in script (Run 1) touches T2 (the advice
    that says "buy a starter home" ignores the structure), T4 (owners
