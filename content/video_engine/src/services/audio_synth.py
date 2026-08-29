@@ -84,6 +84,12 @@ def compile_pause_marks(narration: str) -> str:
 
     compiled = narration
     for mark, tag in PAUSE_MARK_BREAKS.items():
+        # Scripts write the mark inside backticks so it reads as a code span
+        # in the markdown draft. Replacing only the mark leaves
+        # `<break time="1.2s" />` - the provider cannot parse a backticked
+        # SSML tag, so it VOCALISES it. That is the 0.29s artifact heard at
+        # 0:08 of the first Steel and Paper take. Consume the backticks.
+        compiled = re.sub(r"`\s*" + re.escape(mark) + r"\s*`", tag, compiled)
         compiled = compiled.replace(mark, tag)
     leaked = _EDITORIAL_FLAG.findall(compiled)
     if leaked:
@@ -93,6 +99,14 @@ def compile_pause_marks(narration: str) -> str:
             sorted(set(leaked)),
         )
         compiled = " ".join(_EDITORIAL_FLAG.sub(" ", compiled).split())
+    # A break tag with a stray backtick or bracket still touching it is read
+    # aloud. Checking that the MARK is gone is not the same as checking the
+    # output is speakable.
+    dirty = re.findall(r'[`\[\]]\s*<break[^>]*>|<break[^>]*>\s*[`\[\]]', compiled)
+    if dirty:
+        raise ValueError(
+            f"break tag left adjacent to literal {dirty[0]!r}; the provider "
+            f"will speak it - fix compilation, do not record")
     tag_count = len(_BREAK_TAG.findall(compiled))
     if tag_count > MAX_BREAK_TAGS_PER_SEGMENT:
         LOGGER.warning(

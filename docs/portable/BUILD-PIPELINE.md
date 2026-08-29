@@ -76,6 +76,35 @@ Shape of the artifact — one row per window:
  [ (evidence_id, slot, enter, exit, [badge_times...]) ])
 ```
 
+## The plate cadence (the default pattern)
+
+One shape, repeated. It is easy to produce, easy to check, and it is what the
+reference build looked like:
+
+> **Two evidence pieces per plate, two badges each, a breath between them,
+> then wipe.** If the plate cannot field two pieces that genuinely earn their
+> place, it carries **one big piece** instead.
+
+- **12-20s plate -> two pieces.** That is the hold the pair is sized for.
+  Piece one settles, badges at +1.3s / +2.6s, **breath 1.1s**, piece two
+  settles, **savour 2.2s**, wipe.
+- **Cannot field two -> one solo card, wide.** Not two weak ones. A stat tile
+  dragged in to make a count is worse than a single document with room.
+- **Under ~8s -> one piece or none.** A pair cannot settle, badge and breathe
+  inside a short hold; forcing it produces the strobing the breath exists to
+  prevent.
+- **Some plates carry nothing.** The world plate is doing the work and the
+  narration is carrying itself. Not every beat needs proof on the glass.
+- **Two badges per card is the target**, and a badge numeral must appear
+  verbatim in the document behind it. A card with no badges leaves its whole
+  information layer blank.
+
+**Evidence that spans scenes persists.** It is authored once per scene it
+covers, and the player coalesces those into one span: the card holds, the
+world wipes underneath it. A card whose life ends at a scene boundary is part
+of the outgoing page and the **wipe carries it off** - it is never faded on
+its own schedule while the world slides, which reads as clipping.
+
 ## The density CHECK (operator rule) — run it against the authored table
 
 - **One plate per 12 seconds of runtime, minimum.**

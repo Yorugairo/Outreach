@@ -171,6 +171,28 @@ def main() -> int:
     print(f"  audio       : {dur:.2f}s embedded as __audio__")
     print(f"  URIs        : {len(uris)} embedded, {out.stat().st_size/1e6:.0f} MB player")
     print(f"  wrote {out}")
+
+    # THE PLATE CADENCE, measured. Two pieces per plate with two badges each,
+    # or one big piece - never a pair padded out to make a count. This reports
+    # against the pattern; it does not author it.
+    thin = [(s["span"][0], round(s["span"][1] - s["span"][0], 1),
+             len({d["slide"] for d in s["docks"]}))
+            for s in scenes if s["span"][1] - s["span"][0] >= 12.0]
+    off = [x for x in thin if x[2] == 1]
+    nb = [a for a, e in evidence.items() if not e["badges"]]
+    per = [len({d["slide"] for d in s["docks"]}) for s in scenes]
+    print("")
+    print(f"  CADENCE  {per.count(2)} plates carry a pair, "
+          f"{per.count(1)} carry one, {per.count(0)} carry none")
+    if off:
+        print(f"  [WARN] {len(off)} plates hold >=12s on a single piece - pair "
+              f"them or let the solo card go wide:")
+        for a, d, _ in off[:6]:
+            print(f"           {int(a//60)}:{int(a%60):02d}  {d}s")
+    if nb:
+        print(f"  [WARN] {len(nb)} evidence cards carry no badges - their whole "
+              f"information layer is blank: {', '.join(nb[:4])}"
+              f"{' ...' if len(nb) > 4 else ''}")
     return 0
 
 

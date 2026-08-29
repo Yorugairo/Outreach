@@ -196,6 +196,23 @@
      (7s cap) -> exit. Nothing lives to the end of a scene. */
   const DOCKS = [];
   TL.scenes.forEach((sc, si) => (sc.docks || []).forEach((d) => DOCKS.push({ ...d, si, scene: sc })));
+  /* COALESCE. A document that holds through three scenes is authored as one
+     dock per scene, so it used to exit and re-enter at every boundary - the
+     entrance re-running on a card that never left. Evidence that persists
+     must persist: merge same-slide, same-slot docks separated by less than
+     DOCK_JOIN into a single span. The world wipes underneath it; the card
+     does not move. */
+  const DOCK_JOIN = 2.5;
+  DOCKS.sort((a, b) => a.enter - b.enter);
+  for (let i = DOCKS.length - 1; i > 0; i--) {
+    const cur = DOCKS[i], prv = DOCKS[i - 1];
+    if (cur.slide === prv.slide && cur.slot === prv.slot &&
+        cur.enter - prv.exit <= DOCK_JOIN) {
+      prv.exit = Math.max(prv.exit, cur.exit);
+      prv.badge_at = [...new Set([...(prv.badge_at||[]), ...(cur.badge_at||[])])];
+      DOCKS.splice(i, 1);
+    }
+  }
 
   const chips = $("scenes");
   TL.scenes.forEach((sc, i) => {
@@ -291,8 +308,21 @@
       const ck = expoOut(clamp01((t - d.enter) / CARD_IN));
       const xk = t > d.exit ? clamp01((t - d.exit) / EXIT) : 0;
       const xe = expoOut(xk);
-      el.style.clipPath = "none";
-      el.style.opacity = (1 - xe) * clamp01((t - d.enter) / (CARD_IN * 0.55));
+      /* THE PAGE WIPE CLEARS THE PAGE. A card whose life ends at a scene
+         boundary is part of the outgoing page, so the wipe front takes it -
+         same edge, same progress. Fading it on its own schedule while the
+         world slides underneath is what read as clipping. A card that
+         SURVIVES the boundary is not on the outgoing page and is never
+         clipped: it holds while the world changes behind it. */
+      const endsHere = Math.abs(d.exit - sc.span[1]) < 0.35;
+      if (seaming && endsHere) {
+        el.style.clipPath = sc.exit === "wipe_right"
+          ? `inset(0 ${wk * 100}% 0 0)` : `inset(0 0 0 ${wk * 100}%)`;
+        el.style.opacity = clamp01((t - d.enter) / (CARD_IN * 0.55));
+      } else {
+        el.style.clipPath = "none";
+        el.style.opacity = (1 - xe) * clamp01((t - d.enter) / (CARD_IN * 0.55));
+      }
       el.style.transform = xk
         ? "translateY(" + (-22 * xe) + "px) scale(" + (1 - 0.05 * xe) + ")"
         : "translateY(" + (32 * (1 - ck)) + "px) scale(" + (0.96 + 0.04 * ck) + ")";
