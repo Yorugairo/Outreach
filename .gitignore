@@ -119,3 +119,9 @@ content/video_engine/**/render/
 # third-party caption transcripts — research inputs, never committed
 youtube-captions/
 *.vtt
+
+# Derived render artifacts - rebuilt in seconds by build_scene_timeline_f.py.
+# A committed player put 15 blobs of 81-367MB into history and made the
+# branch unpushable (GitHub blocks >100MB); stripped 2026-08-29.
+content/video_engine/projects/*/*/build-*/player.html
+content/video_engine/projects/*/*/build-*/player-lite.html
