@@ -301,13 +301,14 @@ def mega_vs_spy():
 
 
 def divergence():
-    """The episode's opening claim, rebuilt from real data (doc 29 s9.11 -
-    we recreate, we never lift frames). ev-mega-vs-spy-v3 was WRONG here:
-    it plotted the hyperscalers against SPY since 2023 under the title
-    "The builders against the index" - the red line wore the hyperscalers'
-    own tickers while the narration said they'd gone nowhere. This plots
-    what the narration describes: the memory builders against the
-    hyperscalers, trailing 12 months, both equal-weight, indexed to 100."""
+    """Bravos' actual chart (operator, 2026-08-29): MAMAA index vs a
+    semiconductor index. We recreate their pairing faithfully and ADD the
+    two layers the episode argues it needed - the S&P 500 (which the MAMAA
+    line lands exactly on: the hyperscalers have gone market-rate) and the
+    memory builders inside the semis (where the whole move lives). Log
+    scale, stated - a +600% line on linear crushes their pairing into the
+    bottom fifth, which hides the very chart we are crediting."""
+    import numpy as np
     import pandas as pd
     start = (pd.Timestamp.today() - pd.DateOffset(months=12)).strftime("%Y-%m-%d")
     def basket(ticks):
@@ -316,35 +317,43 @@ def divergence():
         for x in ser[1:]: idx = idx.intersection(x.index)
         return sum(x.reindex(idx).ffill() / x.reindex(idx).ffill().iloc[0]
                    for x in ser) / len(ser) * 100
-    mem = basket(["000660.KS", "MU"])
-    hyp = basket(["AMZN", "MSFT", "GOOGL", "META"]).reindex(mem.index).ffill()
+    mem   = basket(["000660.KS", "MU"])
+    mamaa = basket(["META", "AAPL", "MSFT", "AMZN", "GOOGL"]).reindex(mem.index).ffill()
+    sox   = basket(["^SOX"]).reindex(mem.index).ffill()
+    spy   = basket(["SPY"]).reindex(mem.index).ffill()
     fig = frame(); ax = fig.add_axes([0.075, 0.155, 0.845, 0.645]); chrome(ax)
     x = _yr(mem.index)
-    ax.plot(x, mem.values, color=CRIMSON, lw=5, solid_capstyle="round")
-    ax.plot(x, hyp.values, color=TEAL, lw=5, solid_capstyle="round")
-    # End labels carry the RETURN, so the badge numeral appears verbatim in
-    # the document behind it (ruling B3).
-    _endlabel(ax, x[-1], mem.iloc[-1], f"+{mem.iloc[-1]-100:,.0f}%", CRIMSON)
-    _endlabel(ax, x[-1], hyp.iloc[-1], f"+{hyp.iloc[-1]-100:,.0f}%", TEAL)
-    _legend(ax, [("Memory builders - SK hynix / Micron, equal-weight", CRIMSON),
-                 ("Hyperscalers - AMZN / MSFT / GOOGL / META, equal-weight", TEAL)])
+    ax.set_yscale("log")
+    ax.plot(x, spy.values,   color=DEEMPH,  lw=3.5, ls=(0, (5, 3)), solid_capstyle="round")
+    ax.plot(x, mamaa.values, color=COBALT,  lw=5,   solid_capstyle="round")
+    ax.plot(x, sox.values,   color=TEAL,    lw=5,   solid_capstyle="round")
+    ax.plot(x, mem.values,   color=CRIMSON, lw=5,   solid_capstyle="round")
+    # Their pairing ends 5pts apart on a log axis - stagger the labels.
+    _endlabel(ax, x[-1], mem.iloc[-1],   f"+{mem.iloc[-1]-100:,.0f}%",   CRIMSON)
+    _endlabel(ax, x[-1], sox.iloc[-1],   f"+{sox.iloc[-1]-100:,.0f}%",   TEAL)
+    _endlabel(ax, x[-1], mamaa.iloc[-1], f"+{mamaa.iloc[-1]-100:,.0f}%", COBALT, dy=16)
+    _endlabel(ax, x[-1], spy.iloc[-1],   f"+{spy.iloc[-1]-100:,.0f}%",   DEEMPH, dy=-16)
+    _legend(ax, [("Memory builders - SK hynix / Micron (our layer)", CRIMSON),
+                 ("Semiconductors - PHLX SOX (their line)", TEAL),
+                 ("MAMAA - META / AAPL / MSFT / AMZN / GOOGL (their line)", COBALT),
+                 ("S&P 500 (our layer)", DEEMPH)])
+    ax.set_yticks([100, 200, 400, 800])
     ax.yaxis.set_major_formatter(FuncFormatter(lambda v, p: f"{int(v):,}"))
-    # A trailing-12-month window takes MONTH ticks; _year_ticks pins a tick
-    # at the year boundary and drags the view back to January, leaving the
-    # left half of the plot empty.
+    ax.yaxis.set_minor_formatter(FuncFormatter(lambda v, p: ""))
     mt = pd.date_range(mem.index[0].normalize() + pd.offsets.MonthBegin(1),
                        mem.index[-1], freq="2MS")
     ax.set_xticks([t.year + (t.dayofyear - 1) / 365.25 for t in mt])
     ax.set_xticklabels([t.strftime("%b '%y") for t in mt], fontfamily=FAM)
     ax.set_xlim(x[0], x[-1] + 0.055)
-    titles(fig, "The divergence",
-           "Memory builders vs the hyperscalers, indexed to 100, trailing 12 months")
-    source(fig, f"Data: Yahoo Finance, 000660.KS, MU, AMZN, MSFT, GOOGL, META - "
-                f"{start} to {mem.index[-1].date().isoformat()}")
+    titles(fig, "The sharpest chart on YouTube - plus the layer it needed",
+           "Their pairing, plus the S&P 500 and the memory builders. "
+           "100 = Aug '25, log scale")
+    source(fig, f"Data: Yahoo Finance - 000660.KS, MU, ^SOX, META, AAPL, MSFT, "
+                f"AMZN, GOOGL, SPY - {start} to {mem.index[-1].date().isoformat()} "
+                f"- pairing after Bravos Research")
     save(fig, "ev-divergence-v1")
-    print(f"  VERBATIM  memory builders +{mem.iloc[-1]-100:,.0f}%  "
-          f"hyperscalers +{hyp.iloc[-1]-100:,.0f}%  over 12 months")
-
+    print(f"  VERBATIM  memory +{mem.iloc[-1]-100:,.0f}%  semis +{sox.iloc[-1]-100:,.0f}%  "
+          f"MAMAA +{mamaa.iloc[-1]-100:,.0f}%  S&P +{spy.iloc[-1]-100:,.0f}%")
 
 def smh_drawdown():
     s = _px("SMH", "2024-01-01")

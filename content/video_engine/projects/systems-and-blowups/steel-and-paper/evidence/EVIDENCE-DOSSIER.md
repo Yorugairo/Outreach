@@ -38,6 +38,17 @@ their chart's construction from the video and describe it accurately, or
 (b) describe OUR rebuilt divergence (ev-divergence-v1, +601% / +15%, 12
 months) and attribute the argument — not the figures — to Bravos.
 
+**H2 — Their chart identified (operator, 2026-08-29).** Bravos' primary
+chart pairs a **MAMAA index against a semiconductor index**. ev-divergence-v1
+now recreates that pairing (MAMAA equal-weight vs PHLX SOX) and adds the two
+layers the episode argues for: the S&P 500 and the memory builders. Verified
+12-month figures: **memory +601% · semis +102% · MAMAA +20% · S&P +21%**.
+The MAMAA line lands ON the S&P line — the hyperscalers have gone exactly
+market-rate, which is the sharper version of "nowhere for a year."
+→ Narration direction (operator's line): *"It's the sharpest chart on
+YouTube, but we think it needed another layer."* Script patch should anchor
+the beat on the pairing + the added layer, figures above, verbatim.
+
 **Doctrine change:** an answer episode's dossier MUST open with this pin —
 URL, title, publish date, view count at scripting time, claim being
 answered — before any script work. No target pin, no script.

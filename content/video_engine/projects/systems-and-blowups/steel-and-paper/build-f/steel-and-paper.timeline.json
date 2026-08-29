@@ -20783,25 +20783,25 @@
  ],
  "evidence": {
   "ev-divergence-v1": {
-   "title": "The Divergence",
-   "source": "Rebuilt from Yahoo Finance data \u00b7 after Bravos Research",
+   "title": "The Sharpest Chart on YouTube",
+   "source": "Pairing after Bravos Research \u00b7 rebuilt + extended, Yahoo Finance",
    "species": "chart",
    "document": {
     "path": "Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-divergence-v1.png",
-    "sha256": "ef548e645675c32a29a7046aed28fffeee6af011c58ebe027f06abd2a066b82c"
+    "sha256": "dc761c4f7c1c848e916d98d96e12180dd6298c632bd350bb14fa2f6a989be068"
    },
    "badges": [
     {
      "label": "MEMORY BUILDERS",
      "value": "+601%",
-     "tag": "12 months",
+     "tag": "our layer",
      "accent": "coral"
     },
     {
-     "label": "HYPERSCALERS",
-     "value": "+15%",
-     "tag": "12 months",
-     "accent": "teal"
+     "label": "MAMAA",
+     "value": "+20%",
+     "tag": "matches the S&P",
+     "accent": "cobalt"
     }
    ]
   },
