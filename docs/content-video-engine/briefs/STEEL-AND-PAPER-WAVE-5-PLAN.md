@@ -6,7 +6,7 @@ what has to exist before it can ship.
 | | |
 |---|---|
 | Plates today | 39 → **18.0s each** (ceiling 20, target 12) |
-| Plates needed | **58** for the 12s target → **19 new** |
+| Plates needed | **58** for the 12s target → **15 new** (4 reused from finance-episodes-wave-1) |
 | Evidence today | 15 in `evidence/objects/` |
 | Evidence needed | **3 promoted + 2 built** |
 
@@ -42,50 +42,58 @@ HBM consumes ~3× the wafer capacity per gigabyte of standard DRAM. Form:
 value is a tile. Pairs with `ev-dram-contract-v1` as the consequence.
 Source: Micron executive, via the dossier E1 chain.
 
-## 3. Wave 5 — 19 plates
+## 3. Reuse first — the memory episode and the stamped deck
 
-Style: woodblock vox newsprint, 1536×1024, flat RGB, no legible lettering
-or numerals (doc 29 §9.4, §9.14 — screens, boards and gauges are welcome
-as scenery, just not readable figures).
+Operator, 2026-08-29: prior finance-episode assets are reusable. They are,
+and they cut this wave from 19 plates to **15**.
 
-### Debt unit, P3 (7)
+**From `finance-episodes-plates-wave-1`** (built for other finance
+episodes, style-identical):
 
-| Slot | Subject |
+| Plate | Covers |
 |---|---|
-| `world-treasury-cash-count` | a corporate treasury: banded notes stacked and counted on a steel table, ledger open beside them — the era when this was paid out of pocket |
-| `world-bond-prospectus` | a thick ribbon-bound prospectus lying open on a partner's desk, lamp low, the paper the thickest object in frame |
-| `world-index-board-swelling` | a departure-board style index of sector blocks where one block has grown to crowd the others off the frame |
-| `world-lease-contracts-bound` | signed lease contracts bound in stacks on a records-room shelf, receding |
-| `world-datacenter-shell` | a windowless datacenter shell under construction at dusk, a contract sheet pinned to the site fence, wind lifting one corner |
-| `world-cashflow-vessel` | a heavy industrial vessel pouring out until nearly empty, a thin last stream — the 94%-of-cash-flow beat |
-| `world-signature-close` | macro on a fountain pen finishing a signature, the downstroke still wet |
+| `world-dram-terrain-v1` | a wafer surface as terrain — replaces the planned `world-wafer-divided` |
+| `world-memory-fab-floor-v1` | fab clean room — replaces the planned `world-fab-cleanroom` |
+| `world-korea-port-v1` | container port — **better than anything planned** for the tell's "memory leaving Korea, by the kilo" |
+| `world-seoul-fab-skyline-v1` | industrial skyline, power infrastructure |
 
-### Winner unit, P5 (5)
+Plus `world-memory-wafer-v1` already in wave-3. **These need operator wave
+approval before use** — their `approvals.json` records generation attempts
+but no operator sign-off.
 
-| Slot | Subject |
-|---|---|
-| `world-hbm-die-stack` | macro: memory dies stacked vertically like a bound book seen edge-on, bond wires catching light |
-| `world-wafer-divided` | a silicon wafer on a bench with one large wedge lifted away, the remainder visibly diminished |
-| `world-fab-cleanroom` | a memory fab clean room, gowned figures small against tall tool bays, everything overlit |
-| `world-laptop-shelf` | a retail shelf of laptops with a blank price card propped in front, shop light |
-| `world-allocation-board` | a supply board where every line is marked as spoken for, one clerk stepping back from it |
+**From the registered DMP deck** (11 slides, doc 29 §9.3(c) "registered
+generated infographic"): a 1840s / 1999 / 2024 comparison table, an
+HBM stacked-die slide, a 20%-concentration pie, a rate-ceiling gauge at
+5.5%, and an ROI-awakening card naming Palantir / Uber / Microsoft.
 
-### Density fill, all phases (7)
+> ⚠ **The deck predates the dossier and carries at least one figure we
+> have since corrected.** Its comparison table reads **"70% Crash"** for
+> the railways; the verified figure is **64.1%**. Doc 29 §9.3(c) requires
+> a registered infographic to be **figure-verified before use** — that
+> pass has not happened against the current dossier. Do not air the
+> comparison table until it is corrected, and do not let the HBM slide's
+> stronger claim ("committed through 2027 under binding contracts") leak
+> into narration; the sourced line is "essentially sold out for the year."
+> The Microsoft card on the ROI slide is the claim we cut for lack of
+> sourcing — that slide cannot air as drawn.
 
-Runtime grew four minutes; long beats need alternates so nothing holds
-past the 12s target.
+## 4. Wave 5 — 15 plates (dispatched)
 
-| Slot | Subject |
-|---|---|
-| `world-exchange-floor-1845` | a Victorian exchange floor mid-session, top hats, paper in fists, one figure motionless |
-| `world-club-interior-papered` | a gentlemen's club interior with share certificates papering the walls, chairs overturned |
-| `world-navvy-camp-dusk` | a navvy encampment at dusk beside a half-cut embankment, cook fires, tools stacked |
-| `world-trading-desk-dark` | a modern trading desk with every screen dark, chair pushed back, city lights behind |
-| `world-statement-kitchen` | a brokerage statement face-up on a kitchen counter beside car keys and a mug |
-| `world-steel-mill-night` | a steel mill at night from across the river, pour-glow in the windows |
-| `world-certificate-macro` | macro on engraved certificate detail — guilloché scrollwork, no readable text |
+`steel-and-paper-plates-wave-5`, running.
 
-## 4. Order of operations
+**Debt unit, P3 (7)** — treasury cash count · bond prospectus · index
+board with one block crowding the rest · bound lease contracts ·
+datacenter shell with a contract on the fence · pouring vessel nearly
+empty · signature closing.
+
+**Winner unit, P5 (3)** — stacked dies edge-on · retail laptop shelf with
+a blank price card · allocation board with every line marked through.
+
+**Density fill (5)** — Victorian exchange floor · club interior papered
+with certificates · modern trading desk gone dark · brokerage statement on
+a kitchen counter · steel mill at night across a river.
+
+## 5. Order of operations
 
 1. **Open wave-5 claim** for the 19 plates — longest pole, start it first.
 2. Promote the three orphaned documents; build the two new ones.
