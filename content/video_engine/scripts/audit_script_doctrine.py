@@ -256,6 +256,25 @@ def audit(text: str) -> tuple[list[Finding], dict]:
             f"the two rate estimates disagree by {spread(first):.0%} on the "
             f"first sentence (numerals read longer than they look) — record "
             f"a take to settle it")
+    # doc 38 beat 1 names FOUR properties; only duration was gated, so a hook
+    # could pass the audit while missing most of what the beat asks for.
+    # Two of the four are mechanically decidable. Concreteness is a
+    # judgement - a regex proxy for it returns confident wrong verdicts - so
+    # it stays with the reader and is named in the message instead.
+    past = re.search(r"\b(?:was|were|had|did|used to)\b", first, re.I)
+    viewer = re.search(r"\b(?:you|your|yours|you\'?re|you\'?ll)\b",
+                       first, re.I)
+    stats["hook_properties"] = (
+        f"present-tense={'n' if past else 'y'}, "
+        f"viewer-facing={'y' if viewer else 'n'}")
+    lacks = ([f"present tense ({past.group()!r})"] if past else []) + (
+        [] if viewer else ["direct address"])
+    if lacks:
+        add("WARN", "doc 38 beat 1",
+            f"the microhook lacks {' and '.join(lacks)}. The beat asks for a "
+            f"present-tense, viewer-facing, concrete grab - duration is only "
+            f"one of four. Concreteness is yours to judge: {first!r}")
+
     if t_first > 3.0:
         add("FAIL", "doc 38 beat 1",
             f"first sentence runs {t_first:.1f}s (limit 3.0s): {first!r}")

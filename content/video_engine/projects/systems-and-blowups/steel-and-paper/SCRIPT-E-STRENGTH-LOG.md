@@ -199,3 +199,12 @@ L3  [S8 weak 3-word tail from my own S21 split; the merge also sharpens the stee
   from: Start with their case at full strength. It deserves that.
   to  : Start with their case at full strength — the version they would defend.
 ```
+
+## Loop pass 4 — found by reading the assembled text
+
+My S113 split orphaned the next sentence: "And calls it the market."
+lost its subject when "every target-date fund" came between it and
+"Every index fund". Rejoined the predicate to its own subject and
+moved the target-date clause after it. **A mechanical gate cannot see
+a dangling subject created two sentences away — only reading the
+assembled script end to end catches it.**
