@@ -26,7 +26,7 @@ So the obvious move looks like this: take profits on the AI builders. Up three h
 
 But here's where their own chart gets strange — and the strangeness is the whole story.
 
-Walk their evidence like a claims adjuster. Alex Karp of Palantir, live on CNBC: enterprises are — his words — paying for tokens that create no value. Something, he says, has gone completely wrong. Uber's CTO says they burned the entire annual AI budget by April. Four months. And the COO's line on whether it's showing up in the product: if you can't draw a direct line to what you're shipping, that trade gets harder to justify. Remember that one. It's question three, almost word for word.
+Walk their evidence like a claims adjuster. Alex Karp of Palantir, live on CNBC: enterprises are — his words — paying for tokens that create no value. Something, he says, has gone completely wrong. Uber's CTO says they burned the entire annual AI budget by April. Four months. And the COO's line on whether it's showing up in the product: if you can't draw a direct line to what you're shipping, that trade gets harder to justify. Remember that line. He's reaching for question three without having it.
 
 But look at what those two stories actually are. That isn't the peak of inflated expectations. That's the trough already doing its job — the tourists finding out, one budget at a time.
 
