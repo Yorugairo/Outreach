@@ -1,0 +1,7645 @@
+{
+  "duration_s": 567.804,
+  "words": [
+    {
+      "w": "People",
+      "start_s": 0.0,
+      "end_s": 0.313
+    },
+    {
+      "w": "hear",
+      "start_s": 0.36,
+      "end_s": 0.522
+    },
+    {
+      "w": "a",
+      "start_s": 0.58,
+      "end_s": 0.604
+    },
+    {
+      "w": "rapper",
+      "start_s": 0.673,
+      "end_s": 0.952
+    },
+    {
+      "w": "say,",
+      "start_s": 1.022,
+      "end_s": 1.474
+    },
+    {
+      "w": "“I",
+      "start_s": 1.591,
+      "end_s": 1.73
+    },
+    {
+      "w": "killed",
+      "start_s": 1.846,
+      "end_s": 2.113
+    },
+    {
+      "w": "him,”",
+      "start_s": 2.148,
+      "end_s": 2.426
+    },
+    {
+      "w": "and",
+      "start_s": 2.635,
+      "end_s": 2.798
+    },
+    {
+      "w": "immediately",
+      "start_s": 2.844,
+      "end_s": 3.309
+    },
+    {
+      "w": "decide",
+      "start_s": 3.367,
+      "end_s": 3.785
+    },
+    {
+      "w": "civilization",
+      "start_s": 3.831,
+      "end_s": 4.516
+    },
+    {
+      "w": "has",
+      "start_s": 4.574,
+      "end_s": 4.69
+    },
+    {
+      "w": "collapsed.",
+      "start_s": 4.748,
+      "end_s": 5.48
+    },
+    {
+      "w": "Wrong.",
+      "start_s": 6.084,
+      "end_s": 6.711
+    },
+    {
+      "w": "If",
+      "start_s": 7.314,
+      "end_s": 7.454
+    },
+    {
+      "w": "two",
+      "start_s": 7.5,
+      "end_s": 7.639
+    },
+    {
+      "w": "grown",
+      "start_s": 7.697,
+      "end_s": 7.93
+    },
+    {
+      "w": "men",
+      "start_s": 7.976,
+      "end_s": 8.15
+    },
+    {
+      "w": "can",
+      "start_s": 8.208,
+      "end_s": 8.336
+    },
+    {
+      "w": "stand",
+      "start_s": 8.394,
+      "end_s": 8.707
+    },
+    {
+      "w": "six",
+      "start_s": 8.789,
+      "end_s": 8.998
+    },
+    {
+      "w": "inches",
+      "start_s": 9.067,
+      "end_s": 9.311
+    },
+    {
+      "w": "apart,",
+      "start_s": 9.358,
+      "end_s": 9.834
+    },
+    {
+      "w": "describe",
+      "start_s": 9.95,
+      "end_s": 10.391
+    },
+    {
+      "w": "each",
+      "start_s": 10.414,
+      "end_s": 10.553
+    },
+    {
+      "w": "other's",
+      "start_s": 10.588,
+      "end_s": 10.844
+    },
+    {
+      "w": "ancestors",
+      "start_s": 10.89,
+      "end_s": 11.494
+    },
+    {
+      "w": "as",
+      "start_s": 11.54,
+      "end_s": 11.656
+    },
+    {
+      "w": "a",
+      "start_s": 11.714,
+      "end_s": 11.749
+    },
+    {
+      "w": "generational",
+      "start_s": 11.819,
+      "end_s": 12.481
+    },
+    {
+      "w": "disappointment,",
+      "start_s": 12.539,
+      "end_s": 13.305
+    },
+    {
+      "w": "make",
+      "start_s": 13.433,
+      "end_s": 13.618
+    },
+    {
+      "w": "a",
+      "start_s": 13.653,
+      "end_s": 13.688
+    },
+    {
+      "w": "whole",
+      "start_s": 13.735,
+      "end_s": 13.944
+    },
+    {
+      "w": "room",
+      "start_s": 13.978,
+      "end_s": 14.164
+    },
+    {
+      "w": "scream,",
+      "start_s": 14.222,
+      "end_s": 14.721
+    },
+    {
+      "w": "and",
+      "start_s": 14.895,
+      "end_s": 15.035
+    },
+    {
+      "w": "then",
+      "start_s": 15.081,
+      "end_s": 15.209
+    },
+    {
+      "w": "walk",
+      "start_s": 15.267,
+      "end_s": 15.464
+    },
+    {
+      "w": "away",
+      "start_s": 15.522,
+      "end_s": 15.778
+    },
+    {
+      "w": "arguing",
+      "start_s": 15.847,
+      "end_s": 16.265
+    },
+    {
+      "w": "about",
+      "start_s": 16.312,
+      "end_s": 16.532
+    },
+    {
+      "w": "who",
+      "start_s": 16.567,
+      "end_s": 16.683
+    },
+    {
+      "w": "had",
+      "start_s": 16.753,
+      "end_s": 16.892
+    },
+    {
+      "w": "the",
+      "start_s": 16.927,
+      "end_s": 16.997
+    },
+    {
+      "w": "better",
+      "start_s": 17.032,
+      "end_s": 17.229
+    },
+    {
+      "w": "third",
+      "start_s": 17.275,
+      "end_s": 17.496
+    },
+    {
+      "w": "round—you're",
+      "start_s": 17.554,
+      "end_s": 18.088
+    },
+    {
+      "w": "not",
+      "start_s": 18.123,
+      "end_s": 18.251
+    },
+    {
+      "w": "looking",
+      "start_s": 18.297,
+      "end_s": 18.564
+    },
+    {
+      "w": "at",
+      "start_s": 18.611,
+      "end_s": 18.68
+    },
+    {
+      "w": "barbarism.",
+      "start_s": 18.738,
+      "end_s": 19.458
+    },
+    {
+      "w": "You're",
+      "start_s": 19.551,
+      "end_s": 19.76
+    },
+    {
+      "w": "looking",
+      "start_s": 19.783,
+      "end_s": 20.039
+    },
+    {
+      "w": "at",
+      "start_s": 20.097,
+      "end_s": 20.19
+    },
+    {
+      "w": "peace.",
+      "start_s": 20.259,
+      "end_s": 20.747
+    },
+    {
+      "w": "Not",
+      "start_s": 20.863,
+      "end_s": 21.072
+    },
+    {
+      "w": "quiet",
+      "start_s": 21.142,
+      "end_s": 21.536
+    },
+    {
+      "w": "peace.",
+      "start_s": 21.594,
+      "end_s": 21.966
+    },
+    {
+      "w": "Not",
+      "start_s": 22.14,
+      "end_s": 22.349
+    },
+    {
+      "w": "scented-candle",
+      "start_s": 22.419,
+      "end_s": 23.231
+    },
+    {
+      "w": "peace.",
+      "start_s": 23.266,
+      "end_s": 23.661
+    },
+    {
+      "w": "I",
+      "start_s": 23.835,
+      "end_s": 23.882
+    },
+    {
+      "w": "mean",
+      "start_s": 23.963,
+      "end_s": 24.125
+    },
+    {
+      "w": "the",
+      "start_s": 24.172,
+      "end_s": 24.253
+    },
+    {
+      "w": "expensive,",
+      "start_s": 24.323,
+      "end_s": 24.973
+    },
+    {
+      "w": "human,",
+      "start_s": 25.019,
+      "end_s": 25.437
+    },
+    {
+      "w": "hard-won",
+      "start_s": 25.484,
+      "end_s": 25.902
+    },
+    {
+      "w": "version:",
+      "start_s": 25.983,
+      "end_s": 26.424
+    },
+    {
+      "w": "the",
+      "start_s": 26.54,
+      "end_s": 26.633
+    },
+    {
+      "w": "kind",
+      "start_s": 26.679,
+      "end_s": 26.888
+    },
+    {
+      "w": "where",
+      "start_s": 26.923,
+      "end_s": 27.074
+    },
+    {
+      "w": "conflict",
+      "start_s": 27.12,
+      "end_s": 27.562
+    },
+    {
+      "w": "gets",
+      "start_s": 27.596,
+      "end_s": 27.771
+    },
+    {
+      "w": "promoted",
+      "start_s": 27.817,
+      "end_s": 28.235
+    },
+    {
+      "w": "from",
+      "start_s": 28.27,
+      "end_s": 28.398
+    },
+    {
+      "w": "a",
+      "start_s": 28.444,
+      "end_s": 28.467
+    },
+    {
+      "w": "fistfight",
+      "start_s": 28.548,
+      "end_s": 29.083
+    },
+    {
+      "w": "into",
+      "start_s": 29.117,
+      "end_s": 29.268
+    },
+    {
+      "w": "a",
+      "start_s": 29.338,
+      "end_s": 29.361
+    },
+    {
+      "w": "performance",
+      "start_s": 29.419,
+      "end_s": 29.895
+    },
+    {
+      "w": "review.",
+      "start_s": 29.93,
+      "end_s": 30.441
+    },
+    {
+      "w": "Welcome",
+      "start_s": 31.393,
+      "end_s": 31.753
+    },
+    {
+      "w": "to",
+      "start_s": 31.788,
+      "end_s": 31.846
+    },
+    {
+      "w": "Marshall",
+      "start_s": 31.915,
+      "end_s": 32.252
+    },
+    {
+      "w": "Matters,",
+      "start_s": 32.322,
+      "end_s": 32.879
+    },
+    {
+      "w": "the",
+      "start_s": 33.03,
+      "end_s": 33.146
+    },
+    {
+      "w": "only",
+      "start_s": 33.227,
+      "end_s": 33.436
+    },
+    {
+      "w": "show",
+      "start_s": 33.494,
+      "end_s": 33.703
+    },
+    {
+      "w": "that",
+      "start_s": 33.773,
+      "end_s": 33.889
+    },
+    {
+      "w": "can",
+      "start_s": 33.924,
+      "end_s": 34.04
+    },
+    {
+      "w": "explain",
+      "start_s": 34.086,
+      "end_s": 34.493
+    },
+    {
+      "w": "battle",
+      "start_s": 34.574,
+      "end_s": 34.864
+    },
+    {
+      "w": "rap,",
+      "start_s": 34.899,
+      "end_s": 35.329
+    },
+    {
+      "w": "samurai",
+      "start_s": 35.538,
+      "end_s": 36.002
+    },
+    {
+      "w": "strategy,",
+      "start_s": 36.06,
+      "end_s": 36.803
+    },
+    {
+      "w": "and",
+      "start_s": 36.954,
+      "end_s": 37.105
+    },
+    {
+      "w": "why",
+      "start_s": 37.151,
+      "end_s": 37.302
+    },
+    {
+      "w": "your",
+      "start_s": 37.36,
+      "end_s": 37.488
+    },
+    {
+      "w": "uncle",
+      "start_s": 37.546,
+      "end_s": 37.813
+    },
+    {
+      "w": "thinks",
+      "start_s": 37.848,
+      "end_s": 38.08
+    },
+    {
+      "w": "a",
+      "start_s": 38.127,
+      "end_s": 38.15
+    },
+    {
+      "w": "diss",
+      "start_s": 38.231,
+      "end_s": 38.417
+    },
+    {
+      "w": "track",
+      "start_s": 38.452,
+      "end_s": 38.719
+    },
+    {
+      "w": "is",
+      "start_s": 38.777,
+      "end_s": 38.847
+    },
+    {
+      "w": "a",
+      "start_s": 38.893,
+      "end_s": 38.916
+    },
+    {
+      "w": "declaration",
+      "start_s": 38.986,
+      "end_s": 39.508
+    },
+    {
+      "w": "of",
+      "start_s": 39.543,
+      "end_s": 39.601
+    },
+    {
+      "w": "war.",
+      "start_s": 39.659,
+      "end_s": 40.112
+    },
+    {
+      "w": "Today,",
+      "start_s": 40.623,
+      "end_s": 41.284
+    },
+    {
+      "w": "we're",
+      "start_s": 41.458,
+      "end_s": 41.644
+    },
+    {
+      "w": "proving",
+      "start_s": 41.667,
+      "end_s": 41.958
+    },
+    {
+      "w": "a",
+      "start_s": 42.004,
+      "end_s": 42.027
+    },
+    {
+      "w": "simple",
+      "start_s": 42.085,
+      "end_s": 42.364
+    },
+    {
+      "w": "point:",
+      "start_s": 42.399,
+      "end_s": 42.875
+    },
+    {
+      "w": "in",
+      "start_s": 43.2,
+      "end_s": 43.328
+    },
+    {
+      "w": "the",
+      "start_s": 43.374,
+      "end_s": 43.444
+    },
+    {
+      "w": "battle-rap",
+      "start_s": 43.49,
+      "end_s": 43.931
+    },
+    {
+      "w": "arena,",
+      "start_s": 43.966,
+      "end_s": 44.5
+    },
+    {
+      "w": "violent",
+      "start_s": 44.651,
+      "end_s": 45.046
+    },
+    {
+      "w": "language",
+      "start_s": 45.092,
+      "end_s": 45.499
+    },
+    {
+      "w": "is",
+      "start_s": 45.534,
+      "end_s": 45.615
+    },
+    {
+      "w": "often",
+      "start_s": 45.684,
+      "end_s": 45.963
+    },
+    {
+      "w": "evidence",
+      "start_s": 46.033,
+      "end_s": 46.451
+    },
+    {
+      "w": "that",
+      "start_s": 46.486,
+      "end_s": 46.625
+    },
+    {
+      "w": "the",
+      "start_s": 46.66,
+      "end_s": 46.729
+    },
+    {
+      "w": "fight",
+      "start_s": 46.799,
+      "end_s": 47.02
+    },
+    {
+      "w": "has",
+      "start_s": 47.054,
+      "end_s": 47.159
+    },
+    {
+      "w": "become",
+      "start_s": 47.229,
+      "end_s": 47.612
+    },
+    {
+      "w": "a",
+      "start_s": 47.658,
+      "end_s": 47.705
+    },
+    {
+      "w": "game",
+      "start_s": 47.774,
+      "end_s": 48.041
+    },
+    {
+      "w": "with",
+      "start_s": 48.076,
+      "end_s": 48.215
+    },
+    {
+      "w": "rules,",
+      "start_s": 48.285,
+      "end_s": 48.796
+    },
+    {
+      "w": "an",
+      "start_s": 48.842,
+      "end_s": 49.028
+    },
+    {
+      "w": "audience,",
+      "start_s": 49.098,
+      "end_s": 49.702
+    },
+    {
+      "w": "and",
+      "start_s": 49.748,
+      "end_s": 49.91
+    },
+    {
+      "w": "a",
+      "start_s": 49.969,
+      "end_s": 50.003
+    },
+    {
+      "w": "winner",
+      "start_s": 50.073,
+      "end_s": 50.317
+    },
+    {
+      "w": "who",
+      "start_s": 50.363,
+      "end_s": 50.456
+    },
+    {
+      "w": "gets",
+      "start_s": 50.503,
+      "end_s": 50.677
+    },
+    {
+      "w": "a",
+      "start_s": 50.712,
+      "end_s": 50.746
+    },
+    {
+      "w": "reaction",
+      "start_s": 50.816,
+      "end_s": 51.362
+    },
+    {
+      "w": "instead",
+      "start_s": 51.513,
+      "end_s": 51.896
+    },
+    {
+      "w": "of",
+      "start_s": 51.919,
+      "end_s": 51.977
+    },
+    {
+      "w": "a",
+      "start_s": 52.023,
+      "end_s": 52.047
+    },
+    {
+      "w": "body",
+      "start_s": 52.093,
+      "end_s": 52.314
+    },
+    {
+      "w": "count.",
+      "start_s": 52.36,
+      "end_s": 52.813
+    },
+    {
+      "w": "Nature",
+      "start_s": 53.51,
+      "end_s": 53.812
+    },
+    {
+      "w": "figured",
+      "start_s": 53.846,
+      "end_s": 54.114
+    },
+    {
+      "w": "this",
+      "start_s": 54.137,
+      "end_s": 54.264
+    },
+    {
+      "w": "out",
+      "start_s": 54.322,
+      "end_s": 54.462
+    },
+    {
+      "w": "before",
+      "start_s": 54.508,
+      "end_s": 54.787
+    },
+    {
+      "w": "we",
+      "start_s": 54.822,
+      "end_s": 54.915
+    },
+    {
+      "w": "did.",
+      "start_s": 54.973,
+      "end_s": 55.344
+    },
+    {
+      "w": "A",
+      "start_s": 55.669,
+      "end_s": 55.751
+    },
+    {
+      "w": "real",
+      "start_s": 55.878,
+      "end_s": 56.099
+    },
+    {
+      "w": "fight",
+      "start_s": 56.168,
+      "end_s": 56.447
+    },
+    {
+      "w": "is",
+      "start_s": 56.517,
+      "end_s": 56.644
+    },
+    {
+      "w": "terrible",
+      "start_s": 56.714,
+      "end_s": 57.086
+    },
+    {
+      "w": "business.",
+      "start_s": 57.121,
+      "end_s": 57.701
+    },
+    {
+      "w": "You",
+      "start_s": 57.91,
+      "end_s": 58.038
+    },
+    {
+      "w": "win",
+      "start_s": 58.084,
+      "end_s": 58.247
+    },
+    {
+      "w": "the",
+      "start_s": 58.293,
+      "end_s": 58.363
+    },
+    {
+      "w": "meat,",
+      "start_s": 58.432,
+      "end_s": 58.792
+    },
+    {
+      "w": "the",
+      "start_s": 58.874,
+      "end_s": 58.978
+    },
+    {
+      "w": "territory,",
+      "start_s": 59.025,
+      "end_s": 59.779
+    },
+    {
+      "w": "the",
+      "start_s": 59.86,
+      "end_s": 59.965
+    },
+    {
+      "w": "respect,",
+      "start_s": 60.035,
+      "end_s": 60.65
+    },
+    {
+      "w": "whatever",
+      "start_s": 60.696,
+      "end_s": 61.056
+    },
+    {
+      "w": "the",
+      "start_s": 61.103,
+      "end_s": 61.172
+    },
+    {
+      "w": "prize",
+      "start_s": 61.207,
+      "end_s": 61.556
+    },
+    {
+      "w": "is—and",
+      "start_s": 61.614,
+      "end_s": 62.391
+    },
+    {
+      "w": "now",
+      "start_s": 62.461,
+      "end_s": 62.577
+    },
+    {
+      "w": "you've",
+      "start_s": 62.612,
+      "end_s": 62.786
+    },
+    {
+      "w": "got",
+      "start_s": 62.809,
+      "end_s": 62.949
+    },
+    {
+      "w": "one",
+      "start_s": 63.018,
+      "end_s": 63.193
+    },
+    {
+      "w": "eye",
+      "start_s": 63.227,
+      "end_s": 63.355
+    },
+    {
+      "w": "closed,",
+      "start_s": 63.401,
+      "end_s": 63.982
+    },
+    {
+      "w": "a",
+      "start_s": 64.04,
+      "end_s": 64.11
+    },
+    {
+      "w": "leg",
+      "start_s": 64.203,
+      "end_s": 64.388
+    },
+    {
+      "w": "infected,",
+      "start_s": 64.435,
+      "end_s": 65.097
+    },
+    {
+      "w": "and",
+      "start_s": 65.213,
+      "end_s": 65.364
+    },
+    {
+      "w": "a",
+      "start_s": 65.41,
+      "end_s": 65.445
+    },
+    {
+      "w": "very",
+      "start_s": 65.526,
+      "end_s": 65.793
+    },
+    {
+      "w": "short",
+      "start_s": 65.84,
+      "end_s": 66.06
+    },
+    {
+      "w": "career",
+      "start_s": 66.107,
+      "end_s": 66.385
+    },
+    {
+      "w": "as",
+      "start_s": 66.42,
+      "end_s": 66.49
+    },
+    {
+      "w": "a",
+      "start_s": 66.548,
+      "end_s": 66.571
+    },
+    {
+      "w": "successful",
+      "start_s": 66.629,
+      "end_s": 67.14
+    },
+    {
+      "w": "animal.",
+      "start_s": 67.198,
+      "end_s": 67.697
+    },
+    {
+      "w": "So",
+      "start_s": 68.08,
+      "end_s": 68.255
+    },
+    {
+      "w": "animals",
+      "start_s": 68.336,
+      "end_s": 68.684
+    },
+    {
+      "w": "developed",
+      "start_s": 68.731,
+      "end_s": 69.114
+    },
+    {
+      "w": "the",
+      "start_s": 69.137,
+      "end_s": 69.207
+    },
+    {
+      "w": "original",
+      "start_s": 69.253,
+      "end_s": 69.648
+    },
+    {
+      "w": "trailer:",
+      "start_s": 69.694,
+      "end_s": 70.147
+    },
+    {
+      "w": "the",
+      "start_s": 70.205,
+      "end_s": 70.286
+    },
+    {
+      "w": "chest",
+      "start_s": 70.333,
+      "end_s": 70.588
+    },
+    {
+      "w": "beat,",
+      "start_s": 70.646,
+      "end_s": 70.925
+    },
+    {
+      "w": "the",
+      "start_s": 70.948,
+      "end_s": 71.053
+    },
+    {
+      "w": "roar,",
+      "start_s": 71.122,
+      "end_s": 71.517
+    },
+    {
+      "w": "the",
+      "start_s": 71.552,
+      "end_s": 71.656
+    },
+    {
+      "w": "antler",
+      "start_s": 71.738,
+      "end_s": 72.016
+    },
+    {
+      "w": "display,",
+      "start_s": 72.074,
+      "end_s": 72.655
+    },
+    {
+      "w": "the",
+      "start_s": 72.736,
+      "end_s": 72.922
+    },
+    {
+      "w": "“you",
+      "start_s": 73.131,
+      "end_s": 73.34
+    },
+    {
+      "w": "really",
+      "start_s": 73.398,
+      "end_s": 73.618
+    },
+    {
+      "w": "want",
+      "start_s": 73.653,
+      "end_s": 73.781
+    },
+    {
+      "w": "to",
+      "start_s": 73.804,
+      "end_s": 73.851
+    },
+    {
+      "w": "find",
+      "start_s": 73.909,
+      "end_s": 74.187
+    },
+    {
+      "w": "out?”",
+      "start_s": 74.257,
+      "end_s": 74.547
+    },
+    {
+      "w": "walk",
+      "start_s": 74.663,
+      "end_s": 74.907
+    },
+    {
+      "w": "forward.",
+      "start_s": 74.977,
+      "end_s": 75.453
+    },
+    {
+      "w": "It",
+      "start_s": 75.662,
+      "end_s": 75.801
+    },
+    {
+      "w": "is",
+      "start_s": 75.859,
+      "end_s": 75.94
+    },
+    {
+      "w": "conflict",
+      "start_s": 76.01,
+      "end_s": 76.509
+    },
+    {
+      "w": "before",
+      "start_s": 76.567,
+      "end_s": 76.881
+    },
+    {
+      "w": "conflict.",
+      "start_s": 76.939,
+      "end_s": 77.519
+    },
+    {
+      "w": "A",
+      "start_s": 77.763,
+      "end_s": 77.844
+    },
+    {
+      "w": "public",
+      "start_s": 77.926,
+      "end_s": 78.239
+    },
+    {
+      "w": "audition",
+      "start_s": 78.297,
+      "end_s": 78.704
+    },
+    {
+      "w": "for",
+      "start_s": 78.773,
+      "end_s": 78.878
+    },
+    {
+      "w": "violence.",
+      "start_s": 78.936,
+      "end_s": 79.4
+    },
+    {
+      "w": "That",
+      "start_s": 79.423,
+      "end_s": 79.621
+    },
+    {
+      "w": "is",
+      "start_s": 79.679,
+      "end_s": 79.772
+    },
+    {
+      "w": "the",
+      "start_s": 79.83,
+      "end_s": 79.899
+    },
+    {
+      "w": "flex.",
+      "start_s": 79.934,
+      "end_s": 80.422
+    },
+    {
+      "w": "It",
+      "start_s": 80.492,
+      "end_s": 80.631
+    },
+    {
+      "w": "says:",
+      "start_s": 80.678,
+      "end_s": 81.072
+    },
+    {
+      "w": "“I",
+      "start_s": 81.281,
+      "end_s": 81.409
+    },
+    {
+      "w": "have",
+      "start_s": 81.49,
+      "end_s": 81.63
+    },
+    {
+      "w": "enough",
+      "start_s": 81.653,
+      "end_s": 81.874
+    },
+    {
+      "w": "force",
+      "start_s": 81.92,
+      "end_s": 82.222
+    },
+    {
+      "w": "that",
+      "start_s": 82.257,
+      "end_s": 82.396
+    },
+    {
+      "w": "actually",
+      "start_s": 82.454,
+      "end_s": 82.826
+    },
+    {
+      "w": "testing",
+      "start_s": 82.872,
+      "end_s": 83.243
+    },
+    {
+      "w": "this",
+      "start_s": 83.29,
+      "end_s": 83.429
+    },
+    {
+      "w": "would",
+      "start_s": 83.476,
+      "end_s": 83.627
+    },
+    {
+      "w": "be",
+      "start_s": 83.661,
+      "end_s": 83.743
+    },
+    {
+      "w": "a",
+      "start_s": 83.789,
+      "end_s": 83.812
+    },
+    {
+      "w": "bad",
+      "start_s": 83.87,
+      "end_s": 84.079
+    },
+    {
+      "w": "decision",
+      "start_s": 84.137,
+      "end_s": 84.555
+    },
+    {
+      "w": "for",
+      "start_s": 84.613,
+      "end_s": 84.718
+    },
+    {
+      "w": "both",
+      "start_s": 84.764,
+      "end_s": 84.962
+    },
+    {
+      "w": "of",
+      "start_s": 85.008,
+      "end_s": 85.055
+    },
+    {
+      "w": "us.”",
+      "start_s": 85.124,
+      "end_s": 85.635
+    },
+    {
+      "w": "A",
+      "start_s": 85.985,
+      "end_s": 86.066
+    },
+    {
+      "w": "rap",
+      "start_s": 86.159,
+      "end_s": 86.344
+    },
+    {
+      "w": "battle",
+      "start_s": 86.391,
+      "end_s": 86.739
+    },
+    {
+      "w": "is",
+      "start_s": 86.797,
+      "end_s": 86.925
+    },
+    {
+      "w": "a",
+      "start_s": 86.971,
+      "end_s": 86.995
+    },
+    {
+      "w": "gorilla",
+      "start_s": 87.053,
+      "end_s": 87.436
+    },
+    {
+      "w": "chest-beat",
+      "start_s": 87.494,
+      "end_s": 88.063
+    },
+    {
+      "w": "with",
+      "start_s": 88.109,
+      "end_s": 88.248
+    },
+    {
+      "w": "internal",
+      "start_s": 88.295,
+      "end_s": 88.678
+    },
+    {
+      "w": "rhyme.",
+      "start_s": 88.736,
+      "end_s": 89.34
+    },
+    {
+      "w": "Battle",
+      "start_s": 89.665,
+      "end_s": 89.99
+    },
+    {
+      "w": "rap",
+      "start_s": 90.025,
+      "end_s": 90.222
+    },
+    {
+      "w": "takes",
+      "start_s": 90.28,
+      "end_s": 90.489
+    },
+    {
+      "w": "that",
+      "start_s": 90.524,
+      "end_s": 90.652
+    },
+    {
+      "w": "ancient",
+      "start_s": 90.698,
+      "end_s": 90.965
+    },
+    {
+      "w": "operating",
+      "start_s": 91.023,
+      "end_s": 91.476
+    },
+    {
+      "w": "system",
+      "start_s": 91.546,
+      "end_s": 91.871
+    },
+    {
+      "w": "and",
+      "start_s": 91.917,
+      "end_s": 91.987
+    },
+    {
+      "w": "gives",
+      "start_s": 92.045,
+      "end_s": 92.242
+    },
+    {
+      "w": "it",
+      "start_s": 92.289,
+      "end_s": 92.359
+    },
+    {
+      "w": "internal",
+      "start_s": 92.405,
+      "end_s": 92.8
+    },
+    {
+      "w": "rhyme.",
+      "start_s": 92.858,
+      "end_s": 93.369
+    },
+    {
+      "w": "The",
+      "start_s": 93.578,
+      "end_s": 93.694
+    },
+    {
+      "w": "chest",
+      "start_s": 93.752,
+      "end_s": 94.019
+    },
+    {
+      "w": "beat",
+      "start_s": 94.077,
+      "end_s": 94.263
+    },
+    {
+      "w": "becomes",
+      "start_s": 94.309,
+      "end_s": 94.599
+    },
+    {
+      "w": "projection.",
+      "start_s": 94.646,
+      "end_s": 95.319
+    },
+    {
+      "w": "The",
+      "start_s": 95.435,
+      "end_s": 95.563
+    },
+    {
+      "w": "threat",
+      "start_s": 95.621,
+      "end_s": 95.888
+    },
+    {
+      "w": "becomes",
+      "start_s": 95.934,
+      "end_s": 96.271
+    },
+    {
+      "w": "setup-and-punch.",
+      "start_s": 96.329,
+      "end_s": 97.432
+    },
+    {
+      "w": "The",
+      "start_s": 97.606,
+      "end_s": 97.722
+    },
+    {
+      "w": "fight",
+      "start_s": 97.804,
+      "end_s": 98.036
+    },
+    {
+      "w": "becomes",
+      "start_s": 98.082,
+      "end_s": 98.431
+    },
+    {
+      "w": "a",
+      "start_s": 98.477,
+      "end_s": 98.512
+    },
+    {
+      "w": "scorecard",
+      "start_s": 98.582,
+      "end_s": 99.22
+    },
+    {
+      "w": "in",
+      "start_s": 99.278,
+      "end_s": 99.348
+    },
+    {
+      "w": "the",
+      "start_s": 99.394,
+      "end_s": 99.464
+    },
+    {
+      "w": "crowd's",
+      "start_s": 99.499,
+      "end_s": 99.859
+    },
+    {
+      "w": "nervous",
+      "start_s": 99.917,
+      "end_s": 100.219
+    },
+    {
+      "w": "system.",
+      "start_s": 100.253,
+      "end_s": 100.764
+    },
+    {
+      "w": "And",
+      "start_s": 100.938,
+      "end_s": 101.101
+    },
+    {
+      "w": "that",
+      "start_s": 101.159,
+      "end_s": 101.298
+    },
+    {
+      "w": "is",
+      "start_s": 101.345,
+      "end_s": 101.426
+    },
+    {
+      "w": "why",
+      "start_s": 101.472,
+      "end_s": 101.693
+    },
+    {
+      "w": "the",
+      "start_s": 101.786,
+      "end_s": 101.867
+    },
+    {
+      "w": "aggression",
+      "start_s": 101.925,
+      "end_s": 102.401
+    },
+    {
+      "w": "is",
+      "start_s": 102.459,
+      "end_s": 102.541
+    },
+    {
+      "w": "the",
+      "start_s": 102.599,
+      "end_s": 102.668
+    },
+    {
+      "w": "point.",
+      "start_s": 102.715,
+      "end_s": 103.133
+    },
+    {
+      "w": "Nobody",
+      "start_s": 103.516,
+      "end_s": 103.91
+    },
+    {
+      "w": "came",
+      "start_s": 103.969,
+      "end_s": 104.178
+    },
+    {
+      "w": "to",
+      "start_s": 104.201,
+      "end_s": 104.259
+    },
+    {
+      "w": "see",
+      "start_s": 104.317,
+      "end_s": 104.468
+    },
+    {
+      "w": "two",
+      "start_s": 104.503,
+      "end_s": 104.642
+    },
+    {
+      "w": "people",
+      "start_s": 104.712,
+      "end_s": 104.991
+    },
+    {
+      "w": "politely",
+      "start_s": 105.037,
+      "end_s": 105.455
+    },
+    {
+      "w": "exchange",
+      "start_s": 105.525,
+      "end_s": 105.977
+    },
+    {
+      "w": "LinkedIn",
+      "start_s": 106.036,
+      "end_s": 106.361
+    },
+    {
+      "w": "recommendations.",
+      "start_s": 106.43,
+      "end_s": 107.429
+    },
+    {
+      "w": "They",
+      "start_s": 107.754,
+      "end_s": 107.905
+    },
+    {
+      "w": "came",
+      "start_s": 107.951,
+      "end_s": 108.137
+    },
+    {
+      "w": "to",
+      "start_s": 108.172,
+      "end_s": 108.218
+    },
+    {
+      "w": "see",
+      "start_s": 108.276,
+      "end_s": 108.45
+    },
+    {
+      "w": "dominance",
+      "start_s": 108.508,
+      "end_s": 108.996
+    },
+    {
+      "w": "performed",
+      "start_s": 109.043,
+      "end_s": 109.495
+    },
+    {
+      "w": "so",
+      "start_s": 109.542,
+      "end_s": 109.716
+    },
+    {
+      "w": "well",
+      "start_s": 109.797,
+      "end_s": 110.053
+    },
+    {
+      "w": "that",
+      "start_s": 110.122,
+      "end_s": 110.25
+    },
+    {
+      "w": "physical",
+      "start_s": 110.32,
+      "end_s": 110.714
+    },
+    {
+      "w": "dominance",
+      "start_s": 110.796,
+      "end_s": 111.33
+    },
+    {
+      "w": "becomes",
+      "start_s": 111.376,
+      "end_s": 111.701
+    },
+    {
+      "w": "unnecessary.",
+      "start_s": 111.771,
+      "end_s": 112.746
+    },
+    {
+      "w": "The",
+      "start_s": 113.443,
+      "end_s": 113.559
+    },
+    {
+      "w": "modern",
+      "start_s": 113.617,
+      "end_s": 113.907
+    },
+    {
+      "w": "microphone",
+      "start_s": 113.942,
+      "end_s": 114.476
+    },
+    {
+      "w": "is",
+      "start_s": 114.511,
+      "end_s": 114.58
+    },
+    {
+      "w": "not",
+      "start_s": 114.639,
+      "end_s": 114.766
+    },
+    {
+      "w": "a",
+      "start_s": 114.813,
+      "end_s": 114.836
+    },
+    {
+      "w": "weapon",
+      "start_s": 114.894,
+      "end_s": 115.219
+    },
+    {
+      "w": "because",
+      "start_s": 115.289,
+      "end_s": 115.567
+    },
+    {
+      "w": "it",
+      "start_s": 115.602,
+      "end_s": 115.672
+    },
+    {
+      "w": "hurts",
+      "start_s": 115.707,
+      "end_s": 115.927
+    },
+    {
+      "w": "you.",
+      "start_s": 115.974,
+      "end_s": 116.241
+    },
+    {
+      "w": "It",
+      "start_s": 116.566,
+      "end_s": 116.682
+    },
+    {
+      "w": "is",
+      "start_s": 116.728,
+      "end_s": 116.81
+    },
+    {
+      "w": "a",
+      "start_s": 116.856,
+      "end_s": 116.879
+    },
+    {
+      "w": "weapon",
+      "start_s": 116.949,
+      "end_s": 117.216
+    },
+    {
+      "w": "because",
+      "start_s": 117.274,
+      "end_s": 117.541
+    },
+    {
+      "w": "it",
+      "start_s": 117.576,
+      "end_s": 117.645
+    },
+    {
+      "w": "lets",
+      "start_s": 117.692,
+      "end_s": 117.889
+    },
+    {
+      "w": "a",
+      "start_s": 117.924,
+      "end_s": 117.959
+    },
+    {
+      "w": "room",
+      "start_s": 118.029,
+      "end_s": 118.214
+    },
+    {
+      "w": "agree,",
+      "start_s": 118.261,
+      "end_s": 118.783
+    },
+    {
+      "w": "all",
+      "start_s": 118.899,
+      "end_s": 119.12
+    },
+    {
+      "w": "at",
+      "start_s": 119.178,
+      "end_s": 119.248
+    },
+    {
+      "w": "once,",
+      "start_s": 119.317,
+      "end_s": 119.77
+    },
+    {
+      "w": "on",
+      "start_s": 120.095,
+      "end_s": 120.258
+    },
+    {
+      "w": "who",
+      "start_s": 120.304,
+      "end_s": 120.443
+    },
+    {
+      "w": "just",
+      "start_s": 120.501,
+      "end_s": 120.676
+    },
+    {
+      "w": "won",
+      "start_s": 120.722,
+      "end_s": 120.943
+    },
+    {
+      "w": "without",
+      "start_s": 121.001,
+      "end_s": 121.279
+    },
+    {
+      "w": "anyone",
+      "start_s": 121.326,
+      "end_s": 121.674
+    },
+    {
+      "w": "needing",
+      "start_s": 121.721,
+      "end_s": 121.988
+    },
+    {
+      "w": "an",
+      "start_s": 122.022,
+      "end_s": 122.08
+    },
+    {
+      "w": "ambulance.",
+      "start_s": 122.115,
+      "end_s": 122.812
+    },
+    {
+      "w": "That",
+      "start_s": 123.323,
+      "end_s": 123.543
+    },
+    {
+      "w": "agreement",
+      "start_s": 123.59,
+      "end_s": 124.066
+    },
+    {
+      "w": "is",
+      "start_s": 124.449,
+      "end_s": 124.611
+    },
+    {
+      "w": "the",
+      "start_s": 124.658,
+      "end_s": 124.727
+    },
+    {
+      "w": "whole",
+      "start_s": 124.786,
+      "end_s": 125.018
+    },
+    {
+      "w": "technology.",
+      "start_s": 125.053,
+      "end_s": 125.923
+    },
+    {
+      "w": "A",
+      "start_s": 126.875,
+      "end_s": 126.968
+    },
+    {
+      "w": "real",
+      "start_s": 127.084,
+      "end_s": 127.305
+    },
+    {
+      "w": "fight",
+      "start_s": 127.375,
+      "end_s": 127.711
+    },
+    {
+      "w": "has",
+      "start_s": 128.152,
+      "end_s": 128.315
+    },
+    {
+      "w": "only",
+      "start_s": 128.385,
+      "end_s": 128.605
+    },
+    {
+      "w": "two",
+      "start_s": 128.663,
+      "end_s": 128.826
+    },
+    {
+      "w": "witnesses:",
+      "start_s": 128.872,
+      "end_s": 129.627
+    },
+    {
+      "w": "the",
+      "start_s": 130.138,
+      "end_s": 130.242
+    },
+    {
+      "w": "people",
+      "start_s": 130.289,
+      "end_s": 130.591
+    },
+    {
+      "w": "left",
+      "start_s": 130.649,
+      "end_s": 130.846
+    },
+    {
+      "w": "standing.",
+      "start_s": 130.881,
+      "end_s": 131.519
+    },
+    {
+      "w": "A",
+      "start_s": 131.902,
+      "end_s": 131.995
+    },
+    {
+      "w": "battle",
+      "start_s": 132.065,
+      "end_s": 132.355
+    },
+    {
+      "w": "has",
+      "start_s": 132.378,
+      "end_s": 132.483
+    },
+    {
+      "w": "fifty,",
+      "start_s": 132.564,
+      "end_s": 133.145
+    },
+    {
+      "w": "five",
+      "start_s": 133.261,
+      "end_s": 133.551
+    },
+    {
+      "w": "hundred,",
+      "start_s": 133.586,
+      "end_s": 133.911
+    },
+    {
+      "w": "or",
+      "start_s": 133.946,
+      "end_s": 134.05
+    },
+    {
+      "w": "five",
+      "start_s": 134.12,
+      "end_s": 134.398
+    },
+    {
+      "w": "million",
+      "start_s": 134.445,
+      "end_s": 134.747
+    },
+    {
+      "w": "people",
+      "start_s": 134.805,
+      "end_s": 135.107
+    },
+    {
+      "w": "who",
+      "start_s": 135.141,
+      "end_s": 135.246
+    },
+    {
+      "w": "can",
+      "start_s": 135.292,
+      "end_s": 135.408
+    },
+    {
+      "w": "replay",
+      "start_s": 135.466,
+      "end_s": 135.815
+    },
+    {
+      "w": "the",
+      "start_s": 135.873,
+      "end_s": 135.942
+    },
+    {
+      "w": "moment,",
+      "start_s": 135.989,
+      "end_s": 136.291
+    },
+    {
+      "w": "quote",
+      "start_s": 136.326,
+      "end_s": 136.546
+    },
+    {
+      "w": "the",
+      "start_s": 136.581,
+      "end_s": 136.651
+    },
+    {
+      "w": "line,",
+      "start_s": 136.709,
+      "end_s": 137.173
+    },
+    {
+      "w": "argue",
+      "start_s": 137.347,
+      "end_s": 137.754
+    },
+    {
+      "w": "about",
+      "start_s": 137.788,
+      "end_s": 138.009
+    },
+    {
+      "w": "the",
+      "start_s": 138.044,
+      "end_s": 138.114
+    },
+    {
+      "w": "round,",
+      "start_s": 138.183,
+      "end_s": 138.729
+    },
+    {
+      "w": "and",
+      "start_s": 138.938,
+      "end_s": 139.089
+    },
+    {
+      "w": "turn",
+      "start_s": 139.135,
+      "end_s": 139.333
+    },
+    {
+      "w": "a",
+      "start_s": 139.379,
+      "end_s": 139.402
+    },
+    {
+      "w": "flash",
+      "start_s": 139.472,
+      "end_s": 139.785
+    },
+    {
+      "w": "of",
+      "start_s": 139.832,
+      "end_s": 139.878
+    },
+    {
+      "w": "aggression",
+      "start_s": 139.936,
+      "end_s": 140.389
+    },
+    {
+      "w": "into",
+      "start_s": 140.447,
+      "end_s": 140.61
+    },
+    {
+      "w": "public",
+      "start_s": 140.703,
+      "end_s": 141.016
+    },
+    {
+      "w": "memory.",
+      "start_s": 141.086,
+      "end_s": 141.666
+    },
+    {
+      "w": "The",
+      "start_s": 142.363,
+      "end_s": 142.479
+    },
+    {
+      "w": "loser",
+      "start_s": 142.549,
+      "end_s": 142.862
+    },
+    {
+      "w": "loses",
+      "start_s": 142.92,
+      "end_s": 143.245
+    },
+    {
+      "w": "status.",
+      "start_s": 143.303,
+      "end_s": 143.988
+    },
+    {
+      "w": "The",
+      "start_s": 144.371,
+      "end_s": 144.487
+    },
+    {
+      "w": "winner",
+      "start_s": 144.534,
+      "end_s": 144.754
+    },
+    {
+      "w": "gets",
+      "start_s": 144.813,
+      "end_s": 144.987
+    },
+    {
+      "w": "a",
+      "start_s": 145.021,
+      "end_s": 145.056
+    },
+    {
+      "w": "reaction.",
+      "start_s": 145.114,
+      "end_s": 145.799
+    },
+    {
+      "w": "Everybody",
+      "start_s": 146.008,
+      "end_s": 146.461
+    },
+    {
+      "w": "gets",
+      "start_s": 146.508,
+      "end_s": 146.682
+    },
+    {
+      "w": "to",
+      "start_s": 146.717,
+      "end_s": 146.775
+    },
+    {
+      "w": "go",
+      "start_s": 146.833,
+      "end_s": 146.949
+    },
+    {
+      "w": "home",
+      "start_s": 147.007,
+      "end_s": 147.169
+    },
+    {
+      "w": "with",
+      "start_s": 147.192,
+      "end_s": 147.308
+    },
+    {
+      "w": "all",
+      "start_s": 147.343,
+      "end_s": 147.447
+    },
+    {
+      "w": "their",
+      "start_s": 147.494,
+      "end_s": 147.645
+    },
+    {
+      "w": "teeth.",
+      "start_s": 147.691,
+      "end_s": 148.202
+    },
+    {
+      "w": "That",
+      "start_s": 148.585,
+      "end_s": 148.759
+    },
+    {
+      "w": "is",
+      "start_s": 148.806,
+      "end_s": 148.899
+    },
+    {
+      "w": "not",
+      "start_s": 148.98,
+      "end_s": 149.177
+    },
+    {
+      "w": "less",
+      "start_s": 149.247,
+      "end_s": 149.421
+    },
+    {
+      "w": "competitive.",
+      "start_s": 149.468,
+      "end_s": 150.095
+    },
+    {
+      "w": "It",
+      "start_s": 150.129,
+      "end_s": 150.245
+    },
+    {
+      "w": "is",
+      "start_s": 150.292,
+      "end_s": 150.362
+    },
+    {
+      "w": "competition",
+      "start_s": 150.431,
+      "end_s": 150.989
+    },
+    {
+      "w": "with",
+      "start_s": 151.035,
+      "end_s": 151.163
+    },
+    {
+      "w": "better",
+      "start_s": 151.221,
+      "end_s": 151.453
+    },
+    {
+      "w": "infrastructure.",
+      "start_s": 151.511,
+      "end_s": 152.463
+    },
+    {
+      "w": "Now,",
+      "start_s": 153.16,
+      "end_s": 153.508
+    },
+    {
+      "w": "humans",
+      "start_s": 153.566,
+      "end_s": 153.926
+    },
+    {
+      "w": "make",
+      "start_s": 153.984,
+      "end_s": 154.146
+    },
+    {
+      "w": "everything",
+      "start_s": 154.181,
+      "end_s": 154.553
+    },
+    {
+      "w": "more",
+      "start_s": 154.611,
+      "end_s": 154.762
+    },
+    {
+      "w": "complicated,",
+      "start_s": 154.808,
+      "end_s": 155.47
+    },
+    {
+      "w": "because",
+      "start_s": 155.505,
+      "end_s": 155.795
+    },
+    {
+      "w": "we",
+      "start_s": 155.83,
+      "end_s": 155.923
+    },
+    {
+      "w": "invented",
+      "start_s": 155.981,
+      "end_s": 156.387
+    },
+    {
+      "w": "taxes,",
+      "start_s": 156.434,
+      "end_s": 157.061
+    },
+    {
+      "w": "seating",
+      "start_s": 157.177,
+      "end_s": 157.502
+    },
+    {
+      "w": "charts,",
+      "start_s": 157.56,
+      "end_s": 158.117
+    },
+    {
+      "w": "and",
+      "start_s": 158.152,
+      "end_s": 158.291
+    },
+    {
+      "w": "the",
+      "start_s": 158.338,
+      "end_s": 158.407
+    },
+    {
+      "w": "guy",
+      "start_s": 158.454,
+      "end_s": 158.686
+    },
+    {
+      "w": "who",
+      "start_s": 158.721,
+      "end_s": 158.837
+    },
+    {
+      "w": "says",
+      "start_s": 158.907,
+      "end_s": 159.174
+    },
+    {
+      "w": "“we",
+      "start_s": 159.197,
+      "end_s": 159.313
+    },
+    {
+      "w": "don't",
+      "start_s": 159.359,
+      "end_s": 159.533
+    },
+    {
+      "w": "do",
+      "start_s": 159.58,
+      "end_s": 159.673
+    },
+    {
+      "w": "that",
+      "start_s": 159.742,
+      "end_s": 159.894
+    },
+    {
+      "w": "here.”",
+      "start_s": 159.963,
+      "end_s": 160.405
+    },
+    {
+      "w": "Sociologist",
+      "start_s": 161.101,
+      "end_s": 161.902
+    },
+    {
+      "w": "Norbert",
+      "start_s": 161.96,
+      "end_s": 162.297
+    },
+    {
+      "w": "Elias",
+      "start_s": 162.367,
+      "end_s": 162.82
+    },
+    {
+      "w": "called",
+      "start_s": 162.889,
+      "end_s": 163.145
+    },
+    {
+      "w": "the",
+      "start_s": 163.168,
+      "end_s": 163.238
+    },
+    {
+      "w": "long",
+      "start_s": 163.284,
+      "end_s": 163.539
+    },
+    {
+      "w": "historical",
+      "start_s": 163.609,
+      "end_s": 164.085
+    },
+    {
+      "w": "shift",
+      "start_s": 164.131,
+      "end_s": 164.387
+    },
+    {
+      "w": "the",
+      "start_s": 164.433,
+      "end_s": 164.515
+    },
+    {
+      "w": "**civilizing",
+      "start_s": 164.561,
+      "end_s": 165.258
+    },
+    {
+      "w": "process**.",
+      "start_s": 165.327,
+      "end_s": 166.43
+    },
+    {
+      "w": "His",
+      "start_s": 167.034,
+      "end_s": 167.22
+    },
+    {
+      "w": "broad",
+      "start_s": 167.289,
+      "end_s": 167.591
+    },
+    {
+      "w": "argument:",
+      "start_s": 167.649,
+      "end_s": 168.183
+    },
+    {
+      "w": "as",
+      "start_s": 168.218,
+      "end_s": 168.369
+    },
+    {
+      "w": "states",
+      "start_s": 168.416,
+      "end_s": 168.764
+    },
+    {
+      "w": "concentrate",
+      "start_s": 168.834,
+      "end_s": 169.449
+    },
+    {
+      "w": "power,",
+      "start_s": 169.495,
+      "end_s": 169.936
+    },
+    {
+      "w": "private",
+      "start_s": 170.053,
+      "end_s": 170.424
+    },
+    {
+      "w": "violence",
+      "start_s": 170.459,
+      "end_s": 170.9
+    },
+    {
+      "w": "gets",
+      "start_s": 170.935,
+      "end_s": 171.132
+    },
+    {
+      "w": "more",
+      "start_s": 171.179,
+      "end_s": 171.353
+    },
+    {
+      "w": "expensive,",
+      "start_s": 171.388,
+      "end_s": 172.026
+    },
+    {
+      "w": "less",
+      "start_s": 172.142,
+      "end_s": 172.375
+    },
+    {
+      "w": "acceptable,",
+      "start_s": 172.409,
+      "end_s": 173.141
+    },
+    {
+      "w": "and",
+      "start_s": 173.164,
+      "end_s": 173.303
+    },
+    {
+      "w": "less",
+      "start_s": 173.373,
+      "end_s": 173.559
+    },
+    {
+      "w": "useful.",
+      "start_s": 173.617,
+      "end_s": 174.174
+    },
+    {
+      "w": "You",
+      "start_s": 174.685,
+      "end_s": 174.801
+    },
+    {
+      "w": "cannot",
+      "start_s": 174.847,
+      "end_s": 175.103
+    },
+    {
+      "w": "simply",
+      "start_s": 175.161,
+      "end_s": 175.451
+    },
+    {
+      "w": "stab",
+      "start_s": 175.509,
+      "end_s": 175.823
+    },
+    {
+      "w": "your",
+      "start_s": 175.881,
+      "end_s": 175.997
+    },
+    {
+      "w": "rival",
+      "start_s": 176.067,
+      "end_s": 176.345
+    },
+    {
+      "w": "at",
+      "start_s": 176.403,
+      "end_s": 176.473
+    },
+    {
+      "w": "dinner",
+      "start_s": 176.531,
+      "end_s": 176.833
+    },
+    {
+      "w": "if",
+      "start_s": 176.961,
+      "end_s": 177.112
+    },
+    {
+      "w": "the",
+      "start_s": 177.158,
+      "end_s": 177.228
+    },
+    {
+      "w": "king",
+      "start_s": 177.286,
+      "end_s": 177.483
+    },
+    {
+      "w": "has",
+      "start_s": 177.541,
+      "end_s": 177.669
+    },
+    {
+      "w": "a",
+      "start_s": 177.715,
+      "end_s": 177.738
+    },
+    {
+      "w": "monopoly",
+      "start_s": 177.785,
+      "end_s": 178.203
+    },
+    {
+      "w": "on",
+      "start_s": 178.261,
+      "end_s": 178.331
+    },
+    {
+      "w": "stabbing",
+      "start_s": 178.377,
+      "end_s": 178.749
+    },
+    {
+      "w": "people.",
+      "start_s": 178.795,
+      "end_s": 179.352
+    },
+    {
+      "w": "So",
+      "start_s": 179.735,
+      "end_s": 179.863
+    },
+    {
+      "w": "the",
+      "start_s": 179.921,
+      "end_s": 179.991
+    },
+    {
+      "w": "warrior",
+      "start_s": 180.026,
+      "end_s": 180.374
+    },
+    {
+      "w": "class",
+      "start_s": 180.42,
+      "end_s": 180.838
+    },
+    {
+      "w": "has",
+      "start_s": 180.954,
+      "end_s": 181.117
+    },
+    {
+      "w": "a",
+      "start_s": 181.163,
+      "end_s": 181.198
+    },
+    {
+      "w": "problem.",
+      "start_s": 181.245,
+      "end_s": 181.848
+    },
+    {
+      "w": "The",
+      "start_s": 182.232,
+      "end_s": 182.348
+    },
+    {
+      "w": "competitive",
+      "start_s": 182.406,
+      "end_s": 182.975
+    },
+    {
+      "w": "energy",
+      "start_s": 183.021,
+      "end_s": 183.334
+    },
+    {
+      "w": "is",
+      "start_s": 183.381,
+      "end_s": 183.451
+    },
+    {
+      "w": "still",
+      "start_s": 183.485,
+      "end_s": 183.694
+    },
+    {
+      "w": "there.",
+      "start_s": 183.752,
+      "end_s": 184.194
+    },
+    {
+      "w": "The",
+      "start_s": 184.519,
+      "end_s": 184.658
+    },
+    {
+      "w": "ego",
+      "start_s": 184.739,
+      "end_s": 185.006
+    },
+    {
+      "w": "has",
+      "start_s": 185.064,
+      "end_s": 185.18
+    },
+    {
+      "w": "not",
+      "start_s": 185.25,
+      "end_s": 185.378
+    },
+    {
+      "w": "retired.",
+      "start_s": 185.436,
+      "end_s": 186.132
+    },
+    {
+      "w": "It",
+      "start_s": 186.458,
+      "end_s": 186.597
+    },
+    {
+      "w": "just",
+      "start_s": 186.655,
+      "end_s": 186.876
+    },
+    {
+      "w": "needs",
+      "start_s": 186.934,
+      "end_s": 187.166
+    },
+    {
+      "w": "a",
+      "start_s": 187.201,
+      "end_s": 187.224
+    },
+    {
+      "w": "new",
+      "start_s": 187.293,
+      "end_s": 187.398
+    },
+    {
+      "w": "arena.",
+      "start_s": 187.444,
+      "end_s": 188.025
+    },
+    {
+      "w": "Enter",
+      "start_s": 188.466,
+      "end_s": 188.71
+    },
+    {
+      "w": "the",
+      "start_s": 188.756,
+      "end_s": 188.826
+    },
+    {
+      "w": "court.",
+      "start_s": 188.872,
+      "end_s": 189.29
+    },
+    {
+      "w": "You",
+      "start_s": 189.534,
+      "end_s": 189.662
+    },
+    {
+      "w": "win",
+      "start_s": 189.72,
+      "end_s": 189.86
+    },
+    {
+      "w": "with",
+      "start_s": 189.906,
+      "end_s": 190.045
+    },
+    {
+      "w": "clothes,",
+      "start_s": 190.092,
+      "end_s": 190.591
+    },
+    {
+      "w": "etiquette,",
+      "start_s": 190.649,
+      "end_s": 191.079
+    },
+    {
+      "w": "poetry,",
+      "start_s": 191.102,
+      "end_s": 191.671
+    },
+    {
+      "w": "rank,",
+      "start_s": 191.74,
+      "end_s": 192.077
+    },
+    {
+      "w": "jokes,",
+      "start_s": 192.147,
+      "end_s": 192.541
+    },
+    {
+      "w": "insults—every",
+      "start_s": 192.576,
+      "end_s": 193.528
+    },
+    {
+      "w": "way",
+      "start_s": 193.575,
+      "end_s": 193.691
+    },
+    {
+      "w": "of",
+      "start_s": 193.737,
+      "end_s": 193.784
+    },
+    {
+      "w": "saying",
+      "start_s": 193.83,
+      "end_s": 194.144
+    },
+    {
+      "w": "“I",
+      "start_s": 194.387,
+      "end_s": 194.527
+    },
+    {
+      "w": "am",
+      "start_s": 194.596,
+      "end_s": 194.678
+    },
+    {
+      "w": "better",
+      "start_s": 194.724,
+      "end_s": 194.933
+    },
+    {
+      "w": "than",
+      "start_s": 194.968,
+      "end_s": 195.084
+    },
+    {
+      "w": "you”",
+      "start_s": 195.154,
+      "end_s": 195.583
+    },
+    {
+      "w": "that",
+      "start_s": 195.653,
+      "end_s": 195.804
+    },
+    {
+      "w": "does",
+      "start_s": 195.85,
+      "end_s": 195.978
+    },
+    {
+      "w": "not",
+      "start_s": 196.024,
+      "end_s": 196.152
+    },
+    {
+      "w": "require",
+      "start_s": 196.21,
+      "end_s": 196.779
+    },
+    {
+      "w": "a",
+      "start_s": 196.849,
+      "end_s": 196.965
+    },
+    {
+      "w": "horse,",
+      "start_s": 197.058,
+      "end_s": 197.418
+    },
+    {
+      "w": "a",
+      "start_s": 197.441,
+      "end_s": 197.487
+    },
+    {
+      "w": "sword,",
+      "start_s": 197.569,
+      "end_s": 198.068
+    },
+    {
+      "w": "and",
+      "start_s": 198.161,
+      "end_s": 198.312
+    },
+    {
+      "w": "a",
+      "start_s": 198.358,
+      "end_s": 198.381
+    },
+    {
+      "w": "very",
+      "start_s": 198.451,
+      "end_s": 198.706
+    },
+    {
+      "w": "awkward",
+      "start_s": 198.764,
+      "end_s": 199.078
+    },
+    {
+      "w": "funeral.",
+      "start_s": 199.136,
+      "end_s": 199.728
+    },
+    {
+      "w": "That",
+      "start_s": 200.007,
+      "end_s": 200.204
+    },
+    {
+      "w": "is",
+      "start_s": 200.251,
+      "end_s": 200.32
+    },
+    {
+      "w": "the",
+      "start_s": 200.39,
+      "end_s": 200.459
+    },
+    {
+      "w": "bridge",
+      "start_s": 200.518,
+      "end_s": 200.877
+    },
+    {
+      "w": "to",
+      "start_s": 200.912,
+      "end_s": 200.982
+    },
+    {
+      "w": "battle",
+      "start_s": 201.063,
+      "end_s": 201.365
+    },
+    {
+      "w": "rap.",
+      "start_s": 201.4,
+      "end_s": 201.818
+    },
+    {
+      "w": "Not",
+      "start_s": 202.259,
+      "end_s": 202.433
+    },
+    {
+      "w": "because",
+      "start_s": 202.468,
+      "end_s": 202.723
+    },
+    {
+      "w": "the",
+      "start_s": 202.758,
+      "end_s": 202.828
+    },
+    {
+      "w": "South",
+      "start_s": 202.874,
+      "end_s": 203.107
+    },
+    {
+      "w": "Bronx",
+      "start_s": 203.153,
+      "end_s": 203.397
+    },
+    {
+      "w": "was",
+      "start_s": 203.444,
+      "end_s": 203.548
+    },
+    {
+      "w": "secretly",
+      "start_s": 203.606,
+      "end_s": 204.013
+    },
+    {
+      "w": "a",
+      "start_s": 204.059,
+      "end_s": 204.082
+    },
+    {
+      "w": "French",
+      "start_s": 204.14,
+      "end_s": 204.384
+    },
+    {
+      "w": "palace",
+      "start_s": 204.431,
+      "end_s": 204.79
+    },
+    {
+      "w": "with",
+      "start_s": 204.814,
+      "end_s": 204.941
+    },
+    {
+      "w": "better",
+      "start_s": 204.988,
+      "end_s": 205.208
+    },
+    {
+      "w": "drums.",
+      "start_s": 205.255,
+      "end_s": 205.696
+    },
+    {
+      "w": "Because",
+      "start_s": 205.719,
+      "end_s": 206.009
+    },
+    {
+      "w": "both",
+      "start_s": 206.044,
+      "end_s": 206.253
+    },
+    {
+      "w": "worlds",
+      "start_s": 206.3,
+      "end_s": 206.578
+    },
+    {
+      "w": "understand",
+      "start_s": 206.636,
+      "end_s": 207.101
+    },
+    {
+      "w": "the",
+      "start_s": 207.147,
+      "end_s": 207.217
+    },
+    {
+      "w": "same",
+      "start_s": 207.263,
+      "end_s": 207.542
+    },
+    {
+      "w": "hard",
+      "start_s": 207.588,
+      "end_s": 207.809
+    },
+    {
+      "w": "truth:",
+      "start_s": 207.844,
+      "end_s": 208.297
+    },
+    {
+      "w": "status",
+      "start_s": 208.471,
+      "end_s": 208.877
+    },
+    {
+      "w": "conflict",
+      "start_s": 208.924,
+      "end_s": 209.388
+    },
+    {
+      "w": "does",
+      "start_s": 209.469,
+      "end_s": 209.701
+    },
+    {
+      "w": "not",
+      "start_s": 209.771,
+      "end_s": 209.934
+    },
+    {
+      "w": "vanish",
+      "start_s": 210.003,
+      "end_s": 210.34
+    },
+    {
+      "w": "because",
+      "start_s": 210.398,
+      "end_s": 210.665
+    },
+    {
+      "w": "you",
+      "start_s": 210.7,
+      "end_s": 210.793
+    },
+    {
+      "w": "ban",
+      "start_s": 210.874,
+      "end_s": 211.095
+    },
+    {
+      "w": "the",
+      "start_s": 211.153,
+      "end_s": 211.222
+    },
+    {
+      "w": "fight.",
+      "start_s": 211.269,
+      "end_s": 211.722
+    },
+    {
+      "w": "It",
+      "start_s": 212.325,
+      "end_s": 212.465
+    },
+    {
+      "w": "gets",
+      "start_s": 212.511,
+      "end_s": 212.674
+    },
+    {
+      "w": "smarter.",
+      "start_s": 212.708,
+      "end_s": 213.243
+    },
+    {
+      "w": "It",
+      "start_s": 213.568,
+      "end_s": 213.719
+    },
+    {
+      "w": "gets",
+      "start_s": 213.777,
+      "end_s": 213.962
+    },
+    {
+      "w": "theatrical.",
+      "start_s": 214.009,
+      "end_s": 214.705
+    },
+    {
+      "w": "It",
+      "start_s": 214.984,
+      "end_s": 215.135
+    },
+    {
+      "w": "starts",
+      "start_s": 215.181,
+      "end_s": 215.46
+    },
+    {
+      "w": "keeping",
+      "start_s": 215.518,
+      "end_s": 215.808
+    },
+    {
+      "w": "time.",
+      "start_s": 215.866,
+      "end_s": 216.273
+    },
+    {
+      "w": "In",
+      "start_s": 216.969,
+      "end_s": 217.097
+    },
+    {
+      "w": "the",
+      "start_s": 217.132,
+      "end_s": 217.202
+    },
+    {
+      "w": "Bronx,",
+      "start_s": 217.236,
+      "end_s": 217.596
+    },
+    {
+      "w": "young",
+      "start_s": 217.631,
+      "end_s": 217.805
+    },
+    {
+      "w": "people",
+      "start_s": 217.863,
+      "end_s": 218.13
+    },
+    {
+      "w": "turned",
+      "start_s": 218.165,
+      "end_s": 218.397
+    },
+    {
+      "w": "pressure,",
+      "start_s": 218.444,
+      "end_s": 218.839
+    },
+    {
+      "w": "competition,",
+      "start_s": 218.885,
+      "end_s": 219.547
+    },
+    {
+      "w": "neighborhood",
+      "start_s": 219.57,
+      "end_s": 219.988
+    },
+    {
+      "w": "identity,",
+      "start_s": 220.023,
+      "end_s": 220.499
+    },
+    {
+      "w": "and",
+      "start_s": 220.522,
+      "end_s": 220.626
+    },
+    {
+      "w": "raw",
+      "start_s": 220.708,
+      "end_s": 220.905
+    },
+    {
+      "w": "talent",
+      "start_s": 220.963,
+      "end_s": 221.346
+    },
+    {
+      "w": "into",
+      "start_s": 221.393,
+      "end_s": 221.579
+    },
+    {
+      "w": "DJs,",
+      "start_s": 221.66,
+      "end_s": 222.24
+    },
+    {
+      "w": "b-boys,",
+      "start_s": 222.275,
+      "end_s": 222.89
+    },
+    {
+      "w": "writers,",
+      "start_s": 222.914,
+      "end_s": 223.366
+    },
+    {
+      "w": "crews,",
+      "start_s": 223.401,
+      "end_s": 223.912
+    },
+    {
+      "w": "and",
+      "start_s": 223.935,
+      "end_s": 224.075
+    },
+    {
+      "w": "MCs.",
+      "start_s": 224.121,
+      "end_s": 224.957
+    },
+    {
+      "w": "The",
+      "start_s": 225.468,
+      "end_s": 225.584
+    },
+    {
+      "w": "microphone",
+      "start_s": 225.63,
+      "end_s": 226.188
+    },
+    {
+      "w": "did",
+      "start_s": 226.222,
+      "end_s": 226.35
+    },
+    {
+      "w": "not",
+      "start_s": 226.397,
+      "end_s": 226.536
+    },
+    {
+      "w": "remove",
+      "start_s": 226.594,
+      "end_s": 226.884
+    },
+    {
+      "w": "the",
+      "start_s": 226.919,
+      "end_s": 226.989
+    },
+    {
+      "w": "stakes.",
+      "start_s": 227.035,
+      "end_s": 227.534
+    },
+    {
+      "w": "It",
+      "start_s": 227.558,
+      "end_s": 227.709
+    },
+    {
+      "w": "gave",
+      "start_s": 227.767,
+      "end_s": 228.022
+    },
+    {
+      "w": "the",
+      "start_s": 228.068,
+      "end_s": 228.138
+    },
+    {
+      "w": "stakes",
+      "start_s": 228.173,
+      "end_s": 228.544
+    },
+    {
+      "w": "a",
+      "start_s": 228.614,
+      "end_s": 228.672
+    },
+    {
+      "w": "stage.",
+      "start_s": 228.753,
+      "end_s": 229.369
+    },
+    {
+      "w": "That",
+      "start_s": 229.694,
+      "end_s": 229.856
+    },
+    {
+      "w": "is",
+      "start_s": 229.903,
+      "end_s": 229.973
+    },
+    {
+      "w": "not",
+      "start_s": 230.019,
+      "end_s": 230.147
+    },
+    {
+      "w": "weakness.",
+      "start_s": 230.205,
+      "end_s": 230.739
+    },
+    {
+      "w": "That",
+      "start_s": 230.762,
+      "end_s": 230.925
+    },
+    {
+      "w": "is",
+      "start_s": 230.971,
+      "end_s": 231.041
+    },
+    {
+      "w": "engineering.",
+      "start_s": 231.099,
+      "end_s": 231.772
+    },
+    {
+      "w": "You",
+      "start_s": 232.376,
+      "end_s": 232.492
+    },
+    {
+      "w": "are",
+      "start_s": 232.539,
+      "end_s": 232.643
+    },
+    {
+      "w": "taking",
+      "start_s": 232.678,
+      "end_s": 232.933
+    },
+    {
+      "w": "the",
+      "start_s": 232.98,
+      "end_s": 233.049
+    },
+    {
+      "w": "same",
+      "start_s": 233.096,
+      "end_s": 233.351
+    },
+    {
+      "w": "fire",
+      "start_s": 233.409,
+      "end_s": 233.746
+    },
+    {
+      "w": "and",
+      "start_s": 233.769,
+      "end_s": 233.839
+    },
+    {
+      "w": "building",
+      "start_s": 233.874,
+      "end_s": 234.141
+    },
+    {
+      "w": "a",
+      "start_s": 234.176,
+      "end_s": 234.199
+    },
+    {
+      "w": "furnace",
+      "start_s": 234.257,
+      "end_s": 234.57
+    },
+    {
+      "w": "around",
+      "start_s": 234.605,
+      "end_s": 234.907
+    },
+    {
+      "w": "it.",
+      "start_s": 234.953,
+      "end_s": 235.174
+    },
+    {
+      "w": "And",
+      "start_s": 235.557,
+      "end_s": 235.696
+    },
+    {
+      "w": "the",
+      "start_s": 235.743,
+      "end_s": 235.813
+    },
+    {
+      "w": "furnace",
+      "start_s": 235.847,
+      "end_s": 236.196
+    },
+    {
+      "w": "matters.",
+      "start_s": 236.242,
+      "end_s": 236.823
+    },
+    {
+      "w": "A",
+      "start_s": 237.426,
+      "end_s": 237.519
+    },
+    {
+      "w": "beat",
+      "start_s": 237.635,
+      "end_s": 237.856
+    },
+    {
+      "w": "gives",
+      "start_s": 237.926,
+      "end_s": 238.158
+    },
+    {
+      "w": "people",
+      "start_s": 238.227,
+      "end_s": 238.576
+    },
+    {
+      "w": "a",
+      "start_s": 238.622,
+      "end_s": 238.645
+    },
+    {
+      "w": "shared",
+      "start_s": 238.703,
+      "end_s": 239.005
+    },
+    {
+      "w": "clock.",
+      "start_s": 239.052,
+      "end_s": 239.563
+    },
+    {
+      "w": "A",
+      "start_s": 239.888,
+      "end_s": 239.969
+    },
+    {
+      "w": "circle",
+      "start_s": 240.062,
+      "end_s": 240.433
+    },
+    {
+      "w": "gives",
+      "start_s": 240.48,
+      "end_s": 240.689
+    },
+    {
+      "w": "them",
+      "start_s": 240.712,
+      "end_s": 240.84
+    },
+    {
+      "w": "a",
+      "start_s": 240.886,
+      "end_s": 240.909
+    },
+    {
+      "w": "shared",
+      "start_s": 240.956,
+      "end_s": 241.246
+    },
+    {
+      "w": "place.",
+      "start_s": 241.292,
+      "end_s": 241.838
+    },
+    {
+      "w": "A",
+      "start_s": 242.163,
+      "end_s": 242.256
+    },
+    {
+      "w": "crowd",
+      "start_s": 242.337,
+      "end_s": 242.697
+    },
+    {
+      "w": "gives",
+      "start_s": 242.755,
+      "end_s": 242.964
+    },
+    {
+      "w": "them",
+      "start_s": 242.988,
+      "end_s": 243.104
+    },
+    {
+      "w": "a",
+      "start_s": 243.15,
+      "end_s": 243.173
+    },
+    {
+      "w": "shared",
+      "start_s": 243.231,
+      "end_s": 243.51
+    },
+    {
+      "w": "memory.",
+      "start_s": 243.556,
+      "end_s": 244.09
+    },
+    {
+      "w": "A",
+      "start_s": 244.532,
+      "end_s": 244.613
+    },
+    {
+      "w": "round",
+      "start_s": 244.706,
+      "end_s": 245.031
+    },
+    {
+      "w": "gives",
+      "start_s": 245.089,
+      "end_s": 245.275
+    },
+    {
+      "w": "them",
+      "start_s": 245.298,
+      "end_s": 245.414
+    },
+    {
+      "w": "a",
+      "start_s": 245.46,
+      "end_s": 245.484
+    },
+    {
+      "w": "way",
+      "start_s": 245.53,
+      "end_s": 245.658
+    },
+    {
+      "w": "to",
+      "start_s": 245.704,
+      "end_s": 245.751
+    },
+    {
+      "w": "stop.",
+      "start_s": 245.797,
+      "end_s": 246.354
+    },
+    {
+      "w": "Put",
+      "start_s": 246.865,
+      "end_s": 247.063
+    },
+    {
+      "w": "those",
+      "start_s": 247.097,
+      "end_s": 247.295
+    },
+    {
+      "w": "pieces",
+      "start_s": 247.33,
+      "end_s": 247.643
+    },
+    {
+      "w": "together",
+      "start_s": 247.69,
+      "end_s": 248.096
+    },
+    {
+      "w": "and",
+      "start_s": 248.142,
+      "end_s": 248.212
+    },
+    {
+      "w": "a",
+      "start_s": 248.258,
+      "end_s": 248.282
+    },
+    {
+      "w": "rivalry",
+      "start_s": 248.363,
+      "end_s": 248.781
+    },
+    {
+      "w": "can",
+      "start_s": 248.839,
+      "end_s": 248.943
+    },
+    {
+      "w": "become",
+      "start_s": 248.99,
+      "end_s": 249.268
+    },
+    {
+      "w": "an",
+      "start_s": 249.292,
+      "end_s": 249.361
+    },
+    {
+      "w": "event",
+      "start_s": 249.408,
+      "end_s": 249.675
+    },
+    {
+      "w": "before",
+      "start_s": 249.733,
+      "end_s": 250.023
+    },
+    {
+      "w": "it",
+      "start_s": 250.058,
+      "end_s": 250.116
+    },
+    {
+      "w": "becomes",
+      "start_s": 250.151,
+      "end_s": 250.499
+    },
+    {
+      "w": "an",
+      "start_s": 250.546,
+      "end_s": 250.615
+    },
+    {
+      "w": "incident.",
+      "start_s": 250.662,
+      "end_s": 251.207
+    },
+    {
+      "w": "That",
+      "start_s": 251.59,
+      "end_s": 251.823
+    },
+    {
+      "w": "is",
+      "start_s": 251.892,
+      "end_s": 252.519
+    },
+    {
+      "w": "why",
+      "start_s": 252.519,
+      "end_s": 252.856
+    },
+    {
+      "w": "hip-hop",
+      "start_s": 252.972,
+      "end_s": 253.343
+    },
+    {
+      "w": "competition",
+      "start_s": 253.413,
+      "end_s": 253.97
+    },
+    {
+      "w": "feels",
+      "start_s": 254.04,
+      "end_s": 254.284
+    },
+    {
+      "w": "so",
+      "start_s": 254.33,
+      "end_s": 254.458
+    },
+    {
+      "w": "much",
+      "start_s": 254.539,
+      "end_s": 254.737
+    },
+    {
+      "w": "like",
+      "start_s": 254.795,
+      "end_s": 254.957
+    },
+    {
+      "w": "martial",
+      "start_s": 255.015,
+      "end_s": 255.352
+    },
+    {
+      "w": "competition.",
+      "start_s": 255.41,
+      "end_s": 256.246
+    },
+    {
+      "w": "It",
+      "start_s": 256.85,
+      "end_s": 256.989
+    },
+    {
+      "w": "does",
+      "start_s": 257.035,
+      "end_s": 257.198
+    },
+    {
+      "w": "not",
+      "start_s": 257.256,
+      "end_s": 257.43
+    },
+    {
+      "w": "deny",
+      "start_s": 257.488,
+      "end_s": 258.022
+    },
+    {
+      "w": "that",
+      "start_s": 258.266,
+      "end_s": 258.44
+    },
+    {
+      "w": "pride,",
+      "start_s": 258.51,
+      "end_s": 259.102
+    },
+    {
+      "w": "identity,",
+      "start_s": 259.218,
+      "end_s": 259.857
+    },
+    {
+      "w": "territory,",
+      "start_s": 259.88,
+      "end_s": 260.553
+    },
+    {
+      "w": "and",
+      "start_s": 260.576,
+      "end_s": 260.669
+    },
+    {
+      "w": "reputation",
+      "start_s": 260.75,
+      "end_s": 261.401
+    },
+    {
+      "w": "are",
+      "start_s": 261.459,
+      "end_s": 261.575
+    },
+    {
+      "w": "real.",
+      "start_s": 261.621,
+      "end_s": 262.097
+    },
+    {
+      "w": "It",
+      "start_s": 262.608,
+      "end_s": 262.736
+    },
+    {
+      "w": "gives",
+      "start_s": 262.782,
+      "end_s": 262.98
+    },
+    {
+      "w": "them",
+      "start_s": 263.014,
+      "end_s": 263.154
+    },
+    {
+      "w": "a",
+      "start_s": 263.2,
+      "end_s": 263.223
+    },
+    {
+      "w": "higher-resolution",
+      "start_s": 263.305,
+      "end_s": 264.164
+    },
+    {
+      "w": "language.",
+      "start_s": 264.233,
+      "end_s": 264.826
+    },
+    {
+      "w": "So",
+      "start_s": 265.336,
+      "end_s": 265.487
+    },
+    {
+      "w": "why",
+      "start_s": 265.534,
+      "end_s": 265.673
+    },
+    {
+      "w": "doesn't",
+      "start_s": 265.731,
+      "end_s": 265.987
+    },
+    {
+      "w": "every",
+      "start_s": 266.045,
+      "end_s": 266.277
+    },
+    {
+      "w": "rap",
+      "start_s": 266.346,
+      "end_s": 266.555
+    },
+    {
+      "w": "battle",
+      "start_s": 266.613,
+      "end_s": 266.904
+    },
+    {
+      "w": "become",
+      "start_s": 266.939,
+      "end_s": 267.206
+    },
+    {
+      "w": "an",
+      "start_s": 267.229,
+      "end_s": 267.287
+    },
+    {
+      "w": "actual",
+      "start_s": 267.345,
+      "end_s": 267.763
+    },
+    {
+      "w": "fight?",
+      "start_s": 267.844,
+      "end_s": 268.344
+    },
+    {
+      "w": "Because",
+      "start_s": 268.669,
+      "end_s": 269.028
+    },
+    {
+      "w": "the",
+      "start_s": 269.052,
+      "end_s": 269.121
+    },
+    {
+      "w": "battle",
+      "start_s": 269.191,
+      "end_s": 269.505
+    },
+    {
+      "w": "has",
+      "start_s": 269.551,
+      "end_s": 269.725
+    },
+    {
+      "w": "a",
+      "start_s": 269.772,
+      "end_s": 269.806
+    },
+    {
+      "w": "border.",
+      "start_s": 269.864,
+      "end_s": 270.422
+    },
+    {
+      "w": "Historian",
+      "start_s": 270.7,
+      "end_s": 271.362
+    },
+    {
+      "w": "Johan",
+      "start_s": 271.606,
+      "end_s": 272.035
+    },
+    {
+      "w": "Huizinga",
+      "start_s": 272.117,
+      "end_s": 272.779
+    },
+    {
+      "w": "gave",
+      "start_s": 272.871,
+      "end_s": 273.115
+    },
+    {
+      "w": "us",
+      "start_s": 273.162,
+      "end_s": 273.266
+    },
+    {
+      "w": "one",
+      "start_s": 273.347,
+      "end_s": 273.51
+    },
+    {
+      "w": "of",
+      "start_s": 273.533,
+      "end_s": 273.591
+    },
+    {
+      "w": "the",
+      "start_s": 273.638,
+      "end_s": 273.707
+    },
+    {
+      "w": "great",
+      "start_s": 273.754,
+      "end_s": 273.963
+    },
+    {
+      "w": "concepts",
+      "start_s": 274.021,
+      "end_s": 274.566
+    },
+    {
+      "w": "in",
+      "start_s": 274.601,
+      "end_s": 274.683
+    },
+    {
+      "w": "all",
+      "start_s": 274.764,
+      "end_s": 274.938
+    },
+    {
+      "w": "of",
+      "start_s": 274.984,
+      "end_s": 275.031
+    },
+    {
+      "w": "culture:",
+      "start_s": 275.101,
+      "end_s": 275.635
+    },
+    {
+      "w": "the",
+      "start_s": 275.878,
+      "end_s": 275.983
+    },
+    {
+      "w": "play",
+      "start_s": 276.041,
+      "end_s": 276.25
+    },
+    {
+      "w": "space.",
+      "start_s": 276.285,
+      "end_s": 276.865
+    },
+    {
+      "w": "A",
+      "start_s": 277.109,
+      "end_s": 277.19
+    },
+    {
+      "w": "game",
+      "start_s": 277.283,
+      "end_s": 277.573
+    },
+    {
+      "w": "creates",
+      "start_s": 277.631,
+      "end_s": 278.107
+    },
+    {
+      "w": "a",
+      "start_s": 278.177,
+      "end_s": 278.235
+    },
+    {
+      "w": "temporary",
+      "start_s": 278.328,
+      "end_s": 278.874
+    },
+    {
+      "w": "world.",
+      "start_s": 278.943,
+      "end_s": 279.536
+    },
+    {
+      "w": "The",
+      "start_s": 279.745,
+      "end_s": 279.861
+    },
+    {
+      "w": "normal",
+      "start_s": 279.93,
+      "end_s": 280.232
+    },
+    {
+      "w": "world",
+      "start_s": 280.279,
+      "end_s": 280.522
+    },
+    {
+      "w": "is",
+      "start_s": 280.58,
+      "end_s": 280.65
+    },
+    {
+      "w": "still",
+      "start_s": 280.685,
+      "end_s": 280.894
+    },
+    {
+      "w": "outside.",
+      "start_s": 280.952,
+      "end_s": 281.683
+    },
+    {
+      "w": "Rent",
+      "start_s": 281.892,
+      "end_s": 282.159
+    },
+    {
+      "w": "is",
+      "start_s": 282.229,
+      "end_s": 282.38
+    },
+    {
+      "w": "still",
+      "start_s": 282.415,
+      "end_s": 282.647
+    },
+    {
+      "w": "due.",
+      "start_s": 282.717,
+      "end_s": 283.135
+    },
+    {
+      "w": "Your",
+      "start_s": 283.344,
+      "end_s": 283.518
+    },
+    {
+      "w": "phone",
+      "start_s": 283.553,
+      "end_s": 283.855
+    },
+    {
+      "w": "still",
+      "start_s": 283.901,
+      "end_s": 284.157
+    },
+    {
+      "w": "has",
+      "start_s": 284.226,
+      "end_s": 284.365
+    },
+    {
+      "w": "three",
+      "start_s": 284.447,
+      "end_s": 284.691
+    },
+    {
+      "w": "percent",
+      "start_s": 284.737,
+      "end_s": 285.12
+    },
+    {
+      "w": "battery.",
+      "start_s": 285.178,
+      "end_s": 285.724
+    },
+    {
+      "w": "But",
+      "start_s": 286.328,
+      "end_s": 286.49
+    },
+    {
+      "w": "inside",
+      "start_s": 286.537,
+      "end_s": 286.931
+    },
+    {
+      "w": "the",
+      "start_s": 286.966,
+      "end_s": 287.036
+    },
+    {
+      "w": "circle,",
+      "start_s": 287.082,
+      "end_s": 287.616
+    },
+    {
+      "w": "a",
+      "start_s": 287.79,
+      "end_s": 287.86
+    },
+    {
+      "w": "new",
+      "start_s": 287.976,
+      "end_s": 288.127
+    },
+    {
+      "w": "order",
+      "start_s": 288.208,
+      "end_s": 288.475
+    },
+    {
+      "w": "takes",
+      "start_s": 288.533,
+      "end_s": 288.789
+    },
+    {
+      "w": "over.",
+      "start_s": 288.847,
+      "end_s": 289.323
+    },
+    {
+      "w": "On",
+      "start_s": 289.602,
+      "end_s": 289.764
+    },
+    {
+      "w": "a",
+      "start_s": 289.811,
+      "end_s": 289.834
+    },
+    {
+      "w": "basketball",
+      "start_s": 289.892,
+      "end_s": 290.426
+    },
+    {
+      "w": "court,",
+      "start_s": 290.484,
+      "end_s": 290.902
+    },
+    {
+      "w": "you",
+      "start_s": 291.076,
+      "end_s": 291.157
+    },
+    {
+      "w": "can",
+      "start_s": 291.215,
+      "end_s": 291.343
+    },
+    {
+      "w": "deny",
+      "start_s": 291.401,
+      "end_s": 291.738
+    },
+    {
+      "w": "a",
+      "start_s": 291.807,
+      "end_s": 291.842
+    },
+    {
+      "w": "man",
+      "start_s": 291.9,
+      "end_s": 292.121
+    },
+    {
+      "w": "dignity",
+      "start_s": 292.191,
+      "end_s": 292.609
+    },
+    {
+      "w": "for",
+      "start_s": 292.667,
+      "end_s": 292.783
+    },
+    {
+      "w": "forty-eight",
+      "start_s": 292.841,
+      "end_s": 293.317
+    },
+    {
+      "w": "minutes",
+      "start_s": 293.363,
+      "end_s": 293.688
+    },
+    {
+      "w": "and",
+      "start_s": 293.735,
+      "end_s": 293.874
+    },
+    {
+      "w": "then",
+      "start_s": 293.932,
+      "end_s": 294.095
+    },
+    {
+      "w": "shake",
+      "start_s": 294.164,
+      "end_s": 294.396
+    },
+    {
+      "w": "his",
+      "start_s": 294.42,
+      "end_s": 294.524
+    },
+    {
+      "w": "hand.",
+      "start_s": 294.571,
+      "end_s": 295.023
+    },
+    {
+      "w": "In",
+      "start_s": 295.407,
+      "end_s": 295.546
+    },
+    {
+      "w": "a",
+      "start_s": 295.581,
+      "end_s": 295.616
+    },
+    {
+      "w": "boxing",
+      "start_s": 295.674,
+      "end_s": 296.057
+    },
+    {
+      "w": "ring,",
+      "start_s": 296.126,
+      "end_s": 296.521
+    },
+    {
+      "w": "a",
+      "start_s": 296.637,
+      "end_s": 296.707
+    },
+    {
+      "w": "clean",
+      "start_s": 296.777,
+      "end_s": 297.032
+    },
+    {
+      "w": "shot",
+      "start_s": 297.102,
+      "end_s": 297.392
+    },
+    {
+      "w": "earns",
+      "start_s": 297.462,
+      "end_s": 297.717
+    },
+    {
+      "w": "applause",
+      "start_s": 297.752,
+      "end_s": 298.216
+    },
+    {
+      "w": "that",
+      "start_s": 298.251,
+      "end_s": 298.367
+    },
+    {
+      "w": "would",
+      "start_s": 298.39,
+      "end_s": 298.53
+    },
+    {
+      "w": "earn",
+      "start_s": 298.553,
+      "end_s": 298.704
+    },
+    {
+      "w": "a",
+      "start_s": 298.739,
+      "end_s": 298.762
+    },
+    {
+      "w": "police",
+      "start_s": 298.82,
+      "end_s": 299.168
+    },
+    {
+      "w": "report",
+      "start_s": 299.215,
+      "end_s": 299.54
+    },
+    {
+      "w": "at",
+      "start_s": 299.575,
+      "end_s": 299.633
+    },
+    {
+      "w": "brunch.",
+      "start_s": 299.691,
+      "end_s": 300.236
+    },
+    {
+      "w": "In",
+      "start_s": 300.678,
+      "end_s": 300.817
+    },
+    {
+      "w": "a",
+      "start_s": 300.863,
+      "end_s": 300.887
+    },
+    {
+      "w": "battle",
+      "start_s": 300.968,
+      "end_s": 301.293
+    },
+    {
+      "w": "circle,",
+      "start_s": 301.339,
+      "end_s": 301.862
+    },
+    {
+      "w": "you",
+      "start_s": 302.013,
+      "end_s": 302.117
+    },
+    {
+      "w": "can",
+      "start_s": 302.175,
+      "end_s": 302.315
+    },
+    {
+      "w": "verbally",
+      "start_s": 302.431,
+      "end_s": 302.895
+    },
+    {
+      "w": "demolish",
+      "start_s": 302.965,
+      "end_s": 303.476
+    },
+    {
+      "w": "someone's",
+      "start_s": 303.522,
+      "end_s": 303.905
+    },
+    {
+      "w": "outfit,",
+      "start_s": 303.963,
+      "end_s": 304.486
+    },
+    {
+      "w": "relationships,",
+      "start_s": 304.602,
+      "end_s": 305.449
+    },
+    {
+      "w": "career",
+      "start_s": 305.507,
+      "end_s": 305.879
+    },
+    {
+      "w": "plan,",
+      "start_s": 305.937,
+      "end_s": 306.262
+    },
+    {
+      "w": "and",
+      "start_s": 306.285,
+      "end_s": 306.355
+    },
+    {
+      "w": "fictional",
+      "start_s": 306.436,
+      "end_s": 306.854
+    },
+    {
+      "w": "tax",
+      "start_s": 306.912,
+      "end_s": 307.179
+    },
+    {
+      "w": "records—and",
+      "start_s": 307.249,
+      "end_s": 308.363
+    },
+    {
+      "w": "the",
+      "start_s": 308.41,
+      "end_s": 308.479
+    },
+    {
+      "w": "room",
+      "start_s": 308.538,
+      "end_s": 308.747
+    },
+    {
+      "w": "asks",
+      "start_s": 308.816,
+      "end_s": 309.118
+    },
+    {
+      "w": "only",
+      "start_s": 309.176,
+      "end_s": 309.385
+    },
+    {
+      "w": "one",
+      "start_s": 309.466,
+      "end_s": 309.652
+    },
+    {
+      "w": "question:",
+      "start_s": 309.699,
+      "end_s": 310.36
+    },
+    {
+      "w": "Was",
+      "start_s": 310.743,
+      "end_s": 310.918
+    },
+    {
+      "w": "the",
+      "start_s": 310.987,
+      "end_s": 311.057
+    },
+    {
+      "w": "line",
+      "start_s": 311.127,
+      "end_s": 311.382
+    },
+    {
+      "w": "crazy?",
+      "start_s": 311.428,
+      "end_s": 312.067
+    },
+    {
+      "w": "That",
+      "start_s": 312.392,
+      "end_s": 312.613
+    },
+    {
+      "w": "is",
+      "start_s": 312.659,
+      "end_s": 312.729
+    },
+    {
+      "w": "the",
+      "start_s": 312.787,
+      "end_s": 312.856
+    },
+    {
+      "w": "magic.",
+      "start_s": 312.926,
+      "end_s": 313.541
+    },
+    {
+      "w": "The",
+      "start_s": 313.75,
+      "end_s": 313.878
+    },
+    {
+      "w": "threat",
+      "start_s": 313.948,
+      "end_s": 314.284
+    },
+    {
+      "w": "is",
+      "start_s": 314.354,
+      "end_s": 314.517
+    },
+    {
+      "w": "no",
+      "start_s": 314.61,
+      "end_s": 314.76
+    },
+    {
+      "w": "longer",
+      "start_s": 314.853,
+      "end_s": 315.155
+    },
+    {
+      "w": "evaluated",
+      "start_s": 315.213,
+      "end_s": 315.921
+    },
+    {
+      "w": "as",
+      "start_s": 315.979,
+      "end_s": 316.084
+    },
+    {
+      "w": "a",
+      "start_s": 316.142,
+      "end_s": 316.177
+    },
+    {
+      "w": "plan.",
+      "start_s": 316.235,
+      "end_s": 316.85
+    },
+    {
+      "w": "It",
+      "start_s": 317.233,
+      "end_s": 317.384
+    },
+    {
+      "w": "is",
+      "start_s": 317.431,
+      "end_s": 317.524
+    },
+    {
+      "w": "evaluated",
+      "start_s": 317.582,
+      "end_s": 318.383
+    },
+    {
+      "w": "as",
+      "start_s": 318.708,
+      "end_s": 318.917
+    },
+    {
+      "w": "craft.",
+      "start_s": 318.998,
+      "end_s": 319.764
+    },
+    {
+      "w": "William",
+      "start_s": 320.716,
+      "end_s": 321.018
+    },
+    {
+      "w": "Labov",
+      "start_s": 321.076,
+      "end_s": 321.459
+    },
+    {
+      "w": "studied",
+      "start_s": 321.529,
+      "end_s": 321.854
+    },
+    {
+      "w": "ritual",
+      "start_s": 321.912,
+      "end_s": 322.249
+    },
+    {
+      "w": "insult",
+      "start_s": 322.319,
+      "end_s": 322.702
+    },
+    {
+      "w": "traditions",
+      "start_s": 322.725,
+      "end_s": 323.224
+    },
+    {
+      "w": "including",
+      "start_s": 323.282,
+      "end_s": 323.7
+    },
+    {
+      "w": "the",
+      "start_s": 323.747,
+      "end_s": 323.816
+    },
+    {
+      "w": "Dozens",
+      "start_s": 323.874,
+      "end_s": 324.385
+    },
+    {
+      "w": "and",
+      "start_s": 324.629,
+      "end_s": 324.803
+    },
+    {
+      "w": "showed",
+      "start_s": 324.873,
+      "end_s": 325.14
+    },
+    {
+      "w": "why",
+      "start_s": 325.186,
+      "end_s": 325.453
+    },
+    {
+      "w": "this",
+      "start_s": 325.534,
+      "end_s": 325.674
+    },
+    {
+      "w": "is",
+      "start_s": 325.732,
+      "end_s": 325.813
+    },
+    {
+      "w": "not",
+      "start_s": 325.883,
+      "end_s": 326.045
+    },
+    {
+      "w": "just",
+      "start_s": 326.103,
+      "end_s": 326.289
+    },
+    {
+      "w": "random",
+      "start_s": 326.359,
+      "end_s": 326.672
+    },
+    {
+      "w": "cruelty.",
+      "start_s": 326.742,
+      "end_s": 327.45
+    },
+    {
+      "w": "The",
+      "start_s": 327.891,
+      "end_s": 328.007
+    },
+    {
+      "w": "form",
+      "start_s": 328.077,
+      "end_s": 328.356
+    },
+    {
+      "w": "matters.",
+      "start_s": 328.414,
+      "end_s": 328.983
+    },
+    {
+      "w": "Timing",
+      "start_s": 329.308,
+      "end_s": 329.796
+    },
+    {
+      "w": "matters.",
+      "start_s": 329.865,
+      "end_s": 330.457
+    },
+    {
+      "w": "The",
+      "start_s": 330.841,
+      "end_s": 330.968
+    },
+    {
+      "w": "language",
+      "start_s": 331.061,
+      "end_s": 331.584
+    },
+    {
+      "w": "has",
+      "start_s": 331.7,
+      "end_s": 332.013
+    },
+    {
+      "w": "to",
+      "start_s": 332.094,
+      "end_s": 332.187
+    },
+    {
+      "w": "land.",
+      "start_s": 332.28,
+      "end_s": 332.826
+    },
+    {
+      "w": "The",
+      "start_s": 333.151,
+      "end_s": 333.279
+    },
+    {
+      "w": "listener",
+      "start_s": 333.36,
+      "end_s": 333.731
+    },
+    {
+      "w": "has",
+      "start_s": 333.813,
+      "end_s": 334.091
+    },
+    {
+      "w": "to",
+      "start_s": 334.161,
+      "end_s": 334.231
+    },
+    {
+      "w": "know",
+      "start_s": 334.289,
+      "end_s": 334.544
+    },
+    {
+      "w": "the",
+      "start_s": 334.66,
+      "end_s": 334.765
+    },
+    {
+      "w": "exchange",
+      "start_s": 334.834,
+      "end_s": 335.415
+    },
+    {
+      "w": "is",
+      "start_s": 335.473,
+      "end_s": 335.601
+    },
+    {
+      "w": "happening",
+      "start_s": 335.67,
+      "end_s": 336.1
+    },
+    {
+      "w": "inside",
+      "start_s": 336.193,
+      "end_s": 336.669
+    },
+    {
+      "w": "a",
+      "start_s": 336.704,
+      "end_s": 336.727
+    },
+    {
+      "w": "shared",
+      "start_s": 336.785,
+      "end_s": 337.098
+    },
+    {
+      "w": "contest.",
+      "start_s": 337.156,
+      "end_s": 337.899
+    },
+    {
+      "w": "This",
+      "start_s": 338.41,
+      "end_s": 338.619
+    },
+    {
+      "w": "is",
+      "start_s": 338.677,
+      "end_s": 338.759
+    },
+    {
+      "w": "why",
+      "start_s": 338.817,
+      "end_s": 339.049
+    },
+    {
+      "w": "a",
+      "start_s": 339.13,
+      "end_s": 339.165
+    },
+    {
+      "w": "weak",
+      "start_s": 339.258,
+      "end_s": 339.467
+    },
+    {
+      "w": "line",
+      "start_s": 339.583,
+      "end_s": 339.966
+    },
+    {
+      "w": "can",
+      "start_s": 340.012,
+      "end_s": 340.152
+    },
+    {
+      "w": "make",
+      "start_s": 340.198,
+      "end_s": 340.384
+    },
+    {
+      "w": "the",
+      "start_s": 340.419,
+      "end_s": 340.488
+    },
+    {
+      "w": "room",
+      "start_s": 340.558,
+      "end_s": 340.802
+    },
+    {
+      "w": "groan",
+      "start_s": 340.883,
+      "end_s": 341.301
+    },
+    {
+      "w": "but",
+      "start_s": 341.684,
+      "end_s": 341.87
+    },
+    {
+      "w": "a",
+      "start_s": 341.905,
+      "end_s": 341.94
+    },
+    {
+      "w": "brilliant",
+      "start_s": 342.021,
+      "end_s": 342.45
+    },
+    {
+      "w": "line",
+      "start_s": 342.509,
+      "end_s": 342.857
+    },
+    {
+      "w": "can",
+      "start_s": 342.903,
+      "end_s": 343.031
+    },
+    {
+      "w": "make",
+      "start_s": 343.089,
+      "end_s": 343.252
+    },
+    {
+      "w": "the",
+      "start_s": 343.286,
+      "end_s": 343.356
+    },
+    {
+      "w": "opponent",
+      "start_s": 343.414,
+      "end_s": 343.844
+    },
+    {
+      "w": "smile",
+      "start_s": 343.902,
+      "end_s": 344.32
+    },
+    {
+      "w": "through",
+      "start_s": 344.355,
+      "end_s": 344.575
+    },
+    {
+      "w": "pain.",
+      "start_s": 344.622,
+      "end_s": 345.167
+    },
+    {
+      "w": "The",
+      "start_s": 345.864,
+      "end_s": 345.991
+    },
+    {
+      "w": "battle",
+      "start_s": 346.061,
+      "end_s": 346.386
+    },
+    {
+      "w": "is",
+      "start_s": 346.444,
+      "end_s": 346.537
+    },
+    {
+      "w": "testing",
+      "start_s": 346.607,
+      "end_s": 347.059
+    },
+    {
+      "w": "emotional",
+      "start_s": 347.152,
+      "end_s": 347.721
+    },
+    {
+      "w": "control,",
+      "start_s": 347.791,
+      "end_s": 348.511
+    },
+    {
+      "w": "language,",
+      "start_s": 348.627,
+      "end_s": 349.196
+    },
+    {
+      "w": "memory,",
+      "start_s": 349.277,
+      "end_s": 349.869
+    },
+    {
+      "w": "timing,",
+      "start_s": 349.915,
+      "end_s": 350.566
+    },
+    {
+      "w": "posture,",
+      "start_s": 350.635,
+      "end_s": 351.448
+    },
+    {
+      "w": "and",
+      "start_s": 351.657,
+      "end_s": 351.831
+    },
+    {
+      "w": "the",
+      "start_s": 351.889,
+      "end_s": 351.959
+    },
+    {
+      "w": "ability",
+      "start_s": 352.017,
+      "end_s": 352.493
+    },
+    {
+      "w": "to",
+      "start_s": 352.563,
+      "end_s": 352.632
+    },
+    {
+      "w": "take",
+      "start_s": 352.702,
+      "end_s": 352.899
+    },
+    {
+      "w": "a",
+      "start_s": 352.934,
+      "end_s": 352.957
+    },
+    {
+      "w": "hit",
+      "start_s": 353.027,
+      "end_s": 353.201
+    },
+    {
+      "w": "without",
+      "start_s": 353.248,
+      "end_s": 353.549
+    },
+    {
+      "w": "turning",
+      "start_s": 353.584,
+      "end_s": 353.886
+    },
+    {
+      "w": "the",
+      "start_s": 353.933,
+      "end_s": 354.002
+    },
+    {
+      "w": "stage",
+      "start_s": 354.049,
+      "end_s": 354.49
+    },
+    {
+      "w": "back",
+      "start_s": 354.548,
+      "end_s": 354.745
+    },
+    {
+      "w": "into",
+      "start_s": 354.815,
+      "end_s": 354.989
+    },
+    {
+      "w": "the",
+      "start_s": 355.059,
+      "end_s": 355.128
+    },
+    {
+      "w": "street.",
+      "start_s": 355.163,
+      "end_s": 355.732
+    },
+    {
+      "w": "The",
+      "start_s": 356.082,
+      "end_s": 356.198
+    },
+    {
+      "w": "crowd",
+      "start_s": 356.256,
+      "end_s": 356.535
+    },
+    {
+      "w": "is",
+      "start_s": 356.582,
+      "end_s": 356.651
+    },
+    {
+      "w": "part",
+      "start_s": 356.721,
+      "end_s": 356.907
+    },
+    {
+      "w": "of",
+      "start_s": 356.941,
+      "end_s": 356.988
+    },
+    {
+      "w": "the",
+      "start_s": 357.034,
+      "end_s": 357.104
+    },
+    {
+      "w": "rulebook.",
+      "start_s": 357.15,
+      "end_s": 357.766
+    },
+    {
+      "w": "The",
+      "start_s": 357.94,
+      "end_s": 358.056
+    },
+    {
+      "w": "punchline",
+      "start_s": 358.103,
+      "end_s": 358.672
+    },
+    {
+      "w": "has",
+      "start_s": 358.706,
+      "end_s": 358.834
+    },
+    {
+      "w": "two",
+      "start_s": 358.904,
+      "end_s": 359.078
+    },
+    {
+      "w": "targets",
+      "start_s": 359.148,
+      "end_s": 359.566
+    },
+    {
+      "w": "at",
+      "start_s": 359.6,
+      "end_s": 359.682
+    },
+    {
+      "w": "once.",
+      "start_s": 359.751,
+      "end_s": 360.285
+    },
+    {
+      "w": "It",
+      "start_s": 360.889,
+      "end_s": 361.017
+    },
+    {
+      "w": "hits",
+      "start_s": 361.075,
+      "end_s": 361.261
+    },
+    {
+      "w": "the",
+      "start_s": 361.295,
+      "end_s": 361.377
+    },
+    {
+      "w": "opponent",
+      "start_s": 361.423,
+      "end_s": 361.818
+    },
+    {
+      "w": "in",
+      "start_s": 361.864,
+      "end_s": 361.934
+    },
+    {
+      "w": "front",
+      "start_s": 361.992,
+      "end_s": 362.189
+    },
+    {
+      "w": "of",
+      "start_s": 362.236,
+      "end_s": 362.282
+    },
+    {
+      "w": "you,",
+      "start_s": 362.34,
+      "end_s": 362.665
+    },
+    {
+      "w": "but",
+      "start_s": 362.99,
+      "end_s": 363.153
+    },
+    {
+      "w": "it",
+      "start_s": 363.199,
+      "end_s": 363.281
+    },
+    {
+      "w": "also",
+      "start_s": 363.339,
+      "end_s": 363.664
+    },
+    {
+      "w": "hits",
+      "start_s": 363.745,
+      "end_s": 363.942
+    },
+    {
+      "w": "the",
+      "start_s": 363.989,
+      "end_s": 364.07
+    },
+    {
+      "w": "audience",
+      "start_s": 364.151,
+      "end_s": 364.546
+    },
+    {
+      "w": "behind",
+      "start_s": 364.581,
+      "end_s": 364.964
+    },
+    {
+      "w": "them.",
+      "start_s": 365.011,
+      "end_s": 365.278
+    },
+    {
+      "w": "The",
+      "start_s": 366.09,
+      "end_s": 366.206
+    },
+    {
+      "w": "rapper",
+      "start_s": 366.288,
+      "end_s": 366.613
+    },
+    {
+      "w": "is",
+      "start_s": 366.671,
+      "end_s": 366.752
+    },
+    {
+      "w": "not",
+      "start_s": 366.822,
+      "end_s": 366.984
+    },
+    {
+      "w": "merely",
+      "start_s": 367.042,
+      "end_s": 367.379
+    },
+    {
+      "w": "saying,",
+      "start_s": 367.437,
+      "end_s": 367.971
+    },
+    {
+      "w": "“I",
+      "start_s": 368.215,
+      "end_s": 368.459
+    },
+    {
+      "w": "dislike",
+      "start_s": 368.575,
+      "end_s": 369.028
+    },
+    {
+      "w": "you.”",
+      "start_s": 369.074,
+      "end_s": 369.388
+    },
+    {
+      "w": "They",
+      "start_s": 369.991,
+      "end_s": 370.154
+    },
+    {
+      "w": "are",
+      "start_s": 370.2,
+      "end_s": 370.316
+    },
+    {
+      "w": "saying,",
+      "start_s": 370.351,
+      "end_s": 370.874
+    },
+    {
+      "w": "“Watch",
+      "start_s": 371.199,
+      "end_s": 371.617
+    },
+    {
+      "w": "how",
+      "start_s": 371.651,
+      "end_s": 371.733
+    },
+    {
+      "w": "much",
+      "start_s": 371.779,
+      "end_s": 371.942
+    },
+    {
+      "w": "control",
+      "start_s": 371.988,
+      "end_s": 372.418
+    },
+    {
+      "w": "I",
+      "start_s": 372.499,
+      "end_s": 372.522
+    },
+    {
+      "w": "have",
+      "start_s": 372.638,
+      "end_s": 372.894
+    },
+    {
+      "w": "over",
+      "start_s": 372.94,
+      "end_s": 373.103
+    },
+    {
+      "w": "this",
+      "start_s": 373.149,
+      "end_s": 373.289
+    },
+    {
+      "w": "room's",
+      "start_s": 373.358,
+      "end_s": 373.637
+    },
+    {
+      "w": "attention.”",
+      "start_s": 373.672,
+      "end_s": 374.345
+    },
+    {
+      "w": "That",
+      "start_s": 375.158,
+      "end_s": 375.355
+    },
+    {
+      "w": "is",
+      "start_s": 375.402,
+      "end_s": 375.472
+    },
+    {
+      "w": "why",
+      "start_s": 375.53,
+      "end_s": 375.808
+    },
+    {
+      "w": "an",
+      "start_s": 375.924,
+      "end_s": 376.052
+    },
+    {
+      "w": "angle",
+      "start_s": 376.133,
+      "end_s": 376.493
+    },
+    {
+      "w": "can",
+      "start_s": 376.528,
+      "end_s": 376.656
+    },
+    {
+      "w": "be",
+      "start_s": 376.714,
+      "end_s": 376.807
+    },
+    {
+      "w": "more",
+      "start_s": 376.853,
+      "end_s": 377.027
+    },
+    {
+      "w": "dangerous",
+      "start_s": 377.074,
+      "end_s": 377.596
+    },
+    {
+      "w": "than",
+      "start_s": 377.631,
+      "end_s": 377.77
+    },
+    {
+      "w": "a",
+      "start_s": 377.817,
+      "end_s": 377.84
+    },
+    {
+      "w": "threat.",
+      "start_s": 377.91,
+      "end_s": 378.455
+    },
+    {
+      "w": "It",
+      "start_s": 378.896,
+      "end_s": 379.036
+    },
+    {
+      "w": "recruits",
+      "start_s": 379.105,
+      "end_s": 379.523
+    },
+    {
+      "w": "the",
+      "start_s": 379.581,
+      "end_s": 379.663
+    },
+    {
+      "w": "whole",
+      "start_s": 379.721,
+      "end_s": 379.941
+    },
+    {
+      "w": "crowd",
+      "start_s": 379.976,
+      "end_s": 380.371
+    },
+    {
+      "w": "into",
+      "start_s": 380.429,
+      "end_s": 380.615
+    },
+    {
+      "w": "a",
+      "start_s": 380.696,
+      "end_s": 380.731
+    },
+    {
+      "w": "temporary",
+      "start_s": 380.789,
+      "end_s": 381.335
+    },
+    {
+      "w": "verdict.",
+      "start_s": 381.404,
+      "end_s": 382.008
+    },
+    {
+      "w": "That",
+      "start_s": 382.333,
+      "end_s": 382.519
+    },
+    {
+      "w": "is",
+      "start_s": 382.577,
+      "end_s": 382.658
+    },
+    {
+      "w": "martial.",
+      "start_s": 382.739,
+      "end_s": 383.343
+    },
+    {
+      "w": "It",
+      "start_s": 383.854,
+      "end_s": 383.993
+    },
+    {
+      "w": "is",
+      "start_s": 384.04,
+      "end_s": 384.121
+    },
+    {
+      "w": "combat",
+      "start_s": 384.191,
+      "end_s": 384.69
+    },
+    {
+      "w": "with",
+      "start_s": 384.736,
+      "end_s": 384.876
+    },
+    {
+      "w": "a",
+      "start_s": 384.922,
+      "end_s": 384.957
+    },
+    {
+      "w": "rule",
+      "start_s": 385.015,
+      "end_s": 385.282
+    },
+    {
+      "w": "set.",
+      "start_s": 385.328,
+      "end_s": 385.793
+    },
+    {
+      "w": "It",
+      "start_s": 386.234,
+      "end_s": 386.362
+    },
+    {
+      "w": "is",
+      "start_s": 386.408,
+      "end_s": 386.489
+    },
+    {
+      "w": "a",
+      "start_s": 386.536,
+      "end_s": 386.571
+    },
+    {
+      "w": "contest",
+      "start_s": 386.629,
+      "end_s": 387.174
+    },
+    {
+      "w": "whose",
+      "start_s": 387.209,
+      "end_s": 387.407
+    },
+    {
+      "w": "most",
+      "start_s": 387.453,
+      "end_s": 387.639
+    },
+    {
+      "w": "valuable",
+      "start_s": 387.708,
+      "end_s": 388.208
+    },
+    {
+      "w": "skill",
+      "start_s": 388.242,
+      "end_s": 388.544
+    },
+    {
+      "w": "is",
+      "start_s": 388.602,
+      "end_s": 388.684
+    },
+    {
+      "w": "making",
+      "start_s": 388.754,
+      "end_s": 389.044
+    },
+    {
+      "w": "violence",
+      "start_s": 389.114,
+      "end_s": 389.59
+    },
+    {
+      "w": "legible",
+      "start_s": 389.636,
+      "end_s": 390.077
+    },
+    {
+      "w": "enough",
+      "start_s": 390.112,
+      "end_s": 390.391
+    },
+    {
+      "w": "that",
+      "start_s": 390.507,
+      "end_s": 390.704
+    },
+    {
+      "w": "nobody",
+      "start_s": 390.785,
+      "end_s": 391.18
+    },
+    {
+      "w": "has",
+      "start_s": 391.238,
+      "end_s": 391.401
+    },
+    {
+      "w": "to",
+      "start_s": 391.447,
+      "end_s": 391.505
+    },
+    {
+      "w": "perform",
+      "start_s": 391.575,
+      "end_s": 391.935
+    },
+    {
+      "w": "it",
+      "start_s": 391.981,
+      "end_s": 392.039
+    },
+    {
+      "w": "physically.",
+      "start_s": 392.086,
+      "end_s": 392.713
+    },
+    {
+      "w": "And",
+      "start_s": 393.316,
+      "end_s": 393.479
+    },
+    {
+      "w": "yes,",
+      "start_s": 393.549,
+      "end_s": 394.199
+    },
+    {
+      "w": "that",
+      "start_s": 394.524,
+      "end_s": 394.71
+    },
+    {
+      "w": "means",
+      "start_s": 394.768,
+      "end_s": 395.058
+    },
+    {
+      "w": "the",
+      "start_s": 395.116,
+      "end_s": 395.186
+    },
+    {
+      "w": "crowd",
+      "start_s": 395.232,
+      "end_s": 395.511
+    },
+    {
+      "w": "matters.",
+      "start_s": 395.569,
+      "end_s": 396.161
+    },
+    {
+      "w": "The",
+      "start_s": 396.857,
+      "end_s": 396.974
+    },
+    {
+      "w": "crowd",
+      "start_s": 397.032,
+      "end_s": 397.426
+    },
+    {
+      "w": "is",
+      "start_s": 397.577,
+      "end_s": 397.763
+    },
+    {
+      "w": "not",
+      "start_s": 397.844,
+      "end_s": 398.018
+    },
+    {
+      "w": "decoration.",
+      "start_s": 398.088,
+      "end_s": 398.924
+    },
+    {
+      "w": "The",
+      "start_s": 399.307,
+      "end_s": 399.423
+    },
+    {
+      "w": "crowd",
+      "start_s": 399.47,
+      "end_s": 399.83
+    },
+    {
+      "w": "is",
+      "start_s": 399.957,
+      "end_s": 400.155
+    },
+    {
+      "w": "the",
+      "start_s": 400.213,
+      "end_s": 400.282
+    },
+    {
+      "w": "referee,",
+      "start_s": 400.364,
+      "end_s": 401.095
+    },
+    {
+      "w": "the",
+      "start_s": 401.374,
+      "end_s": 401.49
+    },
+    {
+      "w": "witness,",
+      "start_s": 401.571,
+      "end_s": 402.21
+    },
+    {
+      "w": "the",
+      "start_s": 402.326,
+      "end_s": 402.442
+    },
+    {
+      "w": "scoreboard,",
+      "start_s": 402.488,
+      "end_s": 403.266
+    },
+    {
+      "w": "and",
+      "start_s": 403.417,
+      "end_s": 403.568
+    },
+    {
+      "w": "occasionally",
+      "start_s": 403.614,
+      "end_s": 404.323
+    },
+    {
+      "w": "the",
+      "start_s": 404.497,
+      "end_s": 404.624
+    },
+    {
+      "w": "group",
+      "start_s": 404.683,
+      "end_s": 404.903
+    },
+    {
+      "w": "chat",
+      "start_s": 404.961,
+      "end_s": 405.309
+    },
+    {
+      "w": "that",
+      "start_s": 405.425,
+      "end_s": 405.611
+    },
+    {
+      "w": "keeps",
+      "start_s": 405.657,
+      "end_s": 405.889
+    },
+    {
+      "w": "a",
+      "start_s": 405.924,
+      "end_s": 405.959
+    },
+    {
+      "w": "punchline",
+      "start_s": 406.017,
+      "end_s": 406.54
+    },
+    {
+      "w": "alive",
+      "start_s": 406.574,
+      "end_s": 407.062
+    },
+    {
+      "w": "for",
+      "start_s": 407.143,
+      "end_s": 407.306
+    },
+    {
+      "w": "ten",
+      "start_s": 407.364,
+      "end_s": 407.585
+    },
+    {
+      "w": "years.",
+      "start_s": 407.654,
+      "end_s": 408.246
+    },
+    {
+      "w": "Now",
+      "start_s": 409.198,
+      "end_s": 409.5
+    },
+    {
+      "w": "for",
+      "start_s": 409.581,
+      "end_s": 409.698
+    },
+    {
+      "w": "the",
+      "start_s": 409.732,
+      "end_s": 409.802
+    },
+    {
+      "w": "most",
+      "start_s": 409.86,
+      "end_s": 410.081
+    },
+    {
+      "w": "beautiful",
+      "start_s": 410.139,
+      "end_s": 410.568
+    },
+    {
+      "w": "part.",
+      "start_s": 410.626,
+      "end_s": 411.195
+    },
+    {
+      "w": "The",
+      "start_s": 411.892,
+      "end_s": 412.031
+    },
+    {
+      "w": "two",
+      "start_s": 412.089,
+      "end_s": 412.24
+    },
+    {
+      "w": "people",
+      "start_s": 412.31,
+      "end_s": 412.6
+    },
+    {
+      "w": "pretending",
+      "start_s": 412.647,
+      "end_s": 413.064
+    },
+    {
+      "w": "to",
+      "start_s": 413.111,
+      "end_s": 413.157
+    },
+    {
+      "w": "hate",
+      "start_s": 413.227,
+      "end_s": 413.401
+    },
+    {
+      "w": "each",
+      "start_s": 413.424,
+      "end_s": 413.552
+    },
+    {
+      "w": "other",
+      "start_s": 413.61,
+      "end_s": 413.854
+    },
+    {
+      "w": "are",
+      "start_s": 414.063,
+      "end_s": 414.295
+    },
+    {
+      "w": "working",
+      "start_s": 414.33,
+      "end_s": 414.643
+    },
+    {
+      "w": "together.",
+      "start_s": 414.69,
+      "end_s": 415.305
+    },
+    {
+      "w": "Sociologist",
+      "start_s": 416.257,
+      "end_s": 417.14
+    },
+    {
+      "w": "Erving",
+      "start_s": 417.221,
+      "end_s": 417.546
+    },
+    {
+      "w": "Goffman",
+      "start_s": 417.604,
+      "end_s": 418.126
+    },
+    {
+      "w": "looked",
+      "start_s": 418.451,
+      "end_s": 418.707
+    },
+    {
+      "w": "at",
+      "start_s": 418.742,
+      "end_s": 418.8
+    },
+    {
+      "w": "social",
+      "start_s": 418.869,
+      "end_s": 419.206
+    },
+    {
+      "w": "life",
+      "start_s": 419.276,
+      "end_s": 419.496
+    },
+    {
+      "w": "as",
+      "start_s": 419.531,
+      "end_s": 419.612
+    },
+    {
+      "w": "performance.",
+      "start_s": 419.682,
+      "end_s": 420.495
+    },
+    {
+      "w": "He",
+      "start_s": 420.936,
+      "end_s": 421.052
+    },
+    {
+      "w": "cared",
+      "start_s": 421.122,
+      "end_s": 421.389
+    },
+    {
+      "w": "about",
+      "start_s": 421.412,
+      "end_s": 421.633
+    },
+    {
+      "w": "front",
+      "start_s": 421.691,
+      "end_s": 421.935
+    },
+    {
+      "w": "stage,",
+      "start_s": 421.993,
+      "end_s": 422.55
+    },
+    {
+      "w": "back",
+      "start_s": 422.701,
+      "end_s": 422.956
+    },
+    {
+      "w": "stage,",
+      "start_s": 423.026,
+      "end_s": 423.618
+    },
+    {
+      "w": "and",
+      "start_s": 423.734,
+      "end_s": 423.897
+    },
+    {
+      "w": "the",
+      "start_s": 423.955,
+      "end_s": 424.024
+    },
+    {
+      "w": "tiny",
+      "start_s": 424.071,
+      "end_s": 424.396
+    },
+    {
+      "w": "agreements",
+      "start_s": 424.466,
+      "end_s": 424.918
+    },
+    {
+      "w": "people",
+      "start_s": 424.977,
+      "end_s": 425.267
+    },
+    {
+      "w": "make",
+      "start_s": 425.313,
+      "end_s": 425.545
+    },
+    {
+      "w": "to",
+      "start_s": 425.592,
+      "end_s": 425.661
+    },
+    {
+      "w": "keep",
+      "start_s": 425.731,
+      "end_s": 425.929
+    },
+    {
+      "w": "a",
+      "start_s": 425.987,
+      "end_s": 426.01
+    },
+    {
+      "w": "scene",
+      "start_s": 426.068,
+      "end_s": 426.381
+    },
+    {
+      "w": "from",
+      "start_s": 426.428,
+      "end_s": 426.614
+    },
+    {
+      "w": "collapsing",
+      "start_s": 426.695,
+      "end_s": 427.206
+    },
+    {
+      "w": "in",
+      "start_s": 427.264,
+      "end_s": 427.333
+    },
+    {
+      "w": "public.",
+      "start_s": 427.403,
+      "end_s": 427.879
+    },
+    {
+      "w": "Battle",
+      "start_s": 428.229,
+      "end_s": 428.577
+    },
+    {
+      "w": "rap",
+      "start_s": 428.612,
+      "end_s": 428.821
+    },
+    {
+      "w": "is",
+      "start_s": 428.879,
+      "end_s": 428.949
+    },
+    {
+      "w": "that",
+      "start_s": 428.995,
+      "end_s": 429.111
+    },
+    {
+      "w": "idea",
+      "start_s": 429.169,
+      "end_s": 429.413
+    },
+    {
+      "w": "with",
+      "start_s": 429.46,
+      "end_s": 429.587
+    },
+    {
+      "w": "base.",
+      "start_s": 429.634,
+      "end_s": 430.226
+    },
+    {
+      "w": "On",
+      "start_s": 430.576,
+      "end_s": 430.738
+    },
+    {
+      "w": "the",
+      "start_s": 430.773,
+      "end_s": 430.843
+    },
+    {
+      "w": "front",
+      "start_s": 430.878,
+      "end_s": 431.087
+    },
+    {
+      "w": "stage:",
+      "start_s": 431.145,
+      "end_s": 431.748
+    },
+    {
+      "w": "“I",
+      "start_s": 431.876,
+      "end_s": 432.027
+    },
+    {
+      "w": "am",
+      "start_s": 432.12,
+      "end_s": 432.213
+    },
+    {
+      "w": "here",
+      "start_s": 432.282,
+      "end_s": 432.515
+    },
+    {
+      "w": "to",
+      "start_s": 432.573,
+      "end_s": 432.677
+    },
+    {
+      "w": "destroy",
+      "start_s": 432.758,
+      "end_s": 433.176
+    },
+    {
+      "w": "you.”",
+      "start_s": 433.246,
+      "end_s": 433.536
+    },
+    {
+      "w": "Back",
+      "start_s": 433.919,
+      "end_s": 434.152
+    },
+    {
+      "w": "stage:",
+      "start_s": 434.21,
+      "end_s": 434.755
+    },
+    {
+      "w": "“Please",
+      "start_s": 434.871,
+      "end_s": 435.289
+    },
+    {
+      "w": "stand",
+      "start_s": 435.324,
+      "end_s": 435.638
+    },
+    {
+      "w": "there,",
+      "start_s": 435.684,
+      "end_s": 436.032
+    },
+    {
+      "w": "react",
+      "start_s": 436.16,
+      "end_s": 436.497
+    },
+    {
+      "w": "correctly,",
+      "start_s": 436.578,
+      "end_s": 437.17
+    },
+    {
+      "w": "and",
+      "start_s": 437.321,
+      "end_s": 437.484
+    },
+    {
+      "w": "do",
+      "start_s": 437.542,
+      "end_s": 437.623
+    },
+    {
+      "w": "not",
+      "start_s": 437.739,
+      "end_s": 437.925
+    },
+    {
+      "w": "ruin",
+      "start_s": 437.995,
+      "end_s": 438.285
+    },
+    {
+      "w": "the",
+      "start_s": 438.343,
+      "end_s": 438.413
+    },
+    {
+      "w": "best",
+      "start_s": 438.471,
+      "end_s": 438.68
+    },
+    {
+      "w": "show",
+      "start_s": 438.726,
+      "end_s": 438.97
+    },
+    {
+      "w": "either",
+      "start_s": 439.086,
+      "end_s": 439.341
+    },
+    {
+      "w": "of",
+      "start_s": 439.4,
+      "end_s": 439.458
+    },
+    {
+      "w": "us",
+      "start_s": 439.527,
+      "end_s": 439.62
+    },
+    {
+      "w": "has",
+      "start_s": 439.678,
+      "end_s": 440.026
+    },
+    {
+      "w": "all",
+      "start_s": 440.201,
+      "end_s": 440.468
+    },
+    {
+      "w": "year.”",
+      "start_s": 440.549,
+      "end_s": 441.025
+    },
+    {
+      "w": "The",
+      "start_s": 441.977,
+      "end_s": 442.105
+    },
+    {
+      "w": "opponent",
+      "start_s": 442.163,
+      "end_s": 442.697
+    },
+    {
+      "w": "has",
+      "start_s": 442.906,
+      "end_s": 443.08
+    },
+    {
+      "w": "to",
+      "start_s": 443.138,
+      "end_s": 443.196
+    },
+    {
+      "w": "hold",
+      "start_s": 443.266,
+      "end_s": 443.44
+    },
+    {
+      "w": "the",
+      "start_s": 443.486,
+      "end_s": 443.556
+    },
+    {
+      "w": "line",
+      "start_s": 443.614,
+      "end_s": 443.881
+    },
+    {
+      "w": "long",
+      "start_s": 443.916,
+      "end_s": 444.113
+    },
+    {
+      "w": "enough",
+      "start_s": 444.171,
+      "end_s": 444.403
+    },
+    {
+      "w": "for",
+      "start_s": 444.427,
+      "end_s": 444.531
+    },
+    {
+      "w": "the",
+      "start_s": 444.566,
+      "end_s": 444.636
+    },
+    {
+      "w": "bar",
+      "start_s": 444.682,
+      "end_s": 444.868
+    },
+    {
+      "w": "to",
+      "start_s": 444.914,
+      "end_s": 444.972
+    },
+    {
+      "w": "matter.",
+      "start_s": 445.03,
+      "end_s": 445.53
+    },
+    {
+      "w": "The",
+      "start_s": 445.971,
+      "end_s": 446.087
+    },
+    {
+      "w": "crowd",
+      "start_s": 446.133,
+      "end_s": 446.4
+    },
+    {
+      "w": "has",
+      "start_s": 446.458,
+      "end_s": 446.609
+    },
+    {
+      "w": "to",
+      "start_s": 446.667,
+      "end_s": 446.725
+    },
+    {
+      "w": "understand",
+      "start_s": 446.818,
+      "end_s": 447.271
+    },
+    {
+      "w": "the",
+      "start_s": 447.329,
+      "end_s": 447.399
+    },
+    {
+      "w": "rules",
+      "start_s": 447.457,
+      "end_s": 447.863
+    },
+    {
+      "w": "well",
+      "start_s": 447.944,
+      "end_s": 448.13
+    },
+    {
+      "w": "enough",
+      "start_s": 448.188,
+      "end_s": 448.409
+    },
+    {
+      "w": "to",
+      "start_s": 448.444,
+      "end_s": 448.49
+    },
+    {
+      "w": "reward",
+      "start_s": 448.571,
+      "end_s": 448.908
+    },
+    {
+      "w": "it.",
+      "start_s": 448.955,
+      "end_s": 449.187
+    },
+    {
+      "w": "The",
+      "start_s": 449.698,
+      "end_s": 449.825
+    },
+    {
+      "w": "host",
+      "start_s": 449.895,
+      "end_s": 450.174
+    },
+    {
+      "w": "has",
+      "start_s": 450.22,
+      "end_s": 450.359
+    },
+    {
+      "w": "to",
+      "start_s": 450.417,
+      "end_s": 450.464
+    },
+    {
+      "w": "keep",
+      "start_s": 450.522,
+      "end_s": 450.684
+    },
+    {
+      "w": "the",
+      "start_s": 450.731,
+      "end_s": 450.8
+    },
+    {
+      "w": "temperature",
+      "start_s": 450.835,
+      "end_s": 451.253
+    },
+    {
+      "w": "high",
+      "start_s": 451.288,
+      "end_s": 451.543
+    },
+    {
+      "w": "without",
+      "start_s": 451.601,
+      "end_s": 451.926
+    },
+    {
+      "w": "turning",
+      "start_s": 451.961,
+      "end_s": 452.275
+    },
+    {
+      "w": "it",
+      "start_s": 452.333,
+      "end_s": 452.402
+    },
+    {
+      "w": "into",
+      "start_s": 452.449,
+      "end_s": 452.623
+    },
+    {
+      "w": "a",
+      "start_s": 452.716,
+      "end_s": 452.739
+    },
+    {
+      "w": "fire",
+      "start_s": 452.809,
+      "end_s": 453.122
+    },
+    {
+      "w": "code",
+      "start_s": 453.169,
+      "end_s": 453.412
+    },
+    {
+      "w": "violation.",
+      "start_s": 453.447,
+      "end_s": 454.341
+    },
+    {
+      "w": "That",
+      "start_s": 454.945,
+      "end_s": 455.317
+    },
+    {
+      "w": "is",
+      "start_s": 455.642,
+      "end_s": 455.816
+    },
+    {
+      "w": "a",
+      "start_s": 455.874,
+      "end_s": 455.909
+    },
+    {
+      "w": "secret",
+      "start_s": 455.99,
+      "end_s": 456.408
+    },
+    {
+      "w": "alliance.",
+      "start_s": 456.477,
+      "end_s": 457.371
+    },
+    {
+      "w": "Not",
+      "start_s": 457.755,
+      "end_s": 457.952
+    },
+    {
+      "w": "a",
+      "start_s": 457.987,
+      "end_s": 458.01
+    },
+    {
+      "w": "soft",
+      "start_s": 458.068,
+      "end_s": 458.358
+    },
+    {
+      "w": "one.",
+      "start_s": 458.428,
+      "end_s": 458.741
+    },
+    {
+      "w": "A",
+      "start_s": 459.125,
+      "end_s": 459.241
+    },
+    {
+      "w": "brutal,",
+      "start_s": 459.357,
+      "end_s": 459.763
+    },
+    {
+      "w": "professional",
+      "start_s": 459.798,
+      "end_s": 460.402
+    },
+    {
+      "w": "one.",
+      "start_s": 460.483,
+      "end_s": 460.82
+    },
+    {
+      "w": "Every",
+      "start_s": 461.203,
+      "end_s": 461.597
+    },
+    {
+      "w": "great",
+      "start_s": 461.656,
+      "end_s": 461.888
+    },
+    {
+      "w": "round",
+      "start_s": 461.957,
+      "end_s": 462.352
+    },
+    {
+      "w": "is",
+      "start_s": 462.433,
+      "end_s": 462.596
+    },
+    {
+      "w": "a",
+      "start_s": 462.642,
+      "end_s": 462.677
+    },
+    {
+      "w": "contract",
+      "start_s": 462.747,
+      "end_s": 463.293
+    },
+    {
+      "w": "signed",
+      "start_s": 463.362,
+      "end_s": 463.769
+    },
+    {
+      "w": "at",
+      "start_s": 463.815,
+      "end_s": 463.885
+    },
+    {
+      "w": "full",
+      "start_s": 463.943,
+      "end_s": 464.163
+    },
+    {
+      "w": "volume.",
+      "start_s": 464.221,
+      "end_s": 464.825
+    },
+    {
+      "w": "One",
+      "start_s": 465.208,
+      "end_s": 465.44
+    },
+    {
+      "w": "person",
+      "start_s": 465.487,
+      "end_s": 465.812
+    },
+    {
+      "w": "must",
+      "start_s": 465.87,
+      "end_s": 466.056
+    },
+    {
+      "w": "risk",
+      "start_s": 466.137,
+      "end_s": 466.369
+    },
+    {
+      "w": "a",
+      "start_s": 466.427,
+      "end_s": 466.462
+    },
+    {
+      "w": "line",
+      "start_s": 466.532,
+      "end_s": 466.857
+    },
+    {
+      "w": "big",
+      "start_s": 466.903,
+      "end_s": 467.054
+    },
+    {
+      "w": "enough",
+      "start_s": 467.089,
+      "end_s": 467.321
+    },
+    {
+      "w": "to",
+      "start_s": 467.367,
+      "end_s": 467.437
+    },
+    {
+      "w": "fail.",
+      "start_s": 467.518,
+      "end_s": 468.075
+    },
+    {
+      "w": "The",
+      "start_s": 468.517,
+      "end_s": 468.644
+    },
+    {
+      "w": "other",
+      "start_s": 468.714,
+      "end_s": 468.946
+    },
+    {
+      "w": "must",
+      "start_s": 469.016,
+      "end_s": 469.213
+    },
+    {
+      "w": "give",
+      "start_s": 469.271,
+      "end_s": 469.492
+    },
+    {
+      "w": "the",
+      "start_s": 469.527,
+      "end_s": 469.596
+    },
+    {
+      "w": "line",
+      "start_s": 469.666,
+      "end_s": 470.003
+    },
+    {
+      "w": "enough",
+      "start_s": 470.038,
+      "end_s": 470.258
+    },
+    {
+      "w": "composure",
+      "start_s": 470.305,
+      "end_s": 470.827
+    },
+    {
+      "w": "to",
+      "start_s": 470.862,
+      "end_s": 470.932
+    },
+    {
+      "w": "land.",
+      "start_s": 471.024,
+      "end_s": 471.605
+    },
+    {
+      "w": "The",
+      "start_s": 472.116,
+      "end_s": 472.243
+    },
+    {
+      "w": "room",
+      "start_s": 472.313,
+      "end_s": 472.534
+    },
+    {
+      "w": "must",
+      "start_s": 472.615,
+      "end_s": 472.847
+    },
+    {
+      "w": "know",
+      "start_s": 472.905,
+      "end_s": 473.091
+    },
+    {
+      "w": "the",
+      "start_s": 473.161,
+      "end_s": 473.23
+    },
+    {
+      "w": "difference",
+      "start_s": 473.288,
+      "end_s": 473.695
+    },
+    {
+      "w": "between",
+      "start_s": 473.73,
+      "end_s": 474.043
+    },
+    {
+      "w": "a",
+      "start_s": 474.078,
+      "end_s": 474.101
+    },
+    {
+      "w": "clean",
+      "start_s": 474.171,
+      "end_s": 474.461
+    },
+    {
+      "w": "strike",
+      "start_s": 474.531,
+      "end_s": 475.065
+    },
+    {
+      "w": "and",
+      "start_s": 475.308,
+      "end_s": 475.506
+    },
+    {
+      "w": "somebody",
+      "start_s": 475.576,
+      "end_s": 475.959
+    },
+    {
+      "w": "just",
+      "start_s": 476.017,
+      "end_s": 476.226
+    },
+    {
+      "w": "being",
+      "start_s": 476.284,
+      "end_s": 476.516
+    },
+    {
+      "w": "loud",
+      "start_s": 476.597,
+      "end_s": 476.945
+    },
+    {
+      "w": "near",
+      "start_s": 477.027,
+      "end_s": 477.213
+    },
+    {
+      "w": "a",
+      "start_s": 477.259,
+      "end_s": 477.282
+    },
+    {
+      "w": "microphone.",
+      "start_s": 477.34,
+      "end_s": 478.188
+    },
+    {
+      "w": "If",
+      "start_s": 478.884,
+      "end_s": 479.035
+    },
+    {
+      "w": "those",
+      "start_s": 479.093,
+      "end_s": 479.302
+    },
+    {
+      "w": "agreements",
+      "start_s": 479.337,
+      "end_s": 479.755
+    },
+    {
+      "w": "hold,",
+      "start_s": 479.802,
+      "end_s": 480.324
+    },
+    {
+      "w": "hostility",
+      "start_s": 480.498,
+      "end_s": 481.067
+    },
+    {
+      "w": "becomes",
+      "start_s": 481.137,
+      "end_s": 481.473
+    },
+    {
+      "w": "craft.",
+      "start_s": 481.531,
+      "end_s": 482.17
+    },
+    {
+      "w": "If",
+      "start_s": 482.553,
+      "end_s": 482.692
+    },
+    {
+      "w": "they",
+      "start_s": 482.739,
+      "end_s": 482.867
+    },
+    {
+      "w": "break,",
+      "start_s": 482.925,
+      "end_s": 483.378
+    },
+    {
+      "w": "the",
+      "start_s": 483.471,
+      "end_s": 483.587
+    },
+    {
+      "w": "performance",
+      "start_s": 483.645,
+      "end_s": 484.191
+    },
+    {
+      "w": "is",
+      "start_s": 484.225,
+      "end_s": 484.318
+    },
+    {
+      "w": "over",
+      "start_s": 484.4,
+      "end_s": 484.713
+    },
+    {
+      "w": "before",
+      "start_s": 484.783,
+      "end_s": 485.108
+    },
+    {
+      "w": "the",
+      "start_s": 485.154,
+      "end_s": 485.224
+    },
+    {
+      "w": "final",
+      "start_s": 485.27,
+      "end_s": 485.607
+    },
+    {
+      "w": "bar.",
+      "start_s": 485.665,
+      "end_s": 486.187
+    },
+    {
+      "w": "If",
+      "start_s": 486.571,
+      "end_s": 486.733
+    },
+    {
+      "w": "one",
+      "start_s": 486.814,
+      "end_s": 487.047
+    },
+    {
+      "w": "performer",
+      "start_s": 487.081,
+      "end_s": 487.627
+    },
+    {
+      "w": "pulls",
+      "start_s": 487.697,
+      "end_s": 487.975
+    },
+    {
+      "w": "out",
+      "start_s": 488.033,
+      "end_s": 488.196
+    },
+    {
+      "w": "a",
+      "start_s": 488.266,
+      "end_s": 488.324
+    },
+    {
+      "w": "real",
+      "start_s": 488.451,
+      "end_s": 488.707
+    },
+    {
+      "w": "weapon,",
+      "start_s": 488.776,
+      "end_s": 489.322
+    },
+    {
+      "w": "nobody",
+      "start_s": 489.496,
+      "end_s": 489.845
+    },
+    {
+      "w": "won.",
+      "start_s": 489.914,
+      "end_s": 490.379
+    },
+    {
+      "w": "The",
+      "start_s": 490.762,
+      "end_s": 490.889
+    },
+    {
+      "w": "entire",
+      "start_s": 490.948,
+      "end_s": 491.331
+    },
+    {
+      "w": "machine",
+      "start_s": 491.377,
+      "end_s": 491.842
+    },
+    {
+      "w": "broke.",
+      "start_s": 491.888,
+      "end_s": 492.399
+    },
+    {
+      "w": "The",
+      "start_s": 492.643,
+      "end_s": 492.77
+    },
+    {
+      "w": "bar",
+      "start_s": 492.84,
+      "end_s": 493.13
+    },
+    {
+      "w": "died.",
+      "start_s": 493.211,
+      "end_s": 493.769
+    },
+    {
+      "w": "The",
+      "start_s": 493.885,
+      "end_s": 494.013
+    },
+    {
+      "w": "crowd",
+      "start_s": 494.059,
+      "end_s": 494.361
+    },
+    {
+      "w": "lost",
+      "start_s": 494.431,
+      "end_s": 494.709
+    },
+    {
+      "w": "the",
+      "start_s": 494.756,
+      "end_s": 494.825
+    },
+    {
+      "w": "game.",
+      "start_s": 494.883,
+      "end_s": 495.475
+    },
+    {
+      "w": "The",
+      "start_s": 495.859,
+      "end_s": 495.986
+    },
+    {
+      "w": "enemies",
+      "start_s": 496.056,
+      "end_s": 496.393
+    },
+    {
+      "w": "stopped",
+      "start_s": 496.427,
+      "end_s": 496.741
+    },
+    {
+      "w": "being",
+      "start_s": 496.764,
+      "end_s": 496.985
+    },
+    {
+      "w": "co-stars",
+      "start_s": 497.054,
+      "end_s": 497.646
+    },
+    {
+      "w": "and",
+      "start_s": 497.693,
+      "end_s": 497.763
+    },
+    {
+      "w": "became",
+      "start_s": 497.809,
+      "end_s": 498.146
+    },
+    {
+      "w": "evidence.",
+      "start_s": 498.192,
+      "end_s": 498.819
+    },
+    {
+      "w": "But",
+      "start_s": 499.028,
+      "end_s": 499.202
+    },
+    {
+      "w": "when",
+      "start_s": 499.237,
+      "end_s": 499.376
+    },
+    {
+      "w": "both",
+      "start_s": 499.446,
+      "end_s": 499.678
+    },
+    {
+      "w": "people",
+      "start_s": 499.736,
+      "end_s": 500.05
+    },
+    {
+      "w": "hold",
+      "start_s": 500.096,
+      "end_s": 500.352
+    },
+    {
+      "w": "the",
+      "start_s": 500.398,
+      "end_s": 500.468
+    },
+    {
+      "w": "ritual,",
+      "start_s": 500.526,
+      "end_s": 501.083
+    },
+    {
+      "w": "they",
+      "start_s": 501.13,
+      "end_s": 501.281
+    },
+    {
+      "w": "create",
+      "start_s": 501.339,
+      "end_s": 501.698
+    },
+    {
+      "w": "the",
+      "start_s": 501.722,
+      "end_s": 501.791
+    },
+    {
+      "w": "thing",
+      "start_s": 501.849,
+      "end_s": 502.058
+    },
+    {
+      "w": "we",
+      "start_s": 502.116,
+      "end_s": 502.221
+    },
+    {
+      "w": "actually",
+      "start_s": 502.302,
+      "end_s": 502.743
+    },
+    {
+      "w": "came",
+      "start_s": 502.801,
+      "end_s": 503.08
+    },
+    {
+      "w": "for:",
+      "start_s": 503.138,
+      "end_s": 503.649
+    },
+    {
+      "w": "controlled",
+      "start_s": 504.032,
+      "end_s": 504.601
+    },
+    {
+      "w": "danger.",
+      "start_s": 504.659,
+      "end_s": 505.228
+    },
+    {
+      "w": "Risk",
+      "start_s": 505.611,
+      "end_s": 505.901
+    },
+    {
+      "w": "turned",
+      "start_s": 505.971,
+      "end_s": 506.273
+    },
+    {
+      "w": "into",
+      "start_s": 506.308,
+      "end_s": 506.47
+    },
+    {
+      "w": "art.",
+      "start_s": 506.563,
+      "end_s": 507.039
+    },
+    {
+      "w": "Aggression",
+      "start_s": 507.318,
+      "end_s": 507.852
+    },
+    {
+      "w": "turned",
+      "start_s": 507.898,
+      "end_s": 508.165
+    },
+    {
+      "w": "into",
+      "start_s": 508.2,
+      "end_s": 508.351
+    },
+    {
+      "w": "a",
+      "start_s": 508.444,
+      "end_s": 508.479
+    },
+    {
+      "w": "public",
+      "start_s": 508.548,
+      "end_s": 508.897
+    },
+    {
+      "w": "skill",
+      "start_s": 508.955,
+      "end_s": 509.233
+    },
+    {
+      "w": "test.",
+      "start_s": 509.291,
+      "end_s": 509.791
+    },
+    {
+      "w": "So",
+      "start_s": 510.174,
+      "end_s": 510.325
+    },
+    {
+      "w": "the",
+      "start_s": 510.383,
+      "end_s": 510.452
+    },
+    {
+      "w": "next",
+      "start_s": 510.51,
+      "end_s": 510.708
+    },
+    {
+      "w": "time",
+      "start_s": 510.743,
+      "end_s": 510.986
+    },
+    {
+      "w": "somebody",
+      "start_s": 511.021,
+      "end_s": 511.346
+    },
+    {
+      "w": "says",
+      "start_s": 511.393,
+      "end_s": 511.59
+    },
+    {
+      "w": "rap",
+      "start_s": 511.683,
+      "end_s": 511.904
+    },
+    {
+      "w": "is",
+      "start_s": 511.973,
+      "end_s": 512.043
+    },
+    {
+      "w": "too",
+      "start_s": 512.101,
+      "end_s": 512.252
+    },
+    {
+      "w": "violent,",
+      "start_s": 512.322,
+      "end_s": 512.809
+    },
+    {
+      "w": "too",
+      "start_s": 512.856,
+      "end_s": 513.029
+    },
+    {
+      "w": "aggressive,",
+      "start_s": 513.076,
+      "end_s": 513.656
+    },
+    {
+      "w": "too",
+      "start_s": 513.68,
+      "end_s": 513.865
+    },
+    {
+      "w": "much—do",
+      "start_s": 513.947,
+      "end_s": 515.026
+    },
+    {
+      "w": "not",
+      "start_s": 515.096,
+      "end_s": 515.247
+    },
+    {
+      "w": "panic.",
+      "start_s": 515.317,
+      "end_s": 515.874
+    },
+    {
+      "w": "Ask",
+      "start_s": 516.315,
+      "end_s": 516.559
+    },
+    {
+      "w": "them",
+      "start_s": 516.605,
+      "end_s": 516.733
+    },
+    {
+      "w": "what",
+      "start_s": 516.779,
+      "end_s": 516.907
+    },
+    {
+      "w": "they",
+      "start_s": 516.942,
+      "end_s": 517.058
+    },
+    {
+      "w": "would",
+      "start_s": 517.093,
+      "end_s": 517.255
+    },
+    {
+      "w": "prefer.",
+      "start_s": 517.29,
+      "end_s": 517.94
+    },
+    {
+      "w": "Would",
+      "start_s": 518.544,
+      "end_s": 518.73
+    },
+    {
+      "w": "they",
+      "start_s": 518.765,
+      "end_s": 518.892
+    },
+    {
+      "w": "rather",
+      "start_s": 518.985,
+      "end_s": 519.299
+    },
+    {
+      "w": "have",
+      "start_s": 519.368,
+      "end_s": 519.543
+    },
+    {
+      "w": "the",
+      "start_s": 519.577,
+      "end_s": 519.647
+    },
+    {
+      "w": "conflict",
+      "start_s": 519.694,
+      "end_s": 520.135
+    },
+    {
+      "w": "hidden",
+      "start_s": 520.193,
+      "end_s": 520.448
+    },
+    {
+      "w": "until",
+      "start_s": 520.506,
+      "end_s": 520.738
+    },
+    {
+      "w": "it",
+      "start_s": 520.797,
+      "end_s": 520.866
+    },
+    {
+      "w": "explodes?",
+      "start_s": 520.924,
+      "end_s": 521.749
+    },
+    {
+      "w": "Or",
+      "start_s": 522.132,
+      "end_s": 522.283
+    },
+    {
+      "w": "would",
+      "start_s": 522.317,
+      "end_s": 522.468
+    },
+    {
+      "w": "they",
+      "start_s": 522.492,
+      "end_s": 522.608
+    },
+    {
+      "w": "rather",
+      "start_s": 522.677,
+      "end_s": 522.933
+    },
+    {
+      "w": "see",
+      "start_s": 523.002,
+      "end_s": 523.177
+    },
+    {
+      "w": "it",
+      "start_s": 523.223,
+      "end_s": 523.304
+    },
+    {
+      "w": "dragged",
+      "start_s": 523.351,
+      "end_s": 523.711
+    },
+    {
+      "w": "into",
+      "start_s": 523.745,
+      "end_s": 523.908
+    },
+    {
+      "w": "the",
+      "start_s": 523.978,
+      "end_s": 524.047
+    },
+    {
+      "w": "open,",
+      "start_s": 524.117,
+      "end_s": 524.465
+    },
+    {
+      "w": "sharpened",
+      "start_s": 524.512,
+      "end_s": 524.964
+    },
+    {
+      "w": "into",
+      "start_s": 524.999,
+      "end_s": 525.162
+    },
+    {
+      "w": "language,",
+      "start_s": 525.255,
+      "end_s": 525.87
+    },
+    {
+      "w": "timed",
+      "start_s": 526.079,
+      "end_s": 526.404
+    },
+    {
+      "w": "to",
+      "start_s": 526.427,
+      "end_s": 526.497
+    },
+    {
+      "w": "a",
+      "start_s": 526.59,
+      "end_s": 526.613
+    },
+    {
+      "w": "beat,",
+      "start_s": 526.683,
+      "end_s": 526.973
+    },
+    {
+      "w": "judged",
+      "start_s": 527.066,
+      "end_s": 527.415
+    },
+    {
+      "w": "by",
+      "start_s": 527.473,
+      "end_s": 527.612
+    },
+    {
+      "w": "a",
+      "start_s": 527.67,
+      "end_s": 527.705
+    },
+    {
+      "w": "crowd,",
+      "start_s": 527.763,
+      "end_s": 528.158
+    },
+    {
+      "w": "and",
+      "start_s": 528.181,
+      "end_s": 528.274
+    },
+    {
+      "w": "settled",
+      "start_s": 528.332,
+      "end_s": 528.668
+    },
+    {
+      "w": "by",
+      "start_s": 528.703,
+      "end_s": 528.843
+    },
+    {
+      "w": "whoever",
+      "start_s": 528.901,
+      "end_s": 529.272
+    },
+    {
+      "w": "can",
+      "start_s": 529.319,
+      "end_s": 529.446
+    },
+    {
+      "w": "keep",
+      "start_s": 529.504,
+      "end_s": 529.69
+    },
+    {
+      "w": "their",
+      "start_s": 529.737,
+      "end_s": 529.899
+    },
+    {
+      "w": "nerve?",
+      "start_s": 529.969,
+      "end_s": 530.549
+    },
+    {
+      "w": "That",
+      "start_s": 531.362,
+      "end_s": 531.559
+    },
+    {
+      "w": "is",
+      "start_s": 531.617,
+      "end_s": 531.699
+    },
+    {
+      "w": "not",
+      "start_s": 531.768,
+      "end_s": 531.943
+    },
+    {
+      "w": "the",
+      "start_s": 531.989,
+      "end_s": 532.082
+    },
+    {
+      "w": "absence",
+      "start_s": 532.175,
+      "end_s": 532.627
+    },
+    {
+      "w": "of",
+      "start_s": 532.662,
+      "end_s": 532.72
+    },
+    {
+      "w": "conflict.",
+      "start_s": 532.778,
+      "end_s": 533.347
+    },
+    {
+      "w": "It",
+      "start_s": 533.371,
+      "end_s": 533.498
+    },
+    {
+      "w": "is",
+      "start_s": 533.556,
+      "end_s": 533.638
+    },
+    {
+      "w": "the",
+      "start_s": 533.696,
+      "end_s": 533.765
+    },
+    {
+      "w": "evolution",
+      "start_s": 533.847,
+      "end_s": 534.45
+    },
+    {
+      "w": "of",
+      "start_s": 534.508,
+      "end_s": 534.566
+    },
+    {
+      "w": "conflict.",
+      "start_s": 534.636,
+      "end_s": 535.669
+    },
+    {
+      "w": "The",
+      "start_s": 535.669,
+      "end_s": 535.808
+    },
+    {
+      "w": "gorilla",
+      "start_s": 535.878,
+      "end_s": 536.261
+    },
+    {
+      "w": "gets",
+      "start_s": 536.331,
+      "end_s": 536.528
+    },
+    {
+      "w": "a",
+      "start_s": 536.563,
+      "end_s": 536.598
+    },
+    {
+      "w": "chest",
+      "start_s": 536.644,
+      "end_s": 536.911
+    },
+    {
+      "w": "beat.",
+      "start_s": 536.958,
+      "end_s": 537.352
+    },
+    {
+      "w": "The",
+      "start_s": 537.678,
+      "end_s": 537.805
+    },
+    {
+      "w": "knight",
+      "start_s": 537.852,
+      "end_s": 538.049
+    },
+    {
+      "w": "gets",
+      "start_s": 538.095,
+      "end_s": 538.293
+    },
+    {
+      "w": "a",
+      "start_s": 538.339,
+      "end_s": 538.363
+    },
+    {
+      "w": "sword.",
+      "start_s": 538.421,
+      "end_s": 538.978
+    },
+    {
+      "w": "The",
+      "start_s": 539.582,
+      "end_s": 539.698
+    },
+    {
+      "w": "battle",
+      "start_s": 539.756,
+      "end_s": 540.023
+    },
+    {
+      "w": "rapper",
+      "start_s": 540.069,
+      "end_s": 540.336
+    },
+    {
+      "w": "gets",
+      "start_s": 540.406,
+      "end_s": 540.603
+    },
+    {
+      "w": "a",
+      "start_s": 540.638,
+      "end_s": 540.673
+    },
+    {
+      "w": "sixteen,",
+      "start_s": 540.719,
+      "end_s": 541.451
+    },
+    {
+      "w": "a",
+      "start_s": 541.567,
+      "end_s": 541.637
+    },
+    {
+      "w": "room",
+      "start_s": 541.718,
+      "end_s": 541.915
+    },
+    {
+      "w": "full",
+      "start_s": 541.985,
+      "end_s": 542.159
+    },
+    {
+      "w": "of",
+      "start_s": 542.205,
+      "end_s": 542.263
+    },
+    {
+      "w": "witnesses,",
+      "start_s": 542.31,
+      "end_s": 543.007
+    },
+    {
+      "w": "and",
+      "start_s": 543.215,
+      "end_s": 543.366
+    },
+    {
+      "w": "one",
+      "start_s": 543.448,
+      "end_s": 543.633
+    },
+    {
+      "w": "chance",
+      "start_s": 543.68,
+      "end_s": 543.993
+    },
+    {
+      "w": "to",
+      "start_s": 544.028,
+      "end_s": 544.098
+    },
+    {
+      "w": "make",
+      "start_s": 544.168,
+      "end_s": 544.33
+    },
+    {
+      "w": "the",
+      "start_s": 544.365,
+      "end_s": 544.435
+    },
+    {
+      "w": "other",
+      "start_s": 544.504,
+      "end_s": 544.678
+    },
+    {
+      "w": "person",
+      "start_s": 544.725,
+      "end_s": 545.038
+    },
+    {
+      "w": "look",
+      "start_s": 545.096,
+      "end_s": 545.259
+    },
+    {
+      "w": "like",
+      "start_s": 545.317,
+      "end_s": 545.491
+    },
+    {
+      "w": "they",
+      "start_s": 545.526,
+      "end_s": 545.654
+    },
+    {
+      "w": "should",
+      "start_s": 545.7,
+      "end_s": 545.886
+    },
+    {
+      "w": "have",
+      "start_s": 545.909,
+      "end_s": 546.025
+    },
+    {
+      "w": "stayed",
+      "start_s": 546.048,
+      "end_s": 546.339
+    },
+    {
+      "w": "home.",
+      "start_s": 546.385,
+      "end_s": 546.896
+    },
+    {
+      "w": "We",
+      "start_s": 547.592,
+      "end_s": 547.755
+    },
+    {
+      "w": "traded",
+      "start_s": 547.813,
+      "end_s": 548.138
+    },
+    {
+      "w": "the",
+      "start_s": 548.173,
+      "end_s": 548.243
+    },
+    {
+      "w": "battlefield",
+      "start_s": 548.289,
+      "end_s": 548.846
+    },
+    {
+      "w": "for",
+      "start_s": 548.904,
+      "end_s": 549.009
+    },
+    {
+      "w": "the",
+      "start_s": 549.044,
+      "end_s": 549.113
+    },
+    {
+      "w": "beat.",
+      "start_s": 549.16,
+      "end_s": 549.578
+    },
+    {
+      "w": "Peace",
+      "start_s": 550.019,
+      "end_s": 550.321
+    },
+    {
+      "w": "won—but",
+      "start_s": 550.367,
+      "end_s": 551.366
+    },
+    {
+      "w": "it",
+      "start_s": 551.4,
+      "end_s": 551.459
+    },
+    {
+      "w": "still",
+      "start_s": 551.505,
+      "end_s": 551.76
+    },
+    {
+      "w": "talks",
+      "start_s": 551.83,
+      "end_s": 552.12
+    },
+    {
+      "w": "reckless.",
+      "start_s": 552.202,
+      "end_s": 552.852
+    },
+    {
+      "w": "I'm",
+      "start_s": 553.026,
+      "end_s": 553.246
+    },
+    {
+      "w": "Marshall",
+      "start_s": 553.316,
+      "end_s": 553.688
+    },
+    {
+      "w": "Matters.",
+      "start_s": 553.769,
+      "end_s": 554.361
+    },
+    {
+      "w": "This",
+      "start_s": 554.872,
+      "end_s": 555.232
+    },
+    {
+      "w": "is",
+      "start_s": 555.476,
+      "end_s": 555.661
+    },
+    {
+      "w": "Martial",
+      "start_s": 555.754,
+      "end_s": 556.103
+    },
+    {
+      "w": "Matters.",
+      "start_s": 556.161,
+      "end_s": 556.718
+    },
+    {
+      "w": "Next,",
+      "start_s": 557.414,
+      "end_s": 557.925
+    },
+    {
+      "w": "we're",
+      "start_s": 557.995,
+      "end_s": 558.192
+    },
+    {
+      "w": "going",
+      "start_s": 558.216,
+      "end_s": 558.401
+    },
+    {
+      "w": "to",
+      "start_s": 558.436,
+      "end_s": 558.494
+    },
+    {
+      "w": "the",
+      "start_s": 558.552,
+      "end_s": 558.622
+    },
+    {
+      "w": "place",
+      "start_s": 558.657,
+      "end_s": 558.924
+    },
+    {
+      "w": "where",
+      "start_s": 558.947,
+      "end_s": 559.121
+    },
+    {
+      "w": "a",
+      "start_s": 559.156,
+      "end_s": 559.179
+    },
+    {
+      "w": "fighter,",
+      "start_s": 559.249,
+      "end_s": 559.69
+    },
+    {
+      "w": "a",
+      "start_s": 559.76,
+      "end_s": 559.829
+    },
+    {
+      "w": "freestyle",
+      "start_s": 559.922,
+      "end_s": 560.491
+    },
+    {
+      "w": "rapper,",
+      "start_s": 560.549,
+      "end_s": 560.979
+    },
+    {
+      "w": "and",
+      "start_s": 561.025,
+      "end_s": 561.211
+    },
+    {
+      "w": "an",
+      "start_s": 561.269,
+      "end_s": 561.339
+    },
+    {
+      "w": "old-school",
+      "start_s": 561.42,
+      "end_s": 561.989
+    },
+    {
+      "w": "swordsman",
+      "start_s": 562.058,
+      "end_s": 562.604
+    },
+    {
+      "w": "all",
+      "start_s": 562.697,
+      "end_s": 562.952
+    },
+    {
+      "w": "meet:",
+      "start_s": 563.022,
+      "end_s": 563.498
+    },
+    {
+      "w": "the",
+      "start_s": 563.881,
+      "end_s": 563.986
+    },
+    {
+      "w": "moment",
+      "start_s": 564.055,
+      "end_s": 564.346
+    },
+    {
+      "w": "thinking",
+      "start_s": 564.38,
+      "end_s": 564.706
+    },
+    {
+      "w": "gets",
+      "start_s": 564.764,
+      "end_s": 564.938
+    },
+    {
+      "w": "out",
+      "start_s": 564.984,
+      "end_s": 565.1
+    },
+    {
+      "w": "of",
+      "start_s": 565.135,
+      "end_s": 565.182
+    },
+    {
+      "w": "the",
+      "start_s": 565.216,
+      "end_s": 565.286
+    },
+    {
+      "w": "way",
+      "start_s": 565.332,
+      "end_s": 565.623
+    },
+    {
+      "w": "and",
+      "start_s": 565.75,
+      "end_s": 565.913
+    },
+    {
+      "w": "trained",
+      "start_s": 565.959,
+      "end_s": 566.25
+    },
+    {
+      "w": "instinct",
+      "start_s": 566.319,
+      "end_s": 566.784
+    },
+    {
+      "w": "takes",
+      "start_s": 566.842,
+      "end_s": 567.109
+    },
+    {
+      "w": "the",
+      "start_s": 567.155,
+      "end_s": 567.225
+    },
+    {
+      "w": "wheel.",
+      "start_s": 567.271,
+      "end_s": 567.805
+    }
+  ]
+}

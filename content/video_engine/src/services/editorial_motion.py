@@ -527,6 +527,7 @@ def compile_editorial_motion_plan(
     scene_flow_graph: Mapping[str, Any],
     asset_map: Mapping[str, Any] | Sequence[str],
     source_end_s: float | None = None,
+    explicit_shot_timing: Sequence[Mapping[str, Any]] | None = None,
 ) -> dict[str, Any]:
     """Compile explicit shot decisions against canonical word timings."""
 
@@ -591,13 +592,28 @@ def compile_editorial_motion_plan(
             )
         return value
 
+    if explicit_shot_timing is not None and len(explicit_shot_timing) != len(shot_specs):
+        raise EditorialMotionError(
+            "explicit_shot_timing must contain one range per shot spec"
+        )
     first_word = required_word_index(shot_specs[0], "start_index", 0)
     final_word = required_word_index(shot_specs[-1], "end_index", len(shot_specs) - 1)
     if first_word < 0 or final_word >= len(words):
         raise EditorialMotionError("shot word ranges escape canonical word timings")
     source_start = words[first_word]["start_s"]
     selected_end = float(source_end_s) if source_end_s is not None else words[final_word]["end_s"]
-    if selected_end < words[final_word]["end_s"]:
+    if explicit_shot_timing is not None:
+        first_timing = explicit_shot_timing[0]
+        final_timing = explicit_shot_timing[-1]
+        try:
+            source_start = float(first_timing["start_s"])
+            selected_end = float(final_timing["end_s"])
+        except (KeyError, TypeError, ValueError) as exc:
+            raise EditorialMotionError(
+                "explicit_shot_timing requires numeric start_s and end_s"
+            ) from exc
+    final_word_tolerance = 0.01 if explicit_shot_timing is not None else 0.0
+    if selected_end + final_word_tolerance < words[final_word]["end_s"]:
         raise EditorialMotionError("source_end_s cuts off the final selected word")
     if selected_end > float(audio.get("duration_s") or 0) + 1e-4:
         raise EditorialMotionError("selected audio interval exceeds the canonical audio duration")
@@ -613,15 +629,29 @@ def compile_editorial_motion_plan(
         end_index = required_word_index(spec, "end_index", index)
         if start_index != previous_end_index + 1 or end_index < start_index or end_index >= len(words):
             raise EditorialMotionError(f"shot_specs[{index}].word_range is not contiguous")
-        shot_absolute_start = source_start if index == 0 else words[start_index]["start_s"]
-        next_absolute_start = selected_end
-        if index + 1 < len(shot_specs):
-            next_index = required_word_index(shot_specs[index + 1], "start_index", index + 1)
-            if next_index < 0 or next_index >= len(words):
+        if explicit_shot_timing is not None:
+            timing = explicit_shot_timing[index]
+            try:
+                shot_absolute_start = float(timing["start_s"])
+                next_absolute_start = float(timing["end_s"])
+            except (KeyError, TypeError, ValueError) as exc:
                 raise EditorialMotionError(
-                    f"shot_specs[{index + 1}].word_range escapes canonical word timings"
-                )
-            next_absolute_start = words[next_index]["start_s"]
+                    f"explicit_shot_timing[{index}] requires numeric start_s and end_s"
+                ) from exc
+        else:
+            shot_absolute_start = source_start if index == 0 else words[start_index]["start_s"]
+            next_absolute_start = selected_end
+            if index + 1 < len(shot_specs):
+                next_index = required_word_index(shot_specs[index + 1], "start_index", index + 1)
+                if next_index < 0 or next_index >= len(words):
+                    raise EditorialMotionError(
+                        f"shot_specs[{index + 1}].word_range escapes canonical word timings"
+                    )
+                next_absolute_start = words[next_index]["start_s"]
+        if index == 0 and not math.isclose(shot_absolute_start, source_start, abs_tol=1e-4):
+            raise EditorialMotionError("explicit shot timing does not start at source_start_s")
+        if index and not math.isclose(shot_absolute_start, shots[-1]["start_s"] + shots[-1]["duration_s"] + source_start, abs_tol=1e-4):
+            raise EditorialMotionError("explicit shot timing contains a gap or overlap")
         duration = next_absolute_start - shot_absolute_start
         if duration <= 0:
             raise EditorialMotionError(f"shot_specs[{index}] has non-positive derived duration")
@@ -1313,6 +1343,92 @@ def _visual_intent_and_actions(excerpt: str) -> tuple[str, list[dict[str, str]]]
     return "explanation", unique_actions
 
 
+def _validate_explicit_timestamp_ranges(
+    blocks: Sequence[Mapping[str, Any]],
+    words: Sequence[Mapping[str, Any]],
+    *,
+    audio_duration: float,
+) -> list[dict[str, float]]:
+    """Validate an already word-bound cue clock without proportional retiming.
+
+    This path is intentionally opt-in.  The Martial adapter supplies cue-sheet
+    authorization before setting ``explicit_timing=True``; legacy callers keep
+    the proportional timestamped behavior above unchanged.
+    """
+
+    if not blocks:
+        raise EditorialMotionError("explicit timestamp ranges require blocks")
+    if audio_duration <= 0:
+        raise EditorialMotionError("explicit timestamp ranges require positive audio duration")
+
+    def integer(value: Any, label: str) -> int:
+        if isinstance(value, bool) or not isinstance(value, int):
+            raise EditorialMotionError(f"{label} must be an integer")
+        return value
+
+    resolved: list[dict[str, float | int]] = []
+    previous_word_end = -1
+    previous_timeline_end = 0.0
+    for index, raw in enumerate(blocks):
+        label = f"blocks[{index}]"
+        word_range = raw.get("explicit_word_range")
+        timeline_range = raw.get("explicit_timeline_range")
+        if not isinstance(word_range, Mapping) or not isinstance(timeline_range, Mapping):
+            raise EditorialMotionError(
+                f"{label} requires explicit_word_range and explicit_timeline_range"
+            )
+        start_index = integer(word_range.get("start_index"), f"{label}.explicit_word_range.start_index")
+        end_index = integer(word_range.get("end_index"), f"{label}.explicit_word_range.end_index")
+        if start_index < 0 or end_index < start_index or end_index >= len(words):
+            raise EditorialMotionError(f"{label}.explicit_word_range escapes canonical words")
+        if start_index != previous_word_end + 1:
+            raise EditorialMotionError(f"{label}.explicit_word_range is not contiguous")
+        try:
+            start_s = float(timeline_range["start_s"])
+            end_s = float(timeline_range["end_s"])
+        except (KeyError, TypeError, ValueError) as exc:
+            raise EditorialMotionError(
+                f"{label}.explicit_timeline_range requires numeric start_s and end_s"
+            ) from exc
+        if start_s < -1e-4 or end_s <= start_s:
+            raise EditorialMotionError(f"{label}.explicit_timeline_range is invalid")
+        if index == 0:
+            if not math.isclose(start_s, 0.0, abs_tol=1e-4):
+                raise EditorialMotionError("explicit timing must start at 0.000 seconds")
+        elif not math.isclose(start_s, previous_timeline_end, abs_tol=1e-4):
+            raise EditorialMotionError(f"{label}.explicit_timeline_range is not contiguous")
+        excerpt = " ".join(str(raw.get("narration_excerpt") or "").split())
+        expected_excerpt = " ".join(
+            str(word.get("w") or "") for word in words[start_index : end_index + 1]
+        )
+        if _normalized_tokens(excerpt) != _normalized_tokens(expected_excerpt):
+            raise EditorialMotionError(f"{label}.narration_excerpt does not match explicit word range")
+        if index:
+            expected_midpoint = (
+                float(words[previous_word_end]["end_s"])
+                + float(words[start_index]["start_s"])
+            ) / 2
+            if not math.isclose(start_s, expected_midpoint, abs_tol=1e-4):
+                raise EditorialMotionError(
+                    f"{label}.explicit_timeline_range boundary is not the cue midpoint"
+                )
+        resolved.append(
+            {
+                "start_s": round(start_s, 6),
+                "end_s": round(end_s, 6),
+                "start_index": start_index,
+                "end_index": end_index,
+            }
+        )
+        previous_word_end = end_index
+        previous_timeline_end = end_s
+    if previous_word_end != len(words) - 1:
+        raise EditorialMotionError("explicit word ranges must cover the final canonical word")
+    if not math.isclose(previous_timeline_end, audio_duration, abs_tol=1e-4):
+        raise EditorialMotionError("explicit timing must end at the canonical audio duration")
+    return resolved
+
+
 def compile_timestamped_editorial_motion_plan(
     *,
     timestamped_plate_plan: Mapping[str, Any] | str | Path,
@@ -1320,6 +1436,7 @@ def compile_timestamped_editorial_motion_plan(
     audio_manifest: Mapping[str, Any] | str | Path,
     word_timings: Mapping[str, Any] | Sequence[Mapping[str, Any]] | str | Path,
     pacing_recipe: Mapping[str, Any] | str | Path,
+    explicit_timing: bool = False,
 ) -> dict[str, Any]:
     """Bind every approved timestamped plate to the canonical narration.
 
@@ -1347,7 +1464,10 @@ def compile_timestamped_editorial_motion_plan(
         audio_manifest_hash = "0" * 64
     if audio.get("status") != "ready":
         errors.append("canonical audio is not ready")
-    if float(audio.get("duration_s") or 0) + 1e-4 < words[-1]["end_s"]:
+    # ElevenLabs word timestamps can carry a final millisecond beyond the
+    # container duration after muxing; preserve the authored audio bound while
+    # tolerating that harmless rounding residue.
+    if float(audio.get("duration_s") or 0) + 1e-2 < words[-1]["end_s"]:
         errors.append("canonical audio duration cuts off its final word timing")
     raw_assets = assets_payload.get("assets")
     records = (
@@ -1387,30 +1507,47 @@ def compile_timestamped_editorial_motion_plan(
     if errors:
         raise EditorialMotionError(errors)
 
-    semantic_coverage = analyze_timestamped_semantic_coverage(
-        timestamped_plate_plan=plates,
-        word_timings=words,
-    )
-    uncovered = list(semantic_coverage.get("uncovered_slots") or [])
-    if uncovered:
-        examples = ", ".join(
-            f"{item['slot_id']} ({item['start_s']:.3f}-{item['end_s']:.3f}s)"
-            for item in uncovered[:3]
+    explicit_shot_timing: list[dict[str, float | int]] | None = None
+    if explicit_timing:
+        explicit_shot_timing = _validate_explicit_timestamp_ranges(
+            blocks,
+            words,
+            audio_duration=float(audio.get("duration_s") or 0),
         )
-        raise EditorialMotionError(
-            "timestamped plate plan leaves canonical narration uncovered; "
-            "create and approve semantic plates before rendering: " + examples
+    else:
+        semantic_coverage = analyze_timestamped_semantic_coverage(
+            timestamped_plate_plan=plates,
+            word_timings=words,
         )
+        uncovered = list(semantic_coverage.get("uncovered_slots") or [])
+        if uncovered:
+            examples = ", ".join(
+                f"{item['slot_id']} ({item['start_s']:.3f}-{item['end_s']:.3f}s)"
+                for item in uncovered[:3]
+            )
+            raise EditorialMotionError(
+                "timestamped plate plan leaves canonical narration uncovered; "
+                "create and approve semantic plates before rendering: " + examples
+            )
 
     specs: list[dict[str, Any]] = []
     scales: list[str] = []
-    ranges_by_order = {
-        int(item["order"]): (
-            int(item["word_range"]["start_index"]),
-            int(item["word_range"]["end_index"]),
-        )
-        for item in semantic_coverage["resolved"]
-    }
+    if explicit_timing:
+        ranges_by_order = {
+            int(item["order"]): (
+                int(item["explicit_word_range"]["start_index"]),
+                int(item["explicit_word_range"]["end_index"]),
+            )
+            for item in blocks
+        }
+    else:
+        ranges_by_order = {
+            int(item["order"]): (
+                int(item["word_range"]["start_index"]),
+                int(item["word_range"]["end_index"]),
+            )
+            for item in semantic_coverage["resolved"]
+        }
     for block in blocks:
         order = int(block.get("order") or 0)
         start_index, end_index = ranges_by_order[order]
@@ -1447,7 +1584,7 @@ def compile_timestamped_editorial_motion_plan(
                 "transition_out": {"kind": "hard_cut", "reason": transition_reason},
                 "audio_bridge": "continuous_narration",
                 "provider_motion": {"requirement": "none", "fallback": "locked_hold"},
-                "overlay_ids": [],
+                "overlay_ids": list(block.get("overlay_ids") or []),
                 "uniqueness_signature": f"timestamped:{order:03d}:{slot_id}:{scale}:{camera['kind']}",
             }
         )
@@ -1505,6 +1642,7 @@ def compile_timestamped_editorial_motion_plan(
         scene_flow_graph=flow,
         asset_map=assets_payload,
         source_end_s=float(audio["duration_s"]),
+        explicit_shot_timing=explicit_shot_timing,
     )
     overlong = [
         str(shot["shot_id"])

@@ -1,0 +1,7100 @@
+{
+  "duration_s": 559.922,
+  "words": [
+    {
+      "w": "The",
+      "start_s": 0.0,
+      "end_s": 0.151
+    },
+    {
+      "w": "useful",
+      "start_s": 0.232,
+      "end_s": 0.546
+    },
+    {
+      "w": "starting",
+      "start_s": 0.604,
+      "end_s": 0.952
+    },
+    {
+      "w": "point",
+      "start_s": 1.01,
+      "end_s": 1.219
+    },
+    {
+      "w": "is",
+      "start_s": 1.265,
+      "end_s": 1.347
+    },
+    {
+      "w": "not",
+      "start_s": 1.405,
+      "end_s": 1.556
+    },
+    {
+      "w": "a",
+      "start_s": 1.602,
+      "end_s": 1.625
+    },
+    {
+      "w": "battlefield",
+      "start_s": 1.707,
+      "end_s": 2.252
+    },
+    {
+      "w": "legend",
+      "start_s": 2.322,
+      "end_s": 2.635
+    },
+    {
+      "w": "but",
+      "start_s": 2.694,
+      "end_s": 2.833
+    },
+    {
+      "w": "an",
+      "start_s": 2.868,
+      "end_s": 2.926
+    },
+    {
+      "w": "institution.",
+      "start_s": 2.995,
+      "end_s": 3.913
+    },
+    {
+      "w": "In",
+      "start_s": 4.609,
+      "end_s": 4.737
+    },
+    {
+      "w": "1882,",
+      "start_s": 4.772,
+      "end_s": 5.747
+    },
+    {
+      "w": "Jigoro",
+      "start_s": 5.898,
+      "end_s": 6.304
+    },
+    {
+      "w": "Kano",
+      "start_s": 6.374,
+      "end_s": 6.687
+    },
+    {
+      "w": "established",
+      "start_s": 6.769,
+      "end_s": 7.303
+    },
+    {
+      "w": "the",
+      "start_s": 7.326,
+      "end_s": 7.396
+    },
+    {
+      "w": "Kodokan.",
+      "start_s": 7.454,
+      "end_s": 8.29
+    },
+    {
+      "w": "That",
+      "start_s": 9.102,
+      "end_s": 9.3
+    },
+    {
+      "w": "date",
+      "start_s": 9.358,
+      "end_s": 9.567
+    },
+    {
+      "w": "does",
+      "start_s": 9.59,
+      "end_s": 9.741
+    },
+    {
+      "w": "not",
+      "start_s": 9.787,
+      "end_s": 9.927
+    },
+    {
+      "w": "mean",
+      "start_s": 9.985,
+      "end_s": 10.17
+    },
+    {
+      "w": "every",
+      "start_s": 10.263,
+      "end_s": 10.519
+    },
+    {
+      "w": "older",
+      "start_s": 10.6,
+      "end_s": 10.867
+    },
+    {
+      "w": "jujutsu",
+      "start_s": 10.937,
+      "end_s": 11.494
+    },
+    {
+      "w": "practice",
+      "start_s": 11.552,
+      "end_s": 11.993
+    },
+    {
+      "w": "vanished",
+      "start_s": 12.04,
+      "end_s": 12.388
+    },
+    {
+      "w": "overnight.",
+      "start_s": 12.434,
+      "end_s": 13.061
+    },
+    {
+      "w": "It",
+      "start_s": 13.34,
+      "end_s": 13.468
+    },
+    {
+      "w": "marks",
+      "start_s": 13.537,
+      "end_s": 13.827
+    },
+    {
+      "w": "the",
+      "start_s": 13.862,
+      "end_s": 13.932
+    },
+    {
+      "w": "point",
+      "start_s": 13.99,
+      "end_s": 14.222
+    },
+    {
+      "w": "at",
+      "start_s": 14.28,
+      "end_s": 14.338
+    },
+    {
+      "w": "which",
+      "start_s": 14.385,
+      "end_s": 14.582
+    },
+    {
+      "w": "Kano's",
+      "start_s": 14.64,
+      "end_s": 15.023
+    },
+    {
+      "w": "system",
+      "start_s": 15.046,
+      "end_s": 15.395
+    },
+    {
+      "w": "gained",
+      "start_s": 15.464,
+      "end_s": 15.731
+    },
+    {
+      "w": "a",
+      "start_s": 15.766,
+      "end_s": 15.789
+    },
+    {
+      "w": "durable",
+      "start_s": 15.848,
+      "end_s": 16.3
+    },
+    {
+      "w": "home,",
+      "start_s": 16.347,
+      "end_s": 16.858
+    },
+    {
+      "w": "a",
+      "start_s": 17.032,
+      "end_s": 17.113
+    },
+    {
+      "w": "teaching",
+      "start_s": 17.206,
+      "end_s": 17.554
+    },
+    {
+      "w": "structure,",
+      "start_s": 17.612,
+      "end_s": 18.181
+    },
+    {
+      "w": "and",
+      "start_s": 18.297,
+      "end_s": 18.448
+    },
+    {
+      "w": "an",
+      "start_s": 18.495,
+      "end_s": 18.564
+    },
+    {
+      "w": "identity.",
+      "start_s": 18.611,
+      "end_s": 19.296
+    },
+    {
+      "w": "That",
+      "start_s": 19.737,
+      "end_s": 19.923
+    },
+    {
+      "w": "distinction",
+      "start_s": 19.969,
+      "end_s": 20.457
+    },
+    {
+      "w": "changes",
+      "start_s": 20.515,
+      "end_s": 20.944
+    },
+    {
+      "w": "the",
+      "start_s": 20.991,
+      "end_s": 21.06
+    },
+    {
+      "w": "question",
+      "start_s": 21.107,
+      "end_s": 21.467
+    },
+    {
+      "w": "we",
+      "start_s": 21.513,
+      "end_s": 21.583
+    },
+    {
+      "w": "are",
+      "start_s": 21.629,
+      "end_s": 21.757
+    },
+    {
+      "w": "asking.",
+      "start_s": 21.803,
+      "end_s": 22.384
+    },
+    {
+      "w": "Instead",
+      "start_s": 22.767,
+      "end_s": 23.115
+    },
+    {
+      "w": "of",
+      "start_s": 23.15,
+      "end_s": 23.197
+    },
+    {
+      "w": "looking",
+      "start_s": 23.255,
+      "end_s": 23.51
+    },
+    {
+      "w": "for",
+      "start_s": 23.568,
+      "end_s": 23.696
+    },
+    {
+      "w": "a",
+      "start_s": 23.742,
+      "end_s": 23.766
+    },
+    {
+      "w": "single",
+      "start_s": 23.847,
+      "end_s": 24.23
+    },
+    {
+      "w": "ancient",
+      "start_s": 24.288,
+      "end_s": 24.671
+    },
+    {
+      "w": "technique",
+      "start_s": 24.718,
+      "end_s": 25.24
+    },
+    {
+      "w": "that",
+      "start_s": 25.263,
+      "end_s": 25.403
+    },
+    {
+      "w": "somehow",
+      "start_s": 25.449,
+      "end_s": 25.82
+    },
+    {
+      "w": "travelled",
+      "start_s": 25.902,
+      "end_s": 26.308
+    },
+    {
+      "w": "unchanged",
+      "start_s": 26.389,
+      "end_s": 27.19
+    },
+    {
+      "w": "into",
+      "start_s": 27.249,
+      "end_s": 27.446
+    },
+    {
+      "w": "Brazil,",
+      "start_s": 27.516,
+      "end_s": 28.293
+    },
+    {
+      "w": "we",
+      "start_s": 28.468,
+      "end_s": 28.595
+    },
+    {
+      "w": "can",
+      "start_s": 28.642,
+      "end_s": 28.758
+    },
+    {
+      "w": "follow",
+      "start_s": 28.816,
+      "end_s": 29.095
+    },
+    {
+      "w": "a",
+      "start_s": 29.141,
+      "end_s": 29.164
+    },
+    {
+      "w": "system",
+      "start_s": 29.222,
+      "end_s": 29.594
+    },
+    {
+      "w": "as",
+      "start_s": 29.663,
+      "end_s": 29.791
+    },
+    {
+      "w": "it",
+      "start_s": 29.849,
+      "end_s": 29.919
+    },
+    {
+      "w": "acquires",
+      "start_s": 29.942,
+      "end_s": 30.406
+    },
+    {
+      "w": "schools,",
+      "start_s": 30.453,
+      "end_s": 31.01
+    },
+    {
+      "w": "teachers,",
+      "start_s": 31.045,
+      "end_s": 31.544
+    },
+    {
+      "w": "rules,",
+      "start_s": 31.591,
+      "end_s": 32.009
+    },
+    {
+      "w": "and",
+      "start_s": 32.043,
+      "end_s": 32.148
+    },
+    {
+      "w": "public",
+      "start_s": 32.229,
+      "end_s": 32.531
+    },
+    {
+      "w": "meaning.",
+      "start_s": 32.589,
+      "end_s": 33.042
+    },
+    {
+      "w": "The",
+      "start_s": 33.286,
+      "end_s": 33.402
+    },
+    {
+      "w": "date",
+      "start_s": 33.471,
+      "end_s": 33.75
+    },
+    {
+      "w": "is",
+      "start_s": 33.797,
+      "end_s": 33.924
+    },
+    {
+      "w": "an",
+      "start_s": 33.971,
+      "end_s": 34.052
+    },
+    {
+      "w": "anchor",
+      "start_s": 34.11,
+      "end_s": 34.412
+    },
+    {
+      "w": "in",
+      "start_s": 34.47,
+      "end_s": 34.528
+    },
+    {
+      "w": "the",
+      "start_s": 34.563,
+      "end_s": 34.632
+    },
+    {
+      "w": "record,",
+      "start_s": 34.691,
+      "end_s": 35.178
+    },
+    {
+      "w": "not",
+      "start_s": 35.457,
+      "end_s": 35.631
+    },
+    {
+      "w": "a",
+      "start_s": 35.666,
+      "end_s": 35.689
+    },
+    {
+      "w": "magical",
+      "start_s": 35.77,
+      "end_s": 36.177
+    },
+    {
+      "w": "beginning",
+      "start_s": 36.246,
+      "end_s": 36.618
+    },
+    {
+      "w": "for",
+      "start_s": 36.676,
+      "end_s": 36.78
+    },
+    {
+      "w": "every",
+      "start_s": 36.85,
+      "end_s": 37.094
+    },
+    {
+      "w": "practice",
+      "start_s": 37.152,
+      "end_s": 37.581
+    },
+    {
+      "w": "that",
+      "start_s": 37.616,
+      "end_s": 37.756
+    },
+    {
+      "w": "later",
+      "start_s": 37.814,
+      "end_s": 38.057
+    },
+    {
+      "w": "received",
+      "start_s": 38.115,
+      "end_s": 38.499
+    },
+    {
+      "w": "the",
+      "start_s": 38.522,
+      "end_s": 38.591
+    },
+    {
+      "w": "name",
+      "start_s": 38.638,
+      "end_s": 38.905
+    },
+    {
+      "w": "jiu-jitsu.",
+      "start_s": 39.021,
+      "end_s": 39.764
+    },
+    {
+      "w": "Kodokan",
+      "start_s": 40.716,
+      "end_s": 41.204
+    },
+    {
+      "w": "judo",
+      "start_s": 41.273,
+      "end_s": 41.622
+    },
+    {
+      "w": "was",
+      "start_s": 41.865,
+      "end_s": 42.051
+    },
+    {
+      "w": "already",
+      "start_s": 42.109,
+      "end_s": 42.539
+    },
+    {
+      "w": "a",
+      "start_s": 42.585,
+      "end_s": 42.62
+    },
+    {
+      "w": "transformation.",
+      "start_s": 42.666,
+      "end_s": 43.56
+    },
+    {
+      "w": "Kano",
+      "start_s": 44.373,
+      "end_s": 44.698
+    },
+    {
+      "w": "drew",
+      "start_s": 44.756,
+      "end_s": 44.977
+    },
+    {
+      "w": "from",
+      "start_s": 45.035,
+      "end_s": 45.174
+    },
+    {
+      "w": "multiple",
+      "start_s": 45.232,
+      "end_s": 45.662
+    },
+    {
+      "w": "jujutsu",
+      "start_s": 45.708,
+      "end_s": 46.196
+    },
+    {
+      "w": "schools,",
+      "start_s": 46.242,
+      "end_s": 46.799
+    },
+    {
+      "w": "selected",
+      "start_s": 46.927,
+      "end_s": 47.38
+    },
+    {
+      "w": "and",
+      "start_s": 47.426,
+      "end_s": 47.496
+    },
+    {
+      "w": "reorganized",
+      "start_s": 47.566,
+      "end_s": 48.169
+    },
+    {
+      "w": "techniques,",
+      "start_s": 48.193,
+      "end_s": 48.727
+    },
+    {
+      "w": "and",
+      "start_s": 48.75,
+      "end_s": 48.843
+    },
+    {
+      "w": "connected",
+      "start_s": 48.901,
+      "end_s": 49.284
+    },
+    {
+      "w": "practice",
+      "start_s": 49.33,
+      "end_s": 49.795
+    },
+    {
+      "w": "to",
+      "start_s": 49.83,
+      "end_s": 49.888
+    },
+    {
+      "w": "a",
+      "start_s": 49.981,
+      "end_s": 50.015
+    },
+    {
+      "w": "broader",
+      "start_s": 50.062,
+      "end_s": 50.364
+    },
+    {
+      "w": "educational",
+      "start_s": 50.422,
+      "end_s": 50.991
+    },
+    {
+      "w": "program.",
+      "start_s": 51.037,
+      "end_s": 51.71
+    },
+    {
+      "w": "So",
+      "start_s": 52.036,
+      "end_s": 52.175
+    },
+    {
+      "w": "the",
+      "start_s": 52.233,
+      "end_s": 52.303
+    },
+    {
+      "w": "story",
+      "start_s": 52.361,
+      "end_s": 52.709
+    },
+    {
+      "w": "begins",
+      "start_s": 52.767,
+      "end_s": 53.173
+    },
+    {
+      "w": "with",
+      "start_s": 53.22,
+      "end_s": 53.359
+    },
+    {
+      "w": "adaptation",
+      "start_s": 53.405,
+      "end_s": 54.067
+    },
+    {
+      "w": "inside",
+      "start_s": 54.125,
+      "end_s": 54.497
+    },
+    {
+      "w": "Japan,",
+      "start_s": 54.532,
+      "end_s": 55.286
+    },
+    {
+      "w": "before",
+      "start_s": 55.53,
+      "end_s": 55.89
+    },
+    {
+      "w": "the",
+      "start_s": 55.936,
+      "end_s": 56.018
+    },
+    {
+      "w": "art",
+      "start_s": 56.099,
+      "end_s": 56.331
+    },
+    {
+      "w": "ever",
+      "start_s": 56.412,
+      "end_s": 56.68
+    },
+    {
+      "w": "reaches",
+      "start_s": 56.761,
+      "end_s": 57.063
+    },
+    {
+      "w": "Brazil.",
+      "start_s": 57.132,
+      "end_s": 57.748
+    },
+    {
+      "w": "A",
+      "start_s": 58.189,
+      "end_s": 58.259
+    },
+    {
+      "w": "system",
+      "start_s": 58.34,
+      "end_s": 58.653
+    },
+    {
+      "w": "is",
+      "start_s": 58.711,
+      "end_s": 58.781
+    },
+    {
+      "w": "not",
+      "start_s": 58.839,
+      "end_s": 58.99
+    },
+    {
+      "w": "only",
+      "start_s": 59.048,
+      "end_s": 59.269
+    },
+    {
+      "w": "a",
+      "start_s": 59.327,
+      "end_s": 59.362
+    },
+    {
+      "w": "list",
+      "start_s": 59.443,
+      "end_s": 59.675
+    },
+    {
+      "w": "of",
+      "start_s": 59.733,
+      "end_s": 59.78
+    },
+    {
+      "w": "movements.",
+      "start_s": 59.849,
+      "end_s": 60.383
+    },
+    {
+      "w": "It",
+      "start_s": 60.441,
+      "end_s": 60.557
+    },
+    {
+      "w": "is",
+      "start_s": 60.592,
+      "end_s": 60.674
+    },
+    {
+      "w": "also",
+      "start_s": 60.72,
+      "end_s": 60.952
+    },
+    {
+      "w": "a",
+      "start_s": 61.033,
+      "end_s": 61.068
+    },
+    {
+      "w": "way",
+      "start_s": 61.126,
+      "end_s": 61.254
+    },
+    {
+      "w": "of",
+      "start_s": 61.3,
+      "end_s": 61.347
+    },
+    {
+      "w": "deciding",
+      "start_s": 61.405,
+      "end_s": 61.835
+    },
+    {
+      "w": "what",
+      "start_s": 61.881,
+      "end_s": 62.009
+    },
+    {
+      "w": "should",
+      "start_s": 62.044,
+      "end_s": 62.218
+    },
+    {
+      "w": "be",
+      "start_s": 62.264,
+      "end_s": 62.345
+    },
+    {
+      "w": "taught,",
+      "start_s": 62.392,
+      "end_s": 62.856
+    },
+    {
+      "w": "how",
+      "start_s": 62.972,
+      "end_s": 63.112
+    },
+    {
+      "w": "students",
+      "start_s": 63.181,
+      "end_s": 63.518
+    },
+    {
+      "w": "should",
+      "start_s": 63.541,
+      "end_s": 63.715
+    },
+    {
+      "w": "practice,",
+      "start_s": 63.75,
+      "end_s": 64.284
+    },
+    {
+      "w": "what",
+      "start_s": 64.331,
+      "end_s": 64.528
+    },
+    {
+      "w": "counts",
+      "start_s": 64.586,
+      "end_s": 64.853
+    },
+    {
+      "w": "as",
+      "start_s": 64.888,
+      "end_s": 64.969
+    },
+    {
+      "w": "progress,",
+      "start_s": 65.039,
+      "end_s": 65.759
+    },
+    {
+      "w": "and",
+      "start_s": 66.003,
+      "end_s": 66.153
+    },
+    {
+      "w": "which",
+      "start_s": 66.223,
+      "end_s": 66.409
+    },
+    {
+      "w": "ideas",
+      "start_s": 66.467,
+      "end_s": 66.873
+    },
+    {
+      "w": "deserve",
+      "start_s": 66.931,
+      "end_s": 67.291
+    },
+    {
+      "w": "to",
+      "start_s": 67.314,
+      "end_s": 67.372
+    },
+    {
+      "w": "travel",
+      "start_s": 67.431,
+      "end_s": 67.721
+    },
+    {
+      "w": "with",
+      "start_s": 67.767,
+      "end_s": 67.883
+    },
+    {
+      "w": "the",
+      "start_s": 67.918,
+      "end_s": 67.988
+    },
+    {
+      "w": "exercise.",
+      "start_s": 68.069,
+      "end_s": 68.87
+    },
+    {
+      "w": "When",
+      "start_s": 69.683,
+      "end_s": 69.869
+    },
+    {
+      "w": "later",
+      "start_s": 69.927,
+      "end_s": 70.17
+    },
+    {
+      "w": "observers",
+      "start_s": 70.24,
+      "end_s": 70.669
+    },
+    {
+      "w": "describe",
+      "start_s": 70.716,
+      "end_s": 71.11
+    },
+    {
+      "w": "judo",
+      "start_s": 71.168,
+      "end_s": 71.435
+    },
+    {
+      "w": "or",
+      "start_s": 71.505,
+      "end_s": 71.598
+    },
+    {
+      "w": "jiu-jitsu,",
+      "start_s": 71.656,
+      "end_s": 72.399
+    },
+    {
+      "w": "they",
+      "start_s": 72.434,
+      "end_s": 72.573
+    },
+    {
+      "w": "may",
+      "start_s": 72.608,
+      "end_s": 72.724
+    },
+    {
+      "w": "be",
+      "start_s": 72.782,
+      "end_s": 72.852
+    },
+    {
+      "w": "describing",
+      "start_s": 72.887,
+      "end_s": 73.374
+    },
+    {
+      "w": "different",
+      "start_s": 73.444,
+      "end_s": 73.734
+    },
+    {
+      "w": "portions",
+      "start_s": 73.769,
+      "end_s": 74.175
+    },
+    {
+      "w": "of",
+      "start_s": 74.21,
+      "end_s": 74.268
+    },
+    {
+      "w": "that",
+      "start_s": 74.326,
+      "end_s": 74.466
+    },
+    {
+      "w": "larger",
+      "start_s": 74.547,
+      "end_s": 74.884
+    },
+    {
+      "w": "project.",
+      "start_s": 74.942,
+      "end_s": 75.534
+    },
+    {
+      "w": "Keeping",
+      "start_s": 75.708,
+      "end_s": 76.01
+    },
+    {
+      "w": "the",
+      "start_s": 76.056,
+      "end_s": 76.126
+    },
+    {
+      "w": "transformation",
+      "start_s": 76.161,
+      "end_s": 76.881
+    },
+    {
+      "w": "visible",
+      "start_s": 76.95,
+      "end_s": 77.333
+    },
+    {
+      "w": "prevents",
+      "start_s": 77.38,
+      "end_s": 77.775
+    },
+    {
+      "w": "us",
+      "start_s": 77.833,
+      "end_s": 77.925
+    },
+    {
+      "w": "from",
+      "start_s": 77.972,
+      "end_s": 78.123
+    },
+    {
+      "w": "mistaking",
+      "start_s": 78.181,
+      "end_s": 78.68
+    },
+    {
+      "w": "a",
+      "start_s": 78.75,
+      "end_s": 78.773
+    },
+    {
+      "w": "later",
+      "start_s": 78.843,
+      "end_s": 79.075
+    },
+    {
+      "w": "label",
+      "start_s": 79.133,
+      "end_s": 79.4
+    },
+    {
+      "w": "for",
+      "start_s": 79.458,
+      "end_s": 79.586
+    },
+    {
+      "w": "an",
+      "start_s": 79.644,
+      "end_s": 79.702
+    },
+    {
+      "w": "unchanged",
+      "start_s": 79.771,
+      "end_s": 80.271
+    },
+    {
+      "w": "original.",
+      "start_s": 80.329,
+      "end_s": 80.863
+    },
+    {
+      "w": "Kano's",
+      "start_s": 81.014,
+      "end_s": 81.432
+    },
+    {
+      "w": "project",
+      "start_s": 81.467,
+      "end_s": 81.896
+    },
+    {
+      "w": "was",
+      "start_s": 81.931,
+      "end_s": 82.047
+    },
+    {
+      "w": "larger",
+      "start_s": 82.116,
+      "end_s": 82.43
+    },
+    {
+      "w": "than",
+      "start_s": 82.465,
+      "end_s": 82.581
+    },
+    {
+      "w": "a",
+      "start_s": 82.616,
+      "end_s": 82.639
+    },
+    {
+      "w": "catalog",
+      "start_s": 82.697,
+      "end_s": 83.208
+    },
+    {
+      "w": "of",
+      "start_s": 83.266,
+      "end_s": 83.312
+    },
+    {
+      "w": "fighting",
+      "start_s": 83.382,
+      "end_s": 83.707
+    },
+    {
+      "w": "moves.",
+      "start_s": 83.777,
+      "end_s": 84.369
+    },
+    {
+      "w": "Institutional",
+      "start_s": 84.752,
+      "end_s": 85.449
+    },
+    {
+      "w": "histories",
+      "start_s": 85.507,
+      "end_s": 85.971
+    },
+    {
+      "w": "emphasize",
+      "start_s": 86.029,
+      "end_s": 86.598
+    },
+    {
+      "w": "education,",
+      "start_s": 86.644,
+      "end_s": 87.399
+    },
+    {
+      "w": "disciplined",
+      "start_s": 87.55,
+      "end_s": 88.038
+    },
+    {
+      "w": "practice,",
+      "start_s": 88.072,
+      "end_s": 88.699
+    },
+    {
+      "w": "efficient",
+      "start_s": 88.769,
+      "end_s": 89.222
+    },
+    {
+      "w": "use",
+      "start_s": 89.28,
+      "end_s": 89.466
+    },
+    {
+      "w": "of",
+      "start_s": 89.5,
+      "end_s": 89.558
+    },
+    {
+      "w": "energy,",
+      "start_s": 89.64,
+      "end_s": 90.174
+    },
+    {
+      "w": "and",
+      "start_s": 90.232,
+      "end_s": 90.394
+    },
+    {
+      "w": "mutual",
+      "start_s": 90.464,
+      "end_s": 90.836
+    },
+    {
+      "w": "benefit.",
+      "start_s": 90.905,
+      "end_s": 91.497
+    },
+    {
+      "w": "Those",
+      "start_s": 92.101,
+      "end_s": 92.391
+    },
+    {
+      "w": "ideas",
+      "start_s": 92.438,
+      "end_s": 92.844
+    },
+    {
+      "w": "matter",
+      "start_s": 92.925,
+      "end_s": 93.274
+    },
+    {
+      "w": "because",
+      "start_s": 93.448,
+      "end_s": 93.761
+    },
+    {
+      "w": "later",
+      "start_s": 93.808,
+      "end_s": 94.063
+    },
+    {
+      "w": "travelers",
+      "start_s": 94.11,
+      "end_s": 94.539
+    },
+    {
+      "w": "could",
+      "start_s": 94.586,
+      "end_s": 94.737
+    },
+    {
+      "w": "carry",
+      "start_s": 94.771,
+      "end_s": 95.027
+    },
+    {
+      "w": "techniques,",
+      "start_s": 95.096,
+      "end_s": 95.7
+    },
+    {
+      "w": "sporting",
+      "start_s": 95.781,
+      "end_s": 96.211
+    },
+    {
+      "w": "rules,",
+      "start_s": 96.281,
+      "end_s": 96.664
+    },
+    {
+      "w": "professional",
+      "start_s": 96.711,
+      "end_s": 97.233
+    },
+    {
+      "w": "contests,",
+      "start_s": 97.303,
+      "end_s": 98.069
+    },
+    {
+      "w": "or",
+      "start_s": 98.278,
+      "end_s": 98.441
+    },
+    {
+      "w": "educational",
+      "start_s": 98.522,
+      "end_s": 99.16
+    },
+    {
+      "w": "ideals",
+      "start_s": 99.242,
+      "end_s": 99.718
+    },
+    {
+      "w": "in",
+      "start_s": 99.764,
+      "end_s": 99.834
+    },
+    {
+      "w": "different",
+      "start_s": 99.903,
+      "end_s": 100.205
+    },
+    {
+      "w": "proportions.",
+      "start_s": 100.228,
+      "end_s": 100.948
+    },
+    {
+      "w": "The",
+      "start_s": 101.273,
+      "end_s": 101.401
+    },
+    {
+      "w": "same",
+      "start_s": 101.448,
+      "end_s": 101.691
+    },
+    {
+      "w": "practice",
+      "start_s": 101.738,
+      "end_s": 102.202
+    },
+    {
+      "w": "could",
+      "start_s": 102.237,
+      "end_s": 102.376
+    },
+    {
+      "w": "look",
+      "start_s": 102.411,
+      "end_s": 102.562
+    },
+    {
+      "w": "different",
+      "start_s": 102.62,
+      "end_s": 102.968
+    },
+    {
+      "w": "when",
+      "start_s": 103.015,
+      "end_s": 103.166
+    },
+    {
+      "w": "it",
+      "start_s": 103.201,
+      "end_s": 103.27
+    },
+    {
+      "w": "entered",
+      "start_s": 103.328,
+      "end_s": 103.584
+    },
+    {
+      "w": "a",
+      "start_s": 103.619,
+      "end_s": 103.642
+    },
+    {
+      "w": "school,",
+      "start_s": 103.7,
+      "end_s": 104.246
+    },
+    {
+      "w": "a",
+      "start_s": 104.327,
+      "end_s": 104.408
+    },
+    {
+      "w": "theater,",
+      "start_s": 104.489,
+      "end_s": 105.0
+    },
+    {
+      "w": "a",
+      "start_s": 105.116,
+      "end_s": 105.198
+    },
+    {
+      "w": "challenge",
+      "start_s": 105.279,
+      "end_s": 105.732
+    },
+    {
+      "w": "match,",
+      "start_s": 105.778,
+      "end_s": 106.196
+    },
+    {
+      "w": "or",
+      "start_s": 106.37,
+      "end_s": 106.521
+    },
+    {
+      "w": "a",
+      "start_s": 106.568,
+      "end_s": 106.591
+    },
+    {
+      "w": "community",
+      "start_s": 106.649,
+      "end_s": 107.102
+    },
+    {
+      "w": "of",
+      "start_s": 107.148,
+      "end_s": 107.206
+    },
+    {
+      "w": "immigrants.",
+      "start_s": 107.264,
+      "end_s": 107.845
+    },
+    {
+      "w": "This",
+      "start_s": 108.228,
+      "end_s": 108.414
+    },
+    {
+      "w": "is",
+      "start_s": 108.472,
+      "end_s": 108.553
+    },
+    {
+      "w": "why",
+      "start_s": 108.599,
+      "end_s": 108.773
+    },
+    {
+      "w": "a",
+      "start_s": 108.831,
+      "end_s": 108.866
+    },
+    {
+      "w": "history",
+      "start_s": 108.936,
+      "end_s": 109.238
+    },
+    {
+      "w": "of",
+      "start_s": 109.284,
+      "end_s": 109.33
+    },
+    {
+      "w": "Brazilian",
+      "start_s": 109.377,
+      "end_s": 109.818
+    },
+    {
+      "w": "jiu-jitsu",
+      "start_s": 109.876,
+      "end_s": 110.433
+    },
+    {
+      "w": "cannot",
+      "start_s": 110.549,
+      "end_s": 110.909
+    },
+    {
+      "w": "be",
+      "start_s": 110.967,
+      "end_s": 111.06
+    },
+    {
+      "w": "reduced",
+      "start_s": 111.13,
+      "end_s": 111.559
+    },
+    {
+      "w": "to",
+      "start_s": 111.583,
+      "end_s": 111.641
+    },
+    {
+      "w": "asking",
+      "start_s": 111.71,
+      "end_s": 112.082
+    },
+    {
+      "w": "who",
+      "start_s": 112.14,
+      "end_s": 112.291
+    },
+    {
+      "w": "knew",
+      "start_s": 112.349,
+      "end_s": 112.511
+    },
+    {
+      "w": "which",
+      "start_s": 112.581,
+      "end_s": 112.778
+    },
+    {
+      "w": "move",
+      "start_s": 112.848,
+      "end_s": 113.08
+    },
+    {
+      "w": "first.",
+      "start_s": 113.127,
+      "end_s": 113.661
+    },
+    {
+      "w": "We",
+      "start_s": 113.905,
+      "end_s": 114.021
+    },
+    {
+      "w": "also",
+      "start_s": 114.079,
+      "end_s": 114.299
+    },
+    {
+      "w": "have",
+      "start_s": 114.369,
+      "end_s": 114.508
+    },
+    {
+      "w": "to",
+      "start_s": 114.543,
+      "end_s": 114.59
+    },
+    {
+      "w": "ask",
+      "start_s": 114.682,
+      "end_s": 114.903
+    },
+    {
+      "w": "what",
+      "start_s": 114.949,
+      "end_s": 115.077
+    },
+    {
+      "w": "the",
+      "start_s": 115.112,
+      "end_s": 115.182
+    },
+    {
+      "w": "practice",
+      "start_s": 115.228,
+      "end_s": 115.634
+    },
+    {
+      "w": "was",
+      "start_s": 115.669,
+      "end_s": 115.785
+    },
+    {
+      "w": "being",
+      "start_s": 115.855,
+      "end_s": 116.087
+    },
+    {
+      "w": "used",
+      "start_s": 116.157,
+      "end_s": 116.401
+    },
+    {
+      "w": "for,",
+      "start_s": 116.447,
+      "end_s": 116.772
+    },
+    {
+      "w": "who",
+      "start_s": 116.819,
+      "end_s": 116.981
+    },
+    {
+      "w": "was",
+      "start_s": 117.039,
+      "end_s": 117.155
+    },
+    {
+      "w": "teaching",
+      "start_s": 117.213,
+      "end_s": 117.55
+    },
+    {
+      "w": "it,",
+      "start_s": 117.608,
+      "end_s": 117.84
+    },
+    {
+      "w": "and",
+      "start_s": 118.014,
+      "end_s": 118.154
+    },
+    {
+      "w": "what",
+      "start_s": 118.223,
+      "end_s": 118.374
+    },
+    {
+      "w": "the",
+      "start_s": 118.421,
+      "end_s": 118.502
+    },
+    {
+      "w": "surrounding",
+      "start_s": 118.549,
+      "end_s": 119.025
+    },
+    {
+      "w": "institution",
+      "start_s": 119.083,
+      "end_s": 119.686
+    },
+    {
+      "w": "rewarded.",
+      "start_s": 119.756,
+      "end_s": 120.453
+    },
+    {
+      "w": "Terminology",
+      "start_s": 121.149,
+      "end_s": 121.973
+    },
+    {
+      "w": "was",
+      "start_s": 122.124,
+      "end_s": 122.299
+    },
+    {
+      "w": "not",
+      "start_s": 122.368,
+      "end_s": 122.519
+    },
+    {
+      "w": "settled.",
+      "start_s": 122.577,
+      "end_s": 123.158
+    },
+    {
+      "w": "Contemporary",
+      "start_s": 123.854,
+      "end_s": 124.504
+    },
+    {
+      "w": "and",
+      "start_s": 124.551,
+      "end_s": 124.62
+    },
+    {
+      "w": "retrospective",
+      "start_s": 124.679,
+      "end_s": 125.329
+    },
+    {
+      "w": "sources",
+      "start_s": 125.363,
+      "end_s": 125.77
+    },
+    {
+      "w": "use",
+      "start_s": 125.84,
+      "end_s": 126.037
+    },
+    {
+      "w": "judo,",
+      "start_s": 126.095,
+      "end_s": 126.629
+    },
+    {
+      "w": "jiu-jitsu,",
+      "start_s": 126.78,
+      "end_s": 127.558
+    },
+    {
+      "w": "Kano",
+      "start_s": 127.674,
+      "end_s": 127.976
+    },
+    {
+      "w": "jiu-jitsu,",
+      "start_s": 128.045,
+      "end_s": 128.777
+    },
+    {
+      "w": "and",
+      "start_s": 128.928,
+      "end_s": 129.079
+    },
+    {
+      "w": "related",
+      "start_s": 129.137,
+      "end_s": 129.497
+    },
+    {
+      "w": "spellings",
+      "start_s": 129.543,
+      "end_s": 129.973
+    },
+    {
+      "w": "in",
+      "start_s": 130.019,
+      "end_s": 130.077
+    },
+    {
+      "w": "overlapping",
+      "start_s": 130.147,
+      "end_s": 130.716
+    },
+    {
+      "w": "ways.",
+      "start_s": 130.774,
+      "end_s": 131.331
+    },
+    {
+      "w": "Accounts",
+      "start_s": 131.935,
+      "end_s": 132.329
+    },
+    {
+      "w": "differ",
+      "start_s": 132.388,
+      "end_s": 132.666
+    },
+    {
+      "w": "about",
+      "start_s": 132.736,
+      "end_s": 132.968
+    },
+    {
+      "w": "what",
+      "start_s": 133.014,
+      "end_s": 133.154
+    },
+    {
+      "w": "each",
+      "start_s": 133.212,
+      "end_s": 133.409
+    },
+    {
+      "w": "public",
+      "start_s": 133.479,
+      "end_s": 133.804
+    },
+    {
+      "w": "label",
+      "start_s": 133.874,
+      "end_s": 134.129
+    },
+    {
+      "w": "implied,",
+      "start_s": 134.187,
+      "end_s": 134.849
+    },
+    {
+      "w": "so",
+      "start_s": 135.093,
+      "end_s": 135.244
+    },
+    {
+      "w": "this",
+      "start_s": 135.313,
+      "end_s": 135.453
+    },
+    {
+      "w": "episode",
+      "start_s": 135.511,
+      "end_s": 135.952
+    },
+    {
+      "w": "follows",
+      "start_s": 135.998,
+      "end_s": 136.381
+    },
+    {
+      "w": "documented",
+      "start_s": 136.439,
+      "end_s": 137.02
+    },
+    {
+      "w": "people",
+      "start_s": 137.078,
+      "end_s": 137.357
+    },
+    {
+      "w": "and",
+      "start_s": 137.391,
+      "end_s": 137.461
+    },
+    {
+      "w": "practices",
+      "start_s": 137.507,
+      "end_s": 138.065
+    },
+    {
+      "w": "instead",
+      "start_s": 138.123,
+      "end_s": 138.413
+    },
+    {
+      "w": "of",
+      "start_s": 138.459,
+      "end_s": 138.506
+    },
+    {
+      "w": "treating",
+      "start_s": 138.552,
+      "end_s": 138.843
+    },
+    {
+      "w": "a",
+      "start_s": 138.889,
+      "end_s": 138.912
+    },
+    {
+      "w": "name",
+      "start_s": 138.994,
+      "end_s": 139.261
+    },
+    {
+      "w": "as",
+      "start_s": 139.295,
+      "end_s": 139.365
+    },
+    {
+      "w": "a",
+      "start_s": 139.423,
+      "end_s": 139.446
+    },
+    {
+      "w": "perfectly",
+      "start_s": 139.504,
+      "end_s": 139.922
+    },
+    {
+      "w": "stable",
+      "start_s": 139.969,
+      "end_s": 140.317
+    },
+    {
+      "w": "technical",
+      "start_s": 140.352,
+      "end_s": 140.77
+    },
+    {
+      "w": "system.",
+      "start_s": 140.828,
+      "end_s": 141.339
+    },
+    {
+      "w": "That",
+      "start_s": 141.583,
+      "end_s": 141.768
+    },
+    {
+      "w": "caution",
+      "start_s": 141.826,
+      "end_s": 142.198
+    },
+    {
+      "w": "is",
+      "start_s": 142.256,
+      "end_s": 142.349
+    },
+    {
+      "w": "not",
+      "start_s": 142.43,
+      "end_s": 142.616
+    },
+    {
+      "w": "a",
+      "start_s": 142.662,
+      "end_s": 142.685
+    },
+    {
+      "w": "footnote.",
+      "start_s": 142.744,
+      "end_s": 143.289
+    },
+    {
+      "w": "Public",
+      "start_s": 143.44,
+      "end_s": 143.777
+    },
+    {
+      "w": "names",
+      "start_s": 143.846,
+      "end_s": 144.16
+    },
+    {
+      "w": "travel",
+      "start_s": 144.206,
+      "end_s": 144.52
+    },
+    {
+      "w": "through",
+      "start_s": 144.578,
+      "end_s": 144.799
+    },
+    {
+      "w": "advertisements,",
+      "start_s": 144.845,
+      "end_s": 145.611
+    },
+    {
+      "w": "demonstrations,",
+      "start_s": 145.658,
+      "end_s": 146.575
+    },
+    {
+      "w": "newspapers,",
+      "start_s": 146.621,
+      "end_s": 147.248
+    },
+    {
+      "w": "translations,",
+      "start_s": 147.271,
+      "end_s": 148.026
+    },
+    {
+      "w": "and",
+      "start_s": 148.049,
+      "end_s": 148.165
+    },
+    {
+      "w": "later",
+      "start_s": 148.258,
+      "end_s": 148.525
+    },
+    {
+      "w": "memories.",
+      "start_s": 148.595,
+      "end_s": 149.187
+    },
+    {
+      "w": "A",
+      "start_s": 149.396,
+      "end_s": 149.489
+    },
+    {
+      "w": "word",
+      "start_s": 149.582,
+      "end_s": 149.802
+    },
+    {
+      "w": "can",
+      "start_s": 149.849,
+      "end_s": 149.965
+    },
+    {
+      "w": "be",
+      "start_s": 150.011,
+      "end_s": 150.093
+    },
+    {
+      "w": "used",
+      "start_s": 150.174,
+      "end_s": 150.465
+    },
+    {
+      "w": "to",
+      "start_s": 150.488,
+      "end_s": 150.546
+    },
+    {
+      "w": "sell",
+      "start_s": 150.604,
+      "end_s": 150.79
+    },
+    {
+      "w": "an",
+      "start_s": 150.836,
+      "end_s": 150.894
+    },
+    {
+      "w": "exhibition,",
+      "start_s": 150.941,
+      "end_s": 151.649
+    },
+    {
+      "w": "identify",
+      "start_s": 151.8,
+      "end_s": 152.357
+    },
+    {
+      "w": "a",
+      "start_s": 152.415,
+      "end_s": 152.438
+    },
+    {
+      "w": "teacher,",
+      "start_s": 152.496,
+      "end_s": 153.03
+    },
+    {
+      "w": "describe",
+      "start_s": 153.146,
+      "end_s": 153.611
+    },
+    {
+      "w": "a",
+      "start_s": 153.646,
+      "end_s": 153.669
+    },
+    {
+      "w": "lineage,",
+      "start_s": 153.727,
+      "end_s": 154.307
+    },
+    {
+      "w": "or",
+      "start_s": 154.482,
+      "end_s": 154.621
+    },
+    {
+      "w": "summarize",
+      "start_s": 154.679,
+      "end_s": 155.167
+    },
+    {
+      "w": "a",
+      "start_s": 155.201,
+      "end_s": 155.225
+    },
+    {
+      "w": "ruleset.",
+      "start_s": 155.283,
+      "end_s": 156.049
+    },
+    {
+      "w": "The",
+      "start_s": 156.49,
+      "end_s": 156.606
+    },
+    {
+      "w": "label",
+      "start_s": 156.664,
+      "end_s": 156.92
+    },
+    {
+      "w": "tells",
+      "start_s": 156.966,
+      "end_s": 157.222
+    },
+    {
+      "w": "us",
+      "start_s": 157.268,
+      "end_s": 157.349
+    },
+    {
+      "w": "what",
+      "start_s": 157.396,
+      "end_s": 157.547
+    },
+    {
+      "w": "someone",
+      "start_s": 157.605,
+      "end_s": 157.93
+    },
+    {
+      "w": "called",
+      "start_s": 157.976,
+      "end_s": 158.29
+    },
+    {
+      "w": "the",
+      "start_s": 158.336,
+      "end_s": 158.406
+    },
+    {
+      "w": "practice;",
+      "start_s": 158.452,
+      "end_s": 159.207
+    },
+    {
+      "w": "it",
+      "start_s": 159.485,
+      "end_s": 159.59
+    },
+    {
+      "w": "does",
+      "start_s": 159.636,
+      "end_s": 159.764
+    },
+    {
+      "w": "not",
+      "start_s": 159.811,
+      "end_s": 159.961
+    },
+    {
+      "w": "automatically",
+      "start_s": 160.02,
+      "end_s": 160.728
+    },
+    {
+      "w": "tell",
+      "start_s": 160.786,
+      "end_s": 160.995
+    },
+    {
+      "w": "us",
+      "start_s": 161.064,
+      "end_s": 161.146
+    },
+    {
+      "w": "that",
+      "start_s": 161.204,
+      "end_s": 161.343
+    },
+    {
+      "w": "every",
+      "start_s": 161.413,
+      "end_s": 161.691
+    },
+    {
+      "w": "participant",
+      "start_s": 161.749,
+      "end_s": 162.376
+    },
+    {
+      "w": "understood",
+      "start_s": 162.446,
+      "end_s": 162.945
+    },
+    {
+      "w": "the",
+      "start_s": 162.98,
+      "end_s": 163.05
+    },
+    {
+      "w": "practice",
+      "start_s": 163.108,
+      "end_s": 163.584
+    },
+    {
+      "w": "in",
+      "start_s": 163.63,
+      "end_s": 163.7
+    },
+    {
+      "w": "exactly",
+      "start_s": 163.77,
+      "end_s": 164.269
+    },
+    {
+      "w": "the",
+      "start_s": 164.327,
+      "end_s": 164.397
+    },
+    {
+      "w": "same",
+      "start_s": 164.443,
+      "end_s": 164.687
+    },
+    {
+      "w": "way.",
+      "start_s": 164.745,
+      "end_s": 165.221
+    },
+    {
+      "w": "Maeda",
+      "start_s": 166.034,
+      "end_s": 166.382
+    },
+    {
+      "w": "was",
+      "start_s": 166.452,
+      "end_s": 166.591
+    },
+    {
+      "w": "important,",
+      "start_s": 166.649,
+      "end_s": 167.148
+    },
+    {
+      "w": "but",
+      "start_s": 167.171,
+      "end_s": 167.299
+    },
+    {
+      "w": "he",
+      "start_s": 167.357,
+      "end_s": 167.415
+    },
+    {
+      "w": "did",
+      "start_s": 167.473,
+      "end_s": 167.601
+    },
+    {
+      "w": "not",
+      "start_s": 167.659,
+      "end_s": 167.81
+    },
+    {
+      "w": "enter",
+      "start_s": 167.88,
+      "end_s": 168.135
+    },
+    {
+      "w": "an",
+      "start_s": 168.193,
+      "end_s": 168.263
+    },
+    {
+      "w": "empty",
+      "start_s": 168.332,
+      "end_s": 168.611
+    },
+    {
+      "w": "landscape.",
+      "start_s": 168.692,
+      "end_s": 169.4
+    },
+    {
+      "w": "Scholarship",
+      "start_s": 170.004,
+      "end_s": 170.631
+    },
+    {
+      "w": "documents",
+      "start_s": 170.689,
+      "end_s": 171.212
+    },
+    {
+      "w": "Japanese",
+      "start_s": 171.27,
+      "end_s": 171.781
+    },
+    {
+      "w": "jiu-jitsu",
+      "start_s": 171.827,
+      "end_s": 172.315
+    },
+    {
+      "w": "demonstrations",
+      "start_s": 172.396,
+      "end_s": 173.151
+    },
+    {
+      "w": "and",
+      "start_s": 173.197,
+      "end_s": 173.278
+    },
+    {
+      "w": "contests",
+      "start_s": 173.359,
+      "end_s": 173.917
+    },
+    {
+      "w": "in",
+      "start_s": 173.963,
+      "end_s": 174.033
+    },
+    {
+      "w": "Brazil",
+      "start_s": 174.103,
+      "end_s": 174.59
+    },
+    {
+      "w": "before",
+      "start_s": 174.683,
+      "end_s": 174.996
+    },
+    {
+      "w": "his",
+      "start_s": 175.043,
+      "end_s": 175.159
+    },
+    {
+      "w": "arrival,",
+      "start_s": 175.205,
+      "end_s": 175.832
+    },
+    {
+      "w": "including",
+      "start_s": 176.157,
+      "end_s": 176.645
+    },
+    {
+      "w": "a",
+      "start_s": 176.692,
+      "end_s": 176.715
+    },
+    {
+      "w": "highly",
+      "start_s": 176.796,
+      "end_s": 177.133
+    },
+    {
+      "w": "publicized",
+      "start_s": 177.191,
+      "end_s": 177.922
+    },
+    {
+      "w": "1909",
+      "start_s": 178.015,
+      "end_s": 178.874
+    },
+    {
+      "w": "encounter",
+      "start_s": 178.932,
+      "end_s": 179.339
+    },
+    {
+      "w": "in",
+      "start_s": 179.385,
+      "end_s": 179.443
+    },
+    {
+      "w": "Rio.",
+      "start_s": 179.513,
+      "end_s": 180.0
+    },
+    {
+      "w": "That",
+      "start_s": 180.697,
+      "end_s": 180.894
+    },
+    {
+      "w": "earlier",
+      "start_s": 180.952,
+      "end_s": 181.289
+    },
+    {
+      "w": "presence",
+      "start_s": 181.347,
+      "end_s": 181.765
+    },
+    {
+      "w": "complicates",
+      "start_s": 181.812,
+      "end_s": 182.45
+    },
+    {
+      "w": "any",
+      "start_s": 182.497,
+      "end_s": 182.659
+    },
+    {
+      "w": "claim",
+      "start_s": 182.729,
+      "end_s": 183.007
+    },
+    {
+      "w": "that",
+      "start_s": 183.065,
+      "end_s": 183.17
+    },
+    {
+      "w": "Brazilian",
+      "start_s": 183.216,
+      "end_s": 183.681
+    },
+    {
+      "w": "grappling",
+      "start_s": 183.739,
+      "end_s": 184.157
+    },
+    {
+      "w": "history",
+      "start_s": 184.203,
+      "end_s": 184.517
+    },
+    {
+      "w": "begins",
+      "start_s": 184.586,
+      "end_s": 184.958
+    },
+    {
+      "w": "on",
+      "start_s": 185.004,
+      "end_s": 185.109
+    },
+    {
+      "w": "one",
+      "start_s": 185.19,
+      "end_s": 185.364
+    },
+    {
+      "w": "day",
+      "start_s": 185.411,
+      "end_s": 185.585
+    },
+    {
+      "w": "in",
+      "start_s": 185.631,
+      "end_s": 185.689
+    },
+    {
+      "w": "1914.",
+      "start_s": 185.747,
+      "end_s": 186.874
+    },
+    {
+      "w": "It",
+      "start_s": 187.477,
+      "end_s": 187.617
+    },
+    {
+      "w": "also",
+      "start_s": 187.663,
+      "end_s": 187.907
+    },
+    {
+      "w": "gives",
+      "start_s": 187.988,
+      "end_s": 188.197
+    },
+    {
+      "w": "the",
+      "start_s": 188.232,
+      "end_s": 188.313
+    },
+    {
+      "w": "audience",
+      "start_s": 188.371,
+      "end_s": 188.743
+    },
+    {
+      "w": "a",
+      "start_s": 188.778,
+      "end_s": 188.812
+    },
+    {
+      "w": "better",
+      "start_s": 188.882,
+      "end_s": 189.103
+    },
+    {
+      "w": "kind",
+      "start_s": 189.161,
+      "end_s": 189.358
+    },
+    {
+      "w": "of",
+      "start_s": 189.405,
+      "end_s": 189.463
+    },
+    {
+      "w": "origin",
+      "start_s": 189.544,
+      "end_s": 189.985
+    },
+    {
+      "w": "story.",
+      "start_s": 190.066,
+      "end_s": 190.612
+    },
+    {
+      "w": "Before",
+      "start_s": 191.123,
+      "end_s": 191.436
+    },
+    {
+      "w": "the",
+      "start_s": 191.471,
+      "end_s": 191.541
+    },
+    {
+      "w": "famous",
+      "start_s": 191.587,
+      "end_s": 191.912
+    },
+    {
+      "w": "names",
+      "start_s": 191.97,
+      "end_s": 192.214
+    },
+    {
+      "w": "become",
+      "start_s": 192.261,
+      "end_s": 192.574
+    },
+    {
+      "w": "connected,",
+      "start_s": 192.62,
+      "end_s": 193.236
+    },
+    {
+      "w": "there",
+      "start_s": 193.619,
+      "end_s": 193.793
+    },
+    {
+      "w": "are",
+      "start_s": 193.816,
+      "end_s": 193.932
+    },
+    {
+      "w": "public",
+      "start_s": 193.979,
+      "end_s": 194.28
+    },
+    {
+      "w": "events,",
+      "start_s": 194.338,
+      "end_s": 194.954
+    },
+    {
+      "w": "competing",
+      "start_s": 195.07,
+      "end_s": 195.523
+    },
+    {
+      "w": "descriptions,",
+      "start_s": 195.569,
+      "end_s": 196.417
+    },
+    {
+      "w": "and",
+      "start_s": 196.742,
+      "end_s": 196.881
+    },
+    {
+      "w": "people",
+      "start_s": 196.951,
+      "end_s": 197.206
+    },
+    {
+      "w": "whose",
+      "start_s": 197.229,
+      "end_s": 197.415
+    },
+    {
+      "w": "roles",
+      "start_s": 197.462,
+      "end_s": 197.752
+    },
+    {
+      "w": "are",
+      "start_s": 197.798,
+      "end_s": 197.914
+    },
+    {
+      "w": "harder",
+      "start_s": 197.949,
+      "end_s": 198.205
+    },
+    {
+      "w": "to",
+      "start_s": 198.263,
+      "end_s": 198.321
+    },
+    {
+      "w": "preserve",
+      "start_s": 198.379,
+      "end_s": 198.843
+    },
+    {
+      "w": "in",
+      "start_s": 198.878,
+      "end_s": 198.936
+    },
+    {
+      "w": "a",
+      "start_s": 198.982,
+      "end_s": 199.006
+    },
+    {
+      "w": "simplified",
+      "start_s": 199.075,
+      "end_s": 199.691
+    },
+    {
+      "w": "narrative.",
+      "start_s": 199.749,
+      "end_s": 200.376
+    },
+    {
+      "w": "The",
+      "start_s": 201.188,
+      "end_s": 201.304
+    },
+    {
+      "w": "record",
+      "start_s": 201.374,
+      "end_s": 201.676
+    },
+    {
+      "w": "asks",
+      "start_s": 201.734,
+      "end_s": 202.094
+    },
+    {
+      "w": "us",
+      "start_s": 202.187,
+      "end_s": 202.291
+    },
+    {
+      "w": "to",
+      "start_s": 202.349,
+      "end_s": 202.419
+    },
+    {
+      "w": "see",
+      "start_s": 202.489,
+      "end_s": 202.651
+    },
+    {
+      "w": "Brazil",
+      "start_s": 202.698,
+      "end_s": 203.092
+    },
+    {
+      "w": "as",
+      "start_s": 203.15,
+      "end_s": 203.232
+    },
+    {
+      "w": "a",
+      "start_s": 203.29,
+      "end_s": 203.325
+    },
+    {
+      "w": "place",
+      "start_s": 203.383,
+      "end_s": 203.638
+    },
+    {
+      "w": "where",
+      "start_s": 203.661,
+      "end_s": 203.835
+    },
+    {
+      "w": "martial",
+      "start_s": 203.882,
+      "end_s": 204.242
+    },
+    {
+      "w": "practices",
+      "start_s": 204.311,
+      "end_s": 204.869
+    },
+    {
+      "w": "were",
+      "start_s": 204.915,
+      "end_s": 205.054
+    },
+    {
+      "w": "already",
+      "start_s": 205.101,
+      "end_s": 205.519
+    },
+    {
+      "w": "being",
+      "start_s": 205.589,
+      "end_s": 205.774
+    },
+    {
+      "w": "displayed,",
+      "start_s": 205.821,
+      "end_s": 206.552
+    },
+    {
+      "w": "discussed,",
+      "start_s": 206.645,
+      "end_s": 207.365
+    },
+    {
+      "w": "and",
+      "start_s": 207.4,
+      "end_s": 207.585
+    },
+    {
+      "w": "interpreted.",
+      "start_s": 207.655,
+      "end_s": 208.456
+    },
+    {
+      "w": "The",
+      "start_s": 209.059,
+      "end_s": 209.176
+    },
+    {
+      "w": "title",
+      "start_s": 209.234,
+      "end_s": 209.524
+    },
+    {
+      "w": "of",
+      "start_s": 209.547,
+      "end_s": 209.594
+    },
+    {
+      "w": "first",
+      "start_s": 209.652,
+      "end_s": 209.884
+    },
+    {
+      "w": "teacher",
+      "start_s": 209.919,
+      "end_s": 210.255
+    },
+    {
+      "w": "is",
+      "start_s": 210.325,
+      "end_s": 210.406
+    },
+    {
+      "w": "disputed.",
+      "start_s": 210.453,
+      "end_s": 211.207
+    },
+    {
+      "w": "Some",
+      "start_s": 211.59,
+      "end_s": 211.799
+    },
+    {
+      "w": "accounts",
+      "start_s": 211.823,
+      "end_s": 212.183
+    },
+    {
+      "w": "foreground",
+      "start_s": 212.241,
+      "end_s": 212.775
+    },
+    {
+      "w": "Maeda",
+      "start_s": 212.844,
+      "end_s": 213.111
+    },
+    {
+      "w": "and",
+      "start_s": 213.169,
+      "end_s": 213.251
+    },
+    {
+      "w": "Satake;",
+      "start_s": 213.32,
+      "end_s": 214.04
+    },
+    {
+      "w": "others",
+      "start_s": 214.284,
+      "end_s": 214.574
+    },
+    {
+      "w": "identify",
+      "start_s": 214.621,
+      "end_s": 215.143
+    },
+    {
+      "w": "earlier",
+      "start_s": 215.224,
+      "end_s": 215.561
+    },
+    {
+      "w": "Japanese",
+      "start_s": 215.642,
+      "end_s": 216.107
+    },
+    {
+      "w": "practitioners",
+      "start_s": 216.153,
+      "end_s": 216.861
+    },
+    {
+      "w": "or",
+      "start_s": 216.931,
+      "end_s": 217.082
+    },
+    {
+      "w": "distinguish",
+      "start_s": 217.14,
+      "end_s": 217.662
+    },
+    {
+      "w": "public",
+      "start_s": 217.744,
+      "end_s": 218.057
+    },
+    {
+      "w": "performers",
+      "start_s": 218.115,
+      "end_s": 218.614
+    },
+    {
+      "w": "from",
+      "start_s": 218.649,
+      "end_s": 218.789
+    },
+    {
+      "w": "immigrant-community",
+      "start_s": 218.858,
+      "end_s": 219.764
+    },
+    {
+      "w": "instruction.",
+      "start_s": 219.822,
+      "end_s": 220.565
+    },
+    {
+      "w": "The",
+      "start_s": 221.076,
+      "end_s": 221.203
+    },
+    {
+      "w": "evidence",
+      "start_s": 221.262,
+      "end_s": 221.598
+    },
+    {
+      "w": "is",
+      "start_s": 221.633,
+      "end_s": 221.714
+    },
+    {
+      "w": "mixed,",
+      "start_s": 221.795,
+      "end_s": 222.283
+    },
+    {
+      "w": "and",
+      "start_s": 222.376,
+      "end_s": 222.527
+    },
+    {
+      "w": "a",
+      "start_s": 222.573,
+      "end_s": 222.596
+    },
+    {
+      "w": "single",
+      "start_s": 222.666,
+      "end_s": 222.991
+    },
+    {
+      "w": "winner",
+      "start_s": 223.026,
+      "end_s": 223.27
+    },
+    {
+      "w": "would",
+      "start_s": 223.328,
+      "end_s": 223.502
+    },
+    {
+      "w": "create",
+      "start_s": 223.548,
+      "end_s": 223.862
+    },
+    {
+      "w": "more",
+      "start_s": 223.897,
+      "end_s": 224.059
+    },
+    {
+      "w": "certainty",
+      "start_s": 224.106,
+      "end_s": 224.535
+    },
+    {
+      "w": "than",
+      "start_s": 224.593,
+      "end_s": 224.721
+    },
+    {
+      "w": "the",
+      "start_s": 224.756,
+      "end_s": 224.825
+    },
+    {
+      "w": "sources",
+      "start_s": 224.872,
+      "end_s": 225.232
+    },
+    {
+      "w": "allow.",
+      "start_s": 225.267,
+      "end_s": 225.812
+    },
+    {
+      "w": "That",
+      "start_s": 226.137,
+      "end_s": 226.323
+    },
+    {
+      "w": "does",
+      "start_s": 226.37,
+      "end_s": 226.532
+    },
+    {
+      "w": "not",
+      "start_s": 226.579,
+      "end_s": 226.741
+    },
+    {
+      "w": "make",
+      "start_s": 226.799,
+      "end_s": 226.962
+    },
+    {
+      "w": "the",
+      "start_s": 226.996,
+      "end_s": 227.066
+    },
+    {
+      "w": "history",
+      "start_s": 227.124,
+      "end_s": 227.438
+    },
+    {
+      "w": "unknowable.",
+      "start_s": 227.507,
+      "end_s": 228.204
+    },
+    {
+      "w": "It",
+      "start_s": 228.587,
+      "end_s": 228.726
+    },
+    {
+      "w": "tells",
+      "start_s": 228.761,
+      "end_s": 229.005
+    },
+    {
+      "w": "us",
+      "start_s": 229.063,
+      "end_s": 229.156
+    },
+    {
+      "w": "which",
+      "start_s": 229.226,
+      "end_s": 229.423
+    },
+    {
+      "w": "statements",
+      "start_s": 229.469,
+      "end_s": 229.922
+    },
+    {
+      "w": "need",
+      "start_s": 229.98,
+      "end_s": 230.189
+    },
+    {
+      "w": "qualification.",
+      "start_s": 230.247,
+      "end_s": 231.199
+    },
+    {
+      "w": "We",
+      "start_s": 231.64,
+      "end_s": 231.757
+    },
+    {
+      "w": "can",
+      "start_s": 231.791,
+      "end_s": 231.907
+    },
+    {
+      "w": "describe",
+      "start_s": 231.954,
+      "end_s": 232.407
+    },
+    {
+      "w": "a",
+      "start_s": 232.442,
+      "end_s": 232.476
+    },
+    {
+      "w": "growing",
+      "start_s": 232.523,
+      "end_s": 232.825
+    },
+    {
+      "w": "field",
+      "start_s": 232.906,
+      "end_s": 233.196
+    },
+    {
+      "w": "of",
+      "start_s": 233.243,
+      "end_s": 233.301
+    },
+    {
+      "w": "Japanese",
+      "start_s": 233.37,
+      "end_s": 233.881
+    },
+    {
+      "w": "martial",
+      "start_s": 233.928,
+      "end_s": 234.23
+    },
+    {
+      "w": "practice",
+      "start_s": 234.288,
+      "end_s": 234.706
+    },
+    {
+      "w": "in",
+      "start_s": 234.741,
+      "end_s": 234.799
+    },
+    {
+      "w": "Brazil",
+      "start_s": 234.857,
+      "end_s": 235.286
+    },
+    {
+      "w": "without",
+      "start_s": 235.46,
+      "end_s": 235.786
+    },
+    {
+      "w": "pretending",
+      "start_s": 235.832,
+      "end_s": 236.308
+    },
+    {
+      "w": "that",
+      "start_s": 236.354,
+      "end_s": 236.482
+    },
+    {
+      "w": "every",
+      "start_s": 236.54,
+      "end_s": 236.772
+    },
+    {
+      "w": "demonstration",
+      "start_s": 236.83,
+      "end_s": 237.504
+    },
+    {
+      "w": "was",
+      "start_s": 237.562,
+      "end_s": 237.69
+    },
+    {
+      "w": "a",
+      "start_s": 237.748,
+      "end_s": 237.782
+    },
+    {
+      "w": "school,",
+      "start_s": 237.829,
+      "end_s": 238.363
+    },
+    {
+      "w": "or",
+      "start_s": 238.421,
+      "end_s": 238.537
+    },
+    {
+      "w": "that",
+      "start_s": 238.584,
+      "end_s": 238.7
+    },
+    {
+      "w": "every",
+      "start_s": 238.758,
+      "end_s": 238.99
+    },
+    {
+      "w": "performer",
+      "start_s": 239.06,
+      "end_s": 239.547
+    },
+    {
+      "w": "held",
+      "start_s": 239.617,
+      "end_s": 239.791
+    },
+    {
+      "w": "the",
+      "start_s": 239.826,
+      "end_s": 239.895
+    },
+    {
+      "w": "same",
+      "start_s": 239.942,
+      "end_s": 240.186
+    },
+    {
+      "w": "teaching",
+      "start_s": 240.232,
+      "end_s": 240.557
+    },
+    {
+      "w": "role.",
+      "start_s": 240.627,
+      "end_s": 241.068
+    },
+    {
+      "w": "A",
+      "start_s": 241.393,
+      "end_s": 241.474
+    },
+    {
+      "w": "careful",
+      "start_s": 241.544,
+      "end_s": 241.869
+    },
+    {
+      "w": "documentary",
+      "start_s": 241.927,
+      "end_s": 242.566
+    },
+    {
+      "w": "keeps",
+      "start_s": 242.635,
+      "end_s": 242.902
+    },
+    {
+      "w": "the",
+      "start_s": 242.949,
+      "end_s": 243.019
+    },
+    {
+      "w": "question",
+      "start_s": 243.065,
+      "end_s": 243.46
+    },
+    {
+      "w": "open",
+      "start_s": 243.541,
+      "end_s": 243.843
+    },
+    {
+      "w": "when",
+      "start_s": 243.889,
+      "end_s": 244.029
+    },
+    {
+      "w": "the",
+      "start_s": 244.063,
+      "end_s": 244.133
+    },
+    {
+      "w": "sources",
+      "start_s": 244.191,
+      "end_s": 244.621
+    },
+    {
+      "w": "keep",
+      "start_s": 244.679,
+      "end_s": 244.865
+    },
+    {
+      "w": "it",
+      "start_s": 244.923,
+      "end_s": 245.004
+    },
+    {
+      "w": "open.",
+      "start_s": 245.05,
+      "end_s": 245.457
+    },
+    {
+      "w": "The",
+      "start_s": 245.84,
+      "end_s": 245.956
+    },
+    {
+      "w": "record",
+      "start_s": 246.026,
+      "end_s": 246.409
+    },
+    {
+      "w": "does",
+      "start_s": 246.525,
+      "end_s": 246.791
+    },
+    {
+      "w": "support",
+      "start_s": 246.838,
+      "end_s": 247.221
+    },
+    {
+      "w": "a",
+      "start_s": 247.267,
+      "end_s": 247.302
+    },
+    {
+      "w": "major",
+      "start_s": 247.36,
+      "end_s": 247.639
+    },
+    {
+      "w": "transition",
+      "start_s": 247.674,
+      "end_s": 248.231
+    },
+    {
+      "w": "in",
+      "start_s": 248.278,
+      "end_s": 248.347
+    },
+    {
+      "w": "1914.",
+      "start_s": 248.405,
+      "end_s": 249.555
+    },
+    {
+      "w": "Maeda",
+      "start_s": 250.158,
+      "end_s": 250.483
+    },
+    {
+      "w": "and",
+      "start_s": 250.541,
+      "end_s": 250.623
+    },
+    {
+      "w": "Soishiro",
+      "start_s": 250.692,
+      "end_s": 251.168
+    },
+    {
+      "w": "Satake",
+      "start_s": 251.238,
+      "end_s": 251.772
+    },
+    {
+      "w": "entered",
+      "start_s": 251.842,
+      "end_s": 252.12
+    },
+    {
+      "w": "Brazil",
+      "start_s": 252.155,
+      "end_s": 252.492
+    },
+    {
+      "w": "with",
+      "start_s": 252.538,
+      "end_s": 252.678
+    },
+    {
+      "w": "other",
+      "start_s": 252.724,
+      "end_s": 252.91
+    },
+    {
+      "w": "Japanese",
+      "start_s": 252.98,
+      "end_s": 253.456
+    },
+    {
+      "w": "martial",
+      "start_s": 253.502,
+      "end_s": 253.804
+    },
+    {
+      "w": "artists",
+      "start_s": 253.862,
+      "end_s": 254.268
+    },
+    {
+      "w": "after",
+      "start_s": 254.326,
+      "end_s": 254.593
+    },
+    {
+      "w": "travelling",
+      "start_s": 254.64,
+      "end_s": 255.325
+    },
+    {
+      "w": "through",
+      "start_s": 255.325,
+      "end_s": 255.743
+    },
+    {
+      "w": "the",
+      "start_s": 255.778,
+      "end_s": 255.859
+    },
+    {
+      "w": "Americas.",
+      "start_s": 255.905,
+      "end_s": 256.695
+    },
+    {
+      "w": "They",
+      "start_s": 257.81,
+      "end_s": 257.96
+    },
+    {
+      "w": "were",
+      "start_s": 257.995,
+      "end_s": 258.123
+    },
+    {
+      "w": "not",
+      "start_s": 258.158,
+      "end_s": 258.297
+    },
+    {
+      "w": "simply",
+      "start_s": 258.367,
+      "end_s": 258.704
+    },
+    {
+      "w": "missionaries",
+      "start_s": 258.785,
+      "end_s": 259.4
+    },
+    {
+      "w": "following",
+      "start_s": 259.47,
+      "end_s": 259.888
+    },
+    {
+      "w": "a",
+      "start_s": 259.946,
+      "end_s": 259.969
+    },
+    {
+      "w": "modern",
+      "start_s": 260.039,
+      "end_s": 260.375
+    },
+    {
+      "w": "curriculum;",
+      "start_s": 260.433,
+      "end_s": 261.223
+    },
+    {
+      "w": "public",
+      "start_s": 261.664,
+      "end_s": 262.001
+    },
+    {
+      "w": "demonstrations",
+      "start_s": 262.059,
+      "end_s": 262.825
+    },
+    {
+      "w": "and",
+      "start_s": 262.871,
+      "end_s": 262.953
+    },
+    {
+      "w": "professional",
+      "start_s": 263.022,
+      "end_s": 263.533
+    },
+    {
+      "w": "contests",
+      "start_s": 263.603,
+      "end_s": 264.207
+    },
+    {
+      "w": "were",
+      "start_s": 264.253,
+      "end_s": 264.392
+    },
+    {
+      "w": "part",
+      "start_s": 264.439,
+      "end_s": 264.625
+    },
+    {
+      "w": "of",
+      "start_s": 264.659,
+      "end_s": 264.717
+    },
+    {
+      "w": "the",
+      "start_s": 264.764,
+      "end_s": 264.834
+    },
+    {
+      "w": "network",
+      "start_s": 264.892,
+      "end_s": 265.275
+    },
+    {
+      "w": "that",
+      "start_s": 265.333,
+      "end_s": 265.461
+    },
+    {
+      "w": "carried",
+      "start_s": 265.53,
+      "end_s": 265.867
+    },
+    {
+      "w": "their",
+      "start_s": 265.89,
+      "end_s": 266.029
+    },
+    {
+      "w": "practice.",
+      "start_s": 266.076,
+      "end_s": 266.761
+    },
+    {
+      "w": "Their",
+      "start_s": 267.457,
+      "end_s": 267.666
+    },
+    {
+      "w": "movement",
+      "start_s": 267.724,
+      "end_s": 268.073
+    },
+    {
+      "w": "across",
+      "start_s": 268.108,
+      "end_s": 268.433
+    },
+    {
+      "w": "borders",
+      "start_s": 268.502,
+      "end_s": 268.885
+    },
+    {
+      "w": "matters",
+      "start_s": 268.967,
+      "end_s": 269.373
+    },
+    {
+      "w": "because",
+      "start_s": 269.442,
+      "end_s": 269.733
+    },
+    {
+      "w": "it",
+      "start_s": 269.767,
+      "end_s": 269.837
+    },
+    {
+      "w": "makes",
+      "start_s": 269.895,
+      "end_s": 270.092
+    },
+    {
+      "w": "transmission",
+      "start_s": 270.127,
+      "end_s": 270.731
+    },
+    {
+      "w": "physical",
+      "start_s": 270.789,
+      "end_s": 271.219
+    },
+    {
+      "w": "and",
+      "start_s": 271.288,
+      "end_s": 271.358
+    },
+    {
+      "w": "social.",
+      "start_s": 271.428,
+      "end_s": 271.985
+    },
+    {
+      "w": "People",
+      "start_s": 272.31,
+      "end_s": 272.635
+    },
+    {
+      "w": "carried",
+      "start_s": 272.67,
+      "end_s": 273.007
+    },
+    {
+      "w": "skills,",
+      "start_s": 273.053,
+      "end_s": 273.668
+    },
+    {
+      "w": "names,",
+      "start_s": 273.819,
+      "end_s": 274.388
+    },
+    {
+      "w": "reputations,",
+      "start_s": 274.481,
+      "end_s": 275.305
+    },
+    {
+      "w": "performance",
+      "start_s": 275.352,
+      "end_s": 275.886
+    },
+    {
+      "w": "habits,",
+      "start_s": 275.921,
+      "end_s": 276.281
+    },
+    {
+      "w": "and",
+      "start_s": 276.304,
+      "end_s": 276.385
+    },
+    {
+      "w": "business",
+      "start_s": 276.455,
+      "end_s": 276.815
+    },
+    {
+      "w": "arrangements.",
+      "start_s": 276.849,
+      "end_s": 277.546
+    },
+    {
+      "w": "What",
+      "start_s": 277.755,
+      "end_s": 277.941
+    },
+    {
+      "w": "arrived",
+      "start_s": 277.964,
+      "end_s": 278.312
+    },
+    {
+      "w": "in",
+      "start_s": 278.347,
+      "end_s": 278.405
+    },
+    {
+      "w": "Brazil",
+      "start_s": 278.452,
+      "end_s": 278.846
+    },
+    {
+      "w": "was",
+      "start_s": 278.904,
+      "end_s": 279.032
+    },
+    {
+      "w": "therefore",
+      "start_s": 279.09,
+      "end_s": 279.613
+    },
+    {
+      "w": "not",
+      "start_s": 279.729,
+      "end_s": 279.926
+    },
+    {
+      "w": "a",
+      "start_s": 279.961,
+      "end_s": 279.984
+    },
+    {
+      "w": "sealed",
+      "start_s": 280.042,
+      "end_s": 280.321
+    },
+    {
+      "w": "package",
+      "start_s": 280.356,
+      "end_s": 280.797
+    },
+    {
+      "w": "labelled",
+      "start_s": 280.843,
+      "end_s": 281.168
+    },
+    {
+      "w": "Brazilian",
+      "start_s": 281.192,
+      "end_s": 281.633
+    },
+    {
+      "w": "jiu-jitsu.",
+      "start_s": 281.691,
+      "end_s": 282.399
+    },
+    {
+      "w": "It",
+      "start_s": 282.724,
+      "end_s": 282.852
+    },
+    {
+      "w": "was",
+      "start_s": 282.887,
+      "end_s": 283.014
+    },
+    {
+      "w": "a",
+      "start_s": 283.061,
+      "end_s": 283.096
+    },
+    {
+      "w": "set",
+      "start_s": 283.154,
+      "end_s": 283.316
+    },
+    {
+      "w": "of",
+      "start_s": 283.351,
+      "end_s": 283.397
+    },
+    {
+      "w": "practices",
+      "start_s": 283.456,
+      "end_s": 284.036
+    },
+    {
+      "w": "moving",
+      "start_s": 284.106,
+      "end_s": 284.361
+    },
+    {
+      "w": "through",
+      "start_s": 284.408,
+      "end_s": 284.64
+    },
+    {
+      "w": "a",
+      "start_s": 284.675,
+      "end_s": 284.698
+    },
+    {
+      "w": "changing",
+      "start_s": 284.756,
+      "end_s": 285.127
+    },
+    {
+      "w": "international",
+      "start_s": 285.174,
+      "end_s": 285.731
+    },
+    {
+      "w": "circuit,",
+      "start_s": 285.789,
+      "end_s": 286.312
+    },
+    {
+      "w": "ready",
+      "start_s": 286.521,
+      "end_s": 286.741
+    },
+    {
+      "w": "to",
+      "start_s": 286.788,
+      "end_s": 286.834
+    },
+    {
+      "w": "be",
+      "start_s": 286.892,
+      "end_s": 286.985
+    },
+    {
+      "w": "adapted",
+      "start_s": 287.02,
+      "end_s": 287.461
+    },
+    {
+      "w": "again.",
+      "start_s": 287.496,
+      "end_s": 287.96
+    },
+    {
+      "w": "By",
+      "start_s": 288.239,
+      "end_s": 288.378
+    },
+    {
+      "w": "1915,",
+      "start_s": 288.425,
+      "end_s": 289.469
+    },
+    {
+      "w": "the",
+      "start_s": 289.586,
+      "end_s": 289.702
+    },
+    {
+      "w": "troupe",
+      "start_s": 289.748,
+      "end_s": 289.98
+    },
+    {
+      "w": "was",
+      "start_s": 290.004,
+      "end_s": 290.108
+    },
+    {
+      "w": "in",
+      "start_s": 290.166,
+      "end_s": 290.236
+    },
+    {
+      "w": "Belém,",
+      "start_s": 290.294,
+      "end_s": 290.851
+    },
+    {
+      "w": "a",
+      "start_s": 290.932,
+      "end_s": 291.002
+    },
+    {
+      "w": "city",
+      "start_s": 291.083,
+      "end_s": 291.327
+    },
+    {
+      "w": "shaped",
+      "start_s": 291.385,
+      "end_s": 291.664
+    },
+    {
+      "w": "by",
+      "start_s": 291.699,
+      "end_s": 291.78
+    },
+    {
+      "w": "the",
+      "start_s": 291.838,
+      "end_s": 291.908
+    },
+    {
+      "w": "Amazon",
+      "start_s": 291.977,
+      "end_s": 292.407
+    },
+    {
+      "w": "rubber",
+      "start_s": 292.465,
+      "end_s": 292.709
+    },
+    {
+      "w": "economy",
+      "start_s": 292.755,
+      "end_s": 293.289
+    },
+    {
+      "w": "and",
+      "start_s": 293.405,
+      "end_s": 293.545
+    },
+    {
+      "w": "a",
+      "start_s": 293.591,
+      "end_s": 293.614
+    },
+    {
+      "w": "cosmopolitan",
+      "start_s": 293.661,
+      "end_s": 294.485
+    },
+    {
+      "w": "entertainment",
+      "start_s": 294.543,
+      "end_s": 295.1
+    },
+    {
+      "w": "circuit.",
+      "start_s": 295.147,
+      "end_s": 295.657
+    },
+    {
+      "w": "Theaters,",
+      "start_s": 296.098,
+      "end_s": 296.679
+    },
+    {
+      "w": "demonstrations,",
+      "start_s": 296.795,
+      "end_s": 297.747
+    },
+    {
+      "w": "challenges,",
+      "start_s": 297.828,
+      "end_s": 298.536
+    },
+    {
+      "w": "and",
+      "start_s": 298.56,
+      "end_s": 298.734
+    },
+    {
+      "w": "advertised",
+      "start_s": 298.815,
+      "end_s": 299.43
+    },
+    {
+      "w": "lessons",
+      "start_s": 299.488,
+      "end_s": 299.941
+    },
+    {
+      "w": "put",
+      "start_s": 300.22,
+      "end_s": 300.417
+    },
+    {
+      "w": "Japanese",
+      "start_s": 300.475,
+      "end_s": 300.974
+    },
+    {
+      "w": "grappling",
+      "start_s": 301.021,
+      "end_s": 301.52
+    },
+    {
+      "w": "in",
+      "start_s": 301.59,
+      "end_s": 301.683
+    },
+    {
+      "w": "front",
+      "start_s": 301.741,
+      "end_s": 301.915
+    },
+    {
+      "w": "of",
+      "start_s": 301.95,
+      "end_s": 302.008
+    },
+    {
+      "w": "audiences",
+      "start_s": 302.089,
+      "end_s": 302.623
+    },
+    {
+      "w": "who",
+      "start_s": 302.658,
+      "end_s": 302.774
+    },
+    {
+      "w": "encountered",
+      "start_s": 302.832,
+      "end_s": 303.308
+    },
+    {
+      "w": "it",
+      "start_s": 303.343,
+      "end_s": 303.413
+    },
+    {
+      "w": "as",
+      "start_s": 303.459,
+      "end_s": 303.563
+    },
+    {
+      "w": "education,",
+      "start_s": 303.656,
+      "end_s": 304.388
+    },
+    {
+      "w": "spectacle,",
+      "start_s": 304.504,
+      "end_s": 305.2
+    },
+    {
+      "w": "and",
+      "start_s": 305.27,
+      "end_s": 305.409
+    },
+    {
+      "w": "practical",
+      "start_s": 305.479,
+      "end_s": 305.944
+    },
+    {
+      "w": "combat",
+      "start_s": 306.013,
+      "end_s": 306.42
+    },
+    {
+      "w": "at",
+      "start_s": 306.454,
+      "end_s": 306.512
+    },
+    {
+      "w": "the",
+      "start_s": 306.547,
+      "end_s": 306.617
+    },
+    {
+      "w": "same",
+      "start_s": 306.663,
+      "end_s": 306.872
+    },
+    {
+      "w": "time.",
+      "start_s": 306.907,
+      "end_s": 307.383
+    },
+    {
+      "w": "Belém",
+      "start_s": 307.987,
+      "end_s": 308.347
+    },
+    {
+      "w": "is",
+      "start_s": 308.416,
+      "end_s": 308.509
+    },
+    {
+      "w": "more",
+      "start_s": 308.591,
+      "end_s": 308.776
+    },
+    {
+      "w": "than",
+      "start_s": 308.811,
+      "end_s": 308.939
+    },
+    {
+      "w": "a",
+      "start_s": 308.974,
+      "end_s": 308.997
+    },
+    {
+      "w": "pin",
+      "start_s": 309.055,
+      "end_s": 309.299
+    },
+    {
+      "w": "on",
+      "start_s": 309.38,
+      "end_s": 309.473
+    },
+    {
+      "w": "a",
+      "start_s": 309.508,
+      "end_s": 309.531
+    },
+    {
+      "w": "migration",
+      "start_s": 309.589,
+      "end_s": 310.112
+    },
+    {
+      "w": "map.",
+      "start_s": 310.17,
+      "end_s": 310.576
+    },
+    {
+      "w": "It",
+      "start_s": 311.017,
+      "end_s": 311.145
+    },
+    {
+      "w": "is",
+      "start_s": 311.192,
+      "end_s": 311.273
+    },
+    {
+      "w": "a",
+      "start_s": 311.319,
+      "end_s": 311.354
+    },
+    {
+      "w": "setting",
+      "start_s": 311.412,
+      "end_s": 311.691
+    },
+    {
+      "w": "that",
+      "start_s": 311.726,
+      "end_s": 311.853
+    },
+    {
+      "w": "helps",
+      "start_s": 311.9,
+      "end_s": 312.12
+    },
+    {
+      "w": "explain",
+      "start_s": 312.167,
+      "end_s": 312.631
+    },
+    {
+      "w": "why",
+      "start_s": 312.701,
+      "end_s": 312.91
+    },
+    {
+      "w": "a",
+      "start_s": 312.979,
+      "end_s": 313.003
+    },
+    {
+      "w": "practice",
+      "start_s": 313.061,
+      "end_s": 313.502
+    },
+    {
+      "w": "could",
+      "start_s": 313.537,
+      "end_s": 313.711
+    },
+    {
+      "w": "change",
+      "start_s": 313.757,
+      "end_s": 314.199
+    },
+    {
+      "w": "as",
+      "start_s": 314.245,
+      "end_s": 314.408
+    },
+    {
+      "w": "it",
+      "start_s": 314.466,
+      "end_s": 314.535
+    },
+    {
+      "w": "moved.",
+      "start_s": 314.593,
+      "end_s": 315.139
+    },
+    {
+      "w": "The",
+      "start_s": 315.464,
+      "end_s": 315.592
+    },
+    {
+      "w": "audience,",
+      "start_s": 315.661,
+      "end_s": 316.3
+    },
+    {
+      "w": "venue,",
+      "start_s": 316.474,
+      "end_s": 317.043
+    },
+    {
+      "w": "local",
+      "start_s": 317.159,
+      "end_s": 317.438
+    },
+    {
+      "w": "economy,",
+      "start_s": 317.496,
+      "end_s": 317.995
+    },
+    {
+      "w": "and",
+      "start_s": 318.018,
+      "end_s": 318.099
+    },
+    {
+      "w": "promise",
+      "start_s": 318.169,
+      "end_s": 318.738
+    },
+    {
+      "w": "made",
+      "start_s": 318.854,
+      "end_s": 319.075
+    },
+    {
+      "w": "by",
+      "start_s": 319.11,
+      "end_s": 319.214
+    },
+    {
+      "w": "an",
+      "start_s": 319.26,
+      "end_s": 319.319
+    },
+    {
+      "w": "instructor",
+      "start_s": 319.365,
+      "end_s": 319.899
+    },
+    {
+      "w": "all",
+      "start_s": 319.969,
+      "end_s": 320.189
+    },
+    {
+      "w": "influenced",
+      "start_s": 320.259,
+      "end_s": 320.805
+    },
+    {
+      "w": "what",
+      "start_s": 320.839,
+      "end_s": 320.979
+    },
+    {
+      "w": "was",
+      "start_s": 321.014,
+      "end_s": 321.118
+    },
+    {
+      "w": "visible.",
+      "start_s": 321.188,
+      "end_s": 321.687
+    },
+    {
+      "w": "The",
+      "start_s": 322.012,
+      "end_s": 322.128
+    },
+    {
+      "w": "same",
+      "start_s": 322.186,
+      "end_s": 322.465
+    },
+    {
+      "w": "art",
+      "start_s": 322.5,
+      "end_s": 322.72
+    },
+    {
+      "w": "could",
+      "start_s": 322.767,
+      "end_s": 322.929
+    },
+    {
+      "w": "be",
+      "start_s": 322.964,
+      "end_s": 323.045
+    },
+    {
+      "w": "presented",
+      "start_s": 323.092,
+      "end_s": 323.545
+    },
+    {
+      "w": "as",
+      "start_s": 323.603,
+      "end_s": 323.707
+    },
+    {
+      "w": "disciplined",
+      "start_s": 323.824,
+      "end_s": 324.346
+    },
+    {
+      "w": "study",
+      "start_s": 324.392,
+      "end_s": 324.706
+    },
+    {
+      "w": "in",
+      "start_s": 324.764,
+      "end_s": 324.834
+    },
+    {
+      "w": "one",
+      "start_s": 324.915,
+      "end_s": 325.089
+    },
+    {
+      "w": "room",
+      "start_s": 325.124,
+      "end_s": 325.356
+    },
+    {
+      "w": "and",
+      "start_s": 325.507,
+      "end_s": 325.704
+    },
+    {
+      "w": "as",
+      "start_s": 325.786,
+      "end_s": 325.913
+    },
+    {
+      "w": "a",
+      "start_s": 325.971,
+      "end_s": 325.995
+    },
+    {
+      "w": "public",
+      "start_s": 326.064,
+      "end_s": 326.366
+    },
+    {
+      "w": "test",
+      "start_s": 326.413,
+      "end_s": 326.691
+    },
+    {
+      "w": "in",
+      "start_s": 326.749,
+      "end_s": 326.819
+    },
+    {
+      "w": "another.",
+      "start_s": 326.889,
+      "end_s": 327.434
+    },
+    {
+      "w": "That",
+      "start_s": 328.038,
+      "end_s": 328.247
+    },
+    {
+      "w": "context",
+      "start_s": 328.317,
+      "end_s": 328.967
+    },
+    {
+      "w": "shaped",
+      "start_s": 329.141,
+      "end_s": 329.501
+    },
+    {
+      "w": "what",
+      "start_s": 329.547,
+      "end_s": 329.698
+    },
+    {
+      "w": "students",
+      "start_s": 329.745,
+      "end_s": 330.116
+    },
+    {
+      "w": "could",
+      "start_s": 330.151,
+      "end_s": 330.302
+    },
+    {
+      "w": "receive.",
+      "start_s": 330.348,
+      "end_s": 331.057
+    },
+    {
+      "w": "Cairus",
+      "start_s": 331.753,
+      "end_s": 332.148
+    },
+    {
+      "w": "describes",
+      "start_s": 332.194,
+      "end_s": 332.705
+    },
+    {
+      "w": "Maeda's",
+      "start_s": 332.775,
+      "end_s": 333.053
+    },
+    {
+      "w": "Brazilian",
+      "start_s": 333.088,
+      "end_s": 333.553
+    },
+    {
+      "w": "teaching",
+      "start_s": 333.611,
+      "end_s": 333.924
+    },
+    {
+      "w": "alongside",
+      "start_s": 333.982,
+      "end_s": 334.574
+    },
+    {
+      "w": "professional",
+      "start_s": 334.609,
+      "end_s": 335.132
+    },
+    {
+      "w": "wrestling",
+      "start_s": 335.178,
+      "end_s": 335.55
+    },
+    {
+      "w": "and",
+      "start_s": 335.584,
+      "end_s": 335.654
+    },
+    {
+      "w": "prizefighting,",
+      "start_s": 335.701,
+      "end_s": 336.571
+    },
+    {
+      "w": "with",
+      "start_s": 336.745,
+      "end_s": 336.931
+    },
+    {
+      "w": "less",
+      "start_s": 337.001,
+      "end_s": 337.21
+    },
+    {
+      "w": "emphasis",
+      "start_s": 337.268,
+      "end_s": 337.755
+    },
+    {
+      "w": "on",
+      "start_s": 337.825,
+      "end_s": 337.918
+    },
+    {
+      "w": "the",
+      "start_s": 337.952,
+      "end_s": 338.022
+    },
+    {
+      "w": "full",
+      "start_s": 338.08,
+      "end_s": 338.324
+    },
+    {
+      "w": "Kodokan",
+      "start_s": 338.394,
+      "end_s": 338.8
+    },
+    {
+      "w": "pedagogical",
+      "start_s": 338.858,
+      "end_s": 339.496
+    },
+    {
+      "w": "structure.",
+      "start_s": 339.543,
+      "end_s": 340.112
+    },
+    {
+      "w": "This",
+      "start_s": 340.925,
+      "end_s": 341.11
+    },
+    {
+      "w": "does",
+      "start_s": 341.157,
+      "end_s": 341.308
+    },
+    {
+      "w": "not",
+      "start_s": 341.366,
+      "end_s": 341.528
+    },
+    {
+      "w": "prove",
+      "start_s": 341.586,
+      "end_s": 341.946
+    },
+    {
+      "w": "a",
+      "start_s": 341.993,
+      "end_s": 342.027
+    },
+    {
+      "w": "secret",
+      "start_s": 342.109,
+      "end_s": 342.422
+    },
+    {
+      "w": "combat",
+      "start_s": 342.469,
+      "end_s": 342.875
+    },
+    {
+      "w": "system.",
+      "start_s": 342.933,
+      "end_s": 343.479
+    },
+    {
+      "w": "It",
+      "start_s": 343.92,
+      "end_s": 344.048
+    },
+    {
+      "w": "shows",
+      "start_s": 344.094,
+      "end_s": 344.349
+    },
+    {
+      "w": "why",
+      "start_s": 344.408,
+      "end_s": 344.558
+    },
+    {
+      "w": "techniques,",
+      "start_s": 344.64,
+      "end_s": 345.301
+    },
+    {
+      "w": "labels,",
+      "start_s": 345.418,
+      "end_s": 345.859
+    },
+    {
+      "w": "and",
+      "start_s": 345.882,
+      "end_s": 345.986
+    },
+    {
+      "w": "teaching",
+      "start_s": 346.045,
+      "end_s": 346.37
+    },
+    {
+      "w": "methods",
+      "start_s": 346.428,
+      "end_s": 346.741
+    },
+    {
+      "w": "could",
+      "start_s": 346.776,
+      "end_s": 346.927
+    },
+    {
+      "w": "shift",
+      "start_s": 346.985,
+      "end_s": 347.252
+    },
+    {
+      "w": "as",
+      "start_s": 347.31,
+      "end_s": 347.391
+    },
+    {
+      "w": "they",
+      "start_s": 347.449,
+      "end_s": 347.589
+    },
+    {
+      "w": "moved.",
+      "start_s": 347.658,
+      "end_s": 348.204
+    },
+    {
+      "w": "A",
+      "start_s": 348.715,
+      "end_s": 348.784
+    },
+    {
+      "w": "public",
+      "start_s": 348.866,
+      "end_s": 349.144
+    },
+    {
+      "w": "challenge",
+      "start_s": 349.191,
+      "end_s": 349.562
+    },
+    {
+      "w": "rewards",
+      "start_s": 349.609,
+      "end_s": 349.992
+    },
+    {
+      "w": "one",
+      "start_s": 350.062,
+      "end_s": 350.247
+    },
+    {
+      "w": "kind",
+      "start_s": 350.294,
+      "end_s": 350.514
+    },
+    {
+      "w": "of",
+      "start_s": 350.561,
+      "end_s": 350.607
+    },
+    {
+      "w": "explanation;",
+      "start_s": 350.677,
+      "end_s": 351.524
+    },
+    {
+      "w": "a",
+      "start_s": 351.908,
+      "end_s": 351.978
+    },
+    {
+      "w": "regular",
+      "start_s": 352.071,
+      "end_s": 352.419
+    },
+    {
+      "w": "class",
+      "start_s": 352.465,
+      "end_s": 352.79
+    },
+    {
+      "w": "rewards",
+      "start_s": 352.848,
+      "end_s": 353.22
+    },
+    {
+      "w": "another.",
+      "start_s": 353.255,
+      "end_s": 353.835
+    },
+    {
+      "w": "A",
+      "start_s": 354.532,
+      "end_s": 354.602
+    },
+    {
+      "w": "performer",
+      "start_s": 354.671,
+      "end_s": 355.066
+    },
+    {
+      "w": "must",
+      "start_s": 355.124,
+      "end_s": 355.298
+    },
+    {
+      "w": "demonstrate",
+      "start_s": 355.345,
+      "end_s": 355.879
+    },
+    {
+      "w": "quickly,",
+      "start_s": 355.925,
+      "end_s": 356.517
+    },
+    {
+      "w": "while",
+      "start_s": 356.842,
+      "end_s": 357.063
+    },
+    {
+      "w": "a",
+      "start_s": 357.098,
+      "end_s": 357.132
+    },
+    {
+      "w": "teacher",
+      "start_s": 357.179,
+      "end_s": 357.504
+    },
+    {
+      "w": "may",
+      "start_s": 357.562,
+      "end_s": 357.69
+    },
+    {
+      "w": "build",
+      "start_s": 357.759,
+      "end_s": 357.98
+    },
+    {
+      "w": "habits",
+      "start_s": 358.05,
+      "end_s": 358.398
+    },
+    {
+      "w": "over",
+      "start_s": 358.433,
+      "end_s": 358.595
+    },
+    {
+      "w": "time.",
+      "start_s": 358.653,
+      "end_s": 359.199
+    },
+    {
+      "w": "Treating",
+      "start_s": 360.151,
+      "end_s": 360.476
+    },
+    {
+      "w": "those",
+      "start_s": 360.523,
+      "end_s": 360.708
+    },
+    {
+      "w": "settings",
+      "start_s": 360.743,
+      "end_s": 361.103
+    },
+    {
+      "w": "as",
+      "start_s": 361.138,
+      "end_s": 361.219
+    },
+    {
+      "w": "interchangeable",
+      "start_s": 361.289,
+      "end_s": 362.009
+    },
+    {
+      "w": "creates",
+      "start_s": 362.055,
+      "end_s": 362.461
+    },
+    {
+      "w": "a",
+      "start_s": 362.496,
+      "end_s": 362.531
+    },
+    {
+      "w": "false",
+      "start_s": 362.601,
+      "end_s": 362.879
+    },
+    {
+      "w": "mystery.",
+      "start_s": 362.926,
+      "end_s": 363.53
+    },
+    {
+      "w": "Treating",
+      "start_s": 364.133,
+      "end_s": 364.447
+    },
+    {
+      "w": "them",
+      "start_s": 364.493,
+      "end_s": 364.621
+    },
+    {
+      "w": "as",
+      "start_s": 364.667,
+      "end_s": 364.749
+    },
+    {
+      "w": "different",
+      "start_s": 364.818,
+      "end_s": 365.109
+    },
+    {
+      "w": "environments",
+      "start_s": 365.143,
+      "end_s": 365.735
+    },
+    {
+      "w": "gives",
+      "start_s": 365.805,
+      "end_s": 366.002
+    },
+    {
+      "w": "us",
+      "start_s": 366.049,
+      "end_s": 366.142
+    },
+    {
+      "w": "a",
+      "start_s": 366.188,
+      "end_s": 366.223
+    },
+    {
+      "w": "practical",
+      "start_s": 366.281,
+      "end_s": 366.722
+    },
+    {
+      "w": "explanation",
+      "start_s": 366.792,
+      "end_s": 367.372
+    },
+    {
+      "w": "for",
+      "start_s": 367.442,
+      "end_s": 367.558
+    },
+    {
+      "w": "why",
+      "start_s": 367.604,
+      "end_s": 367.79
+    },
+    {
+      "w": "later",
+      "start_s": 367.871,
+      "end_s": 368.115
+    },
+    {
+      "w": "accounts",
+      "start_s": 368.162,
+      "end_s": 368.533
+    },
+    {
+      "w": "do",
+      "start_s": 368.58,
+      "end_s": 368.661
+    },
+    {
+      "w": "not",
+      "start_s": 368.742,
+      "end_s": 368.916
+    },
+    {
+      "w": "line",
+      "start_s": 368.974,
+      "end_s": 369.207
+    },
+    {
+      "w": "up",
+      "start_s": 369.241,
+      "end_s": 369.323
+    },
+    {
+      "w": "perfectly.",
+      "start_s": 369.381,
+      "end_s": 370.008
+    },
+    {
+      "w": "Accounts",
+      "start_s": 370.82,
+      "end_s": 371.227
+    },
+    {
+      "w": "differ",
+      "start_s": 371.285,
+      "end_s": 371.587
+    },
+    {
+      "w": "on",
+      "start_s": 371.645,
+      "end_s": 371.738
+    },
+    {
+      "w": "the",
+      "start_s": 371.772,
+      "end_s": 371.842
+    },
+    {
+      "w": "clean",
+      "start_s": 371.888,
+      "end_s": 372.132
+    },
+    {
+      "w": "version",
+      "start_s": 372.19,
+      "end_s": 372.515
+    },
+    {
+      "w": "of",
+      "start_s": 372.562,
+      "end_s": 372.608
+    },
+    {
+      "w": "the",
+      "start_s": 372.643,
+      "end_s": 372.713
+    },
+    {
+      "w": "handoff.",
+      "start_s": 372.771,
+      "end_s": 373.409
+    },
+    {
+      "w": "The",
+      "start_s": 373.92,
+      "end_s": 374.025
+    },
+    {
+      "w": "evidence",
+      "start_s": 374.094,
+      "end_s": 374.431
+    },
+    {
+      "w": "places",
+      "start_s": 374.466,
+      "end_s": 374.826
+    },
+    {
+      "w": "Carlos",
+      "start_s": 374.884,
+      "end_s": 375.232
+    },
+    {
+      "w": "Gracie",
+      "start_s": 375.302,
+      "end_s": 375.72
+    },
+    {
+      "w": "in",
+      "start_s": 375.766,
+      "end_s": 375.847
+    },
+    {
+      "w": "the",
+      "start_s": 375.894,
+      "end_s": 375.964
+    },
+    {
+      "w": "Belém",
+      "start_s": 376.01,
+      "end_s": 376.37
+    },
+    {
+      "w": "training",
+      "start_s": 376.428,
+      "end_s": 376.753
+    },
+    {
+      "w": "network",
+      "start_s": 376.799,
+      "end_s": 377.194
+    },
+    {
+      "w": "associated",
+      "start_s": 377.241,
+      "end_s": 377.856
+    },
+    {
+      "w": "with",
+      "start_s": 377.891,
+      "end_s": 378.019
+    },
+    {
+      "w": "Maeda,",
+      "start_s": 378.065,
+      "end_s": 378.587
+    },
+    {
+      "w": "while",
+      "start_s": 378.913,
+      "end_s": 379.156
+    },
+    {
+      "w": "scholarship",
+      "start_s": 379.179,
+      "end_s": 379.713
+    },
+    {
+      "w": "also",
+      "start_s": 379.771,
+      "end_s": 380.05
+    },
+    {
+      "w": "identifies",
+      "start_s": 380.131,
+      "end_s": 380.7
+    },
+    {
+      "w": "senior",
+      "start_s": 380.746,
+      "end_s": 381.083
+    },
+    {
+      "w": "student",
+      "start_s": 381.13,
+      "end_s": 381.443
+    },
+    {
+      "w": "Jacyntho",
+      "start_s": 381.501,
+      "end_s": 381.919
+    },
+    {
+      "w": "Ferro",
+      "start_s": 382.0,
+      "end_s": 382.395
+    },
+    {
+      "w": "and",
+      "start_s": 382.465,
+      "end_s": 382.581
+    },
+    {
+      "w": "warns",
+      "start_s": 382.65,
+      "end_s": 382.952
+    },
+    {
+      "w": "against",
+      "start_s": 382.999,
+      "end_s": 383.324
+    },
+    {
+      "w": "treating",
+      "start_s": 383.37,
+      "end_s": 383.695
+    },
+    {
+      "w": "later",
+      "start_s": 383.765,
+      "end_s": 384.009
+    },
+    {
+      "w": "lineage",
+      "start_s": 384.067,
+      "end_s": 384.438
+    },
+    {
+      "w": "tradition",
+      "start_s": 384.473,
+      "end_s": 384.903
+    },
+    {
+      "w": "as",
+      "start_s": 384.972,
+      "end_s": 385.077
+    },
+    {
+      "w": "a",
+      "start_s": 385.123,
+      "end_s": 385.158
+    },
+    {
+      "w": "complete",
+      "start_s": 385.216,
+      "end_s": 385.611
+    },
+    {
+      "w": "classroom",
+      "start_s": 385.657,
+      "end_s": 386.157
+    },
+    {
+      "w": "record.",
+      "start_s": 386.226,
+      "end_s": 386.656
+    },
+    {
+      "w": "We",
+      "start_s": 386.9,
+      "end_s": 387.027
+    },
+    {
+      "w": "can",
+      "start_s": 387.074,
+      "end_s": 387.19
+    },
+    {
+      "w": "say",
+      "start_s": 387.236,
+      "end_s": 387.376
+    },
+    {
+      "w": "there",
+      "start_s": 387.422,
+      "end_s": 387.55
+    },
+    {
+      "w": "was",
+      "start_s": 387.585,
+      "end_s": 387.712
+    },
+    {
+      "w": "transmission;",
+      "start_s": 387.77,
+      "end_s": 388.56
+    },
+    {
+      "w": "we",
+      "start_s": 388.769,
+      "end_s": 388.873
+    },
+    {
+      "w": "should",
+      "start_s": 388.908,
+      "end_s": 389.071
+    },
+    {
+      "w": "qualify",
+      "start_s": 389.106,
+      "end_s": 389.593
+    },
+    {
+      "w": "its",
+      "start_s": 389.651,
+      "end_s": 389.767
+    },
+    {
+      "w": "exact",
+      "start_s": 389.814,
+      "end_s": 390.185
+    },
+    {
+      "w": "shape.",
+      "start_s": 390.232,
+      "end_s": 390.685
+    },
+    {
+      "w": "The",
+      "start_s": 391.068,
+      "end_s": 391.172
+    },
+    {
+      "w": "responsible",
+      "start_s": 391.23,
+      "end_s": 391.811
+    },
+    {
+      "w": "claim",
+      "start_s": 391.846,
+      "end_s": 392.113
+    },
+    {
+      "w": "is",
+      "start_s": 392.171,
+      "end_s": 392.264
+    },
+    {
+      "w": "narrower",
+      "start_s": 392.333,
+      "end_s": 392.751
+    },
+    {
+      "w": "than",
+      "start_s": 392.809,
+      "end_s": 392.926
+    },
+    {
+      "w": "the",
+      "start_s": 392.96,
+      "end_s": 393.03
+    },
+    {
+      "w": "familiar",
+      "start_s": 393.076,
+      "end_s": 393.471
+    },
+    {
+      "w": "legend",
+      "start_s": 393.529,
+      "end_s": 393.854
+    },
+    {
+      "w": "and",
+      "start_s": 393.924,
+      "end_s": 394.005
+    },
+    {
+      "w": "stronger",
+      "start_s": 394.063,
+      "end_s": 394.551
+    },
+    {
+      "w": "because",
+      "start_s": 394.76,
+      "end_s": 395.108
+    },
+    {
+      "w": "of",
+      "start_s": 395.131,
+      "end_s": 395.19
+    },
+    {
+      "w": "that",
+      "start_s": 395.236,
+      "end_s": 395.387
+    },
+    {
+      "w": "restraint.",
+      "start_s": 395.445,
+      "end_s": 396.118
+    },
+    {
+      "w": "It",
+      "start_s": 396.722,
+      "end_s": 396.861
+    },
+    {
+      "w": "recognizes",
+      "start_s": 396.931,
+      "end_s": 397.616
+    },
+    {
+      "w": "Carlos",
+      "start_s": 397.674,
+      "end_s": 398.115
+    },
+    {
+      "w": "as",
+      "start_s": 398.173,
+      "end_s": 398.255
+    },
+    {
+      "w": "part",
+      "start_s": 398.324,
+      "end_s": 398.522
+    },
+    {
+      "w": "of",
+      "start_s": 398.556,
+      "end_s": 398.614
+    },
+    {
+      "w": "an",
+      "start_s": 398.649,
+      "end_s": 398.707
+    },
+    {
+      "w": "important",
+      "start_s": 398.742,
+      "end_s": 399.172
+    },
+    {
+      "w": "network",
+      "start_s": 399.218,
+      "end_s": 399.59
+    },
+    {
+      "w": "without",
+      "start_s": 399.636,
+      "end_s": 399.903
+    },
+    {
+      "w": "erasing",
+      "start_s": 399.95,
+      "end_s": 400.344
+    },
+    {
+      "w": "the",
+      "start_s": 400.391,
+      "end_s": 400.46
+    },
+    {
+      "w": "people,",
+      "start_s": 400.518,
+      "end_s": 400.96
+    },
+    {
+      "w": "settings,",
+      "start_s": 401.076,
+      "end_s": 401.517
+    },
+    {
+      "w": "and",
+      "start_s": 401.54,
+      "end_s": 401.621
+    },
+    {
+      "w": "uncertainties",
+      "start_s": 401.691,
+      "end_s": 402.318
+    },
+    {
+      "w": "that",
+      "start_s": 402.376,
+      "end_s": 402.515
+    },
+    {
+      "w": "the",
+      "start_s": 402.55,
+      "end_s": 402.62
+    },
+    {
+      "w": "surviving",
+      "start_s": 402.666,
+      "end_s": 403.142
+    },
+    {
+      "w": "scholarship",
+      "start_s": 403.2,
+      "end_s": 403.757
+    },
+    {
+      "w": "places",
+      "start_s": 403.804,
+      "end_s": 404.164
+    },
+    {
+      "w": "around",
+      "start_s": 404.21,
+      "end_s": 404.477
+    },
+    {
+      "w": "the",
+      "start_s": 404.512,
+      "end_s": 404.582
+    },
+    {
+      "w": "relationship.",
+      "start_s": 404.628,
+      "end_s": 405.418
+    },
+    {
+      "w": "Jacyntho",
+      "start_s": 405.801,
+      "end_s": 406.346
+    },
+    {
+      "w": "Ferro",
+      "start_s": 406.428,
+      "end_s": 406.741
+    },
+    {
+      "w": "matters",
+      "start_s": 406.811,
+      "end_s": 407.159
+    },
+    {
+      "w": "because",
+      "start_s": 407.229,
+      "end_s": 407.542
+    },
+    {
+      "w": "a",
+      "start_s": 407.577,
+      "end_s": 407.6
+    },
+    {
+      "w": "network",
+      "start_s": 407.67,
+      "end_s": 408.076
+    },
+    {
+      "w": "is",
+      "start_s": 408.134,
+      "end_s": 408.227
+    },
+    {
+      "w": "not",
+      "start_s": 408.309,
+      "end_s": 408.483
+    },
+    {
+      "w": "a",
+      "start_s": 408.529,
+      "end_s": 408.552
+    },
+    {
+      "w": "single",
+      "start_s": 408.622,
+      "end_s": 408.97
+    },
+    {
+      "w": "arrow",
+      "start_s": 409.028,
+      "end_s": 409.319
+    },
+    {
+      "w": "on",
+      "start_s": 409.388,
+      "end_s": 409.493
+    },
+    {
+      "w": "a",
+      "start_s": 409.539,
+      "end_s": 409.562
+    },
+    {
+      "w": "family",
+      "start_s": 409.632,
+      "end_s": 409.969
+    },
+    {
+      "w": "tree.",
+      "start_s": 410.027,
+      "end_s": 410.503
+    },
+    {
+      "w": "Cairus",
+      "start_s": 411.199,
+      "end_s": 411.571
+    },
+    {
+      "w": "identifies",
+      "start_s": 411.629,
+      "end_s": 412.256
+    },
+    {
+      "w": "him",
+      "start_s": 412.302,
+      "end_s": 412.418
+    },
+    {
+      "w": "as",
+      "start_s": 412.477,
+      "end_s": 412.546
+    },
+    {
+      "w": "a",
+      "start_s": 412.604,
+      "end_s": 412.627
+    },
+    {
+      "w": "senior",
+      "start_s": 412.697,
+      "end_s": 412.999
+    },
+    {
+      "w": "local",
+      "start_s": 413.057,
+      "end_s": 413.301
+    },
+    {
+      "w": "student",
+      "start_s": 413.359,
+      "end_s": 413.754
+    },
+    {
+      "w": "who",
+      "start_s": 413.928,
+      "end_s": 414.09
+    },
+    {
+      "w": "taught",
+      "start_s": 414.16,
+      "end_s": 414.392
+    },
+    {
+      "w": "within",
+      "start_s": 414.427,
+      "end_s": 414.682
+    },
+    {
+      "w": "Maeda's",
+      "start_s": 414.74,
+      "end_s": 415.042
+    },
+    {
+      "w": "circle.",
+      "start_s": 415.089,
+      "end_s": 415.634
+    },
+    {
+      "w": "Including",
+      "start_s": 416.145,
+      "end_s": 416.621
+    },
+    {
+      "w": "that",
+      "start_s": 416.668,
+      "end_s": 416.819
+    },
+    {
+      "w": "role",
+      "start_s": 416.877,
+      "end_s": 417.167
+    },
+    {
+      "w": "does",
+      "start_s": 417.202,
+      "end_s": 417.364
+    },
+    {
+      "w": "not",
+      "start_s": 417.422,
+      "end_s": 417.573
+    },
+    {
+      "w": "erase",
+      "start_s": 417.62,
+      "end_s": 417.91
+    },
+    {
+      "w": "Carlos",
+      "start_s": 417.945,
+      "end_s": 418.316
+    },
+    {
+      "w": "Gracie;",
+      "start_s": 418.375,
+      "end_s": 418.862
+    },
+    {
+      "w": "it",
+      "start_s": 419.106,
+      "end_s": 419.234
+    },
+    {
+      "w": "prevents",
+      "start_s": 419.28,
+      "end_s": 419.663
+    },
+    {
+      "w": "the",
+      "start_s": 419.71,
+      "end_s": 419.791
+    },
+    {
+      "w": "visual",
+      "start_s": 419.849,
+      "end_s": 420.221
+    },
+    {
+      "w": "grammar",
+      "start_s": 420.29,
+      "end_s": 420.627
+    },
+    {
+      "w": "of",
+      "start_s": 420.673,
+      "end_s": 420.731
+    },
+    {
+      "w": "lineage",
+      "start_s": 420.813,
+      "end_s": 421.219
+    },
+    {
+      "w": "from",
+      "start_s": 421.254,
+      "end_s": 421.393
+    },
+    {
+      "w": "deleting",
+      "start_s": 421.463,
+      "end_s": 421.892
+    },
+    {
+      "w": "the",
+      "start_s": 421.939,
+      "end_s": 422.008
+    },
+    {
+      "w": "intermediaries",
+      "start_s": 422.067,
+      "end_s": 422.856
+    },
+    {
+      "w": "the",
+      "start_s": 422.914,
+      "end_s": 422.984
+    },
+    {
+      "w": "scholarship",
+      "start_s": 423.03,
+      "end_s": 423.564
+    },
+    {
+      "w": "names.",
+      "start_s": 423.622,
+      "end_s": 424.121
+    },
+    {
+      "w": "Teaching",
+      "start_s": 424.4,
+      "end_s": 424.76
+    },
+    {
+      "w": "networks",
+      "start_s": 424.818,
+      "end_s": 425.201
+    },
+    {
+      "w": "are",
+      "start_s": 425.236,
+      "end_s": 425.329
+    },
+    {
+      "w": "made",
+      "start_s": 425.352,
+      "end_s": 425.515
+    },
+    {
+      "w": "of",
+      "start_s": 425.538,
+      "end_s": 425.596
+    },
+    {
+      "w": "relationships",
+      "start_s": 425.654,
+      "end_s": 426.327
+    },
+    {
+      "w": "that",
+      "start_s": 426.362,
+      "end_s": 426.502
+    },
+    {
+      "w": "do",
+      "start_s": 426.548,
+      "end_s": 426.629
+    },
+    {
+      "w": "not",
+      "start_s": 426.699,
+      "end_s": 426.85
+    },
+    {
+      "w": "always",
+      "start_s": 426.908,
+      "end_s": 427.256
+    },
+    {
+      "w": "fit",
+      "start_s": 427.303,
+      "end_s": 427.454
+    },
+    {
+      "w": "a",
+      "start_s": 427.488,
+      "end_s": 427.523
+    },
+    {
+      "w": "clean",
+      "start_s": 427.57,
+      "end_s": 427.813
+    },
+    {
+      "w": "diagram.",
+      "start_s": 427.883,
+      "end_s": 428.545
+    },
+    {
+      "w": "A",
+      "start_s": 428.824,
+      "end_s": 428.893
+    },
+    {
+      "w": "student",
+      "start_s": 428.963,
+      "end_s": 429.276
+    },
+    {
+      "w": "can",
+      "start_s": 429.311,
+      "end_s": 429.416
+    },
+    {
+      "w": "become",
+      "start_s": 429.462,
+      "end_s": 429.752
+    },
+    {
+      "w": "an",
+      "start_s": 429.776,
+      "end_s": 429.834
+    },
+    {
+      "w": "instructor,",
+      "start_s": 429.88,
+      "end_s": 430.554
+    },
+    {
+      "w": "a",
+      "start_s": 430.67,
+      "end_s": 430.739
+    },
+    {
+      "w": "local",
+      "start_s": 430.821,
+      "end_s": 431.076
+    },
+    {
+      "w": "teacher",
+      "start_s": 431.123,
+      "end_s": 431.424
+    },
+    {
+      "w": "can",
+      "start_s": 431.471,
+      "end_s": 431.599
+    },
+    {
+      "w": "carry",
+      "start_s": 431.657,
+      "end_s": 431.924
+    },
+    {
+      "w": "practice",
+      "start_s": 431.982,
+      "end_s": 432.411
+    },
+    {
+      "w": "into",
+      "start_s": 432.446,
+      "end_s": 432.62
+    },
+    {
+      "w": "another",
+      "start_s": 432.701,
+      "end_s": 432.992
+    },
+    {
+      "w": "community,",
+      "start_s": 433.038,
+      "end_s": 433.746
+    },
+    {
+      "w": "and",
+      "start_s": 433.921,
+      "end_s": 434.06
+    },
+    {
+      "w": "later",
+      "start_s": 434.13,
+      "end_s": 434.373
+    },
+    {
+      "w": "memory",
+      "start_s": 434.431,
+      "end_s": 434.756
+    },
+    {
+      "w": "can",
+      "start_s": 434.815,
+      "end_s": 434.942
+    },
+    {
+      "w": "compress",
+      "start_s": 435.0,
+      "end_s": 435.43
+    },
+    {
+      "w": "several",
+      "start_s": 435.476,
+      "end_s": 435.778
+    },
+    {
+      "w": "stages",
+      "start_s": 435.836,
+      "end_s": 436.289
+    },
+    {
+      "w": "into",
+      "start_s": 436.335,
+      "end_s": 436.51
+    },
+    {
+      "w": "one",
+      "start_s": 436.626,
+      "end_s": 436.823
+    },
+    {
+      "w": "famous",
+      "start_s": 436.881,
+      "end_s": 437.195
+    },
+    {
+      "w": "connection.",
+      "start_s": 437.241,
+      "end_s": 437.845
+    },
+    {
+      "w": "The",
+      "start_s": 438.541,
+      "end_s": 438.657
+    },
+    {
+      "w": "historical",
+      "start_s": 438.715,
+      "end_s": 439.226
+    },
+    {
+      "w": "task",
+      "start_s": 439.284,
+      "end_s": 439.691
+    },
+    {
+      "w": "is",
+      "start_s": 439.749,
+      "end_s": 439.842
+    },
+    {
+      "w": "to",
+      "start_s": 439.888,
+      "end_s": 439.935
+    },
+    {
+      "w": "restore",
+      "start_s": 440.016,
+      "end_s": 440.399
+    },
+    {
+      "w": "those",
+      "start_s": 440.445,
+      "end_s": 440.608
+    },
+    {
+      "w": "stages",
+      "start_s": 440.631,
+      "end_s": 441.072
+    },
+    {
+      "w": "where",
+      "start_s": 441.119,
+      "end_s": 441.293
+    },
+    {
+      "w": "the",
+      "start_s": 441.316,
+      "end_s": 441.386
+    },
+    {
+      "w": "evidence",
+      "start_s": 441.455,
+      "end_s": 441.839
+    },
+    {
+      "w": "allows",
+      "start_s": 441.873,
+      "end_s": 442.21
+    },
+    {
+      "w": "it.",
+      "start_s": 442.268,
+      "end_s": 442.512
+    },
+    {
+      "w": "Brazilian",
+      "start_s": 443.116,
+      "end_s": 443.592
+    },
+    {
+      "w": "development",
+      "start_s": 443.65,
+      "end_s": 444.184
+    },
+    {
+      "w": "also",
+      "start_s": 444.23,
+      "end_s": 444.486
+    },
+    {
+      "w": "extended",
+      "start_s": 444.567,
+      "end_s": 444.985
+    },
+    {
+      "w": "beyond",
+      "start_s": 445.043,
+      "end_s": 445.357
+    },
+    {
+      "w": "the",
+      "start_s": 445.415,
+      "end_s": 445.484
+    },
+    {
+      "w": "best-known",
+      "start_s": 445.531,
+      "end_s": 446.088
+    },
+    {
+      "w": "Rio",
+      "start_s": 446.169,
+      "end_s": 446.448
+    },
+    {
+      "w": "lineage.",
+      "start_s": 446.518,
+      "end_s": 447.203
+    },
+    {
+      "w": "Studies",
+      "start_s": 447.713,
+      "end_s": 448.108
+    },
+    {
+      "w": "of",
+      "start_s": 448.155,
+      "end_s": 448.213
+    },
+    {
+      "w": "Brazilian",
+      "start_s": 448.271,
+      "end_s": 448.758
+    },
+    {
+      "w": "judo",
+      "start_s": 448.816,
+      "end_s": 449.188
+    },
+    {
+      "w": "identify",
+      "start_s": 449.316,
+      "end_s": 449.896
+    },
+    {
+      "w": "immigrant",
+      "start_s": 449.966,
+      "end_s": 450.36
+    },
+    {
+      "w": "teachers,",
+      "start_s": 450.395,
+      "end_s": 450.906
+    },
+    {
+      "w": "professional",
+      "start_s": 450.964,
+      "end_s": 451.463
+    },
+    {
+      "w": "fighters,",
+      "start_s": 451.521,
+      "end_s": 451.928
+    },
+    {
+      "w": "and",
+      "start_s": 451.951,
+      "end_s": 452.032
+    },
+    {
+      "w": "community",
+      "start_s": 452.102,
+      "end_s": 452.59
+    },
+    {
+      "w": "networks",
+      "start_s": 452.659,
+      "end_s": 453.089
+    },
+    {
+      "w": "that",
+      "start_s": 453.124,
+      "end_s": 453.275
+    },
+    {
+      "w": "spread",
+      "start_s": 453.321,
+      "end_s": 453.6
+    },
+    {
+      "w": "related",
+      "start_s": 453.658,
+      "end_s": 454.006
+    },
+    {
+      "w": "practices",
+      "start_s": 454.064,
+      "end_s": 454.621
+    },
+    {
+      "w": "through",
+      "start_s": 454.656,
+      "end_s": 454.854
+    },
+    {
+      "w": "different",
+      "start_s": 454.888,
+      "end_s": 455.19
+    },
+    {
+      "w": "regions.",
+      "start_s": 455.237,
+      "end_s": 455.863
+    },
+    {
+      "w": "That",
+      "start_s": 456.374,
+      "end_s": 456.571
+    },
+    {
+      "w": "wider",
+      "start_s": 456.641,
+      "end_s": 456.966
+    },
+    {
+      "w": "field",
+      "start_s": 457.036,
+      "end_s": 457.326
+    },
+    {
+      "w": "is",
+      "start_s": 457.384,
+      "end_s": 457.454
+    },
+    {
+      "w": "why",
+      "start_s": 457.489,
+      "end_s": 457.639
+    },
+    {
+      "w": "the",
+      "start_s": 457.709,
+      "end_s": 457.779
+    },
+    {
+      "w": "next",
+      "start_s": 457.825,
+      "end_s": 458.034
+    },
+    {
+      "w": "episode",
+      "start_s": 458.104,
+      "end_s": 458.568
+    },
+    {
+      "w": "treats",
+      "start_s": 458.591,
+      "end_s": 458.847
+    },
+    {
+      "w": "forgotten",
+      "start_s": 458.905,
+      "end_s": 459.335
+    },
+    {
+      "w": "branches",
+      "start_s": 459.381,
+      "end_s": 459.845
+    },
+    {
+      "w": "as",
+      "start_s": 459.903,
+      "end_s": 460.031
+    },
+    {
+      "w": "research",
+      "start_s": 460.147,
+      "end_s": 460.565
+    },
+    {
+      "w": "questions",
+      "start_s": 460.623,
+      "end_s": 461.099
+    },
+    {
+      "w": "rather",
+      "start_s": 461.181,
+      "end_s": 461.448
+    },
+    {
+      "w": "than",
+      "start_s": 461.494,
+      "end_s": 461.622
+    },
+    {
+      "w": "decorative",
+      "start_s": 461.691,
+      "end_s": 462.109
+    },
+    {
+      "w": "side",
+      "start_s": 462.144,
+      "end_s": 462.434
+    },
+    {
+      "w": "notes.",
+      "start_s": 462.481,
+      "end_s": 462.957
+    },
+    {
+      "w": "The",
+      "start_s": 463.282,
+      "end_s": 463.398
+    },
+    {
+      "w": "point",
+      "start_s": 463.456,
+      "end_s": 463.665
+    },
+    {
+      "w": "is",
+      "start_s": 463.711,
+      "end_s": 463.781
+    },
+    {
+      "w": "not",
+      "start_s": 463.839,
+      "end_s": 463.99
+    },
+    {
+      "w": "to",
+      "start_s": 464.013,
+      "end_s": 464.071
+    },
+    {
+      "w": "replace",
+      "start_s": 464.141,
+      "end_s": 464.501
+    },
+    {
+      "w": "one",
+      "start_s": 464.559,
+      "end_s": 464.745
+    },
+    {
+      "w": "heroic",
+      "start_s": 464.803,
+      "end_s": 465.186
+    },
+    {
+      "w": "family",
+      "start_s": 465.256,
+      "end_s": 465.604
+    },
+    {
+      "w": "with",
+      "start_s": 465.65,
+      "end_s": 465.778
+    },
+    {
+      "w": "a",
+      "start_s": 465.825,
+      "end_s": 465.848
+    },
+    {
+      "w": "different",
+      "start_s": 465.906,
+      "end_s": 466.184
+    },
+    {
+      "w": "heroic",
+      "start_s": 466.242,
+      "end_s": 466.602
+    },
+    {
+      "w": "list.",
+      "start_s": 466.684,
+      "end_s": 467.148
+    },
+    {
+      "w": "It",
+      "start_s": 467.427,
+      "end_s": 467.554
+    },
+    {
+      "w": "is",
+      "start_s": 467.601,
+      "end_s": 467.67
+    },
+    {
+      "w": "to",
+      "start_s": 467.717,
+      "end_s": 467.775
+    },
+    {
+      "w": "change",
+      "start_s": 467.845,
+      "end_s": 468.146
+    },
+    {
+      "w": "the",
+      "start_s": 468.193,
+      "end_s": 468.274
+    },
+    {
+      "w": "shape",
+      "start_s": 468.332,
+      "end_s": 468.611
+    },
+    {
+      "w": "of",
+      "start_s": 468.646,
+      "end_s": 468.704
+    },
+    {
+      "w": "the",
+      "start_s": 468.75,
+      "end_s": 468.82
+    },
+    {
+      "w": "explanation.",
+      "start_s": 468.89,
+      "end_s": 469.772
+    },
+    {
+      "w": "A",
+      "start_s": 470.376,
+      "end_s": 470.457
+    },
+    {
+      "w": "national",
+      "start_s": 470.55,
+      "end_s": 470.945
+    },
+    {
+      "w": "tradition",
+      "start_s": 470.991,
+      "end_s": 471.444
+    },
+    {
+      "w": "can",
+      "start_s": 471.502,
+      "end_s": 471.641
+    },
+    {
+      "w": "emerge",
+      "start_s": 471.688,
+      "end_s": 472.059
+    },
+    {
+      "w": "from",
+      "start_s": 472.094,
+      "end_s": 472.245
+    },
+    {
+      "w": "overlapping",
+      "start_s": 472.361,
+      "end_s": 472.965
+    },
+    {
+      "w": "communities,",
+      "start_s": 473.023,
+      "end_s": 473.812
+    },
+    {
+      "w": "and",
+      "start_s": 474.056,
+      "end_s": 474.207
+    },
+    {
+      "w": "a",
+      "start_s": 474.265,
+      "end_s": 474.288
+    },
+    {
+      "w": "later",
+      "start_s": 474.346,
+      "end_s": 474.602
+    },
+    {
+      "w": "public",
+      "start_s": 474.66,
+      "end_s": 474.95
+    },
+    {
+      "w": "identity",
+      "start_s": 475.008,
+      "end_s": 475.438
+    },
+    {
+      "w": "can",
+      "start_s": 475.496,
+      "end_s": 475.623
+    },
+    {
+      "w": "become",
+      "start_s": 475.681,
+      "end_s": 476.007
+    },
+    {
+      "w": "dominant",
+      "start_s": 476.065,
+      "end_s": 476.506
+    },
+    {
+      "w": "without",
+      "start_s": 476.564,
+      "end_s": 476.9
+    },
+    {
+      "w": "being",
+      "start_s": 476.959,
+      "end_s": 477.156
+    },
+    {
+      "w": "the",
+      "start_s": 477.191,
+      "end_s": 477.26
+    },
+    {
+      "w": "only",
+      "start_s": 477.33,
+      "end_s": 477.539
+    },
+    {
+      "w": "path",
+      "start_s": 477.597,
+      "end_s": 477.864
+    },
+    {
+      "w": "by",
+      "start_s": 477.911,
+      "end_s": 478.027
+    },
+    {
+      "w": "which",
+      "start_s": 478.085,
+      "end_s": 478.27
+    },
+    {
+      "w": "practice",
+      "start_s": 478.328,
+      "end_s": 478.746
+    },
+    {
+      "w": "travelled.",
+      "start_s": 478.781,
+      "end_s": 479.339
+    },
+    {
+      "w": "The",
+      "start_s": 479.942,
+      "end_s": 480.058
+    },
+    {
+      "w": "Brazilian",
+      "start_s": 480.105,
+      "end_s": 480.627
+    },
+    {
+      "w": "identity",
+      "start_s": 480.685,
+      "end_s": 481.115
+    },
+    {
+      "w": "of",
+      "start_s": 481.173,
+      "end_s": 481.219
+    },
+    {
+      "w": "the",
+      "start_s": 481.254,
+      "end_s": 481.324
+    },
+    {
+      "w": "art",
+      "start_s": 481.394,
+      "end_s": 481.591
+    },
+    {
+      "w": "was",
+      "start_s": 481.649,
+      "end_s": 481.788
+    },
+    {
+      "w": "not",
+      "start_s": 481.858,
+      "end_s": 482.032
+    },
+    {
+      "w": "finished",
+      "start_s": 482.09,
+      "end_s": 482.427
+    },
+    {
+      "w": "in",
+      "start_s": 482.473,
+      "end_s": 482.531
+    },
+    {
+      "w": "Belém.",
+      "start_s": 482.589,
+      "end_s": 483.123
+    },
+    {
+      "w": "Scholarship",
+      "start_s": 483.565,
+      "end_s": 484.145
+    },
+    {
+      "w": "locates",
+      "start_s": 484.203,
+      "end_s": 484.609
+    },
+    {
+      "w": "a",
+      "start_s": 484.656,
+      "end_s": 484.691
+    },
+    {
+      "w": "major",
+      "start_s": 484.772,
+      "end_s": 485.097
+    },
+    {
+      "w": "phase",
+      "start_s": 485.144,
+      "end_s": 485.445
+    },
+    {
+      "w": "of",
+      "start_s": 485.48,
+      "end_s": 485.538
+    },
+    {
+      "w": "reinvention",
+      "start_s": 485.62,
+      "end_s": 486.2
+    },
+    {
+      "w": "in",
+      "start_s": 486.246,
+      "end_s": 486.316
+    },
+    {
+      "w": "the",
+      "start_s": 486.351,
+      "end_s": 486.421
+    },
+    {
+      "w": "1930s,",
+      "start_s": 486.467,
+      "end_s": 487.454
+    },
+    {
+      "w": "when",
+      "start_s": 487.535,
+      "end_s": 487.721
+    },
+    {
+      "w": "public",
+      "start_s": 487.791,
+      "end_s": 488.092
+    },
+    {
+      "w": "performances,",
+      "start_s": 488.151,
+      "end_s": 488.952
+    },
+    {
+      "w": "institutions,",
+      "start_s": 489.044,
+      "end_s": 489.857
+    },
+    {
+      "w": "promotion,",
+      "start_s": 489.904,
+      "end_s": 490.449
+    },
+    {
+      "w": "and",
+      "start_s": 490.473,
+      "end_s": 490.554
+    },
+    {
+      "w": "nationalism",
+      "start_s": 490.612,
+      "end_s": 491.297
+    },
+    {
+      "w": "helped",
+      "start_s": 491.471,
+      "end_s": 491.715
+    },
+    {
+      "w": "distinguish",
+      "start_s": 491.75,
+      "end_s": 492.33
+    },
+    {
+      "w": "a",
+      "start_s": 492.388,
+      "end_s": 492.411
+    },
+    {
+      "w": "Brazilian",
+      "start_s": 492.469,
+      "end_s": 492.957
+    },
+    {
+      "w": "combat",
+      "start_s": 493.027,
+      "end_s": 493.421
+    },
+    {
+      "w": "sport",
+      "start_s": 493.479,
+      "end_s": 493.793
+    },
+    {
+      "w": "from",
+      "start_s": 493.828,
+      "end_s": 493.967
+    },
+    {
+      "w": "Japanese",
+      "start_s": 494.048,
+      "end_s": 494.571
+    },
+    {
+      "w": "immigrant",
+      "start_s": 494.629,
+      "end_s": 495.012
+    },
+    {
+      "w": "traditions",
+      "start_s": 495.047,
+      "end_s": 495.593
+    },
+    {
+      "w": "and",
+      "start_s": 495.744,
+      "end_s": 495.906
+    },
+    {
+      "w": "from",
+      "start_s": 495.953,
+      "end_s": 496.092
+    },
+    {
+      "w": "other",
+      "start_s": 496.173,
+      "end_s": 496.382
+    },
+    {
+      "w": "local",
+      "start_s": 496.44,
+      "end_s": 496.696
+    },
+    {
+      "w": "fighting",
+      "start_s": 496.742,
+      "end_s": 497.033
+    },
+    {
+      "w": "practices.",
+      "start_s": 497.079,
+      "end_s": 497.868
+    },
+    {
+      "w": "Reinvention",
+      "start_s": 498.565,
+      "end_s": 499.169
+    },
+    {
+      "w": "means",
+      "start_s": 499.227,
+      "end_s": 499.459
+    },
+    {
+      "w": "more",
+      "start_s": 499.529,
+      "end_s": 499.807
+    },
+    {
+      "w": "than",
+      "start_s": 499.854,
+      "end_s": 499.993
+    },
+    {
+      "w": "changing",
+      "start_s": 500.063,
+      "end_s": 500.457
+    },
+    {
+      "w": "a",
+      "start_s": 500.504,
+      "end_s": 500.539
+    },
+    {
+      "w": "technique.",
+      "start_s": 500.597,
+      "end_s": 501.259
+    },
+    {
+      "w": "It",
+      "start_s": 501.642,
+      "end_s": 501.781
+    },
+    {
+      "w": "can",
+      "start_s": 501.827,
+      "end_s": 501.944
+    },
+    {
+      "w": "change",
+      "start_s": 502.002,
+      "end_s": 502.292
+    },
+    {
+      "w": "the",
+      "start_s": 502.327,
+      "end_s": 502.408
+    },
+    {
+      "w": "audience,",
+      "start_s": 502.478,
+      "end_s": 503.046
+    },
+    {
+      "w": "the",
+      "start_s": 503.139,
+      "end_s": 503.255
+    },
+    {
+      "w": "rules,",
+      "start_s": 503.325,
+      "end_s": 503.906
+    },
+    {
+      "w": "the",
+      "start_s": 503.987,
+      "end_s": 504.103
+    },
+    {
+      "w": "stories",
+      "start_s": 504.149,
+      "end_s": 504.892
+    },
+    {
+      "w": "attached",
+      "start_s": 504.892,
+      "end_s": 505.368
+    },
+    {
+      "w": "to",
+      "start_s": 505.403,
+      "end_s": 505.472
+    },
+    {
+      "w": "the",
+      "start_s": 505.542,
+      "end_s": 505.612
+    },
+    {
+      "w": "practice,",
+      "start_s": 505.658,
+      "end_s": 506.32
+    },
+    {
+      "w": "and",
+      "start_s": 506.494,
+      "end_s": 506.633
+    },
+    {
+      "w": "the",
+      "start_s": 506.668,
+      "end_s": 506.738
+    },
+    {
+      "w": "institutions",
+      "start_s": 506.808,
+      "end_s": 507.481
+    },
+    {
+      "w": "that",
+      "start_s": 507.527,
+      "end_s": 507.644
+    },
+    {
+      "w": "preserve",
+      "start_s": 507.678,
+      "end_s": 508.05
+    },
+    {
+      "w": "it.",
+      "start_s": 508.085,
+      "end_s": 508.305
+    },
+    {
+      "w": "This",
+      "start_s": 508.909,
+      "end_s": 509.095
+    },
+    {
+      "w": "is",
+      "start_s": 509.153,
+      "end_s": 509.234
+    },
+    {
+      "w": "where",
+      "start_s": 509.269,
+      "end_s": 509.443
+    },
+    {
+      "w": "a",
+      "start_s": 509.478,
+      "end_s": 509.513
+    },
+    {
+      "w": "travelling",
+      "start_s": 509.559,
+      "end_s": 509.966
+    },
+    {
+      "w": "practice",
+      "start_s": 510.012,
+      "end_s": 510.407
+    },
+    {
+      "w": "becomes",
+      "start_s": 510.442,
+      "end_s": 510.79
+    },
+    {
+      "w": "a",
+      "start_s": 510.825,
+      "end_s": 510.86
+    },
+    {
+      "w": "public",
+      "start_s": 510.929,
+      "end_s": 511.243
+    },
+    {
+      "w": "identity.",
+      "start_s": 511.301,
+      "end_s": 512.009
+    },
+    {
+      "w": "The",
+      "start_s": 512.706,
+      "end_s": 512.833
+    },
+    {
+      "w": "history",
+      "start_s": 512.891,
+      "end_s": 513.228
+    },
+    {
+      "w": "is",
+      "start_s": 513.286,
+      "end_s": 513.367
+    },
+    {
+      "w": "no",
+      "start_s": 513.437,
+      "end_s": 513.541
+    },
+    {
+      "w": "longer",
+      "start_s": 513.623,
+      "end_s": 513.913
+    },
+    {
+      "w": "only",
+      "start_s": 513.983,
+      "end_s": 514.203
+    },
+    {
+      "w": "about",
+      "start_s": 514.261,
+      "end_s": 514.482
+    },
+    {
+      "w": "arrival;",
+      "start_s": 514.517,
+      "end_s": 515.144
+    },
+    {
+      "w": "it",
+      "start_s": 515.387,
+      "end_s": 515.492
+    },
+    {
+      "w": "is",
+      "start_s": 515.527,
+      "end_s": 515.596
+    },
+    {
+      "w": "about",
+      "start_s": 515.631,
+      "end_s": 515.84
+    },
+    {
+      "w": "selection,",
+      "start_s": 515.898,
+      "end_s": 516.49
+    },
+    {
+      "w": "promotion,",
+      "start_s": 516.606,
+      "end_s": 517.257
+    },
+    {
+      "w": "memory,",
+      "start_s": 517.384,
+      "end_s": 517.976
+    },
+    {
+      "w": "and",
+      "start_s": 518.069,
+      "end_s": 518.197
+    },
+    {
+      "w": "the",
+      "start_s": 518.243,
+      "end_s": 518.313
+    },
+    {
+      "w": "power",
+      "start_s": 518.371,
+      "end_s": 518.673
+    },
+    {
+      "w": "to",
+      "start_s": 518.731,
+      "end_s": 518.789
+    },
+    {
+      "w": "define",
+      "start_s": 518.859,
+      "end_s": 519.23
+    },
+    {
+      "w": "what",
+      "start_s": 519.265,
+      "end_s": 519.416
+    },
+    {
+      "w": "counts",
+      "start_s": 519.486,
+      "end_s": 519.799
+    },
+    {
+      "w": "as",
+      "start_s": 519.845,
+      "end_s": 519.938
+    },
+    {
+      "w": "Brazilian.",
+      "start_s": 520.008,
+      "end_s": 520.612
+    },
+    {
+      "w": "The",
+      "start_s": 520.67,
+      "end_s": 520.774
+    },
+    {
+      "w": "most",
+      "start_s": 520.821,
+      "end_s": 520.995
+    },
+    {
+      "w": "accurate",
+      "start_s": 521.053,
+      "end_s": 521.494
+    },
+    {
+      "w": "conclusion",
+      "start_s": 521.529,
+      "end_s": 522.028
+    },
+    {
+      "w": "is",
+      "start_s": 522.086,
+      "end_s": 522.179
+    },
+    {
+      "w": "also",
+      "start_s": 522.237,
+      "end_s": 522.597
+    },
+    {
+      "w": "the",
+      "start_s": 522.667,
+      "end_s": 522.736
+    },
+    {
+      "w": "more",
+      "start_s": 522.783,
+      "end_s": 522.945
+    },
+    {
+      "w": "interesting",
+      "start_s": 523.003,
+      "end_s": 523.433
+    },
+    {
+      "w": "one.",
+      "start_s": 523.503,
+      "end_s": 523.758
+    },
+    {
+      "w": "Kano's",
+      "start_s": 524.002,
+      "end_s": 524.408
+    },
+    {
+      "w": "system",
+      "start_s": 524.431,
+      "end_s": 524.791
+    },
+    {
+      "w": "was",
+      "start_s": 524.849,
+      "end_s": 524.989
+    },
+    {
+      "w": "an",
+      "start_s": 525.047,
+      "end_s": 525.116
+    },
+    {
+      "w": "adaptation;",
+      "start_s": 525.174,
+      "end_s": 526.068
+    },
+    {
+      "w": "international",
+      "start_s": 526.219,
+      "end_s": 526.869
+    },
+    {
+      "w": "travel",
+      "start_s": 526.916,
+      "end_s": 527.229
+    },
+    {
+      "w": "changed",
+      "start_s": 527.287,
+      "end_s": 527.659
+    },
+    {
+      "w": "its",
+      "start_s": 527.705,
+      "end_s": 527.821
+    },
+    {
+      "w": "setting",
+      "start_s": 527.856,
+      "end_s": 528.17
+    },
+    {
+      "w": "and",
+      "start_s": 528.216,
+      "end_s": 528.286
+    },
+    {
+      "w": "emphasis;",
+      "start_s": 528.332,
+      "end_s": 528.971
+    },
+    {
+      "w": "Brazil",
+      "start_s": 529.064,
+      "end_s": 529.424
+    },
+    {
+      "w": "already",
+      "start_s": 529.482,
+      "end_s": 529.749
+    },
+    {
+      "w": "contained",
+      "start_s": 529.795,
+      "end_s": 530.19
+    },
+    {
+      "w": "competing",
+      "start_s": 530.225,
+      "end_s": 530.607
+    },
+    {
+      "w": "practices",
+      "start_s": 530.654,
+      "end_s": 531.2
+    },
+    {
+      "w": "and",
+      "start_s": 531.246,
+      "end_s": 531.327
+    },
+    {
+      "w": "communities;",
+      "start_s": 531.374,
+      "end_s": 531.943
+    },
+    {
+      "w": "and",
+      "start_s": 531.977,
+      "end_s": 532.094
+    },
+    {
+      "w": "later",
+      "start_s": 532.175,
+      "end_s": 532.407
+    },
+    {
+      "w": "institutions",
+      "start_s": 532.453,
+      "end_s": 533.08
+    },
+    {
+      "w": "remade",
+      "start_s": 533.162,
+      "end_s": 533.545
+    },
+    {
+      "w": "the",
+      "start_s": 533.568,
+      "end_s": 533.638
+    },
+    {
+      "w": "public",
+      "start_s": 533.684,
+      "end_s": 533.974
+    },
+    {
+      "w": "identity",
+      "start_s": 534.032,
+      "end_s": 534.485
+    },
+    {
+      "w": "again.",
+      "start_s": 534.543,
+      "end_s": 535.066
+    },
+    {
+      "w": "Brazilian",
+      "start_s": 535.449,
+      "end_s": 535.925
+    },
+    {
+      "w": "jiu-jitsu",
+      "start_s": 535.983,
+      "end_s": 536.494
+    },
+    {
+      "w": "was",
+      "start_s": 536.552,
+      "end_s": 536.668
+    },
+    {
+      "w": "not",
+      "start_s": 536.738,
+      "end_s": 536.9
+    },
+    {
+      "w": "copied",
+      "start_s": 536.958,
+      "end_s": 537.33
+    },
+    {
+      "w": "once.",
+      "start_s": 537.399,
+      "end_s": 537.922
+    },
+    {
+      "w": "It",
+      "start_s": 538.131,
+      "end_s": 538.258
+    },
+    {
+      "w": "was",
+      "start_s": 538.305,
+      "end_s": 538.421
+    },
+    {
+      "w": "transformed",
+      "start_s": 538.467,
+      "end_s": 539.141
+    },
+    {
+      "w": "repeatedly.",
+      "start_s": 539.21,
+      "end_s": 539.965
+    },
+    {
+      "w": "That",
+      "start_s": 540.29,
+      "end_s": 540.476
+    },
+    {
+      "w": "conclusion",
+      "start_s": 540.522,
+      "end_s": 541.022
+    },
+    {
+      "w": "is",
+      "start_s": 541.08,
+      "end_s": 541.149
+    },
+    {
+      "w": "not",
+      "start_s": 541.219,
+      "end_s": 541.358
+    },
+    {
+      "w": "an",
+      "start_s": 541.405,
+      "end_s": 541.463
+    },
+    {
+      "w": "attempt",
+      "start_s": 541.498,
+      "end_s": 541.811
+    },
+    {
+      "w": "to",
+      "start_s": 541.846,
+      "end_s": 541.892
+    },
+    {
+      "w": "make",
+      "start_s": 541.95,
+      "end_s": 542.113
+    },
+    {
+      "w": "the",
+      "start_s": 542.136,
+      "end_s": 542.206
+    },
+    {
+      "w": "history",
+      "start_s": 542.264,
+      "end_s": 542.601
+    },
+    {
+      "w": "less",
+      "start_s": 542.67,
+      "end_s": 542.856
+    },
+    {
+      "w": "dramatic.",
+      "start_s": 542.891,
+      "end_s": 543.576
+    },
+    {
+      "w": "It",
+      "start_s": 543.901,
+      "end_s": 544.04
+    },
+    {
+      "w": "gives",
+      "start_s": 544.098,
+      "end_s": 544.307
+    },
+    {
+      "w": "the",
+      "start_s": 544.342,
+      "end_s": 544.412
+    },
+    {
+      "w": "drama",
+      "start_s": 544.446,
+      "end_s": 544.771
+    },
+    {
+      "w": "more",
+      "start_s": 544.829,
+      "end_s": 544.992
+    },
+    {
+      "w": "places",
+      "start_s": 545.027,
+      "end_s": 545.41
+    },
+    {
+      "w": "to",
+      "start_s": 545.456,
+      "end_s": 545.526
+    },
+    {
+      "w": "live:",
+      "start_s": 545.596,
+      "end_s": 545.956
+    },
+    {
+      "w": "in",
+      "start_s": 546.002,
+      "end_s": 546.141
+    },
+    {
+      "w": "institutions,",
+      "start_s": 546.199,
+      "end_s": 546.989
+    },
+    {
+      "w": "ships,",
+      "start_s": 547.024,
+      "end_s": 547.372
+    },
+    {
+      "w": "theaters,",
+      "start_s": 547.407,
+      "end_s": 547.848
+    },
+    {
+      "w": "classrooms,",
+      "start_s": 547.883,
+      "end_s": 548.487
+    },
+    {
+      "w": "challenges,",
+      "start_s": 548.521,
+      "end_s": 549.125
+    },
+    {
+      "w": "immigrant",
+      "start_s": 549.16,
+      "end_s": 549.555
+    },
+    {
+      "w": "communities,",
+      "start_s": 549.601,
+      "end_s": 550.333
+    },
+    {
+      "w": "and",
+      "start_s": 550.576,
+      "end_s": 550.716
+    },
+    {
+      "w": "the",
+      "start_s": 550.762,
+      "end_s": 550.832
+    },
+    {
+      "w": "choices",
+      "start_s": 550.867,
+      "end_s": 551.296
+    },
+    {
+      "w": "later",
+      "start_s": 551.366,
+      "end_s": 551.598
+    },
+    {
+      "w": "promoters",
+      "start_s": 551.656,
+      "end_s": 552.086
+    },
+    {
+      "w": "made",
+      "start_s": 552.144,
+      "end_s": 552.341
+    },
+    {
+      "w": "about",
+      "start_s": 552.376,
+      "end_s": 552.585
+    },
+    {
+      "w": "which",
+      "start_s": 552.62,
+      "end_s": 552.782
+    },
+    {
+      "w": "connections",
+      "start_s": 552.829,
+      "end_s": 553.27
+    },
+    {
+      "w": "to",
+      "start_s": 553.316,
+      "end_s": 553.374
+    },
+    {
+      "w": "remember.",
+      "start_s": 553.456,
+      "end_s": 553.99
+    },
+    {
+      "w": "Explore",
+      "start_s": 554.268,
+      "end_s": 554.721
+    },
+    {
+      "w": "the",
+      "start_s": 554.744,
+      "end_s": 554.814
+    },
+    {
+      "w": "people,",
+      "start_s": 554.86,
+      "end_s": 555.209
+    },
+    {
+      "w": "places,",
+      "start_s": 555.244,
+      "end_s": 555.662
+    },
+    {
+      "w": "and",
+      "start_s": 555.685,
+      "end_s": 555.778
+    },
+    {
+      "w": "sources",
+      "start_s": 555.847,
+      "end_s": 556.289
+    },
+    {
+      "w": "behind",
+      "start_s": 556.358,
+      "end_s": 556.637
+    },
+    {
+      "w": "jiu-jitsu",
+      "start_s": 556.695,
+      "end_s": 557.159
+    },
+    {
+      "w": "at",
+      "start_s": 557.229,
+      "end_s": 557.299
+    },
+    {
+      "w": "NationalBJJRegistry.com.",
+      "start_s": 557.368,
+      "end_s": 559.922
+    }
+  ]
+}

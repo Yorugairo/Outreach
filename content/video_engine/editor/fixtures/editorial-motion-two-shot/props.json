@@ -1,0 +1,106 @@
+{
+  "plan": {
+    "schema_version": "editorial_motion_plan.v1",
+    "source_storyboard_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+    "source_beat_plan_hash": "1111111111111111111111111111111111111111111111111111111111111111",
+    "scene_bundle_hashes": [
+      "2222222222222222222222222222222222222222222222222222222222222222"
+    ],
+    "scene_flow_graph_hash": "3333333333333333333333333333333333333333333333333333333333333333",
+    "asset_map_hash": "4444444444444444444444444444444444444444444444444444444444444444",
+    "audio_manifest_hash": "5555555555555555555555555555555555555555555555555555555555555555",
+    "pacing_recipe_hash": "6666666666666666666666666666666666666666666666666666666666666666",
+    "duration_s": 4,
+    "source_start_s": 0,
+    "shots": [
+      {
+        "shot_id": "fixture-establish",
+        "parent_beat_ids": ["fixture-beat-one"],
+        "parent_scene_bundle_id": "fixture-scene-one",
+        "start_s": 0,
+        "duration_s": 2,
+        "word_range": {"start_index": 0, "end_index": 3},
+        "narration_excerpt": "A quiet room holds the first idea.",
+        "visual_intent": "scenic",
+        "purpose": "establish",
+        "shot_scale": "wide",
+        "focal_point": {"x": 0.5, "y": 0.5},
+        "layers": [
+          {"asset_id": "fixture-establish-plate", "role": "world"}
+        ],
+        "subject_action": "locked",
+        "ambient_actions": [],
+        "information_reveal": "none",
+        "camera": {
+          "kind": "locked",
+          "amount": 0,
+          "easing": "linear",
+          "hold_in_s": 2,
+          "move_s": 0,
+          "hold_out_s": 0
+        },
+        "transition_in": {"kind": "hard_cut", "reason": "fixture opening"},
+        "transition_out": {"kind": "hard_cut", "reason": "new authored plate"},
+        "audio_bridge": "continuous_narration",
+        "provider_motion": {"requirement": "none", "fallback": "locked_hold"},
+        "overlay_ids": [],
+        "uniqueness_signature": "fixture-establish-wide-locked"
+      },
+      {
+        "shot_id": "fixture-detail",
+        "parent_beat_ids": ["fixture-beat-two"],
+        "parent_scene_bundle_id": "fixture-scene-two",
+        "start_s": 2,
+        "duration_s": 2,
+        "word_range": {"start_index": 4, "end_index": 8},
+        "narration_excerpt": "A marked page gives the thought a shape.",
+        "visual_intent": "evidence",
+        "purpose": "reveal",
+        "shot_scale": "medium_detail",
+        "focal_point": {"x": 0.5, "y": 0.5},
+        "layers": [
+          {"asset_id": "fixture-detail-plate", "role": "world"}
+        ],
+        "subject_action": "locked",
+        "ambient_actions": [],
+        "information_reveal": "none",
+        "camera": {
+          "kind": "locked",
+          "amount": 0,
+          "easing": "linear",
+          "hold_in_s": 2,
+          "move_s": 0,
+          "hold_out_s": 0
+        },
+        "transition_in": {"kind": "hard_cut", "reason": "evidence plate"},
+        "transition_out": {"kind": "hard_cut", "reason": "fixture end"},
+        "audio_bridge": "continuous_narration",
+        "provider_motion": {"requirement": "none", "fallback": "locked_hold"},
+        "overlay_ids": [],
+        "uniqueness_signature": "fixture-detail-insert-locked"
+      }
+    ],
+    "provider_calls": 0,
+    "revision_only": true,
+    "artifact_hash": "7777777777777777777777777777777777777777777777777777777777777777"
+  },
+  "asset_map": {
+    "fixture-establish-plate": "assets/establish.svg",
+    "fixture-detail-plate": "assets/detail.svg"
+  },
+  "canonical_audio": {
+    "path": "audio/canonical-fixture.wav",
+    "start_s": 0,
+    "volume": 1
+  },
+  "overlay_map": {},
+  "caption_policy": "platform",
+  "citation_policy": "credits_only",
+  "diagnostic": false,
+  "render_profile": {
+    "width": 640,
+    "height": 360,
+    "fps": 15,
+    "label": "p16-editorial-motion-two-shot"
+  }
+}

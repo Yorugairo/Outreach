@@ -394,13 +394,13 @@ human-readable before/after packet.
 ## Task Slices
 
 ### T1: Establish the isolated implementation foundation
-- Status: in_progress
+- Status: completed
 - Owner: parent
 - Depends on: Gate 0
 - Write set: Git metadata for `codex/p16-agent-native-editor-design-toolchain`; the approved `.claude/PRPs/plans/P16-AGENT-NATIVE-EDITOR-DESIGN-TOOLCHAIN.plan.md` and `.claude/PRPs/compacts/P16-AGENT-NATIVE-EDITOR-DESIGN-TOOLCHAIN.compact.md` copied hash-for-hash into the isolated worktree; `.claude/PRPs/evidence/P16/foundation.md`; no source writes in the active `codex/stickly-woodblock-variant` worktree
 - Acceptance: A new worktree is created from `f70a502ef8260a6f64535ba5559fe724d2096722`; handoff commit `ba69d1769191d9b0d463129b24dcd1afe548aa57` is merged additively; only the approved P16 plan/compact are materialized from active uncommitted files and their source/destination SHA-256 values match; the active dirty worktree status hash is unchanged; the foundation record captures branch, base, merge base, handoff commit, plan/compact hashes, installed runtime versions, Remotion licensing gate state, and P15 foundation dependency state.
 - Validate: `git -C "C:\Users\Snipe\.codex\worktrees\p16-editor-design\Outreach Program" merge-base --is-ancestor f70a502ef8260a6f64535ba5559fe724d2096722 HEAD; git -C "C:\Users\Snipe\.codex\worktrees\p16-editor-design\Outreach Program" merge-base --is-ancestor ba69d1769191d9b0d463129b24dcd1afe548aa57 HEAD; git -C "C:\Users\Snipe\.codex\worktrees\p16-editor-design\Outreach Program" status --short`
-- Evidence: pending
+- Evidence: `.claude/PRPs/evidence/P16/foundation.md`; merge commit `c6f4f7db521510b371c1646e4aad470540552a0a`; active dirty status SHA-256 remained `94856bf9fa2a92911d0c9f2cfbe124dcdc2b357ff3f8c7125c82d42dec7b80ff`.
 
 Implementation notes:
 
@@ -418,26 +418,27 @@ Implementation notes:
    for a separately reviewed P15 foundation commit.
 
 ### T2: Activate the dedicated Remotion composition
-- Status: pending
+- Status: completed
 - Owner: implementation_luna
 - Depends on: T1
 - Write set: `content/video_engine/editor/src/Root.tsx`; `content/video_engine/editor/package.json`; `content/video_engine/editor/fixtures/editorial-motion-two-shot/**`; `content/video_engine/tests/test_remotion_editorial_fixture.py`
 - Acceptance: `EditorialMotion` imports and renders `EditorialMotionComposition`; `Editorial` and `Documentary` registrations are unchanged; the two-shot fixture uses staged local media and canonical fixture audio; path/URL negative fixtures fail; TypeScript and a 640x360/15fps render pass.
 - Validate: `npm --prefix content/video_engine/editor ci; npm --prefix content/video_engine/editor run typecheck; python -m pytest content/video_engine/tests/test_remotion_editorial_fixture.py -q; npm --prefix content/video_engine/editor run render:editorial-motion-fixture`
-- Evidence: pending
+- Evidence: `.claude/PRPs/evidence/P16/t2-compositor.md`; 13 focused tests and TypeScript typecheck passed; local render SHA-256 `8f10358be9acaef30422375777e3c0d139091e53e57104c05a4182d86dd854f4`.
 
 The render script must select `EditorialMotion`, pass fixture props explicitly,
 write beneath `content/video_engine/runtime/jobs/p16-fixture/`, and never invoke
 Remotion Automator or another paid service.
 
 ### T3: Add the generic Martial adapter and exact-word compiler path
-- Status: pending
-- Owner: implementation_luna
+- Status: completed
+- Owner: parent (completed from implementation_luna checkpoint)
 - Depends on: T2
-- Write set: `content/video_engine/configs/editorial_review_authorization.schema.json`; `content/video_engine/configs/martial_editorial_adapter_manifest.schema.json`; `content/video_engine/src/services/martial_editorial_adapter.py`; `content/video_engine/src/services/editorial_motion.py`; `content/video_engine/src/guards/editorial_motion_qc.py`; `content/video_engine/cli.py`; `content/video_engine/tests/test_martial_editorial_adapter.py`; focused additions to `content/video_engine/tests/test_editorial_motion.py` and `content/video_engine/tests/test_editorial_motion_qc.py`
+- Write set: `content/video_engine/configs/editorial_review_authorization.schema.json`; `content/video_engine/configs/martial_editorial_adapter_manifest.schema.json`; `content/video_engine/configs/editorial_pacing_recipe.default.json`; `content/video_engine/src/services/martial_editorial_adapter.py`; `content/video_engine/src/services/editorial_motion.py`; `content/video_engine/src/guards/editorial_motion_qc.py`; `content/video_engine/cli.py`; `content/video_engine/tests/test_martial_editorial_adapter.py`; focused additions to `content/video_engine/tests/test_editorial_motion.py` and `content/video_engine/tests/test_editorial_motion_qc.py`
 - Acceptance: The adapter fails without a valid internal-review authorization; with a valid fixture authorization it verifies all immutable r1 hashes, exact 192 cue/plate pairs, explicit word ranges and midpoint-derived cue time ranges, contiguous 0.000–567.804 coverage, selected-file hashes, and cue-local entry/micro-event/exit instructions; it emits the existing motion-plan schema plus job-local asset/overlay/props and adapter manifests; a cue longer than 3.35 seconds carries at least one timed material event; legacy timestamped compilation remains byte-stable for existing fixtures.
 - Validate: `python -m pytest content/video_engine/tests/test_martial_editorial_adapter.py content/video_engine/tests/test_editorial_motion.py content/video_engine/tests/test_editorial_motion_qc.py -q; python -m content.video_engine.cli compile-martial-editorial --help`
-- Evidence: pending
+- Evidence: `.claude/PRPs/evidence/P16/t3-adapter.md`; 58 focused tests,
+  real 192-plate hash verification, CLI help, TypeScript, and diff checks pass.
 
 Required CLI inputs are explicit paths for edit package, cue sheet, audio
 manifest, word timing, caption plan/output, authorization, pacing recipe, job
@@ -446,13 +447,14 @@ root, and revision ID. The CLI must refuse an output root outside
 injected.
 
 ### T4: Compile and render the first-minute proof
-- Status: pending
+- Status: in_progress (awaiting Gate A operator watch-through)
 - Owner: parent
 - Depends on: T3 and Gate 1
 - Write set: `content/video_engine/projects/martial-matters/pilots/marshall-monday-001/edit/revisions/r1/editorial-review-authorization.v1.json`; generated artifacts under `content/video_engine/runtime/jobs/marshall-monday-001-p16/animatic/revisions/gate-a-first-minute/`; `.claude/PRPs/evidence/P16/gate-a.md`
 - Acceptance: The authorization lists exactly the 192 handoff assets and hashes; the sample ends on the nearest complete authored cue between 45 and 60 seconds and contains 8–20 cues; normal and diagnostic 640x360/15fps previews use the r1 canonical audio segment; structural QC, contained-file hash verification, ffprobe duration, and human watch-through pass.
-- Validate: `python -m content.video_engine.cli compile-martial-editorial --edit-package content/video_engine/projects/martial-matters/pilots/marshall-monday-001/edit/revisions/r1/marshall-monday-001-edit-package.v1.json --authorization content/video_engine/projects/martial-matters/pilots/marshall-monday-001/edit/revisions/r1/editorial-review-authorization.v1.json --sample-max-seconds 60 --sample-max-cues 20 --job-root content/video_engine/runtime/jobs/marshall-monday-001-p16 --revision-id gate-a-first-minute; python -m content.video_engine.cli validate-editorial-motion --job-root content/video_engine/runtime/jobs/marshall-monday-001-p16 --revision-id gate-a-first-minute; python -m content.video_engine.cli render-editorial-motion-revision --job-root content/video_engine/runtime/jobs/marshall-monday-001-p16 --revision-id gate-a-first-minute --width 640 --height 360 --fps 15 --diagnostic`
-- Evidence: pending
+- Validate: `python -m content.video_engine.cli compile-martial-editorial --edit-package content/video_engine/projects/martial-matters/pilots/marshall-monday-001/edit/revisions/r1/marshall-monday-001-edit-package.v1.json --cue-sheet content/video_engine/projects/martial-matters/pilots/marshall-monday-001/continuity/revisions/r1/word-timed-visual-cues-r1.v1.json --audio-manifest content/video_engine/projects/martial-matters/pilots/marshall-monday-001/audio/revisions/r1/marshall-monday-001-canonical-audio-r1.v1.json --word-timings content/video_engine/projects/martial-matters/pilots/marshall-monday-001/audio/revisions/r1/marshall-monday-001-master-r1.words.json --caption-plan content/video_engine/projects/martial-matters/pilots/marshall-monday-001/edit/revisions/r1/captions/marshall-monday-001-dynamic-captions.v1.json --caption-output content/video_engine/projects/martial-matters/pilots/marshall-monday-001/edit/revisions/r1/captions/marshall-monday-001-anchor.en-US.srt --authorization content/video_engine/projects/martial-matters/pilots/marshall-monday-001/edit/revisions/r1/editorial-review-authorization.v1.json --pacing-recipe content/video_engine/configs/editorial_pacing_recipe.default.json --sample-max-seconds 60 --sample-max-cues 20 --job-root content/video_engine/runtime/jobs/marshall-monday-001-p16 --revision-id gate-a-first-minute; python -m content.video_engine.cli validate-editorial-motion --job-root content/video_engine/runtime/jobs/marshall-monday-001-p16 --revision-id gate-a-first-minute; python -m content.video_engine.cli render-editorial-motion-revision --job-root content/video_engine/runtime/jobs/marshall-monday-001-p16 --revision-id gate-a-first-minute --width 640 --height 360 --fps 15 --diagnostic`
+- Evidence: `.claude/PRPs/evidence/P16/gate-a.md`; 20 authored cues ending at
+  58.833 seconds; structural QC passed; normal and diagnostic previews rendered.
 
 If exact CLI flag names differ from the existing parser convention, T3 must add
 these names and its CLI test must lock them. The first-minute render stops for

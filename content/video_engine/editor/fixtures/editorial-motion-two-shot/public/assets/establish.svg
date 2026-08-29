@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720">
+  <defs>
+    <linearGradient id="paper" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#efe4cf"/>
+      <stop offset="1" stop-color="#c6a982"/>
+    </linearGradient>
+    <linearGradient id="shadow" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#273844" stop-opacity=".05"/>
+      <stop offset="1" stop-color="#172129" stop-opacity=".42"/>
+    </linearGradient>
+  </defs>
+  <rect width="1280" height="720" fill="url(#paper)"/>
+  <rect width="1280" height="720" fill="url(#shadow)"/>
+  <path d="M0 560C210 490 340 602 540 530s320-84 740 16v174H0Z" fill="#8e6046" opacity=".48"/>
+  <path d="M80 112h1120M160 172h960M210 232h810" stroke="#f7efdF" stroke-width="8" opacity=".62"/>
+  <circle cx="1060" cy="190" r="72" fill="#b95f3e" opacity=".9"/>
+  <circle cx="1060" cy="190" r="42" fill="#f3d8b5" opacity=".76"/>
+  <text x="82" y="640" fill="#1f252a" font-family="Arial, sans-serif" font-size="34" letter-spacing="8">ESTABLISH / LOCAL PLATE</text>
+</svg>

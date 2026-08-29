@@ -9,7 +9,8 @@
     "test": "vitest run",
     "start": "remotion studio src/index.tsx",
     "render": "remotion render src/index.tsx Editorial",
-    "render:smoke": "remotion render src/index.tsx Documentary out/smoke.mp4 --frames=0-30"
+    "render:smoke": "remotion render src/index.tsx Documentary out/smoke.mp4 --frames=0-30",
+    "render:editorial-motion-fixture": "node fixtures/editorial-motion-two-shot/render.mjs"
   },
   "dependencies": {
     "@remotion/media": "4.0.502",

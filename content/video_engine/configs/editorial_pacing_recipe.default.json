@@ -1,0 +1,19 @@
+{
+  "schema_version": "editorial_pacing_recipe.v1",
+  "id": "history-documentary-restrained-v1",
+  "preferred_shot_duration_s": [
+    1.8,
+    5.5
+  ],
+  "maximum_shot_duration_s": 6.0,
+  "max_consecutive_same_scale": 2,
+  "max_consecutive_moving_shots": 2,
+  "max_information_surfaces": 0,
+  "max_non_evidence_prop_layers": 1,
+  "motion_density": "restrained",
+  "transition_policy": "hard_cuts_default",
+  "chapter_reset_policy": "paper_reset",
+  "provider_motion_policy": "shot_level_exception_only",
+  "reference_policy": "abstract_structure_only",
+  "artifact_hash": "01ab13ba63be5320635b0cedfebb921805be0c07b5521b9e3de34197df26f829"
+}

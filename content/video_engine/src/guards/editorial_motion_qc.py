@@ -121,6 +121,7 @@ def run_editorial_motion_qc(
     revision_dir: str | Path,
     job_dir: str | Path,
     expected_hashes: Mapping[str, str] | None = None,
+    adapter_manifest: Mapping[str, Any] | str | Path | None = None,
     check_files: bool = True,
 ) -> dict[str, Any]:
     """Return fail-closed structural evidence for one revision render."""
@@ -217,6 +218,63 @@ def run_editorial_motion_qc(
             "outputs remain under the job revision tree" if revision_ok else "revision output escapes animatic/revisions",
         )
     )
+
+    if adapter_manifest is not None:
+        manifest_errors: list[str] = []
+        try:
+            manifest = _load(adapter_manifest, "martial editorial adapter manifest")
+        except (EditorialMotionError, ValueError) as exc:
+            manifest = {}
+            manifest_errors.append(str(exc))
+        if manifest:
+            if manifest.get("schema_version") != "martial_editorial_adapter_manifest.v1":
+                manifest_errors.append("adapter manifest schema_version is invalid")
+            if str(manifest.get("artifact_hash") or "") != canonical_sha256(manifest):
+                manifest_errors.append("adapter manifest artifact_hash is stale")
+            if str(manifest.get("motion_plan_hash") or "") != str(validated.get("artifact_hash") or ""):
+                manifest_errors.append("adapter manifest motion_plan_hash is stale")
+            if str(manifest.get("asset_map_hash") or "") != actual_asset_hash:
+                manifest_errors.append("adapter manifest asset_map_hash is stale")
+            if str(manifest.get("pacing_recipe_hash") or "") != str(recipe.get("artifact_hash") or ""):
+                manifest_errors.append("adapter manifest pacing_recipe_hash is stale")
+            if str(manifest.get("revision_id") or "") != revision.name:
+                manifest_errors.append("adapter manifest revision_id does not match the revision path")
+            contained = manifest.get("contained_file_hashes")
+            if not isinstance(contained, list):
+                manifest_errors.append("adapter manifest contained_file_hashes must be an array")
+                contained = []
+            seen_paths: set[str] = set()
+            for index, record in enumerate(contained):
+                if not isinstance(record, Mapping):
+                    manifest_errors.append(f"adapter contained file {index} must be an object")
+                    continue
+                raw_path = str(record.get("path") or "")
+                relative = Path(raw_path)
+                if not raw_path or relative.is_absolute() or ".." in relative.parts:
+                    manifest_errors.append(f"adapter contained file {index} has an unsafe path")
+                    continue
+                candidate = (revision / relative).resolve()
+                if not _inside(candidate, revision):
+                    manifest_errors.append(f"adapter contained file {index} escapes the revision")
+                    continue
+                normalized_path = relative.as_posix()
+                if normalized_path in seen_paths:
+                    manifest_errors.append(f"adapter contained file {normalized_path} is duplicated")
+                seen_paths.add(normalized_path)
+                if check_files:
+                    if not candidate.is_file():
+                        manifest_errors.append(f"adapter contained file {normalized_path} is missing")
+                    elif _sha256(candidate) != str(record.get("sha256") or ""):
+                        manifest_errors.append(f"adapter contained file {normalized_path} has a stale hash")
+        checks.append(
+            _check(
+                "adapter_manifest_integrity",
+                not manifest_errors,
+                "adapter manifest and contained files are hash-bound"
+                if not manifest_errors
+                else "; ".join(manifest_errors),
+            )
+        )
 
     motion_errors: list[str] = []
     maximum_hold_s = min(float(recipe["maximum_shot_duration_s"]), 6.0)
