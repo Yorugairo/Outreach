@@ -2,7 +2,7 @@
  "schema_version": "plate_library.v1",
  "built": "2026-08-29",
  "note": "Status comes from the MANIFEST, never the path (ruling E10). The pilot's quarantine/ directory is misnamed - every manifest inside reads operator_approved.",
- "count": 142,
+ "count": 134,
  "plates": [
   {
    "id": "world-banker-apartment-v2",
@@ -1154,42 +1154,6 @@
    ]
   },
   {
-   "id": "flow-hook-01-memory-vertical-omni-flash-v1-frame-001",
-   "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-01\\flow-hook-01-memory-vertical-omni-flash-v1-frame-001.png",
-   "semantic": "",
-   "register": "sentence-native",
-   "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-01",
-   "state": "approved",
-   "render_eligible": false
-  },
-  {
-   "id": "wave-01a-review-contact-sheet",
-   "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-01\\wave-01a-review-contact-sheet.png",
-   "semantic": "",
-   "register": "sentence-native",
-   "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-01",
-   "state": "approved",
-   "render_eligible": false
-  },
-  {
-   "id": "wave-01b-review-contact-sheet",
-   "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-01\\wave-01b-review-contact-sheet.png",
-   "semantic": "",
-   "register": "sentence-native",
-   "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-01",
-   "state": "approved",
-   "render_eligible": false
-  },
-  {
-   "id": "wave-01c-review-contact-sheet",
-   "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-01\\wave-01c-review-contact-sheet.png",
-   "semantic": "",
-   "register": "sentence-native",
-   "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-01",
-   "state": "approved",
-   "render_eligible": false
-  },
-  {
    "id": "beat-03-002-hbm-stack-accelerator-v1",
    "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-02\\beat-03-002-hbm-stack-accelerator-v1.png",
    "semantic": "High-bandwidth memory, or HBM, is not ordinary storage.",
@@ -1286,15 +1250,6 @@
    ]
   },
   {
-   "id": "wave-02-depth-contact-sheet",
-   "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-02\\wave-02-depth-contact-sheet.png",
-   "semantic": "",
-   "register": "sentence-native",
-   "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-02",
-   "state": "approved",
-   "render_eligible": true
-  },
-  {
    "id": "beat-03-016-hbm-pressures-dram-v1",
    "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-03\\beat-03-016-hbm-pressures-dram-v1.png",
    "semantic": "As manufacturers devote more capacity to HBM, they also pressure conventional DRAM supply.",
@@ -1377,15 +1332,6 @@
      "end_word_index": 520
     }
    ]
-  },
-  {
-   "id": "wave-03-review-contact-sheet",
-   "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-03\\wave-03-review-contact-sheet.png",
-   "semantic": "",
-   "register": "sentence-native",
-   "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-03",
-   "state": "approved",
-   "render_eligible": false
   },
   {
    "id": "beat-04-001-buyer-behavior-v1",
@@ -1554,24 +1500,6 @@
      "end_word_index": 717
     }
    ]
-  },
-  {
-   "id": "wave-04-depth-contact-sheet",
-   "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-04\\wave-04-depth-contact-sheet.png",
-   "semantic": "",
-   "register": "sentence-native",
-   "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-04",
-   "state": "approved",
-   "render_eligible": true
-  },
-  {
-   "id": "wave-04-review-contact-sheet",
-   "path": "C:\\Users\\Snipe\\.codex\\worktrees\\f10b\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\pilots\\current-bubble-mechanism\\assets\\quarantine\\sentence-native-wave-04\\wave-04-review-contact-sheet.png",
-   "semantic": "",
-   "register": "sentence-native",
-   "source": "pilot/current-bubble-mechanism/quarantine/sentence-native-wave-04",
-   "state": "approved",
-   "render_eligible": true
   },
   {
    "id": "beat-05-001-beyond-three-memory-companies-v1",

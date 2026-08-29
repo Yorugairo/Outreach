@@ -172,6 +172,8 @@ def scan_pilot(root: Path, sem: dict | None = None) -> list[dict]:
                                       "--foreground", "--contact-shadow",
                                       "--negative-space")):
                     continue          # depth layers, not standalone plates
+                if "contact-sheet" in png.stem or png.stem.endswith("-frame-001"):
+                    continue          # review artifacts, not plates
                 rec = {
                     "id": png.stem, "path": str(png), "semantic": "",
                     "register": reg,
