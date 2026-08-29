@@ -94,6 +94,15 @@ Indexes to read first: `sources/decks/asset-selection-index.md`,
 **The deck libraries live in the MAIN CHECKOUT, not the worktree.** Worktree
 isolation governs writes. Reads go anywhere.
 
+## Handoff
+
+`docs/portable/BUILD-PIPELINE.md` is the model-agnostic version of this
+document — paste-able into Gemini or GPT with no Claude-specific tooling.
+Keep the two in sync. Anything a fresh model needs that lives only in a
+Claude skill file is a handoff failure waiting to happen.
+
+Skills: `script-writer` owns stages 1-4, `episode-build` owns 5-8.
+
 ## Doctrine — derivation, not operation
 
 Run the kit. Read a numbered doc to learn *why* a rule exists or to change

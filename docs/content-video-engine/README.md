@@ -26,6 +26,7 @@ The working doctrine is **not** in this folder. It is three files in
 |---|---|---|
 | **`DOCTRINE-CORE.md`** | 9,999 chars | Channels, narrator, retention clock, six-phase architecture, sentence gates, packaging, production standards, never-list |
 | **`OPERATOR-RULINGS.md`** | ~12k | Every standing correction, with the reason it was made |
+| **`BUILD-PIPELINE.md`** | ~7k | The build contract stages 4-8: timeline, plate density, evidence docking, motion values, the render schema, captions. Model-agnostic - hand this to Gemini or GPT and they can build without tribal knowledge |
 | **`VOICE-PACK.md`** | ~10k | Voice by exemplar and contrast pair, plus the calibration protocol |
 
 They are model-agnostic and sized to paste into a system-instruction box.
