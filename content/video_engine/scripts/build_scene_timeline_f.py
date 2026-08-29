@@ -14,6 +14,7 @@ and a source line.
 from __future__ import annotations
 
 import base64
+import io
 import hashlib
 import json
 import mimetypes
@@ -37,9 +38,25 @@ def sha(p: Path) -> str:
     return hashlib.sha256(p.read_bytes()).hexdigest()
 
 
-def data_uri(p: Path) -> str:
-    mime = mimetypes.guess_type(p.name)[0] or "application/octet-stream"
-    return f"data:{mime};base64,{base64.b64encode(p.read_bytes()).decode()}"
+# Embedding source PNGs verbatim produced a 366 MB player that no browser
+# would open. The stage is 1920x1080 and a world plate never draws larger
+# than that, so anything beyond it is bytes the viewer cannot see. Evidence
+# caps at 1400 (drawn at most 880 wide, so still ~1.6x for crisp text).
+STAGE_W, CARD_W, Q = 1920, 1400, 90
+
+
+def data_uri(p: Path, cap: int | None = None) -> str:
+    """Embed an asset, downscaled to what the stage can actually show."""
+    if cap is None:
+        mime = mimetypes.guess_type(p.name)[0] or "application/octet-stream"
+        return f"data:{mime};base64,{base64.b64encode(p.read_bytes()).decode()}"
+    from PIL import Image
+    im = Image.open(p).convert("RGB")
+    if im.width > cap:
+        im = im.resize((cap, round(im.height * cap / im.width)), Image.LANCZOS)
+    buf = io.BytesIO()
+    im.save(buf, "JPEG", quality=Q, optimize=True, progressive=True)
+    return f"data:image/jpeg;base64,{base64.b64encode(buf.getvalue()).decode()}"
 
 
 def title_for(asset: str) -> tuple[str, str]:
@@ -74,7 +91,7 @@ def main() -> int:
         # each window runs to the next so the world layer never drops out
         b = plan[i + 1][0] if i + 1 < len(plan) else tl["runtime_s"]
         wp = R.find_asset(plate)
-        uris[plate] = data_uri(wp)
+        uris[plate] = data_uri(wp, STAGE_W)
         docks = []
         for aid, slot, enter, exitt in ds:
             d = META.get(aid, {"title": aid, "source": "", "species": "deck",
@@ -93,7 +110,7 @@ def main() -> int:
                                      "sha256": sha(ap)},
                         "badges": d["badges"],
                     }
-                    uris[aid] = data_uri(ap)
+                    uris[aid] = data_uri(ap, CARD_W)
                 # Spans come from the dock: evidence enters before its claim
                 # and holds through the whole discussion. A flat hold drops the
                 # document mid-argument, which is what left 42% of claims naked.

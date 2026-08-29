@@ -58,8 +58,6 @@
   #dock-1.solo.side-l { left: 100px; }
   #dock-1 { left: 136px; } #dock-2 { left: 1064px; }
 
-  .dock-head { margin-bottom: 9px; }
-  .dock-title { font-size: 25px; font-weight: 800; color: var(--charcoal); line-height: 1.12; }
   /* The skill puts mix-blend-mode: multiply on the artblock wrapper — correct
      for hand-drawn INK on a paper canvas. It does not transfer to a literal
      source document: (a) a blend group escapes the white frame and multiplies
@@ -135,12 +133,10 @@
   <div id="spot"></div>
 
   <div class="dock" id="dock-1">
-    <div class="dock-head"><span class="dock-title" id="t1"></span></div>
     <div class="slide-frame"><img id="i1" alt="evidence" /></div>
     <div class="rail" id="r1"></div>
   </div>
   <div class="dock" id="dock-2">
-    <div class="dock-head"><span class="dock-title" id="t2"></span></div>
     <div class="slide-frame"><img id="i2" alt="evidence" /></div>
     <div class="rail" id="r2"></div>
   </div>
@@ -163,6 +159,10 @@
 <script>
 (() => {
   "use strict";
+  /* $ is declared FIRST. It used to sit below the title/scrub lines that
+     call it, so the whole IIFE threw ReferenceError on load and the stage
+     rendered black - passing every structural check while showing nothing. */
+  const $ = (id) => document.getElementById(id);
   const TL = JSON.parse(document.getElementById("timeline-data").textContent);
   const A  = JSON.parse(document.getElementById("asset-data").textContent);
   /* Runtime comes from the TIMELINE, never hardcoded. A template that
@@ -172,7 +172,6 @@
   const scrub = $("scrub");
   const DUR = TL.runtime_s || (TL.scenes.length ? TL.scenes[TL.scenes.length-1].span[1] : 0);
   scrub.max = DUR;
-  const $ = (id) => document.getElementById(id);
   const stage = $("stage"), fit = $("fit");
   const fitStage = () => { stage.style.transform = `scale(${fit.clientWidth / 1920})`; };
   addEventListener("resize", fitStage); fitStage();
@@ -209,7 +208,10 @@
   const fillDock = (slot, aid) => {
     const ev = TL.evidence[aid]; if (!ev) return;
     const n = slot + 1;
-    $("t" + n).textContent = ev.title;
+    /* NO TITLE ON STAGE. The card IS the document - a label above it spends
+       25px of the most valuable real estate on the frame restating what the
+       viewer is already looking at. `title` stays in the timeline for
+       manifests and QA; it is never drawn. */
     $("i" + n).src = A[aid] || "";
     const rail = $("r" + n); rail.innerHTML = "";
     rail.classList.toggle("single", ev.badges.length === 1);

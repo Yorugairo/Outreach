@@ -1,0 +1,12 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "episode-player",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "8731", "--directory",
+                      "content/video_engine/projects/systems-and-blowups/steel-and-paper/build-f"],
+      "port": 8731
+    }
+  ]
+}
