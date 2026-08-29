@@ -22,9 +22,19 @@ file will be rebuilt by someone who doesn't know it exists.
 | **Kinetic + quiet captions** — word-punch groups at canonical timings; quiet mode under any docked evidence | template + `caption-pages.json` from the words sidecar | LIVE | doc 29 Part 5 |
 | **Choreography ledger + gates** — every enter/exit/side/how-it-leaves, gated per slot; FAIL blocks the build | `content/video_engine/scripts/emit_choreography.py` → `build-f/CHOREOGRAPHY.md` | LIVE — constants mirror the template; change together | caught tnx re-landing on first run |
 | **Whiteboard reveal engine** — serpentine SVG mask + hand follower, pose set with per-pose nib calibration | git history `7880c01`, `1e6612f`; poses `hyperframes/assets/hands/` + `nib-calibration.v1.json` | RETIRED from this lane (doc 29 8.17) — earns its place when artwork is drawn, not sourced | doc 29 8.10–8.16 |
+| **Remotion Production Console** — local timeline/canvas editor + Python bridge (`127.0.0.1:4317`): scrub/zoom/drag/trim, hash-bound immutable revisions, recompiles without touching narration or evidence approvals; semantic-evidence binding tests | `content/video_engine/production_console/` + `configs/production_console_snapshot*.schema.json` (merged from p31, 2026-08-29) | BUILT — the doc 29 §9.3 production route | P29/P31 gate screenshots in `.claude/PRPs/evidence/` |
+| **Remotion composition registry** — single source of truth for editor compositions (Editorial, Documentary, motion variants, finance proofs, production evidence/timeline, 3D prototypes) | `content/video_engine/editor/src/compositions.ts` | LIVE — register here, never in Root.tsx | typecheck + vitest |
+| **Editor fixtures** — editorial-motion two-shot with render harness (`render.mjs`), canonical audio fixture | `content/video_engine/editor/fixtures/` (merged from p16) | BUILT | `npm run render:editorial-motion-fixture` |
 | **Hyperframes** — production vector animation (alpha overlays, compositions); Remotion port path | skills in codex worktree `f10b/.agents/skills/hyperframes*`, assets `content/video_engine/review/hyperframes_assets` | BUILT, not in the review loop — the doc 29 §9.3 production route | pinned CLI renders alpha natively (doc 29 Part 7) |
 
 ## Evidence & assets
+
+**Martial Matters episode 1** (merged from p16, 2026-08-29): 192 asset files
+(1080p plates), recorded narration + word timings
+(`projects/martial-matters/.../transcript/narration.words.json`), the
+Marshall Monday editing handoff. The third channel's pilot — plate-library
+scanner does NOT yet index these paths (follow-up).
+
 
 | Capability | Where | State | Proof |
 |---|---|---|---|
