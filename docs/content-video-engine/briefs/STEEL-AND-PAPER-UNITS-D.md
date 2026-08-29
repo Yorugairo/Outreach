@@ -4,9 +4,9 @@ Two P3/P5 pattern units extending Script C. Units go on **both sides of
 the pivot** — loading them all into P3 would push the pivot to ~76% of
 runtime and break the 45–55% pin (doc 38).
 
-**As drafted: 9,916 characters, ~10m 19s, one master take.** Built out to
-the doctrinal 2:00–2:30 unit length: ~12,400 characters, ~12m 50s, needing
-a chained take. See §3 for the fork.
+**Assembled and measured: Script D is 11,239 characters, 11m 42s.** The
+pivot lands at 49.4% — units on both sides of it is what held the 45–55%
+pin. See §3.
 
 ---
 
@@ -130,50 +130,43 @@ filing.
 
 ---
 
-## 3. Measured, built out
+## 3. Measured, as assembled
 
-The debt unit is now built to the doctrinal 2:00–2:30 (doc 38) using three
-verified figures the episode has never used: the bond market's tech
-weighting, the capex consensus trajectory, and the 94%-of-operating-cash-
-flow number. Draft: `steel-and-paper/unit-debt-draft.txt`.
+Both units are spliced into `SCRIPT-D-VO.txt`. Linter clean: sentence mean
+10.5 words, break ration 1.87/1k, no stray flags.
+
+| | chars | runtime | position |
+|---|---|---|---|
+| Script C | 8,078 | 8m 24s | — |
+| P3 debt unit | 1,920 | ~2m 0s | opens at 32.3% |
+| P5 winner unit | 1,239 | ~1m 17s | opens at 71.2% |
+| **Script D** | **11,239** | **11m 42s** | pivot at **49.4%** |
+
+Drafts: `steel-and-paper/unit-debt-draft.txt`,
+`steel-and-paper/unit-winner-draft.txt`.
+
+## 4. Delivery — chained
+
+11,239 exceeds the mv2 10,000 cap, so the take is two requests split at
+`Now the test — the one from the top.` (the P4→P5 boundary):
 
 | | chars | runtime |
 |---|---|---|
-| Script C | 8,078 | 8m 24s |
-| P3 debt unit (built out) | **1,920** | ~2m 0s |
-| P5 winner unit (as drafted) | 869 | ~0m 54s |
-| **Script D** | **10,867** | **~11m 18s** |
-| with the winner unit given one more loop | 11,268 | ~11m 43s |
+| `SCRIPT-D-VO-part1.txt` | 7,206 | 450s |
+| `SCRIPT-D-VO-part2.txt` | 4,032 | 252s |
 
-**Exceeds the 10,000 mv2 cap → two-part chained take** (§4). That is the
-cost of the runtime target, and it is a real one — but chaining is the
-provider's supported long-form path, not a workaround.
-
-**Plate density is the binding constraint, not credits.** 39 plates were
-sized for eight minutes. At 11m 18s that is 17.4s per plate — inside the
-20s ceiling but well past the 12s target. Hitting target needs **56
-plates, so ~17 more**. A wave-5 claim is required before this ships, and
-it is the longest pole in the job.
-
-## 4. Delivery — only if option B
-
-| | |
-|---|---|
-| Characters | ~12,400 (Script C 8,078 + two units at ~2,100 each) |
-| Runtime | **~12m 50s** at 16.02 chars/sec |
-| mv2 cap | 10,000 — **exceeded** |
-| Delivery | **two chained requests**, part two conditioned on part one's `previous_request_ids` |
-| Split point | at a phase boundary, ideally P4 → P5 |
-| Plates | 39 at 12m 50s = 19.7s each — **at the 20s ceiling**; wants ~25 more plates or a wave-5 |
-| Pivot position | recheck against the 45–55% pin after the split |
+Part two passes part one's `previous_request_ids`.
 
 **Chaining is not splice-repair.** Doc 37 §8 bans stitching fixes into a
-broken take — that produced the 6:20 fragment artifacts, which came from
-raw MP3 concat of independently generated segments. A planned two-part
-take passing `previous_request_ids` is the provider's supported long-form
-path and carries prosody across the join. Worth writing into §8 explicitly
-so the ban is not misread.
+broken take — that produced the 6:20 fragment artifacts, which came from raw
+MP3 concat of independently generated segments. A planned two-part take
+passing `previous_request_ids` is the provider's supported long-form path and
+carries prosody across the join.
 
-**Plate density is the real cost.** 39 plates was sized for ~8 minutes. At
-12m 50s we are at the ceiling, not the target. Extending the script means
-a wave-5 plate claim before this can ship.
+## 5. Plate density — resolved
+
+56 usable plates at 11m 42s is 12.5s each, inside the 20s ceiling and at the
+12s target once evidence cut-ins are counted. With the evidence review gate
+cleared on 2026-08-29 there are 202 approved evidence objects across four
+species, so no stretch has to run bare. Density is no longer the constraint
+on shipping this episode. See `STEEL-AND-PAPER-WAVE-5-PLAN.md`.

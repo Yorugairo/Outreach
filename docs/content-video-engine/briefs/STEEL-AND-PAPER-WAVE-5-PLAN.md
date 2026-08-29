@@ -1,124 +1,128 @@
-# Steel and Paper — wave 5 plan (plates + evidence)
+# Steel and Paper — wave 5 state (plates + evidence)
 
-Script D lands at **11,237 characters ≈ 11m 42s**. Everything below is
-what has to exist before it can ship.
+**Script D is assembled and linter-clean.** `SCRIPT-D-VO.txt`, 11,239 spoken
+characters, **11m 42s** at the measured 16.02 chars/sec.
 
 | | |
 |---|---|
-| Plates today | 39 → **18.0s each** (ceiling 20, target 12) |
-| Plates needed | **58** for the 12s target → **15 new** (4 reused from finance-episodes-wave-1) |
-| Evidence today | 15 in `evidence/objects/` |
-| Evidence needed | **3 promoted + 2 built** |
+| Pivot position | **49.4%** — dead centre of the 45–55% pin (doc 38) |
+| Plates usable | **56** → **12.5s each** (ceiling 20, target 12) |
+| Evidence available | **202 approved objects** — see §2 |
+| Delivery | two-part chained take, split at P4→P5 |
+| Blocking work | none — the review gate is cleared |
 
 ---
 
-## 1. Evidence — three documents exist but were never promoted
+## 1. Script D — measured
 
-Built during the system pass, left in scratchpad, **never moved into
-`evidence/objects/`.** One of them is the best document in the episode.
+Script C with the two extension units spliced on opposite sides of the pivot,
+exactly as the units-D brief specified.
 
-| Document | Why it matters |
-|---|---|
-| `ev-railway-index-v1` | Campbell & Turner index, +106% then −64.1%, peak and trough annotated. **The flagship** — it carries the episode's central historical claim and it is not in the evidence folder. |
-| `ev-railway-gdp-tile-v1` | 7% of British GDP stat tile |
-| `ev-debt-issuance-v2` | The corrected three-bar: $28B avg → $121B → $130–150B |
+| Beat | at | position |
+|---|---|---|
+| Debt unit opens | 227s | 32.3% |
+| **P4 pivot** — "the bubble isn't in the steel" | 347s | **49.4%** |
+| P5 — "Now the test" *(chained-take split)* | 450s | 64.1% |
+| Winner unit opens | 499s | 71.2% |
+| The tell — the memory instrument | 577s | 82.2% |
 
-Action: move all three into `evidence/objects/`, re-render from
-`build_evidence_documents.py` so they carry the current palette and the
-value-weighted method line where relevant.
+Units on both sides of the pivot is what held the pin: loading them into P3
+alone would have pushed it to ~76%.
 
-## 2. Evidence — two new documents for the new units
+Linter: **clean.** Sentence mean 10.5 words, 187 sentences, break ration
+1.87/1k (limit 3.0), no stray editorial flags.
 
-**`ev-ig-credit-weighting`** — debt unit.
-Tech's share of the investment-grade index: ~9% (2024) → ~10% (now) →
->12% (projected). Form: three-bar with the projection in de-emphasis, or
-a threshold line at the 2024 level. Source: Morgan Stanley IM;
-Investing.com/LPL. This is the "money that used to sit in utilities" line
-made visible.
+**Chained take.** 11,239 chars exceeds the mv2 10,000 cap. Split at
+`Now the test — the one from the top.`:
 
-**`ev-hbm-wafer-ratio`** — winner unit.
-HBM consumes ~3× the wafer capacity per gigabyte of standard DRAM. Form:
-**stat tile**, not a chart — it is one number and doc 39 §6 says a single
-value is a tile. Pairs with `ev-dram-contract-v1` as the consequence.
-Source: Micron executive, via the dossier E1 chain.
+| | chars | runtime |
+|---|---|---|
+| `SCRIPT-D-VO-part1.txt` | 7,206 | 450s |
+| `SCRIPT-D-VO-part2.txt` | 4,032 | 252s |
 
-## 3. Reuse first — the memory episode and the stamped deck
+Part two passes part one's `previous_request_ids` so prosody carries across
+the join. This is the provider's supported long-form path, not the
+splice-repair banned by doc 37 §8. Timeout 900s, attempts 1 (§8.1).
 
-Operator, 2026-08-29: prior finance-episode assets are reusable. They are,
-and they cut this wave from 19 plates to **15**.
+## 2. Evidence — the gate is cleared
 
-**From `finance-episodes-plates-wave-1`** (built for other finance
-episodes, style-identical):
+Operator ruling, 2026-08-29: *"all of the evidence should be approved not
+review only."* Applied across the whole library; record at
+`content/video_engine/sources/decks/decks-operator-approval.v1.json`.
 
-| Plate | Covers |
-|---|---|
-| `world-dram-terrain-v1` | a wafer surface as terrain — replaces the planned `world-wafer-divided` |
-| `world-memory-fab-floor-v1` | fab clean room — replaces the planned `world-fab-cleanroom` |
-| `world-korea-port-v1` | container port — **better than anything planned** for the tell's "memory leaving Korea, by the kilo" |
-| `world-seoul-fab-skyline-v1` | industrial skyline, power infrastructure |
+| Layer | Count | Status |
+|---|---|---|
+| Built documents (`steel-and-paper/evidence/objects/`) | 21 | ours, current palette |
+| Teacher-stamped production visuals | 86 | `approved`, render-eligible |
+| Deck slides (6 decks, original + cleaned) | 86 | `operator_verified`, render-eligible |
+| Deck semantic crops | 9 | `operator_verified`, render-eligible |
 
-Plus `world-memory-wafer-v1` already in wave-3. **These need operator wave
-approval before use** — their `approvals.json` records generation attempts
-but no operator sign-off.
+**Four evidence species now, not one.** That is the point of having built our
+own rather than only harvesting the decks:
 
-**From the registered DMP deck** (11 slides, doc 29 §9.3(c) "registered
-generated infographic"): a 1840s / 1999 / 2024 comparison table, an
-HBM stacked-die slide, a 20%-concentration pie, a rate-ceiling gauge at
-5.5%, and an ROI-awakening card naming Palantir / Uber / Microsoft.
+| Species | Doc 39 | Examples |
+|---|---|---|
+| Chart | §6 | `ev-railway-index-v1`, `ev-krx-memory-v3`, `ev-debt-issuance-v2` |
+| Table | §6 | `ev-three-manias`, `ev-mechanism-ladder` |
+| Record document | §10.1 | `ev-doc-karp`, `ev-doc-macdonald`, `ev-doc-leases` |
+| Instrument reading | §12 | `ev-instrument-memory` |
+| Deck plate | 29 §9.3(c) | the 86 stamped visuals + 86 slides |
 
-> ⚠ **The deck predates the dossier and carries at least one figure we
-> have since corrected.** Its comparison table reads **"70% Crash"** for
-> the railways; the verified figure is **64.1%**. Doc 29 §9.3(c) requires
-> a registered infographic to be **figure-verified before use** — that
-> pass has not happened against the current dossier. Do not air the
-> comparison table until it is corrected, and do not let the HBM slide's
-> stronger claim ("committed through 2027 under binding contracts") leak
-> into narration; the sourced line is "essentially sold out for the year."
-> The Microsoft card on the ROI slide is the claim we cut for lack of
-> sourcing — that slide cannot air as drawn.
+A viewer who sees a chart, then a typewritten filing, then our own
+instrument, then a drawn mechanism reads four different *kinds* of proof.
+That variety is what lets a single plate hold 20 seconds without going stale.
 
-## 4. Wave 5 — 15 plates (dispatched)
+**What approval did not lift.** Three gates still bind and are recorded in
+the approval record:
 
-`steel-and-paper-plates-wave-5`, running.
+1. Per-asset `reuse_policy` caps — `max_total_uses`, `min_nonadjacent_gap`.
+   Approval is not a licence to repeat an asset.
+2. **Figure verification before docking** (doc 29 §9.3(c)). The decks predate
+   the dossier. The comparison table still reads **"70% Crash"** for the
+   railways; the verified figure is **64.1%**. The HBM slide's "committed
+   through 2027 under binding contracts" is stronger than our sourced
+   "essentially sold out for the year." Neither may air as drawn.
+3. Doc 39 chrome rules for anything used as evidence on screen.
 
-**Debt unit, P3 (7)** — treasury cash count · bond prospectus · index
-board with one block crowding the rest · bound lease contracts ·
-datacenter shell with a contract on the fence · pouring vessel nearly
-empty · signature closing.
+## 3. Plates — 56 usable, no wave 7 required
 
-**Winner unit, P5 (3)** — stacked dies edge-on · retail laptop shelf with
-a blank price card · allocation board with every line marked through.
+| Wave | Usable | Note |
+|---|---|---|
+| wave-1 | 9 | 2 superseded by wave-1b v2s, 2 retired for style drift |
+| wave-1b | 2 | `spike-certificate-ring-v2`, `spike-rest-v2` |
+| wave-3 | 22 | less `index-weights-v1` and `price-board-wiped-v1` (rejected), `broadcast-set-v1` (superseded by wave-4 v2) |
+| wave-4 | 2 | `broadcast-set-v2`, `listing-barge-v1` |
+| wave-5 | 15 | includes `world-molten-pour-v2` (the ladle swap) |
+| wave-6 | 2 | `paper-and-steel-press-v1`, `signature-nib-v2` — Codex-approved, **operator review outstanding** |
+| finance-episodes-wave-1 | 4 | `dram-terrain`, `korea-port`, `memory-fab-floor`, `seoul-fab-skyline` |
+| **Total** | **56** | **12.5s average** |
 
-**Density fill (5)** — Victorian exchange floor · club interior papered
-with certificates · modern trading desk gone dark · brokerage statement on
-a kitchen counter · steel mill at night across a river.
+12.5s is a hair over the 12s target and far inside the 20s ceiling — and the
+average overstates the exposure, because evidence cut-ins carry a real share
+of the runtime. Under the operator's own rule a plate may hold 20s when two
+strong evidence pieces cover it, and with 202 approved evidence objects
+there is no stretch that has to run bare. **Density is no longer the binding
+constraint.**
 
-## 5. Order of operations
+## 4. Order of operations
 
-1. ~~Open wave-5 claim~~ — **dispatched**, 15 slots running.
-2. **Figure-verify the DMP deck** against the dossier before any slide is
-   docked; correct the 70%→64.1% table, retire the Microsoft ROI card.
-3. Approve the four reused plates from `finance-episodes-plates-wave-1`.
-4. Promote the three orphaned documents; build the two new ones.
-5. Assemble Script D: Script C + debt unit after the existing P3 unit +
-   winner unit after the divergence beat.
-6. Re-run the linter; sentence-strength pass on new lines only.
-7. **Chained master take** — part one ends at the P4→P5 boundary, part two
-   passes part one's `previous_request_ids`. Timeout 900s, attempts 1
-   (doc 37 §8.1).
-8. Rebuild the timeline from the new word timings; recheck the pivot
-   against the 45–55% pin and bare-plate stretches against 12s.
+1. ~~Wave-5 claim~~ — **delivered**, 15 plates.
+2. ~~Clear the evidence review gate~~ — **done**, 2026-08-29.
+3. ~~Assemble Script D~~ — **done**, linter clean, pivot at 49.4%.
+4. Operator review of the two wave-6 plates.
+5. Figure-verify each deck slide against the dossier *at docking time* —
+   per slide, not as a batch pass.
+6. **Chained master take.** Listen to the P4→P5 join before anything else.
+7. Rebuild the scene-evidence timeline from the new word timings; check bare-
+   plate stretches against 12s and confirm no evidence object exceeds its
+   reuse cap.
 
-## 6. Risks
+## 5. Risks
 
-- **The DMP deck is the sharpest risk.** It is on-thesis and reusable, but
-  it was registered before the dossier and carries a figure we corrected.
-  A registered infographic that contradicts our own narration is worse
-  than no infographic — it hands a viewer the error in typeset form.
-- **The chained join sits at P4→P5**, immediately after the pivot. If
-  prosody drifts across the join it will be audible at the episode's most
-  important seam. Listen to that transition before anything else.
-- **`ev-railway-index-v1` never being promoted** is a process failure
-  worth noting: documents built as "samples" during a system pass do not
-  automatically become production assets. Anything built outside a claim
-  needs an explicit promotion step.
+- **The chained join sits at P4→P5**, immediately after the pivot. If prosody
+  drifts it will be audible at the episode's most important seam.
+- **The deck figures.** Approval cleared the rights and context gate; it did
+  not verify the numbers. A registered plate that contradicts our own
+  narration hands the viewer our error in typeset form. Verify per slide.
+- **Reuse caps are easy to breach silently** now that 202 objects are
+  eligible. The timeline rebuild in step 7 is the check, not a formality.
