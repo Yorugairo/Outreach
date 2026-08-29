@@ -114,6 +114,14 @@ P6's "more bullish than Bravos" instead of merely asserting it. It also
 avoids naming a specific stock as froth, which was the highest-risk
 content in the episode.
 
+**It ADDS to the divergence beat, it does not replace it** (operator,
+2026-08-29 — correcting an earlier call of mine that the two were
+duplicative). They are a general→specific escalation and only work as a
+pair: the divergence beat proves scarcity is being repriced across the
+whole sector; this one takes the single most vertical name on the board
+and shows the test *still* clears it. The sector sets it up; the name
+lands it. Cutting either weakens the other.
+
 **Verified inputs only.** "More than five hundred percent" is +517.5%
 measured. "Essentially sold out" is verbatim from the earnings call
 (dossier E1). "Selling product, not issuing stock" is a characterisation,
@@ -122,43 +130,30 @@ filing.
 
 ---
 
-## 3. What this actually costs — measured, not estimated
+## 3. Measured, built out
 
-| | |
-|---|---|
-| P3 debt unit | **969 chars** (~1m 0s) |
-| P5 winner unit | **869 chars** (~0m 54s) |
-| Script D total | **9,916 chars** → **~10m 19s** |
-| mv2 cap 10,000 | **fits — single master take**, with 84 characters of headroom |
-| Plates | 39 at 10m 19s = **15.9s each** (target 12, ceiling 20) |
+The debt unit is now built to the doctrinal 2:00–2:30 (doc 38) using three
+verified figures the episode has never used: the bond market's tech
+weighting, the capex consensus trajectory, and the 94%-of-operating-cash-
+flow number. Draft: `steel-and-paper/unit-debt-draft.txt`.
 
-**These units are half the doctrinal length.** Doc 38 specifies a P3
-pattern unit at **2:00–2:30**; these run 1:00 and 0:54. They have the
-correct five-step shape but only one anecdote loop each where the spec
-calls for two or three.
+| | chars | runtime |
+|---|---|---|
+| Script C | 8,078 | 8m 24s |
+| P3 debt unit (built out) | **1,920** | ~2m 0s |
+| P5 winner unit (as drafted) | 869 | ~0m 54s |
+| **Script D** | **10,867** | **~11m 18s** |
+| with the winner unit given one more loop | 11,268 | ~11m 43s |
 
-That leaves a genuine fork:
+**Exceeds the 10,000 mv2 cap → two-part chained take** (§4). That is the
+cost of the runtime target, and it is a real one — but chaining is the
+provider's supported long-form path, not a workaround.
 
-**A — ship them as drafted.** 9,916 characters, ~10m 19s, **one master
-take**, 84 characters under the cap. Misses the 11–13 minute ad target by
-about a minute. No chaining risk.
-
-**B — build them to spec** (2:00–2:30 each, ~2,100 chars apiece).
-Script D becomes ~12,400 characters, **~12m 50s**, which hits the ad
-target — and **exceeds mv2's 10,000 cap**, so it needs the two-part
-chained take in §4. Each unit gains two more anecdote loops; the debt unit
-has the material (the bond market's tech weighting, the 94%-of-cash-flow
-figure), the winner unit would need one more verified case.
-
-I would take **B**. The units are under-built against our own spec, the
-runtime target is a real business constraint, and chaining is the
-provider's supported path rather than a workaround. But A is genuinely
-safer and available today.
-
-**Plate density is the binding cost either way.** 39 plates was sized for
-8 minutes. At 10m 19s that is 15.9s per plate; at 12m 50s it is 19.7s —
-at the ceiling. Option A wants ~12 more plates, option B ~25. A wave-5
-claim is required before either ships.
+**Plate density is the binding constraint, not credits.** 39 plates were
+sized for eight minutes. At 11m 18s that is 17.4s per plate — inside the
+20s ceiling but well past the 12s target. Hitting target needs **56
+plates, so ~17 more**. A wave-5 claim is required before this ships, and
+it is the longest pole in the job.
 
 ## 4. Delivery — only if option B
 
