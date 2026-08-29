@@ -1,0 +1,91 @@
+{
+  "schema_version": "finance_2d_stick_proof.v1",
+  "proof_id": "finance-2d-stick-proof-v1",
+  "duration_s": 60.732,
+  "source_start_s": 410.26,
+  "source_end_s": 470.992,
+  "source_word_start": 1025,
+  "source_word_end": 1188,
+  "delivery_fps": 24,
+  "authoring_profile": {
+    "width": 1920,
+    "height": 1080,
+    "fps": 24
+  },
+  "render_profile": {
+    "width": 1280,
+    "height": 720,
+    "fps": 24,
+    "label": "review-720p-12-on-24"
+  },
+  "canonical_audio": {
+    "path": "audio/canonical.mp3",
+    "start_s": 410.26,
+    "volume": 1.0
+  },
+  "states": [
+    {
+      "id": "basket-product-qualities",
+      "start_word_index": 1025,
+      "end_word_index": 1058,
+      "start_s": 410.26,
+      "end_s": 422.59,
+      "relative_start_s": 0.0,
+      "relative_end_s": 12.33
+    },
+    {
+      "id": "two-jobs",
+      "start_word_index": 1059,
+      "end_word_index": 1075,
+      "start_s": 422.834,
+      "end_s": 428.209,
+      "relative_start_s": 12.574,
+      "relative_end_s": 17.949
+    },
+    {
+      "id": "concentration",
+      "start_word_index": 1076,
+      "end_word_index": 1121,
+      "start_s": 428.534,
+      "end_s": 444.335,
+      "relative_start_s": 18.274,
+      "relative_end_s": 34.075
+    },
+    {
+      "id": "shared-exposure",
+      "start_word_index": 1122,
+      "end_word_index": 1155,
+      "start_s": 444.614,
+      "end_s": 459.614,
+      "relative_start_s": 34.354,
+      "relative_end_s": 49.354
+    },
+    {
+      "id": "long-tail",
+      "start_word_index": 1156,
+      "end_word_index": 1170,
+      "start_s": 460.218,
+      "end_s": 464.223,
+      "relative_start_s": 49.958,
+      "relative_end_s": 53.963
+    },
+    {
+      "id": "admission-versus-weighting",
+      "start_word_index": 1171,
+      "end_word_index": 1188,
+      "start_s": 464.548,
+      "end_s": 470.992,
+      "relative_start_s": 54.288,
+      "relative_end_s": 60.732
+    }
+  ],
+  "concentration_source": {
+    "claim_id": "sp500-top-ten-concentration",
+    "claim_text": "The ten largest S&P 500 companies represented almost 40% of the index by mid-2025, a concentration level not seen since the mid-1960s.",
+    "display_text": "≈40% of index weight",
+    "as_of": "2025-06-30",
+    "source_locator": "sp500-top-ten-concentration",
+    "source_location": "PDF page 4, highlights and top-ten concentration chart",
+    "qualifier": "Concentration alone does not prove overvaluation or predict a market decline."
+  }
+}

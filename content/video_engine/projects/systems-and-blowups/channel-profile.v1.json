@@ -1,0 +1,34 @@
+{
+  "schema_version": "finance_channel_profile.v1",
+  "channel_id": "systems-and-blowups",
+  "working_name": "Systems & Blowups",
+  "public_name_state": "unselected",
+  "promise": "Go one level deeper than the popular financial explanation by showing incentives, ownership, capital flows, distribution, and second-order effects.",
+  "audiences": [
+    "ordinary households trying to understand why headline growth differs from lived experience",
+    "investors who want mechanisms and risk structure rather than stock picks",
+    "founders and operators who want business and unit-economics anatomy",
+    "Black households and builders navigating ownership, retirement, entrepreneurship, and wealth transfer"
+  ],
+  "editorial_lenses": [
+    "lived contradiction before terminology",
+    "incentives and ownership",
+    "capital and cash-flow paths",
+    "distribution of upside cost and risk",
+    "Black household and institutional context where materially relevant",
+    "countercase and failure conditions"
+  ],
+  "formats": [
+    {"id": "economic_anatomy", "length_min": 20, "length_max": 30, "purpose": "Evergreen business institution or market deep dive", "embedded_short": true},
+    {"id": "one_level_deeper", "length_min": 10, "length_max": 20, "purpose": "Correct a popular explanation by exposing the missing mechanism", "embedded_short": true},
+    {"id": "current_mechanism", "length_min": 8, "length_max": 15, "purpose": "Rapid response to a current claim filing release or market event", "embedded_short": true}
+  ],
+  "visual_worlds": ["story", "mechanism", "evidence"],
+  "complexity_budget": {"reusable_percent": 70, "evidence_percent": 20, "bespoke_percent": 10},
+  "source_priority": ["SEC and issuer filings", "company investor relations", "FRED", "BLS", "BEA", "Federal Reserve and central banks", "regulated exchanges", "IMF", "OECD", "World Bank"],
+  "human_gates": ["public branding", "episode thesis", "primary source set", "contrarian framing", "financial risk language", "title and thumbnail", "asset promotion", "publication"],
+  "compliance": {"educational_only": true, "personalized_advice_forbidden": true, "buy_sell_instructions_forbidden": true, "generated_factual_text_forbidden": true, "dated_values_required": true},
+  "state": "operator_approved",
+  "render_eligible": false,
+  "artifact_hash": "df0abf3a0f700ec5f313e5c9496c8264e76453a3d1e274e5ecb20adda30f4071"
+}

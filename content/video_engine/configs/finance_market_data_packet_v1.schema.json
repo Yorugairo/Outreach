@@ -1,0 +1,40 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "finance_market_data_packet.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "episode_id", "provider", "retrieved_at", "price_basis", "instruments", "artifact_hash"],
+  "properties": {
+    "schema_version": {"const": "finance_market_data_packet.v1"},
+    "episode_id": {"type": "string", "minLength": 1},
+    "provider": {"const": "yfinance"},
+    "retrieved_at": {"type": "string", "format": "date-time"},
+    "price_basis": {"enum": ["adjusted_close", "close"]},
+    "instruments": {
+      "type": "array", "minItems": 1,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["instrument_id", "ticker", "label", "market", "calendar", "period_start", "period_end", "start_price", "end_price", "return_pct", "currency", "observation_count", "observations", "raw_series_sha256", "review_state"],
+        "properties": {
+          "instrument_id": {"type": "string", "pattern": "^[a-z0-9-]+$"},
+          "ticker": {"type": "string", "minLength": 1},
+          "label": {"type": "string", "minLength": 1},
+          "market": {"type": "string", "minLength": 1},
+          "calendar": {"type": "string", "minLength": 1},
+          "period_start": {"type": "string", "format": "date"},
+          "period_end": {"type": "string", "format": "date"},
+          "start_price": {"type": "number", "exclusiveMinimum": 0},
+          "end_price": {"type": "number", "exclusiveMinimum": 0},
+          "return_pct": {"type": "number"},
+          "currency": {"type": "string", "minLength": 1},
+          "observation_count": {"type": "integer", "minimum": 2},
+          "observations": {"type": "array", "minItems": 2, "items": {"type": "object", "additionalProperties": false, "required": ["date", "close"], "properties": {"date": {"type": "string", "format": "date"}, "close": {"type": "number", "exclusiveMinimum": 0}}}},
+          "raw_series_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+          "review_state": {"enum": ["snapshot_only", "source_checked", "operator_approved"]},
+          "secondary_source_note": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "artifact_hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}

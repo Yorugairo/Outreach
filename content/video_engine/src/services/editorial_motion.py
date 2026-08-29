@@ -393,14 +393,33 @@ def _semantic_plan_checks(payload: Mapping[str, Any], *, known_asset_ids: set[st
             for layer in shot.get("layers") or []:
                 errors.extend(_placement_errors(layer, label=label))
         for layer_index, layer in enumerate(shot.get("layers") or []):
-            if not isinstance(layer, Mapping) or not isinstance(layer.get("timing"), Mapping):
+            if not isinstance(layer, Mapping):
                 continue
-            timing = layer["timing"]
-            exit_at = float(timing.get("exit_at_s") or 0)
-            exit_duration = float(timing.get("exit_duration_s") or 0)
-            effect_duration = float(timing.get("exit_effect_duration_s") or exit_duration)
-            if exit_at + max(exit_duration, effect_duration) > duration + 1e-4:
-                errors.append(f"{label}.layers[{layer_index}].timing escapes the shot duration")
+            if isinstance(layer.get("timing"), Mapping):
+                timing = layer["timing"]
+                exit_at = float(timing.get("exit_at_s") or 0)
+                exit_duration = float(timing.get("exit_duration_s") or 0)
+                effect_duration = float(timing.get("exit_effect_duration_s") or exit_duration)
+                if exit_at + max(exit_duration, effect_duration) > duration + 1e-4:
+                    errors.append(f"{label}.layers[{layer_index}].timing escapes the shot duration")
+            if isinstance(layer.get("activation"), Mapping):
+                activation = layer["activation"]
+                activation_start = float(activation.get("start_s") or 0)
+                activation_end = float(activation.get("end_s") or 0)
+                action_start = float(activation.get("action_start_s") or 0)
+                action_end = float(activation.get("action_end_s") or 0)
+                activation_first_word = int(activation.get("start_word_index", -1))
+                activation_last_word = int(activation.get("end_word_index", -1))
+                action_first_word = int(activation.get("action_start_word_index", -1))
+                action_last_word = int(activation.get("action_end_word_index", -1))
+                if activation_start < 0 or activation_end > duration + 1e-4 or activation_end <= activation_start:
+                    errors.append(f"{label}.layers[{layer_index}].activation escapes the shot duration")
+                if action_start < activation_start or action_end > activation_end + 1e-4 or action_end <= action_start:
+                    errors.append(f"{label}.layers[{layer_index}].activation action window escapes the layer")
+                if activation_first_word < first_word or activation_last_word > last_word or activation_last_word < activation_first_word:
+                    errors.append(f"{label}.layers[{layer_index}].activation word range escapes the shot")
+                if action_first_word < activation_first_word or action_last_word > activation_last_word or action_last_word < action_first_word:
+                    errors.append(f"{label}.layers[{layer_index}].activation action words escape the layer")
         for effect_index, effect in enumerate(shot.get("sound_effects") or []):
             if not isinstance(effect, Mapping):
                 continue

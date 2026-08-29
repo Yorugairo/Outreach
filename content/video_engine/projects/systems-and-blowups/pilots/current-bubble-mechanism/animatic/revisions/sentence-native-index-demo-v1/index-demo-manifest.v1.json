@@ -1,0 +1,29 @@
+{
+  "schema_version": "sentence_native_index_demo.v1",
+  "episode_id": "systems-and-blowups:current-bubble-mechanism",
+  "source_window": {
+    "start_s": 410.26,
+    "end_s": 460.218,
+    "duration_s": 49.958
+  },
+  "render_profile": {
+    "width": 1280,
+    "height": 720,
+    "fps": 24,
+    "label": "sentence-native-index-review-720p-12-on-24"
+  },
+  "paper_motion_fps": 12,
+  "delivery_fps": 24,
+  "wave_07_review_manifest_sha256": "90f6e17c8a719c9b063d7d21441baf5be3e7bb6702f04598eee07d24678f656b",
+  "wave_07_depth_manifest_sha256": "00736344fcbbb0a647bee78085aec0b2f47090df5afd5ea3b9d7f07331f99564",
+  "props_path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/animatic/revisions/sentence-native-index-demo-v1/remotion-props.index-demo.v1.json",
+  "props_sha256": "8d5c234050ab8ac90f50516382fed97c044ee7d1e5cd328d9e6a71fb3e5c4d5f",
+  "deterministic_surfaces": [
+    "top-ten concentration card",
+    "short local explanation surfaces",
+    "lower-band narration captions"
+  ],
+  "status": "review_render_complete",
+  "render_path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/animatic/revisions/sentence-native-index-demo-v1/current-bubble-index-sentence-native-review.mp4",
+  "render_sha256": "25c0ea45569c786b5180b02ef916c3a7e2a96718e58175b44ca0d7943e702166"
+}

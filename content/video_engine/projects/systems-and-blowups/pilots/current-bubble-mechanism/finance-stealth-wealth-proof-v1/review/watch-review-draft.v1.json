@@ -1,0 +1,91 @@
+{
+  "schema_version": "video_watch_review.v1",
+  "review_id": "finance-stealth-wealth-proof-v1-draft",
+  "project_id": "outreach-program",
+  "lane_id": "systems-and-blowups-finance",
+  "episode_id": "finance-stealth-wealth-proof-v1",
+  "created_at": "2026-08-09T00:00:00Z",
+  "reviewer": "operator-and-watch",
+  "review_purpose": "Review the complete P24 105-second stealth-wealth presenter proof and five cue boundaries.",
+  "watch_detail": "focused",
+  "source": {
+    "kind": "local",
+    "uri": "../render/finance-stealth-wealth-presenter-proof.mp4",
+    "sha256": "7b24c09f61a89b3bfb69e53b72c61dc3e3edcd7d783bcfbb497853bd2aaa47fa",
+    "duration_s": 105.002667
+  },
+  "transcript": {
+    "path": "../source/narration.locked.md",
+    "sha256": "a08a708b2302f5e63a13b888d5c8aa88f1e4047f11c17dcd8a54644ace463302",
+    "source": "manual"
+  },
+  "summary": {
+    "assessment": "Operator review is pending. The packet preserves the complete presenter-led proxy and exact cue evidence.",
+    "strengths": [
+      "Generated presenter and worlds are staged locally with hashes.",
+      "Report-backed metrics are compositor-owned and citation-bound.",
+      "Five semantic beats preserve the consultant's 105-second Act I structure."
+    ],
+    "priority_issues": [
+      "Review face readability, card hierarchy, timing, and whether the generated worlds feel premium at 720p."
+    ],
+    "overall_state": "revision_required"
+  },
+  "findings": [
+    {
+      "finding_id": "operator-review-pending",
+      "start_s": 0.0,
+      "end_s": 105.0,
+      "transcript_excerpt": "The market may be labeling the wrong bubble.",
+      "evidence_frames": [
+        {
+          "path": "boundaries/01-hook-f0012.png",
+          "sha256": "f6143755cf141ba1fef0435dde7fa09a82ebc656492ace2acdcad7cf35dd7261",
+          "timestamp_s": 0.5
+        },
+        {
+          "path": "boundaries/02-authority-f0204.png",
+          "sha256": "df990c9da50c633f647cf306c0f14ad117633115b7281b22c0b435b2896a5051",
+          "timestamp_s": 8.5
+        },
+        {
+          "path": "boundaries/03-physical-f0396.png",
+          "sha256": "866d9af6da501e2c9d771abfed58b321aca03ddd2c76fec1a09ad4c4db62570d",
+          "timestamp_s": 16.5
+        },
+        {
+          "path": "boundaries/04-concentration-f1092.png",
+          "sha256": "0e4399b78966d9a58e2090df8e1248caa05bf4fd0b63701b9ce4ff365c2aa973",
+          "timestamp_s": 45.5
+        },
+        {
+          "path": "boundaries/05-triopoly-f1872.png",
+          "sha256": "bc9181c8b64a4765a7d9e782e575d48463a66b5cd7418a0ca3d5ab5fc1e02e49",
+          "timestamp_s": 78.0
+        }
+      ],
+      "kind": "other",
+      "scope": "episode",
+      "severity": "medium",
+      "symptom": "The render has not yet received operator visual acceptance.",
+      "root_cause": "P24 stops at a review-only proof boundary.",
+      "impact": "The grammar must not be promoted before the proxy is reviewed.",
+      "proposed_fix": "Review the complete proxy and five boundaries for presenter quality, card readability, motivated movement, and source fidelity.",
+      "acceptance": "Operator records approved or changes_requested.",
+      "confidence": "confirmed",
+      "recurrence_key": "p24-operator-review-gate",
+      "recurrence_count": 1,
+      "learning_trigger": "When a presenter proof reaches visual review.",
+      "learning_action": "Require full proxy review before promotion.",
+      "requires_human_decision": true,
+      "promotion_state": "observation",
+      "status": "open"
+    }
+  ],
+  "operator_decision": {
+    "state": "draft",
+    "approved_at": null,
+    "notes": "Awaiting explicit visual review."
+  },
+  "artifact_hash": "0000000000000000000000000000000000000000000000000000000000000000"
+}

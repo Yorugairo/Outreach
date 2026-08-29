@@ -1,0 +1,21 @@
+{
+  "schema_version": "editorial_visual_revision.v1",
+  "revision_id": "current-bubble-scene-001-r1",
+  "revision_only": true,
+  "base_snapshot_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+  "base_artifact_hashes": {
+    "scene_flow": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  "operator": {
+    "operator_id": "operator",
+    "created_at": "2026-08-10T00:00:00Z"
+  },
+  "operations": [
+    {
+      "op": "select_asset",
+      "target": {"scene_id": "scene-001", "layer_id": "evidence"},
+      "asset_id": "silicon-antidote-s01-production-v1"
+    }
+  ],
+  "note": null
+}

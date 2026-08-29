@@ -1,0 +1,21 @@
+{
+  "schema_version": "deck_asset_coverage.v1",
+  "deck_id": "sovereign-memory-infrastructure",
+  "slide_count": 14,
+  "source_image_count": 14,
+  "semantic_asset_count": 0,
+  "render_eligible_count": 0,
+  "status": "needs_human_review",
+  "checks": {
+    "source_slides_present": true,
+    "semantic_context_complete": true,
+    "render_eligibility_gated": true
+  },
+  "human_gates": {
+    "H1": false,
+    "H2": false,
+    "H3": false,
+    "H4": false
+  },
+  "artifact_hash": "3d4b0a3e1d24da75a0b69dd19b8e62aaeb0fca285c5564089666d285395cb3ec"
+}

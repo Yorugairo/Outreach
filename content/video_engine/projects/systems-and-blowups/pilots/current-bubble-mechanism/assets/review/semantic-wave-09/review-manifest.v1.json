@@ -1,0 +1,20 @@
+{
+  "schema_version": "finance_semantic_wave_review.v1",
+  "episode_id": "current-bubble-mechanism",
+  "wave_id": "semantic-wave-09",
+  "status": "operator_approved_for_composition",
+  "generation_method": "built_in_image_gen",
+  "decision_rule": "The roster is a plain-language analogy for the channel’s diversification-versus-dilution inference. It is not evidence that a defined count of index constituents lacks value or protection.",
+  "candidates": [
+    {
+      "candidate_id": "index-roster-diworsification-v1",
+      "path": "index-roster-diworsification-v1.png",
+      "sha256": "592b719dbf6b0025a4c908f02955da797a224c807b47e7028397323caeb486de",
+      "cluster_id": "cbm-g-001",
+      "purpose": "Translate the five-stars/many-reserves roster analogy: the active core and bulky bench receive visibly separate cash flows without depicting reserves as valueless.",
+      "status": "selected",
+      "qa": ["exactly five active stars are visible", "reserves are not denigrated", "cash allocation is metaphorical and not numeric", "no text, score, or logo"]
+    }
+  ],
+  "artifact_hash": "4b28581a82c2013ee3a8576ed71cd9ddf01a635bc501d420072b40650d6b20ff"
+}

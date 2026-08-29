@@ -1,0 +1,51 @@
+{
+  "schema_version": "finance_source_sticker_pack.v1",
+  "episode_id": "systems-and-blowups:current-bubble-mechanism",
+  "wave_id": "current-bubble-mechanism-semantic-wave-03",
+  "review_state": "operator_supplied_pending_locator_review",
+  "source_policy": "source-bound evidence card; factual text may remain because it is part of the supplied source image; no generated factual text",
+  "operator_research_locator": "C:/Users/Snipe/Downloads/Outreach Program/docs/research/The Decadal Realignment of Global Semiconductors - memory.md",
+  "render_eligible": false,
+  "promotion_eligible": false,
+  "sticker_treatment": {
+    "allowed": ["scale", "2.5d_drop_shadow", "torn_paper_border", "0_to_4_degree_tilt", "local_crop_that_preserves_claim_context"],
+    "prohibited": ["rewriting_source_text", "inventing_numbers", "cropping_away_qualifiers", "using_as_unattributed_filler"],
+    "citation_rail": "required_on_first_appearance_and_any_reuse",
+    "reuse_policy": "reuse only when the same claim remains on screen; clear before the next claim"
+  },
+  "stickers": [
+    {
+      "sticker_id": "evidence-memory-commodity-comparison-v1",
+      "filename": "evidence-memory-commodity-comparison-v1.png",
+      "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-03/source-evidence/evidence-memory-commodity-comparison-v1.png",
+      "sha256": "d84b100b3c9fdd9949ad20a5b9e37fe9da5d6a4859de164f961ca66654958c13",
+      "width": 2910,
+      "height": 1560,
+      "intended_claim": "Memory has shifted from a consumer-driven interchangeable component toward infrastructure-critical allocation.",
+      "candidate_beat_bindings": ["cbm-semantic-beat-03-016", "cbm-semantic-beat-03-017", "cbm-semantic-beat-03-020"],
+      "claim_match_status": "proposed_operator_review"
+    },
+    {
+      "sticker_id": "evidence-hbm-physics-penalty-v1",
+      "filename": "evidence-hbm-physics-penalty-v1.png",
+      "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-03/source-evidence/evidence-hbm-physics-penalty-v1.png",
+      "sha256": "35b638d8931ef0fd40677ba69bffeb4c74c4c00b62a33f7004bd2185a14dc91e",
+      "width": 2897,
+      "height": 1551,
+      "intended_claim": "HBM production consumes more advanced DRAM wafer capacity and creates a physical reallocation penalty.",
+      "candidate_beat_bindings": ["cbm-semantic-beat-03-016", "cbm-semantic-beat-03-018", "cbm-semantic-beat-03-019"],
+      "claim_match_status": "proposed_operator_review"
+    },
+    {
+      "sticker_id": "evidence-memory-infrastructure-critical-v1",
+      "filename": "evidence-memory-infrastructure-critical-v1.png",
+      "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-03/source-evidence/evidence-memory-infrastructure-critical-v1.png",
+      "sha256": "a3d0e7a57a966b9f39dd090b3c789584b178e18277ca417f2dd883d7f0c16cea",
+      "width": 2898,
+      "height": 1535,
+      "intended_claim": "HBM and related memory infrastructure bridge AI training and inference workloads.",
+      "candidate_beat_bindings": ["cbm-semantic-beat-03-002", "cbm-semantic-beat-03-003", "cbm-semantic-beat-03-004"],
+      "claim_match_status": "proposed_operator_review"
+    }
+  ]
+}

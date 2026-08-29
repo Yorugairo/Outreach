@@ -1,0 +1,118 @@
+{
+  "schema_version": "finance_semantic_story_map.v1",
+  "episode_id": "current-bubble-mechanism",
+  "state": "draft_for_gate_a",
+  "coverage": {
+    "start_word": 0,
+    "end_word": 238,
+    "start_s": 0.0,
+    "end_s": 89.803,
+    "canonical_words_path": "../../audio/canonical/history_episode_1_master.words.json"
+  },
+  "design_rule": "Each cue is a causal visual sentence. No unlisted asset, generic finance wallpaper, chart, statistic, page, or overlay may appear in this wave.",
+  "cues": [
+    {
+      "cue_id": "cbm-a-001", "words": [0, 7], "time_s": [0.0, 2.403],
+      "call_cue_id": "name-the-wrong-bubble", "representation_mode": "declared_metaphor",
+      "purpose": "Open on the reversal before naming either side.",
+      "must_show": ["two unlabeled elevator shafts", "one red bubble tag above the wrong shaft", "space for local title"],
+      "must_not_imply": ["a price chart is evidence by itself", "a forecast"],
+      "entry_action": "the bubble tag slides to the wrong elevator", "micro_event": "the second elevator cable glints", "exit_action": "cut into the memory-side price reaction",
+      "resolution": {"kind": "original_generation_request", "demand_id": "demand-wrong-bubble-elevators"}
+    },
+    {
+      "cue_id": "cbm-a-002", "words": [8, 20], "time_s": [2.403, 7.442],
+      "call_cue_id": "show-why-memory-looks-speculative", "representation_mode": "literal_evidence",
+      "purpose": "Make the viewer feel why a rapid AI-memory move invites a bubble diagnosis, then immediately ground that reaction in the retained one-year comparison.",
+      "must_show": ["memory-chip stack rising", "skeptical analyst silhouette", "three local return strips for MU, KOSPI, and S&P 500", "one shared local qualifier: 1Y through Aug. 7, adjusted close"],
+      "must_not_imply": ["a valuation target", "a forecast", "that the three assets are interchangeable"],
+      "entry_action": "chip stack rises behind analyst", "micro_event": "the three evidence strips lock to the corresponding chip, Korea, and broad-index symbols", "exit_action": "warning stamp hard-cuts to the spoken word bubble",
+      "claim_refs": ["timely-trailing-market-return-comparison"],
+      "evidence_surface_ids": ["micron-trailing-return-2026-08-07", "kospi-trailing-return-2026-08-07", "sp500-trailing-return-2026-08-07"],
+      "resolution": {"kind": "original_generation_request", "demand_id": "demand-memory-skepticism"}
+    },
+    {
+      "cue_id": "cbm-a-003", "words": [21, 31], "time_s": [7.442, 11.61],
+      "call_cue_id": "show-the-default-bubble-reaction", "representation_mode": "declared_metaphor",
+      "purpose": "Stage the ordinary, reasonable reflex before the mechanism turns.",
+      "must_show": ["analyst hand pulling back", "single non-factual bubble placard", "recording-studio-dark chartless backdrop"],
+      "must_not_imply": ["the analyst is wrong for being cautious"],
+      "entry_action": "hand raises a stop placard", "micro_event": "placard folds into a question mark", "exit_action": "fold becomes a factory-door reveal",
+      "resolution": {"kind": "original_generation_request", "demand_id": "demand-default-bubble-reaction"}
+    },
+    {
+      "cue_id": "cbm-a-004", "words": [32, 59], "time_s": [11.61, 23.034],
+      "call_cue_id": "show-memory-demand-capacity-contracts", "representation_mode": "accurate_mechanism",
+      "purpose": "Replace the surface chart with the three physical/economic supports named in the narration.",
+      "must_show": ["memory module leaving a constrained fab", "factory line with visible capacity bottleneck", "buyer contract page with generic unsigned terms"],
+      "must_not_imply": ["a named contract", "guaranteed revenue", "supply cannot expand"],
+      "entry_action": "factory gate opens as product exits", "micro_event": "three supports assemble into one cable", "exit_action": "cable matches into index-fund inflow arrows",
+      "resolution": {"kind": "original_generation_request", "demand_id": "demand-memory-three-supports"}
+    },
+    {
+      "cue_id": "cbm-a-005", "words": [60, 93], "time_s": [23.034, 37.72],
+      "call_cue_id": "show-index-concentration-and-automatic-flow", "representation_mode": "accurate_mechanism",
+      "purpose": "Make the contrast legible: automatic contributions enter a recognizable market-cap-weighted fund where a top tier is visually dominant.",
+      "must_show": ["fund container or ledger clearly recognizable as an index fund", "generic cash/share inflow tokens", "ten large weighted holding tiles", "long-tail holding tiles", "local statistic surface anchor"],
+      "must_not_imply": ["automatic flows guarantee price gains", "a named ticker list", "all index funds are identical"],
+      "entry_action": "cash tokens enter the fund container", "micro_event": "top tier expands while a local 40-percent surface locks", "exit_action": "fund splits into concentration and dilution paths",
+      "evidence_surface_ids": ["sp500-top-ten-weight-2025"],
+      "resolution": {"kind": "original_generation_request", "demand_id": "demand-index-fund-weighted-inflows"}
+    },
+    {
+      "cue_id": "cbm-a-006", "words": [94, 114], "time_s": [37.72, 45.766],
+      "call_cue_id": "qualify-the-memory-thesis", "representation_mode": "declared_metaphor",
+      "purpose": "Preserve the script's three qualifications before the thesis lands.",
+      "must_show": ["three removable risk cards: correction, overpriced, cyclical", "same memory cable from prior cue"],
+      "must_not_imply": ["memory is safe", "risk cards are measured probabilities"],
+      "entry_action": "three cards cut into frame one at a time", "micro_event": "each card stays visible rather than being crossed out", "exit_action": "cards frame the bottleneck cable",
+      "resolution": {"kind": "local_compositor_request", "demand_id": "demand-memory-risk-cards"}
+    },
+    {
+      "cue_id": "cbm-a-007", "words": [115, 132], "time_s": [45.766, 51.92],
+      "call_cue_id": "name-physical-bottleneck-repricing", "representation_mode": "accurate_mechanism",
+      "purpose": "Land the early answer as a constrained physical process, not a valuation claim.",
+      "must_show": ["tensioned production cable", "memory modules queued at a narrow factory gate", "demand pressure behind the gate"],
+      "must_not_imply": ["every memory stock is fairly valued", "demand is infinite"],
+      "entry_action": "narrow gate constricts the queue", "micro_event": "cable carries a module across the frame", "exit_action": "the cable turns into an index-fund belt",
+      "resolution": {"kind": "original_generation_request", "demand_id": "demand-bottleneck-repricing"}
+    },
+    {
+      "cue_id": "cbm-a-008", "words": [133, 150], "time_s": [51.92, 58.038],
+      "call_cue_id": "question-the-safe-default", "representation_mode": "declared_metaphor",
+      "purpose": "Turn attention from the dramatic trade to the unexamined default product.",
+      "must_show": ["quiet index-fund box on a household shelf", "inspection lamp moving toward it", "memory scene receding"],
+      "must_not_imply": ["index investing is inherently unsafe"],
+      "entry_action": "inspection lamp leaves the memory cable", "micro_event": "fund box opens one seam", "exit_action": "seam becomes the diagnostic cut",
+      "resolution": {"kind": "original_generation_request", "demand_id": "demand-safe-default-inspection"}
+    },
+    {
+      "cue_id": "cbm-a-009", "words": [151, 167], "time_s": [58.038, 64.876],
+      "call_cue_id": "define-bubble-as-mechanism", "representation_mode": "declared_metaphor",
+      "purpose": "Correct the price-up shortcut with a diagnostic distinction.",
+      "must_show": ["two-panel diagnostic card", "price-up symptom icon", "mechanism-underneath icon"],
+      "must_not_imply": ["a formal regulatory definition", "a statistic"],
+      "entry_action": "price-up icon stamps then slides aside", "micro_event": "mechanism panel unfolds beneath it", "exit_action": "panels become two elevators",
+      "resolution": {"kind": "local_compositor_request", "demand_id": "demand-bubble-diagnosis-card"}
+    },
+    {
+      "cue_id": "cbm-a-010", "words": [168, 198], "time_s": [64.876, 75.87],
+      "call_cue_id": "separate-belief-from-underlying-support", "representation_mode": "accurate_mechanism",
+      "purpose": "Show the difference between next-buyer belief and a productive/scarcity/cash-flow support stack.",
+      "must_show": ["upward elevator supported by crowds jumping", "separate support stack labeled locally only when composited", "no numeric charts"],
+      "must_not_imply": ["cash flow or scarcity guarantees a return"],
+      "entry_action": "crowd elevator bounces upward", "micro_event": "second elevator reveals physical support layers", "exit_action": "both elevators align side by side",
+      "resolution": {"kind": "original_generation_request", "demand_id": "demand-belief-versus-support-elevators"}
+    },
+    {
+      "cue_id": "cbm-a-011", "words": [199, 238], "time_s": [75.87, 89.803],
+      "call_cue_id": "compare-identical-charts-different-mechanisms", "representation_mode": "declared_metaphor",
+      "purpose": "Deliver the recurring elevator metaphor: same visible ascent, different causal system.",
+      "must_show": ["two elevators rising in synchrony", "one steel cable", "one crowd-jump platform", "opening beneath both elevators"],
+      "must_not_imply": ["the elevator analogy measures price performance", "the cable eliminates downside"],
+      "entry_action": "both elevators rise together", "micro_event": "floor opens under each to expose its mechanism", "exit_action": "cut below the floors for the next chapter's cable inventory",
+      "resolution": {"kind": "original_generation_request", "demand_id": "demand-two-elevators-causal-reveal"}
+    }
+  ],
+  "gate_a_request": "Approve the causal visual language, the first-wave asset-demand kinds, and the single claim-bound top-ten-weight statistic before source retrieval or image generation."
+}

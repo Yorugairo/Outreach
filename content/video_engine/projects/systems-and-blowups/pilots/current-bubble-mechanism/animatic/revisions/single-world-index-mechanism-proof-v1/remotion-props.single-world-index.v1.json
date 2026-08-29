@@ -1,0 +1,404 @@
+{
+  "plan": {
+    "schema_version": "editorial_motion_plan.v1",
+    "source_storyboard_hash": "8439049bc7a9d94ef34a053ed911e10e5b33819b3f8fd3d88ad005fa5e360cc6",
+    "source_beat_plan_hash": "f83b2dad210f0d77bec0e9d8a1b7b799f1da54b0c19372ded9e4a7ec103f6cdb",
+    "scene_bundle_hashes": [
+      "1c5c1897205713ca1fb550b47e83725a01103fc23994a30838c4c54bfe4d7137"
+    ],
+    "scene_flow_graph_hash": "19f6e87e800027eaade47cc11d88a9e2583cc297f53acfea9c8fbcdef047149b",
+    "asset_map_hash": "cc792ac0cbedf438ceeb40da806cb7e4d27d074cad70c94d4a21f809c6f0e06d",
+    "audio_manifest_hash": "4d9e640f2c45f4d8be082611515ae842e85e3b45e4d681ca6a3eed0683ba29ca",
+    "pacing_recipe_hash": "7e0693bfcf3494fd442dfc1032b3c5018bbb4ff421a576f110816dd4c8098da1",
+    "duration_s": 13.942,
+    "source_start_s": 423.867,
+    "shots": [
+      {
+        "shot_id": "proof-index-weighted-fund-machine",
+        "parent_beat_ids": [
+          "cbm-semantic-beat-06-005",
+          "cbm-semantic-beat-06-006",
+          "cbm-semantic-beat-06-007",
+          "cbm-semantic-beat-06-008"
+        ],
+        "parent_scene_bundle_id": "finance-scene-06-index-single-world",
+        "start_s": 0.0,
+        "duration_s": 13.942,
+        "word_range": {
+          "start_index": 1072,
+          "end_index": 1121
+        },
+        "narration_excerpt": "",
+        "visual_intent": "explanation",
+        "required_visual_actions": [
+          {
+            "kind": "object_cutaway",
+            "subject": "cash enters a market-cap weighted fund machine"
+          },
+          {
+            "kind": "object_cutaway",
+            "subject": "top-ten blocks concentrate flow while the long tail fills"
+          },
+          {
+            "kind": "object_cutaway",
+            "subject": "two output routes make the two job failure visible"
+          }
+        ],
+        "purpose": "explain",
+        "shot_scale": "wide",
+        "focal_point": {
+          "x": 0.51,
+          "y": 0.49
+        },
+        "layers": [
+          {
+            "asset_id": "machine-world",
+            "role": "world",
+            "action": "locked",
+            "z_index": 0,
+            "layout": {
+              "x": 0,
+              "y": 0,
+              "width": 1,
+              "height": 1,
+              "fit": "cover"
+            }
+          },
+          {
+            "asset_id": "cash-stream",
+            "role": "prop",
+            "action": "cash_stream_enter",
+            "z_index": 4,
+            "layout": {
+              "x": 0.0,
+              "y": 0.38,
+              "width": 0.47,
+              "height": 0.35,
+              "fit": "contain"
+            },
+            "activation": {
+              "start_s": 0.0,
+              "end_s": 13.942,
+              "action_start_s": 0.0,
+              "action_end_s": 0.9,
+              "start_word_index": 1072,
+              "end_word_index": 1121,
+              "action_start_word_index": 1072,
+              "action_end_word_index": 1083
+            }
+          },
+          {
+            "asset_id": "top-ten-blocks",
+            "role": "mechanism",
+            "action": "weighted_blocks_settle",
+            "z_index": 5,
+            "layout": {
+              "x": 0.31,
+              "y": 0.2,
+              "width": 0.35,
+              "height": 0.28,
+              "fit": "contain"
+            },
+            "activation": {
+              "start_s": 0.82,
+              "end_s": 13.942,
+              "action_start_s": 0.82,
+              "action_end_s": 1.85,
+              "start_word_index": 1072,
+              "end_word_index": 1121,
+              "action_start_word_index": 1072,
+              "action_end_word_index": 1092
+            }
+          },
+          {
+            "asset_id": "long-tail-field",
+            "role": "mechanism",
+            "action": "long_tail_fill",
+            "z_index": 4,
+            "layout": {
+              "x": 0.32,
+              "y": 0.49,
+              "width": 0.34,
+              "height": 0.25,
+              "fit": "contain"
+            },
+            "activation": {
+              "start_s": 4.08,
+              "end_s": 13.942,
+              "action_start_s": 4.08,
+              "action_end_s": 5.05,
+              "start_word_index": 1084,
+              "end_word_index": 1121,
+              "action_start_word_index": 1084,
+              "action_end_word_index": 1104
+            }
+          },
+          {
+            "asset_id": "output-routes",
+            "role": "mechanism",
+            "action": "output_routes_extend",
+            "z_index": 5,
+            "layout": {
+              "x": 0,
+              "y": 0,
+              "width": 1,
+              "height": 1,
+              "fit": "cover"
+            },
+            "activation": {
+              "start_s": 7.22,
+              "end_s": 13.942,
+              "action_start_s": 7.22,
+              "action_end_s": 8.05,
+              "start_word_index": 1105,
+              "end_word_index": 1121,
+              "action_start_word_index": 1105,
+              "action_end_word_index": 1113
+            }
+          }
+        ],
+        "subject_action": "weighted fund machine resolves two jobs",
+        "ambient_actions": [],
+        "information_reveal": "none",
+        "information_surface": {
+          "mode": "none",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "camera": {
+          "kind": "locked",
+          "amount": 0,
+          "easing": "linear",
+          "hold_in_s": 13.942,
+          "move_s": 0,
+          "hold_out_s": 0
+        },
+        "transition_in": {
+          "kind": "hard_cut",
+          "reason": "opening proof frame; base world is present immediately",
+          "duration_s": 0
+        },
+        "transition_out": {
+          "kind": "hard_cut",
+          "reason": "true handoff to the next index claim",
+          "duration_s": 0
+        },
+        "audio_bridge": "continuous_narration",
+        "provider_motion": {
+          "requirement": "none",
+          "fallback": "local_layer_motion"
+        },
+        "overlay_ids": [
+          "caption-two-jobs",
+          "caption-protection",
+          "caption-upside",
+          "caption-ten",
+          "job-protection",
+          "job-upside",
+          "count-ten-of-five-hundred",
+          "source-top-ten-concentration"
+        ],
+        "uniqueness_signature": "one-world:weighted-fund-machine:cash-to-top-ten-to-long-tail-to-evidence"
+      }
+    ],
+    "provider_calls": 0,
+    "revision_only": true,
+    "artifact_hash": "e038fa0d81ae9bfd321e6d75fa53489b3c922504c069ea1931ef766ae521fffd"
+  },
+  "asset_map": {
+    "canonical-audio": "audio/canonical.mp3",
+    "machine-world": "assets/machine-world.png",
+    "cash-stream": "assets/cash-stream.png",
+    "top-ten-blocks": "assets/top-ten-blocks.png",
+    "long-tail-field": "assets/long-tail-field.png",
+    "output-routes": "assets/output-routes.png"
+  },
+  "canonical_audio": {
+    "path": "audio/canonical.mp3",
+    "start_s": 423.867,
+    "volume": 1
+  },
+  "overlay_map": {
+    "caption-two-jobs": {
+      "kind": "caption",
+      "text": "The index can fail both jobs at once.",
+      "position": "bottom",
+      "from_s": 0.0,
+      "duration_s": 2.58,
+      "style": {
+        "bottom": "2.2%",
+        "left": "13%",
+        "right": "13%",
+        "padding": "6px 12px",
+        "maxWidth": "74%",
+        "margin": "0 auto",
+        "background": "rgba(7, 17, 28, 0.52)",
+        "borderLeft": "none",
+        "borderRadius": "5px",
+        "fontSize": "25px",
+        "lineHeight": 1.12,
+        "fontWeight": 650,
+        "color": "rgba(255,250,238,0.96)",
+        "textAlign": "center"
+      }
+    },
+    "caption-protection": {
+      "kind": "caption",
+      "text": "It can be too concentrated to deliver the diversification benefit people think they bought\u2014",
+      "position": "bottom",
+      "from_s": 2.58,
+      "duration_s": 3.45,
+      "style": {
+        "bottom": "2.2%",
+        "left": "13%",
+        "right": "13%",
+        "padding": "6px 12px",
+        "maxWidth": "74%",
+        "margin": "0 auto",
+        "background": "rgba(7, 17, 28, 0.52)",
+        "borderLeft": "none",
+        "borderRadius": "5px",
+        "fontSize": "25px",
+        "lineHeight": 1.12,
+        "fontWeight": 650,
+        "color": "rgba(255,250,238,0.96)",
+        "textAlign": "center"
+      }
+    },
+    "caption-upside": {
+      "kind": "caption",
+      "text": "\u2014and still too diluted to capture the full upside of the exceptional companies driving its return.",
+      "position": "bottom",
+      "from_s": 6.03,
+      "duration_s": 4.02,
+      "style": {
+        "bottom": "2.2%",
+        "left": "13%",
+        "right": "13%",
+        "padding": "6px 12px",
+        "maxWidth": "74%",
+        "margin": "0 auto",
+        "background": "rgba(7, 17, 28, 0.52)",
+        "borderLeft": "none",
+        "borderRadius": "5px",
+        "fontSize": "25px",
+        "lineHeight": 1.12,
+        "fontWeight": 650,
+        "color": "rgba(255,250,238,0.96)",
+        "textAlign": "center"
+      }
+    },
+    "caption-ten": {
+      "kind": "caption",
+      "text": "By the middle of 2025, the ten largest companies represented almost forty percent of the S&P 500.",
+      "position": "bottom",
+      "from_s": 10.05,
+      "duration_s": 3.892,
+      "style": {
+        "bottom": "2.2%",
+        "left": "13%",
+        "right": "13%",
+        "padding": "6px 12px",
+        "maxWidth": "74%",
+        "margin": "0 auto",
+        "background": "rgba(7, 17, 28, 0.52)",
+        "borderLeft": "none",
+        "borderRadius": "5px",
+        "fontSize": "25px",
+        "lineHeight": 1.12,
+        "fontWeight": 650,
+        "color": "rgba(255,250,238,0.96)",
+        "textAlign": "center"
+      }
+    },
+    "job-protection": {
+      "kind": "text",
+      "text": "INDEPENDENT PROTECTION",
+      "position": "center",
+      "from_s": 7.6,
+      "duration_s": 6.342,
+      "style": {
+        "left": "71%",
+        "top": "56%",
+        "right": "auto",
+        "width": "22%",
+        "padding": "3px 6px",
+        "background": "rgba(9, 24, 39, 0.58)",
+        "borderLeft": "3px solid #8B939A",
+        "fontSize": "15px",
+        "lineHeight": 1.0,
+        "letterSpacing": "0.35px",
+        "color": "#F2F0E7"
+      }
+    },
+    "job-upside": {
+      "kind": "text",
+      "text": "EXCEPTIONAL UPSIDE",
+      "position": "center",
+      "from_s": 7.6,
+      "duration_s": 6.342,
+      "style": {
+        "left": "71%",
+        "top": "39%",
+        "right": "auto",
+        "width": "22%",
+        "padding": "3px 6px",
+        "background": "rgba(9, 24, 39, 0.58)",
+        "borderLeft": "3px solid #566D9C",
+        "fontSize": "15px",
+        "lineHeight": 1.0,
+        "letterSpacing": "0.35px",
+        "color": "#F2F0E7"
+      }
+    },
+    "count-ten-of-five-hundred": {
+      "kind": "text",
+      "text": "10 largest holdings\nof 500 total",
+      "position": "top",
+      "from_s": 10.05,
+      "duration_s": 3.892,
+      "style": {
+        "left": "36%",
+        "right": "auto",
+        "top": "9%",
+        "width": "25%",
+        "padding": "5px 8px",
+        "background": "rgba(241, 231, 203, 0.90)",
+        "borderLeft": "4px solid #B58A36",
+        "fontSize": "18px",
+        "lineHeight": 1.12,
+        "color": "#17283A"
+      }
+    },
+    "source-top-ten-concentration": {
+      "kind": "citation",
+      "text": "\u224840% of index weight \u00b7 mid-2025\nS&P 500 Factsheet \u00b7 S&P Dow Jones Indices",
+      "position": "top",
+      "from_s": 11.38,
+      "duration_s": 2.562,
+      "style": {
+        "left": "66%",
+        "right": "4%",
+        "top": "8%",
+        "padding": "6px 8px",
+        "background": "rgba(241, 231, 203, 0.94)",
+        "borderLeft": "4px solid #A44A32",
+        "fontSize": "16px",
+        "lineHeight": 1.17,
+        "fontWeight": 650,
+        "color": "#17283A"
+      }
+    }
+  },
+  "caption_policy": "platform",
+  "citation_policy": "on_screen",
+  "diagnostic": false,
+  "render_profile": {
+    "width": 1280,
+    "height": 720,
+    "fps": 24,
+    "label": "single-world-index-proof-720p-12-on-24"
+  }
+}

@@ -1,0 +1,2504 @@
+{
+  "citation-001": {
+    "kind": "citation",
+    "citation_id": "memory-bottleneck-not-bubble-inference",
+    "text": "memory-bottleneck-not-bubble-inference",
+    "position": "rail",
+    "from_s": 0.4806,
+    "duration_s": 1.9224
+  },
+  "citation-002": {
+    "kind": "citation",
+    "citation_id": "memory-architecture-dependency",
+    "text": "Micron Technology · 2026-06-24 · memory-architecture-dependency",
+    "position": "rail",
+    "from_s": 0.6734,
+    "duration_s": 2.6936
+  },
+  "overlay-return-002-1": {
+    "kind": "text",
+    "text": "MU\n+685.7%",
+    "position": "top",
+    "from_s": 0.12,
+    "duration_s": 3.0869999999999997,
+    "style": {
+      "left": "7.4%",
+      "right": "auto",
+      "top": "77%",
+      "width": "20%",
+      "padding": "0",
+      "background": "transparent",
+      "borderLeft": "none",
+      "color": "#fff6df",
+      "fontSize": 28,
+      "fontWeight": 900,
+      "lineHeight": 1.05,
+      "textAlign": "center",
+      "whiteSpace": "pre-line",
+      "textShadow": "0 2px 3px rgba(0,0,0,0.52)"
+    }
+  },
+  "overlay-return-002-2": {
+    "kind": "text",
+    "text": "KOSPI\n+93.9%",
+    "position": "top",
+    "from_s": 0.3,
+    "duration_s": 2.9069999999999996,
+    "style": {
+      "left": "39.6%",
+      "right": "auto",
+      "top": "77%",
+      "width": "20%",
+      "padding": "0",
+      "background": "transparent",
+      "borderLeft": "none",
+      "color": "#fff6df",
+      "fontSize": 28,
+      "fontWeight": 900,
+      "lineHeight": 1.05,
+      "textAlign": "center",
+      "whiteSpace": "pre-line",
+      "textShadow": "0 2px 3px rgba(0,0,0,0.52)"
+    }
+  },
+  "overlay-return-002-3": {
+    "kind": "text",
+    "text": "S&P 500\n+22.4%",
+    "position": "top",
+    "from_s": 0.48,
+    "duration_s": 2.727,
+    "style": {
+      "left": "72.4%",
+      "right": "auto",
+      "top": "77%",
+      "width": "20%",
+      "padding": "0",
+      "background": "transparent",
+      "borderLeft": "none",
+      "color": "#fff6df",
+      "fontSize": 28,
+      "fontWeight": 900,
+      "lineHeight": 1.05,
+      "textAlign": "center",
+      "whiteSpace": "pre-line",
+      "textShadow": "0 2px 3px rgba(0,0,0,0.52)"
+    }
+  },
+  "citation-003": {
+    "kind": "citation",
+    "citation_id": "memory-bottleneck-not-bubble-inference",
+    "text": "memory-bottleneck-not-bubble-inference",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 3.0620000000000003
+  },
+  "overlay-return-003-1": {
+    "kind": "text",
+    "text": "MU\n+685.7%",
+    "position": "top",
+    "from_s": 0.12,
+    "duration_s": 3.482,
+    "style": {
+      "left": "7.4%",
+      "right": "auto",
+      "top": "77%",
+      "width": "20%",
+      "padding": "0",
+      "background": "transparent",
+      "borderLeft": "none",
+      "color": "#fff6df",
+      "fontSize": 28,
+      "fontWeight": 900,
+      "lineHeight": 1.05,
+      "textAlign": "center",
+      "whiteSpace": "pre-line",
+      "textShadow": "0 2px 3px rgba(0,0,0,0.52)"
+    }
+  },
+  "overlay-return-003-2": {
+    "kind": "text",
+    "text": "KOSPI\n+93.9%",
+    "position": "top",
+    "from_s": 0.3,
+    "duration_s": 3.302,
+    "style": {
+      "left": "39.6%",
+      "right": "auto",
+      "top": "77%",
+      "width": "20%",
+      "padding": "0",
+      "background": "transparent",
+      "borderLeft": "none",
+      "color": "#fff6df",
+      "fontSize": 28,
+      "fontWeight": 900,
+      "lineHeight": 1.05,
+      "textAlign": "center",
+      "whiteSpace": "pre-line",
+      "textShadow": "0 2px 3px rgba(0,0,0,0.52)"
+    }
+  },
+  "overlay-return-003-3": {
+    "kind": "text",
+    "text": "S&P 500\n+22.4%",
+    "position": "top",
+    "from_s": 0.48,
+    "duration_s": 3.1220000000000003,
+    "style": {
+      "left": "72.4%",
+      "right": "auto",
+      "top": "77%",
+      "width": "20%",
+      "padding": "0",
+      "background": "transparent",
+      "borderLeft": "none",
+      "color": "#fff6df",
+      "fontSize": 28,
+      "fontWeight": 900,
+      "lineHeight": 1.05,
+      "textAlign": "center",
+      "whiteSpace": "pre-line",
+      "textShadow": "0 2px 3px rgba(0,0,0,0.52)"
+    }
+  },
+  "citation-004": {
+    "kind": "citation",
+    "citation_id": "memory-bottleneck-not-bubble-inference",
+    "text": "memory-bottleneck-not-bubble-inference",
+    "position": "rail",
+    "from_s": 0.6686000000000001,
+    "duration_s": 2.6744
+  },
+  "citation-005": {
+    "kind": "citation",
+    "citation_id": "memory-bottleneck-not-bubble-inference",
+    "text": "memory-bottleneck-not-bubble-inference",
+    "position": "rail",
+    "from_s": 0.5154,
+    "duration_s": 2.0616
+  },
+  "citation-006": {
+    "kind": "citation",
+    "citation_id": "memory-bottleneck-not-bubble-inference",
+    "text": "memory-bottleneck-not-bubble-inference",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 2.923
+  },
+  "citation-007": {
+    "kind": "citation",
+    "citation_id": "micron-strategic-customer-agreements",
+    "text": "Micron Technology · 2026-06-24 · micron-strategic-customer-agreements",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 3.2590000000000003
+  },
+  "citation-008": {
+    "kind": "citation",
+    "citation_id": "memory-bottleneck-not-bubble-inference",
+    "text": "memory-bottleneck-not-bubble-inference",
+    "position": "rail",
+    "from_s": 0.527,
+    "duration_s": 2.1079999999999997
+  },
+  "citation-009": {
+    "kind": "citation",
+    "citation_id": "memory-bottleneck-not-bubble-inference",
+    "text": "memory-bottleneck-not-bubble-inference",
+    "position": "rail",
+    "from_s": 0.5874,
+    "duration_s": 2.3495999999999997
+  },
+  "citation-010": {
+    "kind": "citation",
+    "citation_id": "sp500-top-ten-concentration",
+    "text": "S&P Dow Jones Indices and Vanguard · 2025-06-30 · sp500-top-ten-concentration",
+    "position": "rail",
+    "from_s": 0.6688000000000001,
+    "duration_s": 2.6752
+  },
+  "citation-011": {
+    "kind": "citation",
+    "citation_id": "memory-bottleneck-not-bubble-inference",
+    "text": "memory-bottleneck-not-bubble-inference",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 3.0380000000000003
+  },
+  "citation-012": {
+    "kind": "citation",
+    "citation_id": "memory-bottleneck-not-bubble-inference",
+    "text": "memory-bottleneck-not-bubble-inference",
+    "position": "rail",
+    "from_s": 0.6920000000000001,
+    "duration_s": 2.768
+  },
+  "citation-013": {
+    "kind": "citation",
+    "citation_id": "memory-architecture-dependency",
+    "text": "Micron Technology · 2026-06-24 · memory-architecture-dependency",
+    "position": "rail",
+    "from_s": 0.5900000000000001,
+    "duration_s": 2.3600000000000003
+  },
+  "citation-014": {
+    "kind": "citation",
+    "citation_id": "memory-bottleneck-not-bubble-inference",
+    "text": "memory-bottleneck-not-bubble-inference",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 2.968
+  },
+  "citation-015": {
+    "kind": "citation",
+    "citation_id": "memory-bottleneck-not-bubble-inference",
+    "text": "memory-bottleneck-not-bubble-inference",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 3.3869999999999996
+  },
+  "citation-016": {
+    "kind": "citation",
+    "citation_id": "memory-bottleneck-not-bubble-inference",
+    "text": "memory-bottleneck-not-bubble-inference",
+    "position": "rail",
+    "from_s": 0.6386000000000001,
+    "duration_s": 2.5544000000000002
+  },
+  "citation-017": {
+    "kind": "citation",
+    "citation_id": "memory-bottleneck-not-bubble-inference",
+    "text": "memory-bottleneck-not-bubble-inference",
+    "position": "rail",
+    "from_s": 0.6222000000000001,
+    "duration_s": 2.4888000000000003
+  },
+  "citation-018": {
+    "kind": "citation",
+    "citation_id": "memory-bottleneck-not-bubble-inference",
+    "text": "memory-bottleneck-not-bubble-inference",
+    "position": "rail",
+    "from_s": 0.37620000000000003,
+    "duration_s": 1.5048
+  },
+  "citation-019": {
+    "kind": "citation",
+    "citation_id": "memory-bottleneck-not-bubble-inference",
+    "text": "memory-bottleneck-not-bubble-inference",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 2.841
+  },
+  "citation-020": {
+    "kind": "citation",
+    "citation_id": "memory-bottleneck-not-bubble-inference",
+    "text": "memory-bottleneck-not-bubble-inference",
+    "position": "rail",
+    "from_s": 0.6594000000000001,
+    "duration_s": 2.6376
+  },
+  "citation-021": {
+    "kind": "citation",
+    "citation_id": "memory-bottleneck-not-bubble-inference",
+    "text": "memory-bottleneck-not-bubble-inference",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 3.1550000000000002
+  },
+  "citation-022": {
+    "kind": "citation",
+    "citation_id": "memory-bottleneck-not-bubble-inference",
+    "text": "memory-bottleneck-not-bubble-inference",
+    "position": "rail",
+    "from_s": 0.6106,
+    "duration_s": 2.4424
+  },
+  "citation-023": {
+    "kind": "citation",
+    "citation_id": "memory-bottleneck-not-bubble-inference",
+    "text": "memory-bottleneck-not-bubble-inference",
+    "position": "rail",
+    "from_s": 0.6014,
+    "duration_s": 2.4056
+  },
+  "citation-024": {
+    "kind": "citation",
+    "citation_id": "memory-bottleneck-not-bubble-inference",
+    "text": "memory-bottleneck-not-bubble-inference",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 3.444
+  },
+  "citation-025": {
+    "kind": "citation",
+    "citation_id": "memory-bottleneck-not-bubble-inference",
+    "text": "memory-bottleneck-not-bubble-inference",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 3.1319999999999997
+  },
+  "citation-026": {
+    "kind": "citation",
+    "citation_id": "memory-bottleneck-not-bubble-inference",
+    "text": "memory-bottleneck-not-bubble-inference",
+    "position": "rail",
+    "from_s": 0.6804000000000001,
+    "duration_s": 2.7216
+  },
+  "citation-027": {
+    "kind": "citation",
+    "citation_id": "memory-bottleneck-not-bubble-inference",
+    "text": "memory-bottleneck-not-bubble-inference",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 2.934
+  },
+  "citation-028": {
+    "kind": "citation",
+    "citation_id": "memory-architecture-dependency",
+    "text": "Micron Technology · 2026-06-24 · memory-architecture-dependency",
+    "position": "rail",
+    "from_s": 0.606,
+    "duration_s": 2.424
+  },
+  "citation-029": {
+    "kind": "citation",
+    "citation_id": "hbm-capacity-trade-ratio",
+    "text": "Micron Technology · 2026-06-24 · hbm-capacity-trade-ratio",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 3.7809999999999997
+  },
+  "citation-030": {
+    "kind": "citation",
+    "citation_id": "memory-bottleneck-not-bubble-inference",
+    "text": "memory-bottleneck-not-bubble-inference",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 2.958
+  },
+  "citation-031": {
+    "kind": "citation",
+    "citation_id": "sp500-top-ten-concentration",
+    "text": "S&P Dow Jones Indices and Vanguard · 2025-06-30 · sp500-top-ten-concentration",
+    "position": "rail",
+    "from_s": 0.6454,
+    "duration_s": 2.5816
+  },
+  "citation-032": {
+    "kind": "citation",
+    "citation_id": "sp500-top-ten-concentration",
+    "text": "S&P Dow Jones Indices and Vanguard · 2025-06-30 · sp500-top-ten-concentration",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 3.2830000000000004
+  },
+  "citation-033": {
+    "kind": "citation",
+    "citation_id": "memory-architecture-dependency",
+    "text": "Micron Technology · 2026-06-24 · memory-architecture-dependency",
+    "position": "rail",
+    "from_s": 0.6246,
+    "duration_s": 2.4984
+  },
+  "citation-034": {
+    "kind": "citation",
+    "citation_id": "memory-architecture-dependency",
+    "text": "Micron Technology · 2026-06-24 · memory-architecture-dependency",
+    "position": "rail",
+    "from_s": 0.5317999999999999,
+    "duration_s": 2.1271999999999998
+  },
+  "citation-035": {
+    "kind": "citation",
+    "citation_id": "memory-architecture-dependency",
+    "text": "Micron Technology · 2026-06-24 · memory-architecture-dependency",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 3.0380000000000003
+  },
+  "citation-036": {
+    "kind": "citation",
+    "citation_id": "memory-architecture-dependency",
+    "text": "Micron Technology · 2026-06-24 · memory-architecture-dependency",
+    "position": "rail",
+    "from_s": 0.6804000000000001,
+    "duration_s": 2.7216
+  },
+  "citation-037": {
+    "kind": "citation",
+    "citation_id": "memory-architecture-dependency",
+    "text": "Micron Technology · 2026-06-24 · memory-architecture-dependency",
+    "position": "rail",
+    "from_s": 0.5596,
+    "duration_s": 2.2384
+  },
+  "citation-038": {
+    "kind": "citation",
+    "citation_id": "memory-architecture-dependency",
+    "text": "Micron Technology · 2026-06-24 · memory-architecture-dependency",
+    "position": "rail",
+    "from_s": 0.6036,
+    "duration_s": 2.4143999999999997
+  },
+  "citation-039": {
+    "kind": "citation",
+    "citation_id": "memory-architecture-dependency",
+    "text": "Micron Technology · 2026-06-24 · memory-architecture-dependency",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 3.143
+  },
+  "citation-040": {
+    "kind": "citation",
+    "citation_id": "memory-architecture-dependency",
+    "text": "Micron Technology · 2026-06-24 · memory-architecture-dependency",
+    "position": "rail",
+    "from_s": 0.6618,
+    "duration_s": 2.6472
+  },
+  "citation-041": {
+    "kind": "citation",
+    "citation_id": "memory-architecture-dependency",
+    "text": "Micron Technology · 2026-06-24 · memory-architecture-dependency",
+    "position": "rail",
+    "from_s": 0.6988000000000001,
+    "duration_s": 2.7952000000000004
+  },
+  "citation-042": {
+    "kind": "citation",
+    "citation_id": "memory-architecture-dependency",
+    "text": "Micron Technology · 2026-06-24 · memory-architecture-dependency",
+    "position": "rail",
+    "from_s": 0.6966000000000001,
+    "duration_s": 2.7864
+  },
+  "citation-043": {
+    "kind": "citation",
+    "citation_id": "hbm-capacity-trade-ratio",
+    "text": "Micron Technology · 2026-06-24 · hbm-capacity-trade-ratio",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 2.864
+  },
+  "citation-044": {
+    "kind": "citation",
+    "citation_id": "memory-architecture-dependency",
+    "text": "Micron Technology · 2026-06-24 · memory-architecture-dependency",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 3.0730000000000004
+  },
+  "citation-045": {
+    "kind": "citation",
+    "citation_id": "hbm-capacity-trade-ratio",
+    "text": "Micron Technology · 2026-06-24 · hbm-capacity-trade-ratio",
+    "position": "rail",
+    "from_s": 0.5992000000000001,
+    "duration_s": 2.3968
+  },
+  "citation-046": {
+    "kind": "citation",
+    "citation_id": "memory-architecture-dependency",
+    "text": "Micron Technology · 2026-06-24 · memory-architecture-dependency",
+    "position": "rail",
+    "from_s": 0.6688000000000001,
+    "duration_s": 2.6752
+  },
+  "citation-047": {
+    "kind": "citation",
+    "citation_id": "memory-architecture-dependency",
+    "text": "Micron Technology · 2026-06-24 · memory-architecture-dependency",
+    "position": "rail",
+    "from_s": 0.6360000000000001,
+    "duration_s": 2.544
+  },
+  "citation-048": {
+    "kind": "citation",
+    "citation_id": "memory-architecture-dependency",
+    "text": "Micron Technology · 2026-06-24 · memory-architecture-dependency",
+    "position": "rail",
+    "from_s": 0.6108,
+    "duration_s": 2.4432
+  },
+  "citation-049": {
+    "kind": "citation",
+    "citation_id": "memory-architecture-dependency",
+    "text": "Micron Technology · 2026-06-24 · memory-architecture-dependency",
+    "position": "rail",
+    "from_s": 0.5618000000000001,
+    "duration_s": 2.2472000000000003
+  },
+  "citation-050": {
+    "kind": "citation",
+    "citation_id": "memory-architecture-dependency",
+    "text": "Micron Technology · 2026-06-24 · memory-architecture-dependency",
+    "position": "rail",
+    "from_s": 0.6294,
+    "duration_s": 2.5176
+  },
+  "citation-051": {
+    "kind": "citation",
+    "citation_id": "memory-architecture-dependency",
+    "text": "Micron Technology · 2026-06-24 · memory-architecture-dependency",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 3.282
+  },
+  "citation-052": {
+    "kind": "citation",
+    "citation_id": "memory-architecture-dependency",
+    "text": "Micron Technology · 2026-06-24 · memory-architecture-dependency",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 2.992
+  },
+  "citation-053": {
+    "kind": "citation",
+    "citation_id": "memory-architecture-dependency",
+    "text": "Micron Technology · 2026-06-24 · memory-architecture-dependency",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 2.806
+  },
+  "citation-054": {
+    "kind": "citation",
+    "citation_id": "memory-architecture-dependency",
+    "text": "Micron Technology · 2026-06-24 · memory-architecture-dependency",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 2.958
+  },
+  "citation-055": {
+    "kind": "citation",
+    "citation_id": "hbm-capacity-trade-ratio",
+    "text": "Micron Technology · 2026-06-24 · hbm-capacity-trade-ratio",
+    "position": "rail",
+    "from_s": 0.6756000000000001,
+    "duration_s": 2.7024
+  },
+  "citation-056": {
+    "kind": "citation",
+    "citation_id": "memory-architecture-dependency",
+    "text": "Micron Technology · 2026-06-24 · memory-architecture-dependency",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 3.4559999999999995
+  },
+  "citation-057": {
+    "kind": "citation",
+    "citation_id": "memory-architecture-dependency",
+    "text": "Micron Technology · 2026-06-24 · memory-architecture-dependency",
+    "position": "rail",
+    "from_s": 0.6642000000000001,
+    "duration_s": 2.6568
+  },
+  "overlay-hbm-trade-ratio-057": {
+    "kind": "text",
+    "text": "1 HBM wafer allocation\n→ 2–3× less standard-DRAM bit output",
+    "position": "top",
+    "from_s": 0.22,
+    "duration_s": 2.8810000000000002,
+    "style": {
+      "left": "55%",
+      "right": "auto",
+      "top": "12%",
+      "width": "37%",
+      "padding": "13px 17px",
+      "background": "rgba(7,26,44,0.82)",
+      "borderLeft": "none",
+      "borderRadius": "8px",
+      "color": "#fff6df",
+      "fontSize": 27,
+      "fontWeight": 850,
+      "lineHeight": 1.12,
+      "whiteSpace": "pre-line"
+    }
+  },
+  "citation-058": {
+    "kind": "citation",
+    "citation_id": "memory-architecture-dependency",
+    "text": "Micron Technology · 2026-06-24 · memory-architecture-dependency",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 2.8760000000000003
+  },
+  "overlay-hbm-trade-ratio-058": {
+    "kind": "text",
+    "text": "1 HBM wafer allocation\n→ 2–3× less standard-DRAM bit output",
+    "position": "top",
+    "from_s": 0.22,
+    "duration_s": 3.136,
+    "style": {
+      "left": "55%",
+      "right": "auto",
+      "top": "12%",
+      "width": "37%",
+      "padding": "13px 17px",
+      "background": "rgba(7,26,44,0.82)",
+      "borderLeft": "none",
+      "borderRadius": "8px",
+      "color": "#fff6df",
+      "fontSize": 27,
+      "fontWeight": 850,
+      "lineHeight": 1.12,
+      "whiteSpace": "pre-line"
+    }
+  },
+  "citation-059": {
+    "kind": "citation",
+    "citation_id": "sp500-top-ten-concentration",
+    "text": "S&P Dow Jones Indices and Vanguard · 2025-06-30 · sp500-top-ten-concentration",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 2.864
+  },
+  "citation-060": {
+    "kind": "citation",
+    "citation_id": "hbm-capacity-trade-ratio",
+    "text": "Micron Technology · 2026-06-24 · hbm-capacity-trade-ratio",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 3.1319999999999997
+  },
+  "citation-061": {
+    "kind": "citation",
+    "citation_id": "memory-architecture-dependency",
+    "text": "Micron Technology · 2026-06-24 · memory-architecture-dependency",
+    "position": "rail",
+    "from_s": 0.5596,
+    "duration_s": 2.2384
+  },
+  "citation-062": {
+    "kind": "citation",
+    "citation_id": "memory-architecture-dependency",
+    "text": "Micron Technology · 2026-06-24 · memory-architecture-dependency",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 3.085
+  },
+  "citation-063": {
+    "kind": "citation",
+    "citation_id": "micron-strategic-customer-agreements",
+    "text": "Micron Technology · 2026-06-24 · micron-strategic-customer-agreements",
+    "position": "rail",
+    "from_s": 0.6152000000000001,
+    "duration_s": 2.4608
+  },
+  "citation-064": {
+    "kind": "citation",
+    "citation_id": "memory-architecture-dependency",
+    "text": "Micron Technology · 2026-06-24 · memory-architecture-dependency",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 3.178
+  },
+  "citation-065": {
+    "kind": "citation",
+    "citation_id": "hbm-capacity-trade-ratio",
+    "text": "Micron Technology · 2026-06-24 · hbm-capacity-trade-ratio",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 3.9779999999999998
+  },
+  "citation-066": {
+    "kind": "citation",
+    "citation_id": "micron-strategic-customer-agreements",
+    "text": "Micron Technology · 2026-06-24 · micron-strategic-customer-agreements",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 2.981
+  },
+  "citation-067": {
+    "kind": "citation",
+    "citation_id": "micron-strategic-customer-agreements",
+    "text": "Micron Technology · 2026-06-24 · micron-strategic-customer-agreements",
+    "position": "rail",
+    "from_s": 0.555,
+    "duration_s": 2.2199999999999998
+  },
+  "citation-068": {
+    "kind": "citation",
+    "citation_id": "micron-strategic-customer-agreements",
+    "text": "Micron Technology · 2026-06-24 · micron-strategic-customer-agreements",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 2.8979999999999997
+  },
+  "citation-069": {
+    "kind": "citation",
+    "citation_id": "micron-strategic-customer-agreements",
+    "text": "Micron Technology · 2026-06-24 · micron-strategic-customer-agreements",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 3.84
+  },
+  "citation-070": {
+    "kind": "citation",
+    "citation_id": "micron-strategic-customer-agreements",
+    "text": "Micron Technology · 2026-06-24 · micron-strategic-customer-agreements",
+    "position": "rail",
+    "from_s": 0.6548,
+    "duration_s": 2.6192
+  },
+  "citation-071": {
+    "kind": "citation",
+    "citation_id": "micron-strategic-customer-agreements",
+    "text": "Micron Technology · 2026-06-24 · micron-strategic-customer-agreements",
+    "position": "rail",
+    "from_s": 0.6292,
+    "duration_s": 2.5168
+  },
+  "citation-072": {
+    "kind": "citation",
+    "citation_id": "micron-strategic-customer-agreements",
+    "text": "Micron Technology · 2026-06-24 · micron-strategic-customer-agreements",
+    "position": "rail",
+    "from_s": 0.6918000000000001,
+    "duration_s": 2.7672
+  },
+  "citation-073": {
+    "kind": "citation",
+    "citation_id": "micron-strategic-customer-agreements",
+    "text": "Micron Technology · 2026-06-24 · micron-strategic-customer-agreements",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 3.0040000000000004
+  },
+  "citation-074": {
+    "kind": "citation",
+    "citation_id": "micron-strategic-customer-agreements",
+    "text": "Micron Technology · 2026-06-24 · micron-strategic-customer-agreements",
+    "position": "rail",
+    "from_s": 0.6826,
+    "duration_s": 2.7304
+  },
+  "citation-075": {
+    "kind": "citation",
+    "citation_id": "micron-strategic-customer-agreements",
+    "text": "Micron Technology · 2026-06-24 · micron-strategic-customer-agreements",
+    "position": "rail",
+    "from_s": 0.46680000000000005,
+    "duration_s": 1.8672
+  },
+  "citation-076": {
+    "kind": "citation",
+    "citation_id": "micron-strategic-customer-agreements",
+    "text": "Micron Technology · 2026-06-24 · micron-strategic-customer-agreements",
+    "position": "rail",
+    "from_s": 0.6826,
+    "duration_s": 2.7304
+  },
+  "citation-077": {
+    "kind": "citation",
+    "citation_id": "memory-architecture-dependency",
+    "text": "Micron Technology · 2026-06-24 · memory-architecture-dependency",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 3.6879999999999997
+  },
+  "citation-078": {
+    "kind": "citation",
+    "citation_id": "hbm-capacity-trade-ratio",
+    "text": "Micron Technology · 2026-06-24 · hbm-capacity-trade-ratio",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 2.83
+  },
+  "citation-079": {
+    "kind": "citation",
+    "citation_id": "memory-architecture-dependency",
+    "text": "Micron Technology · 2026-06-24 · memory-architecture-dependency",
+    "position": "rail",
+    "from_s": 0.6408,
+    "duration_s": 2.5632
+  },
+  "citation-080": {
+    "kind": "citation",
+    "citation_id": "memory-architecture-dependency",
+    "text": "Micron Technology · 2026-06-24 · memory-architecture-dependency",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 2.865
+  },
+  "citation-081": {
+    "kind": "citation",
+    "citation_id": "micron-strategic-customer-agreements",
+    "text": "Micron Technology · 2026-06-24 · micron-strategic-customer-agreements",
+    "position": "rail",
+    "from_s": 0.6988000000000001,
+    "duration_s": 2.7952000000000004
+  },
+  "citation-082": {
+    "kind": "citation",
+    "citation_id": "micron-strategic-customer-agreements",
+    "text": "Micron Technology · 2026-06-24 · micron-strategic-customer-agreements",
+    "position": "rail",
+    "from_s": 0.5968,
+    "duration_s": 2.3872
+  },
+  "citation-083": {
+    "kind": "citation",
+    "citation_id": "micron-strategic-customer-agreements",
+    "text": "Micron Technology · 2026-06-24 · micron-strategic-customer-agreements",
+    "position": "rail",
+    "from_s": 0.6062000000000001,
+    "duration_s": 2.4248000000000003
+  },
+  "citation-084": {
+    "kind": "citation",
+    "citation_id": "micron-strategic-customer-agreements",
+    "text": "Micron Technology · 2026-06-24 · micron-strategic-customer-agreements",
+    "position": "rail",
+    "from_s": 0.664,
+    "duration_s": 2.6559999999999997
+  },
+  "citation-085": {
+    "kind": "citation",
+    "citation_id": "micron-strategic-customer-agreements",
+    "text": "Micron Technology · 2026-06-24 · micron-strategic-customer-agreements",
+    "position": "rail",
+    "from_s": 0.339,
+    "duration_s": 1.356
+  },
+  "citation-086": {
+    "kind": "citation",
+    "citation_id": "memory-architecture-dependency",
+    "text": "Micron Technology · 2026-06-24 · memory-architecture-dependency",
+    "position": "rail",
+    "from_s": 0.534,
+    "duration_s": 2.136
+  },
+  "citation-087": {
+    "kind": "citation",
+    "citation_id": "korea-italy-listed-market-comparison",
+    "text": "Korea Exchange · 2026-07-27 · korea-italy-listed-market-comparison",
+    "position": "rail",
+    "from_s": 0.6990000000000001,
+    "duration_s": 2.7960000000000003
+  },
+  "citation-088": {
+    "kind": "citation",
+    "citation_id": "memory-architecture-dependency",
+    "text": "Micron Technology · 2026-06-24 · memory-architecture-dependency",
+    "position": "rail",
+    "from_s": 0.6988000000000001,
+    "duration_s": 2.7952000000000004
+  },
+  "citation-089": {
+    "kind": "citation",
+    "citation_id": "korea-italy-listed-market-comparison",
+    "text": "Korea Exchange · 2026-07-27 · korea-italy-listed-market-comparison",
+    "position": "rail",
+    "from_s": 0.6526000000000001,
+    "duration_s": 2.6104
+  },
+  "citation-090": {
+    "kind": "citation",
+    "citation_id": "korea-italy-listed-market-comparison",
+    "text": "Korea Exchange · 2026-07-27 · korea-italy-listed-market-comparison",
+    "position": "rail",
+    "from_s": 0.5874,
+    "duration_s": 2.3495999999999997
+  },
+  "citation-091": {
+    "kind": "citation",
+    "citation_id": "korea-italy-listed-market-comparison",
+    "text": "Korea Exchange · 2026-07-27 · korea-italy-listed-market-comparison",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 3.4559999999999995
+  },
+  "citation-092": {
+    "kind": "citation",
+    "citation_id": "korea-italy-listed-market-comparison",
+    "text": "Korea Exchange · 2026-07-27 · korea-italy-listed-market-comparison",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 3.399
+  },
+  "citation-093": {
+    "kind": "citation",
+    "citation_id": "korea-italy-listed-market-comparison",
+    "text": "Korea Exchange · 2026-07-27 · korea-italy-listed-market-comparison",
+    "position": "rail",
+    "from_s": 0.5664,
+    "duration_s": 2.2656
+  },
+  "citation-094": {
+    "kind": "citation",
+    "citation_id": "korea-italy-listed-market-comparison",
+    "text": "Korea Exchange · 2026-07-27 · korea-italy-listed-market-comparison",
+    "position": "rail",
+    "from_s": 0.6132,
+    "duration_s": 2.4528
+  },
+  "citation-095": {
+    "kind": "citation",
+    "citation_id": "korea-italy-listed-market-comparison",
+    "text": "Korea Exchange · 2026-07-27 · korea-italy-listed-market-comparison",
+    "position": "rail",
+    "from_s": 0.6548,
+    "duration_s": 2.6192
+  },
+  "citation-096": {
+    "kind": "citation",
+    "citation_id": "korea-italy-listed-market-comparison",
+    "text": "Korea Exchange · 2026-07-27 · korea-italy-listed-market-comparison",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 3.282
+  },
+  "citation-097": {
+    "kind": "citation",
+    "citation_id": "korea-italy-listed-market-comparison",
+    "text": "Korea Exchange · 2026-07-27 · korea-italy-listed-market-comparison",
+    "position": "rail",
+    "from_s": 0.6246,
+    "duration_s": 2.4984
+  },
+  "citation-098": {
+    "kind": "citation",
+    "citation_id": "korea-italy-listed-market-comparison",
+    "text": "Korea Exchange · 2026-07-27 · korea-italy-listed-market-comparison",
+    "position": "rail",
+    "from_s": 0.6200000000000001,
+    "duration_s": 2.48
+  },
+  "citation-099": {
+    "kind": "citation",
+    "citation_id": "korea-italy-listed-market-comparison",
+    "text": "Korea Exchange · 2026-07-27 · korea-italy-listed-market-comparison",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 3.213
+  },
+  "citation-100": {
+    "kind": "citation",
+    "citation_id": "korea-italy-listed-market-comparison",
+    "text": "Korea Exchange · 2026-07-27 · korea-italy-listed-market-comparison",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 3.05
+  },
+  "citation-101": {
+    "kind": "citation",
+    "citation_id": "korea-italy-listed-market-comparison",
+    "text": "Korea Exchange · 2026-07-27 · korea-italy-listed-market-comparison",
+    "position": "rail",
+    "from_s": 0.671,
+    "duration_s": 2.684
+  },
+  "citation-102": {
+    "kind": "citation",
+    "citation_id": "korea-italy-listed-market-comparison",
+    "text": "Korea Exchange · 2026-07-27 · korea-italy-listed-market-comparison",
+    "position": "rail",
+    "from_s": 0.5968,
+    "duration_s": 2.3872
+  },
+  "citation-103": {
+    "kind": "citation",
+    "citation_id": "korea-italy-listed-market-comparison",
+    "text": "Korea Exchange · 2026-07-27 · korea-italy-listed-market-comparison",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 2.806
+  },
+  "citation-104": {
+    "kind": "citation",
+    "citation_id": "memory-architecture-dependency",
+    "text": "Micron Technology · 2026-06-24 · memory-architecture-dependency",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 2.992
+  },
+  "citation-105": {
+    "kind": "citation",
+    "citation_id": "korea-italy-listed-market-comparison",
+    "text": "Korea Exchange · 2026-07-27 · korea-italy-listed-market-comparison",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 3.2590000000000003
+  },
+  "citation-106": {
+    "kind": "citation",
+    "citation_id": "korea-italy-listed-market-comparison",
+    "text": "Korea Exchange · 2026-07-27 · korea-italy-listed-market-comparison",
+    "position": "rail",
+    "from_s": 0.6758000000000001,
+    "duration_s": 2.7032
+  },
+  "citation-107": {
+    "kind": "citation",
+    "citation_id": "korea-italy-listed-market-comparison",
+    "text": "Korea Exchange · 2026-07-27 · korea-italy-listed-market-comparison",
+    "position": "rail",
+    "from_s": 0.6592,
+    "duration_s": 2.6368
+  },
+  "citation-108": {
+    "kind": "citation",
+    "citation_id": "korea-italy-listed-market-comparison",
+    "text": "Korea Exchange · 2026-07-27 · korea-italy-listed-market-comparison",
+    "position": "rail",
+    "from_s": 0.678,
+    "duration_s": 2.712
+  },
+  "citation-109": {
+    "kind": "citation",
+    "citation_id": "korea-italy-listed-market-comparison",
+    "text": "Korea Exchange · 2026-07-27 · korea-italy-listed-market-comparison",
+    "position": "rail",
+    "from_s": 0.6154000000000001,
+    "duration_s": 2.4616
+  },
+  "citation-110": {
+    "kind": "citation",
+    "citation_id": "korea-italy-listed-market-comparison",
+    "text": "Korea Exchange · 2026-07-27 · korea-italy-listed-market-comparison",
+    "position": "rail",
+    "from_s": 0.541,
+    "duration_s": 2.164
+  },
+  "citation-111": {
+    "kind": "citation",
+    "citation_id": "korea-italy-listed-market-comparison",
+    "text": "Korea Exchange · 2026-07-27 · korea-italy-listed-market-comparison",
+    "position": "rail",
+    "from_s": 0.5642,
+    "duration_s": 2.2568
+  },
+  "citation-112": {
+    "kind": "citation",
+    "citation_id": "korea-italy-listed-market-comparison",
+    "text": "Korea Exchange · 2026-07-27 · korea-italy-listed-market-comparison",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 3.109
+  },
+  "citation-113": {
+    "kind": "citation",
+    "citation_id": "korea-italy-listed-market-comparison",
+    "text": "Korea Exchange · 2026-07-27 · korea-italy-listed-market-comparison",
+    "position": "rail",
+    "from_s": 0.6664,
+    "duration_s": 2.6656
+  },
+  "citation-114": {
+    "kind": "citation",
+    "citation_id": "korea-italy-listed-market-comparison",
+    "text": "Korea Exchange · 2026-07-27 · korea-italy-listed-market-comparison",
+    "position": "rail",
+    "from_s": 0.6292,
+    "duration_s": 2.5168
+  },
+  "citation-115": {
+    "kind": "citation",
+    "citation_id": "korea-italy-listed-market-comparison",
+    "text": "Korea Exchange · 2026-07-27 · korea-italy-listed-market-comparison",
+    "position": "rail",
+    "from_s": 0.6618,
+    "duration_s": 2.6472
+  },
+  "citation-116": {
+    "kind": "citation",
+    "citation_id": "korea-italy-listed-market-comparison",
+    "text": "Korea Exchange · 2026-07-27 · korea-italy-listed-market-comparison",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 2.957
+  },
+  "citation-117": {
+    "kind": "citation",
+    "citation_id": "korea-italy-listed-market-comparison",
+    "text": "Korea Exchange · 2026-07-27 · korea-italy-listed-market-comparison",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 2.957
+  },
+  "citation-118": {
+    "kind": "citation",
+    "citation_id": "memory-architecture-dependency",
+    "text": "Micron Technology · 2026-06-24 · memory-architecture-dependency",
+    "position": "rail",
+    "from_s": 0.6222000000000001,
+    "duration_s": 2.4888000000000003
+  },
+  "citation-119": {
+    "kind": "citation",
+    "citation_id": "korea-italy-listed-market-comparison",
+    "text": "Korea Exchange · 2026-07-27 · korea-italy-listed-market-comparison",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 3.2830000000000004
+  },
+  "citation-120": {
+    "kind": "citation",
+    "citation_id": "memory-architecture-dependency",
+    "text": "Micron Technology · 2026-06-24 · memory-architecture-dependency",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 3.2119999999999997
+  },
+  "citation-121": {
+    "kind": "citation",
+    "citation_id": "korea-italy-listed-market-comparison",
+    "text": "Korea Exchange · 2026-07-27 · korea-italy-listed-market-comparison",
+    "position": "rail",
+    "from_s": 0.5364,
+    "duration_s": 2.1456
+  },
+  "citation-122": {
+    "kind": "citation",
+    "citation_id": "sp500-top-ten-concentration",
+    "text": "S&P Dow Jones Indices and Vanguard · 2025-06-30 · sp500-top-ten-concentration",
+    "position": "rail",
+    "from_s": 0.5758,
+    "duration_s": 2.3032
+  },
+  "citation-123": {
+    "kind": "citation",
+    "citation_id": "sp500-top-ten-concentration",
+    "text": "S&P Dow Jones Indices and Vanguard · 2025-06-30 · sp500-top-ten-concentration",
+    "position": "rail",
+    "from_s": 0.6828000000000001,
+    "duration_s": 2.7312000000000003
+  },
+  "citation-124": {
+    "kind": "citation",
+    "citation_id": "sp500-top-ten-concentration",
+    "text": "S&P Dow Jones Indices and Vanguard · 2025-06-30 · sp500-top-ten-concentration",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 3.317
+  },
+  "citation-125": {
+    "kind": "citation",
+    "citation_id": "sp500-top-ten-concentration",
+    "text": "S&P Dow Jones Indices and Vanguard · 2025-06-30 · sp500-top-ten-concentration",
+    "position": "rail",
+    "from_s": 0.6594000000000001,
+    "duration_s": 2.6376
+  },
+  "citation-126": {
+    "kind": "citation",
+    "citation_id": "sp500-top-ten-concentration",
+    "text": "S&P Dow Jones Indices and Vanguard · 2025-06-30 · sp500-top-ten-concentration",
+    "position": "rail",
+    "from_s": 0.6316,
+    "duration_s": 2.5263999999999998
+  },
+  "citation-127": {
+    "kind": "citation",
+    "citation_id": "sp500-top-ten-concentration",
+    "text": "S&P Dow Jones Indices and Vanguard · 2025-06-30 · sp500-top-ten-concentration",
+    "position": "rail",
+    "from_s": 0.6896,
+    "duration_s": 2.7584
+  },
+  "citation-128": {
+    "kind": "citation",
+    "citation_id": "sp500-top-ten-concentration",
+    "text": "S&P Dow Jones Indices and Vanguard · 2025-06-30 · sp500-top-ten-concentration",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 3.143
+  },
+  "citation-129": {
+    "kind": "citation",
+    "citation_id": "sp500-top-ten-concentration",
+    "text": "S&P Dow Jones Indices and Vanguard · 2025-06-30 · sp500-top-ten-concentration",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 3.096
+  },
+  "citation-130": {
+    "kind": "citation",
+    "citation_id": "sp500-top-ten-concentration",
+    "text": "S&P Dow Jones Indices and Vanguard · 2025-06-30 · sp500-top-ten-concentration",
+    "position": "rail",
+    "from_s": 0.6502,
+    "duration_s": 2.6008
+  },
+  "citation-131": {
+    "kind": "citation",
+    "citation_id": "sp500-top-ten-concentration",
+    "text": "S&P Dow Jones Indices and Vanguard · 2025-06-30 · sp500-top-ten-concentration",
+    "position": "rail",
+    "from_s": 0.6502,
+    "duration_s": 2.6008
+  },
+  "citation-132": {
+    "kind": "citation",
+    "citation_id": "sp500-top-ten-concentration",
+    "text": "S&P Dow Jones Indices and Vanguard · 2025-06-30 · sp500-top-ten-concentration",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 2.806
+  },
+  "citation-133": {
+    "kind": "citation",
+    "citation_id": "sp500-top-ten-concentration",
+    "text": "S&P Dow Jones Indices and Vanguard · 2025-06-30 · sp500-top-ten-concentration",
+    "position": "rail",
+    "from_s": 0.6826,
+    "duration_s": 2.7304
+  },
+  "citation-134": {
+    "kind": "citation",
+    "citation_id": "sp500-top-ten-concentration",
+    "text": "S&P Dow Jones Indices and Vanguard · 2025-06-30 · sp500-top-ten-concentration",
+    "position": "rail",
+    "from_s": 0.5504,
+    "duration_s": 2.2016
+  },
+  "citation-135": {
+    "kind": "citation",
+    "citation_id": "hbm-capacity-trade-ratio",
+    "text": "Micron Technology · 2026-06-24 · hbm-capacity-trade-ratio",
+    "position": "rail",
+    "from_s": 0.6572,
+    "duration_s": 2.6288
+  },
+  "citation-136": {
+    "kind": "citation",
+    "citation_id": "sp500-top-ten-concentration",
+    "text": "S&P Dow Jones Indices and Vanguard · 2025-06-30 · sp500-top-ten-concentration",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 3.096
+  },
+  "citation-137": {
+    "kind": "citation",
+    "citation_id": "sp500-top-ten-concentration",
+    "text": "S&P Dow Jones Indices and Vanguard · 2025-06-30 · sp500-top-ten-concentration",
+    "position": "rail",
+    "from_s": 0.6362000000000001,
+    "duration_s": 2.5448
+  },
+  "citation-138": {
+    "kind": "citation",
+    "citation_id": "sp500-top-ten-concentration",
+    "text": "S&P Dow Jones Indices and Vanguard · 2025-06-30 · sp500-top-ten-concentration",
+    "position": "rail",
+    "from_s": 0.6154000000000001,
+    "duration_s": 2.4616
+  },
+  "citation-139": {
+    "kind": "citation",
+    "citation_id": "sp500-top-ten-concentration",
+    "text": "S&P Dow Jones Indices and Vanguard · 2025-06-30 · sp500-top-ten-concentration",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 2.992
+  },
+  "citation-140": {
+    "kind": "citation",
+    "citation_id": "sp500-top-ten-concentration",
+    "text": "S&P Dow Jones Indices and Vanguard · 2025-06-30 · sp500-top-ten-concentration",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 3.0380000000000003
+  },
+  "citation-141": {
+    "kind": "citation",
+    "citation_id": "sp500-top-ten-concentration",
+    "text": "S&P Dow Jones Indices and Vanguard · 2025-06-30 · sp500-top-ten-concentration",
+    "position": "rail",
+    "from_s": 0.6572,
+    "duration_s": 2.6288
+  },
+  "citation-142": {
+    "kind": "citation",
+    "citation_id": "sp500-top-ten-concentration",
+    "text": "S&P Dow Jones Indices and Vanguard · 2025-06-30 · sp500-top-ten-concentration",
+    "position": "rail",
+    "from_s": 0.613,
+    "duration_s": 2.452
+  },
+  "citation-143": {
+    "kind": "citation",
+    "citation_id": "sp500-top-ten-concentration",
+    "text": "S&P Dow Jones Indices and Vanguard · 2025-06-30 · sp500-top-ten-concentration",
+    "position": "rail",
+    "from_s": 0.6896,
+    "duration_s": 2.7584
+  },
+  "citation-144": {
+    "kind": "citation",
+    "citation_id": "sp500-top-ten-concentration",
+    "text": "S&P Dow Jones Indices and Vanguard · 2025-06-30 · sp500-top-ten-concentration",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 3.2590000000000003
+  },
+  "citation-145": {
+    "kind": "citation",
+    "citation_id": "sp500-top-ten-concentration",
+    "text": "S&P Dow Jones Indices and Vanguard · 2025-06-30 · sp500-top-ten-concentration",
+    "position": "rail",
+    "from_s": 0.6594000000000001,
+    "duration_s": 2.6376
+  },
+  "citation-146": {
+    "kind": "citation",
+    "citation_id": "sp500-top-ten-concentration",
+    "text": "S&P Dow Jones Indices and Vanguard · 2025-06-30 · sp500-top-ten-concentration",
+    "position": "rail",
+    "from_s": 0.634,
+    "duration_s": 2.536
+  },
+  "citation-147": {
+    "kind": "citation",
+    "citation_id": "sp500-top-ten-concentration",
+    "text": "S&P Dow Jones Indices and Vanguard · 2025-06-30 · sp500-top-ten-concentration",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 3.1310000000000002
+  },
+  "citation-148": {
+    "kind": "citation",
+    "citation_id": "sp500-top-ten-concentration",
+    "text": "S&P Dow Jones Indices and Vanguard · 2025-06-30 · sp500-top-ten-concentration",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 3.1079999999999997
+  },
+  "citation-149": {
+    "kind": "citation",
+    "citation_id": "sp500-top-ten-concentration",
+    "text": "S&P Dow Jones Indices and Vanguard · 2025-06-30 · sp500-top-ten-concentration",
+    "position": "rail",
+    "from_s": 0.48760000000000003,
+    "duration_s": 1.9504000000000001
+  },
+  "citation-150": {
+    "kind": "citation",
+    "citation_id": "sp500-top-ten-concentration",
+    "text": "S&P Dow Jones Indices and Vanguard · 2025-06-30 · sp500-top-ten-concentration",
+    "position": "rail",
+    "from_s": 0.6200000000000001,
+    "duration_s": 2.48
+  },
+  "citation-151": {
+    "kind": "citation",
+    "citation_id": "sp500-top-ten-concentration",
+    "text": "S&P Dow Jones Indices and Vanguard · 2025-06-30 · sp500-top-ten-concentration",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 2.8179999999999996
+  },
+  "citation-152": {
+    "kind": "citation",
+    "citation_id": "sp500-top-ten-concentration",
+    "text": "S&P Dow Jones Indices and Vanguard · 2025-06-30 · sp500-top-ten-concentration",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 2.841
+  },
+  "citation-153": {
+    "kind": "citation",
+    "citation_id": "sp500-top-ten-concentration",
+    "text": "S&P Dow Jones Indices and Vanguard · 2025-06-30 · sp500-top-ten-concentration",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 3.2119999999999997
+  },
+  "citation-154": {
+    "kind": "citation",
+    "citation_id": "sp500-top-ten-concentration",
+    "text": "S&P Dow Jones Indices and Vanguard · 2025-06-30 · sp500-top-ten-concentration",
+    "position": "rail",
+    "from_s": 0.6224000000000001,
+    "duration_s": 2.4896000000000003
+  },
+  "citation-155": {
+    "kind": "citation",
+    "citation_id": "sp500-top-ten-concentration",
+    "text": "S&P Dow Jones Indices and Vanguard · 2025-06-30 · sp500-top-ten-concentration",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 2.899
+  },
+  "citation-156": {
+    "kind": "citation",
+    "citation_id": "sp500-top-ten-concentration",
+    "text": "S&P Dow Jones Indices and Vanguard · 2025-06-30 · sp500-top-ten-concentration",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 4.117999999999999
+  },
+  "citation-157": {
+    "kind": "citation",
+    "citation_id": "sp500-top-ten-concentration",
+    "text": "S&P Dow Jones Indices and Vanguard · 2025-06-30 · sp500-top-ten-concentration",
+    "position": "rail",
+    "from_s": 0.6478,
+    "duration_s": 2.5911999999999997
+  },
+  "citation-158": {
+    "kind": "citation",
+    "citation_id": "sp500-top-ten-concentration",
+    "text": "S&P Dow Jones Indices and Vanguard · 2025-06-30 · sp500-top-ten-concentration",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 2.9459999999999997
+  },
+  "citation-159": {
+    "kind": "citation",
+    "citation_id": "sp500-top-ten-concentration",
+    "text": "S&P Dow Jones Indices and Vanguard · 2025-06-30 · sp500-top-ten-concentration",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 3.0380000000000003
+  },
+  "citation-160": {
+    "kind": "citation",
+    "citation_id": "sp500-top-ten-concentration",
+    "text": "S&P Dow Jones Indices and Vanguard · 2025-06-30 · sp500-top-ten-concentration",
+    "position": "rail",
+    "from_s": 0.6224000000000001,
+    "duration_s": 2.4896000000000003
+  },
+  "citation-161": {
+    "kind": "citation",
+    "citation_id": "sp500-top-ten-concentration",
+    "text": "S&P Dow Jones Indices and Vanguard · 2025-06-30 · sp500-top-ten-concentration",
+    "position": "rail",
+    "from_s": 0.5780000000000001,
+    "duration_s": 2.3120000000000003
+  },
+  "citation-162": {
+    "kind": "citation",
+    "citation_id": "sp500-top-ten-concentration",
+    "text": "S&P Dow Jones Indices and Vanguard · 2025-06-30 · sp500-top-ten-concentration",
+    "position": "rail",
+    "from_s": 0.6990000000000001,
+    "duration_s": 2.7960000000000003
+  },
+  "citation-163": {
+    "kind": "citation",
+    "citation_id": "sp500-top-ten-concentration",
+    "text": "S&P Dow Jones Indices and Vanguard · 2025-06-30 · sp500-top-ten-concentration",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 3.2359999999999998
+  },
+  "citation-164": {
+    "kind": "citation",
+    "citation_id": "sp500-top-ten-concentration",
+    "text": "S&P Dow Jones Indices and Vanguard · 2025-06-30 · sp500-top-ten-concentration",
+    "position": "rail",
+    "from_s": 0.657,
+    "duration_s": 2.628
+  },
+  "citation-165": {
+    "kind": "citation",
+    "citation_id": "sp500-top-ten-concentration",
+    "text": "S&P Dow Jones Indices and Vanguard · 2025-06-30 · sp500-top-ten-concentration",
+    "position": "rail",
+    "from_s": 0.6108,
+    "duration_s": 2.4432
+  },
+  "citation-166": {
+    "kind": "citation",
+    "citation_id": "sp500-top-ten-concentration",
+    "text": "S&P Dow Jones Indices and Vanguard · 2025-06-30 · sp500-top-ten-concentration",
+    "position": "rail",
+    "from_s": 0.48300000000000004,
+    "duration_s": 1.932
+  },
+  "citation-167": {
+    "kind": "citation",
+    "citation_id": "sp500-top-ten-concentration",
+    "text": "S&P Dow Jones Indices and Vanguard · 2025-06-30 · sp500-top-ten-concentration",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 3.05
+  },
+  "citation-168": {
+    "kind": "citation",
+    "citation_id": "sp500-top-ten-concentration",
+    "text": "S&P Dow Jones Indices and Vanguard · 2025-06-30 · sp500-top-ten-concentration",
+    "position": "rail",
+    "from_s": 0.513,
+    "duration_s": 2.052
+  },
+  "citation-169": {
+    "kind": "citation",
+    "citation_id": "generational-wealth-return-hurdle",
+    "text": "U.S. Securities and Exchange Commission · undated · generational-wealth-return-hurdle",
+    "position": "rail",
+    "from_s": 0.6338,
+    "duration_s": 2.5352
+  },
+  "citation-170": {
+    "kind": "citation",
+    "citation_id": "generational-wealth-return-hurdle",
+    "text": "U.S. Securities and Exchange Commission · undated · generational-wealth-return-hurdle",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 2.865
+  },
+  "citation-171": {
+    "kind": "citation",
+    "citation_id": "generational-wealth-return-hurdle",
+    "text": "U.S. Securities and Exchange Commission · undated · generational-wealth-return-hurdle",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 3.096
+  },
+  "citation-172": {
+    "kind": "citation",
+    "citation_id": "generational-wealth-return-hurdle",
+    "text": "U.S. Securities and Exchange Commission · undated · generational-wealth-return-hurdle",
+    "position": "rail",
+    "from_s": 0.6386000000000001,
+    "duration_s": 2.5544000000000002
+  },
+  "citation-173": {
+    "kind": "citation",
+    "citation_id": "generational-wealth-return-hurdle",
+    "text": "U.S. Securities and Exchange Commission · undated · generational-wealth-return-hurdle",
+    "position": "rail",
+    "from_s": 0.6292,
+    "duration_s": 2.5168
+  },
+  "citation-174": {
+    "kind": "citation",
+    "citation_id": "generational-wealth-return-hurdle",
+    "text": "U.S. Securities and Exchange Commission · undated · generational-wealth-return-hurdle",
+    "position": "rail",
+    "from_s": 0.6804000000000001,
+    "duration_s": 2.7216
+  },
+  "citation-175": {
+    "kind": "citation",
+    "citation_id": "generational-wealth-return-hurdle",
+    "text": "U.S. Securities and Exchange Commission · undated · generational-wealth-return-hurdle",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 3.41
+  },
+  "citation-176": {
+    "kind": "citation",
+    "citation_id": "generational-wealth-return-hurdle",
+    "text": "U.S. Securities and Exchange Commission · undated · generational-wealth-return-hurdle",
+    "position": "rail",
+    "from_s": 0.6222000000000001,
+    "duration_s": 2.4888000000000003
+  },
+  "citation-177": {
+    "kind": "citation",
+    "citation_id": "generational-wealth-return-hurdle",
+    "text": "U.S. Securities and Exchange Commission · undated · generational-wealth-return-hurdle",
+    "position": "rail",
+    "from_s": 0.5690000000000001,
+    "duration_s": 2.2760000000000002
+  },
+  "citation-178": {
+    "kind": "citation",
+    "citation_id": "generational-wealth-return-hurdle",
+    "text": "U.S. Securities and Exchange Commission · undated · generational-wealth-return-hurdle",
+    "position": "rail",
+    "from_s": 0.6920000000000001,
+    "duration_s": 2.768
+  },
+  "citation-179": {
+    "kind": "citation",
+    "citation_id": "generational-wealth-return-hurdle",
+    "text": "U.S. Securities and Exchange Commission · undated · generational-wealth-return-hurdle",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 2.864
+  },
+  "citation-180": {
+    "kind": "citation",
+    "citation_id": "generational-wealth-return-hurdle",
+    "text": "U.S. Securities and Exchange Commission · undated · generational-wealth-return-hurdle",
+    "position": "rail",
+    "from_s": 0.6036,
+    "duration_s": 2.4143999999999997
+  },
+  "citation-181": {
+    "kind": "citation",
+    "citation_id": "generational-wealth-return-hurdle",
+    "text": "U.S. Securities and Exchange Commission · undated · generational-wealth-return-hurdle",
+    "position": "rail",
+    "from_s": 0.6016,
+    "duration_s": 2.4064
+  },
+  "citation-182": {
+    "kind": "citation",
+    "citation_id": "generational-wealth-return-hurdle",
+    "text": "U.S. Securities and Exchange Commission · undated · generational-wealth-return-hurdle",
+    "position": "rail",
+    "from_s": 0.6966000000000001,
+    "duration_s": 2.7864
+  },
+  "citation-183": {
+    "kind": "citation",
+    "citation_id": "generational-wealth-return-hurdle",
+    "text": "U.S. Securities and Exchange Commission · undated · generational-wealth-return-hurdle",
+    "position": "rail",
+    "from_s": 0.6872,
+    "duration_s": 2.7488
+  },
+  "citation-184": {
+    "kind": "citation",
+    "citation_id": "generational-wealth-return-hurdle",
+    "text": "U.S. Securities and Exchange Commission · undated · generational-wealth-return-hurdle",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 2.9690000000000003
+  },
+  "citation-185": {
+    "kind": "citation",
+    "citation_id": "generational-wealth-return-hurdle",
+    "text": "U.S. Securities and Exchange Commission · undated · generational-wealth-return-hurdle",
+    "position": "rail",
+    "from_s": 0.6152000000000001,
+    "duration_s": 2.4608
+  },
+  "citation-186": {
+    "kind": "citation",
+    "citation_id": "generational-wealth-return-hurdle",
+    "text": "U.S. Securities and Exchange Commission · undated · generational-wealth-return-hurdle",
+    "position": "rail",
+    "from_s": 0.6782,
+    "duration_s": 2.7128
+  },
+  "citation-187": {
+    "kind": "citation",
+    "citation_id": "generational-wealth-return-hurdle",
+    "text": "U.S. Securities and Exchange Commission · undated · generational-wealth-return-hurdle",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 3.247
+  },
+  "citation-188": {
+    "kind": "citation",
+    "citation_id": "generational-wealth-return-hurdle",
+    "text": "U.S. Securities and Exchange Commission · undated · generational-wealth-return-hurdle",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 3.4799999999999995
+  },
+  "citation-189": {
+    "kind": "citation",
+    "citation_id": "generational-wealth-return-hurdle",
+    "text": "U.S. Securities and Exchange Commission · undated · generational-wealth-return-hurdle",
+    "position": "rail",
+    "from_s": 0.5618000000000001,
+    "duration_s": 2.2472000000000003
+  },
+  "citation-190": {
+    "kind": "citation",
+    "citation_id": "sp500-top-ten-concentration",
+    "text": "S&P Dow Jones Indices and Vanguard · 2025-06-30 · sp500-top-ten-concentration",
+    "position": "rail",
+    "from_s": 0.6526000000000001,
+    "duration_s": 2.6104
+  },
+  "citation-191": {
+    "kind": "citation",
+    "citation_id": "generational-wealth-return-hurdle",
+    "text": "U.S. Securities and Exchange Commission · undated · generational-wealth-return-hurdle",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 3.3629999999999995
+  },
+  "citation-192": {
+    "kind": "citation",
+    "citation_id": "index-fund-asset-scale",
+    "text": "Investment Company Institute · 2025-12-31 · index-fund-asset-scale",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 3.061
+  },
+  "citation-193": {
+    "kind": "citation",
+    "citation_id": "generational-wealth-return-hurdle",
+    "text": "U.S. Securities and Exchange Commission · undated · generational-wealth-return-hurdle",
+    "position": "rail",
+    "from_s": 0.613,
+    "duration_s": 2.452
+  },
+  "citation-194": {
+    "kind": "citation",
+    "citation_id": "index-fund-asset-scale",
+    "text": "Investment Company Institute · 2025-12-31 · index-fund-asset-scale",
+    "position": "rail",
+    "from_s": 0.685,
+    "duration_s": 2.7399999999999998
+  },
+  "citation-195": {
+    "kind": "citation",
+    "citation_id": "generational-wealth-return-hurdle",
+    "text": "U.S. Securities and Exchange Commission · undated · generational-wealth-return-hurdle",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 3.2359999999999998
+  },
+  "citation-196": {
+    "kind": "citation",
+    "citation_id": "generational-wealth-return-hurdle",
+    "text": "U.S. Securities and Exchange Commission · undated · generational-wealth-return-hurdle",
+    "position": "rail",
+    "from_s": 0.6920000000000001,
+    "duration_s": 2.768
+  },
+  "citation-197": {
+    "kind": "citation",
+    "citation_id": "generational-wealth-return-hurdle",
+    "text": "U.S. Securities and Exchange Commission · undated · generational-wealth-return-hurdle",
+    "position": "rail",
+    "from_s": 0.311,
+    "duration_s": 1.244
+  },
+  "citation-198": {
+    "kind": "citation",
+    "citation_id": "concentrated-defensive-barbell-hypothesis",
+    "text": "concentrated-defensive-barbell-hypothesis",
+    "position": "rail",
+    "from_s": 0.5830000000000001,
+    "duration_s": 2.332
+  },
+  "citation-199": {
+    "kind": "citation",
+    "citation_id": "concentrated-defensive-barbell-hypothesis",
+    "text": "concentrated-defensive-barbell-hypothesis",
+    "position": "rail",
+    "from_s": 0.6918000000000001,
+    "duration_s": 2.7672
+  },
+  "citation-200": {
+    "kind": "citation",
+    "citation_id": "concentrated-defensive-barbell-hypothesis",
+    "text": "concentrated-defensive-barbell-hypothesis",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 3.282
+  },
+  "citation-201": {
+    "kind": "citation",
+    "citation_id": "concentrated-defensive-barbell-hypothesis",
+    "text": "concentrated-defensive-barbell-hypothesis",
+    "position": "rail",
+    "from_s": 0.6594000000000001,
+    "duration_s": 2.6376
+  },
+  "citation-202": {
+    "kind": "citation",
+    "citation_id": "concentrated-defensive-barbell-hypothesis",
+    "text": "concentrated-defensive-barbell-hypothesis",
+    "position": "rail",
+    "from_s": 0.6084,
+    "duration_s": 2.4335999999999998
+  },
+  "citation-203": {
+    "kind": "citation",
+    "citation_id": "concentrated-defensive-barbell-hypothesis",
+    "text": "concentrated-defensive-barbell-hypothesis",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 3.5380000000000003
+  },
+  "citation-204": {
+    "kind": "citation",
+    "citation_id": "concentrated-defensive-barbell-hypothesis",
+    "text": "concentrated-defensive-barbell-hypothesis",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 3.34
+  },
+  "citation-205": {
+    "kind": "citation",
+    "citation_id": "concentrated-defensive-barbell-hypothesis",
+    "text": "concentrated-defensive-barbell-hypothesis",
+    "position": "rail",
+    "from_s": 0.5898,
+    "duration_s": 2.3592
+  },
+  "citation-206": {
+    "kind": "citation",
+    "citation_id": "concentrated-defensive-barbell-hypothesis",
+    "text": "concentrated-defensive-barbell-hypothesis",
+    "position": "rail",
+    "from_s": 0.5038,
+    "duration_s": 2.0152
+  },
+  "citation-207": {
+    "kind": "citation",
+    "citation_id": "concentrated-defensive-barbell-hypothesis",
+    "text": "concentrated-defensive-barbell-hypothesis",
+    "position": "rail",
+    "from_s": 0.6478,
+    "duration_s": 2.5911999999999997
+  },
+  "citation-208": {
+    "kind": "citation",
+    "citation_id": "concentrated-defensive-barbell-hypothesis",
+    "text": "concentrated-defensive-barbell-hypothesis",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 2.899
+  },
+  "citation-209": {
+    "kind": "citation",
+    "citation_id": "sp500-top-ten-concentration",
+    "text": "S&P Dow Jones Indices and Vanguard · 2025-06-30 · sp500-top-ten-concentration",
+    "position": "rail",
+    "from_s": 0.6108,
+    "duration_s": 2.4432
+  },
+  "citation-210": {
+    "kind": "citation",
+    "citation_id": "concentrated-defensive-barbell-hypothesis",
+    "text": "concentrated-defensive-barbell-hypothesis",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 2.8529999999999998
+  },
+  "citation-211": {
+    "kind": "citation",
+    "citation_id": "concentrated-defensive-barbell-hypothesis",
+    "text": "concentrated-defensive-barbell-hypothesis",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 2.9800000000000004
+  },
+  "citation-212": {
+    "kind": "citation",
+    "citation_id": "sp500-market-leaders-comparison",
+    "text": "S&P Dow Jones Indices · 2026-06-30 · sp500-market-leaders-comparison",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 3.189
+  },
+  "citation-213": {
+    "kind": "citation",
+    "citation_id": "concentrated-defensive-barbell-hypothesis",
+    "text": "concentrated-defensive-barbell-hypothesis",
+    "position": "rail",
+    "from_s": 0.6548,
+    "duration_s": 2.6192
+  },
+  "citation-214": {
+    "kind": "citation",
+    "citation_id": "concentrated-defensive-barbell-hypothesis",
+    "text": "concentrated-defensive-barbell-hypothesis",
+    "position": "rail",
+    "from_s": 0.6108,
+    "duration_s": 2.4432
+  },
+  "citation-215": {
+    "kind": "citation",
+    "citation_id": "concentrated-defensive-barbell-hypothesis",
+    "text": "concentrated-defensive-barbell-hypothesis",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 2.934
+  },
+  "citation-216": {
+    "kind": "citation",
+    "citation_id": "sp500-market-leaders-comparison",
+    "text": "S&P Dow Jones Indices · 2026-06-30 · sp500-market-leaders-comparison",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 3.154
+  },
+  "citation-217": {
+    "kind": "citation",
+    "citation_id": "sp500-market-leaders-comparison",
+    "text": "S&P Dow Jones Indices · 2026-06-30 · sp500-market-leaders-comparison",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 3.143
+  },
+  "citation-218": {
+    "kind": "citation",
+    "citation_id": "sp500-market-leaders-comparison",
+    "text": "S&P Dow Jones Indices · 2026-06-30 · sp500-market-leaders-comparison",
+    "position": "rail",
+    "from_s": 0.5388000000000001,
+    "duration_s": 2.1552
+  },
+  "citation-219": {
+    "kind": "citation",
+    "citation_id": "concentrated-defensive-barbell-hypothesis",
+    "text": "concentrated-defensive-barbell-hypothesis",
+    "position": "rail",
+    "from_s": 0.6896,
+    "duration_s": 2.7584
+  },
+  "citation-220": {
+    "kind": "citation",
+    "citation_id": "sp500-market-leaders-comparison",
+    "text": "S&P Dow Jones Indices · 2026-06-30 · sp500-market-leaders-comparison",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 3.34
+  },
+  "citation-221": {
+    "kind": "citation",
+    "citation_id": "sp500-market-leaders-comparison",
+    "text": "S&P Dow Jones Indices · 2026-06-30 · sp500-market-leaders-comparison",
+    "position": "rail",
+    "from_s": 0.5156,
+    "duration_s": 2.0624
+  },
+  "citation-222": {
+    "kind": "citation",
+    "citation_id": "concentrated-defensive-barbell-hypothesis",
+    "text": "concentrated-defensive-barbell-hypothesis",
+    "position": "rail",
+    "from_s": 0.6594000000000001,
+    "duration_s": 2.6376
+  },
+  "citation-223": {
+    "kind": "citation",
+    "citation_id": "concentrated-defensive-barbell-hypothesis",
+    "text": "concentrated-defensive-barbell-hypothesis",
+    "position": "rail",
+    "from_s": 0.6828000000000001,
+    "duration_s": 2.7312000000000003
+  },
+  "citation-224": {
+    "kind": "citation",
+    "citation_id": "concentrated-defensive-barbell-hypothesis",
+    "text": "concentrated-defensive-barbell-hypothesis",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 3.2700000000000005
+  },
+  "citation-225": {
+    "kind": "citation",
+    "citation_id": "concentrated-defensive-barbell-hypothesis",
+    "text": "concentrated-defensive-barbell-hypothesis",
+    "position": "rail",
+    "from_s": 0.6432000000000001,
+    "duration_s": 2.5728
+  },
+  "citation-226": {
+    "kind": "citation",
+    "citation_id": "concentrated-defensive-barbell-hypothesis",
+    "text": "concentrated-defensive-barbell-hypothesis",
+    "position": "rail",
+    "from_s": 0.576,
+    "duration_s": 2.304
+  },
+  "citation-227": {
+    "kind": "citation",
+    "citation_id": "concentrated-defensive-barbell-hypothesis",
+    "text": "concentrated-defensive-barbell-hypothesis",
+    "position": "rail",
+    "from_s": 0.6918000000000001,
+    "duration_s": 2.7672
+  },
+  "citation-228": {
+    "kind": "citation",
+    "citation_id": "concentrated-defensive-barbell-hypothesis",
+    "text": "concentrated-defensive-barbell-hypothesis",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 3.2590000000000003
+  },
+  "citation-229": {
+    "kind": "citation",
+    "citation_id": "concentrated-defensive-barbell-hypothesis",
+    "text": "concentrated-defensive-barbell-hypothesis",
+    "position": "rail",
+    "from_s": 0.6456000000000001,
+    "duration_s": 2.5824000000000003
+  },
+  "citation-230": {
+    "kind": "citation",
+    "citation_id": "concentrated-defensive-barbell-hypothesis",
+    "text": "concentrated-defensive-barbell-hypothesis",
+    "position": "rail",
+    "from_s": 0.5038,
+    "duration_s": 2.0152
+  },
+  "citation-231": {
+    "kind": "citation",
+    "citation_id": "sp500-top-ten-concentration",
+    "text": "S&P Dow Jones Indices and Vanguard · 2025-06-30 · sp500-top-ten-concentration",
+    "position": "rail",
+    "from_s": 0.6896,
+    "duration_s": 2.7584
+  },
+  "citation-232": {
+    "kind": "citation",
+    "citation_id": "concentrated-defensive-barbell-hypothesis",
+    "text": "concentrated-defensive-barbell-hypothesis",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 3.0970000000000004
+  },
+  "citation-233": {
+    "kind": "citation",
+    "citation_id": "concentrated-defensive-barbell-hypothesis",
+    "text": "concentrated-defensive-barbell-hypothesis",
+    "position": "rail",
+    "from_s": 0.6454,
+    "duration_s": 2.5816
+  },
+  "citation-234": {
+    "kind": "citation",
+    "citation_id": "concentrated-defensive-barbell-hypothesis",
+    "text": "concentrated-defensive-barbell-hypothesis",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 3.2590000000000003
+  },
+  "citation-235": {
+    "kind": "citation",
+    "citation_id": "sp500-top-ten-concentration",
+    "text": "S&P Dow Jones Indices and Vanguard · 2025-06-30 · sp500-top-ten-concentration",
+    "position": "rail",
+    "from_s": 0.5804,
+    "duration_s": 2.3216
+  },
+  "citation-236": {
+    "kind": "citation",
+    "citation_id": "memory-countercase",
+    "text": "memory-countercase",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 3.5380000000000003
+  },
+  "citation-237": {
+    "kind": "citation",
+    "citation_id": "memory-countercase",
+    "text": "memory-countercase",
+    "position": "rail",
+    "from_s": 0.6176,
+    "duration_s": 2.4704
+  },
+  "citation-238": {
+    "kind": "citation",
+    "citation_id": "memory-countercase",
+    "text": "memory-countercase",
+    "position": "rail",
+    "from_s": 0.6386000000000001,
+    "duration_s": 2.5544000000000002
+  },
+  "citation-239": {
+    "kind": "citation",
+    "citation_id": "memory-countercase",
+    "text": "memory-countercase",
+    "position": "rail",
+    "from_s": 0.49920000000000003,
+    "duration_s": 1.9968
+  },
+  "citation-240": {
+    "kind": "citation",
+    "citation_id": "memory-countercase",
+    "text": "memory-countercase",
+    "position": "rail",
+    "from_s": 0.6734,
+    "duration_s": 2.6936
+  },
+  "citation-241": {
+    "kind": "citation",
+    "citation_id": "memory-countercase",
+    "text": "memory-countercase",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 3.41
+  },
+  "citation-242": {
+    "kind": "citation",
+    "citation_id": "concentrated-defensive-barbell-hypothesis",
+    "text": "concentrated-defensive-barbell-hypothesis",
+    "position": "rail",
+    "from_s": 0.5642,
+    "duration_s": 2.2568
+  },
+  "citation-243": {
+    "kind": "citation",
+    "citation_id": "concentrated-defensive-barbell-hypothesis",
+    "text": "concentrated-defensive-barbell-hypothesis",
+    "position": "rail",
+    "from_s": 0.6480000000000001,
+    "duration_s": 2.592
+  },
+  "citation-244": {
+    "kind": "citation",
+    "citation_id": "concentrated-defensive-barbell-hypothesis",
+    "text": "concentrated-defensive-barbell-hypothesis",
+    "position": "rail",
+    "from_s": 0.6338,
+    "duration_s": 2.5352
+  },
+  "citation-245": {
+    "kind": "citation",
+    "citation_id": "memory-countercase",
+    "text": "memory-countercase",
+    "position": "rail",
+    "from_s": 0.6038000000000001,
+    "duration_s": 2.4152
+  },
+  "citation-246": {
+    "kind": "citation",
+    "citation_id": "equal-weight-long-tail-countercase",
+    "text": "S&P Dow Jones Indices · 2026-02-28 · equal-weight-long-tail-countercase",
+    "position": "rail",
+    "from_s": 0.5316,
+    "duration_s": 2.1264
+  },
+  "citation-247": {
+    "kind": "citation",
+    "citation_id": "memory-countercase",
+    "text": "memory-countercase",
+    "position": "rail",
+    "from_s": 0.576,
+    "duration_s": 2.304
+  },
+  "citation-248": {
+    "kind": "citation",
+    "citation_id": "memory-countercase",
+    "text": "memory-countercase",
+    "position": "rail",
+    "from_s": 0.6990000000000001,
+    "duration_s": 2.7960000000000003
+  },
+  "citation-249": {
+    "kind": "citation",
+    "citation_id": "memory-countercase",
+    "text": "memory-countercase",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 3.282
+  },
+  "citation-250": {
+    "kind": "citation",
+    "citation_id": "memory-countercase",
+    "text": "memory-countercase",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 3.2009999999999996
+  },
+  "citation-251": {
+    "kind": "citation",
+    "citation_id": "memory-countercase",
+    "text": "memory-countercase",
+    "position": "rail",
+    "from_s": 0.6292,
+    "duration_s": 2.5168
+  },
+  "citation-252": {
+    "kind": "citation",
+    "citation_id": "memory-countercase",
+    "text": "memory-countercase",
+    "position": "rail",
+    "from_s": 0.6456000000000001,
+    "duration_s": 2.5824000000000003
+  },
+  "citation-253": {
+    "kind": "citation",
+    "citation_id": "memory-countercase",
+    "text": "memory-countercase",
+    "position": "rail",
+    "from_s": 0.6176,
+    "duration_s": 2.4704
+  },
+  "citation-254": {
+    "kind": "citation",
+    "citation_id": "memory-architecture-dependency",
+    "text": "Micron Technology · 2026-06-24 · memory-architecture-dependency",
+    "position": "rail",
+    "from_s": 0.5526,
+    "duration_s": 2.2104
+  },
+  "citation-255": {
+    "kind": "citation",
+    "citation_id": "hbm-capacity-trade-ratio",
+    "text": "Micron Technology · 2026-06-24 · hbm-capacity-trade-ratio",
+    "position": "rail",
+    "from_s": 0.5898,
+    "duration_s": 2.3592
+  },
+  "citation-256": {
+    "kind": "citation",
+    "citation_id": "memory-countercase",
+    "text": "memory-countercase",
+    "position": "rail",
+    "from_s": 0.634,
+    "duration_s": 2.536
+  },
+  "citation-257": {
+    "kind": "citation",
+    "citation_id": "memory-countercase",
+    "text": "memory-countercase",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 3.027
+  },
+  "citation-258": {
+    "kind": "citation",
+    "citation_id": "memory-countercase",
+    "text": "memory-countercase",
+    "position": "rail",
+    "from_s": 0.6548,
+    "duration_s": 2.6192
+  },
+  "citation-259": {
+    "kind": "citation",
+    "citation_id": "memory-countercase",
+    "text": "memory-countercase",
+    "position": "rail",
+    "from_s": 0.5852,
+    "duration_s": 2.3408
+  },
+  "citation-260": {
+    "kind": "citation",
+    "citation_id": "memory-countercase",
+    "text": "memory-countercase",
+    "position": "rail",
+    "from_s": 0.6966000000000001,
+    "duration_s": 2.7864
+  },
+  "citation-261": {
+    "kind": "citation",
+    "citation_id": "memory-countercase",
+    "text": "memory-countercase",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 2.9450000000000003
+  },
+  "citation-262": {
+    "kind": "citation",
+    "citation_id": "memory-countercase",
+    "text": "memory-countercase",
+    "position": "rail",
+    "from_s": 0.6224000000000001,
+    "duration_s": 2.4896000000000003
+  },
+  "citation-263": {
+    "kind": "citation",
+    "citation_id": "memory-architecture-dependency",
+    "text": "Micron Technology · 2026-06-24 · memory-architecture-dependency",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 2.8760000000000003
+  },
+  "citation-264": {
+    "kind": "citation",
+    "citation_id": "memory-countercase",
+    "text": "memory-countercase",
+    "position": "rail",
+    "from_s": 0.6478,
+    "duration_s": 2.5911999999999997
+  },
+  "citation-265": {
+    "kind": "citation",
+    "citation_id": "memory-countercase",
+    "text": "memory-countercase",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 3.258
+  },
+  "citation-266": {
+    "kind": "citation",
+    "citation_id": "sp500-top-ten-concentration",
+    "text": "S&P Dow Jones Indices and Vanguard · 2025-06-30 · sp500-top-ten-concentration",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 3.0389999999999997
+  },
+  "citation-267": {
+    "kind": "citation",
+    "citation_id": "concentrated-defensive-barbell-hypothesis",
+    "text": "concentrated-defensive-barbell-hypothesis",
+    "position": "rail",
+    "from_s": 0.5874,
+    "duration_s": 2.3495999999999997
+  },
+  "citation-268": {
+    "kind": "citation",
+    "citation_id": "memory-countercase",
+    "text": "memory-countercase",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 3.248
+  },
+  "citation-269": {
+    "kind": "citation",
+    "citation_id": "memory-countercase",
+    "text": "memory-countercase",
+    "position": "rail",
+    "from_s": 0.6896,
+    "duration_s": 2.7584
+  },
+  "citation-270": {
+    "kind": "citation",
+    "citation_id": "memory-architecture-dependency",
+    "text": "Micron Technology · 2026-06-24 · memory-architecture-dependency",
+    "position": "rail",
+    "from_s": 0.6918000000000001,
+    "duration_s": 2.7672
+  },
+  "citation-271": {
+    "kind": "citation",
+    "citation_id": "hbm-capacity-trade-ratio",
+    "text": "Micron Technology · 2026-06-24 · hbm-capacity-trade-ratio",
+    "position": "rail",
+    "from_s": 0.6014,
+    "duration_s": 2.4056
+  },
+  "citation-272": {
+    "kind": "citation",
+    "citation_id": "memory-bottleneck-not-bubble-inference",
+    "text": "memory-bottleneck-not-bubble-inference",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 3.3179999999999996
+  },
+  "citation-273": {
+    "kind": "citation",
+    "citation_id": "hbm-capacity-trade-ratio",
+    "text": "Micron Technology · 2026-06-24 · hbm-capacity-trade-ratio",
+    "position": "rail",
+    "from_s": 0.6360000000000001,
+    "duration_s": 2.544
+  },
+  "citation-274": {
+    "kind": "citation",
+    "citation_id": "memory-bottleneck-not-bubble-inference",
+    "text": "memory-bottleneck-not-bubble-inference",
+    "position": "rail",
+    "from_s": 0.5852,
+    "duration_s": 2.3408
+  },
+  "citation-275": {
+    "kind": "citation",
+    "citation_id": "memory-bottleneck-not-bubble-inference",
+    "text": "memory-bottleneck-not-bubble-inference",
+    "position": "rail",
+    "from_s": 0.685,
+    "duration_s": 2.7399999999999998
+  },
+  "citation-276": {
+    "kind": "citation",
+    "citation_id": "sp500-top-ten-concentration",
+    "text": "S&P Dow Jones Indices and Vanguard · 2025-06-30 · sp500-top-ten-concentration",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 3.003
+  },
+  "citation-277": {
+    "kind": "citation",
+    "citation_id": "memory-bottleneck-not-bubble-inference",
+    "text": "memory-bottleneck-not-bubble-inference",
+    "position": "rail",
+    "from_s": 0.6642000000000001,
+    "duration_s": 2.6568
+  },
+  "citation-278": {
+    "kind": "citation",
+    "citation_id": "memory-bottleneck-not-bubble-inference",
+    "text": "memory-bottleneck-not-bubble-inference",
+    "position": "rail",
+    "from_s": 0.5966,
+    "duration_s": 2.3864
+  },
+  "citation-279": {
+    "kind": "citation",
+    "citation_id": "memory-bottleneck-not-bubble-inference",
+    "text": "memory-bottleneck-not-bubble-inference",
+    "position": "rail",
+    "from_s": 0.49000000000000005,
+    "duration_s": 1.9600000000000002
+  },
+  "citation-280": {
+    "kind": "citation",
+    "citation_id": "sp500-top-ten-concentration",
+    "text": "S&P Dow Jones Indices and Vanguard · 2025-06-30 · sp500-top-ten-concentration",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 2.9690000000000003
+  },
+  "citation-281": {
+    "kind": "citation",
+    "citation_id": "memory-bottleneck-not-bubble-inference",
+    "text": "memory-bottleneck-not-bubble-inference",
+    "position": "rail",
+    "from_s": 0.6268,
+    "duration_s": 2.5072
+  },
+  "citation-282": {
+    "kind": "citation",
+    "citation_id": "memory-bottleneck-not-bubble-inference",
+    "text": "memory-bottleneck-not-bubble-inference",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 2.8760000000000003
+  },
+  "citation-283": {
+    "kind": "citation",
+    "citation_id": "memory-bottleneck-not-bubble-inference",
+    "text": "memory-bottleneck-not-bubble-inference",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 2.899
+  },
+  "citation-284": {
+    "kind": "citation",
+    "citation_id": "memory-bottleneck-not-bubble-inference",
+    "text": "memory-bottleneck-not-bubble-inference",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 3.527
+  },
+  "citation-285": {
+    "kind": "citation",
+    "citation_id": "memory-bottleneck-not-bubble-inference",
+    "text": "memory-bottleneck-not-bubble-inference",
+    "position": "rail",
+    "from_s": 0.6592,
+    "duration_s": 2.6368
+  },
+  "citation-286": {
+    "kind": "citation",
+    "citation_id": "hbm-capacity-trade-ratio",
+    "text": "Micron Technology · 2026-06-24 · hbm-capacity-trade-ratio",
+    "position": "rail",
+    "from_s": 0.6246,
+    "duration_s": 2.4984
+  },
+  "citation-287": {
+    "kind": "citation",
+    "citation_id": "memory-bottleneck-not-bubble-inference",
+    "text": "memory-bottleneck-not-bubble-inference",
+    "position": "rail",
+    "from_s": 0.6898,
+    "duration_s": 2.7592
+  },
+  "citation-288": {
+    "kind": "citation",
+    "citation_id": "memory-architecture-dependency",
+    "text": "Micron Technology · 2026-06-24 · memory-architecture-dependency",
+    "position": "rail",
+    "from_s": 0.7,
+    "duration_s": 3.0839999999999996
+  },
+  "citation-289": {
+    "kind": "citation",
+    "citation_id": "memory-bottleneck-not-bubble-inference",
+    "text": "memory-bottleneck-not-bubble-inference",
+    "position": "rail",
+    "from_s": 0.6548,
+    "duration_s": 2.6192
+  },
+  "citation-290": {
+    "kind": "citation",
+    "citation_id": "memory-bottleneck-not-bubble-inference",
+    "text": "memory-bottleneck-not-bubble-inference",
+    "position": "rail",
+    "from_s": 0.6106,
+    "duration_s": 2.4424
+  }
+}

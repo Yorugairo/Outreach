@@ -1,0 +1,168 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "production_console_snapshot.v1",
+  "title": "Production Console Snapshot v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "snapshot_id",
+    "project_id",
+    "composition_id",
+    "base_artifact_hashes",
+    "artifacts",
+    "scenes",
+    "words",
+    "assets",
+    "reviews",
+    "degraded_inputs",
+    "artifact_hash"
+  ],
+  "properties": {
+    "schema_version": {"const": "production_console_snapshot.v1"},
+    "snapshot_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]{2,127}$"},
+    "project_id": {"type": "string", "minLength": 1, "maxLength": 128},
+    "composition_id": {"type": "string", "minLength": 1, "maxLength": 128},
+    "base_artifact_hashes": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {"$ref": "#/$defs/sha256"}
+    },
+    "artifacts": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/artifact"}
+    },
+    "scenes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/scene"}
+    },
+    "words": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/word"}
+    },
+    "assets": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/asset"}
+    },
+    "reviews": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/review"}
+    },
+    "degraded_inputs": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1}
+    },
+    "artifact_hash": {"$ref": "#/$defs/sha256"}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "relativePath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?![A-Za-z]:)(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"
+    },
+    "stringList": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1},
+      "uniqueItems": true
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["artifact_id", "kind", "path", "sha256", "status"],
+      "properties": {
+        "artifact_id": {"type": "string", "minLength": 1},
+        "kind": {"type": "string", "minLength": 1},
+        "path": {"$ref": "#/$defs/relativePath"},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "status": {"enum": ["available", "degraded", "missing"]},
+        "degraded_reason": {"type": ["string", "null"]}
+      }
+    },
+    "scene": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "scene_id",
+        "title",
+        "start_s",
+        "end_s",
+        "cue_refs",
+        "claim_refs",
+        "asset_ids",
+        "review_state"
+      ],
+      "properties": {
+        "scene_id": {"type": "string", "minLength": 1},
+        "title": {"type": "string", "minLength": 1},
+        "start_s": {"type": "number", "minimum": 0},
+        "end_s": {"type": "number", "exclusiveMinimum": 0},
+        "cue_refs": {"$ref": "#/$defs/stringList"},
+        "claim_refs": {"$ref": "#/$defs/stringList"},
+        "asset_ids": {"$ref": "#/$defs/stringList"},
+        "review_state": {"enum": ["unreviewed", "review_only", "revision_required", "approved"]}
+      }
+    },
+    "word": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["word_id", "text", "start_s", "end_s"],
+      "properties": {
+        "word_id": {"type": "string", "minLength": 1},
+        "text": {"type": "string"},
+        "start_s": {"type": "number", "minimum": 0},
+        "end_s": {"type": "number", "minimum": 0}
+      }
+    },
+    "asset": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "asset_id",
+        "label",
+        "path_root",
+        "path",
+        "sha256",
+        "source_kind",
+        "approval_scope",
+        "evidence_eligible",
+        "rights_state",
+        "context_status",
+        "claim_refs",
+        "cue_refs"
+      ],
+      "properties": {
+        "asset_id": {"type": "string", "minLength": 1},
+        "label": {"type": "string", "minLength": 1},
+        "path_root": {"enum": ["project", "repository"]},
+        "path": {"$ref": "#/$defs/relativePath"},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "source_kind": {"enum": ["project_asset", "deck_source", "production_visual", "evidence_surface"]},
+        "approval_scope": {"enum": ["none", "review_only", "production_visuals", "evidence"]},
+        "evidence_eligible": {"type": "boolean"},
+        "rights_state": {"enum": ["unknown", "review_only", "operator_authorized", "approved"]},
+        "context_status": {"enum": ["machine_proposed", "review_only", "operator_verified"]},
+        "deck_id": {"type": ["string", "null"]},
+        "slide_number": {"type": ["integer", "null"], "minimum": 1},
+        "width": {"type": ["integer", "null"], "minimum": 1},
+        "height": {"type": ["integer", "null"], "minimum": 1},
+        "what_it_is": {"type": ["string", "null"]},
+        "claim_refs": {"$ref": "#/$defs/stringList"},
+        "cue_refs": {"$ref": "#/$defs/stringList"}
+      }
+    },
+    "review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["review_id", "scope", "state", "artifact_path", "sha256"],
+      "properties": {
+        "review_id": {"type": "string", "minLength": 1},
+        "scope": {"type": "string", "minLength": 1},
+        "state": {"enum": ["unreviewed", "revision_required", "approved"]},
+        "artifact_path": {"$ref": "#/$defs/relativePath"},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    }
+  }
+}

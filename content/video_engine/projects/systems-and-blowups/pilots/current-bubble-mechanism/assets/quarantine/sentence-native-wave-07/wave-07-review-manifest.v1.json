@@ -1,0 +1,130 @@
+{
+  "schema_version": "finance_sentence_native_asset_wave_review.v1",
+  "episode_id": "systems-and-blowups:current-bubble-mechanism",
+  "wave_id": "current-bubble-mechanism-semantic-wave-07",
+  "review_state": "operator_approved_for_composition",
+  "operator_decision": "approved",
+  "semantic_beat_ledger_artifact_hash": "f83b2dad210f0d77bec0e9d8a1b7b799f1da54b0c19372ded9e4a7ec103f6cdb",
+  "selected_route": ["imagegen", "gpt-taste", "finance sentence-native asset demand"],
+  "selection_policy": "exact spoken nouns and causal relationship before style; no convenient reuse, fabricated factual text, unrecognizable symbols, or symbolic filler",
+  "generation_route": "imagegen_builtin",
+  "depth_layer_manifest": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-07/wave-07-depth-layer-manifest.v1.json",
+  "generation_wave": {
+    "batch_size": 6,
+    "source_resolution": "1672x941",
+    "accepted_jobs": 6,
+    "reference_policy": "adult finance paper-theatre continuity; controlled composition variation; no generated figures, names, citations, faux UI, labels, or unrelated B-roll",
+    "rejected_provider_outputs": [
+      {
+        "file": "exec-9d26b555-8f68-4bef-b64f-34c0f6151f67.png",
+        "reason": "Unlabeled tile pictograms were too symbolic to carry the diversification-versus-dilution claim."
+      },
+      {
+        "file": "exec-ce759361-0e04-4c7d-aadd-74ce2283c421.png",
+        "reason": "A rendered workflow label violated the no-generated-text rule."
+      }
+    ]
+  },
+  "global_qa": {
+    "generated_factual_text": "none_observed_in_selected_six",
+    "semantic_fit": "pass_initial_inspection",
+    "unrecognizable_symbol_gate": "pass; selected mechanisms use physical baskets, blocks, gates, weather machinery, supports, and players rather than unlabeled icons",
+    "anatomy_and_prop_gate": "pass_initial_inspection",
+    "depth_separability": "pass_trace_cut_qa",
+    "render_eligible": true,
+    "promotion_eligible": false
+  },
+  "accepted_candidates": [
+    {
+      "beat_ids": ["cbm-semantic-beat-06-001", "cbm-semantic-beat-06-002", "cbm-semantic-beat-06-003"],
+      "filename": "beat-06-001-003-index-product-elevator-v1.png",
+      "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-07/beat-06-001-003-index-product-elevator-v1.png",
+      "sha256": "853db3f6f46daf2eb5f4bbe0a3b2b7272e7cafc23dd0f49bcc34be650019bf1d",
+      "width": 1672,
+      "height": 941,
+      "start_s": 410.260,
+      "end_s": 422.834,
+      "narration_excerpt": "Now open the other elevator: the S&P 500 index fund. It can be an excellent product.",
+      "semantic_job": "Use the explicitly narrated elevator as the entrance to a broad investment basket, with a low-friction channel contrasted against a subordinate active-manager maze.",
+      "visual_verb": "open",
+      "review_state": "operator_approved_for_composition"
+    },
+    {
+      "beat_ids": ["cbm-semantic-beat-06-004", "cbm-semantic-beat-06-005", "cbm-semantic-beat-06-006", "cbm-semantic-beat-06-007"],
+      "filename": "beat-06-004-007-dual-failure-v2.png",
+      "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-07/beat-06-004-007-dual-failure-v2.png",
+      "sha256": "f4c512966956798a8a15891b97eecefc2b9aa0f4d059c2e51578cd17d1719afe",
+      "width": 1672,
+      "height": 941,
+      "start_s": 422.834,
+      "end_s": 438.112,
+      "narration_excerpt": "The index can be too concentrated for protection and too diluted for full upside.",
+      "semantic_job": "Split one basket into a cracked protection side leaned on by three giant blocks and an upside engine restrained by a long ballast chain.",
+      "visual_verb": "split",
+      "review_state": "operator_approved_for_composition"
+    },
+    {
+      "beat_ids": ["cbm-semantic-beat-06-010"],
+      "filename": "beat-06-010-shared-causal-weather-v1.png",
+      "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-07/beat-06-010-shared-causal-weather-v1.png",
+      "sha256": "8280ff4b22f6bb4a3a797166fef8b88167f3170ec871890ef1b013d3b76f55a5",
+      "width": 1672,
+      "height": 941,
+      "start_s": 448.120,
+      "end_s": 460.218,
+      "narration_excerpt": "Many leaders share the same causal weather system.",
+      "semantic_job": "Connect AI data, cloud construction, semiconductor, digital advertising, and research worlds to one visible weather machine.",
+      "visual_verb": "connect",
+      "review_state": "operator_approved_for_composition"
+    },
+    {
+      "beat_ids": ["cbm-semantic-beat-06-011", "cbm-semantic-beat-06-014", "cbm-semantic-beat-06-015", "cbm-semantic-beat-06-016"],
+      "filename": "beat-06-011-016-automatic-size-weighting-v1.png",
+      "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-07/beat-06-011-016-automatic-size-weighting-v1.png",
+      "sha256": "3e076f94df38309506c18c0a40dbd21c85c01bc0780e843592ac32917a5ac300",
+      "width": 1672,
+      "height": 941,
+      "start_s": 460.218,
+      "end_s": 493.155,
+      "narration_excerpt": "The normal index automatically weights qualified companies by market size rather than selecting the best expected return.",
+      "semantic_job": "Send a brilliant workshop, mature plant, older incumbent, and many smaller eligible businesses through one size gate into a broad basket without a quality selector.",
+      "visual_verb": "weight",
+      "review_state": "operator_approved_for_composition"
+    },
+    {
+      "beat_ids": ["cbm-semantic-beat-06-017", "cbm-semantic-beat-06-018"],
+      "filename": "beat-06-017-018-diworsification-v1.png",
+      "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-07/beat-06-017-018-diworsification-v1.png",
+      "sha256": "c093de734fa68890bd7bc74d3ebb589eae386143fc4df31edf4d5c8e99d7a68a",
+      "width": 1672,
+      "height": 941,
+      "start_s": 493.155,
+      "end_s": 505.357,
+      "narration_excerpt": "Extra holdings can dilute the best ideas after useful independent protection is already captured.",
+      "semantic_job": "Contrast a compact basket of distinct load-bearing supports with an overloaded basket of weak rods that crowd the strong supports and add weight without coverage.",
+      "visual_verb": "dilute",
+      "review_state": "operator_approved_for_composition"
+    },
+    {
+      "beat_ids": ["cbm-semantic-beat-06-019", "cbm-semantic-beat-06-020", "cbm-semantic-beat-06-021", "cbm-semantic-beat-06-022", "cbm-semantic-beat-06-023", "cbm-semantic-beat-06-024"],
+      "filename": "beat-06-019-024-basketball-roster-v1.png",
+      "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-07/beat-06-019-024-basketball-roster-v1.png",
+      "sha256": "8ccd69e43af8a446d4dfd5e41cb3a671c3c8c91e6e2b984926ff77f1bb98142e",
+      "width": 1672,
+      "height": 941,
+      "start_s": 505.357,
+      "end_s": 530.957,
+      "narration_excerpt": "Five superstars drive the result while a huge reserve bench consumes space and resources without improving either side.",
+      "semantic_job": "Use the basketball roster analogy to make concentration, diluted upside, and the uncomfortable middle instantly legible.",
+      "visual_verb": "drive",
+      "review_state": "operator_approved_for_composition"
+    }
+  ],
+  "deterministic_source_surface_dependencies": [
+    {
+      "beat_ids": ["cbm-semantic-beat-06-008", "cbm-semantic-beat-06-009", "cbm-semantic-beat-06-012", "cbm-semantic-beat-06-013", "cbm-semantic-beat-06-023"],
+      "reason": "The exact top-ten weight, index eligibility requirements, and ticker-versus-economic-cause qualification remain local source-bound evidence cards; original plates carry the mechanism only."
+    }
+  ],
+  "next_wave_authorized": false
+}

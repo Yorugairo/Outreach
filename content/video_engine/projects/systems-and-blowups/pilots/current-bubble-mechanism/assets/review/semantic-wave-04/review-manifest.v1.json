@@ -1,0 +1,38 @@
+{
+  "schema_version": "finance_semantic_wave_review.v1",
+  "episode_id": "current-bubble-mechanism",
+  "wave_id": "semantic-wave-04",
+  "status": "operator_approved_for_composition",
+  "generation_method": "built_in_image_gen",
+  "decision_rule": "Every candidate is restricted to its named technical explanation. Generated raster contains no factual text; any term, caveat, or source is a local compositor layer.",
+  "candidates": [
+    {
+      "candidate_id": "hbm-adjacent-accelerator-v1",
+      "path": "hbm-adjacent-accelerator-v1.png",
+      "sha256": "1f0aaaeb71be882ebdba99a55fe5de3adb6ea8afbc5f46261bf0ff3e00ecb0f2",
+      "cluster_id": "cbm-b-002",
+      "purpose": "Explain high-bandwidth memory as a layered working-memory stack placed immediately beside an accelerator, with a visibly short data path.",
+      "status": "selected",
+      "qa": ["stack and accelerator have distinct roles", "no named-vendor or throughput claim", "data-path placement—not fake text—does the explaining"]
+    },
+    {
+      "candidate_id": "accelerator-memory-bandwidth-gate-v1",
+      "path": "accelerator-memory-bandwidth-gate-v1.png",
+      "sha256": "759eb55860776b1586a8305924e3b5d0b54688a76341bd4559ebfbe24a3e1552",
+      "cluster_id": "cbm-b-003",
+      "purpose": "Translate the engine/fuel-system analogy into a visibly constrained data channel feeding an accelerator, with multiple generic accelerator forms resolving to the same memory gate.",
+      "status": "selected",
+      "qa": ["no literal fuel", "no claim that all architectures are identical", "queue and narrow gate are visually distinct"]
+    },
+    {
+      "candidate_id": "hbm-physical-inputs-gate-v1",
+      "path": "hbm-physical-inputs-gate-v1.png",
+      "sha256": "aae016ef99f531002331f460f2949a5f758d4f8cfdb65b4d6e1bde910fa00934",
+      "cluster_id": "cbm-b-004",
+      "purpose": "Show six physical production inputs converging on one constrained HBM output gate: wafers, clean-room capacity, packaging, equipment, engineers, and time.",
+      "status": "selected",
+      "qa": ["no production volumes or permanent-shortage claim", "inputs remain physically recognizable without labels", "one output gate is central and legible"]
+    }
+  ],
+  "artifact_hash": "0dd20c41aa5d11dcc12d61829ce59fabfeb4e8b77992b7deae114bd72d5c6c8c"
+}

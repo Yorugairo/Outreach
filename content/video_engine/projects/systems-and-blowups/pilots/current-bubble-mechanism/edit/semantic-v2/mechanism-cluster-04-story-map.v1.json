@@ -1,0 +1,37 @@
+{
+  "schema_version": "finance_semantic_story_map.v1",
+  "episode_id": "current-bubble-mechanism",
+  "state": "asset_wave_in_progress",
+  "coverage": {"start_word": 576, "end_word": 835, "start_s": 239.664, "end_s": 325.612, "canonical_cue_sheet_path": "../word-timed-v1/finance-visual-cue-sheet.v1.json"},
+  "design_rule": "Use an original physical mechanism to show the narrated causal distinction, then reveal dated source-bound evidence only after its claim is spoken. A market-capitalization comparison never becomes a country-worth comparison.",
+  "clusters": [
+    {
+      "cluster_id": "cbm-d-001",
+      "cue_ids": ["cbm-cue-070", "cbm-cue-071", "cbm-cue-072", "cbm-cue-073", "cbm-cue-074", "cbm-cue-075", "cbm-cue-076", "cbm-cue-077", "cbm-cue-078", "cbm-cue-079", "cbm-cue-080", "cbm-cue-081", "cbm-cue-082", "cbm-cue-083", "cbm-cue-084", "cbm-cue-085"],
+      "words": [576, 711], "time_s": [239.664, 286.649],
+      "purpose": "Contrast a reported reservation/commitment structure with vague demand while retaining the explicit caveat that company guidance is not gospel.",
+      "asset_demand": "buyer-reservation-rail-v1",
+      "local_surfaces": ["buyer-commitment-evidence-card-v1", "company-guidance-not-gospel qualifier"],
+      "must_not_imply": ["guaranteed revenue", "all buyers behave this way", "the memory cycle is over"]
+    },
+    {
+      "cluster_id": "cbm-d-002",
+      "cue_ids": ["cbm-cue-086", "cbm-cue-087", "cbm-cue-088", "cbm-cue-089", "cbm-cue-090"],
+      "words": [712, 749], "time_s": [286.649, 304.203],
+      "purpose": "Widen the story from memory to strategic production chokepoints—advanced chips, memory, packaging, power, robotics, and defense technology.",
+      "asset_demand": "strategic-chokepoint-network-v1",
+      "must_show": ["all six physical nodes", "capital routes", "separate technical roles"],
+      "must_not_imply": ["a complete list of strategic sectors", "a forecast", "country superiority"]
+    },
+    {
+      "cluster_id": "cbm-d-003",
+      "cue_ids": ["cbm-cue-091", "cbm-cue-092", "cbm-cue-093", "cbm-cue-094", "cbm-cue-095", "cbm-cue-096"],
+      "words": [750, 790], "time_s": [304.203, 325.612],
+      "purpose": "Set the Korea–Italy listed-market comparison in its narrow scope before any figures appear.",
+      "asset_strategy": "hold the regional market-stage story plate, then reveal the deterministic listed-market card only after the public-equity scope is spoken.",
+      "local_surfaces": ["korea-italy-listed-market-card-v1"],
+      "must_not_imply": ["GDP comparison", "national wealth comparison", "cultural ranking", "perfectly harmonized exchanges"]
+    }
+  ],
+  "artifact_hash": "871d199637c6cfe5e3d15c9e82fa0c78b390285ea6900ea1efa5d19416616037"
+}

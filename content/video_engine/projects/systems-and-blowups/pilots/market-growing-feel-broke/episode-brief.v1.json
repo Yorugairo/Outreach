@@ -1,0 +1,29 @@
+{
+  "schema_version": "finance_episode_brief.v1",
+  "episode_id": "market-growing-feel-broke",
+  "format": "economic_anatomy",
+  "working_title": "The Market Is Growing. So Why Do You Feel Broke?",
+  "audience_tension": "Headline growth and rising markets can coexist with a household experience of falling room to breathe.",
+  "lived_contradiction": "The dashboard says the economy and asset market grew, while rent food debt service and the distance to ownership still feel harder.",
+  "popular_explanation": "The popular answer reduces the experience to unusually high inflation or interest rates and assumes the same conditions reach everyone similarly.",
+  "missing_mechanism": "Research must test how asset ownership income growth debt exposure housing costs and market concentration distribute nominal growth across households.",
+  "thesis_state": "research_question",
+  "thesis": "Does the gap between asset-owner compounding and household cash-flow growth explain more of the lived contradiction than the headline growth rate alone?",
+  "actors": ["worker household", "renter", "homeowner", "index investor", "concentrated asset owner", "employer", "lender", "government"],
+  "distribution_question": "Who owns the assets producing the measured gains, who receives the income, and which households carry the rising recurring costs?",
+  "countercase": "Broad wage gains employment access transfers and falling inflation may improve household conditions even when wealth and asset gains remain unequal.",
+  "failure_conditions": ["The selected household data do not show a meaningful ownership or cash-flow distribution gap.", "Headline inflation and rates explain the measured experience better after controlling for income and housing tenure."],
+  "plain_language_translation": "A rising tide can lift the boats that are already in the water while people still standing on the dock pay more to get in.",
+  "visual_metaphor": "A market elevator rises behind three households while ownership tickets cash-flow drains and debt weights determine who can enter each floor.",
+  "packages": [
+    {"id": "pkg-a", "family": "contradiction", "title": "The Market Is Growing. So Why Do You Feel Broke?", "thumbnail_text": "GROWTH WITHOUT YOU", "promise_key": "growth-distribution-gap"},
+    {"id": "pkg-b", "family": "identity", "title": "The Economy Is Growing Without You", "thumbnail_text": "LEFT OUT", "promise_key": "growth-distribution-gap"},
+    {"id": "pkg-c", "family": "mechanism", "title": "How Asset Growth Can Leave Working Households Behind", "thumbnail_text": "WHO GETS THE GROWTH?", "promise_key": "growth-distribution-gap"}
+  ],
+  "embedded_short": {"working_title": "The Growth Number That Does Not Reach Your Wallet", "capsule_state": "planned", "target_seconds": 55, "recorded_in_long_master": true},
+  "research_blockers": ["Lock the comparison period and publication as-of date.", "Select primary household income wealth housing and asset-ownership datasets.", "Test distribution claims across income age race and housing tenure without inferring unsupported causality."],
+  "human_gates": ["thesis", "primary sources", "distribution framing", "financial risk language", "title and thumbnail", "publication"],
+  "state": "draft",
+  "render_eligible": false,
+  "artifact_hash": "f598f8fdce3321c373751a6bbcd298ecb2e77dbb1d5e696cbd73678436260476"
+}

@@ -1,0 +1,56 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "finance_channel_profile.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "channel_id", "working_name", "public_name_state", "promise", "audiences", "editorial_lenses", "formats", "visual_worlds", "complexity_budget", "source_priority", "human_gates", "compliance", "state", "render_eligible", "artifact_hash"],
+  "properties": {
+    "schema_version": {"const": "finance_channel_profile.v1"},
+    "channel_id": {"type": "string", "pattern": "^[a-z0-9-]+$"},
+    "working_name": {"type": "string", "minLength": 1},
+    "public_name_state": {"enum": ["unselected", "operator_selected"]},
+    "promise": {"type": "string", "minLength": 40},
+    "audiences": {"type": "array", "minItems": 2, "uniqueItems": true, "items": {"type": "string", "minLength": 3}},
+    "editorial_lenses": {"type": "array", "minItems": 4, "uniqueItems": true, "items": {"type": "string", "minLength": 3}},
+    "formats": {
+      "type": "array", "minItems": 3, "maxItems": 3,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["id", "length_min", "length_max", "purpose", "embedded_short"],
+        "properties": {
+          "id": {"enum": ["economic_anatomy", "one_level_deeper", "current_mechanism"]},
+          "length_min": {"type": "integer", "minimum": 8, "maximum": 30},
+          "length_max": {"type": "integer", "minimum": 8, "maximum": 30},
+          "purpose": {"type": "string", "minLength": 10},
+          "embedded_short": {"const": true}
+        }
+      }
+    },
+    "visual_worlds": {"type": "array", "minItems": 3, "maxItems": 3, "uniqueItems": true, "items": {"enum": ["story", "mechanism", "evidence"]}},
+    "complexity_budget": {
+      "type": "object", "additionalProperties": false,
+      "required": ["reusable_percent", "evidence_percent", "bespoke_percent"],
+      "properties": {
+        "reusable_percent": {"type": "integer", "minimum": 65, "maximum": 75},
+        "evidence_percent": {"type": "integer", "minimum": 15, "maximum": 25},
+        "bespoke_percent": {"type": "integer", "minimum": 10, "maximum": 15}
+      }
+    },
+    "source_priority": {"type": "array", "minItems": 5, "uniqueItems": true, "items": {"type": "string"}},
+    "human_gates": {"type": "array", "minItems": 6, "uniqueItems": true, "items": {"type": "string"}},
+    "compliance": {
+      "type": "object", "additionalProperties": false,
+      "required": ["educational_only", "personalized_advice_forbidden", "buy_sell_instructions_forbidden", "generated_factual_text_forbidden", "dated_values_required"],
+      "properties": {
+        "educational_only": {"const": true},
+        "personalized_advice_forbidden": {"const": true},
+        "buy_sell_instructions_forbidden": {"const": true},
+        "generated_factual_text_forbidden": {"const": true},
+        "dated_values_required": {"const": true}
+      }
+    },
+    "state": {"enum": ["draft", "operator_approved"]},
+    "render_eligible": {"type": "boolean"},
+    "artifact_hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}

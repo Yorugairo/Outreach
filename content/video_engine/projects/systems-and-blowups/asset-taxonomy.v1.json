@@ -1,0 +1,8 @@
+{
+  "schema_version": "finance_asset_taxonomy.v1",
+  "actors": ["worker", "household", "renter", "homeowner", "small-investor", "index-investor", "asset-owner", "founder", "executive", "lender", "commercial-bank", "public-company", "private-equity-owner", "government", "central-bank", "regulator", "supplier", "customer", "competitor"],
+  "objects": ["income", "debt", "equity", "interest", "tax", "rent", "dividend", "share", "index-basket", "bond", "home", "factory", "commodity"],
+  "mechanisms": ["balance-sheet", "ownership-tree", "capital-flow", "supply-demand", "price-wage-productivity", "asset-growth-comparison", "risk-concentration", "wealth-transfer"],
+  "worlds": ["home", "rental-building", "store", "factory", "port", "office", "exchange", "bank", "policy-room", "community-business-district"],
+  "identity_lenses": ["black-household", "multigenerational-household", "first-generation-investor", "small-business-owner", "worker-to-owner", "retirement-access", "institutional-history"]
+}

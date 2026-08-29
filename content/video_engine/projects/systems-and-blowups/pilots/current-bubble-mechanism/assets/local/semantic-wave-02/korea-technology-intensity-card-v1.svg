@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="420" viewBox="0 0 1920 420" role="img" aria-label="Korea technology intensity source card">
+  <rect width="1920" height="420" rx="34" fill="#071a2c"/>
+  <rect x="38" y="38" width="12" height="344" rx="6" fill="#18a7ad"/>
+  <text x="86" y="96" fill="#f6e4be" font-family="Arial, sans-serif" font-size="35" font-weight="700" letter-spacing="3">TECHNOLOGY INTENSITY · QUALIFIED CONTEXT</text>
+  <text x="86" y="143" fill="#95d4d2" font-family="Arial, sans-serif" font-size="23">OECD Science, Technology and Innovation Outlook 2025 · OECD Korea Economic Snapshot, June 2026</text>
+  <rect x="86" y="188" width="452" height="142" rx="20" fill="#10324a" stroke="#18a7ad" stroke-width="2"/>
+  <text x="116" y="255" fill="#f6e4be" font-family="Arial, sans-serif" font-size="70" font-weight="700">≈ 5%</text>
+  <text x="116" y="300" fill="#dce9e6" font-family="Arial, sans-serif" font-size="25">Korea R&amp;D intensity of GDP in 2023</text>
+  <rect x="580" y="188" width="1254" height="142" rx="20" fill="#10324a" stroke="#18a7ad" stroke-width="2"/>
+  <text x="614" y="248" fill="#f6e4be" font-family="Arial, sans-serif" font-size="32" font-weight="700">OECD: semiconductor exports support growth and private investment</text>
+  <text x="614" y="294" fill="#95d4d2" font-family="Arial, sans-serif" font-size="23">This helps explain the macro story; it does not guarantee equity-market outperformance.</text>
+  <text x="86" y="371" fill="#b7c6c8" font-family="Arial, sans-serif" font-size="20">Scope: technology intensity is one input among many—not a national ranking, price target, or causal proof by itself.</text>
+</svg>

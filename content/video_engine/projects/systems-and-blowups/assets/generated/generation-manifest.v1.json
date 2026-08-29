@@ -1,0 +1,172 @@
+{
+  "schema_version": "finance_generated_asset_manifest.v1",
+  "style_id": "friendly-crinkle-cut-economy-v1",
+  "generation_mode": "built-in-imagegen",
+  "background_removal": {
+    "method": "flat-chroma-key-plus-local-alpha",
+    "key": "#00ff00",
+    "helper": "C:/Users/Snipe/.codex/skills/.system/imagegen/scripts/remove_chroma_key.py",
+    "arguments": [
+      "--auto-key",
+      "border",
+      "--soft-matte",
+      "--transparent-threshold",
+      "12",
+      "--opaque-threshold",
+      "220",
+      "--despill"
+    ]
+  },
+  "shared_prompt": "Create a bright, approachable, high-fidelity adult editorial woodblock asset assembled from thin hand-cut washi, layered rice paper, and painted cardstock. Use deckled fiber edges, restrained relief, subtle black ink contours, convincing handmade paper shadows, precise business-editorial proportions, and controlled cobalt, teal, sunflower, coral, cream, and indigo accents. Keep the subject fully visible as a clean modular silhouette. Avoid plastic, clay, foam, plush, glossy 3D rendering, chunky toy blocks, kawaii forms, preschool proportions, words, numbers, logos, watermarks, loose fragments, and authoritative factual text.",
+  "chroma_prompt": "Place the isolated subject on a perfectly flat solid #00ff00 chroma-key background with no shadow, gradient, texture, reflection, or floor plane. Do not use #00ff00 in the subject.",
+  "assets": [
+    {
+      "asset_id": "actor-worker-household-v2",
+      "request": "A friendly Black working-household character with a cobalt jacket, sunflower sweater, wage envelope, and lunch tin; full body; warm alert expression.",
+      "source_path": "source/actor-worker-household-v2-source.png",
+      "source_sha256": "8584b32f0180d53dd203f6c655fd9b751846e17e340c82dba06f28b3a8828116",
+      "cutout_path": "cutouts/actor-worker-household-v2.png",
+      "cutout_sha256": "40d6e93abc0127e47f2e6604b67c429b323aeedcbc6191bc6f4b6884ea7ee04d"
+    },
+    {
+      "asset_id": "actor-founder-v2",
+      "request": "A friendly Black woman founder with locs, a teal vest, sunflower blouse, cobalt trousers, a blank ledger, and an oversized ownership key; full body; confident welcoming expression; legs clearly separated.",
+      "source_path": "source/actor-founder-v2-source.png",
+      "source_sha256": "f4b27d7f466ca64d91c95c338e1ae35dc98e4ce33573667e5c630782e2d3c6da",
+      "cutout_path": "cutouts/actor-founder-v2.png",
+      "cutout_sha256": "8b97f1449b91425a2c6946f3a5429e86c61fa88ebbc1a15b04b534e1c4aeedde"
+    },
+    {
+      "asset_id": "building-family-home-v1",
+      "request": "A welcoming detached family home with cream walls, cobalt roof, teal trim, warm windows, front porch, flowers, and one readable front door.",
+      "source_path": "source/building-family-home-v1-source.png",
+      "source_sha256": "9fbb5cc6f7b3f785605fc91b0e1f15a4fb1a2b39c132fc67f2814081b22dde98",
+      "cutout_path": "cutouts/building-family-home-v1.png",
+      "cutout_sha256": "a5315451181c2c2d16d9e886c118b6a890503c4d11796d816d86d43baf189649"
+    },
+    {
+      "asset_id": "building-rental-apartment-v1",
+      "request": "A friendly mid-rise rental apartment with coral walls, cream ground floor, cobalt trim, balconies, warm windows, plants, and two readable entrances.",
+      "source_path": "source/building-rental-apartment-v1-source.png",
+      "source_sha256": "3629511772e2e3406343eaa3e94bdc9c5fa14e31f45ee5a0883979e6c78ecb5f",
+      "cutout_path": "cutouts/building-rental-apartment-v1.png",
+      "cutout_sha256": "ef1b197e1950559b6044b3be416f33048403ffb4d16c1e8b8dda5a52ed406a26"
+    },
+    {
+      "asset_id": "building-neighborhood-workshop-v1",
+      "request": "A welcoming teal neighborhood workshop and storefront with a sunflower awning, coral door, pottery, plants, workshop bay, and bicycle rack.",
+      "source_path": "source/building-neighborhood-workshop-v1-source.png",
+      "source_sha256": "896128373021b08e6e0e2948a6830f690aefde9aca681689d1c3dcb8ed8e5acb",
+      "cutout_path": "cutouts/building-neighborhood-workshop-v1.png",
+      "cutout_sha256": "5348461973dbb55286276216571b159c16f5d2b41e11e1a8b245f1aac587a783"
+    },
+    {
+      "asset_id": "building-civic-bank-v1",
+      "request": "A friendly civic bank or policy building with cream stone, cobalt dome, teal open doors, rounded landscaping, and a blank sign panel.",
+      "source_path": "source/building-civic-bank-v1-source.png",
+      "source_sha256": "9a3bec35ec46ae404d30f20d1c3476a45a68188065d698358b8ca8ef516a6789",
+      "cutout_path": "cutouts/building-civic-bank-v1.png",
+      "cutout_sha256": "35f5c599c89aae81aa4645517332d16deca730b72720aaed826de1cc75494553"
+    },
+    {
+      "asset_id": "mechanism-index-basket-v2",
+      "request": "A sophisticated expandable woven index-fund basket made from precise thin washi strips and containing elegant portfolio slips, with three visibly larger holdings among many smaller holdings; hinged sides and removable rim for animation; explicitly not a toy.",
+      "source_path": "source/mechanism-index-basket-v2-source.png",
+      "source_sha256": "4e61208d300145896635edd8b72f73bdb76d17a411ca1838cd3c000e5dffeff7",
+      "cutout_path": "cutouts/mechanism-index-basket-v2.png",
+      "cutout_sha256": "27fba8656654fc0ff02a429884a6180f68cede8024bfdf4e9b4d634d078df8fa"
+    },
+    {
+      "asset_id": "mechanism-balance-ledger-v1",
+      "request": "An open two-page balance-sheet ledger with a cobalt-and-teal frame, four removable paper trays, blank coin tokens, building tokens, and a visible central hinge.",
+      "source_path": "source/mechanism-balance-ledger-v1-source.png",
+      "source_sha256": "2ef8022c53da7da199aaaaeafe8cf4da8dec37a3e2723c6f45e0bdb26a85a839",
+      "cutout_path": "cutouts/mechanism-balance-ledger-v1.png",
+      "cutout_sha256": "2735aa89f282b217cfdd4e9e41c01373a257ef5a0394c90cc1b3f1ea0d0dc0ce"
+    },
+    {
+      "asset_id": "mechanism-ownership-tree-v1",
+      "request": "A coral-and-teal ownership tree with a broad root platform, branching paths, blank removable owner tokens, and a small building token at the trunk.",
+      "source_path": "source/mechanism-ownership-tree-v1-source.png",
+      "source_sha256": "93844fd32a2a9376d601bf5d49370e8672cb979150ab897e71ec9998a38915c7",
+      "cutout_path": "cutouts/mechanism-ownership-tree-v1.png",
+      "cutout_sha256": "25c3a7e1e11b5aaca20cb450248a33fde4130e09e016cc67c75f9b9d4b264bb5"
+    },
+    {
+      "asset_id": "mechanism-economic-elevator-v1",
+      "request": "A two-track economic elevator in a friendly civic facade: one platform carries a home and share-basket token, the other carries a wage-envelope token; visible gears and pulleys.",
+      "source_path": "source/mechanism-economic-elevator-v1-source.png",
+      "source_sha256": "fada32a0aa430e22949df53f3d3065b8a859e3636ee637558bb53916352ba0a8",
+      "cutout_path": "cutouts/mechanism-economic-elevator-v1.png",
+      "cutout_sha256": "5b20a22f049dbef3ef9910de14c99b667cc6d985c63452306fe1a362117ebeca"
+    },
+    {
+      "asset_id": "whiteboard-easel-v2",
+      "request": "A standalone wide cream-washi whiteboard on a sturdy paper easel with a slim cobalt-and-teal frame, sparse coin, gear, circuit, bar-block, bank, and capital-flow motifs, side clips, and a shallow sticker tray; central field blank; no botanical decoration.",
+      "source_path": "source/whiteboard-easel-v2-source.png",
+      "source_sha256": "26b7fb1dd168e5a0be7101e1de3c861a4da73798c6884be2e09b96fb72443f70",
+      "cutout_path": "cutouts/whiteboard-easel-v2.png",
+      "cutout_sha256": "5f41ac8882ba1118f01ace46d41aaf86b4dec1e12f99199f8a82befc062157cc"
+    },
+    {
+      "asset_id": "whiteboard-world-v2",
+      "request": "A straight-on 16:9 cream-washi whiteboard world with a slim cobalt-and-teal frame, sparse coin, gear, circuit, blank bar-block, bank, certificate, and capital-flow motifs, a lower ledge, four blank circular tabs, two blank cards, and a large uninterrupted central field; no botanical decoration.",
+      "flattened_path": "worlds/whiteboard-world-v2.png",
+      "flattened_sha256": "d1d69e60d012664abae85d7b934d74d514e21fd0a9391c136f09f6056522e1f6"
+    },
+    {
+      "asset_id": "story-neighborhood-v1",
+      "request": "A bright 16:9 lived-in neighborhood world with home, rental building, shops, workshop, transit stop, city skyline, and an active multigenerational Black community.",
+      "flattened_path": "worlds/story-neighborhood-v1.png",
+      "flattened_sha256": "0fc8c2d605560cd3efe69c10036f74618d0a747717aca1d1ad03bb1264a821e8"
+    },
+    {
+      "asset_id": "mechanism-town-v1",
+      "request": "A bright 16:9 interactive economic town with homes, factory, civic building, market, actors, copper flow lines, pulleys, levers, and blank placement sockets.",
+      "flattened_path": "worlds/mechanism-town-v1.png",
+      "flattened_sha256": "e82ef03926ccd39363b3f5e2368d30848916f416395f2d7cb46d5fa8d86024c8"
+    },
+    {
+      "asset_id": "finance-host-identity-master-v3",
+      "request": "An original recurring Black finance presenter in a tailored indigo suit, short sculpted locs, glasses, and subtle Spanish floral-pattern dress shoes, shown as one full-body identity master plus three consistent gesture studies.",
+      "flattened_path": "host/finance-host-identity-master-v3.png",
+      "flattened_sha256": "86242df3292ab528c0645fc8b9f65e8344a4e3f0b60478efb2beb78435c0e403"
+    },
+    {
+      "asset_id": "finance-host-presenter-plate-v1",
+      "request": "A clean full-body production plate of the recurring fictional Black finance presenter, preserving the identity master wardrobe and face, with one open presenting hand on a flat chroma-key background.",
+      "source_path": "host/finance-host-presenter-plate-v1-keyed-source.png",
+      "source_sha256": "b621c63e37bc299a51b0ae9332b24b058b7e2666f658e456f08c68e3cdcda891",
+      "cutout_path": "host/finance-host-presenter-plate-v1.png",
+      "cutout_sha256": "16c94909dcdcd2e6ce369467c3971ce949dfbe5f5a13b7a32b6baea2649009c8",
+      "background_removal": "flat-chroma-key-plus-local-alpha",
+      "render_state": "draft"
+    },
+    {
+      "asset_id": "finance-host-presenter-direct-v1",
+      "request": "Identity-preserving generated direct-to-camera finance presenter on flat chroma-key background.",
+      "source_path": "generated/stealth-wealth-v1/presenter-direct-v1-keyed-source.png",
+      "source_sha256": "9d9721031dcd3fe58e8208684b605888fd70539d1092df63a45c2a7c7e8fc9b3",
+      "cutout_path": "generated/stealth-wealth-v1/presenter-direct-v1.png",
+      "cutout_sha256": "9d9721031dcd3fe58e8208684b605888fd70539d1092df63a45c2a7c7e8fc9b3",
+      "background_removal": "flat-chroma-key-plus-local-alpha",
+      "render_state": "draft"
+    },
+    {
+      "asset_id": "stealth-wealth-warm-study-v1",
+      "request": "Generated cinematic warm oak study with charcoal shadows, amber practicals, emerald accents, and negative space for cards.",
+      "flattened_path": "generated/stealth-wealth-v1/warm-oak-study-v1.png",
+      "flattened_sha256": "ead65484b509200df5cf36276779b573c638e5f39cb39296ba8b996ea3670317",
+      "render_state": "draft"
+    },
+    {
+      "asset_id": "stealth-wealth-cool-wafer-v1",
+      "request": "Generated cool slate laboratory macro plate with an emerald silicon wafer and uncluttered card space.",
+      "flattened_path": "generated/stealth-wealth-v1/cool-wafer-lab-v1.png",
+      "flattened_sha256": "eb0ab9a6e574c92a31d23a98eabbbad308a06d3b8f2e9baf73d6f44d016b52ce",
+      "render_state": "draft"
+    }
+  ],
+  "promotion_state": "review_only",
+  "render_eligible": false
+}

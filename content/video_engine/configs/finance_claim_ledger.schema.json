@@ -1,0 +1,52 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "finance_claim_ledger.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "episode_id", "research_state", "contrarian_frame", "countercase", "failure_conditions", "claims", "artifact_hash"],
+  "properties": {
+    "schema_version": {"const": "finance_claim_ledger.v1"},
+    "episode_id": {"type": "string"},
+    "research_state": {"enum": ["not_started", "in_progress", "source_locked", "operator_approved"]},
+    "contrarian_frame": {"type": "boolean"},
+    "countercase": {"type": "string"},
+    "failure_conditions": {"type": "array", "items": {"type": "string"}},
+    "claims": {
+      "type": "array",
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["claim_id", "text", "classification", "temporal_kind", "as_of", "source_locators", "calculation", "qualifier", "counterevidence_refs", "review_state"],
+        "properties": {
+          "claim_id": {"type": "string", "pattern": "^[a-z0-9-]+$"},
+          "text": {"type": "string", "minLength": 5},
+          "classification": {"enum": ["observed_fact", "calculation", "sourced_interpretation", "market_snapshot", "channel_inference", "scenario", "unresolved_question"]},
+          "temporal_kind": {"enum": ["timeless", "dated", "current", "numeric"]},
+          "as_of": {"type": ["string", "null"], "format": "date"},
+          "source_locators": {
+            "type": "array",
+            "items": {
+              "type": "object", "additionalProperties": false,
+              "required": ["source_id", "publisher", "title", "url", "location", "published_at", "accessed_at", "primary"],
+              "properties": {
+                "source_id": {"type": "string"}, "publisher": {"type": "string"}, "title": {"type": "string"},
+                "url": {"type": "string", "format": "uri"}, "location": {"type": "string", "minLength": 1},
+                "published_at": {"type": ["string", "null"], "format": "date"}, "accessed_at": {"type": "string", "format": "date"},
+                "primary": {"type": "boolean"}
+              }
+            }
+          },
+          "calculation": {
+            "type": ["object", "null"],
+            "properties": {"formula": {"type": "string"}, "inputs": {"type": "array", "items": {"type": "string"}}, "result": {"type": "string"}},
+            "required": ["formula", "inputs", "result"], "additionalProperties": false
+          },
+          "qualifier": {"type": "string"},
+          "counterevidence_refs": {"type": "array", "items": {"type": "string"}},
+          "review_state": {"enum": ["draft", "source_checked", "operator_approved"]},
+          "market_data_packet_hash": {"type": ["string", "null"], "pattern": "^[a-f0-9]{64}$"}
+        }
+      }
+    },
+    "artifact_hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}

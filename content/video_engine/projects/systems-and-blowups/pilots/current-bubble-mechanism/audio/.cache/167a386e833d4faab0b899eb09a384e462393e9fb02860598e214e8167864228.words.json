@@ -1,0 +1,2481 @@
+{
+  "scene_id": 9004,
+  "duration_s": 206.238,
+  "words": [
+    {
+      "w": "less",
+      "start_s": 0.0,
+      "end_s": 0.302
+    },
+    {
+      "w": "portfolio-level",
+      "start_s": 0.383,
+      "end_s": 1.265
+    },
+    {
+      "w": "downside—even",
+      "start_s": 1.335,
+      "end_s": 2.426
+    },
+    {
+      "w": "if",
+      "start_s": 2.473,
+      "end_s": 2.543
+    },
+    {
+      "w": "the",
+      "start_s": 2.601,
+      "end_s": 2.67
+    },
+    {
+      "w": "growth",
+      "start_s": 2.717,
+      "end_s": 3.007
+    },
+    {
+      "w": "sleeve",
+      "start_s": 3.053,
+      "end_s": 3.425
+    },
+    {
+      "w": "is",
+      "start_s": 3.471,
+      "end_s": 3.553
+    },
+    {
+      "w": "more",
+      "start_s": 3.622,
+      "end_s": 3.82
+    },
+    {
+      "w": "volatile.",
+      "start_s": 3.878,
+      "end_s": 4.54
+    },
+    {
+      "w": "The",
+      "start_s": 5.236,
+      "end_s": 5.352
+    },
+    {
+      "w": "price",
+      "start_s": 5.399,
+      "end_s": 5.666
+    },
+    {
+      "w": "of",
+      "start_s": 5.7,
+      "end_s": 5.759
+    },
+    {
+      "w": "that",
+      "start_s": 5.805,
+      "end_s": 5.956
+    },
+    {
+      "w": "possibility",
+      "start_s": 6.026,
+      "end_s": 6.699
+    },
+    {
+      "w": "is",
+      "start_s": 6.769,
+      "end_s": 6.861
+    },
+    {
+      "w": "tracking",
+      "start_s": 6.92,
+      "end_s": 7.314
+    },
+    {
+      "w": "error,",
+      "start_s": 7.384,
+      "end_s": 7.814
+    },
+    {
+      "w": "concentration",
+      "start_s": 7.906,
+      "end_s": 8.626
+    },
+    {
+      "w": "risk,",
+      "start_s": 8.684,
+      "end_s": 9.137
+    },
+    {
+      "w": "tax",
+      "start_s": 9.288,
+      "end_s": 9.578
+    },
+    {
+      "w": "friction,",
+      "start_s": 9.636,
+      "end_s": 10.147
+    },
+    {
+      "w": "research",
+      "start_s": 10.263,
+      "end_s": 10.704
+    },
+    {
+      "w": "burden,",
+      "start_s": 10.751,
+      "end_s": 11.215
+    },
+    {
+      "w": "and",
+      "start_s": 11.366,
+      "end_s": 11.517
+    },
+    {
+      "w": "long",
+      "start_s": 11.598,
+      "end_s": 11.842
+    },
+    {
+      "w": "periods",
+      "start_s": 11.912,
+      "end_s": 12.307
+    },
+    {
+      "w": "when",
+      "start_s": 12.33,
+      "end_s": 12.446
+    },
+    {
+      "w": "the",
+      "start_s": 12.481,
+      "end_s": 12.55
+    },
+    {
+      "w": "boring",
+      "start_s": 12.597,
+      "end_s": 12.91
+    },
+    {
+      "w": "index",
+      "start_s": 12.968,
+      "end_s": 13.293
+    },
+    {
+      "w": "makes",
+      "start_s": 13.351,
+      "end_s": 13.526
+    },
+    {
+      "w": "you",
+      "start_s": 13.56,
+      "end_s": 13.63
+    },
+    {
+      "w": "look",
+      "start_s": 13.665,
+      "end_s": 13.815
+    },
+    {
+      "w": "foolish.",
+      "start_s": 13.873,
+      "end_s": 14.466
+    },
+    {
+      "w": "You",
+      "start_s": 14.849,
+      "end_s": 14.976
+    },
+    {
+      "w": "have",
+      "start_s": 15.046,
+      "end_s": 15.185
+    },
+    {
+      "w": "to",
+      "start_s": 15.209,
+      "end_s": 15.267
+    },
+    {
+      "w": "stomach",
+      "start_s": 15.325,
+      "end_s": 15.661
+    },
+    {
+      "w": "volatility",
+      "start_s": 15.708,
+      "end_s": 16.393
+    },
+    {
+      "w": "without",
+      "start_s": 16.521,
+      "end_s": 16.846
+    },
+    {
+      "w": "confusing",
+      "start_s": 16.892,
+      "end_s": 17.449
+    },
+    {
+      "w": "discomfort",
+      "start_s": 17.507,
+      "end_s": 18.123
+    },
+    {
+      "w": "with",
+      "start_s": 18.158,
+      "end_s": 18.285
+    },
+    {
+      "w": "failure.",
+      "start_s": 18.355,
+      "end_s": 18.97
+    },
+    {
+      "w": "Now",
+      "start_s": 19.667,
+      "end_s": 19.911
+    },
+    {
+      "w": "the",
+      "start_s": 19.992,
+      "end_s": 20.073
+    },
+    {
+      "w": "part",
+      "start_s": 20.143,
+      "end_s": 20.491
+    },
+    {
+      "w": "every",
+      "start_s": 20.7,
+      "end_s": 21.014
+    },
+    {
+      "w": "concentrated",
+      "start_s": 21.083,
+      "end_s": 21.815
+    },
+    {
+      "w": "investor",
+      "start_s": 21.873,
+      "end_s": 22.395
+    },
+    {
+      "w": "needs",
+      "start_s": 22.569,
+      "end_s": 22.836
+    },
+    {
+      "w": "to",
+      "start_s": 22.871,
+      "end_s": 22.929
+    },
+    {
+      "w": "hear.",
+      "start_s": 23.011,
+      "end_s": 23.475
+    },
+    {
+      "w": "Identifying",
+      "start_s": 24.172,
+      "end_s": 24.822
+    },
+    {
+      "w": "yesterday’s",
+      "start_s": 24.88,
+      "end_s": 25.344
+    },
+    {
+      "w": "winners",
+      "start_s": 25.391,
+      "end_s": 25.727
+    },
+    {
+      "w": "is",
+      "start_s": 25.774,
+      "end_s": 25.855
+    },
+    {
+      "w": "easy.",
+      "start_s": 25.925,
+      "end_s": 26.424
+    },
+    {
+      "w": "Identifying",
+      "start_s": 26.807,
+      "end_s": 27.387
+    },
+    {
+      "w": "tomorrow’s",
+      "start_s": 27.446,
+      "end_s": 27.98
+    },
+    {
+      "w": "is",
+      "start_s": 28.072,
+      "end_s": 28.223
+    },
+    {
+      "w": "the",
+      "start_s": 28.281,
+      "end_s": 28.351
+    },
+    {
+      "w": "entire",
+      "start_s": 28.409,
+      "end_s": 28.769
+    },
+    {
+      "w": "problem.",
+      "start_s": 28.816,
+      "end_s": 29.384
+    },
+    {
+      "w": "A",
+      "start_s": 29.895,
+      "end_s": 29.976
+    },
+    {
+      "w": "top-stock",
+      "start_s": 30.058,
+      "end_s": 30.58
+    },
+    {
+      "w": "basket",
+      "start_s": 30.65,
+      "end_s": 31.079
+    },
+    {
+      "w": "can",
+      "start_s": 31.126,
+      "end_s": 31.242
+    },
+    {
+      "w": "replace",
+      "start_s": 31.3,
+      "end_s": 31.695
+    },
+    {
+      "w": "diworsification",
+      "start_s": 31.776,
+      "end_s": 32.832
+    },
+    {
+      "w": "with",
+      "start_s": 32.89,
+      "end_s": 33.041
+    },
+    {
+      "w": "catastrophic",
+      "start_s": 33.088,
+      "end_s": 33.808
+    },
+    {
+      "w": "company",
+      "start_s": 33.924,
+      "end_s": 34.284
+    },
+    {
+      "w": "risk.",
+      "start_s": 34.353,
+      "end_s": 34.887
+    },
+    {
+      "w": "One",
+      "start_s": 35.584,
+      "end_s": 35.77
+    },
+    {
+      "w": "accounting",
+      "start_s": 35.793,
+      "end_s": 36.199
+    },
+    {
+      "w": "failure,",
+      "start_s": 36.257,
+      "end_s": 36.849
+    },
+    {
+      "w": "regulation,",
+      "start_s": 37.058,
+      "end_s": 37.813
+    },
+    {
+      "w": "technology",
+      "start_s": 37.929,
+      "end_s": 38.568
+    },
+    {
+      "w": "shift,",
+      "start_s": 38.614,
+      "end_s": 38.928
+    },
+    {
+      "w": "or",
+      "start_s": 38.951,
+      "end_s": 39.044
+    },
+    {
+      "w": "valuation",
+      "start_s": 39.125,
+      "end_s": 39.729
+    },
+    {
+      "w": "collapse",
+      "start_s": 39.787,
+      "end_s": 40.205
+    },
+    {
+      "w": "can",
+      "start_s": 40.239,
+      "end_s": 40.367
+    },
+    {
+      "w": "destroy",
+      "start_s": 40.425,
+      "end_s": 40.808
+    },
+    {
+      "w": "years",
+      "start_s": 40.924,
+      "end_s": 41.238
+    },
+    {
+      "w": "of",
+      "start_s": 41.284,
+      "end_s": 41.342
+    },
+    {
+      "w": "excess",
+      "start_s": 41.424,
+      "end_s": 41.807
+    },
+    {
+      "w": "return.",
+      "start_s": 41.865,
+      "end_s": 42.457
+    },
+    {
+      "w": "Defensive",
+      "start_s": 43.061,
+      "end_s": 43.548
+    },
+    {
+      "w": "assets",
+      "start_s": 43.595,
+      "end_s": 43.955
+    },
+    {
+      "w": "make",
+      "start_s": 44.013,
+      "end_s": 44.175
+    },
+    {
+      "w": "no",
+      "start_s": 44.222,
+      "end_s": 44.326
+    },
+    {
+      "w": "promise",
+      "start_s": 44.396,
+      "end_s": 44.733
+    },
+    {
+      "w": "to",
+      "start_s": 44.767,
+      "end_s": 44.826
+    },
+    {
+      "w": "defend",
+      "start_s": 44.895,
+      "end_s": 45.197
+    },
+    {
+      "w": "you.",
+      "start_s": 45.255,
+      "end_s": 45.499
+    },
+    {
+      "w": "Bonds",
+      "start_s": 45.882,
+      "end_s": 46.265
+    },
+    {
+      "w": "can",
+      "start_s": 46.312,
+      "end_s": 46.428
+    },
+    {
+      "w": "fall",
+      "start_s": 46.486,
+      "end_s": 46.672
+    },
+    {
+      "w": "with",
+      "start_s": 46.718,
+      "end_s": 46.858
+    },
+    {
+      "w": "stocks,",
+      "start_s": 46.892,
+      "end_s": 47.554
+    },
+    {
+      "w": "gold",
+      "start_s": 47.728,
+      "end_s": 47.995
+    },
+    {
+      "w": "can",
+      "start_s": 48.053,
+      "end_s": 48.17
+    },
+    {
+      "w": "stagnate,",
+      "start_s": 48.239,
+      "end_s": 48.947
+    },
+    {
+      "w": "and",
+      "start_s": 49.122,
+      "end_s": 49.296
+    },
+    {
+      "w": "sovereign",
+      "start_s": 49.389,
+      "end_s": 49.83
+    },
+    {
+      "w": "risk",
+      "start_s": 49.888,
+      "end_s": 50.213
+    },
+    {
+      "w": "can",
+      "start_s": 50.329,
+      "end_s": 50.468
+    },
+    {
+      "w": "become",
+      "start_s": 50.526,
+      "end_s": 50.84
+    },
+    {
+      "w": "the",
+      "start_s": 50.875,
+      "end_s": 50.944
+    },
+    {
+      "w": "crisis.",
+      "start_s": 50.991,
+      "end_s": 51.687
+    },
+    {
+      "w": "Correlations",
+      "start_s": 52.291,
+      "end_s": 52.976
+    },
+    {
+      "w": "change",
+      "start_s": 53.046,
+      "end_s": 53.464
+    },
+    {
+      "w": "when",
+      "start_s": 53.487,
+      "end_s": 53.626
+    },
+    {
+      "w": "investors",
+      "start_s": 53.673,
+      "end_s": 54.114
+    },
+    {
+      "w": "need",
+      "start_s": 54.16,
+      "end_s": 54.323
+    },
+    {
+      "w": "them",
+      "start_s": 54.358,
+      "end_s": 54.485
+    },
+    {
+      "w": "most.",
+      "start_s": 54.543,
+      "end_s": 55.031
+    },
+    {
+      "w": "And",
+      "start_s": 55.31,
+      "end_s": 55.437
+    },
+    {
+      "w": "the",
+      "start_s": 55.484,
+      "end_s": 55.553
+    },
+    {
+      "w": "long",
+      "start_s": 55.6,
+      "end_s": 55.855
+    },
+    {
+      "w": "tail",
+      "start_s": 55.913,
+      "end_s": 56.192
+    },
+    {
+      "w": "is",
+      "start_s": 56.25,
+      "end_s": 56.32
+    },
+    {
+      "w": "not",
+      "start_s": 56.378,
+      "end_s": 56.517
+    },
+    {
+      "w": "always",
+      "start_s": 56.564,
+      "end_s": 56.854
+    },
+    {
+      "w": "dead",
+      "start_s": 56.912,
+      "end_s": 57.086
+    },
+    {
+      "w": "weight.",
+      "start_s": 57.144,
+      "end_s": 57.527
+    },
+    {
+      "w": "S&P’s",
+      "start_s": 57.968,
+      "end_s": 58.607
+    },
+    {
+      "w": "equal-weight",
+      "start_s": 58.688,
+      "end_s": 59.222
+    },
+    {
+      "w": "index",
+      "start_s": 59.269,
+      "end_s": 59.687
+    },
+    {
+      "w": "has",
+      "start_s": 59.896,
+      "end_s": 60.058
+    },
+    {
+      "w": "outperformed",
+      "start_s": 60.116,
+      "end_s": 60.697
+    },
+    {
+      "w": "the",
+      "start_s": 60.72,
+      "end_s": 60.79
+    },
+    {
+      "w": "normal",
+      "start_s": 60.848,
+      "end_s": 61.161
+    },
+    {
+      "w": "S&P",
+      "start_s": 61.231,
+      "end_s": 61.579
+    },
+    {
+      "w": "500",
+      "start_s": 61.73,
+      "end_s": 62.392
+    },
+    {
+      "w": "over",
+      "start_s": 62.636,
+      "end_s": 62.868
+    },
+    {
+      "w": "its",
+      "start_s": 62.926,
+      "end_s": 63.042
+    },
+    {
+      "w": "full",
+      "start_s": 63.089,
+      "end_s": 63.274
+    },
+    {
+      "w": "live",
+      "start_s": 63.344,
+      "end_s": 63.611
+    },
+    {
+      "w": "history",
+      "start_s": 63.658,
+      "end_s": 63.994
+    },
+    {
+      "w": "since",
+      "start_s": 64.052,
+      "end_s": 64.296
+    },
+    {
+      "w": "2003,",
+      "start_s": 64.343,
+      "end_s": 65.271
+    },
+    {
+      "w": "even",
+      "start_s": 65.422,
+      "end_s": 65.678
+    },
+    {
+      "w": "though",
+      "start_s": 65.724,
+      "end_s": 65.921
+    },
+    {
+      "w": "it",
+      "start_s": 65.956,
+      "end_s": 66.026
+    },
+    {
+      "w": "lagged",
+      "start_s": 66.084,
+      "end_s": 66.386
+    },
+    {
+      "w": "badly",
+      "start_s": 66.456,
+      "end_s": 66.885
+    },
+    {
+      "w": "during",
+      "start_s": 66.955,
+      "end_s": 67.222
+    },
+    {
+      "w": "the",
+      "start_s": 67.268,
+      "end_s": 67.338
+    },
+    {
+      "w": "recent",
+      "start_s": 67.396,
+      "end_s": 67.709
+    },
+    {
+      "w": "mega-cap",
+      "start_s": 67.767,
+      "end_s": 68.267
+    },
+    {
+      "w": "cycle.",
+      "start_s": 68.325,
+      "end_s": 68.754
+    },
+    {
+      "w": "Sometimes",
+      "start_s": 69.567,
+      "end_s": 70.043
+    },
+    {
+      "w": "the",
+      "start_s": 70.089,
+      "end_s": 70.159
+    },
+    {
+      "w": "reserves",
+      "start_s": 70.217,
+      "end_s": 70.67
+    },
+    {
+      "w": "become",
+      "start_s": 70.728,
+      "end_s": 71.03
+    },
+    {
+      "w": "the",
+      "start_s": 71.053,
+      "end_s": 71.123
+    },
+    {
+      "w": "next",
+      "start_s": 71.169,
+      "end_s": 71.355
+    },
+    {
+      "w": "starters.",
+      "start_s": 71.378,
+      "end_s": 72.017
+    },
+    {
+      "w": "The",
+      "start_s": 72.226,
+      "end_s": 72.342
+    },
+    {
+      "w": "S&P",
+      "start_s": 72.411,
+      "end_s": 72.76
+    },
+    {
+      "w": "500",
+      "start_s": 72.934,
+      "end_s": 73.468
+    },
+    {
+      "w": "also",
+      "start_s": 73.526,
+      "end_s": 73.863
+    },
+    {
+      "w": "heals:",
+      "start_s": 73.944,
+      "end_s": 74.374
+    },
+    {
+      "w": "winners",
+      "start_s": 74.524,
+      "end_s": 74.85
+    },
+    {
+      "w": "grow,",
+      "start_s": 74.896,
+      "end_s": 75.279
+    },
+    {
+      "w": "failures",
+      "start_s": 75.372,
+      "end_s": 75.825
+    },
+    {
+      "w": "shrink,",
+      "start_s": 75.871,
+      "end_s": 76.255
+    },
+    {
+      "w": "and",
+      "start_s": 76.289,
+      "end_s": 76.452
+    },
+    {
+      "w": "new",
+      "start_s": 76.545,
+      "end_s": 76.684
+    },
+    {
+      "w": "companies",
+      "start_s": 76.742,
+      "end_s": 77.16
+    },
+    {
+      "w": "enter",
+      "start_s": 77.241,
+      "end_s": 77.532
+    },
+    {
+      "w": "without",
+      "start_s": 77.59,
+      "end_s": 77.88
+    },
+    {
+      "w": "requiring",
+      "start_s": 77.938,
+      "end_s": 78.426
+    },
+    {
+      "w": "the",
+      "start_s": 78.472,
+      "end_s": 78.542
+    },
+    {
+      "w": "investor",
+      "start_s": 78.6,
+      "end_s": 79.041
+    },
+    {
+      "w": "to",
+      "start_s": 79.111,
+      "end_s": 79.192
+    },
+    {
+      "w": "identify",
+      "start_s": 79.273,
+      "end_s": 79.796
+    },
+    {
+      "w": "them",
+      "start_s": 79.865,
+      "end_s": 79.993
+    },
+    {
+      "w": "in",
+      "start_s": 80.039,
+      "end_s": 80.098
+    },
+    {
+      "w": "advance.",
+      "start_s": 80.144,
+      "end_s": 80.875
+    },
+    {
+      "w": "Memory",
+      "start_s": 81.688,
+      "end_s": 82.048
+    },
+    {
+      "w": "has",
+      "start_s": 82.118,
+      "end_s": 82.269
+    },
+    {
+      "w": "its",
+      "start_s": 82.327,
+      "end_s": 82.443
+    },
+    {
+      "w": "own",
+      "start_s": 82.489,
+      "end_s": 82.64
+    },
+    {
+      "w": "three",
+      "start_s": 82.687,
+      "end_s": 82.942
+    },
+    {
+      "w": "failure",
+      "start_s": 82.988,
+      "end_s": 83.337
+    },
+    {
+      "w": "points.",
+      "start_s": 83.372,
+      "end_s": 83.848
+    },
+    {
+      "w": "Extraordinary",
+      "start_s": 84.451,
+      "end_s": 85.194
+    },
+    {
+      "w": "margins",
+      "start_s": 85.264,
+      "end_s": 85.694
+    },
+    {
+      "w": "attract",
+      "start_s": 85.74,
+      "end_s": 86.077
+    },
+    {
+      "w": "new",
+      "start_s": 86.135,
+      "end_s": 86.262
+    },
+    {
+      "w": "capacity.",
+      "start_s": 86.309,
+      "end_s": 87.017
+    },
+    {
+      "w": "More",
+      "start_s": 87.4,
+      "end_s": 87.621
+    },
+    {
+      "w": "efficient",
+      "start_s": 87.644,
+      "end_s": 88.05
+    },
+    {
+      "w": "AI",
+      "start_s": 88.108,
+      "end_s": 88.422
+    },
+    {
+      "w": "architectures",
+      "start_s": 88.48,
+      "end_s": 89.095
+    },
+    {
+      "w": "can",
+      "start_s": 89.142,
+      "end_s": 89.258
+    },
+    {
+      "w": "reduce",
+      "start_s": 89.316,
+      "end_s": 89.629
+    },
+    {
+      "w": "demand.",
+      "start_s": 89.664,
+      "end_s": 90.187
+    },
+    {
+      "w": "And",
+      "start_s": 90.57,
+      "end_s": 90.721
+    },
+    {
+      "w": "a",
+      "start_s": 90.779,
+      "end_s": 90.802
+    },
+    {
+      "w": "small",
+      "start_s": 90.849,
+      "end_s": 91.116
+    },
+    {
+      "w": "number",
+      "start_s": 91.185,
+      "end_s": 91.418
+    },
+    {
+      "w": "of",
+      "start_s": 91.464,
+      "end_s": 91.511
+    },
+    {
+      "w": "giant",
+      "start_s": 91.58,
+      "end_s": 91.87
+    },
+    {
+      "w": "buyers",
+      "start_s": 91.928,
+      "end_s": 92.3
+    },
+    {
+      "w": "can",
+      "start_s": 92.346,
+      "end_s": 92.474
+    },
+    {
+      "w": "delay",
+      "start_s": 92.532,
+      "end_s": 92.788
+    },
+    {
+      "w": "a",
+      "start_s": 92.846,
+      "end_s": 92.869
+    },
+    {
+      "w": "product",
+      "start_s": 92.915,
+      "end_s": 93.287
+    },
+    {
+      "w": "generation",
+      "start_s": 93.322,
+      "end_s": 93.995
+    },
+    {
+      "w": "or",
+      "start_s": 94.088,
+      "end_s": 94.239
+    },
+    {
+      "w": "cut",
+      "start_s": 94.297,
+      "end_s": 94.459
+    },
+    {
+      "w": "capital",
+      "start_s": 94.518,
+      "end_s": 94.901
+    },
+    {
+      "w": "spending.",
+      "start_s": 94.947,
+      "end_s": 95.597
+    },
+    {
+      "w": "Real",
+      "start_s": 96.41,
+      "end_s": 96.654
+    },
+    {
+      "w": "demand",
+      "start_s": 96.723,
+      "end_s": 97.199
+    },
+    {
+      "w": "does",
+      "start_s": 97.316,
+      "end_s": 97.513
+    },
+    {
+      "w": "not",
+      "start_s": 97.571,
+      "end_s": 97.71
+    },
+    {
+      "w": "prevent",
+      "start_s": 97.757,
+      "end_s": 98.07
+    },
+    {
+      "w": "bubble",
+      "start_s": 98.128,
+      "end_s": 98.395
+    },
+    {
+      "w": "pricing.",
+      "start_s": 98.418,
+      "end_s": 99.034
+    },
+    {
+      "w": "Railroads",
+      "start_s": 99.475,
+      "end_s": 99.963
+    },
+    {
+      "w": "changed",
+      "start_s": 100.009,
+      "end_s": 100.346
+    },
+    {
+      "w": "the",
+      "start_s": 100.381,
+      "end_s": 100.45
+    },
+    {
+      "w": "world",
+      "start_s": 100.497,
+      "end_s": 100.787
+    },
+    {
+      "w": "and",
+      "start_s": 100.845,
+      "end_s": 100.926
+    },
+    {
+      "w": "still",
+      "start_s": 100.973,
+      "end_s": 101.182
+    },
+    {
+      "w": "destroyed",
+      "start_s": 101.24,
+      "end_s": 101.611
+    },
+    {
+      "w": "investors.",
+      "start_s": 101.646,
+      "end_s": 102.401
+    },
+    {
+      "w": "The",
+      "start_s": 102.842,
+      "end_s": 102.958
+    },
+    {
+      "w": "internet",
+      "start_s": 103.028,
+      "end_s": 103.376
+    },
+    {
+      "w": "was",
+      "start_s": 103.422,
+      "end_s": 103.527
+    },
+    {
+      "w": "real",
+      "start_s": 103.608,
+      "end_s": 103.829
+    },
+    {
+      "w": "in",
+      "start_s": 103.887,
+      "end_s": 103.933
+    },
+    {
+      "w": "1999.",
+      "start_s": 103.98,
+      "end_s": 105.164
+    },
+    {
+      "w": "The",
+      "start_s": 105.443,
+      "end_s": 105.559
+    },
+    {
+      "w": "price",
+      "start_s": 105.605,
+      "end_s": 105.872
+    },
+    {
+      "w": "paid",
+      "start_s": 105.907,
+      "end_s": 106.116
+    },
+    {
+      "w": "for",
+      "start_s": 106.162,
+      "end_s": 106.267
+    },
+    {
+      "w": "many",
+      "start_s": 106.325,
+      "end_s": 106.534
+    },
+    {
+      "w": "internet",
+      "start_s": 106.592,
+      "end_s": 106.952
+    },
+    {
+      "w": "companies",
+      "start_s": 107.01,
+      "end_s": 107.393
+    },
+    {
+      "w": "was",
+      "start_s": 107.428,
+      "end_s": 107.556
+    },
+    {
+      "w": "not.",
+      "start_s": 107.625,
+      "end_s": 108.148
+    },
+    {
+      "w": "So",
+      "start_s": 108.751,
+      "end_s": 108.902
+    },
+    {
+      "w": "this",
+      "start_s": 108.96,
+      "end_s": 109.088
+    },
+    {
+      "w": "is",
+      "start_s": 109.146,
+      "end_s": 109.239
+    },
+    {
+      "w": "not",
+      "start_s": 109.32,
+      "end_s": 109.564
+    },
+    {
+      "w": "“sell",
+      "start_s": 109.634,
+      "end_s": 109.924
+    },
+    {
+      "w": "the",
+      "start_s": 109.982,
+      "end_s": 110.063
+    },
+    {
+      "w": "index",
+      "start_s": 110.133,
+      "end_s": 110.505
+    },
+    {
+      "w": "and",
+      "start_s": 110.574,
+      "end_s": 110.667
+    },
+    {
+      "w": "buy",
+      "start_s": 110.737,
+      "end_s": 110.923
+    },
+    {
+      "w": "memory.”",
+      "start_s": 111.015,
+      "end_s": 111.712
+    },
+    {
+      "w": "It",
+      "start_s": 112.153,
+      "end_s": 112.293
+    },
+    {
+      "w": "is",
+      "start_s": 112.339,
+      "end_s": 112.42
+    },
+    {
+      "w": "not",
+      "start_s": 112.49,
+      "end_s": 112.676
+    },
+    {
+      "w": "a",
+      "start_s": 112.722,
+      "end_s": 112.745
+    },
+    {
+      "w": "model",
+      "start_s": 112.803,
+      "end_s": 113.082
+    },
+    {
+      "w": "portfolio.",
+      "start_s": 113.14,
+      "end_s": 114.034
+    },
+    {
+      "w": "It",
+      "start_s": 114.313,
+      "end_s": 114.429
+    },
+    {
+      "w": "is",
+      "start_s": 114.475,
+      "end_s": 114.568
+    },
+    {
+      "w": "a",
+      "start_s": 114.614,
+      "end_s": 114.649
+    },
+    {
+      "w": "challenge",
+      "start_s": 114.707,
+      "end_s": 115.172
+    },
+    {
+      "w": "to",
+      "start_s": 115.207,
+      "end_s": 115.288
+    },
+    {
+      "w": "stop",
+      "start_s": 115.358,
+      "end_s": 115.613
+    },
+    {
+      "w": "treating",
+      "start_s": 115.671,
+      "end_s": 115.973
+    },
+    {
+      "w": "the",
+      "start_s": 116.031,
+      "end_s": 116.101
+    },
+    {
+      "w": "default",
+      "start_s": 116.147,
+      "end_s": 116.495
+    },
+    {
+      "w": "product",
+      "start_s": 116.53,
+      "end_s": 116.936
+    },
+    {
+      "w": "as",
+      "start_s": 116.983,
+      "end_s": 117.064
+    },
+    {
+      "w": "if",
+      "start_s": 117.111,
+      "end_s": 117.192
+    },
+    {
+      "w": "it",
+      "start_s": 117.25,
+      "end_s": 117.308
+    },
+    {
+      "w": "were",
+      "start_s": 117.354,
+      "end_s": 117.505
+    },
+    {
+      "w": "optimized",
+      "start_s": 117.552,
+      "end_s": 118.179
+    },
+    {
+      "w": "for",
+      "start_s": 118.214,
+      "end_s": 118.318
+    },
+    {
+      "w": "every",
+      "start_s": 118.388,
+      "end_s": 118.597
+    },
+    {
+      "w": "objective.",
+      "start_s": 118.643,
+      "end_s": 119.351
+    },
+    {
+      "w": "Broad",
+      "start_s": 120.164,
+      "end_s": 120.477
+    },
+    {
+      "w": "indexing",
+      "start_s": 120.535,
+      "end_s": 121.034
+    },
+    {
+      "w": "solves",
+      "start_s": 121.116,
+      "end_s": 121.452
+    },
+    {
+      "w": "low-cost",
+      "start_s": 121.51,
+      "end_s": 121.963
+    },
+    {
+      "w": "participation.",
+      "start_s": 121.998,
+      "end_s": 122.938
+    },
+    {
+      "w": "A",
+      "start_s": 123.449,
+      "end_s": 123.531
+    },
+    {
+      "w": "concentrated-plus-defensive",
+      "start_s": 123.623,
+      "end_s": 125.202
+    },
+    {
+      "w": "barbell",
+      "start_s": 125.249,
+      "end_s": 125.69
+    },
+    {
+      "w": "tries",
+      "start_s": 125.76,
+      "end_s": 126.05
+    },
+    {
+      "w": "to",
+      "start_s": 126.096,
+      "end_s": 126.154
+    },
+    {
+      "w": "build",
+      "start_s": 126.224,
+      "end_s": 126.433
+    },
+    {
+      "w": "exceptional",
+      "start_s": 126.503,
+      "end_s": 127.048
+    },
+    {
+      "w": "wealth",
+      "start_s": 127.106,
+      "end_s": 127.362
+    },
+    {
+      "w": "while",
+      "start_s": 127.408,
+      "end_s": 127.606
+    },
+    {
+      "w": "purchasing",
+      "start_s": 127.641,
+      "end_s": 128.105
+    },
+    {
+      "w": "explicit",
+      "start_s": 128.186,
+      "end_s": 128.685
+    },
+    {
+      "w": "protection.",
+      "start_s": 128.732,
+      "end_s": 129.44
+    },
+    {
+      "w": "It",
+      "start_s": 129.881,
+      "end_s": 130.009
+    },
+    {
+      "w": "must",
+      "start_s": 130.055,
+      "end_s": 130.206
+    },
+    {
+      "w": "be",
+      "start_s": 130.253,
+      "end_s": 130.334
+    },
+    {
+      "w": "tested",
+      "start_s": 130.38,
+      "end_s": 130.706
+    },
+    {
+      "w": "with",
+      "start_s": 130.74,
+      "end_s": 130.868
+    },
+    {
+      "w": "specified",
+      "start_s": 130.903,
+      "end_s": 131.46
+    },
+    {
+      "w": "assets,",
+      "start_s": 131.518,
+      "end_s": 132.052
+    },
+    {
+      "w": "weights,",
+      "start_s": 132.134,
+      "end_s": 132.575
+    },
+    {
+      "w": "rebalancing,",
+      "start_s": 132.668,
+      "end_s": 133.341
+    },
+    {
+      "w": "taxes,",
+      "start_s": 133.364,
+      "end_s": 133.875
+    },
+    {
+      "w": "and",
+      "start_s": 133.898,
+      "end_s": 133.991
+    },
+    {
+      "w": "drawdowns.",
+      "start_s": 134.038,
+      "end_s": 134.885
+    },
+    {
+      "w": "Memory",
+      "start_s": 135.582,
+      "end_s": 135.907
+    },
+    {
+      "w": "looks",
+      "start_s": 135.953,
+      "end_s": 136.139
+    },
+    {
+      "w": "speculative",
+      "start_s": 136.162,
+      "end_s": 136.94
+    },
+    {
+      "w": "because",
+      "start_s": 137.01,
+      "end_s": 137.288
+    },
+    {
+      "w": "its",
+      "start_s": 137.323,
+      "end_s": 137.428
+    },
+    {
+      "w": "price",
+      "start_s": 137.486,
+      "end_s": 137.788
+    },
+    {
+      "w": "moved",
+      "start_s": 137.834,
+      "end_s": 138.078
+    },
+    {
+      "w": "fast.",
+      "start_s": 138.124,
+      "end_s": 138.716
+    },
+    {
+      "w": "Underneath",
+      "start_s": 139.041,
+      "end_s": 139.506
+    },
+    {
+      "w": "it",
+      "start_s": 139.564,
+      "end_s": 139.692
+    },
+    {
+      "w": "are",
+      "start_s": 139.843,
+      "end_s": 140.04
+    },
+    {
+      "w": "scarce",
+      "start_s": 140.075,
+      "end_s": 140.446
+    },
+    {
+      "w": "production",
+      "start_s": 140.493,
+      "end_s": 140.946
+    },
+    {
+      "w": "capacity,",
+      "start_s": 141.004,
+      "end_s": 141.77
+    },
+    {
+      "w": "long",
+      "start_s": 142.048,
+      "end_s": 142.269
+    },
+    {
+      "w": "construction",
+      "start_s": 142.327,
+      "end_s": 142.861
+    },
+    {
+      "w": "times,",
+      "start_s": 142.919,
+      "end_s": 143.442
+    },
+    {
+      "w": "complex",
+      "start_s": 143.616,
+      "end_s": 144.103
+    },
+    {
+      "w": "packaging,",
+      "start_s": 144.185,
+      "end_s": 144.835
+    },
+    {
+      "w": "shipped",
+      "start_s": 144.928,
+      "end_s": 145.253
+    },
+    {
+      "w": "products,",
+      "start_s": 145.311,
+      "end_s": 145.915
+    },
+    {
+      "w": "growing",
+      "start_s": 146.066,
+      "end_s": 146.402
+    },
+    {
+      "w": "revenue,",
+      "start_s": 146.472,
+      "end_s": 147.006
+    },
+    {
+      "w": "and",
+      "start_s": 147.157,
+      "end_s": 147.285
+    },
+    {
+      "w": "customers",
+      "start_s": 147.366,
+      "end_s": 147.83
+    },
+    {
+      "w": "committing",
+      "start_s": 147.877,
+      "end_s": 148.213
+    },
+    {
+      "w": "to",
+      "start_s": 148.26,
+      "end_s": 148.329
+    },
+    {
+      "w": "supply",
+      "start_s": 148.387,
+      "end_s": 148.759
+    },
+    {
+      "w": "years",
+      "start_s": 148.851,
+      "end_s": 149.107
+    },
+    {
+      "w": "in",
+      "start_s": 149.142,
+      "end_s": 149.2
+    },
+    {
+      "w": "advance.",
+      "start_s": 149.246,
+      "end_s": 149.885
+    },
+    {
+      "w": "The",
+      "start_s": 150.326,
+      "end_s": 150.442
+    },
+    {
+      "w": "S&P",
+      "start_s": 150.512,
+      "end_s": 150.872
+    },
+    {
+      "w": "500",
+      "start_s": 151.023,
+      "end_s": 151.557
+    },
+    {
+      "w": "looks",
+      "start_s": 151.615,
+      "end_s": 151.812
+    },
+    {
+      "w": "safe",
+      "start_s": 151.835,
+      "end_s": 152.125
+    },
+    {
+      "w": "because",
+      "start_s": 152.172,
+      "end_s": 152.474
+    },
+    {
+      "w": "the",
+      "start_s": 152.509,
+      "end_s": 152.578
+    },
+    {
+      "w": "label",
+      "start_s": 152.636,
+      "end_s": 152.973
+    },
+    {
+      "w": "says",
+      "start_s": 153.043,
+      "end_s": 153.24
+    },
+    {
+      "w": "five",
+      "start_s": 153.31,
+      "end_s": 153.623
+    },
+    {
+      "w": "hundred.",
+      "start_s": 153.67,
+      "end_s": 154.204
+    },
+    {
+      "w": "Underneath",
+      "start_s": 154.645,
+      "end_s": 155.109
+    },
+    {
+      "w": "it",
+      "start_s": 155.179,
+      "end_s": 155.26
+    },
+    {
+      "w": "is",
+      "start_s": 155.33,
+      "end_s": 155.446
+    },
+    {
+      "w": "a",
+      "start_s": 155.492,
+      "end_s": 155.516
+    },
+    {
+      "w": "market-cap-weighted",
+      "start_s": 155.597,
+      "end_s": 156.572
+    },
+    {
+      "w": "machine",
+      "start_s": 156.619,
+      "end_s": 156.99
+    },
+    {
+      "w": "that",
+      "start_s": 157.025,
+      "end_s": 157.153
+    },
+    {
+      "w": "may",
+      "start_s": 157.199,
+      "end_s": 157.327
+    },
+    {
+      "w": "be",
+      "start_s": 157.385,
+      "end_s": 157.489
+    },
+    {
+      "w": "too",
+      "start_s": 157.547,
+      "end_s": 157.71
+    },
+    {
+      "w": "concentrated",
+      "start_s": 157.78,
+      "end_s": 158.465
+    },
+    {
+      "w": "to",
+      "start_s": 158.511,
+      "end_s": 158.569
+    },
+    {
+      "w": "diversify",
+      "start_s": 158.639,
+      "end_s": 159.219
+    },
+    {
+      "w": "properly",
+      "start_s": 159.3,
+      "end_s": 159.765
+    },
+    {
+      "w": "and",
+      "start_s": 159.823,
+      "end_s": 159.904
+    },
+    {
+      "w": "too",
+      "start_s": 159.951,
+      "end_s": 160.102
+    },
+    {
+      "w": "diluted",
+      "start_s": 160.171,
+      "end_s": 160.659
+    },
+    {
+      "w": "to",
+      "start_s": 160.705,
+      "end_s": 160.763
+    },
+    {
+      "w": "compound",
+      "start_s": 160.833,
+      "end_s": 161.228
+    },
+    {
+      "w": "fast",
+      "start_s": 161.297,
+      "end_s": 161.576
+    },
+    {
+      "w": "enough",
+      "start_s": 161.622,
+      "end_s": 161.843
+    },
+    {
+      "w": "for",
+      "start_s": 161.866,
+      "end_s": 161.959
+    },
+    {
+      "w": "an",
+      "start_s": 161.994,
+      "end_s": 162.052
+    },
+    {
+      "w": "ambitious",
+      "start_s": 162.087,
+      "end_s": 162.551
+    },
+    {
+      "w": "wealth",
+      "start_s": 162.621,
+      "end_s": 162.864
+    },
+    {
+      "w": "target.",
+      "start_s": 162.911,
+      "end_s": 163.433
+    },
+    {
+      "w": "One",
+      "start_s": 164.246,
+      "end_s": 164.49
+    },
+    {
+      "w": "trade",
+      "start_s": 164.525,
+      "end_s": 164.826
+    },
+    {
+      "w": "advertises",
+      "start_s": 164.873,
+      "end_s": 165.546
+    },
+    {
+      "w": "its",
+      "start_s": 165.604,
+      "end_s": 165.744
+    },
+    {
+      "w": "danger",
+      "start_s": 165.79,
+      "end_s": 166.138
+    },
+    {
+      "w": "while",
+      "start_s": 166.196,
+      "end_s": 166.429
+    },
+    {
+      "w": "selling",
+      "start_s": 166.464,
+      "end_s": 166.754
+    },
+    {
+      "w": "a",
+      "start_s": 166.8,
+      "end_s": 166.823
+    },
+    {
+      "w": "bottleneck.",
+      "start_s": 166.893,
+      "end_s": 167.613
+    },
+    {
+      "w": "The",
+      "start_s": 168.054,
+      "end_s": 168.193
+    },
+    {
+      "w": "other",
+      "start_s": 168.263,
+      "end_s": 168.542
+    },
+    {
+      "w": "advertises",
+      "start_s": 168.658,
+      "end_s": 169.389
+    },
+    {
+      "w": "diversification",
+      "start_s": 169.447,
+      "end_s": 170.341
+    },
+    {
+      "w": "while",
+      "start_s": 170.399,
+      "end_s": 170.597
+    },
+    {
+      "w": "concentrating",
+      "start_s": 170.631,
+      "end_s": 171.282
+    },
+    {
+      "w": "around",
+      "start_s": 171.328,
+      "end_s": 171.572
+    },
+    {
+      "w": "the",
+      "start_s": 171.607,
+      "end_s": 171.676
+    },
+    {
+      "w": "same",
+      "start_s": 171.723,
+      "end_s": 171.943
+    },
+    {
+      "w": "technological",
+      "start_s": 171.99,
+      "end_s": 172.652
+    },
+    {
+      "w": "order,",
+      "start_s": 172.721,
+      "end_s": 173.22
+    },
+    {
+      "w": "then",
+      "start_s": 173.429,
+      "end_s": 173.592
+    },
+    {
+      "w": "spreads",
+      "start_s": 173.638,
+      "end_s": 173.964
+    },
+    {
+      "w": "the",
+      "start_s": 173.998,
+      "end_s": 174.068
+    },
+    {
+      "w": "remaining",
+      "start_s": 174.126,
+      "end_s": 174.486
+    },
+    {
+      "w": "dollar",
+      "start_s": 174.544,
+      "end_s": 174.823
+    },
+    {
+      "w": "across",
+      "start_s": 174.857,
+      "end_s": 175.171
+    },
+    {
+      "w": "businesses",
+      "start_s": 175.229,
+      "end_s": 175.763
+    },
+    {
+      "w": "that",
+      "start_s": 175.81,
+      "end_s": 175.926
+    },
+    {
+      "w": "may",
+      "start_s": 175.972,
+      "end_s": 176.123
+    },
+    {
+      "w": "improve",
+      "start_s": 176.169,
+      "end_s": 176.529
+    },
+    {
+      "w": "neither",
+      "start_s": 176.564,
+      "end_s": 176.785
+    },
+    {
+      "w": "return",
+      "start_s": 176.854,
+      "end_s": 177.226
+    },
+    {
+      "w": "nor",
+      "start_s": 177.272,
+      "end_s": 177.4
+    },
+    {
+      "w": "defense.",
+      "start_s": 177.458,
+      "end_s": 178.108
+    },
+    {
+      "w": "Maybe",
+      "start_s": 178.433,
+      "end_s": 178.7
+    },
+    {
+      "w": "neither",
+      "start_s": 178.77,
+      "end_s": 179.026
+    },
+    {
+      "w": "is",
+      "start_s": 179.072,
+      "end_s": 179.142
+    },
+    {
+      "w": "a",
+      "start_s": 179.188,
+      "end_s": 179.223
+    },
+    {
+      "w": "bubble.",
+      "start_s": 179.281,
+      "end_s": 179.734
+    },
+    {
+      "w": "Maybe",
+      "start_s": 180.117,
+      "end_s": 180.407
+    },
+    {
+      "w": "both",
+      "start_s": 180.465,
+      "end_s": 180.721
+    },
+    {
+      "w": "can",
+      "start_s": 180.767,
+      "end_s": 180.895
+    },
+    {
+      "w": "become",
+      "start_s": 180.941,
+      "end_s": 181.255
+    },
+    {
+      "w": "one.",
+      "start_s": 181.313,
+      "end_s": 181.649
+    },
+    {
+      "w": "But",
+      "start_s": 182.032,
+      "end_s": 182.183
+    },
+    {
+      "w": "if",
+      "start_s": 182.218,
+      "end_s": 182.288
+    },
+    {
+      "w": "you",
+      "start_s": 182.323,
+      "end_s": 182.404
+    },
+    {
+      "w": "want",
+      "start_s": 182.462,
+      "end_s": 182.613
+    },
+    {
+      "w": "to",
+      "start_s": 182.636,
+      "end_s": 182.683
+    },
+    {
+      "w": "find",
+      "start_s": 182.729,
+      "end_s": 182.915
+    },
+    {
+      "w": "the",
+      "start_s": 182.961,
+      "end_s": 183.031
+    },
+    {
+      "w": "danger,",
+      "start_s": 183.077,
+      "end_s": 183.553
+    },
+    {
+      "w": "stop",
+      "start_s": 183.67,
+      "end_s": 183.948
+    },
+    {
+      "w": "staring",
+      "start_s": 184.006,
+      "end_s": 184.331
+    },
+    {
+      "w": "at",
+      "start_s": 184.366,
+      "end_s": 184.436
+    },
+    {
+      "w": "the",
+      "start_s": 184.471,
+      "end_s": 184.54
+    },
+    {
+      "w": "chart.",
+      "start_s": 184.587,
+      "end_s": 184.981
+    },
+    {
+      "w": "Look",
+      "start_s": 185.132,
+      "end_s": 185.33
+    },
+    {
+      "w": "under",
+      "start_s": 185.376,
+      "end_s": 185.539
+    },
+    {
+      "w": "the",
+      "start_s": 185.574,
+      "end_s": 185.643
+    },
+    {
+      "w": "elevator.",
+      "start_s": 185.713,
+      "end_s": 186.212
+    },
+    {
+      "w": "Find",
+      "start_s": 186.259,
+      "end_s": 186.514
+    },
+    {
+      "w": "the",
+      "start_s": 186.549,
+      "end_s": 186.618
+    },
+    {
+      "w": "cable.",
+      "start_s": 186.653,
+      "end_s": 187.106
+    },
+    {
+      "w": "Ask",
+      "start_s": 187.315,
+      "end_s": 187.594
+    },
+    {
+      "w": "who",
+      "start_s": 187.628,
+      "end_s": 187.733
+    },
+    {
+      "w": "is",
+      "start_s": 187.803,
+      "end_s": 187.872
+    },
+    {
+      "w": "paying,",
+      "start_s": 187.93,
+      "end_s": 188.394
+    },
+    {
+      "w": "what",
+      "start_s": 188.487,
+      "end_s": 188.661
+    },
+    {
+      "w": "is",
+      "start_s": 188.708,
+      "end_s": 188.777
+    },
+    {
+      "w": "scarce,",
+      "start_s": 188.812,
+      "end_s": 189.381
+    },
+    {
+      "w": "how",
+      "start_s": 189.555,
+      "end_s": 189.695
+    },
+    {
+      "w": "quickly",
+      "start_s": 189.764,
+      "end_s": 190.078
+    },
+    {
+      "w": "supply",
+      "start_s": 190.136,
+      "end_s": 190.461
+    },
+    {
+      "w": "can",
+      "start_s": 190.519,
+      "end_s": 190.635
+    },
+    {
+      "w": "respond,",
+      "start_s": 190.681,
+      "end_s": 191.32
+    },
+    {
+      "w": "and",
+      "start_s": 191.39,
+      "end_s": 191.541
+    },
+    {
+      "w": "whether",
+      "start_s": 191.587,
+      "end_s": 191.842
+    },
+    {
+      "w": "the",
+      "start_s": 191.889,
+      "end_s": 191.959
+    },
+    {
+      "w": "buyer",
+      "start_s": 192.017,
+      "end_s": 192.353
+    },
+    {
+      "w": "needs",
+      "start_s": 192.411,
+      "end_s": 192.62
+    },
+    {
+      "w": "cash",
+      "start_s": 192.678,
+      "end_s": 192.957
+    },
+    {
+      "w": "flow—or",
+      "start_s": 192.992,
+      "end_s": 193.654
+    },
+    {
+      "w": "merely",
+      "start_s": 193.712,
+      "end_s": 194.014
+    },
+    {
+      "w": "the",
+      "start_s": 194.072,
+      "end_s": 194.141
+    },
+    {
+      "w": "next",
+      "start_s": 194.188,
+      "end_s": 194.408
+    },
+    {
+      "w": "buyer.",
+      "start_s": 194.466,
+      "end_s": 194.954
+    },
+    {
+      "w": "Right",
+      "start_s": 195.558,
+      "end_s": 195.778
+    },
+    {
+      "w": "now,",
+      "start_s": 195.836,
+      "end_s": 196.08
+    },
+    {
+      "w": "memory",
+      "start_s": 196.127,
+      "end_s": 196.498
+    },
+    {
+      "w": "has",
+      "start_s": 196.556,
+      "end_s": 196.695
+    },
+    {
+      "w": "a",
+      "start_s": 196.753,
+      "end_s": 196.788
+    },
+    {
+      "w": "cable.",
+      "start_s": 196.835,
+      "end_s": 197.346
+    },
+    {
+      "w": "The",
+      "start_s": 197.671,
+      "end_s": 197.798
+    },
+    {
+      "w": "“safe”",
+      "start_s": 197.845,
+      "end_s": 198.193
+    },
+    {
+      "w": "index",
+      "start_s": 198.216,
+      "end_s": 198.611
+    },
+    {
+      "w": "trade",
+      "start_s": 198.669,
+      "end_s": 198.948
+    },
+    {
+      "w": "deserves",
+      "start_s": 198.983,
+      "end_s": 199.412
+    },
+    {
+      "w": "a",
+      "start_s": 199.447,
+      "end_s": 199.482
+    },
+    {
+      "w": "closer",
+      "start_s": 199.528,
+      "end_s": 199.853
+    },
+    {
+      "w": "inspection—and",
+      "start_s": 199.911,
+      "end_s": 200.887
+    },
+    {
+      "w": "perhaps",
+      "start_s": 200.945,
+      "end_s": 201.247
+    },
+    {
+      "w": "competition",
+      "start_s": 201.305,
+      "end_s": 201.908
+    },
+    {
+      "w": "from",
+      "start_s": 201.966,
+      "end_s": 202.105
+    },
+    {
+      "w": "a",
+      "start_s": 202.152,
+      "end_s": 202.175
+    },
+    {
+      "w": "portfolio",
+      "start_s": 202.221,
+      "end_s": 202.895
+    },
+    {
+      "w": "whose",
+      "start_s": 202.941,
+      "end_s": 203.138
+    },
+    {
+      "w": "upside",
+      "start_s": 203.185,
+      "end_s": 203.731
+    },
+    {
+      "w": "and",
+      "start_s": 203.777,
+      "end_s": 203.858
+    },
+    {
+      "w": "defense",
+      "start_s": 203.916,
+      "end_s": 204.323
+    },
+    {
+      "w": "are",
+      "start_s": 204.358,
+      "end_s": 204.462
+    },
+    {
+      "w": "designed",
+      "start_s": 204.497,
+      "end_s": 204.938
+    },
+    {
+      "w": "as",
+      "start_s": 204.973,
+      "end_s": 205.054
+    },
+    {
+      "w": "separate",
+      "start_s": 205.101,
+      "end_s": 205.46
+    },
+    {
+      "w": "jobs.",
+      "start_s": 205.507,
+      "end_s": 206.238
+    }
+  ]
+}

@@ -1,0 +1,96 @@
+{
+  "schema_version": "finance_2d_stick_source_binding.v1",
+  "proof_id": "finance-2d-stick-proof-v1",
+  "inputs": {
+    "canonical_audio": {
+      "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/audio/canonical/history_episode_1_master.mp3",
+      "sha256": "ecacf46c49aee85b912404bfa0e47c37acbae0397b637e2a966c51a625077ce1"
+    },
+    "canonical_words": {
+      "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/audio/canonical/history_episode_1_master.words.json",
+      "sha256": "3773bdd611c96d5e431ed56749d9991825215bb3756043086f14fbbdbe0d1da3"
+    },
+    "claim_ledger": {
+      "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/claim-ledger.v1.json",
+      "sha256": "0f5c49a3ab764ba5ad6ed9d4b14b2fc24fa6c921b9d83342975a7cfe0080edcc"
+    }
+  },
+  "source_window": {
+    "word_start_index": 1025,
+    "word_end_index": 1188,
+    "start_s": 410.26,
+    "end_s": 470.992,
+    "duration_s": 60.732,
+    "indexing": "zero_based_in_canonical_words_json"
+  },
+  "states": [
+    {
+      "id": "basket-product-qualities",
+      "start_word_index": 1025,
+      "end_word_index": 1058,
+      "start_s": 410.26,
+      "end_s": 422.59,
+      "relative_start_s": 0.0,
+      "relative_end_s": 12.33
+    },
+    {
+      "id": "two-jobs",
+      "start_word_index": 1059,
+      "end_word_index": 1075,
+      "start_s": 422.834,
+      "end_s": 428.209,
+      "relative_start_s": 12.574,
+      "relative_end_s": 17.949
+    },
+    {
+      "id": "concentration",
+      "start_word_index": 1076,
+      "end_word_index": 1121,
+      "start_s": 428.534,
+      "end_s": 444.335,
+      "relative_start_s": 18.274,
+      "relative_end_s": 34.075
+    },
+    {
+      "id": "shared-exposure",
+      "start_word_index": 1122,
+      "end_word_index": 1155,
+      "start_s": 444.614,
+      "end_s": 459.614,
+      "relative_start_s": 34.354,
+      "relative_end_s": 49.354
+    },
+    {
+      "id": "long-tail",
+      "start_word_index": 1156,
+      "end_word_index": 1170,
+      "start_s": 460.218,
+      "end_s": 464.223,
+      "relative_start_s": 49.958,
+      "relative_end_s": 53.963
+    },
+    {
+      "id": "admission-versus-weighting",
+      "start_word_index": 1171,
+      "end_word_index": 1188,
+      "start_s": 464.548,
+      "end_s": 470.992,
+      "relative_start_s": 54.288,
+      "relative_end_s": 60.732
+    }
+  ],
+  "numeric_claim": {
+    "claim_id": "sp500-top-ten-concentration",
+    "claim_text": "The ten largest S&P 500 companies represented almost 40% of the index by mid-2025, a concentration level not seen since the mid-1960s.",
+    "display_text": "≈40% of index weight",
+    "as_of": "2025-06-30",
+    "source_location": "PDF page 4, highlights and top-ten concentration chart",
+    "qualifier": "Concentration alone does not prove overvaluation or predict a market decline."
+  },
+  "visual_contract": {
+    "character": "native_face_readable_stick_person",
+    "world": "white_paper",
+    "generated_assets": false
+  },
+  "status": "source_bound"
+}

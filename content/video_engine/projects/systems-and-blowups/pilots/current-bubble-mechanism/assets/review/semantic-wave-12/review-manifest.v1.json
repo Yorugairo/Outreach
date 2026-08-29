@@ -1,0 +1,25 @@
+{
+  "schema_version": "finance_semantic_wave_review.v1",
+  "episode_id": "current-bubble-mechanism",
+  "wave_id": "semantic-wave-12",
+  "status": "operator_approved_for_composition",
+  "generation_method": "built_in_image_gen",
+  "decision_rule": "This plate may only explain shared causal exposure plus automatic allocation. Its blank upper-left field is reserved for a deterministic evidence card after the spoken concentration claim; it must not be used to claim a crash, forecast, or causal certainty.",
+  "candidates": [
+    {
+      "candidate_id": "shared-cause-automatic-allocation-v1",
+      "path": "shared-cause-automatic-allocation-v1.png",
+      "sha256": "97a8ceb2c4671ba9e9493785791f41068a333651f09f873833a4224eae6dd578",
+      "cluster_id": "cbm-f-003",
+      "purpose": "Show a many-ticker index container whose components share weather-like causal pressure while automatic weighted cash allocation continues; the image explains exposure structure, not an outcome.",
+      "status": "selected",
+      "qa": [
+        "weather represents shared causes rather than a forecast",
+        "allocation mechanism and company tiles are visually separate",
+        "no numerical, ticker, logo, or factual text is embedded",
+        "upper-left field remains available only for a local evidence card"
+      ]
+    }
+  ],
+  "artifact_hash": "c7329dd2e1271fc08b624daef7606113db10eec6d9c14cbfc6567a9d63e741e0"
+}

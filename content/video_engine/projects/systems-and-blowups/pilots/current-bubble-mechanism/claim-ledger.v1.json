@@ -1,0 +1,566 @@
+{
+  "schema_version": "finance_claim_ledger.v1",
+  "episode_id": "current-bubble-mechanism",
+  "research_state": "source_locked",
+  "contrarian_frame": true,
+  "countercase": "Real scarcity, adoption, shipments, and contracts do not prove that memory equities are fairly valued; new supply, efficiency, customer concentration, or lower AI capital spending can still produce a severe cyclical reversal. Historic S&P concentration has not automatically prevented strong long-run index returns, and a concentrated-plus-defensive alternative may replace dilution with selection, tracking-error, correlation, tax, and behavioral risk.",
+  "failure_conditions": [
+    "Memory capacity expands faster than durable demand.",
+    "Customer commitments fail to translate into contracted volume, deposits, or revenue.",
+    "The memory trade requires implausible future cash flows at the final valuation snapshot.",
+    "S&P 500 leadership broadens without a material index drawdown.",
+    "A specified concentrated-plus-defensive portfolio fails to improve return or drawdown after costs across multiple regimes."
+  ],
+  "claims": [
+    {
+      "claim_id": "memory-architecture-dependency",
+      "text": "AI system performance depends on memory-subsystem performance and capacity across GPU, ASIC, and CPU designs.",
+      "classification": "observed_fact",
+      "temporal_kind": "current",
+      "as_of": "2026-06-24",
+      "source_locators": [
+        {
+          "source_id": "micron-q3-2026-remarks",
+          "publisher": "Micron Technology",
+          "title": "Fiscal Q3 2026 Earnings Call Prepared Remarks",
+          "url": "https://investors.micron.com/static-files/631b1a32-5537-46ae-8f40-82e42fc79dfe",
+          "location": "PDF page 1, lines 56-60 in extracted text",
+          "published_at": "2026-06-24",
+          "accessed_at": "2026-08-07",
+          "primary": true
+        }
+      ],
+      "calculation": null,
+      "qualifier": "This is a manufacturer statement but describes the shared architectural requirement rather than a market-size forecast.",
+      "counterevidence_refs": [
+        "memory-countercase"
+      ],
+      "review_state": "source_checked"
+    },
+    {
+      "claim_id": "hbm-capacity-trade-ratio",
+      "text": "HBM growth and increasing trade ratio pressure non-HBM supply while greenfield fabs remain slow and complex to build.",
+      "classification": "observed_fact",
+      "temporal_kind": "current",
+      "as_of": "2026-06-24",
+      "source_locators": [
+        {
+          "source_id": "micron-q3-2026-remarks",
+          "publisher": "Micron Technology",
+          "title": "Fiscal Q3 2026 Earnings Call Prepared Remarks",
+          "url": "https://investors.micron.com/static-files/631b1a32-5537-46ae-8f40-82e42fc79dfe",
+          "location": "PDF page 1, lines 41-55 in extracted text",
+          "published_at": "2026-06-24",
+          "accessed_at": "2026-08-07",
+          "primary": true
+        }
+      ],
+      "calculation": null,
+      "qualifier": "The script avoids the attachment's unsupported two-to-three-times numerical trade-ratio estimate and uses the manufacturer's directional statement.",
+      "counterevidence_refs": [
+        "memory-countercase"
+      ],
+      "review_state": "source_checked"
+    },
+    {
+      "claim_id": "micron-strategic-customer-agreements",
+      "text": "Micron reported 16 strategic customer agreements, usually five years, covering about 20% of DRAM volume and one-third of NAND volume over the period, with take-or-pay commitments.",
+      "classification": "observed_fact",
+      "temporal_kind": "numeric",
+      "as_of": "2026-06-24",
+      "source_locators": [
+        {
+          "source_id": "micron-q3-2026-remarks",
+          "publisher": "Micron Technology",
+          "title": "Fiscal Q3 2026 Earnings Call Prepared Remarks",
+          "url": "https://investors.micron.com/static-files/631b1a32-5537-46ae-8f40-82e42fc79dfe",
+          "location": "PDF pages 1-2, lines 61-100 in extracted text",
+          "published_at": "2026-06-24",
+          "accessed_at": "2026-08-07",
+          "primary": true
+        }
+      ],
+      "calculation": null,
+      "qualifier": "Company-reported agreements are evidence of buyer commitment, not a guarantee of realized revenue or stock returns.",
+      "counterevidence_refs": [
+        "memory-countercase"
+      ],
+      "review_state": "source_checked"
+    },
+    {
+      "claim_id": "samsung-hbm4-growth",
+      "text": "Samsung began commercial HBM4 shipments and said it expected 2026 HBM sales to more than triple from 2025.",
+      "classification": "observed_fact",
+      "temporal_kind": "dated",
+      "as_of": "2026-02-12",
+      "source_locators": [
+        {
+          "source_id": "samsung-hbm4-2026",
+          "publisher": "Samsung Electronics",
+          "title": "Samsung Ships Industry-First Commercial HBM4 With Ultimate Performance for AI Computing",
+          "url": "https://news.samsung.com/global/samsung-ships-industry-first-commercial-hbm4-with-ultimate-performance-for-ai-computing",
+          "location": "Comprehensive Yet Agile Production Capabilities, paragraph containing 2026 sales outlook",
+          "published_at": "2026-02-12",
+          "accessed_at": "2026-08-07",
+          "primary": true
+        }
+      ],
+      "calculation": null,
+      "qualifier": "The sales-growth figure is company guidance and must be described as Samsung's expectation.",
+      "counterevidence_refs": [
+        "memory-countercase"
+      ],
+      "review_state": "source_checked"
+    },
+    {
+      "claim_id": "sk-hynix-demand-exceeds-supply",
+      "text": "SK hynix reported record first-quarter 2026 performance driven by AI-related memory and said customer demand exceeded supply capacity.",
+      "classification": "observed_fact",
+      "temporal_kind": "dated",
+      "as_of": "2026-04-23",
+      "source_locators": [
+        {
+          "source_id": "sk-hynix-q1-2026",
+          "publisher": "SK hynix",
+          "title": "SK hynix Announces 1Q26 Financial Results",
+          "url": "https://news.skhynix.com/en/q1-2026-business-results/",
+          "location": "News highlights and body paragraphs describing AI demand, high-value products, and demand exceeding supply capacity",
+          "published_at": "2026-04-23",
+          "accessed_at": "2026-08-07",
+          "primary": true
+        }
+      ],
+      "calculation": null,
+      "qualifier": "Preliminary company-reported results and management interpretation are not independent market validation.",
+      "counterevidence_refs": [
+        "memory-countercase"
+      ],
+      "review_state": "source_checked"
+    },
+    {
+      "claim_id": "sp500-top-ten-concentration",
+      "text": "The ten largest S&P 500 companies represented almost 40% of the index by mid-2025, a concentration level not seen since the mid-1960s.",
+      "classification": "observed_fact",
+      "temporal_kind": "numeric",
+      "as_of": "2025-06-30",
+      "source_locators": [
+        {
+          "source_id": "spdj-vanguard-concentration-2026",
+          "publisher": "S&P Dow Jones Indices and Vanguard",
+          "title": "In the Shadows of Giants",
+          "url": "https://www.spglobal.com/content/dam/spglobal/global-assets/en/special-reports/partner-perspectives/Partner-Perspectives_UnlockingPotentialAhead.pdf",
+          "location": "PDF page 4, highlights and top-ten concentration chart",
+          "published_at": "2026-01-01",
+          "accessed_at": "2026-08-07",
+          "primary": true
+        }
+      ],
+      "calculation": null,
+      "qualifier": "Concentration alone does not prove overvaluation or predict a market decline.",
+      "counterevidence_refs": [
+        "sp500-countercase"
+      ],
+      "review_state": "source_checked"
+    },
+    {
+      "claim_id": "index-fund-asset-scale",
+      "text": "Index mutual funds and ETFs held $19.1 trillion and 52% of long-term fund assets at year-end 2025; domestic equity index funds held about 19% of U.S. stock value.",
+      "classification": "observed_fact",
+      "temporal_kind": "numeric",
+      "as_of": "2025-12-31",
+      "source_locators": [
+        {
+          "source_id": "ici-2026-factbook",
+          "publisher": "Investment Company Institute",
+          "title": "2026 Investment Company Fact Book",
+          "url": "https://www.ici.org/system/files/2026-04/2026-factbook.pdf",
+          "location": "Growth of Index Funds, figures 2.5 and 2.6",
+          "published_at": "2026-04-27",
+          "accessed_at": "2026-08-07",
+          "primary": true
+        }
+      ],
+      "calculation": null,
+      "qualifier": "Index funds are large but do not own or set the price of the entire U.S. equity market.",
+      "counterevidence_refs": [
+        "sp500-countercase"
+      ],
+      "review_state": "source_checked"
+    },
+    {
+      "claim_id": "sp500-trailing-return-snapshot",
+      "text": "The S&P 500's annualized price return for the ten years ending June 30, 2026 was 13.58%, with annualized risk of 15.36%.",
+      "classification": "observed_fact",
+      "temporal_kind": "numeric",
+      "as_of": "2026-06-30",
+      "source_locators": [
+        {
+          "source_id": "spdj-sp500-index-page-2026",
+          "publisher": "S&P Dow Jones Indices",
+          "title": "S&P 500",
+          "url": "https://www.spglobal.com/spdji/en/indices/equity/sp-500/",
+          "location": "Performance and risk tables, 10-year annualized price return and risk as of June 30, 2026",
+          "published_at": null,
+          "accessed_at": "2026-08-07",
+          "primary": true
+        }
+      ],
+      "calculation": null,
+      "qualifier": "This is a backward-looking price-return snapshot; it excludes dividends and does not imply that the next 25 years will repeat the prior decade.",
+      "counterevidence_refs": [
+        "sp500-countercase"
+      ],
+      "review_state": "source_checked"
+    },
+    {
+      "claim_id": "generational-wealth-return-hurdle",
+      "text": "Growing $25,000 to $1,000,000 over 25 years with no additional contributions requires approximately 15.9% annual compound growth before taxes and inflation.",
+      "classification": "calculation",
+      "temporal_kind": "timeless",
+      "as_of": null,
+      "source_locators": [
+        {
+          "source_id": "sec-compound-interest-calculator",
+          "publisher": "U.S. Securities and Exchange Commission",
+          "title": "Compound Interest Calculator",
+          "url": "https://www.investor.gov/financial-tools-calculators/calculators/compound-interest-calculator",
+          "location": "Compound-growth inputs and calculation method",
+          "published_at": null,
+          "accessed_at": "2026-08-07",
+          "primary": true
+        }
+      ],
+      "calculation": {
+        "formula": "(target / starting_value)^(1 / years) - 1",
+        "inputs": [
+          "target = $1,000,000",
+          "starting_value = $25,000",
+          "years = 25",
+          "no additional contributions"
+        ],
+        "result": "approximately 15.88% annual compound growth"
+      },
+      "qualifier": "This is an illustrative return hurdle, not a universal definition of generational wealth or an expected investment return; contributions, taxes, inflation, fees, and dividends change the result.",
+      "counterevidence_refs": [
+        "sp500-countercase"
+      ],
+      "review_state": "source_checked"
+    },
+    {
+      "claim_id": "sp500-market-leaders-comparison",
+      "text": "As of June 30, 2026, the S&P 500 Market Leaders Index showed a 16.01% ten-year annualized price return versus 13.58% for the S&P 500, with slightly lower measured ten-year volatility.",
+      "classification": "observed_fact",
+      "temporal_kind": "numeric",
+      "as_of": "2026-06-30",
+      "source_locators": [
+        {
+          "source_id": "spdj-market-leaders-index-page-2026",
+          "publisher": "S&P Dow Jones Indices",
+          "title": "S&P 500 Market Leaders Index",
+          "url": "https://www.spglobal.com/spdji/en/indices/dividends-factors/sp-500-market-leaders-index/",
+          "location": "Index description plus performance and risk tables as of June 30, 2026",
+          "published_at": null,
+          "accessed_at": "2026-08-07",
+          "primary": true
+        },
+        {
+          "source_id": "spdj-market-leaders-brochure-2026",
+          "publisher": "S&P Dow Jones Indices",
+          "title": "S&P 500 Market Leaders Index Brochure",
+          "url": "https://www.spglobal.com/spdji/en/documents/brochure/brochure-sp-500-market-leaders-index.pdf",
+          "location": "Methodology summary, performance comparison, simulated-history disclosure, and maximum drawdown table",
+          "published_at": null,
+          "accessed_at": "2026-08-07",
+          "primary": true
+        }
+      ],
+      "calculation": null,
+      "qualifier": "The index launched in late 2024, so most ten-year history is hypothetical back-testing; its brochure also reports a deeper maximum drawdown than the S&P 500 over the illustrated full period.",
+      "counterevidence_refs": [
+        "sp500-countercase"
+      ],
+      "review_state": "source_checked"
+    },
+    {
+      "claim_id": "equal-weight-long-tail-countercase",
+      "text": "The S&P 500 Equal Weight Index outperformed the cap-weighted S&P 500 over its full live history beginning in 2003, although it materially lagged during the recent mega-cap-led period.",
+      "classification": "sourced_interpretation",
+      "temporal_kind": "current",
+      "as_of": "2026-02-28",
+      "source_locators": [
+        {
+          "source_id": "spdj-equal-weight-faq",
+          "publisher": "S&P Dow Jones Indices",
+          "title": "S&P 500 Equal Weight Index FAQ",
+          "url": "https://www.spglobal.com/spdji/en/education/article/sp-500-equal-weight-index-faq/",
+          "location": "Live-history performance and diversification discussion",
+          "published_at": null,
+          "accessed_at": "2026-08-07",
+          "primary": true
+        },
+        {
+          "source_id": "spdj-factor-dashboard-2026-02",
+          "publisher": "S&P Dow Jones Indices",
+          "title": "S&P 500 Factor Dashboard February 2026",
+          "url": "https://www.spglobal.com/spdji/en/documents/performance-reports/dashboard-sp-500-factor-2026-02.pdf",
+          "location": "Equal Weight annualized total return and relative return table",
+          "published_at": "2026-02-28",
+          "accessed_at": "2026-08-07",
+          "primary": true
+        }
+      ],
+      "calculation": null,
+      "qualifier": "Long-run equal-weight outperformance is evidence that the long tail is not inherently dead weight; recent underperformance also shows the result is regime-dependent.",
+      "counterevidence_refs": [
+        "sp500-hidden-bubble-risk-inference"
+      ],
+      "review_state": "source_checked"
+    },
+    {
+      "claim_id": "korea-italy-listed-market-comparison",
+      "text": "Recent exchange data imply Korean listed-market capitalization of about EUR 3.2 trillion versus about EUR 1.16 trillion for the Milan market.",
+      "classification": "calculation",
+      "temporal_kind": "numeric",
+      "as_of": "2026-07-27",
+      "source_locators": [
+        {
+          "source_id": "krx-market-cap-2026",
+          "publisher": "Korea Exchange",
+          "title": "Global KRX market overview",
+          "url": "https://global.krx.co.kr/",
+          "location": "Market capitalization: KRW 5,370 trillion, KOSPI plus KOSDAQ plus KONEX",
+          "published_at": null,
+          "accessed_at": "2026-08-07",
+          "primary": true
+        },
+        {
+          "source_id": "borsa-italiana-market-cap-2026",
+          "publisher": "Borsa Italiana",
+          "title": "Partecipate statali: valore di Borsa sale a 394,8 miliardi",
+          "url": "https://www.borsaitaliana.it/borsa/notizie/teleborsa/finanza/partecipate-statali-valore-di-borsa-sale-a3948-miliardi-quota-stato-a1334miliardi-83_2026-07-10_TLB.html?lang=it",
+          "location": "Total Milan-market capitalization EUR 1,157.8 billion at the beginning of July 2026",
+          "published_at": "2026-07-10",
+          "accessed_at": "2026-08-07",
+          "primary": false
+        },
+        {
+          "source_id": "ecb-eur-krw-2026",
+          "publisher": "European Central Bank",
+          "title": "Euro foreign exchange reference rates",
+          "url": "https://www.ecb.europa.eu/stats/policy_and_exchange_rates/euro_reference_exchange_rates/html/index.en.html",
+          "location": "27 July 2026 EUR/KRW reference rate: 1 EUR = 1,674.31 KRW",
+          "published_at": "2026-07-27",
+          "accessed_at": "2026-08-07",
+          "primary": true
+        }
+      ],
+      "calculation": {
+        "formula": "KRX market capitalization in KRW / ECB KRW per EUR",
+        "inputs": [
+          "KRW 5,370 trillion",
+          "1 EUR = KRW 1,674.31",
+          "Milan market capitalization EUR 1,157.8 billion"
+        ],
+        "result": "KRX approximately EUR 3.21 trillion, or approximately 2.77 times the Milan market"
+      },
+      "qualifier": "This compares listed-market capitalization, not GDP, national wealth, cultural value, or perfectly harmonized exchange universes; the Borsa article republishes CoMar calculations and is not treated as a primary statistical release.",
+      "counterevidence_refs": [
+        "cross-exchange-comparability-limit"
+      ],
+      "review_state": "source_checked"
+    },
+    {
+      "claim_id": "korea-technology-intensity",
+      "text": "Korea's R&D intensity was about 5% of GDP in 2023, among the OECD's highest, and the OECD says semiconductor exports are driving 2026 growth and private investment.",
+      "classification": "sourced_interpretation",
+      "temporal_kind": "current",
+      "as_of": "2026-07-01",
+      "source_locators": [
+        {
+          "source_id": "oecd-sti-outlook-2025",
+          "publisher": "OECD",
+          "title": "OECD Science, Technology and Innovation Outlook 2025",
+          "url": "https://www.oecd.org/en/publications/oecd-science-technology-and-innovation-outlook-2025_5fe57b90-en/full-report/mobilising-science-technology-and-innovation-policies-for-transformative-change_7c5f5933.html",
+          "location": "Figure 1.2 discussion: Korea R&D intensity approximately 5% in 2023",
+          "published_at": "2025-10-01",
+          "accessed_at": "2026-08-07",
+          "primary": true
+        },
+        {
+          "source_id": "oecd-korea-snapshot-2026",
+          "publisher": "OECD",
+          "title": "Korea Economic Snapshot",
+          "url": "https://www.oecd.org/en/topics/sub-issues/economic-surveys/korea-economic-snapshot.html",
+          "location": "June 2026 outlook: semiconductor exports continue to drive growth and private investment",
+          "published_at": "2026-07-01",
+          "accessed_at": "2026-08-07",
+          "primary": true
+        }
+      ],
+      "calculation": null,
+      "qualifier": "Technology intensity supports the macro-restructuring argument but does not alone explain equity valuation or guarantee outperformance.",
+      "counterevidence_refs": [
+        "korea-conglomerate-concentration-risk"
+      ],
+      "review_state": "source_checked"
+    },
+    {
+      "claim_id": "timely-trailing-market-return-comparison",
+      "text": "Over the one-year trading windows ending August 7, 2026, stored adjusted-close observations show Micron up 685.7%, the KOSPI up 93.9%, and the S&P 500 Price Index up 22.4%.",
+      "classification": "market_snapshot",
+      "temporal_kind": "numeric",
+      "as_of": "2026-08-07",
+      "source_locators": [
+        {
+          "source_id": "yfinance-trailing-market-data-2026-08-07",
+          "publisher": "Yahoo Finance via yfinance",
+          "title": "Stored one-year adjusted-close market-data packet",
+          "url": "https://finance.yahoo.com/",
+          "location": "current-bubble-mechanism/edit/semantic-v2/market-data-yfinance-trailing-2026-08-07.v1.json; daily observations for MU, ^KS11, and ^GSPC, ending 2026-08-07",
+          "published_at": null,
+          "accessed_at": "2026-08-08",
+          "primary": false
+        }
+      ],
+      "calculation": {
+        "formula": "(final adjusted close / first adjusted close - 1) * 100",
+        "inputs": [
+          "MU: 111.69072723 to 877.57000732",
+          "^KS11: 3227.67993164 to 6258.77001953",
+          "^GSPC: stored adjusted-close observations for the same stated window"
+        ],
+        "result": "MU +685.7%, KOSPI +93.9%, S&P 500 +22.4%, rounded to one decimal"
+      },
+      "qualifier": "This is a one-year, adjusted-close snapshot for the stated trading windows, not a valuation conclusion, a forecast, or a total-return comparison. Trading calendars and price-basis choices can change comparable figures.",
+      "counterevidence_refs": [
+        "memory-countercase",
+        "sp500-countercase"
+      ],
+      "review_state": "source_checked",
+      "market_data_packet_hash": "9b1d18352888f135aeae830c255cf6da12c82db9e554262e2c6bbb6e8d5c405c"
+    },
+    {
+      "claim_id": "memory-bottleneck-not-bubble-inference",
+      "text": "The current memory boom is better described as physical bottleneck repricing than a demand-free speculative bubble.",
+      "classification": "channel_inference",
+      "temporal_kind": "current",
+      "as_of": "2026-08-07",
+      "source_locators": [],
+      "calculation": null,
+      "qualifier": "This is the episode thesis, not a claim that every memory security is fairly valued or appropriate for any investor.",
+      "counterevidence_refs": [
+        "memory-countercase"
+      ],
+      "review_state": "draft"
+    },
+    {
+      "claim_id": "sp500-hidden-bubble-risk-inference",
+      "text": "The S&P 500 may fail both implied portfolio jobs: mega-cap concentration weakens the diversification benefit, while the remaining long tail can dilute exceptional return drivers without necessarily supplying independent defense or enough growth for an ambitious wealth target.",
+      "classification": "channel_inference",
+      "temporal_kind": "current",
+      "as_of": "2026-08-07",
+      "source_locators": [],
+      "calculation": null,
+      "qualifier": "This is the episode's portfolio-design inference. It does not prove the index is in a bubble, that long-tail companies are valueless, or that index investing is unsuitable for broad participation and retirement saving.",
+      "counterevidence_refs": [
+        "sp500-countercase",
+        "equal-weight-long-tail-countercase"
+      ],
+      "review_state": "draft"
+    },
+    {
+      "claim_id": "concentrated-defensive-barbell-hypothesis",
+      "text": "A rules-based basket of exceptional companies combined with a separately designed defensive basket can be tested as a way to seek more upside with less portfolio-level downside than a single broad cap-weighted index.",
+      "classification": "scenario",
+      "temporal_kind": "current",
+      "as_of": "2026-08-07",
+      "source_locators": [],
+      "calculation": null,
+      "qualifier": "This is a testable portfolio hypothesis, not a guarantee or personalized recommendation. Results depend on specified assets, weights, rebalancing, costs, taxes, correlations, drawdowns, and investor behavior; the concentrated sleeve may be substantially more volatile.",
+      "counterevidence_refs": [
+        "sp500-countercase",
+        "equal-weight-long-tail-countercase"
+      ],
+      "review_state": "draft"
+    },
+    {
+      "claim_id": "memory-countercase",
+      "text": "Memory can still experience bubble pricing or a severe cyclical reversal if new capacity, efficiency gains, customer capital-spending cuts, qualification failures, or buyer concentration overwhelm the current shortage.",
+      "classification": "scenario",
+      "temporal_kind": "current",
+      "as_of": "2026-08-07",
+      "source_locators": [],
+      "calculation": null,
+      "qualifier": "This is the strongest combined failure scenario for the episode thesis, not a forecast that every condition will occur.",
+      "counterevidence_refs": [
+        "memory-bottleneck-not-bubble-inference"
+      ],
+      "review_state": "draft"
+    },
+    {
+      "claim_id": "sp500-countercase",
+      "text": "Historic concentration has not automatically prevented strong long-run S&P 500 returns because declining leaders lose weight and new winners can enter and grow.",
+      "classification": "sourced_interpretation",
+      "temporal_kind": "timeless",
+      "as_of": null,
+      "source_locators": [
+        {
+          "source_id": "spdj-vanguard-concentration-2026",
+          "publisher": "S&P Dow Jones Indices and Vanguard",
+          "title": "In the Shadows of Giants",
+          "url": "https://www.spglobal.com/content/dam/spglobal/global-assets/en/special-reports/partner-perspectives/Partner-Perspectives_UnlockingPotentialAhead.pdf",
+          "location": "PDF pages 5-9, historical top-ten cohort and index-performance discussion",
+          "published_at": "2026-01-01",
+          "accessed_at": "2026-08-07",
+          "primary": true
+        }
+      ],
+      "calculation": null,
+      "qualifier": "Past index adaptation does not prove current valuation is fair or eliminate drawdown risk.",
+      "counterevidence_refs": [
+        "sp500-hidden-bubble-risk-inference"
+      ],
+      "review_state": "source_checked"
+    },
+    {
+      "claim_id": "cross-exchange-comparability-limit",
+      "text": "KRX and Milan market-capitalization totals are not perfectly harmonized exchange universes and must not be presented as GDP or national-wealth rankings.",
+      "classification": "channel_inference",
+      "temporal_kind": "timeless",
+      "as_of": null,
+      "source_locators": [],
+      "calculation": null,
+      "qualifier": "The comparison is directional and explicitly limited to recent listed-equity capitalization.",
+      "counterevidence_refs": [
+        "korea-italy-listed-market-comparison"
+      ],
+      "review_state": "source_checked"
+    },
+    {
+      "claim_id": "korea-conglomerate-concentration-risk",
+      "text": "Korea's technology intensity is concentrated in large industrial groups, which can make national R&D strength vulnerable to firm-specific execution and governance risk.",
+      "classification": "sourced_interpretation",
+      "temporal_kind": "timeless",
+      "as_of": null,
+      "source_locators": [
+        {
+          "source_id": "oecd-korea-innovation-2023",
+          "publisher": "OECD",
+          "title": "OECD Reviews of Innovation Policy: Korea 2023",
+          "url": "https://www.oecd.org/en/publications/oecd-reviews-of-innovation-policy-korea-2023_bdcf9685-en/full-report/component-4.html",
+          "location": "Overall assessment discussion of business R&D concentration among chaebols",
+          "published_at": "2023-07-01",
+          "accessed_at": "2026-08-07",
+          "primary": true
+        }
+      ],
+      "calculation": null,
+      "qualifier": "High R&D intensity is a structural advantage and a concentration risk; it is not a sufficient valuation model.",
+      "counterevidence_refs": [
+        "korea-technology-intensity"
+      ],
+      "review_state": "source_checked"
+    }
+  ],
+  "artifact_hash": "7071bb052eda8190225d8d4847cee1643a41ecf802293932283a6bae030c467e"
+}

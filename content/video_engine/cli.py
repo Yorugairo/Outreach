@@ -31,6 +31,7 @@ DEFAULT_SCHEMA = VIDEO_ENGINE_ROOT / "configs" / "storyboard.schema.json"
 DEFAULT_DOTENV = PROJECT_ROOT / ".env"
 COMMANDS = {
     "run",
+    "production-console",
     "resume",
     "status",
     "approve",
@@ -47,6 +48,21 @@ COMMANDS = {
     "validate",
     "validate-study",
     "validate-art-bible",
+    "validate-martial-lanes",
+    "validate-martial-style-profile",
+    "validate-martial-style-registry",
+    "validate-martial-channel-v2",
+    "validate-martial-lane-v2",
+    "validate-martial-style-selection",
+    "validate-content-node",
+    "validate-martial-asset-catalog",
+    "validate-martial-scene-blocks",
+    "plan-content-node",
+    "run-content-node",
+    "resume-content-node",
+    "content-node-status",
+    "resolve-martial-asset-demand",
+    "schedule-martial-matters",
     "validate-history",
     "validate-research",
     "validate-assets",
@@ -274,6 +290,26 @@ def build_parser() -> argparse.ArgumentParser:
     run_parser.add_argument("--channel", default="combat-science")
     run_parser.add_argument("--targets", default="landscape,vertical")
 
+    production_console_parser = subparsers.add_parser(
+        "production-console",
+        help="serve the read-only Production Console on IPv4 loopback",
+        description=(
+            "Start the local Production Console bridge. The host is fixed to "
+            "127.0.0.1 and cannot be configured."
+        ),
+    )
+    production_console_parser.add_argument("--project-root", required=True)
+    production_console_parser.add_argument("--repository-root", required=True)
+    production_console_parser.add_argument("--snapshot", required=True)
+    production_console_parser.add_argument("--runtime-root", required=True)
+    production_console_parser.add_argument("--console-dist", required=True)
+    production_console_parser.add_argument(
+        "--port",
+        type=int,
+        default=8765,
+        help="loopback TCP port (default: 8765); host is always 127.0.0.1",
+    )
+
     resume_parser = subparsers.add_parser("resume")
     resume_parser.add_argument("job_id")
 
@@ -367,6 +403,60 @@ def build_parser() -> argparse.ArgumentParser:
     study_parser.add_argument("file")
     art_bible_parser = subparsers.add_parser("validate-art-bible")
     art_bible_parser.add_argument("file")
+    martial_lanes_parser = subparsers.add_parser("validate-martial-lanes")
+    martial_lanes_parser.add_argument("file")
+    martial_style_profile_parser = subparsers.add_parser(
+        "validate-martial-style-profile"
+    )
+    martial_style_profile_parser.add_argument("file")
+    martial_style_registry_parser = subparsers.add_parser(
+        "validate-martial-style-registry"
+    )
+    martial_style_registry_parser.add_argument("file")
+    martial_channel_v2_parser = subparsers.add_parser("validate-martial-channel-v2")
+    martial_channel_v2_parser.add_argument("file")
+    martial_lane_v2_parser = subparsers.add_parser("validate-martial-lane-v2")
+    martial_lane_v2_parser.add_argument("file")
+    martial_style_selection_parser = subparsers.add_parser("validate-martial-style-selection")
+    martial_style_selection_parser.add_argument("file")
+    content_node_parser = subparsers.add_parser("validate-content-node")
+    content_node_parser.add_argument("file")
+    content_node_parser.add_argument("--format-family", required=True)
+    martial_catalog_parser = subparsers.add_parser("validate-martial-asset-catalog")
+    martial_catalog_parser.add_argument("file")
+    martial_catalog_parser.add_argument("--taxonomy", required=True)
+    martial_scene_parser = subparsers.add_parser("validate-martial-scene-blocks")
+    martial_scene_parser.add_argument("file")
+    martial_scene_parser.add_argument("--catalog", required=True)
+    martial_scene_parser.add_argument("--taxonomy", required=True)
+    plan_content_parser = subparsers.add_parser("plan-content-node")
+    plan_content_parser.add_argument("--node", required=True)
+    plan_content_parser.add_argument("--format-family", required=True)
+    run_content_parser = subparsers.add_parser("run-content-node")
+    run_content_parser.add_argument("--node", required=True)
+    run_content_parser.add_argument("--format-family", required=True)
+    run_content_parser.add_argument("--style-selection")
+    run_content_parser.add_argument("--content-node-root", default=str(VIDEO_ENGINE_ROOT / "runtime" / "content_nodes"))
+    resume_content_parser = subparsers.add_parser("resume-content-node")
+    resume_content_parser.add_argument("--id", required=True)
+    resume_content_parser.add_argument("--content-node-root", default=str(VIDEO_ENGINE_ROOT / "runtime" / "content_nodes"))
+    content_node_status_parser = subparsers.add_parser("content-node-status")
+    content_node_status_parser.add_argument("--id", required=True)
+    content_node_status_parser.add_argument("--content-node-root", default=str(VIDEO_ENGINE_ROOT / "runtime" / "content_nodes"))
+    content_node_status_parser.add_argument("--require-children-gate-b", action="store_true")
+    content_node_status_parser.add_argument("--require-qc-pass", action="store_true")
+    resolve_demand_parser = subparsers.add_parser("resolve-martial-asset-demand")
+    resolve_demand_parser.add_argument("demand")
+    resolve_demand_parser.add_argument("--catalog", required=True)
+    resolve_demand_parser.add_argument("--taxonomy", required=True)
+    resolve_demand_parser.add_argument("--scene-blocks")
+    schedule_martial_parser = subparsers.add_parser("schedule-martial-matters")
+    schedule_martial_parser.add_argument("--fixture", required=True)
+    schedule_martial_parser.add_argument(
+        "--config",
+        default=str(VIDEO_ENGINE_ROOT / "configs" / "martial_matters_scheduler.json"),
+    )
+    schedule_martial_parser.add_argument("--dry-run", action="store_true")
     history_parser = subparsers.add_parser("validate-history")
     history_parser.add_argument("file")
     research_parser = subparsers.add_parser("validate-research")
@@ -959,6 +1049,38 @@ def _run_store_command(args: argparse.Namespace) -> int:
 def main(argv: Sequence[str] | None = None) -> int:
     load_video_environment()
     args = build_parser().parse_args(argv)
+
+    if args.command == "production-console":
+        from content.video_engine.src.services.production_console import (
+            ProductionConsoleError,
+            serve_production_console,
+        )
+
+        try:
+            serve_production_console(
+                project_root=args.project_root,
+                repository_root=args.repository_root,
+                snapshot=args.snapshot,
+                runtime_root=args.runtime_root,
+                console_dist=args.console_dist,
+                port=args.port,
+            )
+        except (OSError, TypeError, ValueError, ProductionConsoleError) as exc:
+            print(
+                json.dumps(
+                    {
+                        "valid": False,
+                        "error": {
+                            "code": getattr(exc, "code", "CONSOLE_START_FAILED"),
+                            "message": "production console could not start",
+                        },
+                    },
+                    indent=2,
+                )
+            )
+            return 1
+        return 0
+
     repository = _repository(args.artifact_root)
     pipeline = _pipeline(repository)
 
@@ -2279,6 +2401,215 @@ def main(argv: Sequence[str] | None = None) -> int:
             print(json.dumps({"valid": False, "errors": errors}, indent=2))
             return 1
         print("OK")
+        return 0
+
+    if args.command == "validate-martial-lanes":
+        from content.video_engine.src.services.martial_lane_profiles import (
+            check_martial_lanes,
+        )
+
+        errors = check_martial_lanes(args.file, root=PROJECT_ROOT)
+        if errors:
+            print(json.dumps({"valid": False, "errors": errors}, indent=2))
+            return 1
+        print("OK")
+        return 0
+
+    if args.command in {
+        "validate-martial-style-profile",
+        "validate-martial-style-registry",
+    }:
+        from content.video_engine.src.services.martial_style_profiles import (
+            check_martial_style_profile,
+            check_martial_style_registry,
+        )
+
+        errors = (
+            check_martial_style_profile(args.file, root=PROJECT_ROOT)
+            if args.command == "validate-martial-style-profile"
+            else check_martial_style_registry(args.file, root=PROJECT_ROOT)
+        )
+        if errors:
+            print(json.dumps({"valid": False, "errors": errors}, indent=2))
+            return 1
+        print("OK")
+        return 0
+
+    if args.command in {
+        "validate-martial-channel-v2",
+        "validate-martial-lane-v2",
+        "validate-martial-style-selection",
+    }:
+        from content.video_engine.src.services.martial_matters_v2 import (
+            check_martial_channel_v2,
+            check_martial_lane_profile_v2,
+            check_martial_style_selection,
+        )
+
+        checker = {
+            "validate-martial-channel-v2": check_martial_channel_v2,
+            "validate-martial-lane-v2": check_martial_lane_profile_v2,
+            "validate-martial-style-selection": check_martial_style_selection,
+        }[args.command]
+        errors = checker(args.file, root=PROJECT_ROOT)
+        if errors:
+            print(json.dumps({"valid": False, "errors": errors}, indent=2))
+            return 1
+        print("OK")
+        return 0
+
+    if args.command == "validate-content-node":
+        from content.video_engine.src.services.content_node_contracts import (
+            ContentNodeContractError,
+            validate_content_node,
+        )
+
+        try:
+            payload = validate_content_node(
+                args.file, format_family=args.format_family, root=PROJECT_ROOT
+            )
+        except (OSError, TypeError, ValueError, ContentNodeContractError) as exc:
+            errors = exc.errors if isinstance(exc, ContentNodeContractError) else [str(exc)]
+            print(json.dumps({"valid": False, "errors": errors}, indent=2))
+            return 1
+        print(json.dumps({"valid": True, "id": payload["id"], "artifact_hash": payload["artifact_hash"]}, indent=2))
+        return 0
+
+    if args.command == "validate-martial-asset-catalog":
+        from content.video_engine.src.services.martial_asset_catalog import (
+            MartialAssetCatalogError,
+            validate_martial_asset_catalog,
+        )
+
+        try:
+            payload = validate_martial_asset_catalog(
+                args.file, taxonomy=args.taxonomy, root=PROJECT_ROOT
+            )
+        except (OSError, TypeError, ValueError, MartialAssetCatalogError) as exc:
+            errors = exc.errors if isinstance(exc, MartialAssetCatalogError) else [str(exc)]
+            print(json.dumps({"valid": False, "errors": errors}, indent=2))
+            return 1
+        print(json.dumps({"valid": True, "id": payload["id"], "artifact_hash": payload["artifact_hash"]}, indent=2))
+        return 0
+
+    if args.command == "validate-martial-scene-blocks":
+        from content.video_engine.src.services.martial_asset_catalog import (
+            MartialAssetCatalogError,
+            validate_martial_scene_block_catalog,
+        )
+
+        try:
+            payload = validate_martial_scene_block_catalog(
+                args.file,
+                asset_catalog=args.catalog,
+                taxonomy=args.taxonomy,
+                root=PROJECT_ROOT,
+            )
+        except (OSError, TypeError, ValueError, MartialAssetCatalogError) as exc:
+            errors = exc.errors if isinstance(exc, MartialAssetCatalogError) else [str(exc)]
+            print(json.dumps({"valid": False, "errors": errors}, indent=2))
+            return 1
+        print(json.dumps({"valid": True, "id": payload["id"], "artifact_hash": payload["artifact_hash"]}, indent=2))
+        return 0
+
+    if args.command == "plan-content-node":
+        from content.video_engine.src.services.content_node_contracts import (
+            ContentNodeContractError,
+            validate_content_node,
+        )
+
+        try:
+            payload = validate_content_node(
+                args.node, format_family=args.format_family, root=PROJECT_ROOT
+            )
+        except (OSError, TypeError, ValueError, ContentNodeContractError) as exc:
+            errors = exc.errors if isinstance(exc, ContentNodeContractError) else [str(exc)]
+            print(json.dumps({"valid": False, "errors": errors}, indent=2))
+            return 1
+        print(json.dumps({"valid": True, "plan": payload}, indent=2))
+        return 0
+
+    if args.command == "resolve-martial-asset-demand":
+        from content.video_engine.src.services.martial_asset_reuse import resolve_asset_demand
+
+        try:
+            payload = resolve_asset_demand(
+                _load_json(args.demand),
+                asset_catalog=args.catalog,
+                taxonomy=args.taxonomy,
+                scene_blocks=args.scene_blocks,
+                root=PROJECT_ROOT,
+            )
+        except (OSError, TypeError, ValueError) as exc:
+            print(json.dumps({"valid": False, "errors": [str(exc)]}, indent=2))
+            return 1
+        print(json.dumps({"valid": True, "resolution": payload}, indent=2))
+        return 0
+
+    if args.command == "schedule-martial-matters":
+        from content.video_engine.src.services.work_order_dispatch import (
+            plan_and_dispatch_dry_run,
+        )
+
+        if not args.dry_run:
+            print(json.dumps({"valid": False, "errors": ["schedule-martial-matters requires --dry-run"]}, indent=2))
+            return 1
+        try:
+            fixture = _load_json(args.fixture)
+            payload = plan_and_dispatch_dry_run(
+                fixture.get("opportunities") or [],
+                scheduler_config=args.config,
+                as_of=str(fixture.get("as_of") or ""),
+                capacity=int(fixture.get("capacity") or 0),
+                root=PROJECT_ROOT,
+            )
+        except (OSError, TypeError, ValueError) as exc:
+            print(json.dumps({"valid": False, "errors": [str(exc)]}, indent=2))
+            return 1
+        print(json.dumps({"valid": True, **payload}, indent=2))
+        return 0
+
+    if args.command in {"run-content-node", "resume-content-node", "content-node-status"}:
+        from content.video_engine.src.repositories.content_node_file_repository import (
+            FileBackedContentNodeRepository,
+        )
+        from content.video_engine.src.services.content_node_orchestration import (
+            ContentNodeOrchestrator,
+        )
+
+        orchestrator = ContentNodeOrchestrator(
+            FileBackedContentNodeRepository(args.content_node_root), repository
+        )
+        try:
+            if args.command == "run-content-node":
+                run = orchestrator.start(
+                    args.node,
+                    format_family=args.format_family,
+                    style_selection=args.style_selection,
+                    root=PROJECT_ROOT,
+                )
+                print(json.dumps(run.to_dict(), indent=2))
+                return 0
+            if args.command == "resume-content-node":
+                run = orchestrator.resume(args.id)
+                print(json.dumps(run.to_dict(), indent=2))
+                return 0
+            payload = orchestrator.status(args.id)
+        except (OSError, TypeError, ValueError) as exc:
+            print(json.dumps({"valid": False, "errors": [str(exc)]}, indent=2))
+            return 1
+        children = payload["children"]
+        if args.require_children_gate_b and any(
+            child.get("gate_b_status") != "approved" for child in children
+        ):
+            print(json.dumps({"valid": False, "errors": ["not every child has Gate B approval"], **payload}, indent=2))
+            return 1
+        if args.require_qc_pass and any(
+            child.get("summary", {}).get("qc_passed") is not True for child in children
+        ):
+            print(json.dumps({"valid": False, "errors": ["not every child has passing QC"], **payload}, indent=2))
+            return 1
+        print(json.dumps({"valid": True, **payload}, indent=2))
         return 0
 
     if args.command in {

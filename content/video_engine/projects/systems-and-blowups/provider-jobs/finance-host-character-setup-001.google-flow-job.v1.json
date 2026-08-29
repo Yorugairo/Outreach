@@ -1,0 +1,35 @@
+{
+  "schema_version": "google_flow_provider_job.v1",
+  "job_id": "finance-host-character-setup-001",
+  "channel_id": "systems-and-blowups",
+  "episode_id": "channel-kit",
+  "action": "character_setup",
+  "project_url": "https://labs.google/fx/tools/flow/project/62f78040-f462-4de1-a281-82551986ac2b",
+  "character_url": "https://labs.google/fx/tools/flow/project/62f78040-f462-4de1-a281-82551986ac2b/character/18b6382c-72c1-4d06-9def-a4cf828b26b5",
+  "prompt": "Use the approved recurring finance-host identity master to prepare a consistent Flow character reference. Preserve the fictional Black analyst identity, adult crinkle-paper woodblock construction, indigo suit, glasses, short sculpted locs, copper accents, and subtle floral-pattern dress shoes. Do not click a paid generation control during setup.",
+  "prompt_sha256": "78b690b6c3727b3d5c4f75c3a3b7fbf8b217a921f9157aff18cd44423ea216a6",
+  "references": [
+    {
+      "asset_id": "finance-host-identity-master-v3",
+      "path": "assets/generated/host/finance-host-identity-master-v3.png",
+      "sha256": "86242df3292ab528c0645fc8b9f65e8344a4e3f0b60478efb2beb78435c0e403"
+    }
+  ],
+  "credit_budget": {
+    "estimated_credits": 0,
+    "actual_credits": null,
+    "allocation": "daily_complimentary",
+    "daily_complimentary_target": true
+  },
+  "approval": {
+    "auto_confirm": false,
+    "state": "not_requested",
+    "approval_id": null,
+    "expected_account_verified": false
+  },
+  "status": "ready_for_confirmation",
+  "outputs": [],
+  "review_state": "quarantined",
+  "render_eligible": false,
+  "artifact_hash": "d0d6504e7b5750d546dd37ba3c9028e0159fe27c70937244ac302adf98574d43"
+}

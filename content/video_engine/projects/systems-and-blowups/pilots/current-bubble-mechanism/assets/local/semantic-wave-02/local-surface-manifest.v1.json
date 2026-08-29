@@ -1,0 +1,56 @@
+{
+  "schema_version": "finance_local_surface_manifest.v1",
+  "episode_id": "current-bubble-mechanism",
+  "state": "operator_approved_for_composition",
+  "surfaces": [
+    {
+      "surface_id": "buyer-commitment-evidence-card-v1",
+      "path": "buyer-commitment-evidence-card-v1.svg",
+      "cue_ids": ["cbm-cue-068", "cbm-cue-069", "cbm-cue-070", "cbm-cue-071", "cbm-cue-072", "cbm-cue-073", "cbm-cue-074", "cbm-cue-075"],
+      "claim_ref": "micron-strategic-customer-agreements",
+      "purpose": "Show the reported agreement evidence only as a qualified, source-bound rail during the buyer-behavior contrast.",
+      "factual_scope": "Micron-reported 16 agreements, typically five years, with take-or-pay commitments. The card explicitly excludes a guarantee inference."
+    },
+    {
+      "surface_id": "korea-italy-listed-market-card-v1",
+      "path": "korea-italy-listed-market-card-v1.svg",
+      "cue_ids": ["cbm-cue-096", "cbm-cue-097", "cbm-cue-098", "cbm-cue-099", "cbm-cue-100", "cbm-cue-101", "cbm-cue-102", "cbm-cue-103"],
+      "claim_ref": "korea-italy-listed-market-comparison",
+      "purpose": "Make the narrow listed-market comparison legible while retaining the spoken scope limit.",
+      "factual_scope": "KRX approximately EUR 3.21T versus Milan approximately EUR 1.1578T, sourced and dated as specified in the claim ledger."
+    },
+    {
+      "surface_id": "korea-technology-intensity-card-v1",
+      "path": "korea-technology-intensity-card-v1.svg",
+      "cue_ids": ["cbm-cue-112", "cbm-cue-113", "cbm-cue-114", "cbm-cue-115", "cbm-cue-116", "cbm-cue-117"],
+      "claim_ref": "korea-technology-intensity",
+      "purpose": "Supply the dated OECD context for the macro-restructuring inference after that distinction is narrated.",
+      "factual_scope": "Korea R&D intensity approximately 5% of GDP in 2023; OECD’s stated view that semiconductor exports support 2026 growth and private investment, with an explicit non-guarantee qualifier."
+    },
+    {
+      "surface_id": "index-fund-two-jobs-card-v1",
+      "path": "index-fund-two-jobs-card-v1.svg",
+      "cue_ids": ["cbm-cue-126", "cbm-cue-127", "cbm-cue-128", "cbm-cue-129", "cbm-cue-130", "cbm-cue-131", "cbm-cue-132"],
+      "claim_refs": ["sp500-top-ten-concentration", "sp500-hidden-bubble-risk-inference"],
+      "purpose": "Separate the concentration observation from the episode’s two-jobs portfolio-design inference and show the explicit scope limit alongside both.",
+      "factual_scope": "Top ten represented almost 40% by mid-2025; all claims about dilution and portfolio jobs are marked as channel inference, not a predictive or suitability conclusion."
+    },
+    {
+      "surface_id": "return-hurdle-calculation-card-v1",
+      "path": "return-hurdle-calculation-card-v1.svg",
+      "cue_ids": ["cbm-cue-173", "cbm-cue-174", "cbm-cue-175", "cbm-cue-176", "cbm-cue-177", "cbm-cue-178", "cbm-cue-179", "cbm-cue-180", "cbm-cue-181", "cbm-cue-182", "cbm-cue-183", "cbm-cue-184", "cbm-cue-185", "cbm-cue-186"],
+      "claim_refs": ["generational-wealth-return-hurdle", "sp500-market-leaders-comparison"],
+      "purpose": "Show the stated return hurdle and the two conditional compounding illustrations without turning either into a forecast or a universal wealth definition.",
+      "factual_scope": "All values are deterministic calculations registered in numeric-evidence-register.v1.json; exclusions are visible on the card."
+    },
+    {
+      "surface_id": "market-leaders-qualified-comparison-card-v1",
+      "path": "market-leaders-qualified-comparison-card-v1.svg",
+      "cue_ids": ["cbm-cue-212", "cbm-cue-213", "cbm-cue-214", "cbm-cue-215", "cbm-cue-216", "cbm-cue-217", "cbm-cue-218", "cbm-cue-219", "cbm-cue-220", "cbm-cue-221", "cbm-cue-222", "cbm-cue-223", "cbm-cue-224"],
+      "claim_ref": "sp500-market-leaders-comparison",
+      "purpose": "Keep the reported Market Leaders/S&amp;P comparison inseparable from the recent-launch, back-test, and drawdown limitations.",
+      "factual_scope": "16.01% versus 13.58% annualized price returns as of June 30, 2026, rounded to one decimal for display; source and method limits remain visible."
+    }
+  ],
+  "artifact_hash": "10ac02809219e8c6c22ef9b65271b4b15268939df88a7186e65fe83d9e980339"
+}

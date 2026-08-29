@@ -1,0 +1,54 @@
+{
+  "schema_version": "editorial_motion_qc.v1",
+  "overall": "pass",
+  "structural_pass": true,
+  "human_review_required": true,
+  "quality_claim": "none; human watch-through required",
+  "checks": [
+    {
+      "check_id": "contract_integrity",
+      "status": "pass",
+      "detail": "plan and pacing contracts are current"
+    },
+    {
+      "check_id": "asset_map_hash_integrity",
+      "status": "pass",
+      "detail": "asset map hash matches the plan"
+    },
+    {
+      "check_id": "upstream_hash_integrity",
+      "status": "pass",
+      "detail": "all supplied upstream hashes match"
+    },
+    {
+      "check_id": "asset_resolution",
+      "status": "pass",
+      "detail": "all used assets are contained, promoted, and hash-matched"
+    },
+    {
+      "check_id": "revision_path_containment",
+      "status": "pass",
+      "detail": "outputs remain under the job revision tree"
+    },
+    {
+      "check_id": "motion_discipline",
+      "status": "pass",
+      "detail": "motion density, scale rhythm, and layer ownership satisfy the recipe"
+    },
+    {
+      "check_id": "information_surface_safety",
+      "status": "pass",
+      "detail": "information surfaces stay on-canvas and clear of characters"
+    },
+    {
+      "check_id": "editorial_value_discipline",
+      "status": "pass",
+      "detail": "information surfaces and non-evidence props stay within the approved limits"
+    },
+    {
+      "check_id": "provider_boundary",
+      "status": "pass",
+      "detail": "provider calls equal zero"
+    }
+  ]
+}

@@ -1,0 +1,113 @@
+{
+  "schema_version": "finance_sentence_native_asset_wave_review.v1",
+  "episode_id": "systems-and-blowups:current-bubble-mechanism",
+  "wave_id": "current-bubble-mechanism-semantic-wave-02",
+  "review_state": "operator_approved_for_composition",
+  "operator_decision": "approved_for_composition",
+  "semantic_beat_ledger_artifact_hash": "f83b2dad210f0d77bec0e9d8a1b7b799f1da54b0c19372ded9e4a7ec103f6cdb",
+  "prompt_spine_artifact_hash": "360313709cfe4fb347ab0b82b844b75b445694c665893b4071943df983370c2b",
+  "depth_layer_manifest": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-02/wave-02-depth-layer-manifest.v1.json",
+  "selection_policy": "exact spoken nouns and causal relationship before style; no convenient reuse or filler",
+  "generation_route": "imagegen_builtin_with_wave_01_style_reference",
+  "reference_images": [
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-01/beat-01-002-memory-stocks-vertical-v1.png"
+  ],
+  "global_qa": {
+    "generated_factual_text": "none_observed",
+    "style_continuity": "pass",
+    "semantic_fit": "pass_on_initial_inspection",
+    "depth_separability": "pass_for_composition; trace-cut review only",
+    "render_eligible": true,
+    "promotion_eligible": false
+  },
+  "accepted_candidates": [
+    {
+      "beat_ids": ["cbm-semantic-beat-03-002", "cbm-semantic-beat-03-003"],
+      "filename": "beat-03-002-hbm-stack-accelerator-v1.png",
+      "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-02/beat-03-002-hbm-stack-accelerator-v1.png",
+      "sha256": "9ce5dc906877db7c10a8480885133b799157f8a1bdfaf5eb8af61c968dd2746f",
+      "width": 1672,
+      "height": 941,
+      "start_word_index": 288,
+      "end_word_index": 315,
+      "start_s": 109.958,
+      "end_s": 121.104,
+      "narration_excerpts": [
+        "High-bandwidth memory, or HBM, is not ordinary storage.",
+        "It is stacked working memory placed beside an AI accelerator so enormous amounts of data can reach the processor quickly."
+      ],
+      "semantic_job": "Make HBM legible as stacked working memory beside an accelerator, with data visibly crossing the short connection.",
+      "visual_verb": "connect_and_feed",
+      "review_state": "operator_approved_for_composition",
+      "trace_cut_qa": "pass_for_composition",
+      "depth_layers": ["foreground", "midground", "background", "negative_space", "contact_shadow"]
+    },
+    {
+      "beat_ids": ["cbm-semantic-beat-03-004", "cbm-semantic-beat-03-005"],
+      "filename": "beat-03-004-gpu-hbm-fuel-system-v1.png",
+      "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-02/beat-03-004-gpu-hbm-fuel-system-v1.png",
+      "sha256": "31c5ecb1c072e6669345509784a196883c37802d46e8e42cd6550facb65e9097",
+      "width": 1672,
+      "height": 941,
+      "start_word_index": 316,
+      "end_word_index": 346,
+      "start_s": 121.104,
+      "end_s": 132.098,
+      "narration_excerpts": [
+        "Plain English: the GPU may be the engine, but HBM is the pressure-rated fuel system.",
+        "Build a larger engine without widening the fuel line and the expensive engine sits there starving."
+      ],
+      "semantic_job": "Translate bandwidth into a literal engine, reservoir, valve, and widening fuel-line relationship.",
+      "visual_verb": "open_flow_path",
+      "review_state": "operator_approved_for_composition",
+      "trace_cut_qa": "pass_for_composition",
+      "depth_layers": ["foreground", "midground", "background", "negative_space", "contact_shadow"]
+    },
+    {
+      "beat_ids": ["cbm-semantic-beat-03-008", "cbm-semantic-beat-03-009"],
+      "filename": "beat-03-008-009-physical-capacity-gate-v1.png",
+      "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-02/beat-03-008-009-physical-capacity-gate-v1.png",
+      "sha256": "74dd859c87abcce6a827ca45aabd3825fee25c315dd20e00509f3627e36e1e50",
+      "width": 1672,
+      "height": 941,
+      "start_word_index": 368,
+      "end_word_index": 388,
+      "start_s": 141.955,
+      "end_s": 152.972,
+      "narration_excerpts": [
+        "And this is where the shortage becomes physical.",
+        "HBM competes for advanced wafers, clean-room space, packaging capacity, equipment, engineers, and time."
+      ],
+      "semantic_job": "Show multiple scarce production inputs converging on one packaging gate and forming a real queue.",
+      "visual_verb": "converge_and_queue",
+      "review_state": "operator_approved_for_composition",
+      "trace_cut_qa": "pass_for_composition",
+      "depth_layers": ["foreground", "midground", "background", "negative_space", "contact_shadow"]
+    },
+    {
+      "beat_ids": ["cbm-semantic-beat-03-011", "cbm-semantic-beat-03-012", "cbm-semantic-beat-03-013", "cbm-semantic-beat-03-014", "cbm-semantic-beat-03-015"],
+      "filename": "beat-03-011-015-bakery-capacity-analogy-v1.png",
+      "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-02/beat-03-011-015-bakery-capacity-analogy-v1.png",
+      "sha256": "f55b46a26f6e6dd6cff357327c12fd9d19e7cd0527ce6545cd3d6337e59d0fa8",
+      "width": 1672,
+      "height": 941,
+      "start_word_index": 399,
+      "end_word_index": 448,
+      "start_s": 157.906,
+      "end_s": 178.096,
+      "narration_excerpts": [
+        "Imagine a bakery with a fixed number of ovens.",
+        "Yesterday it made simple loaves.",
+        "Today its most valuable customer wants twelve-layer wedding cakes.",
+        "Each cake earns more, but it also occupies more oven space, takes longer, and has more opportunities to fail.",
+        "Producing more cakes can mean producing fewer loaves."
+      ],
+      "semantic_job": "Translate HBM capacity reallocation into a fixed-oven bakery where a larger, higher-value cake displaces ordinary loaves.",
+      "visual_verb": "reallocate_fixed_capacity",
+      "review_state": "operator_approved_for_composition",
+      "trace_cut_qa": "pass_for_composition",
+      "depth_layers": ["foreground", "midground", "background", "negative_space", "contact_shadow"]
+    }
+  ],
+  "next_wave_authorized": true
+}

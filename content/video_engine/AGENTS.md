@@ -79,3 +79,23 @@ is the specification of record. The rules that get violated most:
 - Separate *medium* (an editorial choice, the operator's) from *function* (density,
   legibility, scale, registration). Rejecting a delivery on medium when the operator has
   already chosen it wastes a batch.
+## Local code-navigation workflow
+
+Use the portable wrapper from the repository root when a named symbol, service, or architecture path needs ranked evidence:
+
+```bash
+python scripts/sigmap_context.py build
+python scripts/sigmap_context.py query "sitemap discovery" --top 5
+python scripts/sigmap_context.py evidence "CrawlDiscoveryService" --markdown
+```
+
+Every wrapper command regenerates the local index first with `--no-track`. Its configuration writes only the gitignored `.github/copilot-instructions.md`; it does not modify `AGENTS.md` or `CLAUDE.md`, register MCP clients, or invoke Codex/Claude adapters.
+
+Route questions to the smallest suitable tool:
+
+- **SigMap**: declared symbols, ranked architecture discovery, and evidence packs.
+- **ast-grep**: structural patterns and exact call-site sweeps. Always set `--lang`, use a narrow pattern, and scope it to repo-relative paths; one-shot `run` needs no `sgconfig.yml`, while reusable configured rules use `scan`.
+- **Text search** (`git grep` or `search_files`): literals, configuration keys, SQL, docs, and test descriptions.
+- **SQZ**: compress noisy command output or logs only after saving the original evidence. Use `sqz compress --mode safe --verify --no-cache --cmd <producer>`; do not compress hashes, exact test verdicts, security evidence, or small outputs, and never use SQZ as a search or correctness tool.
+
+Windows path rule: set the command/tool workdir to the exact repository root and pass `.` or repo-relative paths. The native Windows `rg` used by `search_files` does not accept MSYS-style absolute paths such as `/c/Users/...`; if an absolute-path search fails, retry from the exact workdir with a relative path before concluding that nothing matched.

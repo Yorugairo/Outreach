@@ -1,0 +1,20 @@
+{
+  "schema_version": "finance_semantic_wave_review.v1",
+  "episode_id": "current-bubble-mechanism",
+  "wave_id": "semantic-wave-11",
+  "status": "operator_approved_for_composition",
+  "generation_method": "built_in_image_gen",
+  "decision_rule": "This is a countercase plate. It makes three plausible memory-cycle failure pathways visible without presenting any as certain, quantified, or sufficient to determine a stock price.",
+  "candidates": [
+    {
+      "candidate_id": "memory-three-failure-points-v1",
+      "path": "memory-three-failure-points-v1.png",
+      "sha256": "f68e2f0e863f9427b10d4d23e807a7e417fc0ba3c9dad4b8bb5e2138f6cfd45a",
+      "cluster_id": "cbm-i-001",
+      "purpose": "Show new capacity, architecture efficiency, and concentrated-buyer capex pauses converging as three distinct failure paths toward one generic memory module.",
+      "status": "selected",
+      "qa": ["three pathways are visually distinct", "none is drawn as inevitable collapse", "no supplier, buyer, or price claim", "no embedded text"]
+    }
+  ],
+  "artifact_hash": "4728553c57f1c2c2cfb8d13ae784efd88c2a416df91a6d2c03d72137865d63fb"
+}

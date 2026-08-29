@@ -1,0 +1,42 @@
+{
+  "schema_version": "finance_research_evidence_supplement.v1",
+  "episode_id": "current-bubble-mechanism",
+  "inputs": [
+    {
+      "kind": "operator_verified_research",
+      "path": "C:/Users/Snipe/Downloads/Outreach Program/docs/research/The Decadal Realignment of Global Semiconductors - memory.md",
+      "sha256": "19b7fc7ce80bb009e28627400263fc2c3622f00e4f420999df90876349de6358"
+    },
+    {
+      "kind": "yfinance_adjusted_close_packet",
+      "path": "edit/semantic-v2/market-data-yfinance-trailing-2026-08-07.v1.json",
+      "sha256": "d96aa1bb80d37d59a7212520f0f56b66527ea6cad2a8b3005a25e08ec49efc02",
+      "as_of": "2026-08-07"
+    }
+  ],
+  "visual_claims": [
+    {
+      "id": "hbm-wafer-bit-output-tradeoff",
+      "display": "1 HBM wafer allocation → 2–3× less standard-DRAM bit output",
+      "source_input": "C:/Users/Snipe/Downloads/Outreach Program/docs/research/The Decadal Realignment of Global Semiconductors - memory.md",
+      "locator": "High-Bandwidth Memory and the Standard DRAM Deficit / The Cannibalization Mechanics of Advanced Wafers",
+      "cue_ids": [
+        "cbm-cue-057",
+        "cbm-cue-058"
+      ],
+      "classification": "operator_verified_research"
+    },
+    {
+      "id": "timely-trailing-return-comparison",
+      "display": "MU +685.7% · KOSPI +93.9% · S&P 500 +22.4%",
+      "source_input": "edit/semantic-v2/market-data-yfinance-trailing-2026-08-07.v1.json",
+      "locator": "one-year adjusted-close windows ending 2026-08-07",
+      "cue_ids": [
+        "cbm-cue-002",
+        "cbm-cue-003"
+      ],
+      "classification": "dated_calculation"
+    }
+  ],
+  "artifact_hash": "a7d02d9933c7362e41a73b4e54b94dba4d00212a885091c60b1416ec8dfdcf0e"
+}

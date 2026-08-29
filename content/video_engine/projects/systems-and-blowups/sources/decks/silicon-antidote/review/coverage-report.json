@@ -1,0 +1,21 @@
+{
+  "schema_version": "deck_asset_coverage.v1",
+  "deck_id": "silicon-antidote",
+  "slide_count": 15,
+  "source_image_count": 15,
+  "semantic_asset_count": 5,
+  "render_eligible_count": 0,
+  "status": "needs_human_review",
+  "checks": {
+    "source_slides_present": true,
+    "semantic_context_complete": true,
+    "render_eligibility_gated": true
+  },
+  "human_gates": {
+    "H1": false,
+    "H2": false,
+    "H3": false,
+    "H4": false
+  },
+  "artifact_hash": "17c511adb550036ea412dc5d10bdfa3bacc0c6fba04b321279aea63291fad96b"
+}

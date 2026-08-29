@@ -1,0 +1,14 @@
+{
+  "schema_version": "watch_review_draft.v1",
+  "proof_id": "finance-whiteboard-code-drawn-proof-v1",
+  "status": "draft",
+  "review_required": true,
+  "render_path": "render/finance-whiteboard-code-drawn-proof.mp4",
+  "checks": [
+    "each artblock is isolated and fully covered",
+    "hand writes labels and rides every active reveal",
+    "plate remains stable with no camera drift",
+    "no PDF/card image is visible in the composition",
+    "the result reads as drawn whiteboard art rather than a pasted print"
+  ]
+}

@@ -1,0 +1,1667 @@
+{
+  "schema_version": "finance_edit_manifest.v1",
+  "episode_id": "current-bubble-mechanism",
+  "brief_hash": "c8a395d421871c8d09bb0621db30c4ec68901acdc56848b182d66dbd00856fc2",
+  "claim_ledger_hash": "7071bb052eda8190225d8d4847cee1643a41ecf802293932283a6bae030c467e",
+  "research_supplement_hash": "a7d02d9933c7362e41a73b4e54b94dba4d00212a885091c60b1416ec8dfdcf0e",
+  "audio_sha256": "ecacf46c49aee85b912404bfa0e47c37acbae0397b637e2a966c51a625077ce1",
+  "words_sha256": "3773bdd611c96d5e431ed56749d9991825215bb3756043086f14fbbdbe0d1da3",
+  "cue_sheet_hash": "bce598f900344f360a50b4c09b983957dbc04e156bcbad656439e5bd0cb0e356",
+  "assets": [
+    {
+      "cue_id": "cbm-cue-001",
+      "asset_id": "wrong-bubble-elevators-v2",
+      "sha256": "e359675594b4bbd6ec51972fc2417172903b4782aa865f71d2fc91f4e76526dc"
+    },
+    {
+      "cue_id": "cbm-cue-002",
+      "asset_id": "memory-skepticism-v2",
+      "sha256": "b807c53afb48f24840ddfe92fbf303669c5f3e472abfa05bc541791a9cc9e90c"
+    },
+    {
+      "cue_id": "cbm-cue-003",
+      "asset_id": "memory-skepticism-v2",
+      "sha256": "b807c53afb48f24840ddfe92fbf303669c5f3e472abfa05bc541791a9cc9e90c"
+    },
+    {
+      "cue_id": "cbm-cue-004",
+      "asset_id": "safe-default-inspection-v1",
+      "sha256": "54262034c0a94bb9571155fdabc5c2062bad61edf15f1d6e99c8e995151f2d35"
+    },
+    {
+      "cue_id": "cbm-cue-005",
+      "asset_id": "memory-three-supports-v1",
+      "sha256": "105c06405ee1a6d7e2c3e9fd452952fed114885c47f31d2ee244a1300642eb81"
+    },
+    {
+      "cue_id": "cbm-cue-006",
+      "asset_id": "memory-three-supports-v1",
+      "sha256": "105c06405ee1a6d7e2c3e9fd452952fed114885c47f31d2ee244a1300642eb81"
+    },
+    {
+      "cue_id": "cbm-cue-007",
+      "asset_id": "memory-three-supports-v1",
+      "sha256": "105c06405ee1a6d7e2c3e9fd452952fed114885c47f31d2ee244a1300642eb81"
+    },
+    {
+      "cue_id": "cbm-cue-008",
+      "asset_id": "index-fund-weighted-inflows-v2",
+      "sha256": "d10b1e8571b65117d529f6a2687e613b73400eba55774df338a2b309ba301a02"
+    },
+    {
+      "cue_id": "cbm-cue-009",
+      "asset_id": "index-fund-weighted-inflows-v2",
+      "sha256": "d10b1e8571b65117d529f6a2687e613b73400eba55774df338a2b309ba301a02"
+    },
+    {
+      "cue_id": "cbm-cue-010",
+      "asset_id": "index-fund-weighted-inflows-v2",
+      "sha256": "d10b1e8571b65117d529f6a2687e613b73400eba55774df338a2b309ba301a02"
+    },
+    {
+      "cue_id": "cbm-cue-011",
+      "asset_id": "index-fund-weighted-inflows-v2",
+      "sha256": "d10b1e8571b65117d529f6a2687e613b73400eba55774df338a2b309ba301a02"
+    },
+    {
+      "cue_id": "cbm-cue-012",
+      "asset_id": "index-fund-weighted-inflows-v2",
+      "sha256": "d10b1e8571b65117d529f6a2687e613b73400eba55774df338a2b309ba301a02"
+    },
+    {
+      "cue_id": "cbm-cue-013",
+      "asset_id": "bottleneck-repricing-v1",
+      "sha256": "b7c1cf004a4eeef70ff497dff98345687c10950a82683376f32c3cb1ceef53d0"
+    },
+    {
+      "cue_id": "cbm-cue-014",
+      "asset_id": "bottleneck-repricing-v1",
+      "sha256": "b7c1cf004a4eeef70ff497dff98345687c10950a82683376f32c3cb1ceef53d0"
+    },
+    {
+      "cue_id": "cbm-cue-015",
+      "asset_id": "bottleneck-repricing-v1",
+      "sha256": "b7c1cf004a4eeef70ff497dff98345687c10950a82683376f32c3cb1ceef53d0"
+    },
+    {
+      "cue_id": "cbm-cue-016",
+      "asset_id": "bottleneck-repricing-v1",
+      "sha256": "b7c1cf004a4eeef70ff497dff98345687c10950a82683376f32c3cb1ceef53d0"
+    },
+    {
+      "cue_id": "cbm-cue-017",
+      "asset_id": "safe-default-inspection-v1",
+      "sha256": "54262034c0a94bb9571155fdabc5c2062bad61edf15f1d6e99c8e995151f2d35"
+    },
+    {
+      "cue_id": "cbm-cue-018",
+      "asset_id": "safe-default-inspection-v1",
+      "sha256": "54262034c0a94bb9571155fdabc5c2062bad61edf15f1d6e99c8e995151f2d35"
+    },
+    {
+      "cue_id": "cbm-cue-019",
+      "asset_id": "safe-default-inspection-v1",
+      "sha256": "54262034c0a94bb9571155fdabc5c2062bad61edf15f1d6e99c8e995151f2d35"
+    },
+    {
+      "cue_id": "cbm-cue-020",
+      "asset_id": "safe-default-inspection-v1",
+      "sha256": "54262034c0a94bb9571155fdabc5c2062bad61edf15f1d6e99c8e995151f2d35"
+    },
+    {
+      "cue_id": "cbm-cue-021",
+      "asset_id": "belief-versus-support-v2",
+      "sha256": "e85dae1630974425e9390b921e7d6edae639dae6e50b3089a129b2b634947abb"
+    },
+    {
+      "cue_id": "cbm-cue-022",
+      "asset_id": "belief-versus-support-v2",
+      "sha256": "e85dae1630974425e9390b921e7d6edae639dae6e50b3089a129b2b634947abb"
+    },
+    {
+      "cue_id": "cbm-cue-023",
+      "asset_id": "belief-versus-support-v2",
+      "sha256": "e85dae1630974425e9390b921e7d6edae639dae6e50b3089a129b2b634947abb"
+    },
+    {
+      "cue_id": "cbm-cue-024",
+      "asset_id": "belief-versus-support-v2",
+      "sha256": "e85dae1630974425e9390b921e7d6edae639dae6e50b3089a129b2b634947abb"
+    },
+    {
+      "cue_id": "cbm-cue-025",
+      "asset_id": "wrong-bubble-elevators-v2",
+      "sha256": "e359675594b4bbd6ec51972fc2417172903b4782aa865f71d2fc91f4e76526dc"
+    },
+    {
+      "cue_id": "cbm-cue-026",
+      "asset_id": "wrong-bubble-elevators-v2",
+      "sha256": "e359675594b4bbd6ec51972fc2417172903b4782aa865f71d2fc91f4e76526dc"
+    },
+    {
+      "cue_id": "cbm-cue-027",
+      "asset_id": "belief-versus-support-v2",
+      "sha256": "e85dae1630974425e9390b921e7d6edae639dae6e50b3089a129b2b634947abb"
+    },
+    {
+      "cue_id": "cbm-cue-028",
+      "asset_id": "safe-default-inspection-v1",
+      "sha256": "54262034c0a94bb9571155fdabc5c2062bad61edf15f1d6e99c8e995151f2d35"
+    },
+    {
+      "cue_id": "cbm-cue-029",
+      "asset_id": "memory-three-supports-v1",
+      "sha256": "105c06405ee1a6d7e2c3e9fd452952fed114885c47f31d2ee244a1300642eb81"
+    },
+    {
+      "cue_id": "cbm-cue-030",
+      "asset_id": "index-fund-weighted-inflows-v2",
+      "sha256": "d10b1e8571b65117d529f6a2687e613b73400eba55774df338a2b309ba301a02"
+    },
+    {
+      "cue_id": "cbm-cue-031",
+      "asset_id": "index-fund-weighted-inflows-v2",
+      "sha256": "d10b1e8571b65117d529f6a2687e613b73400eba55774df338a2b309ba301a02"
+    },
+    {
+      "cue_id": "cbm-cue-032",
+      "asset_id": "index-fund-weighted-inflows-v2",
+      "sha256": "d10b1e8571b65117d529f6a2687e613b73400eba55774df338a2b309ba301a02"
+    },
+    {
+      "cue_id": "cbm-cue-033",
+      "asset_id": "hbm-adjacent-accelerator-v1",
+      "sha256": "1f0aaaeb71be882ebdba99a55fe5de3adb6ea8afbc5f46261bf0ff3e00ecb0f2"
+    },
+    {
+      "cue_id": "cbm-cue-034",
+      "asset_id": "hbm-adjacent-accelerator-v1",
+      "sha256": "1f0aaaeb71be882ebdba99a55fe5de3adb6ea8afbc5f46261bf0ff3e00ecb0f2"
+    },
+    {
+      "cue_id": "cbm-cue-035",
+      "asset_id": "hbm-adjacent-accelerator-v1",
+      "sha256": "1f0aaaeb71be882ebdba99a55fe5de3adb6ea8afbc5f46261bf0ff3e00ecb0f2"
+    },
+    {
+      "cue_id": "cbm-cue-036",
+      "asset_id": "hbm-adjacent-accelerator-v1",
+      "sha256": "1f0aaaeb71be882ebdba99a55fe5de3adb6ea8afbc5f46261bf0ff3e00ecb0f2"
+    },
+    {
+      "cue_id": "cbm-cue-037",
+      "asset_id": "accelerator-memory-bandwidth-gate-v1",
+      "sha256": "759eb55860776b1586a8305924e3b5d0b54688a76341bd4559ebfbe24a3e1552"
+    },
+    {
+      "cue_id": "cbm-cue-038",
+      "asset_id": "accelerator-memory-bandwidth-gate-v1",
+      "sha256": "759eb55860776b1586a8305924e3b5d0b54688a76341bd4559ebfbe24a3e1552"
+    },
+    {
+      "cue_id": "cbm-cue-039",
+      "asset_id": "accelerator-memory-bandwidth-gate-v1",
+      "sha256": "759eb55860776b1586a8305924e3b5d0b54688a76341bd4559ebfbe24a3e1552"
+    },
+    {
+      "cue_id": "cbm-cue-040",
+      "asset_id": "accelerator-memory-bandwidth-gate-v1",
+      "sha256": "759eb55860776b1586a8305924e3b5d0b54688a76341bd4559ebfbe24a3e1552"
+    },
+    {
+      "cue_id": "cbm-cue-041",
+      "asset_id": "accelerator-memory-bandwidth-gate-v1",
+      "sha256": "759eb55860776b1586a8305924e3b5d0b54688a76341bd4559ebfbe24a3e1552"
+    },
+    {
+      "cue_id": "cbm-cue-042",
+      "asset_id": "accelerator-memory-bandwidth-gate-v1",
+      "sha256": "759eb55860776b1586a8305924e3b5d0b54688a76341bd4559ebfbe24a3e1552"
+    },
+    {
+      "cue_id": "cbm-cue-043",
+      "asset_id": "accelerator-memory-bandwidth-gate-v1",
+      "sha256": "759eb55860776b1586a8305924e3b5d0b54688a76341bd4559ebfbe24a3e1552"
+    },
+    {
+      "cue_id": "cbm-cue-044",
+      "asset_id": "hbm-physical-inputs-gate-v1",
+      "sha256": "aae016ef99f531002331f460f2949a5f758d4f8cfdb65b4d6e1bde910fa00934"
+    },
+    {
+      "cue_id": "cbm-cue-045",
+      "asset_id": "hbm-physical-inputs-gate-v1",
+      "sha256": "aae016ef99f531002331f460f2949a5f758d4f8cfdb65b4d6e1bde910fa00934"
+    },
+    {
+      "cue_id": "cbm-cue-046",
+      "asset_id": "hbm-physical-inputs-gate-v1",
+      "sha256": "aae016ef99f531002331f460f2949a5f758d4f8cfdb65b4d6e1bde910fa00934"
+    },
+    {
+      "cue_id": "cbm-cue-047",
+      "asset_id": "fixed-oven-capacity-wedding-cake-v1",
+      "sha256": "0b582578d178f670841fc152bf74f04f3668ec6aa72b6c011e12991f3358dfe7"
+    },
+    {
+      "cue_id": "cbm-cue-048",
+      "asset_id": "fixed-oven-capacity-wedding-cake-v1",
+      "sha256": "0b582578d178f670841fc152bf74f04f3668ec6aa72b6c011e12991f3358dfe7"
+    },
+    {
+      "cue_id": "cbm-cue-049",
+      "asset_id": "fixed-oven-capacity-wedding-cake-v1",
+      "sha256": "0b582578d178f670841fc152bf74f04f3668ec6aa72b6c011e12991f3358dfe7"
+    },
+    {
+      "cue_id": "cbm-cue-050",
+      "asset_id": "fixed-oven-capacity-wedding-cake-v1",
+      "sha256": "0b582578d178f670841fc152bf74f04f3668ec6aa72b6c011e12991f3358dfe7"
+    },
+    {
+      "cue_id": "cbm-cue-051",
+      "asset_id": "fixed-oven-capacity-wedding-cake-v1",
+      "sha256": "0b582578d178f670841fc152bf74f04f3668ec6aa72b6c011e12991f3358dfe7"
+    },
+    {
+      "cue_id": "cbm-cue-052",
+      "asset_id": "fixed-oven-capacity-wedding-cake-v1",
+      "sha256": "0b582578d178f670841fc152bf74f04f3668ec6aa72b6c011e12991f3358dfe7"
+    },
+    {
+      "cue_id": "cbm-cue-053",
+      "asset_id": "fixed-oven-capacity-wedding-cake-v1",
+      "sha256": "0b582578d178f670841fc152bf74f04f3668ec6aa72b6c011e12991f3358dfe7"
+    },
+    {
+      "cue_id": "cbm-cue-054",
+      "asset_id": "hbm-physical-inputs-gate-v1",
+      "sha256": "aae016ef99f531002331f460f2949a5f758d4f8cfdb65b4d6e1bde910fa00934"
+    },
+    {
+      "cue_id": "cbm-cue-055",
+      "asset_id": "hbm-physical-inputs-gate-v1",
+      "sha256": "aae016ef99f531002331f460f2949a5f758d4f8cfdb65b4d6e1bde910fa00934"
+    },
+    {
+      "cue_id": "cbm-cue-056",
+      "asset_id": "hbm-physical-inputs-gate-v1",
+      "sha256": "aae016ef99f531002331f460f2949a5f758d4f8cfdb65b4d6e1bde910fa00934"
+    },
+    {
+      "cue_id": "cbm-cue-057",
+      "asset_id": "hbm-physical-inputs-gate-v1",
+      "sha256": "aae016ef99f531002331f460f2949a5f758d4f8cfdb65b4d6e1bde910fa00934"
+    },
+    {
+      "cue_id": "cbm-cue-058",
+      "asset_id": "hbm-physical-inputs-gate-v1",
+      "sha256": "aae016ef99f531002331f460f2949a5f758d4f8cfdb65b4d6e1bde910fa00934"
+    },
+    {
+      "cue_id": "cbm-cue-059",
+      "asset_id": "hbm-physical-inputs-gate-v1",
+      "sha256": "aae016ef99f531002331f460f2949a5f758d4f8cfdb65b4d6e1bde910fa00934"
+    },
+    {
+      "cue_id": "cbm-cue-060",
+      "asset_id": "hbm-physical-inputs-gate-v1",
+      "sha256": "aae016ef99f531002331f460f2949a5f758d4f8cfdb65b4d6e1bde910fa00934"
+    },
+    {
+      "cue_id": "cbm-cue-061",
+      "asset_id": "hbm-physical-inputs-gate-v1",
+      "sha256": "aae016ef99f531002331f460f2949a5f758d4f8cfdb65b4d6e1bde910fa00934"
+    },
+    {
+      "cue_id": "cbm-cue-062",
+      "asset_id": "hbm-physical-inputs-gate-v1",
+      "sha256": "aae016ef99f531002331f460f2949a5f758d4f8cfdb65b4d6e1bde910fa00934"
+    },
+    {
+      "cue_id": "cbm-cue-063",
+      "asset_id": "commodity-cycle-versus-qualified-agreements-v1",
+      "sha256": "fa454d1caa400f10e789135b6fe7b1b85d9c236fc331c559e74ef3c1d3b6a49c"
+    },
+    {
+      "cue_id": "cbm-cue-064",
+      "asset_id": "commodity-cycle-versus-qualified-agreements-v1",
+      "sha256": "fa454d1caa400f10e789135b6fe7b1b85d9c236fc331c559e74ef3c1d3b6a49c"
+    },
+    {
+      "cue_id": "cbm-cue-065",
+      "asset_id": "commodity-cycle-versus-qualified-agreements-v1",
+      "sha256": "fa454d1caa400f10e789135b6fe7b1b85d9c236fc331c559e74ef3c1d3b6a49c"
+    },
+    {
+      "cue_id": "cbm-cue-066",
+      "asset_id": "commodity-cycle-versus-qualified-agreements-v1",
+      "sha256": "fa454d1caa400f10e789135b6fe7b1b85d9c236fc331c559e74ef3c1d3b6a49c"
+    },
+    {
+      "cue_id": "cbm-cue-067",
+      "asset_id": "commodity-cycle-versus-qualified-agreements-v1",
+      "sha256": "fa454d1caa400f10e789135b6fe7b1b85d9c236fc331c559e74ef3c1d3b6a49c"
+    },
+    {
+      "cue_id": "cbm-cue-068",
+      "asset_id": "commodity-cycle-versus-qualified-agreements-v1",
+      "sha256": "fa454d1caa400f10e789135b6fe7b1b85d9c236fc331c559e74ef3c1d3b6a49c"
+    },
+    {
+      "cue_id": "cbm-cue-069",
+      "asset_id": "commodity-cycle-versus-qualified-agreements-v1",
+      "sha256": "fa454d1caa400f10e789135b6fe7b1b85d9c236fc331c559e74ef3c1d3b6a49c"
+    },
+    {
+      "cue_id": "cbm-cue-070",
+      "asset_id": "commodity-cycle-versus-qualified-agreements-v1",
+      "sha256": "fa454d1caa400f10e789135b6fe7b1b85d9c236fc331c559e74ef3c1d3b6a49c"
+    },
+    {
+      "cue_id": "cbm-cue-071",
+      "asset_id": "buyer-reservation-rail-v1",
+      "sha256": "143705a3feae964db36c341c50edcee0b30d3d0b02bf67f807d9361c552a1db9"
+    },
+    {
+      "cue_id": "cbm-cue-072",
+      "asset_id": "buyer-reservation-rail-v1",
+      "sha256": "143705a3feae964db36c341c50edcee0b30d3d0b02bf67f807d9361c552a1db9"
+    },
+    {
+      "cue_id": "cbm-cue-073",
+      "asset_id": "buyer-reservation-rail-v1",
+      "sha256": "143705a3feae964db36c341c50edcee0b30d3d0b02bf67f807d9361c552a1db9"
+    },
+    {
+      "cue_id": "cbm-cue-074",
+      "asset_id": "buyer-reservation-rail-v1",
+      "sha256": "143705a3feae964db36c341c50edcee0b30d3d0b02bf67f807d9361c552a1db9"
+    },
+    {
+      "cue_id": "cbm-cue-075",
+      "asset_id": "buyer-reservation-rail-v1",
+      "sha256": "143705a3feae964db36c341c50edcee0b30d3d0b02bf67f807d9361c552a1db9"
+    },
+    {
+      "cue_id": "cbm-cue-076",
+      "asset_id": "buyer-reservation-rail-v1",
+      "sha256": "143705a3feae964db36c341c50edcee0b30d3d0b02bf67f807d9361c552a1db9"
+    },
+    {
+      "cue_id": "cbm-cue-077",
+      "asset_id": "buyer-reservation-rail-v1",
+      "sha256": "143705a3feae964db36c341c50edcee0b30d3d0b02bf67f807d9361c552a1db9"
+    },
+    {
+      "cue_id": "cbm-cue-078",
+      "asset_id": "buyer-reservation-rail-v1",
+      "sha256": "143705a3feae964db36c341c50edcee0b30d3d0b02bf67f807d9361c552a1db9"
+    },
+    {
+      "cue_id": "cbm-cue-079",
+      "asset_id": "buyer-reservation-rail-v1",
+      "sha256": "143705a3feae964db36c341c50edcee0b30d3d0b02bf67f807d9361c552a1db9"
+    },
+    {
+      "cue_id": "cbm-cue-080",
+      "asset_id": "buyer-reservation-rail-v1",
+      "sha256": "143705a3feae964db36c341c50edcee0b30d3d0b02bf67f807d9361c552a1db9"
+    },
+    {
+      "cue_id": "cbm-cue-081",
+      "asset_id": "buyer-reservation-rail-v1",
+      "sha256": "143705a3feae964db36c341c50edcee0b30d3d0b02bf67f807d9361c552a1db9"
+    },
+    {
+      "cue_id": "cbm-cue-082",
+      "asset_id": "buyer-reservation-rail-v1",
+      "sha256": "143705a3feae964db36c341c50edcee0b30d3d0b02bf67f807d9361c552a1db9"
+    },
+    {
+      "cue_id": "cbm-cue-083",
+      "asset_id": "buyer-reservation-rail-v1",
+      "sha256": "143705a3feae964db36c341c50edcee0b30d3d0b02bf67f807d9361c552a1db9"
+    },
+    {
+      "cue_id": "cbm-cue-084",
+      "asset_id": "buyer-reservation-rail-v1",
+      "sha256": "143705a3feae964db36c341c50edcee0b30d3d0b02bf67f807d9361c552a1db9"
+    },
+    {
+      "cue_id": "cbm-cue-085",
+      "asset_id": "strategic-chokepoint-network-v1",
+      "sha256": "71b184f543d8497e451a3e6391ae4f634f0fbaf3130e6f131d2cde1b1ad090b6"
+    },
+    {
+      "cue_id": "cbm-cue-086",
+      "asset_id": "strategic-chokepoint-network-v1",
+      "sha256": "71b184f543d8497e451a3e6391ae4f634f0fbaf3130e6f131d2cde1b1ad090b6"
+    },
+    {
+      "cue_id": "cbm-cue-087",
+      "asset_id": "strategic-chokepoint-network-v1",
+      "sha256": "71b184f543d8497e451a3e6391ae4f634f0fbaf3130e6f131d2cde1b1ad090b6"
+    },
+    {
+      "cue_id": "cbm-cue-088",
+      "asset_id": "strategic-chokepoint-network-v1",
+      "sha256": "71b184f543d8497e451a3e6391ae4f634f0fbaf3130e6f131d2cde1b1ad090b6"
+    },
+    {
+      "cue_id": "cbm-cue-089",
+      "asset_id": "strategic-chokepoint-network-v1",
+      "sha256": "71b184f543d8497e451a3e6391ae4f634f0fbaf3130e6f131d2cde1b1ad090b6"
+    },
+    {
+      "cue_id": "cbm-cue-090",
+      "asset_id": "strategic-chokepoint-network-v1",
+      "sha256": "71b184f543d8497e451a3e6391ae4f634f0fbaf3130e6f131d2cde1b1ad090b6"
+    },
+    {
+      "cue_id": "cbm-cue-091",
+      "asset_id": "capitalizes-industrial-cashflows-v1",
+      "sha256": "3f5b51f946bca0a3de19fb03b3bb758abd275121145ef9975bd5cfe270e2adc7"
+    },
+    {
+      "cue_id": "cbm-cue-092",
+      "asset_id": "capitalizes-industrial-cashflows-v1",
+      "sha256": "3f5b51f946bca0a3de19fb03b3bb758abd275121145ef9975bd5cfe270e2adc7"
+    },
+    {
+      "cue_id": "cbm-cue-093",
+      "asset_id": "capitalizes-industrial-cashflows-v1",
+      "sha256": "3f5b51f946bca0a3de19fb03b3bb758abd275121145ef9975bd5cfe270e2adc7"
+    },
+    {
+      "cue_id": "cbm-cue-094",
+      "asset_id": "capitalizes-industrial-cashflows-v1",
+      "sha256": "3f5b51f946bca0a3de19fb03b3bb758abd275121145ef9975bd5cfe270e2adc7"
+    },
+    {
+      "cue_id": "cbm-cue-095",
+      "asset_id": "capitalizes-industrial-cashflows-v1",
+      "sha256": "3f5b51f946bca0a3de19fb03b3bb758abd275121145ef9975bd5cfe270e2adc7"
+    },
+    {
+      "cue_id": "cbm-cue-096",
+      "asset_id": "capitalizes-industrial-cashflows-v1",
+      "sha256": "3f5b51f946bca0a3de19fb03b3bb758abd275121145ef9975bd5cfe270e2adc7"
+    },
+    {
+      "cue_id": "cbm-cue-097",
+      "asset_id": "capitalizes-industrial-cashflows-v1",
+      "sha256": "3f5b51f946bca0a3de19fb03b3bb758abd275121145ef9975bd5cfe270e2adc7"
+    },
+    {
+      "cue_id": "cbm-cue-098",
+      "asset_id": "capitalizes-industrial-cashflows-v1",
+      "sha256": "3f5b51f946bca0a3de19fb03b3bb758abd275121145ef9975bd5cfe270e2adc7"
+    },
+    {
+      "cue_id": "cbm-cue-099",
+      "asset_id": "capitalizes-industrial-cashflows-v1",
+      "sha256": "3f5b51f946bca0a3de19fb03b3bb758abd275121145ef9975bd5cfe270e2adc7"
+    },
+    {
+      "cue_id": "cbm-cue-100",
+      "asset_id": "capitalizes-industrial-cashflows-v1",
+      "sha256": "3f5b51f946bca0a3de19fb03b3bb758abd275121145ef9975bd5cfe270e2adc7"
+    },
+    {
+      "cue_id": "cbm-cue-101",
+      "asset_id": "capitalizes-industrial-cashflows-v1",
+      "sha256": "3f5b51f946bca0a3de19fb03b3bb758abd275121145ef9975bd5cfe270e2adc7"
+    },
+    {
+      "cue_id": "cbm-cue-102",
+      "asset_id": "capitalizes-industrial-cashflows-v1",
+      "sha256": "3f5b51f946bca0a3de19fb03b3bb758abd275121145ef9975bd5cfe270e2adc7"
+    },
+    {
+      "cue_id": "cbm-cue-103",
+      "asset_id": "capitalizes-industrial-cashflows-v1",
+      "sha256": "3f5b51f946bca0a3de19fb03b3bb758abd275121145ef9975bd5cfe270e2adc7"
+    },
+    {
+      "cue_id": "cbm-cue-104",
+      "asset_id": "capitalizes-industrial-cashflows-v1",
+      "sha256": "3f5b51f946bca0a3de19fb03b3bb758abd275121145ef9975bd5cfe270e2adc7"
+    },
+    {
+      "cue_id": "cbm-cue-105",
+      "asset_id": "capitalizes-industrial-cashflows-v1",
+      "sha256": "3f5b51f946bca0a3de19fb03b3bb758abd275121145ef9975bd5cfe270e2adc7"
+    },
+    {
+      "cue_id": "cbm-cue-106",
+      "asset_id": "capitalizes-industrial-cashflows-v1",
+      "sha256": "3f5b51f946bca0a3de19fb03b3bb758abd275121145ef9975bd5cfe270e2adc7"
+    },
+    {
+      "cue_id": "cbm-cue-107",
+      "asset_id": "capitalizes-industrial-cashflows-v1",
+      "sha256": "3f5b51f946bca0a3de19fb03b3bb758abd275121145ef9975bd5cfe270e2adc7"
+    },
+    {
+      "cue_id": "cbm-cue-108",
+      "asset_id": "capitalizes-industrial-cashflows-v1",
+      "sha256": "3f5b51f946bca0a3de19fb03b3bb758abd275121145ef9975bd5cfe270e2adc7"
+    },
+    {
+      "cue_id": "cbm-cue-109",
+      "asset_id": "capitalizes-industrial-cashflows-v1",
+      "sha256": "3f5b51f946bca0a3de19fb03b3bb758abd275121145ef9975bd5cfe270e2adc7"
+    },
+    {
+      "cue_id": "cbm-cue-110",
+      "asset_id": "capitalizes-industrial-cashflows-v1",
+      "sha256": "3f5b51f946bca0a3de19fb03b3bb758abd275121145ef9975bd5cfe270e2adc7"
+    },
+    {
+      "cue_id": "cbm-cue-111",
+      "asset_id": "capitalizes-industrial-cashflows-v1",
+      "sha256": "3f5b51f946bca0a3de19fb03b3bb758abd275121145ef9975bd5cfe270e2adc7"
+    },
+    {
+      "cue_id": "cbm-cue-112",
+      "asset_id": "strategic-chokepoint-network-v1",
+      "sha256": "71b184f543d8497e451a3e6391ae4f634f0fbaf3130e6f131d2cde1b1ad090b6"
+    },
+    {
+      "cue_id": "cbm-cue-113",
+      "asset_id": "strategic-chokepoint-network-v1",
+      "sha256": "71b184f543d8497e451a3e6391ae4f634f0fbaf3130e6f131d2cde1b1ad090b6"
+    },
+    {
+      "cue_id": "cbm-cue-114",
+      "asset_id": "strategic-chokepoint-network-v1",
+      "sha256": "71b184f543d8497e451a3e6391ae4f634f0fbaf3130e6f131d2cde1b1ad090b6"
+    },
+    {
+      "cue_id": "cbm-cue-115",
+      "asset_id": "strategic-chokepoint-network-v1",
+      "sha256": "71b184f543d8497e451a3e6391ae4f634f0fbaf3130e6f131d2cde1b1ad090b6"
+    },
+    {
+      "cue_id": "cbm-cue-116",
+      "asset_id": "strategic-chokepoint-network-v1",
+      "sha256": "71b184f543d8497e451a3e6391ae4f634f0fbaf3130e6f131d2cde1b1ad090b6"
+    },
+    {
+      "cue_id": "cbm-cue-117",
+      "asset_id": "strategic-chokepoint-network-v1",
+      "sha256": "71b184f543d8497e451a3e6391ae4f634f0fbaf3130e6f131d2cde1b1ad090b6"
+    },
+    {
+      "cue_id": "cbm-cue-118",
+      "asset_id": "hbm-pipeline-and-reservoir-v1",
+      "sha256": "6ce3f198f017024ba2cc3f70add6c80996817a77faf9bd2e962fe57f2d9c2366"
+    },
+    {
+      "cue_id": "cbm-cue-119",
+      "asset_id": "hbm-pipeline-and-reservoir-v1",
+      "sha256": "6ce3f198f017024ba2cc3f70add6c80996817a77faf9bd2e962fe57f2d9c2366"
+    },
+    {
+      "cue_id": "cbm-cue-120",
+      "asset_id": "hbm-pipeline-and-reservoir-v1",
+      "sha256": "6ce3f198f017024ba2cc3f70add6c80996817a77faf9bd2e962fe57f2d9c2366"
+    },
+    {
+      "cue_id": "cbm-cue-121",
+      "asset_id": "hbm-pipeline-and-reservoir-v1",
+      "sha256": "6ce3f198f017024ba2cc3f70add6c80996817a77faf9bd2e962fe57f2d9c2366"
+    },
+    {
+      "cue_id": "cbm-cue-122",
+      "asset_id": "index-fund-weighted-inflows-v2",
+      "sha256": "d10b1e8571b65117d529f6a2687e613b73400eba55774df338a2b309ba301a02"
+    },
+    {
+      "cue_id": "cbm-cue-123",
+      "asset_id": "index-fund-weighted-inflows-v2",
+      "sha256": "d10b1e8571b65117d529f6a2687e613b73400eba55774df338a2b309ba301a02"
+    },
+    {
+      "cue_id": "cbm-cue-124",
+      "asset_id": "index-fund-weighted-inflows-v2",
+      "sha256": "d10b1e8571b65117d529f6a2687e613b73400eba55774df338a2b309ba301a02"
+    },
+    {
+      "cue_id": "cbm-cue-125",
+      "asset_id": "index-fund-weighted-inflows-v2",
+      "sha256": "d10b1e8571b65117d529f6a2687e613b73400eba55774df338a2b309ba301a02"
+    },
+    {
+      "cue_id": "cbm-cue-126",
+      "asset_id": "index-fund-weighted-inflows-v2",
+      "sha256": "d10b1e8571b65117d529f6a2687e613b73400eba55774df338a2b309ba301a02"
+    },
+    {
+      "cue_id": "cbm-cue-127",
+      "asset_id": "index-fund-weighted-inflows-v2",
+      "sha256": "d10b1e8571b65117d529f6a2687e613b73400eba55774df338a2b309ba301a02"
+    },
+    {
+      "cue_id": "cbm-cue-128",
+      "asset_id": "index-fund-weighted-inflows-v2",
+      "sha256": "d10b1e8571b65117d529f6a2687e613b73400eba55774df338a2b309ba301a02"
+    },
+    {
+      "cue_id": "cbm-cue-129",
+      "asset_id": "index-fund-weighted-inflows-v2",
+      "sha256": "d10b1e8571b65117d529f6a2687e613b73400eba55774df338a2b309ba301a02"
+    },
+    {
+      "cue_id": "cbm-cue-130",
+      "asset_id": "index-fund-weighted-inflows-v2",
+      "sha256": "d10b1e8571b65117d529f6a2687e613b73400eba55774df338a2b309ba301a02"
+    },
+    {
+      "cue_id": "cbm-cue-131",
+      "asset_id": "index-fund-weighted-inflows-v2",
+      "sha256": "d10b1e8571b65117d529f6a2687e613b73400eba55774df338a2b309ba301a02"
+    },
+    {
+      "cue_id": "cbm-cue-132",
+      "asset_id": "index-fund-weighted-inflows-v2",
+      "sha256": "d10b1e8571b65117d529f6a2687e613b73400eba55774df338a2b309ba301a02"
+    },
+    {
+      "cue_id": "cbm-cue-133",
+      "asset_id": "shared-cause-automatic-allocation-v1",
+      "sha256": "97a8ceb2c4671ba9e9493785791f41068a333651f09f873833a4224eae6dd578"
+    },
+    {
+      "cue_id": "cbm-cue-134",
+      "asset_id": "shared-cause-automatic-allocation-v1",
+      "sha256": "97a8ceb2c4671ba9e9493785791f41068a333651f09f873833a4224eae6dd578"
+    },
+    {
+      "cue_id": "cbm-cue-135",
+      "asset_id": "shared-cause-automatic-allocation-v1",
+      "sha256": "97a8ceb2c4671ba9e9493785791f41068a333651f09f873833a4224eae6dd578"
+    },
+    {
+      "cue_id": "cbm-cue-136",
+      "asset_id": "shared-cause-automatic-allocation-v1",
+      "sha256": "97a8ceb2c4671ba9e9493785791f41068a333651f09f873833a4224eae6dd578"
+    },
+    {
+      "cue_id": "cbm-cue-137",
+      "asset_id": "shared-cause-automatic-allocation-v1",
+      "sha256": "97a8ceb2c4671ba9e9493785791f41068a333651f09f873833a4224eae6dd578"
+    },
+    {
+      "cue_id": "cbm-cue-138",
+      "asset_id": "evidence-index-inclusion-gate-v1",
+      "sha256": "56569e1ebe9c0b7e3d7129f9459b70a673a26680bab993cab27b138a1639af91"
+    },
+    {
+      "cue_id": "cbm-cue-139",
+      "asset_id": "evidence-index-inclusion-gate-v1",
+      "sha256": "56569e1ebe9c0b7e3d7129f9459b70a673a26680bab993cab27b138a1639af91"
+    },
+    {
+      "cue_id": "cbm-cue-140",
+      "asset_id": "evidence-index-inclusion-gate-v1",
+      "sha256": "56569e1ebe9c0b7e3d7129f9459b70a673a26680bab993cab27b138a1639af91"
+    },
+    {
+      "cue_id": "cbm-cue-141",
+      "asset_id": "evidence-float-weighting-v1",
+      "sha256": "c25f07a8e276b4325f01043732ce91d8ec7d74506b6b8ff162cc0f1749a92d79"
+    },
+    {
+      "cue_id": "cbm-cue-142",
+      "asset_id": "evidence-float-weighting-v1",
+      "sha256": "c25f07a8e276b4325f01043732ce91d8ec7d74506b6b8ff162cc0f1749a92d79"
+    },
+    {
+      "cue_id": "cbm-cue-143",
+      "asset_id": "evidence-float-weighting-v1",
+      "sha256": "c25f07a8e276b4325f01043732ce91d8ec7d74506b6b8ff162cc0f1749a92d79"
+    },
+    {
+      "cue_id": "cbm-cue-144",
+      "asset_id": "evidence-automatic-business-mix-v1",
+      "sha256": "8280ce8c8495e9c0a609765ca9363c3920af39d28112872ac4d2e8db9b7886b7"
+    },
+    {
+      "cue_id": "cbm-cue-145",
+      "asset_id": "evidence-automatic-business-mix-v1",
+      "sha256": "8280ce8c8495e9c0a609765ca9363c3920af39d28112872ac4d2e8db9b7886b7"
+    },
+    {
+      "cue_id": "cbm-cue-146",
+      "asset_id": "evidence-automatic-business-mix-v1",
+      "sha256": "8280ce8c8495e9c0a609765ca9363c3920af39d28112872ac4d2e8db9b7886b7"
+    },
+    {
+      "cue_id": "cbm-cue-147",
+      "asset_id": "evidence-diworsification-plateau-v1",
+      "sha256": "3ade7ee183ae7b50edfac7e4b11849c258ba18b2a4d6ebfd4c0a0e9cee5b55f6"
+    },
+    {
+      "cue_id": "cbm-cue-148",
+      "asset_id": "evidence-diworsification-plateau-v1",
+      "sha256": "3ade7ee183ae7b50edfac7e4b11849c258ba18b2a4d6ebfd4c0a0e9cee5b55f6"
+    },
+    {
+      "cue_id": "cbm-cue-149",
+      "asset_id": "evidence-diworsification-plateau-v1",
+      "sha256": "3ade7ee183ae7b50edfac7e4b11849c258ba18b2a4d6ebfd4c0a0e9cee5b55f6"
+    },
+    {
+      "cue_id": "cbm-cue-150",
+      "asset_id": "index-roster-diworsification-v1",
+      "sha256": "592b719dbf6b0025a4c908f02955da797a224c807b47e7028397323caeb486de"
+    },
+    {
+      "cue_id": "cbm-cue-151",
+      "asset_id": "index-roster-diworsification-v1",
+      "sha256": "592b719dbf6b0025a4c908f02955da797a224c807b47e7028397323caeb486de"
+    },
+    {
+      "cue_id": "cbm-cue-152",
+      "asset_id": "index-roster-diworsification-v1",
+      "sha256": "592b719dbf6b0025a4c908f02955da797a224c807b47e7028397323caeb486de"
+    },
+    {
+      "cue_id": "cbm-cue-153",
+      "asset_id": "index-roster-diworsification-v1",
+      "sha256": "592b719dbf6b0025a4c908f02955da797a224c807b47e7028397323caeb486de"
+    },
+    {
+      "cue_id": "cbm-cue-154",
+      "asset_id": "evidence-portfolio-jobs-v1",
+      "sha256": "1505d17e735c9c445f2aeb4628e34d9268532a5248593a6e8fc1f17ccb427724"
+    },
+    {
+      "cue_id": "cbm-cue-155",
+      "asset_id": "evidence-portfolio-jobs-v1",
+      "sha256": "1505d17e735c9c445f2aeb4628e34d9268532a5248593a6e8fc1f17ccb427724"
+    },
+    {
+      "cue_id": "cbm-cue-156",
+      "asset_id": "evidence-portfolio-jobs-v1",
+      "sha256": "1505d17e735c9c445f2aeb4628e34d9268532a5248593a6e8fc1f17ccb427724"
+    },
+    {
+      "cue_id": "cbm-cue-157",
+      "asset_id": "evidence-portfolio-jobs-v1",
+      "sha256": "1505d17e735c9c445f2aeb4628e34d9268532a5248593a6e8fc1f17ccb427724"
+    },
+    {
+      "cue_id": "cbm-cue-158",
+      "asset_id": "evidence-sp500-concentration-v1",
+      "sha256": "4d07e81763e9accef609da0ff5e3671211f9db78286f3121cd8584712c01e20b"
+    },
+    {
+      "cue_id": "cbm-cue-159",
+      "asset_id": "evidence-sp500-concentration-v1",
+      "sha256": "4d07e81763e9accef609da0ff5e3671211f9db78286f3121cd8584712c01e20b"
+    },
+    {
+      "cue_id": "cbm-cue-160",
+      "asset_id": "evidence-sp500-concentration-v1",
+      "sha256": "4d07e81763e9accef609da0ff5e3671211f9db78286f3121cd8584712c01e20b"
+    },
+    {
+      "cue_id": "cbm-cue-161",
+      "asset_id": "evidence-index-tail-absorption-v1",
+      "sha256": "8921d41d652ac6cedb51772df0e338af4e5420fd434f8ae5ebcd0862d132fe63"
+    },
+    {
+      "cue_id": "cbm-cue-162",
+      "asset_id": "evidence-index-tail-absorption-v1",
+      "sha256": "8921d41d652ac6cedb51772df0e338af4e5420fd434f8ae5ebcd0862d132fe63"
+    },
+    {
+      "cue_id": "cbm-cue-163",
+      "asset_id": "index-roster-diworsification-v1",
+      "sha256": "592b719dbf6b0025a4c908f02955da797a224c807b47e7028397323caeb486de"
+    },
+    {
+      "cue_id": "cbm-cue-164",
+      "asset_id": "index-roster-diworsification-v1",
+      "sha256": "592b719dbf6b0025a4c908f02955da797a224c807b47e7028397323caeb486de"
+    },
+    {
+      "cue_id": "cbm-cue-165",
+      "asset_id": "index-roster-diworsification-v1",
+      "sha256": "592b719dbf6b0025a4c908f02955da797a224c807b47e7028397323caeb486de"
+    },
+    {
+      "cue_id": "cbm-cue-166",
+      "asset_id": "evidence-portfolio-jobs-v1",
+      "sha256": "1505d17e735c9c445f2aeb4628e34d9268532a5248593a6e8fc1f17ccb427724"
+    },
+    {
+      "cue_id": "cbm-cue-167",
+      "asset_id": "evidence-portfolio-jobs-v1",
+      "sha256": "1505d17e735c9c445f2aeb4628e34d9268532a5248593a6e8fc1f17ccb427724"
+    },
+    {
+      "cue_id": "cbm-cue-168",
+      "asset_id": "evidence-portfolio-jobs-v1",
+      "sha256": "1505d17e735c9c445f2aeb4628e34d9268532a5248593a6e8fc1f17ccb427724"
+    },
+    {
+      "cue_id": "cbm-cue-169",
+      "asset_id": "evidence-portfolio-jobs-v1",
+      "sha256": "1505d17e735c9c445f2aeb4628e34d9268532a5248593a6e8fc1f17ccb427724"
+    },
+    {
+      "cue_id": "cbm-cue-170",
+      "asset_id": "evidence-portfolio-jobs-v1",
+      "sha256": "1505d17e735c9c445f2aeb4628e34d9268532a5248593a6e8fc1f17ccb427724"
+    },
+    {
+      "cue_id": "cbm-cue-171",
+      "asset_id": "evidence-portfolio-jobs-v1",
+      "sha256": "1505d17e735c9c445f2aeb4628e34d9268532a5248593a6e8fc1f17ccb427724"
+    },
+    {
+      "cue_id": "cbm-cue-172",
+      "asset_id": "evidence-portfolio-jobs-v1",
+      "sha256": "1505d17e735c9c445f2aeb4628e34d9268532a5248593a6e8fc1f17ccb427724"
+    },
+    {
+      "cue_id": "cbm-cue-173",
+      "asset_id": "evidence-wealth-target-path-v1",
+      "sha256": "2bf818acaabab79700acc47ab067ffda1eb6662562fd5cda86e6e45b94445cf4"
+    },
+    {
+      "cue_id": "cbm-cue-174",
+      "asset_id": "evidence-wealth-target-path-v1",
+      "sha256": "2bf818acaabab79700acc47ab067ffda1eb6662562fd5cda86e6e45b94445cf4"
+    },
+    {
+      "cue_id": "cbm-cue-175",
+      "asset_id": "evidence-wealth-target-path-v1",
+      "sha256": "2bf818acaabab79700acc47ab067ffda1eb6662562fd5cda86e6e45b94445cf4"
+    },
+    {
+      "cue_id": "cbm-cue-176",
+      "asset_id": "evidence-wealth-target-path-v1",
+      "sha256": "2bf818acaabab79700acc47ab067ffda1eb6662562fd5cda86e6e45b94445cf4"
+    },
+    {
+      "cue_id": "cbm-cue-177",
+      "asset_id": "evidence-return-ten-percent-v1",
+      "sha256": "f525d8cf8eae564ffa798c21dc108196c2ecc7077025d0d5ad41c811098cd7c2"
+    },
+    {
+      "cue_id": "cbm-cue-178",
+      "asset_id": "evidence-return-ten-percent-v1",
+      "sha256": "f525d8cf8eae564ffa798c21dc108196c2ecc7077025d0d5ad41c811098cd7c2"
+    },
+    {
+      "cue_id": "cbm-cue-179",
+      "asset_id": "evidence-return-ten-percent-v1",
+      "sha256": "f525d8cf8eae564ffa798c21dc108196c2ecc7077025d0d5ad41c811098cd7c2"
+    },
+    {
+      "cue_id": "cbm-cue-180",
+      "asset_id": "evidence-return-ten-percent-v1",
+      "sha256": "f525d8cf8eae564ffa798c21dc108196c2ecc7077025d0d5ad41c811098cd7c2"
+    },
+    {
+      "cue_id": "cbm-cue-181",
+      "asset_id": "evidence-return-comparison-v1",
+      "sha256": "ad0560010423d4096f8d49dfba826299d0a6ba1661c84d04dbec779da8f5b84f"
+    },
+    {
+      "cue_id": "cbm-cue-182",
+      "asset_id": "evidence-return-comparison-v1",
+      "sha256": "ad0560010423d4096f8d49dfba826299d0a6ba1661c84d04dbec779da8f5b84f"
+    },
+    {
+      "cue_id": "cbm-cue-183",
+      "asset_id": "evidence-return-comparison-v1",
+      "sha256": "ad0560010423d4096f8d49dfba826299d0a6ba1661c84d04dbec779da8f5b84f"
+    },
+    {
+      "cue_id": "cbm-cue-184",
+      "asset_id": "evidence-return-comparison-v1",
+      "sha256": "ad0560010423d4096f8d49dfba826299d0a6ba1661c84d04dbec779da8f5b84f"
+    },
+    {
+      "cue_id": "cbm-cue-185",
+      "asset_id": "evidence-return-comparison-v1",
+      "sha256": "ad0560010423d4096f8d49dfba826299d0a6ba1661c84d04dbec779da8f5b84f"
+    },
+    {
+      "cue_id": "cbm-cue-186",
+      "asset_id": "evidence-return-comparison-v1",
+      "sha256": "ad0560010423d4096f8d49dfba826299d0a6ba1661c84d04dbec779da8f5b84f"
+    },
+    {
+      "cue_id": "cbm-cue-187",
+      "asset_id": "evidence-return-comparison-v1",
+      "sha256": "ad0560010423d4096f8d49dfba826299d0a6ba1661c84d04dbec779da8f5b84f"
+    },
+    {
+      "cue_id": "cbm-cue-188",
+      "asset_id": "evidence-return-comparison-v1",
+      "sha256": "ad0560010423d4096f8d49dfba826299d0a6ba1661c84d04dbec779da8f5b84f"
+    },
+    {
+      "cue_id": "cbm-cue-189",
+      "asset_id": "evidence-wealth-levers-v1",
+      "sha256": "a7ca4dbbbbc1f83f361d901c1614c8b8ad1050c6ff7a2ec511c5b8dc26e6baea"
+    },
+    {
+      "cue_id": "cbm-cue-190",
+      "asset_id": "evidence-wealth-levers-v1",
+      "sha256": "a7ca4dbbbbc1f83f361d901c1614c8b8ad1050c6ff7a2ec511c5b8dc26e6baea"
+    },
+    {
+      "cue_id": "cbm-cue-191",
+      "asset_id": "evidence-wealth-levers-v1",
+      "sha256": "a7ca4dbbbbc1f83f361d901c1614c8b8ad1050c6ff7a2ec511c5b8dc26e6baea"
+    },
+    {
+      "cue_id": "cbm-cue-192",
+      "asset_id": "evidence-index-scale-v1",
+      "sha256": "649eea7c27d18ad22b5cb4e26374be3e59c1a165e4b2487b12a87249cf21409e"
+    },
+    {
+      "cue_id": "cbm-cue-193",
+      "asset_id": "evidence-index-scale-v1",
+      "sha256": "649eea7c27d18ad22b5cb4e26374be3e59c1a165e4b2487b12a87249cf21409e"
+    },
+    {
+      "cue_id": "cbm-cue-194",
+      "asset_id": "evidence-index-scale-v1",
+      "sha256": "649eea7c27d18ad22b5cb4e26374be3e59c1a165e4b2487b12a87249cf21409e"
+    },
+    {
+      "cue_id": "cbm-cue-195",
+      "asset_id": "evidence-index-scale-v1",
+      "sha256": "649eea7c27d18ad22b5cb4e26374be3e59c1a165e4b2487b12a87249cf21409e"
+    },
+    {
+      "cue_id": "cbm-cue-196",
+      "asset_id": "evidence-index-scale-v1",
+      "sha256": "649eea7c27d18ad22b5cb4e26374be3e59c1a165e4b2487b12a87249cf21409e"
+    },
+    {
+      "cue_id": "cbm-cue-197",
+      "asset_id": "evidence-index-scale-v1",
+      "sha256": "649eea7c27d18ad22b5cb4e26374be3e59c1a165e4b2487b12a87249cf21409e"
+    },
+    {
+      "cue_id": "cbm-cue-198",
+      "asset_id": "evidence-portfolio-jobs-v1",
+      "sha256": "1505d17e735c9c445f2aeb4628e34d9268532a5248593a6e8fc1f17ccb427724"
+    },
+    {
+      "cue_id": "cbm-cue-199",
+      "asset_id": "evidence-portfolio-jobs-v1",
+      "sha256": "1505d17e735c9c445f2aeb4628e34d9268532a5248593a6e8fc1f17ccb427724"
+    },
+    {
+      "cue_id": "cbm-cue-200",
+      "asset_id": "evidence-portfolio-jobs-v1",
+      "sha256": "1505d17e735c9c445f2aeb4628e34d9268532a5248593a6e8fc1f17ccb427724"
+    },
+    {
+      "cue_id": "cbm-cue-201",
+      "asset_id": "evidence-portfolio-jobs-v1",
+      "sha256": "1505d17e735c9c445f2aeb4628e34d9268532a5248593a6e8fc1f17ccb427724"
+    },
+    {
+      "cue_id": "cbm-cue-202",
+      "asset_id": "evidence-portfolio-jobs-v1",
+      "sha256": "1505d17e735c9c445f2aeb4628e34d9268532a5248593a6e8fc1f17ccb427724"
+    },
+    {
+      "cue_id": "cbm-cue-203",
+      "asset_id": "evidence-portfolio-jobs-v1",
+      "sha256": "1505d17e735c9c445f2aeb4628e34d9268532a5248593a6e8fc1f17ccb427724"
+    },
+    {
+      "cue_id": "cbm-cue-204",
+      "asset_id": "evidence-portfolio-jobs-v1",
+      "sha256": "1505d17e735c9c445f2aeb4628e34d9268532a5248593a6e8fc1f17ccb427724"
+    },
+    {
+      "cue_id": "cbm-cue-205",
+      "asset_id": "evidence-portfolio-jobs-v1",
+      "sha256": "1505d17e735c9c445f2aeb4628e34d9268532a5248593a6e8fc1f17ccb427724"
+    },
+    {
+      "cue_id": "cbm-cue-206",
+      "asset_id": "two-sleeve-barbell-v1",
+      "sha256": "b290127adfd80e66583cdedfe85803e38b2ae4bccb5dedba735e0b8a44208b36"
+    },
+    {
+      "cue_id": "cbm-cue-207",
+      "asset_id": "two-sleeve-barbell-v1",
+      "sha256": "b290127adfd80e66583cdedfe85803e38b2ae4bccb5dedba735e0b8a44208b36"
+    },
+    {
+      "cue_id": "cbm-cue-208",
+      "asset_id": "two-sleeve-barbell-v1",
+      "sha256": "b290127adfd80e66583cdedfe85803e38b2ae4bccb5dedba735e0b8a44208b36"
+    },
+    {
+      "cue_id": "cbm-cue-209",
+      "asset_id": "two-sleeve-barbell-v1",
+      "sha256": "b290127adfd80e66583cdedfe85803e38b2ae4bccb5dedba735e0b8a44208b36"
+    },
+    {
+      "cue_id": "cbm-cue-210",
+      "asset_id": "two-sleeve-barbell-v1",
+      "sha256": "b290127adfd80e66583cdedfe85803e38b2ae4bccb5dedba735e0b8a44208b36"
+    },
+    {
+      "cue_id": "cbm-cue-211",
+      "asset_id": "two-sleeve-barbell-v1",
+      "sha256": "b290127adfd80e66583cdedfe85803e38b2ae4bccb5dedba735e0b8a44208b36"
+    },
+    {
+      "cue_id": "cbm-cue-212",
+      "asset_id": "evidence-market-leaders-basket-v1",
+      "sha256": "7c3add58798f2f45f61251d89929984857aaef6c54cc723a7a0a6f69b4381c19"
+    },
+    {
+      "cue_id": "cbm-cue-213",
+      "asset_id": "evidence-market-leaders-basket-v1",
+      "sha256": "7c3add58798f2f45f61251d89929984857aaef6c54cc723a7a0a6f69b4381c19"
+    },
+    {
+      "cue_id": "cbm-cue-214",
+      "asset_id": "evidence-market-leaders-basket-v1",
+      "sha256": "7c3add58798f2f45f61251d89929984857aaef6c54cc723a7a0a6f69b4381c19"
+    },
+    {
+      "cue_id": "cbm-cue-215",
+      "asset_id": "evidence-market-leaders-basket-v1",
+      "sha256": "7c3add58798f2f45f61251d89929984857aaef6c54cc723a7a0a6f69b4381c19"
+    },
+    {
+      "cue_id": "cbm-cue-216",
+      "asset_id": "evidence-market-leaders-v1",
+      "sha256": "90998772685a4169ce1715944be72b4c8350b86dfa5b4a7809fbf9d5be65d9a9"
+    },
+    {
+      "cue_id": "cbm-cue-217",
+      "asset_id": "evidence-market-leaders-v1",
+      "sha256": "90998772685a4169ce1715944be72b4c8350b86dfa5b4a7809fbf9d5be65d9a9"
+    },
+    {
+      "cue_id": "cbm-cue-218",
+      "asset_id": "evidence-market-leaders-v1",
+      "sha256": "90998772685a4169ce1715944be72b4c8350b86dfa5b4a7809fbf9d5be65d9a9"
+    },
+    {
+      "cue_id": "cbm-cue-219",
+      "asset_id": "evidence-market-leaders-backtest-v1",
+      "sha256": "cab684dfc3c2e2318720cc3a7220de669e364172c5b1cc8c17ad7964c7de2f6e"
+    },
+    {
+      "cue_id": "cbm-cue-220",
+      "asset_id": "evidence-market-leaders-backtest-v1",
+      "sha256": "cab684dfc3c2e2318720cc3a7220de669e364172c5b1cc8c17ad7964c7de2f6e"
+    },
+    {
+      "cue_id": "cbm-cue-221",
+      "asset_id": "evidence-market-leaders-backtest-v1",
+      "sha256": "cab684dfc3c2e2318720cc3a7220de669e364172c5b1cc8c17ad7964c7de2f6e"
+    },
+    {
+      "cue_id": "cbm-cue-222",
+      "asset_id": "evidence-market-leaders-drawdown-v1",
+      "sha256": "052943a89bf25989c615e596d559c23b798eff31d6b6c68f38d9b6ac8632f17a"
+    },
+    {
+      "cue_id": "cbm-cue-223",
+      "asset_id": "evidence-market-leaders-drawdown-v1",
+      "sha256": "052943a89bf25989c615e596d559c23b798eff31d6b6c68f38d9b6ac8632f17a"
+    },
+    {
+      "cue_id": "cbm-cue-224",
+      "asset_id": "evidence-market-leaders-drawdown-v1",
+      "sha256": "052943a89bf25989c615e596d559c23b798eff31d6b6c68f38d9b6ac8632f17a"
+    },
+    {
+      "cue_id": "cbm-cue-225",
+      "asset_id": "evidence-portfolio-jobs-v1",
+      "sha256": "1505d17e735c9c445f2aeb4628e34d9268532a5248593a6e8fc1f17ccb427724"
+    },
+    {
+      "cue_id": "cbm-cue-226",
+      "asset_id": "evidence-portfolio-jobs-v1",
+      "sha256": "1505d17e735c9c445f2aeb4628e34d9268532a5248593a6e8fc1f17ccb427724"
+    },
+    {
+      "cue_id": "cbm-cue-227",
+      "asset_id": "evidence-portfolio-jobs-v1",
+      "sha256": "1505d17e735c9c445f2aeb4628e34d9268532a5248593a6e8fc1f17ccb427724"
+    },
+    {
+      "cue_id": "cbm-cue-228",
+      "asset_id": "evidence-portfolio-jobs-v1",
+      "sha256": "1505d17e735c9c445f2aeb4628e34d9268532a5248593a6e8fc1f17ccb427724"
+    },
+    {
+      "cue_id": "cbm-cue-229",
+      "asset_id": "evidence-portfolio-jobs-v1",
+      "sha256": "1505d17e735c9c445f2aeb4628e34d9268532a5248593a6e8fc1f17ccb427724"
+    },
+    {
+      "cue_id": "cbm-cue-230",
+      "asset_id": "evidence-portfolio-jobs-v1",
+      "sha256": "1505d17e735c9c445f2aeb4628e34d9268532a5248593a6e8fc1f17ccb427724"
+    },
+    {
+      "cue_id": "cbm-cue-231",
+      "asset_id": "evidence-defensive-sleeve-risk-v1",
+      "sha256": "8174bbbbc7d8dcaf7dbf88cc577ed134e9dd8285f5f665ade4c9e42e82844fed"
+    },
+    {
+      "cue_id": "cbm-cue-232",
+      "asset_id": "evidence-defensive-sleeve-risk-v1",
+      "sha256": "8174bbbbc7d8dcaf7dbf88cc577ed134e9dd8285f5f665ade4c9e42e82844fed"
+    },
+    {
+      "cue_id": "cbm-cue-233",
+      "asset_id": "evidence-defensive-sleeve-risk-v1",
+      "sha256": "8174bbbbc7d8dcaf7dbf88cc577ed134e9dd8285f5f665ade4c9e42e82844fed"
+    },
+    {
+      "cue_id": "cbm-cue-234",
+      "asset_id": "evidence-defensive-sleeve-risk-v1",
+      "sha256": "8174bbbbc7d8dcaf7dbf88cc577ed134e9dd8285f5f665ade4c9e42e82844fed"
+    },
+    {
+      "cue_id": "cbm-cue-235",
+      "asset_id": "evidence-defensive-sleeve-risk-v1",
+      "sha256": "8174bbbbc7d8dcaf7dbf88cc577ed134e9dd8285f5f665ade4c9e42e82844fed"
+    },
+    {
+      "cue_id": "cbm-cue-236",
+      "asset_id": "evidence-concentrated-selection-risk-v1",
+      "sha256": "62017f723b2565c1e0a819a01cb279d6db4f7a0c9e084e2e4e1f5883b09f00cb"
+    },
+    {
+      "cue_id": "cbm-cue-237",
+      "asset_id": "evidence-concentrated-selection-risk-v1",
+      "sha256": "62017f723b2565c1e0a819a01cb279d6db4f7a0c9e084e2e4e1f5883b09f00cb"
+    },
+    {
+      "cue_id": "cbm-cue-238",
+      "asset_id": "evidence-concentrated-selection-risk-v1",
+      "sha256": "62017f723b2565c1e0a819a01cb279d6db4f7a0c9e084e2e4e1f5883b09f00cb"
+    },
+    {
+      "cue_id": "cbm-cue-239",
+      "asset_id": "evidence-concentrated-selection-risk-v1",
+      "sha256": "62017f723b2565c1e0a819a01cb279d6db4f7a0c9e084e2e4e1f5883b09f00cb"
+    },
+    {
+      "cue_id": "cbm-cue-240",
+      "asset_id": "evidence-concentrated-selection-risk-v1",
+      "sha256": "62017f723b2565c1e0a819a01cb279d6db4f7a0c9e084e2e4e1f5883b09f00cb"
+    },
+    {
+      "cue_id": "cbm-cue-241",
+      "asset_id": "evidence-concentrated-selection-risk-v1",
+      "sha256": "62017f723b2565c1e0a819a01cb279d6db4f7a0c9e084e2e4e1f5883b09f00cb"
+    },
+    {
+      "cue_id": "cbm-cue-242",
+      "asset_id": "evidence-defensive-sleeve-risk-v1",
+      "sha256": "8174bbbbc7d8dcaf7dbf88cc577ed134e9dd8285f5f665ade4c9e42e82844fed"
+    },
+    {
+      "cue_id": "cbm-cue-243",
+      "asset_id": "evidence-defensive-sleeve-risk-v1",
+      "sha256": "8174bbbbc7d8dcaf7dbf88cc577ed134e9dd8285f5f665ade4c9e42e82844fed"
+    },
+    {
+      "cue_id": "cbm-cue-244",
+      "asset_id": "evidence-defensive-sleeve-risk-v1",
+      "sha256": "8174bbbbc7d8dcaf7dbf88cc577ed134e9dd8285f5f665ade4c9e42e82844fed"
+    },
+    {
+      "cue_id": "cbm-cue-245",
+      "asset_id": "evidence-defensive-sleeve-risk-v1",
+      "sha256": "8174bbbbc7d8dcaf7dbf88cc577ed134e9dd8285f5f665ade4c9e42e82844fed"
+    },
+    {
+      "cue_id": "cbm-cue-246",
+      "asset_id": "evidence-equal-weight-countercase-v1",
+      "sha256": "71280a8474dc488cf6fd2dfdc5358da4875b03099339257e905c70d438d3b7a1"
+    },
+    {
+      "cue_id": "cbm-cue-247",
+      "asset_id": "evidence-equal-weight-countercase-v1",
+      "sha256": "71280a8474dc488cf6fd2dfdc5358da4875b03099339257e905c70d438d3b7a1"
+    },
+    {
+      "cue_id": "cbm-cue-248",
+      "asset_id": "evidence-equal-weight-countercase-v1",
+      "sha256": "71280a8474dc488cf6fd2dfdc5358da4875b03099339257e905c70d438d3b7a1"
+    },
+    {
+      "cue_id": "cbm-cue-249",
+      "asset_id": "evidence-equal-weight-countercase-v1",
+      "sha256": "71280a8474dc488cf6fd2dfdc5358da4875b03099339257e905c70d438d3b7a1"
+    },
+    {
+      "cue_id": "cbm-cue-250",
+      "asset_id": "evidence-equal-weight-countercase-v1",
+      "sha256": "71280a8474dc488cf6fd2dfdc5358da4875b03099339257e905c70d438d3b7a1"
+    },
+    {
+      "cue_id": "cbm-cue-251",
+      "asset_id": "evidence-equal-weight-countercase-v1",
+      "sha256": "71280a8474dc488cf6fd2dfdc5358da4875b03099339257e905c70d438d3b7a1"
+    },
+    {
+      "cue_id": "cbm-cue-252",
+      "asset_id": "evidence-equal-weight-countercase-v1",
+      "sha256": "71280a8474dc488cf6fd2dfdc5358da4875b03099339257e905c70d438d3b7a1"
+    },
+    {
+      "cue_id": "cbm-cue-253",
+      "asset_id": "evidence-equal-weight-countercase-v1",
+      "sha256": "71280a8474dc488cf6fd2dfdc5358da4875b03099339257e905c70d438d3b7a1"
+    },
+    {
+      "cue_id": "cbm-cue-254",
+      "asset_id": "memory-three-failure-points-v1",
+      "sha256": "f68e2f0e863f9427b10d4d23e807a7e417fc0ba3c9dad4b8bb5e2138f6cfd45a"
+    },
+    {
+      "cue_id": "cbm-cue-255",
+      "asset_id": "memory-three-failure-points-v1",
+      "sha256": "f68e2f0e863f9427b10d4d23e807a7e417fc0ba3c9dad4b8bb5e2138f6cfd45a"
+    },
+    {
+      "cue_id": "cbm-cue-256",
+      "asset_id": "memory-three-failure-points-v1",
+      "sha256": "f68e2f0e863f9427b10d4d23e807a7e417fc0ba3c9dad4b8bb5e2138f6cfd45a"
+    },
+    {
+      "cue_id": "cbm-cue-257",
+      "asset_id": "memory-three-failure-points-v1",
+      "sha256": "f68e2f0e863f9427b10d4d23e807a7e417fc0ba3c9dad4b8bb5e2138f6cfd45a"
+    },
+    {
+      "cue_id": "cbm-cue-258",
+      "asset_id": "memory-three-failure-points-v1",
+      "sha256": "f68e2f0e863f9427b10d4d23e807a7e417fc0ba3c9dad4b8bb5e2138f6cfd45a"
+    },
+    {
+      "cue_id": "cbm-cue-259",
+      "asset_id": "belief-versus-support-v2",
+      "sha256": "e85dae1630974425e9390b921e7d6edae639dae6e50b3089a129b2b634947abb"
+    },
+    {
+      "cue_id": "cbm-cue-260",
+      "asset_id": "belief-versus-support-v2",
+      "sha256": "e85dae1630974425e9390b921e7d6edae639dae6e50b3089a129b2b634947abb"
+    },
+    {
+      "cue_id": "cbm-cue-261",
+      "asset_id": "belief-versus-support-v2",
+      "sha256": "e85dae1630974425e9390b921e7d6edae639dae6e50b3089a129b2b634947abb"
+    },
+    {
+      "cue_id": "cbm-cue-262",
+      "asset_id": "evidence-bounded-conclusion-v1",
+      "sha256": "7619ef2c1449219b184596ca63212bdd3baa7948d0f0d89b0e5a15dfae3de301"
+    },
+    {
+      "cue_id": "cbm-cue-263",
+      "asset_id": "evidence-bounded-conclusion-v1",
+      "sha256": "7619ef2c1449219b184596ca63212bdd3baa7948d0f0d89b0e5a15dfae3de301"
+    },
+    {
+      "cue_id": "cbm-cue-264",
+      "asset_id": "hbm-physical-inputs-gate-v1",
+      "sha256": "aae016ef99f531002331f460f2949a5f758d4f8cfdb65b4d6e1bde910fa00934"
+    },
+    {
+      "cue_id": "cbm-cue-265",
+      "asset_id": "hbm-physical-inputs-gate-v1",
+      "sha256": "aae016ef99f531002331f460f2949a5f758d4f8cfdb65b4d6e1bde910fa00934"
+    },
+    {
+      "cue_id": "cbm-cue-266",
+      "asset_id": "hbm-physical-inputs-gate-v1",
+      "sha256": "aae016ef99f531002331f460f2949a5f758d4f8cfdb65b4d6e1bde910fa00934"
+    },
+    {
+      "cue_id": "cbm-cue-267",
+      "asset_id": "hbm-physical-inputs-gate-v1",
+      "sha256": "aae016ef99f531002331f460f2949a5f758d4f8cfdb65b4d6e1bde910fa00934"
+    },
+    {
+      "cue_id": "cbm-cue-268",
+      "asset_id": "hbm-physical-inputs-gate-v1",
+      "sha256": "aae016ef99f531002331f460f2949a5f758d4f8cfdb65b4d6e1bde910fa00934"
+    },
+    {
+      "cue_id": "cbm-cue-269",
+      "asset_id": "hbm-physical-inputs-gate-v1",
+      "sha256": "aae016ef99f531002331f460f2949a5f758d4f8cfdb65b4d6e1bde910fa00934"
+    },
+    {
+      "cue_id": "cbm-cue-270",
+      "asset_id": "hbm-physical-inputs-gate-v1",
+      "sha256": "aae016ef99f531002331f460f2949a5f758d4f8cfdb65b4d6e1bde910fa00934"
+    },
+    {
+      "cue_id": "cbm-cue-271",
+      "asset_id": "hbm-physical-inputs-gate-v1",
+      "sha256": "aae016ef99f531002331f460f2949a5f758d4f8cfdb65b4d6e1bde910fa00934"
+    },
+    {
+      "cue_id": "cbm-cue-272",
+      "asset_id": "hbm-physical-inputs-gate-v1",
+      "sha256": "aae016ef99f531002331f460f2949a5f758d4f8cfdb65b4d6e1bde910fa00934"
+    },
+    {
+      "cue_id": "cbm-cue-273",
+      "asset_id": "hbm-physical-inputs-gate-v1",
+      "sha256": "aae016ef99f531002331f460f2949a5f758d4f8cfdb65b4d6e1bde910fa00934"
+    },
+    {
+      "cue_id": "cbm-cue-274",
+      "asset_id": "hbm-physical-inputs-gate-v1",
+      "sha256": "aae016ef99f531002331f460f2949a5f758d4f8cfdb65b4d6e1bde910fa00934"
+    },
+    {
+      "cue_id": "cbm-cue-275",
+      "asset_id": "hbm-physical-inputs-gate-v1",
+      "sha256": "aae016ef99f531002331f460f2949a5f758d4f8cfdb65b4d6e1bde910fa00934"
+    },
+    {
+      "cue_id": "cbm-cue-276",
+      "asset_id": "hbm-physical-inputs-gate-v1",
+      "sha256": "aae016ef99f531002331f460f2949a5f758d4f8cfdb65b4d6e1bde910fa00934"
+    },
+    {
+      "cue_id": "cbm-cue-277",
+      "asset_id": "hbm-physical-inputs-gate-v1",
+      "sha256": "aae016ef99f531002331f460f2949a5f758d4f8cfdb65b4d6e1bde910fa00934"
+    },
+    {
+      "cue_id": "cbm-cue-278",
+      "asset_id": "hbm-physical-inputs-gate-v1",
+      "sha256": "aae016ef99f531002331f460f2949a5f758d4f8cfdb65b4d6e1bde910fa00934"
+    },
+    {
+      "cue_id": "cbm-cue-279",
+      "asset_id": "hbm-physical-inputs-gate-v1",
+      "sha256": "aae016ef99f531002331f460f2949a5f758d4f8cfdb65b4d6e1bde910fa00934"
+    },
+    {
+      "cue_id": "cbm-cue-280",
+      "asset_id": "hbm-physical-inputs-gate-v1",
+      "sha256": "aae016ef99f531002331f460f2949a5f758d4f8cfdb65b4d6e1bde910fa00934"
+    },
+    {
+      "cue_id": "cbm-cue-281",
+      "asset_id": "hbm-physical-inputs-gate-v1",
+      "sha256": "aae016ef99f531002331f460f2949a5f758d4f8cfdb65b4d6e1bde910fa00934"
+    },
+    {
+      "cue_id": "cbm-cue-282",
+      "asset_id": "hbm-physical-inputs-gate-v1",
+      "sha256": "aae016ef99f531002331f460f2949a5f758d4f8cfdb65b4d6e1bde910fa00934"
+    },
+    {
+      "cue_id": "cbm-cue-283",
+      "asset_id": "hbm-physical-inputs-gate-v1",
+      "sha256": "aae016ef99f531002331f460f2949a5f758d4f8cfdb65b4d6e1bde910fa00934"
+    },
+    {
+      "cue_id": "cbm-cue-284",
+      "asset_id": "wrong-bubble-elevators-v2",
+      "sha256": "e359675594b4bbd6ec51972fc2417172903b4782aa865f71d2fc91f4e76526dc"
+    },
+    {
+      "cue_id": "cbm-cue-285",
+      "asset_id": "wrong-bubble-elevators-v2",
+      "sha256": "e359675594b4bbd6ec51972fc2417172903b4782aa865f71d2fc91f4e76526dc"
+    },
+    {
+      "cue_id": "cbm-cue-286",
+      "asset_id": "memory-three-supports-v1",
+      "sha256": "105c06405ee1a6d7e2c3e9fd452952fed114885c47f31d2ee244a1300642eb81"
+    },
+    {
+      "cue_id": "cbm-cue-287",
+      "asset_id": "memory-three-supports-v1",
+      "sha256": "105c06405ee1a6d7e2c3e9fd452952fed114885c47f31d2ee244a1300642eb81"
+    },
+    {
+      "cue_id": "cbm-cue-288",
+      "asset_id": "index-fund-weighted-inflows-v2",
+      "sha256": "d10b1e8571b65117d529f6a2687e613b73400eba55774df338a2b309ba301a02"
+    },
+    {
+      "cue_id": "cbm-cue-289",
+      "asset_id": "index-fund-weighted-inflows-v2",
+      "sha256": "d10b1e8571b65117d529f6a2687e613b73400eba55774df338a2b309ba301a02"
+    },
+    {
+      "cue_id": "cbm-cue-290",
+      "asset_id": "evidence-bounded-conclusion-v1",
+      "sha256": "7619ef2c1449219b184596ca63212bdd3baa7948d0f0d89b0e5a15dfae3de301"
+    }
+  ],
+  "charts": [
+    {
+      "chart_id": "evidence-memory-contracts-v1",
+      "dataset_sha256": "cea8dd852699e429c8b6b37538c8821446bb0d6646ccf8f93f17c7e34a38872d",
+      "claim_refs": [
+        "micron-strategic-customer-agreements"
+      ],
+      "as_of": "2026-06-24"
+    },
+    {
+      "chart_id": "evidence-sp500-concentration-v1",
+      "dataset_sha256": "36c59d3cbab6fd401a41b7a4f8c1e01365797dac21cc79667f4f516e62ab9511",
+      "claim_refs": [
+        "sp500-top-ten-concentration"
+      ],
+      "as_of": "2025-06-30"
+    },
+    {
+      "chart_id": "evidence-index-inclusion-gate-v1",
+      "dataset_sha256": "4ab06ae935914fa4f8de0f0a6db6641bb9c2426af0a52479379dace6fb233cb0",
+      "claim_refs": [
+        "sp500-top-ten-concentration"
+      ],
+      "as_of": "2026-08-08"
+    },
+    {
+      "chart_id": "evidence-float-weighting-v1",
+      "dataset_sha256": "b3fffc02dfa879f2f2c85e7b16352c6c53b123684a1140a5613bca933e6211f1",
+      "claim_refs": [
+        "sp500-top-ten-concentration",
+        "index-fund-asset-scale"
+      ],
+      "as_of": "2026-08-08"
+    },
+    {
+      "chart_id": "evidence-automatic-business-mix-v1",
+      "dataset_sha256": "f31472856877b58c52fde57696b43cf421b57a7d0ef345823499a52d7074516e",
+      "claim_refs": [
+        "sp500-hidden-bubble-risk-inference"
+      ],
+      "as_of": "2026-08-08"
+    },
+    {
+      "chart_id": "evidence-diworsification-plateau-v1",
+      "dataset_sha256": "4aedbe5daf37570c52f993049e86760bf041d14f29e7698f854535432b24f45f",
+      "claim_refs": [
+        "sp500-hidden-bubble-risk-inference"
+      ],
+      "as_of": "2026-08-08"
+    },
+    {
+      "chart_id": "evidence-index-tail-absorption-v1",
+      "dataset_sha256": "9d9e58792fc42bca690672f3684dae545ef4151952c900e088aa4be935a61eb4",
+      "claim_refs": [
+        "sp500-top-ten-concentration",
+        "sp500-hidden-bubble-risk-inference"
+      ],
+      "as_of": "2025-06-30"
+    },
+    {
+      "chart_id": "evidence-korea-italy-v1",
+      "dataset_sha256": "a3ed268642a2f68469cc56de3ce41b58cf2f167d9e9f3c45d35074ced68483ad",
+      "claim_refs": [
+        "korea-italy-listed-market-comparison"
+      ],
+      "as_of": "2026-07-27"
+    },
+    {
+      "chart_id": "evidence-return-hurdle-v1",
+      "dataset_sha256": "da851b26145652178d356c422822992c659277bd47c735a751a4aaba6db196eb",
+      "claim_refs": [
+        "generational-wealth-return-hurdle",
+        "sp500-trailing-return-snapshot"
+      ],
+      "as_of": "2026-06-30"
+    },
+    {
+      "chart_id": "evidence-market-leaders-v1",
+      "dataset_sha256": "1de795e528f7e85f8a62ef11d3babdbe63b0219b6d41aaf294dfb494c9724fec",
+      "claim_refs": [
+        "sp500-market-leaders-comparison"
+      ],
+      "as_of": "2026-06-30"
+    },
+    {
+      "chart_id": "evidence-index-scale-v1",
+      "dataset_sha256": "94053a8ec3253e62aea3546d08db9bad77ee0ffc5c7c421e2ccec7e24aad142e",
+      "claim_refs": [
+        "index-fund-asset-scale"
+      ],
+      "as_of": "2025-12-31"
+    },
+    {
+      "chart_id": "evidence-wealth-target-path-v1",
+      "dataset_sha256": "2e6fdc7a8a92b5df7171d921264ff13da9c80a027a8a9cbbc0fad7e2d6fcd1a6",
+      "claim_refs": [
+        "generational-wealth-return-hurdle"
+      ],
+      "as_of": "2026-06-30"
+    },
+    {
+      "chart_id": "evidence-return-ten-percent-v1",
+      "dataset_sha256": "17914cf9a6436f9e1fec590ba82e4cd0da91c2f4d58bb09a6535acd5dfb7ed9c",
+      "claim_refs": [
+        "generational-wealth-return-hurdle"
+      ],
+      "as_of": "2026-06-30"
+    },
+    {
+      "chart_id": "evidence-return-comparison-v1",
+      "dataset_sha256": "da851b26145652178d356c422822992c659277bd47c735a751a4aaba6db196eb",
+      "claim_refs": [
+        "generational-wealth-return-hurdle",
+        "sp500-trailing-return-snapshot"
+      ],
+      "as_of": "2026-06-30"
+    },
+    {
+      "chart_id": "evidence-wealth-levers-v1",
+      "dataset_sha256": "d68371896bb678ac685892f40c284956fb658934e37065bcb60e28e804d974c0",
+      "claim_refs": [
+        "generational-wealth-return-hurdle"
+      ],
+      "as_of": "2026-08-08"
+    },
+    {
+      "chart_id": "evidence-portfolio-jobs-v1",
+      "dataset_sha256": "d68371896bb678ac685892f40c284956fb658934e37065bcb60e28e804d974c0",
+      "claim_refs": [
+        "sp500-hidden-bubble-risk-inference",
+        "concentrated-defensive-barbell-hypothesis"
+      ],
+      "as_of": "2026-08-08"
+    },
+    {
+      "chart_id": "evidence-market-leaders-basket-v1",
+      "dataset_sha256": "5d32598897b9bc3c968e3342714e9bd3b81db71936f89fa8b9c95dad94f4f49e",
+      "claim_refs": [
+        "sp500-market-leaders-comparison"
+      ],
+      "as_of": "2026-06-30"
+    },
+    {
+      "chart_id": "evidence-market-leaders-backtest-v1",
+      "dataset_sha256": "297bd3de410b51a9c085afa25ba76df241ae516cef3a51599d5f417ef72a5497",
+      "claim_refs": [
+        "sp500-market-leaders-comparison"
+      ],
+      "as_of": "2026-06-30"
+    },
+    {
+      "chart_id": "evidence-market-leaders-drawdown-v1",
+      "dataset_sha256": "9ae7157af24814a76de100eeebc2eb9d5630aa96bb83233e100ffbc92d8f7e6d",
+      "claim_refs": [
+        "sp500-market-leaders-comparison"
+      ],
+      "as_of": "2026-06-30"
+    },
+    {
+      "chart_id": "evidence-concentrated-selection-risk-v1",
+      "dataset_sha256": "fe42a7b1c1f12c255f50b047a645b5e3a9e22130c09bd2ee5227b77901b4e52b",
+      "claim_refs": [
+        "sp500-countercase"
+      ],
+      "as_of": "2026-08-08"
+    },
+    {
+      "chart_id": "evidence-defensive-sleeve-risk-v1",
+      "dataset_sha256": "fe42a7b1c1f12c255f50b047a645b5e3a9e22130c09bd2ee5227b77901b4e52b",
+      "claim_refs": [
+        "concentrated-defensive-barbell-hypothesis",
+        "sp500-countercase"
+      ],
+      "as_of": "2026-08-08"
+    },
+    {
+      "chart_id": "evidence-equal-weight-countercase-v1",
+      "dataset_sha256": "cfe1e0fe769b5604d57aa016fc3b0e4297a97881c3a4c959f11e8f44db2b173f",
+      "claim_refs": [
+        "equal-weight-long-tail-countercase"
+      ],
+      "as_of": "2026-02-28"
+    },
+    {
+      "chart_id": "evidence-bounded-conclusion-v1",
+      "dataset_sha256": "33f52d7b12f7868cc955a297f46b3f2f2a73b1f4ff1499140996b1c143e50f61",
+      "claim_refs": [
+        "memory-countercase",
+        "sp500-countercase"
+      ],
+      "as_of": "2026-08-08"
+    }
+  ],
+  "motion_presets": [
+    "money-transfer",
+    "ownership-reveal",
+    "balance-sheet-open",
+    "index-expand",
+    "distribution-split",
+    "risk-transfer",
+    "evidence-lock"
+  ],
+  "review_state": "draft",
+  "render_eligible": true,
+  "artifact_hash": "0150debd56abb6304a7d1030b334589bae2bf5a896acaa1237ab4444f1bdeccc"
+}

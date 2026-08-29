@@ -1,0 +1,272 @@
+{
+  "schema_version": "deck_asset_context.v1",
+  "deck_id": "silicon-antidote",
+  "assets": [
+    {
+      "asset_id": "silicon-antidote-s02-valuation-bubble-v1",
+      "kind": "semantic_crop",
+      "path": "silicon-antidote/semantic-assets/assets/silicon-antidote-s02-valuation-bubble-v1.png",
+      "sha256": "237df91e6c7beeeff9b9a837739d8c155089d74caf1230d4191e3e79d716ce31",
+      "deck_id": "silicon-antidote",
+      "slide_id": "silicon-antidote-s02",
+      "slide_number": 2,
+      "parent_source_image_id": "silicon-antidote-s02-cleaned",
+      "source_variant": "cleaned",
+      "extraction": {
+        "method": "rect_crop",
+        "bbox_px": [
+          55,
+          131,
+          592,
+          584
+        ],
+        "bbox_norm": [
+          0.04,
+          0.17,
+          0.43,
+          0.76
+        ],
+        "polygon_norm": null,
+        "mask_path": null,
+        "source_sha256": "12b8e9c87fbcd88456009f05b54410dd725a845e1507420d2581d130b97a0286"
+      },
+      "context": {
+        "what_it_is": "A red S&P 500 valuation balloon labeled with the source deck's CAPE comparison.",
+        "visual_role": "evidence",
+        "representation_mode": "literal_evidence",
+        "factual_text": true,
+        "claim_refs": [],
+        "cue_refs": [],
+        "not_what_it_means": [
+          "The crop preserves the source claim but is not independent verification of the metric."
+        ],
+        "context_status": "review_only",
+        "reuse_policy": {
+          "scope": "source_only",
+          "max_total_uses": 1,
+          "min_nonadjacent_gap": 0,
+          "allowed_reasons": [
+            "evidence_hold"
+          ],
+          "claim_bound": false
+        }
+      },
+      "rights_state": "source_review_only",
+      "review_state": "review_only",
+      "render_eligible": false
+    },
+    {
+      "asset_id": "silicon-antidote-s02-memory-triopoly-v1",
+      "kind": "semantic_crop",
+      "path": "silicon-antidote/semantic-assets/assets/silicon-antidote-s02-memory-triopoly-v1.png",
+      "sha256": "f37858b19c7507251746f9a8ff786644d683b4a107134ba935b1a064d37e0788",
+      "deck_id": "silicon-antidote",
+      "slide_id": "silicon-antidote-s02",
+      "slide_number": 2,
+      "parent_source_image_id": "silicon-antidote-s02-cleaned",
+      "source_variant": "cleaned",
+      "extraction": {
+        "method": "rect_crop",
+        "bbox_px": [
+          688,
+          115,
+          660,
+          614
+        ],
+        "bbox_norm": [
+          0.5,
+          0.15,
+          0.48,
+          0.8
+        ],
+        "polygon_norm": null,
+        "mask_path": null,
+        "source_sha256": "12b8e9c87fbcd88456009f05b54410dd725a845e1507420d2581d130b97a0286"
+      },
+      "context": {
+        "what_it_is": "Three illustrated memory-company vaults with source valuation and margin cards.",
+        "visual_role": "evidence",
+        "representation_mode": "literal_evidence",
+        "factual_text": true,
+        "claim_refs": [],
+        "cue_refs": [],
+        "not_what_it_means": [
+          "The companies and figures remain source-deck evidence and should not be generalized beyond the cited research."
+        ],
+        "context_status": "review_only",
+        "reuse_policy": {
+          "scope": "source_only",
+          "max_total_uses": 1,
+          "min_nonadjacent_gap": 0,
+          "allowed_reasons": [
+            "evidence_hold"
+          ],
+          "claim_bound": false
+        }
+      },
+      "rights_state": "source_review_only",
+      "review_state": "review_only",
+      "render_eligible": false
+    },
+    {
+      "asset_id": "silicon-antidote-s09-capacity-penalty-v1",
+      "kind": "semantic_crop",
+      "path": "silicon-antidote/semantic-assets/assets/silicon-antidote-s09-capacity-penalty-v1.png",
+      "sha256": "e79f750cc11016a73f966d03c89b136779ff0c716a7011859cedb10ee4c61e89",
+      "deck_id": "silicon-antidote",
+      "slide_id": "silicon-antidote-s09",
+      "slide_number": 9,
+      "parent_source_image_id": "silicon-antidote-s09-cleaned",
+      "source_variant": "cleaned",
+      "extraction": {
+        "method": "rect_crop",
+        "bbox_px": [
+          28,
+          15,
+          1321,
+          730
+        ],
+        "bbox_norm": [
+          0.02,
+          0.02,
+          0.96,
+          0.95
+        ],
+        "polygon_norm": null,
+        "mask_path": null,
+        "source_sha256": "5f0eae50ad6d6944cc0b4eeecf2daa9d0ee9878cdcd13e1a96d864b2ff931fa4"
+      },
+      "context": {
+        "what_it_is": "A balance-scale illustration comparing one HBM unit with three standard DDR5 units and the stated capacity penalty.",
+        "visual_role": "mechanism",
+        "representation_mode": "literal_evidence",
+        "factual_text": true,
+        "claim_refs": [],
+        "cue_refs": [],
+        "not_what_it_means": [
+          "The visual comparison does not replace the underlying wafer-capacity calculation."
+        ],
+        "context_status": "review_only",
+        "reuse_policy": {
+          "scope": "source_only",
+          "max_total_uses": 1,
+          "min_nonadjacent_gap": 0,
+          "allowed_reasons": [
+            "evidence_hold"
+          ],
+          "claim_bound": false
+        }
+      },
+      "rights_state": "source_review_only",
+      "review_state": "review_only",
+      "render_eligible": false
+    },
+    {
+      "asset_id": "silicon-antidote-s10-ram-ageddon-v1",
+      "kind": "semantic_crop",
+      "path": "silicon-antidote/semantic-assets/assets/silicon-antidote-s10-ram-ageddon-v1.png",
+      "sha256": "78c75d10d427ed4b9f599bd58ba2b1df66bc77f613e92253feb9d9cba62e8147",
+      "deck_id": "silicon-antidote",
+      "slide_id": "silicon-antidote-s10",
+      "slide_number": 10,
+      "parent_source_image_id": "silicon-antidote-s10-cleaned",
+      "source_variant": "cleaned",
+      "extraction": {
+        "method": "rect_crop",
+        "bbox_px": [
+          165,
+          138,
+          1183,
+          568
+        ],
+        "bbox_norm": [
+          0.12,
+          0.18,
+          0.86,
+          0.74
+        ],
+        "polygon_norm": null,
+        "mask_path": null,
+        "source_sha256": "0c3079c87e041b91d4af0e1cca39f958948b1736f55771b7ce2b49691635c5d5"
+      },
+      "context": {
+        "what_it_is": "A central RAM-ageddon burst with opposing blue supply arrows, red demand arrows, and pinned source notes.",
+        "visual_role": "mechanism",
+        "representation_mode": "accurate_mechanism",
+        "factual_text": true,
+        "claim_refs": [],
+        "cue_refs": [],
+        "not_what_it_means": [
+          "RAM-ageddon is a declared explanatory label, not a formal market classification."
+        ],
+        "context_status": "review_only",
+        "reuse_policy": {
+          "scope": "source_only",
+          "max_total_uses": 1,
+          "min_nonadjacent_gap": 0,
+          "allowed_reasons": [
+            "evidence_hold"
+          ],
+          "claim_bound": false
+        }
+      },
+      "rights_state": "source_review_only",
+      "review_state": "review_only",
+      "render_eligible": false
+    },
+    {
+      "asset_id": "silicon-antidote-s14-diagnostic-matrix-v1",
+      "kind": "semantic_crop",
+      "path": "silicon-antidote/semantic-assets/assets/silicon-antidote-s14-diagnostic-matrix-v1.png",
+      "sha256": "319b14a29db724e922a4f7e4bd9262b4354fb667a1aeacd3b704e54d74531b5d",
+      "deck_id": "silicon-antidote",
+      "slide_id": "silicon-antidote-s14",
+      "slide_number": 14,
+      "parent_source_image_id": "silicon-antidote-s14-cleaned",
+      "source_variant": "cleaned",
+      "extraction": {
+        "method": "rect_crop",
+        "bbox_px": [
+          83,
+          123,
+          1211,
+          584
+        ],
+        "bbox_norm": [
+          0.06,
+          0.16,
+          0.88,
+          0.76
+        ],
+        "polygon_norm": null,
+        "mask_path": null,
+        "source_sha256": "cb4d1547573bfcd50df207d303fe7b7f851cbdf17fa9ed7e6e15a87874cbd25c"
+      },
+      "context": {
+        "what_it_is": "A two-column diagnostic matrix contrasting the S&P 500 index with the memory triopoly.",
+        "visual_role": "evidence",
+        "representation_mode": "literal_evidence",
+        "factual_text": true,
+        "claim_refs": [],
+        "cue_refs": [],
+        "not_what_it_means": [
+          "The matrix is a source summary and should remain bound to the report's evidence register."
+        ],
+        "context_status": "review_only",
+        "reuse_policy": {
+          "scope": "source_only",
+          "max_total_uses": 1,
+          "min_nonadjacent_gap": 0,
+          "allowed_reasons": [
+            "evidence_hold"
+          ],
+          "claim_bound": false
+        }
+      },
+      "rights_state": "source_review_only",
+      "review_state": "review_only",
+      "render_eligible": false
+    }
+  ],
+  "artifact_hash": "49aad0859d43343ca5c3cbdb0b3203b66a094972409b215d47019f1ab8dc0cf8"
+}

@@ -1,0 +1,13 @@
+{
+  "duration": 90,
+  "assertions": [
+    { "kind": "appearsBy", "selector": "#opening-callout", "bySec": 1.2 },
+    { "kind": "appearsBy", "selector": "#memory-window", "bySec": 4.0 },
+    { "kind": "appearsBy", "selector": "#factory-window", "bySec": 13.5 },
+    { "kind": "appearsBy", "selector": "#fund-window", "bySec": 25.0 },
+    { "kind": "appearsBy", "selector": "#diagnostic-left", "bySec": 60.0 },
+    { "kind": "before", "a": "#memory-window", "b": "#fund-window" },
+    { "kind": "before", "a": "#fund-window", "b": "#diagnostic-left" },
+    { "kind": "staysInFrame", "selector": "#memory-window" }
+  ]
+}

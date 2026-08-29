@@ -1,0 +1,23 @@
+{
+  "schema_version": "finance_composition_render.v1",
+  "episode_id": "current-bubble-mechanism",
+  "render_path": "C:/Users/Snipe/.codex/worktrees/f10b/Outreach Program/content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/animatic/revisions/composition-v1/current-bubble-mechanism-composition-review.mp4",
+  "duration_s": 980.806,
+  "full_episode_duration_s": 980.806,
+  "fps": 12,
+  "resolution": [
+    1280,
+    720
+  ],
+  "audio_path": "C:/Users/Snipe/.codex/worktrees/f10b/Outreach Program/content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/audio/canonical/history_episode_1_master.mp3",
+  "audio_sha256": "ecacf46c49aee85b912404bfa0e47c37acbae0397b637e2a966c51a625077ce1",
+  "spine_path": "C:/Users/Snipe/.codex/worktrees/f10b/Outreach Program/content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/edit/semantic-v2/full-episode-composition-spine.v1.json",
+  "spine_hash": "b103bf6d0ac93bdb899057eda5eebbe85e00704123ca58aed63b716dc24e7c44",
+  "asset_catalog_hash": "fbdedff0aa0d8c67443ec957d40c4bdb0495180d65daf3328dedd778dec7dd22",
+  "group_count": 23,
+  "cue_state_count": 290,
+  "dense_cue_map_path": "C:/Users/Snipe/.codex/worktrees/f10b/Outreach Program/content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/edit/semantic-v2/dense-visual-cue-map.v1.json",
+  "dense_cue_map_hash": "bdc5775b2184a32ef7631cbb0916830aced2a86352e421018b0c572554c16cb5",
+  "render_sha256": "841ed823f7befc0a699053fbd7f7dbfd5945bf6a3ba950911b9e978d154852f7",
+  "status": "review_render_complete"
+}

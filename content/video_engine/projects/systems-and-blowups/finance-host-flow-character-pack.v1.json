@@ -1,0 +1,33 @@
+{
+  "schema_version": "flow_character_pack.v1",
+  "provider": "google_flow",
+  "model": "nano-banana-pro",
+  "builder_surface": "character_builder",
+  "id": "systems-and-blowups-finance-host-v1",
+  "episode_id": "channel-kit",
+  "art_bible_id": "friendly-crinkle-cut-economy-v1",
+  "art_bible_hash": "847b9f5d94a60616e96f06de994a39fef62d57311524bdb57839101bff592f06",
+  "characters": [
+    {
+      "id": "finance-host-v1",
+      "label": "Recurring finance and economics presenter",
+      "role": "fictional_presenter",
+      "prompt": "Original fictional Black male finance presenter in his thirties with warm brown skin, short sculpted loc twists and a clean taper, black rectangular glasses, a neatly trimmed goatee, tailored deep-indigo suit, pale blue shirt, copper tie, restrained gold circuit lapel pin, and brown cap-toe dress shoes with a subtle handcrafted red-and-gold Spanish floral textile. Sophisticated adult hand-cut crinkle-paper woodblock editorial puppet with consistent proportions, friendly analytical expression, clean trace-cut silhouette, and fully visible hands and feet.",
+      "negative_prompt": "No photorealism, celebrity likeness, toy proportions, childish styling, extra fingers, malformed hands, cropped feet, floating props, generated words, numbers, charts, logos, currency symbols, or watermarks.",
+      "reference_views": ["front", "three_quarter", "full_body", "expression_sheet"],
+      "style_atom_ids": ["friendly-crinkle-cut-economy-v1", "adult-editorial-paper", "carved-ink-contour"],
+      "scene_uses": ["silent-five-second-hook", "mechanism-translation", "whiteboard-explanation", "episode-callback"],
+      "rights_policy": {"source_kind": "generated_original", "likeness_status": "fictional", "label_as_illustration": true},
+      "reference_asset_ids": [],
+      "render_eligible": false
+    }
+  ],
+  "workflow": {
+    "generate_character_sheet_first": true,
+    "operator_review_required": true,
+    "ingredients_to_video_requires_approved_reference": true,
+    "provider_output_render_eligible": false
+  },
+  "render_eligible": false,
+  "artifact_hash": "23304071d0d4b8c988fb85412889435f924a3737573772c8875de6334f03332b"
+}

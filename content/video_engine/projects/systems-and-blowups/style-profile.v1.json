@@ -1,0 +1,21 @@
+{
+  "schema_version": "finance_style_profile.v1",
+  "style_id": "friendly-crinkle-cut-economy-v1",
+  "palette": {"charcoal": "#25313C", "cobalt": "#1769C2", "teal": "#178C83", "sunflower": "#F5B72E", "coral": "#ED6A4A", "cream": "#F4E6C7"},
+  "visual_tone": "Bright, approachable adult editorial woodblock figures and environments made from thin hand-cut washi, layered rice paper, subtle ink contours, and painted cardstock. Expressive faces and controlled color create accessibility while precise proportions, paper fibers, and woodblock grain preserve business and financial credibility.",
+  "worlds": {
+    "story": "Bright lived-in neighborhoods, homes, shops, transit, workplaces, and civic buildings populated by recognizable friendly paper actors.",
+    "mechanism": "Playful modular ownership, balance-sheet, index, and capital-flow machines built from the same crinkled paper materials and motivated by causal movement.",
+    "evidence": "Quiet deterministic chart filing quotation and source surfaces rendered locally."
+  },
+  "depth_layers": ["foreground_cutout", "actor_or_machine", "building_or_environment", "evidence_safe_region"],
+  "motion_rule": "Every movement must explain a causal or state change; decorative motion is forbidden.",
+  "generated_text_rule": "Generated imagery contains no authoritative facts numbers dates quotations or financial labels.",
+  "construction_rule": "Actors, buildings, props, and mechanism objects are generated as independent tactile raster assets and trace-cut to transparency. Canonical construction uses thin hand-cut layers, deckled fiber edges, restrained relief, subtle woodblock ink contours, and believable paper shadows. Flat icon boards and generic vector substitutes are forbidden.",
+  "friendliness_rule": "Default assets use warm expressions, bright daylight, welcoming environments, and controlled cobalt, teal, sunflower, and coral accents. Brightness makes serious business and financial material approachable; it does not authorize toy proportions, chunky foam-like blocks, glossy 3D rendering, kawaii forms, or preschool iconography.",
+  "whiteboard_compositor": "A warm cream washi whiteboard with a slim woodblock frame is a cross-world presentation surface. Deterministic drawings, charts, and labels may reveal locally while transparent catalog assets behave as movable stickers. It is not a fourth narrative world and must not replace scene-based storytelling.",
+  "identity_rule": "Culture and identity are represented through household structure institutions ownership paths settings and stakes rather than cosmetic recoloring.",
+  "aspect_ratios": ["16:9", "9:16", "1:1"],
+  "review_state": "operator_review_required",
+  "render_eligible": false
+}

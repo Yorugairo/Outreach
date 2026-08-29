@@ -1,0 +1,31 @@
+{
+  "name": "outreach-production-console",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "build": "tsc --noEmit && vite build",
+    "test:e2e": "node scripts/e2e-smoke.mjs"
+  },
+  "dependencies": {
+    "@remotion/player": "4.0.502",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "remotion": "4.0.502"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "6.6.3",
+    "@testing-library/react": "16.2.0",
+    "@types/react": "18.3.18",
+    "@types/react-dom": "18.3.5",
+    "@vitejs/plugin-react": "4.4.1",
+    "jsdom": "26.0.0",
+    "playwright-core": "1.62.1",
+    "typescript": "5.7.3",
+    "vite": "6.4.3",
+    "vitest": "4.1.10"
+  }
+}

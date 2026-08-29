@@ -1,0 +1,14 @@
+{
+  "schema_version": "watch_review_draft.v1",
+  "proof_id": "finance-whiteboard-world-blend-proof-v1",
+  "status": "draft",
+  "review_required": true,
+  "render_path": "render/finance-whiteboard-world-blend-proof.mp4",
+  "checks": [
+    "woodblock world remains stable across scenes",
+    "whiteboard evidence layer stays inside the world",
+    "hand reveals each deck plate",
+    "baked source text remains legible",
+    "P28 source IDs and hashes remain bound"
+  ]
+}

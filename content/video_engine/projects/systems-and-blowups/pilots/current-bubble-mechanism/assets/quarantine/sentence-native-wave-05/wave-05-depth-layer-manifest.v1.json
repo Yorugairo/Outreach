@@ -1,0 +1,645 @@
+{
+  "schema_version": "finance_depth_layer_package.v1",
+  "episode_id": "systems-and-blowups:current-bubble-mechanism",
+  "wave_id": "current-bubble-mechanism-semantic-wave-05",
+  "review_state": "operator_approved_for_composition",
+  "render_eligible": true,
+  "promotion_eligible": false,
+  "layer_contract": [
+    "foreground",
+    "midground",
+    "background",
+    "negative_space",
+    "contact_shadow"
+  ],
+  "background_strategy": "softened_background_anchor_under_authored_irregular_polygon_trace_cuts; no whole-frame block crops",
+  "caption_band": {
+    "top_pct": 84,
+    "bottom_pct": 94
+  },
+  "qa": {
+    "full_frame_alpha_rejected": true,
+    "foreground_alpha_edges_inspected": true,
+    "midground_alpha_edges_inspected": true,
+    "objects_clipped_by_accident": false,
+    "negative_space_exceeds_15_percent": false,
+    "generated_factual_text": "none_observed",
+    "depth_order": "foreground > midground > background; negative_space and contact_shadow are local compositor layers",
+    "status": "pass_for_composition; trace-cut QA complete; catalog promotion remains gated",
+    "alpha_qc": {
+      "files_checked": 30,
+      "dimensions": "all 1672x941",
+      "sha256_matches": true,
+      "rgba_layers_nonempty": true,
+      "full_frame_opaque_rgba_rejected": true,
+      "negative_space_frame_pct": 10.0,
+      "caption_band_px": [
+        790,
+        885
+      ],
+      "manual_observation": "Authored irregular polygon masks separate semantic object groups; source claims remain deterministic compositor responsibilities."
+    }
+  },
+  "plates": [
+    {
+      "plate_id": "beat-05-001-beyond-three-memory-companies-v1",
+      "depth_order": {
+        "foreground": "three small chip workshops and their nearest routes",
+        "midground": "robot, wafer, power equipment, data-center racks, packaging line, and logistics",
+        "background": "connected city, sky, and landscape anchor"
+      },
+      "layers": {
+        "foreground": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-05/beat-05-001-beyond-three-memory-companies-v1--foreground.png",
+          "sha256": "3ba70b720ab873486b00556fdd6de0b103b8f9e992e4b0dc24b515ca4d6dccda",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              683,
+              769,
+              892
+            ],
+            "alpha_min": 0,
+            "alpha_max": 255,
+            "nonzero_pixels": 148353
+          }
+        },
+        "midground": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-05/beat-05-001-beyond-three-memory-companies-v1--midground.png",
+          "sha256": "58c6303d1078810cbcac503972d50bfde3bc1641f94c0296144fec5b9c7220d7",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              261,
+              1672,
+              728
+            ],
+            "alpha_min": 0,
+            "alpha_max": 255,
+            "nonzero_pixels": 505554
+          }
+        },
+        "background": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-05/beat-05-001-beyond-three-memory-companies-v1--background.png",
+          "sha256": "1bbe4f9ffdd993cd75ce586d5976751939ff7e16c93d5503e15ba7769f1acb60",
+          "mode": "RGB",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              0,
+              1672,
+              941
+            ],
+            "alpha_min": 255,
+            "alpha_max": 255,
+            "nonzero_pixels": 1573352
+          }
+        },
+        "negative_space": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-05/beat-05-001-beyond-three-memory-companies-v1--negative-space.png",
+          "sha256": "9ae555aa62eed1b7deaabf601ffe81de216932c5728212dbe87a063a048c5877",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              790,
+              1672,
+              886
+            ],
+            "alpha_min": 0,
+            "alpha_max": 64,
+            "nonzero_pixels": 160512
+          }
+        },
+        "contact_shadow": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-05/beat-05-001-beyond-three-memory-companies-v1--contact-shadow.png",
+          "sha256": "b74e1e0057c67e73fe793cd64af0ecfff9eddd4063930fe17e16497a594e46af",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              601,
+              1672,
+              941
+            ],
+            "alpha_min": 0,
+            "alpha_max": 68,
+            "nonzero_pixels": 356617
+          }
+        }
+      }
+    },
+    {
+      "plate_id": "beat-05-002-strategic-chokepoints-v1",
+      "depth_order": {
+        "foreground": "cargo vessel, rail curve, robot port, and near logistics routes",
+        "midground": "wafer, memory stack, transformer, packaging machine, radar, and robot chokepoints",
+        "background": "peripheral cities and dark paper field"
+      },
+      "layers": {
+        "foreground": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-05/beat-05-002-strategic-chokepoints-v1--foreground.png",
+          "sha256": "be33edf97bcd2396e80c70b166c16c998863c9574e3cf4acfa658dd89d52283c",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              733,
+              570,
+              1473,
+              941
+            ],
+            "alpha_min": 0,
+            "alpha_max": 255,
+            "nonzero_pixels": 184384
+          }
+        },
+        "midground": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-05/beat-05-002-strategic-chokepoints-v1--midground.png",
+          "sha256": "ce5a912ad6dcb2a58a960a12cd9e5b9daa9203f92737e8431de2b009d54043d7",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              205,
+              112,
+              1672,
+              745
+            ],
+            "alpha_min": 0,
+            "alpha_max": 255,
+            "nonzero_pixels": 629269
+          }
+        },
+        "background": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-05/beat-05-002-strategic-chokepoints-v1--background.png",
+          "sha256": "fb21a82c3e920528f945966d02567c9976ebea0c6bc22ad289d58b2eec4e287f",
+          "mode": "RGB",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              0,
+              1672,
+              941
+            ],
+            "alpha_min": 255,
+            "alpha_max": 255,
+            "nonzero_pixels": 1573352
+          }
+        },
+        "negative_space": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-05/beat-05-002-strategic-chokepoints-v1--negative-space.png",
+          "sha256": "9ae555aa62eed1b7deaabf601ffe81de216932c5728212dbe87a063a048c5877",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              790,
+              1672,
+              886
+            ],
+            "alpha_min": 0,
+            "alpha_max": 64,
+            "nonzero_pixels": 160512
+          }
+        },
+        "contact_shadow": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-05/beat-05-002-strategic-chokepoints-v1--contact-shadow.png",
+          "sha256": "b8fd85559502e4f714ed44a20823e0a7311c090e8b9054c3c8081cedee1dc2a9",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              228,
+              484,
+              1550,
+              922
+            ],
+            "alpha_min": 0,
+            "alpha_max": 68,
+            "nonzero_pixels": 433025
+          }
+        }
+      }
+    },
+    {
+      "plate_id": "beat-05-003-market-reprices-control-v2",
+      "depth_order": {
+        "foreground": "trading floor, moving paper counterweights, and lower lift rail",
+        "midground": "raised chip, packaging, power, and research platform with the mechanical lift",
+        "background": "distant lower supplier platforms and paper sky"
+      },
+      "layers": {
+        "foreground": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-05/beat-05-003-market-reprices-control-v2--foreground.png",
+          "sha256": "9de177f9ff3f4b33289e5c5041479d0d86c1a4fd95b64202541d5c54db6d8e50",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              483,
+              1128,
+              941
+            ],
+            "alpha_min": 0,
+            "alpha_max": 255,
+            "nonzero_pixels": 291636
+          }
+        },
+        "midground": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-05/beat-05-003-market-reprices-control-v2--midground.png",
+          "sha256": "cd99c427d9c238ac71110a981ede491e98acbc77bb03a0b6b897cc4e0091dfab",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              488,
+              89,
+              1672,
+              803
+            ],
+            "alpha_min": 0,
+            "alpha_max": 255,
+            "nonzero_pixels": 630247
+          }
+        },
+        "background": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-05/beat-05-003-market-reprices-control-v2--background.png",
+          "sha256": "b673aef9493560f8a35d14488e1bd31dcc9c023309430f9a82ee92c19ae7249b",
+          "mode": "RGB",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              0,
+              1672,
+              941
+            ],
+            "alpha_min": 255,
+            "alpha_max": 255,
+            "nonzero_pixels": 1573352
+          }
+        },
+        "negative_space": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-05/beat-05-003-market-reprices-control-v2--negative-space.png",
+          "sha256": "9ae555aa62eed1b7deaabf601ffe81de216932c5728212dbe87a063a048c5877",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              790,
+              1672,
+              886
+            ],
+            "alpha_min": 0,
+            "alpha_max": 64,
+            "nonzero_pixels": 160512
+          }
+        },
+        "contact_shadow": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-05/beat-05-003-market-reprices-control-v2--contact-shadow.png",
+          "sha256": "ba806739d1636190afa967e0f43b25efdccc7830962252d9fa35dad62416b060",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              307,
+              490,
+              1672,
+              912
+            ],
+            "alpha_min": 0,
+            "alpha_max": 68,
+            "nonzero_pixels": 381136
+          }
+        }
+      }
+    },
+    {
+      "plate_id": "beat-05-005-not-civilization-ranking-v1",
+      "depth_order": {
+        "foreground": "near workshops, people, and bottom production benches in both civic worlds",
+        "midground": "two equal civic-industrial ecosystems plus the central transparent market lens",
+        "background": "split paper sky and distant landscape anchor"
+      },
+      "layers": {
+        "foreground": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-05/beat-05-005-not-civilization-ranking-v1--foreground.png",
+          "sha256": "ee4c29b74ba915596126646f0aca7de4d2d38823fcea958ee22d40af643a9ac1",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              628,
+              1672,
+              941
+            ],
+            "alpha_min": 0,
+            "alpha_max": 255,
+            "nonzero_pixels": 399417
+          }
+        },
+        "midground": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-05/beat-05-005-not-civilization-ranking-v1--midground.png",
+          "sha256": "aeb6822c2b3b1af3552f4c73960d607fe700e21e0ee7f92b2eda72a7153efd1f",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              139,
+              1672,
+              806
+            ],
+            "alpha_min": 0,
+            "alpha_max": 255,
+            "nonzero_pixels": 982965
+          }
+        },
+        "background": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-05/beat-05-005-not-civilization-ranking-v1--background.png",
+          "sha256": "6d4738b398216755f9da5afc9913682d3b9387474b78eef40372d356f4241236",
+          "mode": "RGB",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              0,
+              1672,
+              941
+            ],
+            "alpha_min": 255,
+            "alpha_max": 255,
+            "nonzero_pixels": 1573352
+          }
+        },
+        "negative_space": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-05/beat-05-005-not-civilization-ranking-v1--negative-space.png",
+          "sha256": "9ae555aa62eed1b7deaabf601ffe81de216932c5728212dbe87a063a048c5877",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              790,
+              1672,
+              886
+            ],
+            "alpha_min": 0,
+            "alpha_max": 64,
+            "nonzero_pixels": 160512
+          }
+        },
+        "contact_shadow": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-05/beat-05-005-not-civilization-ranking-v1--contact-shadow.png",
+          "sha256": "1935abfeee57d2a2ca7bd402a60c49233f781b89d733b32f9d08e238587398fd",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              675,
+              1672,
+              926
+            ],
+            "alpha_min": 0,
+            "alpha_max": 68,
+            "nonzero_pixels": 348561
+          }
+        }
+      }
+    },
+    {
+      "plate_id": "beat-05-006-listed-cash-flow-market-v1",
+      "depth_order": {
+        "foreground": "investor group, market basket, and near cash pipes",
+        "midground": "factory, data center, warehouse, energy plant, and operating cash flows",
+        "background": "distant city and pale paper field"
+      },
+      "layers": {
+        "foreground": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-05/beat-05-006-listed-cash-flow-market-v1--foreground.png",
+          "sha256": "b7ba90f77f3b8c21260fa6d74c140acfc3ce15d57d7ff68637a8bc1e3efda4c7",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              560,
+              1632,
+              941
+            ],
+            "alpha_min": 0,
+            "alpha_max": 255,
+            "nonzero_pixels": 351868
+          }
+        },
+        "midground": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-05/beat-05-006-listed-cash-flow-market-v1--midground.png",
+          "sha256": "c851e196849c7e40ab31d5f33bd7df32a7a898bc358ea95efaa72cef7a2680e4",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              149,
+              1672,
+              707
+            ],
+            "alpha_min": 0,
+            "alpha_max": 255,
+            "nonzero_pixels": 816912
+          }
+        },
+        "background": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-05/beat-05-006-listed-cash-flow-market-v1--background.png",
+          "sha256": "43133096242dab3c0567049fe8e40674fb88dc835cb042576035bd0e58d8e49b",
+          "mode": "RGB",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              0,
+              1672,
+              941
+            ],
+            "alpha_min": 255,
+            "alpha_max": 255,
+            "nonzero_pixels": 1573352
+          }
+        },
+        "negative_space": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-05/beat-05-006-listed-cash-flow-market-v1--negative-space.png",
+          "sha256": "9ae555aa62eed1b7deaabf601ffe81de216932c5728212dbe87a063a048c5877",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              790,
+              1672,
+              886
+            ],
+            "alpha_min": 0,
+            "alpha_max": 64,
+            "nonzero_pixels": 160512
+          }
+        },
+        "contact_shadow": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-05/beat-05-006-listed-cash-flow-market-v1--contact-shadow.png",
+          "sha256": "c234bfad716414c000432d747c59095e15315529fb6fc5afb47221f71a33284e",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              598,
+              1672,
+              928
+            ],
+            "alpha_min": 0,
+            "alpha_max": 68,
+            "nonzero_pixels": 371688
+          }
+        }
+      }
+    },
+    {
+      "plate_id": "beat-05-012-different-cash-flow-structures-v1",
+      "depth_order": {
+        "foreground": "two investor hands, market channels, and near production edges",
+        "midground": "digital-memory ecosystem, precision industry, medical lab, vehicle line, design atelier, and food workshop",
+        "background": "two integrated cityscapes and paper sky"
+      },
+      "layers": {
+        "foreground": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-05/beat-05-012-different-cash-flow-structures-v1--foreground.png",
+          "sha256": "90c4303f3b61b61082b4905d4f1f10d0e0bf92d0b75111ba49e0e1101a665329",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              591,
+              1672,
+              941
+            ],
+            "alpha_min": 0,
+            "alpha_max": 255,
+            "nonzero_pixels": 537779
+          }
+        },
+        "midground": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-05/beat-05-012-different-cash-flow-structures-v1--midground.png",
+          "sha256": "8876250b55831a0dcca88832d13e930579e05bf2334ee92adb48bf7121621dfc",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              123,
+              1672,
+              770
+            ],
+            "alpha_min": 0,
+            "alpha_max": 255,
+            "nonzero_pixels": 930601
+          }
+        },
+        "background": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-05/beat-05-012-different-cash-flow-structures-v1--background.png",
+          "sha256": "de16240ff4b5e4bbc7b7366019db031882bb30824b22c550358b883d51a876ab",
+          "mode": "RGB",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              0,
+              1672,
+              941
+            ],
+            "alpha_min": 255,
+            "alpha_max": 255,
+            "nonzero_pixels": 1573352
+          }
+        },
+        "negative_space": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-05/beat-05-012-different-cash-flow-structures-v1--negative-space.png",
+          "sha256": "9ae555aa62eed1b7deaabf601ffe81de216932c5728212dbe87a063a048c5877",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              790,
+              1672,
+              886
+            ],
+            "alpha_min": 0,
+            "alpha_max": 64,
+            "nonzero_pixels": 160512
+          }
+        },
+        "contact_shadow": {
+          "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-05/beat-05-012-different-cash-flow-structures-v1--contact-shadow.png",
+          "sha256": "ed6fb54ddd70cdb7c95a3060bed93f3d2a95d8c68ab061ec6496ae1aa5fd8262",
+          "mode": "RGBA",
+          "width": 1672,
+          "height": 941,
+          "alpha": {
+            "bbox": [
+              0,
+              612,
+              1672,
+              931
+            ],
+            "alpha_min": 0,
+            "alpha_max": 68,
+            "nonzero_pixels": 441108
+          }
+        }
+      }
+    }
+  ]
+}

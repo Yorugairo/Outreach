@@ -1,0 +1,28 @@
+{
+  "schema_version": "finance_video_build.v1",
+  "episode_id": "current-bubble-mechanism",
+  "duration_s": 980.806,
+  "word_count": 2445,
+  "cue_count": 290,
+  "shot_count": 290,
+  "chapter_count": 11,
+  "asset_count": 40,
+  "evidence_card_count": 23,
+  "short_range": {
+    "short_id": "short-sp500-double-failure",
+    "start_word": 1349,
+    "end_word": 1457,
+    "start_s": 530.957,
+    "end_s": 570.082
+  },
+  "audio_sha256": "ecacf46c49aee85b912404bfa0e47c37acbae0397b637e2a966c51a625077ce1",
+  "words_sha256": "3773bdd611c96d5e431ed56749d9991825215bb3756043086f14fbbdbe0d1da3",
+  "plan_hash": "1de45ffcdc057255246e1fda578ee97f21d509cf4150df3efb8135f16926fb61",
+  "cue_sheet_hash": "bce598f900344f360a50b4c09b983957dbc04e156bcbad656439e5bd0cb0e356",
+  "edit_manifest_hash": "0150debd56abb6304a7d1030b334589bae2bf5a896acaa1237ab4444f1bdeccc",
+  "semantic_resolution_hash": "01e48837d1b141c7ac92c0a123fcd099fa05d1bad5aa4ad3fd8c65903bb85238",
+  "research_supplement_hash": "a7d02d9933c7362e41a73b4e54b94dba4d00212a885091c60b1416ec8dfdcf0e",
+  "qc_overall": "pass",
+  "review_output": "C:/Users/Snipe/.codex/worktrees/f10b/Outreach Program/content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/animatic/revisions/full-review-v1/current-bubble-mechanism-review-master.mp4",
+  "artifact_hash": "052a1156e470e1d88c3777822ec3afa39aa7651c412b8e6461197c66c13be729"
+}

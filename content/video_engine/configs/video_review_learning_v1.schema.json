@@ -1,0 +1,67 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "video_review_learning.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "project_id", "generated_at", "source_review_hashes", "candidates", "artifact_hash"],
+  "properties": {
+    "schema_version": {"const": "video_review_learning.v1"},
+    "project_id": {"$ref": "#/definitions/id"},
+    "generated_at": {"type": "string", "format": "date-time"},
+    "source_review_hashes": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"$ref": "#/definitions/hash"}},
+    "candidates": {"type": "array", "items": {"$ref": "#/definitions/candidate"}},
+    "artifact_hash": {"$ref": "#/definitions/hash"}
+  },
+  "definitions": {
+    "id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]*$"},
+    "hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "observation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["review_id", "review_hash", "finding_id", "episode_id", "lane_id", "scope", "status"],
+      "properties": {
+        "review_id": {"$ref": "#/definitions/id"},
+        "review_hash": {"$ref": "#/definitions/hash"},
+        "finding_id": {"$ref": "#/definitions/id"},
+        "episode_id": {"$ref": "#/definitions/id"},
+        "lane_id": {"$ref": "#/definitions/id"},
+        "scope": {"enum": ["episode", "lane", "engine", "global"]},
+        "status": {"enum": ["open", "planned", "implemented", "verified", "wont_fix"]}
+      }
+    },
+    "candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "candidate_id",
+        "recurrence_key",
+        "kind",
+        "trigger",
+        "action",
+        "scope",
+        "confidence",
+        "observations",
+        "distinct_episode_count",
+        "distinct_lane_count",
+        "recommended_destination",
+        "promotion_state",
+        "operator_gate"
+      ],
+      "properties": {
+        "candidate_id": {"$ref": "#/definitions/id"},
+        "recurrence_key": {"$ref": "#/definitions/id"},
+        "kind": {"enum": ["semantic_mismatch", "timing", "composition", "asset_selection", "caption", "evidence", "motion", "audio", "retention", "continuity", "accessibility", "other"]},
+        "trigger": {"type": "string", "minLength": 1},
+        "action": {"type": "string", "minLength": 1},
+        "scope": {"enum": ["episode", "lane", "engine", "global"]},
+        "confidence": {"type": "number", "minimum": 0.3, "maximum": 0.9},
+        "observations": {"type": "array", "minItems": 1, "items": {"$ref": "#/definitions/observation"}},
+        "distinct_episode_count": {"type": "integer", "minimum": 1},
+        "distinct_lane_count": {"type": "integer", "minimum": 1},
+        "recommended_destination": {"enum": ["episode_edit_delta", "lane_skill", "process_runbook", "project_instinct", "global_instinct"]},
+        "promotion_state": {"enum": ["observation", "candidate_rule", "approved_rule", "implemented"]},
+        "operator_gate": {"enum": ["required", "satisfied"]}
+      }
+    }
+  }
+}

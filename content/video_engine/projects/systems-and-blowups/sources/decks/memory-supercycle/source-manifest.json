@@ -1,0 +1,892 @@
+{
+  "schema_version": "deck_asset_manifest.v1",
+  "manifest_id": "silicon-decks-source-manifest-v2-memory-supercycle",
+  "project_id": "systems-and-blowups",
+  "source_decks": [
+    {
+      "deck_id": "memory-supercycle",
+      "title": "The Memory Supercycle",
+      "source_path": "C:\\Users\\Snipe\\Downloads\\The_Memory_Supercycle (1).pptx",
+      "source_sha256": "05ac24daf68dcf9aef7d1e761dc15b6822fef29f9cdf89cf8f48113f774c938b",
+      "source_family": "operator-supplied-notebooklm-research-deck",
+      "rights_state": "source_review_only",
+      "cleanup": {
+        "requested": true,
+        "input_path": "C:\\Users\\Snipe\\Downloads\\The_Memory_Supercycle (1).no-watermark.pptx",
+        "original_sha256": "05ac24daf68dcf9aef7d1e761dc15b6822fef29f9cdf89cf8f48113f774c938b",
+        "cleaned_sha256": "b1ad3ff87bcc22867f5b69be2a2c97b6f11c82ad5529b9f9280771e1a8aa5964",
+        "policy": "Derived from an operator-approved non-destructive footer cleanup.",
+        "approved": true
+      }
+    }
+  ],
+  "slides": [
+    {
+      "slide_id": "memory-supercycle-s01",
+      "deck_id": "memory-supercycle",
+      "slide_number": 1,
+      "slide_label": "The Decadal Realignment",
+      "source_image_id": "memory-supercycle-s01-original",
+      "context": {
+        "label": "The Decadal Realignment",
+        "summary": "Opening source plate framing the structural shift in global semiconductor memory and the outlook through 2030.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "slide_id": "memory-supercycle-s02",
+      "deck_id": "memory-supercycle",
+      "slide_number": 2,
+      "slide_label": "Memory Is No Longer an Interchangeable Commodity",
+      "source_image_id": "memory-supercycle-s02-original",
+      "context": {
+        "label": "Memory Is No Longer an Interchangeable Commodity",
+        "summary": "Source plate contrasting legacy consumer memory with specialized infrastructure-grade memory.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "slide_id": "memory-supercycle-s03",
+      "deck_id": "memory-supercycle",
+      "slide_number": 3,
+      "slide_label": "The Root of the Shortage: The Three-to-One Physics Penalty",
+      "source_image_id": "memory-supercycle-s03-original",
+      "context": {
+        "label": "The Root of the Shortage: The Three-to-One Physics Penalty",
+        "summary": "Source plate illustrating how HBM packaging consumes more wafer capacity than standard DDR5 and constrains supply.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "slide_id": "memory-supercycle-s04",
+      "deck_id": "memory-supercycle",
+      "slide_number": 4,
+      "slide_label": "The Revenue Paradox: Market Share in the AI Era",
+      "source_image_id": "memory-supercycle-s04-original",
+      "context": {
+        "label": "The Revenue Paradox: Market Share in the AI Era",
+        "summary": "Source chart showing the changing revenue share of memory manufacturers during the AI-era mix shift.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "slide_id": "memory-supercycle-s05",
+      "deck_id": "memory-supercycle",
+      "slide_number": 5,
+      "slide_label": "The Bottom Falls as the Top Accelerates",
+      "source_image_id": "memory-supercycle-s05-original",
+      "context": {
+        "label": "The Bottom Falls as the Top Accelerates",
+        "summary": "Source plate comparing enterprise demand acceleration with the declining commodity-memory base beneath it.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "slide_id": "memory-supercycle-s06",
+      "deck_id": "memory-supercycle",
+      "slide_number": 6,
+      "slide_label": "The End of Transactional Memory",
+      "source_image_id": "memory-supercycle-s06-original",
+      "context": {
+        "label": "The End of Transactional Memory",
+        "summary": "Source plate showing the transition away from spot-market memory toward contracted and strategic supply relationships.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "slide_id": "memory-supercycle-s07",
+      "deck_id": "memory-supercycle",
+      "slide_number": 7,
+      "slide_label": "Diverging Roadmaps: The HBM4 Logic Base Die",
+      "source_image_id": "memory-supercycle-s07-original",
+      "context": {
+        "label": "Diverging Roadmaps: The HBM4 Logic Base Die",
+        "summary": "Source comparison of Samsung, SK hynix, and Micron roadmaps for custom logic and HBM integration.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "slide_id": "memory-supercycle-s08",
+      "deck_id": "memory-supercycle",
+      "slide_number": 8,
+      "slide_label": "Bridging the AI Bandwidth Gap",
+      "source_image_id": "memory-supercycle-s08-original",
+      "context": {
+        "label": "Bridging the AI Bandwidth Gap",
+        "summary": "Source mechanism plate contrasting traditional DRAM with HBM and high-capacity storage in an AI memory stack.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "slide_id": "memory-supercycle-s09",
+      "deck_id": "memory-supercycle",
+      "slide_number": 9,
+      "slide_label": "The 10 fF Wall",
+      "source_image_id": "memory-supercycle-s09-original",
+      "context": {
+        "label": "The 10 fF Wall",
+        "summary": "Source plate describing the physical limits of two-dimensional DRAM and the move toward three-dimensional structures.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "slide_id": "memory-supercycle-s10",
+      "deck_id": "memory-supercycle",
+      "slide_number": 10,
+      "slide_label": "The Next Supercycle Vector: Automotive and Robotics",
+      "source_image_id": "memory-supercycle-s10-original",
+      "context": {
+        "label": "The Next Supercycle Vector: Automotive and Robotics",
+        "summary": "Source plate mapping memory demand from AI infrastructure into automotive, robotics, and edge systems.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "slide_id": "memory-supercycle-s11",
+      "deck_id": "memory-supercycle",
+      "slide_number": 11,
+      "slide_label": "One Hundred Billion Dollar Blueprints",
+      "source_image_id": "memory-supercycle-s11-original",
+      "context": {
+        "label": "One Hundred Billion Dollar Blueprints",
+        "summary": "Source map of planned cleanroom and fabrication investment supporting the memory buildout.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "slide_id": "memory-supercycle-s12",
+      "deck_id": "memory-supercycle",
+      "slide_number": 12,
+      "slide_label": "Subsidies, Sunset Clauses, and Civil Friction",
+      "source_image_id": "memory-supercycle-s12-original",
+      "context": {
+        "label": "Subsidies, Sunset Clauses, and Civil Friction",
+        "summary": "Source plate comparing public subsidies, expiration conditions, and local-government friction around new capacity.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "slide_id": "memory-supercycle-s13",
+      "deck_id": "memory-supercycle",
+      "slide_number": 13,
+      "slide_label": "Global Supply Chains Collide with Municipal Governance",
+      "source_image_id": "memory-supercycle-s13-original",
+      "context": {
+        "label": "Global Supply Chains Collide with Municipal Governance",
+        "summary": "Source plate showing how local permitting and infrastructure constraints interact with global memory supply chains.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "slide_id": "memory-supercycle-s14",
+      "deck_id": "memory-supercycle",
+      "slide_number": 14,
+      "slide_label": "The Fragile Balance: From Shortage to Structural Glut?",
+      "source_image_id": "memory-supercycle-s14-original",
+      "context": {
+        "label": "The Fragile Balance: From Shortage to Structural Glut?",
+        "summary": "Source timeline modeling the risk that new capacity could move the market from undersupply to oversupply.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "slide_id": "memory-supercycle-s15",
+      "deck_id": "memory-supercycle",
+      "slide_number": 15,
+      "slide_label": "The Winning Formula Through 2030",
+      "source_image_id": "memory-supercycle-s15-original",
+      "context": {
+        "label": "The Winning Formula Through 2030",
+        "summary": "Closing source plate summarizing process leadership, foundry symbiosis, and capital discipline through 2030.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    }
+  ],
+  "source_images": [
+    {
+      "image_id": "memory-supercycle-s01-original",
+      "deck_id": "memory-supercycle",
+      "slide_id": "memory-supercycle-s01",
+      "slide_number": 1,
+      "variant": "original",
+      "pptx_member": "ppt/media/image1.png",
+      "extracted_path": "memory-supercycle/slides/slide-001.png",
+      "sha256": "09468846726780619559d36d2061a5346263e0d478ef09ed464266b0fcc72405",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "selection_label": "The Memory Supercycle · S01 · The Decadal Realignment",
+      "context": {
+        "label": "The Decadal Realignment",
+        "summary": "Opening source plate framing the structural shift in global semiconductor memory and the outlook through 2030.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "memory-supercycle-s02-original",
+      "deck_id": "memory-supercycle",
+      "slide_id": "memory-supercycle-s02",
+      "slide_number": 2,
+      "variant": "original",
+      "pptx_member": "ppt/media/image2.png",
+      "extracted_path": "memory-supercycle/slides/slide-002.png",
+      "sha256": "f65807ea5eb51c1ab0e0425330773120d0ce3bbf19b0089d92754629292b0b6a",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "selection_label": "The Memory Supercycle · S02 · Memory Is No Longer an Interchangeable Commodity",
+      "context": {
+        "label": "Memory Is No Longer an Interchangeable Commodity",
+        "summary": "Source plate contrasting legacy consumer memory with specialized infrastructure-grade memory.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "memory-supercycle-s03-original",
+      "deck_id": "memory-supercycle",
+      "slide_id": "memory-supercycle-s03",
+      "slide_number": 3,
+      "variant": "original",
+      "pptx_member": "ppt/media/image3.png",
+      "extracted_path": "memory-supercycle/slides/slide-003.png",
+      "sha256": "115f79a3e8107846529df85deb42aef9527d5a951240076714bb5cf60b9108b7",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "selection_label": "The Memory Supercycle · S03 · The Root of the Shortage: The Three-to-One Physics Penalty",
+      "context": {
+        "label": "The Root of the Shortage: The Three-to-One Physics Penalty",
+        "summary": "Source plate illustrating how HBM packaging consumes more wafer capacity than standard DDR5 and constrains supply.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "memory-supercycle-s04-original",
+      "deck_id": "memory-supercycle",
+      "slide_id": "memory-supercycle-s04",
+      "slide_number": 4,
+      "variant": "original",
+      "pptx_member": "ppt/media/image4.png",
+      "extracted_path": "memory-supercycle/slides/slide-004.png",
+      "sha256": "0dad33cb58ecd7ab9b30e93f03b530d3d8036f46af74253d0c5e7cf8cac9a3b3",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "selection_label": "The Memory Supercycle · S04 · The Revenue Paradox: Market Share in the AI Era",
+      "context": {
+        "label": "The Revenue Paradox: Market Share in the AI Era",
+        "summary": "Source chart showing the changing revenue share of memory manufacturers during the AI-era mix shift.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "memory-supercycle-s05-original",
+      "deck_id": "memory-supercycle",
+      "slide_id": "memory-supercycle-s05",
+      "slide_number": 5,
+      "variant": "original",
+      "pptx_member": "ppt/media/image5.png",
+      "extracted_path": "memory-supercycle/slides/slide-005.png",
+      "sha256": "c1a16e8e1d0b8d7a27fbba14567e9e20ba33e7d07bcb5532096c1942f76a941a",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "selection_label": "The Memory Supercycle · S05 · The Bottom Falls as the Top Accelerates",
+      "context": {
+        "label": "The Bottom Falls as the Top Accelerates",
+        "summary": "Source plate comparing enterprise demand acceleration with the declining commodity-memory base beneath it.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "memory-supercycle-s06-original",
+      "deck_id": "memory-supercycle",
+      "slide_id": "memory-supercycle-s06",
+      "slide_number": 6,
+      "variant": "original",
+      "pptx_member": "ppt/media/image6.png",
+      "extracted_path": "memory-supercycle/slides/slide-006.png",
+      "sha256": "06878068bf4cea0ed48d674b3cf8eaefc13ea82bf37b4549bdccbca46568929d",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "selection_label": "The Memory Supercycle · S06 · The End of Transactional Memory",
+      "context": {
+        "label": "The End of Transactional Memory",
+        "summary": "Source plate showing the transition away from spot-market memory toward contracted and strategic supply relationships.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "memory-supercycle-s07-original",
+      "deck_id": "memory-supercycle",
+      "slide_id": "memory-supercycle-s07",
+      "slide_number": 7,
+      "variant": "original",
+      "pptx_member": "ppt/media/image7.png",
+      "extracted_path": "memory-supercycle/slides/slide-007.png",
+      "sha256": "0a49bf34ff46857e02186d2a0d37afb2379d7157604f908d032ad2db4d081e13",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "selection_label": "The Memory Supercycle · S07 · Diverging Roadmaps: The HBM4 Logic Base Die",
+      "context": {
+        "label": "Diverging Roadmaps: The HBM4 Logic Base Die",
+        "summary": "Source comparison of Samsung, SK hynix, and Micron roadmaps for custom logic and HBM integration.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "memory-supercycle-s08-original",
+      "deck_id": "memory-supercycle",
+      "slide_id": "memory-supercycle-s08",
+      "slide_number": 8,
+      "variant": "original",
+      "pptx_member": "ppt/media/image8.png",
+      "extracted_path": "memory-supercycle/slides/slide-008.png",
+      "sha256": "c2e9e0ef89fbdb724ff2f0607405d5e86d4591621ed0192040932353b4aae424",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "selection_label": "The Memory Supercycle · S08 · Bridging the AI Bandwidth Gap",
+      "context": {
+        "label": "Bridging the AI Bandwidth Gap",
+        "summary": "Source mechanism plate contrasting traditional DRAM with HBM and high-capacity storage in an AI memory stack.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "memory-supercycle-s09-original",
+      "deck_id": "memory-supercycle",
+      "slide_id": "memory-supercycle-s09",
+      "slide_number": 9,
+      "variant": "original",
+      "pptx_member": "ppt/media/image9.png",
+      "extracted_path": "memory-supercycle/slides/slide-009.png",
+      "sha256": "0e684ae64191df4239c0cdc1d6ecd861215fd8a765250e6948de5c2a6e87f28c",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "selection_label": "The Memory Supercycle · S09 · The 10 fF Wall",
+      "context": {
+        "label": "The 10 fF Wall",
+        "summary": "Source plate describing the physical limits of two-dimensional DRAM and the move toward three-dimensional structures.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "memory-supercycle-s10-original",
+      "deck_id": "memory-supercycle",
+      "slide_id": "memory-supercycle-s10",
+      "slide_number": 10,
+      "variant": "original",
+      "pptx_member": "ppt/media/image10.png",
+      "extracted_path": "memory-supercycle/slides/slide-010.png",
+      "sha256": "93c84260f329b8085de8047113650e7ae488fad2acfcfe8a2f0e1aea78665710",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "selection_label": "The Memory Supercycle · S10 · The Next Supercycle Vector: Automotive and Robotics",
+      "context": {
+        "label": "The Next Supercycle Vector: Automotive and Robotics",
+        "summary": "Source plate mapping memory demand from AI infrastructure into automotive, robotics, and edge systems.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "memory-supercycle-s11-original",
+      "deck_id": "memory-supercycle",
+      "slide_id": "memory-supercycle-s11",
+      "slide_number": 11,
+      "variant": "original",
+      "pptx_member": "ppt/media/image11.png",
+      "extracted_path": "memory-supercycle/slides/slide-011.png",
+      "sha256": "0cdd1eafc5353a7a8c3f766cedc399cf5df9795a3f1385c2db06d705e3013ce7",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "selection_label": "The Memory Supercycle · S11 · One Hundred Billion Dollar Blueprints",
+      "context": {
+        "label": "One Hundred Billion Dollar Blueprints",
+        "summary": "Source map of planned cleanroom and fabrication investment supporting the memory buildout.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "memory-supercycle-s12-original",
+      "deck_id": "memory-supercycle",
+      "slide_id": "memory-supercycle-s12",
+      "slide_number": 12,
+      "variant": "original",
+      "pptx_member": "ppt/media/image12.png",
+      "extracted_path": "memory-supercycle/slides/slide-012.png",
+      "sha256": "1506fce4eea171298b55fcb2f6001756a24184359c56a5e10108f61b94f360e7",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "selection_label": "The Memory Supercycle · S12 · Subsidies, Sunset Clauses, and Civil Friction",
+      "context": {
+        "label": "Subsidies, Sunset Clauses, and Civil Friction",
+        "summary": "Source plate comparing public subsidies, expiration conditions, and local-government friction around new capacity.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "memory-supercycle-s13-original",
+      "deck_id": "memory-supercycle",
+      "slide_id": "memory-supercycle-s13",
+      "slide_number": 13,
+      "variant": "original",
+      "pptx_member": "ppt/media/image13.png",
+      "extracted_path": "memory-supercycle/slides/slide-013.png",
+      "sha256": "1294f04e20b7db7c5bdc6890a3aea0e42cdbd4d77c935ec1e83589d011abc4d1",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "selection_label": "The Memory Supercycle · S13 · Global Supply Chains Collide with Municipal Governance",
+      "context": {
+        "label": "Global Supply Chains Collide with Municipal Governance",
+        "summary": "Source plate showing how local permitting and infrastructure constraints interact with global memory supply chains.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "memory-supercycle-s14-original",
+      "deck_id": "memory-supercycle",
+      "slide_id": "memory-supercycle-s14",
+      "slide_number": 14,
+      "variant": "original",
+      "pptx_member": "ppt/media/image14.png",
+      "extracted_path": "memory-supercycle/slides/slide-014.png",
+      "sha256": "e6cf019d4d3a4afac1c39c2b1ef87da7c7b4e02e28231628e14fd5dc8b117760",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "selection_label": "The Memory Supercycle · S14 · The Fragile Balance: From Shortage to Structural Glut?",
+      "context": {
+        "label": "The Fragile Balance: From Shortage to Structural Glut?",
+        "summary": "Source timeline modeling the risk that new capacity could move the market from undersupply to oversupply.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "memory-supercycle-s15-original",
+      "deck_id": "memory-supercycle",
+      "slide_id": "memory-supercycle-s15",
+      "slide_number": 15,
+      "variant": "original",
+      "pptx_member": "ppt/media/image15.png",
+      "extracted_path": "memory-supercycle/slides/slide-015.png",
+      "sha256": "0c2244eaf535b51485fd49e0f68140cf81796bb88aaf791e4105ffaedbdf5271",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "selection_label": "The Memory Supercycle · S15 · The Winning Formula Through 2030",
+      "context": {
+        "label": "The Winning Formula Through 2030",
+        "summary": "Closing source plate summarizing process leadership, foundry symbiosis, and capital discipline through 2030.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    }
+  ],
+  "cleaned_images": [
+    {
+      "image_id": "memory-supercycle-s01-cleaned",
+      "deck_id": "memory-supercycle",
+      "slide_id": "memory-supercycle-s01",
+      "slide_number": 1,
+      "variant": "cleaned",
+      "pptx_member": "ppt/media/image1.png",
+      "extracted_path": "memory-supercycle/slides-cleaned/slide-001.png",
+      "sha256": "8bdd6e406992738b690b606b2aec52305a43408410e110cfbd22e826018f734f",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "parent_image_id": "memory-supercycle-s01-original",
+      "selection_label": "The Memory Supercycle · S01 · The Decadal Realignment",
+      "context": {
+        "label": "The Decadal Realignment",
+        "summary": "Opening source plate framing the structural shift in global semiconductor memory and the outlook through 2030.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "memory-supercycle-s02-cleaned",
+      "deck_id": "memory-supercycle",
+      "slide_id": "memory-supercycle-s02",
+      "slide_number": 2,
+      "variant": "cleaned",
+      "pptx_member": "ppt/media/image2.png",
+      "extracted_path": "memory-supercycle/slides-cleaned/slide-002.png",
+      "sha256": "57d0dad002699d28ba95e22b5ad0ac25f95f4863ca4dc13c3aed0c5922422d65",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "parent_image_id": "memory-supercycle-s02-original",
+      "selection_label": "The Memory Supercycle · S02 · Memory Is No Longer an Interchangeable Commodity",
+      "context": {
+        "label": "Memory Is No Longer an Interchangeable Commodity",
+        "summary": "Source plate contrasting legacy consumer memory with specialized infrastructure-grade memory.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "memory-supercycle-s03-cleaned",
+      "deck_id": "memory-supercycle",
+      "slide_id": "memory-supercycle-s03",
+      "slide_number": 3,
+      "variant": "cleaned",
+      "pptx_member": "ppt/media/image3.png",
+      "extracted_path": "memory-supercycle/slides-cleaned/slide-003.png",
+      "sha256": "e291cde5db1f215e4967020926faf04677e82d97349bfea533104c09d2927d3a",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "parent_image_id": "memory-supercycle-s03-original",
+      "selection_label": "The Memory Supercycle · S03 · The Root of the Shortage: The Three-to-One Physics Penalty",
+      "context": {
+        "label": "The Root of the Shortage: The Three-to-One Physics Penalty",
+        "summary": "Source plate illustrating how HBM packaging consumes more wafer capacity than standard DDR5 and constrains supply.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "memory-supercycle-s04-cleaned",
+      "deck_id": "memory-supercycle",
+      "slide_id": "memory-supercycle-s04",
+      "slide_number": 4,
+      "variant": "cleaned",
+      "pptx_member": "ppt/media/image4.png",
+      "extracted_path": "memory-supercycle/slides-cleaned/slide-004.png",
+      "sha256": "777bfa548d7269aaaf8feaef58381de86ad470e7a493500e7cda40f6068e07e3",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "parent_image_id": "memory-supercycle-s04-original",
+      "selection_label": "The Memory Supercycle · S04 · The Revenue Paradox: Market Share in the AI Era",
+      "context": {
+        "label": "The Revenue Paradox: Market Share in the AI Era",
+        "summary": "Source chart showing the changing revenue share of memory manufacturers during the AI-era mix shift.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "memory-supercycle-s05-cleaned",
+      "deck_id": "memory-supercycle",
+      "slide_id": "memory-supercycle-s05",
+      "slide_number": 5,
+      "variant": "cleaned",
+      "pptx_member": "ppt/media/image5.png",
+      "extracted_path": "memory-supercycle/slides-cleaned/slide-005.png",
+      "sha256": "07b5f0e7816e3d7cf8fadcecd0be1383b3c20dbcb7cea97585022ddca60eab95",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "parent_image_id": "memory-supercycle-s05-original",
+      "selection_label": "The Memory Supercycle · S05 · The Bottom Falls as the Top Accelerates",
+      "context": {
+        "label": "The Bottom Falls as the Top Accelerates",
+        "summary": "Source plate comparing enterprise demand acceleration with the declining commodity-memory base beneath it.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "memory-supercycle-s06-cleaned",
+      "deck_id": "memory-supercycle",
+      "slide_id": "memory-supercycle-s06",
+      "slide_number": 6,
+      "variant": "cleaned",
+      "pptx_member": "ppt/media/image6.png",
+      "extracted_path": "memory-supercycle/slides-cleaned/slide-006.png",
+      "sha256": "135825de612001c350c7ad394b6c48072f855c65c1be1a87b9c685d442f905c5",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "parent_image_id": "memory-supercycle-s06-original",
+      "selection_label": "The Memory Supercycle · S06 · The End of Transactional Memory",
+      "context": {
+        "label": "The End of Transactional Memory",
+        "summary": "Source plate showing the transition away from spot-market memory toward contracted and strategic supply relationships.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "memory-supercycle-s07-cleaned",
+      "deck_id": "memory-supercycle",
+      "slide_id": "memory-supercycle-s07",
+      "slide_number": 7,
+      "variant": "cleaned",
+      "pptx_member": "ppt/media/image7.png",
+      "extracted_path": "memory-supercycle/slides-cleaned/slide-007.png",
+      "sha256": "46c802d255186799ffbe38d622e59cad858700797f15966c199c70b2a8e7c664",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "parent_image_id": "memory-supercycle-s07-original",
+      "selection_label": "The Memory Supercycle · S07 · Diverging Roadmaps: The HBM4 Logic Base Die",
+      "context": {
+        "label": "Diverging Roadmaps: The HBM4 Logic Base Die",
+        "summary": "Source comparison of Samsung, SK hynix, and Micron roadmaps for custom logic and HBM integration.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "memory-supercycle-s08-cleaned",
+      "deck_id": "memory-supercycle",
+      "slide_id": "memory-supercycle-s08",
+      "slide_number": 8,
+      "variant": "cleaned",
+      "pptx_member": "ppt/media/image8.png",
+      "extracted_path": "memory-supercycle/slides-cleaned/slide-008.png",
+      "sha256": "7e40bb8b2b8fe5e753f9bf082b36d3e982e740488d19b58fd9f47a026bf38e38",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "parent_image_id": "memory-supercycle-s08-original",
+      "selection_label": "The Memory Supercycle · S08 · Bridging the AI Bandwidth Gap",
+      "context": {
+        "label": "Bridging the AI Bandwidth Gap",
+        "summary": "Source mechanism plate contrasting traditional DRAM with HBM and high-capacity storage in an AI memory stack.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "memory-supercycle-s09-cleaned",
+      "deck_id": "memory-supercycle",
+      "slide_id": "memory-supercycle-s09",
+      "slide_number": 9,
+      "variant": "cleaned",
+      "pptx_member": "ppt/media/image9.png",
+      "extracted_path": "memory-supercycle/slides-cleaned/slide-009.png",
+      "sha256": "cf7f5f9cfb14bc13daca93cbfe1469935b388650abff5179926c4fdcffcd7678",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "parent_image_id": "memory-supercycle-s09-original",
+      "selection_label": "The Memory Supercycle · S09 · The 10 fF Wall",
+      "context": {
+        "label": "The 10 fF Wall",
+        "summary": "Source plate describing the physical limits of two-dimensional DRAM and the move toward three-dimensional structures.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "memory-supercycle-s10-cleaned",
+      "deck_id": "memory-supercycle",
+      "slide_id": "memory-supercycle-s10",
+      "slide_number": 10,
+      "variant": "cleaned",
+      "pptx_member": "ppt/media/image10.png",
+      "extracted_path": "memory-supercycle/slides-cleaned/slide-010.png",
+      "sha256": "1181d4542c9ae4aef775a2f22a937fbbee373ab33a743667be43bb6e0a9adbd4",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "parent_image_id": "memory-supercycle-s10-original",
+      "selection_label": "The Memory Supercycle · S10 · The Next Supercycle Vector: Automotive and Robotics",
+      "context": {
+        "label": "The Next Supercycle Vector: Automotive and Robotics",
+        "summary": "Source plate mapping memory demand from AI infrastructure into automotive, robotics, and edge systems.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "memory-supercycle-s11-cleaned",
+      "deck_id": "memory-supercycle",
+      "slide_id": "memory-supercycle-s11",
+      "slide_number": 11,
+      "variant": "cleaned",
+      "pptx_member": "ppt/media/image11.png",
+      "extracted_path": "memory-supercycle/slides-cleaned/slide-011.png",
+      "sha256": "8cecc388c68498095cf551df60251068d418b75a7804d39a6094f16b86f75b24",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "parent_image_id": "memory-supercycle-s11-original",
+      "selection_label": "The Memory Supercycle · S11 · One Hundred Billion Dollar Blueprints",
+      "context": {
+        "label": "One Hundred Billion Dollar Blueprints",
+        "summary": "Source map of planned cleanroom and fabrication investment supporting the memory buildout.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "memory-supercycle-s12-cleaned",
+      "deck_id": "memory-supercycle",
+      "slide_id": "memory-supercycle-s12",
+      "slide_number": 12,
+      "variant": "cleaned",
+      "pptx_member": "ppt/media/image12.png",
+      "extracted_path": "memory-supercycle/slides-cleaned/slide-012.png",
+      "sha256": "7737ffdf9b3400d36f3f5aac8d3d1ee1a970bf7d650b6a47bbe62628f340d724",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "parent_image_id": "memory-supercycle-s12-original",
+      "selection_label": "The Memory Supercycle · S12 · Subsidies, Sunset Clauses, and Civil Friction",
+      "context": {
+        "label": "Subsidies, Sunset Clauses, and Civil Friction",
+        "summary": "Source plate comparing public subsidies, expiration conditions, and local-government friction around new capacity.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "memory-supercycle-s13-cleaned",
+      "deck_id": "memory-supercycle",
+      "slide_id": "memory-supercycle-s13",
+      "slide_number": 13,
+      "variant": "cleaned",
+      "pptx_member": "ppt/media/image13.png",
+      "extracted_path": "memory-supercycle/slides-cleaned/slide-013.png",
+      "sha256": "f055624f82ecc377497fe96bb2c824efe29260de1bd36ff89bac7d9d3aa84664",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "parent_image_id": "memory-supercycle-s13-original",
+      "selection_label": "The Memory Supercycle · S13 · Global Supply Chains Collide with Municipal Governance",
+      "context": {
+        "label": "Global Supply Chains Collide with Municipal Governance",
+        "summary": "Source plate showing how local permitting and infrastructure constraints interact with global memory supply chains.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "memory-supercycle-s14-cleaned",
+      "deck_id": "memory-supercycle",
+      "slide_id": "memory-supercycle-s14",
+      "slide_number": 14,
+      "variant": "cleaned",
+      "pptx_member": "ppt/media/image14.png",
+      "extracted_path": "memory-supercycle/slides-cleaned/slide-014.png",
+      "sha256": "77b753caf98991e1aac70ae6d0e11db882a373e36a336c37bed73baa67c78e20",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "parent_image_id": "memory-supercycle-s14-original",
+      "selection_label": "The Memory Supercycle · S14 · The Fragile Balance: From Shortage to Structural Glut?",
+      "context": {
+        "label": "The Fragile Balance: From Shortage to Structural Glut?",
+        "summary": "Source timeline modeling the risk that new capacity could move the market from undersupply to oversupply.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "memory-supercycle-s15-cleaned",
+      "deck_id": "memory-supercycle",
+      "slide_id": "memory-supercycle-s15",
+      "slide_number": 15,
+      "variant": "cleaned",
+      "pptx_member": "ppt/media/image15.png",
+      "extracted_path": "memory-supercycle/slides-cleaned/slide-015.png",
+      "sha256": "2c0ca620fd707e40e4120aa8e6e95ac1f9e10e6c55c11a8aeb908f70148ead50",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "parent_image_id": "memory-supercycle-s15-original",
+      "selection_label": "The Memory Supercycle · S15 · The Winning Formula Through 2030",
+      "context": {
+        "label": "The Winning Formula Through 2030",
+        "summary": "Closing source plate summarizing process leadership, foundry symbiosis, and capital discipline through 2030.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    }
+  ],
+  "assets": [],
+  "review": {
+    "slide_contact_sheet": "memory-supercycle/review/slide-contact-sheet.png",
+    "semantic_contact_sheet": "memory-supercycle/review/semantic-contact-sheet.png",
+    "coverage_report": "memory-supercycle/review/coverage-report.json",
+    "promotion_policy": "Source plates remain review-only. A crop becomes render-eligible only after operator-verified context, approved rights, and visual promotion review."
+  },
+  "artifact_hash": "b77766dd0ac4e16d511678b561d4178c18225425d3269669552660c17da32487"
+}

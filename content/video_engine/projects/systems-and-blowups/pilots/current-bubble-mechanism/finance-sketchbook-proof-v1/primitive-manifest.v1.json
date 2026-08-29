@@ -1,0 +1,40 @@
+{
+  "schema_version": "finance_sketchbook_primitive_manifest.v1",
+  "proof_id": "finance-sketchbook-proof-v1",
+  "composition": "FinanceSketchbookProof",
+  "canvas": {
+    "width": 1920,
+    "height": 1080,
+    "background": "warm cream paper"
+  },
+  "primitives": [
+    "investor",
+    "basket",
+    "contribution_token",
+    "holding_tile",
+    "weather_cloud",
+    "connector",
+    "label",
+    "eligibility_gate",
+    "scale",
+    "caption",
+    "source_card",
+    "generated_presenter_plate"
+  ],
+  "asset_paths": [
+    "public/assets/finance-host-presenter-plate-v1.png"
+  ],
+  "generated_assets": [
+    {
+      "asset_id": "finance-host-presenter-plate-v1",
+      "path": "public/assets/finance-host-presenter-plate-v1.png",
+      "sha256": "16c94909dcdcd2e6ce369467c3971ce949dfbe5f5a13b7a32b6baea2649009c8",
+      "source_kind": "built_in_imagegen",
+      "background_removal": "flat_chroma_key_plus_local_alpha",
+      "render_state": "draft"
+    }
+  ],
+  "stock_assets": [],
+  "provider_calls": 0,
+  "notes": "Visible objects remain deterministic SVG/React primitives except for the source-bound generated presenter plate; factual text is compositor-owned."
+}

@@ -204,9 +204,13 @@ export type EditorialMotionLayerRole =
   | "world"
   | "depth"
   | "character"
+  | "subject"
   | "prop"
   | "ambient"
-  | "diagram";
+  | "diagram"
+  | "mechanism"
+  | "evidence"
+  | "transition";
 
 export type EditorialMotionCameraKind =
   | "locked"
@@ -252,6 +256,16 @@ export type EditorialMotionLayer = {
     exit_duration_s: number;
     exit_effect_duration_s?: number;
     exit_effect: "none" | "smoke_puff";
+  };
+  activation?: {
+    start_s: number;
+    end_s: number;
+    action_start_s: number;
+    action_end_s: number;
+    start_word_index: number;
+    end_word_index: number;
+    action_start_word_index: number;
+    action_end_word_index: number;
   };
   placement?: {
     support_plane: EditorialMotionPlacementRegion;
@@ -415,3 +429,136 @@ export type EditorialMotionProps = {
 };
 
 export type EditorialMotionPlanProps = EditorialMotionProps;
+
+export type FinanceSketchbookStateId =
+  | "basket-product-qualities"
+  | "two-jobs"
+  | "concentration"
+  | "shared-exposure"
+  | "long-tail"
+  | "admission-versus-weighting";
+
+export type FinanceSketchbookState = {
+  id: FinanceSketchbookStateId;
+  start_word_index: number;
+  end_word_index: number;
+  start_s: number;
+  end_s: number;
+  relative_start_s: number;
+  relative_end_s: number;
+};
+
+export type FinanceSketchbookSourceCard = {
+  claim_id: "sp500-top-ten-concentration";
+  claim_text: string;
+  display_text: "≈40% of index weight";
+  as_of: "2025-06-30";
+  source_locator: string;
+  source_location: string;
+  qualifier: string;
+};
+
+export type FinanceSketchbookProofProps = {
+  schema_version: "finance_sketchbook_proof.v1";
+  proof_id: "finance-sketchbook-proof-v1";
+  duration_s: 60.732;
+  source_start_s: 410.26;
+  source_end_s: 470.992;
+  source_word_start: 1025;
+  source_word_end: 1188;
+  delivery_fps: 24;
+  paper_motion_fps: 12;
+  authoring_profile: { width: 1920; height: 1080; fps: 24 };
+  render_profile: { width: number; height: number; fps: 24; label: string };
+  canonical_audio: { path: string; start_s: 410.26; volume: number };
+  presenter_asset?: { asset_id: string; path: string; sha256: string; render_state?: "draft" | "approved" };
+  states: FinanceSketchbookState[];
+  concentration_source: FinanceSketchbookSourceCard;
+};
+
+export type Finance2DStickStateId =
+  | "basket-product-qualities"
+  | "two-jobs"
+  | "concentration"
+  | "shared-exposure"
+  | "long-tail"
+  | "admission-versus-weighting";
+
+export type Finance2DStickState = {
+  id: Finance2DStickStateId;
+  start_word_index: number;
+  end_word_index: number;
+  start_s: number;
+  end_s: number;
+  relative_start_s: number;
+  relative_end_s: number;
+};
+
+export type Finance2DStickSourceCard = {
+  claim_id: "sp500-top-ten-concentration";
+  claim_text: string;
+  display_text: "≈40% of index weight";
+  as_of: "2025-06-30";
+  source_locator: string;
+  source_location: string;
+  qualifier: string;
+};
+
+export type Finance2DStickProofProps = {
+  schema_version: "finance_2d_stick_proof.v1";
+  proof_id: "finance-2d-stick-proof-v1";
+  duration_s: 60.732;
+  source_start_s: 410.26;
+  source_end_s: 470.992;
+  source_word_start: 1025;
+  source_word_end: 1188;
+  delivery_fps: 24;
+  authoring_profile: { width: 1920; height: 1080; fps: 24 };
+  render_profile: { width: number; height: number; fps: 24; label: string };
+  canonical_audio: { path: string; start_s: 410.26; volume: number };
+  states: Finance2DStickState[];
+  concentration_source: Finance2DStickSourceCard;
+};
+
+export type FinanceStealthWealthAsset = {
+  asset_id: string;
+  path: string;
+  sha256: string;
+  render_state?: "draft" | "approved";
+};
+
+export type FinanceStealthWealthBeat = {
+  id: string;
+  start_s: number;
+  end_s: number;
+  eyebrow: string;
+  spoken_job: string;
+  narration_excerpt: string;
+  source_refs: string[];
+};
+
+export type FinanceStealthWealthClaim = {
+  claim_id: string;
+  display_text: string;
+  claim_text: string;
+  source_locator: string;
+  citation: string;
+  as_of?: string;
+  qualifier?: string;
+  kind: "metric" | "comparison" | "thesis" | "mechanism";
+};
+
+export type FinanceStealthWealthProofProps = {
+  schema_version: "finance_stealth_wealth_proof.v1";
+  proof_id: "finance-stealth-wealth-proof-v1";
+  duration_s: 105;
+  delivery_fps: 24;
+  authoring_profile: { width: 1920; height: 1080; fps: 24 };
+  render_profile: { width: number; height: number; fps: 24; label: string };
+  canonical_audio: { path: string; start_s: 0; volume: number };
+  presenter_assets: FinanceStealthWealthAsset[];
+  world_assets: FinanceStealthWealthAsset[];
+  beats: FinanceStealthWealthBeat[];
+  claims: FinanceStealthWealthClaim[];
+  report_source: { path: string; sha256: string };
+};

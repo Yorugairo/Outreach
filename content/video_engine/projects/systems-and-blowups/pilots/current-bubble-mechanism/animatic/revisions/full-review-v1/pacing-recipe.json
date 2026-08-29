@@ -1,0 +1,19 @@
+{
+  "schema_version": "editorial_pacing_recipe.v1",
+  "id": "finance-causal-paper-theatre-v1",
+  "preferred_shot_duration_s": [
+    2.15,
+    4.6
+  ],
+  "maximum_shot_duration_s": 5.5,
+  "max_consecutive_same_scale": 2,
+  "max_consecutive_moving_shots": 2,
+  "max_information_surfaces": 0,
+  "max_non_evidence_prop_layers": 600,
+  "motion_density": "moderate",
+  "transition_policy": "motivated_only",
+  "chapter_reset_policy": "paper_reset",
+  "provider_motion_policy": "shot_level_exception_only",
+  "reference_policy": "abstract_structure_only",
+  "artifact_hash": "12e4809ad3e36e1ffc14caf90db7e7524e0ad07b194828ab6369cf09c97628be"
+}

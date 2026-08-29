@@ -1,0 +1,56 @@
+{
+  "schema_version": "deck_asset_manifest.v1",
+  "manifest_id": "deck-source-example",
+  "project_id": "systems-and-blowups",
+  "source_decks": [
+    {
+      "deck_id": "example-deck",
+      "title": "Example deck",
+      "source_path": "C:/source/example.pptx",
+      "source_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "source_family": "operator-supplied-research-deck",
+      "rights_state": "source_review_only",
+      "cleanup": {"requested": false, "policy": "No derivative cleanup requested."}
+    }
+  ],
+  "slides": [
+    {
+      "slide_id": "example-deck-s01",
+      "deck_id": "example-deck",
+      "slide_number": 1,
+      "slide_label": "Slide 01",
+      "source_image_id": "example-deck-s01-original",
+      "context": {
+        "label": "Slide 01",
+        "summary": "Context pending operator review.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    }
+  ],
+  "source_images": [
+    {
+      "image_id": "example-deck-s01-original",
+      "deck_id": "example-deck",
+      "slide_id": "example-deck-s01",
+      "slide_number": 1,
+      "variant": "original",
+      "pptx_member": "ppt/media/image1.png",
+      "extracted_path": "slides/example-deck/slide-001.png",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA"
+    }
+  ],
+  "cleaned_images": [],
+  "assets": [],
+  "review": {
+    "slide_contact_sheet": "review/slide-contact-sheet.png",
+    "semantic_contact_sheet": "review/semantic-contact-sheet.png",
+    "coverage_report": "review/coverage-report.json",
+    "promotion_policy": "Only operator-verified context and approved rights may render."
+  },
+  "artifact_hash": "0000000000000000000000000000000000000000000000000000000000000000"
+}

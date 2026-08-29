@@ -1,0 +1,115 @@
+{
+  "schema_version": "finance_numeric_evidence_register.v1",
+  "episode_id": "current-bubble-mechanism",
+  "claim_ledger_hash": "7071bb052eda8190225d8d4847cee1643a41ecf802293932283a6bae030c467e",
+  "verified_report": {
+    "report_id": "operator-verified-market-landscape-report",
+    "title": "Market Landscape and Revenue Realities in the AI Era",
+    "location": "operator-provided verified research report; claim-ledger locator controls final display"
+  },
+  "items": [
+    {
+      "surface_id": "sp500-top-ten-weight-2025",
+      "claim_id": "sp500-top-ten-concentration",
+      "display_value": "almost 40",
+      "unit": "percent of S&P 500 weight",
+      "as_of": "2025-06-30",
+      "report_locator": "S&P Dow Jones Indices and Vanguard, In the Shadows of Giants, PDF page 4, highlights and top-ten concentration chart",
+      "format": "large percentage with local qualifier rail; no generated-raster text",
+      "qualifier": "Concentration alone does not prove overvaluation or predict a market decline.",
+      "permitted_surface_types": ["statistic", "weight_diagram", "report_page"]
+    },
+    {
+      "surface_id": "micron-trailing-return-2026-08-07",
+      "claim_id": "timely-trailing-market-return-comparison",
+      "display_value": 685.7,
+      "unit": "percent one-year adjusted-close return",
+      "as_of": "2026-08-07",
+      "report_locator": "Stored YFinance adjusted-close packet: MU, 2025-08-07 through 2026-08-07; full daily observation series retained with packet hash.",
+      "format": "one-decimal percentage; local qualifier: 1Y through Aug. 7, adjusted close; no generated-raster text",
+      "qualifier": "One-year price snapshot, not a valuation conclusion, forecast, or total-return comparison.",
+      "permitted_surface_types": ["statistic", "comparison_bar", "report_page"],
+      "market_data_binding": {"packet_hash": "9b1d18352888f135aeae830c255cf6da12c82db9e554262e2c6bbb6e8d5c405c", "instrument_id": "micron", "metric": "return_pct", "rounding_decimals": 1}
+    },
+    {
+      "surface_id": "kospi-trailing-return-2026-08-07",
+      "claim_id": "timely-trailing-market-return-comparison",
+      "display_value": 93.9,
+      "unit": "percent one-year adjusted-close return",
+      "as_of": "2026-08-07",
+      "report_locator": "Stored YFinance adjusted-close packet: ^KS11, 2025-08-07 through 2026-08-07; full daily observation series retained with packet hash.",
+      "format": "one-decimal percentage; local qualifier: 1Y through Aug. 7, adjusted close; no generated-raster text",
+      "qualifier": "One-year price snapshot, not a valuation conclusion, forecast, or total-return comparison.",
+      "permitted_surface_types": ["statistic", "comparison_bar", "report_page"],
+      "market_data_binding": {"packet_hash": "9b1d18352888f135aeae830c255cf6da12c82db9e554262e2c6bbb6e8d5c405c", "instrument_id": "kospi", "metric": "return_pct", "rounding_decimals": 1}
+    },
+    {
+      "surface_id": "sp500-trailing-return-2026-08-07",
+      "claim_id": "timely-trailing-market-return-comparison",
+      "display_value": 22.4,
+      "unit": "percent one-year adjusted-close return",
+      "as_of": "2026-08-07",
+      "report_locator": "Stored YFinance adjusted-close packet: ^GSPC, 2025-08-07 through 2026-08-07; full daily observation series retained with packet hash.",
+      "format": "one-decimal percentage; local qualifier: 1Y through Aug. 7, adjusted close; no generated-raster text",
+      "qualifier": "One-year price snapshot, not a valuation conclusion, forecast, or total-return comparison.",
+      "permitted_surface_types": ["statistic", "comparison_bar", "report_page"],
+      "market_data_binding": {"packet_hash": "9b1d18352888f135aeae830c255cf6da12c82db9e554262e2c6bbb6e8d5c405c", "instrument_id": "sp500", "metric": "return_pct", "rounding_decimals": 1}
+    },
+    {
+      "surface_id": "generational-wealth-return-hurdle",
+      "claim_id": "generational-wealth-return-hurdle",
+      "display_value": 15.9,
+      "unit": "percent annual compound growth",
+      "as_of": "2026-08-07",
+      "report_locator": "SEC compound-interest calculator method; ($1,000,000 / $25,000)^(1 / 25) - 1 = approximately 15.88%",
+      "format": "one-decimal percentage with stated $25,000 start, $1,000,000 target, 25 years, and no contributions",
+      "qualifier": "Illustrative return hurdle only; taxes, inflation, fees, dividends, and contributions change the result. It is not an expected return or universal wealth definition.",
+      "permitted_surface_types": ["statistic", "comparison_bar", "report_page"]
+    },
+    {
+      "surface_id": "ten-percent-compound-example",
+      "claim_id": "generational-wealth-return-hurdle",
+      "display_value": 271000,
+      "unit": "dollars after 25 years",
+      "as_of": "2026-08-07",
+      "report_locator": "Deterministic calculation: $25,000 × 1.10^25 = approximately $270,867, rounded to $271,000",
+      "format": "rounded dollar comparison, explicitly conditional on no additional contributions",
+      "qualifier": "Illustrative math only; not a forecast or a statement of realized market returns.",
+      "permitted_surface_types": ["statistic", "comparison_bar"]
+    },
+    {
+      "surface_id": "sp500-ten-year-price-gain-compound-example",
+      "claim_id": "sp500-market-leaders-comparison",
+      "display_value": 600000,
+      "unit": "dollars after 25 years",
+      "as_of": "2026-06-30",
+      "report_locator": "S&P Dow Jones Indices: S&P 500 13.58% ten-year annualized price return as of June 30, 2026; deterministic illustration $25,000 × 1.1358^25 = approximately $604,000, rounded to $600,000",
+      "format": "rounded dollar comparison with explicit counterfactual repetition disclaimer",
+      "qualifier": "The reported ten-year price return is not a forecast; the illustrated result excludes dividends, contributions, taxes, inflation, and fees.",
+      "permitted_surface_types": ["statistic", "comparison_bar", "report_page"]
+    },
+    {
+      "surface_id": "market-leaders-ten-year-price-return-2026-06-30",
+      "claim_id": "sp500-market-leaders-comparison",
+      "display_value": 16.01,
+      "unit": "percent annualized ten-year price return",
+      "as_of": "2026-06-30",
+      "report_locator": "S&P Dow Jones Indices Market Leaders Index performance table as of June 30, 2026",
+      "format": "one-decimal annualized price-return comparison with source and simulated-history qualifier",
+      "qualifier": "Most ten-year history is hypothetical back-testing because the index launched in late 2024; a reported stronger full-period return does not prove a recommendation.",
+      "permitted_surface_types": ["statistic", "comparison_bar", "report_page"]
+    },
+    {
+      "surface_id": "sp500-ten-year-price-return-2026-06-30",
+      "claim_id": "sp500-market-leaders-comparison",
+      "display_value": 13.58,
+      "unit": "percent annualized ten-year price return",
+      "as_of": "2026-06-30",
+      "report_locator": "S&P Dow Jones Indices Market Leaders Index comparison table, S&P 500 row, as of June 30, 2026",
+      "format": "one-decimal annualized price-return comparison with source and simulated-history qualifier",
+      "qualifier": "Price return comparison only; it is not a forecast, total-return comparison, or individualized recommendation.",
+      "permitted_surface_types": ["statistic", "comparison_bar", "report_page"]
+    }
+  ],
+  "artifact_hash": "1ec697889f6671890203d12d3e1b79c431048a2a74d8b07f7b4bfab6f508fd9e"
+}

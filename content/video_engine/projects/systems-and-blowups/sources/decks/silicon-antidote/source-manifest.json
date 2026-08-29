@@ -1,0 +1,1158 @@
+{
+  "schema_version": "deck_asset_manifest.v1",
+  "manifest_id": "silicon-decks-source-manifest-v2-silicon-antidote",
+  "project_id": "systems-and-blowups",
+  "source_decks": [
+    {
+      "deck_id": "silicon-antidote",
+      "title": "The Silicon Antidote",
+      "source_path": "C:\\Users\\Snipe\\Downloads\\The_Silicon_Antidote.pptx",
+      "source_sha256": "306b2673e4ef20e3a9ccf783145202fbc460fddb9aad155239d1fe091226ceed",
+      "source_family": "operator-supplied-notebooklm-research-deck",
+      "rights_state": "source_review_only",
+      "cleanup": {
+        "requested": true,
+        "input_path": "C:\\Users\\Snipe\\Downloads\\The_Silicon_Antidote.no-watermark.pptx",
+        "original_sha256": "306b2673e4ef20e3a9ccf783145202fbc460fddb9aad155239d1fe091226ceed",
+        "cleaned_sha256": "1ec6bbe5d007d7ce11e117291b995950e7b08da2b668e071b70e88c6a1959fc3",
+        "policy": "Derived from an operator-approved non-destructive footer cleanup.",
+        "approved": true
+      }
+    }
+  ],
+  "slides": [
+    {
+      "slide_id": "silicon-antidote-s01",
+      "deck_id": "silicon-antidote",
+      "slide_number": 1,
+      "slide_label": "The Ultimate Antidote to an S&P 500 Bubble",
+      "source_image_id": "silicon-antidote-s01-original",
+      "context": {
+        "label": "The Ultimate Antidote to an S&P 500 Bubble",
+        "summary": "Opening source plate framing physical memory infrastructure as the counterpoint to a software-led market bubble.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "slide_id": "silicon-antidote-s02",
+      "deck_id": "silicon-antidote",
+      "slide_number": 2,
+      "slide_label": "The Great Valuation Paradox",
+      "source_image_id": "silicon-antidote-s02-original",
+      "context": {
+        "label": "The Great Valuation Paradox",
+        "summary": "A source plate contrasting the S&P 500 valuation bubble with the memory triopoly and its operating-margin/valuation cards.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "slide_id": "silicon-antidote-s03",
+      "deck_id": "silicon-antidote",
+      "slide_number": 3,
+      "slide_label": "Flashing Red on Extreme Concentration",
+      "source_image_id": "silicon-antidote-s03-original",
+      "context": {
+        "label": "Flashing Red on Extreme Concentration",
+        "summary": "Source plate showing top-ten mega-cap concentration and the mismatch between index weight and earnings contribution.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "slide_id": "silicon-antidote-s04",
+      "deck_id": "silicon-antidote",
+      "slide_number": 4,
+      "slide_label": "The Market’s Historical Blind Spot",
+      "source_image_id": "silicon-antidote-s04-original",
+      "context": {
+        "label": "The Market’s Historical Blind Spot",
+        "summary": "Source warning plate linking high prices, debt-financed overinvestment, and industry oversupply to prior market cycles.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "slide_id": "silicon-antidote-s05",
+      "deck_id": "silicon-antidote",
+      "slide_number": 5,
+      "slide_label": "The Crucible of Compute",
+      "source_image_id": "silicon-antidote-s05-original",
+      "context": {
+        "label": "The Crucible of Compute",
+        "summary": "Source consolidation plate showing the funnel from many competitors to the Samsung, Micron, and SK hynix triopoly.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "slide_id": "silicon-antidote-s06",
+      "deck_id": "silicon-antidote",
+      "slide_number": 6,
+      "slide_label": "The Strange Genesis of Silicon’s Most Brutal Cartel",
+      "source_image_id": "silicon-antidote-s06-original",
+      "context": {
+        "label": "The Strange Genesis of Silicon’s Most Brutal Cartel",
+        "summary": "Source history plate describing the debt-fueled, founder-led, and abandoned-asset paths of the surviving memory makers.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "slide_id": "silicon-antidote-s07",
+      "deck_id": "silicon-antidote",
+      "slide_number": 7,
+      "slide_label": "The AI Catalyst: Breaking the Physical Bottleneck",
+      "source_image_id": "silicon-antidote-s07-original",
+      "context": {
+        "label": "The AI Catalyst: Breaking the Physical Bottleneck",
+        "summary": "Source mechanism plate contrasting traditional planar DRAM with the stacked HBM structure feeding AI accelerators.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "slide_id": "silicon-antidote-s08",
+      "deck_id": "silicon-antidote",
+      "slide_number": 8,
+      "slide_label": "The Brutal Physics of the Moat",
+      "source_image_id": "silicon-antidote-s08-original",
+      "context": {
+        "label": "The Brutal Physics of the Moat",
+        "summary": "Source process plate showing backgrinding, TSV etching, and packaging as yield-sensitive HBM bottlenecks.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "slide_id": "silicon-antidote-s09",
+      "deck_id": "silicon-antidote",
+      "slide_number": 9,
+      "slide_label": "The Three-to-One Capacity Penalty",
+      "source_image_id": "silicon-antidote-s09-original",
+      "context": {
+        "label": "The Three-to-One Capacity Penalty",
+        "summary": "A source plate comparing standard DRAM capacity with the wafer cost of HBM.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "slide_id": "silicon-antidote-s10",
+      "deck_id": "silicon-antidote",
+      "slide_number": 10,
+      "slide_label": "Welcome to RAM-ageddon",
+      "source_image_id": "silicon-antidote-s10-original",
+      "context": {
+        "label": "Welcome to RAM-ageddon",
+        "summary": "A source plate showing supply pressure, AI and consumer demand, and the RAM-ageddon price shock.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "slide_id": "silicon-antidote-s11",
+      "deck_id": "silicon-antidote",
+      "slide_number": 11,
+      "slide_label": "Locking Down the Financial Paradigm",
+      "source_image_id": "silicon-antidote-s11-original",
+      "context": {
+        "label": "Locking Down the Financial Paradigm",
+        "summary": "Source comparison of volatile spot-market pricing with multi-year supply agreements and strategic co-engineering.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "slide_id": "silicon-antidote-s12",
+      "deck_id": "silicon-antidote",
+      "slide_number": 12,
+      "slide_label": "The Strategic Hardware Choke Point",
+      "source_image_id": "silicon-antidote-s12-original",
+      "context": {
+        "label": "The Strategic Hardware Choke Point",
+        "summary": "Source plate showing memory as a large share of the AI server bill of materials and a dominant compute input.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "slide_id": "silicon-antidote-s13",
+      "deck_id": "silicon-antidote",
+      "slide_number": 13,
+      "slide_label": "The Modern Market Racetrack",
+      "source_image_id": "silicon-antidote-s13-original",
+      "context": {
+        "label": "The Modern Market Racetrack",
+        "summary": "Source market-share plate comparing DRAM and NAND tracks across the major memory manufacturers.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "slide_id": "silicon-antidote-s14",
+      "deck_id": "silicon-antidote",
+      "slide_number": 14,
+      "slide_label": "The Ultimate Diagnostic Matrix",
+      "source_image_id": "silicon-antidote-s14-original",
+      "context": {
+        "label": "The Ultimate Diagnostic Matrix",
+        "summary": "A source plate comparing the S&P 500 index and memory triopoly across valuation, earnings quality, market structure, and pricing model.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "slide_id": "silicon-antidote-s15",
+      "deck_id": "silicon-antidote",
+      "slide_number": 15,
+      "slide_label": "The Physical Antidote to a Paper Bubble",
+      "source_image_id": "silicon-antidote-s15-original",
+      "context": {
+        "label": "The Physical Antidote to a Paper Bubble",
+        "summary": "Closing source plate pairing the S&P 500 bubble with the physical constraints and moat of memory infrastructure.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    }
+  ],
+  "source_images": [
+    {
+      "image_id": "silicon-antidote-s01-original",
+      "deck_id": "silicon-antidote",
+      "slide_id": "silicon-antidote-s01",
+      "slide_number": 1,
+      "variant": "original",
+      "pptx_member": "ppt/media/image1.png",
+      "extracted_path": "silicon-antidote/slides/slide-001.png",
+      "sha256": "1e037a288474319526466ec5f8f7f73b775f06d6b54c5e44a0a54f2805e6facc",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "selection_label": "The Silicon Antidote · S01 · The Ultimate Antidote to an S&P 500 Bubble",
+      "context": {
+        "label": "The Ultimate Antidote to an S&P 500 Bubble",
+        "summary": "Opening source plate framing physical memory infrastructure as the counterpoint to a software-led market bubble.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-antidote-s02-original",
+      "deck_id": "silicon-antidote",
+      "slide_id": "silicon-antidote-s02",
+      "slide_number": 2,
+      "variant": "original",
+      "pptx_member": "ppt/media/image2.png",
+      "extracted_path": "silicon-antidote/slides/slide-002.png",
+      "sha256": "ffb4fa34f3692536089803371ba47072f3e46ea2ceb1ef5e54dc2ec3a5033cab",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "selection_label": "The Silicon Antidote · S02 · The Great Valuation Paradox",
+      "context": {
+        "label": "The Great Valuation Paradox",
+        "summary": "A source plate contrasting the S&P 500 valuation bubble with the memory triopoly and its operating-margin/valuation cards.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-antidote-s03-original",
+      "deck_id": "silicon-antidote",
+      "slide_id": "silicon-antidote-s03",
+      "slide_number": 3,
+      "variant": "original",
+      "pptx_member": "ppt/media/image3.png",
+      "extracted_path": "silicon-antidote/slides/slide-003.png",
+      "sha256": "7daa26d0151c10a1886a7738051154091a933a0b19126db50c71e4090fbbab70",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "selection_label": "The Silicon Antidote · S03 · Flashing Red on Extreme Concentration",
+      "context": {
+        "label": "Flashing Red on Extreme Concentration",
+        "summary": "Source plate showing top-ten mega-cap concentration and the mismatch between index weight and earnings contribution.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-antidote-s04-original",
+      "deck_id": "silicon-antidote",
+      "slide_id": "silicon-antidote-s04",
+      "slide_number": 4,
+      "variant": "original",
+      "pptx_member": "ppt/media/image4.png",
+      "extracted_path": "silicon-antidote/slides/slide-004.png",
+      "sha256": "26cb850bb179e874e16d63bfdf8d8a8f7f70855db12ce4296daf3b0ff6cd321f",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "selection_label": "The Silicon Antidote · S04 · The Market’s Historical Blind Spot",
+      "context": {
+        "label": "The Market’s Historical Blind Spot",
+        "summary": "Source warning plate linking high prices, debt-financed overinvestment, and industry oversupply to prior market cycles.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-antidote-s05-original",
+      "deck_id": "silicon-antidote",
+      "slide_id": "silicon-antidote-s05",
+      "slide_number": 5,
+      "variant": "original",
+      "pptx_member": "ppt/media/image5.png",
+      "extracted_path": "silicon-antidote/slides/slide-005.png",
+      "sha256": "9be07a0a4df72d26b7f37dab6ec6d0b3e4813133f5e988f6dc5a9ec0fef2f044",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "selection_label": "The Silicon Antidote · S05 · The Crucible of Compute",
+      "context": {
+        "label": "The Crucible of Compute",
+        "summary": "Source consolidation plate showing the funnel from many competitors to the Samsung, Micron, and SK hynix triopoly.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-antidote-s06-original",
+      "deck_id": "silicon-antidote",
+      "slide_id": "silicon-antidote-s06",
+      "slide_number": 6,
+      "variant": "original",
+      "pptx_member": "ppt/media/image6.png",
+      "extracted_path": "silicon-antidote/slides/slide-006.png",
+      "sha256": "fad967a88a1de8c9ceb0b85fab772bf4e25240a3831bafcec543dc82976ccc1a",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "selection_label": "The Silicon Antidote · S06 · The Strange Genesis of Silicon’s Most Brutal Cartel",
+      "context": {
+        "label": "The Strange Genesis of Silicon’s Most Brutal Cartel",
+        "summary": "Source history plate describing the debt-fueled, founder-led, and abandoned-asset paths of the surviving memory makers.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-antidote-s07-original",
+      "deck_id": "silicon-antidote",
+      "slide_id": "silicon-antidote-s07",
+      "slide_number": 7,
+      "variant": "original",
+      "pptx_member": "ppt/media/image7.png",
+      "extracted_path": "silicon-antidote/slides/slide-007.png",
+      "sha256": "2e95e7e626a186af9bbfdfa4e50c155fd0e32719597012bece15de5426e640d0",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "selection_label": "The Silicon Antidote · S07 · The AI Catalyst: Breaking the Physical Bottleneck",
+      "context": {
+        "label": "The AI Catalyst: Breaking the Physical Bottleneck",
+        "summary": "Source mechanism plate contrasting traditional planar DRAM with the stacked HBM structure feeding AI accelerators.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-antidote-s08-original",
+      "deck_id": "silicon-antidote",
+      "slide_id": "silicon-antidote-s08",
+      "slide_number": 8,
+      "variant": "original",
+      "pptx_member": "ppt/media/image8.png",
+      "extracted_path": "silicon-antidote/slides/slide-008.png",
+      "sha256": "08dcc902fb468fbfb03d96dbb2ef1ee1278f1a29351174126aaf741ac678d9bd",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "selection_label": "The Silicon Antidote · S08 · The Brutal Physics of the Moat",
+      "context": {
+        "label": "The Brutal Physics of the Moat",
+        "summary": "Source process plate showing backgrinding, TSV etching, and packaging as yield-sensitive HBM bottlenecks.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-antidote-s09-original",
+      "deck_id": "silicon-antidote",
+      "slide_id": "silicon-antidote-s09",
+      "slide_number": 9,
+      "variant": "original",
+      "pptx_member": "ppt/media/image9.png",
+      "extracted_path": "silicon-antidote/slides/slide-009.png",
+      "sha256": "99c45ff1fc37bee2a592ce5c5c447dfb7639483daed6e18e426a44478286fc7b",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "selection_label": "The Silicon Antidote · S09 · The Three-to-One Capacity Penalty",
+      "context": {
+        "label": "The Three-to-One Capacity Penalty",
+        "summary": "A source plate comparing standard DRAM capacity with the wafer cost of HBM.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-antidote-s10-original",
+      "deck_id": "silicon-antidote",
+      "slide_id": "silicon-antidote-s10",
+      "slide_number": 10,
+      "variant": "original",
+      "pptx_member": "ppt/media/image10.png",
+      "extracted_path": "silicon-antidote/slides/slide-010.png",
+      "sha256": "fd5bfbb5b230be9c70d13f24f2b3338625488ca726356b65bcbcc674faf18620",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "selection_label": "The Silicon Antidote · S10 · Welcome to RAM-ageddon",
+      "context": {
+        "label": "Welcome to RAM-ageddon",
+        "summary": "A source plate showing supply pressure, AI and consumer demand, and the RAM-ageddon price shock.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-antidote-s11-original",
+      "deck_id": "silicon-antidote",
+      "slide_id": "silicon-antidote-s11",
+      "slide_number": 11,
+      "variant": "original",
+      "pptx_member": "ppt/media/image11.png",
+      "extracted_path": "silicon-antidote/slides/slide-011.png",
+      "sha256": "0d33183054990f3874d0ba042238a388a8f674b02ed6bc6be906f38bbf792b40",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "selection_label": "The Silicon Antidote · S11 · Locking Down the Financial Paradigm",
+      "context": {
+        "label": "Locking Down the Financial Paradigm",
+        "summary": "Source comparison of volatile spot-market pricing with multi-year supply agreements and strategic co-engineering.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-antidote-s12-original",
+      "deck_id": "silicon-antidote",
+      "slide_id": "silicon-antidote-s12",
+      "slide_number": 12,
+      "variant": "original",
+      "pptx_member": "ppt/media/image12.png",
+      "extracted_path": "silicon-antidote/slides/slide-012.png",
+      "sha256": "084a40e14f73565e0c1dea0ec2d74b2b6537fbb08c745688d446fbbfadb7d7ae",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "selection_label": "The Silicon Antidote · S12 · The Strategic Hardware Choke Point",
+      "context": {
+        "label": "The Strategic Hardware Choke Point",
+        "summary": "Source plate showing memory as a large share of the AI server bill of materials and a dominant compute input.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-antidote-s13-original",
+      "deck_id": "silicon-antidote",
+      "slide_id": "silicon-antidote-s13",
+      "slide_number": 13,
+      "variant": "original",
+      "pptx_member": "ppt/media/image13.png",
+      "extracted_path": "silicon-antidote/slides/slide-013.png",
+      "sha256": "6102f164bd308f9a838d7b651ab5fc7a41604a7cd5bb1357572a4ac2d6e15f1c",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "selection_label": "The Silicon Antidote · S13 · The Modern Market Racetrack",
+      "context": {
+        "label": "The Modern Market Racetrack",
+        "summary": "Source market-share plate comparing DRAM and NAND tracks across the major memory manufacturers.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-antidote-s14-original",
+      "deck_id": "silicon-antidote",
+      "slide_id": "silicon-antidote-s14",
+      "slide_number": 14,
+      "variant": "original",
+      "pptx_member": "ppt/media/image14.png",
+      "extracted_path": "silicon-antidote/slides/slide-014.png",
+      "sha256": "33738716a7522b48d248f147e2f649fc3dbc5c595296f7c75020aecde4ab3cb9",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "selection_label": "The Silicon Antidote · S14 · The Ultimate Diagnostic Matrix",
+      "context": {
+        "label": "The Ultimate Diagnostic Matrix",
+        "summary": "A source plate comparing the S&P 500 index and memory triopoly across valuation, earnings quality, market structure, and pricing model.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-antidote-s15-original",
+      "deck_id": "silicon-antidote",
+      "slide_id": "silicon-antidote-s15",
+      "slide_number": 15,
+      "variant": "original",
+      "pptx_member": "ppt/media/image15.png",
+      "extracted_path": "silicon-antidote/slides/slide-015.png",
+      "sha256": "f2ae9dfd00c4230c49b4cfb110d370130733b8935c1a45e984a796396f4cf967",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "selection_label": "The Silicon Antidote · S15 · The Physical Antidote to a Paper Bubble",
+      "context": {
+        "label": "The Physical Antidote to a Paper Bubble",
+        "summary": "Closing source plate pairing the S&P 500 bubble with the physical constraints and moat of memory infrastructure.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    }
+  ],
+  "cleaned_images": [
+    {
+      "image_id": "silicon-antidote-s01-cleaned",
+      "deck_id": "silicon-antidote",
+      "slide_id": "silicon-antidote-s01",
+      "slide_number": 1,
+      "variant": "cleaned",
+      "pptx_member": "ppt/media/image1.png",
+      "extracted_path": "silicon-antidote/slides-cleaned/slide-001.png",
+      "sha256": "69847bd9d368144539468aa6bdcc22f4ea41632d227fa47941249d1eb7550511",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "parent_image_id": "silicon-antidote-s01-original",
+      "selection_label": "The Silicon Antidote · S01 · The Ultimate Antidote to an S&P 500 Bubble",
+      "context": {
+        "label": "The Ultimate Antidote to an S&P 500 Bubble",
+        "summary": "Opening source plate framing physical memory infrastructure as the counterpoint to a software-led market bubble.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-antidote-s02-cleaned",
+      "deck_id": "silicon-antidote",
+      "slide_id": "silicon-antidote-s02",
+      "slide_number": 2,
+      "variant": "cleaned",
+      "pptx_member": "ppt/media/image2.png",
+      "extracted_path": "silicon-antidote/slides-cleaned/slide-002.png",
+      "sha256": "12b8e9c87fbcd88456009f05b54410dd725a845e1507420d2581d130b97a0286",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "parent_image_id": "silicon-antidote-s02-original",
+      "selection_label": "The Silicon Antidote · S02 · The Great Valuation Paradox",
+      "context": {
+        "label": "The Great Valuation Paradox",
+        "summary": "A source plate contrasting the S&P 500 valuation bubble with the memory triopoly and its operating-margin/valuation cards.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-antidote-s03-cleaned",
+      "deck_id": "silicon-antidote",
+      "slide_id": "silicon-antidote-s03",
+      "slide_number": 3,
+      "variant": "cleaned",
+      "pptx_member": "ppt/media/image3.png",
+      "extracted_path": "silicon-antidote/slides-cleaned/slide-003.png",
+      "sha256": "bfb7524a0cf2d2d07dc9c81e519cd138f7ef0b9e49d8ef5f12a86c90eac2f2f1",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "parent_image_id": "silicon-antidote-s03-original",
+      "selection_label": "The Silicon Antidote · S03 · Flashing Red on Extreme Concentration",
+      "context": {
+        "label": "Flashing Red on Extreme Concentration",
+        "summary": "Source plate showing top-ten mega-cap concentration and the mismatch between index weight and earnings contribution.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-antidote-s04-cleaned",
+      "deck_id": "silicon-antidote",
+      "slide_id": "silicon-antidote-s04",
+      "slide_number": 4,
+      "variant": "cleaned",
+      "pptx_member": "ppt/media/image4.png",
+      "extracted_path": "silicon-antidote/slides-cleaned/slide-004.png",
+      "sha256": "25e7c7ab65fcfec55456884a575faf28c11987b4347e61143775fddfb4450ddd",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "parent_image_id": "silicon-antidote-s04-original",
+      "selection_label": "The Silicon Antidote · S04 · The Market’s Historical Blind Spot",
+      "context": {
+        "label": "The Market’s Historical Blind Spot",
+        "summary": "Source warning plate linking high prices, debt-financed overinvestment, and industry oversupply to prior market cycles.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-antidote-s05-cleaned",
+      "deck_id": "silicon-antidote",
+      "slide_id": "silicon-antidote-s05",
+      "slide_number": 5,
+      "variant": "cleaned",
+      "pptx_member": "ppt/media/image5.png",
+      "extracted_path": "silicon-antidote/slides-cleaned/slide-005.png",
+      "sha256": "b61cedd4a0cf10920cb996e787d325cb9132ebfda08035d470ee2093b9fe3a14",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "parent_image_id": "silicon-antidote-s05-original",
+      "selection_label": "The Silicon Antidote · S05 · The Crucible of Compute",
+      "context": {
+        "label": "The Crucible of Compute",
+        "summary": "Source consolidation plate showing the funnel from many competitors to the Samsung, Micron, and SK hynix triopoly.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-antidote-s06-cleaned",
+      "deck_id": "silicon-antidote",
+      "slide_id": "silicon-antidote-s06",
+      "slide_number": 6,
+      "variant": "cleaned",
+      "pptx_member": "ppt/media/image6.png",
+      "extracted_path": "silicon-antidote/slides-cleaned/slide-006.png",
+      "sha256": "b55b66836e825ac5a43a487ffd3fa0e578d3795a4206ca6cc13a936861d326a7",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "parent_image_id": "silicon-antidote-s06-original",
+      "selection_label": "The Silicon Antidote · S06 · The Strange Genesis of Silicon’s Most Brutal Cartel",
+      "context": {
+        "label": "The Strange Genesis of Silicon’s Most Brutal Cartel",
+        "summary": "Source history plate describing the debt-fueled, founder-led, and abandoned-asset paths of the surviving memory makers.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-antidote-s07-cleaned",
+      "deck_id": "silicon-antidote",
+      "slide_id": "silicon-antidote-s07",
+      "slide_number": 7,
+      "variant": "cleaned",
+      "pptx_member": "ppt/media/image7.png",
+      "extracted_path": "silicon-antidote/slides-cleaned/slide-007.png",
+      "sha256": "ab941357be800be2320480e6ba495e9bf55f17070e51055907aa883e87b3b4cd",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "parent_image_id": "silicon-antidote-s07-original",
+      "selection_label": "The Silicon Antidote · S07 · The AI Catalyst: Breaking the Physical Bottleneck",
+      "context": {
+        "label": "The AI Catalyst: Breaking the Physical Bottleneck",
+        "summary": "Source mechanism plate contrasting traditional planar DRAM with the stacked HBM structure feeding AI accelerators.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-antidote-s08-cleaned",
+      "deck_id": "silicon-antidote",
+      "slide_id": "silicon-antidote-s08",
+      "slide_number": 8,
+      "variant": "cleaned",
+      "pptx_member": "ppt/media/image8.png",
+      "extracted_path": "silicon-antidote/slides-cleaned/slide-008.png",
+      "sha256": "b1a8eae251ef18e9f71b43d49c07a8e25f02fb36adf1b625eefc227fb2de927b",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "parent_image_id": "silicon-antidote-s08-original",
+      "selection_label": "The Silicon Antidote · S08 · The Brutal Physics of the Moat",
+      "context": {
+        "label": "The Brutal Physics of the Moat",
+        "summary": "Source process plate showing backgrinding, TSV etching, and packaging as yield-sensitive HBM bottlenecks.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-antidote-s09-cleaned",
+      "deck_id": "silicon-antidote",
+      "slide_id": "silicon-antidote-s09",
+      "slide_number": 9,
+      "variant": "cleaned",
+      "pptx_member": "ppt/media/image9.png",
+      "extracted_path": "silicon-antidote/slides-cleaned/slide-009.png",
+      "sha256": "5f0eae50ad6d6944cc0b4eeecf2daa9d0ee9878cdcd13e1a96d864b2ff931fa4",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "parent_image_id": "silicon-antidote-s09-original",
+      "selection_label": "The Silicon Antidote · S09 · The Three-to-One Capacity Penalty",
+      "context": {
+        "label": "The Three-to-One Capacity Penalty",
+        "summary": "A source plate comparing standard DRAM capacity with the wafer cost of HBM.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-antidote-s10-cleaned",
+      "deck_id": "silicon-antidote",
+      "slide_id": "silicon-antidote-s10",
+      "slide_number": 10,
+      "variant": "cleaned",
+      "pptx_member": "ppt/media/image10.png",
+      "extracted_path": "silicon-antidote/slides-cleaned/slide-010.png",
+      "sha256": "0c3079c87e041b91d4af0e1cca39f958948b1736f55771b7ce2b49691635c5d5",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "parent_image_id": "silicon-antidote-s10-original",
+      "selection_label": "The Silicon Antidote · S10 · Welcome to RAM-ageddon",
+      "context": {
+        "label": "Welcome to RAM-ageddon",
+        "summary": "A source plate showing supply pressure, AI and consumer demand, and the RAM-ageddon price shock.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-antidote-s11-cleaned",
+      "deck_id": "silicon-antidote",
+      "slide_id": "silicon-antidote-s11",
+      "slide_number": 11,
+      "variant": "cleaned",
+      "pptx_member": "ppt/media/image11.png",
+      "extracted_path": "silicon-antidote/slides-cleaned/slide-011.png",
+      "sha256": "24b4abe8717f2d5468373d8db663331396b7b360a257405111c473711f181a80",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "parent_image_id": "silicon-antidote-s11-original",
+      "selection_label": "The Silicon Antidote · S11 · Locking Down the Financial Paradigm",
+      "context": {
+        "label": "Locking Down the Financial Paradigm",
+        "summary": "Source comparison of volatile spot-market pricing with multi-year supply agreements and strategic co-engineering.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-antidote-s12-cleaned",
+      "deck_id": "silicon-antidote",
+      "slide_id": "silicon-antidote-s12",
+      "slide_number": 12,
+      "variant": "cleaned",
+      "pptx_member": "ppt/media/image12.png",
+      "extracted_path": "silicon-antidote/slides-cleaned/slide-012.png",
+      "sha256": "4f4b8fb515172630637db17539af41b969c651f481ac258ce79c6585eb384e2a",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "parent_image_id": "silicon-antidote-s12-original",
+      "selection_label": "The Silicon Antidote · S12 · The Strategic Hardware Choke Point",
+      "context": {
+        "label": "The Strategic Hardware Choke Point",
+        "summary": "Source plate showing memory as a large share of the AI server bill of materials and a dominant compute input.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-antidote-s13-cleaned",
+      "deck_id": "silicon-antidote",
+      "slide_id": "silicon-antidote-s13",
+      "slide_number": 13,
+      "variant": "cleaned",
+      "pptx_member": "ppt/media/image13.png",
+      "extracted_path": "silicon-antidote/slides-cleaned/slide-013.png",
+      "sha256": "7caf94ff1690458564ecb337f6f9bd045a48c7ebf249604cd9db04f340cdbc0d",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "parent_image_id": "silicon-antidote-s13-original",
+      "selection_label": "The Silicon Antidote · S13 · The Modern Market Racetrack",
+      "context": {
+        "label": "The Modern Market Racetrack",
+        "summary": "Source market-share plate comparing DRAM and NAND tracks across the major memory manufacturers.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-antidote-s14-cleaned",
+      "deck_id": "silicon-antidote",
+      "slide_id": "silicon-antidote-s14",
+      "slide_number": 14,
+      "variant": "cleaned",
+      "pptx_member": "ppt/media/image14.png",
+      "extracted_path": "silicon-antidote/slides-cleaned/slide-014.png",
+      "sha256": "cb4d1547573bfcd50df207d303fe7b7f851cbdf17fa9ed7e6e15a87874cbd25c",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "parent_image_id": "silicon-antidote-s14-original",
+      "selection_label": "The Silicon Antidote · S14 · The Ultimate Diagnostic Matrix",
+      "context": {
+        "label": "The Ultimate Diagnostic Matrix",
+        "summary": "A source plate comparing the S&P 500 index and memory triopoly across valuation, earnings quality, market structure, and pricing model.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    },
+    {
+      "image_id": "silicon-antidote-s15-cleaned",
+      "deck_id": "silicon-antidote",
+      "slide_id": "silicon-antidote-s15",
+      "slide_number": 15,
+      "variant": "cleaned",
+      "pptx_member": "ppt/media/image15.png",
+      "extracted_path": "silicon-antidote/slides-cleaned/slide-015.png",
+      "sha256": "2c5f24b564f0ce6424eb153be52cdc3229c66db158a5b411455fbc0534778b6e",
+      "width": 1376,
+      "height": 768,
+      "mode": "RGBA",
+      "parent_image_id": "silicon-antidote-s15-original",
+      "selection_label": "The Silicon Antidote · S15 · The Physical Antidote to a Paper Bubble",
+      "context": {
+        "label": "The Physical Antidote to a Paper Bubble",
+        "summary": "Closing source plate pairing the S&P 500 bubble with the physical constraints and moat of memory infrastructure.",
+        "context_status": "review_only",
+        "claim_refs": [],
+        "cue_refs": []
+      }
+    }
+  ],
+  "assets": [
+    {
+      "asset_id": "silicon-antidote-s02-valuation-bubble-v1",
+      "kind": "semantic_crop",
+      "path": "silicon-antidote/semantic-assets/assets/silicon-antidote-s02-valuation-bubble-v1.png",
+      "sha256": "237df91e6c7beeeff9b9a837739d8c155089d74caf1230d4191e3e79d716ce31",
+      "deck_id": "silicon-antidote",
+      "slide_id": "silicon-antidote-s02",
+      "slide_number": 2,
+      "parent_source_image_id": "silicon-antidote-s02-cleaned",
+      "source_variant": "cleaned",
+      "extraction": {
+        "method": "rect_crop",
+        "bbox_px": [
+          55,
+          131,
+          592,
+          584
+        ],
+        "bbox_norm": [
+          0.04,
+          0.17,
+          0.43,
+          0.76
+        ],
+        "polygon_norm": null,
+        "mask_path": null,
+        "source_sha256": "12b8e9c87fbcd88456009f05b54410dd725a845e1507420d2581d130b97a0286"
+      },
+      "context": {
+        "what_it_is": "A red S&P 500 valuation balloon labeled with the source deck's CAPE comparison.",
+        "visual_role": "evidence",
+        "representation_mode": "literal_evidence",
+        "factual_text": true,
+        "claim_refs": [],
+        "cue_refs": [],
+        "not_what_it_means": [
+          "The crop preserves the source claim but is not independent verification of the metric."
+        ],
+        "context_status": "review_only",
+        "reuse_policy": {
+          "scope": "source_only",
+          "max_total_uses": 1,
+          "min_nonadjacent_gap": 0,
+          "allowed_reasons": [
+            "evidence_hold"
+          ],
+          "claim_bound": false
+        }
+      },
+      "rights_state": "source_review_only",
+      "review_state": "review_only",
+      "render_eligible": false
+    },
+    {
+      "asset_id": "silicon-antidote-s02-memory-triopoly-v1",
+      "kind": "semantic_crop",
+      "path": "silicon-antidote/semantic-assets/assets/silicon-antidote-s02-memory-triopoly-v1.png",
+      "sha256": "f37858b19c7507251746f9a8ff786644d683b4a107134ba935b1a064d37e0788",
+      "deck_id": "silicon-antidote",
+      "slide_id": "silicon-antidote-s02",
+      "slide_number": 2,
+      "parent_source_image_id": "silicon-antidote-s02-cleaned",
+      "source_variant": "cleaned",
+      "extraction": {
+        "method": "rect_crop",
+        "bbox_px": [
+          688,
+          115,
+          660,
+          614
+        ],
+        "bbox_norm": [
+          0.5,
+          0.15,
+          0.48,
+          0.8
+        ],
+        "polygon_norm": null,
+        "mask_path": null,
+        "source_sha256": "12b8e9c87fbcd88456009f05b54410dd725a845e1507420d2581d130b97a0286"
+      },
+      "context": {
+        "what_it_is": "Three illustrated memory-company vaults with source valuation and margin cards.",
+        "visual_role": "evidence",
+        "representation_mode": "literal_evidence",
+        "factual_text": true,
+        "claim_refs": [],
+        "cue_refs": [],
+        "not_what_it_means": [
+          "The companies and figures remain source-deck evidence and should not be generalized beyond the cited research."
+        ],
+        "context_status": "review_only",
+        "reuse_policy": {
+          "scope": "source_only",
+          "max_total_uses": 1,
+          "min_nonadjacent_gap": 0,
+          "allowed_reasons": [
+            "evidence_hold"
+          ],
+          "claim_bound": false
+        }
+      },
+      "rights_state": "source_review_only",
+      "review_state": "review_only",
+      "render_eligible": false
+    },
+    {
+      "asset_id": "silicon-antidote-s09-capacity-penalty-v1",
+      "kind": "semantic_crop",
+      "path": "silicon-antidote/semantic-assets/assets/silicon-antidote-s09-capacity-penalty-v1.png",
+      "sha256": "e79f750cc11016a73f966d03c89b136779ff0c716a7011859cedb10ee4c61e89",
+      "deck_id": "silicon-antidote",
+      "slide_id": "silicon-antidote-s09",
+      "slide_number": 9,
+      "parent_source_image_id": "silicon-antidote-s09-cleaned",
+      "source_variant": "cleaned",
+      "extraction": {
+        "method": "rect_crop",
+        "bbox_px": [
+          28,
+          15,
+          1321,
+          730
+        ],
+        "bbox_norm": [
+          0.02,
+          0.02,
+          0.96,
+          0.95
+        ],
+        "polygon_norm": null,
+        "mask_path": null,
+        "source_sha256": "5f0eae50ad6d6944cc0b4eeecf2daa9d0ee9878cdcd13e1a96d864b2ff931fa4"
+      },
+      "context": {
+        "what_it_is": "A balance-scale illustration comparing one HBM unit with three standard DDR5 units and the stated capacity penalty.",
+        "visual_role": "mechanism",
+        "representation_mode": "literal_evidence",
+        "factual_text": true,
+        "claim_refs": [],
+        "cue_refs": [],
+        "not_what_it_means": [
+          "The visual comparison does not replace the underlying wafer-capacity calculation."
+        ],
+        "context_status": "review_only",
+        "reuse_policy": {
+          "scope": "source_only",
+          "max_total_uses": 1,
+          "min_nonadjacent_gap": 0,
+          "allowed_reasons": [
+            "evidence_hold"
+          ],
+          "claim_bound": false
+        }
+      },
+      "rights_state": "source_review_only",
+      "review_state": "review_only",
+      "render_eligible": false
+    },
+    {
+      "asset_id": "silicon-antidote-s10-ram-ageddon-v1",
+      "kind": "semantic_crop",
+      "path": "silicon-antidote/semantic-assets/assets/silicon-antidote-s10-ram-ageddon-v1.png",
+      "sha256": "78c75d10d427ed4b9f599bd58ba2b1df66bc77f613e92253feb9d9cba62e8147",
+      "deck_id": "silicon-antidote",
+      "slide_id": "silicon-antidote-s10",
+      "slide_number": 10,
+      "parent_source_image_id": "silicon-antidote-s10-cleaned",
+      "source_variant": "cleaned",
+      "extraction": {
+        "method": "rect_crop",
+        "bbox_px": [
+          165,
+          138,
+          1183,
+          568
+        ],
+        "bbox_norm": [
+          0.12,
+          0.18,
+          0.86,
+          0.74
+        ],
+        "polygon_norm": null,
+        "mask_path": null,
+        "source_sha256": "0c3079c87e041b91d4af0e1cca39f958948b1736f55771b7ce2b49691635c5d5"
+      },
+      "context": {
+        "what_it_is": "A central RAM-ageddon burst with opposing blue supply arrows, red demand arrows, and pinned source notes.",
+        "visual_role": "mechanism",
+        "representation_mode": "accurate_mechanism",
+        "factual_text": true,
+        "claim_refs": [],
+        "cue_refs": [],
+        "not_what_it_means": [
+          "RAM-ageddon is a declared explanatory label, not a formal market classification."
+        ],
+        "context_status": "review_only",
+        "reuse_policy": {
+          "scope": "source_only",
+          "max_total_uses": 1,
+          "min_nonadjacent_gap": 0,
+          "allowed_reasons": [
+            "evidence_hold"
+          ],
+          "claim_bound": false
+        }
+      },
+      "rights_state": "source_review_only",
+      "review_state": "review_only",
+      "render_eligible": false
+    },
+    {
+      "asset_id": "silicon-antidote-s14-diagnostic-matrix-v1",
+      "kind": "semantic_crop",
+      "path": "silicon-antidote/semantic-assets/assets/silicon-antidote-s14-diagnostic-matrix-v1.png",
+      "sha256": "319b14a29db724e922a4f7e4bd9262b4354fb667a1aeacd3b704e54d74531b5d",
+      "deck_id": "silicon-antidote",
+      "slide_id": "silicon-antidote-s14",
+      "slide_number": 14,
+      "parent_source_image_id": "silicon-antidote-s14-cleaned",
+      "source_variant": "cleaned",
+      "extraction": {
+        "method": "rect_crop",
+        "bbox_px": [
+          83,
+          123,
+          1211,
+          584
+        ],
+        "bbox_norm": [
+          0.06,
+          0.16,
+          0.88,
+          0.76
+        ],
+        "polygon_norm": null,
+        "mask_path": null,
+        "source_sha256": "cb4d1547573bfcd50df207d303fe7b7f851cbdf17fa9ed7e6e15a87874cbd25c"
+      },
+      "context": {
+        "what_it_is": "A two-column diagnostic matrix contrasting the S&P 500 index with the memory triopoly.",
+        "visual_role": "evidence",
+        "representation_mode": "literal_evidence",
+        "factual_text": true,
+        "claim_refs": [],
+        "cue_refs": [],
+        "not_what_it_means": [
+          "The matrix is a source summary and should remain bound to the report's evidence register."
+        ],
+        "context_status": "review_only",
+        "reuse_policy": {
+          "scope": "source_only",
+          "max_total_uses": 1,
+          "min_nonadjacent_gap": 0,
+          "allowed_reasons": [
+            "evidence_hold"
+          ],
+          "claim_bound": false
+        }
+      },
+      "rights_state": "source_review_only",
+      "review_state": "review_only",
+      "render_eligible": false
+    }
+  ],
+  "review": {
+    "slide_contact_sheet": "silicon-antidote/review/slide-contact-sheet.png",
+    "semantic_contact_sheet": "silicon-antidote/review/semantic-contact-sheet.png",
+    "coverage_report": "silicon-antidote/review/coverage-report.json",
+    "promotion_policy": "Source plates remain review-only. A crop becomes render-eligible only after operator-verified context, approved rights, and visual promotion review."
+  },
+  "artifact_hash": "880ffeb5ddfcf74a38a81d75aba0c687ea9e541b84d1cc1040bfb745d8932e47"
+}

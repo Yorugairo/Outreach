@@ -1,0 +1,35 @@
+{
+  "schema_version": "finance_semantic_story_map.v1",
+  "episode_id": "current-bubble-mechanism",
+  "state": "asset_wave_in_progress",
+  "coverage": {"start_word": 975, "end_word": 1272, "start_s": 396.572, "end_s": 502.919, "canonical_cue_sheet_path": "../word-timed-v1/finance-visual-cue-sheet.v1.json"},
+  "design_rule": "Hold one legible causal image through its narrated analogy; transition only when the subject changes from HBM to index construction. Source observations and channel inferences receive visibly distinct local cards.",
+  "clusters": [
+    {
+      "cluster_id": "cbm-f-001",
+      "cue_ids": ["cbm-cue-118", "cbm-cue-119", "cbm-cue-120", "cbm-cue-121"],
+      "words": [975, 1011], "time_s": [396.572, 410.260],
+      "purpose": "Close the memory section with the qualified pipeline-and-reservoir analogy: compute without an adequate memory subsystem is stranded machinery.",
+      "asset_demand": "hbm-pipeline-and-reservoir-v1",
+      "must_not_imply": ["memory is literally oil", "a named product advantage", "a valuation conclusion"]
+    },
+    {
+      "cluster_id": "cbm-f-002",
+      "cue_ids": ["cbm-cue-122", "cbm-cue-123", "cbm-cue-124", "cbm-cue-125", "cbm-cue-126", "cbm-cue-127", "cbm-cue-128", "cbm-cue-129", "cbm-cue-130", "cbm-cue-131", "cbm-cue-132"],
+      "words": [1012, 1114], "time_s": [410.260, 448.120],
+      "purpose": "Open the S&P 500 elevator fairly—cheap, liquid, tax-efficient, historically difficult to beat after fees—then introduce the separate diversification and upside-capture questions.",
+      "asset_strategy": "transition to the approved index-fund weighted-inflows world only after the elevator line; reveal the two-jobs source/inference card on the spoken concentration claim.",
+      "local_surfaces": ["index-fund-two-jobs-card-v1"],
+      "must_not_imply": ["the index is inherently bad", "concentration proves a bubble", "personal investment advice"]
+    },
+    {
+      "cluster_id": "cbm-f-003",
+      "cue_ids": ["cbm-cue-133", "cbm-cue-134", "cbm-cue-135", "cbm-cue-136", "cbm-cue-137", "cbm-cue-138", "cbm-cue-139", "cbm-cue-140", "cbm-cue-141", "cbm-cue-142", "cbm-cue-143", "cbm-cue-144", "cbm-cue-145", "cbm-cue-146", "cbm-cue-147", "cbm-cue-148"],
+      "words": [1115, 1272], "time_s": [448.120, 502.919],
+      "purpose": "Separate shared mega-cap causal exposure from the remaining automatic float-adjusted allocation and define the episode’s non-predictive diworsification critique.",
+      "asset_strategy": "use the index-container world only for mechanically explained allocation; commission a distinct causal-weather and automatic-allocation plate before edit assembly.",
+      "must_not_imply": ["index eligibility screens are meaningless", "all non-leaders are junk", "any portfolio result is guaranteed"]
+    }
+  ],
+  "artifact_hash": "48f0c459004b155dc223579fa96270df7290065c55fdaa3eb6cca9921c502f00"
+}

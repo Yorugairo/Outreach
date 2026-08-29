@@ -1,0 +1,87 @@
+{
+  "schema_version": "finance_stealth_wealth_design_plan.v1",
+  "proof_id": "finance-stealth-wealth-proof-v1",
+  "aesthetic": {
+    "style": "original stealth-wealth cinematic presenter",
+    "palette": [
+      "deep charcoal",
+      "warm desaturated amber",
+      "rich emerald"
+    ],
+    "surface": "semi-transparent matte-glass cards",
+    "pacing": "staccato, rhythmic, high-authority, analytical"
+  },
+  "beats": [
+    {
+      "id": "hook",
+      "start_s": 0.0,
+      "end_s": 8.0,
+      "eyebrow": "HOOK",
+      "spoken_job": "Establish the index promise",
+      "narration_excerpt": "The market may be labeling the wrong bubble.",
+      "source_refs": []
+    },
+    {
+      "id": "authority",
+      "start_s": 8.0,
+      "end_s": 16.0,
+      "eyebrow": "AUTHORITY HOOK",
+      "spoken_job": "Introduce the valuation contradiction",
+      "narration_excerpt": "The valuation profile is the contradiction.",
+      "source_refs": [
+        "sp500-cape",
+        "memory-forward-pe"
+      ]
+    },
+    {
+      "id": "physical",
+      "start_s": 16.0,
+      "end_s": 45.0,
+      "eyebrow": "PHYSICAL COUNTERCASE",
+      "spoken_job": "Translate the contradiction through the wafer",
+      "narration_excerpt": "The underlying shortage is not imaginary.",
+      "source_refs": [
+        "memory-triopoly",
+        "hbm-capacity-penalty"
+      ]
+    },
+    {
+      "id": "concentration",
+      "start_s": 45.0,
+      "end_s": 75.0,
+      "eyebrow": "CONCENTRATION GAP",
+      "spoken_job": "Explain weight versus earnings and passive flows",
+      "narration_excerpt": "The index is feeding its own weight.",
+      "source_refs": [
+        "top-ten-weight",
+        "top-ten-earnings",
+        "passive-flow"
+      ]
+    },
+    {
+      "id": "triopoly",
+      "start_s": 75.0,
+      "end_s": 105.0,
+      "eyebrow": "SILENT TRIOPOLY",
+      "spoken_job": "Open the memory-sector mechanism",
+      "narration_excerpt": "The capital cycle removed more than thirty rivals.",
+      "source_refs": [
+        "thirty-rivals",
+        "memory-triopoly",
+        "thesis-undervalued"
+      ]
+    }
+  ],
+  "claims_are_compositor_owned": true,
+  "world_motion": [
+    "warm study",
+    "cool wafer/lab",
+    "warm study title return"
+  ],
+  "camera": "deterministic parent transforms and opacity; no remote or random motion",
+  "input_hashes": {
+    "canonical_audio": "ecacf46c49aee85b912404bfa0e47c37acbae0397b637e2a966c51a625077ce1",
+    "canonical_words": "3773bdd611c96d5e431ed56749d9991825215bb3756043086f14fbbdbe0d1da3",
+    "deep_research_report": "f153216f319f96b52a1a420f58a2fe6809084a60273ca8cb5f321cc4774f8c96"
+  }
+}

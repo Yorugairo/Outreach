@@ -1,0 +1,12 @@
+{
+  "name": "finance-whiteboard-asset-blend-proof-v1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "preview": "npx --yes hyperframes@0.7.104 preview",
+    "check": "npx --yes hyperframes@0.7.104 check",
+    "lint": "npx --yes hyperframes@0.7.104 lint",
+    "keyframes": "npx --yes hyperframes@0.7.104 keyframes .",
+    "render": "npx --yes hyperframes@0.7.104 render"
+  }
+}

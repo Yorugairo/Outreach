@@ -1,0 +1,48 @@
+{
+  "schema_version": "finance_selected_assets.v1",
+  "proof_id": "finance-stealth-wealth-proof-v1",
+  "assets": [
+    {
+      "asset_id": "finance-host-presenter-plate-v1",
+      "path": "assets/finance-host-presenter-plate-v1.png",
+      "source_path": "content/video_engine/projects/systems-and-blowups/assets/generated/host/finance-host-presenter-plate-v1.png",
+      "sha256": "16c94909dcdcd2e6ce369467c3971ce949dfbe5f5a13b7a32b6baea2649009c8",
+      "kind": "presenter_full_body",
+      "source_kind": "built_in_imagegen",
+      "contains_factual_text": false,
+      "render_state": "draft"
+    },
+    {
+      "asset_id": "finance-host-presenter-direct-v1",
+      "path": "assets/generated/stealth-wealth-v1/presenter-direct-v1.png",
+      "source_path": "content/video_engine/projects/systems-and-blowups/assets/generated/stealth-wealth-v1/presenter-direct-v1.png",
+      "sha256": "9d9721031dcd3fe58e8208684b605888fd70539d1092df63a45c2a7c7e8fc9b3",
+      "kind": "presenter_direct_to_camera",
+      "source_kind": "built_in_imagegen_identity_preserve",
+      "contains_factual_text": false,
+      "render_state": "draft"
+    },
+    {
+      "asset_id": "stealth-wealth-warm-study-v1",
+      "path": "assets/generated/stealth-wealth-v1/warm-oak-study-v1.png",
+      "source_path": "content/video_engine/projects/systems-and-blowups/assets/generated/stealth-wealth-v1/warm-oak-study-v1.png",
+      "sha256": "ead65484b509200df5cf36276779b573c638e5f39cb39296ba8b996ea3670317",
+      "kind": "world_warm_oak_study",
+      "source_kind": "built_in_imagegen",
+      "contains_factual_text": false,
+      "render_state": "draft"
+    },
+    {
+      "asset_id": "stealth-wealth-cool-wafer-v1",
+      "path": "assets/generated/stealth-wealth-v1/cool-wafer-lab-v1.png",
+      "source_path": "content/video_engine/projects/systems-and-blowups/assets/generated/stealth-wealth-v1/cool-wafer-lab-v1.png",
+      "sha256": "eb0ab9a6e574c92a31d23a98eabbbad308a06d3b8f2e9baf73d6f44d016b52ce",
+      "kind": "world_cool_wafer_lab",
+      "source_kind": "built_in_imagegen",
+      "contains_factual_text": false,
+      "render_state": "draft"
+    }
+  ],
+  "provider_calls": 0,
+  "render_state": "draft"
+}

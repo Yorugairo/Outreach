@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080" role="img" aria-label="Three risk qualification cards: correction, overpriced, cyclical.">
+  <defs>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="160%"><feDropShadow dx="0" dy="13" stdDeviation="10" flood-color="#071320" flood-opacity="0.50"/></filter>
+  </defs>
+  <g filter="url(#shadow)" font-family="Arial, Helvetica, sans-serif" font-weight="700" letter-spacing="3">
+    <g transform="translate(230 742) rotate(-2 210 100)">
+      <path d="M0 18Q0 0 18 0H404Q422 0 422 18V180Q422 198 404 198H18Q0 198 0 180Z" fill="#e8d7ae" stroke="#0b2939" stroke-width="10"/>
+      <rect x="24" y="24" width="16" height="150" rx="8" fill="#d15b44"/>
+      <text x="66" y="116" font-size="48" fill="#132c3b">CORRECTION</text>
+    </g>
+    <g transform="translate(750 710) rotate(1 210 100)">
+      <path d="M0 18Q0 0 18 0H404Q422 0 422 18V180Q422 198 404 198H18Q0 198 0 180Z" fill="#e8d7ae" stroke="#0b2939" stroke-width="10"/>
+      <rect x="24" y="24" width="16" height="150" rx="8" fill="#d1963d"/>
+      <text x="66" y="116" font-size="43" fill="#132c3b">OVERPRICED</text>
+    </g>
+    <g transform="translate(1270 742) rotate(-1 210 100)">
+      <path d="M0 18Q0 0 18 0H404Q422 0 422 18V180Q422 198 404 198H18Q0 198 0 180Z" fill="#e8d7ae" stroke="#0b2939" stroke-width="10"/>
+      <rect x="24" y="24" width="16" height="150" rx="8" fill="#2d9db7"/>
+      <text x="66" y="116" font-size="48" fill="#132c3b">CYCLICAL</text>
+    </g>
+  </g>
+</svg>

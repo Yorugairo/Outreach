@@ -1,0 +1,20 @@
+{
+  "schema_version": "production_console_snapshot.v2",
+  "width": 1920,
+  "height": 1080,
+  "fps": 30,
+  "durationInFrames": 180,
+  "backgroundColor": "#0b1015",
+  "diagnosticMode": false,
+  "assetMap": {
+    "memory-skepticism-v2": "p31-proof/memory-skepticism-v2.png",
+    "valuation-evidence": "p31-proof/valuation-bubble-v1.png",
+    "whiteboard-draw-hand-a-v1": "p31-proof/draw-hand-a-v1.png"
+  },
+  "items": [
+    {"id": "memory-world", "type": "world_plate", "from": 0, "durationInFrames": 180, "assetId": "memory-skepticism-v2", "zIndex": 0, "layout": {"fit": "cover"}},
+    {"id": "valuation-evidence", "type": "evidence", "from": 0, "durationInFrames": 150, "assetId": "valuation-evidence", "zIndex": 40, "layout": {"x": -0.335, "y": 0.39, "width": 0.25, "height": 0.20}},
+    {"id": "valuation-leader", "type": "annotation", "from": 0, "durationInFrames": 150, "overlayKind": "arrow", "zIndex": 55, "layout": {"x": -0.19, "y": 0.18, "width": 0.14, "height": 0.14}},
+    {"id": "citation-metadata", "type": "annotation", "from": 0, "durationInFrames": 180, "citation_id": "memory-bottleneck-not-bubble-inference", "diagnostic_label": "claim · memory-bottleneck-not-bubble-inference", "zIndex": 90, "layout": {"x": 0.28, "y": -0.42, "width": 0.42, "height": 0.08}}
+  ]
+}

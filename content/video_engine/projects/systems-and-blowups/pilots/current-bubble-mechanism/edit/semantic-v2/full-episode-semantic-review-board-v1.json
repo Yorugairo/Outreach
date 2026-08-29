@@ -1,0 +1,23 @@
+{
+  "schema_version": "finance_semantic_review_board.v1",
+  "episode_id": "current-bubble-mechanism",
+  "state": "operator_approved_for_composition",
+  "image_path": "full-episode-semantic-review-board-v1.png",
+  "layout": "4x3, reading left-to-right and top-to-bottom",
+  "plate_order": [
+    "wrong-bubble-elevators-v2",
+    "memory-skepticism-v2",
+    "index-fund-weighted-inflows-v2",
+    "fixed-oven-capacity-wedding-cake-v1",
+    "commodity-cycle-versus-qualified-agreements-v1",
+    "buyer-reservation-rail-v1",
+    "strategic-chokepoint-network-v1",
+    "capitalizes-industrial-cashflows-v1",
+    "hbm-pipeline-and-reservoir-v1",
+    "index-roster-diworsification-v1",
+    "two-sleeve-barbell-v1",
+    "memory-three-failure-points-v1"
+  ],
+  "selection_rule": "A plate may be promoted only for its exact narration-bound purpose in its source review manifest. Factual numbers, sources, and claim limitations remain in local deterministic surfaces, not these raster plates.",
+  "artifact_hash": "3ff50967f31a5599f773980f84652617f5a9c6908fdbeb5c6e12429b6ce6cba2"
+}

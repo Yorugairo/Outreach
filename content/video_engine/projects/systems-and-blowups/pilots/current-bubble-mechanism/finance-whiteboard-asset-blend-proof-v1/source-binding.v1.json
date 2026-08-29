@@ -1,0 +1,104 @@
+{
+  "schema_version": "finance_whiteboard_source_binding.v1",
+  "proof_id": "finance-whiteboard-asset-blend-proof-v1",
+  "source_receipts": {
+    "pdf_hashes": {
+      "The_Silicon_Reality_Gap.pdf": "157cdfa87fd58bc92f84a479ba617033df7923c7297e0a6741e813e46744d5fb",
+      "The_Silicon_Antidote.pdf": "f77536dd8123f9c5ff3cc4cc674a6e65117ecbdb0bf1982e8593098bf6ba244f"
+    },
+    "audio_sha256": "ecacf46c49aee85b912404bfa0e47c37acbae0397b637e2a966c51a625077ce1",
+    "canonical_words_sha256": "3773bdd611c96d5e431ed56749d9991825215bb3756043086f14fbbdbe0d1da3",
+    "p24_words_sha256": "547f2103d39778246ad80ab3e92c6a38906e90b3d4970d9384ab77177111d78a",
+    "p24_narration_sha256": "a08a708b2302f5e63a13b888d5c8aa88f1e4047f11c17dcd8a54644ace463302",
+    "p24_claim_ledger_sha256": "100288f9c76bfded155afdc8ab438d35d531f9bcdaf63912baf01d4ac777d619",
+    "hand_asset_sha256": "f50d4f592b0bb62eddc15cc31aa062943c339be079fb38672bf212bb5e7e9a68",
+    "source_window": {
+      "start_s": 0.0,
+      "end_s": 18.0,
+      "duration_s": 18.0,
+      "word_start_index": 0,
+      "word_end_index": 50
+    }
+  },
+  "cards": [
+    {
+      "id": "valuation-paradox",
+      "path": "assets/valuation-paradox.png",
+      "sha256": "a892a6ce387d5519533ef3d7016392b9a321bec925133cb49e7895270f3bd9a6",
+      "source_pdf": "The_Silicon_Reality_Gap.pdf",
+      "source_pdf_sha256": "157cdfa87fd58bc92f84a479ba617033df7923c7297e0a6741e813e46744d5fb",
+      "page": 1,
+      "crop_normalized": [
+        0.02,
+        0.05,
+        0.52,
+        0.94
+      ],
+      "crop_px": [
+        55,
+        77,
+        1431,
+        1444
+      ],
+      "source_locator": "The Silicon Reality Gap.pdf, p.1, left valuation-paradox panel",
+      "text_owner": "supplied source card",
+      "render_state": "proof_only",
+      "start_s": 0.0,
+      "end_s": 2.4,
+      "caption": "The market may be labeling the wrong bubble."
+    },
+    {
+      "id": "capacity-penalty",
+      "path": "assets/capacity-penalty.png",
+      "sha256": "0f2ca478819f6402426767a5974ea691e30131ab0c2c0757227e8b86f3c0670f",
+      "source_pdf": "The_Silicon_Reality_Gap.pdf",
+      "source_pdf_sha256": "157cdfa87fd58bc92f84a479ba617033df7923c7297e0a6741e813e46744d5fb",
+      "page": 9,
+      "crop_normalized": [
+        0.02,
+        0.04,
+        0.98,
+        0.96
+      ],
+      "crop_px": [
+        55,
+        61,
+        2697,
+        1475
+      ],
+      "source_locator": "The Silicon Reality Gap.pdf, p.9, three-to-one capacity penalty panel",
+      "text_owner": "supplied source card",
+      "render_state": "proof_only",
+      "start_s": 2.4,
+      "end_s": 11.6,
+      "caption": "AI memory stocks have gone vertical. That is normally where sensible people step back and say: bubble."
+    },
+    {
+      "id": "physical-antidote",
+      "path": "assets/physical-antidote.png",
+      "sha256": "3332efaa07f13dfaa9f0f43acb59eb9772a579ff9b02a599cf2404f72b9d0d8a",
+      "source_pdf": "The_Silicon_Antidote.pdf",
+      "source_pdf_sha256": "f77536dd8123f9c5ff3cc4cc674a6e65117ecbdb0bf1982e8593098bf6ba244f",
+      "page": 15,
+      "crop_normalized": [
+        0.02,
+        0.05,
+        0.98,
+        0.94
+      ],
+      "crop_px": [
+        55,
+        77,
+        2697,
+        1444
+      ],
+      "source_locator": "The Silicon Antidote.pdf, p.15, physical-antidote closing panel",
+      "text_owner": "supplied source card",
+      "render_state": "proof_only",
+      "start_s": 11.6,
+      "end_s": 18.0,
+      "caption": "But underneath the chart is a product customers cannot get enough of."
+    }
+  ],
+  "asset_policy": "source-bound cards retain page/crop context; no factual text rewritten"
+}

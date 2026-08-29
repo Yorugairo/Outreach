@@ -1,0 +1,29 @@
+{
+  "schema_version": "finance_semantic_wave_review.v1",
+  "episode_id": "current-bubble-mechanism",
+  "wave_id": "semantic-wave-05",
+  "status": "operator_approved_for_composition",
+  "generation_method": "built_in_image_gen",
+  "decision_rule": "Each candidate is restricted to its named claim cluster. Generated raster carries action and metaphor only; qualifying language, source terms, and citations stay deterministic local layers.",
+  "candidates": [
+    {
+      "candidate_id": "fixed-oven-capacity-wedding-cake-v1",
+      "path": "fixed-oven-capacity-wedding-cake-v1.png",
+      "sha256": "0b582578d178f670841fc152bf74f04f3668ec6aa72b6c011e12991f3358dfe7",
+      "cluster_id": "cbm-c-001",
+      "purpose": "Translate the fixed-capacity bakery analogy: simple loaves yield oven time to one tall, higher-value layered cake.",
+      "status": "selected",
+      "qa": ["one finite oven set is legible", "simple loaves and layered cake are distinct", "does not portray literal memory manufacturing", "no factual text or capacity number"]
+    },
+    {
+      "candidate_id": "commodity-cycle-versus-qualified-agreements-v1",
+      "path": "commodity-cycle-versus-qualified-agreements-v1.png",
+      "sha256": "fa454d1caa400f10e789135b6fe7b1b85d9c236fc331c559e74ef3c1d3b6a49c",
+      "cluster_id": "cbm-c-003",
+      "purpose": "Keep the classic production boom-bust loop visible while separate generic buyer-agreement tokens approach the factory; the central question mark preserves the countercase as open.",
+      "status": "selected",
+      "qa": ["cycle and agreements are distinct systems", "question remains unresolved", "no promise that contracts eliminate cyclicality", "no factual text or numeric claim"]
+    }
+  ],
+  "artifact_hash": "136b5c3b89173eb8c797a045379f12eac36bd5adc31c332bb01a9fb3a22733e5"
+}

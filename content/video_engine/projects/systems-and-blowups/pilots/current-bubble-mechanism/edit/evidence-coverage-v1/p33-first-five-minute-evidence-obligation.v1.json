@@ -1,0 +1,243 @@
+{
+  "schema_version": "p33_first_five_minute_evidence_obligation.v1",
+  "duration_boundary_s": 300.0,
+  "rule": "factual world plates longer than six seconds require evidence unless explicitly analogy_exempt",
+  "records": [
+    {
+      "world_id": "world-002-memory-skepticism-v2",
+      "asset_id": "memory-skepticism-v2",
+      "start_s": 2.403,
+      "end_s": 9.532,
+      "duration_s": 7.129,
+      "status": "covered",
+      "evidence_asset_ids": [
+        "silicon-antidote-s14-teacher-stamped"
+      ]
+    },
+    {
+      "world_id": "world-004-memory-three-supports-v1",
+      "asset_id": "memory-three-supports-v1",
+      "start_s": 12.875,
+      "end_s": 23.034,
+      "duration_s": 10.159,
+      "status": "covered",
+      "evidence_asset_ids": [
+        "silicon-antidote-s11-teacher-stamped"
+      ]
+    },
+    {
+      "world_id": "world-005-index-fund-weighted-inflows-v2",
+      "asset_id": "index-fund-weighted-inflows-v2",
+      "start_s": 23.034,
+      "end_s": 39.148,
+      "duration_s": 16.114,
+      "status": "covered",
+      "evidence_asset_ids": [
+        "silicon-reality-gap-s12-teacher-stamped",
+        "silicon-reality-gap-s02-teacher-stamped",
+        "silicon-reality-gap-s15-teacher-stamped"
+      ]
+    },
+    {
+      "world_id": "world-006-bottleneck-repricing-v1",
+      "asset_id": "bottleneck-repricing-v1",
+      "start_s": 39.148,
+      "end_s": 53.046,
+      "duration_s": 13.898,
+      "status": "covered",
+      "evidence_asset_ids": [
+        "silicon-value-software-bubble-s01-teacher-stamped",
+        "silicon-silent-triopoly-s12-teacher-stamped"
+      ]
+    },
+    {
+      "world_id": "world-007-sentence-native-beat-01-013-hidden-safe-index-loop-v1",
+      "asset_id": "sentence-native-beat-01-013-hidden-safe-index-loop-v1",
+      "start_s": 53.046,
+      "end_s": 64.876,
+      "duration_s": 11.83,
+      "status": "covered",
+      "evidence_asset_ids": [
+        "silicon-reality-gap-s12-teacher-stamped"
+      ]
+    },
+    {
+      "world_id": "world-008-sentence-native-beat-02-003-next-buyer-belief-v1",
+      "asset_id": "sentence-native-beat-02-003-next-buyer-belief-v1",
+      "start_s": 64.876,
+      "end_s": 70.901,
+      "duration_s": 6.025,
+      "status": "covered",
+      "evidence_asset_ids": [
+        "silicon-antidote-s14-teacher-stamped"
+      ]
+    },
+    {
+      "world_id": "world-009-two-elevator-mechanism-v1",
+      "asset_id": "two-elevator-mechanism-v1",
+      "start_s": 70.901,
+      "end_s": 89.803,
+      "duration_s": 18.902,
+      "status": "covered",
+      "evidence_asset_ids": [
+        "silicon-antidote-s02-teacher-stamped"
+      ]
+    },
+    {
+      "world_id": "world-012-index-fund-weighted-inflows-v2",
+      "asset_id": "index-fund-weighted-inflows-v2",
+      "start_s": 97.314,
+      "end_s": 108.182,
+      "duration_s": 10.868,
+      "status": "covered",
+      "evidence_asset_ids": [
+        "silicon-antidote-s10-teacher-stamped"
+      ]
+    },
+    {
+      "world_id": "world-013-hbm-adjacent-accelerator-v1",
+      "asset_id": "hbm-adjacent-accelerator-v1",
+      "start_s": 108.182,
+      "end_s": 121.104,
+      "duration_s": 12.922,
+      "status": "covered",
+      "evidence_asset_ids": [
+        "memory-supercycle-s08-teacher-stamped",
+        "sovereign-memory-infrastructure-s04-teacher-stamped"
+      ]
+    },
+    {
+      "world_id": "world-014-accelerator-memory-bandwidth-gate-v1",
+      "asset_id": "accelerator-memory-bandwidth-gate-v1",
+      "start_s": 121.104,
+      "end_s": 141.104,
+      "duration_s": 20.0,
+      "status": "covered",
+      "evidence_asset_ids": [
+        "memory-supercycle-s02-teacher-stamped"
+      ]
+    },
+    {
+      "world_id": "world-016-hbm-physical-inputs-gate-v1",
+      "asset_id": "hbm-physical-inputs-gate-v1",
+      "start_s": 144.613,
+      "end_s": 154.726,
+      "duration_s": 10.113,
+      "status": "covered",
+      "evidence_asset_ids": [
+        "sovereign-memory-infrastructure-s11-teacher-stamped",
+        "memory-supercycle-s03-teacher-stamped"
+      ]
+    },
+    {
+      "world_id": "world-017-fixed-oven-capacity-wedding-cake-v1",
+      "asset_id": "fixed-oven-capacity-wedding-cake-v1",
+      "start_s": 154.726,
+      "end_s": 174.726,
+      "duration_s": 20.0,
+      "status": "exempt",
+      "evidence_asset_ids": [],
+      "exemption": {
+        "reason": "direct explanatory analogy; source-card evidence is not required",
+        "permitted_future_evidence": "silicon-antidote-s09-teacher-stamped"
+      }
+    },
+    {
+      "world_id": "world-019-hbm-physical-inputs-gate-v1",
+      "asset_id": "hbm-physical-inputs-gate-v1",
+      "start_s": 178.096,
+      "end_s": 198.096,
+      "duration_s": 20.0,
+      "status": "covered",
+      "evidence_asset_ids": [
+        "memory-supercycle-s08-teacher-stamped",
+        "silicon-value-software-bubble-s11-teacher-stamped",
+        "silicon-antidote-s10-teacher-stamped"
+      ]
+    },
+    {
+      "world_id": "world-020-hbm-adjacent-accelerator-v1",
+      "asset_id": "hbm-adjacent-accelerator-v1",
+      "start_s": 198.096,
+      "end_s": 210.164,
+      "duration_s": 12.068,
+      "status": "covered",
+      "evidence_asset_ids": [
+        "memory-supercycle-s03-teacher-stamped",
+        "memory-supercycle-s08-teacher-stamped"
+      ]
+    },
+    {
+      "world_id": "world-021-commodity-cycle-versus-qualified-agreements-v1",
+      "asset_id": "commodity-cycle-versus-qualified-agreements-v1",
+      "start_s": 210.164,
+      "end_s": 230.164,
+      "duration_s": 20.0,
+      "status": "covered",
+      "evidence_asset_ids": [
+        "sovereign-memory-infrastructure-s09-teacher-stamped",
+        "silicon-reality-gap-s04-teacher-stamped"
+      ]
+    },
+    {
+      "world_id": "world-022-sentence-native-beat-04-004-changed-customer-behavior-v1",
+      "asset_id": "sentence-native-beat-04-004-changed-customer-behavior-v1",
+      "start_s": 230.164,
+      "end_s": 239.664,
+      "duration_s": 9.5,
+      "status": "covered",
+      "evidence_asset_ids": [
+        "memory-supercycle-s06-teacher-stamped"
+      ]
+    },
+    {
+      "world_id": "world-023-buyer-reservation-rail-v1",
+      "asset_id": "buyer-reservation-rail-v1",
+      "start_s": 239.664,
+      "end_s": 259.664,
+      "duration_s": 20.0,
+      "status": "covered",
+      "evidence_asset_ids": [
+        "silicon-antidote-s13-teacher-stamped",
+        "silicon-value-software-bubble-s07-teacher-stamped",
+        "silicon-antidote-s09-teacher-stamped"
+      ]
+    },
+    {
+      "world_id": "world-024-commodity-cycle-versus-qualified-agreements-v1",
+      "asset_id": "commodity-cycle-versus-qualified-agreements-v1",
+      "start_s": 259.664,
+      "end_s": 279.664,
+      "duration_s": 20.0,
+      "status": "covered",
+      "evidence_asset_ids": [
+        "memory-supercycle-s08-teacher-stamped",
+        "silicon-antidote-s13-teacher-stamped",
+        "memory-supercycle-s03-teacher-stamped"
+      ]
+    },
+    {
+      "world_id": "world-025-sentence-native-beat-04-014-evidence-hierarchy-v2",
+      "asset_id": "sentence-native-beat-04-014-evidence-hierarchy-v2",
+      "start_s": 279.664,
+      "end_s": 286.649,
+      "duration_s": 6.985,
+      "status": "covered",
+      "evidence_asset_ids": [
+        "silicon-antidote-s04-teacher-stamped"
+      ]
+    },
+    {
+      "world_id": "world-026-strategic-chokepoint-network-v1",
+      "asset_id": "strategic-chokepoint-network-v1",
+      "start_s": 286.649,
+      "end_s": 304.203,
+      "duration_s": 17.554,
+      "status": "covered",
+      "evidence_asset_ids": [
+        "sovereign-memory-infrastructure-s05-teacher-stamped",
+        "memory-supercycle-s10-teacher-stamped"
+      ]
+    }
+  ]
+}

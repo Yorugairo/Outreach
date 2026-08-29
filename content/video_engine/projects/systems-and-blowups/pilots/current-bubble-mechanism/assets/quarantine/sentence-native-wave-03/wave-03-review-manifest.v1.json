@@ -1,0 +1,103 @@
+{
+  "schema_version": "finance_sentence_native_asset_wave_review.v1",
+  "episode_id": "systems-and-blowups:current-bubble-mechanism",
+  "wave_id": "current-bubble-mechanism-semantic-wave-03",
+  "review_state": "operator_approved_for_trace_cut",
+  "operator_decision": "approved",
+  "semantic_beat_ledger_artifact_hash": "f83b2dad210f0d77bec0e9d8a1b7b799f1da54b0c19372ded9e4a7ec103f6cdb",
+  "prompt_spine_artifact_hash": "360313709cfe4fb347ab0b82b844b75b445694c665893b4071943df983370c2b",
+  "source_sticker_pack": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-03/source-evidence/evidence-sticker-pack.v1.json",
+  "selection_policy": "exact spoken nouns and causal relationship before style; no convenient reuse or filler",
+  "generation_route": "imagegen_builtin",
+  "reference_images": [
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-02/beat-03-002-hbm-stack-accelerator-v1.png"
+  ],
+  "global_qa": {
+    "generated_factual_text": "none_observed",
+    "style_continuity": "pass_on_initial_inspection",
+    "semantic_fit": "pass_on_initial_inspection",
+    "depth_separability": "pending_trace_cut_review",
+    "negative_space": "composition_trimmed; verify after trace cut",
+    "render_eligible": false,
+    "promotion_eligible": false
+  },
+  "source_surface_dependencies": [
+    {
+      "beat_ids": ["cbm-semantic-beat-03-018"],
+      "status": "pending_deterministic_source_surface",
+      "reason": "Micron statement and trade-ratio claim require locator-bound source treatment, not generated text."
+    },
+    {
+      "beat_ids": ["cbm-semantic-beat-03-019"],
+      "status": "pending_deterministic_source_surface",
+      "reason": "Samsung statement about HBM/server concentration and PC/phone supply requires locator-bound source treatment, not generated text."
+    }
+  ],
+  "accepted_candidates": [
+    {
+      "beat_ids": ["cbm-semantic-beat-03-016"],
+      "filename": "beat-03-016-hbm-pressures-dram-v1.png",
+      "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-03/beat-03-016-hbm-pressures-dram-v1.png",
+      "sha256": "77f07dbd53f45b4abf4e02a21c8cfa6dbb18b6e78eecc4c276d802c7ab2a8dc8",
+      "width": 1672,
+      "height": 941,
+      "start_word_index": 449,
+      "end_word_index": 461,
+      "start_s": 178.096,
+      "end_s": 185.132,
+      "narration_excerpt": "As manufacturers devote more capacity to HBM, they also pressure conventional DRAM supply.",
+      "semantic_job": "Make HBM allocation visibly squeeze conventional DRAM capacity through a shared production lane.",
+      "visual_verb": "pressure_and_divert",
+      "review_state": "operator_approved_for_trace_cut"
+    },
+    {
+      "beat_ids": ["cbm-semantic-beat-03-017"],
+      "filename": "beat-03-017-production-pull-complexity-v1.png",
+      "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-03/beat-03-017-production-pull-complexity-v1.png",
+      "sha256": "a612e4fa0732cd7ea732a0db89d11a48746fb9a48500072fe42330b2a81b4936",
+      "width": 1672,
+      "height": 941,
+      "start_word_index": 462,
+      "end_word_index": 473,
+      "start_s": 185.132,
+      "end_s": 189.288,
+      "narration_excerpt": "The AI boom pulls the same production system toward more complex products.",
+      "semantic_job": "Show one production line physically pulled from simple chips toward stacked HBM and server hardware.",
+      "visual_verb": "pull_toward_complexity",
+      "review_state": "operator_approved_for_trace_cut"
+    },
+    {
+      "beat_ids": ["cbm-semantic-beat-03-020"],
+      "filename": "beat-03-020-price-fairness-separation-v1.png",
+      "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-03/beat-03-020-price-fairness-separation-v1.png",
+      "sha256": "e64fe8fe4eca54a44cf45183f139a7c0f2fa7519d26fcbafb44a928b4fc03f18",
+      "width": 1672,
+      "height": 941,
+      "start_word_index": 505,
+      "end_word_index": 514,
+      "start_s": 203.581,
+      "end_s": 206.379,
+      "narration_excerpt": "This is not proof that any stock price is fair.",
+      "semantic_job": "Separate physical production evidence from a market-price fairness judgment.",
+      "visual_verb": "separate_and_qualify",
+      "review_state": "operator_approved_for_trace_cut"
+    },
+    {
+      "beat_ids": ["cbm-semantic-beat-03-021"],
+      "filename": "beat-03-021-shortage-not-imaginary-v1.png",
+      "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-03/beat-03-021-shortage-not-imaginary-v1.png",
+      "sha256": "db82fb95c6dfd18340a55d49b5352e2645782a339eb5f6f1a36e3420158d8b18",
+      "width": 1672,
+      "height": 941,
+      "start_word_index": 515,
+      "end_word_index": 524,
+      "start_s": 206.379,
+      "end_s": 210.164,
+      "narration_excerpt": "It is proof that the underlying shortage is not imaginary.",
+      "semantic_job": "Make the shortage concrete through a locked packaging gate, empty queue slots, and a real finished-memory stack.",
+      "visual_verb": "bind_and_prove",
+      "review_state": "operator_approved_for_trace_cut"
+    }
+  ],
+  "next_wave_authorized": true
+}

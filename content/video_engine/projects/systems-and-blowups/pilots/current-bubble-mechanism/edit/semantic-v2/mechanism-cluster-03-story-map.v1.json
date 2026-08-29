@@ -1,0 +1,37 @@
+{
+  "schema_version": "finance_semantic_story_map.v1",
+  "episode_id": "current-bubble-mechanism",
+  "state": "asset_wave_in_progress",
+  "coverage": {"start_word": 393, "end_word": 595, "start_s": 154.726, "end_s": 239.664, "canonical_cue_sheet_path": "../word-timed-v1/finance-visual-cue-sheet.v1.json"},
+  "design_rule": "Use a familiar physical analogy only where it faithfully translates the named production constraint. Source claims remain local, citation-bound surfaces; no generated image impersonates a filing or uses factual text.",
+  "clusters": [
+    {
+      "cluster_id": "cbm-c-001",
+      "cue_ids": ["cbm-cue-047", "cbm-cue-048", "cbm-cue-049", "cbm-cue-050", "cbm-cue-051", "cbm-cue-052", "cbm-cue-053"],
+      "words": [393, 448], "time_s": [154.726, 178.096],
+      "purpose": "Translate larger, more complex HBM stacks into a bakery allocating fixed oven capacity from simple loaves to twelve-layer cakes.",
+      "asset_demand": "fixed-oven-capacity-wedding-cake-v1",
+      "must_show": ["one finite set of ovens", "simple loaves", "one tall layered cake", "cake visibly occupies oven capacity", "room for local analogy disclaimer"],
+      "must_not_imply": ["HBM fabrication is literally baking", "a production yield rate", "capacity cannot expand"]
+    },
+    {
+      "cluster_id": "cbm-c-002",
+      "cue_ids": ["cbm-cue-054", "cbm-cue-055", "cbm-cue-056", "cbm-cue-057", "cbm-cue-058", "cbm-cue-059", "cbm-cue-060", "cbm-cue-061", "cbm-cue-062"],
+      "words": [449, 524], "time_s": [178.096, 210.164],
+      "purpose": "Return from the bakery analogy to an actual shared production system: advanced capacity shifts toward more complex products, with a source-bound qualification that this is not a valuation verdict.",
+      "asset_strategy": "reuse only the HBM physical-input gate as a purpose-matched continuation; add deterministic source and qualifier rails.",
+      "local_surfaces": ["source-bound Micron HBM trade-ratio assertion", "source-bound Samsung capacity allocation assertion", "not-a-fair-value verdict qualifier"],
+      "must_not_imply": ["specific supplier outcomes", "permanent shortage", "fair stock price"]
+    },
+    {
+      "cluster_id": "cbm-c-003",
+      "cue_ids": ["cbm-cue-063", "cbm-cue-064", "cbm-cue-065", "cbm-cue-066", "cbm-cue-067", "cbm-cue-068", "cbm-cue-069", "cbm-cue-070"],
+      "words": [525, 595], "time_s": [210.164, 239.664],
+      "purpose": "Contrast the classic commodity memory cycle with the reported buyer-agreement behavior, while preserving the cycle as the strongest counterargument rather than dismissing it.",
+      "asset_demand": "commodity-cycle-versus-qualified-agreements-v1",
+      "must_show": ["cyclical production loop", "separate generic agreement tokens entering a buyer/factory network", "one visibly unresolved question mark between them", "space for source-bound terms"],
+      "must_not_imply": ["agreements guarantee demand", "cycle is eliminated", "all customers behave the same"]
+    }
+  ],
+  "artifact_hash": "f15dd2359d3431dea5d4fed6f10ed89658056aa8427c6a884da47561939907f8"
+}

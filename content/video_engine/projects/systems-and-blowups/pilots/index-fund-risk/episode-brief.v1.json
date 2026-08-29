@@ -1,0 +1,29 @@
+{
+  "schema_version": "finance_episode_brief.v1",
+  "episode_id": "index-fund-risk",
+  "format": "one_level_deeper",
+  "working_title": "The Risk Index Funds Don't Diversify Away",
+  "audience_tension": "A diversified label can feel like a guarantee even though an index still concentrates exposure to the same market regime and its largest holdings.",
+  "lived_contradiction": "A household can own hundreds of securities and still discover that many of them fall together when the same factor or liquidity shock drives the basket.",
+  "popular_explanation": "The popular answer equates a high security count with complete diversification and treats the index label as the end of the risk conversation.",
+  "missing_mechanism": "Research must separate company-specific diversification from concentration weighting factor exposure valuation liquidity and market-wide drawdown risk.",
+  "thesis_state": "research_question",
+  "thesis": "Which risks do broad index funds actually diversify and which systematic concentration liquidity or valuation risks necessarily remain?",
+  "actors": ["household investor", "index provider", "fund sponsor", "largest constituent companies", "authorized participant", "market maker"],
+  "distribution_question": "Who controls index construction and rebalancing, where does concentration accumulate, and who ultimately absorbs a market-wide drawdown?",
+  "countercase": "For many long-horizon investors broad low-cost indexes may still reduce company-specific risk cost taxes and behavioral mistakes compared with a small self-selected stock portfolio.",
+  "failure_conditions": ["The proposed risk is company-specific and demonstrably diversified by the selected index.", "The comparison quietly substitutes leverage timing or a concentrated index for an ordinary broad-market product."],
+  "plain_language_translation": "Owning every cabin on one ship protects you from one bad room, not from the whole ship entering the same storm.",
+  "visual_metaphor": "An index basket opens into many company tokens whose ropes converge on a few oversized weights and one shared market floor.",
+  "packages": [
+    {"id": "pkg-a", "family": "contradiction", "title": "The Risk Index Funds Don't Diversify Away", "thumbnail_text": "STILL ONE BET?", "promise_key": "index-risk-boundary"},
+    {"id": "pkg-b", "family": "identity", "title": "You Own Hundreds of Stocks. Why Can They Still Fall Together?", "thumbnail_text": "DIVERSIFIED?", "promise_key": "index-risk-boundary"},
+    {"id": "pkg-c", "family": "mechanism", "title": "What Index Diversification Actually Protects You From", "thumbnail_text": "RISK REMAINS", "promise_key": "index-risk-boundary"}
+  ],
+  "embedded_short": {"working_title": "Hundreds of Stocks Can Still Be One Market Bet", "capsule_state": "planned", "target_seconds": 50, "recorded_in_long_master": true},
+  "research_blockers": ["Select the exact index or index families to compare.", "Lock constituent weighting factor exposure and drawdown data from primary sources.", "Define the active-stock comparison without implying personalized portfolio advice."],
+  "human_gates": ["thesis", "primary sources", "risk terminology", "financial risk language", "title and thumbnail", "publication"],
+  "state": "draft",
+  "render_eligible": false,
+  "artifact_hash": "18ba112a7a1e883de3be1ae38324a7e9a11ec43bbce44d23220a29508d14d816"
+}

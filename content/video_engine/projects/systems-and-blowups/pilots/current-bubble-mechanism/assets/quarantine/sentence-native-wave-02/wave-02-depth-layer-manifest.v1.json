@@ -1,0 +1,78 @@
+{
+  "schema_version": "finance_depth_layer_package.v1",
+  "episode_id": "systems-and-blowups:current-bubble-mechanism",
+  "wave_id": "current-bubble-mechanism-semantic-wave-02",
+  "review_state": "operator_approved_for_trace_cut",
+  "render_eligible": true,
+  "promotion_eligible": false,
+  "layer_contract": ["foreground", "midground", "background", "negative_space", "contact_shadow"],
+  "background_strategy": "softened_background_anchor_under_trace_cut_objects; no whole-frame block crops",
+  "caption_band": {"top_pct": 84, "bottom_pct": 94},
+  "qa": {
+    "full_frame_alpha_rejected": true,
+    "foreground_alpha_edges_inspected": true,
+    "midground_alpha_edges_inspected": true,
+    "objects_clipped_by_accident": false,
+    "negative_space_exceeds_15_percent": false,
+    "generated_factual_text": "none_observed",
+    "depth_order": "foreground > midground > background; negative_space and contact_shadow are local compositor layers",
+    "alpha_qc": {
+      "files_checked": 20,
+      "dimensions": "all 1672x941",
+      "sha256_matches": true,
+      "rgba_layers_nonempty": true,
+      "full_frame_opaque_rgba_rejected": true,
+      "negative_space_bbox": [0, 790, 1672, 885],
+      "negative_space_frame_pct": 10.1,
+      "caption_band_px": [790, 885],
+      "manual_observation": "Trace-cut silhouettes are semantically legible and non-rectangular; capacity-gate and bakery masks need edge polish before catalog promotion."
+    },
+    "status": "pass_for_composition; trace-cut review only, no catalog promotion"
+  },
+  "plates": [
+    {
+      "plate_id": "beat-03-002-hbm-stack-accelerator-v1",
+      "depth_order": {"foreground": "data ribbons", "midground": "HBM stack and accelerator", "background": "data-center floor"},
+      "layers": {
+        "foreground": {"path": "assets/quarantine/sentence-native-wave-02/beat-03-002-hbm-stack-accelerator-v1--foreground.png", "sha256": "74aaa822f81b1e6561985c313b9d9550621c69777b370535d97506b6bf899993"},
+        "midground": {"path": "assets/quarantine/sentence-native-wave-02/beat-03-002-hbm-stack-accelerator-v1--midground.png", "sha256": "a2152e520311eb385ff638ac0c3657ef4baf721a385106ed0d1650c48939f661"},
+        "background": {"path": "assets/quarantine/sentence-native-wave-02/beat-03-002-hbm-stack-accelerator-v1--background.png", "sha256": "b94d841ad043a150a799e36b6953975abeeaeb757506aaf74a46bd33b4be71be"},
+        "negative_space": {"path": "assets/quarantine/sentence-native-wave-02/beat-03-002-hbm-stack-accelerator-v1--negative-space.png", "sha256": "74d06cc87dfef3f37082aa1b4c43a854a8dd26ded6ff7e8b200a4afee8edd710"},
+        "contact_shadow": {"path": "assets/quarantine/sentence-native-wave-02/beat-03-002-hbm-stack-accelerator-v1--contact-shadow.png", "sha256": "c6086fca9afa92ab3a0eb87899f610f3f1daa55f039a53418f9455550fae58d1"}
+      }
+    },
+    {
+      "plate_id": "beat-03-004-gpu-hbm-fuel-system-v1",
+      "depth_order": {"foreground": "fuel line and valve", "midground": "HBM reservoir and accelerator", "background": "data-center floor"},
+      "layers": {
+        "foreground": {"path": "assets/quarantine/sentence-native-wave-02/beat-03-004-gpu-hbm-fuel-system-v1--foreground.png", "sha256": "1d16652ed26e70fed5c3ae6aa441066c76d0b31f9454292f3ccb3d232516f761"},
+        "midground": {"path": "assets/quarantine/sentence-native-wave-02/beat-03-004-gpu-hbm-fuel-system-v1--midground.png", "sha256": "f1eb37814551b62f2ea199d6ae120cff1f3fd387fdfada31ce2bc90dea12615a"},
+        "background": {"path": "assets/quarantine/sentence-native-wave-02/beat-03-004-gpu-hbm-fuel-system-v1--background.png", "sha256": "57d3ef6da555fe7935c468e842d9cd7a50e5e4c87da0fa5afef3c9d6e030b870"},
+        "negative_space": {"path": "assets/quarantine/sentence-native-wave-02/beat-03-004-gpu-hbm-fuel-system-v1--negative-space.png", "sha256": "3f025470f73514a65f89413f271a9f44cbf382542b55c2bcac64feb28db9aa47"},
+        "contact_shadow": {"path": "assets/quarantine/sentence-native-wave-02/beat-03-004-gpu-hbm-fuel-system-v1--contact-shadow.png", "sha256": "e202b563527fb104843d32e94a66aee09285320522b14628d395509837e4effa"}
+      }
+    },
+    {
+      "plate_id": "beat-03-008-009-physical-capacity-gate-v1",
+      "depth_order": {"foreground": "wafer carts and control panel", "midground": "packaging gate and engineers", "background": "clean-room floor"},
+      "layers": {
+        "foreground": {"path": "assets/quarantine/sentence-native-wave-02/beat-03-008-009-physical-capacity-gate-v1--foreground.png", "sha256": "4212cccfae8a210643cb4c0de7ffab096519899d1fd26e66741a390ffa3eed13"},
+        "midground": {"path": "assets/quarantine/sentence-native-wave-02/beat-03-008-009-physical-capacity-gate-v1--midground.png", "sha256": "fe98210428f5465304cebf7d3320e6110a7bc0fbe19a958034fda741de529e57"},
+        "background": {"path": "assets/quarantine/sentence-native-wave-02/beat-03-008-009-physical-capacity-gate-v1--background.png", "sha256": "78841097e3c5566154d3122c9e169b25dbcf3fd1d4e63371dc346f9200debcd8"},
+        "negative_space": {"path": "assets/quarantine/sentence-native-wave-02/beat-03-008-009-physical-capacity-gate-v1--negative-space.png", "sha256": "dd1c0cd8dd50a3b4b2bc756738af3d97832154ed8f138330bd87ef01a4e5f50d"},
+        "contact_shadow": {"path": "assets/quarantine/sentence-native-wave-02/beat-03-008-009-physical-capacity-gate-v1--contact-shadow.png", "sha256": "fdd9d381eaed0b7bef78f7a54d04277761498d77daba7d9109203acb8521ff96"}
+      }
+    },
+    {
+      "plate_id": "beat-03-011-015-bakery-capacity-analogy-v1",
+      "depth_order": {"foreground": "loaf conveyor", "midground": "baker, ovens, and wedding cake", "background": "bakery architecture"},
+      "layers": {
+        "foreground": {"path": "assets/quarantine/sentence-native-wave-02/beat-03-011-015-bakery-capacity-analogy-v1--foreground.png", "sha256": "361af306263b5cbc10cb37a5b1ba75b3065ec1e5fd9a5dfc72ee4f6de2e592b2"},
+        "midground": {"path": "assets/quarantine/sentence-native-wave-02/beat-03-011-015-bakery-capacity-analogy-v1--midground.png", "sha256": "33a800c2d0481641c678877118580278d7dee6baefe85a8fdd5fb1b1cd1f2e16"},
+        "background": {"path": "assets/quarantine/sentence-native-wave-02/beat-03-011-015-bakery-capacity-analogy-v1--background.png", "sha256": "27794eae02f4cc44e14b1d8b988907f6e52d9b7e2d9fcb15c62b3c8a479b2bd6"},
+        "negative_space": {"path": "assets/quarantine/sentence-native-wave-02/beat-03-011-015-bakery-capacity-analogy-v1--negative-space.png", "sha256": "4d23214fe16189a9b440155c91801597eb1152f44dc1d25fcbbf653dbbe79bcc"},
+        "contact_shadow": {"path": "assets/quarantine/sentence-native-wave-02/beat-03-011-015-bakery-capacity-analogy-v1--contact-shadow.png", "sha256": "d3030758bea132f909c2b342097a411f990cc1da0aadc71dbf9a45117511ca2a"}
+      }
+    }
+  ]
+}

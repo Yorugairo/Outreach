@@ -1,0 +1,28 @@
+{
+  "schema_version": "finance_semantic_story_map.v1",
+  "episode_id": "current-bubble-mechanism",
+  "state": "asset_wave_in_progress",
+  "coverage": {"start_word": 1273, "end_word": 1619, "start_s": 502.919, "end_s": 695.910, "canonical_cue_sheet_path": "../word-timed-v1/finance-visual-cue-sheet.v1.json"},
+  "design_rule": "The basketball roster and compound-growth card each have a single job. The roster explains the inference; the calculation card explains the arithmetic. Neither becomes financial advice or a forecast.",
+  "clusters": [
+    {
+      "cluster_id": "cbm-g-001",
+      "cue_ids": ["cbm-cue-149", "cbm-cue-150", "cbm-cue-151", "cbm-cue-152", "cbm-cue-153", "cbm-cue-154", "cbm-cue-155", "cbm-cue-156", "cbm-cue-157", "cbm-cue-158", "cbm-cue-159", "cbm-cue-160", "cbm-cue-161", "cbm-cue-162", "cbm-cue-163", "cbm-cue-164", "cbm-cue-165", "cbm-cue-166", "cbm-cue-167", "cbm-cue-168"],
+      "words": [1273, 1473], "time_s": [502.919, 570.082],
+      "purpose": "Make the episode’s two-jobs inference memorable: ticker-count diversification can coexist with shared causes and automatic allocation that fails to buy independent defense.",
+      "asset_demand": "index-roster-diworsification-v1",
+      "local_surfaces": ["index-fund-two-jobs-card-v1"],
+      "must_not_imply": ["reserves or long-tail companies are worthless", "all diversification is inefficient", "the S&P 500 is a proven bubble"]
+    },
+    {
+      "cluster_id": "cbm-g-002",
+      "cue_ids": ["cbm-cue-169", "cbm-cue-170", "cbm-cue-171", "cbm-cue-172", "cbm-cue-173", "cbm-cue-174", "cbm-cue-175", "cbm-cue-176", "cbm-cue-177", "cbm-cue-178", "cbm-cue-179", "cbm-cue-180", "cbm-cue-181", "cbm-cue-182", "cbm-cue-183", "cbm-cue-184", "cbm-cue-185", "cbm-cue-186", "cbm-cue-187", "cbm-cue-188", "cbm-cue-189", "cbm-cue-190", "cbm-cue-191", "cbm-cue-192", "cbm-cue-193", "cbm-cue-194", "cbm-cue-195", "cbm-cue-196", "cbm-cue-197", "cbm-cue-198", "cbm-cue-199", "cbm-cue-200", "cbm-cue-201", "cbm-cue-202", "cbm-cue-203", "cbm-cue-204", "cbm-cue-205"],
+      "words": [1474, 1619], "time_s": [570.082, 695.910],
+      "purpose": "Distinguish broad-participation success from an individual’s stated wealth objective, quantify only the illustrative hurdle, then introduce separate upside and defense jobs without a recommendation.",
+      "asset_strategy": "reframe from the roster to a deterministic return-hurdle calculation only when the starting value and target are spoken; prepare a new neutral two-basket mechanism for the next cue cluster.",
+      "local_surfaces": ["return-hurdle-calculation-card-v1"],
+      "must_not_imply": ["a universal generational-wealth threshold", "expected return", "suitability of concentrated strategies", "that broad index participation failed"]
+    }
+  ],
+  "artifact_hash": "ee1e0d693e2dfb37ccab6e1dbf28c246087266e6d888f3d05f1e9ce50e3feb41"
+}

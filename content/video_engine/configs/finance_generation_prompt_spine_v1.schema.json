@@ -1,0 +1,51 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "finance_generation_prompt_spine.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "episode_id", "asset_demand_path", "style_contract", "prompts", "review_state", "provider_calls_authorized", "artifact_hash"],
+  "properties": {
+    "schema_version": {"const": "finance_generation_prompt_spine.v1"},
+    "episode_id": {"type": "string", "minLength": 1},
+    "asset_demand_path": {"type": "string", "minLength": 1},
+    "style_contract": {
+      "type": "object", "additionalProperties": false,
+      "required": ["material", "tone", "resolution", "depth_layers", "factual_text_policy", "safe_area_policy"],
+      "properties": {
+        "material": {"type": "string", "minLength": 1}, "tone": {"type": "string", "minLength": 1},
+        "resolution": {"const": "1920x1080"},
+        "depth_layers": {"type": "array", "minItems": 3, "uniqueItems": true, "items": {"enum": ["foreground", "midground", "background", "negative_space"]}},
+        "factual_text_policy": {"const": "no_authoritative_text_or_numbers_in_generated_pixels"},
+        "safe_area_policy": {"type": "string", "minLength": 1}
+      }
+    },
+    "prompts": {"type": "array", "minItems": 1, "items": {"$ref": "#/definitions/prompt"}},
+    "review_state": {"enum": ["draft", "operator_approved"]},
+    "provider_calls_authorized": {"const": false},
+    "artifact_hash": {"$ref": "#/definitions/sha256"}
+  },
+  "definitions": {
+    "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "prompt": {
+      "type": "object", "additionalProperties": false,
+      "required": ["prompt_id", "beat_id", "narration_excerpt", "context_before", "context_after", "semantic_job", "active_nouns", "causal_verb", "prompt", "composition", "depth_plan", "negative_space", "avoid", "factual_text_policy", "review_state"],
+      "properties": {
+        "prompt_id": {"type": "string", "pattern": "^prompt-cbm-semantic-beat-[0-9]{2}-[0-9]{3}$"},
+        "beat_id": {"type": "string", "pattern": "^cbm-semantic-beat-[0-9]{2}-[0-9]{3}$"},
+        "narration_excerpt": {"type": "string", "minLength": 1},
+        "context_before": {"type": ["string", "null"]},
+        "context_after": {"type": ["string", "null"]},
+        "semantic_job": {"type": "string", "minLength": 20},
+        "active_nouns": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}},
+        "causal_verb": {"type": "string", "minLength": 1},
+        "prompt": {"type": "string", "minLength": 120},
+        "composition": {"type": "string", "minLength": 30},
+        "depth_plan": {"type": "object", "minProperties": 3, "additionalProperties": {"type": "string", "minLength": 1}},
+        "negative_space": {"type": "string", "minLength": 15},
+        "avoid": {"type": "array", "minItems": 6, "uniqueItems": true, "items": {"type": "string"}},
+        "factual_text_policy": {"const": "no_authoritative_text_or_numbers_in_generated_pixels"},
+        "review_state": {"const": "draft"}
+      }
+    }
+  }
+}

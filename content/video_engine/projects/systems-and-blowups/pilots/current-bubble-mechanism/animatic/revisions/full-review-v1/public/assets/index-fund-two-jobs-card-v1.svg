@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="420" viewBox="0 0 1920 420" role="img" aria-label="Index fund concentration and portfolio jobs card">
+  <rect width="1920" height="420" rx="34" fill="#071a2c"/>
+  <rect x="38" y="38" width="12" height="344" rx="6" fill="#c87932"/>
+  <text x="86" y="96" fill="#f6e4be" font-family="Arial, sans-serif" font-size="35" font-weight="700" letter-spacing="3">TWO PORTFOLIO JOBS · DIFFERENT QUESTIONS</text>
+  <text x="86" y="143" fill="#95d4d2" font-family="Arial, sans-serif" font-size="23">S&amp;P Dow Jones Indices / Vanguard concentration analysis · mid-2025</text>
+  <rect x="86" y="184" width="510" height="154" rx="20" fill="#10324a" stroke="#c87932" stroke-width="2"/>
+  <text x="116" y="233" fill="#dce9e6" font-family="Arial, sans-serif" font-size="27" font-weight="700">DIVERSIFY INDEPENDENT RISK</text>
+  <rect x="116" y="258" width="370" height="32" rx="16" fill="#d1a25a"/>
+  <rect x="486" y="258" width="74" height="32" rx="16" fill="#28495c"/>
+  <text x="116" y="322" fill="#f6e4be" font-family="Arial, sans-serif" font-size="28">Top 10: almost 40% of the index</text>
+  <rect x="636" y="184" width="572" height="154" rx="20" fill="#10324a" stroke="#18a7ad" stroke-width="2"/>
+  <text x="666" y="233" fill="#dce9e6" font-family="Arial, sans-serif" font-size="27" font-weight="700">CAPTURE EXCEPTIONAL UPSIDE</text>
+  <text x="666" y="278" fill="#95d4d2" font-family="Arial, sans-serif" font-size="23">Channel inference: a market-cap basket</text>
+  <text x="666" y="311" fill="#95d4d2" font-family="Arial, sans-serif" font-size="23">can dilute a small group of return drivers.</text>
+  <rect x="1248" y="184" width="586" height="154" rx="20" fill="#10324a" stroke="#8697a2" stroke-width="2"/>
+  <text x="1278" y="233" fill="#dce9e6" font-family="Arial, sans-serif" font-size="27" font-weight="700">LIMIT OF THE CLAIM</text>
+  <text x="1278" y="278" fill="#b7c6c8" font-family="Arial, sans-serif" font-size="23">Concentration alone does not prove</text>
+  <text x="1278" y="311" fill="#b7c6c8" font-family="Arial, sans-serif" font-size="23">overvaluation or forecast a decline.</text>
+  <text x="86" y="374" fill="#b7c6c8" font-family="Arial, sans-serif" font-size="20">This is a portfolio-design framework, not personalized investment advice or a verdict on index funds.</text>
+</svg>

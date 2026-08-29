@@ -1,0 +1,20 @@
+{
+  "schema_version": "p32_source_hash_report.v1",
+  "coverage_artifact_hash": "ab547e586cefbb53e699bc69b88633648d4ac2a4c5114929a58281bc87d18254",
+  "source_hashes": {
+    "asset_map": "2f9d82e1397ab5b6564d03cb3376798c3c269b8365c70b30ce916c03db6f619d",
+    "beat_plan": "fdf792e34617b6dac329a3f0a9aa40fd090dab21db51175965ecafadc27b4f1f",
+    "claim_ledger": "7071bb052eda8190225d8d4847cee1643a41ecf802293932283a6bae030c467e",
+    "composition_spine": "b103bf6d0ac93bdb899057eda5eebbe85e00704123ca58aed63b716dc24e7c44",
+    "cue_sheet": "bce598f900344f360a50b4c09b983957dbc04e156bcbad656439e5bd0cb0e356",
+    "deck_context_memory-supercycle": "3eb919d93809c04c8fbdf40833cf625cc1f5bf3d798e7cd6c918425a071aabf0",
+    "deck_context_silicon-antidote": "49aad0859d43343ca5c3cbdb0b3203b66a094972409b215d47019f1ab8dc0cf8",
+    "deck_context_silicon-reality-gap": "56533ad73b93a6f1315aff8fd24eb951c08b4784728dcae18bfad40433879173",
+    "deck_context_silicon-silent-triopoly": "34921e782034aee9fdfde7236c198a5eeaa0bacc0c1663479f085be74458f8ef",
+    "deck_context_silicon-value-software-bubble": "a7bbed2ce844282e91b177bddba7eb47b7ec6dd2c9c0a11e73bb8f7e7e857386",
+    "deck_context_sovereign-memory-infrastructure": "326de6ccc9c9c8fb1b7761e62dc1107d67ffadfac6af5384ab9bb8b4cac27a1c",
+    "resolution_map": "01e48837d1b141c7ac92c0a123fcd099fa05d1bad5aa4ad3fd8c65903bb85238",
+    "snapshot": "d1e618286334a811374bb9a02842386a45a5e83d2532b2a509972966eb2a0f27",
+    "teacher_approval": "f9e7b0cdb69552cc7c5d3e130764be02345a97d424923d3fd5bab81268c8c36c"
+  }
+}

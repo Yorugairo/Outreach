@@ -1,0 +1,1738 @@
+{
+  "schema_version": "finance_boundary_review.v1",
+  "source_start_s": 797.0,
+  "source_end_s": 889.0,
+  "fps": 24,
+  "boundary_count": 29,
+  "transition_counts": {
+    "match_cut": 6,
+    "hard_cut": 23
+  },
+  "transition_contracts": {
+    "hard_cut": "zero-duration direct semantic cut; no opacity or wipe",
+    "paper_wipe": "visible base world plus moving foreground paper edge",
+    "match_cut": "zero-duration direct cut with required shared motif_id and focal alignment"
+  },
+  "median_boundary_delta_rms": 50.732,
+  "boundaries": [
+    {
+      "shot_id": "finance-shot-236",
+      "source_start_s": 797.137,
+      "relative_start_s": 0.137,
+      "transition_in": {
+        "kind": "match_cut",
+        "reason": "shared causal object changes state on the spoken turn",
+        "duration_s": 0.0,
+        "motif_id": "risk_branches"
+      },
+      "authored_pause": false,
+      "frames": {
+        "before": 2,
+        "start": 3,
+        "after": 4,
+        "settled": 16
+      },
+      "frame_paths": {
+        "before": "boundary-frames/finance-shot-236-before-f000002.png",
+        "start": "boundary-frames/finance-shot-236-start-f000003.png",
+        "after": "boundary-frames/finance-shot-236-after-f000004.png",
+        "settled": "boundary-frames/finance-shot-236-settled-f000016.png"
+      },
+      "start_metrics": {
+        "mean_luma": 190.863,
+        "luma_stddev": 67.617,
+        "near_dark_ratio": 1.1e-05,
+        "blank_or_dark": false
+      },
+      "sample_metrics": {
+        "before": {
+          "mean_luma": 197.326,
+          "luma_stddev": 62.446,
+          "near_dark_ratio": 9e-06,
+          "blank_or_dark": false
+        },
+        "start": {
+          "mean_luma": 190.863,
+          "luma_stddev": 67.617,
+          "near_dark_ratio": 1.1e-05,
+          "blank_or_dark": false
+        },
+        "after": {
+          "mean_luma": 190.285,
+          "luma_stddev": 67.353,
+          "near_dark_ratio": 1.1e-05,
+          "blank_or_dark": false
+        },
+        "settled": {
+          "mean_luma": 189.09,
+          "luma_stddev": 68.23,
+          "near_dark_ratio": 1.4e-05,
+          "blank_or_dark": false
+        }
+      },
+      "before_to_start_rms": 88.802,
+      "before_to_settled_content_rms": 88.891,
+      "material_check_eligible": true,
+      "materially_different": true
+    },
+    {
+      "shot_id": "finance-shot-237",
+      "source_start_s": 801.375,
+      "relative_start_s": 4.375,
+      "transition_in": {
+        "kind": "hard_cut",
+        "reason": "spoken semantic turn",
+        "duration_s": 0.0
+      },
+      "authored_pause": false,
+      "frames": {
+        "before": 104,
+        "start": 105,
+        "after": 106,
+        "settled": 118
+      },
+      "frame_paths": {
+        "before": "boundary-frames/finance-shot-237-before-f000104.png",
+        "start": "boundary-frames/finance-shot-237-start-f000105.png",
+        "after": "boundary-frames/finance-shot-237-after-f000106.png",
+        "settled": "boundary-frames/finance-shot-237-settled-f000118.png"
+      },
+      "start_metrics": {
+        "mean_luma": 190.862,
+        "luma_stddev": 67.613,
+        "near_dark_ratio": 1.1e-05,
+        "blank_or_dark": false
+      },
+      "sample_metrics": {
+        "before": {
+          "mean_luma": 190.29,
+          "luma_stddev": 67.34,
+          "near_dark_ratio": 1.1e-05,
+          "blank_or_dark": false
+        },
+        "start": {
+          "mean_luma": 190.862,
+          "luma_stddev": 67.613,
+          "near_dark_ratio": 1.1e-05,
+          "blank_or_dark": false
+        },
+        "after": {
+          "mean_luma": 190.382,
+          "luma_stddev": 67.398,
+          "near_dark_ratio": 1.1e-05,
+          "blank_or_dark": false
+        },
+        "settled": {
+          "mean_luma": 189.43,
+          "luma_stddev": 68.086,
+          "near_dark_ratio": 1.7e-05,
+          "blank_or_dark": false
+        }
+      },
+      "before_to_start_rms": 5.518,
+      "before_to_settled_content_rms": 14.007,
+      "material_check_eligible": true,
+      "materially_different": true
+    },
+    {
+      "shot_id": "finance-shot-238",
+      "source_start_s": 804.463,
+      "relative_start_s": 7.463,
+      "transition_in": {
+        "kind": "hard_cut",
+        "reason": "spoken semantic turn",
+        "duration_s": 0.0
+      },
+      "authored_pause": false,
+      "frames": {
+        "before": 178,
+        "start": 179,
+        "after": 180,
+        "settled": 192
+      },
+      "frame_paths": {
+        "before": "boundary-frames/finance-shot-238-before-f000178.png",
+        "start": "boundary-frames/finance-shot-238-start-f000179.png",
+        "after": "boundary-frames/finance-shot-238-after-f000180.png",
+        "settled": "boundary-frames/finance-shot-238-settled-f000192.png"
+      },
+      "start_metrics": {
+        "mean_luma": 190.878,
+        "luma_stddev": 67.615,
+        "near_dark_ratio": 9e-06,
+        "blank_or_dark": false
+      },
+      "sample_metrics": {
+        "before": {
+          "mean_luma": 190.435,
+          "luma_stddev": 67.407,
+          "near_dark_ratio": 9e-06,
+          "blank_or_dark": false
+        },
+        "start": {
+          "mean_luma": 190.878,
+          "luma_stddev": 67.615,
+          "near_dark_ratio": 9e-06,
+          "blank_or_dark": false
+        },
+        "after": {
+          "mean_luma": 190.331,
+          "luma_stddev": 67.364,
+          "near_dark_ratio": 9e-06,
+          "blank_or_dark": false
+        },
+        "settled": {
+          "mean_luma": 189.233,
+          "luma_stddev": 68.249,
+          "near_dark_ratio": 1.5e-05,
+          "blank_or_dark": false
+        }
+      },
+      "before_to_start_rms": 44.92,
+      "before_to_settled_content_rms": 46.658,
+      "material_check_eligible": true,
+      "materially_different": true
+    },
+    {
+      "shot_id": "finance-shot-239",
+      "source_start_s": 807.656,
+      "relative_start_s": 10.656,
+      "transition_in": {
+        "kind": "hard_cut",
+        "reason": "spoken semantic turn",
+        "duration_s": 0.0
+      },
+      "authored_pause": false,
+      "frames": {
+        "before": 255,
+        "start": 256,
+        "after": 257,
+        "settled": 269
+      },
+      "frame_paths": {
+        "before": "boundary-frames/finance-shot-239-before-f000255.png",
+        "start": "boundary-frames/finance-shot-239-start-f000256.png",
+        "after": "boundary-frames/finance-shot-239-after-f000257.png",
+        "settled": "boundary-frames/finance-shot-239-settled-f000269.png"
+      },
+      "start_metrics": {
+        "mean_luma": 190.867,
+        "luma_stddev": 67.621,
+        "near_dark_ratio": 9e-06,
+        "blank_or_dark": false
+      },
+      "sample_metrics": {
+        "before": {
+          "mean_luma": 188.962,
+          "luma_stddev": 68.442,
+          "near_dark_ratio": 9e-06,
+          "blank_or_dark": false
+        },
+        "start": {
+          "mean_luma": 190.867,
+          "luma_stddev": 67.621,
+          "near_dark_ratio": 9e-06,
+          "blank_or_dark": false
+        },
+        "after": {
+          "mean_luma": 190.56,
+          "luma_stddev": 67.483,
+          "near_dark_ratio": 9e-06,
+          "blank_or_dark": false
+        },
+        "settled": {
+          "mean_luma": 189.91,
+          "luma_stddev": 67.968,
+          "near_dark_ratio": 1.4e-05,
+          "blank_or_dark": false
+        }
+      },
+      "before_to_start_rms": 54.106,
+      "before_to_settled_content_rms": 48.55,
+      "material_check_eligible": true,
+      "materially_different": true
+    },
+    {
+      "shot_id": "finance-shot-240",
+      "source_start_s": 810.152,
+      "relative_start_s": 13.152,
+      "transition_in": {
+        "kind": "hard_cut",
+        "reason": "spoken semantic turn",
+        "duration_s": 0.0
+      },
+      "authored_pause": false,
+      "frames": {
+        "before": 315,
+        "start": 316,
+        "after": 317,
+        "settled": 329
+      },
+      "frame_paths": {
+        "before": "boundary-frames/finance-shot-240-before-f000315.png",
+        "start": "boundary-frames/finance-shot-240-start-f000316.png",
+        "after": "boundary-frames/finance-shot-240-after-f000317.png",
+        "settled": "boundary-frames/finance-shot-240-settled-f000329.png"
+      },
+      "start_metrics": {
+        "mean_luma": 190.865,
+        "luma_stddev": 67.623,
+        "near_dark_ratio": 9e-06,
+        "blank_or_dark": false
+      },
+      "sample_metrics": {
+        "before": {
+          "mean_luma": 190.557,
+          "luma_stddev": 67.486,
+          "near_dark_ratio": 9e-06,
+          "blank_or_dark": false
+        },
+        "start": {
+          "mean_luma": 190.865,
+          "luma_stddev": 67.623,
+          "near_dark_ratio": 9e-06,
+          "blank_or_dark": false
+        },
+        "after": {
+          "mean_luma": 190.309,
+          "luma_stddev": 67.38,
+          "near_dark_ratio": 9e-06,
+          "blank_or_dark": false
+        },
+        "settled": {
+          "mean_luma": 189.21,
+          "luma_stddev": 68.303,
+          "near_dark_ratio": 1.6e-05,
+          "blank_or_dark": false
+        }
+      },
+      "before_to_start_rms": 4.005,
+      "before_to_settled_content_rms": 14.311,
+      "material_check_eligible": true,
+      "materially_different": true
+    },
+    {
+      "shot_id": "finance-shot-241",
+      "source_start_s": 813.519,
+      "relative_start_s": 16.519,
+      "transition_in": {
+        "kind": "hard_cut",
+        "reason": "spoken semantic turn",
+        "duration_s": 0.0
+      },
+      "authored_pause": false,
+      "frames": {
+        "before": 395,
+        "start": 396,
+        "after": 397,
+        "settled": 409
+      },
+      "frame_paths": {
+        "before": "boundary-frames/finance-shot-241-before-f000395.png",
+        "start": "boundary-frames/finance-shot-241-start-f000396.png",
+        "after": "boundary-frames/finance-shot-241-after-f000397.png",
+        "settled": "boundary-frames/finance-shot-241-settled-f000409.png"
+      },
+      "start_metrics": {
+        "mean_luma": 190.855,
+        "luma_stddev": 67.63,
+        "near_dark_ratio": 1.2e-05,
+        "blank_or_dark": false
+      },
+      "sample_metrics": {
+        "before": {
+          "mean_luma": 188.95,
+          "luma_stddev": 68.445,
+          "near_dark_ratio": 7e-06,
+          "blank_or_dark": false
+        },
+        "start": {
+          "mean_luma": 190.855,
+          "luma_stddev": 67.63,
+          "near_dark_ratio": 1.2e-05,
+          "blank_or_dark": false
+        },
+        "after": {
+          "mean_luma": 190.245,
+          "luma_stddev": 67.353,
+          "near_dark_ratio": 1.2e-05,
+          "blank_or_dark": false
+        },
+        "settled": {
+          "mean_luma": 188.977,
+          "luma_stddev": 68.285,
+          "near_dark_ratio": 1.4e-05,
+          "blank_or_dark": false
+        }
+      },
+      "before_to_start_rms": 54.1,
+      "before_to_settled_content_rms": 48.543,
+      "material_check_eligible": true,
+      "materially_different": true
+    },
+    {
+      "shot_id": "finance-shot-242",
+      "source_start_s": 817.629,
+      "relative_start_s": 20.629,
+      "transition_in": {
+        "kind": "match_cut",
+        "reason": "shared causal object changes state on the spoken turn",
+        "duration_s": 0.0,
+        "motif_id": "risk_branches"
+      },
+      "authored_pause": false,
+      "frames": {
+        "before": 494,
+        "start": 495,
+        "after": 496,
+        "settled": 508
+      },
+      "frame_paths": {
+        "before": "boundary-frames/finance-shot-242-before-f000494.png",
+        "start": "boundary-frames/finance-shot-242-start-f000495.png",
+        "after": "boundary-frames/finance-shot-242-after-f000496.png",
+        "settled": "boundary-frames/finance-shot-242-settled-f000508.png"
+      },
+      "start_metrics": {
+        "mean_luma": 198.914,
+        "luma_stddev": 61.589,
+        "near_dark_ratio": 7e-06,
+        "blank_or_dark": false
+      },
+      "sample_metrics": {
+        "before": {
+          "mean_luma": 190.241,
+          "luma_stddev": 67.356,
+          "near_dark_ratio": 1.2e-05,
+          "blank_or_dark": false
+        },
+        "start": {
+          "mean_luma": 198.914,
+          "luma_stddev": 61.589,
+          "near_dark_ratio": 7e-06,
+          "blank_or_dark": false
+        },
+        "after": {
+          "mean_luma": 198.378,
+          "luma_stddev": 61.392,
+          "near_dark_ratio": 7e-06,
+          "blank_or_dark": false
+        },
+        "settled": {
+          "mean_luma": 197.309,
+          "luma_stddev": 62.414,
+          "near_dark_ratio": 9e-06,
+          "blank_or_dark": false
+        }
+      },
+      "before_to_start_rms": 77.011,
+      "before_to_settled_content_rms": 82.221,
+      "material_check_eligible": true,
+      "materially_different": true
+    },
+    {
+      "shot_id": "finance-shot-243",
+      "source_start_s": 820.45,
+      "relative_start_s": 23.45,
+      "transition_in": {
+        "kind": "hard_cut",
+        "reason": "spoken semantic turn",
+        "duration_s": 0.0
+      },
+      "authored_pause": false,
+      "frames": {
+        "before": 562,
+        "start": 563,
+        "after": 564,
+        "settled": 576
+      },
+      "frame_paths": {
+        "before": "boundary-frames/finance-shot-243-before-f000562.png",
+        "start": "boundary-frames/finance-shot-243-start-f000563.png",
+        "after": "boundary-frames/finance-shot-243-after-f000564.png",
+        "settled": "boundary-frames/finance-shot-243-settled-f000576.png"
+      },
+      "start_metrics": {
+        "mean_luma": 198.91,
+        "luma_stddev": 61.589,
+        "near_dark_ratio": 5e-06,
+        "blank_or_dark": false
+      },
+      "sample_metrics": {
+        "before": {
+          "mean_luma": 198.426,
+          "luma_stddev": 61.405,
+          "near_dark_ratio": 4e-06,
+          "blank_or_dark": false
+        },
+        "start": {
+          "mean_luma": 198.91,
+          "luma_stddev": 61.589,
+          "near_dark_ratio": 5e-06,
+          "blank_or_dark": false
+        },
+        "after": {
+          "mean_luma": 198.411,
+          "luma_stddev": 61.414,
+          "near_dark_ratio": 5e-06,
+          "blank_or_dark": false
+        },
+        "settled": {
+          "mean_luma": 197.417,
+          "luma_stddev": 62.46,
+          "near_dark_ratio": 8e-06,
+          "blank_or_dark": false
+        }
+      },
+      "before_to_start_rms": 42.927,
+      "before_to_settled_content_rms": 43.799,
+      "material_check_eligible": true,
+      "materially_different": true
+    },
+    {
+      "shot_id": "finance-shot-244",
+      "source_start_s": 823.69,
+      "relative_start_s": 26.69,
+      "transition_in": {
+        "kind": "hard_cut",
+        "reason": "spoken semantic turn",
+        "duration_s": 0.0
+      },
+      "authored_pause": false,
+      "frames": {
+        "before": 640,
+        "start": 641,
+        "after": 642,
+        "settled": 654
+      },
+      "frame_paths": {
+        "before": "boundary-frames/finance-shot-244-before-f000640.png",
+        "start": "boundary-frames/finance-shot-244-start-f000641.png",
+        "after": "boundary-frames/finance-shot-244-after-f000642.png",
+        "settled": "boundary-frames/finance-shot-244-settled-f000654.png"
+      },
+      "start_metrics": {
+        "mean_luma": 198.907,
+        "luma_stddev": 61.587,
+        "near_dark_ratio": 7e-06,
+        "blank_or_dark": false
+      },
+      "sample_metrics": {
+        "before": {
+          "mean_luma": 197.266,
+          "luma_stddev": 62.478,
+          "near_dark_ratio": 1e-05,
+          "blank_or_dark": false
+        },
+        "start": {
+          "mean_luma": 198.907,
+          "luma_stddev": 61.587,
+          "near_dark_ratio": 7e-06,
+          "blank_or_dark": false
+        },
+        "after": {
+          "mean_luma": 198.446,
+          "luma_stddev": 61.426,
+          "near_dark_ratio": 7e-06,
+          "blank_or_dark": false
+        },
+        "settled": {
+          "mean_luma": 197.495,
+          "luma_stddev": 62.322,
+          "near_dark_ratio": 1.5e-05,
+          "blank_or_dark": false
+        }
+      },
+      "before_to_start_rms": 50.732,
+      "before_to_settled_content_rms": 43.144,
+      "material_check_eligible": true,
+      "materially_different": true
+    },
+    {
+      "shot_id": "finance-shot-245",
+      "source_start_s": 826.859,
+      "relative_start_s": 29.859,
+      "transition_in": {
+        "kind": "hard_cut",
+        "reason": "spoken semantic turn",
+        "duration_s": 0.0
+      },
+      "authored_pause": false,
+      "frames": {
+        "before": 716,
+        "start": 717,
+        "after": 718,
+        "settled": 730
+      },
+      "frame_paths": {
+        "before": "boundary-frames/finance-shot-245-before-f000716.png",
+        "start": "boundary-frames/finance-shot-245-start-f000717.png",
+        "after": "boundary-frames/finance-shot-245-after-f000718.png",
+        "settled": "boundary-frames/finance-shot-245-settled-f000730.png"
+      },
+      "start_metrics": {
+        "mean_luma": 198.906,
+        "luma_stddev": 61.587,
+        "near_dark_ratio": 7e-06,
+        "blank_or_dark": false
+      },
+      "sample_metrics": {
+        "before": {
+          "mean_luma": 198.444,
+          "luma_stddev": 61.425,
+          "near_dark_ratio": 7e-06,
+          "blank_or_dark": false
+        },
+        "start": {
+          "mean_luma": 198.906,
+          "luma_stddev": 61.587,
+          "near_dark_ratio": 7e-06,
+          "blank_or_dark": false
+        },
+        "after": {
+          "mean_luma": 198.33,
+          "luma_stddev": 61.373,
+          "near_dark_ratio": 7e-06,
+          "blank_or_dark": false
+        },
+        "settled": {
+          "mean_luma": 197.205,
+          "luma_stddev": 62.583,
+          "near_dark_ratio": 1.2e-05,
+          "blank_or_dark": false
+        }
+      },
+      "before_to_start_rms": 4.972,
+      "before_to_settled_content_rms": 11.378,
+      "material_check_eligible": true,
+      "materially_different": true
+    },
+    {
+      "shot_id": "finance-shot-246",
+      "source_start_s": 829.878,
+      "relative_start_s": 32.878,
+      "transition_in": {
+        "kind": "match_cut",
+        "reason": "shared causal object changes state on the spoken turn",
+        "duration_s": 0.0,
+        "motif_id": "risk_branches"
+      },
+      "authored_pause": false,
+      "frames": {
+        "before": 788,
+        "start": 789,
+        "after": 790,
+        "settled": 802
+      },
+      "frame_paths": {
+        "before": "boundary-frames/finance-shot-246-before-f000788.png",
+        "start": "boundary-frames/finance-shot-246-start-f000789.png",
+        "after": "boundary-frames/finance-shot-246-after-f000790.png",
+        "settled": "boundary-frames/finance-shot-246-settled-f000802.png"
+      },
+      "start_metrics": {
+        "mean_luma": 146.586,
+        "luma_stddev": 85.681,
+        "near_dark_ratio": 3e-06,
+        "blank_or_dark": false
+      },
+      "sample_metrics": {
+        "before": {
+          "mean_luma": 197.206,
+          "luma_stddev": 62.461,
+          "near_dark_ratio": 1.2e-05,
+          "blank_or_dark": false
+        },
+        "start": {
+          "mean_luma": 146.586,
+          "luma_stddev": 85.681,
+          "near_dark_ratio": 3e-06,
+          "blank_or_dark": false
+        },
+        "after": {
+          "mean_luma": 146.116,
+          "luma_stddev": 85.272,
+          "near_dark_ratio": 3e-06,
+          "blank_or_dark": false
+        },
+        "settled": {
+          "mean_luma": 145.139,
+          "luma_stddev": 85.338,
+          "near_dark_ratio": 7e-06,
+          "blank_or_dark": false
+        }
+      },
+      "before_to_start_rms": 109.254,
+      "before_to_settled_content_rms": 111.721,
+      "material_check_eligible": true,
+      "materially_different": true
+    },
+    {
+      "shot_id": "finance-shot-247",
+      "source_start_s": 832.536,
+      "relative_start_s": 35.536,
+      "transition_in": {
+        "kind": "hard_cut",
+        "reason": "spoken semantic turn",
+        "duration_s": 0.0
+      },
+      "authored_pause": false,
+      "frames": {
+        "before": 852,
+        "start": 853,
+        "after": 854,
+        "settled": 866
+      },
+      "frame_paths": {
+        "before": "boundary-frames/finance-shot-247-before-f000852.png",
+        "start": "boundary-frames/finance-shot-247-start-f000853.png",
+        "after": "boundary-frames/finance-shot-247-after-f000854.png",
+        "settled": "boundary-frames/finance-shot-247-settled-f000866.png"
+      },
+      "start_metrics": {
+        "mean_luma": 146.584,
+        "luma_stddev": 85.684,
+        "near_dark_ratio": 3e-06,
+        "blank_or_dark": false
+      },
+      "sample_metrics": {
+        "before": {
+          "mean_luma": 146.113,
+          "luma_stddev": 85.275,
+          "near_dark_ratio": 3e-06,
+          "blank_or_dark": false
+        },
+        "start": {
+          "mean_luma": 146.584,
+          "luma_stddev": 85.684,
+          "near_dark_ratio": 3e-06,
+          "blank_or_dark": false
+        },
+        "after": {
+          "mean_luma": 146.077,
+          "luma_stddev": 85.236,
+          "near_dark_ratio": 3e-06,
+          "blank_or_dark": false
+        },
+        "settled": {
+          "mean_luma": 144.867,
+          "luma_stddev": 85.363,
+          "near_dark_ratio": 1.4e-05,
+          "blank_or_dark": false
+        }
+      },
+      "before_to_start_rms": 5.015,
+      "before_to_settled_content_rms": 12.223,
+      "material_check_eligible": true,
+      "materially_different": true
+    },
+    {
+      "shot_id": "finance-shot-248",
+      "source_start_s": 835.416,
+      "relative_start_s": 38.416,
+      "transition_in": {
+        "kind": "hard_cut",
+        "reason": "spoken semantic turn",
+        "duration_s": 0.0
+      },
+      "authored_pause": false,
+      "frames": {
+        "before": 921,
+        "start": 922,
+        "after": 923,
+        "settled": 935
+      },
+      "frame_paths": {
+        "before": "boundary-frames/finance-shot-248-before-f000921.png",
+        "start": "boundary-frames/finance-shot-248-start-f000922.png",
+        "after": "boundary-frames/finance-shot-248-after-f000923.png",
+        "settled": "boundary-frames/finance-shot-248-settled-f000935.png"
+      },
+      "start_metrics": {
+        "mean_luma": 146.589,
+        "luma_stddev": 85.693,
+        "near_dark_ratio": 3e-06,
+        "blank_or_dark": false
+      },
+      "sample_metrics": {
+        "before": {
+          "mean_luma": 143.927,
+          "luma_stddev": 85.359,
+          "near_dark_ratio": 4e-06,
+          "blank_or_dark": false
+        },
+        "start": {
+          "mean_luma": 146.589,
+          "luma_stddev": 85.693,
+          "near_dark_ratio": 3e-06,
+          "blank_or_dark": false
+        },
+        "after": {
+          "mean_luma": 146.096,
+          "luma_stddev": 85.266,
+          "near_dark_ratio": 3e-06,
+          "blank_or_dark": false
+        },
+        "settled": {
+          "mean_luma": 144.961,
+          "luma_stddev": 85.325,
+          "near_dark_ratio": 1.1e-05,
+          "blank_or_dark": false
+        }
+      },
+      "before_to_start_rms": 54.254,
+      "before_to_settled_content_rms": 48.831,
+      "material_check_eligible": true,
+      "materially_different": true
+    },
+    {
+      "shot_id": "finance-shot-249",
+      "source_start_s": 838.911,
+      "relative_start_s": 41.911,
+      "transition_in": {
+        "kind": "hard_cut",
+        "reason": "spoken semantic turn",
+        "duration_s": 0.0
+      },
+      "authored_pause": false,
+      "frames": {
+        "before": 1005,
+        "start": 1006,
+        "after": 1007,
+        "settled": 1019
+      },
+      "frame_paths": {
+        "before": "boundary-frames/finance-shot-249-before-f001005.png",
+        "start": "boundary-frames/finance-shot-249-start-f001006.png",
+        "after": "boundary-frames/finance-shot-249-after-f001007.png",
+        "settled": "boundary-frames/finance-shot-249-settled-f001019.png"
+      },
+      "start_metrics": {
+        "mean_luma": 146.593,
+        "luma_stddev": 85.678,
+        "near_dark_ratio": 2e-06,
+        "blank_or_dark": false
+      },
+      "sample_metrics": {
+        "before": {
+          "mean_luma": 143.063,
+          "luma_stddev": 85.469,
+          "near_dark_ratio": 8e-06,
+          "blank_or_dark": false
+        },
+        "start": {
+          "mean_luma": 146.593,
+          "luma_stddev": 85.678,
+          "near_dark_ratio": 2e-06,
+          "blank_or_dark": false
+        },
+        "after": {
+          "mean_luma": 145.817,
+          "luma_stddev": 85.134,
+          "near_dark_ratio": 2e-06,
+          "blank_or_dark": false
+        },
+        "settled": {
+          "mean_luma": 144.221,
+          "luma_stddev": 85.517,
+          "near_dark_ratio": 3.3e-05,
+          "blank_or_dark": false
+        }
+      },
+      "before_to_start_rms": 59.666,
+      "before_to_settled_content_rms": 54.322,
+      "material_check_eligible": true,
+      "materially_different": true
+    },
+    {
+      "shot_id": "finance-shot-250",
+      "source_start_s": 842.893,
+      "relative_start_s": 45.893,
+      "transition_in": {
+        "kind": "hard_cut",
+        "reason": "spoken semantic turn",
+        "duration_s": 0.0
+      },
+      "authored_pause": false,
+      "frames": {
+        "before": 1100,
+        "start": 1101,
+        "after": 1102,
+        "settled": 1114
+      },
+      "frame_paths": {
+        "before": "boundary-frames/finance-shot-250-before-f001100.png",
+        "start": "boundary-frames/finance-shot-250-start-f001101.png",
+        "after": "boundary-frames/finance-shot-250-after-f001102.png",
+        "settled": "boundary-frames/finance-shot-250-settled-f001114.png"
+      },
+      "start_metrics": {
+        "mean_luma": 146.587,
+        "luma_stddev": 85.682,
+        "near_dark_ratio": 5e-06,
+        "blank_or_dark": false
+      },
+      "sample_metrics": {
+        "before": {
+          "mean_luma": 145.822,
+          "luma_stddev": 85.131,
+          "near_dark_ratio": 5e-06,
+          "blank_or_dark": false
+        },
+        "start": {
+          "mean_luma": 146.587,
+          "luma_stddev": 85.682,
+          "near_dark_ratio": 5e-06,
+          "blank_or_dark": false
+        },
+        "after": {
+          "mean_luma": 145.977,
+          "luma_stddev": 85.15,
+          "near_dark_ratio": 5e-06,
+          "blank_or_dark": false
+        },
+        "settled": {
+          "mean_luma": 144.714,
+          "luma_stddev": 85.181,
+          "near_dark_ratio": 1.2e-05,
+          "blank_or_dark": false
+        }
+      },
+      "before_to_start_rms": 6.541,
+      "before_to_settled_content_rms": 5.98,
+      "material_check_eligible": true,
+      "materially_different": true
+    },
+    {
+      "shot_id": "finance-shot-251",
+      "source_start_s": 846.794,
+      "relative_start_s": 49.794,
+      "transition_in": {
+        "kind": "hard_cut",
+        "reason": "spoken semantic turn",
+        "duration_s": 0.0
+      },
+      "authored_pause": false,
+      "frames": {
+        "before": 1194,
+        "start": 1195,
+        "after": 1196,
+        "settled": 1208
+      },
+      "frame_paths": {
+        "before": "boundary-frames/finance-shot-251-before-f001194.png",
+        "start": "boundary-frames/finance-shot-251-start-f001195.png",
+        "after": "boundary-frames/finance-shot-251-after-f001196.png",
+        "settled": "boundary-frames/finance-shot-251-settled-f001208.png"
+      },
+      "start_metrics": {
+        "mean_luma": 146.592,
+        "luma_stddev": 85.689,
+        "near_dark_ratio": 8e-06,
+        "blank_or_dark": false
+      },
+      "sample_metrics": {
+        "before": {
+          "mean_luma": 142.966,
+          "luma_stddev": 85.387,
+          "near_dark_ratio": 7e-06,
+          "blank_or_dark": false
+        },
+        "start": {
+          "mean_luma": 146.592,
+          "luma_stddev": 85.689,
+          "near_dark_ratio": 8e-06,
+          "blank_or_dark": false
+        },
+        "after": {
+          "mean_luma": 146.166,
+          "luma_stddev": 85.325,
+          "near_dark_ratio": 8e-06,
+          "blank_or_dark": false
+        },
+        "settled": {
+          "mean_luma": 145.285,
+          "luma_stddev": 85.383,
+          "near_dark_ratio": 1.1e-05,
+          "blank_or_dark": false
+        }
+      },
+      "before_to_start_rms": 59.669,
+      "before_to_settled_content_rms": 54.316,
+      "material_check_eligible": true,
+      "materially_different": true
+    },
+    {
+      "shot_id": "finance-shot-252",
+      "source_start_s": 849.94,
+      "relative_start_s": 52.94,
+      "transition_in": {
+        "kind": "hard_cut",
+        "reason": "spoken semantic turn",
+        "duration_s": 0.0
+      },
+      "authored_pause": false,
+      "frames": {
+        "before": 1270,
+        "start": 1271,
+        "after": 1272,
+        "settled": 1284
+      },
+      "frame_paths": {
+        "before": "boundary-frames/finance-shot-252-before-f001270.png",
+        "start": "boundary-frames/finance-shot-252-start-f001271.png",
+        "after": "boundary-frames/finance-shot-252-after-f001272.png",
+        "settled": "boundary-frames/finance-shot-252-settled-f001284.png"
+      },
+      "start_metrics": {
+        "mean_luma": 146.586,
+        "luma_stddev": 85.686,
+        "near_dark_ratio": 7e-06,
+        "blank_or_dark": false
+      },
+      "sample_metrics": {
+        "before": {
+          "mean_luma": 146.16,
+          "luma_stddev": 85.323,
+          "near_dark_ratio": 7e-06,
+          "blank_or_dark": false
+        },
+        "start": {
+          "mean_luma": 146.586,
+          "luma_stddev": 85.686,
+          "near_dark_ratio": 7e-06,
+          "blank_or_dark": false
+        },
+        "after": {
+          "mean_luma": 145.822,
+          "luma_stddev": 85.107,
+          "near_dark_ratio": 7e-06,
+          "blank_or_dark": false
+        },
+        "settled": {
+          "mean_luma": 144.157,
+          "luma_stddev": 85.446,
+          "near_dark_ratio": 3.7e-05,
+          "blank_or_dark": false
+        }
+      },
+      "before_to_start_rms": 4.762,
+      "before_to_settled_content_rms": 7.413,
+      "material_check_eligible": true,
+      "materially_different": true
+    },
+    {
+      "shot_id": "finance-shot-253",
+      "source_start_s": 853.168,
+      "relative_start_s": 56.168,
+      "transition_in": {
+        "kind": "hard_cut",
+        "reason": "spoken semantic turn",
+        "duration_s": 0.0
+      },
+      "authored_pause": false,
+      "frames": {
+        "before": 1347,
+        "start": 1348,
+        "after": 1349,
+        "settled": 1361
+      },
+      "frame_paths": {
+        "before": "boundary-frames/finance-shot-253-before-f001347.png",
+        "start": "boundary-frames/finance-shot-253-start-f001348.png",
+        "after": "boundary-frames/finance-shot-253-after-f001349.png",
+        "settled": "boundary-frames/finance-shot-253-settled-f001361.png"
+      },
+      "start_metrics": {
+        "mean_luma": 146.587,
+        "luma_stddev": 85.68,
+        "near_dark_ratio": 5e-06,
+        "blank_or_dark": false
+      },
+      "sample_metrics": {
+        "before": {
+          "mean_luma": 143.714,
+          "luma_stddev": 85.2,
+          "near_dark_ratio": 4e-06,
+          "blank_or_dark": false
+        },
+        "start": {
+          "mean_luma": 146.587,
+          "luma_stddev": 85.68,
+          "near_dark_ratio": 5e-06,
+          "blank_or_dark": false
+        },
+        "after": {
+          "mean_luma": 146.183,
+          "luma_stddev": 85.33,
+          "near_dark_ratio": 5e-06,
+          "blank_or_dark": false
+        },
+        "settled": {
+          "mean_luma": 145.213,
+          "luma_stddev": 85.454,
+          "near_dark_ratio": 1e-05,
+          "blank_or_dark": false
+        }
+      },
+      "before_to_start_rms": 54.281,
+      "before_to_settled_content_rms": 48.136,
+      "material_check_eligible": true,
+      "materially_different": true
+    },
+    {
+      "shot_id": "finance-shot-254",
+      "source_start_s": 856.256,
+      "relative_start_s": 59.256,
+      "transition_in": {
+        "kind": "match_cut",
+        "reason": "shared causal object changes state on the spoken turn",
+        "duration_s": 0.0,
+        "motif_id": "risk_branches"
+      },
+      "authored_pause": false,
+      "frames": {
+        "before": 1421,
+        "start": 1422,
+        "after": 1423,
+        "settled": 1435
+      },
+      "frame_paths": {
+        "before": "boundary-frames/finance-shot-254-before-f001421.png",
+        "start": "boundary-frames/finance-shot-254-start-f001422.png",
+        "after": "boundary-frames/finance-shot-254-after-f001423.png",
+        "settled": "boundary-frames/finance-shot-254-settled-f001435.png"
+      },
+      "start_metrics": {
+        "mean_luma": 82.473,
+        "luma_stddev": 59.85,
+        "near_dark_ratio": 0.039148,
+        "blank_or_dark": false
+      },
+      "sample_metrics": {
+        "before": {
+          "mean_luma": 143.148,
+          "luma_stddev": 85.493,
+          "near_dark_ratio": 4e-06,
+          "blank_or_dark": false
+        },
+        "start": {
+          "mean_luma": 82.473,
+          "luma_stddev": 59.85,
+          "near_dark_ratio": 0.039148,
+          "blank_or_dark": false
+        },
+        "after": {
+          "mean_luma": 82.645,
+          "luma_stddev": 59.766,
+          "near_dark_ratio": 0.039615,
+          "blank_or_dark": false
+        },
+        "settled": {
+          "mean_luma": 83.014,
+          "luma_stddev": 60.212,
+          "near_dark_ratio": 0.040441,
+          "blank_or_dark": false
+        }
+      },
+      "before_to_start_rms": 118.204,
+      "before_to_settled_content_rms": 112.391,
+      "material_check_eligible": true,
+      "materially_different": true
+    },
+    {
+      "shot_id": "finance-shot-255",
+      "source_start_s": 859.019,
+      "relative_start_s": 62.019,
+      "transition_in": {
+        "kind": "hard_cut",
+        "reason": "spoken semantic turn",
+        "duration_s": 0.0
+      },
+      "authored_pause": false,
+      "frames": {
+        "before": 1487,
+        "start": 1488,
+        "after": 1489,
+        "settled": 1501
+      },
+      "frame_paths": {
+        "before": "boundary-frames/finance-shot-255-before-f001487.png",
+        "start": "boundary-frames/finance-shot-255-start-f001488.png",
+        "after": "boundary-frames/finance-shot-255-after-f001489.png",
+        "settled": "boundary-frames/finance-shot-255-settled-f001501.png"
+      },
+      "start_metrics": {
+        "mean_luma": 82.473,
+        "luma_stddev": 59.849,
+        "near_dark_ratio": 0.039157,
+        "blank_or_dark": false
+      },
+      "sample_metrics": {
+        "before": {
+          "mean_luma": 82.646,
+          "luma_stddev": 59.768,
+          "near_dark_ratio": 0.039457,
+          "blank_or_dark": false
+        },
+        "start": {
+          "mean_luma": 82.473,
+          "luma_stddev": 59.849,
+          "near_dark_ratio": 0.039157,
+          "blank_or_dark": false
+        },
+        "after": {
+          "mean_luma": 82.663,
+          "luma_stddev": 59.759,
+          "near_dark_ratio": 0.03978,
+          "blank_or_dark": false
+        },
+        "settled": {
+          "mean_luma": 83.095,
+          "luma_stddev": 60.235,
+          "near_dark_ratio": 0.039082,
+          "blank_or_dark": false
+        }
+      },
+      "before_to_start_rms": 3.55,
+      "before_to_settled_content_rms": 10.574,
+      "material_check_eligible": true,
+      "materially_different": true
+    },
+    {
+      "shot_id": "finance-shot-256",
+      "source_start_s": 861.968,
+      "relative_start_s": 64.968,
+      "transition_in": {
+        "kind": "hard_cut",
+        "reason": "spoken semantic turn",
+        "duration_s": 0.0
+      },
+      "authored_pause": false,
+      "frames": {
+        "before": 1558,
+        "start": 1559,
+        "after": 1560,
+        "settled": 1572
+      },
+      "frame_paths": {
+        "before": "boundary-frames/finance-shot-256-before-f001558.png",
+        "start": "boundary-frames/finance-shot-256-start-f001559.png",
+        "after": "boundary-frames/finance-shot-256-after-f001560.png",
+        "settled": "boundary-frames/finance-shot-256-settled-f001572.png"
+      },
+      "start_metrics": {
+        "mean_luma": 82.477,
+        "luma_stddev": 59.861,
+        "near_dark_ratio": 0.039205,
+        "blank_or_dark": false
+      },
+      "sample_metrics": {
+        "before": {
+          "mean_luma": 82.635,
+          "luma_stddev": 59.502,
+          "near_dark_ratio": 0.039638,
+          "blank_or_dark": false
+        },
+        "start": {
+          "mean_luma": 82.477,
+          "luma_stddev": 59.861,
+          "near_dark_ratio": 0.039205,
+          "blank_or_dark": false
+        },
+        "after": {
+          "mean_luma": 82.696,
+          "luma_stddev": 59.757,
+          "near_dark_ratio": 0.039932,
+          "blank_or_dark": false
+        },
+        "settled": {
+          "mean_luma": 83.173,
+          "luma_stddev": 60.326,
+          "near_dark_ratio": 0.040827,
+          "blank_or_dark": false
+        }
+      },
+      "before_to_start_rms": 40.002,
+      "before_to_settled_content_rms": 41.727,
+      "material_check_eligible": true,
+      "materially_different": true
+    },
+    {
+      "shot_id": "finance-shot-257",
+      "source_start_s": 865.138,
+      "relative_start_s": 68.138,
+      "transition_in": {
+        "kind": "hard_cut",
+        "reason": "spoken semantic turn",
+        "duration_s": 0.0
+      },
+      "authored_pause": false,
+      "frames": {
+        "before": 1634,
+        "start": 1635,
+        "after": 1636,
+        "settled": 1648
+      },
+      "frame_paths": {
+        "before": "boundary-frames/finance-shot-257-before-f001634.png",
+        "start": "boundary-frames/finance-shot-257-start-f001635.png",
+        "after": "boundary-frames/finance-shot-257-after-f001636.png",
+        "settled": "boundary-frames/finance-shot-257-settled-f001648.png"
+      },
+      "start_metrics": {
+        "mean_luma": 82.474,
+        "luma_stddev": 59.865,
+        "near_dark_ratio": 0.039178,
+        "blank_or_dark": false
+      },
+      "sample_metrics": {
+        "before": {
+          "mean_luma": 82.688,
+          "luma_stddev": 59.768,
+          "near_dark_ratio": 0.04022,
+          "blank_or_dark": false
+        },
+        "start": {
+          "mean_luma": 82.474,
+          "luma_stddev": 59.865,
+          "near_dark_ratio": 0.039178,
+          "blank_or_dark": false
+        },
+        "after": {
+          "mean_luma": 82.762,
+          "luma_stddev": 59.735,
+          "near_dark_ratio": 0.040018,
+          "blank_or_dark": false
+        },
+        "settled": {
+          "mean_luma": 83.443,
+          "luma_stddev": 60.54,
+          "near_dark_ratio": 0.041429,
+          "blank_or_dark": false
+        }
+      },
+      "before_to_start_rms": 4.007,
+      "before_to_settled_content_rms": 13.548,
+      "material_check_eligible": true,
+      "materially_different": true
+    },
+    {
+      "shot_id": "finance-shot-258",
+      "source_start_s": 868.865,
+      "relative_start_s": 71.865,
+      "transition_in": {
+        "kind": "hard_cut",
+        "reason": "spoken semantic turn",
+        "duration_s": 0.0
+      },
+      "authored_pause": false,
+      "frames": {
+        "before": 1724,
+        "start": 1725,
+        "after": 1726,
+        "settled": 1738
+      },
+      "frame_paths": {
+        "before": "boundary-frames/finance-shot-258-before-f001724.png",
+        "start": "boundary-frames/finance-shot-258-start-f001725.png",
+        "after": "boundary-frames/finance-shot-258-after-f001726.png",
+        "settled": "boundary-frames/finance-shot-258-settled-f001738.png"
+      },
+      "start_metrics": {
+        "mean_luma": 82.484,
+        "luma_stddev": 59.868,
+        "near_dark_ratio": 0.039303,
+        "blank_or_dark": false
+      },
+      "sample_metrics": {
+        "before": {
+          "mean_luma": 84.66,
+          "luma_stddev": 61.77,
+          "near_dark_ratio": 0.040053,
+          "blank_or_dark": false
+        },
+        "start": {
+          "mean_luma": 82.484,
+          "luma_stddev": 59.868,
+          "near_dark_ratio": 0.039303,
+          "blank_or_dark": false
+        },
+        "after": {
+          "mean_luma": 82.661,
+          "luma_stddev": 59.782,
+          "near_dark_ratio": 0.039666,
+          "blank_or_dark": false
+        },
+        "settled": {
+          "mean_luma": 83.059,
+          "luma_stddev": 60.222,
+          "near_dark_ratio": 0.039652,
+          "blank_or_dark": false
+        }
+      },
+      "before_to_start_rms": 51.514,
+      "before_to_settled_content_rms": 53.891,
+      "material_check_eligible": true,
+      "materially_different": true
+    },
+    {
+      "shot_id": "finance-shot-259",
+      "source_start_s": 872.139,
+      "relative_start_s": 75.139,
+      "transition_in": {
+        "kind": "match_cut",
+        "reason": "shared causal object changes state on the spoken turn",
+        "duration_s": 0.0,
+        "motif_id": "price_versus_cause"
+      },
+      "authored_pause": false,
+      "frames": {
+        "before": 1802,
+        "start": 1803,
+        "after": 1804,
+        "settled": 1816
+      },
+      "frame_paths": {
+        "before": "boundary-frames/finance-shot-259-before-f001802.png",
+        "start": "boundary-frames/finance-shot-259-start-f001803.png",
+        "after": "boundary-frames/finance-shot-259-after-f001804.png",
+        "settled": "boundary-frames/finance-shot-259-settled-f001816.png"
+      },
+      "start_metrics": {
+        "mean_luma": 65.44,
+        "luma_stddev": 60.843,
+        "near_dark_ratio": 0.179737,
+        "blank_or_dark": false
+      },
+      "sample_metrics": {
+        "before": {
+          "mean_luma": 82.612,
+          "luma_stddev": 59.534,
+          "near_dark_ratio": 0.039899,
+          "blank_or_dark": false
+        },
+        "start": {
+          "mean_luma": 65.44,
+          "luma_stddev": 60.843,
+          "near_dark_ratio": 0.179737,
+          "blank_or_dark": false
+        },
+        "after": {
+          "mean_luma": 65.533,
+          "luma_stddev": 60.798,
+          "near_dark_ratio": 0.179085,
+          "blank_or_dark": false
+        },
+        "settled": {
+          "mean_luma": 65.731,
+          "luma_stddev": 61.442,
+          "near_dark_ratio": 0.179206,
+          "blank_or_dark": false
+        }
+      },
+      "before_to_start_rms": 83.485,
+      "before_to_settled_content_rms": 86.483,
+      "material_check_eligible": true,
+      "materially_different": true
+    },
+    {
+      "shot_id": "finance-shot-260",
+      "source_start_s": 875.065,
+      "relative_start_s": 78.065,
+      "transition_in": {
+        "kind": "hard_cut",
+        "reason": "spoken semantic turn",
+        "duration_s": 0.0
+      },
+      "authored_pause": false,
+      "frames": {
+        "before": 1873,
+        "start": 1874,
+        "after": 1875,
+        "settled": 1887
+      },
+      "frame_paths": {
+        "before": "boundary-frames/finance-shot-260-before-f001873.png",
+        "start": "boundary-frames/finance-shot-260-start-f001874.png",
+        "after": "boundary-frames/finance-shot-260-after-f001875.png",
+        "settled": "boundary-frames/finance-shot-260-settled-f001887.png"
+      },
+      "start_metrics": {
+        "mean_luma": 65.439,
+        "luma_stddev": 60.843,
+        "near_dark_ratio": 0.179746,
+        "blank_or_dark": false
+      },
+      "sample_metrics": {
+        "before": {
+          "mean_luma": 65.537,
+          "luma_stddev": 60.799,
+          "near_dark_ratio": 0.179078,
+          "blank_or_dark": false
+        },
+        "start": {
+          "mean_luma": 65.439,
+          "luma_stddev": 60.843,
+          "near_dark_ratio": 0.179746,
+          "blank_or_dark": false
+        },
+        "after": {
+          "mean_luma": 65.544,
+          "luma_stddev": 60.792,
+          "near_dark_ratio": 0.179025,
+          "blank_or_dark": false
+        },
+        "settled": {
+          "mean_luma": 65.812,
+          "luma_stddev": 61.54,
+          "near_dark_ratio": 0.179276,
+          "blank_or_dark": false
+        }
+      },
+      "before_to_start_rms": 3.858,
+      "before_to_settled_content_rms": 5.89,
+      "material_check_eligible": true,
+      "materially_different": true
+    },
+    {
+      "shot_id": "finance-shot-261",
+      "source_start_s": 878.548,
+      "relative_start_s": 81.548,
+      "transition_in": {
+        "kind": "hard_cut",
+        "reason": "spoken semantic turn",
+        "duration_s": 0.0
+      },
+      "authored_pause": false,
+      "frames": {
+        "before": 1956,
+        "start": 1957,
+        "after": 1958,
+        "settled": 1970
+      },
+      "frame_paths": {
+        "before": "boundary-frames/finance-shot-261-before-f001956.png",
+        "start": "boundary-frames/finance-shot-261-start-f001957.png",
+        "after": "boundary-frames/finance-shot-261-after-f001958.png",
+        "settled": "boundary-frames/finance-shot-261-settled-f001970.png"
+      },
+      "start_metrics": {
+        "mean_luma": 65.444,
+        "luma_stddev": 60.847,
+        "near_dark_ratio": 0.179902,
+        "blank_or_dark": false
+      },
+      "sample_metrics": {
+        "before": {
+          "mean_luma": 66.704,
+          "luma_stddev": 61.335,
+          "near_dark_ratio": 0.182716,
+          "blank_or_dark": false
+        },
+        "start": {
+          "mean_luma": 65.444,
+          "luma_stddev": 60.847,
+          "near_dark_ratio": 0.179902,
+          "blank_or_dark": false
+        },
+        "after": {
+          "mean_luma": 65.534,
+          "luma_stddev": 60.799,
+          "near_dark_ratio": 0.179188,
+          "blank_or_dark": false
+        },
+        "settled": {
+          "mean_luma": 65.731,
+          "luma_stddev": 61.47,
+          "near_dark_ratio": 0.179372,
+          "blank_or_dark": false
+        }
+      },
+      "before_to_start_rms": 40.729,
+      "before_to_settled_content_rms": 40.483,
+      "material_check_eligible": true,
+      "materially_different": true
+    },
+    {
+      "shot_id": "finance-shot-262",
+      "source_start_s": 882.193,
+      "relative_start_s": 85.193,
+      "transition_in": {
+        "kind": "match_cut",
+        "reason": "shared causal object changes state on the spoken turn",
+        "duration_s": 0.0,
+        "motif_id": "price_versus_cause"
+      },
+      "authored_pause": false,
+      "frames": {
+        "before": 2044,
+        "start": 2045,
+        "after": 2046,
+        "settled": 2058
+      },
+      "frame_paths": {
+        "before": "boundary-frames/finance-shot-262-before-f002044.png",
+        "start": "boundary-frames/finance-shot-262-start-f002045.png",
+        "after": "boundary-frames/finance-shot-262-after-f002046.png",
+        "settled": "boundary-frames/finance-shot-262-settled-f002058.png"
+      },
+      "start_metrics": {
+        "mean_luma": 149.975,
+        "luma_stddev": 83.221,
+        "near_dark_ratio": 2e-06,
+        "blank_or_dark": false
+      },
+      "sample_metrics": {
+        "before": {
+          "mean_luma": 65.511,
+          "luma_stddev": 60.805,
+          "near_dark_ratio": 0.179388,
+          "blank_or_dark": false
+        },
+        "start": {
+          "mean_luma": 149.975,
+          "luma_stddev": 83.221,
+          "near_dark_ratio": 2e-06,
+          "blank_or_dark": false
+        },
+        "after": {
+          "mean_luma": 149.556,
+          "luma_stddev": 82.88,
+          "near_dark_ratio": 2e-06,
+          "blank_or_dark": false
+        },
+        "settled": {
+          "mean_luma": 148.727,
+          "luma_stddev": 82.958,
+          "near_dark_ratio": 1.4e-05,
+          "blank_or_dark": false
+        }
+      },
+      "before_to_start_rms": 137.742,
+      "before_to_settled_content_rms": 135.696,
+      "material_check_eligible": true,
+      "materially_different": true
+    },
+    {
+      "shot_id": "finance-shot-263",
+      "source_start_s": 885.305,
+      "relative_start_s": 88.305,
+      "transition_in": {
+        "kind": "hard_cut",
+        "reason": "spoken semantic turn",
+        "duration_s": 0.0
+      },
+      "authored_pause": false,
+      "frames": {
+        "before": 2118,
+        "start": 2119,
+        "after": 2120,
+        "settled": 2132
+      },
+      "frame_paths": {
+        "before": "boundary-frames/finance-shot-263-before-f002118.png",
+        "start": "boundary-frames/finance-shot-263-start-f002119.png",
+        "after": "boundary-frames/finance-shot-263-after-f002120.png",
+        "settled": "boundary-frames/finance-shot-263-settled-f002132.png"
+      },
+      "start_metrics": {
+        "mean_luma": 149.985,
+        "luma_stddev": 83.22,
+        "near_dark_ratio": 2e-06,
+        "blank_or_dark": false
+      },
+      "sample_metrics": {
+        "before": {
+          "mean_luma": 149.62,
+          "luma_stddev": 82.926,
+          "near_dark_ratio": 4e-06,
+          "blank_or_dark": false
+        },
+        "start": {
+          "mean_luma": 149.985,
+          "luma_stddev": 83.22,
+          "near_dark_ratio": 2e-06,
+          "blank_or_dark": false
+        },
+        "after": {
+          "mean_luma": 149.538,
+          "luma_stddev": 82.848,
+          "near_dark_ratio": 2e-06,
+          "blank_or_dark": false
+        },
+        "settled": {
+          "mean_luma": 148.504,
+          "luma_stddev": 82.949,
+          "near_dark_ratio": 7e-06,
+          "blank_or_dark": false
+        }
+      },
+      "before_to_start_rms": 48.743,
+      "before_to_settled_content_rms": 50.252,
+      "material_check_eligible": true,
+      "materially_different": true
+    },
+    {
+      "shot_id": "finance-shot-264",
+      "source_start_s": 888.881,
+      "relative_start_s": 91.881,
+      "transition_in": {
+        "kind": "hard_cut",
+        "reason": "spoken semantic turn",
+        "duration_s": 0.0
+      },
+      "authored_pause": false,
+      "frames": {
+        "before": 2204,
+        "start": 2205,
+        "after": 2206,
+        "settled": 2207
+      },
+      "frame_paths": {
+        "before": "boundary-frames/finance-shot-264-before-f002204.png",
+        "start": "boundary-frames/finance-shot-264-start-f002205.png",
+        "after": "boundary-frames/finance-shot-264-after-f002206.png",
+        "settled": "boundary-frames/finance-shot-264-settled-f002207.png"
+      },
+      "start_metrics": {
+        "mean_luma": 67.936,
+        "luma_stddev": 61.179,
+        "near_dark_ratio": 0.17238,
+        "blank_or_dark": false
+      },
+      "sample_metrics": {
+        "before": {
+          "mean_luma": 146.569,
+          "luma_stddev": 83.048,
+          "near_dark_ratio": 4e-06,
+          "blank_or_dark": false
+        },
+        "start": {
+          "mean_luma": 67.936,
+          "luma_stddev": 61.179,
+          "near_dark_ratio": 0.17238,
+          "blank_or_dark": false
+        },
+        "after": {
+          "mean_luma": 68.073,
+          "luma_stddev": 61.106,
+          "near_dark_ratio": 0.171306,
+          "blank_or_dark": false
+        },
+        "settled": {
+          "mean_luma": 68.208,
+          "luma_stddev": 61.338,
+          "near_dark_ratio": 0.17125,
+          "blank_or_dark": false
+        }
+      },
+      "before_to_start_rms": 132.849,
+      "before_to_settled_content_rms": 130.26,
+      "material_check_eligible": true,
+      "materially_different": true
+    }
+  ],
+  "failures": [],
+  "status": "pass"
+}

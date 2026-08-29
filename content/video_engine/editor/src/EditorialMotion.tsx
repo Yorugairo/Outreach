@@ -132,15 +132,24 @@ const transitionFrames = (
 
 /** Build a stable frame timeline from the plan's continuous second clock. */
 export const buildEditorialMotionTimeline = (
-  plan: Pick<EditorialMotionPlan, "shots">,
+  plan: Pick<EditorialMotionPlan, "shots" | "duration_s">,
   fps: number,
 ): EditorialMotionTimelineItem[] => {
-  return plan.shots.map((shot) => {
-    const coreDuration = Math.max(1, Math.round(Math.max(0, shot.duration_s) * fps));
+  const startFrames = plan.shots.map((shot) =>
+    Math.max(0, Math.round(Math.max(0, shot.start_s) * fps)),
+  );
+  const finalFrame = Math.max(1, Math.round(Math.max(0.01, plan.duration_s) * fps));
+  return plan.shots.map((shot, index) => {
+    const from = startFrames[index];
+    // Derive each core duration from the next canonical cue boundary. Rounding
+    // start and duration independently can leave a one-frame hole that exposes
+    // the composition's dark backing plate.
+    const nextFrom = index + 1 < startFrames.length ? startFrames[index + 1] : finalFrame;
+    const coreDuration = Math.max(1, nextFrom - from);
     const transitionOutDuration = transitionFrames(shot.transition_out, fps);
     return {
       shot,
-      from: Math.max(0, Math.round(Math.max(0, shot.start_s) * fps)),
+      from,
       duration: coreDuration + transitionOutDuration,
       coreDuration,
       transitionOutDuration,
@@ -233,21 +242,26 @@ const cameraTransform = (
 
 const actionName = (layer: EditorialMotionLayer, shot: EditorialMotionShot): string => {
   if (layer.action?.trim()) return layer.action.trim().toLowerCase();
-  if (layer.role === "character" || layer.role === "prop") {
+  if (layer.role === "character" || layer.role === "subject" || layer.role === "prop") {
     return (shot.subject_action || "locked").trim().toLowerCase();
   }
   if (layer.role === "ambient") {
     return (shot.ambient_actions[0] || "locked").trim().toLowerCase();
   }
-  if (layer.role === "diagram" && shot.information_reveal) {
+  if ((layer.role === "diagram" || layer.role === "mechanism" || layer.role === "evidence") && shot.information_reveal) {
     return shot.information_reveal.trim().toLowerCase();
   }
   return "locked";
 };
 
 const actionProgress = (frame: number, duration: number, fps: number): number => {
+  // Paper-puppet actions are authored on twos inside the 24 fps delivery
+  // timeline. Camera, captions, and transition layers retain full-frame
+  // timing while character/prop motion advances at a deliberate 12 fps.
+  const framesPerPaperStep = Math.max(1, Math.round(fps / 12));
+  const steppedFrame = Math.floor(frame / framesPerPaperStep) * framesPerPaperStep;
   const intro = Math.max(1, Math.min(Math.round(fps * 0.8), Math.floor(duration * 0.45)));
-  return ease(interpolate(frame, [0, intro], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }), "smoothstep");
+  return ease(interpolate(steppedFrame, [0, intro], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }), "smoothstep");
 };
 
 const layerExitProgress = (
@@ -286,6 +300,53 @@ const layerActionStyle = (
       transformOrigin: "50% 88%",
     };
   }
+  if (/^subject[_ -]/.test(action)) {
+    return {
+      opacity: progress,
+      transform: `translateY(${(1 - progress) * 2.5}%) rotate(${(1 - progress) * -0.8}deg)`,
+      transformOrigin: "50% 88%",
+    };
+  }
+  // Deliberate causal actions for the single-world weighted-fund mechanism.
+  // They are intentionally narrow: adding a new action name does not opt an
+  // unrelated plate into generic motion.
+  if (/cash[_ -]?(?:stream|flow|enter)/.test(action)) {
+    return {
+      opacity: progress,
+      transform: `translateX(${(1 - progress) * -28}%)`,
+      transformOrigin: "100% 50%",
+    };
+  }
+  if (/weighted[_ -]?(?:blocks|holdings)|top[_ -]?(?:weight|holdings)/.test(action)) {
+    return {
+      opacity: progress,
+      transform: `translateY(${(1 - progress) * -18}%) scale(${0.94 + progress * 0.06})`,
+      transformOrigin: "50% 100%",
+    };
+  }
+  if (/long[_ -]?tail[_ -]?(?:fill|holdings|field)/.test(action)) {
+    return {
+      opacity: progress,
+      transform: `translateY(${(1 - progress) * 10}%)`,
+      transformOrigin: "50% 100%",
+      clipPath: `inset(${(1 - progress) * 100}% 0 0 0)`,
+    };
+  }
+  if (/output[_ -]?(?:routes|flow|pipes)/.test(action)) {
+    return {
+      opacity: progress,
+      transform: `translateX(${(1 - progress) * -8}%)`,
+      transformOrigin: "0% 50%",
+      clipPath: `inset(0 ${(1 - progress) * 100}% 0 0)`,
+    };
+  }
+  if (/^(?:prop|mechanism)[_ -]/.test(action)) {
+    return {
+      opacity: progress,
+      transform: `translateX(${(1 - progress) * 3}%) scale(${0.96 + progress * 0.04})`,
+      transformOrigin: "50% 60%",
+    };
+  }
   if (/lamp[_ -]?flicker|window[_ -]?light|light[_ -]?flicker|ambient[_ -]?pulse/.test(action)) {
     return {
       opacity: 0.88 + 0.1 * (0.5 + 0.5 * Math.sin((frame / Math.max(1, duration)) * Math.PI * 8)),
@@ -312,17 +373,23 @@ const roleDefaultZ = (role: EditorialMotionLayerRole): number => {
     case "ambient":
       return 2;
     case "character":
+    case "subject":
     case "prop":
       return 4;
     case "diagram":
+    case "mechanism":
       return 5;
+    case "evidence":
+      return 6;
+    case "transition":
+      return 8;
     default:
       return 1;
   }
 };
 
 const layerObjectFit = (role: EditorialMotionLayerRole): React.CSSProperties["objectFit"] =>
-  role === "world" || role === "depth" || role === "ambient" ? "cover" : "contain";
+  role === "world" || role === "depth" || role === "ambient" || role === "transition" ? "cover" : "contain";
 
 /** A deliberately rough, local ink-and-paper puff for a narration-timed exit. */
 const SmokePuff: React.FC<{
@@ -378,16 +445,33 @@ const MotionLayer: React.FC<{
   duration: number;
   fps: number;
 }> = ({ layer, shot, assetMap, frame, duration, fps }) => {
+  const activation = layer.activation;
+  const currentS = frame / fps;
+  if (activation && (currentS < activation.start_s || currentS > activation.end_s)) return null;
   const src = resolveEditorialMotionAsset(layer.asset_id, assetMap);
   if (!src) return null;
   const camera = shot.camera;
   const focal = shot.focal_point;
   const progress = cameraProgress(camera, frame, fps, duration);
-  const actionStyle = layerActionStyle(actionName(layer, shot), frame, duration, fps);
+  const authoredAction = actionName(layer, shot);
+  // A world plate is the visual floor of the shot. Revealing it from an empty
+  // canvas produced the dark pre-roll frames found in review. Reveal actions
+  // belong on contained depth, character, prop, or diagram layers; worlds are
+  // present from the first frame.
+  const resolvedAction = layer.role === "world" && /paper[_ -]?reveal|reveal|wipe|trace|draw/.test(authoredAction)
+    ? "locked"
+    : authoredAction;
+  const actionFrame = activation
+    ? Math.max(0, frame - Math.round(activation.action_start_s * fps))
+    : frame;
+  const actionDuration = activation
+    ? Math.max(1, Math.round((activation.action_end_s - activation.action_start_s) * fps))
+    : duration;
+  const actionStyle = layerActionStyle(resolvedAction, actionFrame, actionDuration, fps);
   const exitProgress = layerExitProgress(layer, frame, fps);
   // Foreground parallax is intentionally per-layer.  The world remains locked
   // while depth/foreground plates move by a bounded authored amount.
-  const foregroundAction = /foreground|parallax/.test(actionName(layer, shot));
+  const foregroundAction = /foreground|parallax/.test(resolvedAction);
   const cameraStyle = camera.kind === "foreground_parallax"
     ? cameraTransform(camera, focal, progress, layer.role === "depth" || layer.role === "ambient" || foregroundAction ? 1 : 0)
     : cameraTransform(camera, focal, progress);
@@ -445,18 +529,35 @@ const transitionInOpacity = (
   });
 };
 
-const transitionInClipPath = (
-  transition: EditorialMotionTransition | undefined,
-  frame: number,
-  fps: number,
-): string | undefined => {
-  if (!transition || transition.kind !== "paper_wipe") return undefined;
-  const duration = transitionFrames(transition, fps);
-  const progress = interpolate(frame, [0, Math.max(1, duration)], [0, 1], {
-    extrapolateLeft: "clamp",
-    extrapolateRight: "clamp",
-  });
-  return `inset(0 ${(1 - progress) * 100}% 0 0)`;
+/**
+ * A paper wipe is a moving foreground sheet edge over an already-visible
+ * world. It must never be the mechanism that makes the base image appear.
+ */
+const TransitionInPaperSweep: React.FC<{
+  transition: EditorialMotionTransition | undefined;
+  frame: number;
+  fps: number;
+}> = ({ transition, frame, fps }) => {
+  if (!transition || transition.kind !== "paper_wipe") return null;
+  const duration = Math.max(1, transitionFrames(transition, fps));
+  const progress = ease(clamp(frame / duration, 0, 1), "smoothstep");
+  if (progress >= 1) return null;
+  return (
+    <div
+      style={{
+        position: "absolute",
+        top: 0,
+        bottom: 0,
+        left: 0,
+        width: "24%",
+        zIndex: 880,
+        pointerEvents: "none",
+        transform: `translateX(${progress * 520 - 112}%) rotate(-0.4deg)`,
+        background: "linear-gradient(90deg, rgba(242,226,185,0), rgba(242,226,185,0.88) 42%, rgba(176,143,86,0.72) 50%, rgba(242,226,185,0.18) 58%, rgba(242,226,185,0))",
+        filter: "drop-shadow(8px 0 8px rgba(21, 30, 38, 0.16))",
+      }}
+    />
+  );
 };
 
 const TransitionOutOverlay: React.FC<{
@@ -568,18 +669,28 @@ const NarrationCaption: React.FC<{ shot: EditorialMotionShot; frame: number; fps
     <div
       style={{
         position: "absolute",
-        left: "8%",
-        right: "8%",
-        bottom: "12%",
+        left: "50%",
+        bottom: "2.2%",
         zIndex: 15,
         opacity,
-        padding: "10px 14px",
-        background: `${COLORS.paper}E8`,
-        borderLeft: `6px solid ${COLORS.rust}`,
+        width: "fit-content",
+        maxWidth: "76%",
+        transform: "translateX(-50%)",
+        padding: "7px 14px 8px",
+        background: "rgba(8, 18, 28, 0.58)",
+        borderRadius: 7,
+        boxShadow: "0 2px 12px rgba(0, 0, 0, 0.14)",
         fontFamily: "Inter, Arial, sans-serif",
-        color: COLORS.ink,
-        fontSize: 27,
-        lineHeight: 1.18,
+        color: "rgba(255, 250, 236, 0.96)",
+        fontSize: "clamp(20px, 1.65vw, 30px)",
+        fontWeight: 650,
+        lineHeight: 1.14,
+        textAlign: "center",
+        textWrap: "balance",
+        overflow: "hidden",
+        display: "-webkit-box",
+        WebkitLineClamp: 2,
+        WebkitBoxOrient: "vertical",
       }}
     >
       {shot.narration_excerpt}
@@ -811,7 +922,6 @@ const ShotFrame: React.FC<{
   const { fps } = useVideoConfig();
   const shot = item.shot;
   const opacity = transitionInOpacity(shot.transition_in, frame, fps);
-  const clipPath = transitionInClipPath(shot.transition_in, frame, fps);
   const withinCore = frame < item.coreDuration;
   return (
     <div
@@ -821,7 +931,6 @@ const ShotFrame: React.FC<{
         overflow: "hidden",
         background: COLORS.paper,
         opacity,
-        clipPath,
         ...BASE_TEXT,
       }}
     >
@@ -837,6 +946,7 @@ const ShotFrame: React.FC<{
         />
       ))}
       {withinCore ? <AmbientActionEffects shot={shot} frame={frame} duration={item.coreDuration} /> : null}
+      <TransitionInPaperSweep transition={shot.transition_in} frame={frame} fps={fps} />
       {withinCore && captionPolicy === "burned_in" ? <NarrationCaption shot={shot} frame={frame} fps={fps} duration={item.coreDuration} /> : null}
       {withinCore ? <InformationReveal shot={shot} frame={frame} fps={fps} duration={item.coreDuration} /> : null}
       {withinCore

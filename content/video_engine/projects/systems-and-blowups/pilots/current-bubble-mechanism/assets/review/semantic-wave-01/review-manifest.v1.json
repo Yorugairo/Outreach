@@ -1,0 +1,75 @@
+{
+  "schema_version": "finance_semantic_wave_review.v1",
+  "episode_id": "current-bubble-mechanism",
+  "wave_id": "semantic-wave-01",
+  "status": "operator_approved_for_motion_proof",
+  "generation_method": "built_in_image_gen",
+  "decision_rule": "No candidate may enter a render map until it is selected for its exact cue, passes visual/representation QA, and receives rights plus operator promotion.",
+  "shared_style": "Bright adult editorial crinkle-cut woodblock collage; tactile paper edges, shallow 2.5D depth, carved ink detail; approachable but not childish.",
+  "candidates": [
+    {
+      "candidate_id": "wrong-bubble-elevators-v1",
+      "path": "wrong-bubble-elevators-v1.png",
+      "sha256": "abb01431a156ebc290707d4f1e214d1db28376812128c14e641934b57e430aa6",
+      "cue_id": "cbm-a-001",
+      "purpose": "Same ascent, distinct causes: crowd belief versus physical support.",
+      "status": "rejected",
+      "qa": ["two mechanisms are legible", "no factual claims in raster", "red bubble tag remains metaphor only"]
+    },
+    {
+      "candidate_id": "wrong-bubble-elevators-v2",
+      "path": "wrong-bubble-elevators-v2.png",
+      "sha256": "e359675594b4bbd6ec51972fc2417172903b4782aa865f71d2fc91f4e76526dc",
+      "cue_id": "cbm-a-001",
+      "purpose": "Corrected cutaway: both cars share one ground-floor landing; a thick slab and elevator pits separate the basement factory from the literal lift mechanism; the right car is visibly cabled from a roof-level sheave.",
+      "status": "selected",
+      "qa": ["ground-floor landing is explicit", "no car visually continues into the basement", "right cable is mechanically legible", "red bubble tag remains metaphor only"]
+    },
+    {
+      "candidate_id": "memory-skepticism-v1",
+      "path": "memory-skepticism-v1.png",
+      "sha256": "47e4749304f59698dbadc73d98e533210627436b5b2eca5bd48358fa01b0ec97",
+      "cue_id": "cbm-a-002",
+      "purpose": "First concept pass for the return-comparison evidence slot.",
+      "status": "rejected",
+      "qa": ["reject: decorative rise-line resembles unsupported price evidence", "reject: faux chart UI competes with the later deterministic evidence rail"]
+    },
+    {
+      "candidate_id": "memory-skepticism-v2",
+      "path": "memory-skepticism-v2.png",
+      "sha256": "b807c53afb48f24840ddfe92fbf303669c5f3e472abfa05bc541791a9cc9e90c",
+      "cue_id": "cbm-a-002",
+      "purpose": "Memory stack, skeptical reaction, Korean and broad-index context, and three small local fact docks for the verified return comparison.",
+      "status": "selected",
+      "qa": ["no chart or numerical claim in raster", "local statistic docks are visually attached to their subjects", "requires local 1Y adjusted-close qualifier rail"]
+    },
+    {
+      "candidate_id": "memory-three-supports-v1",
+      "path": "memory-three-supports-v1.png",
+      "sha256": "105c06405ee1a6d7e2c3e9fd452952fed114885c47f31d2ee244a1300642eb81",
+      "cue_id": "cbm-a-004",
+      "purpose": "Physical demand, constrained capacity, and buyer commitment braid into one mechanism.",
+      "status": "selected",
+      "qa": ["generic contract only", "no named customer or guarantee", "must be trace-cut before motion proof"]
+    },
+    {
+      "candidate_id": "index-fund-weighted-inflows-v1",
+      "path": "index-fund-weighted-inflows-v1.png",
+      "sha256": "4a0215fff4ea2a477db4f2dc63e0f96d4f04fc33e6278d8ddc28782d16af45d4",
+      "cue_id": "cbm-a-005",
+      "purpose": "First concept pass for a weighted index-fund container.",
+      "status": "rejected",
+      "qa": ["reject: decorative charts and document-like clutter could be mistaken for evidence", "reject: visual hierarchy is too diffuse for the concentration explanation"]
+    },
+    {
+      "candidate_id": "index-fund-weighted-inflows-v2",
+      "path": "index-fund-weighted-inflows-v2.png",
+      "sha256": "d10b1e8571b65117d529f6a2687e613b73400eba55774df338a2b309ba301a02",
+      "cue_id": "cbm-a-005",
+      "purpose": "Recognizable fund container with generic inflows, dominant top holding tier, broad long-tail tier, inspection lens, and one local statistic dock.",
+      "status": "selected",
+      "qa": ["no generated figures", "must receive local top-ten concentration surface", "must not animate into direct price-causation"]
+    }
+  ],
+  "artifact_hash": "a1351a5b61b5abb42ea571edc25941a297ea022fcdba527c65e8038f730259c9"
+}

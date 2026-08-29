@@ -1,0 +1,20 @@
+{
+  "schema_version": "finance_semantic_wave_review.v1",
+  "episode_id": "current-bubble-mechanism",
+  "wave_id": "semantic-wave-08",
+  "status": "operator_approved_for_composition",
+  "generation_method": "built_in_image_gen",
+  "decision_rule": "The generated plate is a clearly labeled-at-edit analogy for the spoken HBM pipeline/reservoir line. It does not assert a vendor, throughput, valuation, or literal commodity relationship.",
+  "candidates": [
+    {
+      "candidate_id": "hbm-pipeline-and-reservoir-v1",
+      "path": "hbm-pipeline-and-reservoir-v1.png",
+      "sha256": "6ce3f198f017024ba2cc3f70add6c80996817a77faf9bd2e962fe57f2d9c2366",
+      "cluster_id": "cbm-f-001",
+      "purpose": "Translate the narration’s HBM pipeline-and-reservoir analogy: a blank stacked-tile reservoir sends a data flow into otherwise-stranded generic compute machinery.",
+      "status": "selected",
+      "qa": ["no embedded text or vendor mark", "reservoir and pipeline are distinct", "no literal oil analogy", "no quantitative performance claim"]
+    }
+  ],
+  "artifact_hash": "a43cc3e57b777e763d240d487707d084cf38a3d67e70a00026a1df10dcd4cac9"
+}

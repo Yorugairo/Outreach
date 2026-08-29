@@ -1,0 +1,1334 @@
+{
+  "plan": {
+    "schema_version": "editorial_motion_plan.v1",
+    "source_storyboard_hash": "90f6e17c8a719c9b063d7d21441baf5be3e7bb6702f04598eee07d24678f656b",
+    "source_beat_plan_hash": "f83b2dad210f0d77bec0e9d8a1b7b799f1da54b0c19372ded9e4a7ec103f6cdb",
+    "scene_bundle_hashes": [
+      "00736344fcbbb0a647bee78085aec0b2f47090df5afd5ea3b9d7f07331f99564"
+    ],
+    "scene_flow_graph_hash": "19f6e87e800027eaade47cc11d88a9e2583cc297f53acfea9c8fbcdef047149b",
+    "asset_map_hash": "bba2100e5f219b3bc8bb699eb3d7bc92c8ba2f6c9649ac4ed8f47fa65058443c",
+    "audio_manifest_hash": "4d9e640f2c45f4d8be082611515ae842e85e3b45e4d681ca6a3eed0683ba29ca",
+    "pacing_recipe_hash": "7e0693bfcf3494fd442dfc1032b3c5018bbb4ff421a576f110816dd4c8098da1",
+    "duration_s": 49.958,
+    "source_start_s": 410.26,
+    "shots": [
+      {
+        "shot_id": "demo-shot-01",
+        "parent_beat_ids": [
+          "cbm-semantic-beat-06-01"
+        ],
+        "parent_scene_bundle_id": "finance-scene-06-index",
+        "start_s": 0.0,
+        "duration_s": 2.879,
+        "word_range": {
+          "start_index": 0,
+          "end_index": 0
+        },
+        "narration_excerpt": "Now open the other elevator: the S&P 500 index fund.",
+        "visual_intent": "explanation",
+        "required_visual_actions": [
+          {
+            "kind": "object_cutaway",
+            "subject": "open_index_product"
+          }
+        ],
+        "purpose": "explain",
+        "shot_scale": "medium",
+        "focal_point": {
+          "x": 0.44,
+          "y": 0.47
+        },
+        "layers": [
+          {
+            "asset_id": "wave07-index-background",
+            "role": "world",
+            "action": "locked",
+            "z_index": 0
+          },
+          {
+            "asset_id": "wave07-index-contact-shadow",
+            "role": "depth",
+            "action": "locked",
+            "z_index": 1
+          },
+          {
+            "asset_id": "wave07-index-midground",
+            "role": "mechanism",
+            "action": "mechanism_open",
+            "z_index": 5
+          },
+          {
+            "asset_id": "wave07-index-foreground",
+            "role": "prop",
+            "action": "prop_enter_from_left",
+            "z_index": 6
+          }
+        ],
+        "subject_action": "open_index_product",
+        "ambient_actions": [],
+        "information_reveal": "none",
+        "information_surface": {
+          "mode": "none",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "camera": {
+          "kind": "foreground_parallax",
+          "amount": 0.018,
+          "easing": "smoothstep",
+          "direction": "left",
+          "hold_in_s": 0.18,
+          "move_s": 2.519,
+          "hold_out_s": 0.18
+        },
+        "transition_in": {
+          "kind": "paper_wipe",
+          "reason": "moving foreground edge enters over an already-visible index world",
+          "duration_s": 0.28
+        },
+        "transition_out": {
+          "kind": "hard_cut",
+          "reason": "next sentence-native claim",
+          "duration_s": 0.0
+        },
+        "audio_bridge": "continuous_narration",
+        "provider_motion": {
+          "requirement": "none",
+          "fallback": "local_layer_motion"
+        },
+        "overlay_ids": [],
+        "uniqueness_signature": "demo-shot-01:open_index_product:0.44:0.47"
+      },
+      {
+        "shot_id": "demo-shot-02",
+        "parent_beat_ids": [
+          "cbm-semantic-beat-06-02"
+        ],
+        "parent_scene_bundle_id": "finance-scene-06-index",
+        "start_s": 2.879,
+        "duration_s": 3.414,
+        "word_range": {
+          "start_index": 0,
+          "end_index": 0
+        },
+        "narration_excerpt": "An S&P 500 fund can be an excellent product.",
+        "visual_intent": "explanation",
+        "required_visual_actions": [
+          {
+            "kind": "object_cutaway",
+            "subject": "show_accessible_basket"
+          }
+        ],
+        "purpose": "explain",
+        "shot_scale": "medium",
+        "focal_point": {
+          "x": 0.58,
+          "y": 0.47
+        },
+        "layers": [
+          {
+            "asset_id": "wave07-index-background",
+            "role": "world",
+            "action": "locked",
+            "z_index": 0
+          },
+          {
+            "asset_id": "wave07-index-contact-shadow",
+            "role": "depth",
+            "action": "locked",
+            "z_index": 1
+          },
+          {
+            "asset_id": "wave07-index-midground",
+            "role": "mechanism",
+            "action": "mechanism_open",
+            "z_index": 5
+          },
+          {
+            "asset_id": "wave07-index-foreground",
+            "role": "prop",
+            "action": "prop_enter_from_left",
+            "z_index": 6
+          }
+        ],
+        "subject_action": "show_accessible_basket",
+        "ambient_actions": [],
+        "information_reveal": "A useful product is not automatically a complete portfolio.",
+        "information_surface": {
+          "mode": "floating_label",
+          "x": 0.63,
+          "y": 0.1,
+          "width": 0.29,
+          "height": 0.13,
+          "text_align": "left"
+        },
+        "camera": {
+          "kind": "foreground_parallax",
+          "amount": 0.018,
+          "easing": "smoothstep",
+          "direction": "left",
+          "hold_in_s": 0.18,
+          "move_s": 3.0540000000000003,
+          "hold_out_s": 0.18
+        },
+        "transition_in": {
+          "kind": "hard_cut",
+          "reason": "next sentence-native claim",
+          "duration_s": 0.0
+        },
+        "transition_out": {
+          "kind": "hard_cut",
+          "reason": "next sentence-native claim",
+          "duration_s": 0.0
+        },
+        "audio_bridge": "continuous_narration",
+        "provider_motion": {
+          "requirement": "none",
+          "fallback": "local_layer_motion"
+        },
+        "overlay_ids": [],
+        "uniqueness_signature": "demo-shot-02:show_accessible_basket:0.58:0.47"
+      },
+      {
+        "shot_id": "demo-shot-03",
+        "parent_beat_ids": [
+          "cbm-semantic-beat-06-03"
+        ],
+        "parent_scene_bundle_id": "finance-scene-06-index",
+        "start_s": 6.293,
+        "duration_s": 4.017,
+        "word_range": {
+          "start_index": 0,
+          "end_index": 0
+        },
+        "narration_excerpt": "It is cheap, liquid, tax-efficient, and historically difficult for active managers to beat after fees.",
+        "visual_intent": "explanation",
+        "required_visual_actions": [
+          {
+            "kind": "object_cutaway",
+            "subject": "show_index_strengths"
+          }
+        ],
+        "purpose": "explain",
+        "shot_scale": "medium",
+        "focal_point": {
+          "x": 0.43,
+          "y": 0.47
+        },
+        "layers": [
+          {
+            "asset_id": "wave07-index-background",
+            "role": "world",
+            "action": "locked",
+            "z_index": 0
+          },
+          {
+            "asset_id": "wave07-index-contact-shadow",
+            "role": "depth",
+            "action": "locked",
+            "z_index": 1
+          },
+          {
+            "asset_id": "wave07-index-midground",
+            "role": "mechanism",
+            "action": "mechanism_open",
+            "z_index": 5
+          },
+          {
+            "asset_id": "wave07-index-foreground",
+            "role": "prop",
+            "action": "prop_enter_from_left",
+            "z_index": 6
+          }
+        ],
+        "subject_action": "show_index_strengths",
+        "ambient_actions": [],
+        "information_reveal": "none",
+        "information_surface": {
+          "mode": "none",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "camera": {
+          "kind": "push_settle",
+          "amount": 0.014,
+          "easing": "smoothstep",
+          "direction": "toward_focal_point",
+          "hold_in_s": 0.18,
+          "move_s": 3.45,
+          "hold_out_s": 0.24
+        },
+        "transition_in": {
+          "kind": "hard_cut",
+          "reason": "next sentence-native claim",
+          "duration_s": 0.0
+        },
+        "transition_out": {
+          "kind": "hard_cut",
+          "reason": "next sentence-native claim",
+          "duration_s": 0.0
+        },
+        "audio_bridge": "continuous_narration",
+        "provider_motion": {
+          "requirement": "none",
+          "fallback": "local_layer_motion"
+        },
+        "overlay_ids": [],
+        "uniqueness_signature": "demo-shot-03:show_index_strengths:0.43:0.47"
+      },
+      {
+        "shot_id": "demo-shot-04",
+        "parent_beat_ids": [
+          "cbm-semantic-beat-06-04"
+        ],
+        "parent_scene_bundle_id": "finance-scene-06-index",
+        "start_s": 10.31,
+        "duration_s": 3.297,
+        "word_range": {
+          "start_index": 0,
+          "end_index": 0
+        },
+        "narration_excerpt": "But the problem is more subtle than concentration alone.",
+        "visual_intent": "explanation",
+        "required_visual_actions": [
+          {
+            "kind": "object_cutaway",
+            "subject": "split_two_jobs"
+          }
+        ],
+        "purpose": "explain",
+        "shot_scale": "medium",
+        "focal_point": {
+          "x": 0.42,
+          "y": 0.48
+        },
+        "layers": [
+          {
+            "asset_id": "wave07-dual-background",
+            "role": "world",
+            "action": "locked",
+            "z_index": 0
+          },
+          {
+            "asset_id": "wave07-dual-contact-shadow",
+            "role": "depth",
+            "action": "locked",
+            "z_index": 1
+          },
+          {
+            "asset_id": "wave07-dual-midground",
+            "role": "mechanism",
+            "action": "mechanism_split",
+            "z_index": 5
+          },
+          {
+            "asset_id": "wave07-dual-foreground",
+            "role": "prop",
+            "action": "prop_enter_from_right",
+            "z_index": 6
+          }
+        ],
+        "subject_action": "split_two_jobs",
+        "ambient_actions": [],
+        "information_reveal": "none",
+        "information_surface": {
+          "mode": "none",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "camera": {
+          "kind": "foreground_parallax",
+          "amount": 0.018,
+          "easing": "smoothstep",
+          "direction": "left",
+          "hold_in_s": 0.18,
+          "move_s": 2.9370000000000003,
+          "hold_out_s": 0.18
+        },
+        "transition_in": {
+          "kind": "hard_cut",
+          "reason": "next sentence-native claim",
+          "duration_s": 0.0
+        },
+        "transition_out": {
+          "kind": "hard_cut",
+          "reason": "next sentence-native claim",
+          "duration_s": 0.0
+        },
+        "audio_bridge": "continuous_narration",
+        "provider_motion": {
+          "requirement": "none",
+          "fallback": "local_layer_motion"
+        },
+        "overlay_ids": [],
+        "uniqueness_signature": "demo-shot-04:split_two_jobs:0.42:0.48"
+      },
+      {
+        "shot_id": "demo-shot-05",
+        "parent_beat_ids": [
+          "cbm-semantic-beat-06-05"
+        ],
+        "parent_scene_bundle_id": "finance-scene-06-index",
+        "start_s": 13.607,
+        "duration_s": 4.158,
+        "word_range": {
+          "start_index": 0,
+          "end_index": 0
+        },
+        "narration_excerpt": "The index can fail both jobs at once. It can be too concentrated to deliver the diversification benefit people think they bought\u2014",
+        "visual_intent": "explanation",
+        "required_visual_actions": [
+          {
+            "kind": "object_cutaway",
+            "subject": "show_protection_failure"
+          }
+        ],
+        "purpose": "explain",
+        "shot_scale": "medium",
+        "focal_point": {
+          "x": 0.31,
+          "y": 0.5
+        },
+        "layers": [
+          {
+            "asset_id": "wave07-dual-background",
+            "role": "world",
+            "action": "locked",
+            "z_index": 0
+          },
+          {
+            "asset_id": "wave07-dual-contact-shadow",
+            "role": "depth",
+            "action": "locked",
+            "z_index": 1
+          },
+          {
+            "asset_id": "wave07-dual-midground",
+            "role": "mechanism",
+            "action": "mechanism_split",
+            "z_index": 5
+          },
+          {
+            "asset_id": "wave07-dual-foreground",
+            "role": "prop",
+            "action": "prop_enter_from_right",
+            "z_index": 6
+          }
+        ],
+        "subject_action": "show_protection_failure",
+        "ambient_actions": [],
+        "information_reveal": "JOB ONE: independent protection",
+        "information_surface": {
+          "mode": "floating_label",
+          "x": 0.63,
+          "y": 0.1,
+          "width": 0.29,
+          "height": 0.13,
+          "text_align": "left"
+        },
+        "camera": {
+          "kind": "foreground_parallax",
+          "amount": 0.018,
+          "easing": "smoothstep",
+          "direction": "left",
+          "hold_in_s": 0.18,
+          "move_s": 3.7980000000000005,
+          "hold_out_s": 0.18
+        },
+        "transition_in": {
+          "kind": "hard_cut",
+          "reason": "next sentence-native claim",
+          "duration_s": 0.0
+        },
+        "transition_out": {
+          "kind": "hard_cut",
+          "reason": "next sentence-native claim",
+          "duration_s": 0.0
+        },
+        "audio_bridge": "continuous_narration",
+        "provider_motion": {
+          "requirement": "none",
+          "fallback": "local_layer_motion"
+        },
+        "overlay_ids": [],
+        "uniqueness_signature": "demo-shot-05:show_protection_failure:0.31:0.50"
+      },
+      {
+        "shot_id": "demo-shot-06",
+        "parent_beat_ids": [
+          "cbm-semantic-beat-06-06"
+        ],
+        "parent_scene_bundle_id": "finance-scene-06-index",
+        "start_s": 17.765,
+        "duration_s": 3.282,
+        "word_range": {
+          "start_index": 0,
+          "end_index": 0
+        },
+        "narration_excerpt": "\u2014and still too diluted to capture the full upside of the exceptional companies driving its return.",
+        "visual_intent": "explanation",
+        "required_visual_actions": [
+          {
+            "kind": "object_cutaway",
+            "subject": "show_upside_failure"
+          }
+        ],
+        "purpose": "explain",
+        "shot_scale": "medium",
+        "focal_point": {
+          "x": 0.72,
+          "y": 0.48
+        },
+        "layers": [
+          {
+            "asset_id": "wave07-dual-background",
+            "role": "world",
+            "action": "locked",
+            "z_index": 0
+          },
+          {
+            "asset_id": "wave07-dual-contact-shadow",
+            "role": "depth",
+            "action": "locked",
+            "z_index": 1
+          },
+          {
+            "asset_id": "wave07-dual-midground",
+            "role": "mechanism",
+            "action": "mechanism_split",
+            "z_index": 5
+          },
+          {
+            "asset_id": "wave07-dual-foreground",
+            "role": "prop",
+            "action": "prop_enter_from_right",
+            "z_index": 6
+          }
+        ],
+        "subject_action": "show_upside_failure",
+        "ambient_actions": [],
+        "information_reveal": "JOB TWO: follow the strongest economic drivers",
+        "information_surface": {
+          "mode": "floating_label",
+          "x": 0.63,
+          "y": 0.1,
+          "width": 0.29,
+          "height": 0.13,
+          "text_align": "left"
+        },
+        "camera": {
+          "kind": "foreground_parallax",
+          "amount": 0.018,
+          "easing": "smoothstep",
+          "direction": "left",
+          "hold_in_s": 0.18,
+          "move_s": 2.922,
+          "hold_out_s": 0.18
+        },
+        "transition_in": {
+          "kind": "hard_cut",
+          "reason": "next sentence-native claim",
+          "duration_s": 0.0
+        },
+        "transition_out": {
+          "kind": "hard_cut",
+          "reason": "next sentence-native claim",
+          "duration_s": 0.0
+        },
+        "audio_bridge": "continuous_narration",
+        "provider_motion": {
+          "requirement": "none",
+          "fallback": "local_layer_motion"
+        },
+        "overlay_ids": [],
+        "uniqueness_signature": "demo-shot-06:show_upside_failure:0.72:0.48"
+      },
+      {
+        "shot_id": "demo-shot-07",
+        "parent_beat_ids": [
+          "cbm-semantic-beat-06-07"
+        ],
+        "parent_scene_bundle_id": "finance-scene-06-index",
+        "start_s": 21.047,
+        "duration_s": 3.251,
+        "word_range": {
+          "start_index": 0,
+          "end_index": 0
+        },
+        "narration_excerpt": "By the middle of 2025, the ten largest companies",
+        "visual_intent": "explanation",
+        "required_visual_actions": [
+          {
+            "kind": "object_cutaway",
+            "subject": "prepare_concentration_evidence"
+          }
+        ],
+        "purpose": "explain",
+        "shot_scale": "medium",
+        "focal_point": {
+          "x": 0.46,
+          "y": 0.45
+        },
+        "layers": [
+          {
+            "asset_id": "wave07-dual-background",
+            "role": "world",
+            "action": "locked",
+            "z_index": 0
+          },
+          {
+            "asset_id": "wave07-dual-contact-shadow",
+            "role": "depth",
+            "action": "locked",
+            "z_index": 1
+          },
+          {
+            "asset_id": "wave07-dual-midground",
+            "role": "mechanism",
+            "action": "mechanism_split",
+            "z_index": 5
+          },
+          {
+            "asset_id": "wave07-dual-foreground",
+            "role": "prop",
+            "action": "prop_enter_from_right",
+            "z_index": 6
+          }
+        ],
+        "subject_action": "prepare_concentration_evidence",
+        "ambient_actions": [],
+        "information_reveal": "none",
+        "information_surface": {
+          "mode": "none",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "camera": {
+          "kind": "foreground_parallax",
+          "amount": 0.018,
+          "easing": "smoothstep",
+          "direction": "left",
+          "hold_in_s": 0.18,
+          "move_s": 2.891,
+          "hold_out_s": 0.18
+        },
+        "transition_in": {
+          "kind": "hard_cut",
+          "reason": "next sentence-native claim",
+          "duration_s": 0.0
+        },
+        "transition_out": {
+          "kind": "hard_cut",
+          "reason": "next sentence-native claim",
+          "duration_s": 0.0
+        },
+        "audio_bridge": "continuous_narration",
+        "provider_motion": {
+          "requirement": "none",
+          "fallback": "local_layer_motion"
+        },
+        "overlay_ids": [],
+        "uniqueness_signature": "demo-shot-07:prepare_concentration_evidence:0.46:0.45"
+      },
+      {
+        "shot_id": "demo-shot-08",
+        "parent_beat_ids": [
+          "cbm-semantic-beat-06-08"
+        ],
+        "parent_scene_bundle_id": "finance-scene-06-index",
+        "start_s": 24.298,
+        "duration_s": 3.251,
+        "word_range": {
+          "start_index": 0,
+          "end_index": 0
+        },
+        "narration_excerpt": "represented almost forty percent of the S&P 500.",
+        "visual_intent": "explanation",
+        "required_visual_actions": [
+          {
+            "kind": "object_cutaway",
+            "subject": "show_top_ten_concentration"
+          }
+        ],
+        "purpose": "explain",
+        "shot_scale": "medium",
+        "focal_point": {
+          "x": 0.65,
+          "y": 0.45
+        },
+        "layers": [
+          {
+            "asset_id": "wave07-dual-background",
+            "role": "world",
+            "action": "locked",
+            "z_index": 0
+          },
+          {
+            "asset_id": "wave07-dual-contact-shadow",
+            "role": "depth",
+            "action": "locked",
+            "z_index": 1
+          },
+          {
+            "asset_id": "wave07-dual-midground",
+            "role": "mechanism",
+            "action": "mechanism_split",
+            "z_index": 5
+          },
+          {
+            "asset_id": "wave07-dual-foreground",
+            "role": "prop",
+            "action": "prop_enter_from_right",
+            "z_index": 6
+          },
+          {
+            "asset_id": "evidence-sp500-concentration-v1",
+            "role": "evidence",
+            "action": "reveal",
+            "z_index": 7,
+            "layout": {
+              "x": 0.59,
+              "y": 0.17,
+              "width": 0.32,
+              "height": 0.34,
+              "fit": "contain"
+            }
+          }
+        ],
+        "subject_action": "show_top_ten_concentration",
+        "ambient_actions": [],
+        "information_reveal": "none",
+        "information_surface": {
+          "mode": "none",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "camera": {
+          "kind": "foreground_parallax",
+          "amount": 0.018,
+          "easing": "smoothstep",
+          "direction": "left",
+          "hold_in_s": 0.18,
+          "move_s": 2.891,
+          "hold_out_s": 0.18
+        },
+        "transition_in": {
+          "kind": "hard_cut",
+          "reason": "next sentence-native claim",
+          "duration_s": 0.0
+        },
+        "transition_out": {
+          "kind": "hard_cut",
+          "reason": "next sentence-native claim",
+          "duration_s": 0.0
+        },
+        "audio_bridge": "continuous_narration",
+        "provider_motion": {
+          "requirement": "none",
+          "fallback": "local_layer_motion"
+        },
+        "overlay_ids": [
+          "source-top-ten"
+        ],
+        "uniqueness_signature": "demo-shot-08:show_top_ten_concentration:0.65:0.45"
+      },
+      {
+        "shot_id": "demo-shot-09",
+        "parent_beat_ids": [
+          "cbm-semantic-beat-06-09"
+        ],
+        "parent_scene_bundle_id": "finance-scene-06-index",
+        "start_s": 27.549,
+        "duration_s": 3.511,
+        "word_range": {
+          "start_index": 0,
+          "end_index": 0
+        },
+        "narration_excerpt": "That weakens the five hundred independent bets story.",
+        "visual_intent": "explanation",
+        "required_visual_actions": [
+          {
+            "kind": "object_cutaway",
+            "subject": "move_to_shared_weather"
+          }
+        ],
+        "purpose": "explain",
+        "shot_scale": "medium",
+        "focal_point": {
+          "x": 0.49,
+          "y": 0.46
+        },
+        "layers": [
+          {
+            "asset_id": "wave07-weather-background",
+            "role": "world",
+            "action": "locked",
+            "z_index": 0
+          },
+          {
+            "asset_id": "wave07-weather-contact-shadow",
+            "role": "depth",
+            "action": "locked",
+            "z_index": 1
+          },
+          {
+            "asset_id": "wave07-weather-midground",
+            "role": "mechanism",
+            "action": "mechanism_connect",
+            "z_index": 5
+          },
+          {
+            "asset_id": "wave07-weather-foreground",
+            "role": "prop",
+            "action": "prop_enter_from_left",
+            "z_index": 6
+          }
+        ],
+        "subject_action": "move_to_shared_weather",
+        "ambient_actions": [],
+        "information_reveal": "One shared causal weather system can move many leaders together.",
+        "information_surface": {
+          "mode": "floating_label",
+          "x": 0.63,
+          "y": 0.1,
+          "width": 0.29,
+          "height": 0.13,
+          "text_align": "left"
+        },
+        "camera": {
+          "kind": "foreground_parallax",
+          "amount": 0.018,
+          "easing": "smoothstep",
+          "direction": "left",
+          "hold_in_s": 0.18,
+          "move_s": 3.1510000000000002,
+          "hold_out_s": 0.18
+        },
+        "transition_in": {
+          "kind": "hard_cut",
+          "reason": "next sentence-native claim",
+          "duration_s": 0.0
+        },
+        "transition_out": {
+          "kind": "hard_cut",
+          "reason": "next sentence-native claim",
+          "duration_s": 0.0
+        },
+        "audio_bridge": "continuous_narration",
+        "provider_motion": {
+          "requirement": "none",
+          "fallback": "local_layer_motion"
+        },
+        "overlay_ids": [],
+        "uniqueness_signature": "demo-shot-09:move_to_shared_weather:0.49:0.46"
+      },
+      {
+        "shot_id": "demo-shot-10",
+        "parent_beat_ids": [
+          "cbm-semantic-beat-06-10"
+        ],
+        "parent_scene_bundle_id": "finance-scene-06-index",
+        "start_s": 31.06,
+        "duration_s": 3.413,
+        "word_range": {
+          "start_index": 0,
+          "end_index": 0
+        },
+        "narration_excerpt": "Many of those leaders also share the same causal weather system:",
+        "visual_intent": "explanation",
+        "required_visual_actions": [
+          {
+            "kind": "object_cutaway",
+            "subject": "connect_shared_causes"
+          }
+        ],
+        "purpose": "explain",
+        "shot_scale": "medium",
+        "focal_point": {
+          "x": 0.52,
+          "y": 0.42
+        },
+        "layers": [
+          {
+            "asset_id": "wave07-weather-background",
+            "role": "world",
+            "action": "locked",
+            "z_index": 0
+          },
+          {
+            "asset_id": "wave07-weather-contact-shadow",
+            "role": "depth",
+            "action": "locked",
+            "z_index": 1
+          },
+          {
+            "asset_id": "wave07-weather-midground",
+            "role": "mechanism",
+            "action": "mechanism_connect",
+            "z_index": 5
+          },
+          {
+            "asset_id": "wave07-weather-foreground",
+            "role": "prop",
+            "action": "prop_enter_from_left",
+            "z_index": 6
+          }
+        ],
+        "subject_action": "connect_shared_causes",
+        "ambient_actions": [],
+        "information_reveal": "none",
+        "information_surface": {
+          "mode": "none",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "camera": {
+          "kind": "foreground_parallax",
+          "amount": 0.018,
+          "easing": "smoothstep",
+          "direction": "left",
+          "hold_in_s": 0.18,
+          "move_s": 3.053,
+          "hold_out_s": 0.18
+        },
+        "transition_in": {
+          "kind": "hard_cut",
+          "reason": "next sentence-native claim",
+          "duration_s": 0.0
+        },
+        "transition_out": {
+          "kind": "hard_cut",
+          "reason": "next sentence-native claim",
+          "duration_s": 0.0
+        },
+        "audio_bridge": "continuous_narration",
+        "provider_motion": {
+          "requirement": "none",
+          "fallback": "local_layer_motion"
+        },
+        "overlay_ids": [],
+        "uniqueness_signature": "demo-shot-10:connect_shared_causes:0.52:0.42"
+      },
+      {
+        "shot_id": "demo-shot-11",
+        "parent_beat_ids": [
+          "cbm-semantic-beat-06-11"
+        ],
+        "parent_scene_bundle_id": "finance-scene-06-index",
+        "start_s": 34.473,
+        "duration_s": 2.752,
+        "word_range": {
+          "start_index": 0,
+          "end_index": 0
+        },
+        "narration_excerpt": "AI spending, cloud capital expenditure,",
+        "visual_intent": "explanation",
+        "required_visual_actions": [
+          {
+            "kind": "object_cutaway",
+            "subject": "show_ai_and_cloud"
+          }
+        ],
+        "purpose": "explain",
+        "shot_scale": "medium",
+        "focal_point": {
+          "x": 0.28,
+          "y": 0.47
+        },
+        "layers": [
+          {
+            "asset_id": "wave07-weather-background",
+            "role": "world",
+            "action": "locked",
+            "z_index": 0
+          },
+          {
+            "asset_id": "wave07-weather-contact-shadow",
+            "role": "depth",
+            "action": "locked",
+            "z_index": 1
+          },
+          {
+            "asset_id": "wave07-weather-midground",
+            "role": "mechanism",
+            "action": "mechanism_connect",
+            "z_index": 5
+          },
+          {
+            "asset_id": "wave07-weather-foreground",
+            "role": "prop",
+            "action": "prop_enter_from_left",
+            "z_index": 6
+          }
+        ],
+        "subject_action": "show_ai_and_cloud",
+        "ambient_actions": [],
+        "information_reveal": "AI spending + cloud capital expenditure",
+        "information_surface": {
+          "mode": "floating_label",
+          "x": 0.63,
+          "y": 0.1,
+          "width": 0.29,
+          "height": 0.13,
+          "text_align": "left"
+        },
+        "camera": {
+          "kind": "foreground_parallax",
+          "amount": 0.018,
+          "easing": "smoothstep",
+          "direction": "left",
+          "hold_in_s": 0.18,
+          "move_s": 2.392,
+          "hold_out_s": 0.18
+        },
+        "transition_in": {
+          "kind": "hard_cut",
+          "reason": "next sentence-native claim",
+          "duration_s": 0.0
+        },
+        "transition_out": {
+          "kind": "hard_cut",
+          "reason": "next sentence-native claim",
+          "duration_s": 0.0
+        },
+        "audio_bridge": "continuous_narration",
+        "provider_motion": {
+          "requirement": "none",
+          "fallback": "local_layer_motion"
+        },
+        "overlay_ids": [],
+        "uniqueness_signature": "demo-shot-11:show_ai_and_cloud:0.28:0.47"
+      },
+      {
+        "shot_id": "demo-shot-12",
+        "parent_beat_ids": [
+          "cbm-semantic-beat-06-12"
+        ],
+        "parent_scene_bundle_id": "finance-scene-06-index",
+        "start_s": 37.225,
+        "duration_s": 3.286,
+        "word_range": {
+          "start_index": 0,
+          "end_index": 0
+        },
+        "narration_excerpt": "semiconductor supply, digital advertising, and premium valuations for long-duration growth.",
+        "visual_intent": "explanation",
+        "required_visual_actions": [
+          {
+            "kind": "object_cutaway",
+            "subject": "show_shared_growth_weather"
+          }
+        ],
+        "purpose": "explain",
+        "shot_scale": "medium",
+        "focal_point": {
+          "x": 0.74,
+          "y": 0.46
+        },
+        "layers": [
+          {
+            "asset_id": "wave07-weather-background",
+            "role": "world",
+            "action": "locked",
+            "z_index": 0
+          },
+          {
+            "asset_id": "wave07-weather-contact-shadow",
+            "role": "depth",
+            "action": "locked",
+            "z_index": 1
+          },
+          {
+            "asset_id": "wave07-weather-midground",
+            "role": "mechanism",
+            "action": "mechanism_connect",
+            "z_index": 5
+          },
+          {
+            "asset_id": "wave07-weather-foreground",
+            "role": "prop",
+            "action": "prop_enter_from_left",
+            "z_index": 6
+          }
+        ],
+        "subject_action": "show_shared_growth_weather",
+        "ambient_actions": [],
+        "information_reveal": "Semiconductor supply + digital advertising + long-duration growth",
+        "information_surface": {
+          "mode": "floating_label",
+          "x": 0.63,
+          "y": 0.1,
+          "width": 0.29,
+          "height": 0.13,
+          "text_align": "left"
+        },
+        "camera": {
+          "kind": "foreground_parallax",
+          "amount": 0.018,
+          "easing": "smoothstep",
+          "direction": "left",
+          "hold_in_s": 0.18,
+          "move_s": 2.926,
+          "hold_out_s": 0.18
+        },
+        "transition_in": {
+          "kind": "hard_cut",
+          "reason": "next sentence-native claim",
+          "duration_s": 0.0
+        },
+        "transition_out": {
+          "kind": "hard_cut",
+          "reason": "next sentence-native claim",
+          "duration_s": 0.0
+        },
+        "audio_bridge": "continuous_narration",
+        "provider_motion": {
+          "requirement": "none",
+          "fallback": "local_layer_motion"
+        },
+        "overlay_ids": [],
+        "uniqueness_signature": "demo-shot-12:show_shared_growth_weather:0.74:0.46"
+      },
+      {
+        "shot_id": "demo-shot-13",
+        "parent_beat_ids": [
+          "cbm-semantic-beat-06-13"
+        ],
+        "parent_scene_bundle_id": "finance-scene-06-index",
+        "start_s": 40.511,
+        "duration_s": 6.195,
+        "word_range": {
+          "start_index": 0,
+          "end_index": 0
+        },
+        "narration_excerpt": "But the other four hundred and ninety companies are not there only to offset a top-ten concentration problem.",
+        "visual_intent": "explanation",
+        "required_visual_actions": [
+          {
+            "kind": "object_cutaway",
+            "subject": "separate_cause_from_count"
+          }
+        ],
+        "purpose": "explain",
+        "shot_scale": "medium",
+        "focal_point": {
+          "x": 0.52,
+          "y": 0.47
+        },
+        "layers": [
+          {
+            "asset_id": "wave07-weather-background",
+            "role": "world",
+            "action": "locked",
+            "z_index": 0
+          },
+          {
+            "asset_id": "wave07-weather-contact-shadow",
+            "role": "depth",
+            "action": "locked",
+            "z_index": 1
+          },
+          {
+            "asset_id": "wave07-weather-midground",
+            "role": "mechanism",
+            "action": "mechanism_connect",
+            "z_index": 5
+          },
+          {
+            "asset_id": "wave07-weather-foreground",
+            "role": "prop",
+            "action": "prop_enter_from_left",
+            "z_index": 6
+          }
+        ],
+        "subject_action": "separate_cause_from_count",
+        "ambient_actions": [],
+        "information_reveal": "none",
+        "information_surface": {
+          "mode": "none",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "camera": {
+          "kind": "foreground_parallax",
+          "amount": 0.018,
+          "easing": "smoothstep",
+          "direction": "left",
+          "hold_in_s": 0.18,
+          "move_s": 5.835,
+          "hold_out_s": 0.18
+        },
+        "transition_in": {
+          "kind": "hard_cut",
+          "reason": "next sentence-native claim",
+          "duration_s": 0.0
+        },
+        "transition_out": {
+          "kind": "hard_cut",
+          "reason": "next sentence-native claim",
+          "duration_s": 0.0
+        },
+        "audio_bridge": "continuous_narration",
+        "provider_motion": {
+          "requirement": "none",
+          "fallback": "local_layer_motion"
+        },
+        "overlay_ids": [],
+        "uniqueness_signature": "demo-shot-13:separate_cause_from_count:0.52:0.47"
+      },
+      {
+        "shot_id": "demo-shot-14",
+        "parent_beat_ids": [
+          "cbm-semantic-beat-06-14"
+        ],
+        "parent_scene_bundle_id": "finance-scene-06-index",
+        "start_s": 46.706,
+        "duration_s": 3.252,
+        "word_range": {
+          "start_index": 0,
+          "end_index": 0
+        },
+        "narration_excerpt": "The index is a market-capitalization machine, not a best-ideas selector.",
+        "visual_intent": "explanation",
+        "required_visual_actions": [
+          {
+            "kind": "object_cutaway",
+            "subject": "return_to_size_weighting"
+          }
+        ],
+        "purpose": "explain",
+        "shot_scale": "medium",
+        "focal_point": {
+          "x": 0.53,
+          "y": 0.46
+        },
+        "layers": [
+          {
+            "asset_id": "wave07-index-background",
+            "role": "world",
+            "action": "locked",
+            "z_index": 0
+          },
+          {
+            "asset_id": "wave07-index-contact-shadow",
+            "role": "depth",
+            "action": "locked",
+            "z_index": 1
+          },
+          {
+            "asset_id": "wave07-index-midground",
+            "role": "mechanism",
+            "action": "mechanism_open",
+            "z_index": 5
+          },
+          {
+            "asset_id": "wave07-index-foreground",
+            "role": "prop",
+            "action": "prop_enter_from_left",
+            "z_index": 6
+          }
+        ],
+        "subject_action": "return_to_size_weighting",
+        "ambient_actions": [],
+        "information_reveal": "The rule is market size\u2014not a forward expected-return ranking.",
+        "information_surface": {
+          "mode": "floating_label",
+          "x": 0.63,
+          "y": 0.1,
+          "width": 0.29,
+          "height": 0.13,
+          "text_align": "left"
+        },
+        "camera": {
+          "kind": "foreground_parallax",
+          "amount": 0.018,
+          "easing": "smoothstep",
+          "direction": "left",
+          "hold_in_s": 0.18,
+          "move_s": 2.892,
+          "hold_out_s": 0.18
+        },
+        "transition_in": {
+          "kind": "hard_cut",
+          "reason": "next sentence-native claim",
+          "duration_s": 0.0
+        },
+        "transition_out": {
+          "kind": "hard_cut",
+          "reason": "next sentence-native claim",
+          "duration_s": 0.0
+        },
+        "audio_bridge": "continuous_narration",
+        "provider_motion": {
+          "requirement": "none",
+          "fallback": "local_layer_motion"
+        },
+        "overlay_ids": [],
+        "uniqueness_signature": "demo-shot-14:return_to_size_weighting:0.53:0.46"
+      }
+    ],
+    "provider_calls": 0,
+    "revision_only": true,
+    "artifact_hash": "cc67d6b053ca7fa227646e0d2df9d24a8f2116d8c81a3a462e8359da28ce6f8c"
+  },
+  "asset_map": {
+    "canonical-audio": "audio/canonical.mp3",
+    "wave07-index-background": "assets/wave07-index-background.png",
+    "wave07-index-midground": "assets/wave07-index-midground.png",
+    "wave07-index-foreground": "assets/wave07-index-foreground.png",
+    "wave07-index-contact-shadow": "assets/wave07-index-contact-shadow.png",
+    "wave07-dual-background": "assets/wave07-dual-background.png",
+    "wave07-dual-midground": "assets/wave07-dual-midground.png",
+    "wave07-dual-foreground": "assets/wave07-dual-foreground.png",
+    "wave07-dual-contact-shadow": "assets/wave07-dual-contact-shadow.png",
+    "wave07-weather-background": "assets/wave07-weather-background.png",
+    "wave07-weather-midground": "assets/wave07-weather-midground.png",
+    "wave07-weather-foreground": "assets/wave07-weather-foreground.png",
+    "wave07-weather-contact-shadow": "assets/wave07-weather-contact-shadow.png",
+    "evidence-sp500-concentration-v1": "assets/evidence-sp500-concentration-v1.svg"
+  },
+  "canonical_audio": {
+    "path": "audio/canonical.mp3",
+    "start_s": 410.26,
+    "volume": 1
+  },
+  "overlay_map": {
+    "source-top-ten": {
+      "kind": "text",
+      "text": "TOP 10 \u2248 40% OF THE S&P 500\nMid-2025 \u00b7 Source: S&P Dow Jones Indices + Vanguard",
+      "position": "top",
+      "from_s": 0.55,
+      "duration_s": 2.35,
+      "style": {
+        "fontSize": 24,
+        "lineHeight": 1.22,
+        "borderLeft": "6px solid #A44A32",
+        "maxWidth": "43%"
+      }
+    }
+  },
+  "caption_policy": "burned_in",
+  "citation_policy": "on_screen",
+  "diagnostic": false,
+  "render_profile": {
+    "width": 1280,
+    "height": 720,
+    "fps": 24,
+    "label": "sentence-native-index-review-720p-12-on-24"
+  }
+}

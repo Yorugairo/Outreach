@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080" role="img" aria-label="Diagnostic contrast: a price move is a symptom; inspect the mechanism underneath.">
+  <defs>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="160%"><feDropShadow dx="0" dy="13" stdDeviation="10" flood-color="#071320" flood-opacity="0.50"/></filter>
+  </defs>
+  <g filter="url(#shadow)" font-family="Arial, Helvetica, sans-serif" font-weight="700">
+    <path d="M154 248Q154 218 184 218H792Q822 218 822 248V732Q822 762 792 762H184Q154 762 154 732Z" fill="#e8d7ae" stroke="#0b2939" stroke-width="12"/>
+    <path d="M1098 248Q1098 218 1128 218H1736Q1766 218 1766 248V732Q1766 762 1736 762H1128Q1098 762 1098 732Z" fill="#e8d7ae" stroke="#0b2939" stroke-width="12"/>
+    <rect x="154" y="218" width="668" height="102" fill="#d15b44"/>
+    <rect x="1098" y="218" width="668" height="102" fill="#2d9db7"/>
+    <text x="488" y="284" text-anchor="middle" font-size="37" letter-spacing="3" fill="#fff9e7">SYMPTOM</text>
+    <text x="1432" y="284" text-anchor="middle" font-size="37" letter-spacing="3" fill="#fff9e7">QUESTION</text>
+    <text x="488" y="477" text-anchor="middle" font-size="70" fill="#132c3b">PRICE MOVED</text>
+    <text x="1432" y="450" text-anchor="middle" font-size="64" fill="#132c3b">WHAT MOVED</text>
+    <text x="1432" y="534" text-anchor="middle" font-size="64" fill="#132c3b">THE PRICE?</text>
+    <path d="M852 490H1068" stroke="#d1963d" stroke-width="22" stroke-linecap="round"/>
+    <path d="M1034 448L1084 490 1034 532" fill="none" stroke="#d1963d" stroke-width="22" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg>

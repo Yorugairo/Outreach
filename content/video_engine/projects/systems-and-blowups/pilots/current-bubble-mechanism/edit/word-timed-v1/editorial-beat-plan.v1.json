@@ -1,0 +1,2535 @@
+{
+  "schema_version": "editorial_beat_plan.v1",
+  "episode_id": "current-bubble-mechanism",
+  "duration_s": 980.806,
+  "beat_count": 290,
+  "beats": [
+    {
+      "beat_id": "cbm-beat-001",
+      "narration_excerpt": "The market may be labeling the wrong bubble.",
+      "claim_refs": [
+        "memory-bottleneck-not-bubble-inference",
+        "sp500-hidden-bubble-risk-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-002",
+      "narration_excerpt": "AI memory stocks have gone vertical and the earnings numbers",
+      "claim_refs": [
+        "memory-architecture-dependency",
+        "memory-bottleneck-not-bubble-inference",
+        "sp500-hidden-bubble-risk-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-003",
+      "narration_excerpt": "look almost fake. That is normally where sensible people step",
+      "claim_refs": [
+        "memory-bottleneck-not-bubble-inference",
+        "sp500-hidden-bubble-risk-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-004",
+      "narration_excerpt": "back and say: bubble. But underneath the chart",
+      "claim_refs": [
+        "memory-bottleneck-not-bubble-inference",
+        "sp500-hidden-bubble-risk-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-005",
+      "narration_excerpt": "is a product customers cannot get enough of,",
+      "claim_refs": [
+        "memory-bottleneck-not-bubble-inference",
+        "sp500-hidden-bubble-risk-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-006",
+      "narration_excerpt": "factories that cannot expand quickly enough, and buyers signing",
+      "claim_refs": [
+        "memory-bottleneck-not-bubble-inference",
+        "sp500-hidden-bubble-risk-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-007",
+      "narration_excerpt": "multi-year take-or-pay contracts just to guarantee supply.",
+      "claim_refs": [
+        "micron-strategic-customer-agreements",
+        "hbm-capacity-trade-ratio",
+        "memory-bottleneck-not-bubble-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-008",
+      "narration_excerpt": "Meanwhile, the trade marketed as boring and",
+      "claim_refs": [
+        "memory-bottleneck-not-bubble-inference",
+        "sp500-hidden-bubble-risk-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-009",
+      "narration_excerpt": "diversified—the S&P 500 index",
+      "claim_refs": [
+        "memory-bottleneck-not-bubble-inference",
+        "sp500-hidden-bubble-risk-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-010",
+      "narration_excerpt": "fund—has nearly forty percent of its weight concentrated in",
+      "claim_refs": [
+        "sp500-top-ten-concentration",
+        "memory-bottleneck-not-bubble-inference",
+        "sp500-hidden-bubble-risk-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-011",
+      "narration_excerpt": "ten companies, while automatic contributions keep buying them",
+      "claim_refs": [
+        "memory-bottleneck-not-bubble-inference",
+        "sp500-hidden-bubble-risk-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-012",
+      "narration_excerpt": "because they are already the biggest. So here is the argument:",
+      "claim_refs": [
+        "memory-bottleneck-not-bubble-inference",
+        "sp500-hidden-bubble-risk-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-013",
+      "narration_excerpt": "the memory trade can absolutely correct.",
+      "claim_refs": [
+        "memory-architecture-dependency",
+        "memory-bottleneck-not-bubble-inference",
+        "sp500-hidden-bubble-risk-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-014",
+      "narration_excerpt": "It can become overpriced. It can still be brutally cyclical.",
+      "claim_refs": [
+        "memory-bottleneck-not-bubble-inference",
+        "sp500-hidden-bubble-risk-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-015",
+      "narration_excerpt": "But what we are seeing today looks more like a physical bottleneck being repriced",
+      "claim_refs": [
+        "memory-bottleneck-not-bubble-inference",
+        "sp500-hidden-bubble-risk-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-016",
+      "narration_excerpt": "than a demand-free fantasy. Bubble logic may be",
+      "claim_refs": [
+        "memory-bottleneck-not-bubble-inference",
+        "sp500-hidden-bubble-risk-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-017",
+      "narration_excerpt": "hiding inside the thing investors stopped examining because",
+      "claim_refs": [
+        "memory-bottleneck-not-bubble-inference",
+        "sp500-hidden-bubble-risk-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-018",
+      "narration_excerpt": "they were told it was safe.",
+      "claim_refs": [
+        "memory-bottleneck-not-bubble-inference",
+        "sp500-hidden-bubble-risk-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-019",
+      "narration_excerpt": "A bubble is not “a price went up a lot.”",
+      "claim_refs": [
+        "memory-bottleneck-not-bubble-inference",
+        "sp500-hidden-bubble-risk-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-020",
+      "narration_excerpt": "That is a symptom, not a diagnosis.",
+      "claim_refs": [
+        "memory-bottleneck-not-bubble-inference",
+        "sp500-hidden-bubble-risk-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-021",
+      "narration_excerpt": "A real bubble forms when the price increasingly depends on the belief that",
+      "claim_refs": [
+        "memory-bottleneck-not-bubble-inference",
+        "sp500-hidden-bubble-risk-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-022",
+      "narration_excerpt": "somebody else will pay more, while the cash flow,",
+      "claim_refs": [
+        "memory-bottleneck-not-bubble-inference",
+        "sp500-hidden-bubble-risk-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-023",
+      "narration_excerpt": "productive use, or scarcity underneath it cannot",
+      "claim_refs": [
+        "memory-bottleneck-not-bubble-inference",
+        "sp500-hidden-bubble-risk-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-024",
+      "narration_excerpt": "keep up. Think of two elevators rising at the same speed.",
+      "claim_refs": [
+        "memory-bottleneck-not-bubble-inference",
+        "sp500-hidden-bubble-risk-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-025",
+      "narration_excerpt": "One is being pulled by a steel cable. The other is rising because",
+      "claim_refs": [
+        "memory-bottleneck-not-bubble-inference",
+        "sp500-hidden-bubble-risk-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-026",
+      "narration_excerpt": "everyone inside jumped at once. The chart looks identical",
+      "claim_refs": [
+        "memory-bottleneck-not-bubble-inference",
+        "sp500-hidden-bubble-risk-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-027",
+      "narration_excerpt": "for half a second. The mechanism is completely different.",
+      "claim_refs": [
+        "memory-bottleneck-not-bubble-inference",
+        "sp500-hidden-bubble-risk-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-028",
+      "narration_excerpt": "So we need to look under both elevators. For memory,",
+      "claim_refs": [
+        "memory-architecture-dependency",
+        "memory-bottleneck-not-bubble-inference",
+        "sp500-hidden-bubble-risk-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-029",
+      "narration_excerpt": "the cables are demand, capacity, contracts, and cash flow.",
+      "claim_refs": [
+        "hbm-capacity-trade-ratio",
+        "memory-bottleneck-not-bubble-inference",
+        "sp500-hidden-bubble-risk-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-030",
+      "narration_excerpt": "For the S&P 500 complex, the question is whether diversification",
+      "claim_refs": [
+        "memory-bottleneck-not-bubble-inference",
+        "sp500-hidden-bubble-risk-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-031",
+      "narration_excerpt": "has quietly become concentration—and whether automatic",
+      "claim_refs": [
+        "sp500-top-ten-concentration",
+        "memory-bottleneck-not-bubble-inference",
+        "sp500-hidden-bubble-risk-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-032",
+      "narration_excerpt": "demand is helping investors ignore the price of that concentration.",
+      "claim_refs": [
+        "sp500-top-ten-concentration",
+        "memory-bottleneck-not-bubble-inference",
+        "sp500-hidden-bubble-risk-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-033",
+      "narration_excerpt": "Start with the product. High-bandwidth memory,",
+      "claim_refs": [
+        "memory-architecture-dependency",
+        "hbm-capacity-trade-ratio",
+        "samsung-hbm4-growth"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-034",
+      "narration_excerpt": "or HBM, is not ordinary storage.",
+      "claim_refs": [
+        "memory-architecture-dependency",
+        "hbm-capacity-trade-ratio",
+        "samsung-hbm4-growth"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-035",
+      "narration_excerpt": "It is stacked working memory placed beside an AI accelerator so",
+      "claim_refs": [
+        "memory-architecture-dependency",
+        "hbm-capacity-trade-ratio",
+        "samsung-hbm4-growth"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-036",
+      "narration_excerpt": "enormous amounts of data can reach the processor quickly.",
+      "claim_refs": [
+        "memory-architecture-dependency",
+        "hbm-capacity-trade-ratio",
+        "samsung-hbm4-growth"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-037",
+      "narration_excerpt": "Plain English: the GPU may be the engine,",
+      "claim_refs": [
+        "memory-architecture-dependency",
+        "hbm-capacity-trade-ratio",
+        "samsung-hbm4-growth"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-038",
+      "narration_excerpt": "but HBM is the pressure-rated fuel system.",
+      "claim_refs": [
+        "memory-architecture-dependency",
+        "hbm-capacity-trade-ratio",
+        "samsung-hbm4-growth"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-039",
+      "narration_excerpt": "Build a larger engine without widening the fuel line and the expensive engine",
+      "claim_refs": [
+        "memory-architecture-dependency",
+        "hbm-capacity-trade-ratio",
+        "samsung-hbm4-growth"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-040",
+      "narration_excerpt": "sits there starving. That is why every serious AI",
+      "claim_refs": [
+        "memory-architecture-dependency",
+        "hbm-capacity-trade-ratio",
+        "samsung-hbm4-growth"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-041",
+      "narration_excerpt": "architecture—whether it uses GPUs, custom accelerators,",
+      "claim_refs": [
+        "memory-architecture-dependency",
+        "hbm-capacity-trade-ratio",
+        "samsung-hbm4-growth"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-042",
+      "narration_excerpt": "or specialized processors—has to solve memory bandwidth and",
+      "claim_refs": [
+        "memory-architecture-dependency",
+        "hbm-capacity-trade-ratio",
+        "samsung-hbm4-growth"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-043",
+      "narration_excerpt": "capacity. And this is where the shortage becomes physical.",
+      "claim_refs": [
+        "hbm-capacity-trade-ratio",
+        "memory-architecture-dependency",
+        "samsung-hbm4-growth"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-044",
+      "narration_excerpt": "HBM competes for advanced wafers, clean-room space,",
+      "claim_refs": [
+        "memory-architecture-dependency",
+        "hbm-capacity-trade-ratio",
+        "samsung-hbm4-growth"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-045",
+      "narration_excerpt": "packaging capacity, equipment, engineers,",
+      "claim_refs": [
+        "hbm-capacity-trade-ratio",
+        "memory-architecture-dependency",
+        "samsung-hbm4-growth"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-046",
+      "narration_excerpt": "and time. New generations also use",
+      "claim_refs": [
+        "memory-architecture-dependency",
+        "hbm-capacity-trade-ratio",
+        "samsung-hbm4-growth"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-047",
+      "narration_excerpt": "larger dies and more complicated stacks.",
+      "claim_refs": [
+        "memory-architecture-dependency",
+        "hbm-capacity-trade-ratio",
+        "samsung-hbm4-growth"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-048",
+      "narration_excerpt": "Imagine a bakery with a fixed number of ovens.",
+      "claim_refs": [
+        "memory-architecture-dependency",
+        "hbm-capacity-trade-ratio",
+        "samsung-hbm4-growth"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-049",
+      "narration_excerpt": "Yesterday it made simple loaves. Today its most",
+      "claim_refs": [
+        "memory-architecture-dependency",
+        "hbm-capacity-trade-ratio",
+        "samsung-hbm4-growth"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-050",
+      "narration_excerpt": "valuable customer wants twelve-layer wedding cakes.",
+      "claim_refs": [
+        "memory-architecture-dependency",
+        "hbm-capacity-trade-ratio",
+        "samsung-hbm4-growth"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-051",
+      "narration_excerpt": "Each cake earns more, but it also occupies more oven space,",
+      "claim_refs": [
+        "memory-architecture-dependency",
+        "hbm-capacity-trade-ratio",
+        "samsung-hbm4-growth"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-052",
+      "narration_excerpt": "takes longer, and has more opportunities to fail.",
+      "claim_refs": [
+        "memory-architecture-dependency",
+        "hbm-capacity-trade-ratio",
+        "samsung-hbm4-growth"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-053",
+      "narration_excerpt": "Producing more cakes can mean producing fewer loaves.",
+      "claim_refs": [
+        "memory-architecture-dependency",
+        "hbm-capacity-trade-ratio",
+        "samsung-hbm4-growth"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-054",
+      "narration_excerpt": "As manufacturers devote more capacity to HBM,",
+      "claim_refs": [
+        "memory-architecture-dependency",
+        "hbm-capacity-trade-ratio",
+        "samsung-hbm4-growth"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-055",
+      "narration_excerpt": "they also pressure conventional DRAM supply.",
+      "claim_refs": [
+        "hbm-capacity-trade-ratio",
+        "memory-architecture-dependency",
+        "samsung-hbm4-growth"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-056",
+      "narration_excerpt": "The AI boom pulls the same production system toward more complex products.",
+      "claim_refs": [
+        "memory-architecture-dependency",
+        "hbm-capacity-trade-ratio",
+        "samsung-hbm4-growth"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-057",
+      "narration_excerpt": "Micron says HBM’s growing trade ratio is pressuring",
+      "claim_refs": [
+        "memory-architecture-dependency",
+        "hbm-capacity-trade-ratio",
+        "samsung-hbm4-growth"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-058",
+      "narration_excerpt": "non-HBM supply and new fabs take years.",
+      "claim_refs": [
+        "memory-architecture-dependency",
+        "hbm-capacity-trade-ratio",
+        "samsung-hbm4-growth"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-059",
+      "narration_excerpt": "Samsung says concentrating capacity on HBM and server",
+      "claim_refs": [
+        "sp500-top-ten-concentration",
+        "memory-architecture-dependency",
+        "hbm-capacity-trade-ratio"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-060",
+      "narration_excerpt": "products limits cutting-edge supply for PCs and phones.",
+      "claim_refs": [
+        "hbm-capacity-trade-ratio",
+        "memory-architecture-dependency",
+        "samsung-hbm4-growth"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-061",
+      "narration_excerpt": "This is not proof that any stock price is fair.",
+      "claim_refs": [
+        "memory-architecture-dependency",
+        "hbm-capacity-trade-ratio",
+        "samsung-hbm4-growth"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-062",
+      "narration_excerpt": "It is proof that the underlying shortage is not imaginary.",
+      "claim_refs": [
+        "memory-architecture-dependency",
+        "hbm-capacity-trade-ratio",
+        "samsung-hbm4-growth"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-063",
+      "narration_excerpt": "Now look at buyer behavior. In a classic commodity",
+      "claim_refs": [
+        "micron-strategic-customer-agreements",
+        "memory-bottleneck-not-bubble-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-064",
+      "narration_excerpt": "memory cycle, suppliers add capacity, prices spike,",
+      "claim_refs": [
+        "memory-architecture-dependency",
+        "hbm-capacity-trade-ratio",
+        "micron-strategic-customer-agreements"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-065",
+      "narration_excerpt": "everybody gets excited, too much supply arrives, and margins collapse.",
+      "claim_refs": [
+        "hbm-capacity-trade-ratio",
+        "micron-strategic-customer-agreements",
+        "memory-bottleneck-not-bubble-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-066",
+      "narration_excerpt": "That history is the strongest argument against this entire video.",
+      "claim_refs": [
+        "micron-strategic-customer-agreements",
+        "memory-bottleneck-not-bubble-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-067",
+      "narration_excerpt": "But customers are behaving differently this time.",
+      "claim_refs": [
+        "micron-strategic-customer-agreements",
+        "memory-bottleneck-not-bubble-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-068",
+      "narration_excerpt": "Micron says it has completed sixteen strategic customer",
+      "claim_refs": [
+        "micron-strategic-customer-agreements",
+        "memory-bottleneck-not-bubble-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-069",
+      "narration_excerpt": "agreements across data centers, consumer devices, and automotive markets.",
+      "claim_refs": [
+        "micron-strategic-customer-agreements",
+        "memory-bottleneck-not-bubble-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-070",
+      "narration_excerpt": "Most run for five years. They cover roughly twenty percent of",
+      "claim_refs": [
+        "micron-strategic-customer-agreements",
+        "memory-bottleneck-not-bubble-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-071",
+      "narration_excerpt": "its DRAM volume and one-third of its NAND volume over",
+      "claim_refs": [
+        "micron-strategic-customer-agreements",
+        "memory-bottleneck-not-bubble-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-072",
+      "narration_excerpt": "the contract period. They are take-or-pay agreements: buyers commit",
+      "claim_refs": [
+        "micron-strategic-customer-agreements",
+        "memory-bottleneck-not-bubble-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-073",
+      "narration_excerpt": "to specific volumes rather than casually promising they might show up",
+      "claim_refs": [
+        "micron-strategic-customer-agreements",
+        "memory-bottleneck-not-bubble-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-074",
+      "narration_excerpt": "later. Translation: customers are reserving",
+      "claim_refs": [
+        "micron-strategic-customer-agreements",
+        "memory-bottleneck-not-bubble-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-075",
+      "narration_excerpt": "oven time through 2030.",
+      "claim_refs": [
+        "micron-strategic-customer-agreements",
+        "memory-bottleneck-not-bubble-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-076",
+      "narration_excerpt": "SK hynix reported record first-quarter performance driven by",
+      "claim_refs": [
+        "micron-strategic-customer-agreements",
+        "memory-bottleneck-not-bubble-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-077",
+      "narration_excerpt": "AI memory, high-capacity server DRAM, and enterprise SSDs,",
+      "claim_refs": [
+        "memory-architecture-dependency",
+        "hbm-capacity-trade-ratio",
+        "micron-strategic-customer-agreements"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-078",
+      "narration_excerpt": "while saying demand exceeded supply capacity.",
+      "claim_refs": [
+        "hbm-capacity-trade-ratio",
+        "micron-strategic-customer-agreements",
+        "memory-bottleneck-not-bubble-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-079",
+      "narration_excerpt": "Samsung began commercial HBM4 shipments and expects",
+      "claim_refs": [
+        "memory-architecture-dependency",
+        "micron-strategic-customer-agreements",
+        "memory-bottleneck-not-bubble-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-080",
+      "narration_excerpt": "its HBM sales to more than triple in 2026.",
+      "claim_refs": [
+        "memory-architecture-dependency",
+        "micron-strategic-customer-agreements",
+        "memory-bottleneck-not-bubble-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-081",
+      "narration_excerpt": "Company guidance is not gospel. But contracts, shipments,",
+      "claim_refs": [
+        "micron-strategic-customer-agreements",
+        "memory-bottleneck-not-bubble-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-082",
+      "narration_excerpt": "and reported revenue are stronger evidence than clicks,",
+      "claim_refs": [
+        "micron-strategic-customer-agreements",
+        "memory-bottleneck-not-bubble-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-083",
+      "narration_excerpt": "token prices, or a pitch deck promising a market that does",
+      "claim_refs": [
+        "micron-strategic-customer-agreements",
+        "memory-bottleneck-not-bubble-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-084",
+      "narration_excerpt": "not exist. That is why I would call this a bottleneck boom",
+      "claim_refs": [
+        "micron-strategic-customer-agreements",
+        "memory-bottleneck-not-bubble-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-085",
+      "narration_excerpt": "before I call it a bubble.",
+      "claim_refs": [
+        "micron-strategic-customer-agreements",
+        "memory-bottleneck-not-bubble-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-086",
+      "narration_excerpt": "This is also bigger than three memory companies.",
+      "claim_refs": [
+        "memory-architecture-dependency",
+        "korea-italy-listed-market-comparison",
+        "korea-technology-intensity"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-087",
+      "narration_excerpt": "The world economy is reorganizing around strategic chokepoints:",
+      "claim_refs": [
+        "korea-italy-listed-market-comparison",
+        "korea-technology-intensity",
+        "cross-exchange-comparability-limit"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-088",
+      "narration_excerpt": "advanced chips, memory, packaging, power equipment, robotics,",
+      "claim_refs": [
+        "memory-architecture-dependency",
+        "korea-italy-listed-market-comparison",
+        "korea-technology-intensity"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-089",
+      "narration_excerpt": "and defense technology. Capital markets are beginning to raise",
+      "claim_refs": [
+        "korea-italy-listed-market-comparison",
+        "korea-technology-intensity",
+        "cross-exchange-comparability-limit"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-090",
+      "narration_excerpt": "the countries that control those chokepoints toward the position their",
+      "claim_refs": [
+        "korea-italy-listed-market-comparison",
+        "korea-technology-intensity",
+        "cross-exchange-comparability-limit"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-091",
+      "narration_excerpt": "technical importance already implied. Look at South Korea and Italy.",
+      "claim_refs": [
+        "korea-italy-listed-market-comparison",
+        "korea-technology-intensity",
+        "cross-exchange-comparability-limit"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-092",
+      "narration_excerpt": "This is not a GDP comparison, and it is not a vote on which civilization",
+      "claim_refs": [
+        "korea-italy-listed-market-comparison",
+        "korea-technology-intensity",
+        "cross-exchange-comparability-limit"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-093",
+      "narration_excerpt": "matters more. It is a comparison of listed equity",
+      "claim_refs": [
+        "korea-italy-listed-market-comparison",
+        "korea-technology-intensity",
+        "cross-exchange-comparability-limit"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-094",
+      "narration_excerpt": "markets—what investors believe future public-company",
+      "claim_refs": [
+        "korea-italy-listed-market-comparison",
+        "korea-technology-intensity",
+        "cross-exchange-comparability-limit"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-095",
+      "narration_excerpt": "cash flows are worth. The Korea Exchange",
+      "claim_refs": [
+        "korea-italy-listed-market-comparison",
+        "korea-technology-intensity",
+        "cross-exchange-comparability-limit"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-096",
+      "narration_excerpt": "recently showed roughly 5,370 trillion won of listed",
+      "claim_refs": [
+        "korea-italy-listed-market-comparison",
+        "korea-technology-intensity",
+        "cross-exchange-comparability-limit"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-097",
+      "narration_excerpt": "market capitalization. Using a recent European",
+      "claim_refs": [
+        "korea-italy-listed-market-comparison",
+        "korea-technology-intensity",
+        "cross-exchange-comparability-limit"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-098",
+      "narration_excerpt": "Central Bank exchange rate, that is about 3.2",
+      "claim_refs": [
+        "korea-italy-listed-market-comparison",
+        "korea-technology-intensity",
+        "cross-exchange-comparability-limit"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-099",
+      "narration_excerpt": "trillion euros. The Milan market was about 1.16",
+      "claim_refs": [
+        "korea-italy-listed-market-comparison",
+        "korea-technology-intensity",
+        "cross-exchange-comparability-limit"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-100",
+      "narration_excerpt": "trillion euros at the beginning of July. The public equity market",
+      "claim_refs": [
+        "korea-italy-listed-market-comparison",
+        "korea-technology-intensity",
+        "cross-exchange-comparability-limit"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-101",
+      "narration_excerpt": "anchored by Samsung and SK hynix is now worth far more",
+      "claim_refs": [
+        "korea-italy-listed-market-comparison",
+        "korea-technology-intensity",
+        "cross-exchange-comparability-limit"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-102",
+      "narration_excerpt": "than the listed market of one of Europe’s historical industrial",
+      "claim_refs": [
+        "korea-italy-listed-market-comparison",
+        "korea-technology-intensity",
+        "cross-exchange-comparability-limit"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-103",
+      "narration_excerpt": "giants. And that makes sense. The company producing",
+      "claim_refs": [
+        "korea-italy-listed-market-comparison",
+        "korea-technology-intensity",
+        "cross-exchange-comparability-limit"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-104",
+      "narration_excerpt": "the memory that feeds the digital age is being capitalized differently from the",
+      "claim_refs": [
+        "memory-architecture-dependency",
+        "korea-italy-listed-market-comparison",
+        "korea-technology-intensity"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-105",
+      "narration_excerpt": "country famous for luxury handbags, pizza, and pasta.",
+      "claim_refs": [
+        "korea-italy-listed-market-comparison",
+        "korea-technology-intensity",
+        "cross-exchange-comparability-limit"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-106",
+      "narration_excerpt": "That line is unfair to Italy—and useful.",
+      "claim_refs": [
+        "korea-italy-listed-market-comparison",
+        "korea-technology-intensity",
+        "cross-exchange-comparability-limit"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-107",
+      "narration_excerpt": "Italy also produces machinery, pharmaceuticals, vehicles,",
+      "claim_refs": [
+        "korea-italy-listed-market-comparison",
+        "korea-technology-intensity",
+        "cross-exchange-comparability-limit"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-108",
+      "narration_excerpt": "energy systems, aerospace, and defense technology.",
+      "claim_refs": [
+        "korea-italy-listed-market-comparison",
+        "korea-technology-intensity",
+        "cross-exchange-comparability-limit"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-109",
+      "narration_excerpt": "The joke is simple. The mechanism is not.",
+      "claim_refs": [
+        "korea-italy-listed-market-comparison",
+        "korea-technology-intensity",
+        "cross-exchange-comparability-limit"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-110",
+      "narration_excerpt": "Markets do not award points for cultural importance.",
+      "claim_refs": [
+        "korea-italy-listed-market-comparison",
+        "korea-technology-intensity",
+        "cross-exchange-comparability-limit"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-111",
+      "narration_excerpt": "They capitalize expected future cash flows.",
+      "claim_refs": [
+        "korea-italy-listed-market-comparison",
+        "korea-technology-intensity",
+        "cross-exchange-comparability-limit"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-112",
+      "narration_excerpt": "Korea spends around five percent of GDP on research and development,",
+      "claim_refs": [
+        "korea-italy-listed-market-comparison",
+        "korea-technology-intensity",
+        "cross-exchange-comparability-limit"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-113",
+      "narration_excerpt": "among the highest shares in the OECD, and the OECD",
+      "claim_refs": [
+        "korea-italy-listed-market-comparison",
+        "korea-technology-intensity",
+        "cross-exchange-comparability-limit"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-114",
+      "narration_excerpt": "now says semiconductor exports are driving Korean growth",
+      "claim_refs": [
+        "korea-italy-listed-market-comparison",
+        "korea-technology-intensity",
+        "cross-exchange-comparability-limit"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-115",
+      "narration_excerpt": "and private investment. The global order has aligned around",
+      "claim_refs": [
+        "korea-italy-listed-market-comparison",
+        "korea-technology-intensity",
+        "cross-exchange-comparability-limit"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-116",
+      "narration_excerpt": "forward technology. Countries manufacturing the bottlenecks are being",
+      "claim_refs": [
+        "korea-italy-listed-market-comparison",
+        "korea-technology-intensity",
+        "cross-exchange-comparability-limit"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-117",
+      "narration_excerpt": "repriced from subcontractors into strategic powers.",
+      "claim_refs": [
+        "korea-italy-listed-market-comparison",
+        "korea-technology-intensity",
+        "cross-exchange-comparability-limit"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-118",
+      "narration_excerpt": "Memory is the oil of the digital age—not because it is",
+      "claim_refs": [
+        "memory-architecture-dependency",
+        "korea-italy-listed-market-comparison",
+        "korea-technology-intensity"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-119",
+      "narration_excerpt": "literally burned, but because it turns machinery into usable work.",
+      "claim_refs": [
+        "korea-italy-listed-market-comparison",
+        "korea-technology-intensity",
+        "cross-exchange-comparability-limit"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-120",
+      "narration_excerpt": "More precisely, HBM is both pipeline and reservoir.",
+      "claim_refs": [
+        "memory-architecture-dependency",
+        "korea-italy-listed-market-comparison",
+        "korea-technology-intensity"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-121",
+      "narration_excerpt": "Compute without it is stranded machinery.",
+      "claim_refs": [
+        "korea-italy-listed-market-comparison",
+        "korea-technology-intensity",
+        "cross-exchange-comparability-limit"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-122",
+      "narration_excerpt": "Now open the other elevator: the S&P 500",
+      "claim_refs": [
+        "sp500-top-ten-concentration",
+        "index-fund-asset-scale",
+        "sp500-hidden-bubble-risk-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-123",
+      "narration_excerpt": "index fund. An S&P 500 fund can be an excellent",
+      "claim_refs": [
+        "sp500-top-ten-concentration",
+        "index-fund-asset-scale",
+        "sp500-hidden-bubble-risk-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-124",
+      "narration_excerpt": "product. It is cheap, liquid, tax-efficient, and historically difficult",
+      "claim_refs": [
+        "sp500-top-ten-concentration",
+        "index-fund-asset-scale",
+        "sp500-hidden-bubble-risk-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-125",
+      "narration_excerpt": "for active managers to beat after fees. But the problem is more",
+      "claim_refs": [
+        "sp500-top-ten-concentration",
+        "index-fund-asset-scale",
+        "sp500-hidden-bubble-risk-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-126",
+      "narration_excerpt": "subtle than concentration alone. The index can fail",
+      "claim_refs": [
+        "sp500-top-ten-concentration",
+        "index-fund-asset-scale",
+        "sp500-hidden-bubble-risk-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-127",
+      "narration_excerpt": "both jobs at once. It can be too concentrated to deliver the",
+      "claim_refs": [
+        "sp500-top-ten-concentration",
+        "index-fund-asset-scale",
+        "sp500-hidden-bubble-risk-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-128",
+      "narration_excerpt": "diversification benefit people think they bought—and still too diluted",
+      "claim_refs": [
+        "sp500-top-ten-concentration",
+        "index-fund-asset-scale",
+        "sp500-hidden-bubble-risk-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-129",
+      "narration_excerpt": "to capture the full upside of the exceptional companies driving its return.",
+      "claim_refs": [
+        "sp500-top-ten-concentration",
+        "index-fund-asset-scale",
+        "sp500-hidden-bubble-risk-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-130",
+      "narration_excerpt": "By the middle of 2025, the ten largest companies",
+      "claim_refs": [
+        "sp500-top-ten-concentration",
+        "index-fund-asset-scale",
+        "sp500-hidden-bubble-risk-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-131",
+      "narration_excerpt": "represented almost forty percent of the S&P 500.",
+      "claim_refs": [
+        "sp500-top-ten-concentration",
+        "index-fund-asset-scale",
+        "sp500-hidden-bubble-risk-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-132",
+      "narration_excerpt": "That weakens the “five hundred independent bets” story.",
+      "claim_refs": [
+        "sp500-top-ten-concentration",
+        "index-fund-asset-scale",
+        "sp500-hidden-bubble-risk-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-133",
+      "narration_excerpt": "Many of those leaders also share the same causal weather system:",
+      "claim_refs": [
+        "sp500-top-ten-concentration",
+        "index-fund-asset-scale",
+        "sp500-hidden-bubble-risk-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-134",
+      "narration_excerpt": "AI spending, cloud capital expenditure,",
+      "claim_refs": [
+        "sp500-top-ten-concentration",
+        "index-fund-asset-scale",
+        "sp500-hidden-bubble-risk-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-135",
+      "narration_excerpt": "semiconductor supply, digital advertising, and premium",
+      "claim_refs": [
+        "hbm-capacity-trade-ratio",
+        "sp500-top-ten-concentration",
+        "index-fund-asset-scale"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-136",
+      "narration_excerpt": "valuations for long-duration growth. But the other four hundred and",
+      "claim_refs": [
+        "sp500-top-ten-concentration",
+        "index-fund-asset-scale",
+        "sp500-hidden-bubble-risk-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-137",
+      "narration_excerpt": "ninety companies still consume most of the remaining dollar.",
+      "claim_refs": [
+        "sp500-top-ten-concentration",
+        "index-fund-asset-scale",
+        "sp500-hidden-bubble-risk-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-138",
+      "narration_excerpt": "The S&P 500 does apply size, liquidity,",
+      "claim_refs": [
+        "sp500-top-ten-concentration",
+        "index-fund-asset-scale",
+        "sp500-hidden-bubble-risk-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-139",
+      "narration_excerpt": "and profitability requirements. It is not a bag of random junk.",
+      "claim_refs": [
+        "sp500-top-ten-concentration",
+        "index-fund-asset-scale",
+        "sp500-hidden-bubble-risk-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-140",
+      "narration_excerpt": "But once a company enters, the normal index does not ask which business has",
+      "claim_refs": [
+        "sp500-top-ten-concentration",
+        "index-fund-asset-scale",
+        "sp500-hidden-bubble-risk-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-141",
+      "narration_excerpt": "the best free cash flow, the strongest return on capital,",
+      "claim_refs": [
+        "sp500-top-ten-concentration",
+        "index-fund-asset-scale",
+        "sp500-hidden-bubble-risk-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-142",
+      "narration_excerpt": "or the highest expected return. It weights the company",
+      "claim_refs": [
+        "sp500-top-ten-concentration",
+        "index-fund-asset-scale",
+        "sp500-hidden-bubble-risk-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-143",
+      "narration_excerpt": "by float-adjusted market value. So every contribution",
+      "claim_refs": [
+        "sp500-top-ten-concentration",
+        "index-fund-asset-scale",
+        "sp500-hidden-bubble-risk-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-144",
+      "narration_excerpt": "buys the brilliant compounder, the mature incumbent, and the company that merely",
+      "claim_refs": [
+        "sp500-top-ten-concentration",
+        "index-fund-asset-scale",
+        "sp500-hidden-bubble-risk-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-145",
+      "narration_excerpt": "remained large enough to qualify. Not equally—but",
+      "claim_refs": [
+        "sp500-top-ten-concentration",
+        "index-fund-asset-scale",
+        "sp500-hidden-bubble-risk-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-146",
+      "narration_excerpt": "automatically. That is the logic behind what investors call",
+      "claim_refs": [
+        "sp500-top-ten-concentration",
+        "index-fund-asset-scale",
+        "sp500-hidden-bubble-risk-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-147",
+      "narration_excerpt": "“diworsification”: adding holdings after useful diversification",
+      "claim_refs": [
+        "sp500-top-ten-concentration",
+        "index-fund-asset-scale",
+        "sp500-hidden-bubble-risk-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-148",
+      "narration_excerpt": "has already been captured, until more names dilute the best ideas",
+      "claim_refs": [
+        "sp500-top-ten-concentration",
+        "index-fund-asset-scale",
+        "sp500-hidden-bubble-risk-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-149",
+      "narration_excerpt": "without adding independent protection.",
+      "claim_refs": [
+        "sp500-top-ten-concentration",
+        "index-fund-asset-scale",
+        "sp500-hidden-bubble-risk-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-150",
+      "narration_excerpt": "Picture a basketball roster with five superstars and four",
+      "claim_refs": [
+        "sp500-top-ten-concentration",
+        "index-fund-asset-scale",
+        "sp500-hidden-bubble-risk-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-151",
+      "narration_excerpt": "hundred and ninety reserve players. The stars still determine whether",
+      "claim_refs": [
+        "sp500-top-ten-concentration",
+        "index-fund-asset-scale",
+        "sp500-hidden-bubble-risk-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-152",
+      "narration_excerpt": "you win. But the reserves consume roster space and",
+      "claim_refs": [
+        "sp500-top-ten-concentration",
+        "index-fund-asset-scale",
+        "sp500-hidden-bubble-risk-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-153",
+      "narration_excerpt": "salary even when they do not improve the offense or the defense.",
+      "claim_refs": [
+        "sp500-top-ten-concentration",
+        "index-fund-asset-scale",
+        "sp500-hidden-bubble-risk-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-154",
+      "narration_excerpt": "This is the S&P 500’s uncomfortable middle.",
+      "claim_refs": [
+        "sp500-top-ten-concentration",
+        "index-fund-asset-scale",
+        "sp500-hidden-bubble-risk-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-155",
+      "narration_excerpt": "You can be diversified by ticker symbol, concentrated by economic",
+      "claim_refs": [
+        "sp500-top-ten-concentration",
+        "index-fund-asset-scale",
+        "sp500-hidden-bubble-risk-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-156",
+      "narration_excerpt": "cause, and diluted by companies that do not improve either side of the equation.",
+      "claim_refs": [
+        "sp500-top-ten-concentration",
+        "index-fund-asset-scale",
+        "sp500-hidden-bubble-risk-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-157",
+      "narration_excerpt": "The S&P 500 can fail both jobs at once.",
+      "claim_refs": [
+        "sp500-top-ten-concentration",
+        "sp500-hidden-bubble-risk-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-158",
+      "narration_excerpt": "Its ten largest companies are almost forty percent of the index,",
+      "claim_refs": [
+        "sp500-top-ten-concentration",
+        "sp500-hidden-bubble-risk-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-159",
+      "narration_excerpt": "so it may be too concentrated to provide the diversification people think they",
+      "claim_refs": [
+        "sp500-top-ten-concentration",
+        "sp500-hidden-bubble-risk-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-160",
+      "narration_excerpt": "bought. But the other four hundred and ninety companies still",
+      "claim_refs": [
+        "sp500-top-ten-concentration",
+        "sp500-hidden-bubble-risk-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-161",
+      "narration_excerpt": "absorb most of the remaining dollar, whether or not they",
+      "claim_refs": [
+        "sp500-top-ten-concentration",
+        "sp500-hidden-bubble-risk-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-162",
+      "narration_excerpt": "improve expected return or protect against the same economic",
+      "claim_refs": [
+        "sp500-top-ten-concentration",
+        "sp500-hidden-bubble-risk-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-163",
+      "narration_excerpt": "shock. Imagine a basketball team where five stars decide",
+      "claim_refs": [
+        "sp500-top-ten-concentration",
+        "sp500-hidden-bubble-risk-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-164",
+      "narration_excerpt": "the game—but you are forced to pay four hundred and ninety reserve",
+      "claim_refs": [
+        "sp500-top-ten-concentration",
+        "sp500-hidden-bubble-risk-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-165",
+      "narration_excerpt": "players too. That is not pure concentration",
+      "claim_refs": [
+        "sp500-top-ten-concentration",
+        "sp500-hidden-bubble-risk-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-166",
+      "narration_excerpt": "and it is not efficient diversification.",
+      "claim_refs": [
+        "sp500-top-ten-concentration",
+        "sp500-hidden-bubble-risk-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-167",
+      "narration_excerpt": "It is diworsification: diluting the best return drivers",
+      "claim_refs": [
+        "sp500-top-ten-concentration",
+        "sp500-hidden-bubble-risk-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-168",
+      "narration_excerpt": "without buying enough independent defense.",
+      "claim_refs": [
+        "sp500-top-ten-concentration",
+        "sp500-hidden-bubble-risk-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-169",
+      "narration_excerpt": "There is another problem hiding inside the phrase “just",
+      "claim_refs": [
+        "generational-wealth-return-hurdle",
+        "sp500-trailing-return-snapshot",
+        "sp500-market-leaders-comparison"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-170",
+      "narration_excerpt": "buy the S&P 500.” That was excellent retirement",
+      "claim_refs": [
+        "generational-wealth-return-hurdle",
+        "sp500-trailing-return-snapshot",
+        "sp500-market-leaders-comparison"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-171",
+      "narration_excerpt": "advice. It was never a guarantee of generational wealth from a modest",
+      "claim_refs": [
+        "generational-wealth-return-hurdle",
+        "sp500-trailing-return-snapshot",
+        "sp500-market-leaders-comparison"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-172",
+      "narration_excerpt": "starting base. Define the objective before judging the",
+      "claim_refs": [
+        "generational-wealth-return-hurdle",
+        "sp500-trailing-return-snapshot",
+        "sp500-market-leaders-comparison"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-173",
+      "narration_excerpt": "product. Suppose someone starts with twenty-five thousand",
+      "claim_refs": [
+        "generational-wealth-return-hurdle",
+        "sp500-trailing-return-snapshot",
+        "sp500-market-leaders-comparison"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-174",
+      "narration_excerpt": "dollars and wants one million dollars in twenty-five years,",
+      "claim_refs": [
+        "generational-wealth-return-hurdle",
+        "sp500-trailing-return-snapshot",
+        "sp500-market-leaders-comparison"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-175",
+      "narration_excerpt": "with no additional contributions. They need roughly 15.9",
+      "claim_refs": [
+        "generational-wealth-return-hurdle",
+        "sp500-trailing-return-snapshot",
+        "sp500-market-leaders-comparison"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-176",
+      "narration_excerpt": "percent annual growth before taxes and inflation.",
+      "claim_refs": [
+        "generational-wealth-return-hurdle",
+        "sp500-trailing-return-snapshot",
+        "sp500-market-leaders-comparison"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-177",
+      "narration_excerpt": "At ten percent, the old rule-of-thumb return people often",
+      "claim_refs": [
+        "generational-wealth-return-hurdle",
+        "sp500-trailing-return-snapshot",
+        "sp500-market-leaders-comparison"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-178",
+      "narration_excerpt": "associate with U.S. stocks, that twenty-five thousand becomes",
+      "claim_refs": [
+        "generational-wealth-return-hurdle",
+        "sp500-trailing-return-snapshot",
+        "sp500-market-leaders-comparison"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-179",
+      "narration_excerpt": "about 271,000 dollars—not one",
+      "claim_refs": [
+        "generational-wealth-return-hurdle",
+        "sp500-trailing-return-snapshot",
+        "sp500-market-leaders-comparison"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-180",
+      "narration_excerpt": "million. Even the S&P 500’s",
+      "claim_refs": [
+        "generational-wealth-return-hurdle",
+        "sp500-trailing-return-snapshot",
+        "sp500-market-leaders-comparison"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-181",
+      "narration_excerpt": "unusually strong 13.6 percent annualized",
+      "claim_refs": [
+        "generational-wealth-return-hurdle",
+        "sp500-trailing-return-snapshot",
+        "sp500-market-leaders-comparison"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-182",
+      "narration_excerpt": "price gain over the ten years ending June 2026, if repeated",
+      "claim_refs": [
+        "generational-wealth-return-hurdle",
+        "sp500-trailing-return-snapshot",
+        "sp500-market-leaders-comparison"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-183",
+      "narration_excerpt": "for twenty-five years, would turn twenty-five thousand into roughly",
+      "claim_refs": [
+        "generational-wealth-return-hurdle",
+        "sp500-trailing-return-snapshot",
+        "sp500-market-leaders-comparison"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-184",
+      "narration_excerpt": "600,000 dollars. That example excludes dividends,",
+      "claim_refs": [
+        "generational-wealth-return-hurdle",
+        "sp500-trailing-return-snapshot",
+        "sp500-market-leaders-comparison"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-185",
+      "narration_excerpt": "contributions, taxes, and inflation—and nobody should",
+      "claim_refs": [
+        "generational-wealth-return-hurdle",
+        "sp500-trailing-return-snapshot",
+        "sp500-market-leaders-comparison"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-186",
+      "narration_excerpt": "assume the last decade repeats. Six hundred thousand dollars",
+      "claim_refs": [
+        "generational-wealth-return-hurdle",
+        "sp500-trailing-return-snapshot",
+        "sp500-market-leaders-comparison"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-187",
+      "narration_excerpt": "is not failure. But “good long-term return” and “enough return",
+      "claim_refs": [
+        "generational-wealth-return-hurdle",
+        "sp500-trailing-return-snapshot",
+        "sp500-market-leaders-comparison"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-188",
+      "narration_excerpt": "to create generational wealth from limited capital” are different equations.",
+      "claim_refs": [
+        "generational-wealth-return-hurdle",
+        "sp500-trailing-return-snapshot",
+        "sp500-market-leaders-comparison"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-189",
+      "narration_excerpt": "You can close the gap with time, higher savings,",
+      "claim_refs": [
+        "generational-wealth-return-hurdle",
+        "sp500-trailing-return-snapshot",
+        "sp500-market-leaders-comparison"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-190",
+      "narration_excerpt": "business ownership, leverage, concentrated risk,",
+      "claim_refs": [
+        "sp500-top-ten-concentration",
+        "generational-wealth-return-hurdle",
+        "sp500-trailing-return-snapshot"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-191",
+      "narration_excerpt": "or exceptional returns. But you cannot close it with a slogan.",
+      "claim_refs": [
+        "generational-wealth-return-hurdle",
+        "sp500-trailing-return-snapshot",
+        "sp500-market-leaders-comparison"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-192",
+      "narration_excerpt": "Index funds are now the majority of long-term fund assets.",
+      "claim_refs": [
+        "index-fund-asset-scale",
+        "generational-wealth-return-hurdle",
+        "sp500-trailing-return-snapshot"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-193",
+      "narration_excerpt": "The Investment Company Institute says index mutual funds and",
+      "claim_refs": [
+        "generational-wealth-return-hurdle",
+        "sp500-trailing-return-snapshot",
+        "sp500-market-leaders-comparison"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-194",
+      "narration_excerpt": "ETFs held 19.1 trillion dollars at the end",
+      "claim_refs": [
+        "index-fund-asset-scale",
+        "generational-wealth-return-hurdle",
+        "sp500-trailing-return-snapshot"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-195",
+      "narration_excerpt": "of 2025. The product succeeded because it solves broad",
+      "claim_refs": [
+        "generational-wealth-return-hurdle",
+        "sp500-trailing-return-snapshot",
+        "sp500-market-leaders-comparison"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-196",
+      "narration_excerpt": "participation beautifully. That does not mean it is optimized",
+      "claim_refs": [
+        "generational-wealth-return-hurdle",
+        "sp500-trailing-return-snapshot",
+        "sp500-market-leaders-comparison"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-197",
+      "narration_excerpt": "for every wealth objective.",
+      "claim_refs": [
+        "generational-wealth-return-hurdle",
+        "sp500-trailing-return-snapshot",
+        "sp500-market-leaders-comparison"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-198",
+      "narration_excerpt": "The alternative is not “replace five hundred stocks with five",
+      "claim_refs": [
+        "concentrated-defensive-barbell-hypothesis",
+        "sp500-market-leaders-comparison"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-199",
+      "narration_excerpt": "stocks and call yourself a genius.” It is to separate the two",
+      "claim_refs": [
+        "concentrated-defensive-barbell-hypothesis",
+        "sp500-market-leaders-comparison"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-200",
+      "narration_excerpt": "jobs the S&P 500 tries to perform inside one basket.",
+      "claim_refs": [
+        "concentrated-defensive-barbell-hypothesis",
+        "sp500-market-leaders-comparison"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-201",
+      "narration_excerpt": "Job one is upside: a rules-based basket of leaders and",
+      "claim_refs": [
+        "concentrated-defensive-barbell-hypothesis",
+        "sp500-market-leaders-comparison"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-202",
+      "narration_excerpt": "strategic bottlenecks with demonstrated free cash flow,",
+      "claim_refs": [
+        "concentrated-defensive-barbell-hypothesis",
+        "sp500-market-leaders-comparison"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-203",
+      "narration_excerpt": "return on invested capital, market share, and durable demand.",
+      "claim_refs": [
+        "concentrated-defensive-barbell-hypothesis",
+        "sp500-market-leaders-comparison"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-204",
+      "narration_excerpt": "Job two is defense: a separate basket designed for recession,",
+      "claim_refs": [
+        "concentrated-defensive-barbell-hypothesis",
+        "sp500-market-leaders-comparison"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-205",
+      "narration_excerpt": "inflation, financial stress, or geopolitical",
+      "claim_refs": [
+        "concentrated-defensive-barbell-hypothesis",
+        "sp500-market-leaders-comparison"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-206",
+      "narration_excerpt": "fracture—potentially sovereign bills,",
+      "claim_refs": [
+        "concentrated-defensive-barbell-hypothesis",
+        "sp500-market-leaders-comparison"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-207",
+      "narration_excerpt": "inflation-linked debt, gold, cash,",
+      "claim_refs": [
+        "concentrated-defensive-barbell-hypothesis",
+        "sp500-market-leaders-comparison"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-208",
+      "narration_excerpt": "and strategic resources. Then rebalance between them.",
+      "claim_refs": [
+        "concentrated-defensive-barbell-hypothesis",
+        "sp500-market-leaders-comparison"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-209",
+      "narration_excerpt": "The design is a barbell: concentrated productive",
+      "claim_refs": [
+        "sp500-top-ten-concentration",
+        "concentrated-defensive-barbell-hypothesis",
+        "sp500-market-leaders-comparison"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-210",
+      "narration_excerpt": "upside on one side, deliberate defense on the other.",
+      "claim_refs": [
+        "concentrated-defensive-barbell-hypothesis",
+        "sp500-market-leaders-comparison"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-211",
+      "narration_excerpt": "The center is not filled with hundreds of companies merely because an index",
+      "claim_refs": [
+        "concentrated-defensive-barbell-hypothesis",
+        "sp500-market-leaders-comparison"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-212",
+      "narration_excerpt": "committee admitted them. S&P itself created a Market Leaders",
+      "claim_refs": [
+        "sp500-market-leaders-comparison",
+        "sp500-market-leaders-comparison",
+        "concentrated-defensive-barbell-hypothesis"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-213",
+      "narration_excerpt": "index that selects roughly fifty companies using sustained",
+      "claim_refs": [
+        "concentrated-defensive-barbell-hypothesis",
+        "sp500-market-leaders-comparison"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-214",
+      "narration_excerpt": "free-cash-flow margin, return on invested capital,",
+      "claim_refs": [
+        "concentrated-defensive-barbell-hypothesis",
+        "sp500-market-leaders-comparison"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-215",
+      "narration_excerpt": "and market share. As of June 2026,",
+      "claim_refs": [
+        "concentrated-defensive-barbell-hypothesis",
+        "sp500-market-leaders-comparison"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-216",
+      "narration_excerpt": "its ten-year annualized price return was about 16 percent",
+      "claim_refs": [
+        "sp500-market-leaders-comparison",
+        "sp500-market-leaders-comparison",
+        "concentrated-defensive-barbell-hypothesis"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-217",
+      "narration_excerpt": "versus 13.6 percent for the S&P 500,",
+      "claim_refs": [
+        "sp500-market-leaders-comparison",
+        "generational-wealth-return-hurdle",
+        "concentrated-defensive-barbell-hypothesis"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-218",
+      "narration_excerpt": "with slightly lower measured volatility.",
+      "claim_refs": [
+        "sp500-market-leaders-comparison",
+        "concentrated-defensive-barbell-hypothesis"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-219",
+      "narration_excerpt": "That is not a retail recommendation and it is not a clean live",
+      "claim_refs": [
+        "concentrated-defensive-barbell-hypothesis",
+        "sp500-market-leaders-comparison"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-220",
+      "narration_excerpt": "track record. The index launched in late 2024,",
+      "claim_refs": [
+        "sp500-market-leaders-comparison",
+        "concentrated-defensive-barbell-hypothesis"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-221",
+      "narration_excerpt": "so most of that history is back-tested.",
+      "claim_refs": [
+        "sp500-market-leaders-comparison",
+        "concentrated-defensive-barbell-hypothesis"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-222",
+      "narration_excerpt": "Its own brochure also shows that the simulated leader basket",
+      "claim_refs": [
+        "concentrated-defensive-barbell-hypothesis",
+        "sp500-market-leaders-comparison"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-223",
+      "narration_excerpt": "experienced a deeper maximum drawdown even while posting better",
+      "claim_refs": [
+        "concentrated-defensive-barbell-hypothesis",
+        "sp500-market-leaders-comparison"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-224",
+      "narration_excerpt": "full-period risk-adjusted returns. It shows the five-hundred-stock",
+      "claim_refs": [
+        "concentrated-defensive-barbell-hypothesis",
+        "sp500-market-leaders-comparison"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-225",
+      "narration_excerpt": "boundary is not sacred. A smaller, quality-screened",
+      "claim_refs": [
+        "concentrated-defensive-barbell-hypothesis",
+        "sp500-market-leaders-comparison"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-226",
+      "narration_excerpt": "basket can represent much of the productive engine without the",
+      "claim_refs": [
+        "concentrated-defensive-barbell-hypothesis",
+        "sp500-market-leaders-comparison"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-227",
+      "narration_excerpt": "entire long tail. Add an independent defensive sleeve",
+      "claim_refs": [
+        "concentrated-defensive-barbell-hypothesis",
+        "equal-weight-long-tail-countercase",
+        "sp500-market-leaders-comparison"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-228",
+      "narration_excerpt": "and disciplined rebalancing, and an investor can test for higher upside",
+      "claim_refs": [
+        "concentrated-defensive-barbell-hypothesis",
+        "sp500-market-leaders-comparison"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-229",
+      "narration_excerpt": "with less portfolio-level downside—even if the",
+      "claim_refs": [
+        "concentrated-defensive-barbell-hypothesis",
+        "sp500-market-leaders-comparison"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-230",
+      "narration_excerpt": "growth sleeve is more volatile.",
+      "claim_refs": [
+        "concentrated-defensive-barbell-hypothesis",
+        "sp500-market-leaders-comparison"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-231",
+      "narration_excerpt": "The price of that possibility is tracking error, concentration",
+      "claim_refs": [
+        "sp500-top-ten-concentration",
+        "concentrated-defensive-barbell-hypothesis",
+        "sp500-market-leaders-comparison"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-232",
+      "narration_excerpt": "risk, tax friction, research burden, and long periods when",
+      "claim_refs": [
+        "concentrated-defensive-barbell-hypothesis",
+        "sp500-market-leaders-comparison"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-233",
+      "narration_excerpt": "the boring index makes you look foolish. You have to stomach",
+      "claim_refs": [
+        "concentrated-defensive-barbell-hypothesis",
+        "sp500-market-leaders-comparison"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-234",
+      "narration_excerpt": "volatility without confusing discomfort with failure.",
+      "claim_refs": [
+        "concentrated-defensive-barbell-hypothesis",
+        "sp500-market-leaders-comparison"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-235",
+      "narration_excerpt": "Now the part every concentrated investor",
+      "claim_refs": [
+        "sp500-top-ten-concentration",
+        "memory-countercase",
+        "sp500-countercase"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-236",
+      "narration_excerpt": "needs to hear. Identifying yesterday’s winners is easy.",
+      "claim_refs": [
+        "memory-countercase",
+        "sp500-countercase",
+        "equal-weight-long-tail-countercase"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-237",
+      "narration_excerpt": "Identifying tomorrow’s is the entire problem.",
+      "claim_refs": [
+        "memory-countercase",
+        "sp500-countercase",
+        "equal-weight-long-tail-countercase"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-238",
+      "narration_excerpt": "A top-stock basket can replace diworsification with",
+      "claim_refs": [
+        "memory-countercase",
+        "sp500-countercase",
+        "equal-weight-long-tail-countercase"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-239",
+      "narration_excerpt": "catastrophic company risk.",
+      "claim_refs": [
+        "memory-countercase",
+        "sp500-countercase",
+        "equal-weight-long-tail-countercase"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-240",
+      "narration_excerpt": "One accounting failure, regulation, technology shift,",
+      "claim_refs": [
+        "memory-countercase",
+        "sp500-countercase",
+        "equal-weight-long-tail-countercase"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-241",
+      "narration_excerpt": "or valuation collapse can destroy years of excess return.",
+      "claim_refs": [
+        "memory-countercase",
+        "sp500-countercase",
+        "equal-weight-long-tail-countercase"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-242",
+      "narration_excerpt": "Defensive assets make no promise to defend you.",
+      "claim_refs": [
+        "concentrated-defensive-barbell-hypothesis",
+        "memory-countercase",
+        "sp500-countercase"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-243",
+      "narration_excerpt": "Bonds can fall with stocks, gold can stagnate,",
+      "claim_refs": [
+        "concentrated-defensive-barbell-hypothesis",
+        "memory-countercase",
+        "sp500-countercase"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-244",
+      "narration_excerpt": "and sovereign risk can become the crisis.",
+      "claim_refs": [
+        "concentrated-defensive-barbell-hypothesis",
+        "memory-countercase",
+        "sp500-countercase"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-245",
+      "narration_excerpt": "Correlations change when investors need them most.",
+      "claim_refs": [
+        "memory-countercase",
+        "sp500-countercase",
+        "equal-weight-long-tail-countercase"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-246",
+      "narration_excerpt": "And the long tail is not always dead weight.",
+      "claim_refs": [
+        "equal-weight-long-tail-countercase",
+        "memory-countercase",
+        "sp500-countercase"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-247",
+      "narration_excerpt": "S&P’s equal-weight index has outperformed the",
+      "claim_refs": [
+        "memory-countercase",
+        "sp500-countercase",
+        "equal-weight-long-tail-countercase"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-248",
+      "narration_excerpt": "normal S&P 500 over its full live history since",
+      "claim_refs": [
+        "memory-countercase",
+        "sp500-countercase",
+        "equal-weight-long-tail-countercase"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-249",
+      "narration_excerpt": "2003, even though it lagged badly during the recent mega-cap",
+      "claim_refs": [
+        "memory-countercase",
+        "sp500-countercase",
+        "equal-weight-long-tail-countercase"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-250",
+      "narration_excerpt": "cycle. Sometimes the reserves become the next starters.",
+      "claim_refs": [
+        "memory-countercase",
+        "sp500-countercase",
+        "equal-weight-long-tail-countercase"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-251",
+      "narration_excerpt": "The S&P 500 also heals: winners grow,",
+      "claim_refs": [
+        "memory-countercase",
+        "sp500-countercase",
+        "equal-weight-long-tail-countercase"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-252",
+      "narration_excerpt": "failures shrink, and new companies enter without requiring the",
+      "claim_refs": [
+        "memory-countercase",
+        "sp500-countercase",
+        "equal-weight-long-tail-countercase"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-253",
+      "narration_excerpt": "investor to identify them in advance.",
+      "claim_refs": [
+        "memory-countercase",
+        "sp500-countercase",
+        "equal-weight-long-tail-countercase"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-254",
+      "narration_excerpt": "Memory has its own three failure points.",
+      "claim_refs": [
+        "memory-architecture-dependency",
+        "memory-countercase",
+        "sp500-countercase"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-255",
+      "narration_excerpt": "Extraordinary margins attract new capacity.",
+      "claim_refs": [
+        "hbm-capacity-trade-ratio",
+        "memory-countercase",
+        "sp500-countercase"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-256",
+      "narration_excerpt": "More efficient AI architectures can reduce demand.",
+      "claim_refs": [
+        "memory-countercase",
+        "sp500-countercase",
+        "equal-weight-long-tail-countercase"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-257",
+      "narration_excerpt": "And a small number of giant buyers can delay a product generation or",
+      "claim_refs": [
+        "memory-countercase",
+        "sp500-countercase",
+        "equal-weight-long-tail-countercase"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-258",
+      "narration_excerpt": "cut capital spending. Real demand does",
+      "claim_refs": [
+        "memory-countercase",
+        "sp500-countercase",
+        "equal-weight-long-tail-countercase"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-259",
+      "narration_excerpt": "not prevent bubble pricing. Railroads changed the",
+      "claim_refs": [
+        "memory-countercase",
+        "sp500-countercase",
+        "equal-weight-long-tail-countercase"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-260",
+      "narration_excerpt": "world and still destroyed investors. The internet was real in",
+      "claim_refs": [
+        "memory-countercase",
+        "sp500-countercase",
+        "equal-weight-long-tail-countercase"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-261",
+      "narration_excerpt": "1999. The price paid for many internet companies was",
+      "claim_refs": [
+        "memory-countercase",
+        "sp500-countercase",
+        "equal-weight-long-tail-countercase"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-262",
+      "narration_excerpt": "not. So this is not “sell the index and",
+      "claim_refs": [
+        "memory-countercase",
+        "sp500-countercase",
+        "equal-weight-long-tail-countercase"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-263",
+      "narration_excerpt": "buy memory.” It is not a model portfolio.",
+      "claim_refs": [
+        "memory-architecture-dependency",
+        "memory-countercase",
+        "sp500-countercase"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-264",
+      "narration_excerpt": "It is a challenge to stop treating the default product as if it were",
+      "claim_refs": [
+        "memory-countercase",
+        "sp500-countercase",
+        "equal-weight-long-tail-countercase"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-265",
+      "narration_excerpt": "optimized for every objective. Broad indexing solves",
+      "claim_refs": [
+        "memory-countercase",
+        "sp500-countercase",
+        "equal-weight-long-tail-countercase"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-266",
+      "narration_excerpt": "low-cost participation. A concentrated-plus-defensive",
+      "claim_refs": [
+        "sp500-top-ten-concentration",
+        "concentrated-defensive-barbell-hypothesis",
+        "memory-countercase"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-267",
+      "narration_excerpt": "barbell tries to build exceptional wealth while purchasing",
+      "claim_refs": [
+        "concentrated-defensive-barbell-hypothesis",
+        "memory-countercase",
+        "sp500-countercase"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-268",
+      "narration_excerpt": "explicit protection. It must be tested with specified assets,",
+      "claim_refs": [
+        "memory-countercase",
+        "sp500-countercase",
+        "equal-weight-long-tail-countercase"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-269",
+      "narration_excerpt": "weights, rebalancing, taxes, and drawdowns.",
+      "claim_refs": [
+        "memory-countercase",
+        "sp500-countercase",
+        "equal-weight-long-tail-countercase"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-270",
+      "narration_excerpt": "Memory looks speculative because its price moved fast.",
+      "claim_refs": [
+        "memory-architecture-dependency",
+        "memory-bottleneck-not-bubble-inference",
+        "sp500-hidden-bubble-risk-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-271",
+      "narration_excerpt": "Underneath it are scarce production capacity,",
+      "claim_refs": [
+        "hbm-capacity-trade-ratio",
+        "memory-bottleneck-not-bubble-inference",
+        "sp500-hidden-bubble-risk-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-272",
+      "narration_excerpt": "long construction times, complex packaging, shipped products,",
+      "claim_refs": [
+        "memory-bottleneck-not-bubble-inference",
+        "sp500-hidden-bubble-risk-inference",
+        "concentrated-defensive-barbell-hypothesis"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-273",
+      "narration_excerpt": "growing revenue, and customers committing to supply years in",
+      "claim_refs": [
+        "hbm-capacity-trade-ratio",
+        "memory-bottleneck-not-bubble-inference",
+        "sp500-hidden-bubble-risk-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-274",
+      "narration_excerpt": "advance. The S&P 500 looks safe",
+      "claim_refs": [
+        "memory-bottleneck-not-bubble-inference",
+        "sp500-hidden-bubble-risk-inference",
+        "concentrated-defensive-barbell-hypothesis"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-275",
+      "narration_excerpt": "because the label says five hundred. Underneath it is a",
+      "claim_refs": [
+        "memory-bottleneck-not-bubble-inference",
+        "sp500-hidden-bubble-risk-inference",
+        "concentrated-defensive-barbell-hypothesis"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-276",
+      "narration_excerpt": "market-cap-weighted machine that may be too concentrated to diversify",
+      "claim_refs": [
+        "sp500-top-ten-concentration",
+        "memory-bottleneck-not-bubble-inference",
+        "sp500-hidden-bubble-risk-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-277",
+      "narration_excerpt": "properly and too diluted to compound fast enough for an ambitious",
+      "claim_refs": [
+        "memory-bottleneck-not-bubble-inference",
+        "sp500-hidden-bubble-risk-inference",
+        "concentrated-defensive-barbell-hypothesis"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-278",
+      "narration_excerpt": "wealth target. One trade advertises",
+      "claim_refs": [
+        "memory-bottleneck-not-bubble-inference",
+        "sp500-hidden-bubble-risk-inference",
+        "concentrated-defensive-barbell-hypothesis"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-279",
+      "narration_excerpt": "its danger while selling a bottleneck.",
+      "claim_refs": [
+        "memory-bottleneck-not-bubble-inference",
+        "sp500-hidden-bubble-risk-inference",
+        "concentrated-defensive-barbell-hypothesis"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-280",
+      "narration_excerpt": "The other advertises diversification while concentrating around the",
+      "claim_refs": [
+        "sp500-top-ten-concentration",
+        "memory-bottleneck-not-bubble-inference",
+        "sp500-hidden-bubble-risk-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-281",
+      "narration_excerpt": "same technological order, then spreads the remaining dollar",
+      "claim_refs": [
+        "memory-bottleneck-not-bubble-inference",
+        "sp500-hidden-bubble-risk-inference",
+        "concentrated-defensive-barbell-hypothesis"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-282",
+      "narration_excerpt": "across businesses that may improve neither return nor defense.",
+      "claim_refs": [
+        "memory-bottleneck-not-bubble-inference",
+        "sp500-hidden-bubble-risk-inference",
+        "concentrated-defensive-barbell-hypothesis"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-283",
+      "narration_excerpt": "Maybe neither is a bubble. Maybe both can become one.",
+      "claim_refs": [
+        "memory-bottleneck-not-bubble-inference",
+        "sp500-hidden-bubble-risk-inference",
+        "concentrated-defensive-barbell-hypothesis"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-284",
+      "narration_excerpt": "But if you want to find the danger, stop staring at the chart. Look under the elevator.",
+      "claim_refs": [
+        "memory-bottleneck-not-bubble-inference",
+        "sp500-hidden-bubble-risk-inference",
+        "concentrated-defensive-barbell-hypothesis"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-285",
+      "narration_excerpt": "Find the cable. Ask who is paying, what is scarce,",
+      "claim_refs": [
+        "memory-bottleneck-not-bubble-inference",
+        "sp500-hidden-bubble-risk-inference",
+        "concentrated-defensive-barbell-hypothesis"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-286",
+      "narration_excerpt": "how quickly supply can respond, and whether the buyer needs",
+      "claim_refs": [
+        "hbm-capacity-trade-ratio",
+        "memory-bottleneck-not-bubble-inference",
+        "sp500-hidden-bubble-risk-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-287",
+      "narration_excerpt": "cash flow—or merely the next buyer. Right now,",
+      "claim_refs": [
+        "memory-bottleneck-not-bubble-inference",
+        "sp500-hidden-bubble-risk-inference",
+        "concentrated-defensive-barbell-hypothesis"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-288",
+      "narration_excerpt": "memory has a cable. The “safe” index trade deserves a closer",
+      "claim_refs": [
+        "memory-architecture-dependency",
+        "memory-bottleneck-not-bubble-inference",
+        "sp500-hidden-bubble-risk-inference"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-289",
+      "narration_excerpt": "inspection—and perhaps competition from a portfolio whose",
+      "claim_refs": [
+        "memory-bottleneck-not-bubble-inference",
+        "sp500-hidden-bubble-risk-inference",
+        "concentrated-defensive-barbell-hypothesis"
+      ]
+    },
+    {
+      "beat_id": "cbm-beat-290",
+      "narration_excerpt": "upside and defense are designed as separate jobs.",
+      "claim_refs": [
+        "memory-bottleneck-not-bubble-inference",
+        "sp500-hidden-bubble-risk-inference",
+        "concentrated-defensive-barbell-hypothesis"
+      ]
+    }
+  ],
+  "artifact_hash": "fdf792e34617b6dac329a3f0a9aa40fd090dab21db51175965ecafadc27b4f1f"
+}

@@ -1,0 +1,41 @@
+{
+  "schema_version": "finance_reference_learnings.v1",
+  "references": [
+    {
+      "reference_id": "mr-finance",
+      "url": "https://outlierkit.com/channel/misterfinanceyt",
+      "observed_patterns": ["Repeatable economics-of-owning container", "Business and unit-economics stories support long-form depth"],
+      "adopt": ["Use stable format containers that can accept many industries", "Make money flows and operating constraints visible"],
+      "do_not_copy": ["Exact titles", "Thumbnail layouts", "Channel trade dress"]
+    },
+    {
+      "reference_id": "money-simplified",
+      "url": "https://vling.net/en/channel/UCFCEKvkU5_ekTfBQuHrZi0Q/channel-info",
+      "observed_patterns": ["Psychologically relatable framing before technical explanation"],
+      "adopt": ["Name the viewer’s lived contradiction before presenting terminology"],
+      "do_not_copy": ["Scripts", "Recurring character designs", "Packaging language"]
+    },
+    {
+      "reference_id": "casual-finance",
+      "url": "https://www.showmeyourchannel.com/youtuber/casuallyfinance",
+      "observed_patterns": ["Timely macro claims packaged as emotionally legible contradictions"],
+      "adopt": ["Translate a current headline into one answerable mechanism"],
+      "do_not_copy": ["Headline wording", "Thumbnail composition", "Visual identity"]
+    },
+    {
+      "reference_id": "moses-speaks-nuhu",
+      "url": "https://www.youtube.com/@nuhu112",
+      "observed_patterns": ["A Black faceless creator uses a consistent illustrated identity", "Household and generational-wealth stakes are explicit content architecture", "Utility-led titles make financial education immediately legible"],
+      "adopt": ["Treat Black household ownership retirement entrepreneurship and wealth-transfer context as research-relevant mechanisms", "Use a consistent original cast to create recognition without facecam dependence"],
+      "do_not_copy": ["Avatar", "Blue-and-black trade dress", "Thumbnails", "Title wording", "Knowledge Wealth Freedom slogan"]
+    }
+  ],
+  "synthesis_rules": [
+    "Combine repeatable business anatomy with emotionally exact lived contradictions.",
+    "Use current packaging only when a primary-source evidence window can support it.",
+    "Represent identity through actors relationships institutions and economic stakes rather than cosmetic recoloring.",
+    "Keep all visual assets and packaging recognizably original.",
+    "Let the missing causal layer determine the conclusion rather than selecting contrarianism first."
+  ],
+  "artifact_hash": "3091003019908f15907b7631d6112d0294024785e2aca12965beb9db220265c5"
+}

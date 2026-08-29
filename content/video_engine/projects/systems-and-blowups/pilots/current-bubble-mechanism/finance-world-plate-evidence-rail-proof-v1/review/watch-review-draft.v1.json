@@ -1,0 +1,14 @@
+{
+  "schema_version": "watch_review_draft.v1",
+  "proof_id": "finance-world-plate-evidence-rail-proof-v1",
+  "status": "draft",
+  "review_required": true,
+  "render_path": "render/finance-world-plate-evidence-rail-proof.mp4",
+  "checks": [
+    "canonical world plates remain full-frame",
+    "one evidence crop active at a time",
+    "memory callout rail remains readable",
+    "fab plate is not covered by a large card",
+    "hand reveals evidence only"
+  ]
+}

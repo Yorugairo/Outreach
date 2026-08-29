@@ -1,0 +1,170 @@
+{
+  "schema_version": "finance_sentence_native_asset_wave_review.v1",
+  "episode_id": "systems-and-blowups:current-bubble-mechanism",
+  "wave_id": "current-bubble-mechanism-semantic-wave-04",
+  "review_state": "operator_approved_for_composition",
+  "operator_decision": "approved",
+  "semantic_beat_ledger_artifact_hash": "f83b2dad210f0d77bec0e9d8a1b7b799f1da54b0c19372ded9e4a7ec103f6cdb",
+  "prompt_spine_artifact_hash": "360313709cfe4fb347ab0b82b844b75b445694c665893b4071943df983370c2b",
+  "selection_policy": "exact spoken nouns and causal relationship before style; no convenient reuse or filler",
+  "generation_route": "imagegen_builtin",
+  "depth_layer_manifest": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-04/wave-04-depth-layer-manifest.v1.json",
+  "generation_wave": {
+    "batch_size": 6,
+    "source_resolution": "1672x941",
+    "independent_jobs": 6,
+    "reference_policy": "woodblock/paper-theatre continuity from wave 02 and wave 03; no generated factual text",
+    "provider_outputs": [
+      "exec-8c546412-75df-43c2-9f91-9347ac26abd2.png",
+      "exec-58a05742-0b8f-4551-9528-33e5eb5ff173.png",
+      "exec-e01b0665-8987-444c-930c-33fade10d99b.png",
+      "exec-e7f003d7-ae17-4aeb-b5aa-d3c0652ea457.png",
+      "exec-9dc779bc-8dd8-4aa9-9de5-c0114ac1fc5a.png",
+      "exec-e2d6a0bf-83cd-47a3-9676-1c06c71c8fa5.png"
+    ]
+  },
+  "global_qa": {
+    "generated_factual_text": "none_observed",
+    "style_continuity": "pass_on_initial_inspection",
+    "semantic_fit": "pass_on_initial_inspection",
+    "depth_separability": "pass_trace_cut_qa",
+    "negative_space": "authored lower bands and narrow quiet regions; verify after trace cut",
+    "symbol_readability": "pass_after_v2_replacements; no unexplained token or duplicate-chip symbols selected",
+    "render_eligible": true,
+    "promotion_eligible": false
+  },
+  "exact_reuse_context": [
+    {
+      "beat_ids": ["cbm-semantic-beat-04-009"],
+      "asset_id": "bakery-capacity-analogy-v2",
+      "reason": "Approved bakery mechanism already depicts customers reserving oven time; reuse only for this exact translation beat.",
+      "status": "existing_approved_pending_wave_registration"
+    }
+  ],
+  "source_surface_dependencies": [
+    {
+      "beat_ids": ["cbm-semantic-beat-04-002"],
+      "status": "pending_deterministic_source_surface",
+      "reason": "Classic commodity-cycle claim needs the bound claim ledger and source rail; generated cycle image is explanatory metaphor only."
+    },
+    {
+      "beat_ids": ["cbm-semantic-beat-04-005", "cbm-semantic-beat-04-006", "cbm-semantic-beat-04-007", "cbm-semantic-beat-04-008"],
+      "status": "pending_deterministic_source_surface",
+      "reason": "Micron strategic-agreement count, duration, volume coverage, and take-or-pay language remain source-bound; use local evidence cards or reviewed source excerpts."
+    },
+    {
+      "beat_ids": ["cbm-semantic-beat-04-010", "cbm-semantic-beat-04-011", "cbm-semantic-beat-04-012"],
+      "status": "pending_deterministic_source_surface",
+      "reason": "SK hynix and Samsung performance, demand, shipment, and guidance claims require locator-bound source treatment, not generated text."
+    }
+  ],
+  "accepted_candidates": [
+    {
+      "beat_ids": ["cbm-semantic-beat-04-001"],
+      "filename": "beat-04-001-buyer-behavior-v1.png",
+      "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-04/beat-04-001-buyer-behavior-v1.png",
+      "sha256": "96881b32d1df0a95d7df2e8a52ba05a2eee6a9082ea51f96d310ae51a9809b6b",
+      "width": 1672,
+      "height": 941,
+      "start_word_index": 525,
+      "end_word_index": 529,
+      "start_s": 210.164,
+      "end_s": 212.01,
+      "narration_excerpt": "Now look at buyer behavior.",
+      "semantic_job": "Shift attention from the production line to buyers reserving constrained memory capacity.",
+      "visual_verb": "shift_and_reserve",
+      "review_state": "operator_approved_for_composition"
+    },
+    {
+      "beat_ids": ["cbm-semantic-beat-04-003"],
+      "filename": "beat-04-003-classic-cycle-counterargument-v1.png",
+      "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-04/beat-04-003-classic-cycle-counterargument-v1.png",
+      "sha256": "445a89c02ae180a4432cc71fc3b6accb9689c2fcfa9a283e40b5c4d8b6f9617a",
+      "width": 1672,
+      "height": 941,
+      "start_word_index": 551,
+      "end_word_index": 560,
+      "start_s": 221.8,
+      "end_s": 225.48,
+      "narration_excerpt": "That history is the strongest argument against this entire video.",
+      "semantic_job": "Make the historical commodity-cycle objection visible as a loop and warning gate.",
+      "visual_verb": "loop_and_challenge",
+      "review_state": "operator_approved_for_composition"
+    },
+    {
+      "beat_ids": ["cbm-semantic-beat-04-004"],
+      "filename": "beat-04-004-changed-customer-behavior-v1.png",
+      "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-04/beat-04-004-changed-customer-behavior-v1.png",
+      "sha256": "0d0118f619514e0a19ac306f09d88dcecafbfc66f54eb6bbc43c4b4fd9203f99",
+      "width": 1672,
+      "height": 941,
+      "start_word_index": 561,
+      "end_word_index": 567,
+      "start_s": 225.48,
+      "end_s": 228.25,
+      "narration_excerpt": "But customers are behaving differently this time.",
+      "semantic_job": "Contrast casual spot demand with organized, committed infrastructure demand.",
+      "visual_verb": "split_and_lock",
+      "review_state": "operator_approved_for_composition"
+    },
+    {
+      "beat_ids": ["cbm-semantic-beat-04-013"],
+      "filename": "beat-04-013-guidance-not-gospel-v2.png",
+      "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-04/beat-04-013-guidance-not-gospel-v2.png",
+      "sha256": "ef3935bc320ee1c286c2ea1bf6cf35c3ecfcdfab4b6a6260284bc0fc85567b33",
+      "width": 1672,
+      "height": 941,
+      "start_word_index": 673,
+      "end_word_index": 677,
+      "start_s": 273.82,
+      "end_s": 275.74,
+      "narration_excerpt": "Company guidance is not gospel.",
+      "semantic_job": "Separate a forecast scroll from grounded contracts, shipments, and revenue evidence.",
+      "visual_verb": "weigh_and_qualify",
+      "review_state": "operator_approved_for_composition"
+    },
+    {
+      "beat_ids": ["cbm-semantic-beat-04-014"],
+      "filename": "beat-04-014-evidence-hierarchy-v2.png",
+      "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-04/beat-04-014-evidence-hierarchy-v2.png",
+      "sha256": "652bfcbe3c00627c37182a18bb6c83423ec73db900ad52abc9bf81f425a86592",
+      "width": 1672,
+      "height": 941,
+      "start_word_index": 678,
+      "end_word_index": 701,
+      "start_s": 275.74,
+      "end_s": 284.41,
+      "narration_excerpt": "But contracts, shipments, and reported revenue are stronger evidence than clicks, token prices, or a pitch deck promising a market that does not exist.",
+      "semantic_job": "Ground the evidence hierarchy in physical contract, shipment, and ledger objects while speculative signals recede.",
+      "visual_verb": "settle_and_ground",
+      "review_state": "operator_approved_for_composition"
+    },
+    {
+      "beat_ids": ["cbm-semantic-beat-04-015"],
+      "filename": "beat-04-015-bottleneck-boom-v1.png",
+      "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-04/beat-04-015-bottleneck-boom-v1.png",
+      "sha256": "a81d71ac4c98dfe1016c4e7f90934f60a2da2ad8c58107dc4efe280782b00206",
+      "width": 1672,
+      "height": 941,
+      "start_word_index": 702,
+      "end_word_index": 717,
+      "start_s": 284.41,
+      "end_s": 288.34,
+      "narration_excerpt": "That is why I would call this a bottleneck boom before I call it a bubble.",
+      "semantic_job": "Resolve the chapter as a constrained, productive memory pipeline rather than a speculative balloon.",
+      "visual_verb": "meter_and_resolve",
+      "review_state": "operator_approved_for_composition"
+    }
+  ],
+  "superseded_candidates": [
+    {
+      "filename": "beat-04-013-guidance-not-gospel-v1.png",
+      "reason": "Second chip line and decorative strip weakened the distinction between a single observed production lane and a forecast."
+    },
+    {
+      "filename": "beat-04-014-evidence-hierarchy-v1.png",
+      "reason": "Unexplained token and social symbols made the evidence hierarchy ambiguous."
+    }
+  ],
+  "next_wave_authorized": true
+}

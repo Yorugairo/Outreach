@@ -1,0 +1,25 @@
+{
+  "schema_version": "finance_schedule.v1",
+  "channel_id": "systems-and-blowups",
+  "timezone": "America/New_York",
+  "policy": "weekend_first_investor_information_cycle",
+  "releases": [
+    {"slot_id": "friday-current", "day": "Friday", "local_time": "18:00", "kind": "long", "format": "current_mechanism", "parent_slot_id": null, "rationale": "Publish after the U.S. market close when the full weekly evidence window is available."},
+    {"slot_id": "saturday-anatomy", "day": "Saturday", "local_time": "10:00", "kind": "long", "format": "economic_anatomy", "parent_slot_id": null, "rationale": "Use weekend attention for the longest evergreen business and market anatomy."},
+    {"slot_id": "sunday-deeper", "day": "Sunday", "local_time": "10:00", "kind": "long", "format": "one_level_deeper", "parent_slot_id": null, "rationale": "Deliver the corrective causal model before viewers return to the new week."},
+    {"slot_id": "monday-short", "day": "Monday", "local_time": "12:00", "kind": "short", "format": "embedded_short", "parent_slot_id": "sunday-deeper", "rationale": "Carry Sunday’s strongest self-contained answer into weekday discovery."},
+    {"slot_id": "wednesday-short", "day": "Wednesday", "local_time": "12:00", "kind": "short", "format": "embedded_short", "parent_slot_id": "saturday-anatomy", "rationale": "Reopen the evergreen flagship with its canonical embedded capsule."},
+    {"slot_id": "thursday-short", "day": "Thursday", "local_time": "12:00", "kind": "short", "format": "embedded_short", "parent_slot_id": "friday-current", "rationale": "Preview the already locked Friday narration master without a second recording."}
+  ],
+  "operation_cycle": [
+    {"day": "Monday", "job": "Review the weekend cohort after market hours and replenish the topic graph."},
+    {"day": "Tuesday", "job": "Lock primary sources research questions and evergreen claim ledgers."},
+    {"day": "Wednesday", "job": "Build the flagship and deeper scripts narration plans and visual cue packages."},
+    {"day": "Thursday", "job": "Lock the current mechanism evidence window narration master and embedded preview."},
+    {"day": "Friday", "job": "Publish current analysis after close and finish weekend packaging and quality gates."},
+    {"day": "Saturday", "job": "Publish Economic Anatomy and monitor early retention without changing claims."},
+    {"day": "Sunday", "job": "Publish One Level Deeper and capture questions for the next graph node."}
+  ],
+  "queues": {"evergreen_days": [10, 14], "contrarian_days": [5, 7], "current_hours": [24, 72]},
+  "artifact_hash": "e0c02eae328baaf49da802c842d591103989e83ebcf68b58b882b2cc2bff966c"
+}

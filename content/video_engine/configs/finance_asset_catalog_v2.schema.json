@@ -1,0 +1,50 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "finance_asset_catalog.v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "channel_id", "project_root", "resolution_order", "assets", "artifact_hash"],
+  "properties": {
+    "schema_version": {"const": "finance_asset_catalog.v2"},
+    "channel_id": {"type": "string", "minLength": 1},
+    "project_root": {"type": "string", "minLength": 1},
+    "resolution_order": {"type": "array", "minItems": 4, "maxItems": 4, "items": {"enum": ["exact_semantic_match", "reusable_component_composition", "deterministic_evidence_or_mechanism", "bespoke_plate"]}},
+    "assets": {
+      "type": "array",
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["asset_id", "path", "sha256", "kind", "visual_worlds", "semantic_tags", "capability_anchors", "representation_modes", "prohibited_implications", "claim_refs", "reuse_policy", "resolution_tier", "generated", "contains_factual_text", "rights_state", "review_state", "render_eligible"],
+        "properties": {
+          "asset_id": {"type": "string", "pattern": "^[a-z0-9-]+$"},
+          "path": {"type": "string", "minLength": 1},
+          "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+          "kind": {"enum": ["actor", "prop", "world", "mechanism", "evidence_template", "hero_plate", "component"]},
+          "visual_worlds": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"enum": ["story", "mechanism", "evidence"]}},
+          "semantic_tags": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}},
+          "capability_anchors": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 2}},
+          "representation_modes": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"enum": ["literal_evidence", "accurate_mechanism", "declared_metaphor"]}},
+          "prohibited_implications": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+          "claim_refs": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+          "reuse_policy": {
+            "type": "object", "additionalProperties": false,
+            "required": ["max_total_uses", "min_nonadjacent_gap", "allowed_reasons", "allow_adjacent_continuation", "claim_bound"],
+            "properties": {
+              "max_total_uses": {"type": "integer", "minimum": 1},
+              "min_nonadjacent_gap": {"type": "integer", "minimum": 0},
+              "allowed_reasons": {"type": "array", "uniqueItems": true, "items": {"enum": ["continuation", "callback", "comparison", "evidence_hold"]}},
+              "allow_adjacent_continuation": {"type": "boolean"},
+              "claim_bound": {"type": "boolean"}
+            }
+          },
+          "resolution_tier": {"type": "integer", "minimum": 1, "maximum": 4},
+          "generated": {"type": "boolean"},
+          "contains_factual_text": {"type": "boolean"},
+          "rights_state": {"enum": ["original_review_only", "approved"]},
+          "review_state": {"enum": ["review_only", "approved_reusable"]},
+          "render_eligible": {"type": "boolean"}
+        }
+      }
+    },
+    "artifact_hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}

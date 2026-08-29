@@ -1,0 +1,29 @@
+{
+  "schema_version": "finance_2d_stick_primitive_manifest.v1",
+  "proof_id": "finance-2d-stick-proof-v1",
+  "composition": "Finance2DStickProof",
+  "canvas": {
+    "width": 1920,
+    "height": 1080,
+    "background": "white paper"
+  },
+  "primitives": [
+    "stick_person",
+    "face",
+    "index_basket",
+    "holding_dot",
+    "weather_cloud",
+    "company_token",
+    "money_stack",
+    "eligibility_gate",
+    "weight_scale",
+    "label",
+    "arrow",
+    "scene_cut"
+  ],
+  "asset_paths": [],
+  "generated_assets": [],
+  "stock_assets": [],
+  "provider_calls": 0,
+  "notes": "All visible content is deterministic SVG/React. No raster or provider asset is used."
+}

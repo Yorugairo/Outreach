@@ -1,0 +1,30 @@
+{
+  "schema_version": "evidence_proposal_register.v1",
+  "purpose": "Illustrative cards suggested for claim matching. They are not factual evidence and are excluded from approved evidence manifests until explicitly promoted.",
+  "proposals": [
+    {
+      "asset_id": "index-flow-feedback-explainer-proposed-v1",
+      "path": "evidence-proposals-v1/index-flow-feedback-explainer-proposed-v1.png",
+      "status": "pending_human_approval",
+      "representation_mode": "illustrative_model",
+      "preview_usage": "current-bubble-five-minute-v2, 75.80s–89.45s; explicitly rendered without factual source treatment for design review only.",
+      "matches": [
+        "index concentration",
+        "float-adjusted automatic allocation",
+        "self-reinforcing allocation loop"
+      ],
+      "claim_boundary": "It explains the allocation mechanism without asserting a metric, company, or market outcome."
+    },
+    {
+      "asset_id": "two-elevators-mechanism-explainer-proposed-v1",
+      "path": "evidence-proposals-v1/two-elevators-mechanism-explainer-proposed-v1.png",
+      "status": "pending_human_approval",
+      "representation_mode": "illustrative_model",
+      "matches": [
+        "price increase is not itself a bubble diagnosis",
+        "cash flow, productive use, and scarcity distinguish mechanisms"
+      ],
+      "claim_boundary": "It is a conceptual visual aid; it does not prove the thesis or establish any financial result."
+    }
+  ]
+}

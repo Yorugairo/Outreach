@@ -1,0 +1,36 @@
+{
+  "schema_version": "video_review_learning.v1",
+  "project_id": "outreach-program",
+  "generated_at": "2026-08-10T04:20:21.938255Z",
+  "source_review_hashes": [
+    "c6b5335e1c17672ff302d54138ee6070cffdf98cddaa17c0018455b62dad2d86"
+  ],
+  "candidates": [
+    {
+      "candidate_id": "learning-p24-operator-review-gate",
+      "recurrence_key": "p24-operator-review-gate",
+      "kind": "other",
+      "trigger": "When a presenter proof reaches visual review.",
+      "action": "Require full proxy review before promotion.",
+      "scope": "episode",
+      "confidence": 0.3,
+      "observations": [
+        {
+          "review_id": "finance-stealth-wealth-proof-v1-draft",
+          "review_hash": "c6b5335e1c17672ff302d54138ee6070cffdf98cddaa17c0018455b62dad2d86",
+          "finding_id": "operator-review-pending",
+          "episode_id": "finance-stealth-wealth-proof-v1",
+          "lane_id": "systems-and-blowups-finance",
+          "scope": "episode",
+          "status": "open"
+        }
+      ],
+      "distinct_episode_count": 1,
+      "distinct_lane_count": 1,
+      "recommended_destination": "episode_edit_delta",
+      "promotion_state": "observation",
+      "operator_gate": "required"
+    }
+  ],
+  "artifact_hash": "7d86d77ddd07406cd83ae92c417fb7ec7523a23677bdf351b69a1bf794460f3f"
+}
