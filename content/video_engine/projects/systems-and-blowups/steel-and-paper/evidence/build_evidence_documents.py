@@ -300,6 +300,52 @@ def mega_vs_spy():
     save(fig, "ev-mega-vs-spy-v3")
 
 
+def divergence():
+    """The episode's opening claim, rebuilt from real data (doc 29 s9.11 -
+    we recreate, we never lift frames). ev-mega-vs-spy-v3 was WRONG here:
+    it plotted the hyperscalers against SPY since 2023 under the title
+    "The builders against the index" - the red line wore the hyperscalers'
+    own tickers while the narration said they'd gone nowhere. This plots
+    what the narration describes: the memory builders against the
+    hyperscalers, trailing 12 months, both equal-weight, indexed to 100."""
+    import pandas as pd
+    start = (pd.Timestamp.today() - pd.DateOffset(months=12)).strftime("%Y-%m-%d")
+    def basket(ticks):
+        ser = [_px(t, start) for t in ticks]
+        idx = ser[0].index
+        for x in ser[1:]: idx = idx.intersection(x.index)
+        return sum(x.reindex(idx).ffill() / x.reindex(idx).ffill().iloc[0]
+                   for x in ser) / len(ser) * 100
+    mem = basket(["000660.KS", "MU"])
+    hyp = basket(["AMZN", "MSFT", "GOOGL", "META"]).reindex(mem.index).ffill()
+    fig = frame(); ax = fig.add_axes([0.075, 0.155, 0.845, 0.645]); chrome(ax)
+    x = _yr(mem.index)
+    ax.plot(x, mem.values, color=CRIMSON, lw=5, solid_capstyle="round")
+    ax.plot(x, hyp.values, color=TEAL, lw=5, solid_capstyle="round")
+    # End labels carry the RETURN, so the badge numeral appears verbatim in
+    # the document behind it (ruling B3).
+    _endlabel(ax, x[-1], mem.iloc[-1], f"+{mem.iloc[-1]-100:,.0f}%", CRIMSON)
+    _endlabel(ax, x[-1], hyp.iloc[-1], f"+{hyp.iloc[-1]-100:,.0f}%", TEAL)
+    _legend(ax, [("Memory builders - SK hynix / Micron, equal-weight", CRIMSON),
+                 ("Hyperscalers - AMZN / MSFT / GOOGL / META, equal-weight", TEAL)])
+    ax.yaxis.set_major_formatter(FuncFormatter(lambda v, p: f"{int(v):,}"))
+    # A trailing-12-month window takes MONTH ticks; _year_ticks pins a tick
+    # at the year boundary and drags the view back to January, leaving the
+    # left half of the plot empty.
+    mt = pd.date_range(mem.index[0].normalize() + pd.offsets.MonthBegin(1),
+                       mem.index[-1], freq="2MS")
+    ax.set_xticks([t.year + (t.dayofyear - 1) / 365.25 for t in mt])
+    ax.set_xticklabels([t.strftime("%b '%y") for t in mt], fontfamily=FAM)
+    ax.set_xlim(x[0], x[-1] + 0.055)
+    titles(fig, "The divergence",
+           "Memory builders vs the hyperscalers, indexed to 100, trailing 12 months")
+    source(fig, f"Data: Yahoo Finance, 000660.KS, MU, AMZN, MSFT, GOOGL, META - "
+                f"{start} to {mem.index[-1].date().isoformat()}")
+    save(fig, "ev-divergence-v1")
+    print(f"  VERBATIM  memory builders +{mem.iloc[-1]-100:,.0f}%  "
+          f"hyperscalers +{hyp.iloc[-1]-100:,.0f}%  over 12 months")
+
+
 def smh_drawdown():
     s = _px("SMH", "2024-01-01")
     dd = (s / s.cummax() - 1) * 100

@@ -45,6 +45,16 @@ their charts. **We do not compete on chart reading.** We compete on what
 the chart means and what to do about it — the answer. Their evidence,
 our relocation.
 
+**Standing requirement (operator, 2026-08-29, after the "Steel and Paper"
+provenance failure):** an answer episode's evidence dossier MUST open with a
+**RESPONSE TARGET pin** — the target video's URL, title, channel, publish
+date, view count at scripting time, and the specific claim being answered —
+written down BEFORE scripting begins. "Steel and Paper" reached its third
+script revision with no pinned target; its hook carried a fabricated view
+count and its opening chart recreated a chart nobody had identified. Naming
+the source generously (the ruling above) is impossible if the source
+document is never named. **No target pin, no script.**
+
 ## 2. We cannot win on time to market, so we do not race
 
 They build the chart and talk about it, on Bloomberg terminal data. Their

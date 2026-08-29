@@ -11,6 +11,39 @@ or cited verbatim figures with attribution; we do not lift source frames.
 
 ---
 
+## RESPONSE TARGET (pinned 2026-08-29 — was missing entirely)
+
+**The video this episode answers:**
+- **"History is About to Be Made... (Emergency Update)"** — Bravos Research
+- URL: https://www.youtube.com/watch?v=Jw8ykhoOVBQ
+- Published ~2026-08-21 (8 days before this pin) · 14:20 runtime
+- **186K views at pin time · channel 640K subscribers**
+- Content verified from the live page: the railway-mania-to-AI-capex
+  comparison (top comments discuss the railroad parallel directly). This is
+  the same video ID the operator pulled for the doc 34 caption study — the
+  provenance existed there all along and was never linked from this episode.
+
+**SCRIPT FIX — the hook's audience claim is false.** ⚠ blocks the re-record.
+Narration: *"Last week, two million people watched a chart claim AI is
+next."* Reality: **186K views**. No Bravos upload in the last two months
+exceeds 547K. "Two million" is a fabricated audience figure and cannot be
+recorded. "Last week" is accurate as of this pin but ages; prefer phrasing
+pinned to the video, not the calendar.
+
+**Still unverified: the exact chart their video opens on.** Our narration
+characterizes it ("builders +300% since April... hyperscalers nowhere for a
+year") — those anchors fail against market data (row H1) and have NOT been
+verified against their actual frames. Before re-record, either (a) verify
+their chart's construction from the video and describe it accurately, or
+(b) describe OUR rebuilt divergence (ev-divergence-v1, +601% / +15%, 12
+months) and attribute the argument — not the figures — to Bravos.
+
+**Doctrine change:** an answer episode's dossier MUST open with this pin —
+URL, title, publish date, view count at scripting time, claim being
+answered — before any script work. No target pin, no script.
+
+---
+
 ## A. Railway mania (1840s Britain)
 
 **A1 — Peak railway investment ≈ 7% of British GDP.** VERIFIED.
@@ -191,3 +224,29 @@ dot-com peak, not past it. A draft chart titled "has passed its dot-com
 peak" was corrected to "is back at its dot-com peak" before shipping.
 PIMCO's own wording — "on track to surpass" — is the accurate framing.
 Narration must not claim the peak has been exceeded.
+
+---
+
+## H. The opening chart (added 2026-08-29)
+
+**H1 — The divergence chart itself.** ⚠ **SCRIPT FIX — blocks the re-record.**
+`ev-mega-vs-spy-v3` was docked under the opening narration but plots the
+HYPERSCALERS against SPY since 2023 — the red line wears AMZN/MSFT/GOOGL/META
+tickers and is up 248% while the narration says the hyperscalers "have gone
+exactly nowhere." The chart contradicted the sentence spoken over it.
+Replaced by **ev-divergence-v1**: memory builders (SK hynix + Micron,
+equal-weight) vs hyperscalers (AMZN/MSFT/GOOGL/META, equal-weight), indexed
+to 100, trailing 12 months. Yahoo Finance, 2025-08-29 → 2026-08-28.
+
+**Verified figures: memory builders +601%, hyperscalers +15%, over 12 months.**
+
+The narration's own anchors fail against this data:
+- *"up three hundred percent since April"* — no defensible basket does that.
+  Since April: SK hynix +84%, Micron +154%. Over 12 months the honest number
+  is **larger** than the script's: +601%.
+- *"for a year, they've gone exactly nowhere"* — the basket is +15%. MSFT
+  (−1%) and META (−23%) have gone nowhere; the basket has not.
+
+→ Narration must move to the 12-month window: builders "up six hundred
+percent in a year" and hyperscalers "up fifteen — a rounding error next to
+that" or name MSFT/META specifically. **Do not re-record the old line.**

@@ -1,23 +1,25 @@
 [
  {
-  "asset": "ev-mega-vs-spy-v3",
+  "asset": "ev-divergence-v1",
   "species": "chart",
   "at": 26.4,
   "end": 42.01,
   "anchor": "One is the builders of AI \u2014 chips, racks, power.",
   "hold": 15.62,
   "title": "The Divergence",
-  "source": "Bravos Research \u00b7 builders vs hyperscalers",
+  "source": "Rebuilt from Yahoo Finance data \u00b7 after Bravos Research",
   "badges": [
    {
-    "label": "BUILDERS",
-    "value": "+300%",
-    "tag": "since April"
+    "label": "MEMORY BUILDERS",
+    "value": "+601%",
+    "tag": "12 months",
+    "accent": "coral"
    },
    {
     "label": "HYPERSCALERS",
-    "value": "flat",
-    "tag": "12 months"
+    "value": "+15%",
+    "tag": "12 months",
+    "accent": "teal"
    }
   ]
  },
@@ -118,13 +120,123 @@
   "hold": 12.53,
   "title": "Alex Karp, Palantir",
   "source": "CNBC, live",
-  "badges": [
-   {
-    "label": "VERBATIM",
-    "value": "\u201cpaying for tokens that create no value\u201d",
-    "tag": ""
-   }
-  ]
+  "badges": [],
+  "record": {
+   "hdr": [
+    "CNBC \u00b7 Squawk Box",
+    "1 July 2026"
+   ],
+   "kicker": "Palantir CEO Alex Karp, on how AI is sold:",
+   "words": [
+    [
+     "\u201cSomething",
+     184.0
+    ],
+    [
+     "has",
+     184.3
+    ],
+    [
+     "gone",
+     184.6
+    ],
+    [
+     "completely",
+     184.9
+    ],
+    [
+     "wrong.",
+     185.2
+    ],
+    [
+     "Every",
+     185.5
+    ],
+    [
+     "single",
+     185.8
+    ],
+    [
+     "enterprise",
+     186.1
+    ],
+    [
+     "in",
+     186.4
+    ],
+    [
+     "this",
+     186.7
+    ],
+    [
+     "country",
+     187.0
+    ],
+    [
+     "\u2014",
+     187.3
+    ],
+    [
+     "these",
+     187.6
+    ],
+    [
+     "people",
+     187.9
+    ],
+    [
+     "are",
+     188.2
+    ],
+    [
+     "livid.",
+     188.5
+    ],
+    [
+     "They",
+     188.8
+    ],
+    [
+     "are",
+     189.1
+    ],
+    [
+     "paying",
+     189.45
+    ],
+    [
+     "for",
+     189.78
+    ],
+    [
+     "tokens",
+     189.93
+    ],
+    [
+     "that",
+     190.36
+    ],
+    [
+     "create",
+     190.52
+    ],
+    [
+     "no",
+     190.96
+    ],
+    [
+     "value.\u201d",
+     191.2
+    ]
+   ],
+   "hl": [
+    18,
+    24
+   ],
+   "end": 191.7,
+   "attr": "Alex Karp, Chief Executive Officer, Palantir Technologies",
+   "src": "Transcript \u2014 CNBC Squawk Box, 1 July 2026 \u00b7 PLTR closed +8\u20139% that session"
+  }
  },
  {
   "asset": "ev-uber-adoption-v1",

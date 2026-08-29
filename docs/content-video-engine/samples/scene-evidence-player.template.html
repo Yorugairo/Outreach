@@ -71,6 +71,36 @@
   }
   .slide-frame img { display: block; width: 100%; height: auto; }
 
+  /* RECORD DOCUMENT (doc 29 species) — typewriter on paper, one highlighter
+     stroke on the exact phrase spoken. Live type, never a static image:
+     words appear on the document's clock, the stroke lands per-word on the
+     NARRATOR'S word timings. Ported from the motion prototype
+     (evidence/prototypes/record-document-motion.html). */
+  .dock.record .slide-frame, .dock.record .rail { display: none; }
+  .paper { background: #f0eadc; color: #17150f; padding: 34px 42px 30px;
+           font-family: "Lucida Sans Typewriter", "Courier New", monospace;
+           display: flex; flex-direction: column; min-height: 380px; }
+  .paper .phdr { display: flex; justify-content: space-between;
+           font-size: 13px; letter-spacing: .16em; text-transform: uppercase;
+           color: #6b665c; }
+  .paper .prule { height: 2px; background: #cdc5b4; margin: 11px 0 20px; }
+  .paper .pkick { font-size: 15px; color: #6b665c; margin-bottom: 12px; }
+  .paper blockquote { font-size: 25px; line-height: 1.5; min-height: 5.8em; }
+  .paper .hw { background-image: linear-gradient(101deg, transparent 1.5%,
+                 rgba(245,201,63,.72) 6%, rgba(245,201,63,.72) 94%,
+                 transparent 98.5%);
+               background-repeat: no-repeat; background-position: left center;
+               background-size: 0% 100%; padding: .06em .04em;
+               border-radius: 2px; }
+  .paper .pcur { display: inline-block; width: .55em; height: 1em;
+                 background: #17150f; vertical-align: -.14em; margin-left: .04em; }
+  .paper .pattr { margin-top: auto; font-size: 15px; opacity: 0;
+                  transition: opacity .35s ease-out; }
+  .paper .psrc { margin-top: 12px; padding-top: 11px;
+                 border-top: 2px solid #cdc5b4; font-size: 12px;
+                 color: #6b665c; opacity: 0; transition: opacity .35s ease-out; }
+  .paper .shown { opacity: 1 !important; }
+
   .rail { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; margin-top: 11px; }
   .rail.single { grid-template-columns: 1fr; }
   /* Badges SPRING in: a back-out curve overshoots ~4% and settles. A pure
@@ -229,7 +259,26 @@
        25px of the most valuable real estate on the frame restating what the
        viewer is already looking at. `title` stays in the timeline for
        manifests and QA; it is never drawn. */
-    $("i" + n).src = A[aid] || "";
+    const dockEl = docks[slot];
+    dockEl.classList.toggle("record", !!ev.record);
+    let old = dockEl.querySelector(".paper"); if (old) old.remove();
+    recState[slot] = null;
+    if (ev.record) {
+      const r = ev.record, pp = document.createElement("div");
+      pp.className = "paper";
+      pp.innerHTML = `<div class="phdr"><span></span><span></span></div>` +
+        `<div class="prule"></div><div class="pkick"></div><blockquote></blockquote>` +
+        `<div class="pattr"></div><div class="psrc"></div>`;
+      const hs = pp.querySelectorAll(".phdr span");
+      hs[0].textContent = r.hdr[0]; hs[1].textContent = r.hdr[1];
+      pp.querySelector(".pkick").textContent = r.kicker;
+      pp.querySelector(".pattr").textContent = r.attr;
+      pp.querySelector(".psrc").textContent = r.src;
+      dockEl.appendChild(pp);
+      recState[slot] = { r, q: pp.querySelector("blockquote"),
+                         attr: pp.querySelector(".pattr"), src: pp.querySelector(".psrc") };
+    }
+    $("i" + n).src = ev.record ? "" : (A[aid] || "");
     const rail = $("r" + n); rail.innerHTML = "";
     rail.classList.toggle("single", ev.badges.length === 1);
     ev.badges.forEach((bd, bi) => {
@@ -243,6 +292,40 @@
   };
 
   let shown = ["", ""];
+  const recState = [null, null];
+  const drawRecord = (slot, t) => {
+    const st = recState[slot]; if (!st) return;
+    const { r, q } = st, W = r.words;
+    let i = -1;
+    while (i + 1 < W.length && W[i + 1][1] <= t) i++;
+    const frag = document.createDocumentFragment();
+    for (let k = 0; k <= i; k++) {
+      const [w, ts] = W[k];
+      const next = W[k + 1] ? W[k + 1][1] : r.end;
+      let txt = w;
+      if (k === i) {          // string slicing, never per-character opacity
+        const span = Math.max(0.08, (next - ts) * 0.72);
+        const p = Math.max(0, Math.min(1, (t - ts) / span));
+        txt = w.slice(0, Math.round(w.length * p));
+      }
+      if (k >= r.hl[0] && k <= r.hl[1]) {
+        const sp = document.createElement("span");
+        sp.className = "hw";
+        sp.textContent = (k < i && k < r.hl[1]) ? txt + " " : txt;
+        const swept = Math.max(0, Math.min(1, (t - ts) / 0.2));
+        sp.style.backgroundSize = ((1 - Math.pow(1 - swept, 3)) * 100) + "% 100%";
+        frag.append(sp);
+      } else {
+        frag.append(document.createTextNode(txt));
+        if (k < i) frag.append(document.createTextNode(" "));
+      }
+    }
+    const cur = document.createElement("span");
+    cur.className = "pcur"; frag.append(cur);
+    q.replaceChildren(frag);
+    st.attr.classList.toggle("shown", t > r.end + 0.15);
+    st.src.classList.toggle("shown", t > r.end + 0.45);
+  };
   const render = (t) => {
     let si = 0;
     for (let i = 0; i < TL.scenes.length; i++) if (t >= TL.scenes[i].span[0]) si = i;
@@ -296,6 +379,7 @@
       const el = docks[s];
       if (!d) { el.style.opacity = 0; el.style.clipPath = "inset(0 100% 0 0)"; continue; }
       if (d.slide !== shown[s]) { fillDock(s, d.slide); shown[s] = d.slide; }
+      drawRecord(s, t);
       const solo = live.length === 1 && s === 0;
       el.classList.toggle("solo", solo);
       el.classList.toggle("side-r", solo && soloRight);

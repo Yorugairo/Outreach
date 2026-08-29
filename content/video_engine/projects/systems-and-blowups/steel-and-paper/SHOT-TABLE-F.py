@@ -16,9 +16,9 @@ range (1.00 -> 1.04 over the shot), x/y in px.
 W = [
 # ── P1 OPEN ────────────────────────────────────────────────────────────
 (  0.0,  11.8, "world-spike-desk-v1",            (.05,  10,  -6), []),                       # the spike itself, macro. The ring token plants here.
-( 11.9,  20.5, "world-adviser-signature-v1",         (.04, -14,   6), [("ev-mega-vs-spy-v3",0,14.6,20.4)]),  # 'The chart is right' SUMMONS the chart
-( 20.6,  31.0, "world-share-office-queue-v1",  (.05,  16,  -8), [("ev-mega-vs-spy-v3",0,22.0,31.0)]),      # foundry vs empty boardroom = the two lines
-( 31.0,  41.4, "world-gpu-crate-dock-v1",          (.04, -12,   8), [("ev-mega-vs-spy-v3",0,31.0,41.0)]),      # builders up 300%, hyperscalers flat
+( 11.9,  20.5, "world-adviser-signature-v1",         (.04, -14,   6), [("ev-divergence-v1",0,14.6,20.4)]),  # 'The chart is right' SUMMONS the chart
+( 20.6,  31.0, "world-share-office-queue-v1",  (.05,  16,  -8), [("ev-divergence-v1",0,22.0,31.0)]),      # foundry vs empty boardroom = the two lines
+( 31.0,  41.4, "world-gpu-crate-dock-v1",          (.04, -12,   8), [("ev-divergence-v1",0,31.0,41.0)]),      # builders up 300%, hyperscalers flat
 ( 41.4,  45.6, "world-statement-kitchen",        (.06,   8, -10), [("silicon-antidote-s02-valuation-bubble-v1",1,42.2,45.4)]),  # a brokerage statement on a kitchen counter - "owns a piece of you"
 ( 45.6,  54.0, "world-three-notch-slate-v1",     (.05, -10,   6), [("ev-mechanism-ladder",0,46.5,54.0)]),  # the test named, as an object
 ( 54.0,  63.0, "world-signature-nib-v2",         (.04,  12,   8), [("ev-mechanism-ladder",0,54.0,62.5)]),  # 'thirty seconds a stock'
@@ -35,7 +35,7 @@ W = [
 (166.8, 175.9, "world-sell-ticket-v1"      ,     (.05,  10,   8), [("silicon-reality-gap-s03-teacher-stamped",1,167.2,175.8)]),  # record earnings vs valuation - the profit-taking case
 (176.2, 180.9, "world-trading-desk-dark",        (.05, -10,  -6), []),                       # "here's where their own chart gets strange"
 # ── P3 GAP · unit 1: the evidence walk ─────────────────────────────────
-(181.0, 192.0, "world-internal-memo-v1",         (.04,  12,   6), [("ev-doc-karp",0,181.0,192.0)]),          # Karp on CNBC
+(181.0, 192.0, "world-internal-memo-v1",         (.04,  12,   6), [("ev-doc-karp",0,181.0,195.8)]),          # Karp on CNBC
 (192.0, 203.0, "world-budget-burndown-v1",       (.05, -12,   8), [("ev-uber-adoption-v1",1,192.5,203.0)]),  # Uber burned the annual budget by April
 (203.0, 213.6, "world-empty-racks-v1",           (.04,  10,  -8), [("ev-uber-adoption-v1",1,203.0,212.0)]),  # "can't draw a line to what you're shipping"
 (213.9, 223.7, "world-exhibition-hall-morning-v1",(.05, -14,   6), [("ev-three-manias",0,214.0,223.5)]),      # the fair the morning after = the trough

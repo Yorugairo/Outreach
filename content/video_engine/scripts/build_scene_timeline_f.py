@@ -109,6 +109,10 @@ def main() -> int:
                         "document": {"path": str(ap.relative_to(ap.anchor)),
                                      "sha256": sha(ap)},
                         "badges": d["badges"],
+                        # a record document carries its typed-word payload;
+                        # the player renders it as live type + highlighter
+                        # instead of a static image (doc 29 record species)
+                        **({"record": d["record"]} if "record" in d else {}),
                     }
                     uris[aid] = data_uri(ap, CARD_W)
                 # Spans come from the dock: evidence enters before its claim
