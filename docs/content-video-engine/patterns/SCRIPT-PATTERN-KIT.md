@@ -92,9 +92,12 @@ different model — continues the same video.
 1. **Attribution-first** — source before assertion, every claim, every
    phase. Unverified claims carry `[verify]` and are banned from hook,
    promise, reversal, payoff, and tell.
-2. **The score** — one idea per sentence · active S-V-O · 15–16 word
-   average in a wave · terminal stress on beat-final lines · punctuation
-   as performance notation · `[pre-key]`/`[post-key]` rationed ≈3/min.
+2. **The score** — one idea per sentence · active S-V-O · **10–15 word
+   average in a wave** (corrected 2026-08-29: 15–16 was a written-prose
+   figure; 15–20 is where listener comprehension falls off. Gate the
+   SPREAD too — stdev ≥3.5, ≤12% of sentences past 20 words) · terminal
+   stress on beat-final lines · punctuation as performance notation ·
+   `[pre-key]`/`[post-key]` rationed ≈3/min.
 3. **Counterpoint** — narration never captions its own visual. Per-phase
    modes: irony → contextual mapping → subtext → register shift →
    abstract synthesis → ring symmetry.

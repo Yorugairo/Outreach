@@ -18,7 +18,7 @@ ACOUSTIC NARRATIVE ARCHITECTURE (LLM KNOWLEDGE CONTEXT)
 1. BROADCAST & RADIO WRITING MECHANICS
 
 * Cognitive Constraint: Auditory text is real-time, linear, and ephemeral; requires low working-memory load.
-* Sentence Length: Target 15–16 words average. Single-idea declarative sentences only.
+* Sentence Length: Target 10–15 words average, deliberately varied — mix 5-word punches with 15-word carries. 15–20 is where listener comprehension drops. Single-idea declarative sentences only.
 * Voice & Syntax:
    * Strict Active Voice: Subject-Verb-Object (S-V-O).
    * Attribution-First Placement: Source precedes assertion (e.g., "The council decided X", not "X, decided the council").

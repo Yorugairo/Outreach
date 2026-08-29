@@ -32,7 +32,7 @@ attribution-first · Truby's seven steps · A/V counterpoint.
 | Glass Reflection | lands on savor beats, `[post-key]` silence, and breathing dips — meaning gets the pause | map §2/§7 |
 | Humes' three pauses | compile to `[pre-key]`/`[post-key]` → doc 37 break tags; pre-opener bent to a visual-only breath | doc 37 §1 |
 | Ring composition | formalizes THREE platform systems at once: callbacks (closed LIFO), the Story Close outro, and the foreshadow→payoff trace; the ring echo is the Peak-End vehicle | map §2/§8 |
-| Broadcast score (15–16w, active, one-idea, punctuation-as-notation) | the mechanical lint tier — enforced in code, not judgment | P10 T4 |
+| Broadcast score (10–15w, active, one-idea, punctuation-as-notation) | the mechanical lint tier — enforced in code, not judgment | P10 T4 |
 | Signposting | phase-transition lines + the five rehook template families | map §2 |
 | A/V counterpoint | the tautology lint + plates-as-evidence doctrine (narration carries mechanism, plate carries world) | doc 29 |
 

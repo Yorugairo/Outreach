@@ -32,6 +32,32 @@ They are model-agnostic and sized to paste into a system-instruction box.
 When a document in *this* folder disagrees with the portable tier, the
 portable tier wins.
 
+## To WRITE or REVIEW a script, start at the kit
+
+[`patterns/SCRIPT-PATTERN-KIT.md`](patterns/SCRIPT-PATTERN-KIT.md) is the
+operational surface — the binder that turns this folder's doctrine into a
+deterministic generation flow. **Nothing in this folder pointed at it until
+2026-08-29**, which is why reviews kept being assembled from remembered
+fragments of the long docs instead of run against the roster.
+
+| The kit | Role |
+|---|---|
+| `SCRIPT-PATTERN-KIT.md` | binder — generation flow, geometry, **the duty roster**, hard gates, output contract |
+| `phase-guides/P1.md` … `P6.md` | the six generation contracts — beat templates, device slots, QC lines |
+| `INJECTION.md` | the parameter surface: everything channel-specific, one block per script |
+| `LLM-CONTEXT-CLASSICAL.md` | the timeless craft layer, densified for injection |
+| `SENTENCE-STRENGTH-CHECK.md` | the line gate — ten per-sentence checks, standing not optional |
+| `FULL-VIDEO-MAP.md` | the derivation: McKee extended to YouTube, integral + differentials |
+
+**The kit is the operational tier; the numbered docs are its derivation.**
+Read a numbered doc to learn *why* a rule exists or to change it. Run the
+kit to write or review. The `script-editor` skill drives this.
+
+Two checkers back it:
+`scripts/lint_script_pattern.py` (mechanical) and
+`scripts/audit_script_doctrine.py` (phase geometry, timed beats, roster
+items that are greppable).
+
 ## The ghost in the machine (the organising principle)
 
 Operator, 2026-08-28: *"the voice, brand, style should translate across all
