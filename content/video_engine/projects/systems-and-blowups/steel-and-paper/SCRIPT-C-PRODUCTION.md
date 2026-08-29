@@ -11,7 +11,7 @@ feel stupid): *hyperscalers* named on first use (Amazon, Microsoft,
 Google, Meta) · *BEA* replaced with "the government statisticians who
 count it" — an acronym read aloud as letters is friction · *semis* →
 "the chipmakers" · *target-date fund* → "the default your retirement
-money probably sits in" · *drawdown* → "if the AI names fall by half" ·
+money hopefully doesn't sit in" · *drawdown* → "if the AI names fall by half" ·
 *order books sold out* → "the orders are placed, the slots are gone." 
 
 **Record as ONE request** (doc 37 §8 master take). Seed 4242.
@@ -21,9 +21,9 @@ stripped, pause marks preserved.
 
 | | |
 |---|---|
-| Spoken characters | **8,070** (+921 vs Script B) |
+| Spoken characters | **8,078** (+929 vs Script B) |
 | Master take | **one request** — under the 9,000-char cap |
-| Break tags | 17 · **2.11 per 1k** (limit 3.0) |
+| Break tags | 17 · **2.10 per 1k** (limit 3.0) |
 | Stray editorial flags | none |
 | Linter | **clean** |
 | Est. runtime | **~8m 24s** at Script B's measured 16.02 chars/sec |
@@ -133,7 +133,7 @@ paper promises priced off the best year, held by people who never checked
 what they owned. And Bravos' own number tells you where that paper lives
 today: AI builders are now twenty percent of the S&P five hundred.
 Historically, two to four. Every index fund — and every target-date
-fund, the default your retirement money probably sits in — now carries a
+fund, the default your retirement money hopefully doesn't sit in — now carries a
 fifth of its weight in one bet. And calls it the market.
 
 Run the arithmetic. At a fifth of the index, if the AI names fall by half,

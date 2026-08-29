@@ -113,6 +113,14 @@ narrates its own symmetry):
   disclaimer.** "…and so am I. That week, I de-risk the builders on camera."
 - **Second person carries the payoff.** "Run your top five tonight." The
   video ends on an action, not a summary.
+- **Address the viewer as competent, or becoming competent — never as the
+  mark.** Operator, 2026-08-29, on a target-date aside: *"the default your
+  retirement money hopefully doesn't sit in"* beats *"probably sits in"* —
+  "we should hope our viewers are a little more aware OR become aware from
+  our content." Most finance content assumes the viewer is the sucker.
+  Assume instead they already know better, or are one video from it. The
+  same fact lands without condescension, and it is the register that makes
+  "every video ends empowering" true rather than claimed.
 
 ---
 
