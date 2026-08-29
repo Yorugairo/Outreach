@@ -16,7 +16,11 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 ALLOWED_MARKS = frozenset({"pre-key", "post-key", "verify"})
-WORDS_PER_MINUTE = 150.0
+# Measured from the Steel and Paper take: 1,231 words / 446.1s across seven
+# scenes (per-scene range 160-174). The old 150.0 was a generic estimate and
+# ran 9.4% slow, which INFLATED the minute count and quietly loosened the
+# marks-per-minute gate below.
+WORDS_PER_MINUTE = 165.6
 MAX_MARKS_PER_MINUTE = 3.5
 SENTENCE_MEAN_RANGE = (8.0, 20.0)
 PASSIVE_RATIO_MAX = 0.15
