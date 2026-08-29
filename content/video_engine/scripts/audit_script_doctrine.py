@@ -91,6 +91,10 @@ P6_CLOSE_S = kit_spec.open_close_seconds()  # absolute, from the end
 REHOOK_ANCHORS = {"A1": 30.0, "A2": 60.0, "A3": 180.0}
 REHOOK_TOLERANCE_S = 45.0
 # doc 38: rehook slots at ~0:30, ~1:00, 3:00 and mid-video
+# MAP sec 3: the 0:30-0:60 dated promise IS A1 ("A1 + F1 + macro-loop-1
+# setup in one line"), so it counts as an anchor even though it is not one of
+# the five template families.
+A1_PROMISE = r"by the end,? you'?ll|you'?ll run it yourself|thirty seconds a"
 REHOOKS = (r"but here's where", r"here's where it gets",
            r"this is where most people", r"what nobody", r"fast-?forward",
            r"but the real question", r"which flips the question",
@@ -127,17 +131,32 @@ def spread(fragment: str) -> float:
     return abs(a - b) / max(a, b, 1e-9)
 
 
-def load_timings(script: Path) -> list[dict] | None:
+def _norm(s: str) -> str:
+    """Compare words, not punctuation — a take carries commas the text may not."""
+    return re.sub(r"[^a-z0-9 ]", "", s.lower()).strip()
+
+
+def load_timings(script: Path, first_sentence: str = "") -> list[dict] | None:
     """Real word timings for this episode, if a take has been recorded.
 
     Ground truth beats any estimate, and the timed gates are exactly where
-    a 9% estimate error changes a verdict.
+    a 9% estimate error changes a verdict — BUT only if the take is of THIS
+    text. An episode folder holds one `vo/`, and a revised script sits next
+    to the previous script's recording. Reporting a measured hook length for
+    a hook that was never recorded is worse than estimating it, so the
+    opening words must match before any timing is trusted.
     """
     vo = script.parent / "vo"
     files = sorted(vo.glob("scene_*.words.json"),
                    key=lambda p: int(re.search(r"\d+", p.name).group()))
     if not files:
         return None
+    if first_sentence:
+        head = json.loads(files[0].read_text(encoding="utf-8")).get("words", [])
+        recorded = " ".join(w["w"] for w in head[:6]).lower()
+        wanted = " ".join(first_sentence.split()[:6]).lower()
+        if _norm(recorded) != _norm(wanted):
+            return None
     words, offset = [], 0.0
     for f in files:
         d = json.loads(f.read_text(encoding="utf-8"))
@@ -304,9 +323,11 @@ def audit(text: str) -> tuple[list[Finding], dict]:
     stats["p3_units_expected"] = want_units
 
     # sec 2 — rehook anchors A1/A2/A3 (A4 is the pivot, pinned separately).
+    a1 = [secs(sp[:m.start()]) for m in re.finditer(A1_PROMISE, sp, re.I)]
+    anchor_hits = sorted(set(times) | set(a1))
     missing = [name for name, target in REHOOK_ANCHORS.items()
                if not any(abs(t_ - target) <= REHOOK_TOLERANCE_S
-                          for t_ in times)]
+                          for t_ in anchor_hits)]
     if missing:
         add("WARN", "MAP sec 2",
             f"no rehook construction within {REHOOK_TOLERANCE_S:.0f}s of "
@@ -357,7 +378,8 @@ def main() -> int:
     findings, stats = audit(text)
 
     # If a take exists, measure the tight gates instead of estimating them.
-    timings = load_timings(args.script)
+    first = sentences(spoken(text))[0] if sentences(spoken(text)) else ""
+    timings = load_timings(args.script, first)
     if timings:
         stats["timing_source"] = f"measured ({len(timings)} words on disk)"
         hook, rest = [], iter(timings)
@@ -390,7 +412,11 @@ def main() -> int:
                     f"microhook not paid until {t_par:.2f}s AS RECORDED "
                     f"(gate 8.0s)"))
     else:
-        stats["timing_source"] = "estimated (no take on disk)"
+        vo = args.script.parent / "vo"
+        stale = any(vo.glob("scene_*.words.json"))
+        stats["timing_source"] = (
+            "estimated (a take exists but is of DIFFERENT text — not used)"
+            if stale else "estimated (no take on disk)")
 
     if args.pivot:
         hits = text.count(args.pivot)

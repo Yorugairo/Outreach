@@ -81,11 +81,26 @@ different model — continues the same video.
 | CTAs | ≤1 micro + 1 outro (0 in serialized segments) | P2 post-payoff window · P6 action window |
 | Breathing dips | 1/unit + post-macro-1 | P2–P5 |
 | Savor beats | ≥2 | P5 |
-| Tricolons | ≤3 total | P1 promise · P2 momentum (optional) · P6 final triad |
+| Tricolons | **terminal, not rationed** | the P6 triad lands last and hardest; no tricolon after it; none decorative |
 | Anaphora arc | 1 — constant opening, evolving tails | debut P1/P3 · recur ≥3× · resolve ONLY in P6's triad |
 | The tell | exactly 1, four parts | P5, post-payoff |
 | Ring echo | exactly 1, token-verifiable | P6 |
 | Glass ratio | stated per phase | 80/20 → 70/30 → 60/40-in-unit → 50/50 → 30/70 → 40/60 |
+
+**Tricolon gate — corrected 2026-08-29.** This was "≤3 total," which was
+gating the wrong thing. The count existed to protect the closing triad's
+impact, but a cap does not do that: an episode whose *content* is triadic
+(a three-question test, "scarce, cash, used") burns the budget on substance
+and reads as a violation while the close is untouched.
+
+The real rule is **terminal placement and escalation**, not scarcity:
+
+- Structural tricolons are unlimited. If the idea has three parts, say three.
+- **The P6 triad lands last and hardest.** Nothing triadic follows it.
+- No decorative tricolons — a three-beat list that would read the same as
+  two is padding, and padding anywhere lowers the ceiling at the close.
+
+Gate the close, not the count.
 
 ## Hard gates (fail the script, not the line)
 
