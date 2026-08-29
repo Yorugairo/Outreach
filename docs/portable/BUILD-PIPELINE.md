@@ -55,7 +55,10 @@ carries. To merge:
 One index of every generated plate: `sources/PLATE-LIBRARY.json` — id,
 **semantic**, style register, approval state as the manifest records it, and
 path. **Search it by meaning before generating anything.** Status lives in
-the manifest, never in the directory name.
+the manifest, never in the directory name. **Channels are identity walls,
+not tags**: every plate carries a `channel` and every consumer filters by
+it — a martial-arts plate never resolves into a finance episode, however
+well its semantic matches. Search with `--channel <name>`.
 
 ## Stage 6 is AUTHORED — there is no allocator
 

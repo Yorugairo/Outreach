@@ -36,6 +36,8 @@ M = {
 STAMPED = json.loads((BUILD / "stamped-index.json").read_text(encoding="utf-8"))     if (BUILD / "stamped-index.json").exists() else {}
 
 
+CHANNEL = "money-physics"   # the episode this builder serves
+
 LIBRARY = json.loads(
     (REPO / "content/video_engine/sources/PLATE-LIBRARY.json").read_text(
         encoding="utf-8"))["plates"] if (
@@ -62,6 +64,12 @@ def find_asset(name: str) -> Path | None:
     # 134 approved plates - which is the whole reason the library exists.
     for pl in LIBRARY:
         if pl["id"] == name and Path(pl["path"]).exists():
+            # CHANNELS ARE IDENTITY WALLS (operator, 2026-08-29): this is a
+            # Money Physics builder and it REFUSES plates from any other
+            # channel - a jiu-jitsu plate must never resolve into a finance
+            # episode, however well its id or semantic matches.
+            if pl.get("channel", "money-physics") != CHANNEL:
+                continue
             return Path(pl["path"])
     return None
 

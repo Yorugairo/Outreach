@@ -32,13 +32,15 @@ file will be rebuilt by someone who doesn't know it exists.
 **Martial Matters episode 1** (merged from p16, 2026-08-29): 192 asset files
 (1080p plates), recorded narration + word timings
 (`projects/martial-matters/.../transcript/narration.words.json`), the
-Marshall Monday editing handoff. The third channel's pilot — plate-library
-scanner does NOT yet index these paths (follow-up).
+Marshall Monday editing handoff. The third channel's pilot — indexed in the
+plate library under channel `martial-matters` (2026-08-29), semantics from
+the word-timed cue ledger, state `candidate` until an approval manifest is
+read.
 
 
 | Capability | Where | State | Proof |
 |---|---|---|---|
-| **Plate library** — 134 plates indexed by SEMANTIC across all worktrees; status from manifests, never paths | `content/video_engine/scripts/build_plate_library.py` → `sources/PLATE-LIBRARY.json` | LIVE — rebuild after any plate wave | resolver falls through to it |
+| **Plate library** — 326 plates indexed by SEMANTIC across all worktrees and CHANNEL-AWARE (money-physics 134 / martial-matters 192); channels are identity walls — the resolver refuses cross-channel plates; status from manifests, never paths | `content/video_engine/scripts/build_plate_library.py` → `sources/PLATE-LIBRARY.json` | LIVE — rebuild after any plate wave | resolver falls through to it |
 | **Chart builders** — real-data charts (yfinance/FRED), verbatim end labels, month/year axes, series sidecars | `steel-and-paper/evidence/build_evidence_documents.py` (+ railway, HBM builders) | LIVE | ev-divergence-v1 |
 | **Live HTML evidence sources** — karp/leases/macdonald records, instrument-memory, mechanism-ladder, three-manias | `steel-and-paper/evidence/*.html` | BUILT — PNGs are flattened renders of these | files on disk |
 | **Teacher-stamped catalog** — 86 production slides keyed `image_id` → `extracted_path` | `sources/decks/teacher-stamped-production-visuals/` + manifest (MAIN checkout) | LIVE | episode-build skill §5 |

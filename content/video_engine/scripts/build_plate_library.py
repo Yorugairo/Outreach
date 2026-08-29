@@ -14,7 +14,11 @@ because of WHERE they sat rather than WHAT they were:
 
 The library records, for every plate: its id, its real path, its SEMANTIC
 (what it depicts — the thing you actually select on), its style register,
-its approval state as the MANIFEST states it, and its source.
+its approval state as the MANIFEST states it, its source, and its CHANNEL.
+
+**Channels are identity walls, not tags** (operator, 2026-08-29): a
+jiu-jitsu plate must never resolve into a finance episode. Every consumer
+filters by channel; the resolver refuses cross-channel plates outright.
 
 **Status comes from the manifest, never from the path** (ruling E10).
 
@@ -25,6 +29,7 @@ Usage:
 from __future__ import annotations
 
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -60,7 +65,8 @@ def state_of(manifests: list[dict]) -> tuple[str, bool]:
     return ("approved" if ok else (", ".join(sorted(states)) or "unstated")), render
 
 
-def scan_claim_waves(root: Path, source: str, register: str) -> list[dict]:
+def scan_claim_waves(root: Path, source: str, register: str,
+                     channel: str = "money-physics") -> list[dict]:
     """Episode plate waves: semantics live in <wave>/*.manifest.json."""
     out = []
     for wave in sorted(root.glob("*plate*")):
@@ -85,7 +91,8 @@ def scan_claim_waves(root: Path, source: str, register: str) -> list[dict]:
         for png in sorted((wave / "objects").glob("*.png")):
             out.append({
                 "id": png.stem, "path": str(png), "semantic": sem.get(png.stem, ""),
-                "register": reg, "source": f"{source}/{wave.name}",
+                "register": reg, "channel": channel,
+                "source": f"{source}/{wave.name}",
                 "state": "approved" if (png.stem in approved or st == "approved")
                          else st,
                 "render_eligible": render or png.stem in approved,
@@ -176,7 +183,7 @@ def scan_pilot(root: Path, sem: dict | None = None) -> list[dict]:
                     continue          # review artifacts, not plates
                 rec = {
                     "id": png.stem, "path": str(png), "semantic": "",
-                    "register": reg,
+                    "register": reg, "channel": "money-physics",
                     "source": f"pilot/current-bubble-mechanism/{sub}/{wave.name}",
                     "state": st, "render_eligible": render,
                 }
@@ -195,21 +202,56 @@ def scan_pilot(root: Path, sem: dict | None = None) -> list[dict]:
     return out
 
 
+def scan_martial_matters(repo: Path) -> list[dict]:
+    """The THIRD channel. 192 word-timed plates keyed mm001-word-NNN; their
+    semantics live in the continuity cue ledger (narration excerpt, chapter,
+    story signal) — the filename prefix after NNN_ is the cue id."""
+    root = repo / "content/video_engine/projects/martial-matters"
+    cues = {}
+    for led in root.glob("pilots/*/continuity/revisions/*/word-timed-visual-cues*.json"):
+        for c in load(led).get("cues", []):
+            cues[c["cue_id"]] = c
+    out = []
+    for png in sorted(root.glob("assets/kits/*/candidates/*/*.png")):
+        # 001_mm001-word-008-contained-peace -> cue mm001-word-008; later
+        # waves append a slug after the cue id, so match by pattern
+        m = re.search(r"mm\d+-word-\d+", png.stem)
+        c = cues.get(m.group(0), {}) if m else {}
+        out.append({
+            "id": png.stem, "path": str(png),
+            "semantic": c.get("narration_excerpt", ""),
+            "register": png.parts[-3].rsplit("-", 1)[0],   # kit name sans -v1
+            "channel": "martial-matters",
+            "source": f"martial-matters/{png.parts[-2]}",
+            "chapter": c.get("chapter_id", ""),
+            "state": "candidate",          # no approval manifest read yet
+            "render_eligible": False,
+        })
+    return out
+
+
 def main() -> int:
     if len(sys.argv) > 1:
         lib = json.loads(OUT.read_text(encoding="utf-8"))
         q = " ".join(sys.argv[1:]).lower()
+        chan = None
+        if "--channel" in sys.argv:
+            i = sys.argv.index("--channel"); chan = sys.argv[i + 1]
+            q = " ".join(a for a in sys.argv[1:] if a not in ("--channel", chan)).lower()
         hits = [p for p in lib["plates"]
-                if q in p["id"].lower() or q in p["semantic"].lower()]
+                if (q in p["id"].lower() or q in p["semantic"].lower())
+                and (chan is None or p.get("channel") == chan)]
         print(f"{len(hits)} of {len(lib['plates'])} plates match {q!r}\n")
         for p in hits[:40]:
-            print(f"  {p['id'][:44]:<46}{p['register']:<17}{p['semantic'][:56]}")
+            print(f"  {p['id'][:40]:<42}{p.get('channel','?')[:14]:<16}"
+                  f"{p['semantic'][:52]}")
         return 0
 
     plates = []
     plates += scan_claim_waves(
         REPO / "content/video_engine/projects/systems-and-blowups/review/claims",
         "steel-and-paper", "woodblock-vox-newsprint")
+    plates += scan_martial_matters(REPO)
     pilot = CODEX / ("content/video_engine/projects/systems-and-blowups/"
                      "pilots/current-bubble-mechanism/assets")
     if pilot.is_dir():
@@ -244,6 +286,9 @@ def main() -> int:
     print(f"PLATE LIBRARY — {len(uniq)} plates indexed -> {OUT.name}\n")
     for k, v in Counter(p["register"] for p in uniq).most_common():
         print(f"  {v:4d}  {k}")
+    print()
+    for k, v in Counter(p.get("channel", "?") for p in uniq).most_common():
+        print(f"  {v:4d}  channel {k}")
     print()
     for k, v in Counter(p["state"] for p in uniq).most_common():
         print(f"  {v:4d}  {k}")
