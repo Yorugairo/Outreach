@@ -1,0 +1,132 @@
+# Script E — external review
+
+Two independent readings, deliberately outside our own doc set.
+
+---
+
+## 1. Art of YouTube `review_script` — three runs, and the scores do not hold
+
+| | Script D | Script E mid | Script E final |
+|---|---|---|---|
+| Hook | 6 | 6 | 6 |
+| Structure | 7 | **8** | 7 |
+| Anti-Fluff | **5** | **7** | 6 |
+| Visual verbs | 8 | 7 | 7 |
+| Retention | 6 | 6 | **5** |
+| Ending | 7 | 8 | 8 |
+| Animatability | 7 | 6 | 6 |
+| Specificity | 9 | 9 | **7** |
+| **Overall** | **6.5** | **7.0** | **6.5** |
+
+**The measurements are unstable, so the scores cannot be compared.**
+
+| Run | Claimed words | Actual | Error | Claimed duration |
+|---|---|---|---|---|
+| Script D | 3,921 | 1,954 | +101% | ~20s |
+| Script E mid | 3,876 | 1,977 | +96% | ~20m |
+| Script E final | 3,204 | 1,985 | **+61%** | ~20s |
+
+The claimed word count **fell by 672** across runs while the actual text
+**grew by 31 words**. Duration flipped between "~20s" and "~20m" for
+near-identical inputs.
+
+**Specificity dropped 9 → 7** on a revision that added no vagueness and
+removed no figures. That is the tell: the scores move ±2 on unchanged
+content.
+
+**Correction to my earlier read.** I reported the D → E-mid move as
+"+0.5 overall, and Anti-Fluff +2 is the strength pass showing up." Three
+runs make that unsupportable — Anti-Fluff went 5 → 7 → 6 while the passage
+it named got monotonically tighter. That was noise, and I read it as signal.
+
+**What survives across all three runs is the prescription pattern, not the
+scores.** Every suggested rewrite, nine of nine, breaks doctrine:
+
+| Run | Suggested | Breaks |
+|---|---|---|
+| 1, 3 | "Imagine holding an iron spike…" | hypothetical framing; banned |
+| 3 | "Here's the game plan: we'll dissect the hype, reveal the truth" | meta/announcement construction; stock commentary |
+| 3 | "But what if I told you… Stay tuned as we unravel this mystery" | bait question **and** begging the viewer to stay |
+| 1 | "a reminder that in the world of investment…" | explains the metaphor after landing it; kills the ring |
+| 2 | "fortified like castles… crumbling walls" | purple, mixed, passive |
+
+**Standing verdict, unchanged and now better evidenced:** treat
+`review_script` as a corroborating signal only where our own tooling agrees,
+never as a score to optimise. Its numbers are not reproducible on the same
+text.
+
+---
+
+## 2. Independent frameworks — classical rhetoric, Toulmin, Monroe
+
+None of these are in our doc set. All three are standard outside it.
+
+### 2a. Classical arrangement (Cicero / Quintilian, six-part *dispositio*)
+
+| Part | Where | Read |
+|---|---|---|
+| **Exordium** — win attention and goodwill | hook + the Bravos credit | **Strong.** Crediting the opponent is textbook *captatio benevolentiae*, and it is aimed at exactly the audience most likely to resist us — people who liked their video. |
+| **Narratio** — state the facts | the two lines, the historical cases | **Strong.** Economical, no editorialising inside the statement. |
+| **Partitio** — declare what will be proved | "One test — three questions — that sorts every holding into steel or paper" | **Strong and rare.** An explicit partitio is standard in classical oratory and almost absent from online video. |
+| **Confirmatio** — positive proof | debt trajectory, $822B leases, 94% of OCF, 20% index concentration | **Strong.** Sourced, escalating, best material late. |
+| **Refutatio** — answer the opposition | the pivot | **Unusual and sophisticated.** This is not refutation, it is *concessio* + relocation: the opponent's grounds are granted in full, and the dispute is moved to where the risk actually sits. Harder than refutation and more durable, because nothing they proved has to be wrong. |
+| **Peroratio** — recapitulate, then intensify | the ring and the final triad | **Half.** The *affectus* is excellent. The *enumeratio* is thin — classical practice restates the proofs before the emotional close, and we go straight to the figure. |
+
+**Finding: the peroratio does not recapitulate.** A listener who drifted at
+minute seven gets the emotional close without a restatement of what was
+proved. One or two sentences of enumeration before "The steel gets used"
+would satisfy it.
+
+### 2b. Toulmin — argument integrity of the central claim
+
+| Element | Present? |
+|---|---|
+| **Claim** | The bubble is in the paper, not the steel. ✓ |
+| **Grounds** | 20% concentration vs 2–4% historical; $822B off-balance-sheet; 94% of OCF; sold-out order books; the customs instrument. ✓ |
+| **Warrant** | "A bubble is ownership outrunning understanding." ✓ **Stated explicitly** — most arguments leave the warrant buried. |
+| **Backing** | 1845: index −64.1%, technology survived, towns grew. ✓ |
+| **Qualifier** | "Both are true at once." + the tripwire's conditionality. ✓ |
+| **Rebuttal condition** | "If memory breaks while the buildout holds, the scarcity story is wrong — and so am I." ✓ |
+
+**A complete Toulmin structure with an explicit warrant and a stated
+rebuttal condition. That is genuinely uncommon** — most persuasive content
+carries claim plus grounds and stops.
+
+**Finding: the warrant is asserted, not backed.** Toulmin asks for backing
+of the warrant itself — *why* is "ownership outrunning understanding" the
+right definition of a bubble? The 1845 case supplies it implicitly and never
+says so. One clause would close it.
+
+### 2c. Monroe's Motivated Sequence
+
+| Step | Read |
+|---|---|
+| **Attention** | The spike. ✓ |
+| **Need** | "this chart already owns a piece of you" — personalised at 37s. ✓ |
+| **Satisfaction** | The three-question test — concrete, portable, usable tonight. ✓ |
+| **Visualization** | **Weak.** Monroe wants the audience to see their world both with and without the solution. We visualise the *failure* state vividly ("accidental concentration, sold as safety") and never the *success* state. What does the viewer's portfolio look like after they run the test? |
+| **Action** | One CTA, specific, with a named trigger condition. ✓ Strong. |
+
+**Finding: step 4 is underserved — and our own doctrine already asks for
+it.** Doc 38's P6 CTA pillars are value reinforcement → clear direction →
+**future pacing (concrete action→outcome picture)**. The script has the
+first two and only gestures at the third. Two independent frameworks
+converge on the same gap, and it is a gap against our own spec.
+
+---
+
+## 3. What the independent read concludes
+
+The script is **structurally stronger than its AOY score suggests**, on
+dimensions AOY does not measure: an explicit partitio, a concessio-based
+refutatio, and a complete Toulmin chain with a stated falsifier.
+
+Three convergent weaknesses, in priority order:
+
+1. **Peroratio under-recapitulates** (classical) — no restatement of proofs
+   before the emotional close.
+2. **Future pacing is thin** (Monroe step 4 **and** doc 38 P6) — the
+   success state is never pictured. *Two frameworks and our own doctrine.*
+3. **The warrant is unbacked** (Toulmin) — the bubble definition is asserted.
+
+All three sit in the final ninety seconds. None requires restructuring.
