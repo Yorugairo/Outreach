@@ -95,21 +95,26 @@ a kitchen counter · steel mill at night across a river.
 
 ## 5. Order of operations
 
-1. **Open wave-5 claim** for the 19 plates — longest pole, start it first.
-2. Promote the three orphaned documents; build the two new ones.
-3. Assemble Script D: Script C + debt unit after the existing P3 unit +
+1. ~~Open wave-5 claim~~ — **dispatched**, 15 slots running.
+2. **Figure-verify the DMP deck** against the dossier before any slide is
+   docked; correct the 70%→64.1% table, retire the Microsoft ROI card.
+3. Approve the four reused plates from `finance-episodes-plates-wave-1`.
+4. Promote the three orphaned documents; build the two new ones.
+5. Assemble Script D: Script C + debt unit after the existing P3 unit +
    winner unit after the divergence beat.
-4. Re-run the linter; sentence-strength pass on new lines only.
-5. **Chained master take** — part one ends at the P4→P5 boundary, part two
+6. Re-run the linter; sentence-strength pass on new lines only.
+7. **Chained master take** — part one ends at the P4→P5 boundary, part two
    passes part one's `previous_request_ids`. Timeout 900s, attempts 1
    (doc 37 §8.1).
-6. Rebuild the timeline from the new word timings; recheck the pivot
+8. Rebuild the timeline from the new word timings; recheck the pivot
    against the 45–55% pin and bare-plate stretches against 12s.
 
-## 5. Risks
+## 6. Risks
 
-- **Plate count is the schedule.** 19 plates at wave-3's rate is one codex
-  run; the review pass is the slower half.
+- **The DMP deck is the sharpest risk.** It is on-thesis and reusable, but
+  it was registered before the dossier and carries a figure we corrected.
+  A registered infographic that contradicts our own narration is worse
+  than no infographic — it hands a viewer the error in typeset form.
 - **The chained join sits at P4→P5**, immediately after the pivot. If
   prosody drifts across the join it will be audible at the episode's most
   important seam. Listen to that transition before anything else.
