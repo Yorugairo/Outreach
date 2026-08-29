@@ -119,6 +119,13 @@ def main() -> int:
                         # the player renders it as live type + highlighter
                         # instead of a static image (doc 29 record species)
                         **({"record": d["record"]} if "record" in d else {}),
+                        # a LIVE CHART payload: series emitted by the chart
+                        # builder from the same data as the PNG. The player
+                        # DRAWS the line; the PNG stays the static fallback.
+                        **({"chart": json.loads(
+                            ap.with_suffix(".series.json").read_text(
+                                encoding="utf-8"))}
+                           if ap.with_suffix(".series.json").exists() else {}),
                     }
                     uris[aid] = data_uri(ap, CARD_W)
                 # Spans come from the dock: evidence enters before its claim

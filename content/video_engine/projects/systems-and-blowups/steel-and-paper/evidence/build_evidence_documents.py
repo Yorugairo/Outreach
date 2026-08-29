@@ -352,6 +352,28 @@ def divergence():
                 f"AMZN, GOOGL, SPY - {start} to {mem.index[-1].date().isoformat()} "
                 f"- pairing after Bravos Research")
     save(fig, "ev-divergence-v1")
+    # LIVE-CHART SIDECAR: the same series, decimated, so the player can DRAW
+    # the chart instead of pasting the PNG (the data-document motion pattern;
+    # the PNG stays as the fallback and the review artifact).
+    import json as _json
+    from pathlib import Path
+    def dec(sr, n=140):
+        step = max(1, len(sr) // n)
+        return [[_yr([i])[0], round(float(v), 2)]
+                for i, v in list(zip(sr.index, sr.values))[::step]]
+    (Path(__file__).parent / "objects/ev-divergence-v1.series.json").write_text(
+        _json.dumps({
+            "title": "The sharpest chart on YouTube - plus the layer it needed",
+            "sub": "Their pairing, plus the S&P 500 and the memory builders. "
+                   "100 = Aug '25, log scale",
+            "src": "Yahoo Finance - pairing after Bravos Research",
+            "log": True,
+            "series": [
+                {"label": f"+{mem.iloc[-1]-100:,.0f}%", "color": "crimson", "pts": dec(mem)},
+                {"label": f"+{sox.iloc[-1]-100:,.0f}%", "color": "teal", "pts": dec(sox)},
+                {"label": f"+{mamaa.iloc[-1]-100:,.0f}%", "color": "cobalt", "pts": dec(mamaa)},
+                {"label": f"+{spy.iloc[-1]-100:,.0f}%", "color": "deemph", "pts": dec(spy)},
+            ]}), encoding="utf-8")
     print(f"  VERBATIM  memory +{mem.iloc[-1]-100:,.0f}%  semis +{sox.iloc[-1]-100:,.0f}%  "
           f"MAMAA +{mamaa.iloc[-1]-100:,.0f}%  S&P +{spy.iloc[-1]-100:,.0f}%")
 

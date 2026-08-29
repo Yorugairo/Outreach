@@ -88,6 +88,16 @@
      NARRATOR'S word timings. Ported from the motion prototype
      (evidence/prototypes/record-document-motion.html). */
   .dock.record .slide-frame, .dock.record .rail { display: none; }
+  /* LIVE CHART (data-document motion pattern): the line is drawn, not
+     pasted. Dark chart ground inside the washi frame, like the PNG. */
+  .dock.chart .slide-frame img { display: none; }
+  .dock.chart .slide-frame { background: #16181c; }
+  .chartbox { display: block; width: 100%; height: auto; background: #16181c;
+              border-radius: 6px; }
+  .chartbox .ct  { font: 800 34px/1.2 "Segoe UI", sans-serif; fill: #f2f2ef; }
+  .chartbox .cs  { font: 600 19px/1.3 "Segoe UI", sans-serif; fill: #b9bcc4; }
+  .chartbox .csr { font: 600 15px/1.3 "Segoe UI", sans-serif; fill: #8b8f98; }
+  .chartbox .cl  { font: 800 26px/1 ui-monospace, Consolas, monospace; }
   .paper { background: #f0eadc; color: #17150f; padding: 34px 42px 30px;
            font-family: "Lucida Sans Typewriter", "Courier New", monospace;
            display: flex; flex-direction: column; min-height: 380px; }
@@ -335,7 +345,70 @@
       recState[slot] = { r, q: pp.querySelector("blockquote"),
                          attr: pp.querySelector(".pattr"), src: pp.querySelector(".psrc") };
     }
-    $("i" + n).src = ev.record ? "" : (A[aid] || "");
+    let oldC = dockEl.querySelector(".chartbox"); if (oldC) oldC.remove();
+    // (chartbox lives inside .slide-frame; querySelector reaches it there)
+    chartState[slot] = null;
+    dockEl.classList.toggle("chart", !!ev.chart && !ev.record);
+    if (ev.chart && !ev.record) {
+      const C = ev.chart, NS = "http://www.w3.org/2000/svg";
+      const CW = 1056, CH = 480, PL = 64, PR = 120, PT = 96, PB = 44;
+      const svg = document.createElementNS(NS, "svg");
+      svg.setAttribute("viewBox", `0 0 ${CW} ${CH}`);
+      svg.setAttribute("class", "chartbox");
+      const Y = (v) => C.log ? Math.log10(v) : v;
+      let x0 = 1e9, x1 = -1e9, y0 = 1e9, y1 = -1e9;
+      for (const sr of C.series) for (const [x, v] of sr.pts) {
+        x0 = Math.min(x0, x); x1 = Math.max(x1, x);
+        y0 = Math.min(y0, Y(v)); y1 = Math.max(y1, Y(v));
+      }
+      const mx = (x) => PL + (x - x0) / (x1 - x0) * (CW - PL - PR);
+      const my = (v) => PT + (1 - (Y(v) - y0) / (y1 - y0)) * (CH - PT - PB);
+      const mk = (tag, at, txt) => {
+        const e = document.createElementNS(NS, tag);
+        for (const k in at) e.setAttribute(k, at[k]);
+        if (txt) e.textContent = txt;
+        svg.appendChild(e); return e;
+      };
+      mk("text", { class: "ct", x: 28, y: 44 }, C.title);
+      mk("text", { class: "cs", x: 28, y: 74 }, C.sub);
+      mk("text", { class: "csr", x: 28, y: CH - 14 }, C.src);
+      const PAL = { crimson: "#e5484d", teal: "#1fa892", cobalt: "#4a7fd6",
+                    amber: "#c98500", deemph: "#8b8f98" };
+      const st = { paths: [], labels: [] };
+      /* base layers draw first, the star (series[0]) draws LAST */
+      const order = [...C.series.keys()].reverse();
+      order.forEach((si, oi) => {
+        const sr = C.series[si];
+        const d = sr.pts.map(([x, v], i) =>
+          (i ? "L" : "M") + mx(x).toFixed(1) + " " + my(v).toFixed(1)).join(" ");
+        const path = mk("path", { d, fill: "none",
+          stroke: PAL[sr.color] || "#f2f2ef",
+          "stroke-width": si === 0 ? 5 : 3.5,
+          "stroke-linecap": "round", "stroke-linejoin": "round" });
+        const len = path.getTotalLength();
+        path.setAttribute("stroke-dasharray", len);
+        path.setAttribute("stroke-dashoffset", len);
+        const last = sr.pts[sr.pts.length - 1];
+        const lbl = mk("text", { class: "cl", x: mx(last[0]) + 14,
+          y: my(last[1]) + 8, fill: PAL[sr.color] || "#f2f2ef",
+          opacity: 0 }, sr.label);
+        st.paths.push({ path, len, stagger: oi / order.length });
+        st.labels.push(lbl);
+      });
+      /* into the slide-frame, so the rail (pills) stays BENEATH the chart
+         exactly as with a static document */
+      /* de-overlap end labels: two series ending within 26px stack their
+         labels (MAMAA +20% on S&P +21%); push later ones down */
+      const ys = [];
+      for (const l of st.labels) {
+        let y = +l.getAttribute("y");
+        while (ys.some((o) => Math.abs(o - y) < 26)) y += 26;
+        l.setAttribute("y", y); ys.push(y);
+      }
+      dockEl.querySelector(".slide-frame").appendChild(svg);
+      chartState[slot] = st;
+    }
+    $("i" + n).src = (ev.record || ev.chart) ? "" : (A[aid] || "");
     const rail = $("r" + n); rail.innerHTML = "";
     rail.classList.toggle("single", ev.badges.length === 1);
     ev.badges.forEach((bd, bi) => {
@@ -350,6 +423,21 @@
 
   let shown = ["", ""];
   const recState = [null, null];
+  const chartState = [null, null];
+  /* the line is drawn over the first stretch of the hold - eased, series
+     staggered so the base layers exist before the star lands on top */
+  const drawChart = (slot, t, d) => {
+    const st = chartState[slot]; if (!st) return;
+    const DUR = Math.min(6, Math.max(2.5, (d.exit - d.enter) * 0.38));
+    const p = clamp01((t - d.enter - CARD_IN * 0.6) / DUR);
+    st.paths.forEach((pp, i) => {
+      const lp = clamp01((p - pp.stagger * 0.35) / 0.65);
+      pp.path.setAttribute("stroke-dashoffset",
+        (pp.len * (1 - expoOut(lp))).toFixed(1));
+      st.labels[i].setAttribute("opacity",
+        clamp01((lp - 0.92) / 0.08).toFixed(2));
+    });
+  };
   const drawRecord = (slot, t) => {
     const st = recState[slot]; if (!st) return;
     const { r, q } = st, W = r.words;
@@ -461,6 +549,7 @@
       if (!d) { el.style.opacity = 0; el.style.clipPath = "inset(0 100% 0 0)"; continue; }
       if (d.slide !== shown[s]) { fillDock(s, d.slide); shown[s] = d.slide; }
       drawRecord(s, t);
+      drawChart(s, t, d);
       const solo = d.side !== "pair" && s === 0;
       el.classList.toggle("solo", solo);
       el.classList.toggle("side-r", solo && d.side === "r");
