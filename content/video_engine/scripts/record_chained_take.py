@@ -1,4 +1,4 @@
-"""Steel and Paper — Script E, two-part CHAINED master take.
+"""Steel and Paper — Script F, two-part CHAINED master take.
 
 Doc 37 §8: one take per part, no splicing. §8.1: a long paid generation gets
 a generous timeout and exactly one attempt, because a retry on an 11-minute
@@ -28,8 +28,8 @@ from pathlib import Path
 REPO = Path(r"C:\Users\Snipe\Downloads\Outreach Program\.claude\worktrees\sweet-villani-1c3a16")
 ENV_FILE = Path(r"C:\Users\Snipe\Downloads\Outreach Program\docs\local.env")
 EP = REPO / "content/video_engine/projects/systems-and-blowups/steel-and-paper"
-VO_TEXT = EP / "SCRIPT-E-VO.txt"
-OUT = EP / "vo-e"
+VO_TEXT = EP / "SCRIPT-F-VO.txt"
+OUT = EP / "vo-f"
 AUDIO_DIR = OUT / "audio"
 CACHE_DIR = OUT / "cache"
 
