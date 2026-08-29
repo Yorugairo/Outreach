@@ -360,6 +360,20 @@
     wash.classList.toggle("on", live.length > 0);
     spot.classList.toggle("on", live.length > 0);
 
+    /* THE PAGE TURN CARRIES ITS OWN LIGHT. When every live card ends at the
+       boundary being wiped, the wash and spotlight belong to the OUTGOING
+       page - clip them with the same front, so the incoming world arrives
+       clean and takes its own wash only when its own evidence lands. A wash
+       that stays full-stage through the turn pre-darkens the fresh page,
+       which is what reads as a mask over the layer. */
+    const boundary = sc.span[0];
+    const allOut = seaming && live.length > 0 &&
+      live.every((x) => Math.abs(x.exit - boundary) < 0.35);
+    const frontClip = sc.exit === "wipe_right"
+      ? `inset(0 ${wk * 100}% 0 0)` : `inset(0 0 0 ${wk * 100}%)`;
+    wash.style.clipPath = allOut ? frontClip : "none";
+    spot.style.clipPath = allOut ? frontClip : "none";
+
     /* Which side does the evidence occupy? A solo card alternates sides by
        scene so the world is not always cropped the same way; a pair spans
        the frame, so the gradient runs bottom-up instead of sideways. */
@@ -398,19 +412,23 @@
          world slides underneath is what read as clipping. A card that
          SURVIVES the boundary is not on the outgoing page and is never
          clipped: it holds while the world changes behind it. */
-      const endsHere = Math.abs(d.exit - sc.span[1]) < 0.35;
-      if (seaming && endsHere) {
-        el.style.clipPath = sc.exit === "wipe_right"
-          ? `inset(0 ${wk * 100}% 0 0)` : `inset(0 0 0 ${wk * 100}%)`;
+      /* A card ending at the boundary exits at sc.span[0] - the seam being
+         wiped - NOT sc.span[1]. The old check compared the wrong end, so
+         this branch never fired and every boundary card took the fade-and-
+         rise exit while the world slid underneath: the mask read. */
+      const endsHere = Math.abs(d.exit - boundary) < 0.35;
+      const swept = seaming && endsHere;
+      if (swept) {
+        el.style.clipPath = frontClip;
         el.style.opacity = clamp01((t - d.enter) / (CARD_IN * 0.55));
       } else {
         el.style.clipPath = "none";
         el.style.opacity = (1 - xe) * clamp01((t - d.enter) / (CARD_IN * 0.55));
       }
-      el.style.transform = xk
+      el.style.transform = (xk && !swept)
         ? "translateY(" + (-22 * xe) + "px) scale(" + (1 - 0.05 * xe) + ")"
         : "translateY(" + (32 * (1 - ck)) + "px) scale(" + (0.96 + 0.04 * ck) + ")";
-      const sh = 12 * ck;
+      const sh = 12 * ck * (swept ? (1 - wk) : 1);
       el.style.boxShadow = sh.toFixed(1) + "px " + sh.toFixed(1) + "px 0 rgba(37,49,60,.82)";
 
       const badges = (TL.evidence[d.slide] || {}).badges || [];

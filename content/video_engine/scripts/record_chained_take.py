@@ -123,6 +123,25 @@ def main() -> int:
         if not ok:
             fails.append(f"{label} character count {n} outside 1..{MV2_CAP}")
 
+    # Paragraphs are pause marks (doc 37): the provider introduces "a clear
+    # pause and reset in intonation" at every blank line. A payload that
+    # keeps the display script's beat-per-paragraph formatting resets the
+    # voice every sentence or two - and a break tag stacked on a paragraph
+    # boundary is a double pause. Both block recording.
+    paras = len([x for x in text.split("\n\n") if x.strip()])
+    dense = paras > max(10, len(text) // 700)
+    print(f"  [{'FAIL' if dense else 'ok'}] paragraph density: {paras} paragraphs "
+          f"in {len(text)} chars (reset every ~{len(text)//max(1,paras)} chars)")
+    if dense:
+        fails.append(f"{paras} paragraphs - the payload was not reflowed; "
+                     f"paragraph breaks survive only at section seams")
+    stacked = re.findall(
+        r"`?\[(?:pre|post)-key\]`?[ \t]*\n[ \t]*\n"
+        r"|\n[ \t]*\n[ \t]*`?\[(?:pre|post)-key\]`?", text)
+    print(f"  [{'FAIL' if stacked else 'ok'}] stacked pauses (tag on a paragraph seam): {len(stacked)}")
+    if stacked:
+        fails.append(f"{len(stacked)} break tags stacked on paragraph breaks - "
+                     f"at a seam the paragraph IS the settle; drop the tag")
     stray = set(re.findall(r"\[([a-z][a-z-]*)\]", text)) - {"pre-key", "post-key"}
     print(f"  [{'ok' if not stray else 'FAIL'}] no stray editorial flags "
           f"{sorted(stray) if stray else ''}")

@@ -40,6 +40,30 @@ mechanism is **model-dependent**
 | `[post-key]` | `<break time="1.2s" />` | settle time after the heavy point |
 | savor / breathing-room beat > 3s | **nothing in TTS** — assembled as timeline gap in the edit | break tags cap at 3s; long silence belongs to the editor, not the synth |
 
+**Paragraphs are pause marks (2026-08-29, from the provider docs — the rule
+we were missing).** ElevenLabs: *"New paragraphs introduce a clear pause and
+reset in intonation."* A blank line in the payload IS a pause mark, as real
+as a break tag. The Script F take shipped **37 paragraphs in 8.5k chars** —
+the display script's beat-per-paragraph formatting carried into the payload
+verbatim — so the voice reset its intonation every one-to-two sentences and
+could never build a run. Three rules, enforced by the recorder's preflight:
+
+1. **The payload is REFLOWED, never the display script.** Paragraph breaks
+   survive only at true section seams — a register reset the narration
+   *wants* (unit exits, the pivot, phase boundaries). Target one paragraph
+   per movement, roughly every 45–75s of speech: ≈8–10 paragraphs for a
+   six-minute part, not 37.
+2. **Never stack pauses.** A break tag adjacent to a paragraph break is a
+   double pause (tag + intonation reset) — the "weird gap" class of defect.
+   At a kept seam the paragraph break IS the settle: drop the tag. A tag
+   survives only mid-paragraph, where an exact duration is needed and no
+   reset is wanted.
+3. **The full pause inventory is counted together.** Tags, paragraph
+   breaks, and em-dashes all pause; the ration rule above governs their
+   SUM, not tags alone. 30 em-dashes already carry the micro-pause layer —
+   that is the voice, keep it — which is exactly why the tag budget stays
+   small.
+
 **Ration rule (official warning):** excessive break tags cause speed-ups and
 audio artifacts. Cap **≈3 break tags per generated segment**; micro-pauses
 come from punctuation — a dash or em-dash reads as a small pause (our
