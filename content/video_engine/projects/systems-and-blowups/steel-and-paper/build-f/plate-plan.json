@@ -1,0 +1,362 @@
+[
+ {
+  "plate": "world-hype-machine-v2",
+  "start": 0.0,
+  "end": 8.93,
+  "hold": 8.93
+ },
+ {
+  "plate": "world-unwind-desk-v2",
+  "start": 8.93,
+  "end": 17.87,
+  "hold": 8.93
+ },
+ {
+  "plate": "world-assay-sort-v1",
+  "start": 17.87,
+  "end": 26.8,
+  "hold": 8.93
+ },
+ {
+  "plate": "world-steelman-build-v1",
+  "start": 32.8,
+  "end": 43.32,
+  "hold": 10.52
+ },
+ {
+  "plate": "world-paper-and-steel-press-v1",
+  "start": 43.32,
+  "end": 53.84,
+  "hold": 10.52
+ },
+ {
+  "plate": "world-signature-nib-v2",
+  "start": 53.84,
+  "end": 64.37,
+  "hold": 10.52
+ },
+ {
+  "plate": "world-allocation-board",
+  "start": 64.37,
+  "end": 74.89,
+  "hold": 10.52
+ },
+ {
+  "plate": "world-bond-prospectus",
+  "start": 74.89,
+  "end": 85.41,
+  "hold": 10.52
+ },
+ {
+  "plate": "world-club-interior-papered",
+  "start": 91.41,
+  "end": 99.56,
+  "hold": 8.15
+ },
+ {
+  "plate": "world-datacenter-shell",
+  "start": 105.56,
+  "end": 112.89,
+  "hold": 7.33
+ },
+ {
+  "plate": "world-exchange-floor-1845",
+  "start": 118.89,
+  "end": 127.6,
+  "hold": 8.71
+ },
+ {
+  "plate": "world-hbm-die-stack",
+  "start": 127.6,
+  "end": 136.32,
+  "hold": 8.71
+ },
+ {
+  "plate": "world-index-board-swelling",
+  "start": 142.32,
+  "end": 152.66,
+  "hold": 10.34
+ },
+ {
+  "plate": "world-laptop-shelf",
+  "start": 152.66,
+  "end": 163.0,
+  "hold": 10.34
+ },
+ {
+  "plate": "world-lease-contracts-bound",
+  "start": 163.0,
+  "end": 173.33,
+  "hold": 10.34
+ },
+ {
+  "plate": "world-molten-pour-v2",
+  "start": 173.33,
+  "end": 183.67,
+  "hold": 10.34
+ },
+ {
+  "plate": "world-signature-close",
+  "start": 191.75,
+  "end": 195.64,
+  "hold": 3.89
+ },
+ {
+  "plate": "world-statement-kitchen",
+  "start": 201.64,
+  "end": 211.71,
+  "hold": 10.07
+ },
+ {
+  "plate": "world-steel-mill-night",
+  "start": 211.71,
+  "end": 221.79,
+  "hold": 10.07
+ },
+ {
+  "plate": "world-trading-desk-dark",
+  "start": 221.79,
+  "end": 231.86,
+  "hold": 10.07
+ },
+ {
+  "plate": "world-treasury-cash-count",
+  "start": 237.86,
+  "end": 246.83,
+  "hold": 8.97
+ },
+ {
+  "plate": "world-broadcast-set-v2",
+  "start": 246.83,
+  "end": 255.8,
+  "hold": 8.97
+ },
+ {
+  "plate": "world-listing-barge-v1",
+  "start": 261.8,
+  "end": 271.21,
+  "hold": 9.41
+ },
+ {
+  "plate": "world-adviser-signature-v1",
+  "start": 277.21,
+  "end": 284.67,
+  "hold": 7.46
+ },
+ {
+  "plate": "world-budget-burndown-v1",
+  "start": 284.67,
+  "end": 292.13,
+  "hold": 7.46
+ },
+ {
+  "plate": "world-datacenter-aisle-v1",
+  "start": 298.13,
+  "end": 302.99,
+  "hold": 4.86
+ },
+ {
+  "plate": "world-dawn-factory-v1",
+  "start": 308.99,
+  "end": 315.68,
+  "hold": 6.69
+ },
+ {
+  "plate": "world-dotcom-server-room-v1",
+  "start": 315.68,
+  "end": 322.37,
+  "hold": 6.69
+ },
+ {
+  "plate": "world-empty-racks-v1",
+  "start": 329.43,
+  "end": 339.16,
+  "hold": 9.73
+ },
+ {
+  "plate": "world-fiber-trench-v1",
+  "start": 339.16,
+  "end": 348.9,
+  "hold": 9.73
+ },
+ {
+  "plate": "world-gpu-crate-dock-v1",
+  "start": 348.9,
+  "end": 358.63,
+  "hold": 9.73
+ },
+ {
+  "plate": "world-internal-memo-v1",
+  "start": 358.63,
+  "end": 368.37,
+  "hold": 9.73
+ },
+ {
+  "plate": "world-ledger-page-v1",
+  "start": 368.37,
+  "end": 378.1,
+  "hold": 9.73
+ },
+ {
+  "plate": "world-license-cabinet-v1",
+  "start": 384.1,
+  "end": 393.74,
+  "hold": 9.64
+ },
+ {
+  "plate": "world-memory-wafer-v1",
+  "start": 402.19,
+  "end": 413.1,
+  "hold": 10.91
+ },
+ {
+  "plate": "world-navvy-cutting-v1",
+  "start": 413.1,
+  "end": 424.0,
+  "hold": 10.91
+ },
+ {
+  "plate": "world-orderbook-stamped-v1",
+  "start": 424.0,
+  "end": 434.91,
+  "hold": 10.91
+ },
+ {
+  "plate": "world-pressure-gauge-v1",
+  "start": 445.94,
+  "end": 457.7,
+  "hold": 11.76
+ },
+ {
+  "plate": "world-railway-acts-desk-v1",
+  "start": 463.7,
+  "end": 473.48,
+  "hold": 9.78
+ },
+ {
+  "plate": "world-scales-coin-paper-v1",
+  "start": 473.48,
+  "end": 483.26,
+  "hold": 9.78
+ },
+ {
+  "plate": "world-sell-ticket-v1",
+  "start": 483.26,
+  "end": 493.04,
+  "hold": 9.78
+ },
+ {
+  "plate": "world-share-office-queue-v1",
+  "start": 493.04,
+  "end": 502.82,
+  "hold": 9.78
+ },
+ {
+  "plate": "world-substation-feed-v1",
+  "start": 502.82,
+  "end": 512.6,
+  "hold": 9.78
+ },
+ {
+  "plate": "world-target-date-envelope-v1",
+  "start": 518.6,
+  "end": 527.06,
+  "hold": 8.46
+ },
+ {
+  "plate": "world-three-notch-slate-v1",
+  "start": 540.46,
+  "end": 547.69,
+  "hold": 7.23
+ },
+ {
+  "plate": "world-spike-certificate-ring-v2",
+  "start": 553.88,
+  "end": 565.51,
+  "hold": 11.63
+ },
+ {
+  "plate": "world-spike-rest-v2",
+  "start": 571.51,
+  "end": 581.78,
+  "hold": 10.27
+ },
+ {
+  "plate": "world-bankrupt-club-v1",
+  "start": 581.78,
+  "end": 592.06,
+  "hold": 10.27
+ },
+ {
+  "plate": "world-certificate-wall-v1",
+  "start": 592.06,
+  "end": 602.33,
+  "hold": 10.27
+ },
+ {
+  "plate": "world-circuit-terrain-v1",
+  "start": 608.33,
+  "end": 609.5,
+  "hold": 1.17
+ },
+ {
+  "plate": "world-exhibition-hall-morning-v1",
+  "start": 616.2,
+  "end": 626.31,
+  "hold": 10.11
+ },
+ {
+  "plate": "world-modern-certificate-v1",
+  "start": 626.31,
+  "end": 636.42,
+  "hold": 10.11
+ },
+ {
+  "plate": "world-spike-desk-v1",
+  "start": 636.42,
+  "end": 646.54,
+  "hold": 10.11
+ },
+ {
+  "plate": "world-two-rooms-divergence-v1",
+  "start": 646.54,
+  "end": 656.65,
+  "hold": 10.11
+ },
+ {
+  "plate": "world-viaduct-train-rain-v1",
+  "start": 656.65,
+  "end": 666.76,
+  "hold": 10.11
+ },
+ {
+  "plate": "world-workbench-triad-v1",
+  "start": 666.76,
+  "end": 676.87,
+  "hold": 10.11
+ },
+ {
+  "plate": "world-dram-terrain-v1",
+  "start": 682.87,
+  "end": 692.92,
+  "hold": 10.05
+ },
+ {
+  "plate": "world-korea-port-v1",
+  "start": 692.92,
+  "end": 702.98,
+  "hold": 10.05
+ },
+ {
+  "plate": "world-memory-fab-floor-v1",
+  "start": 702.98,
+  "end": 713.03,
+  "hold": 10.05
+ },
+ {
+  "plate": "world-seoul-fab-skyline-v1",
+  "start": 713.03,
+  "end": 723.09,
+  "hold": 10.05
+ }
+]

@@ -50,7 +50,8 @@ def load_take() -> tuple[list[Word], float, float]:
 
 def plate_inventory() -> list[str]:
     """Every operator-approved plate, newest wave first so v2s win."""
-    waves = ["steel-and-paper-plates-wave-6", "steel-and-paper-plates-wave-5",
+    waves = ["steel-and-paper-plates-wave-7b", "steel-and-paper-plates-wave-7",
+             "steel-and-paper-plates-wave-6", "steel-and-paper-plates-wave-5",
              "steel-and-paper-plates-wave-4", "steel-and-paper-plates-wave-3",
              "steel-and-paper-plates-wave-1b", "steel-and-paper-plates-wave-1",
              "finance-episodes-plates-wave-1"]
@@ -62,6 +63,8 @@ def plate_inventory() -> list[str]:
         "world-index-weights-v1": "operator rejected",
         "world-price-board-wiped-v1": "operator rejected",
         "world-molten-pour-v1": "superseded by wave-5 v2",
+        "world-hype-machine-v1": "output was paper; superseded by 7b v2",
+        "world-unwind-desk-v1": "reduction illegible, cards read as playing cards; superseded by 7b v2",
     }
     # finance-episodes-wave-1 holds plates for other episodes too.
     REUSABLE = {"world-dram-terrain-v1", "world-korea-port-v1",

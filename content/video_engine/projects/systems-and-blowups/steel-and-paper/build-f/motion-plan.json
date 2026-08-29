@@ -1,0 +1,1806 @@
+{
+ "runtime_s": 723.085,
+ "join": {
+  "offset_s": 504.353,
+  "settle_s": 1.2,
+  "part1_speech_end_s": 503.153
+ },
+ "durations": {
+  "dock_in": 0.75,
+  "dock_out": 0.72,
+  "wash": 0.75,
+  "pill": 0.65,
+  "wipe": 0.62,
+  "plate_alone": 1.7,
+  "settle": 1.1,
+  "savour": 2.2,
+  "scale_from": 0.88,
+  "parallax_to": 1.04,
+  "expo_out": "cubic-bezier(.16,1,.3,1)",
+  "quart_io": "cubic-bezier(.77,0,.175,1)"
+ },
+ "cues": [
+  {
+   "kind": "plate",
+   "asset": "world-hype-machine-v2",
+   "in": 0.0,
+   "out": 8.93,
+   "enter": {
+    "type": "wipe",
+    "dur": 0.62,
+    "ease": "cubic-bezier(.77,0,.175,1)"
+   },
+   "hold": {
+    "parallax_scale": [
+     1.0,
+     1.04
+    ]
+   },
+   "file": "assets/world-hype-machine-v2.png"
+  },
+  {
+   "kind": "plate",
+   "asset": "world-unwind-desk-v2",
+   "in": 8.93,
+   "out": 17.87,
+   "enter": {
+    "type": "wipe",
+    "dur": 0.62,
+    "ease": "cubic-bezier(.77,0,.175,1)"
+   },
+   "hold": {
+    "parallax_scale": [
+     1.0,
+     1.04
+    ]
+   },
+   "file": "assets/world-unwind-desk-v2.png"
+  },
+  {
+   "kind": "plate",
+   "asset": "world-assay-sort-v1",
+   "in": 17.87,
+   "out": 32.8,
+   "enter": {
+    "type": "wipe",
+    "dur": 0.62,
+    "ease": "cubic-bezier(.77,0,.175,1)"
+   },
+   "hold": {
+    "parallax_scale": [
+     1.0,
+     1.04
+    ]
+   },
+   "file": "assets/world-assay-sort-v1.png"
+  },
+  {
+   "kind": "evidence",
+   "asset": "ev-mega-vs-spy-v3",
+   "species": "chart",
+   "in": 26.55,
+   "out": 33.9,
+   "enter": {
+    "type": "dock",
+    "dur": 0.75,
+    "ease": "cubic-bezier(.16,1,.3,1)",
+    "translateY": 32,
+    "scale": [
+     0.88,
+     1.0
+    ]
+   },
+   "exit": {
+    "dur": 0.72,
+    "ease": "cubic-bezier(.16,1,.3,1)"
+   },
+   "wash": {
+    "dur": 0.75
+   },
+   "anchor": "One is the builders of AI \u2014 chips, racks, power.",
+   "file": "assets/ev-mega-vs-spy-v3.png"
+  },
+  {
+   "kind": "plate",
+   "asset": "world-steelman-build-v1",
+   "in": 32.8,
+   "out": 43.32,
+   "enter": {
+    "type": "wipe",
+    "dur": 0.62,
+    "ease": "cubic-bezier(.77,0,.175,1)"
+   },
+   "hold": {
+    "parallax_scale": [
+     1.0,
+     1.04
+    ]
+   },
+   "file": "assets/world-steelman-build-v1.png"
+  },
+  {
+   "kind": "plate",
+   "asset": "world-paper-and-steel-press-v1",
+   "in": 43.32,
+   "out": 53.84,
+   "enter": {
+    "type": "wipe",
+    "dur": 0.62,
+    "ease": "cubic-bezier(.77,0,.175,1)"
+   },
+   "hold": {
+    "parallax_scale": [
+     1.0,
+     1.04
+    ]
+   },
+   "file": "assets/world-paper-and-steel-press-v1.png"
+  },
+  {
+   "kind": "plate",
+   "asset": "world-signature-nib-v2",
+   "in": 53.84,
+   "out": 64.37,
+   "enter": {
+    "type": "wipe",
+    "dur": 0.62,
+    "ease": "cubic-bezier(.77,0,.175,1)"
+   },
+   "hold": {
+    "parallax_scale": [
+     1.0,
+     1.04
+    ]
+   },
+   "file": "assets/world-signature-nib-v2.png"
+  },
+  {
+   "kind": "plate",
+   "asset": "world-allocation-board",
+   "in": 64.37,
+   "out": 74.89,
+   "enter": {
+    "type": "wipe",
+    "dur": 0.62,
+    "ease": "cubic-bezier(.77,0,.175,1)"
+   },
+   "hold": {
+    "parallax_scale": [
+     1.0,
+     1.04
+    ]
+   },
+   "file": "assets/world-allocation-board.png"
+  },
+  {
+   "kind": "plate",
+   "asset": "world-bond-prospectus",
+   "in": 74.89,
+   "out": 91.41,
+   "enter": {
+    "type": "wipe",
+    "dur": 0.62,
+    "ease": "cubic-bezier(.77,0,.175,1)"
+   },
+   "hold": {
+    "parallax_scale": [
+     1.0,
+     1.04
+    ]
+   },
+   "file": "assets/world-bond-prospectus.png"
+  },
+  {
+   "kind": "evidence",
+   "asset": "ev-railway-index-v1",
+   "species": "chart",
+   "in": 85.16,
+   "out": 92.51,
+   "enter": {
+    "type": "dock",
+    "dur": 0.75,
+    "ease": "cubic-bezier(.16,1,.3,1)",
+    "translateY": 32,
+    "scale": [
+     0.88,
+     1.0
+    ]
+   },
+   "exit": {
+    "dur": 0.72,
+    "ease": "cubic-bezier(.16,1,.3,1)"
+   },
+   "wash": {
+    "dur": 0.75
+   },
+   "anchor": "Railways in the 1840s drew a quarter-billion pounds \u2014 mo",
+   "file": "assets/ev-railway-index-v1.png"
+  },
+  {
+   "kind": "plate",
+   "asset": "world-club-interior-papered",
+   "in": 91.41,
+   "out": 105.56,
+   "enter": {
+    "type": "wipe",
+    "dur": 0.62,
+    "ease": "cubic-bezier(.77,0,.175,1)"
+   },
+   "hold": {
+    "parallax_scale": [
+     1.0,
+     1.04
+    ]
+   },
+   "file": "assets/world-club-interior-papered.png"
+  },
+  {
+   "kind": "evidence",
+   "asset": "ev-railway-gdp-tile-v1",
+   "species": "tile",
+   "in": 99.31,
+   "out": 106.66,
+   "enter": {
+    "type": "dock",
+    "dur": 0.75,
+    "ease": "cubic-bezier(.16,1,.3,1)",
+    "translateY": 32,
+    "scale": [
+     0.88,
+     1.0
+    ]
+   },
+   "exit": {
+    "dur": 0.72,
+    "ease": "cubic-bezier(.16,1,.3,1)"
+   },
+   "wash": {
+    "dur": 0.75
+   },
+   "anchor": "And by Bravos' math, AI spending just crossed eight.",
+   "file": "assets/ev-railway-gdp-tile-v1.png"
+  },
+  {
+   "kind": "plate",
+   "asset": "world-datacenter-shell",
+   "in": 105.56,
+   "out": 118.89,
+   "enter": {
+    "type": "wipe",
+    "dur": 0.62,
+    "ease": "cubic-bezier(.77,0,.175,1)"
+   },
+   "hold": {
+    "parallax_scale": [
+     1.0,
+     1.04
+    ]
+   },
+   "file": "assets/world-datacenter-shell.png"
+  },
+  {
+   "kind": "evidence",
+   "asset": "ev-equip-ipp-gdp-v1",
+   "species": "chart",
+   "in": 112.64,
+   "out": 119.99,
+   "enter": {
+    "type": "dock",
+    "dur": 0.75,
+    "ease": "cubic-bezier(.16,1,.3,1)",
+    "translateY": 32,
+    "scale": [
+     0.88,
+     1.0
+    ]
+   },
+   "exit": {
+    "dur": 0.72,
+    "ease": "cubic-bezier(.16,1,.3,1)"
+   },
+   "wash": {
+    "dur": 0.75
+   },
+   "anchor": "Back in 2000, the dot-com peak was eleven point five fou",
+   "file": "assets/ev-equip-ipp-gdp-v1.png"
+  },
+  {
+   "kind": "plate",
+   "asset": "world-exchange-floor-1845",
+   "in": 118.89,
+   "out": 127.6,
+   "enter": {
+    "type": "wipe",
+    "dur": 0.62,
+    "ease": "cubic-bezier(.77,0,.175,1)"
+   },
+   "hold": {
+    "parallax_scale": [
+     1.0,
+     1.04
+    ]
+   },
+   "file": "assets/world-exchange-floor-1845.png"
+  },
+  {
+   "kind": "plate",
+   "asset": "world-hbm-die-stack",
+   "in": 127.6,
+   "out": 142.32,
+   "enter": {
+    "type": "wipe",
+    "dur": 0.62,
+    "ease": "cubic-bezier(.77,0,.175,1)"
+   },
+   "hold": {
+    "parallax_scale": [
+     1.0,
+     1.04
+    ]
+   },
+   "file": "assets/world-hbm-die-stack.png"
+  },
+  {
+   "kind": "evidence",
+   "asset": "ev-tnx-two-eras-v3",
+   "species": "chart",
+   "in": 136.07,
+   "out": 143.42,
+   "enter": {
+    "type": "dock",
+    "dur": 0.75,
+    "ease": "cubic-bezier(.16,1,.3,1)",
+    "translateY": 32,
+    "scale": [
+     0.88,
+     1.0
+    ]
+   },
+   "exit": {
+    "dur": 0.72,
+    "ease": "cubic-bezier(.16,1,.3,1)"
+   },
+   "wash": {
+    "dur": 0.75
+   },
+   "anchor": "Bank of England above six percent: railways rolled over.",
+   "file": "assets/ev-tnx-two-eras-v3.png"
+  },
+  {
+   "kind": "plate",
+   "asset": "world-index-board-swelling",
+   "in": 142.32,
+   "out": 152.66,
+   "enter": {
+    "type": "wipe",
+    "dur": 0.62,
+    "ease": "cubic-bezier(.77,0,.175,1)"
+   },
+   "hold": {
+    "parallax_scale": [
+     1.0,
+     1.04
+    ]
+   },
+   "file": "assets/world-index-board-swelling.png"
+  },
+  {
+   "kind": "plate",
+   "asset": "world-laptop-shelf",
+   "in": 152.66,
+   "out": 163.0,
+   "enter": {
+    "type": "wipe",
+    "dur": 0.62,
+    "ease": "cubic-bezier(.77,0,.175,1)"
+   },
+   "hold": {
+    "parallax_scale": [
+     1.0,
+     1.04
+    ]
+   },
+   "file": "assets/world-laptop-shelf.png"
+  },
+  {
+   "kind": "plate",
+   "asset": "world-lease-contracts-bound",
+   "in": 163.0,
+   "out": 173.33,
+   "enter": {
+    "type": "wipe",
+    "dur": 0.62,
+    "ease": "cubic-bezier(.77,0,.175,1)"
+   },
+   "hold": {
+    "parallax_scale": [
+     1.0,
+     1.04
+    ]
+   },
+   "file": "assets/world-lease-contracts-bound.png"
+  },
+  {
+   "kind": "plate",
+   "asset": "world-molten-pour-v2",
+   "in": 173.33,
+   "out": 191.75,
+   "enter": {
+    "type": "wipe",
+    "dur": 0.62,
+    "ease": "cubic-bezier(.77,0,.175,1)"
+   },
+   "hold": {
+    "parallax_scale": [
+     1.0,
+     1.04
+    ]
+   },
+   "file": "assets/world-molten-pour-v2.png"
+  },
+  {
+   "kind": "evidence",
+   "asset": "ev-doc-karp",
+   "species": "record",
+   "in": 183.42,
+   "out": 192.85,
+   "enter": {
+    "type": "dock",
+    "dur": 0.75,
+    "ease": "cubic-bezier(.16,1,.3,1)",
+    "translateY": 32,
+    "scale": [
+     0.88,
+     1.0
+    ]
+   },
+   "exit": {
+    "dur": 0.72,
+    "ease": "cubic-bezier(.16,1,.3,1)"
+   },
+   "wash": {
+    "dur": 0.75
+   },
+   "anchor": "Alex Karp of Palantir, live on CNBC: enterprises are \u2014 h",
+   "file": "assets/ev-doc-karp.png"
+  },
+  {
+   "kind": "plate",
+   "asset": "world-signature-close",
+   "in": 191.75,
+   "out": 201.64,
+   "enter": {
+    "type": "wipe",
+    "dur": 0.62,
+    "ease": "cubic-bezier(.77,0,.175,1)"
+   },
+   "hold": {
+    "parallax_scale": [
+     1.0,
+     1.04
+    ]
+   },
+   "file": "assets/world-signature-close.png"
+  },
+  {
+   "kind": "evidence",
+   "asset": "ev-uber-adoption-v1",
+   "species": "chart",
+   "in": 195.39,
+   "out": 202.74,
+   "enter": {
+    "type": "dock",
+    "dur": 0.75,
+    "ease": "cubic-bezier(.16,1,.3,1)",
+    "translateY": 32,
+    "scale": [
+     0.88,
+     1.0
+    ]
+   },
+   "exit": {
+    "dur": 0.72,
+    "ease": "cubic-bezier(.16,1,.3,1)"
+   },
+   "wash": {
+    "dur": 0.75
+   },
+   "anchor": "Uber's CTO says they burned the entire annual AI budget ",
+   "file": "assets/ev-uber-adoption-v1.png"
+  },
+  {
+   "kind": "plate",
+   "asset": "world-statement-kitchen",
+   "in": 201.64,
+   "out": 211.71,
+   "enter": {
+    "type": "wipe",
+    "dur": 0.62,
+    "ease": "cubic-bezier(.77,0,.175,1)"
+   },
+   "hold": {
+    "parallax_scale": [
+     1.0,
+     1.04
+    ]
+   },
+   "file": "assets/world-statement-kitchen.png"
+  },
+  {
+   "kind": "plate",
+   "asset": "world-steel-mill-night",
+   "in": 211.71,
+   "out": 221.79,
+   "enter": {
+    "type": "wipe",
+    "dur": 0.62,
+    "ease": "cubic-bezier(.77,0,.175,1)"
+   },
+   "hold": {
+    "parallax_scale": [
+     1.0,
+     1.04
+    ]
+   },
+   "file": "assets/world-steel-mill-night.png"
+  },
+  {
+   "kind": "plate",
+   "asset": "world-trading-desk-dark",
+   "in": 221.79,
+   "out": 237.86,
+   "enter": {
+    "type": "wipe",
+    "dur": 0.62,
+    "ease": "cubic-bezier(.77,0,.175,1)"
+   },
+   "hold": {
+    "parallax_scale": [
+     1.0,
+     1.04
+    ]
+   },
+   "file": "assets/world-trading-desk-dark.png"
+  },
+  {
+   "kind": "evidence",
+   "asset": "ev-three-manias",
+   "species": "table",
+   "in": 231.61,
+   "out": 238.96,
+   "enter": {
+    "type": "dock",
+    "dur": 0.75,
+    "ease": "cubic-bezier(.16,1,.3,1)",
+    "translateY": 32,
+    "scale": [
+     0.88,
+     1.0
+    ]
+   },
+   "exit": {
+    "dur": 0.72,
+    "ease": "cubic-bezier(.16,1,.3,1)"
+   },
+   "wash": {
+    "dur": 0.75
+   },
+   "anchor": "And in 1849, the answer wasn't the paper.",
+   "file": "assets/ev-three-manias.png"
+  },
+  {
+   "kind": "plate",
+   "asset": "world-treasury-cash-count",
+   "in": 237.86,
+   "out": 246.83,
+   "enter": {
+    "type": "wipe",
+    "dur": 0.62,
+    "ease": "cubic-bezier(.77,0,.175,1)"
+   },
+   "hold": {
+    "parallax_scale": [
+     1.0,
+     1.04
+    ]
+   },
+   "file": "assets/world-treasury-cash-count.png"
+  },
+  {
+   "kind": "plate",
+   "asset": "world-broadcast-set-v2",
+   "in": 246.83,
+   "out": 261.8,
+   "enter": {
+    "type": "wipe",
+    "dur": 0.62,
+    "ease": "cubic-bezier(.77,0,.175,1)"
+   },
+   "hold": {
+    "parallax_scale": [
+     1.0,
+     1.04
+    ]
+   },
+   "file": "assets/world-broadcast-set-v2.png"
+  },
+  {
+   "kind": "evidence",
+   "asset": "ev-debt-issuance-v2",
+   "species": "chart",
+   "in": 255.55,
+   "out": 262.9,
+   "enter": {
+    "type": "dock",
+    "dur": 0.75,
+    "ease": "cubic-bezier(.16,1,.3,1)",
+    "translateY": 32,
+    "scale": [
+     0.88,
+     1.0
+    ]
+   },
+   "exit": {
+    "dur": 0.72,
+    "ease": "cubic-bezier(.16,1,.3,1)"
+   },
+   "wash": {
+    "dur": 0.75
+   },
+   "anchor": "Between 2020 and 2024, the biggest builders borrowed abo",
+   "file": "assets/ev-debt-issuance-v2.png"
+  },
+  {
+   "kind": "plate",
+   "asset": "world-listing-barge-v1",
+   "in": 261.8,
+   "out": 277.21,
+   "enter": {
+    "type": "wipe",
+    "dur": 0.62,
+    "ease": "cubic-bezier(.77,0,.175,1)"
+   },
+   "hold": {
+    "parallax_scale": [
+     1.0,
+     1.04
+    ]
+   },
+   "file": "assets/world-listing-barge-v1.png"
+  },
+  {
+   "kind": "evidence",
+   "asset": "ev-ig-credit-weighting-v1",
+   "species": "chart",
+   "in": 270.96,
+   "out": 278.31,
+   "enter": {
+    "type": "dock",
+    "dur": 0.75,
+    "ease": "cubic-bezier(.16,1,.3,1)",
+    "translateY": 32,
+    "scale": [
+     0.88,
+     1.0
+    ]
+   },
+   "exit": {
+    "dur": 0.72,
+    "ease": "cubic-bezier(.16,1,.3,1)"
+   },
+   "wash": {
+    "dur": 0.75
+   },
+   "anchor": "Technology used to be about nine percent of the investme",
+   "file": "assets/ev-ig-credit-weighting-v1.png"
+  },
+  {
+   "kind": "plate",
+   "asset": "world-adviser-signature-v1",
+   "in": 277.21,
+   "out": 284.67,
+   "enter": {
+    "type": "wipe",
+    "dur": 0.62,
+    "ease": "cubic-bezier(.77,0,.175,1)"
+   },
+   "hold": {
+    "parallax_scale": [
+     1.0,
+     1.04
+    ]
+   },
+   "file": "assets/world-adviser-signature-v1.png"
+  },
+  {
+   "kind": "plate",
+   "asset": "world-budget-burndown-v1",
+   "in": 284.67,
+   "out": 298.13,
+   "enter": {
+    "type": "wipe",
+    "dur": 0.62,
+    "ease": "cubic-bezier(.77,0,.175,1)"
+   },
+   "hold": {
+    "parallax_scale": [
+     1.0,
+     1.04
+    ]
+   },
+   "file": "assets/world-budget-burndown-v1.png"
+  },
+  {
+   "kind": "evidence",
+   "asset": "ev-capex-consensus-v1",
+   "species": "chart",
+   "in": 291.88,
+   "out": 299.23,
+   "enter": {
+    "type": "dock",
+    "dur": 0.75,
+    "ease": "cubic-bezier(.16,1,.3,1)",
+    "translateY": 32,
+    "scale": [
+     0.88,
+     1.0
+    ]
+   },
+   "exit": {
+    "dur": 0.72,
+    "ease": "cubic-bezier(.16,1,.3,1)"
+   },
+   "wash": {
+    "dur": 0.75
+   },
+   "anchor": "Consensus now says six hundred and ninety.",
+   "file": "assets/ev-capex-consensus-v1.png"
+  },
+  {
+   "kind": "plate",
+   "asset": "world-datacenter-aisle-v1",
+   "in": 298.13,
+   "out": 308.99,
+   "enter": {
+    "type": "wipe",
+    "dur": 0.62,
+    "ease": "cubic-bezier(.77,0,.175,1)"
+   },
+   "hold": {
+    "parallax_scale": [
+     1.0,
+     1.04
+    ]
+   },
+   "file": "assets/world-datacenter-aisle-v1.png"
+  },
+  {
+   "kind": "evidence",
+   "asset": "ev-doc-leases",
+   "species": "record",
+   "in": 302.74,
+   "out": 310.09,
+   "enter": {
+    "type": "dock",
+    "dur": 0.75,
+    "ease": "cubic-bezier(.16,1,.3,1)",
+    "translateY": 32,
+    "scale": [
+     0.88,
+     1.0
+    ]
+   },
+   "exit": {
+    "dur": 0.72,
+    "ease": "cubic-bezier(.16,1,.3,1)"
+   },
+   "wash": {
+    "dur": 0.75
+   },
+   "anchor": "Go into the filings and there's another eight hundred an",
+   "file": "assets/ev-doc-leases.png"
+  },
+  {
+   "kind": "plate",
+   "asset": "world-dawn-factory-v1",
+   "in": 308.99,
+   "out": 315.68,
+   "enter": {
+    "type": "wipe",
+    "dur": 0.62,
+    "ease": "cubic-bezier(.77,0,.175,1)"
+   },
+   "hold": {
+    "parallax_scale": [
+     1.0,
+     1.04
+    ]
+   },
+   "file": "assets/world-dawn-factory-v1.png"
+  },
+  {
+   "kind": "plate",
+   "asset": "world-dotcom-server-room-v1",
+   "in": 315.68,
+   "out": 329.43,
+   "enter": {
+    "type": "wipe",
+    "dur": 0.62,
+    "ease": "cubic-bezier(.77,0,.175,1)"
+   },
+   "hold": {
+    "parallax_scale": [
+     1.0,
+     1.04
+    ]
+   },
+   "file": "assets/world-dotcom-server-room-v1.png"
+  },
+  {
+   "kind": "evidence",
+   "asset": "ev-doc-macdonald",
+   "species": "record",
+   "in": 322.12,
+   "out": 330.53,
+   "enter": {
+    "type": "dock",
+    "dur": 0.75,
+    "ease": "cubic-bezier(.16,1,.3,1)",
+    "translateY": 32,
+    "scale": [
+     0.88,
+     1.0
+    ]
+   },
+   "exit": {
+    "dur": 0.72,
+    "ease": "cubic-bezier(.16,1,.3,1)"
+   },
+   "wash": {
+    "dur": 0.75
+   },
+   "anchor": "Over the next two years, PIMCO has this buildout consumi",
+   "file": "assets/ev-doc-macdonald.png"
+  },
+  {
+   "kind": "plate",
+   "asset": "world-empty-racks-v1",
+   "in": 329.43,
+   "out": 339.16,
+   "enter": {
+    "type": "wipe",
+    "dur": 0.62,
+    "ease": "cubic-bezier(.77,0,.175,1)"
+   },
+   "hold": {
+    "parallax_scale": [
+     1.0,
+     1.04
+    ]
+   },
+   "file": "assets/world-empty-racks-v1.png"
+  },
+  {
+   "kind": "plate",
+   "asset": "world-fiber-trench-v1",
+   "in": 339.16,
+   "out": 348.9,
+   "enter": {
+    "type": "wipe",
+    "dur": 0.62,
+    "ease": "cubic-bezier(.77,0,.175,1)"
+   },
+   "hold": {
+    "parallax_scale": [
+     1.0,
+     1.04
+    ]
+   },
+   "file": "assets/world-fiber-trench-v1.png"
+  },
+  {
+   "kind": "plate",
+   "asset": "world-gpu-crate-dock-v1",
+   "in": 348.9,
+   "out": 358.63,
+   "enter": {
+    "type": "wipe",
+    "dur": 0.62,
+    "ease": "cubic-bezier(.77,0,.175,1)"
+   },
+   "hold": {
+    "parallax_scale": [
+     1.0,
+     1.04
+    ]
+   },
+   "file": "assets/world-gpu-crate-dock-v1.png"
+  },
+  {
+   "kind": "plate",
+   "asset": "world-internal-memo-v1",
+   "in": 358.63,
+   "out": 368.37,
+   "enter": {
+    "type": "wipe",
+    "dur": 0.62,
+    "ease": "cubic-bezier(.77,0,.175,1)"
+   },
+   "hold": {
+    "parallax_scale": [
+     1.0,
+     1.04
+    ]
+   },
+   "file": "assets/world-internal-memo-v1.png"
+  },
+  {
+   "kind": "plate",
+   "asset": "world-ledger-page-v1",
+   "in": 368.37,
+   "out": 384.1,
+   "enter": {
+    "type": "wipe",
+    "dur": 0.62,
+    "ease": "cubic-bezier(.77,0,.175,1)"
+   },
+   "hold": {
+    "parallax_scale": [
+     1.0,
+     1.04
+    ]
+   },
+   "file": "assets/world-ledger-page-v1.png"
+  },
+  {
+   "kind": "evidence",
+   "asset": "silicon-antidote-s02-valuation-bubble-v1",
+   "species": "deck",
+   "in": 377.85,
+   "out": 385.2,
+   "enter": {
+    "type": "dock",
+    "dur": 0.75,
+    "ease": "cubic-bezier(.16,1,.3,1)",
+    "translateY": 32,
+    "scale": [
+     0.88,
+     1.0
+    ]
+   },
+   "exit": {
+    "dur": 0.72,
+    "ease": "cubic-bezier(.16,1,.3,1)"
+   },
+   "wash": {
+    "dur": 0.75
+   },
+   "anchor": "AI builders are now twenty percent of the S&P five hundr",
+   "file": "assets/silicon-antidote-s02-valuation-bubble-v1.png"
+  },
+  {
+   "kind": "plate",
+   "asset": "world-license-cabinet-v1",
+   "in": 384.1,
+   "out": 402.19,
+   "enter": {
+    "type": "wipe",
+    "dur": 0.62,
+    "ease": "cubic-bezier(.77,0,.175,1)"
+   },
+   "hold": {
+    "parallax_scale": [
+     1.0,
+     1.04
+    ]
+   },
+   "file": "assets/world-license-cabinet-v1.png"
+  },
+  {
+   "kind": "evidence",
+   "asset": "ev-smh-drawdown-v3",
+   "species": "chart",
+   "in": 393.49,
+   "out": 403.29,
+   "enter": {
+    "type": "dock",
+    "dur": 0.75,
+    "ease": "cubic-bezier(.16,1,.3,1)",
+    "translateY": 32,
+    "scale": [
+     0.88,
+     1.0
+    ]
+   },
+   "exit": {
+    "dur": 0.72,
+    "ease": "cubic-bezier(.16,1,.3,1)"
+   },
+   "wash": {
+    "dur": 0.75
+   },
+   "anchor": "At a fifth of the index, if the AI names fall by half, t",
+   "file": "assets/ev-smh-drawdown-v3.png"
+  },
+  {
+   "kind": "plate",
+   "asset": "world-memory-wafer-v1",
+   "in": 402.19,
+   "out": 413.1,
+   "enter": {
+    "type": "wipe",
+    "dur": 0.62,
+    "ease": "cubic-bezier(.77,0,.175,1)"
+   },
+   "hold": {
+    "parallax_scale": [
+     1.0,
+     1.04
+    ]
+   },
+   "file": "assets/world-memory-wafer-v1.png"
+  },
+  {
+   "kind": "plate",
+   "asset": "world-navvy-cutting-v1",
+   "in": 413.1,
+   "out": 424.0,
+   "enter": {
+    "type": "wipe",
+    "dur": 0.62,
+    "ease": "cubic-bezier(.77,0,.175,1)"
+   },
+   "hold": {
+    "parallax_scale": [
+     1.0,
+     1.04
+    ]
+   },
+   "file": "assets/world-navvy-cutting-v1.png"
+  },
+  {
+   "kind": "plate",
+   "asset": "world-orderbook-stamped-v1",
+   "in": 424.0,
+   "out": 445.94,
+   "enter": {
+    "type": "wipe",
+    "dur": 0.62,
+    "ease": "cubic-bezier(.77,0,.175,1)"
+   },
+   "hold": {
+    "parallax_scale": [
+     1.0,
+     1.04
+    ]
+   },
+   "file": "assets/world-orderbook-stamped-v1.png"
+  },
+  {
+   "kind": "evidence",
+   "asset": "silicon-antidote-s11-teacher-stamped",
+   "species": "deck",
+   "in": 434.66,
+   "out": 442.01,
+   "enter": {
+    "type": "dock",
+    "dur": 0.75,
+    "ease": "cubic-bezier(.16,1,.3,1)",
+    "translateY": 32,
+    "scale": [
+     0.88,
+     1.0
+    ]
+   },
+   "exit": {
+    "dur": 0.72,
+    "ease": "cubic-bezier(.16,1,.3,1)"
+   },
+   "wash": {
+    "dur": 0.75
+   },
+   "anchor": "And the builders are already sold out into next year \u2014 t",
+   "file": "assets/silicon-antidote-s11-teacher-stamped.png"
+  },
+  {
+   "kind": "evidence",
+   "asset": "sovereign-memory-infrastructure-s10-teacher-stamped",
+   "species": "deck",
+   "in": 439.69,
+   "out": 447.04,
+   "enter": {
+    "type": "dock",
+    "dur": 0.75,
+    "ease": "cubic-bezier(.16,1,.3,1)",
+    "translateY": 32,
+    "scale": [
+     0.88,
+     1.0
+    ]
+   },
+   "exit": {
+    "dur": 0.72,
+    "ease": "cubic-bezier(.16,1,.3,1)"
+   },
+   "wash": {
+    "dur": 0.75
+   },
+   "anchor": "Governments are standing up national AI programs on the ",
+   "file": "assets/sovereign-memory-infrastructure-s10-teacher-stamped.png"
+  },
+  {
+   "kind": "plate",
+   "asset": "world-pressure-gauge-v1",
+   "in": 445.94,
+   "out": 463.7,
+   "enter": {
+    "type": "wipe",
+    "dur": 0.62,
+    "ease": "cubic-bezier(.77,0,.175,1)"
+   },
+   "hold": {
+    "parallax_scale": [
+     1.0,
+     1.04
+    ]
+   },
+   "file": "assets/world-pressure-gauge-v1.png"
+  },
+  {
+   "kind": "evidence",
+   "asset": "ev-mechanism-ladder",
+   "species": "table",
+   "in": 457.45,
+   "out": 464.8,
+   "enter": {
+    "type": "dock",
+    "dur": 0.75,
+    "ease": "cubic-bezier(.16,1,.3,1)",
+    "translateY": 32,
+    "scale": [
+     0.88,
+     1.0
+    ]
+   },
+   "exit": {
+    "dur": 0.72,
+    "ease": "cubic-bezier(.16,1,.3,1)"
+   },
+   "wash": {
+    "dur": 0.75
+   },
+   "anchor": "Take any holding and ask it three questions.",
+   "file": "assets/ev-mechanism-ladder.png"
+  },
+  {
+   "kind": "plate",
+   "asset": "world-railway-acts-desk-v1",
+   "in": 463.7,
+   "out": 473.48,
+   "enter": {
+    "type": "wipe",
+    "dur": 0.62,
+    "ease": "cubic-bezier(.77,0,.175,1)"
+   },
+   "hold": {
+    "parallax_scale": [
+     1.0,
+     1.04
+    ]
+   },
+   "file": "assets/world-railway-acts-desk-v1.png"
+  },
+  {
+   "kind": "plate",
+   "asset": "world-scales-coin-paper-v1",
+   "in": 473.48,
+   "out": 483.26,
+   "enter": {
+    "type": "wipe",
+    "dur": 0.62,
+    "ease": "cubic-bezier(.77,0,.175,1)"
+   },
+   "hold": {
+    "parallax_scale": [
+     1.0,
+     1.04
+    ]
+   },
+   "file": "assets/world-scales-coin-paper-v1.png"
+  },
+  {
+   "kind": "plate",
+   "asset": "world-sell-ticket-v1",
+   "in": 483.26,
+   "out": 493.04,
+   "enter": {
+    "type": "wipe",
+    "dur": 0.62,
+    "ease": "cubic-bezier(.77,0,.175,1)"
+   },
+   "hold": {
+    "parallax_scale": [
+     1.0,
+     1.04
+    ]
+   },
+   "file": "assets/world-sell-ticket-v1.png"
+  },
+  {
+   "kind": "plate",
+   "asset": "world-share-office-queue-v1",
+   "in": 493.04,
+   "out": 502.82,
+   "enter": {
+    "type": "wipe",
+    "dur": 0.62,
+    "ease": "cubic-bezier(.77,0,.175,1)"
+   },
+   "hold": {
+    "parallax_scale": [
+     1.0,
+     1.04
+    ]
+   },
+   "file": "assets/world-share-office-queue-v1.png"
+  },
+  {
+   "kind": "plate",
+   "asset": "world-substation-feed-v1",
+   "in": 502.82,
+   "out": 518.6,
+   "enter": {
+    "type": "wipe",
+    "dur": 0.62,
+    "ease": "cubic-bezier(.77,0,.175,1)"
+   },
+   "hold": {
+    "parallax_scale": [
+     1.0,
+     1.04
+    ]
+   },
+   "file": "assets/world-substation-feed-v1.png"
+  },
+  {
+   "kind": "evidence",
+   "asset": "ev-krx-memory-v3",
+   "species": "chart",
+   "in": 512.35,
+   "out": 519.7,
+   "enter": {
+    "type": "dock",
+    "dur": 0.75,
+    "ease": "cubic-bezier(.16,1,.3,1)",
+    "translateY": 32,
+    "scale": [
+     0.88,
+     1.0
+    ]
+   },
+   "exit": {
+    "dur": 0.72,
+    "ease": "cubic-bezier(.16,1,.3,1)"
+   },
+   "wash": {
+    "dur": 0.75
+   },
+   "anchor": "Over the last year the stock is up more than five hundre",
+   "file": "assets/ev-krx-memory-v3.png"
+  },
+  {
+   "kind": "plate",
+   "asset": "world-target-date-envelope-v1",
+   "in": 518.6,
+   "out": 540.46,
+   "enter": {
+    "type": "wipe",
+    "dur": 0.62,
+    "ease": "cubic-bezier(.77,0,.175,1)"
+   },
+   "hold": {
+    "parallax_scale": [
+     1.0,
+     1.04
+    ]
+   },
+   "file": "assets/world-target-date-envelope-v1.png"
+  },
+  {
+   "kind": "evidence",
+   "asset": "silicon-reality-gap-s07-hbm-stack-v1",
+   "species": "deck",
+   "in": 526.81,
+   "out": 534.16,
+   "enter": {
+    "type": "dock",
+    "dur": 0.75,
+    "ease": "cubic-bezier(.16,1,.3,1)",
+    "translateY": 32,
+    "scale": [
+     0.88,
+     1.0
+    ]
+   },
+   "exit": {
+    "dur": 0.72,
+    "ease": "cubic-bezier(.16,1,.3,1)"
+   },
+   "wash": {
+    "dur": 0.75
+   },
+   "anchor": "High-bandwidth memory stacks the dies vertically.",
+   "file": "assets/silicon-reality-gap-s07-hbm-stack-v1.png"
+  },
+  {
+   "kind": "evidence",
+   "asset": "ev-hbm-wafer-ratio-v1",
+   "species": "tile",
+   "in": 529.61,
+   "out": 536.96,
+   "enter": {
+    "type": "dock",
+    "dur": 0.75,
+    "ease": "cubic-bezier(.16,1,.3,1)",
+    "translateY": 32,
+    "scale": [
+     0.88,
+     1.0
+    ]
+   },
+   "exit": {
+    "dur": 0.72,
+    "ease": "cubic-bezier(.16,1,.3,1)"
+   },
+   "wash": {
+    "dur": 0.75
+   },
+   "anchor": "So a gigabyte of it eats about three times the wafer cap",
+   "file": "assets/ev-hbm-wafer-ratio-v1.png"
+  },
+  {
+   "kind": "evidence",
+   "asset": "silicon-antidote-s09-capacity-penalty-v1",
+   "species": "deck",
+   "in": 534.21,
+   "out": 541.56,
+   "enter": {
+    "type": "dock",
+    "dur": 0.75,
+    "ease": "cubic-bezier(.16,1,.3,1)",
+    "translateY": 32,
+    "scale": [
+     0.88,
+     1.0
+    ]
+   },
+   "exit": {
+    "dur": 0.72,
+    "ease": "cubic-bezier(.16,1,.3,1)"
+   },
+   "wash": {
+    "dur": 0.75
+   },
+   "anchor": "Every accelerator they feed takes silicon away from ever",
+   "file": "assets/silicon-antidote-s09-capacity-penalty-v1.png"
+  },
+  {
+   "kind": "plate",
+   "asset": "world-three-notch-slate-v1",
+   "in": 540.46,
+   "out": 553.88,
+   "enter": {
+    "type": "wipe",
+    "dur": 0.62,
+    "ease": "cubic-bezier(.77,0,.175,1)"
+   },
+   "hold": {
+    "parallax_scale": [
+     1.0,
+     1.04
+    ]
+   },
+   "file": "assets/world-three-notch-slate-v1.png"
+  },
+  {
+   "kind": "evidence",
+   "asset": "ev-dram-contract-v1",
+   "species": "chart",
+   "in": 547.44,
+   "out": 554.98,
+   "enter": {
+    "type": "dock",
+    "dur": 0.75,
+    "ease": "cubic-bezier(.16,1,.3,1)",
+    "translateY": 32,
+    "scale": [
+     0.88,
+     1.0
+    ]
+   },
+   "exit": {
+    "dur": 0.72,
+    "ease": "cubic-bezier(.16,1,.3,1)"
+   },
+   "wash": {
+    "dur": 0.75
+   },
+   "anchor": "Their own earnings call says capacity is essentially sol",
+   "file": "assets/ev-dram-contract-v1.png"
+  },
+  {
+   "kind": "plate",
+   "asset": "world-spike-certificate-ring-v2",
+   "in": 553.88,
+   "out": 571.51,
+   "enter": {
+    "type": "wipe",
+    "dur": 0.62,
+    "ease": "cubic-bezier(.77,0,.175,1)"
+   },
+   "hold": {
+    "parallax_scale": [
+     1.0,
+     1.04
+    ]
+   },
+   "file": "assets/world-spike-certificate-ring-v2.png"
+  },
+  {
+   "kind": "evidence",
+   "asset": "silicon-antidote-s02-memory-triopoly-v1",
+   "species": "deck",
+   "in": 565.26,
+   "out": 572.61,
+   "enter": {
+    "type": "dock",
+    "dur": 0.75,
+    "ease": "cubic-bezier(.16,1,.3,1)",
+    "translateY": 32,
+    "scale": [
+     0.88,
+     1.0
+    ]
+   },
+   "exit": {
+    "dur": 0.72,
+    "ease": "cubic-bezier(.16,1,.3,1)"
+   },
+   "wash": {
+    "dur": 0.75
+   },
+   "anchor": "The most vertical line on the board is steel.",
+   "file": "assets/silicon-antidote-s02-memory-triopoly-v1.png"
+  },
+  {
+   "kind": "plate",
+   "asset": "world-spike-rest-v2",
+   "in": 571.51,
+   "out": 581.78,
+   "enter": {
+    "type": "wipe",
+    "dur": 0.62,
+    "ease": "cubic-bezier(.77,0,.175,1)"
+   },
+   "hold": {
+    "parallax_scale": [
+     1.0,
+     1.04
+    ]
+   },
+   "file": "assets/world-spike-rest-v2.png"
+  },
+  {
+   "kind": "plate",
+   "asset": "world-bankrupt-club-v1",
+   "in": 581.78,
+   "out": 592.06,
+   "enter": {
+    "type": "wipe",
+    "dur": 0.62,
+    "ease": "cubic-bezier(.77,0,.175,1)"
+   },
+   "hold": {
+    "parallax_scale": [
+     1.0,
+     1.04
+    ]
+   },
+   "file": "assets/world-bankrupt-club-v1.png"
+  },
+  {
+   "kind": "plate",
+   "asset": "world-certificate-wall-v1",
+   "in": 592.06,
+   "out": 608.33,
+   "enter": {
+    "type": "wipe",
+    "dur": 0.62,
+    "ease": "cubic-bezier(.77,0,.175,1)"
+   },
+   "hold": {
+    "parallax_scale": [
+     1.0,
+     1.04
+    ]
+   },
+   "file": "assets/world-certificate-wall-v1.png"
+  },
+  {
+   "kind": "evidence",
+   "asset": "ev-instrument-memory",
+   "species": "instrument",
+   "in": 602.08,
+   "out": 609.43,
+   "enter": {
+    "type": "dock",
+    "dur": 0.75,
+    "ease": "cubic-bezier(.16,1,.3,1)",
+    "translateY": 32,
+    "scale": [
+     0.88,
+     1.0
+    ]
+   },
+   "exit": {
+    "dur": 0.72,
+    "ease": "cubic-bezier(.16,1,.3,1)"
+   },
+   "wash": {
+    "dur": 0.75
+   },
+   "anchor": "The threshold is that number falling below its own trail",
+   "file": "assets/ev-instrument-memory.png"
+  },
+  {
+   "kind": "plate",
+   "asset": "world-circuit-terrain-v1",
+   "in": 608.33,
+   "out": 616.2,
+   "enter": {
+    "type": "wipe",
+    "dur": 0.62,
+    "ease": "cubic-bezier(.77,0,.175,1)"
+   },
+   "hold": {
+    "parallax_scale": [
+     1.0,
+     1.04
+    ]
+   },
+   "file": "assets/world-circuit-terrain-v1.png"
+  },
+  {
+   "kind": "evidence",
+   "asset": "ev-hbm-export-series",
+   "species": "chart",
+   "in": 609.25,
+   "out": 617.3,
+   "enter": {
+    "type": "dock",
+    "dur": 0.75,
+    "ease": "cubic-bezier(.16,1,.3,1)",
+    "translateY": 32,
+    "scale": [
+     0.88,
+     1.0
+    ]
+   },
+   "exit": {
+    "dur": 0.72,
+    "ease": "cubic-bezier(.16,1,.3,1)"
+   },
+   "wash": {
+    "dur": 0.75
+   },
+   "anchor": "Right now it's going the other way \u2014 DRAM up seventeen p",
+   "file": "assets/ev-hbm-export-series.png"
+  },
+  {
+   "kind": "plate",
+   "asset": "world-exhibition-hall-morning-v1",
+   "in": 616.2,
+   "out": 626.31,
+   "enter": {
+    "type": "wipe",
+    "dur": 0.62,
+    "ease": "cubic-bezier(.77,0,.175,1)"
+   },
+   "hold": {
+    "parallax_scale": [
+     1.0,
+     1.04
+    ]
+   },
+   "file": "assets/world-exhibition-hall-morning-v1.png"
+  },
+  {
+   "kind": "plate",
+   "asset": "world-modern-certificate-v1",
+   "in": 626.31,
+   "out": 636.42,
+   "enter": {
+    "type": "wipe",
+    "dur": 0.62,
+    "ease": "cubic-bezier(.77,0,.175,1)"
+   },
+   "hold": {
+    "parallax_scale": [
+     1.0,
+     1.04
+    ]
+   },
+   "file": "assets/world-modern-certificate-v1.png"
+  },
+  {
+   "kind": "plate",
+   "asset": "world-spike-desk-v1",
+   "in": 636.42,
+   "out": 646.54,
+   "enter": {
+    "type": "wipe",
+    "dur": 0.62,
+    "ease": "cubic-bezier(.77,0,.175,1)"
+   },
+   "hold": {
+    "parallax_scale": [
+     1.0,
+     1.04
+    ]
+   },
+   "file": "assets/world-spike-desk-v1.png"
+  },
+  {
+   "kind": "plate",
+   "asset": "world-two-rooms-divergence-v1",
+   "in": 646.54,
+   "out": 656.65,
+   "enter": {
+    "type": "wipe",
+    "dur": 0.62,
+    "ease": "cubic-bezier(.77,0,.175,1)"
+   },
+   "hold": {
+    "parallax_scale": [
+     1.0,
+     1.04
+    ]
+   },
+   "file": "assets/world-two-rooms-divergence-v1.png"
+  },
+  {
+   "kind": "plate",
+   "asset": "world-viaduct-train-rain-v1",
+   "in": 656.65,
+   "out": 666.76,
+   "enter": {
+    "type": "wipe",
+    "dur": 0.62,
+    "ease": "cubic-bezier(.77,0,.175,1)"
+   },
+   "hold": {
+    "parallax_scale": [
+     1.0,
+     1.04
+    ]
+   },
+   "file": "assets/world-viaduct-train-rain-v1.png"
+  },
+  {
+   "kind": "plate",
+   "asset": "world-workbench-triad-v1",
+   "in": 666.76,
+   "out": 682.87,
+   "enter": {
+    "type": "wipe",
+    "dur": 0.62,
+    "ease": "cubic-bezier(.77,0,.175,1)"
+   },
+   "hold": {
+    "parallax_scale": [
+     1.0,
+     1.04
+    ]
+   },
+   "file": "assets/world-workbench-triad-v1.png"
+  },
+  {
+   "kind": "evidence",
+   "asset": "silicon-antidote-s14-diagnostic-matrix-v1",
+   "species": "deck",
+   "in": 676.62,
+   "out": 683.97,
+   "enter": {
+    "type": "dock",
+    "dur": 0.75,
+    "ease": "cubic-bezier(.16,1,.3,1)",
+    "translateY": 32,
+    "scale": [
+     0.88,
+     1.0
+    ]
+   },
+   "exit": {
+    "dur": 0.72,
+    "ease": "cubic-bezier(.16,1,.3,1)"
+   },
+   "wash": {
+    "dur": 0.75
+   },
+   "anchor": "More worried: the index they sold you as the safe versio",
+   "file": "assets/silicon-antidote-s14-diagnostic-matrix-v1.png"
+  },
+  {
+   "kind": "plate",
+   "asset": "world-dram-terrain-v1",
+   "in": 682.87,
+   "out": 692.92,
+   "enter": {
+    "type": "wipe",
+    "dur": 0.62,
+    "ease": "cubic-bezier(.77,0,.175,1)"
+   },
+   "hold": {
+    "parallax_scale": [
+     1.0,
+     1.04
+    ]
+   },
+   "file": "assets/world-dram-terrain-v1.png"
+  },
+  {
+   "kind": "plate",
+   "asset": "world-korea-port-v1",
+   "in": 692.92,
+   "out": 702.98,
+   "enter": {
+    "type": "wipe",
+    "dur": 0.62,
+    "ease": "cubic-bezier(.77,0,.175,1)"
+   },
+   "hold": {
+    "parallax_scale": [
+     1.0,
+     1.04
+    ]
+   },
+   "file": "assets/world-korea-port-v1.png"
+  },
+  {
+   "kind": "plate",
+   "asset": "world-memory-fab-floor-v1",
+   "in": 702.98,
+   "out": 713.03,
+   "enter": {
+    "type": "wipe",
+    "dur": 0.62,
+    "ease": "cubic-bezier(.77,0,.175,1)"
+   },
+   "hold": {
+    "parallax_scale": [
+     1.0,
+     1.04
+    ]
+   },
+   "file": "assets/world-memory-fab-floor-v1.png"
+  },
+  {
+   "kind": "plate",
+   "asset": "world-seoul-fab-skyline-v1",
+   "in": 713.03,
+   "out": 723.085,
+   "enter": {
+    "type": "wipe",
+    "dur": 0.62,
+    "ease": "cubic-bezier(.77,0,.175,1)"
+   },
+   "hold": {
+    "parallax_scale": [
+     1.0,
+     1.04
+    ]
+   },
+   "file": "assets/world-seoul-fab-skyline-v1.png"
+  }
+ ]
+}
