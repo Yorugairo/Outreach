@@ -182,3 +182,61 @@ Nothing triadic follows the final triad, per the corrected tricolon gate.
 11,905 chars · **12m 22s** · pivot **47.9%** · F1 7.1% · F2 8.8% ·
 F3 27.8% · delivery 62.4% · both checkers **0 FAIL, 0 WARN** ·
 recorder preflight clean (parts 8,218 / 3,686; tags 12 / 6).
+
+
+---
+
+## 5. E vs F — and the definitive AOY result (2026-08-29)
+
+Script F is Script E after the first full run of the strength loop. Two
+insertions, both mid-script: P3 unit 1's missing **u5 rehook**, and unit 2's
+missing **u4 anaphora recurrence**.
+
+### Our ranking — F wins
+
+| | E | F |
+|---|---|---|
+| L3 unit 1 complete (u1–u5) | **no u5** | yes |
+| L3 unit 2 u4 anaphora | **absent** | yes |
+| L2 rehook closing each unit | 1 of 2 | **2 of 2** |
+| rehook constructions | 5 | **6** |
+| L0 mean (carrying) / spread / >20w | 11.3 / 5.2 / 2.9% | 11.3 / 5.2 / 2.8% |
+| L4 pivot | 47.9% | 48.4% |
+| L5 roster · dispositio · Toulmin · Monroe | complete | complete |
+
+F is strictly better: it fixes two documented gate failures and ties
+everything else. The pattern linter agrees independently —
+`rehook_positions` went from `[25]` to `[23, 32]`.
+
+### AOY's ranking — E wins, and that settles the reliability question
+
+**Five runs, all this session:**
+
+| Run | Script | Claimed words | Actual | Error | Hook | Overall |
+|---|---|---|---|---|---|---|
+| 1 | D | 3,921 | 1,954 | +101% | 6 | 6.5 |
+| 2 | E-mid | 3,876 | 1,977 | +96% | 6 | 7.0 |
+| 3 | E pre-close | 3,204 | 1,985 | +61% | 6 | 6.5 |
+| 4 | **F** | 3,271 | 2,010 | +63% | 6 | **6.5** |
+| 5 | **E current** | 2,823 | 1,988 | +42% | **8** | **7.0** |
+
+**Runs 3, 4 and 5 carry a verbatim-identical hook.** Hook Quality on that
+unchanged text scored **6, 6, and 8**.
+
+That is the end of the argument. A reviewer that scores identical words two
+points apart cannot rank two scripts differing by two sentences. Its word
+count also never once landed within 40% of the truth, and the error moved
+monotonically down across runs while the actual text barely changed.
+
+**AOY rates E above F. We rate F above E, on two gate failures we can point
+at in the text.** Where a measurable gate disagrees with an unstable score,
+the gate wins.
+
+### Standing rule, now settled with evidence
+
+`review_script` is **not a ranking instrument.** Use it only for diagnoses
+that our own tooling independently corroborates — the borrowing-section
+repetition and the rehook-density note both qualified. Never compare its
+scores between drafts, and never act on its rewrites: across five runs,
+**eleven of eleven** broke doctrine, including four bait constructions and
+two "stay tuned"s.
