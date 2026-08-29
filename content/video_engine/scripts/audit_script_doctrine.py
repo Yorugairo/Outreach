@@ -146,17 +146,31 @@ def load_timings(script: Path, first_sentence: str = "") -> list[dict] | None:
     a hook that was never recorded is worse than estimating it, so the
     opening words must match before any timing is trusted.
     """
-    vo = script.parent / "vo"
-    files = sorted(vo.glob("scene_*.words.json"),
-                   key=lambda p: int(re.search(r"\d+", p.name).group()))
-    if not files:
+    # An episode accumulates take directories (vo/, vo-c/, vo-f/ ...). Search
+    # them all and use the one whose opening words match THIS script — the
+    # directory name is a convention, the text match is the actual proof.
+    cands = []
+    for vo in sorted(script.parent.glob("vo*")):
+        if not vo.is_dir():
+            continue
+        files = sorted(vo.rglob("scene_*.words.json"),
+                       key=lambda p: int(re.search(r"\d+", p.name).group()))
+        if files:
+            cands.append(files)
+    if not cands:
         return None
+    files = None
     if first_sentence:
-        head = json.loads(files[0].read_text(encoding="utf-8")).get("words", [])
-        recorded = " ".join(w["w"] for w in head[:6]).lower()
-        wanted = " ".join(first_sentence.split()[:6]).lower()
-        if _norm(recorded) != _norm(wanted):
+        wanted = _norm(" ".join(first_sentence.split()[:6]))
+        for group in cands:
+            head = json.loads(group[0].read_text(encoding="utf-8")).get("words", [])
+            if _norm(" ".join(w["w"] for w in head[:6])) == wanted:
+                files = group
+                break
+        if files is None:
             return None
+    else:
+        files = cands[0]
     words, offset = [], 0.0
     for f in files:
         d = json.loads(f.read_text(encoding="utf-8"))

@@ -1,0 +1,32 @@
+{
+  "script": "SCRIPT-F-VO.txt",
+  "split_anchor": "Run it on the most extreme number in this whole trade",
+  "split_lands_on_pause": true,
+  "seed": "4242",
+  "model": "eleven_multilingual_v2",
+  "settings": {
+    "stability": 0.4,
+    "similarity_boost": 0.75,
+    "style": 0.2,
+    "use_speaker_boost": true
+  },
+  "parts": [
+    {
+      "part": 1,
+      "characters": 8658,
+      "duration_s": 508.331,
+      "request_id": "41mSoyczGiQDNO4GVnHJ",
+      "audio": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\vo-f\\audio\\scene_1.mp3",
+      "chained_from": null
+    },
+    {
+      "part": 2,
+      "characters": 3843,
+      "duration_s": 218.732,
+      "request_id": "5TZsSh1ZR7kDkEVLGfGf",
+      "audio": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\vo-f\\audio\\scene_2.mp3",
+      "chained_from": "41mSoyczGiQDNO4GVnHJ"
+    }
+  ],
+  "total_duration_s": 727.063
+}

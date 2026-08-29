@@ -25,11 +25,17 @@ KIT = (Path(__file__).resolve().parents[3]
        / "docs/content-video-engine/patterns/SCRIPT-PATTERN-KIT.md")
 
 # --- MEASURED, not doctrine -------------------------------------------------
-# Steel and Paper take: 1,231 words / 7,161 chars / 446.1s across 7 scenes
-# (per-scene 160-174 wpm). Two estimators because they fail differently:
-# chars/sec under-reads numerals, words/min under-reads long words.
-CHARS_PER_SEC = 16.05
-WORDS_PER_MIN = 165.6
+# Mean of two independent takes, same voice/settings/seed:
+#   take 1 (Script C era): 1,231w / 7,161ch / 446.1s -> 165.6 wpm, 16.05 cps
+#   take 2 (Script F):     2,134w / 12,020ch / 727.0s -> 176.1 wpm, 16.53 cps
+# The 6% spread is real and probably break-tag density: take 2 carries
+# 1.50 tags/1k against take 1's heavier ration, so it spends less time in
+# scripted silence. Two points is too thin to fit that as a term, so the
+# mean is used and the spread is why the dual-estimator disagreement check
+# exists. Both takes came in FASTER than the constants predicted, meaning
+# runtime estimates run long — the safe direction for a cap or a 3s gate.
+CHARS_PER_SEC = 16.29
+WORDS_PER_MIN = 170.9
 
 
 @dataclass(frozen=True)
