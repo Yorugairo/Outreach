@@ -254,3 +254,39 @@ request prosody drift; it does not remove seams.
 Steel and Paper's VO is scheduled for a full master-take re-record under
 this standard (single request, ~7k chars) when credits allow; the existing
 segmented VO is review-scratch only.
+
+### §8.1 Client timeout and retries — learned the expensive way (2026-08-29)
+
+The first Script C master take **timed out and returned no audio, while
+consuming 13,746 characters.** Root cause: the library defaults are sized
+for the retired per-scene workflow.
+
+```
+DEFAULT_TIMEOUT_S   = 60.0   # a ~1k-char scene renders in seconds
+DEFAULT_MAX_ATTEMPTS = 3
+```
+
+An 8,078-character master take renders roughly eight minutes of audio and
+cannot complete inside 60 seconds. The client abandoned the request
+mid-generation and **retried twice — and every attempt is charged.**
+8,078 requested, 13,746 spent, nothing delivered.
+
+**Rules for any master take:**
+
+1. **`ELEVENLABS_TIMEOUT_S` must exceed the generation time**, not the
+   request round-trip. Budget conservatively at ~20 characters of script
+   per second of generation and add headroom — 900s for a ≤10k take.
+2. **`ELEVENLABS_MAX_ATTEMPTS = 1`.** On a long paid generation a retry is
+   a **cost multiplier, not a safety net**: it will hit the same timeout
+   and charge again. Retries are appropriate for short segments and for
+   transport errors, never for a timeout on a master take.
+3. **Preflight the timeout against the character count** before spending.
+   `scratchpad/record_master_take.py` now fails closed on this.
+4. **A timeout is not evidence the request was free.** Check the
+   subscription endpoint after any failed take — the provider charges on
+   generation, not on delivery.
+
+The master-take rule in §8 created this exposure: it replaced many small
+requests with one long one, and the retry policy was never revisited to
+match. Any doctrine change that alters request *shape* must be checked
+against the client's timeout and retry configuration.
