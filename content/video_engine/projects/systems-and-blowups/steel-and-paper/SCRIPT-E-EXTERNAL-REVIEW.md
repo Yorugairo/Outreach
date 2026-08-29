@@ -130,3 +130,55 @@ Three convergent weaknesses, in priority order:
 3. **The warrant is unbacked** (Toulmin) — the bubble definition is asserted.
 
 All three sit in the final ninety seconds. None requires restructuring.
+
+
+---
+
+## 4. Fixes applied, 2026-08-29
+
+All three landed in the final ninety seconds. None required restructuring.
+
+**Warrant backed** (Toulmin). The definition was asserted and the 1845 case
+supplied it only implicitly. Now explicit, with the verified figure:
+
+> "A bubble is ownership outrunning understanding. **1845 is the proof: the
+> rails worked, and the paper still lost two-thirds.**"
+
+**Peroratio now recapitulates** (classical *enumeratio* before *affectus*),
+at 89.2% — recall, not re-argument, and deliberately **four** beats rather
+than three so it does not read as a competing triad against the close:
+
+> "Everything we checked holds. The builders sell scarcity, and they sell it
+> for cash. About eighteen months ago the money behind them turned into
+> debt. A fifth of your index rides on one bet you never placed. And the one
+> number that would prove me wrong is moving the other way."
+
+The first draft had "the paper wrapped around them **is borrowed, leased,
+and concentrated**" — an agent-hiding passive, never licensed. Rewritten
+active.
+
+**Future pacing added** (Monroe step 4 · doc 38 P6's third CTA pillar), at
+98.3%, landing on a callback to "they fail by pointing":
+
+> "Do that, and the next time a chart like this goes viral, you won't need
+> anyone to tell you **where it's pointing**. You'll already know which half
+> of your portfolio is steel."
+
+### Close now runs in the classical order
+
+| | at |
+|---|---|
+| Ring echo (the spike, 1850) | 87% |
+| **Enumeratio** — the proofs recalled | **89.2%** |
+| Intensification — more bullish / more worried | 92% |
+| **Affectus** — the final triad | **95.3%** |
+| CTA: value → direction → **future pacing** | 96–98.3% |
+| Ring anchor — "The spike stays on the desk." | **99.8%** |
+
+Nothing triadic follows the final triad, per the corrected tricolon gate.
+
+### State
+
+11,905 chars · **12m 22s** · pivot **47.9%** · F1 7.1% · F2 8.8% ·
+F3 27.8% · delivery 62.4% · both checkers **0 FAIL, 0 WARN** ·
+recorder preflight clean (parts 8,218 / 3,686; tags 12 / 6).
