@@ -171,9 +171,9 @@ info cards. Preferred is the DIEGETIC COMPOSITE: host gestures at a surface, rea
 evidence lands in it. Each evidence moment names its document, exact
 figure, badge (numeral verbatim) and window; evidence every 15–45s, bare
 stretches over 12s need cause.
-Captions are word-timed and kinetic. Unverified claims NEVER go inline —
-list them under SOURCES-TO-VERIFY and write narration to survive their
-removal. No advice framing: mechanisms, never prescriptions.
+Captions are word-timed and kinetic. Unverified claims NEVER go inline — list them under SOURCES-TO-VERIFY
+and write narration to survive their removal. No advice framing:
+mechanisms, never prescriptions.
 
 ## NEVER
 
