@@ -392,3 +392,40 @@ asset-integrity checks with every plate in the wrong place.
 means composited frames, not a JSON dump. Report what was verified BY EYE
 separately from what was verified by check, and never let the second stand
 in for the first.
+
+**C9 — Style is a knob, not a constraint. The narrative layer is what
+matters.** (2026-08-29.) Operator: *"I see it more as a style knob. Both can
+exist, even in the same world, with the pilot style for dramatic/dynamic
+scenes. The narrative+evidence layer is the part that matters, the world
+plates are to meet the narrative and keep the user engaged, they can have
+artistic drift as long as the plate carries the narrative in an engaging
+fashion."*
+*Why:* this SUPERSEDES the reading of C4 that treated a style family as a
+hard boundary. C4 still governs how a plate is PROMPTED; it does not forbid
+a second register inside one episode. What is invariant is the evidence
+layer and the narrative it serves — the world plate is there to carry the
+beat and hold attention, and a visibly different treatment on a dramatic
+peak serves that rather than breaking it.
+*Apply:* reach up the register for peaks — the reversal, the index
+arithmetic, the physics beat, "what survives" — and hold the base vocabulary
+for the connective tissue, so the shift reads as emphasis rather than
+inconsistency. Style drift is judged by whether the plate carries the beat,
+never by family purity. Evidence, badges and captions do NOT drift: their
+grammar is fixed.
+
+**E10 — A directory name is not a status. Read the manifest.**
+(2026-08-29, third instance in one session.)
+*Why:* the pilot's `assets/quarantine/` holds **195 operator-approved
+plates** — every manifest inside reads `operator_approved_for_composition`
+or `_for_trace_cut`, and waves 04-07 carry `render_eligible: true`. The
+folder name is the only thing calling them quarantined, and it caused them
+to be skipped. Two earlier instances the same day: the deck libraries
+carried `review_only` in their manifests long after the operator had
+approved the material, and the teacher-stamped visuals are keyed by
+`image_id` while stored under `extracted_path`, so a filename lookup
+resolved to nothing.
+*Apply:* status lives in the manifest, never in the path. Before excluding
+an asset because of where it sits, **open the manifest and read the state
+field.** When the two disagree, the manifest wins and the path is the bug.
+Do not rename or move assets in another worktree to fix it — index them
+where they are and record the discrepancy.

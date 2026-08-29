@@ -40,7 +40,8 @@ def find_asset(name: str) -> Path | None:
     # Teacher-stamped visuals are stored by slide path, keyed by image_id.
     if name in STAMPED and Path(STAMPED[name]).exists():
         return Path(STAMPED[name])
-    for wave in sorted(CLAIMS.glob("*plates-wave-*")):
+    # claims include borrowed registers, not just this episode's waves
+    for wave in sorted(CLAIMS.glob("*plate*")):
         p = wave / "objects" / f"{name}.png"
         if p.exists():
             return p

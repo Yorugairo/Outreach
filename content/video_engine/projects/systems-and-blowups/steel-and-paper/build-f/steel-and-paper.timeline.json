@@ -22119,8 +22119,8 @@
   {
    "scene_id": "s23",
    "world": {
-    "asset_id": "world-viaduct-train-rain-v1",
-    "sha256": "87b75720130c907837788b355d84dc72f442c3afaf838eecdf88a9f532b0511f",
+    "asset_id": "hero-countercase-v1",
+    "sha256": "08ac8424c8e41f67fef962c985f89567e38884d845f29b735f0290e3cf8941a5",
     "ken_burns": {
      "scale": 0.05,
      "x": 14,
@@ -22512,8 +22512,8 @@
   {
    "scene_id": "s38",
    "world": {
-    "asset_id": "world-paper-and-steel-press-v1",
-    "sha256": "3d3362b8d8504df0e1919fc68b46dc05626631edd4eff8ee1d55e43a297321fc",
+    "asset_id": "hero-wrong-bubble-v1",
+    "sha256": "a49a431e29a6827ec9d28208c138b0dc64257af77b136ad9ec0778769e9b61cf",
     "ken_burns": {
      "scale": 0.06,
      "x": 10,
@@ -22617,8 +22617,8 @@
   {
    "scene_id": "s42",
    "world": {
-    "asset_id": "world-index-board-swelling",
-    "sha256": "f2793246e57336925ad0dcbd2e54a236f1f9f2468b59f52ea3bbfac8304bdbbc",
+    "asset_id": "hero-sp500-double-failure-v1",
+    "sha256": "26724d3ce58778b4a18183dbcd77ba234cac5f8ab69dd36914568c977c5d6227",
     "ken_burns": {
      "scale": 0.05,
      "x": 14,
@@ -22722,8 +22722,8 @@
   {
    "scene_id": "s46",
    "world": {
-    "asset_id": "world-bankrupt-club-v1",
-    "sha256": "98aa54b6af7b2517fd7906671630e82b9165fe46de69b927983a4f7b745955ff",
+    "asset_id": "hero-contract-ovens-v1",
+    "sha256": "49d777e832bfe8afea7e78c991a81d87c00a545e46d1bdf74c0639b36d3e4aa8",
     "ken_burns": {
      "scale": 0.04,
      "x": 12,
@@ -22751,8 +22751,8 @@
   {
    "scene_id": "s47",
    "world": {
-    "asset_id": "world-fiber-trench-v1",
-    "sha256": "7b0d04577e66a8d9ccfb21b3270168da85ca8867df905da309205697f728aa45",
+    "asset_id": "hero-korea-italy-v1",
+    "sha256": "5d1a2a89e7c2370abe0fdcc1af1b4eae50e441310cc7b7bc7026ab4474653914",
     "ken_burns": {
      "scale": 0.05,
      "x": -10,
@@ -22780,8 +22780,8 @@
   {
    "scene_id": "s48",
    "world": {
-    "asset_id": "world-scales-coin-paper-v1",
-    "sha256": "fd697f3fb5ba1a7d9aef9a3ce4586ec3c1543771b3506997c7c0e8965f6a6ceb",
+    "asset_id": "hero-barbell-v1",
+    "sha256": "183a32fdf5fad7fa316f6b9fbe61994b291370d4d0077fa17330c27c8638923d",
     "ken_burns": {
      "scale": 0.05,
      "x": 12,
@@ -22951,8 +22951,8 @@
   {
    "scene_id": "s54",
    "world": {
-    "asset_id": "world-memory-fab-floor-v1",
-    "sha256": "950cfc215705cb2ddded6bc806a58f24041b3110798f8f0e5438f0a8221e2e49",
+    "asset_id": "hero-fab-constraint-v1",
+    "sha256": "0212175acd5b8b868577e69b6eda403b3220440ece0d6522ac552aebab16dfea",
     "ken_burns": {
      "scale": 0.05,
      "x": 14,
@@ -22980,8 +22980,8 @@
   {
    "scene_id": "s55",
    "world": {
-    "asset_id": "world-hbm-die-stack",
-    "sha256": "7c68322e18976364d06b2dbc7b7ce439ff8d7f5f4bad91133f7b3f8e5c49dcc4",
+    "asset_id": "hero-hbm-bandwidth-v1",
+    "sha256": "41f20f9391b6accacbfadae89a87f7edfe2b6d04fbeb5fe11b76ce96dc835bd5",
     "ken_burns": {
      "scale": 0.06,
      "x": -8,
