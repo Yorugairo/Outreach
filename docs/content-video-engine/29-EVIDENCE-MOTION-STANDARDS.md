@@ -23,7 +23,7 @@ disagree, this section wins.
 **The lane.** Every channel ships on the scene-evidence lane (Part 8):
 one ken-burns vector per scene, translucent washi docks with opaque
 documents inside, verbatim badges, word-timed kinetic captions, wipes on
-evidence-free boundaries - except evidence that PERSISTS across a boundary, which rides above the curtain wipe (s9.15). Held stills with hard cuts are a defect. Lanes
+evidence-free boundaries - except evidence that PERSISTS across a boundary, which holds untouched while the front passes (s9.15). Held stills with hard cuts are a defect. Lanes
 differ only in scripting — theme, audience, voice. *(§9 C1)*
 
 **Plate density is runtime-derived.** Target **runtime ÷ 12s** distinct
@@ -904,20 +904,24 @@ actual Gemini artifact, not this doc's summary of it) recovered two
 mechanisms Parts 6/8 lost in translation, and the operator issued three
 rulings. Where these conflict with anything above, THESE win.
 
-1. **The wipe is an opaque CURTAIN, not a cross-reveal.** The showcase
-   sweeps a solid panel across the whole stage; every boundary state change
-   (world swap, wash reset, dock turnover) happens hidden behind it. This
-   doc kept the wipe's duration and ease but lost the mechanism, and every
-   boundary defect since - mask reads, repaste flashes, clipped cards - was
-   the cost of choreographing exits in the open. The player now covers
-   through the outgoing scene's last half-wipe and reveals through the
-   incoming scene's first, one continuous edge.
+1. **The wipe is the CROSS-REVEAL with carried light** (settled same day,
+   after the curtain was tried and rejected on review). The showcase's
+   opaque curtain was ported first and read as a blackout blink at every
+   boundary - a flat panel sweeping a full frame is the crudest mechanism
+   in that demo, and s8.15 had already evolved past it. The reviewed form:
+   the incoming plate cross-reveals under the quart front with the ink
+   seam, and everything that belongs to the outgoing page - a card ending
+   at the boundary, the wash, the spotlight, the card's shadow - is
+   CARRIED OFF BY THE SAME FRONT at the same progress. Nothing fades on
+   its own schedule at a boundary. Lesson: an ancestor artifact is where
+   doctrine CAME from, not where it is - a reviewed refinement outranks
+   the demo it refined.
 2. **Evidence may persist across a boundary** (operator): a document whose
-   claim spans scenes holds while the world wipes beneath it - it rides
-   ABOVE the curtain. Same-slide docks in adjacent scenes coalesce into one
-   span; the entrance never re-runs. This supersedes Part 6's evidence-free-
-   boundary rule FOR SPANNING EVIDENCE ONLY; a card ending at the boundary
-   is simply covered by the curtain and swapped away hidden.
+   claim spans scenes holds untouched while the world wipes beneath it.
+   Same-slide docks in adjacent scenes coalesce into one span; the entrance
+   never re-runs. This supersedes Part 6's evidence-free-boundary rule FOR
+   SPANNING EVIDENCE ONLY; a card ending at the boundary is carried off by
+   the front.
 3. **Near-boundary exits snap to the boundary.** An exit authored within
    ~1.4s of a scene turn used to fire fade + wash-off + wipe in under a
    second (the "repaste" flash). Those exits snap to the boundary; exits

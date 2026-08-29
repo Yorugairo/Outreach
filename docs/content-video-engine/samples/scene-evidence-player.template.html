@@ -134,16 +134,10 @@
   }
 
   #seam { position: absolute; top: 0; bottom: 0; width: 6px; background: var(--charcoal); box-shadow: 0 0 22px rgba(5,19,30,.9); opacity: 0; z-index: 45; }
-  /* THE CURTAIN (Gemini showcase mechanism, recovered 2026-08-29): an OPAQUE
-     panel sweeps the whole stage and every boundary state change happens
-     hidden behind it - no card exit choreography, no wash handoff, nothing
-     to clip. Doc 29 kept the wipe's duration and ease but lost this
-     mechanism, and every boundary defect since (mask reads, repaste
-     flashes) was the cost. Evidence that PERSISTS across the boundary rides
-     ABOVE the curtain (z-index) - the operator's persistence ruling. */
-  #curtain { position: absolute; inset: 0; background: #10141b;
-             z-index: 40; transform: scaleX(0); pointer-events: none; }
-  .dock { z-index: 20; } .dock.persist { z-index: 60; }
+  /* The curtain experiment (2026-08-29) is RETIRED: an opaque panel
+     sweeping the stage reads as a blackout blink at every boundary. The
+     reviewed mechanism is the cross-reveal below; the light that belongs
+     to the outgoing page travels with its front. */
 
   #caption {
     position: absolute; left: 145px; right: 145px; bottom: 38px; text-align: center;
@@ -192,7 +186,6 @@
     <div class="rail" id="r2"></div>
   </div>
 
-  <div id="curtain"></div>
   <div id="seam"></div>
   <div id="caption"></div>
 </div></div></div>
@@ -393,44 +386,34 @@
       const z = 1 + p * kb.scale + 0.008 * lean;
       el.style.transform = `scale(${z.toFixed(4)}) translate(${(p*kb.x).toFixed(1)}px, ${(p*kb.y).toFixed(1)}px)`;
     };
-    const prev = TL.scenes[si - 1], nxt = TL.scenes[si + 1];
-    paint(wB, sc); wA.style.display = "none";
-    /* Curtain choreography: COVER through the outgoing scene's last half-
-       wipe, the edge travelling left to right; at the boundary the stage is
-       fully hidden and the world, wash and docks swap; REVEAL continues the
-       same travel by shrinking toward the right. One continuous edge
-       crossing two scenes. */
-    const HALF = WIPE / 2;
-    const ck = (nxt && sc.exit !== "cut")
-      ? clamp01((t - (sc.span[1] - HALF)) / HALF) : 0;
-    const rk = (prev && prev.exit !== "cut")
-      ? clamp01((t - sc.span[0]) / HALF) : 1;
-    const curtain = $("curtain");
-    let edge = null;
-    if (ck > 0) {
-      const e = quartIO(ck);
-      curtain.style.transformOrigin = "left center";
-      curtain.style.transform = `scaleX(${e})`;
-      edge = e * 1920;
-    } else if (rk < 1) {
-      const e = quartIO(rk);
-      curtain.style.transformOrigin = "right center";
-      curtain.style.transform = `scaleX(${1 - e})`;
-      edge = e * 1920;
-    } else {
-      curtain.style.transform = "scaleX(0)";
-    }
-    const seaming = edge !== null;
-    seam.style.opacity = seaming && edge > 3 && edge < 1917 ? 1 : 0;
-    if (seaming) seam.style.transform = `translateX(${edge}px)`;
+    const prev = TL.scenes[si - 1];
+    wA.style.display = "";
+    paint(wA, prev || sc);
+    paint(wB, sc);
+    const wk = prev ? quartIO(clamp01((t - sc.span[0]) / WIPE)) : 1;
+    wB.style.clipPath = sc.exit === "wipe_right"
+      ? `inset(0 0 0 ${(1-wk)*100}%)` : `inset(0 ${(1-wk)*100}% 0 0)`;
+    const seaming = prev && wk > 0 && wk < 1;
+    seam.style.opacity = seaming ? 1 : 0;
+    seam.style.transform = `translateX(${(sc.exit === "wipe_right" ? (1-wk) : wk) * 1920}px)`;
 
     /* LAYER 2/3 — docks live on their own schedule */
     const live = DOCKS.filter((d) => t >= d.enter && t < d.exit + EXIT);
     wash.classList.toggle("on", live.length > 0);
     spot.classList.toggle("on", live.length > 0);
 
-    /* Boundary state changes happen hidden behind the curtain - nothing to
-       clip on the wash or the spotlight any more. */
+    /* THE PAGE TURN CARRIES ITS OWN LIGHT. When every live card ends at
+       the boundary being wiped, the wash and spotlight belong to the
+       OUTGOING page - they clip with the same front, so the incoming world
+       arrives clean and takes its own wash only when its own evidence
+       lands. */
+    const boundary = sc.span[0];
+    const allOut = seaming && live.length > 0 &&
+      live.every((x) => Math.abs(x.exit - boundary) < 0.35);
+    const frontClip = sc.exit === "wipe_right"
+      ? `inset(0 ${wk * 100}% 0 0)` : `inset(0 0 0 ${wk * 100}%)`;
+    wash.style.clipPath = allOut ? frontClip : "none";
+    spot.style.clipPath = allOut ? frontClip : "none";
 
     /* Which side does the evidence occupy? A solo card alternates sides by
        scene so the world is not always cropped the same way; a pair spans
@@ -470,22 +453,22 @@
          world slides underneath is what read as clipping. A card that
          SURVIVES the boundary is not on the outgoing page and is never
          clipped: it holds while the world changes behind it. */
-      /* A dock that OUTLIVES this boundary rides above the curtain
-         (.persist); one ending at it holds beneath and is swapped away
-         hidden. Either way there is no exit choreography at a boundary. */
-      const persists = seaming &&
-        ((ck > 0 && d.exit > sc.span[1] + 0.35) ||
-         (rk < 1 && d.enter < sc.span[0] - 0.05 && d.exit > sc.span[0] + 0.35));
-      el.classList.toggle("persist", !!persists);
-      const swept = seaming && !persists;
-      el.style.clipPath = "none";
-      el.style.opacity = swept
-        ? clamp01((t - d.enter) / (CARD_IN * 0.55))
-        : (1 - xe) * clamp01((t - d.enter) / (CARD_IN * 0.55));
+      /* A card ending at the boundary (d.exit ~ sc.span[0], the seam being
+         wiped) is carried off by the front - same edge, same progress, its
+         shadow easing out beneath it. A card that survives the boundary is
+         never touched: it holds while the world changes behind it. */
+      const swept = seaming && Math.abs(d.exit - boundary) < 0.35;
+      if (swept) {
+        el.style.clipPath = frontClip;
+        el.style.opacity = clamp01((t - d.enter) / (CARD_IN * 0.55));
+      } else {
+        el.style.clipPath = "none";
+        el.style.opacity = (1 - xe) * clamp01((t - d.enter) / (CARD_IN * 0.55));
+      }
       el.style.transform = (xk && !swept)
         ? "translateY(" + (-22 * xe) + "px) scale(" + (1 - 0.05 * xe) + ")"
         : "translateY(" + (32 * (1 - ck)) + "px) scale(" + (0.96 + 0.04 * ck) + ")";
-      const sh = 12 * ck;   // the curtain covers the swept card; no shadow fade
+      const sh = 12 * ck * (swept ? (1 - wk) : 1);   // light leaves with the page
       el.style.boxShadow = sh.toFixed(1) + "px " + sh.toFixed(1) + "px 0 rgba(37,49,60,.82)";
 
       const badges = (TL.evidence[d.slide] || {}).badges || [];
