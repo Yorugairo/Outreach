@@ -2,8 +2,17 @@
 
 Script B with Revision C applied. Structure, beats and the five hardest
 lines unchanged — B won a seed-locked A/B by ear. Changes are the four
-fact fixes, the Microsoft cut, the audit beat, and the tell upgraded to an
-instrument. Figures re-verified against the rebuilt ledger 2026-08-29.
+fact fixes, the Microsoft cut, the audit beat, the tell upgraded to an
+instrument, and a term-explanation pass. Figures re-verified against the
+rebuilt ledger 2026-08-29.
+
+**Terms defined inline** (VOICE-PACK — comfort means never being made to
+feel stupid): *hyperscalers* named on first use (Amazon, Microsoft,
+Google, Meta) · *BEA* replaced with "the government statisticians who
+count it" — an acronym read aloud as letters is friction · *semis* →
+"the chipmakers" · *target-date fund* → "the default your retirement
+money probably sits in" · *drawdown* → "if the AI names fall by half" ·
+*order books sold out* → "the orders are placed, the slots are gone." 
 
 **Record as ONE request** (doc 37 §8 master take). Seed 4242.
 Stage directions and this header are NOT spoken. The recordable text is
@@ -12,13 +21,13 @@ stripped, pause marks preserved.
 
 | | |
 |---|---|
-| Spoken characters | **7,873** (+724 vs Script B) |
+| Spoken characters | **8,070** (+921 vs Script B) |
 | Master take | **one request** — under the 9,000-char cap |
-| Break tags | 17 · **2.16 per 1k** (limit 3.0) |
+| Break tags | 17 · **2.11 per 1k** (limit 3.0) |
 | Stray editorial flags | none |
 | Linter | **clean** |
-| Est. runtime | **~8m 11s** at Script B's measured 16.02 chars/sec |
-| Plate density | 39 plates → **12.6s each** (target 12, ceiling 20) |
+| Est. runtime | **~8m 24s** at Script B's measured 16.02 chars/sec |
+| Plate density | 39 plates → **12.9s each** (target 12, ceiling 20) |
 | Evidence density | 13 documents → one per 38s (window 15–45s) |
 
 ---
@@ -35,8 +44,8 @@ is right. The warning points at the wrong address.
 The chart comes from Bravos Research — credit where due, the sharpest
 macro chart on YouTube. Two lines. One is the builders of AI — chips,
 racks, power — up three hundred percent since April. The other is the
-hyperscalers writing the checks — and for a year, they've gone exactly
-nowhere.
+hyperscalers — Amazon, Microsoft, Google, Meta, the ones actually writing
+the checks. And for a year, they've gone exactly nowhere.
 
 If you own an index fund, this chart already owns a piece of you.
 
@@ -60,7 +69,8 @@ of GDP in two thousand. Then the tower came down. And by Bravos' math, AI
 spending just crossed eight.
 
 So I went and pulled a version of that myself — equipment and software
-investment as a share of GDP, straight off the BEA. `[pre-key]` The
+investment as a share of GDP, straight from the government statisticians
+who count it. `[pre-key]` The
 dot-com peak was eleven point five four, back in 2000. Today we're at
 eleven point five one. `[post-key]` Three hundredths of a point short. So
 we're not past that peak. We're level with it — which is still the story,
@@ -122,11 +132,12 @@ What broke England in 1845 wasn't rail. It was railway certificates —
 paper promises priced off the best year, held by people who never checked
 what they owned. And Bravos' own number tells you where that paper lives
 today: AI builders are now twenty percent of the S&P five hundred.
-Historically, two to four. Every index fund and every target-date plan
-now carries a fifth of its weight in one bet — and calls it the market.
+Historically, two to four. Every index fund — and every target-date
+fund, the default your retirement money probably sits in — now carries a
+fifth of its weight in one bet. And calls it the market.
 
-Run the arithmetic. At a fifth of the index, a fifty percent AI drawdown
-erases ten percent of "the market." The other four hundred ninety
+Run the arithmetic. At a fifth of the index, if the AI names fall by half,
+that erases ten percent of "the market." The other four hundred ninety
 companies never get a vote.
 
 So look at the spike again. `[post-key]` The spike was never the risk.
@@ -142,8 +153,8 @@ outrunning understanding. `[post-key]`
 And this is where the railway map, good as it is, skips a gear. Railway
 steel sat waiting for twenty years while the economy grew around it.
 That's why the return took two decades. Today's compute doesn't sit. It
-depreciates in about five years. And the builders' order books are sold
-out into next year. Governments are standing up national AI programs on
+depreciates in about five years. And the builders are already sold out
+into next year — the orders are placed, the slots are gone. Governments are standing up national AI programs on
 the same hardware. Different demand, different clock. The moat under the
 builders runs deeper than the paper holders can see. And the paper
 stacked on top runs taller than the builders admit. Both are true at
@@ -157,8 +168,8 @@ tonight, would the asset still get used tomorrow morning? `[post-key]`
 Steel answers scarce, cash, used. Paper answers abundant, issued,
 believed. Thirty seconds a holding. Run your top five tonight.
 
-Run it on their divergence chart and it reads differently. Semis up three
-hundred percent: that's scarcity getting repriced. Hyperscalers flat
+Run it on their divergence chart and it reads differently. The chipmakers
+up three hundred percent: that's scarcity getting repriced. Hyperscalers flat
 while spending hundreds of billions: that's the market demanding an
 answer to question three. The divergence isn't a house of cards. It's the
 test, administered in public. `[post-key]`

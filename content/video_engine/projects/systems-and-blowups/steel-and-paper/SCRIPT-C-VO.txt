@@ -2,7 +2,7 @@ In 1845, the smartest trade in England was this iron spike. It ruined almost eve
 
 Last week, two million people watched a chart claim AI is next. The chart is right. The warning points at the wrong address.
 
-The chart comes from Bravos Research — credit where due, the sharpest macro chart on YouTube. Two lines. One is the builders of AI — chips, racks, power — up three hundred percent since April. The other is the hyperscalers writing the checks — and for a year, they've gone exactly nowhere.
+The chart comes from Bravos Research — credit where due, the sharpest macro chart on YouTube. Two lines. One is the builders of AI — chips, racks, power — up three hundred percent since April. The other is the hyperscalers — Amazon, Microsoft, Google, Meta, the ones actually writing the checks. And for a year, they've gone exactly nowhere.
 
 If you own an index fund, this chart already owns a piece of you.
 
@@ -12,7 +12,7 @@ And the opponent here isn't Bravos, and it isn't Nvidia. It's a machine — the 
 
 Take their case at its strongest first, because it deserves it. Every transformative technology overshoots. Railways in the 1840s drew a quarter-billion pounds — more than a trillion in today's money. Then the stocks crashed by nearly two-thirds. The internet crossed seven percent of GDP in two thousand. Then the tower came down. And by Bravos' math, AI spending just crossed eight.
 
-So I went and pulled a version of that myself — equipment and software investment as a share of GDP, straight off the BEA. `[pre-key]` The dot-com peak was eleven point five four, back in 2000. Today we're at eleven point five one. `[post-key]` Three hundredths of a point short. So we're not past that peak. We're level with it — which is still the story, just not the bigger one I went looking for.
+So I went and pulled a version of that myself — equipment and software investment as a share of GDP, straight from the government statisticians who count it. `[pre-key]` The dot-com peak was eleven point five four, back in 2000. Today we're at eleven point five one. `[post-key]` Three hundredths of a point short. So we're not past that peak. We're level with it — which is still the story, just not the bigger one I went looking for.
 
 Their sharpest line is the trigger. The mania never dies of old age — it dies when rates cross back above where the borrowing began. Bank of England above six percent: railways rolled over. The Fed at six and a half in two thousand: the internet trade rolled over. So their tripwire for this cycle: the Fed back above five and a half.
 
@@ -36,19 +36,19 @@ And that's where most people — including, this one time, Bravos — get the wh
 
 `[pre-key]` It was never the AI stocks. The bubble isn't in the steel. It's in the paper wrapped around it.
 
-What broke England in 1845 wasn't rail. It was railway certificates — paper promises priced off the best year, held by people who never checked what they owned. And Bravos' own number tells you where that paper lives today: AI builders are now twenty percent of the S&P five hundred. Historically, two to four. Every index fund and every target-date plan now carries a fifth of its weight in one bet — and calls it the market.
+What broke England in 1845 wasn't rail. It was railway certificates — paper promises priced off the best year, held by people who never checked what they owned. And Bravos' own number tells you where that paper lives today: AI builders are now twenty percent of the S&P five hundred. Historically, two to four. Every index fund — and every target-date fund, the default your retirement money probably sits in — now carries a fifth of its weight in one bet. And calls it the market.
 
-Run the arithmetic. At a fifth of the index, a fifty percent AI drawdown erases ten percent of "the market." The other four hundred ninety companies never get a vote.
+Run the arithmetic. At a fifth of the index, if the AI names fall by half, that erases ten percent of "the market." The other four hundred ninety companies never get a vote.
 
 So look at the spike again. `[post-key]` The spike was never the risk. The certificates were.
 
 `[pre-key]` A bubble is not a technology failing. A bubble is ownership outrunning understanding. `[post-key]`
 
-And this is where the railway map, good as it is, skips a gear. Railway steel sat waiting for twenty years while the economy grew around it. That's why the return took two decades. Today's compute doesn't sit. It depreciates in about five years. And the builders' order books are sold out into next year. Governments are standing up national AI programs on the same hardware. Different demand, different clock. The moat under the builders runs deeper than the paper holders can see. And the paper stacked on top runs taller than the builders admit. Both are true at once. That's the whole point.
+And this is where the railway map, good as it is, skips a gear. Railway steel sat waiting for twenty years while the economy grew around it. That's why the return took two decades. Today's compute doesn't sit. It depreciates in about five years. And the builders are already sold out into next year — the orders are placed, the slots are gone. Governments are standing up national AI programs on the same hardware. Different demand, different clock. The moat under the builders runs deeper than the paper holders can see. And the paper stacked on top runs taller than the builders admit. Both are true at once. That's the whole point.
 
 Now the test — the one from the top. Take any holding and ask it three questions. One: is what it sells scarce — sold out, priced up, fought over — or abundant the moment belief fades? Two: does it fund its growth from cash it earns, or from paper it issues? Three: if the hype died tonight, would the asset still get used tomorrow morning? `[post-key]` Steel answers scarce, cash, used. Paper answers abundant, issued, believed. Thirty seconds a holding. Run your top five tonight.
 
-Run it on their divergence chart and it reads differently. Semis up three hundred percent: that's scarcity getting repriced. Hyperscalers flat while spending hundreds of billions: that's the market demanding an answer to question three. The divergence isn't a house of cards. It's the test, administered in public. `[post-key]`
+Run it on their divergence chart and it reads differently. The chipmakers up three hundred percent: that's scarcity getting repriced. Hyperscalers flat while spending hundreds of billions: that's the market demanding an answer to question three. The divergence isn't a house of cards. It's the test, administered in public. `[post-key]`
 
 Bravos put their tripwire on the record: the Fed back above five and a half. Write it down — it's real. Mine is stricter, and it's the one this channel already stands on. The variable is memory — the RAM inside every one of these data centers. And I don't take that one on trust. I built a monitor for it: it reads what memory costs leaving Korea, by the kilo, straight off customs export data. `[pre-key]` The threshold is that number falling below its own trailing average, two quarters running, while the buildout keeps going. `[post-key]` Right now it's going the other way — DRAM up seventeen percent, and the stacked memory the AI racks actually need up fourteen. That's the July release; customs runs about a month behind. The flip: if memory breaks while the buildout holds, the scarcity story is wrong — and so am I. That week, I de-risk the builders on camera.
 
