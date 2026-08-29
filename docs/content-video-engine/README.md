@@ -46,7 +46,8 @@ fragments of the long docs instead of run against the roster.
 | `phase-guides/P1.md` … `P6.md` | the six generation contracts — beat templates, device slots, QC lines |
 | `INJECTION.md` | the parameter surface: everything channel-specific, one block per script |
 | `LLM-CONTEXT-CLASSICAL.md` | the timeless craft layer, densified for injection |
-| `SENTENCE-STRENGTH-CHECK.md` | the line gate — ten per-sentence checks, standing not optional |
+| `STRENGTH-LOOP.md` | **the loop** — gates at L0–L6, the cross-scale checks, fixpoint convergence |
+| `SENTENCE-STRENGTH-CHECK.md` | the L0 line gate — ten per-sentence checks, standing not optional |
 | `FULL-VIDEO-MAP.md` | the derivation: McKee extended to YouTube, integral + differentials |
 
 **The kit is the operational tier; the numbered docs are its derivation.**
