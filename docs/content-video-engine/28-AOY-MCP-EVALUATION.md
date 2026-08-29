@@ -532,3 +532,47 @@ At the workshop tier it is the de-facto library interface and its quotes can
 be treated as course-doctrine citations, subject to the slice-not-enumeration
 caveat and its habit of silently substituting nearest neighbours for things
 that don't exist.
+
+## `review_script` on Steel and Paper — measured (2026-08-29)
+
+Submitted Script D (1,954 words, 11m 40s) to `review_script`. Confirms the
+"reviewers remain thin" verdict with numbers, and shows the failure mode.
+
+**Its own measurements were wrong, and half the rubric depends on them.**
+
+| | Actual | AOY reported | Error |
+|---|---|---|---|
+| Words | 1,954 | 3,921 | **+101%** |
+| Duration | 11m 40s | **~20s** | ~35× |
+
+Retention, Structure and pacing cannot be scored against a 20-second
+phantom. Treat every duration-dependent score as unsupported.
+
+**Two of its three rewrites break our doctrine, and one makes a measured
+defect worse.**
+
+1. Hook: *"Imagine holding an iron spike in 1845, only to watch it ruin
+   your fortune."* Hypothetical framing where doc 38 beat 1 wants present
+   tense and concrete; atmosphere in sentence one is VOICE-PACK
+   anti-pattern 1. It is also **66 characters against our 59** — the
+   microhook already runs 4.05s against a 3.0s cap, and this lengthens it.
+2. Close: *"— a reminder that in the world of investment, it's the paper
+   that often weighs us down."* Explains the metaphor after landing it,
+   which is how a ring gets killed. Generic cadence.
+3. Retention: "reintroduce the three questions" — already satisfied; the
+   test runs three times (the divergence chart, SK hynix, the close).
+
+**What it got right, and it is worth having.** Two signals corroborated our
+own tooling independently:
+
+- **Anti-Fluff 5/10**, naming the borrowing section as repetitive. Third
+  independent hit on that passage — the number-stacking finding came from
+  the line review, and the descending-run fix came from doc 32.
+- **Retention 6/10 on re-hook placement.** Real. Rehook-family
+  constructions cluster from 2.7min on; doc 38's ~0:30 and ~1:00 slots are
+  the thinnest part of the script. See below.
+
+**Standing rule.** `review_script` is a corroborating signal, never an
+authority. Take its *diagnoses* where our own tooling agrees; discard its
+*prescriptions* unless they survive doc 32/33/36/38. Never paste its
+rewrites in — it does not know our voice, and it cannot measure.
