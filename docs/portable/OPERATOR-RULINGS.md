@@ -241,6 +241,38 @@ before use.
 
 ## D. Voice and recording
 
+**D1b — Above the cap, chain; never splice.** (2026-08-29.) An episode
+over the model's character cap records as TWO parts, part two conditioned
+on part one's `previous_request_ids`. That is the provider's supported
+long-form path and it carries prosody across the join — measured at −4.1%
+word duration and an identical inter-word gap. It is NOT the splice-repair
+D1 bans; that ban is on concatenating independently generated segments.
+*Apply:* the split must land on a `[post-key]` settle so the join sits in
+silence, not between two words — preflight refuses to spend otherwise. Cap
+each part at **12 break tags** (doc 37 §8.3 governs masters and supersedes
+§1's "≈3 per segment", which was written when a segment was a scene). Join
+with ONE re-encode pass: trim part one to its last word plus the 1.2s
+settle, short crossfade. Credits must cover BOTH parts before either fires —
+charging part one and failing part two leaves a half-episode and a spent
+balance.
+
+**D5 — The strength loop is multi-scale and runs to a fixpoint.**
+(2026-08-29.) The sentence pass (D3) is ONE scale of seven. Gates exist at
+L0 line, L1 phrase, L2 beat, L3 section, L4 phase, L5 video, L6 catalogue —
+plus cross-scale checks after every edit, because a fix at one scale
+routinely breaks an adjacent one.
+*Why:* observed six times in one session — sentence splits severed beat
+connectives, the close insertions moved the pivot, the hook rewrite shifted
+the foreshadow anchors. None is findable by the gate that caused it.
+*Apply:* **convergence is a fixpoint, not an empty gate list** — a round
+that fires no gates but made an edit runs again, because the edit is what
+may have broken something nothing checked yet. Precedence when scales
+conflict: **comprehension > structure > line-craft**. Any sentence rewritten
+more than twice stops and comes to the operator — a line that keeps failing
+is usually a line the gates are wrong about, and that budget is the guard
+against a fixpoint loop sanding the voice off. Oscillation escalates as a
+DECISION; it means two gates genuinely conflict, which is a doctrine finding.
+
 **D1 — The MASTER TAKE rule.** Episodes ≤~9k characters record as ONE
 request (the provider caps at 10,000 chars ≈ 10 minutes). Scene cuts are
 timestamps in the words file, never audio seams. Silence over 1.2s lives
@@ -286,3 +318,45 @@ inherit the long-form clock — write the Shorts spec separately.
 **E5 — Reference images bound the drift.** A style-only reference still
 leaks its subject into prompts. Name what a reference is FOR, and reject
 subject drift at the contact sheet.
+
+**E6 — Enumerate before you generate, and before you build a tool.**
+(2026-08-29.) List the directory and read the index BEFORE searching.
+Searching returns confirmations of what you already suspect; it cannot
+surface a component you do not know exists.
+*Why:* seven established components were bypassed and rebuilt from scratch
+in one session — the deck libraries, the script pattern kit, the six phase
+guides, the sentence-strength check, doc 29's caption doctrine, and **the
+renderer itself**. Every one was a folder never listed. The cost was a
+second player that rendered black because it referenced assets by path
+instead of embedding them, exactly as the real template's design prevents.
+*Apply:* entry points are mapped in `docs/content-video-engine/PIPELINE.md`
+and `docs/portable/BUILD-PIPELINE.md` — read one before building anything.
+**There is already a player. Do not write another.**
+
+**E7 — One owner per value; everywhere else points at it.**
+(2026-08-29.) A number restated in a second document is a second place it
+can drift, and drift is silent.
+*Why:* the sentence-length figure lived in TEN locations across four tiers —
+the numbered docs, the video map, the kit, the knowledge graph, the LLM
+context layer and two phase guides. All ten were wrong and none knew about
+the others. `FULL-VIDEO-MAP`'s "P2 ends at ~17%" contradicted its own
+authored columns. Doc 36's persona pass said T1–T10 after the list grew to
+T12.
+*Apply:* the kit's tables own the constants and the linters parse them, so
+editing the kit moves the gate. Never restate a value — reference it. When a
+doc turns out to be wrong, fix it, fix every place it is restated, and
+**record why**, or the next pass corrects it back.
+
+**E8 — `review_script` is a diagnosis source, never a ranking instrument.**
+(2026-08-29, measured over five runs.)
+*Why:* its word count never landed within 40% of the truth and moved
+3,921 → 3,876 → 3,204 → 3,271 → 2,823 while the actual text barely changed.
+Three runs carried a VERBATIM IDENTICAL hook and scored it 6, 6 and 8. A
+reviewer that scores the same words two points apart cannot resolve two
+drafts differing by two sentences.
+*Apply:* take its diagnoses **only where our own tooling independently
+agrees** — the repetition call and the rehook-density note both qualified.
+Never compare its scores between drafts. Never paste its rewrites: across
+five runs, eleven of eleven broke doctrine, including four bait
+constructions and two "stay tuned"s. Where a measurable gate disagrees with
+an unstable score, **the gate wins**.

@@ -163,15 +163,15 @@ sell the episode's question or thesis — never its opening prop.**
 ## PRODUCTION AWARENESS
 
 Narration is synthesized: numbers as spoken words, exact numerals on
-on-screen evidence, episodes ≤~9k chars recorded as ONE continuous take
-(scene cuts are data, not audio seams). Visuals are stylized world plates
-— host may appear in-world presenting, pointing, holding — plus a
-separate SHARP evidence layer: real charts we build from real data,
-verified documents, cited source frames. Never info cards. Preferred is
-the DIEGETIC COMPOSITE: host gestures at a surface, real evidence lands
-in it; name each surface's document. Each evidence moment specifies
-document + exact figure, badge (label/value/tag, numeral verbatim), and
-window; evidence every 15–45s, bare stretches over 12s need cause.
+on-screen evidence, one continuous take up to the model's cap and two
+chained parts above it — split on a settle, never spliced (scene cuts are
+data, not audio seams). Build contract: BUILD-PIPELINE.md. Visuals are stylized world plates — host may appear in-world presenting,
+pointing, holding — plus a separate SHARP evidence layer: real charts
+built from real data, verified documents, cited source frames. Never
+info cards. Preferred is the DIEGETIC COMPOSITE: host gestures at a surface, real
+evidence lands in it. Each evidence moment names its document, exact
+figure, badge (numeral verbatim) and window; evidence every 15–45s, bare
+stretches over 12s need cause.
 Captions are word-timed and kinetic. Unverified claims NEVER go inline —
 list them under SOURCES-TO-VERIFY and write narration to survive their
 removal. No advice framing: mechanisms, never prescriptions.
