@@ -481,3 +481,35 @@ TTS tags - the ~3-tag cap stands. Enumerate candidates by pattern
 (colon/dash + payload, threshold sentences), verdict each against the
 chart-sync filter, anchor verbatim and UNIQUELY (repeated phrases take
 longer anchors).
+
+
+## 19. The pause grammar (operator, probe listen, 2026-08-30)
+
+The probe's word timings turned the ear notes into a grammar. Four
+patterns, each now a named pause class in the edit-pause plan:
+
+1. **Aphorism framing** - a coined fragment ("Copies of copies, louder
+   every pass") takes a FULL beat before it: the previous line lands,
+   the aphorism gets its own air.
+2. **Citation weight** - naming a source takes a full beat after the
+   name ("It comes from Bravos Research - [beat] credit where due"):
+   tension AND honor in the same silence.
+3. **Attention redirect** - after introducing an object, a half-beat
+   before the feature callout ("...sharpest macro chart on YouTube.
+   [half] Two lines.").
+4. **Accusation separation** - a half-beat before the charge inside a
+   compound sentence ("...names the people who built it, [half] and
+   not one of them checked the original's math.").
+
+**And the inverse rule: DESCRIPTION RUNS FLOW.** Between consecutive
+descriptive/chart-read sentences with no reveal, the provider's
+0.4-0.55s settles read as jarring stop-start (measured five of them in
+the probe's 0:44-0:56). The plan declares `tighten_runs` - anchored
+spans where the compressor's caps drop (~0.32/0.26 inter) - and the
+deliberate beats are re-inserted afterwards. Pauses cluster at reveals;
+runs move.
+
+**Tag sites are capped, not preserved raw.** An authored `[post-key]`
+renders as break + provider settle (measured 1.49s for a 1.2s tag).
+The authored intent is one beat, so the compressor caps tag sites at
+1.0s combined.

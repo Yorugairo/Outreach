@@ -191,7 +191,42 @@
    "s": 0.45,
    "kind": "half-settle",
    "why": "the 8% threshold before the yardstick turn"
+  },
+  {
+   "before": "Copies of copies, louder every pass.",
+   "s": 1.0,
+   "kind": "savor",
+   "why": "aphorism framing - the coined fragment gets a full beat of air"
+  },
+  {
+   "before": "and not one of them checked the original's math.",
+   "s": 0.45,
+   "kind": "half-savor",
+   "why": "the accusation lands separately from the observation"
+  },
+  {
+   "before": "credit where due, the sharpest macro chart on YouTube.",
+   "s": 1.0,
+   "kind": "savor",
+   "why": "citation weight - naming Bravos Research builds tension AND honors the credit"
+  },
+  {
+   "after": "the sharpest macro chart on YouTube.",
+   "s": 0.45,
+   "kind": "half-savor",
+   "why": "attention redirect: chart introduced -> now the feature callout (Two lines.)"
   }
  ],
- "note_half_beats": "half kind (0.45s) added 2026-08-30: naming->list, reveal callout, threshold settle - the audio side of chart tension reveals"
+ "note_half_beats": "half kind (0.45s) added 2026-08-30: naming->list, reveal callout, threshold settle - the audio side of chart tension reveals",
+ "tighten_runs": [
+  {
+   "start_after": "In a year, up twenty-one percent.",
+   "end_before": "And one layer Bravos' chart never drew.",
+   "inter_cap": 0.32,
+   "inter_tgt": 0.26,
+   "intra_cap": 0.3,
+   "intra_tgt": 0.24,
+   "why": "the chart-read description run flows; deliberate beats are re-inserted after"
+  }
+ ]
 }

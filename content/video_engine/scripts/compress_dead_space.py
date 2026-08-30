@@ -33,6 +33,10 @@ BUILD = EP / "build-f"
 
 INTRA_CAP, INTRA_TGT = 0.40, 0.30
 INTER_CAP, INTER_TGT = 0.65, 0.50
+# an authored break tag renders as tag + provider settle (~1.5s measured on
+# the probe's [post-key] after "touched it") - the authored INTENT is one
+# full beat, so tag sites are capped, not preserved untouched
+TAG_CAP = 1.00
 
 
 def norm(s: str) -> str:
@@ -74,16 +78,53 @@ def main() -> int:
     words = tl["words"]
     sent_ends = {round(s["end"], 3) for s in tl.get("sentences", [])}
     keep = preserved_boundaries(words)
-    print(f"{len(keep)} authored boundaries preserved (break tags + seam)")
+    print(f"{len(keep)} authored tag/seam boundaries (capped at {TAG_CAP}s, "
+          f"not preserved raw)")
+    # resolve the plan's tighten runs to time spans
+    runs = []
+    try:
+        plan = json.loads((EP / "SCRIPT-G-EDIT-PAUSES.json")
+                          .read_text(encoding="utf-8"))
+        wt = [(t, w) for w in words for t in norm(w["w"]).split()]
+        wtoks = [t for t, _ in wt]
+        def anchor_end(txt):
+            toks = norm(txt).split(); n = len(toks)
+            for i in range(len(wtoks) - n + 1):
+                if wtoks[i:i + n] == toks:
+                    return wt[i + n - 1][1]["end"]
+        def anchor_start(txt):
+            toks = norm(txt).split(); n = len(toks)
+            for i in range(len(wtoks) - n + 1):
+                if wtoks[i:i + n] == toks:
+                    return wt[i][1]["start"]
+        for r in plan.get("tighten_runs", []):
+            a2, b2 = anchor_end(r["start_after"]), anchor_start(r["end_before"])
+            if a2 and b2:
+                runs.append({"a": a2, "b": b2, **{k: r[k] for k in
+                    ("inter_cap", "inter_tgt", "intra_cap", "intra_tgt")}})
+                print(f"  fluid run {a2:.1f}-{b2:.1f}s")
+    except FileNotFoundError:
+        pass
 
     cuts = []   # (gap_start, gap_end, new_len)
     for a, b in zip(words, words[1:]):
         g = b["start"] - a["end"]
         at = round(a["end"], 3)
-        if at in keep or g <= 0:
+        if g <= 0:
+            continue
+        if at in keep:
+            if g > TAG_CAP:
+                cuts.append((a["end"], b["start"], TAG_CAP))
             continue
         cap, tgt = ((INTER_CAP, INTER_TGT) if at in sent_ends
                     else (INTRA_CAP, INTRA_TGT))
+        # fluid runs (declared in the edit-pause plan): descriptions flow,
+        # so caps drop; the deliberate beats get re-inserted afterwards
+        for run in runs:
+            if run["a"] <= at <= run["b"]:
+                cap, tgt = ((run["inter_cap"], run["inter_tgt"])
+                            if at in sent_ends
+                            else (run["intra_cap"], run["intra_tgt"]))
         if g > cap:
             cuts.append((a["end"], b["start"], tgt))
     saved = sum((b - a) - t for a, b, t in cuts)
