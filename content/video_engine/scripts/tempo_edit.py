@@ -218,7 +218,8 @@ def build(words, plan, audio):
             if s1 - s0 < 0.02:
                 continue
             seg = audio[int(s0 * SR):int(s1 * SR)]
-            pieces.append(stretch(seg, r))
+            pieces.append({"pcm": stretch(seg, r), "o0": s0, "o1": s1,
+                           "rate": r})
 
     pieces = []
     prev = 0.0
@@ -229,16 +230,34 @@ def build(words, plan, audio):
             prev = b - t / 2
         else:
             emit(prev, a)
-            pieces.append(np.zeros(int(SR * t), dtype="float32"))
+            pieces.append({"pcm": np.zeros(int(SR * t), dtype="float32"),
+                           "o0": None, "o1": None, "rate": 1.0})
             prev = a
     emit(prev, len(audio) / SR)
-    return xfade_join(pieces)
+
+    # exact original->edited time map (xfade_join overlaps XF per joint)
+    out_pos = 0.0
+    for i, pc in enumerate(pieces):
+        if i:
+            out_pos -= XF / SR
+        pc["out0"] = out_pos
+        out_pos += len(pc["pcm"]) / SR
+
+    def to_edited(t: float) -> float:
+        last = 0.0
+        for pc in pieces:
+            if pc["o0"] is None:
+                continue
+            if pc["o0"] - 0.001 <= t <= pc["o1"] + 0.001:
+                return pc["out0"] + (t - pc["o0"]) / pc["rate"]
+            if t > pc["o1"]:
+                last = pc["out0"] + (pc["o1"] - pc["o0"]) / pc["rate"]
+        return last
+
+    return xfade_join([pc["pcm"] for pc in pieces]), to_edited
 
 
-def main() -> int:
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--probe", action="store_true")
-    ap.parse_args()
+def run_probe_mode():
     src = EP / "vo-f/audio/scene_99.mp3"
     wj = json.loads((EP / "vo-f/audio/scene_99.words.json")
                     .read_text(encoding="utf-8"))["words"]
@@ -246,16 +265,64 @@ def main() -> int:
              for x in wj]
     plan = json.loads((EP / "SCRIPT-G-EDIT-PAUSES.json")
                       .read_text(encoding="utf-8"))
-    audio = decode(src)
-    out = build(words, plan, audio)
+    out, _ = build(words, plan, decode(src))
     dest = EP / "vo-f/audio/probe-tempo-preview.mp3"
+    encode(out, dest)
+    print(f"{dest.name}: {len(out) / SR:.1f}s")
+
+
+def run_take_mode():
+    """CHAIN STAGE: edit the joined master, rewrite the timeline onto
+    the edited clock. Replaces compress_dead_space + insert_edit_pauses
+    (doc 37 s20)."""
+    tl_path = EP / "build-f/timeline.json"
+    tl = json.loads(tl_path.read_text(encoding="utf-8"))
+    if tl.get("tempo_field_applied"):
+        print("REFUSED: tempo field already applied")
+        return 1
+    if tl.get("edit_pauses_applied"):
+        print("REFUSED: legacy pause insertion already ran on this "
+              "timeline - rebuild it first")
+        return 1
+    plan = json.loads((EP / "SCRIPT-G-EDIT-PAUSES.json")
+                      .read_text(encoding="utf-8"))
+    audio = decode(EP / "build-f/audio/episode.mp3")
+    out, to_edited = build(tl["words"], plan, audio)
+    encode(out, EP / "build-f/audio/episode-paused.mp3")
+    for w in tl["words"]:
+        w["start"] = round(to_edited(w["start"]), 3)
+        w["end"] = round(to_edited(w["end"]), 3)
+    for sn in tl.get("sentences", []):
+        sn["start"] = round(to_edited(sn["start"]), 3)
+        sn["end"] = round(to_edited(sn["end"]), 3)
+    tl["runtime_s"] = round(len(out) / SR, 3)
+    tl["tempo_field_applied"] = True
+    tl["edit_pauses_applied"] = True      # downstream guard convention
+    tl["dead_space_compressed"] = True
+    tl["paused_audio"] = "audio/episode-paused.mp3"
+    tl_path.write_text(json.dumps(tl, indent=1), encoding="utf-8")
+    print(f"episode-paused.mp3 (tempo field): {len(out) / SR:.1f}s; "
+          f"timeline rewritten onto the edited clock")
+    return 0
+
+
+def encode(pcm, dest: Path):
     with tempfile.TemporaryDirectory() as td:
         wav = Path(td) / "o.wav"
-        sf.write(wav, out, SR)
+        sf.write(wav, pcm, SR)
         subprocess.run(["ffmpeg", "-y", "-v", "quiet", "-i", str(wav),
                         "-c:a", "libmp3lame", "-b:a", "192k", str(dest)],
                        check=True)
-    print(f"{dest.name}: {len(out) / SR:.1f}s")
+
+
+def main() -> int:
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--probe", action="store_true")
+    ap.add_argument("--take", action="store_true")
+    a = ap.parse_args()
+    if a.take:
+        return run_take_mode() or 0
+    run_probe_mode()
     return 0
 
 
