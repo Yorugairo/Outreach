@@ -496,7 +496,11 @@ def tnx_two_eras():
         # the trigger threshold ON the document: the dot-com era crosses it,
         # the AI era rides below it - the narration's argument, rendered.
         # Also makes the badge numeral appear in the document (ruling B3).
-        "hline": {"y": 6.5, "label": "Fed funds peak, 2000 - 6.5%"},
+        "hlines": [
+            {"y": 6.5, "label": "Fed funds peak, 2000 - 6.5%"},
+            # THEIR tripwire, in their color band: "the Fed back above five
+            # and a half" - today's 4.7% end label sits visibly beneath it
+            {"y": 5.5, "label": "their tripwire - 5.5%", "color": "amber"}],
         "panels": [
             {"sub": "Dot-com era - 1998-2001",
              "series": [{"label": f"{a.iloc[-1]:.1f}%", "color": "crimson",

@@ -397,7 +397,8 @@
         for (const sr of pn0.series) for (const [, v] of sr.pts) {
           gy0 = Math.min(gy0, Y(v)); gy1 = Math.max(gy1, Y(v));
         }
-      if (C.hline) { gy0 = Math.min(gy0, Y(C.hline.y)); gy1 = Math.max(gy1, Y(C.hline.y)); }
+      const HL = C.hlines || (C.hline ? [C.hline] : []);
+      for (const h of HL) { gy0 = Math.min(gy0, Y(h.y)); gy1 = Math.max(gy1, Y(h.y)); }
       if (C.ymin != null) gy0 = Math.min(gy0, Y(C.ymin));
       if (C.ymax != null) gy1 = Math.max(gy1, Y(C.ymax));
       { const pad = (gy1 - gy0) * 0.06 || 1; gy0 -= C.ymin != null ? 0 : pad; gy1 += pad; }
@@ -435,15 +436,17 @@
                "text-anchor": "end" }, C.log || Number.isInteger(v)
                ? String(v >= 1000 ? v.toLocaleString("en-US") : v) : v.toFixed(1));
         }
-        if (C.hline) {
+        HL.forEach((h, hi) => {
+          const hcol = PAL[h.color] || "#6b6f78";
           const hl = mk("line", { x1: px0, x2: px0 + pw,
-            y1: my(C.hline.y), y2: my(C.hline.y), stroke: "#6b6f78",
+            y1: my(h.y), y2: my(h.y), stroke: hcol,
             "stroke-width": 2, "stroke-dasharray": "7 6", opacity: 0 });
-          st.marks.push({ el: hl, at: 0.15 });
-          if (C.hline.label)
+          st.marks.push({ el: hl, at: 0.15 + hi * 0.08 });
+          if (h.label && pn.i === 0)
             st.marks.push({ el: mk("text", { class: "csr", x: px0 + 6,
-              y: my(C.hline.y) - 8, opacity: 0 }, C.hline.label), at: 0.15 });
-        }
+              y: my(h.y) - 8, fill: hcol, opacity: 0 }, h.label),
+              at: 0.15 + hi * 0.08 });
+        });
         const order = [...pn.series.keys()].reverse();
         order.forEach((si, oi) => {
           const sr = pn.series[si];
@@ -456,7 +459,7 @@
             const cid = "cclip" + (clipN++) + slot;
             const cp = mk("clipPath", { id: cid });
             const cr = mk("rect", { x: px0, y: 0, width: 0, height: CH }, null, cp);
-            const base = my(Math.max(y0, Math.min(y1, C.hline ? C.hline.y : y0)));
+            const base = my(Math.max(y0, Math.min(y1, HL.length ? HL[0].y : y0)));
             mk("path", { d: d + ` L ${mx(sr.pts[sr.pts.length-1][0]).toFixed(1)} ${base}`
                  + ` L ${mx(sr.pts[0][0]).toFixed(1)} ${base} Z`,
                fill: col, "fill-opacity": 0.10, "clip-path": `url(#${cid})` });

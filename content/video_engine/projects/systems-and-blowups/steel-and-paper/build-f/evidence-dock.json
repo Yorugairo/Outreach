@@ -100,14 +100,16 @@
   "source": "two manias, one threshold",
   "badges": [
    {
-    "label": "BoE 1845",
-    "value": ">6%",
-    "tag": "railways rolled"
-   },
-   {
     "label": "FED 2000",
     "value": "6.5%",
-    "tag": "internet rolled"
+    "tag": "internet rolled",
+    "accent": "coral"
+   },
+   {
+    "label": "THEIR TRIPWIRE",
+    "value": "5.5%",
+    "tag": "Fed, this cycle",
+    "accent": "sunflower"
    }
   ]
  },

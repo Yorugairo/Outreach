@@ -26290,14 +26290,16 @@
    },
    "badges": [
     {
-     "label": "BoE 1845",
-     "value": ">6%",
-     "tag": "railways rolled"
-    },
-    {
      "label": "FED 2000",
      "value": "6.5%",
-     "tag": "internet rolled"
+     "tag": "internet rolled",
+     "accent": "coral"
+    },
+    {
+     "label": "THEIR TRIPWIRE",
+     "value": "5.5%",
+     "tag": "Fed, this cycle",
+     "accent": "sunflower"
     }
    ],
    "chart": {
@@ -26306,10 +26308,17 @@
     "src": "Yahoo Finance, ^TNX",
     "ymin": 0,
     "ymax": 7.2,
-    "hline": {
-     "y": 6.5,
-     "label": "Fed funds peak, 2000 - 6.5%"
-    },
+    "hlines": [
+     {
+      "y": 6.5,
+      "label": "Fed funds peak, 2000 - 6.5%"
+     },
+     {
+      "y": 5.5,
+      "label": "their tripwire - 5.5%",
+      "color": "amber"
+     }
+    ],
     "panels": [
      {
       "sub": "Dot-com era - 1998-2001",
