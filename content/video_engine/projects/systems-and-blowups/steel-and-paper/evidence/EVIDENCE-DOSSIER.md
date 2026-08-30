@@ -49,6 +49,18 @@ market-rate, which is the sharper version of "nowhere for a year."
 YouTube, but we think it needed another layer."* Script patch should anchor
 the beat on the pairing + the added layer, figures above, verbatim.
 
+**H3 — THE RAILWAY YARDSTICK, adopted as a recurring instrument (operator,
+2026-08-30).** Tech share of ALL US private capital formation, quarterly
+from FRED: narrow line (info-processing equipment + software / GPDI) at
+**28%** — an all-time high, above the **23%** dot-com peak; broad line (all
+equipment + IP) at **65%**; UK railway reference ~50%, ONE technology.
+Operator: "almost a central piece to the episode... a regular piece of my
+tracking." Instrument home: `content/video_engine/instruments/railway-
+yardstick/` (definition, updater, dated readings log). Tripwire is a
+pending OPERATOR DECISION — until set, cite the reading, never a threshold.
+→ Script patch: this beat upgrades from a one-line anchor to a candidate
+central piece; natural home is the "pulled a version of that myself" beat.
+
 **Doctrine change:** an answer episode's dossier MUST open with this pin —
 URL, title, publish date, view count at scripting time, claim being
 answered — before any script work. No target pin, no script.
