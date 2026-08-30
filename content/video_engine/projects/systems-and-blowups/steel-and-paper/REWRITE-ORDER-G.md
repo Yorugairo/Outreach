@@ -37,10 +37,35 @@ Every item below is pinned in the dossier (rows H1–H3) or a standing gate.
    probably met this chart. If you hold an index fund, it's already
    holding you."
 
-   B3 scripts onto the chart's staged draw: "same two lines" spoken over
-   their flat pair; the eruption lands near "checked the original's
-   math." The loop grinds both through S1–S10 + the ear test; neither
-   ships as-is without the fixpoint.
+   **THE MERGE (operator-authored, 2026-08-30 — build Beat 3 around this
+   line verbatim):**
+
+   > "Copies of copies, louder every pass. Almost nobody names the
+   > people who built it, and not one of them checked the original's
+   > math."
+
+   Why it wins: B1's escalation ("louder every pass") + B3's pivot to
+   the check; the paired negations are a licensed parallel figure;
+   terminal stress on "math" — exactly where the chart's eruption lands.
+   Log the parallelism license in the strength log.
+
+   Assembled merged Beat 3 (candidate; entry clause is the loop's choice
+   between B3's archetype and B1's direct address, judged by ear):
+
+   > "Somewhere today, a guy on his lunch break is watching his fourth
+   > version of the same chart — different voice, same two lines, same
+   > warning: AI is 1845 again. Copies of copies, louder every pass.
+   > Almost nobody names the people who built it, and not one of them
+   > checked the original's math. You've probably met this chart. If you
+   > hold an index fund, it's already holding you." (~23s)
+
+   STRATEGIC INPUT for the loop: the operator is weighing future Bravos
+   PARTNERSHIP positioning (doc 35's open-attribution network effect,
+   compounded). Generosity in the credit turn is strategy, not manners —
+   keep the Bravos naming warm and specific ("sharpest macro chart on
+   YouTube" stays); the indictment above aims at the uncredited copies,
+   NEVER at Bravos. The mini-payoff + credit turn at ~0:30 is
+   operator-loved: preserve its shape through the fixpoint.
 2. **The chart beat reframes to the operator's line**: "It's the sharpest
    chart on YouTube — but we think it needed another layer." Verified
    figures (badge-synced, refetch at record): memory ~+613%, semis ~+105%,
