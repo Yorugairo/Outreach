@@ -13,20 +13,20 @@
   "parts": [
     {
       "part": 1,
-      "characters": 6674,
-      "duration_s": 385.173,
-      "request_id": "opXFdmjLZLRH9r7339Ul",
+      "characters": 6699,
+      "duration_s": 394.369,
+      "request_id": "SENewiLcJ95cO8xCHQK7",
       "audio": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\vo-f\\audio\\scene_1.mp3",
       "chained_from": null
     },
     {
       "part": 2,
-      "characters": 6741,
-      "duration_s": 388.885,
-      "request_id": "wxu6YYWJfpvCXcwgJvMm",
+      "characters": 6744,
+      "duration_s": 388.003,
+      "request_id": "i85srL7zZ4YPLslf8ksZ",
       "audio": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\vo-f\\audio\\scene_2.mp3",
-      "chained_from": "opXFdmjLZLRH9r7339Ul"
+      "chained_from": "SENewiLcJ95cO8xCHQK7"
     }
   ],
-  "total_duration_s": 774.058
+  "total_duration_s": 782.3720000000001
 }

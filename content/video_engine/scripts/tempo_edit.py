@@ -37,6 +37,7 @@ INTRA, INTRAT = 0.40, 0.30
 INTER, INTERT = 0.65, 0.50
 TAG_CAP = 1.00
 HOOK_HOLD_S = 9.0             # the open never runs
+TAIL_HOLD_S = 14.0            # ...and neither does the ring close
 ENDERS = (".", "!", "?", ":")
 
 
@@ -143,6 +144,8 @@ def build(words, plan, audio):
             if a - 0.05 <= t <= b + 0.05:
                 att_spans.append((a, b))
     att_spans.append((0.0, HOOK_HOLD_S))
+    take_end = words[-1]["end"]
+    att_spans.append((take_end - TAIL_HOLD_S, take_end + 1))
     RAMP_S = 1.6   # halved slope (operator: stabilize the field edges)
 
     def rate_curve(t: float) -> float:

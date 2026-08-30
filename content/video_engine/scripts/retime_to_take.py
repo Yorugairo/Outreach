@@ -123,6 +123,33 @@ def main() -> int:
             gap = final[id(nxt)][0] - final[id(prev)][1]
             if 0 < gap < 8.0:
                 final[id(prev)][1] = final[id(nxt)][0]
+    # PASS 1.6: standing fixes for the two classes every retime recreates
+    # (a) same-slot overlap -> sequential handoff: pinned enters are the
+    #     truth; the earlier dock's exit trims to the later's enter
+    all_d = [d for _, d in insts]
+    for i, d in enumerate(all_d):
+        for o in all_d:
+            if o is d or o[1] != d[1]:
+                continue
+            if (final[id(d)][0] < final[id(o)][0] < final[id(d)][1]):
+                final[id(d)][1] = final[id(o)][0]
+    # (b) a sub-8s plate's dock either fills the plate or leaves it -
+    #     0.8*plate is the drive-by line; short holds stretch full-plate.
+    #     TWO docks on such a plate become a PAIR (slots 0/1, both full):
+    #     sequential handoff cannot fit under 8 seconds.
+    slot_override = {}
+    for r in rows:
+        a, b = warp(r[0]), warp(r[1])
+        if b - a >= 8.0 or not r[4]:
+            continue
+        short = any(final[id(d)][1] - final[id(d)][0] < 0.8 * (b - a)
+                    for d in r[4])
+        if not short:
+            continue
+        for i, d in enumerate(r[4][:2]):
+            final[id(d)] = [a, b]
+            slot_override[id(d)] = i
+
     dropped = []
     for _, d in insts:
         ne, nx = final[id(d)]
@@ -158,6 +185,7 @@ def main() -> int:
                 if match is None:
                     return mm.group(0)
                 ne, nx = final[id(match)]
+                slot = str(slot_override.get(id(match), int(slot)))
                 return f'("{name}",{slot},{ne:.1f},{nx:.1f})'
             newline = dock_re.sub(sub_dock, newline)
             out_lines.append(indent + newline)
