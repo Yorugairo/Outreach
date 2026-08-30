@@ -965,5 +965,27 @@
     "accent": "ink"
    }
   ]
+ },
+ {
+  "asset": "ev-index-concentration-v1",
+  "species": "data",
+  "anchor": "More worried: the index they sold you as the safe version of this trade is the certificate.",
+  "anchor_kind": "claim",
+  "title": "One bet, a fifth of the index",
+  "source": "Figures via Bravos Research",
+  "badges": [
+   {
+    "label": "AI BUILDERS",
+    "value": "20%",
+    "tag": "of the S&P today",
+    "accent": "coral"
+   },
+   {
+    "label": "HISTORICALLY",
+    "value": "2-4%",
+    "tag": "the old normal",
+    "accent": "ink"
+   }
+  ]
  }
 ]

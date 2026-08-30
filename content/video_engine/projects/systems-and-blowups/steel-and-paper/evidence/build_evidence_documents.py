@@ -394,6 +394,49 @@ def test_scorecard():
 
 
 
+def index_concentration():
+    """The pivot's own number, finally on the document layer: AI builders
+    at 20% of the S&P against a 2-4% historical norm. Both numerals are
+    SPOKEN (pivot and close) and both are Bravos-attributed in the
+    narration ("Bravos' own number tells you where that paper lives").
+    Shares mode - the fill IS the claim."""
+    fig = frame(640)
+    fig.text(0.055, 0.865, "One bet, a fifth of the index",
+             color=INK_1, fontsize=T_TITLE, fontweight=600, fontfamily=FAM)
+    rows = [("AI builders, share of the S&P 500 today", 0.20, "20%", CRIMSON,
+             "one bet"),
+            ("Their historical share", 0.03, "2-4%", DEEMPH, "the old normal")]
+    for i, (lbl, frac, val, col, note) in enumerate(rows):
+        y = 0.60 - i * 0.27
+        fig.text(0.055, y + 0.085, lbl, color=INK_2, fontsize=T_SUB,
+                 fontfamily=FAM)
+        ax = fig.add_axes([0.055, y - 0.045, 0.70, 0.095])
+        ax.set_xlim(0, 1); ax.set_ylim(0, 1); ax.axis("off")
+        ax.barh([0.5], [1.0], height=1.0, color=GRID)
+        ax.barh([0.5], [frac], height=1.0, color=col)
+        fig.text(0.075 + 0.70 * frac, y, val, color=INK_1,
+                 fontsize=T_LABEL, fontweight=600, fontfamily=FAM, va="center")
+        fig.text(0.775, y, note, color=INK_MUTE, fontsize=T_SOURCE,
+                 fontfamily=FAM, va="center")
+    fig.text(0.055, 0.115, "Every index fund carries it. Every target-date fund defaults to it.",
+             color=INK_2, fontsize=T_SUB, fontfamily=FAM)
+    fig.text(0.045, 0.045, "Figures via Bravos Research - S&P 500 sector weighting",
+             color=INK_MUTE, fontsize=T_SOURCE, fontfamily=FAM, va="center")
+    save(fig, "ev-index-concentration-v1")
+    emit_sidecar("ev-index-concentration-v1", {
+        "title": "One bet, a fifth of the index",
+        "sub": "AI builders as a share of the S&P 500",
+        "src": "Figures via Bravos Research - S&P 500 sector weighting",
+        "shares": [
+            {"label": "Share of the S&P 500 today", "frac": 0.20,
+             "value": "20%", "color": "crimson", "note": "one bet"},
+            {"label": "Their historical share", "frac": 0.03,
+             "value": "2-4%", "color": "deemph", "note": "the old normal"}],
+        "foot": "Every index fund carries it. Every target-date fund defaults to it.",
+    })
+
+
+
 def divergence():
     """Bravos' actual chart (operator, 2026-08-29): MAMAA index vs a
     semiconductor index. We recreate their pairing faithfully and ADD the

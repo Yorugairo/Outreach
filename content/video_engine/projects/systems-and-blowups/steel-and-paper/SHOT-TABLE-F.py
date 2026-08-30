@@ -70,7 +70,7 @@ W = [
 (454.9, 466.0, "hero-barbell-v1",                       (.05,  12,   6), [("ev-test-scorecard-v1",0,455.5,486.5)]),  # the three questions  # ^REGISTER: the balance: gold one side, paper the other - THE TEST
 (466.0, 476.0, "beat-04-014-evidence-hierarchy-v1",                        (.05, -14,  -6), []),  # steel answers / paper answers - the sort  # POOL: contracts and shipments beat narrative - the test's own logic
 (476.0, 486.8, "world-workbench-triad-v1",       (.04,  10,   8), []),                       # "thirty seconds a holding. run your top five tonight"
-(486.9, 496.0, "world-two-rooms-divergence-v1",  (.05, -12,   6), []),
+(486.9, 496.0, "world-two-rooms-divergence-v1",  (.05, -12,   6), [("ev-divergence-v1",0,487.0,503.0)]),  # the chart RETURNS at the line that names it
 (496.0, 503.2, "beat-04-015-bottleneck-boom-v1",                        (.04,  12,  -8), []),  # the test, administered in public  # POOL: a bottleneck boom before a bubble
 (504.4, 513.9, "world-seoul-fab-skyline-v1",     (.05, -10,   6), [], "cut"),  # the global DRAM battlefield  # extended to 9.0s so 500% / +716% can actually land
 (508.2, 522.0, "hero-fab-constraint-v1",                 (.05,  14,   8), [("ev-krx-memory-v3",0,508.5,522.0)], "cut"),     # SK hynix, +517%  # ^REGISTER: the cleanroom line - SK hynix, the constraint itself
@@ -92,7 +92,7 @@ W = [
 (649.0, 656.0, "beat-03-008-009-physical-capacity-gate-v1",                       (.04,  10,   6), [("ev-test-scorecard-v1",0,649.2,656.0)]),  # POOL: the gate to physical capacity - scarcity is what they sell
 (656.0, 663.6, "world-scales-coin-paper-v1",     (.05, -12,   8), []),  # vulnerability vs opportunity - EVIDENCE PULLED: the s15 slide reads "Opportunity."
 (663.8, 675.0, "beat-05-002-strategic-chokepoints-v1",                    (.05,  14,  -6), []),  # EVIDENCE PULLED: antidote-s15 is a buy directive + third-party branding  # POOL: the world reorganizing around chokepoints - they're the steel
-(675.0, 691.2, "world-listing-barge-v1",         (.05, -10,   6), []),  # accidental concentration, sold as safety
+(675.0, 691.2, "world-listing-barge-v1",         (.05, -10,   6), [("ev-index-concentration-v1",0,676.9,691.0)]),  # the pivot's own number, finally charted  # accidental concentration, sold as safety
 (691.3, 697.2, "beat-06-017-018-diworsification-v1",             (.06,  10,   8), []),                       # FINAL TRIAD: steel used / paper believed  # POOL: diworsification - the paper gets believed
 (697.7, 712.0, "beat-04-001-buyer-behavior-v1",                       (.04, -12,   6), []),                       # CTA: you now have the test  # POOL: now look at buyer behaviour - the assignment
 (712.0, 721.3, "beat-06-001-003-index-product-elevator-v1",            (.05,  12,  -8), []),                       # future pacing: which half of your portfolio is steel  # POOL: open the other elevator: your index fund

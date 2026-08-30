@@ -31102,6 +31102,51 @@
      "accent": "teal"
     }
    ]
+  },
+  "ev-index-concentration-v1": {
+   "title": "One bet, a fifth of the index",
+   "source": "Figures via Bravos Research",
+   "species": "data",
+   "document": {
+    "path": "Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-index-concentration-v1.png",
+    "sha256": "6fa767d36729026fe068c061126e8268a1590d50a9883ef125a21457945daa1d"
+   },
+   "badges": [
+    {
+     "label": "AI BUILDERS",
+     "value": "20%",
+     "tag": "of the S&P today",
+     "accent": "coral"
+    },
+    {
+     "label": "HISTORICALLY",
+     "value": "2-4%",
+     "tag": "the old normal",
+     "accent": "ink"
+    }
+   ],
+   "chart": {
+    "title": "One bet, a fifth of the index",
+    "sub": "AI builders as a share of the S&P 500",
+    "src": "Figures via Bravos Research - S&P 500 sector weighting",
+    "shares": [
+     {
+      "label": "Share of the S&P 500 today",
+      "frac": 0.2,
+      "value": "20%",
+      "color": "crimson",
+      "note": "one bet"
+     },
+     {
+      "label": "Their historical share",
+      "frac": 0.03,
+      "value": "2-4%",
+      "color": "deemph",
+      "note": "the old normal"
+     }
+    ],
+    "foot": "Every index fund carries it. Every target-date fund defaults to it."
+   }
   }
  },
  "scenes": [
@@ -32379,12 +32424,25 @@
      "y": 6
     }
    },
-   "exit": "cut",
+   "exit": "wipe_right",
    "span": [
     486.9,
     496.0
    ],
-   "docks": []
+   "docks": [
+    {
+     "slide": "ev-divergence-v1",
+     "slot": 0,
+     "enter": 487.0,
+     "exit": 503.0,
+     "badge_at": [
+      489.05,
+      490.35,
+      491.65,
+      492.95
+     ]
+    }
+   ]
   },
   {
    "scene_id": "s52",
@@ -32872,12 +32930,23 @@
      "y": 6
     }
    },
-   "exit": "cut",
+   "exit": "wipe_right",
    "span": [
     675.0,
     691.3
    ],
-   "docks": []
+   "docks": [
+    {
+     "slide": "ev-index-concentration-v1",
+     "slot": 0,
+     "enter": 676.9,
+     "exit": 691.0,
+     "badge_at": [
+      678.95,
+      680.25
+     ]
+    }
+   ]
   },
   {
    "scene_id": "s72",
