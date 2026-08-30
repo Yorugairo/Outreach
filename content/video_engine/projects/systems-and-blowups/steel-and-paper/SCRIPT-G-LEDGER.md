@@ -92,16 +92,16 @@ ending on the object.
 
 The narration is written to the divergence chart's staged draw: their
 pairing named over the flat cobalt/grey pair; semis line erupts at
-"left both behind"; memory erupts after the `[pre-key]` reveal. Sidecar
-delay 2.5s; figures freeze at record (badge-chart sync active).
+"left both behind"; memory erupts on "And one layer their chart never drew" (its 0.6s
+lead lives in the edit-pause plan). Sidecar delay 2.5s; figures freeze at record (badge-chart sync active).
 
 ## Edit-pause plan (the owed silences)
 
 The ~3-tags-per-generation practice moved 14 settles OUT of TTS and into
 the editor's timeline. They are RECORDED, not remembered:
-`SCRIPT-G-EDIT-PAUSES.json` (edit_pauses.v1) — verbatim anchors, kind
-(lead 0.6 / settle 1.2 / savor 1.6), phase, and why. 14.4s total; final
-cut ≈ 13m22s. The P5 savor beats the roster requires live THERE, as do
+`SCRIPT-G-EDIT-PAUSES.json` (edit_pauses.v1, 15 entries) — verbatim anchors, kind
+(lead 0.6 / settle 1.2 / savor 1.6), phase, and why. 15.0s total; final
+cut ≈ 13m23s. The P5 savor beats the roster requires live THERE, as do
 the P4 ring-recontextualization breath and the triad's final-stroke lead.
 The retime pass inserts them at anchor word boundaries and shifts the
 word timeline before docks retime.
