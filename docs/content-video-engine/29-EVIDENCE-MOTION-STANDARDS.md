@@ -1217,3 +1217,20 @@ at the moment narration starts adding layers. Draw delays are tuned to
 the reads - semis erupt at "the chart's second line," memory at "one
 layer their chart never drew." The handoff lands on a plate boundary so
 the wipe carries the swap.
+
+
+### 9.21 Purpose-built beats reuse, and audience units (operator, 2026-08-30)
+
+**A non-specific card never appears twice when a specific one can be
+built.** The concentration card was docked at two close beats; the
+operator's ruling: build the evidence the beat deserves instead
+(ev-hynix-steel-v1 - price vs its own operating profit - for the "More
+bullish" beat). Reuse is a smell that the beat's real evidence hasn't
+been made yet. A deliberate claim-then-verdict recurrence is still legal
+when each appearance IS the card's claim - but reach for a purpose-built
+card first.
+
+**Figures speak the audience's currency.** The audience is American:
+foreign-currency figures convert to USD at a real spot rate (source the
+rate), with the conversion named in the source line. ₩37.6T is "a
+$27 billion quarter."

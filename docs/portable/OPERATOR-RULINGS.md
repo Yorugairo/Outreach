@@ -449,3 +449,28 @@ antecedent pairs, docks, plates), first emit the item list mechanically,
 then verdict each item in the log. If no enumerator exists, write one —
 `enumerate_strength_screens.py` is the pattern.
 
+
+
+## E12 — Evidence exits with its topic, never with its plate (2026-08-30)
+
+"We shouldn't be removing evidence layers just for the sake of removing
+evidence layers." Dock exits are authored against the last sentence that
+leans on the card; holds cross plate boundaries freely. After ANY retime
+or script change, run the topic-exit audit (enumerated, per-dock
+verdicts) — a warp preserves durations while topics move, so every
+retime silently reintroduces mid-topic exits.
+
+## E13 — Probe first, then whisper-gate every take (2026-08-30)
+
+Whisper cannot generate a read; "test before spending" means a short
+same-settings ElevenLabs probe (~2k credits), whisper-gated and
+listened to, before the full master. Every recorded take then passes
+the whisper gate (blind transcription diffed against the script) before
+the timeline is built — provider alignment cannot hear vocalized
+artifacts; a transcriber that never saw the script can.
+
+## E14 — Purpose-built evidence, in the audience's units (2026-08-30)
+
+Never reuse a non-specific card where a specific one can be built (the
+hynix price-vs-profit chart replaced a second appearance of the
+concentration card). All on-card figures in USD at a sourced spot rate.

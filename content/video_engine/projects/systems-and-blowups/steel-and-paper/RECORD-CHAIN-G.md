@@ -1,4 +1,11 @@
-# SCRIPT G — RECORD CHAIN (verified 2026-08-30)
+# SCRIPT G — RECORD CHAIN (RUN 2026-08-30 — take recorded, chain complete)
+
+**Outcome:** 12.90 min take (385.2s + 388.9s chained), whisper gate caught
+a real vocalized tail tone (killed by the defended join; seam −91 dB),
+15 edit pauses inserted (runtime 788.6s), 32 docks pinned in the retime,
+close re-authored to G's beats, all 47 docks topic-exit audited, captions
+regenerated. Choreography: all slots clean incl. clash gates.
+Remaining: operator join listen · filmstrips · full playthrough.
 
 Every stage, its tool, its verified status. Nothing here is remembered.
 

@@ -56,6 +56,19 @@ read.
 | **Doctrine audit + pattern lint** — timed gates from text via dual rate estimators (16.29 c/s, 170.9 wpm) | `scripts/audit_script_doctrine.py`, `lint_script_pattern.py`, `kit_spec.py` | LIVE | |
 | **Recorder preflight** — 16 gates: split-on-pause, tag cap, paragraph density, stacked pauses, credits-for-both-parts | `scripts/record_chained_take.py` | LIVE — both new gates FAIL on the take that shipped bad | doc 37 |
 | **Pause compilation** — marks → break tags, backticks consumed, dirty-tag guard RAISES | `src/services/audio_synth.py` `compile_pause_marks` | LIVE | the 0:08 artifact class is unshippable |
+| **Whisper gate** — transcribe the take blind, diff vs script; FAIL on insertions/deletions, WER > 5% | `scripts/verify_take_whisper.py` (faster-whisper base.en) | LIVE — caught a real vocalized tail tone on its FIRST run | doc 37 §12; Script G take |
+| **Defended join** — part-1 tail faded to silence after last word + generated settle; provider-appended junk dies by construction | `scripts/join_chained_take.py` | LIVE — seam measures −91 dB | doc 37; Script G |
+| **Edit-pause insertion** — the ~3-tag practice's owed silences cut into the take at verbatim anchors; timeline shifted | `scripts/insert_edit_pauses.py` | LIVE — 15 pauses, +15.0s | Script G |
+| **Retime pass** — docks pin to anchors' new word times; plates warp between control points; same-slide gaps stitch | `scripts/retime_to_take.py` | LIVE — 32 pins; MUST be followed by the topic-exit audit (durations carry, topics move) | Script G |
+| **Caption pages regen** — ~3-word kinetic pages with k-flags from the current timeline | `scripts/build_caption_pages.py` | LIVE | 832 pages |
+| **Topic-exit audit** — E11 enumeration of every dock vs the narration it serves; exits authored to topic ends | `build-f/TOPIC-EXIT-AUDIT.md` procedure (doc 29 §9.20) | STANDING — runs after every retime or script change | 47 docks walked 2026-08-30 |
+| **Choreography clash gates** — same-slot overlap + >2 concurrent docks FAIL | `scripts/emit_choreography.py` | LIVE — caught a real slot clash on first run | |
+
+## External evidence sources
+
+| Source | Where | Gives | Rule |
+|---|---|---|---|
+| **SCML ledger** — the operator's Korea/memory intelligence base | `~/.claude/Claude Work/Claude Files/scml-ledger/scml-ledger/data/scml.db` | DART-filed financials (cross-validate Yahoo to the won), USDKRW series, **memory export tracker** (customs value-per-kg — primary-source "sold out" pricing), short interest, NPS flows, catalyst calendar | read-only for evidence; .env keys never printed; cite as "cross-checked vs DART filings" |
 
 ## Reference builds (locked)
 
