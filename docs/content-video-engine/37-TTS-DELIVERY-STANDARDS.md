@@ -75,7 +75,14 @@ movement paragraphs carry the section settles and the em-dash register
 carries the micro-pauses; a tag survives only where an EXACT duration is
 essential mid-paragraph (the hook settle, an instrument reveal, the tell's
 threshold pair, P4's required pre-key, the X5 split seam). Any other
-silence belongs to the editor's timeline, where it costs nothing.
+silence belongs to the editor's timeline, where it costs nothing — and it
+is OWED, not optional: every settle removed from the payload is recorded
+in an **edit-pause plan** (`<script>-EDIT-PAUSES.json`, edit_pauses.v1 —
+verbatim anchor, kind, duration, why) that travels with the script. The
+recorder's preflight refuses a take without one. The retime pass inserts
+the silences at anchor word boundaries and shifts the word timeline; the
+roster's savor beats live in the plan, so the duty-roster count includes
+it.
 
 **Ration rule (official warning):** excessive break tags cause speed-ups and
 audio artifacts. Cap **≈3 break tags per generated segment**; micro-pauses

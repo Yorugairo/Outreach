@@ -178,6 +178,15 @@ def main() -> int:
                 f"section-boundary savors to editor-placed timeline gaps — "
                 f"any silence over 1.2s belongs there anyway")
 
+    # the settles cut from TTS must be RECORDED for the timeline edit -
+    # a payload at ~3 tags/generation without an edit-pause plan has lost
+    # its savor beats, not rationed them
+    plan = EP / "SCRIPT-G-EDIT-PAUSES.json"
+    print(f"  [{'ok' if plan.exists() else 'FAIL'}] edit-pause plan present ({plan.name})")
+    if not plan.exists():
+        fails.append("edit-pause plan missing - the dropped settles are owed "
+                     "to the timeline and must be recorded before the take")
+
     for d in (AUDIO_DIR, CACHE_DIR):
         d.mkdir(parents=True, exist_ok=True)
     print(f"  [ok] output dirs exist")

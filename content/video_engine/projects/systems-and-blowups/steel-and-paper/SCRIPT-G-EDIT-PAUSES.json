@@ -1,0 +1,105 @@
+{
+ "schema_version": "edit_pauses.v1",
+ "script": "SCRIPT-G",
+ "note": "Settles removed from the TTS payload under the ~3-tags-per-generation practice (doc 37). The retime pass inserts these as timeline silences at the anchor word boundaries and shifts the word timeline; docks/choreography retime after. Durations: lead 0.6 / settle 1.2 / savor 1.6.",
+ "pauses": [
+  {
+   "after": "Up six hundred and thirteen percent.",
+   "s": 1.2,
+   "kind": "reveal settle",
+   "phase": "P1",
+   "why": "the eruption's landing - was credit post-key"
+  },
+  {
+   "before": "One test \u2014 three questions",
+   "s": 0.6,
+   "kind": "lead",
+   "phase": "P1",
+   "why": "promise reveal lead - was pre-key"
+  },
+  {
+   "after": "into steel or paper.",
+   "s": 1.2,
+   "kind": "settle",
+   "phase": "P1",
+   "why": "promise settle before the calculable close"
+  },
+  {
+   "before": "My version runs the same measure on America",
+   "s": 0.6,
+   "kind": "lead",
+   "phase": "P2",
+   "why": "yardstick reveal lead"
+  },
+  {
+   "before": "And that's the borrowing you can see.",
+   "s": 0.6,
+   "kind": "lead",
+   "phase": "P3",
+   "why": "the hinge line - was pre-key"
+  },
+  {
+   "after": "And that's the borrowing you can see.",
+   "s": 1.6,
+   "kind": "savor",
+   "phase": "P3",
+   "why": "full savor beat - the line turns the debt section"
+  },
+  {
+   "after": "So look at the spike again.",
+   "s": 1.6,
+   "kind": "savor",
+   "phase": "P4",
+   "why": "the ring recontextualization - eyes on the spike before the verdict"
+  },
+  {
+   "before": "A bubble is not a technology failing.",
+   "s": 0.6,
+   "kind": "lead",
+   "phase": "P4",
+   "why": "thesis definition lead"
+  },
+  {
+   "after": "It's the test, administered in public.",
+   "s": 1.6,
+   "kind": "savor",
+   "phase": "P5",
+   "why": "divergence re-read payoff (roster savor beat)"
+  },
+  {
+   "before": "If anything in this story is a bubble, it should be that number.",
+   "s": 0.6,
+   "kind": "lead",
+   "phase": "P5",
+   "why": "hynix stake lead"
+  },
+  {
+   "after": "it should be that number.",
+   "s": 1.2,
+   "kind": "settle",
+   "phase": "P5",
+   "why": "let the +500 hang before the physics"
+  },
+  {
+   "after": "would the asset still get used tomorrow morning?",
+   "s": 1.2,
+   "kind": "settle",
+   "phase": "P5",
+   "why": "test delivery settle (roster savor beat)"
+  },
+  {
+   "before": "And the difference gets discovered all at once.",
+   "s": 0.6,
+   "kind": "lead",
+   "phase": "P6",
+   "why": "triad final-stroke lead - was pre-key"
+  },
+  {
+   "after": "So \u2014 the spike, one more time.",
+   "s": 1.2,
+   "kind": "settle",
+   "phase": "P6",
+   "why": "ring close breath"
+  }
+ ]
+}
