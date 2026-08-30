@@ -369,3 +369,28 @@ then record the full master. Provider artifacts are settings-dependent -
 only the provider reproduces its own failure modes, which is why a free
 local TTS cannot stand in as the probe. Standing order for every future
 master take.
+
+
+## 14. Kill the dead space, THEN add the breaks (operator, 2026-08-30)
+
+The take comes back carrying dead air the model produced - mid-sentence
+holes up to ~2s, slow settles - and stacking our deliberate pauses on
+top of it made delivery drag below YouTube pace. Standing order on every
+take, enforced by tooling:
+
+1. `compress_dead_space.py` runs on the JOINED take: intra-sentence
+   gaps above 0.40s tighten to 0.30s; inter-sentence gaps above 0.65s
+   tighten to 0.50s. The six break-tag sites and the join settle are
+   AUTHORED silence and are never touched.
+2. Only then does `insert_edit_pauses.py` add the owed pauses - it now
+   REFUSES to run on an uncompressed timeline.
+
+Deliberate silence is authored; everything else above the caps is dead
+air. Script G's raw take measured ~16s of it.
+
+## 15. Name Bravos, not "they" (script gate, 2026-08-30)
+
+The named-subject rule applied to the opponent: any "they/their" whose
+referent is Bravos and whose last naming sits more than ~2 sentences
+back takes the name. Eight sites fixed in Script G; the sweep is part
+of the strength loop's X1 walk for every answer video.

@@ -37,6 +37,11 @@ def main() -> int:
     if tl.get("edit_pauses_applied"):
         print("timeline already carries the edit pauses - refusing to double-insert")
         return 1
+    if not tl.get("dead_space_compressed") and "--skip-tighten-check" not in sys.argv:
+        print("ORDER: kill the dead space FIRST (compress_dead_space.py), "
+              "THEN add our breaks (operator, 2026-08-30). "
+              "--skip-tighten-check to override.")
+        return 1
     plan = json.loads((EP / "SCRIPT-G-EDIT-PAUSES.json")
                       .read_text(encoding="utf-8"))["pauses"]
     words = tl["words"]

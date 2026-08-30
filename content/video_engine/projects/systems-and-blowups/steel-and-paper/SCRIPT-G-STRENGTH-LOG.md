@@ -172,3 +172,19 @@ ev-test-scorecard-v1 docks at the block's first sentence.
 ## DECISIONS — none
 
 No oscillations. No sentence hit the two-rewrite budget.
+
+
+## Round 7 — the Bravos naming sweep (operator, 2026-08-30)
+
+All 24 they/their sites enumerated with predecessors; 16 resolve locally
+(SK hynix, the builders, risk charts, Uber). Eight Bravos-referent sites
+where the name sat too far back, all fixed by naming: [57] "Bravos'
+chart never drew" · [93] "survive Bravos' argument" · [96] "Bravos' case
+at full strength" · [168] "Bravos' sharpest line is the trigger" ·
+[183] "Bravos' tripwire" (was misbindable to the Fed) · [219] "Bravos'
+own chart gets strange" · [549] "Bravos' divergence chart" · [762]
+"Bravos' at five and a half, mine on memory". Each rewrite walked
+through the ten gates: possessive-on-name keeps terminal stress; no
+length trips; X1 antecedents strengthen by construction. Checkers:
+lint clean, audit 0 FAIL. Downstream anchors updated (tnx, edit-pause
+plan). REQUIRES RE-RECORD - probe-first per doc 37 §13.

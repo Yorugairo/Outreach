@@ -28,7 +28,7 @@ the sharpest macro chart on YouTube. Two lines. The mega-caps — Meta,
 Apple, Microsoft, Amazon, Alphabet. In a year, up twenty-one percent. We
 drew the index underneath them — same line. The giants are the market now.
 The chart's second line is the chip industry, and it left both behind: up a
-hundred and five. And one layer their chart never drew. Memory
+hundred and five. And one layer Bravos' chart never drew. Memory
 — the builders inside the builders. Up six hundred and thirteen percent. The chart is right. The warning points at the wrong address.
 
 So here's what you're getting: not a rebuttal, not a victory lap, not a
@@ -42,9 +42,9 @@ the hype cycle — capital arriving faster than the value it's chasing.
 **[P2 · the hype machine plate. A3+F2 merged construction.]**
 
 But a machine you can test. That's the job of the three questions. They
-have to survive their argument before they survive mine.
+have to survive Bravos' argument before they survive mine.
 
-Start with their case at full strength — the version they would defend.
+Start with Bravos' case at full strength — the version they would defend.
 Every transformative technology overshoots. Railways in the 1840s drew a
 quarter-billion pounds — more than a trillion in today's money. Then the
 stocks crashed by nearly two-thirds. In two thousand, the internet crossed
@@ -65,10 +65,10 @@ Nothing since the railways has matched the railways. What we're watching is
 the closest run at it in a hundred and eighty years. The yardstick is a new instrument for this channel — no threshold on it yet.
 We're reading it together, one quarter at a time.
 
-Their sharpest line is the trigger. The mania never dies of old age — it
+Bravos' sharpest line is the trigger. The mania never dies of old age — it
 dies when rates cross back above where the borrowing began. Bank of England
 above six percent: railways rolled over. The Fed at six and a half in two
-thousand: the internet trade rolled over. So their tripwire for this cycle:
+thousand: the internet trade rolled over. So Bravos' tripwire for this cycle:
 the Fed back above five and a half.
 
 Put my agreement on the record. The cycle is real. The threshold is real.
@@ -84,7 +84,7 @@ profit-taking. Any adviser would sign it.
 
 **[P3 · the claims-adjuster walk. Karp document types itself.]**
 
-But here's where their own chart gets strange — and the strangeness is the
+But here's where Bravos' own chart gets strange — and the strangeness is the
 whole story.
 
 Walk their evidence like a claims adjuster. Alex Karp of Palantir, live on
@@ -194,7 +194,7 @@ would the asset still get used tomorrow morning? And you can check all three fro
 scarce, cash, used. Paper answers abundant, issued, believed. Thirty
 seconds a holding. Run your top five tonight.
 
-Run it on their divergence chart and it reads differently. The chip line
+Run it on Bravos' divergence chart and it reads differently. The chip line
 doubling: that's scarcity getting repriced. The giants pinned to the index while spending hundreds of billions: that's the market demanding an answer
 to question three. The divergence isn't a house of cards. It's the test,
 administered in public.
@@ -263,7 +263,7 @@ The steel gets used. The paper gets believed. And the
 difference gets discovered all at once.
 
 You now have the test — three questions, thirty seconds, any holding.
-Subscribe for the watch: the week either tripwire moves — theirs at five
+Subscribe for the watch: the week either tripwire moves — Bravos' at five
 and a half, mine on memory — that video posts. And the yardstick reading lands every quarter. Bring your top five; next time we run the test on the
 whole index. Do that, and the next time a copy of this chart crosses your
 feed, you won't need anyone to tell you where it's pointing. You'll already
