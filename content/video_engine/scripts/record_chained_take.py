@@ -239,6 +239,7 @@ def run_probe(go: bool) -> int:
     """Record the 2:00 probe at IDENTICAL settings/seed, so provider
     behavior on the probe predicts the master. ~2k credits."""
     import re as _re
+    load_env(ENV_FILE)
     text = VO_TEXT.read_text(encoding="utf-8")
     est = int(PROBE_SPEECH_S * CHARS_PER_S)
     cut = len(text)
@@ -259,8 +260,9 @@ def run_probe(go: bool) -> int:
         AudioSynthService, ElevenLabsConfig)
     config = ElevenLabsConfig.from_env()
     service = AudioSynthService(config=config)
+    # scene_id is numeric in the synth service; 99 = the probe slot
     r = service.synthesize_scene(
-        "probe", body, voice_id=config.voice_id, settings=SETTINGS,
+        99, body, voice_id=config.voice_id, settings=SETTINGS,
         audio_dir=AUDIO_DIR, cache_dir=CACHE_DIR, config=config)
     print(f"  duration : {r.duration_s:.1f}s")
     print(f"  audio    : {r.audio_path}")

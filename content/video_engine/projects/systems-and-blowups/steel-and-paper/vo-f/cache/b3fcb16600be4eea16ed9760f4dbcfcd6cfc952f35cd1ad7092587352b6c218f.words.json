@@ -1,0 +1,1687 @@
+{
+  "scene_id": 99,
+  "duration_s": 120.606,
+  "words": [
+    {
+      "w": "The",
+      "start_s": 0.0,
+      "end_s": 0.151
+    },
+    {
+      "w": "safest",
+      "start_s": 0.209,
+      "end_s": 0.557
+    },
+    {
+      "w": "thing",
+      "start_s": 0.592,
+      "end_s": 0.743
+    },
+    {
+      "w": "you",
+      "start_s": 0.801,
+      "end_s": 0.894
+    },
+    {
+      "w": "own",
+      "start_s": 1.01,
+      "end_s": 1.289
+    },
+    {
+      "w": "looks",
+      "start_s": 1.463,
+      "end_s": 1.683
+    },
+    {
+      "w": "like",
+      "start_s": 1.73,
+      "end_s": 1.904
+    },
+    {
+      "w": "this.",
+      "start_s": 1.939,
+      "end_s": 2.415
+    },
+    {
+      "w": "An",
+      "start_s": 2.508,
+      "end_s": 2.67
+    },
+    {
+      "w": "iron",
+      "start_s": 2.752,
+      "end_s": 3.053
+    },
+    {
+      "w": "spike.",
+      "start_s": 3.111,
+      "end_s": 3.634
+    },
+    {
+      "w": "It",
+      "start_s": 3.715,
+      "end_s": 3.855
+    },
+    {
+      "w": "ruined",
+      "start_s": 3.913,
+      "end_s": 4.191
+    },
+    {
+      "w": "almost",
+      "start_s": 4.226,
+      "end_s": 4.481
+    },
+    {
+      "w": "everyone",
+      "start_s": 4.54,
+      "end_s": 4.899
+    },
+    {
+      "w": "who",
+      "start_s": 4.923,
+      "end_s": 5.016
+    },
+    {
+      "w": "touched",
+      "start_s": 5.074,
+      "end_s": 5.364
+    },
+    {
+      "w": "it.",
+      "start_s": 5.399,
+      "end_s": 5.55
+    },
+    {
+      "w": "That",
+      "start_s": 7.036,
+      "end_s": 7.221
+    },
+    {
+      "w": "was",
+      "start_s": 7.279,
+      "end_s": 7.419
+    },
+    {
+      "w": "1845.",
+      "start_s": 7.488,
+      "end_s": 8.905
+    },
+    {
+      "w": "Somewhere",
+      "start_s": 9.416,
+      "end_s": 9.81
+    },
+    {
+      "w": "today,",
+      "start_s": 9.857,
+      "end_s": 10.403
+    },
+    {
+      "w": "a",
+      "start_s": 10.461,
+      "end_s": 10.519
+    },
+    {
+      "w": "guy",
+      "start_s": 10.6,
+      "end_s": 10.82
+    },
+    {
+      "w": "on",
+      "start_s": 10.879,
+      "end_s": 10.96
+    },
+    {
+      "w": "his",
+      "start_s": 11.006,
+      "end_s": 11.111
+    },
+    {
+      "w": "lunch",
+      "start_s": 11.18,
+      "end_s": 11.401
+    },
+    {
+      "w": "break",
+      "start_s": 11.436,
+      "end_s": 11.656
+    },
+    {
+      "w": "is",
+      "start_s": 11.703,
+      "end_s": 11.784
+    },
+    {
+      "w": "watching",
+      "start_s": 11.842,
+      "end_s": 12.132
+    },
+    {
+      "w": "his",
+      "start_s": 12.19,
+      "end_s": 12.295
+    },
+    {
+      "w": "fourth",
+      "start_s": 12.365,
+      "end_s": 12.643
+    },
+    {
+      "w": "version",
+      "start_s": 12.701,
+      "end_s": 13.015
+    },
+    {
+      "w": "of",
+      "start_s": 13.061,
+      "end_s": 13.119
+    },
+    {
+      "w": "the",
+      "start_s": 13.177,
+      "end_s": 13.247
+    },
+    {
+      "w": "same",
+      "start_s": 13.293,
+      "end_s": 13.572
+    },
+    {
+      "w": "chart.",
+      "start_s": 13.607,
+      "end_s": 14.083
+    },
+    {
+      "w": "Different",
+      "start_s": 14.408,
+      "end_s": 14.745
+    },
+    {
+      "w": "voice,",
+      "start_s": 14.791,
+      "end_s": 15.279
+    },
+    {
+      "w": "same",
+      "start_s": 15.36,
+      "end_s": 15.627
+    },
+    {
+      "w": "two",
+      "start_s": 15.662,
+      "end_s": 15.813
+    },
+    {
+      "w": "lines,",
+      "start_s": 15.883,
+      "end_s": 16.324
+    },
+    {
+      "w": "same",
+      "start_s": 16.382,
+      "end_s": 16.649
+    },
+    {
+      "w": "warning:",
+      "start_s": 16.684,
+      "end_s": 17.229
+    },
+    {
+      "w": "AI",
+      "start_s": 17.613,
+      "end_s": 18.03
+    },
+    {
+      "w": "is",
+      "start_s": 18.077,
+      "end_s": 18.181
+    },
+    {
+      "w": "1845",
+      "start_s": 18.251,
+      "end_s": 18.611
+    },
+    {
+      "w": "again.",
+      "start_s": 18.681,
+      "end_s": 19.726
+    },
+    {
+      "w": "Copies",
+      "start_s": 19.76,
+      "end_s": 20.144
+    },
+    {
+      "w": "of",
+      "start_s": 20.19,
+      "end_s": 20.248
+    },
+    {
+      "w": "copies,",
+      "start_s": 20.318,
+      "end_s": 20.828
+    },
+    {
+      "w": "louder",
+      "start_s": 20.945,
+      "end_s": 21.316
+    },
+    {
+      "w": "every",
+      "start_s": 21.432,
+      "end_s": 21.804
+    },
+    {
+      "w": "pass.",
+      "start_s": 21.873,
+      "end_s": 22.407
+    },
+    {
+      "w": "Almost",
+      "start_s": 22.454,
+      "end_s": 22.86
+    },
+    {
+      "w": "nobody",
+      "start_s": 22.918,
+      "end_s": 23.267
+    },
+    {
+      "w": "names",
+      "start_s": 23.336,
+      "end_s": 23.592
+    },
+    {
+      "w": "the",
+      "start_s": 23.638,
+      "end_s": 23.708
+    },
+    {
+      "w": "people",
+      "start_s": 23.754,
+      "end_s": 23.998
+    },
+    {
+      "w": "who",
+      "start_s": 24.021,
+      "end_s": 24.114
+    },
+    {
+      "w": "built",
+      "start_s": 24.172,
+      "end_s": 24.393
+    },
+    {
+      "w": "it,",
+      "start_s": 24.439,
+      "end_s": 24.637
+    },
+    {
+      "w": "and",
+      "start_s": 24.683,
+      "end_s": 24.822
+    },
+    {
+      "w": "not",
+      "start_s": 24.892,
+      "end_s": 25.055
+    },
+    {
+      "w": "one",
+      "start_s": 25.136,
+      "end_s": 25.31
+    },
+    {
+      "w": "of",
+      "start_s": 25.333,
+      "end_s": 25.391
+    },
+    {
+      "w": "them",
+      "start_s": 25.438,
+      "end_s": 25.554
+    },
+    {
+      "w": "checked",
+      "start_s": 25.6,
+      "end_s": 25.832
+    },
+    {
+      "w": "the",
+      "start_s": 25.856,
+      "end_s": 25.925
+    },
+    {
+      "w": "original's",
+      "start_s": 25.972,
+      "end_s": 26.413
+    },
+    {
+      "w": "math.",
+      "start_s": 26.471,
+      "end_s": 26.97
+    },
+    {
+      "w": "If",
+      "start_s": 27.295,
+      "end_s": 27.423
+    },
+    {
+      "w": "you",
+      "start_s": 27.469,
+      "end_s": 27.551
+    },
+    {
+      "w": "hold",
+      "start_s": 27.632,
+      "end_s": 27.794
+    },
+    {
+      "w": "an",
+      "start_s": 27.841,
+      "end_s": 27.899
+    },
+    {
+      "w": "index",
+      "start_s": 27.957,
+      "end_s": 28.259
+    },
+    {
+      "w": "fund,",
+      "start_s": 28.305,
+      "end_s": 28.723
+    },
+    {
+      "w": "it's",
+      "start_s": 28.805,
+      "end_s": 28.99
+    },
+    {
+      "w": "already",
+      "start_s": 29.037,
+      "end_s": 29.397
+    },
+    {
+      "w": "holding",
+      "start_s": 29.443,
+      "end_s": 29.733
+    },
+    {
+      "w": "you.",
+      "start_s": 29.78,
+      "end_s": 29.989
+    },
+    {
+      "w": "So",
+      "start_s": 30.163,
+      "end_s": 30.453
+    },
+    {
+      "w": "here's",
+      "start_s": 30.627,
+      "end_s": 30.894
+    },
+    {
+      "w": "the",
+      "start_s": 30.929,
+      "end_s": 30.999
+    },
+    {
+      "w": "original.",
+      "start_s": 31.069,
+      "end_s": 31.545
+    },
+    {
+      "w": "It",
+      "start_s": 31.614,
+      "end_s": 31.754
+    },
+    {
+      "w": "comes",
+      "start_s": 31.8,
+      "end_s": 32.009
+    },
+    {
+      "w": "from",
+      "start_s": 32.044,
+      "end_s": 32.183
+    },
+    {
+      "w": "Bravos",
+      "start_s": 32.241,
+      "end_s": 32.648
+    },
+    {
+      "w": "Research",
+      "start_s": 32.717,
+      "end_s": 33.193
+    },
+    {
+      "w": "—",
+      "start_s": 33.321,
+      "end_s": 33.379
+    },
+    {
+      "w": "credit",
+      "start_s": 33.437,
+      "end_s": 33.727
+    },
+    {
+      "w": "where",
+      "start_s": 33.762,
+      "end_s": 33.959
+    },
+    {
+      "w": "due,",
+      "start_s": 34.006,
+      "end_s": 34.366
+    },
+    {
+      "w": "the",
+      "start_s": 34.424,
+      "end_s": 34.528
+    },
+    {
+      "w": "sharpest",
+      "start_s": 34.575,
+      "end_s": 34.981
+    },
+    {
+      "w": "macro",
+      "start_s": 35.039,
+      "end_s": 35.364
+    },
+    {
+      "w": "chart",
+      "start_s": 35.411,
+      "end_s": 35.666
+    },
+    {
+      "w": "on",
+      "start_s": 35.713,
+      "end_s": 35.805
+    },
+    {
+      "w": "YouTube.",
+      "start_s": 35.875,
+      "end_s": 36.432
+    },
+    {
+      "w": "Two",
+      "start_s": 36.502,
+      "end_s": 36.688
+    },
+    {
+      "w": "lines.",
+      "start_s": 36.757,
+      "end_s": 37.315
+    },
+    {
+      "w": "The",
+      "start_s": 37.64,
+      "end_s": 37.744
+    },
+    {
+      "w": "mega-caps",
+      "start_s": 37.802,
+      "end_s": 38.429
+    },
+    {
+      "w": "—",
+      "start_s": 38.603,
+      "end_s": 38.65
+    },
+    {
+      "w": "Meta,",
+      "start_s": 38.731,
+      "end_s": 39.161
+    },
+    {
+      "w": "Apple,",
+      "start_s": 39.277,
+      "end_s": 39.834
+    },
+    {
+      "w": "Microsoft,",
+      "start_s": 40.008,
+      "end_s": 40.844
+    },
+    {
+      "w": "Amazon,",
+      "start_s": 40.995,
+      "end_s": 41.727
+    },
+    {
+      "w": "Alphabet.",
+      "start_s": 41.877,
+      "end_s": 42.574
+    },
+    {
+      "w": "In",
+      "start_s": 42.748,
+      "end_s": 42.888
+    },
+    {
+      "w": "a",
+      "start_s": 42.934,
+      "end_s": 42.969
+    },
+    {
+      "w": "year,",
+      "start_s": 43.038,
+      "end_s": 43.433
+    },
+    {
+      "w": "up",
+      "start_s": 43.549,
+      "end_s": 43.677
+    },
+    {
+      "w": "twenty-one",
+      "start_s": 43.723,
+      "end_s": 44.141
+    },
+    {
+      "w": "percent.",
+      "start_s": 44.176,
+      "end_s": 44.687
+    },
+    {
+      "w": "We",
+      "start_s": 45.198,
+      "end_s": 45.326
+    },
+    {
+      "w": "drew",
+      "start_s": 45.372,
+      "end_s": 45.558
+    },
+    {
+      "w": "the",
+      "start_s": 45.604,
+      "end_s": 45.686
+    },
+    {
+      "w": "index",
+      "start_s": 45.744,
+      "end_s": 46.092
+    },
+    {
+      "w": "underneath",
+      "start_s": 46.162,
+      "end_s": 46.556
+    },
+    {
+      "w": "them",
+      "start_s": 46.591,
+      "end_s": 46.73
+    },
+    {
+      "w": "—",
+      "start_s": 46.905,
+      "end_s": 46.963
+    },
+    {
+      "w": "same",
+      "start_s": 47.404,
+      "end_s": 47.659
+    },
+    {
+      "w": "line.",
+      "start_s": 47.706,
+      "end_s": 48.217
+    },
+    {
+      "w": "The",
+      "start_s": 48.658,
+      "end_s": 48.774
+    },
+    {
+      "w": "giants",
+      "start_s": 48.843,
+      "end_s": 49.157
+    },
+    {
+      "w": "are",
+      "start_s": 49.18,
+      "end_s": 49.273
+    },
+    {
+      "w": "the",
+      "start_s": 49.308,
+      "end_s": 49.378
+    },
+    {
+      "w": "market",
+      "start_s": 49.424,
+      "end_s": 49.737
+    },
+    {
+      "w": "now.",
+      "start_s": 49.784,
+      "end_s": 50.248
+    },
+    {
+      "w": "The",
+      "start_s": 50.759,
+      "end_s": 50.875
+    },
+    {
+      "w": "chart's",
+      "start_s": 50.922,
+      "end_s": 51.2
+    },
+    {
+      "w": "second",
+      "start_s": 51.235,
+      "end_s": 51.514
+    },
+    {
+      "w": "line",
+      "start_s": 51.56,
+      "end_s": 51.955
+    },
+    {
+      "w": "is",
+      "start_s": 52.013,
+      "end_s": 52.176
+    },
+    {
+      "w": "the",
+      "start_s": 52.245,
+      "end_s": 52.315
+    },
+    {
+      "w": "chip",
+      "start_s": 52.361,
+      "end_s": 52.57
+    },
+    {
+      "w": "industry,",
+      "start_s": 52.64,
+      "end_s": 53.232
+    },
+    {
+      "w": "and",
+      "start_s": 53.278,
+      "end_s": 53.441
+    },
+    {
+      "w": "it",
+      "start_s": 53.499,
+      "end_s": 53.569
+    },
+    {
+      "w": "left",
+      "start_s": 53.627,
+      "end_s": 53.813
+    },
+    {
+      "w": "both",
+      "start_s": 53.882,
+      "end_s": 54.114
+    },
+    {
+      "w": "behind:",
+      "start_s": 54.172,
+      "end_s": 54.834
+    },
+    {
+      "w": "up",
+      "start_s": 54.927,
+      "end_s": 55.043
+    },
+    {
+      "w": "a",
+      "start_s": 55.09,
+      "end_s": 55.113
+    },
+    {
+      "w": "hundred",
+      "start_s": 55.171,
+      "end_s": 55.415
+    },
+    {
+      "w": "and",
+      "start_s": 55.45,
+      "end_s": 55.519
+    },
+    {
+      "w": "five.",
+      "start_s": 55.6,
+      "end_s": 56.169
+    },
+    {
+      "w": "And",
+      "start_s": 56.448,
+      "end_s": 56.599
+    },
+    {
+      "w": "one",
+      "start_s": 56.692,
+      "end_s": 56.866
+    },
+    {
+      "w": "layer",
+      "start_s": 56.912,
+      "end_s": 57.226
+    },
+    {
+      "w": "Bravos'",
+      "start_s": 57.354,
+      "end_s": 57.807
+    },
+    {
+      "w": "chart",
+      "start_s": 57.853,
+      "end_s": 58.12
+    },
+    {
+      "w": "never",
+      "start_s": 58.178,
+      "end_s": 58.376
+    },
+    {
+      "w": "drew.",
+      "start_s": 58.434,
+      "end_s": 58.829
+    },
+    {
+      "w": "Memory",
+      "start_s": 59.072,
+      "end_s": 59.479
+    },
+    {
+      "w": "—",
+      "start_s": 59.606,
+      "end_s": 59.688
+    },
+    {
+      "w": "the",
+      "start_s": 59.839,
+      "end_s": 59.931
+    },
+    {
+      "w": "builders",
+      "start_s": 60.001,
+      "end_s": 60.373
+    },
+    {
+      "w": "inside",
+      "start_s": 60.419,
+      "end_s": 60.849
+    },
+    {
+      "w": "the",
+      "start_s": 60.872,
+      "end_s": 60.942
+    },
+    {
+      "w": "builders.",
+      "start_s": 61.0,
+      "end_s": 61.487
+    },
+    {
+      "w": "Up",
+      "start_s": 61.58,
+      "end_s": 61.743
+    },
+    {
+      "w": "six",
+      "start_s": 61.812,
+      "end_s": 62.01
+    },
+    {
+      "w": "hundred",
+      "start_s": 62.068,
+      "end_s": 62.323
+    },
+    {
+      "w": "and",
+      "start_s": 62.358,
+      "end_s": 62.428
+    },
+    {
+      "w": "thirteen",
+      "start_s": 62.486,
+      "end_s": 62.88
+    },
+    {
+      "w": "percent.",
+      "start_s": 62.95,
+      "end_s": 63.414
+    },
+    {
+      "w": "The",
+      "start_s": 63.531,
+      "end_s": 63.647
+    },
+    {
+      "w": "chart",
+      "start_s": 63.693,
+      "end_s": 63.96
+    },
+    {
+      "w": "is",
+      "start_s": 64.007,
+      "end_s": 64.076
+    },
+    {
+      "w": "right.",
+      "start_s": 64.146,
+      "end_s": 64.459
+    },
+    {
+      "w": "The",
+      "start_s": 64.668,
+      "end_s": 64.784
+    },
+    {
+      "w": "warning",
+      "start_s": 64.842,
+      "end_s": 65.144
+    },
+    {
+      "w": "points",
+      "start_s": 65.214,
+      "end_s": 65.469
+    },
+    {
+      "w": "at",
+      "start_s": 65.504,
+      "end_s": 65.586
+    },
+    {
+      "w": "the",
+      "start_s": 65.62,
+      "end_s": 65.69
+    },
+    {
+      "w": "wrong",
+      "start_s": 65.748,
+      "end_s": 65.969
+    },
+    {
+      "w": "address.",
+      "start_s": 66.015,
+      "end_s": 66.549
+    },
+    {
+      "w": "So",
+      "start_s": 66.874,
+      "end_s": 67.025
+    },
+    {
+      "w": "here's",
+      "start_s": 67.095,
+      "end_s": 67.292
+    },
+    {
+      "w": "what",
+      "start_s": 67.327,
+      "end_s": 67.431
+    },
+    {
+      "w": "you're",
+      "start_s": 67.478,
+      "end_s": 67.617
+    },
+    {
+      "w": "getting:",
+      "start_s": 67.64,
+      "end_s": 68.058
+    },
+    {
+      "w": "not",
+      "start_s": 68.442,
+      "end_s": 68.616
+    },
+    {
+      "w": "a",
+      "start_s": 68.651,
+      "end_s": 68.685
+    },
+    {
+      "w": "rebuttal,",
+      "start_s": 68.743,
+      "end_s": 69.289
+    },
+    {
+      "w": "not",
+      "start_s": 69.498,
+      "end_s": 69.672
+    },
+    {
+      "w": "a",
+      "start_s": 69.707,
+      "end_s": 69.73
+    },
+    {
+      "w": "victory",
+      "start_s": 69.8,
+      "end_s": 70.137
+    },
+    {
+      "w": "lap,",
+      "start_s": 70.195,
+      "end_s": 70.543
+    },
+    {
+      "w": "not",
+      "start_s": 70.717,
+      "end_s": 70.88
+    },
+    {
+      "w": "a",
+      "start_s": 70.926,
+      "end_s": 70.949
+    },
+    {
+      "w": "panic.",
+      "start_s": 70.996,
+      "end_s": 71.495
+    },
+    {
+      "w": "One",
+      "start_s": 71.739,
+      "end_s": 71.936
+    },
+    {
+      "w": "test",
+      "start_s": 71.983,
+      "end_s": 72.308
+    },
+    {
+      "w": "—",
+      "start_s": 72.424,
+      "end_s": 72.493
+    },
+    {
+      "w": "three",
+      "start_s": 72.563,
+      "end_s": 72.807
+    },
+    {
+      "w": "questions",
+      "start_s": 72.842,
+      "end_s": 73.376
+    },
+    {
+      "w": "—",
+      "start_s": 73.445,
+      "end_s": 73.504
+    },
+    {
+      "w": "that",
+      "start_s": 73.562,
+      "end_s": 73.747
+    },
+    {
+      "w": "sorts",
+      "start_s": 73.805,
+      "end_s": 74.084
+    },
+    {
+      "w": "every",
+      "start_s": 74.154,
+      "end_s": 74.398
+    },
+    {
+      "w": "holding",
+      "start_s": 74.444,
+      "end_s": 74.746
+    },
+    {
+      "w": "you",
+      "start_s": 74.792,
+      "end_s": 74.885
+    },
+    {
+      "w": "own",
+      "start_s": 74.978,
+      "end_s": 75.175
+    },
+    {
+      "w": "into",
+      "start_s": 75.222,
+      "end_s": 75.384
+    },
+    {
+      "w": "steel",
+      "start_s": 75.442,
+      "end_s": 75.709
+    },
+    {
+      "w": "or",
+      "start_s": 75.767,
+      "end_s": 75.849
+    },
+    {
+      "w": "paper.",
+      "start_s": 75.907,
+      "end_s": 76.325
+    },
+    {
+      "w": "By",
+      "start_s": 76.406,
+      "end_s": 76.58
+    },
+    {
+      "w": "the",
+      "start_s": 76.65,
+      "end_s": 76.731
+    },
+    {
+      "w": "end,",
+      "start_s": 76.812,
+      "end_s": 77.207
+    },
+    {
+      "w": "you'll",
+      "start_s": 77.265,
+      "end_s": 77.463
+    },
+    {
+      "w": "run",
+      "start_s": 77.497,
+      "end_s": 77.625
+    },
+    {
+      "w": "it",
+      "start_s": 77.66,
+      "end_s": 77.73
+    },
+    {
+      "w": "yourself:",
+      "start_s": 77.776,
+      "end_s": 78.403
+    },
+    {
+      "w": "thirty",
+      "start_s": 78.473,
+      "end_s": 78.751
+    },
+    {
+      "w": "seconds",
+      "start_s": 78.809,
+      "end_s": 79.158
+    },
+    {
+      "w": "a",
+      "start_s": 79.192,
+      "end_s": 79.216
+    },
+    {
+      "w": "stock.",
+      "start_s": 79.262,
+      "end_s": 79.715
+    },
+    {
+      "w": "And",
+      "start_s": 79.75,
+      "end_s": 79.901
+    },
+    {
+      "w": "the",
+      "start_s": 79.947,
+      "end_s": 80.017
+    },
+    {
+      "w": "opponent",
+      "start_s": 80.075,
+      "end_s": 80.493
+    },
+    {
+      "w": "here",
+      "start_s": 80.551,
+      "end_s": 80.725
+    },
+    {
+      "w": "isn't",
+      "start_s": 80.771,
+      "end_s": 80.98
+    },
+    {
+      "w": "Bravos,",
+      "start_s": 81.015,
+      "end_s": 81.712
+    },
+    {
+      "w": "and",
+      "start_s": 81.735,
+      "end_s": 81.886
+    },
+    {
+      "w": "it",
+      "start_s": 81.944,
+      "end_s": 82.014
+    },
+    {
+      "w": "isn't",
+      "start_s": 82.06,
+      "end_s": 82.257
+    },
+    {
+      "w": "Nvidia.",
+      "start_s": 82.304,
+      "end_s": 82.919
+    },
+    {
+      "w": "It's",
+      "start_s": 83.36,
+      "end_s": 83.546
+    },
+    {
+      "w": "a",
+      "start_s": 83.569,
+      "end_s": 83.593
+    },
+    {
+      "w": "machine",
+      "start_s": 83.639,
+      "end_s": 84.127
+    },
+    {
+      "w": "—",
+      "start_s": 84.255,
+      "end_s": 84.313
+    },
+    {
+      "w": "the",
+      "start_s": 84.441,
+      "end_s": 84.545
+    },
+    {
+      "w": "hype",
+      "start_s": 84.603,
+      "end_s": 84.824
+    },
+    {
+      "w": "cycle",
+      "start_s": 84.847,
+      "end_s": 85.253
+    },
+    {
+      "w": "—",
+      "start_s": 85.334,
+      "end_s": 85.404
+    },
+    {
+      "w": "capital",
+      "start_s": 85.474,
+      "end_s": 85.869
+    },
+    {
+      "w": "arriving",
+      "start_s": 85.915,
+      "end_s": 86.333
+    },
+    {
+      "w": "faster",
+      "start_s": 86.414,
+      "end_s": 86.797
+    },
+    {
+      "w": "than",
+      "start_s": 86.832,
+      "end_s": 86.948
+    },
+    {
+      "w": "the",
+      "start_s": 86.983,
+      "end_s": 87.053
+    },
+    {
+      "w": "value",
+      "start_s": 87.111,
+      "end_s": 87.448
+    },
+    {
+      "w": "it's",
+      "start_s": 87.471,
+      "end_s": 87.587
+    },
+    {
+      "w": "chasing.",
+      "start_s": 87.633,
+      "end_s": 88.074
+    },
+    {
+      "w": "But",
+      "start_s": 88.098,
+      "end_s": 88.225
+    },
+    {
+      "w": "a",
+      "start_s": 88.26,
+      "end_s": 88.283
+    },
+    {
+      "w": "machine",
+      "start_s": 88.33,
+      "end_s": 88.748
+    },
+    {
+      "w": "you",
+      "start_s": 88.794,
+      "end_s": 88.876
+    },
+    {
+      "w": "can",
+      "start_s": 88.934,
+      "end_s": 89.05
+    },
+    {
+      "w": "test.",
+      "start_s": 89.108,
+      "end_s": 89.688
+    },
+    {
+      "w": "That's",
+      "start_s": 89.746,
+      "end_s": 89.978
+    },
+    {
+      "w": "the",
+      "start_s": 90.013,
+      "end_s": 90.083
+    },
+    {
+      "w": "job",
+      "start_s": 90.129,
+      "end_s": 90.373
+    },
+    {
+      "w": "of",
+      "start_s": 90.443,
+      "end_s": 90.489
+    },
+    {
+      "w": "the",
+      "start_s": 90.524,
+      "end_s": 90.594
+    },
+    {
+      "w": "three",
+      "start_s": 90.629,
+      "end_s": 90.838
+    },
+    {
+      "w": "questions.",
+      "start_s": 90.872,
+      "end_s": 91.499
+    },
+    {
+      "w": "They",
+      "start_s": 91.581,
+      "end_s": 91.743
+    },
+    {
+      "w": "have",
+      "start_s": 91.801,
+      "end_s": 91.941
+    },
+    {
+      "w": "to",
+      "start_s": 91.964,
+      "end_s": 92.022
+    },
+    {
+      "w": "survive",
+      "start_s": 92.08,
+      "end_s": 92.521
+    },
+    {
+      "w": "Bravos'",
+      "start_s": 92.568,
+      "end_s": 93.009
+    },
+    {
+      "w": "argument",
+      "start_s": 93.044,
+      "end_s": 93.415
+    },
+    {
+      "w": "before",
+      "start_s": 93.461,
+      "end_s": 93.763
+    },
+    {
+      "w": "they",
+      "start_s": 93.798,
+      "end_s": 93.914
+    },
+    {
+      "w": "survive",
+      "start_s": 93.961,
+      "end_s": 94.379
+    },
+    {
+      "w": "mine.",
+      "start_s": 94.425,
+      "end_s": 94.936
+    },
+    {
+      "w": "Start",
+      "start_s": 95.377,
+      "end_s": 95.691
+    },
+    {
+      "w": "with",
+      "start_s": 95.725,
+      "end_s": 95.853
+    },
+    {
+      "w": "Bravos'",
+      "start_s": 95.911,
+      "end_s": 96.341
+    },
+    {
+      "w": "case",
+      "start_s": 96.364,
+      "end_s": 96.631
+    },
+    {
+      "w": "at",
+      "start_s": 96.666,
+      "end_s": 96.747
+    },
+    {
+      "w": "full",
+      "start_s": 96.793,
+      "end_s": 96.991
+    },
+    {
+      "w": "strength",
+      "start_s": 97.037,
+      "end_s": 97.409
+    },
+    {
+      "w": "—",
+      "start_s": 97.536,
+      "end_s": 97.594
+    },
+    {
+      "w": "the",
+      "start_s": 97.664,
+      "end_s": 97.757
+    },
+    {
+      "w": "version",
+      "start_s": 97.815,
+      "end_s": 98.14
+    },
+    {
+      "w": "they",
+      "start_s": 98.187,
+      "end_s": 98.291
+    },
+    {
+      "w": "would",
+      "start_s": 98.314,
+      "end_s": 98.465
+    },
+    {
+      "w": "defend.",
+      "start_s": 98.5,
+      "end_s": 99.127
+    },
+    {
+      "w": "Every",
+      "start_s": 99.301,
+      "end_s": 99.591
+    },
+    {
+      "w": "transformative",
+      "start_s": 99.638,
+      "end_s": 100.334
+    },
+    {
+      "w": "technology",
+      "start_s": 100.358,
+      "end_s": 100.961
+    },
+    {
+      "w": "overshoots.",
+      "start_s": 101.031,
+      "end_s": 101.879
+    },
+    {
+      "w": "Railways",
+      "start_s": 102.482,
+      "end_s": 102.912
+    },
+    {
+      "w": "in",
+      "start_s": 102.947,
+      "end_s": 103.016
+    },
+    {
+      "w": "the",
+      "start_s": 103.051,
+      "end_s": 103.121
+    },
+    {
+      "w": "1840s",
+      "start_s": 103.167,
+      "end_s": 103.922
+    },
+    {
+      "w": "drew",
+      "start_s": 103.968,
+      "end_s": 104.177
+    },
+    {
+      "w": "a",
+      "start_s": 104.224,
+      "end_s": 104.247
+    },
+    {
+      "w": "quarter-billion",
+      "start_s": 104.317,
+      "end_s": 104.99
+    },
+    {
+      "w": "pounds",
+      "start_s": 105.06,
+      "end_s": 105.605
+    },
+    {
+      "w": "—",
+      "start_s": 105.756,
+      "end_s": 105.838
+    },
+    {
+      "w": "more",
+      "start_s": 105.954,
+      "end_s": 106.116
+    },
+    {
+      "w": "than",
+      "start_s": 106.151,
+      "end_s": 106.279
+    },
+    {
+      "w": "a",
+      "start_s": 106.314,
+      "end_s": 106.348
+    },
+    {
+      "w": "trillion",
+      "start_s": 106.406,
+      "end_s": 106.836
+    },
+    {
+      "w": "in",
+      "start_s": 106.882,
+      "end_s": 106.952
+    },
+    {
+      "w": "today's",
+      "start_s": 106.999,
+      "end_s": 107.347
+    },
+    {
+      "w": "money.",
+      "start_s": 107.405,
+      "end_s": 107.823
+    },
+    {
+      "w": "Then",
+      "start_s": 108.427,
+      "end_s": 108.601
+    },
+    {
+      "w": "the",
+      "start_s": 108.647,
+      "end_s": 108.717
+    },
+    {
+      "w": "stocks",
+      "start_s": 108.752,
+      "end_s": 109.077
+    },
+    {
+      "w": "crashed",
+      "start_s": 109.123,
+      "end_s": 109.448
+    },
+    {
+      "w": "by",
+      "start_s": 109.483,
+      "end_s": 109.576
+    },
+    {
+      "w": "nearly",
+      "start_s": 109.634,
+      "end_s": 109.878
+    },
+    {
+      "w": "two-thirds.",
+      "start_s": 109.913,
+      "end_s": 110.76
+    },
+    {
+      "w": "In",
+      "start_s": 110.934,
+      "end_s": 111.062
+    },
+    {
+      "w": "two",
+      "start_s": 111.12,
+      "end_s": 111.248
+    },
+    {
+      "w": "thousand,",
+      "start_s": 111.306,
+      "end_s": 111.921
+    },
+    {
+      "w": "the",
+      "start_s": 112.049,
+      "end_s": 112.153
+    },
+    {
+      "w": "internet",
+      "start_s": 112.223,
+      "end_s": 112.56
+    },
+    {
+      "w": "crossed",
+      "start_s": 112.618,
+      "end_s": 112.955
+    },
+    {
+      "w": "seven",
+      "start_s": 113.024,
+      "end_s": 113.314
+    },
+    {
+      "w": "percent",
+      "start_s": 113.373,
+      "end_s": 113.721
+    },
+    {
+      "w": "of",
+      "start_s": 113.756,
+      "end_s": 113.802
+    },
+    {
+      "w": "GDP.",
+      "start_s": 113.86,
+      "end_s": 114.696
+    },
+    {
+      "w": "Then",
+      "start_s": 115.021,
+      "end_s": 115.184
+    },
+    {
+      "w": "the",
+      "start_s": 115.23,
+      "end_s": 115.3
+    },
+    {
+      "w": "tower",
+      "start_s": 115.358,
+      "end_s": 115.636
+    },
+    {
+      "w": "came",
+      "start_s": 115.695,
+      "end_s": 115.903
+    },
+    {
+      "w": "down.",
+      "start_s": 115.938,
+      "end_s": 116.345
+    },
+    {
+      "w": "And",
+      "start_s": 116.728,
+      "end_s": 116.867
+    },
+    {
+      "w": "by",
+      "start_s": 116.925,
+      "end_s": 117.03
+    },
+    {
+      "w": "Bravos'",
+      "start_s": 117.099,
+      "end_s": 117.575
+    },
+    {
+      "w": "math,",
+      "start_s": 117.61,
+      "end_s": 118.086
+    },
+    {
+      "w": "AI",
+      "start_s": 118.295,
+      "end_s": 118.655
+    },
+    {
+      "w": "spending",
+      "start_s": 118.725,
+      "end_s": 119.212
+    },
+    {
+      "w": "just",
+      "start_s": 119.386,
+      "end_s": 119.642
+    },
+    {
+      "w": "crossed",
+      "start_s": 119.688,
+      "end_s": 120.025
+    },
+    {
+      "w": "eight.",
+      "start_s": 120.095,
+      "end_s": 120.606
+    }
+  ],
+  "request_id": "PtmacYlpn5lIl9TejmZ9"
+}
