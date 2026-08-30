@@ -723,12 +723,93 @@ def hbm_wafer_ratio():
     save(fig, "ev-hbm-wafer-ratio-v1")
 
 
+def hynix_steel():
+    """The close's 'More bullish' beat (operator, 2026-08-30): not a reused
+    card - a purpose-built one. SK hynix share price against its own
+    quarterly operating profit, both indexed over the same 12 months. The
+    'not a house of cards' claim IS this picture: the price line is steep
+    because the profit line under it is steep."""
+    import pandas as pd
+    import json as _json
+    from pathlib import Path as _Path
+    import yfinance as yf
+    start = (pd.Timestamp.today() - pd.DateOffset(months=12)).strftime("%Y-%m-%d")
+    px = _px("000660.KS", start)
+    pxi = px / px.iloc[0] * 100
+    q = yf.Ticker("000660.KS").quarterly_financials
+    op = q.loc["Operating Income"].dropna().sort_index()
+    rev = q.loc["Total Revenue"].dropna().sort_index()
+    op = op[op.index >= px.index[0]]
+    opi = op / op.iloc[0] * 100
+    margin = float(op.iloc[-1] / rev.loc[op.index[-1]]) * 100
+    p_pct, o_pct = pxi.iloc[-1] - 100, opi.iloc[-1] - 100
+    # audience is American - quote the profit in dollars (operator,
+    # 2026-08-30). Cross-checked against SK hynix DART filings in the
+    # local SCML ledger: Q1-Q3 '25 standalone quarters match to the won.
+    fxs = yf.download("KRW=X", period="5d", progress=False)["Close"]
+    if hasattr(fxs, "columns"):
+        fxs = fxs.iloc[:, 0]
+    fx = float(fxs.iloc[-1])
+    op_usd = float(op.iloc[-1]) / fx / 1e9
+    print(f"     VERBATIM  price +{p_pct:,.0f}% | op profit +{o_pct:,.0f}% "
+          f"(${float(op.iloc[0])/fx/1e9:.0f}B -> ${op_usd:.0f}B/qtr at "
+          f"KRW {fx:,.0f}) | margin {margin:.0f}%")
+
+    fig = frame(); ax = fig.add_axes([0.075, 0.155, 0.845, 0.645]); chrome(ax)
+    x = _yr(pxi.index); xq = _yr(opi.index)
+    ax.plot(x, pxi.values, color=CRIMSON, lw=5, solid_capstyle="round")
+    ax.plot(xq, opi.values, color=TEAL, lw=5, solid_capstyle="round",
+            marker="o", ms=14, mec=SURFACE, mew=3)
+    _endlabel(ax, x[-1], pxi.iloc[-1], f"+{p_pct:,.0f}%", CRIMSON)
+    _endlabel(ax, xq[-1], opi.iloc[-1], f"+{o_pct:,.0f}%", TEAL, dy=-16)
+    _legend(ax, [("Share price", CRIMSON),
+                 ("Quarterly operating profit", TEAL)])
+    mt = pd.date_range(pxi.index[0].normalize() + pd.offsets.MonthBegin(1),
+                       pxi.index[-1], freq="2MS")
+    ax.set_xticks([t.year + (t.dayofyear - 1) / 365.25 for t in mt])
+    ax.set_xticklabels([t.strftime("%b '%y") for t in mt], fontfamily=FAM)
+    ax.set_xlim(x[0], x[-1] + 0.055)
+    titles(fig, "Sold out, and paid for",
+           "SK hynix: share price vs its own operating profit. "
+           "100 = Aug '25, same 12 months")
+    source(fig, f"Yahoo Finance - 000660.KS; profits cross-checked vs "
+                f"SK hynix DART filings - {start} to "
+                f"{pxi.index[-1].date().isoformat()}; USD at KRW spot")
+    save(fig, "ev-hynix-steel-v1")
+
+    def dec(sr, xs, n=140):
+        step = max(1, len(sr) // n)
+        return [[round(xv, 4), round(float(v), 2)]
+                for xv, v in list(zip(xs, sr.values))[::step]]
+    (_Path(__file__).parent / "objects/ev-hynix-steel-v1.series.json").write_text(
+        _json.dumps({
+            "title": "Sold out, and paid for",
+            "sub": "SK hynix: share price vs its own operating profit. "
+                   "100 = Aug '25, same 12 months",
+            "src": "Yahoo Finance - 000660.KS; profits cross-checked vs SK hynix DART filings; USD at KRW spot",
+            "series": [
+                {"label": f"+{p_pct:,.0f}%", "name": "SHARE PRICE",
+                 "color": "crimson", "pts": dec(pxi, x)},
+                {"label": f"+{o_pct:,.0f}%", "name": "OPERATING PROFIT",
+                 "color": "teal", "delay": 1.5, "pts": dec(opi, xq, n=20)},
+            ],
+            "marks": [{"x": round(xq[-1], 4),
+                       "y": round(float(opi.iloc[-1]), 2),
+                       "label": f"${op_usd:.0f}B quarter - "
+                                f"{margin:.0f}% margin",
+                       "sub": ""}],
+        }), encoding="utf-8")
+    print("     + ev-hynix-steel-v1.series.json")
+
+
 if __name__ == "__main__":
     print("building evidence documents ->", OUT)
     for fn in (equip_ipp_gdp, capex_trajectory, dram_prices,
                uber_adoption, railway_mileage,
                krx_memory, mega_vs_spy, smh_drawdown, tnx_two_eras,
-               ig_credit_weighting, hbm_wafer_ratio):
+               ig_credit_weighting, hbm_wafer_ratio,
+               test_scorecard, index_concentration, divergence,
+               capital_formation_share, hynix_steel):
         try:
             fn()
         except Exception as e:

@@ -988,5 +988,27 @@
     "accent": "ink"
    }
   ]
+ },
+ {
+  "asset": "ev-hynix-steel-v1",
+  "species": "data",
+  "anchor": "More bullish: builders with sold-out order books are not a house of cards.",
+  "anchor_kind": "claim",
+  "badges": [
+   {
+    "label": "SHARE PRICE",
+    "value": "+548%",
+    "tag": "the year",
+    "accent": "coral"
+   },
+   {
+    "label": "OPERATING PROFIT",
+    "value": "+230%",
+    "tag": "the profit under it",
+    "accent": "teal"
+   }
+  ],
+  "title": "Sold out, and paid for",
+  "source": "Yahoo Finance - cross-checked vs SK hynix DART filings"
  }
 ]

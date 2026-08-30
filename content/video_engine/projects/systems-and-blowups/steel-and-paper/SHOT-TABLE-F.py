@@ -90,8 +90,8 @@ W = [
 (695.5, 698.9, "world-spike-certificate-ring-v2",(.05,  12,   8), []),                       # RING ECHO: the spike, one more time
 (698.9, 707.7, "world-club-interior-papered",    (.05, -10,  -6), []),                       # 1850: trains still running, certificates papering bankrupt clubs
 (707.7, 717.3, "beat-03-008-009-physical-capacity-gate-v1", (.04,  10,   6), []),            # everything holds - they sell scarcity, for cash; then the debt turn
-(717.3, 724.3, "world-listing-barge-v1",         (.05, -10,   6), [("ev-index-concentration-v1",0,717.3,724.3)]),  # the claim: a fifth of your index, one bet
-(724.3, 736.9, "beat-05-002-strategic-chokepoints-v1", (.05,  14,  -6), [("silicon-reality-gap-s13-teacher-stamped",0,728.0,736.8)]),  # further than Bravos: sold-out order books are not a house of cards - they're the steel
+(717.3, 724.3, "world-listing-barge-v1",         (.05, -10,   6), []),  # a fifth of your index - the card holds for the VERDICT beat, not here (no reuse)
+(724.3, 736.9, "beat-05-002-strategic-chokepoints-v1", (.05,  14,  -6), [("ev-hynix-steel-v1",0,728.0,736.8)]),  # purpose-built (operator): hynix price WITH the profit under it - not a house of cards
 (736.9, 751.2, "world-listing-barge-v1",         (.05, -10,   6), [("ev-index-concentration-v1",0,736.9,751.0)]),  # the verdict: the safe version IS the certificate
 (751.2, 757.3, "beat-06-017-018-diworsification-v1", (.06,  10,   8), []),                   # FINAL TRIAD: steel used / paper believed / discovered at once
 (757.3, 777.3, "beat-04-001-buyer-behavior-v1",  (.04, -12,   6), [("ev-test-scorecard-v1",0,757.3,762.5)]),  # CTA: you now have the test - the scorecard returns at its recap
