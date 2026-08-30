@@ -28,7 +28,16 @@ railway mania." The narrow line is the honest internet/AI-era claim.
   sidecar through the episode builder.
 - Every reading is dated and kept — the log IS the tracking.
 
-## Tripwire — DECISION, operator-owned
+## Tripwire — deliberately OPEN (operator, 2026-08-30)
+
+*"No tripwire for this yet — it's just something we're all watching and
+learning more about together."* That is the instrument's stance, and it is
+speakable on air: no false precision, no manufactured threshold. Episodes
+cite the reading and invite the audience into the watch. If a threshold
+ever earns itself from the data, the operator sets it — the notes below
+stay as candidates only.
+
+## (superseded) Tripwire — DECISION, operator-owned
 
 An instrument carries four parts (doc 35): one variable, one threshold,
 where we sit now, what flips us. Variable: the narrow line. Now: 28%

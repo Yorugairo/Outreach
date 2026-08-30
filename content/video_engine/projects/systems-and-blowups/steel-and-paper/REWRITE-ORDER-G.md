@@ -6,9 +6,15 @@ Every item below is pinned in the dossier (rows H1–H3) or a standing gate.
 
 ## Editorial changes (the reason for the rewrite)
 
-1. **Hook: the fabricated audience figure dies.** "Two million people
-   watched" → the target has 186K views (dossier RESPONSE TARGET pin).
-   Rephrase pinned to the video, not the calendar.
+1. **Hook: the audience claim retargets to what is TRUE.** The single
+   upload has 186K views, but the chart-argument ecosystem is at
+   multi-million reach (verified 2026-08-30: Dalio short 2.8M, ColdFusion
+   1.4M, 503K, long tail of uncredited remakes). Two defensible shapes —
+   loop chooses on voice: (a) claim the GENRE ("millions watched some
+   version of this chart this month"); (b) the differentiated angle: the
+   chart is everywhere, re-made without credit — we credit Bravos by name
+   and add the layer it needed. (b) feeds the credit-first strategy and
+   the "sharpest chart" beat directly.
 2. **The chart beat reframes to the operator's line**: "It's the sharpest
    chart on YouTube — but we think it needed another layer." Verified
    figures (badge-synced, refetch at record): memory ~+613%, semis ~+105%,
@@ -23,7 +29,9 @@ Every item below is pinned in the dossier (rows H1–H3) or a standing gate.
    formation — all-time high, above the 23% dot-com high; broad 65%;
    railways ~50% AS ONE TECHNOLOGY. The one-technology caveat is spoken,
    not fine print. ev-equip-ipp-gdp remains available as secondary.
-   NO TRIPWIRE stated — operator decision pending; cite the reading only.
+   NO TRIPWIRE — deliberately open, not pending (operator): "it's just
+   something we're all watching and learning more about together." That
+   stance is speakable and on-voice; cite the reading, invite the watch.
 4. **Pivot softening check**: "including, this one time, Bravos — get the
    whole thing wrong" may retune to extension-not-correction ("needed
    another layer" is generous); P4 register shift stays.

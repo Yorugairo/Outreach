@@ -23,12 +23,18 @@ or cited verbatim figures with attribution; we do not lift source frames.
   the same video ID the operator pulled for the doc 34 caption study — the
   provenance existed there all along and was never linked from this episode.
 
-**SCRIPT FIX — the hook's audience claim is false.** ⚠ blocks the re-record.
-Narration: *"Last week, two million people watched a chart claim AI is
-next."* Reality: **186K views**. No Bravos upload in the last two months
-exceeds 547K. "Two million" is a fabricated audience figure and cannot be
-recorded. "Last week" is accurate as of this pin but ages; prefer phrasing
-pinned to the video, not the calendar.
+**SCRIPT FIX — the hook's audience claim was OVERSTATED AS WRITTEN, not
+fabricated** (operator correction, 2026-08-30: "tons of channels are just
+copying Bravos content without adding any value or citing them"). The
+target upload has 186K views — but the CHART-ARGUMENT ECOSYSTEM is at
+multi-million reach this month, verified by search (2026-08-30): a Ray
+Dalio AI-bubble Short at 2.8M, ColdFusion data-centres at 1.4M, "The AI
+Bubble POP" 503K, plus a tail of small remakes running the same
+railway-comparison structure, mostly uncredited. The hook may keep a big
+number IF it claims the genre, not the upload ("millions watched some
+version of this chart"), or take the sharper differentiated angle: the
+chart is being re-made everywhere without credit — we credit, and we add
+the layer. The script loop chooses; both are defensible.
 
 **Still unverified: the exact chart their video opens on.** Our narration
 characterizes it ("builders +300% since April... hyperscalers nowhere for a
