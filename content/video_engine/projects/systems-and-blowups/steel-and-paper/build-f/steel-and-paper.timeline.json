@@ -35744,15 +35744,123 @@
     }
    ]
   },
-  "sovereign-memory-infrastructure-s05-teacher-stamped": {
-   "title": "The Geographic Oligopoly",
-   "source": "Sovereign Memory",
-   "species": "deck",
+  "ev-tripwire-board-v1": {
+   "title": "THE WATCH - two tripwires, on the record",
+   "source": "FRED DFF + SCML contagion monitor",
+   "species": "data",
    "document": {
-    "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\sources\\decks\\teacher-stamped-production-visuals\\sovereign-memory-infrastructure\\slides\\slide-005.png",
-    "sha256": "7c6aa4b3dc3ece200956b43e5ae21f7df3042659e731be9a732905459f802f58"
+    "path": "Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-tripwire-board-v1.png",
+    "sha256": "60734899c4d8ce3e20280b54fab5449b658f4c1c70af6f41cff4b7dada0cefcd"
    },
-   "badges": []
+   "badges": [
+    {
+     "label": "FED FUNDS NOW",
+     "value": "3.63%",
+     "tag": "trigger 5.50%",
+     "accent": "teal"
+    },
+    {
+     "label": "TRIGGERS LIT",
+     "value": "0/2",
+     "tag": "stage: healthy",
+     "accent": "teal"
+    }
+   ],
+   "chart": {
+    "title": "THE WATCH - two tripwires, on the record",
+    "sub": "Alert level: armed - 0/2 mechanical triggers lit - stage: healthy (SCML contagion monitor)",
+    "src": "Fed funds via FRED (DFF, 2026-08-27); memory monitor: Korean customs via SCML ledger",
+    "checklist": {
+     "head": [
+      "WHOSE",
+      "THE TRIGGER",
+      "WHERE IT IS NOW",
+      "STATUS"
+     ],
+     "rows": [
+      {
+       "cells": [
+        "Bravos'",
+        "Fed funds back above 5.50%",
+        "3.63%",
+        "NOT LIT"
+       ],
+       "colors": [
+        "#f4f6f8",
+        "#dce3ea",
+        "#dce3ea",
+        "#3bc9b0"
+       ],
+       "delay": 0.17,
+       "delay_anchor": "Bravos put their tripwire on the record"
+      },
+      {
+       "cells": [
+        "Mine",
+        "memory $/kg below trend, 2 qtrs",
+        "DRAM +17.4% m/m",
+        "NOT LIT"
+       ],
+       "colors": [
+        "#f4f6f8",
+        "#dce3ea",
+        "#dce3ea",
+        "#3bc9b0"
+       ],
+       "delay": 5.98,
+       "delay_anchor": "Mine is stricter, and it's the one this channel already stands on."
+      }
+     ]
+    }
+   }
+  },
+  "ev-memory-monitor-v1": {
+   "title": "The monitor - what memory costs leaving Korea",
+   "source": "Korean & Taiwanese customs via the SCML memory monitor",
+   "species": "data",
+   "document": {
+    "path": "Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-memory-monitor-v1.png",
+    "sha256": "f108fca62e04c63b2585bcf81c33d209fd9e494a594ed612e27714ef7642ae8c"
+   },
+   "badges": [
+    {
+     "label": "DRAM",
+     "value": "+17.4%",
+     "tag": "m/m, $86,970/kg",
+     "accent": "coral"
+    },
+    {
+     "label": "HBM-CLASS",
+     "value": "+14.1%",
+     "tag": "m/m, $95,408/kg",
+     "accent": "teal"
+    }
+   ],
+   "chart": {
+    "title": "The monitor - what memory costs leaving Korea",
+    "sub": "Customs value per kilogram, July release - month over month",
+    "src": "Korean & Taiwanese customs via the SCML memory monitor, read 29 Aug 2026",
+    "bars": [
+     {
+      "label": "KR memory, aggregate",
+      "note": "+21.8%",
+      "color": "crimson",
+      "value": 21.8
+     },
+     {
+      "label": "DRAM ($86,970/kg)",
+      "note": "+17.4%",
+      "color": "crimson",
+      "value": 17.4
+     },
+     {
+      "label": "HBM-class ($95,408/kg)",
+      "note": "+14.1%",
+      "color": "teal",
+      "value": 14.1
+     }
+    ]
+   }
   },
   "ev-instrument-memory": {
    "title": "Memory Export Instrument",
@@ -38295,12 +38403,23 @@
      "y": 8
     }
    },
-   "exit": "cut",
+   "exit": "wipe_right",
    "span": [
     604.7,
     613.9
    ],
-   "docks": []
+   "docks": [
+    {
+     "slide": "ev-tripwire-board-v1",
+     "slot": 0,
+     "enter": 609.4,
+     "exit": 624.7,
+     "badge_at": [
+      611.45,
+      612.75
+     ]
+    }
+   ]
   },
   {
    "scene_id": "s61",
@@ -38338,11 +38457,14 @@
    ],
    "docks": [
     {
-     "slide": "sovereign-memory-infrastructure-s05-teacher-stamped",
+     "slide": "ev-memory-monitor-v1",
      "slot": 0,
      "enter": 625.0,
      "exit": 631.7,
-     "badge_at": []
+     "badge_at": [
+      627.05,
+      628.35
+     ]
     }
    ]
   },

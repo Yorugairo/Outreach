@@ -516,27 +516,46 @@
          SEEN: half of every pound Britain invested went into one
          technology. Row: label - track - fill to frac - numeral lands at
          the fill's edge - note beyond it. */
-      /* CHECKLIST: the test as a live document - the card enters
-         UNFILLED (header + rules), each row lands when narration asks
-         its question (delays narration-keyed at build) */
+      /* CHECKLIST v2 - typewriter + marker-highlight (technique ported
+         from remotion-ui: cap-height band, chisel-tilt leading edge,
+         ~0.3 ink over dark ground; question cells TYPE on, answer cells
+         get the highlighter swept through them). Optional per-row
+         cell colors (r.colors) for status boards. */
       if (C.checklist) {
         const cols = [PL, PL + 300, PL + 640, PL + 990];
-        const cellCol = ["#f4f6f8", "#dce3ea", "#3bc9b0", "#ff8a8c"];
+        const defCol = ["#f4f6f8", "#dce3ea", "#3bc9b0", "#ff8a8c"];
         C.checklist.head.forEach((h, ci) =>
           mk("text", { class: "csr", x: cols[ci], y: PT + 18 }, h));
         st.rowEls = [];
         C.checklist.rows.forEach((r, i) => {
           const y = PT + 64 + i * 58;
-          const g = mk("g", { opacity: 0 });
-          r.cells.forEach((cell, ci) =>
-            mk("text", { class: "cs", x: cols[ci], y,
-               fill: cellCol[ci] }, cell, g));
+          const colr = r.colors || defCol;
+          const cells = [];
+          r.cells.forEach((cell, ci) => {
+            const g2 = mk("g", { opacity: 0 });
+            let sweep = null;
+            if (ci >= 2 && cell) {
+              /* the band: cap-height, behind the text, clipped by a
+                 chisel-tilted wipe (skew ~ -7deg) that runs through */
+              const cid2 = "hl" + slot + i + ci;
+              const cp2 = mk("clipPath", { id: cid2 }, null,
+                             mk("defs", {}, null, g2));
+              sweep = mk("rect", { x: cols[ci] - 8, y: y - 21,
+                width: 0, height: 30, transform: "skewX(-7)" }, null, cp2);
+              mk("rect", { x: cols[ci] - 8, y: y - 21, width: 10,
+                 height: 30, rx: 4, fill: colr[ci], opacity: 0.28,
+                 "clip-path": `url(#${cid2})`, class: "hlband" + slot + i + ci }, null, g2);
+            }
+            const tx = mk("text", { class: "cs", x: cols[ci], y,
+               fill: colr[ci] }, ci === 0 ? "" : cell, g2);
+            cells.push({ el: g2, tx, txt: cell, ci, sweep,
+                         bandCls: "hlband" + slot + i + ci });
+          });
           mk("line", { x1: PL, x2: CW - PR, y1: y + 18, y2: y + 18,
-             stroke: "#24262b", "stroke-width": 1.5 }, null, g);
-          st.rowEls.push({ el: g, d: r.delay || i * 3 });
+             stroke: "#24262b", "stroke-width": 1.5 });
+          st.rowEls.push({ d: r.delay || i * 3, cells, y });
         });
       }
-
       if (C.shares) {
         const rows = C.shares, rh = 46, gap2 = 30;
         const top = PT + 26;
@@ -640,9 +659,28 @@
     }
     /* bars grow staggered from the baseline; the note lands with the bar */
     for (const r of (st.rowEls || [])) {
-      const o = clamp01((tRel - r.d) / 0.45);
-      r.el.setAttribute("opacity", o.toFixed(2));
-      r.el.setAttribute("transform", `translate(0 ${(1 - o) * 14})`);
+      /* cell choreography inside a row: question TYPES at +0, where
+         fades at +0.6, steel sweep at +1.0, paper sweep at +1.6 */
+      const offs = [0, 0.6, 1.0, 1.6];
+      r.cells.forEach((c, k) => {
+        const ct = tRel - r.d - offs[Math.min(k, 3)];
+        const o = clamp01(ct / 0.35);
+        c.el.setAttribute("opacity", o.toFixed(2));
+        if (c.ci === 0) {
+          const nch = Math.max(0, Math.floor(ct / 0.045));
+          const want = c.txt.slice(0, nch);
+          if (c.tx.textContent !== want) c.tx.textContent = want;
+        }
+        if (c.sweep) {
+          const p = clamp01(ct / 0.55);
+          const ease = 1 - Math.pow(1 - p, 3);
+          const w = c.tx.getComputedTextLength
+            ? c.tx.getComputedTextLength() + 18 : 300;
+          c.sweep.setAttribute("width", (ease * w).toFixed(1));
+          const band = c.el.querySelector("." + c.bandCls);
+          if (band) band.setAttribute("width", (w).toFixed(1));
+        }
+      });
     }
     for (const b of st.bars) {
       const bp = expoOut(clamp01((p - b.stagger * 0.4) / 0.6));

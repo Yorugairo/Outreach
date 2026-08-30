@@ -79,10 +79,10 @@ W = [
 (571.6, 577.8, "world-allocation-board",         (.05, -12,   8), [("ev-dram-contract-v1",0,571.7,577.8)]),  # every line marked through - sold out
 (577.8, 598.8, "world-laptop-shelf",             (.04,  12,  -6), [("ev-dram-contract-v1",0,577.8,586.5),("silicon-value-software-bubble-s13-teacher-stamped",1,587.8,598.8)]),  # the blank price card
 (598.8, 604.6, "world-steel-mill-night",         (.05, -10,   6), [("silicon-antidote-s02-memory-triopoly-v1",0,598.8,604.6)]),  # the most vertical line is steel
-(604.7, 613.6, "beat-04-013-guidance-not-gospel-v1",                       (.04,  10,   8), []),                       # "it doesn't care what you were hoping to conclude"  # POOL: guidance is not gospel - the test doesn't care what you hoped
+(604.7, 613.6, "beat-04-013-guidance-not-gospel-v1",                       (.04,  10,   8), [("ev-tripwire-board-v1",0,609.4,624.7)]),                       # "it doesn't care what you were hoping to conclude"  # POOL: guidance is not gospel - the test doesn't care what you hoped
 # ── P5 · the tell ──────────────────────────────────────────────────────
 (613.9, 624.9, "beat-04-003-classic-cycle-counterargument-v1",         (.05, -14,  -6), []),  # paper-bubble mechanics - their tripwire, then ours  # POOL: the strongest argument against this video - their tripwire
-(624.9, 631.7, "world-korea-port-v1",            (.05,  12,   6), [("sovereign-memory-infrastructure-s05-teacher-stamped",0,625.0,631.7)]),  # the geographic monopoly - memory leaving Korea  # s05 carries NO figure at all; 7.0s and gone, and it takes the stage alone rather than the narrow rail
+(624.9, 631.7, "world-korea-port-v1",            (.05,  12,   6), [("ev-memory-monitor-v1",0,625.0,631.7)]),  # the monitor shows its OWN readings (s05 slide RETIRED here: no figure, partial match)
 (631.7, 638.5, "world-memory-wafer-v1",          (.04, -10,   8), [("ev-instrument-memory",0,631.7,638.5)]), # the instrument, method and threshold
 (638.5, 657.1, "world-unwind-desk-v2",           (.05,  10,  -8), [("ev-hbm-export-series",0,638.5,648.9)]), # THE FLIP: a position deliberately reduced - de-risked on camera
 # ── P6 CLOSE ── re-authored to Script G's close (the beats reordered) ──
