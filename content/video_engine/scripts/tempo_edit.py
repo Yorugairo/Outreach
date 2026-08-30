@@ -4,11 +4,14 @@ Renders an edited take from four semantic inputs the provider never had:
 the dead-space caps, the tighten runs, the pause plan, and the tempo map
 (attention sentences hold 1.0x, connective sentences run at RUN_RATE).
 
-Artifact-free by construction (v2 after the operator heard clicks):
-  - ALL boundaries land at inter-word GAP MIDPOINTS, never word edges
-  - stretching happens on decoded PCM per span (ffmpeg atempo on wav)
-  - every joint gets a 12ms crossfade, placed in near-silence
-  - inserted silences ramp through the crossfade instead of gating
+v3 - THE TEMPO FIELD (operator, 2026-08-30): tempo is a CONTINUOUS
+CURVE over the timeline, not per-sentence gears. Attention spans (the
+sentences carrying pause anchors - the same sentences the docks and
+badges bind to) impose SPEED LIMITS of 1.0x; between them the curve
+eases up to RUN_RATE through cosine ramps (~RAMP_S). Emission quantizes
+the curve into micro-segments whose rates differ by <= 0.02x, so every
+12ms crossfade joins two nearly identical renders - no cliff, no click,
+even mid-word. The literary graph drives the accelerator.
 
 Usage (preview mode, probe):
     python tempo_edit.py --probe
@@ -51,7 +54,7 @@ def decode(path: Path) -> np.ndarray:
 
 
 def stretch(seg: np.ndarray, rate: float) -> np.ndarray:
-    if abs(rate - 1.0) < 0.001 or len(seg) < SR // 10:
+    if abs(rate - 1.0) < 0.005 or len(seg) < SR // 25:
         return seg
     with tempfile.TemporaryDirectory() as td:
         a, b = Path(td) / "a.wav", Path(td) / "b.wav"
@@ -117,14 +120,36 @@ def build(words, plan, audio):
             marks.append(t)
             tag_sites.append(round(t, 3))
 
-    def sent_rate(a, b):
-        if a < HOOK_HOLD_S or any(a - 0.05 <= t <= b + 0.05 for t in marks):
+    # THE TEMPO FIELD: speed limits at attention spans, cosine ramps
+    att_spans = []
+    for t, _ in att:
+        for a, b in sents:
+            if a - 0.05 <= t <= b + 0.05:
+                att_spans.append((a, b))
+    for t in [x for x in marks if x not in [q for q, _ in att]]:
+        for a, b in sents:
+            if a - 0.05 <= t <= b + 0.05:
+                att_spans.append((a, b))
+    att_spans.append((0.0, HOOK_HOLD_S))
+    RAMP_S = 0.7
+
+    def rate_curve(t: float) -> float:
+        # distance to the nearest attention span
+        d = min((max(0.0, a - t, t - b) for a, b in att_spans),
+                default=RAMP_S)
+        if d <= 0:
             return 1.0
-        return RUN_RATE
-    rates = [(a, b, sent_rate(a, b)) for a, b in sents]
-    nrun = sum(1 for _, _, r in rates if r > 1)
-    print(f"  {len(sents)} sentences: {nrun} run at {RUN_RATE}x, "
-          f"{len(sents) - nrun} hold 1.0x")
+        if d >= RAMP_S:
+            return RUN_RATE
+        # cosine ease between the limit and cruise
+        import math
+        f = 0.5 - 0.5 * math.cos(math.pi * d / RAMP_S)
+        return 1.0 + (RUN_RATE - 1.0) * f
+
+    nrun = sum(1 for a, b in sents
+               if rate_curve((a + b) / 2) > 1.05)
+    print(f"  {len(sents)} sentences, {len(att_spans)} attention spans, "
+          f"{nrun} cruise at ~{RUN_RATE}x")
 
     # compression + insertion ops
     runs = []
@@ -155,34 +180,31 @@ def build(words, plan, audio):
         ops.append((t, t, s, "ins"))
     ops.sort(key=lambda o: (o[0], o[3]))
 
-    # rate boundaries snapped to gap midpoints
-    gaps = [((x["end"] + y["start"]) / 2)
-            for x, y in zip(words, words[1:]) if y["start"] > x["end"]]
-
-    def snap(t):
-        best = min(gaps, key=lambda m: abs(m - t), default=t)
-        return best if abs(best - t) < 0.6 else t
-    bounds = sorted({snap(a) for a, _, _ in rates}
-                    | {snap(b) for _, b, _ in rates})
-
-    def rate_of(t):
-        for a, b, r in rates:
-            if a - 0.05 <= t <= b + 0.05:
-                return r
-        return RUN_RATE
-
-    pieces = []
-    prev = 0.0
+    # emission: quantize the curve on a 50ms grid; group cells while the
+    # rate stays within 0.02 of the group mean - adjacent segments then
+    # differ by <=0.02x and the crossfades are inaudible anywhere
+    GRID = 0.05
 
     def emit(a, b):
         if b - a < 0.03:
             return
-        pts = [a] + [x for x in bounds if a < x < b] + [b]
-        for s0, s1 in zip(pts, pts[1:]):
-            if s1 - s0 < 0.03:
-                continue
-            seg = audio[int(s0 * SR):int(s1 * SR)]
-            pieces.append(stretch(seg, rate_of((s0 + s1) / 2)))
+        t0 = a
+        r0 = rate_curve(a + GRID / 2)
+        t = a + GRID
+        while t < b + GRID / 2:
+            r = rate_curve(min(t + GRID / 2, b))
+            if abs(r - r0) > 0.02 or t >= b:
+                s1 = min(t, b)
+                seg = audio[int(t0 * SR):int(s1 * SR)]
+                pieces.append(stretch(seg, r0))
+                t0, r0 = s1, r
+            t += GRID
+        if t0 < b:
+            seg = audio[int(t0 * SR):int(b * SR)]
+            pieces.append(stretch(seg, r0))
+
+    pieces = []
+    prev = 0.0
 
     for a, b, t, kind in ops:
         if kind == "cut":
