@@ -436,6 +436,71 @@ def divergence():
     print(f"  VERBATIM  memory +{mem.iloc[-1]-100:,.0f}%  semis +{sox.iloc[-1]-100:,.0f}%  "
           f"MAMAA +{mamaa.iloc[-1]-100:,.0f}%  S&P +{spy.iloc[-1]-100:,.0f}%")
 
+def capital_formation_share():
+    """The railway yardstick, run on America (operator ask, 2026-08-30):
+    what share of ALL capital formation does the tech buildout take?
+
+    Two lines, because honesty needs the decomposition: the BROAD aggregate
+    (all equipment + all intellectual property - trucks and R&D included)
+    and the NARROW tech line (information-processing equipment + software,
+    the internet/AI-era categories). The railway ~50% rides as an amber
+    reference with its definitional basis named - it was ONE technology
+    against Britain's total capital formation; neither US line is."""
+    import datetime as dt
+    eq, ipp = fred("Y033RC1Q027SBEA"), fred("Y001RC1Q027SBEA")
+    it, sw = fred("Y034RC1Q027SBEA"), fred("B985RC1Q027SBEA")
+    gpdi = fred("GPDI")
+    keys = [k for k in sorted(set(eq) & set(ipp) & set(it) & set(sw) & set(gpdi))
+            if k >= "1970-01-01"]
+    xs = [dt.date.fromisoformat(k).year + (int(k[5:7]) - 1) / 12 for k in keys]
+    broad = [(eq[k] + ipp[k]) / gpdi[k] * 100 for k in keys]
+    tech = [(it[k] + sw[k]) / gpdi[k] * 100 for k in keys]
+    # the dot-com high on the tech line, for the mark
+    dc = max((y, x) for x, y in zip(xs, tech) if 1995 <= x <= 2002)
+    fig = frame(); ax = fig.add_axes([0.075, 0.155, 0.845, 0.645]); chrome(ax)
+    ax.axhline(50, color=AMBER, lw=2, ls=(0, (7, 6)))
+    ax.text(xs[0] + 0.6, 50.9, "British railways, 1844-47 - ~50% of ALL UK capital formation (one technology)",
+            color=AMBER, fontsize=T_TICK, fontfamily=FAM)
+    ax.plot(xs, broad, color=DEEMPH, lw=3.5, solid_capstyle="round")
+    ax.plot(xs, tech, color=CRIMSON, lw=5, solid_capstyle="round")
+    ax.plot([dc[1]], [dc[0]], "o", ms=18, color=CRIMSON, mec=SURFACE, mew=5)
+    ax.annotate(f"dot-com high - {dc[0]:.0f}%", xy=(dc[1], dc[0]),
+                xytext=(dc[1] - 11.5, dc[0] + 4.5), color=INK_1,
+                fontsize=T_TICK, fontweight=600, fontfamily=FAM,
+                arrowprops=dict(arrowstyle="-", color=INK_MUTE, lw=2))
+    _endlabel(ax, xs[-1], broad[-1], f"{broad[-1]:.0f}%", DEEMPH, dy=18)
+    _endlabel(ax, xs[-1], tech[-1], f"{tech[-1]:.0f}%", CRIMSON, dy=-14)
+    _legend(ax, [("Info-processing equipment + software", CRIMSON),
+                 ("All equipment + intellectual property", DEEMPH)])
+    ax.set_ylim(0, 72)
+    ax.yaxis.set_major_formatter(FuncFormatter(lambda v, p: f"{int(v)}%"))
+    ax.set_xticks([1975, 1985, 1995, 2005, 2015, 2025])
+    ax.set_xticklabels(["1975","1985","1995","2005","2015","2025"], fontfamily=FAM)
+    titles(fig, "The railway yardstick, run on America",
+           "Tech investment as a share of ALL US private capital formation (GPDI)")
+    source(fig, f"BEA via FRED - (Y034+B985) and (Y033+Y001) over GPDI - quarterly, "
+                f"1970-{keys[-1][:4]} - UK yardstick: Campbell & Turner")
+    save(fig, "ev-capital-formation-v1")
+    emit_sidecar("ev-capital-formation-v1", {
+        "title": "The railway yardstick, run on America",
+        "sub": "Tech investment, share of ALL US private capital formation",
+        "src": "BEA via FRED - quarterly since 1970 - UK yardstick: Campbell & Turner",
+        "ymin": 0, "ymax": 72,
+        "series": [
+            {"label": f"{tech[-1]:.0f}%", "color": "crimson", "fill": True,
+             "pts": dec_pts(xs, tech)},
+            {"label": f"{broad[-1]:.0f}%", "color": "deemph",
+             "pts": dec_pts(xs, broad)}],
+        "hlines": [{"y": 50, "label": "British railways, 1844-47 - ~50% (one technology)",
+                    "color": "amber"}],
+        "marks": [{"x": round(dc[1], 2), "y": round(dc[0], 1),
+                   "label": f"{dc[0]:.0f}%", "sub": "dot-com high"}],
+    })
+    print(f"  VERBATIM  tech {tech[-1]:.0f}%  broad {broad[-1]:.0f}%  "
+          f"dot-com high {dc[0]:.0f}%")
+
+
+
 def smh_drawdown():
     s = _px("SMH", "2024-01-01")
     dd = (s / s.cummax() - 1) * 100
