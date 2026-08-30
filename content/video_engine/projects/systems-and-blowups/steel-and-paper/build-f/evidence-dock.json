@@ -941,7 +941,7 @@
  {
   "asset": "ev-test-scorecard-v1",
   "species": "data",
-  "anchor": "And you can check all three from your phone.",
+  "anchor": "Take any holding and ask it three questions.",
   "title": "THE TEST",
   "source": "Money Physics - the three-question test",
   "badges": [
@@ -1037,6 +1037,28 @@
     "value": "+105%",
     "tag": "their second line",
     "accent": "teal"
+   }
+  ]
+ },
+ {
+  "asset": "ev-weight-check-v1",
+  "species": "data",
+  "anchor": "And Bravos' own number tells you where that paper lives today.",
+  "anchor_kind": "claim",
+  "title": "We checked. It's bigger.",
+  "source": "iShares Russell 3000 filing via SCML ledger",
+  "badges": [
+   {
+    "label": "THEIR NUMBER",
+    "value": "20%",
+    "tag": "of the S&P 500",
+    "accent": "cobalt"
+   },
+   {
+    "label": "OUR CHECK",
+    "value": "24.3%",
+    "tag": "of the whole market",
+    "accent": "coral"
    }
   ]
  }

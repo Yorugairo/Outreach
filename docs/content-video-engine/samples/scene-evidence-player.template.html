@@ -516,6 +516,27 @@
          SEEN: half of every pound Britain invested went into one
          technology. Row: label - track - fill to frac - numeral lands at
          the fill's edge - note beyond it. */
+      /* CHECKLIST: the test as a live document - the card enters
+         UNFILLED (header + rules), each row lands when narration asks
+         its question (delays narration-keyed at build) */
+      if (C.checklist) {
+        const cols = [PL, PL + 300, PL + 640, PL + 990];
+        const cellCol = ["#f4f6f8", "#dce3ea", "#3bc9b0", "#ff8a8c"];
+        C.checklist.head.forEach((h, ci) =>
+          mk("text", { class: "csr", x: cols[ci], y: PT + 18 }, h));
+        st.rowEls = [];
+        C.checklist.rows.forEach((r, i) => {
+          const y = PT + 64 + i * 58;
+          const g = mk("g", { opacity: 0 });
+          r.cells.forEach((cell, ci) =>
+            mk("text", { class: "cs", x: cols[ci], y,
+               fill: cellCol[ci] }, cell, g));
+          mk("line", { x1: PL, x2: CW - PR, y1: y + 18, y2: y + 18,
+             stroke: "#24262b", "stroke-width": 1.5 }, null, g);
+          st.rowEls.push({ el: g, d: r.delay || i * 3 });
+        });
+      }
+
       if (C.shares) {
         const rows = C.shares, rh = 46, gap2 = 30;
         const top = PT + 26;
@@ -618,6 +639,11 @@
         ? clamp01((p - m.at) / 0.06).toFixed(2) : 0);
     }
     /* bars grow staggered from the baseline; the note lands with the bar */
+    for (const r of (st.rowEls || [])) {
+      const o = clamp01((tRel - r.d) / 0.45);
+      r.el.setAttribute("opacity", o.toFixed(2));
+      r.el.setAttribute("transform", `translate(0 ${(1 - o) * 14})`);
+    }
     for (const b of st.bars) {
       const bp = expoOut(clamp01((p - b.stagger * 0.4) / 0.6));
       if (b.share) {           /* proportion row: fill grows rightward */

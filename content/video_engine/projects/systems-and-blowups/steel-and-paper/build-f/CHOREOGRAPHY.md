@@ -1,6 +1,6 @@
 # CHOREOGRAPHY STATEMENT - Steel and Paper (build F)
 
-75 scenes - 37 coalesced docks - 16 wash intervals covering 64% of 749s
+75 scenes - 37 coalesced docks - 16 wash intervals covering 67% of 749s
 
 Every entering and exiting element, in order. Verify any slot
 by reading its lines; the gates below run on every build.
@@ -94,10 +94,10 @@ by reading its lines; the gates below run on every build.
    6:31.1  LIGHT  wash rises (side of first card)
    6:35.8  SCENE  s40  world-exchange-floor-1845  (3.8s, exit cut)
    6:39.6  SCENE  s41  world-target-date-envelope-v1  (17.7s, exit cut)
-   6:39.7  ENTER  silicon-antidote-s02-valuation-bubble-v1  slot 0 side r  holds 17.6s
+   6:39.7  ENTER  ev-weight-check-v1  slot 0 side r  holds 17.6s
    6:39.7  EXIT   ev-railway-mileage-v1  fades in place
    6:57.3  ENTER  ev-smh-drawdown-v3  slot 0 side l  holds 9.0s
-   6:57.3  EXIT   silicon-antidote-s02-valuation-bubble-v1  carried by the wipe front
+   6:57.3  EXIT   ev-weight-check-v1  carried by the wipe front
    6:57.3  SCENE  s42  hero-sp500-double-failure-v1  (8.7s, exit wipe)
    7:06.0  SCENE  s43  world-spike-certificate-ring-v2  (6.5s, exit cut)
    7:06.3  EXIT   ev-smh-drawdown-v3  fades in place
@@ -110,15 +110,15 @@ by reading its lines; the gates below run on every build.
    7:22.9  ENTER  ev-railway-mileage-v1  slot 0 side l  holds 9.3s
    7:32.2  ENTER  silicon-antidote-s11-teacher-stamped  slot 0 side r  holds 7.2s
    7:32.2  EXIT   ev-railway-mileage-v1  carried by the wipe front
-   7:32.2  SCENE  s46  hero-contract-ovens-v1  (7.2s, exit cut)
+   7:32.2  SCENE  s46  world-hbm-die-stack  (7.2s, exit cut)
    7:39.4  ENTER  sovereign-memory-infrastructure-s10-teacher-stamped  slot 0 side l  holds 13.8s
    7:39.4  EXIT   silicon-antidote-s11-teacher-stamped  carried by the wipe front
    7:39.4  SCENE  s47  hero-korea-italy-v1  (34.7s, exit cut)
    7:53.2  EXIT   sovereign-memory-infrastructure-s10-teacher-stamped  fades in place
    7:53.9  LIGHT  wash falls
-   8:14.1  SCENE  s48  hero-barbell-v1  (11.6s, exit wipe)
-   8:15.8  ENTER  ev-test-scorecard-v1  slot 0 side r  holds 29.4s
-   8:15.8  LIGHT  wash rises (side of first card)
+   7:56.8  ENTER  ev-test-scorecard-v1  slot 0 side r  holds 48.4s
+   7:56.8  LIGHT  wash rises (side of first card)
+   8:14.1  SCENE  s48  hero-barbell-v1  (11.6s, exit cut)
    8:25.7  SCENE  s49  beat-04-014-evidence-hierarchy-v1  (9.3s, exit cut)
    8:35.0  SCENE  s50  world-workbench-triad-v1  (10.2s, exit cut)
    8:45.2  EXIT   ev-test-scorecard-v1  carried by the wipe front

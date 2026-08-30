@@ -59,15 +59,15 @@ W = [
 (382.5, 390.1, "hero-wrong-bubble-v1",              (.06,  10,   6), []),                       # THE REVERSAL: paper endless, hardware exact  # ^REGISTER: THE REVERSAL - the chip tower beside the basket of paper
 (390.7, 395.8, "world-certificate-wall-v1",      (.05, -14,   8), [("ev-railway-mileage-v1",0,391.1,399.7)]),# it was railway CERTIFICATES
 (395.8, 399.6, "world-exchange-floor-1845"   ,    (.05,  12,  -6), []),
-(399.6, 416.7, "world-target-date-envelope-v1",  (.04, -10,   6), [("silicon-antidote-s02-valuation-bubble-v1",0,399.7,417.1)], "cut"),  # the default your retirement sits in
+(399.6, 416.7, "world-target-date-envelope-v1",  (.04, -10,   6), [("ev-weight-check-v1",0,399.7,417.1)], "cut"),  # the default your retirement sits in
 (417.3, 425.8, "hero-sp500-double-failure-v1",          (.05,  14,   8), [("ev-smh-drawdown-v3",0,417.3,426.3)]),   # if the names fall by half  # ^REGISTER: the index as towers cascading paper onto a crowd
 (426.0, 431.6, "world-spike-certificate-ring-v2",(.06, -8,   -6), []),                       # RING TOKEN RECONTEXTUALIZED: certificate curls onto the spike
 (432.5, 442.2, "world-railway-acts-desk-v1",     (.05,  10,   8), [("ev-railway-index-v1",0,432.7,442.4)]),  # 1845 is the proof
 # ── P5 REFLECTION ──────────────────────────────────────────────────────
 (442.6, 452.2, "world-circuit-terrain-v1",       (.05, -12,   6), [("ev-railway-mileage-v1",0,442.9,452.2)], "cut"),                       # railway steel sat 20 years; compute depreciates
-(452.2, 459.4, "hero-contract-ovens-v1",                   (.04,  12,  -8), [("silicon-antidote-s11-teacher-stamped",0,452.2,459.4)], "cut"),  # orders in, slots gone  # ^REGISTER: the line issuing sealed contracts - orders in, slots gone
-(459.4, 493.3, "hero-korea-italy-v1",                        (.05, -10,   8), [("sovereign-memory-infrastructure-s10-teacher-stamped",0,459.4,473.2)], "cut"),  # sovereign stacks  # ^REGISTER: two continents, one hardware - sovereign stacks
-(494.1, 505.7, "hero-barbell-v1",                       (.05,  12,   6), [("ev-test-scorecard-v1",0,495.8,524.7)]),  # the three questions  # ^REGISTER: the balance: gold one side, paper the other - THE TEST
+(452.2, 459.4, "world-hbm-die-stack",                      (.04,  12,  -8), [("silicon-antidote-s11-teacher-stamped",0,452.2,459.4)], "cut"),  # orders in, slots gone  # ^REGISTER: the die stack itself - allocation sealed (ovens plate RETIRED: read as bread out of context, operator)
+(459.4, 493.3, "hero-korea-italy-v1",                        (.05, -10,   8), [("sovereign-memory-infrastructure-s10-teacher-stamped",0,459.4,473.2),("ev-test-scorecard-v1",0,476.8,524.7)], "cut"),  # sovereign stacks  # ^REGISTER: two continents, one hardware - sovereign stacks
+(494.1, 505.7, "hero-barbell-v1",                       (.05,  12,   6), []),  # the three questions  # ^REGISTER: the balance: gold one side, paper the other - THE TEST
 (505.7, 515.0, "beat-04-014-evidence-hierarchy-v1",                        (.05, -14,  -6), []),  # steel answers / paper answers - the sort  # POOL: contracts and shipments beat narrative - the test's own logic
 (515.0, 525.1, "world-workbench-triad-v1",       (.04,  10,   8), []),                       # "thirty seconds a holding. run your top five tonight"
 (525.2, 533.8, "world-two-rooms-divergence-v1",  (.05, -12,   6), [("ev-divergence-v1",0,525.3,541.6)]),  # the chart RETURNS at the line that names it

@@ -33372,26 +33372,50 @@
     ]
    }
   },
-  "silicon-antidote-s02-valuation-bubble-v1": {
-   "title": "Index Concentration",
-   "source": "AI builders in the S&P 500",
-   "species": "deck",
+  "ev-weight-check-v1": {
+   "title": "We checked. It's bigger.",
+   "source": "iShares Russell 3000 filing via SCML ledger",
+   "species": "data",
    "document": {
-    "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\sources\\decks\\silicon-antidote\\semantic-assets\\assets\\silicon-antidote-s02-valuation-bubble-v1.png",
-    "sha256": "237df91e6c7beeeff9b9a837739d8c155089d74caf1230d4191e3e79d716ce31"
+    "path": "Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-weight-check-v1.png",
+    "sha256": "3570385231670d5146a85f9b4f7b1726943f1036e2a8285c9543298c00884dbd"
    },
    "badges": [
     {
-     "label": "NOW",
+     "label": "THEIR NUMBER",
      "value": "20%",
-     "tag": "of the index"
+     "tag": "of the S&P 500",
+     "accent": "cobalt"
     },
     {
-     "label": "HISTORIC",
-     "value": "2\u20134%",
-     "tag": ""
+     "label": "OUR CHECK",
+     "value": "24.3%",
+     "tag": "of the whole market",
+     "accent": "coral"
     }
-   ]
+   ],
+   "chart": {
+    "title": "We checked. It's bigger.",
+    "sub": "The AI builders' combined index weight - their number, then our check",
+    "src": "iShares Russell 3000 filing, 27 Aug 2026 (SCML ledger) - cohort: NVDA MSFT GOOGL GOOG AMZN META AVGO",
+    "shares": [
+     {
+      "label": "Bravos' number - share of the S&P 500",
+      "value": "20%",
+      "frac": 0.2,
+      "color": "cobalt",
+      "note": "their chart"
+     },
+     {
+      "label": "Our check - share of the WHOLE US market, from the filing",
+      "value": "24.3%",
+      "frac": 0.243,
+      "color": "crimson",
+      "note": "six tickers"
+     }
+    ],
+    "foot": "Historically two to four percent. Every index fund carries it."
+   }
   },
   "ev-smh-drawdown-v3": {
    "title": "If The Names Fall By Half",
@@ -34157,7 +34181,52 @@
      "tag": "a holding",
      "accent": "sunflower"
     }
-   ]
+   ],
+   "chart": {
+    "title": "THE TEST - 30 seconds a holding",
+    "sub": "Steel: scarce, cash, used.  Paper: abundant, issued, believed.",
+    "src": "Money Physics - the three-question test",
+    "checklist": {
+     "head": [
+      "Ask",
+      "Where to look",
+      "Steel answers",
+      "Paper answers"
+     ],
+     "rows": [
+      {
+       "cells": [
+        "1  Scarce?",
+        "the order book",
+        "sold out, prices up",
+        "abundant on belief"
+       ],
+       "delay": 2.64,
+       "delay_anchor": "One: is what it sells scarce"
+      },
+      {
+       "cells": [
+        "2  Cash or paper?",
+        "cash flow + share count",
+        "earns cash, count flat",
+        "issues paper to run"
+       ],
+       "delay": 9.5,
+       "delay_anchor": "Two: does it fund its growth from cash it earns"
+      },
+      {
+       "cells": [
+        "3  Used tomorrow?",
+        "the product, hype gone",
+        "still gets used",
+        "needs the story"
+       ],
+       "delay": 13.57,
+       "delay_anchor": "Three: if the hype died tonight"
+      }
+     ]
+    }
+   }
   },
   "ev-krx-memory-v3": {
    "title": "SK hynix",
@@ -37721,7 +37790,7 @@
    ],
    "docks": [
     {
-     "slide": "silicon-antidote-s02-valuation-bubble-v1",
+     "slide": "ev-weight-check-v1",
      "slot": 0,
      "enter": 399.7,
      "exit": 417.1,
@@ -37840,8 +37909,8 @@
   {
    "scene_id": "s46",
    "world": {
-    "asset_id": "hero-contract-ovens-v1",
-    "sha256": "49d777e832bfe8afea7e78c991a81d87c00a545e46d1bdf74c0639b36d3e4aa8",
+    "asset_id": "world-hbm-die-stack",
+    "sha256": "7c68322e18976364d06b2dbc7b7ce439ff8d7f5f4bad91133f7b3f8e5c49dcc4",
     "ken_burns": {
      "scale": 0.04,
      "x": 12,
@@ -37892,6 +37961,15 @@
       461.45,
       462.75
      ]
+    },
+    {
+     "slide": "ev-test-scorecard-v1",
+     "slot": 0,
+     "enter": 476.8,
+     "exit": 524.7,
+     "badge_at": [
+      478.85
+     ]
     }
    ]
   },
@@ -37906,22 +37984,12 @@
      "y": 6
     }
    },
-   "exit": "wipe_right",
+   "exit": "cut",
    "span": [
     494.1,
     505.7
    ],
-   "docks": [
-    {
-     "slide": "ev-test-scorecard-v1",
-     "slot": 0,
-     "enter": 495.8,
-     "exit": 524.7,
-     "badge_at": [
-      497.85
-     ]
-    }
-   ]
+   "docks": []
   },
   {
    "scene_id": "s49",

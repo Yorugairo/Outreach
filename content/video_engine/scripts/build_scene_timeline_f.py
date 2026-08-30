@@ -79,7 +79,8 @@ def narration_key_delays(chart: dict, dock_enter: float, tl: dict) -> dict:
     norm = lambda x: _re.sub(r"[^a-z0-9' ]", " ", x.lower()).split()
     wt = [(t, w) for w in tl["words"] for t in norm(w["w"])]
     wtoks = [t for t, _ in wt]
-    for sr in chart.get("series", []):
+    targets = list(chart.get("series", []))         + list(chart.get("checklist", {}).get("rows", []))
+    for sr in targets:
         anc = sr.get("delay_anchor")
         if not anc:
             continue
