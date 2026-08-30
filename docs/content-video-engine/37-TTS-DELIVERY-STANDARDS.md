@@ -358,3 +358,14 @@ Tool: `content/video_engine/scripts/verify_take_whisper.py`. It reads the
 recorder's own manifest for audio paths — no path guessing. The gate is a
 FILTER before the listen, not a replacement for it: doc §8's "listen to
 the join first" stands.
+
+## 13. Probe-first recording (operator, 2026-08-30)
+
+Whisper cannot generate a read - it only transcribes. So "test before
+spending" takes this shape: record a SHORT PROBE (the first 60-90s,
+~1.5-2k credits) with the SAME voice, model, settings and seed as the
+master, run the whisper gate and the human listen on the probe, and only
+then record the full master. Provider artifacts are settings-dependent -
+only the provider reproduces its own failure modes, which is why a free
+local TTS cannot stand in as the probe. Standing order for every future
+master take.
