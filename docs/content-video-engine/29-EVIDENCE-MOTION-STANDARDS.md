@@ -1166,3 +1166,32 @@ covers."*
   sharp, never soft" governs the evidence layer — extending it to police
   the world layer cost two good plates and would have thinned an episode
   already short on plate density (9.13).
+
+### 9.19 The metallic slate text ramp (operator, 2026-08-30)
+
+"We use too many greys on black" — and the operator's fix names the
+direction: **the grey palette moves from neutral grey to metallic slate.**
+Cool steel, not ash. On-theme for the channel and measurably brighter.
+
+Text on the dark chart ground (#16181c) uses exactly three steps:
+
+| step | hex | role |
+|---|---|---|
+| bright steel | `#F4F6F8` | titles, numerals, mark labels |
+| polished slate | `#DCE3EA` | subtitles, row labels, series names |
+| brushed slate | `#B8C4D0` | ticks, source lines, shares notes — **the floor** |
+
+**Nothing dimmer than brushed slate ever renders as text.** The old
+`#8b8f98` small-text grey (~4:1 on charcoal, gone after YouTube
+compression) is what made "one bet / the old normal" unreadable.
+
+**The two-tier rule extends INSIDE the chart.** The graphic palette
+(crimson/teal/cobalt/amber/deemph) draws strokes and fills only. Any text
+it colors — series end-labels, threshold labels — takes the TEXT tier
+(`TPAL`: same hue, lifted: coral #FF8A8C, teal #3BC9B0, cobalt #8FB3F0,
+sunflower #F5B72E, deemph → brushed slate). Graphic cobalt as label text
+is the same failure as graphic cobalt on the pills.
+
+Mirrored in the same commit: player template (`.ct/.cs/.csr` + `TPAL`),
+evidence builder constants (`INK_1/INK_2/INK_MUTE`), pill label + ink
+accent. DEEMPH `#6b6f78` survives as a *graphic* de-emphasis color only.

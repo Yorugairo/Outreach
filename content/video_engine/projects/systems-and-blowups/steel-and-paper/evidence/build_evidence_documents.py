@@ -12,8 +12,8 @@ from matplotlib.patches import FancyBboxPatch, Rectangle
 import numpy as np, os, io, csv, urllib.request, datetime as dt
 
 # ---- doc 39 tokens (validated palette; see doc 39 §2) --------------------
-SURFACE, INK_1, INK_2 = "#16181c", "#f2f2ef", "#b9bcc4"
-INK_MUTE, DEEMPH      = "#8b8f98", "#6b6f78"
+SURFACE, INK_1, INK_2 = "#16181c", "#f4f6f8", "#dce3ea"
+INK_MUTE, DEEMPH      = "#b8c4d0", "#6b6f78"
 GRID, BASELINE        = "#24262b", "#33363d"
 CRIMSON, TEAL, AMBER, COBALT = "#e5484d", "#1fa892", "#c98500", "#4a7fd6"
 
