@@ -107,6 +107,91 @@
    "kind": "settle",
    "phase": "P6",
    "why": "ring close breath"
+  },
+  {
+   "before": "Meta, Apple, Microsoft, Amazon, Alphabet.",
+   "s": 0.45,
+   "kind": "half-list",
+   "why": "mega-caps naming -> the MAMAA line draws"
+  },
+  {
+   "before": "DRAM up seventeen percent",
+   "s": 0.45,
+   "kind": "half-list",
+   "why": "instrument readings list"
+  },
+  {
+   "before": "three questions, thirty seconds, any holding.",
+   "s": 0.45,
+   "kind": "half-list",
+   "why": "test recap triad, scorecard on stage"
+  },
+  {
+   "before": "same line.",
+   "s": 0.45,
+   "kind": "half-reveal",
+   "why": "the S&P layer reveal - operator's example"
+  },
+  {
+   "before": "the builders inside the builders.",
+   "s": 0.45,
+   "kind": "half-reveal",
+   "why": "memory eruption seam"
+  },
+  {
+   "after": "everything Britain invested. Half",
+   "s": 0.45,
+   "kind": "half-reveal",
+   "why": "the UK 50% read - beat lands between 'Half' and 'one technology'"
+  },
+  {
+   "before": "the most it has ever been.",
+   "s": 0.45,
+   "kind": "half-reveal",
+   "why": "28% all-time-high badge"
+  },
+  {
+   "before": "but that's every truck and every patent",
+   "s": 0.45,
+   "kind": "half-reveal",
+   "why": "the 65% line gets its beat before the deflation"
+  },
+  {
+   "before": "the one from the top.",
+   "s": 0.45,
+   "kind": "half-reveal",
+   "why": "test re-introduction"
+  },
+  {
+   "before": "the RAM inside every one of these data centers.",
+   "s": 0.45,
+   "kind": "half-reveal",
+   "why": "naming the variable"
+  },
+  {
+   "before": "the spike, one more time.",
+   "s": 0.45,
+   "kind": "half-reveal",
+   "why": "ring echo breath"
+  },
+  {
+   "after": "So Bravos' tripwire for this cycle: the Fed back above five and a half.",
+   "s": 0.45,
+   "kind": "half-settle",
+   "why": "their threshold lands with the hline"
+  },
+  {
+   "after": "Bravos put their tripwire on the record: the Fed back above five and a half.",
+   "s": 0.45,
+   "kind": "half-settle",
+   "why": "the tripwire recall"
+  },
+  {
+   "after": "And by Bravos' math, AI spending just crossed eight.",
+   "s": 0.45,
+   "kind": "half-settle",
+   "why": "the 8% threshold before the yardstick turn"
   }
- ]
+ ],
+ "note_half_beats": "half kind (0.45s) added 2026-08-30: naming->list, reveal callout, threshold settle - the audio side of chart tension reveals"
 }

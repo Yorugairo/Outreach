@@ -455,3 +455,29 @@ Charon read more naturally than our current ElevenLabs voice (whatever
 its pronunciation quirks). OPEN QUESTION before the next episode: an
 EL settings/voice pass (stability/style sweep, or v3 voices) with the
 scratch renders as the comparison bar.
+
+
+## 18. The half-beat - chart reads breathe at the reveal (operator, 2026-08-30)
+
+Chart-read delivery has a rhythm problem the full-second pause class is
+too heavy for: **when the voice names a thing, opens a list, or sets up
+a reveal, it needs a HALF-BEAT (0.45s) before the payload** - and after
+a threshold statement, a half-beat before the turn.
+
+Three triggers:
+- **naming -> list**: "The mega-caps -" [beat] "Meta, Apple, Microsoft..."
+- **reveal callout**: "We drew the index underneath them -" [beat]
+  "same line."
+- **threshold settle**: "...the Fed back above five and a half." [beat]
+
+The selection filter is the CHART: a half-beat is earned where the seam
+coincides with a tension reveal on the evidence layer - a delayed
+series erupting, a badge landing, an hline drawing. The voice makes the
+room; the chart fills it. Ordinary house-style dashes get nothing.
+
+Mechanics: half-beats are EDITOR pauses (kind "half-*" in the edit-pause
+plan, applied by insert_edit_pauses.py after the dead-space kill), never
+TTS tags - the ~3-tag cap stands. Enumerate candidates by pattern
+(colon/dash + payload, threshold sentences), verdict each against the
+chart-sync filter, anchor verbatim and UNIQUELY (repeated phrases take
+longer anchors).
