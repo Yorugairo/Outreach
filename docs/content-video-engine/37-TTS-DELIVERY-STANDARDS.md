@@ -404,3 +404,27 @@ The named-subject rule applied to the opponent: any "they/their" whose
 referent is Bravos and whose last naming sits more than ~2 sentences
 back takes the name. Eight sites fixed in Script G; the sweep is part
 of the strength loop's X1 walk for every answer video.
+
+
+## 16. Stage zero: the scratch take (operator, 2026-08-30)
+
+Before any credit moves, `scratch_take.py` renders the FULL script free,
+on two engines with two jobs:
+
+- **Chirp 3 HD** (cloud, ~2 min for a full script, 1M chars/mo free) -
+  the LISTEN. The ear pass starts immediately.
+- **Kokoro-82M** (local, ~2x realtime, unlimited forever) - the
+  EVIDENCE: word timestamps in the take schema, SCRATCH-INDEX.md jump
+  points per paragraph, and real chars/sec to replace the rate
+  estimators (measured 1.8% off the EL take on the hook vs the
+  estimators' ~10% spread).
+
+The scratch tests OUR TEXT - ear failures, pronoun ambiguity, number
+reads, pacing shape - and calibrates timing. It CANNOT test ElevenLabs
+behavior (tags, seams, appended artifacts, our voice settings): the
+2:00 probe (§13) still precedes every master, and scratch timings never
+touch the build - the EL take is the only clock.
+
+The ladder: scratch (free, script-level fixes) → 2:00 probe (~2k,
+provider + shift) → master (~13k). Each layer catches the failure class
+the next layer is too expensive to discover.

@@ -56,6 +56,7 @@ read.
 | **Doctrine audit + pattern lint** — timed gates from text via dual rate estimators (16.29 c/s, 170.9 wpm) | `scripts/audit_script_doctrine.py`, `lint_script_pattern.py`, `kit_spec.py` | LIVE | |
 | **Recorder preflight** — 16 gates: split-on-pause, tag cap, paragraph density, stacked pauses, credits-for-both-parts | `scripts/record_chained_take.py` | LIVE — both new gates FAIL on the take that shipped bad | doc 37 |
 | **Pause compilation** — marks → break tags, backticks consumed, dirty-tag guard RAISES | `src/services/audio_synth.py` `compile_pause_marks` | LIVE | the 0:08 artifact class is unshippable |
+| **Scratch take (stage zero)** — free full-script render before any credit: Chirp 3 HD (fast listen, key in local.env) + Kokoro-82M local (word timestamps, jump index, real chars/sec) | `scripts/scratch_take.py` | LIVE | doc 37 §16; Kokoro hook timing 1.8% off the EL take |
 | **Whisper gate** — transcribe the take blind, diff vs script; FAIL on insertions/deletions, WER > 5% | `scripts/verify_take_whisper.py` (faster-whisper base.en) | LIVE — caught a real vocalized tail tone on its FIRST run | doc 37 §12; Script G take |
 | **Defended join** — part-1 tail faded to silence after last word + generated settle; provider-appended junk dies by construction | `scripts/join_chained_take.py` | LIVE — seam measures −91 dB | doc 37; Script G |
 | **Edit-pause insertion** — the ~3-tag practice's owed silences cut into the take at verbatim anchors; timeline shifted | `scripts/insert_edit_pauses.py` | LIVE — 15 pauses, +15.0s | Script G |
