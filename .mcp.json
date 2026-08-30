@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "remotion-ui": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "remotion-ui-mcp"
+      ]
+    }
+  }
+}

@@ -162,7 +162,15 @@
   }
   /* doc 29 Part 5 - kinetic groups at ONE fixed anchor. No pill, no panel. */
   #caption .cg { display: inline-block; }
-  #caption .cw { display: inline-block; color: rgba(255,255,255,.80); transition: color .12s linear; }
+  /* the spoken word takes a subtle pop (remotion-ui EMPHASIS.subtle = 1.05,
+     their EASING.pop = our badge spring). Token spaces sit OUTSIDE the
+     spans, so the scaled box never closes the gap to its neighbour. */
+  #caption .cw { display: inline-block; color: rgba(255,255,255,.80);
+                 transform-origin: 50% 88%;
+                 transition: color .12s linear,
+                             transform .22s cubic-bezier(.34,1.56,.64,1); }
+  #caption .cw.on { transform: scale(1.05); }
+  #caption.quiet .cw { transform: none !important; }
   #caption .cw.ck { color: #c98500; }        /* keyword accent */
   #caption .cw.on { color: #fff; }           /* the word being spoken now */
   #caption .cw.ck.on { color: #e9a020; }
@@ -250,6 +258,13 @@
   const wA = $("wA"), wB = $("wB"), wash = $("wash"), seam = $("seam"), cap = $("caption");
   const docks = [$("dock-1"), $("dock-2")];
   const WIPE = 0.62;
+  /* remotion-ui directional-wipe port (2026-08-30): FEATHER is the soft
+     edge as a share of the frame (their edgeSoftness); DEPTH is the
+     parallax the pages carry under the wipe. The mask edge travels from
+     past the far side to past the near side so the feather never clips
+     short - their formula, kept exactly. */
+  const FEATHER = 0.10, DEPTH = 0.05;
+  const maskEdge = (k) => (1 - k) * (100 + FEATHER * 100) - FEATHER * 50;
 
   const EXIT = 0.72, CARD_IN = 0.75;
 
@@ -483,7 +498,7 @@
        dock — already fixed in screen space — and the world plate is a
        separate layer behind it. Its parallax never moves the paper, so it
        runs continuously and independently of any reveal. */
-    const paint = (el, scene) => {
+    const paint = (el, scene, dx = 0) => {
       el.style.backgroundImage = `url("${A[scene.world.asset_id]}")`;
       const kb = scene.world.ken_burns;
       const p = clamp01((t - scene.span[0]) / Math.max(0.1, scene.span[1] - scene.span[0]));
@@ -497,17 +512,33 @@
          of one scene judged in isolation. The authored Ken Burns is the
          only world motion. */
       const z = 1 + p * kb.scale;
-      el.style.transform = `scale(${z.toFixed(4)}) translate(${(p*kb.x).toFixed(1)}px, ${(p*kb.y).toFixed(1)}px)`;
+      el.style.transform = `translateX(${dx.toFixed(1)}px) scale(${z.toFixed(4)}) `
+        + `translate(${(p*kb.x).toFixed(1)}px, ${(p*kb.y).toFixed(1)}px)`;
     };
     const prev = TL.scenes[si - 1];
     wA.style.display = "";
-    paint(wA, prev || sc);
-    paint(wB, sc);
     const wk = prev ? quartIO(clamp01((t - sc.span[0]) / WIPE)) : 1;
-    wB.style.clipPath = sc.exit === "wipe_right"
-      ? `inset(0 0 0 ${(1-wk)*100}%)` : `inset(0 ${(1-wk)*100}% 0 0)`;
+    const F = FEATHER * 50;
+    const edge = maskEdge(wk);
+    const grad = (dir) =>
+      `linear-gradient(${dir}, transparent ${edge - F}%, #000 ${edge + F}%)`;
     const seaming = prev && wk > 0 && wk < 1;
-    seam.style.opacity = seaming ? 1 : 0;
+    if (seaming) {
+      const g = sc.exit === "wipe_right" ? grad("to left") : grad("to right");
+      wB.style.maskImage = g; wB.style.webkitMaskImage = g;
+      wB.style.clipPath = "none";
+    } else {
+      wB.style.maskImage = "none"; wB.style.webkitMaskImage = "none";
+      wB.style.clipPath = "none";
+    }
+    /* parallax under the wipe: outgoing slides away, incoming decelerates
+       in - the pages MOVE instead of being masked in place */
+    const sgn = sc.exit === "wipe_right" ? 1 : -1;
+    const pA = seaming ? -sgn * DEPTH * wk * 1920 : 0;
+    const pB = seaming ? sgn * DEPTH * (1 - wk) * 1920 : 0;
+    paint(wA, prev || sc, pA);
+    paint(wB, sc, pB);
+    seam.style.opacity = seaming ? 0.55 : 0;   /* the ink line rides inside the feather now */
     seam.style.transform = `translateX(${(sc.exit === "wipe_right" ? (1-wk) : wk) * 1920}px)`;
 
     /* LAYER 2/3 — docks live on their own schedule */
@@ -524,10 +555,15 @@
     const boundary = sc.span[0];
     const allOut = seaming && live.length > 0 &&
       live.every((x) => Math.abs(x.exit - boundary) < 0.35);
-    const frontClip = sc.exit === "wipe_right"
-      ? `inset(0 ${wk * 100}% 0 0)` : `inset(0 0 0 ${wk * 100}%)`;
-    wash.style.clipPath = allOut ? frontClip : "none";
-    spot.style.clipPath = allOut ? frontClip : "none";
+    /* the outgoing page's light leaves under the SAME feathered edge */
+    const outGrad = sc.exit === "wipe_right"
+      ? `linear-gradient(to left, #000 ${100 - edge - F}%, transparent ${100 - edge + F}%)`
+      : `linear-gradient(to right, #000 ${100 - edge - F}%, transparent ${100 - edge + F}%)`;
+    for (const el2 of [wash, spot]) {
+      el2.style.maskImage = allOut ? outGrad : "none";
+      el2.style.webkitMaskImage = allOut ? outGrad : "none";
+      el2.style.clipPath = "none";
+    }
 
     /* Which side does the evidence occupy? A solo card alternates sides by
        scene so the world is not always cropped the same way; a pair spans
@@ -582,16 +618,21 @@
            front's stage X into element coordinates. */
         const fx = (sc.exit === "wipe_right" ? (1 - wk) : wk) * 1920;
         const L = el.offsetLeft, W2 = el.offsetWidth || 1;
-        if (sc.exit === "wipe_right") {   // incoming spreads from the right
-          const hide = clamp01(((L + W2) - fx) / W2);
-          el.style.clipPath = `inset(0 ${(hide * 100).toFixed(2)}% 0 0)`;
-        } else {                          // incoming spreads from the left
-          const hide = clamp01((fx - L) / W2);
-          el.style.clipPath = `inset(0 0 0 ${(hide * 100).toFixed(2)}%)`;
-        }
+        /* the stage front mapped into the CARD's space, as a feathered
+           mask rather than a hard inset - the card dissolves at the same
+           soft edge the page turns on */
+        const fpx = FEATHER * 1920 * 0.5;
+        const eP = ((fx - L) / W2) * 100;
+        const fP = (fpx / W2) * 100;
+        const cg = sc.exit === "wipe_right"
+          ? `linear-gradient(to right, #000 ${eP - fP}%, transparent ${eP + fP}%)`
+          : `linear-gradient(to left, #000 ${100 - eP - fP}%, transparent ${100 - eP + fP}%)`;
+        el.style.maskImage = cg; el.style.webkitMaskImage = cg;
+        el.style.clipPath = "none";
         el.style.opacity = clamp01((t - d.enter) / (CARD_IN * 0.55));
       } else {
         el.style.clipPath = "none";
+        el.style.maskImage = "none"; el.style.webkitMaskImage = "none";
         el.style.opacity = (1 - xe) * clamp01((t - d.enter) / (CARD_IN * 0.55));
       }
       el.style.transform = (xk && !swept)
