@@ -428,8 +428,10 @@ def divergence():
             "src": "Yahoo Finance - pairing after Bravos Research",
             "log": True,
             "series": [
-                {"label": f"+{mem.iloc[-1]-100:,.0f}%", "color": "crimson", "pts": dec(mem)},
-                {"label": f"+{sox.iloc[-1]-100:,.0f}%", "color": "teal", "pts": dec(sox)},
+                # THEIR two lines draw first; semis and memory hold back
+                # 2.5s and erupt through them - the added layer PERFORMED
+                {"label": f"+{mem.iloc[-1]-100:,.0f}%", "color": "crimson", "delay": 2.5, "pts": dec(mem)},
+                {"label": f"+{sox.iloc[-1]-100:,.0f}%", "color": "teal", "delay": 2.5, "pts": dec(sox)},
                 {"label": f"+{mamaa.iloc[-1]-100:,.0f}%", "color": "cobalt", "pts": dec(mamaa)},
                 {"label": f"+{spy.iloc[-1]-100:,.0f}%", "color": "deemph", "pts": dec(spy)},
             ]}), encoding="utf-8")

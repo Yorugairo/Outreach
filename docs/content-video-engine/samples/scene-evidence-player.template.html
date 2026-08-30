@@ -252,7 +252,7 @@
   const expoOut = (k) => (k >= 1 ? 1 : 1 - Math.pow(2, -10 * k));
   const quartIO = (k) => (k < 0.5 ? 8*k*k*k*k : 1 - Math.pow(-2*k+2, 4)/2);
   /* Pills draw TEXT, so they take the text tier - never the graphic tier. */
-  const ACCENT = { sunflower: "var(--t-sunflower)", coral: "var(--t-coral)", teal: "var(--t-teal)", cobalt: "var(--t-cobalt)" };
+  const ACCENT = { sunflower: "var(--t-sunflower)", coral: "var(--t-coral)", teal: "var(--t-teal)", cobalt: "var(--t-cobalt)", ink: "#b9bcc4" };
 
   const vo = $("vo"); vo.src = A["__audio__"];
   const wA = $("wA"), wB = $("wB"), wash = $("wash"), seam = $("seam"), cap = $("caption");
@@ -474,7 +474,8 @@
           const last = sr.pts[sr.pts.length - 1];
           const lbl = mk("text", { class: "cl", x: mx(last[0]) + 12,
             y: my(last[1]) + 8, fill: col, opacity: 0 }, sr.label);
-          st.paths.push({ path, len, stagger: oi / Math.max(1, order.length) });
+          st.paths.push({ path, len, stagger: oi / Math.max(1, order.length),
+                          delay: sr.delay || 0 });
           st.labels.push(lbl);
         });
         for (const m of (C.marks || [])) {
@@ -579,8 +580,11 @@
     const st = chartState[slot]; if (!st) return;
     const DUR = Math.min(6, Math.max(2.5, (d.exit - d.enter) * 0.38));
     const p = clamp01((t - d.enter - CARD_IN * 0.6) / DUR);
+    const tRel = t - d.enter - CARD_IN * 0.6;
     st.paths.forEach((pp, i) => {
-      const lp = clamp01((p - pp.stagger * 0.35) / 0.65);
+      /* a series may hold back (sidecar `delay`, seconds): the source's own
+         chart draws first, the added layers erupt through it */
+      const lp = clamp01(((tRel - pp.delay) / DUR - pp.stagger * 0.35) / 0.65);
       pp.path.setAttribute("stroke-dashoffset",
         (pp.len * (1 - expoOut(lp))).toFixed(1));
       st.labels[i].setAttribute("opacity",

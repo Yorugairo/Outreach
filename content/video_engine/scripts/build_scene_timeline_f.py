@@ -127,6 +127,22 @@ def main() -> int:
                                 encoding="utf-8"))}
                            if ap.with_suffix(".series.json").exists() else {}),
                     }
+                    # BADGE-CHART SYNC: chart data refetches on rebuild, so
+                    # an authored badge value can silently drift from the end
+                    # label on the document behind it (caught 2026-08-30:
+                    # badges said +601% while a fresh fetch drew +613%). A
+                    # badge whose accent maps to a series color takes the
+                    # series' CURRENT label - B3 by construction.
+                    ch = evidence[aid].get("chart")
+                    if ch and ch.get("series"):
+                        amap = {"coral": "crimson", "teal": "teal",
+                                "cobalt": "cobalt", "ink": "deemph",
+                                "sunflower": "amber"}
+                        for bd in evidence[aid]["badges"]:
+                            sc_col = amap.get(bd.get("accent", ""))
+                            for sr in ch["series"]:
+                                if sr.get("color") == sc_col and sr.get("label"):
+                                    bd["value"] = sr["label"]
                     uris[aid] = data_uri(ap, CARD_W)
                 # Spans come from the dock: evidence enters before its claim
                 # and holds through the whole discussion. A flat hold drops the

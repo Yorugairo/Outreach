@@ -10,16 +10,28 @@
   "source": "Pairing after Bravos Research \u00b7 rebuilt + extended, Yahoo Finance",
   "badges": [
    {
-    "label": "MEMORY BUILDERS",
-    "value": "+601%",
-    "tag": "our layer",
-    "accent": "coral"
-   },
-   {
     "label": "MAMAA",
     "value": "+20%",
     "tag": "matches the S&P",
     "accent": "cobalt"
+   },
+   {
+    "label": "S&P 500",
+    "value": "+21%",
+    "tag": "12 months",
+    "accent": "ink"
+   },
+   {
+    "label": "SEMICONDUCTORS",
+    "value": "+102%",
+    "tag": "their divergence",
+    "accent": "teal"
+   },
+   {
+    "label": "MEMORY BUILDERS",
+    "value": "+601%",
+    "tag": "our layer",
+    "accent": "coral"
    }
   ]
  },
