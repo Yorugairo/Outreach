@@ -15,6 +15,32 @@ Every item below is pinned in the dossier (rows H1–H3) or a standing gate.
    chart is everywhere, re-made without credit — we credit Bravos by name
    and add the layer it needed. (b) feeds the credit-first strategy and
    the "sharpest chart" beat directly.
+
+   **OPERATOR (2026-08-30): (b) is the way IF it meets the P1 virality
+   gates — and it does, in one form only**: the ubiquity is the THREAT
+   (copies of copies have already reached the viewer, unchecked), never a
+   creator-economy grievance; the Bravos credit lands as the
+   differentiator at ~0:30. The spike open and the paradox are UNTOUCHED.
+   Candidate Beat-3 drafts for the loop (gate-mapped, timed at 170.9wpm):
+
+   B1 (contagion, ~24s): "A hundred and eighty years later, one chart is
+   making the same promise about AI. You've probably seen it — maybe not
+   the original. It's been re-cut by a dozen channels this month, copies
+   of copies, louder every pass. Almost nobody names the people who built
+   it. And almost nobody checks it. If you own an index fund, you're
+   already betting on the answer."
+
+   B3 (archetype, preferred, ~21s): "Somewhere today, a guy on his lunch
+   break is watching his fourth version of the same chart — different
+   voice, same two lines, same warning: AI is 1845 again. Copies of
+   copies, and not one of them checked the original's math. You've
+   probably met this chart. If you hold an index fund, it's already
+   holding you."
+
+   B3 scripts onto the chart's staged draw: "same two lines" spoken over
+   their flat pair; the eruption lands near "checked the original's
+   math." The loop grinds both through S1–S10 + the ear test; neither
+   ships as-is without the fixpoint.
 2. **The chart beat reframes to the operator's line**: "It's the sharpest
    chart on YouTube — but we think it needed another layer." Verified
    figures (badge-synced, refetch at record): memory ~+613%, semis ~+105%,
