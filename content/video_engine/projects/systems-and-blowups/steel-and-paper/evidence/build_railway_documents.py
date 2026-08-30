@@ -193,33 +193,51 @@ def debt_bars():
 # 3. Stat tile — one number is the whole point (NOT a chart)
 # ======================================================================
 def stat_tile():
+    """Proportion bars, not a text tile - a stat tile is a banned species
+    (doc 29 s9.3). The 50%-of-all-capital-formation claim is the stunning
+    one and it deserves to be SEEN as half a bar, not read as a line."""
     fig = plt.figure(figsize=(FW, 640 / DPI), dpi=DPI)
     fig.patch.set_facecolor(SURFACE)
-    fig.text(0.055, 0.815, "Peak railway investment, 1844–47",
-             color=INK_2, fontsize=T_SUB, fontfamily=FAM, va="center")
-    fig.text(0.055, 0.545, "7%", color=CRIMSON, fontsize=T_HERO,
-             fontweight=600, fontfamily=FAM, va="center")
-    fig.text(0.245, 0.545, "of British GDP", color=INK_1, fontsize=T_TITLE,
-             fontweight=600, fontfamily=FAM, va="center")
-
-    # supporting pair, ink only
-    fig.text(0.055, 0.275, "≈ 50%", color=INK_1, fontsize=T_LABEL,
-             fontweight=600, fontfamily=FAM, va="center")
-    fig.text(0.175, 0.275, "of all gross domestic capital formation",
-             color=INK_2, fontsize=T_SUB, fontfamily=FAM, va="center")
-    fig.text(0.055, 0.165, "£40M+", color=INK_1, fontsize=T_LABEL,
-             fontweight=600, fontfamily=FAM, va="center")
-    fig.text(0.175, 0.165, "spent annually at the peak",
-             color=INK_2, fontsize=T_SUB, fontfamily=FAM, va="center")
-
-    # hairline rule above the source
-    fig.add_artist(plt.Line2D([0.055, 0.945], [0.088, 0.088],
-                              color=GRID, lw=2, transform=fig.transFigure))
+    fig.text(0.055, 0.865, "Where Britain's money went, 1844-47",
+             color=INK_1, fontsize=T_TITLE, fontweight=600, fontfamily=FAM)
+    rows = [("Share of British GDP", 0.07, "7%", CRIMSON, "peak years"),
+            ("Share of ALL capital formation", 0.50, "~50%", "#c98500",
+             "half of every pound invested")]
+    for i, (lbl, frac, val, col, note) in enumerate(rows):
+        y = 0.60 - i * 0.27
+        fig.text(0.055, y + 0.085, lbl, color=INK_2, fontsize=T_SUB,
+                 fontfamily=FAM)
+        ax = fig.add_axes([0.055, y - 0.045, 0.70, 0.095])
+        ax.set_xlim(0, 1); ax.set_ylim(0, 1); ax.axis("off")
+        ax.barh([0.5], [1.0], height=1.0, color=GRID)
+        ax.barh([0.5], [frac], height=1.0, color=col)
+        fig.text(0.075 + 0.70 * frac, y, val, color=INK_1,
+                 fontsize=T_LABEL, fontweight=600, fontfamily=FAM, va="center")
+        fig.text(0.775, y, note, color=INK_MUTE, fontsize=T_SOURCE,
+                 fontfamily=FAM, va="center")
+    fig.text(0.055, 0.115, "£40M+ spent annually at the peak",
+             color=INK_2, fontsize=T_SUB, fontfamily=FAM)
     fig.text(0.045, 0.042, "Campbell & Turner railway mania literature",
              color=INK_MUTE, fontsize=T_SOURCE, fontfamily=FAM, va="center")
     fig.savefig(os.path.join(OUT, "ev-railway-gdp-tile-v1.png"),
                 facecolor=SURFACE, dpi=DPI)
     plt.close(fig)
+    import json as _json
+    with open(os.path.join(OUT, "ev-railway-gdp-tile-v1.series.json"), "w",
+              encoding="utf-8") as f:
+        _json.dump({
+            "title": "Where Britain's money went, 1844-47",
+            "sub": "Railway investment against the whole economy",
+            "src": "Campbell & Turner railway mania literature",
+            "shares": [
+                {"label": "Share of British GDP", "frac": 0.07,
+                 "value": "7%", "color": "crimson", "note": "peak years"},
+                {"label": "Share of ALL capital formation", "frac": 0.50,
+                 "value": "~50%", "color": "amber",
+                 "note": "half of every pound invested"}],
+            "foot": "£40M+ spent annually at the peak",
+        }, f)
+    print("     + ev-railway-gdp-tile-v1.series.json")
 
 
 railway_index(); debt_bars(); stat_tile()

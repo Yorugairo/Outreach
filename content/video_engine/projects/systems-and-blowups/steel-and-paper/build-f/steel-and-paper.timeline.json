@@ -25322,7 +25322,7 @@
    "species": "tile",
    "document": {
     "path": "Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-railway-gdp-tile-v1.png",
-    "sha256": "ef22010ad7a7f4c6ee52a30e5cc06c29e89f195f1ba7816d3beca179925a269d"
+    "sha256": "3ed3fe1ca1f32bc12ead7b9f0e115632f6e0320926b6d4b3a90db851247f39ec"
    },
    "badges": [
     {
@@ -25335,7 +25335,29 @@
      "value": "~8%",
      "tag": "of US GDP"
     }
-   ]
+   ],
+   "chart": {
+    "title": "Where Britain's money went, 1844-47",
+    "sub": "Railway investment against the whole economy",
+    "src": "Campbell & Turner railway mania literature",
+    "shares": [
+     {
+      "label": "Share of British GDP",
+      "frac": 0.07,
+      "value": "7%",
+      "color": "crimson",
+      "note": "peak years"
+     },
+     {
+      "label": "Share of ALL capital formation",
+      "frac": 0.5,
+      "value": "~50%",
+      "color": "amber",
+      "note": "half of every pound invested"
+     }
+    ],
+    "foot": "\u00a340M+ spent annually at the peak"
+   }
   },
   "ev-equip-ipp-gdp-v1": {
    "title": "Equipment + Software / GDP",
@@ -30144,7 +30166,29 @@
      "value": "~3\u00d7",
      "tag": "the wafer capacity"
     }
-   ]
+   ],
+   "chart": {
+    "title": "Wafer capacity per gigabyte",
+    "sub": "HBM against standard DRAM - stacking the dies is what makes it scarce",
+    "src": "Micron, via industry reporting - approximate ratio",
+    "shares": [
+     {
+      "label": "HBM",
+      "frac": 1.0,
+      "value": "3x",
+      "color": "crimson",
+      "note": "the silicon, same gigabyte"
+     },
+     {
+      "label": "Standard DRAM",
+      "frac": 0.333,
+      "value": "1x",
+      "color": "deemph",
+      "note": ""
+     }
+    ],
+    "foot": "Every accelerator fed takes wafer away from everything else on the line."
+   }
   },
   "silicon-antidote-s09-capacity-penalty-v1": {
    "title": "Three To One",

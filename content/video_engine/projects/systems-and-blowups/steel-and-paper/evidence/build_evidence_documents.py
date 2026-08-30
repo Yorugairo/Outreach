@@ -564,6 +564,17 @@ def hbm_wafer_ratio():
                               color=GRID, lw=2, transform=fig.transFigure))
     fig.text(0.045, 0.045, "Micron, via industry reporting - approximate ratio",
              color=INK_MUTE, fontsize=T_SOURCE, fontfamily=FAM, va="center")
+    emit_sidecar("ev-hbm-wafer-ratio-v1", {
+        "title": "Wafer capacity per gigabyte",
+        "sub": "HBM against standard DRAM - stacking the dies is what makes it scarce",
+        "src": "Micron, via industry reporting - approximate ratio",
+        "shares": [
+            {"label": "HBM", "frac": 1.0, "value": "3x", "color": "crimson",
+             "note": "the silicon, same gigabyte"},
+            {"label": "Standard DRAM", "frac": 0.333, "value": "1x",
+             "color": "deemph", "note": ""}],
+        "foot": "Every accelerator fed takes wafer away from everything else on the line.",
+    })
     save(fig, "ev-hbm-wafer-ratio-v1")
 
 

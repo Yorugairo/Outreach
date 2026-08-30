@@ -491,6 +491,38 @@
         }
       }
 
+      /* SHARES: horizontal proportion bars - the fill IS the claim. Built
+         because a stat TILE (text on a rectangle) is a banned species
+         (doc 29 s9.3, "fill-in paper toys") and proportions deserve to be
+         SEEN: half of every pound Britain invested went into one
+         technology. Row: label - track - fill to frac - numeral lands at
+         the fill's edge - note beyond it. */
+      if (C.shares) {
+        const rows = C.shares, rh = 46, gap2 = 30;
+        const top = PT + 26;
+        const trackW = CW - PL - PR - 150;
+        rows.forEach((r, i) => {
+          const y = top + i * (rh + gap2);
+          const col = PAL[r.color] || "#e5484d";
+          mk("text", { class: "cs", x: PL, y: y - 10 }, r.label);
+          mk("rect", { x: PL, y, width: trackW, height: rh, rx: 9,
+             fill: "#24262b" });
+          const fill = mk("rect", { x: PL, y, width: 0, height: rh, rx: 9,
+             fill: col });
+          const num = mk("text", { class: "cl", x: PL, y: y + rh / 2 + 9,
+             fill: "#f2f2ef", opacity: 0 }, r.value);
+          const note = r.note ? mk("text", { class: "csr",
+             x: PL + trackW + 14, y: y + rh / 2 + 5, opacity: 0 }, r.note)
+             : null;
+          st.bars.push({ rect: fill, note: num, note2: note,
+             h: null, share: { w: trackW * r.frac, numEl: num, x0: PL },
+             stagger: i / Math.max(1, rows.length) });
+        });
+        if (C.foot)
+          mk("text", { class: "cs", x: PL,
+             y: top + rows.length * (rh + gap2) + 8 }, C.foot);
+      }
+
       /* BARS: grow from the baseline, staggered, note landing with the bar */
       if (C.bars) {
         const n = C.bars.length, plot = CW - PL - PR;
@@ -566,6 +598,15 @@
     /* bars grow staggered from the baseline; the note lands with the bar */
     for (const b of st.bars) {
       const bp = expoOut(clamp01((p - b.stagger * 0.4) / 0.6));
+      if (b.share) {           /* proportion row: fill grows rightward */
+        const w = b.share.w * bp;
+        b.rect.setAttribute("width", Math.max(0, w).toFixed(1));
+        b.share.numEl.setAttribute("x", (b.share.x0 + w + 12).toFixed(1));
+        b.note.setAttribute("opacity", clamp01((bp - 0.85) / 0.15).toFixed(2));
+        if (b.note2) b.note2.setAttribute("opacity",
+          clamp01((bp - 0.85) / 0.15).toFixed(2));
+        continue;
+      }
       const h = b.h * bp;
       b.rect.setAttribute("height", Math.max(0, h).toFixed(1));
       b.rect.setAttribute("y", (b.baseY - h).toFixed(1));
