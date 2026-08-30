@@ -127,9 +127,12 @@ def run_kokoro() -> None:
             wavs.append(r.audio.numpy() if hasattr(r.audio, "numpy")
                         else np.asarray(r.audio))
             offset += len(wavs[-1]) / SR
-        # paragraph breath in the scratch render
-        wavs.append(np.zeros(int(SR * 0.5), dtype=np.float32))
-        offset += 0.5
+        # paragraph breath: 0.25s inserted + the engine's own settle
+        # lands near the compressor's 0.50s inter-sentence target, so the
+        # scratch PREDICTS post-compression pacing (operator: the 0.5s
+        # version made the pause after "holding you." a beat too long)
+        wavs.append(np.zeros(int(SR * 0.25), dtype=np.float32))
+        offset += 0.25
     wav = np.concatenate(wavs)
     sf.write(OUT / "scratch-kokoro.wav", wav, SR)
     subprocess.run(["ffmpeg", "-y", "-v", "quiet", "-i",

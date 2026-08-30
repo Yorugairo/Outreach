@@ -428,3 +428,30 @@ touch the build - the EL take is the only clock.
 The ladder: scratch (free, script-level fixes) → 2:00 probe (~2k,
 provider + shift) → master (~13k). Each layer catches the failure class
 the next layer is too expensive to discover.
+
+
+## 17. THE AUDIO PATH — canonical, one block (operator-confirmed 2026-08-30)
+
+    script
+      -> FULL scratch render      scratch_take.py (Kokoro + Chirp, free)
+      -> whisper check + EAR PASS -> fix the script      (repeat until clean)
+      -> EL 2:00 PROBE            record_chained_take.py --probe --go (~2k)
+      -> whisper check + listen   -> fix if needed
+      -> EL MASTER                record_chained_take.py --go (~13k)
+      -> whisper gate             verify_take_whisper.py
+      -> defended join            join_chained_take.py
+      -> word timeline            build_timeline_f.py
+      -> KILL DEAD SPACE          compress_dead_space.py --write
+      -> add OUR breaks back      insert_edit_pauses.py
+      -> retime + TOPIC-EXIT AUDIT + captions -> scene build -> gates
+
+The scratch is full-length (it is free - never sample it); the 2:00 cut
+belongs to the PROBE, which tests the provider and the section shift.
+Compression precedes the breaks: dead air dies first, deliberate
+silence is added back on a tight base.
+
+**Voice watch (operator, 2026-08-30):** on the same text, Chirp 3 HD
+Charon read more naturally than our current ElevenLabs voice (whatever
+its pronunciation quirks). OPEN QUESTION before the next episode: an
+EL settings/voice pass (stability/style sweep, or v3 voices) with the
+scratch renders as the comparison bar.
