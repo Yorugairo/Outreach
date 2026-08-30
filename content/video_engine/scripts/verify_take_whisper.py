@@ -57,10 +57,7 @@ def main() -> int:
 
     import json as _json
     if args.probe:
-        audio = EP / "vo-f/audio/scene_probe.mp3"
-        cand = sorted((EP / "vo-f/audio").glob("*probe*.mp3"))
-        if cand:
-            audio = cand[0]
+        audio = EP / "vo-f/audio/scene_99.mp3"   # 99 = the probe slot
         if not audio.exists():
             print("no probe audio found - record with --probe --go first")
             return 1
