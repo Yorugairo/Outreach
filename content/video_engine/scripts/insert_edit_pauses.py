@@ -47,12 +47,16 @@ def main() -> int:
     def find_boundary(p) -> float | None:
         anc = norm(p.get("after") or p.get("before"))
         toks = anc.split()
-        wtoks = [norm(w["w"]) for w in words]
+        # a lone em-dash word normalizes to "" and would sever the
+        # consecutive match - index only the words that survive norm
+        wt = [(norm(w["w"]), w) for w in words]
+        wt = [(t, w) for t, w in wt if t]
+        wtoks = [t for t, _ in wt]
         for i in range(len(wtoks) - len(toks) + 1):
             if wtoks[i:i + len(toks)] == toks:
                 if "after" in p:
-                    return words[i + len(toks) - 1]["end"]
-                return words[i]["start"]
+                    return wt[i + len(toks) - 1][1]["end"]
+                return wt[i][1]["start"]
         return None
 
     inserts = []

@@ -122,110 +122,110 @@
    "words": [
     [
      "\u201cSomething",
-     184.0
+     228.79
     ],
     [
      "has",
-     184.3
+     229.09
     ],
     [
      "gone",
-     184.6
+     229.39
     ],
     [
      "completely",
-     184.9
+     229.69
     ],
     [
      "wrong.",
-     185.2
+     229.99
     ],
     [
      "Every",
-     185.5
+     230.29
     ],
     [
      "single",
-     185.8
+     230.59
     ],
     [
      "enterprise",
-     186.1
+     230.89
     ],
     [
      "in",
-     186.4
+     231.19
     ],
     [
      "this",
-     186.7
+     231.49
     ],
     [
      "country",
-     187.0
+     231.79
     ],
     [
      "\u2014",
-     187.3
+     232.09
     ],
     [
      "these",
-     187.6
+     232.39
     ],
     [
      "people",
-     187.9
+     232.69
     ],
     [
      "are",
-     188.2
+     232.99
     ],
     [
      "livid.",
-     188.5
+     233.29
     ],
     [
      "They",
-     188.8
+     233.59
     ],
     [
      "are",
-     189.1
+     233.89
     ],
     [
      "paying",
-     189.45
+     234.24
     ],
     [
      "for",
-     189.78
+     234.57
     ],
     [
      "tokens",
-     189.93
+     234.72
     ],
     [
      "that",
-     190.36
+     235.15
     ],
     [
      "create",
-     190.52
+     235.31
     ],
     [
      "no",
-     190.96
+     235.75
     ],
     [
      "value.\u201d",
-     191.2
+     235.99
     ]
    ],
    "hl": [
     18,
     24
    ],
-   "end": 191.7,
+   "end": 236.49,
    "attr": "Alex Karp, Chief Executive Officer, Palantir Technologies",
    "src": "Transcript \u2014 CNBC Squawk Box, 1 July 2026 \u00b7 PLTR closed +8\u20139% that session"
   }
@@ -521,7 +521,7 @@
   "species": "deck",
   "at": 478.38,
   "end": 568.41,
-  "anchor": "Steel answers scarce, cash, used.",
+  "anchor": "The most vertical line on the board is steel.",
   "hold": 90.03,
   "title": "The Memory Triopoly",
   "source": "Samsung \u00b7 Micron \u00b7 SK hynix",
@@ -541,7 +541,8 @@
     "value": "yes",
     "tag": ""
    }
-  ]
+  ],
+  "anchor_kind": "claim"
  },
  {
   "asset": "silicon-antidote-s14-diagnostic-matrix-v1",

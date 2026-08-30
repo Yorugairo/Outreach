@@ -111,7 +111,7 @@ def main() -> int:
     need_target = int(total / PLATE_TARGET_S) + 1
     need_max = int(total / PLATE_MAX_S) + 1
 
-    print(f"TIMELINE — Script F")
+    print(f"TIMELINE — Script G")
     print(f"  runtime      : {total:.2f}s ({total/60:.2f} min)")
     print(f"  join offset  : {offset:.2f}s (part 1 tail trimmed to {SETTLE_S}s)")
     print(f"  words        : {len(words):,}   sentences: {len(sents)}")
@@ -124,7 +124,7 @@ def main() -> int:
           f"{'at' if total/len(plates) <= PLATE_TARGET_S else 'over'} target)")
 
     (OUT / "timeline.json").write_text(json.dumps({
-        "episode": "steel-and-paper", "script": "SCRIPT-F-VO.txt",
+        "episode": "steel-and-paper", "script": "SCRIPT-G-VO.txt",
         "take": "vo-f", "runtime_s": round(total, 3),
         "join": {"offset_s": round(offset, 3), "settle_s": SETTLE_S,
                  "part1_speech_end_s": round(offset - SETTLE_S, 3)},

@@ -81,10 +81,13 @@ def main() -> int:
     dock = json.loads((BUILD / "evidence-dock.json").read_text(encoding="utf-8"))
     META = {d["asset"]: d for d in dock}
     pages = json.loads((BUILD / "caption-pages.json").read_text(encoding="utf-8"))
-    audio = BUILD / "audio/episode.mp3"
+    # the timeline names its own audio: after insert_edit_pauses.py it is
+    # the PAUSED file - embedding the unpaused one desyncs every word
+    audio = BUILD / tl.get("paused_audio", "audio/episode.mp3")         if tl.get("edit_pauses_applied") else BUILD / "audio/episode.mp3"
     if not audio.exists():
         print(f"FAIL: {audio} missing — join the chained parts first")
         return 1
+    print(f"  audio: {audio.name}")
 
     evidence, uris, scenes = {}, {}, []
     for i, row in enumerate(plan):

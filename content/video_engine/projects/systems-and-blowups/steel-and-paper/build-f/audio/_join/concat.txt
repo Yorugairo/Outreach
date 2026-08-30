@@ -1,0 +1,3 @@
+file 'p1.mp3'
+file 'sil.mp3'
+file 'C:/Users/Snipe/Downloads/Outreach Program/.claude/worktrees/sweet-villani-1c3a16/content/video_engine/projects/systems-and-blowups/steel-and-paper/vo-f/audio/scene_2.mp3'
