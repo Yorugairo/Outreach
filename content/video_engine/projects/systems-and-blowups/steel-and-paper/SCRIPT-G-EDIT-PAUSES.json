@@ -215,6 +215,96 @@
    "s": 0.45,
    "kind": "half-savor",
    "why": "attention redirect: chart introduced -> now the feature callout (Two lines.)"
+  },
+  {
+   "after": "Alex Karp of Palantir, live on CNBC:",
+   "s": 0.45,
+   "kind": "half-citation",
+   "why": "the source lands before the quote"
+  },
+  {
+   "before": "The cycle is real.",
+   "s": 0.45,
+   "kind": "half-savor",
+   "why": "the agreement-on-record pair"
+  },
+  {
+   "before": "Four months.",
+   "s": 0.45,
+   "kind": "half-savor",
+   "why": "the Uber burn punch"
+  },
+  {
+   "before": "It was the steel.",
+   "s": 0.45,
+   "kind": "half-reveal",
+   "why": "the 1849 answer"
+  },
+  {
+   "before": "The steel kept working.",
+   "s": 0.45,
+   "kind": "half-savor",
+   "why": "paired aphorism"
+  },
+  {
+   "after": "every dollar these companies generate from operations.",
+   "s": 0.45,
+   "kind": "half-savor",
+   "why": "before the bare Ninety-four"
+  },
+  {
+   "before": "The steel kept building.",
+   "s": 0.45,
+   "kind": "half-savor",
+   "why": "the pre-pivot pair"
+  },
+  {
+   "before": "Historically, two to four.",
+   "s": 0.45,
+   "kind": "half-reveal",
+   "why": "the norm against the 20%"
+  },
+  {
+   "before": "The certificates were.",
+   "s": 0.45,
+   "kind": "half-savor",
+   "why": "punch after 'never the risk'"
+  },
+  {
+   "before": "Different demand, different clock.",
+   "s": 0.45,
+   "kind": "half-savor",
+   "why": "sovereign-demand savor"
+  },
+  {
+   "before": "Both are true at once.",
+   "s": 0.45,
+   "kind": "half-savor",
+   "why": "the thesis moment"
+  },
+  {
+   "before": "Steel answers scarce, cash, used.",
+   "s": 0.45,
+   "kind": "half-savor",
+   "why": "the verdict pair opens"
+  },
+  {
+   "after": "Not fifty.",
+   "s": 0.45,
+   "kind": "half-reveal",
+   "why": "before the bare Five hundred"
+  },
+  {
+   "before": "It passes.",
+   "s": 0.45,
+   "kind": "half-savor",
+   "why": "the test verdict"
+  },
+  {
+   "before": "The steel gets used.",
+   "s": 0.45,
+   "kind": "half-savor",
+   "why": "the final triad opens"
   }
  ],
  "note_half_beats": "half kind (0.45s) added 2026-08-30: naming->list, reveal callout, threshold settle - the audio side of chart tension reveals",
@@ -227,6 +317,60 @@
    "intra_cap": 0.3,
    "intra_tgt": 0.24,
    "why": "the chart-read description run flows; deliberate beats are re-inserted after"
+  },
+  {
+   "start_after": "Every transformative technology overshoots.",
+   "end_before": "So I pulled their yardstick myself",
+   "why": "railway/internet history run",
+   "inter_cap": 0.32,
+   "inter_tgt": 0.26,
+   "intra_cap": 0.3,
+   "intra_tgt": 0.24
+  },
+  {
+   "start_after": "Walk their evidence like a claims adjuster.",
+   "end_before": "But look harder at those two stories.",
+   "why": "the Karp/Uber witness stories",
+   "inter_cap": 0.32,
+   "inter_tgt": 0.26,
+   "intra_cap": 0.3,
+   "intra_tgt": 0.24
+  },
+  {
+   "start_after": "Between 2020 and 2024, the biggest builders borrowed about twenty-eight billion dollars a year.",
+   "end_before": "That is not a rounding error in someone's capital structure.",
+   "why": "the debt escalation reads",
+   "inter_cap": 0.32,
+   "inter_tgt": 0.26,
+   "intra_cap": 0.3,
+   "intra_tgt": 0.24
+  },
+  {
+   "start_after": "That is not a rounding error in someone's capital structure.",
+   "end_before": "And none of this is slowing down.",
+   "why": "the bond-market bend",
+   "inter_cap": 0.32,
+   "inter_tgt": 0.26,
+   "intra_cap": 0.3,
+   "intra_tgt": 0.24
+  },
+  {
+   "start_after": "High-bandwidth memory stacks the dies vertically.",
+   "end_before": "That's not a forecast.",
+   "why": "the physics description",
+   "inter_cap": 0.32,
+   "inter_tgt": 0.26,
+   "intra_cap": 0.3,
+   "intra_tgt": 0.24
+  },
+  {
+   "start_after": "So \u2014 the spike, one more time.",
+   "end_before": "Everything we checked holds.",
+   "why": "the 1850 close story",
+   "inter_cap": 0.32,
+   "inter_tgt": 0.26,
+   "intra_cap": 0.3,
+   "intra_tgt": 0.24
   }
  ]
 }
