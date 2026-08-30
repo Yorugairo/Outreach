@@ -91,6 +91,24 @@ def fred(series):
 # =========================================================================
 # 1. Equipment + IPP investment as a share of GDP  (REAL — BEA via FRED)
 # =========================================================================
+
+def emit_sidecar(name, payload):
+    """Live-chart sidecar: the SAME data the PNG was drawn from, so the
+    player can DRAW the chart instead of pasting it (operator, 2026-08-30:
+    the animated evidence layer comes back for every chart)."""
+    import json as _json
+    from pathlib import Path as _P
+    (_P(__file__).parent / "objects" / (name + ".series.json")).write_text(
+        _json.dumps(payload), encoding="utf-8")
+    print(f"     + {name}.series.json")
+
+
+def dec_pts(xs, ys, n=140):
+    step = max(1, len(xs) // n)
+    return [[round(float(x), 4), round(float(y), 3)]
+            for x, y in list(zip(xs, ys))[::step]]
+
+
 def equip_ipp_gdp():
     eq, ipp, gdp = fred("Y033RC1Q027SBEA"), fred("Y001RC1Q027SBEA"), fred("GDP")
     keys = sorted(set(eq) & set(ipp) & set(gdp))
@@ -122,6 +140,14 @@ def equip_ipp_gdp():
     source(fig, "BEA via FRED · (Y033RC1Q027SBEA + Y001RC1Q027SBEA) ÷ GDP · "
                 f"quarterly, 1970–{keys[-1][:4]}")
     save(fig, "ev-equip-ipp-gdp-v1")
+    emit_sidecar("ev-equip-ipp-gdp-v1", {
+        "title": "Equipment and IP investment is back at its dot-com peak",
+        "sub": "US private nonresidential investment, share of GDP",
+        "src": "BEA via FRED - quarterly since 1970",
+        "series": [{"label": f"{latest:.2f}%", "color": "crimson",
+                    "fill": True, "pts": dec_pts(xs, ys)}],
+        "hline": {"y": round(peak90, 2), "label": f"Q2 2000 peak - {peak90:.2f}%"},
+    })
 
 
 # =========================================================================
@@ -146,6 +172,14 @@ def capex_trajectory():
     source(fig, "PIMCO, “AI Credit Expansion: Assessing the Micro and Macro Risks”, "
                 "Figures 2–3 · consensus estimates, not actuals")
     save(fig, "ev-capex-consensus-v1")
+    emit_sidecar("ev-capex-consensus-v1", {
+        "title": "Hyperscaler capital spending, consensus estimates",
+        "sub": "Five largest hyperscalers - 94% of operating cash flow",
+        "src": "PIMCO, Figures 2-3 - consensus estimates, not actuals",
+        "bars": [{"label": "Start of year", "value": 480, "note": "$480B", "color": "deemph"},
+                 {"label": "2026 consensus", "value": 690, "note": "$690B", "color": "crimson"},
+                 {"label": "2027 consensus", "value": 870, "note": "$870B", "color": "crimson"}],
+    })
 
 
 # =========================================================================
@@ -170,6 +204,14 @@ def dram_prices():
     source(fig, "TrendForce (conventional, server) · Counterpoint / TrendForce (consumer peak) "
                 "· quarterly contract price change")
     save(fig, "ev-dram-contract-v1")
+    emit_sidecar("ev-dram-contract-v1", {
+        "title": "Memory contract prices, quarter over quarter",
+        "sub": "2026 - HBM, DRAM and NAND essentially sold out for the year",
+        "src": "TrendForce - Counterpoint - quarterly contract price change",
+        "bars": [{"label": "Conventional DRAM", "value": 57.5, "note": "+55-60%", "color": "deemph"},
+                 {"label": "Server DRAM", "value": 60, "note": "+60%", "color": "deemph"},
+                 {"label": "Consumer DRAM", "value": 89, "note": "+89%", "color": "crimson"}],
+    })
 
 
 # =========================================================================
@@ -220,6 +262,13 @@ def railway_mileage():
     source(fig, "Jackman (1916), p. 585 · 1845 alone authorised ~3,000 miles — "
                 "about as much as the previous 15 years combined")
     save(fig, "ev-railway-mileage-v1")
+    emit_sidecar("ev-railway-mileage-v1", {
+        "title": "Parliament authorised three times the railway ever built",
+        "sub": "Bills sanctioned 1844-46, against mileage actually constructed",
+        "src": "Jackman (1916), p. 585",
+        "bars": [{"label": "Authorised by Parliament", "value": 8470, "note": "8,470 miles", "color": "crimson"},
+                 {"label": "Actually constructed", "value": 2823, "note": "~2,800 miles", "color": "deemph"}],
+    })
 
 
 # =========================================================================
@@ -274,6 +323,16 @@ def krx_memory():
     source(fig, f"Data: Yahoo Finance, 000660.KS, MU · 2024-01 to "
                 f"{ai.index[-1].date().isoformat()}")
     save(fig, "ev-krx-memory-v3")
+    emit_sidecar("ev-krx-memory-v3", {
+        "title": "The memory trade, live",
+        "sub": "SK hynix and Micron, indexed to 100 at January 2024",
+        "src": f"Yahoo Finance, 000660.KS, MU - to {ai.index[-1].date().isoformat()}",
+        "series": [
+            {"label": f"{ai.iloc[-1]:,.0f}", "color": "crimson",
+             "pts": dec_pts(_yr(ai.index), ai.values)},
+            {"label": f"{bi.iloc[-1]:,.0f}", "color": "teal",
+             "pts": dec_pts(_yr(bi.index), bi.values)}],
+    })
 
 
 def mega_vs_spy():
@@ -397,6 +456,14 @@ def smh_drawdown():
            "SMH drawdown from running high — a single series, so no legend")
     source(fig, f"Data: Yahoo Finance, SMH · 2024-01 to {dd.index[-1].date().isoformat()}")
     save(fig, "ev-smh-drawdown-v3")
+    emit_sidecar("ev-smh-drawdown-v3", {
+        "title": "Semiconductors, distance from their own peak",
+        "sub": "SMH drawdown from running high",
+        "src": f"Yahoo Finance, SMH - 2024-01 to {dd.index[-1].date().isoformat()}",
+        "series": [{"label": f"{dd.iloc[-1]:.0f}%", "color": "crimson",
+                    "fill": True, "pts": dec_pts(x, dd.values)}],
+        "hline": {"y": 0, "label": ""},
+    })
 
 
 def tnx_two_eras():
@@ -421,6 +488,19 @@ def tnx_two_eras():
     source(fig, f"Data: Yahoo Finance, ^TNX · 1998-01 to 2001-12 and 2021-01 to "
                 f"{b.index[-1].date().isoformat()}")
     save(fig, "ev-tnx-two-eras-v3")
+    emit_sidecar("ev-tnx-two-eras-v3", {
+        "title": "The 10-year Treasury yield, two eras",
+        "sub": "Same scale, side by side - never two y-axes on one plot",
+        "src": "Yahoo Finance, ^TNX",
+        "ymax": 7.2,
+        "panels": [
+            {"sub": "Dot-com era - 1998-2001",
+             "series": [{"label": f"{a.iloc[-1]:.1f}%", "color": "crimson",
+                         "pts": dec_pts(_yr(a.index), a.values)}]},
+            {"sub": "AI era - 2021-today",
+             "series": [{"label": f"{b.iloc[-1]:.1f}%", "color": "crimson",
+                         "pts": dec_pts(_yr(b.index), b.values)}]}],
+    })
 
 
 # =========================================================================
@@ -445,6 +525,14 @@ def ig_credit_weighting():
     source(fig, "Morgan Stanley Investment Management; LPL / Investing.com - "
                 "Bloomberg Corporate Bond Index; the third bar is a projection")
     save(fig, "ev-ig-credit-weighting-v1")
+    emit_sidecar("ev-ig-credit-weighting-v1", {
+        "title": "Technology's share of the investment-grade bond index",
+        "sub": "The pool a bond fund buys from - reweighting toward data centres",
+        "src": "Morgan Stanley IM; LPL - the third bar is a projection",
+        "bars": [{"label": "2024", "value": 9.0, "note": "9%", "color": "deemph"},
+                 {"label": "Now", "value": 10.0, "note": "10%", "color": "crimson"},
+                 {"label": "Projected", "value": 12.0, "note": ">12%", "color": "crimson"}],
+    })
 
 
 # =========================================================================

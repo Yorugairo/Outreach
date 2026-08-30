@@ -35,7 +35,7 @@ T_SOURCE = size_pt(0.014)
 T_HERO   = size_pt(0.085)
 
 FAM = ["Segoe UI", "DejaVu Sans", "sans-serif"]
-OUT = os.path.dirname(os.path.abspath(__file__))
+OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "objects")
 
 
 def frame():
@@ -128,6 +128,21 @@ def railway_index():
     fig.savefig(os.path.join(OUT, "ev-railway-index-v1.png"),
                 facecolor=SURFACE, dpi=DPI)
     plt.close(fig)
+    import json as _json
+    with open(os.path.join(OUT, "ev-railway-index-v1.series.json"), "w",
+              encoding="utf-8") as f:
+        _json.dump({
+            "title": "British railway shares fell 64% from their peak",
+            "sub": "Daily index of 442 railway companies - January 1843 = 1,000",
+            "src": "Campbell & Turner railway share index, 1843-1850",
+            "series": [{"label": "741", "color": "crimson", "fill": True,
+                        "pts": [[round(float(x), 3), round(float(y), 1)]
+                                for x, y in zip(xi[::5], yi[::5])]}],
+            "hline": {"y": 1000, "label": "1843 level"},
+            "marks": [{"x": 1845.76, "y": 2062, "label": "2,062", "sub": "6 Oct 1845"},
+                      {"x": 1850.25, "y": 741, "label": "741", "sub": "Apr 1850"}],
+        }, f)
+    print("     + ev-railway-index-v1.series.json")
 
 
 # ======================================================================

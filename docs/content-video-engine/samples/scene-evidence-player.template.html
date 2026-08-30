@@ -370,46 +370,114 @@
       const svg = document.createElementNS(NS, "svg");
       svg.setAttribute("viewBox", `0 0 ${CW} ${CH}`);
       svg.setAttribute("class", "chartbox");
-      const Y = (v) => C.log ? Math.log10(v) : v;
-      let x0 = 1e9, x1 = -1e9, y0 = 1e9, y1 = -1e9;
-      for (const sr of C.series) for (const [x, v] of sr.pts) {
-        x0 = Math.min(x0, x); x1 = Math.max(x1, x);
-        y0 = Math.min(y0, Y(v)); y1 = Math.max(y1, Y(v));
-      }
-      const mx = (x) => PL + (x - x0) / (x1 - x0) * (CW - PL - PR);
-      const my = (v) => PT + (1 - (Y(v) - y0) / (y1 - y0)) * (CH - PT - PB);
-      const mk = (tag, at, txt) => {
+      const mk = (tag, at, txt, parent) => {
         const e = document.createElementNS(NS, tag);
         for (const k in at) e.setAttribute(k, at[k]);
         if (txt) e.textContent = txt;
-        svg.appendChild(e); return e;
+        (parent || svg).appendChild(e); return e;
       };
       mk("text", { class: "ct", x: 28, y: 44 }, C.title);
       mk("text", { class: "cs", x: 28, y: 74 }, C.sub);
       mk("text", { class: "csr", x: 28, y: CH - 14 }, C.src);
       const PAL = { crimson: "#e5484d", teal: "#1fa892", cobalt: "#4a7fd6",
                     amber: "#c98500", deemph: "#8b8f98" };
-      const st = { paths: [], labels: [] };
-      /* base layers draw first, the star (series[0]) draws LAST */
-      const order = [...C.series.keys()].reverse();
-      order.forEach((si, oi) => {
-        const sr = C.series[si];
-        const d = sr.pts.map(([x, v], i) =>
-          (i ? "L" : "M") + mx(x).toFixed(1) + " " + my(v).toFixed(1)).join(" ");
-        const path = mk("path", { d, fill: "none",
-          stroke: PAL[sr.color] || "#f2f2ef",
-          "stroke-width": si === 0 ? 5 : 3.5,
-          "stroke-linecap": "round", "stroke-linejoin": "round" });
-        const len = path.getTotalLength();
-        path.setAttribute("stroke-dasharray", len);
-        path.setAttribute("stroke-dashoffset", len);
-        const last = sr.pts[sr.pts.length - 1];
-        const lbl = mk("text", { class: "cl", x: mx(last[0]) + 14,
-          y: my(last[1]) + 8, fill: PAL[sr.color] || "#f2f2ef",
-          opacity: 0 }, sr.label);
-        st.paths.push({ path, len, stagger: oi / order.length });
-        st.labels.push(lbl);
-      });
+      const st = { paths: [], labels: [], bars: [], marks: [], areas: [] };
+      let clipN = 0;
+
+      /* one panel = one mapped plot region; a plain chart is one panel */
+      const panels = C.panels
+        ? C.panels.map((p, i) => ({ ...p, i, n: C.panels.length }))
+        : [{ series: C.series || [], sub: null, i: 0, n: 1 }];
+      for (const pn of panels) {
+        const gap = 34;
+        const pw = (CW - PL - PR - gap * (pn.n - 1)) / pn.n;
+        const px0 = PL + pn.i * (pw + gap);
+        const Y = (v) => C.log ? Math.log10(v) : v;
+        let x0 = 1e9, x1 = -1e9, y0 = 1e9, y1 = -1e9;
+        for (const sr of pn.series) for (const [x, v] of sr.pts) {
+          x0 = Math.min(x0, x); x1 = Math.max(x1, x);
+          y0 = Math.min(y0, Y(v)); y1 = Math.max(y1, Y(v));
+        }
+        if (C.hline) { y0 = Math.min(y0, Y(C.hline.y)); y1 = Math.max(y1, Y(C.hline.y)); }
+        if (C.ymax != null) y1 = Math.max(y1, Y(C.ymax));
+        const pad = (y1 - y0) * 0.06 || 1; y0 -= pad; y1 += pad;
+        const mx = (x) => px0 + (x - x0) / (x1 - x0 || 1) * pw;
+        const my = (v) => PT + (1 - (Y(v) - y0) / (y1 - y0)) * (CH - PT - PB);
+        if (pn.sub) mk("text", { class: "csr", x: px0, y: PT - 10 }, pn.sub);
+        if (C.hline) {
+          const hl = mk("line", { x1: px0, x2: px0 + pw,
+            y1: my(C.hline.y), y2: my(C.hline.y), stroke: "#6b6f78",
+            "stroke-width": 2, "stroke-dasharray": "7 6", opacity: 0 });
+          st.marks.push({ el: hl, at: 0.15 });
+          if (C.hline.label)
+            st.marks.push({ el: mk("text", { class: "csr", x: px0 + 6,
+              y: my(C.hline.y) - 8, opacity: 0 }, C.hline.label), at: 0.15 });
+        }
+        const order = [...pn.series.keys()].reverse();
+        order.forEach((si, oi) => {
+          const sr = pn.series[si];
+          const col = PAL[sr.color] || "#f2f2ef";
+          const d = sr.pts.map(([x, v], i) =>
+            (i ? "L" : "M") + mx(x).toFixed(1) + " " + my(v).toFixed(1)).join(" ");
+          if (sr.fill) {
+            /* area under the line, revealed by a clip that grows with the
+               draw - the prototype's grammar */
+            const cid = "cclip" + (clipN++) + slot;
+            const cp = mk("clipPath", { id: cid });
+            const cr = mk("rect", { x: px0, y: 0, width: 0, height: CH }, null, cp);
+            const base = my(Math.max(y0, Math.min(y1, C.hline ? C.hline.y : y0)));
+            mk("path", { d: d + ` L ${mx(sr.pts[sr.pts.length-1][0]).toFixed(1)} ${base}`
+                 + ` L ${mx(sr.pts[0][0]).toFixed(1)} ${base} Z`,
+               fill: col, "fill-opacity": 0.10, "clip-path": `url(#${cid})` });
+            st.areas.push({ rect: cr, w: pw });
+          }
+          const path = mk("path", { d, fill: "none", stroke: col,
+            "stroke-width": si === 0 ? 5 : 3.5,
+            "stroke-linecap": "round", "stroke-linejoin": "round" });
+          const len = path.getTotalLength();
+          path.setAttribute("stroke-dasharray", len);
+          path.setAttribute("stroke-dashoffset", len);
+          const last = sr.pts[sr.pts.length - 1];
+          const lbl = mk("text", { class: "cl", x: mx(last[0]) + 12,
+            y: my(last[1]) + 8, fill: col, opacity: 0 }, sr.label);
+          st.paths.push({ path, len, stagger: oi / Math.max(1, order.length) });
+          st.labels.push(lbl);
+        });
+        for (const m of (C.marks || [])) {
+          const g = mk("g", { opacity: 0 });
+          mk("circle", { cx: mx(m.x), cy: my(m.y), r: 9, fill: "#e5484d",
+             stroke: "#16181c", "stroke-width": 4 }, null, g);
+          const tx = mx(m.x) + (mx(m.x) > px0 + pw * 0.75 ? -14 : 14);
+          const anch = mx(m.x) > px0 + pw * 0.75 ? "end" : "start";
+          mk("text", { class: "cl", x: tx, y: my(m.y) - 12,
+             fill: "#f2f2ef", "text-anchor": anch }, m.label, g);
+          mk("text", { class: "csr", x: tx, y: my(m.y) + 12,
+             "text-anchor": anch }, m.sub || "", g);
+          st.marks.push({ el: g, at: (m.x - x0) / (x1 - x0 || 1) });
+        }
+      }
+
+      /* BARS: grow from the baseline, staggered, note landing with the bar */
+      if (C.bars) {
+        const n = C.bars.length, plot = CW - PL - PR;
+        const bw = Math.min(150, plot / (n * 1.9));
+        const vmax = Math.max(...C.bars.map((b) => b.value)) * 1.18;
+        const baseY = CH - PB - 26;
+        C.bars.forEach((b, i) => {
+          const cx = PL + plot * (i + 0.5) / n;
+          const col = PAL[b.color] || "#8b8f98";
+          const h = (b.value / vmax) * (baseY - PT);
+          const rect = mk("rect", { x: cx - bw / 2, y: baseY, width: bw,
+            height: 0, rx: 7, fill: col });
+          const note = mk("text", { class: "cl", x: cx, y: baseY - h - 12,
+            fill: "#f2f2ef", "text-anchor": "middle", opacity: 0 }, b.note);
+          mk("text", { class: "csr", x: cx, y: baseY + 24,
+             "text-anchor": "middle" }, b.label);
+          st.bars.push({ rect, note, h, baseY, stagger: i / n });
+        });
+        mk("line", { x1: PL, x2: CW - PR, y1: baseY, y2: baseY,
+           stroke: "#33363d", "stroke-width": 2 });
+      }
       /* into the slide-frame, so the rail (pills) stays BENEATH the chart
          exactly as with a static document */
       /* de-overlap end labels: two series ending within 26px stack their
@@ -452,6 +520,23 @@
       st.labels[i].setAttribute("opacity",
         clamp01((lp - 0.92) / 0.08).toFixed(2));
     });
+    /* area fills reveal with the primary line's progress */
+    for (const a of st.areas)
+      a.rect.setAttribute("width", (a.w * expoOut(p)).toFixed(1));
+    /* marks land when the line reaches them; hlines early */
+    for (const m of st.marks) {
+      const on = p >= m.at;
+      m.el.setAttribute("opacity", on
+        ? clamp01((p - m.at) / 0.06).toFixed(2) : 0);
+    }
+    /* bars grow staggered from the baseline; the note lands with the bar */
+    for (const b of st.bars) {
+      const bp = expoOut(clamp01((p - b.stagger * 0.4) / 0.6));
+      const h = b.h * bp;
+      b.rect.setAttribute("height", Math.max(0, h).toFixed(1));
+      b.rect.setAttribute("y", (b.baseY - h).toFixed(1));
+      b.note.setAttribute("opacity", clamp01((bp - 0.9) / 0.1).toFixed(2));
+    }
   };
   const drawRecord = (slot, t) => {
     const st = recState[slot]; if (!st) return;
