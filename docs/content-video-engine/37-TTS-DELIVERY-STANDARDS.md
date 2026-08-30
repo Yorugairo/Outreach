@@ -334,3 +334,27 @@ The master-take rule in §8 created this exposure: it replaced many small
 requests with one long one, and the retry policy was never revisited to
 match. Any doctrine change that alters request *shape* must be checked
 against the client's timeout and retry configuration.
+
+
+## 12. The whisper gate (operator, 2026-08-30)
+
+Provider alignment maps the INTENDED text onto the waveform; it is
+structurally blind to the model saying something that was never scripted.
+The 0:08 "thumb" (a mangled break tag, vocalized) passed every text gate
+because every text gate reads text.
+
+So every recorded take passes a WHISPER GATE before the word timeline is
+built: transcribe the audio with a model that has never seen the script
+(faster-whisper), normalize both sides, sequence-diff.
+
+- **INSERTED** words (spoken, not scripted) → FAIL. This is the vocalized-
+  tag class.
+- **DELETED** words (scripted, not spoken) → FAIL. Dropped lines.
+- **REPLACED** words are printed but do not fail alone — whisper mishears
+  numerals and proper nouns; the human listen adjudicates them.
+- WER above 5% → FAIL regardless of class.
+
+Tool: `content/video_engine/scripts/verify_take_whisper.py`. It reads the
+recorder's own manifest for audio paths — no path guessing. The gate is a
+FILTER before the listen, not a replacement for it: doc §8's "listen to
+the join first" stands.
