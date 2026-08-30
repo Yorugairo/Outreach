@@ -75,6 +75,47 @@ uncharted ✓ (and ties the hook's copies motif).
   they would defend") discharges the re-justification duty untemplated.
   Carried WARN, consistent with two operator-reviewed scripts.
 
+## Round 4 — the ENUMERATED screens (operator audit, 2026-08-30)
+
+The operator asked whether L1/L3 and the X1 orphan screen ran to the
+upgraded standard. Honest answer: round 1 ran them by spot-check, not by
+enumeration — the exact partial-pass the loop exists to prevent. Round 4
+ran them properly:
+
+**X1 enumerated:** 224 sentences → 85 open on a connective or bare
+pronoun; every pair listed with its predecessor and read. TWO ORPHANS
+FOUND, both in new material, both fixed:
+
+- **G7** · "Their second line is the chip industry…" ← "The giants are
+  the market now." — "Their" resolves to the giants, not Bravos →
+  "The chart's second line is the chip industry…"
+- **G8** · "That's a new instrument for this channel…" ← "…the closest
+  run at it in a hundred and eighty years." — "That" points at the run,
+  not the measure → "The yardstick is a new instrument for this channel…"
+
+Carryover WARNs (operator-approved F text, logged not altered):
+- [25] "And the opponent here isn't Bravos…" — additive junction at a
+  beat boundary (L1-P1 prefers BUT/THEREFORE); approved through E/F.
+- [175] "So ask it the three questions." — "it" reaches four sentences
+  back to SK hynix across the physics digression; approved through E/F.
+  Flag for the ear pass: if the scratch VO stumbles here, the fix is
+  "So put SK hynix to the three questions."
+
+**L1 walked over all changed regions:** cadence waves hold (hook builds
+long→fragment→punch; yardstick carries two licensed fragments); no
+phonetic anchors outside promise/payoff/tell (repetition figures —
+"copies of copies", "builders inside the builders" — are not phonetic
+anchors); figure referents attach ("already holding you" → the index
+fund's weighting; "reading it together" → the instrument).
+
+**L2 on the new beats:** hook and yardstick both close setup→tension→
+resolution inside 60s, shift charge, junction on turns. **L3** unchanged
+(P3 units were genuinely five-step-checked in round 1).
+
+Round 4 checkers re-run after G7/G8: lint clean, audit 0 FAIL, preflight
+CLEAN. Round 5 re-read of the two fixes: zero findings. CONVERGED — this
+time with the enumeration on record.
+
 ## DECISIONS — none
 
 No oscillations. No sentence hit the two-rewrite budget.

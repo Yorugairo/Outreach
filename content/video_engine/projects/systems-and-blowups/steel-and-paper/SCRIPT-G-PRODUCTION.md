@@ -27,7 +27,7 @@ So here's the original. It comes from Bravos Research — credit where due,
 the sharpest macro chart on YouTube. Two lines. The mega-caps — Meta,
 Apple, Microsoft, Amazon, Alphabet. In a year, up twenty-one percent. We
 drew the index underneath them — same line. The giants are the market now.
-Their second line is the chip industry, and it left both behind: up a
+The chart's second line is the chip industry, and it left both behind: up a
 hundred and five. And one layer their chart never drew. Memory
 — the builders inside the builders. Up six hundred and thirteen percent. The chart is right. The warning points at the wrong address.
 
@@ -62,7 +62,7 @@ twenty-three cents. Today it's twenty-eight — the most it has ever been.
 `[post-key]` Count all equipment and ideas together and the line crosses
 sixty-five — but that's every truck and every patent, not one technology.
 Nothing since the railways has matched the railways. What we're watching is
-the closest run at it in a hundred and eighty years. That's a new instrument for this channel — no threshold on it yet.
+the closest run at it in a hundred and eighty years. The yardstick is a new instrument for this channel — no threshold on it yet.
 We're reading it together, one quarter at a time.
 
 Their sharpest line is the trigger. The mania never dies of old age — it
