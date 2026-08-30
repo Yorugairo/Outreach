@@ -27,8 +27,8 @@ W = [
 # ── P2 ENGINE — the steelman ───────────────────────────────────────────
 ( 78.5,  90.0, "world-steelman-build-v1",        (.05, -12,   8), [("silicon-value-software-bubble-s05-teacher-stamped",1,79.0,90.0)]),  # the price-deflation capital cycle
 ( 90.0, 102.8, "world-navvy-cutting-v1",         (.05,  14,  -8), [("ev-railway-index-v1",0,85.4,96.0),("ev-railway-gdp-tile-v1",0,96.5,102.5)]),
-(103.0, 115.0, "world-dotcom-server-room-v1",    (.04, -10,   6), [("ev-equip-ipp-gdp-v1",0,103.0,115.0)]),  # the internet's 7% of GDP
-(115.0, 128.8, "world-ledger-page-v1",           (.05,  10,  -6), [("ev-equip-ipp-gdp-v1",0,115.0,128.5)]),  # "I went and pulled a version myself"
+(103.0, 115.0, "world-dotcom-server-room-v1",    (.04, -10,   6), [("ev-capital-formation-v1",0,103.0,115.0)]),  # the internet's 7% of GDP
+(115.0, 128.8, "world-ledger-page-v1",           (.05,  10,  -6), [("ev-capital-formation-v1",0,115.0,128.5)]),  # "I went and pulled a version myself"
 (128.9, 140.0, "world-pressure-gauge-v1",        (.05, -14,   8), [("ev-tnx-two-eras-v3",0,129.0,140.0)]),   # the rate trigger, as an instrument
 (140.0, 147.6, "world-viaduct-train-rain-v1",    (.04,  12,   6), [("ev-tnx-two-eras-v3",0,140.0,147.5)]),
 (147.7, 166.8, "world-broadcast-set-v2",         (.04, -12,  -8), [("ev-tnx-two-eras-v3",0,148.0,157.0),("silicon-antidote-s13-teacher-stamped",0,157.5,166.7)]),  # their line on the record, then the racetrack

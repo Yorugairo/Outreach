@@ -32,11 +32,11 @@ by reading its lines; the gates below run on every build.
    1:30.0  SCENE  s11  world-navvy-cutting-v1  (13.0s, exit wipe)
    1:36.0  EXIT   ev-railway-index-v1  fades in place
    1:36.5  ENTER  ev-railway-gdp-tile-v1  slot 0 side r  holds 6.5s
-   1:43.0  ENTER  ev-equip-ipp-gdp-v1  slot 0 side l  holds 25.9s
+   1:43.0  ENTER  ev-capital-formation-v1  slot 0 side l  holds 25.9s
    1:43.0  EXIT   ev-railway-gdp-tile-v1  carried by the wipe front
    1:43.0  SCENE  s12  world-dotcom-server-room-v1  (12.0s, exit wipe)
    1:55.0  SCENE  s13  world-ledger-page-v1  (13.9s, exit wipe)
-   2:08.9  EXIT   ev-equip-ipp-gdp-v1  carried by the wipe front
+   2:08.9  EXIT   ev-capital-formation-v1  carried by the wipe front
    2:08.9  SCENE  s14  world-pressure-gauge-v1  (11.1s, exit wipe)
    2:09.0  ENTER  ev-tnx-two-eras-v3  slot 0 side r  holds 28.0s
    2:20.0  SCENE  s15  world-viaduct-train-rain-v1  (7.7s, exit wipe)

@@ -4,7 +4,7 @@
   "species": "chart",
   "at": 26.4,
   "end": 42.01,
-  "anchor": "One is the builders of AI \u2014 chips, racks, power.",
+  "anchor": "So here's the original.",
   "hold": 15.62,
   "title": "The Sharpest Chart on YouTube",
   "source": "Pairing after Bravos Research \u00b7 rebuilt + extended, Yahoo Finance",
@@ -76,28 +76,6 @@
     "label": "AI BUILD",
     "value": "~8%",
     "tag": "of US GDP"
-   }
-  ]
- },
- {
-  "asset": "ev-equip-ipp-gdp-v1",
-  "species": "chart",
-  "at": 102.6,
-  "end": 129.39,
-  "anchor": "So I went and pulled a version of that myself: equipme",
-  "hold": 26.78,
-  "title": "Equipment + Software / GDP",
-  "source": "BEA \u00b7 government statisticians",
-  "badges": [
-   {
-    "label": "2000 PEAK",
-    "value": "11.54%",
-    "tag": ""
-   },
-   {
-    "label": "TODAY",
-    "value": "11.51%",
-    "tag": "0.03pp short"
    }
   ]
  },
@@ -744,7 +722,9 @@
     "tag": "cost cuts passed on",
     "accent": "sunflower"
    }
-  ]
+  ],
+  "anchor": "It's a machine \u2014 the hype cycle \u2014 capital arriving faster than the value it's chasing.",
+  "anchor_kind": "contextual"
  },
  {
   "asset": "silicon-antidote-s14-teacher-stamped",
@@ -764,7 +744,9 @@
     "tag": "forward P/E",
     "accent": "teal"
    }
-  ]
+  ],
+  "anchor": "That's the job of the three questions.",
+  "anchor_kind": "claim"
  },
  {
   "asset": "silicon-value-software-bubble-s05-teacher-stamped",
@@ -784,7 +766,9 @@
     "tag": "bankruptcy",
     "accent": "coral"
    }
-  ]
+  ],
+  "anchor": "Every transformative technology overshoots.",
+  "anchor_kind": "contextual"
  },
  {
   "asset": "silicon-antidote-s13-teacher-stamped",
@@ -804,7 +788,9 @@
     "tag": "YoY growth",
     "accent": "teal"
    }
-  ]
+  ],
+  "anchor": "The cycle is real.",
+  "anchor_kind": "contextual"
  },
  {
   "asset": "silicon-reality-gap-s03-teacher-stamped",
@@ -824,7 +810,9 @@
     "tag": "compressed",
     "accent": "teal"
    }
-  ]
+  ],
+  "anchor": "The threshold is real.",
+  "anchor_kind": "contextual"
  },
  {
   "asset": "silicon-value-software-bubble-s03-teacher-stamped",
@@ -838,7 +826,9 @@
     "tag": "of global supply",
     "accent": "teal"
    }
-  ]
+  ],
+  "anchor": "But the real question is who's paying for the steel this time.",
+  "anchor_kind": "contextual"
  },
  {
   "asset": "silicon-value-software-bubble-s13-teacher-stamped",
@@ -858,14 +848,18 @@
     "tag": "actual earnings growth",
     "accent": "coral"
    }
-  ]
+  ],
+  "anchor": "Then the bills got bigger than the cash.",
+  "anchor_kind": "claim"
  },
  {
   "asset": "silicon-antidote-s04-teacher-stamped",
   "species": "deck",
   "title": "The Blind Spot",
   "source": "Silicon Antidote",
-  "badges": []
+  "badges": [],
+  "anchor": "That's the trough already doing its job \u2014 the tourists finding out, one budget at a time.",
+  "anchor_kind": "contextual"
  },
  {
   "asset": "silicon-reality-gap-s10-teacher-stamped",
@@ -885,7 +879,9 @@
     "tag": "YoY growth",
     "accent": "coral"
    }
-  ]
+  ],
+  "anchor": "So ask it the three questions.",
+  "anchor_kind": "contextual"
  },
  {
   "asset": "silicon-reality-gap-s12-teacher-stamped",
@@ -905,14 +901,18 @@
     "tag": "of the aggregate",
     "accent": "coral"
    }
-  ]
+  ],
+  "anchor": "The certificates wear nicer names now \u2014 target-date, \"the market\" \u2014 but paper is paper.",
+  "anchor_kind": "claim"
  },
  {
   "asset": "sovereign-memory-infrastructure-s05-teacher-stamped",
   "species": "deck",
   "title": "The Geographic Oligopoly",
   "source": "Sovereign Memory",
-  "badges": []
+  "badges": [],
+  "anchor": "I built a monitor for it: it reads what memory costs leaving Korea, by the kilo, straight off customs export data.",
+  "anchor_kind": "claim"
  },
  {
   "asset": "silicon-reality-gap-s13-teacher-stamped",
@@ -926,7 +926,9 @@
     "tag": "2x its historical average",
     "accent": "teal"
    }
-  ]
+  ],
+  "anchor": "More bullish: builders with sold-out order books are not a house of cards.",
+  "anchor_kind": "claim"
  },
  {
   "asset": "ev-test-scorecard-v1",
@@ -940,6 +942,27 @@
     "value": "30 seconds",
     "tag": "a holding",
     "accent": "sunflower"
+   }
+  ]
+ },
+ {
+  "asset": "ev-capital-formation-v1",
+  "species": "chart",
+  "anchor": "So I pulled their yardstick myself, and I ran it all the way back.",
+  "title": "The Railway Yardstick",
+  "source": "BEA via FRED - Campbell & Turner yardstick",
+  "badges": [
+   {
+    "label": "THE YARDSTICK",
+    "value": "28%",
+    "tag": "all-time high",
+    "accent": "coral"
+   },
+   {
+    "label": "DOT-COM HIGH",
+    "value": "23%",
+    "tag": "same line, 2000",
+    "accent": "ink"
    }
   ]
  }
