@@ -116,6 +116,45 @@ Round 4 checkers re-run after G7/G8: lint clean, audit 0 FAIL, preflight
 CLEAN. Round 5 re-read of the two fixes: zero findings. CONVERGED — this
 time with the enumeration on record.
 
+## Round 5 — the emitted screens, walked to verdict (SCRIPT-G-SCREENS.md)
+
+Under the enumeration mandate (STRENGTH-LOOP §8a, ruling E11), every
+listed candidate takes a verdict:
+
+**P5A — 41 phonetic-anchor candidates: 0 violations.** Breakdown:
+- LEGAL SITES (device permitted): [23] the promise t-run · [150–152] the
+  test's three questions (delivery) · [193] the tell's threshold t-run ·
+  [200] the ring close · [217] the CTA's promise echo.
+- CARRYOVER devices, E/F-approved: [26] the opponent's c-run · [64]
+  strange/strangeness/story · [82] trains/through/towns · [89] the
+  debt-beat b-run · [123] the pivot's paper/promises/priced/people ·
+  [143] different demand, different clock · [204] sell scarcity/sell.
+- INCIDENTAL (function words, proper nouns, no device): the remaining 28,
+  including [12] Meta/Microsoft/mega-caps (names are names).
+- EAR-WATCH: [40] the G3 rewrite carries five s-words (same/straight/
+  statisticians/software/share) — natural speech, no device intent,
+  F-precedent vocabulary; flagged for the scratch-VO listen.
+
+**P1J — 22 additive junctions: 0 fixes.** Every AND/Then carries a turn,
+a consequence, or a licensed enumeration stroke: temporal Thens ([33],
+[35], [88]); declared enumerations ([36] third stroke of
+railways→internet→AI, [70] the witness list, [207] the four-beat recap,
+[216] the triad, [219] the CTA list); turns wearing And ([17] "never
+drew", [101] "the borrowing you can SEE", [136] "skips a gear", [191]
+"don't take on trust"); escalations ([97], [141], [145] the anaphora
+pair). Carryover: [25] the opponent junction (logged round 4).
+
+**P6 — 30 deixis openers:** all subsumed by the X1 pair-walk (round 4);
+the two orphans found there (G7/G8) were the only failures.
+
+**P4C — cadence:** no paragraph flagged flat; the "30-word" outlier is a
+splitter artifact (close-quote before period: 18w + 9w, both in-band —
+enumerator patched); [24w] the CTA future-pacing line is one cadenced
+conditional breath — LICENSED as such.
+
+Screens file: SCRIPT-G-SCREENS.md (X1=83 · deixis=30 · junctions=22 ·
+anchors=41). This round's walk IS the convergence evidence.
+
 ## DECISIONS — none
 
 No oscillations. No sentence hit the two-rewrite budget.

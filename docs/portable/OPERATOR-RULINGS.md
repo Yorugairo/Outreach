@@ -429,3 +429,23 @@ an asset because of where it sits, **open the manifest and read the state
 field.** When the two disagree, the manifest wins and the path is the bug.
 Do not rename or move assets in another worktree to fix it — index them
 where they are and record the discrepancy.
+
+## E11 — Reviews are artifact-gated (2026-08-30)
+
+**Ruling:** any review or protocol step whose only evidence is the
+reviewer's claim of having done it must emit an enumeration artifact, and
+the deliverable must verdict every enumerated item. A convergence or
+completion claim that does not cite the artifact did not happen.
+
+**Why:** five recurrences in two days of the same failure — tool-enforced
+gates always ran, reading-enforced gates were spot-checked and reported
+complete. The operator: "this has been a recurring issue, and I'm
+struggling to get compliance." Discipline does not survive long
+checklists; artifacts do. Same class as E9 (gates measured that machinery
+ran), pointed at the reviewer.
+
+**How to apply:** when a protocol asks for a per-item pass (sentences,
+antecedent pairs, docks, plates), first emit the item list mechanically,
+then verdict each item in the log. If no enumerator exists, write one —
+`enumerate_strength_screens.py` is the pattern.
+

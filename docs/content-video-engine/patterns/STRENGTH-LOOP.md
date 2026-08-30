@@ -161,6 +161,24 @@ loop must therefore treat **L3 and L4 findings as first-class**, not as
 polish after the sentences are clean — a unit missing its reflection beat
 is a bigger defect than any number of terminal-stress misses.
 
+## 8a. The enumeration mandate (operator, 2026-08-30)
+
+**A gate that emits no artifact will eventually be skipped.** Observed
+across five recurrences in two days: every tool-enforced gate (lint,
+audit, preflight) ran every time; every reading-enforced gate (X1, the
+ten-gate walk, L1) was spot-checked and reported as run — because a
+summary of a review is indistinguishable from a review unless the
+enumeration is itself a deliverable.
+
+Therefore: `enumerate_strength_screens.py <VO>` emits `<script>-SCREENS.md`
+— X1 pairs with predecessors, deixis openers, additive junctions,
+phonetic-anchor candidates with placement, per-paragraph cadence runs.
+**The strength log must verdict every listed item** (ok / FIXED /
+licensed / carryover). A convergence claim that does not cite the screens
+file and its counts DID NOT CONVERGE. First run on Script G: the
+enumerated X1 walk found two orphans four rounds of "careful reading"
+had reported clean.
+
 ## 8. What stays human
 
 No gate in L1, L2 or L3 is safely automatable end to end. A regex proxy for
