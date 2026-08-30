@@ -36913,21 +36913,21 @@
     {
      "slide": "ev-railway-index-v1",
      "slot": 0,
-     "enter": 106.0,
-     "exit": 114.1,
+     "enter": 102.4,
+     "exit": 111.1,
      "badge_at": [
-      108.05,
-      109.35
+      104.45,
+      105.75
      ]
     },
     {
      "slide": "ev-railway-gdp-tile-v1",
      "slot": 0,
-     "enter": 111.0,
-     "exit": 114.1,
+     "enter": 111.1,
+     "exit": 120.1,
      "badge_at": [
-      113.05,
-      114.35
+      113.15,
+      114.45
      ]
     }
    ]
@@ -36943,23 +36943,12 @@
      "y": 6
     }
    },
-   "exit": "wipe_right",
+   "exit": "cut",
    "span": [
     114.2,
     120.1
    ],
-   "docks": [
-    {
-     "slide": "ev-capital-formation-v1",
-     "slot": 0,
-     "enter": 114.2,
-     "exit": 120.1,
-     "badge_at": [
-      116.25,
-      117.55
-     ]
-    }
-   ]
+   "docks": []
   },
   {
    "scene_id": "s13",
@@ -36981,11 +36970,11 @@
     {
      "slide": "ev-capital-formation-v1",
      "slot": 0,
-     "enter": 120.1,
-     "exit": 133.6,
+     "enter": 120.3,
+     "exit": 168.4,
      "badge_at": [
-      122.15,
-      123.45
+      122.35,
+      123.65
      ]
     }
    ]
@@ -37001,23 +36990,12 @@
      "y": 8
     }
    },
-   "exit": "wipe_right",
+   "exit": "cut",
    "span": [
     141.4,
     158.3
    ],
-   "docks": [
-    {
-     "slide": "ev-tnx-two-eras-v3",
-     "slot": 0,
-     "enter": 141.5,
-     "exit": 158.3,
-     "badge_at": [
-      143.55,
-      144.85
-     ]
-    }
-   ]
+   "docks": []
   },
   {
    "scene_id": "s15",
@@ -37039,11 +37017,11 @@
     {
      "slide": "ev-tnx-two-eras-v3",
      "slot": 0,
-     "enter": 158.3,
-     "exit": 170.5,
+     "enter": 168.5,
+     "exit": 187.6,
      "badge_at": [
-      160.35,
-      161.65
+      170.55,
+      171.85
      ]
     }
    ]
@@ -37059,23 +37037,12 @@
      "y": -8
     }
    },
-   "exit": "wipe_right",
+   "exit": "cut",
    "span": [
     170.1,
     202.0
    ],
-   "docks": [
-    {
-     "slide": "ev-tnx-two-eras-v3",
-     "slot": 0,
-     "enter": 170.5,
-     "exit": 179.5,
-     "badge_at": [
-      172.55,
-      173.85
-     ]
-    }
-   ]
+   "docks": []
   },
   {
    "scene_id": "s17",
@@ -37134,7 +37101,7 @@
      "slide": "ev-doc-karp",
      "slot": 0,
      "enter": 225.8,
-     "exit": 231.1,
+     "exit": 236.3,
      "badge_at": []
     }
    ]
@@ -37150,22 +37117,12 @@
      "y": 8
     }
    },
-   "exit": "wipe_right",
+   "exit": "cut",
    "span": [
     231.1,
     236.3
    ],
-   "docks": [
-    {
-     "slide": "ev-uber-adoption-v1",
-     "slot": 1,
-     "enter": 231.3,
-     "exit": 236.3,
-     "badge_at": [
-      233.35
-     ]
-    }
-   ]
+   "docks": []
   },
   {
    "scene_id": "s21",
@@ -37187,10 +37144,10 @@
     {
      "slide": "ev-uber-adoption-v1",
      "slot": 0,
-     "enter": 236.3,
-     "exit": 245.3,
+     "enter": 236.4,
+     "exit": 254.6,
      "badge_at": [
-      238.35
+      238.45
      ]
     }
    ]
@@ -37211,19 +37168,7 @@
     247.0,
     256.8
    ],
-   "docks": [
-    {
-     "slide": "ev-three-manias",
-     "slot": 0,
-     "enter": 247.1,
-     "exit": 257.0,
-     "badge_at": [
-      249.15,
-      250.45,
-      251.75
-     ]
-    }
-   ]
+   "docks": []
   },
   {
    "scene_id": "s23",
@@ -37246,7 +37191,7 @@
      "slide": "ev-three-manias",
      "slot": 0,
      "enter": 257.0,
-     "exit": 267.0,
+     "exit": 268.8,
      "badge_at": [
       259.05,
       260.35,
@@ -37330,7 +37275,7 @@
      "slide": "ev-debt-issuance-v2",
      "slot": 0,
      "enter": 294.3,
-     "exit": 300.0,
+     "exit": 306.1,
      "badge_at": [
       296.35,
       297.65,
@@ -37350,24 +37295,12 @@
      "y": 8
     }
    },
-   "exit": "wipe_right",
+   "exit": "cut",
    "span": [
     300.1,
     306.1
    ],
-   "docks": [
-    {
-     "slide": "ev-ig-credit-weighting-v1",
-     "slot": 0,
-     "enter": 300.2,
-     "exit": 306.1,
-     "badge_at": [
-      302.25,
-      303.55,
-      304.85
-     ]
-    }
-   ]
+   "docks": []
   },
   {
    "scene_id": "s29",
@@ -37389,12 +37322,12 @@
     {
      "slide": "ev-ig-credit-weighting-v1",
      "slot": 0,
-     "enter": 306.1,
-     "exit": 315.6,
+     "enter": 306.2,
+     "exit": 325.2,
      "badge_at": [
-      308.15,
-      309.45,
-      310.75
+      308.25,
+      309.55,
+      310.85
      ]
     }
    ]
@@ -37420,7 +37353,7 @@
      "slide": "ev-capex-consensus-v1",
      "slot": 0,
      "enter": 325.9,
-     "exit": 335.8,
+     "exit": 337.8,
      "badge_at": [
       327.95,
       329.25
@@ -37439,22 +37372,12 @@
      "y": 8
     }
    },
-   "exit": "wipe_right",
+   "exit": "cut",
    "span": [
     335.8,
     341.1
    ],
-   "docks": [
-    {
-     "slide": "ev-doc-leases",
-     "slot": 0,
-     "enter": 335.8,
-     "exit": 341.1,
-     "badge_at": [
-      337.85
-     ]
-    }
-   ]
+   "docks": []
   },
   {
    "scene_id": "s32",
@@ -37476,10 +37399,10 @@
     {
      "slide": "ev-doc-leases",
      "slot": 0,
-     "enter": 341.1,
-     "exit": 347.8,
+     "enter": 337.9,
+     "exit": 356.5,
      "badge_at": [
-      343.15
+      339.95
      ]
     }
    ]
@@ -37495,22 +37418,12 @@
      "y": 6
     }
    },
-   "exit": "wipe_right",
+   "exit": "cut",
    "span": [
     347.8,
     356.5
    ],
-   "docks": [
-    {
-     "slide": "ev-doc-macdonald",
-     "slot": 0,
-     "enter": 347.8,
-     "exit": 356.5,
-     "badge_at": [
-      349.85
-     ]
-    }
-   ]
+   "docks": []
   },
   {
    "scene_id": "s34",
@@ -37532,10 +37445,10 @@
     {
      "slide": "ev-doc-macdonald",
      "slot": 0,
-     "enter": 356.5,
-     "exit": 364.0,
+     "enter": 356.7,
+     "exit": 374.1,
      "badge_at": [
-      358.55
+      358.75
      ]
     }
    ]
@@ -37633,7 +37546,7 @@
      "slide": "ev-railway-mileage-v1",
      "slot": 0,
      "enter": 405.2,
-     "exit": 410.4,
+     "exit": 414.7,
      "badge_at": [
       407.25,
       408.55
@@ -37652,23 +37565,12 @@
      "y": -6
     }
    },
-   "exit": "wipe_right",
+   "exit": "cut",
    "span": [
     410.4,
     414.6
    ],
-   "docks": [
-    {
-     "slide": "silicon-antidote-s02-valuation-bubble-v1",
-     "slot": 0,
-     "enter": 410.4,
-     "exit": 414.6,
-     "badge_at": [
-      412.45,
-      413.75
-     ]
-    }
-   ]
+   "docks": []
   },
   {
    "scene_id": "s41",
@@ -37690,11 +37592,11 @@
     {
      "slide": "silicon-antidote-s02-valuation-bubble-v1",
      "slot": 0,
-     "enter": 414.6,
-     "exit": 423.6,
+     "enter": 414.8,
+     "exit": 432.6,
      "badge_at": [
-      416.65,
-      417.95
+      416.85,
+      418.15
      ]
     }
    ]
@@ -37720,7 +37622,7 @@
      "slide": "ev-smh-drawdown-v3",
      "slot": 0,
      "enter": 432.8,
-     "exit": 442.3,
+     "exit": 442.9,
      "badge_at": [
       434.85,
       436.15
@@ -37767,7 +37669,7 @@
      "slide": "ev-railway-index-v1",
      "slot": 0,
      "enter": 450.1,
-     "exit": 460.6,
+     "exit": 460.9,
      "badge_at": [
       452.15,
       453.45
@@ -37796,7 +37698,7 @@
      "slide": "ev-railway-mileage-v1",
      "slot": 0,
      "enter": 461.5,
-     "exit": 471.5,
+     "exit": 472.5,
      "badge_at": [
       463.55,
       464.85
@@ -37854,7 +37756,7 @@
      "slide": "sovereign-memory-infrastructure-s10-teacher-stamped",
      "slot": 0,
      "enter": 480.1,
-     "exit": 491.6,
+     "exit": 494.6,
      "badge_at": [
       482.15,
       483.45
@@ -37883,7 +37785,7 @@
      "slide": "ev-test-scorecard-v1",
      "slot": 0,
      "enter": 518.4,
-     "exit": 528.8,
+     "exit": 549.0,
      "badge_at": [
       520.45
      ]
@@ -37947,7 +37849,7 @@
      "slide": "ev-divergence-v1",
      "slot": 0,
      "enter": 549.6,
-     "exit": 558.6,
+     "exit": 566.9,
      "badge_at": [
       551.65,
       552.95,
@@ -38014,7 +37916,7 @@
      "slide": "ev-krx-memory-v3",
      "slot": 0,
      "enter": 570.9,
-     "exit": 583.9,
+     "exit": 584.9,
      "badge_at": [
       572.95,
       574.25
@@ -38136,7 +38038,7 @@
      "slide": "ev-dram-contract-v1",
      "slot": 0,
      "enter": 605.9,
-     "exit": 613.9,
+     "exit": 615.4,
      "badge_at": [
       607.95
      ]
@@ -38295,7 +38197,7 @@
      "slide": "ev-hbm-export-series",
      "slot": 0,
      "enter": 670.0,
-     "exit": 680.0,
+     "exit": 681.2,
      "badge_at": [
       672.05,
       673.35,

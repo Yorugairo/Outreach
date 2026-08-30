@@ -41,7 +41,7 @@
   "species": "chart",
   "at": 85.01,
   "end": 94.02,
-  "anchor": "Railways in the 1840s drew a quarter-billion pounds \u2014 ",
+  "anchor": "Railways in the 1840s drew a quarter-billion pounds",
   "hold": 9.01,
   "title": "The Railway Index",
   "source": "Campbell & Turner \u00b7 442 companies",
@@ -56,14 +56,15 @@
     "value": "\u221264.1%",
     "tag": "April 1850"
    }
-  ]
+  ],
+  "anchor_kind": "claim"
  },
  {
   "asset": "ev-railway-gdp-tile-v1",
   "species": "tile",
   "at": 93.3,
   "end": 103.43,
-  "anchor": "In two thousand, the internet crossed seven percent of",
+  "anchor": "In two thousand, the internet crossed seven percent of GDP.",
   "hold": 10.13,
   "title": "Capital Committed",
   "source": "share of GDP at the peak",
@@ -78,14 +79,15 @@
     "value": "~8%",
     "tag": "of US GDP"
    }
-  ]
+  ],
+  "anchor_kind": "claim"
  },
  {
   "asset": "ev-tnx-two-eras-v3",
   "species": "chart",
   "at": 130.07,
   "end": 148.2,
-  "anchor": "The mania never dies of old age \u2014 it dies when rates c",
+  "anchor": "Their sharpest line is the trigger.",
   "hold": 18.12,
   "title": "The Rate Trigger",
   "source": "two manias, one threshold",
@@ -102,7 +104,8 @@
     "tag": "Fed, this cycle",
     "accent": "sunflower"
    }
-  ]
+  ],
+  "anchor_kind": "claim"
  },
  {
   "asset": "ev-doc-karp",
@@ -273,7 +276,8 @@
     "value": "open",
     "tag": ""
    }
-  ]
+  ],
+  "anchor_kind": "claim"
  },
  {
   "asset": "ev-debt-issuance-v2",
@@ -356,7 +360,7 @@
   "species": "record",
   "at": 302.59,
   "end": 319.56,
-  "anchor": "Go into the filings and there's another eight hundred ",
+  "anchor": "And that's the borrowing you can see.",
   "hold": 16.97,
   "title": "Off-Balance-Sheet Leases",
   "source": "PIMCO, from 10-Qs",
@@ -366,7 +370,8 @@
     "value": "$822B",
     "tag": "not on a balance sheet"
    }
-  ]
+  ],
+  "anchor_kind": "claim"
  },
  {
   "asset": "ev-doc-macdonald",
@@ -383,7 +388,8 @@
     "value": "94%",
     "tag": "of operating cash flow"
    }
-  ]
+  ],
+  "anchor_kind": "claim"
  },
  {
   "asset": "ev-railway-mileage-v1",
@@ -662,7 +668,7 @@
   "species": "instrument",
   "at": 594.2,
   "end": 608.73,
-  "anchor": "I built a monitor for it: it reads what memory costs l",
+  "anchor": "The threshold is that number falling below its own trailing average",
   "hold": 14.54,
   "title": "Memory Export Instrument",
   "source": "Korea Customs HS 8542.32 \u00b7 value-weighted",

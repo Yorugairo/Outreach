@@ -130,6 +130,20 @@ def main() -> int:
         if gap < WASH_BRIDGE:
             fails.append(f"{mmss(washes[i][0])}: wash gap {gap:.2f}s "
                          f"should have merged")
+    # CLASH GATES (operator, 2026-08-30): two docks may never occupy the
+    # same slot at the same time, and never more than two on stage at once
+    for i, d in enumerate(docks):
+        for o in docks[i + 1:]:
+            if d["enter"] < o["exit"] and o["enter"] < d["exit"]:
+                if d["slot"] == o["slot"] and min(d["exit"], o["exit"]) - max(d["enter"], o["enter"]) > 0.05:
+                    fails.append(f"{mmss(max(d['enter'], o['enter']))}: SLOT CLASH - "
+                                 f"{d['slide']} and {o['slide']} both in slot {d['slot']}")
+    times = sorted([(d["enter"], 1) for d in docks] + [(d["exit"], -1) for d in docks])
+    live = 0
+    for tt, delta in times:
+        live += delta
+        if live > 2:
+            fails.append(f"{mmss(tt)}: {live} docks on stage at once - two is the ceiling")
     # a slide must never re-enter moments after exiting - coalesce or space it
     seen = {}
     for d in docks:
