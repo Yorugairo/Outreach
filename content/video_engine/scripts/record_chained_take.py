@@ -229,6 +229,46 @@ def main() -> int:
     return _report(fails, go, text, part1, part2, n1, n2)
 
 
+
+
+PROBE_SPEECH_S = 120.0    # doc 37 s13: 90s macro section + 30s of the next
+CHARS_PER_S = 16.05
+
+
+def run_probe(go: bool) -> int:
+    """Record the 2:00 probe at IDENTICAL settings/seed, so provider
+    behavior on the probe predicts the master. ~2k credits."""
+    import re as _re
+    text = VO_TEXT.read_text(encoding="utf-8")
+    est = int(PROBE_SPEECH_S * CHARS_PER_S)
+    cut = len(text)
+    for m in _re.finditer(r"[.!?][\"”]?(?=\s)", text):
+        if m.end() >= est:
+            cut = m.end(); break
+    body = text[:cut].rstrip()
+    n = len(body)
+    print(f"PROBE: {n:,} chars (~{n / CHARS_PER_S:.0f}s speech) - the full "
+          f"first macro section + the shift into the next")
+    if not go:
+        print("dry run - re-run with --probe --go (~{:,} credits)".format(n))
+        return 0
+    os.environ["ELEVENLABS_SEED"] = SEED
+    os.environ["ELEVENLABS_TIMEOUT_S"] = TIMEOUT_S
+    os.environ["ELEVENLABS_MAX_ATTEMPTS"] = MAX_ATTEMPTS
+    from content.video_engine.src.services.audio_synth import (
+        AudioSynthService, ElevenLabsConfig)
+    config = ElevenLabsConfig.from_env()
+    service = AudioSynthService(config=config)
+    r = service.synthesize_scene(
+        "probe", body, voice_id=config.voice_id, settings=SETTINGS,
+        audio_dir=AUDIO_DIR, cache_dir=CACHE_DIR, config=config)
+    print(f"  duration : {r.duration_s:.1f}s")
+    print(f"  audio    : {r.audio_path}")
+    print("Now: whisper-gate it (verify_take_whisper.py --probe), LISTEN "
+          "to it, and only then record the master.")
+    return 0
+
+
 def _report(fails, go, text=None, part1=None, part2=None, n1=0, n2=0) -> int:
     print()
     if fails:
@@ -290,4 +330,6 @@ def _report(fails, go, text=None, part1=None, part2=None, n1=0, n2=0) -> int:
 
 
 if __name__ == "__main__":
+    if "--probe" in sys.argv:
+        raise SystemExit(run_probe("--go" in sys.argv))
     raise SystemExit(main())

@@ -51,9 +51,45 @@ def transcribe(model, path: Path) -> list[str]:
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--model", default="base.en")
+    ap.add_argument("--probe", action="store_true",
+                    help="gate the 2:00 probe against the script's head")
     args = ap.parse_args()
 
     import json as _json
+    if args.probe:
+        audio = EP / "vo-f/audio/scene_probe.mp3"
+        cand = sorted((EP / "vo-f/audio").glob("*probe*.mp3"))
+        if cand:
+            audio = cand[0]
+        if not audio.exists():
+            print("no probe audio found - record with --probe --go first")
+            return 1
+        full = (EP / "SCRIPT-G-VO.txt").read_text(encoding="utf-8")
+        # the probe is a PREFIX of the script; diff only against a head
+        # slightly longer than the probe could cover
+        head = full[:int(len(full) * 0.35)]
+        probe_txt = EP / "vo-f/_probe_head.txt"
+        probe_txt.write_text(head, encoding="utf-8")
+        from faster_whisper import WhisperModel as _WM
+        model = _WM(args.model, device="cpu", compute_type="int8")
+        heard = transcribe(model, audio)
+        expect_all = norm_tokens(head)
+        expect = expect_all[:len(heard) + 30]
+        import difflib as _dl
+        sm = _dl.SequenceMatcher(a=expect, b=heard, autojunk=False)
+        errs = sum(max(i2 - i1, j2 - j1)
+                   for tag, i1, i2, j1, j2 in sm.get_opcodes()
+                   if tag != "equal" and not (tag == "delete" and i1 > len(heard)))
+        wer = errs / max(1, len(heard))
+        print(f"probe: {len(heard)} words heard - WER vs script head "
+              f"{wer:.1%} [{'OK' if wer <= WER_CAP + 0.02 else 'HIGH'}]")
+        for tag, i1, i2, j1, j2 in sm.get_opcodes():
+            if tag == "insert":
+                ins = heard[j1:j2]
+                if not all(x in NOISE for x in ins):
+                    print(f"  INSERTED: {' '.join(ins)!r}")
+        return 0 if wer <= WER_CAP + 0.02 else 1
+
     man = EP / "vo-f/chained-take.json"
     pairs = []
     if man.exists():

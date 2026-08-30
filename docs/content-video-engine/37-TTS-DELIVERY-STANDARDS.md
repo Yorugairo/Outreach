@@ -362,10 +362,20 @@ the join first" stands.
 ## 13. Probe-first recording (operator, 2026-08-30)
 
 Whisper cannot generate a read - it only transcribes. So "test before
-spending" takes this shape: record a SHORT PROBE (the first 60-90s,
-~1.5-2k credits) with the SAME voice, model, settings and seed as the
-master, run the whisper gate and the human listen on the probe, and only
-then record the full master. Provider artifacts are settings-dependent -
+spending" takes this shape: record THE 2:00 PROBE (~2k credits) with the
+SAME voice, model, settings and seed as the master, run the whisper gate
+and the human listen on it, and only then record the full master.
+
+**Why 2:00 exactly** (operator, 2026-08-30): the first macro section runs
+0:00-1:30. A 2:00 sample carries that full section with all its micro
+features PLUS the first 30 seconds of the next section - including its
+re-hook - so the probe monitors the SHIFT between sections, not just the
+section. A probe that ends at the boundary tests a section; a probe that
+crosses it tests the video.
+
+Tooling: `record_chained_take.py --probe [--go]` cuts at the first
+sentence end past the 2:00 speech estimate and records at master
+settings; `verify_take_whisper.py --probe` gates it. Provider artifacts are settings-dependent -
 only the provider reproduces its own failure modes, which is why a free
 local TTS cannot stand in as the probe. Standing order for every future
 master take.

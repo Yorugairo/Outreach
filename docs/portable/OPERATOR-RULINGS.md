@@ -462,9 +462,11 @@ retime silently reintroduces mid-topic exits.
 
 ## E13 — Probe first, then whisper-gate every take (2026-08-30)
 
-Whisper cannot generate a read; "test before spending" means a short
-same-settings ElevenLabs probe (~2k credits), whisper-gated and
-listened to, before the full master. Every recorded take then passes
+Whisper cannot generate a read; "test before spending" means the 2:00
+same-settings ElevenLabs probe (~2k credits), whisper-gated and listened
+to, before the full master. 2:00, not 90s: the full first macro section
+PLUS the next section's first 30s and its re-hook - the probe monitors
+the SHIFT, not just the section. Every recorded take then passes
 the whisper gate (blind transcription diffed against the script) before
 the timeline is built — provider alignment cannot hear vocalized
 artifacts; a transcriber that never saw the script can.
