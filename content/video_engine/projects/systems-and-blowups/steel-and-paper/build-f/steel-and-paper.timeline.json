@@ -28734,6 +28734,23 @@
     }
    ]
   },
+  "ev-test-scorecard-v1": {
+   "title": "THE TEST",
+   "source": "Money Physics - the three-question test",
+   "species": "data",
+   "document": {
+    "path": "Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-test-scorecard-v1.png",
+    "sha256": "590b2631a35f2d0f8b52191b57305672512eea773578a40b653f76d75d1a0789"
+   },
+   "badges": [
+    {
+     "label": "THE TEST",
+     "value": "30 seconds",
+     "tag": "a holding",
+     "accent": "sunflower"
+    }
+   ]
+  },
   "silicon-antidote-s14-diagnostic-matrix-v1": {
    "title": "The Divergence, Read Again",
    "source": "scarcity repriced vs question three",
@@ -31717,6 +31734,15 @@
      "badge_at": [
       468.05,
       469.35
+     ]
+    },
+    {
+     "slide": "ev-test-scorecard-v1",
+     "slot": 1,
+     "enter": 466.5,
+     "exit": 486.5,
+     "badge_at": [
+      468.55
      ]
     }
    ]

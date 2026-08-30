@@ -1,6 +1,6 @@
 # CHOREOGRAPHY STATEMENT - Steel and Paper (build F)
 
-75 scenes - 45 coalesced docks - 14 wash intervals covering 78% of 723s
+75 scenes - 47 coalesced docks - 14 wash intervals covering 78% of 723s
 
 Every entering and exiting element, in order. Verify any slot
 by reading its lines; the gates below run on every build.
@@ -128,12 +128,16 @@ by reading its lines; the gates below run on every build.
    7:23.0  SCENE  s47  hero-korea-italy-v1  (11.9s, exit cut)
    7:34.9  EXIT   sovereign-memory-infrastructure-s10-teacher-stamped  carried by the wipe front
    7:34.9  SCENE  s48  hero-barbell-v1  (11.1s, exit wipe)
-   7:35.0  ENTER  ev-mechanism-ladder  slot 0 side l  holds 31.9s
+   7:35.0  ENTER  ev-mechanism-ladder  slot 0 side pair  holds 21.0s
    7:46.0  SCENE  s49  beat-04-014-evidence-hierarchy-v1  (10.0s, exit wipe)
+   7:46.5  ENTER  ev-test-scorecard-v1  slot 1 side pair  holds 20.4s
+   7:56.0  ENTER  ev-mechanism-ladder  slot 0 side pair  holds 10.9s
+   7:56.0  EXIT   ev-mechanism-ladder  carried by the wipe front
    7:56.0  SCENE  s50  world-workbench-triad-v1  (10.9s, exit wipe)
    8:06.9  EXIT   ev-mechanism-ladder  carried by the wipe front
+   8:06.9  EXIT   ev-test-scorecard-v1  carried by the wipe front
    8:06.9  SCENE  s51  world-two-rooms-divergence-v1  (9.1s, exit wipe)
-   8:07.0  ENTER  silicon-antidote-s14-diagnostic-matrix-v1  slot 0 side r  holds 17.4s
+   8:07.0  ENTER  silicon-antidote-s14-diagnostic-matrix-v1  slot 0 side l  holds 17.4s
    8:16.0  SCENE  s52  beat-04-015-bottleneck-boom-v1  (8.4s, exit wipe)
    8:24.4  EXIT   silicon-antidote-s14-diagnostic-matrix-v1  carried by the wipe front
    8:24.4  SCENE  s53  world-seoul-fab-skyline-v1  (3.8s, exit cut)
@@ -143,54 +147,54 @@ by reading its lines; the gates below run on every build.
    8:33.6  EXIT   silicon-reality-gap-s10-teacher-stamped  fades in place
    8:43.3  EXIT   ev-krx-memory-v3  carried by the wipe front
    8:43.3  SCENE  s55  hero-hbm-bandwidth-v1  (9.7s, exit wipe)
-   8:43.5  ENTER  silicon-reality-gap-s07-hbm-stack-v1  slot 0 side l  holds 9.5s
-   8:53.0  ENTER  ev-hbm-wafer-ratio-v1  slot 0 side r  holds 7.0s
+   8:43.5  ENTER  silicon-reality-gap-s07-hbm-stack-v1  slot 0 side r  holds 9.5s
+   8:53.0  ENTER  ev-hbm-wafer-ratio-v1  slot 0 side l  holds 7.0s
    8:53.0  EXIT   silicon-reality-gap-s07-hbm-stack-v1  carried by the wipe front
    8:53.0  SCENE  s56  world-dram-terrain-v1  (11.3s, exit wipe)
-   9:00.0  ENTER  silicon-antidote-s09-capacity-penalty-v1  slot 0 side l  holds 4.3s
+   9:00.0  ENTER  silicon-antidote-s09-capacity-penalty-v1  slot 0 side r  holds 4.3s
    9:00.0  EXIT   ev-hbm-wafer-ratio-v1  fades in place
    9:04.3  EXIT   silicon-antidote-s09-capacity-penalty-v1  carried by the wipe front
    9:04.3  SCENE  s57  world-allocation-board  (9.7s, exit wipe)
-   9:04.5  ENTER  ev-dram-contract-v1  slot 0 side r  holds 17.5s
+   9:04.5  ENTER  ev-dram-contract-v1  slot 0 side l  holds 17.5s
    9:14.0  SCENE  s58  world-laptop-shelf  (8.0s, exit wipe)
-   9:22.0  ENTER  silicon-antidote-s02-memory-triopoly-v1  slot 0 side l  holds 5.9s
+   9:22.0  ENTER  silicon-antidote-s02-memory-triopoly-v1  slot 0 side r  holds 5.9s
    9:22.0  EXIT   ev-dram-contract-v1  carried by the wipe front
    9:22.0  SCENE  s59  world-steel-mill-night  (5.9s, exit wipe)
    9:27.9  EXIT   silicon-antidote-s02-memory-triopoly-v1  carried by the wipe front
    9:27.9  SCENE  s60  beat-04-013-guidance-not-gospel-v1  (9.2s, exit cut)
    9:28.6  LIGHT  wash falls
    9:37.1  SCENE  s61  beat-04-003-classic-cycle-counterargument-v1  (10.9s, exit wipe)
-   9:37.5  ENTER  silicon-reality-gap-s12-teacher-stamped  slot 0 side r  holds 10.5s
+   9:37.5  ENTER  silicon-reality-gap-s12-teacher-stamped  slot 0 side l  holds 10.5s
    9:37.5  LIGHT  wash rises (side of first card)
    9:48.0  EXIT   silicon-reality-gap-s12-teacher-stamped  carried by the wipe front
    9:48.0  SCENE  s62  world-korea-port-v1  (12.0s, exit wipe)
-   9:48.2  ENTER  sovereign-memory-infrastructure-s05-teacher-stamped  slot 0 side l  holds 7.0s
+   9:48.2  ENTER  sovereign-memory-infrastructure-s05-teacher-stamped  slot 0 side r  holds 7.0s
    9:55.2  EXIT   sovereign-memory-infrastructure-s05-teacher-stamped  fades in place
    9:55.9  LIGHT  wash falls
-  10:00.0  ENTER  ev-instrument-memory  slot 0 side r  holds 12.0s
+  10:00.0  ENTER  ev-instrument-memory  slot 0 side l  holds 12.0s
   10:00.0  LIGHT  wash rises (side of first card)
   10:00.0  SCENE  s63  world-memory-wafer-v1  (12.0s, exit wipe)
-  10:12.0  ENTER  ev-hbm-export-series  slot 0 side l  holds 10.0s
+  10:12.0  ENTER  ev-hbm-export-series  slot 0 side r  holds 10.0s
   10:12.0  EXIT   ev-instrument-memory  carried by the wipe front
   10:12.0  SCENE  s64  world-unwind-desk-v2  (16.3s, exit wipe)
   10:22.0  EXIT   ev-hbm-export-series  fades in place
   10:22.7  LIGHT  wash falls
   10:28.3  SCENE  s65  world-modern-certificate-v1  (5.3s, exit wipe)
-  10:28.5  ENTER  silicon-reality-gap-s13-teacher-stamped  slot 0 side r  holds 5.1s
+  10:28.5  ENTER  silicon-reality-gap-s13-teacher-stamped  slot 0 side l  holds 5.1s
   10:28.5  LIGHT  wash rises (side of first card)
   10:33.6  EXIT   silicon-reality-gap-s13-teacher-stamped  carried by the wipe front
   10:33.6  SCENE  s66  world-spike-certificate-ring-v2  (7.4s, exit cut)
   10:34.3  LIGHT  wash falls
   10:41.0  SCENE  s67  world-club-interior-papered  (8.0s, exit cut)
   10:49.0  SCENE  s68  beat-03-008-009-physical-capacity-gate-v1  (7.0s, exit wipe)
-  10:49.2  ENTER  silicon-antidote-s14-teacher-stamped  slot 0 side l  holds 6.8s
+  10:49.2  ENTER  silicon-antidote-s14-teacher-stamped  slot 0 side r  holds 6.8s
   10:49.2  LIGHT  wash rises (side of first card)
   10:56.0  EXIT   silicon-antidote-s14-teacher-stamped  carried by the wipe front
   10:56.0  SCENE  s69  world-scales-coin-paper-v1  (7.8s, exit cut)
   10:56.7  LIGHT  wash falls
   11:03.8  SCENE  s70  beat-05-002-strategic-chokepoints-v1  (11.2s, exit cut)
   11:15.0  SCENE  s71  world-listing-barge-v1  (16.3s, exit wipe)
-  11:16.9  ENTER  silicon-antidote-s14-diagnostic-matrix-v1  slot 0 side r  holds 14.4s
+  11:16.9  ENTER  silicon-antidote-s14-diagnostic-matrix-v1  slot 0 side l  holds 14.4s
   11:16.9  LIGHT  wash rises (side of first card)
   11:31.3  EXIT   silicon-antidote-s14-diagnostic-matrix-v1  carried by the wipe front
   11:31.3  SCENE  s72  beat-06-017-018-diworsification-v1  (6.4s, exit cut)
@@ -201,4 +205,4 @@ by reading its lines; the gates below run on every build.
 
 ## Gates
 
-  all slots clean
+  FAIL  7:56.0 ev-mechanism-ladder: re-enters 0.0s after exiting - coalesce it or space it

@@ -34,6 +34,21 @@ until it passes. No sentence ships on "good enough in context."
 | S9 | **Verb strength** | the verb is "is/are/has" plus an abstraction where an action verb exists ("is in decline" → "declines") — thesis-grade definitions are the one exemption |
 | S10 | **The never-list** | any banned construction of the injected voice profile: bait questions, fake curiosity, stock commentary lines, greeting/meta constructions |
 
+## The named-subject rule (operator, 2026-08-30)
+
+**Specify the instrument, person, place, or thing.** Where a sentence
+passes authority (an attribution), renders a judgment, or draws a
+comparison, its subject must be NAMED — never a pronoun, never a bare
+deictic. "Their second line" hands the chip industry to whoever the last
+sentence mentioned; "the chart's second line" hands it to the chart.
+"That's a new instrument" points at the nearest noun; "the yardstick is a
+new instrument" points at the yardstick. Naming prevents ambiguity AND is
+what lets authority transfer and comparisons land cleanly — a judgment on
+a pronoun is a judgment on a guess. This is the WRITE-side rule behind
+S2/S4 and the X1 screen: X1 catches the orphans; writing named subjects
+prevents them. Pronouns remain fine for continuation within a beat — the
+rule binds at authority, judgment, and comparison points.
+
 ## Licensed exceptions (must be claimed in the log, never assumed)
 
 - **Contraction runs** (the pivot, the final triad): fragments and

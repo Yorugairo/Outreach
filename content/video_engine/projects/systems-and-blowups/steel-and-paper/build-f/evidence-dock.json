@@ -927,5 +927,20 @@
     "accent": "teal"
    }
   ]
+ },
+ {
+  "asset": "ev-test-scorecard-v1",
+  "species": "data",
+  "anchor": "And you can check all three from your phone.",
+  "title": "THE TEST",
+  "source": "Money Physics - the three-question test",
+  "badges": [
+   {
+    "label": "THE TEST",
+    "value": "30 seconds",
+    "tag": "a holding",
+    "accent": "sunflower"
+   }
+  ]
  }
 ]

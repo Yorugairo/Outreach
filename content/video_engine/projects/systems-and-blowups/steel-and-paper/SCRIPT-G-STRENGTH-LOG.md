@@ -155,6 +155,20 @@ conditional breath — LICENSED as such.
 Screens file: SCRIPT-G-SCREENS.md (X1=83 · deixis=30 · junctions=22 ·
 anchors=41). This round's walk IS the convergence evidence.
 
+## Round 6 — the operability insert (operator: promise clarity)
+
+Five sentences added at the delivery beat making the test RUNNABLE
+(where-to-look per question), each written under the new named-subject
+rule and walked through all ten gates: named instruments throughout
+("your phone", "the order book", "operating cash flow, and the share
+count", "the company", "the product"); the one conditional runs 19w as a
+single cadenced breath. Screens re-emitted (X1=84, junctions=23,
+anchors=43): the new candidates verdict ok — the And-junction is a turn
+(questions → procedure), the two new anchor candidates are incidental
+and sit at the delivery/payoff site where the device is legal anyway.
+Checkers clean; pivot 52.1% → 50.6% (inside the pin); preflight CLEAN.
+ev-test-scorecard-v1 docks at the block's first sentence.
+
 ## DECISIONS — none
 
 No oscillations. No sentence hit the two-rewrite budget.

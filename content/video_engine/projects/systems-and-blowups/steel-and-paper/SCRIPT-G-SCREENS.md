@@ -1,11 +1,11 @@
 # STRENGTH SCREENS — SCRIPT-G-VO.txt
 
-226 sentences. Every candidate below requires a
+231 sentences. Every candidate below requires a
 per-item verdict in the strength log (ok / FIXED / licensed /
 carryover). A convergence claim without this file walked is
 invalid — the enumeration IS the review.
 
-## X1 — antecedent pairs (83)
+## X1 — antecedent pairs (84)
 
 - [2] `…An iron spike.` → **It ruined almost everyone who touched it.**
 - [3] `…It ruined almost everyone who touched it.` → **That was 1845.**
@@ -68,28 +68,29 @@ invalid — the enumeration IS the review.
 - [147] `…he builders runs deeper than the paper holders can see.` → **And the paper stacked on top runs taller than the builders admit.**
 - [149] `…Both are true at once.` → **That's the whole point.**
 - [150] `…That's the whole point.` → **Now the test — the one from the top.**
-- [163] `…The divergence isn't a house of cards.` → **It's the test, administered in public.**
-- [166] `…SK hynix.` → **They make the stacked memory the AI racks need.**
-- [168] `…st year the stock is up more than five hundred percent.` → **Not fifty.**
-- [171] `…ng in this story is a bubble, it should be that number.` → **And the scarcity underneath it isn't a mood — it's physics.**
-- [173] `…High-bandwidth memory stacks the dies vertically.` → **So a gigabyte of it eats about three times the wafer capacity of the ordinary ki**
-- [175] `…ed takes silicon away from everything else on the line.` → **That's not a forecast.**
-- [176] `…That's not a forecast.` → **That's why the memory in a new laptop costs what it does this year.**
-- [177] `…he memory in a new laptop costs what it does this year.` → **So ask it the three questions.**
-- [179] `…Scarce?` → **Their own earnings call says capacity is essentially sold out for the year — you**
-- [181] `…Cash or paper?` → **They're selling product, not issuing stock to survive.**
-- [185] `…Scarce, cash, used.` → **It passes.**
-- [187] `…The most vertical line on the board is steel.` → **That's the uncomfortable part of this test — it doesn't care what you were hopin**
-- [193] `…emory — the RAM inside every one of these data centers.` → **And I don't take that one on trust.**
-- [197] `… stacked memory the AI racks actually need up fourteen.` → **That's the July release; customs runs about a month behind.**
-- [199] `…ldout holds, the scarcity story is wrong — and so am I.` → **That week, I de-risk the builders on camera.**
-- [201] `…s now — target-date, "the market" — but paper is paper.` → **So — the spike, one more time.**
-- [209] `… fifth of your index rides on one bet you never placed.` → **And the one number that would prove me wrong is moving the other way.**
-- [210] `…mber that would prove me wrong is moving the other way.` → **Which is why I'll go further than Bravos — in both directions.**
-- [212] `…ers with sold-out order books are not a house of cards.` → **They're the steel — and I own them on purpose, positions disclosed every week.**
-- [215] `…Nobody holding it thinks they're speculating.` → **That's what a top actually looks like: not euphoria — accidental concentration, **
-- [218] `…The paper gets believed.` → **And the difference gets discovered all at once.**
-- [221] `… at five and a half, mine on memory — that video posts.` → **And the yardstick reading lands every quarter.**
+- [155] `…night, would the asset still get used tomorrow morning?` → **And you can check all three from your phone.**
+- [168] `…The divergence isn't a house of cards.` → **It's the test, administered in public.**
+- [171] `…SK hynix.` → **They make the stacked memory the AI racks need.**
+- [173] `…st year the stock is up more than five hundred percent.` → **Not fifty.**
+- [176] `…ng in this story is a bubble, it should be that number.` → **And the scarcity underneath it isn't a mood — it's physics.**
+- [178] `…High-bandwidth memory stacks the dies vertically.` → **So a gigabyte of it eats about three times the wafer capacity of the ordinary ki**
+- [180] `…ed takes silicon away from everything else on the line.` → **That's not a forecast.**
+- [181] `…That's not a forecast.` → **That's why the memory in a new laptop costs what it does this year.**
+- [182] `…he memory in a new laptop costs what it does this year.` → **So ask it the three questions.**
+- [184] `…Scarce?` → **Their own earnings call says capacity is essentially sold out for the year — you**
+- [186] `…Cash or paper?` → **They're selling product, not issuing stock to survive.**
+- [190] `…Scarce, cash, used.` → **It passes.**
+- [192] `…The most vertical line on the board is steel.` → **That's the uncomfortable part of this test — it doesn't care what you were hopin**
+- [198] `…emory — the RAM inside every one of these data centers.` → **And I don't take that one on trust.**
+- [202] `… stacked memory the AI racks actually need up fourteen.` → **That's the July release; customs runs about a month behind.**
+- [204] `…ldout holds, the scarcity story is wrong — and so am I.` → **That week, I de-risk the builders on camera.**
+- [206] `…s now — target-date, "the market" — but paper is paper.` → **So — the spike, one more time.**
+- [214] `… fifth of your index rides on one bet you never placed.` → **And the one number that would prove me wrong is moving the other way.**
+- [215] `…mber that would prove me wrong is moving the other way.` → **Which is why I'll go further than Bravos — in both directions.**
+- [217] `…ers with sold-out order books are not a house of cards.` → **They're the steel — and I own them on purpose, positions disclosed every week.**
+- [220] `…Nobody holding it thinks they're speculating.` → **That's what a top actually looks like: not euphoria — accidental concentration, **
+- [223] `…The paper gets believed.` → **And the difference gets discovered all at once.**
+- [226] `… at five and a half, mine on memory — that video posts.` → **And the yardstick reading lands every quarter.**
 
 ## P6 — deixis openers (30)
 
@@ -115,16 +116,16 @@ invalid — the enumeration IS the review.
 - [140] That's why the return took two decades.
 - [142] It depreciates in about five years.
 - [149] That's the whole point.
-- [163] It's the test, administered in public.
-- [175] That's not a forecast.
-- [176] That's why the memory in a new laptop costs what it does this year.
-- [185] It passes.
-- [187] That's the uncomfortable part of this test — it doesn't care what you were hoping to concl
-- [197] That's the July release; customs runs about a month behind.
-- [199] That week, I de-risk the builders on camera.
-- [215] That's what a top actually looks like: not euphoria — accidental concentration, sold as sa
+- [168] It's the test, administered in public.
+- [180] That's not a forecast.
+- [181] That's why the memory in a new laptop costs what it does this year.
+- [190] It passes.
+- [192] That's the uncomfortable part of this test — it doesn't care what you were hoping to concl
+- [202] That's the July release; customs runs about a month behind.
+- [204] That week, I de-risk the builders on camera.
+- [220] That's what a top actually looks like: not euphoria — accidental concentration, sold as sa
 
-## P1J — additive junctions, AND-THEN risk (22)
+## P1J — additive junctions, AND-THEN risk (23)
 
 - [17] `…left both behind: up a hundred and five.` → And one layer their chart never drew.
 - [25] `…run it yourself: thirty seconds a stock.` → And the opponent here isn't Bravos, and it isn't Nvidia.
@@ -143,13 +144,14 @@ invalid — the enumeration IS the review.
 - [138] `…ed, and the paper still lost two-thirds.` → And this is where the railway map, good as it is, skips a gear.
 - [143] `…It depreciates in about five years.` → And the builders are already sold out into next year — the orders are in, the sl
 - [147] `…s deeper than the paper holders can see.` → And the paper stacked on top runs taller than the builders admit.
-- [171] `…y is a bubble, it should be that number.` → And the scarcity underneath it isn't a mood — it's physics.
-- [193] `… inside every one of these data centers.` → And I don't take that one on trust.
-- [209] `…index rides on one bet you never placed.` → And the one number that would prove me wrong is moving the other way.
-- [218] `…The paper gets believed.` → And the difference gets discovered all at once.
-- [221] `…half, mine on memory — that video posts.` → And the yardstick reading lands every quarter.
+- [155] `…e asset still get used tomorrow morning?` → And you can check all three from your phone.
+- [176] `…y is a bubble, it should be that number.` → And the scarcity underneath it isn't a mood — it's physics.
+- [198] `… inside every one of these data centers.` → And I don't take that one on trust.
+- [214] `…index rides on one bet you never placed.` → And the one number that would prove me wrong is moving the other way.
+- [223] `…The paper gets believed.` → And the difference gets discovered all at once.
+- [226] `…half, mine on memory — that video posts.` → And the yardstick reading lands every quarter.
 
-## P5A — phonetic-anchor candidates (40) — legal ONLY at promise / payoff / tell
+## P5A — phonetic-anchor candidates (43) — legal ONLY at promise / payoff / tell
 
 - [10] (c×) It comes from Bravos Research — credit where due, the sharpest macro chart on YouTube.
 - [12] (m×) The mega-caps — Meta, Apple, Microsoft, Amazon, Alphabet.
@@ -178,19 +180,22 @@ invalid — the enumeration IS the review.
 - [152] (s×) One: is what it sells scarce — sold out, priced up, fought over — or abundant the moment
 - [153] (f×) Two: does it fund its growth from cash it earns, or from paper it issues?
 - [154] (t×) Three: if the hype died tonight, would the asset still get used tomorrow morning?
-- [174] (e×) Every accelerator they feed takes silicon away from everything else on the line.
-- [179] (c×) Their own earnings call says capacity is essentially sold out for the year — you cannot 
-- [181] (s×) They're selling product, not issuing stock to survive.
-- [187] (t×) That's the uncomfortable part of this test — it doesn't care what you were hoping to con
-- [193] (t×) And I don't take that one on trust.
-- [195] (t×) The threshold is that number falling below its own trailing average, two quarters runnin
-- [202] (c×) In 1850 it was still carrying trains across England, while the certificates that finance
-- [206] (s×) The builders sell scarcity, and they sell it for cash.
-- [211] (b×) More bullish: builders with sold-out order books are not a house of cards.
-- [213] (t×) More worried: the index they sold you as the safe version of this trade is the certifica
-- [219] (t×) You now have the test — three questions, thirty seconds, any holding.
-- [220] (t×) Subscribe for the watch: the week either tripwire moves — theirs at five and a half, min
-- [223] (t×) Do that, and the next time a copy of this chart crosses your feed, you won't need anyone
+- [156] (s×) Scarcity shows up in the order book — sold out, waitlists, prices rising.
+- [157] (c×) The cash answer is two lines on any finance site: operating cash flow, and the share cou
+- [158] (c×) If cash flow is positive and the share count isn't growing, the company isn't selling pa
+- [179] (e×) Every accelerator they feed takes silicon away from everything else on the line.
+- [184] (c×) Their own earnings call says capacity is essentially sold out for the year — you cannot 
+- [186] (s×) They're selling product, not issuing stock to survive.
+- [192] (t×) That's the uncomfortable part of this test — it doesn't care what you were hoping to con
+- [198] (t×) And I don't take that one on trust.
+- [200] (t×) The threshold is that number falling below its own trailing average, two quarters runnin
+- [207] (c×) In 1850 it was still carrying trains across England, while the certificates that finance
+- [211] (s×) The builders sell scarcity, and they sell it for cash.
+- [216] (b×) More bullish: builders with sold-out order books are not a house of cards.
+- [218] (t×) More worried: the index they sold you as the safe version of this trade is the certifica
+- [224] (t×) You now have the test — three questions, thirty seconds, any holding.
+- [225] (t×) Subscribe for the watch: the week either tripwire moves — theirs at five and a half, min
+- [228] (t×) Do that, and the next time a copy of this chart crosses your feed, you won't need anyone
 
 ## P4C — cadence runs (words per sentence, per paragraph)
 
@@ -206,7 +211,7 @@ invalid — the enumeration IS the review.
 - ¶10: [8, 21, 2, 8, 12, 14, 8, 4, 10, 4, 5, 11]
 - ¶11: [18, 6, 6, 8, 6, 20, 11, 12, 4, 17, 15, 3, 20, 10, 6, 6, 3, 7, 19]
 - ¶12: [14, 11, 7, 4, 6, 18, 11, 4, 13, 12, 5, 4]
-- ¶13: [8, 8, 18, 15, 14, 5, 5, 4, 5, 10, 8, 20, 7, 6]
+- ¶13: [8, 8, 18, 15, 14, 9, 12, 17, 18, 15, 5, 5, 4, 5, 10, 8, 20, 7, 6]
 - ¶14: [15, 2, 9, 13, 2, 2, 13, 10, 7, 16, 13, 4, 14, 6, 1, 20, 3, 8, 3, 11, 3, 2, 9, 16, 17]
 - ¶15: [15, 5, 12, 13, 8, 21, 19, 22, 10, 18, 9, 14]
 - ¶16: [6, 20, 3, 8, 4, 10, 11, 12, 14, 11, 14, 13, 17, 6, 14]

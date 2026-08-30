@@ -1,6 +1,6 @@
 # Steel and Paper — Script G ledger
 
-**Script G: 12,875 chars · ~13m 08s · pivot 52.1% · both checkers clean
+**Script G: 13,268 chars · ~13m 34s speech (+15s edit pauses ≈ 13m 49s) · pivot 50.6% · both checkers clean
 (1 WARN: the promise detector is digit-blind; "thirty seconds a stock" is
 calculable in words — same class E carried).**
 
@@ -105,6 +105,16 @@ cut ≈ 13m23s. The P5 savor beats the roster requires live THERE, as do
 the P4 ring-recontextualization breath and the triad's final-stroke lead.
 The retime pass inserts them at anchor word boundaries and shifts the
 word timeline before docks retime.
+
+## The test made runnable (operator, 2026-08-30)
+
+"Thirty seconds a stock" is now a procedure, not rhetoric: the delivery
+beat says WHERE to look per question (the order book · operating cash
+flow + share count on any finance site · the product with the hype gone),
+written under the NAMED-SUBJECT RULE, and ev-test-scorecard-v1 puts the
+same procedure on screen as a screenshot-able card (docked at "And you
+can check all three from your phone", paired with the ladder). Badge "30
+seconds / a holding" verbatim on the card.
 
 ## Figures — freeze rule
 

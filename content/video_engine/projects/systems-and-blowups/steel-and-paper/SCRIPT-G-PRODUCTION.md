@@ -190,7 +190,7 @@ Now the test — the one from the top. Take any holding and ask it three
 questions. One: is what it sells scarce — sold out, priced up, fought over
 — or abundant the moment belief fades? Two: does it fund its growth from
 cash it earns, or from paper it issues? Three: if the hype died tonight,
-would the asset still get used tomorrow morning? Steel answers
+would the asset still get used tomorrow morning? And you can check all three from your phone. Scarcity shows up in the order book — sold out, waitlists, prices rising. The cash answer is two lines on any finance site: operating cash flow, and the share count. If cash flow is positive and the share count isn't growing, the company isn't selling paper to survive. Question three you already know how to answer — picture the product with the hype gone. Steel answers
 scarce, cash, used. Paper answers abundant, issued, believed. Thirty
 seconds a holding. Run your top five tonight.
 

@@ -359,6 +359,41 @@ def mega_vs_spy():
     save(fig, "ev-mega-vs-spy-v3")
 
 
+def test_scorecard():
+    """THE TEST as a document - operator (2026-08-30): "I don't think we
+    ever give enough clarity" around thirty-seconds-a-stock. The narration
+    now says WHERE to look; this card is the same procedure as an object
+    the viewer can screenshot. Data-document species: structured columns,
+    not prose on a rectangle."""
+    fig = frame(640)
+    fig.text(0.055, 0.87, "THE TEST — 30 seconds a holding",
+             color=INK_1, fontsize=T_TITLE, fontweight=600, fontfamily=FAM)
+    cols = [(0.055, "Ask"), (0.34, "Where to look"),
+            (0.62, "Steel answers"), (0.82, "Paper answers")]
+    for x, h in cols:
+        fig.text(x, 0.72, h, color=INK_MUTE, fontsize=T_TICK,
+                 fontfamily=FAM, fontweight=600)
+    rows = [
+        ("1  Scarce?", "the order book", "sold out, prices up", "abundant on belief"),
+        ("2  Cash or paper?", "cash flow + share count", "earns cash, count flat", "issues paper to run"),
+        ("3  Used tomorrow?", "the product, hype gone", "still gets used", "needs the story"),
+    ]
+    colors = [INK_1, INK_2, TEAL, CRIMSON]
+    for i, row in enumerate(rows):
+        y = 0.585 - i * 0.155
+        for (x, _), cell, c in zip(cols, row, colors):
+            fig.text(x, y, cell, color=c, fontsize=T_LEG, fontfamily=FAM,
+                     fontweight=600 if c is INK_1 else 400)
+        fig.add_artist(plt.Line2D([0.055, 0.945], [y - 0.062, y - 0.062],
+                                  color=GRID, lw=1.5, transform=fig.transFigure))
+    fig.text(0.055, 0.115, "Steel: scarce, cash, used.   Paper: abundant, issued, believed.",
+             color=INK_1, fontsize=T_LEG, fontweight=600, fontfamily=FAM)
+    fig.text(0.045, 0.045, "Money Physics - the three-question test",
+             color=INK_MUTE, fontsize=T_SOURCE, fontfamily=FAM)
+    save(fig, "ev-test-scorecard-v1")
+
+
+
 def divergence():
     """Bravos' actual chart (operator, 2026-08-29): MAMAA index vs a
     semiconductor index. We recreate their pairing faithfully and ADD the
