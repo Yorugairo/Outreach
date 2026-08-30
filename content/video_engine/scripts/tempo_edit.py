@@ -143,7 +143,7 @@ def build(words, plan, audio):
             if a - 0.05 <= t <= b + 0.05:
                 att_spans.append((a, b))
     att_spans.append((0.0, HOOK_HOLD_S))
-    RAMP_S = 0.7
+    RAMP_S = 1.6   # halved slope (operator: stabilize the field edges)
 
     def rate_curve(t: float) -> float:
         # distance to the nearest attention span
@@ -192,28 +192,33 @@ def build(words, plan, audio):
         ops.append((t, t, s, "ins"))
     ops.sort(key=lambda o: (o[0], o[3]))
 
-    # emission: quantize the curve on a 50ms grid; group cells while the
-    # rate stays within 0.02 of the group mean - adjacent segments then
-    # differ by <=0.02x and the crossfades are inaudible anywhere
-    GRID = 0.05
+    # emission v4 (operator: "black hole dynamics" at field edges):
+    # WORDS ARE NEVER SPLIT and cuts only happen inside real silence
+    # gaps. Consecutive words merge into one chunk until the curve
+    # drifts >0.015x AND a gap >=30ms offers a clean boundary - so every
+    # stretched piece is a healthy 0.5-2s and every transient sits far
+    # from any joint. Adjacent chunks differ by <=~0.015x.
+    chunks = []          # (start, end, rate) covering the whole take
+    cs = 0.0
+    cr = rate_curve(words[0]["start"])
+    for x, y in zip(words, words[1:]):
+        gap = y["start"] - x["end"]
+        r = rate_curve((y["start"] + y["end"]) / 2)
+        if gap >= 0.03 and abs(r - cr) > 0.015:
+            mid = (x["end"] + y["start"]) / 2
+            chunks.append((cs, mid, cr))
+            cs, cr = mid, r
+    chunks.append((cs, len(audio) / SR, cr))
 
     def emit(a, b):
         if b - a < 0.03:
             return
-        t0 = a
-        r0 = rate_curve(a + GRID / 2)
-        t = a + GRID
-        while t < b + GRID / 2:
-            r = rate_curve(min(t + GRID / 2, b))
-            if abs(r - r0) > 0.02 or t >= b:
-                s1 = min(t, b)
-                seg = audio[int(t0 * SR):int(s1 * SR)]
-                pieces.append(stretch(seg, r0))
-                t0, r0 = s1, r
-            t += GRID
-        if t0 < b:
-            seg = audio[int(t0 * SR):int(b * SR)]
-            pieces.append(stretch(seg, r0))
+        for c0, c1, r in chunks:
+            s0, s1 = max(a, c0), min(b, c1)
+            if s1 - s0 < 0.02:
+                continue
+            seg = audio[int(s0 * SR):int(s1 * SR)]
+            pieces.append(stretch(seg, r))
 
     pieces = []
     prev = 0.0
