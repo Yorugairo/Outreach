@@ -236,3 +236,26 @@ over a dark ground.
 5. Audio duration matches the timeline runtime.
 6. **Open it and look.** A build that passes every check and renders black
    has passed nothing.
+
+
+## The recorded-take chain (2026-08-30 — first full run)
+
+Order: whisper gate → defended join → timeline → edit pauses → retime →
+**topic-exit audit** → captions → scene build → choreography gates →
+filmstrips. Tools for every stage live in `content/video_engine/scripts/`
+(see CAPABILITIES.md). Three lessons the run burned in:
+
+1. **A retime is half a migration.** Pinning docks to anchors moves
+   enters correctly but carries OLD durations; and where the script
+   reordered beats, whole plate stretches compress. Always follow with
+   the enumerated topic-exit audit (E12) and expect close-region
+   re-authoring when the script's structure moved.
+2. **Anchors are enter-moments.** After re-staging, re-sync each dock's
+   anchor to the sentence it now enters on — a stale anchor poisons the
+   NEXT retime (one bad pin squeezed six close plates into 9 seconds).
+3. **Gates only see what they model.** The clash class (same-slot
+   overlap, >2 concurrent) was invisible until modeled; it caught a real
+   overlap the same minute it was added. When the operator's eye finds a
+   defect class, the fix ships WITH its gate.
+
+**Audience units:** on-card figures in USD at a sourced spot rate (E14).
