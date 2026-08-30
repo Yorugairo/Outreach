@@ -26304,7 +26304,12 @@
     "title": "The 10-year Treasury yield, two eras",
     "sub": "Same scale, side by side - never two y-axes on one plot",
     "src": "Yahoo Finance, ^TNX",
+    "ymin": 0,
     "ymax": 7.2,
+    "hline": {
+     "y": 6.5,
+     "label": "Fed funds peak, 2000 - 6.5%"
+    },
     "panels": [
      {
       "sub": "Dot-com era - 1998-2001",

@@ -492,7 +492,11 @@ def tnx_two_eras():
         "title": "The 10-year Treasury yield, two eras",
         "sub": "Same scale, side by side - never two y-axes on one plot",
         "src": "Yahoo Finance, ^TNX",
-        "ymax": 7.2,
+        "ymin": 0, "ymax": 7.2,
+        # the trigger threshold ON the document: the dot-com era crosses it,
+        # the AI era rides below it - the narration's argument, rendered.
+        # Also makes the badge numeral appear in the document (ruling B3).
+        "hline": {"y": 6.5, "label": "Fed funds peak, 2000 - 6.5%"},
         "panels": [
             {"sub": "Dot-com era - 1998-2001",
              "series": [{"label": f"{a.iloc[-1]:.1f}%", "color": "crimson",
