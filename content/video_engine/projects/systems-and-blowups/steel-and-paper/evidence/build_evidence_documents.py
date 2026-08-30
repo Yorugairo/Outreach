@@ -508,8 +508,8 @@ def divergence():
             "series": [
                 # THEIR two lines draw first; semis and memory hold back
                 # 2.5s and erupt through them - the added layer PERFORMED
-                {"label": f"+{mem.iloc[-1]-100:,.0f}%", "color": "crimson", "delay": 2.5, "pts": dec(mem)},
-                {"label": f"+{sox.iloc[-1]-100:,.0f}%", "color": "teal", "delay": 2.5, "pts": dec(sox)},
+                {"label": f"+{mem.iloc[-1]-100:,.0f}%", "color": "crimson", "delay": 9.5, "pts": dec(mem)},
+                {"label": f"+{sox.iloc[-1]-100:,.0f}%", "color": "teal", "delay": 3.2, "pts": dec(sox)},
                 {"label": f"+{mamaa.iloc[-1]-100:,.0f}%", "color": "cobalt", "pts": dec(mamaa)},
                 {"label": f"+{spy.iloc[-1]-100:,.0f}%", "color": "deemph", "pts": dec(spy)},
             ]}), encoding="utf-8")
@@ -802,6 +802,64 @@ def hynix_steel():
     print("     + ev-hynix-steel-v1.series.json")
 
 
+def bravos_original():
+    """The ANSWER-FORMAT credit beat, made visual (operator, 2026-08-30):
+    before our four-line chart appears, the viewer sees the chart being
+    answered - Bravos' own pairing, their two lines, their linear scale.
+    Ours takes over at s05 when the narration starts adding layers."""
+    import pandas as pd
+    import json as _json
+    from pathlib import Path as _Path
+    start = (pd.Timestamp.today() - pd.DateOffset(months=12)).strftime("%Y-%m-%d")
+    def basket(ticks):
+        ser = [_px(t, start) for t in ticks]
+        idx = ser[0].index
+        for x in ser[1:]: idx = idx.intersection(x.index)
+        return sum(x.reindex(idx).ffill() / x.reindex(idx).ffill().iloc[0]
+                   for x in ser) / len(ser) * 100
+    mamaa = basket(["META", "AAPL", "MSFT", "AMZN", "GOOGL"])
+    sox = basket(["^SOX"]).reindex(mamaa.index).ffill()
+    m_pct, s_pct = mamaa.iloc[-1] - 100, sox.iloc[-1] - 100
+    print(f"     VERBATIM  MAMAA +{m_pct:,.0f}%  semis +{s_pct:,.0f}%")
+    fig = frame(); ax = fig.add_axes([0.075, 0.155, 0.845, 0.645]); chrome(ax)
+    x = _yr(mamaa.index)
+    ax.plot(x, mamaa.values, color=COBALT, lw=5, solid_capstyle="round")
+    ax.plot(x, sox.values, color=TEAL, lw=5, solid_capstyle="round")
+    _endlabel(ax, x[-1], mamaa.iloc[-1], f"+{m_pct:,.0f}%", COBALT)
+    _endlabel(ax, x[-1], sox.iloc[-1], f"+{s_pct:,.0f}%", TEAL)
+    _legend(ax, [("MAMAA - META / AAPL / MSFT / AMZN / GOOGL", COBALT),
+                 ("Semiconductors - PHLX SOX", TEAL)])
+    mt = pd.date_range(mamaa.index[0].normalize() + pd.offsets.MonthBegin(1),
+                       mamaa.index[-1], freq="2MS")
+    ax.set_xticks([t.year + (t.dayofyear - 1) / 365.25 for t in mt])
+    ax.set_xticklabels([t.strftime("%b '%y") for t in mt], fontfamily=FAM)
+    ax.set_xlim(x[0], x[-1] + 0.055)
+    titles(fig, "The original - two lines",
+           "Mega-caps vs semiconductors, one year. Their pairing, "
+           "their scale - redrawn with credit")
+    source(fig, f"Pairing after Bravos Research - data Yahoo Finance, "
+                f"{start} to {mamaa.index[-1].date().isoformat()}")
+    save(fig, "ev-bravos-original-v1")
+    def dec(sr, xs, n=140):
+        step = max(1, len(sr) // n)
+        return [[round(xv, 4), round(float(v), 2)]
+                for xv, v in list(zip(xs, sr.values))[::step]]
+    (_Path(__file__).parent / "objects/ev-bravos-original-v1.series.json"
+     ).write_text(_json.dumps({
+        "title": "The original - two lines",
+        "sub": "Mega-caps vs semiconductors, one year. Their pairing, "
+               "their scale - redrawn with credit",
+        "src": "Pairing after Bravos Research - data Yahoo Finance",
+        "series": [
+            {"label": f"+{m_pct:,.0f}%", "name": "MAMAA",
+             "color": "cobalt", "pts": dec(mamaa, x)},
+            {"label": f"+{s_pct:,.0f}%", "name": "SEMICONDUCTORS",
+             "color": "teal", "pts": dec(sox, x)},
+        ],
+    }), encoding="utf-8")
+    print("     + ev-bravos-original-v1.series.json")
+
+
 if __name__ == "__main__":
     print("building evidence documents ->", OUT)
     for fn in (equip_ipp_gdp, capex_trajectory, dram_prices,
@@ -809,7 +867,7 @@ if __name__ == "__main__":
                krx_memory, mega_vs_spy, smh_drawdown, tnx_two_eras,
                ig_credit_weighting, hbm_wafer_ratio,
                test_scorecard, index_concentration, divergence,
-               capital_formation_share, hynix_steel):
+               capital_formation_share, hynix_steel, bravos_original):
         try:
             fn()
         except Exception as e:

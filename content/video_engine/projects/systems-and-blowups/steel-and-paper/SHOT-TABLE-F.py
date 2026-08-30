@@ -16,10 +16,10 @@ range (1.00 -> 1.04 over the shot), x/y in px.
 W = [
 # ── P1 OPEN ────────────────────────────────────────────────────────────
 (  0.0,  11.4, "world-spike-desk-v1",            (.05,  10,  -6), []),                       # the spike itself, macro. The ring token plants here.
-( 11.5,  19.8, "world-adviser-signature-v1",         (.04, -14,   6), [("ev-divergence-v1",0,14.1,21.3)]),  # 'The chart is right' SUMMONS the chart
-( 19.9,  30.0, "world-share-office-queue-v1",  (.05,  16,  -8), [("ev-divergence-v1",0,21.3,30.0)]),      # foundry vs empty boardroom = the two lines
-( 30.0,  47.6, "world-gpu-crate-dock-v1",          (.04, -12,   8), [("ev-divergence-v1",0,30.0,40.0)]),      # builders up 300%, hyperscalers flat
-( 47.6,  54.7, "world-statement-kitchen",        (.06,   8, -10), []),  # "owns a piece of you" - a PUNCH plate, bare by rule: a 3.4s dock on a 4.2s beat is a drive-by (cadence: under ~8s, one piece or none); the balloon slide keeps its real hold at 6:15
+( 11.5,  19.8, "world-adviser-signature-v1",         (.04, -14,   6), [("ev-bravos-original-v1",0,14.1,47.6)]),  # THEIR chart, their two lines - held through the credit and both reads (topic-governed exit)
+( 19.9,  30.0, "world-share-office-queue-v1",  (.05,  16,  -8), []),      # the original persists overhead
+( 30.0,  47.6, "world-gpu-crate-dock-v1",          (.04, -12,   8), []),      # "so here's the original" - credit where due
+( 47.6,  54.7, "world-statement-kitchen",        (.06,   8, -10), [("ev-divergence-v1",0,47.6,68.5)]),  # OUR chart takes over: semis erupt at "second line", memory at "one layer never drew"; exits when the topic does ("wrong address")
 ( 54.7,  68.9, "world-three-notch-slate-v1",     (.05, -10,   6), []),  # the test named, as an object
 ( 68.9,  84.2, "world-signature-nib-v2",         (.04,  12,   8), []),  # 'thirty seconds a stock'
 ( 84.4,  91.2, "world-hype-machine-v2",          (.05, -16,  -6), [("silicon-reality-gap-s04-teacher-stamped",0,85.0,91.2)]),  # the cyclical trauma: returns -> capital -> oversupply

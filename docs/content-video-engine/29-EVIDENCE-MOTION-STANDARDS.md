@@ -1195,3 +1195,25 @@ is the same failure as graphic cobalt on the pills.
 Mirrored in the same commit: player template (`.ct/.cs/.csr` + `TPAL`),
 evidence builder constants (`INK_1/INK_2/INK_MUTE`), pill label + ink
 accent. DEEMPH `#6b6f78` survives as a *graphic* de-emphasis color only.
+
+### 9.20 Topic-governed exits, and the two-chart open (operator, 2026-08-30)
+
+**Evidence leaves when its TOPIC ends, never because a plate ended.**
+"We shouldn't be removing evidence layers from the screen just for the
+sake of removing evidence layers." A dock's exit is authored against the
+narration - the last sentence that reads, cites, or leans on the card -
+and holds across as many plates as that topic runs (the §9.15
+persistence machinery carries it through the wipes). Plate boundaries
+are for the WORLD layer; the evidence layer answers to the argument.
+The old reflex - exit at the plate edge, re-enter on the next - is the
+clipping look with extra steps.
+
+**The answer-format credit beat is visual, not just spoken.** For an
+answer video, the audience sees the chart being answered BEFORE ours:
+ev-bravos-original-v1 (their two lines, their scale, credited in the
+title block) holds from the hook's "fourth version of the same chart"
+through both of their reads; our four-line version takes the same slot
+at the moment narration starts adding layers. Draw delays are tuned to
+the reads - semis erupt at "the chart's second line," memory at "one
+layer their chart never drew." The handoff lands on a plate boundary so
+the wipe carries the swap.

@@ -4,7 +4,7 @@
   "species": "chart",
   "at": 26.4,
   "end": 42.01,
-  "anchor": "So here's the original.",
+  "anchor": "The giants are the market now.",
   "hold": 15.62,
   "title": "The Sharpest Chart on YouTube",
   "source": "Pairing after Bravos Research \u00b7 rebuilt + extended, Yahoo Finance",
@@ -33,7 +33,8 @@
     "tag": "our layer",
     "accent": "coral"
    }
-  ]
+  ],
+  "anchor_kind": "claim"
  },
  {
   "asset": "ev-railway-index-v1",
@@ -1010,5 +1011,27 @@
   ],
   "title": "Sold out, and paid for",
   "source": "Yahoo Finance - cross-checked vs SK hynix DART filings"
+ },
+ {
+  "asset": "ev-bravos-original-v1",
+  "species": "data",
+  "anchor": "Somewhere today, a guy on his lunch break is watching his fourth version of the same chart.",
+  "anchor_kind": "claim",
+  "title": "The original - two lines",
+  "source": "Pairing after Bravos Research - data Yahoo Finance",
+  "badges": [
+   {
+    "label": "MAMAA",
+    "value": "+21%",
+    "tag": "the mega-caps",
+    "accent": "cobalt"
+   },
+   {
+    "label": "SEMICONDUCTORS",
+    "value": "+105%",
+    "tag": "their second line",
+    "accent": "teal"
+   }
+  ]
  }
 ]
