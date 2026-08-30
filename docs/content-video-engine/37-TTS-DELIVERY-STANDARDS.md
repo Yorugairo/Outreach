@@ -489,11 +489,11 @@ The probe's word timings turned the ear notes into a grammar. Four
 patterns, each now a named pause class in the edit-pause plan:
 
 1. **Aphorism framing** - a coined fragment ("Copies of copies, louder
-   every pass") takes a FULL beat before it: the previous line lands,
-   the aphorism gets its own air.
-2. **Citation weight** - naming a source takes a full beat after the
-   name ("It comes from Bravos Research - [beat] credit where due"):
-   tension AND honor in the same silence.
+   every pass") takes a HALF beat before it (operator correction: a
+   full beat over-emphasizes; the fragment carries its own weight).
+2. **Citation weight** - naming a source takes a HALF beat after the
+   name ("It comes from Bravos Research - [half] credit where due").
+   The FULL beat is reserved for reveals and settles, never emphasis.
 3. **Attention redirect** - after introducing an object, a half-beat
    before the feature callout ("...sharpest macro chart on YouTube.
    [half] Two lines.").
