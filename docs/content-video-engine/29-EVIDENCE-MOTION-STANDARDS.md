@@ -987,6 +987,27 @@ rulings. Where these conflict with anything above, THESE win.
    whisper. If removing the scrim would not hurt legibility, it is still
    too strong.
 
+### 9.18 Strong match or nothing (operator, 2026-08-30)
+
+*"Let's not carry weak evidence for the sake of carrying evidence anymore
+— if we don't have strong matches drop the evidence and we can either
+create proper evidence or leave the plate blank if that's the proper
+move."*
+
+- **A dock exists to prove a spoken claim.** `anchor_kind: claim` is the
+  standard; `contextual` — a slide that merely shares a theme with the
+  beat — is no longer a reason to dock. A bare plate beats a weak dock.
+- **A slide that carries complexities the narration never discusses is a
+  weak match by definition**, however handsome: the ladder ("the froth
+  cracks before the giants do"), the racetrack, the CXMT battlefield and
+  the paper-bubble mechanics all belong to a memory/Korea episode, not
+  this one. Fifteen deck/matrix docks were cut from Steel and Paper under
+  this ruling; the episode's own instruments (THE TEST scorecard, the
+  yardstick) took the primary slots their placement had been demoting.
+- **Applied test:** if the viewer paused on the card, would the narration
+  they just heard explain what they're reading? If not, drop it — and
+  either build the proper evidence or let the plate carry the beat.
+
 ### 9.7 Host-in-world plates approved (operator, 2026-08-25)
 
 The host-in-world experiment passed: generated host shots inside world

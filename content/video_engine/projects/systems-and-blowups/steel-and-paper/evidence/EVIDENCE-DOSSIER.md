@@ -279,3 +279,23 @@ The narration's own anchors fail against this data:
 → Narration must move to the 12-month window: builders "up six hundred
 percent in a year" and hyperscalers "up fifteen — a rounding error next to
 that" or name MSFT/META specifically. **Do not re-record the old line.**
+
+---
+
+## I. Evidence trim under strong-match-or-nothing (2026-08-30)
+
+Fifteen docks cut (ladder ×4, diagnostic matrix ×5, racetrack, battlefield,
+paper-bubble, blind-spot, hourglass, Moore's-deaths, valuation-check);
+THE TEST scorecard is now PRIMARY and solo at its delivery and returns as
+the P6 recap callback; vsb-s13 (76% margin) moved to the one line it
+proves ("They're selling product, not issuing stock to survive"), pairing
+with the DRAM-contract card. 31 docked assets, 31 verbatim anchors.
+
+**Candidates for PROPER evidence to build later:**
+- The pivot's own number — "AI builders are now twenty percent of the S&P
+  five hundred. Historically, two to four." — currently carries no chart.
+  A concentration series (top-sector share of index weight, historical)
+  is the missing document, buildable from index data.
+- The retired memory-complexity slides (ladder, racetrack, battlefield)
+  are strong openers for the standing memory/Korea episode.
+
