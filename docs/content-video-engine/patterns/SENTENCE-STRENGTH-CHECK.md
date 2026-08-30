@@ -72,3 +72,12 @@ that), and it does not smooth voice into blandness — a sentence that
 passes all ten gates in the injected voice is the goal, not a neutral
 sentence. When a gate and the voice profile genuinely collide, the voice
 profile wins and the exception is logged.
+
+
+## Subject-first restatement (operator, 2026-08-30 — ruling E16)
+
+The named-subject rule extends to FRAGMENTS: a licensed fragment or
+aphorism carries its noun unless the subject is immediately adjacent
+(the sentence directly before). "The chart is copies of copies, louder
+every pass" — the restated noun costs one word and saves the listener a
+lookup they may fail. Check at S2 during the X1 antecedent walk.

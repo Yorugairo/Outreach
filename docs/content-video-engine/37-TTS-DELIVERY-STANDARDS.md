@@ -513,3 +513,47 @@ runs move.
 renders as break + provider settle (measured 1.49s for a 1.2s tag).
 The authored intent is one beat, so the compressor caps tag sites at
 1.0s combined.
+
+
+## 20. THE TEMPO FIELD - one choreography across script AND video (operator-approved 2026-08-30)
+
+The realization (obvious only in hindsight, and only reachable through
+the micro/macro structure research in FULL-VIDEO-MAP): **the literary
+graph, the pause plan, and the animation reveals are ONE choreography.**
+The edit-pause anchors are the same sentences the docks and badges bind
+to - so the same graph that stages the evidence now drives the voice's
+accelerator. No TTS provider can do this; they don't know where the
+argument is going. Our pipeline exists to know.
+
+**The model:** tempo is a continuous field r(t) over the take.
+Attention spans (sentences carrying pause anchors + the hook open)
+impose speed limits of 1.0x; between them the field eases to
+RUN_RATE 1.10x through ~1.6s cosine ramps. The voice decelerates INTO
+every reveal, holds through it, re-accelerates out - and the reveal is
+where the chart erupts. YouTube pacing: runs connect, slowdowns call
+attention.
+
+**Artifact physics, learned by ear (four operator-caught classes):**
+1. Segment-concat mp3 cuts -> clicks. Render on PCM, crossfade joints.
+2. Cuts at word edges -> clipped onsets ("Mm-Meta"): provider word
+   timestamps are +/-30-60ms loose. ALL cuts and insertions snap to
+   silence-gap midpoints.
+3. Independently stretched micro-chunks -> echo overlay ("Vo-voice")
+   and warble ("if you"): WSOLA duplicates edge context and suffocates
+   under ~150ms. WORDS ARE NEVER SPLIT; chunks merge words until the
+   curve drifts >0.015x AND a gap >=30ms offers a clean boundary.
+4. Steep field edges -> "black hole dynamics" (operator's phrase - an
+   object pulled by two fields). Ramp slope halved; adjacent chunks
+   differ <=0.015x, below the perceptual step threshold.
+
+**Tool:** `tempo_edit.py` - one pass does dead-space caps, tag-site cap,
+tighten runs, pause insertion, and the tempo field on decoded PCM.
+Proven on the probe (v4, operator: "This is it"). Chain promotion
+requires the warped-timeline emission (each chunk's word times scale by
+its rate; pauses shift as in insert_edit_pauses) so docks, captions and
+choreography ride the authored clock. Until then compress_dead_space +
+insert_edit_pauses remain the fallback path.
+
+**Ladder of authority for delivery:** the take is raw material; the
+edit authors silence (s19) AND tempo (s20); text changes alone force
+re-recording.

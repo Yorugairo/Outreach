@@ -188,3 +188,18 @@ through the ten gates: possessive-on-name keeps terminal stress; no
 length trips; X1 antecedents strengthen by construction. Checkers:
 lint clean, audit 0 FAIL. Downstream anchors updated (tnx, edit-pause
 plan). REQUIRES RE-RECORD - probe-first per doc 37 §13.
+
+
+## Round 8 — subject-first restatement (operator, 2026-08-30)
+
+**G9** · "Copies of copies, louder every pass." → "The chart is copies
+of copies, louder every pass." Operator rule: never ask the viewer to
+hold context when the noun can be restated cheaply. The fragment kept
+its license through three reviews because the WRITER held the
+antecedent; the listener two sentences downstream may not. All ten
+gates re-walked: S2 gains an explicit subject, terminal stress on
+"pass" holds, S5 at 9 words. Other licensed fragments enumerated and
+kept: "Different voice, same two lines…" (subject one sentence back),
+"Half — one technology." / "Two lines." / "Five hundred." (subject
+adjacent). The rule extends the named-subject gate: fragments carry
+their noun unless the subject is IMMEDIATELY adjacent.

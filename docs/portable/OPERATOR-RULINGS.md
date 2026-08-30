@@ -476,3 +476,19 @@ artifacts; a transcriber that never saw the script can.
 Never reuse a non-specific card where a specific one can be built (the
 hynix price-vs-profit chart replaced a second appearance of the
 concentration card). All on-card figures in USD at a sourced spot rate.
+
+
+## E15 — One choreography: the tempo field (2026-08-30)
+
+Script devices, edit pauses, and animation reveals are one graph. The
+voice decelerates into the same anchors the docks bind to (doc 37 §20).
+Delivery is authored in the edit on PCM: words never split, boundaries
+only in silence gaps, adjacent rate steps ≤0.015x. "This is it."
+
+## E16 — Subject-first restatement (2026-08-30)
+
+"We shouldn't ask viewers to hold context in their heads when we can
+cheaply remind them." A fragment carries its noun unless the subject is
+IMMEDIATELY adjacent: "The chart is copies of copies," never bare
+"Copies of copies." Extends the named-subject gate to fragments and
+aphorisms; enforced in the strength loop's X1 walk.

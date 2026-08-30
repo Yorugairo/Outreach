@@ -16,7 +16,7 @@ playing. Copies multiply across the frame.]**
 
 Somewhere today, a guy on his lunch break is watching his fourth version of
 the same chart. Different voice, same two lines, same warning: AI is 1845
-again. Copies of copies, louder every pass. Almost nobody names the people
+again. The chart is copies of copies, louder every pass. Almost nobody names the people
 who built it, and not one of them checked the original's math. If you hold an index fund, it's already holding
 you.
 
