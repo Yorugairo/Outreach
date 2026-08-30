@@ -103,13 +103,25 @@ def build(words, plan, audio):
         sents.append((cur[0]["start"], cur[-1]["end"]))
     sent_ends = {round(b, 3) for _, b in sents}
 
-    # attention marks: every pause anchor + every break-tag site
+    # attention marks: every pause anchor + every break-tag site.
+    # THE INSERTION POINT IS NEVER A WORD EDGE (operator caught the "Mm"
+    # pip before "Meta"): provider timestamps are +/-30-60ms loose, so a
+    # cut at word.start can strand the onset. Every insertion snaps to
+    # the MIDPOINT of its natural silence gap.
+    def gap_mid(t, is_after):
+        for x, y in zip(words, words[1:]):
+            if is_after and abs(x["end"] - t) < 0.02:
+                return (x["end"] + y["start"]) / 2
+            if not is_after and abs(y["start"] - t) < 0.02:
+                return (x["end"] + y["start"]) / 2
+        return t
     att = []
     for p in plan["pauses"]:
+        is_after = "after" in p and bool(p.get("after"))
         anc = p.get("after") or p.get("before")
-        t = find(anc, "after" in p and bool(p.get("after")))
+        t = find(anc, is_after)
         if t is not None:
-            att.append((t, p["s"]))
+            att.append((gap_mid(t, is_after), p["s"]))
     marks = [t for t, _ in att]
     tag_sites = []
     vo = (EP / "SCRIPT-G-VO.txt").read_text(encoding="utf-8")
