@@ -64,6 +64,19 @@ could never build a run. Three rules, enforced by the recorder's preflight:
    that is the voice, keep it — which is exactly why the tag budget stays
    small.
 
+**The practice target is ≈3 tags PER GENERATION (2026-08-30, after a failed
+take).** The provider's own guidance ("How can I add pauses?") warns that
+excessive SSML breaks cause speed-ups and artifacts, and its working figure
+is about three per generation. §8.3's 12-per-master is a hard CEILING for
+pathological cases — reading it as a budget is how yesterday's take went
+out with 18 tags and came back with artifacts. Each chained part is one
+generation: **target 3 tags per part.** With the payload reflowed, the
+movement paragraphs carry the section settles and the em-dash register
+carries the micro-pauses; a tag survives only where an EXACT duration is
+essential mid-paragraph (the hook settle, an instrument reveal, the tell's
+threshold pair, P4's required pre-key, the X5 split seam). Any other
+silence belongs to the editor's timeline, where it costs nothing.
+
 **Ration rule (official warning):** excessive break tags cause speed-ups and
 audio artifacts. Cap **≈3 break tags per generated segment**; micro-pauses
 come from punctuation — a dash or em-dash reads as a small pause (our

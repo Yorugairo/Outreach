@@ -91,7 +91,7 @@ Every item below is pinned in the dossier (rows H1–H3) or a standing gate.
 
 - Doc 37 + paragraph rules: the VO payload is REFLOWED (~8–10 paragraphs
   per part, breaks only at section seams), no tag stacked on a paragraph
-  seam, tags ≤6/part; recorder preflight now FAILS on violations.
+  seam, tags ≈3/part (provider best practice); recorder preflight now FAILS on violations.
 - All duty-roster systems (kit): ring (the spike), rehooks, foreshadows
   3→1, LIFO loops, head-fake into pivot, tell (instrument: memory export
   monitor), CTA windows, tricolon terminal.

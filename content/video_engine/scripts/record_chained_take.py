@@ -28,7 +28,7 @@ from pathlib import Path
 REPO = Path(r"C:\Users\Snipe\Downloads\Outreach Program\.claude\worktrees\sweet-villani-1c3a16")
 ENV_FILE = Path(r"C:\Users\Snipe\Downloads\Outreach Program\docs\local.env")
 EP = REPO / "content/video_engine/projects/systems-and-blowups/steel-and-paper"
-VO_TEXT = EP / "SCRIPT-F-VO.txt"
+VO_TEXT = EP / "SCRIPT-G-VO.txt"
 OUT = EP / "vo-f"
 AUDIO_DIR = OUT / "audio"
 CACHE_DIR = OUT / "cache"
@@ -37,7 +37,7 @@ CACHE_DIR = OUT / "cache"
 # [post-key] settle AND it opens a new unit with an imperative, so any
 # prosody shift across the join reads as a deliberate gear change rather
 # than a seam. See the ledger for the alternatives considered.
-SPLIT_ANCHOR = "Run it on the most extreme number in this whole trade"
+SPLIT_ANCHOR = "And that's the part everyone repeating this chart missed"
 
 SEED = "4242"
 TIMEOUT_S = "900"
@@ -135,9 +135,15 @@ def main() -> int:
     if dense:
         fails.append(f"{paras} paragraphs - the payload was not reflowed; "
                      f"paragraph breaks survive only at section seams")
-    stacked = re.findall(
-        r"`?\[(?:pre|post)-key\]`?[ \t]*\n[ \t]*\n"
-        r"|\n[ \t]*\n[ \t]*`?\[(?:pre|post)-key\]`?", text)
+    # Checked PER PART PAYLOAD, not on the joined text: the split-seam
+    # [post-key] that X5 requires at part one's end sits against the part
+    # boundary's blank line, but that break never renders as silence - the
+    # join replaces it. Only stacks INSIDE a part's flow double-pause.
+    stacked = []
+    for _part in (part1, part2):
+        stacked += re.findall(
+            r"`?\[(?:pre|post)-key\]`?[ \t]*\n[ \t]*\n"
+            r"|\n[ \t]*\n[ \t]*`?\[(?:pre|post)-key\]`?", _part.strip())
     print(f"  [{'FAIL' if stacked else 'ok'}] stacked pauses (tag on a paragraph seam): {len(stacked)}")
     if stacked:
         fails.append(f"{len(stacked)} break tags stacked on paragraph breaks - "

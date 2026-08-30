@@ -1,0 +1,293 @@
+# STEEL AND PAPER — Script G (production)
+
+Base: Script F. Changes per REWRITE-ORDER-G. Pause marks per doc 37.
+Figures freeze to the final chart refetch before recording.
+
+---
+
+**[P1 · the spike on the desk, macro — ring plant. Counterpoint: calm claim
+over an anomalous object.]**
+
+The safest thing you own looks like this. An iron spike. It ruined almost
+everyone who touched it. `[post-key]` That was 1845.
+
+**[the lunch-break viewer — a phone, the fourth copy of the same chart
+playing. Copies multiply across the frame.]**
+
+Somewhere today, a guy on his lunch break is watching his fourth version of
+the same chart. Different voice, same two lines, same warning: AI is 1845
+again. Copies of copies, louder every pass. Almost nobody names the people
+who built it, and not one of them checked the original's math. If you hold an index fund, it's already holding
+you.
+
+**[the original chart draws — THEIR two lines first, flat; the eruption
+arrives on "checked". Mini-payoff: the real thing, credited.]**
+
+So here's the original. It comes from Bravos Research — credit where due,
+the sharpest macro chart on YouTube. Two lines. The mega-caps — Meta,
+Apple, Microsoft, Amazon, Alphabet. In a year, up twenty-one percent. We
+drew the index underneath them — same line. The giants are the market now.
+Their second line is the chip industry, and it left both behind: up a
+hundred and five. And one layer their chart never drew. Memory
+— the builders inside the builders. Up six hundred and thirteen percent. The chart is right. The warning points at the wrong address.
+
+So here's what you're getting: not a rebuttal, not a victory lap, not a
+panic. One test — three questions — that sorts every holding
+you own into steel or paper. By the end, you'll run it
+yourself: thirty seconds a stock.
+
+And the opponent here isn't Bravos, and it isn't Nvidia. It's a machine —
+the hype cycle — capital arriving faster than the value it's chasing.
+
+**[P2 · the hype machine plate. A3+F2 merged construction.]**
+
+But a machine you can test. That's the job of the three questions. They
+have to survive their argument before they survive mine.
+
+Start with their case at full strength — the version they would defend.
+Every transformative technology overshoots. Railways in the 1840s drew a
+quarter-billion pounds — more than a trillion in today's money. Then the
+stocks crashed by nearly two-thirds. In two thousand, the internet crossed
+seven percent of GDP. Then the tower came down. And by Bravos' math, AI
+spending just crossed eight.
+
+**[THE RAILWAY YARDSTICK draws — the central self-pulled evidence.]**
+
+So I pulled their yardstick myself, and I ran it all the way back. In the
+1840s, railways took roughly half of everything Britain invested. Half —
+one technology. My version runs the same measure on America, straight from the
+government's own statisticians. It counts computing and software as a
+share of every private investment dollar. At the dot-com peak, that share hit
+twenty-three cents. Today it's twenty-eight — the most it has ever been.
+`[post-key]` Count all equipment and ideas together and the line crosses
+sixty-five — but that's every truck and every patent, not one technology.
+Nothing since the railways has matched the railways. What we're watching is
+the closest run at it in a hundred and eighty years. That's a new instrument for this channel — no threshold on it yet.
+We're reading it together, one quarter at a time.
+
+Their sharpest line is the trigger. The mania never dies of old age — it
+dies when rates cross back above where the borrowing began. Bank of England
+above six percent: railways rolled over. The Fed at six and a half in two
+thousand: the internet trade rolled over. So their tripwire for this cycle:
+the Fed back above five and a half.
+
+Put my agreement on the record. The cycle is real. The threshold is real.
+And here's the most honest sentence a macro channel has said all year.
+"Don't try to call the top."
+
+I used to risk-score portfolios for a bank. Here's the thing about risk
+charts: they rarely fail by lying. They fail by pointing.
+
+So the obvious move looks like this: take profits on the AI trade.
+Chipmakers doubling with customers flat at the index — textbook
+profit-taking. Any adviser would sign it.
+
+**[P3 · the claims-adjuster walk. Karp document types itself.]**
+
+But here's where their own chart gets strange — and the strangeness is the
+whole story.
+
+Walk their evidence like a claims adjuster. Alex Karp of Palantir, live on
+CNBC: enterprises are — his words — paying for tokens that create no value.
+Something, he says, has gone completely wrong. Uber's CTO says they burned
+the entire annual AI budget by April. Four months. And the COO, on whether
+any of it is showing up in the product. His answer: if you can't draw a
+direct line to what you're shipping, that trade gets harder to justify.
+Remember that line. He's reaching for question three without having it.
+
+But look harder at those two stories. That isn't the peak of inflated
+expectations. That's the trough already doing its job — the tourists
+finding out, one budget at a time.
+
+Which flips the question. Not "when does the disappointment arrive" — it's
+arriving. The question is what survives. And in 1849, the answer wasn't the
+paper. It was the steel. The trains ran straight through the crash — and
+the towns kept growing around the stations.
+
+The steel kept working. The paper stopped pretending.
+
+But the real question is who's paying for the steel this time.
+
+For years the giants paid for all this out of pocket. Cash on hand, no
+borrowing — that was the whole flex. Then the bills got bigger than the
+cash.
+
+Between 2020 and 2024, the biggest builders borrowed about twenty-eight
+billion dollars a year. Last year: a hundred and twenty-one billion. This
+year they're tracking toward a hundred and fifty.
+
+That is not a rounding error in someone's capital structure. It is big
+enough to bend the bond market. Technology used to be about nine percent of
+the investment-grade index — the pool that feeds your bond fund. It's ten
+now, and the projections run past twelve. Money that used to sit in
+utilities and banks is quietly becoming a bet on data centers.
+
+And none of this is slowing down. When the year opened, the street had them
+spending about four hundred and eighty billion. Consensus now says six
+hundred and ninety. The estimate went up faster than the year went by.
+
+And that's the borrowing you can see.
+
+Go into the filings and there's another eight hundred and twenty-two
+billion in lease commitments. Data centers they've already agreed to pay
+for, on contracts already signed, that have never landed on a balance
+sheet. Not hidden — the number is right there in the filing. Just not where
+anyone looks.
+
+Put it together and the arithmetic gets tight. Over the next two years,
+PIMCO has this buildout consuming ninety-four percent of every dollar these
+companies generate from operations. Ninety-four. That is not a company
+investing its surplus. That is a company spending all of it, and borrowing
+the difference.
+
+So when you hear the buildout is funded out of profits — that was true. It
+stopped being true about eighteen months ago.
+
+Nobody here committed fraud. They signed a promise, in a year that looked
+good. The steel kept building. The paper just got heavier. And promises are
+the part of this that nobody is charting. `[post-key]`
+
+**[P4 · PIVOT — visual register shift: charts give way to certificates.]**
+
+And that's the part everyone repeating this chart missed — including, just
+this once, the people who drew it.
+
+`[pre-key]` It was never the AI stocks. The bubble isn't in the steel. It's
+in the paper wrapped around the steel.
+
+What broke England in 1845 wasn't rail. It was railway certificates — paper
+promises priced off the best year, held by people who never checked what
+they owned. And Bravos' own number tells you where that paper lives today.
+AI builders are now twenty percent of the S&P five hundred. Historically,
+two to four. Every index fund carries a fifth of its weight in one bet, and
+calls it the market. So does every target-date fund — the default your
+retirement money hopefully doesn't sit in.
+
+Run the arithmetic. At a fifth of the index, if the AI names fall by half,
+that erases ten percent of "the market." The other four hundred ninety
+companies never get a vote.
+
+So look at the spike again. The spike was never the risk. The
+certificates were.
+
+A bubble is not a technology failing. A bubble is ownership
+outrunning understanding. 1845 is the proof: the rails worked, and the
+paper still lost two-thirds.
+
+**[P5 · the two-clock beat, then the test delivered.]**
+
+And this is where the railway map, good as it is, skips a gear. Railway
+steel sat waiting twenty years while the economy caught up. That's why the
+return took two decades. Today's compute doesn't sit. It depreciates in
+about five years. And the builders are already sold out into next year —
+the orders are in, the slots are gone. Governments are standing up national
+AI programs on the same hardware. Different demand, different clock. The
+moat under the builders runs deeper than the paper holders can see. And the
+paper stacked on top runs taller than the builders admit. Both are true at
+once. That's the whole point.
+
+Now the test — the one from the top. Take any holding and ask it three
+questions. One: is what it sells scarce — sold out, priced up, fought over
+— or abundant the moment belief fades? Two: does it fund its growth from
+cash it earns, or from paper it issues? Three: if the hype died tonight,
+would the asset still get used tomorrow morning? Steel answers
+scarce, cash, used. Paper answers abundant, issued, believed. Thirty
+seconds a holding. Run your top five tonight.
+
+Run it on their divergence chart and it reads differently. The chip line
+doubling: that's scarcity getting repriced. The giants pinned to the index while spending hundreds of billions: that's the market demanding an answer
+to question three. The divergence isn't a house of cards. It's the test,
+administered in public.
+
+Run it on the most extreme number in this whole trade and see what happens.
+
+SK hynix. They make the stacked memory the AI racks need. Over the last
+year the stock is up more than five hundred percent. Not fifty. Five
+hundred. If anything in this story is a bubble, it should be
+that number. And the scarcity underneath it isn't a mood — it's physics. High-bandwidth
+memory stacks the dies vertically. So a gigabyte of it eats about three
+times the wafer capacity of the ordinary kind. Every accelerator they feed
+takes silicon away from everything else on the line. That's not a forecast.
+That's why the memory in a new laptop costs what it does this year.
+
+So ask it the three questions. Scarce? Their own earnings call says
+capacity is essentially sold out for the year — you cannot buy what they
+haven't got. Cash or paper? They're selling product, not issuing stock to
+survive. Used tomorrow morning? The memory is going into racks that are
+already under construction.
+
+Scarce, cash, used. It passes. The most vertical line on the board is
+steel.
+
+That's the uncomfortable part of this test — it doesn't care what you were
+hoping to conclude. Run it honestly and it'll clear names you wanted to
+short, and flag things you're already holding.
+
+Bravos put their tripwire on the record: the Fed back above five and a
+half. Write it down — it's real. Mine is stricter, and it's the one this
+channel already stands on. The variable is memory — the RAM inside every
+one of these data centers. And I don't take that one on trust. I built a
+monitor for it: it reads what memory costs leaving Korea, by the kilo,
+straight off customs export data. `[pre-key]` The threshold is that number
+falling below its own trailing average, two quarters running, while the
+buildout keeps going. `[post-key]` Right now it's going the other way —
+DRAM up seventeen percent, and the stacked memory the AI racks actually
+need up fourteen. That's the July release; customs runs about a month
+behind. The flip: if memory breaks while the buildout holds, the scarcity
+story is wrong — and so am I. That week, I de-risk the builders on camera.
+
+The certificates wear nicer names now — target-date, "the market" — but
+paper is paper.
+
+**[P6 · the spike returns, transformed.]**
+
+So — the spike, one more time. In 1850 it was still carrying
+trains across England, while the certificates that financed it papered the
+walls of bankrupt clubs. The technology delivered. The owners of its paper
+paid the bill.
+
+Everything we checked holds. The builders sell scarcity, and they sell it
+for cash. About eighteen months ago the money behind them turned into debt.
+A fifth of your index rides on one bet you never placed. And the one number
+that would prove me wrong is moving the other way.
+
+Which is why I'll go further than Bravos — in both directions. More
+bullish: builders with sold-out order books are not a house of cards.
+They're the steel — and I own them on purpose, positions disclosed every
+week. More worried: the index they sold you as the safe version of this
+trade is the certificate. Nobody holding it thinks they're speculating.
+That's what a top actually looks like: not euphoria — accidental
+concentration, sold as safety.
+
+The steel gets used. The paper gets believed. And the
+difference gets discovered all at once.
+
+You now have the test — three questions, thirty seconds, any holding.
+Subscribe for the watch: the week either tripwire moves — theirs at five
+and a half, mine on memory — that video posts. And the yardstick reading lands every quarter. Bring your top five; next time we run the test on the
+whole index. Do that, and the next time a copy of this chart crosses your
+feed, you won't need anyone to tell you where it's pointing. You'll already
+know which half of your portfolio is steel.
+
+The spike stays on the desk.
+
+---
+
+## Sources
+
+- Bravos Research divergence pairing (MAMAA vs semiconductors) — recreated,
+  Yahoo Finance; figures badge-synced at record freeze (dossier H2)
+- Memory builders +613% / semis +105% / MAMAA +21% / S&P +21% — Yahoo
+  Finance via ev-divergence-v1 sidecar (freeze at record)
+- Railway ~50% of UK capital formation; £40M+/yr; crash 64% — Campbell &
+  Turner literature (dossier A1/A2)
+- Yardstick: computing+software 28% (23% dot-com high), broad 65% — BEA via
+  FRED, ev-capital-formation-v1 (dossier H3)
+- AI spending ~8% of GDP claim — attributed to Bravos ("by Bravos' math")
+- Borrowing 28B→121B→150B; IG index 9→10→>12%; leases 822B; 94% of OCF —
+  PIMCO / MS IM / LPL / filings (dossier B/C rows, carried from F)
+- Karp quote — CNBC transcript (verbatim, ev-doc-karp); Uber — The
+  Information, April 2026 (dossier)
+- SK hynix +500%/sold out — earnings call language (dossier); HBM 3x wafer
+  — Micron via industry reporting
+- Memory instrument — SCML ledger, KR customs exports, July release

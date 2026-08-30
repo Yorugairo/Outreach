@@ -49,6 +49,12 @@ carries. To merge:
    to the editor's timeline, not the voice.
 3. Join with **one re-encode pass** and a short crossfade. Never a raw
    concat of independently generated segments.
+4. **Pause discipline (provider best practice):** the payload is REFLOWED —
+   paragraph breaks only at section seams (~8–10 per part; every blank line
+   is a pause and an intonation reset). Target **≈3 break tags per
+   generation** (the provider's own working figure; excessive tags cause
+   speed-ups and artifacts); never stack a tag against a paragraph seam.
+   Em-dashes carry the micro-pauses. Longer silences are the editor's.
 
 ## The plate library
 
