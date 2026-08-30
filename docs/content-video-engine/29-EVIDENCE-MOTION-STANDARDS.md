@@ -1234,3 +1234,22 @@ card first.
 foreign-currency figures convert to USD at a real spot rate (source the
 rate), with the conversion named in the source line. ₩37.6T is "a
 $27 billion quarter."
+
+### 9.22 Charts read like analysts, not toys (operator, 2026-08-30)
+
+"We should be building actual charts that read like financial analysts."
+A time series is a LINE, never a bar trio of period changes. The
+analyst chrome is mandatory on data cards: labeled axes with units
+($-formatted ticks via `yfmt:"usd"`, x-axis date ticks via `xticks`),
+the basis stated in the subtitle, the source AND release named, the
+last print called out (end labels carry the level), and reference/
+trigger lines drawn dashed (`dash` on a series - fades in, never
+draw-animated). The instrument's own decision rule belongs ON the
+chart: the memory monitor shows its 12-month-average trigger line, not
+just readings.
+
+**Ledger data hygiene:** SCML series queries filter
+`data_tier='production'` and full periods only - beta ten-day partials
+(`-P1/-P2/-P3`) are a different basis and print false spikes. The
+ledger is DRIVABLE (its CLI ingests, monitors, briefs) - drive it for
+fresh reads rather than settling for stale rows.

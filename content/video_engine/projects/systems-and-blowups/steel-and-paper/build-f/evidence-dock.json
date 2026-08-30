@@ -1094,14 +1094,14 @@
   "badges": [
    {
     "label": "DRAM",
-    "value": "+17.4%",
-    "tag": "m/m, $86,970/kg",
+    "value": "$86,970/kg",
+    "tag": "+17.4% m/m",
     "accent": "coral"
    },
    {
     "label": "HBM-CLASS",
-    "value": "+14.1%",
-    "tag": "m/m, $95,408/kg",
+    "value": "$95,408/kg",
+    "tag": "+14.1% m/m",
     "accent": "teal"
    }
   ]
