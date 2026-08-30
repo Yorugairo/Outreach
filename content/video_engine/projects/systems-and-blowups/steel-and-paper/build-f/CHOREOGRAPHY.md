@@ -1,6 +1,6 @@
 # CHOREOGRAPHY STATEMENT - Steel and Paper (build F)
 
-75 scenes - 47 coalesced docks - 14 wash intervals covering 78% of 723s
+75 scenes - 46 coalesced docks - 14 wash intervals covering 78% of 723s
 
 Every entering and exiting element, in order. Verify any slot
 by reading its lines; the gates below run on every build.
@@ -128,11 +128,9 @@ by reading its lines; the gates below run on every build.
    7:23.0  SCENE  s47  hero-korea-italy-v1  (11.9s, exit cut)
    7:34.9  EXIT   sovereign-memory-infrastructure-s10-teacher-stamped  carried by the wipe front
    7:34.9  SCENE  s48  hero-barbell-v1  (11.1s, exit wipe)
-   7:35.0  ENTER  ev-mechanism-ladder  slot 0 side pair  holds 21.0s
+   7:35.0  ENTER  ev-mechanism-ladder  slot 0 side pair  holds 31.9s
    7:46.0  SCENE  s49  beat-04-014-evidence-hierarchy-v1  (10.0s, exit wipe)
    7:46.5  ENTER  ev-test-scorecard-v1  slot 1 side pair  holds 20.4s
-   7:56.0  ENTER  ev-mechanism-ladder  slot 0 side pair  holds 10.9s
-   7:56.0  EXIT   ev-mechanism-ladder  carried by the wipe front
    7:56.0  SCENE  s50  world-workbench-triad-v1  (10.9s, exit wipe)
    8:06.9  EXIT   ev-mechanism-ladder  carried by the wipe front
    8:06.9  EXIT   ev-test-scorecard-v1  carried by the wipe front
@@ -205,4 +203,4 @@ by reading its lines; the gates below run on every build.
 
 ## Gates
 
-  FAIL  7:56.0 ev-mechanism-ladder: re-enters 0.0s after exiting - coalesce it or space it
+  all slots clean

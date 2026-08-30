@@ -43,20 +43,25 @@ def load_model():
                        "exit": exits.get(a) or ("wipe" if ds else "cut"),
                        "docks": [{"slide": d[0], "slot": d[1],
                                   "enter": d[2], "exit": d[3]} for d in ds]})
-    # mirror rule 1: coalesce same-slide same-slot docks separated < DOCK_JOIN
-    docks = sorted((dict(d) for s in scenes for d in s["docks"]),
-                   key=lambda d: d["enter"])
+    # mirror rule 1: coalesce same-slide docks. GROUP BY SLIDE first -
+    # consecutive-only merging breaks when a DIFFERENT slide interleaves
+    # the time sort (this gate caught it: pairing the scorecard between
+    # two ladder rows made the ladder "re-enter").
+    by_slide: dict = {}
+    for sc2 in scenes:
+        for d in sc2["docks"]:
+            by_slide.setdefault(d["slide"], []).append(dict(d))
     out = []
-    for d in docks:
-        p = out[-1] if out else None
-        # keyed on the SLIDE alone: the same document persists even across
-        # an authored slot change (ledger caught tnx swept off and re-landing
-        # 0.3s later on the other side)
-        if p and p["slide"] == d["slide"] \
-                and d["enter"] - p["exit"] <= DOCK_JOIN:
-            p["exit"] = max(p["exit"], d["exit"])
-        else:
-            out.append(d)
+    for slide, ds2 in by_slide.items():
+        ds2.sort(key=lambda d: d["enter"])
+        cur = None
+        for d in ds2:
+            if cur is not None and d["enter"] - cur["exit"] <= DOCK_JOIN:
+                cur["exit"] = max(cur["exit"], d["exit"])
+            else:
+                cur = d
+                out.append(d)
+    out.sort(key=lambda d: d["enter"])
     # mirror rule 2: snap near-boundary exits
     bounds = [s["span"][0] for s in scenes]
     for d in out:

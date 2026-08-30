@@ -279,17 +279,30 @@
      DOCK_JOIN into a single span. The world wipes underneath it; the card
      does not move. */
   const DOCK_JOIN = 2.5;
-  DOCKS.sort((a, b) => a.enter - b.enter);
-  for (let i = DOCKS.length - 1; i > 0; i--) {
-    const cur = DOCKS[i], prv = DOCKS[i - 1];
-    if (cur.slide === prv.slide &&
-        cur.enter - prv.exit <= DOCK_JOIN) {   /* same DOCUMENT persists even
-          across an authored slot change - being swept off and re-landing
-          0.3s later on the other side is the defect (ledger, 2:27.7) */
-      prv.exit = Math.max(prv.exit, cur.exit);
-      prv.badge_at = [...new Set([...(prv.badge_at||[]), ...(cur.badge_at||[])])];
-      DOCKS.splice(i, 1);
+  /* GROUP BY SLIDE, then merge - consecutive-only merging breaks when a
+     DIFFERENT slide interleaves the time sort (pairing a card between two
+     rows of the same document made it "re-enter"; the choreography gate
+     caught it). Same algorithm as emit_choreography.py - mirrored. */
+  {
+    const bySlide = new Map();
+    for (const d of DOCKS) {
+      if (!bySlide.has(d.slide)) bySlide.set(d.slide, []);
+      bySlide.get(d.slide).push(d);
     }
+    const merged = [];
+    for (const ds of bySlide.values()) {
+      ds.sort((a, b) => a.enter - b.enter);
+      let cur = null;
+      for (const d of ds) {
+        if (cur && d.enter - cur.exit <= DOCK_JOIN) {
+          cur.exit = Math.max(cur.exit, d.exit);
+          cur.badge_at = [...new Set([...(cur.badge_at || []), ...(d.badge_at || [])])];
+        } else { cur = d; merged.push(d); }
+      }
+    }
+    DOCKS.length = 0;
+    for (const d of merged) DOCKS.push(d);
+    DOCKS.sort((a, b) => a.enter - b.enter);
   }
   /* EACH DOCK OWNS ITS PRESENTATION STATE. Solo side alternates by dock
      order (so the world is not always cropped the same way) and NEVER
