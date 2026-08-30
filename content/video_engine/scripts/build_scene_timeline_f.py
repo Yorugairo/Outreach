@@ -71,6 +71,30 @@ def title_for(asset: str) -> tuple[str, str]:
     return asset.replace("-", " ").title(), "Research deck"
 
 
+def narration_key_delays(chart: dict, dock_enter: float, tl: dict) -> dict:
+    """NARRATION-KEYED DRAW: a delayed series erupts at its claim's word
+    time, not at a hard-coded offset (doc 29 - the deferred item; the
+    tempo field made every static offset stale by construction)."""
+    import re as _re
+    norm = lambda x: _re.sub(r"[^a-z0-9' ]", " ", x.lower()).split()
+    wt = [(t, w) for w in tl["words"] for t in norm(w["w"])]
+    wtoks = [t for t, _ in wt]
+    for sr in chart.get("series", []):
+        anc = sr.get("delay_anchor")
+        if not anc:
+            continue
+        toks = norm(anc)
+        n = len(toks)
+        for i in range(len(wtoks) - n + 1):
+            if (wtoks[i:i + n - 1] == toks[:-1]
+                    and wtoks[i + n - 1].startswith(toks[-1])):
+                at = wt[i][1]["start"]
+                if at >= dock_enter - 1.0:
+                    sr["delay"] = round(max(0.0, at - dock_enter - 0.2), 2)
+                    break
+    return chart
+
+
 def main() -> int:
     tl = json.loads((BUILD / "timeline.json").read_text(encoding="utf-8"))
     # THE AUTHORED SHOT TABLE is the source. Not an allocator.
@@ -125,9 +149,9 @@ def main() -> int:
                         # a LIVE CHART payload: series emitted by the chart
                         # builder from the same data as the PNG. The player
                         # DRAWS the line; the PNG stays the static fallback.
-                        **({"chart": json.loads(
+                        **({"chart": narration_key_delays(json.loads(
                             ap.with_suffix(".series.json").read_text(
-                                encoding="utf-8"))}
+                                encoding="utf-8")), enter, tl)}
                            if ap.with_suffix(".series.json").exists() else {}),
                     }
                     # BADGE-CHART SYNC: chart data refetches on rebuild, so

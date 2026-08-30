@@ -901,4 +901,75 @@
   scrub.addEventListener("input", () => { seek(+scrub.value); });
   sync();
 })();
+
+  /* ---- FILMSTRIP MODE (doc 29 s9.16) - true PLAYED frames -----------
+     __filmstrip(t0, dur, n, name): for each sample, PLAYS INTO the
+     moment (state derives from the live RAF loop), pauses, rasterizes
+     a cleaned stage clone (hidden scenes stripped - a raw outerHTML of
+     the full stage is ~100MB of data URIs and OOMs the tab), and
+     assembles one labeled strip PNG POSTed to :8732. */
+  window.__filmstrip = async (t0, dur, n, name) => {
+    const g = (id) => document.getElementById(id);
+    const stage = g("stage"), vo = g("vo"), scrub = g("scrub"),
+          playBtn = g("play");
+    const seekTo = (t) => { scrub.value = t;
+      scrub.dispatchEvent(new Event("input", { bubbles: true })); };
+    const playing = () => playBtn.textContent.includes("Pause");
+    const setPlay = (on) => { if (playing() !== on) playBtn.click(); };
+    const css = [...document.querySelectorAll("style")]
+      .map(x => x.textContent).join(String.fromCharCode(10));
+    const FW = 480, FH = Math.round(FW * 9 / 16), PAD = 22;
+    const cv = document.createElement("canvas");
+    cv.width = FW * n; cv.height = FH + PAD;
+    const cx = cv.getContext("2d");
+    cx.fillStyle = "#0d0f12"; cx.fillRect(0, 0, cv.width, cv.height);
+    for (let i = 0; i < n; i++) {
+      const tt = t0 + (i + 0.5) * (dur / n);
+      seekTo(Math.max(0, tt - 0.35));
+      setPlay(true);
+      await new Promise(res => {
+        const w = () => vo.currentTime >= tt ? res()
+                       : requestAnimationFrame(w);
+        requestAnimationFrame(w);
+      });
+      setPlay(false);
+      const at = vo.currentTime;
+      const cl = stage.cloneNode(true);
+      cl.querySelectorAll("img").forEach(im => {
+        let e = im, vis = true;
+        while (e && e !== cl) {
+          const st = e.style;
+          if (st && (st.opacity === "0" || st.display === "none"))
+            vis = false;
+          e = e.parentElement;
+        }
+        const r = im.getBoundingClientRect ? null : null;
+        if (!vis) im.removeAttribute("src");
+      });
+      const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080">` +
+        `<foreignObject width="1920" height="1080">` +
+        `<div xmlns="http://www.w3.org/1999/xhtml">` +
+        `<style>${css.replace(/]]>/g, "")}</style>` +
+        new XMLSerializer().serializeToString(cl) +
+        `</div></foreignObject></svg>`;
+      /* data: URL, not blob: - this Chromium taints canvases drawn
+         from blob-loaded foreignObject SVGs, but not data:-loaded */
+      const img = new Image();
+      img.src = "data:image/svg+xml;charset=utf-8,"
+              + encodeURIComponent(svg);
+      await new Promise((res, rej) => {
+        img.onload = res; img.onerror = rej; });
+      cx.drawImage(img, i * FW, PAD, FW, FH);
+      cx.fillStyle = "#dce3ea"; cx.font = "600 13px Consolas, monospace";
+      cx.fillText(at.toFixed(2) + "s", i * FW + 8, 15);
+      cx.strokeStyle = "#33363d";
+      cx.strokeRect(i * FW + 0.5, PAD + 0.5, FW - 1, FH - 1);
+    }
+    const png = cv.toDataURL("image/png");
+    await fetch("http://127.0.0.1:8732/", { method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ name, png }) });
+    return name + ": " + n + " played frames";
+  };
 </script>
+</body></html>

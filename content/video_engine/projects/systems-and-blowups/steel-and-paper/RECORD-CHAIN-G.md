@@ -19,7 +19,7 @@ Every stage, its tool, its verified status. Nothing here is remembered.
 | 5 | **Karp rebind** — the record payload's typed-word times are absolute against the OLD take; recompute from the new timeline (type-on over the intro, stroke on the narrator's "paying for tokens…" words) | retime substep — small, deterministic from words + anchors | PLANNED (blocked on take) |
 | 6 | **Dock retime** — shift all 75 windows + 41 docks onto the new clock. NOW DETERMINISTIC: every dock carries a VERBATIM anchor in Script G (41/41 verified), so each maps to its anchor's new word time; plate windows shift with their docks/beats | retime pass (anchors → word times → deltas) | PLANNED (blocked on take) — the alignment work this pass did is what makes it mechanical |
 | 7 | **Choreography gates** | `emit_choreography.py` | RUNNABLE — currently ALL SLOTS CLEAN on the pre-retime table |
-| 8 | **Filmstrips** — three boundary classes, played frames, vs the locked reference | doc 29 §9.16 procedure (browser) | PROCEDURE DOCUMENTED |
+| 8 | **Filmstrips** — DONE 2026-08-30: four boundary classes captured as TRUE PLAYED FRAMES via the player's built-in `__filmstrip()` (plays into each sample, rasterizes via foreignObject data:-URL, strips POSTed to `filmstrip_receiver.py`). B1 chart handoff CLEAN · B2 persistence CLEAN · B3 pair draw CLEAN · B4 register cut CLEAN | template filmstrip mode + `scripts/filmstrip_receiver.py` | **ALL FOUR CLEAN** — build-f/filmstrips/ |
 
 ## Evidence alignment (this pass)
 

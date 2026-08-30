@@ -508,8 +508,8 @@ def divergence():
             "series": [
                 # THEIR two lines draw first; semis and memory hold back
                 # 2.5s and erupt through them - the added layer PERFORMED
-                {"label": f"+{mem.iloc[-1]-100:,.0f}%", "color": "crimson", "delay": 9.5, "pts": dec(mem)},
-                {"label": f"+{sox.iloc[-1]-100:,.0f}%", "color": "teal", "delay": 3.2, "pts": dec(sox)},
+                {"label": f"+{mem.iloc[-1]-100:,.0f}%", "color": "crimson", "delay": 9.5, "delay_anchor": "And one layer Bravos' chart never drew.", "pts": dec(mem)},
+                {"label": f"+{sox.iloc[-1]-100:,.0f}%", "color": "teal", "delay": 3.2, "delay_anchor": "The chart's second line is the chip industry", "pts": dec(sox)},
                 {"label": f"+{mamaa.iloc[-1]-100:,.0f}%", "color": "cobalt", "pts": dec(mamaa)},
                 {"label": f"+{spy.iloc[-1]-100:,.0f}%", "color": "deemph", "pts": dec(spy)},
             ]}), encoding="utf-8")
@@ -791,7 +791,7 @@ def hynix_steel():
                 {"label": f"+{p_pct:,.0f}%", "name": "SHARE PRICE",
                  "color": "crimson", "pts": dec(pxi, x)},
                 {"label": f"+{o_pct:,.0f}%", "name": "OPERATING PROFIT",
-                 "color": "teal", "delay": 1.5, "pts": dec(opi, xq, n=20)},
+                 "color": "teal", "delay": 1.5, "delay_anchor": "They're the steel", "pts": dec(opi, xq, n=20)},
             ],
             "marks": [{"x": round(xq[-1], 4),
                        "y": round(float(opi.iloc[-1]), 2),

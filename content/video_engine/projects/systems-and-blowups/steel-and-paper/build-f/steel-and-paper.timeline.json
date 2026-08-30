@@ -25469,7 +25469,7 @@
      {
       "label": "+613%",
       "color": "crimson",
-      "delay": 9.5,
+      "delay": 7.45,
       "pts": [
        [
         2025.6680355920603,
@@ -26411,12 +26411,13 @@
         2026.6543463381245,
         712.52
        ]
-      ]
+      ],
+      "delay_anchor": "And one layer Bravos' chart never drew."
      },
      {
       "label": "+105%",
       "color": "teal",
-      "delay": 3.2,
+      "delay": 1.67,
       "pts": [
        [
         2025.6680355920603,
@@ -27358,7 +27359,8 @@
         2026.6543463381245,
         204.62
        ]
-      ]
+      ],
+      "delay_anchor": "The chart's second line is the chip industry"
      },
      {
       "label": "+21%",
@@ -33025,110 +33027,110 @@
     "words": [
      [
       "\u201cSomething",
-      222.34
+      215.86
      ],
      [
       "has",
-      222.64
+      216.16
      ],
      [
       "gone",
-      222.94
+      216.46
      ],
      [
       "completely",
-      223.24
+      216.76
      ],
      [
       "wrong.",
-      223.54
+      217.06
      ],
      [
       "Every",
-      223.84
+      217.36
      ],
      [
       "single",
-      224.14
+      217.66
      ],
      [
       "enterprise",
-      224.44
+      217.96
      ],
      [
       "in",
-      224.74
+      218.26
      ],
      [
       "this",
-      225.04
+      218.56
      ],
      [
       "country",
-      225.34
+      218.86
      ],
      [
       "\u2014",
-      225.64
+      219.16
      ],
      [
       "these",
-      225.94
+      219.46
      ],
      [
       "people",
-      226.24
+      219.76
      ],
      [
       "are",
-      226.54
+      220.06
      ],
      [
       "livid.",
-      226.84
+      220.36
      ],
      [
       "They",
-      227.14
+      220.66
      ],
      [
       "are",
-      227.44
+      220.96
      ],
      [
       "paying",
-      227.8
+      221.32
      ],
      [
       "for",
-      228.12
+      221.64
      ],
      [
       "tokens",
-      228.27
+      221.79
      ],
      [
       "that",
-      228.7
+      222.22
      ],
      [
       "create",
-      228.86
+      222.38
      ],
      [
       "no",
-      229.3
+      222.82
      ],
      [
       "value.\u201d",
-      229.54
+      223.06
      ]
     ],
     "hl": [
      18,
      24
     ],
-    "end": 230.04,
+    "end": 223.56,
     "attr": "Alex Karp, Chief Executive Officer, Palantir Technologies",
     "src": "Transcript \u2014 CNBC Squawk Box, 1 July 2026 \u00b7 PLTR closed +8\u20139% that session"
    }
@@ -36732,7 +36734,7 @@
       "label": "+230%",
       "name": "OPERATING PROFIT",
       "color": "teal",
-      "delay": 1.5,
+      "delay": 3.78,
       "pts": [
        [
         2025.7447,
@@ -36746,7 +36748,8 @@
         2026.2437,
         330.4
        ]
-      ]
+      ],
+      "delay_anchor": "They're the steel"
      }
     ],
     "marks": [
@@ -36845,7 +36848,7 @@
      "slide": "ev-bravos-original-v1",
      "slot": 0,
      "enter": 8.7,
-     "exit": 15.6,
+     "exit": 49.2,
      "badge_at": [
       10.75,
       12.05
@@ -36910,7 +36913,7 @@
      "slide": "ev-divergence-v1",
      "slot": 0,
      "enter": 49.2,
-     "exit": 56.0,
+     "exit": 69.3,
      "badge_at": [
       51.25,
       52.55,
@@ -36970,14 +36973,14 @@
    "exit": "wipe_right",
    "span": [
     84.6,
-    90.5
+    91.4
    ],
    "docks": [
     {
      "slide": "silicon-reality-gap-s04-teacher-stamped",
      "slot": 0,
      "enter": 85.1,
-     "exit": 90.5,
+     "exit": 91.4,
      "badge_at": [
       87.15,
       88.45
@@ -36998,8 +37001,8 @@
    },
    "exit": "cut",
    "span": [
-    90.5,
-    95.4
+    91.4,
+    97.1
    ],
    "docks": []
   },
@@ -37016,8 +37019,8 @@
    },
    "exit": "cut",
    "span": [
-    95.4,
-    102.6
+    97.1,
+    105.4
    ],
    "docks": []
   },
@@ -37034,28 +37037,28 @@
    },
    "exit": "wipe_right",
    "span": [
-    102.6,
-    110.9
+    105.4,
+    112.3
    ],
    "docks": [
     {
      "slide": "ev-railway-index-v1",
      "slot": 0,
-     "enter": 102.6,
-     "exit": 109.4,
+     "enter": 105.4,
+     "exit": 112.2,
      "badge_at": [
-      104.65,
-      105.95
+      107.45,
+      108.75
      ]
     },
     {
      "slide": "ev-railway-gdp-tile-v1",
      "slot": 1,
-     "enter": 108.6,
-     "exit": 110.8,
+     "enter": 105.4,
+     "exit": 112.2,
      "badge_at": [
-      110.65,
-      111.95
+      107.45,
+      108.75
      ]
     }
    ]
@@ -37073,7 +37076,7 @@
    },
    "exit": "cut",
    "span": [
-    110.9,
+    112.3,
     117.7
    ],
    "docks": []
@@ -37092,14 +37095,14 @@
    "exit": "wipe_right",
    "span": [
     117.7,
-    139.1
+    138.7
    ],
    "docks": [
     {
      "slide": "ev-capital-formation-v1",
      "slot": 0,
      "enter": 117.9,
-     "exit": 138.5,
+     "exit": 165.4,
      "badge_at": [
       119.95,
       121.25
@@ -37120,8 +37123,8 @@
    },
    "exit": "cut",
    "span": [
-    139.1,
-    156.2
+    138.7,
+    155.4
    ],
    "docks": []
   },
@@ -37138,15 +37141,15 @@
    },
    "exit": "wipe_right",
    "span": [
-    156.2,
-    167.9
+    155.4,
+    167.0
    ],
    "docks": [
     {
      "slide": "ev-tnx-two-eras-v3",
      "slot": 0,
      "enter": 165.5,
-     "exit": 167.7,
+     "exit": 183.4,
      "badge_at": [
       167.55,
       168.85
@@ -37167,8 +37170,8 @@
    },
    "exit": "cut",
    "span": [
-    167.9,
-    197.3
+    167.0,
+    197.0
    ],
    "docks": []
   },
@@ -37185,8 +37188,8 @@
    },
    "exit": "cut",
    "span": [
-    197.3,
-    212.0
+    197.0,
+    211.8
    ],
    "docks": []
   },
@@ -37203,7 +37206,7 @@
    },
    "exit": "cut",
    "span": [
-    212.0,
+    211.8,
     219.3
    ],
    "docks": []
@@ -37229,7 +37232,7 @@
      "slide": "ev-doc-karp",
      "slot": 0,
      "enter": 219.3,
-     "exit": 224.3,
+     "exit": 229.9,
      "badge_at": []
     }
    ]
@@ -37266,14 +37269,14 @@
    "exit": "wipe_right",
    "span": [
     229.9,
-    239.8
+    239.7
    ],
    "docks": [
     {
      "slide": "ev-uber-adoption-v1",
      "slot": 0,
      "enter": 230.0,
-     "exit": 239.3,
+     "exit": 246.7,
      "badge_at": [
       232.05
      ]
@@ -37293,7 +37296,7 @@
    },
    "exit": "cut",
    "span": [
-    239.8,
+    239.7,
     248.7
    ],
    "docks": []
@@ -37319,7 +37322,7 @@
      "slide": "ev-three-manias",
      "slot": 0,
      "enter": 248.9,
-     "exit": 259.6,
+     "exit": 260.2,
      "badge_at": [
       250.95,
       252.25,
@@ -37342,7 +37345,7 @@
    "exit": "cut",
    "span": [
     260.0,
-    272.1
+    272.0
    ],
    "docks": []
   },
@@ -37359,7 +37362,7 @@
    },
    "exit": "cut",
    "span": [
-    272.1,
+    272.0,
     275.7
    ],
    "docks": []
@@ -37403,7 +37406,7 @@
      "slide": "ev-debt-issuance-v2",
      "slot": 0,
      "enter": 284.5,
-     "exit": 289.5,
+     "exit": 294.7,
      "badge_at": [
       286.55,
       287.85,
@@ -37451,7 +37454,7 @@
      "slide": "ev-ig-credit-weighting-v1",
      "slot": 0,
      "enter": 294.8,
-     "exit": 311.4,
+     "exit": 311.3,
      "badge_at": [
       296.85,
       298.15,
@@ -37474,14 +37477,14 @@
    "exit": "wipe_right",
    "span": [
     311.4,
-    319.4
+    321.4
    ],
    "docks": [
     {
      "slide": "ev-capex-consensus-v1",
      "slot": 0,
      "enter": 311.9,
-     "exit": 319.4,
+     "exit": 323.4,
      "badge_at": [
       313.95,
       315.25
@@ -37502,8 +37505,8 @@
    },
    "exit": "cut",
    "span": [
-    319.4,
-    323.5
+    321.4,
+    326.5
    ],
    "docks": []
   },
@@ -37520,17 +37523,17 @@
    },
    "exit": "wipe_right",
    "span": [
-    323.5,
-    331.2
+    326.5,
+    333.0
    ],
    "docks": [
     {
      "slide": "ev-doc-leases",
      "slot": 0,
-     "enter": 323.5,
-     "exit": 329.9,
+     "enter": 326.5,
+     "exit": 341.3,
      "badge_at": [
-      325.55
+      328.55
      ]
     }
    ]
@@ -37548,7 +37551,7 @@
    },
    "exit": "cut",
    "span": [
-    331.2,
+    333.0,
     341.3
    ],
    "docks": []
@@ -37567,14 +37570,14 @@
    "exit": "wipe_right",
    "span": [
     341.3,
-    351.9
+    352.0
    ],
    "docks": [
     {
      "slide": "ev-doc-macdonald",
      "slot": 0,
      "enter": 341.5,
-     "exit": 351.7,
+     "exit": 359.3,
      "badge_at": [
       343.55
      ]
@@ -37594,7 +37597,7 @@
    },
    "exit": "cut",
    "span": [
-    351.9,
+    352.0,
     361.2
    ],
    "docks": []
@@ -37613,7 +37616,7 @@
    "exit": "cut",
    "span": [
     361.2,
-    374.4
+    374.5
    ],
    "docks": []
   },
@@ -37630,8 +37633,8 @@
    },
    "exit": "cut",
    "span": [
-    374.4,
-    382.6
+    374.5,
+    382.5
    ],
    "docks": []
   },
@@ -37648,7 +37651,7 @@
    },
    "exit": "cut",
    "span": [
-    382.6,
+    382.5,
     390.7
    ],
    "docks": []
@@ -37674,7 +37677,7 @@
      "slide": "ev-railway-mileage-v1",
      "slot": 0,
      "enter": 391.1,
-     "exit": 395.8,
+     "exit": 399.7,
      "badge_at": [
       393.15,
       394.45
@@ -37721,7 +37724,7 @@
      "slide": "silicon-antidote-s02-valuation-bubble-v1",
      "slot": 0,
      "enter": 399.7,
-     "exit": 415.8,
+     "exit": 417.1,
      "badge_at": [
       401.75,
       403.05
@@ -37743,14 +37746,14 @@
    "exit": "wipe_right",
    "span": [
     417.3,
-    426.7
+    426.0
    ],
    "docks": [
     {
      "slide": "ev-smh-drawdown-v3",
      "slot": 0,
      "enter": 417.3,
-     "exit": 425.8,
+     "exit": 426.3,
      "badge_at": [
       419.35,
       420.65
@@ -37771,8 +37774,8 @@
    },
    "exit": "cut",
    "span": [
-    426.7,
-    433.6
+    426.0,
+    432.5
    ],
    "docks": []
   },
@@ -37789,18 +37792,18 @@
    },
    "exit": "wipe_right",
    "span": [
-    433.6,
-    444.6
+    432.5,
+    442.6
    ],
    "docks": [
     {
      "slide": "ev-railway-index-v1",
      "slot": 0,
-     "enter": 433.9,
-     "exit": 443.2,
+     "enter": 432.7,
+     "exit": 442.4,
      "badge_at": [
-      435.95,
-      437.25
+      434.75,
+      436.05
      ]
     }
    ]
@@ -37818,18 +37821,18 @@
    },
    "exit": "cut",
    "span": [
-    444.6,
-    454.8
+    442.6,
+    452.2
    ],
    "docks": [
     {
      "slide": "ev-railway-mileage-v1",
      "slot": 0,
-     "enter": 444.8,
-     "exit": 454.0,
+     "enter": 442.9,
+     "exit": 452.2,
      "badge_at": [
-      446.85,
-      448.15
+      444.95,
+      446.25
      ]
     }
    ]
@@ -37847,18 +37850,18 @@
    },
    "exit": "cut",
    "span": [
-    454.8,
+    452.2,
     459.4
    ],
    "docks": [
     {
      "slide": "silicon-antidote-s11-teacher-stamped",
      "slot": 0,
-     "enter": 454.8,
+     "enter": 452.2,
      "exit": 459.4,
      "badge_at": [
-      456.85,
-      458.15
+      454.25,
+      455.55
      ]
     }
    ]
@@ -37877,14 +37880,14 @@
    "exit": "cut",
    "span": [
     459.4,
-    494.2
+    494.1
    ],
    "docks": [
     {
      "slide": "sovereign-memory-infrastructure-s10-teacher-stamped",
      "slot": 0,
      "enter": 459.4,
-     "exit": 473.9,
+     "exit": 473.2,
      "badge_at": [
       461.45,
       462.75
@@ -37905,7 +37908,7 @@
    },
    "exit": "wipe_right",
    "span": [
-    494.2,
+    494.1,
     505.7
    ],
    "docks": [
@@ -37913,7 +37916,7 @@
      "slide": "ev-test-scorecard-v1",
      "slot": 0,
      "enter": 495.8,
-     "exit": 505.6,
+     "exit": 524.7,
      "badge_at": [
       497.85
      ]
@@ -37952,7 +37955,7 @@
    "exit": "cut",
    "span": [
     515.0,
-    525.3
+    525.2
    ],
    "docks": []
   },
@@ -37969,7 +37972,7 @@
    },
    "exit": "wipe_right",
    "span": [
-    525.3,
+    525.2,
     533.8
    ],
    "docks": [
@@ -37977,7 +37980,7 @@
      "slide": "ev-divergence-v1",
      "slot": 0,
      "enter": 525.3,
-     "exit": 533.8,
+     "exit": 541.6,
      "badge_at": [
       527.35,
       528.65,
@@ -38044,7 +38047,7 @@
      "slide": "ev-krx-memory-v3",
      "slot": 0,
      "enter": 545.4,
-     "exit": 557.4,
+     "exit": 558.8,
      "badge_at": [
       547.45,
       548.75
@@ -38166,7 +38169,7 @@
      "slide": "ev-dram-contract-v1",
      "slot": 0,
      "enter": 577.8,
-     "exit": 587.3,
+     "exit": 586.5,
      "badge_at": [
       579.85
      ]
@@ -38175,7 +38178,7 @@
      "slide": "silicon-value-software-bubble-s13-teacher-stamped",
      "slot": 1,
      "enter": 587.8,
-     "exit": 594.6,
+     "exit": 598.8,
      "badge_at": [
       589.85,
       591.15
@@ -38325,7 +38328,7 @@
      "slide": "ev-hbm-export-series",
      "slot": 0,
      "enter": 638.5,
-     "exit": 649.7,
+     "exit": 648.9,
      "badge_at": [
       640.55,
       641.85,
@@ -38474,7 +38477,7 @@
      "slide": "ev-index-concentration-v1",
      "slot": 0,
      "enter": 700.5,
-     "exit": 713.9,
+     "exit": 713.8,
      "badge_at": [
       702.55,
       703.85
@@ -38521,7 +38524,7 @@
      "slide": "ev-test-scorecard-v1",
      "slot": 0,
      "enter": 719.8,
-     "exit": 725.0,
+     "exit": 724.7,
      "badge_at": [
       721.85
      ]

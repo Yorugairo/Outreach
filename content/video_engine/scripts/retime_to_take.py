@@ -108,11 +108,14 @@ def main() -> int:
     # 2.5-8s awkward band (they were one coalesced hold on the old clock)
     final = {}
     for r in rows:
-        a, b = warp(r[0]), warp(r[1])
+        a = warp(r[0])
         for d in r[4]:
             ne = pins.get(id(d), warp(d[2]))
-            ne = max(a, min(ne, b - 2.2))
-            nx = min(ne + (d[3] - d[2]), b)
+            ne = max(a, ne)
+            # exits are TOPIC-authored (E12): they warp with the
+            # narration and are NEVER clamped to the host plate - a
+            # cross-plate hold is legal and load-bearing
+            nx = max(warp(d[3]), ne + 2.2)
             final[id(d)] = [ne, nx]
     by_slide2: dict = {}
     for _, d in insts:
@@ -149,6 +152,14 @@ def main() -> int:
         for i, d in enumerate(r[4][:2]):
             final[id(d)] = [a, b]
             slot_override[id(d)] = i
+
+    # (a2) handoff again AFTER the stretch - (b) can re-create overlap
+    for i, d in enumerate(all_d):
+        for o in all_d:
+            if o is d or o[1] != d[1]:
+                continue
+            if (final[id(d)][0] < final[id(o)][0] < final[id(d)][1]):
+                final[id(d)][1] = final[id(o)][0]
 
     dropped = []
     for _, d in insts:
