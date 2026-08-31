@@ -669,3 +669,27 @@ perfection." For a later episode, PVC is the standing candidate:
   it attacks the class-5c stutter family at the source.
 - Cost: paid tier + a recording session. Decision point: after episode
   one publishes, before episode two's record.
+
+### 23b. Stutter auto-scan: attempted, NEGATIVE (2026-08-30)
+
+Tried to scan for class-5c stutters mechanically (energy envelope vs
+word alignment) so the ear could jump straight to candidates. Three
+detectors, each validated against the known 'Builted' case:
+
+- isolated island-in-gap: known case not flagged (its energy touches
+  the word edge), 109 false candidates;
+- double-burst-in-gap: known case not flagged (the doubled release is
+  one CONTINUOUS 66ms cluster, not two separated bursts), 383 false
+  candidates;
+- gap-fill ratio: known case ranked 963 of 991 gaps.
+
+Verdict: the defect is not separable from normal speech in the
+energy/alignment domain. Word-final releases legitimately land inside
+aligned gaps, co-articulated function words fill their gaps routinely,
+and the stutter's identity is PHONETIC - the same consonant twice,
+heard as an extra syllable - which even whisper's language model
+normalizes over (it transcribed 'built it' cleanly through the
+defect). The ear remains the detector; the envelope map at 2ms is the
+LOCALIZER once the ear has flagged a timestamp. Do not rebuild this
+scanner without a fundamentally different signal (phoneme-level
+alignment or ASR confidence, both unproven on the known case).
