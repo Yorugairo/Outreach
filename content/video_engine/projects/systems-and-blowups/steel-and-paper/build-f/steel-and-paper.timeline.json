@@ -34638,7 +34638,7 @@
     ],
     "series": [
      {
-      "label": "cash in",
+      "label": "",
       "name": "CASH FROM OPERATIONS",
       "color": "teal",
       "pts": [
@@ -34693,7 +34693,7 @@
       ]
      },
      {
-      "label": "capex",
+      "label": "",
       "name": "CASH CAPEX",
       "color": "crimson",
       "pts": [
@@ -34748,7 +34748,7 @@
       ]
      },
      {
-      "label": "",
+      "label": "cash in",
       "name": "",
       "color": "teal",
       "dash": "7 6",
@@ -34769,8 +34769,8 @@
       ]
      },
      {
-      "label": "",
-      "name": "TREND",
+      "label": "capex",
+      "name": "",
       "color": "crimson",
       "dash": "7 6",
       "delay": 2.0,
