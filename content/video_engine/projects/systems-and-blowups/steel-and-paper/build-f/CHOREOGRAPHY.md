@@ -1,6 +1,6 @@
 # CHOREOGRAPHY STATEMENT - Steel and Paper (build F)
 
-75 scenes - 40 coalesced docks - 16 wash intervals covering 70% of 749s
+75 scenes - 41 coalesced docks - 16 wash intervals covering 70% of 749s
 
 Every entering and exiting element, in order. Verify any slot
 by reading its lines; the gates below run on every build.
@@ -159,14 +159,16 @@ by reading its lines; the gates below run on every build.
   10:24.9  EXIT   ev-tripwire-board-v1  carried by the wipe front
   10:24.9  SCENE  s62  world-korea-port-v1  (6.8s, exit wipe)
   10:25.0  ENTER  ev-memory-monitor-v1  slot 0 side r  holds 6.7s
-  10:31.7  ENTER  ev-instrument-memory  slot 0 side l  holds 6.8s
+  10:31.7  ENTER  ev-instrument-memory  slot 0 side pair  holds 6.8s
+  10:31.7  ENTER  ev-trim-proof-v1  slot 1 side pair  holds 6.8s
   10:31.7  EXIT   ev-memory-monitor-v1  carried by the wipe front
   10:31.7  SCENE  s63  world-memory-wafer-v1  (6.8s, exit wipe)
-  10:38.5  ENTER  ev-hbm-export-series  slot 0 side r  holds 10.4s
+  10:38.5  ENTER  ev-hbm-export-series  slot 0 side l  holds 10.4s
   10:38.5  EXIT   ev-instrument-memory  carried by the wipe front
+  10:38.5  EXIT   ev-trim-proof-v1  carried by the wipe front
   10:38.5  SCENE  s64  world-unwind-desk-v2  (18.6s, exit wipe)
   10:48.9  EXIT   ev-hbm-export-series  fades in place
-  10:49.1  ENTER  ev-june-print-v1  slot 0 side l  holds 8.0s
+  10:49.1  ENTER  ev-june-print-v1  slot 0 side r  holds 8.0s
   10:57.1  EXIT   ev-june-print-v1  carried by the wipe front
   10:57.1  SCENE  s65  world-modern-certificate-v1  (5.1s, exit cut)
   10:57.8  LIGHT  wash falls
@@ -178,14 +180,14 @@ by reading its lines; the gates below run on every build.
   11:32.4  ENTER  ev-hynix-steel-v1  slot 0 side pair  holds 8.1s
   11:32.4  LIGHT  wash rises (side of first card)
   11:36.0  ENTER  ev-memory-arithmetic-v1  slot 1 side pair  holds 4.5s
-  11:40.5  ENTER  ev-index-concentration-v1  slot 0 side r  holds 13.5s
+  11:40.5  ENTER  ev-index-concentration-v1  slot 0 side l  holds 13.5s
   11:40.5  EXIT   ev-hynix-steel-v1  carried by the wipe front
   11:40.5  EXIT   ev-memory-arithmetic-v1  carried by the wipe front
   11:40.5  SCENE  s71  world-listing-barge-v1  (13.5s, exit wipe)
   11:54.0  EXIT   ev-index-concentration-v1  carried by the wipe front
   11:54.0  SCENE  s72  beat-06-017-018-diworsification-v1  (5.8s, exit cut)
   11:54.7  LIGHT  wash falls
-  11:59.8  ENTER  ev-test-scorecard-v1  slot 0 side l  holds 4.9s
+  11:59.8  ENTER  ev-test-scorecard-v1  slot 0 side r  holds 4.9s
   11:59.8  LIGHT  wash rises (side of first card)
   11:59.8  SCENE  s73  beat-04-001-buyer-behavior-v1  (18.9s, exit wipe)
   12:04.7  EXIT   ev-test-scorecard-v1  fades in place

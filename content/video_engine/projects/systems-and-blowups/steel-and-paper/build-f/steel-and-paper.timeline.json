@@ -36444,6 +36444,84 @@
     }
    ]
   },
+  "ev-trim-proof-v1": {
+   "title": "\u201cIf you're so bullish, why trim?\u201d",
+   "source": "SCML monitor backtest - weak prints, Aug '24 - Aug '26",
+   "species": "data",
+   "document": {
+    "path": "Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-trim-proof-v1.png",
+    "sha256": "d2c3c503361904b6ab04e5f883a9dd4e603d37ff95138556e0e1aaffc386768b"
+   },
+   "badges": [
+    {
+     "label": "AFTER A WEAK PRINT",
+     "value": "7 of 8",
+     "tag": "half-months negative",
+     "accent": "coral"
+    },
+    {
+     "label": "AVERAGE FOLLOW-THROUGH",
+     "value": "-6.9%",
+     "tag": "the trim's payoff",
+     "accent": "coral"
+    }
+   ],
+   "chart": {
+    "title": "\u201cIf you're so bullish, why trim?\u201d",
+    "sub": "The paper's move in the HALF-MONTH after each weak customs print (m/m \u2264 -3%), Aug '24 - Aug '26. Strong prints are already front-run",
+    "src": "Korean customs HS 8542.32 via SCML monitor; hynix + Micron basket, Yahoo Finance - 8 weak prints in 25 months",
+    "bars": [
+     {
+      "label": "Oct '24",
+      "value": 3.9,
+      "color": "crimson",
+      "note": "-4%"
+     },
+     {
+      "label": "Dec '24",
+      "value": 12.4,
+      "color": "crimson",
+      "note": "-12%"
+     },
+     {
+      "label": "Jan '25",
+      "value": 5.3,
+      "color": "crimson",
+      "note": "-5%"
+     },
+     {
+      "label": "Feb '25",
+      "value": 10.5,
+      "color": "crimson",
+      "note": "-10%"
+     },
+     {
+      "label": "Mar '25",
+      "value": 11.3,
+      "color": "crimson",
+      "note": "-11%"
+     },
+     {
+      "label": "Jun '25",
+      "value": 10.9,
+      "color": "teal",
+      "note": "+11%"
+     },
+     {
+      "label": "Jul '25",
+      "value": 8.7,
+      "color": "crimson",
+      "note": "-9%"
+     },
+     {
+      "label": "Jul '26",
+      "value": 13.8,
+      "color": "crimson",
+      "note": "-14%"
+     }
+    ]
+   }
+  },
   "ev-hbm-export-series": {
    "title": "Latest Reading",
    "source": "data period 2026-07 \u00b7 customs ~1mo behind",
@@ -39528,6 +39606,16 @@
     {
      "slide": "ev-instrument-memory",
      "slot": 0,
+     "enter": 631.7,
+     "exit": 638.5,
+     "badge_at": [
+      633.75,
+      635.05
+     ]
+    },
+    {
+     "slide": "ev-trim-proof-v1",
+     "slot": 1,
      "enter": 631.7,
      "exit": 638.5,
      "badge_at": [

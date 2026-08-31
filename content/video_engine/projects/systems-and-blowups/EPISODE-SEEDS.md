@@ -61,3 +61,19 @@ memory episode): payload saved verbatim at
 evidence/objects/ev-cycle-anatomy-v1.series.json.PARKED (Dec window,
 three marks). Steel and Paper carries the simplified May-window version.
 This IS the memory-episode's second act.
+
+
+## Act three: the print calendar is the metronome (backtest, 2026-08-30)
+
+25 months, Aug '24 - Aug '26, hynix+Micron vs the print calendar:
+- **Anticipation drift**: +6.8% mean in the half-month INTO the print
+  (18/25 positive) vs +2.2% after - the month's gains concentrate
+  before the release.
+- **Good prints are pre-traded**: post-print halves after strong prints
+  = +3.4%, 8/14 positive. A coin flip with drift.
+- **THE ASYMMETRY**: after weak prints (m/m <= -3%): 7 of 8 half-months
+  negative, avg -6.9%. Bad news is the only surprise left.
+Card built: ev-trim-proof-v1 ("If you're so bullish, why trim?") -
+docked in Steel and Paper at the trigger beat AND reusable as the
+memory episode's act-three centerpiece. Caveats on record: n=25, one
+regime, trend beta in the drift.

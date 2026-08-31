@@ -1149,5 +1149,27 @@
     "accent": "teal"
    }
   ]
+ },
+ {
+  "asset": "ev-trim-proof-v1",
+  "species": "data",
+  "anchor": "That print, I start trimming.",
+  "anchor_kind": "claim",
+  "title": "\u201cIf you're so bullish, why trim?\u201d",
+  "source": "SCML monitor backtest - weak prints, Aug '24 - Aug '26",
+  "badges": [
+   {
+    "label": "AFTER A WEAK PRINT",
+    "value": "7 of 8",
+    "tag": "half-months negative",
+    "accent": "coral"
+   },
+   {
+    "label": "AVERAGE FOLLOW-THROUGH",
+    "value": "-6.9%",
+    "tag": "the trim's payoff",
+    "accent": "coral"
+   }
+  ]
  }
 ]
