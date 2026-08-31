@@ -501,3 +501,13 @@ binds CLAIMED numbers (anything a viewer could check and call wrong);
 obviously non-literal hyperbole answers to the ear, not the fact-check.
 When a gate and the voice collide, the voice wins and the exception is
 logged - never silently sanded down.
+
+## E18 — The pre-review pass is Claude's, standing (2026-08-31)
+
+"You ALWAYS have the pre-review pass, please be my guest." Before any
+build reaches the operator's eye: run the evidence-coverage audit (no
+empty stretches like the s36 middle), the chart mute-test sweep (doc 29
+§9.23), the choreography/hold audit (no dead cards like the s73 recap),
+a sound check once the audio layer exists, and packaging QC. Findings
+arrive as FIXES WITH CANDIDATES, not questions. The operator's review
+should start where Claude's ends.
