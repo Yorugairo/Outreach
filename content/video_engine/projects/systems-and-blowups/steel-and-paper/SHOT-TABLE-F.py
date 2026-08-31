@@ -16,10 +16,10 @@ range (1.00 -> 1.04 over the shot), x/y in px.
 W = [
 # ── P1 OPEN ────────────────────────────────────────────────────────────
 (  0.0,  7.7, "world-spike-desk-v1",            (.05,  10,  -6), []),                       # the spike itself, macro. The ring token plants here.
-( 7.8,  16.6, "world-adviser-signature-v1",         (.04, -14,   6), [("ev-bravos-original-v1",0,9.5,50.5)]),  # THEIR chart, their two lines - held through the credit and both reads (topic-governed exit)
+( 7.8,  16.6, "world-adviser-signature-v1",         (.04, -14,   6), [("ev-bravos-original-v1",0,9.5,50.4)]),  # THEIR chart, their two lines - held through the credit and both reads (topic-governed exit)
 ( 16.7,  29.1, "world-share-office-queue-v1",  (.05,  16,  -8), []),      # the original persists overhead
-( 29.1,  50.5, "world-gpu-crate-dock-v1",          (.04, -12,   8), []),      # "so here's the original" - credit where due
-( 50.5,  57.3, "world-statement-kitchen",        (.06,   8, -10), [("ev-divergence-v1",0,50.5,70.9)]),  # OUR chart takes over: semis erupt at "second line", memory at "one layer never drew"; exits when the topic does ("wrong address")
+( 29.1,  50.4, "world-gpu-crate-dock-v1",          (.04, -12,   8), []),      # "so here's the original" - credit where due
+( 50.4,  57.3, "world-statement-kitchen",        (.06,   8, -10), [("ev-divergence-v1",0,50.4,70.9)]),  # OUR chart takes over: semis erupt at "second line", memory at "one layer never drew"; exits when the topic does ("wrong address")
 ( 57.3,  71.3, "world-three-notch-slate-v1",     (.05, -10,   6), []),  # the test named, as an object
 ( 71.3,  86.1, "world-signature-nib-v2",         (.04,  12,   8), []),  # 'thirty seconds a stock'
 ( 86.3,  92.3, "world-hype-machine-v2",          (.05, -16,  -6), [("silicon-reality-gap-s04-teacher-stamped",0,86.9,92.3)]),  # the cyclical trauma: returns -> capital -> oversupply

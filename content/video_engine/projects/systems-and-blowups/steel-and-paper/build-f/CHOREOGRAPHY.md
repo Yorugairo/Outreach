@@ -7,13 +7,13 @@ by reading its lines; the gates below run on every build.
 
    0:00.0  SCENE  s01  world-spike-desk-v1  (7.8s, exit cut)
    0:07.8  SCENE  s02  world-adviser-signature-v1  (8.9s, exit wipe)
-   0:09.5  ENTER  ev-bravos-original-v1  slot 0 side r  holds 41.0s
+   0:09.5  ENTER  ev-bravos-original-v1  slot 0 side r  holds 40.9s
    0:09.5  LIGHT  wash rises (side of first card)
    0:16.7  SCENE  s03  world-share-office-queue-v1  (12.4s, exit cut)
-   0:29.1  SCENE  s04  world-gpu-crate-dock-v1  (21.4s, exit cut)
-   0:50.5  ENTER  ev-divergence-v1  slot 0 side l  holds 20.8s
-   0:50.5  EXIT   ev-bravos-original-v1  carried by the wipe front
-   0:50.5  SCENE  s05  world-statement-kitchen  (6.8s, exit wipe)
+   0:29.1  SCENE  s04  world-gpu-crate-dock-v1  (21.3s, exit cut)
+   0:50.4  ENTER  ev-divergence-v1  slot 0 side l  holds 20.9s
+   0:50.4  EXIT   ev-bravos-original-v1  carried by the wipe front
+   0:50.4  SCENE  s05  world-statement-kitchen  (6.9s, exit wipe)
    0:57.3  SCENE  s06  world-three-notch-slate-v1  (14.0s, exit cut)
    1:11.3  EXIT   ev-divergence-v1  carried by the wipe front
    1:11.3  SCENE  s07  world-signature-nib-v2  (15.0s, exit cut)

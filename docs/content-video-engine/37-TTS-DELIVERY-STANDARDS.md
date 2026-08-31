@@ -629,3 +629,43 @@ integrally tied to those pauses"):
 The field is now derived from TEXT SHAPE plus the pause plan - robust
 to take regeneration, since the rhetoric is the invariant, not the
 render.
+
+## 23. Micro-repair - the editor excises what the provider stutters (operator, 2026-08-30)
+
+Amends the old splice ban. When the provider RENDERS a sub-word defect
+(class 5c - doubled plosive, repeated glide: "Builted it"), the fix is
+a free excision in the editor, not a paid re-render:
+
+    python repair_microcut.py scene_1 23.946 23.966
+
+- **Locate by envelope, not by whisper** - transcription and energy
+  scans are blind below ~100ms; the doubled release shows as a
+  hump-dip-hump cluster at 2ms resolution. The ear is the instrument
+  of record.
+- **Preview candidates first, free.** Cut 2-3 in-memory variants of
+  the excision and send clips; the take is not touched until the ear
+  picks one. (First attempt on Script G removed a whole syllable -
+  the preview step exists because of it.)
+- **The joint is a ZERO-CROSS BUTT SPLICE, no crossfade.** These cuts
+  land in closure silence between a stop consonant and its release. A
+  crossfade there multiplies the surviving consonant's attack toward
+  zero and the next word arrives audibly quiet (operator caught "it"
+  landing soft). Snapping both edges to the nearest zero-crossing is
+  what prevents the click; no amplitude blending is needed or wanted.
+- The tool shifts `words.json`, logs the cut under `micro_repairs`,
+  and keeps a `.prerepair` backup. Re-run the chain from the join -
+  the repair is on a PART file, an input to everything downstream.
+
+## 24. Next-voice track: ElevenLabs Professional Voice Clone (seeded 2026-08-30)
+
+Episode one ships on the stock voice - the operator's ruling: "get it
+to a passable production level before we keep restarting searching for
+perfection." For a later episode, PVC is the standing candidate:
+
+- The operator records 30min-3h of clean read; ElevenLabs trains a
+  dedicated model of THEIR voice. Resolves the deep-voice identity
+  question (doc 36: the person whose bio we tell becomes the person
+  speaking), and PVCs are more stable take-to-take than stock voices -
+  it attacks the class-5c stutter family at the source.
+- Cost: paid tier + a recording session. Decision point: after episode
+  one publishes, before episode two's record.
