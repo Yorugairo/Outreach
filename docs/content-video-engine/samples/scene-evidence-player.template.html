@@ -414,12 +414,19 @@
         img.src = A[it.id] || "";
         card.appendChild(img);
         sb.appendChild(card);
-        const cx = L + W / 2 - 50, cy = T + 14 - 50;   // offset from center
-        const nrm = Math.hypot(cx, cy) || 1;
+        /* hyperframes geometry (operator: "the evidence is actually
+           dancing" in that cut): the base CSS rect is the card's RAIL
+           spot; the ACTIVE pose (large, near stage center, where the
+           card lives WHILE ITS LINE IS SPOKEN) is a transform relative
+           to it. Stage is 1920x1080. */
+        const wpx = W / 100 * 1920, hpx = wpx * 480 / 1056;
+        const cx = L / 100 * 1920 + wpx / 2, cy = T / 100 * 1080 + hpx / 2;
+        const acx = 930 + (i % 2 ? 70 : -70), acy = 400 + (i % 3) * 26;
         return { card, at: it.at,
                  tilt: [-3, 2, -2, 3, -2.5, 2.5][i % 6],
                  dir: i % 2 ? 1 : -1,
-                 bx: cx / nrm, by: cy / nrm };
+                 adx: acx - cx, ady: acy - cy, asc: 840 / wpx,
+                 bx: (cx - 960) / 700, by: (cy - 540) / 460 };
       });
       document.getElementById("stage").appendChild(sb);
       stackState[slot] = { sb, items, clear_at: ev.stack.clear_at };
@@ -807,17 +814,32 @@
           ` scale(${1 + cbe * 0.22})`;
         return;
       }
-      const e = clamp01((t - it.at) / 0.6);
+      /* hyperframes focus hand-off: enter LARGE at stage center while
+         the phrase is spoken; when the NEXT proof's beat lands, recede
+         to the rail spot; drift the whole time. Pure function of t -
+         scrub-safe. */
+      const nextAt = i + 1 < st.items.length
+        ? st.items[i + 1].at : st.clear_at - 0.9;
+      const e = clamp01((t - it.at) / 0.9);
       const ee = 1 - Math.pow(1 - e, 3);
-      const fl = Math.sin(t * 1.3 + i * 1.7) * 6 * ee;
-      const fr = Math.sin(t * 0.9 + i * 2.3) * 1.4 * ee;
+      const r = clamp01((t - nextAt) / 1.0);
+      const rr = r < 0.5 ? 4 * r * r * r
+                         : 1 - Math.pow(-2 * r + 2, 3) / 2;
+      // pose blend: 0 = rail, 1 = active
+      const a = ee * (1 - rr);
+      const drift = Math.sin(t * 0.55 + i * 1.7);
+      const dx = it.adx * a + drift * (8 + 26 * a);
+      const dy = it.ady * a + Math.cos(t * 0.7 + i * 2.1) * (5 + 14 * a);
+      const sc = 1 + (it.asc - 1) * a + drift * 0.008 * a;
       it.card.style.opacity = ee.toFixed(2);
+      it.card.style.zIndex = a > 0.5 ? 9 : 7;
       it.card.style.transform =
-        `translateZ(${(1 - ee) * -940}px)` +
-        ` translate(${(1 - ee) * -120 * it.bx}px,` +
-        ` ${(1 - ee) * 60 + fl}px)` +
-        ` rotateY(${(1 - ee) * 38 * it.dir}deg)` +
-        ` rotate(${it.tilt * ee + fr}deg)`;
+        `translate(${(dx + (1 - ee) * 460 * it.dir).toFixed(1)}px,` +
+        ` ${(dy + (1 - ee) * -90).toFixed(1)}px)` +
+        ` translateZ(${(1 - ee) * -700}px)` +
+        ` rotateY(${(1 - ee) * 30 * it.dir}deg)` +
+        ` rotate(${(it.tilt * (1 - a) + drift * 0.6 * a).toFixed(2)}deg)` +
+        ` scale(${sc.toFixed(3)})`;
     });
   };
   /* the line is drawn over the first stretch of the hold - eased, series

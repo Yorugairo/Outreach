@@ -1310,3 +1310,14 @@ dancing around the world plate, not static on the evidence layer"):
   extend ~1s past clear_at so the burst finishes ticking.
 - Item beats are absolute times on the authoring clock - a retime
   regenerates them from their verbatim phrases.
+
+**9.24b - the HYPERFRAMES blend (operator: "in that cut the evidence
+is actually dancing").** What makes the pilot dance is not the
+fly-ins, it is the FOCUS HAND-OFF: each proof enters LARGE near stage
+center and stays there WHILE ITS PHRASE IS SPOKEN, then recedes to
+its small rail spot exactly when the next proof's beat lands - the
+composition renegotiates space on every beat. The active card drifts
+continuously (slow sine wander + scale breathing); railed cards hold
+almost still. Pose is a pure function of t (rail rect = base CSS,
+active pose = transform), so scrubbing is exact. The last proof holds
+focus until the burst.
