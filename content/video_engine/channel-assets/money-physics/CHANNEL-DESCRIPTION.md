@@ -5,18 +5,28 @@ works" / "market mechanics" / "finance explained" cluster; "financial
 history" + "market crashes" as the evergreen tail our 1845-to-AI series
 serves). Voice per doc 33 (attribution-first, credentials exact, no
 never-list constructions). First line = 148 chars, inside YouTube's
-~150-char search/hover snippet. Total 805/1000.
+~150-char search/hover snippet. Total 992/1000.
+
+Operator rewrite 2026-08-31 merged in: AI-transparency disclosure
+("scrutiny stays human"), public-LinkedIn verifiability, "cited not
+gatekept", "chart lore" jab, outdated-advice content lane, tech-trace
+step. Cut for budget: "information systems and business logic applied
+to financial markets" (the "tech meets the numbers" line carries it
+concretely).
 
 ## Description (paste verbatim)
 
 ```
 Money Physics explains how markets actually work — the mechanics of risk, reward, and time that decide who gets paid and who's left holding the bag.
 
-Every episode takes one live story — an AI capex boom, a memory-chip squeeze, a railway mania from 1845 — and traces the machine underneath it: where the money comes in, what it's promised, and what breaks first. Charts built to be read with the sound off. Claims traced to primary sources — SEC filings, Fed data, national accounts — and when a call is my judgment, it's marked as one.
+I worked in risk at JPMorgan — this channel applies that discipline to the stories markets tell, and my LinkedIn is public so you can check. I build it with AI, because that's how one analyst moves at the speed the market demands. The scrutiny stays human.
 
-I worked in risk at JPMorgan. I've owned and run a business. This channel applies that discipline to the stories markets tell: mechanism first, verdict last.
+Every episode takes one story — an AI capex boom, a memory-chip squeeze, the biggest investment in history, a piece of financial advice that stopped being true — and traces the machine underneath: where the money comes in, what it's promised, the tech that carries it, and what breaks first. Claims traced to primary sources — SEC filings, Fed data, national accounts. Cited, not gatekept.
 
-Education, not investment advice. Subscribe for the next breakdown.
+Where the tech meets the numbers — and a human makes the call.
+
+Education — not investment advice, and not chart lore.
+Subscribe for the next breakdown.
 
 The market isn't magic. It's mechanics.
 ```
