@@ -34,7 +34,7 @@ Subscribe for the next breakdown.
 The market isn't magic. It's mechanics.
 ```
 
-## Channel keywords (Studio → Settings → Channel → Keywords; 226/500 chars)
+## Channel keywords (Studio → Settings → Channel → Keywords; 235/500 chars)
 
 ```
 how money actually works, how money works, money mechanics, how markets actually work, market mechanics, finance explained, financial history, market crashes, bubbles, AI bubble, semiconductors, risk, investing explained, money physics
