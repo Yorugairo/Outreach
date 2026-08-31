@@ -48,6 +48,9 @@ read.
 | **Teacher-stamped catalog** — 86 production slides keyed `image_id` → `extracted_path` | `sources/decks/teacher-stamped-production-visuals/` + manifest (MAIN checkout) | LIVE | episode-build skill §5 |
 | **Two-tier palette** — graphic tier for lines/fills, lifted text tier for numerals on dark pills | template `:root` + BUILD-PIPELINE.md | LIVE — never graphic-tier text on dark | contrast 5.7–7.4:1 measured |
 
+| **VERDICT STACK species** — N proofs fly in from depth over the world plate, word-matched; hyperframes focus hand-off (active card LARGE center-stage for its phrase, recedes to rail on the next beat); radial burst on the pivot | `samples/scene-evidence-player.template.html` (stackbox / drawStack; dock species `stack`, member ids resolve against asset-data) | LIVE — nine-proof wall at s67-70, operator-approved | doc 29 §9.24-9.24b |
+| **Chart self-containment gates** — auto-fit checklist columns, skew-pivot highlighter sweeps, nowrap pills, mark backing chips + dotted leaders, named reference series, log-chart date ticks, header shrink-then-squeeze, recap fill (sub-12s checklist hold = 0.8s/row) | `samples/scene-evidence-player.template.html` (template-enforced, every chart inherits) | LIVE — mute-the-narration test is the acceptance gate | doc 29 §9.23 |
+
 ## Script & voice
 
 | Capability | Where | State | Proof |
@@ -67,6 +70,10 @@ read.
 | **Caption pages regen** — ~3-word kinetic pages with k-flags from the current timeline | `scripts/build_caption_pages.py` | LIVE | 832 pages |
 | **Topic-exit audit** — E11 enumeration of every dock vs the narration it serves; exits authored to topic ends | `build-f/TOPIC-EXIT-AUDIT.md` procedure (doc 29 §9.20) | STANDING — runs after every retime or script change | 47 docks walked 2026-08-30 |
 | **Choreography clash gates** — same-slot overlap + >2 concurrent docks FAIL | `scripts/emit_choreography.py` | LIVE — caught a real slot clash on first run | |
+
+| **Pause grammar, GENERATIVE** — scans the VO for grammar classes (stat-settle→era-shift FULL; snap settles / era breaths / reveal leads HALF), diffs against the standing plan; run before every master record | `scripts/derive_pauses.py` | LIVE — Script G: 18 candidates, 1 operator full + 7 ratified halves | doc 37 §19b |
+| **Micro-repair** — sub-word provider stutters excised free: envelope-localize, fade-free preview candidates, zero-cross butt splice, words.json shifted, verify from the EDITED master | `scripts/repair_microcut.py` | PROVEN — 'Builted it' two-round fix | doc 37 §23-23c |
+| **Stutter auto-scan** — NEGATIVE result, do not rebuild: three envelope detectors all failed validation against the known case; ear detects, envelope localizes | (tool deleted by design) | CLOSED | doc 37 §23b |
 
 ## External evidence sources
 
