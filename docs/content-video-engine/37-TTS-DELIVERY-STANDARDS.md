@@ -618,10 +618,13 @@ integrally tied to those pauses"):
 - **A settle-dip into EVERY inserted pause**: 0.96x over the last
   0.55s before the cut-in, 1.00x for 0.35s after - the field supplies
   the breath the provider no longer plants.
-- **Graded semantic limits from rhetoric shape** (not a binary hold):
-  savor/key/lead/settle/reveal sentences and aphorism fragments
-  (<6 words) 1.00x · half-beats 1.02x · questions 1.04x · declared
-  fluid runs cruise 1.12x · connective tissue 1.10x.
+- **Graded semantic limits from rhetoric shape** (v7.1 middle ground -
+  the first grading over-held): ONLY pause-anchored sentences and mark
+  sites hold - full-beat kinds 1.00x, half-beats 1.05x; fragments and
+  questions RUN (snap-fragments are run material); declared fluid runs
+  cruise 1.12x; connective tissue 1.10x. Dips soften to 0.975x over
+  0.40s. 46 of 269 sentences held on Script G - roughly one hold per
+  three cruising sentences is the balance point.
 
 The field is now derived from TEXT SHAPE plus the pause plan - robust
 to take regeneration, since the rhetoric is the invariant, not the

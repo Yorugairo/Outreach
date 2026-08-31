@@ -174,13 +174,13 @@ def build(words, plan, audio):
             continue
         kindmap.setdefault(sent_of(t), []).append(p2.get("kind", ""))
         # the breath into the inserted pause
-        cons.append((t - 0.55, t, 0.96, 0.5))
-        cons.append((t, t + 0.35, 1.00, 0.6))
+        cons.append((t - 0.40, t, 0.975, 0.45))
+        cons.append((t, t + 0.25, 1.00, 0.5))
     for span, kinds in kindmap.items():
         if span is None:
             continue
         k = " ".join(kinds)
-        lim = 1.02 if all(x.startswith("half") for x in kinds) else 1.00
+        lim = 1.05 if all(x.startswith("half") for x in kinds) else 1.00
         cons.append((span[0], span[1], lim, RAMP_S))
     for t in marks:                       # tag-mark sites (key beats)
         sp2 = sent_of(t)
@@ -191,10 +191,9 @@ def build(words, plan, audio):
         n_words = sum(1 for w in words if a <= w["start"] < b)
         txt_end = next((w["w"] for w in reversed(words)
                         if a <= w["start"] < b), "")
-        if n_words and n_words < 6:
-            cons.append((a, b, 1.00, RAMP_S))          # aphorism fragment
-        elif txt_end.rstrip('"”').endswith("?"):
-            cons.append((a, b, 1.04, RAMP_S))          # question
+        # v7.1 (operator: "too gappy - middle ground"): fragments and
+        # questions do NOT auto-hold - snap-fragments are RUN material;
+        # only pause-anchored sentences and the marks hold the field
     cons.append((0.0, HOOK_HOLD_S, 1.00, RAMP_S))
     take_end = words[-1]["end"]
     cons.append((take_end - TAIL_HOLD_S, take_end + 1, 1.00, RAMP_S))
