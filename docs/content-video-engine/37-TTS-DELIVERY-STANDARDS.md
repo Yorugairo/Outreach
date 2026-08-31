@@ -693,3 +693,23 @@ defect). The ear remains the detector; the envelope map at 2ms is the
 LOCALIZER once the ear has flagged a timestamp. Do not rebuild this
 scanner without a fundamentally different signal (phoneme-level
 alignment or ASR confidence, both unproven on the known case).
+
+### 23c. Micro-repair round two - the whole cluster goes (operator, 2026-08-30)
+
+The 'Builted' fix took two rounds; the corrections are doctrine:
+
+- **Excise the WHOLE junk cluster, keep exactly ONE release.** The
+  doubled release was a 3-4 hump, ~70ms cluster, not a single extra
+  burst. A partial cut leaves the stutter audible. Keeping the LAST
+  release before the vowel read most natural (K3).
+- **A crossfade can MASK an incomplete cut** - round one's faded
+  previews sounded fixed because the ramp suppressed the un-excised
+  humps (and the next word with them). Fade-free previews are the
+  honest audition.
+- **The verification clip comes from the EDITED MASTER, never the raw
+  take.** Raw previews approve the cut; only episode-paused approves
+  the repair. (Here tempo was passthrough at the site - rate 1.0,
+  word durations identical - but the rule stands.)
+- Accepted residual: "it" arrives slightly weak on every variant -
+  operator-accepted for this cut, revisit with the voice upgrade
+  (s24 PVC track).
