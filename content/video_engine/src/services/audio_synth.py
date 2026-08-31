@@ -675,6 +675,14 @@ class AudioSynthService:
                     cache_sidecar,
                     caption_text,
                 )
+                for candidate in (words_path, cache_sidecar):
+                    if request_id is None and candidate.exists():
+                        try:
+                            request_id = json.loads(
+                                candidate.read_text(encoding="utf-8")
+                            ).get("request_id")
+                        except (OSError, json.JSONDecodeError):
+                            pass
             except AudioSynthesisError:
                 # a cache entry that cannot validate is a MISS, never a
                 # crash: drop it and resynthesize (2026-08-30 - the first
@@ -708,6 +716,7 @@ class AudioSynthService:
                     {
                         "scene_id": int(scene_id),
                         "duration_s": duration_s,
+                        "request_id": request_id,
                         "words": words,
                         "request_id": request_id,
                     },
