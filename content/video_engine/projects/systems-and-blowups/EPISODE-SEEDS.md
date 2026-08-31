@@ -27,3 +27,17 @@ From the ledger's own customs series: physics led paper by ~36 months.
 - **2025-26** — common knowledge arrives
 The channel's edge stated in one line: the monitor watches the FRONT of
 the lag; the market trades the back.
+
+## The capitulation doctrine (operator, verbatim, 2026-08-30)
+
+"Trimming on the release date puts me AHEAD of the retail fear, even if
+behind the sharpest money in the trade. That's the trick: we don't have
+to be sharper than the market when the trade is the bottleneck of
+digital growth; we just have to be ahead of the capitulation."
+
+The keystone of the monitor's logic — it answers "smart money sees the
+data first" head-on: structural demand wins the trade; the instrument
+only has to win the EXIT, and the exit's competition is the crowd, not
+the pros. Candidate standing thesis (T13?) for doc 36: "Beat the
+capitulation, not the market." Pairs with "I don't have to be wrong for
+the trade to break" as the two halves of the risk doctrine.
