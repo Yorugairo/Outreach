@@ -186,6 +186,38 @@ def build(words, plan, audio):
         sp2 = sent_of(t)
         if sp2:
             cons.append((sp2[0], sp2[1], 1.00, RAMP_S))
+    # v7.2 (operator, s11: "IT runs STRAIGHT through"): the field never
+    # saw the VIDEO choreography - scene/evidence transitions got no
+    # settle. Every dock anchor is an evidence ENTER on the take's own
+    # words; the approach into it slows and the reveal lands settled.
+    dock_json = EP / "build-f/evidence-dock.json"
+    n_dock = 0
+    if dock_json.exists():
+        for e in json.loads(dock_json.read_text(encoding="utf-8")):
+            anc = e.get("anchor")
+            at = find(anc, False) if anc else None
+            if at is not None:
+                cons.append((at - 0.7, at + 0.35, 1.03, 0.6))
+                n_dock += 1
+    # and DENSE INFORMATION cannot cruise: a sentence carrying 4+
+    # number tokens (numerals are spelled out in VO scripts) caps at
+    # 1.05 - the listener is doing arithmetic, not riding a run.
+    NUM_TOKENS = set(
+        """zero one two three four five six seven eight nine ten eleven
+        twelve thirteen fourteen fifteen sixteen seventeen eighteen
+        nineteen twenty thirty forty fifty sixty seventy eighty ninety
+        hundred thousand million billion trillion percent""".split())
+    n_dense = 0
+    for a, b in sents:
+        toks = [t for w2 in words if a <= w2["start"] < b
+                for t in norm(w2["w"]).split()]
+        n_num = sum(1 for t in toks
+                    if t in NUM_TOKENS or any(c.isdigit() for c in t))
+        if n_num >= 4:
+            cons.append((a, b, 1.05, RAMP_S))
+            n_dense += 1
+    print(f"  v7.2: {n_dock} dock-anchor settles, "
+          f"{n_dense} number-dense sentences capped 1.05x")
     widx = 0
     for a, b in sents:
         n_words = sum(1 for w in words if a <= w["start"] < b)

@@ -713,3 +713,21 @@ The 'Builted' fix took two rounds; the corrections are doctrine:
 - Accepted residual: "it" arrives slightly weak on every variant -
   operator-accepted for this cut, revisit with the voice upgrade
   (s24 PVC track).
+
+### 22b. Field v7.2 - the video choreography joins the field (operator, s11 review)
+
+The operator on s11: dense information sped up too much and the field
+"runs STRAIGHT through" scene transitions - v7.1's constraints were
+all script-side; the video choreography (the other half of s20's
+thesis) was never wired in. Two additions:
+
+- **Dock-anchor settles**: every evidence-dock anchor is an ENTER
+  moment on the take's own words; the field holds 1.03x from 0.7s
+  before to 0.35s after it (ramp 0.6s). 49 settles on Script G - the
+  reveal lands on a settled voice.
+- **Number-density cap**: a sentence carrying 4+ number tokens
+  (numerals are spelled out in VO) caps at 1.05x - the listener is
+  doing arithmetic, not riding a run. 8 sentences on Script G.
+
+Cost: 796.6 -> 801.2s (+4.6s of breathing). Both constraints stay
+derived from text + choreography data, robust to take regeneration.
