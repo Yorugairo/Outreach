@@ -1105,5 +1105,27 @@
     "accent": "teal"
    }
   ]
+ },
+ {
+  "asset": "ev-memory-arithmetic-v1",
+  "species": "data",
+  "anchor": "And past that, do the arithmetic yourself.",
+  "anchor_kind": "claim",
+  "title": "The arithmetic - run it yourself",
+  "source": "fab timelines + NVIDIA memory-per-chip generations",
+  "badges": [
+   {
+    "label": "FAB BUILD",
+    "value": "4-5 yrs",
+    "tag": "supply clock",
+    "accent": "teal"
+   },
+   {
+    "label": "PER CHIP",
+    "value": "2x/gen",
+    "tag": "demand clock",
+    "accent": "coral"
+   }
+  ]
  }
 ]

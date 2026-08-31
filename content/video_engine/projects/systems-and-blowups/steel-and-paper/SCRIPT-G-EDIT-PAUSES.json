@@ -305,6 +305,30 @@
    "s": 0.45,
    "kind": "half-savor",
    "why": "the final triad opens"
+  },
+  {
+   "before": "That print, I start trimming.",
+   "s": 0.45,
+   "kind": "half-savor",
+   "why": "the action lands separately from the rule"
+  },
+  {
+   "before": "That's not a top blowing off",
+   "s": 0.45,
+   "kind": "half-reveal",
+   "why": "the consolidation verdict"
+  },
+  {
+   "before": "The only world where memory catches up by twenty thirty",
+   "s": 0.45,
+   "kind": "half-reveal",
+   "why": "the flip condition; arithmetic card verdict row lands here"
+  },
+  {
+   "before": "Decide for yourself which of those you believe.",
+   "s": 0.45,
+   "kind": "half-savor",
+   "why": "the viewer's choice framed"
   }
  ],
  "note_half_beats": "half kind (0.45s) added 2026-08-30: naming->list, reveal callout, threshold settle - the audio side of chart tension reveals",

@@ -203,3 +203,26 @@ kept: "Different voice, same two lines…" (subject one sentence back),
 "Half — one technology." / "Two lines." / "Five hundred." (subject
 adjacent). The rule extends the named-subject gate: fragments carry
 their noun unless the subject is IMMEDIATELY adjacent.
+
+
+## Round 9 — instant trigger + the horizon arithmetic (operator, 2026-08-30)
+
+**G10 trigger** · the two-quarter rule BACKTESTS WRONG twice in the
+H100-era window (9mo below-avg at the trade's birth; 8mo into Jul '25
+before the +500%). Replaced with the instant/graduated rule. The
+buildout qualifier is the mix-shift guard (2022: the aggregate spoke
+for phones until AI became the marginal buyer).
+
+**G11 consolidation** · the June -3.7% print, the trim disclosed, the
+reversal: "That's not a top blowing off — that's a big run digesting."
+
+**G12 horizon** · admitted tier only (booked through '26 — the 2028
+figure is a street PROJECTION and stays off air), then the operator's
+own derivation ending in the four-part tell: "The only world where
+memory catches up by twenty thirty is one where AI starts developing
+slower than factories get built." Draft's 24w sentence split; "do the
+arithmetic" avoids colliding with [433] "Run the arithmetic."
+
+Operator on record: **"I don't have to be wrong for the trade to
+break."** All ten gates walked per new sentence; lint clean; preflight
+CLEAN. REQUIRES RE-RECORD (queued with G9). Runtime +~35s est.

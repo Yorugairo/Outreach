@@ -228,11 +228,9 @@ half. Write it down — it's real. Mine is stricter, and it's the one this
 channel already stands on. The variable is memory — the RAM inside every
 one of these data centers. And I don't take that one on trust. I built a
 monitor for it: it reads what memory costs leaving Korea, by the kilo,
-straight off customs export data. `[pre-key]` The threshold is that number
-falling below its own trailing average, two quarters running, while the
-buildout keeps going. `[post-key]` Right now it's going the other way —
+straight off customs export data. `[pre-key]` The threshold is the release itself: the first month customs shows memory getting cheaper while the buildout still stands. That print, I start trimming. `[post-key]` Right now it's going the other way —
 DRAM up seventeen percent, and the stacked memory the AI racks actually
-need up fourteen. That's the July release; customs runs about a month
+need up fourteen. Customs printed one soft month in June. I trimmed some — so did half the market — and the next release took the price straight back up. That's not a top blowing off — that's a big run digesting. That's the July release; customs runs about a month
 behind. The flip: if memory breaks while the buildout holds, the scarcity
 story is wrong — and so am I. That week, I de-risk the builders on camera.
 
@@ -252,7 +250,7 @@ A fifth of your index rides on one bet you never placed. And the one number
 that would prove me wrong is moving the other way.
 
 Which is why I'll go further than Bravos — in both directions. More
-bullish: builders with sold-out order books are not a house of cards.
+bullish: builders with sold-out order books are not a house of cards. The order books are booked solid through twenty twenty-six. And past that, do the arithmetic yourself. A memory fab takes five years to build. Every new generation of chips doubles the memory it needs. The only world where memory catches up by twenty thirty is one where AI starts developing slower than factories get built. Decide for yourself which of those you believe.
 They're the steel — and I own them on purpose, positions disclosed every
 week. More worried: the index they sold you as the safe version of this
 trade is the certificate. Nobody holding it thinks they're speculating.

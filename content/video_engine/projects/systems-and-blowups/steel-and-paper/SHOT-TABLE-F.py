@@ -91,7 +91,7 @@ W = [
 (665.4, 673.5, "world-club-interior-papered",    (.05, -10,  -6), []),                       # 1850: trains still running, certificates papering bankrupt clubs
 (673.5, 682.5, "beat-03-008-009-physical-capacity-gate-v1", (.04,  10,   6), []),            # everything holds - they sell scarcity, for cash; then the debt turn
 (682.5, 689.0, "world-listing-barge-v1",         (.05, -10,   6), []),  # a fifth of your index - the card holds for the VERDICT beat, not here (no reuse)
-(689.0, 700.5, "beat-05-002-strategic-chokepoints-v1", (.05,  14,  -6), [("ev-hynix-steel-v1",0,692.4,700.4)]),  # purpose-built (operator): hynix price WITH the profit under it - not a house of cards
+(689.0, 700.5, "beat-05-002-strategic-chokepoints-v1", (.05,  14,  -6), [("ev-hynix-steel-v1",0,692.4,700.4),("ev-memory-arithmetic-v1",1,696.0,700.4)]),  # purpose-built (operator): hynix price WITH the profit under it - not a house of cards
 (700.5, 714.0, "world-listing-barge-v1",         (.05, -10,   6), [("ev-index-concentration-v1",0,700.5,713.8)]),  # the verdict: the safe version IS the certificate
 (714.0, 719.8, "beat-06-017-018-diworsification-v1", (.06,  10,   8), []),                   # FINAL TRIAD: steel used / paper believed / discovered at once
 (719.8, 738.7, "beat-04-001-buyer-behavior-v1",  (.04, -12,   6), [("ev-test-scorecard-v1",0,719.8,724.7)]),  # CTA: you now have the test - the scorecard returns at its recap

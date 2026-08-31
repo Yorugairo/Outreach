@@ -35797,8 +35797,8 @@
       {
        "cells": [
         "Mine",
-        "memory $/kg below trend, 2 qtrs",
-        "DRAM +17.4% m/m",
+        "any weakening customs print, buildout standing",
+        "last: Jun '26 -3.7%, reversed",
         "NOT LIT"
        ],
        "colors": [
@@ -35838,7 +35838,7 @@
    ],
    "chart": {
     "title": "The monitor - what memory costs leaving Korea",
-    "sub": "USD per kilogram of exported memory, monthly, log scale. Trigger: DRAM below its own 12-month average, two quarters running",
+    "sub": "USD per kilogram of exported memory, monthly, log scale. The trigger: the release itself - the first weakening print while the buildout stands",
     "src": "Korean customs, HS 8542.32 exports (production tier, full months) - SCML memory monitor, July 2026 release",
     "log": true,
     "yfmt": "usd",
@@ -36404,6 +36404,14 @@
         45625.0
        ]
       ]
+     }
+    ],
+    "marks": [
+     {
+      "x": 2026.458,
+      "y": 74686,
+      "label": "Jun '26: -3.7%",
+      "sub": "the trim - reversed next print"
      }
     ]
    }
@@ -37483,6 +37491,92 @@
       "sub": ""
      }
     ]
+   }
+  },
+  "ev-memory-arithmetic-v1": {
+   "title": "The arithmetic - run it yourself",
+   "source": "fab timelines + NVIDIA memory-per-chip generations",
+   "species": "data",
+   "document": {
+    "path": "Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-memory-arithmetic-v1.png",
+    "sha256": "0f79a8bad3874e4abd14ea4b31e2773f9325f3644ebbb50d24f422276429d407"
+   },
+   "badges": [
+    {
+     "label": "FAB BUILD",
+     "value": "4-5 yrs",
+     "tag": "supply clock",
+     "accent": "teal"
+    },
+    {
+     "label": "PER CHIP",
+     "value": "2x/gen",
+     "tag": "demand clock",
+     "accent": "coral"
+    }
+   ],
+   "chart": {
+    "title": "The arithmetic - run it yourself",
+    "sub": "Why the shortage cannot close fast: supply physics vs demand physics",
+    "src": "Fab timelines: SK hynix (M15X 2026, Yongin ph.1 end-2027); memory per chip: NVIDIA H100 80GB -> B200 192GB; capacity: 3 makers, HBM 2-3x silicon/GB",
+    "checklist": {
+     "head": [
+      "SIDE",
+      "THE FACT",
+      "THE NUMBER",
+      "WHAT IT MEANS"
+     ],
+     "rows": [
+      {
+       "cells": [
+        "SUPPLY",
+        "a new memory fab takes",
+        "4-5 years",
+        "next capacity: end-2027"
+       ],
+       "colors": [
+        "#f4f6f8",
+        "#dce3ea",
+        "#3bc9b0",
+        "#dce3ea"
+       ],
+       "delay": 2.0,
+       "delay_anchor": "A memory fab takes five years to build."
+      },
+      {
+       "cells": [
+        "DEMAND",
+        "memory per AI chip",
+        "80GB -> 192GB",
+        "doubles each generation"
+       ],
+       "colors": [
+        "#f4f6f8",
+        "#dce3ea",
+        "#ff8a8c",
+        "#dce3ea"
+       ],
+       "delay": 4.5,
+       "delay_anchor": "Every new generation of chips doubles the memory it needs."
+      },
+      {
+       "cells": [
+        "VERDICT",
+        "abates by 2030 only if",
+        "AI < factories",
+        "decide which you believe"
+       ],
+       "colors": [
+        "#f4f6f8",
+        "#dce3ea",
+        "#f5b72e",
+        "#dce3ea"
+       ],
+       "delay": 7.5,
+       "delay_anchor": "The only world where memory catches up by twenty thirty"
+      }
+     ]
+    }
    }
   },
   "ev-index-concentration-v1": {
@@ -39188,6 +39282,16 @@
      "badge_at": [
       694.45,
       695.75
+     ]
+    },
+    {
+     "slide": "ev-memory-arithmetic-v1",
+     "slot": 1,
+     "enter": 696.0,
+     "exit": 700.4,
+     "badge_at": [
+      698.05,
+      699.35
      ]
     }
    ]
