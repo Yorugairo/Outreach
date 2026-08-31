@@ -545,6 +545,14 @@ attention.
 4. Steep field edges -> "black hole dynamics" (operator's phrase - an
    object pulled by two fields). Ramp slope halved; adjacent chunks
    differ <=0.015x, below the perceptual step threshold.
+5b. FALSE MICRO-GAPS -> a chunk boundary INSIDE a word ("vo-oice" -
+   the vowel doubled mid-word; the operator heard it survive v4 AND
+   v5): provider timestamps are +/-30-60ms loose, so a reported 30-50ms
+   "gap" can sit inside a co-articulated word, and cutting there splits
+   the word across two rates. v6: a cut site requires >=120ms of
+   reported silence - a gap no timestamp jitter can fake. (The smoking
+   gun: 'Different'->'voice' reported 0.046s of gap that does not
+   exist.) Verifier: zero cut sites inside any word span.
 5. Independent chunk stretching -> WSOLA STARTUP TRANSIENT doubles the
    first onset inside a chunk and sharpens attacks at chunk heads (the
    residue of class 3-4; the operator heard it survive v4). v5: every

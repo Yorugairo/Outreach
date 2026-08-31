@@ -220,7 +220,12 @@ def build(words, plan, audio):
     for x, y in zip(words, words[1:]):
         gap = y["start"] - x["end"]
         r = rate_curve((y["start"] + y["end"]) / 2)
-        if gap >= 0.03 and abs(r - cr) > 0.015:
+        # v6 (operator: "vo-oice" - the vowel doubled MID-WORD): provider
+        # word timestamps are +/-30-60ms loose, so a reported 30ms "gap"
+        # can sit INSIDE a co-articulated word - cutting there splits the
+        # word across two rates. A cut site must be a gap no timestamp
+        # jitter can fake: >=120ms of reported silence.
+        if gap >= 0.12 and abs(r - cr) > 0.015:
             mid = (x["end"] + y["start"]) / 2
             chunks.append((cs, mid, cr))
             cs, cr = mid, r
