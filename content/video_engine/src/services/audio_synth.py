@@ -66,12 +66,12 @@ PAUSE_MARK_BREAKS: dict[str, str] = {
 MAX_BREAK_TAGS_PER_SEGMENT = 3
 
 _BREAK_TAG = re.compile(r'<break\s+time="\d+(?:\.\d+)?s"\s*/>')
-_PAUSE_MARK = re.compile(r"\[(?:pre|post)-key\]")
+_PAUSE_MARK = re.compile(r"`?\[(?:pre|post)-key\]`?")
 # Editorial flags ([verify], [check-me], ...) are workflow markup. They must
 # never be spoken: the provider reads unknown brackets aloud (operator-caught,
 # 2026-08-25). Scripts should not contain them at synthesis time at all; this
 # strip is the defensive gate, and finding one is warned as a script defect.
-_EDITORIAL_FLAG = re.compile(r"\[[a-z][a-z-]*\]")
+_EDITORIAL_FLAG = re.compile(r"`?\[[a-z][a-z-]*\]`?")
 
 
 def compile_pause_marks(narration: str) -> str:
@@ -668,12 +668,23 @@ class AudioSynthService:
         request_id: str | None = None
         cache_hit = cache_path.exists()
         if cache_hit:
-            audio_bytes = cache_path.read_bytes()
-            words, duration_s = self._load_cached_words(
-                words_path,
-                cache_sidecar,
-                caption_text,
-            )
+            try:
+                audio_bytes = cache_path.read_bytes()
+                words, duration_s = self._load_cached_words(
+                    words_path,
+                    cache_sidecar,
+                    caption_text,
+                )
+            except AudioSynthesisError:
+                # a cache entry that cannot validate is a MISS, never a
+                # crash: drop it and resynthesize (2026-08-30 - the first
+                # legit cache hit detonated a dormant strip bug and cost
+                # a recording run)
+                LOGGER.warning(
+                    "cache entry failed validation - dropping %s", cache_path)
+                cache_path.unlink(missing_ok=True)
+                cache_sidecar.unlink(missing_ok=True)
+                cache_hit = False
         else:
             payload, request_id = self._request_with_retries(
                 voice_id=voice_id,
