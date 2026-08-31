@@ -226,3 +226,33 @@ arithmetic" avoids colliding with [433] "Run the arithmetic."
 Operator on record: **"I don't have to be wrong for the trade to
 break."** All ten gates walked per new sentence; lint clean; preflight
 CLEAN. REQUIRES RE-RECORD (queued with G9). Runtime +~35s est.
+
+
+## Round 10 — THE FULL PASS on rounds 8-9 (operator: "the script needs
+## the full pass since we changed it")
+
+Honest admission first: rounds 8-9 walked the ten S-gates per new
+sentence but NOT the full loop — the recurring partial-pass. Round 10
+ran it complete: screens re-emitted (X1=86, deixis=32, junctions=24,
+anchors=44), every round 8-9 candidate walked to verdict, X2-X5, both
+checkers, preflight.
+
+**TWO X1 ORPHANS FOUND (insertion-severed) + one verification fix:**
+- **G13** · [206] "That's the July release" was severed from the DRAM
+  readings by G11's insertion point → G11 MOVED after the release-lag
+  note. Sequence now: readings → lag → June story → flip.
+- **G14** · [227] "They're the steel" left 6 sentences from its
+  antecedent by G12's block → G12 MOVED after the ownership line.
+  Sequence: claim → ownership → arithmetic → "Decide" → More worried.
+- **G15** · "so did half the market" = unverifiable figure → "plenty
+  of others did too."
+
+Licensed/verdicted: [200] s-run and [225] w-run sit at tell sites
+(legal); [221] t-run incidental numerals; [222] And-junction carries
+the admitted→derived turn. X2: pivot 47.7% (pin holds). X4: new
+material mean 11.5w, max 21. WARN logged: bullish/worried asymmetry at
+the close (~8 sentences vs 4) — thesis-weighted, deliberate.
+
+Round 2 re-read of all edit sites: zero findings. **CONVERGED, with
+the enumeration on record.** Lint clean · audit 0 FAIL 1 WARN
+(standing detector gap) · preflight CLEAN · 13,9k chars.

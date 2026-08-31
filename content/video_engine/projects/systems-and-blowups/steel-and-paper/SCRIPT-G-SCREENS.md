@@ -1,34 +1,33 @@
 # STRENGTH SCREENS — SCRIPT-G-VO.txt
 
-231 sentences. Every candidate below requires a
+241 sentences. Every candidate below requires a
 per-item verdict in the strength log (ok / FIXED / licensed /
 carryover). A convergence claim without this file walked is
 invalid — the enumeration IS the review.
 
-## X1 — antecedent pairs (84)
+## X1 — antecedent pairs (86)
 
 - [2] `…An iron spike.` → **It ruined almost everyone who touched it.**
 - [3] `…It ruined almost everyone who touched it.` → **That was 1845.**
 - [9] `…If you hold an index fund, it's already holding you.` → **So here's the original.**
 - [10] `…So here's the original.` → **It comes from Bravos Research — credit where due, the sharpest macro chart on Yo**
-- [17] `…dustry, and it left both behind: up a hundred and five.` → **And one layer their chart never drew.**
+- [17] `…dustry, and it left both behind: up a hundred and five.` → **And one layer Bravos' chart never drew.**
 - [22] `…The warning points at the wrong address.` → **So here's what you're getting: not a rebuttal, not a victory lap, not a panic.**
 - [25] `…he end, you'll run it yourself: thirty seconds a stock.` → **And the opponent here isn't Bravos, and it isn't Nvidia.**
 - [26] `…nd the opponent here isn't Bravos, and it isn't Nvidia.` → **It's a machine — the hype cycle — capital arriving faster than the value it's ch**
 - [27] `… — capital arriving faster than the value it's chasing.` → **But a machine you can test.**
 - [28] `…But a machine you can test.` → **That's the job of the three questions.**
-- [29] `…That's the job of the three questions.` → **They have to survive their argument before they survive mine.**
+- [29] `…That's the job of the three questions.` → **They have to survive Bravos' argument before they survive mine.**
 - [33] `…billion pounds — more than a trillion in today's money.` → **Then the stocks crashed by nearly two-thirds.**
 - [35] `…wo thousand, the internet crossed seven percent of GDP.` → **Then the tower came down.**
 - [36] `…Then the tower came down.` → **And by Bravos' math, AI spending just crossed eight.**
 - [37] `…And by Bravos' math, AI spending just crossed eight.` → **So I pulled their yardstick myself, and I ran it all the way back.**
 - [41] `…rica, straight from the government's own statisticians.` → **It counts computing and software as a share of every private investment dollar.**
-- [49] `…We're reading it together, one quarter at a time.` → **Their sharpest line is the trigger.**
-- [53] `…a half in two thousand: the internet trade rolled over.` → **So their tripwire for this cycle: the Fed back above five and a half.**
+- [53] `…a half in two thousand: the internet trade rolled over.` → **So Bravos' tripwire for this cycle: the Fed back above five and a half.**
 - [57] `…The threshold is real.` → **And here's the most honest sentence a macro channel has said all year.**
 - [61] `…the thing about risk charts: they rarely fail by lying.` → **They fail by pointing.**
 - [62] `…They fail by pointing.` → **So the obvious move looks like this: take profits on the AI trade.**
-- [65] `…Any adviser would sign it.` → **But here's where their own chart gets strange — and the strangeness is the whole**
+- [65] `…Any adviser would sign it.` → **But here's where Bravos' own chart gets strange — and the strangeness is the who**
 - [71] `…Four months.` → **And the COO, on whether any of it is showing up in the product.**
 - [72] `…COO, on whether any of it is showing up in the product.` → **His answer: if you can't draw a direct line to what you're shipping, that trade **
 - [74] `…Remember that line.` → **He's reaching for question three without having it.**
@@ -82,17 +81,20 @@ invalid — the enumeration IS the review.
 - [190] `…Scarce, cash, used.` → **It passes.**
 - [192] `…The most vertical line on the board is steel.` → **That's the uncomfortable part of this test — it doesn't care what you were hopin**
 - [198] `…emory — the RAM inside every one of these data centers.` → **And I don't take that one on trust.**
-- [202] `… stacked memory the AI racks actually need up fourteen.` → **That's the July release; customs runs about a month behind.**
-- [204] `…ldout holds, the scarcity story is wrong — and so am I.` → **That week, I de-risk the builders on camera.**
-- [206] `…s now — target-date, "the market" — but paper is paper.` → **So — the spike, one more time.**
-- [214] `… fifth of your index rides on one bet you never placed.` → **And the one number that would prove me wrong is moving the other way.**
-- [215] `…mber that would prove me wrong is moving the other way.` → **Which is why I'll go further than Bravos — in both directions.**
-- [217] `…ers with sold-out order books are not a house of cards.` → **They're the steel — and I own them on purpose, positions disclosed every week.**
-- [220] `…Nobody holding it thinks they're speculating.` → **That's what a top actually looks like: not euphoria — accidental concentration, **
-- [223] `…The paper gets believed.` → **And the difference gets discovered all at once.**
-- [226] `… at five and a half, mine on memory — that video posts.` → **And the yardstick reading lands every quarter.**
+- [201] `…memory getting cheaper while the buildout still stands.` → **That print, I start trimming.**
+- [203] `… stacked memory the AI racks actually need up fourteen.` → **That's the July release; customs runs about a month behind.**
+- [206] `…— and the next release took the price straight back up.` → **That's not a top blowing off — that's a big run digesting.**
+- [208] `…ldout holds, the scarcity story is wrong — and so am I.` → **That week, I de-risk the builders on camera.**
+- [210] `…s now — target-date, "the market" — but paper is paper.` → **So — the spike, one more time.**
+- [218] `… fifth of your index rides on one bet you never placed.` → **And the one number that would prove me wrong is moving the other way.**
+- [219] `…mber that would prove me wrong is moving the other way.` → **Which is why I'll go further than Bravos — in both directions.**
+- [221] `…ers with sold-out order books are not a house of cards.` → **They're the steel — and I own them on purpose, positions disclosed every week.**
+- [223] `…order books are booked solid through twenty twenty-six.` → **And past that, do the arithmetic yourself.**
+- [230] `…Nobody holding it thinks they're speculating.` → **That's what a top actually looks like: not euphoria — accidental concentration, **
+- [233] `…The paper gets believed.` → **And the difference gets discovered all at once.**
+- [236] `… at five and a half, mine on memory — that video posts.` → **And the yardstick reading lands every quarter.**
 
-## P6 — deixis openers (30)
+## P6 — deixis openers (32)
 
 - [2] It ruined almost everyone who touched it.
 - [3] That was 1845.
@@ -121,13 +123,15 @@ invalid — the enumeration IS the review.
 - [181] That's why the memory in a new laptop costs what it does this year.
 - [190] It passes.
 - [192] That's the uncomfortable part of this test — it doesn't care what you were hoping to concl
-- [202] That's the July release; customs runs about a month behind.
-- [204] That week, I de-risk the builders on camera.
-- [220] That's what a top actually looks like: not euphoria — accidental concentration, sold as sa
+- [201] That print, I start trimming.
+- [203] That's the July release; customs runs about a month behind.
+- [206] That's not a top blowing off — that's a big run digesting.
+- [208] That week, I de-risk the builders on camera.
+- [230] That's what a top actually looks like: not euphoria — accidental concentration, sold as sa
 
-## P1J — additive junctions, AND-THEN risk (23)
+## P1J — additive junctions, AND-THEN risk (24)
 
-- [17] `…left both behind: up a hundred and five.` → And one layer their chart never drew.
+- [17] `…left both behind: up a hundred and five.` → And one layer Bravos' chart never drew.
 - [25] `…run it yourself: thirty seconds a stock.` → And the opponent here isn't Bravos, and it isn't Nvidia.
 - [33] `…— more than a trillion in today's money.` → Then the stocks crashed by nearly two-thirds.
 - [35] `…e internet crossed seven percent of GDP.` → Then the tower came down.
@@ -147,26 +151,26 @@ invalid — the enumeration IS the review.
 - [155] `…e asset still get used tomorrow morning?` → And you can check all three from your phone.
 - [176] `…y is a bubble, it should be that number.` → And the scarcity underneath it isn't a mood — it's physics.
 - [198] `… inside every one of these data centers.` → And I don't take that one on trust.
-- [214] `…index rides on one bet you never placed.` → And the one number that would prove me wrong is moving the other way.
-- [223] `…The paper gets believed.` → And the difference gets discovered all at once.
-- [226] `…half, mine on memory — that video posts.` → And the yardstick reading lands every quarter.
+- [218] `…index rides on one bet you never placed.` → And the one number that would prove me wrong is moving the other way.
+- [223] `… booked solid through twenty twenty-six.` → And past that, do the arithmetic yourself.
+- [233] `…The paper gets believed.` → And the difference gets discovered all at once.
+- [236] `…half, mine on memory — that video posts.` → And the yardstick reading lands every quarter.
 
-## P5A — phonetic-anchor candidates (43) — legal ONLY at promise / payoff / tell
+## P5A — phonetic-anchor candidates (44) — legal ONLY at promise / payoff / tell
 
+- [6] (c×) The chart is copies of copies, louder every pass.
 - [10] (c×) It comes from Bravos Research — credit where due, the sharpest macro chart on YouTube.
 - [12] (m×) The mega-caps — Meta, Apple, Microsoft, Amazon, Alphabet.
 - [23] (t×) One test — three questions — that sorts every holding you own into steel or paper.
 - [26] (c×) It's a machine — the hype cycle — capital arriving faster than the value it's chasing.
-- [29] (t×) They have to survive their argument before they survive mine.
 - [32] (t×) Railways in the 1840s drew a quarter-billion pounds — more than a trillion in today's mo
 - [40] (s×) My version runs the same measure on America, straight from the government's own statisti
 - [42] (t×) At the dot-com peak, that share hit twenty-three cents.
 - [44] (e×) Count all equipment and ideas together and the line crosses sixty-five — but that's ever
 - [46] (w×) What we're watching is the closest run at it in a hundred and eighty years.
 - [50] (b×) The mania never dies of old age — it dies when rates cross back above where the borrowin
-- [53] (t×) So their tripwire for this cycle: the Fed back above five and a half.
 - [62] (t×) So the obvious move looks like this: take profits on the AI trade.
-- [65] (s×) But here's where their own chart gets strange — and the strangeness is the whole story.
+- [65] (s×) But here's where Bravos' own chart gets strange — and the strangeness is the whole story
 - [77] (t×) That's the trough already doing its job — the tourists finding out, one budget at a time
 - [83] (t×) The trains ran straight through the crash — and the towns kept growing around the statio
 - [90] (b×) Between 2020 and 2024, the biggest builders borrowed about twenty-eight billion dollars 
@@ -188,18 +192,20 @@ invalid — the enumeration IS the review.
 - [186] (s×) They're selling product, not issuing stock to survive.
 - [192] (t×) That's the uncomfortable part of this test — it doesn't care what you were hoping to con
 - [198] (t×) And I don't take that one on trust.
-- [200] (t×) The threshold is that number falling below its own trailing average, two quarters runnin
-- [207] (c×) In 1850 it was still carrying trains across England, while the certificates that finance
-- [211] (s×) The builders sell scarcity, and they sell it for cash.
-- [216] (b×) More bullish: builders with sold-out order books are not a house of cards.
-- [218] (t×) More worried: the index they sold you as the safe version of this trade is the certifica
-- [224] (t×) You now have the test — three questions, thirty seconds, any holding.
-- [225] (t×) Subscribe for the watch: the week either tripwire moves — theirs at five and a half, min
-- [228] (t×) Do that, and the next time a copy of this chart crosses your feed, you won't need anyone
+- [200] (s×) The threshold is the release itself: the first month customs shows memory getting cheape
+- [211] (c×) In 1850 it was still carrying trains across England, while the certificates that finance
+- [215] (s×) The builders sell scarcity, and they sell it for cash.
+- [220] (b×) More bullish: builders with sold-out order books are not a house of cards.
+- [222] (t×) The order books are booked solid through twenty twenty-six.
+- [226] (w×) The only world where memory catches up by twenty thirty is one where AI starts developin
+- [228] (t×) More worried: the index they sold you as the safe version of this trade is the certifica
+- [234] (t×) You now have the test — three questions, thirty seconds, any holding.
+- [235] (m×) Subscribe for the watch: the week either tripwire moves — Bravos' at five and a half, mi
+- [238] (t×) Do that, and the next time a copy of this chart crosses your feed, you won't need anyone
 
 ## P4C — cadence runs (words per sentence, per paragraph)
 
-- ¶1: [8, 3, 7, 2, 17, 10, 6, 17, 10]
+- ¶1: [8, 3, 7, 2, 17, 10, 9, 17, 10]
 - ¶2: [4, 14, 2, 8, 7, 8, 6, 18, 7, 6, 6, 4, 7]
 - ¶3: [15, 14, 11, 10, 14]
 - ¶4: [6, 7, 10, 12, 4, 16, 8, 10, 5, 9]
@@ -213,6 +219,6 @@ invalid — the enumeration IS the review.
 - ¶12: [14, 11, 7, 4, 6, 18, 11, 4, 13, 12, 5, 4]
 - ¶13: [8, 8, 18, 15, 14, 9, 12, 17, 18, 15, 5, 5, 4, 5, 10, 8, 20, 7, 6]
 - ¶14: [15, 2, 9, 13, 2, 2, 13, 10, 7, 16, 13, 4, 14, 6, 1, 20, 3, 8, 3, 11, 3, 2, 9, 16, 17]
-- ¶15: [15, 5, 12, 13, 8, 21, 19, 22, 10, 18, 9, 14]
-- ¶16: [6, 20, 3, 8, 4, 10, 11, 12, 14, 11, 14, 13, 17, 6, 14]
+- ¶15: [15, 5, 12, 13, 8, 21, 19, 5, 22, 10, 7, 18, 11, 18, 9, 14]
+- ¶16: [6, 20, 3, 8, 4, 10, 11, 12, 14, 11, 14, 13, 10, 7, 8, 10, 21, 8, 17, 6, 14]
 - ¶17: [4, 4, 8, 11, 21, 7, 14, 24, 10, 6]
