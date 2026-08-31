@@ -84,7 +84,7 @@ W = [
 (613.9, 624.9, "beat-04-003-classic-cycle-counterargument-v1",         (.05, -14,  -6), []),  # paper-bubble mechanics - their tripwire, then ours  # POOL: the strongest argument against this video - their tripwire
 (624.9, 631.7, "world-korea-port-v1",            (.05,  12,   6), [("ev-memory-monitor-v1",0,625.0,631.7)]),  # the monitor shows its OWN readings (s05 slide RETIRED here: no figure, partial match)
 (631.7, 638.5, "world-memory-wafer-v1",          (.04, -10,   8), [("ev-instrument-memory",0,631.7,638.5)]), # the instrument, method and threshold
-(638.5, 657.1, "world-unwind-desk-v2",           (.05,  10,  -8), [("ev-hbm-export-series",0,638.5,648.9)]), # THE FLIP: a position deliberately reduced - de-risked on camera
+(638.5, 657.1, "world-unwind-desk-v2",           (.05,  10,  -8), [("ev-hbm-export-series",0,638.5,648.9),("ev-june-print-v1",0,649.1,657.0)]), # THE FLIP: a position deliberately reduced - de-risked on camera
 # ── P6 CLOSE ── re-authored to Script G's close (the beats reordered) ──
 (657.1, 662.2, "world-modern-certificate-v1",    (.05, -12,   6), []),                       # certificates wear nicer names now - target-date, "the market"
 (662.2, 665.4, "world-spike-certificate-ring-v2",(.05,  12,   8), []),                       # RING ECHO: the spike, one more time
