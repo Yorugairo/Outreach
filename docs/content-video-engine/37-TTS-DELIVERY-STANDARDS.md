@@ -601,3 +601,28 @@ Same discovery also settled "vo-oice": a SYSTEMATIC provider stutter on
 prosody re-parse (commas -> em-dashes). Micro-probes (~500 credits, one
 paragraph) are the instrument for both classes: reproduce, vary one
 thing, ear-check.
+
+
+## 22. The BREATHING field - v7 (operator, 2026-08-30)
+
+Retiring break tags exposed what the tags had really been doing: the
+provider PLANS PROSODY around a coming pause (settle before, fresh
+attack after). Tag-free, it glides through those boundaries - part 1
+lost ~6s of natural inter-word silence and read denser. The editor's
+pauses returned, but cut into un-breathed speech: "the pause is there,
+the breath around it isn't."
+
+v7 re-ties tempo to the pauses (the operator: "it used to be
+integrally tied to those pauses"):
+
+- **A settle-dip into EVERY inserted pause**: 0.96x over the last
+  0.55s before the cut-in, 1.00x for 0.35s after - the field supplies
+  the breath the provider no longer plants.
+- **Graded semantic limits from rhetoric shape** (not a binary hold):
+  savor/key/lead/settle/reveal sentences and aphorism fragments
+  (<6 words) 1.00x · half-beats 1.02x · questions 1.04x · declared
+  fluid runs cruise 1.12x · connective tissue 1.10x.
+
+The field is now derived from TEXT SHAPE plus the pause plan - robust
+to take regeneration, since the rhetoric is the invariant, not the
+render.

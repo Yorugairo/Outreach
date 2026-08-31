@@ -146,38 +146,85 @@ def build(words, plan, audio):
             marks.append(t)
             tag_sites.append(round(t, 3))
 
-    # THE TEMPO FIELD: speed limits at attention spans, cosine ramps
-    att_spans = []
-    for t, _ in att:
+    # THE TEMPO FIELD v7 - SEMANTIC, GRADED, AND BREATHING (operator,
+    # 2026-08-30: tag-free synthesis lost the model's own breathing
+    # around pauses - the field now supplies it, and limits grade by
+    # RHETORIC SHAPE instead of a binary hold):
+    #   savor/key/lead/settle/reveal sentences .. 1.00
+    #   aphorism fragments (<6 words) ........... 1.00
+    #   half-beats (citation/list/savor) ........ 1.02
+    #   questions ............................... 1.04
+    #   declared fluid runs ..................... 1.12 cruise
+    #   everything else ......................... RUN_RATE cruise
+    #   AND a settle-dip into EVERY inserted pause: 0.96 over the last
+    #   0.55s before the cut-in, 1.00 for 0.35s after - the breath the
+    #   provider no longer plants.
+    RAMP_S = 1.6
+    cons = []   # (a, b, limit, ramp)
+    def sent_of(t):
         for a, b in sents:
             if a - 0.05 <= t <= b + 0.05:
-                att_spans.append((a, b))
-    for t in [x for x in marks if x not in [q for q, _ in att]]:
-        for a, b in sents:
-            if a - 0.05 <= t <= b + 0.05:
-                att_spans.append((a, b))
-    att_spans.append((0.0, HOOK_HOLD_S))
+                return (a, b)
+        return None
+    kindmap = {}
+    for p2 in plan["pauses"]:
+        anc = p2.get("after") or p2.get("before")
+        t = find(anc, "after" in p2 and bool(p2.get("after")))
+        if t is None:
+            continue
+        kindmap.setdefault(sent_of(t), []).append(p2.get("kind", ""))
+        # the breath into the inserted pause
+        cons.append((t - 0.55, t, 0.96, 0.5))
+        cons.append((t, t + 0.35, 1.00, 0.6))
+    for span, kinds in kindmap.items():
+        if span is None:
+            continue
+        k = " ".join(kinds)
+        lim = 1.02 if all(x.startswith("half") for x in kinds) else 1.00
+        cons.append((span[0], span[1], lim, RAMP_S))
+    for t in marks:                       # tag-mark sites (key beats)
+        sp2 = sent_of(t)
+        if sp2:
+            cons.append((sp2[0], sp2[1], 1.00, RAMP_S))
+    widx = 0
+    for a, b in sents:
+        n_words = sum(1 for w in words if a <= w["start"] < b)
+        txt_end = next((w["w"] for w in reversed(words)
+                        if a <= w["start"] < b), "")
+        if n_words and n_words < 6:
+            cons.append((a, b, 1.00, RAMP_S))          # aphorism fragment
+        elif txt_end.rstrip('"”').endswith("?"):
+            cons.append((a, b, 1.04, RAMP_S))          # question
+    cons.append((0.0, HOOK_HOLD_S, 1.00, RAMP_S))
     take_end = words[-1]["end"]
-    att_spans.append((take_end - TAIL_HOLD_S, take_end + 1))
-    RAMP_S = 1.6   # halved slope (operator: stabilize the field edges)
+    cons.append((take_end - TAIL_HOLD_S, take_end + 1, 1.00, RAMP_S))
+    # fluid runs raise the local cruise
+    run_spans = []
+    for r in plan.get("tighten_runs", []):
+        a, b = find(r["start_after"], True), find(r["end_before"], False)
+        if a and b:
+            run_spans.append((a, b))
 
+    import math
     def rate_curve(t: float) -> float:
-        # distance to the nearest attention span
-        d = min((max(0.0, a - t, t - b) for a, b in att_spans),
-                default=RAMP_S)
-        if d <= 0:
-            return 1.0
-        if d >= RAMP_S:
-            return RUN_RATE
-        # cosine ease between the limit and cruise
-        import math
-        f = 0.5 - 0.5 * math.cos(math.pi * d / RAMP_S)
-        return 1.0 + (RUN_RATE - 1.0) * f
+        base = RUN_RATE
+        for a, b in run_spans:
+            if a <= t <= b:
+                base = 1.12
+        r = base
+        for a, b, lim, ramp in cons:
+            if lim >= base:
+                continue
+            d = max(0.0, a - t, t - b)
+            if d >= ramp:
+                continue
+            f = 0.5 - 0.5 * math.cos(math.pi * d / ramp)
+            r = min(r, lim + (base - lim) * f)
+        return r
 
-    nrun = sum(1 for a, b in sents
-               if rate_curve((a + b) / 2) > 1.05)
-    print(f"  {len(sents)} sentences, {len(att_spans)} attention spans, "
-          f"{nrun} cruise at ~{RUN_RATE}x")
+    n_hold = sum(1 for a, b in sents if rate_curve((a + b) / 2) < 1.03)
+    print(f"  {len(sents)} sentences, {len(cons)} field constraints, "
+          f"{n_hold} held near 1.0x, cruise {RUN_RATE}x (runs 1.12x)")
 
     # compression + insertion ops
     runs = []
