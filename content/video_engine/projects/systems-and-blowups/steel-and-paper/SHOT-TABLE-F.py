@@ -94,7 +94,7 @@ W = [
 (726.7, 761.3, "beat-05-002-strategic-chokepoints-v1", (.05,  14,  -6), [("ev-hynix-steel-v1",0,731.3,760.7),("ev-memory-arithmetic-v1",1,742.2,760.7)]),  # purpose-built (operator): hynix price WITH the profit under it - not a house of cards
 (761.3, 774.0, "world-listing-barge-v1",         (.05, -10,   6), [("ev-index-concentration-v1",0,761.3,773.8)]),  # the verdict: the safe version IS the certificate
 (774.0, 779.6, "beat-06-017-018-diworsification-v1", (.06,  10,   8), []),                   # FINAL TRIAD: steel used / paper believed / discovered at once
-(779.6, 797.4, "beat-04-001-buyer-behavior-v1",  (.04, -12,   6), [("ev-test-scorecard-v1",0,779.6,784.1)]),  # CTA: you now have the test - the scorecard returns at its recap
+(779.6, 797.4, "beat-04-001-buyer-behavior-v1",  (.04, -12,   6), [("ev-test-scorecard-v1",0,779.6,788.0)]),  # CTA: you now have the test - the scorecard returns at its recap
 (797.4, 806.0, "beat-06-001-003-index-product-elevator-v1", (.05,  12,  -8), []),            # future pacing: which half of your portfolio is steel
 (806.0, 807.5, "world-spike-rest-v2",            (.03,   6,   4), []),                       # RING ANCHOR: the spike stays on the desk. Lamp almost out.
 ]

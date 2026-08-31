@@ -956,12 +956,18 @@
       }
       F.done = true;
     }
-    for (const r of (st.rowEls || [])) {
+    /* QC 2026-08-30 (the s73 scorecard showed EMPTY): row delays are
+       resolved against the FIRST showing's narration and shared across
+       instances - on a short re-dock every row landed past the exit.
+       A checklist on a short hold is a RECAP: it fills fast. */
+    const recap = (d.exit - d.enter) < 12;
+    (st.rowEls || []).forEach((r, ri) => {
+      const rowDelay = recap ? ri * 0.8 : r.d;
       /* cell choreography inside a row: question TYPES at +0, where
          fades at +0.6, steel sweep at +1.0, paper sweep at +1.6 */
-      const offs = [0, 0.6, 1.0, 1.6];
+      const offs = recap ? [0, 0.25, 0.45, 0.7] : [0, 0.6, 1.0, 1.6];
       r.cells.forEach((c, k) => {
-        const ct = tRel - r.d - offs[Math.min(k, 3)];
+        const ct = tRel - rowDelay - offs[Math.min(k, 3)];
         const o = clamp01(ct / 0.35);
         c.el.setAttribute("opacity", o.toFixed(2));
         if (c.ci === 0) {
@@ -980,7 +986,7 @@
           if (band) band.setAttribute("width", (w).toFixed(1));
         }
       });
-    }
+    });
     for (const b of st.bars) {
       const bp = expoOut(clamp01((p - b.stagger * 0.4) / 0.6));
       if (b.share) {           /* proportion row: fill grows rightward */

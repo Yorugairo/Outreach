@@ -189,11 +189,11 @@ by reading its lines; the gates below run on every build.
   12:54.0  EXIT   ev-index-concentration-v1  carried by the wipe front
   12:54.0  SCENE  s72  beat-06-017-018-diworsification-v1  (5.6s, exit cut)
   12:54.7  LIGHT  wash falls
-  12:59.6  ENTER  ev-test-scorecard-v1  slot 0 side l  holds 4.5s
+  12:59.6  ENTER  ev-test-scorecard-v1  slot 0 side l  holds 8.4s
   12:59.6  LIGHT  wash rises (side of first card)
   12:59.6  SCENE  s73  beat-04-001-buyer-behavior-v1  (17.8s, exit wipe)
-  13:04.1  EXIT   ev-test-scorecard-v1  fades in place
-  13:04.8  LIGHT  wash falls
+  13:08.0  EXIT   ev-test-scorecard-v1  fades in place
+  13:08.7  LIGHT  wash falls
   13:17.4  SCENE  s74  beat-06-001-003-index-product-elevator-v1  (8.6s, exit cut)
   13:26.0  SCENE  s75  world-spike-rest-v2  (1.5s, exit cut)
 
