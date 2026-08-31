@@ -5,27 +5,27 @@ works" / "market mechanics" / "finance explained" cluster; "financial
 history" + "market crashes" as the evergreen tail our 1845-to-AI series
 serves). Voice per doc 33 (attribution-first, credentials exact, no
 never-list constructions). First line = 148 chars, inside YouTube's
-~150-char search/hover snippet. Total 992/1000.
+~150-char search/hover snippet. Total 994/1000.
 
-Operator rewrite 2026-08-31 merged in: AI-transparency disclosure
-("scrutiny stays human"), public-LinkedIn verifiability, "cited not
-gatekept", "chart lore" jab, outdated-advice content lane, tech-trace
-step. Cut for budget: "information systems and business logic applied
-to financial markets" (the "tech meets the numbers" line carries it
-concretely).
+FINAL — operator v3, 2026-08-31. Operator-held choices: named sources
+dropped ("primary sources — cited, not gatekept" stands alone),
+"biggest investment ever", accountability attached to public LinkedIn,
+"solo analyst", systems-thinking line restored as its own stanza.
+Mechanical repairs only: colon-splice → period, em dash for the
+semicolon couplet, spacing, capitalization.
 
 ## Description (paste verbatim)
 
 ```
 Money Physics explains how markets actually work — the mechanics of risk, reward, and time that decide who gets paid and who's left holding the bag.
 
-I worked in risk at JPMorgan — this channel applies that discipline to the stories markets tell, and my LinkedIn is public so you can check. I build it with AI, because that's how one analyst moves at the speed the market demands. The scrutiny stays human.
+I worked in risk at JPMorgan. This channel applies that discipline to the stories markets tell. And my LinkedIn is shared here publicly, so the accountability stays human. I build with AI, because that's how a solo analyst moves at the speed the market demands.
 
-Every episode takes one story — an AI capex boom, a memory-chip squeeze, the biggest investment in history, a piece of financial advice that stopped being true — and traces the machine underneath: where the money comes in, what it's promised, the tech that carries it, and what breaks first. Claims traced to primary sources — SEC filings, Fed data, national accounts. Cited, not gatekept.
+Every episode takes one story — an AI capex boom, a memory-chip squeeze, the biggest investment ever, a piece of financial advice that stopped being true — and traces the machine underneath it: where the money comes in, what it's promised, the tech that supports it, and what breaks first. Claims traced to primary sources — cited, not gatekept.
 
-Where the tech meets the numbers — and a human makes the call.
-
-Education — not investment advice, and not chart lore.
+Where the tech meets the numbers — and the human answers the questions.
+Education, not investment advice.
+Finance process and systems thinking, not chart lore.
 Subscribe for the next breakdown.
 
 The market isn't magic. It's mechanics.
