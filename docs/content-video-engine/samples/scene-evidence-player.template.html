@@ -525,15 +525,36 @@
                           delay: sr.delay || 0 });
           st.labels.push(lbl);
         });
+        /* EVENT BARS (doc 29 s9.22 combo convention): the print series
+           as a volume-style histogram in the bottom band of the plot -
+           teal up, crimson down; each bar lands as the draw reaches it */
+        for (const eb of (C.eventbars || [])) {
+          const bh = Math.abs(eb.v) / Math.max(...C.eventbars.map(
+            (e) => Math.abs(e.v))) * (CH - PT - PB) * 0.22;
+          const bx = mx(eb.x);
+          const g2 = mk("g", { opacity: 0 });
+          mk("rect", { x: bx - 9, y: my(y0) - bh, width: 18, height: bh,
+             rx: 3, fill: eb.v >= 0 ? "#1fa892" : "#e5484d",
+             "fill-opacity": 0.85 }, null, g2);
+          mk("text", { class: "csr", x: bx, y: my(y0) - bh - 8,
+             "text-anchor": "middle",
+             fill: eb.v >= 0 ? "#3bc9b0" : "#ff8a8c" },
+             (eb.v > 0 ? "+" : "") + eb.v.toFixed(1) + "%", g2);
+          if (eb.label)
+            mk("text", { class: "csr", x: bx, y: my(y0) - bh - 26,
+               "text-anchor": "middle" }, eb.label, g2);
+          st.marks.push({ el: g2, at: (eb.x - x0) / (x1 - x0 || 1) });
+        }
         for (const m of (C.marks || [])) {
           const g = mk("g", { opacity: 0 });
           mk("circle", { cx: mx(m.x), cy: my(m.y), r: 9, fill: "#e5484d",
              stroke: "#16181c", "stroke-width": 4 }, null, g);
           const tx = mx(m.x) + (mx(m.x) > px0 + pw * 0.75 ? -14 : 14);
           const anch = mx(m.x) > px0 + pw * 0.75 ? "end" : "start";
-          mk("text", { class: "cl", x: tx, y: my(m.y) - 12,
+          const mdy = m.dy || 0;
+          mk("text", { class: "cl", x: tx, y: my(m.y) - 12 + mdy,
              fill: "#f4f6f8", "text-anchor": anch }, m.label, g);
-          mk("text", { class: "csr", x: tx, y: my(m.y) + 12,
+          mk("text", { class: "csr", x: tx, y: my(m.y) + 12 + mdy,
              "text-anchor": anch }, m.sub || "", g);
           st.marks.push({ el: g, at: (m.x - x0) / (x1 - x0 || 1) });
         }

@@ -1257,6 +1257,15 @@ e.g. "index · 100 = 1 May 2026" or "USD per kilogram, log scale"; end
 labels stay short (~6 chars) - the right margin is 120px and "off peak"
 belongs in the badge tag, not the label.
 
+**The combo convention (operator, same day):** when the story is
+"event series drives a price," use the terminal layout - price line
+above, the events as a volume-style HISTOGRAM in the plot's bottom band
+(`eventbars`: teal up / crimson down, value atop each bar, landing on
+the draw). One red bar in a row of teal bars needs no arrow. And PRINTS
+ARE NAMED BY LANDING MONTH ("the August print" carries July's numbers)
+and PLOTTED on information time - the day the market could know - never
+on data time. A data-time plot misaligns cause and reaction.
+
 **Ledger data hygiene:** SCML series queries filter
 `data_tier='production'` and full periods only - beta ten-day partials
 (`-P1/-P2/-P3`) are a different basis and print false spikes. The

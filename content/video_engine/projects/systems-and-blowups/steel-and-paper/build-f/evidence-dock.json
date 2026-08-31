@@ -1137,16 +1137,16 @@
   "source": "hynix + Micron vs Korean customs via SCML monitor",
   "badges": [
    {
-    "label": "THE STEEL",
-    "value": "+267%",
-    "tag": "Dec -> July print",
-    "accent": "teal"
+    "label": "JULY PRINT",
+    "value": "-3.7%",
+    "tag": "the one soft month",
+    "accent": "coral"
    },
    {
-    "label": "THE PAPER",
-    "value": "-34%",
-    "tag": "off its June peak",
-    "accent": "coral"
+    "label": "AUGUST PRINT",
+    "value": "+16.4%",
+    "tag": "steel at new highs",
+    "accent": "teal"
    }
   ]
  }

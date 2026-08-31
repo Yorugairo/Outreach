@@ -36480,23 +36480,24 @@
    },
    "badges": [
     {
-     "label": "THE STEEL",
-     "value": "+12%",
-     "tag": "Dec -> July print",
-     "accent": "teal"
+     "label": "JULY PRINT",
+     "value": "-33%",
+     "tag": "the one soft month",
+     "accent": "coral"
     },
     {
-     "label": "THE PAPER",
-     "value": "-33%",
-     "tag": "off its June peak",
-     "accent": "coral"
+     "label": "AUGUST PRINT",
+     "value": "+16.4%",
+     "tag": "steel at new highs",
+     "accent": "teal"
     }
    ],
    "chart": {
     "title": "The steel repriced. The paper is still afraid.",
-    "sub": "Customs memory price vs SK hynix + Micron, indexed to 1 May 2026",
-    "src": "Yahoo Finance - 000660.KS, MU; Korean customs HS 8542.32 via SCML monitor",
+    "sub": "The paper: hynix + Micron, daily. The bars: customs memory prints as they LAND, month over month",
+    "src": "Yahoo Finance - 000660.KS, MU (100 = 1 May 2026); Korean customs HS 8542.32 via SCML monitor; KCS mid-month schedule",
     "yfmt": "none",
+    "ylabel": "paper: index, 100 = 1 May",
     "xticks": [
      [
       2026.335,
@@ -36517,29 +36518,9 @@
     ],
     "series": [
      {
-      "label": "+12%",
-      "name": "THE STEEL - customs $/kg",
-      "color": "teal",
-      "pts": [
-       [
-        2026.375,
-        100.0
-       ],
-       [
-        2026.4583,
-        96.3
-       ],
-       [
-        2026.5417,
-        112.1
-       ]
-      ]
-     },
-     {
       "label": "-33%",
       "name": "THE PAPER - hynix + Micron",
       "color": "crimson",
-      "delay": 1.2,
       "pts": [
        [
         2026.3368,
@@ -36856,15 +36837,29 @@
       ]
      }
     ],
-    "marks": [
+    "eventbars": [
+     {
+      "x": 2026.3669,
+      "v": 20.5,
+      "label": "May"
+     },
+     {
+      "x": 2026.4517,
+      "v": 16.7,
+      "label": "Jun"
+     },
+     {
+      "x": 2026.5339,
+      "v": -3.7,
+      "label": "Jul"
+     },
      {
       "x": 2026.616,
-      "y": 141.1,
-      "label": "July print: +16.4%",
-      "sub": "steel at new highs"
+      "v": 16.4,
+      "label": "Aug"
      }
     ],
-    "ylabel": "index \u00b7 100 = 1 May 2026"
+    "marks": []
    }
   },
   "ev-hynix-steel-v1": {
