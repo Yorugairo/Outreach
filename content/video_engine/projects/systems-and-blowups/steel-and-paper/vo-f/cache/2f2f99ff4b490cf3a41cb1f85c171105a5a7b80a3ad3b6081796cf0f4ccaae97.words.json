@@ -1,6 +1,7 @@
 {
   "scene_id": 1,
   "duration_s": 391.999,
+  "request_id": "uyLAG5zK2ZQ0Mi49V5Mn",
   "words": [
     {
       "w": "The",
@@ -5827,6 +5828,5 @@
       "start_s": 391.279,
       "end_s": 391.999
     }
-  ],
-  "request_id": "uyLAG5zK2ZQ0Mi49V5Mn"
+  ]
 }

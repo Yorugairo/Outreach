@@ -1,6 +1,7 @@
 {
   "scene_id": 2,
   "duration_s": 423.948,
+  "request_id": "kfKnxb1VesJlCLXm2tfy",
   "words": [
     {
       "w": "And",
@@ -6477,6 +6478,5 @@
       "start_s": 423.309,
       "end_s": 423.948
     }
-  ],
-  "request_id": "kfKnxb1VesJlCLXm2tfy"
+  ]
 }

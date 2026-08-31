@@ -53,13 +53,18 @@ def main() -> int:
     tmp.mkdir(exist_ok=True)
     p1 = tmp / "p1.mp3"
     sil = tmp / "sil.mp3"
+    # a take can end EXACTLY on its last word (zero provider tail) -
+    # keep only the decay that exists and make up the rest in silence
+    keep = min(KEEP, max(0.0, dur(TAKE / "scene_1.mp3") - we))
+    fade_at = min(FADE_AT, keep)
     subprocess.run(["ffmpeg", "-y", "-v", "quiet", "-i",
-                    str(TAKE / "scene_1.mp3"), "-to", f"{we + KEEP}",
-                    "-af", f"afade=t=out:st={we + FADE_AT}:d={KEEP - FADE_AT}",
-                    "-c:a", "libmp3lame", "-b:a", "192k", str(p1)],
+                    str(TAKE / "scene_1.mp3"), "-to", f"{we + keep}"]
+                   + (["-af", f"afade=t=out:st={we + fade_at}:d={max(0.01, keep - fade_at)}"]
+                      if keep > 0.02 else [])
+                   + ["-c:a", "libmp3lame", "-b:a", "192k", str(p1)],
                    check=True)
     subprocess.run(["ffmpeg", "-y", "-v", "quiet", "-f", "lavfi", "-i",
-                    "anullsrc=r=44100:cl=mono", "-t", f"{SETTLE_S - KEEP}",
+                    "anullsrc=r=44100:cl=mono", "-t", f"{SETTLE_S - keep}",
                     "-c:a", "libmp3lame", "-b:a", "192k", str(sil)],
                    check=True)
     lst = tmp / "concat.txt"
