@@ -45,3 +45,16 @@ the trade to break" as the two halves of the risk doctrine.
 **EARMARKED (operator ruling): held OUT of Steel and Paper - this is a
 centerpiece beat for the full memory-trade episode.** Do not spend it as
 a support line anywhere else.
+
+
+## The nine-month cycle anatomy (found 2026-08-30, Dec-window pull)
+
+On the ledger's own tape, one complete steel/paper cycle Dec '25 - Aug
+'26: **paper ANTICIPATES** (basket +61% Dec-Feb while the Dec print was
+still negative) -> **steel CONFIRMS** (Jan print +49.7% m/m; customs
++267% in seven months) -> **the market trades the prints** (+18.8% in
+the five days after the May release - the trigger doctrine, quantified)
+-> **paper OVERSHOOTS and panics anyway** (peak +424% on 30 Jun, -34%
+July slide on the one soft print) -> **steel keeps going** (July print
++16.4%, new highs) while paper consolidates. Chart built:
+ev-june-print-v1 (extended). This IS the memory-episode's second act.

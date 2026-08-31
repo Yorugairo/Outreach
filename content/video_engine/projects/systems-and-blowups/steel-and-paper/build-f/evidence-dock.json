@@ -1134,17 +1134,17 @@
   "anchor": "Customs printed one soft month in June.",
   "anchor_kind": "claim",
   "title": "The steel repriced. The paper is still afraid.",
-  "source": "DRAM ETF vs Korean customs via SCML monitor",
+  "source": "hynix + Micron vs Korean customs via SCML monitor",
   "badges": [
    {
     "label": "THE STEEL",
-    "value": "+12%",
-    "tag": "May -> July print",
+    "value": "+267%",
+    "tag": "Dec -> July print",
     "accent": "teal"
    },
    {
     "label": "THE PAPER",
-    "value": "-31%",
+    "value": "-34%",
     "tag": "off its June peak",
     "accent": "coral"
    }
