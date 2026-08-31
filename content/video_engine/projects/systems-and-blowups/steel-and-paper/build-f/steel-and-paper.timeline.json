@@ -39421,11 +39421,11 @@
     {
      "slide": "ev-railway-gdp-tile-v1",
      "slot": 1,
-     "enter": 110.4,
-     "exit": 112.6,
+     "enter": 103.5,
+     "exit": 111.8,
      "badge_at": [
-      112.45,
-      113.75
+      105.55,
+      106.85
      ]
     }
    ]

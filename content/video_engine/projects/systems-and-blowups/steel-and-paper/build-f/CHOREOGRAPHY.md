@@ -25,14 +25,14 @@ by reading its lines; the gates below run on every build.
    1:31.5  SCENE  s09  world-assay-sort-v1  (4.9s, exit cut)
    1:32.2  LIGHT  wash falls
    1:36.4  SCENE  s10  world-steelman-build-v1  (7.1s, exit cut)
+   1:43.5  ENTER  ev-railway-gdp-tile-v1  slot 1 side pair  holds 8.5s
    1:43.5  ENTER  ev-railway-index-v1  slot 0 side pair  holds 8.5s
    1:43.5  LIGHT  wash rises (side of first card)
    1:43.5  SCENE  s11  world-navvy-cutting-v1  (8.5s, exit wipe)
-   1:50.4  ENTER  ev-railway-gdp-tile-v1  slot 1 side pair  holds 2.2s
+   1:52.0  EXIT   ev-railway-gdp-tile-v1  carried by the wipe front
    1:52.0  EXIT   ev-railway-index-v1  carried by the wipe front
    1:52.0  SCENE  s12  world-dotcom-server-room-v1  (6.6s, exit cut)
-   1:52.6  EXIT   ev-railway-gdp-tile-v1  fades in place
-   1:53.3  LIGHT  wash falls
+   1:52.7  LIGHT  wash falls
    1:58.6  SCENE  s13  world-ledger-page-v1  (21.2s, exit wipe)
    1:58.8  ENTER  ev-capital-formation-v1  slot 0 side l  holds 48.0s
    1:58.8  LIGHT  wash rises (side of first card)
@@ -193,4 +193,4 @@ by reading its lines; the gates below run on every build.
 
 ## Gates
 
-  FAIL  1:50.4 ev-railway-gdp-tile-v1: 2.2s hold < 2.2s - drop it rather than flash it (doc 29 8.9)
+  all slots clean
