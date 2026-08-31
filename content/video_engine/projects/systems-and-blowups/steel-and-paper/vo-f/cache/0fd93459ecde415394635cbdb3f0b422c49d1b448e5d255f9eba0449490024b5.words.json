@@ -1,6 +1,7 @@
 {
   "scene_id": 2,
   "duration_s": 427.109,
+  "request_id": "TUia79b0f9duVNqB8XIG",
   "words": [
     {
       "w": "And",
@@ -6477,6 +6478,5 @@
       "start_s": 426.633,
       "end_s": 427.109
     }
-  ],
-  "request_id": "TUia79b0f9duVNqB8XIG"
+  ]
 }

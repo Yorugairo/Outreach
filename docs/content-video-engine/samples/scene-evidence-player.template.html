@@ -1044,14 +1044,21 @@
     cx.fillStyle = "#0d0f12"; cx.fillRect(0, 0, cv.width, cv.height);
     for (let i = 0; i < n; i++) {
       const tt = t0 + (i + 0.5) * (dur / n);
+      /* visibility-proof: RAF suspends in hidden panes and a MUTED
+         audio clock freezes - poll on a timer at whisper volume */
+      vo.muted = false; vo.volume = 0.01;
       seekTo(Math.max(0, tt - 0.35));
       setPlay(true);
-      await new Promise(res => {
-        const w = () => vo.currentTime >= tt ? res()
-                       : requestAnimationFrame(w);
-        requestAnimationFrame(w);
+      await new Promise((res, rej) => {
+        const t1 = Date.now();
+        const iv = setInterval(() => {
+          if (vo.currentTime >= tt) { clearInterval(iv); res(); }
+          else if (Date.now() - t1 > 15000) {
+            clearInterval(iv); rej(new Error("stall at " + tt)); }
+        }, 40);
       });
       setPlay(false);
+      seekTo(vo.currentTime);
       const at = vo.currentTime;
       const cl = stage.cloneNode(true);
       cl.querySelectorAll("img").forEach(im => {

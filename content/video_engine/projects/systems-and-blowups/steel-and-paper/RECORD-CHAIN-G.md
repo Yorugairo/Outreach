@@ -1,4 +1,14 @@
-# SCRIPT G — RECORD CHAIN (RUN 2026-08-30 — take recorded, chain complete)
+# SCRIPT G — RECORD CHAIN (FINAL RUN 2026-08-30 — post-playthrough master, chain complete)
+
+**FINAL MASTER:** part 1 reused from validated cache (FREE - first legit
+cache hit after fixing the dormant strip-markup bug), part 2 fresh 427.1s
+chained onto the recovered request id. 13.69 min raw -> tempo field
+786.0s (13:06). Whisper: part 2 verbatim (all G10-G14 present), part 1 =
+byte-identical cached audio. 36 docks anchor-pinned, E12 audit walked
+(instrument card retired - redundant with the monitor analyst chart;
+objection card holds through the readings), all slots clean, captions
+regenerated, filmstrips clean on the final clock (trigger handoff,
+arithmetic row-fill).
 
 **Outcome:** 12.90 min take (385.2s + 388.9s chained), whisper gate caught
 a real vocalized tail tone (killed by the defended join; seam −91 dB),
