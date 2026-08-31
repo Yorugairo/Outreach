@@ -399,9 +399,12 @@
          (the dock stays as an invisible lifecycle anchor). Scattered
          asymmetric placement keeps the plate breathing through the
          gaps; the burst throws each card radially off its position. */
+      /* nine rail spots: four across the top, mid-frame flanks, three
+         along the bottom - the center stays open for the active card */
       const SPOTS = [
-        [3, 7, 30], [66, 5, 31], [35, 2, 27],
-        [4, 54, 33], [63, 56, 32], [33, 38, 30]];
+        [2, 5, 24], [27, 3, 22], [51, 4, 22], [74, 5, 24],
+        [1, 40, 22], [77, 40, 22],
+        [4, 62, 26], [37, 66, 24], [68, 62, 26]];
       const sb = document.createElement("div");
       sb.className = "stackbox";
       const items = ev.stack.items.map((it, i) => {
