@@ -52,7 +52,7 @@ W = [
 (331.0, 339.3, "world-datacenter-shell",         (.05,  12,  -8), [("ev-doc-leases",0,331.0,349.8)]),        # a contract pinned to the site fence
 (339.3, 349.8, "beat-05-017-018-market-prices-cashflows-v1",              (.05, -10,   6), []),     # POOL: conduits pumping into the built city - every dollar consumed by the buildout
 (349.8, 361.2, "beat-05-006-listed-cash-flow-market-v1",                  (.04,  10,   8), [("ev-doc-macdonald",0,350.0,368.8)]),  # POOL: what investors believe future cash flows are worth
-(361.2, 370.7, "world-orderbook-stamped-v1",     (.05, -12,  -6), []),  # the historical blind spot: debt-financed overinvestment
+(361.2, 370.7, "world-orderbook-stamped-v1",     (.05, -12,  -6), [("ev-capex-funding-v1",0,369.6,386.5)]),  # the historical blind spot: debt-financed overinvestment; capex-vs-cash chart holds through "nobody is charting"
 (370.7, 384.8, "world-signature-close",          (.05,  12,   6), []),                       # "they signed a promise, in a year that looked good"
 # ── P4 PIVOT ───────────────────────────────────────────────────────────
 (384.8, 393.2, "world-license-cabinet-v1",  (.06, -10,  -8), []),                       # "where most people get the whole thing wrong"

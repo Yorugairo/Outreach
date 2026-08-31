@@ -26507,7 +26507,25 @@
       ]
      }
     ],
-    "ylabel": "index \u00b7 100 = Aug 2025"
+    "ylabel": "index \u00b7 100 = Aug 2025",
+    "xticks": [
+     [
+      2025.75,
+      "Oct '25"
+     ],
+     [
+      2026.04,
+      "Jan '26"
+     ],
+     [
+      2026.29,
+      "Apr '26"
+     ],
+     [
+      2026.54,
+      "Jul '26"
+     ]
+    ]
    }
   },
   "ev-divergence-v1": {
@@ -30339,7 +30357,25 @@
       ]
      }
     ],
-    "ylabel": "index \u00b7 100 = Aug 2025, log scale"
+    "ylabel": "index \u00b7 100 = Aug 2025, log scale",
+    "xticks": [
+     [
+      2025.75,
+      "Oct '25"
+     ],
+     [
+      2026.04,
+      "Jan '26"
+     ],
+     [
+      2026.29,
+      "Apr '26"
+     ],
+     [
+      2026.54,
+      "Jul '26"
+     ]
+    ]
    }
   },
   "silicon-reality-gap-s04-teacher-stamped": {
@@ -30975,7 +31011,38 @@
       "label": "741",
       "sub": "Apr 1850"
      }
-    ]
+    ],
+    "xticks": [
+     [
+      1844,
+      "1844"
+     ],
+     [
+      1845,
+      "1845"
+     ],
+     [
+      1846,
+      "1846"
+     ],
+     [
+      1847,
+      "1847"
+     ],
+     [
+      1848,
+      "1848"
+     ],
+     [
+      1849,
+      "1849"
+     ],
+     [
+      1850,
+      "1850"
+     ]
+    ],
+    "ylabel": "index of 442 railway shares"
    }
   },
   "ev-railway-gdp-tile-v1": {
@@ -32888,7 +32955,33 @@
      }
     ],
     "yunit": "%",
-    "ylabel": "share of private investment"
+    "ylabel": "share of private investment",
+    "xticks": [
+     [
+      1970,
+      "1970"
+     ],
+     [
+      1980,
+      "1980"
+     ],
+     [
+      1990,
+      "1990"
+     ],
+     [
+      2000,
+      "2000"
+     ],
+     [
+      2010,
+      "2010"
+     ],
+     [
+      2020,
+      "2020"
+     ]
+    ]
    }
   },
   "ev-tnx-two-eras-v3": {
@@ -34095,7 +34188,49 @@
      }
     ],
     "yunit": "%",
-    "ylabel": "10-year Treasury yield"
+    "ylabel": "10-year Treasury yield",
+    "xticks": [
+     [
+      1998,
+      "1998"
+     ],
+     [
+      1999,
+      "1999"
+     ],
+     [
+      2000,
+      "2000"
+     ],
+     [
+      2001,
+      "2001"
+     ],
+     [
+      2021,
+      "2021"
+     ],
+     [
+      2022,
+      "2022"
+     ],
+     [
+      2023,
+      "2023"
+     ],
+     [
+      2024,
+      "2024"
+     ],
+     [
+      2025,
+      "2025"
+     ],
+     [
+      2026,
+      "2026"
+     ]
+    ]
    }
   },
   "ev-doc-karp": {
@@ -34420,6 +34555,237 @@
      "tag": "of operating cash flow"
     }
    ]
+  },
+  "ev-capex-funding-v1": {
+   "title": "Who pays for the steel",
+   "source": "Company filings via Epoch AI; PIMCO forward estimate cited in narration",
+   "species": "data",
+   "document": {
+    "path": "Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-capex-funding-v1.png",
+    "sha256": "32fe6154091a5274c57d6667ccf0069b0322a18d6d4495f30179680f68f5fb0a"
+   },
+   "badges": [
+    {
+     "label": "CAPEX, Q1 '26",
+     "value": "94%",
+     "tag": "of operating cash",
+     "accent": "sunflower"
+    },
+    {
+     "label": "BOND ISSUANCE",
+     "value": "$121B",
+     "tag": "2025 - was $20B a year",
+     "accent": "amber"
+    }
+   ],
+   "chart": {
+    "title": "Who pays for the steel",
+    "sub": "The five biggest builders: cash from operations vs cash capital spending, quarterly",
+    "src": "Company filings, aggregated by Epoch AI (Jun 2026) - MSFT, AMZN, GOOGL, META, ORCL; dashed = their fitted trend",
+    "yfmt": "usd",
+    "yunit": "B",
+    "ylabel": "US$ billions per quarter",
+    "xticks": [
+     [
+      2023.54,
+      "Jul '23"
+     ],
+     [
+      2024.04,
+      "Jan '24"
+     ],
+     [
+      2024.54,
+      "Jul '24"
+     ],
+     [
+      2025.04,
+      "Jan '25"
+     ],
+     [
+      2025.54,
+      "Jul '25"
+     ],
+     [
+      2026.04,
+      "Jan '26"
+     ],
+     [
+      2026.54,
+      "Jul '26"
+     ]
+    ],
+    "series": [
+     {
+      "label": "cash in",
+      "name": "CASH FROM OPERATIONS",
+      "color": "teal",
+      "pts": [
+       [
+        2023.375,
+        96.9
+       ],
+       [
+        2023.625,
+        109.8
+       ],
+       [
+        2023.875,
+        99.8
+       ],
+       [
+        2024.125,
+        104.5
+       ],
+       [
+        2024.375,
+        114.6
+       ],
+       [
+        2024.625,
+        123.0
+       ],
+       [
+        2024.875,
+        136.3
+       ],
+       [
+        2025.125,
+        120.2
+       ],
+       [
+        2025.375,
+        134.6
+       ],
+       [
+        2025.625,
+        167.1
+       ],
+       [
+        2025.875,
+        180.9
+       ],
+       [
+        2026.125,
+        157.9
+       ]
+      ]
+     },
+     {
+      "label": "capex",
+      "name": "CASH CAPEX",
+      "color": "crimson",
+      "pts": [
+       [
+        2023.375,
+        35.4
+       ],
+       [
+        2023.625,
+        38.3
+       ],
+       [
+        2023.875,
+        44.1
+       ],
+       [
+        2024.125,
+        46.0
+       ],
+       [
+        2024.375,
+        55.6
+       ],
+       [
+        2024.625,
+        61.2
+       ],
+       [
+        2024.875,
+        76.3
+       ],
+       [
+        2025.125,
+        77.8
+       ],
+       [
+        2025.375,
+        97.3
+       ],
+       [
+        2025.625,
+        105.8
+       ],
+       [
+        2025.875,
+        130.7
+       ],
+       [
+        2026.125,
+        148.4
+       ]
+      ]
+     },
+     {
+      "label": "",
+      "name": "",
+      "color": "teal",
+      "dash": "7 6",
+      "delay": 2.0,
+      "pts": [
+       [
+        2026.125,
+        168.5
+       ],
+       [
+        2026.375,
+        177.4
+       ],
+       [
+        2026.625,
+        186.8
+       ]
+      ]
+     },
+     {
+      "label": "",
+      "name": "",
+      "color": "crimson",
+      "dash": "7 6",
+      "delay": 2.0,
+      "pts": [
+       [
+        2026.125,
+        142.4
+       ],
+       [
+        2026.375,
+        162.6
+       ],
+       [
+        2026.625,
+        185.7
+       ]
+      ]
+     }
+    ],
+    "marks": [
+     {
+      "x": 2026.125,
+      "y": 148.4,
+      "label": "94 cents of every dollar",
+      "sub": "operating cash consumed, Q1 '26",
+      "dy": 72
+     },
+     {
+      "x": 2026.625,
+      "y": 186.0,
+      "label": "the cross",
+      "sub": "trend: free cash hits zero, Q3 '26",
+      "dy": -52
+     }
+    ]
+   }
   },
   "ev-railway-mileage-v1": {
    "title": "Railway Certificates",
@@ -35210,7 +35576,34 @@
     "hline": {
      "y": 0,
      "label": ""
-    }
+    },
+    "xticks": [
+     [
+      2024.04,
+      "Jan '24"
+     ],
+     [
+      2024.54,
+      "Jul '24"
+     ],
+     [
+      2025.04,
+      "Jan '25"
+     ],
+     [
+      2025.54,
+      "Jul '25"
+     ],
+     [
+      2026.04,
+      "Jan '26"
+     ],
+     [
+      2026.54,
+      "Jul '26"
+     ]
+    ],
+    "ylabel": "drawdown from running high"
    }
   },
   "silicon-antidote-s11-teacher-stamped": {
@@ -36670,7 +37063,34 @@
        ]
       ]
      }
-    ]
+    ],
+    "xticks": [
+     [
+      2024.04,
+      "Jan '24"
+     ],
+     [
+      2024.54,
+      "Jul '24"
+     ],
+     [
+      2025.04,
+      "Jan '25"
+     ],
+     [
+      2025.54,
+      "Jul '25"
+     ],
+     [
+      2026.04,
+      "Jan '26"
+     ],
+     [
+      2026.54,
+      "Jul '26"
+     ]
+    ],
+    "ylabel": "index \u00b7 100 = Jan 2024"
    }
   },
   "silicon-reality-gap-s07-hbm-stack-v1": {
@@ -36914,20 +37334,20 @@
    "badges": [
     {
      "label": "DRAM",
-     "value": "$86,970/kg",
+     "value": "$87.0k",
      "tag": "+17.4% m/m",
      "accent": "coral"
     },
     {
      "label": "HBM-CLASS",
-     "value": "$95,408/kg",
+     "value": "$95.4k",
      "tag": "+14.1% m/m",
      "accent": "teal"
     }
    ],
    "chart": {
     "title": "The monitor - what memory costs leaving Korea",
-    "sub": "USD per kilogram of exported memory, monthly, log scale. The trigger: the release itself - the first weakening print while the buildout stands",
+    "sub": "USD per kilogram of exported memory, monthly, log scale. The trigger is the release itself",
     "src": "Korean customs, HS 8542.32 exports (production tier, full months) - SCML memory monitor, July 2026 release",
     "log": true,
     "yfmt": "usd",
@@ -36955,7 +37375,7 @@
     ],
     "series": [
      {
-      "label": "$86,970/kg",
+      "label": "$87.0k",
       "name": "DRAM",
       "color": "crimson",
       "pts": [
@@ -37134,7 +37554,7 @@
       ]
      },
      {
-      "label": "$95,408/kg",
+      "label": "$95.4k",
       "name": "HBM-CLASS",
       "color": "teal",
       "delay": 1.4,
@@ -37314,7 +37734,7 @@
       ]
      },
      {
-      "label": "12-mo avg (the trigger)",
+      "label": "12-mo avg",
       "name": "TRIGGER",
       "color": "deemph",
       "dash": "7 6",
@@ -37500,7 +37920,8 @@
       "x": 2026.458,
       "y": 74686,
       "label": "Jun '26: -3.7%",
-      "sub": "the trim - reversed next print"
+      "sub": "the trim - reversed next print",
+      "dy": 150
      }
     ],
     "ylabel": "USD per kilogram, log scale"
@@ -39031,7 +39452,25 @@
       "dy": 40
      }
     ],
-    "ylabel": "index \u00b7 100 = Aug 2025"
+    "ylabel": "index \u00b7 100 = Aug 2025",
+    "xticks": [
+     [
+      2025.75,
+      "Oct '25"
+     ],
+     [
+      2026.04,
+      "Jan '26"
+     ],
+     [
+      2026.29,
+      "Apr '26"
+     ],
+     [
+      2026.54,
+      "Jul '26"
+     ]
+    ]
    }
   },
   "ev-memory-arithmetic-v1": {
@@ -39953,12 +40392,23 @@
      "y": -6
     }
    },
-   "exit": "cut",
+   "exit": "wipe_right",
    "span": [
     361.2,
     370.7
    ],
-   "docks": []
+   "docks": [
+    {
+     "slide": "ev-capex-funding-v1",
+     "slot": 0,
+     "enter": 369.6,
+     "exit": 386.5,
+     "badge_at": [
+      371.65,
+      372.95
+     ]
+    }
+   ]
   },
   {
    "scene_id": "s36",

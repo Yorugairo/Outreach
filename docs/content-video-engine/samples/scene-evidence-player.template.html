@@ -402,9 +402,10 @@
         [mk("text", { class: "cs", x: 28, y: 74 }, C.sub), CW - 56],
         [mk("text", { class: "csr", x: 28, y: CH - 14 }, C.src), CW - 56],
       ];
-      if (C.ylabel)
+      if (C.ylabel && !C.panels)
         /* floats inside the plot, top-left - FT convention; never on
-           the subtitle line */
+           the subtitle line. Paneled charts skip it: that corner
+           belongs to the panel title and the yunit ticks carry units */
         mk("text", { class: "csr", x: PL + 10, y: PT + 20,
            opacity: 0.85 }, C.ylabel);
       const PAL = { crimson: "#e5484d", teal: "#1fa892", cobalt: "#4a7fd6",
@@ -445,7 +446,11 @@
         const y0 = gy0, y1 = gy1;
         const mx = (x) => px0 + (x - x0) / (x1 - x0 || 1) * pw;
         const my = (v) => PT + (1 - (Y(v) - y0) / (y1 - y0)) * (CH - PT - PB);
-        if (pn.sub) mk("text", { class: "cs", x: px0, y: PT - 10 }, pn.sub);
+        /* QC 2026-08-30 (two-eras "butchered"): a panel label at PT-10
+           crashed into the card subtitle. It is a PANEL TITLE - it
+           lives INSIDE its panel, top-left, FT-style. */
+        if (pn.sub) mk("text", { class: "cs", x: px0 + 10, y: PT + 24 },
+                       pn.sub);
         if (pn.i > 0)
           mk("line", { x1: px0 - gap / 2, x2: px0 - gap / 2, y1: PT - 24,
              y2: CH - PB, stroke: "#24262b", "stroke-width": 2 });
@@ -481,6 +486,10 @@
           mk("text", { class: "csr", x: mx(xv), y: my(y0) + 22,
              "text-anchor": "middle" }, xl);
         }
+        /* hline labels sit RIGHT-ALIGNED at the line's end (the panel's
+           top-left belongs to the panel title / ylabel); stacked lines
+           alternate above/below so 1%-apart tripwires never collide */
+        const hlY = [];
         HL.forEach((h, hi) => {
           const hcol = PAL[h.color] || "#94a3b2";
           const htcol = TPAL[h.color] || "#b8c4d0";
@@ -488,10 +497,15 @@
             y1: my(h.y), y2: my(h.y), stroke: hcol,
             "stroke-width": 2, "stroke-dasharray": "7 6", opacity: 0 });
           st.marks.push({ el: hl, at: 0.15 + hi * 0.08 });
-          if (h.label && pn.i === 0)
-            st.marks.push({ el: mk("text", { class: "csr", x: px0 + 6,
-              y: my(h.y) - 8, fill: htcol, opacity: 0 }, h.label),
+          if (h.label && pn.i === 0) {
+            let ly = my(h.y) - 9;
+            if (hlY.some((o) => Math.abs(o - ly) < 24)) ly = my(h.y) + 22;
+            hlY.push(ly);
+            st.marks.push({ el: mk("text", { class: "csr",
+              x: px0 + pw - 8, y: ly, "text-anchor": "end",
+              fill: htcol, opacity: 0 }, h.label),
               at: 0.15 + hi * 0.08 });
+          }
         });
         const order = [...pn.series.keys()].reverse();
         order.forEach((si, oi) => {
@@ -650,7 +664,8 @@
              x: PL + trackW + 14, y: y + rh / 2 + 5, opacity: 0 }, r.note)
              : null;
           st.bars.push({ rect: fill, note: num, note2: note,
-             h: null, share: { w: trackW * r.frac, numEl: num, x0: PL },
+             h: null, share: { w: trackW * r.frac, numEl: num, x0: PL,
+                               trackW },
              stagger: i / Math.max(1, rows.length) });
         });
         if (C.foot)
@@ -844,7 +859,14 @@
       if (b.share) {           /* proportion row: fill grows rightward */
         const w = b.share.w * bp;
         b.rect.setAttribute("width", Math.max(0, w).toFixed(1));
-        b.share.numEl.setAttribute("x", (b.share.x0 + w + 12).toFixed(1));
+        /* QC 2026-08-30 ("3x" on "silicon, same gigabyte"): a
+           near-full fill leaves no room outside it - the numeral
+           moves INSIDE the fill's right end, clear of the note */
+        if (b.share.w > b.share.trackW - 96) {
+          b.share.numEl.setAttribute("text-anchor", "end");
+          b.share.numEl.setAttribute("x", (b.share.x0 + w - 12).toFixed(1));
+        } else
+          b.share.numEl.setAttribute("x", (b.share.x0 + w + 12).toFixed(1));
         b.note.setAttribute("opacity", clamp01((bp - 0.85) / 0.15).toFixed(2));
         if (b.note2) b.note2.setAttribute("opacity",
           clamp01((bp - 0.85) / 0.15).toFixed(2));
