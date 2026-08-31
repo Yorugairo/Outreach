@@ -64,3 +64,9 @@ Never trust a detector, effect, or fix not validated against a known
 ground-truth case; verify on the final deliverable, not an
 intermediate. (Three plausible stutter detectors all failed the one
 known-real case; a crossfade "fix" masked an incomplete cut.)
+
+11. **Insider shorthand** - a nickname is not a label ("the yardstick"),
+    a citation is not a key ("BEA via FRED"). Every series names what
+    it tracks, inline, in audience words; nicknames only alongside
+    their descriptor; acronyms glossed in plain words. The audit
+    question: could a stranger say what each line IS?

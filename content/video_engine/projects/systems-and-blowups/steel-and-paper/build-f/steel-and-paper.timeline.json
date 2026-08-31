@@ -27555,7 +27555,8 @@
         712.52
        ]
       ],
-      "delay_anchor": "And one layer Bravos' chart never drew."
+      "delay_anchor": "And one layer Bravos' chart never drew.",
+      "name": "MEGA-CAP TECH STOCKS"
      },
      {
       "label": "+105%",
@@ -28503,7 +28504,8 @@
         204.62
        ]
       ],
-      "delay_anchor": "The chart's second line is the chip industry"
+      "delay_anchor": "The chart's second line is the chip industry",
+      "name": "S&P 500 (the market)"
      },
      {
       "label": "+21%",
@@ -29449,7 +29451,8 @@
         2026.6543463381245,
         120.75
        ]
-      ]
+      ],
+      "name": "SEMICONDUCTOR STOCKS"
      },
      {
       "label": "+21%",
@@ -30395,7 +30398,8 @@
         2026.6543463381245,
         121.49
        ]
-      ]
+      ],
+      "name": "MEMORY MAKERS (hynix+Micron)"
      }
     ],
     "ylabel": "index \u00b7 100 = Aug 2025, log scale",
@@ -31032,7 +31036,8 @@
         1850.209,
         742.9
        ]
-      ]
+      ],
+      "name": "RAILWAY SHARE PRICES (442 companies)"
      }
     ],
     "hline": {
@@ -31152,9 +31157,9 @@
     }
    ],
    "chart": {
-    "title": "The railway yardstick, run on America",
-    "sub": "Tech investment, share of ALL US private capital formation",
-    "src": "BEA via FRED - quarterly since 1970 - UK yardstick: Campbell & Turner",
+    "title": "Tech's share of ALL US investment - the railway yardstick",
+    "sub": "Of every dollar of US private investment (buildings, machines, software - everything), the share going to tech",
+    "src": "US Bureau of Economic Analysis data via FRED, quarterly since 1970 - UK railway benchmark: Campbell & Turner",
     "ymin": 0,
     "ymax": 72,
     "series": [
@@ -32067,7 +32072,8 @@
         2026.25,
         28.184
        ]
-      ]
+      ],
+      "name": "COMPUTERS + SOFTWARE"
      },
      {
       "label": "65%",
@@ -32977,7 +32983,8 @@
         2026.25,
         65.366
        ]
-      ]
+      ],
+      "name": "ALL EQUIPMENT + IP (for scale)"
      }
     ],
     "hlines": [
@@ -32996,7 +33003,7 @@
      }
     ],
     "yunit": "%",
-    "ylabel": "share of private investment",
+    "ylabel": "share of all US private investment",
     "xticks": [
      [
       1970,
@@ -33644,7 +33651,8 @@
           2001.9692,
           5.078
          ]
-        ]
+        ],
+        "name": "10-YEAR TREASURY YIELD"
        }
       ]
      },
@@ -34223,7 +34231,8 @@
           2026.6242,
           4.724
          ]
-        ]
+        ],
+        "name": "10-YEAR TREASURY YIELD"
        }
       ]
      }
@@ -34790,7 +34799,7 @@
      },
      {
       "label": "",
-      "name": "",
+      "name": "TREND",
       "color": "crimson",
       "dash": "7 6",
       "delay": 2.0,
@@ -35611,7 +35620,8 @@
         2026.6489,
         -16.914
        ]
-      ]
+      ],
+      "name": "CHIP STOCKS: % BELOW THEIR HIGH"
      }
     ],
     "hline": {
@@ -36428,7 +36438,8 @@
         2026.6516,
         1235.72
        ]
-      ]
+      ],
+      "name": "SK HYNIX SHARE PRICE"
      },
      {
       "label": "1,142",
@@ -37102,7 +37113,8 @@
         2026.6489,
         1148.943
        ]
-      ]
+      ],
+      "name": "MICRON SHARE PRICE"
      }
     ],
     "xticks": [

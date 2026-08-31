@@ -1321,3 +1321,14 @@ continuously (slow sine wander + scale breathing); railed cards hold
 almost still. Pose is a pure function of t (rail rect = base CSS,
 active pose = transform), so scrubbing is exact. The last proof holds
 focus until the burst.
+
+**9.23b - a nickname is not a label; a citation is not a key (operator,
+2026-08-31).** Failure class 11: INSIDER SHORTHAND. Every series names
+WHAT IT TRACKS in audience words, inline on the chart (template renders
+sr.name at the line's start, FT-style, revealed with the line). A
+nickname ("the yardstick") may appear ONLY alongside its descriptor -
+the measure leads, the nickname follows. Acronyms get a plain-word
+gloss ("US Bureau of Economic Analysis data via FRED", never bare
+"BEA"). The audit that caught this: the yardstick chart shipped with
+TWO ENTIRELY UNNAMED SERIES - seven docked charts had unnamed lines.
+The mute test now includes: "could a stranger say what each line IS?"
