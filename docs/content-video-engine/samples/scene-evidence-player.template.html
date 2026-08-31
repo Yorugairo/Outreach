@@ -542,8 +542,11 @@
           for (let v = Math.ceil(y0 / step) * step; v <= y1; v += step) ticks.push(v);
         }
         for (const v of ticks) {
+          /* the zero line carries the baseline, so it reads heavier
+             (remotion-ui line-chart-draw convention) */
           mk("line", { x1: px0, x2: px0 + pw, y1: my(v), y2: my(v),
-             stroke: "#24262b", "stroke-width": 1.5 });
+             stroke: v === 0 ? "#3a3e46" : "#24262b",
+             "stroke-width": v === 0 ? 2.5 : 1.5 });
           if (pn.i === 0) {
             let lab = C.yfmt === "usd"
               ? (v >= 1000 ? "$" + Math.round(v / 1000) + "k" : "$" + v)
@@ -678,8 +681,25 @@
           const lbl = mk("text", { class: "cl", x: mx(last[0]) + 12,
             y: my(last[1]) + 8, fill: TPAL[sr.color] || "#f4f6f8",
             opacity: 0 }, sr.label);
+          /* TIP HEAD + DEPOSITED DOTS (harvested from remotion-ui
+             line-chart-draw, 2026-08-31): a glowing head rides the
+             draw's tip - read off the REAL path via getPointAtLength so
+             it tracks the curve on steep segments - and on sparse
+             series (<=16 pts) the data dots grow in as the tip passes:
+             "the line depositing them rather than a blink". */
+          let tip = null, dots = [];
+          if (!sr.dash) {
+            const halo = mk("circle", { r: sr.dash ? 0 : 9, fill: col,
+              opacity: 0 });
+            const core = mk("circle", { r: 4.2, fill: col, opacity: 0 });
+            tip = { halo, core };
+            if (sr.pts.length <= 16)
+              dots = sr.pts.map(([x, v]) => mk("circle", { cx: mx(x),
+                cy: my(v), r: 0, fill: col, stroke: "#16181c",
+                "stroke-width": 2 }));
+          }
           st.paths.push({ path, len, stagger: oi / Math.max(1, order.length),
-                          delay: sr.delay || 0 });
+                          delay: sr.delay || 0, tip, dots });
           st.labels.push(lbl);
         });
         /* EVENT BARS (doc 29 s9.22 combo convention): the print series
@@ -923,6 +943,7 @@
     const DUR = Math.min(6, Math.max(2.5, (d.exit - d.enter) * 0.38));
     const p = clamp01((t - d.enter - CARD_IN * 0.6) / DUR);
     const tRel = t - d.enter - CARD_IN * 0.6;
+    st.doneAt = d.enter + CARD_IN * 0.6 + DUR;   // badge floor: conclusions land after the draw
     st.paths.forEach((pp, i) => {
       if (pp.path.dataset && pp.path.dataset.fadein) {
         const fo = clamp01((tRel - pp.delay) / 0.8);
@@ -937,10 +958,28 @@
       /* a series may hold back (sidecar `delay`, seconds): the source's own
          chart draws first, the added layers erupt through it */
       const lp = clamp01(((tRel - pp.delay) / DUR - pp.stagger * 0.35) / 0.65);
+      const frac = expoOut(lp);
       pp.path.setAttribute("stroke-dashoffset",
-        (pp.len * (1 - expoOut(lp))).toFixed(1));
+        (pp.len * (1 - frac)).toFixed(1));
       st.labels[i].setAttribute("opacity",
         clamp01((lp - 0.92) / 0.08).toFixed(2));
+      if (pp.tip) {
+        const drawing = frac > 0.01 && frac < 0.995;
+        let tx2 = Infinity;
+        if (drawing) {
+          const p2 = pp.path.getPointAtLength(pp.len * frac);
+          tx2 = p2.x;
+          pp.tip.core.setAttribute("cx", p2.x); pp.tip.core.setAttribute("cy", p2.y);
+          pp.tip.halo.setAttribute("cx", p2.x); pp.tip.halo.setAttribute("cy", p2.y);
+        }
+        pp.tip.core.setAttribute("opacity", drawing ? 1 : 0);
+        pp.tip.halo.setAttribute("opacity", drawing ? 0.18 : 0);
+        for (const dot of pp.dots) {
+          const reveal = frac <= 0.01 ? 0 : frac >= 0.995 ? 1
+            : clamp01((tx2 - (+dot.getAttribute("cx")) + 26) / 26);
+          dot.setAttribute("r", (4.6 * reveal).toFixed(1));
+        }
+      }
     });
     /* area fills reveal with the primary line's progress */
     for (const a of st.areas)
@@ -1272,10 +1311,16 @@
       el.style.boxShadow = sh.toFixed(1) + "px " + sh.toFixed(1) + "px 0 rgba(37,49,60,.82)";
 
       const badges = (TL.evidence[d.slide] || {}).badges || [];
+      /* THE CALLOUT IS THE CONCLUSION (remotion-ui comparison-bars,
+         2026-08-31): a badge stating a chart's conclusion lands only
+         after the draw finishes - its reveal is floored at the chart's
+         draw-complete time */
+      const chartDone = (chartState[s] && chartState[s].doneAt) || 0;
       badges.forEach((_, bi) => {
         const pill = document.getElementById(`p${s+1}${bi}`);
         const at = (d.badge_at || [])[bi];
-        if (pill) pill.classList.toggle("on", at != null && t >= at && t < d.exit);
+        if (pill) pill.classList.toggle("on",
+          at != null && t >= Math.max(at, chartDone) && t < d.exit);
       });
     }
     const active = live;
