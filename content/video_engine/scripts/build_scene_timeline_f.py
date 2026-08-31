@@ -197,6 +197,29 @@ def main() -> int:
 
     uris["__audio__"] = data_uri(audio)
 
+    # SOUND REVIEW LAYER (operator, 2026-08-31: "i can't judge the audio
+    # without also seeing what actions are happening on the screen") -
+    # cues from sound/SOUND-PLAN.json embed as data URIs; the player
+    # schedules them on the master clock with live A/B variant toggles.
+    sound_cues = []
+    sp_path = EP / "sound/SOUND-PLAN.json"
+    if sp_path.exists():
+        plan = json.loads(sp_path.read_text(encoding="utf-8"))
+        for ci, cue in enumerate(plan.get("cues", [])):
+            variants = {}
+            for vk, fname in cue.get("variants", {}).items():
+                fp = EP / "sound" / fname
+                if fp.exists():
+                    key = f"__snd_{ci}_{vk}__"
+                    uris[key] = data_uri(fp)
+                    variants[vk] = key
+            if variants:
+                sound_cues.append({"slot": cue["slot"], "at": cue["at"],
+                                   "gain": cue.get("gain", 0.5),
+                                   "fade_in": cue.get("fade_in", 0),
+                                   "variants": variants})
+        print(f"  sound cues  : {len(sound_cues)} embedded from SOUND-PLAN.json")
+
     timeline = {
         "schema_version": "scene_evidence_timeline.v1",
         "runtime_s": tl["runtime_s"],
@@ -211,6 +234,7 @@ def main() -> int:
         "captions": [{"at": p["s"], "until": p["e"],
                       "text": " ".join(t["w"] for t in p["t"])} for p in pages],
         "caption_pages": pages,
+        "sound": sound_cues,
         "evidence": evidence,
         "scenes": scenes,
     }

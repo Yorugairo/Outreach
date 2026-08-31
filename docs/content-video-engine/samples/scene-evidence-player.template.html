@@ -197,6 +197,22 @@
   button:hover { background: #16344b; }
   button:focus-visible { outline: 2px solid var(--sunflower); outline-offset: 1px; }
   #scrub { flex: 1 1 420px; accent-color: var(--sunflower); }
+  /* SOUND REVIEW STRIP - live variant toggles; sound is judged ON the
+     timeline, watching (operator ruling 2026-08-31) */
+  #sndbar { display: flex; flex-wrap: wrap; gap: 14px; padding: 6px 14px;
+    align-items: center; font: 600 12px/1.3 "Segoe UI", sans-serif;
+    color: #c3ceda; }
+  #sndbar:empty { display: none; }
+  .sndcue { display: flex; gap: 6px; align-items: center;
+    background: rgba(37,49,60,.7); border-radius: 6px; padding: 4px 9px; }
+  .sndcue .lbl { color: #f4e6c7; letter-spacing: .05em;
+    text-transform: uppercase; }
+  .sndcue button { font: inherit; color: #c3ceda; background: #1b232b;
+    border: 1px solid #33363d; border-radius: 4px; padding: 2px 8px;
+    cursor: pointer; }
+  .sndcue button.on { color: #16181c; background: var(--sunflower);
+    border-color: var(--sunflower); }
+  .sndcue input[type=range] { width: 64px; accent-color: #3bc9b0; }
   #clock { font: 600 12px/1 ui-monospace, Consolas, monospace; color: #7d95a6; min-width: 108px; text-align: right; font-variant-numeric: tabular-nums; }
   #scenes { width: min(96vw,1400px); display: flex; gap: 4px; flex-wrap: wrap; }
   .chip { font: 600 10px/1 ui-monospace, Consolas, monospace; color: #7d95a6; background: #0a1620;
@@ -231,6 +247,7 @@
   <input id="scrub" type="range" min="0" max="1" step="0.01" value="0" aria-label="timeline scrub" />
   <div id="clock">0:00 / 0:00</div>
 </div>
+<div id="sndbar"></div>
 <div id="scenes"></div>
 <audio id="vo" preload="auto"></audio>
 
@@ -1257,7 +1274,57 @@
   let t = 0, playing = false, raf = 0;
   const clock = $("clock"), playBtn = $("play");
   const fmt = (s) => `${Math.floor(s/60)}:${String(Math.floor(s%60)).padStart(2,"0")}`;
-  const sync = () => { scrub.value = t; clock.textContent = `${fmt(t)} / ${fmt(DUR)}`; render(t); };
+  /* SOUND ENGINE: cues from TL.sound scheduled on the master clock.
+     Each cue owns per-variant <audio> elements built from the embedded
+     data URIs; the review strip switches variants LIVE. */
+  const SND = (TL.sound || []).map((c) => {
+    const els = {};
+    for (const [vk, key] of Object.entries(c.variants)) {
+      const a = new Audio(A[key]); a.preload = "auto"; els[vk] = a;
+    }
+    return { ...c, els, sel: Object.keys(c.variants)[0], vol: c.gain };
+  });
+  const syncSound = (tt, isPlaying) => {
+    for (const c of SND) {
+      for (const [vk, el] of Object.entries(c.els)) {
+        const active = isPlaying && vk === c.sel && c.sel !== "off";
+        const dur = el.duration || 0;
+        const off = tt - c.at;
+        if (active && off >= 0 && dur && off < dur) {
+          const fade = c.fade_in > 0 ? Math.min(1, off / c.fade_in) : 1;
+          el.volume = Math.min(1, c.vol * fade);
+          if (el.paused) { el.currentTime = off; el.play().catch(() => {}); }
+          else if (Math.abs(el.currentTime - off) > 0.3) el.currentTime = off;
+        } else if (!el.paused) el.pause();
+      }
+    }
+  };
+  {
+    const bar = document.getElementById("sndbar");
+    for (const c of SND) {
+      const d = document.createElement("div"); d.className = "sndcue";
+      d.innerHTML = `<span class="lbl">${c.slot}</span>`;
+      const keys = [...Object.keys(c.els), "off"];
+      for (const vk of keys) {
+        const b = document.createElement("button");
+        b.textContent = vk.toUpperCase();
+        if (vk === c.sel) b.classList.add("on");
+        b.addEventListener("click", () => {
+          c.sel = vk;
+          d.querySelectorAll("button").forEach(x => x.classList.remove("on"));
+          b.classList.add("on");
+          syncSound(t, playing);
+        });
+        d.appendChild(b);
+      }
+      const r = document.createElement("input");
+      r.type = "range"; r.min = 0; r.max = 1; r.step = 0.05; r.value = c.vol;
+      r.addEventListener("input", () => { c.vol = +r.value; });
+      d.appendChild(r);
+      bar.appendChild(d);
+    }
+  }
+  const sync = () => { scrub.value = t; clock.textContent = `${fmt(t)} / ${fmt(DUR)}`; render(t); syncSound(t, playing); };
   const seek = (v) => { t = Math.min(DUR, Math.max(0, v)); vo.currentTime = t; sync(); };
   const tick = () => {
     if (!playing) return;
@@ -1267,7 +1334,7 @@
     if (playing) raf = requestAnimationFrame(tick);
   };
   playBtn.addEventListener("click", () => {
-    if (playing) { playing = false; vo.pause(); cancelAnimationFrame(raf); playBtn.innerHTML = "&#9654; Play with narration"; }
+    if (playing) { playing = false; vo.pause(); cancelAnimationFrame(raf); playBtn.innerHTML = "&#9654; Play with narration"; syncSound(t, false); }
     else {
       if (t >= DUR) seek(0);
       playing = true; vo.currentTime = t; vo.play().catch(() => {});
