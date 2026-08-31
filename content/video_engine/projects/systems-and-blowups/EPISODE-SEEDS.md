@@ -41,3 +41,7 @@ only has to win the EXIT, and the exit's competition is the crowd, not
 the pros. Candidate standing thesis (T13?) for doc 36: "Beat the
 capitulation, not the market." Pairs with "I don't have to be wrong for
 the trade to break" as the two halves of the risk doctrine.
+
+**EARMARKED (operator ruling): held OUT of Steel and Paper - this is a
+centerpiece beat for the full memory-trade episode.** Do not spend it as
+a support line anywhere else.
