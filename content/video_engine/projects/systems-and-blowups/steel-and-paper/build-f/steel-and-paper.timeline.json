@@ -37329,7 +37329,7 @@
    "species": "data",
    "document": {
     "path": "Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-memory-monitor-v1.png",
-    "sha256": "f108fca62e04c63b2585bcf81c33d209fd9e494a594ed612e27714ef7642ae8c"
+    "sha256": "57204119af0c9d613efe782161a86ff040616189ada3d254623df0786ddd060e"
    },
    "badges": [
     {
@@ -38421,6 +38421,45 @@
      }
     ],
     "marks": []
+   }
+  },
+  "ev-holds-stack-v1": {
+   "title": "Everything we checked holds",
+   "source": "six documents from this episode - each shown with its own source earlier",
+   "species": "stack",
+   "document": {
+    "path": "Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-holds-stack-v1.png",
+    "sha256": "a3c1e798d771ec5e0bb40448b8504c9aed393560108c46c136198e3e725dd3e7"
+   },
+   "badges": [],
+   "stack": {
+    "items": [
+     {
+      "id": "ev-hynix-steel-v1",
+      "at": 714.16
+     },
+     {
+      "id": "ev-hbm-wafer-ratio-v1",
+      "at": 715.52
+     },
+     {
+      "id": "ev-dram-contract-v1",
+      "at": 716.74
+     },
+     {
+      "id": "ev-capex-funding-v1",
+      "at": 718.21
+     },
+     {
+      "id": "ev-weight-check-v1",
+      "at": 721.42
+     },
+     {
+      "id": "ev-memory-monitor-v1",
+      "at": 724.61
+     }
+    ],
+    "clear_at": 727.9
    }
   },
   "ev-hynix-steel-v1": {
@@ -41233,12 +41272,20 @@
      "y": 6
     }
    },
-   "exit": "cut",
+   "exit": "wipe_right",
    "span": [
     706.8,
     718.6
    ],
-   "docks": []
+   "docks": [
+    {
+     "slide": "ev-holds-stack-v1",
+     "slot": 0,
+     "enter": 714.2,
+     "exit": 729.5,
+     "badge_at": []
+    }
+   ]
   },
   {
    "scene_id": "s69",

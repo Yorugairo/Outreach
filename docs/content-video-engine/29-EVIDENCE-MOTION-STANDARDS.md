@@ -1288,3 +1288,25 @@ and no date axis. The gates, all template-enforced now:
 - The test: mute the narration, screenshot the chart, hand it to a
   stranger. If any ink needs the voiceover to explain it, the chart
   is not done.
+
+### 9.24 The VERDICT STACK species (operator, s68, 2026-08-30)
+
+At a verdict beat ("Everything we checked holds") the episode's best
+evidence PILES UP over the world plate - not inside a dock card. The
+stack mounts on the STAGE, full-frame (operator: "the evidence is
+dancing around the world plate, not static on the evidence layer"):
+
+- **Members are documents already shown** - each card is the PNG of an
+  asset docked with its own source earlier; the stack re-presents, it
+  never introduces.
+- **Word-matched enters**: each card flies in from depth (translateZ
+  -940, rotateY, transform3d-showcase vocabulary) on its verbatim
+  narration beat; scattered asymmetric SPOTS keep the plate visible
+  through the gaps; idle cards float.
+- **The burst**: on the pivot line every card is thrown RADIALLY off
+  its own bearing from stage center, spinning, staggered 60ms - the
+  clear is part of the rhetoric (the case is made; now the turn).
+- The host dock is an invisible lifecycle anchor; its window must
+  extend ~1s past clear_at so the burst finishes ticking.
+- Item beats are absolute times on the authoring clock - a retime
+  regenerates them from their verbatim phrases.

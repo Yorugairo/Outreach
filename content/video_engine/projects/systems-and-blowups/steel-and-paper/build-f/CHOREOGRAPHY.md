@@ -1,6 +1,6 @@
 # CHOREOGRAPHY STATEMENT - Steel and Paper (build F)
 
-75 scenes - 41 coalesced docks - 15 wash intervals covering 73% of 808s
+75 scenes - 42 coalesced docks - 16 wash intervals covering 75% of 808s
 
 Every entering and exiting element, in order. Verify any slot
 by reading its lines; the gates below run on every build.
@@ -172,20 +172,24 @@ by reading its lines; the gates below run on every build.
   11:25.8  LIGHT  wash falls
   11:31.8  SCENE  s66  world-spike-certificate-ring-v2  (4.3s, exit cut)
   11:36.1  SCENE  s67  world-club-interior-papered  (10.7s, exit cut)
-  11:46.8  SCENE  s68  beat-03-008-009-physical-capacity-gate-v1  (11.8s, exit cut)
+  11:46.8  SCENE  s68  beat-03-008-009-physical-capacity-gate-v1  (11.8s, exit wipe)
+  11:54.2  ENTER  ev-holds-stack-v1  slot 0 side l  holds 15.3s
+  11:54.2  LIGHT  wash rises (side of first card)
   11:58.6  SCENE  s69  world-listing-barge-v1  (8.4s, exit cut)
   12:07.0  SCENE  s70  beat-05-002-strategic-chokepoints-v1  (34.5s, exit wipe)
+  12:09.5  EXIT   ev-holds-stack-v1  fades in place
+  12:10.2  LIGHT  wash falls
   12:11.5  ENTER  ev-hynix-steel-v1  slot 0 side pair  holds 30.0s
   12:11.5  LIGHT  wash rises (side of first card)
   12:22.3  ENTER  ev-memory-arithmetic-v1  slot 1 side pair  holds 19.2s
-  12:41.5  ENTER  ev-index-concentration-v1  slot 0 side l  holds 12.7s
+  12:41.5  ENTER  ev-index-concentration-v1  slot 0 side r  holds 12.7s
   12:41.5  EXIT   ev-hynix-steel-v1  carried by the wipe front
   12:41.5  EXIT   ev-memory-arithmetic-v1  carried by the wipe front
   12:41.5  SCENE  s71  world-listing-barge-v1  (12.7s, exit wipe)
   12:54.2  EXIT   ev-index-concentration-v1  carried by the wipe front
   12:54.2  SCENE  s72  beat-06-017-018-diworsification-v1  (5.6s, exit cut)
   12:54.9  LIGHT  wash falls
-  12:59.8  ENTER  ev-test-scorecard-v1  slot 0 side r  holds 4.5s
+  12:59.8  ENTER  ev-test-scorecard-v1  slot 0 side l  holds 4.5s
   12:59.8  LIGHT  wash rises (side of first card)
   12:59.8  SCENE  s73  beat-04-001-buyer-behavior-v1  (17.8s, exit wipe)
   13:04.3  EXIT   ev-test-scorecard-v1  fades in place

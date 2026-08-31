@@ -147,6 +147,10 @@ def main() -> int:
                         # the player renders it as live type + highlighter
                         # instead of a static image (doc 29 record species)
                         **({"record": d["record"]} if "record" in d else {}),
+                        # a STACK payload: the verdict pile-up - member
+                        # ids resolve against the asset-data map in the
+                        # player (every member is docked elsewhere)
+                        **({"stack": d["stack"]} if "stack" in d else {}),
                         # a LIVE CHART payload: series emitted by the chart
                         # builder from the same data as the PNG. The player
                         # DRAWS the line; the PNG stays the static fallback.

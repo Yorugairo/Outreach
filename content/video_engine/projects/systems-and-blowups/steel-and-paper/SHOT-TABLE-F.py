@@ -89,7 +89,7 @@ W = [
 (685.1, 691.8, "world-modern-certificate-v1",    (.05, -12,   6), []),                       # certificates wear nicer names now - target-date, "the market"
 (691.8, 696.1, "world-spike-certificate-ring-v2",(.05,  12,   8), []),                       # RING ECHO: the spike, one more time
 (696.1, 706.8, "world-club-interior-papered",    (.05, -10,  -6), []),                       # 1850: trains still running, certificates papering bankrupt clubs
-(706.8, 718.6, "beat-03-008-009-physical-capacity-gate-v1", (.04,  10,   6), []),            # everything holds - they sell scarcity, for cash; then the debt turn
+(706.8, 718.6, "beat-03-008-009-physical-capacity-gate-v1", (.04,  10,   6), [("ev-holds-stack-v1",0,714.2,729.5)]),  # THE VERDICT STACK: six proofs pile up word-matched, burst on "go further than Bravos" (item beats live in the dock entry)
 (718.6, 727.0, "world-listing-barge-v1",         (.05, -10,   6), []),  # a fifth of your index - the card holds for the VERDICT beat, not here (no reuse)
 (727.0, 761.5, "beat-05-002-strategic-chokepoints-v1", (.05,  14,  -6), [("ev-hynix-steel-v1",0,731.5,760.9),("ev-memory-arithmetic-v1",1,742.3,760.9)]),  # purpose-built (operator): hynix price WITH the profit under it - not a house of cards
 (761.5, 774.2, "world-listing-barge-v1",         (.05, -10,   6), [("ev-index-concentration-v1",0,761.5,774.0)]),  # the verdict: the safe version IS the certificate
