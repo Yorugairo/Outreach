@@ -25423,7 +25423,8 @@
        ]
       ]
      }
-    ]
+    ],
+    "ylabel": "index \u00b7 100 = Aug 2025"
    }
   },
   "ev-divergence-v1": {
@@ -29254,7 +29255,8 @@
        ]
       ]
      }
-    ]
+    ],
+    "ylabel": "index \u00b7 100 = Aug 2025, log scale"
    }
   },
   "silicon-reality-gap-s04-teacher-stamped": {
@@ -31801,7 +31803,9 @@
       "label": "23%",
       "sub": "dot-com high"
      }
-    ]
+    ],
+    "yunit": "%",
+    "ylabel": "share of private investment"
    }
   },
   "ev-tnx-two-eras-v3": {
@@ -33006,7 +33010,9 @@
        }
       ]
      }
-    ]
+    ],
+    "yunit": "%",
+    "ylabel": "10-year Treasury yield"
    }
   },
   "ev-doc-karp": {
@@ -36413,7 +36419,8 @@
       "label": "Jun '26: -3.7%",
       "sub": "the trim - reversed next print"
      }
-    ]
+    ],
+    "ylabel": "USD per kilogram, log scale"
    }
   },
   "ev-instrument-memory": {
@@ -36480,7 +36487,7 @@
     },
     {
      "label": "THE PAPER",
-     "value": "-33% off peak",
+     "value": "-33%",
      "tag": "off its June peak",
      "accent": "coral"
     }
@@ -36529,7 +36536,7 @@
       ]
      },
      {
-      "label": "-33% off peak",
+      "label": "-33%",
       "name": "THE PAPER - hynix + Micron",
       "color": "crimson",
       "delay": 1.2,
@@ -36856,7 +36863,8 @@
       "label": "July print: +16.4%",
       "sub": "steel at new highs"
      }
-    ]
+    ],
+    "ylabel": "index \u00b7 100 = 1 May 2026"
    }
   },
   "ev-hynix-steel-v1": {
@@ -37886,7 +37894,8 @@
       "label": "$27B quarter - 72% margin",
       "sub": ""
      }
-    ]
+    ],
+    "ylabel": "index \u00b7 100 = Aug 2025"
    }
   },
   "ev-memory-arithmetic-v1": {

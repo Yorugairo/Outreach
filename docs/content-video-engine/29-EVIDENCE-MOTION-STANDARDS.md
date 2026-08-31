@@ -1248,6 +1248,15 @@ draw-animated). The instrument's own decision rule belongs ON the
 chart: the memory monitor shows its 12-month-average trigger line, not
 just readings.
 
+**Layout hygiene (operator, same day):** the x-axis band is RESERVED
+(bottom padding widens when xticks exist) so the source line never sits
+under the date labels; y ticks carry units (`yfmt:"usd"` or a `yunit`
+suffix like "%"); every chart states its basis as a `ylabel` floating
+top-left INSIDE the plot (FT convention - never on the subtitle line),
+e.g. "index · 100 = 1 May 2026" or "USD per kilogram, log scale"; end
+labels stay short (~6 chars) - the right margin is 120px and "off peak"
+belongs in the badge tag, not the label.
+
 **Ledger data hygiene:** SCML series queries filter
 `data_tier='production'` and full periods only - beta ten-day partials
 (`-P1/-P2/-P3`) are a different basis and print false spikes. The

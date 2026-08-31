@@ -379,7 +379,10 @@
     dockEl.classList.toggle("chart", !!ev.chart && !ev.record);
     if (ev.chart && !ev.record) {
       const C = ev.chart, NS = "http://www.w3.org/2000/svg";
-      const CW = 1056, CH = 480, PL = 64, PR = 120, PT = 96, PB = 44;
+      const CW = 1056, CH = 480, PL = 64, PR = 120, PT = 96;
+      /* chart hygiene (doc 29 s9.22): the x-axis labels get their own
+         band; the source line never collides with them */
+      const PB = C.xticks ? 70 : 44;
       const svg = document.createElementNS(NS, "svg");
       svg.setAttribute("viewBox", `0 0 ${CW} ${CH}`);
       svg.setAttribute("class", "chartbox");
@@ -392,6 +395,11 @@
       mk("text", { class: "ct", x: 28, y: 44 }, C.title);
       mk("text", { class: "cs", x: 28, y: 74 }, C.sub);
       mk("text", { class: "csr", x: 28, y: CH - 14 }, C.src);
+      if (C.ylabel)
+        /* floats inside the plot, top-left - FT convention; never on
+           the subtitle line */
+        mk("text", { class: "csr", x: PL + 10, y: PT + 20,
+           opacity: 0.85 }, C.ylabel);
       const PAL = { crimson: "#e5484d", teal: "#1fa892", cobalt: "#4a7fd6",
                     amber: "#c98500", deemph: "#8b8f98" };
       /* graphic tier draws; TEXT tier reads. Same hue, lifted for contrast. */
@@ -448,11 +456,12 @@
           mk("line", { x1: px0, x2: px0 + pw, y1: my(v), y2: my(v),
              stroke: "#24262b", "stroke-width": 1.5 });
           if (pn.i === 0) {
-            const lab = C.yfmt === "usd"
+            let lab = C.yfmt === "usd"
               ? (v >= 1000 ? "$" + Math.round(v / 1000) + "k" : "$" + v)
               : (C.log || Number.isInteger(v)
                  ? String(v >= 1000 ? v.toLocaleString("en-US") : v)
                  : v.toFixed(1));
+            if (C.yunit) lab += C.yunit;
             mk("text", { class: "csr", x: px0 - 10, y: my(v) + 5,
                "text-anchor": "end" }, lab);
           }
