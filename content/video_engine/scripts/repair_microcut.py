@@ -55,6 +55,12 @@ def main() -> int:
                        check=True)
         cut = (i1 - i0) / sr
     payload = json.loads(wj.read_text(encoding="utf-8"))
+    # words FULLY inside the cut are REMOVED, not clamped - a phrase cut
+    # that leaves zero-length ghost words re-emits the cut text into
+    # captions (caught on the 'live on CNBC' excision, 2026-08-31)
+    payload["words"] = [w for w in payload["words"]
+                        if not (w["start_s"] >= a - 0.05
+                                and w["end_s"] <= b + 0.05)]
     for w in payload["words"]:
         if w["start_s"] >= b:
             w["start_s"] = round(w["start_s"] - cut, 3)
