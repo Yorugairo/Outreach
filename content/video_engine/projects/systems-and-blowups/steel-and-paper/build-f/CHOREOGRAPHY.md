@@ -1,6 +1,6 @@
 # CHOREOGRAPHY STATEMENT - Steel and Paper (build F)
 
-75 scenes - 40 coalesced docks - 16 wash intervals covering 70% of 808s
+75 scenes - 40 coalesced docks - 15 wash intervals covering 71% of 808s
 
 Every entering and exiting element, in order. Verify any slot
 by reading its lines; the gates below run on every build.
@@ -28,14 +28,12 @@ by reading its lines; the gates below run on every build.
    1:44.2  ENTER  ev-railway-index-v1  slot 0 side pair  holds 9.8s
    1:44.2  LIGHT  wash rises (side of first card)
    1:44.2  SCENE  s11  world-navvy-cutting-v1  (9.8s, exit wipe)
-   1:52.5  ENTER  ev-railway-gdp-tile-v1  slot 1 side pair  holds 2.4s
+   1:52.5  ENTER  ev-railway-gdp-tile-v1  slot 1 side pair  holds 9.6s
    1:54.0  EXIT   ev-railway-index-v1  carried by the wipe front
    1:54.0  SCENE  s12  world-dotcom-server-room-v1  (7.9s, exit cut)
-   1:54.9  EXIT   ev-railway-gdp-tile-v1  fades in place
-   1:55.6  LIGHT  wash falls
    2:01.9  SCENE  s13  world-ledger-page-v1  (22.1s, exit wipe)
    2:02.1  ENTER  ev-capital-formation-v1  slot 0 side l  holds 50.1s
-   2:02.1  LIGHT  wash rises (side of first card)
+   2:02.1  EXIT   ev-railway-gdp-tile-v1  fades in place
    2:24.0  SCENE  s14  world-pressure-gauge-v1  (17.7s, exit cut)
    2:41.7  SCENE  s15  world-viaduct-train-rain-v1  (12.2s, exit wipe)
    2:52.2  EXIT   ev-capital-formation-v1  fades in place

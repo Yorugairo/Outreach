@@ -26,7 +26,7 @@ W = [
 ( 92.2,  97.0, "world-assay-sort-v1",            (.04,  10,   6), []),  # the diagnostic matrix - the machine you can test
 # ── P2 ENGINE — the steelman ───────────────────────────────────────────
 ( 97.2,  104.2, "world-steelman-build-v1",        (.05, -12,   8), []),  # the price-deflation capital cycle
-( 104.2, 113.6, "world-navvy-cutting-v1",         (.05,  14,  -8), [("ev-railway-index-v1",0,104.2,113.6),("ev-railway-gdp-tile-v1",1,112.5,114.9)]),
+( 104.2, 113.6, "world-navvy-cutting-v1",         (.05,  14,  -8), [("ev-railway-index-v1",0,104.2,113.6),("ev-railway-gdp-tile-v1",1,112.5,122.1)]),  # operator: Britain tile HOLDS through the dotcom plate; the yardstick's enter is its exit
 (114.0, 121.9, "world-dotcom-server-room-v1",    (.04, -10,   6), []),  # the internet's 7% of GDP
 (121.9, 143.8, "world-ledger-page-v1",           (.05,  10,  -6), [("ev-capital-formation-v1",0,122.1,172.2)]),  # "I went and pulled a version myself"
 (144.0, 161.7, "world-pressure-gauge-v1",        (.05, -14,   8), []),   # the rate trigger, as an instrument
