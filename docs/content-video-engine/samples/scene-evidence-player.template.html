@@ -139,9 +139,11 @@
   .pill.on { opacity: 1; transform: translateY(0) scale(1); }
   .dock.solo .rail { grid-template-columns: 1fr 1fr; }
   .pill-label { font-size: 13px; font-weight: 700; letter-spacing: .08em; color: #c3ceda; white-space: nowrap; }
-  .pill-row { display: flex; align-items: baseline; gap: 9px; }
-  .pill-num { font-size: 23px; font-weight: 800; font-family: ui-monospace, Consolas, monospace; font-variant-numeric: tabular-nums; }
-  .pill-tag { font-size: 13px; font-weight: 700; letter-spacing: .05em; padding: 2px 6px; border-radius: 4px; background: rgba(244,230,199,.14); }
+  /* QC 2026-08-30: a compact value never wraps mid-number ("7 of / 8");
+     the row wraps instead, dropping the tag below as a whole chip */
+  .pill-row { display: flex; align-items: baseline; gap: 9px; flex-wrap: wrap; }
+  .pill-num { font-size: 23px; font-weight: 800; font-family: ui-monospace, Consolas, monospace; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .pill-tag { font-size: 13px; font-weight: 700; letter-spacing: .05em; padding: 2px 6px; border-radius: 4px; background: rgba(244,230,199,.14); white-space: nowrap; }
 
 
   .hand-unused {
@@ -392,9 +394,14 @@
         if (txt) e.textContent = txt;
         (parent || svg).appendChild(e); return e;
       };
-      mk("text", { class: "ct", x: 28, y: 44 }, C.title);
-      mk("text", { class: "cs", x: 28, y: 74 }, C.sub);
-      mk("text", { class: "csr", x: 28, y: CH - 14 }, C.src);
+      /* QC 2026-08-30: header/src lines clamp to the canvas - a long
+         subtitle ran off the card edge mid-word ("Strong prints ar").
+         Squeezed via textLength at first tick (needs the DOM). */
+      const hdrFit = [
+        [mk("text", { class: "ct", x: 28, y: 44 }, C.title), CW - 56],
+        [mk("text", { class: "cs", x: 28, y: 74 }, C.sub), CW - 56],
+        [mk("text", { class: "csr", x: 28, y: CH - 14 }, C.src), CW - 56],
+      ];
       if (C.ylabel)
         /* floats inside the plot, top-left - FT convention; never on
            the subtitle line */
@@ -405,7 +412,8 @@
       /* graphic tier draws; TEXT tier reads. Same hue, lifted for contrast. */
       const TPAL = { crimson: "#ff8a8c", teal: "#3bc9b0", cobalt: "#8fb3f0",
                      amber: "#f5b72e", deemph: "#b8c4d0" };
-      const st = { paths: [], labels: [], bars: [], marks: [], areas: [] };
+      const st = { paths: [], labels: [], bars: [], marks: [], areas: [],
+                   fitTexts: hdrFit };
       let clipN = 0;
 
       /* one panel = one mapped plot region; a plain chart is one panel */
@@ -552,11 +560,19 @@
           const tx = mx(m.x) + (mx(m.x) > px0 + pw * 0.75 ? -14 : 14);
           const anch = mx(m.x) > px0 + pw * 0.75 ? "end" : "start";
           const mdy = m.dy || 0;
-          mk("text", { class: "cl", x: tx, y: my(m.y) - 12 + mdy,
+          /* QC 2026-08-30: annotation text was drawn bare over the data
+             ink ("$27B quarter" across the price line). A backing chip
+             sits behind the label pair - sized at first tick */
+          const chip = mk("rect", { x: tx, y: my(m.y) - 34 + mdy,
+             height: 0, width: 0, rx: 6, fill: "#16181c",
+             opacity: 0.78 }, null, g);
+          const t1 = mk("text", { class: "cl", x: tx, y: my(m.y) - 12 + mdy,
              fill: "#f4f6f8", "text-anchor": anch }, m.label, g);
-          mk("text", { class: "csr", x: tx, y: my(m.y) + 12 + mdy,
+          const t2 = mk("text", { class: "csr", x: tx, y: my(m.y) + 12 + mdy,
              "text-anchor": anch }, m.sub || "", g);
-          st.marks.push({ el: g, at: (m.x - x0) / (x1 - x0 || 1) });
+          st.marks.push({ el: g, at: (m.x - x0) / (x1 - x0 || 1),
+                          chip, t1, t2, anchX: tx, anch,
+                          hasSub: !!m.sub });
         }
       }
 
@@ -572,10 +588,15 @@
          get the highlighter swept through them). Optional per-row
          cell colors (r.colors) for status boards. */
       if (C.checklist) {
-        const cols = [PL, PL + 300, PL + 640, PL + 990];
+        /* QC 2026-08-30: fixed cols [PL,+300,+640,+990] put col 4 at
+           x=1054 on a 1056 canvas (whole column clipped) and let long
+           cells run into their neighbours. Columns now AUTO-FIT: text
+           is measured at the first animation tick (needs the DOM),
+           widths distribute across the usable span, and any cell still
+           over its allotment squeezes via textLength. */
         const defCol = ["#f4f6f8", "#dce3ea", "#3bc9b0", "#ff8a8c"];
-        C.checklist.head.forEach((h, ci) =>
-          mk("text", { class: "csr", x: cols[ci], y: PT + 18 }, h));
+        const headEls = C.checklist.head.map((h) =>
+          mk("text", { class: "csr", x: PL, y: PT + 18 }, h));
         st.rowEls = [];
         C.checklist.rows.forEach((r, i) => {
           const y = PT + 64 + i * 58;
@@ -583,28 +604,33 @@
           const cells = [];
           r.cells.forEach((cell, ci) => {
             const g2 = mk("g", { opacity: 0 });
-            let sweep = null;
+            let sweep = null, band = null;
             if (ci >= 2 && cell) {
               /* the band: cap-height, behind the text, clipped by a
-                 chisel-tilted wipe (skew ~ -7deg) that runs through */
+                 chisel-tilted wipe. The skew pivots about the BAND'S
+                 OWN corner - a bare skewX(-7) pivots about the SVG
+                 origin and slides the clip tan(7deg)*y (~20-50px)
+                 left, amputating the highlight's right end (the
+                 "incomplete highlighter" QC class). */
               const cid2 = "hl" + slot + i + ci;
               const cp2 = mk("clipPath", { id: cid2 }, null,
                              mk("defs", {}, null, g2));
-              sweep = mk("rect", { x: cols[ci] - 8, y: y - 21,
-                width: 0, height: 30, transform: "skewX(-7)" }, null, cp2);
-              mk("rect", { x: cols[ci] - 8, y: y - 21, width: 10,
+              sweep = mk("rect", { x: PL - 8, y: y - 21,
+                width: 0, height: 30 }, null, cp2);
+              band = mk("rect", { x: PL - 8, y: y - 21, width: 10,
                  height: 30, rx: 4, fill: colr[ci], opacity: 0.28,
                  "clip-path": `url(#${cid2})`, class: "hlband" + slot + i + ci }, null, g2);
             }
-            const tx = mk("text", { class: "cs", x: cols[ci], y,
+            const tx = mk("text", { class: "cs", x: PL, y,
                fill: colr[ci] }, ci === 0 ? "" : cell, g2);
-            cells.push({ el: g2, tx, txt: cell, ci, sweep,
+            cells.push({ el: g2, tx, txt: cell, ci, sweep, band, y,
                          bandCls: "hlband" + slot + i + ci });
           });
           mk("line", { x1: PL, x2: CW - PR, y1: y + 18, y2: y + 18,
              stroke: "#24262b", "stroke-width": 1.5 });
           st.rowEls.push({ d: r.delay || i * 3, cells, y });
         });
+        st.chkFit = { headEls, done: false, usable: CW - PL - 28 };
       }
       if (C.shares) {
         const rows = C.shares, rh = 46, gap2 = 30;
@@ -706,13 +732,88 @@
     /* area fills reveal with the primary line's progress */
     for (const a of st.areas)
       a.rect.setAttribute("width", (a.w * expoOut(p)).toFixed(1));
+    if (st.fitTexts) {
+      for (const [el2, maxW] of st.fitTexts) {
+        if (!el2.textContent || !el2.getComputedTextLength) continue;
+        const len = el2.getComputedTextLength();
+        if (len <= maxW) continue;
+        const ratio = maxW / len;
+        if (ratio < 0.93) {   /* big overflow: shrink the type instead
+                                 of crushing glyph spacing */
+          const fs = parseFloat(getComputedStyle(el2).fontSize) || 19;
+          el2.style.fontSize = Math.max(13, fs * ratio).toFixed(1) + "px";
+        }
+        if (el2.getComputedTextLength() > maxW) {
+          el2.setAttribute("textLength", maxW);
+          el2.setAttribute("lengthAdjust", "spacingAndGlyphs");
+        }
+      }
+      st.fitTexts = null;
+    }
     /* marks land when the line reaches them; hlines early */
     for (const m of st.marks) {
+      if (m.chip && !m.sized && m.t1.getComputedTextLength) {
+        const w = Math.max(m.t1.getComputedTextLength(),
+                           m.hasSub ? m.t2.getComputedTextLength() : 0) + 16;
+        if (w > 16) {
+          m.chip.setAttribute("width", w.toFixed(0));
+          m.chip.setAttribute("height", m.hasSub ? 56 : 32);
+          if (m.anch === "end")
+            m.chip.setAttribute("x", (m.anchX - w + 8).toFixed(0));
+          else m.chip.setAttribute("x", (m.anchX - 8).toFixed(0));
+          m.sized = true;
+        }
+      }
       const on = p >= m.at;
       m.el.setAttribute("opacity", on
         ? clamp01((p - m.at) / 0.06).toFixed(2) : 0);
     }
     /* bars grow staggered from the baseline; the note lands with the bar */
+    if (st.chkFit && !st.chkFit.done && st.rowEls && st.rowEls.length) {
+      /* one-time column fit - measurement needs the DOM. Natural width
+         per column (headers + cells, col-0 measured with its full text
+         restored after), distributed across the usable span; slack
+         spreads evenly, deficit squeezes columns proportionally and
+         over-long cells compress via textLength. */
+      const F = st.chkFit, NC = F.headEls.length, PAD = 26;
+      const natW = new Array(NC).fill(40);
+      const meas = (el) => el.getComputedTextLength
+        ? el.getComputedTextLength() : (el.textContent.length * 10);
+      F.headEls.forEach((h, ci) => natW[ci] = Math.max(natW[ci], meas(h)));
+      for (const r of st.rowEls) for (const c of r.cells) {
+        const keep = c.tx.textContent;
+        if (c.ci === 0) c.tx.textContent = c.txt;
+        natW[c.ci] = Math.max(natW[c.ci], meas(c.tx));
+        if (c.ci === 0) c.tx.textContent = keep;
+      }
+      const alloc = natW.map((w) => w + PAD);
+      const total = alloc.reduce((a, b) => a + b, 0);
+      const scale2 = total > F.usable ? F.usable / total : 1;
+      const extra = total < F.usable ? (F.usable - total) / NC : 0;
+      const xs = []; let acc = 64;
+      for (let ci = 0; ci < NC; ci++) {
+        xs.push(acc); acc += alloc[ci] * scale2 + extra;
+      }
+      F.headEls.forEach((h, ci) => h.setAttribute("x", xs[ci]));
+      for (const r of st.rowEls) for (const c of r.cells) {
+        c.tx.setAttribute("x", xs[c.ci]);
+        const room = alloc[c.ci] * scale2 + extra - PAD + 8;
+        if (c.ci > 0 && natW[c.ci] >= room && meas(c.tx) > room) {
+          c.tx.setAttribute("textLength", room.toFixed(0));
+          c.tx.setAttribute("lengthAdjust", "spacingAndGlyphs");
+        }
+        c.room = room;
+        if (c.sweep) {
+          const x0 = xs[c.ci] - 8, y0 = c.y - 21;
+          for (const el of [c.sweep, c.band]) {
+            el.setAttribute("x", x0); el.setAttribute("y", y0);
+          }
+          c.sweep.setAttribute("transform",
+            `translate(${x0} ${y0}) skewX(-7) translate(${-x0} ${-y0})`);
+        }
+      }
+      F.done = true;
+    }
     for (const r of (st.rowEls || [])) {
       /* cell choreography inside a row: question TYPES at +0, where
          fades at +0.6, steel sweep at +1.0, paper sweep at +1.6 */
@@ -729,8 +830,9 @@
         if (c.sweep) {
           const p = clamp01(ct / 0.55);
           const ease = 1 - Math.pow(1 - p, 3);
-          const w = c.tx.getComputedTextLength
-            ? c.tx.getComputedTextLength() + 18 : 300;
+          const w = Math.min((c.tx.getComputedTextLength
+            ? c.tx.getComputedTextLength() : 300) + 18,
+            (c.room || 300) + 12);
           c.sweep.setAttribute("width", (ease * w).toFixed(1));
           const band = c.el.querySelector("." + c.bandCls);
           if (band) band.setAttribute("width", (w).toFixed(1));

@@ -39027,7 +39027,8 @@
       "x": 2026.2437,
       "y": 330.4,
       "label": "$27B quarter - 72% margin",
-      "sub": ""
+      "sub": "",
+      "dy": 40
      }
     ],
     "ylabel": "index \u00b7 100 = Aug 2025"
