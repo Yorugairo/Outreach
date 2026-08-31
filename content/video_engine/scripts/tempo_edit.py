@@ -54,16 +54,29 @@ def decode(path: Path) -> np.ndarray:
     return data
 
 
-def stretch(seg: np.ndarray, rate: float) -> np.ndarray:
+PAD = int(SR * 0.08)   # context borrowed for the stretcher's warm-up
+
+
+def stretch(seg: np.ndarray, rate: float,
+            pre: int = 0, post: int = 0) -> np.ndarray:
+    """Stretch with CONTEXT PADDING (v5 - the operator heard the last of
+    the black-hole class): WSOLA has a startup transient that can double
+    the first onset of an independently-stretched chunk ("Vo-voice") and
+    sharpen attacks at chunk heads. Each chunk is stretched WITH pre/post
+    context and the stretched pads are trimmed - the transient lands in
+    the discard, never in the audible span."""
     if abs(rate - 1.0) < 0.005 or len(seg) < SR // 25:
-        return seg
+        return seg[pre:len(seg) - post if post else len(seg)]
     with tempfile.TemporaryDirectory() as td:
         a, b = Path(td) / "a.wav", Path(td) / "b.wav"
         sf.write(a, seg, SR)
         subprocess.run(["ffmpeg", "-y", "-v", "quiet", "-i", str(a),
                         "-filter:a", f"atempo={rate}", str(b)], check=True)
         out, _ = sf.read(b, dtype="float32")
-    return out
+    scale = len(out) / max(1, len(seg))
+    h = int(round(pre * scale))
+    t = int(round(post * scale))
+    return out[h:len(out) - t if t else len(out)]
 
 
 def xfade_join(pieces: list[np.ndarray]) -> np.ndarray:
@@ -220,9 +233,12 @@ def build(words, plan, audio):
             s0, s1 = max(a, c0), min(b, c1)
             if s1 - s0 < 0.02:
                 continue
-            seg = audio[int(s0 * SR):int(s1 * SR)]
-            pieces.append({"pcm": stretch(seg, r), "o0": s0, "o1": s1,
-                           "rate": r})
+            i0, i1 = int(s0 * SR), int(s1 * SR)
+            pre = min(PAD, i0)
+            post = min(PAD, len(audio) - i1)
+            seg = audio[i0 - pre:i1 + post]
+            pieces.append({"pcm": stretch(seg, r, pre, post),
+                           "o0": s0, "o1": s1, "rate": r})
 
     pieces = []
     prev = 0.0

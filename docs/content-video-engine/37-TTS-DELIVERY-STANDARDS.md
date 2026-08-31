@@ -545,6 +545,11 @@ attention.
 4. Steep field edges -> "black hole dynamics" (operator's phrase - an
    object pulled by two fields). Ramp slope halved; adjacent chunks
    differ <=0.015x, below the perceptual step threshold.
+5. Independent chunk stretching -> WSOLA STARTUP TRANSIENT doubles the
+   first onset inside a chunk and sharpens attacks at chunk heads (the
+   residue of class 3-4; the operator heard it survive v4). v5: every
+   chunk is stretched with ~80ms of borrowed CONTEXT on both sides and
+   the stretched pads are trimmed - the transient lands in the discard.
 
 **Tool:** `tempo_edit.py` - one pass does dead-space caps, tag-site cap,
 tighten runs, pause insertion, and the tempo field on decoded PCM.
