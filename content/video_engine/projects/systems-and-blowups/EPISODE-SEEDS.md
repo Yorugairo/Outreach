@@ -56,5 +56,8 @@ still negative) -> **steel CONFIRMS** (Jan print +49.7% m/m; customs
 the five days after the May release - the trigger doctrine, quantified)
 -> **paper OVERSHOOTS and panics anyway** (peak +424% on 30 Jun, -34%
 July slide on the one soft print) -> **steel keeps going** (July print
-+16.4%, new highs) while paper consolidates. Chart built:
-ev-june-print-v1 (extended). This IS the memory-episode's second act.
++16.4%, new highs) while paper consolidates. Chart PARKED (operator: too dense for this episode - sharpen it for the
+memory episode): payload saved verbatim at
+evidence/objects/ev-cycle-anatomy-v1.series.json.PARKED (Dec window,
+three marks). Steel and Paper carries the simplified May-window version.
+This IS the memory-episode's second act.
