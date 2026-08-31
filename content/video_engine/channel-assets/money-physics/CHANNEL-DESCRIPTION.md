@@ -5,21 +5,21 @@ works" / "market mechanics" / "finance explained" cluster; "financial
 history" + "market crashes" as the evergreen tail our 1845-to-AI series
 serves). Voice per doc 33 (attribution-first, credentials exact, no
 never-list constructions). First line = 148 chars, inside YouTube's
-~150-char search/hover snippet. Total 994/1000.
+~150-char search/hover snippet. Total 996/1000.
 
-FINAL — operator v3, 2026-08-31. Operator-held choices: named sources
-dropped ("primary sources — cited, not gatekept" stands alone),
-"biggest investment ever", accountability attached to public LinkedIn,
-"solo analyst", systems-thinking line restored as its own stanza.
-Mechanical repairs only: colon-splice → period, em dash for the
-semicolon couplet, spacing, capitalization.
+FINAL — operator v4, 2026-08-31. Paragraph-2 sequencing settled: AI
+claim first, "But my LinkedIn is public" as the concession-turn, human
+accountability + scrutiny as the close. Operator-held choices: named
+sources dropped ("primary sources — cited, not gatekept" stands
+alone), "biggest investment ever", "solo analyst", systems-thinking
+stanza. Mechanical repairs only: spacing, capitalization.
 
 ## Description (paste verbatim)
 
 ```
 Money Physics explains how markets actually work — the mechanics of risk, reward, and time that decide who gets paid and who's left holding the bag.
 
-I worked in risk at JPMorgan. This channel applies that discipline to the stories markets tell. And my LinkedIn is shared here publicly, so the accountability stays human. I build with AI, because that's how a solo analyst moves at the speed the market demands.
+I worked in risk at JPMorgan. This channel applies that discipline to the stories markets tell. I build with AI, because that's how a solo analyst moves at the speed the market demands. But my LinkedIn is public, so the accountability and the scrutiny stay human.
 
 Every episode takes one story — an AI capex boom, a memory-chip squeeze, the biggest investment ever, a piece of financial advice that stopped being true — and traces the machine underneath it: where the money comes in, what it's promised, the tech that supports it, and what breaks first. Claims traced to primary sources — cited, not gatekept.
 
