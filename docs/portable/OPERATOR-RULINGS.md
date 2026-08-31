@@ -511,3 +511,13 @@ empty stretches like the s36 middle), the chart mute-test sweep (doc 29
 a sound check once the audio layer exists, and packaging QC. Findings
 arrive as FIXES WITH CANDIDATES, not questions. The operator's review
 should start where Claude's ends.
+
+## E19 — Isolation is by PROJECT, not by worktree (2026-08-31)
+
+"I think you should be able to write across worktrees; what we want to
+isolate is projects." Worktrees are checkouts, not walls: write where
+the work belongs (the p29 editor, the main checkout's tools). The
+boundary that matters is the PROJECT — one project's changes, assets,
+and doctrine never smear into another's. Merging discipline stands:
+worktrees are isolation, not storage; stage-complete work merges to
+main.
