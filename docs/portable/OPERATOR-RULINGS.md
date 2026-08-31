@@ -516,8 +516,14 @@ should start where Claude's ends.
 
 "I think you should be able to write across worktrees; what we want to
 isolate is projects." Worktrees are checkouts, not walls: write where
-the work belongs (the p29 editor, the main checkout's tools). The
-boundary that matters is the PROJECT — one project's changes, assets,
-and doctrine never smear into another's. Merging discipline stands:
-worktrees are isolation, not storage; stage-complete work merges to
-main.
+the work belongs (the p29 editor, the main checkout's tools).
+
+**The boundary, precisely (operator, same day):** systems-and-blowups,
+martial-matters, and every channel/series are all parts of ONE creative
+project — the Outreach Program. Tools, doctrine, motion grammar, and
+conventions flow freely across channels and episodes. The REAL wall is
+**Outreach vs the BJJ Registry project** (WA JiuJitsu Registry /
+nationalbjjregistry) — those two never smear into each other: no shared
+edits, no cross-contaminated assets or configs. Merging discipline
+stands: worktrees are isolation, not storage; stage-complete work
+merges to main.
