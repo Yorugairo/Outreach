@@ -731,3 +731,18 @@ thesis) was never wired in. Two additions:
 
 Cost: 796.6 -> 801.2s (+4.6s of breathing). Both constraints stay
 derived from text + choreography data, robust to take regeneration.
+
+### 19b. The grammar turns GENERATIVE - derive_pauses.py (operator, 2026-08-30)
+
+The 'two-thirds' miss: the pause grammar described classes but nothing
+generated sites from it - the plan was hand-placed from probe listens,
+so any site never ear-flagged silently got the tightened default.
+`derive_pauses.py` now scans the VO for grammar classes (stat-settle
+into era-shift = FULL savor; snap stat-settles, era-shift breaths,
+reveal leads = HALF) and diffs against the standing plan. Run it on
+every script BEFORE the master record; the operator adjudicates the
+candidate list - count-phrases ("three questions", "two stories")
+false-fire the number heuristic, and enumeration-internal stats stay
+UNPAUSED (runs flow; the v7.2 density cap owns their rate instead).
+Script G yield: 1 operator-named full + 7 ratified halves of 18
+candidates.

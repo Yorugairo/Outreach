@@ -26,75 +26,75 @@ W = [
 ( 92.2,  97.0, "world-assay-sort-v1",            (.04,  10,   6), []),  # the diagnostic matrix - the machine you can test
 # ── P2 ENGINE — the steelman ───────────────────────────────────────────
 ( 97.2,  104.2, "world-steelman-build-v1",        (.05, -12,   8), []),  # the price-deflation capital cycle
-( 104.2, 112.3, "world-navvy-cutting-v1",         (.05,  14,  -8), [("ev-railway-index-v1",0,104.2,112.3),("ev-railway-gdp-tile-v1",1,111.3,113.5)]),
-(112.6, 119.8, "world-dotcom-server-room-v1",    (.04, -10,   6), []),  # the internet's 7% of GDP
-(119.8, 141.7, "world-ledger-page-v1",           (.05,  10,  -6), [("ev-capital-formation-v1",0,120.0,170.1)]),  # "I went and pulled a version myself"
-(141.9, 159.6, "world-pressure-gauge-v1",        (.05, -14,   8), []),   # the rate trigger, as an instrument
-(159.6, 171.6, "world-viaduct-train-rain-v1",    (.04,  12,   6), [("ev-tnx-two-eras-v3",0,170.2,188.3)]),
-(171.8, 202.2, "world-broadcast-set-v2",         (.04, -12,  -8), []),  # their line on the record, then the racetrack
-(202.2, 216.2, "world-sell-ticket-v1"      ,     (.05,  10,   8), []),  # record earnings vs valuation - the profit-taking case
-(216.8, 224.3, "world-trading-desk-dark",        (.05, -10,  -6), []),                       # "here's where their own chart gets strange"
+( 104.2, 113.6, "world-navvy-cutting-v1",         (.05,  14,  -8), [("ev-railway-index-v1",0,104.2,113.6),("ev-railway-gdp-tile-v1",1,112.5,114.9)]),
+(114.0, 121.9, "world-dotcom-server-room-v1",    (.04, -10,   6), []),  # the internet's 7% of GDP
+(121.9, 143.8, "world-ledger-page-v1",           (.05,  10,  -6), [("ev-capital-formation-v1",0,122.1,172.2)]),  # "I went and pulled a version myself"
+(144.0, 161.7, "world-pressure-gauge-v1",        (.05, -14,   8), []),   # the rate trigger, as an instrument
+(161.7, 173.7, "world-viaduct-train-rain-v1",    (.04,  12,   6), [("ev-tnx-two-eras-v3",0,172.3,190.4)]),
+(173.9, 204.3, "world-broadcast-set-v2",         (.04, -12,  -8), []),  # their line on the record, then the racetrack
+(204.3, 218.3, "world-sell-ticket-v1"      ,     (.05,  10,   8), []),  # record earnings vs valuation - the profit-taking case
+(218.9, 226.4, "world-trading-desk-dark",        (.05, -10,  -6), []),                       # "here's where their own chart gets strange"
 # ── P3 GAP · unit 1: the evidence walk ─────────────────────────────────
-(224.5, 229.5, "world-internal-memo-v1",         (.04,  12,   6), [("ev-doc-karp",0,224.5,234.1)]),          # Karp on CNBC
-(229.5, 234.1, "world-budget-burndown-v1",       (.05, -12,   8), []),  # Uber burned the annual budget by April
-(234.1, 243.5, "world-empty-racks-v1",           (.04,  10,  -8), [("ev-uber-adoption-v1",0,234.3,250.9)]),  # "can't draw a line to what you're shipping"
-(243.8, 252.7, "world-exhibition-hall-morning-v1",(.05, -14,   6), [], "cut"),      # the fair the morning after = the trough
-(252.8, 264.2, "hero-countercase-v1",                  (.05,  14,  -6), [("ev-three-manias",0,253.0,264.4)]),      # the trains ran through the crash  # ^REGISTER: the wave, the ruin, one green shoot - WHAT SURVIVES
-(264.2, 276.0, "world-dawn-factory-v1"  ,           (.04, -10,   8), []),  # the inescapable physical reality  # s03 carries ONE figure (97%); clears at 7.0s so the plate breathes
-(276.4, 279.9, "world-molten-pour-v2",       (.05,  10,   6), []),                       # u5 rehook: "who's paying for the steel this time"
+(226.6, 231.6, "world-internal-memo-v1",         (.04,  12,   6), [("ev-doc-karp",0,226.6,236.2)]),          # Karp on CNBC
+(231.6, 236.2, "world-budget-burndown-v1",       (.05, -12,   8), []),  # Uber burned the annual budget by April
+(236.2, 245.6, "world-empty-racks-v1",           (.04,  10,  -8), [("ev-uber-adoption-v1",0,236.4,253.0)]),  # "can't draw a line to what you're shipping"
+(245.9, 254.8, "world-exhibition-hall-morning-v1",(.05, -14,   6), [], "cut"),      # the fair the morning after = the trough
+(254.9, 266.4, "hero-countercase-v1",                  (.05,  14,  -6), [("ev-three-manias",0,255.1,266.6)]),      # the trains ran through the crash  # ^REGISTER: the wave, the ruin, one green shoot - WHAT SURVIVES
+(266.4, 278.4, "world-dawn-factory-v1"  ,           (.04, -10,   8), []),  # the inescapable physical reality  # s03 carries ONE figure (97%); clears at 7.0s so the plate breathes
+(278.8, 282.4, "world-molten-pour-v2",       (.05,  10,   6), []),                       # u5 rehook: "who's paying for the steel this time"
 # ── P3 GAP · unit 2: the debt unit ─────────────────────────────────────
-(280.0, 288.9, "world-treasury-cash-count",      (.05, -12,  -8), []),  # cash generation vs paper gains
-(288.9, 294.0, "world-bond-prospectus",          (.05,  12,   6), [("ev-debt-issuance-v2",0,289.1,299.2)]),  # the borrowing, as an object
-(294.1, 299.2, "world-index-board-swelling",     (.04, -10,   8), []),  # one sector crowding the index
-(299.2, 316.1, "world-substation-feed-v1",       (.05,  14,  -6), [("ev-ig-credit-weighting-v1",0,299.3,316.0)]),  # money that sat in utilities
-(316.1, 324.5, "world-datacenter-aisle-v1",      (.04, -12,   6), [("ev-capex-consensus-v1",0,316.5,325.8)]),
-(324.5, 328.4, "world-lease-contracts-bound",    (.05, -14,   8), []),        # bound contract volumes past the frame
-(328.4, 336.7, "world-datacenter-shell",         (.05,  12,  -8), [("ev-doc-leases",0,328.4,347.2)]),        # a contract pinned to the site fence
-(336.7, 347.2, "beat-05-017-018-market-prices-cashflows-v1",              (.05, -10,   6), []),     # POOL: conduits pumping into the built city - every dollar consumed by the buildout
-(347.2, 358.3, "beat-05-006-listed-cash-flow-market-v1",                  (.04,  10,   8), [("ev-doc-macdonald",0,347.4,365.8)]),  # POOL: what investors believe future cash flows are worth
-(358.3, 367.6, "world-orderbook-stamped-v1",     (.05, -12,  -6), []),  # the historical blind spot: debt-financed overinvestment
-(367.6, 381.4, "world-signature-close",          (.05,  12,   6), []),                       # "they signed a promise, in a year that looked good"
+(282.5, 291.5, "world-treasury-cash-count",      (.05, -12,  -8), []),  # cash generation vs paper gains
+(291.5, 296.6, "world-bond-prospectus",          (.05,  12,   6), [("ev-debt-issuance-v2",0,291.7,301.9)]),  # the borrowing, as an object
+(296.7, 301.9, "world-index-board-swelling",     (.04, -10,   8), []),  # one sector crowding the index
+(301.9, 318.8, "world-substation-feed-v1",       (.05,  14,  -6), [("ev-ig-credit-weighting-v1",0,302.0,318.7)]),  # money that sat in utilities
+(318.8, 327.2, "world-datacenter-aisle-v1",      (.04, -12,   6), [("ev-capex-consensus-v1",0,319.2,328.5)]),
+(327.2, 331.0, "world-lease-contracts-bound",    (.05, -14,   8), []),        # bound contract volumes past the frame
+(331.0, 339.3, "world-datacenter-shell",         (.05,  12,  -8), [("ev-doc-leases",0,331.0,349.8)]),        # a contract pinned to the site fence
+(339.3, 349.8, "beat-05-017-018-market-prices-cashflows-v1",              (.05, -10,   6), []),     # POOL: conduits pumping into the built city - every dollar consumed by the buildout
+(349.8, 361.2, "beat-05-006-listed-cash-flow-market-v1",                  (.04,  10,   8), [("ev-doc-macdonald",0,350.0,368.8)]),  # POOL: what investors believe future cash flows are worth
+(361.2, 370.7, "world-orderbook-stamped-v1",     (.05, -12,  -6), []),  # the historical blind spot: debt-financed overinvestment
+(370.7, 384.8, "world-signature-close",          (.05,  12,   6), []),                       # "they signed a promise, in a year that looked good"
 # ── P4 PIVOT ───────────────────────────────────────────────────────────
-(381.4, 389.5, "world-license-cabinet-v1",  (.06, -10,  -8), []),                       # "where most people get the whole thing wrong"
-(389.5, 397.2, "hero-wrong-bubble-v1",              (.06,  10,   6), []),                       # THE REVERSAL: paper endless, hardware exact  # ^REGISTER: THE REVERSAL - the chip tower beside the basket of paper
-(397.8, 403.1, "world-certificate-wall-v1",      (.05, -14,   8), [("ev-railway-mileage-v1",0,398.2,407.0)]),# it was railway CERTIFICATES
-(403.1, 406.8, "world-exchange-floor-1845"   ,    (.05,  12,  -6), []),
-(406.8, 424.3, "world-target-date-envelope-v1",  (.04, -10,   6), [("ev-weight-check-v1",0,407.0,424.7)], "cut"),  # the default your retirement sits in
-(424.9, 434.4, "hero-sp500-double-failure-v1",          (.05,  14,   8), [("ev-smh-drawdown-v3",0,424.9,435.0)]),   # if the names fall by half  # ^REGISTER: the index as towers cascading paper onto a crowd
-(434.6, 441.1, "world-spike-certificate-ring-v2",(.06, -8,   -6), []),                       # RING TOKEN RECONTEXTUALIZED: certificate curls onto the spike
-(442.1, 453.2, "world-railway-acts-desk-v1",     (.05,  10,   8), [("ev-railway-index-v1",0,442.3,453.4)]),  # 1845 is the proof
+(384.8, 393.2, "world-license-cabinet-v1",  (.06, -10,  -8), []),                       # "where most people get the whole thing wrong"
+(393.2, 401.0, "hero-wrong-bubble-v1",              (.06,  10,   6), []),                       # THE REVERSAL: paper endless, hardware exact  # ^REGISTER: THE REVERSAL - the chip tower beside the basket of paper
+(401.7, 407.4, "world-certificate-wall-v1",      (.05, -14,   8), [("ev-railway-mileage-v1",0,402.1,411.6)]),# it was railway CERTIFICATES
+(407.4, 411.4, "world-exchange-floor-1845"   ,    (.05,  12,  -6), []),
+(411.4, 429.3, "world-target-date-envelope-v1",  (.04, -10,   6), [("ev-weight-check-v1",0,411.6,429.7)], "cut"),  # the default your retirement sits in
+(429.9, 439.6, "hero-sp500-double-failure-v1",          (.05,  14,   8), [("ev-smh-drawdown-v3",0,429.9,440.2)]),   # if the names fall by half  # ^REGISTER: the index as towers cascading paper onto a crowd
+(439.8, 446.4, "world-spike-certificate-ring-v2",(.06, -8,   -6), []),                       # RING TOKEN RECONTEXTUALIZED: certificate curls onto the spike
+(447.4, 458.7, "world-railway-acts-desk-v1",     (.05,  10,   8), [("ev-railway-index-v1",0,447.6,458.9)]),  # 1845 is the proof
 # ── P5 REFLECTION ──────────────────────────────────────────────────────
-(453.6, 464.5, "world-circuit-terrain-v1",       (.05, -12,   6), [("ev-railway-mileage-v1",0,453.9,464.5)], "cut"),                       # railway steel sat 20 years; compute depreciates
-(464.5, 469.6, "world-hbm-die-stack",                      (.04,  12,  -8), [("silicon-antidote-s11-teacher-stamped",0,464.5,469.6)], "cut"),  # orders in, slots gone  # ^REGISTER: the die stack itself - allocation sealed (ovens plate RETIRED: read as bread out of context, operator)
-(469.6, 505.3, "hero-korea-italy-v1",                        (.05, -10,   8), [("sovereign-memory-infrastructure-s10-teacher-stamped",0,469.6,484.3),("ev-test-scorecard-v1",0,487.9,538.2)], "cut"),  # sovereign stacks  # ^REGISTER: two continents, one hardware - sovereign stacks
-(506.2, 518.2, "hero-barbell-v1",                       (.05,  12,   6), []),  # the three questions  # ^REGISTER: the balance: gold one side, paper the other - THE TEST
-(518.2, 528.1, "beat-04-014-evidence-hierarchy-v1",                        (.05, -14,  -6), []),  # steel answers / paper answers - the sort  # POOL: contracts and shipments beat narrative - the test's own logic
-(528.1, 538.6, "world-workbench-triad-v1",       (.04,  10,   8), []),                       # "thirty seconds a holding. run your top five tonight"
-(538.7, 547.7, "world-two-rooms-divergence-v1",  (.05, -12,   6), [("ev-divergence-v1",0,538.8,555.8)]),  # the chart RETURNS at the line that names it
-(547.7, 554.7, "beat-04-015-bottleneck-boom-v1",                        (.04,  12,  -8), []),  # the test, administered in public  # POOL: a bottleneck boom before a bubble
-(555.8, 565.0, "world-seoul-fab-skyline-v1",     (.05, -10,   6), [], "cut"),  # the global DRAM battlefield  # extended to 9.0s so 500% / +716% can actually land
-(559.5, 572.7, "hero-fab-constraint-v1",                 (.05,  14,   8), [("ev-krx-memory-v3",0,559.8,573.8)], "cut"),     # SK hynix, +517%  # ^REGISTER: the cleanroom line - SK hynix, the constraint itself
-(574.0, 580.1, "hero-hbm-bandwidth-v1",                        (.06, -8,   -6), [("silicon-reality-gap-s07-hbm-stack-v1",0,574.3,580.1)]),   # dies stacked edge-on  # ^REGISTER: the die with bandwidth streaming - HBM physics
-(580.1, 590.1, "world-dram-terrain-v1",          (.05,  10,   6), [("ev-hbm-wafer-ratio-v1",0,580.1,590.1),("silicon-antidote-s09-capacity-penalty-v1",1,584.2,590.1)]),
-(590.4, 593.0, "world-allocation-board",         (.05, -12,   8), [("ev-dram-contract-v1",0,590.5,593.0)]),  # every line marked through - sold out
-(593.0, 614.3, "world-laptop-shelf",             (.04,  12,  -6), [("ev-dram-contract-v1",0,593.0,601.9),("silicon-value-software-bubble-s13-teacher-stamped",1,603.1,614.3)]),  # the blank price card
-(614.3, 620.4, "world-steel-mill-night",         (.05, -10,   6), [("silicon-antidote-s02-memory-triopoly-v1",0,614.3,620.4)]),  # the most vertical line is steel
-(620.5, 629.4, "beat-04-013-guidance-not-gospel-v1",                       (.04,  10,   8), [("ev-tripwire-board-v1",0,625.1,640.9)]),                       # "it doesn't care what you were hoping to conclude"  # POOL: guidance is not gospel - the test doesn't care what you hoped
+(459.2, 470.3, "world-circuit-terrain-v1",       (.05, -12,   6), [("ev-railway-mileage-v1",0,459.5,470.3)], "cut"),                       # railway steel sat 20 years; compute depreciates
+(470.3, 475.3, "world-hbm-die-stack",                      (.04,  12,  -8), [("silicon-antidote-s11-teacher-stamped",0,470.3,475.3)], "cut"),  # orders in, slots gone  # ^REGISTER: the die stack itself - allocation sealed (ovens plate RETIRED: read as bread out of context, operator)
+(475.3, 511.3, "hero-korea-italy-v1",                        (.05, -10,   8), [("sovereign-memory-infrastructure-s10-teacher-stamped",0,475.3,490.1),("ev-test-scorecard-v1",0,493.7,544.4)], "cut"),  # sovereign stacks  # ^REGISTER: two continents, one hardware - sovereign stacks
+(512.2, 524.3, "hero-barbell-v1",                       (.05,  12,   6), []),  # the three questions  # ^REGISTER: the balance: gold one side, paper the other - THE TEST
+(524.3, 534.2, "beat-04-014-evidence-hierarchy-v1",                        (.05, -14,  -6), []),  # steel answers / paper answers - the sort  # POOL: contracts and shipments beat narrative - the test's own logic
+(534.2, 544.8, "world-workbench-triad-v1",       (.04,  10,   8), []),                       # "thirty seconds a holding. run your top five tonight"
+(544.9, 554.0, "world-two-rooms-divergence-v1",  (.05, -12,   6), [("ev-divergence-v1",0,545.0,562.2)]),  # the chart RETURNS at the line that names it
+(554.0, 561.1, "beat-04-015-bottleneck-boom-v1",                        (.04,  12,  -8), []),  # the test, administered in public  # POOL: a bottleneck boom before a bubble
+(562.2, 571.4, "world-seoul-fab-skyline-v1",     (.05, -10,   6), [], "cut"),  # the global DRAM battlefield  # extended to 9.0s so 500% / +716% can actually land
+(565.9, 579.0, "hero-fab-constraint-v1",                 (.05,  14,   8), [("ev-krx-memory-v3",0,566.2,580.1)], "cut"),     # SK hynix, +517%  # ^REGISTER: the cleanroom line - SK hynix, the constraint itself
+(580.3, 586.5, "hero-hbm-bandwidth-v1",                        (.06, -8,   -6), [("silicon-reality-gap-s07-hbm-stack-v1",0,580.6,586.5)]),   # dies stacked edge-on  # ^REGISTER: the die with bandwidth streaming - HBM physics
+(586.5, 596.5, "world-dram-terrain-v1",          (.05,  10,   6), [("ev-hbm-wafer-ratio-v1",0,586.5,596.5),("silicon-antidote-s09-capacity-penalty-v1",1,590.5,596.5)]),
+(596.8, 599.4, "world-allocation-board",         (.05, -12,   8), [("ev-dram-contract-v1",0,596.9,599.4)]),  # every line marked through - sold out
+(599.4, 620.6, "world-laptop-shelf",             (.04,  12,  -6), [("ev-dram-contract-v1",0,599.4,608.3),("silicon-value-software-bubble-s13-teacher-stamped",1,609.5,620.6)]),  # the blank price card
+(620.6, 626.7, "world-steel-mill-night",         (.05, -10,   6), [("silicon-antidote-s02-memory-triopoly-v1",0,620.6,626.7)]),  # the most vertical line is steel
+(626.8, 635.7, "beat-04-013-guidance-not-gospel-v1",                       (.04,  10,   8), [("ev-tripwire-board-v1",0,631.4,647.2)]),                       # "it doesn't care what you were hoping to conclude"  # POOL: guidance is not gospel - the test doesn't care what you hoped
 # ── P5 · the tell ──────────────────────────────────────────────────────
-(629.7, 641.1, "beat-04-003-classic-cycle-counterargument-v1",         (.05, -14,  -6), []),  # paper-bubble mechanics - their tripwire, then ours  # POOL: the strongest argument against this video - their tripwire
-(641.1, 655.5, "world-korea-port-v1",            (.05,  12,   6), [("ev-memory-monitor-v1",0,641.2,655.5)]),  # the monitor shows its OWN readings (s05 slide RETIRED here: no figure, partial match)
-(655.5, 657.9, "world-memory-wafer-v1",          (.04, -10,   8), [("ev-trim-proof-v1",0,655.5,668.2)]),  # instrument card RETIRED (redundant with monitor analyst chart); objection card holds through the readings
-(657.9, 678.8, "world-unwind-desk-v2",           (.05,  10,  -8), [("ev-hbm-export-series",1,657.9,668.2),("ev-june-print-v1",0,668.4,678.7)]), # THE FLIP: a position deliberately reduced - de-risked on camera
+(636.0, 647.4, "beat-04-003-classic-cycle-counterargument-v1",         (.05, -14,  -6), []),  # paper-bubble mechanics - their tripwire, then ours  # POOL: the strongest argument against this video - their tripwire
+(647.4, 661.8, "world-korea-port-v1",            (.05,  12,   6), [("ev-memory-monitor-v1",0,647.5,661.8)]),  # the monitor shows its OWN readings (s05 slide RETIRED here: no figure, partial match)
+(661.8, 664.3, "world-memory-wafer-v1",          (.04, -10,   8), [("ev-trim-proof-v1",0,661.8,674.5)]),  # instrument card RETIRED (redundant with monitor analyst chart); objection card holds through the readings
+(664.3, 685.1, "world-unwind-desk-v2",           (.05,  10,  -8), [("ev-hbm-export-series",1,664.3,674.5),("ev-june-print-v1",0,674.7,685.0)]), # THE FLIP: a position deliberately reduced - de-risked on camera
 # ── P6 CLOSE ── re-authored to Script G's close (the beats reordered) ──
-(678.8, 685.5, "world-modern-certificate-v1",    (.05, -12,   6), []),                       # certificates wear nicer names now - target-date, "the market"
-(685.5, 689.8, "world-spike-certificate-ring-v2",(.05,  12,   8), []),                       # RING ECHO: the spike, one more time
-(689.8, 700.4, "world-club-interior-papered",    (.05, -10,  -6), []),                       # 1850: trains still running, certificates papering bankrupt clubs
-(700.4, 712.2, "beat-03-008-009-physical-capacity-gate-v1", (.04,  10,   6), []),            # everything holds - they sell scarcity, for cash; then the debt turn
-(712.2, 720.6, "world-listing-barge-v1",         (.05, -10,   6), []),  # a fifth of your index - the card holds for the VERDICT beat, not here (no reuse)
-(720.6, 755.1, "beat-05-002-strategic-chokepoints-v1", (.05,  14,  -6), [("ev-hynix-steel-v1",0,725.1,754.5),("ev-memory-arithmetic-v1",1,736.0,754.5)]),  # purpose-built (operator): hynix price WITH the profit under it - not a house of cards
-(755.1, 767.8, "world-listing-barge-v1",         (.05, -10,   6), [("ev-index-concentration-v1",0,755.1,767.6)]),  # the verdict: the safe version IS the certificate
-(767.8, 773.4, "beat-06-017-018-diworsification-v1", (.06,  10,   8), []),                   # FINAL TRIAD: steel used / paper believed / discovered at once
-(773.4, 791.2, "beat-04-001-buyer-behavior-v1",  (.04, -12,   6), [("ev-test-scorecard-v1",0,773.4,777.9)]),  # CTA: you now have the test - the scorecard returns at its recap
-(791.2, 799.7, "beat-06-001-003-index-product-elevator-v1", (.05,  12,  -8), []),            # future pacing: which half of your portfolio is steel
-(799.7, 801.2, "world-spike-rest-v2",            (.03,   6,   4), []),                       # RING ANCHOR: the spike stays on the desk. Lamp almost out.
+(685.1, 691.8, "world-modern-certificate-v1",    (.05, -12,   6), []),                       # certificates wear nicer names now - target-date, "the market"
+(691.8, 696.1, "world-spike-certificate-ring-v2",(.05,  12,   8), []),                       # RING ECHO: the spike, one more time
+(696.1, 706.8, "world-club-interior-papered",    (.05, -10,  -6), []),                       # 1850: trains still running, certificates papering bankrupt clubs
+(706.8, 718.6, "beat-03-008-009-physical-capacity-gate-v1", (.04,  10,   6), []),            # everything holds - they sell scarcity, for cash; then the debt turn
+(718.6, 727.0, "world-listing-barge-v1",         (.05, -10,   6), []),  # a fifth of your index - the card holds for the VERDICT beat, not here (no reuse)
+(727.0, 761.5, "beat-05-002-strategic-chokepoints-v1", (.05,  14,  -6), [("ev-hynix-steel-v1",0,731.5,760.9),("ev-memory-arithmetic-v1",1,742.3,760.9)]),  # purpose-built (operator): hynix price WITH the profit under it - not a house of cards
+(761.5, 774.2, "world-listing-barge-v1",         (.05, -10,   6), [("ev-index-concentration-v1",0,761.5,774.0)]),  # the verdict: the safe version IS the certificate
+(774.2, 779.8, "beat-06-017-018-diworsification-v1", (.06,  10,   8), []),                   # FINAL TRIAD: steel used / paper believed / discovered at once
+(779.8, 797.6, "beat-04-001-buyer-behavior-v1",  (.04, -12,   6), [("ev-test-scorecard-v1",0,779.8,784.3)]),  # CTA: you now have the test - the scorecard returns at its recap
+(797.6, 806.1, "beat-06-001-003-index-product-elevator-v1", (.05,  12,  -8), []),            # future pacing: which half of your portfolio is steel
+(806.1, 807.6, "world-spike-rest-v2",            (.03,   6,   4), []),                       # RING ANCHOR: the spike stays on the desk. Lamp almost out.
 ]
