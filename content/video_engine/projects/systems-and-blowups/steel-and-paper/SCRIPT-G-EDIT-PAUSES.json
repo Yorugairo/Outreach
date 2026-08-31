@@ -329,6 +329,42 @@
    "s": 0.45,
    "kind": "half-savor",
    "why": "the viewer's choice framed"
+  },
+  {
+   "after": "It ruined almost everyone who touched it.",
+   "s": 1.1,
+   "kind": "key-post",
+   "why": "authored key beat - moved from TTS break tag (tags RETIRED: stochastic vocalization)"
+  },
+  {
+   "after": "Today it's twenty-eight \u2014 the most it has ever been.",
+   "s": 1.1,
+   "kind": "key-post",
+   "why": "authored key beat - moved from TTS break tag (tags RETIRED: stochastic vocalization)"
+  },
+  {
+   "after": "And promises are the part of this that nobody is charting.",
+   "s": 1.1,
+   "kind": "key-post",
+   "why": "authored key beat - moved from TTS break tag (tags RETIRED: stochastic vocalization)"
+  },
+  {
+   "after": "everyone repeating this chart missed \u2014 including, just this once, the people who drew it.",
+   "s": 1.1,
+   "kind": "key-pre",
+   "why": "authored key beat - moved from TTS break tag (tags RETIRED: stochastic vocalization)"
+  },
+  {
+   "after": "it reads what memory costs leaving Korea, by the kilo, straight off customs export data.",
+   "s": 1.1,
+   "kind": "key-pre",
+   "why": "authored key beat - moved from TTS break tag (tags RETIRED: stochastic vocalization)"
+  },
+  {
+   "after": "That print, I start trimming.",
+   "s": 1.1,
+   "kind": "key-post",
+   "why": "authored key beat - moved from TTS break tag (tags RETIRED: stochastic vocalization)"
   }
  ],
  "note_half_beats": "half kind (0.45s) added 2026-08-30: naming->list, reveal callout, threshold settle - the audio side of chart tension reveals",

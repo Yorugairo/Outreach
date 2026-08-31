@@ -85,6 +85,7 @@ def main() -> int:
         fails.append(f"env file missing: {ENV_FILE}")
     else:
         load_env(ENV_FILE)
+    os.environ["ELEVENLABS_NO_BREAK_TAGS"] = "1"
     key = os.environ.get("ELEVENLABS_API_KEY", "")
     voice = os.environ.get("ELEVENLABS_VOICE_ID", "")
     print(f"  [{'ok' if key else 'FAIL'}] API key present ({len(key)} chars, not shown)")
@@ -254,6 +255,7 @@ def run_probe(go: bool) -> int:
         print("dry run - re-run with --probe --go (~{:,} credits)".format(n))
         return 0
     os.environ["ELEVENLABS_SEED"] = SEED
+    os.environ["ELEVENLABS_NO_BREAK_TAGS"] = "1"
     os.environ["ELEVENLABS_TIMEOUT_S"] = TIMEOUT_S
     os.environ["ELEVENLABS_MAX_ATTEMPTS"] = MAX_ATTEMPTS
     from content.video_engine.src.services.audio_synth import (

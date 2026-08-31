@@ -579,3 +579,25 @@ insert_edit_pauses remain the fallback path.
 **Ladder of authority for delivery:** the take is raw material; the
 edit authors silence (s19) AND tempo (s20); text changes alone force
 re-recording.
+
+
+## 21. BREAK TAGS RETIRED from the provider payload (operator-driven, 2026-08-30)
+
+The final thumb: a micro-probe with a PERFECTLY COMPILED break tag came
+back with the tag VOCALISED ("touched it on thumb") - while the same
+compiled tag rendered silently in the same day's masters. Break-tag
+vocalisation is STOCHASTIC provider behavior; the 0:08 backtick bug was
+one deterministic cause, not the class.
+
+The class is now unreachable: `ELEVENLABS_NO_BREAK_TAGS=1` (set by the
+recorder) strips pause marks to plain text - NO tag ever enters the
+payload. The six authored key beats moved into the edit-pause plan
+(kind "key-pre"/"key-post", 1.1s) and are cut in by the editor, where
+nothing can speak them. §8's tag caps become historical; the ~3-tag
+practice is superseded by zero.
+
+Same discovery also settled "vo-oice": a SYSTEMATIC provider stutter on
+"Different voice," (two seeds, same defect) fixed by a punctuation-only
+prosody re-parse (commas -> em-dashes). Micro-probes (~500 credits, one
+paragraph) are the instrument for both classes: reproduce, vary one
+thing, ear-check.

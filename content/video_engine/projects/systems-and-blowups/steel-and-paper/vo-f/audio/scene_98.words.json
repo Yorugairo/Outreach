@@ -1,0 +1,442 @@
+{
+  "scene_id": 98,
+  "duration_s": 30.14,
+  "words": [
+    {
+      "w": "The",
+      "start_s": 0.0,
+      "end_s": 0.151
+    },
+    {
+      "w": "safest",
+      "start_s": 0.209,
+      "end_s": 0.557
+    },
+    {
+      "w": "thing",
+      "start_s": 0.592,
+      "end_s": 0.743
+    },
+    {
+      "w": "you",
+      "start_s": 0.801,
+      "end_s": 0.894
+    },
+    {
+      "w": "own",
+      "start_s": 1.01,
+      "end_s": 1.289
+    },
+    {
+      "w": "looks",
+      "start_s": 1.463,
+      "end_s": 1.683
+    },
+    {
+      "w": "like",
+      "start_s": 1.73,
+      "end_s": 1.904
+    },
+    {
+      "w": "this.",
+      "start_s": 1.939,
+      "end_s": 2.415
+    },
+    {
+      "w": "An",
+      "start_s": 2.531,
+      "end_s": 2.694
+    },
+    {
+      "w": "iron",
+      "start_s": 2.775,
+      "end_s": 3.077
+    },
+    {
+      "w": "spike.",
+      "start_s": 3.135,
+      "end_s": 3.657
+    },
+    {
+      "w": "It",
+      "start_s": 3.75,
+      "end_s": 3.889
+    },
+    {
+      "w": "ruined",
+      "start_s": 3.947,
+      "end_s": 4.226
+    },
+    {
+      "w": "almost",
+      "start_s": 4.261,
+      "end_s": 4.516
+    },
+    {
+      "w": "everyone",
+      "start_s": 4.574,
+      "end_s": 4.934
+    },
+    {
+      "w": "who",
+      "start_s": 4.957,
+      "end_s": 5.05
+    },
+    {
+      "w": "touched",
+      "start_s": 5.108,
+      "end_s": 5.399
+    },
+    {
+      "w": "it.",
+      "start_s": 5.433,
+      "end_s": 5.584
+    },
+    {
+      "w": "That",
+      "start_s": 7.163,
+      "end_s": 7.349
+    },
+    {
+      "w": "was",
+      "start_s": 7.407,
+      "end_s": 7.546
+    },
+    {
+      "w": "1845.",
+      "start_s": 7.616,
+      "end_s": 9.033
+    },
+    {
+      "w": "Somewhere",
+      "start_s": 9.543,
+      "end_s": 9.938
+    },
+    {
+      "w": "today,",
+      "start_s": 9.985,
+      "end_s": 10.53
+    },
+    {
+      "w": "a",
+      "start_s": 10.588,
+      "end_s": 10.646
+    },
+    {
+      "w": "guy",
+      "start_s": 10.728,
+      "end_s": 10.948
+    },
+    {
+      "w": "on",
+      "start_s": 11.006,
+      "end_s": 11.088
+    },
+    {
+      "w": "his",
+      "start_s": 11.134,
+      "end_s": 11.238
+    },
+    {
+      "w": "lunch",
+      "start_s": 11.308,
+      "end_s": 11.529
+    },
+    {
+      "w": "break",
+      "start_s": 11.564,
+      "end_s": 11.784
+    },
+    {
+      "w": "is",
+      "start_s": 11.831,
+      "end_s": 11.912
+    },
+    {
+      "w": "watching",
+      "start_s": 11.97,
+      "end_s": 12.26
+    },
+    {
+      "w": "his",
+      "start_s": 12.318,
+      "end_s": 12.423
+    },
+    {
+      "w": "fourth",
+      "start_s": 12.492,
+      "end_s": 12.771
+    },
+    {
+      "w": "version",
+      "start_s": 12.829,
+      "end_s": 13.142
+    },
+    {
+      "w": "of",
+      "start_s": 13.189,
+      "end_s": 13.247
+    },
+    {
+      "w": "the",
+      "start_s": 13.305,
+      "end_s": 13.375
+    },
+    {
+      "w": "same",
+      "start_s": 13.421,
+      "end_s": 13.7
+    },
+    {
+      "w": "chart.",
+      "start_s": 13.735,
+      "end_s": 14.211
+    },
+    {
+      "w": "Different",
+      "start_s": 14.536,
+      "end_s": 14.873
+    },
+    {
+      "w": "voice",
+      "start_s": 14.919,
+      "end_s": 15.384
+    },
+    {
+      "w": "—",
+      "start_s": 15.43,
+      "end_s": 15.476
+    },
+    {
+      "w": "same",
+      "start_s": 15.593,
+      "end_s": 15.894
+    },
+    {
+      "w": "two",
+      "start_s": 15.918,
+      "end_s": 16.08
+    },
+    {
+      "w": "lines",
+      "start_s": 16.15,
+      "end_s": 16.556
+    },
+    {
+      "w": "—",
+      "start_s": 16.765,
+      "end_s": 16.812
+    },
+    {
+      "w": "same",
+      "start_s": 16.939,
+      "end_s": 17.23
+    },
+    {
+      "w": "warning:",
+      "start_s": 17.264,
+      "end_s": 17.764
+    },
+    {
+      "w": "AI",
+      "start_s": 17.938,
+      "end_s": 18.414
+    },
+    {
+      "w": "is",
+      "start_s": 18.53,
+      "end_s": 18.658
+    },
+    {
+      "w": "1845",
+      "start_s": 18.727,
+      "end_s": 19.691
+    },
+    {
+      "w": "again.",
+      "start_s": 19.726,
+      "end_s": 20.097
+    },
+    {
+      "w": "The",
+      "start_s": 20.132,
+      "end_s": 20.248
+    },
+    {
+      "w": "chart",
+      "start_s": 20.295,
+      "end_s": 20.573
+    },
+    {
+      "w": "is",
+      "start_s": 20.631,
+      "end_s": 20.713
+    },
+    {
+      "w": "copies",
+      "start_s": 20.771,
+      "end_s": 21.119
+    },
+    {
+      "w": "of",
+      "start_s": 21.165,
+      "end_s": 21.235
+    },
+    {
+      "w": "copies,",
+      "start_s": 21.305,
+      "end_s": 21.723
+    },
+    {
+      "w": "louder",
+      "start_s": 21.769,
+      "end_s": 22.083
+    },
+    {
+      "w": "every",
+      "start_s": 22.152,
+      "end_s": 22.384
+    },
+    {
+      "w": "pass.",
+      "start_s": 22.431,
+      "end_s": 22.953
+    },
+    {
+      "w": "Almost",
+      "start_s": 22.988,
+      "end_s": 23.383
+    },
+    {
+      "w": "nobody",
+      "start_s": 23.453,
+      "end_s": 23.882
+    },
+    {
+      "w": "names",
+      "start_s": 23.952,
+      "end_s": 24.184
+    },
+    {
+      "w": "the",
+      "start_s": 24.219,
+      "end_s": 24.288
+    },
+    {
+      "w": "people",
+      "start_s": 24.323,
+      "end_s": 24.567
+    },
+    {
+      "w": "who",
+      "start_s": 24.59,
+      "end_s": 24.695
+    },
+    {
+      "w": "built",
+      "start_s": 24.753,
+      "end_s": 24.985
+    },
+    {
+      "w": "it,",
+      "start_s": 25.031,
+      "end_s": 25.113
+    },
+    {
+      "w": "and",
+      "start_s": 25.136,
+      "end_s": 25.206
+    },
+    {
+      "w": "not",
+      "start_s": 25.275,
+      "end_s": 25.438
+    },
+    {
+      "w": "one",
+      "start_s": 25.508,
+      "end_s": 25.67
+    },
+    {
+      "w": "of",
+      "start_s": 25.705,
+      "end_s": 25.751
+    },
+    {
+      "w": "them",
+      "start_s": 25.798,
+      "end_s": 25.925
+    },
+    {
+      "w": "checked",
+      "start_s": 25.984,
+      "end_s": 26.216
+    },
+    {
+      "w": "the",
+      "start_s": 26.239,
+      "end_s": 26.309
+    },
+    {
+      "w": "original's",
+      "start_s": 26.367,
+      "end_s": 26.808
+    },
+    {
+      "w": "math.",
+      "start_s": 26.866,
+      "end_s": 27.377
+    },
+    {
+      "w": "If",
+      "start_s": 27.551,
+      "end_s": 27.667
+    },
+    {
+      "w": "you",
+      "start_s": 27.702,
+      "end_s": 27.783
+    },
+    {
+      "w": "hold",
+      "start_s": 27.853,
+      "end_s": 28.015
+    },
+    {
+      "w": "an",
+      "start_s": 28.05,
+      "end_s": 28.108
+    },
+    {
+      "w": "index",
+      "start_s": 28.166,
+      "end_s": 28.48
+    },
+    {
+      "w": "fund,",
+      "start_s": 28.538,
+      "end_s": 28.782
+    },
+    {
+      "w": "it's",
+      "start_s": 28.805,
+      "end_s": 28.944
+    },
+    {
+      "w": "already",
+      "start_s": 28.979,
+      "end_s": 29.292
+    },
+    {
+      "w": "holding",
+      "start_s": 29.35,
+      "end_s": 29.664
+    },
+    {
+      "w": "you.",
+      "start_s": 29.722,
+      "end_s": 30.14
+    }
+  ],
+  "request_id": "Mop1jgL1UsBL1PDDTxt1"
+}

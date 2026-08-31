@@ -82,6 +82,17 @@ def compile_pause_marks(narration: str) -> str:
     the provider would read it aloud verbatim.
     """
 
+    # BREAK TAGS RETIRED (2026-08-30): even a perfectly formed break tag
+    # is sometimes VOCALISED by the provider ("on thumb" - stochastic,
+    # reproduced on a clean compile). Set ELEVENLABS_NO_BREAK_TAGS=1 and
+    # marks strip to plain silence-free text; the authored beats live in
+    # the edit-pause plan and are cut in by the editor, where nothing can
+    # speak them.
+    import os as _os
+    if _os.environ.get("ELEVENLABS_NO_BREAK_TAGS"):
+        stripped = strip_pause_markup(narration)
+        return stripped
+
     compiled = narration
     for mark, tag in PAUSE_MARK_BREAKS.items():
         # Scripts write the mark inside backticks so it reads as a code span
