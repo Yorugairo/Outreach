@@ -492,3 +492,12 @@ cheaply remind them." A fragment carries its noun unless the subject is
 IMMEDIATELY adjacent: "The chart is copies of copies," never bare
 "Copies of copies." Extends the named-subject gate to fragments and
 aphorisms; enforced in the strength loop's X1 walk.
+
+
+## E17 — Don't soften: rhetorical sharpness is licensed (2026-08-30)
+
+"Half the market" is not a figure claim - it is a cut. Verification
+binds CLAIMED numbers (anything a viewer could check and call wrong);
+obviously non-literal hyperbole answers to the ear, not the fact-check.
+When a gate and the voice collide, the voice wins and the exception is
+logged - never silently sanded down.

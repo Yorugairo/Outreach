@@ -244,8 +244,12 @@ checkers, preflight.
 - **G14** · [227] "They're the steel" left 6 sentences from its
   antecedent by G12's block → G12 MOVED after the ownership line.
   Sequence: claim → ownership → arithmetic → "Decide" → More worried.
-- **G15** · "so did half the market" = unverifiable figure → "plenty
-  of others did too."
+- **G15 REVERSED by operator** · "so did half the market" RESTORED.
+  Ruling: "don't soften things - sharpness is necessary; 'half the
+  market' is not literal, but it does cut a note." Licensed hyperbole -
+  obviously non-literal to the ear, so the verification gate does not
+  bind; the voice wins (the standing collision rule). Logged as a voice
+  exception, not a figure claim.
 
 Licensed/verdicted: [200] s-run and [225] w-run sit at tell sites
 (legal); [221] t-run incidental numerals; [222] And-junction carries

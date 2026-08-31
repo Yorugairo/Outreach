@@ -231,7 +231,7 @@ monitor for it: it reads what memory costs leaving Korea, by the kilo,
 straight off customs export data. `[pre-key]` The threshold is the release itself: the first month customs shows memory getting cheaper while the buildout still stands. That print, I start trimming. `[post-key]` Right now it's going the other way —
 DRAM up seventeen percent, and the stacked memory the AI racks actually
 need up fourteen. That's the July release; customs runs about a month
-behind. Customs printed one soft month in June. I trimmed some — plenty of others did too — and the next release took the price straight back up. That's not a top blowing off — that's a big run digesting. The flip: if memory breaks while the buildout holds, the scarcity
+behind. Customs printed one soft month in June. I trimmed some — so did half the market — and the next release took the price straight back up. That's not a top blowing off — that's a big run digesting. The flip: if memory breaks while the buildout holds, the scarcity
 story is wrong — and so am I. That week, I de-risk the builders on camera.
 
 The certificates wear nicer names now — target-date, "the market" — but
