@@ -39,7 +39,7 @@ CACHE_DIR = OUT / "cache"
 # than a seam. See the ledger for the alternatives considered.
 SPLIT_ANCHOR = "And that's the part everyone repeating this chart missed"
 
-SEED = "4242"
+SEED = os.environ.get("RECORD_SEED_OVERRIDE", "4242")
 TIMEOUT_S = "900"
 MAX_ATTEMPTS = "1"
 SETTINGS = {"stability": 0.40, "similarity_boost": 0.75, "style": 0.20,

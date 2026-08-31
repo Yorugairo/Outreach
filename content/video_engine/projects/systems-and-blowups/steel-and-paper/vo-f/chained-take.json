@@ -2,7 +2,7 @@
   "script": "SCRIPT-G-VO.txt",
   "split_anchor": "And that's the part everyone repeating this chart missed",
   "split_lands_on_pause": true,
-  "seed": "4242",
+  "seed": "4343",
   "model": "eleven_multilingual_v2",
   "settings": {
     "stability": 0.4,
@@ -14,8 +14,8 @@
     {
       "part": 1,
       "characters": 6699,
-      "duration_s": 394.369,
-      "request_id": "SENewiLcJ95cO8xCHQK7",
+      "duration_s": 402.449,
+      "request_id": "PmMXL1T4c98oO757aJ43",
       "audio": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\vo-f\\audio\\scene_1.mp3",
       "chained_from": null
     },
@@ -25,8 +25,8 @@
       "duration_s": 427.109,
       "request_id": "TUia79b0f9duVNqB8XIG",
       "audio": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\vo-f\\audio\\scene_2.mp3",
-      "chained_from": "SENewiLcJ95cO8xCHQK7"
+      "chained_from": "PmMXL1T4c98oO757aJ43"
     }
   ],
-  "total_duration_s": 821.4780000000001
+  "total_duration_s": 829.558
 }

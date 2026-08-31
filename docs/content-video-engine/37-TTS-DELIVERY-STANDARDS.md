@@ -553,6 +553,15 @@ attention.
    reported silence - a gap no timestamp jitter can fake. (The smoking
    gun: 'Different'->'voice' reported 0.046s of gap that does not
    exist.) Verifier: zero cut sites inside any word span.
+5c. GENERATED STUTTERS - the provider itself can synthesize a doubled
+   vowel inside a word ("vo-oice": monosyllabic 'voice' rendered 490ms
+   with a hump-dip-hump energy envelope). Whisper transcribes it CLEAN
+   (sub-100ms), so no text gate can catch it - only the ear, confirmed
+   by envelope analysis of the word span. Fix: regenerate the part with
+   a DIFFERENT SEED (same-seed reruns can reproduce the render;
+   RECORD_SEED_OVERRIDE env var on the recorder), then fingerprint the
+   word acoustically BEFORE re-chaining. The ear is the instrument of
+   record for the sub-100ms band.
 5. Independent chunk stretching -> WSOLA STARTUP TRANSIENT doubles the
    first onset inside a chunk and sharpens attacks at chunk heads (the
    residue of class 3-4; the operator heard it survive v4). v5: every
