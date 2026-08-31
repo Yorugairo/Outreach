@@ -37734,7 +37734,7 @@
       ]
      },
      {
-      "label": "12-mo avg",
+      "label": "12m avg",
       "name": "TRIGGER",
       "color": "deemph",
       "dash": "7 6",
@@ -37919,8 +37919,8 @@
      {
       "x": 2026.458,
       "y": 74686,
-      "label": "Jun '26: -3.7%",
-      "sub": "the trim - reversed next print",
+      "label": "Jun '26 print: -3.7%",
+      "sub": "the one weak month - reversed next print",
       "dy": 150
      }
     ],

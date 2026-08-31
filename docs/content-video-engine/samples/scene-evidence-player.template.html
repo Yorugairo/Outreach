@@ -479,11 +479,16 @@
                "text-anchor": "end" }, lab);
           }
         }
+        /* QC 2026-08-30: the baseline is the PLOT BOTTOM, a pixel
+           constant - my(y0) re-applies the log transform to an already
+           log-space value and threw log charts' date ticks off-canvas
+           (the monitor rendered dateless) */
+        const XB = CH - PB;
         for (const [xv, xl] of (C.xticks || [])) {
           if (xv < x0 || xv > x1) continue;
-          mk("line", { x1: mx(xv), x2: mx(xv), y1: my(y0), y2: my(y0) + 6,
+          mk("line", { x1: mx(xv), x2: mx(xv), y1: XB, y2: XB + 6,
              stroke: "#33363d", "stroke-width": 1.5 });
-          mk("text", { class: "csr", x: mx(xv), y: my(y0) + 22,
+          mk("text", { class: "csr", x: mx(xv), y: XB + 22,
              "text-anchor": "middle" }, xl);
         }
         /* hline labels sit RIGHT-ALIGNED at the line's end (the panel's
@@ -577,6 +582,14 @@
           /* QC 2026-08-30: annotation text was drawn bare over the data
              ink ("$27B quarter" across the price line). A backing chip
              sits behind the label pair - sized at first tick */
+          /* a mark pushed clear of the data (big dy) gets a LEADER
+             from its dot to its chip - an offset label with no leader
+             reads as an accident (operator, monitor June mark) */
+          if (Math.abs(mdy) > 40)
+            mk("line", { x1: mx(m.x), y1: my(m.y) + Math.sign(mdy) * 12,
+               x2: mx(m.x), y2: my(m.y) + mdy - Math.sign(mdy) * 26,
+               stroke: "#8b95a3", "stroke-width": 1.5,
+               "stroke-dasharray": "2 4" }, null, g);
           const chip = mk("rect", { x: tx, y: my(m.y) - 34 + mdy,
              height: 0, width: 0, rx: 6, fill: "#16181c",
              opacity: 0.78 }, null, g);
@@ -732,8 +745,13 @@
     const tRel = t - d.enter - CARD_IN * 0.6;
     st.paths.forEach((pp, i) => {
       if (pp.path.dataset && pp.path.dataset.fadein) {
-        pp.path.setAttribute("opacity",
-          clamp01((tRel - pp.delay) / 0.8).toFixed(2));
+        const fo = clamp01((tRel - pp.delay) / 0.8);
+        pp.path.setAttribute("opacity", fo.toFixed(2));
+        /* QC 2026-08-30: this early return orphaned the reference
+           series' END LABEL - the dashed 12-mo trigger line rendered
+           unnamed ("what IS the white dotted line?"). The label fades
+           with its line. */
+        if (st.labels[i]) st.labels[i].setAttribute("opacity", fo.toFixed(2));
         return;
       }
       /* a series may hold back (sidecar `delay`, seconds): the source's own
