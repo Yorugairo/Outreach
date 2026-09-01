@@ -82,12 +82,47 @@ def capture(t0: float, t1: float, video_out: Path) -> None:
         raise RuntimeError("ffmpeg encode failed")
 
 
+def capture_frames(f0: int, f1: int, video_out: Path) -> None:
+    """Worker entry: capture global frames [f0, f1) to one x264 segment."""
+    capture(f0 / FPS, f1 / FPS, video_out)
+
+
+def parallel_render(n_frames: int, workers: int, video_out: Path) -> None:
+    """Remotion's speed trick: shard the timeline across concurrent
+    headless browsers, one x264 segment each, concat losslessly."""
+    chunk = -(-n_frames // workers)
+    parts, procs = [], []
+    for w in range(workers):
+        a, b = w * chunk, min((w + 1) * chunk, n_frames)
+        if a >= b:
+            break
+        part = OUT / f"part-{w:02d}.mp4"
+        parts.append(part)
+        procs.append(subprocess.Popen(
+            [sys.executable, __file__, "--frames", str(a), str(b),
+             "--part", str(part)]))
+    fails = [p.wait() for p in procs]
+    if any(fails):
+        raise RuntimeError(f"shard exit codes: {fails}")
+    lst = OUT / "parts.txt"
+    lst.write_text("".join(f"file '{p.as_posix()}'\n" for p in parts),
+                   encoding="utf-8")
+    subprocess.run(["ffmpeg", "-y", "-v", "error", "-f", "concat", "-safe", "0",
+                    "-i", str(lst), "-c", "copy", str(video_out)], check=True)
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--t0", type=float, default=0.0)
     ap.add_argument("--t1", type=float, default=None)
     ap.add_argument("--test", action="store_true")
+    ap.add_argument("--workers", type=int, default=8)
+    ap.add_argument("--frames", type=int, nargs=2, help="worker mode: global frame range")
+    ap.add_argument("--part", type=str, help="worker mode: segment output path")
     args = ap.parse_args()
+    if args.frames:  # shard worker
+        capture_frames(args.frames[0], args.frames[1], Path(args.part))
+        return 0
     tl = json.loads((EP / "build-f/timeline.json").read_text(encoding="utf-8"))
     dur = float(tl["runtime_s"])
     if args.test:
@@ -98,8 +133,12 @@ def main() -> int:
     tag = "test" if args.test else ("full" if (t0, t1) == (0.0, dur) else f"{t0:.0f}-{t1:.0f}")
     video = OUT / f"video-{tag}.mp4"
     final = OUT / f"steel-and-paper-{tag}-1440p.mp4"
-    print(f"capture {t0:.2f}-{t1:.2f}s @ {FPS}fps -> {video.name}")
-    capture(t0, t1, video)
+    n = int(round((t1 - t0) * FPS))
+    print(f"capture {t0:.2f}-{t1:.2f}s @ {FPS}fps x{args.workers} workers -> {video.name}")
+    if args.workers > 1 and t0 == 0.0:
+        parallel_render(n, args.workers, video)
+    else:
+        capture(t0, t1, video)
     print("mixing audio...")
     audio = mix_audio(dur)
     subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", str(video),
