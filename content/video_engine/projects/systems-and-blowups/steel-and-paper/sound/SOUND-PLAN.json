@@ -1,9 +1,45 @@
 {
-  "note": "Review plan - cues on the edited clock (807.5s build). Audio files live in this dir (gitignored); the builder embeds them. Variants A/B toggle live in the player.",
+  "note": "Review plan - cues on the 806.47s post-CNBC clock. Audio files live in this dir (gitignored); the builder embeds them. Variants A/B toggle live in the player.",
   "cues": [
-    {"slot": "hook bed",  "at": 0.0,   "gain": 0.30, "fade_in": 1.5, "variants": {"A": "suno-hook-A.mp3",  "B": "suno-hook-B.mp3"}},
-    {"slot": "pivot turn","at": 384.0, "gain": 0.28, "fade_in": 1.0, "variants": {"A": "suno-pivot-A.mp3", "B": "suno-pivot-B.mp3"}},
-    {"slot": "close bed", "at": 775.0, "gain": 0.30, "fade_in": 2.0, "variants": {"A": "suno-close-A.mp3", "B": "suno-close-B.mp3"}},
-    {"slot": "burst whoosh", "at": 727.25, "gain": 0.90, "fade_in": 0.0, "variants": {"A": "fs-whoosh-1-706679.mp3", "B": "sfx-burst-impact.mp3"}}
+    {
+      "slot": "hook bed",
+      "at": 0.0,
+      "gain": 0.3,
+      "fade_in": 1.5,
+      "variants": {
+        "A": "suno-hook-A.mp3",
+        "B": "suno-hook-B.mp3"
+      }
+    },
+    {
+      "slot": "pivot turn",
+      "at": 384.0,
+      "gain": 0.28,
+      "fade_in": 1.0,
+      "variants": {
+        "A": "suno-pivot-A.mp3",
+        "B": "suno-pivot-B.mp3"
+      }
+    },
+    {
+      "slot": "close bed",
+      "at": 775.0,
+      "gain": 0.3,
+      "fade_in": 2.0,
+      "variants": {
+        "A": "suno-close-A.mp3",
+        "B": "suno-close-B.mp3"
+      }
+    },
+    {
+      "slot": "burst whoosh",
+      "at": 726.68,
+      "gain": 0.9,
+      "fade_in": 0.0,
+      "variants": {
+        "A": "fs-whoosh-1-706679.mp3",
+        "B": "sfx-burst-impact.mp3"
+      }
+    }
   ]
 }
