@@ -10,8 +10,10 @@ RULED (2026-08-31): "Building Money > build with money" — Building
 Money is the confirmed second-channel name; seed's "Build With Money"
 was a variant, not a rename.
 
-OPEN QUESTION for operator: "Micheal" spelling kept — confirm before
-posting (becomes the canonical public spelling).
+RULED (2026-09-01): "Micheal" is the operator's actual name spelling —
+confirmed, canonical. Never "correct" it to Michael in any asset.
+
+STATUS: FINAL — no open questions. Paste-ready.
 
 Source roster, all five verified 2026-08-31: TrendForce, Bravos
 (operator's established shorthand), SemiAnalysis (Dylan Patel),
