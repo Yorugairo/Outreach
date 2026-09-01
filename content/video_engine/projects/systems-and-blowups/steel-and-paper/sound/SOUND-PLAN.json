@@ -1,10 +1,10 @@
 {
-  "note": "Review plan - cues on the 806.47s post-CNBC clock. Audio files live in this dir (gitignored); the builder embeds them. Variants A/B toggle live in the player.",
+  "note": "Cues on the 806.47s post-CNBC clock. Bed gains are MEASURED to VO-26 LU (doctrine: docs/research/audio blueprint; VO master -19.2 LUFS; gains set for variant A clips - re-derive if B wins: hookB .025, pivotB .027, closeB .028). Burst whoosh is an accent, exempt from the -26 rule. Audio files gitignored; builder embeds.",
   "cues": [
     {
       "slot": "hook bed",
       "at": 0.0,
-      "gain": 0.3,
+      "gain": 0.042,
       "fade_in": 1.5,
       "variants": {
         "A": "suno-hook-A.mp3",
@@ -14,7 +14,7 @@
     {
       "slot": "pivot turn",
       "at": 384.0,
-      "gain": 0.28,
+      "gain": 0.03,
       "fade_in": 1.0,
       "variants": {
         "A": "suno-pivot-A.mp3",
@@ -24,7 +24,7 @@
     {
       "slot": "close bed",
       "at": 775.0,
-      "gain": 0.3,
+      "gain": 0.03,
       "fade_in": 2.0,
       "variants": {
         "A": "suno-close-A.mp3",
