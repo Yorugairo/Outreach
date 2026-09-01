@@ -25,19 +25,19 @@ inflation ... extremely low" (unsourced claim cluster, weakest link in
 the thesis paragraph); "so we can all grow together" (greeting-card
 register); course-fear disclaimer (the offer paragraph shows it instead).
 
-## Post (paste verbatim) — operator v2, 2026-08-31
+## Post (paste verbatim) — operator v3, 2026-08-31
 
 You found Money Physics early. Thank you — early matters in the market, and I'll remember it.
 
-I'm Micheal Golliet — Mike. I worked in risk at JPMorgan. I've owned a dispensary. Today I'm a growth strategist: 15 years operating businesses, 14 years investing my own money. This channel is where all of it lands.
+I'm Micheal Golliet — Mike. I worked in risk at JPMorgan. I've owned a dispensary. Today I'm a growth strategist, now starting my nonprofit: 15 years operating businesses, 14 years investing my own money. This channel is where all of it lands.
 
-Here's the stance that starts everything: standard financial advice in 2026 is mostly platitudes — which is why you can consume it forever and never feel yourself get ahead. Advice isn't the medicine. Followed blindly, it's the poison. What actually compounds is a defensible worldview: your own read of the market's current phase, and the discipline to weigh risk against reward inside it. That's what this channel builds. Not tips — the way of thinking.
+Here's the stance that starts everything: standard financial advice in 2026 is mostly platitudes — which is why you can consume it forever, follow it prudently, and never feel yourself pulling ahead. Advice isn't the medicine. Followed blindly, it's the poison. What actually compounds is a defensible worldview: your own read of the market's current phase, and the discipline to weigh risk against reward inside it. That's what this channel builds. Not tips — the way of thinking.
 
 And since you made it this far, here's the thesis I'll be arguing — and testing in public, episode by episode:
 
 Technology drives the market. The growth is exponential, and the volatility that comes with it is permanent. The greatest transfer of wealth in history is running right now — and if your income or savings aren't tied to the technological leaders, keeping up has been nearly impossible, no matter how well you followed the standard advice or how well you did in your career. My read says the answer is a barbell: durable tech on one side, the sovereign-mandated assets that guard its bottlenecks on the other — rare earths, nuclear fuel, drones. Bonds and rates become the measuring stick that proves the thesis, not the ammunition that grows wealth. That's a thesis, not advice. The channel exists to put evidence under it, number by number, chart by chart — and to change it in public if the evidence says so.
 
-I'll bring you the highest-grade research — TrendForce, Bravos, SemiAnalysis, Cappy Army, Fabricated Knowledge: the best in the business of economics, geopolitics, and finance today. We'll call them right when they're right, wrong when they're wrong, and connect the threads between them for you. This isn't day-trading. It's risk management and market analysis, practiced live, in the most volatile, highest-growth market the world has ever known.
+I'll bring you the highest-grade research — TrendForce, Bravos, SemiAnalysis, Cappy Army, Fabricated Knowledge: the best in the business of economics, geopolitics, and finance operating in the public domain today — the names I measure my own work against. We'll underwrite their charts and research with custom-made tooling, customs-tracking software, technical deep dives, grid deliverables — the aspects that can't lie. And we'll call them right when they're right, wrong when they're wrong, and connect the threads between them for you. This isn't day-trading. It's risk management and world analysis, practiced live, in the most volatile, highest-growth market the world has ever known.
 
 One more thing you deserve up front: this channel is faceless and AI-assisted, and I'm hiding neither. I don't believe anyone should publish generic AI prose as personal insight — so my name and professional profile are on this. My LinkedIn is public. I enjoy writing — much of what you'll read here is me. The thesis is mine. The posts are me. And if we ever connect, it'll be my human face, not an AI avatar. The accountability stays human. And if this community wants it, I'll host live, in-person discussions down the road.
 
