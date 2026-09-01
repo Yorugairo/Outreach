@@ -119,6 +119,16 @@ dense segments.
 4. **Selection rules:** instrumental, unfamiliar/purpose-made,
    repetitive structure, minimal energy in 300 Hz–4 kHz (or carve it),
    no strong pulse under dense narration.
+4b. **Keep the bed dynamically FLAT** (limit it before the mix):
+   YouTube's Stable Volume normalizer (mobile/TV) reacts to peaks in
+   the whole mix — a bed with swells can make the algorithm duck the
+   VOICE to compensate. Flat + quiet defeats it. Also the reason the
+   spec is in LU-below-VO, not dBFS fader positions: peak readings
+   depend on crest factor; loudness offsets measure what the ear gets.
+   (Cross-checked 2026-09-01 against common creator guidance — VO −6
+   to −12 dBFS, music −25 to −35 dBFS under speech, −15/−18 solo,
+   −14 LUFS/−1 dBTP mix — same window; our target sits deliberately at
+   its quiet edge for dense-analysis content.)
 5. **Continuity rule:** the bed must be CONTINUOUS through every VO
    splice region — its whole error-masking value is unbroken
    steady-state. Never start/stop the bed at an edit point; that
