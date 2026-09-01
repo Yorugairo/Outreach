@@ -88,7 +88,7 @@ W = [
 # ── P6 CLOSE ── re-authored to Script G's close (the beats reordered) ──
 (683.5, 690.3, "world-modern-certificate-v1",    (.05, -12,   6), []),                       # certificates wear nicer names now - target-date, "the market"
 (690.3, 694.6, "world-spike-certificate-ring-v2",(.05,  12,   8), []),                       # RING ECHO: the spike, one more time
-(694.6, 705.2, "world-club-interior-papered",    (.05, -10,  -6), [("ev-holds-stack-v1",0,702.5,728.4)]),  # THE VERDICT STACK: nine proofs, "In 1850" through the monitor, burst on "go further than Bravos" (item beats in the dock entry)
+(694.6, 705.2, "world-club-interior-papered",    (.05, -10,  -6), [("ev-holds-stack-v1",0,701.73,727.63)]),  # THE VERDICT STACK: nine proofs, "In 1850" through the monitor, burst on "go further than Bravos" (item beats in the dock entry). Window -0.77 to the post-CNBC clock to match the re-clocked stack members (enter-wash lead 1.14s preserved; exit rejoins clear_at 726.98)
 (705.2, 717.1, "beat-03-008-009-physical-capacity-gate-v1", (.04,  10,   6), []),  # stack hosted on the club-papered row above
 (717.1, 725.7, "world-listing-barge-v1",         (.05, -10,   6), []),  # a fifth of your index - the card holds for the VERDICT beat, not here (no reuse)
 (725.7, 760.3, "beat-05-002-strategic-chokepoints-v1", (.05,  14,  -6), [("ev-hynix-steel-v1",0,730.3,759.7),("ev-memory-arithmetic-v1",1,741.2,759.7)]),  # purpose-built (operator): hynix price WITH the profit under it - not a house of cards

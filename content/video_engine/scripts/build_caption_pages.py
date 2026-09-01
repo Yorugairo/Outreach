@@ -15,8 +15,12 @@ REPO = Path(__file__).resolve().parents[3]
 BUILD = REPO / ("content/video_engine/projects/systems-and-blowups/"
                 "steel-and-paper/build-f")
 
-CHAR_BUDGET = 18
-GAP_BREAK = 0.45
+# CHAR_BUDGET raised 18 -> 34 (operator/watch feedback 2026-09-01: pages
+# were reading 2-3 words; wants 4-6 at a time). MAX_WORDS is the hard cap
+# so a run of short words can't overfill a page past readability.
+CHAR_BUDGET = 34
+MAX_WORDS = 6
+GAP_BREAK = 0.60
 NUM = {"one", "two", "three", "four", "five", "six", "seven", "eight",
        "nine", "ten", "eleven", "twelve", "twenty", "thirty", "forty",
        "fifty", "sixty", "seventy", "eighty", "ninety", "hundred",
@@ -46,7 +50,8 @@ def main() -> int:
     for w in tl["words"]:
         gap = (w["start"] - prev_end) if prev_end is not None else 0.0
         cur_len = sum(len(t["w"]) + 1 for t in cur)
-        if cur and (cur_len + len(w["w"]) > CHAR_BUDGET or gap > GAP_BREAK):
+        if cur and (cur_len + len(w["w"]) > CHAR_BUDGET
+                    or len(cur) >= MAX_WORDS or gap > GAP_BREAK):
             pages.append({"s": cur[0]["s"], "e": cur[-1]["e"], "t": cur})
             cur = []
         cur.append({"w": w["w"], "s": round(w["start"], 2),
