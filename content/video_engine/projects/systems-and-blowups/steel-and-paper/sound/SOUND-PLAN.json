@@ -1,14 +1,14 @@
 {
-  "note": "Cues on the 806.47s post-CNBC clock. Bed gains are MEASURED to VO-26 LU (doctrine: docs/research/audio blueprint; VO master -19.2 LUFS; gains set for variant A clips - re-derive if B wins: hookB .025, pivotB .027, closeB .028). Burst whoosh is an accent, exempt from the -26 rule. Audio files gitignored; builder embeds.",
+  "note": "PICKS LOCKED 2026-09-01: hook=suno-hook-B (promoted to variant A, gain .025 = VO-26 for that clip), pivot=A, close=A (no extend - early fade accepted), burst=whoosh. 806.47s clock. Files gitignored; builder embeds.",
   "cues": [
     {
       "slot": "hook bed",
       "at": 0.0,
-      "gain": 0.042,
+      "gain": 0.025,
       "fade_in": 1.5,
       "variants": {
-        "A": "suno-hook-A.mp3",
-        "B": "suno-hook-B.mp3"
+        "A": "suno-hook-B.mp3",
+        "B": "suno-hook-A.mp3"
       }
     },
     {
