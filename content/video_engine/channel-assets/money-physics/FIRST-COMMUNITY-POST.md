@@ -6,9 +6,12 @@ change: the barbell section is framed as A THESIS THE CHANNEL WILL TEST
 risk:reward analysis says, tie your money to..." was advice-shaped and
 conflicts with the About page's "Education, not investment advice."
 
-OPEN QUESTIONS for operator: (1) seed said "Build With Money"; verified
-collision-free name (2026-08-25) is "Building Money" — draft uses
-Building Money. (2) "Micheal" spelling kept — confirm.
+RULED (2026-08-31): "Building Money > build with money" — Building
+Money is the confirmed second-channel name; seed's "Build With Money"
+was a variant, not a rename.
+
+OPEN QUESTION for operator: "Micheal" spelling kept — confirm before
+posting (becomes the canonical public spelling).
 
 Source roster, all five verified 2026-08-31: TrendForce, Bravos
 (operator's established shorthand), SemiAnalysis (Dylan Patel),
