@@ -45,14 +45,22 @@ def mix_audio(dur: float) -> Path:
     return out
 
 
+RAW_W, RAW_H = 2560, 1440  # #stage 1920x1080 at device_scale_factor 4/3
+
+
 def capture(t0: float, t1: float, video_out: Path) -> None:
     from playwright.sync_api import sync_playwright
     n = int(round((t1 - t0) * FPS))
+    # RAW RGB pipe, not PNG: a PNG can survive PIL validation in-process yet
+    # be corrupted in the pipe under concurrent memory pressure, and ffmpeg's
+    # deflate parser then dies with "inflate error -3". Raw pixels have no
+    # deflate stream, so that failure mode cannot exist. PIL decodes the
+    # (validated) screenshot to pixels; we ship pixels.
     enc = subprocess.Popen(
-        ["ffmpeg", "-y", "-v", "error", "-f", "image2pipe", "-framerate", str(FPS),
-         "-i", "-", "-c:v", "libx264", "-preset", "medium", "-crf", "17",
-         "-pix_fmt", "yuv420p", "-vf", "scale=2560:1440:flags=lanczos",
-         str(video_out)], stdin=subprocess.PIPE)
+        ["ffmpeg", "-y", "-v", "error", "-f", "rawvideo", "-pix_fmt", "rgb24",
+         "-s", f"{RAW_W}x{RAW_H}", "-framerate", str(FPS), "-i", "-",
+         "-c:v", "libx264", "-preset", "medium", "-crf", "17",
+         "-pix_fmt", "yuv420p", str(video_out)], stdin=subprocess.PIPE)
     with sync_playwright() as pw:
         browser = pw.chromium.launch(headless=True)
         page = browser.new_context(
@@ -69,33 +77,32 @@ def capture(t0: float, t1: float, video_out: Path) -> None:
         import io as _io
         from PIL import Image as _Img
 
-        def good_png(buf: bytes) -> bool:
-            # FULL decode-verify: a screenshot can carry a valid PNG sig and
-            # IEND yet a corrupt IDAT (inflate error -3) that kills ffmpeg's
-            # decoder mid-stream and breaks the pipe. If PIL can decompress
-            # every pixel, ffmpeg can too. This is the sufficient check;
-            # sig/IEND alone was necessary but not sufficient.
+        def frame_rgb(buf: bytes):
+            # decode screenshot -> exact-size RGB pixel bytes; returns None if
+            # the screenshot itself came back corrupt (then we re-shoot).
             try:
-                _Img.open(_io.BytesIO(buf)).load()
-                return True
+                im = _Img.open(_io.BytesIO(buf)).convert("RGB")
+                if im.size != (RAW_W, RAW_H):
+                    im = im.resize((RAW_W, RAW_H), _Img.LANCZOS)
+                return im.tobytes()
             except Exception:
-                return False
+                return None
 
         for i in range(n):
             t = t0 + i / FPS
             page.evaluate(
                 "t => { const s = document.getElementById('scrub');"
                 " s.value = t; s.dispatchEvent(new Event('input', {bubbles:true})); }", t)
-            png = stage.screenshot(type="png")
+            rgb = frame_rgb(stage.screenshot(type="png"))
             tries = 0
-            while not good_png(png):
+            while rgb is None:
                 tries += 1
                 if tries > 8:
                     raise RuntimeError(f"corrupt frame at t={t:.3f} after 8 retries")
                 time.sleep(0.15)
-                png = stage.screenshot(type="png")
+                rgb = frame_rgb(stage.screenshot(type="png"))
             try:
-                enc.stdin.write(png)
+                enc.stdin.write(rgb)
             except OSError as e:
                 raise RuntimeError(f"encoder pipe closed at t={t:.3f}: {e}")
             if i and i % 300 == 0:
