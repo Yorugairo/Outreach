@@ -239,6 +239,14 @@ Task routing into the deeper doctrine, plus the work-order interop
 contract, is in [`GEMINI.md`](GEMINI.md) — that routing table applies to
 every agent, not just Google-side ones.
 
+**The assembly process itself is one page:
+[`docs/content-video-engine/PIPELINE.md`](docs/content-video-engine/PIPELINE.md)
+— the eight stages (write → strength loop → lint → audit → record → word
+timeline → shot table → render), what owns each, what consumes what, and
+the capability index it opens with. Read it before building anything;
+the renderer, the player and the gates already exist. Enumerate before
+you grep.**
+
 **Three spine documents sit behind that table. Know they exist before
 doing script, review, or motion work — they were unrouted until
 2026-09-02 and lived on one branch only:**

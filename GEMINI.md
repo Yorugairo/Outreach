@@ -22,6 +22,7 @@ working on the video/content side of this repo. (Antigravity also reads
 
 | Task | Read |
 |---|---|
+| Build or assemble an episode (any stage) | `PIPELINE.md` — the eight stages and their owners, plus the capability index it opens with; enumerate before you grep |
 | Write or review a script | `patterns/SCRIPT-PATTERN-KIT.md`, `patterns/phase-guides/P1..P6.md`, `patterns/STRENGTH-LOOP.md`, `patterns/SENTENCE-STRENGTH-CHECK.md`; the spine they derive from is `patterns/FULL-VIDEO-MAP.md` |
 | Check a script — who owns which verdict | `patterns/CHECK-RESPONSIBILITIES.md` (tool vs runtime agent; the runtime sequence in §4 and the report contract in §5), then run `scripts/lint_script_pattern.py`, `scripts/audit_script_doctrine.py --pivot`, `scripts/gate_opening_structure.py --ring --counterparty [--timeline]`, `scripts/enumerate_strength_screens.py` |
 | Answer-format episode | `35-ANSWER-FORMAT-DOCTRINE.md` |
