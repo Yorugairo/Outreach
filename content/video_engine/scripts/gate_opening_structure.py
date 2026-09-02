@@ -8,30 +8,48 @@ those first ~5 minutes needs to hit." The audit checked A1-A3, CTAs, marks and
 the tell; the rest of the P1/P2 roster was "by hand", and by hand the promise
 landed after 0:60 with nothing to stop it.
 
-SOURCES (every gate quotes its line):
-  38   docs/content-video-engine/38-SCRIPT-ARCHITECTURE.md s2 (beats 1-5)
-  P1   docs/content-video-engine/patterns/phase-guides/P1.md
-  P2   docs/content-video-engine/patterns/phase-guides/P2.md
-  MAP  docs/content-video-engine/patterns/FULL-VIDEO-MAP.md s3/s4
-  U6   patterns/STRENGTH-LOOP.md U6 / docs/portable/OPERATOR-RULINGS.md E20
-  CLK  memory: youtube-retention-clock (3s hook / 10s answer / 30s promise /
-       then the cycle repeats per beat)
+TWO LAYERS, FUSED (FULL-VIDEO-MAP: "the classical six-phase architecture,
+the integral, fused with the platform micro-rules, the differentials"):
+
+  CLASSICAL (doc 32 s4-s6, LLM-CONTEXT-CLASSICAL, doc 38 s2) - the nodes that
+  fall inside the opening:
+    Truby      Weakness/Need planted AS PEOPLE (P1 B3) -> Desire + Opponent
+               named (P1 B5) -> Plan v1 = the head-fake, planted straight
+               (P2) -> Plan v1 tried and FAILS = the Debate (P2, as a gap)
+    McKee      the gap opens at the microhook (line 2 violates line 1);
+               BUT/THEREFORE is the gap's sentence-level shadow; archetype
+               not stereotype; antagonism = a mechanism; inciting incident
+    Snyder     Catalyst (P2 start, as a closed micro loop) + Debate
+    Glass      anecdote <-> reflection alternation (80/20 P1, 70/30 P2)
+    Humes      pre-opener (visual breath), post-key on the 8s boundary,
+               pre-key before the promise
+    Rhetoric   one tricolon on the thesis line; anaphora debut/recurrence
+    Ring       token planted (P1), touched once unresolved (P2)
+    A/V        irony counterpoint (P1), contextual mapping (P2) - JUDGE rows
+  Truby Battle / Self-Revelation / New Equilibrium, Snyder's midpoint, the
+  chiastic center and the ring CLOSE belong to P4-P6 and are NOT gated here.
+
+  PLATFORM (doc 31 via the map): 3s microhook, 8s decision, "you" by 0:30,
+  One Minute Wall (payoff 30-60 then the promise), rehooks A1/A2/A3, new info
+  every 15-30s, density bands, the dip, the one CTA slot, the retention
+  clock's repeating cycle (memory youtube-retention-clock).
 
 THREE KINDS OF CHECK, reported honestly:
-  mechanical - from text + timing (a take's word times via --timeline or
-               the episode's vo*/ dirs; else the kit's measured speech rate)
+  mechanical - from text + timing (a take's word times via --timeline or the
+               episode's vo*/ dirs; else the kit's measured speech rate)
   declared   - the writer tags the beat (beat_tags.py) because the text has
                no signature; an undeclared required beat FAILS
-  JUDGE      - only a reader can decide (opponent = mechanism, terminal
-               stress); printed, never silently passed, never counted as PASS
+  JUDGE      - only a reader can decide; printed, never silently passed
 
-GEOMETRY is read from the phase guides' runtime tables and interpolated:
-P1 and P2 shrink with runtime (1:30/5:00 @30m -> 1:15/3:00 @16m -> 1:00/2:15
-@8m). At Steel and Paper's 13.4 min that is P1 ~1:10 and P2 ~1:10-2:46.
+GEOMETRY: P1/P2 ends and P2 density bands are read from the phase guides'
+runtime tables and interpolated (P1 ~1:10, P2 ~1:10-2:46 at 13.4 min). The
+platform timings inside P1 (3s, 8s, 0:30, 0:30-0:60) are absolute - "the
+attention ladder is physics, not proportion" (MAP s1); beat 5 (desire /
+opponent / map / A2 / ring) runs from 0:60 to P1's end and MERGES into beat 4
+when P1 ends before 0:60 (P1.md: "compress beats, never drop them").
 
-DOCTRINE CONFLICT SURFACED (not resolved here): P2.md and MAP s4 put A3 at
-~10% of runtime; audit_script_doctrine.py hard-codes 180s absolute. This
-gate follows the docs (10%) and says so in its output.
+DOCTRINE CONFLICT SURFACED: P2.md and MAP s4 put A3 at ~10% of runtime; the
+audit hard-codes 180s absolute. This gate follows the docs and says so.
 
     python gate_opening_structure.py SCRIPT.txt [--timeline build-f/timeline.json]
            [--counterparty Bravos] [--ring spike] [--opening-s 300]
@@ -54,27 +72,31 @@ P1_GUIDE = DOCS / "patterns/phase-guides/P1.md"
 P2_GUIDE = DOCS / "patterns/phase-guides/P2.md"
 
 # ---- constants quoted from the docs ---------------------------------------
-GRAB_S = 3.0                    # 38 B1 / P1 QC: first sentence <= 3s
-BREATH_S = (0.5, 0.8)           # 38 B1: plate breathes 0.5-0.8s before the first word
+GRAB_S = 3.0                    # 38 B1 / P1 QC
+BREATH_S = (0.5, 0.8)           # 38 B1: plate breathes before the first word (Humes pre-opener, bent visual)
 BREATH_TOL = 0.2
 PARADOX_BY_S = 8.0              # 38 B2: [post-key] ON the 8-second boundary
+ARCHETYPE_WIN = (8.0, 30.0)     # 38 B3: the world opens 0:08-0:30; W&N as people
 YOU_BY_S = 30.0                 # 38 B3 / P1 QC
 STAKES_BY_S = 30.0              # 38 B3: stakes named by ~0:25 (tolerance to 0:30)
-PROMISE_WIN = (30.0, 60.0)      # 38 B4 / MAP s3: mini-payoff FIRST, then the promise
-A2_ANCHOR = 60.0                # 38 B5 / P1 QC: rehook ~1:00
+PROMISE_WIN = (30.0, 60.0)      # 38 B4 / MAP s3 / CLK: mini-payoff FIRST, then the promise
+BEAT5_START = 60.0              # 38 B5: the map, desire, opponent, A2, ring - 0:60 to P1 end
+A2_ANCHOR = 60.0                # 38 B5 / P1 QC
 A3_PCT = 0.10                   # P2.md / MAP s4 QC: A3 + F2 at ~10% of runtime
 REHOOK_TOL = A.REHOOK_TOLERANCE_S
 NEW_INFO_MAX_GAP_S = 30.0       # P2: something genuinely new every 15-30s
-CATALYST_WITHIN_S = 60.0        # P2: first micro loop closed inside 30-60s of the phase
+CATALYST_WITHIN_S = 60.0        # P2: catalyst lands in the phase's first ~60s, closed inside 30-60s
+DEBATE_FROM = 0.40              # P2: "the debate (mid-late phase)"
+SIGNPOST_FROM = 0.75            # P2: "exit on a transition signpost into the gap phase"
 DIP_WITHIN_S = 15.0             # P2: "Immediately after" the macro close
 DIP_MIN_GAP_S = 2.0             # P2: "2-3 beats of visual room tone, no narration push"
 CTA_WINDOW_S = 30.0             # P2: "inside the 15-30 seconds after the macro payoff"
-MARKS_PER_MIN_MAX = A.BREAK_RATION_MAX  # P1: ~three per minute maximum
+MARKS_PER_MIN_MAX = A.BREAK_RATION_MAX
 P2_MARKS_MAX = 3                # P2: "Ration: <=3 marks in this phase"
 CYCLE_MAX_GAP_S = 60.0          # CLK: the cycle repeats per beat (roster: 30-60s cadence)
 CONCESSION_MAX_S = 10.0         # U6
 CONCESSION_MAX_SENTS = 2        # U6
-EST_TOL = 1.0 + A.TIMING_SPREAD_WARN   # estimates carry an 8% band (audit convention)
+EST_TOL = 1.0 + A.TIMING_SPREAD_WARN
 
 AGREEMENT = re.compile(
     r"\b(agree|agreement|on the record|credit where due|is real\b|they'?re right|"
@@ -92,15 +114,17 @@ NUMBER = re.compile(r"\b(\d[\d,.]*%?|one|two|three|four|five|six|seven|eight|nin
 CALCULABLE = re.compile(r"\b(by the end|in the next|minutes?|seconds?|thirty seconds|"
                         r"calculate|run it yourself|check(?: it)? yourself|your own)\b", re.I)
 AND_THEN = re.compile(r"^(and then|then)\b", re.I)
+# McKee: BUT/THEREFORE - the connectors that mark a gap opening or a consequence
+TURN_CONNECTOR = re.compile(r"^(but|so|because|which is why|therefore|yet|instead|"
+                            r"except|and that'?s (?:where|why)|and here'?s)\b", re.I)
 CHANNEL_TALK = re.compile(r"\b(this channel|my channel|the channel|on this channel)\b", re.I)
-BIO = re.compile(r"\b(I worked (?:at|in)|I used to|JPMorgan|I own(?:ed)?|my dispensary|"
-                 r"risk-scor)\w*", re.I)
+BIO = re.compile(r"\b(I worked (?:at|in)|I used to|JPMorgan|I own(?:ed)?|my dispensary|risk-scor)\w*", re.I)
 
 
 @dataclass(frozen=True)
 class Gate:
     id: str
-    src: str          # doc reference
+    src: str          # classical node + doc reference
     level: str        # FAIL | WARN | PASS | JUDGE | INFO
     message: str
 
@@ -112,7 +136,6 @@ def _clock(s: str) -> float:
 
 
 def _phase_table(path: Path) -> list[tuple[float, float, float, str]]:
-    """[(runtime_min, start_s, end_s, extra_cell)] from a guide's Geometry table."""
     rows = []
     if not path.exists():
         return rows
@@ -157,7 +180,6 @@ def geometry(runtime_s: float) -> dict:
 
 # ---- text -> timed sentences + marks -------------------------------------
 def _sentences_timed(text: str, timeline: list[dict] | None):
-    """[(start_s, end_s, clean_sentence, char_offset_in_original)]."""
     bounds = []
     for m in re.finditer(r"[^.!?]*[.!?]+(?:\s+|$)", text, re.S):
         clean = beat_tags.strip_marks(m.group(0))
@@ -186,7 +208,6 @@ def _sentences_timed(text: str, timeline: list[dict] | None):
 
 
 def _time_of(off: int, sents) -> float | None:
-    """The start time of the sentence a char offset belongs to (or precedes)."""
     host = None
     for st, en, s, o in sents:
         if o <= off:
@@ -206,12 +227,17 @@ def _sentence_index_of(off: int, sents) -> int:
     return idx
 
 
+def _first_alnum(text: str, chunk_off: int) -> int:
+    lead = re.search(r"[A-Za-z0-9]", text[chunk_off:])
+    return chunk_off + (lead.start() if lead else 0)
+
+
 # ---- the gate ---------------------------------------------------------------
 def run(text: str, timeline: list[dict] | None = None, counterparty: str | None = None,
         ring: str | None = None, opening_s: float = 300.0) -> tuple[list[Gate], dict]:
     sents = _sentences_timed(text, timeline)
-    marks = beat_tags.find_marks(text)                       # (mark, offset)
-    beats: dict[str, list[tuple[float, int]]] = {}           # tag -> [(time, sentence idx)]
+    marks = beat_tags.find_marks(text)
+    beats: dict[str, list[tuple[float, int]]] = {}
     for tag, off in marks:
         if tag in beat_tags.BEAT_TAGS:
             t = _time_of(off, sents)
@@ -221,6 +247,7 @@ def run(text: str, timeline: list[dict] | None = None, counterparty: str | None 
     geo = geometry(runtime)
     p1_end, p2_end = geo["p1_end"], geo["p2_end"]
     tol = 1.0 if timeline else EST_TOL
+    beat5_lo = min(BEAT5_START, p1_end * 0.67)          # merge rule below 8 min
     g: list[Gate] = []
     add = lambda i, src, lvl, m: g.append(Gate(i, src, lvl, m))
     mmss = lambda s: f"{int(s // 60)}:{int(s % 60):02d}"
@@ -228,44 +255,32 @@ def run(text: str, timeline: list[dict] | None = None, counterparty: str | None 
     in_p2 = lambda t: p1_end / tol <= t <= p2_end * tol
     first_beat = lambda tag: (beats.get(tag) or [(None, None)])[0][0]
     tag_times = lambda tag: [t for t, _ in beats.get(tag, [])]
+    tag_idx = lambda tag: [i for _, i in beats.get(tag, [])]
     rehook_hits = lambda lo, hi: sorted(set(
         [st for st, _, s, _ in sents if lo <= st <= hi and re.search("|".join(A.REHOOKS), s, re.I)]
         + [t for t in tag_times("rehook") if lo <= t <= hi]))
 
-    # ================= P1 =================
-    # G01 microhook
+    # ================= P1 - THE OPEN =================
     if sents:
         d = sents[0][1] - sents[0][0]
-        add("G01", "38 s2 B1 / P1 QC: first sentence <= 3s", "FAIL" if d > GRAB_S * tol else "PASS",
-            f"first sentence {d:.2f}s")
-    # G02 visual breath before the first word (edit clock)
+        add("G01", "PLATFORM 3s microhook (38 B1 / P1 QC)", "FAIL" if d > GRAB_S * tol else "PASS", f"first sentence {d:.2f}s")
+        add("J03", "Rhetoric: microhook concrete, terminal stress on the surprising word (38 B1)", "JUDGE", f"'{sents[0][2][:80]}'")
     if timeline:
         t0 = sents[0][0] if sents else 0.0
         ok = BREATH_S[0] - BREATH_TOL <= t0 <= BREATH_S[1] + BREATH_TOL
-        add("G02", "38 s2 B1: plate breathes 0.5-0.8s before the first word; no cold silence",
+        add("G02", "Humes pre-opener, bent visual: the plate breathes 0.5-0.8s before the first word (38 B1 / doc 32 s7)",
             "PASS" if ok else "FAIL", f"first word at {t0:.2f}s in the edit clock")
     else:
-        add("G02", "38 s2 B1: plate breathes 0.5-0.8s before the first word", "INFO",
-            "edit-clock property - checked when a timeline is supplied")
-    # G03 quick return by 8s + [post-key] on the boundary
+        add("G02", "Humes pre-opener, bent visual: plate breathes 0.5-0.8s before the first word", "INFO", "edit-clock property - checked with --timeline")
     if len(sents) > 1:
         e = sents[1][1]
-        # "the settle pause lands ON the 8-second decision boundary": a
-        # [post-key] whose host line ENDS by 0:08, after the paradox is paid.
-        # (Not "adjacent to sentence two" - ep1's mark after "touched it" at
-        # ~6s is exactly the doc's beat.)
         pk_by_boundary = []
         for m, o in marks:
             if m != "post-key":
                 continue
             k = _sentence_index_of(o, sents)
-            # a mark written at the HEAD of a chunk ("touched it. `[post-key]`
-            # That was 1845.") settles the sentence BEFORE it, not the one it
-            # leads - attribute it to k-1 when it precedes chunk k's first letter
-            lead = re.search(r"[A-Za-z0-9]", text[sents[k][3]:]) if k < len(sents) else None
-            first_alnum = (sents[k][3] + lead.start()) if lead else -1
-            if k >= 1 and o < first_alnum:
-                k -= 1
+            if k >= 1 and o < _first_alnum(text, sents[k][3]):
+                k -= 1                      # a mark leading chunk k settles sentence k-1
             host_end = sents[k][1] if k < len(sents) else 1e9
             if k >= 1 and host_end <= PARADOX_BY_S * tol:
                 pk_by_boundary.append(host_end)
@@ -273,160 +288,163 @@ def run(text: str, timeline: list[dict] | None = None, counterparty: str | None 
         why = [] if e <= PARADOX_BY_S * tol else [f"paid at {e:.2f}s (> 8s)"]
         if not pk_by_boundary:
             why.append("no [post-key] settle by the 8s boundary")
-        add("G03", "38 s2 B2: pay the microhook wrong by 0:08; [post-key] ON the 8s boundary", lvl,
+        add("G03", "McKee gap paid WRONG by 0:08 + Humes post-key ON the boundary (38 B2)", lvl,
             "; ".join(why) or f"paid at {e:.2f}s, settle at {pk_by_boundary[0]:.2f}s")
-    # G04 ban list (greetings, announcements, channel talk) in the first 30s
+        add("J05", "McKee: the gap opens - line 2 violates line 1's expected consequence (38 B1-B2)", "JUDGE",
+            f"'{sents[0][2][:50]}' -> '{sents[1][2][:50]}'")
     ban = [st for st, _, s, _ in sents if st <= YOU_BY_S and (re.search("|".join(A.GREETINGS), s, re.I) or CHANNEL_TALK.search(s))]
-    add("G04", "38 s2 B2: no greeting, no 'in this video', no channel talk", "FAIL" if ban else "PASS",
+    add("G04", "PLATFORM ban list: no greeting, no 'in this video', no channel talk (38 B2)", "FAIL" if ban else "PASS",
         f"banned construction at {mmss(ban[0])}" if ban else "clean")
-    # G05 "you" by 0:30
     ty = next((st for st, _, s, _ in sents if st <= YOU_BY_S * tol and re.search(r"\byou(?:r|'ll|'re|'ve)?\b", s, re.I)), None)
-    add("G05", "38 s2 B3 / P1 QC: 'you' appears by 0:30", "PASS" if ty is not None else "FAIL",
+    add("G05", "Direct address: 'you' by 0:30 (38 B3 / doc 32 s1)", "PASS" if ty is not None else "FAIL",
         f"'you' at {mmss(ty)}" if ty is not None else "no 'you' before 0:30")
-    # G06 biography only after the paradox
     par_end = sents[1][1] if len(sents) > 1 else 0.0
     early_bio = [st for st, _, s, _ in sents if st < par_end and BIO.search(s)]
-    add("G06", "38 s2 B3: biography as the twist - AFTER the paradox, never before", "FAIL" if early_bio else "PASS",
+    add("G06", "Biography as the twist - AFTER the paradox, never before (38 B3)", "FAIL" if early_bio else "PASS",
         f"biography at {mmss(early_bio[0])} precedes the paradox" if early_bio else "clean")
-    # G07 stakes by ~0:25 (declared)
+    # Truby Weakness/Need planted AS PEOPLE - McKee archetype in a specific setting
+    ta = [t for t in tag_times("archetype") if ARCHETYPE_WIN[0] / tol <= t <= ARCHETYPE_WIN[1] * tol]
+    add("G37", "Truby Weakness/Need planted AS PEOPLE: an archetype-in-a-setting enters 0:08-0:30 (38 B3 / MAP s3)",
+        "PASS" if ta else "FAIL", f"[archetype] at {mmss(ta[0])}" if ta else "no [archetype] declared in 0:08-0:30")
+    if ta:
+        add("J09", "McKee archetype, not stereotype: a universal experience in a specific setting (doc 32 s4)", "JUDGE", f"read the line at {mmss(ta[0])}")
     ts = first_beat("stakes")
-    add("G07", "38 s2 B3: stakes named by ~0:25 (target + transformation + what's at risk)",
-        "PASS" if ts is not None and ts <= STAKES_BY_S * tol else "FAIL",
+    add("G07", "Hook anatomy: stakes named by ~0:25 (38 B3)", "PASS" if ts is not None and ts <= STAKES_BY_S * tol else "FAIL",
         f"[stakes] at {mmss(ts)}" if ts is not None else "no [stakes] declared by 0:30")
-    # G08/G09/G10/G11 promise cluster
     t_pr_tag = first_beat("promise")
     t_pr_rx = next((st for st, _, s, _ in sents if re.search(A.A1_PROMISE, s, re.I)), None)
     t_pr = t_pr_tag if t_pr_tag is not None else t_pr_rx
     pr_sent = next(((st, en, s, o) for st, en, s, o in sents if st == t_pr), None) if t_pr is not None else None
     t_po = first_beat("payoff")
     if t_po is None:
-        add("G08", "38 s2 B4: deliver real value FIRST, before the ask", "FAIL", "no [payoff] declared before the promise")
+        add("G08", "One Minute Wall: real value FIRST, before the ask (38 B4)", "FAIL", "no [payoff] declared before the promise")
     elif t_pr is not None and t_po > t_pr:
-        add("G08", "38 s2 B4: deliver real value FIRST, before the ask", "FAIL", f"[payoff] at {mmss(t_po)} comes AFTER the promise at {mmss(t_pr)}")
+        add("G08", "One Minute Wall: real value FIRST, before the ask (38 B4)", "FAIL", f"[payoff] at {mmss(t_po)} comes AFTER the promise at {mmss(t_pr)}")
     else:
-        add("G08", "38 s2 B4: deliver real value FIRST, before the ask", "PASS", f"[payoff] at {mmss(t_po)}")
+        add("G08", "One Minute Wall: real value FIRST, before the ask (38 B4)", "PASS", f"[payoff] at {mmss(t_po)}")
+    src9 = "F1 + A1 + macro-loop-1 SETUP: the dated promise in 0:30-0:60 (38 B4 / MAP s3 / CLK)"
     if t_pr is None:
-        add("G09", "38 s2 B4 / MAP s3 / CLK: the dated promise, 0:30-0:60", "FAIL", "no promise found (tag [promise] or a 'by the end you'll...' line)")
+        add("G09", src9, "FAIL", "no promise found (tag [promise] or a 'by the end you'll...' line)")
     elif t_pr > PROMISE_WIN[1] * tol:
-        add("G09", "38 s2 B4 / MAP s3 / CLK: the dated promise, 0:30-0:60", "FAIL", f"promise at {mmss(t_pr)} - AFTER 0:60 (Steel and Paper as recorded: 1:20)")
+        add("G09", src9, "FAIL", f"promise at {mmss(t_pr)} - AFTER 0:60 (Steel and Paper as recorded: 1:20)")
     elif t_pr < PROMISE_WIN[0] / tol:
-        add("G09", "38 s2 B4 / MAP s3 / CLK: the dated promise, 0:30-0:60", "WARN", f"promise at {mmss(t_pr)} - before the mini-payoff window opens")
+        add("G09", src9, "WARN", f"promise at {mmss(t_pr)} - before the mini-payoff window opens")
     else:
-        add("G09", "38 s2 B4 / MAP s3 / CLK: the dated promise, 0:30-0:60", "PASS", f"promise at {mmss(t_pr)}")
+        add("G09", src9, "PASS", f"promise at {mmss(t_pr)}")
     if pr_sent:
-        # "immediately before the promise": the mark sits in the promise
-        # chunk's leading zone (before its first letter) or just ahead of it -
-        # `[pre-key]` with backticks and spacing is up to ~20 chars.
-        lead = re.search(r"[A-Za-z0-9]", text[pr_sent[3]:])
-        first_alnum = pr_sent[3] + (lead.start() if lead else 0)
-        has_prekey = any(m == "pre-key" and pr_sent[3] - 20 <= o < first_alnum for m, o in marks)
-        add("G10", "P1 pause marks: [pre-key] immediately before the promise", "PASS" if has_prekey else "FAIL",
-            "placed" if has_prekey else "missing")
+        has_prekey = any(m == "pre-key" and pr_sent[3] - 20 <= o < _first_alnum(text, pr_sent[3]) for m, o in marks)
+        add("G10", "Humes pre-key immediately before the promise (P1 pause marks)", "PASS" if has_prekey else "FAIL", "placed" if has_prekey else "missing")
         calc = bool(NUMBER.search(pr_sent[2]) or CALCULABLE.search(pr_sent[2]))
-        add("G11", "38 s2 B4: the promise carries a date or number and is calculable", "PASS" if calc else "FAIL",
-            f"'{pr_sent[2][:70]}'")
-    # G12 tricolon exactly one in P1
+        add("G11", "The promise carries a date or number and is calculable (38 B4 / doc 35)", "PASS" if calc else "FAIL", f"'{pr_sent[2][:70]}'")
     tri1 = [t for t in tag_times("tricolon") if in_p1(t)]
-    add("G12", "P1 B4: tricolon on the thesis line - exactly one in the phase", "PASS" if len(tri1) == 1 else "FAIL",
-        f"{len(tri1)} declared in P1")
-    # G13 A2 ~1:00
+    add("G12", "Rhetoric: ONE tricolon on the thesis line, none elsewhere in P1 (P1 B4 / doc 32 s3)", "PASS" if len(tri1) == 1 else "FAIL", f"{len(tri1)} declared in P1")
+    add("J08", "Rhetoric: phonetic anchor only on the promise/payoff/tell (doc 32 s3)", "JUDGE", "read the promise line")
     a2 = rehook_hits(A2_ANCHOR - 5, max(p1_end, A2_ANCHOR) * tol + 5)
-    add("G13", "38 s2 B5 / P1 QC: rehook A2 ~1:00 (template family)", "PASS" if a2 else "FAIL",
+    add("G13", "PLATFORM rehook A2 ~1:00, template family (38 B5 / P1 QC)", "PASS" if a2 else "FAIL",
         f"A2 at {mmss(a2[0])}" if a2 else f"no rehook construction in 0:55-{mmss(p1_end)}")
-    # G14 opponent named as mechanism (declared + JUDGE)
-    top = first_beat("opponent")
-    if top is None or not in_p1(top):
-        add("G14", "38 s2 B5: Desire and the Opponent named - a MECHANISM, never a villain", "FAIL", "no [opponent] declared in P1")
+    # Truby Desire + Opponent, the map signpost - beat 5
+    tdes = [t for t in tag_times("desire") if beat5_lo / tol <= t <= p1_end * tol]
+    add("G38", "Truby Desire named: the goal the video pursues (38 B5)", "PASS" if tdes else "FAIL",
+        f"[desire] at {mmss(tdes[0])}" if tdes else f"no [desire] declared in {mmss(beat5_lo)}-{mmss(p1_end)}")
+    top = [t for t in tag_times("opponent") if in_p1(t)]
+    if not top:
+        add("G14", "Truby Opponent / McKee antagonism: the opponent named, a MECHANISM never a villain (38 B5)", "FAIL", "no [opponent] declared in P1")
     else:
-        add("G14", "38 s2 B5: Desire and the Opponent named - a MECHANISM, never a villain", "PASS", f"[opponent] at {mmss(top)}")
-        add("J01", "38 s2 B5: opponent is a mechanism, not a villain", "JUDGE", f"read the [opponent] line at {mmss(top)}")
-    # G15 ring token planted in P1
+        add("G14", "Truby Opponent / McKee antagonism: the opponent named, a MECHANISM never a villain (38 B5)", "PASS", f"[opponent] at {mmss(top[0])}")
+        add("J01", "McKee antagonism: the opponent is a mechanism, not a villain", "JUDGE", f"read the [opponent] line at {mmss(top[0])}")
+    tmap = [t for t in tag_times("map") if beat5_lo / tol <= t <= p1_end * tol]
+    add("G39", "Auditory handrail: map-not-territory signpost - tease the WHAT, hold the HOW (38 B5 / doc 32 s1)",
+        "PASS" if tmap else "FAIL", f"[map] at {mmss(tmap[0])}" if tmap else "no [map] declared in beat 5")
+    if tmap:
+        add("J10", "38 B5: the map is a journey tease, never a table of contents", "JUDGE", f"read the line at {mmss(tmap[0])}")
     if ring:
         rx = re.compile(r"\b" + re.escape(ring) + r"s?\b", re.I)
         r1 = [st for st, _, s, _ in sents if in_p1(st) and rx.search(s)]
-        add("G15", "38 s2 B5 / P1: the ring token planted by the end of P1", "PASS" if r1 else "FAIL",
+        add("G15", "Ring composition: the ring token PLANTED in P1 (38 B5 / doc 32 s5)", "PASS" if r1 else "FAIL",
             f"'{ring}' planted at {mmss(r1[0])}" if r1 else f"'{ring}' never mentioned in P1")
     else:
         rg = [t for t in tag_times("ring") if in_p1(t)]
-        add("G15", "38 s2 B5 / P1: the ring token planted by the end of P1", "PASS" if rg else "FAIL",
+        add("G15", "Ring composition: the ring token PLANTED in P1 (38 B5 / doc 32 s5)", "PASS" if rg else "FAIL",
             f"[ring] at {mmss(rg[0])}" if rg else "no ring token (pass --ring <object> or tag [ring])")
-    # G16 exactly one reflection dab in P1
     rf1 = [t for t in tag_times("reflect") if in_p1(t)]
-    add("G16", "P1 Glass 80/20: exactly ONE reflection dab", "PASS" if len(rf1) == 1 else "FAIL", f"{len(rf1)} [reflect] in P1")
-    # G17 attribution-first (hard gate) + [verify] placement
+    add("G16", "Glass alternation, P1 80/20: exactly ONE reflection dab (P1)", "PASS" if len(rf1) == 1 else "FAIL", f"{len(rf1)} [reflect] in P1")
     trail = [st for st, _, s, _ in sents if st <= opening_s and re.search("|".join(A.TRAILING_ATTR), s)]
     vf_bad = [o for m, o in marks if m == "verify" and (_sentence_index_of(o, sents) == 0 or (pr_sent and _sentence_index_of(o, sents) == sents.index(pr_sent)))]
-    if trail or vf_bad:
-        add("G17", "P1/P2 HARD GATE: attribution-first; [verify] never in hook/promise", "FAIL",
-            (f"trailing attribution at {mmss(trail[0])}" if trail else "") + ("; [verify] in hook/promise" if vf_bad else ""))
-    else:
-        add("G17", "P1/P2 HARD GATE: attribution-first; [verify] never in hook/promise", "PASS", "clean")
-    # G18 pause ration P1
+    add("G17", "HARD GATE attribution-first; [verify] never in hook/promise (P1/P2 / doc 32 s1)", "FAIL" if (trail or vf_bad) else "PASS",
+        ((f"trailing attribution at {mmss(trail[0])}" if trail else "") + ("; [verify] in hook/promise" if vf_bad else "")) or "clean")
     n1 = sum(1 for m, o in marks if m in ("pre-key", "post-key") and (_time_of(o, sents) or 0) <= p1_end)
     per_min = n1 / max(p1_end / 60.0, 1e-9)
-    add("G18", "P1 pause marks: roughly three per minute maximum", "FAIL" if per_min > MARKS_PER_MIN_MAX else "PASS",
-        f"{n1} marks in P1 ({per_min:.1f}/min)")
+    add("G18", "Humes pauses rationed: ~three per minute maximum (P1)", "FAIL" if per_min > MARKS_PER_MIN_MAX else "PASS", f"{n1} marks in P1 ({per_min:.1f}/min)")
+    add("J06", "A/V irony counterpoint: the image TENSIONS the line, never illustrates it (38 B1 / doc 32 s6) - check the plate plan", "JUDGE", "P1")
 
-    # ================= P2 =================
+    # ================= P2 - THE ENGINE =================
     loops = [t for t in tag_times("loop") if in_p2(t)]
     news = [t for t in tag_times("new") if in_p2(t)]
-    # G19 catalyst closes inside the first 60s of P2
-    add("G19", "P2: the catalyst lands as a micro loop CLOSED inside 30-60s of the phase", "PASS" if loops and loops[0] <= (p1_end + CATALYST_WITHIN_S) * tol else "FAIL",
-        f"first [loop] at {mmss(loops[0])}" if loops else "no [loop] declared in P2")
-    # G20 new-info cadence
+    tcat = [t for t in tag_times("catalyst") if p1_end / tol <= t <= (p1_end + CATALYST_WITHIN_S) * tol]
+    if not tcat:
+        add("G40", "Snyder Catalyst / McKee inciting incident: the fact that makes the question urgent lands as a story beat in P2's first ~60s (P2)", "FAIL",
+            "no [catalyst] declared in the phase's first 60s")
+    else:
+        closed = [t for t in loops if tcat[0] <= t <= (tcat[0] + CATALYST_WITHIN_S) * tol]
+        add("G40", "Snyder Catalyst / McKee inciting incident: lands as a story beat in P2's first ~60s (P2)", "PASS", f"[catalyst] at {mmss(tcat[0])}")
+        add("G19", "The catalyst is a micro loop CLOSED inside 30-60s, not exposition (P2)", "PASS" if closed else "FAIL",
+            f"closed by [loop] at {mmss(closed[0])}" if closed else f"no [loop] within 60s of the catalyst at {mmss(tcat[0])}")
     if news:
         pts = [p1_end] + news
-        gaps = [b - a for a, b in zip(pts, pts[1:])]
-        worst = max(gaps)
-        add("G20", "P2: something genuinely new every 15-30s", "FAIL" if worst > NEW_INFO_MAX_GAP_S * tol else "PASS",
-            f"longest gap between new-info beats {worst:.0f}s")
+        worst = max(b - a for a, b in zip(pts, pts[1:]))
+        add("G20", "PLATFORM new-info cadence: something genuinely new every 15-30s (P2)", "FAIL" if worst > NEW_INFO_MAX_GAP_S * tol else "PASS", f"longest gap {worst:.0f}s")
     else:
-        add("G20", "P2: something genuinely new every 15-30s", "FAIL", "no [new] beats declared in P2")
-    # G21 density bands
+        add("G20", "PLATFORM new-info cadence: something genuinely new every 15-30s (P2)", "FAIL", "no [new] beats declared in P2")
     lo_l, hi_l = geo["loops"]; lo_n, hi_n = geo["new"]
     if lo_l is not None:
-        okl = lo_l <= len(loops) <= hi_l
-        add("G21", f"P2 density: {lo_l}-{hi_l} micro-loop closes at this runtime", "PASS" if okl else "FAIL", f"{len(loops)} [loop] in P2")
+        add("G21", f"L2 loops: {lo_l}-{hi_l} micro-loop closes at this runtime (P2 geometry / MAP s0)", "PASS" if lo_l <= len(loops) <= hi_l else "FAIL", f"{len(loops)} [loop] in P2")
     if lo_n is not None:
-        okn = lo_n <= len(news) <= hi_n
-        add("G22", f"P2 density: {lo_n}-{hi_n} new-info beats at this runtime", "PASS" if okn else "FAIL", f"{len(news)} [new] in P2")
-    # G23 no AND-THEN chains
+        add("G22", f"PLATFORM density: {lo_n}-{hi_n} new-info beats at this runtime (P2 geometry)", "PASS" if lo_n <= len(news) <= hi_n else "FAIL", f"{len(news)} [new] in P2")
     p2s = [(st, s) for st, _, s, _ in sents if in_p2(st)]
     chain = any(AND_THEN.match(a[1]) and AND_THEN.match(b[1]) for a, b in zip(p2s, p2s[1:]))
-    add("G23", "P2 / MAP s4 QC: BUT/THEREFORE only - zero AND-THEN chains", "FAIL" if chain else "PASS", "chain found" if chain else "clean")
-    # G24 head-fake early-mid P2
+    add("G23", "McKee gap, sentence-level: BUT/THEREFORE only - zero AND-THEN chains (P2 / doc 32 s4)", "FAIL" if chain else "PASS", "chain found" if chain else "clean")
+    # McKee: each loop/new beat should TURN on a gap or consequence connector
+    beat_idx = sorted(set(tag_idx("loop") + tag_idx("new") + tag_idx("catalyst")))
+    beat_idx = [i for i in beat_idx if i < len(sents) and in_p2(sents[i][0])]
+    turned = [i for i in beat_idx if TURN_CONNECTOR.match(sents[i][2]) or (i + 1 < len(sents) and TURN_CONNECTOR.match(sents[i + 1][2]))]
+    if beat_idx:
+        share = len(turned) / len(beat_idx)
+        add("G43", "McKee gap: beats connect by BUT/THEREFORE - a beat that could swap places is filler (P2 / doc 32 s4)",
+            "WARN" if share < 0.5 else "PASS", f"{len(turned)}/{len(beat_idx)} declared beats open on a gap/consequence connector")
     hf = [t for t in tag_times("head-fake") if in_p2(t)]
     early = p1_end + 0.6 * (p2_end - p1_end)
     if not hf:
-        add("G24", "P2 MANDATORY: head-fake #1 planted straight, early-mid phase", "FAIL", "no [head-fake] declared in P2")
+        add("G24", "Truby Plan v1 / head-fake #1 planted STRAIGHT, early-mid P2 (P2 MANDATORY / MAP s4)", "FAIL", "no [head-fake] declared in P2")
     elif hf[0] > early * tol:
-        add("G24", "P2 MANDATORY: head-fake #1 planted straight, early-mid phase", "FAIL", f"[head-fake] at {mmss(hf[0])} - late in the phase (by {mmss(early)})")
+        add("G24", "Truby Plan v1 / head-fake #1 planted STRAIGHT, early-mid P2 (P2 MANDATORY / MAP s4)", "FAIL", f"[head-fake] at {mmss(hf[0])} - late (by {mmss(early)})")
     else:
-        add("G24", "P2 MANDATORY: head-fake #1 planted straight, early-mid phase", "PASS", f"[head-fake] at {mmss(hf[0])}")
-        add("J02", "P2: head-fake offered STRAIGHT, demolition reserved for the pivot", "JUDGE", f"read the line at {mmss(hf[0])}")
-    # G25 A3 + F2 at ~10% of runtime (docs), conflict with audit's 180s noted
+        add("G24", "Truby Plan v1 / head-fake #1 planted STRAIGHT, early-mid P2 (P2 MANDATORY / MAP s4)", "PASS", f"[head-fake] at {mmss(hf[0])}")
+        add("J02", "P2: the head-fake is offered STRAIGHT, no wink; demolition reserved for the pivot", "JUDGE", f"read the line at {mmss(hf[0])}")
+    # Snyder Debate / Truby Plan v1 FAILS - shown as a gap
+    deb_lo = p1_end + DEBATE_FROM * (p2_end - p1_end)
+    tdeb = [t for t in tag_times("debate") if deb_lo / tol <= t <= p2_end * tol and (not hf or t > hf[0])]
+    add("G41", "Snyder Debate / Truby Plan v1 FAILS: the obvious answer tried and found wanting, after the head-fake, mid-late P2 (P2 / MAP s4)",
+        "PASS" if tdeb else "FAIL", f"[debate] at {mmss(tdeb[0])}" if tdeb else "no [debate] declared after the head-fake in mid-late P2")
+    if tdeb:
+        add("J11", "McKee: the plan fails as a GAP (an action whose result violates expectation), never as a lecture", "JUDGE", f"read the line at {mmss(tdeb[0])}")
     a3c = runtime * A3_PCT
     a3 = rehook_hits(a3c - REHOOK_TOL, a3c + REHOOK_TOL)
-    add("G25", f"P2 / MAP s4: A3 rehook at ~10% of runtime ({mmss(a3c)}) [audit hard-codes 3:00 absolute - docs win here]",
+    add("G25", f"PLATFORM rehook A3 at ~10% of runtime = {mmss(a3c)} (P2 / MAP s4 QC) [audit hard-codes 3:00 - docs win here]",
         "PASS" if a3 else "FAIL", f"A3 at {mmss(a3[0])}" if a3 else f"no rehook within {REHOOK_TOL:.0f}s of {mmss(a3c)}")
     f2 = [t for t in tag_times("foreshadow") if a3c - REHOOK_TOL <= t <= a3c + REHOOK_TOL]
-    add("G26", "P2: F2 - the promise sighted again at ~10%, delivering none of it (may share the A3 line)", "PASS" if f2 else "FAIL",
+    add("G26", "Foreshadow schedule F2 at ~10%: the promise sighted again, none of it delivered (P2 / MAP s2)", "PASS" if f2 else "FAIL",
         f"[foreshadow] at {mmss(f2[0])}" if f2 else "no [foreshadow] near 10%")
-    # G27 ring touched exactly once in P2
     if ring:
         r2 = [st for st, _, s, _ in sents if in_p2(st) and rx.search(s)]
-        add("G27", "P2: ring token touched exactly ONCE, unresolved", "PASS" if len(r2) == 1 else "FAIL", f"'{ring}' mentioned {len(r2)}x in P2")
+        add("G27", "Ring composition: token TOUCHED exactly once in P2, unresolved (P2 / doc 32 s5)", "PASS" if len(r2) == 1 else "FAIL", f"'{ring}' {len(r2)}x in P2")
     else:
         r2 = [t for t in tag_times("ring") if in_p2(t)]
-        add("G27", "P2: ring token touched exactly ONCE, unresolved", "PASS" if len(r2) == 1 else "FAIL", f"[ring] {len(r2)}x in P2")
-    # G28 macro loop 1 closes
+        add("G27", "Ring composition: token TOUCHED exactly once in P2, unresolved (P2 / doc 32 s5)", "PASS" if len(r2) == 1 else "FAIL", f"[ring] {len(r2)}x in P2")
     lc = [t for t in tag_times("loop-close") if in_p2(t) or t <= (p2_end + REHOOK_TOL)]
-    add("G28", "P2 / MAP s4: macro loop 1 closes on a partial answer that opens the bigger question", "PASS" if lc else "FAIL",
+    add("G28", "Macro loop 1 CLOSES on a partial answer that opens the bigger question (P2 / MAP s4, LIFO ledger)", "PASS" if lc else "FAIL",
         f"[loop-close] at {mmss(lc[0])}" if lc else "no [loop-close] declared")
-    # G29 dip immediately after (timeline gap or declared)
     if lc:
-        t_lc = lc[0]
-        dip_ok, how = False, ""
+        t_lc = lc[0]; dip_ok, how = False, ""
         if timeline:
             ws = [w for w in timeline if re.search(r"[A-Za-z0-9]", w["w"])]
             for a, b in zip(ws, ws[1:]):
@@ -436,47 +454,44 @@ def run(text: str, timeline: list[dict] | None = None, counterparty: str | None 
             dd = [t for t in tag_times("dip") if t_lc <= t <= t_lc + DIP_WITHIN_S * tol]
             if dd:
                 dip_ok, how = True, f"[dip] at {mmss(dd[0])}"
-        add("G29", "P2: IMMEDIATELY after the macro close, one breathing dip (2-3 beats of room tone)", "PASS" if dip_ok else "FAIL",
+        add("G29", "PLATFORM breathing dip IMMEDIATELY after the macro close - 2-3 beats of room tone (P2)", "PASS" if dip_ok else "FAIL",
             how or f"no dip within {DIP_WITHIN_S:.0f}s of the macro close at {mmss(t_lc)}")
     else:
-        add("G29", "P2: breathing dip after the macro close", "WARN", "cannot place - macro close not declared")
-    # G30 CTA only in the post-payoff window
+        add("G29", "PLATFORM breathing dip after the macro close (P2)", "WARN", "cannot place - macro close not declared")
     ctas = [st for st, _, s, _ in sents if st <= opening_s and re.search("|".join(A.CTA), s, re.I)]
     bad_cta = [t for t in ctas if not (lc and lc[0] <= t <= lc[0] + CTA_WINDOW_S)]
-    add("G30", "P2: the ONLY mid-video CTA slot is the 15-30s after the macro payoff", "FAIL" if bad_cta else "PASS",
+    add("G30", "PLATFORM: the ONLY mid-video CTA slot is the 15-30s after the macro payoff (P2)", "FAIL" if bad_cta else "PASS",
         f"CTA at {mmss(bad_cta[0])} outside the slot" if bad_cta else ("none" if not ctas else f"one inside the slot at {mmss(ctas[0])}"))
-    # G31 Glass 70/30 in P2: reflection dabs never consecutive; not listing
+    tsp = [t for t in tag_times("signpost") if (p1_end + SIGNPOST_FROM * (p2_end - p1_end)) / tol <= t <= (p2_end + REHOOK_TOL)]
+    add("G42", "Auditory handrail: exit P2 on a transition signpost into the Gap (P2 / doc 32 s1)", "PASS" if tsp else "FAIL",
+        f"[signpost] at {mmss(tsp[0])}" if tsp else "no [signpost] declared at the end of P2")
     rf2 = sorted(i for t, i in beats.get("reflect", []) if in_p2(t))
     adj = any(b - a == 1 for a, b in zip(rf2, rf2[1:]))
     if adj:
-        add("G31", "P2 Glass 70/30: two consecutive reflection sentences = lecturing", "FAIL", "adjacent [reflect] dabs")
+        add("G31", "Glass alternation, P2 70/30: two consecutive reflection sentences = lecturing (P2)", "FAIL", "adjacent [reflect] dabs")
     elif loops and len(rf2) * 2 < len(loops):
-        add("G31", "P2 Glass 70/30: two loops with no reflection = listing", "WARN", f"{len(rf2)} dabs for {len(loops)} loops")
+        add("G31", "Glass alternation, P2 70/30: two loops with no reflection = listing (P2)", "WARN", f"{len(rf2)} dabs for {len(loops)} loops")
     else:
-        add("G31", "P2 Glass 70/30: reflection dabs marked, never consecutive", "PASS", f"{len(rf2)} dabs, {len(loops)} loops")
-    # G32 tricolon <=1 in P2; anaphora recurs once if debuted in P1
+        add("G31", "Glass alternation, P2 70/30: dabs marked, never consecutive (P2)", "PASS", f"{len(rf2)} dabs, {len(loops)} loops")
     tri2 = [t for t in tag_times("tricolon") if in_p2(t)]
     an1 = [t for t in tag_times("anaphora") if in_p1(t)]
     an2 = [t for t in tag_times("anaphora") if in_p2(t)]
     bad = len(tri2) > 1 or (an1 and len(an2) != 1)
-    add("G32", "P2: ONE momentum tricolon max; anaphora (if debuted in P1) recurs exactly once", "FAIL" if bad else "PASS",
+    add("G32", "Rhetoric: ONE momentum tricolon max in P2; anaphora (if debuted in P1) recurs exactly once (P2 / doc 32 s3)", "FAIL" if bad else "PASS",
         f"tricolon {len(tri2)}, anaphora P1 {len(an1)} / P2 {len(an2)}")
-    # G33 no [pre-key] immediately before the head-fake; P2 mark ration
     hf_offs = [o for m, o in marks if m == "head-fake"]
-    # "`[pre-key]` [head-fake]" spans ~11-16 chars between the two marks' starts
     pk_before_hf = any(m == "pre-key" and any(0 <= ho - o <= 20 for ho in hf_offs) for m, o in marks)
     n2 = sum(1 for m, o in marks if m in ("pre-key", "post-key") and in_p2(_time_of(o, sents) or -1))
-    lvl = "FAIL" if (pk_before_hf or n2 > P2_MARKS_MAX) else "PASS"
-    add("G33", "P2 pause marks: no [pre-key] before the head-fake; <=3 marks in the phase", lvl,
+    add("G33", "Humes pauses in P2: no [pre-key] before the head-fake (that pause belongs to the pivot); <=3 marks in the phase", "FAIL" if (pk_before_hf or n2 > P2_MARKS_MAX) else "PASS",
         ("[pre-key] sits before the head-fake; " if pk_before_hf else "") + f"{n2} marks in P2")
+    add("J07", "A/V contextual mapping: plates carry the archive, the voice carries motive and cost; a line that captions its visual fails (P2 / doc 32 s6) - check the plate plan", "JUDGE", "P2")
 
     # ================= cross-cutting =================
-    # G34 concession budget (U6 / E20)
     cp = counterparty
     if not cp:
         from collections import Counter
         caps = Counter(re.findall(r"\b([A-Z][a-z]{3,})\b", " ".join(s for _, _, s, _ in sents)))
-        stop = {"The", "And", "But", "That", "This", "Here", "There", "What", "When", "Then", "Today", "Count", "Nothing", "Every", "Every"}
+        stop = {"The", "And", "But", "That", "This", "Here", "There", "What", "When", "Then", "Today", "Count", "Nothing", "Every"}
         common = [w for w, c in caps.most_common(8) if c >= 5 and w not in stop]
         cp = common[0] if common else None
     worst, run_ = None, []
@@ -494,31 +509,25 @@ def run(text: str, timeline: list[dict] | None = None, counterparty: str | None 
         else:
             worst = _flush(run_, worst); run_ = []
     worst = _flush(run_, worst)
-    if worst:
-        add("G34", "U6 / E20: a counterparty/agreement run never exceeds 2 sentences or 10s without a claim of ours", "FAIL",
-            f"{len(worst)} sentences, {mmss(worst[0][0])}-{mmss(worst[-1][1])} ({worst[-1][1] - worst[0][0]:.0f}s): '{worst[0][2][:60]}...'")
-    else:
-        add("G34", "U6 / E20: a counterparty/agreement run never exceeds 2 sentences or 10s without a claim of ours", "PASS", "clean")
-    # G35 a delivered proof is never hedged next-line (U6 / E20)
+    add("G34", "U6 / E20 concession budget: an agreement run never exceeds 2 sentences or 10s without a claim of ours", "FAIL" if worst else "PASS",
+        f"{len(worst)} sentences, {mmss(worst[0][0])}-{mmss(worst[-1][1])} ({worst[-1][1] - worst[0][0]:.0f}s): '{worst[0][2][:60]}...'" if worst else "clean")
     hedged = next(((a, b) for a, b in zip(sents, sents[1:]) if b[0] <= opening_s and NUMBER.search(a[2]) and HEDGE.search(b[2])), None)
     add("G35", "U6 / E20: a delivered proof is never hedged in the next sentence", "FAIL" if hedged else "PASS",
         f"proof at {mmss(hedged[0][0])} hedged at {mmss(hedged[1][0])}: '{hedged[1][2][:70]}'" if hedged else "clean")
-    # G36 the cycle repeats (CLK): no >60s stretch of the opening without a cycle beat
-    cycle = sorted(set(([t_pr] if t_pr is not None else []) + loops + news + lc + rehook_hits(0, opening_s) + tag_times("head-fake")))
+    cycle = sorted(set(([t_pr] if t_pr is not None else []) + loops + news + lc + rehook_hits(0, opening_s) + tag_times("head-fake") + tag_times("catalyst") + tag_times("debate")))
     cycle = [t for t in cycle if t <= opening_s]
     pts = [0.0] + cycle + [min(opening_s, runtime)]
     gaps = [(a, b - a) for a, b in zip(pts, pts[1:])]
     wg = max(gaps, key=lambda x: x[1]) if gaps else (0, 0)
-    add("G36", "CLK: hook / show it's worth it / promise more / deliver - the cycle repeats per beat (no >60s without one)",
-        "FAIL" if wg[1] > CYCLE_MAX_GAP_S * tol else "PASS", f"longest stretch without a cycle beat: {wg[1]:.0f}s from {mmss(wg[0])}")
-    # JUDGE-only rows the docs require and no machine can read
-    add("J03", "38 s2 B1: microhook is concrete with terminal stress on the surprising word", "JUDGE", f"'{sents[0][2][:80]}'" if sents else "")
-    add("J04", "38 s2 B5: context-dump ban - every abstraction cashed into an object or number within one sentence", "JUDGE", "read P1 B5")
+    add("G36", "CLK the cycle repeats per beat - hook / show it's worth it / promise more / deliver; no >60s without a cycle beat", "FAIL" if wg[1] > CYCLE_MAX_GAP_S * tol else "PASS",
+        f"longest stretch without a cycle beat: {wg[1]:.0f}s from {mmss(wg[0])}")
+    add("J04", "38 B5 context-dump ban: every abstraction cashed into an object or number within one sentence", "JUDGE", "read P1 B5 and the P2 catalyst")
 
     stats = {"runtime": mmss(runtime), "timing": "measured (take)" if timeline else "estimated (kit rate, 8% band)",
-             "geometry": f"P1 0:00-{mmss(p1_end)}, P2 -{mmss(p2_end)} ({geo['source']})",
+             "geometry": f"P1 0:00-{mmss(p1_end)} (beat 5 from {mmss(beat5_lo)}), P2 -{mmss(p2_end)} ({geo['source']})",
              "density_bands": f"loops {geo['loops']}, new-info {geo['new']}",
              "counterparty": cp, "ring": ring,
+             "not_gated_here": "Truby Battle / Self-Revelation / New Equilibrium, Snyder midpoint, chiastic center, ring CLOSE (P4-P6)",
              "beats_declared": {k: [mmss(t) for t, _ in v] for k, v in beats.items()}}
     return g, stats
 
@@ -548,7 +557,8 @@ def main() -> int:
     for k, v in stats.items():
         print(f"  {k:>16}: {v}")
     print()
-    for x in gates:
+    order = {"FAIL": 0, "WARN": 1, "PASS": 2, "INFO": 3, "JUDGE": 4}
+    for x in sorted(gates, key=lambda x: (order[x.level], x.id)):
         print(f"  [{x.level:5}] {x.id} {x.message}\n          {x.src}")
     n = lambda lvl: sum(1 for x in gates if x.level == lvl)
     print(f"\nRESULT: {n('FAIL')} FAIL / {n('WARN')} WARN / {n('PASS')} PASS / {n('JUDGE')} JUDGE (read these) / {n('INFO')} INFO")
