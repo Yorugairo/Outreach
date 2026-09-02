@@ -50,10 +50,22 @@ terminal stress on the hard word; doc 36: answer-not-race vs Bravos):
   4. The AI Bubble Already Popped - You Just Can't See It
      (trough-is-here reframe; most contrarian)
 
-PACKAGE NOTE: for title+hook+thumbnail to be ONE system, the thumbnail
-top-right "History Has Memory." should become "STEEL or PAPER?" - the
-memory angle is one proof in the stack, not the thesis. Then all three
-surfaces carry the steel/paper frame. Awaiting operator direction before
-rebuilding the thumbnail corner. review_title scoring still walled.
+=== LOCKED 2026-09-01 ===
+TITLE:     The AI Bubble Is Real. What Survives Is Steel.
+THUMBNAIL: thumbnail-ship-v7-steelpaper.png (v6's "History Has Memory."
+           corner swapped for "STEEL or PAPER?" - steel=charcoal,
+           paper=crimson; robo kept; 1845 train-on-paper-certificates
+           vs 2026 steel-chip panels now read as the fork)
+HOOK:      pays it exactly - iron spike -> "what survives" -> "the steel
+           kept working, the paper stopped pretending"
+
+RESERVED: "History Has Memory." + the chip-fill Memory wordart
+(thumbnail-ship-v6-circuit.png) held for a future MEMORY episode - it's
+a strong package for the DRAM/memory-supercycle story, just not this
+episode's thesis. Wordart source lives in review/claims/
+steel-and-paper-packaging-wordart-3/objects/packaging-memory-circuit-v3.png.
+
+review_title scoring still walled (AOY subscription expired 2026-08-31);
+run the locked title through it when renewed as a confirmation.
 
 STATUS: awaiting operator pick. Thumbnail v6-circuit is ship-ready.
