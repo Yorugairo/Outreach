@@ -66,25 +66,38 @@ def capture(t0: float, t1: float, video_out: Path) -> None:
         page.evaluate("for (const id of ['sndbar']) { const e=document.getElementById(id); if (e) e.style.display='none'; }")
         stage = page.locator("#stage")
         t_start = time.time()
-        PNG_SIG = b"\x89PNG\r\n\x1a\n"
-        IEND = b"\x49\x45\x4e\x44\xae\x42\x60\x82"
+        import io as _io
+        from PIL import Image as _Img
+
+        def good_png(buf: bytes) -> bool:
+            # FULL decode-verify: a screenshot can carry a valid PNG sig and
+            # IEND yet a corrupt IDAT (inflate error -3) that kills ffmpeg's
+            # decoder mid-stream and breaks the pipe. If PIL can decompress
+            # every pixel, ffmpeg can too. This is the sufficient check;
+            # sig/IEND alone was necessary but not sufficient.
+            try:
+                _Img.open(_io.BytesIO(buf)).load()
+                return True
+            except Exception:
+                return False
+
         for i in range(n):
             t = t0 + i / FPS
             page.evaluate(
                 "t => { const s = document.getElementById('scrub');"
                 " s.value = t; s.dispatchEvent(new Event('input', {bubbles:true})); }", t)
-            # validate each frame is a complete PNG (sig + IEND terminator);
-            # under heavy worker concurrency a screenshot can come back
-            # truncated and ffmpeg's inflate dies mid-render. Re-shoot.
             png = stage.screenshot(type="png")
             tries = 0
-            while not (png[:8] == PNG_SIG and png[-8:] == IEND):
+            while not good_png(png):
                 tries += 1
-                if tries > 5:
-                    raise RuntimeError(f"corrupt frame at t={t:.3f} after 5 retries")
-                time.sleep(0.1)
+                if tries > 8:
+                    raise RuntimeError(f"corrupt frame at t={t:.3f} after 8 retries")
+                time.sleep(0.15)
                 png = stage.screenshot(type="png")
-            enc.stdin.write(png)
+            try:
+                enc.stdin.write(png)
+            except OSError as e:
+                raise RuntimeError(f"encoder pipe closed at t={t:.3f}: {e}")
             if i and i % 300 == 0:
                 rate = i / (time.time() - t_start)
                 eta = (n - i) / rate / 60
@@ -129,7 +142,7 @@ def main() -> int:
     ap.add_argument("--t0", type=float, default=0.0)
     ap.add_argument("--t1", type=float, default=None)
     ap.add_argument("--test", action="store_true")
-    ap.add_argument("--workers", type=int, default=6)  # 6 << 8 contention; retry guard covers the rest
+    ap.add_argument("--workers", type=int, default=4)  # 4 for memory headroom; full PIL decode-verify guards the rest
     ap.add_argument("--frames", type=int, nargs=2, help="worker mode: global frame range")
     ap.add_argument("--part", type=str, help="worker mode: segment output path")
     args = ap.parse_args()
