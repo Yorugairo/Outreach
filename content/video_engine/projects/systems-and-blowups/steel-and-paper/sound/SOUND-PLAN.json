@@ -1,10 +1,10 @@
 {
-  "note": "PICKS LOCKED 2026-09-01: hook=suno-hook-B (promoted to variant A, gain .025 = VO-26 for that clip), pivot=A, close=A (no extend - early fade accepted), burst=whoosh. 806.47s clock. Files gitignored; builder embeds.",
+  "note": "PICKS LOCKED 2026-09-01: hook=suno-hook-B (variant A slot), pivot=A, close=A (no extend), burst=whoosh. Bed gains at VO-28 LU (operator: 'a fraction lower' from the -26 anchor; doctrine window -22..-30, floor = the mute test - bed must still be noticed when absent; re-derive per clip if a pick changes). Whoosh accent exempt. 806.47s clock.",
   "cues": [
     {
       "slot": "hook bed",
       "at": 0.0,
-      "gain": 0.025,
+      "gain": 0.0199,
       "fade_in": 1.5,
       "variants": {
         "A": "suno-hook-B.mp3",
@@ -14,7 +14,7 @@
     {
       "slot": "pivot turn",
       "at": 384.0,
-      "gain": 0.03,
+      "gain": 0.0238,
       "fade_in": 1.0,
       "variants": {
         "A": "suno-pivot-A.mp3",
@@ -24,7 +24,7 @@
     {
       "slot": "close bed",
       "at": 775.0,
-      "gain": 0.03,
+      "gain": 0.0238,
       "fade_in": 2.0,
       "variants": {
         "A": "suno-close-A.mp3",
