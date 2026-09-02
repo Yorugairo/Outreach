@@ -1190,20 +1190,22 @@
     const edge = maskEdge(wk);
     const grad = (dir) =>
       `linear-gradient(${dir}, transparent ${edge - F}%, #000 ${edge + F}%)`;
-    /* wk===0 (the exact boundary frame) MUST be part of the wipe: at wk=0
-       maskEdge=105 masks the incoming plate fully hidden, so the OLD plate
-       shows and the wipe starts clean. Excluding wk===0 let the else-branch
-       unmask the incoming plate for one frame -> the destination plate
-       flashed fully bright a frame before the wipe (operator-caught
-       2026-09-01). Include the whole [0,1) interval. */
-    const seaming = prev && wk < 1;
+    const seaming = prev && wk > 0 && wk < 1;
     if (seaming) {
       const g = sc.exit === "wipe_right" ? grad("to left") : grad("to right");
       wB.style.maskImage = g; wB.style.webkitMaskImage = g;
-      wB.style.clipPath = "none";
+      wB.style.clipPath = "none"; wB.style.opacity = 1;
     } else {
       wB.style.maskImage = "none"; wB.style.webkitMaskImage = "none";
       wB.style.clipPath = "none";
+      /* THE PRE-WIPE BOUNDARY FRAME (prev && wk===0): the wipe has not
+         started, so the incoming plate must stay hidden and the OLD plate
+         show - otherwise the destination plate flashes fully bright for one
+         frame before the wipe (operator-caught 2026-09-01). Hiding wB here
+         (rather than making wk===0 'seaming') fixes the flash WITHOUT
+         engaging the parallax/seam a frame early, which pulled the plate
+         edges apart into a gray-band collision. */
+      wB.style.opacity = (prev && wk <= 0) ? 0 : 1;
     }
     /* parallax under the wipe: outgoing slides away, incoming decelerates
        in - the pages MOVE instead of being masked in place */
