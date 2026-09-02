@@ -104,9 +104,15 @@ dense segments.
 
 1. **VO anchor:** master the mix so integrated loudness lands ≈
    −14 LUFS (YouTube target); VO dominates that reading.
-2. **Bed level:** start the music bed at **−26 LU below the VO's
-   short-term level** while narration runs (bed alone metering roughly
-   −40 LUFS momentary). Range to explore by ear: −22 to −30 LU below.
+2. **Bed level:** **−28 LU below the VO** - CALIBRATED BY EAR 2026-09-01
+   (Money Physics, Steel and Paper). Started at the −26 anchor; the
+   operator asked for a fraction lower; at −28 the mute test passed
+   exactly as the doctrine predicts - *"when I turn it off I lose
+   richness; when it's on I don't notice it 95% of the time, only when
+   the talking cuts out."* That last 5% is the bed doing its job in the
+   narration gaps, not a defect. Range remains −22 to −30; −30 is the
+   floor (below it the bed stops masking and is wasted per the
+   subliminal null result). Bed alone meters roughly −42 LUFS momentary.
    This is well under every measured-interference regime in the
    literature (studies find effects at 0 to −5 dB SNR; we sit at
    −22 to −30) while staying above the masking floor so it still
