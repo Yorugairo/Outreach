@@ -52,10 +52,14 @@ terminal stress on the hard word; doc 36: answer-not-race vs Bravos):
 
 === LOCKED 2026-09-01 ===
 TITLE:     The AI Bubble Is Real. What Survives Is Steel.
-THUMBNAIL: thumbnail-ship-v7-steelpaper.png (v6's "History Has Memory."
-           corner swapped for "STEEL or PAPER?" - steel=charcoal,
-           paper=crimson; robo kept; 1845 train-on-paper-certificates
-           vs 2026 steel-chip panels now read as the fork)
+THUMBNAIL: thumbnail-FINAL-steelpaper.png - "STEEL or PAPER?" in Impact
+           italic, YouTube-native sticker treatment (heavy black outline
+           + hard drop shadow) per operator's MrBeast-style reference.
+           STEEL=slate grey (metal), PAPER?=yellow (danger; highest-CTR
+           thumbnail color). Robo mascot kept (host stays in-episode/
+           banner; per-video character swap would break mascot
+           recognition - robo is the permanent thumbnail signature).
+           Text block clears "$1T+today" (ends x835, block starts x947).
 HOOK:      pays it exactly - iron spike -> "what survives" -> "the steel
            kept working, the paper stopped pretending"
 
