@@ -15,7 +15,9 @@ import sys
 from dataclasses import dataclass, field
 from pathlib import Path
 
-ALLOWED_MARKS = frozenset({"pre-key", "post-key", "verify"})
+import beat_tags  # noqa: E402  - the one owner of the mark/tag set
+
+ALLOWED_MARKS = beat_tags.ALL_MARKS   # delivery marks + structural beat tags
 # Measured from the Steel and Paper take: 1,231 words / 446.1s across seven
 # scenes (per-scene range 160-174). The old 150.0 was a generic estimate and
 # ran 9.4% slow, which INFLATED the minute count and quietly loosened the

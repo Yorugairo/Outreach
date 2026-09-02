@@ -99,6 +99,11 @@ def main() -> int:
         fails.append(f"VO text missing: {VO_TEXT}")
         return _report(fails, go)
     text = VO_TEXT.read_text(encoding="utf-8").strip()
+    # Structural beat tags ([promise], [head-fake], ...) are authoring
+    # metadata for gate_opening_structure - strip them so nothing downstream
+    # (the split, the stray check, compile, the provider) ever sees them.
+    import beat_tags
+    text = beat_tags.strip_beat_tags(text)
 
     # --- the split ---------------------------------------------------------
     hits = text.count(SPLIT_ANCHOR)

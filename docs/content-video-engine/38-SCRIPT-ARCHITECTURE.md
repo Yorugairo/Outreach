@@ -135,6 +135,11 @@ and ~1:00 · zero greeting/announcement constructions · every abstract noun
 cashed out within one sentence · pause marks placed (`[post-key]` after the
 paradox, `[pre-key]` before the promise).
 
+*Executable (2026-09-02):* every line of this QC is a gate in
+`content/video_engine/scripts/gate_opening_structure.py` (G01-G18), with
+the P1 window scaled from the phase guide's runtime table. Run it before
+recording; pass `--timeline` after, so the timed beats are measured.
+
 ## 3. The full skeleton (phases 2–6, same fusion — to be expanded per use)
 
 | Phase | Classical spine (doc 32) | Platform fill (doc 31) |

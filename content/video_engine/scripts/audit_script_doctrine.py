@@ -57,7 +57,8 @@ LONG_SENTENCE_WORDS = 20        # comprehension drop-off
 LONG_SENTENCE_SHARE_MAX = 0.12
 PIVOT_PIN = kit_spec.pivot_pin()          # kit geometry
 BREAK_RATION_MAX = 3.0       # doc 37 sec 1
-MARKS = frozenset({"pre-key", "post-key", "verify"})
+import beat_tags  # noqa: E402  - the one owner of the mark/tag set
+MARKS = beat_tags.ALL_MARKS   # delivery marks + structural beat tags (gate_opening_structure)
 
 # doc 38 beat 2 ban list + VOICE-PACK anti-pattern 1
 GREETINGS = (r"\bhey (?:guys|everyone|folks)\b", r"\bwelcome back\b",
@@ -109,7 +110,7 @@ class Finding:
 
 
 def spoken(text: str) -> str:
-    t = re.sub(r"`?\[(?:pre|post)-key\]`?", "", text)
+    t = beat_tags.strip_marks(text)   # every known mark AND beat tag is silent
     t = re.sub(r"^\s*(?:#|\||>|---|```).*$", "", t, flags=re.M)
     return re.sub(r"\s+", " ", t).strip()
 

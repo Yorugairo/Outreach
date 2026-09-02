@@ -82,6 +82,11 @@ def main() -> int:
         text = ""
     else:
         text = VO_TEXT.read_text(encoding="utf-8").strip()
+    # Structural beat tags ([promise], [head-fake], ...) are authoring
+    # metadata for gate_opening_structure - strip them here so nothing
+    # downstream (stray check, compile, the provider) ever sees them.
+    import beat_tags
+    text = beat_tags.strip_beat_tags(text)
     spoken = re.sub(r"`?\[(?:pre|post)-key\]`?", "", text)
     spoken = re.sub(r"\s+", " ", spoken).strip()
     n = len(spoken)
