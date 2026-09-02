@@ -167,7 +167,13 @@
      to the outgoing page travels with its front. */
 
   #caption {
-    position: absolute; left: 145px; right: 145px; bottom: 38px; text-align: center;
+    /* CAPTION SAFE ZONE (operator, 2026-09-02): YouTube's hover controls bar
+       overlays roughly the bottom 10-12% of the frame (~110-130px at 1080p)
+       in the normal/embedded player - anything there is hidden whenever the
+       mouse is on the video, and only fullscreen looks right. Baseline was
+       38px (3.5%) and got cut off. 120px = 11.1%, clear of the bar with
+       margin; nothing else lives in the bottom band. Doc 29 s9.15 ruling 7. */
+    position: absolute; left: 145px; right: 145px; bottom: 120px; text-align: center;
     line-height: 1.24; color: var(--cream); font-size: 40px; font-weight: 700;
     text-shadow: 0 2px 14px rgba(0,0,0,.94), 0 0 5px rgba(0,0,0,.85);
     transition: font-size .3s, font-weight .3s;

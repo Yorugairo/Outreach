@@ -954,6 +954,14 @@ rulings. Where these conflict with anything above, THESE win.
    two badges each, a breath between, then wipe; a plate that cannot field
    two honestly carries ONE BIG piece (solo 1056px); under ~8s, one or
    none. Documents with no readable figure clear early and small.
+7. **Caption safe zone** (operator, 2026-09-02): YouTube's hover controls
+   bar overlays roughly the bottom 10-12% of the frame in the normal and
+   embedded player; anything placed there is hidden whenever the mouse is
+   on the video, and only fullscreen looks right. The kinetic caption
+   baseline sits at **120px from the bottom of the 1080p stage (11.1%)**,
+   never lower. Was 38px (3.5%) through episode one and got cut off. The
+   check: with the player at normal size and the pointer on the video,
+   every caption word is fully visible above the scrub bar.
 
 ### 9.16 Motion verification and authority (operator decisions, 2026-08-29)
 
