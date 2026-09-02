@@ -292,8 +292,10 @@
      parallax the pages carry under the wipe. The mask edge travels from
      past the far side to past the near side so the feather never clips
      short - their formula, kept exactly. */
-  const FEATHER = 0.10, DEPTH = 0.05;
-  const maskEdge = (k) => (1 - k) * (100 + FEATHER * 100) - FEATHER * 50;
+  /* FEATHER / DEPTH / maskEdge (the remotion-ui directional-wipe port,
+     dd9e476) were RETIRED 2026-09-01: the feathered parallax cross-reveal
+     read as a two-direction fade on review and mirrored the carried light.
+     The scene wipe is the hard inset() front again - see LAYER 1. */
 
   const EXIT = 0.72, CARD_IN = 0.75;
 
@@ -1186,35 +1188,24 @@
     const prev = TL.scenes[si - 1];
     wA.style.display = "";
     const wk = prev ? quartIO(clamp01((t - sc.span[0]) / WIPE)) : 1;
-    const F = FEATHER * 50;
-    const edge = maskEdge(wk);
-    const grad = (dir) =>
-      `linear-gradient(${dir}, transparent ${edge - F}%, #000 ${edge + F}%)`;
     const seaming = prev && wk > 0 && wk < 1;
-    if (seaming) {
-      const g = sc.exit === "wipe_right" ? grad("to left") : grad("to right");
-      wB.style.maskImage = g; wB.style.webkitMaskImage = g;
-      wB.style.clipPath = "none"; wB.style.opacity = 1;
-    } else {
-      wB.style.maskImage = "none"; wB.style.webkitMaskImage = "none";
-      wB.style.clipPath = "none";
-      /* THE PRE-WIPE BOUNDARY FRAME (prev && wk===0): the wipe has not
-         started, so the incoming plate must stay hidden and the OLD plate
-         show - otherwise the destination plate flashes fully bright for one
-         frame before the wipe (operator-caught 2026-09-01). Hiding wB here
-         (rather than making wk===0 'seaming') fixes the flash WITHOUT
-         engaging the parallax/seam a frame early, which pulled the plate
-         edges apart into a gray-band collision. */
-      wB.style.opacity = (prev && wk <= 0) ? 0 : 1;
-    }
-    /* parallax under the wipe: outgoing slides away, incoming decelerates
-       in - the pages MOVE instead of being masked in place */
-    const sgn = sc.exit === "wipe_right" ? 1 : -1;
-    const pA = seaming ? -sgn * DEPTH * wk * 1920 : 0;
-    const pB = seaming ? sgn * DEPTH * (1 - wk) * 1920 : 0;
-    paint(wA, prev || sc, pA);
-    paint(wB, sc, pB);
-    seam.style.opacity = seaming ? 0.55 : 0;   /* the ink line rides inside the feather now */
+    /* THE HARD-EDGE CLIP WIPE (restored 2026-09-01). The remotion-ui
+       directional-wipe port (dd9e476, 2026-08-30) replaced this with a
+       feathered gradient mask plus DEPTH parallax. On review the feather
+       read as a fade and the two moving pages read as a wipe going both
+       directions; the port also flipped the reveal direction and mirrored
+       the carried light. This is the reviewed form (doc 29 s9.15 ruling 1):
+       ONE hard front, the incoming plate revealed by inset() at wk, nothing
+       sliding, the ink seam riding the front at full strength. At wk=0 the
+       inset hides wB completely, so the old plate holds and there is no
+       destination-plate flash at the boundary. */
+    wB.style.maskImage = "none"; wB.style.webkitMaskImage = "none";
+    wB.style.opacity = 1;
+    wB.style.clipPath = sc.exit === "wipe_right"
+      ? `inset(0 0 0 ${(1-wk)*100}%)` : `inset(0 ${(1-wk)*100}% 0 0)`;
+    paint(wA, prev || sc);
+    paint(wB, sc);
+    seam.style.opacity = seaming ? 1 : 0;
     seam.style.transform = `translateX(${(sc.exit === "wipe_right" ? (1-wk) : wk) * 1920}px)`;
 
     /* LAYER 2/3 — docks live on their own schedule */
@@ -1231,23 +1222,17 @@
     const boundary = sc.span[0];
     const allOut = seaming && live.length > 0 &&
       live.every((x) => Math.abs(x.exit - boundary) < 0.35);
-    /* THE OUTGOING LIGHT IS THE EXACT COMPLEMENT OF THE INCOMING PLATE MASK
-       (doc 29 s9.15 ruling 1: carried off by the SAME front at the SAME
-       progress). The incoming plate is visible on [edge, 100]; the outgoing
-       page occupies [0, edge]; so the outgoing wash must be visible on
-       [0, edge] - i.e. `edge`, the same front. It was written as `100-edge`,
-       the MIRROR: hidden at wipe start (edge=105 -> [0,-5]) and full at wipe
-       end (edge=-5 -> [0,105]), so the wash vanished the instant a wipe
-       began and dimmed the clean incoming plate as it finished. That
-       inversion was the flash at every carried-light boundary
-       (operator-caught 2026-09-01, s@595.5). */
-    const outGrad = sc.exit === "wipe_right"
-      ? `linear-gradient(to left, #000 ${edge - F}%, transparent ${edge + F}%)`
-      : `linear-gradient(to right, #000 ${edge - F}%, transparent ${edge + F}%)`;
+    /* the outgoing page's light leaves under the SAME hard front (doc 29
+       s9.15 ruling 1). The incoming plate is visible on [0, wk] (spreading
+       from the left), so the outgoing wash/spot must be visible on
+       [wk, 100] - the inset that hides the left wk%. Same front, same
+       progress; an inset cannot be mirrored the way the port's gradient
+       (100-edge) was. */
+    const frontClip = sc.exit === "wipe_right"
+      ? `inset(0 ${wk * 100}% 0 0)` : `inset(0 0 0 ${wk * 100}%)`;
     for (const el2 of [wash, spot]) {
-      el2.style.maskImage = allOut ? outGrad : "none";
-      el2.style.webkitMaskImage = allOut ? outGrad : "none";
-      el2.style.clipPath = "none";
+      el2.style.maskImage = "none"; el2.style.webkitMaskImage = "none";
+      el2.style.clipPath = allOut ? frontClip : "none";
     }
 
     /* Which side does the evidence occupy? A solo card alternates sides by
@@ -1304,17 +1289,18 @@
            front's stage X into element coordinates. */
         const fx = (sc.exit === "wipe_right" ? (1 - wk) : wk) * 1920;
         const L = el.offsetLeft, W2 = el.offsetWidth || 1;
-        /* the stage front mapped into the CARD's space, as a feathered
-           mask rather than a hard inset - the card dissolves at the same
-           soft edge the page turns on */
-        const fpx = FEATHER * 1920 * 0.5;
-        const eP = ((fx - L) / W2) * 100;
-        const fP = (fpx / W2) * 100;
-        const cg = sc.exit === "wipe_right"
-          ? `linear-gradient(to right, #000 ${eP - fP}%, transparent ${eP + fP}%)`
-          : `linear-gradient(to left, #000 ${100 - eP - fP}%, transparent ${100 - eP + fP}%)`;
-        el.style.maskImage = cg; el.style.webkitMaskImage = cg;
-        el.style.clipPath = "none";
+        /* the stage front mapped into the CARD's space as a HARD inset: the
+           card is severed at the same hard edge the page turns on, same
+           progress (restored 2026-09-01 - the port's feathered mask made
+           the card dissolve, which read as a fade on review). */
+        if (sc.exit === "wipe_right") {   // incoming spreads from the right
+          const hide = clamp01(((L + W2) - fx) / W2);
+          el.style.clipPath = `inset(0 ${(hide * 100).toFixed(2)}% 0 0)`;
+        } else {                          // incoming spreads from the left
+          const hide = clamp01((fx - L) / W2);
+          el.style.clipPath = `inset(0 0 0 ${(hide * 100).toFixed(2)}%)`;
+        }
+        el.style.maskImage = "none"; el.style.webkitMaskImage = "none";
         el.style.opacity = clamp01((t - d.enter) / (CARD_IN * 0.55));
       } else {
         el.style.clipPath = "none";
