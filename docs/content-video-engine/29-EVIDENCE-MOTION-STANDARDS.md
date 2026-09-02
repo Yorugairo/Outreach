@@ -916,16 +916,21 @@ rulings. Where these conflict with anything above, THESE win.
    its own schedule at a boundary. Lesson: an ancestor artifact is where
    doctrine CAME from, not where it is - a reviewed refinement outranks
    the demo it refined.
-   *Implementation check (2026-09-01):* "same front" is literal. The
-   incoming plate mask is visible on `[edge, 100]`, so the outgoing
-   light mask must be visible on `[0, edge]` - the same `edge` value.
-   The template had it as `100 - edge`, the mirror, which made the wash
-   vanish the instant a wipe began and dim the clean incoming plate as
-   it finished: a bright pop at every carried-light boundary. Symptom
-   patches (keeping the wash on when a new card docks mid-wipe) hid it;
-   the fix was the one-token correction. Verify carried light by
-   measuring right-half luminance across a boundary: a wipe is a
-   monotonic ramp; a pop-then-fall is a light leaving on its own schedule.
+   *Implementation check (2026-09-01):* this ruling was silently
+   overwritten on 2026-08-30 by the remotion-ui directional-wipe port
+   (dd9e476), which swapped the reviewed hard `inset()` front for a
+   feathered gradient mask + DEPTH parallax. On review the feather read
+   as a fade, the two moving pages read as a wipe going both directions,
+   the reveal direction flipped, and the outgoing-light mask was the
+   MIRROR of the front (`100 - edge`), so the wash vanished the instant
+   a wipe began and dimmed the clean incoming plate as it finished - a
+   bright pop at every carried-light boundary. Symptom patches hid it
+   for a day; `git log -S` found it; the hard front was restored
+   (75a0f13). Two standing checks: (1) a port that changes what a
+   reviewed shot looks like is a proposal for A/B, not a change; (2)
+   verify carried light by measuring right-half luminance across a
+   boundary - a wipe is a monotonic ramp; a pop-then-fall is a light
+   leaving on its own schedule.
 2. **Evidence may persist across a boundary** (operator): a document whose
    claim spans scenes holds untouched while the world wipes beneath it.
    Same-slide docks in adjacent scenes coalesce into one span; the entrance

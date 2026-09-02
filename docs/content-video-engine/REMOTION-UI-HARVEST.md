@@ -44,3 +44,22 @@ What's worth taking, and where:
     npx remotion-ui@latest add hook-card
     npx remotion-ui@latest add line-chart-draw
     npx remotion-ui@latest add animated-bar-chart
+
+## Lesson (2026-09-01): harvest the idea, never replace the mechanism
+
+The directional-wipe port (dd9e476) is the counter-example. It swapped
+the reviewed hard `inset()` scene wipe for remotion-ui's feathered mask
++ parallax cross-reveal. On review it read as a two-direction fade,
+flipped the reveal direction, and mirrored the carried light; it was
+retired and the hard front restored (75a0f13). Operator: *"there was
+something we were trying to learn from the remotion component, but
+definitely over-stepped and ruined what was good about what we had."*
+
+Standing rule for every future steal-now:
+- A port that changes what a REVIEWED shot looks like is a proposal, not
+  a change. Render candidates side by side; the operator picks.
+- Extract the transferable idea and graft it INSIDE our mechanism. The
+  ports that survived (badge floor, tip head, deposited dots) are all of
+  that kind - additions to a mechanism, never replacements of one.
+- When motion regresses, `git log -S<constant>` on the template first.
+  Doc 29 s9.15: a reviewed refinement outranks the demo it refined.
