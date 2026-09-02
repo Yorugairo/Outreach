@@ -1229,7 +1229,16 @@
        arrives clean and takes its own wash only when its own evidence
        lands. */
     const boundary = sc.span[0];
-    const allOut = seaming && live.length > 0 &&
+    /* allOut (clean light-handoff: the outgoing page's wash leaves under the
+       wipe front) must NOT engage when a new card docks DURING the wipe. If
+       it does, the wash clips off for the brief window between the old cards
+       leaving and the new card arriving, then snaps back on when the new card
+       docks - a one-frame bright flash (operator-caught 2026-09-01 at s@595.5,
+       ev-dram-contract enters 0.1s into the wipe). Keep the wash on through
+       the turn in that case. */
+    const incomingSoon = DOCKS.some(
+      (d) => d.enter > boundary - 0.01 && d.enter <= boundary + WIPE);
+    const allOut = seaming && live.length > 0 && !incomingSoon &&
       live.every((x) => Math.abs(x.exit - boundary) < 0.35);
     /* the outgoing page's light leaves under the SAME feathered edge */
     const outGrad = sc.exit === "wipe_right"
