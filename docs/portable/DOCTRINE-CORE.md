@@ -57,6 +57,9 @@ audio, never word counts.
 
 ## ARCHITECTURE (six phases)
 
+Spine: `docs/content-video-engine/patterns/FULL-VIDEO-MAP.md` (classical
+integral × platform differentials). Who checks what: `patterns/CHECK-RESPONSIBILITIES.md`.
+
 Open and close are absolute 60–90s at any runtime; midpoint pinned
 45–55%; middle units are the runtime knob — at short runtimes systems
 MERGE, never drop. Shorts are NOT this architecture — see rulings.
@@ -160,6 +163,10 @@ compound across the catalogue; no real faces. **Thumbnails sell the
 episode's question or thesis — never its opening prop.**
 
 ## PRODUCTION AWARENESS
+
+Motion and evidence choreography: `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md`
+(Part 3 linked-evidence choreography, Part 8 scene-evidence lane, Part 9
+corrections). 29 wins over 15/16 on motion.
 
 Narration is synthesized: numbers as spoken words, exact numerals on
 on-screen evidence, one continuous take up to the model's cap and two

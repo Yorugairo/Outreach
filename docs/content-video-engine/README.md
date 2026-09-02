@@ -64,16 +64,22 @@ fragments of the long docs instead of run against the roster.
 | `LLM-CONTEXT-CLASSICAL.md` | the timeless craft layer, densified for injection |
 | `STRENGTH-LOOP.md` | **the loop** — gates at L0–L6, the cross-scale checks, fixpoint convergence |
 | `SENTENCE-STRENGTH-CHECK.md` | the L0 line gate — ten per-sentence checks, standing not optional |
-| `FULL-VIDEO-MAP.md` | the derivation: McKee extended to YouTube, integral + differentials |
+| `FULL-VIDEO-MAP.md` | **the spine** — the derivation: McKee extended to YouTube, classical integral + platform differentials; everything above derives from it |
+| `CHECK-RESPONSIBILITIES.md` | **who checks what** — tool vs runtime agent, by verdict kind; the runtime sequence and the report contract |
+| `KNOWLEDGE-GRAPH.md` | the map laid out by relation — the edge list the injection context is built from |
 
 **The kit is the operational tier; the numbered docs are its derivation.**
 Read a numbered doc to learn *why* a rule exists or to change it. Run the
-kit to write or review. The `script-editor` skill drives this.
+kit to write or review. The `script-writer` skill drives this.
 
-Two checkers back it:
-`scripts/lint_script_pattern.py` (mechanical) and
-`scripts/audit_script_doctrine.py` (phase geometry, timed beats, roster
-items that are greppable).
+Four tools back it, and `CHECK-RESPONSIBILITIES.md` says exactly what each
+decides and what stays with the reader:
+`scripts/lint_script_pattern.py` (mechanical), `scripts/audit_script_doctrine.py`
+(phase geometry, timed beats, greppable roster items),
+`scripts/gate_opening_structure.py` (the first ~5 minutes — every P1/P2
+beat of the map, classical and platform, as a hard gate; declared beats via
+`scripts/beat_tags.py`), and `scripts/enumerate_strength_screens.py` (the
+X1 / deixis / cadence enumeration the strength log must verdict).
 
 ## The ghost in the machine (the organising principle)
 

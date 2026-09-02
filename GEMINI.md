@@ -22,10 +22,11 @@ working on the video/content side of this repo. (Antigravity also reads
 
 | Task | Read |
 |---|---|
-| Write or review a script | `patterns/SCRIPT-PATTERN-KIT.md`, `patterns/phase-guides/P1..P6.md`, `patterns/SENTENCE-STRENGTH-CHECK.md` |
+| Write or review a script | `patterns/SCRIPT-PATTERN-KIT.md`, `patterns/phase-guides/P1..P6.md`, `patterns/STRENGTH-LOOP.md`, `patterns/SENTENCE-STRENGTH-CHECK.md`; the spine they derive from is `patterns/FULL-VIDEO-MAP.md` |
+| Check a script — who owns which verdict | `patterns/CHECK-RESPONSIBILITIES.md` (tool vs runtime agent; the runtime sequence in §4 and the report contract in §5), then run `scripts/lint_script_pattern.py`, `scripts/audit_script_doctrine.py --pivot`, `scripts/gate_opening_structure.py --ring --counterparty [--timeline]`, `scripts/enumerate_strength_screens.py` |
 | Answer-format episode | `35-ANSWER-FORMAT-DOCTRINE.md` |
 | Voice / persona | `36-WRITER-PERSONA.md`, `33-VOICE-PROFILE.md`, `32-WRITING-FOR-THE-EAR.md` |
-| Visuals, evidence, motion | `29-EVIDENCE-MOTION-STANDARDS.md` (Part 9 = corrections) |
+| Visuals, evidence, motion | `29-EVIDENCE-MOTION-STANDARDS.md` — the production bar for every channel (Part 3 = linked-evidence choreography, Part 8 = the scene-evidence lane, Part 9 = corrections, §9.15 = wipe + caption safe zone); doc 16 partially superseded, doc 15 record — 29 wins on motion |
 | Narration recording | `37-TTS-DELIVERY-STANDARDS.md` (§8 = recording standards) |
 | Image generation claims | `26-AGENT-GENERATION-LOOP.md` |
 | Channel strategy | `31-FACELESS-CHANNEL-DOCTRINE.md` |

@@ -239,6 +239,35 @@ Task routing into the deeper doctrine, plus the work-order interop
 contract, is in [`GEMINI.md`](GEMINI.md) — that routing table applies to
 every agent, not just Google-side ones.
 
+**Three spine documents sit behind that table. Know they exist before
+doing script, review, or motion work — they were unrouted until
+2026-09-02 and lived on one branch only:**
+
+- [`docs/content-video-engine/patterns/FULL-VIDEO-MAP.md`](docs/content-video-engine/patterns/FULL-VIDEO-MAP.md)
+  — **the script spine.** The classical six-phase architecture (Truby /
+  McKee / Snyder / Glass / ring composition — the integral) fused with the
+  platform retention micro-rules (the differentials) at every 15–90s
+  interval. The phase guides `P1–P6` and the strength loop derive from it;
+  `patterns/KNOWLEDGE-GRAPH.md` is the same graph laid out by relation.
+- [`docs/content-video-engine/patterns/CHECK-RESPONSIBILITIES.md`](docs/content-video-engine/patterns/CHECK-RESPONSIBILITIES.md)
+  — **who checks what.** Three verdict kinds (mechanical / declared /
+  JUDGE) decide whether a tool or the runtime agent owns a verdict; §2
+  tables the four checkers (`lint_script_pattern.py`,
+  `audit_script_doctrine.py`, `gate_opening_structure.py`,
+  `enumerate_strength_screens.py`); §3 names everything the agent must
+  verdict by hand; §5 fixes the report format. A tool's verdict is final;
+  a declared tag is a claim the agent verifies; a report missing a block is
+  not a review.
+- [`docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md`](docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md)
+  — **motion and evidence choreography, the production bar for every
+  channel.** Part 3 is the linked-evidence choreography (the chain is the
+  transition), Part 8 the scene-evidence lane that ships, Part 9 the
+  operator corrections, §9.15 the cross-reveal wipe and caption safe zone.
+  Doc 16 (editorial motion system) is partially superseded by it and doc 15
+  (living-scene language) is record only — where they disagree on motion,
+  29 wins. The renderer is `samples/scene-evidence-player.template.html`;
+  do not write another.
+
 Three rules bind agents generating assets here:
 
 1. A dispatched `WORK-ORDER.md` is **frozen**. Corrections open a new
