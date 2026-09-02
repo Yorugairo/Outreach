@@ -187,3 +187,9 @@ No gate in L1, L2 or L3 is safely automatable end to end. A regex proxy for
 would be worse. Mechanical screens propose candidates; **the reader
 decides.** Automate only what is unambiguous — counts, positions,
 durations, antecedent adjacency — and surface the rest.
+
+The line between the two is written down: `CHECK-RESPONSIBILITIES.md` names
+each checker's mechanical and declared verdicts, the JUDGE rows it prints,
+and everything that stays the runtime agent's — verdicted by name in a
+report whose format that file fixes. A by-hand row that turns out to be
+mechanical crosses the line in the same commit as the defect that showed it.

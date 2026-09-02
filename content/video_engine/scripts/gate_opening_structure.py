@@ -40,6 +40,9 @@ THREE KINDS OF CHECK, reported honestly:
   declared   - the writer tags the beat (beat_tags.py) because the text has
                no signature; an undeclared required beat FAILS
   JUDGE      - only a reader can decide; printed, never silently passed
+  The contract for who owns which verdict - and what the runtime agent must
+  verdict by name that this gate cannot reach - is
+  docs/content-video-engine/patterns/CHECK-RESPONSIBILITIES.md.
 
 GEOMETRY: P1/P2 ends and P2 density bands are read from the phase guides'
 runtime tables and interpolated (P1 ~1:10, P2 ~1:10-2:46 at 13.4 min). The

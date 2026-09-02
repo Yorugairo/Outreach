@@ -16,6 +16,7 @@ channel, or any future lane.
 | `phase-guides/P1.md` … `P6.md` | The six generation contracts — beat templates, mandatory device slots, hard gates, QC lines, worked micro-examples |
 | `STRENGTH-LOOP.md` | **The loop**: gates at every scale L0-L6, the cross-scale checks, the fixpoint protocol, precedence, the rewrite budget |
 | `SENTENCE-STRENGTH-CHECK.md` | The L0 line gate: ten per-sentence strength checks run after structure conforms, before audio; every failing sentence is rewritten until it passes, with a logged audit trail |
+| `CHECK-RESPONSIBILITIES.md` | **The contract between the tools and the runtime agent**: three verdict kinds (mechanical / declared / JUDGE), what each checker decides, what the agent must verdict by name (declared-beat truth, JUDGE rows, P3–P6 nodes, roster, loop scales), the runtime sequence and the report format |
 | this file | The binder: flow, geometry, duty roster, changelog |
 
 Layer 2 (the platform micro-rules) is not a separate file: it is already
