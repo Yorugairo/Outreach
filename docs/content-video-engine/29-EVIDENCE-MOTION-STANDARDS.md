@@ -916,6 +916,16 @@ rulings. Where these conflict with anything above, THESE win.
    its own schedule at a boundary. Lesson: an ancestor artifact is where
    doctrine CAME from, not where it is - a reviewed refinement outranks
    the demo it refined.
+   *Implementation check (2026-09-01):* "same front" is literal. The
+   incoming plate mask is visible on `[edge, 100]`, so the outgoing
+   light mask must be visible on `[0, edge]` - the same `edge` value.
+   The template had it as `100 - edge`, the mirror, which made the wash
+   vanish the instant a wipe began and dim the clean incoming plate as
+   it finished: a bright pop at every carried-light boundary. Symptom
+   patches (keeping the wash on when a new card docks mid-wipe) hid it;
+   the fix was the one-token correction. Verify carried light by
+   measuring right-half luminance across a boundary: a wipe is a
+   monotonic ramp; a pop-then-fall is a light leaving on its own schedule.
 2. **Evidence may persist across a boundary** (operator): a document whose
    claim spans scenes holds untouched while the world wipes beneath it.
    Same-slide docks in adjacent scenes coalesce into one span; the entrance

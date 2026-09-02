@@ -1229,21 +1229,21 @@
        arrives clean and takes its own wash only when its own evidence
        lands. */
     const boundary = sc.span[0];
-    /* allOut (clean light-handoff: the outgoing page's wash leaves under the
-       wipe front) must NOT engage when a new card docks DURING the wipe. If
-       it does, the wash clips off for the brief window between the old cards
-       leaving and the new card arriving, then snaps back on when the new card
-       docks - a one-frame bright flash (operator-caught 2026-09-01 at s@595.5,
-       ev-dram-contract enters 0.1s into the wipe). Keep the wash on through
-       the turn in that case. */
-    const incomingSoon = DOCKS.some(
-      (d) => d.enter > boundary - 0.01 && d.enter <= boundary + WIPE);
-    const allOut = seaming && live.length > 0 && !incomingSoon &&
+    const allOut = seaming && live.length > 0 &&
       live.every((x) => Math.abs(x.exit - boundary) < 0.35);
-    /* the outgoing page's light leaves under the SAME feathered edge */
+    /* THE OUTGOING LIGHT IS THE EXACT COMPLEMENT OF THE INCOMING PLATE MASK
+       (doc 29 s9.15 ruling 1: carried off by the SAME front at the SAME
+       progress). The incoming plate is visible on [edge, 100]; the outgoing
+       page occupies [0, edge]; so the outgoing wash must be visible on
+       [0, edge] - i.e. `edge`, the same front. It was written as `100-edge`,
+       the MIRROR: hidden at wipe start (edge=105 -> [0,-5]) and full at wipe
+       end (edge=-5 -> [0,105]), so the wash vanished the instant a wipe
+       began and dimmed the clean incoming plate as it finished. That
+       inversion was the flash at every carried-light boundary
+       (operator-caught 2026-09-01, s@595.5). */
     const outGrad = sc.exit === "wipe_right"
-      ? `linear-gradient(to left, #000 ${100 - edge - F}%, transparent ${100 - edge + F}%)`
-      : `linear-gradient(to right, #000 ${100 - edge - F}%, transparent ${100 - edge + F}%)`;
+      ? `linear-gradient(to left, #000 ${edge - F}%, transparent ${edge + F}%)`
+      : `linear-gradient(to right, #000 ${edge - F}%, transparent ${edge + F}%)`;
     for (const el2 of [wash, spot]) {
       el2.style.maskImage = allOut ? outGrad : "none";
       el2.style.webkitMaskImage = allOut ? outGrad : "none";
