@@ -79,6 +79,7 @@ The P3/P5 unit, 2:00–2:30, five steps.
 | **U3** | **One breathing dip** | the unit runs without a dip, or piles on more than one. |
 | **U4** | **Anaphora evolves** | the anaphora phrase recurs with an identical tail instead of an evolved one. |
 | **U5** | **Best evidence late** | the strongest material sits in an early unit rather than the final unit before the pivot. |
+| **U6** | **Concession budget** | a run of agreement with the counterparty (steelman, concession, approving quote) exceeds ~10s / two sentences without a claim of OURS landing; or a delivered instrument/proof is hedged or qualified in the sentence that follows it. Screen: mark every sentence that restates or agrees with the counterparty; a run longer than two without our own claim fails; a proof followed by a qualifier fails. (Ruling E20 - Steel and Paper 2:46-3:23: 37s of hedge + concession, evidence layer dark 3:10-3:46, AVD 2:49.) |
 
 ## 5. X — CROSS-SCALE checks (run after EVERY edit)
 

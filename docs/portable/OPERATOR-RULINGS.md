@@ -527,3 +527,29 @@ nationalbjjregistry) — those two never smear into each other: no shared
 edits, no cross-contaminated assets or configs. Merging discipline
 stands: worktrees are isolation, not storage; stage-complete work
 merges to main.
+
+## E20 — Concession runs are budgeted; a delivered proof is never hedged next-line (2026-09-02)
+
+Retention read on Steel and Paper (AVD 2:49 at n=2 - noise, but it lands
+three seconds into a stretch the timeline shows is structurally soft).
+From 2:46 to 3:23 the script hedges its own first proof ("the yardstick
+is a new instrument for this channel - no threshold on it yet"), then
+restates, agrees with, and approvingly quotes the counterparty for 30s
+with no claim of ours, while the evidence layer sits dark on three bare
+plates (3:10-3:46). The re-hook (biography twist, "risk charts fail by
+pointing") is right - it arrives ~30s after the tension drained.
+
+Standing rules:
+- A run of agreement with the counterparty never exceeds ~10s / two
+  sentences without a claim of OURS landing. The three-beat concession
+  ("the cycle is real, the threshold is real") is the LAST thing before
+  the turn, never the middle of a run.
+- A delivered instrument or proof is never hedged or qualified in the
+  sentence that follows it. Meta lines about the channel's instruments
+  ("for this channel", "we're reading it together") are production
+  scaffolding and come out.
+- The concession + turn never sits on a bare plate; dock a callback so
+  the turn has a picture (doc 29 s9.15 r6 cadence).
+
+Gate: STRENGTH-LOOP U6. Template for the corrected unit:
+content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-NOTES-retention-2-46.md
