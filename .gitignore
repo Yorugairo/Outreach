@@ -149,3 +149,6 @@ youtube-captions/
 # branch unpushable (GitHub blocks >100MB); stripped 2026-08-29.
 content/video_engine/projects/*/*/build-*/player.html
 content/video_engine/projects/*/*/build-*/player-lite.html
+
+# Claude Code per-checkout local instructions (imports AGENTS.md on branches that predate the tracked CLAUDE.md)
+CLAUDE.local.md
