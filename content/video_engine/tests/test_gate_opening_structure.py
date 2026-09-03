@@ -178,9 +178,12 @@ def test_red_steel_and_paper_cycle_gap_measured_past_the_opening():
     assert _gap_start_s(g["G36"].message) >= 300, g["G36"].message           # the worst gap is PAST 5:00
     assert stats["cycle"].startswith(f"checked 0:00-{stats['runtime']}"), stats["cycle"]
     assert len(stats["unit_windows"]) == 2 * kit_spec.unit_count(_clock(stats["runtime"]) / 60)
-    # narrowed to the opening, the old reading comes back
+    # Narrowed to the opening the gate says PASS - which is exactly why E23 widened it.
+    # (Before the 2026-09-03 annotation this read FAIL-with-an-earlier-gap; the declared
+    # beats gave the opening its cycle beats, so the first 5:00 now clears the 60s ceiling
+    # and only the whole-runtime check still catches the real gap past 5:00.)
     g5 = _by_id(G.run(text, tl, counterparty="Bravos", ring="spike", cycle_s=300.0)[0])
-    assert g5["G36"].level == "FAIL" and _gap_start_s(g5["G36"].message) < 300, g5["G36"]
+    assert g5["G36"].level == "PASS", g5["G36"]
     assert g["G44"].level == "FAIL" and "unit " in g["G44"].message, g["G44"]  # no rehook in every unit window
 
 
