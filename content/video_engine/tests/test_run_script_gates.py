@@ -178,3 +178,62 @@ def test_an_unparsed_tool_result_is_never_a_pass():
     assert RG.ToolResult("x", 0, "", {"fail": -1}, "x: exit 0, ? fails").failing
     assert not RG.ToolResult("x", 0, "", {"fail": 0}, "x").failing
     assert RG.verdict_line([RG.ToolResult("x", 0, "", {"fail": -1}, "x")]).startswith("VERDICT: FAIL")
+
+
+# ---- P36 T4: the VIEWER block (advisory until Human Gate 1) ------------------
+
+VIEWER_MD = """# VIEWER — X
+
+```text
+  [FAIL ] V01 3/5 declared beats perceived (60%); unperceived: [rehook] w7
+          P36 beat recall
+  [WARN ] V02 1 dead-run(s) of 2+ windows: w12-w13
+          doc 31 retention clock
+  [PASS ] V03 open loop live in 30/54 windows (56%)
+          open-loop coverage floor 50%
+```
+
+RESULT: 1 FAIL / 1 WARN / 1 PASS / 0 INFO
+"""
+
+
+def _script_with_viewer(tmp_path):
+    s = tmp_path / "S-VO.txt"
+    s.write_text("A line.", encoding="utf-8")
+    (tmp_path / "S-VIEWER.md").write_text(VIEWER_MD, encoding="utf-8")
+    return s
+
+
+def test_viewer_rows_are_read_from_the_report(tmp_path):
+    rows = RG.viewer_rows(_script_with_viewer(tmp_path))
+    assert [r[1] for r in rows] == ["V01", "V02", "V03"]
+    assert rows[0][0] == "FAIL" and "[rehook]" in rows[0][2]
+
+
+def test_viewer_is_advisory_by_default(tmp_path):
+    block, fails, warns = RG.viewer_block(_script_with_viewer(tmp_path), gating=False)
+    assert (fails, warns) == (0, 0)                       # never moves the VERDICT before promotion
+    assert "advisory" in block[0] and "Human Gate 1" in block[0]
+    assert all("[INFO " in line for line in block[1:])    # shown, but at INFO
+    assert "V01" in block[1]
+
+
+def test_viewer_gate_promotes_the_rows(tmp_path):
+    block, fails, warns = RG.viewer_block(_script_with_viewer(tmp_path), gating=True)
+    assert (fails, warns) == (1, 1)
+    assert "[FAIL " in block[1] and "advisory" not in block[0]
+
+
+def test_viewer_absent_says_how_to_run_it(tmp_path):
+    s = tmp_path / "S-VO.txt"
+    s.write_text("A line.", encoding="utf-8")
+    block, fails, warns = RG.viewer_block(s, gating=True)
+    assert (fails, warns) == (0, 0) and "not run" in block[0] and "viewer_score.py" in block[0]
+
+
+def test_verdict_line_counts_viewer_fails_only_when_gated():
+    ok = [RG.ToolResult("x", 0, "", {"fail": 0}, "x")]
+    assert RG.verdict_line(ok, 0) == "VERDICT: PASS"
+    assert RG.verdict_line(ok, 2) == "VERDICT: FAIL (2 viewer)"
+    bad = [RG.ToolResult("x", 1, "", {"fail": 1}, "x")]
+    assert RG.verdict_line(bad, 1) == "VERDICT: FAIL (1 failing tools, 1 viewer)"

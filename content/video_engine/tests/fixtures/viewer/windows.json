@@ -1,0 +1,41 @@
+{
+ "schema_version": "viewer_windows.v1",
+ "window_s": 15.0,
+ "memory_windows": 2,
+ "timing_source": "measured",
+ "runtime_s": 60.0,
+ "windows": [
+  {
+   "i": 0,
+   "start_s": 0.0,
+   "end_s": 15.0,
+   "span": "0:00-0:15",
+   "text": "By the end you will run one test yourself, thirty seconds a stock. It sorts what you hold into steel or paper.",
+   "memory": ""
+  },
+  {
+   "i": 1,
+   "start_s": 15.0,
+   "end_s": 30.0,
+   "span": "0:15-0:30",
+   "text": "But the interesting part is who paid for the steel.",
+   "memory": "By the end you will run one test yourself, thirty seconds a stock. It sorts what you hold into steel or paper."
+  },
+  {
+   "i": 2,
+   "start_s": 30.0,
+   "end_s": 45.0,
+   "span": "0:30-0:45",
+   "text": "Nothing much happens in this stretch and it simply keeps going.",
+   "memory": "By the end you will run one test yourself, thirty seconds a stock. It sorts what you hold into steel or paper. But the interesting part is who paid for the steel."
+  },
+  {
+   "i": 3,
+   "start_s": 45.0,
+   "end_s": 60.0,
+   "span": "0:45-1:00",
+   "text": "Between 2020 and 2024 the builders borrowed twenty-eight billion dollars a year. Last year the number was a hundred and twenty-one billion.",
+   "memory": "But the interesting part is who paid for the steel. Nothing much happens in this stretch and it simply keeps going."
+  }
+ ]
+}

@@ -1,0 +1,44 @@
+{
+ "schema_version": "viewer_reports.v1",
+ "prompt_version": "v1",
+ "model": "test",
+ "effort": "high",
+ "reports": [
+  {
+   "i": 0,
+   "new_things": [
+    "there is a test I can run in thirty seconds a stock",
+    "holdings sort into steel or paper"
+   ],
+   "held_question": "what are the three questions?",
+   "asked_of_me": "run the test",
+   "could_not_follow": []
+  },
+  {
+   "i": 1,
+   "new_things": [],
+   "held_question": "",
+   "asked_of_me": "",
+   "could_not_follow": []
+  },
+  {
+   "i": 2,
+   "new_things": [],
+   "held_question": "",
+   "asked_of_me": "",
+   "could_not_follow": [
+    "who is 'they'"
+   ]
+  },
+  {
+   "i": 3,
+   "new_things": [
+    "the builders borrowed twenty-eight billion a year",
+    "last year it was a hundred and twenty-one billion"
+   ],
+   "held_question": "where did the extra borrowing go?",
+   "asked_of_me": "",
+   "could_not_follow": []
+  }
+ ]
+}

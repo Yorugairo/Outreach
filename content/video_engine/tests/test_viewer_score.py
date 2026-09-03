@@ -1,0 +1,166 @@
+"""P36 T3 - the viewer's scorer. No live calls: every report here is recorded."""
+from __future__ import annotations
+
+import json
+import sys
+from pathlib import Path
+
+import pytest
+
+ROOT = Path(__file__).resolve().parents[3]
+sys.path.insert(0, str(ROOT / "content/video_engine/scripts"))
+import viewer_score as V  # noqa: E402
+
+FIXTURES = Path(__file__).parent / "fixtures" / "viewer"
+
+
+# --- the fixture: a script whose [rehook] is declared but never felt ---------
+SCRIPT = (
+    "`[promise]` By the end you will run one test yourself, thirty seconds a stock. "
+    "It sorts what you hold into steel or paper. "
+    "`[rehook]` But the interesting part is who paid for the steel. "
+    "Nothing much happens in this stretch and it simply keeps going. "
+    "`[new]` Between 2020 and 2024 the builders borrowed twenty-eight billion dollars a year. "
+    "Last year the number was a hundred and twenty-one billion."
+)
+
+
+def _windows() -> dict:
+    texts = [
+        "By the end you will run one test yourself, thirty seconds a stock. It sorts what you hold into steel or paper.",
+        "But the interesting part is who paid for the steel.",
+        "Nothing much happens in this stretch and it simply keeps going.",
+        "Between 2020 and 2024 the builders borrowed twenty-eight billion dollars a year. "
+        "Last year the number was a hundred and twenty-one billion.",
+    ]
+    ws = []
+    for i, t in enumerate(texts):
+        ws.append({"i": i, "start_s": 15.0 * i, "end_s": 15.0 * (i + 1),
+                   "span": f"{int(15 * i // 60)}:{int(15 * i % 60):02d}-{int(15 * (i + 1) // 60)}:{int(15 * (i + 1) % 60):02d}",
+                   "text": t, "memory": " ".join(texts[max(0, i - 2):i])})
+    return {"schema_version": "viewer_windows.v1", "window_s": 15.0, "memory_windows": 2,
+            "timing_source": "measured", "runtime_s": 60.0, "windows": ws}
+
+
+def _reports() -> dict:
+    return {"schema_version": "viewer_reports.v1", "prompt_version": "v1", "model": "test", "effort": "high",
+            "reports": [
+                {"i": 0, "new_things": ["there is a test I can run in thirty seconds a stock",
+                                        "holdings sort into steel or paper"],
+                 "held_question": "what are the three questions?", "asked_of_me": "run the test", "could_not_follow": []},
+                # window 1 carries the [rehook] sentence but the reader felt nothing of it
+                {"i": 1, "new_things": [], "held_question": "", "asked_of_me": "", "could_not_follow": []},
+                {"i": 2, "new_things": [], "held_question": "", "asked_of_me": "", "could_not_follow": ["who is 'they'"]},
+                {"i": 3, "new_things": ["the builders borrowed twenty-eight billion a year",
+                                        "last year it was a hundred and twenty-one billion"],
+                 "held_question": "where did the extra borrowing go?", "asked_of_me": "", "could_not_follow": []},
+            ]}
+
+
+@pytest.fixture()
+def scored():
+    return V.score(_windows(), _reports(), SCRIPT)
+
+
+# --- beat recall -------------------------------------------------------------
+def test_a_declared_beat_the_reader_never_felt_drops_recall_below_100(scored):
+    by_tag = {r["tag"]: r for r in scored["recall"]}
+    assert by_tag["promise"]["perceived"] and by_tag["new"]["perceived"]
+    assert not by_tag["rehook"]["perceived"], by_tag["rehook"]
+    assert scored["recall_pct"] < 100.0
+    v01 = next(r for r in scored["rows"] if r["id"] == "V01")
+    assert v01["level"] == "FAIL" and "[rehook]" in v01["message"], v01
+
+
+def test_recall_cites_the_readers_own_line(scored):
+    promise = next(r for r in scored["recall"] if r["tag"] == "promise")
+    assert "thirty seconds" in promise["matched"]
+    assert promise["matched_window"] in (promise["window"] - 1, promise["window"], promise["window"] + 1)
+
+
+def test_a_beat_felt_one_window_late_still_counts():
+    reports = _reports()
+    reports["reports"][2]["new_things"] = ["someone paid for the steel"]      # the rehook, felt one window late
+    res = V.score(_windows(), reports, SCRIPT)
+    assert next(r for r in res["recall"] if r["tag"] == "rehook")["perceived"]
+
+
+# --- gain, dead runs, loops, confusion ---------------------------------------
+def test_two_windows_with_nothing_concrete_are_a_dead_run(scored):
+    assert scored["dead"] == [1, 2]
+    assert scored["dead_runs"] == [[1, 2]]
+    v02 = next(r for r in scored["rows"] if r["id"] == "V02")
+    assert v02["level"] == "WARN" and "dead-run" in v02["message"]
+
+
+def test_open_loop_coverage_and_confusion_are_reported(scored):
+    v03 = next(r for r in scored["rows"] if r["id"] == "V03")
+    assert "2/4" in v03["message"] and v03["level"] == "PASS"     # exactly at the 50% floor
+    v04 = next(r for r in scored["rows"] if r["id"] == "V04")
+    assert v04["level"] == "WARN" and "who is" in v04["message"]
+
+
+def test_concreteness_rule_counts_numerals_names_and_new_words():
+    assert V.is_concrete("borrowed twenty-eight billion in 2024", "2024 borrowing", "")
+    assert V.is_concrete("a man named Karp said it", "Karp said", "")
+    assert V.is_concrete("the buildout is leased", "the buildout is leased", "nothing about that")
+    assert not V.is_concrete("it keeps going", "nothing much happens and it keeps going", "it keeps going")
+    assert not V.is_concrete("", "x", "")
+
+
+def test_gain_counts_only_concrete_things(scored):
+    per = {p["i"]: p for p in scored["per_window"]}
+    assert per[0]["gain"] == 2 and per[3]["gain"] == 2
+    assert per[1]["gain"] == 0 and per[2]["gain"] == 0
+
+
+# --- plumbing ----------------------------------------------------------------
+def test_sentence_at_takes_the_sentence_the_tag_precedes():
+    s = V.sentence_at(SCRIPT, SCRIPT.index("`[rehook]`"))
+    assert s == "But the interesting part is who paid for the steel."
+
+
+def test_the_viewer_never_sees_tags_in_a_scored_sentence():
+    for b in V.declared_beats(SCRIPT):
+        assert "[" not in b["sentence"] and "`" not in b["sentence"]
+
+
+def test_render_is_deterministic_and_carries_the_result_line(scored):
+    a = V.render(scored, "X-VO.txt")
+    b = V.render(V.score(_windows(), _reports(), SCRIPT), "X-VO.txt")
+    assert a == b
+    assert "RESULT: 1 FAIL / 2 WARN" in a and "| `[rehook]` |" in a and "**NO**" in a
+
+
+def test_paths_strip_the_vo_suffix(tmp_path):
+    w, r, o = V.paths_for(tmp_path / "SCRIPT-G-VO.txt")
+    assert w.name == "SCRIPT-G-VIEWER-WINDOWS.json"
+    assert r.name == "SCRIPT-G-VIEWER-REPORTS.json"
+    assert o.name == "SCRIPT-G-VIEWER.md"
+
+
+def test_main_writes_the_report(tmp_path, capsys):
+    script = tmp_path / "T-VO.txt"
+    script.write_text(SCRIPT, encoding="utf-8")
+    (tmp_path / "T-VIEWER-WINDOWS.json").write_text(json.dumps(_windows()), encoding="utf-8")
+    (tmp_path / "T-VIEWER-REPORTS.json").write_text(json.dumps(_reports()), encoding="utf-8")
+    assert V.main([str(script)]) == 0
+    assert "RESULT:" in capsys.readouterr().out
+    assert (tmp_path / "T-VIEWER.md").exists()
+
+
+def test_main_refuses_without_the_inputs(tmp_path, capsys):
+    script = tmp_path / "T-VO.txt"
+    script.write_text(SCRIPT, encoding="utf-8")
+    assert V.main([str(script)]) == 2
+    assert "viewer_windows.py" in capsys.readouterr().err
+
+
+# --- the recorded fixture on disk (the plan's "recorded reports as fixtures") --
+def test_recorded_fixture_pair_scores_the_same_way():
+    wp, rp = FIXTURES / "windows.json", FIXTURES / "reports.json"
+    if not (wp.exists() and rp.exists()):
+        pytest.skip("recorded viewer fixtures absent")
+    res = V.score(json.loads(wp.read_text(encoding="utf-8")),
+                  json.loads(rp.read_text(encoding="utf-8")), SCRIPT)
+    assert res["recall_pct"] < 100.0 and res["dead_runs"]

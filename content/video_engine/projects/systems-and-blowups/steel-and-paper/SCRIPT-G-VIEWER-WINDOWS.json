@@ -1,0 +1,442 @@
+{
+  "schema_version": "viewer_windows.v1",
+  "script": "SCRIPT-G-VO.txt",
+  "window_s": 15.0,
+  "memory_windows": 2,
+  "timing_source": "measured",
+  "runtime_s": 806.47,
+  "windows": [
+    {
+      "i": 0,
+      "start_s": 0.0,
+      "end_s": 15.376,
+      "span": "0:00-0:15",
+      "text": "The safest thing you own looks like this. An iron spike. It ruined almost everyone who touched it. That was 1845. Somewhere today, a guy on his lunch break is watching his fourth version of the same chart. Different voice",
+      "memory": ""
+    },
+    {
+      "i": 1,
+      "start_s": 15.0,
+      "end_s": 30.163,
+      "span": "0:15-0:30",
+      "text": "— same two lines — same warning: AI is 1845 again. The chart is copies of copies, louder every pass. Almost nobody names the people who built it, and not one of them checked the original's math. If you hold an index fund, it's already holding",
+      "memory": "The safest thing you own looks like this. An iron spike. It ruined almost everyone who touched it. That was 1845. Somewhere today, a guy on his lunch break is watching his fourth version of the same chart. Different voice"
+    },
+    {
+      "i": 2,
+      "start_s": 30.0,
+      "end_s": 44.762,
+      "span": "0:30-0:45",
+      "text": "you. So here's the original. It comes from Bravos Research — credit where due, the sharpest macro chart on YouTube. Two lines. The mega-caps — Meta, Apple, Microsoft, Amazon, Alphabet.",
+      "memory": "The safest thing you own looks like this. An iron spike. It ruined almost everyone who touched it. That was 1845. Somewhere today, a guy on his lunch break is watching his fourth version of the same chart. Different voice — same two lines — same warning: AI is 1845 again. The chart is copies of copies, louder every pass. Almost nobody names the people who built it, and not one of them checked the original's math. If you hold an index fund, it's already holding"
+    },
+    {
+      "i": 3,
+      "start_s": 45.0,
+      "end_s": 60.282,
+      "span": "0:45-1:00",
+      "text": "In a year, up twenty-one percent. We drew the index underneath them — same line. The giants are the market now. The chart's second line is the chip industry, and it left both behind: up a hundred and five. And one layer Bravos' chart never drew.",
+      "memory": "— same two lines — same warning: AI is 1845 again. The chart is copies of copies, louder every pass. Almost nobody names the people who built it, and not one of them checked the original's math. If you hold an index fund, it's already holding you. So here's the original. It comes from Bravos Research — credit where due, the sharpest macro chart on YouTube. Two lines. The mega-caps — Meta, Apple, Microsoft, Amazon, Alphabet."
+    },
+    {
+      "i": 4,
+      "start_s": 60.0,
+      "end_s": 75.212,
+      "span": "1:00-1:15",
+      "text": "Memory — the builders inside the builders. Up six hundred and thirteen percent. The chart is right. The warning points at the wrong address. So here's what you're getting: not a rebuttal, not a victory lap, not a panic. One test",
+      "memory": "you. So here's the original. It comes from Bravos Research — credit where due, the sharpest macro chart on YouTube. Two lines. The mega-caps — Meta, Apple, Microsoft, Amazon, Alphabet. In a year, up twenty-one percent. We drew the index underneath them — same line. The giants are the market now. The chart's second line is the chip industry, and it left both behind: up a hundred and five. And one layer Bravos' chart never drew."
+    },
+    {
+      "i": 5,
+      "start_s": 75.0,
+      "end_s": 90.096,
+      "span": "1:15-1:30",
+      "text": "— three questions — that sorts every holding you own into steel or paper. By the end, you'll run it yourself: thirty seconds a stock. And the opponent here isn't Bravos, and it isn't Nvidia. It's a machine — the hype cycle — capital arriving",
+      "memory": "In a year, up twenty-one percent. We drew the index underneath them — same line. The giants are the market now. The chart's second line is the chip industry, and it left both behind: up a hundred and five. And one layer Bravos' chart never drew. Memory — the builders inside the builders. Up six hundred and thirteen percent. The chart is right. The warning points at the wrong address. So here's what you're getting: not a rebuttal, not a victory lap, not a panic. One test"
+    },
+    {
+      "i": 6,
+      "start_s": 90.0,
+      "end_s": 104.955,
+      "span": "1:30-1:45",
+      "text": "faster than the value it's chasing. But a machine you can test. That's the job of the three questions. They have to survive Bravos' argument before they survive mine. Start with Bravos' case at full strength — the version they would defend. Every transformative technology overshoots. Railways in",
+      "memory": "Memory — the builders inside the builders. Up six hundred and thirteen percent. The chart is right. The warning points at the wrong address. So here's what you're getting: not a rebuttal, not a victory lap, not a panic. One test — three questions — that sorts every holding you own into steel or paper. By the end, you'll run it yourself: thirty seconds a stock. And the opponent here isn't Bravos, and it isn't Nvidia. It's a machine — the hype cycle — capital arriving"
+    },
+    {
+      "i": 7,
+      "start_s": 105.0,
+      "end_s": 120.212,
+      "span": "1:45-2:00",
+      "text": "the 1840s drew a quarter-billion pounds — more than a trillion in today's money. Then the stocks crashed by nearly two-thirds. In two thousand, the internet crossed seven percent of GDP. Then the tower came down. And by Bravos' math, AI",
+      "memory": "— three questions — that sorts every holding you own into steel or paper. By the end, you'll run it yourself: thirty seconds a stock. And the opponent here isn't Bravos, and it isn't Nvidia. It's a machine — the hype cycle — capital arriving faster than the value it's chasing. But a machine you can test. That's the job of the three questions. They have to survive Bravos' argument before they survive mine. Start with Bravos' case at full strength — the version they would defend. Every transformative technology overshoots. Railways in"
+    },
+    {
+      "i": 8,
+      "start_s": 120.0,
+      "end_s": 135.115,
+      "span": "2:00-2:15",
+      "text": "spending just crossed eight. So I pulled their yardstick myself, and I ran it all the way back. In the 1840s, railways took roughly half of everything Britain invested. Half — one technology. My version runs the same measure",
+      "memory": "faster than the value it's chasing. But a machine you can test. That's the job of the three questions. They have to survive Bravos' argument before they survive mine. Start with Bravos' case at full strength — the version they would defend. Every transformative technology overshoots. Railways in the 1840s drew a quarter-billion pounds — more than a trillion in today's money. Then the stocks crashed by nearly two-thirds. In two thousand, the internet crossed seven percent of GDP. Then the tower came down. And by Bravos' math, AI"
+    },
+    {
+      "i": 9,
+      "start_s": 135.0,
+      "end_s": 150.447,
+      "span": "2:15-2:30",
+      "text": "on America, straight from the government's own statisticians. It counts computing and software as a share of every private investment dollar. At the dot-com peak, that share hit twenty-three cents. Today it's twenty-eight — the most it has ever been.",
+      "memory": "the 1840s drew a quarter-billion pounds — more than a trillion in today's money. Then the stocks crashed by nearly two-thirds. In two thousand, the internet crossed seven percent of GDP. Then the tower came down. And by Bravos' math, AI spending just crossed eight. So I pulled their yardstick myself, and I ran it all the way back. In the 1840s, railways took roughly half of everything Britain invested. Half — one technology. My version runs the same measure"
+    },
+    {
+      "i": 10,
+      "start_s": 150.0,
+      "end_s": 164.971,
+      "span": "2:30-2:45",
+      "text": "Count all equipment and ideas together and the line crosses sixty-five — but that's every truck and every patent, not one technology. Nothing since the railways has matched the railways. What we're watching is the closest run at it in a hundred",
+      "memory": "spending just crossed eight. So I pulled their yardstick myself, and I ran it all the way back. In the 1840s, railways took roughly half of everything Britain invested. Half — one technology. My version runs the same measure on America, straight from the government's own statisticians. It counts computing and software as a share of every private investment dollar. At the dot-com peak, that share hit twenty-three cents. Today it's twenty-eight — the most it has ever been."
+    },
+    {
+      "i": 11,
+      "start_s": 165.0,
+      "end_s": 180.344,
+      "span": "2:45-3:00",
+      "text": "and eighty years. The yardstick is a new instrument for this channel — no threshold on it yet. We're reading it together, one quarter at a time. Bravos' sharpest line is the trigger. The mania never dies of old age — it dies when rates cross back above where the borrowing",
+      "memory": "on America, straight from the government's own statisticians. It counts computing and software as a share of every private investment dollar. At the dot-com peak, that share hit twenty-three cents. Today it's twenty-eight — the most it has ever been. Count all equipment and ideas together and the line crosses sixty-five — but that's every truck and every patent, not one technology. Nothing since the railways has matched the railways. What we're watching is the closest run at it in a hundred"
+    },
+    {
+      "i": 12,
+      "start_s": 180.0,
+      "end_s": 194.632,
+      "span": "3:00-3:15",
+      "text": "began. Bank of England above six percent: railways rolled over. The Fed at six and a half in two thousand: the internet trade rolled over. So Bravos' tripwire for this cycle: the Fed back above five and a half. Put my agreement on the record.",
+      "memory": "Count all equipment and ideas together and the line crosses sixty-five — but that's every truck and every patent, not one technology. Nothing since the railways has matched the railways. What we're watching is the closest run at it in a hundred and eighty years. The yardstick is a new instrument for this channel — no threshold on it yet. We're reading it together, one quarter at a time. Bravos' sharpest line is the trigger. The mania never dies of old age — it dies when rates cross back above where the borrowing"
+    },
+    {
+      "i": 13,
+      "start_s": 195.0,
+      "end_s": 210.374,
+      "span": "3:15-3:30",
+      "text": "The cycle is real. The threshold is real. And here's the most honest sentence a macro channel has said all year. \"Don't try to call the top.\" I used to risk-score portfolios for a bank. Here's the thing about risk charts: they rarely fail by lying. They fail by pointing.",
+      "memory": "and eighty years. The yardstick is a new instrument for this channel — no threshold on it yet. We're reading it together, one quarter at a time. Bravos' sharpest line is the trigger. The mania never dies of old age — it dies when rates cross back above where the borrowing began. Bank of England above six percent: railways rolled over. The Fed at six and a half in two thousand: the internet trade rolled over. So Bravos' tripwire for this cycle: the Fed back above five and a half. Put my agreement on the record."
+    },
+    {
+      "i": 14,
+      "start_s": 210.0,
+      "end_s": 225.076,
+      "span": "3:30-3:45",
+      "text": "So the obvious move looks like this: take profits on the AI trade. Chipmakers doubling with customers flat at the index — textbook profit-taking. Any adviser would sign it. But here's where Bravos' own chart gets strange — and the strangeness is the whole story. Walk their",
+      "memory": "began. Bank of England above six percent: railways rolled over. The Fed at six and a half in two thousand: the internet trade rolled over. So Bravos' tripwire for this cycle: the Fed back above five and a half. Put my agreement on the record. The cycle is real. The threshold is real. And here's the most honest sentence a macro channel has said all year. \"Don't try to call the top.\" I used to risk-score portfolios for a bank. Here's the thing about risk charts: they rarely fail by lying. They fail by pointing."
+    },
+    {
+      "i": 15,
+      "start_s": 225.0,
+      "end_s": 239.8,
+      "span": "3:45-4:00",
+      "text": "evidence like a claims adjuster. Alex Karp of Palantir, enterprises are — his words — paying for tokens that create no value. Something, he says, has gone completely wrong. Uber's CTO says they burned the entire annual AI budget by April.",
+      "memory": "The cycle is real. The threshold is real. And here's the most honest sentence a macro channel has said all year. \"Don't try to call the top.\" I used to risk-score portfolios for a bank. Here's the thing about risk charts: they rarely fail by lying. They fail by pointing. So the obvious move looks like this: take profits on the AI trade. Chipmakers doubling with customers flat at the index — textbook profit-taking. Any adviser would sign it. But here's where Bravos' own chart gets strange — and the strangeness is the whole story. Walk their"
+    },
+    {
+      "i": 16,
+      "start_s": 240.0,
+      "end_s": 255.06,
+      "span": "4:00-4:15",
+      "text": "Four months. And the COO, on whether any of it is showing up in the product. His answer: if you can't draw a direct line to what you're shipping, that trade gets harder to justify. Remember that line. He's reaching for question three without having it. But look harder at those two stories. That isn't the peak",
+      "memory": "So the obvious move looks like this: take profits on the AI trade. Chipmakers doubling with customers flat at the index — textbook profit-taking. Any adviser would sign it. But here's where Bravos' own chart gets strange — and the strangeness is the whole story. Walk their evidence like a claims adjuster. Alex Karp of Palantir, enterprises are — his words — paying for tokens that create no value. Something, he says, has gone completely wrong. Uber's CTO says they burned the entire annual AI budget by April."
+    },
+    {
+      "i": 17,
+      "start_s": 255.0,
+      "end_s": 269.959,
+      "span": "4:15-4:30",
+      "text": "of inflated expectations. That's the trough already doing its job — the tourists finding out, one budget at a time. Which flips the question. Not \"when does the disappointment arrive\" — it's arriving. The question is what survives. And in 1849,",
+      "memory": "evidence like a claims adjuster. Alex Karp of Palantir, enterprises are — his words — paying for tokens that create no value. Something, he says, has gone completely wrong. Uber's CTO says they burned the entire annual AI budget by April. Four months. And the COO, on whether any of it is showing up in the product. His answer: if you can't draw a direct line to what you're shipping, that trade gets harder to justify. Remember that line. He's reaching for question three without having it. But look harder at those two stories. That isn't the peak"
+    },
+    {
+      "i": 18,
+      "start_s": 270.0,
+      "end_s": 284.984,
+      "span": "4:30-4:45",
+      "text": "the answer wasn't the paper. It was the steel. The trains ran straight through the crash — and the towns kept growing around the stations. The steel kept working. The paper stopped pretending. But the real question is who's paying for the steel this time. For years the giants paid for all",
+      "memory": "Four months. And the COO, on whether any of it is showing up in the product. His answer: if you can't draw a direct line to what you're shipping, that trade gets harder to justify. Remember that line. He's reaching for question three without having it. But look harder at those two stories. That isn't the peak of inflated expectations. That's the trough already doing its job — the tourists finding out, one budget at a time. Which flips the question. Not \"when does the disappointment arrive\" — it's arriving. The question is what survives. And in 1849,"
+    },
+    {
+      "i": 19,
+      "start_s": 285.0,
+      "end_s": 300.006,
+      "span": "4:45-5:00",
+      "text": "this out of pocket. Cash on hand, no borrowing — that was the whole flex. Then the bills got bigger than the cash. Between 2020 and 2024, the biggest builders borrowed about twenty-eight billion dollars a year. Last year: a hundred and twenty-one billion. This year they're tracking toward a",
+      "memory": "of inflated expectations. That's the trough already doing its job — the tourists finding out, one budget at a time. Which flips the question. Not \"when does the disappointment arrive\" — it's arriving. The question is what survives. And in 1849, the answer wasn't the paper. It was the steel. The trains ran straight through the crash — and the towns kept growing around the stations. The steel kept working. The paper stopped pretending. But the real question is who's paying for the steel this time. For years the giants paid for all"
+    },
+    {
+      "i": 20,
+      "start_s": 300.0,
+      "end_s": 314.989,
+      "span": "5:00-5:15",
+      "text": "hundred and fifty. That is not a rounding error in someone's capital structure. It is big enough to bend the bond market. Technology used to be about nine percent of the investment-grade index — the pool that feeds your bond fund. It's ten now, and the projections run past twelve. Money that used to sit",
+      "memory": "the answer wasn't the paper. It was the steel. The trains ran straight through the crash — and the towns kept growing around the stations. The steel kept working. The paper stopped pretending. But the real question is who's paying for the steel this time. For years the giants paid for all this out of pocket. Cash on hand, no borrowing — that was the whole flex. Then the bills got bigger than the cash. Between 2020 and 2024, the biggest builders borrowed about twenty-eight billion dollars a year. Last year: a hundred and twenty-one billion. This year they're tracking toward a"
+    },
+    {
+      "i": 21,
+      "start_s": 315.0,
+      "end_s": 329.372,
+      "span": "5:15-5:30",
+      "text": "in utilities and banks is quietly becoming a bet on data centers. And none of this is slowing down. When the year opened, the street had them spending about four hundred and eighty billion. Consensus now says six hundred and ninety. The estimate went up faster than the year went by.",
+      "memory": "this out of pocket. Cash on hand, no borrowing — that was the whole flex. Then the bills got bigger than the cash. Between 2020 and 2024, the biggest builders borrowed about twenty-eight billion dollars a year. Last year: a hundred and twenty-one billion. This year they're tracking toward a hundred and fifty. That is not a rounding error in someone's capital structure. It is big enough to bend the bond market. Technology used to be about nine percent of the investment-grade index — the pool that feeds your bond fund. It's ten now, and the projections run past twelve. Money that used to sit"
+    },
+    {
+      "i": 22,
+      "start_s": 330.0,
+      "end_s": 345.092,
+      "span": "5:30-5:45",
+      "text": "And that's the borrowing you can see. Go into the filings and there's another eight hundred and twenty-two billion in lease commitments. Data centers they've already agreed to pay for, on contracts already signed, that have never landed on a balance sheet. Not",
+      "memory": "hundred and fifty. That is not a rounding error in someone's capital structure. It is big enough to bend the bond market. Technology used to be about nine percent of the investment-grade index — the pool that feeds your bond fund. It's ten now, and the projections run past twelve. Money that used to sit in utilities and banks is quietly becoming a bet on data centers. And none of this is slowing down. When the year opened, the street had them spending about four hundred and eighty billion. Consensus now says six hundred and ninety. The estimate went up faster than the year went by."
+    },
+    {
+      "i": 23,
+      "start_s": 345.0,
+      "end_s": 360.422,
+      "span": "5:45-6:00",
+      "text": "hidden — the number is right there in the filing. Just not where anyone looks. Put it together and the arithmetic gets tight. Over the next two years, PIMCO has this buildout consuming ninety-four percent of every dollar these companies generate from operations.",
+      "memory": "in utilities and banks is quietly becoming a bet on data centers. And none of this is slowing down. When the year opened, the street had them spending about four hundred and eighty billion. Consensus now says six hundred and ninety. The estimate went up faster than the year went by. And that's the borrowing you can see. Go into the filings and there's another eight hundred and twenty-two billion in lease commitments. Data centers they've already agreed to pay for, on contracts already signed, that have never landed on a balance sheet. Not"
+    },
+    {
+      "i": 24,
+      "start_s": 360.0,
+      "end_s": 374.32,
+      "span": "6:00-6:15",
+      "text": "Ninety-four. That is not a company investing its surplus. That is a company spending all of it, and borrowing the difference. So when you hear the buildout is funded out of profits — that was true. It stopped being true about eighteen months ago.",
+      "memory": "And that's the borrowing you can see. Go into the filings and there's another eight hundred and twenty-two billion in lease commitments. Data centers they've already agreed to pay for, on contracts already signed, that have never landed on a balance sheet. Not hidden — the number is right there in the filing. Just not where anyone looks. Put it together and the arithmetic gets tight. Over the next two years, PIMCO has this buildout consuming ninety-four percent of every dollar these companies generate from operations."
+    },
+    {
+      "i": 25,
+      "start_s": 375.0,
+      "end_s": 390.133,
+      "span": "6:15-6:30",
+      "text": "Nobody here committed fraud. They signed a promise, in a year that looked good. The steel kept building. The paper just got heavier. And promises are the part of this that nobody is charting. And that's the part everyone repeating this chart",
+      "memory": "hidden — the number is right there in the filing. Just not where anyone looks. Put it together and the arithmetic gets tight. Over the next two years, PIMCO has this buildout consuming ninety-four percent of every dollar these companies generate from operations. Ninety-four. That is not a company investing its surplus. That is a company spending all of it, and borrowing the difference. So when you hear the buildout is funded out of profits — that was true. It stopped being true about eighteen months ago."
+    },
+    {
+      "i": 26,
+      "start_s": 390.0,
+      "end_s": 405.527,
+      "span": "6:30-6:45",
+      "text": "missed — including, just this once, the people who drew it. It was never the AI stocks. The bubble isn't in the steel. It's in the paper wrapped around the steel. What broke England in 1845 wasn't rail. It was railway certificates",
+      "memory": "Ninety-four. That is not a company investing its surplus. That is a company spending all of it, and borrowing the difference. So when you hear the buildout is funded out of profits — that was true. It stopped being true about eighteen months ago. Nobody here committed fraud. They signed a promise, in a year that looked good. The steel kept building. The paper just got heavier. And promises are the part of this that nobody is charting. And that's the part everyone repeating this chart"
+    },
+    {
+      "i": 27,
+      "start_s": 405.0,
+      "end_s": 420.184,
+      "span": "6:45-7:00",
+      "text": "— paper promises priced off the best year, held by people who never checked what they owned. And Bravos' own number tells you where that paper lives today. AI builders are now twenty percent of the S&P five hundred. Historically, two to four. Every",
+      "memory": "Nobody here committed fraud. They signed a promise, in a year that looked good. The steel kept building. The paper just got heavier. And promises are the part of this that nobody is charting. And that's the part everyone repeating this chart missed — including, just this once, the people who drew it. It was never the AI stocks. The bubble isn't in the steel. It's in the paper wrapped around the steel. What broke England in 1845 wasn't rail. It was railway certificates"
+    },
+    {
+      "i": 28,
+      "start_s": 420.0,
+      "end_s": 434.716,
+      "span": "7:00-7:15",
+      "text": "index fund carries a fifth of its weight in one bet, and calls it the market. So does every target-date fund — the default your retirement money hopefully doesn't sit in. Run the arithmetic. At a fifth of the index, if the AI names fall by half, that erases ten percent of \"the market.\"",
+      "memory": "missed — including, just this once, the people who drew it. It was never the AI stocks. The bubble isn't in the steel. It's in the paper wrapped around the steel. What broke England in 1845 wasn't rail. It was railway certificates — paper promises priced off the best year, held by people who never checked what they owned. And Bravos' own number tells you where that paper lives today. AI builders are now twenty percent of the S&P five hundred. Historically, two to four. Every"
+    },
+    {
+      "i": 29,
+      "start_s": 435.0,
+      "end_s": 450.752,
+      "span": "7:15-7:30",
+      "text": "The other four hundred ninety companies never get a vote. So look at the spike again. The spike was never the risk. The certificates were. A bubble is not a technology failing. A bubble is ownership outrunning understanding.",
+      "memory": "— paper promises priced off the best year, held by people who never checked what they owned. And Bravos' own number tells you where that paper lives today. AI builders are now twenty percent of the S&P five hundred. Historically, two to four. Every index fund carries a fifth of its weight in one bet, and calls it the market. So does every target-date fund — the default your retirement money hopefully doesn't sit in. Run the arithmetic. At a fifth of the index, if the AI names fall by half, that erases ten percent of \"the market.\""
+    },
+    {
+      "i": 30,
+      "start_s": 450.0,
+      "end_s": 464.689,
+      "span": "7:30-7:45",
+      "text": "1845 is the proof: the rails worked, and the paper still lost two-thirds. And this is where the railway map, good as it is, skips a gear. Railway steel sat waiting twenty years while the economy caught up. That's why the return took two decades.",
+      "memory": "index fund carries a fifth of its weight in one bet, and calls it the market. So does every target-date fund — the default your retirement money hopefully doesn't sit in. Run the arithmetic. At a fifth of the index, if the AI names fall by half, that erases ten percent of \"the market.\" The other four hundred ninety companies never get a vote. So look at the spike again. The spike was never the risk. The certificates were. A bubble is not a technology failing. A bubble is ownership outrunning understanding."
+    },
+    {
+      "i": 31,
+      "start_s": 465.0,
+      "end_s": 479.959,
+      "span": "7:45-8:00",
+      "text": "Today's compute doesn't sit. It depreciates in about five years. And the builders are already sold out into next year — the orders are in, the slots are gone. Governments are standing up national AI programs on the same hardware. Different demand, different clock.",
+      "memory": "The other four hundred ninety companies never get a vote. So look at the spike again. The spike was never the risk. The certificates were. A bubble is not a technology failing. A bubble is ownership outrunning understanding. 1845 is the proof: the rails worked, and the paper still lost two-thirds. And this is where the railway map, good as it is, skips a gear. Railway steel sat waiting twenty years while the economy caught up. That's why the return took two decades."
+    },
+    {
+      "i": 32,
+      "start_s": 480.0,
+      "end_s": 494.951,
+      "span": "8:00-8:15",
+      "text": "The moat under the builders runs deeper than the paper holders can see. And the paper stacked on top runs taller than the builders admit. Both are true at once. That's the whole point. Now the test — the one from the top. Take any holding and ask it three questions.",
+      "memory": "1845 is the proof: the rails worked, and the paper still lost two-thirds. And this is where the railway map, good as it is, skips a gear. Railway steel sat waiting twenty years while the economy caught up. That's why the return took two decades. Today's compute doesn't sit. It depreciates in about five years. And the builders are already sold out into next year — the orders are in, the slots are gone. Governments are standing up national AI programs on the same hardware. Different demand, different clock."
+    },
+    {
+      "i": 33,
+      "start_s": 495.0,
+      "end_s": 510.012,
+      "span": "8:15-8:30",
+      "text": "One: is what it sells scarce — sold out, priced up, fought over — or abundant the moment belief fades? Two: does it fund its growth from cash it earns, or from paper it issues? Three: if the hype died tonight, would the asset still get used tomorrow",
+      "memory": "Today's compute doesn't sit. It depreciates in about five years. And the builders are already sold out into next year — the orders are in, the slots are gone. Governments are standing up national AI programs on the same hardware. Different demand, different clock. The moat under the builders runs deeper than the paper holders can see. And the paper stacked on top runs taller than the builders admit. Both are true at once. That's the whole point. Now the test — the one from the top. Take any holding and ask it three questions."
+    },
+    {
+      "i": 34,
+      "start_s": 510.0,
+      "end_s": 525.029,
+      "span": "8:30-8:45",
+      "text": "morning? And you can check all three from your phone. Scarcity shows up in the order book — sold out, waitlists, prices rising. The cash answer is two lines on any finance site: operating cash flow, and the share count. If cash flow is positive",
+      "memory": "The moat under the builders runs deeper than the paper holders can see. And the paper stacked on top runs taller than the builders admit. Both are true at once. That's the whole point. Now the test — the one from the top. Take any holding and ask it three questions. One: is what it sells scarce — sold out, priced up, fought over — or abundant the moment belief fades? Two: does it fund its growth from cash it earns, or from paper it issues? Three: if the hype died tonight, would the asset still get used tomorrow"
+    },
+    {
+      "i": 35,
+      "start_s": 525.0,
+      "end_s": 539.986,
+      "span": "8:45-9:00",
+      "text": "and the share count isn't growing, the company isn't selling paper to survive. Question three you already know how to answer — picture the product with the hype gone. Steel answers scarce, cash, used. Paper answers abundant, issued, believed. Thirty seconds a holding.",
+      "memory": "One: is what it sells scarce — sold out, priced up, fought over — or abundant the moment belief fades? Two: does it fund its growth from cash it earns, or from paper it issues? Three: if the hype died tonight, would the asset still get used tomorrow morning? And you can check all three from your phone. Scarcity shows up in the order book — sold out, waitlists, prices rising. The cash answer is two lines on any finance site: operating cash flow, and the share count. If cash flow is positive"
+    },
+    {
+      "i": 36,
+      "start_s": 540.0,
+      "end_s": 555.357,
+      "span": "9:00-9:15",
+      "text": "Run your top five tonight. Run it on Bravos' divergence chart and it reads differently. The chip line doubling: that's scarcity getting repriced. The giants pinned to the index while spending hundreds of billions: that's the market demanding an answer to question three. The divergence",
+      "memory": "morning? And you can check all three from your phone. Scarcity shows up in the order book — sold out, waitlists, prices rising. The cash answer is two lines on any finance site: operating cash flow, and the share count. If cash flow is positive and the share count isn't growing, the company isn't selling paper to survive. Question three you already know how to answer — picture the product with the hype gone. Steel answers scarce, cash, used. Paper answers abundant, issued, believed. Thirty seconds a holding."
+    },
+    {
+      "i": 37,
+      "start_s": 555.0,
+      "end_s": 569.979,
+      "span": "9:15-9:30",
+      "text": "isn't a house of cards. It's the test, administered in public. Run it on the most extreme number in this whole trade and see what happens. SK hynix. They make the stacked memory the AI racks need. Over the last year the stock is",
+      "memory": "and the share count isn't growing, the company isn't selling paper to survive. Question three you already know how to answer — picture the product with the hype gone. Steel answers scarce, cash, used. Paper answers abundant, issued, believed. Thirty seconds a holding. Run your top five tonight. Run it on Bravos' divergence chart and it reads differently. The chip line doubling: that's scarcity getting repriced. The giants pinned to the index while spending hundreds of billions: that's the market demanding an answer to question three. The divergence"
+    },
+    {
+      "i": 38,
+      "start_s": 570.0,
+      "end_s": 585.211,
+      "span": "9:30-9:45",
+      "text": "up more than five hundred percent. Not fifty. Five hundred. If anything in this story is a bubble, it should be that number. And the scarcity underneath it isn't a mood — it's physics. High-bandwidth memory stacks the dies vertically.",
+      "memory": "Run your top five tonight. Run it on Bravos' divergence chart and it reads differently. The chip line doubling: that's scarcity getting repriced. The giants pinned to the index while spending hundreds of billions: that's the market demanding an answer to question three. The divergence isn't a house of cards. It's the test, administered in public. Run it on the most extreme number in this whole trade and see what happens. SK hynix. They make the stacked memory the AI racks need. Over the last year the stock is"
+    },
+    {
+      "i": 39,
+      "start_s": 585.0,
+      "end_s": 599.757,
+      "span": "9:45-10:00",
+      "text": "So a gigabyte of it eats about three times the wafer capacity of the ordinary kind. Every accelerator they feed takes silicon away from everything else on the line. That's not a forecast. That's why the memory in a new laptop costs what it does this year. So ask it the three questions.",
+      "memory": "isn't a house of cards. It's the test, administered in public. Run it on the most extreme number in this whole trade and see what happens. SK hynix. They make the stacked memory the AI racks need. Over the last year the stock is up more than five hundred percent. Not fifty. Five hundred. If anything in this story is a bubble, it should be that number. And the scarcity underneath it isn't a mood — it's physics. High-bandwidth memory stacks the dies vertically."
+    },
+    {
+      "i": 40,
+      "start_s": 600.0,
+      "end_s": 614.992,
+      "span": "10:00-10:15",
+      "text": "Scarce? Their own earnings call says capacity is essentially sold out for the year — you cannot buy what they haven't got. Cash or paper? They're selling product, not issuing stock to survive. Used tomorrow morning? The memory is going into racks that are already under",
+      "memory": "up more than five hundred percent. Not fifty. Five hundred. If anything in this story is a bubble, it should be that number. And the scarcity underneath it isn't a mood — it's physics. High-bandwidth memory stacks the dies vertically. So a gigabyte of it eats about three times the wafer capacity of the ordinary kind. Every accelerator they feed takes silicon away from everything else on the line. That's not a forecast. That's why the memory in a new laptop costs what it does this year. So ask it the three questions."
+    },
+    {
+      "i": 41,
+      "start_s": 615.0,
+      "end_s": 629.935,
+      "span": "10:15-10:30",
+      "text": "construction. Scarce, cash, used. It passes. The most vertical line on the board is steel. That's the uncomfortable part of this test — it doesn't care what you were hoping to conclude. Run it honestly and it'll clear names you wanted to short, and flag things you're already holding.",
+      "memory": "So a gigabyte of it eats about three times the wafer capacity of the ordinary kind. Every accelerator they feed takes silicon away from everything else on the line. That's not a forecast. That's why the memory in a new laptop costs what it does this year. So ask it the three questions. Scarce? Their own earnings call says capacity is essentially sold out for the year — you cannot buy what they haven't got. Cash or paper? They're selling product, not issuing stock to survive. Used tomorrow morning? The memory is going into racks that are already under"
+    },
+    {
+      "i": 42,
+      "start_s": 630.0,
+      "end_s": 645.049,
+      "span": "10:30-10:45",
+      "text": "Bravos put their tripwire on the record: the Fed back above five and a half. Write it down — it's real. Mine is stricter, and it's the one this channel already stands on. The variable is memory — the RAM inside every one of these data centers. And I don't",
+      "memory": "Scarce? Their own earnings call says capacity is essentially sold out for the year — you cannot buy what they haven't got. Cash or paper? They're selling product, not issuing stock to survive. Used tomorrow morning? The memory is going into racks that are already under construction. Scarce, cash, used. It passes. The most vertical line on the board is steel. That's the uncomfortable part of this test — it doesn't care what you were hoping to conclude. Run it honestly and it'll clear names you wanted to short, and flag things you're already holding."
+    },
+    {
+      "i": 43,
+      "start_s": 645.0,
+      "end_s": 660.071,
+      "span": "10:45-11:00",
+      "text": "take that one on trust. I built a monitor for it: it reads what memory costs leaving Korea, by the kilo, straight off customs export data. The threshold is the release itself: the first month customs shows memory getting cheaper while the buildout still stands.",
+      "memory": "construction. Scarce, cash, used. It passes. The most vertical line on the board is steel. That's the uncomfortable part of this test — it doesn't care what you were hoping to conclude. Run it honestly and it'll clear names you wanted to short, and flag things you're already holding. Bravos put their tripwire on the record: the Fed back above five and a half. Write it down — it's real. Mine is stricter, and it's the one this channel already stands on. The variable is memory — the RAM inside every one of these data centers. And I don't"
+    },
+    {
+      "i": 44,
+      "start_s": 660.0,
+      "end_s": 675.121,
+      "span": "11:00-11:15",
+      "text": "That print, I start trimming. Right now it's going the other way — DRAM up seventeen percent, and the stacked memory the AI racks actually need up fourteen. That's the July release; customs runs about a month behind. Customs printed one soft month",
+      "memory": "Bravos put their tripwire on the record: the Fed back above five and a half. Write it down — it's real. Mine is stricter, and it's the one this channel already stands on. The variable is memory — the RAM inside every one of these data centers. And I don't take that one on trust. I built a monitor for it: it reads what memory costs leaving Korea, by the kilo, straight off customs export data. The threshold is the release itself: the first month customs shows memory getting cheaper while the buildout still stands."
+    },
+    {
+      "i": 45,
+      "start_s": 675.0,
+      "end_s": 690.03,
+      "span": "11:15-11:30",
+      "text": "in June. I trimmed some — so did half the market — and the next release took the price straight back up. That's not a top blowing off — that's a big run digesting. The flip: if memory breaks while the buildout holds, the scarcity story is wrong — and so am",
+      "memory": "take that one on trust. I built a monitor for it: it reads what memory costs leaving Korea, by the kilo, straight off customs export data. The threshold is the release itself: the first month customs shows memory getting cheaper while the buildout still stands. That print, I start trimming. Right now it's going the other way — DRAM up seventeen percent, and the stacked memory the AI racks actually need up fourteen. That's the July release; customs runs about a month behind. Customs printed one soft month"
+    },
+    {
+      "i": 46,
+      "start_s": 690.0,
+      "end_s": 705.165,
+      "span": "11:30-11:45",
+      "text": "I. That week, I de-risk the builders on camera. The certificates wear nicer names now — target-date, \"the market\" — but paper is paper. So — the spike, one more time. In 1850 it was still carrying trains across",
+      "memory": "That print, I start trimming. Right now it's going the other way — DRAM up seventeen percent, and the stacked memory the AI racks actually need up fourteen. That's the July release; customs runs about a month behind. Customs printed one soft month in June. I trimmed some — so did half the market — and the next release took the price straight back up. That's not a top blowing off — that's a big run digesting. The flip: if memory breaks while the buildout holds, the scarcity story is wrong — and so am"
+    },
+    {
+      "i": 47,
+      "start_s": 705.0,
+      "end_s": 720.227,
+      "span": "11:45-12:00",
+      "text": "England, while the certificates that financed it papered the walls of bankrupt clubs. The technology delivered. The owners of its paper paid the bill. Everything we checked holds. The builders sell scarcity, and they sell it for cash. About eighteen months ago the money behind them turned into debt.",
+      "memory": "in June. I trimmed some — so did half the market — and the next release took the price straight back up. That's not a top blowing off — that's a big run digesting. The flip: if memory breaks while the buildout holds, the scarcity story is wrong — and so am I. That week, I de-risk the builders on camera. The certificates wear nicer names now — target-date, \"the market\" — but paper is paper. So — the spike, one more time. In 1850 it was still carrying trains across"
+    },
+    {
+      "i": 48,
+      "start_s": 720.0,
+      "end_s": 734.997,
+      "span": "12:00-12:15",
+      "text": "A fifth of your index rides on one bet you never placed. And the one number that would prove me wrong is moving the other way. Which is why I'll go further than Bravos — in both directions. More bullish: builders with sold-out order books are not a house of cards. They're the steel",
+      "memory": "I. That week, I de-risk the builders on camera. The certificates wear nicer names now — target-date, \"the market\" — but paper is paper. So — the spike, one more time. In 1850 it was still carrying trains across England, while the certificates that financed it papered the walls of bankrupt clubs. The technology delivered. The owners of its paper paid the bill. Everything we checked holds. The builders sell scarcity, and they sell it for cash. About eighteen months ago the money behind them turned into debt."
+    },
+    {
+      "i": 49,
+      "start_s": 735.0,
+      "end_s": 749.689,
+      "span": "12:15-12:30",
+      "text": "— and I own them on purpose, positions disclosed every week. The order books are booked solid through twenty twenty-six. And past that, do the arithmetic yourself. A memory fab takes five years to build. Every new generation of chips doubles the memory it needs.",
+      "memory": "England, while the certificates that financed it papered the walls of bankrupt clubs. The technology delivered. The owners of its paper paid the bill. Everything we checked holds. The builders sell scarcity, and they sell it for cash. About eighteen months ago the money behind them turned into debt. A fifth of your index rides on one bet you never placed. And the one number that would prove me wrong is moving the other way. Which is why I'll go further than Bravos — in both directions. More bullish: builders with sold-out order books are not a house of cards. They're the steel"
+    },
+    {
+      "i": 50,
+      "start_s": 750.0,
+      "end_s": 765.325,
+      "span": "12:30-12:45",
+      "text": "The only world where memory catches up by twenty thirty is one where AI starts developing slower than factories get built. Decide for yourself which of those you believe. More worried: the index they sold you as the safe version of this trade is the certificate.",
+      "memory": "A fifth of your index rides on one bet you never placed. And the one number that would prove me wrong is moving the other way. Which is why I'll go further than Bravos — in both directions. More bullish: builders with sold-out order books are not a house of cards. They're the steel — and I own them on purpose, positions disclosed every week. The order books are booked solid through twenty twenty-six. And past that, do the arithmetic yourself. A memory fab takes five years to build. Every new generation of chips doubles the memory it needs."
+    },
+    {
+      "i": 51,
+      "start_s": 765.0,
+      "end_s": 779.854,
+      "span": "12:45-13:00",
+      "text": "Nobody holding it thinks they're speculating. That's what a top actually looks like: not euphoria — accidental concentration, sold as safety. The steel gets used. The paper gets believed. And the difference gets discovered all at once.",
+      "memory": "— and I own them on purpose, positions disclosed every week. The order books are booked solid through twenty twenty-six. And past that, do the arithmetic yourself. A memory fab takes five years to build. Every new generation of chips doubles the memory it needs. The only world where memory catches up by twenty thirty is one where AI starts developing slower than factories get built. Decide for yourself which of those you believe. More worried: the index they sold you as the safe version of this trade is the certificate."
+    },
+    {
+      "i": 52,
+      "start_s": 780.0,
+      "end_s": 795.017,
+      "span": "13:00-13:15",
+      "text": "You now have the test — three questions, thirty seconds, any holding. Subscribe for the watch: the week either tripwire moves — Bravos' at five and a half, mine on memory — that video posts. And the yardstick reading lands every quarter. Bring your top five; next time we",
+      "memory": "The only world where memory catches up by twenty thirty is one where AI starts developing slower than factories get built. Decide for yourself which of those you believe. More worried: the index they sold you as the safe version of this trade is the certificate. Nobody holding it thinks they're speculating. That's what a top actually looks like: not euphoria — accidental concentration, sold as safety. The steel gets used. The paper gets believed. And the difference gets discovered all at once."
+    },
+    {
+      "i": 53,
+      "start_s": 795.0,
+      "end_s": 806.47,
+      "span": "13:15-13:30",
+      "text": "run the test on the whole index. Do that, and the next time a copy of this chart crosses your feed, you won't need anyone to tell you where it's pointing. You'll already know which half of your portfolio is steel. The spike stays on the desk.",
+      "memory": "Nobody holding it thinks they're speculating. That's what a top actually looks like: not euphoria — accidental concentration, sold as safety. The steel gets used. The paper gets believed. And the difference gets discovered all at once. You now have the test — three questions, thirty seconds, any holding. Subscribe for the watch: the week either tripwire moves — Bravos' at five and a half, mine on memory — that video posts. And the yardstick reading lands every quarter. Bring your top five; next time we"
+    }
+  ]
+}
