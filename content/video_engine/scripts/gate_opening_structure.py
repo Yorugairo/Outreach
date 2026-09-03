@@ -51,11 +51,18 @@ attention ladder is physics, not proportion" (MAP s1); beat 5 (desire /
 opponent / map / A2 / ring) runs from 0:60 to P1's end and MERGES into beat 4
 when P1 ends before 0:60 (P1.md: "compress beats, never drop them").
 
-DOCTRINE CONFLICT SURFACED: P2.md and MAP s4 put A3 at ~10% of runtime; the
-audit hard-codes 180s absolute. This gate follows the docs and says so.
+DOCTRINE CONFLICT RESOLVED (ruling E23, 2026-09-02): P2.md and MAP s4 put A3
+at ~10% of runtime; the audit used to hard-code 180s absolute. Both tools now
+take A3 from kit_spec.a3_anchor_s (10% of runtime; 3:00 is the @30:00 column,
+not a constant). The operator's rider - "the next microhook and the cycle
+continues ... should already be self-healing regardless of when the hook
+lands" - is made mechanical past the opening: G36 runs the cycle check over
+the whole runtime (--cycle-s, default = runtime) and G44 requires one
+rehook-family line or [rehook] inside every P3/P5 unit window
+(kit_spec.unit_windows).
 
     python gate_opening_structure.py SCRIPT.txt [--timeline build-f/timeline.json]
-           [--counterparty Bravos] [--ring spike] [--opening-s 300]
+           [--counterparty Bravos] [--ring spike] [--opening-s 300] [--cycle-s 805]
 """
 from __future__ import annotations
 
@@ -69,6 +76,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import audit_script_doctrine as A          # noqa: E402  (shared helpers/regexes)
 import beat_tags                            # noqa: E402
+import kit_spec                             # noqa: E402  (A3 anchor, unit windows - one owner)
 
 DOCS = Path(__file__).resolve().parents[3] / "docs/content-video-engine"
 P1_GUIDE = DOCS / "patterns/phase-guides/P1.md"
@@ -85,7 +93,7 @@ STAKES_BY_S = 30.0              # 38 B3: stakes named by ~0:25 (tolerance to 0:3
 PROMISE_WIN = (30.0, 60.0)      # 38 B4 / MAP s3 / CLK: mini-payoff FIRST, then the promise
 BEAT5_START = 60.0              # 38 B5: the map, desire, opponent, A2, ring - 0:60 to P1 end
 A2_ANCHOR = 60.0                # 38 B5 / P1 QC
-A3_PCT = 0.10                   # P2.md / MAP s4 QC: A3 + F2 at ~10% of runtime
+# A3 = kit_spec.a3_anchor_s(runtime): P2.md / MAP s4 QC, A3 + F2 at ~10% of runtime (E23; shared with the audit)
 REHOOK_TOL = A.REHOOK_TOLERANCE_S
 NEW_INFO_MAX_GAP_S = 30.0       # P2: something genuinely new every 15-30s
 CATALYST_WITHIN_S = 60.0        # P2: catalyst lands in the phase's first ~60s, closed inside 30-60s
@@ -237,7 +245,9 @@ def _first_alnum(text: str, chunk_off: int) -> int:
 
 # ---- the gate ---------------------------------------------------------------
 def run(text: str, timeline: list[dict] | None = None, counterparty: str | None = None,
-        ring: str | None = None, opening_s: float = 300.0) -> tuple[list[Gate], dict]:
+        ring: str | None = None, opening_s: float = 300.0,
+        cycle_s: float | None = None) -> tuple[list[Gate], dict]:
+    """cycle_s: how far G36's cycle check runs; None = the whole runtime (E23)."""
     sents = _sentences_timed(text, timeline)
     marks = beat_tags.find_marks(text)
     beats: dict[str, list[tuple[float, int]]] = {}
@@ -430,9 +440,9 @@ def run(text: str, timeline: list[dict] | None = None, counterparty: str | None 
         "PASS" if tdeb else "FAIL", f"[debate] at {mmss(tdeb[0])}" if tdeb else "no [debate] declared after the head-fake in mid-late P2")
     if tdeb:
         add("J11", "McKee: the plan fails as a GAP (an action whose result violates expectation), never as a lecture", "JUDGE", f"read the line at {mmss(tdeb[0])}")
-    a3c = runtime * A3_PCT
+    a3c = kit_spec.a3_anchor_s(runtime)
     a3 = rehook_hits(a3c - REHOOK_TOL, a3c + REHOOK_TOL)
-    add("G25", f"PLATFORM rehook A3 at ~10% of runtime = {mmss(a3c)} (P2 / MAP s4 QC) [audit hard-codes 3:00 - docs win here]",
+    add("G25", f"PLATFORM rehook A3 at ~10% of runtime = {mmss(a3c)} (P2 / MAP s4 QC; audit and gate share kit_spec.a3_anchor_s, E23)",
         "PASS" if a3 else "FAIL", f"A3 at {mmss(a3[0])}" if a3 else f"no rehook within {REHOOK_TOL:.0f}s of {mmss(a3c)}")
     f2 = [t for t in tag_times("foreshadow") if a3c - REHOOK_TOL <= t <= a3c + REHOOK_TOL]
     add("G26", "Foreshadow schedule F2 at ~10%: the promise sighted again, none of it delivered (P2 / MAP s2)", "PASS" if f2 else "FAIL",
@@ -517,18 +527,36 @@ def run(text: str, timeline: list[dict] | None = None, counterparty: str | None 
     hedged = next(((a, b) for a, b in zip(sents, sents[1:]) if b[0] <= opening_s and NUMBER.search(a[2]) and HEDGE.search(b[2])), None)
     add("G35", "U6 / E20: a delivered proof is never hedged in the next sentence", "FAIL" if hedged else "PASS",
         f"proof at {mmss(hedged[0][0])} hedged at {mmss(hedged[1][0])}: '{hedged[1][2][:70]}'" if hedged else "clean")
-    cycle = sorted(set(([t_pr] if t_pr is not None else []) + loops + news + lc + rehook_hits(0, opening_s) + tag_times("head-fake") + tag_times("catalyst") + tag_times("debate")))
-    cycle = [t for t in cycle if t <= opening_s]
-    pts = [0.0] + cycle + [min(opening_s, runtime)]
+    # E23: the cycle check runs the WHOLE video by default - every declared beat tag, the
+    # promise, and the rehook family anywhere in the runtime is a cycle beat.
+    cycle_end = min(runtime, cycle_s) if cycle_s is not None else runtime
+    all_tags = [t for v in beats.values() for t, _ in v]
+    cycle = sorted(set(([t_pr] if t_pr is not None else []) + loops + news + lc + rehook_hits(0, cycle_end) + all_tags
+                       + tag_times("head-fake") + tag_times("catalyst") + tag_times("debate")))
+    cycle = [t for t in cycle if t <= cycle_end]
+    pts = [0.0] + cycle + [cycle_end]
     gaps = [(a, b - a) for a, b in zip(pts, pts[1:])]
     wg = max(gaps, key=lambda x: x[1]) if gaps else (0, 0)
-    add("G36", "CLK the cycle repeats per beat - hook / show it's worth it / promise more / deliver; no >60s without a cycle beat", "FAIL" if wg[1] > CYCLE_MAX_GAP_S * tol else "PASS",
+    add("G36", f"CLK the cycle repeats per beat - hook / show it's worth it / promise more / deliver; no >60s without a cycle beat, 0:00-{mmss(cycle_end)} (E23: whole runtime)",
+        "FAIL" if wg[1] > CYCLE_MAX_GAP_S * tol else "PASS",
         f"longest stretch without a cycle beat: {wg[1]:.0f}s from {mmss(wg[0])}")
+    # E23 / P3.md u5 / MAP s9 "1/unit": every P3 and P5 unit window rehooks out
+    windows = kit_spec.unit_windows(runtime)
+    n_p3 = kit_spec.unit_count(runtime / 60)
+    empty = [k for k, (lo, hi) in enumerate(windows, start=1) if not rehook_hits(lo / tol, hi * tol)]
+    add("G44", "PLATFORM rehook per unit: one template-family line or [rehook] inside every P3/P5 unit window (P3.md u5 / P5 / MAP s9 '1 per unit'; E23)",
+        "FAIL" if empty else "PASS",
+        ("no rehook in " + ", ".join(f"unit {k} {mmss(windows[k - 1][0])}-{mmss(windows[k - 1][1])}" for k in empty)) if empty
+        else f"all {len(windows)} unit windows rehook out")
     add("J04", "38 B5 context-dump ban: every abstraction cashed into an object or number within one sentence", "JUDGE", "read P1 B5 and the P2 catalyst")
 
     stats = {"runtime": mmss(runtime), "timing": "measured (take)" if timeline else "estimated (kit rate, 8% band)",
              "geometry": f"P1 0:00-{mmss(p1_end)} (beat 5 from {mmss(beat5_lo)}), P2 -{mmss(p2_end)} ({geo['source']})",
              "density_bands": f"loops {geo['loops']}, new-info {geo['new']}",
+             "a3_anchor": mmss(a3c),
+             "cycle": f"checked 0:00-{mmss(cycle_end)}; longest gap {wg[1]:.0f}s from {mmss(wg[0])}",
+             "unit_windows": [f"{'P3' if k <= n_p3 else 'P5'} unit {k} {mmss(lo)}-{mmss(hi)}"
+                              for k, (lo, hi) in enumerate(windows, start=1)],
              "counterparty": cp, "ring": ring,
              "not_gated_here": "Truby Battle / Self-Revelation / New Equilibrium, Snyder midpoint, chiastic center, ring CLOSE (P4-P6)",
              "beats_declared": {k: [mmss(t) for t, _ in v] for k, v in beats.items()}}
@@ -547,13 +575,15 @@ def main() -> int:
     ap.add_argument("--counterparty", help="named counterparty, e.g. Bravos")
     ap.add_argument("--ring", help="the ring token object, e.g. spike")
     ap.add_argument("--opening-s", type=float, default=300.0)
+    ap.add_argument("--cycle-s", type=float, default=None,
+                    help="how far G36's cycle check runs (default: the whole runtime, E23)")
     args = ap.parse_args()
     if hasattr(sys.stdout, "reconfigure"):
         sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     text = args.script.read_text(encoding="utf-8")
     unknown = beat_tags.unknown_marks(text)
     tl = load_timeline(args.timeline) if args.timeline else A.load_timings(args.script)
-    gates, stats = run(text, tl, args.counterparty, args.ring, args.opening_s)
+    gates, stats = run(text, tl, args.counterparty, args.ring, args.opening_s, args.cycle_s)
     if unknown:
         gates.insert(0, Gate("G00", "doc 37 marks", "FAIL", f"unknown marks would be spoken: {sorted(unknown)}"))
     print(f"=== OPENING STRUCTURE GATE: {args.script.name} ===")

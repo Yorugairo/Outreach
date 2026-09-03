@@ -152,6 +152,50 @@ def open_close_seconds() -> tuple[float, float]:
     return (float(m.group(1)), float(m.group(2))) if m else (60.0, 90.0)
 
 
+# --- positional anchors and unit geometry -----------------------------------
+# P2.md "Positional anchor A3 + foreshadow F2 (~10% of runtime; 3:00 @30min)";
+# MAP s4 QC; kit roster "A3 ~10%". Ruling E23 (2026-09-02): 10% of runtime is
+# the anchor for BOTH the audit and the opening gate; 3:00 is the @30:00
+# column of that rule, not a constant.
+A3_RUNTIME_SHARE = 0.10
+# FULL-VIDEO-MAP sec 1 scaling law, as the audit's phase geometry carries it
+# (audit_script_doctrine P3_GAP_PCT / P5_REFLECTION_PCT): between the pinned
+# OPEN and CLOSE, every phase is a share of runtime. P3 GAP 17-45%; P5
+# REFLECTION 55-87%. Replicated here (not imported) because the audit imports
+# this module.
+P3_GAP_SHARE = (0.17, 0.45)
+P5_REFLECTION_SHARE = (0.55, 0.87)
+
+
+def a3_anchor_s(runtime_s: float) -> float:
+    """Rehook anchor A3, in seconds, for a script of this runtime.
+
+    P2.md: "A3 at ~10% of runtime; 3:00 @30min". 806s -> 80.6s; 1800s -> 180s.
+    """
+    return runtime_s * A3_RUNTIME_SHARE
+
+
+def _split(lo: float, hi: float, n: int) -> list[tuple[float, float]]:
+    """A span cut into n contiguous equal windows."""
+    step = (hi - lo) / n
+    return [(lo + i * step, lo + (i + 1) * step) for i in range(n)]
+
+
+def unit_windows(runtime_s: float) -> list[tuple[float, float]]:
+    """The per-unit windows a script of this runtime must rehook out of.
+
+    P3.md u5 ("Rehook out", one per unit) and MAP s9 / kit roster ("1/unit"):
+    the P3 GAP span is cut into `unit_count(runtime_min)` equal windows, and
+    the P5 REFLECTION span the same way. The first `unit_count` tuples are
+    P3, the rest P5; windows are contiguous inside each phase span.
+    """
+    n = unit_count(runtime_s / 60)
+    p3 = _split(runtime_s * P3_GAP_SHARE[0], runtime_s * P3_GAP_SHARE[1], n)
+    p5 = _split(runtime_s * P5_REFLECTION_SHARE[0],
+                runtime_s * P5_REFLECTION_SHARE[1], n)
+    return p3 + p5
+
+
 if __name__ == "__main__":
     import sys
     # The kit is full of en-dashes and middots; a cp1252 console cannot

@@ -663,3 +663,34 @@ review:
 Camera punch is reserved for punctuation on a named object ("this iron
 spike"); pull-back reveal for hooks that open on one large number.
 Menu: doc 29 s9.27. Plan: P35 T6-T8.
+
+## E23 — A3 sits at 10% of runtime; the cycle check runs the whole video (2026-09-02)
+
+Two tools disagreed on where rehook A3 belongs. The opening gate read
+P2.md (~10% of runtime); the doctrine audit hard-coded 3:00, which is
+only the @30:00 column of that rule. On a 13:26 episode that is 1:20
+against 3:00, and the audit passed episode one's first mid-video rehook
+at 3:40 as "A3".
+
+Operator: "A3 at 10% of runtime is correct. But then we still have to
+set the next microhook and the cycle continues, but the way our
+structure is written that should already be self-healing regardless of
+when the hook lands."
+
+Standing:
+- A3 = 10% of runtime, one owner: `kit_spec.a3_anchor_s(runtime)`. The
+  audit (MAP sec 2 anchor WARN) and the opening gate (G25) both call it
+  and print the computed target as m:ss. 3:00 is not a constant anywhere.
+- The self-healing is mechanical past the opening, not a by-hand roster
+  row: G36 (no >60s without a cycle beat) runs over the whole runtime by
+  default (`--cycle-s` narrows it), counting every declared beat tag, the
+  promise and the rehook family; G44 requires one rehook-family line or
+  `[rehook]` inside every P3 and P5 unit window (`kit_spec.unit_windows`,
+  P3.md u5 / MAP s9 "1/unit"). Both FAIL, not WARN.
+
+Why: the clock repeats per beat (memory youtube-retention-clock); a hook
+that lands earlier only moves where the next one is due. The doctrine
+already said so; the tools only checked the first five minutes, so a
+script could clear the opening and go 5 minutes without a beat.
+Gate: `gate_opening_structure.py` G25 / G36 / G44; audit
+`audit_script_doctrine.py` MAP sec 2. Plan: P34 T2.

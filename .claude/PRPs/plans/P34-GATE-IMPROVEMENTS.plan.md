@@ -193,7 +193,7 @@ Acceptance (all observable):
 - Evidence: commit d837d1d; `pytest tests/test_run_script_gates.py -q` 11 passed; runner on ep1 -> exit 1, `SCRIPT-G-GATES.md` TOOLS: lint exit 0/0, audit exit 0 0/1 measured, opening gate exit 1 26/1/14/6, screens 186 items; `record_chained_take.py` preflight prints `[FAIL] gates report fail` and exits 1, nothing spent
 
 ### T2: A3 at 10% of runtime, and the cycle check runs the whole video
-- Status: pending
+- Status: done
 - Owner: junior_developer (→ `general-purpose`)
 - Depends on: none (Human Gate 1 decided)
 - Write set: `content/video_engine/scripts/audit_script_doctrine.py`
@@ -212,7 +212,7 @@ Acceptance (all observable):
   no rehook; ep1 red baseline gains whatever these find past 5:00 (report
   the numbers); the conforming synthetic still passes.
 - Validate: `python -m pytest content/video_engine/tests/test_audit_a3_anchor.py content/video_engine/tests/test_gate_opening_structure.py -q`
-- Evidence: pending
+- Evidence: `pytest test_audit_a3_anchor.py test_gate_opening_structure.py -q` 16 passed (58 across the gate suites); kit_spec.a3_anchor_s(1800)=180, (806)=80.6; ep1 gate 26 -> 27 FAIL (G36 now 352s from 7:33 over the whole runtime; G44 P5 unit 4 9:32-11:40 has no rehook); audit stats a3_anchor 1:25 on its estimate, no A3 WARN because the A1 promise line at ~1:20 counts (pre-existing semantics); ruling E23 in OPERATOR-RULINGS; P2.md QC note. Note: the audit's break ration counts silent beat tags as marks - latent, out of scope
 
 ### T3: Declared-beat enumeration (rule R2 artifact)
 - Status: done

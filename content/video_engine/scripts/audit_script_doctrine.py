@@ -89,9 +89,13 @@ P4_PIVOT_PCT = (45.0, 55.0)
 P5_REFLECTION_PCT = (55.0, 87.0)
 P6_CLOSE_S = kit_spec.open_close_seconds()  # absolute, from the end
 # sec 2 — rehook anchors A1..A4. A4 is the pivot itself, checked separately.
-REHOOK_ANCHORS = {"A1": 30.0, "A2": 60.0, "A3": 180.0}
+# A1/A2 are absolute (the attention ladder is physics); A3 is 10% of runtime
+# (P2.md; ruling E23 2026-09-02) and is computed per script in audit() via
+# kit_spec.a3_anchor_s — the same function the opening gate uses. The 3:00
+# that used to sit here was the @30:00 column of that rule, not a constant.
+REHOOK_ANCHORS = {"A1": 30.0, "A2": 60.0}
 REHOOK_TOLERANCE_S = 45.0
-# doc 38: rehook slots at ~0:30, ~1:00, 3:00 and mid-video
+# doc 38: rehook slots at ~0:30, ~1:00, ~10% and mid-video
 # MAP sec 3: the 0:30-0:60 dated promise IS A1 ("A1 + F1 + macro-loop-1
 # setup in one line"), so it counts as an anchor even though it is not one of
 # the five template families.
@@ -371,14 +375,19 @@ def audit(text: str) -> tuple[list[Finding], dict]:
     # sec 2 — rehook anchors A1/A2/A3 (A4 is the pivot, pinned separately).
     a1 = [secs(sp[:m.start()]) for m in re.finditer(A1_PROMISE, sp, re.I)]
     anchor_hits = sorted(set(times) | set(a1))
-    missing = [name for name, target in REHOOK_ANCHORS.items()
+    a3_s = kit_spec.a3_anchor_s(runtime)           # E23: 10% of THIS runtime
+    mmss = lambda s: f"{int(s // 60)}:{int(s % 60):02d}"  # noqa: E731
+    stats["a3_anchor"] = mmss(a3_s)
+    anchors = {**REHOOK_ANCHORS, "A3": a3_s}
+    missing = [name for name, target in anchors.items()
                if not any(abs(t_ - target) <= REHOOK_TOLERANCE_S
                           for t_ in anchor_hits)]
     if missing:
         add("WARN", "MAP sec 2",
             f"no rehook construction within {REHOOK_TOLERANCE_S:.0f}s of "
             f"anchor(s) {', '.join(missing)} "
-            f"(A1 ~0:30, A2 ~1:00, A3 ~3:00) — found at "
+            f"(A1 ~0:30, A2 ~1:00, A3 ~{mmss(a3_s)} at {mmss(runtime)} = "
+            f"10% of runtime) — found at "
             f"{[f'{t_ / 60:.1f}m' for t_ in times] or 'none'}")
 
     # sec 2 — CTA budget: at most one micro-CTA in the P2 tail, exactly one

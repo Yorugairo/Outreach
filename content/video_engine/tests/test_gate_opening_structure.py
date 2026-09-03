@@ -9,6 +9,7 @@ present.
 """
 from __future__ import annotations
 
+import re
 import sys
 from pathlib import Path
 
@@ -20,6 +21,7 @@ sys.path.insert(0, str(SCRIPTS))
 
 import gate_opening_structure as G   # noqa: E402
 import audit_script_doctrine as A     # noqa: E402
+import kit_spec                       # noqa: E402
 
 EP = ROOT / "content/video_engine/projects/systems-and-blowups/steel-and-paper"
 SCRIPT = EP / "SCRIPT-G-VO.txt"
@@ -98,6 +100,13 @@ def _conforming_opening() -> str:
     for t in (190.0, 240.0, 290.0):
         s = _pad_to(s, t)
         s += "[new] [rehook] But look at what the filings say next, because the number moves again. "
+    # E23: the cycle runs the whole video - an (untagged) rehook-family line every ~50s
+    # keeps G36 under 60s x tol to the end and lands one in every P3/P5 unit window
+    # (kit_spec.unit_windows at 805s: P3 2:16-4:09 / 4:09-6:02, P5 7:23-9:32 / 9:32-11:40).
+    # Untagged on purpose: the audit's doc-37 break ration counts every [mark] per 1k chars.
+    for t in range(340, 800, 50):
+        s = _pad_to(s, float(t))
+        s += "But look at what the filings say next, because the number moves again. "
     s = _pad_to(s, 805.0)
     return s
 
@@ -150,3 +159,49 @@ def test_geometry_scales_with_runtime():
     assert (g16["p1_end"], g16["p2_end"]) == (75.0, 180.0)
     assert (g8["p1_end"], g8["p2_end"]) == (60.0, 135.0)
     assert g30["loops"] == (4, 6) and g30["new"] == (7, 14)
+
+
+# ---- E23: the cycle runs the whole video; one rehook per unit window -------
+
+def _gap_start_s(message: str) -> float:
+    m = re.search(r"from (\d+):(\d+)", message)
+    assert m, message
+    return int(m.group(1)) * 60 + int(m.group(2))
+
+
+@needs_ep1
+def test_red_steel_and_paper_cycle_gap_measured_past_the_opening():
+    text, tl = SCRIPT.read_text(encoding="utf-8"), G.load_timeline(TIMELINE)
+    gates, stats = G.run(text, tl, counterparty="Bravos", ring="spike")        # cycle_s None = whole runtime
+    g = _by_id(gates)
+    assert g["G36"].level == "FAIL", g["G36"]
+    assert _gap_start_s(g["G36"].message) >= 300, g["G36"].message           # the worst gap is PAST 5:00
+    assert stats["cycle"].startswith(f"checked 0:00-{stats['runtime']}"), stats["cycle"]
+    assert len(stats["unit_windows"]) == 2 * kit_spec.unit_count(_clock(stats["runtime"]) / 60)
+    # narrowed to the opening, the old reading comes back
+    g5 = _by_id(G.run(text, tl, counterparty="Bravos", ring="spike", cycle_s=300.0)[0])
+    assert g5["G36"].level == "FAIL" and _gap_start_s(g5["G36"].message) < 300, g5["G36"]
+    assert g["G44"].level == "FAIL" and "unit " in g["G44"].message, g["G44"]  # no rehook in every unit window
+
+
+def test_unit_window_without_rehook_fails_g44():
+    s = _pad_to("The safest thing you own looks like this. An iron spike. ", 140.0)
+    s += "[rehook] But here's where their own chart gets strange. "            # inside P3 unit 1 only
+    g = _by_id(G.run(_pad_to(s, 805.0), None)[0])
+    assert g["G44"].level == "FAIL", g["G44"]
+    assert "unit 2 " in g["G44"].message and "unit 1 " not in g["G44"].message, g["G44"].message
+
+
+def test_conforming_opening_rehooks_every_unit_and_cycles_to_the_end():
+    gates, stats = G.run(_conforming_opening(), None, counterparty="Bravos", ring="spike")
+    g = _by_id(gates)
+    assert g["G44"].level == "PASS", g["G44"]
+    assert g["G36"].level == "PASS", g["G36"]
+    assert g["G25"].level == "PASS" and "1:2" in g["G25"].src, g["G25"]        # A3 at 10% of ~13.4 min
+    assert "hard-codes" not in g["G25"].src
+    assert len(stats["unit_windows"]) == 4 and stats["unit_windows"][0].startswith("P3 unit 1")
+
+
+def _clock(mmss: str) -> float:
+    m, _, s = mmss.partition(":")
+    return int(m) * 60 + int(s)
