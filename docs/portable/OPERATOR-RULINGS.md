@@ -718,3 +718,15 @@ idea) or the soak (the no-hand path) fills the board to a definite rounded
 edge; the outline draws exactly on that edge. Why: the page is a
 chalkboard on paper - its power is the ink arriving and the line closing
 it, not the paper performing.
+
+**E22 addendum 4 (2026-09-03) - the deckle is the feature.** On the
+delivered blank page: *"that deckle is almost perfect ... fill in the frame
+up to the deckle with the charcoal, then write the line with the line and
+build the graph. The deckle is the feature that makes it look hand-drawn
+without the roughness."* The field fills the paper to its deckle edge; the
+line traces the deckle; the chart sits inside. Coffee stains and the uneven
+halo were attempts at this idea and stay refused. Same review: stage
+captions are the default ("awesome"); wash beats the focus rack (rack
+retired); the targeted species are "finally a real capability"; the race
+must be smoother; whole charts keep the chart hygiene (s9.22-9.23b).
+

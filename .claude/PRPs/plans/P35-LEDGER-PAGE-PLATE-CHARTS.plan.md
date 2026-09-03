@@ -305,7 +305,7 @@ proof earns the page.
 - Evidence: `ledger_page.py` (299 lines; pick_builder / validate / build_spec pure; values verbatim via parse_float=str; race/decline/progress contracts in the docstring; checklist series rejected with 'keep it a dock'); `pytest test_ledger_page.py -q` 17 passed; trim-proof -> story bars 8 values, value_strings verbatim; divergence -> dense-line 4x235 pts with the axes block carried
 
 ### T3: The plate-chart species in the player
-- Status: done (working reference C; the pick and the font stay open)
+- Status: done (Human Gate 1 DECIDED 2026-09-03: the two-plate path with the charcoal filled to the DECKLE; the font stays open)
 - Owner: parent
 - Depends on: T1 (Human Gates 1, 2), T2
 - Write set: `docs/content-video-engine/samples/scene-evidence-player.template.html`
@@ -398,7 +398,7 @@ proof earns the page.
   (player half) `resolveTarget` (datum -> the page's bar or dense-line point; point/region -> frame fractions; span -> caption words), `camXf` one world transform about the target (docks fixed), `paintSpecies` overlay; proof: callout circles the trim bar with its label, squiggle draws under 'ledger', spotlight glides between two points, punch on a point moves the world and the cutouts; no console errors; range renders per species for the operator are still to cut
 
 ### T8: Focus rack vs the current evidence lighting - side by side (proposal)
-- Status: review (the operator picks; the current mechanism stays)
+- Status: done (DECIDED 2026-09-03: "Wash beats the focus rack" - rack retired, wash/spot stays)
 - Owner: parent
 - Depends on: T3 (template ordering only)
 - Write set: `content/video_engine/projects/systems-and-blowups/steel-and-paper/evidence/prototypes/focus-rack-vs-wash.html`

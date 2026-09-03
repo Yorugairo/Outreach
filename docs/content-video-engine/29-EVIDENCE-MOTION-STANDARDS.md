@@ -1413,7 +1413,7 @@ whose still stretches over 12s carry no stage page. The side-by-side
 default only after that pick. Rendered 2026-09-03 on 3:11-3:31 (the 0:57
 window is dock-held, so captions stay anchored there by rule):
 `steel-and-paper/build-f/render/stage-vs-anchor-0311.mp4` and its
-filmstrip. PICK: ____ (operator).
+filmstrip. PICK (operator, 2026-09-03): STAGE. "The captions on the ledger proof are awesome." Stage mode is the default whenever no dock is up.
 
 **Authoring rule for the shot table (stage 7):** every window row is
 either under a dock, inside 12s of one, or carries stage captions. The
@@ -1555,6 +1555,26 @@ draw"*): the page is PLAIN cream (the newsprint grain barely there, no
 fibre, no stains), the scribble or the soak fills the board to a definite
 rounded edge, and the line draws on that edge. Three things, in that
 order, and nothing decorating them.
+
+**The DECKLE is the feature (operator, 2026-09-03, on the delivered
+plates).** *"That deckle is almost perfect - that is exactly what I was
+trying to describe earlier; I wanted it paper in my head, but that white
+would work too. The answer is to simply fill in the frame up to the deckle
+with the charcoal, then write the line with the line and build the graph.
+The deckle is the feature that makes it look hand-drawn without the
+roughness."* So the field is not a rounded board on the page: the charcoal
+fills the PAPER up to its own deckle edge (made procedurally from the
+generated blank page: paper mask, 1.2px feather, 94% charcoal so a whisper
+of fibre survives), the white beyond the deckle stays, and the line is
+drawn ALONG the deckle (the page spec carries `edge_path`, the paper's
+traced boundary, drawn clockwise by dash-offset). The chart box sits inside
+the paper with a margin the deckle never touches. This is what the coffee
+and halo attempts were reaching for; the deckle says it cleanly.
+Also ruled the same review: the ledger species proof "looks good" (the
+two-plate path is the field); the targeted species "all worked really
+well - finally a real capability"; the race "needs to be smoother";
+the builders proofs must keep the s9.22-9.23b chart hygiene when they are
+whole charts, not examples.
 
 **The ground is a generated plate, and so may be the field (operator,
 2026-09-03).** *"The background needs to be a plate that GPT generates,

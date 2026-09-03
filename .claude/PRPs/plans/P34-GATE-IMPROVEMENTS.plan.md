@@ -245,7 +245,7 @@ Acceptance (all observable):
 - Evidence: commit d837d1d; `pytest tests/test_motion_gate_wiring.py tests/test_gate_motion_density.py -q` 13 passed; gate stdout byte-identical after the refactor; `build-f/GATES-MOTION.md` VERDICT: FAIL (4 FAIL); `render_episode.py` -> exit 2 with the refusal line
 
 ### T5: Caption STAGE mode in the player, M08 enforced
-- Status: review (Human Gate 2: the operator picks from the 3:11-3:31 side-by-side)
+- Status: done (Human Gate 2 DECIDED 2026-09-03: STAGE is the default - "awesome")
 - Owner: parent
 - Depends on: T4, Human Gate 2
 - Write set: `docs/content-video-engine/samples/scene-evidence-player.template.html`
