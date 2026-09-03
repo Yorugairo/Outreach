@@ -27,6 +27,37 @@ reveal, push hand-off, weight-shift anchor captions) as further
 opt-in species. Nothing replaces a reviewed mechanism; every species is
 an addition beside the locked wipe and dock choreography.
 
+Research findings (2026-09-02, from the component sources and the
+hyperframes skill references):
+1. **Two chart builders, by data shape.** `chart-story` parses a
+   comma-separated handful of values and fades one label per datum; it is
+   a proof-stats unit (4-8 values: the 28-cents progress, the three
+   questions as bars, 1845 vs 2026). The divergence chart is four series
+   of 235 points; that shape uses OUR dash-offset builder (player template
+   ~:470-760, driven by a `C` chart spec: panels, series, log, hlines,
+   ymin/ymax), which is self-contained enough to port. The stitch's chart
+   step therefore has two implementations and the page spec (T2) picks by
+   series length.
+2. **Ship path is a decision, not a given.** The hyperframes CLI renders
+   `--format webm` (transparent) and `png-sequence` locally. A page can
+   ship as a PNG/WebP frame sequence the player tiles as a plate (the
+   player already tiles PNG plates; a per-frame swap is deterministic and
+   needs no `<video>`), at the cost of asset weight (~150 frames per 5s
+   page). The alternative is porting the picked stitch into the player as
+   a species (T3 as written). Human Gate 4.
+3. **Hyperframes' determinism allowlist** (opacity, x/y, scale, rotation,
+   color, backgroundColor, borderRadius, transforms) does not list
+   `clip-path`, `mask-image` or `filter`; registry items stay inside it by
+   moving blobs with transforms and driving reveals through `onUpdate`.
+   The roll-out must be authored the same way (a transform on a wrapper
+   inside an overflow-hidden frame, not an animated clip-path) or
+   `hyperframes check` flags it. Our own player has no such limit.
+4. **Sequencing is native**: clips chain by id (`data-start="bleed + 0.4"`),
+   sync points are published per component (`draw-complete`,
+   `callout-landed`), and `hyperframes snapshot --at` gives the filmstrip.
+5. The sound palette has no paper, ink or chalk cue; the page is silent
+   until one is sourced (Human Gate 5).
+
 ## Intent And Acceptance
 
 Intent: the payoff chart of every episode, and at least one more plate per
@@ -99,6 +130,14 @@ Acceptance:
 3. **Bar-race motion on a page**: overtaking bars are the busiest thing
    the channel will show; confirm from the render that it reads as a
    ledger and not a dashboard before it becomes a default variant.
+4. **Ship path** (after T1): pages as pre-rendered frame sequences the
+   player tiles as plates (fast, uses the lane as-is, heavy assets) or
+   the stitch ported into the player as a species (T3; lighter, more
+   work, one renderer). Recommendation: frame sequences for the first
+   episode's two or three pages, port when pages become routine.
+5. **Sound**: a paper roll, an ink bleed and a chalk stroke need cues;
+   source CC0 (Freesound, as the whoosh was) or leave the page under the
+   bed only. Confirm the spend rule applies (no paid audio without a yes).
 
 ## Mandatory Reads
 
