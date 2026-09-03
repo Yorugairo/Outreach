@@ -1,23 +1,23 @@
 # SCRIPT GATES - SCRIPT-G-VO.txt
 
 script: SCRIPT-G-VO.txt
-generated: 2026-09-03T09:12:58+00:00
+generated: 2026-09-03T10:21:53+00:00
 script_hash: 4d2876620021c3d94387d761d442548d95f867afeb7be8db00f3ed3385dcf5f8
 timing_source: measured
 
-TOOLS      lint: exit 0, 0 fails | audit: exit 0, 0/0, timing=measured |
-           opening gate: exit 1, 28/1/14/7 | screens: SCRIPT-G-SCREENS.md, 186 items
+TOOLS      lint: exit 0, 0 fails | audit: exit 1, 1/0, timing=measured |
+           opening gate: exit 1, 22/2/21/8 | screens: SCRIPT-G-SCREENS.md, 186 items
 
 ## lint_script_pattern.py
 exit 0
 
 ```
-stats: {'sentence_mean': 10.1, 'sentence_count': 240, 'word_count': 2417, 'rehook_positions_pct': [26, 33]}
+stats: {'sentence_mean': 10.1, 'sentence_count': 240, 'word_count': 2417, 'rehook_positions_pct': [26, 34]}
 RESULT: clean
 ```
 
 ## audit_script_doctrine.py
-exit 0
+exit 1
 
 ```
 === SCRIPT-G-VO.txt ===
@@ -26,7 +26,7 @@ exit 0
            runtime: 14m 11s
          sentences: 240
      sentence_mean: 10.1
-      break_ration: 0.43
+      break_ration: 3.1
   sentence_mean_carrying: 11.4
   short_figure_share: 16.2%
     sentence_stdev: 5.2
@@ -45,11 +45,12 @@ exit 0
    hook_measured_s: 2.42
   paradox_measured_s: 3.63
 
+  [FAIL] doc 37 sec 1: break ration 3.10/1k exceeds 3.0 — causes audible speed-ups
   [INFO] doc 37 sec 8: 13,883 chars exceeds the mv2 10,000 cap — chained take required, split at a phase boundary
   [INFO] estimator: the two rate estimates disagree by 10% on the first sentence (numerals read longer than they look) — record a take to settle it
   [INFO] doc 38 B1-B4: owned by gate_opening_structure - see content\video_engine\projects\systems-and-blowups\steel-and-paper\SCRIPT-G-GATES.md
 
-RESULT: 0 FAIL, 0 WARN
+RESULT: 1 FAIL, 0 WARN
 ```
 
 ## gate_opening_structure.py
@@ -62,21 +63,17 @@ exit 1
           geometry: P1 0:00-1:10 (beat 5 from 0:47), P2 -2:45 (phase guides)
      density_bands: loops (3, 4), new-info (5, 7)
          a3_anchor: 1:20
-             cycle: checked 0:00-13:25; longest gap 352s from 7:33
+             cycle: checked 0:00-13:25; longest gap 130s from 9:26
       unit_windows: ['P3 unit 1 2:16-4:09', 'P3 unit 2 4:09-6:02', 'P5 unit 3 7:23-9:32', 'P5 unit 4 9:32-11:40']
       counterparty: Bravos
               ring: spike
          packaging: title='The AI Bubble Is Real. What Survives Is Steel.' thumb=None thumb_file=content/video_engine/projects/systems-and-blowups/steel-and-paper/packaging/thumbnail-FINAL-steelpaper.png
     not_gated_here: Truby Battle / Self-Revelation / New Equilibrium, Snyder midpoint, chiastic center, ring CLOSE (P4-P6)
-    beats_declared: {}
+    beats_declared: {'ring': ['0:02', '7:15', '11:36'], 'archetype': ['0:09'], 'stakes': ['0:28'], 'payoff': ['0:30'], 'reflect': ['1:07'], 'tricolon': ['1:10'], 'promise': ['1:15'], 'desire': ['1:20'], 'opponent': ['1:23'], 'rehook': ['1:32'], 'map': ['1:33'], 'catalyst': ['1:43'], 'foreshadow': ['1:45', '6:44'], 'new': ['1:53', '1:59', '2:24', '3:03', '3:48', '4:52', '5:36', '5:54', '9:26'], 'concede': ['3:16'], 'turn': ['3:24'], 'head-fake': ['3:31'], 'debate': ['3:41'], 'loop': ['4:15'], 'loop-close': ['4:22'], 'dip': ['4:30'], 'anaphora': ['4:39', '6:23', '8:51', '12:53'], 'signpost': ['6:31']}
 
   [FAIL ] G02 first word at 0.00s in the edit clock
           Humes pre-opener, bent visual: the plate breathes 0.5-0.8s before the first word (38 B1 / doc 32 s7)
-  [FAIL ] G07 no [stakes] declared by 0:30
-          Hook anatomy: stakes named by ~0:25 (38 B3)
-  [FAIL ] G08 no [payoff] declared before the promise
-          One Minute Wall: real value FIRST, before the ask (38 B4)
-  [FAIL ] G09 promise at 1:20 - AFTER 0:45 (E24, decided 2026-09-03; Steel and Paper as recorded: 1:20)
+  [FAIL ] G09 promise at 1:15 - AFTER 0:45 (E24, decided 2026-09-03; Steel and Paper as recorded: 1:20)
           F1 + A1 + macro-loop-1 SETUP: the dated promise in 0:30-0:45 (38 B4 / MAP s3 / CLK; E24 roadmap by 0:45)
   [FAIL ] G10 missing
           Humes pre-key immediately before the promise (P1 pause marks)
@@ -86,20 +83,16 @@ exit 1
           PLATFORM rehook A2 ~1:00, template family (38 B5 / P1 QC)
   [FAIL ] G14 no [opponent] declared in P1
           Truby Opponent / McKee antagonism: the opponent named, a MECHANISM never a villain (38 B5)
-  [FAIL ] G16 0 [reflect] in P1
-          Glass alternation, P1 80/20: exactly ONE reflection dab (P1)
-  [FAIL ] G20 no [new] beats declared in P2
+  [FAIL ] G19 no [loop] within 60s of the catalyst at 1:43
+          The catalyst is a micro loop CLOSED inside 30-60s, not exposition (P2)
+  [FAIL ] G20 longest gap 44s
           PLATFORM new-info cadence: something genuinely new every 15-30s (P2)
   [FAIL ] G21 0 [loop] in P2
           L2 loops: 3-4 micro-loop closes at this runtime (P2 geometry / MAP s0)
-  [FAIL ] G22 0 [new] in P2
+  [FAIL ] G22 3 [new] in P2
           PLATFORM density: 5-7 new-info beats at this runtime (P2 geometry)
   [FAIL ] G24 no [head-fake] declared in P2
           Truby Plan v1 / head-fake #1 planted STRAIGHT, early-mid P2 (P2 MANDATORY / MAP s4)
-  [FAIL ] G25 no rehook within 45s of 1:20
-          PLATFORM rehook A3 at ~10% of runtime = 1:20 (P2 / MAP s4 QC; audit and gate share kit_spec.a3_anchor_s, E23)
-  [FAIL ] G26 no [foreshadow] near 10%
-          Foreshadow schedule F2 at ~10%: the promise sighted again, none of it delivered (P2 / MAP s2)
   [FAIL ] G27 'spike' 0x in P2
           Ring composition: token TOUCHED exactly once in P2, unresolved (P2 / doc 32 s5)
   [FAIL ] G28 no [loop-close] declared
@@ -108,16 +101,12 @@ exit 1
           U6 / E20 concession budget: an agreement run never exceeds 2 sentences or 10s without a claim of ours
   [FAIL ] G35 proof at 2:44 hedged at 2:47: 'The yardstick is a new instrument for this channel — no threshold on i'
           U6 / E20: a delivered proof is never hedged in the next sentence
-  [FAIL ] G36 longest stretch without a cycle beat: 352s from 7:33
+  [FAIL ] G36 longest stretch without a cycle beat: 130s from 9:26
           CLK the cycle repeats per beat - hook / show it's worth it / promise more / deliver; no >60s without a cycle beat, 0:00-13:25 (E23: whole runtime)
-  [FAIL ] G37 no [archetype] declared in 0:08-0:30
-          Truby Weakness/Need planted AS PEOPLE: an archetype-in-a-setting enters 0:08-0:30 (38 B3 / MAP s3)
   [FAIL ] G38 no [desire] declared in 0:47-1:10
           Truby Desire named: the goal the video pursues (38 B5)
   [FAIL ] G39 no [map] declared in beat 5
           Auditory handrail: map-not-territory signpost - tease the WHAT, hold the HOW (38 B5 / doc 32 s1)
-  [FAIL ] G40 no [catalyst] declared in the phase's first 60s
-          Snyder Catalyst / McKee inciting incident: the fact that makes the question urgent lands as a story beat in P2's first ~60s (P2)
   [FAIL ] G41 no [debate] declared after the head-fake in mid-late P2
           Snyder Debate / Truby Plan v1 FAILS: the obvious answer tried and found wanting, after the head-fake, mid-late P2 (P2 / MAP s4)
   [FAIL ] G42 no [signpost] declared at the end of P2
@@ -128,6 +117,8 @@ exit 1
           E24 / doc 29 s9.29: proxy for 'the first sentence answers the thumbnail' - the title is the words packaged with it
   [WARN ] G29 cannot place - macro close not declared
           PLATFORM breathing dip after the macro close (P2)
+  [WARN ] G43 1/4 declared beats open on a gap/consequence connector
+          McKee gap: beats connect by BUT/THEREFORE - a beat that could swap places is filler (P2 / doc 32 s4)
   [PASS ] G01 first sentence 2.42s
           PLATFORM 3s microhook (38 B1 / P1 QC)
   [PASS ] G03 paid at 3.63s, settle at 5.57s
@@ -138,24 +129,38 @@ exit 1
           Direct address: 'you' by 0:30 (38 B3 / doc 32 s1)
   [PASS ] G06 clean
           Biography as the twist - AFTER the paradox, never before (38 B3)
-  [PASS ] G11 'By the end, you'll run it yourself: thirty seconds a stock.'
+  [PASS ] G07 [stakes] at 0:28
+          Hook anatomy: stakes named by ~0:25 (38 B3)
+  [PASS ] G08 [payoff] at 0:30
+          One Minute Wall: real value FIRST, before the ask (38 B4)
+  [PASS ] G11 'One test — three questions — that sorts every holding you own into ste'
           The promise carries a date or number and is calculable (38 B4 / doc 35)
   [PASS ] G15 'spike' planted at 0:02
           Ring composition: the ring token PLANTED in P1 (38 B5 / doc 32 s5)
+  [PASS ] G16 1 [reflect] in P1
+          Glass alternation, P1 80/20: exactly ONE reflection dab (P1)
   [PASS ] G17 clean
           HARD GATE attribution-first; [verify] never in hook/promise (P1/P2 / doc 32 s1)
   [PASS ] G18 1 marks in P1 (0.9/min)
           Humes pauses rationed: ~three per minute maximum (P1)
   [PASS ] G23 clean
           McKee gap, sentence-level: BUT/THEREFORE only - zero AND-THEN chains (P2 / doc 32 s4)
+  [PASS ] G25 A3 at 1:32
+          PLATFORM rehook A3 at ~10% of runtime = 1:20 (P2 / MAP s4 QC; audit and gate share kit_spec.a3_anchor_s, E23)
+  [PASS ] G26 [foreshadow] at 1:45
+          Foreshadow schedule F2 at ~10%: the promise sighted again, none of it delivered (P2 / MAP s2)
   [PASS ] G30 none
           PLATFORM: the ONLY mid-video CTA slot is the 15-30s after the macro payoff (P2)
   [PASS ] G31 0 dabs, 0 loops
           Glass alternation, P2 70/30: dabs marked, never consecutive (P2)
-  [PASS ] G32 tricolon 0, anaphora P1 0 / P2 0
+  [PASS ] G32 tricolon 1, anaphora P1 0 / P2 0
           Rhetoric: ONE momentum tricolon max in P2; anaphora (if debuted in P1) recurs exactly once (P2 / doc 32 s3)
   [PASS ] G33 1 marks in P2
           Humes pauses in P2: no [pre-key] before the head-fake (that pause belongs to the pivot); <=3 marks in the phase
+  [PASS ] G37 [archetype] at 0:09
+          Truby Weakness/Need planted AS PEOPLE: an archetype-in-a-setting enters 0:08-0:30 (38 B3 / MAP s3)
+  [PASS ] G40 [catalyst] at 1:43
+          Snyder Catalyst / McKee inciting incident: lands as a story beat in P2's first ~60s (P2)
   [JUDGE] J03 'The safest thing you own looks like this.'
           Rhetoric: microhook concrete, terminal stress on the surprising word (38 B1)
   [JUDGE] J04 read P1 B5 and the P2 catalyst
@@ -168,17 +173,19 @@ exit 1
           A/V contextual mapping: plates carry the archive, the voice carries motive and cost; a line that captions its visual fails (P2 / doc 32 s6) - check the plate plan
   [JUDGE] J08 read the promise line
           Rhetoric: phonetic anchor only on the promise/payoff/tell (doc 32 s3)
+  [JUDGE] J09 read the line at 0:09
+          McKee archetype, not stereotype: a universal experience in a specific setting (doc 32 s4)
   [JUDGE] J12 open content/video_engine/projects/systems-and-blowups/steel-and-paper/packaging/thumbnail-FINAL-steelpaper.png; sentence 1: 'The safest thing you own looks like this.'
           E24 / doc 29 s9.29: the first sentence answers what the thumbnail poses - open the thumbnail and read sentence 1 against it
 
-RESULT: 28 FAIL / 1 WARN / 14 PASS / 7 JUDGE (read these) / 0 INFO
+RESULT: 22 FAIL / 2 WARN / 21 PASS / 8 JUDGE (read these) / 0 INFO
 ```
 
 ## enumerate_strength_screens.py
 exit 0
 
 ```
-SCRIPT-G-SCREENS.md: X1=86 deixis=32 junctions=24 anchors=44 declared=0
+SCRIPT-G-SCREENS.md: X1=86 deixis=32 junctions=24 anchors=44 declared=37
 ```
 
-VERDICT: FAIL (1 failing tools)
+VERDICT: FAIL (2 failing tools)

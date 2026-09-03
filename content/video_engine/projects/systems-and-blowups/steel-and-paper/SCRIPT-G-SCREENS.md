@@ -223,11 +223,47 @@ invalid — the enumeration IS the review.
 - ¶16: [6, 20, 3, 8, 4, 10, 11, 12, 14, 11, 14, 13, 10, 7, 8, 10, 21, 8, 17, 6, 14]
 - ¶17: [4, 4, 8, 11, 21, 7, 14, 24, 10, 6]
 
-## DECLARED — beat tags (0)
+## DECLARED — beat tags (37)
 
 One row per tag, script order. `window` is the opening gate's verdict
 for the tag's owning gate (R1: final, never re-derived). `verdict` is
 the agent's, per tag: **true / laundered** (CHECK-RESPONSIBILITIES R2,
 §3a) - a laundered tag is a FAIL at the phase, not a note.
 
-- no declared beats — every declared-kind gate FAILs by absence (R2); tag the beats or record the reason
+- [ring]@0:02  window: PASS — G15  "An iron spike."  → verdict: ____
+- [archetype]@0:08  window: PASS — G37  "Somewhere today, a guy on his lunch break is watching his fourth version of the same chart."  → verdict: ____
+- [stakes]@0:28  window: PASS — G07  "If you hold an index fund, it's already holding you."  → verdict: ____
+- [payoff]@0:31  window: PASS — G08  "So here's the original."  → verdict: ____
+- [reflect]@1:01  window: PASS — G31  "The chart is right."  → verdict: ____
+- [tricolon]@1:05  window: PASS — G32  "So here's what you're getting: not a rebuttal, not a victory lap, not a panic."  → verdict: ____
+- [promise]@1:12  window: FAIL — G09  "One test — three questions — that sorts every holding you own into steel or paper."  → verdict: ____
+- [desire]@1:17  window: FAIL — G38  "By the end, you'll run it yourself: thirty seconds a stock."  → verdict: ____
+- [opponent]@1:20  window: FAIL — G14  "And the opponent here isn't Bravos, and it isn't Nvidia."  → verdict: ____
+- [rehook]@1:28  window: PASS — G25  "But a machine you can test."  → verdict: ____
+- [map]@1:31  window: FAIL — G39  "That's the job of the three questions."  → verdict: ____
+- [catalyst]@1:40  window: PASS — G40  "Every transformative technology overshoots."  → verdict: ____
+- [foreshadow]@1:41  window: FAIL — G26  "Railways in the 1840s drew a quarter-billion pounds — more than a trillion in today's money."  → verdict: ____
+- [new]@1:49  window: FAIL — G20, FAIL — G22  "In two thousand, the internet crossed seven percent of GDP."  → verdict: ____
+- [new]@1:53  window: FAIL — G20, FAIL — G22  "And by Bravos' math, AI spending just crossed eight."  → verdict: ____
+- [new]@2:16  window: n/a — outside opening window (P2 ends 2:01)  "At the dot-com peak, that share hit twenty-three cents."  → verdict: ____
+- [new]@2:58  window: n/a — outside opening window (P2 ends 2:01)  "Bank of England above six percent: railways rolled over."  → verdict: ____
+- [concede]@3:11  window: n/a — no owning gate  "Put my agreement on the record."  → verdict: ____
+- [turn]@3:20  window: n/a — no owning gate  "" I used to risk-score portfolios for a bank."  → verdict: ____
+- [head-fake]@3:30  window: n/a — outside opening window (P2 ends 2:01)  "So the obvious move looks like this: take profits on the AI trade."  → verdict: ____
+- [debate]@3:40  window: n/a — outside opening window (P2 ends 2:01)  "But here's where Bravos' own chart gets strange — and the strangeness is the whole story."  → verdict: ____
+- [new]@3:47  window: n/a — outside opening window (P2 ends 2:01)  "Alex Karp of Palantir: enterprises are — his words — paying for tokens that create no value."  → verdict: ____
+- [loop]@4:20  window: n/a — outside opening window (P2 ends 2:01)  "That isn't the peak of inflated expectations."  → verdict: ____
+- [loop-close]@4:27  window: n/a — outside opening window (P2 ends 2:01)  "Which flips the question."  → verdict: ____
+- [dip]@4:34  window: n/a — outside opening window (P2 ends 2:01)  "And in 1849, the answer wasn't the paper."  → verdict: ____
+- [anaphora]@4:41  window: n/a — outside opening window (P2 ends 2:01)  "The steel kept working."  → verdict: ____
+- [new]@5:00  window: n/a — outside opening window (P2 ends 2:01)  "Between 2020 and 2024, the biggest builders borrowed about twenty-eight billion dollars a year."  → verdict: ____
+- [new]@5:55  window: n/a — outside opening window (P2 ends 2:01)  "Go into the filings and there's another eight hundred and twenty-two billion in lease commitments."  → verdict: ____
+- [new]@6:18  window: n/a — outside opening window (P2 ends 2:01)  "Over the next two years, PIMCO has this buildout consuming ninety-four percent of every dollar these companie…"  → verdict: ____
+- [anaphora]@6:48  window: n/a — outside opening window (P2 ends 2:01)  "The steel kept building."  → verdict: ____
+- [signpost]@6:54  window: n/a — outside opening window (P2 ends 2:01)  "And that's the part everyone repeating this chart missed — including, just this once, the people who drew it."  → verdict: ____
+- [foreshadow]@7:08  window: n/a — outside opening window (P2 ends 2:01)  "What broke England in 1845 wasn't rail."  → verdict: ____
+- [ring]@7:22  window: n/a — outside opening window (P2 ends 2:01)  "So look at the spike again."  → verdict: ____
+- [anaphora]@7:22  window: n/a — outside opening window (P2 ends 2:01)  "Steel answers scarce, cash, used."  → verdict: ____
+- [new]@7:22  window: n/a — outside opening window (P2 ends 2:01)  "Over the last year the stock is up more than five hundred percent."  → verdict: ____
+- [ring]@7:22  window: n/a — outside opening window (P2 ends 2:01)  "So — the spike, one more time."  → verdict: ____
+- [anaphora]@7:22  window: n/a — outside opening window (P2 ends 2:01)  "The steel gets used."  → verdict: ____
