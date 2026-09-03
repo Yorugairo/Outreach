@@ -152,3 +152,6 @@ content/video_engine/projects/*/*/build-*/player-lite.html
 
 # Claude Code per-checkout local instructions (imports AGENTS.md on branches that predate the tracked CLAUDE.md)
 CLAUDE.local.md
+
+# Claude Design bundle reference images are copies of tracked assets (see design-system/README.md)
+content/video_engine/channel-assets/money-physics/design-system/assets/

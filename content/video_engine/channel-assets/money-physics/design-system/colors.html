@@ -1,0 +1,35 @@
+<!-- @dsCard group="Colors" -->
+<title>Money Physics · Colors</title>
+<style>
+  :root{--cream:#F4E6C7;--charcoal:#25313C;--cobalt:#1769C2;--teal:#178C83;--coral:#ED6A4A;--sunflower:#F5B72E;--evg:#1B1E23;--evi:#F2F2F2}
+  body{margin:0;background:var(--cream);color:var(--charcoal);font-family:Inter,Arial,sans-serif;padding:32px}
+  h1{font-size:14px;letter-spacing:.18em;text-transform:uppercase;margin:0 0 20px}
+  .row{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;margin-bottom:28px}
+  .sw{border-radius:6px;overflow:hidden;border:1px solid rgba(37,49,60,.18)}
+  .sw .c{height:96px}
+  .sw .m{padding:10px 12px;font-size:12px;line-height:1.35;background:#fff8}
+  .sw b{display:block;font-size:13px}
+  .sem{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  .pill{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:6px;background:#fff8;font-size:13px}
+  .dot{width:18px;height:18px;border-radius:50%}
+  .ev{margin-top:28px;background:var(--evg);color:var(--evi);padding:18px 20px;border-radius:6px;font-size:13px;line-height:1.5}
+  .ev b{color:#fff}
+  .note{font-size:12px;opacity:.75;margin-top:18px;max-width:70ch;line-height:1.5}
+</style>
+<h1>Six tokens, fixed</h1>
+<div class="row">
+  <div class="sw"><div class="c" style="background:var(--cream)"></div><div class="m"><b>cream</b>#F4E6C7<br>paper ground</div></div>
+  <div class="sw"><div class="c" style="background:var(--charcoal)"></div><div class="m"><b>charcoal</b>#25313C<br>ink</div></div>
+  <div class="sw"><div class="c" style="background:var(--cobalt)"></div><div class="m"><b>cobalt</b>#1769C2<br>brand accent</div></div>
+  <div class="sw"><div class="c" style="background:var(--teal)"></div><div class="m"><b>teal</b>#178C83<br>positive / our layer</div></div>
+  <div class="sw"><div class="c" style="background:var(--coral)"></div><div class="m"><b>coral</b>#ED6A4A<br>negative / alarm</div></div>
+  <div class="sw"><div class="c" style="background:var(--sunflower)"></div><div class="m"><b>sunflower</b>#F5B72E<br>highlight</div></div>
+</div>
+<h1>Semantics (style pack)</h1>
+<div class="sem">
+  <div class="pill"><span class="dot" style="background:var(--teal)"></span>positive = teal</div>
+  <div class="pill"><span class="dot" style="background:var(--coral)"></span>negative = coral</div>
+  <div class="pill"><span class="dot" style="background:var(--sunflower)"></span>accent = sunflower</div>
+</div>
+<div class="ev"><b>Evidence ground #1B1E23 · ink #F2F2F2.</b> The only dark surface in the system. Real charts, real data, source line printed on the chart. It never imitates the woodblock, and the woodblock never imitates it.</div>
+<p class="note">No other hues in generated art. Plates are prompted with the palette verbatim (style-spine v2). A chart line and a plate accent must mean the same thing.</p>
