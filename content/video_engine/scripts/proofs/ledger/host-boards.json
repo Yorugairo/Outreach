@@ -1,0 +1,74 @@
+{
+ "host-board-present-v1": {
+  "board_bbox": {
+   "x": 0.0167,
+   "y": 0.0278,
+   "w": 0.6922,
+   "h": 0.9417
+  },
+  "inner": {
+   "x": 0.0276,
+   "y": 0.0435,
+   "w": 0.6703,
+   "h": 0.9102
+  },
+  "host_side": "right",
+  "quiet_zone": "right",
+  "chart_box": {
+   "x": 0.0276,
+   "y": 0.0435,
+   "w": 0.4248,
+   "h": 0.9102
+  },
+  "hand_x": 0.4724,
+  "blank": "host-board-present-v1-blank.png"
+ },
+ "host-board-point-v1": {
+  "board_bbox": {
+   "x": 0.0224,
+   "y": 0.0278,
+   "w": 0.6385,
+   "h": 0.9426
+  },
+  "inner": {
+   "x": 0.0333,
+   "y": 0.0435,
+   "w": 0.6167,
+   "h": 0.9111
+  },
+  "host_side": "right",
+  "quiet_zone": "right",
+  "chart_box": {
+   "x": 0.0333,
+   "y": 0.0435,
+   "w": 0.4342,
+   "h": 0.9111
+  },
+  "hand_x": 0.4875,
+  "blank": "host-board-point-v1-blank.png"
+ },
+ "host-board-turned-v1": {
+  "board_bbox": {
+   "x": 0.224,
+   "y": 0.0389,
+   "w": 0.7516,
+   "h": 0.9185
+  },
+  "inner": {
+   "x": 0.2349,
+   "y": 0.0546,
+   "w": 0.7297,
+   "h": 0.887
+  },
+  "host_side": "left",
+  "quiet_zone": "left",
+  "chart_box": {
+   "x": 0.2549,
+   "y": 0.0546,
+   "w": 0.7097,
+   "h": 0.887
+  },
+  "hand_x": 0.2349,
+  "blank": "host-board-turned-v1-blank.png"
+ }
+}
