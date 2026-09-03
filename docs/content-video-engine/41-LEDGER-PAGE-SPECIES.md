@@ -12,7 +12,7 @@ chart is built on it from a series we own, and docks may still land on it in
 its declared quiet zone. It is the channel's signature and the payoff chart
 of every episode by default.
 
-## 2. The five beats (all derived from `t`, seek-safe)
+## 2. The seven beats (all derived from `t`, seek-safe)
 
 | # | Beat | Window | Mechanism (player) |
 |---|---|---|---|
@@ -20,9 +20,12 @@ of every episode by default.
 | 2 | Half savor | 0.7 – 1.5s | the page holds, empty |
 | 3 | The field | 1.5 – 3.9s | **DECIDED (E22 addendum 4): the deckle is the feature.** The inked plate (`page.field_plate`, made procedurally from the blank page: charcoal fills the paper up to its deckle edge, 94% so a whisper of fibre survives) cross-fades over the plain page; the deckle edge appears only as the ink arrives. Fallbacks when no inked plate exists: `page.field = "scribble"` or `"soak"` filling the board box |
 | 4 | The line + ink | 3.9 – 4.7s (+ ink to 5.9s) | **DECIDED (E22 addendum 5):** the line is the deckle's INNERMOST boundary (`page.board`, the largest clean rectangle inside the paper mask, drawn clockwise as the conic border), so it just touches the cream at the deepest deckle points. `page.edge_path` (a line traced along the deckle) stays an option. Title and source are written per glyph with a seeded ±1.6° tilt |
-| 5 | The build | 4.7 – 7.7s | `story`: bars grow from the baseline in reading order, labels then values, the emphasized datum takes the accent pill whose number rolls and lands on the exact string · `dense-line`: dash-offset draw with a tip head, inline series names de-collided (§9.23b). Axes and grid appear only in this beat |
+| 5 | Punch in | 4.7 – 5.2s | the page zooms about the board's centre (×1.16), cropping the line and the deckle margin out — the room we spend (E22 addendum 6) |
+| 6 | The build | 5.2 – 8.2s | `story`: bars grow from the baseline in reading order, labels then values, the emphasized datum takes the accent pill whose number rolls and lands on the exact string · `dense-line`: dash-offset draw with a tip head, inline series names de-collided (§9.23b). Axes and grid appear only in this beat |
 
-Constants: `const LP = { ROLL: 0.7, SAVOR: 0.8, FIELD: 2.4, OUTLINE: 0.8, INK: 2.0, BUILD: 3.0 }` in the template. The gate reads the same offsets (`PAGE_BEAT_OFFSETS`).
+| 7 | The focus | 8.2s → | the page's declared `focus` (callout / spotlight / punch) fires on its datum — the page ends pointing at the proof, never as homework (E25) |
+
+Constants: `const LP = { ROLL: 0.7, SAVOR: 0.8, FIELD: 2.4, OUTLINE: 0.8, PUNCH: 0.5, INK: 2.0, BUILD: 3.0 }`, focus at 8.2s, in the template. The gate reads the same offsets (`PAGE_BEAT_OFFSETS`).
 
 Refused on sight (do not retry): blob bloom-and-contract "bleed"; any gap
 between ink and outline; coffee-ring stains on the margin; a charcoal halo
@@ -46,6 +49,7 @@ Produced by `content/video_engine/scripts/ledger_page.py` from a
 | `plate` | asset id of the GENERATED blank washi page (world plate, spine register). CSS cream `#F4E6C7` is the fallback and reads dull |
 | `field_plate` | asset id of the generated page with the board inked; cross-faded in beat 3 |
 | `field` | `scribble` / `soak` — the procedural fallback when no `field_plate` is approved |
+| `focus` | `{kind: callout \| spotlight \| punch, target?, label?, dur?}` — the focus action fired at the build's end; target defaults to the emphasized datum |
 | `board` | `{x, y, w, h}` fractions of the frame — the deckle's innermost rectangle, MEASURED from the blank plate's paper mask; the line, the field fallback and the chart share it; default 0.06 / 0.08 / 0.88 / 0.84 |
 | `edge_path` | the paper's deckle boundary as a normalized SVG path (traced from the blank plate's paper mask); the line is drawn along it |
 | `plate_zoom` | overscan for a page plate (not used for the deckle page: the white beyond the deckle is part of the look) |

@@ -773,3 +773,13 @@ to it, it re-enters spotlit on the new datum. E11's topic-governed exits
 are amended to proof-governed exits. Gate M12. Why: reading time is not
 ours to give; a viewer who wants to study pauses. Direction over duration.
 
+**E22 addendum 6 (2026-09-03) - punch in, then build, then the focus
+action.** From E25: *"we're not done with the chart when we draw the line
+and build the graph: draw the line -> punch/zoom in (we have the line we
+drew plus the deckle we don't even care about as room) -> draw the chart
+-> perform whatever the focus action is on the proper data we want to call
+out."* The page punches in about the board after the line, builds the
+chart on the punched page, and fires its declared focus (callout /
+spotlight / punch on the emphasized datum) at the build's end. Why: the
+chart is the proof of one sentence; the page must end pointing at it.
+

@@ -1592,6 +1592,21 @@ indentation on each side), so it just touches the cream at the deepest
 points of the deckle; the chart sits inside the line. `page.board` carries
 that rectangle; `edge_path` remains an option, not the default.
 
+**Two more beats (operator, 2026-09-03, from E25):** *"We're not done with
+the chart when we draw the line and build the graph. We should draw the
+line -> punch/zoom in (we know we have at least some space, because we
+have the line we drew plus the deckle we don't even care about) -> draw
+the chart -> perform whatever the focus action is on the proper data we
+want to call out."* So after the line the page PUNCHES IN about the
+board's centre (scale 1.16 over 0.5s - the line and the deckle margin are
+the room being spent, cropped out by the punch), the chart builds on the
+punched page, and at the build's end the page's declared FOCUS action
+fires on the datum (`page.focus = {kind: callout | spotlight | punch,
+target?, label?}`; the target defaults to the emphasized datum). The chart
+is never left as homework: the page ends on the pointed-at proof.
+Constants: ROLL 0.7 · SAVOR 0.8 · FIELD 2.4 · OUTLINE 0.8 · PUNCH 0.5 ·
+BUILD 3.0 · focus at 8.2s; the gate's page beats follow.
+
 Also ruled the same review: the ledger species proof "looks good" (the
 two-plate path is the field); the targeted species "all worked really
 well - finally a real capability"; the race "needs to be smoother";
