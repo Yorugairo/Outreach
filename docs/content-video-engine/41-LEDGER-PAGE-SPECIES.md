@@ -69,8 +69,9 @@ day): `page.badges` - the series file's own `badges` plus the evidence dock's au
 badges for the same asset (`build_scene_timeline_f.ledger_world`), each {label, value,
 tag, accent}; a badge whose accent maps to a series colour takes that series' current
 label as its value (`ledger_page.badges_for`). The page renders them as the dock's own
-pills in ONE ROW grouped under the chart and its source (never in the quiet zone - that is
-the caption's), springing in one at a time from build end + 0.4s every 0.9s, painted from t;
+pills in ONE TIGHT CLUSTER under the chart and its source - content-sized, 6px apart,
+hugging the chart's left edge, never stretched across it (never in the quiet zone - that is
+the caption's, at 40% height), springing in one at a time from build end + 0.4s every 0.9s, painted from t;
 the gate counts each rail pill as an event. A badge whose accent keys a dense series is
 marked `inline` and becomes that line's DYNAMIC LABEL instead: its tag rides the inline
 name at the line's end in the accent, one reveal at draw-complete, no pill (operator,

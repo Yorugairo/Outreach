@@ -70,9 +70,14 @@
   .lp-sub { font-size: 21px; font-weight: 400; line-height: 1.25; color: var(--lp-chalk); opacity: .8; white-space: normal; }
   .lp-sub .w { display: inline-block; white-space: nowrap; }
   /* the page's badge rail: the dock's pill, painted from t (no transition) */
-  .lp-rail { position: absolute; display: grid; gap: 9px; pointer-events: none; }
-  .lp-rail.row { grid-template-columns: repeat(4, 1fr); }
-  .lp-rail .lp-pill { opacity: 0; transition: none; transform-origin: 50% 100%; }
+  /* a TIGHT cluster (operator, 2026-09-03: 'tight, sleek grouping that doesn't eat up so much space'): pills sized
+     to their content, 6px apart, hugging the chart's left edge under the source - never stretched to the chart */
+  .lp-rail { position: absolute; display: flex; flex-wrap: wrap; align-items: flex-start; gap: 6px; pointer-events: none; }
+  .lp-rail .lp-pill { opacity: 0; transition: none; transform-origin: 0 100%; padding: 3px 9px 4px; border-radius: 6px; }
+  .lp-rail .lp-pill .pill-label { font-size: 11px; letter-spacing: .06em; }
+  .lp-rail .lp-pill .pill-row { gap: 6px; }
+  .lp-rail .lp-pill .pill-num { font-size: 17px; }
+  .lp-rail .lp-pill .pill-tag { font-size: 11px; padding: 1px 5px; }
   .lp-chart { position: absolute; overflow: visible; }
   /* MOTION MENU species (doc 29 s9.27; P35 T6/T7): plate life on the world side, the targeted overlay above the docks */
   #plife { position: absolute; inset: 0; pointer-events: none; }
@@ -1394,7 +1399,7 @@
     src.style.top = ((cb.y + cb.h) * 100 + 1.2).toFixed(2) + "%"; src.style.left = chart.style.left;
     /* the badge rail: ALWAYS a row grouped under the chart and its source (operator, 2026-09-03: the quiet zone is the
        caption's; a badge that keys a line is that line's dynamic label instead - see buildLedgerLine) */
-    const rail = lpEl("div", "lp-rail row", page);
+    const rail = lpEl("div", "lp-rail", page);
     const badges = (pg.badges || []).filter((bd) => !bd.inline).map((bd, bi) => {
       const el = lpEl("div", "pill lp-pill", rail);
       el.innerHTML = '<span class="pill-label">' + bd.label + '</span><span class="pill-row">' +
@@ -1402,8 +1407,7 @@
         '<span class="pill-tag" style="color:' + (ACCENT[bd.accent] || "var(--sunflower)") + '">' + bd.tag + '</span></span>';
       return { el, at: LP_BADGE0 + LP_BADGE_STEP * bi };
     });
-    rail.style.left = chart.style.left; rail.style.top = ((cb.y + cb.h) * 100 + 4.6).toFixed(2) + "%"; rail.style.width = chart.style.width;
-    rail.style.gridTemplateColumns = "repeat(" + Math.max(1, Math.min(4, badges.length)) + ", 1fr)";
+    rail.style.left = chart.style.left; rail.style.top = ((cb.y + cb.h) * 100 + 4.4).toFixed(2) + "%"; rail.style.maxWidth = chart.style.width;
     const inlineBadges = {}; (pg.badges || []).forEach((bd) => { if (bd.inline) inlineBadges[LP_BADGE_COL[bd.accent]] = bd; });
     const st = { root, page, edge, blobs, strokes, nib, rect, goo, glyphs, chart, fieldPlate, boardCentre, badges, inlineBadges, kind: pg.builder || "story",
                  bars: [], paths: [], labels: [], callout: null, cval: null, vals: pg.values || [],
