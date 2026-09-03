@@ -1,6 +1,6 @@
 {
   "_contract": "video-engine MCP -> create_flow_batch. DAY 1 = the four host transitions only; hooks are batch-hooks.json for day 2. The driver now SETS mode/submode/model/count and READS BACK the credits line before every submit; it refuses on Image mode, a wrong model, or a scene over maxCredits. Flow quoted 24 credits at x2/8s/720p on Omni 1.1 Flash, so x1/6s is the library setting and ~4 clips is a day.",
-  "_style": "woodblock-vox-newsprint-v2. The host is a flat graphic silhouette, single ink tone, no facial features. NO text, lettering, numerals, charts, graphs, axes or screens anywhere in frame - a chart in a generated frame is a fabricated figure.",
+  "_style": "woodblock-vox-newsprint-v2 WORLD; the HOST is the approved full-colour cartoon cutout and renders exactly as that reference - never a silhouette, never re-costumed. NO text, lettering, numerals, charts, graphs, axes or screens anywhere in frame - a chart in a generated frame is a fabricated figure.",
   "mode": "video",
   "submode": "ingredients",
   "model": "Omni 1.1 Flash",
@@ -18,7 +18,7 @@
         "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\finance-episodes-plates-wave-1\\objects\\world-signal-box-dusk-v1.png",
         "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\assets\\generated\\cutouts\\actor-host-point-right-v1.png"
       ],
-      "prompt": "Woodblock newsprint illustration, dusk over a railway signal box, the exact scene of the first reference held as a locked camera. A flat black graphic silhouette of a man - the second reference, single tone, no face - steps in from frame left in a calm lateral stride, stops at left-third, and settles into pointing right toward the rails. Stylised, minimal leg articulation, ink-print texture, grain constant across the whole clip. The background does not move. No text, no lettering, no numerals, no signs."
+      "prompt": "Woodblock newsprint illustration, dusk over a railway signal box, the exact scene of the first reference held as a locked camera. The host - the second reference, rendered EXACTLY as that cutout: full colour cartoon, navy suit, orange tie, glasses, locs, bare-headed, no added props - steps in from frame left in a calm lateral stride, stops at left-third, and settles into pointing right toward the rails. Stylised, minimal leg articulation; the world keeps its ink-print texture and constant grain, the host keeps his clean cartoon line and colour across the whole clip. The background does not move. No text, no lettering, no numerals, no signs."
     },
     {
       "id": "host-enter-korea-port",
@@ -29,7 +29,7 @@
         "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\finance-episodes-plates-wave-1\\objects\\world-korea-port-v1.png",
         "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\assets\\generated\\cutouts\\actor-host-present-open-v1.png"
       ],
-      "prompt": "Woodblock newsprint illustration, a container port at dusk, the exact scene of the first reference held as a locked camera. A flat black graphic silhouette of a man - the second reference, single tone, no face - walks in from frame right in a calm lateral stride, stops at right-third, and settles into an open presenting gesture toward the stacked containers. Stylised, minimal leg articulation, ink-print texture, grain constant. Background static. No text, no lettering, no numerals, no container markings."
+      "prompt": "Woodblock newsprint illustration, a container port at dusk, the exact scene of the first reference held as a locked camera. The host - the second reference, rendered EXACTLY as that cutout: full colour cartoon, navy suit, orange tie, glasses, locs, bare-headed, no added props - walks in from frame right in a calm lateral stride, stops at right-third, and settles into an open presenting gesture toward the stacked containers. Stylised, minimal leg articulation; the world keeps its ink-print texture and constant grain, the host keeps his clean cartoon line and colour. Background static. No text, no lettering, no numerals, no container markings."
     },
     {
       "id": "host-enter-memory-fab-floor",
@@ -40,7 +40,7 @@
         "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\finance-episodes-plates-wave-1\\objects\\world-memory-fab-floor-v1.png",
         "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\assets\\generated\\cutouts\\actor-host-explain-both-hands-v1.png"
       ],
-      "prompt": "Woodblock newsprint illustration, a cleanroom wafer line in full production, the exact scene of the first reference held as a locked camera. A flat black graphic silhouette of a man - the second reference, single tone, no face - steps in from frame left along the aisle, stops at left-third, and settles into explaining with both hands. Stylised, minimal leg articulation, ink-print texture, grain constant. Background static. No text, no lettering, no numerals, no screens, no readouts."
+      "prompt": "Woodblock newsprint illustration, a cleanroom wafer line in full production, the exact scene of the first reference held as a locked camera. The host - the second reference, rendered EXACTLY as that cutout: full colour cartoon, navy suit, orange tie, glasses, locs, bare-headed, no added props - steps in from frame left along the aisle, stops at left-third, and settles into explaining with both hands. Stylised, minimal leg articulation; the world keeps its ink-print texture and constant grain, the host keeps his clean cartoon line and colour. Background static. No text, no lettering, no numerals, no screens, no readouts."
     },
     {
       "id": "host-enter-seoul-fab-skyline",
@@ -51,7 +51,7 @@
         "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\finance-episodes-plates-wave-1\\objects\\world-seoul-fab-skyline-v1.png",
         "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\assets\\generated\\cutouts\\actor-host-arms-crossed-v1.png"
       ],
-      "prompt": "Woodblock newsprint illustration, an industrial skyline at dawn, the exact scene of the first reference held as a locked camera. A flat black graphic silhouette of a man - the second reference, single tone, no face - walks in from frame right in a calm lateral stride, stops at right-third, and settles with arms crossed, looking out at the skyline. Stylised, minimal leg articulation, ink-print texture, grain constant. Background static. No text, no lettering, no numerals, no signage on the buildings."
+      "prompt": "Woodblock newsprint illustration, an industrial skyline at dawn, the exact scene of the first reference held as a locked camera. The host - the second reference, rendered EXACTLY as that cutout: full colour cartoon, navy suit, orange tie, glasses, locs, bare-headed, no added props - walks in from frame right in a calm lateral stride, stops at right-third, and settles with arms crossed, looking out at the skyline. Stylised, minimal leg articulation; the world keeps its ink-print texture and constant grain, the host keeps his clean cartoon line and colour. Background static. No text, no lettering, no numerals, no signage on the buildings."
     }
   ]
 }

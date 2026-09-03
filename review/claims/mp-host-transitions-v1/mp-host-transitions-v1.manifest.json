@@ -1,0 +1,196 @@
+{
+  "schema_version": "review_manifest.v1",
+  "status": "review_only",
+  "render_eligible": false,
+  "channel": "money-physics",
+  "style_family": "woodblock-vox-newsprint-v2",
+  "source_prompt": "claim:mp-host-transitions-v1",
+  "generated_on": "2026-09-03",
+  "assets": [
+    {
+      "asset_id": "host-enter-korea-port",
+      "path": "clips/host-enter-korea-port.mp4",
+      "sha256": "a10206fac0328895a5501d889e844bef22976f0a294d080fdea68f1626abcd87",
+      "kind": "transition_clip",
+      "semantic": "host-enter:korea-port",
+      "channel": "money-physics",
+      "duration_s": 6.02,
+      "handoff_frame": "first",
+      "derived": false,
+      "generated_from": {
+        "plate": "world-korea-port-v1",
+        "pose": "actor-host-present-open-v1",
+        "model": "Omni 1.1 Flash",
+        "count": 1,
+        "resolution": "720p",
+        "credits": 10
+      },
+      "judge": {
+        "verdict": "REJECT",
+        "note": "identity: rendered as a flat silhouette because the PROMPT said so; the referenced cutout is the full-colour cartoon host (navy suit, orange tie, glasses, locs). World, handoff frame, motion and style register all held - the mechanism is proven, the host is wrong."
+      }
+    },
+    {
+      "asset_id": "host-exit-korea-port",
+      "path": "clips/host-exit-korea-port.mp4",
+      "sha256": "18d1258e6ff1ee57946367ab0073f15617b07251a03137eed9e775656ee0697b",
+      "kind": "transition_clip",
+      "semantic": "host-exit:korea-port",
+      "channel": "money-physics",
+      "duration_s": 6.02,
+      "handoff_frame": "last",
+      "derived": true,
+      "generated_from": {
+        "plate": "world-korea-port-v1",
+        "pose": "actor-host-present-open-v1",
+        "model": "Omni 1.1 Flash",
+        "count": 1,
+        "resolution": "720p",
+        "credits": 0
+      },
+      "judge": {
+        "verdict": "REJECT",
+        "note": "identity: rendered as a flat silhouette because the PROMPT said so; the referenced cutout is the full-colour cartoon host (navy suit, orange tie, glasses, locs). World, handoff frame, motion and style register all held - the mechanism is proven, the host is wrong."
+      }
+    },
+    {
+      "asset_id": "host-enter-memory-fab-floor",
+      "path": "clips/host-enter-memory-fab-floor.mp4",
+      "sha256": "71f9c0238f667ec38c7873d07db536427753e57bfed043761937eb551338d608",
+      "kind": "transition_clip",
+      "semantic": "host-enter:memory-fab-floor",
+      "channel": "money-physics",
+      "duration_s": 6.02,
+      "handoff_frame": "first",
+      "derived": false,
+      "generated_from": {
+        "plate": "world-memory-fab-floor-v1",
+        "pose": "actor-host-explain-both-hands-v1",
+        "model": "Omni 1.1 Flash",
+        "count": 1,
+        "resolution": "720p",
+        "credits": 10
+      },
+      "judge": {
+        "verdict": "REJECT",
+        "note": "identity: rendered as a flat silhouette because the PROMPT said so; the referenced cutout is the full-colour cartoon host (navy suit, orange tie, glasses, locs). World, handoff frame, motion and style register all held - the mechanism is proven, the host is wrong."
+      }
+    },
+    {
+      "asset_id": "host-exit-memory-fab-floor",
+      "path": "clips/host-exit-memory-fab-floor.mp4",
+      "sha256": "54a2b55a3c3d3e5285552c1d393733164659a70a442d05723ee3ce5256e9b786",
+      "kind": "transition_clip",
+      "semantic": "host-exit:memory-fab-floor",
+      "channel": "money-physics",
+      "duration_s": 6.02,
+      "handoff_frame": "last",
+      "derived": true,
+      "generated_from": {
+        "plate": "world-memory-fab-floor-v1",
+        "pose": "actor-host-explain-both-hands-v1",
+        "model": "Omni 1.1 Flash",
+        "count": 1,
+        "resolution": "720p",
+        "credits": 0
+      },
+      "judge": {
+        "verdict": "REJECT",
+        "note": "identity: rendered as a flat silhouette because the PROMPT said so; the referenced cutout is the full-colour cartoon host (navy suit, orange tie, glasses, locs). World, handoff frame, motion and style register all held - the mechanism is proven, the host is wrong."
+      }
+    },
+    {
+      "asset_id": "host-enter-seoul-fab-skyline",
+      "path": "clips/host-enter-seoul-fab-skyline.mp4",
+      "sha256": "e4197c9af52185c22cbc5f98d6d395f359286e03f75b5de5c74416e9a204c17a",
+      "kind": "transition_clip",
+      "semantic": "host-enter:seoul-fab-skyline",
+      "channel": "money-physics",
+      "duration_s": 6.02,
+      "handoff_frame": "first",
+      "derived": false,
+      "generated_from": {
+        "plate": "world-seoul-fab-skyline-v1",
+        "pose": "actor-host-arms-crossed-v1",
+        "model": "Omni 1.1 Flash",
+        "count": 1,
+        "resolution": "720p",
+        "credits": 10
+      },
+      "judge": {
+        "verdict": "REJECT",
+        "note": "identity: rendered as a flat silhouette because the PROMPT said so; the referenced cutout is the full-colour cartoon host (navy suit, orange tie, glasses, locs). World, handoff frame, motion and style register all held - the mechanism is proven, the host is wrong."
+      }
+    },
+    {
+      "asset_id": "host-exit-seoul-fab-skyline",
+      "path": "clips/host-exit-seoul-fab-skyline.mp4",
+      "sha256": "ff9b301740c9b79cd9f787b22a90dffaef288502edb8d088b964029afd069d85",
+      "kind": "transition_clip",
+      "semantic": "host-exit:seoul-fab-skyline",
+      "channel": "money-physics",
+      "duration_s": 6.02,
+      "handoff_frame": "last",
+      "derived": true,
+      "generated_from": {
+        "plate": "world-seoul-fab-skyline-v1",
+        "pose": "actor-host-arms-crossed-v1",
+        "model": "Omni 1.1 Flash",
+        "count": 1,
+        "resolution": "720p",
+        "credits": 0
+      },
+      "judge": {
+        "verdict": "REJECT",
+        "note": "identity: rendered as a flat silhouette because the PROMPT said so; the referenced cutout is the full-colour cartoon host (navy suit, orange tie, glasses, locs). World, handoff frame, motion and style register all held - the mechanism is proven, the host is wrong."
+      }
+    },
+    {
+      "asset_id": "host-enter-signal-box-dusk",
+      "path": "clips/host-enter-signal-box-dusk.mp4",
+      "sha256": "61b487fcde6a3c6e3feb9ce5296bb8a82ed7e963fb7047a1f7d2a973523f1738",
+      "kind": "transition_clip",
+      "semantic": "host-enter:signal-box-dusk",
+      "channel": "money-physics",
+      "duration_s": 6.02,
+      "handoff_frame": "first",
+      "derived": false,
+      "generated_from": {
+        "plate": "world-signal-box-dusk-v1",
+        "pose": "actor-host-point-right-v1",
+        "model": "Omni 1.1 Flash",
+        "count": 1,
+        "resolution": "720p",
+        "credits": 10
+      },
+      "judge": {
+        "verdict": "REJECT",
+        "note": "identity: rendered as a flat silhouette because the PROMPT said so; the referenced cutout is the full-colour cartoon host (navy suit, orange tie, glasses, locs). World, handoff frame, motion and style register all held - the mechanism is proven, the host is wrong."
+      }
+    },
+    {
+      "asset_id": "host-exit-signal-box-dusk",
+      "path": "clips/host-exit-signal-box-dusk.mp4",
+      "sha256": "2dd24411df99631c55a791324ee344291ec409f610fb2fbe6f7979f7a8f166ed",
+      "kind": "transition_clip",
+      "semantic": "host-exit:signal-box-dusk",
+      "channel": "money-physics",
+      "duration_s": 6.02,
+      "handoff_frame": "last",
+      "derived": true,
+      "generated_from": {
+        "plate": "world-signal-box-dusk-v1",
+        "pose": "actor-host-point-right-v1",
+        "model": "Omni 1.1 Flash",
+        "count": 1,
+        "resolution": "720p",
+        "credits": 0
+      },
+      "judge": {
+        "verdict": "REJECT",
+        "note": "identity: rendered as a flat silhouette because the PROMPT said so; the referenced cutout is the full-colour cartoon host (navy suit, orange tie, glasses, locs). World, handoff frame, motion and style register all held - the mechanism is proven, the host is wrong."
+      }
+    }
+  ],
+  "run_note": "2026-09-03 day 1: four generations, 40 credits, all identity-REJECT by the agent's own prompt error. Kept as the record of the run; not for use on money-physics. Prompts corrected in batch.json / batch-day1-rest.json."
+}

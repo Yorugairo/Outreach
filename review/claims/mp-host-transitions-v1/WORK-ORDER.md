@@ -80,11 +80,24 @@ Hard rules carried in every prompt, and to be checked on every output:
 - **No text, lettering, numerals, charts, axes or screens anywhere in frame.** A
   chart in a generated frame is a fabricated figure (E22, E25, E28: charts are
   code). Any such artifact is an automatic reject.
-- **The host is a flat single-tone silhouette with no facial features.** Limb
-  drift, a second tone, a face, or a change of proportion across the clip is a
-  reject. The silhouette having no face is the reason this is survivable at all —
-  the generative model's worst failure mode is absent by construction.
+- **The host renders EXACTLY as the referenced cutout: the full-colour cartoon —
+  navy suit, orange tie, glasses, locs.** He is never a silhouette and never
+  re-costumed. Day 1 (2026-09-03) produced four silhouettes because the agent's
+  prompt *described* the reference from a doctrine phrase belonging to another
+  channel (doc 18, the combat-woodblock silhouette lane, status RECORD) without
+  ever opening the file. 40 credits, all identity-REJECT.
+  **Rule: a prompt that describes a reference is written from the opened image,
+  never from memory of what it should be.** Open every reference before Stage A.
+- **Because the host has a face, face and proportion drift across the clip is the
+  live risk** — the earlier "no face, so survivable" reasoning was built on the
+  wrong host. Multi-reference the cutout every scene; keep clips at 6s; and test
+  Flow's **Characters** feature — the project already holds character cards — as
+  the identity lock. That question is now worth the test it was not before.
 - **The background does not move** in transition clips. Only the host moves.
+- **No costume the pose cutout does not wear.** Scene 1 (2026-09-03) came back with
+  a peaked railwayman's cap the model added to suit the world; the silhouette IS the
+  identity, so a hat is drift. Every host prompt now says "bare-headed, no hat, no
+  props" unless the referenced cutout carries one. Judge it on the sheet either way.
 - Duration 6s for transitions, 8s for hooks; 16:9 throughout.
 
 ## Stage B — Derive exits (free, local)
