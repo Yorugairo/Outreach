@@ -1274,7 +1274,11 @@
     /* the page ground is a GENERATED world plate (operator, 2026-09-03: "the background needs to be a plate
        that GPT generates, it doesn't look like our world plates"); page.plate names it in the asset map.
        The CSS cream is the fallback only while no plate is approved. */
-    if (pg.plate && A[pg.plate]) { page.style.backgroundImage = 'url("' + A[pg.plate] + '")'; page.style.backgroundSize = "cover"; page.style.backgroundPosition = "center"; }
+    if (pg.plate && A[pg.plate]) { page.style.backgroundImage = 'url("' + A[pg.plate] + '")'; page.style.backgroundSize = ((pg.plate_zoom || 1) * 100).toFixed(1) + "% " + ((pg.plate_zoom || 1) * 100).toFixed(1) + "%"; page.style.backgroundPosition = "center"; }
+    /* the BOARD box: measured from the inked plate when one exists (page.board, fractions of the frame), else the
+       s9.26 default 6% / 8% / 88% x 84%; the field, the outline and the chart all take the same box so the line is tight */
+    const bd = pg.board || { x: 0.06, y: 0.08, w: 0.88, h: 0.84 };
+    const boxCss = (el) => { el.style.left = (bd.x * 100).toFixed(2) + "%"; el.style.top = (bd.y * 100).toFixed(2) + "%"; el.style.width = (bd.w * 100).toFixed(2) + "%"; el.style.height = (bd.h * 100).toFixed(2) + "%"; };
     const grain = lpEl("svg", "lp-grain", page, { width: "100%", height: "100%" });
     grain.innerHTML = '<filter id="lpg' + seed + '"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="7" stitchTiles="stitch"/>'
       + '<feColorMatrix values="0 0 0 0 .15 0 0 0 0 .13 0 0 0 0 .10 0 0 0 .35 0"/></filter><rect width="100%" height="100%" filter="url(#lpg' + seed + ')"/>';
@@ -1283,6 +1287,7 @@
        SCRIBBLE (seeded strokes drawn one at a time, nib at the front); the crisp rect
        resolves under either so the ink ends at a definite edge. Clipped by .lp-field. */
     const field = lpEl("div", "lp-field", page);
+    boxCss(field);
     const fsvg = lpEl("svg", "", field, { viewBox: "0 0 1690 907", preserveAspectRatio: "none" });
     fsvg.innerHTML = '<defs><filter id="lpsoak' + seed + '" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="14"/></filter></defs>';   /* the soak's wet edge, inside the board */
     const mode = pg.field === "scribble" ? "scribble" : "soak";
@@ -1317,14 +1322,16 @@
     const fieldPlate = pg.field_plate && A[pg.field_plate] ? lpEl("div", "lp-fieldplate", page) : null;
     if (fieldPlate) { fieldPlate.style.backgroundImage = 'url("' + A[pg.field_plate] + '")'; field.style.display = "none"; }
     const outline = lpEl("div", "lp-outline", page);
+    boxCss(outline);
     const title = lpEl("div", "lp-ink lp-title", page);
+    title.style.left = ((bd.x + 0.027) * 100).toFixed(2) + "%"; title.style.top = ((bd.y + 0.024) * 100).toFixed(2) + "%";
     const src = lpEl("div", "lp-ink lp-src", page);
     const glyphs = [...lpGlyphs(title, pg.title || "", seed), ...lpGlyphs(src, pg.source || "", seed + 1)];
     /* chart area inside the field, leaving the declared quiet zone for docks (s9.28 B3/C2) */
     const qz = pg.quiet_zone || null;
     const chart = lpEl("svg", "lp-chart", page, { viewBox: "0 0 1000 560" });
-    chart.style.width = (qz ? 50 : 76) + "%"; chart.style.height = "66%";
-    chart.style.left = (qz === "left" ? 44 : 10) + "%"; chart.style.top = "20%";
+    chart.style.width = ((qz ? 0.57 : 0.86) * bd.w * 100).toFixed(2) + "%"; chart.style.height = (0.78 * bd.h * 100).toFixed(2) + "%";
+    chart.style.left = ((bd.x + (qz === "left" ? 0.43 : 0.05) * bd.w) * 100).toFixed(2) + "%"; chart.style.top = ((bd.y + 0.14 * bd.h) * 100).toFixed(2) + "%";
     const st = { root, page, edge, blobs, strokes, nib, rect, goo, outline, glyphs, chart, fieldPlate, kind: pg.builder || "story",
                  bars: [], paths: [], labels: [], callout: null, cval: null, vals: pg.values || [],
                  vstr: pg.value_strings || [], emph: pg.emphasize | 0 };

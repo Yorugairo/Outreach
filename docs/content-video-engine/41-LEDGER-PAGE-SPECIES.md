@@ -46,6 +46,8 @@ Produced by `content/video_engine/scripts/ledger_page.py` from a
 | `plate` | asset id of the GENERATED blank washi page (world plate, spine register). CSS cream `#F4E6C7` is the fallback and reads dull |
 | `field_plate` | asset id of the generated page with the board inked; cross-faded in beat 3 |
 | `field` | `scribble` / `soak` — the procedural fallback when no `field_plate` is approved |
+| `board` | `{x, y, w, h}` fractions of the frame — the inked plate's board, MEASURED (dark-pixel bbox) so the outline, the field and the chart share its exact box; default 0.06 / 0.08 / 0.88 / 0.84 |
+| `plate_zoom` | overscan for a page plate that carries a rim (the first blank page has a white deckle edge; 1.05 hides it until a full-bleed page is delivered) |
 
 Validation: `python content/video_engine/scripts/ledger_page.py <series.json> --variant bars --emphasize 7 --quiet-zone right`
 refuses a missing source, unaligned labels, a race without periods, a
@@ -75,7 +77,7 @@ Claim `steel-and-paper-ledger-page-v1` (style family
 - `world-ledger-blank-page-v1` — the blank cream washi page, 1920×1080, no objects, no text.
 - `world-ledger-inked-board-v1` — the same page with the board inked solid charcoal in the exact geometry above.
 
-Fulfilled headless by Codex from the rendered `WORK-ORDER.md`; output stays
+DELIVERED 2026-09-03 (Codex headless; `claim-resume` scanned: 2 flagged, 0 failed). The inked board measures x 0.0635 / y 0.0694 / w 0.8693 / h 0.8602 of the frame; the blank page carries a white deckle rim (overscan 1.05 in the proof; re-order full-bleed). Proof with both plates: scene 1 of `ledger-species-proof.html`. Output stays
 in `review/claims/<claim>/` until the operator approves the contact sheet;
 only then do `plate` / `field_plate` point at approved ids.
 
