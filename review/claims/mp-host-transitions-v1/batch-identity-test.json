@@ -1,0 +1,24 @@
+{
+  "_contract": "IDENTITY TEST, the day's last 10 credits: one corrected clip - colour host, fixed prompt, signal box. If he holds through 6s in motion, day two runs; if he drifts, try him as a Flow Character first.",
+  "_style": "woodblock-vox-newsprint-v2 WORLD; the HOST is the approved full-colour cartoon cutout and renders exactly as that reference - never a silhouette, never re-costumed. NO text, lettering, numerals, charts, graphs, axes or screens anywhere in frame - a chart in a generated frame is a fabricated figure.",
+  "mode": "video",
+  "submode": "ingredients",
+  "model": "Omni 1.1 Flash",
+  "count": 1,
+  "maxCredits": 16,
+  "ratio": "16:9",
+  "outputDir": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\review\\claims\\mp-host-transitions-v1\\clips",
+  "scenes": [
+    {
+      "id": "host-enter-signal-box-dusk-v2",
+      "duration": 6,
+      "resolution": "720p",
+      "reverse": false,
+      "references": [
+        "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\finance-episodes-plates-wave-1\\objects\\world-signal-box-dusk-v1.png",
+        "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\assets\\generated\\cutouts\\actor-host-point-right-v1.png"
+      ],
+      "prompt": "Woodblock newsprint illustration, dusk over a railway signal box, the exact scene of the first reference held as a locked camera. The host - the second reference, rendered EXACTLY as that cutout: full colour cartoon, navy suit, orange tie, glasses, goatee, hair in tied-up LOCS exactly as the reference (never short or cropped), bare-headed, no added props, drawn INTO the scene's dusk light with no white outline or sticker edge - steps in from frame left in a calm lateral stride, stops at left-third, and settles into pointing right toward the rails. Stylised, minimal leg articulation; the world keeps its ink-print texture and constant grain, the host keeps his clean cartoon line and colour across the whole clip. The background does not move. No text, no lettering, no numerals, no signs."
+    }
+  ]
+}

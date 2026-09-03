@@ -190,7 +190,53 @@
         "verdict": "REJECT",
         "note": "identity: rendered as a flat silhouette because the PROMPT said so; the referenced cutout is the full-colour cartoon host (navy suit, orange tie, glasses, locs). World, handoff frame, motion and style register all held - the mechanism is proven, the host is wrong."
       }
+    },
+    {
+      "asset_id": "host-enter-signal-box-dusk-v2",
+      "path": "clips/host-enter-signal-box-dusk-v2.mp4",
+      "sha256": "38e49cca8e9bea6b3dc04ddc59eecb396f6f7e610358f5e8fdfe5313f99eabbe",
+      "kind": "transition_clip",
+      "semantic": "host-enter:signal-box-dusk",
+      "channel": "money-physics",
+      "duration_s": 6.02,
+      "handoff_frame": "first",
+      "derived": false,
+      "generated_from": {
+        "plate": "world-signal-box-dusk-v1",
+        "pose": "actor-host-point-right-v1",
+        "model": "Omni 1.1 Flash",
+        "count": 1,
+        "resolution": "720p",
+        "credits": 10
+      },
+      "judge": {
+        "verdict": "WARN",
+        "note": "colour host, corrected prompt. PASS: world plate held as the first frame, suit/tie/glasses/goatee/skin/shoes match, gesture lands, background static, no text. WARN: hair drifted - tied-up locs rendered as short cropped hair (the most distinctive feature); the cutout's pale outline carried in as a sticker halo. Verdict: identity partial - the reasons to test Flow Characters and a clean-matte reference before day 2."
+      }
+    },
+    {
+      "asset_id": "host-exit-signal-box-dusk-v2",
+      "path": "clips/host-exit-signal-box-dusk-v2.mp4",
+      "sha256": "71ae6ac37fb7472ffd281bc1d70e35ce48a208f7dca4439e2ea54a331661a310",
+      "kind": "transition_clip",
+      "semantic": "host-exit:signal-box-dusk",
+      "channel": "money-physics",
+      "duration_s": 6.02,
+      "handoff_frame": "last",
+      "derived": true,
+      "generated_from": {
+        "plate": "world-signal-box-dusk-v1",
+        "pose": "actor-host-point-right-v1",
+        "model": "Omni 1.1 Flash",
+        "count": 1,
+        "resolution": "720p",
+        "credits": 0
+      },
+      "judge": {
+        "verdict": "WARN",
+        "note": "colour host, corrected prompt. PASS: world plate held as the first frame, suit/tie/glasses/goatee/skin/shoes match, gesture lands, background static, no text. WARN: hair drifted - tied-up locs rendered as short cropped hair (the most distinctive feature); the cutout's pale outline carried in as a sticker halo. Verdict: identity partial - the reasons to test Flow Characters and a clean-matte reference before day 2."
+      }
     }
   ],
-  "run_note": "2026-09-03 day 1: four generations, 40 credits, all identity-REJECT by the agent's own prompt error. Kept as the record of the run; not for use on money-physics. Prompts corrected in batch.json / batch-day1-rest.json."
+  "run_note": "2026-09-03 day 1: four generations, 40 credits, all identity-REJECT by the agent's own prompt error. Kept as the record of the run; not for use on money-physics. Prompts corrected in batch.json / batch-day1-rest.json. | identity test v2 (10 credits): host correct in colour/suit/glasses, hair drifted to short crop, outline halo present."
 }

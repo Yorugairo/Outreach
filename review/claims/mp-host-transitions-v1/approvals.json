@@ -1,8 +1,8 @@
 {
   "judge": "agent draft - operator rules",
   "credits_per_clip": 10,
-  "generations": 4,
-  "credits_spent": 40,
+  "generations": 5,
+  "credits_spent": 50,
   "approved": [],
   "rejected": [
     "host-enter-korea-port",
@@ -14,5 +14,5 @@
     "host-enter-signal-box-dusk",
     "host-exit-signal-box-dusk"
   ],
-  "notes": "All four enters (and derived exits) REJECT on identity: silhouette instead of the colour host. Agent error in the prompt, caught by the operator on the sheet."
+  "notes": "All four enters (and derived exits) REJECT on identity: silhouette instead of the colour host. Agent error in the prompt, caught by the operator on the sheet. | v2 identity test: partial - see manifest WARN."
 }
