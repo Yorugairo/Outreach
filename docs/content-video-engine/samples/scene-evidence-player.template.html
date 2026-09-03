@@ -71,7 +71,7 @@
                mask-image: linear-gradient(90deg, #000 calc(var(--w) * 118% - 18%), transparent calc(var(--w) * 118%));
                transform: rotate(var(--tilt)); }
   .lp-title { left: 8.4%; top: 10.4%; font-size: 34px; font-weight: 700; color: var(--lp-chalk); letter-spacing: -.01em; }
-  .lp-src { left: 6%; bottom: 2.4%; font-size: 22px; font-weight: 500; color: var(--lp-char); }
+  .lp-src { left: 6%; bottom: 2.4%; font-size: 22px; font-weight: 500; color: var(--lp-chalk); opacity: .85; }   /* the source sits on the board after the punch: chalk, not charcoal */
   .lp-chart { position: absolute; overflow: visible; }
   /* MOTION MENU species (doc 29 s9.27; P35 T6/T7): plate life on the world side, the targeted overlay above the docks */
   #plife { position: absolute; inset: 0; pointer-events: none; }
@@ -1298,6 +1298,9 @@
        s9.26 default 6% / 8% / 88% x 84%; the field, the outline and the chart all take the same box so the line is tight */
     const bd = pg.board || { x: 0.06, y: 0.08, w: 0.88, h: 0.84 };
     const boardCentre = { x: (bd.x + bd.w / 2) * 100, y: (bd.y + bd.h / 2) * 100 };
+    /* the punch (E22 addendum 6) crops the page to 1/PUNCH_SCALE around the board centre: title, source and the
+       chart box are placed inside that region from the first frame so nothing written is ever cut off */
+    const vis = { x: bd.x + bd.w / 2 - 0.5 / LP.PUNCH_SCALE, y: bd.y + bd.h / 2 - 0.5 / LP.PUNCH_SCALE, w: 1 / LP.PUNCH_SCALE, h: 1 / LP.PUNCH_SCALE };
     const boxCss = (el) => { el.style.left = (bd.x * 100).toFixed(2) + "%"; el.style.top = (bd.y * 100).toFixed(2) + "%"; el.style.width = (bd.w * 100).toFixed(2) + "%"; el.style.height = (bd.h * 100).toFixed(2) + "%"; };
     const grain = lpEl("svg", "lp-grain", page, { width: "100%", height: "100%" });
     grain.innerHTML = '<filter id="lpg' + seed + '"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="7" stitchTiles="stitch"/>'
@@ -1351,14 +1354,17 @@
       const elen = edgePath.getTotalLength ? edgePath.getTotalLength() : 4; edgePath.setAttribute("stroke-dasharray", elen); edgePath.setAttribute("stroke-dashoffset", elen); edgePath.dataset.len = elen;
     }
     const title = lpEl("div", "lp-ink lp-title", page);
-    title.style.left = ((bd.x + 0.027) * 100).toFixed(2) + "%"; title.style.top = ((bd.y + 0.024) * 100).toFixed(2) + "%";
+    title.style.left = (Math.max(bd.x + 0.027, vis.x + 0.03) * 100).toFixed(2) + "%"; title.style.top = (Math.max(bd.y + 0.024, vis.y + 0.035) * 100).toFixed(2) + "%";
     const src = lpEl("div", "lp-ink lp-src", page);
+    src.style.left = (Math.max(0.06, vis.x + 0.03) * 100).toFixed(2) + "%"; src.style.bottom = (Math.max(0.024, 1 - (vis.y + vis.h) + 0.03) * 100).toFixed(2) + "%";
     const glyphs = [...lpGlyphs(title, pg.title || "", seed), ...lpGlyphs(src, pg.source || "", seed + 1)];
     /* chart area inside the field, leaving the declared quiet zone for docks (s9.28 B3/C2) */
     const qz = pg.quiet_zone || null;
     const chart = lpEl("svg", "lp-chart", page, { viewBox: "0 0 1000 560" });
-    chart.style.width = ((qz ? 0.57 : 0.86) * bd.w * 100).toFixed(2) + "%"; chart.style.height = (0.78 * bd.h * 100).toFixed(2) + "%";
-    chart.style.left = ((bd.x + (qz === "left" ? 0.43 : 0.05) * bd.w) * 100).toFixed(2) + "%"; chart.style.top = ((bd.y + 0.14 * bd.h) * 100).toFixed(2) + "%";
+    /* the chart box lives inside the punched region (with room for the title above and the source below) */
+    const cb = { x: vis.x + 0.03 * vis.w, y: vis.y + 0.15 * vis.h, w: 0.94 * vis.w, h: 0.74 * vis.h };
+    chart.style.width = ((qz ? 0.6 : 0.9) * cb.w * 100).toFixed(2) + "%"; chart.style.height = (cb.h * 100).toFixed(2) + "%";
+    chart.style.left = ((cb.x + (qz === "left" ? 0.4 : 0.05) * cb.w) * 100).toFixed(2) + "%"; chart.style.top = (cb.y * 100).toFixed(2) + "%";
     const st = { root, page, edge, blobs, strokes, nib, rect, goo, outline, edgePath, glyphs, chart, fieldPlate, boardCentre, kind: pg.builder || "story",
                  bars: [], paths: [], labels: [], callout: null, cval: null, vals: pg.values || [],
                  vstr: pg.value_strings || [], emph: pg.emphasize | 0 };
@@ -1762,7 +1768,8 @@
      (build validate_species + gate M09). Plate life quantizes t to 10 fps FIRST and derives every
      pose from the step (stop-motion law). Everything from t; jitter only via lpHash. */
   const SP = { PUNCH_IN: 0.42, PUNCH_OUT: 0.5, PUNCH_SCALE: 1.14, FOCUS_SCALE: 1.32, PULL_FROM: 1.9,
-               CALLOUT_DRAW: 0.7, SQUIG_DRAW: 0.45, LIFE_FPS: 10, LIFE_LAND: 0.6, BOIL_PX: 1.2, BOIL_DEG: 0.7 };
+               CALLOUT_DRAW: 0.7, SQUIG_DRAW: 0.45, LIFE_FPS: 10, LIFE_LAND: 0.6, BOIL_PX: 1.2, BOIL_DEG: 0.7,
+               SPOT_DIM: 0.44 };   /* operator 2026-09-03: 0.55 read as the analyst's '80%' and was 'way too dark' - 64% of that */
   const CAMERA = new Set(["punch", "focus_zoom", "pull_back"]);
   const spSvg = $("species"), plife = $("plife");
   const spEase = (k) => 1 - Math.pow(1 - clamp01(k), 3);
@@ -1865,8 +1872,8 @@
         const rg = lpEl("radialGradient", "", defs, { id, cx: (cx / 1920).toFixed(4), cy: (cy / 1080).toFixed(4), r: 0.5 });
         lpEl("stop", "", rg, { offset: 0, "stop-color": "#000", "stop-opacity": 0 });
         lpEl("stop", "", rg, { offset: r0.toFixed(3), "stop-color": "#000", "stop-opacity": 0 });
-        lpEl("stop", "", rg, { offset: (r0 + 0.12).toFixed(3), "stop-color": "#000", "stop-opacity": 0.55 });
-        lpEl("stop", "", rg, { offset: 1, "stop-color": "#000", "stop-opacity": 0.55 });
+        lpEl("stop", "", rg, { offset: (r0 + 0.12).toFixed(3), "stop-color": "#000", "stop-opacity": SP.SPOT_DIM });
+        lpEl("stop", "", rg, { offset: 1, "stop-color": "#000", "stop-opacity": SP.SPOT_DIM });
         const fade = Math.min(spEase(k * dur / 0.4), spEase((1 - k) * dur / 0.4));
         lpEl("rect", "", spSvg, { x: 0, y: 0, width: 1920, height: 1080, fill: "url(#" + id + ")", opacity: fade.toFixed(2) });
       } else if (sp.kind === "squiggle") {   /* a hand-drawn underline under a declared caption word span (stage mode only) */
