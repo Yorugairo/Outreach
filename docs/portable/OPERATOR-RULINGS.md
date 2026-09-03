@@ -783,3 +783,13 @@ chart on the punched page, and fires its declared focus (callout /
 spotlight / punch on the emphasized datum) at the build's end. Why: the
 chart is the proof of one sentence; the page must end pointing at it.
 
+**C5 addendum (2026-09-03) - the host at the board.** The banner and avatar
+promise a host the episode never showed. *"This gives us an opportunity to
+build the host on the developed charcoal board, and with world plate
+charts, not just with evidence scenes."* Host-on-board plates: the host
+in-world at the inked deckle board, in the page's quiet zone; the chart
+builds in the surface he points at; four or five first-person beats an
+episode. One generation per pose; the blank page state is derived
+procedurally so the host never drifts between beats. Why: the packaging's
+promise of a person is a confirmation-gap promise (E24) like the thesis.
+

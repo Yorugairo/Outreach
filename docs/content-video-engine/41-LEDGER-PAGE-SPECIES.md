@@ -87,6 +87,20 @@ DELIVERED 2026-09-03 (Codex headless; `claim-resume` scanned: 2 flagged, 0 faile
 in `review/claims/<claim>/` until the operator approves the contact sheet;
 only then do `plate` / `field_plate` point at approved ids.
 
+## 5b. The host at the board (C5 addendum, 2026-09-03)
+
+Host-on-board plates are page plates (`plate` / `field_plate`) in which the
+host stands at the inked board in the page's quiet zone. The chart builds
+in the board he points at; the focus action lands on the datum, never on
+him. Claim `steel-and-paper-host-board-v1`: three poses (presenting at the
+board, pointing at its upper area, turned to it from the left), each
+delivered as the inked-board state; the blank state is derived by
+returning the board region to cream paper so the host is identical across
+the beats. Interim: the host cut-outs in
+`assets/generated/cutouts/actor-host-*.png` may throw in via plate life on
+the quiet zone (proof scene 1), but the brand sheet's rule stands - the
+host lives in the plate, never as a cut-out over evidence.
+
 ## 6. Sound
 
 `sound/SOUND-PLAN.json` → `page_cues` (page-relative): paper slide at

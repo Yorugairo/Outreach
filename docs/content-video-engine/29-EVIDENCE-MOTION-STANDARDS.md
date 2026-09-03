@@ -1610,6 +1610,28 @@ is never left as homework: the page ends on the pointed-at proof.
 Constants: ROLL 0.7 · SAVOR 0.8 · FIELD 2.4 · OUTLINE 0.8 · PUNCH 0.5 ·
 BUILD 3.0 · focus at 8.2s; the gate's page beats follow.
 
+**The host at the board (operator, 2026-09-03).** The banner and the avatar
+lead with the host; Steel and Paper never showed him. Operator: *"this gives
+us an opportunity to build the host on the developed charcoal board, and
+with world plate charts, not just with evidence scenes. We can do a lot
+more now."* Ruling C5 (the diegetic composite: the host gestures at a
+framed surface and real evidence composites into it) becomes literal on
+the ledger page: HOST-ON-BOARD plates are world plates in which the host
+stands at the inked board on the cream deckle page - presenting, pointing,
+turned to it - and the page's chart builds IN the board he points at.
+Rules: (a) the host lives in the plate (generated, in-world, brand-sheet
+identity anchor), never as a cut-out over evidence (brand sheet §3) - the
+cut-out via plate life is the interim only; (b) the host occupies the
+page's quiet zone, so the chart, the focus action and docks never cover
+him and he never covers the emphasized datum; (c) the host appears where
+the narrator speaks as himself - the opening (confirming the person behind
+the packaging), the first-person claims ("I pulled it myself", "I built a
+monitor"), the trim on camera, the CTA - four or five beats an episode,
+not every plate; (d) both page states derive from ONE generation per pose:
+the inked-board plate is the delivery, the blank state is made
+procedurally by returning the board region to cream paper, so the host is
+identical across the beats. Claim `steel-and-paper-host-board-v1`.
+
 Also ruled the same review: the ledger species proof "looks good" (the
 two-plate path is the field); the targeted species "all worked really
 well - finally a real capability"; the race "needs to be smoother";
