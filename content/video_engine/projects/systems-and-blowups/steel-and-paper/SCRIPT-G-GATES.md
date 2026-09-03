@@ -1,7 +1,7 @@
 # SCRIPT GATES - SCRIPT-G-VO.txt
 
 script: SCRIPT-G-VO.txt
-generated: 2026-09-03T08:42:40+00:00
+generated: 2026-09-03T09:12:58+00:00
 script_hash: 4d2876620021c3d94387d761d442548d95f867afeb7be8db00f3ed3385dcf5f8
 timing_source: measured
 
@@ -76,8 +76,8 @@ exit 1
           Hook anatomy: stakes named by ~0:25 (38 B3)
   [FAIL ] G08 no [payoff] declared before the promise
           One Minute Wall: real value FIRST, before the ask (38 B4)
-  [FAIL ] G09 promise at 1:20 - AFTER 0:60 (Steel and Paper as recorded: 1:20)
-          F1 + A1 + macro-loop-1 SETUP: the dated promise in 0:30-0:60 (38 B4 / MAP s3 / CLK)
+  [FAIL ] G09 promise at 1:20 - AFTER 0:45 (E24, decided 2026-09-03; Steel and Paper as recorded: 1:20)
+          F1 + A1 + macro-loop-1 SETUP: the dated promise in 0:30-0:45 (38 B4 / MAP s3 / CLK; E24 roadmap by 0:45)
   [FAIL ] G10 missing
           Humes pre-key immediately before the promise (P1 pause marks)
   [FAIL ] G12 0 declared in P1

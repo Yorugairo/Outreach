@@ -251,9 +251,10 @@ def test_green_conforming_opening_answers_its_packaging():
     assert not [x for x in gates if x.level == "FAIL"]
 
 
-def test_promise_after_45s_warns_with_the_decision_named():
+def test_promise_after_45s_fails_e24_decided():
+    # operator, 2026-09-03 (click): the roadmap lands by 0:45 - G09 FAILs past it, no WARN band
     s = _pad_to(OPEN, 50.0)
     s += "[payoff] Here is what the chart got right. `[pre-key]` [promise] By the end you'll run one test yourself. "
     g = _by_id(G.run(_pad_to(s, 805.0), None)[0])
-    assert g["G09"].level == "WARN" and "DECISION (R7)" in g["G09"].message, g["G09"]
-    assert G.ROADMAP_WARN_S == 45.0 and G.PROMISE_WIN == (30.0, 60.0)      # the FAIL past 0:60 is doctrine, untouched
+    assert g["G09"].level == "FAIL" and "AFTER 0:45" in g["G09"].message, g["G09"]
+    assert G.PROMISE_WIN == (30.0, 45.0) and G.ROADMAP_S == 45.0

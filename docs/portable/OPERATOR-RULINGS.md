@@ -749,8 +749,8 @@ the words packaged with the thumbnail") — no greeting, no lore, no history
 first (gate G45 as the title-word proxy; J12 the reader's verdict on the
 thumbnail itself);
 (2) the cold open matches the packaging's tension — anchor 0–10s,
-complication 10–25s, roadmap by 0:45 (DECISION open: our promise window
-ends at 0:60; the gate WARNs past 0:45 until ruled); (3) charts are
+complication 10–25s, roadmap by 0:45 (DECIDED 2026-09-03: the promise
+window is 0:30–0:45; G09 FAILs past 0:45); (3) charts are
 evidence, not the hook — in the first minute no still over 6s (M10), and
 the first chart enters between the 8s paradox and 20s WITH a targeted
 species on its divergence and a sound hit, never as a full unannotated

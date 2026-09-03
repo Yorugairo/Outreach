@@ -1,0 +1,34 @@
+{
+  "schema_version": "review_manifest.v1",
+  "status": "approved",
+  "render_eligible": true,
+  "style_family": "woodblock-vox-newsprint-v2",
+  "source_prompt": "claim:steel-and-paper-ledger-page-v1",
+  "assets": [
+    {
+      "asset_id": "world-ledger-blank-page-v1",
+      "path": "objects/world-ledger-blank-page-v1.png",
+      "sha256": "94d336d9975eaebbf356cda8c168c4e4eda70675eea7bd6b040555683ff93efb",
+      "kind": "world_board",
+      "semantic": "",
+      "source": {
+        "path": "source/world-ledger-blank-page-v1-source.png",
+        "sha256": "94d336d9975eaebbf356cda8c168c4e4eda70675eea7bd6b040555683ff93efb"
+      }
+    },
+    {
+      "asset_id": "world-ledger-inked-board-v1",
+      "path": "objects/world-ledger-inked-board-v1.png",
+      "sha256": "b7f743d5c2ee3e6b14b9e88400fdc4ebd6244f29ebb4f706a7bd14e8db033797",
+      "kind": "world_board",
+      "semantic": "",
+      "source": {
+        "path": "source/world-ledger-inked-board-v1-source.png",
+        "sha256": "b7f743d5c2ee3e6b14b9e88400fdc4ebd6244f29ebb4f706a7bd14e8db033797"
+      }
+    }
+  ],
+  "approved_by": "operator",
+  "approved_at": "2026-09-03",
+  "approval_note": "Contact sheet approved by the operator (click answer, 2026-09-03: 'Approve both'). See OPERATOR-APPROVAL.md."
+}

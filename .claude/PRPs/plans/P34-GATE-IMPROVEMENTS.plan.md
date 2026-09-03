@@ -348,14 +348,14 @@ reports INFO not-run), motion gate = 8 FAIL.
   proposal. Suites after the fixes: 281 passed under `-k "gate or audit or
   enumerate or motion or ledger or species"`, 9 pre-existing failures outside
   them; ep1 motion report regenerated: 8 FAIL, now hash-keyed to its timeline.
-  Open DECISION carried, not blocking: the roadmap window (G09 WARNs past
-  0:45, FAILs past 0:60) - the operator picks when the re-script lands.
+  The roadmap window DECIDED 2026-09-03 (click): 0:45 - `PROMISE_WIN` (30,
+  45), G09 FAILs past it, the WARN band retired; test renamed.
 
 ## Post-plan additions (2026-09-03)
 
 Rulings E24/E25 (the operator's analytics read) shipped as gates after this
 plan closed its slices: G45 + J12 (the first sentence answers the thumbnail),
-G09 WARN past 0:45 (DECISION open vs the 0:60 window), M10 (no still over 6s in
+G09 FAIL past 0:45 (decided 2026-09-03; was WARN with the 0:60 FAIL), M10 (no still over 6s in
 the first minute), M11 (the first chart 8-20s, spotlit, with a sound hit),
 M12 (the chart is the proof, not the homework: no hold across plates, 10s /
 6s ceilings). Commit eb52f86. Ep1 baselines: opening gate 28 FAIL, motion

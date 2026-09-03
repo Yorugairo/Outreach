@@ -1691,7 +1691,8 @@ from three samples written on the inked plate ("Kalam is probably the
 right call"); Inter is the offline fallback.
 
 **Variants (same page, same ink):** line, bars, bar race (ranked bars
-overtaking across periods, axis rescaling, accent handing to the leader),
+overtaking across periods, axis rescaling, accent handing to the leader -
+confirmed as a ledger by the operator 2026-09-03 after the re-timing),
 decline (a line drawing downward while its value counts down), progress.
 
 **Rules.** Data only from a `series.json` beside the page, with the
@@ -1908,10 +1909,9 @@ paradox / stakes), 0:10–0:25 the complication (why the conventional view
 is wrong), 0:25–0:45 the roadmap (what the viewer will understand that 99%
 of the market is missing). Our doc 38 / P1 shape is the same ladder with
 one difference: the promise sits 0:30–0:60 after the mini-payoff, the
-analyst puts the roadmap by 0:45. **DECISION for the operator (R7):** the
-gate WARNs on a promise after 0:45 and FAILs after 0:60 until ruled;
-tightening the window to 0:45 is the recommendation, because the
-analytics agree with the analyst.
+analyst puts the roadmap by 0:45. **DECIDED (operator, 2026-09-03):** the
+window is tightened to 0:45 - `PROMISE_WIN = (30, 45)`, G09 FAILs on a
+promise after 0:45 - because the analytics agree with the analyst.
 
 **3. Visual pacing in the first 30–60s.** Viewers decide on the production
 in the first 30 seconds. A static chart or a slow pan for 8s+ signals a

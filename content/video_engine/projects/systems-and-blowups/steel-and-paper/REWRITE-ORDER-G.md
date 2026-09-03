@@ -133,7 +133,7 @@ chart docks held as homework).
 ## Standing rulings that bind the re-script (added 2026-09-03)
 
 - **E24** - the first sentence answers the thumbnail (G45 proxy + J12);
-  roadmap by 0:45 (WARN) / 0:60 (FAIL); the first chart lands 8-20s
+  roadmap by 0:45 (FAIL past it - decided 2026-09-03); the first chart lands 8-20s
   spotlit on its divergence with a sound hit, never full and unannotated
   (M11); no still over 6s in the first minute (M10).
 - **E25** - the chart is the proof, not the homework: no chart holds across
@@ -142,3 +142,7 @@ chart docks held as homework).
   The shot table's "topic-governed exits" are retired: exits are
   proof-governed.
 
+- **Carried from P35 (Human Gate 6): the ring on a page.** "We'd have to see
+  it to know" - one ledger page in this script carries the iron spike drawn on
+  the ledger as its ring beat (the payoff page by default); render it as a
+  proposal beside the plain page and the operator picks.

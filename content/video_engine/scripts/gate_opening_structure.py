@@ -99,8 +99,9 @@ PARADOX_BY_S = 8.0              # 38 B2: [post-key] ON the 8-second boundary
 ARCHETYPE_WIN = (8.0, 30.0)     # 38 B3: the world opens 0:08-0:30; W&N as people
 YOU_BY_S = 30.0                 # 38 B3 / P1 QC
 STAKES_BY_S = 30.0              # 38 B3: stakes named by ~0:25 (tolerance to 0:30)
-PROMISE_WIN = (30.0, 60.0)      # 38 B4 / MAP s3 / CLK: mini-payoff FIRST, then the promise
-ROADMAP_WARN_S = 45.0           # E24: the analyst's roadmap-by-0:45; DECISION open (R7) against doc 38's window to 0:60
+PROMISE_WIN = (30.0, 45.0)      # 38 B4 / MAP s3 / CLK: mini-payoff FIRST, then the promise - by 0:45 (E24 DECIDED 2026-09-03: the
+                                # analyst's roadmap-by-0:45 wins over doc 38's 0:60; the analytics drop lands 0:45-1:00)
+ROADMAP_S = PROMISE_WIN[1]      # kept as a name for the report text
 BEAT5_START = 60.0              # 38 B5: the map, desire, opponent, A2, ring - 0:60 to P1 end
 A2_ANCHOR = 60.0                # 38 B5 / P1 QC
 # A3 = kit_spec.a3_anchor_s(runtime): P2.md / MAP s4 QC, A3 + F2 at ~10% of runtime (E23; shared with the audit)
@@ -421,13 +422,11 @@ def run(text: str, timeline: list[dict] | None = None, counterparty: str | None 
         add("G08", "One Minute Wall: real value FIRST, before the ask (38 B4)", "FAIL", f"[payoff] at {mmss(t_po)} comes AFTER the promise at {mmss(t_pr)}")
     else:
         add("G08", "One Minute Wall: real value FIRST, before the ask (38 B4)", "PASS", f"[payoff] at {mmss(t_po)}")
-    src9 = "F1 + A1 + macro-loop-1 SETUP: the dated promise in 0:30-0:60 (38 B4 / MAP s3 / CLK)"
+    src9 = "F1 + A1 + macro-loop-1 SETUP: the dated promise in 0:30-0:45 (38 B4 / MAP s3 / CLK; E24 roadmap by 0:45)"
     if t_pr is None:
         add("G09", src9, "FAIL", "no promise found (tag [promise] or a 'by the end you'll...' line)")
     elif t_pr > PROMISE_WIN[1] * tol:
-        add("G09", src9, "FAIL", f"promise at {mmss(t_pr)} - AFTER 0:60 (Steel and Paper as recorded: 1:20)")
-    elif t_pr > ROADMAP_WARN_S * tol:
-        add("G09", src9, "WARN", f"promise at {mmss(t_pr)} - after 0:45; DECISION (R7): analyst roadmap by 0:45 vs doc 38 promise window to 0:60")
+        add("G09", src9, "FAIL", f"promise at {mmss(t_pr)} - AFTER 0:45 (E24, decided 2026-09-03; Steel and Paper as recorded: 1:20)")
     elif t_pr < PROMISE_WIN[0] / tol:
         add("G09", src9, "WARN", f"promise at {mmss(t_pr)} - before the mini-payoff window opens")
     else:

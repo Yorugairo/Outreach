@@ -1,0 +1,45 @@
+{
+  "schema_version": "review_manifest.v1",
+  "status": "approved",
+  "render_eligible": true,
+  "style_family": "woodblock-vox-newsprint-v2",
+  "source_prompt": "claim:steel-and-paper-host-board-v1",
+  "assets": [
+    {
+      "asset_id": "host-board-present-v1",
+      "path": "objects/host-board-present-v1.png",
+      "sha256": "4752eee1060ffb4d32724daf4d09927d3ec03b38669ba24dc99b71c83bd0f43c",
+      "kind": "world_board",
+      "semantic": "",
+      "source": {
+        "path": "source/host-board-present-v1-source.png",
+        "sha256": "4752eee1060ffb4d32724daf4d09927d3ec03b38669ba24dc99b71c83bd0f43c"
+      }
+    },
+    {
+      "asset_id": "host-board-point-v1",
+      "path": "objects/host-board-point-v1.png",
+      "sha256": "00d82d32b7aea56d080bfe6b14b252e0c9416206f1fe544d12789269130479d6",
+      "kind": "world_board",
+      "semantic": "",
+      "source": {
+        "path": "source/host-board-point-v1-source.png",
+        "sha256": "00d82d32b7aea56d080bfe6b14b252e0c9416206f1fe544d12789269130479d6"
+      }
+    },
+    {
+      "asset_id": "host-board-turned-v1",
+      "path": "objects/host-board-turned-v1.png",
+      "sha256": "a92952e4daf39bacc5a48705f45d90d0f8bdd4bdfbaa75c919851f5b48951de8",
+      "kind": "world_board",
+      "semantic": "",
+      "source": {
+        "path": "source/host-board-turned-v1-source.png",
+        "sha256": "a92952e4daf39bacc5a48705f45d90d0f8bdd4bdfbaa75c919851f5b48951de8"
+      }
+    }
+  ],
+  "approved_by": "operator",
+  "approved_at": "2026-09-03",
+  "approval_note": "Contact sheet approved by the operator (click answer, 2026-09-03: 'Approve both'). See OPERATOR-APPROVAL.md."
+}

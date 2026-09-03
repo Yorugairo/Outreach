@@ -1,7 +1,7 @@
 ---
 id: P35-LEDGER-PAGE-PLATE-CHARTS
 title: The ledger page - plate charts that roll out, write in ink, and build; plus the motion menu
-status: review
+status: complete
 operation: feature
 risk: standard
 owner: parent
@@ -135,7 +135,9 @@ Acceptance:
    Google Fonts in the template head, Inter the offline fallback; brand
    sheet type table row added. Bundling the TTF beside the template is the
    operator's download to make (OFL permits it).
-3. **Bar-race motion on a page** - OPEN (second read): the operator's
+3. **Bar-race motion on a page** - DECIDED 2026-09-03 (click): "Reads as a
+   ledger, keep it" - the race is a default variant; on air the memory-share
+   race still waits on sourced quarters. History: the operator's
    first read (2026-09-03) was "the race needs to be smoother, it feels a
    bit choppy"; the race was re-timed as a pure function of t and the
    builders proof republished (7563abf9). The second read decides
@@ -148,7 +150,7 @@ Acceptance:
    used only for the prototype and the pick.
 5. **Sound** - DECIDED: source the cues (CC0 via the Freesound client;
    no paid audio). T9.
-6. **The ring on a page** - OPEN, carried by the re-script: "we'd have to
+6. **The ring on a page** - CARRIED to REWRITE-ORDER-G (not a P35 deliverable): "we'd have to
    see it to know." No candidate with the spike drawn on the ledger has
    been rendered yet; it is authored against the re-scripted episode's
    own ring beat, not against Script G.
@@ -349,7 +351,7 @@ proof earns the page.
 - Evidence: `pytest test_gate_motion_density.py test_motion_gate_wiring.py -q` 22 passed; shot row `ledger:<series>:<variant>[:<emphasize>[:<quiet_zone>]]` -> `world_for_plate` emits `{kind: ledger, page: <spec>}` (no asset), timeline gains `species`; gate clock FIXED: dock events from the timeline's own scenes[].docks incl. badge reveals (`dock_source: timeline`), evidence-dock.json only as fallback; page beats (0/0.6/3.4/4.2/7.2s) count as events, page start as evidence entry, hold still; ep1 after the fix: M01 8 stretches 123s=15% worst 17.7s at 2:24 (was 11/23%/34.6s), M03 54s from 2:52 (was 197s), still 4 FAIL; synthetic 90s window with a page at 12-31s passes M01/M03/M05, without it FAILs; GATES-MOTION.md regenerated. Plate-life events still uncounted (T6)
 
 ### T5: The other builders - story, race, decline, combo - each ported from its own component
-- Status: review (Human Gate 3: the race on a page; the memory-share race waits on sourced TrendForce quarters)
+- Status: done (Human Gate 3 DECIDED 2026-09-03: the smoothed race reads as a ledger - a default variant; the memory-share race waits on sourced quarters before air)
 - Owner: implementation_luna (→ `general-purpose`), one builder per dispatch
 - Depends on: T3, T4; Human Gate 3 (race)
 - Write set: `docs/content-video-engine/samples/scene-evidence-player.template.html` (one builder function per treatment, keyed by the row's `builder`; no changes to `dense-line`),
@@ -483,8 +485,9 @@ twice and compare frame hashes; grep the template for
   anchor-pinned pages. Species proof regenerated and republished (artifact
   d4bf959c, label "No outline, Kalam, signed bars"); stage hashes equal from
   two seek orders at t=10.5 (75ff9184) and t=4.0 (d81d2308).
-  REMAINING - operator only, so the plan stays in `review`: Human Gate 3 (second read of the smoothed race), Human Gate 6 (the ring
-  on a page, with the re-script), and the two contact sheets in
-  `review/claims/` (ledger-page pair `steel-and-paper-ledger-page-v1`,
-  host-on-board triple `steel-and-paper-host-board-v1`) - `approved` is
-  the operator's word, never product code's.
+  DECIDED 2026-09-03 (click answers): Human Gate 3 - the race reads as a
+  ledger, kept as a default variant; both contact sheets APPROVED
+  (`review/claims/*/OPERATOR-APPROVAL.md`, manifests `status: approved`,
+  `approved_by: operator`). Human Gate 6 (the ring on a page) is carried
+  to REWRITE-ORDER-G - it is authored against the re-scripted episode's
+  ring beat, not a P35 deliverable. No required work remains: COMPLETE.
