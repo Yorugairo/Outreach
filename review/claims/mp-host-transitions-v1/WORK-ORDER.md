@@ -88,6 +88,19 @@ Hard rules carried in every prompt, and to be checked on every output:
   ever opening the file. 40 credits, all identity-REJECT.
   **Rule: a prompt that describes a reference is written from the opened image,
   never from memory of what it should be.** Open every reference before Stage A.
+- **Never call him a "cartoon".** The identity test (v2, 10 credits) said "full colour
+  cartoon" and Omni treated it as a style order: enlarged head, flat fills, a sticker
+  outline, and the locs simplified to a crop. He is a *detailed illustration in the
+  world's own ink-and-newsprint register*. Describe him from the opened image - suit
+  texture, tie pattern, glasses, goatee, tied locs, proportions - and say he is drawn
+  in the scene's register, not pasted on. (Operator, 2026-09-03.)
+- **The locked-identity route is the renderer, not the model.** The shipped template
+  already animates our cutouts on a plate deterministically - `plate_life` species,
+  `scene-evidence-player.template.html` line 1955: stepped time, throw-and-land with
+  squash, two-frame boil. A host entrance built there is pixel-exact, zero credits,
+  zero drift. Flow earns its credits on what has NO locked identity: worlds, hooks,
+  ambient. Generated host motion is a Quality-tier / Flow-Character experiment, not
+  the library's default.
 - **Because the host has a face, face and proportion drift across the clip is the
   live risk** — the earlier "no face, so survivable" reasoning was built on the
   wrong host. Multi-reference the cutout every scene; keep clips at 6s; and test
