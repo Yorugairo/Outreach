@@ -923,3 +923,16 @@ The page pill is the dock's pill unchanged in shape and type; only its
 ground moves to the evidence token with the card's hairline and lift,
 because the dock's charcoal fill vanishes on the charcoal board.
 
+**E28 addendum 2 (2026-09-03) - sign is colour too.** *"We should make
+negative charts blood red, positive green. That way the yellow circle is
+actually impactful."* Bars take their sign colour (blood red down, green
+up, `--lp-neg` / `--lp-pos`, tokens `chart.negative` / `chart.positive`);
+a single-metric line takes the sign of its end against its start;
+multi-line pages keep their series key. The emphasized datum and the
+focus ring stay sunflower - the only yellow on the board. Correction on
+the record: Bravos's original chart was MAMAA against the S&P 500, not
+against semiconductors; `ev-bravos-original-v1.series.json` carries a
++105% second line named SEMICONDUCTORS and is under SOURCES-TO-VERIFY
+until re-read against the source. The divergence mapping stands on the
+dock's badges.
+

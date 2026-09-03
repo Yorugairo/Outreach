@@ -49,6 +49,11 @@ near-white type; it is the only dark surface in the system.
 **No other hues in generated art.** Plates are prompted with the palette
 verbatim (spine STYLE block).
 
+**Chart sign colours (operator, 2026-09-03):** on any chart, a drop is
+blood red `#B0201F` and a rise green `#2E9E5B` - `chart.negative` /
+`chart.positive` in the tokens. Teal and coral stay the world's tokens;
+the sunflower callout is the ONLY yellow on a chart, so it lands.
+
 ## 3. The world layer — woodblock vox newsprint (spine, verbatim rules)
 
 - Carved woodblock ink contours with visible cut character; flat

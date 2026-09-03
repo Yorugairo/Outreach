@@ -2,48 +2,185 @@
   "$schema": "https://design-tokens.github.io/community-group/format/",
   "$description": "Money Physics brand tokens. Source of truth for hex values is style-spine.woodblock-vox-newsprint.v2.md and configs/style_packs/woodblock.json; this file mirrors them in W3C design-token format for design tools. Assembled 2026-09-02.",
   "color": {
-    "cream": { "$type": "color", "$value": "#F4E6C7", "$description": "paper ground: plates, banner, whiteboard" },
-    "charcoal": { "$type": "color", "$value": "#25313C", "$description": "ink: contours, wordmark, body text" },
-    "cobalt": { "$type": "color", "$value": "#1769C2", "$description": "brand accent: the one highlight block" },
-    "teal": { "$type": "color", "$value": "#178C83", "$description": "positive / our layer" },
-    "coral": { "$type": "color", "$value": "#ED6A4A", "$description": "negative / alarm" },
-    "sunflower": { "$type": "color", "$value": "#F5B72E", "$description": "highlight / attention" },
-    "evidence-ground": { "$type": "color", "$value": "#1B1E23", "$description": "near-black ground of the evidence layer; the only dark surface" },
-    "evidence-ink": { "$type": "color", "$value": "#F2F2F2", "$description": "near-white type on the evidence ground" }
+    "cream": {
+      "$type": "color",
+      "$value": "#F4E6C7",
+      "$description": "paper ground: plates, banner, whiteboard"
+    },
+    "charcoal": {
+      "$type": "color",
+      "$value": "#25313C",
+      "$description": "ink: contours, wordmark, body text"
+    },
+    "cobalt": {
+      "$type": "color",
+      "$value": "#1769C2",
+      "$description": "brand accent: the one highlight block"
+    },
+    "teal": {
+      "$type": "color",
+      "$value": "#178C83",
+      "$description": "positive / our layer"
+    },
+    "coral": {
+      "$type": "color",
+      "$value": "#ED6A4A",
+      "$description": "negative / alarm"
+    },
+    "sunflower": {
+      "$type": "color",
+      "$value": "#F5B72E",
+      "$description": "highlight / attention"
+    },
+    "evidence-ground": {
+      "$type": "color",
+      "$value": "#1B1E23",
+      "$description": "near-black ground of the evidence layer; the only dark surface"
+    },
+    "evidence-ink": {
+      "$type": "color",
+      "$value": "#F2F2F2",
+      "$description": "near-white type on the evidence ground"
+    }
   },
   "semantic": {
-    "positive": { "$type": "color", "$value": "{color.teal}" },
-    "negative": { "$type": "color", "$value": "{color.coral}" },
-    "accent": { "$type": "color", "$value": "{color.sunflower}" },
-    "brand": { "$type": "color", "$value": "{color.cobalt}" },
-    "ground": { "$type": "color", "$value": "{color.cream}" },
-    "ink": { "$type": "color", "$value": "{color.charcoal}" }
+    "positive": {
+      "$type": "color",
+      "$value": "{color.teal}"
+    },
+    "negative": {
+      "$type": "color",
+      "$value": "{color.coral}"
+    },
+    "accent": {
+      "$type": "color",
+      "$value": "{color.sunflower}"
+    },
+    "brand": {
+      "$type": "color",
+      "$value": "{color.cobalt}"
+    },
+    "ground": {
+      "$type": "color",
+      "$value": "{color.cream}"
+    },
+    "ink": {
+      "$type": "color",
+      "$value": "{color.charcoal}"
+    }
   },
   "font": {
-    "chrome": { "$type": "fontFamily", "$value": ["Inter", "Arial", "sans-serif"], "$description": "wordmark, banner, docks, captions" },
-    "evidence": { "$type": "fontFamily", "$value": ["Inter", "Segoe UI", "system-ui", "sans-serif"], "$description": "charts; numerals tabular" },
-    "badge": { "$type": "fontFamily", "$value": ["ui-monospace", "Consolas", "monospace"], "$description": "exact figures in badges" },
-    "thumbnail": { "$type": "fontFamily", "$value": ["Impact", "Anton", "sans-serif"], "$description": "outlined display type, upright, <=3 punch words" },
-    "plate": { "$type": "fontFamily", "$value": [], "$description": "NONE: readable text is banned on generated plates" }
+    "chrome": {
+      "$type": "fontFamily",
+      "$value": [
+        "Inter",
+        "Arial",
+        "sans-serif"
+      ],
+      "$description": "wordmark, banner, docks, captions"
+    },
+    "evidence": {
+      "$type": "fontFamily",
+      "$value": [
+        "Inter",
+        "Segoe UI",
+        "system-ui",
+        "sans-serif"
+      ],
+      "$description": "charts; numerals tabular"
+    },
+    "badge": {
+      "$type": "fontFamily",
+      "$value": [
+        "ui-monospace",
+        "Consolas",
+        "monospace"
+      ],
+      "$description": "exact figures in badges"
+    },
+    "thumbnail": {
+      "$type": "fontFamily",
+      "$value": [
+        "Impact",
+        "Anton",
+        "sans-serif"
+      ],
+      "$description": "outlined display type, upright, <=3 punch words"
+    },
+    "plate": {
+      "$type": "fontFamily",
+      "$value": [],
+      "$description": "NONE: readable text is banned on generated plates"
+    }
   },
   "fontWeight": {
-    "wordmark": { "$type": "fontWeight", "$value": 900 },
-    "line": { "$type": "fontWeight", "$value": 800 },
-    "sub": { "$type": "fontWeight", "$value": 700 }
+    "wordmark": {
+      "$type": "fontWeight",
+      "$value": 900
+    },
+    "line": {
+      "$type": "fontWeight",
+      "$value": 800
+    },
+    "sub": {
+      "$type": "fontWeight",
+      "$value": 700
+    }
   },
   "motion": {
-    "kenBurnsScale": { "$type": "number", "$value": 1.04, "$description": "1.00 -> 1.04 over one scene, one move per scene" },
-    "recipes": { "$type": "string", "$value": "parallax_push, paper_transition, masked_reveal, map_trace" },
-    "rule": { "$type": "string", "$value": "Every movement explains a causal or state change; decorative motion is forbidden." },
-    "transition": { "$type": "string", "$value": "cross-reveal wipe with carried light (doc 29 s9.15)" }
+    "kenBurnsScale": {
+      "$type": "number",
+      "$value": 1.04,
+      "$description": "1.00 -> 1.04 over one scene, one move per scene"
+    },
+    "recipes": {
+      "$type": "string",
+      "$value": "parallax_push, paper_transition, masked_reveal, map_trace"
+    },
+    "rule": {
+      "$type": "string",
+      "$value": "Every movement explains a causal or state change; decorative motion is forbidden."
+    },
+    "transition": {
+      "$type": "string",
+      "$value": "cross-reveal wipe with carried light (doc 29 s9.15)"
+    }
   },
   "layout": {
-    "captionSafeBottom": { "$type": "dimension", "$value": "120px", "$description": "at 1080 height (11.1%)" },
-    "bannerSafeZone": { "$type": "string", "$value": "1546x423 centred on 2560x1440" },
-    "quietZone": { "$type": "string", "$value": "one side of every plate stays bare cream or charcoal for evidence" }
+    "captionSafeBottom": {
+      "$type": "dimension",
+      "$value": "120px",
+      "$description": "at 1080 height (11.1%)"
+    },
+    "bannerSafeZone": {
+      "$type": "string",
+      "$value": "1546x423 centred on 2560x1440"
+    },
+    "quietZone": {
+      "$type": "string",
+      "$value": "one side of every plate stays bare cream or charcoal for evidence"
+    }
   },
   "voice": {
-    "tagline": { "$type": "string", "$value": "The market isn't magic. It's mechanics." },
-    "triad": { "$type": "string", "$value": "Risk. Reward. Time." }
+    "tagline": {
+      "$type": "string",
+      "$value": "The market isn't magic. It's mechanics."
+    },
+    "triad": {
+      "$type": "string",
+      "$value": "Risk. Reward. Time."
+    }
+  },
+  "chart": {
+    "negative": {
+      "$type": "color",
+      "$value": "#B0201F",
+      "$description": "chart sign: a drop (blood red) - operator 2026-09-03; the sunflower callout stays the only yellow"
+    },
+    "positive": {
+      "$type": "color",
+      "$value": "#2E9E5B",
+      "$description": "chart sign: a rise (green)"
+    }
   }
 }

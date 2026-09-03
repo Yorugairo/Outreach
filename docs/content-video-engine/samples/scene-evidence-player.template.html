@@ -38,7 +38,7 @@
      mapped into the .world element (which overhangs 5% for Ken Burns). */
   .world.ledger { background: #F4E6C7 !important; }
   .lp { position: absolute; left: 4.545%; top: 4.545%; width: 90.91%; height: 90.91%; overflow: hidden;
-        --lp-cream: #F4E6C7; --lp-char: #25313C; --lp-chalk: #F2F2F2; --lp-acc: #F5B72E; --lp-pos: #178C83; --lp-neg: #ED6A4A; --lp-brand: #1769C2; }
+        --lp-cream: #F4E6C7; --lp-char: #25313C; --lp-chalk: #F2F2F2; --lp-acc: #F5B72E; --lp-pos: #2E9E5B; --lp-neg: #B0201F;   /* chart SIGN colours (operator, 2026-09-03): green up, blood red down - the sunflower callout is the only yellow */ --lp-brand: #1769C2; }
   .lp-page { position: absolute; inset: 0; background: var(--lp-cream); will-change: transform; overflow: hidden; }
   /* plain cream (operator, 2026-09-03: "just a plain cream background"); the newsprint grain stays barely there */
   .lp-grain { position: absolute; inset: 0; opacity: .08; mix-blend-mode: multiply; pointer-events: none; }
@@ -89,7 +89,9 @@
   .lp-chart .ax { stroke: #8a94a0; stroke-width: 2; }
   .lp-chart .grid { stroke: rgba(242,242,242,.14); stroke-width: 1.5; }
   .lp-chart .bar { fill: #9aa4ad; }
-  .lp-chart .bar.emph { fill: var(--lp-acc); }
+  .lp-chart .bar.neg { fill: var(--lp-neg); }   /* a drop is blood red, a rise green - the sign is colour AND geometry (E28) */
+  .lp-chart .bar.pos { fill: var(--lp-pos); }
+  .lp-chart .bar.emph { fill: var(--lp-acc); }   /* the emphasized datum keeps the sunflower: the only yellow on the board */
   .lp-chart .val { font-size: 26px; font-weight: 600; fill: #c9ced4; font-variant-numeric: tabular-nums; }
   .lp-chart .lab { font-size: 24px; fill: #c9ced4; }
   .lp-chart .callout { font-size: 30px; font-weight: 700; fill: var(--lp-char); font-variant-numeric: tabular-nums; }
@@ -1434,7 +1436,7 @@
     st.vals.forEach((v, i) => {
       const x = x0 + (x1 - x0) / n * (i + gap / 2), yv = my(v), neg = v < 0;
       const h = Math.max(3, Math.abs(yv - base)), y = neg ? base : base - h;
-      const bar = lpEl("rect", "bar" + (i === st.emph ? " emph" : ""), st.chart,
+      const bar = lpEl("rect", "bar" + (neg ? " neg" : " pos") + (i === st.emph ? " emph" : ""), st.chart,
         { x: x.toFixed(1), y: y.toFixed(1), width: bw.toFixed(1), height: h.toFixed(1), rx: 6 });   /* grows from the zero baseline, up or down */
       bar.style.transformOrigin = "0 " + base.toFixed(1) + "px"; bar.style.transform = "scaleY(0)";
       const lab = lpEl("text", "lab", st.chart, { x: (x + bw / 2).toFixed(1), y: bottom + 34, "text-anchor": "middle", opacity: 0 });
@@ -1473,7 +1475,9 @@
     (ax.xticks || []).forEach(([x, lab]) => { const tx = lpEl("text", "lab", st.chart, { x: mx(x).toFixed(1), y: B + 32, "text-anchor": "middle" }); tx.textContent = lab; });
     series.forEach((s, i) => {
       const d = s.pts.map(([x, v], k) => (k ? "L" : "M") + mx(x).toFixed(1) + " " + my(v).toFixed(1)).join(" ");
-      const col = PAL[s.color] || PAL.deemph;
+      /* a single-metric line takes its SIGN colour (blood red down, green up); multi-line pages keep their series key */
+      const endsDown = s.pts.length > 1 && s.pts[s.pts.length - 1][1] < s.pts[0][1];
+      const col = series.length === 1 ? (endsDown ? "var(--lp-neg)" : "var(--lp-pos)") : (PAL[s.color] || PAL.deemph);
       const p = lpEl("path", "ser", st.chart, { d, stroke: col });
       const len = p.getTotalLength ? p.getTotalLength() : 2000;
       p.setAttribute("stroke-dasharray", len); p.setAttribute("stroke-dashoffset", len);
