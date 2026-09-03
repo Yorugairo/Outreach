@@ -182,6 +182,7 @@ def validate(series: dict, variant: str) -> list[str]:
     if variant in VARIANTS:
         errors += _validate_shape_for_variant(series, variant)
     errors += _validate_sign_in_geometry(series)
+    errors += badge_key_conflicts(series)
     return errors + _validate_values(series, variant) + _validate_variant(series, variant)
 
 
@@ -230,6 +231,36 @@ def review_notes(series: dict) -> list[str]:
 
 
 BADGE_ACCENT_TO_SERIES = {"coral": "crimson", "teal": "teal", "cobalt": "cobalt", "ink": "deemph", "sunflower": "amber"}
+
+
+KEY_STOP = {"THE", "OF", "A", "AND", "STOCKS", "STOCK", "SHARE", "PRICE", "PRICES", "INDEX", "MARKET"}
+
+
+def _key_tokens(text: str) -> set[str]:
+    return {w.strip("()+,:;.'\"").upper() for w in str(text or "").split()} - KEY_STOP - {""}
+
+
+def badge_key_conflicts(series: dict, extra: list | None = None) -> list[str]:
+    """E28 addendum (operator, 2026-09-03: the +613% line was labelled MEGA-CAP TECH while
+    its badge said MEMORY BUILDERS): a badge's label must name the line its accent keys.
+    A badge word that appears in ANOTHER series' name and not in the keyed one is a swap."""
+    errors = []
+    dense = dense_series(series)
+    for b in (series.get("badges") or []) + list(extra or []):
+        col = BADGE_ACCENT_TO_SERIES.get(str(b.get("accent") or ""))
+        keyed = [s for s in dense if s.get("color") == col]
+        if not col or not keyed:
+            continue
+        words = _key_tokens(b.get("label"))
+        mine = _key_tokens(keyed[0].get("name"))
+        for other in dense:
+            if other is keyed[0]:
+                continue
+            hit = (words & _key_tokens(other.get("name"))) - mine
+            if hit:
+                errors.append(f"badge {b.get('label')!r} ({b.get('accent')}) keys the {col} line {keyed[0].get('name')!r} "
+                              f"but names the {other.get('color')} line {other.get('name')!r} ({', '.join(sorted(hit))}) - a swapped label (E28)")
+    return errors
 
 
 def badges_for(series: dict, extra: list | None = None) -> list[dict]:

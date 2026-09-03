@@ -73,11 +73,10 @@
   /* a TIGHT cluster (operator, 2026-09-03: 'tight, sleek grouping that doesn't eat up so much space'): pills sized
      to their content, 6px apart, hugging the chart's left edge under the source - never stretched to the chart */
   .lp-rail { position: absolute; display: flex; flex-wrap: wrap; align-items: flex-start; gap: 6px; pointer-events: none; }
-  .lp-rail .lp-pill { opacity: 0; transition: none; transform-origin: 0 100%; padding: 3px 9px 4px; border-radius: 6px; }
-  .lp-rail .lp-pill .pill-label { font-size: 11px; letter-spacing: .06em; }
-  .lp-rail .lp-pill .pill-row { gap: 6px; }
-  .lp-rail .lp-pill .pill-num { font-size: 17px; }
-  .lp-rail .lp-pill .pill-tag { font-size: 11px; padding: 1px 5px; }
+  /* the dock's pill, unchanged in shape and type; only its ground moves to the evidence token so it reads on the
+     charcoal board (the dock's charcoal fill vanishes there), with the card's hairline and lift */
+  .lp-rail .lp-pill { opacity: 0; transition: none; transform-origin: 0 100%; background: #1B1E23;
+                      border: 1px solid #3a3e46; box-shadow: 0 6px 18px rgba(0,0,0,.45); }
   .lp-chart { position: absolute; overflow: visible; }
   /* MOTION MENU species (doc 29 s9.27; P35 T6/T7): plate life on the world side, the targeted overlay above the docks */
   #plife { position: absolute; inset: 0; pointer-events: none; }

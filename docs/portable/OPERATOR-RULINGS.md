@@ -906,3 +906,20 @@ under the chart, never in the quiet zone (the caption's); on a line chart a
 badge that keys a series is that line's dynamic label - its tag rides the
 inline name in the accent - and leaves the rail.
 
+**E28 addendum (2026-09-03) - the label is data too.** On the divergence
+page: *"we're having a lot of issues - your layer (memory makers) at 21%
+and tech stocks at 613%."* The +613% line IS the memory makers; the
+08-31 pass that named the unnamed series in audience words attached the
+names to the wrong lines, and nothing checked them against the badges
+that had been authored from the documents a day earlier. Fixed from the
+dock's own badges and the Bravos original. Standing: a badge's label must
+name the line its accent keys - `ledger_page.badge_key_conflicts` FAILs
+a badge whose label words belong to a different series' name (the build
+refuses the page, the CLI refuses the file), and a series file that
+carries names carries a `names_note` saying where they came from. Same
+day: *"the badges are basically unclassed CSS with square boxes - what
+happened to the polished pills we had in our actual published episode?"*
+The page pill is the dock's pill unchanged in shape and type; only its
+ground moves to the evidence token with the card's hairline and lift,
+because the dock's charcoal fill vanishes on the charcoal board.
+

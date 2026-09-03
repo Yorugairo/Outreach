@@ -215,6 +215,9 @@ def ledger_world(plate_id: str, ken: tuple, ep_dir: Path, dock_badges: list | No
     # the evidence dock's authored badges for this asset land on the page too (the key for the
     # viewer), synced to the series' own labels - never a second copy of the numbers
     if dock_badges:
+        conflicts = LPG.badge_key_conflicts(series, dock_badges)
+        if conflicts:
+            raise ValueError(f"{plate_id!r}: " + "; ".join(conflicts))
         page["badges"] = LPG.badges_for(series, dock_badges)
     return {"kind": SPECIES_LEDGER, "page": page,
             "ken_burns": {"scale": ken[0], "x": ken[1], "y": ken[2]}}

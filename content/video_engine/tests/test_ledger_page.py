@@ -249,6 +249,20 @@ def test_badges_ride_on_the_page_synced_to_the_series_labels():
     assert L.build_spec(L.load_series(TRIM), "bars", 7, "right")["badges"][0]["value"] == "7 of 8"
 
 
+def test_a_badge_naming_another_line_is_a_swapped_label_e28():
+    # operator 2026-09-03: the +613% line was labelled MEGA-CAP TECH while its badge said MEMORY BUILDERS
+    div = L.load_series(DIVERGENCE)
+    assert not L.badge_key_conflicts(div)
+    swapped = json.loads(json.dumps(div))
+    by = {s["color"]: s for s in swapped["series"]}
+    by["crimson"]["name"], by["deemph"]["name"] = by["deemph"]["name"], by["crimson"]["name"]
+    errs = L.badge_key_conflicts(swapped)
+    assert errs and "swapped label" in errs[0] and "MEMORY" in errs[0], errs
+    assert any("swapped label" in e for e in L.validate(swapped, "line"))
+    dock = [{"label": "MEMORY BUILDERS", "value": "+601%", "tag": "our layer", "accent": "coral"}]
+    assert not L.badge_key_conflicts(div, dock) and L.badge_key_conflicts(swapped, dock)
+
+
 def test_sign_hidden_in_a_note_is_refused_e28():
     # operator 2026-09-03: 'every bar appears to be positive at a glance, and the negative move is the tallest bar'
     series = {"title": "t", "src": "s", "bars": [{"label": "a", "value": "3.9", "note": "-4%"}, {"label": "b", "value": "10.9", "note": "+11%"}]}
