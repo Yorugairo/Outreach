@@ -61,7 +61,7 @@ stills (cost: 0 credits). The driver now SETS mode / sub-mode / model / count, r
 back the composer pill and the "Generating will use N credits" line, and REFUSES to
 submit on Image mode, a wrong model, or a scene over `maxCredits`. Flow quoted **24
 credits at x2 / 8s / 720p on Omni 1.1 Flash**, so the library setting is **x1 / 6s**
-and a day is roughly four clips, not seven.
+and a day is roughly four clips, not seven. **Measured on the first verified submit: 10 credits per 6s clip at x1 / 720p** — fifty a day is five clips; day one's four cost forty.
 
 - **Day 1 — `batch.json`:** the four host entrances, x1, 6s, 720p, Omni 1.1 Flash,
   `maxCredits: 16` each.

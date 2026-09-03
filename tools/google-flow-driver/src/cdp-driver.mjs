@@ -108,7 +108,8 @@ export class FlowCdpDriver {
   // The composer pill is the one button whose text ends in the output count ("... x2").
   // It is unique, unlike anything containing "Video".
   settingsPill() {
-    return this.flowPage.locator('button').filter({ hasText: /x[1-4]\s*$/ }).last();
+    // With the panel open the count buttons ("x1".."x4") also end in xN - exclude bare tokens.
+    return this.flowPage.locator('button').filter({ hasText: /x[1-4]\s*$/ }).filter({ hasNotText: /^\s*x[1-4]\s*$/ }).last();
   }
 
   async readGenerationState() {
@@ -118,7 +119,9 @@ export class FlowCdpDriver {
     const creditsLoc = page.getByText(/Generating will use/i).first();
     const creditsText = (await creditsLoc.count()) ? (await creditsLoc.innerText()).replace(/\s+/g, ' ').trim() : '';
     const m = creditsText.match(/(\d+)\s*credits?/i);
-    return { pillText, creditsText, credits: m ? parseInt(m[1], 10) : null };
+    const dd = page.locator('button').filter({ hasText: /arrow_drop_down/ }).first();
+    const modelText = (await dd.count()) ? (await dd.innerText()).replace(/arrow_drop_down/g, '').replace(/\s+/g, ' ').trim() : '';
+    return { pillText, creditsText, modelText, credits: m ? parseInt(m[1], 10) : null };
   }
 
   async configureSettings({
@@ -148,11 +151,18 @@ export class FlowCdpDriver {
     if (duration) await this.clickExact(`${duration}s`);
     if (count) await this.clickExact(`x${count}`);
 
-    // READ BACK before closing: this is the gate the first live run lacked.
-    const state = await this.readGenerationState();
+    // READ BACK: credits line while the panel is open (it lives inside it), pill after it closes.
+    const open = await this.readGenerationState();
+    await page.keyboard.press('Escape');
+    await page.waitForTimeout(500);
+    const closed = await this.readGenerationState();
+    const state = { pillText: closed.pillText || open.pillText, creditsText: open.creditsText || closed.creditsText,
+                    modelText: open.modelText || closed.modelText, credits: open.credits ?? closed.credits };
     const problems = [];
-    if (model && !state.pillText.toLowerCase().includes(model.toLowerCase().split(' ')[0])) {
-      problems.push(`pill does not show model "${model}" (pill: "${state.pillText}")`);
+    // The video-mode pill reads "Video · 720p · 6s ..." with no model; the model shows on the dropdown.
+    const shown = `${state.modelText} ${state.pillText}`.toLowerCase();
+    if (model && !shown.includes(model.toLowerCase())) {
+      problems.push(`model "${model}" not selected (dropdown: "${state.modelText}", pill: "${state.pillText}")`);
     }
     if (mode !== 'image' && /banana|imagen/i.test(state.pillText)) {
       problems.push(`pill shows an IMAGE model in video mode (pill: "${state.pillText}")`);
@@ -167,13 +177,10 @@ export class FlowCdpDriver {
       problems.push(`scene would cost ${state.credits} credits, over its maxCredits ${maxCredits}`);
     }
     if (problems.length) {
-      await page.keyboard.press('Escape').catch(() => {});
       throw new Error(`REFUSED to submit - generation state not as declared:\n  - ${problems.join('\n  - ')}`);
     }
 
-    await page.keyboard.press('Escape');
-    await page.waitForTimeout(400);
-    console.log(`[FlowCdpDriver] settings verified: ${state.pillText} | ${state.creditsText}`);
+    console.log(`[FlowCdpDriver] settings verified: ${state.modelText} | ${state.pillText} | ${state.creditsText}`);
     return state;
   }
 
