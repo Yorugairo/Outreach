@@ -1413,10 +1413,26 @@ Ruling E22. Operator: *"if we could roll out a cream paper that gets
 colored in with charcoal ink, writes on the graph, then builds the graph,
 THAT would become the true channel-defining feature."*
 
-**What it is.** A chart that is the WORLD layer, not a dock: a cream paper
-page rolls out across the frame, charcoal ink writes the axes, the labels
-and the source line by hand, and the graph builds on the page from real
-data. Evidence may still dock over it in its quiet zone. It exists
+**What it is.** A chart that is the WORLD layer, not a dock. The full
+vision (operator, same day): *"cream page rolls out, hand scribbles the
+charcoal/black fill, outlines a clean edge around what is now essentially
+a chalkboard, then draws the axes etc, then builds the graph."* So the
+page becomes a CHALKBOARD before the chart exists: a hand scribbles a
+charcoal field onto the cream (scribble strokes accumulating, the
+hw-callout-circle / whiteboard-ink stroke law), a clean outline draws
+clockwise around the scribbled field and closes (outline-draw's hollow
+conic border), and only then do the axes, labels and source get written
+and the graph build - in chalk-light ink on the charcoal, with the cream
+margin still visible as the page. Evidence may still dock over it in its
+quiet zone. The operator's own caveat stands and is the design
+constraint: *"hand stuff has been pretty complicated so far, haven't found
+a strong solution."* Therefore the hand is never a drawn actor and never a
+stroke-ordered glyph: every "hand" beat is a mask or a stroke reveal
+derived from t (scribble = accumulating stroke paths with a nib at the
+front; outline = a conic-gradient border; writing = the per-glyph wipe).
+If the scribble fill cannot be made to read as a hand at 1080 in the
+prototype, the fallback is the plain cream page (roll-out, ink writes,
+graph builds) and the chalkboard stays a candidate, not a blocker. It exists
 because every chart the channel has shipped is an evidence card, and the
 motion gate found the still stretches are exactly the windows with no
 card - a plate that builds is a plate that is never still.
@@ -1470,3 +1486,45 @@ for the motion gate; its still hold does not. Ken Burns on a page is a
 slow push only. Docks land in the page's declared quiet zone; a dock
 never covers the graph's emphasized datum. The species is a PROPOSAL until
 the operator picks from rendered candidates (harvest rule).
+
+### 9.27 The MOTION MENU — opt-in species, each with a slot, a mechanism, and a gate treatment (operator, 2026-09-02)
+
+Ruling E22 addendum. The registry items the operator flagged, read from
+source, mapped to the slot each may occupy in THIS lane. Every entry is
+harvested as a mechanism into the player (HTML + t-derived motion), never
+imported as a runtime; every entry that changes a reviewed shot is a
+proposal rendered side by side (REMOTION-UI-HARVEST lesson). Nothing here
+replaces the s9.15 wipe or the dock choreography by default.
+
+**Targeting law (operator: "one problem with this type of thing has always
+been that we circle the wrong thing").** Any species that points, circles,
+zooms, spotlights or underlines takes its target as a DECLARED coordinate
+in the shot table - a datum index or series point on a ledger page or
+chart dock, a plate `semantic` region for a world plate, a word span for
+captions - resolved to pixels by the player at render time. Nobody
+eyeballs a pixel. A species with no declared target does not fire.
+
+| Species | Harvested from | Slot in this lane | Mechanism (all from t) | Gate treatment |
+|---|---|---|---|---|
+| **Ledger page** (s9.26) | chart-story value contract · bar-chart-race ranking · decline-chart · handwriting-text ink wipe · outline-draw · whiteboard-ink stroke law · ink-bleed | world layer; the payoff chart by default | roll-out → scribble field → outline → ink writes → graph builds | build = events; start = evidence entry; hold = still |
+| **Plate life** | stop-motion-cadence | a bare world plate with no evidence | quantize t to 8/10/12 fps FIRST, derive all motion from the step; our cutouts throw-and-land with squash; 2-frame seeded boil | events while stepping |
+| **Camera punch** | yt-camera-move | punctuation on a named object ("this iron spike") - the ring token, a plate object, a datum | ONE world-wrapper transform: zoom/slide/tilt with cubic ease and an edge-defocus pulse; never stacked with Ken Burns in the same window | one event at the punch |
+| **Scribble callout** | hw-callout-circle | circling a DECLARED target on a page or dock; the label pops with momentum, shapes squash on contact | wobbled ellipse draws, optional scribble fill, connector; boils; stroke family plain/soft/sharp/spray | event at draw; target must be declared |
+| **Focus zoom** | ui-focus-zoom | after a chart or document has entered, zoom + pan to an anchored region and hold dead still (the camera-servo law: micro-drift from integer sine cycles ending at zero) | one wrapper transform; optional halo at the anchor | event at departure and arrival |
+| **Pull-back reveal** | pull-back-reveal | hooks that open on ONE large number, then recontextualize it: the detail holds, one decelerating pull-back reveals the headline and cards around it | reverse build of the evidence | events across the pull |
+| **Focus rack** (proposal against s9.15's wash/spot) | focus-rack | two-evidence plates: focus shifts once between two cards at different depths through synchronized blur, dimming, scale and parallax, instead of clipping the wash/spot to the front | the operator's read: "this should stop a lot of the image cutting"; rendered side by side against the current light handling before any change | event at the rack |
+| **Feathered spotlight** | yt-feather-highlight | dim the frame except a feathered ellipse that GLIDES between declared targets (a document region → a datum) | CSS-variable hole position/size, helpers tween it | events per glide |
+| **Squiggle marks** | hw-underline | captions and page labels: hand-drawn underline, double-pass strikethrough, brackets that draw on; a CAPTION treatment layered under stage/anchor captions, on a declared word span | stroke reveal | counts as a caption event in stage mode only |
+| **Whiteboard ink** | whiteboard-ink | the scribble field and any diagram the page needs: multi-stroke SVG paths drawn one measured stroke at a time with a nib at the active front, per-stroke cadence | strokes slot | events while drawing |
+| **Outline draw** | outline-draw | the chalkboard's clean edge; also "proving" a callout box | hollow conic-gradient border drawn clockwise with a clean closure, ~0.8s | one event |
+| **Radial reveal** | transitions-radial | revealing the ring token or a callback object FROM the point the narration names | `clip-path: circle()` / diamond polygon from a declared point | scene event |
+| **Push hand-off** | transitions-push | dock A pushes dock B in (evidence hand-off), not scene transitions | x / scaleX / skewX on two stacked cards | event |
+| **Beat-freeze chart exit** | beat-freeze-cut | leaving a chart: the final state freezes as a hit (flash, contour, badge) then a directional-stretch cut into the next plate; NOT a held still (that is the defect) | ramp → freeze → connector | events at hit and cut |
+| **Weight-shift captions** | caption-weight-shift | the ANCHOR (quiet) caption when a document holds the stage: 300↔700 weight swap between lines in 100ms | font-weight tween | not an event |
+
+Precedence: a species never fires inside the pivot's reversal, never
+covers an emphasized datum, and never stacks two camera moves in one
+window (punch, focus zoom, pull-back, Ken Burns are mutually exclusive per
+window). The motion gate counts events as tabled above once the timeline
+carries the species rows; until then the shot table declares them and the
+agent verdicts them (CHECK-RESPONSIBILITIES R2).

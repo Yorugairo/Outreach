@@ -639,3 +639,24 @@ Standing:
 Why: a plate that builds is never still (E21), it is on-brand where a
 dark card is a visitor, and it turns the channel's proof into its look.
 Plan: P35.
+
+**E22 addendum (same day).** The full vision: the cream page becomes a
+CHALKBOARD first - "hand scribbles the charcoal/black fill, outlines a
+clean edge around what is now essentially a chalkboard, then draws the
+axes, then builds the graph." Constraint from the operator: "hand stuff
+has been pretty complicated so far, haven't found a strong solution" -
+so the hand is only ever a mask or stroke reveal derived from t, and the
+plain cream page is the fallback if the scribble field does not read at
+1080. Two further standing rules from the same review:
+- **Targeting law**: anything that circles, points, zooms, spotlights or
+  underlines takes a DECLARED target (datum index, series point, plate
+  semantic region, word span) in the shot table; "we circle the wrong
+  thing" is fixed by never eyeballing a pixel (doc 29 s9.27).
+- **Focus rack is a proposal against the current evidence lighting**:
+  the operator's read is that synchronized blur/dim/scale/parallax
+  between two cards would stop the image cutting of the clipped
+  wash/spot on two-evidence plates. Rendered side by side against s9.15
+  before anything changes; the current mechanism stays until the pick.
+Camera punch is reserved for punctuation on a named object ("this iron
+spike"); pull-back reveal for hooks that open on one large number.
+Menu: doc 29 s9.27. Plan: P35 T6-T8.

@@ -165,12 +165,19 @@ Acceptance:
 - Depends on: none
 - Write set: `content/video_engine/projects/systems-and-blowups/steel-and-paper/evidence/prototypes/ledger-page-motion.html`,
   `.../prototypes/filmstrip-ledger-page.jpg`, `.../prototypes/ledger-*.png`
-- Acceptance: page rolls out (A: from left with rolled-edge light; B:
-  from top), ink writes axes/labels/title/source per glyph with nib and
-  seeded tilt in three candidate fonts, the divergence line builds with
-  tip head and deposited dots, callout rolls to the exact value; scrub
-  bar; filmstrip at 0.3s steps; no wall-clock or random calls; the
-  operator's pick and font choice recorded in doc 29 §9.26.
+- Acceptance: three candidates from the same series.json - A: plain
+  cream page (roll-out from the left with the rolled-edge light → ink
+  writes → graph builds); B: the CHALKBOARD (roll-out → a hand scribbles
+  the charcoal field as accumulating stroke paths with a nib at the front
+  → a clean outline draws clockwise around it and closes → chalk-light ink
+  writes axes/labels/title/source → graph builds); C: chalkboard with the
+  scribble replaced by an ink-bleed bloom that settles into the field
+  (the cheaper hand). Ink writes per glyph with nib and seeded tilt in
+  three candidate fonts; the divergence line builds with tip head and
+  deposited dots; callout rolls to the exact value; scrub bar; filmstrip
+  at 0.3s steps; no wall-clock or random calls; the operator's pick and
+  font choice recorded in doc 29 §9.26. If B does not read as a hand at
+  1080, A ships and B stays a candidate (§9.26 fallback).
 - Validate: open via `preview_start` (static server on the prototypes
   dir), screenshot at t = 0.3, 1.2, 2.4, 4.0 for both candidates; grep
   the file for `Math.random|Date.now|performance.now` returns nothing
@@ -245,14 +252,53 @@ Acceptance:
   `docs/content-video-engine/samples/scene-evidence-player.template.html` (plate-life species),
   `content/video_engine/scripts/gate_motion_density.py` (plate-life events),
   `content/video_engine/tests/test_gate_motion_density.py`
-- Acceptance: §9.27 lists each species (ledger page, plate life,
-  beat-freeze chart exit, radial token reveal, push hand-off, weight-shift
-  anchor captions) with its slot, mechanism, and gate treatment; plate
+- Acceptance: §9.27 (written 2026-09-02) is the menu of record; plate
   life renders our cutouts on a bare plate under the stepped-time law
   (quantize t to 8/10/12 fps first; squash on land; seeded two-frame boil)
   and counts as events; a side-by-side of one bare ep1 window with and
   without plate life for the operator.
 - Validate: `python -m pytest content/video_engine/tests/test_gate_motion_density.py -q`; range render side-by-side
+- Evidence: pending
+
+### T7: Targeted species - punch, scribble callout, focus zoom, feathered spotlight, squiggle marks, pull-back
+- Status: pending
+- Owner: parent (template + targeting resolver), implementation_luna (→ `general-purpose`) for the shot-table row forms and tests
+- Depends on: T4
+- Write set: `docs/content-video-engine/samples/scene-evidence-player.template.html` (species blocks + one `resolveTarget()`),
+  `content/video_engine/scripts/build_scene_timeline_f.py` (species rows with declared targets),
+  `content/video_engine/scripts/gate_motion_density.py` (events per §9.27; camera-move exclusivity per window),
+  `content/video_engine/tests/test_targeted_species.py`, `content/video_engine/tests/test_gate_motion_density.py`
+- Acceptance: the targeting law is code - every species row carries a
+  target of kind `datum|point|region|span` and the player resolves it to
+  pixels at render time (`resolveTarget`); a row without a target is
+  rejected by the builder; camera punch, focus zoom, pull-back and Ken
+  Burns are mutually exclusive per window (builder error, gate FAIL);
+  the punch lands on "this iron spike" (ring token, plate semantic
+  region) in a range render; a scribble callout circles the emphasized
+  datum of a ledger page; a focus zoom holds dead still at the anchor
+  (micro-drift ends at exactly zero); the feathered spotlight glides
+  between two declared targets; squiggle marks draw under a declared word
+  span in stage captions; pull-back opens on one declared number and
+  reveals the page around it. Each species: one range render for the
+  operator.
+- Validate: `python -m pytest content/video_engine/tests/test_targeted_species.py content/video_engine/tests/test_gate_motion_density.py -q`; range renders
+- Evidence: pending
+
+### T8: Focus rack vs the current evidence lighting - side by side (proposal)
+- Status: pending
+- Owner: parent
+- Depends on: T3 (template ordering only)
+- Write set: `content/video_engine/projects/systems-and-blowups/steel-and-paper/evidence/prototypes/focus-rack-vs-wash.html`
+  (+ filmstrip), `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md` (§9.15 / §9.27 pick recorded)
+- Acceptance: the same two-evidence window from ep1 (a pair of docks over
+  one plate) rendered twice from the same timeline - current mechanism
+  (wash/spot clipped to the front, §9.15) and focus rack (synchronized
+  blur, dimming, scale and parallax shifting focus once between the two
+  cards) - with a filmstrip at the boundary frames where images currently
+  cut; the operator picks; the current mechanism stays until then and is
+  not edited in this slice.
+- Validate: `preview_start` on the prototypes dir; filmstrip present; the
+  reviewed template untouched (`git diff --stat` shows no template change from this slice)
 - Evidence: pending
 
 ## Verification
