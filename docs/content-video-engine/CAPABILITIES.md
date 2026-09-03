@@ -32,7 +32,28 @@ file will be rebuilt by someone who doesn't know it exists.
 | **Remotion composition registry** — single source of truth for editor compositions (Editorial, Documentary, motion variants, finance proofs, production evidence/timeline, 3D prototypes) | `content/video_engine/editor/src/compositions.ts` | LIVE — register here, never in Root.tsx | typecheck + vitest |
 | **Editor fixtures** — editorial-motion two-shot with render harness (`render.mjs`), canonical audio fixture | `content/video_engine/editor/fixtures/` (merged from p16) | BUILT | `npm run render:editorial-motion-fixture` |
 | **remotion-ui registry** (external, MIT) — ~200 copy-in `.tsx` components: captions, data/live metrics, SVG draw-on paths, TransitionSeries transitions, motion primitives; MCP server (`npx remotion-ui-mcp`) exposes list/search/detail/install to agents | github.com/riaz37/remotion-ui · remotionui.com/docs/components/browse | MCP INSTALLED (.mcp.json, loads on session start); registry index + 8 key components read; THREE techniques already ported into the review player (feathered wipe edge, under-wipe parallax, active-word caption pop). Their EASING.pop == our badge spring — same motion school. Full sweep when the Remotion port opens | port commit 2026-08-30 |
-| **Hyperframes** — production vector animation (alpha overlays, compositions); Remotion port path | skills in codex worktree `f10b/.agents/skills/hyperframes*`, assets `content/video_engine/review/hyperframes_assets` | BUILT, not in the review loop — PLANE ONE, preserved by operator decision 2026-08-30: hyperframes-first stays alongside the Remotion plane while the hand-built editor works out its kinks | pinned CLI renders alpha natively (doc 29 Part 7) |
+| **Hyperframes** — HTML-to-video rendering framework & motion system (DOM `data-*` timeline, clips, tracks, sub-compositions, 7 runtime adapters [GSAP, Lottie, Three.js, Anime.js, CSS, WAAPI, TypeGPU], seek-safe keyframes, registry blocks, Remotion-to-HyperFrames compilation) | `.agents/skills/hyperframes*`, `content/video_engine/review/hyperframes_assets`, `npx hyperframes` (0.8.27) | LIVE & STANDARDIZED — 8 skills synced across master, global Codex and all worktrees; PLANE ONE preserved (operator 2026-08-30) alongside the Remotion plane | CLI `npx hyperframes --version` -> 0.8.27, doc 29 Part 7 |
+
+## Generative video, 2.5D parallax & driver automation (2026-09)
+
+Rescued onto main 2026-09-03: this stack was written UNTRACKED in the main checkout
+while it sat on `claude/outreach-api-and-tooling` (299 commits behind), so it belonged
+to no branch. ComfyUI is the host for the first three - they are custom nodes on the
+local instance at `127.0.0.1:8188`, not standalone tools.
+
+| Capability | Where | State | Proof |
+|---|---|---|---|
+| **ComfyUI 2.5D Parallax Engine** - zero-hallucination monocular metric depth (`Depth Anything v2`) + virtual 3D camera trajectory displacement (`Depthflow` GLSL: dolly, zoom, circle, horizontal, vertical, orbital); turns an approved still plate into a camera sweep without AI shape drift, so it never re-generates locked art | `tools/google-flow-driver/src/parallax-runner.mjs`, `comfy-client.mjs`, workflow `content/video_engine/workflows/2_5d_parallax_inpaint.json`, ComfyUI `127.0.0.1:8188` | LIVE - benchmarked on RTX 4070 (3.1s / 30 frames @ 1024x768) | `content/video_engine/assets/test_parallax_dolly.mp4` (untracked - `*.mp4` is gitignored by the binary policy) |
+| **SAM 2 + LaMa occlusion inpainting** (ComfyUI nodes) - the precondition for parallax on any plate carrying an actor: SAM 2 cuts the subject to an alpha PNG, LaMa fills the hole behind it (~0.3s), and the camera then moves two clean layers instead of stretching edge pixels into smears | `custom_nodes/ComfyUI-segment-anything-2`, `custom_nodes/comfyui-inpaint-nodes` | INSTALLED & VERIFIED | ComfyUI node initialization ledger |
+| **LTX-Video 2B DiT ambient engine** (ComfyUI node) - local physical motion loops (haze, embers, drifting cloud, water) on a still plate, ~12s on the local GPU, zero cloud credits; SAM 2's mask pins the subject so the model animates only the ground - which is what protects the Graphic Silhouette actor from morphing | `custom_nodes/ComfyUI-LTXVideo` | INSTALLED & LOADED | ComfyUI node initialization ledger |
+| **Google Flow driver** - zero-credit multi-reference generative diffusion over an ACTIVE Chrome CDP session (port 9222); preserves project canvas ratio or enforces 9:16 / 16:9; optional FFmpeg `-vf reverse` for pixel-exact ending-frame handoffs, which is what makes a SEQUENTIAL plate chain possible (plate N seeds plate N+1) | `tools/google-flow-driver/src/cdp-driver.mjs`, `flow-batch-runner.mjs` | LIVE - needs Chrome running with remote debugging | CDP handshake, resolution & duration capture |
+| **Unified Video Engine MCP server** - `create_flow_video`, `create_flow_batch` (`scenes[]` + `outputDir`), `get_flow_status`, `create_comfy_parallax_video` (`imagePath` + `outputPath`), with embedded stylistic affordances and negative gates | `tools/google-flow-driver/mcp/server.mjs` | LIVE for Antigravity + Codex; **registered for Claude Code 2026-09-03** in the tracked `.mcp.json` (loads on session start) | stdio handshake, ListToolsRequest returns 4 tools |
+| **Video perception (`/watch`)** - acquisition via `yt-dlp`, frame extraction via `ffmpeg` (scene-aware or keyframe), timestamped transcript from native captions or Whisper | `.agents/skills/watch/` | LIVE & STANDARDIZED | yt-dlp 2026.08.19, ffmpeg 8.1.2 |
+
+**Motion-gate standing:** ambient loops are TEXTURE, not authored events - they never
+satisfy M01/M03/M08/M12, or they launder the stillness those gates were built to catch
+(E21, E25). A parallax move counts as plate life only when it is bound to a narration
+anchor, the same rule as narration-keyed chart draw and `narration_key_delays`.
 
 ## Evidence & assets
 

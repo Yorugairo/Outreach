@@ -1,0 +1,9 @@
+{
+  "name": "com.outreach.flow_driver",
+  "description": "Outreach Google Flow metadata queue native host",
+  "path": "__FLOW_DRIVER_HOST_PATH__",
+  "type": "stdio",
+  "allowed_origins": [
+    "chrome-extension://__FLOW_DRIVER_EXTENSION_ID__/"
+  ]
+}

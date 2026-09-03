@@ -1,0 +1,6 @@
+id: enforce-batch-manifest-schema
+message: "Google Flow batch job manifests must specify supported aspect ratios and valid model names."
+severity: error
+language: JSON
+rule:
+  pattern: '"aspectRatio": "$RATIO"'

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Flow Driver</title>
+    <link rel="stylesheet" href="sidepanel.css" />
+  </head>
+  <body>
+    <main class="app">
+      <header>
+        <h1>Outreach Flow Driver</h1>
+        <p id="extensionVersion" class="muted"></p>
+      </header>
+      <section class="status-card">
+        <h2>Connection</h2>
+        <div id="connectionStatus" class="status status-offline">Disconnected</div>
+        <p id="connectionDetails" class="muted">No host heartbeat yet.</p>
+      </section>
+      <section class="queue-card">
+        <h2>Queue</h2>
+        <ul id="queueCounts">
+          <li>Pending: <strong id="queuePending">-</strong></li>
+          <li>Active: <strong id="queueActive">-</strong></li>
+          <li>Completed: <strong id="queueCompleted">-</strong></li>
+          <li>Failed: <strong id="queueFailed">-</strong></li>
+          <li>Cancelled: <strong id="queueCancelled">-</strong></li>
+        </ul>
+        <p id="activeJob" class="muted">Active item: none</p>
+        <p id="pauseStatus" class="muted">Running</p>
+      </section>
+      <section class="controls">
+        <button id="pauseBtn" type="button">Pause</button>
+        <label for="retryJobId">Failed/cancelled job ID</label>
+        <input id="retryJobId" type="text" autocomplete="off" spellcheck="false" />
+        <button id="retryBtn" type="button">Retry Item</button>
+        <button id="diagnosticBtn" type="button">Capture Diagnostic</button>
+        <button id="refreshBtn" type="button">Refresh Now</button>
+      </section>
+      <section class="status-card">
+        <h2>Capability Snapshot</h2>
+        <p class="muted">Confirm the intended Flow account/project is open. Use a non-secret account label.</p>
+        <label for="accountMarker">Account marker</label>
+        <input id="accountMarker" type="text" value="primary-flow-account" autocomplete="off" spellcheck="false" />
+        <label for="capabilityPath">Project-relative output path</label>
+        <input id="capabilityPath" type="text" value="content/video_engine/projects/systems-and-blowups/provider-jobs/flow-extension-smoke-001.google-flow-capability.v1.json" autocomplete="off" spellcheck="false" />
+        <label class="confirm-row"><input id="accountConfirmed" type="checkbox" /> I confirm the intended Flow account and project are open.</label>
+        <button id="capabilityBtn" type="button">Capture Current Capability</button>
+        <p id="capabilityStatus" class="muted">Not captured.</p>
+      </section>
+      <section class="status-card">
+        <h2>Diagnostic</h2>
+        <pre id="diagnosticOutput">Press "Capture Diagnostic" to request a redacted snapshot.</pre>
+      </section>
+      <section class="status-card">
+        <h2>Heartbeat Log</h2>
+        <p id="heartbeatLog" class="muted">Waiting for first check.</p>
+      </section>
+    </main>
+    <script src="sidepanel.js"></script>
+  </body>
+</html>

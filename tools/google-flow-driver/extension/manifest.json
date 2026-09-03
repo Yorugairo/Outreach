@@ -1,0 +1,38 @@
+{
+  "manifest_version": 3,
+  "minimum_chrome_version": "114",
+  "name": "Outreach Flow Driver",
+  "version": "0.1.0",
+  "description": "MV3 operator shell for the Google Flow native queue driver.",
+  "permissions": [
+    "storage",
+    "sidePanel",
+    "downloads",
+    "nativeMessaging",
+    "debugger"
+  ],
+  "host_permissions": [
+    "https://labs.google/fx/*"
+  ],
+  "action": {
+    "default_title": "Outreach Flow Driver"
+  },
+  "side_panel": {
+    "default_path": "src/sidepanel.html"
+  },
+  "background": {
+    "service_worker": "src/service-worker.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://labs.google/fx/*"
+      ],
+      "js": [
+        "dist/content-script.bundle.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ]
+}

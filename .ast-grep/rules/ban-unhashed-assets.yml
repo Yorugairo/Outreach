@@ -1,0 +1,9 @@
+id: ban-unhashed-assets
+message: "Video Engine Invariant: Generated media must be registered by SHA-256 digest or quarantine ID, never unhashed temporary paths."
+severity: warning
+language: TypeScript
+rule:
+  pattern: registerAsset($PATH)
+  not:
+    inside:
+      pattern: "{ sha256: $$$ }"

@@ -1,0 +1,10 @@
+id: anti-ai-slop-content
+message: "Anti-AI Humanizer Gate: Banned corporate buzzwords and AI filler detected in video script / copy."
+severity: warning
+language: TypeScript
+rule:
+  any:
+    - pattern: '"delve"'
+    - pattern: '"tapestry"'
+    - pattern: '"game-changer"'
+    - pattern: '"revolutionary"'
