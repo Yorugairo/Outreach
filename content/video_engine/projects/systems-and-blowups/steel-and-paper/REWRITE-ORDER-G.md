@@ -105,3 +105,24 @@ Every item below is pinned in the dossier (rows H1–H3) or a standing gate.
 lint + doctrine audit on the FULL script → VO reflow → recorder preflight
 → chained re-record → word timeline → dock retime pass → choreography
 gates → filmstrip check → operator review.
+
+## Acceptance (added 2026-09-03, P34 close) - the two gate reports
+
+The re-script is accepted for recording only when BOTH reports are on disk
+and green, produced by the tools, not asserted:
+
+1. `python content/video_engine/scripts/run_script_gates.py <NEW-SCRIPT>-VO.txt --pivot "<verbatim pivot line>" --ring spike --counterparty Bravos`
+   -> `<NEW-SCRIPT>-GATES.md` with `VERDICT: PASS` (lint, audit, opening
+   gate incl. G25 A3 at 1:20 for a 13:26 runtime, G36 whole-video cycle,
+   G44 one rehook per unit; the DECLARED section of `-SCREENS.md`
+   verdicted true/laundered per tag). The recorders refuse without it.
+2. After the shot table is authored (using `build-f/SURFACE-CENSUS.md` and
+   doc 29 s9.28 for page / dock / plate-life per window): the build's
+   `build-f/GATES-MOTION.md` with `VERDICT: PASS` - no still stretch over
+   12s without a dock, a page build, plate life or stage captions (M08),
+   evidence at most 45s apart, the opening minute never the thinnest.
+   `render_episode.py` refuses the full render otherwise.
+
+Baselines to beat: Script G opening gate 27 FAIL; build-f motion gate 5
+FAIL (M01 15% still, M03 54s gap, M05, M07, M08 six bare stretches).
+
