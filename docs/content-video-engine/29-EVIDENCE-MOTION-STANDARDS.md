@@ -1408,9 +1408,12 @@ timeline declares `caption_modes: ["stage","anchor"]`; on dock enter the
 `quiet` class demotes it to the anchor inside the dock's 0.75s rise. The
 build stamps `cap_mode` on every caption page ("anchor" if a dock is live
 at its first word, else "stage"), and gate M08 now FAILs a declaring build
-whose still stretches over 12s carry no stage page. The 0:57-1:11
-side-by-side (anchor vs stage) is the operator's Human Gate 2; the mode
-ships as the default only after that pick.
+whose still stretches over 12s carry no stage page. The side-by-side
+(anchor vs stage) is the operator's Human Gate 2; the mode ships as the
+default only after that pick. Rendered 2026-09-03 on 3:11-3:31 (the 0:57
+window is dock-held, so captions stay anchored there by rule):
+`steel-and-paper/build-f/render/stage-vs-anchor-0311.mp4` and its
+filmstrip. PICK: ____ (operator).
 
 **Authoring rule for the shot table (stage 7):** every window row is
 either under a dock, inside 12s of one, or carries stage captions. The
@@ -1636,6 +1639,16 @@ eyeballs a pixel. A species with no declared target does not fire.
 | **Push hand-off** | transitions-push | dock A pushes dock B in (evidence hand-off), not scene transitions | x / scaleX / skewX on two stacked cards | event |
 | **Beat-freeze chart exit** | beat-freeze-cut | leaving a chart: the final state freezes as a hit (flash, contour, badge) then a directional-stretch cut into the next plate; NOT a held still (that is the defect) | ramp → freeze → connector | events at hit and cut |
 | **Weight-shift captions** | caption-weight-shift | the ANCHOR (quiet) caption when a document holds the stage: 300↔700 weight swap between lines in 100ms | font-weight tween | not an event |
+
+Focus rack, side-by-side rendered 2026-09-02 (P35 T8):
+`content/video_engine/projects/systems-and-blowups/steel-and-paper/evidence/prototypes/focus-rack-vs-wash.html`
+(filmstrip `filmstrip-focus-rack-vs-wash.jpg` beside it) - ep1 row
+(585.1, 595.2) `world-dram-terrain-v1` with `ev-hbm-wafer-ratio-v1` and
+`silicon-antidote-s09-capacity-penalty-v1` on one 8s clock, the top pane
+the template's s9.15 wash/spot verbatim, the bottom pane the rack (even
+dim, one 0.6s A→B shift of blur/dim/scale/parallax, power2.inOut), frames
+at 3.9/4.1/4.3/4.6/5.0 and at the front 7.35/7.5/7.7. The pick is the
+operator's; the current mechanism stays until then.
 
 Precedence: a species never fires inside the pivot's reversal, never
 covers an emphasized datum, and never stacks two camera moves in one
