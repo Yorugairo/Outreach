@@ -190,6 +190,30 @@ the vocabulary and the species, not the episode.
 7. The Steel and Paper re-script work order names its pages AFTER the
    verbal rewrite, using T0's grammar; not before.
 
+## Builder Architecture (operator clarification, 2026-09-02)
+
+Two independent axes; a shot-table row names both.
+
+- **Surface** - where the chart lives: the LEDGER PAGE (world plate:
+  cream, bleed, outline; new) or the DOCK (near-black evidence card;
+  unchanged). The page set-up is shared by every chart that lands on it.
+- **Builder** - one per treatment, each harvested from ITS OWN component
+  with its own envelope and sync points; they are never merged:
+
+| Builder | Source | Data shape | Today |
+|---|---|---|---|
+| `dense-line` | our player builder (template ~:470-760) | many points per series, several series, log scale, event bars, hlines | exists, dock-only |
+| `story` | hyperframes `chart-story` | 4-8 values landing on exact numbers; bars / line / donut / progress; one emphasized datum with a rolling callout | to port |
+| `race` | hyperframes `bar-chart-race` | series × periods; ranked bars overtaking; axis rescales; accent hands to the leader | to port |
+| `decline` | hyperframes `decline-chart` | one metric start → end; line draws down, value counts down, ground darkens | to port |
+| `combo` | hyperframes `data-chart` | bars + line, staggered reveal, NYT-style labels | to port |
+
+Making a builder render on either surface is work inside T3 (the
+existing builder knows only the dock's geometry and palette), not a
+given. T0's grammar decides which surface × builder combinations the lane
+allows; the draft rule is that THEIR evidence stays a dark card and OUR
+proof earns the page.
+
 ## Patterns To Mirror
 
 - Prototype form: `evidence/prototypes/record-document-motion.html` -
@@ -312,18 +336,22 @@ the vocabulary and the species, not the episode.
 - Validate: `python -m pytest content/video_engine/tests/test_gate_motion_density.py -q`
 - Evidence: pending
 
-### T5: Bar-race and decline variants, with the first real race
+### T5: The other builders - story, race, decline, combo - each ported from its own component
 - Status: pending
-- Owner: implementation_luna (→ `general-purpose`)
-- Depends on: T3, T4; Human Gate 3
-- Write set: `docs/content-video-engine/samples/scene-evidence-player.template.html` (variant builders only),
+- Owner: implementation_luna (→ `general-purpose`), one builder per dispatch
+- Depends on: T3, T4; Human Gate 3 (race)
+- Write set: `docs/content-video-engine/samples/scene-evidence-player.template.html` (one builder function per treatment, keyed by the row's `builder`; no changes to `dense-line`),
   `content/video_engine/projects/systems-and-blowups/steel-and-paper/evidence/objects/ev-memory-share-race-v1.series.json`,
   `content/video_engine/tests/test_ledger_page.py`
-- Acceptance: race = ranked bars overtaking across periods with axis
-  rescale and accent hand-off; decline = line drawing down with the value
-  counting down and the page darkening slightly; the memory-maker share
-  race renders from sourced data; the operator confirms it reads as a
-  ledger.
+- Acceptance: four separate builders, each reproducing its component's
+  envelope and sync point - `story` (bars/line/donut/progress landing on
+  exact values, callout rolls, `callout-landed`), `race` (ranked bars
+  overtaking across periods, axis rescale, accent hand-off), `decline`
+  (line draws down, value counts down, ground darkens), `combo` (bars +
+  line, staggered) - each renders on the page surface and, where T0
+  allows, in a dock; the memory-maker share race renders from sourced
+  data; the operator confirms it reads as a ledger. Race and story are
+  distinct builders; nothing is folded into `dense-line`.
 - Validate: `python -m pytest content/video_engine/tests/test_ledger_page.py -q`; range render of the race
 - Evidence: pending
 
