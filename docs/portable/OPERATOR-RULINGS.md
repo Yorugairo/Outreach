@@ -928,8 +928,10 @@ negative charts blood red, positive green. That way the yellow circle is
 actually impactful."* Bars take their sign colour (blood red down, green
 up, `--lp-neg` / `--lp-pos`, tokens `chart.negative` / `chart.positive`);
 a single-metric line takes the sign of its end against its start;
-multi-line pages keep their series key. The emphasized datum and the
-focus ring stay sunflower - the only yellow on the board. Correction on
+multi-line pages keep their series key. The emphasized bar KEEPS its
+sign colour ("that bar should still be red - which is what makes the
+yellow encircling it valuable"); the sunflower is the callout pill and
+the focus ring only - the only yellow on the board. Correction on
 the record: Bravos's original chart was MAMAA against the S&P 500, not
 against semiconductors; `ev-bravos-original-v1.series.json` carries a
 +105% second line named SEMICONDUCTORS and is under SOURCES-TO-VERIFY
