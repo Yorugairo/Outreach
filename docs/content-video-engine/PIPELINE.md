@@ -27,6 +27,7 @@ cannot surface a component you don't know exists.
 | 6 | **Word timeline** | `scripts/build_timeline_f.py` | the take | merged word timeline (mechanical, safe to automate) |
 | 7 | **SHOT TABLE — AUTHORED** | **a human or model reading the narration** | word timeline · plate `semantic` fields · evidence `context` fields | the window table: plate + Ken Burns + docks + badge times, per beat |
 | 7b | Motion | `scripts/build_render_f.py` | the authored table | motion plan |
+| 7c | **Motion-density gate** (E21 / doc 29 §9.25) | `scripts/gate_motion_density.py` | the compiled timeline, `evidence-dock.json`, `motion-plan.json` | exit 1 on any stretch > 12s without a visual event, evidence gaps > 45s, plate holds > 20s, a thin opening minute; the list of stretches that need stage captions |
 | 8 | **Render** | **`samples/scene-evidence-player.template.html`** | a `scene_evidence_timeline.v1` + base64 asset map | a self-contained preview |
 
 ## Stage 7 is AUTHORED. There is no allocator.

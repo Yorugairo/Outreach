@@ -1355,3 +1355,54 @@ gloss ("US Bureau of Economic Analysis data via FRED", never bare
 "BEA"). The audit that caught this: the yardstick chart shipped with
 TWO ENTIRELY UNNAMED SERIES - seven docked charts had unnamed lines.
 The mute test now includes: "could a stranger say what each line IS?"
+
+### 9.25 The screen never goes still; captions take the stage (operator, 2026-09-02)
+
+Ruling E21. Steel and Paper shipped with 23% of its runtime in stretches
+over 12s where nothing moved but the Ken Burns and a lower-third caption,
+and its opening minute was the thinnest minute of the video (8.6 visual
+events/min, 0.9 docks/min; a 14s still stretch from 0:57 - the first-drop
+point). The s8.19 gap-fill existed but lived in the five-minute cut
+builder and printed a number; the hand-authored Script F shot table never
+had a density check run on it.
+
+**Three mechanics, all gated by `scripts/gate_motion_density.py` on the
+built timeline (exit 1):**
+
+1. **Stillness ceiling.** No stretch longer than 12s without a visual
+   event beyond Ken Burns - dock enter or exit, badge reveal, scene
+   change, or captions in stage mode. 8s is the working target (industry
+   6-8s; 12s is our justified ceiling because a stamped document costs
+   reading time). Evidence enters at least every 45s in every phase
+   including P1 and P6. Plate density runtime/12s and the 20s hold
+   ceiling (s9.13) are checked on the same pass.
+
+2. **Caption STAGE mode.** Part 5 defined one fixed lower-third anchor.
+   That anchor is now the *shared-stage* position only. When no dock is
+   up, captions move to the stage: centred in the frame (vertically in
+   the plate's quiet zone, horizontally centred), ~64px at 1080 (vs 40px
+   lower-third), 2-4 word groups, each word entering with an explosive
+   pop (scale 1.4 -> 1.0 with overshoot, ~0.18s, `power3.out`), keywords
+   in the accent colour, the spoken word at full white. When a dock
+   enters, the caption demotes to the lower-third anchor inside the
+   dock's enter duration (0.75s) and comes back to the stage when the last
+   dock clears. The timeline carries the mode per row (`cap_mode:
+   "stage" | "anchor"`); the player template implements both. Until the
+   template ships stage mode, the gate lists every still stretch where
+   stage captions are REQUIRED so the shot table can be authored against
+   them, and prints the mode check as a JUDGE row.
+
+3. **Savor beats keep their picture.** A savor is the payoff held on
+   screen - the card up, the badge lit, the plate pushing in on it -
+   never a bare plate with a slow drift. The `savour` duration in the
+   motion plan (2.2s) is a dock hold, and a savour never extends a
+   stretch past the 12s ceiling.
+
+**Authoring rule for the shot table (stage 7):** every window row is
+either under a dock, inside 12s of one, or carries stage captions. The
+density rules were always "the check on this table, never its source";
+the check now runs and fails.
+
+Origin lesson: the Alicia kinetic caption study (Part 5) was read as a
+caption style. It was a motion budget: on that channel the captions *are*
+the screen whenever the evidence is down.

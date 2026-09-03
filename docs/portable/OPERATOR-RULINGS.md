@@ -553,3 +553,60 @@ Standing rules:
 
 Gate: STRENGTH-LOOP U6. Template for the corrected unit:
 content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-NOTES-retention-2-46.md
+
+## E21 — The screen never goes still; captions ARE the motion when nothing else moves (2026-09-02)
+
+Operator, watching Steel and Paper after a week of flat performance: "we
+left way too much space/savor moments and we don't actually have enough
+motion on the screen. Captions need to be more centered and explosive;
+they move to share the stage with evidence, but they ARE the motion when
+nothing else is happening. We learned this lesson from Alicia at one point
+but I didn't realize how important it was."
+
+Measured on the shipped build (`gate_motion_density.py` on build-f):
+- Narration silence was NOT the problem: zero pauses >= 2s, 26s of pauses
+  >= 1s in 13:26. The "space" is visual.
+- 23% of runtime (182s) sits in eleven stretches longer than 12s with
+  nothing moving but a 1.04 Ken Burns and a lower-third caption; thirty
+  stretches over 8s; the worst 35s (12:05).
+- The OPENING is the thinnest part of the video: P1 8.6 visual events/min
+  and 0.9 docks/min against 17.6/min in P3. A 14s still stretch starts at
+  0:57 - the first-drop point in the day-one retention curve. P6 has no
+  docks at all.
+- Captions turned 35 pages/min throughout, so cadence existed - but as a
+  40px lower-third band with a 5% pop, which reads as nothing when it is
+  the only thing moving for 14s.
+- 60 distinct plates against the doc-29 target of runtime/12s = 67; the
+  hand-authored shot table (SHOT-TABLE-F) had no density check run on
+  it - the 12s gap-fill of doc 29 s8.19 lived in the five-minute cut
+  builder and printed a number instead of failing.
+
+Standing rules (doc 29 s9.25 carries the mechanics):
+- No stretch of the final timeline runs more than 12s without a visual
+  event beyond Ken Burns (dock enter/exit, badge, scene change); 8s is the
+  working target. This is a GATE on the built timeline (exit 1), not a
+  print.
+- Evidence enters at least every 45s in EVERY phase, P1 and P6 included
+  (doc 29 "evidence every 15-45s"). The opening is the densest minute of
+  the video, never the thinnest.
+- When no dock is up, captions run in STAGE mode: centred in the frame,
+  large, per-word explosive entry, keyword accent. When a dock enters they
+  demote to the lower-third anchor and return when the docks clear.
+  Captions in stage mode count as a visual event; lower-third captions do
+  not.
+- A savor beat is a narration beat with its evidence HELD on screen (the
+  badge lit, the card up), never a bare plate with a slow push. The roster
+  count (>= 2 in P5) stands; the picture under it changes.
+- Plate density stays runtime/12s with the 20s hard hold ceiling
+  (doc 29 s9.13), checked mechanically on the authored shot table.
+
+Why it generalizes: a viewer reads stillness as "nothing is happening"
+regardless of what the narration is saying, and the platform reads the
+resulting swipe as a signal about the whole video. The script gate
+(opening structure) catches what the words fail to do; this gate catches
+what the screen fails to do. Both ran late on episode one; both are
+standing for episode two.
+
+Gate: `content/video_engine/scripts/gate_motion_density.py <build-dir>`.
+Companion: the opening-structure gate (E20 / doc 38) - the re-script of
+Steel and Paper clears both before it records.

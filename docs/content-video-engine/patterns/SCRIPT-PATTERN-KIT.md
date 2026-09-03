@@ -85,7 +85,7 @@ different model — continues the same video.
 | Head-fake | ≥1 | planted P2 straight · demolished at the pivot |
 | CTAs | ≤1 micro + 1 outro (0 in serialized segments) | P2 post-payoff window · P6 action window |
 | Breathing dips | 1/unit + post-macro-1 | P2–P5 |
-| Savor beats | ≥2 | P5 |
+| Savor beats | ≥2 — **a savor holds its picture** (card up, badge lit), never a bare plate with a drift (E21 / doc 29 §9.25) | P5 |
 | Tricolons | **terminal, not rationed** | the P6 triad lands last and hardest; no tricolon after it; none decorative |
 | Anaphora arc | 1 — constant opening, evolving tails | debut P1/P3 · recur ≥3× · resolve ONLY in P6's triad |
 | The tell | exactly 1, four parts | P5, post-payoff |
