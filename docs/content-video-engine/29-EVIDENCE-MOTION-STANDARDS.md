@@ -1553,6 +1553,23 @@ fibre, no stains), the scribble or the soak fills the board to a definite
 rounded edge, and the line draws on that edge. Three things, in that
 order, and nothing decorating them.
 
+**The ground is a generated plate, and so may be the field (operator,
+2026-09-03).** *"The background needs to be a plate that GPT generates,
+because it doesn't actually look like our world plates right now - ours are
+on the cream/washi vox/woodblock; the flat hex reads dull yellow."* And the
+cleaner build: *"have GPT generate a cream plate, and a charcoal-filled
+cream plate, then we fade the charcoal plate in over the top, then we draw
+the line."* So the page spec carries `plate` (the blank washi page, a world
+plate in the spine's register) and, when generated, `field_plate` (the
+same page with the board inked); the player cross-fades the inked plate
+over the blank one in beat 3 and draws the line on the board's edge. The
+procedural soak / scribble is the fallback while no inked plate is
+approved; the CSS cream is the fallback while no page plate is approved.
+Claim: `steel-and-paper-ledger-page-v1` (world-ledger-blank-page-v1,
+world-ledger-inked-board-v1; board geometry left 6% / top 8% / 88% x 84%,
+radius ~2.4% of width, so the outline traces it exactly). Output stays in
+review quarantine until the operator approves the contact sheet.
+
 **Candidates rendered (P35 T1, 2026-09-03) - Human Gate 1 open.** The
 stitch was built in the hyperframes lane from the verbatim registry
 components (`content/video_engine/hyperframes/compositions/ledger-page-v1-{A,B,C}.html`;

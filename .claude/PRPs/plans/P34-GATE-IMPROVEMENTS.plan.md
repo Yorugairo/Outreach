@@ -245,7 +245,7 @@ Acceptance (all observable):
 - Evidence: commit d837d1d; `pytest tests/test_motion_gate_wiring.py tests/test_gate_motion_density.py -q` 13 passed; gate stdout byte-identical after the refactor; `build-f/GATES-MOTION.md` VERDICT: FAIL (4 FAIL); `render_episode.py` -> exit 2 with the refusal line
 
 ### T5: Caption STAGE mode in the player, M08 enforced
-- Status: pending
+- Status: review (Human Gate 2: the operator picks from the 3:11-3:31 side-by-side)
 - Owner: parent
 - Depends on: T4, Human Gate 2
 - Write set: `docs/content-video-engine/samples/scene-evidence-player.template.html`
@@ -263,7 +263,7 @@ Acceptance (all observable):
 - Validate: `python -m pytest content/video_engine/tests/test_gate_motion_density.py -q`
   then `python content/video_engine/scripts/render_episode.py --range 57 71 --out build-f/render/stage-vs-anchor-0057.mp4`
   (two passes, one per mode) and the operator's pick
-- Evidence: pending
+- Evidence: commits e5b605c + 01e4265; template `#caption.stage` (64px/800, centred at 40%, per-word pop at spoken time with alternating +-2.5deg tilt; page quiet zone on a ledger page; quiet demotes to the anchor); build stamps `cap_mode` per page and declares `caption_modes` (ep1: 110 stage / 354 anchor pages); gate counts stage pages as events and M08 FAILs a declaring build's bare >12s stretches - rebuilt ep1: 5 FAIL (M08 lists 0:33, 0:57, 2:24, 6:53, 8:14, 12:24 - dock-held or silent stills); `pytest test_gate_motion_density.py test_motion_gate_wiring.py -q` 24 passed; doc 29 s9.25 'Shipped' note; side-by-side 3:11-3:31 (the 0:57 window is dock-held, so a captioned dock-free stage span was used) rendering to build-f/render
 
 ### T6: One row, one verdict - the audit defers to the opening gate
 - Status: done
