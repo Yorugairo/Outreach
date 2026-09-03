@@ -71,8 +71,7 @@
   .lp-sub .w { display: inline-block; white-space: nowrap; }
   /* the page's badge rail: the dock's pill, painted from t (no transition) */
   .lp-rail { position: absolute; display: grid; gap: 9px; pointer-events: none; }
-  .lp-rail.col { grid-template-columns: 1fr; }
-  .lp-rail.row { grid-template-columns: 1fr 1fr 1fr 1fr; }
+  .lp-rail.row { grid-template-columns: repeat(4, 1fr); }
   .lp-rail .lp-pill { opacity: 0; transition: none; transform-origin: 50% 100%; }
   .lp-chart { position: absolute; overflow: visible; }
   /* MOTION MENU species (doc 29 s9.27; P35 T6/T7): plate life on the world side, the targeted overlay above the docks */
@@ -93,6 +92,7 @@
   .lp-chart .cpill { fill: var(--lp-acc); }
   .lp-chart .ser { fill: none; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
   .lp-chart .sname { font-size: 24px; font-weight: 700; }
+  .lp-chart .tagchip { font-size: 18px; font-weight: 600; letter-spacing: .04em; opacity: .85; text-transform: lowercase; }
 
   /* Regional shading, not a global dim. The world half stays fully lit;
      darkening only begins around the midpoint and deepens toward whichever
@@ -1272,6 +1272,7 @@
      value / tag with the series' accent as the key - spring in one at a time AFTER the build (the callout is the
      conclusion), in the page's quiet zone, painted as a function of t (never a CSS transition) */
   const LP_BADGE0 = 0.4, LP_BADGE_STEP = 0.9, LP_BADGE_IN = 0.36;
+  const LP_BADGE_COL = { coral: "crimson", teal: "teal", cobalt: "cobalt", ink: "deemph", sunflower: "amber" };   /* badge accent -> series colour (the key) */
   /* pure hash of (seed, index, salt) -> [0,1): the only source of jitter (handwriting-text rule 2) */
   const lpHash = (seed, i, salt) => {
     let h = (seed ^ Math.imul(i + 1, 0x9E3779B1) ^ Math.imul(salt + 1, 0x85EBCA77)) >>> 0;
@@ -1391,18 +1392,20 @@
     /* the sub wraps inside the chart's width; the source writes directly under the chart box (never in the caption band) */
     subEl.style.width = chart.style.width; subEl.style.left = chart.style.left;
     src.style.top = ((cb.y + cb.h) * 100 + 1.2).toFixed(2) + "%"; src.style.left = chart.style.left;
-    /* the badge rail: in the quiet-zone column beside the chart, else a row under the source */
-    const rail = lpEl("div", "lp-rail" + (qz ? " col" : " row"), page);
-    const badges = (pg.badges || []).map((bd, bi) => {
+    /* the badge rail: ALWAYS a row grouped under the chart and its source (operator, 2026-09-03: the quiet zone is the
+       caption's; a badge that keys a line is that line's dynamic label instead - see buildLedgerLine) */
+    const rail = lpEl("div", "lp-rail row", page);
+    const badges = (pg.badges || []).filter((bd) => !bd.inline).map((bd, bi) => {
       const el = lpEl("div", "pill lp-pill", rail);
       el.innerHTML = '<span class="pill-label">' + bd.label + '</span><span class="pill-row">' +
         '<span class="pill-num" style="color:' + (ACCENT[bd.accent] || "var(--sunflower)") + '">' + bd.value + '</span>' +
         '<span class="pill-tag" style="color:' + (ACCENT[bd.accent] || "var(--sunflower)") + '">' + bd.tag + '</span></span>';
       return { el, at: LP_BADGE0 + LP_BADGE_STEP * bi };
     });
-    if (qz) { rail.style.left = ((cb.x + (qz === "left" ? 0.02 : 0.66) * cb.w) * 100).toFixed(2) + "%"; rail.style.top = (cb.y * 100).toFixed(2) + "%"; rail.style.width = (0.3 * cb.w * 100).toFixed(2) + "%"; }
-    else { rail.style.left = chart.style.left; rail.style.top = ((cb.y + cb.h) * 100 + 4.6).toFixed(2) + "%"; rail.style.width = chart.style.width; }
-    const st = { root, page, edge, blobs, strokes, nib, rect, goo, glyphs, chart, fieldPlate, boardCentre, badges, kind: pg.builder || "story",
+    rail.style.left = chart.style.left; rail.style.top = ((cb.y + cb.h) * 100 + 4.6).toFixed(2) + "%"; rail.style.width = chart.style.width;
+    rail.style.gridTemplateColumns = "repeat(" + Math.max(1, Math.min(4, badges.length)) + ", 1fr)";
+    const inlineBadges = {}; (pg.badges || []).forEach((bd) => { if (bd.inline) inlineBadges[LP_BADGE_COL[bd.accent]] = bd; });
+    const st = { root, page, edge, blobs, strokes, nib, rect, goo, glyphs, chart, fieldPlate, boardCentre, badges, inlineBadges, kind: pg.builder || "story",
                  bars: [], paths: [], labels: [], callout: null, cval: null, vals: pg.values || [],
                  vstr: pg.value_strings || [], emph: Number.isInteger(pg.emphasize) ? pg.emphasize : -1 };   /* no emphasis declared = no datum styled (spec emits null) */
     /* one builder per treatment (s9.28; P35 Builder Architecture) - each harvested from its own component, never merged */
@@ -1475,6 +1478,10 @@
       const last = s.pts[s.pts.length - 1];
       const name = lpEl("text", "sname", st.chart, { x: (mx(last[0]) + 12).toFixed(1), y: (my(last[1]) + 8).toFixed(1), fill: col, opacity: 0 });
       name.textContent = (s.label ? s.label + " " : "") + (s.name || "");
+      /* DYNAMIC LABEL: the badge that keys this line rides its inline name as the tag, in the accent - one
+         reveal, one real estate (operator, 2026-09-03) */
+      const ib = (st.inlineBadges || {})[s.color];
+      if (ib && ib.tag) { const tg = lpEl("tspan", "tagchip", name, { dx: 12, fill: col }); tg.textContent = ib.tag; }
       st.paths.push({ p, len, tip, name, stagger: i / Math.max(1, series.length), ny: my(last[1]) + 8 });
     });
     /* s9.23b inline names never overprint: push apart any two ends closer than one line */

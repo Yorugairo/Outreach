@@ -239,7 +239,8 @@ def test_badges_ride_on_the_page_synced_to_the_series_labels():
     # operator 2026-09-03: 'we need the badges back' - the dock's pills, keyed by accent, values from the series itself
     div = L.load_series(DIVERGENCE)
     spec = L.build_spec(div, "line", None, "right")
-    assert spec["badges"] and all(set(b) == {"label", "value", "tag", "accent"} for b in spec["badges"])
+    assert spec["badges"] and all(set(b) == {"label", "value", "tag", "accent", "inline"} for b in spec["badges"])
+    assert all(b["inline"] for b in spec["badges"])   # every divergence badge keys a line: a dynamic label, not a rail pill
     by_accent = {b["accent"]: b["value"] for b in spec["badges"]}
     labels = {s["color"]: str(s.get("label", "")).split()[0] for s in div["series"] if s.get("label")}
     assert by_accent["coral"] == labels["crimson"] and by_accent["teal"] == labels["teal"]   # synced, never authored twice

@@ -69,9 +69,13 @@ day): `page.badges` - the series file's own `badges` plus the evidence dock's au
 badges for the same asset (`build_scene_timeline_f.ledger_world`), each {label, value,
 tag, accent}; a badge whose accent maps to a series colour takes that series' current
 label as its value (`ledger_page.badges_for`). The page renders them as the dock's own
-pills in the quiet-zone column (or a row under the source when no quiet zone is
-declared), springing in one at a time from build end + 0.4s every 0.9s, painted from t;
-the gate counts each as an event.
+pills in ONE ROW grouped under the chart and its source (never in the quiet zone - that is
+the caption's), springing in one at a time from build end + 0.4s every 0.9s, painted from t;
+the gate counts each rail pill as an event. A badge whose accent keys a dense series is
+marked `inline` and becomes that line's DYNAMIC LABEL instead: its tag rides the inline
+name at the line's end in the accent, one reveal at draw-complete, no pill (operator,
+2026-09-03: "grouped back below the charts, or dynamic labels - not label + pill +
+captions all taking up the same real estate").
 
 Validation: `python content/video_engine/scripts/ledger_page.py <series.json> --variant bars --emphasize 7 --quiet-zone right`
 refuses a missing source, unaligned labels, a race without periods, a

@@ -898,5 +898,11 @@ chart carries both axes with ticks and its unit (the ledger builders use
 one helper; the dock charts already do); the ledger page carries the
 dock's badges - verbatim label / value / tag, the series' accent as the
 key - springing in one at a time after the build in the quiet zone, their
-values synced to the series' own labels (B3 by construction).
+values synced to the series' own labels (B3 by construction). Placement
+(same day): *"the badges either need to be grouped back below the charts,
+or they should become dynamic labels instead of having label + pill +
+captions all taking up the same real estate."* Both: the rail is one row
+under the chart, never in the quiet zone (the caption's); on a line chart a
+badge that keys a series is that line's dynamic label - its tag rides the
+inline name in the accent - and leaves the rail.
 

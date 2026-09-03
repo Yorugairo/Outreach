@@ -183,7 +183,8 @@ def _page_events(scenes: list[dict]) -> tuple[list[float], list[float]]:
         a, z = float(s["span"][0]), float(s["span"][1])
         starts.append(a)
         beats += [round(a + off, 2) for off in PAGE_BEAT_OFFSETS if a + off < z]
-        n_badges = len((s.get("world", {}).get("page") or {}).get("badges") or [])
+        # inline badges ride their line's draw-complete (already a build event); only rail pills are extra reveals
+        n_badges = sum(1 for b in ((s.get("world", {}).get("page") or {}).get("badges") or []) if not b.get("inline"))
         beats += [round(a + PAGE_BEAT_OFFSETS[-1] + LP_BADGE0_S + LP_BADGE_STEP_S * k, 2) for k in range(n_badges)
                   if a + PAGE_BEAT_OFFSETS[-1] + LP_BADGE0_S + LP_BADGE_STEP_S * k < z]
     return beats, starts

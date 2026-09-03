@@ -248,6 +248,9 @@ def badges_for(series: dict, extra: list | None = None) -> list[dict]:
         for entry in dense_series(series):
             if col and entry.get("color") == col and _text(entry.get("label")):
                 bd["value"] = str(entry["label"]).split()[0]
+        # a badge that keys a dense series becomes that line's DYNAMIC LABEL (operator, 2026-09-03:
+        # 'grouped below the chart, or dynamic labels - not label + pill + captions on one real estate')
+        bd["inline"] = bool(col) and any(e.get("color") == col for e in dense_series(series))
         out.append(bd)
     return out
 
