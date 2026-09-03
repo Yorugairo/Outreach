@@ -1570,6 +1570,17 @@ drawn ALONG the deckle (the page spec carries `edge_path`, the paper's
 traced boundary, drawn clockwise by dash-offset). The chart box sits inside
 the paper with a margin the deckle never touches. This is what the coffee
 and halo attempts were reaching for; the deckle says it cleanly.
+Refined on sight (same day): *"the line actually needs to be inside"* -
+the line is not traced along the deckle; it is drawn INSIDE it as the clean
+stabilising edge (`page.board`, inset ~2% from the paper), so the ragged
+charcoal beyond it reads as the deckle and the fill inside reads clean.
+And the ground is in question: *"my original instincts were maybe right;
+the cream deckle would have read like the charcoal was fill, playing
+literally like charcoal on a scroll, but with the white it just looks kind
+of broken."* Two grounds are in the proof for the pick: the white beyond
+the deckle (scene 1) and cream beyond it (scene 2, `world-ledger-*-cream-v1`,
+made by compositing the paper onto the cream token). `edge_path` stays in
+the spec as an option; the default line is the inner box.
 Also ruled the same review: the ledger species proof "looks good" (the
 two-plate path is the field); the targeted species "all worked really
 well - finally a real capability"; the race "needs to be smoother";
