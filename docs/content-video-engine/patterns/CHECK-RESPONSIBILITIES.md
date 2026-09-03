@@ -14,7 +14,7 @@ vs what the gate can cover."*
 
 ---
 
-## 0. The three verdict kinds
+## 0. The four verdict kinds
 
 Every check in the kit is exactly one of these. The kind decides the owner.
 
@@ -22,7 +22,16 @@ Every check in the kit is exactly one of these. The kind decides the owner.
 |---|---|---|---|
 | **mechanical** | decidable from text + timing: a count, a position, a duration, an adjacency | **tool** — final | promise lands after 0:60 (G09); AND-THEN chain (G23); pivot outside 45–55% (audit) |
 | **declared** | the beat has no textual signature, so the writer TAGS it; the tool checks presence and window | **tool** checks the claim exists and sits in its window; **agent** verifies the claim is TRUE | `[catalyst]` present in P2's first 60s (G40) — the agent confirms the tagged line is an inciting event told as anecdote, not exposition wearing a tag |
+| **PERCEIVED** | did a reader who knows NOTHING actually feel it? | **the viewer** (P36) — a blind agent reports, a deterministic scorer judges | a declared `[rehook]` that never shows up in the blind reader's new information or held question is *laundered*: tagged, not delivered |
 | **JUDGE** | only a reader can decide | **agent** — every row verdicted individually, with the quoted line | opponent is a mechanism not a villain (J01); the head-fake is offered straight (J02); the image tensions the line (J06) |
+
+The fourth kind is the outside check on the second. `declared` trusts the
+writer's tag and asks only *is it present, and in its window*; `PERCEIVED`
+asks whether a cold reader felt it at all. That is rule R2's laundering,
+measured from outside the doctrine instead of inside it. The viewer is never
+asked when it would drop off: an LLM's patience is not a human's, so it is
+asked only for perception reports it can give stably, and the judging is the
+scorer's, deterministically (P36; ruling E26).
 
 STRENGTH-LOOP §8 is the standing rule behind this: *automate only what is
 unambiguous — counts, positions, durations, antecedent adjacency — and
@@ -99,6 +108,7 @@ before you grep; read before you claim.
 | `enumerate_strength_screens.py` | `… <VO>` → `<script>-SCREENS.md` | *enumerates only*: X1 connective/pronoun openers with predecessors, deixis openers, additive junctions, phonetic-anchor candidates, per-paragraph cadence runs | — | every listed item — the agent verdicts each (ok / FIXED / licensed / carryover) |
 | `run_script_gates.py` (**the runner — stages 3–4**) | `… <script> --pivot "<line>" --ring <t> --counterparty <n> [--timeline …] [--title … --thumb … --thumb-file …]` | *decides nothing itself*: runs the four rows above in order through their own `main()`, cites each exit + RESULT line, and writes `<script>-GATES.md` (the §5 TOOLS block, every tool's stdout verbatim, `script_hash` of the spoken text, `VERDICT`); exit 1 on any FAIL. `record_*_take.py` refuse a script whose report is missing / stale / FAIL (`--force "<reason>"` overrides, reason into the take manifest) | — | — |
 | `gate_motion_density.py` (**stage 7/8, on the BUILT timeline**) | `… <build-dir>` | M01 no stretch > 12s without a visual event (a LEDGER PAGE's build beats — scene start +0 / 0.7 / 1.5 / 3.9 / 4.7 / 5.2 / 8.2s: roll-out, savor, field, line, punch, build start, build end + focus (§9.26, E22 addendum 6) — count; its hold does not, §9.28 C5 / D1) · M02 > 8s (WARN) · M03 evidence enters ≤ 45s apart, every phase (a page START counts as an entry, D2) · M04 plates ≥ runtime/12s (a page is its own plate) · M05 20s hold ceiling · M06 caption cadence · M07 the opening minute is not the thinnest · M08 stage captions on every still stretch (once the timeline carries `cap_mode`) · M09 one camera move per window (§9.27 / §9.28 C3) · M10 no still stretch > 6s begins in the first 60s (E24 / §9.29) · M11 the first chart (chart/data dock, or ledger page; any dock when the timeline carries no evidence species) enters 0:08–0:20 with a spotlight / callout / punch / focus_zoom declared within 1.5s of the enter; a sound cue (motion-plan cue or timeline `sound` entry) within 1.5s or WARN (E24 / §9.29) · M12 a chart dock never spans a scene boundary and holds ≤ 10s (≤ 6s inside the opening minute) — re-enter it spotlit on the new datum instead (E25 / §9.30: the chart is the proof, not the homework). The dock clock is the timeline's own `scenes[].docks`; `evidence-dock.json` only when the timeline carries none (`dock_source` in the stats) | — | J01 savor beats keep their picture · J02 stage captions centred/large/explosive (until the template carries the mode) |
+| `viewer_windows.py` + `viewer_run.py` + `viewer_score.py` (**stage 4b, the VIEWER**) | `viewer_windows.py <script> [--timeline …]` → `viewer_run.py <script> [--thumb-file …] [--title …]` → `viewer_score.py <script>` → `<script>-VIEWER.md` | V01 beat recall (every declared beat felt within ±1 window, citing the reader's line), V02 dead-runs, V03 open-loop coverage, V04 confusion, V05 gain per window | *nothing* — the viewer is never shown a tag; if it can see the doctrine the test is void | the block is **advisory** until P36 Human Gate 1; `run_script_gates.py --viewer-gate` promotes V01 to FAIL and V02 to WARN |
 
 The opening gate covers **P1–P2 only** and says so in its header. Nothing
 mechanical exists for P3–P6 beyond the audit's pivot pin, CTA windows, tell
@@ -195,6 +205,8 @@ The report is not accepted without every block below.
 TOOLS      lint: exit N, F fails | audit: exit N, F/W, timing=<measured|estimated> |
            opening gate: exit N, F/W/P/J | screens: <file>, K items
 DECLARED   <tag>@<mm:ss> "<line>" -> true | laundered      (one per tag)
+VIEWER     V01 recall N/M (unperceived: [tag]@w…) · V02 dead-runs · V03 open-loop
+           (advisory until P36 Human Gate 1; `not run` is a legal value)
 JUDGE      J01 "<line>" -> verdict … J11                     (one per row)
 P3–P6      each §3c node -> verdict / NOT RUN
 ROSTER     each §3d row -> count + verdict / NOT RUN

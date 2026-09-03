@@ -97,6 +97,7 @@ read.
 |---|---|---|
 | **current-bubble-five-minute-v4** | `samples/current-bubble-five-minute-v4.timeline.json` (+ rendered build) | THE motion gold standard (doc 29 §9.16) — side-by-side before any motion change ships |
 | **Gemini showcases** | `samples/gemini-decoupled-evidence-showcase.html`, `gemini-scene-evidence-pipeline-showcase.html` | ancestor artifacts — where doctrine CAME from; a reviewed refinement outranks them |
+| **The viewer (P36)** — a blind, windowed perception test: an agent that knows no doctrine reads the script cold in 15s windows with a two-window memory; a deterministic scorer measures beat recall (a declared beat the reader never felt was laundered) and information gain | `scripts/viewer_windows.py` · `viewer_run.py` (Codex headless) · `viewer_score.py`; `run_script_gates.py --viewer-gate` | **advisory** until the ep1 calibration passes P36 Human Gate 1 | ep1: 54 windows on measured timings, all 37 declared beats placed; `test_viewer_windows.py` 17 + `test_viewer_score.py` 14 |
 
 ## The recall rule
 
