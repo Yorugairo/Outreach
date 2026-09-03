@@ -1581,6 +1581,17 @@ of broken."* Two grounds are in the proof for the pick: the white beyond
 the deckle (scene 1) and cream beyond it (scene 2, `world-ledger-*-cream-v1`,
 made by compositing the paper onto the cream token). `edge_path` stays in
 the spec as an option; the default line is the inner box.
+DECIDED (operator, 2026-09-03): *"yes, it has to be cream, but that inner
+line needs to be pushed out to just touch the cream ground."* Standing
+form: the page sits on the CREAM ground (the paper composited onto the
+cream token - `world-ledger-blank-page-cream-v1`, the charcoal-filled
+`world-ledger-inked-deckle-cream-v1`); the charcoal fills the paper to its
+deckle; the line is the deckle's INNERMOST boundary - the largest clean
+rectangle the paper contains, measured from the paper mask (the deepest
+indentation on each side), so it just touches the cream at the deepest
+points of the deckle; the chart sits inside the line. `page.board` carries
+that rectangle; `edge_path` remains an option, not the default.
+
 Also ruled the same review: the ledger species proof "looks good" (the
 two-plate path is the field); the targeted species "all worked really
 well - finally a real capability"; the race "needs to be smoother";

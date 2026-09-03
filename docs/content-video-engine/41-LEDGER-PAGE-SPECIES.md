@@ -19,7 +19,7 @@ of every episode by default.
 | 1 | Unravel | 0 – 0.7s | the plain cream page rolls out left→right (`translateX`, never clip-path), a curl-shadow band riding the front |
 | 2 | Half savor | 0.7 – 1.5s | the page holds, empty |
 | 3 | The field | 1.5 – 3.9s | **DECIDED (E22 addendum 4): the deckle is the feature.** The inked plate (`page.field_plate`, made procedurally from the blank page: charcoal fills the paper up to its deckle edge, 94% so a whisper of fibre survives) cross-fades over the plain page; the deckle edge appears only as the ink arrives. Fallbacks when no inked plate exists: `page.field = "scribble"` or `"soak"` filling the board box |
-| 4 | The line + ink | 3.9 – 4.7s (+ ink to 5.9s) | the line is drawn ALONG the deckle (`page.edge_path`, the paper's traced boundary, dash-offset clockwise); without an edge path it falls back to the conic border on the board box. Title and source are written per glyph with a seeded ±1.6° tilt |
+| 4 | The line + ink | 3.9 – 4.7s (+ ink to 5.9s) | **DECIDED (E22 addendum 5):** the line is the deckle's INNERMOST boundary (`page.board`, the largest clean rectangle inside the paper mask, drawn clockwise as the conic border), so it just touches the cream at the deepest deckle points. `page.edge_path` (a line traced along the deckle) stays an option. Title and source are written per glyph with a seeded ±1.6° tilt |
 | 5 | The build | 4.7 – 7.7s | `story`: bars grow from the baseline in reading order, labels then values, the emphasized datum takes the accent pill whose number rolls and lands on the exact string · `dense-line`: dash-offset draw with a tip head, inline series names de-collided (§9.23b). Axes and grid appear only in this beat |
 
 Constants: `const LP = { ROLL: 0.7, SAVOR: 0.8, FIELD: 2.4, OUTLINE: 0.8, INK: 2.0, BUILD: 3.0 }` in the template. The gate reads the same offsets (`PAGE_BEAT_OFFSETS`).
@@ -46,7 +46,7 @@ Produced by `content/video_engine/scripts/ledger_page.py` from a
 | `plate` | asset id of the GENERATED blank washi page (world plate, spine register). CSS cream `#F4E6C7` is the fallback and reads dull |
 | `field_plate` | asset id of the generated page with the board inked; cross-faded in beat 3 |
 | `field` | `scribble` / `soak` — the procedural fallback when no `field_plate` is approved |
-| `board` | `{x, y, w, h}` fractions of the frame — the inked plate's board, MEASURED (dark-pixel bbox) so the outline, the field and the chart share its exact box; default 0.06 / 0.08 / 0.88 / 0.84 |
+| `board` | `{x, y, w, h}` fractions of the frame — the deckle's innermost rectangle, MEASURED from the blank plate's paper mask; the line, the field fallback and the chart share it; default 0.06 / 0.08 / 0.88 / 0.84 |
 | `edge_path` | the paper's deckle boundary as a normalized SVG path (traced from the blank plate's paper mask); the line is drawn along it |
 | `plate_zoom` | overscan for a page plate (not used for the deckle page: the white beyond the deckle is part of the look) |
 
@@ -75,8 +75,9 @@ window in `build-f/SURFACE-CENSUS.md`.
 Claim `steel-and-paper-ledger-page-v1` (style family
 `woodblock-vox-newsprint-v2`, reference `world-ledger-page-v1.png`):
 
-- `world-ledger-blank-page-v1` — the blank cream washi page, 1920×1080, no objects, no text.
-- `world-ledger-inked-board-v1` — the same page with the board inked solid charcoal in the exact geometry above.
+- `world-ledger-blank-page-v1` — the blank cream washi page with its deckle (delivered on white).
+- `world-ledger-inked-board-v1` — the delivered rounded-board version (retired: the deckle is the feature).
+- `world-ledger-blank-page-cream-v1` / `world-ledger-inked-deckle-cream-v1` — DECIDED: the page composited onto the cream token, and the same with the charcoal filled to the deckle (made procedurally from the blank page).
 
 DELIVERED 2026-09-03 (Codex headless; `claim-resume` scanned: 2 flagged, 0 failed). The inked board measures x 0.0635 / y 0.0694 / w 0.8693 / h 0.8602 of the frame; the blank page carries a white deckle rim (overscan 1.05 in the proof; re-order full-bleed). Proof with both plates: scene 1 of `ledger-species-proof.html`. Output stays
 in `review/claims/<claim>/` until the operator approves the contact sheet;

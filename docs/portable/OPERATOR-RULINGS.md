@@ -730,3 +730,13 @@ captions are the default ("awesome"); wash beats the focus rack (rack
 retired); the targeted species are "finally a real capability"; the race
 must be smoother; whole charts keep the chart hygiene (s9.22-9.23b).
 
+**E22 addendum 5 (2026-09-03) - cream ground; the line at the deckle's
+innermost boundary.** The white beyond the deckle "just looks kind of
+broken"; *"it has to be cream, but that inner line needs to be pushed out
+to just touch the cream ground."* The page sits on the cream token, the
+charcoal fills the paper to its deckle, and the line is the largest clean
+rectangle inside the paper (measured from the paper mask) - it touches the
+cream at the deepest deckle points; the chart builds inside it. Why: the
+charcoal must read as ink filling a scroll on the world's own paper, and
+the line stabilises the fill without hiding the deckle.
+
