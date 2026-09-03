@@ -1,18 +1,18 @@
 # SCRIPT GATES - SCRIPT-G-VO.txt
 
 script: SCRIPT-G-VO.txt
-generated: 2026-09-03T11:10:44+00:00
+generated: 2026-09-03T11:32:27+00:00
 script_hash: 4d2876620021c3d94387d761d442548d95f867afeb7be8db00f3ed3385dcf5f8
 timing_source: measured
 
 TOOLS      lint: exit 0, 0 fails | audit: exit 1, 1/0, timing=measured |
            opening gate: exit 1, 22/2/21/8 | screens: SCRIPT-G-SCREENS.md, 186 items
 
-VIEWER     SCRIPT-G-VIEWER.md  (advisory: P36 Human Gate 1 not granted - these rows never change the VERDICT)
-  [INFO ] V01 25/37 declared beats perceived (68%); unperceived: [payoff] w2, [reflect] w4, [opponent] w5, [rehook] w6, [concede] w12, [loop] w16, [loop-close] w17, [anaphora] w25 +4 more
-  [INFO ] V04 15 window(s) with something unfollowable: 0:15-0:30 What exactly AI is being compared to in 1845; 2:45-3:00 The new yardstick is not defined yet.; 3:15-3:30 The meaning of risk charts failing by pointing; 4:00-4:15 What the four months refers to.
-  [INFO ] V02 no run of 2+ windows without a concrete new thing
-  [INFO ] V03 open loop live in 48/54 windows (89%)
+VIEWER     SCRIPT-G-VIEWER.md
+  [FAIL ] V01 25/37 declared beats perceived (68%); unperceived: [payoff] w2, [reflect] w4, [opponent] w5, [rehook] w6, [concede] w12, [loop] w16, [loop-close] w17, [anaphora] w25 +4 more
+  [WARN ] V04 15 window(s) with something unfollowable: 0:15-0:30 What exactly AI is being compared to in 1845; 2:45-3:00 The new yardstick is not defined yet.; 3:15-3:30 The meaning of risk charts failing by pointing; 4:00-4:15 What the four months refers to.
+  [PASS ] V02 no run of 2+ windows without a concrete new thing
+  [PASS ] V03 open loop live in 48/54 windows (89%)
   [INFO ] V05 gain per window: median 3, 0 dead of 54 reported
 
 ## lint_script_pattern.py
@@ -195,4 +195,4 @@ exit 0
 SCRIPT-G-SCREENS.md: X1=86 deixis=32 junctions=24 anchors=44 declared=37
 ```
 
-VERDICT: FAIL (2 failing tools)
+VERDICT: FAIL (2 failing tools, 1 viewer)

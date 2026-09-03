@@ -118,6 +118,9 @@ and green, produced by the tools, not asserted:
    verdicted true/laundered per tag). The recorders refuse without it.
 2. After the shot table is authored (using `build-f/SURFACE-CENSUS.md` and
    doc 29 s9.28 for page / dock / plate-life per window): the build's
+   `<NEW-SCRIPT>-VIEWER.md` with **V01 recall at 100%** (every declared beat
+   felt by a reader that knows nothing - P36, binding since HG1) and V04
+   confusion carrying no unresolved referent; then
    `build-f/GATES-MOTION.md` with `VERDICT: PASS` - no still stretch over
    12s without a dock, a page build, plate life or stage captions (M08),
    evidence at most 45s apart, the opening minute never the thinnest.

@@ -272,9 +272,13 @@ def viewer_block(script: Path, gating: bool) -> tuple[list[str], int, int]:
     """
     rows = viewer_rows(script)
     if not rows:
-        return (["VIEWER     not run - `viewer_windows.py` then `viewer_run.py` then `viewer_score.py`"], 0, 0)
+        # NOT RUN is legal, and loud (CHECK-RESPONSIBILITIES s5: only with a reason the operator can rule on).
+        # It does not block: the viewer costs a live model pass, and the work order - not the runner -
+        # decides which scripts must carry one.
+        return (["VIEWER     NOT RUN - `viewer_windows.py` -> `viewer_run.py` -> `viewer_score.py` (P36; a re-script"
+                 "            names the VIEWER block in its own acceptance)"], 0, 0)
     out = [f"VIEWER     {viewer_path(script).name}"
-           + ("" if gating else "  (advisory: P36 Human Gate 1 not granted - these rows never change the VERDICT)")]
+           + ("" if gating else "  (advisory: --no-viewer-gate - these rows do not change the VERDICT)")]
     for lvl, rid, msg in rows:
         shown = lvl if gating else "INFO"
         out.append(f"  [{shown:5}] {rid} {msg}")
@@ -284,7 +288,8 @@ def viewer_block(script: Path, gating: bool) -> tuple[list[str], int, int]:
 
 
 def render_report(script: Path, results: list[ToolResult], timing: str,
-                  stamp: str | None = None, viewer: list[str] | None = None) -> str:
+                  stamp: str | None = None, viewer: list[str] | None = None,
+                  viewer_fails: int = 0) -> str:
     stamp = stamp or datetime.now(timezone.utc).isoformat(timespec="seconds")
     text = script.read_text(encoding="utf-8")
     out = [f"# SCRIPT GATES - {script.name}", "",
@@ -296,15 +301,16 @@ def render_report(script: Path, results: list[ToolResult], timing: str,
     for r in results:
         out += [f"## {r.name}", f"exit {r.exit}", "", "```",
                 r.stdout.rstrip("\n"), "```", ""]
-    out += [verdict_line(results), ""]
+    out += [verdict_line(results, viewer_fails), ""]
     return "\n".join(out)
 
 
 def write_report(script: Path, results: list[ToolResult],
-                 viewer: list[str] | None = None) -> Path:
+                 viewer: list[str] | None = None, viewer_fails: int = 0) -> Path:
     timing = results[2].counts.get("timing", "unknown")   # opening gate's stats["timing"]
     path = report_path(script)
-    path.write_text(render_report(script, results, timing, viewer=viewer), encoding="utf-8")
+    path.write_text(render_report(script, results, timing, viewer=viewer,
+                                  viewer_fails=viewer_fails), encoding="utf-8")
     return path
 
 
@@ -320,8 +326,13 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--title", help="the locked title - opening gate G45 packaging echo (E24)")
     ap.add_argument("--thumb", help="the thumbnail's words, when recorded in text (E24 G45)")
     ap.add_argument("--thumb-file", help="the FINAL thumbnail path the opening gate's J12 prints (E24)")
-    ap.add_argument("--viewer-gate", action="store_true",
-                    help="bind the VIEWER rows to the VERDICT (P36 Human Gate 1 - off until the ep1 calibration is accepted)")
+    # P36 Human Gate 1 GRANTED (operator, 2026-09-03, on the ep1 calibration): the viewer binds.
+    # V01 beat recall is a FAIL, V04 confusion a WARN; V05 information gain stays INFO with no
+    # authority because it read GREEN on the episode whose retention curve we hold.
+    ap.add_argument("--no-viewer-gate", dest="viewer_gate", action="store_false", default=True,
+                    help="report the VIEWER rows without binding them to the VERDICT (they bind by default since P36 HG1)")
+    ap.add_argument("--viewer-gate", dest="viewer_gate", action="store_true",
+                    help=argparse.SUPPRESS)   # accepted and redundant: gating is the default
     args = ap.parse_args(argv)
     if hasattr(sys.stdout, "reconfigure"):
         sys.stdout.reconfigure(encoding="utf-8", errors="replace")
@@ -330,7 +341,7 @@ def main(argv: list[str] | None = None) -> int:
         return CRASH_EXIT
     results = run_all(args.script, args)
     vblock, vfail, _vwarn = viewer_block(args.script, args.viewer_gate)
-    path = write_report(args.script, results, vblock)
+    path = write_report(args.script, results, vblock, vfail)
     print(f"=== SCRIPT GATES: {args.script.name} ===")
     print(tools_block(results))
     for line in vblock:

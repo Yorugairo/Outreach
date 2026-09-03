@@ -974,11 +974,37 @@ always produce the same verdict:
   mood. Two dead windows in a row is thirty seconds the script has to argue
   for.
 
-**Advisory until it proves itself.** The instrument does not get to fail a
-script before it has agreed with the one retention curve we actually hold.
-The viewer block reports at INFO until the ep1 calibration is accepted
-(P36 Human Gate 1); `run_script_gates.py --viewer-gate` is the promotion
-switch, and after it an unperceived declared beat is a FAIL.
+**Advisory until it proved itself — and it has, in part.** The instrument
+did not get to fail a script before agreeing with the one retention curve we
+hold. **PROMOTED (operator, 2026-09-03, on the ep1 calibration):**
+
+- **Beat recall binds as a FAIL.** It agreed with the analytics and with the
+  annotated gate (the four opening misses — payoff, reflect, opponent,
+  rehook — are the beats the gate placed outside their windows), and it
+  caught the ring token and the anaphora arc going unfelt, which nothing
+  else measures. An unperceived declared beat is laundering and it blocks
+  the recording.
+- **Information gain does NOT bind. It stays INFO with no authority.** It
+  read GREEN on the episode we know failed: the 0:45–1:00 window scores
+  above the episode median, every dock-held still scores at or above it, and
+  there is no dead window in 13½ minutes. A density measure cannot find a
+  failure that is not about density, and a gate that is green on the known
+  bad case is worse than no gate.
+- **Confusion binds as a WARN, in gain's place.** It found the referent
+  failures and one thing no other instrument produced: the counterparty
+  evaporates — "Bravos" is unfollowable at 6:45, 9:00, 12:00 and 13:00
+  while the script goes on arguing against them. Window-cut artifacts are
+  filtered out of it: a 15-second boundary landing mid-sentence is our
+  instrument's noise, not the script's defect (20 of 42 on ep1).
+
+The viewer binds by default from this ruling; `--no-viewer-gate` reports
+without binding. NOT RUN stays legal and loud — the viewer costs a live
+model pass, so the work order, not the runner, decides which scripts must
+carry one.
+
+The general lesson is worth more than the instrument: **a measure earns
+authority by firing on the known-bad case, not by being reasonable.** Two of
+the three did; the third was retired the day it was built.
 
 Why: gates and judge both grade against our own intentions, so they cannot
 catch a script that satisfies every rule and still lands on nobody. The

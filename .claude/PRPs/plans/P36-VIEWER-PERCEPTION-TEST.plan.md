@@ -1,7 +1,7 @@
 ---
 id: P36-VIEWER-PERCEPTION-TEST
 title: The viewer - a blind, windowed perception test that measures whether the declared structure survives the read
-status: review
+status: complete
 operation: feature
 risk: standard
 owner: parent
@@ -111,7 +111,11 @@ Acceptance:
 
 ## Human Gates
 
-1. **Promotion** - after the ep1 calibration report: the operator confirms
+1. **Promotion** - GRANTED 2026-09-03 (operator, on the calibration report:
+   *"your recommendations sound correct, implement"*): beat recall binds as a
+   FAIL, confusion as a WARN, information gain stays INFO with no authority
+   because it read green on ep1. Gating is the runner's default;
+   `--no-viewer-gate` reports without binding. History: the operator confirms
    the instrument agrees with the analytics drop; only then does beat
    recall become a FAIL row and gain a WARN row. Until then the VIEWER
    block is advisory (INFO). DECIDED by click 2026-09-03: this is the

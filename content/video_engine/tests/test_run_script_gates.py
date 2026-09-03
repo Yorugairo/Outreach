@@ -210,12 +210,21 @@ def test_viewer_rows_are_read_from_the_report(tmp_path):
     assert rows[0][0] == "FAIL" and "[rehook]" in rows[0][2]
 
 
-def test_viewer_is_advisory_by_default(tmp_path):
+def test_no_viewer_gate_reports_without_binding(tmp_path):
     block, fails, warns = RG.viewer_block(_script_with_viewer(tmp_path), gating=False)
-    assert (fails, warns) == (0, 0)                       # never moves the VERDICT before promotion
-    assert "advisory" in block[0] and "Human Gate 1" in block[0]
-    assert all("[INFO " in line for line in block[1:])    # shown, but at INFO
+    assert (fails, warns) == (0, 0)                       # --no-viewer-gate: shown, not binding
+    assert "advisory" in block[0] and "--no-viewer-gate" in block[0]
+    assert all("[INFO " in line for line in block[1:])
     assert "V01" in block[1]
+
+
+def test_the_viewer_binds_by_default_since_human_gate_1(tmp_path):
+    # operator granted P36 HG1 on the ep1 calibration, 2026-09-03
+    import argparse
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--no-viewer-gate", dest="viewer_gate", action="store_false", default=True)
+    assert ap.parse_args([]).viewer_gate is True
+    assert ap.parse_args(["--no-viewer-gate"]).viewer_gate is False
 
 
 def test_viewer_gate_promotes_the_rows(tmp_path):
@@ -228,7 +237,7 @@ def test_viewer_absent_says_how_to_run_it(tmp_path):
     s = tmp_path / "S-VO.txt"
     s.write_text("A line.", encoding="utf-8")
     block, fails, warns = RG.viewer_block(s, gating=True)
-    assert (fails, warns) == (0, 0) and "not run" in block[0] and "viewer_score.py" in block[0]
+    assert (fails, warns) == (0, 0) and "NOT RUN" in block[0] and "viewer_score.py" in block[0]
 
 
 def test_verdict_line_counts_viewer_fails_only_when_gated():
@@ -237,3 +246,12 @@ def test_verdict_line_counts_viewer_fails_only_when_gated():
     assert RG.verdict_line(ok, 2) == "VERDICT: FAIL (2 viewer)"
     bad = [RG.ToolResult("x", 1, "", {"fail": 1}, "x")]
     assert RG.verdict_line(bad, 1) == "VERDICT: FAIL (1 failing tools, 1 viewer)"
+
+
+def test_a_viewer_fail_reaches_the_written_report_not_just_stdout(tmp_path):
+    # the report is what the recorder reads (recording_preflight), so the VERDICT there must carry it
+    script = _script_with_viewer(tmp_path)
+    ok = [RG.ToolResult("x", 0, "", {"fail": 0}, "x")] * 4
+    body = RG.render_report(script, ok, "measured", stamp="s", viewer=["VIEWER x"], viewer_fails=1)
+    assert "VERDICT: FAIL (1 viewer)" in body
+    assert "VERDICT: PASS" in RG.render_report(script, ok, "measured", stamp="s", viewer=["VIEWER x"])
