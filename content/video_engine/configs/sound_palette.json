@@ -20,6 +20,21 @@
       "asset_path": null,
       "gain_db": -20.0,
       "phase": "action"
+    },
+    "page_roll": {
+      "asset_path": "content/video_engine/projects/systems-and-blowups/steel-and-paper/sound/fs-page-roll-464302.mp3",
+      "gain_db": -0.98,
+      "phase": "anticipation"
+    },
+    "page_bleed": {
+      "asset_path": "content/video_engine/projects/systems-and-blowups/steel-and-paper/sound/fs-page-bleed-166322.mp3",
+      "gain_db": -0.89,
+      "phase": "contact"
+    },
+    "page_stroke": {
+      "asset_path": "content/video_engine/projects/systems-and-blowups/steel-and-paper/sound/fs-page-stroke-447925.mp3",
+      "gain_db": -0.53,
+      "phase": "action"
     }
   }
 }
