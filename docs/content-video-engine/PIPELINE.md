@@ -121,6 +121,30 @@ carries **badges** and a **source line**.
 Word-by-word model: `remotion-video-creation/rules/display-captions.md` —
 `createTikTokStyleCaptions` pages, active token by `fromMs <= now < toMs`.
 
+## Plate motion — parallax, ambient, sequential generation (2026-09)
+
+Applies to an APPROVED plate; it never regenerates locked art. Full rows and the
+ComfyUI node inventory are in `CAPABILITIES.md` under "Generative video".
+
+- **A still plate to a camera move** — `create_comfy_parallax_video({imagePath,
+  outputPath})` on the `video-engine` MCP (Depth Anything v2 + Depthflow). ComfyUI
+  must be up on `127.0.0.1:8188`.
+- **A sequential plate chain**, plate N seeding plate N+1 — `create_flow_batch({scenes,
+  outputDir})` on the same server. Needs Chrome running with CDP on `9222`.
+- **Queue, preflight and bridge diagnostics** live on the separate `flow-queue` server
+  (`flow_enqueue_batch`, `flow_preflight_batch`, `flow_bridge_status`, ...).
+
+Any plate carrying a Graphic Silhouette actor needs SAM 2 + LaMa first, or the camera
+smears the actor's edge: SAM 2 cuts the subject to alpha, LaMa fills the ground behind
+it, and the move then plays two clean layers. The same mask pins the actor when
+LTX-Video animates the ground, which is what stops a generative model morphing the
+silhouette.
+
+**None of this satisfies the motion gates.** Ambient loops are texture, never authored
+events — haze behind a chart the narration has left makes stillness prettier, not
+comprehensible (E21, E25). A parallax move counts as plate life only when it is bound
+to a narration anchor, the same rule as narration-keyed chart draw.
+
 ## The plate library — ONE index, search it before generating
 
 `content/video_engine/sources/PLATE-LIBRARY.json` — every generated plate

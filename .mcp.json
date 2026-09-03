@@ -10,6 +10,12 @@
     "video-engine": {
       "command": "node",
       "args": [
+        "tools/google-flow-driver/mcp/server.mjs"
+      ]
+    },
+    "flow-queue": {
+      "command": "node",
+      "args": [
         "tools/google-flow-driver/mcp/index.mjs"
       ]
     }
