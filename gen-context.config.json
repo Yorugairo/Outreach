@@ -1,7 +1,16 @@
 {
   "output": ".github/copilot-instructions.md",
-  "outputs": ["copilot"],
-  "srcDirs": ["src", "scripts"],
+  "outputs": [
+    "copilot"
+  ],
+  "srcDirs": [
+    "src",
+    "scripts",
+    "content/video_engine/scripts",
+    "content/video_engine/src",
+    "content/video_engine/tests",
+    "content/video_engine/projects/systems-and-blowups/steel-and-paper"
+  ],
   "exclude": [
     "node_modules",
     ".git",
@@ -28,7 +37,7 @@
   ],
   "maxDepth": 6,
   "maxSigsPerFile": 25,
-  "maxTokens": 30000,
+  "maxTokens": 80000,
   "autoMaxTokens": false,
   "strategy": "full",
   "secretScan": true,
