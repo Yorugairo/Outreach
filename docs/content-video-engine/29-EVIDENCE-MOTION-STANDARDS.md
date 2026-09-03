@@ -1406,3 +1406,67 @@ the check now runs and fails.
 Origin lesson: the Alicia kinetic caption study (Part 5) was read as a
 caption style. It was a motion budget: on that channel the captions *are*
 the screen whenever the evidence is down.
+
+### 9.26 The LEDGER PAGE — the plate-chart species, the channel's signature (operator, 2026-09-02)
+
+Ruling E22. Operator: *"if we could roll out a cream paper that gets
+colored in with charcoal ink, writes on the graph, then builds the graph,
+THAT would become the true channel-defining feature."*
+
+**What it is.** A chart that is the WORLD layer, not a dock: a cream paper
+page rolls out across the frame, charcoal ink writes the axes, the labels
+and the source line by hand, and the graph builds on the page from real
+data. Evidence may still dock over it in its quiet zone. It exists
+because every chart the channel has shipped is an evidence card, and the
+motion gate found the still stretches are exactly the windows with no
+card - a plate that builds is a plate that is never still.
+
+**Register (decided).** Cream paper `#F4E6C7` (the spine's paper token,
+never the record-document's off-white), charcoal ink `#25313C`, one
+accent from the six tokens for the emphasized datum, subtle newsprint
+grain. It is the woodblock world's own ledger page. Docks stay near-black
+so the two registers never blur. It is deterministic and real-data, so it
+lives under the EVIDENCE text rule (exact numerals, source line on the
+page), not the generated-imagery ban.
+
+**The four beats, all derived from t (seek-safe, screenshot-render
+safe, no wall clock, no Math.random):**
+
+1. **Roll-out (0-0.6s).** The page unrolls from one edge: a `clip-path`
+   inset that opens across the frame with a rolled-edge highlight riding
+   the front (a narrow gradient band, like the wipe's carried light,
+   s9.15). Seeded paper grain (feTurbulence, fixed seed) rides the whole
+   piece.
+2. **Ink writes (0.4-2.4s).** Axes, tick labels, title and the source
+   line are WRITTEN, not faded: per glyph, a left-to-right `mask-image`
+   wipe with an ink-soft edge (~18% of a glyph) and a nib dot riding the
+   wet edge; each character carries a fixed seeded tilt and baseline
+   drift (~±1.6°) so it reads as a hand and never wriggles after it is
+   written; writing order is reading order, never re-ranked (harvested
+   from remotion-ui `handwriting-text`, which is the whole distinction:
+   a string is wiped, a real path is stroked). A pinned handwriting
+   webfont; the generic cursive fallback is banned because it resolves
+   per machine.
+3. **Graph builds (2.0-4.0s).** Our existing draw: `getTotalLength`
+   dash-offset for lines with the tip head and deposited dots (s9.23b
+   series names revealed with the line); bars grow from the baseline
+   (`scaleY`, origin bottom) in reading order; the emphasized datum takes
+   the accent and its callout number rolls to the exact value
+   (chart-story's contract: lands on the raw supplied value, never a
+   re-rounded one).
+4. **Accent mark (optional, on the tell).** An ink-bleed bloom (gooey
+   filter: blur + alpha threshold, blobs merging then contracting) that
+   resolves into the callout or a circled figure - reserved for the
+   payoff, the tell, and the ring token, never decorative.
+
+**Variants (same page, same ink):** line, bars, bar race (ranked bars
+overtaking across periods, axis rescaling, accent handing to the leader),
+decline (a line drawing downward while its value counts down), progress.
+
+**Rules.** Data only from a `series.json` beside the page, with the
+source written on the page last. One page per window; a page holds like
+a plate (20s ceiling, s9.13) and its build phase counts as visual events
+for the motion gate; its still hold does not. Ken Burns on a page is a
+slow push only. Docks land in the page's declared quiet zone; a dock
+never covers the graph's emphasized datum. The species is a PROPOSAL until
+the operator picks from rendered candidates (harvest rule).

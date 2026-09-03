@@ -610,3 +610,32 @@ standing for episode two.
 Gate: `content/video_engine/scripts/gate_motion_density.py <build-dir>`.
 Companion: the opening-structure gate (E20 / doc 38) - the re-script of
 Steel and Paper clears both before it records.
+
+## E22 — The ledger page: charts that ARE the plate, on cream paper in charcoal ink (2026-09-02)
+
+Operator, on plate charts: "All of these charts actually become viable
+plate charts, which is a species that doesn't exist for us currently -
+all of our charts are evidence layers; this helps us because it gives us
+plates that actually build and have motion over time." Then: "if we could
+roll out a cream paper that gets colored in with charcoal ink, writes on
+the graph, then builds the graph, THAT would become the true
+channel-defining feature."
+
+Standing:
+- A new world-layer species, the LEDGER PAGE (doc 29 s9.26): cream
+  paper rolls out, charcoal ink writes the axes, labels and source by
+  hand, the graph builds from real data. Evidence may dock over it.
+- Register decided: cream `#F4E6C7` + charcoal `#25313C` + one accent
+  token. Docks stay near-black. The page is deterministic real data, so
+  it lives under the evidence text rule, not the generated-imagery ban.
+- It is the channel's signature. Every episode carries at least one;
+  the payoff chart is one by default.
+- It is built as a proposal: two or three cheap candidates rendered
+  from the same series.json, operator picks, then it ships in the
+  player as a species (REMOTION-UI-HARVEST lesson; harvest the ink
+  mechanism, the chart-story value contract and the bar-race ranking,
+  never a runtime).
+
+Why: a plate that builds is never still (E21), it is on-brand where a
+dark card is a visitor, and it turns the channel's proof into its look.
+Plan: P35.

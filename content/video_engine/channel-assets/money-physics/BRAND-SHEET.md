@@ -147,6 +147,17 @@ drift. Reference: `steel-and-paper/packaging/thumbnail-FINAL-steelpaper.png`.
 | Watermark 150×150 | `mp-watermark-hybrid-150.png` | sprint pick; host + subscribe variants kept |
 | Robo host | `robo-cutout.png` | thumbnails only |
 
+## 8b. The signature — the ledger page (E22 / doc 29 §9.26)
+
+The channel-defining move: **a cream paper page rolls out, charcoal ink
+writes the axes, labels and source by hand, and the graph builds from
+real data on the page.** It is a chart that IS the world plate (the
+"plate chart" species), not an evidence card; docks may still land over
+it. Cream `#F4E6C7`, charcoal `#25313C`, one accent token, newsprint
+grain; deterministic, seek-safe, real `series.json` data with the source
+written last. Every episode carries at least one; the payoff chart is one
+by default. Docks stay near-black so the two registers never blur.
+
 ## 9. Never (visual)
 
 No photographic or glossy render · no collage, torn edges or washi on
