@@ -199,7 +199,7 @@ Route questions to the smallest suitable tool:
 - **SigMap**: declared symbols, ranked architecture discovery, and evidence packs.
 - **ast-grep**: structural patterns and exact call-site sweeps. Always set `--lang`, use a narrow pattern, and scope it to repo-relative paths; one-shot `run` needs no `sgconfig.yml`, while reusable configured rules use `scan`.
 - **Text search** (`git grep` or `search_files`): literals, configuration keys, SQL, docs, and test descriptions.
-- **SQZ**: compress noisy command output or logs only after saving the original evidence. Use `sqz compress --mode safe --verify --no-cache --cmd <producer>`; do not compress hashes, exact test verdicts, security evidence, or small outputs, and never use SQZ as a search or correctness tool.
+- **SQZ**: compress noisy command output or logs only after saving the original evidence. Feed the SAVED output on stdin: `sqz compress --mode safe --verify --no-cache --cmd <producer-name> < .context/<file>` (`--cmd` is a label for `sqz stats`, not a runner - it does not execute the producer; verified 2026-09-02, sqz 1.3.0). Do not compress hashes, exact test verdicts, security evidence, or small outputs (a 30-line gate report compressed 2%), and never use SQZ as a search or correctness tool.
 
 Windows path rule: set the command/tool workdir to the exact repository root and pass `.` or repo-relative paths. The native Windows `rg` used by `search_files` does not accept MSYS-style absolute paths such as `/c/Users/...`; if an absolute-path search fails, retry from the exact workdir with a relative path before concluding that nothing matched.
 
