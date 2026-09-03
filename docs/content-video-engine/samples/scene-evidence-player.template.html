@@ -39,16 +39,14 @@
   .lp { position: absolute; left: 4.545%; top: 4.545%; width: 90.91%; height: 90.91%; overflow: hidden;
         --lp-cream: #F4E6C7; --lp-char: #25313C; --lp-chalk: #F2F2F2; --lp-acc: #F5B72E; --lp-pos: #178C83; --lp-neg: #ED6A4A; --lp-brand: #1769C2; }
   .lp-page { position: absolute; inset: 0; background: var(--lp-cream); will-change: transform; overflow: hidden; }
-  /* textured paper: grain + fibre streaks, visible through the unravel and the savor (E22 addendum 2) */
-  .lp-grain { position: absolute; inset: 0; opacity: .34; mix-blend-mode: multiply; pointer-events: none; }
-  /* coffee-stained parchment (operator, 2026-09-03): seeded blotches with tide-line rings on the cream margin, aged woodblock paper */
-  .lp-stain { position: absolute; inset: 0; opacity: .55; mix-blend-mode: multiply; pointer-events: none; }
-  .lp-fibre { position: absolute; inset: 0; opacity: .22; mix-blend-mode: multiply; pointer-events: none;
-              background: repeating-linear-gradient(97deg, rgba(120,100,70,0) 0 7px, rgba(120,100,70,.35) 7px 8px, rgba(120,100,70,0) 8px 19px); }
+  /* plain cream (operator, 2026-09-03: "just a plain cream background"); the newsprint grain stays barely there */
+  .lp-grain { position: absolute; inset: 0; opacity: .08; mix-blend-mode: multiply; pointer-events: none; }
   /* the unravelling edge: a curl shadow ahead of the front and a lit rim on it */
   .lp-edge { position: absolute; top: 0; bottom: 0; right: -14px; width: 74px;
              background: linear-gradient(90deg, rgba(37,49,60,0) 0%, rgba(37,49,60,.22) 40%, rgba(37,49,60,.42) 62%, rgba(255,255,255,.6) 74%, rgba(37,49,60,.5) 100%); }
   /* the field: the soak is CLIPPED to this rounded box so the ink fills to a definite edge (a stained page, cream margin) */
+  /* the field: the scribble or the soak fills the BOARD to a definite edge (clipped, rounded);
+     the line then draws exactly on that edge (operator, 2026-09-03: "plain cream, then the scribble/soak, then the line draw") */
   .lp-field { position: absolute; left: 6%; top: 8%; width: 88%; height: 84%; border-radius: 46px; overflow: hidden; }
   .lp-field svg { position: absolute; inset: 0; width: 100%; height: 100%; }
   /* the clean edge: a conic sector drawn clockwise, hollow centre (outline-draw mechanism),
@@ -247,6 +245,18 @@
   #caption .cw.ck { color: #c98500; }        /* keyword accent */
   #caption .cw.on { color: #fff; }           /* the word being spoken now */
   #caption .cw.ck.on { color: #e9a020; }
+  /* STAGE mode (doc 29 s9.25 #2, ruling E21; P34 T5): when no dock holds the stage the caption
+     IS the motion - centred in the plate's quiet zone, ~64px, each word entering with its own
+     explosive pop (scale 1.16 -> 1.0, alternating +-2.5deg tilt settling in ~6 frames), keywords in
+     the accent, the spoken word full white. On dock enter it demotes to the anchor (the quiet class)
+     inside the dock's 0.75s rise. Declared by the timeline (caption_modes includes "stage"). */
+  #caption.stage { bottom: auto; top: 40%; left: 200px; right: 200px; font-size: 64px; font-weight: 800;
+                   line-height: 1.12; letter-spacing: -.01em; }
+  #caption.stage .cg { transform: none !important; opacity: 1 !important; }
+  #caption.stage .cw { opacity: 0; transform: scale(1.16) rotate(var(--tilt, 0deg));
+                       transition: transform .2s cubic-bezier(.34,1.56,.64,1), opacity .1s linear, color .12s linear; }
+  #caption.stage .cw.in { opacity: 1; transform: scale(1) rotate(0deg); }
+  #caption.stage .cw.on { transform: scale(1.06) rotate(0deg); }
   /* 4.2 quiet mode - smaller, static, single fade, keywords still coloured */
   #caption.quiet { font-size: 33px; font-weight: 600; }
   #caption.quiet .cg { transform: none !important; opacity: 1 !important; }
@@ -1260,33 +1270,20 @@
     el.querySelectorAll(".lp").forEach((x) => x.remove());
     const root = lpEl("div", "lp", el);
     const page = lpEl("div", "lp-page", root);
+    /* the page ground is a GENERATED world plate (operator, 2026-09-03: "the background needs to be a plate
+       that GPT generates, it doesn't look like our world plates"); page.plate names it in the asset map.
+       The CSS cream is the fallback only while no plate is approved. */
+    if (pg.plate && A[pg.plate]) { page.style.backgroundImage = 'url("' + A[pg.plate] + '")'; page.style.backgroundSize = "cover"; page.style.backgroundPosition = "center"; }
     const grain = lpEl("svg", "lp-grain", page, { width: "100%", height: "100%" });
     grain.innerHTML = '<filter id="lpg' + seed + '"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="7" stitchTiles="stitch"/>'
       + '<feColorMatrix values="0 0 0 0 .15 0 0 0 0 .13 0 0 0 0 .10 0 0 0 .35 0"/></filter><rect width="100%" height="100%" filter="url(#lpg' + seed + ')"/>';
-    lpEl("div", "lp-fibre", page);
-    const stain = lpEl("svg", "lp-stain", page, { viewBox: "0 0 1920 1080", preserveAspectRatio: "none" });
-    stain.innerHTML = '<defs><filter id="lpst' + seed + '" x="-30%" y="-30%" width="160%" height="160%">'
-      + '<feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="3" seed="11" result="n"/>'
-      + '<feDisplacementMap in="SourceGraphic" in2="n" scale="46" xChannelSelector="R" yChannelSelector="G"/></filter>'
-      + '<radialGradient id="lpsg' + seed + '"><stop offset="0" stop-color="#b48a52" stop-opacity=".10"/>'
-      + '<stop offset=".72" stop-color="#a97c46" stop-opacity=".16"/><stop offset=".90" stop-color="#7d5626" stop-opacity=".55"/>'
-      + '<stop offset="1" stop-color="#7d5626" stop-opacity="0"/></radialGradient></defs>';
-    const sg = lpEl("g", "", stain, { filter: "url(#lpst" + seed + ")" });
-    /* blotches live on the margin and under the field's edge: corners and the four bands */
-    const spots = [[70, 60], [1850, 90], [90, 1020], [1830, 1000], [960, 40], [40, 540], [1880, 560], [980, 1050], [520, 30], [1400, 1055], [30, 300], [1890, 800]];
-    spots.forEach(([x, y], i) => {
-      const big = lpHash(seed, i, 13) > 0.6;   /* a few rings, mostly specks: aged, not polka-dotted */
-      const rx = (big ? 90 : 26) + lpHash(seed, i, 8) * (big ? 120 : 40), ry = (big ? 60 : 18) + lpHash(seed, i, 9) * (big ? 90 : 30);
-      lpEl("ellipse", "", sg, { cx: (x + (lpHash(seed, i, 10) - 0.5) * 120).toFixed(1), cy: (y + (lpHash(seed, i, 11) - 0.5) * 80).toFixed(1),
-        rx: rx.toFixed(1), ry: ry.toFixed(1), fill: "url(#lpsg" + seed + ")", transform: "rotate(" + ((lpHash(seed, i, 12) - 0.5) * 40).toFixed(1) + " " + x + " " + y + ")" });
-    });
     const edge = lpEl("div", "lp-edge", page);
     /* the field: SOAK (feathered seeps spreading and saturating, never contracting) or
        SCRIBBLE (seeded strokes drawn one at a time, nib at the front); the crisp rect
        resolves under either so the ink ends at a definite edge. Clipped by .lp-field. */
     const field = lpEl("div", "lp-field", page);
     const fsvg = lpEl("svg", "", field, { viewBox: "0 0 1690 907", preserveAspectRatio: "none" });
-    fsvg.innerHTML = '<defs><filter id="lpsoak' + seed + '" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="26"/></filter></defs>';
+    fsvg.innerHTML = '<defs><filter id="lpsoak' + seed + '" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="14"/></filter></defs>';   /* the soak's wet edge, inside the board */
     const mode = pg.field === "scribble" ? "scribble" : "soak";
     const goo = lpEl("g", "", fsvg, mode === "soak" ? { filter: "url(#lpsoak" + seed + ")" } : {});
     const blobs = [], strokes = [];
@@ -1295,7 +1292,7 @@
         const col = i % 3, row = Math.floor(i / 3);
         const cx = 282 + col * 563 + (lpHash(seed, i, 1) - 0.5) * 300, cy = 150 + row * 303 + (lpHash(seed, i, 2) - 0.5) * 160;
         const c = lpEl("circle", "", goo, { cx: cx.toFixed(1), cy: cy.toFixed(1), r: 0, fill: "#25313C" });
-        blobs.push({ c, R: 520 + lpHash(seed, i, 4) * 380, lag: lpHash(seed, i, 5) * 0.35 });
+        blobs.push({ c, R: 560 + lpHash(seed, i, 4) * 360, lag: lpHash(seed, i, 5) * 0.35 });
       }
     } else {
       for (let r = 0; r < LP.STROKES; r++) {
@@ -1631,6 +1628,8 @@
     /* LAYER 5 — canonical caption track: resolved by time at its own
        timings, never resampled onto beat boundaries (doc 29 Part 5). */
     const quiet = active.length > 0;
+    /* STAGE (s9.25 #2): the timeline declares it; the anchor is the shared-stage position only */
+    const stage = !quiet && (TL.caption_modes || []).includes("stage");
     const PG = TL.caption_pages;
     if (PG) {
       /* KINETIC (doc 29 Part 5): 2-4 word groups punch into the fixed anchor,
@@ -1643,11 +1642,11 @@
       const pg = pi >= 0 ? PG[pi] : null;
       if (pi !== cap._pi) {
         cap._pi = pi;
-        cap.innerHTML = pg ? '<span class="cg">' + pg.t.map((x) =>
-          '<span class="cw' + (x.k ? " ck" : "") + '">' + x.w + "</span>").join(" ")
+        cap.innerHTML = pg ? '<span class="cg">' + pg.t.map((x, j) =>
+          '<span class="cw' + (x.k ? " ck" : "") + '" style="--tilt:' + (j % 2 ? "-2.5deg" : "2.5deg") + '">' + x.w + "</span>").join(" ")
           + "</span>" : "";
         const g = cap.firstChild;
-        if (g && !quiet) {
+        if (g && !quiet && !stage) {
           g.style.transition = "none";
           g.style.opacity = 0; g.style.transform = "translateY(12px) scale(1.14)";
           requestAnimationFrame(() => {
@@ -1658,7 +1657,9 @@
         }
       }
       if (pg) { const ws = cap.querySelectorAll(".cw");
-        pg.t.forEach((x, j) => { if (ws[j]) ws[j].classList.toggle("on", x.s <= t && t < x.e); }); }
+        pg.t.forEach((x, j) => { if (ws[j]) { ws[j].classList.toggle("on", x.s <= t && t < x.e);
+          /* stage: each word pops in at its own spoken time (words.json), never at the page boundary */
+          ws[j].classList.toggle("in", !stage || x.s <= t + 0.05); } }); }
       cap.style.opacity = pg ? 1 : 0;
     } else {
       let line = null;
@@ -1668,6 +1669,12 @@
         ? Math.min(clamp01((t - line.at) / 0.22), clamp01((line.until - t) / 0.18)) : 0;
     }
     cap.classList.toggle("quiet", quiet);
+    cap.classList.toggle("stage", stage);
+    /* on a LEDGER PAGE the stage caption sits in the page's declared quiet zone (s9.25 #2, s9.28 C2:
+       never over the emphasized datum); elsewhere it is centred */
+    const qz = stage && sc.world.kind === "ledger" && sc.world.page ? sc.world.page.quiet_zone : null;
+    cap.style.left = qz === "right" ? "58%" : qz === "left" ? "120px" : "";
+    cap.style.right = qz === "left" ? "58%" : qz === "right" ? "120px" : "";
 
     [...chips.children].forEach((c, i) => c.classList.toggle("on", i === si));
   };

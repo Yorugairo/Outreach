@@ -708,12 +708,13 @@ writes and the build. Why: the page must read as PAPER taking INK, not as a
 logo reveal; a gap between ink and outline reads as a framed board, which
 s9.26 already rules out.
 
-**E22 addendum 3 (2026-09-03) - coffee-stained parchment.** *"The border
-of the card would kind of appear 'textured' and 'splotched' - like a real
-woodblock parchment would look after aging, 'coffee stained'."* The cream
-margin of a ledger page carries seeded tide-line blotches from its first
-frame; the field's ink meets that aged paper at a tight outline. Why: the
-page is the woodblock world's own object, and the world is aged print, not
-a clean slab. Scribble is the original field mechanism; soak is the
-no-hand path; both are shipped as `field` on the page spec.
-
+**E22 addendum 3 (2026-09-03) - plain cream, then the field, then the
+line.** Two decorations were tried and refused in one sitting: coffee-ring
+stains on the margin (*"the coffee isn't a good look"*) and a charcoal halo
+overrunning the board unevenly (*"no, that's not right either"*). The
+standing form: *"just a plain cream background, then the scribble/soak,
+then the line draw."* The page is plain cream; the scribble (the original
+idea) or the soak (the no-hand path) fills the board to a definite rounded
+edge; the outline draws exactly on that edge. Why: the page is a
+chalkboard on paper - its power is the ink arriving and the line closing
+it, not the paper performing.

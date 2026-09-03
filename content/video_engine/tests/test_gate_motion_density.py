@@ -203,3 +203,28 @@ def test_parse_ledger_id_defaults_emphasize_and_quiet_zone():
     assert B.parse_ledger_id("ledger:ev-x:line") == ("ev-x", "line", None, "right")
     assert B.parse_ledger_id("ledger:ev-x:bars:3") == ("ev-x", "bars", 3, "right")
     assert B.parse_ledger_id("ledger:ev-x:bars::left") == ("ev-x", "bars", None, "left")
+
+
+# ---- P34 T5: caption STAGE mode declared per page; M08 enforced -----------------------------
+
+def _stage_pages(tl, mode="stage", every=1.5):
+    """caption_pages as the build emits them: cap_mode at each page's first word."""
+    pages, t = [], 0.0
+    while t < tl["runtime_s"]:
+        pages.append({"s": t, "e": t + 1.4, "t": [{"w": "x"}] * 5, "cap_mode": mode}); t += every
+    return {**tl, "caption_pages": pages, "caption_modes": ["stage", "anchor"]}
+
+
+def test_stage_pages_are_events_and_m08_passes():
+    tl, docks, mp = _dense_build(scene_len=15.0, dock_every=60.0)      # still > 12s without captions
+    g = _by_id(G.run(_stage_pages(tl), docks, mp)[0])
+    assert g["M01"].level == "PASS", g["M01"]
+    assert g["M08"].level == "PASS", g["M08"]
+
+
+def test_declaring_build_with_anchor_pages_on_a_still_stretch_fails_m08():
+    tl, docks, mp = _dense_build(scene_len=15.0, dock_every=60.0)
+    g = _by_id(G.run(_stage_pages(tl, mode="anchor"), docks, mp)[0])
+    assert g["M08"].level == "FAIL" and "no stage-mode caption" in g["M08"].message, g["M08"]
+    assert g["M01"].level == "FAIL"
+

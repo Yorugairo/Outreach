@@ -153,7 +153,10 @@ def analyse(tl: dict, docks: list[dict], mp: dict) -> dict:
     page_beats, page_starts = _page_events(scenes)
     # stage-mode captions count as events when the timeline declares them
     tl_rows = tl.get("rows", tl.get("timeline", []))
+    # P34 T5: the build declares the mode per caption page (cap_mode at the page's first word);
+    # a stage page is a visual event at its start (s9.25 #1: "captions in stage mode")
     stage_rows = [r for r in tl_rows if isinstance(r, dict) and r.get("cap_mode") == "stage"]
+    stage_rows += [{"t": pg["s"]} for pg in pages if isinstance(pg, dict) and pg.get("cap_mode") == "stage"]
     events = _collect_events(tl, mp, spans, badges, page_beats, stage_rows)
     ev = sorted(t for t in events if 0.0 <= t <= runtime)
     if not ev or ev[0] > 0:
@@ -178,7 +181,8 @@ def analyse(tl: dict, docks: list[dict], mp: dict) -> dict:
     return {"runtime": runtime, "events": ev, "still": still, "ev_gaps": ev_gaps, "plates": plate_ids,
             "over_hold": over_hold, "wc": wc, "pages": pages, "dens": _per_minute(runtime, ev, entries),
             "spans": spans, "dock_source": dock_source, "n_pages": len(page_starts),
-            "has_cap_mode": bool(stage_rows) or any(isinstance(r, dict) and "cap_mode" in r for r in tl_rows)}
+            "has_cap_mode": bool(stage_rows) or any(isinstance(r, dict) and "cap_mode" in r for r in tl_rows)
+                            or any(isinstance(pg, dict) and "cap_mode" in pg for pg in pages)}
 
 
 def run(tl: dict, docks: list[dict], mp: dict) -> tuple[list[Gate], dict]:
@@ -222,7 +226,14 @@ def run(tl: dict, docks: list[dict], mp: dict) -> tuple[list[Gate], dict]:
             "E21: the opening is the densest minute, never the thinnest")
     req = [(a, d) for a, d in A["still"] if d > STILL_WARN_S]
     if A["has_cap_mode"]:
-        add("M08", "PASS", "timeline carries cap_mode; stage rows counted as events above", "doc 29 s9.25 caption STAGE mode")
+        # ENFORCED (P34 T5): stage pages already count as events, so any stretch still over the
+        # ceiling is one the captions did not take - the shot table must author stage rows there
+        bare = [(a, d) for a, d in A["still"] if d > STILL_FAIL_S]
+        add("M08", "FAIL" if bare else "PASS",
+            (f"{len(bare)} still stretches > {STILL_FAIL_S:.0f}s carry no stage-mode caption: "
+             + ", ".join(f"{mm(a)}+{d:.0f}s" for a, d in sorted(bare)[:12]) + (" ..." if len(bare) > 12 else "")) if bare
+            else "timeline declares cap_mode; every stretch over the ceiling carries stage captions (counted as events above)",
+            "doc 29 s9.25 caption STAGE mode (E21: captions ARE the motion when nothing else moves)")
     else:
         add("M08", "INFO", f"timeline carries no cap_mode yet - stage captions REQUIRED on {len(req)} stretches: "
             + ", ".join(f"{mm(a)}+{d:.0f}s" for a, d in sorted(req)[:12]) + (" ..." if len(req) > 12 else ""),

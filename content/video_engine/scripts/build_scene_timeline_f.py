@@ -49,6 +49,11 @@ TIMELINE_NAME = "steel-and-paper.timeline.json"  # the compiled scene_evidence_t
 KEN = {"scale": 0.04, "x": 14, "y": -10}
 
 
+def _dock_live_at(scenes: list, t: float) -> bool:
+    """A dock holds the stage at t -> the caption takes the anchor (s9.25 #2)."""
+    return any(d["enter"] <= t < d["exit"] for sc in scenes for d in sc.get("docks", []))
+
+
 def sha(p: Path) -> str:
     return hashlib.sha256(p.read_bytes()).hexdigest()
 
@@ -270,6 +275,8 @@ def main() -> int:
             "docks": docks,
         })
 
+    # caption STAGE mode: stamp each page with the mode it takes at its first word (after the scenes exist)
+    pages = [{**pg, "cap_mode": "anchor" if _dock_live_at(scenes, pg["s"]) else "stage"} for pg in pages]
     uris["__audio__"] = data_uri(audio)
 
     # SOUND REVIEW LAYER (operator, 2026-08-31: "i can't judge the audio
@@ -309,6 +316,11 @@ def main() -> int:
         "captions": [{"at": p["s"], "until": p["e"],
                       "text": " ".join(t["w"] for t in p["t"])} for p in pages],
         "caption_pages": pages,
+        # caption STAGE mode (doc 29 s9.25 #2, P34 T5): the player centres and pops
+        # the caption whenever no dock is up; each page declares the mode it will
+        # take at its first word so the motion gate can count stage pages as events
+        # and FAIL a still stretch that carries none.
+        "caption_modes": ["stage", "anchor"],
         "sound": sound_cues,
         "evidence": evidence,
         "scenes": scenes,

@@ -1398,6 +1398,20 @@ built timeline (exit 1):**
    motion plan (2.2s) is a dock hold, and a savour never extends a
    stretch past the 12s ceiling.
 
+**Shipped (P34 T5, 2026-09-03).** The player template carries STAGE mode:
+`#caption.stage` (centred at 40% height in the plate's quiet zone, 64px,
+weight 800; each word enters at its own spoken time with scale 1.16 -> 1.0
+and an alternating +-2.5deg tilt settling in ~6 frames; keywords in the
+accent, the spoken word full white; on a ledger page the caption sits in
+the page's declared quiet zone), toggled whenever no dock is live and the
+timeline declares `caption_modes: ["stage","anchor"]`; on dock enter the
+`quiet` class demotes it to the anchor inside the dock's 0.75s rise. The
+build stamps `cap_mode` on every caption page ("anchor" if a dock is live
+at its first word, else "stage"), and gate M08 now FAILs a declaring build
+whose still stretches over 12s carry no stage page. The 0:57-1:11
+side-by-side (anchor vs stage) is the operator's Human Gate 2; the mode
+ships as the default only after that pick.
+
 **Authoring rule for the shot table (stage 7):** every window row is
 either under a dock, inside 12s of one, or carries stage captions. The
 density rules were always "the check on this table, never its source";
@@ -1505,11 +1519,10 @@ soaking up ink, and then we use the outline component to draw the border
 (100% tight match, not the open space like your example)."* So the beats
 are now FIVE, and beat 2 changes mechanism:
 
-1. **Unravel (0-0.7s).** The cream page enters as a textured unravelling -
-   paper grain and fibre visible, the rolled edge carrying a curl shadow -
-   never a flat cream slab sliding in.
-2. **Half savor (0.7-1.5s).** The page holds, still, textured, empty. A
-   breath before the ink.
+1. **Unravel (0-0.7s).** The plain cream page rolls out, the rolled edge
+   carrying its curl shadow.
+2. **Half savor (0.7-1.5s).** The page holds, still, empty. A breath
+   before the ink.
 3. **Soak (1.5-3.9s).** Charcoal SEEPS into the paper from several seed
    points and spreads outward as if the page were absorbing ink: feathered
    wet edges, darkening as it saturates, never contracting. The seep is
@@ -1532,15 +1545,13 @@ no-hand path - ink absorbed by the paper. Both end on the same definite
 edge, and the outline traces that edge in both. The pick (Human Gate 1)
 decides the default; until then the species defaults to soak.
 
-And the paper itself: *"the border of the card would kind of appear
-'textured' and 'splotched' - like a real woodblock parchment would look
-after aging, 'coffee stained' might be the way to describe it."* The cream
-margin carries seeded blotches with tide-line rings (a radial gradient
-darkest at its rim, displaced by fractal noise so no edge is clean),
-multiplied onto the paper at low opacity, concentrated at the corners and
-the four bands where the margin meets the field. It is part of the page
-from the first frame of the unravel - aged paper, not a stain that
-arrives. Seeded by lpHash; never animated.
+Settled the same day, after a coffee-stain attempt and an uneven-halo
+attempt were both refused (*"no, that's not right either. Let's go back to
+just a plain cream background, then the scribble/soak, then the line
+draw"*): the page is PLAIN cream (the newsprint grain barely there, no
+fibre, no stains), the scribble or the soak fills the board to a definite
+rounded edge, and the line draws on that edge. Three things, in that
+order, and nothing decorating them.
 
 **Candidates rendered (P35 T1, 2026-09-03) - Human Gate 1 open.** The
 stitch was built in the hyperframes lane from the verbatim registry
