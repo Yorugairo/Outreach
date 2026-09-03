@@ -7,6 +7,13 @@
       "runtimeArgs": ["-m", "http.server", "8731", "--directory",
                       "content/video_engine/projects/systems-and-blowups/steel-and-paper/build-f"],
       "port": 8731
+    },
+    {
+      "name": "brand-cards",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "8732", "--directory",
+                      "content/video_engine/channel-assets/money-physics/design-system"],
+      "port": 8732
     }
   ]
 }
