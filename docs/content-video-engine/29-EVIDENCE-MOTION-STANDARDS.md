@@ -1497,6 +1497,51 @@ safe, no wall clock, no Math.random):**
    resolves into the callout or a circled figure - reserved for the
    payoff, the tell, and the ring token, never decorative.
 
+**Correction (operator, 2026-09-03) - the bleed is a SOAK, and the outline is
+tight.** Seen on candidate C: *"that's not what I meant by bleed. The world
+plate should enter as an unravelling, textured cream. Then a half savor,
+then we literally bleed/seep the charcoal on to the page as if it is
+soaking up ink, and then we use the outline component to draw the border
+(100% tight match, not the open space like your example)."* So the beats
+are now FIVE, and beat 2 changes mechanism:
+
+1. **Unravel (0-0.7s).** The cream page enters as a textured unravelling -
+   paper grain and fibre visible, the rolled edge carrying a curl shadow -
+   never a flat cream slab sliding in.
+2. **Half savor (0.7-1.5s).** The page holds, still, textured, empty. A
+   breath before the ink.
+3. **Soak (1.5-3.9s).** Charcoal SEEPS into the paper from several seed
+   points and spreads outward as if the page were absorbing ink: feathered
+   wet edges, darkening as it saturates, never contracting. The seep is
+   clipped to the field's rounded rectangle, so the ink fills to a definite
+   edge - a stained page with a cream margin. The registry
+   `ink-bleed-reveal` (blobs bloom, merge and CONTRACT to reveal a mark) is
+   the wrong mechanism for this slot and is retired here; the soak is ours,
+   in the player, from t.
+4. **Outline (+0.8s).** The clean edge draws clockwise EXACTLY on the
+   field's boundary - same box, same radius, the stroke sitting on the
+   charcoal edge. No gap, no open cream between the ink and the line.
+5. **Ink writes, then the build** as before.
+
+Operator, same exchange: *"that's why originally the idea was to
+'scribble' the charcoal on to the page."* So the field has TWO mechanisms
+and the page spec names one (`field: "scribble" | "soak"`): **scribble** -
+the original idea - strokes accumulating one at a time with a nib at the
+front (the whiteboard-ink stroke law), clipped to the field; **soak** - the
+no-hand path - ink absorbed by the paper. Both end on the same definite
+edge, and the outline traces that edge in both. The pick (Human Gate 1)
+decides the default; until then the species defaults to soak.
+
+And the paper itself: *"the border of the card would kind of appear
+'textured' and 'splotched' - like a real woodblock parchment would look
+after aging, 'coffee stained' might be the way to describe it."* The cream
+margin carries seeded blotches with tide-line rings (a radial gradient
+darkest at its rim, displaced by fractal noise so no edge is clean),
+multiplied onto the paper at low opacity, concentrated at the corners and
+the four bands where the margin meets the field. It is part of the page
+from the first frame of the unravel - aged paper, not a stain that
+arrives. Seeded by lpHash; never animated.
+
 **Candidates rendered (P35 T1, 2026-09-03) - Human Gate 1 open.** The
 stitch was built in the hyperframes lane from the verbatim registry
 components (`content/video_engine/hyperframes/compositions/ledger-page-v1-{A,B,C}.html`;

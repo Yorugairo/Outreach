@@ -694,3 +694,26 @@ already said so; the tools only checked the first five minutes, so a
 script could clear the opening and go 5 minutes without a beat.
 Gate: `gate_opening_structure.py` G25 / G36 / G44; audit
 `audit_script_doctrine.py` MAP sec 2. Plan: P34 T2.
+
+**E22 addendum 2 (2026-09-03) - the bleed is a soak; the outline is tight.**
+Seen on the first rendered candidate, which used a blob-bloom-and-contract
+reveal: *"that's not what I meant by bleed: the world plate should enter as
+an unravelling, textured cream. Then a half savor, then we literally
+bleed/seep the charcoal on to the page as if it is soaking up ink, and then
+we use the outline component to draw the border (100% tight match, not the
+open space)."* Five beats: unravel (textured) -> half savor -> soak (ink
+absorbed by paper, spreading and saturating, clipped to the field so it
+fills to a definite edge) -> outline drawn exactly on that edge -> ink
+writes and the build. Why: the page must read as PAPER taking INK, not as a
+logo reveal; a gap between ink and outline reads as a framed board, which
+s9.26 already rules out.
+
+**E22 addendum 3 (2026-09-03) - coffee-stained parchment.** *"The border
+of the card would kind of appear 'textured' and 'splotched' - like a real
+woodblock parchment would look after aging, 'coffee stained'."* The cream
+margin of a ledger page carries seeded tide-line blotches from its first
+frame; the field's ink meets that aged paper at a tight outline. Why: the
+page is the woodblock world's own object, and the world is aged print, not
+a clean slab. Scribble is the original field mechanism; soak is the
+no-hand path; both are shipped as `field` on the page spec.
+

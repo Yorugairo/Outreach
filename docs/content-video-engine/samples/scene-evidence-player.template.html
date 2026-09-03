@@ -39,14 +39,22 @@
   .lp { position: absolute; left: 4.545%; top: 4.545%; width: 90.91%; height: 90.91%; overflow: hidden;
         --lp-cream: #F4E6C7; --lp-char: #25313C; --lp-chalk: #F2F2F2; --lp-acc: #F5B72E; --lp-pos: #178C83; --lp-neg: #ED6A4A; --lp-brand: #1769C2; }
   .lp-page { position: absolute; inset: 0; background: var(--lp-cream); will-change: transform; overflow: hidden; }
-  .lp-grain { position: absolute; inset: 0; opacity: .16; mix-blend-mode: multiply; pointer-events: none; }
-  .lp-edge { position: absolute; top: 0; bottom: 0; right: -6px; width: 42px;
-             background: linear-gradient(90deg, rgba(37,49,60,0) 0%, rgba(37,49,60,.28) 35%, rgba(255,255,255,.55) 60%, rgba(37,49,60,.35) 100%); }
-  .lp-field { position: absolute; left: 6%; top: 8%; width: 88%; height: 84%; }
-  .lp-field svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
-  /* the clean edge: a conic sector drawn clockwise, hollow centre (outline-draw mechanism) */
-  .lp-outline { position: absolute; left: 5.2%; top: 6.6%; width: 89.6%; height: 86.8%; --lp-prog: 0;
-                border: 5px solid transparent; border-radius: 30px; pointer-events: none;
+  /* textured paper: grain + fibre streaks, visible through the unravel and the savor (E22 addendum 2) */
+  .lp-grain { position: absolute; inset: 0; opacity: .34; mix-blend-mode: multiply; pointer-events: none; }
+  /* coffee-stained parchment (operator, 2026-09-03): seeded blotches with tide-line rings on the cream margin, aged woodblock paper */
+  .lp-stain { position: absolute; inset: 0; opacity: .55; mix-blend-mode: multiply; pointer-events: none; }
+  .lp-fibre { position: absolute; inset: 0; opacity: .22; mix-blend-mode: multiply; pointer-events: none;
+              background: repeating-linear-gradient(97deg, rgba(120,100,70,0) 0 7px, rgba(120,100,70,.35) 7px 8px, rgba(120,100,70,0) 8px 19px); }
+  /* the unravelling edge: a curl shadow ahead of the front and a lit rim on it */
+  .lp-edge { position: absolute; top: 0; bottom: 0; right: -14px; width: 74px;
+             background: linear-gradient(90deg, rgba(37,49,60,0) 0%, rgba(37,49,60,.22) 40%, rgba(37,49,60,.42) 62%, rgba(255,255,255,.6) 74%, rgba(37,49,60,.5) 100%); }
+  /* the field: the soak is CLIPPED to this rounded box so the ink fills to a definite edge (a stained page, cream margin) */
+  .lp-field { position: absolute; left: 6%; top: 8%; width: 88%; height: 84%; border-radius: 46px; overflow: hidden; }
+  .lp-field svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+  /* the clean edge: a conic sector drawn clockwise, hollow centre (outline-draw mechanism),
+     on EXACTLY the field's box and radius - the stroke sits on the ink's edge, no gap (E22 addendum 2) */
+  .lp-outline { position: absolute; left: 6%; top: 8%; width: 88%; height: 84%; --lp-prog: 0; box-sizing: border-box;
+                border: 5px solid transparent; border-radius: 46px; pointer-events: none;
                 background: conic-gradient(from -90deg, var(--lp-acc) 0deg calc(var(--lp-prog) * 3.6deg), transparent calc(var(--lp-prog) * 3.6deg + .5deg) 360deg);
                 background-clip: border-box; background-origin: border-box;
                 -webkit-mask: linear-gradient(#000 0 0) padding-box, linear-gradient(#000 0 0) border-box; -webkit-mask-composite: xor;
@@ -1218,7 +1226,10 @@
        build    +BUILD           the chart lands crisp on the exact value strings (story bars or
                                  the dense line with tip head and inline series names, s9.23b)
      Surface x builder are independent axes (s9.28): the page spec names the builder. */
-  const LP = { ROLL: 0.6, BLEED: 2.8, OUTLINE: 0.8, INK: 2.0, BUILD: 3.0, BLOBS: 6, KB_MAX: 0.03 };
+  /* E22 addendum 2: unravel -> half savor -> the field (SOAK: ink absorbed by the paper, or
+     SCRIBBLE: strokes accumulating with a nib - the operator's original idea; page.field picks)
+     -> outline drawn on the field's own edge -> ink writes -> the build. */
+  const LP = { ROLL: 0.7, SAVOR: 0.8, FIELD: 2.4, OUTLINE: 0.8, INK: 2.0, BUILD: 3.0, SEEPS: 9, STROKES: 14, KB_MAX: 0.03 };
   /* pure hash of (seed, index, salt) -> [0,1): the only source of jitter (handwriting-text rule 2) */
   const lpHash = (seed, i, salt) => {
     let h = (seed ^ Math.imul(i + 1, 0x9E3779B1) ^ Math.imul(salt + 1, 0x85EBCA77)) >>> 0;
@@ -1252,21 +1263,56 @@
     const grain = lpEl("svg", "lp-grain", page, { width: "100%", height: "100%" });
     grain.innerHTML = '<filter id="lpg' + seed + '"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="7" stitchTiles="stitch"/>'
       + '<feColorMatrix values="0 0 0 0 .15 0 0 0 0 .13 0 0 0 0 .10 0 0 0 .35 0"/></filter><rect width="100%" height="100%" filter="url(#lpg' + seed + ')"/>';
+    lpEl("div", "lp-fibre", page);
+    const stain = lpEl("svg", "lp-stain", page, { viewBox: "0 0 1920 1080", preserveAspectRatio: "none" });
+    stain.innerHTML = '<defs><filter id="lpst' + seed + '" x="-30%" y="-30%" width="160%" height="160%">'
+      + '<feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="3" seed="11" result="n"/>'
+      + '<feDisplacementMap in="SourceGraphic" in2="n" scale="46" xChannelSelector="R" yChannelSelector="G"/></filter>'
+      + '<radialGradient id="lpsg' + seed + '"><stop offset="0" stop-color="#b48a52" stop-opacity=".10"/>'
+      + '<stop offset=".72" stop-color="#a97c46" stop-opacity=".16"/><stop offset=".90" stop-color="#7d5626" stop-opacity=".55"/>'
+      + '<stop offset="1" stop-color="#7d5626" stop-opacity="0"/></radialGradient></defs>';
+    const sg = lpEl("g", "", stain, { filter: "url(#lpst" + seed + ")" });
+    /* blotches live on the margin and under the field's edge: corners and the four bands */
+    const spots = [[70, 60], [1850, 90], [90, 1020], [1830, 1000], [960, 40], [40, 540], [1880, 560], [980, 1050], [520, 30], [1400, 1055], [30, 300], [1890, 800]];
+    spots.forEach(([x, y], i) => {
+      const big = lpHash(seed, i, 13) > 0.6;   /* a few rings, mostly specks: aged, not polka-dotted */
+      const rx = (big ? 90 : 26) + lpHash(seed, i, 8) * (big ? 120 : 40), ry = (big ? 60 : 18) + lpHash(seed, i, 9) * (big ? 90 : 30);
+      lpEl("ellipse", "", sg, { cx: (x + (lpHash(seed, i, 10) - 0.5) * 120).toFixed(1), cy: (y + (lpHash(seed, i, 11) - 0.5) * 80).toFixed(1),
+        rx: rx.toFixed(1), ry: ry.toFixed(1), fill: "url(#lpsg" + seed + ")", transform: "rotate(" + ((lpHash(seed, i, 12) - 0.5) * 40).toFixed(1) + " " + x + " " + y + ")" });
+    });
     const edge = lpEl("div", "lp-edge", page);
-    /* the field: goo layer (blur + alpha threshold) over the crisp charcoal rect */
+    /* the field: SOAK (feathered seeps spreading and saturating, never contracting) or
+       SCRIBBLE (seeded strokes drawn one at a time, nib at the front); the crisp rect
+       resolves under either so the ink ends at a definite edge. Clipped by .lp-field. */
     const field = lpEl("div", "lp-field", page);
     const fsvg = lpEl("svg", "", field, { viewBox: "0 0 1690 907", preserveAspectRatio: "none" });
-    fsvg.innerHTML = '<defs><filter id="lpgoo' + seed + '"><feGaussianBlur stdDeviation="18"/>'
-      + '<feColorMatrix values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 26 -10"/></filter></defs>';
-    const rect = lpEl("rect", "", fsvg, { x: 0, y: 0, width: 1690, height: 907, rx: 46, fill: "#25313C", opacity: 0 });
-    const goo = lpEl("g", "", fsvg, { filter: "url(#lpgoo" + seed + ")" });
-    const blobs = [];
-    for (let i = 0; i < LP.BLOBS; i++) {
-      const a = lpHash(seed, i, 1) * Math.PI * 2, d = 120 + lpHash(seed, i, 2) * 420;
-      const cx = 845 + Math.cos(a) * d * 1.6, cy = 453 + Math.sin(a) * d * 0.7;
-      const c = lpEl("circle", "", goo, { cx: cx.toFixed(1), cy: cy.toFixed(1), r: 0, fill: "#25313C" });
-      blobs.push({ c, R: 260 + lpHash(seed, i, 4) * 300, lag: i * 0.06 });
+    fsvg.innerHTML = '<defs><filter id="lpsoak' + seed + '" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="26"/></filter></defs>';
+    const mode = pg.field === "scribble" ? "scribble" : "soak";
+    const goo = lpEl("g", "", fsvg, mode === "soak" ? { filter: "url(#lpsoak" + seed + ")" } : {});
+    const blobs = [], strokes = [];
+    if (mode === "soak") {
+      for (let i = 0; i < LP.SEEPS; i++) {
+        const col = i % 3, row = Math.floor(i / 3);
+        const cx = 282 + col * 563 + (lpHash(seed, i, 1) - 0.5) * 300, cy = 150 + row * 303 + (lpHash(seed, i, 2) - 0.5) * 160;
+        const c = lpEl("circle", "", goo, { cx: cx.toFixed(1), cy: cy.toFixed(1), r: 0, fill: "#25313C" });
+        blobs.push({ c, R: 520 + lpHash(seed, i, 4) * 380, lag: lpHash(seed, i, 5) * 0.35 });
+      }
+    } else {
+      for (let r = 0; r < LP.STROKES; r++) {
+        const y = 40 + (827) * r / (LP.STROKES - 1), pts = [];
+        for (let k = 0; k < 9; k++) {
+          const u = k / 8, x = 60 + 1570 * (r % 2 ? 1 - u : u) + (lpHash(seed, r * 9 + k, 6) - 0.5) * 40;
+          pts.push([x, y + (lpHash(seed, r * 9 + k, 7) - 0.5) * 44]);
+        }
+        const d = pts.map(([x, yy], k) => (k ? "L" : "M") + x.toFixed(1) + " " + yy.toFixed(1)).join(" ");
+        const p = lpEl("path", "", goo, { d, stroke: "#25313C", "stroke-width": 76, "stroke-linecap": "round", "stroke-linejoin": "round", fill: "none" });
+        const len = p.getTotalLength ? p.getTotalLength() : 1700;
+        p.setAttribute("stroke-dasharray", len); p.setAttribute("stroke-dashoffset", len);
+        strokes.push({ p, len });
+      }
     }
+    const nib = lpEl("circle", "", fsvg, { r: 9, fill: "#25313C", opacity: 0 });
+    const rect = lpEl("rect", "", fsvg, { x: 0, y: 0, width: 1690, height: 907, fill: "#25313C", opacity: 0 });
     const outline = lpEl("div", "lp-outline", page);
     const title = lpEl("div", "lp-ink lp-title", page);
     const src = lpEl("div", "lp-ink lp-src", page);
@@ -1276,7 +1322,7 @@
     const chart = lpEl("svg", "lp-chart", page, { viewBox: "0 0 1000 560" });
     chart.style.width = (qz ? 50 : 76) + "%"; chart.style.height = "66%";
     chart.style.left = (qz === "left" ? 44 : 10) + "%"; chart.style.top = "20%";
-    const st = { root, page, edge, blobs, rect, goo, outline, glyphs, chart, kind: pg.builder || "story",
+    const st = { root, page, edge, blobs, strokes, nib, rect, goo, outline, glyphs, chart, kind: pg.builder || "story",
                  bars: [], paths: [], labels: [], callout: null, cval: null, vals: pg.values || [],
                  vstr: pg.value_strings || [], emph: pg.emphasize | 0 };
     if (st.kind === "dense-line") buildLedgerLine(st, pg); else buildLedgerBars(st, pg);
@@ -1293,7 +1339,7 @@
     st.vals.forEach((v, i) => {
       const x = x0 + (x1 - x0) / n * (i + gap / 2), h = Math.max(3, (Math.abs(v) / maxV) * (base - top));
       const bar = lpEl("rect", "bar" + (i === st.emph ? " emph" : ""), st.chart,
-        { x: x.toFixed(1), y: base, width: bw.toFixed(1), height: h.toFixed(1), rx: 6 });
+        { x: x.toFixed(1), y: (base - h).toFixed(1), width: bw.toFixed(1), height: h.toFixed(1), rx: 6 });   /* sits on the baseline, grows upward */
       bar.style.transformOrigin = "0 " + base + "px"; bar.style.transform = "scaleY(0)";
       const lab = lpEl("text", "lab", st.chart, { x: (x + bw / 2).toFixed(1), y: base + 34, "text-anchor": "middle", opacity: 0 });
       lab.textContent = (pg.labels || [])[i] || "";
@@ -1348,18 +1394,31 @@
     const rk = expoOut(clamp01(tr / LP.ROLL));
     st.page.style.transform = "translateX(" + ((rk - 1) * 100).toFixed(2) + "%)";
     st.edge.style.opacity = (1 - clamp01((tr - LP.ROLL) / 0.25)).toFixed(2);
-    /* beat 2: bleed - blobs bloom over the first 55%, contract to zero by the end;
-       the crisp field resolves beneath as the goo dies (ink-bleed-reveal law) */
-    const b = clamp01((tr - LP.ROLL) / LP.BLEED);
+    /* beat 2: the half savor - the textured page holds, empty (E22 addendum 2) */
+    /* beat 3: the field. SOAK: seeps spread and saturate, never contract - paper taking ink;
+       SCRIBBLE: strokes accumulate one at a time with the nib at the front. Either ends on the
+       crisp rect so the ink meets the clipped edge the outline will trace. */
+    const b = clamp01((tr - LP.ROLL - LP.SAVOR) / LP.FIELD);
     for (const bl of st.blobs) {
       const u = clamp01((b - bl.lag) / (1 - bl.lag));
-      const r = u < 0.55 ? bl.R * expoOut(u / 0.55) : bl.R * (1 - Math.pow((u - 0.55) / 0.45, 1.6));
-      bl.c.setAttribute("r", Math.max(0, r).toFixed(1));
+      bl.c.setAttribute("r", (bl.R * Math.pow(u, 1.5)).toFixed(1));   /* seeps creep, then flood */
+      bl.c.setAttribute("opacity", (0.55 + 0.45 * u).toFixed(2));
     }
-    st.goo.setAttribute("opacity", b < 0.55 ? 1 : (1 - clamp01((b - 0.55) / 0.45)).toFixed(2));
-    st.rect.setAttribute("opacity", clamp01((b - 0.45) / 0.4).toFixed(2));
-    /* beat 3: outline + ink writes, in parallel, once the field has settled */
-    const t3 = tr - LP.ROLL - LP.BLEED;
+    if (st.strokes.length) {
+      const n = st.strokes.length, per = 1 / n;
+      let nibAt = null;
+      st.strokes.forEach((sk, i) => {
+        const f = clamp01((b - i * per) / (per * 1.15));
+        sk.p.setAttribute("stroke-dashoffset", (sk.len * (1 - f)).toFixed(1));
+        sk.p.setAttribute("opacity", f > 0 ? 1 : 0);   /* a round cap shows even at full offset */
+        if (f > 0 && f < 1 && sk.p.getPointAtLength) nibAt = sk.p.getPointAtLength(sk.len * f);
+      });
+      st.nib.setAttribute("opacity", nibAt ? 1 : 0);
+      if (nibAt) { st.nib.setAttribute("cx", nibAt.x.toFixed(1)); st.nib.setAttribute("cy", nibAt.y.toFixed(1)); }
+    }
+    st.rect.setAttribute("opacity", clamp01((b - 0.78) / 0.22).toFixed(2));
+    /* beat 4: outline on the field's own edge + ink writes, in parallel, once the field has soaked */
+    const t3 = tr - LP.ROLL - LP.SAVOR - LP.FIELD;
     st.outline.style.setProperty("--lp-prog", (100 * expoOut(clamp01(t3 / LP.OUTLINE))).toFixed(1));
     const n = Math.max(1, st.glyphs.length), per = LP.INK / n;
     st.glyphs.forEach((g, j) => g.style.setProperty("--w", clamp01((t3 - j * per) / (per * 1.6)).toFixed(3)));
