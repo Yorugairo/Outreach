@@ -14,9 +14,12 @@ minute of the video.
 What counts as a VISUAL EVENT (doc 29 s9.25): a scene boundary, a dock
 entering or leaving, a badge/pill reveal, captions in STAGE mode, or a
 LEDGER PAGE building (s9.28 C5 / D1: roll-out, field, outline, build start,
-build complete - the hold after that is still). A page START is an
-EVIDENCE ENTRY (D2). Ken Burns and lower-third (anchor-mode) captions do
-NOT count - they are what a viewer reads as stillness.
+build complete - the hold after that is still), or a TARGETED SPECIES
+firing on a scene (s9.27 MOTION MENU "Gate treatment" column: a punch at
+its punch, a focus zoom at departure and arrival, plate life stepping at
+10 fps, ...). A page START is an EVIDENCE ENTRY (D2). Ken Burns and
+lower-third (anchor-mode) captions do NOT count - they are what a viewer
+reads as stillness.
 
   M01  no stretch > 12s without a visual event            FAIL   (s8.19 / s9.25)
   M02  stretches > 8s (working target)                    WARN
@@ -27,6 +30,8 @@ NOT count - they are what a viewer reads as stillness.
   M07  the opening minute is not the thinnest minute      FAIL   (E21: P1 densest, never thinnest)
   M08  stage-mode captions declared on every still stretch FAIL once the timeline carries cap_mode;
        until then INFO listing where stage captions are REQUIRED + a JUDGE row
+  M09  one camera move per window: no scene stacks two of   FAIL   (s9.27 precedence / s9.28 C3)
+       punch | focus_zoom | pull_back, or one over Ken Burns
   J01  savor beats keep their picture (card up, badge lit) JUDGE
 
     python gate_motion_density.py <build-dir> [--timeline NAME.timeline.json]
@@ -62,6 +67,29 @@ PAGE_BEAT_OFFSETS = (0.0, LP_ROLL_S, LP_ROLL_S + LP_BLEED_S,
                      LP_ROLL_S + LP_BLEED_S + LP_OUTLINE_S + LP_BUILD_S)   # 0, 0.6, 3.4, 4.2, 7.2
 DOCK_SOURCE_TIMELINE = "timeline"            # scenes[].docks enter/exit/badge_at - the player's own clock
 DOCK_SOURCE_FILE = "evidence-dock.json"      # fallback only: a timeline that carries no docks at all
+
+# TARGETED SPECIES events (doc 29 s9.27 MOTION MENU, "Gate treatment" column;
+# P35 T7). A scene's `species` rows are {"kind", "at", "dur", "target"}; the
+# table says which edges of each are visual events: "at" = one event at the
+# firing, "end" = one at at+dur. Camera punch: "one event at the punch". Scribble
+# callout: "event at draw". Focus zoom: "event at departure and arrival".
+# Feathered spotlight: "events per glide" (each glide is a row). Pull-back
+# reveal: "events across the pull" (departure and arrival). Beat-freeze exit:
+# "events at hit and cut". Radial reveal: "scene event". Push hand-off: "event".
+# "stepping" = plate life, "events while stepping": the stop-motion cadence is
+# quantized to 10 fps, so one event every 1/10 s across its duration - plate
+# life fills a bare plate. Squiggle marks "count as a caption event in stage
+# mode only": the stage page under them already counts (M08), so they add no
+# event of their own for now.
+SPECIES_EVENTS = {"punch": ("at",), "callout": ("at",), "focus_zoom": ("at", "end"),
+                  "spotlight": ("at", "end"), "squiggle": (), "pull_back": ("at", "end"),
+                  "plate_life": "stepping", "beat_freeze": ("at", "end"),
+                  "radial": ("at",), "push": ("at",)}
+PLATE_LIFE_STEP_S = 0.1    # s9.27 plate life: quantize t to 10 fps; each step is an event
+# s9.27 precedence / s9.28 C3: punch, focus zoom, pull-back and Ken Burns are
+# mutually exclusive per window. M09 mirrors the builder's validate_species so a
+# hand-edited timeline is caught too.
+CAMERA_MOVES = ("punch", "focus_zoom", "pull_back")
 
 
 @dataclass(frozen=True)
@@ -118,13 +146,47 @@ def _page_events(scenes: list[dict]) -> tuple[list[float], list[float]]:
     return beats, starts
 
 
-def _collect_events(tl: dict, mp: dict, spans: list, badges: list, page_beats: list, stage_rows: list) -> set[float]:
+def _species_events(scenes: list[dict]) -> list[float]:
+    """Visual events contributed by targeted species rows, per SPECIES_EVENTS (s9.27)."""
+    out: list[float] = []
+    for s in scenes:
+        for sp in s.get("species", []):
+            edges = SPECIES_EVENTS.get(sp.get("kind"), ())
+            at, dur = float(sp.get("at", 0.0)), float(sp.get("dur", 0.0))
+            if edges == "stepping":
+                steps = int(round(dur / PLATE_LIFE_STEP_S))
+                out += [round(at + k * PLATE_LIFE_STEP_S, 2) for k in range(steps + 1)]
+                continue
+            if "at" in edges:
+                out.append(round(at, 2))
+            if "end" in edges:
+                out.append(round(at + dur, 2))
+    return out
+
+
+def _camera_clashes(scenes: list[dict]) -> list[tuple[str, str]]:
+    """(scene_id, why) for every scene that stacks two camera moves, or one over
+    a Ken Burns drift (scale > 0) - s9.27 precedence / s9.28 C3."""
+    out = []
+    for s in scenes:
+        moves = [sp.get("kind") for sp in s.get("species", []) if sp.get("kind") in CAMERA_MOVES]
+        scale = float(s.get("world", {}).get("ken_burns", {}).get("scale", 0) or 0)
+        sid = s.get("scene_id", "?")
+        if len(moves) > 1:
+            out.append((sid, " + ".join(moves)))
+        elif moves and scale > 0:
+            out.append((sid, f"{moves[0]} over Ken Burns scale {scale:g}"))
+    return out
+
+
+def _collect_events(tl: dict, mp: dict, spans: list, badges: list, page_beats: list, stage_rows: list,
+                    species_events: list = ()) -> set[float]:
     events: set[float] = set()
     for s in tl.get("scenes", []):
         events.add(float(s["span"][0])); events.add(float(s["span"][1]))
     for a, z in spans:
         events.add(a); events.add(z)
-    events.update(badges); events.update(page_beats)
+    events.update(badges); events.update(page_beats); events.update(species_events)
     for c in mp.get("cues", []):
         if c.get("kind") != "plate":
             events.add(float(c["in"])); events.add(float(c.get("out", c["in"])))
@@ -157,7 +219,8 @@ def analyse(tl: dict, docks: list[dict], mp: dict) -> dict:
     # a stage page is a visual event at its start (s9.25 #1: "captions in stage mode")
     stage_rows = [r for r in tl_rows if isinstance(r, dict) and r.get("cap_mode") == "stage"]
     stage_rows += [{"t": pg["s"]} for pg in pages if isinstance(pg, dict) and pg.get("cap_mode") == "stage"]
-    events = _collect_events(tl, mp, spans, badges, page_beats, stage_rows)
+    # P35 T7: targeted species fire as tabled in SPECIES_EVENTS (s9.27 gate column)
+    events = _collect_events(tl, mp, spans, badges, page_beats, stage_rows, _species_events(scenes))
     ev = sorted(t for t in events if 0.0 <= t <= runtime)
     if not ev or ev[0] > 0:
         ev.insert(0, 0.0)
@@ -181,6 +244,7 @@ def analyse(tl: dict, docks: list[dict], mp: dict) -> dict:
     return {"runtime": runtime, "events": ev, "still": still, "ev_gaps": ev_gaps, "plates": plate_ids,
             "over_hold": over_hold, "wc": wc, "pages": pages, "dens": _per_minute(runtime, ev, entries),
             "spans": spans, "dock_source": dock_source, "n_pages": len(page_starts),
+            "camera_clashes": _camera_clashes(scenes),
             "has_cap_mode": bool(stage_rows) or any(isinstance(r, dict) and "cap_mode" in r for r in tl_rows)
                             or any(isinstance(pg, dict) and "cap_mode" in pg for pg in pages)}
 
@@ -239,8 +303,20 @@ def run(tl: dict, docks: list[dict], mp: dict) -> tuple[list[Gate], dict]:
             + ", ".join(f"{mm(a)}+{d:.0f}s" for a, d in sorted(req)[:12]) + (" ..." if len(req) > 12 else ""),
             "doc 29 s9.25 caption STAGE mode (player template pending)")
         add("J02", "JUDGE", "captions on the still stretches above are centred, large, per-word explosive - not the lower-third anchor", "doc 29 s9.25 #2")
+    g.append(_camera_gate(A["camera_clashes"]))
     add("J01", "JUDGE", "every savor beat holds its picture (card up, badge lit), never a bare plate with a drift", "doc 29 s9.25 #3")
     return g, _stats(A, tot)
+
+
+def _camera_gate(clashes: list[tuple[str, str]]) -> Gate:
+    """M09 (P35 T7): one camera move per window - mirrors build_scene_timeline_f.validate_species
+    so a hand-edited timeline (two moves on a scene, or a move over Ken Burns) is caught too."""
+    if clashes:
+        msg = (f"{len(clashes)} scenes stack camera moves: " + ", ".join(f"{sid} ({why})" for sid, why in clashes[:12])
+               + (" ..." if len(clashes) > 12 else ""))
+    else:
+        msg = "no scene stacks two camera moves (punch | focus_zoom | pull_back) or a camera move over Ken Burns"
+    return Gate("M09", "FAIL" if clashes else "PASS", msg, "doc 29 s9.27 precedence / s9.28 C3: one camera move per window")
 
 
 def _stats(A: dict, still_total: float) -> dict:

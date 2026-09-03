@@ -32,8 +32,9 @@ def test_ep1_report_is_the_four_fail_baseline():
     assert text.splitlines()[0] == "# MOTION GATE — build-f"
     assert "[FAIL ] M01" in text and "> 12s" in text
     # 4 FAIL before caption modes were declared; 5 once the rebuilt ep1 declares them and M08 enforces
-    assert ("RESULT: 4 FAIL / 1 WARN / 2 PASS / 2 JUDGE / 1 INFO" in text
-            or "RESULT: 5 FAIL / 1 WARN / 2 PASS / 1 JUDGE / 0 INFO" in text), text[-400:]
+    # P35 T7 adds M09 (one camera move per window): a PASS on ep1, which carries no species rows
+    assert ("RESULT: 4 FAIL / 1 WARN / 3 PASS / 2 JUDGE / 1 INFO" in text
+            or "RESULT: 5 FAIL / 1 WARN / 3 PASS / 1 JUDGE / 0 INFO" in text), text[-400:]
     assert text.rstrip().splitlines()[-1] in ("VERDICT: FAIL (4 FAIL)", "VERDICT: FAIL (5 FAIL)")
 
 

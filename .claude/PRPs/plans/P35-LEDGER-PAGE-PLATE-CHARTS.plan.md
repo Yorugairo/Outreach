@@ -372,7 +372,7 @@ proof earns the page.
 - Evidence: pending
 
 ### T7: Targeted species - punch, scribble callout, focus zoom, feathered spotlight, squiggle marks, pull-back
-- Status: pending
+- Status: running (data half done: build + gate; player species blocks + resolveTarget() are the parent's next)
 - Owner: parent (template + targeting resolver), implementation_luna (→ `general-purpose`) for the shot-table row forms and tests
 - Depends on: T4
 - Write set: `docs/content-video-engine/samples/scene-evidence-player.template.html` (species blocks + one `resolveTarget()`),
@@ -393,7 +393,7 @@ proof earns the page.
   reveals the page around it. Each species: one range render for the
   operator.
 - Validate: `python -m pytest content/video_engine/tests/test_targeted_species.py content/video_engine/tests/test_gate_motion_density.py -q`; range renders
-- Evidence: pending
+- Evidence (data half): `validate_species` in build_scene_timeline_f.py (target kinds datum|point|region|span; pointing species without a target FAIL the build naming the row; punch|focus_zoom|pull_back mutually exclusive and never over Ken Burns > 0; optional pivot span); scenes carry `species` verbatim, timeline `species` lists kinds; gate SPECIES_EVENTS table (plate life steps at 10 fps), M09 camera-move clash gate; `pytest test_targeted_species.py test_gate_motion_density.py test_motion_gate_wiring.py -q` 42 passed; ep1 RESULT 5 FAIL / 1 WARN / 3 PASS
 
 ### T8: Focus rack vs the current evidence lighting - side by side (proposal)
 - Status: review (the operator picks; the current mechanism stays)

@@ -17,6 +17,15 @@ world is DRAWN by the player from ``world.page`` (the ``ledger_page.v1`` spec
 built from ``evidence/objects/<series-id>.series.json``), so the scene carries
 no ``asset_id`` / ``sha256`` and embeds no plate PNG. The compiled timeline
 lists every species present in ``species`` (``["ledger"]`` or ``[]``).
+
+A shot-table row may carry an optional 7th element: a ``species`` list of
+TARGETED SPECIES (doc 29 s9.27 MOTION MENU, P35 T7). The targeting law is
+code here: every pointing species carries a DECLARED target (datum, point,
+region or word span) or the build fails naming the row and the kind - a
+species with no declared target does not fire, and we fail rather than drop
+it silently. ``validate_species`` is the pure rule; the list is emitted
+verbatim onto the compiled scene as ``scene["species"]`` and the kinds
+present extend the timeline's top-level ``species`` list.
 """
 from __future__ import annotations
 
@@ -47,6 +56,113 @@ TIMELINE_NAME = "steel-and-paper.timeline.json"  # the compiled scene_evidence_t
 # Ken Burns: doc 29 §1.4 — the world plate drifts while evidence holds locked,
 # so the eye separates narrative world from evidence data with no labelling.
 KEN = {"scale": 0.04, "x": 14, "y": -10}
+
+# TARGETED SPECIES (doc 29 s9.27 MOTION MENU, P35 T7). A shot-table row's
+# optional 7th element is a list of {"kind", "at", "dur", "target"} dicts;
+# `at` and `dur` are episode seconds on the same clock as dock enter/exit.
+SPECIES_KINDS = ("punch", "callout", "focus_zoom", "spotlight", "squiggle",
+                 "pull_back", "plate_life", "beat_freeze", "radial", "push")
+# s9.27 precedence / s9.28 C3: punch, focus zoom, pull-back and Ken Burns are
+# mutually exclusive per window - one camera move, never over a Ken Burns drift.
+CAMERA_MOVES = ("punch", "focus_zoom", "pull_back")
+TARGET_KINDS = ("datum", "point", "region", "span")
+# s9.27 targeting law: the target kinds each species may take. () = the species
+# needs no target (plate life's target is the plate itself); everything else
+# fires only on a declared coordinate - datum index / series point on a page or
+# dock, a plate point or region the author names, a caption word span.
+SPECIES_TARGETS = {
+    "punch": TARGET_KINDS, "callout": TARGET_KINDS, "focus_zoom": TARGET_KINDS,
+    "spotlight": TARGET_KINDS, "squiggle": TARGET_KINDS, "pull_back": TARGET_KINDS,
+    "plate_life": (),
+    "beat_freeze": ("point", "region"), "radial": ("point", "region"), "push": ("point", "region"),
+}
+TARGET_FIELDS = {"datum": ("index",), "point": ("x", "y"),
+                 "region": ("x0", "y0", "x1", "y1"), "span": ("from_word", "to_word")}
+FRACTION_FIELDS = ("x", "y", "x0", "y0", "x1", "y1")   # plate coordinates as fractions of the frame, 0..1
+
+
+def _validate_target(kind: str, target, allowed: tuple) -> list[str]:
+    """Errors for one species' target against the kinds it may take (s9.27 targeting law)."""
+    if not isinstance(target, dict) or target.get("kind") not in TARGET_KINDS:
+        return [f"{kind}: target must be a dict of kind {'|'.join(TARGET_KINDS)}"]
+    tk = target["kind"]
+    if tk not in allowed:
+        return [f"{kind}: target kind {tk!r} not allowed (takes {'|'.join(allowed)})"]
+    errs = []
+    for f in TARGET_FIELDS[tk]:
+        v = target.get(f)
+        if isinstance(v, bool) or not isinstance(v, (int, float)):
+            errs.append(f"{kind}: target {tk} needs numeric {f!r}")
+        elif f in FRACTION_FIELDS and not 0.0 <= v <= 1.0:
+            errs.append(f"{kind}: target {tk} {f}={v} is not a 0..1 fraction of the frame")
+        elif f not in FRACTION_FIELDS and (not isinstance(v, int) or v < 0):
+            errs.append(f"{kind}: target {tk} {f}={v!r} is not a non-negative integer index")
+    if tk == "datum" and "series" in target and not isinstance(target["series"], int):
+        errs.append(f"{kind}: target datum 'series' must be an integer series index")
+    if tk == "span" and not errs and target["from_word"] > target["to_word"]:
+        errs.append(f"{kind}: target span from_word > to_word")
+    return errs
+
+
+def _validate_entry(entry) -> list[str]:
+    """Errors for one species entry: known kind, numeric at/dur, a target where the law requires one."""
+    if not isinstance(entry, dict) or entry.get("kind") not in SPECIES_KINDS:
+        return [f"species entry {entry!r}: kind must be one of {'|'.join(SPECIES_KINDS)}"]
+    kind = entry["kind"]
+    errs = [f"{kind}: {f!r} must be a number (episode seconds)" for f in ("at", "dur")
+            if isinstance(entry.get(f), bool) or not isinstance(entry.get(f), (int, float))]
+    if not errs and entry["dur"] <= 0:
+        errs.append(f"{kind}: dur must be > 0 (a species that lasts 0s does not fire)")
+    allowed = SPECIES_TARGETS[kind]
+    if not allowed:
+        return errs
+    if "target" not in entry:
+        errs.append(f"{kind}: no declared target - a species with no declared target does not fire (s9.27)")
+    else:
+        errs += _validate_target(kind, entry["target"], allowed)
+    return errs
+
+
+def validate_species(row_species, ken, plate_id: str, pivot_span: tuple | None = None) -> list[str]:
+    """The targeting law as a pure check on one shot-table row's species list
+    (doc 29 s9.27, s9.28 C3/C4). Returns the errors; the caller names the row.
+
+    - every pointing species carries a declared target of an allowed kind;
+    - at most one camera move (punch | focus_zoom | pull_back) per row, and
+      none over an authored Ken Burns (``ken[0] > 0``) - one camera move per window;
+    - no species fires inside ``pivot_span`` (the pivot's reversal takes no
+      species; the parent wires the span from the ledger, the build passes None).
+    """
+    if row_species is None:
+        return []
+    if not isinstance(row_species, (list, tuple)):
+        return [f"{plate_id}: species must be a list of species dicts"]
+    errs = [e for entry in row_species for e in _validate_entry(entry)]
+    moves = [e["kind"] for e in row_species if isinstance(e, dict) and e.get("kind") in CAMERA_MOVES]
+    if len(moves) > 1:
+        errs.append(f"{plate_id}: {' + '.join(moves)} on one row - one camera move per window (s9.28 C3)")
+    elif moves and ken and ken[0] > 0:
+        errs.append(f"{plate_id}: {moves[0]} over Ken Burns scale {ken[0]} - a camera move and Ken Burns never share a window (s9.28 C3)")
+    if pivot_span:
+        p0, p1 = pivot_span
+        for e in row_species:
+            if not isinstance(e, dict) or not isinstance(e.get("at"), (int, float)):
+                continue
+            end = e["at"] + (e["dur"] if isinstance(e.get("dur"), (int, float)) else 0)
+            if e["at"] < p1 and end > p0:
+                errs.append(f"{plate_id}: {e['kind']} at {e['at']}s fires inside the pivot's reversal {p0}-{p1}s (s9.28 C4)")
+    return errs
+
+
+def timeline_species(scenes: list) -> list[str]:
+    """Every species present, for the timeline's top-level ``species``: ``ledger``
+    first when any page is drawn, then the targeted kinds in first-appearance order."""
+    out = [SPECIES_LEDGER] if any(s["world"].get("kind") == SPECIES_LEDGER for s in scenes) else []
+    for s in scenes:
+        for e in s.get("species", []):
+            if e["kind"] not in out:
+                out.append(e["kind"])
+    return out
 
 
 def _dock_live_at(scenes: list, t: float) -> bool:
@@ -197,6 +313,13 @@ def main() -> int:
         # cut = contrast/correction, wipe = process continuation.
         a, b, plate, ken, ds = row[:5]
         authored_exit = row[5] if len(row) > 5 else None
+        # TARGETED SPECIES (doc 29 s9.27, P35 T7): the optional 7th element.
+        # The targeting law is a hard build error naming the row; the pivot
+        # span is None until the parent wires it from the ledger (s9.28 C4).
+        row_species = list(row[6]) if len(row) > 6 and row[6] is not None else []
+        species_errors = validate_species(row_species, ken, plate, pivot_span=None)
+        if species_errors:
+            raise SystemExit(f"FAIL: shot row {i + 1} ({a}-{b}s): " + "; ".join(species_errors))
         # each window runs to the next so the world layer never drops out
         b = plan[i + 1][0] if i + 1 < len(plan) else tl["runtime_s"]
         # a ledger page is drawn, not embedded (doc 29 s9.26); a bad or
@@ -273,6 +396,10 @@ def main() -> int:
             "exit": authored_exit or ("wipe_right" if docks else "cut"),
             "span": [round(a, 2), round(b, 2)],
             "docks": docks,
+            # the row's targeted species, verbatim: the player resolves each
+            # declared target to pixels at render time (resolveTarget), the
+            # motion gate counts their events per the s9.27 gate column
+            "species": row_species,
         })
 
     # caption STAGE mode: stamp each page with the mode it takes at its first word (after the scenes exist)
@@ -324,8 +451,9 @@ def main() -> int:
         "sound": sound_cues,
         "evidence": evidence,
         "scenes": scenes,
-        # every world species present, so downstream (gate, render) can see it
-        "species": [SPECIES_LEDGER] if any(s["world"].get("kind") == SPECIES_LEDGER for s in scenes) else [],
+        # every species present (the ledger world + the targeted kinds), so
+        # downstream (gate, render) can see it
+        "species": timeline_species(scenes),
     }
     (BUILD / TIMELINE_NAME).write_text(
         json.dumps(timeline, indent=1), encoding="utf-8")

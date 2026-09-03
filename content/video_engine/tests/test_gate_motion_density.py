@@ -230,3 +230,60 @@ def test_declaring_build_with_anchor_pages_on_a_still_stretch_fails_m08():
     assert g["M08"].level == "FAIL" and "no stage-mode caption" in g["M08"].message, g["M08"]
     assert g["M01"].level == "FAIL"
 
+
+
+# ---- P35 T7: targeted species fire as events (s9.27 gate column); M09 one camera move per window -----
+
+def _bare_plate(runtime=30.0, species=None, ken_scale=0.0):
+    scene = {"scene_id": "s00", "world": {"asset_id": "world-bare", "ken_burns": {"scale": ken_scale, "x": 0, "y": 0}},
+             "span": [0.0, runtime], "docks": [], "species": species or []}
+    tl = {"runtime_s": runtime, "scenes": [scene], "caption_pages": _caption_pages(runtime), "rows": [],
+          "species": sorted({sp["kind"] for sp in (species or [])})}
+    return tl, [], {"cues": []}
+
+
+def test_plate_life_steps_fill_a_bare_plate_and_pass_m01():
+    tl, docks, mp = _bare_plate()
+    assert _by_id(G.run(tl, docks, mp)[0])["M01"].level == "FAIL"          # 30s with nothing moving
+    tl, docks, mp = _bare_plate(species=[{"kind": "plate_life", "at": 12.0, "dur": 18.0}])
+    g = _by_id(G.run(tl, docks, mp)[0])
+    assert g["M01"].level == "PASS", g["M01"]                               # stepping at 10 fps from 12s to 30s
+    ev = G.analyse(tl, docks, mp)["events"]
+    assert 12.0 in ev and 12.1 in ev and 29.9 in ev and 30.0 in ev
+    assert 11.9 not in ev                                                   # nothing before the species fires
+    assert g["M09"].level == "PASS"
+
+
+def test_species_edges_are_events_per_the_gate_column():
+    species = [{"kind": "punch", "at": 3.0, "dur": 0.8, "target": {"kind": "point", "x": 0.5, "y": 0.5}},
+               {"kind": "spotlight", "at": 10.0, "dur": 2.5, "target": {"kind": "region", "x0": 0, "y0": 0, "x1": 0.4, "y1": 0.4}},
+               {"kind": "squiggle", "at": 20.0, "dur": 1.0, "target": {"kind": "span", "from_word": 1, "to_word": 2}}]
+    tl, docks, mp = _bare_plate(species=species)
+    ev = G.analyse(tl, docks, mp)["events"]
+    assert 3.0 in ev and 3.8 not in ev                                      # punch: one event at the punch
+    assert 10.0 in ev and 12.5 in ev                                        # spotlight: departure and arrival of the glide
+    assert 20.0 not in ev and 21.0 not in ev                                # squiggle: a caption event in stage mode only - none of its own
+    assert G.SPECIES_EVENTS["focus_zoom"] == ("at", "end") and G.SPECIES_EVENTS["plate_life"] == "stepping"
+
+
+def test_two_camera_moves_on_one_scene_fail_m09():
+    species = [{"kind": "punch", "at": 3.0, "dur": 0.8, "target": {"kind": "point", "x": 0.5, "y": 0.5}},
+               {"kind": "pull_back", "at": 12.0, "dur": 2.0, "target": {"kind": "datum", "index": 4}}]
+    tl, docks, mp = _bare_plate(species=species)
+    g = _by_id(G.run(tl, docks, mp)[0])
+    assert g["M09"].level == "FAIL" and "s00 (punch + pull_back)" in g["M09"].message, g["M09"]
+
+
+def test_camera_move_over_ken_burns_fails_m09_on_a_hand_edited_timeline():
+    species = [{"kind": "focus_zoom", "at": 3.0, "dur": 2.0, "target": {"kind": "datum", "index": 4}}]
+    tl, docks, mp = _bare_plate(species=species, ken_scale=0.04)
+    g = _by_id(G.run(tl, docks, mp)[0])
+    assert g["M09"].level == "FAIL" and "s00 (focus_zoom over Ken Burns scale 0.04)" in g["M09"].message, g["M09"]
+    tl, docks, mp = _bare_plate(species=species, ken_scale=0.0)
+    assert _by_id(G.run(tl, docks, mp)[0])["M09"].level == "PASS"
+
+
+def test_m09_passes_on_a_build_without_species():
+    tl, docks, mp = _dense_build()
+    g = _by_id(G.run(tl, docks, mp)[0])
+    assert g["M09"].level == "PASS" and "no scene stacks two camera moves" in g["M09"].message

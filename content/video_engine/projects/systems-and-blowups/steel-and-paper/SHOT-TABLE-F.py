@@ -5,10 +5,39 @@ depicts the beat it sits under; each dock was chosen because that document
 proves the claim being spoken. The density rules are the CHECK on this
 table, never its source.
 
-    (start, end, plate_id, ken_burns(scale, x, y), [docks][, exit])
+    (start, end, plate_id, ken_burns(scale, x, y), [docks][, exit[, species]])
     dock = (evidence_id, slot, enter, exit)
     exit = optional authored 6th element ("cut" | "wipe_right"); the default
-           is mechanical - docks -> wipe, bare -> cut (doc 29 Part 6)
+           is mechanical - docks -> wipe, bare -> cut (doc 29 Part 6).
+           Write None here when a row carries species but no authored exit.
+    species = optional 7th element (doc 29 s9.27 MOTION MENU, P35 T7): a list of
+           {"kind": ..., "at": <s>, "dur": <s>, "target": {...}} dicts. at/dur are
+           episode seconds on the same clock as dock enter/exit. kind is one of
+           punch | callout | focus_zoom | spotlight | squiggle | pull_back |
+           plate_life | beat_freeze | radial | push. THE TARGETING LAW: a species
+           that points, circles, zooms, spotlights or underlines takes its target
+           as a DECLARED coordinate - nobody eyeballs a pixel; the player resolves
+           it at render time (resolveTarget). Target kinds:
+             {"kind":"datum","index":n[,"series":i]}  a ledger-page value or a chart
+                                                     dock series point (series i for dense)
+             {"kind":"point","x":0..1,"y":0..1[,"semantic":"..."]}  a plate coordinate
+                                                     as a fraction of the frame, for the
+                                                     semantic region the author names
+             {"kind":"region","x0":..,"y0":..,"x1":..,"y1":..}  fractions of the frame
+             {"kind":"span","from_word":n,"to_word":m}  caption word indices
+           plate_life needs no target (its target is the plate); beat_freeze,
+           radial, push take point | region; every other kind REQUIRES a target
+           and a row without one is a HARD BUILD ERROR naming the row and the
+           kind (s9.27: "a species with no declared target does not fire" - the
+           build fails rather than dropping it). Exclusivity (s9.28 C3): a row
+           carries at most ONE camera move (punch | focus_zoom | pull_back), and
+           never one over an authored Ken Burns (scale > 0) - build error naming
+           the row; the motion gate's M09 mirrors it on the compiled timeline.
+           The pivot's reversal takes no species (s9.28 C4): validate_species
+           checks a pivot_span, which the parent wires from the ledger later -
+           the build passes None for now. The list is emitted verbatim as
+           scene["species"]; the gate counts species events per the s9.27
+           "Gate treatment" column (plate life steps at 10 fps).
 
 A plate_id of the form "ledger:<series-id>:<variant>[:<emphasize>[:<quiet_zone>]]"
 places a LEDGER PAGE world instead of an image plate (doc 29 s9.26 / s9.28,

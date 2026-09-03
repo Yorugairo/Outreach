@@ -26,10 +26,12 @@
           doc 29 s9.13 plate density
   [PASS ] M06 464 caption pages = 35/min, 5.3 words/page
           s9.15 r7 / build_caption_pages 4-6 words
+  [PASS ] M09 no scene stacks two camera moves (punch | focus_zoom | pull_back) or a camera move over Ken Burns
+          doc 29 s9.27 precedence / s9.28 C3: one camera move per window
   [JUDGE] J01 every savor beat holds its picture (card up, badge lit), never a bare plate with a drift
           doc 29 s9.25 #3
 
-RESULT: 5 FAIL / 1 WARN / 2 PASS / 1 JUDGE / 0 INFO
+RESULT: 5 FAIL / 1 WARN / 3 PASS / 1 JUDGE / 0 INFO
 ```
 
 VERDICT: FAIL (5 FAIL)
