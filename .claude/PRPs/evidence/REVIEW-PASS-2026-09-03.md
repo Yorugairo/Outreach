@@ -12,7 +12,8 @@ the branch head) unless marked otherwise. Lead: **what to decide**, then
 | HG1 (P35) | **The field mechanism**: generated inked plate cross-fade (your two-plate idea) vs scribble vs soak | proof `http://localhost:8731/ledger-species-proof.html` (episode-player server) — scene 1 = soak, scene 2 = scribble; plates when the claim delivers | doc 29 §9.26 |
 | Plates | Approve `world-ledger-blank-page-v1` and `world-ledger-inked-board-v1` from the contact sheet | DELIVERED: `review/claims/steel-and-paper-ledger-page-v1/objects/*.png` (scan: 2 flagged, 0 failed); the two-plate path is live in scene 1 of the proof (filmstrip sent). Defect to rule on: the blank page has a white deckle rim (overscanned 1.05 for now; re-order full-bleed?) | claim approvals.json |
 | HG2 (P35) | **Handwriting font** for the ink writes (Inter until then; no generic cursive) | doc 41 §8 | brand sheet type table |
-| HG3 (P35) | **Race on a page** reads as a ledger, not a dashboard | `build-f/ledger-builders-proof.html` (when T5 lands) | doc 29 §9.26 |
+| HG3 (P35) | **Race on a page** reads as a ledger, not a dashboard | `http://localhost:8731/ledger-builders-proof.html` (race at t≈6–10s, decline ≈20–24s, combo ≈32–38s) | doc 29 §9.26 |
+| Species | Each targeted species on its range render: callout on the trim bar, spotlight glide, plate life + punch | `ledger-species-proof.html` seek 10.6 / 23.0 / 27.6 / 31.0; filmstrip sent | doc 29 §9.27 'Shipped' |
 | Focus rack | Rack vs the current wash/spot at the two-card boundary | `evidence/prototypes/focus-rack-vs-wash.html` (served on :8733 while the session lives; `?t=4.3` freezes) — the rack removes the scrim shape, not the card severing at the front | doc 29 §9.27 |
 
 ## 2. What to read (in this order)
@@ -46,7 +47,9 @@ the branch head) unless marked otherwise. Lead: **what to decide**, then
 - T9 three CC0 page cues at −14 LUFS (no CC0 ink sound under 4s exists — the bleed cue is a water drop; flag).
 - T8 focus rack vs wash/spot side-by-side (proposal; current stays).
 - T7 data half: species rows carry declared targets; pointing species without one fail the build; camera moves exclusive per window (build + gate M09).
-- In flight: T5 race/decline/combo builders; T7 player half (species blocks + `resolveTarget()`); T6 plate life in the player.
+- T5 race / decline / combo builders on the page, each from its own component (proof `build-f/ledger-builders-proof.html`); the memory-share race is SOURCES-TO-VERIFY and cannot render.
+- T6/T7 player half: plate life, camera punch / focus zoom / pull-back (one world transform), scribble callout, spotlight glide, squiggle; `resolveTarget()` from declared targets. Not built: beat-freeze exit, radial reveal, push hand-off, weight-shift captions.
+- Both PRPs are now `review`: every slice is built; what remains is your picks (section 1).
 - Reversed by you today: "no generated paper imagery" → the ground and the board are generated plates (claim open).
 
 ## 4. Known rough edges (not hidden)

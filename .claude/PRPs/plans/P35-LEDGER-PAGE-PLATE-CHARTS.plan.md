@@ -1,7 +1,7 @@
 ---
 id: P35-LEDGER-PAGE-PLATE-CHARTS
 title: The ledger page - plate charts that roll out, write in ink, and build; plus the motion menu
-status: running
+status: review
 operation: feature
 risk: standard
 owner: parent

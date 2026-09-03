@@ -1,7 +1,7 @@
 ---
 id: P34-GATE-IMPROVEMENTS
 title: Gate improvements - one runner, no silent skips, the motion gate wired into the build
-status: running
+status: review
 operation: feature
 risk: standard
 owner: parent
