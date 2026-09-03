@@ -1769,7 +1769,7 @@
      pose from the step (stop-motion law). Everything from t; jitter only via lpHash. */
   const SP = { PUNCH_IN: 0.42, PUNCH_OUT: 0.5, PUNCH_SCALE: 1.14, FOCUS_SCALE: 1.32, PULL_FROM: 1.9,
                CALLOUT_DRAW: 0.7, SQUIG_DRAW: 0.45, LIFE_FPS: 10, LIFE_LAND: 0.6, BOIL_PX: 1.2, BOIL_DEG: 0.7,
-               SPOT_DIM: 0.44 };   /* operator 2026-09-03: 0.55 read as the analyst's '80%' and was 'way too dark' - 64% of that */
+               SPOT_DIM: 0.49 };   /* operator 2026-09-03: 0.55 was 'way too dark', 0.44 too light - settled at 0.49 */
   const CAMERA = new Set(["punch", "focus_zoom", "pull_back"]);
   const spSvg = $("species"), plife = $("plife");
   const spEase = (k) => 1 - Math.pow(1 - clamp01(k), 3);
