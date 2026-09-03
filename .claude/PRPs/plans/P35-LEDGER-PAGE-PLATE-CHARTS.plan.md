@@ -291,7 +291,7 @@ proof earns the page.
 - Evidence: registry adds ink-bleed-reveal / outline-draw / chart-story / whiteboard-ink (pinned 0.7.101); `compositions/ledger-page-v1-{A,B,C}.html` + `ledger-page-v1.html` (=C) generated from one data set; three renders `renders/ledger-page-v1-{A,B,C}.mp4` (artifact validated, 7-13s each, untracked like the lane's other renders); filmstrips `evidence/prototypes/filmstrip-ledger-page-{A,B,C}.jpg` reviewed: roll-out, field, sunflower outline, bars landing on the exact values, source in the cream margin; determinism grep clean. Deviation: `hyperframes check` targets the project index.html only, so validation is the renders themselves. Doc 29 s9.26 carries the candidate note; the pick is the operator's
 
 ### T2: Page spec and validator
-- Status: pending
+- Status: done
 - Owner: junior_developer (→ `general-purpose`)
 - Depends on: none
 - Write set: `content/video_engine/scripts/ledger_page.py`,
@@ -302,7 +302,7 @@ proof earns the page.
   verbatim as strings so no re-rounding), and fails on a missing source
   line; tests cover each variant and the failure.
 - Validate: `python -m pytest content/video_engine/tests/test_ledger_page.py -q`
-- Evidence: pending
+- Evidence: `ledger_page.py` (299 lines; pick_builder / validate / build_spec pure; values verbatim via parse_float=str; race/decline/progress contracts in the docstring; checklist series rejected with 'keep it a dock'); `pytest test_ledger_page.py -q` 17 passed; trim-proof -> story bars 8 values, value_strings verbatim; divergence -> dense-line 4x235 pts with the axes block carried
 
 ### T3: The plate-chart species in the player
 - Status: pending
