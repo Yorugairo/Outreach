@@ -131,8 +131,6 @@ ComfyUI node inventory are in `CAPABILITIES.md` under "Generative video".
   must be up on `127.0.0.1:8188`.
 - **A sequential plate chain**, plate N seeding plate N+1 — `create_flow_batch({scenes,
   outputDir})` on the same server. Needs Chrome running with CDP on `9222`.
-- **Queue, preflight and bridge diagnostics** live on the separate `flow-queue` server
-  (`flow_enqueue_batch`, `flow_preflight_batch`, `flow_bridge_status`, ...).
 
 Any plate carrying a Graphic Silhouette actor needs SAM 2 + LaMa first, or the camera
 smears the actor's edge: SAM 2 cuts the subject to alpha, LaMa fills the ground behind
