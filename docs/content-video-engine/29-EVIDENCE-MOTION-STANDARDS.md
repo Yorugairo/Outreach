@@ -1436,7 +1436,14 @@ derived from t (scribble field = strokes accumulating with a nib at the
 front; outline = a conic-gradient border; writing = the per-glyph wipe).
 The plain cream page is a comparison candidate in the prototype, not a
 fallback; the cleanliness of a drawn hand is not a criterion, because no
-hand is drawn. It exists
+hand is drawn. Operator, closing the point: *"if there is no good hand,
+we just roll out the cream, bleed in the charcoal, use the outline
+component, then build the chart - it's literally just stitching the
+components together at that point."* That stitch (roll-out →
+ink-bleed-reveal → outline-draw → chart-story) is the reference build;
+the prototype is made in the hyperframes lane by mounting those
+components in sequence on one timeline, and the player species is a port
+of the picked stitch. It exists
 because every chart the channel has shipped is an evidence card, and the
 motion gate found the still stretches are exactly the windows with no
 card - a plate that builds is a plate that is never still.

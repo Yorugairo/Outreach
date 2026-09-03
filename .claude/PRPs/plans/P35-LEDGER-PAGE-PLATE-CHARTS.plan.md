@@ -159,30 +159,34 @@ Acceptance:
 
 ## Task Slices
 
-### T1: Prototype - two candidates from one series.json
+### T1: Prototype - the stitch, in the hyperframes lane
 - Status: pending
 - Owner: parent
 - Depends on: none
-- Write set: `content/video_engine/projects/systems-and-blowups/steel-and-paper/evidence/prototypes/ledger-page-motion.html`,
-  `.../prototypes/filmstrip-ledger-page.jpg`, `.../prototypes/ledger-*.png`
-- Acceptance: three candidates from the same series.json - A: plain
-  cream page (roll-out from the left with the rolled-edge light → ink
-  writes → graph builds); B: the CHALKBOARD (roll-out → a hand scribbles
-  the charcoal field as accumulating stroke paths with a nib at the front
-  → a clean outline draws clockwise around it and closes → chalk-light ink
-  writes axes/labels/title/source → graph builds); C: chalkboard with the
-  scribble replaced by an ink-bleed bloom that settles into the field
-  (the cheaper hand). Ink writes per glyph with nib and seeded tilt in
-  three candidate fonts; the divergence line builds with tip head and
-  deposited dots; callout rolls to the exact value; scrub bar; filmstrip
-  at 0.3s steps; no wall-clock or random calls; the operator's pick and
-  font choice recorded in doc 29 §9.26. B (the chalkboard) is the
-  intended default and is built from stroke reveals with no hand actor,
-  the way hw-callout-circle / whiteboard-ink / outline-draw do it; A and C
-  exist for comparison, not as fallbacks.
-- Validate: open via `preview_start` (static server on the prototypes
-  dir), screenshot at t = 0.3, 1.2, 2.4, 4.0 for both candidates; grep
-  the file for `Math.random|Date.now|performance.now` returns nothing
+- Write set: `content/video_engine/hyperframes/compositions/ledger-page-v1.html`,
+  `content/video_engine/hyperframes/compositions/components/{ink-bleed-reveal,outline-draw,chart-story,whiteboard-ink}.html` (registry adds, verbatim),
+  `content/video_engine/hyperframes/renders/ledger-page-v1*.mp4`,
+  `content/video_engine/projects/systems-and-blowups/steel-and-paper/evidence/prototypes/filmstrip-ledger-page.jpg`
+- Acceptance: operator's own definition - "roll out the cream, bleed in
+  the charcoal, use the outline component, then build the chart; it's
+  literally just stitching the components together." One composition
+  mounts, in sequence on one paused timeline: the page roll-out
+  (clip-path inset with the rolled-edge light, authored in the
+  composition), `ink-bleed-reveal` with the charcoal field as its mark
+  slot, `outline-draw` around the field, then `chart-story` (line
+  variant, divergence data and labels from `ev-divergence-v1.series.json`,
+  exact values, source line) with our six tokens mapped onto the
+  components' `--brand/--accent/--fg/--bg` variables. Sync points chain
+  (bleed settles → outline `draw-complete` → chart `callout-landed`).
+  Variant B swaps the bleed for `whiteboard-ink` strokes (the scribble
+  field) with its default sketch replaced by field strokes; variant A is
+  the plain page without the field, for comparison only. Rendered with
+  the pinned CLI (`npm run render`), filmstrip at 0.3s steps; `hyperframes
+  check` clean; no wall-clock or random calls (the components are
+  deterministic by contract). The operator's pick recorded in doc 29
+  §9.26.
+- Validate: `cd content/video_engine/hyperframes && npm run check && npm run render -- -c compositions/ledger-page-v1.html`;
+  filmstrip present; `grep -E "Math.random|Date.now|performance.now" compositions/ledger-page-v1.html` returns nothing
 - Evidence: pending
 
 ### T2: Page spec and validator
