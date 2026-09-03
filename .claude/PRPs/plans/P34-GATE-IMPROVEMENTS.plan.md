@@ -303,3 +303,14 @@ opening minute rank 5/14).
   `screen-never-still` and `claude-md-imports-agents-md` updated with the
   runner command; the Steel and Paper re-script work order cites both
   gate reports as its acceptance.
+
+## Post-plan additions (2026-09-03)
+
+Rulings E24/E25 (the operator's analytics read) shipped as gates after this
+plan closed its slices: G45 + J12 (the first sentence answers the thumbnail),
+G09 WARN past 0:45 (DECISION open vs the 0:60 window), M10 (no still over 6s in
+the first minute), M11 (the first chart 8-20s, spotlit, with a sound hit),
+M12 (the chart is the proof, not the homework: no hold across plates, 10s /
+6s ceilings). Commit eb52f86. Ep1 baselines: opening gate 28 FAIL, motion
+gate 8 FAIL.
+
