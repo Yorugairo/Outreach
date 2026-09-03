@@ -1,6 +1,6 @@
 # 41 — THE LEDGER PAGE SPECIES (component doc)
 
-Status: BUILT 2026-09-03 (P35 T0–T4, T9); picks open. Ruling E22 + addenda
+Status: BUILT 2026-09-03 (P35 T0–T9); the field and the plates are decided (the deckle); the font and the race read stay open. Ruling E22 + addenda
 (docs/portable/OPERATOR-RULINGS.md); doctrine doc 29 §9.26 (the page), §9.27
 (the motion menu), §9.28 (surface grammar). This page is the component
 contract an implementer or reviewer needs; the *why* lives in doc 29.
@@ -18,8 +18,8 @@ of every episode by default.
 |---|---|---|---|
 | 1 | Unravel | 0 – 0.7s | the plain cream page rolls out left→right (`translateX`, never clip-path), a curl-shadow band riding the front |
 | 2 | Half savor | 0.7 – 1.5s | the page holds, empty |
-| 3 | The field | 1.5 – 3.9s | **preferred:** the generated inked plate (`page.field_plate`) cross-fades over the cream page · **fallback:** `page.field = "scribble"` (seeded strokes drawn one at a time, nib at the front) or `"soak"` (feathered seeps that creep, flood and saturate). Either fills the BOARD (left 6% / top 8% / 88% × 84%, radius 46px) to a definite edge |
-| 4 | The line + ink | 3.9 – 4.7s (+ ink to 5.9s) | the outline draws clockwise EXACTLY on the board's box and radius (conic sector, hollow centre); title and source are written per glyph with a seeded ±1.6° tilt |
+| 3 | The field | 1.5 – 3.9s | **DECIDED (E22 addendum 4): the deckle is the feature.** The inked plate (`page.field_plate`, made procedurally from the blank page: charcoal fills the paper up to its deckle edge, 94% so a whisper of fibre survives) cross-fades over the plain page; the deckle edge appears only as the ink arrives. Fallbacks when no inked plate exists: `page.field = "scribble"` or `"soak"` filling the board box |
+| 4 | The line + ink | 3.9 – 4.7s (+ ink to 5.9s) | the line is drawn ALONG the deckle (`page.edge_path`, the paper's traced boundary, dash-offset clockwise); without an edge path it falls back to the conic border on the board box. Title and source are written per glyph with a seeded ±1.6° tilt |
 | 5 | The build | 4.7 – 7.7s | `story`: bars grow from the baseline in reading order, labels then values, the emphasized datum takes the accent pill whose number rolls and lands on the exact string · `dense-line`: dash-offset draw with a tip head, inline series names de-collided (§9.23b). Axes and grid appear only in this beat |
 
 Constants: `const LP = { ROLL: 0.7, SAVOR: 0.8, FIELD: 2.4, OUTLINE: 0.8, INK: 2.0, BUILD: 3.0 }` in the template. The gate reads the same offsets (`PAGE_BEAT_OFFSETS`).
@@ -47,7 +47,8 @@ Produced by `content/video_engine/scripts/ledger_page.py` from a
 | `field_plate` | asset id of the generated page with the board inked; cross-faded in beat 3 |
 | `field` | `scribble` / `soak` — the procedural fallback when no `field_plate` is approved |
 | `board` | `{x, y, w, h}` fractions of the frame — the inked plate's board, MEASURED (dark-pixel bbox) so the outline, the field and the chart share its exact box; default 0.06 / 0.08 / 0.88 / 0.84 |
-| `plate_zoom` | overscan for a page plate that carries a rim (the first blank page has a white deckle edge; 1.05 hides it until a full-bleed page is delivered) |
+| `edge_path` | the paper's deckle boundary as a normalized SVG path (traced from the blank plate's paper mask); the line is drawn along it |
+| `plate_zoom` | overscan for a page plate (not used for the deckle page: the white beyond the deckle is part of the look) |
 
 Validation: `python content/video_engine/scripts/ledger_page.py <series.json> --variant bars --emphasize 7 --quiet-zone right`
 refuses a missing source, unaligned labels, a race without periods, a
@@ -99,8 +100,7 @@ CC0, matched to the whoosh at −14 LUFS ±1 LU; `sound/SOURCES.md`.
 
 ## 8. Open picks (the operator's)
 
-1. **The field** — inked plate (two-plate build) vs scribble vs soak, from the
-   contact sheet and the proof.
+1. ~~The field~~ DECIDED: the two-plate build with the charcoal filled to the deckle.
 2. **The font** for the ink writes (Inter until picked; no generic cursive).
 3. **Race on a page** — confirm it reads as a ledger, not a dashboard.
 4. **The plates** — approve `world-ledger-blank-page-v1` / `-inked-board-v1`.
