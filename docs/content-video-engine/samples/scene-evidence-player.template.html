@@ -1,3 +1,4 @@
+<meta charset="utf-8"> <!-- served by python http.server with no charset header: without this, caption dashes and ledger ink glyphs decode as cp1252 -->
 <title id="doctitle">Episode</title>
 <style>
   :root {
@@ -26,6 +27,52 @@
   #stage { position: absolute; inset: 0; width: 1920px; height: 1080px; transform-origin: top left; overflow: hidden; }
 
   .world { position: absolute; inset: -5%; background-size: cover; background-position: center; will-change: transform, clip-path; }
+
+  /* LEDGER PAGE species (doc 29 s9.26, ruling E22; P35 T3). A world plate
+     that IS a chart: cream page rolls out, charcoal field bleeds in leaving a
+     cream-stained margin, a clean outline draws, ink writes the labels, the
+     graph builds crisp from the page spec (ledger_page.v1). Every beat is a
+     pure function of t (seek-safe, screenshot-render safe); the seeded blobs
+     come from lpHash, never Math.random. The .lp box is the 1920x1080 stage
+     mapped into the .world element (which overhangs 5% for Ken Burns). */
+  .world.ledger { background: #F4E6C7 !important; }
+  .lp { position: absolute; left: 4.545%; top: 4.545%; width: 90.91%; height: 90.91%; overflow: hidden;
+        --lp-cream: #F4E6C7; --lp-char: #25313C; --lp-chalk: #F2F2F2; --lp-acc: #F5B72E; --lp-pos: #178C83; --lp-neg: #ED6A4A; --lp-brand: #1769C2; }
+  .lp-page { position: absolute; inset: 0; background: var(--lp-cream); will-change: transform; overflow: hidden; }
+  .lp-grain { position: absolute; inset: 0; opacity: .16; mix-blend-mode: multiply; pointer-events: none; }
+  .lp-edge { position: absolute; top: 0; bottom: 0; right: -6px; width: 42px;
+             background: linear-gradient(90deg, rgba(37,49,60,0) 0%, rgba(37,49,60,.28) 35%, rgba(255,255,255,.55) 60%, rgba(37,49,60,.35) 100%); }
+  .lp-field { position: absolute; left: 6%; top: 8%; width: 88%; height: 84%; }
+  .lp-field svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+  /* the clean edge: a conic sector drawn clockwise, hollow centre (outline-draw mechanism) */
+  .lp-outline { position: absolute; left: 5.2%; top: 6.6%; width: 89.6%; height: 86.8%; --lp-prog: 0;
+                border: 5px solid transparent; border-radius: 30px; pointer-events: none;
+                background: conic-gradient(from -90deg, var(--lp-acc) 0deg calc(var(--lp-prog) * 3.6deg), transparent calc(var(--lp-prog) * 3.6deg + .5deg) 360deg);
+                background-clip: border-box; background-origin: border-box;
+                -webkit-mask: linear-gradient(#000 0 0) padding-box, linear-gradient(#000 0 0) border-box; -webkit-mask-composite: xor;
+                mask: linear-gradient(#000 0 0) padding-box, linear-gradient(#000 0 0) border-box; mask-composite: exclude; }
+  /* ink writes: per glyph, a left-to-right mask wipe with an ink-soft edge (~18% of the glyph),
+     a fixed seeded tilt per character so it reads as a hand and never wriggles after it is written.
+     Font: Inter until Human Gate 2 picks the handwriting face (no generic cursive - it resolves per machine). */
+  .lp-ink { position: absolute; font-family: Inter, Arial, sans-serif; white-space: nowrap; pointer-events: none; }
+  .lp-ink .g { display: inline-block; --w: 0; --tilt: 0deg;
+               -webkit-mask-image: linear-gradient(90deg, #000 calc(var(--w) * 118% - 18%), transparent calc(var(--w) * 118%));
+               mask-image: linear-gradient(90deg, #000 calc(var(--w) * 118% - 18%), transparent calc(var(--w) * 118%));
+               transform: rotate(var(--tilt)); }
+  .lp-title { left: 8.4%; top: 10.4%; font-size: 34px; font-weight: 700; color: var(--lp-chalk); letter-spacing: -.01em; }
+  .lp-src { left: 6%; bottom: 2.4%; font-size: 22px; font-weight: 500; color: var(--lp-char); }
+  .lp-chart { position: absolute; overflow: visible; }   /* inline series names may run past the plot (s9.23b) */
+  .lp-chart text { font-family: Inter, Arial, sans-serif; fill: var(--lp-chalk); }
+  .lp-chart .ax { stroke: #8a94a0; stroke-width: 2; }
+  .lp-chart .grid { stroke: rgba(242,242,242,.14); stroke-width: 1.5; }
+  .lp-chart .bar { fill: #9aa4ad; }
+  .lp-chart .bar.emph { fill: var(--lp-acc); }
+  .lp-chart .val { font-size: 26px; font-weight: 600; fill: #c9ced4; font-variant-numeric: tabular-nums; }
+  .lp-chart .lab { font-size: 24px; fill: #c9ced4; }
+  .lp-chart .callout { font-size: 30px; font-weight: 700; fill: var(--lp-char); font-variant-numeric: tabular-nums; }
+  .lp-chart .cpill { fill: var(--lp-acc); }
+  .lp-chart .ser { fill: none; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+  .lp-chart .sname { font-size: 24px; font-weight: 700; }
 
   /* Regional shading, not a global dim. The world half stays fully lit;
      darkening only begins around the midpoint and deepens toward whichever
@@ -1162,6 +1209,184 @@
     st.attr.classList.toggle("shown", t > r.end + 0.15);
     st.src.classList.toggle("shown", t > r.end + 0.45);
   };
+  /* ================= LEDGER PAGE species (doc 29 s9.26 / P35 T3) =================
+     Four beats, all from t (seconds since the scene opened):
+       roll-out 0..ROLL          the page unrolls left->right, rolled-edge light on the front
+       bleed    ROLL..+BLEED     seeded ink blobs bloom, merge (goo filter) and contract while the
+                                 crisp charcoal field resolves beneath - a stained page, cream margin
+       outline  +OUTLINE         the clean edge draws clockwise; ink writes title/source in parallel
+       build    +BUILD           the chart lands crisp on the exact value strings (story bars or
+                                 the dense line with tip head and inline series names, s9.23b)
+     Surface x builder are independent axes (s9.28): the page spec names the builder. */
+  const LP = { ROLL: 0.6, BLEED: 2.8, OUTLINE: 0.8, INK: 2.0, BUILD: 3.0, BLOBS: 6, KB_MAX: 0.03 };
+  /* pure hash of (seed, index, salt) -> [0,1): the only source of jitter (handwriting-text rule 2) */
+  const lpHash = (seed, i, salt) => {
+    let h = (seed ^ Math.imul(i + 1, 0x9E3779B1) ^ Math.imul(salt + 1, 0x85EBCA77)) >>> 0;
+    h = Math.imul(h ^ (h >>> 15), 0x2C1B3C6D); h = Math.imul(h ^ (h >>> 12), 0x297A2D39);
+    return ((h ^ (h >>> 15)) >>> 0) / 4294967296;
+  };
+  const ledgerState = new Map();
+  const NSV = "http://www.w3.org/2000/svg";
+  const lpEl = (tag, cls, parent, at) => {
+    const e = tag === "svg" || (parent && parent.namespaceURI === NSV && tag !== "div" && tag !== "span")
+      ? document.createElementNS(NSV, tag) : document.createElement(tag);
+    if (cls) e.setAttribute("class", cls);
+    for (const k in (at || {})) e.setAttribute(k, at[k]);
+    if (parent) parent.appendChild(e); return e;
+  };
+  const lpGlyphs = (parent, text, seed) => {
+    const out = [];
+    [...text].forEach((ch, i) => {
+      const g = lpEl("span", "g", parent); g.textContent = ch === " " ? " " : ch;   /* NBSP as an escape: an inline-block span with a plain space collapses to nothing */
+      g.style.setProperty("--tilt", ((lpHash(seed, i, 3) - 0.5) * 3.2).toFixed(2) + "deg");
+      out.push(g);
+    });
+    return out;
+  };
+  const lpFmt = (v) => Math.abs(v) >= 100 ? v.toFixed(0) : Math.abs(v) >= 10 ? v.toFixed(1) : v.toFixed(2);
+  const buildLedger = (el, scene) => {
+    const pg = scene.world.page || {}, seed = 0x1B1EEDCA ^ (scene.scene_id || "").length;
+    el.querySelectorAll(".lp").forEach((x) => x.remove());
+    const root = lpEl("div", "lp", el);
+    const page = lpEl("div", "lp-page", root);
+    const grain = lpEl("svg", "lp-grain", page, { width: "100%", height: "100%" });
+    grain.innerHTML = '<filter id="lpg' + seed + '"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="7" stitchTiles="stitch"/>'
+      + '<feColorMatrix values="0 0 0 0 .15 0 0 0 0 .13 0 0 0 0 .10 0 0 0 .35 0"/></filter><rect width="100%" height="100%" filter="url(#lpg' + seed + ')"/>';
+    const edge = lpEl("div", "lp-edge", page);
+    /* the field: goo layer (blur + alpha threshold) over the crisp charcoal rect */
+    const field = lpEl("div", "lp-field", page);
+    const fsvg = lpEl("svg", "", field, { viewBox: "0 0 1690 907", preserveAspectRatio: "none" });
+    fsvg.innerHTML = '<defs><filter id="lpgoo' + seed + '"><feGaussianBlur stdDeviation="18"/>'
+      + '<feColorMatrix values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 26 -10"/></filter></defs>';
+    const rect = lpEl("rect", "", fsvg, { x: 0, y: 0, width: 1690, height: 907, rx: 46, fill: "#25313C", opacity: 0 });
+    const goo = lpEl("g", "", fsvg, { filter: "url(#lpgoo" + seed + ")" });
+    const blobs = [];
+    for (let i = 0; i < LP.BLOBS; i++) {
+      const a = lpHash(seed, i, 1) * Math.PI * 2, d = 120 + lpHash(seed, i, 2) * 420;
+      const cx = 845 + Math.cos(a) * d * 1.6, cy = 453 + Math.sin(a) * d * 0.7;
+      const c = lpEl("circle", "", goo, { cx: cx.toFixed(1), cy: cy.toFixed(1), r: 0, fill: "#25313C" });
+      blobs.push({ c, R: 260 + lpHash(seed, i, 4) * 300, lag: i * 0.06 });
+    }
+    const outline = lpEl("div", "lp-outline", page);
+    const title = lpEl("div", "lp-ink lp-title", page);
+    const src = lpEl("div", "lp-ink lp-src", page);
+    const glyphs = [...lpGlyphs(title, pg.title || "", seed), ...lpGlyphs(src, pg.source || "", seed + 1)];
+    /* chart area inside the field, leaving the declared quiet zone for docks (s9.28 B3/C2) */
+    const qz = pg.quiet_zone || null;
+    const chart = lpEl("svg", "lp-chart", page, { viewBox: "0 0 1000 560" });
+    chart.style.width = (qz ? 50 : 76) + "%"; chart.style.height = "66%";
+    chart.style.left = (qz === "left" ? 44 : 10) + "%"; chart.style.top = "20%";
+    const st = { root, page, edge, blobs, rect, goo, outline, glyphs, chart, kind: pg.builder || "story",
+                 bars: [], paths: [], labels: [], callout: null, cval: null, vals: pg.values || [],
+                 vstr: pg.value_strings || [], emph: pg.emphasize | 0 };
+    if (st.kind === "dense-line") buildLedgerLine(st, pg); else buildLedgerBars(st, pg);
+    /* keyed per world element: the wipe paints the same scene into wA and wB */
+    ledgerState.set(el.id + "|" + scene.scene_id, st);
+    return st;
+  };
+  const buildLedgerBars = (st, pg) => {
+    const n = Math.max(1, st.vals.length), maxV = Math.max(1e-9, ...st.vals.map((v) => Math.abs(v)));
+    const base = 470, top = 90, x0 = 60, x1 = 980, gap = 0.34;
+    const bw = (x1 - x0) / n * (1 - gap);
+    lpEl("line", "ax", st.chart, { x1: x0 - 20, x2: x1 + 20, y1: base, y2: base });
+    for (let k = 1; k <= 4; k++) lpEl("line", "grid", st.chart, { x1: x0 - 20, x2: x1 + 20, y1: base - (base - top) * k / 4, y2: base - (base - top) * k / 4 });
+    st.vals.forEach((v, i) => {
+      const x = x0 + (x1 - x0) / n * (i + gap / 2), h = Math.max(3, (Math.abs(v) / maxV) * (base - top));
+      const bar = lpEl("rect", "bar" + (i === st.emph ? " emph" : ""), st.chart,
+        { x: x.toFixed(1), y: base, width: bw.toFixed(1), height: h.toFixed(1), rx: 6 });
+      bar.style.transformOrigin = "0 " + base + "px"; bar.style.transform = "scaleY(0)";
+      const lab = lpEl("text", "lab", st.chart, { x: (x + bw / 2).toFixed(1), y: base + 34, "text-anchor": "middle", opacity: 0 });
+      lab.textContent = (pg.labels || [])[i] || "";
+      const val = lpEl("text", "val", st.chart, { x: (x + bw / 2).toFixed(1), y: (base - h - 14).toFixed(1), "text-anchor": "middle", opacity: 0 });
+      val.textContent = st.vstr[i] != null ? String(st.vstr[i]) : lpFmt(v);
+      st.bars.push({ bar, lab, val, h, x: x + bw / 2, i });
+    });
+    const e = st.bars[Math.min(st.emph, st.bars.length - 1)];
+    if (e) {
+      const cg = lpEl("g", "", st.chart, { opacity: 0 });
+      lpEl("rect", "cpill", cg, { x: (e.x - 64).toFixed(1), y: (base - e.h - 66).toFixed(1), width: 128, height: 42, rx: 8 });
+      const ct = lpEl("text", "callout", cg, { x: e.x.toFixed(1), y: (base - e.h - 36).toFixed(1), "text-anchor": "middle" });
+      e.val.setAttribute("opacity", 0); e.val.style.display = "none";
+      st.callout = cg; st.cval = ct; st.cfinal = e.val.textContent; st.cnum = st.vals[e.i];
+    }
+  };
+  const buildLedgerLine = (st, pg) => {
+    const ax = pg.axes || {}, series = pg.series || [];
+    const PAL = { crimson: "#ED6A4A", teal: "#178C83", cobalt: "#8fb3f0", amber: "#F5B72E", deemph: "#b8c4d0" };
+    const L = 70, R = 220, T = 40, B = 470, W = 1000;
+    const Y = (v) => ax.log ? Math.log10(v) : v;
+    let x0 = 1e9, x1 = -1e9, y0 = 1e9, y1 = -1e9;
+    for (const s of series) for (const [x, v] of s.pts) { x0 = Math.min(x0, x); x1 = Math.max(x1, x); y0 = Math.min(y0, Y(v)); y1 = Math.max(y1, Y(v)); }
+    const pad = (y1 - y0) * 0.06 || 1; y0 -= pad; y1 += pad;
+    const mx = (x) => L + (x - x0) / (x1 - x0 || 1) * (W - L - R), my = (v) => T + (1 - (Y(v) - y0) / (y1 - y0)) * (B - T);
+    lpEl("line", "ax", st.chart, { x1: L, x2: W - R, y1: B, y2: B });
+    for (let k = 1; k <= 4; k++) lpEl("line", "grid", st.chart, { x1: L, x2: W - R, y1: T + (B - T) * k / 4, y2: T + (B - T) * k / 4 });
+    (ax.xticks || []).forEach(([x, lab]) => { const tx = lpEl("text", "lab", st.chart, { x: mx(x).toFixed(1), y: B + 32, "text-anchor": "middle" }); tx.textContent = lab; });
+    series.forEach((s, i) => {
+      const d = s.pts.map(([x, v], k) => (k ? "L" : "M") + mx(x).toFixed(1) + " " + my(v).toFixed(1)).join(" ");
+      const col = PAL[s.color] || PAL.deemph;
+      const p = lpEl("path", "ser", st.chart, { d, stroke: col });
+      const len = p.getTotalLength ? p.getTotalLength() : 2000;
+      p.setAttribute("stroke-dasharray", len); p.setAttribute("stroke-dashoffset", len);
+      const tip = lpEl("circle", "", st.chart, { r: 6, fill: col, opacity: 0 });
+      const last = s.pts[s.pts.length - 1];
+      const name = lpEl("text", "sname", st.chart, { x: (mx(last[0]) + 12).toFixed(1), y: (my(last[1]) + 8).toFixed(1), fill: col, opacity: 0 });
+      name.textContent = (s.label ? s.label + " " : "") + (s.name || "");
+      st.paths.push({ p, len, tip, name, stagger: i / Math.max(1, series.length), ny: my(last[1]) + 8 });
+    });
+    /* s9.23b inline names never overprint: push apart any two ends closer than one line */
+    const order = [...st.paths].sort((a, b) => a.ny - b.ny);
+    for (let i = 1; i < order.length; i++)
+      if (order[i].ny - order[i - 1].ny < 28) order[i].ny = order[i - 1].ny + 28;
+    for (const pp of order) pp.name.setAttribute("y", pp.ny.toFixed(1));
+  };
+  const paintLedger = (el, scene, t) => {
+    const st = ledgerState.get(el.id + "|" + scene.scene_id) || buildLedger(el, scene);
+    if (!st.root.isConnected) { el.querySelectorAll(".lp").forEach((x) => x.remove()); el.appendChild(st.root); }
+    const tr = t - scene.span[0];
+    /* beat 1: roll-out */
+    const rk = expoOut(clamp01(tr / LP.ROLL));
+    st.page.style.transform = "translateX(" + ((rk - 1) * 100).toFixed(2) + "%)";
+    st.edge.style.opacity = (1 - clamp01((tr - LP.ROLL) / 0.25)).toFixed(2);
+    /* beat 2: bleed - blobs bloom over the first 55%, contract to zero by the end;
+       the crisp field resolves beneath as the goo dies (ink-bleed-reveal law) */
+    const b = clamp01((tr - LP.ROLL) / LP.BLEED);
+    for (const bl of st.blobs) {
+      const u = clamp01((b - bl.lag) / (1 - bl.lag));
+      const r = u < 0.55 ? bl.R * expoOut(u / 0.55) : bl.R * (1 - Math.pow((u - 0.55) / 0.45, 1.6));
+      bl.c.setAttribute("r", Math.max(0, r).toFixed(1));
+    }
+    st.goo.setAttribute("opacity", b < 0.55 ? 1 : (1 - clamp01((b - 0.55) / 0.45)).toFixed(2));
+    st.rect.setAttribute("opacity", clamp01((b - 0.45) / 0.4).toFixed(2));
+    /* beat 3: outline + ink writes, in parallel, once the field has settled */
+    const t3 = tr - LP.ROLL - LP.BLEED;
+    st.outline.style.setProperty("--lp-prog", (100 * expoOut(clamp01(t3 / LP.OUTLINE))).toFixed(1));
+    const n = Math.max(1, st.glyphs.length), per = LP.INK / n;
+    st.glyphs.forEach((g, j) => g.style.setProperty("--w", clamp01((t3 - j * per) / (per * 1.6)).toFixed(3)));
+    /* beat 4: the build - crisp, landing on the exact strings */
+    const c = clamp01((t3 - LP.OUTLINE) / LP.BUILD);
+    st.chart.style.opacity = c > 0 ? 1 : 0;   /* axes and grid belong to the build, not the bleed */
+    st.bars.forEach((bb, i) => {
+      const k = expoOut(clamp01((c - i * 0.1) / 0.55));
+      bb.bar.style.transform = "scaleY(" + k.toFixed(4) + ")";
+      bb.lab.setAttribute("opacity", clamp01((c - i * 0.1 - 0.3) / 0.2).toFixed(2));
+      bb.val.setAttribute("opacity", clamp01((k - 0.9) / 0.1).toFixed(2));
+    });
+    if (st.callout) {
+      const ck = clamp01((c - 0.55) / 0.45);
+      st.callout.setAttribute("opacity", clamp01(ck / 0.3).toFixed(2));
+      st.cval.textContent = ck >= 1 ? st.cfinal : lpFmt(st.cnum * expoOut(ck));
+    }
+    st.paths.forEach((pp) => {
+      const f = expoOut(clamp01((c - pp.stagger * 0.3) / 0.7));
+      pp.p.setAttribute("stroke-dashoffset", (pp.len * (1 - f)).toFixed(1));
+      const drawing = f > 0.01 && f < 0.995;
+      if (drawing && pp.p.getPointAtLength) { const q = pp.p.getPointAtLength(pp.len * f); pp.tip.setAttribute("cx", q.x); pp.tip.setAttribute("cy", q.y); }
+      pp.tip.setAttribute("opacity", drawing ? 1 : 0);
+      pp.name.setAttribute("opacity", clamp01((f - 0.9) / 0.1).toFixed(2));
+    });
+  };
+
   const render = (t) => {
     let si = 0;
     for (let i = 0; i < TL.scenes.length; i++) if (t >= TL.scenes[i].span[0]) si = i;
@@ -1175,8 +1400,18 @@
        separate layer behind it. Its parallax never moves the paper, so it
        runs continuously and independently of any reveal. */
     const paint = (el, scene, dx = 0) => {
-      el.style.backgroundImage = `url("${A[scene.world.asset_id]}")`;
-      const kb = scene.world.ken_burns;
+      /* LEDGER PAGE species: the world is drawn, not an image. The page
+         paints itself from t; the authored Ken Burns still applies below,
+         capped to a slow push (s9.26 rules). */
+      const isLedger = scene.world.kind === "ledger";
+      el.classList.toggle("ledger", isLedger);
+      if (isLedger) { el.style.backgroundImage = "none"; paintLedger(el, scene, t); }
+      else {
+        el.style.backgroundImage = `url("${A[scene.world.asset_id]}")`;
+        el.querySelectorAll(".lp").forEach((x) => x.remove());
+      }
+      const kb0 = scene.world.ken_burns || { scale: 0, x: 0, y: 0 };
+      const kb = isLedger ? { scale: Math.min(kb0.scale, LP.KB_MAX), x: 0, y: 0 } : kb0;
       const p = clamp01((t - scene.span[0]) / Math.max(0.1, scene.span[1] - scene.span[0]));
       /* THE WORLD LEANS IN WITH THE ARGUMENT (Gemini showcase: worldScale
          steps 1.02 -> 1.08 across a build). Each evidence event in this

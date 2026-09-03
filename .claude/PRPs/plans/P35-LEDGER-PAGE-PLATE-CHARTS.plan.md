@@ -305,7 +305,7 @@ proof earns the page.
 - Evidence: `ledger_page.py` (299 lines; pick_builder / validate / build_spec pure; values verbatim via parse_float=str; race/decline/progress contracts in the docstring; checklist series rejected with 'keep it a dock'); `pytest test_ledger_page.py -q` 17 passed; trim-proof -> story bars 8 values, value_strings verbatim; divergence -> dense-line 4x235 pts with the axes block carried
 
 ### T3: The plate-chart species in the player
-- Status: pending
+- Status: done (working reference C; the pick and the font stay open)
 - Owner: parent
 - Depends on: T1 (Human Gates 1, 2), T2
 - Write set: `docs/content-video-engine/samples/scene-evidence-player.template.html`
@@ -318,7 +318,7 @@ proof earns the page.
 - Validate: `python content/video_engine/scripts/render_episode.py --range <s> <e>`
   on a synthetic timeline twice and compare frame hashes; visual check via
   `preview_start` episode-player
-- Evidence: pending
+- Evidence: template gains the LEDGER PAGE species: CSS block after `.world`, `LP` constants + lpHash + buildLedger/buildLedgerBars/buildLedgerLine/paintLedger before `render`, one branch in `paint()` (world.kind == "ledger": no image, Ken Burns capped to a 0.03 push); reviewed wipe and dock code untouched. Synthetic proof `build-f/ledger-species-proof.html` (story bars from ev-trim-proof, dense line from ev-divergence, then a plain plate): all four beats render from t; stage innerHTML sha at t=8.0 identical from two seek orders (0ca203ff04e45b16); callout lands on the exact value string 13.8; inline names de-collide; wipe out of a page clean; utf-8 declared at the top of the template (the served player had no charset - caption dashes decoded as cp1252 before). Font: Inter until Human Gate 2
 
 ### T4: Timeline, shot table, and the motion gate know the species
 - Status: pending
@@ -413,7 +413,7 @@ proof earns the page.
 - Evidence: pending
 
 ### T9: Sound cues for the page - paper roll, ink bleed, chalk stroke
-- Status: pending
+- Status: done
 - Owner: junior_developer (→ `general-purpose`)
 - Depends on: none
 - Write set: `content/video_engine/configs/sound_palette.json` (three cues),
@@ -425,7 +425,7 @@ proof earns the page.
   and aligned to the page's sync points (roll-out start, bleed settle,
   outline `draw-complete`); SOURCES.md records id, author, licence.
 - Validate: `python -c "import json;json.load(open('content/video_engine/configs/sound_palette.json'))"`; ffprobe on each file; SOURCES.md present
-- Evidence: pending
+- Evidence: commit 1c97b84; Freesound CC0 464302 (paper slide, roll-out), 166322 (water drop, bleed settle - no CC0 ink sound under 4s exists; flag at the contact sheet), 447925 (chalk stroke, outline draw-complete); trimmed <=1.5s, matched to fs-whoosh-1 at -14.06 LUFS within +-1 LU (roll -13.99, bleed -14.09, stroke -14.45 limited); sound_palette.json + SOUND-PLAN.json `page_cues` (page-relative, because `cues` is flattened onto the episode clock by render_episode.mix_audio); mp3s gitignored like the whoosh; SOURCES.md carries the table
 
 ## Verification
 
