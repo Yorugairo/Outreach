@@ -1,0 +1,53 @@
+{
+  "schema_version": "review_manifest.v1",
+  "status": "review_only",
+  "render_eligible": false,
+  "style_family": "notebooklm-pencil-paper-v1",
+  "source_prompt": "claim:yen-scene3-plates-v1",
+  "assets": [
+    {
+      "asset_id": "yen-p1-borrow-buy",
+      "path": "objects/yen-p1-borrow-buy.png",
+      "sha256": "852a0df07fcee842cf2209aa9f15ba5f198f4ab7e79d08074643152604d2ee47",
+      "kind": "world_plate",
+      "semantic": "",
+      "source": {
+        "path": "source/yen-p1-borrow-buy-source.png",
+        "sha256": "497ce3cabf797c7152763ce50adaa41f1e2e469cb5dfa35d3a4c7dcc39d8113c"
+      }
+    },
+    {
+      "asset_id": "yen-p2-easy",
+      "path": "objects/yen-p2-easy.png",
+      "sha256": "020ed5346b12e6f56d537d3b41161e3d3a3a508fecb3ef58a1cf520d2c87c01f",
+      "kind": "world_plate",
+      "semantic": "",
+      "source": {
+        "path": "source/yen-p2-easy-source.png",
+        "sha256": "1fabdd2ce66afbb4a966d6dabbbf75612b5ddffb0cf24daf60dd66c8743a92a7"
+      }
+    },
+    {
+      "asset_id": "yen-p3-yen-rises-heavier",
+      "path": "objects/yen-p3-yen-rises-heavier.png",
+      "sha256": "b3c836d6d62321de0b73c19f888b6ea7d9f75b2fbc1eae2c63702e393006cba3",
+      "kind": "world_plate",
+      "semantic": "",
+      "source": {
+        "path": "source/yen-p3-yen-rises-heavier-source.png",
+        "sha256": "b74585eca3253c5d05cae929bebec16a580c4ade1751d76edf91c1e591883b31"
+      }
+    },
+    {
+      "asset_id": "yen-p4-forced-sell",
+      "path": "objects/yen-p4-forced-sell.png",
+      "sha256": "ae4548e10001927540f6a3f29fca7b63f1eeed1c811115dfc5ab9c13aae43f8e",
+      "kind": "world_plate",
+      "semantic": "",
+      "source": {
+        "path": "source/yen-p4-forced-sell-source.png",
+        "sha256": "c4b1920aaf5c17c4487e2f2c81172349ddf1001ce0503bb5fc8408649d8ab556"
+      }
+    }
+  ]
+}

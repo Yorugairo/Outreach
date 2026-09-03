@@ -1,0 +1,23 @@
+{
+  "judge": "Codex GPT-5",
+  "generation_attempts": {
+    "yen-p1-borrow-buy": 1,
+    "yen-p2-easy": 1,
+    "yen-p3-yen-rises-heavier": 1,
+    "yen-p4-forced-sell": 1
+  },
+  "extraction_attempts": {
+    "yen-p1-borrow-buy": 2,
+    "yen-p2-easy": 2,
+    "yen-p3-yen-rises-heavier": 2,
+    "yen-p4-forced-sell": 2
+  },
+  "approved": [
+    "yen-p1-borrow-buy",
+    "yen-p2-easy",
+    "yen-p3-yen-rises-heavier",
+    "yen-p4-forced-sell"
+  ],
+  "unresolved": [],
+  "notes": "First extraction retained paper-grain speckles; second pass tightened the matte cutoff and produced genuine transparent 1024x1024 cutouts."
+}
