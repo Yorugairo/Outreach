@@ -52,6 +52,10 @@
   /* the clean edge: a conic sector drawn clockwise, hollow centre (outline-draw mechanism),
      on EXACTLY the field's box and radius - the stroke sits on the ink's edge, no gap (E22 addendum 2) */
   .lp-fieldplate { position: absolute; inset: 0; background-size: cover; background-position: center; opacity: 0; }
+  /* the DECKLE is the feature (operator, 2026-09-03): when the page spec carries edge_path, the line is drawn ALONG the
+     paper's own deckle edge (dash-offset, clockwise) instead of the CSS box, and the charcoal fills the paper up to it */
+  .lp-edgeline { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+  .lp-edgeline path { fill: none; stroke: var(--lp-acc); stroke-width: 5; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
   .lp-outline { position: absolute; left: 6%; top: 8%; width: 88%; height: 84%; --lp-prog: 0; box-sizing: border-box;
                 border: 5px solid transparent; border-radius: 46px; pointer-events: none;
                 background: conic-gradient(from -90deg, var(--lp-acc) 0deg calc(var(--lp-prog) * 3.6deg), transparent calc(var(--lp-prog) * 3.6deg + .5deg) 360deg);
@@ -1332,6 +1336,13 @@
     if (fieldPlate) { fieldPlate.style.backgroundImage = 'url("' + A[pg.field_plate] + '")'; field.style.display = "none"; }
     const outline = lpEl("div", "lp-outline", page);
     boxCss(outline);
+    let edgePath = null;
+    if (pg.edge_path) {
+      outline.style.display = "none";
+      const esvg = lpEl("svg", "lp-edgeline", page, { viewBox: "0 0 1 1", preserveAspectRatio: "none" });
+      edgePath = lpEl("path", "", esvg, { d: pg.edge_path });
+      const elen = edgePath.getTotalLength ? edgePath.getTotalLength() : 4; edgePath.setAttribute("stroke-dasharray", elen); edgePath.setAttribute("stroke-dashoffset", elen); edgePath.dataset.len = elen;
+    }
     const title = lpEl("div", "lp-ink lp-title", page);
     title.style.left = ((bd.x + 0.027) * 100).toFixed(2) + "%"; title.style.top = ((bd.y + 0.024) * 100).toFixed(2) + "%";
     const src = lpEl("div", "lp-ink lp-src", page);
@@ -1341,7 +1352,7 @@
     const chart = lpEl("svg", "lp-chart", page, { viewBox: "0 0 1000 560" });
     chart.style.width = ((qz ? 0.57 : 0.86) * bd.w * 100).toFixed(2) + "%"; chart.style.height = (0.78 * bd.h * 100).toFixed(2) + "%";
     chart.style.left = ((bd.x + (qz === "left" ? 0.43 : 0.05) * bd.w) * 100).toFixed(2) + "%"; chart.style.top = ((bd.y + 0.14 * bd.h) * 100).toFixed(2) + "%";
-    const st = { root, page, edge, blobs, strokes, nib, rect, goo, outline, glyphs, chart, fieldPlate, kind: pg.builder || "story",
+    const st = { root, page, edge, blobs, strokes, nib, rect, goo, outline, edgePath, glyphs, chart, fieldPlate, kind: pg.builder || "story",
                  bars: [], paths: [], labels: [], callout: null, cval: null, vals: pg.values || [],
                  vstr: pg.value_strings || [], emph: pg.emphasize | 0 };
     /* one builder per treatment (s9.28; P35 Builder Architecture) - each harvested from its own component, never merged */
@@ -1416,15 +1427,17 @@
   const LPX = {
     RACE_IN: 0.6,        /* bars grow into period 0 first: the page builds from empty, the component opens full */
     RACE_PERIOD: 1.2,    /* seconds per period (bar-chart-race defaults 2): a beat on the page, not a film */
-    RACE_MOVE: 0.7,      /* fraction of a period spent moving; the rest settles = the rank-settled sync point */
-    RACE_K: 10,          /* rank keyframes per period ("Bostock's number"): a swap plays out over one interval */
-    RACE_TICKS: 8,       /* tick pool; the domain follows the leader with x1.06 headroom so the axis glides */
+    RACE_SWAP: 0.7,      /* fraction of a period one row swap takes when the crossing is mid-period, centred on it (operator: "smoother") */
+    RACE_SWAP_MIN: 0.4,  /* a crossing near a period's end swaps over at least this much - narrower so it stays near the crossing */
+    RACE_SETTLE: 0.01,   /* within this of a period (in period units) the exact value strings show; between, interpolations */
+    RACE_TICKS: 14,      /* tick pool: the coarse set plus the finer set that fades out as the axis glides (never pops) */
     DECLINE_BUILD: 3.6, DECLINE_IN: 0.15, DECLINE_OUT: 0.08,   /* decline-chart: IN settles, HOLD draws + counts + darkens, OUT locks */
     COMBO_BUILD: 4.5, COMBO_BARS: 0.5, COMBO_LINE: 0.42,        /* data-chart: bars in reading order, then the line at one speed */
   };
   const LP_PAL = { crimson: "#ED6A4A", teal: "#178C83", cobalt: "#8fb3f0", amber: "#F5B72E", deemph: "#b8c4d0" };   /* the field's own tokens (cobalt lifted for the charcoal, as dense-line) */
   const pow2out = (x) => 1 - (1 - x) * (1 - x);
   const smoothstep = (x) => x * x * (3 - 2 * x);
+  const lpInvSmooth = (s) => 0.5 - Math.sin(Math.asin(1 - 2 * clamp01(s)) / 3);   /* smoothstep's inverse, closed form: the period fraction at which an eased value reaches s */
   const lpNiceStep = (x) => { const e = Math.pow(10, Math.floor(Math.log10(x))), f = x / e; return e * (f <= 1 ? 1 : f <= 2 ? 2 : f <= 5 ? 5 : 10); };
   const lpTick = (v) => String(Math.round(v * 100) / 100);
   const LP_HALO = "paint-order:stroke;stroke:#25313C;stroke-width:7px;stroke-linejoin:round;";   /* a field-coloured halo: a direct label stays legible where a line crosses it */
@@ -1433,63 +1446,106 @@
     const e = lpEl("text", cls, parent, { x: (+x).toFixed(1), y: (+y).toFixed(1), "text-anchor": anchor, ...(at || {}) });
     e.textContent = text; return e;
   };
-  /* RACE (bar-chart-race): ranked horizontal bars per period. A value moves linearly between periods
-     over RACE_MOVE of the period, then settles; rank is baked at K keyframes per period and a row's y
-     is solved FROM rank, so two bars never cross without swapping. The accent is binary and carries
-     one meaning - this bar leads now - and hands over where the values cross (the bars are the same
-     length there). Settled periods show value_strings verbatim; mid-move values are interpolations. */
+  /* chart hygiene shared by the page builders (s9.22-9.23b, operator review of T5: "we lost our labelling/charting
+     best practices"): y gridlines carry TICK LABELS with the unit (nice step, 4-6 ticks, the zero line heavier), the
+     unit comes from page.unit or axes.yunit, the basis (axes.ylabel) floats top-left inside the plot. */
+  const lpUnit = (pg) => String(pg.unit || (pg.axes || {}).yunit || "");
+  const lpYTicks = (st, lo, hi, my, xa, xb, unit, labX) => {
+    const step = lpNiceStep(Math.max(1e-9, (hi - lo) / 5)), out = [];
+    for (let tv = Math.ceil(lo / step - 1e-9) * step; tv <= hi + 1e-9; tv += step) {
+      const v = Math.abs(tv) < step * 1e-6 ? 0 : tv, y = my(v);
+      out.push(lpEl("line", v === 0 ? "ax" : "grid", st.chart, { x1: xa, x2: xb, y1: y.toFixed(1), y2: y.toFixed(1) }));
+      out.push(lpText(st.chart, "lab", labX, y + 8, "end", lpTick(v) + unit));
+    }
+    return out;
+  };
+  const lpYLabel = (st, pg, x, y, at) => { const t = (pg.axes || {}).ylabel; return t ? lpText(st.chart, "lab", x, y, "start", String(t), { style: "font-size:22px;fill:#aeb6be", ...(at || {}) }) : null; };
+  /* RACE (bar-chart-race): ranked horizontal bars per period. EVERYTHING is a smooth function of u (period units):
+     a value eases (smoothstep) between consecutive period values over the WHOLE period - exact at every period,
+     still at both ends of each; the rank order is read from those values every frame, and a row SWAP is a pair's
+     crossing, solved from the four period values, eased over RACE_SWAP of the period and centred on it (clamped
+     inside the period so the integers stay settled). A row's position is its period rank plus the swaps in
+     flight: continuous, no keyframes, no clock, no state - a seek lands the identical frame. The axis max glides
+     on the same values (a coarsening tick set fades, never pops); the accent is binary - this bar leads now - and
+     hands over where the values cross (the bars are the same length there). Settled periods show value_strings
+     verbatim; mid-move values are interpolations. */
   const buildLedgerRace = (st, pg) => {
-    const periods = pg.periods || [], rows = st.vals, T = periods.length, N = rows.length;
-    const G = { NAME_X: 150, TRACK_X: 172, TRACK_W: 690, TOP: 78, H: 420 };
+    const periods = pg.periods || [], rows = st.vals, T = periods.length, N = rows.length, unit = lpUnit(pg);
+    const G = { NAME_X: 150, TRACK_X: 172, TRACK_W: 690, TOP: 70, H: 400 };
     G.PITCH = G.H / Math.max(1, N); G.BAR_H = Math.max(12, G.PITCH * 0.62);
-    const valueAt = (u, j) => {   /* u in period units */
+    const valueAt = (u, j) => {
       if (T < 2) return rows[j][0];
-      const i = Math.min(Math.max(Math.floor(u), 0), T - 2), f = clamp01((u - i) / LPX.RACE_MOVE);
-      return rows[j][i] + (rows[j][i + 1] - rows[j][i]) * f;
+      const uu = Math.min(Math.max(u, 0), T - 1), i = Math.min(Math.floor(uu), T - 2);
+      return rows[j][i] + (rows[j][i + 1] - rows[j][i]) * smoothstep(uu - i);
     };
-    const KF = T > 1 ? (T - 1) * LPX.RACE_K + 1 : 1, ranks = [];
-    for (let m = 0; m < KF; m++) {   /* descending by value, index breaks ties: a total order, identical every evaluation */
-      const order = rows.map((_, j) => ({ j, v: valueAt(m / LPX.RACE_K, j) })).sort((a, b) => b.v - a.v || a.j - b.j);
-      ranks.push(order.reduce((acc, o, r) => { acc[o.j] = r; return acc; }, new Array(N)));
+    /* descending by value, index breaks ties: a total order, identical every evaluation */
+    const rankAt = (i) => rows.map((_, j) => ({ j, v: rows[j][i] })).sort((a, b) => b.v - a.v || a.j - b.j)
+      .reduce((acc, o, r) => { acc[o.j] = r; return acc; }, new Array(N));
+    const ranks = Array.from({ length: Math.max(1, T) }, (_, i) => rankAt(i));
+    const swaps = [];   /* per period: every pair whose order flips, with the crossing's period fraction */
+    for (let i = 0; i + 1 < T; i++) {
+      const list = [];
+      for (let j = 0; j < N; j++) for (let k = j + 1; k < N; k++) {
+        const jAbove = ranks[i][j] < ranks[i][k];
+        if (jAbove === (ranks[i + 1][j] < ranks[i + 1][k])) continue;   /* same order at both ends: no crossing (the eased difference is monotone) */
+        const den = (rows[j][i + 1] - rows[j][i]) - (rows[k][i + 1] - rows[k][i]);
+        const f = den ? lpInvSmooth((rows[k][i] - rows[j][i]) / den) : 0;
+        const h = Math.max(LPX.RACE_SWAP_MIN / 2, Math.min(LPX.RACE_SWAP / 2, f, 1 - f));   /* half-window: full mid-period, tighter at the ends */
+        list.push({ down: jAbove ? j : k, up: jAbove ? k : j, c: Math.min(Math.max(f, h), 1 - h), w: 2 * h });
+      }
+      swaps.push(list);
     }
     const ticks = [];
     for (let k = 0; k < LPX.RACE_TICKS; k++)
-      ticks.push({ line: lpEl("line", "grid", st.chart, { y1: G.TOP - 6, y2: G.TOP + G.H }), lab: lpText(st.chart, "lab", 0, G.TOP - 18, "middle", "") });
-    const items = rows.map((_, j) => {
+      ticks.push({ line: lpEl("line", "grid", st.chart, { y1: G.TOP - 6, y2: G.TOP + G.H, opacity: 0 }), lab: lpText(st.chart, "lab", 0, G.TOP - 18, "middle", "", { opacity: 0 }) });
+    const items = rows.map((_, j) => {   /* a row: the name at the left of the track, the bar, the exact value at its end */
       const g = lpEl("g", "", st.chart);
       lpText(g, "lab", G.NAME_X, G.PITCH / 2 + 9, "end", String((pg.labels || [])[j] ?? ""), { style: "font-weight:700;fill:#F2F2F2" });
       const bar = lpEl("rect", "bar", g, { x: G.TRACK_X, y: ((G.PITCH - G.BAR_H) / 2).toFixed(1), width: 0, height: G.BAR_H.toFixed(1), rx: 4 });
       const val = lpText(g, "val", G.TRACK_X, G.PITCH / 2 + 9, "start", "");
       return { g, bar, val };
     });
-    const period = lpText(st.chart, "callout", 985, 548, "end", "", { style: "fill:#F2F2F2;font-size:64px", opacity: 0 });
-    st.race = { G, periods, rows, T, N, valueAt, ranks, ticks, items, period };
+    const period = lpText(st.chart, "callout", 985, 548, "end", "", { style: "fill:#F2F2F2;font-size:60px", opacity: 0 });   /* below the rows, clear of every bar */
+    st.race = { G, periods, rows, T, N, unit, valueAt, ranks, swaps, ticks, items, period };
     st.buildDur = LPX.RACE_IN + Math.max(0, T - 1) * LPX.RACE_PERIOD;
-    /* rank-settled per period, seconds from the scene's open: period 0 when the grow-in lands, period i
-       when its move completes (the parent reads st.sync to cue a caption or a sound on the settle) */
+    /* rank-settled per period, seconds from the scene's open: period 0 when the grow-in lands, period i at u = i,
+       where its values and ranks are exact (the parent reads st.sync to cue a caption or a sound on the settle) */
     const T0 = LP.ROLL + LP.SAVOR + LP.FIELD + LP.OUTLINE + LPX.RACE_IN;
-    st.sync = periods.map((p, i) => ({ period: p, at: +(T0 + (i ? (i - 1 + LPX.RACE_MOVE) * LPX.RACE_PERIOD : 0)).toFixed(3) }));
+    st.sync = periods.map((p, i) => ({ period: p, at: +(T0 + i * LPX.RACE_PERIOD).toFixed(3) }));
     st.paint = paintLedgerRace;
   };
-  const lpRankPos = (R, u, j) => {   /* continuous row from the baked ranks; a rank change IS the swap, over one keyframe */
-    if (R.ranks.length < 2) return R.ranks[0][j];
-    const m = u * LPX.RACE_K, m0 = Math.min(Math.max(Math.floor(m), 0), R.ranks.length - 2), e = smoothstep(clamp01(m - m0));
-    return R.ranks[m0][j] + (R.ranks[m0 + 1][j] - R.ranks[m0][j]) * e;
+  const lpRankPos = (R, u, j) => {   /* period rank plus the swaps in flight: continuous, exact at every integer u */
+    if (R.T < 2) return R.ranks[0][j];
+    const uu = Math.min(Math.max(u, 0), R.T - 1), i = Math.min(Math.floor(uu), R.T - 2), f = uu - i;
+    let pos = R.ranks[i][j];
+    for (const sw of R.swaps[i]) {
+      if (sw.up !== j && sw.down !== j) continue;
+      const e = smoothstep(clamp01((f - sw.c) / sw.w + 0.5));
+      pos += sw.down === j ? e : -e;
+    }
+    return pos;
   };
   const paintLedgerRace = (st, c, secs) => {
     const R = st.race, G = R.G, u = Math.max(0, secs - LPX.RACE_IN) / LPX.RACE_PERIOD;
     const grow = expoOut(clamp01(secs / LPX.RACE_IN));
     const vals = R.items.map((_, j) => R.valueAt(u, j));
     const byV = vals.map((_, j) => j).sort((a, b) => vals[b] - vals[a] || a - b), leader = byV[0];
-    const scaleMax = Math.max(vals[leader] * 1.06, 1e-6), step = lpNiceStep(scaleMax / 4);
-    R.ticks.forEach((tk, k) => {
-      const tv = k * step, on = tv <= scaleMax && grow > 0.5, x = (G.TRACK_X + tv / scaleMax * G.TRACK_W).toFixed(1);
-      tk.line.setAttribute("x1", x); tk.line.setAttribute("x2", x); tk.line.setAttribute("opacity", on ? 1 : 0);
-      tk.lab.setAttribute("x", x); tk.lab.setAttribute("opacity", on ? 1 : 0); tk.lab.textContent = on ? lpTick(tv) : "";
-    });
-    const i = Math.min(Math.max(Math.floor(u), 0), Math.max(0, R.T - 2)), f = R.T < 2 ? 1 : clamp01((u - i) / LPX.RACE_MOVE);
-    const idx = R.T < 2 ? 0 : f >= 1 ? i + 1 : u <= 0 ? 0 : -1;   /* -1: between periods, no exact string yet */
-    R.period.textContent = String(R.periods[idx >= 0 ? idx : i] ?? "");
+    const scaleMax = Math.max(vals[leader] * 1.06, 1e-6), step = lpNiceStep(scaleMax / 5);
+    /* the axis glides: every tick slides with the scale; when the nice step coarsens (1-2-5), the finer set fades
+       over the first half of the new band instead of popping, and a tick fades in over the last 4% of the scale */
+    const mant = Math.round(step / Math.pow(10, Math.floor(Math.log10(step)))), fine = step / (mant === 5 ? 2.5 : 2);
+    const rho = scaleMax / 5 / step, rmin = fine / step, fineOn = 1 - clamp01((rho - rmin) / (0.5 * (1 - rmin)));
+    const axisOn = clamp01((grow - 0.5) / 0.3);
+    let k = 0;
+    for (let tv = 0; tv <= scaleMax + 1e-9 && k < R.ticks.length; tv += fine, k++) {
+      const tk = R.ticks[k], coarse = Math.abs(tv / step - Math.round(tv / step)) < 1e-6;
+      const on = (coarse ? 1 : fineOn) * clamp01((scaleMax - tv) / (0.04 * scaleMax)) * axisOn, x = (G.TRACK_X + tv / scaleMax * G.TRACK_W).toFixed(1);
+      tk.line.setAttribute("x1", x); tk.line.setAttribute("x2", x); tk.line.setAttribute("opacity", on.toFixed(3));
+      tk.lab.setAttribute("x", x); tk.lab.setAttribute("opacity", on.toFixed(3)); tk.lab.textContent = lpTick(tv) + R.unit;
+    }
+    for (; k < R.ticks.length; k++) { R.ticks[k].line.setAttribute("opacity", 0); R.ticks[k].lab.setAttribute("opacity", 0); R.ticks[k].lab.textContent = ""; }
+    const uu = Math.min(Math.max(u, 0), Math.max(0, R.T - 1)), near = Math.round(uu), settled = Math.abs(uu - near) < LPX.RACE_SETTLE;
+    R.period.textContent = String(R.periods[near] ?? "");   /* the period label hands over at the midpoint of the move */
     R.period.setAttribute("opacity", (0.85 * grow).toFixed(2));
     for (const j of [...byV].reverse()) st.chart.appendChild(R.items[j].g);   /* paint order follows value: the overtaker comes forward */
     R.items.forEach((it, j) => {
@@ -1499,34 +1555,45 @@
       it.bar.setAttribute("class", "bar" + (j === leader ? " emph" : ""));
       it.val.setAttribute("x", (G.TRACK_X + w + 12).toFixed(1));
       it.val.setAttribute("opacity", clamp01((grow - 0.85) / 0.15).toFixed(2));
-      it.val.textContent = idx >= 0 ? String((st.vstr[j] || [])[idx] ?? lpFmt(vals[j])) : lpFmt(vals[j]);
+      it.val.textContent = settled ? String((st.vstr[j] || [])[near] ?? lpFmt(vals[j])) : lpFmt(vals[j]);
     });
   };
   /* DECLINE (decline-chart): one metric. The line draws downward from start to end while the value
      counts down to the exact end string and the ground darkens from the same progress; the endpoint
-     locks in with no recovery. The start value stays on the page as a ghost so the fall has a from. */
+     locks in with no recovery. The start value stays on the page as a ghost so the fall has a from.
+     Hygiene: y ticks with the unit, the zero line heavier; x labels are DISPLAY strings - the series'
+     own date ticks (axes.xticks) when it has them, else the two endpoints' display_labels (never a raw
+     float); the basis (axes.ylabel) top-left; the metric named inline at the line's start (s9.23b). */
   const buildLedgerDecline = (st, pg) => {
-    const vals = st.vals, n = Math.max(1, vals.length), L = 50, R = 40, T = 120, B = 470, W = 1000;
+    const vals = st.vals, n = Math.max(1, vals.length), ax = pg.axes || {}, unit = lpUnit(pg), dl = pg.display_labels || {};
+    const L = 96, R = 40, T = 120, B = 470, W = 1000;
     let y0 = Math.min(...vals), y1 = Math.max(...vals); const pad = (y1 - y0) * 0.08 || 1; y0 -= pad; y1 += pad;
-    const mx = (i) => L + (n > 1 ? i / (n - 1) : 0.5) * (W - L - R), my = (v) => T + (1 - (v - y0) / (y1 - y0)) * (B - T);
+    const xn = (pg.labels || []).map((l) => parseFloat(l)), numeric = xn.length === n && xn.every(Number.isFinite);   /* a dense series' own x, else the index */
+    const xs = numeric ? xn : vals.map((_, i) => i), xa = Math.min(...xs), xb = Math.max(...xs);
+    const mx = (x) => L + (xb > xa ? (x - xa) / (xb - xa) : 0.5) * (W - L - R), my = (v) => T + (1 - (v - y0) / (y1 - y0)) * (B - T);
     const gid = "lpgnd" + n;
     lpEl("defs", "", st.chart).innerHTML = '<linearGradient id="' + gid + '" x1="0" y1="0" x2="0" y2="1">'
       + '<stop offset="0" stop-color="#05131E" stop-opacity="0"/><stop offset="1" stop-color="#05131E" stop-opacity="1"/></linearGradient>';
     const ground = lpEl("rect", "", st.chart, { x: 0, y: T, width: W, height: B - T + 30, fill: "url(#" + gid + ")", opacity: 0 });
     lpEl("line", "ax", st.chart, { x1: L, x2: W - R, y1: B, y2: B });
-    for (let k = 1; k <= 3; k++) lpEl("line", "grid", st.chart, { x1: L, x2: W - R, y1: T + (B - T) * k / 4, y2: T + (B - T) * k / 4 });
-    const d = vals.map((v, i) => (i ? "L" : "M") + mx(i).toFixed(1) + " " + my(v).toFixed(1)).join(" ");
+    lpYTicks(st, y0, y1, my, L, W - R, unit, L - 12);
+    const s = pg.start || {}, e = pg.end || {};
+    const xt = numeric ? (ax.xticks || []).filter((t) => Array.isArray(t) && +t[0] >= xa && +t[0] <= xb) : [];
+    const labels = xt.length
+      ? xt.map(([x, lab]) => lpText(st.chart, "lab", mx(+x), B + 32, "middle", String(lab), { opacity: 0 }))
+      : [lpText(st.chart, "lab", mx(xs[0]), B + 32, "start", String(dl.start ?? s.label ?? ""), { opacity: 0 }),
+         lpText(st.chart, "lab", mx(xs[n - 1]), B + 32, "end", String(dl.end ?? e.label ?? ""), { opacity: 0 })];
+    const ylab = lpYLabel(st, pg, L, 64, { opacity: 0 }); if (ylab) labels.push(ylab);   /* top-left, on the callout's row, clear of the ghost */
+    const d = vals.map((v, i) => (i ? "L" : "M") + mx(xs[i]).toFixed(1) + " " + my(v).toFixed(1)).join(" ");
     const p = lpEl("path", "ser", st.chart, { d, style: "stroke:#ED6A4A" });   /* a fall is the negative token */
     const len = p.getTotalLength ? p.getTotalLength() : 2000;
     p.setAttribute("stroke-dasharray", len); p.setAttribute("stroke-dashoffset", len);
     const tip = lpEl("circle", "", st.chart, { r: 6, fill: "#ED6A4A", opacity: 0 });
-    const end = lpEl("circle", "", st.chart, { cx: mx(n - 1).toFixed(1), cy: my(vals[n - 1]).toFixed(1), r: 6, fill: "#F5B72E", opacity: 0 });
-    const s = pg.start || {}, e = pg.end || {};
-    const ghost = lpText(st.chart, "val", mx(0) + 14, my(vals[0]) - 16, "start", String(s.value_string ?? lpFmt(vals[0])), { opacity: 0 });
-    const labels = [lpText(st.chart, "lab", mx(0), B + 32, "start", String(s.label ?? ""), { opacity: 0 }),
-                    lpText(st.chart, "lab", mx(n - 1), B + 32, "end", String(e.label ?? ""), { opacity: 0 })];
+    const end = lpEl("circle", "", st.chart, { cx: mx(xs[n - 1]).toFixed(1), cy: my(vals[n - 1]).toFixed(1), r: 6, fill: "#F5B72E", opacity: 0 });
+    const ghost = lpText(st.chart, "val", mx(xs[0]) + 14, my(vals[0]) - 16, "start", String(s.value_string ?? lpFmt(vals[0])), { opacity: 0 });
+    const name = dl.series ? lpText(st.chart, "sname", mx(xs[0]) + 14, my(vals[0]) + 34, "start", String(dl.series), { opacity: 0, style: LP_HALO + "fill:#ED6A4A" }) : null;   /* named at the line's start, revealed with it */
     const big = lpText(st.chart, "callout", W - R, 70, "end", "", { style: "fill:#F2F2F2;font-size:64px", opacity: 0 });
-    st.dec = { p, len, tip, end, ground, ghost, big, labels, start: vals[0], last: vals[n - 1], endStr: String(e.value_string ?? lpFmt(vals[n - 1])) };
+    st.dec = { p, len, tip, end, ground, ghost, name, big, labels, start: vals[0], last: vals[n - 1], endStr: String(e.value_string ?? lpFmt(vals[n - 1])) };
     st.buildDur = LPX.DECLINE_BUILD; st.paint = paintLedgerDecline;
   };
   const paintLedgerDecline = (st, c) => {
@@ -1538,6 +1605,7 @@
     const drawing = pr > 0.01 && pr < 0.995;
     if (drawing && D.p.getPointAtLength) { const q = D.p.getPointAtLength(D.len * pr); D.tip.setAttribute("cx", q.x.toFixed(1)); D.tip.setAttribute("cy", q.y.toFixed(1)); }
     D.tip.setAttribute("opacity", drawing ? 1 : 0);
+    if (D.name) D.name.setAttribute("opacity", clamp01(pr / 0.08).toFixed(2));
     D.ground.setAttribute("opacity", (0.55 * pr).toFixed(3));
     D.end.setAttribute("opacity", clamp01((pr - 0.94) / 0.06).toFixed(2));
     D.end.setAttribute("r", (6 + 3 * expoOut(lock)).toFixed(2));
@@ -1546,12 +1614,16 @@
   };
   /* COMBO (data-chart): bars and a line on one plot, each on its own scale, a staggered reveal - bars
      in reading order with each value landing as its bar does, then the line draws at one speed with a
-     travelling dot and NYT-style direct labels that count to the exact tokens and stay by the points. */
+     travelling dot and NYT-style direct labels that count to the exact tokens and stay by the points.
+     Hygiene: the bars' scale carries y ticks with the unit and the basis top-left; the line is named
+     inline at its end and its values are direct labels in its own colour (the halo keeps every label
+     legible where the line crosses it; a label that would land on a bar's value stacks above it). */
   const buildLedgerCombo = (st, pg) => {
-    const n = Math.max(1, st.vals.length), maxV = Math.max(1e-9, ...st.vals.map((v) => Math.abs(v))) * 1.12;
-    const base = 470, top = 110, x0 = 60, x1 = 900, bw = (x1 - x0) / n * 0.62, cx = (i) => x0 + (x1 - x0) / n * (i + 0.5);
+    const n = Math.max(1, st.vals.length), maxV = Math.max(1e-9, ...st.vals.map((v) => Math.abs(v))) * 1.12, unit = lpUnit(pg);
+    const base = 470, top = 110, x0 = 96, x1 = 880, bw = (x1 - x0) / n * 0.62, cx = (i) => x0 + (x1 - x0) / n * (i + 0.5);
     lpEl("line", "ax", st.chart, { x1: x0 - 20, x2: x1 + 20, y1: base, y2: base });
-    for (let k = 1; k <= 4; k++) lpEl("line", "grid", st.chart, { x1: x0 - 20, x2: x1 + 20, y1: base - (base - top) * k / 4, y2: base - (base - top) * k / 4 });
+    lpYTicks(st, 0, maxV, (v) => base - v / maxV * (base - top), x0 - 20, x1 + 20, unit, x0 - 30);
+    lpYLabel(st, pg, x0 - 20, top - 16);
     const bars = st.vals.map((v, i) => {
       const h = Math.max(3, Math.abs(v) / maxV * (base - top)), emph = i === st.emph;
       const bar = lpEl("rect", "bar" + (emph ? " emph" : ""), st.chart, { x: (cx(i) - bw / 2).toFixed(1), y: (base - h).toFixed(1), width: bw.toFixed(1), height: h.toFixed(1), rx: 5 });
@@ -1642,6 +1714,7 @@
     /* beat 4: outline on the field's own edge + ink writes, in parallel, once the field has soaked */
     const t3 = tr - LP.ROLL - LP.SAVOR - LP.FIELD;
     st.outline.style.setProperty("--lp-prog", (100 * expoOut(clamp01(t3 / LP.OUTLINE))).toFixed(1));
+    if (st.edgePath) { const L = +st.edgePath.dataset.len; st.edgePath.setAttribute("stroke-dashoffset", (L * (1 - expoOut(clamp01(t3 / LP.OUTLINE)))).toFixed(4)); }
     const n = Math.max(1, st.glyphs.length), per = LP.INK / n;
     st.glyphs.forEach((g, j) => g.style.setProperty("--w", clamp01((t3 - j * per) / (per * 1.6)).toFixed(3)));
     /* beat 4: the build - crisp, landing on the exact strings */

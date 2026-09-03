@@ -295,3 +295,48 @@ def test_combo_spec_carries_bars_and_the_line_tokens_for_the_builder(tmp_path):
     assert spec["value_strings"] == ["8.0", "12.5"] and spec["labels"] == ["Q1", "Q2"]
     assert spec["series"][0]["pts"] == [[1, "2.10"], [2, "3.4"]]         # the y tokens verbatim (ints stay ints)
     assert spec["axes"] == {"ylabel": "$bn"}
+
+
+# --- T5 review: decline endpoints carry DISPLAY labels (doc 29 s9.22: x labels are readable) --
+
+def test_decimal_year_label_formats_month_and_short_year():
+    assert L.decimal_year_label(2024.0027) == "Jan '24"
+    assert L.decimal_year_label(2026.6489) == "Aug '26"
+    assert L.decimal_year_label(2025.5) == "Jul '25"
+    assert L.decimal_year_label(1999.999) == "Dec '99"
+    assert L.decimal_year_label("2024.0027") == "Jan '24"          # the token as written parses too
+    assert L.decimal_year_label(17.3) is None                       # not a year: no label
+    assert L.decimal_year_label("peak") is None
+
+
+def test_display_label_prefers_an_exact_xtick_then_labels_then_the_year():
+    xticks = [[2024.04, "Jan '24"], [2026.54, "Jul '26"]]
+    assert L.display_label("2024.04", 0, xticks=xticks) == "Jan '24"
+    assert L.display_label("2026.54", 1, xticks=xticks) == "Jul '26"
+    assert L.display_label("2024.0027", 0, xticks=xticks) == "Jan '24"        # no tick at that x: the year
+    assert L.display_label("2026.6489", 1, xticks=xticks, labels=["from", "to"]) == "to"   # a labels list wins over the year
+    assert L.display_label("peak", 0) == "peak"                                 # a bar label is already a display string
+
+
+@pytest.mark.skipif(not SMH.exists(), reason="SMH drawdown series not on disk")
+def test_smh_decline_endpoints_carry_display_labels_and_axes():
+    spec = L.build_spec(L.load_series(SMH), "decline")
+    assert spec["start"]["label"] == "2024.0027" and spec["end"]["label"] == "2026.6489"   # labels stay verbatim
+    assert spec["display_labels"] == {"start": "Jan '24", "end": "Aug '26", "series": "CHIP STOCKS: % BELOW THEIR HIGH"}
+    assert spec["axes"]["ylabel"] == "drawdown from running high" and len(spec["axes"]["xticks"]) == 6
+
+
+def test_decline_from_bars_displays_the_bar_labels_and_carries_no_axes():
+    spec = L.build_spec(_bars([88.0, 61.5, 28]), "decline")
+    assert spec["display_labels"] == {"start": "L0", "end": "L2", "series": None}
+    assert "axes" not in spec
+
+
+def test_decline_display_from_a_labels_list_beats_the_decimal_year():
+    series = {"title": "t", "src": "s", "labels": ["start", "mid", "end"],
+              "series": [{"name": "m", "color": "crimson", "pts": [[2024.0, 3], [2025.0, 2], [2026.0, 1]]}]}
+    spec = L.build_spec(series, "decline")
+    assert spec["display_labels"] == {"start": "start", "end": "end", "series": "m"}
+    no_list = {**series, "labels": None}
+    spec2 = L.build_spec(no_list, "decline")
+    assert spec2["display_labels"] == {"start": "Jan '24", "end": "Jan '26", "series": "m"}

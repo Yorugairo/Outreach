@@ -29,7 +29,11 @@ register; ``color`` token names pass through verbatim):
            as one list per series); dense carries labels only. value_strings are the
            tokens EXACTLY as the file wrote them (parse_float=str: 3.90 stays "3.90")
   series, axes   dense-line and combo only, verbatim      periods   race only, verbatim
-  start, end     decline only: {"label", "value", "value_string"}
+  start, end     decline only: {"label", "value", "value_string"} - label is the datum's token verbatim
+  display_labels decline only: {"start", "end", "series"} - the READABLE x labels (s9.22: never a
+           raw float): an exact ``xticks`` match, else a top-level ``labels`` list, else a decimal
+           year as "Mon 'YY", else the token; ``series`` is the metric's name for the inline label
+           (s9.23b; null for bars). A dense-series decline also carries ``axes`` verbatim.
   denominator    progress only, when the file carries one (verbatim token)
 """
 from __future__ import annotations
@@ -47,6 +51,8 @@ DECLINE_MIN_VALUES = 2   # s9.26: one metric, a start and an end
 PROGRESS_MAX = 100       # s9.26 progress: a share of a whole unless a denominator is given
 EXIT_INVALID = 2
 SCHEMA_VERSION = "ledger_page.v1"
+MONTHS = ("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
+YEAR_RANGE = (1900, 2100)   # a decimal x outside this is a number, not a date
 VARIANTS = ("line", "bars", "race", "decline", "progress")
 QUIET_ZONES = ("left", "right")
 AXES_KEYS = ("log", "ylabel", "xticks", "hlines", "hline", "marks", "eventbars",
@@ -71,6 +77,28 @@ def to_number(value: Any) -> float | None:
 def value_string(value: Any) -> str:
     """The token as written (strings are already verbatim under parse_float=str)."""
     return value if isinstance(value, str) else repr(value)
+
+
+def decimal_year_label(value: Any) -> str | None:
+    """A decimal year (2026.6489) -> "Aug '26"; None when the token is not a plausible year."""
+    year = to_number(value)
+    if year is None or not (YEAR_RANGE[0] <= year < YEAR_RANGE[1]):
+        return None
+    whole = int(year)
+    month = min(11, int((year - whole) * 12))
+    return f"{MONTHS[month]} '{whole % 100:02d}"
+
+
+def display_label(token: Any, index: int, xticks: list | None = None, labels: list | None = None) -> str:
+    """The readable label for an x token: an exact xtick, else labels[index], else the year, else the token."""
+    x = to_number(token)
+    if x is not None:
+        for tick in xticks or []:
+            if isinstance(tick, (list, tuple)) and len(tick) == 2 and to_number(tick[0]) == x:
+                return str(tick[1])
+    if isinstance(labels, list) and 0 <= index < len(labels) and _text(labels[index]):
+        return str(labels[index])
+    return decimal_year_label(token) or str(token)
 
 
 def _text(value: Any) -> bool:
@@ -230,13 +258,26 @@ def build_spec(series: dict, variant: str, emphasize: int | None = None,
     if builder == "combo":
         spec.update({k: v for k, v in _dense_block(series).items() if k != "labels"})
     if builder == "decline":
-        spec.update({key: {"label": spec["labels"][i], "value": spec["values"][i],
-                           "value_string": spec["value_strings"][i]} for key, i in (("start", 0), ("end", -1))})
+        spec.update(_decline_block(series, spec))
     if variant == "progress" and "denominator" in series:
         spec["denominator"] = value_string(series["denominator"])
     count = len(spec["labels"])
     spec["emphasize"] = None if emphasize is None or not count else max(0, min(int(emphasize), count - 1))
     return spec
+
+
+def _decline_block(series: dict, spec: dict) -> dict:
+    """start/end verbatim, display_labels readable; a dense-series decline keeps its axes."""
+    dense = dense_series(series)
+    axes = _dense_block(series)["axes"] if dense else {}
+    labels = series.get("labels") if isinstance(series.get("labels"), list) else None
+    ends, displays = {}, {}
+    for key, i in (("start", 0), ("end", len(spec["labels"]) - 1)):
+        token = spec["labels"][i]
+        ends[key] = {"label": token, "value": spec["values"][i], "value_string": spec["value_strings"][i]}
+        displays[key] = display_label(token, i, axes.get("xticks"), labels) if dense else str(token)
+    displays["series"] = (dense[0].get("name") or dense[0].get("label")) if dense else None
+    return {**ends, "display_labels": displays, **({"axes": axes} if dense else {})}
 
 
 def _story_block(series: dict) -> dict:
