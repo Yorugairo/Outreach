@@ -1882,3 +1882,45 @@ it is where the viewer is convinced the evidence will be worth the time.
 The chart's job in the first minute is to prove one sentence, spotlit,
 then leave.
 
+### 9.30 The chart is the PROOF, not the homework — no chart held across plates (operator, 2026-09-03)
+
+Ruling E25. The operator's own read of the analytics behind §9.29: the
+thumbnail converts at 20%, and traffic is ~23% search and ~28% YouTube
+surfaces, so the packaging is not the weakness — *"the weakness is in the
+script. The average drop-off happens on the static chart being held across
+plates. We thought we were helping them read the chart more, but that's
+our fault for assuming they want to do homework. The chart is the proof
+for the narrative, not the homework for the viewer."*
+
+What we had backwards: §9.20's topic-exit audit (E11) authored a chart's
+exit to the END OF THE TOPIC, so Steel and Paper held their chart from
+0:09 to 0:50 across four plates and ours from 0:50 to 1:11 across three,
+and the capital-formation chart for fifty seconds. Those are the still
+stretches the motion gate lists as "dock-held", and they are where the
+audience left.
+
+**Standing rules.**
+1. **A chart enters to prove the sentence being spoken, and leaves when
+   the sentence has been proved.** Its hold is the proof, not the topic:
+   ceiling 10s anywhere, 6s inside the opening minute.
+2. **A chart never survives a plate change.** A dock that straddles a
+   scene boundary is a defect, not a held read; the wipe takes it. If the
+   narrative returns to the chart, RE-ENTER it — spotlit on the new datum
+   (the targeted species) — rather than hold it.
+3. **Reading time is not our gift to give.** A viewer who wants to study
+   the chart pauses; the video's job is to point at the one thing that
+   proves the line and move on. Direction over duration.
+4. §9.20 (topic-governed exits) is amended: exits are PROOF-governed. The
+   topic-exit audit still runs, but it checks that no dock outlives its
+   proof, not that it lasts the topic.
+
+**Gate M12 (motion gate):** a chart dock that spans a scene boundary
+FAILs; a chart dock held over 10s (6s in the first minute) FAILs; the same
+asset re-entering later is the intended pattern. Ep1 baseline: Bravos'
+chart 0:09–0:50 across four plates, ours 0:50–1:11 across three, capital
+formation 2:02–2:52 — all red.
+
+Consequence for the census (§9.28): the fourteen "held-dock stills" are
+not stage-caption cases; they are charts that should have left and come
+back. The re-script's shot table re-enters, it does not hold.
+

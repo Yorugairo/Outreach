@@ -126,3 +126,15 @@ and green, produced by the tools, not asserted:
 Baselines to beat: Script G opening gate 27 FAIL; build-f motion gate 5
 FAIL (M01 15% still, M03 54s gap, M05, M07, M08 six bare stretches).
 
+## Standing rulings that bind the re-script (added 2026-09-03)
+
+- **E24** - the first sentence answers the thumbnail (G45 proxy + J12);
+  roadmap by 0:45 (WARN) / 0:60 (FAIL); the first chart lands 8-20s
+  spotlit on its divergence with a sound hit, never full and unannotated
+  (M11); no still over 6s in the first minute (M10).
+- **E25** - the chart is the proof, not the homework: no chart holds across
+  a plate change; hold ceiling 10s (6s in the first minute); if the
+  narrative returns to a chart it RE-ENTERS spotlit on the new datum (M12).
+  The shot table's "topic-governed exits" are retired: exits are
+  proof-governed.
+

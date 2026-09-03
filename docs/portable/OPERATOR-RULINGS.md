@@ -758,3 +758,18 @@ frame (M11). Why: at a 20% CTR the viewer arrives primed; a static chart
 taxes them with axes and legends before they know why to care, and the
 drop lands at 0:45–1:00 — exactly where Steel and Paper lost them.
 
+## E25 — The chart is the proof, not the homework (2026-09-03)
+
+The analytics behind E24, read by the operator: the thumbnail converts at
+20% and traffic is ~23% search / ~28% YouTube surfaces, so the packaging
+holds; *"the weakness is in the script. The average drop-off happens on
+the static chart being held across plates - we thought we were helping
+them read the chart more, but that's our fault for assuming they want to
+do homework. The chart is the proof for the narrative, not the homework
+for the viewer."* Standing rule: a chart enters to prove the sentence
+being spoken and leaves when it has (hold ceiling 10s, 6s in the first
+minute); a chart never survives a plate change - if the narrative returns
+to it, it re-enters spotlit on the new datum. E11's topic-governed exits
+are amended to proof-governed exits. Gate M12. Why: reading time is not
+ours to give; a viewer who wants to study pauses. Direction over duration.
+
