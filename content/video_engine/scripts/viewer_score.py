@@ -49,6 +49,10 @@ DEAD_RUN_LEN = 2              # two dead windows in a row = 30s with nothing new
 OPEN_LOOP_MIN = 0.50          # doc 31 retention clock: an open loop should be live in at least half the windows
 CONCRETE_RULE = ("a new thing is CONCRETE when it carries a numeral, or a capitalised name, or a word this "
                  "window introduced that the memory did not already hold - crude on purpose, and constant-cited")
+# A 15s window lands mid-sentence, so the reader reports the cut itself as something it could not
+# follow. That is OUR instrument's artifact, not the script's defect (ep1 calibration 2026-09-03:
+# 20 of 42). Confusion counts only what survives this filter.
+WINDOW_CUT_RE = re.compile(r"incomplete|cuts? off|cut short|trails? off|unfinished|mid-sentence|ends? abruptly|truncat", re.I)
 
 STOP = {
     "the", "a", "an", "and", "or", "but", "of", "to", "in", "on", "at", "for", "with", "by", "from", "as",
@@ -170,7 +174,10 @@ def score(windows_doc: dict, reports_doc: dict, script_text: str) -> dict:
             "gain": len(concrete), "concrete": concrete,
             "held_question": (rep.get("held_question") or "").strip(),
             "asked_of_me": (rep.get("asked_of_me") or "").strip(),
-            "could_not_follow": [c for c in (rep.get("could_not_follow") or []) if isinstance(c, str) and c.strip()],
+            "could_not_follow": [c for c in (rep.get("could_not_follow") or [])
+                                 if isinstance(c, str) and c.strip() and not WINDOW_CUT_RE.search(c)],
+            "window_cuts": [c for c in (rep.get("could_not_follow") or [])
+                            if isinstance(c, str) and WINDOW_CUT_RE.search(c)],
             "error": rep.get("error", ""),
         })
 
@@ -241,7 +248,7 @@ def score(windows_doc: dict, reports_doc: dict, script_text: str) -> dict:
                     "nothing the reader could not follow" if not confusion else
                     f"{len(confusion)} window(s) with something unfollowable: "
                     + "; ".join(f"{p['span']} {p['could_not_follow'][0][:60]}" for p in confusion[:4]),
-                    "comprehension outranks structure (STRENGTH-LOOP precedence)"))
+                    "comprehension outranks structure (STRENGTH-LOOP precedence); window-cut artifacts excluded"))
     gains = [p["gain"] for p in answered]
     rows.append(Row("V05", "INFO",
                     (f"gain per window: median {sorted(gains)[len(gains) // 2]}, "

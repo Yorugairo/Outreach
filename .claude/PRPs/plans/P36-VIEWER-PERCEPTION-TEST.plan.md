@@ -1,7 +1,7 @@
 ---
 id: P36-VIEWER-PERCEPTION-TEST
 title: The viewer - a blind, windowed perception test that measures whether the declared structure survives the read
-status: draft
+status: review
 operation: feature
 risk: standard
 owner: parent
@@ -174,49 +174,49 @@ Acceptance:
 ## Task Slices
 
 ### T1: Windows
-- Status: pending
+- Status: done
 - Owner: junior_developer (→ `general-purpose`)
 - Depends on: none
 - Write set: `content/video_engine/scripts/viewer_windows.py`, `content/video_engine/tests/test_viewer_windows.py`
 - Acceptance: windows of `WINDOW_S` cut on word boundaries from the take's `words` (never mid-word), or from the kit rate when no take exists (reported as estimated); each window carries its mm:ss span, its words, and the memory text of the previous `MEMORY_WINDOWS` windows; beat tags and pause marks are stripped from what the viewer sees (`beat_tags.strip_marks`); ep1 → ~54 windows; the conforming fixture → its window count; JSON written beside the script.
 - Validate: `python -m pytest content/video_engine/tests/test_viewer_windows.py -q`
-- Evidence: pending
+- Evidence: commit fbfcd7f; `viewer_windows.py` (word-boundary cut on the take's own times, `--timeline` > `load_timings` > kit rate, `beat_tags.strip_marks` applied inside `build_windows` so every path into the viewer is stripped, empty windows kept so index i always means the same clock); `pytest test_viewer_windows.py -q` 17 passed; ep1 -> 54 windows, `timing_source: measured`, runtime 806.5s, `SCRIPT-G-VIEWER-WINDOWS.json` committed as the calibration input. Deviation: none to the JSON shape
 
 ### T2: The prompt and the headless runner
-- Status: pending
+- Status: done
 - Owner: implementation_luna (→ `general-purpose`)
 - Depends on: none (T1's JSON shape is fixed in this plan)
 - Write set: `content/video_engine/configs/viewer_prompt.v1.md`, `content/video_engine/scripts/viewer_run.py`
 - Acceptance: WINDOW 0 is the package: the viewer is shown the thumbnail (`--thumb-file`) and the title and asked one question - "what were you promised?" - and window 1's report adds "was the promise answered, and by which sentence?" (E27: the package answered is the first measure; E24's G45 is only the proxy); then the prompt gives the viewer ONLY the memory text and the window text and asks the four questions, answering in strict JSON; `viewer_run.py` calls Codex headless once per window (`-m` strongest available, `-c model_reasoning_effort=high`, `--approve-for-me`, stdin /dev/null, per-window log), retries a malformed JSON once, records model + prompt version + timestamps, and writes `<script>-VIEWER-REPORTS.json`; a `--dry-run` writes the prompts without calling; a `--limit N` runs the first N windows.
 - Validate: `python content/video_engine/scripts/viewer_run.py <conforming fixture> --limit 3` produces three well-formed reports; `--dry-run` on ep1 writes 54 prompts
-- Evidence: pending
+- Evidence: commit ccafd99; `viewer_prompt.v1.md` (v1, three sendable blocks; a leak scan of the sendable text finds none of beat/tag/doctrine/phase/retention/hook/gate/structure - the worked example is about a bakery so it primes nothing of ours) and `viewer_run.py` (pure `render_prompt`/`parse_response` seams, one call per window, retry-once then record the error and continue, reports rewritten after every window). Deviation, and it matters: the call's `--cd` points at an EMPTY directory outside the repo - codex discovers AGENTS.md by walking upward, so running it inside the checkout would hand the viewer the whole doctrine and void the test. Fixed live during the smoke test: `-i/--image` is VARIADIC and swallowed the positional prompt, so the package call fell back to stdin and failed twice; the image now precedes the non-variadic `-c` that closes the list
 
 ### T3: The scorer
-- Status: pending
+- Status: done
 - Owner: implementation_luna (→ `general-purpose`)
 - Depends on: T1
 - Write set: `content/video_engine/scripts/viewer_score.py`, `content/video_engine/tests/test_viewer_score.py`, `content/video_engine/tests/fixtures/viewer/`
 - Acceptance: joins reports with declared beats and clocks; BEAT RECALL per tag (perceived within ±1 window when the viewer's held_question or new_things matches the beat's sentence by token overlap ≥ the constant, listing the matching viewer line); INFO GAIN per window (concrete = contains a numeral, a capitalised name, or a noun the window introduces - the rule is constant-cited and crude on purpose); OPEN-LOOP coverage; DEAD windows and dead-runs; CONFUSION; a `RESULT:` summary line; `<script>-VIEWER.md`. Tests: a recorded fixture where a declared [rehook] is never perceived → recall < 100%; a fixture with a dead-run → flagged; determinism (same input, same file).
 - Validate: `python -m pytest content/video_engine/tests/test_viewer_score.py -q`
-- Evidence: pending
+- Evidence: commit fbfcd7f; `viewer_score.py` - BEAT RECALL joins the writer's declarations to the blind reports by content-token overlap (floor of 2 tokens AND 20% of a long beat sentence; the ratio alone let one shared word like 'steel' count as feeling a beat, caught by the fixture and tightened), INFO GAIN by the CONCRETE_RULE constant, plus open-loop coverage, dead-runs, confusion; levels are always computed here and bound only by the runner. `pytest test_viewer_score.py -q` 14 passed; recorded fixtures under tests/fixtures/viewer/. Verified against the real ep1 windows: all 37 declared beats place, recall 0% on an empty report set
 
 ### T4: The VIEWER block in the runner and the report contract
-- Status: pending
+- Status: done
 - Owner: junior_developer (→ `general-purpose`)
 - Depends on: T3
 - Write set: `content/video_engine/scripts/run_script_gates.py`, `content/video_engine/tests/test_run_script_gates.py`, `docs/content-video-engine/patterns/CHECK-RESPONSIBILITIES.md`, `docs/content-video-engine/PIPELINE.md`
 - Acceptance: when `<script>-VIEWER.md` exists beside the script the runner appends a VIEWER block (recall %, dead windows, open-loop coverage) as INFO rows that never change the VERDICT (advisory); a `--viewer-gate` flag (off by default; on after Human Gate 1) makes recall < 100% a FAIL and a dead-run a WARN; §5 gains the block; PIPELINE stage 4b.
 - Validate: `python -m pytest content/video_engine/tests/test_run_script_gates.py -q`
-- Evidence: pending
+- Evidence: commit fbfcd7f; `viewer_rows` / `viewer_block` / `viewer_path` in run_script_gates.py; advisory by default (every row shown at INFO, counts returned zero, the block says Human Gate 1 is not granted), `--viewer-gate` promotes FAIL/WARN and `verdict_line` gains a viewer term; `pytest test_run_script_gates.py -q` 18 passed (5 new). CHECK-RESPONSIBILITIES §5 and PIPELINE stage 4b ride with T5's docs commit
 
 ### T5: Calibration on Script G
-- Status: pending
+- Status: done (Human Gate 1 open: the promotion ruling is the operator's)
 - Owner: parent
 - Depends on: T2, T3
 - Write set: `content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-G-VIEWER-REPORTS.json`, `SCRIPT-G-VIEWER.md`, `SCRIPT-G-VIEWER-CALIBRATION.md`, `docs/portable/OPERATOR-RULINGS.md` (E26), `docs/content-video-engine/CAPABILITIES.md`
 - Acceptance: the full ep1 run (54 windows, high effort); the calibration report places each window's gain and held-question beside the retention curve's drop points (0:45–1:00; the dock-held stills) and states, window by window, whether the instrument agrees; the four questions and three sample answers are shown to the operator (Human Gate 2); the operator's promotion ruling (Human Gate 1) is recorded in E26 and, if granted, `--viewer-gate` becomes the runner's default in a follow-up commit.
 - Validate: the three files exist; `viewer_score.py` on ep1 exits 0; the calibration report cites the analytics drop points by mm:ss
-- Evidence: pending
+- Evidence: commit follows; full ep1 run 54/54 windows + the package window, high effort, 0 errored; `SCRIPT-G-VIEWER-REPORTS.json`, `SCRIPT-G-VIEWER.md`, `SCRIPT-G-VIEWER-CALIBRATION.md`. RESULT 1 FAIL / 1 WARN / 2 PASS / 1 INFO. Calibration verdict PARTIAL: the package measure and beat recall agree with the analytics (the reader is promised 'why the AI boom may be a bubble and what endures', reports the promise 'not yet' answered at w1, and four of the twelve unperceived beats - payoff, reflect, opponent, rehook - are exactly the beats the annotated gate placed outside their windows); INFORMATION GAIN DOES NOT - w3 (0:45-1:00, where viewers actually leave) scores 5 against a median of 3, every dock-held still scores at or above median, and there is no dead window in the episode, so promoting gain would add a row that stays green on the one episode we know failed. Confusion DOES track: 22 real misses after filtering 20 window-cut artifacts (that filter is now in the scorer), ten of them unresolved referents, and one finding no other instrument produced - 'Bravos' is unfollowable at 6:45, 9:00, 12:00 and 13:00, i.e. the counterparty evaporates mid-argument. Recommendation to Human Gate 1: promote recall to FAIL, keep gain at INFO, promote confusion to WARN in gain's place. The runner shows the block advisory on ep1 and the VERDICT is unchanged (2 failing tools, none of them the viewer)
 
 ## Verification
 
@@ -226,9 +226,11 @@ python content/video_engine/scripts/viewer_windows.py content/video_engine/proje
 python scripts/prp_validate.py .claude/PRPs/plans/P36-VIEWER-PERCEPTION-TEST.plan.md
 ```
 
-Baselines: ep1's declared-beat recall is undefined (Script G declares no
-beats) - the calibration uses the conforming fixture for recall and ep1
-for the gain/open-loop agreement with the analytics.
+Baselines: Script G was annotated with its 37 real beats on 2026-09-03 (the
+gate-calibration pass, commit 977fb36), so ep1 now carries declared beats and
+recall IS measurable on it - the calibration uses BOTH: the conforming fixture
+for a clean-recall control and ep1 for recall plus the gain/open-loop agreement
+with the analytics drop.
 
 ## Evidence And Handoff
 

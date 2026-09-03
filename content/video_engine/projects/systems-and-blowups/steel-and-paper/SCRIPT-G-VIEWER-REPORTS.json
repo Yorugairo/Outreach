@@ -1,0 +1,777 @@
+{
+  "schema_version": "viewer_reports.v1",
+  "prompt_version": "v1",
+  "script": "SCRIPT-G-VO.txt",
+  "windows_file": "SCRIPT-G-VIEWER-WINDOWS.json",
+  "model": "(codex default)",
+  "effort": "high",
+  "lane": "codex",
+  "started_at": "2026-09-03T10:59:13+00:00",
+  "finished_at": "2026-09-03T11:08:34+00:00",
+  "windows_run": 54,
+  "package": {
+    "status": "asked",
+    "title": "The AI Bubble Is Real. What Survives Is Steel.",
+    "thumb_file": "content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\packaging\\thumbnail-FINAL-steelpaper.png",
+    "promised": "A grounded look at whether the AI investment bubble is real, and why physical infrastructure like steel may outlast speculative hype. I expect to learn what parts of the AI boom are durable and what signals point to a bust."
+  },
+  "reports": [
+    {
+      "i": 0,
+      "span": "0:00-0:15",
+      "new_things": [
+        "The safest thing you own is compared to an iron spike.",
+        "The iron spike ruined almost everyone who touched it.",
+        "The year associated with the spike was 1845.",
+        "Someone today is watching his fourth version of the same chart during his lunch break.",
+        "The chart is being presented in different voices."
+      ],
+      "held_question": "What is the chart about, and how does it connect to the iron spike and the AI investment bubble?",
+      "asked_of_me": "",
+      "could_not_follow": [
+        "The sentence ending with “Different voice” was incomplete."
+      ],
+      "promise_answered": "not yet",
+      "answered_by": ""
+    },
+    {
+      "i": 1,
+      "span": "0:15-0:30",
+      "new_things": [
+        "The chart has two lines.",
+        "AI is being compared to 1845 again.",
+        "The chart is repeatedly copied, with each version becoming louder.",
+        "The people who built it are usually not named.",
+        "No one checked the original chart's math.",
+        "Index funds are already holding something related to it, but the sentence was cut off."
+      ],
+      "held_question": "What is the index fund already holding?",
+      "asked_of_me": "",
+      "could_not_follow": [
+        "What exactly AI is being compared to in 1845"
+      ]
+    },
+    {
+      "i": 2,
+      "span": "0:30-0:45",
+      "new_things": [
+        "The original chart comes from Bravos Research.",
+        "It is described as a sharp macro chart on YouTube.",
+        "The chart compares two lines involving mega-cap companies: Meta, Apple, Microsoft, Amazon, and Alphabet."
+      ],
+      "held_question": "What do the chart’s two lines show, and how do they support the claim that AI is 1845 again?",
+      "asked_of_me": "",
+      "could_not_follow": []
+    },
+    {
+      "i": 3,
+      "span": "0:45-1:00",
+      "new_things": [
+        "The mega-caps rose 21% in a year.",
+        "The index was plotted beneath them and followed the same line.",
+        "The giants now represent the market.",
+        "The chip industry rose 105% and outpaced both the giants and the index.",
+        "Bravos’ chart left out another layer."
+      ],
+      "held_question": "What is the layer that Bravos’ chart never drew?",
+      "asked_of_me": "",
+      "could_not_follow": []
+    },
+    {
+      "i": 4,
+      "span": "1:00-1:15",
+      "new_things": [
+        "Memory companies are described as the builders inside the builders.",
+        "Memory is up 613%.",
+        "The chart is considered correct, but its warning is aimed at the wrong place.",
+        "What follows will be one test, not a rebuttal, victory lap, or panic."
+      ],
+      "held_question": "What is the one test?",
+      "asked_of_me": "",
+      "could_not_follow": [
+        "The sentence ending with “One test” was incomplete."
+      ]
+    },
+    {
+      "i": 5,
+      "span": "1:15-1:30",
+      "new_things": [
+        "The test has three questions and is meant to sort each holding into steel or paper.",
+        "It should take about thirty seconds to run the test on each stock.",
+        "The opponent is the hype cycle, a machine that attracts capital."
+      ],
+      "held_question": "What are the three questions in the test?",
+      "asked_of_me": "",
+      "could_not_follow": [
+        "The sentence ending with “capital arriving” is incomplete."
+      ]
+    },
+    {
+      "i": 6,
+      "span": "1:30-1:45",
+      "new_things": [
+        "The hype cycle is capital arriving faster than the value it is chasing.",
+        "The testable machine is the hype cycle itself.",
+        "Bravos’ strongest argument is that every transformative technology overshoots.",
+        "The example begins with railways."
+      ],
+      "held_question": "What is the rest of Bravos’ full-strength case, beginning with railways?",
+      "asked_of_me": "",
+      "could_not_follow": [
+        "The sentence about railways was cut off."
+      ]
+    },
+    {
+      "i": 7,
+      "span": "1:45-2:00",
+      "new_things": [
+        "Railways in the 1840s attracted a quarter-billion pounds, worth more than a trillion dollars today.",
+        "Railway stocks later crashed by nearly two-thirds.",
+        "In 2000, the internet crossed seven percent of GDP.",
+        "The speaker says the tower then came down."
+      ],
+      "held_question": "What does Bravos' math say about AI?",
+      "asked_of_me": "",
+      "could_not_follow": [
+        "The sentence about Bravos' math and AI cuts off."
+      ]
+    },
+    {
+      "i": 8,
+      "span": "2:00-2:15",
+      "new_things": [
+        "AI spending has crossed 8% of GDP.",
+        "In the 1840s, railways accounted for roughly half of all British investment.",
+        "The speaker is applying the same comparison measure across historical examples."
+      ],
+      "held_question": "What will this same measure show about AI spending?",
+      "asked_of_me": "",
+      "could_not_follow": [
+        "The sentence cuts off at “My version runs the same measure.”"
+      ]
+    },
+    {
+      "i": 9,
+      "span": "2:15-2:30",
+      "new_things": [
+        "The measure is applied to America using government statistics.",
+        "It counts computing and software as a share of private investment.",
+        "At the dot-com peak, computing and software made up 23 cents of every private investment dollar.",
+        "Today that share is 28 cents, the highest ever."
+      ],
+      "held_question": "What does this measure show when it is run back through American history?",
+      "asked_of_me": "",
+      "could_not_follow": []
+    },
+    {
+      "i": 10,
+      "span": "2:30-2:45",
+      "new_things": [
+        "All equipment and ideas together account for more than sixty-five percent.",
+        "That figure includes everything from trucks to patents, so it does not measure one technology.",
+        "The speaker claims nothing since the railways has matched them.",
+        "The speaker says something is making the closest attempt in a hundred..."
+      ],
+      "held_question": "A hundred what is this the closest run at it in?",
+      "asked_of_me": "",
+      "could_not_follow": [
+        "The sentence ending with \"in a hundred\" is unfinished."
+      ]
+    },
+    {
+      "i": 11,
+      "span": "2:45-3:00",
+      "new_things": [
+        "The current development is being described as the closest comparable event to the railways in 180 years.",
+        "The channel is introducing a new yardstick whose threshold has not yet been set.",
+        "They will examine the yardstick quarter by quarter.",
+        "Bravos’ sharpest line is the trigger for the mania ending.",
+        "The mania ends when interest rates rise above the level at which borrowing becomes difficult."
+      ],
+      "held_question": "What level must rates cross above for borrowing to become a problem?",
+      "asked_of_me": "",
+      "could_not_follow": [
+        "The new yardstick is not defined yet.",
+        "The sentence about where borrowing becomes difficult is unfinished."
+      ]
+    },
+    {
+      "i": 12,
+      "span": "3:00-3:15",
+      "new_things": [
+        "The Bank of England rose above six percent before the railway boom rolled over.",
+        "The Fed reached six and a half percent in 2000 before the internet trade rolled over.",
+        "Bravos’s trigger for this cycle is the Fed rising above five and a half percent."
+      ],
+      "held_question": "Will the Fed rise back above five and a half percent in this cycle?",
+      "asked_of_me": "Put my agreement on the record.",
+      "could_not_follow": []
+    },
+    {
+      "i": 13,
+      "span": "3:15-3:30",
+      "new_things": [
+        "The cycle is real.",
+        "The threshold is real.",
+        "The speaker advises not trying to call the top.",
+        "The speaker used to risk-score portfolios for a bank.",
+        "Risk charts usually fail by pointing in the wrong direction, rather than by lying."
+      ],
+      "held_question": "What does it mean that risk charts fail by pointing?",
+      "asked_of_me": "",
+      "could_not_follow": [
+        "The meaning of risk charts failing by pointing"
+      ]
+    },
+    {
+      "i": 14,
+      "span": "3:30-3:45",
+      "new_things": [
+        "The obvious move is to take profits on the AI trade.",
+        "Chipmakers have doubled while customers have stayed flat at the index.",
+        "That pattern looks like textbook profit-taking and would be endorsed by any adviser.",
+        "Bravos' own chart appears strange, and that strangeness is important to the story."
+      ],
+      "held_question": "What is strange about Bravos' chart?",
+      "asked_of_me": "",
+      "could_not_follow": [
+        "The phrase \"Walk their\" is incomplete."
+      ]
+    },
+    {
+      "i": 15,
+      "span": "3:45-4:00",
+      "new_things": [
+        "Alex Karp of Palantir says enterprises are paying for tokens that create no value.",
+        "Karp says something has gone completely wrong.",
+        "Uber's CTO says the company used up its entire annual AI budget by April."
+      ],
+      "held_question": "What exactly is strange about Bravos' chart, and how do these examples reveal it?",
+      "asked_of_me": "",
+      "could_not_follow": []
+    },
+    {
+      "i": 16,
+      "span": "4:00-4:15",
+      "new_things": [
+        "Four months is mentioned.",
+        "A COO says AI spending is harder to justify when it cannot be directly tied to what the company ships.",
+        "The speaker says this connects to question three."
+      ],
+      "held_question": "What do the two stories show if this is not the peak?",
+      "asked_of_me": "Remember the COO's line.",
+      "could_not_follow": [
+        "What the four months refers to.",
+        "What question three is."
+      ]
+    },
+    {
+      "i": 17,
+      "span": "4:15-4:30",
+      "new_things": [
+        "The disappointment is already happening, not still waiting to arrive.",
+        "The current phase is described as a trough where less-serious participants are discovering the costs through their budgets.",
+        "The important question is now what will survive.",
+        "The speaker has started to introduce something from 1849."
+      ],
+      "held_question": "What will survive, and how does 1849 relate to that?",
+      "asked_of_me": "",
+      "could_not_follow": [
+        "The sentence beginning “And in 1849,” was unfinished."
+      ]
+    },
+    {
+      "i": 18,
+      "span": "4:30-4:45",
+      "new_things": [
+        "In 1849, the thing that lasted was the steel rather than the paper.",
+        "The trains kept running through the crash, and towns continued growing around their stations.",
+        "The steel kept functioning while the paper stopped pretending.",
+        "The question now is who is paying for the steel.",
+        "For years, the giants paid for all of it."
+      ],
+      "held_question": "Who is paying for the steel this time?",
+      "asked_of_me": "",
+      "could_not_follow": [
+        "The sentence about the giants paying for all of it is unfinished."
+      ]
+    },
+    {
+      "i": 19,
+      "span": "4:45-5:00",
+      "new_things": [
+        "For years, the giants funded everything from cash on hand without borrowing.",
+        "Their bills eventually became larger than their cash reserves.",
+        "From 2020 to 2024, the biggest builders borrowed about $28 billion per year.",
+        "Last year, they borrowed $121 billion.",
+        "This year’s borrowing is expected to be even higher."
+      ],
+      "held_question": "How much are they tracking toward borrowing this year?",
+      "asked_of_me": "",
+      "could_not_follow": [
+        "The sentence cuts off before giving this year’s figure."
+      ]
+    },
+    {
+      "i": 20,
+      "span": "5:00-5:15",
+      "new_things": [
+        "The builders are on track to borrow $150 billion this year.",
+        "That level of borrowing could significantly affect the bond market.",
+        "Technology now makes up about 10% of the investment-grade bond index, up from about 9%.",
+        "Technology's share is projected to rise above 12%."
+      ],
+      "held_question": "Where did the money used to sit, and where is it moving now?",
+      "asked_of_me": "",
+      "could_not_follow": []
+    },
+    {
+      "i": 21,
+      "span": "5:15-5:30",
+      "new_things": [
+        "Money in utilities and banks is becoming a bet on data centers.",
+        "Data-center spending is not slowing down.",
+        "The spending estimate rose from $480 billion to $690 billion.",
+        "The estimate increased faster than the year progressed."
+      ],
+      "held_question": "",
+      "asked_of_me": "",
+      "could_not_follow": []
+    },
+    {
+      "i": 22,
+      "span": "5:30-5:45",
+      "new_things": [
+        "There are another $822 billion in lease commitments.",
+        "These are for data centers already contracted and agreed to be paid for.",
+        "Those lease commitments have not appeared on balance sheets."
+      ],
+      "held_question": "What is the speaker about to say after “Not”?",
+      "asked_of_me": "",
+      "could_not_follow": [
+        "The sentence cuts off after “Not.”"
+      ]
+    },
+    {
+      "i": 23,
+      "span": "5:45-6:00",
+      "new_things": [
+        "PIMCO estimates that over the next two years the buildout will consume 94% of the companies’ operating cash flow."
+      ],
+      "held_question": "Which companies is PIMCO referring to?",
+      "asked_of_me": "",
+      "could_not_follow": []
+    },
+    {
+      "i": 24,
+      "span": "6:00-6:15",
+      "new_things": [
+        "The buildout consumes all of the companies’ operating cash, so they are borrowing to cover the difference.",
+        "The buildout used to be funded from profits, but that stopped about eighteen months ago."
+      ],
+      "held_question": "",
+      "asked_of_me": "",
+      "could_not_follow": []
+    },
+    {
+      "i": 25,
+      "span": "6:15-6:30",
+      "new_things": [
+        "Nobody involved committed fraud.",
+        "They signed a promise during a good year.",
+        "The physical buildout continued while the paperwork and obligations grew heavier.",
+        "Promises are not included in the chart everyone is repeating."
+      ],
+      "held_question": "What does the chart leave out about those promises?",
+      "asked_of_me": "",
+      "could_not_follow": [
+        "Who exactly “they” refers to.",
+        "The sentence about what everyone repeating the chart is missing is unfinished."
+      ]
+    },
+    {
+      "i": 26,
+      "span": "6:30-6:45",
+      "new_things": [
+        "The bubble is in the financial paper around the steel infrastructure, not in AI stocks.",
+        "The 1845 crisis in England was caused by railway certificates rather than railways themselves."
+      ],
+      "held_question": "How did railway certificates break England in 1845?",
+      "asked_of_me": "",
+      "could_not_follow": []
+    },
+    {
+      "i": 27,
+      "span": "6:45-7:00",
+      "new_things": [
+        "The paper promises were priced using the best year and held by people who had not checked what they owned.",
+        "Bravos has a number showing where that paper exists today.",
+        "AI builders make up 20% of the S&P 500, compared with a historical 2–4%."
+      ],
+      "held_question": "What comes after “Every” in the comparison?",
+      "asked_of_me": "",
+      "could_not_follow": [
+        "Bravos"
+      ]
+    },
+    {
+      "i": 28,
+      "span": "7:00-7:15",
+      "new_things": [
+        "Every index fund has about one-fifth of its value tied to AI companies.",
+        "Target-date funds also have that same exposure and are commonly the default retirement option.",
+        "If the AI companies lose half their value, the overall market would drop about 10%."
+      ],
+      "held_question": "",
+      "asked_of_me": "Calculate the market impact if AI stocks fall by half.",
+      "could_not_follow": []
+    },
+    {
+      "i": 29,
+      "span": "7:15-7:30",
+      "new_things": [
+        "The other 490 companies effectively have no say in the market’s movement.",
+        "The real risk was the certificates representing ownership, not the price spike itself.",
+        "A bubble happens when ownership grows faster than people’s understanding, rather than when the technology fails."
+      ],
+      "held_question": "",
+      "asked_of_me": "Look at the spike again.",
+      "could_not_follow": []
+    },
+    {
+      "i": 30,
+      "span": "7:30-7:45",
+      "new_things": [
+        "In 1845, the railway infrastructure worked, but railway investments still lost about two-thirds of their value.",
+        "Railway steel remained unused for twenty years while the economy caught up.",
+        "The eventual return took two decades."
+      ],
+      "held_question": "What does 1845 prove, and what step is missing from the railway map?",
+      "asked_of_me": "",
+      "could_not_follow": [
+        "The jump to 1845 and what it refers to.",
+        "Why working railway infrastructure still led to a two-thirds loss."
+      ]
+    },
+    {
+      "i": 31,
+      "span": "7:45-8:00",
+      "new_things": [
+        "Today's compute depreciates in about five years.",
+        "Compute builders are already sold out into next year, with orders placed and production slots taken.",
+        "Governments are creating national AI programs using the same hardware.",
+        "The demand is different and operates on a different timeline."
+      ],
+      "held_question": "What do the different demand and depreciation timelines mean for the investment risk?",
+      "asked_of_me": "",
+      "could_not_follow": []
+    },
+    {
+      "i": 32,
+      "span": "8:00-8:15",
+      "new_things": [
+        "The builders have a deeper moat than paper holders can see.",
+        "The paper stacked on top is taller than the builders admit.",
+        "Both claims are true at the same time.",
+        "The test is to take any holding and ask it three questions."
+      ],
+      "held_question": "What are the three questions I am supposed to ask a holding?",
+      "asked_of_me": "Take any holding and ask it three questions.",
+      "could_not_follow": [
+        "What “the one from the top” refers to",
+        "The three questions were not yet given"
+      ]
+    },
+    {
+      "i": 33,
+      "span": "8:15-8:30",
+      "new_things": [
+        "The test has three questions: whether what a holding sells is scarce or abundant, whether its growth is funded by earned cash or issued paper, and whether it would still be used if hype disappeared.",
+        "Scarcity can be recognized through being sold out, becoming more expensive, or being fought over."
+      ],
+      "held_question": "How would a particular holding perform when judged by these three questions?",
+      "asked_of_me": "Take any holding and ask it these three questions.",
+      "could_not_follow": []
+    },
+    {
+      "i": 34,
+      "span": "8:30-8:45",
+      "new_things": [
+        "You can check all three questions from your phone.",
+        "Scarcity appears in order-book signals such as sellouts, waitlists, and rising prices.",
+        "A finance site shows the cash answer through operating cash flow and the share count."
+      ],
+      "held_question": "What is the significance if cash flow is positive?",
+      "asked_of_me": "",
+      "could_not_follow": []
+    },
+    {
+      "i": 35,
+      "span": "8:45-9:00",
+      "new_things": [
+        "Positive operating cash flow and a stable share count mean the company is not issuing shares to survive.",
+        "You can test an asset by imagining whether it would still be used without hype.",
+        "Steel is presented as scarce, cash-generating, and useful.",
+        "Paper is presented as abundant, issued, and dependent on belief."
+      ],
+      "held_question": "",
+      "asked_of_me": "Picture the product with the hype gone.",
+      "could_not_follow": []
+    },
+    {
+      "i": 36,
+      "span": "9:00-9:15",
+      "new_things": [
+        "The speaker wants you to run your top five holdings on Bravos’ divergence chart.",
+        "A doubling chip line means scarcity is being repriced.",
+        "Large companies staying tied to the index despite massive spending means the market wants an answer about the product without its hype."
+      ],
+      "held_question": "What does the divergence show?",
+      "asked_of_me": "Run your top five holdings on Bravos’ divergence chart tonight.",
+      "could_not_follow": [
+        "Bravos’ divergence chart",
+        "The sentence about the divergence was cut off"
+      ]
+    },
+    {
+      "i": 37,
+      "span": "9:15-9:30",
+      "new_things": [
+        "The divergence is described as a public test rather than a house of cards.",
+        "The suggested test is to run it on the trade’s most extreme number.",
+        "SK hynix is named as the example.",
+        "SK hynix makes the stacked memory used in AI racks."
+      ],
+      "held_question": "What has SK hynix’s stock done over the last year?",
+      "asked_of_me": "Run the test on SK hynix.",
+      "could_not_follow": [
+        "Which number is meant by the trade’s most extreme number."
+      ]
+    },
+    {
+      "i": 38,
+      "span": "9:30-9:45",
+      "new_things": [
+        "SK hynix’s stock is up more than 500% over the past year.",
+        "That 500% rise is presented as the clearest possible bubble candidate in the story.",
+        "The scarcity behind the rise is described as physical rather than emotional or speculative.",
+        "High-bandwidth memory stacks its dies vertically."
+      ],
+      "held_question": "How does stacking the memory dies vertically create the physical scarcity being described?",
+      "asked_of_me": "",
+      "could_not_follow": []
+    },
+    {
+      "i": 39,
+      "span": "9:45-10:00",
+      "new_things": [
+        "A gigabyte of high-bandwidth memory uses about three times as much wafer capacity as ordinary memory.",
+        "Supplying accelerators with this memory reduces the silicon available for other products.",
+        "This helps explain why laptop memory is expensive this year."
+      ],
+      "held_question": "What are the three questions to ask about this situation?",
+      "asked_of_me": "Ask it the three questions.",
+      "could_not_follow": []
+    },
+    {
+      "i": 40,
+      "span": "10:00-10:15",
+      "new_things": [
+        "The company says its capacity is essentially sold out for the year.",
+        "The company is selling products rather than issuing stock to stay afloat.",
+        "The memory is going into racks that are already under..."
+      ],
+      "held_question": "What are the racks already under?",
+      "asked_of_me": "Ask it the three questions.",
+      "could_not_follow": [
+        "The sentence about the racks cuts off after “already under.”"
+      ]
+    },
+    {
+      "i": 41,
+      "span": "10:15-10:30",
+      "new_things": [
+        "The test passes for this case.",
+        "Steel is the most vertical line on the board.",
+        "Applying the test honestly can clear companies someone wanted to short and flag companies they already hold."
+      ],
+      "held_question": "Which specific names will the test clear or flag?",
+      "asked_of_me": "Run the test honestly.",
+      "could_not_follow": [
+        "What “the board” refers to",
+        "What makes a line “vertical”"
+      ]
+    },
+    {
+      "i": 42,
+      "span": "10:30-10:45",
+      "new_things": [
+        "Bravos considers the Fed being back above 5.5 its tripwire.",
+        "The speaker uses a stricter threshold than Bravos.",
+        "The variable under discussion is memory, specifically RAM in data centers."
+      ],
+      "held_question": "What stricter threshold does the speaker use?",
+      "asked_of_me": "",
+      "could_not_follow": [
+        "The sentence cut off after \"And I don't\"."
+      ]
+    },
+    {
+      "i": 43,
+      "span": "10:45-11:00",
+      "new_things": [
+        "The speaker built a monitor that tracks memory prices leaving Korea using customs export data, measured by the kilo.",
+        "The monitor’s threshold is the first month when memory becomes cheaper while the data-center buildout continues."
+      ],
+      "held_question": "When will customs data first show memory getting cheaper while the buildout continues?",
+      "asked_of_me": "",
+      "could_not_follow": []
+    },
+    {
+      "i": 44,
+      "span": "11:00-11:15",
+      "new_things": [
+        "The speaker is starting to trim based on the data print.",
+        "DRAM prices are up 17%.",
+        "Stacked memory needed by AI racks is up 14%.",
+        "The figures come from the July release.",
+        "Customs data is about a month delayed.",
+        "Customs showed one soft month."
+      ],
+      "held_question": "What happened after customs showed one soft month?",
+      "asked_of_me": "",
+      "could_not_follow": []
+    },
+    {
+      "i": 45,
+      "span": "11:15-11:30",
+      "new_things": [
+        "Customs printed a soft month in June.",
+        "The speaker trimmed some exposure, as did half the market, but the next release pushed prices back up.",
+        "The speaker sees this as a large run digesting, not a market top.",
+        "If memory prices break while the buildout continues, the scarcity story is wrong."
+      ],
+      "held_question": "What is the speaker going to say about being wrong?",
+      "asked_of_me": "",
+      "could_not_follow": [
+        "The sentence cuts off at “and so am…”"
+      ]
+    },
+    {
+      "i": 46,
+      "span": "11:30-11:45",
+      "new_things": [
+        "The speaker de-risked the builders on camera that week.",
+        "Certificates now use names such as target-date and “the market,” though the speaker says they are still paper.",
+        "The historical example reaches 1850, when something was still carrying trains across an unfinished destination."
+      ],
+      "held_question": "What was it carrying trains across in 1850?",
+      "asked_of_me": "",
+      "could_not_follow": [
+        "The sentence about 1850 cuts off before saying where the trains were carried."
+      ]
+    },
+    {
+      "i": 47,
+      "span": "11:45-12:00",
+      "new_things": [
+        "In 1850, the technology was still carrying trains across England.",
+        "Certificates financing it covered the walls of bankrupt clubs.",
+        "The technology worked, but the owners of its paper lost money.",
+        "The builders sell scarcity for cash.",
+        "About eighteen months ago, the money behind the builders became debt."
+      ],
+      "held_question": "What does that debt mean for the builders and the scarcity story?",
+      "asked_of_me": "",
+      "could_not_follow": []
+    },
+    {
+      "i": 48,
+      "span": "12:00-12:15",
+      "new_things": [
+        "A fifth of the index depends on one bet.",
+        "The number that would disprove the speaker’s argument is moving in the opposite direction.",
+        "The speaker plans to be more extreme than Bravos, both bullishly and bearishly.",
+        "The bullish case is that builders with sold-out order books are not a house of cards."
+      ],
+      "held_question": "What are those builders being compared to as steel?",
+      "asked_of_me": "",
+      "could_not_follow": [
+        "The sentence cuts off after “They’re the steel.”",
+        "Bravos’ role is unclear."
+      ]
+    },
+    {
+      "i": 49,
+      "span": "12:15-12:30",
+      "new_things": [
+        "The speaker owns the builders deliberately and discloses the positions weekly.",
+        "The builders' order books are full through 2026.",
+        "A memory fab takes five years to build.",
+        "Each new chip generation needs twice as much memory."
+      ],
+      "held_question": "What will demand and order books look like beyond 2026?",
+      "asked_of_me": "Do the arithmetic yourself.",
+      "could_not_follow": []
+    },
+    {
+      "i": 50,
+      "span": "12:30-12:45",
+      "new_things": [
+        "Memory will only catch up by 2030 if AI development slows down more than factories can be built.",
+        "The supposedly safer index version of this trade is called “the certificate.”"
+      ],
+      "held_question": "Will AI development slow down before factories can be built?",
+      "asked_of_me": "Decide which is more likely.",
+      "could_not_follow": [
+        "Why the safe-version index is called “the certificate.”"
+      ]
+    },
+    {
+      "i": 51,
+      "span": "12:45-13:00",
+      "new_things": [
+        "People holding the certificate do not see themselves as speculators.",
+        "A market top can look like accidental concentration presented as safety rather than euphoria.",
+        "The underlying assets are actually used, while the certificate is trusted as paper.",
+        "The gap between the real asset and the paper claim may be discovered suddenly."
+      ],
+      "held_question": "",
+      "asked_of_me": "",
+      "could_not_follow": []
+    },
+    {
+      "i": 52,
+      "span": "13:00-13:15",
+      "new_things": [
+        "The test has three questions and thirty seconds, and it can be about any holding.",
+        "Bravos' tripwire is at five and a half.",
+        "The speaker's tripwire concerns memory.",
+        "A video will post when either tripwire moves.",
+        "A yardstick reading arrives every quarter."
+      ],
+      "held_question": "What are we supposed to do next time?",
+      "asked_of_me": "Bring your top five.",
+      "could_not_follow": [
+        "Bravos",
+        "tripwire",
+        "mine on memory",
+        "yardstick reading"
+      ]
+    },
+    {
+      "i": 53,
+      "span": "13:15-13:30",
+      "new_things": [
+        "The test is going to be run on the whole index.",
+        "A portfolio can be divided into a steel half and another half.",
+        "The spike remains on the desk."
+      ],
+      "held_question": "What does it mean that the spike stays on the desk?",
+      "asked_of_me": "Run the test on the whole index.",
+      "could_not_follow": [
+        "What the spike staying on the desk means."
+      ]
+    }
+  ]
+}

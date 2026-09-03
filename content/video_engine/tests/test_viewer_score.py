@@ -164,3 +164,14 @@ def test_recorded_fixture_pair_scores_the_same_way():
     res = V.score(json.loads(wp.read_text(encoding="utf-8")),
                   json.loads(rp.read_text(encoding="utf-8")), SCRIPT)
     assert res["recall_pct"] < 100.0 and res["dead_runs"]
+
+
+def test_a_window_cut_is_our_artifact_not_the_scripts_defect():
+    # ep1 calibration 2026-09-03: 20 of 42 "could not follow" items were the 15s cut itself
+    reports = _reports()
+    reports["reports"][0]["could_not_follow"] = ["The sentence ending with 'Different voice' is incomplete.",
+                                                 "Who exactly 'they' refers to."]
+    res = V.score(_windows(), reports, SCRIPT)
+    p0 = res["per_window"][0]
+    assert p0["could_not_follow"] == ["Who exactly 'they' refers to."]
+    assert len(p0["window_cuts"]) == 1
