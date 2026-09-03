@@ -1550,3 +1550,113 @@ window (punch, focus zoom, pull-back, Ken Burns are mutually exclusive per
 window). The motion gate counts events as tabled above once the timeline
 carries the species rows; until then the shot table declares them and the
 agent verdicts them (CHECK-RESPONSIBILITIES R2).
+
+### 9.28 The SURFACE GRAMMAR — page, dock, or transition, decided by rule (operator, 2026-09-03)
+
+P35 T0. Operator: *"the first part of the plan is getting components
+aligned and understanding how these things map over to our evidence
+layer - what determines the full page surface, what belongs as pop-out
+evidence on the plate, how do we determine the choreography that leads to
+different outcomes / plate / evidence layers / transitions."* This section
+is that map. Every shot-table row from here on names a **surface** and,
+where a chart is drawn, a **builder**; the two axes are independent and
+never merged (P35 Builder Architecture: `dense-line` is ours in the
+player, `story` / `race` / `decline` / `combo` are each ported from their
+own component).
+
+**The surfaces.**
+
+| Surface | Register | What lives on it | Motion it contributes |
+|---|---|---|---|
+| **PAGE** (s9.26) | cream `#F4E6C7` → charcoal bleed, chalk-light ink | a chart that is OURS, built from a `series.json` we own | roll-out → bleed → outline → ink → build (~4s of events); then a plate hold |
+| **DOCK** (Part 3, s9.15) | near-black card, unchanged | anything READ: their document, their chart, a citation, a stamped slide, a record, an instrument | enter / badge reveals / exit (the events the gate already counts) |
+| **PLATE LIFE** (s9.27) | the world plate itself | our cutouts on a bare plate, stepped-time | events while stepping |
+| **NONE** | bare plate + Ken Burns | a savor that holds its picture (s9.25 #3), the pivot's reversal, a breath | none — must be < 12s or carry stage captions |
+
+**(a) What earns the FULL PAGE.** All three must hold; any one missing
+sends the chart to a dock.
+
+- **A1 — the proof is ours.** We ran it, pulled it, counted it, drew it.
+  The narration says so in the first person (the gate's `OUR_CLAIM`
+  family: *I ran / pulled / checked / drew / measured / counted*) and the
+  data lives in a `series.json` beside the asset with OUR source line.
+  A series that re-plots their chart (`ev-bravos-original-v1`) is theirs
+  even though we drew it: it docks.
+- **A2 — it is carried by a series we own.** Exact values, labels aligned,
+  source present (`ledger_page.py` validates; P35 T2). No series, no page.
+- **A3 — it lands at a beat that TURNS the argument, or fills a still.**
+  Turning beats: the mini-payoff before the promise (P1 B4), the catalyst's
+  close (P2), the best evidence spent in P3's last unit, the pivot's
+  THEREFORE (never the reversal itself — rule C4), the payoff delivery
+  (P5, 60–70%), the tell, the ring close. Or: the window sits in the
+  motion gate's M01 / M08 list with no dock inside 12s either side, and
+  the chart under narration there is ours (A1, A2).
+
+One page per window; the payoff chart of every episode is a page by
+default (P35 intent); at least one more per episode.
+
+**(b) What stays POP-OUT evidence (a dock).**
+
+- **B1 — their evidence always docks.** Their chart, their document, a
+  quote card, a stamped slide, a screenshot, a record: read, not built.
+  Near-black, exactly as today. A page never carries their document.
+- **B2 — our proof docks when the beat does not turn.** A supporting
+  number mid-unit, a second view of a page already shown, a tile beside a
+  page. `dense-line` on a dock is the ship state and stays available.
+- **B3 — a dock may land ON a page**, in the page's declared quiet zone
+  (`quiet_zone: left|right`), never over the emphasized datum (C2). Two
+  docks over a page keep the s9.13 20s hold rule for the page.
+- **B4 — a chart that is theirs but we extend** (the divergence pairing:
+  their two lines plus our layer) is OURS for the layer we added and
+  theirs for the rest: it pages only at a turning beat where the narration
+  claims our layer ("one layer never drew" → page; "here's the original"
+  → dock).
+
+**(c) CHOREOGRAPHY at a boundary.**
+
+- **C1 — leaving a page.** If the next beat continues the same proof
+  (another datum, the callout, the comparison) → **beat-freeze chart
+  exit** (s9.27: freeze as a hit, then the directional cut). If the next
+  beat changes topic → the **s9.15 wipe**, with the page as the departing
+  plate. A page never simply fades.
+- **C2 — a dock landing on a page** enters in the declared quiet zone
+  with the s9.15 carried light; the page's emphasized datum stays
+  uncovered for the dock's whole hold.
+- **C3 — one camera move per window.** Punch, focus zoom, pull-back and
+  Ken Burns are mutually exclusive per window (s9.27 precedence). On a
+  page, Ken Burns is a slow push only.
+- **C4 — the pivot's reversal takes no species.** The visual register
+  shift IS the motion (P4 QC); a page or a targeted species fires only on
+  the THEREFORE after it.
+- **C5 — a page holds like a plate.** 20s ceiling (s9.13); its build
+  phase counts as visual events and its start as an evidence entry; its
+  hold is still and needs a dock, plate life, or stage captions past 12s.
+- **C6 — entering a page.** From a bare plate → the roll-out is the
+  transition (no wipe before it). From a dock-bearing plate → the dock
+  exits first (its own exit), then the roll-out; a page never rolls out
+  under a live dock.
+
+**(d) DENSITY — the E21 link, restated for surfaces.**
+
+- **D1** — no window > 12s without a dock, a page build, or plate life
+  (the gate's M01 with the page and plate-life events counted, P35 T4).
+- **D2** — evidence enters at least every 45s in every phase; a page
+  start counts (M03).
+- **D3** — the opening minute is never the thinnest (M07); a page in P1
+  is allowed only under (a), and the mini-payoff chart is the P1
+  candidate by default.
+- **D4** — stage captions cover what (a)–(c) leave bare (s9.25 #2);
+  they are the floor, not the plan.
+
+**The decision, per window (the census form).** For every shot-table
+row: `start–end · plate · beat · current docks · SURFACE (page / dock /
+plate-life / none) · builder (if a chart) · rule letters`. A row whose
+surface is `none` for more than 12s cites D4 (stage captions) or is a
+defect. The census for Steel and Paper build-f is
+`build-f/SURFACE-CENSUS.md`; the re-script's shot table starts from it,
+after the verbal rewrite names the pages (P35 execution path 7).
+
+**Who verdicts.** (a)–(d) are declared by the shot table and verdicted by
+the runtime agent per window until the timeline carries the species rows
+(CHECK-RESPONSIBILITIES §3, R2); the motion gate then counts what it can
+(P35 T4).

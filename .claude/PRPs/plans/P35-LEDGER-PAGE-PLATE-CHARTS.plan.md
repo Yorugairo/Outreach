@@ -1,13 +1,13 @@
 ---
 id: P35-LEDGER-PAGE-PLATE-CHARTS
 title: The ledger page - plate charts that roll out, write in ink, and build; plus the motion menu
-status: draft
+status: running
 operation: feature
 risk: standard
 owner: parent
 branch: claude/content-generation-system-52f077
 created: 2026-09-02
-updated: 2026-09-02
+updated: 2026-09-03
 ---
 
 # The Ledger Page
@@ -234,7 +234,7 @@ proof earns the page.
 ## Task Slices
 
 ### T0: The surface grammar - page vs dock vs transition, decided by rule
-- Status: pending
+- Status: done
 - Owner: parent (doctrine), explorer (→ `Explore`) for the ep1 window census
 - Depends on: none
 - Write set: `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md` (§9.28),
@@ -258,7 +258,7 @@ proof earns the page.
   from.
 - Validate: the census covers every row of `SHOT-TABLE-F.py`; each row
   cites a rule letter; `gate_motion_density.py` still runs unchanged
-- Evidence: pending
+- Evidence: doc 29 §9.28 (surfaces table; rules A1-A3, B1-B4, C1-C6, D1-D4; the census form); CHECK-RESPONSIBILITIES §3g surface choice per window; `build-f/SURFACE-CENSUS.md` covers all 75 rows of `SHOT-TABLE-F.py` (len(W)=75, not 76), each with rule letters and a builder; counts page 8 rows / 6 pages, dock 49, plate-life 4, none 14; PAGE candidates agree with the PRP's three (28c yardstick #13-14, 1845 vs 2026 #41 conditional on the VO claiming the check, memory race #70 pending its series) and add three (#6 divergence layer, #47 the test, #62 the monitor). FINDING: the motion gate reads `evidence-dock.json` / `motion-plan.json` on an older clock than the timeline (divergence dock 26.4 vs 50.4); on the timeline's own scene docks there are 20 stretches > 12s, not 11 - T4 must read the timeline's `scenes[].docks`. Shot rows #53/#54 overlap 5.5s.
 
 ### T1: Prototype - the stitch, in the hyperframes lane
 - Status: pending

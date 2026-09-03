@@ -1,13 +1,13 @@
 ---
 id: P34-GATE-IMPROVEMENTS
 title: Gate improvements - one runner, no silent skips, the motion gate wired into the build
-status: draft
+status: running
 operation: feature
 risk: standard
 owner: parent
 branch: claude/content-generation-system-52f077
 created: 2026-09-02
-updated: 2026-09-02
+updated: 2026-09-03
 ---
 
 # Gate Improvements
@@ -173,7 +173,7 @@ Acceptance (all observable):
 ## Task Slices
 
 ### T1: Script-gate runner and recording refusal
-- Status: pending
+- Status: done
 - Owner: implementation_luna (→ `general-purpose`)
 - Depends on: Human Gate 3 (refusal semantics)
 - Write set: `content/video_engine/scripts/run_script_gates.py`,
@@ -190,7 +190,7 @@ Acceptance (all observable):
 - Validate: `python -m pytest content/video_engine/tests/test_run_script_gates.py -q`
   and `python content/video_engine/scripts/run_script_gates.py content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-G-VO.txt --ring spike --counterparty Bravos --timeline content/video_engine/projects/systems-and-blowups/steel-and-paper/build-f/timeline.json; echo exit=$?`
   (expect exit=1 and the report on disk)
-- Evidence: pending
+- Evidence: commit d837d1d; `pytest tests/test_run_script_gates.py -q` 11 passed; runner on ep1 -> exit 1, `SCRIPT-G-GATES.md` TOOLS: lint exit 0/0, audit exit 0 0/1 measured, opening gate exit 1 26/1/14/6, screens 186 items; `record_chained_take.py` preflight prints `[FAIL] gates report fail` and exits 1, nothing spent
 
 ### T2: A3 at 10% of runtime, and the cycle check runs the whole video
 - Status: pending
@@ -215,7 +215,7 @@ Acceptance (all observable):
 - Evidence: pending
 
 ### T3: Declared-beat enumeration (rule R2 artifact)
-- Status: pending
+- Status: done
 - Owner: junior_developer (→ `general-purpose`)
 - Depends on: none
 - Write set: `content/video_engine/scripts/enumerate_strength_screens.py`,
@@ -226,10 +226,10 @@ Acceptance (all observable):
   column blank for the agent); a script with no tags emits an explicit
   "no declared beats" line; runs on ep1 and on the conforming test text.
 - Validate: `python -m pytest content/video_engine/tests/test_enumerate_declared_beats.py -q`
-- Evidence: pending
+- Evidence: commit d837d1d; `pytest tests/test_enumerate_declared_beats.py -q` 4 passed; ep1 `SCRIPT-G-SCREENS.md` DECLARED section = 0 tags (the script carries none); conforming fixture lists 34 rows with the gate's window verdicts
 
 ### T4: Motion gate wired into build and render
-- Status: pending
+- Status: done
 - Owner: implementation_luna (→ `general-purpose`)
 - Depends on: none
 - Write set: `content/video_engine/scripts/build_scene_timeline_f.py`,
@@ -242,7 +242,7 @@ Acceptance (all observable):
   blocks the `--range` / shard preview modes; ep1's build-f produces the
   4-FAIL report.
 - Validate: `python -m pytest content/video_engine/tests/test_motion_gate_wiring.py -q`
-- Evidence: pending
+- Evidence: commit d837d1d; `pytest tests/test_motion_gate_wiring.py tests/test_gate_motion_density.py -q` 13 passed; gate stdout byte-identical after the refactor; `build-f/GATES-MOTION.md` VERDICT: FAIL (4 FAIL); `render_episode.py` -> exit 2 with the refusal line
 
 ### T5: Caption STAGE mode in the player, M08 enforced
 - Status: pending

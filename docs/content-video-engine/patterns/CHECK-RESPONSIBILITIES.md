@@ -150,7 +150,18 @@ S2/S3/S5/S7/S9 are screenable; **S1, S4, S6, S8, S10 need a reader**, every
 sentence, in order, with the log as the deliverable
 (SENTENCE-STRENGTH-CHECK).
 
-### 3g. Not structural, still the agent's
+### 3g. Surface choice per window (doc 29 §9.28)
+For every shot-table row: PAGE (A1 ours + A2 owned series + A3 turning
+beat or a still window) / DOCK (B1 theirs; B2 ours but not turning) /
+PLATE LIFE / NONE, with the rule letters that decided it and the builder
+where a chart is drawn (dense-line / story / race / decline / combo, never
+merged). A NONE longer than 12s cites D4 (stage captions) or is a defect.
+The census form is `build-f/SURFACE-CENSUS.md`; the motion gate counts the
+page and plate-life events once the timeline carries the species rows
+(P35 T4) - until then this row is the agent's, declared by the table and
+verdicted per window (R2).
+
+### 3h. Not structural, still the agent's
 Evidence tracing (every figure → dossier row; ledger figures re-checked
 against the ledger) · verbatim quotes · source-strength matching · the
 persona pass (doc 36 §5, six checks) · thesis lens T1–T12 · dated
@@ -168,7 +179,7 @@ register read aloud · the ear (scratch VO).
        writes <script>-GATES.md: the §5 TOOLS line, each tool's stdout verbatim,
        script_hash, VERDICT; exit 1 on any FAIL. Recording refuses without a
        current PASS report (--force "<reason>" overrides, reason into the take manifest).
-2. AGENT: 3a declared-beat verdicts · 3b JUDGE rows · 3c–3g by name
+2. AGENT: 3a declared-beat verdicts · 3b JUDGE rows · 3c–3h by name
 3. Fix; re-run 1 (X2–X4 are re-runs, not memory); loop to a fixpoint
 4. Report per §5
 ```
