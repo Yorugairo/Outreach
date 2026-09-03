@@ -740,3 +740,21 @@ cream at the deepest deckle points; the chart builds inside it. Why: the
 charcoal must read as ink filling a scroll on the world's own paper, and
 the line stabilises the fill without hiding the deckle.
 
+## E24 — The opening minute: confirm the click, match the packaging, never open on the full chart (2026-09-03)
+
+An outside analyst's drop-off read, checked by the operator against the
+analytics ("checks out"). Three standing rules: (1) the first sentence
+ANSWERS THE THUMBNAIL ("easiest done with the title, because the title is
+the words packaged with the thumbnail") — no greeting, no lore, no history
+first (gate G45 as the title-word proxy; J12 the reader's verdict on the
+thumbnail itself);
+(2) the cold open matches the packaging's tension — anchor 0–10s,
+complication 10–25s, roadmap by 0:45 (DECISION open: our promise window
+ends at 0:60; the gate WARNs past 0:45 until ruled); (3) charts are
+evidence, not the hook — in the first minute no still over 6s (M10), and
+the first chart enters between the 8s paradox and 20s WITH a targeted
+species on its divergence and a sound hit, never as a full unannotated
+frame (M11). Why: at a 20% CTR the viewer arrives primed; a static chart
+taxes them with axes and legends before they know why to care, and the
+drop lands at 0:45–1:00 — exactly where Steel and Paper lost them.
+

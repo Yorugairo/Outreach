@@ -1825,3 +1825,60 @@ after the verbal rewrite names the pages (P35 execution path 7).
 the runtime agent per window until the timeline carries the species rows
 (CHECK-RESPONSIBILITIES §3, R2); the motion gate then counts what it can
 (P35 T4).
+
+### 9.29 The OPENING MINUTE — the confirmation gap, the packaging match, and no full chart before the thesis (operator, 2026-09-03)
+
+Ruling E24. An outside analyst's read of Steel and Paper's drop-off,
+which the operator checked against the analytics: *"checks out."* Three
+findings, each with a mechanical check where one is possible.
+
+**1. The confirmation gap (0–15s).** A viewer who clicked a title promising
+a systemic unraveling is searching for instant verification that they
+clicked the right video. Failure mode: a greeting, a logo, channel lore,
+or background context ("to understand this we have to go back to 1971").
+Fix: the first sentence ANSWERS THE THUMBNAIL - the operator's framing:
+*"it must answer the thumbnail, which is easiest done with the title,
+because the title is the words that are packaged with the thumbnail."*
+History comes after. **Gate G45 (opening gate, a PROXY):** the title's
+content words (passed as `--title`, plus any thumbnail text as `--thumb`)
+must appear in the first two spoken sentences; a first sentence with none
+of them FAILs. The proxy is mechanical; the real verdict is **J12
+(JUDGE):** does the first sentence answer what the thumbnail poses - the
+agent opens the thumbnail file and rules, every run.
+
+**2. Packaging tension vs audio delivery.** At a 20% CTR the packaging
+generates speculative tension; a dry, academic cold open bounces on the
+energy mismatch. The analyst's blueprint: 0:00–0:10 the anchor (restate the
+paradox / stakes), 0:10–0:25 the complication (why the conventional view
+is wrong), 0:25–0:45 the roadmap (what the viewer will understand that 99%
+of the market is missing). Our doc 38 / P1 shape is the same ladder with
+one difference: the promise sits 0:30–0:60 after the mini-payoff, the
+analyst puts the roadmap by 0:45. **DECISION for the operator (R7):** the
+gate WARNs on a promise after 0:45 and FAILs after 0:60 until ruled;
+tightening the window to 0:45 is the recommendation, because the
+analytics agree with the analyst.
+
+**3. Visual pacing in the first 30–60s.** Viewers decide on the production
+in the first 30 seconds. A static chart or a slow pan for 8s+ signals a
+lecture. Charts are EVIDENCE, not the hook: dropping the viewer onto an
+unannotated full-screen chart forces them to decode axes, legends and
+dates before they know why they should care — the drop-off at 0:45–1:00.
+Fixes, all of which the lane now has: isolate the divergence (the
+spotlight / callout species on the anomaly, never make the viewer search),
+build the chart in real time (the dense-line draw with a sound hit where
+the line breaks structure), punch in on the inflection then pull back
+(camera species), and never open on the full chart: the first 10–15s are
+dynamic scene-setting, the chart lands at 15–20s as the proof of the
+sentence just spoken. **Gates (motion gate):** M10 — inside the opening
+minute the stillness ceiling is 6s, not 12; M11 — the first chart dock
+enters no earlier than the 8s paradox and no later than 20s, and enters
+WITH a declared targeted species (spotlight / callout / punch on its
+divergence) and a sound cue; a full unannotated chart in the first 20s
+FAILs. Steel and Paper as shipped lands its first chart at 0:09.5, full
+and unannotated, and holds it: the named failure mode.
+
+Why it generalizes: the opening is not where the evidence is presented,
+it is where the viewer is convinced the evidence will be worth the time.
+The chart's job in the first minute is to prove one sentence, spotlit,
+then leave.
+
