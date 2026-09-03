@@ -56,7 +56,9 @@ def main() -> int:
               "--remote-debugging-port=9222 signed in to Flow, then re-run.")
         return 2
 
-    batch = json.loads((CLAIM / "batch.json").read_text(encoding="utf-8"))
+    batch_file = CLAIM / (sys.argv[1] if len(sys.argv) > 1 else "batch.json")   # e.g. batch-day1-rest.json
+    batch = json.loads(batch_file.read_text(encoding="utf-8"))
+    print(f"dispatching {batch_file.name}")
     args = {k: v for k, v in batch.items() if not k.startswith("_")}   # _contract/_style are for readers
     (CLAIM / "clips").mkdir(exist_ok=True)
 

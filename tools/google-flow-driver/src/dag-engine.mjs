@@ -1,5 +1,6 @@
 import path from 'node:path';
 import { FlowCdpDriver } from './cdp-driver.mjs';
+import fs from 'node:fs';
 import {
   reverseVideo,
   extractVerificationFrames,
@@ -69,26 +70,38 @@ export class FlowDagEngine {
     } else if (rawPath !== outputPath) {
       // If no reversal requested and rawPath != outputPath, save directly to outputPath
       activeVideoPath = outputPath;
-      import('node:fs').then(fs => fs.copyFileSync(rawPath, outputPath));
+      // Synchronous on purpose. The previous dynamic import() returned an un-awaited promise,
+      // so the frame extraction below ran before the copy landed and aborted a batch whose
+      // credits were already spent (first live run, 2026-09-03).
+      fs.copyFileSync(rawPath, outputPath);
     }
 
     // 8. Extract verification frames
     const frame0Path = path.join(targetDir, `${baseName}_frame_0.png`);
     const frameEndPath = path.join(targetDir, `${baseName}_frame_end.png`);
-    extractVerificationFrames(activeVideoPath, frame0Path, frameEndPath);
+    // 8-9 are verification, not delivery: the mp4 is already on disk and paid for.
+    // A failure here is logged into the result, never thrown - it must not abort the batch.
+    let probe = null;
+    let verificationError = null;
+    try {
+      extractVerificationFrames(activeVideoPath, frame0Path, frameEndPath);
+      probe = probeVideo(activeVideoPath);
+    } catch (err) {
+      verificationError = String(err?.message || err).split(/\r?\n/)[0];
+      console.warn(`[FlowDagEngine] verification step failed (video kept): ${verificationError}`);
+    }
 
-    // 9. Probe video
-    const probe = probeVideo(activeVideoPath);
-
-    // 10. Write Metadata Manifest
+    // 10. Write Metadata Manifest (null-safe: probe/frames may be absent after a verification failure)
     const metadataPath = path.join(targetDir, `${baseName}_meta.json`);
     const metadata = {
       prompt,
       references,
+      settings: settings ?? null,
       requested_ratio: ratio || 'preserved',
-      detected_dimensions: `${probe.width}x${probe.height}`,
-      aspect_ratio: probe.aspect_ratio,
-      duration_seconds: probe.duration,
+      detected_dimensions: probe ? `${probe.width}x${probe.height}` : null,
+      aspect_ratio: probe?.aspect_ratio ?? null,
+      duration_seconds: probe?.duration ?? null,
+      verification_error: verificationError,
       reversed: reverse,
       files: {
         video: { path: activeVideoPath, sha256: sha256File(activeVideoPath) },

@@ -1,0 +1,45 @@
+{
+  "_contract": "RESUME of day 1 after host-enter-signal-box-dusk generated (10 credits) and the batch aborted on a post-process race. These three scenes were never submitted. Same settings; the driver sets and reads back the state before each.",
+  "mode": "video",
+  "submode": "ingredients",
+  "model": "Omni 1.1 Flash",
+  "count": 1,
+  "maxCredits": 16,
+  "ratio": "16:9",
+  "outputDir": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\review\\claims\\mp-host-transitions-v1\\clips",
+  "scenes": [
+    {
+      "id": "host-enter-korea-port",
+      "duration": 6,
+      "resolution": "720p",
+      "reverse": false,
+      "references": [
+        "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\finance-episodes-plates-wave-1\\objects\\world-korea-port-v1.png",
+        "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\assets\\generated\\cutouts\\actor-host-present-open-v1.png"
+      ],
+      "prompt": "Woodblock newsprint illustration, a container port at dusk, the exact scene of the first reference held as a locked camera. A flat black graphic silhouette of a man - the second reference, single tone, no face - walks in from frame right in a calm lateral stride, stops at right-third, and settles into an open presenting gesture toward the stacked containers. Stylised, minimal leg articulation, ink-print texture, grain constant. Background static. No text, no lettering, no numerals, no container markings."
+    },
+    {
+      "id": "host-enter-memory-fab-floor",
+      "duration": 6,
+      "resolution": "720p",
+      "reverse": false,
+      "references": [
+        "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\finance-episodes-plates-wave-1\\objects\\world-memory-fab-floor-v1.png",
+        "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\assets\\generated\\cutouts\\actor-host-explain-both-hands-v1.png"
+      ],
+      "prompt": "Woodblock newsprint illustration, a cleanroom wafer line in full production, the exact scene of the first reference held as a locked camera. A flat black graphic silhouette of a man - the second reference, single tone, no face - steps in from frame left along the aisle, stops at left-third, and settles into explaining with both hands. Stylised, minimal leg articulation, ink-print texture, grain constant. Background static. No text, no lettering, no numerals, no screens, no readouts."
+    },
+    {
+      "id": "host-enter-seoul-fab-skyline",
+      "duration": 6,
+      "resolution": "720p",
+      "reverse": false,
+      "references": [
+        "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\finance-episodes-plates-wave-1\\objects\\world-seoul-fab-skyline-v1.png",
+        "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\assets\\generated\\cutouts\\actor-host-arms-crossed-v1.png"
+      ],
+      "prompt": "Woodblock newsprint illustration, an industrial skyline at dawn, the exact scene of the first reference held as a locked camera. A flat black graphic silhouette of a man - the second reference, single tone, no face - walks in from frame right in a calm lateral stride, stops at right-third, and settles with arms crossed, looking out at the skyline. Stylised, minimal leg articulation, ink-print texture, grain constant. Background static. No text, no lettering, no numerals, no signage on the buildings."
+    }
+  ]
+}

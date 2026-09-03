@@ -24,8 +24,10 @@ playbook, mascot slot). The host lives in the episode. Keep them apart.
 
 ## Preconditions (check, do not assume)
 
-1. Chrome is running with `--remote-debugging-port=9222` and is signed in to
-   Google Flow. Verify: `curl -s http://127.0.0.1:9222/json/version` returns JSON.
+1. The driver's **dedicated automation profile** is up: Chrome launched with
+   `--user-data-dir=C:\Users\Snipe\.flow-chrome-profile --remote-debugging-port=9223`,
+   signed in to Google Flow (9222 on the default profile is only the driver's
+   fallback). Verify: `curl -s http://127.0.0.1:9223/json/version` returns JSON.
    If it does not, STOP — the operator launches the browser; you never enter
    credentials.
 2. The `video-engine` MCP server answers `tools/list` and exposes
