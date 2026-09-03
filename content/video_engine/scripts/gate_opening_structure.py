@@ -61,8 +61,17 @@ the whole runtime (--cycle-s, default = runtime) and G44 requires one
 rehook-family line or [rehook] inside every P3/P5 unit window
 (kit_spec.unit_windows).
 
+OPENING-MINUTE GATES (ruling E24, doc 29 s9.29 - an analyst's drop-off review the
+operator verified against analytics): G45 the packaging echo - the first spoken
+sentence must ANSWER THE THUMBNAIL; the title's content words are the mechanical
+proxy (the title ships with the thumbnail), J12 prints the thumbnail path so the
+agent reads sentence 1 against it; G09 WARNs a promise after 0:45 (DECISION R7
+against doc 38's window to 0:60). The screen-side rows M10/M11 live in
+gate_motion_density.py.
+
     python gate_opening_structure.py SCRIPT.txt [--timeline build-f/timeline.json]
            [--counterparty Bravos] [--ring spike] [--opening-s 300] [--cycle-s 805]
+           [--title "<locked title>"] [--thumb "<thumbnail words>"] [--thumb-file <png>]
 """
 from __future__ import annotations
 
@@ -91,6 +100,7 @@ ARCHETYPE_WIN = (8.0, 30.0)     # 38 B3: the world opens 0:08-0:30; W&N as peopl
 YOU_BY_S = 30.0                 # 38 B3 / P1 QC
 STAKES_BY_S = 30.0              # 38 B3: stakes named by ~0:25 (tolerance to 0:30)
 PROMISE_WIN = (30.0, 60.0)      # 38 B4 / MAP s3 / CLK: mini-payoff FIRST, then the promise
+ROADMAP_WARN_S = 45.0           # E24: the analyst's roadmap-by-0:45; DECISION open (R7) against doc 38's window to 0:60
 BEAT5_START = 60.0              # 38 B5: the map, desire, opponent, A2, ring - 0:60 to P1 end
 A2_ANCHOR = 60.0                # 38 B5 / P1 QC
 # A3 = kit_spec.a3_anchor_s(runtime): P2.md / MAP s4 QC, A3 + F2 at ~10% of runtime (E23; shared with the audit)
@@ -130,6 +140,20 @@ TURN_CONNECTOR = re.compile(r"^(but|so|because|which is why|therefore|yet|instea
                             r"except|and that'?s (?:where|why)|and here'?s)\b", re.I)
 CHANNEL_TALK = re.compile(r"\b(this channel|my channel|the channel|on this channel)\b", re.I)
 BIO = re.compile(r"\b(I worked (?:at|in)|I used to|JPMorgan|I own(?:ed)?|my dispensary|risk-scor)\w*", re.I)
+# E24 / doc 29 s9.29 (G45): the packaging's CONTENT words - title + thumbnail text minus these -
+# must be echoed by the first spoken sentence (the confirmation gap: the sentence states the thesis
+# the packaging implied). Function words carry no thesis, so they never count as an echo.
+PACKAGING_STOPWORDS = frozenset(
+    "the a an is are was were be been am of and or but not no nor what who why how when where which "
+    "that this these those it its in on at to for from by with as into than then so if you your yours "
+    "we our i my me he she they them their his her do does did done has have had can could will would "
+    "should may might just only also very there here about over under out up down off all any some "
+    "every each more most much many still yet again ever never now".split())
+PACKAGING_MIN_STEM = 2          # E24 G45: "AI" is a two-letter content word
+PACKAGING_PREFIX_MIN = 4        # E24 G45: crude stems match by prefix ("surviv" / "survive") from four letters
+SRC_G45 = ("E24 / doc 29 s9.29: proxy for 'the first sentence answers the thumbnail' - "
+           "the title is the words packaged with it")
+SRC_J12 = "E24 / doc 29 s9.29: the first sentence answers what the thumbnail poses - open the thumbnail and read sentence 1 against it"
 
 
 @dataclass(frozen=True)
@@ -243,11 +267,72 @@ def _first_alnum(text: str, chunk_off: int) -> int:
     return chunk_off + (lead.start() if lead else 0)
 
 
+# ---- E24 G45: packaging echo -------------------------------------------------
+def _stem(word: str) -> str:
+    """Crude stem (E24 G45): strip one trailing ing / ed / es / s, never below three letters."""
+    for suffix in ("ing", "ed", "es", "s"):
+        if word.endswith(suffix) and len(word) - len(suffix) >= 3:
+            return word[: -len(suffix)]
+    return word
+
+
+def _stems(text: str) -> list[str]:
+    return [_stem(t.replace("'", "")) for t in re.findall(r"[a-z][a-z']*", text.lower())]
+
+
+def _stem_match(a: str, b: str) -> bool:
+    if a == b:
+        return True
+    return min(len(a), len(b)) >= PACKAGING_PREFIX_MIN and (a.startswith(b) or b.startswith(a))
+
+
+def packaging_words(title: str | None, thumb: str | None) -> list[str]:
+    """The packaging's content-word stems, in order, deduplicated (E24 G45)."""
+    out: list[str] = []
+    for raw in re.findall(r"[a-z][a-z']*", f"{title or ''} {thumb or ''}".lower()):
+        word = raw.replace("'", "")
+        stem = _stem(word)
+        if word in PACKAGING_STOPWORDS or len(stem) < PACKAGING_MIN_STEM or stem in out:
+            continue
+        out.append(stem)
+    return out
+
+
+def _echoed(sentence: str, words: list[str]) -> list[str]:
+    toks = _stems(sentence)
+    return [w for w in words if any(_stem_match(w, t) for t in toks)]
+
+
+def _packaging_gates(sents, title: str | None, thumb: str | None, thumb_file: str | None) -> list[Gate]:
+    """G45 (mechanical proxy) + J12 (JUDGE): the first sentence answers the thumbnail (E24 / doc 29 s9.29)."""
+    out: list[Gate] = []
+    if not (title or thumb):
+        out.append(Gate("G45", SRC_G45, "INFO", "no --title given, G45 not run"))
+    else:
+        words = packaging_words(title, thumb)
+        first = _echoed(sents[0][2], words) if sents else []
+        second = _echoed(sents[1][2], words) if len(sents) > 1 else []
+        if first:
+            out.append(Gate("G45", SRC_G45, "PASS", f"title-word proxy: {first} echoed in sentence 1"))
+        elif second:
+            out.append(Gate("G45", SRC_G45, "WARN", f"title-word proxy: {second} only in sentence 2 - "
+                            "the first sentence should state the thesis the packaging implied"))
+        else:
+            out.append(Gate("G45", SRC_G45, "FAIL", f"title-word proxy: none of {words} in the first two sentences - "
+                            "the first sentence must answer the thumbnail"))
+    where = f"open {thumb_file}" if thumb_file else "no --thumb-file given - open the FINAL thumbnail"
+    line = f"; sentence 1: '{sents[0][2][:80]}'" if sents else ""
+    out.append(Gate("J12", SRC_J12, "JUDGE", where + line))
+    return out
+
+
 # ---- the gate ---------------------------------------------------------------
 def run(text: str, timeline: list[dict] | None = None, counterparty: str | None = None,
         ring: str | None = None, opening_s: float = 300.0,
-        cycle_s: float | None = None) -> tuple[list[Gate], dict]:
-    """cycle_s: how far G36's cycle check runs; None = the whole runtime (E23)."""
+        cycle_s: float | None = None, title: str | None = None, thumb: str | None = None,
+        thumb_file: str | None = None) -> tuple[list[Gate], dict]:
+    """cycle_s: how far G36's cycle check runs; None = the whole runtime (E23).
+    title / thumb: the packaging's words for G45; thumb_file: the thumbnail path J12 prints (E24)."""
     sents = _sentences_timed(text, timeline)
     marks = beat_tags.find_marks(text)
     beats: dict[str, list[tuple[float, int]]] = {}
@@ -278,6 +363,7 @@ def run(text: str, timeline: list[dict] | None = None, counterparty: str | None 
         d = sents[0][1] - sents[0][0]
         add("G01", "PLATFORM 3s microhook (38 B1 / P1 QC)", "FAIL" if d > GRAB_S * tol else "PASS", f"first sentence {d:.2f}s")
         add("J03", "Rhetoric: microhook concrete, terminal stress on the surprising word (38 B1)", "JUDGE", f"'{sents[0][2][:80]}'")
+    g += _packaging_gates(sents, title, thumb, thumb_file)      # E24: G45 proxy + J12
     if timeline:
         t0 = sents[0][0] if sents else 0.0
         ok = BREATH_S[0] - BREATH_TOL <= t0 <= BREATH_S[1] + BREATH_TOL
@@ -340,6 +426,8 @@ def run(text: str, timeline: list[dict] | None = None, counterparty: str | None 
         add("G09", src9, "FAIL", "no promise found (tag [promise] or a 'by the end you'll...' line)")
     elif t_pr > PROMISE_WIN[1] * tol:
         add("G09", src9, "FAIL", f"promise at {mmss(t_pr)} - AFTER 0:60 (Steel and Paper as recorded: 1:20)")
+    elif t_pr > ROADMAP_WARN_S * tol:
+        add("G09", src9, "WARN", f"promise at {mmss(t_pr)} - after 0:45; DECISION (R7): analyst roadmap by 0:45 vs doc 38 promise window to 0:60")
     elif t_pr < PROMISE_WIN[0] / tol:
         add("G09", src9, "WARN", f"promise at {mmss(t_pr)} - before the mini-payoff window opens")
     else:
@@ -558,6 +646,7 @@ def run(text: str, timeline: list[dict] | None = None, counterparty: str | None 
              "unit_windows": [f"{'P3' if k <= n_p3 else 'P5'} unit {k} {mmss(lo)}-{mmss(hi)}"
                               for k, (lo, hi) in enumerate(windows, start=1)],
              "counterparty": cp, "ring": ring,
+             "packaging": f"title={title!r} thumb={thumb!r} thumb_file={thumb_file}",
              "not_gated_here": "Truby Battle / Self-Revelation / New Equilibrium, Snyder midpoint, chiastic center, ring CLOSE (P4-P6)",
              "beats_declared": {k: [mmss(t) for t, _ in v] for k, v in beats.items()}}
     return g, stats
@@ -577,13 +666,17 @@ def main() -> int:
     ap.add_argument("--opening-s", type=float, default=300.0)
     ap.add_argument("--cycle-s", type=float, default=None,
                     help="how far G36's cycle check runs (default: the whole runtime, E23)")
+    ap.add_argument("--title", help="the locked title - G45 packaging echo (E24)")
+    ap.add_argument("--thumb", help="the thumbnail's words, when recorded in text (E24 G45)")
+    ap.add_argument("--thumb-file", help="the FINAL thumbnail path J12 prints for the agent to open (E24)")
     args = ap.parse_args()
     if hasattr(sys.stdout, "reconfigure"):
         sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     text = args.script.read_text(encoding="utf-8")
     unknown = beat_tags.unknown_marks(text)
     tl = load_timeline(args.timeline) if args.timeline else A.load_timings(args.script)
-    gates, stats = run(text, tl, args.counterparty, args.ring, args.opening_s, args.cycle_s)
+    gates, stats = run(text, tl, args.counterparty, args.ring, args.opening_s, args.cycle_s,
+                       args.title, args.thumb, args.thumb_file)
     if unknown:
         gates.insert(0, Gate("G00", "doc 37 marks", "FAIL", f"unknown marks would be spoken: {sorted(unknown)}"))
     print(f"=== OPENING STRUCTURE GATE: {args.script.name} ===")

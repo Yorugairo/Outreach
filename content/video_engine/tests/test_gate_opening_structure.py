@@ -205,3 +205,55 @@ def test_conforming_opening_rehooks_every_unit_and_cycles_to_the_end():
 def _clock(mmss: str) -> float:
     m, _, s = mmss.partition(":")
     return int(m) * 60 + int(s)
+
+
+# ---- E24: the opening-minute gates - G45 packaging echo + J12, G09 roadmap WARN ----
+
+EP1_TITLE = "The AI Bubble Is Real. What Survives Is Steel."       # packaging/TITLE-CANDIDATES.md, LOCKED 2026-09-01
+EP1_THUMB = "STEEL or PAPER?"                                        # thumbnail-FINAL-steelpaper.png, as recorded there
+EP1_THUMB_FILE = EP / "packaging/thumbnail-FINAL-steelpaper.png"
+OPEN = "The safest thing you own looks like this. An iron spike. "
+
+
+@needs_ep1
+def test_red_steel_and_paper_first_sentence_does_not_answer_the_packaging():
+    gates, stats = G.run(SCRIPT.read_text(encoding="utf-8"), G.load_timeline(TIMELINE), counterparty="Bravos",
+                         ring="spike", title=EP1_TITLE, thumb=EP1_THUMB, thumb_file=str(EP1_THUMB_FILE))
+    g = _by_id(gates)
+    assert g["G45"].level == "FAIL" and "'steel'" in g["G45"].message and "proxy" in g["G45"].message, g["G45"]
+    assert "proxy" in g["G45"].src and "E24" in g["G45"].src
+    assert g["J12"].level == "JUDGE" and str(EP1_THUMB_FILE) in g["J12"].message, g["J12"]
+    assert g["G09"].level == "FAIL" and "AFTER" in g["G09"].message, g["G09"]   # 1:20 stays a FAIL, never the 0:45 WARN
+    assert "title=" in stats["packaging"]
+
+
+def test_packaging_words_and_the_g45_levels():
+    assert G.packaging_words(EP1_TITLE, EP1_THUMB) == ["ai", "bubble", "real", "surviv", "steel", "paper"]
+    assert G._stem_match("surviv", "survive") and G._stem("survived") == "surviv"
+    s = _pad_to(OPEN, 805.0)
+    assert _by_id(G.run(s, None)[0])["G45"].level == "INFO"                                         # no --title: not run
+    g = _by_id(G.run(s, None, title="The Safest Thing You Own Is an Iron Spike")[0])
+    assert g["G45"].level == "PASS" and "'safest'" in g["G45"].message, g["G45"]
+    g = _by_id(G.run(s, None, title="Every AI Stock Is Steel or an Iron Spike")[0])
+    assert g["G45"].level == "WARN" and "sentence 2" in g["G45"].message, g["G45"]                 # only the second echoes
+    g = _by_id(G.run(s, None, title=EP1_TITLE, thumb=EP1_THUMB)[0])
+    assert g["G45"].level == "FAIL" and "answer the thumbnail" in g["G45"].message, g["G45"]
+    assert "no --thumb-file given" in g["J12"].message
+
+
+def test_green_conforming_opening_answers_its_packaging():
+    gates, _ = G.run(_conforming_opening(), None, counterparty="Bravos", ring="spike",
+                     title="The Safest Thing You Own Is an Iron Spike", thumb="STEEL or PAPER?",
+                     thumb_file="packaging/thumb.png")
+    g = _by_id(gates)
+    assert g["G45"].level == "PASS", g["G45"]
+    assert "open packaging/thumb.png" in g["J12"].message, g["J12"]
+    assert not [x for x in gates if x.level == "FAIL"]
+
+
+def test_promise_after_45s_warns_with_the_decision_named():
+    s = _pad_to(OPEN, 50.0)
+    s += "[payoff] Here is what the chart got right. `[pre-key]` [promise] By the end you'll run one test yourself. "
+    g = _by_id(G.run(_pad_to(s, 805.0), None)[0])
+    assert g["G09"].level == "WARN" and "DECISION (R7)" in g["G09"].message, g["G09"]
+    assert G.ROADMAP_WARN_S == 45.0 and G.PROMISE_WIN == (30.0, 60.0)      # the FAIL past 0:60 is doctrine, untouched

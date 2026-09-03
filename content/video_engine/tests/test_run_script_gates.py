@@ -159,3 +159,15 @@ def test_force_reason_takes_the_next_argv_item():
     assert RG.force_reason(["--force", "the take is a probe"]) == (True, "the take is a probe")
     assert RG.force_reason(["--force"]) == (True, "")
     assert RG.force_reason(["--force", "--go"]) == (True, "")
+
+
+# ---- E24: --title / --thumb / --thumb-file reach the opening gate -------------------------
+
+def test_title_and_thumb_pass_through_to_the_opening_gate(tmp_path):
+    script = _conforming_script(tmp_path)
+    code = RG.main([str(script), *GATE_ARGS, "--title", "The Safest Thing You Own Is an Iron Spike",
+                    "--thumb", "STEEL or PAPER?", "--thumb-file", "packaging/thumb.png"])
+    report = (tmp_path / "CONFORM-GATES.md").read_text(encoding="utf-8")
+    assert code == 0, report
+    assert "[PASS ] G45 title-word proxy" in report and "[JUDGE] J12 open packaging/thumb.png" in report
+    assert "\nTOOLS      lint: exit " in report        # the s5 TOOLS block keeps its shape

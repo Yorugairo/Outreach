@@ -1484,8 +1484,11 @@ the chart for a visual effect. The chalkboard is a WORLD plate; the
 standard evidence docks remain exactly as they are today and may land on
 it, so a busy variant (the bar race) is not held back by the board.
 
-**The four beats, all derived from t (seek-safe, screenshot-render
-safe, no wall clock, no Math.random):**
+**The four beats as first written (superseded by the addenda below: the
+standing chain is unravel 0.7 · savor 0.8 · field 2.4 · line 0.8 · punch
+0.5 · build 3.0 · focus at 8.2s; the gate's PAGE_BEAT_OFFSETS follow it),
+all derived from t (seek-safe, screenshot-render safe, no wall clock, no
+Math.random):**
 
 1. **Roll-out (0-0.6s).** The page unrolls from one edge: a `clip-path`
    inset that opens across the frame with a rolled-edge highlight riding

@@ -36,14 +36,25 @@ def test_red_steel_and_paper_as_shipped():
     assert g["M08"].level in ("FAIL", "INFO"), g["M08"]
 
 
-def _dense_build(runtime=180.0, scene_len=6.0, dock_every=20.0, stage=False):
+FIRST_CHART_S = 12.0   # E24 M11: the first chart enters inside 0:08-0:20
+DOCK_HOLD_S = 5.0      # E25 M12: a chart dock holds <= 6s in the opening minute and never spans a scene boundary
+SPOTLIGHT = {"kind": "spotlight", "at": FIRST_CHART_S + 0.2, "dur": 2.0,
+             "target": {"kind": "region", "x0": 0, "y0": 0, "x1": 0.4, "y1": 0.4}}   # E24 M11: annotated within 1.5s
+
+
+def _dense_build(runtime=180.0, scene_len=6.0, dock_every=18.0, stage=False):
+    """The conforming synthetic build: 6s scenes, 5s docks that start on a scene start
+    (every 18s from 12s, so none spans a boundary - E25 M12), the first chart at 12s
+    with a spotlight at 12.2s (E24 M11), no still stretch > 6s in the opening minute (M10)."""
     scenes = []
     t = 0.0
     i = 0
     while t < runtime:
         scenes.append({"scene_id": f"s{i:02d}", "world": {"asset_id": f"world-{i}"}, "span": [t, min(t + scene_len, runtime)]})
         t += scene_len; i += 1
-    docks = [{"asset": f"ev-{k}", "at": a, "end": min(a + 8.0, runtime)} for k, a in enumerate([x * dock_every + 3.0 for x in range(int(runtime // dock_every))])]
+    docks = [{"asset": f"ev-{k}", "at": a, "end": min(a + DOCK_HOLD_S, runtime)}
+             for k, a in enumerate([x * dock_every + FIRST_CHART_S for x in range(int(runtime // dock_every))])]
+    next(s for s in scenes if s["span"][0] <= FIRST_CHART_S < s["span"][1])["species"] = [dict(SPOTLIGHT)]
     pages = []
     t = 0.0
     while t < runtime:
@@ -68,7 +79,7 @@ def test_still_stretch_over_12s_fails():
 
 
 def test_stage_captions_count_as_events():
-    tl, docks, mp = _dense_build(scene_len=15.0, dock_every=20.0, stage=True)
+    tl, docks, mp = _dense_build(scene_len=15.0, dock_every=15.0, stage=True)
     g = _by_id(G.run(tl, docks, mp)[0])
     assert g["M08"].level == "PASS"
 
@@ -91,7 +102,7 @@ def _caption_pages(runtime: float) -> list[dict]:
 def _page_window(with_page: bool):
     """A 90s build whose docks ride the TIMELINE's scenes (enter 3s and 54s) and
     whose 12-42s window is dock-free. Its first scene, 12-31s, is the ledger
-    page when `with_page`: the page's beats (12, 12.6, 15.4, 16.2, 19.2) break
+    page when `with_page`: the page's beats (12, 12.7, 13.5, 15.9, 16.7, 17.2, 20.2) break
     the 19s still stretch and its start is the evidence entry that keeps the
     3s -> 54s wait under 45s. The page scene is 19s, not the whole window,
     because the hold after the build is STILL (s9.28 C5) - a page alone
@@ -118,7 +129,7 @@ def test_page_build_counts_as_events_and_its_start_as_evidence():
     assert g["M05"].level == "PASS", g["M05"]          # a 19s page holds like a plate, under the 20s ceiling
     assert stats["ledger_pages"] == 1 and stats["dock_source"] == "timeline"
     ev = G.analyse(tl, docks, mp)["events"]
-    assert all(t in ev for t in (12.0, 12.6, 15.4, 16.2, 19.2)), ev   # roll-out, field, outline, build start, build complete
+    assert all(t in ev for t in (12.0, 12.7, 13.5, 15.9, 16.7, 17.2, 20.2)), ev   # roll-out, savor, field, line, punch, build start, build end + focus
 
 
 def test_same_window_without_the_page_fails_m01_and_m03():
@@ -129,8 +140,9 @@ def test_same_window_without_the_page_fails_m01_and_m03():
 
 
 def test_page_beat_offsets_follow_the_template_lp_constants():
-    # template `const LP = { ROLL: 0.6, BLEED: 2.8, OUTLINE: 0.8, ..., BUILD: 3.0 }`
-    assert G.PAGE_BEAT_OFFSETS == (0.0, 0.6, 3.4, 4.2, 7.2)
+    # template `const LP = { ROLL: 0.7, SAVOR: 0.8, FIELD: 2.4, OUTLINE: 0.8, PUNCH: 0.5, INK: 2.0, BUILD: 3.0 }`
+    # (doc 29 s9.26, E22 addendum 6): roll-out, savor start, field start, line, punch, build start, build end + focus
+    assert G.PAGE_BEAT_OFFSETS == (0.0, 0.7, 1.5, 3.9, 4.7, 5.2, 8.2)
 
 
 def test_timeline_docks_are_the_clock_when_present():
@@ -287,3 +299,65 @@ def test_m09_passes_on_a_build_without_species():
     tl, docks, mp = _dense_build()
     g = _by_id(G.run(tl, docks, mp)[0])
     assert g["M09"].level == "PASS" and "no scene stacks two camera moves" in g["M09"].message
+
+
+# ---- E24 / E25: the opening minute (M10, M11) and the chart as proof, not homework (M12) -----
+
+@needs_ep1
+def test_red_steel_and_paper_opening_minute_and_chart_holds():
+    tl, docks, mp = G._load(BUILD, "steel-and-paper.timeline.json")
+    g = _by_id(G.run(tl, docks, mp)[0])
+    assert g["M10"].level == "FAIL" and "0:57+14s" in g["M10"].message, g["M10"]          # 14s still at 0:57
+    assert g["M11"].level == "FAIL" and "unannotated" in g["M11"].message, g["M11"]      # 9.5s full chart, no species
+    assert "no sound cue" in g["M11"].message and "9.5s" in g["M11"].message, g["M11"]
+    assert g["M12"].level == "FAIL", g["M12"]
+    for offender in ("ev-bravos-original-v1 0:09-0:50 crosses 2 scene boundaries",
+                     "ev-divergence-v1 0:50-1:10 crosses 1 scene boundaries",
+                     "ev-capital-formation-v1 2:02-2:52 crosses 2 scene boundaries"):
+        assert offender in g["M12"].message, (offender, g["M12"].message)
+    assert "E24" in g["M10"].src and "E24" in g["M11"].src and "E25" in g["M12"].src
+
+
+def test_green_first_chart_at_12s_spotlit_with_short_docks_inside_one_scene():
+    tl, docks, mp = _dense_build()
+    g = _by_id(G.run(tl, docks, mp)[0])
+    assert g["M10"].level == "PASS", g["M10"]
+    assert g["M11"].level == "PASS" and "enters at 12.0s with spotlight at 12.2s" in g["M11"].message, g["M11"]
+    assert "every dock treated as a chart candidate" in g["M11"].message      # the synthetic build has no evidence map
+    assert g["M12"].level == "PASS", g["M12"]
+
+
+def test_opening_still_over_6s_fails_m10_even_under_the_12s_ceiling():
+    tl, docks, mp = _dense_build(scene_len=10.0, dock_every=30.0)            # 10s scenes: fine for M01, not for M10
+    g = _by_id(G.run(tl, docks, mp)[0])
+    assert g["M01"].level == "PASS", g["M01"]
+    assert g["M10"].level == "FAIL" and "0:00+10s" in g["M10"].message, g["M10"]
+
+
+def test_first_chart_unannotated_or_outside_the_window_fails_m11_and_no_cue_warns():
+    tl, docks, mp = _dense_build()
+    tl["scenes"][2]["species"] = []                                          # the spotlight gone
+    g = _by_id(G.run(tl, docks, mp)[0])
+    assert g["M11"].level == "FAIL" and "unannotated" in g["M11"].message, g["M11"]
+    tl, docks, mp = _dense_build()
+    late = [{**docks[0], "at": 24.0, "end": 29.0}] + docks[1:]              # first chart after 0:20
+    g = _by_id(G.run(tl, late, mp)[0])
+    assert g["M11"].level == "FAIL" and "enters at 24.0s - outside 8-20s" in g["M11"].message, g["M11"]
+    tl, docks, mp = _dense_build()
+    g = _by_id(G.run(tl, docks, {"cues": []})[0])                           # no cues, no `sound` on the timeline
+    assert g["M11"].level == "WARN" and "no sound structure to check" in g["M11"].message, g["M11"]
+
+
+def test_chart_dock_across_a_boundary_or_held_as_homework_fails_m12_but_a_re_enter_passes():
+    tl, docks, mp = _dense_build()
+    straddle = [{**docks[0], "at": 12.0, "end": 20.0}] + docks[1:]         # 8s hold crossing the 18s scene start
+    g = _by_id(G.run(tl, straddle, mp)[0])
+    assert g["M12"].level == "FAIL", g["M12"]
+    assert "ev-0 0:12-0:20 crosses 1 scene boundaries (world-2 -> world-3), hold 8.0s > 6s (opening minute)" in g["M12"].message, g["M12"]
+    tl, _, mp = _dense_build(scene_len=30.0, dock_every=30.0)
+    g = _by_id(G.run(tl, [{"asset": "ev-x", "at": 90.0, "end": 101.0}], mp)[0])
+    assert g["M12"].level == "FAIL" and "ev-x 1:30-1:41 hold 11.0s > 10s" in g["M12"].message, g["M12"]
+    reenter = [{"asset": "ev-x", "at": 12.0, "end": 17.0}, {"asset": "ev-x", "at": 30.0, "end": 35.0}]
+    assert _by_id(G.run(tl, reenter, mp)[0])["M12"].level == "PASS"          # re-entering the same chart is the pattern
+    assert (G.OPENING_STILL_MAX_S, G.PARADOX_S, G.FIRST_CHART_MAX_S) == (6.0, 8.0, 20.0)
+    assert (G.CHART_HOLD_MAX_S, G.OPENING_CHART_HOLD_MAX_S) == (10.0, 6.0)

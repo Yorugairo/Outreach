@@ -16,6 +16,7 @@ reason lands in the take manifest.
 
     python run_script_gates.py <script> [--pivot "<line>"] [--ring <t>]
         [--counterparty <n>] [--timeline <path>] [--opening-s N]
+        [--title "<locked title>"] [--thumb "<thumbnail words>"] [--thumb-file <png>]
 
 Exit 1 if any tool FAILed (lint failures > 0, audit FAIL > 0, opening gate
 FAIL > 0, or a checker crashed), else 0. The screens file only enumerates.
@@ -186,9 +187,10 @@ def run_audit(script: Path, pivot: str | None) -> ToolResult:
 
 def run_opening_gate(script: Path, args: argparse.Namespace) -> ToolResult:
     argv = [str(script)]
-    for flag in ("timeline", "counterparty", "ring"):
+    # E24: --title / --thumb / --thumb-file pass straight through to G45 / J12
+    for flag in ("timeline", "counterparty", "ring", "title", "thumb", "thumb_file"):
         if getattr(args, flag):
-            argv += [f"--{flag}", str(getattr(args, flag))]
+            argv += [f"--{flag.replace('_', '-')}", str(getattr(args, flag))]
     if args.opening_s is not None:
         argv += ["--opening-s", str(args.opening_s)]
     code, out = _call_main("gate_opening_structure.py", G.main, argv)
@@ -266,6 +268,9 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--counterparty", help="named counterparty, e.g. Bravos")
     ap.add_argument("--timeline", type=Path, help="build-f/timeline.json (measured word times)")
     ap.add_argument("--opening-s", type=float, default=None)
+    ap.add_argument("--title", help="the locked title - opening gate G45 packaging echo (E24)")
+    ap.add_argument("--thumb", help="the thumbnail's words, when recorded in text (E24 G45)")
+    ap.add_argument("--thumb-file", help="the FINAL thumbnail path the opening gate's J12 prints (E24)")
     args = ap.parse_args(argv)
     if hasattr(sys.stdout, "reconfigure"):
         sys.stdout.reconfigure(encoding="utf-8", errors="replace")

@@ -212,7 +212,7 @@ invalid — the enumeration IS the review.
 - ¶5: [14, 11, 3, 14, 13, 11, 10, 22, 8, 15, 14, 9]
 - ¶6: [6, 18, 9, 15, 14, 6, 4, 4, 13, 6]
 - ¶7: [9, 11, 4, 13, 11, 5]
-- ¶8: [15, 7, 18, 7, 12, 2, 14, 19, 3, 8, 7, 7, 16, 4, 8, 5, 7, 4, 15, 4, 4]
+- ¶8: [15, 7, 15, 7, 12, 2, 14, 19, 3, 8, 7, 7, 16, 4, 8, 5, 7, 4, 15, 4, 4]
 - ¶9: [12, 11, 10, 8, 13, 8, 9, 10, 9, 19, 9, 17, 7, 15, 7, 10, 7, 16, 20, 10, 5]
 - ¶10: [8, 21, 2, 8, 12, 14, 8, 4, 10, 4, 5, 11]
 - ¶11: [18, 6, 6, 8, 6, 20, 11, 12, 4, 17, 15, 3, 20, 10, 6, 6, 3, 7, 19]
@@ -222,3 +222,12 @@ invalid — the enumeration IS the review.
 - ¶15: [15, 5, 12, 13, 8, 21, 19, 5, 22, 10, 7, 18, 11, 18, 9, 14]
 - ¶16: [6, 20, 3, 8, 4, 10, 11, 12, 14, 11, 14, 13, 10, 7, 8, 10, 21, 8, 17, 6, 14]
 - ¶17: [4, 4, 8, 11, 21, 7, 14, 24, 10, 6]
+
+## DECLARED — beat tags (0)
+
+One row per tag, script order. `window` is the opening gate's verdict
+for the tag's owning gate (R1: final, never re-derived). `verdict` is
+the agent's, per tag: **true / laundered** (CHECK-RESPONSIBILITIES R2,
+§3a) - a laundered tag is a FAIL at the phase, not a note.
+
+- no declared beats — every declared-kind gate FAILs by absence (R2); tag the beats or record the reason

@@ -1,12 +1,12 @@
 # SCRIPT GATES - SCRIPT-G-VO.txt
 
 script: SCRIPT-G-VO.txt
-generated: 2026-09-03T05:10:35+00:00
+generated: 2026-09-03T07:27:01+00:00
 script_hash: 4d2876620021c3d94387d761d442548d95f867afeb7be8db00f3ed3385dcf5f8
 timing_source: measured
 
-TOOLS      lint: exit 0, 0 fails | audit: exit 0, 0/1, timing=measured |
-           opening gate: exit 1, 26/1/14/6 | screens: SCRIPT-G-SCREENS.md, 186 items
+TOOLS      lint: exit 0, 0 fails | audit: exit 0, 0/0, timing=measured |
+           opening gate: exit 1, 28/1/14/7 | screens: SCRIPT-G-SCREENS.md, 186 items
 
 ## lint_script_pattern.py
 exit 0
@@ -39,16 +39,17 @@ exit 0
            rehooks: ['3.7m', '4.4m', '4.8m', '7.9m']
          phase_map: {'P1 OPEN': '0.0-1.5m', 'P2 ENGINE': '1.5-3.0m', 'P3 GAP': '2.4-6.4m', 'P4 PIVOT': '6.4-7.8m', 'P5 REFLECTION': '7.8-12.4m', 'P6 CLOSE': '12.7-14.2m'}
   p3_units_expected: 3
+         a3_anchor: 1:25
          pivot_pct: 47.6
      timing_source: measured (2883 words on disk)
    hook_measured_s: 2.42
   paradox_measured_s: 3.63
 
-  [WARN] doc 38 beat 4: no dated/checkable promise detected inside the first 60s
   [INFO] doc 37 sec 8: 13,883 chars exceeds the mv2 10,000 cap — chained take required, split at a phase boundary
   [INFO] estimator: the two rate estimates disagree by 10% on the first sentence (numerals read longer than they look) — record a take to settle it
+  [INFO] doc 38 B1-B4: owned by gate_opening_structure - see content\video_engine\projects\systems-and-blowups\steel-and-paper\SCRIPT-G-GATES.md
 
-RESULT: 0 FAIL, 1 WARN
+RESULT: 0 FAIL, 0 WARN
 ```
 
 ## gate_opening_structure.py
@@ -60,8 +61,12 @@ exit 1
             timing: measured (take)
           geometry: P1 0:00-1:10 (beat 5 from 0:47), P2 -2:45 (phase guides)
      density_bands: loops (3, 4), new-info (5, 7)
+         a3_anchor: 1:20
+             cycle: checked 0:00-13:25; longest gap 352s from 7:33
+      unit_windows: ['P3 unit 1 2:16-4:09', 'P3 unit 2 4:09-6:02', 'P5 unit 3 7:23-9:32', 'P5 unit 4 9:32-11:40']
       counterparty: Bravos
               ring: spike
+         packaging: title='The AI Bubble Is Real. What Survives Is Steel.' thumb='STEEL or PAPER?' thumb_file=content/video_engine/projects/systems-and-blowups/steel-and-paper/packaging/thumbnail-FINAL-steelpaper.png
     not_gated_here: Truby Battle / Self-Revelation / New Equilibrium, Snyder midpoint, chiastic center, ring CLOSE (P4-P6)
     beats_declared: {}
 
@@ -92,7 +97,7 @@ exit 1
   [FAIL ] G24 no [head-fake] declared in P2
           Truby Plan v1 / head-fake #1 planted STRAIGHT, early-mid P2 (P2 MANDATORY / MAP s4)
   [FAIL ] G25 no rehook within 45s of 1:20
-          PLATFORM rehook A3 at ~10% of runtime = 1:20 (P2 / MAP s4 QC) [audit hard-codes 3:00 - docs win here]
+          PLATFORM rehook A3 at ~10% of runtime = 1:20 (P2 / MAP s4 QC; audit and gate share kit_spec.a3_anchor_s, E23)
   [FAIL ] G26 no [foreshadow] near 10%
           Foreshadow schedule F2 at ~10%: the promise sighted again, none of it delivered (P2 / MAP s2)
   [FAIL ] G27 'spike' 0x in P2
@@ -103,8 +108,8 @@ exit 1
           U6 / E20 concession budget: an agreement run never exceeds 2 sentences or 10s without a claim of ours
   [FAIL ] G35 proof at 2:44 hedged at 2:47: 'The yardstick is a new instrument for this channel — no threshold on i'
           U6 / E20: a delivered proof is never hedged in the next sentence
-  [FAIL ] G36 longest stretch without a cycle beat: 141s from 1:20
-          CLK the cycle repeats per beat - hook / show it's worth it / promise more / deliver; no >60s without a cycle beat
+  [FAIL ] G36 longest stretch without a cycle beat: 352s from 7:33
+          CLK the cycle repeats per beat - hook / show it's worth it / promise more / deliver; no >60s without a cycle beat, 0:00-13:25 (E23: whole runtime)
   [FAIL ] G37 no [archetype] declared in 0:08-0:30
           Truby Weakness/Need planted AS PEOPLE: an archetype-in-a-setting enters 0:08-0:30 (38 B3 / MAP s3)
   [FAIL ] G38 no [desire] declared in 0:47-1:10
@@ -117,6 +122,10 @@ exit 1
           Snyder Debate / Truby Plan v1 FAILS: the obvious answer tried and found wanting, after the head-fake, mid-late P2 (P2 / MAP s4)
   [FAIL ] G42 no [signpost] declared at the end of P2
           Auditory handrail: exit P2 on a transition signpost into the Gap (P2 / doc 32 s1)
+  [FAIL ] G44 no rehook in unit 4 9:32-11:40
+          PLATFORM rehook per unit: one template-family line or [rehook] inside every P3/P5 unit window (P3.md u5 / P5 / MAP s9 '1 per unit'; E23)
+  [FAIL ] G45 title-word proxy: none of ['ai', 'bubble', 'real', 'surviv', 'steel', 'paper'] in the first two sentences - the first sentence must answer the thumbnail
+          E24 / doc 29 s9.29: proxy for 'the first sentence answers the thumbnail' - the title is the words packaged with it
   [WARN ] G29 cannot place - macro close not declared
           PLATFORM breathing dip after the macro close (P2)
   [PASS ] G01 first sentence 2.42s
@@ -159,8 +168,10 @@ exit 1
           A/V contextual mapping: plates carry the archive, the voice carries motive and cost; a line that captions its visual fails (P2 / doc 32 s6) - check the plate plan
   [JUDGE] J08 read the promise line
           Rhetoric: phonetic anchor only on the promise/payoff/tell (doc 32 s3)
+  [JUDGE] J12 open content/video_engine/projects/systems-and-blowups/steel-and-paper/packaging/thumbnail-FINAL-steelpaper.png; sentence 1: 'The safest thing you own looks like this.'
+          E24 / doc 29 s9.29: the first sentence answers what the thumbnail poses - open the thumbnail and read sentence 1 against it
 
-RESULT: 26 FAIL / 1 WARN / 14 PASS / 6 JUDGE (read these) / 0 INFO
+RESULT: 28 FAIL / 1 WARN / 14 PASS / 7 JUDGE (read these) / 0 INFO
 ```
 
 ## enumerate_strength_screens.py

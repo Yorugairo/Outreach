@@ -27,25 +27,30 @@ needs_ep1 = pytest.mark.skipif(not (BUILD / "steel-and-paper.timeline.json").exi
 def test_ep1_report_is_the_four_fail_baseline():
     path, n_fail = G.write_report(BUILD, "steel-and-paper.timeline.json")
     assert path == BUILD / "GATES-MOTION.md" and path.exists()
-    assert n_fail in (4, 5)   # 4 before caption modes were declared; 5 once M08 enforces on the rebuilt ep1
+    assert n_fail in (7, 8)   # 4 before caption modes were declared; 5 once M08 enforces on the rebuilt ep1; +3 for E24/E25
     text = path.read_text(encoding="utf-8")
     assert text.splitlines()[0] == "# MOTION GATE — build-f"
     assert "[FAIL ] M01" in text and "> 12s" in text
     # 4 FAIL before caption modes were declared; 5 once the rebuilt ep1 declares them and M08 enforces
     # P35 T7 adds M09 (one camera move per window): a PASS on ep1, which carries no species rows
-    assert ("RESULT: 4 FAIL / 1 WARN / 3 PASS / 2 JUDGE / 1 INFO" in text
-            or "RESULT: 5 FAIL / 1 WARN / 3 PASS / 1 JUDGE / 0 INFO" in text), text[-400:]
-    assert text.rstrip().splitlines()[-1] in ("VERDICT: FAIL (4 FAIL)", "VERDICT: FAIL (5 FAIL)")
+    # E24 / E25 add M10 (opening stillness), M11 (the first chart) and M12 (chart held as homework): all red on ep1
+    assert ("RESULT: 7 FAIL / 1 WARN / 3 PASS / 2 JUDGE / 1 INFO" in text
+            or "RESULT: 8 FAIL / 1 WARN / 3 PASS / 1 JUDGE / 0 INFO" in text), text[-400:]
+    assert text.rstrip().splitlines()[-1] in ("VERDICT: FAIL (7 FAIL)", "VERDICT: FAIL (8 FAIL)")
 
 
-def _dense_build(runtime=180.0, scene_len=6.0, dock_every=20.0, stage=False):
+def _dense_build(runtime=180.0, scene_len=6.0, dock_every=18.0, stage=False):
+    """Mirrors test_gate_motion_density._dense_build: 5s docks on scene starts every 18s from
+    12s (E25 M12), the first chart spotlit at 12.2s (E24 M11), no still > 6s in the opening (M10)."""
     scenes = []
     t = 0.0
     i = 0
     while t < runtime:
         scenes.append({"scene_id": f"s{i:02d}", "world": {"asset_id": f"world-{i}"}, "span": [t, min(t + scene_len, runtime)]})
         t += scene_len; i += 1
-    docks = [{"asset": f"ev-{k}", "at": a, "end": min(a + 8.0, runtime)} for k, a in enumerate([x * dock_every + 3.0 for x in range(int(runtime // dock_every))])]
+    docks = [{"asset": f"ev-{k}", "at": a, "end": min(a + 5.0, runtime)} for k, a in enumerate([x * dock_every + 12.0 for x in range(int(runtime // dock_every))])]
+    next(s for s in scenes if s["span"][0] <= 12.0 < s["span"][1])["species"] = [
+        {"kind": "spotlight", "at": 12.2, "dur": 2.0, "target": {"kind": "region", "x0": 0, "y0": 0, "x1": 0.4, "y1": 0.4}}]
     pages = []
     t = 0.0
     while t < runtime:

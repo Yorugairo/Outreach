@@ -123,8 +123,12 @@ and green, produced by the tools, not asserted:
    evidence at most 45s apart, the opening minute never the thinnest.
    `render_episode.py` refuses the full render otherwise.
 
-Baselines to beat: Script G opening gate 27 FAIL; build-f motion gate 5
-FAIL (M01 15% still, M03 54s gap, M05, M07, M08 six bare stretches).
+Baselines to beat (2026-09-03, after E24/E25): Script G opening gate 28
+FAIL (incl. G45: the first sentence does not answer the thumbnail; G09
+promise at 1:20); build-f motion gate 8 FAIL (M01 15% still, M03 54s gap,
+M05, M07, M08 six bare stretches, M10 three stills over 6s in the first
+minute, M11 the first chart full and unannotated at 0:09.5, M12 twenty-five
+chart docks held as homework).
 
 ## Standing rulings that bind the re-script (added 2026-09-03)
 

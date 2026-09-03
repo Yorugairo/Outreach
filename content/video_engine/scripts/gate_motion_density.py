@@ -32,6 +32,13 @@ reads as stillness.
        until then INFO listing where stage captions are REQUIRED + a JUDGE row
   M09  one camera move per window: no scene stacks two of   FAIL   (s9.27 precedence / s9.28 C3)
        punch | focus_zoom | pull_back, or one over Ken Burns
+  M10  opening stillness: no still stretch > 6s begins      FAIL   (E24 / s9.29: 4-6s in the first 30-60s)
+       in the first 60s
+  M11  the first chart: enters 0:08-0:20, annotated by a    FAIL   (E24 / s9.29; sound cue absent = WARN)
+       spotlight/callout/punch/focus_zoom within 1.5s
+  M12  a chart is the proof, not the homework: a chart dock FAIL   (E25 / s9.30)
+       never spans a scene boundary; hold <= 10s anywhere,
+       <= 6s inside the opening minute (re-enter it instead)
   J01  savor beats keep their picture (card up, badge lit) JUDGE
 
     python gate_motion_density.py <build-dir> [--timeline NAME.timeline.json]
@@ -55,16 +62,21 @@ CAP_PAGES_PER_MIN_MIN = 20.0
 OPENING_S = 60.0           # E21: the opening minute
 WINDOW_S = 60.0
 
-# LEDGER PAGE beats (doc 29 s9.26 / s9.28 C5, D1, D2; P35 T3 template `const LP`):
-# ROLL 0.6 the cream unrolls, BLEED 2.8 the charcoal field bleeds in, OUTLINE 0.8
-# the clean edge draws, BUILD 3.0 the chart lands. Each boundary is a visual
-# event from the scene start; the start itself is an evidence entry; the hold
-# after BUILD completes is still (C5) and needs a dock, plate life, or stage
+# LEDGER PAGE beats (doc 29 s9.26, E22 addendum 6 / s9.28 C5, D1, D2; the template's
+# `const LP = { ROLL: 0.7, SAVOR: 0.8, FIELD: 2.4, OUTLINE: 0.8, PUNCH: 0.5, INK: 2.0, BUILD: 3.0 }`,
+# operator 2026-09-03): ROLL the cream unrolls, SAVOR the half-savor, FIELD the charcoal
+# fills to the deckle, OUTLINE the line draws on that edge, PUNCH the punch-in after the
+# line, BUILD the chart lands, and the FOCUS action fires at the build's end. Each
+# boundary is a visual event from the scene start; the start itself is an evidence
+# entry; the hold after the focus is still (C5) and needs a dock, plate life, or stage
 # captions past 12s. Keep in step with the template's LP constants.
-LP_ROLL_S, LP_BLEED_S, LP_OUTLINE_S, LP_BUILD_S = 0.6, 2.8, 0.8, 3.0
-PAGE_BEAT_OFFSETS = (0.0, LP_ROLL_S, LP_ROLL_S + LP_BLEED_S,
-                     LP_ROLL_S + LP_BLEED_S + LP_OUTLINE_S,
-                     LP_ROLL_S + LP_BLEED_S + LP_OUTLINE_S + LP_BUILD_S)   # 0, 0.6, 3.4, 4.2, 7.2
+LP_ROLL_S, LP_SAVOR_S, LP_FIELD_S, LP_OUTLINE_S, LP_PUNCH_S, LP_BUILD_S = 0.7, 0.8, 2.4, 0.8, 0.5, 3.0
+PAGE_BEAT_OFFSETS = (0.0, LP_ROLL_S, LP_ROLL_S + LP_SAVOR_S,
+                     LP_ROLL_S + LP_SAVOR_S + LP_FIELD_S,
+                     LP_ROLL_S + LP_SAVOR_S + LP_FIELD_S + LP_OUTLINE_S,
+                     LP_ROLL_S + LP_SAVOR_S + LP_FIELD_S + LP_OUTLINE_S + LP_PUNCH_S,
+                     LP_ROLL_S + LP_SAVOR_S + LP_FIELD_S + LP_OUTLINE_S + LP_PUNCH_S + LP_BUILD_S)
+# = (0.0, 0.7, 1.5, 3.9, 4.7, 5.2, 8.2): roll-out, savor start, field start, line, punch, build start, build end + focus
 DOCK_SOURCE_TIMELINE = "timeline"            # scenes[].docks enter/exit/badge_at - the player's own clock
 DOCK_SOURCE_FILE = "evidence-dock.json"      # fallback only: a timeline that carries no docks at all
 
@@ -90,6 +102,21 @@ PLATE_LIFE_STEP_S = 0.1    # s9.27 plate life: quantize t to 10 fps; each step i
 # mutually exclusive per window. M09 mirrors the builder's validate_species so a
 # hand-edited timeline is caught too.
 CAMERA_MOVES = ("punch", "focus_zoom", "pull_back")
+
+# OPENING-MINUTE gates (ruling E24 / doc 29 s9.29 - the analyst's drop-off review the
+# operator verified against analytics) and the chart-hold rule (ruling E25 / s9.30).
+OPENING_STILL_MAX_S = 6.0        # E24 / doc 29 s9.29: 4-6s in the first 30-60s - the opening's own stillness ceiling
+PARADOX_S = 8.0                  # E24 / doc 29 s9.29: the first chart enters only after the 8s paradox is paid
+FIRST_CHART_MAX_S = 20.0         # E24 / doc 29 s9.29: ... and no later than 0:20
+CHART_SPECIES = ("chart", "data")  # E24 / doc 29 s9.29: the evidence species that count as "the first chart"
+ANNOTATED_KINDS = ("spotlight", "callout", "punch", "focus_zoom")  # E24 / doc 29 s9.29: the chart's divergence is pointed at
+ANNOTATE_TOL_S = 1.5             # E24 / doc 29 s9.29: the targeted species fires with the enter, not later
+CUE_TOL_S = 1.5                  # E24 / doc 29 s9.29: a sound cue lands with the enter (absent = WARN)
+CHART_HOLD_MAX_S = 10.0          # E25 / doc 29 s9.30: the chart is the proof, not the homework - hold ceiling anywhere
+OPENING_CHART_HOLD_MAX_S = 6.0   # E25 / doc 29 s9.30: ... and inside the opening minute
+SRC_M10 = "E24 / doc 29 s9.29: stillness inside the opening minute - 4-6s in the first 30-60s"
+SRC_M11 = "E24 / doc 29 s9.29: the first chart enters 0:08-0:20, annotated on its divergence, with a sound cue"
+SRC_M12 = "E25 / doc 29 s9.30: the chart is the proof, not the homework"
 
 
 @dataclass(frozen=True)
@@ -304,8 +331,116 @@ def run(tl: dict, docks: list[dict], mp: dict) -> tuple[list[Gate], dict]:
             "doc 29 s9.25 caption STAGE mode (player template pending)")
         add("J02", "JUDGE", "captions on the still stretches above are centred, large, per-word explosive - not the lower-third anchor", "doc 29 s9.25 #2")
     g.append(_camera_gate(A["camera_clashes"]))
+    # E24 / E25: the opening minute and the chart-as-proof rule
+    g += [_opening_still_gate(A["still"]), _first_chart_gate(tl, docks, mp), _chart_hold_gate(tl, docks)]
     add("J01", "JUDGE", "every savor beat holds its picture (card up, badge lit), never a bare plate with a drift", "doc 29 s9.25 #3")
     return g, _stats(A, tot)
+
+
+def _mm(s: float) -> str:
+    return f"{int(s // 60)}:{int(s % 60):02d}"
+
+
+def _scene_at(scenes: list[dict], t: float) -> dict | None:
+    return next((s for s in scenes if float(s["span"][0]) <= t < float(s["span"][1])), None)
+
+
+def chart_docks(tl: dict, docks: list[dict]) -> tuple[list[dict], bool]:
+    """Every CHART dock as {enter, exit, asset, scene}, by enter time, plus whether the
+    species was known. The timeline's own docks win (P35 T0); the evidence map's species
+    filters to CHART_SPECIES - a timeline with no evidence map treats EVERY dock as a
+    chart candidate (E24 M11 says so in its message)."""
+    scenes = tl.get("scenes", [])
+    evidence = tl.get("evidence") or {}
+    known = bool(evidence)
+    tl_docks = [(d, s) for s in scenes for d in s.get("docks", [])]
+    pairs = tl_docks if tl_docks else [(d, None) for d in docks]
+    out = []
+    for d, s in pairs:
+        span = _dock_span(d)
+        if not span:
+            continue
+        asset = d.get("slide") or d.get("asset") or d.get("asset_id") or "?"
+        if known and evidence.get(asset, {}).get("species") not in CHART_SPECIES:
+            continue
+        out.append({"enter": span[0], "exit": span[1], "asset": asset, "scene": s or _scene_at(scenes, span[0])})
+    return sorted(out, key=lambda x: x["enter"]), known
+
+
+def _cue_near(t: float, tl: dict, mp: dict) -> bool | None:
+    """True/False: a non-plate motion-plan cue or a timeline `sound` entry within CUE_TOL_S;
+    None when the build carries neither structure (E24 M11: 'no sound structure to check')."""
+    if not mp.get("cues") and "sound" not in tl:
+        return None
+    ats = [float(c["in"]) for c in mp.get("cues", []) if c.get("kind") != "plate"]
+    ats += [float(x["at"]) for x in tl.get("sound", []) or []
+            if isinstance(x, dict) and isinstance(x.get("at"), (int, float))]
+    return any(abs(a - t) <= CUE_TOL_S for a in ats)
+
+
+def _opening_still_gate(still: list[tuple[float, float]]) -> Gate:
+    """M10 (E24): no still stretch over OPENING_STILL_MAX_S begins inside the opening minute."""
+    bad = sorted((a, d) for a, d in still if a < OPENING_S and d > OPENING_STILL_MAX_S)
+    if bad:
+        return Gate("M10", "FAIL", f"{len(bad)} still stretches > {OPENING_STILL_MAX_S:.0f}s begin in the first "
+                    f"{OPENING_S:.0f}s: " + ", ".join(f"{_mm(a)}+{d:.0f}s" for a, d in bad), SRC_M10)
+    return Gate("M10", "PASS", f"no still stretch > {OPENING_STILL_MAX_S:.0f}s begins in the first {OPENING_S:.0f}s", SRC_M10)
+
+
+def _first_chart_gate(tl: dict, docks: list[dict], mp: dict) -> Gate:
+    """M11 (E24): the first chart (chart/data dock, or ledger page) enters 8-20s, carries a
+    targeted species within ANNOTATE_TOL_S, and a sound cue within CUE_TOL_S (WARN)."""
+    charts, known = chart_docks(tl, docks)
+    pages = [{"enter": float(s["span"][0]), "asset": f"ledger:{s.get('scene_id', '?')}", "scene": s}
+             for s in tl.get("scenes", []) if _is_page(s)]
+    cands = sorted(charts + pages, key=lambda x: x["enter"])
+    if not cands:
+        return Gate("M11", "FAIL", "no chart enters at all - no chart/data dock and no ledger page in the timeline", SRC_M11)
+    t, asset, scene = cands[0]["enter"], cands[0]["asset"], cands[0]["scene"]
+    why = []
+    if not PARADOX_S <= t <= FIRST_CHART_MAX_S:
+        why.append(f"first chart {asset} enters at {t:.1f}s - outside {PARADOX_S:.0f}-{FIRST_CHART_MAX_S:.0f}s")
+    hits = [sp for sp in (scene or {}).get("species", [])
+            if sp.get("kind") in ANNOTATED_KINDS and abs(float(sp.get("at", -1e9)) - t) <= ANNOTATE_TOL_S]
+    if not hits:
+        why.append("first chart enters full and unannotated - declare a spotlight/callout/punch on its divergence")
+    cue = _cue_near(t, tl, mp)
+    sound = "" if cue else ("; WARN no sound structure to check" if cue is None
+                            else f"; WARN no sound cue within {CUE_TOL_S:.1f}s of the enter at {t:.1f}s")
+    note = "" if known else " (no evidence species in the timeline - every dock treated as a chart candidate)"
+    if why:
+        return Gate("M11", "FAIL", "; ".join(why) + sound + note, SRC_M11)
+    msg = f"first chart {asset} enters at {t:.1f}s with {hits[0]['kind']} at {float(hits[0]['at']):.1f}s"
+    return Gate("M11", "PASS" if cue else "WARN", msg + sound + note, SRC_M11)
+
+
+def _chart_hold_offences(tl: dict, docks: list[dict]) -> list[str]:
+    """E25 M12: a chart dock that straddles a later scene's start, or holds past the ceiling."""
+    scenes = tl.get("scenes", [])
+    out = []
+    for d in chart_docks(tl, docks)[0]:
+        enter, exit_, hold = d["enter"], d["exit"], d["exit"] - d["enter"]
+        crossed = [s for s in scenes if enter < float(s["span"][0]) < exit_]
+        ceiling = OPENING_CHART_HOLD_MAX_S if enter < OPENING_S else CHART_HOLD_MAX_S
+        why = []
+        if crossed:
+            plates = [_plate_id(d["scene"]) or "?"] if d["scene"] else []
+            plates += [_plate_id(s) or "?" for s in crossed]
+            why.append(f"crosses {len(crossed)} scene boundaries ({' -> '.join(plates)})")
+        if hold > ceiling:
+            why.append(f"hold {hold:.1f}s > {ceiling:.0f}s" + (" (opening minute)" if enter < OPENING_S else ""))
+        if why:
+            out.append(f"{d['asset']} {_mm(enter)}-{_mm(exit_)} " + ", ".join(why))
+    return out
+
+
+def _chart_hold_gate(tl: dict, docks: list[dict]) -> Gate:
+    bad = _chart_hold_offences(tl, docks)
+    if bad:
+        return Gate("M12", "FAIL", f"{len(bad)} chart docks held as homework: " + "; ".join(bad[:12])
+                    + (" ..." if len(bad) > 12 else "") + " - re-enter the chart spotlit on the new datum rather than hold", SRC_M12)
+    return Gate("M12", "PASS", f"no chart dock spans a scene boundary or holds past {CHART_HOLD_MAX_S:.0f}s "
+                f"({OPENING_CHART_HOLD_MAX_S:.0f}s in the opening minute)", SRC_M12)
 
 
 def _camera_gate(clashes: list[tuple[str, str]]) -> Gate:
