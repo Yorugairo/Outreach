@@ -1362,7 +1362,11 @@
     const qz = pg.quiet_zone || null;
     const chart = lpEl("svg", "lp-chart", page, { viewBox: "0 0 1000 560" });
     /* the chart box lives inside the punched region (with room for the title above and the source below) */
-    const cb = { x: vis.x + 0.03 * vis.w, y: vis.y + 0.15 * vis.h, w: 0.94 * vis.w, h: 0.74 * vis.h };
+    /* the chart box is the BOARD clipped to the punched region (a host plate's board is only part of the page) */
+    const reg = pg.punch === false ? bd : { x: Math.max(bd.x, vis.x), y: Math.max(bd.y, vis.y), w: Math.min(bd.x + bd.w, vis.x + vis.w) - Math.max(bd.x, vis.x), h: Math.min(bd.y + bd.h, vis.y + vis.h) - Math.max(bd.y, vis.y) };
+    /* a host plate may declare the chart box outright (page.chart_box, measured clear of the host's hand) */
+    const cb = pg.chart_box ? { x: pg.chart_box.x + 0.02 * pg.chart_box.w, y: pg.chart_box.y + 0.15 * pg.chart_box.h, w: 0.96 * pg.chart_box.w, h: 0.74 * pg.chart_box.h }
+                            : { x: reg.x + 0.03 * reg.w, y: reg.y + 0.15 * reg.h, w: 0.94 * reg.w, h: 0.74 * reg.h };
     chart.style.width = ((qz ? 0.6 : 0.9) * cb.w * 100).toFixed(2) + "%"; chart.style.height = (cb.h * 100).toFixed(2) + "%";
     chart.style.left = ((cb.x + (qz === "left" ? 0.4 : 0.05) * cb.w) * 100).toFixed(2) + "%"; chart.style.top = (cb.y * 100).toFixed(2) + "%";
     const st = { root, page, edge, blobs, strokes, nib, rect, goo, outline, edgePath, glyphs, chart, fieldPlate, boardCentre, kind: pg.builder || "story",
@@ -1694,6 +1698,7 @@
   };
   const paintLedger = (el, scene, t) => {
     const st = ledgerState.get(el.id + "|" + scene.scene_id) || buildLedger(el, scene);
+    const pg = scene.world.page || {};
     if (!st.root.isConnected) { el.querySelectorAll(".lp").forEach((x) => x.remove()); el.appendChild(st.root); }
     const tr = t - scene.span[0];
     /* beat 1: roll-out */
@@ -1731,7 +1736,7 @@
     const n = Math.max(1, st.glyphs.length), per = LP.INK / n;
     st.glyphs.forEach((g, j) => g.style.setProperty("--w", clamp01((t3 - j * per) / (per * 1.6)).toFixed(3)));
     /* beat 5: PUNCH IN on the board - the line and the deckle margin are the room we spend (E22 addendum 6) */
-    const pk = expoOut(clamp01((t3 - LP.OUTLINE) / LP.PUNCH));
+    const pk = pg.punch === false ? 0 : expoOut(clamp01((t3 - LP.OUTLINE) / LP.PUNCH));   /* a host plate skips the punch: his gesture is the direction */
     const bdc = st.boardCentre || { x: 50, y: 50 };
     st.page.style.transformOrigin = bdc.x.toFixed(2) + "% " + bdc.y.toFixed(2) + "%";
     st.page.style.transform = "translateX(" + ((rk - 1) * 100).toFixed(2) + "%) scale(" + (1 + (LP.PUNCH_SCALE - 1) * pk).toFixed(4) + ")";
@@ -2085,7 +2090,9 @@
        timings, never resampled onto beat boundaries (doc 29 Part 5). */
     const quiet = active.length > 0;
     /* STAGE (s9.25 #2): the timeline declares it; the anchor is the shared-stage position only */
-    const stage = !quiet && (TL.caption_modes || []).includes("stage");
+    /* a ledger page may pin its captions to the anchor (page.caption === "anchor"): a host plate's quiet zone is the host's (C5 addendum) */
+    const capPinned = sc.world.kind === "ledger" && sc.world.page && sc.world.page.caption === "anchor";
+    const stage = !quiet && !capPinned && (TL.caption_modes || []).includes("stage");
     const PG = TL.caption_pages;
     if (PG) {
       /* KINETIC (doc 29 Part 5): 2-4 word groups punch into the fixed anchor,
@@ -2124,7 +2131,7 @@
       cap.style.opacity = line
         ? Math.min(clamp01((t - line.at) / 0.22), clamp01((line.until - t) / 0.18)) : 0;
     }
-    cap.classList.toggle("quiet", quiet);
+    cap.classList.toggle("quiet", quiet || capPinned);
     cap.classList.toggle("stage", stage);
     paintSpecies(sc, t);
     /* on a LEDGER PAGE the stage caption sits in the page's declared quiet zone (s9.25 #2, s9.28 C2:

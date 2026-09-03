@@ -49,6 +49,9 @@ Produced by `content/video_engine/scripts/ledger_page.py` from a
 | `plate` | asset id of the GENERATED blank washi page (world plate, spine register). CSS cream `#F4E6C7` is the fallback and reads dull |
 | `field_plate` | asset id of the generated page with the board inked; cross-faded in beat 3 |
 | `field` | `scribble` / `soak` — the procedural fallback when no `field_plate` is approved |
+| `punch` | `false` on a host plate: the punch is skipped, his gesture is the direction |
+| `chart_box` | `{x, y, w, h}` measured clear of the host's hand (derive_host_boards); the chart fits it instead of the board |
+| `caption` | `"anchor"` pins the captions to the lower third for the page (a host plate's quiet zone is the host's) |
 | `focus` | `{kind: callout \| spotlight \| punch, target?, label?, dur?}` — the focus action fired at the build's end; target defaults to the emphasized datum |
 | `board` | `{x, y, w, h}` fractions of the frame — the deckle's innermost rectangle, MEASURED from the blank plate's paper mask; the line, the field fallback and the chart share it; default 0.06 / 0.08 / 0.88 / 0.84 |
 | `edge_path` | the paper's deckle boundary as a normalized SVG path (traced from the blank plate's paper mask); the line is drawn along it |
@@ -96,7 +99,7 @@ him. Claim `steel-and-paper-host-board-v1`: three poses (presenting at the
 board, pointing at its upper area, turned to it from the left), each
 delivered as the inked-board state; the blank state is derived by
 returning the board region to cream paper so the host is identical across
-the beats. Interim: the host cut-outs in
+the beats. DELIVERED 2026-09-03 (claim-resume: 3 flagged, 0 failed): `host-board-present-v1`, `host-board-point-v1`, `host-board-turned-v1`; blank states derived (`*-blank.png`, only charcoal pixels return to paper so the host's arm survives); boards, hand clearance and quiet zones measured into `host-boards.json`. The pointing pose runs scene 1 of the proof. Interim: the host cut-outs in
 `assets/generated/cutouts/actor-host-*.png` may throw in via plate life on
 the quiet zone (proof scene 1), but the brand sheet's rule stands - the
 host lives in the plate, never as a cut-out over evidence.
