@@ -18,7 +18,7 @@ the branch head) unless marked otherwise. Lead: **what to decide**, then
 ## 2. What to read (in this order)
 
 1. `docs/content-video-engine/41-LEDGER-PAGE-SPECIES.md` — the component doc: five beats, the `ledger_page.v1` spec, the shot row, plates, sound, gates, open picks.
-2. `docs/content-video-engine/CAPABILITIES.md` — nine new rows (opening gate, script-gate runner + recording refusal, declared-beat enumeration, motion gate wired, caption STAGE mode, LEDGER PAGE species, surface grammar + census, page sound cues).
+2. `docs/content-video-engine/CAPABILITIES.md` — new rows (opening gate, script-gate runner + recording refusal, declared-beat enumeration, motion gate wired, caption STAGE mode, LEDGER PAGE species, surface grammar + census, page sound cues).
 3. `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md` §9.25 (Shipped), §9.26 (E22 addenda 2–3: the corrections you gave today, in order), §9.28 (surface grammar).
 4. `docs/portable/OPERATOR-RULINGS.md` E22 addenda 2–3, E23 (A3 = 10% of runtime).
 5. `docs/content-video-engine/patterns/CHECK-RESPONSIBILITIES.md` §2 (runner row, gate rows), §3g (surface choice), §4 (the runner is step 1).
@@ -45,7 +45,8 @@ the branch head) unless marked otherwise. Lead: **what to decide**, then
 - T4 shot rows `ledger:<series>:<variant>…`, timeline `species`, gate page beats.
 - T9 three CC0 page cues at −14 LUFS (no CC0 ink sound under 4s exists — the bleed cue is a water drop; flag).
 - T8 focus rack vs wash/spot side-by-side (proposal; current stays).
-- In flight: T5 race/decline/combo builders; T7 declared targets + camera-move exclusivity (build + gate).
+- T7 data half: species rows carry declared targets; pointing species without one fail the build; camera moves exclusive per window (build + gate M09).
+- In flight: T5 race/decline/combo builders; T7 player half (species blocks + `resolveTarget()`); T6 plate life in the player.
 - Reversed by you today: "no generated paper imagery" → the ground and the board are generated plates (claim open).
 
 ## 4. Known rough edges (not hidden)
