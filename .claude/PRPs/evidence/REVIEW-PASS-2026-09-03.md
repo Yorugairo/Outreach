@@ -13,7 +13,7 @@ the branch head) unless marked otherwise. Lead: **what to decide**, then
 | Plates | Approve `world-ledger-blank-page-v1` and `world-ledger-inked-board-v1` from the contact sheet | `review/claims/steel-and-paper-ledger-page-v1/` (Codex delivery; `claim-resume` after) | claim approvals.json |
 | HG2 (P35) | **Handwriting font** for the ink writes (Inter until then; no generic cursive) | doc 41 §8 | brand sheet type table |
 | HG3 (P35) | **Race on a page** reads as a ledger, not a dashboard | `build-f/ledger-builders-proof.html` (when T5 lands) | doc 29 §9.26 |
-| Focus rack | Rack vs the current wash/spot at the two-card boundary | `evidence/prototypes/focus-rack-vs-wash.html` (when T8 lands) | doc 29 §9.27 |
+| Focus rack | Rack vs the current wash/spot at the two-card boundary | `evidence/prototypes/focus-rack-vs-wash.html` (served on :8733 while the session lives; `?t=4.3` freezes) — the rack removes the scrim shape, not the card severing at the front | doc 29 §9.27 |
 
 ## 2. What to read (in this order)
 
@@ -44,7 +44,8 @@ the branch head) unless marked otherwise. Lead: **what to decide**, then
 - T3 the species in the player (settled after four corrections: plain cream → field → tight line; `page.plate` / `page.field_plate` for generated plates).
 - T4 shot rows `ledger:<series>:<variant>…`, timeline `species`, gate page beats.
 - T9 three CC0 page cues at −14 LUFS (no CC0 ink sound under 4s exists — the bleed cue is a water drop; flag).
-- In flight: T5 race/decline/combo builders; T7 declared targets + camera-move exclusivity (build + gate); T8 focus-rack side-by-side.
+- T8 focus rack vs wash/spot side-by-side (proposal; current stays).
+- In flight: T5 race/decline/combo builders; T7 declared targets + camera-move exclusivity (build + gate).
 - Reversed by you today: "no generated paper imagery" → the ground and the board are generated plates (claim open).
 
 ## 4. Known rough edges (not hidden)
