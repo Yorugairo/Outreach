@@ -396,7 +396,7 @@ proof earns the page.
 - Evidence: pending
 
 ### T8: Focus rack vs the current evidence lighting - side by side (proposal)
-- Status: pending
+- Status: review (the operator picks; the current mechanism stays)
 - Owner: parent
 - Depends on: T3 (template ordering only)
 - Write set: `content/video_engine/projects/systems-and-blowups/steel-and-paper/evidence/prototypes/focus-rack-vs-wash.html`
@@ -410,7 +410,7 @@ proof earns the page.
   not edited in this slice.
 - Validate: `preview_start` on the prototypes dir; filmstrip present; the
   reviewed template untouched (`git diff --stat` shows no template change from this slice)
-- Evidence: pending
+- Evidence: `evidence/prototypes/focus-rack-vs-wash.html` (standalone, real ep1 assets from row 585.1-595.2 on an 8s clock; TOP = the template's wash/spot/settle copied verbatim, BOTTOM = flat dim + one 0.6s rack: blur 0-2.5px, brightness 1-0.78, scale 1-0.985, x -+6px); filmstrip 8 cols x 2 rows at 3.9/4.1/4.3/4.6/5.0 and the front 7.35/7.5/7.7 (gitignored); template diff empty; no Math.random/Date.now; doc 29 s9.27 paragraph. Agent's read: the rack removes the scrim/spot SHAPE and makes the boundary a one-value step; it does not by itself stop the card severing at the front (that is a card-exit decision under s9.15)
 
 ### T9: Sound cues for the page - paper roll, ink bleed, chalk stroke
 - Status: done
