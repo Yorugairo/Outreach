@@ -113,6 +113,8 @@ Acceptance:
   chart-story value contract, bar-chart-race ranking, ink-bleed filter,
   stop-motion time law); the player stays HTML + its own seek.
 - Replacing the wipe, the dock choreography, or any reviewed shot.
+- Beat-freeze, radial and push from the s9.27 menu (not in T7's acceptance;
+  a follow-on species slice when a script calls for one).
 - ~~AI-generated paper or ink imagery. The page is drawn, not generated.~~ REVERSED 2026-09-03 by the operator: the page ground (and, by the two-plate build, the inked board) are generated world plates in the spine's register; the drawn field is the fallback. Claim `steel-and-paper-ledger-page-v1` opened.
 - Hand-drawn stroke paths for glyphs (path-draw); the string wipe is the
   chosen mechanism for labels. Stroke order is reserved for a future
@@ -121,15 +123,24 @@ Acceptance:
 
 ## Human Gates
 
-1. **The pick** (after T1): candidate A or B (or a blend), and the roll
-   speed / ink pace, from the rendered prototype. The species is a
-   proposal until picked.
-2. **The font**: one handwriting webfont, licensed for embedding, chosen
-   from three samples rendered in the prototype (charcoal on cream at
-   1080). Written into the brand sheet's type table.
-3. **Bar-race motion on a page**: overtaking bars are the busiest thing
-   the channel will show; confirm from the render that it reads as a
-   ledger and not a dashboard before it becomes a default variant.
+1. **The pick** (after T1) - DECIDED 2026-09-03: none of A/B/C as drawn;
+   the two-plate path in the player with the charcoal filled to the
+   DECKLE on the cream ground, then punch + focus (E22 addenda 4-7; doc 29
+   s9.26 DECIDED block; brand sheet s8b). Addendum 7 (2026-09-03, on the
+   font samples): the outline beat is RETIRED - "useless here, not pulling
+   weight"; the charcoal arriving on the cream is the edge. The hyperframes stitch stays as the prototype record.
+2. **The font** - DECIDED 2026-09-03: **Kalam** (SIL OFL), from three
+   samples on the inked plate (artifact 5dd778fb: Caveat / Kalam /
+   Architects Daughter) - "Kalam is probably the right call." Loaded from
+   Google Fonts in the template head, Inter the offline fallback; brand
+   sheet type table row added. Bundling the TTF beside the template is the
+   operator's download to make (OFL permits it).
+3. **Bar-race motion on a page** - OPEN (second read): the operator's
+   first read (2026-09-03) was "the race needs to be smoother, it feels a
+   bit choppy"; the race was re-timed as a pure function of t and the
+   builders proof republished (7563abf9). The second read decides
+   whether it becomes a default variant; on air it also waits on sourced
+   quarters (the placeholder series is refused by the validator).
 4. **Ship path** - DECIDED 2026-09-02: port first. The chart must be
    crisp and ours (the dense-series builder already lives in the player),
    the page must coexist with docks on one renderer, and the grammar
@@ -137,9 +148,10 @@ Acceptance:
    used only for the prototype and the pick.
 5. **Sound** - DECIDED: source the cues (CC0 via the Freesound client;
    no paid audio). T9.
-6. **The ring on a page**: "we'd have to see it to know" - the prototype
-   carries one optional variant with the spike drawn on the ledger; the
-   pick decides.
+6. **The ring on a page** - OPEN, carried by the re-script: "we'd have to
+   see it to know." No candidate with the spike drawn on the ledger has
+   been rendered yet; it is authored against the re-scripted episode's
+   own ring beat, not against Script G.
 
 ## Mandatory Reads
 
@@ -261,7 +273,7 @@ proof earns the page.
 - Evidence: doc 29 §9.28 (surfaces table; rules A1-A3, B1-B4, C1-C6, D1-D4; the census form); CHECK-RESPONSIBILITIES §3g surface choice per window; `build-f/SURFACE-CENSUS.md` covers all 75 rows of `SHOT-TABLE-F.py` (len(W)=75, not 76), each with rule letters and a builder; counts page 8 rows / 6 pages, dock 49, plate-life 4, none 14; PAGE candidates agree with the PRP's three (28c yardstick #13-14, 1845 vs 2026 #41 conditional on the VO claiming the check, memory race #70 pending its series) and add three (#6 divergence layer, #47 the test, #62 the monitor). FINDING: the motion gate reads `evidence-dock.json` / `motion-plan.json` on an older clock than the timeline (divergence dock 26.4 vs 50.4); on the timeline's own scene docks there are 20 stretches > 12s, not 11 - T4 must read the timeline's `scenes[].docks`. Shot rows #53/#54 overlap 5.5s.
 
 ### T1: Prototype - the stitch, in the hyperframes lane
-- Status: review (Human Gate 1 pick open; C is the working reference)
+- Status: done (Human Gate 1 DECIDED 2026-09-03 - the two-plate deckle path in the player; A/B/C remain the prototype record, doc 29 s9.26)
 - Owner: parent
 - Depends on: none
 - Write set: `content/video_engine/hyperframes/compositions/ledger-page-v1.html`,
@@ -305,7 +317,7 @@ proof earns the page.
 - Evidence: `ledger_page.py` (299 lines; pick_builder / validate / build_spec pure; values verbatim via parse_float=str; race/decline/progress contracts in the docstring; checklist series rejected with 'keep it a dock'); `pytest test_ledger_page.py -q` 17 passed; trim-proof -> story bars 8 values, value_strings verbatim; divergence -> dense-line 4x235 pts with the axes block carried
 
 ### T3: The plate-chart species in the player
-- Status: done (Human Gate 1 DECIDED 2026-09-03: the two-plate path with the charcoal filled to the DECKLE; the font stays open)
+- Status: done (Human Gate 1 DECIDED 2026-09-03: the two-plate path with the charcoal filled to the DECKLE; E22 addendum 7 retired the outline; Human Gate 2 DECIDED: Kalam)
 - Owner: parent
 - Depends on: T1 (Human Gates 1, 2), T2
 - Write set: `docs/content-video-engine/samples/scene-evidence-player.template.html`
@@ -356,7 +368,7 @@ proof earns the page.
 - Evidence: template species block gains buildLedgerRace / buildLedgerDecline / buildLedgerCombo, each from its own component's envelope (race: rank keyframes, overtakes as swaps, axis glides, accent on the leader, `st.sync` rank-settled times; decline: draw-down + count-down + darkening ground, endpoint locks on the exact string; combo: bars then the line, NYT direct labels with field-coloured halos); dense-line/story untouched; `pytest test_ledger_page.py -q` 23 passed; determinism hashes equal at three t's; proof `build-f/ledger-builders-proof.html`. Race data: `ev-memory-share-race-v1.series.json` is SOURCES-TO-VERIFY with `placeholder: true` (no multi-quarter DRAM vendor share exists in the repo) and the validator refuses placeholders, so it can never render; the proof race uses synthetic data marked not for air | 2026-09-03 review: race re-timed as a pure function of t (smoothstep values over the whole period, closed-form crossings, adaptive swap width; max second difference 0.6px at 0.02s), chart hygiene restored on all three (lpYTicks with unit, FT-style basis label, readable date labels via decimal_year_label, inline series names, halo rule); 28 tests; hashes equal from two seek orders; builders proof republished - the operator's read of the race is the remaining HG3
 
 ### T6: The motion menu, and stop-motion plate life as its first species
-- Status: review (plate life shipped in the player; side-by-side on a bare ep1 window still to render)
+- Status: done (plate life shipped; reviewed by the operator on the hosted species proof, 2026-09-03)
 - Owner: parent (menu + template), junior_developer (→ `general-purpose`) for the doc rows
 - Depends on: T3 (template ordering only)
 - Write set: `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md` (§9.27),
@@ -369,11 +381,10 @@ proof earns the page.
   and counts as events; a side-by-side of one bare ep1 window with and
   without plate life for the operator.
 - Validate: `python -m pytest content/video_engine/tests/test_gate_motion_density.py -q`; range render side-by-side
-- Evidence: pending
-- Evidence: §9.27 is the menu of record (written 2026-09-02); plate life species in the template (`plate_life` rows: cutouts from assets/generated/cutouts, t quantized to 10 fps first, throw-and-land with squash, seeded two-frame boil, carried by the camera); gate counts stepping events (T7); proof scene 3 carries two cutouts on a bare plate
+- Evidence: §9.27 is the menu of record (written 2026-09-02); plate life species in the template (`plate_life` rows: cutouts from assets/generated/cutouts, t quantized to 10 fps first, throw-and-land with squash, seeded two-frame boil, carried by the camera); gate counts stepping events (T7); proof scene 3 carries two cutouts on a bare plate. Deviation: the side-by-side range render on a bare ep1 window was replaced by the hosted species proof (artifact d4bf959c, scene 3 with and without plate life on one page) because worktree file links never open for the operator (memory `file-links-never-open`); operator 2026-09-03: "Ledger species proof looks good"
 
 ### T7: Targeted species - punch, scribble callout, focus zoom, feathered spotlight, squiggle marks, pull-back
-- Status: review (player half shipped for punch / focus zoom / pull-back / callout / spotlight / squiggle; beat-freeze, radial, push not built)
+- Status: done (the six named species shipped, data half + player half; operator 2026-09-03: "the targeted species stuff all worked really well, so that's finally a real capability". Beat-freeze, radial and push from the s9.27 menu are not built - not in this slice's acceptance, listed under Not Building for a follow-on)
 - Owner: parent (template + targeting resolver), implementation_luna (→ `general-purpose`) for the shot-table row forms and tests
 - Depends on: T4
 - Write set: `docs/content-video-engine/samples/scene-evidence-player.template.html` (species blocks + one `resolveTarget()`),
@@ -395,7 +406,7 @@ proof earns the page.
   operator.
 - Validate: `python -m pytest content/video_engine/tests/test_targeted_species.py content/video_engine/tests/test_gate_motion_density.py -q`; range renders
 - Evidence: (data half) `validate_species` in build_scene_timeline_f.py (target kinds datum|point|region|span; pointing species without a target FAIL the build naming the row; punch|focus_zoom|pull_back mutually exclusive and never over Ken Burns > 0; optional pivot span); scenes carry `species` verbatim, timeline `species` lists kinds; gate SPECIES_EVENTS table (plate life steps at 10 fps), M09 camera-move clash gate; `pytest test_targeted_species.py test_gate_motion_density.py test_motion_gate_wiring.py -q` 42 passed; ep1 RESULT 5 FAIL / 1 WARN / 3 PASS
-  (player half) `resolveTarget` (datum -> the page's bar or dense-line point; point/region -> frame fractions; span -> caption words), `camXf` one world transform about the target (docks fixed), `paintSpecies` overlay; proof: callout circles the trim bar with its label, squiggle draws under 'ledger', spotlight glides between two points, punch on a point moves the world and the cutouts; no console errors; range renders per species for the operator are still to cut
+  (player half) `resolveTarget` (datum -> the page's bar or dense-line point; point/region -> frame fractions; span -> caption words), `camXf` one world transform about the target (docks fixed), `paintSpecies` overlay; proof: callout circles the trim bar with its label, squiggle draws under 'ledger', spotlight glides between two points, punch on a point moves the world and the cutouts; no console errors. Deviation: per-species range renders were replaced by the hosted species proof (artifact d4bf959c: callout, squiggle, spotlight glide, punch, focus zoom, pull-back, each on its declared target) - the operator reviewed and approved from it; spotlight dim settled at 0.49 on that review (SPOT_DIM)
 
 ### T8: Focus rack vs the current evidence lighting - side by side (proposal)
 - Status: done (DECIDED 2026-09-03: "Wash beats the focus rack" - rack retired, wash/spot stays)
@@ -432,7 +443,7 @@ proof earns the page.
 ## Verification
 
 ```powershell
-python -m pytest content/video_engine/tests/test_ledger_page.py content/video_engine/tests/test_gate_motion_density.py -q
+python -m pytest content/video_engine/tests/test_ledger_page.py content/video_engine/tests/test_gate_motion_density.py content/video_engine/tests/test_targeted_species.py content/video_engine/tests/test_motion_gate_wiring.py -q
 python content/video_engine/scripts/gate_motion_density.py content/video_engine/projects/systems-and-blowups/steel-and-paper/build-f --timeline steel-and-paper.timeline.json
 python scripts/prp_validate.py .claude/PRPs/plans/P35-LEDGER-PAGE-PLATE-CHARTS.plan.md
 ```
@@ -449,3 +460,31 @@ twice and compare frame hashes; grep the template for
   the picked candidate; the Steel and Paper re-script work order names the
   three ledger pages it will carry; memory `money-physics-brand-sheet`
   updated with the signature.
+- CLOSE PASS 2026-09-03: the four suites above 75 passed; motion gate on
+  build-f 8 FAIL / 1 WARN / 3 PASS / 1 JUDGE (the E24/E25 baseline,
+  `GATES-MOTION.md` byte-identical); `prp_validate` PASS; determinism
+  grep over the species blocks clean (the one `Date.now` in the template
+  is the filmstrip exporter's stall guard, outside paint). Brand sheet
+  s8b rewritten to the settled signature; doc 29 s9.26 records the pick;
+  memory `money-physics-brand-sheet` points at `ledger-page-signature`.
+  Fresh read-only review: the same pass as P34's (one reviewer, both plans) -
+  see P34's close line for the verdict and the fixes; the P35-side findings
+  were (5) the variant/shape check, (16) the stray emphasis, and (8) the
+  unresolvable-target event, the first two fixed here.
+  LIVE RULINGS ON THIS CLOSE (2026-09-03): E22 addendum 7 - the outline beat
+  is retired ("useless here, not pulling weight"): LP loses OUTLINE, focus at
+  7.4s, PAGE_BEAT_OFFSETS (0, 0.7, 1.5, 3.9, 4.4, 7.4), edge_path inert; Human
+  Gate 2 decided - Kalam; E28 - a chart reads right at a glance: the trim
+  proof's values are now signed (a drop is a bar going DOWN from a 0% baseline
+  - the page read as seven rises), `validate` FAILs a sign hidden in a note,
+  `review_notes` raises a JUDGE row for a date axis with uneven gaps naming
+  the file's `selection` rule, the species writes the sub (word-wrapped) under
+  the title and the source under the chart box, clear of the caption band on
+  anchor-pinned pages. Species proof regenerated and republished (artifact
+  d4bf959c, label "No outline, Kalam, signed bars"); stage hashes equal from
+  two seek orders at t=10.5 (75ff9184) and t=4.0 (d81d2308).
+  REMAINING - operator only, so the plan stays in `review`: Human Gate 3 (second read of the smoothed race), Human Gate 6 (the ring
+  on a page, with the re-script), and the two contact sheets in
+  `review/claims/` (ledger-page pair `steel-and-paper-ledger-page-v1`,
+  host-on-board triple `steel-and-paper-host-board-v1`) - `approved` is
+  the operator's word, never product code's.

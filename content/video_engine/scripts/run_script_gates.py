@@ -71,7 +71,8 @@ class ToolResult:
 
     @property
     def failing(self) -> bool:
-        return self.exit != 0 or self.counts.get("fail", 0) > 0
+        # -1 = the tool's RESULT line did not parse: nothing was measured, so it cannot be a PASS
+        return self.exit != 0 or self.counts.get("fail", 0) != 0
 
 
 # ---- the canonical hash (shared with the recorders) ----------------------

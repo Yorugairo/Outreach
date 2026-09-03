@@ -13,7 +13,7 @@ minute of the video.
 
 What counts as a VISUAL EVENT (doc 29 s9.25): a scene boundary, a dock
 entering or leaving, a badge/pill reveal, captions in STAGE mode, or a
-LEDGER PAGE building (s9.28 C5 / D1: roll-out, field, outline, build start,
+LEDGER PAGE building (s9.28 C5 / D1: roll-out, field, punch, build start,
 build complete - the hold after that is still), or a TARGETED SPECIES
 firing on a scene (s9.27 MOTION MENU "Gate treatment" column: a punch at
 its punch, a focus zoom at departure and arrival, plate life stepping at
@@ -46,6 +46,7 @@ reads as stillness.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import statistics as st
 import sys
@@ -63,20 +64,19 @@ OPENING_S = 60.0           # E21: the opening minute
 WINDOW_S = 60.0
 
 # LEDGER PAGE beats (doc 29 s9.26, E22 addendum 6 / s9.28 C5, D1, D2; the template's
-# `const LP = { ROLL: 0.7, SAVOR: 0.8, FIELD: 2.4, OUTLINE: 0.8, PUNCH: 0.5, INK: 2.0, BUILD: 3.0 }`,
+# `const LP = { ROLL: 0.7, SAVOR: 0.8, FIELD: 2.4, PUNCH: 0.5, INK: 2.0, BUILD: 3.0 }`,
 # operator 2026-09-03): ROLL the cream unrolls, SAVOR the half-savor, FIELD the charcoal
-# fills to the deckle, OUTLINE the line draws on that edge, PUNCH the punch-in after the
-# line, BUILD the chart lands, and the FOCUS action fires at the build's end. Each
+# fills to the deckle (E22 addendum 7: no outline - the deckle is the edge), PUNCH the
+# punch-in, BUILD the chart lands, and the FOCUS action fires at the build's end. Each
 # boundary is a visual event from the scene start; the start itself is an evidence
 # entry; the hold after the focus is still (C5) and needs a dock, plate life, or stage
 # captions past 12s. Keep in step with the template's LP constants.
-LP_ROLL_S, LP_SAVOR_S, LP_FIELD_S, LP_OUTLINE_S, LP_PUNCH_S, LP_BUILD_S = 0.7, 0.8, 2.4, 0.8, 0.5, 3.0
+LP_ROLL_S, LP_SAVOR_S, LP_FIELD_S, LP_PUNCH_S, LP_BUILD_S = 0.7, 0.8, 2.4, 0.5, 3.0
 PAGE_BEAT_OFFSETS = (0.0, LP_ROLL_S, LP_ROLL_S + LP_SAVOR_S,
                      LP_ROLL_S + LP_SAVOR_S + LP_FIELD_S,
-                     LP_ROLL_S + LP_SAVOR_S + LP_FIELD_S + LP_OUTLINE_S,
-                     LP_ROLL_S + LP_SAVOR_S + LP_FIELD_S + LP_OUTLINE_S + LP_PUNCH_S,
-                     LP_ROLL_S + LP_SAVOR_S + LP_FIELD_S + LP_OUTLINE_S + LP_PUNCH_S + LP_BUILD_S)
-# = (0.0, 0.7, 1.5, 3.9, 4.7, 5.2, 8.2): roll-out, savor start, field start, line, punch, build start, build end + focus
+                     LP_ROLL_S + LP_SAVOR_S + LP_FIELD_S + LP_PUNCH_S,
+                     LP_ROLL_S + LP_SAVOR_S + LP_FIELD_S + LP_PUNCH_S + LP_BUILD_S)
+# = (0.0, 0.7, 1.5, 3.9, 4.4, 7.4): roll-out, savor start, field start, punch, build start, build end + focus
 DOCK_SOURCE_TIMELINE = "timeline"            # scenes[].docks enter/exit/badge_at - the player's own clock
 DOCK_SOURCE_FILE = "evidence-dock.json"      # fallback only: a timeline that carries no docks at all
 
@@ -127,10 +127,15 @@ class Gate:
     src: str
 
 
-def _load(build: Path, timeline_name: str | None) -> tuple[dict, list[dict], dict]:
+def _timeline_path(build: Path, timeline_name: str | None) -> Path:
     tl_path = build / timeline_name if timeline_name else next(iter(sorted(build.glob("*.timeline.json"))), None)
     if not tl_path or not tl_path.exists():
         raise SystemExit(f"no *.timeline.json in {build}")
+    return tl_path
+
+
+def _load(build: Path, timeline_name: str | None) -> tuple[dict, list[dict], dict]:
+    tl_path = _timeline_path(build, timeline_name)
     tl = json.loads(tl_path.read_text(encoding="utf-8"))
     docks_p = build / "evidence-dock.json"
     docks = json.loads(docks_p.read_text(encoding="utf-8")) if docks_p.exists() else []
@@ -167,9 +172,16 @@ def _dock_clock(scenes: list[dict], docks: list[dict]) -> tuple[list[tuple[float
 
 
 def _page_events(scenes: list[dict]) -> tuple[list[float], list[float]]:
-    """(visual events, evidence entries) contributed by ledger pages (s9.28 C5, D1, D2)."""
-    starts = [float(s["span"][0]) for s in scenes if _is_page(s)]
-    beats = [round(a + off, 2) for a in starts for off in PAGE_BEAT_OFFSETS]
+    """(visual events, evidence entries) contributed by ledger pages (s9.28 C5, D1, D2).
+    A beat past the page's own scene end never happened - a short page credits only
+    the beats it had time to play (never motion inside the scene after it)."""
+    starts, beats = [], []
+    for s in scenes:
+        if not _is_page(s):
+            continue
+        a, z = float(s["span"][0]), float(s["span"][1])
+        starts.append(a)
+        beats += [round(a + off, 2) for off in PAGE_BEAT_OFFSETS if a + off < z]
     return beats, starts
 
 
@@ -177,16 +189,20 @@ def _species_events(scenes: list[dict]) -> list[float]:
     """Visual events contributed by targeted species rows, per SPECIES_EVENTS (s9.27)."""
     out: list[float] = []
     for s in scenes:
+        a, z = (float(s["span"][0]), float(s["span"][1])) if s.get("span") else (None, None)
         for sp in s.get("species", []):
             edges = SPECIES_EVENTS.get(sp.get("kind"), ())
             at, dur = float(sp.get("at", 0.0)), float(sp.get("dur", 0.0))
+            # a species that runs past its scene stops with the scene: no event is credited beyond span end
+            inside = a is not None and a <= at <= z
+            keep = (lambda t: t <= z) if inside else (lambda t: True)
             if edges == "stepping":
                 steps = int(round(dur / PLATE_LIFE_STEP_S))
-                out += [round(at + k * PLATE_LIFE_STEP_S, 2) for k in range(steps + 1)]
+                out += [round(at + k * PLATE_LIFE_STEP_S, 2) for k in range(steps + 1) if keep(at + k * PLATE_LIFE_STEP_S)]
                 continue
             if "at" in edges:
                 out.append(round(at, 2))
-            if "end" in edges:
+            if "end" in edges and keep(at + dur):
                 out.append(round(at + dur, 2))
     return out
 
@@ -307,6 +323,8 @@ def run(tl: dict, docks: list[dict], mp: dict) -> tuple[list[Gate], dict]:
         mean_w = st.mean(A["wc"])
         ok = CAP_WORDS[0] <= mean_w <= CAP_WORDS[1] and ppm >= CAP_PAGES_PER_MIN_MIN
         add("M06", "PASS" if ok else "WARN", f"{len(A['pages'])} caption pages = {ppm:.0f}/min, {mean_w:.1f} words/page", "s9.15 r7 / build_caption_pages 4-6 words")
+    else:
+        add("M06", "INFO", "no caption pages in the build - M06 not run (no silent skip: build caption-pages.json first)", "s9.15 r7")
     if dens := A["dens"]:
         opening = [d for d in dens if d[0] < OPENING_S][0]
         ranked = sorted(dens, key=lambda x: x[1])
@@ -315,6 +333,8 @@ def run(tl: dict, docks: list[dict], mp: dict) -> tuple[list[Gate], dict]:
         add("M07", "FAIL" if opening[1] < med else "PASS",
             f"opening minute: {opening[1]:.1f} events/min, {opening[2]:.1f} docks/min - rank {rank}/{len(dens)} from the bottom; episode median {med:.1f}/min",
             "E21: the opening is the densest minute, never the thinnest")
+    else:
+        add("M07", "INFO", f"runtime {R:.0f}s has no full minute to rank - M07 not run (no silent skip)", "E21")
     req = [(a, d) for a, d in A["still"] if d > STILL_WARN_S]
     if A["has_cap_mode"]:
         # ENFORCED (P34 T5): stage pages already count as events, so any stretch still over the
@@ -493,10 +513,15 @@ def write_report(build_dir: Path, timeline_name: str | None = None) -> tuple[Pat
     """
     build_dir = Path(build_dir)
     tl, docks, mp = _load(build_dir, timeline_name)
+    tl_path = _timeline_path(build_dir, timeline_name)
     gates, stats = run(tl, docks, mp)
     n_fail = fail_count(gates)
     verdict = "FAIL" if n_fail else "PASS"
+    # the timeline hash keys the report to the build it measured; render_episode refuses a
+    # full render when the timeline on disk no longer hashes to it (a stale report is no report)
+    digest = hashlib.sha256(tl_path.read_bytes()).hexdigest()
     body = (f"# MOTION GATE — {build_dir.name}\n\n```text\n{report_text(gates, stats, build_dir)}\n```\n\n"
+            f"TIMELINE: {tl_path.name} sha256:{digest}\n"
             f"VERDICT: {verdict} ({n_fail} FAIL)\n")
     out = build_dir / REPORT_NAME
     out.write_text(body, encoding="utf-8")

@@ -19,16 +19,16 @@ of every episode by default.
 | 1 | Unravel | 0 – 0.7s | the plain cream page rolls out left→right (`translateX`, never clip-path), a curl-shadow band riding the front |
 | 2 | Half savor | 0.7 – 1.5s | the page holds, empty |
 | 3 | The field | 1.5 – 3.9s | **DECIDED (E22 addendum 4): the deckle is the feature.** The inked plate (`page.field_plate`, made procedurally from the blank page: charcoal fills the paper up to its deckle edge, 94% so a whisper of fibre survives) cross-fades over the plain page; the deckle edge appears only as the ink arrives. Fallbacks when no inked plate exists: `page.field = "scribble"` or `"soak"` filling the board box |
-| 4 | The line + ink | 3.9 – 4.7s (+ ink to 5.9s) | **DECIDED (E22 addendum 5):** the line is the deckle's INNERMOST boundary (`page.board`, the largest clean rectangle inside the paper mask, drawn clockwise as the conic border), so it just touches the cream at the deepest deckle points. `page.edge_path` (a line traced along the deckle) stays an option. Title and source are written per glyph with a seeded ±1.6° tilt |
-| 5 | Punch in | 4.7 – 5.2s | the page zooms about the board's centre (×1.16), cropping the line and the deckle margin out — the room we spend (E22 addendum 6) |
-| 6 | The build | 5.2 – 8.2s | `story`: bars grow from the baseline in reading order, labels then values, the emphasized datum takes the accent pill whose number rolls and lands on the exact string · `dense-line`: dash-offset draw with a tip head, inline series names de-collided (§9.23b). Axes and grid appear only in this beat |
+| 4 | Ink | 3.9s → (+2.0s) | **E22 addendum 7 (2026-09-03): the outline is RETIRED** - "it looks like a cool animation, but it's useless here, not pulling weight." The charcoal arriving on the cream ground IS the edge. Title and source are written per glyph in Kalam (HG2 decided) with a seeded ±1.6° tilt, as the punch begins. `page.board` stays (punch centre, chart box); `page.edge_path` is accepted and inert |
+| 5 | Punch in | 3.9 – 4.4s | the page zooms about the board's centre (×1.16), cropping the deckle margin out — the room we spend (E22 addendum 6) |
+| 6 | The build | 4.4 – 7.4s | `story`: bars grow from the baseline in reading order, labels then values, the emphasized datum takes the accent pill whose number rolls and lands on the exact string · `dense-line`: dash-offset draw with a tip head, inline series names de-collided (§9.23b). Axes and grid appear only in this beat |
 
-| 7 | The focus | 8.2s → | the page's declared `focus` (callout / spotlight / punch) fires on its datum — the page ends pointing at the proof, never as homework (E25) |
+| 7 | The focus | 7.4s → | the page's declared `focus` (callout / spotlight / punch) fires on its datum — the page ends pointing at the proof, never as homework (E25) |
 
-Constants: `const LP = { ROLL: 0.7, SAVOR: 0.8, FIELD: 2.4, OUTLINE: 0.8, PUNCH: 0.5, INK: 2.0, BUILD: 3.0 }`, focus at 8.2s, in the template. The gate reads the same offsets (`PAGE_BEAT_OFFSETS`).
+Constants: `const LP = { ROLL: 0.7, SAVOR: 0.8, FIELD: 2.4, PUNCH: 0.5, INK: 2.0, BUILD: 3.0 }`, focus at 7.4s, in the template. The gate reads the same offsets (`PAGE_BEAT_OFFSETS`).
 
-Refused on sight (do not retry): blob bloom-and-contract "bleed"; any gap
-between ink and outline; coffee-ring stains on the margin; a charcoal halo
+Refused on sight (do not retry): blob bloom-and-contract "bleed"; the
+drawn outline itself (addendum 7); any gap between ink and edge; coffee-ring stains on the margin; a charcoal halo
 overrunning the board unevenly; fibre texture on the paper. The operator's
 line: *"just a plain cream background, then the scribble/soak, then the line
 draw."*
@@ -54,8 +54,14 @@ Produced by `content/video_engine/scripts/ledger_page.py` from a
 | `caption` | `"anchor"` pins the captions to the lower third for the page (a host plate's quiet zone is the host's) |
 | `focus` | `{kind: callout \| spotlight \| punch, target?, label?, dur?}` — the focus action fired at the build's end; target defaults to the emphasized datum |
 | `board` | `{x, y, w, h}` fractions of the frame — the deckle's innermost rectangle, MEASURED from the blank plate's paper mask; the line, the field fallback and the chart share it; default 0.06 / 0.08 / 0.88 / 0.84 |
-| `edge_path` | the paper's deckle boundary as a normalized SVG path (traced from the blank plate's paper mask); the line is drawn along it |
+| `edge_path` | accepted and inert since E22 addendum 7 (the deckle boundary was traced for the retired outline) |
 | `plate_zoom` | overscan for a page plate (not used for the deckle page: the white beyond the deckle is part of the look) |
+
+E28 (2026-09-03) rules in the validator: a bar's value is SIGNED (a drop goes down from the
+zero baseline; the sign hidden in a `note` is a FAIL); a date axis with uneven gaps raises
+a `[JUDGE]` row (printed by the CLI, carried on the spec as `judge`) naming the gaps and the
+file's `selection` rule, which the sub must state on the page. `unit` (e.g. `%`) is written
+on the zero tick and every value. The hand is **Kalam** (Human Gate 2, decided 2026-09-03).
 
 Validation: `python content/video_engine/scripts/ledger_page.py <series.json> --variant bars --emphasize 7 --quiet-zone right`
 refuses a missing source, unaligned labels, a race without periods, a
@@ -107,7 +113,8 @@ host lives in the plate, never as a cut-out over evidence.
 ## 6. Sound
 
 `sound/SOUND-PLAN.json` → `page_cues` (page-relative): paper slide at
-roll-out, drop settle at +2.8s, chalk stroke at the outline's draw-complete.
+roll-out, drop settle at +2.8s, chalk stroke re-cued to the punch (3.9s) now
+that the outline is retired (addendum 7).
 CC0, matched to the whoosh at −14 LUFS ±1 LU; `sound/SOURCES.md`.
 
 ## 7. Gates

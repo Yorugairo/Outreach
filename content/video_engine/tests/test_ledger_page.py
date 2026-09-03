@@ -24,7 +24,7 @@ needs_objects = pytest.mark.skipif(
     reason="steel-and-paper evidence objects not on disk",
 )
 
-TRIM_VALUE_STRINGS = ["3.9", "12.4", "5.3", "10.5", "11.3", "10.9", "8.7", "13.8"]
+TRIM_VALUE_STRINGS = ["-3.9", "-12.4", "-5.3", "-10.5", "-11.3", "10.9", "-8.7", "-13.8"]   # signed: a drop is a bar going down (E28)
 
 
 def _race(periods: bool = True) -> dict:
@@ -75,7 +75,7 @@ def test_trim_proof_bars_is_story_with_verbatim_value_strings():
     assert L.validate(series, "bars") == []
     spec = L.build_spec(series, "bars", emphasize=7)
     assert spec["builder"] == "story"
-    assert len(spec["values"]) == 8 and spec["values"][0] == 3.9
+    assert len(spec["values"]) == 8 and spec["values"][0] == -3.9
     assert spec["value_strings"] == TRIM_VALUE_STRINGS
     assert spec["labels"][0] == "Oct '24" and spec["colors"][5] == "teal"
     assert spec["emphasize"] == 7
@@ -100,8 +100,9 @@ def test_main_writes_spec_and_summary(tmp_path, capsys):
     spec = json.loads(out.read_text(encoding="utf-8"))
     assert spec["schema_version"] == "ledger_page.v1" and spec["surface"] == "page"
     assert spec["value_strings"] == TRIM_VALUE_STRINGS and spec["quiet_zone"] == "right"
-    line = capsys.readouterr().out.strip()
-    assert line.startswith("story bars 8 values source=")
+    lines = capsys.readouterr().out.strip().splitlines()
+    assert lines[-1].startswith("story bars 8 values source=")
+    assert any(l.strip().startswith("[JUDGE]") and "uneven gaps" in l for l in lines[:-1]), lines   # E28: the uneven date axis is surfaced
 
 
 # --- race ----------------------------------------------------------------------
@@ -232,6 +233,34 @@ def test_build_spec_is_deterministic_and_never_mutates_the_input():
 
 RACE_FILE = OBJECTS / "ev-memory-share-race-v1.series.json"
 SMH = OBJECTS / "ev-smh-drawdown-v3.series.json"
+
+
+def test_sign_hidden_in_a_note_is_refused_e28():
+    # operator 2026-09-03: 'every bar appears to be positive at a glance, and the negative move is the tallest bar'
+    series = {"title": "t", "src": "s", "bars": [{"label": "a", "value": "3.9", "note": "-4%"}, {"label": "b", "value": "10.9", "note": "+11%"}]}
+    errors = L.validate(series, "bars")
+    assert len(errors) == 1 and "sign lives in the note" in errors[0] and "'a'" in errors[0], errors
+    signed = {**series, "bars": [{**series["bars"][0], "value": "-3.9"}, series["bars"][1]]}
+    assert not L.validate(signed, "bars")
+    assert not L.validate(L.load_series(TRIM), "bars")
+
+
+def test_uneven_date_axis_is_a_judge_row_naming_the_selection_rule_e28():
+    trim = L.load_series(TRIM)
+    notes = L.review_notes(trim)
+    assert len(notes) == 1 and "uneven gaps" in notes[0] and "selection rule declared" in notes[0], notes
+    assert L.build_spec(trim, "bars", 7, "right")["judge"] == notes
+    bare = {**trim}; bare.pop("selection")
+    assert "no `selection` rule" in L.review_notes(bare)[0]
+    even = {**trim, "bars": [{"label": f"{m} '25", "value": "-1"} for m in ("Jan", "Feb", "Mar", "Apr")]}
+    assert L.review_notes(even) == []
+
+
+def test_a_variant_without_its_own_shape_is_refused():
+    # reviewer 2026-09-03: a race-shaped file asked for bars validated clean and built an empty page
+    errors = L.validate(_race(), "bars")
+    assert any("needs story values" in e for e in errors), errors
+    assert not L.validate(_race(), "race"), L.validate(_race(), "race")
 
 
 def test_placeholder_figures_never_build_a_page(tmp_path, capsys):

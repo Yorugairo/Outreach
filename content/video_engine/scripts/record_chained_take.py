@@ -255,7 +255,14 @@ def run_probe(go: bool) -> int:
     behavior on the probe predicts the master. ~2k credits."""
     import re as _re
     load_env(ENV_FILE)
-    text = VO_TEXT.read_text(encoding="utf-8")
+    # The probe spends credits too: the same recording refusal as the master
+    # (P34 HG3) and the same beat-tag strip (nothing spoken carries a tag).
+    import beat_tags
+    import run_script_gates as RG
+    fails: list[str] = []
+    if RG.recording_preflight(VO_TEXT, sys.argv, fails) is None:
+        return _report(fails, go)
+    text = beat_tags.strip_beat_tags(VO_TEXT.read_text(encoding="utf-8"))
     est = int(PROBE_SPEECH_S * CHARS_PER_S)
     cut = len(text)
     for m in _re.finditer(r"[.!?][\"”]?(?=\s)", text):

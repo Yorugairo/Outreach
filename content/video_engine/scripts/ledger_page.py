@@ -41,6 +41,7 @@ from __future__ import annotations
 import argparse
 import copy
 import json
+import re
 import sys
 from pathlib import Path
 from typing import Any
@@ -178,7 +179,67 @@ def validate(series: dict, variant: str) -> list[str]:
     has_race = any(r["values"] for r in race_rows(series))
     if not (_bars(series) or dense_series(series) or has_race):
         return errors + [next((v for k, v in UNCHARTABLE.items() if k in series), UNCHARTABLE_DEFAULT)]
+    if variant in VARIANTS:
+        errors += _validate_shape_for_variant(series, variant)
+    errors += _validate_sign_in_geometry(series)
     return errors + _validate_values(series, variant) + _validate_variant(series, variant)
+
+
+SIGNED_NOTE_RE = re.compile(r"^\s*[+\u2212-]\s*\d")
+MONTH_LABEL_RE = re.compile(r"^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s*'?(\d{2}|\d{4})$")
+MONTHS = ("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
+
+
+def _validate_sign_in_geometry(series: dict) -> list[str]:
+    """E28 (operator, 2026-09-03): a chart must read right at a glance - a drop is a bar
+    going DOWN. A bar whose value is an unsigned magnitude while its note carries the
+    minus sign draws every drop as a rise (the trim proof read as seven rises)."""
+    errors = []
+    for i, bar in enumerate(_bars(series)):
+        note, value = str(bar.get("note") or ""), to_number(bar.get("value"))
+        if value is not None and value > 0 and SIGNED_NOTE_RE.match(note) and note.strip()[0] in "-\u2212":
+            errors.append(f"bars[{i}] {bar.get('label')!r}: the sign lives in the note ({note.strip()}) while the value "
+                          f"({value_string(bar.get('value'))}) is an unsigned magnitude - sign the value so the bar goes down (E28)")
+    return errors
+
+
+def _month_index(label: str) -> int | None:
+    m = MONTH_LABEL_RE.match(str(label).strip())
+    if not m:
+        return None
+    year = int(m.group(2))
+    year = year + (2000 if year < 100 else 0)
+    return year * 12 + MONTHS.index(m.group(1))
+
+
+def review_notes(series: dict) -> list[str]:
+    """JUDGE rows for the operator (CHECK-RESPONSIBILITIES: not a tool's verdict). E28: an
+    axis of dates with uneven gaps reads as noise unless the page states the selection
+    rule - `selection` in the file, written into the sub. Pure."""
+    notes = []
+    labels = [b.get("label") for b in _bars(series)]
+    idx = [_month_index(x) for x in labels]
+    if len(idx) >= 3 and all(i is not None for i in idx):
+        gaps = [b - a for a, b in zip(idx, idx[1:])]
+        if len(set(gaps)) > 1:
+            rule = _text(series.get("selection"))
+            notes.append("date axis with uneven gaps (months apart: " + ", ".join(str(g) for g in gaps) + ") - "
+                         + (f"selection rule declared: {series['selection']!r}; check the sub says it on the page" if rule
+                            else "no `selection` rule in the file: the reader sees noise unless the sub says which dates and why (E28)"))
+    return notes
+
+
+def _validate_shape_for_variant(series: dict, variant: str) -> list[str]:
+    """The REQUESTED variant must have data of its own shape: a chartable file is not
+    a page for every variant (a race file asked for bars would build an empty page)."""
+    builder = pick_builder(series, variant)
+    if builder in ("story", "decline", "progress") and not story_data(series)[1]:
+        return [f"variant {variant!r} needs story values (bars, or one short series); this file has none - pick the variant its shape supports"]
+    if builder == "dense-line" and not dense_series(series):
+        return [f"variant {variant!r} needs a dense series ([x, y] points); this file has none"]
+    if builder == "combo" and not (_bars(series) and dense_series(series)):
+        return ["combo needs both bars and a dense series"]
+    return []
 
 
 def _validate_values(series: dict, variant: str) -> list[str]:
@@ -261,6 +322,8 @@ def build_spec(series: dict, variant: str, emphasize: int | None = None,
         spec.update(_decline_block(series, spec))
     if variant == "progress" and "denominator" in series:
         spec["denominator"] = value_string(series["denominator"])
+    spec["unit"] = str(series["unit"]) if _text(series.get("unit")) else ""
+    spec["judge"] = review_notes(series)
     count = len(spec["labels"])
     spec["emphasize"] = None if emphasize is None or not count else max(0, min(int(emphasize), count - 1))
     return spec
@@ -329,6 +392,8 @@ def main(argv: list[str] | None = None) -> int:
             print(f"  - {error}", file=sys.stderr)
         return EXIT_INVALID
     spec = build_spec(series, args.variant, args.emphasize, args.quiet_zone)
+    for note in spec.get("judge", []):
+        print(f"  [JUDGE] {note}")
     stem = path.name[: -len(".series.json")] if path.name.endswith(".series.json") else path.stem
     out = Path(args.out) if args.out else path.with_name(f"{stem}.page.json")
     out.write_text(json.dumps(spec, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")

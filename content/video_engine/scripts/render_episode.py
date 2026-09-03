@@ -18,7 +18,7 @@ build_scene_timeline_f.py) and refuses with exit 2 while it says FAIL
 
 Requires the episode-player server on :8731 (preview harness).
 """
-import argparse, json, re, subprocess, sys, time
+import argparse, hashlib, json, re, subprocess, sys, time
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[3]
@@ -29,6 +29,7 @@ FPS = 30
 URL = "http://127.0.0.1:8731/player.html"
 GATE_REPORT = "GATES-MOTION.md"  # gate_motion_density.write_report output; last line VERDICT: PASS|FAIL
 GATE_REFUSED = 2                 # exit code: the gate refused, nothing was captured
+FORCE_RECORD = "FORCED-RENDER.md"  # render/FORCED-RENDER.md: every --force with its reason
 
 
 def mix_audio(dur: float) -> Path:
@@ -152,12 +153,31 @@ def parallel_render(n_frames: int, workers: int, video_out: Path) -> None:
                     "-i", str(lst), "-c", "copy", str(video_out)], check=True)
 
 
-def motion_gate_verdict(force: bool) -> int | None:
+def _report_timeline_hash(lines: list[str]) -> tuple[str, str] | None:
+    """(timeline file name, sha256) from the report's `TIMELINE: <name> sha256:<hex>` line, if written."""
+    for line in lines:
+        m = re.match(r"TIMELINE: (\S+) sha256:([0-9a-f]{64})", line)
+        if m:
+            return m.group(1), m.group(2)
+    return None
+
+
+def _record_force(reason: str, why: str) -> None:
+    """The override goes on the record beside the renders, like the recorder's manifest (P34 HG3)."""
+    OUT.mkdir(parents=True, exist_ok=True)
+    stamp = time.strftime("%Y-%m-%d %H:%M:%S")
+    with (OUT / FORCE_RECORD).open("a", encoding="utf-8") as fh:
+        fh.write(f"- {stamp} forced full render over `{why}` - reason: {reason}\n")
+
+
+def motion_gate_verdict(force: str | None) -> int | None:
     """E21 / doc 29 s9.25: consult build-f/GATES-MOTION.md before a FULL render.
 
     Returns an exit code to stop on, or None to proceed. Missing report ->
-    the build never ran the gate; FAIL -> refuse unless --force, which is
-    printed so the override is on the record."""
+    the build never ran the gate; STALE (the report's timeline hash no longer
+    matches the timeline on disk) or FAIL -> refuse unless `--force "<reason>"`,
+    which is printed and appended to render/FORCED-RENDER.md so the override
+    is on the record. A bare --force (no reason) is refused."""
     report = BUILD / GATE_REPORT
     if not report.exists():
         print("MOTION GATE: no report - run build_scene_timeline_f.py first")
@@ -167,19 +187,34 @@ def motion_gate_verdict(force: bool) -> int | None:
     if verdict is None:
         print(f"MOTION GATE: {report} carries no VERDICT line - rebuild")
         return GATE_REFUSED
-    if not verdict.startswith("VERDICT: FAIL"):
+    why = None
+    hashed = _report_timeline_hash(lines)
+    if hashed:
+        name, want = hashed
+        tl_path = BUILD / name
+        have = hashlib.sha256(tl_path.read_bytes()).hexdigest() if tl_path.exists() else "missing"
+        if have != want:
+            why = f"STALE report: {name} on disk is not the timeline the gate measured (rebuild)"
+    if why is None and verdict.startswith("VERDICT: FAIL"):
+        why = verdict
+    if why is None:
         return None
-    if force:
-        print(f"[FORCED] motion gate FAIL overridden ({verdict})")
+    if force is not None:
+        if not force.strip():
+            print("MOTION GATE: --force needs a reason - `--force \"<why this render ships over the gate>\"`")
+            return GATE_REFUSED
+        print(f"[FORCED] motion gate FAIL overridden ({why}) - reason: {force.strip()}")
+        _record_force(force.strip(), why)
         return None
     print(f"MOTION GATE: {report}")
-    print(f"MOTION GATE: {verdict} - refusing full render (E21); re-run with --force to override")
+    print(f"MOTION GATE: {why} - refusing full render (E21); re-run with --force \"<reason>\" to override")
     return GATE_REFUSED
 
 
-def is_full_render(args: argparse.Namespace) -> bool:
-    """Full = whole runtime from 0 with no --test/--t1; slices and previews never block."""
-    return not args.test and args.t1 is None and args.t0 == 0.0
+def is_full_render(args: argparse.Namespace, dur: float) -> bool:
+    """Full = the whole runtime from 0, whether --t1 is omitted or names the
+    runtime (or past it); --test and true slices never block."""
+    return not args.test and args.t0 == 0.0 and (args.t1 is None or args.t1 >= dur)
 
 
 def main() -> int:
@@ -187,7 +222,8 @@ def main() -> int:
     ap.add_argument("--t0", type=float, default=0.0)
     ap.add_argument("--t1", type=float, default=None)
     ap.add_argument("--test", action="store_true")
-    ap.add_argument("--force", action="store_true", help="full render even when GATES-MOTION.md says FAIL")
+    ap.add_argument("--force", nargs="?", const="", default=None, metavar="REASON",
+                    help="full render even when GATES-MOTION.md is FAIL or stale; the reason is required and recorded")
     ap.add_argument("--workers", type=int, default=4)  # 4 for memory headroom; full PIL decode-verify guards the rest
     ap.add_argument("--frames", type=int, nargs=2, help="worker mode: global frame range")
     ap.add_argument("--part", type=str, help="worker mode: segment output path")
@@ -195,12 +231,12 @@ def main() -> int:
     if args.frames:  # shard worker
         capture_frames(args.frames[0], args.frames[1], Path(args.part))
         return 0
-    if is_full_render(args):
+    tl = json.loads((BUILD / "timeline.json").read_text(encoding="utf-8"))
+    dur = float(tl["runtime_s"])
+    if is_full_render(args, dur):
         stop = motion_gate_verdict(args.force)
         if stop is not None:
             return stop
-    tl = json.loads((BUILD / "timeline.json").read_text(encoding="utf-8"))
-    dur = float(tl["runtime_s"])
     if args.test:
         t0, t1 = 699.0, 707.0
     else:

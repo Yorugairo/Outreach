@@ -1594,6 +1594,14 @@ rectangle the paper contains, measured from the paper mask (the deepest
 indentation on each side), so it just touches the cream at the deepest
 points of the deckle; the chart sits inside the line. `page.board` carries
 that rectangle; `edge_path` remains an option, not the default.
+RETIRED (operator, 2026-09-03, E22 addendum 7): the line itself. *"Drop
+the outline entirely - it looks like a cool animation, but it's useless
+here, not pulling weight. The charcoal fill onto that cream border with
+the handwriting font is absolutely what's needed."* The charcoal
+arriving on the cream ground is the edge; nothing is drawn on top of it.
+`page.board` stays as the punch centre and the chart box. Beats: roll
+0.7 · savor 0.8 · field 2.4 · punch 0.5 (ink writes from the field's end)
+· build 3.0 · focus at 7.4s.
 
 **Two more beats (operator, 2026-09-03, from E25):** *"We're not done with
 the chart when we draw the line and build the graph. We should draw the
@@ -1674,9 +1682,13 @@ renders under `hyperframes/renders/ledger-page-v1-{A,B,C}.mp4` (untracked).
 Found while building: a mounted sub-composition does not inherit the
 host's CSS variables, so the six tokens are set on each component copy's
 `#root`; a sub-composition ends on its own intrinsic clock, so the page
-composition ends with the chart's hold rather than outliving it. The
-pick, the font (Human Gate 2) and the roll speed are recorded here when
-the operator rules.
+composition ends with the chart's hold rather than outliving it.
+PICKED (operator, 2026-09-03): none of A/B/C as drawn - the two-plate
+path in the player with the charcoal filled to the DECKLE and no drawn
+line (the DECIDED block above, E22 addenda 4-7); the hyperframes stitch stays as the
+prototype record only. The font (Human Gate 2): KALAM, picked 2026-09-03
+from three samples written on the inked plate ("Kalam is probably the
+right call"); Inter is the offline fallback.
 
 **Variants (same page, same ink):** line, bars, bar race (ranked bars
 overtaking across periods, axis rescaling, accent handing to the leader),

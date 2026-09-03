@@ -131,7 +131,7 @@ def test_full_render_refuses_on_fail(render_sandbox: Path, monkeypatch, capsys):
     assert RE.main() == 2
     out = capsys.readouterr().out
     assert str(report) in out
-    assert "refusing full render (E21); re-run with --force to override" in out
+    assert "refusing full render (E21); re-run with --force" in out
 
 
 def test_full_render_refuses_without_report(render_sandbox: Path, monkeypatch, capsys):
@@ -152,9 +152,46 @@ def test_slice_render_skips_the_gate(render_sandbox: Path, monkeypatch, capsys):
 def test_force_overrides_fail_and_renders(render_sandbox: Path, monkeypatch, capsys):
     _fail_report(render_sandbox)
     calls = _arm_capture(monkeypatch)
-    monkeypatch.setattr(sys, "argv", ["render_episode.py", "--force", "--workers", "1"])
+    monkeypatch.setattr(sys, "argv", ["render_episode.py", "--force", "operator: baseline render for the drop-off review", "--workers", "1"])
     assert RE.main() == 0
     assert "[FORCED] motion gate FAIL overridden" in capsys.readouterr().out
+    assert ("capture", 0.0, 2.0) in calls
+    record = (render_sandbox / "render" / "FORCED-RENDER.md").read_text(encoding="utf-8")
+    assert "baseline render for the drop-off review" in record and "VERDICT: FAIL" in record
+
+
+def test_force_without_a_reason_is_refused(render_sandbox: Path, monkeypatch, capsys):
+    _fail_report(render_sandbox)
+    monkeypatch.setattr(sys, "argv", ["render_episode.py", "--force", "--workers", "1"])
+    assert RE.main() == 2
+    assert "--force needs a reason" in capsys.readouterr().out
+    assert not (render_sandbox / "render" / "FORCED-RENDER.md").exists()
+
+
+def test_t1_at_the_runtime_is_a_full_render_and_is_gated(render_sandbox: Path, monkeypatch, capsys):
+    # reviewer 2026-09-03: `--t0 0 --t1 <runtime>` rendered the whole episode past the gate
+    _fail_report(render_sandbox)
+    monkeypatch.setattr(sys, "argv", ["render_episode.py", "--t0", "0", "--t1", "2", "--workers", "1"])
+    assert RE.main() == 2
+    assert "refusing full render" in capsys.readouterr().out
+
+
+def _hashed_pass_report(build: Path, name: str, digest: str) -> None:
+    (build / "GATES-MOTION.md").write_text(
+        f"# MOTION GATE — x\n\n```text\nRESULT: 0 FAIL\n```\n\nTIMELINE: {name} sha256:{digest}\nVERDICT: PASS (0 FAIL)\n", encoding="utf-8")
+
+
+def test_stale_report_is_refused_and_a_current_one_passes(render_sandbox: Path, monkeypatch, capsys):
+    import hashlib
+    tl = render_sandbox / "steel.timeline.json"
+    tl.write_text("{}", encoding="utf-8")
+    _hashed_pass_report(render_sandbox, "steel.timeline.json", "0" * 64)
+    monkeypatch.setattr(sys, "argv", ["render_episode.py", "--workers", "1"])
+    assert RE.main() == 2
+    assert "STALE report" in capsys.readouterr().out
+    _hashed_pass_report(render_sandbox, "steel.timeline.json", hashlib.sha256(tl.read_bytes()).hexdigest())
+    calls = _arm_capture(monkeypatch)
+    assert RE.main() == 0
     assert ("capture", 0.0, 2.0) in calls
 
 

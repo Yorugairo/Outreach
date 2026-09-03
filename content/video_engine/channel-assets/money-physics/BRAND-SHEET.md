@@ -119,6 +119,7 @@ which describes the earlier collage look, is retired and not render-eligible).
 |---|---|---|
 | Wordmark, banner, chrome | **Inter** 900/800/700 (Arial fallback) | letterspaced caps for MONEY PHYSICS; tight tracking on the triad |
 | Evidence charts, docks | Inter / Segoe UI / system sans | numerals `tabular-nums` |
+| The ledger page's hand (title, source, ticks, values) | **Kalam** 400 (SIL OFL; Inter fallback) | picked 2026-09-03 from three samples on the inked plate - an upright marker hand, the most legible at source-line size |
 | Badges | ui-monospace, Consolas | exact figures |
 | Thumbnails | Impact-class condensed display, upright | outlined, ≤3 punch words |
 | Generated plates | **none** — text is banned on plates | |
@@ -149,14 +150,26 @@ drift. Reference: `steel-and-paper/packaging/thumbnail-FINAL-steelpaper.png`.
 
 ## 8b. The signature — the ledger page (E22 / doc 29 §9.26)
 
-The channel-defining move: **a cream paper page rolls out, charcoal ink
-writes the axes, labels and source by hand, and the graph builds from
-real data on the page.** It is a chart that IS the world plate (the
-"plate chart" species), not an evidence card; docks may still land over
-it. Cream `#F4E6C7`, charcoal `#25313C`, one accent token, newsprint
-grain; deterministic, seek-safe, real `series.json` data with the source
-written last. Every episode carries at least one; the payoff chart is one
-by default. Docks stay near-black so the two registers never blur.
+The channel-defining move, settled 2026-09-03 (E22 addenda 4-7): **a
+generated washi page sits on the cream ground; charcoal fills the page
+to its DECKLE, so the deckle appears as the ink arrives - that arrival
+IS the edge, nothing is drawn on top of it; the title and source write
+in a handwriting face as the camera punches in on the board; the chart
+builds from real data; then the page performs its focus action on the
+datum the sentence is about.** The deckle is the feature that reads
+"hand-made" without roughness - no drawn outline, no blob bleed, no
+stains, halo or fibre, never a white ground. It is a chart that IS the world plate
+(the "plate chart" species), not an evidence card; docks land in its
+declared quiet zone and never cover the emphasized datum. Cream
+`#F4E6C7`, charcoal `#25313C`, one accent token; the two plates are
+generated (blank page + inked board, claim
+`steel-and-paper-ledger-page-v1`); deterministic, seek-safe, real
+`series.json` data with the source written on the board in chalk. The
+host may stand at the developed board (C5 addendum): host-on-board
+plates with a derived blank state, the chart fitted clear of the hand,
+captions at the anchor. Every episode carries at least one; the payoff
+chart is one by default. Docks stay near-black so the two registers
+never blur. Handwriting face: Kalam (Human Gate 2, decided 2026-09-03).
 
 ## 9. Never (visual)
 

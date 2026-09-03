@@ -1,7 +1,7 @@
 # SCRIPT GATES - SCRIPT-G-VO.txt
 
 script: SCRIPT-G-VO.txt
-generated: 2026-09-03T07:27:01+00:00
+generated: 2026-09-03T08:42:40+00:00
 script_hash: 4d2876620021c3d94387d761d442548d95f867afeb7be8db00f3ed3385dcf5f8
 timing_source: measured
 
@@ -40,7 +40,7 @@ exit 0
          phase_map: {'P1 OPEN': '0.0-1.5m', 'P2 ENGINE': '1.5-3.0m', 'P3 GAP': '2.4-6.4m', 'P4 PIVOT': '6.4-7.8m', 'P5 REFLECTION': '7.8-12.4m', 'P6 CLOSE': '12.7-14.2m'}
   p3_units_expected: 3
          a3_anchor: 1:25
-         pivot_pct: 47.6
+         pivot_pct: None
      timing_source: measured (2883 words on disk)
    hook_measured_s: 2.42
   paradox_measured_s: 3.63
@@ -66,7 +66,7 @@ exit 1
       unit_windows: ['P3 unit 1 2:16-4:09', 'P3 unit 2 4:09-6:02', 'P5 unit 3 7:23-9:32', 'P5 unit 4 9:32-11:40']
       counterparty: Bravos
               ring: spike
-         packaging: title='The AI Bubble Is Real. What Survives Is Steel.' thumb='STEEL or PAPER?' thumb_file=content/video_engine/projects/systems-and-blowups/steel-and-paper/packaging/thumbnail-FINAL-steelpaper.png
+         packaging: title='The AI Bubble Is Real. What Survives Is Steel.' thumb=None thumb_file=content/video_engine/projects/systems-and-blowups/steel-and-paper/packaging/thumbnail-FINAL-steelpaper.png
     not_gated_here: Truby Battle / Self-Revelation / New Equilibrium, Snyder midpoint, chiastic center, ring CLOSE (P4-P6)
     beats_declared: {}
 
@@ -124,7 +124,7 @@ exit 1
           Auditory handrail: exit P2 on a transition signpost into the Gap (P2 / doc 32 s1)
   [FAIL ] G44 no rehook in unit 4 9:32-11:40
           PLATFORM rehook per unit: one template-family line or [rehook] inside every P3/P5 unit window (P3.md u5 / P5 / MAP s9 '1 per unit'; E23)
-  [FAIL ] G45 title-word proxy: none of ['ai', 'bubble', 'real', 'surviv', 'steel', 'paper'] in the first two sentences - the first sentence must answer the thumbnail
+  [FAIL ] G45 title-word proxy: none of ['ai', 'bubble', 'real', 'surviv', 'steel'] in the first two sentences - the first sentence must answer the thumbnail
           E24 / doc 29 s9.29: proxy for 'the first sentence answers the thumbnail' - the title is the words packaged with it
   [WARN ] G29 cannot place - macro close not declared
           PLATFORM breathing dip after the macro close (P2)

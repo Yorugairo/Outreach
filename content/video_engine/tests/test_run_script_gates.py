@@ -171,3 +171,10 @@ def test_title_and_thumb_pass_through_to_the_opening_gate(tmp_path):
     assert code == 0, report
     assert "[PASS ] G45 title-word proxy" in report and "[JUDGE] J12 open packaging/thumb.png" in report
     assert "\nTOOLS      lint: exit " in report        # the s5 TOOLS block keeps its shape
+
+
+def test_an_unparsed_tool_result_is_never_a_pass():
+    # reviewer 2026-09-03: a checker whose RESULT line did not parse scored -1 fails, and -1 > 0 is False
+    assert RG.ToolResult("x", 0, "", {"fail": -1}, "x: exit 0, ? fails").failing
+    assert not RG.ToolResult("x", 0, "", {"fail": 0}, "x").failing
+    assert RG.verdict_line([RG.ToolResult("x", 0, "", {"fail": -1}, "x")]).startswith("VERDICT: FAIL")

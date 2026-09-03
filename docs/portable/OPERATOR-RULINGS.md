@@ -783,6 +783,20 @@ chart on the punched page, and fires its declared focus (callout /
 spotlight / punch on the emphasized datum) at the build's end. Why: the
 chart is the proof of one sentence; the page must end pointing at it.
 
+**E22 addendum 7 (2026-09-03) - no outline.** On seeing the inked deckle
+plate with the trim-proof page written in a handwriting face: *"Oh my
+gosh, that's a gorgeous plate. We should just drop the outline entirely,
+it looks like a cool animation, but it's useless here, not pulling
+weight. The charcoal fill onto that cream border with the handwriting
+font is absolutely what's needed."* The species is now: page rolls out
+on the cream ground -> half savor -> the charcoal fills the paper to its
+deckle -> ink writes in the handwriting face as the punch begins -> the
+build -> the focus action (7.4s). Addendum 5's inner line is retired with
+it; `page.board` stays as the punch centre and chart box. Why: the deckle
+appearing as the ink arrives IS the drawn edge - a second line on top
+was decoration, and decoration on the page made it read as a prop
+(addendum 3, same reason).
+
 **C5 addendum (2026-09-03) - the host at the board.** The banner and avatar
 promise a host the episode never showed. *"This gives us an opportunity to
 build the host on the developed charcoal board, and with world plate
@@ -817,4 +831,37 @@ Standing order of priority, above every gate in this ledger:
 
 Why: a still image with a voice that answered its title held an audience
 we out-produced and lost. Production is the multiplier, not the base.
+
+## E28 — A chart reads right at a glance, or it is not on the page (2026-09-03)
+
+On the trim-proof page (the paper's move after each weak customs print),
+rendered with the sign in a note and colour only: *"It's not immediately
+clear why we chose that chart. Every bar appears to be positive at a
+glance, and the negative move is the tallest bar. That's not the real
+chart is it? If so, we definitely have to do better about catching
+graphs/charts that look inconclusive or even backwards. Plus now that I
+look, the dates are total nonsense - Oct '24, Dec '24, Jan '25, Feb '25,
+Mar '25, Jun '25, Jul '25, Jul '26? This chart tells no story."*
+
+It was the real series. The move's size was the bar's height, its sign
+only a colour and a note, so seven drops read as seven rises; the eight
+dates were the eight weak prints in twenty-five months, a legitimate
+selection the page never stated.
+
+Standing order:
+1. **The sign is geometry.** A drop is a bar going DOWN from a zero
+   baseline; a rise goes up. Values are signed in the series file;
+   `ledger_page.validate` refuses a bar whose value is an unsigned
+   magnitude while its note carries the minus (mechanical FAIL).
+2. **A selected axis states its rule on the page.** Dates with uneven
+   gaps are noise until the sub says which dates and why. The file
+   carries `selection`; the validator raises a JUDGE row naming the gaps
+   and the rule (or its absence) - the operator reads it, because whether
+   the sub actually says it is a judgment.
+3. **The first-glance read is the viewer's job** (P36, window by window):
+   "what does this chart say?" answered wrong is a perception FAIL, not
+   a data error.
+
+Why: the chart is the proof of one sentence (E25). A proof the eye reads
+backwards disproves the sentence.
 

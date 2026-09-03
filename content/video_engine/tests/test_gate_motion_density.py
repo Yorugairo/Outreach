@@ -129,7 +129,50 @@ def test_page_build_counts_as_events_and_its_start_as_evidence():
     assert g["M05"].level == "PASS", g["M05"]          # a 19s page holds like a plate, under the 20s ceiling
     assert stats["ledger_pages"] == 1 and stats["dock_source"] == "timeline"
     ev = G.analyse(tl, docks, mp)["events"]
-    assert all(t in ev for t in (12.0, 12.7, 13.5, 15.9, 16.7, 17.2, 20.2)), ev   # roll-out, savor, field, line, punch, build start, build end + focus
+    assert all(t in ev for t in (12.0, 12.7, 13.5, 15.9, 16.4, 19.4)), ev   # roll-out, savor, field, punch, build start, build end + focus (no outline, E22 addendum 7)
+
+
+def test_a_short_page_credits_only_the_beats_it_had_time_to_play():
+    # reviewer 2026-09-03: a 1.5s ledger row bought 7.4s of motion inside the bare plate after it
+    tl, docks, mp = _page_window(with_page=True)
+    page = tl["scenes"][2]
+    assert page["world"]["kind"] == "ledger" and page["span"] == [12.0, 31.0]
+    page["span"] = [12.0, 13.5]
+    tl["scenes"].insert(3, {"scene_id": "s02b", "world": {"asset_id": "world-bare"}, "span": [13.5, 31.0], "docks": []})
+    ev = G.analyse(tl, docks, mp)["events"]
+    assert 12.0 in ev and 12.7 in ev
+    assert 13.5 in ev   # the scene boundary itself, not a page beat
+    assert not any(t in ev for t in (15.9, 16.4, 19.4)), ev
+    g = _by_id(G.run(tl, docks, mp)[0])
+    assert g["M01"].level == "FAIL", g["M01"]   # the 17.5s bare plate is still again
+
+
+def test_species_events_stop_at_the_scene_end():
+    tl, docks, mp = _bare_plate(runtime=30.0, species=[{"kind": "plate_life", "at": 28.0, "dur": 5.0, "target": {"kind": "point", "x": 0.5, "y": 0.5}}])
+    ev = G.analyse(tl, docks, mp)["events"]
+    z = float(tl["scenes"][-1]["span"][1])
+    assert all(t <= z for t in ev), [t for t in ev if t > z]
+
+
+def test_m06_and_m07_report_info_rows_instead_of_vanishing():
+    tl, docks, mp = _page_window(with_page=True)
+    del tl["caption_pages"]
+    g = _by_id(G.run(tl, docks, mp)[0])
+    assert g["M06"].level == "INFO" and "not run" in g["M06"].message
+    short, d2, m2 = _bare_plate(runtime=10.0)
+    g2 = _by_id(G.run(short, d2, m2)[0])
+    assert "M07" in g2 and g2["M07"].level in ("INFO", "PASS", "FAIL")
+
+
+def test_report_carries_the_hash_of_the_timeline_it_measured(tmp_path):
+    import hashlib, json
+    tl, docks, mp = _page_window(with_page=True)
+    (tmp_path / "x.timeline.json").write_text(json.dumps(tl), encoding="utf-8")
+    (tmp_path / "evidence-dock.json").write_text(json.dumps(docks), encoding="utf-8")
+    (tmp_path / "motion-plan.json").write_text(json.dumps(mp), encoding="utf-8")
+    report, _ = G.write_report(tmp_path, "x.timeline.json")
+    digest = hashlib.sha256((tmp_path / "x.timeline.json").read_bytes()).hexdigest()
+    assert f"TIMELINE: x.timeline.json sha256:{digest}" in report.read_text(encoding="utf-8")
 
 
 def test_same_window_without_the_page_fails_m01_and_m03():
@@ -140,9 +183,10 @@ def test_same_window_without_the_page_fails_m01_and_m03():
 
 
 def test_page_beat_offsets_follow_the_template_lp_constants():
-    # template `const LP = { ROLL: 0.7, SAVOR: 0.8, FIELD: 2.4, OUTLINE: 0.8, PUNCH: 0.5, INK: 2.0, BUILD: 3.0 }`
-    # (doc 29 s9.26, E22 addendum 6): roll-out, savor start, field start, line, punch, build start, build end + focus
-    assert G.PAGE_BEAT_OFFSETS == (0.0, 0.7, 1.5, 3.9, 4.7, 5.2, 8.2)
+    # template `const LP = { ROLL: 0.7, SAVOR: 0.8, FIELD: 2.4, PUNCH: 0.5, INK: 2.0, BUILD: 3.0 }`
+    # (doc 29 s9.26, E22 addenda 6-7): roll-out, savor start, field start, punch, build start, build end + focus;
+    # the outline beat is retired (addendum 7) - the deckle is the edge
+    assert G.PAGE_BEAT_OFFSETS == (0.0, 0.7, 1.5, 3.9, 4.4, 7.4)
 
 
 def test_timeline_docks_are_the_clock_when_present():

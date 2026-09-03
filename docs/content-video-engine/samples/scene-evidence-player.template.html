@@ -1,5 +1,6 @@
 <meta charset="utf-8"> <!-- served by python http.server with no charset header: without this, caption dashes and ledger ink glyphs decode as cp1252 -->
 <title id="doctitle">Episode</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&display=swap"> <!-- the ledger page's hand (HG2: Kalam, OFL) -->
 <style>
   :root {
     --charcoal: #25313C; --cobalt: #1769C2; --teal: #178C83;
@@ -29,8 +30,8 @@
   .world { position: absolute; inset: -5%; background-size: cover; background-position: center; will-change: transform, clip-path; }
 
   /* LEDGER PAGE species (doc 29 s9.26, ruling E22; P35 T3). A world plate
-     that IS a chart: cream page rolls out, charcoal field bleeds in leaving a
-     cream-stained margin, a clean outline draws, ink writes the labels, the
+     that IS a chart: the generated page rolls out on the cream ground, the
+     charcoal fills the paper to its DECKLE, ink writes the labels, the
      graph builds crisp from the page spec (ledger_page.v1). Every beat is a
      pure function of t (seek-safe, screenshot-render safe); the seeded blobs
      come from lpHash, never Math.random. The .lp box is the 1920x1080 stage
@@ -49,29 +50,25 @@
      the line then draws exactly on that edge (operator, 2026-09-03: "plain cream, then the scribble/soak, then the line draw") */
   .lp-field { position: absolute; left: 6%; top: 8%; width: 88%; height: 84%; border-radius: 46px; overflow: hidden; }
   .lp-field svg { position: absolute; inset: 0; width: 100%; height: 100%; }
-  /* the clean edge: a conic sector drawn clockwise, hollow centre (outline-draw mechanism),
-     on EXACTLY the field's box and radius - the stroke sits on the ink's edge, no gap (E22 addendum 2) */
   .lp-fieldplate { position: absolute; inset: 0; background-size: cover; background-position: center; opacity: 0; }
-  /* the DECKLE is the feature (operator, 2026-09-03): when the page spec carries edge_path, the line is drawn ALONG the
-     paper's own deckle edge (dash-offset, clockwise) instead of the CSS box, and the charcoal fills the paper up to it */
-  .lp-edgeline { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
-  .lp-edgeline path { fill: none; stroke: var(--lp-acc); stroke-width: 5; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
-  .lp-outline { position: absolute; left: 6%; top: 8%; width: 88%; height: 84%; --lp-prog: 0; box-sizing: border-box;
-                border: 5px solid transparent; border-radius: 46px; pointer-events: none;
-                background: conic-gradient(from -90deg, var(--lp-acc) 0deg calc(var(--lp-prog) * 3.6deg), transparent calc(var(--lp-prog) * 3.6deg + .5deg) 360deg);
-                background-clip: border-box; background-origin: border-box;
-                -webkit-mask: linear-gradient(#000 0 0) padding-box, linear-gradient(#000 0 0) border-box; -webkit-mask-composite: xor;
-                mask: linear-gradient(#000 0 0) padding-box, linear-gradient(#000 0 0) border-box; mask-composite: exclude; }
+  /* E22 addendum 7 (operator, 2026-09-03): NO outline. The deckle IS the edge - the charcoal
+     arriving on the cream ground draws it; a drawn line on top pulled no weight. `page.edge_path`
+     and the conic border are gone; `page.board` stays (the punch centre and the chart box). */
   /* ink writes: per glyph, a left-to-right mask wipe with an ink-soft edge (~18% of the glyph),
      a fixed seeded tilt per character so it reads as a hand and never wriggles after it is written.
-     Font: Inter until Human Gate 2 picks the handwriting face (no generic cursive - it resolves per machine). */
-  .lp-ink { position: absolute; font-family: Inter, Arial, sans-serif; white-space: nowrap; pointer-events: none; }
+     Font: KALAM (Human Gate 2 DECIDED 2026-09-03 - "Kalam is probably the right call"; SIL OFL), loaded from
+     Google Fonts by the link in the head; Inter is the fallback when the machine is offline (never a generic
+     cursive - it resolves per machine). */
+  .lp-ink { position: absolute; font-family: Kalam, Inter, Arial, sans-serif; white-space: nowrap; pointer-events: none; }
   .lp-ink .g { display: inline-block; --w: 0; --tilt: 0deg;
                -webkit-mask-image: linear-gradient(90deg, #000 calc(var(--w) * 118% - 18%), transparent calc(var(--w) * 118%));
                mask-image: linear-gradient(90deg, #000 calc(var(--w) * 118% - 18%), transparent calc(var(--w) * 118%));
                transform: rotate(var(--tilt)); }
   .lp-title { left: 8.4%; top: 10.4%; font-size: 34px; font-weight: 700; color: var(--lp-chalk); letter-spacing: -.01em; }
-  .lp-src { left: 6%; bottom: 2.4%; font-size: 22px; font-weight: 500; color: var(--lp-chalk); opacity: .85; }   /* the source sits on the board after the punch: chalk, not charcoal */
+  .lp-src { left: 6%; font-size: 22px; font-weight: 500; color: var(--lp-chalk); opacity: .85; }   /* the source sits under the chart box, clear of the anchor caption's band: chalk, not charcoal */
+  /* E28: the sub carries the selection rule (which dates and why) - written under the title, wrapped by word */
+  .lp-sub { font-size: 21px; font-weight: 400; line-height: 1.25; color: var(--lp-chalk); opacity: .8; white-space: normal; }
+  .lp-sub .w { display: inline-block; white-space: nowrap; }
   .lp-chart { position: absolute; overflow: visible; }
   /* MOTION MENU species (doc 29 s9.27; P35 T6/T7): plate life on the world side, the targeted overlay above the docks */
   #plife { position: absolute; inset: 0; pointer-events: none; }
@@ -241,7 +238,8 @@
     position: absolute; left: 145px; right: 145px; bottom: 120px; text-align: center;
     line-height: 1.24; color: var(--cream); font-size: 40px; font-weight: 700;
     text-shadow: 0 2px 14px rgba(0,0,0,.94), 0 0 5px rgba(0,0,0,.85);
-    transition: font-size .3s, font-weight .3s;
+    /* no transition: the stage -> anchor demote is instant so a seek-and-screenshot render and a
+       live play agree on every frame (a wall-clock transition never lands in a captured frame) */
   }
   /* doc 29 Part 5 - kinetic groups at ONE fixed anchor. No pill, no panel. */
   #caption .cg { display: inline-block; }
@@ -265,10 +263,11 @@
   #caption.stage { bottom: auto; top: 40%; left: 200px; right: 200px; font-size: 64px; font-weight: 800;
                    line-height: 1.12; letter-spacing: -.01em; }
   #caption.stage .cg { transform: none !important; opacity: 1 !important; }
-  #caption.stage .cw { opacity: 0; transform: scale(1.16) rotate(var(--tilt, 0deg));
-                       transition: transform .2s cubic-bezier(.34,1.56,.64,1), opacity .1s linear, color .12s linear; }
-  #caption.stage .cw.in { opacity: 1; transform: scale(1) rotate(0deg); }
-  #caption.stage .cw.on { transform: scale(1.06) rotate(0deg); }
+  /* the per-word pop is painted INLINE as a pure function of t (stagePop below) - never a CSS
+     transition, which runs on wall time: the renderer scrubs then screenshots, so a transition
+     is either already over or not started in every captured frame, and two renders of one
+     second differ. Only the colour flip stays a transition (it is not motion). */
+  #caption.stage .cw { transition: color .12s linear; }
   /* 4.2 quiet mode - smaller, static, single fade, keywords still coloured */
   #caption.quiet { font-size: 33px; font-weight: 600; }
   #caption.quiet .cg { transform: none !important; opacity: 1 !important; }
@@ -1246,20 +1245,24 @@
        roll-out 0..ROLL          the page unrolls left->right, rolled-edge light on the front
        bleed    ROLL..+BLEED     seeded ink blobs bloom, merge (goo filter) and contract while the
                                  crisp charcoal field resolves beneath - a stained page, cream margin
-       outline  +OUTLINE         the clean edge draws clockwise; ink writes title/source in parallel
+       ink      +INK             ink writes title/source in the handwriting face as the punch begins
        build    +BUILD           the chart lands crisp on the exact value strings (story bars or
                                  the dense line with tip head and inline series names, s9.23b)
      Surface x builder are independent axes (s9.28): the page spec names the builder. */
   /* E22 addendum 2: unravel -> half savor -> the field (SOAK: ink absorbed by the paper, or
      SCRIBBLE: strokes accumulating with a nib - the operator's original idea; page.field picks)
-     -> outline drawn on the field's own edge -> ink writes -> the build. */
+     -> ink writes -> the build. E22 addendum 7: the outline is RETIRED - the deckle is the edge. */
   /* E22 addendum 6 (operator, 2026-09-03): "draw the line -> punch/zoom in (we have the line we drew + the deckle we
      don't even care about as room) -> draw the chart -> perform the focus action on the data we want to call out."
      PUNCH: the page zooms about the board's centre by PUNCH_SCALE, cropping the line and the deckle margin out;
      the build runs on the punched page; FOCUS: the page's declared focus species fires at the build's end. */
-  const LP = { ROLL: 0.7, SAVOR: 0.8, FIELD: 2.4, OUTLINE: 0.8, PUNCH: 0.5, INK: 2.0, BUILD: 3.0, SEEPS: 9, STROKES: 14, KB_MAX: 0.03,
+  /* STAGE caption pop (s9.25 #2): scale 1.16 -> 1.0 with a back-ease over STAGE_POP_S, the tilt
+     settling to 0 - a function of (t - word.s), painted inline by the caption pass */
+  const STAGE_POP_S = 0.2;
+  const stagePop = (u) => { const c1 = 1.70158, c3 = c1 + 1; const x = u - 1; return 1 + c3 * x * x * x + c1 * x * x; };
+  const LP = { ROLL: 0.7, SAVOR: 0.8, FIELD: 2.4, PUNCH: 0.5, INK: 2.0, BUILD: 3.0, SEEPS: 9, STROKES: 14, KB_MAX: 0.03,
                PUNCH_SCALE: 1.16, FOCUS_DUR: 3.0 };
-  const LP_FOCUS_AT = LP.ROLL + LP.SAVOR + LP.FIELD + LP.OUTLINE + LP.PUNCH + LP.BUILD;   /* 8.2s: the focus action fires here */
+  const LP_FOCUS_AT = LP.ROLL + LP.SAVOR + LP.FIELD + LP.PUNCH + LP.BUILD;   /* 7.4s: the focus action fires here */
   /* pure hash of (seed, index, salt) -> [0,1): the only source of jitter (handwriting-text rule 2) */
   const lpHash = (seed, i, salt) => {
     let h = (seed ^ Math.imul(i + 1, 0x9E3779B1) ^ Math.imul(salt + 1, 0x85EBCA77)) >>> 0;
@@ -1284,6 +1287,17 @@
     });
     return out;
   };
+  /* word-wrapped ink: each word is an inline-block of glyph spans, words separated by real spaces so the line breaks */
+  const lpGlyphsWrap = (parent, text, seed) => {
+    const out = []; let i = 0;
+    String(text).split(" ").forEach((word, k) => {
+      if (k) parent.appendChild(document.createTextNode(" "));
+      const w = lpEl("span", "w", parent);
+      [...word].forEach((ch) => { const g = lpEl("span", "g", w); g.textContent = ch;
+        g.style.setProperty("--tilt", ((lpHash(seed, i++, 3) - 0.5) * 3.2).toFixed(2) + "deg"); out.push(g); });
+    });
+    return out;
+  };
   const lpFmt = (v) => Math.abs(v) >= 100 ? v.toFixed(0) : Math.abs(v) >= 10 ? v.toFixed(1) : v.toFixed(2);
   const buildLedger = (el, scene) => {
     const pg = scene.world.page || {}, seed = 0x1B1EEDCA ^ (scene.scene_id || "").length;
@@ -1295,7 +1309,7 @@
        The CSS cream is the fallback only while no plate is approved. */
     if (pg.plate && A[pg.plate]) { page.style.backgroundImage = 'url("' + A[pg.plate] + '")'; page.style.backgroundSize = ((pg.plate_zoom || 1) * 100).toFixed(1) + "% " + ((pg.plate_zoom || 1) * 100).toFixed(1) + "%"; page.style.backgroundPosition = "center"; }
     /* the BOARD box: measured from the inked plate when one exists (page.board, fractions of the frame), else the
-       s9.26 default 6% / 8% / 88% x 84%; the field, the outline and the chart all take the same box so the line is tight */
+       s9.26 default 6% / 8% / 88% x 84%; the field fallback and the chart take the same box */
     const bd = pg.board || { x: 0.06, y: 0.08, w: 0.88, h: 0.84 };
     const boardCentre = { x: (bd.x + bd.w / 2) * 100, y: (bd.y + bd.h / 2) * 100 };
     /* the punch (E22 addendum 6) crops the page to 1/PUNCH_SCALE around the board centre: title, source and the
@@ -1344,20 +1358,13 @@
        plate; it cross-fades over the cream page in beat 3 and the procedural field stays hidden. */
     const fieldPlate = pg.field_plate && A[pg.field_plate] ? lpEl("div", "lp-fieldplate", page) : null;
     if (fieldPlate) { fieldPlate.style.backgroundImage = 'url("' + A[pg.field_plate] + '")'; field.style.display = "none"; }
-    const outline = lpEl("div", "lp-outline", page);
-    boxCss(outline);
-    let edgePath = null;
-    if (pg.edge_path) {
-      outline.style.display = "none";
-      const esvg = lpEl("svg", "lp-edgeline", page, { viewBox: "0 0 1 1", preserveAspectRatio: "none" });
-      edgePath = lpEl("path", "", esvg, { d: pg.edge_path });
-      const elen = edgePath.getTotalLength ? edgePath.getTotalLength() : 4; edgePath.setAttribute("stroke-dasharray", elen); edgePath.setAttribute("stroke-dashoffset", elen); edgePath.dataset.len = elen;
-    }
     const title = lpEl("div", "lp-ink lp-title", page);
     title.style.left = (Math.max(bd.x + 0.027, vis.x + 0.03) * 100).toFixed(2) + "%"; title.style.top = (Math.max(bd.y + 0.024, vis.y + 0.035) * 100).toFixed(2) + "%";
+    const subEl = lpEl("div", "lp-ink lp-sub", page);
+    subEl.style.left = title.style.left; subEl.style.top = (parseFloat(title.style.top) + 5.6).toFixed(2) + "%";
     const src = lpEl("div", "lp-ink lp-src", page);
-    src.style.left = (Math.max(0.06, vis.x + 0.03) * 100).toFixed(2) + "%"; src.style.bottom = (Math.max(0.024, 1 - (vis.y + vis.h) + 0.03) * 100).toFixed(2) + "%";
-    const glyphs = [...lpGlyphs(title, pg.title || "", seed), ...lpGlyphs(src, pg.source || "", seed + 1)];
+    src.style.left = (Math.max(0.06, vis.x + 0.03) * 100).toFixed(2) + "%";
+    const glyphs = [...lpGlyphs(title, pg.title || "", seed), ...lpGlyphsWrap(subEl, pg.sub || "", seed + 2), ...lpGlyphs(src, pg.source || "", seed + 1)];
     /* chart area inside the field, leaving the declared quiet zone for docks (s9.28 B3/C2) */
     const qz = pg.quiet_zone || null;
     const chart = lpEl("svg", "lp-chart", page, { viewBox: "0 0 1000 560" });
@@ -1367,11 +1374,17 @@
     /* a host plate may declare the chart box outright (page.chart_box, measured clear of the host's hand) */
     const cb = pg.chart_box ? { x: pg.chart_box.x + 0.02 * pg.chart_box.w, y: pg.chart_box.y + 0.15 * pg.chart_box.h, w: 0.96 * pg.chart_box.w, h: 0.74 * pg.chart_box.h }
                             : { x: reg.x + 0.03 * reg.w, y: reg.y + 0.15 * reg.h, w: 0.94 * reg.w, h: 0.74 * reg.h };
+    /* a page whose captions are pinned to the anchor (a host plate, C5) keeps its chart and source above the
+       caption band: the chart ends at 79% of the frame so the source line under it never meets a caption */
+    if (pg.caption === "anchor") cb.h = Math.max(0.2, Math.min(cb.h, 0.79 - cb.y));
     chart.style.width = ((qz ? 0.6 : 0.9) * cb.w * 100).toFixed(2) + "%"; chart.style.height = (cb.h * 100).toFixed(2) + "%";
     chart.style.left = ((cb.x + (qz === "left" ? 0.4 : 0.05) * cb.w) * 100).toFixed(2) + "%"; chart.style.top = (cb.y * 100).toFixed(2) + "%";
-    const st = { root, page, edge, blobs, strokes, nib, rect, goo, outline, edgePath, glyphs, chart, fieldPlate, boardCentre, kind: pg.builder || "story",
+    /* the sub wraps inside the chart's width; the source writes directly under the chart box (never in the caption band) */
+    subEl.style.width = chart.style.width; subEl.style.left = chart.style.left;
+    src.style.top = ((cb.y + cb.h) * 100 + 1.2).toFixed(2) + "%"; src.style.left = chart.style.left;
+    const st = { root, page, edge, blobs, strokes, nib, rect, goo, glyphs, chart, fieldPlate, boardCentre, kind: pg.builder || "story",
                  bars: [], paths: [], labels: [], callout: null, cval: null, vals: pg.values || [],
-                 vstr: pg.value_strings || [], emph: pg.emphasize | 0 };
+                 vstr: pg.value_strings || [], emph: Number.isInteger(pg.emphasize) ? pg.emphasize : -1 };   /* no emphasis declared = no datum styled (spec emits null) */
     /* one builder per treatment (s9.28; P35 Builder Architecture) - each harvested from its own component, never merged */
     const builders = { "dense-line": buildLedgerLine, race: buildLedgerRace, decline: buildLedgerDecline, combo: buildLedgerCombo };
     (builders[st.kind] || buildLedgerBars)(st, pg);
@@ -1380,29 +1393,40 @@
     return st;
   };
   const buildLedgerBars = (st, pg) => {
-    const n = Math.max(1, st.vals.length), maxV = Math.max(1e-9, ...st.vals.map((v) => Math.abs(v)));
-    const base = 470, top = 90, x0 = 60, x1 = 980, gap = 0.34;
+    /* E28 (operator, 2026-09-03): a chart reads right at a glance - a drop is a bar going DOWN from a
+       zero baseline. Values are SIGNED; the baseline sits at zero wherever the range puts it, bars hang
+       below it for negatives, value labels ride the bar's far end, category labels stay along the bottom. */
+    const n = Math.max(1, st.vals.length);
+    const lo0 = Math.min(0, ...st.vals), hi0 = Math.max(0, ...st.vals);
+    const pad = Math.max(1e-9, (hi0 - lo0) * 0.14), lo = lo0 - (lo0 < 0 ? pad : 0), hi = hi0 + (hi0 > 0 ? pad : 0);
+    const bottom = 440, top = 90, x0 = 60, x1 = 980, gap = 0.34, unit = pg.unit || "";
+    const my = (v) => bottom - (v - lo) / (hi - lo || 1) * (bottom - top);
+    const base = my(0);
     const bw = (x1 - x0) / n * (1 - gap);
-    lpEl("line", "ax", st.chart, { x1: x0 - 20, x2: x1 + 20, y1: base, y2: base });
-    for (let k = 1; k <= 4; k++) lpEl("line", "grid", st.chart, { x1: x0 - 20, x2: x1 + 20, y1: base - (base - top) * k / 4, y2: base - (base - top) * k / 4 });
+    for (let k = 1; k <= 4; k++) { const gy = top + (bottom - top) * k / 4; if (Math.abs(gy - base) > 6) lpEl("line", "grid", st.chart, { x1: x0 - 20, x2: x1 + 20, y1: gy.toFixed(1), y2: gy.toFixed(1) }); }
+    lpEl("line", "ax", st.chart, { x1: x0 - 20, x2: x1 + 20, y1: base.toFixed(1), y2: base.toFixed(1) });
+    const zero = lpEl("text", "lab", st.chart, { x: x0 - 26, y: (base + 8).toFixed(1), "text-anchor": "end" }); zero.textContent = "0" + unit;
     st.vals.forEach((v, i) => {
-      const x = x0 + (x1 - x0) / n * (i + gap / 2), h = Math.max(3, (Math.abs(v) / maxV) * (base - top));
+      const x = x0 + (x1 - x0) / n * (i + gap / 2), yv = my(v), neg = v < 0;
+      const h = Math.max(3, Math.abs(yv - base)), y = neg ? base : base - h;
       const bar = lpEl("rect", "bar" + (i === st.emph ? " emph" : ""), st.chart,
-        { x: x.toFixed(1), y: (base - h).toFixed(1), width: bw.toFixed(1), height: h.toFixed(1), rx: 6 });   /* sits on the baseline, grows upward */
-      bar.style.transformOrigin = "0 " + base + "px"; bar.style.transform = "scaleY(0)";
-      const lab = lpEl("text", "lab", st.chart, { x: (x + bw / 2).toFixed(1), y: base + 34, "text-anchor": "middle", opacity: 0 });
+        { x: x.toFixed(1), y: y.toFixed(1), width: bw.toFixed(1), height: h.toFixed(1), rx: 6 });   /* grows from the zero baseline, up or down */
+      bar.style.transformOrigin = "0 " + base.toFixed(1) + "px"; bar.style.transform = "scaleY(0)";
+      const lab = lpEl("text", "lab", st.chart, { x: (x + bw / 2).toFixed(1), y: bottom + 34, "text-anchor": "middle", opacity: 0 });
       lab.textContent = (pg.labels || [])[i] || "";
-      const val = lpEl("text", "val", st.chart, { x: (x + bw / 2).toFixed(1), y: (base - h - 14).toFixed(1), "text-anchor": "middle", opacity: 0 });
-      val.textContent = st.vstr[i] != null ? String(st.vstr[i]) : lpFmt(v);
-      st.bars.push({ bar, lab, val, h, x: x + bw / 2, i });
+      const vy = neg ? base + h + 26 : base - h - 14;
+      const val = lpEl("text", "val", st.chart, { x: (x + bw / 2).toFixed(1), y: vy.toFixed(1), "text-anchor": "middle", opacity: 0 });
+      val.textContent = (st.vstr[i] != null ? String(st.vstr[i]) : lpFmt(v)) + unit;
+      st.bars.push({ bar, lab, val, h, x: x + bw / 2, i, neg, end: neg ? base + h : base - h });
     });
     const e = st.bars[Math.min(st.emph, st.bars.length - 1)];
     if (e) {
       const cg = lpEl("g", "", st.chart, { opacity: 0 });
-      lpEl("rect", "cpill", cg, { x: (e.x - 64).toFixed(1), y: (base - e.h - 66).toFixed(1), width: 128, height: 42, rx: 8 });
-      const ct = lpEl("text", "callout", cg, { x: e.x.toFixed(1), y: (base - e.h - 36).toFixed(1), "text-anchor": "middle" });
+      const py = e.neg ? e.end + 24 : e.end - 66;   /* the pill sits past the bar's far end, never over it */
+      lpEl("rect", "cpill", cg, { x: (e.x - 64).toFixed(1), y: py.toFixed(1), width: 128, height: 42, rx: 8 });
+      const ct = lpEl("text", "callout", cg, { x: e.x.toFixed(1), y: (py + 30).toFixed(1), "text-anchor": "middle" });
       e.val.setAttribute("opacity", 0); e.val.style.display = "none";
-      st.callout = cg; st.cval = ct; st.cfinal = e.val.textContent; st.cnum = st.vals[e.i];
+      st.callout = cg; st.cval = ct; st.cfinal = e.val.textContent; st.cnum = st.vals[e.i]; st.cunit = unit;
     }
   };
   const buildLedgerLine = (st, pg) => {
@@ -1527,7 +1551,7 @@
     st.buildDur = LPX.RACE_IN + Math.max(0, T - 1) * LPX.RACE_PERIOD;
     /* rank-settled per period, seconds from the scene's open: period 0 when the grow-in lands, period i at u = i,
        where its values and ranks are exact (the parent reads st.sync to cue a caption or a sound on the settle) */
-    const T0 = LP.ROLL + LP.SAVOR + LP.FIELD + LP.OUTLINE + LPX.RACE_IN;
+    const T0 = LP.ROLL + LP.SAVOR + LP.FIELD + LPX.RACE_IN;
     st.sync = periods.map((p, i) => ({ period: p, at: +(T0 + i * LPX.RACE_PERIOD).toFixed(3) }));
     st.paint = paintLedgerRace;
   };
@@ -1708,7 +1732,7 @@
     /* beat 2: the half savor - the textured page holds, empty (E22 addendum 2) */
     /* beat 3: the field. SOAK: seeps spread and saturate, never contract - paper taking ink;
        SCRIBBLE: strokes accumulate one at a time with the nib at the front. Either ends on the
-       crisp rect so the ink meets the clipped edge the outline will trace. */
+       crisp rect. */
     const b = clamp01((tr - LP.ROLL - LP.SAVOR) / LP.FIELD);
     for (const bl of st.blobs) {
       const u = clamp01((b - bl.lag) / (1 - bl.lag));
@@ -1729,19 +1753,17 @@
     }
     st.rect.setAttribute("opacity", clamp01((b - 0.78) / 0.22).toFixed(2));
     if (st.fieldPlate) st.fieldPlate.style.opacity = expoOut(b).toFixed(3);   /* the inked plate arrives over the cream */
-    /* beat 4: outline on the field's own edge + ink writes, in parallel, once the field has soaked */
+    /* beat 4: ink writes title/source once the field has soaked - no outline (E22 addendum 7: the deckle is the edge) */
     const t3 = tr - LP.ROLL - LP.SAVOR - LP.FIELD;
-    st.outline.style.setProperty("--lp-prog", (100 * expoOut(clamp01(t3 / LP.OUTLINE))).toFixed(1));
-    if (st.edgePath) { const L = +st.edgePath.dataset.len; st.edgePath.setAttribute("stroke-dashoffset", (L * (1 - expoOut(clamp01(t3 / LP.OUTLINE)))).toFixed(4)); }
     const n = Math.max(1, st.glyphs.length), per = LP.INK / n;
     st.glyphs.forEach((g, j) => g.style.setProperty("--w", clamp01((t3 - j * per) / (per * 1.6)).toFixed(3)));
     /* beat 5: PUNCH IN on the board - the line and the deckle margin are the room we spend (E22 addendum 6) */
-    const pk = pg.punch === false ? 0 : expoOut(clamp01((t3 - LP.OUTLINE) / LP.PUNCH));   /* a host plate skips the punch: his gesture is the direction */
+    const pk = pg.punch === false ? 0 : expoOut(clamp01(t3 / LP.PUNCH));   /* a host plate skips the punch: his gesture is the direction */
     const bdc = st.boardCentre || { x: 50, y: 50 };
     st.page.style.transformOrigin = bdc.x.toFixed(2) + "% " + bdc.y.toFixed(2) + "%";
     st.page.style.transform = "translateX(" + ((rk - 1) * 100).toFixed(2) + "%) scale(" + (1 + (LP.PUNCH_SCALE - 1) * pk).toFixed(4) + ")";
     /* beat 6: the build - crisp, landing on the exact strings - on the punched page */
-    const c = clamp01((t3 - LP.OUTLINE - LP.PUNCH) / (st.buildDur || LP.BUILD));   /* race/decline/combo declare their own envelope */
+    const c = clamp01((t3 - LP.PUNCH) / (st.buildDur || LP.BUILD));   /* race/decline/combo declare their own envelope */
     st.chart.style.opacity = c > 0 ? 1 : 0;   /* axes and grid belong to the build, not the bleed */
     st.bars.forEach((bb, i) => {
       const k = expoOut(clamp01((c - i * 0.1) / 0.55));
@@ -1752,7 +1774,7 @@
     if (st.callout) {
       const ck = clamp01((c - 0.55) / 0.45);
       st.callout.setAttribute("opacity", clamp01(ck / 0.3).toFixed(2));
-      st.cval.textContent = ck >= 1 ? st.cfinal : lpFmt(st.cnum * expoOut(ck));
+      st.cval.textContent = ck >= 1 ? st.cfinal : lpFmt(st.cnum * expoOut(ck)) + (st.cunit || "");
     }
     st.paths.forEach((pp) => {
       const f = expoOut(clamp01((c - pp.stagger * 0.3) / 0.7));
@@ -1762,7 +1784,7 @@
       pp.tip.setAttribute("opacity", drawing ? 1 : 0);
       pp.name.setAttribute("opacity", clamp01((f - 0.9) / 0.1).toFixed(2));
     });
-    if (st.paint) st.paint(st, c, t3 - LP.OUTLINE);   /* the builder's own build step (race / decline / combo) */
+    if (st.paint) st.paint(st, c, t3);   /* the builder's own build step (race / decline / combo) */
   };
 
   /* ================= MOTION MENU species (doc 29 s9.27; P35 T6 / T7) =================
@@ -1851,7 +1873,7 @@
     if (!pg || !pg.focus) return [];
     const f = pg.focus;
     return [{ kind: f.kind || "callout", at: sc.span[0] + LP_FOCUS_AT, dur: f.dur || LP.FOCUS_DUR, label: f.label,
-              target: f.target || { kind: "datum", index: pg.emphasize | 0 }, target2: f.target2 }];
+              target: f.target || { kind: "datum", index: Number.isInteger(pg.emphasize) ? pg.emphasize : 0 }, target2: f.target2 }];
   };
   const paintSpecies = (sc, t) => {
     spSvg.replaceChildren(); plife.replaceChildren();
@@ -2120,9 +2142,15 @@
         }
       }
       if (pg) { const ws = cap.querySelectorAll(".cw");
-        pg.t.forEach((x, j) => { if (ws[j]) { ws[j].classList.toggle("on", x.s <= t && t < x.e);
-          /* stage: each word pops in at its own spoken time (words.json), never at the page boundary */
-          ws[j].classList.toggle("in", !stage || x.s <= t + 0.05); } }); }
+        pg.t.forEach((x, j) => { if (ws[j]) { const on = x.s <= t && t < x.e; ws[j].classList.toggle("on", on);
+          /* stage: each word pops in at its own spoken time (words.json), never at the page boundary.
+             The pop is a pure function of t painted inline (see stagePop) so a scrubbed render
+             captures mid-pop frames and two renders of one second are identical. */
+          if (stage) { const e = stagePop(clamp01((t + 0.05 - x.s) / STAGE_POP_S));
+            ws[j].style.opacity = Math.min(1, e * 2).toFixed(3);
+            const sc = (1.16 + (1 - 1.16) * e) * (on && e >= 1 ? 1.06 : 1);
+            ws[j].style.transform = "scale(" + sc.toFixed(4) + ") rotate(calc(var(--tilt, 0deg) * " + (1 - e).toFixed(3) + "))"; }
+          else { ws[j].style.opacity = ""; ws[j].style.transform = ""; } } }); }
       cap.style.opacity = pg ? 1 : 0;
     } else {
       let line = null;
