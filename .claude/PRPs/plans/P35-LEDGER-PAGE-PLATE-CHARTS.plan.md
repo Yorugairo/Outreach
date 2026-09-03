@@ -176,8 +176,10 @@ Acceptance:
   three candidate fonts; the divergence line builds with tip head and
   deposited dots; callout rolls to the exact value; scrub bar; filmstrip
   at 0.3s steps; no wall-clock or random calls; the operator's pick and
-  font choice recorded in doc 29 §9.26. If B does not read as a hand at
-  1080, A ships and B stays a candidate (§9.26 fallback).
+  font choice recorded in doc 29 §9.26. B (the chalkboard) is the
+  intended default and is built from stroke reveals with no hand actor,
+  the way hw-callout-circle / whiteboard-ink / outline-draw do it; A and C
+  exist for comparison, not as fallbacks.
 - Validate: open via `preview_start` (static server on the prototypes
   dir), screenshot at t = 0.3, 1.2, 2.4, 4.0 for both candidates; grep
   the file for `Math.random|Date.now|performance.now` returns nothing

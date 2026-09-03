@@ -1424,15 +1424,19 @@ clockwise around the scribbled field and closes (outline-draw's hollow
 conic border), and only then do the axes, labels and source get written
 and the graph build - in chalk-light ink on the charcoal, with the cream
 margin still visible as the page. Evidence may still dock over it in its
-quiet zone. The operator's own caveat stands and is the design
-constraint: *"hand stuff has been pretty complicated so far, haven't found
-a strong solution."* Therefore the hand is never a drawn actor and never a
-stroke-ordered glyph: every "hand" beat is a mask or a stroke reveal
-derived from t (scribble = accumulating stroke paths with a nib at the
+quiet zone. **The chalkboard is the default, not a stretch goal.**
+Earlier attempts at "hand" work were hard because they tried to draw a
+hand. The registry components the operator pointed at (hw-callout-circle,
+whiteboard-ink, outline-draw, hw-underline) render NO hand: the scribble
+is accumulating stroke paths with a nib dot at the ink front, the outline
+is a border drawing itself clockwise, the marks are stroke reveals - and
+they read cleanly because the stroke's motion carries the effect. That is
+the mechanism here, verbatim: every "hand" beat is a stroke or mask reveal
+derived from t (scribble field = strokes accumulating with a nib at the
 front; outline = a conic-gradient border; writing = the per-glyph wipe).
-If the scribble fill cannot be made to read as a hand at 1080 in the
-prototype, the fallback is the plain cream page (roll-out, ink writes,
-graph builds) and the chalkboard stays a candidate, not a blocker. It exists
+The plain cream page is a comparison candidate in the prototype, not a
+fallback; the cleanliness of a drawn hand is not a criterion, because no
+hand is drawn. It exists
 because every chart the channel has shipped is an evidence card, and the
 motion gate found the still stretches are exactly the windows with no
 card - a plate that builds is a plate that is never still.

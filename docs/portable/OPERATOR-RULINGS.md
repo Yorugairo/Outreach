@@ -643,11 +643,14 @@ Plan: P35.
 **E22 addendum (same day).** The full vision: the cream page becomes a
 CHALKBOARD first - "hand scribbles the charcoal/black fill, outlines a
 clean edge around what is now essentially a chalkboard, then draws the
-axes, then builds the graph." Constraint from the operator: "hand stuff
-has been pretty complicated so far, haven't found a strong solution" -
-so the hand is only ever a mask or stroke reveal derived from t, and the
-plain cream page is the fallback if the scribble field does not read at
-1080. Two further standing rules from the same review:
+axes, then builds the graph." Operator, correcting the first draft of
+this entry: "the hand drawing being clean shouldn't be what holds us
+back: the components I just sent largely don't use a hand and still
+convey the effects cleanly." Standing: the chalkboard is the DEFAULT; the
+scribble field, outline and marks are stroke reveals with no hand actor
+(the mechanism those components use), so the plain page is a comparison
+candidate, not a fallback. Two further standing rules from the same
+review:
 - **Targeting law**: anything that circles, points, zooms, spotlights or
   underlines takes a DECLARED target (datum index, series point, plate
   semantic region, word span) in the shot table; "we circle the wrong
