@@ -793,3 +793,28 @@ episode. One generation per pose; the blank page state is derived
 procedurally so the host never drifts between beats. Why: the packaging's
 promise of a person is a confirmation-gap promise (E24) like the thesis.
 
+## E27 — The order of what matters: the package answered, then the voice, then everything else (2026-09-03)
+
+Operator: *"We saw people doing 30k subscribers on a totally still image,
+just talking about 'how to be a zen trader' - offering literally zero
+actual value, just an AI-generated script. So it's fair to say that deeply
+answering the package (thumbnail + title + hook) is really the most
+important thing. Everything else we're doing will fail after that. And the
+voice: our voiceover is the other constant."*
+
+Standing order of priority, above every gate in this ledger:
+1. **The package is answered.** The thumbnail poses something, the title
+   is its words, the hook is the answer. A script that does not deeply
+   answer its own package fails before any structure, motion, chart or
+   plate can help it (E24 G45/J12 are the checks; the viewer's window 0 is
+   the measure).
+2. **The voice is constant.** The narrator's voice (docs 33/36, the voice
+   pack) is the other thing a channel is recognised by; it does not flex
+   per episode.
+3. Everything else - the six-phase structure, the retention clock, the
+   ledger page, the motion menu, the evidence layer - is what keeps a
+   viewer the package earned. It cannot earn one.
+
+Why: a still image with a voice that answered its title held an audience
+we out-produced and lost. Production is the multiplier, not the base.
+

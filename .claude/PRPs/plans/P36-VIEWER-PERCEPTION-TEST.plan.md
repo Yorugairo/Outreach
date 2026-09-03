@@ -131,6 +131,7 @@ Acceptance:
   joins)
 - `docs/content-video-engine/patterns/STRENGTH-LOOP.md` §8/§8a (automate
   only the unambiguous; the enumeration is the deliverable)
+- `docs/portable/OPERATOR-RULINGS.md` E27 (the order of what matters: the package answered, then the voice)
 - `docs/content-video-engine/31-FACELESS-CHANNEL-DOCTRINE.md` (the
   retention clock: new information every 15–30s; the One Minute Wall)
 - `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md` §9.29–9.30
@@ -186,7 +187,7 @@ Acceptance:
 - Owner: implementation_luna (→ `general-purpose`)
 - Depends on: none (T1's JSON shape is fixed in this plan)
 - Write set: `content/video_engine/configs/viewer_prompt.v1.md`, `content/video_engine/scripts/viewer_run.py`
-- Acceptance: the prompt gives the viewer ONLY the memory text and the window text and asks the four questions, answering in strict JSON; `viewer_run.py` calls Codex headless once per window (`-m` strongest available, `-c model_reasoning_effort=high`, `--approve-for-me`, stdin /dev/null, per-window log), retries a malformed JSON once, records model + prompt version + timestamps, and writes `<script>-VIEWER-REPORTS.json`; a `--dry-run` writes the prompts without calling; a `--limit N` runs the first N windows.
+- Acceptance: WINDOW 0 is the package: the viewer is shown the thumbnail (`--thumb-file`) and the title and asked one question - "what were you promised?" - and window 1's report adds "was the promise answered, and by which sentence?" (E27: the package answered is the first measure; E24's G45 is only the proxy); then the prompt gives the viewer ONLY the memory text and the window text and asks the four questions, answering in strict JSON; `viewer_run.py` calls Codex headless once per window (`-m` strongest available, `-c model_reasoning_effort=high`, `--approve-for-me`, stdin /dev/null, per-window log), retries a malformed JSON once, records model + prompt version + timestamps, and writes `<script>-VIEWER-REPORTS.json`; a `--dry-run` writes the prompts without calling; a `--limit N` runs the first N windows.
 - Validate: `python content/video_engine/scripts/viewer_run.py <conforming fixture> --limit 3` produces three well-formed reports; `--dry-run` on ep1 writes 54 prompts
 - Evidence: pending
 
