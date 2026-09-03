@@ -186,7 +186,76 @@ def load_timings(script: Path, first_sentence: str = "") -> list[dict] | None:
     return words or None
 
 
-def audit(text: str) -> tuple[list[Finding], dict]:
+def gate_report(script_path: Path | None) -> Path | None:
+    """The `<script>-GATES.md` the runner writes beside the script, if any.
+
+    CHECK-RESPONSIBILITIES R1 (one row, one verdict): once the opening gate
+    has ruled on doc 38 beats 1-4, the audit does not restate them.
+    """
+    if script_path is None:
+        return None
+    import run_script_gates  # lazy: run_script_gates imports this module
+    path = run_script_gates.report_path(Path(script_path))
+    return path if path.exists() else None
+
+
+def _discard(level: str, rule: str, msg: str) -> None:
+    """Sink for rows another tool owns - stats are still computed."""
+
+
+def _doc38_opening(sp: str, sents: list[str], stats: dict, add) -> None:
+    """doc 38 beats 1-4 (hook 3s + properties, greetings, paradox 8s, 'you'
+    by 0:30, promise in 60s). `add` is `_discard` when the gate owns them."""
+    first = sents[0] if sents else ""
+    t_first = secs(first)
+    # Beat 1 names FOUR properties; two are mechanically decidable. Concreteness
+    # is a judgement (a regex proxy returns confident wrong verdicts), so it
+    # stays with the reader and is named in the message instead.
+    past = re.search(r"\b(?:was|were|had|did|used to)\b", first, re.I)
+    viewer = re.search(r"\b(?:you|your|yours|you\'?re|you\'?ll)\b",
+                       first, re.I)
+    stats["hook_properties"] = (
+        f"present-tense={'n' if past else 'y'}, "
+        f"viewer-facing={'y' if viewer else 'n'}")
+    lacks = ([f"present tense ({past.group()!r})"] if past else []) + (
+        [] if viewer else ["direct address"])
+    if lacks:
+        add("WARN", "doc 38 beat 1",
+            f"the microhook lacks {' and '.join(lacks)}. The beat asks for a "
+            f"present-tense, viewer-facing, concrete grab - duration is only "
+            f"one of four. Concreteness is yours to judge: {first!r}")
+    if t_first > 3.0:
+        add("FAIL", "doc 38 beat 1",
+            f"first sentence runs {t_first:.1f}s (limit 3.0s): {first!r}")
+    for pat in GREETINGS:
+        m = re.search(pat, sp, re.I)
+        if m:
+            add("FAIL", "doc 38 beat 2",
+                f"banned opener construction: {m.group()!r}")
+    # Beat 2: the paradox lands by 0:08 (the decision boundary), measured as
+    # the end of sentence two - where the microhook is paid (and paid wrong).
+    if len(sents) >= 2:
+        t_paradox = secs(" ".join(sents[:2]))
+        stats["paradox_s"] = round(t_paradox, 1)
+        if t_paradox > 8.0:
+            add("FAIL", "doc 38 beat 2",
+                f"the microhook is not paid until {t_paradox:.1f}s — the "
+                f"viewer decides at 0:08")
+    m = re.search(r"\byou\b|\byour\b|\byou'll\b|\byou're\b", sp, re.I)
+    t_you = secs(sp[:m.start()]) if m else float("inf")
+    if t_you > 30:
+        add("FAIL", "doc 38 beat 3",
+            f"direct address ('you') first appears at {t_you:.0f}s "
+            f"(must land by 0:30)")
+    stats["first_you_s"] = round(t_you, 1) if m else None
+    head = sp[:int(60 * CHARS_PER_SEC)]  # generous window; a miss here is a WARN
+    if not re.search(r"\bby the end\b|\byou'll\b|\bthirty seconds\b"
+                     r"|\brun (?:it|your)\b", head, re.I):
+        add("WARN", "doc 38 beat 4",
+            "no dated/checkable promise detected inside the first 60s")
+
+
+def audit(text: str, script_path: Path | None = None) -> tuple[list[Finding], dict]:
     out: list[Finding] = []
     sp = spoken(text)
     n = len(sp)
@@ -268,64 +337,19 @@ def audit(text: str) -> tuple[list[Finding], dict]:
 
     # ---- doc 38 phase 1 QC line ------------------------------------------
     first = sents[0] if sents else ""
-    t_first = secs(first)
     stats["hook_spread"] = f"{spread(first):.0%}"
     if spread(first) > TIMING_SPREAD_WARN:
         add("INFO", "estimator",
             f"the two rate estimates disagree by {spread(first):.0%} on the "
             f"first sentence (numerals read longer than they look) — record "
             f"a take to settle it")
-    # doc 38 beat 1 names FOUR properties; only duration was gated, so a hook
-    # could pass the audit while missing most of what the beat asks for.
-    # Two of the four are mechanically decidable. Concreteness is a
-    # judgement - a regex proxy for it returns confident wrong verdicts - so
-    # it stays with the reader and is named in the message instead.
-    past = re.search(r"\b(?:was|were|had|did|used to)\b", first, re.I)
-    viewer = re.search(r"\b(?:you|your|yours|you\'?re|you\'?ll)\b",
-                       first, re.I)
-    stats["hook_properties"] = (
-        f"present-tense={'n' if past else 'y'}, "
-        f"viewer-facing={'y' if viewer else 'n'}")
-    lacks = ([f"present tense ({past.group()!r})"] if past else []) + (
-        [] if viewer else ["direct address"])
-    if lacks:
-        add("WARN", "doc 38 beat 1",
-            f"the microhook lacks {' and '.join(lacks)}. The beat asks for a "
-            f"present-tense, viewer-facing, concrete grab - duration is only "
-            f"one of four. Concreteness is yours to judge: {first!r}")
-
-    if t_first > 3.0:
-        add("FAIL", "doc 38 beat 1",
-            f"first sentence runs {t_first:.1f}s (limit 3.0s): {first!r}")
-    for pat in GREETINGS:
-        m = re.search(pat, sp, re.I)
-        if m:
-            add("FAIL", "doc 38 beat 2",
-                f"banned opener construction: {m.group()!r}")
-    # Beat 2: the paradox must land by 0:08 — the 8-second decision boundary.
-    # Measured as the end of sentence two, which is where the microhook is
-    # paid (and paid wrong).
-    if len(sents) >= 2:
-        t_paradox = secs(" ".join(sents[:2]))
-        stats["paradox_s"] = round(t_paradox, 1)
-        if t_paradox > 8.0:
-            add("FAIL", "doc 38 beat 2",
-                f"the microhook is not paid until {t_paradox:.1f}s — the "
-                f"viewer decides at 0:08")
-
-    m = re.search(r"\byou\b|\byour\b|\byou'll\b|\byou're\b", sp, re.I)
-    t_you = secs(sp[:m.start()]) if m else float("inf")
-    if t_you > 30:
-        add("FAIL", "doc 38 beat 3",
-            f"direct address ('you') first appears at {t_you:.0f}s "
-            f"(must land by 0:30)")
-    stats["first_you_s"] = round(t_you, 1) if m else None
-
-    head = sp[:int(60 * CHARS_PER_SEC)]  # generous window; a miss here is a WARN
-    if not re.search(r"\bby the end\b|\byou'll\b|\bthirty seconds\b"
-                     r"|\brun (?:it|your)\b", head, re.I):
-        add("WARN", "doc 38 beat 4",
-            "no dated/checkable promise detected inside the first 60s")
+    # R1: one row, one verdict. With a gates report beside the script the
+    # opening gate owns beats 1-4; the audit points at it instead.
+    report = gate_report(script_path)
+    if report is not None:
+        add("INFO", "doc 38 B1-B4",
+            f"owned by gate_opening_structure - see {report}")
+    _doc38_opening(sp, sents, stats, _discard if report is not None else add)
 
     # ---- doc 38 phase 6: the close ---------------------------------------
     hits = [m for pat in CTA for m in re.finditer(pat, sp, re.I)]
@@ -423,6 +447,65 @@ def audit(text: str) -> tuple[list[Finding], dict]:
     return out, stats
 
 
+def _sentence_span(words) -> list[dict]:
+    """Take words off the iterator up to and including the sentence end."""
+    out: list[dict] = []
+    for w in words:
+        out.append(w)
+        if w["w"].endswith((".", "!", "?")):
+            break
+    return out
+
+
+def _measured_opening(findings: list[Finding], stats: dict, timings: list[dict],
+                      deferred: bool) -> list[Finding]:
+    """Swap the estimated hook / paradox rows for the recorded ones. When the
+    opening gate owns beats 1-4 (`deferred`) only the stats are recorded."""
+    rest = iter(timings)
+    hook = _sentence_span(rest)
+    if hook:
+        t_hook = hook[-1]["end"] - hook[0]["start"]
+        stats["hook_measured_s"] = round(t_hook, 2)
+        if not deferred:
+            findings = [f for f in findings if "doc 38 beat 1" not in f.rule]
+            if t_hook > 3.0:
+                findings = findings + [Finding(
+                    "FAIL", "doc 38 beat 1",
+                    f"first sentence is {t_hook:.2f}s AS RECORDED "
+                    f"(limit 3.0s) — measured, not estimated")]
+    paradox = hook + _sentence_span(rest)
+    if len(paradox) > len(hook):
+        t_par = paradox[-1]["end"] - paradox[0]["start"]
+        stats["paradox_measured_s"] = round(t_par, 2)
+        if not deferred:
+            findings = [f for f in findings if "doc 38 beat 2" not in f.rule
+                        or "banned opener" in f.message]
+            if t_par > 8.0:
+                findings = findings + [Finding(
+                    "FAIL", "doc 38 beat 2",
+                    f"microhook not paid until {t_par:.2f}s AS RECORDED "
+                    f"(gate 8.0s)")]
+    return findings
+
+
+def _pivot_pin(findings: list[Finding], stats: dict, text: str,
+               pivot: str) -> list[Finding]:
+    """doc 38 sec 3: the verbatim P4 anchor is unique and sits in the pin."""
+    hits = text.count(pivot)
+    if hits != 1:
+        return findings + [Finding("FAIL", "doc 38 sec 3",
+                                   f"pivot anchor not unique ({hits} hits)")]
+    i = text.index(pivot)
+    pct = len(spoken(text[:i])) / len(spoken(text)) * 100
+    stats["pivot_pct"] = round(pct, 1)
+    lo, hi = PIVOT_PIN
+    if lo <= pct <= hi:
+        return findings
+    return findings + [Finding(
+        "FAIL", "doc 38 sec 3 phase 4",
+        f"pivot at {pct:.1f}% breaks the {lo:g}-{hi:g}% pin")]
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("script", type=Path)
@@ -430,42 +513,15 @@ def main() -> int:
     args = ap.parse_args()
 
     text = args.script.read_text(encoding="utf-8")
-    findings, stats = audit(text)
+    findings, stats = audit(text, script_path=args.script)
+    deferred = gate_report(args.script) is not None
 
     # If a take exists, measure the tight gates instead of estimating them.
     first = sentences(spoken(text))[0] if sentences(spoken(text)) else ""
     timings = load_timings(args.script, first)
     if timings:
         stats["timing_source"] = f"measured ({len(timings)} words on disk)"
-        hook, rest = [], iter(timings)
-        for w in rest:
-            hook.append(w)
-            if w["w"].endswith((".", "!", "?")):
-                break
-        if hook:
-            t_hook = hook[-1]["end"] - hook[0]["start"]
-            stats["hook_measured_s"] = round(t_hook, 2)
-            findings = [f for f in findings if "doc 38 beat 1" not in f.rule]
-            if t_hook > 3.0:
-                findings.append(Finding(
-                    "FAIL", "doc 38 beat 1",
-                    f"first sentence is {t_hook:.2f}s AS RECORDED "
-                    f"(limit 3.0s) — measured, not estimated"))
-        paradox = list(hook)
-        for w in rest:
-            paradox.append(w)
-            if w["w"].endswith((".", "!", "?")):
-                break
-        if len(paradox) > len(hook):
-            t_par = paradox[-1]["end"] - paradox[0]["start"]
-            stats["paradox_measured_s"] = round(t_par, 2)
-            findings = [f for f in findings if "doc 38 beat 2" not in f.rule
-                        or "banned opener" in f.message]
-            if t_par > 8.0:
-                findings.append(Finding(
-                    "FAIL", "doc 38 beat 2",
-                    f"microhook not paid until {t_par:.2f}s AS RECORDED "
-                    f"(gate 8.0s)"))
+        findings = _measured_opening(findings, stats, timings, deferred)
     else:
         vo = args.script.parent / "vo"
         stale = any(vo.glob("scene_*.words.json"))
@@ -474,19 +530,7 @@ def main() -> int:
             if stale else "estimated (no take on disk)")
 
     if args.pivot:
-        hits = text.count(args.pivot)
-        if hits != 1:
-            findings.append(Finding("FAIL", "doc 38 sec 3",
-                                    f"pivot anchor not unique ({hits} hits)"))
-        else:
-            i = text.index(args.pivot)
-            pct = len(spoken(text[:i])) / len(spoken(text)) * 100
-            stats["pivot_pct"] = round(pct, 1)
-            lo, hi = PIVOT_PIN
-            if not (lo <= pct <= hi):
-                findings.append(Finding(
-                    "FAIL", "doc 38 sec 3 phase 4",
-                    f"pivot at {pct:.1f}% breaks the {lo:g}-{hi:g}% pin"))
+        findings = _pivot_pin(findings, stats, text, args.pivot)
 
     print(f"=== {args.script.name} ===")
     for key, val in stats.items():

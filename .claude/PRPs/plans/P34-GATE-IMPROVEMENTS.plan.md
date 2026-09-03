@@ -266,7 +266,7 @@ Acceptance (all observable):
 - Evidence: pending
 
 ### T6: One row, one verdict - the audit defers to the opening gate
-- Status: pending
+- Status: done
 - Owner: speedster (→ `general-purpose`)
 - Depends on: T1
 - Write set: `content/video_engine/scripts/audit_script_doctrine.py`
@@ -276,7 +276,7 @@ Acceptance (all observable):
   beat 1-4 findings and one INFO pointer; without it, behaviour is
   unchanged; no other audit rows move.
 - Validate: `python -m pytest content/video_engine/tests/test_audit_defers.py -q`
-- Evidence: pending
+- Evidence: `pytest test_audit_defers.py test_audit_a3_anchor.py test_run_script_gates.py -q` 22 passed; ep1 audit with SCRIPT-G-GATES.md beside it prints one `[INFO] doc 38 B1-B4: owned by gate_opening_structure - see <report>` and no beat 1-4 rows (measured-take re-adds also deferred); without the report byte-identical. Note: 7 pre-existing failures elsewhere under `-k "gate or audit or enumerate or motion"` (finance/history/remotion fixture tests, unrelated imports)
 
 ## Verification
 
