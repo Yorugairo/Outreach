@@ -938,3 +938,49 @@ against semiconductors; `ev-bravos-original-v1.series.json` carries a
 until re-read against the source. The divergence mapping stands on the
 dock's badges.
 
+## E26 — Three roles check a script, and the third one knows nothing (2026-09-03)
+
+The gates are **mechanical**: counts, positions, durations, decided from the
+text and the take's clock, and a tool's verdict is final. The judge is
+**doctrinal**: the runtime agent, with the ledger and the dossier open,
+verdicting the declared beats and the JUDGE rows against our own criteria.
+Both check whether the script matches what we decided to build. Neither can
+tell us whether any of it is *perceptible*.
+
+The **viewer** is the third role and it knows nothing: no doctrine, no
+ledger, no tags, no idea a test is happening. It reads the script cold in
+15-second windows carrying only the previous two windows as memory, and
+answers four questions per window: what do you now know, what question are
+you holding, what were you asked to do, what could you not follow.
+
+Operator, on why it is shaped this way: *"The judge is judging our criteria
+and needs to know what to judge against. … We can't ask an agent 'when would
+you drop?' and get a valuable answer. It has to be a time-bounded,
+information-gain or quality-based measurement. The gates + judge force our
+structure; the viewer tests if it's perceptible."*
+
+So the viewer is **never** asked when it would leave. An LLM's patience and
+inference speed are not a human's, and a made-up drop-off timestamp is worse
+than no measurement. It is asked only for perception reports it can give
+stably, and the **judging is a deterministic scorer's**, so the same reports
+always produce the same verdict:
+
+- **Beat recall** — every beat the writer declared must show up in what the
+  blind reader felt, within one window either side. A beat that is tagged and
+  never felt was **laundered**: the tag bought a PASS the writing did not.
+  This is rule R2 measured from outside the doctrine instead of inside it.
+- **Information gain** — concrete new things per window, by a crude rule
+  stated as a constant, so a disagreement is about the rule and not a model's
+  mood. Two dead windows in a row is thirty seconds the script has to argue
+  for.
+
+**Advisory until it proves itself.** The instrument does not get to fail a
+script before it has agreed with the one retention curve we actually hold.
+The viewer block reports at INFO until the ep1 calibration is accepted
+(P36 Human Gate 1); `run_script_gates.py --viewer-gate` is the promotion
+switch, and after it an unperceived declared beat is a FAIL.
+
+Why: gates and judge both grade against our own intentions, so they cannot
+catch a script that satisfies every rule and still lands on nobody. The
+viewer is the only check in the kit whose answer we do not already know.
+
