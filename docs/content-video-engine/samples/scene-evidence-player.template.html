@@ -68,7 +68,14 @@
                transform: rotate(var(--tilt)); }
   .lp-title { left: 8.4%; top: 10.4%; font-size: 34px; font-weight: 700; color: var(--lp-chalk); letter-spacing: -.01em; }
   .lp-src { left: 6%; bottom: 2.4%; font-size: 22px; font-weight: 500; color: var(--lp-char); }
-  .lp-chart { position: absolute; overflow: visible; }   /* inline series names may run past the plot (s9.23b) */
+  .lp-chart { position: absolute; overflow: visible; }
+  /* MOTION MENU species (doc 29 s9.27; P35 T6/T7): plate life on the world side, the targeted overlay above the docks */
+  #plife { position: absolute; inset: 0; pointer-events: none; }
+  #plife img { position: absolute; will-change: transform; transform-origin: 50% 100%; }
+  #species { position: absolute; inset: 0; width: 1920px; height: 1080px; pointer-events: none; overflow: visible; }
+  #species .co { fill: none; stroke: #F5B72E; stroke-width: 6; stroke-linecap: round; stroke-linejoin: round; }
+  #species .sq { fill: none; stroke: #F5B72E; stroke-width: 5; stroke-linecap: round; }
+  #species .lab { font: 700 30px Inter, Arial, sans-serif; fill: #F5B72E; paint-order: stroke; stroke: rgba(27,30,35,.85); stroke-width: 8px; }   /* inline series names may run past the plot (s9.23b) */
   .lp-chart text { font-family: Inter, Arial, sans-serif; fill: var(--lp-chalk); }
   .lp-chart .ax { stroke: #8a94a0; stroke-width: 2; }
   .lp-chart .grid { stroke: rgba(242,242,242,.14); stroke-width: 1.5; }
@@ -299,6 +306,7 @@
   <div class="world" id="wB"></div>
   <div id="wash"></div>
   <div id="spot"></div>
+  <div id="plife"></div>
 
   <div class="dock" id="dock-1">
     <div class="slide-frame"><img id="i1" alt="evidence" /></div>
@@ -310,6 +318,7 @@
   </div>
 
   <div id="seam"></div>
+  <svg id="species" viewBox="0 0 1920 1080" aria-hidden="true"></svg>
   <div id="caption"></div>
 </div></div></div>
 
@@ -1660,6 +1669,135 @@
     if (st.paint) st.paint(st, c, t3 - LP.OUTLINE);   /* the builder's own build step (race / decline / combo) */
   };
 
+  /* ================= MOTION MENU species (doc 29 s9.27; P35 T6 / T7) =================
+     The targeting law as code: every species takes a DECLARED target and resolveTarget maps it to
+     stage pixels at render time (a datum on a ledger page, a point/region of the frame, a caption
+     word span). Camera moves (punch / focus_zoom / pull_back) are ONE transform on the world layer -
+     docks stay fixed in screen space (this lane's drawing surface) - and are exclusive per window
+     (build validate_species + gate M09). Plate life quantizes t to 10 fps FIRST and derives every
+     pose from the step (stop-motion law). Everything from t; jitter only via lpHash. */
+  const SP = { PUNCH_IN: 0.42, PUNCH_OUT: 0.5, PUNCH_SCALE: 1.14, FOCUS_SCALE: 1.32, PULL_FROM: 1.9,
+               CALLOUT_DRAW: 0.7, SQUIG_DRAW: 0.45, LIFE_FPS: 10, LIFE_LAND: 0.6, BOIL_PX: 1.2, BOIL_DEG: 0.7 };
+  const CAMERA = new Set(["punch", "focus_zoom", "pull_back"]);
+  const spSvg = $("species"), plife = $("plife");
+  const spEase = (k) => 1 - Math.pow(1 - clamp01(k), 3);
+  const spIO = (k) => { k = clamp01(k); return k < 0.5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2; };
+  /* an element's box in STAGE px (the stage is scaled to fit the pane) */
+  const stageBox = (el) => { const r = el.getBoundingClientRect(), sb = $("stage").getBoundingClientRect(); const k = 1920 / Math.max(1, sb.width); return { x: (r.left - sb.left) * k, y: (r.top - sb.top) * k, w: r.width * k, h: r.height * k }; };
+  const resolveTarget = (tg) => {
+    if (!tg) return null;
+    if (tg.kind === "point") return { x: tg.x * 1920, y: tg.y * 1080, w: 0, h: 0 };
+    if (tg.kind === "region") return { x: tg.x0 * 1920, y: tg.y0 * 1080, w: (tg.x1 - tg.x0) * 1920, h: (tg.y1 - tg.y0) * 1080 };
+    if (tg.kind === "datum") {   /* the ledger page's bar, or a point on its dense line */
+      const world = wB.classList.contains("ledger") ? wB : wA;
+      const bars = world.querySelectorAll(".lp-chart .bar");
+      if (bars.length) return stageBox(bars[Math.min(tg.index | 0, bars.length - 1)]);
+      const ser = world.querySelectorAll(".lp-chart .ser")[tg.series | 0];
+      if (ser && ser.getPointAtLength) {
+        const q = ser.getPointAtLength(ser.getTotalLength() * clamp01((tg.index | 0) / Math.max(1, (tg.count || 100) - 1)));
+        const b = stageBox(ser.ownerSVGElement), vb = ser.ownerSVGElement.viewBox.baseVal;
+        return { x: b.x + q.x / vb.width * b.w, y: b.y + q.y / vb.height * b.h, w: 0, h: 0 };
+      }
+      return null;
+    }
+    if (tg.kind === "span") {
+      const ws = [...cap.querySelectorAll(".cw")].slice(tg.from_word | 0, (tg.to_word | 0) + 1);
+      if (!ws.length) return null;
+      const bs = ws.map(stageBox);
+      const x0 = Math.min(...bs.map((b) => b.x)), x1 = Math.max(...bs.map((b) => b.x + b.w));
+      const y0 = Math.min(...bs.map((b) => b.y)), y1 = Math.max(...bs.map((b) => b.y + b.h));
+      return { x: x0, y: y0, w: x1 - x0, h: y1 - y0 };
+    }
+    return null;
+  };
+  const centre = (b) => ({ cx: b.x + b.w / 2, cy: b.y + b.h / 2 });
+  /* the camera: one world transform for this window, about the resolved target */
+  const camXf = (sc, t) => {
+    let xf = { s: 1, ox: 960, oy: 540 };
+    for (const sp of (sc.species || [])) {
+      if (!CAMERA.has(sp.kind)) continue;
+      const k = (t - sp.at) / Math.max(0.001, sp.dur || 1);
+      if (k < 0 || k > 1) continue;
+      const b = resolveTarget(sp.target); if (!b) continue;
+      const { cx, cy } = centre(b);
+      if (sp.kind === "punch") {           /* in - hold - out, cubic ease (yt-camera-move) */
+        const tin = SP.PUNCH_IN / (sp.dur || 1), tout = SP.PUNCH_OUT / (sp.dur || 1);
+        const a = k < tin ? spEase(k / tin) : k > 1 - tout ? 1 - spEase((k - (1 - tout)) / tout) : 1;
+        xf = { s: 1 + (SP.PUNCH_SCALE - 1) * a, ox: cx, oy: cy };
+      } else if (sp.kind === "focus_zoom") { /* zoom + pan to the anchor, then dead still (servo law) */
+        xf = { s: 1 + (SP.FOCUS_SCALE - 1) * spIO(Math.min(1, k * 1.8)), ox: cx, oy: cy };
+      } else {                             /* pull-back: opens ON the number, one decelerating pull */
+        xf = { s: SP.PULL_FROM + (1 - SP.PULL_FROM) * spEase(k), ox: cx, oy: cy };
+      }
+    }
+    return xf;
+  };
+  const camCss = (xf) => xf.s === 1 ? "" :
+    "translate(" + (xf.ox - 960).toFixed(1) + "px, " + (xf.oy - 540).toFixed(1) + "px) scale(" + xf.s.toFixed(4) + ") translate(" + (960 - xf.ox).toFixed(1) + "px, " + (540 - xf.oy).toFixed(1) + "px) ";
+  /* a wobbled ellipse around a box (hw-callout-circle): seeded, drawn by dash-offset */
+  const calloutPath = (b, seed) => {
+    const cx = b.x + b.w / 2, cy = b.y + b.h / 2, rx = b.w / 2 + 22, ry = b.h / 2 + 18, n = 28, pts = [];
+    for (let i = 0; i <= n; i++) { const a = -Math.PI * 0.6 + i / n * Math.PI * 2.08; const j = 1 + (lpHash(seed, i, 21) - 0.5) * 0.12;
+      pts.push([cx + Math.cos(a) * rx * j, cy + Math.sin(a) * ry * j]); }
+    return pts.map(([x, y], i) => (i ? "L" : "M") + x.toFixed(1) + " " + y.toFixed(1)).join(" ");
+  };
+  const squigglePath = (b, seed) => {
+    const y = b.y + b.h + 6, n = Math.max(6, Math.round(b.w / 22)), pts = [];
+    for (let i = 0; i <= n; i++) pts.push([b.x + b.w * i / n, y + (i % 2 ? 4 : -4) + (lpHash(seed, i, 23) - 0.5) * 3]);
+    return pts.map(([x, yy], i) => (i ? "L" : "M") + x.toFixed(1) + " " + yy.toFixed(1)).join(" ");
+  };
+  const drawOn = (path, k) => { const len = path.getTotalLength ? path.getTotalLength() : 1000; path.setAttribute("stroke-dasharray", len); path.setAttribute("stroke-dashoffset", (len * (1 - spEase(k))).toFixed(1)); };
+  const paintSpecies = (sc, t) => {
+    spSvg.replaceChildren(); plife.replaceChildren();
+    plife.style.transformOrigin = "960px 540px"; plife.style.transform = camCss(camXf(sc, t));   /* plate life lives in the world: the camera carries it */
+    (sc.species || []).forEach((sp, si) => {
+      const dur = sp.dur || 1, k = (t - sp.at) / Math.max(0.001, dur);
+      if (k < 0 || k > 1) return;
+      const seed = 0x51EC1E5 ^ ((sc.scene_id || "").length * 131 + si);
+      if (sp.kind === "callout") {
+        const b = resolveTarget(sp.target); if (!b) return;
+        drawOn(lpEl("path", "co", spSvg, { d: calloutPath(b, seed) }), k * dur / SP.CALLOUT_DRAW);
+        if (sp.label && k * dur > SP.CALLOUT_DRAW * 0.8) {
+          const lx = b.x + b.w + 34, ly = b.y - 10, pop = spEase((k * dur - SP.CALLOUT_DRAW * 0.8) / 0.25);
+          const tx = lpEl("text", "lab", spSvg, { x: lx.toFixed(1), y: ly.toFixed(1) }); tx.textContent = sp.label;
+          tx.setAttribute("transform", "translate(" + lx.toFixed(1) + " " + ly.toFixed(1) + ") scale(" + (0.7 + 0.3 * pop).toFixed(3) + ") translate(" + (-lx).toFixed(1) + " " + (-ly).toFixed(1) + ")");
+        }
+      } else if (sp.kind === "spotlight") { /* dim the frame except a feathered hole gliding between two declared targets */
+        const a = resolveTarget(sp.target), z = resolveTarget(sp.target2) || a; if (!a) return;
+        const g = spIO((t - sp.at - (sp.glide_at || 0)) / 0.6);
+        const ca = centre(a), cz = centre(z), cx = ca.cx + (cz.cx - ca.cx) * g, cy = ca.cy + (cz.cy - ca.cy) * g;
+        const r0 = (Math.max(a.w, 240) / 2 + 60) / 960, id = "spot" + si;
+        const defs = lpEl("defs", "", spSvg);
+        const rg = lpEl("radialGradient", "", defs, { id, cx: (cx / 1920).toFixed(4), cy: (cy / 1080).toFixed(4), r: 0.5 });
+        lpEl("stop", "", rg, { offset: 0, "stop-color": "#000", "stop-opacity": 0 });
+        lpEl("stop", "", rg, { offset: r0.toFixed(3), "stop-color": "#000", "stop-opacity": 0 });
+        lpEl("stop", "", rg, { offset: (r0 + 0.12).toFixed(3), "stop-color": "#000", "stop-opacity": 0.55 });
+        lpEl("stop", "", rg, { offset: 1, "stop-color": "#000", "stop-opacity": 0.55 });
+        const fade = Math.min(spEase(k * dur / 0.4), spEase((1 - k) * dur / 0.4));
+        lpEl("rect", "", spSvg, { x: 0, y: 0, width: 1920, height: 1080, fill: "url(#" + id + ")", opacity: fade.toFixed(2) });
+      } else if (sp.kind === "squiggle") {   /* a hand-drawn underline under a declared caption word span (stage mode only) */
+        const b = resolveTarget(sp.target); if (!b || !cap.classList.contains("stage")) return;
+        drawOn(lpEl("path", "sq", spSvg, { d: squigglePath(b, seed) }), k * dur / SP.SQUIG_DRAW);
+      } else if (sp.kind === "plate_life") { /* our cutouts on a bare plate: stepped time, throw-and-land with squash, two-frame boil */
+        const step = Math.floor((t - sp.at) * SP.LIFE_FPS) / SP.LIFE_FPS;
+        (sp.cutouts || []).forEach((c, ci) => {
+          if (!A[c.asset]) return;
+          const img = lpEl("img", "", plife); img.src = A[c.asset];
+          const w = (c.w || 0.18) * 1920, x = c.x * 1920, y = c.y * 1080, delay = (c.delay || 0) + ci * 0.15;
+          const land = clamp01((step - delay) / SP.LIFE_LAND);
+          const drop = (1 - spEase(land)) * -220;
+          const squash = land >= 1 ? 1 : land > 0.85 ? 1 + (1 - land) * 1.2 : 1;
+          const frame = Math.floor(step * SP.LIFE_FPS) % 2;
+          const bx = (lpHash(seed, ci * 2 + frame, 31) - 0.5) * 2 * SP.BOIL_PX, by = (lpHash(seed, ci * 2 + frame, 32) - 0.5) * 2 * SP.BOIL_PX;
+          const rot = (lpHash(seed, ci * 2 + frame, 33) - 0.5) * 2 * SP.BOIL_DEG;
+          img.style.width = w.toFixed(1) + "px"; img.style.left = (x - w / 2).toFixed(1) + "px"; img.style.bottom = (1080 - y).toFixed(1) + "px";
+          img.style.opacity = step >= delay ? 1 : 0;
+          img.style.transform = "translate(" + bx.toFixed(1) + "px, " + (drop + by).toFixed(1) + "px) rotate(" + rot.toFixed(2) + "deg) scale(" + (1 / squash).toFixed(3) + ", " + squash.toFixed(3) + ")";
+        });
+      }
+    });
+  };
+
   const render = (t) => {
     let si = 0;
     for (let i = 0; i < TL.scenes.length; i++) if (t >= TL.scenes[i].span[0]) si = i;
@@ -1696,7 +1834,7 @@
          of one scene judged in isolation. The authored Ken Burns is the
          only world motion. */
       const z = 1 + p * kb.scale;
-      el.style.transform = `translateX(${dx.toFixed(1)}px) scale(${z.toFixed(4)}) `
+      el.style.transform = camCss(camXf(scene, t)) + `translateX(${dx.toFixed(1)}px) scale(${z.toFixed(4)}) `
         + `translate(${(p*kb.x).toFixed(1)}px, ${(p*kb.y).toFixed(1)}px)`;
     };
     const prev = TL.scenes[si - 1];
@@ -1887,6 +2025,7 @@
     }
     cap.classList.toggle("quiet", quiet);
     cap.classList.toggle("stage", stage);
+    paintSpecies(sc, t);
     /* on a LEDGER PAGE the stage caption sits in the page's declared quiet zone (s9.25 #2, s9.28 C2:
        never over the emphasized datum); elsewhere it is centred */
     const qz = stage && sc.world.kind === "ledger" && sc.world.page ? sc.world.page.quiet_zone : null;

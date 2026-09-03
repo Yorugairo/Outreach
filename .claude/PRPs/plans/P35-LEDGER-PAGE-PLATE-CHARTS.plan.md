@@ -356,7 +356,7 @@ proof earns the page.
 - Evidence: template species block gains buildLedgerRace / buildLedgerDecline / buildLedgerCombo, each from its own component's envelope (race: rank keyframes, overtakes as swaps, axis glides, accent on the leader, `st.sync` rank-settled times; decline: draw-down + count-down + darkening ground, endpoint locks on the exact string; combo: bars then the line, NYT direct labels with field-coloured halos); dense-line/story untouched; `pytest test_ledger_page.py -q` 23 passed; determinism hashes equal at three t's; proof `build-f/ledger-builders-proof.html`. Race data: `ev-memory-share-race-v1.series.json` is SOURCES-TO-VERIFY with `placeholder: true` (no multi-quarter DRAM vendor share exists in the repo) and the validator refuses placeholders, so it can never render; the proof race uses synthetic data marked not for air
 
 ### T6: The motion menu, and stop-motion plate life as its first species
-- Status: pending
+- Status: review (plate life shipped in the player; side-by-side on a bare ep1 window still to render)
 - Owner: parent (menu + template), junior_developer (→ `general-purpose`) for the doc rows
 - Depends on: T3 (template ordering only)
 - Write set: `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md` (§9.27),
@@ -370,9 +370,10 @@ proof earns the page.
   without plate life for the operator.
 - Validate: `python -m pytest content/video_engine/tests/test_gate_motion_density.py -q`; range render side-by-side
 - Evidence: pending
+- Evidence: §9.27 is the menu of record (written 2026-09-02); plate life species in the template (`plate_life` rows: cutouts from assets/generated/cutouts, t quantized to 10 fps first, throw-and-land with squash, seeded two-frame boil, carried by the camera); gate counts stepping events (T7); proof scene 3 carries two cutouts on a bare plate
 
 ### T7: Targeted species - punch, scribble callout, focus zoom, feathered spotlight, squiggle marks, pull-back
-- Status: running (data half done: build + gate; player species blocks + resolveTarget() are the parent's next)
+- Status: review (player half shipped for punch / focus zoom / pull-back / callout / spotlight / squiggle; beat-freeze, radial, push not built)
 - Owner: parent (template + targeting resolver), implementation_luna (→ `general-purpose`) for the shot-table row forms and tests
 - Depends on: T4
 - Write set: `docs/content-video-engine/samples/scene-evidence-player.template.html` (species blocks + one `resolveTarget()`),
@@ -393,7 +394,8 @@ proof earns the page.
   reveals the page around it. Each species: one range render for the
   operator.
 - Validate: `python -m pytest content/video_engine/tests/test_targeted_species.py content/video_engine/tests/test_gate_motion_density.py -q`; range renders
-- Evidence (data half): `validate_species` in build_scene_timeline_f.py (target kinds datum|point|region|span; pointing species without a target FAIL the build naming the row; punch|focus_zoom|pull_back mutually exclusive and never over Ken Burns > 0; optional pivot span); scenes carry `species` verbatim, timeline `species` lists kinds; gate SPECIES_EVENTS table (plate life steps at 10 fps), M09 camera-move clash gate; `pytest test_targeted_species.py test_gate_motion_density.py test_motion_gate_wiring.py -q` 42 passed; ep1 RESULT 5 FAIL / 1 WARN / 3 PASS
+- Evidence: (data half) `validate_species` in build_scene_timeline_f.py (target kinds datum|point|region|span; pointing species without a target FAIL the build naming the row; punch|focus_zoom|pull_back mutually exclusive and never over Ken Burns > 0; optional pivot span); scenes carry `species` verbatim, timeline `species` lists kinds; gate SPECIES_EVENTS table (plate life steps at 10 fps), M09 camera-move clash gate; `pytest test_targeted_species.py test_gate_motion_density.py test_motion_gate_wiring.py -q` 42 passed; ep1 RESULT 5 FAIL / 1 WARN / 3 PASS
+  (player half) `resolveTarget` (datum -> the page's bar or dense-line point; point/region -> frame fractions; span -> caption words), `camXf` one world transform about the target (docks fixed), `paintSpecies` overlay; proof: callout circles the trim bar with its label, squiggle draws under 'ledger', spotlight glides between two points, punch on a point moves the world and the cutouts; no console errors; range renders per species for the operator are still to cut
 
 ### T8: Focus rack vs the current evidence lighting - side by side (proposal)
 - Status: review (the operator picks; the current mechanism stays)

@@ -1650,6 +1650,23 @@ dim, one 0.6s A→B shift of blur/dim/scale/parallax, power2.inOut), frames
 at 3.9/4.1/4.3/4.6/5.0 and at the front 7.35/7.5/7.7. The pick is the
 operator's; the current mechanism stays until then.
 
+**Shipped in the player (P35 T6/T7, 2026-09-03).** The species block in the
+template (`const SP`, `resolveTarget`, `camXf`, `paintSpecies`) implements:
+**plate life** (10 fps stepped time, throw-and-land with squash, seeded
+two-frame boil, our cutouts from `assets/generated/cutouts`, carried by the
+camera), **camera punch / focus zoom / pull-back** (ONE transform on the
+world layer about the resolved target; docks stay fixed; exclusive per
+window - build `validate_species` + gate M09), **scribble callout**
+(seeded wobbled ellipse drawn by dash-offset around a datum / point /
+region, label pops), **feathered spotlight** (radial hole gliding between
+two declared targets), **squiggle marks** (underline drawn under a declared
+caption word span, stage mode only). Targets are declared on the shot row
+(`species` list; datum | point | region | span) and resolved to stage pixels
+at render time - nobody eyeballs a pixel. NOT yet built: beat-freeze chart
+exit, radial reveal, push hand-off, weight-shift captions, focus rack
+(proposal only, §9.27 side-by-side). Proof: `build-f/ledger-species-proof.html`
+(callout on the trim bar + squiggle, spotlight glide, plate life + punch).
+
 Precedence: a species never fires inside the pivot's reversal, never
 covers an emphasized datum, and never stacks two camera moves in one
 window (punch, focus zoom, pull-back, Ken Burns are mutually exclusive per
