@@ -125,6 +125,7 @@ the strictest lane (finance) raises the floor everywhere.
 | **38** | Script architecture — the six phases |
 | **39** | Evidence chart system — palette, type scale, the three document species |
 | **40** | Process as evidence — the audit beat |
+| **41** | The LEDGER PAGE species (component doc) — the five beats, the `ledger_page.v1` spec, the shot row, plates, sound, gates, the open picks |
 
 Plus [`patterns/`](patterns/): the script pattern kit, phase guides P1–P6,
 the sentence strength check, and the full video map.
