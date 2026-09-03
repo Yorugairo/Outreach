@@ -261,7 +261,7 @@ proof earns the page.
 - Evidence: doc 29 §9.28 (surfaces table; rules A1-A3, B1-B4, C1-C6, D1-D4; the census form); CHECK-RESPONSIBILITIES §3g surface choice per window; `build-f/SURFACE-CENSUS.md` covers all 75 rows of `SHOT-TABLE-F.py` (len(W)=75, not 76), each with rule letters and a builder; counts page 8 rows / 6 pages, dock 49, plate-life 4, none 14; PAGE candidates agree with the PRP's three (28c yardstick #13-14, 1845 vs 2026 #41 conditional on the VO claiming the check, memory race #70 pending its series) and add three (#6 divergence layer, #47 the test, #62 the monitor). FINDING: the motion gate reads `evidence-dock.json` / `motion-plan.json` on an older clock than the timeline (divergence dock 26.4 vs 50.4); on the timeline's own scene docks there are 20 stretches > 12s, not 11 - T4 must read the timeline's `scenes[].docks`. Shot rows #53/#54 overlap 5.5s.
 
 ### T1: Prototype - the stitch, in the hyperframes lane
-- Status: pending
+- Status: review (Human Gate 1 pick open; C is the working reference)
 - Owner: parent
 - Depends on: none
 - Write set: `content/video_engine/hyperframes/compositions/ledger-page-v1.html`,
@@ -288,7 +288,7 @@ proof earns the page.
   §9.26.
 - Validate: `cd content/video_engine/hyperframes && npm run check && npm run render -- -c compositions/ledger-page-v1.html`;
   filmstrip present; `grep -E "Math.random|Date.now|performance.now" compositions/ledger-page-v1.html` returns nothing
-- Evidence: pending
+- Evidence: registry adds ink-bleed-reveal / outline-draw / chart-story / whiteboard-ink (pinned 0.7.101); `compositions/ledger-page-v1-{A,B,C}.html` + `ledger-page-v1.html` (=C) generated from one data set; three renders `renders/ledger-page-v1-{A,B,C}.mp4` (artifact validated, 7-13s each, untracked like the lane's other renders); filmstrips `evidence/prototypes/filmstrip-ledger-page-{A,B,C}.jpg` reviewed: roll-out, field, sunflower outline, bars landing on the exact values, source in the cream margin; determinism grep clean. Deviation: `hyperframes check` targets the project index.html only, so validation is the renders themselves. Doc 29 s9.26 carries the candidate note; the pick is the operator's
 
 ### T2: Page spec and validator
 - Status: pending

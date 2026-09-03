@@ -1497,6 +1497,26 @@ safe, no wall clock, no Math.random):**
    resolves into the callout or a circled figure - reserved for the
    payoff, the tell, and the ring token, never decorative.
 
+**Candidates rendered (P35 T1, 2026-09-03) - Human Gate 1 open.** The
+stitch was built in the hyperframes lane from the verbatim registry
+components (`content/video_engine/hyperframes/compositions/ledger-page-v1-{A,B,C}.html`;
+lane-tokened copies of chart-story / outline-draw / ink-bleed-reveal in
+`compositions/components/*-ledger*.html`, whiteboard-ink with a
+14-stroke seeded field in `whiteboard-ink-field.html`). Three candidates,
+one data set (the divergence end values 712.52 / 204.62 / 120.75 / 121.49,
+exact): **A** plain cream page (comparison only); **B** the field
+SCRIBBLED (whiteboard-ink strokes, nib riding, 3.55s); **C** the field
+BLED (ink-bleed-reveal, six blobs merging then contracting, 2.8s) - the
+operator's own sentence, so C is the working reference until the pick.
+Filmstrips at 0.5s: `steel-and-paper/evidence/prototypes/filmstrip-ledger-page-{A,B,C}.jpg`;
+renders under `hyperframes/renders/ledger-page-v1-{A,B,C}.mp4` (untracked).
+Found while building: a mounted sub-composition does not inherit the
+host's CSS variables, so the six tokens are set on each component copy's
+`#root`; a sub-composition ends on its own intrinsic clock, so the page
+composition ends with the chart's hold rather than outliving it. The
+pick, the font (Human Gate 2) and the roll speed are recorded here when
+the operator rules.
+
 **Variants (same page, same ink):** line, bars, bar race (ranked bars
 overtaking across periods, axis rescaling, accent handing to the leader),
 decline (a line drawing downward while its value counts down), progress.
