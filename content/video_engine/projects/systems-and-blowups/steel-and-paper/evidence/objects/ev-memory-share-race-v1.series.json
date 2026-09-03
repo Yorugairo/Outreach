@@ -1,0 +1,14 @@
+{
+  "title": "Memory-maker share of DRAM revenue",
+  "sub": "Samsung, SK hynix, Micron - by quarter",
+  "status": "SOURCES-TO-VERIFY",
+  "placeholder": true,
+  "src": "SOURCES-TO-VERIFY: TrendForce quarterly DRAM revenue share by vendor (Samsung / SK hynix / Micron), each quarter listed below, cited by report title and date. Not sourced in this repo as of 2026-09-02: the only figure on file is one quarter (Q2 2026: Samsung 39%, SK hynix 26%, Micron 25%) registered from a generated slide in content/video_engine/projects/systems-and-blowups/registration/registration.memory-supercycle.json (slide memory-supercycle-s04), which is a slide registration, not a primary source, and one period cannot race. The values below are PLACEHOLDERS (placeholder: true) and ledger_page.validate refuses to build a page from them.",
+  "periods": ["Q1 2025", "Q2 2025", "Q3 2025", "Q4 2025", "Q1 2026", "Q2 2026"],
+  "series": [
+    {"name": "Samsung", "color": "cobalt", "values": [0, 0, 0, 0, 0, 0]},
+    {"name": "SK hynix", "color": "crimson", "values": [0, 0, 0, 0, 0, 0]},
+    {"name": "Micron", "color": "teal", "values": [0, 0, 0, 0, 0, 0]}
+  ],
+  "notes": "Replace the zero placeholders with the sourced quarterly shares, delete 'placeholder' and set status to 'sourced' with the src line naming the TrendForce report(s). Until then the race renders only from synthetic proof data marked 'not for air'."
+}

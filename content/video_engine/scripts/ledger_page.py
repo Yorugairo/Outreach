@@ -145,6 +145,8 @@ def validate(series: dict, variant: str) -> list[str]:
         errors.append("missing title")
     if not _text(series.get("src")):
         errors.append("missing source line: 'src' is required and is written on the page (s9.26)")
+    if series.get("placeholder") is True:   # AGENTS.md: figures are never fabricated - a placeholder never renders
+        errors.append("placeholder figures: 'placeholder': true marks values still under SOURCES-TO-VERIFY; a page never renders them")
     has_race = any(r["values"] for r in race_rows(series))
     if not (_bars(series) or dense_series(series) or has_race):
         return errors + [next((v for k, v in UNCHARTABLE.items() if k in series), UNCHARTABLE_DEFAULT)]

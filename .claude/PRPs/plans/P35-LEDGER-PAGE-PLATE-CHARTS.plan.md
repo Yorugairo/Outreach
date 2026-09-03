@@ -337,7 +337,7 @@ proof earns the page.
 - Evidence: `pytest test_gate_motion_density.py test_motion_gate_wiring.py -q` 22 passed; shot row `ledger:<series>:<variant>[:<emphasize>[:<quiet_zone>]]` -> `world_for_plate` emits `{kind: ledger, page: <spec>}` (no asset), timeline gains `species`; gate clock FIXED: dock events from the timeline's own scenes[].docks incl. badge reveals (`dock_source: timeline`), evidence-dock.json only as fallback; page beats (0/0.6/3.4/4.2/7.2s) count as events, page start as evidence entry, hold still; ep1 after the fix: M01 8 stretches 123s=15% worst 17.7s at 2:24 (was 11/23%/34.6s), M03 54s from 2:52 (was 197s), still 4 FAIL; synthetic 90s window with a page at 12-31s passes M01/M03/M05, without it FAILs; GATES-MOTION.md regenerated. Plate-life events still uncounted (T6)
 
 ### T5: The other builders - story, race, decline, combo - each ported from its own component
-- Status: pending
+- Status: review (Human Gate 3: the race on a page; the memory-share race waits on sourced TrendForce quarters)
 - Owner: implementation_luna (→ `general-purpose`), one builder per dispatch
 - Depends on: T3, T4; Human Gate 3 (race)
 - Write set: `docs/content-video-engine/samples/scene-evidence-player.template.html` (one builder function per treatment, keyed by the row's `builder`; no changes to `dense-line`),
@@ -353,7 +353,7 @@ proof earns the page.
   data; the operator confirms it reads as a ledger. Race and story are
   distinct builders; nothing is folded into `dense-line`.
 - Validate: `python -m pytest content/video_engine/tests/test_ledger_page.py -q`; range render of the race
-- Evidence: pending
+- Evidence: template species block gains buildLedgerRace / buildLedgerDecline / buildLedgerCombo, each from its own component's envelope (race: rank keyframes, overtakes as swaps, axis glides, accent on the leader, `st.sync` rank-settled times; decline: draw-down + count-down + darkening ground, endpoint locks on the exact string; combo: bars then the line, NYT direct labels with field-coloured halos); dense-line/story untouched; `pytest test_ledger_page.py -q` 23 passed; determinism hashes equal at three t's; proof `build-f/ledger-builders-proof.html`. Race data: `ev-memory-share-race-v1.series.json` is SOURCES-TO-VERIFY with `placeholder: true` (no multi-quarter DRAM vendor share exists in the repo) and the validator refuses placeholders, so it can never render; the proof race uses synthetic data marked not for air
 
 ### T6: The motion menu, and stop-motion plate life as its first species
 - Status: pending

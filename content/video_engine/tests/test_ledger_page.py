@@ -226,3 +226,72 @@ def test_build_spec_is_deterministic_and_never_mutates_the_input():
     assert series == before
     with pytest.raises(ValueError):
         L.build_spec(series, "race", quiet_zone="middle")
+
+
+# --- T5: the specs the race / decline / combo builders consume ------------------
+
+RACE_FILE = OBJECTS / "ev-memory-share-race-v1.series.json"
+SMH = OBJECTS / "ev-smh-drawdown-v3.series.json"
+
+
+def test_placeholder_figures_never_build_a_page(tmp_path, capsys):
+    series = {**_race(), "status": "SOURCES-TO-VERIFY", "placeholder": True}
+    errors = L.validate(series, "race")
+    assert any("placeholder" in e and "SOURCES-TO-VERIFY" in e for e in errors), errors
+    path = _write(tmp_path, "ph.series.json", series)
+    assert L.main([str(path), "--variant", "race"]) == L.EXIT_INVALID
+    assert "placeholder" in capsys.readouterr().err
+    assert L.validate({**series, "placeholder": False}, "race") == []   # only the literal true refuses
+
+
+@pytest.mark.skipif(not RACE_FILE.exists(), reason="race series not on disk")
+def test_memory_share_race_file_is_flagged_until_sourced():
+    series = L.load_series(RACE_FILE)
+    assert series["status"] == "SOURCES-TO-VERIFY" and series["placeholder"] is True
+    assert "TrendForce" in series["src"] and len(series["periods"]) >= L.RACE_MIN_PERIODS
+    assert any("placeholder" in e for e in L.validate(series, "race"))
+
+
+def test_race_spec_rows_align_with_periods_for_the_builder():
+    spec = L.build_spec(_race(), "race")
+    n = len(spec["periods"])
+    assert spec["builder"] == "race" and n == 4
+    for values, strings in zip(spec["values"], spec["value_strings"]):
+        assert len(values) == n == len(strings)
+        assert all(isinstance(v, float) for v in values)
+    assert spec["emphasize"] is None                       # the leader is decided by the data, per frame
+    assert spec["labels"] == ["hynix", "Micron", "Samsung"]
+
+
+@pytest.mark.skipif(not SMH.exists(), reason="SMH drawdown series not on disk")
+def test_smh_drawdown_is_a_decline_with_verbatim_endpoints():
+    series = L.load_series(SMH)
+    assert L.validate(series, "decline") == []
+    spec = L.build_spec(series, "decline")
+    assert spec["builder"] == "decline"
+    pts = series["series"][0]["pts"]
+    assert spec["start"] == {"label": pts[0][0], "value": float(pts[0][1]), "value_string": pts[0][1]}
+    assert spec["end"] == {"label": pts[-1][0], "value": float(pts[-1][1]), "value_string": pts[-1][1]}
+    assert len(spec["values"]) == len(pts) and min(spec["values"]) < 0
+
+
+def test_decline_from_bars_keeps_the_tokens_the_file_wrote(tmp_path):
+    path = tmp_path / "d.series.json"
+    path.write_text('{"title":"t","src":"s","bars":[{"label":"peak","value":88.0,"color":"crimson"},'
+                    '{"label":"mid","value":61.50,"color":"crimson"},{"label":"floor","value":28,"color":"crimson"}]}',
+                    encoding="utf-8")
+    spec = L.build_spec(L.load_series(path), "decline")
+    assert spec["start"]["value_string"] == "88.0" and spec["end"]["value_string"] == "28"
+    assert spec["value_strings"] == ["88.0", "61.50", "28"] and spec["values"] == [88.0, 61.5, 28.0]
+
+
+def test_combo_spec_carries_bars_and_the_line_tokens_for_the_builder(tmp_path):
+    path = tmp_path / "c.series.json"
+    path.write_text('{"title":"t","src":"s","ylabel":"$bn",'
+                    '"bars":[{"label":"Q1","value":8.0,"color":"deemph"},{"label":"Q2","value":12.5,"color":"deemph"}],'
+                    '"series":[{"name":"margin","color":"cobalt","pts":[[1,2.10],[2,3.4]]}]}', encoding="utf-8")
+    spec = L.build_spec(L.load_series(path), "bars", emphasize=5)
+    assert spec["builder"] == "combo" and spec["emphasize"] == 1        # clamped to the last bar
+    assert spec["value_strings"] == ["8.0", "12.5"] and spec["labels"] == ["Q1", "Q2"]
+    assert spec["series"][0]["pts"] == [[1, "2.10"], [2, "3.4"]]         # the y tokens verbatim (ints stay ints)
+    assert spec["axes"] == {"ylabel": "$bn"}
