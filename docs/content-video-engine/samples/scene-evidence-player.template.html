@@ -1253,7 +1253,13 @@
   /* E22 addendum 2: unravel -> half savor -> the field (SOAK: ink absorbed by the paper, or
      SCRIBBLE: strokes accumulating with a nib - the operator's original idea; page.field picks)
      -> outline drawn on the field's own edge -> ink writes -> the build. */
-  const LP = { ROLL: 0.7, SAVOR: 0.8, FIELD: 2.4, OUTLINE: 0.8, INK: 2.0, BUILD: 3.0, SEEPS: 9, STROKES: 14, KB_MAX: 0.03 };
+  /* E22 addendum 6 (operator, 2026-09-03): "draw the line -> punch/zoom in (we have the line we drew + the deckle we
+     don't even care about as room) -> draw the chart -> perform the focus action on the data we want to call out."
+     PUNCH: the page zooms about the board's centre by PUNCH_SCALE, cropping the line and the deckle margin out;
+     the build runs on the punched page; FOCUS: the page's declared focus species fires at the build's end. */
+  const LP = { ROLL: 0.7, SAVOR: 0.8, FIELD: 2.4, OUTLINE: 0.8, PUNCH: 0.5, INK: 2.0, BUILD: 3.0, SEEPS: 9, STROKES: 14, KB_MAX: 0.03,
+               PUNCH_SCALE: 1.16, FOCUS_DUR: 3.0 };
+  const LP_FOCUS_AT = LP.ROLL + LP.SAVOR + LP.FIELD + LP.OUTLINE + LP.PUNCH + LP.BUILD;   /* 8.2s: the focus action fires here */
   /* pure hash of (seed, index, salt) -> [0,1): the only source of jitter (handwriting-text rule 2) */
   const lpHash = (seed, i, salt) => {
     let h = (seed ^ Math.imul(i + 1, 0x9E3779B1) ^ Math.imul(salt + 1, 0x85EBCA77)) >>> 0;
@@ -1291,6 +1297,7 @@
     /* the BOARD box: measured from the inked plate when one exists (page.board, fractions of the frame), else the
        s9.26 default 6% / 8% / 88% x 84%; the field, the outline and the chart all take the same box so the line is tight */
     const bd = pg.board || { x: 0.06, y: 0.08, w: 0.88, h: 0.84 };
+    const boardCentre = { x: (bd.x + bd.w / 2) * 100, y: (bd.y + bd.h / 2) * 100 };
     const boxCss = (el) => { el.style.left = (bd.x * 100).toFixed(2) + "%"; el.style.top = (bd.y * 100).toFixed(2) + "%"; el.style.width = (bd.w * 100).toFixed(2) + "%"; el.style.height = (bd.h * 100).toFixed(2) + "%"; };
     const grain = lpEl("svg", "lp-grain", page, { width: "100%", height: "100%" });
     grain.innerHTML = '<filter id="lpg' + seed + '"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="7" stitchTiles="stitch"/>'
@@ -1352,7 +1359,7 @@
     const chart = lpEl("svg", "lp-chart", page, { viewBox: "0 0 1000 560" });
     chart.style.width = ((qz ? 0.57 : 0.86) * bd.w * 100).toFixed(2) + "%"; chart.style.height = (0.78 * bd.h * 100).toFixed(2) + "%";
     chart.style.left = ((bd.x + (qz === "left" ? 0.43 : 0.05) * bd.w) * 100).toFixed(2) + "%"; chart.style.top = ((bd.y + 0.14 * bd.h) * 100).toFixed(2) + "%";
-    const st = { root, page, edge, blobs, strokes, nib, rect, goo, outline, edgePath, glyphs, chart, fieldPlate, kind: pg.builder || "story",
+    const st = { root, page, edge, blobs, strokes, nib, rect, goo, outline, edgePath, glyphs, chart, fieldPlate, boardCentre, kind: pg.builder || "story",
                  bars: [], paths: [], labels: [], callout: null, cval: null, vals: pg.values || [],
                  vstr: pg.value_strings || [], emph: pg.emphasize | 0 };
     /* one builder per treatment (s9.28; P35 Builder Architecture) - each harvested from its own component, never merged */
@@ -1685,7 +1692,7 @@
     const tr = t - scene.span[0];
     /* beat 1: roll-out */
     const rk = expoOut(clamp01(tr / LP.ROLL));
-    st.page.style.transform = "translateX(" + ((rk - 1) * 100).toFixed(2) + "%)";
+    /* (the roll-out translate is composed with the punch below) */
     st.edge.style.opacity = (1 - clamp01((tr - LP.ROLL) / 0.25)).toFixed(2);
     /* beat 2: the half savor - the textured page holds, empty (E22 addendum 2) */
     /* beat 3: the field. SOAK: seeps spread and saturate, never contract - paper taking ink;
@@ -1717,8 +1724,13 @@
     if (st.edgePath) { const L = +st.edgePath.dataset.len; st.edgePath.setAttribute("stroke-dashoffset", (L * (1 - expoOut(clamp01(t3 / LP.OUTLINE)))).toFixed(4)); }
     const n = Math.max(1, st.glyphs.length), per = LP.INK / n;
     st.glyphs.forEach((g, j) => g.style.setProperty("--w", clamp01((t3 - j * per) / (per * 1.6)).toFixed(3)));
-    /* beat 4: the build - crisp, landing on the exact strings */
-    const c = clamp01((t3 - LP.OUTLINE) / (st.buildDur || LP.BUILD));   /* race/decline/combo declare their own envelope */
+    /* beat 5: PUNCH IN on the board - the line and the deckle margin are the room we spend (E22 addendum 6) */
+    const pk = expoOut(clamp01((t3 - LP.OUTLINE) / LP.PUNCH));
+    const bdc = st.boardCentre || { x: 50, y: 50 };
+    st.page.style.transformOrigin = bdc.x.toFixed(2) + "% " + bdc.y.toFixed(2) + "%";
+    st.page.style.transform = "translateX(" + ((rk - 1) * 100).toFixed(2) + "%) scale(" + (1 + (LP.PUNCH_SCALE - 1) * pk).toFixed(4) + ")";
+    /* beat 6: the build - crisp, landing on the exact strings - on the punched page */
+    const c = clamp01((t3 - LP.OUTLINE - LP.PUNCH) / (st.buildDur || LP.BUILD));   /* race/decline/combo declare their own envelope */
     st.chart.style.opacity = c > 0 ? 1 : 0;   /* axes and grid belong to the build, not the bleed */
     st.bars.forEach((bb, i) => {
       const k = expoOut(clamp01((c - i * 0.1) / 0.55));
@@ -1820,10 +1832,19 @@
     return pts.map(([x, yy], i) => (i ? "L" : "M") + x.toFixed(1) + " " + yy.toFixed(1)).join(" ");
   };
   const drawOn = (path, k) => { const len = path.getTotalLength ? path.getTotalLength() : 1000; path.setAttribute("stroke-dasharray", len); path.setAttribute("stroke-dashoffset", (len * (1 - spEase(k))).toFixed(1)); };
+  /* a ledger page's declared focus (page.focus = {kind, target?, label?}) is an implicit species at LP_FOCUS_AT;
+     the target defaults to the emphasized datum (E22 addendum 6) */
+  const pageFocus = (sc) => {
+    const pg = sc.world && sc.world.kind === "ledger" ? sc.world.page : null;
+    if (!pg || !pg.focus) return [];
+    const f = pg.focus;
+    return [{ kind: f.kind || "callout", at: sc.span[0] + LP_FOCUS_AT, dur: f.dur || LP.FOCUS_DUR, label: f.label,
+              target: f.target || { kind: "datum", index: pg.emphasize | 0 }, target2: f.target2 }];
+  };
   const paintSpecies = (sc, t) => {
     spSvg.replaceChildren(); plife.replaceChildren();
     plife.style.transformOrigin = "960px 540px"; plife.style.transform = camCss(camXf(sc, t));   /* plate life lives in the world: the camera carries it */
-    (sc.species || []).forEach((sp, si) => {
+    [...(sc.species || []), ...pageFocus(sc)].forEach((sp, si) => {
       const dur = sp.dur || 1, k = (t - sp.at) / Math.max(0.001, dur);
       if (k < 0 || k > 1) return;
       const seed = 0x51EC1E5 ^ ((sc.scene_id || "").length * 131 + si);
