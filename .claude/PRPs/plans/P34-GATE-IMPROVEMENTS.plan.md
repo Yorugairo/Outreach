@@ -98,12 +98,16 @@ Acceptance (all observable):
 
 ## Human Gates
 
-1. **A3 anchor** (blocks T2): P2.md and MAP §4 say ~10% of runtime; the
-   audit hard-codes 180s (`REHOOK_ANCHORS`, audit_script_doctrine.py:92,
-   with the comment at :80-84 explaining the fit). Recommendation: 10% of
-   runtime, computed via `kit_spec`, because the phase guides are the
-   generation contract and 180s lands past P2's end below ~16 min. The
-   operator rules; the ruling is written to OPERATOR-RULINGS.
+1. **A3 anchor** - DECIDED 2026-09-02: 10% of runtime ("A3 at 10% of
+   runtime is correct"). The audit's 180s hard-code goes; `kit_spec`
+   computes it. Operator's rider: "then we still have to set the next
+   microhook and the cycle continues, but the way our structure is
+   written that should already be self-healing regardless of when the
+   hook lands." True in doctrine (the clock repeats per beat) and in the
+   opening gate (G36, no >60s without a cycle beat, across the opening
+   window); NOT yet mechanical past the opening - the per-unit rehook is a
+   by-hand roster row. T2 therefore also extends the cycle check to the
+   whole runtime.
 2. **Caption stage mode** (blocks keeping T5): a change to how a reviewed
    shot looks is a proposal (REMOTION-UI-HARVEST lesson). T5 renders the
    0:57-1:11 window twice from the same timeline and the operator picks.
@@ -185,19 +189,25 @@ Acceptance (all observable):
   (expect exit=1 and the report on disk)
 - Evidence: pending
 
-### T2: A3 anchor follows the docs
+### T2: A3 at 10% of runtime, and the cycle check runs the whole video
 - Status: pending
 - Owner: junior_developer (→ `general-purpose`)
-- Depends on: Human Gate 1
+- Depends on: none (Human Gate 1 decided)
 - Write set: `content/video_engine/scripts/audit_script_doctrine.py`
   (REHOOK_ANCHORS / message), `content/video_engine/scripts/kit_spec.py`
-  (A3 helper), `content/video_engine/scripts/gate_opening_structure.py`
-  (G25 source line), `content/video_engine/tests/test_audit_a3_anchor.py`,
-  `docs/portable/OPERATOR-RULINGS.md` (ruling entry),
+  (A3 helper; unit geometry helper), `content/video_engine/scripts/gate_opening_structure.py`
+  (G25 source line; G36 gains `--cycle-s` defaulting to the full runtime;
+  new G44 per-unit rehook: every P3/P5 unit window per `kit_spec.unit_count`
+  carries at least one rehook-family line or `[rehook]`), `content/video_engine/tests/test_audit_a3_anchor.py`,
+  `content/video_engine/tests/test_gate_opening_structure.py`,
+  `docs/portable/OPERATOR-RULINGS.md` (ruling entry: A3 10%; cycle whole-video),
   `docs/content-video-engine/patterns/phase-guides/P2.md` (QC note)
 - Acceptance: audit and gate compute the same A3 target for the same
-  runtime; the gate's G25 source no longer says "audit hard-codes 3:00";
-  the ruling is recorded with its reason.
+  runtime (1:20 at 13:26; 3:00 at 30:00); the gate's G25 source no longer
+  says "audit hard-codes 3:00"; G36 reports the longest cycle gap over
+  the whole runtime and FAILs above 60s anywhere; G44 FAILs a unit with
+  no rehook; ep1 red baseline gains whatever these find past 5:00 (report
+  the numbers); the conforming synthetic still passes.
 - Validate: `python -m pytest content/video_engine/tests/test_audit_a3_anchor.py content/video_engine/tests/test_gate_opening_structure.py -q`
 - Evidence: pending
 
