@@ -1627,7 +1627,10 @@ him and he never covers the emphasized datum; (c) the host appears where
 the narrator speaks as himself - the opening (confirming the person behind
 the packaging), the first-person claims ("I pulled it myself", "I built a
 monitor"), the trim on camera, the CTA - four or five beats an episode,
-not every plate; (d) both page states derive from ONE generation per pose:
+not every plate; (c2) the host and the STAGE caption never share the
+quiet zone - when a host is in the plate the stage caption takes the other
+side or demotes to the anchor, and the focus action never lands on him;
+(d) both page states derive from ONE generation per pose:
 the inked-board plate is the delivery, the blank state is made
 procedurally by returning the board region to cream paper, so the host is
 identical across the beats. Claim `steel-and-paper-host-board-v1`.
