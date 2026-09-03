@@ -78,54 +78,103 @@ export class FlowCdpDriver {
     return this.flowPage;
   }
 
-  async configureSettings({ ratio = null, duration = null, resolution = null } = {}) {
+  // Click a control INSIDE the settings panel by its exact visible label. Flow prefixes
+  // labels with an icon ligature word ("videocam Video", "crop_16_9 16:9"), so the
+  // pattern allows one leading token. It never matches by substring: the left nav's
+  // "View videos" contains "Video" and clicking it closes the panel (seen live).
+  async clickExact(label, { required = true } = {}) {
+    const page = this.flowPage;
+    const esc = label.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const re = new RegExp(`^(?:[a-z_0-9]+\\s+)?${esc}$`, 'i');
+    const candidates = [
+      page.getByRole('button', { name: re }),
+      page.getByRole('tab', { name: re }),
+      page.getByRole('radio', { name: re }),
+      page.getByRole('option', { name: re }),
+      page.getByRole('menuitem', { name: re }),
+      page.getByText(re, { exact: true }),
+    ];
+    for (const loc of candidates) {
+      if (await loc.count() > 0) {
+        await loc.first().click();
+        await page.waitForTimeout(350);
+        return true;
+      }
+    }
+    if (required) throw new Error(`Flow settings control not found: "${label}"`);
+    return false;
+  }
+
+  // The composer pill is the one button whose text ends in the output count ("... x2").
+  // It is unique, unlike anything containing "Video".
+  settingsPill() {
+    return this.flowPage.locator('button').filter({ hasText: /x[1-4]\s*$/ }).last();
+  }
+
+  async readGenerationState() {
+    const page = this.flowPage;
+    const pill = this.settingsPill();
+    const pillText = (await pill.count()) ? (await pill.innerText()).replace(/\s+/g, ' ').trim() : '';
+    const creditsLoc = page.getByText(/Generating will use/i).first();
+    const creditsText = (await creditsLoc.count()) ? (await creditsLoc.innerText()).replace(/\s+/g, ' ').trim() : '';
+    const m = creditsText.match(/(\d+)\s*credits?/i);
+    return { pillText, creditsText, credits: m ? parseInt(m[1], 10) : null };
+  }
+
+  async configureSettings({
+    mode = 'video', submode = 'ingredients', model = null,
+    ratio = null, duration = null, resolution = null, count = 1, maxCredits = null,
+  } = {}) {
     const page = this.flowPage;
     if (!page) throw new Error('No active Flow page');
 
-    // Only open settings modal if at least one explicit setting was specified
-    if (!ratio && !duration && !resolution) {
-      return; // Preserve existing project canvas settings
+    const pill = this.settingsPill();
+    if (await pill.count() === 0) throw new Error('Flow settings pill not found (composer button ending in x1..x4).');
+    await pill.click();
+    await page.waitForTimeout(700);
+
+    // Mode first - it changes which controls exist below it.
+    await this.clickExact(mode === 'image' ? 'Image' : 'Video');
+    if (mode !== 'image' && submode) await this.clickExact(submode === 'frames' ? 'Frames' : 'Ingredients', { required: false });
+    if (ratio === '9:16' || ratio === '16:9') await this.clickExact(ratio);
+
+    if (model) {
+      // The model dropdown is the panel button carrying the dropdown glyph; open it, pick by exact name.
+      const dd = page.locator('button').filter({ hasText: /arrow_drop_down/ }).first();
+      if (await dd.count() > 0) { await dd.click(); await page.waitForTimeout(500); }
+      await this.clickExact(model);
+    }
+    if (resolution) await this.clickExact(resolution);
+    if (duration) await this.clickExact(`${duration}s`);
+    if (count) await this.clickExact(`x${count}`);
+
+    // READ BACK before closing: this is the gate the first live run lacked.
+    const state = await this.readGenerationState();
+    const problems = [];
+    if (model && !state.pillText.toLowerCase().includes(model.toLowerCase().split(' ')[0])) {
+      problems.push(`pill does not show model "${model}" (pill: "${state.pillText}")`);
+    }
+    if (mode !== 'image' && /banana|imagen/i.test(state.pillText)) {
+      problems.push(`pill shows an IMAGE model in video mode (pill: "${state.pillText}")`);
+    }
+    if (mode !== 'image' && state.credits === 0) {
+      problems.push('credits read 0 - that is the Image-mode signature, Flow is not in Video mode');
+    }
+    if (state.credits === null) {
+      problems.push(`could not read the credits line (saw: "${state.creditsText}")`);
+    }
+    if (maxCredits != null && state.credits != null && state.credits > maxCredits) {
+      problems.push(`scene would cost ${state.credits} credits, over its maxCredits ${maxCredits}`);
+    }
+    if (problems.length) {
+      await page.keyboard.press('Escape').catch(() => {});
+      throw new Error(`REFUSED to submit - generation state not as declared:\n  - ${problems.join('\n  - ')}`);
     }
 
-    // Click settings pill (e.g. "Video · 720p · 6s")
-    const pill = page.locator("button:has-text('Video'), div[role='button']:has-text('Video'), button:has-text('720p'), button:has-text('1080p')").last();
-    if (await pill.count() > 0) {
-      await pill.click();
-      await page.waitForTimeout(600);
-
-      // Select Ratio ONLY if explicitly requested ('9:16' or '16:9')
-      if (ratio === '9:16' || ratio === '16:9') {
-        const ratioTarget = ratio;
-        const ratioBtn = page.locator(`button:has-text('${ratioTarget}'), div[role='button']:has-text('${ratioTarget}')`).first();
-        if (await ratioBtn.count() > 0) {
-          await ratioBtn.click();
-          await page.waitForTimeout(300);
-        }
-      }
-
-      // Select Duration only if specified (e.g. 4, 6, 8)
-      if (duration) {
-        const durTarget = `${duration}s`;
-        const durBtn = page.locator(`button:has-text('${durTarget}'), div[role='button']:has-text('${durTarget}')`).first();
-        if (await durBtn.count() > 0) {
-          await durBtn.click();
-          await page.waitForTimeout(200);
-        }
-      }
-
-      // Select Resolution only if specified ('720p' or '1080p')
-      if (resolution) {
-        const resBtn = page.locator(`button:has-text('${resolution}')`).first();
-        if (await resBtn.count() > 0) {
-          await resBtn.click();
-          await page.waitForTimeout(200);
-        }
-      }
-
-      // Close settings modal cleanly
-      await page.keyboard.press('Escape');
-      await page.waitForTimeout(400);
-    }
+    await page.keyboard.press('Escape');
+    await page.waitForTimeout(400);
+    console.log(`[FlowCdpDriver] settings verified: ${state.pillText} | ${state.creditsText}`);
+    return state;
   }
 
   async uploadReferences(filePaths = []) {
@@ -179,7 +228,7 @@ export class FlowCdpDriver {
     await page.waitForTimeout(2000);
   }
 
-  async waitForGenerationAndDownload(rawOutputPath, timeoutMs = 180000) {
+  async waitForGenerationAndDownload(rawOutputPath, timeoutMs = 420000) {
     const page = this.flowPage;
     if (!page) throw new Error('No active Flow page');
 

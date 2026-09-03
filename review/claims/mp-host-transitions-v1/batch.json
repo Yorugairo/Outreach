@@ -1,12 +1,18 @@
 {
-  "_contract": "video-engine MCP -> create_flow_batch. Scenes run in priority order; stop when the day's 50 credits are exhausted. references[0] is the PRIMARY reference (the frame the clip starts on; with reverse:true, the frame it ends on).",
+  "_contract": "video-engine MCP -> create_flow_batch. DAY 1 = the four host transitions only; hooks are batch-hooks.json for day 2. The driver now SETS mode/submode/model/count and READS BACK the credits line before every submit; it refuses on Image mode, a wrong model, or a scene over maxCredits. Flow quoted 24 credits at x2/8s/720p on Omni 1.1 Flash, so x1/6s is the library setting and ~4 clips is a day.",
   "_style": "woodblock-vox-newsprint-v2. The host is a flat graphic silhouette, single ink tone, no facial features. NO text, lettering, numerals, charts, graphs, axes or screens anywhere in frame - a chart in a generated frame is a fabricated figure.",
+  "mode": "video",
+  "submode": "ingredients",
+  "model": "Omni 1.1 Flash",
+  "count": 1,
+  "maxCredits": 16,
   "ratio": "16:9",
   "outputDir": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\review\\claims\\mp-host-transitions-v1\\clips",
   "scenes": [
     {
       "id": "host-enter-signal-box-dusk",
       "duration": 6,
+      "resolution": "720p",
       "reverse": false,
       "references": [
         "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\finance-episodes-plates-wave-1\\objects\\world-signal-box-dusk-v1.png",
@@ -17,6 +23,7 @@
     {
       "id": "host-enter-korea-port",
       "duration": 6,
+      "resolution": "720p",
       "reverse": false,
       "references": [
         "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\finance-episodes-plates-wave-1\\objects\\world-korea-port-v1.png",
@@ -27,6 +34,7 @@
     {
       "id": "host-enter-memory-fab-floor",
       "duration": 6,
+      "resolution": "720p",
       "reverse": false,
       "references": [
         "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\finance-episodes-plates-wave-1\\objects\\world-memory-fab-floor-v1.png",
@@ -37,39 +45,13 @@
     {
       "id": "host-enter-seoul-fab-skyline",
       "duration": 6,
+      "resolution": "720p",
       "reverse": false,
       "references": [
         "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\finance-episodes-plates-wave-1\\objects\\world-seoul-fab-skyline-v1.png",
         "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\assets\\generated\\cutouts\\actor-host-arms-crossed-v1.png"
       ],
       "prompt": "Woodblock newsprint illustration, an industrial skyline at dawn, the exact scene of the first reference held as a locked camera. A flat black graphic silhouette of a man - the second reference, single tone, no face - walks in from frame right in a calm lateral stride, stops at right-third, and settles with arms crossed, looking out at the skyline. Stylised, minimal leg articulation, ink-print texture, grain constant. Background static. No text, no lettering, no numerals, no signage on the buildings."
-    },
-    {
-      "id": "hook-signal-box-push-in",
-      "duration": 8,
-      "reverse": true,
-      "references": [
-        "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\finance-episodes-plates-wave-1\\objects\\world-signal-box-dusk-v1.png"
-      ],
-      "prompt": "Woodblock newsprint illustration, dusk over a railway signal box, the exact scene of the reference. Slow steady camera push-in toward the signal box across the rails, dusk light deepening, ink-print texture, grain constant, no people. Ends framed exactly on the reference composition. No text, no lettering, no numerals, no signs, no lamps with readable faces."
-    },
-    {
-      "id": "hook-signal-box-rails-glint",
-      "duration": 8,
-      "reverse": true,
-      "references": [
-        "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\finance-episodes-plates-wave-1\\objects\\world-signal-box-dusk-v1.png"
-      ],
-      "prompt": "Woodblock newsprint illustration, dusk over a railway signal box, the exact scene of the reference held as a locked camera. The only motion: a slow band of last light travelling along the two rails toward the signal box, catching the steel, then fading; the signal box lamp warms. Ink-print texture, grain constant, no people. Ends exactly on the reference composition. No text, no lettering, no numerals, no signs."
-    },
-    {
-      "id": "hook-signal-box-lateral-dolly",
-      "duration": 8,
-      "reverse": true,
-      "references": [
-        "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\finance-episodes-plates-wave-1\\objects\\world-signal-box-dusk-v1.png"
-      ],
-      "prompt": "Woodblock newsprint illustration, dusk over a railway signal box, the exact scene of the reference. Slow lateral dolly from left to right along the rails with gentle parallax between the near rails and the far signal box, dusk sky still, ink-print texture, grain constant, no people. Ends framed exactly on the reference composition. No text, no lettering, no numerals, no signs."
     }
   ]
 }

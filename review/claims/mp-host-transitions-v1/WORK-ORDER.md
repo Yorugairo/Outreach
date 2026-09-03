@@ -52,11 +52,26 @@ Never write into these directories.
 **A world that has no approved plate gets no transition.** A new world is a plate
 claim first, then a transition. Do not generate a world inside this claim.
 
-## Stage A — Generate (priority order, stop at credit exhaustion)
+## Stage A — Generate (two days, priority order)
 
-Call `create_flow_batch` with `batch.json` verbatim. Scenes are ordered by value:
-four host entrances, then three hooks. If credits run out mid-batch, deliver what
-completed and record where it stopped — that is a result, not a failure.
+**What the first live run taught (2026-09-03).** The driver submitted to Nano Banana 2
+in Image mode because it never selected a mode and matched controls on the bare word
+"Video" — which also matches the left nav's "View videos". Seven motion prompts became
+stills (cost: 0 credits). The driver now SETS mode / sub-mode / model / count, reads
+back the composer pill and the "Generating will use N credits" line, and REFUSES to
+submit on Image mode, a wrong model, or a scene over `maxCredits`. Flow quoted **24
+credits at x2 / 8s / 720p on Omni 1.1 Flash**, so the library setting is **x1 / 6s**
+and a day is roughly four clips, not seven.
+
+- **Day 1 — `batch.json`:** the four host entrances, x1, 6s, 720p, Omni 1.1 Flash,
+  `maxCredits: 16` each.
+- **Day 2 — `batch-hooks.json`:** the three hook variants, 8s, `reverse: true`. Test
+  ONE variant in `submode: "frames"` with the plate as the END frame first — if Flow's
+  Frames mode takes an end frame, it guarantees the handoff pixel-exact and retires
+  the reversal trick for hooks and exits.
+
+Call `create_flow_batch` with the day's file verbatim. If a scene is REFUSED, the
+error names exactly what the driver saw — deliver that, do not work around it.
 
 Hard rules carried in every prompt, and to be checked on every output:
 

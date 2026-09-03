@@ -1,0 +1,42 @@
+{
+  "_contract": "DAY 2 - the three hook variants for the Steel and Paper re-post. 8s each (E24: the first chart lands spotlit at 8-20s, the hook covers 0-8s). reverse:true so each ENDS pixel-exact on the title world for the handoff. Line-agnostic: no text, no mouth, no figures, so the hook sentence can be rewritten without regenerating. If Frames sub-mode accepts an END frame, prefer it over reversal: submode 'frames' with the plate as the end frame - test on one variant first.",
+  "mode": "video",
+  "submode": "ingredients",
+  "model": "Omni 1.1 Flash",
+  "count": 1,
+  "maxCredits": 20,
+  "ratio": "16:9",
+  "outputDir": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\review\\claims\\mp-host-transitions-v1\\clips",
+  "scenes": [
+    {
+      "id": "hook-signal-box-push-in",
+      "duration": 8,
+      "resolution": "720p",
+      "reverse": true,
+      "references": [
+        "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\finance-episodes-plates-wave-1\\objects\\world-signal-box-dusk-v1.png"
+      ],
+      "prompt": "Woodblock newsprint illustration, dusk over a railway signal box, the exact scene of the reference. Slow steady camera push-in toward the signal box across the rails, dusk light deepening, ink-print texture, grain constant, no people. Ends framed exactly on the reference composition. No text, no lettering, no numerals, no signs, no lamps with readable faces."
+    },
+    {
+      "id": "hook-signal-box-rails-glint",
+      "duration": 8,
+      "resolution": "720p",
+      "reverse": true,
+      "references": [
+        "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\finance-episodes-plates-wave-1\\objects\\world-signal-box-dusk-v1.png"
+      ],
+      "prompt": "Woodblock newsprint illustration, dusk over a railway signal box, the exact scene of the reference held as a locked camera. The only motion: a slow band of last light travelling along the two rails toward the signal box, catching the steel, then fading; the signal box lamp warms. Ink-print texture, grain constant, no people. Ends exactly on the reference composition. No text, no lettering, no numerals, no signs."
+    },
+    {
+      "id": "hook-signal-box-lateral-dolly",
+      "duration": 8,
+      "resolution": "720p",
+      "reverse": true,
+      "references": [
+        "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\finance-episodes-plates-wave-1\\objects\\world-signal-box-dusk-v1.png"
+      ],
+      "prompt": "Woodblock newsprint illustration, dusk over a railway signal box, the exact scene of the reference. Slow lateral dolly from left to right along the rails with gentle parallax between the near rails and the far signal box, dusk sky still, ink-print texture, grain constant, no people. Ends framed exactly on the reference composition. No text, no lettering, no numerals, no signs."
+    }
+  ]
+}

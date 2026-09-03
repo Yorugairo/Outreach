@@ -16,6 +16,11 @@ export class FlowDagEngine {
   async generateVideo({
     prompt,
     references = [],
+    mode = 'video',          // 'video' | 'image' - ALWAYS set; the project's last state is never trusted
+    submode = 'ingredients', // 'ingredients' (reference images) | 'frames' (start/end frame)
+    model = null,            // exact model label as Flow shows it, e.g. 'Omni 1.1 Flash'
+    count = 1,               // outputs per generation x1..x4 - credits scale with it
+    maxCredits = null,       // refuse the scene if Flow quotes more than this
     ratio = null,            // null = preserve canvas ratio; '9:16' or '16:9'
     duration = null,         // e.g. 6
     resolution = null,       // e.g. '720p'
@@ -38,10 +43,8 @@ export class FlowDagEngine {
     // 1. Connect and ensure Flow page
     await this.driver.getFlowPage(projectUrl);
 
-    // 2. Configure Settings if explicitly requested (ratio, duration, resolution)
-    if (ratio || duration || resolution) {
-      await this.driver.configureSettings({ ratio, duration, resolution });
-    }
+    // 2. Set the generation state and READ IT BACK - never preserve whatever the project was left on.
+    const settings = await this.driver.configureSettings({ mode, submode, model, ratio, duration, resolution, count, maxCredits });
 
     // 3. Upload References (up to 3)
     if (references && references.length > 0) {
@@ -107,12 +110,13 @@ export class FlowDagEngine {
     };
   }
 
-  async generateBatch({
-    projectUrl = null,
-    outputDir,
-    scenes = [],
-    ratio = null,
-  }) {
+  async generateBatch(batch = {}) {
+    const {
+      projectUrl = null,
+      outputDir,
+      scenes = [],
+      ratio = null,
+    } = batch;
     if (!Array.isArray(scenes) || scenes.length === 0) {
       throw new Error('scenes must be a non-empty array.');
     }
@@ -140,6 +144,11 @@ export class FlowDagEngine {
       const res = await this.generateVideo({
         prompt: scene.prompt,
         references: refs,
+        mode: scene.mode ?? batch.mode ?? 'video',
+        submode: scene.submode ?? batch.submode ?? 'ingredients',
+        model: scene.model ?? batch.model ?? null,
+        count: scene.count ?? batch.count ?? 1,
+        maxCredits: scene.maxCredits ?? batch.maxCredits ?? null,
         ratio: scene.ratio || ratio || null,
         duration: scene.duration || null,
         resolution: scene.resolution || null,

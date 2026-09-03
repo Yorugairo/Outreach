@@ -74,6 +74,11 @@ const TOOLS = [
             type: 'object',
             properties: {
               id: { type: 'string' },
+            mode: { type: 'string', enum: ['video', 'image'], description: 'Always set. Default video.' },
+            submode: { type: 'string', enum: ['ingredients', 'frames'] },
+            model: { type: 'string', description: "Exact model label as Flow shows it, e.g. 'Omni 1.1 Flash'." },
+            count: { type: 'number', enum: [1, 2, 3, 4], description: 'Outputs per generation; credits scale with it.' },
+            maxCredits: { type: 'number', description: 'Refuse the scene if Flow quotes more than this.' },
               prompt: { type: 'string' },
               references: { type: 'array', items: { type: 'string' } },
               chain_from_previous: {
@@ -92,6 +97,11 @@ const TOOLS = [
           type: 'string',
           description: 'Absolute output directory where all scene videos and metadata will be saved.'
         },
+        mode: { type: 'string', enum: ['video', 'image'], description: 'Batch default. Always set; default video. The driver reads the state back and refuses to submit on mismatch.' },
+        submode: { type: 'string', enum: ['ingredients', 'frames'] },
+        model: { type: 'string', description: "Batch default model label exactly as Flow shows it, e.g. 'Omni 1.1 Flash'." },
+        count: { type: 'number', enum: [1, 2, 3, 4], description: 'Outputs per generation; credits scale with it.' },
+        maxCredits: { type: 'number', description: 'Per-scene credit ceiling read from the "Generating will use N credits" line before submit.' },
         ratio: {
           type: 'string',
           enum: ['9:16', '16:9'],
