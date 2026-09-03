@@ -321,7 +321,7 @@ proof earns the page.
 - Evidence: template gains the LEDGER PAGE species: CSS block after `.world`, `LP` constants + lpHash + buildLedger/buildLedgerBars/buildLedgerLine/paintLedger before `render`, one branch in `paint()` (world.kind == "ledger": no image, Ken Burns capped to a 0.03 push); reviewed wipe and dock code untouched. Synthetic proof `build-f/ledger-species-proof.html` (story bars from ev-trim-proof, dense line from ev-divergence, then a plain plate): all four beats render from t; stage innerHTML sha at t=8.0 identical from two seek orders (0ca203ff04e45b16); callout lands on the exact value string 13.8; inline names de-collide; wipe out of a page clean; utf-8 declared at the top of the template (the served player had no charset - caption dashes decoded as cp1252 before). Font: Inter until Human Gate 2 | Corrected 2026-09-03 on operator review (E22 addenda 2-3): five beats - textured unravel, half savor, FIELD (soak = ink absorbed, or scribble = the original idea, `page.field`), outline on the field's own edge (no gap), ink + build; coffee-stained parchment margin from the first frame. Proof re-verified: hash 47ba741f3b75b2b7 identical from two seek orders; bars seated on the baseline; scribble strokes hidden until their turn
 
 ### T4: Timeline, shot table, and the motion gate know the species
-- Status: pending
+- Status: done
 - Owner: implementation_luna (→ `general-purpose`)
 - Depends on: T3
 - Write set: `content/video_engine/scripts/build_scene_timeline_f.py`,
@@ -334,7 +334,7 @@ proof earns the page.
   phase as events and the start as an evidence entry; ep1 baseline stays
   4 FAIL; a synthetic 30s dock-free window with a page passes M01/M03.
 - Validate: `python -m pytest content/video_engine/tests/test_gate_motion_density.py -q`
-- Evidence: pending
+- Evidence: `pytest test_gate_motion_density.py test_motion_gate_wiring.py -q` 22 passed; shot row `ledger:<series>:<variant>[:<emphasize>[:<quiet_zone>]]` -> `world_for_plate` emits `{kind: ledger, page: <spec>}` (no asset), timeline gains `species`; gate clock FIXED: dock events from the timeline's own scenes[].docks incl. badge reveals (`dock_source: timeline`), evidence-dock.json only as fallback; page beats (0/0.6/3.4/4.2/7.2s) count as events, page start as evidence entry, hold still; ep1 after the fix: M01 8 stretches 123s=15% worst 17.7s at 2:24 (was 11/23%/34.6s), M03 54s from 2:52 (was 197s), still 4 FAIL; synthetic 90s window with a page at 12-31s passes M01/M03/M05, without it FAILs; GATES-MOTION.md regenerated. Plate-life events still uncounted (T6)
 
 ### T5: The other builders - story, race, decline, combo - each ported from its own component
 - Status: pending

@@ -10,6 +10,13 @@ The schema encodes things a flat cue list does not: a scene OWNS its world
 plate and that plate's Ken Burns move; docks carry a semantic SLOT so
 evidence roams while the caption anchor never moves; evidence carries badges
 and a source line.
+
+A shot-table plate id of the form ``ledger:<series-id>:<variant>[:<emphasize>
+[:<quiet_zone>]]`` is a LEDGER PAGE world (doc 29 s9.26 / s9.28, P35 T4): the
+world is DRAWN by the player from ``world.page`` (the ``ledger_page.v1`` spec
+built from ``evidence/objects/<series-id>.series.json``), so the scene carries
+no ``asset_id`` / ``sha256`` and embeds no plate PNG. The compiled timeline
+lists every species present in ``species`` (``["ledger"]`` or ``[]``).
 """
 from __future__ import annotations
 
@@ -29,6 +36,11 @@ TEMPLATE = REPO / "docs/content-video-engine/samples/scene-evidence-player.templ
 sys.path.insert(0, str(Path(__file__).parent))
 import build_render_f as R  # noqa: E402  (asset resolver + doc-29 durations)
 import gate_motion_density as MG  # noqa: E402  (E21 motion gate -> GATES-MOTION.md)
+import ledger_page as LPG  # noqa: E402  (series.json -> ledger_page.v1 spec, doc 29 s9.26)
+
+LEDGER_PREFIX = "ledger:"          # shot-table plate id prefix for a LEDGER PAGE world (s9.28 surface = page)
+LEDGER_ID_PARTS = (3, 5)           # ledger:<series>:<variant>[:<emphasize>[:<quiet_zone>]]
+SPECIES_LEDGER = "ledger"          # timeline["species"] entry; the player keys on world.kind == "ledger"
 
 TIMELINE_NAME = "steel-and-paper.timeline.json"  # the compiled scene_evidence_timeline.v1 the gate reads
 
@@ -39,6 +51,61 @@ KEN = {"scale": 0.04, "x": 14, "y": -10}
 
 def sha(p: Path) -> str:
     return hashlib.sha256(p.read_bytes()).hexdigest()
+
+
+def parse_ledger_id(plate_id: str) -> tuple[str, str, int | None, str]:
+    """``ledger:<series>:<variant>[:<emphasize>[:<quiet_zone>]]`` -> its parts.
+    ValueError names the id; the caller names the row."""
+    parts = plate_id.split(":")
+    lo, hi = LEDGER_ID_PARTS
+    if parts[0] != LEDGER_PREFIX[:-1] or not (lo <= len(parts) <= hi) or not parts[1]:
+        raise ValueError(f"{plate_id!r}: expected ledger:<series-id>:<variant>[:<emphasize>[:<quiet_zone>]]")
+    series_id, variant = parts[1], parts[2]
+    if variant not in LPG.VARIANTS:
+        raise ValueError(f"{plate_id!r}: variant {variant!r} is not one of {'|'.join(LPG.VARIANTS)}")
+    emphasize: int | None = None
+    if len(parts) > 3 and parts[3] != "":
+        if not parts[3].lstrip("-").isdigit():
+            raise ValueError(f"{plate_id!r}: emphasize {parts[3]!r} is not an integer index")
+        emphasize = int(parts[3])
+    quiet_zone = parts[4] if len(parts) > 4 else "right"
+    if quiet_zone not in LPG.QUIET_ZONES:
+        raise ValueError(f"{plate_id!r}: quiet_zone {quiet_zone!r} is not one of {'|'.join(LPG.QUIET_ZONES)}")
+    return series_id, variant, emphasize, quiet_zone
+
+
+def ledger_world(plate_id: str, ken: tuple, ep_dir: Path) -> dict:
+    """The LEDGER PAGE world for a ``ledger:`` plate id: ``world.page`` is the
+    ``ledger_page.v1`` spec from ``<ep_dir>/evidence/objects/<series>.series.json``
+    (doc 29 s9.26: data only from a series.json; s9.28: surface x builder are
+    two axes). No asset_id / sha256 - the player draws the page."""
+    series_id, variant, emphasize, quiet_zone = parse_ledger_id(plate_id)
+    path = Path(ep_dir) / "evidence/objects" / f"{series_id}.series.json"
+    if not path.exists():
+        raise ValueError(f"{plate_id!r}: series file missing: {path}")
+    try:
+        series = LPG.load_series(path)
+    except (OSError, ValueError) as exc:
+        raise ValueError(f"{plate_id!r}: cannot read {path}: {exc}") from exc
+    errors = LPG.validate(series, variant)
+    if errors:
+        raise ValueError(f"{plate_id!r}: {path.name} is not a page ({variant}): " + "; ".join(errors))
+    page = LPG.build_spec(series, variant, emphasize, quiet_zone)
+    return {"kind": SPECIES_LEDGER, "page": page,
+            "ken_burns": {"scale": ken[0], "x": ken[1], "y": ken[2]}}
+
+
+def world_for_plate(plate_id: str, ken: tuple, ep_dir: Path) -> dict:
+    """A scene's ``world`` for a shot-table plate id: a ledger page (``ledger:``
+    prefix) or an image plate resolved by the asset resolver. Pure apart from
+    reading the series / plate file; ValueError on a bad or missing id."""
+    if plate_id.startswith(LEDGER_PREFIX):
+        return ledger_world(plate_id, ken, ep_dir)
+    wp = R.find_asset(plate_id)
+    if wp is None:
+        raise ValueError(f"{plate_id!r}: no plate asset found")
+    return {"asset_id": plate_id, "sha256": sha(wp),
+            "ken_burns": {"scale": ken[0], "x": ken[1], "y": ken[2]}}
 
 
 # Embedding source PNGs verbatim produced a 366 MB player that no browser
@@ -127,8 +194,14 @@ def main() -> int:
         authored_exit = row[5] if len(row) > 5 else None
         # each window runs to the next so the world layer never drops out
         b = plan[i + 1][0] if i + 1 < len(plan) else tl["runtime_s"]
-        wp = R.find_asset(plate)
-        uris[plate] = data_uri(wp, STAGE_W)
+        # a ledger page is drawn, not embedded (doc 29 s9.26); a bad or
+        # missing series is a hard build error naming the row
+        try:
+            world = world_for_plate(plate, ken, EP)
+        except ValueError as exc:
+            raise SystemExit(f"FAIL: shot row {i + 1} ({a}-{b}s): {exc}") from exc
+        if "asset_id" in world:
+            uris[plate] = data_uri(R.find_asset(plate), STAGE_W)
         docks = []
         for aid, slot, enter, exitt in ds:
             d = META.get(aid, {"title": aid, "source": "", "species": "deck",
@@ -191,8 +264,7 @@ def main() -> int:
         scenes.append({
             "scene_id": f"s{i+1:02d}",
             # Ken Burns is AUTHORED per shot in the table, not one constant.
-            "world": {"asset_id": plate, "sha256": sha(wp),
-                      "ken_burns": {"scale": ken[0], "x": ken[1], "y": ken[2]}},
+            "world": world,
             "exit": authored_exit or ("wipe_right" if docks else "cut"),
             "span": [round(a, 2), round(b, 2)],
             "docks": docks,
@@ -240,6 +312,8 @@ def main() -> int:
         "sound": sound_cues,
         "evidence": evidence,
         "scenes": scenes,
+        # every world species present, so downstream (gate, render) can see it
+        "species": [SPECIES_LEDGER] if any(s["world"].get("kind") == SPECIES_LEDGER for s in scenes) else [],
     }
     (BUILD / TIMELINE_NAME).write_text(
         json.dumps(timeline, indent=1), encoding="utf-8")
@@ -255,6 +329,8 @@ def main() -> int:
          "-of", "csv=p=0", str(audio)], capture_output=True, text=True).stdout or 0)
     print(f"scene_evidence_timeline.v1")
     print(f"  scenes      : {len(scenes)}  (one per world plate)")
+    print(f"  species     : {timeline['species'] or 'none'}  "
+          f"({sum(1 for s in scenes if s['world'].get('kind') == SPECIES_LEDGER)} ledger pages)")
     print(f"  docks       : {sum(len(s['docks']) for s in scenes)} across "
           f"{sum(1 for s in scenes if s['docks'])} scenes")
     print(f"  evidence    : {len(evidence)} assets")

@@ -98,7 +98,7 @@ before you grep; read before you claim.
 | `gate_opening_structure.py` | `… <script> --ring <token> --counterparty <name> [--timeline …]` | G01–G06, G09–G11, G13, G15 (with `--ring`), G17–G18, G23, G25, G27 (with `--ring`), G29 (with timeline), G30, G33–G36, G43 (WARN) | G07 stakes · G08 payoff · G12/G32 tricolon · G14 opponent · G16/G31 reflect · G19/G21 loop · G20/G22 new · G24 head-fake · G26 foreshadow · G28 loop-close · G37 archetype · G38 desire · G39 map · G40 catalyst · G41 debate · G42 signpost · anaphora · dip | J01 mechanism · J02 head-fake straight · J03 hook concrete/terminal stress · J04 context-dump · J05 gap opens · J06 irony counterpoint · J07 contextual mapping · J08 phonetic anchor · J09 archetype not stereotype · J10 map not TOC · J11 debate as gap |
 | `enumerate_strength_screens.py` | `… <VO>` → `<script>-SCREENS.md` | *enumerates only*: X1 connective/pronoun openers with predecessors, deixis openers, additive junctions, phonetic-anchor candidates, per-paragraph cadence runs | — | every listed item — the agent verdicts each (ok / FIXED / licensed / carryover) |
 | `run_script_gates.py` (**the runner — stages 3–4**) | `… <script> --pivot "<line>" --ring <t> --counterparty <n> [--timeline …]` | *decides nothing itself*: runs the four rows above in order through their own `main()`, cites each exit + RESULT line, and writes `<script>-GATES.md` (the §5 TOOLS block, every tool's stdout verbatim, `script_hash` of the spoken text, `VERDICT`); exit 1 on any FAIL. `record_*_take.py` refuse a script whose report is missing / stale / FAIL (`--force "<reason>"` overrides, reason into the take manifest) | — | — |
-| `gate_motion_density.py` (**stage 7/8, on the BUILT timeline**) | `… <build-dir>` | M01 no stretch > 12s without a visual event · M02 > 8s (WARN) · M03 evidence enters ≤ 45s apart, every phase · M04 plates ≥ runtime/12s · M05 20s hold ceiling · M06 caption cadence · M07 the opening minute is not the thinnest · M08 stage captions on every still stretch (once the timeline carries `cap_mode`) | — | J01 savor beats keep their picture · J02 stage captions centred/large/explosive (until the template carries the mode) |
+| `gate_motion_density.py` (**stage 7/8, on the BUILT timeline**) | `… <build-dir>` | M01 no stretch > 12s without a visual event (a LEDGER PAGE's build beats — scene start +0 / 0.6 / 3.4 / 4.2 / 7.2s — count; its hold does not, §9.28 C5 / D1) · M02 > 8s (WARN) · M03 evidence enters ≤ 45s apart, every phase (a page START counts as an entry, D2) · M04 plates ≥ runtime/12s (a page is its own plate) · M05 20s hold ceiling · M06 caption cadence · M07 the opening minute is not the thinnest · M08 stage captions on every still stretch (once the timeline carries `cap_mode`). The dock clock is the timeline's own `scenes[].docks`; `evidence-dock.json` only when the timeline carries none (`dock_source` in the stats) | — | J01 savor beats keep their picture · J02 stage captions centred/large/explosive (until the template carries the mode) |
 
 The opening gate covers **P1–P2 only** and says so in its header. Nothing
 mechanical exists for P3–P6 beyond the audit's pivot pin, CTA windows, tell
@@ -156,10 +156,13 @@ beat or a still window) / DOCK (B1 theirs; B2 ours but not turning) /
 PLATE LIFE / NONE, with the rule letters that decided it and the builder
 where a chart is drawn (dense-line / story / race / decline / combo, never
 merged). A NONE longer than 12s cites D4 (stage captions) or is a defect.
-The census form is `build-f/SURFACE-CENSUS.md`; the motion gate counts the
-page and plate-life events once the timeline carries the species rows
-(P35 T4) - until then this row is the agent's, declared by the table and
-verdicted per window (R2).
+The census form is `build-f/SURFACE-CENSUS.md`; the motion gate now counts
+a PAGE's build beats as visual events and its start as an evidence entry
+once the row is a `ledger:<series>:<variant>` id (P35 T4; M01 / M03 on the
+timeline's own dock clock), and reports `ledger_pages` in its stats. Plate
+life is still uncounted, and whether a window SHOULD be a page (A1–A3 vs
+B1–B4) is never the gate's - this row stays the agent's, declared by the
+table and verdicted per window (R2).
 
 ### 3h. Not structural, still the agent's
 Evidence tracing (every figure → dossier row; ledger figures re-checked

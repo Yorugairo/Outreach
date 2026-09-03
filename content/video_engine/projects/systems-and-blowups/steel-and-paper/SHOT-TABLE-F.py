@@ -5,12 +5,28 @@ depicts the beat it sits under; each dock was chosen because that document
 proves the claim being spoken. The density rules are the CHECK on this
 table, never its source.
 
-    (start, end, plate_id, ken_burns(scale, x, y), [docks])
+    (start, end, plate_id, ken_burns(scale, x, y), [docks][, exit])
     dock = (evidence_id, slot, enter, exit)
+    exit = optional authored 6th element ("cut" | "wipe_right"); the default
+           is mechanical - docks -> wipe, bare -> cut (doc 29 Part 6)
+
+A plate_id of the form "ledger:<series-id>:<variant>[:<emphasize>[:<quiet_zone>]]"
+places a LEDGER PAGE world instead of an image plate (doc 29 s9.26 / s9.28,
+P35 T4), e.g. "ledger:ev-trim-proof-v1:bars:7:right": the builder reads
+evidence/objects/<series-id>.series.json, emits world.kind = "ledger" with
+world.page = the ledger_page.v1 spec, and the player DRAWS the page (roll
+0.6s, bleed 2.8s, outline 0.8s, build 3.0s from the scene start; the hold
+after that is still, s9.28 C5). variant is line|bars|race|decline|progress;
+emphasize is the datum index; quiet_zone is left|right (where docks land,
+s9.28 B3). Docks on the row attach as on any plate. A missing series file
+or a series that fails the page validator is a hard build error naming the
+row. The motion gate counts the page's build beats as visual events and its
+start as an evidence entry (s9.28 D1/D2).
 
 Ken Burns is authored per shot: push in on arrivals and reveals, pull back
 on reflection, drift laterally across a wide world. Scale is the doc 29
-range (1.00 -> 1.04 over the shot), x/y in px.
+range (1.00 -> 1.04 over the shot), x/y in px; on a page it is capped to a
+slow push by the player (s9.26 rules / C3).
 """
 
 W = [
