@@ -10,6 +10,11 @@ YouTube -14 LUFS / -1 dBTP).
     python render_episode.py --test          # 8s proof slice at the verdict stack
     python render_episode.py                 # full episode
     python render_episode.py --t0 0 --t1 30  # arbitrary slice
+    python render_episode.py --force         # full episode past a motion-gate FAIL
+
+A full render first reads build-f/GATES-MOTION.md (written by
+build_scene_timeline_f.py) and refuses with exit 2 while it says FAIL
+(ruling E21 / doc 29 s9.25). Slices, --test and shard workers never block.
 
 Requires the episode-player server on :8731 (preview harness).
 """
@@ -18,9 +23,12 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[3]
 EP = REPO / "content/video_engine/projects/systems-and-blowups/steel-and-paper"
-OUT = EP / "build-f/render"
+BUILD = EP / "build-f"
+OUT = BUILD / "render"
 FPS = 30
 URL = "http://127.0.0.1:8731/player.html"
+GATE_REPORT = "GATES-MOTION.md"  # gate_motion_density.write_report output; last line VERDICT: PASS|FAIL
+GATE_REFUSED = 2                 # exit code: the gate refused, nothing was captured
 
 
 def mix_audio(dur: float) -> Path:
@@ -144,11 +152,42 @@ def parallel_render(n_frames: int, workers: int, video_out: Path) -> None:
                     "-i", str(lst), "-c", "copy", str(video_out)], check=True)
 
 
+def motion_gate_verdict(force: bool) -> int | None:
+    """E21 / doc 29 s9.25: consult build-f/GATES-MOTION.md before a FULL render.
+
+    Returns an exit code to stop on, or None to proceed. Missing report ->
+    the build never ran the gate; FAIL -> refuse unless --force, which is
+    printed so the override is on the record."""
+    report = BUILD / GATE_REPORT
+    if not report.exists():
+        print("MOTION GATE: no report - run build_scene_timeline_f.py first")
+        return GATE_REFUSED
+    lines = report.read_text(encoding="utf-8").splitlines()
+    verdict = next((l for l in reversed(lines) if l.startswith("VERDICT:")), None)
+    if verdict is None:
+        print(f"MOTION GATE: {report} carries no VERDICT line - rebuild")
+        return GATE_REFUSED
+    if not verdict.startswith("VERDICT: FAIL"):
+        return None
+    if force:
+        print(f"[FORCED] motion gate FAIL overridden ({verdict})")
+        return None
+    print(f"MOTION GATE: {report}")
+    print(f"MOTION GATE: {verdict} - refusing full render (E21); re-run with --force to override")
+    return GATE_REFUSED
+
+
+def is_full_render(args: argparse.Namespace) -> bool:
+    """Full = whole runtime from 0 with no --test/--t1; slices and previews never block."""
+    return not args.test and args.t1 is None and args.t0 == 0.0
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--t0", type=float, default=0.0)
     ap.add_argument("--t1", type=float, default=None)
     ap.add_argument("--test", action="store_true")
+    ap.add_argument("--force", action="store_true", help="full render even when GATES-MOTION.md says FAIL")
     ap.add_argument("--workers", type=int, default=4)  # 4 for memory headroom; full PIL decode-verify guards the rest
     ap.add_argument("--frames", type=int, nargs=2, help="worker mode: global frame range")
     ap.add_argument("--part", type=str, help="worker mode: segment output path")
@@ -156,7 +195,11 @@ def main() -> int:
     if args.frames:  # shard worker
         capture_frames(args.frames[0], args.frames[1], Path(args.part))
         return 0
-    tl = json.loads((EP / "build-f/timeline.json").read_text(encoding="utf-8"))
+    if is_full_render(args):
+        stop = motion_gate_verdict(args.force)
+        if stop is not None:
+            return stop
+    tl = json.loads((BUILD / "timeline.json").read_text(encoding="utf-8"))
     dur = float(tl["runtime_s"])
     if args.test:
         t0, t1 = 699.0, 707.0

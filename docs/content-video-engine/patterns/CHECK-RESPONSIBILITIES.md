@@ -97,6 +97,7 @@ before you grep; read before you claim.
 | `audit_script_doctrine.py` | `… <script> --pivot "<line>"` | unknown marks, break ration, digit numerals, carrying mean / spread / over-20 share, trailing attribution, 3s hook + 8s paradox (measured if a take exists), greetings, "you" by 0:30, promise regex in 60s (WARN), CTA count + windows, A1–A3 anchors (**3:00 absolute — conflict R7**), break tags per paragraph, tell presence (doc 35), **pivot pin 45–55%** | — | hook concreteness (named in the WARN) |
 | `gate_opening_structure.py` | `… <script> --ring <token> --counterparty <name> [--timeline …]` | G01–G06, G09–G11, G13, G15 (with `--ring`), G17–G18, G23, G25, G27 (with `--ring`), G29 (with timeline), G30, G33–G36, G43 (WARN) | G07 stakes · G08 payoff · G12/G32 tricolon · G14 opponent · G16/G31 reflect · G19/G21 loop · G20/G22 new · G24 head-fake · G26 foreshadow · G28 loop-close · G37 archetype · G38 desire · G39 map · G40 catalyst · G41 debate · G42 signpost · anaphora · dip | J01 mechanism · J02 head-fake straight · J03 hook concrete/terminal stress · J04 context-dump · J05 gap opens · J06 irony counterpoint · J07 contextual mapping · J08 phonetic anchor · J09 archetype not stereotype · J10 map not TOC · J11 debate as gap |
 | `enumerate_strength_screens.py` | `… <VO>` → `<script>-SCREENS.md` | *enumerates only*: X1 connective/pronoun openers with predecessors, deixis openers, additive junctions, phonetic-anchor candidates, per-paragraph cadence runs | — | every listed item — the agent verdicts each (ok / FIXED / licensed / carryover) |
+| `run_script_gates.py` (**the runner — stages 3–4**) | `… <script> --pivot "<line>" --ring <t> --counterparty <n> [--timeline …]` | *decides nothing itself*: runs the four rows above in order through their own `main()`, cites each exit + RESULT line, and writes `<script>-GATES.md` (the §5 TOOLS block, every tool's stdout verbatim, `script_hash` of the spoken text, `VERDICT`); exit 1 on any FAIL. `record_*_take.py` refuse a script whose report is missing / stale / FAIL (`--force "<reason>"` overrides, reason into the take manifest) | — | — |
 | `gate_motion_density.py` (**stage 7/8, on the BUILT timeline**) | `… <build-dir>` | M01 no stretch > 12s without a visual event · M02 > 8s (WARN) · M03 evidence enters ≤ 45s apart, every phase · M04 plates ≥ runtime/12s · M05 20s hold ceiling · M06 caption cadence · M07 the opening minute is not the thinnest · M08 stage captions on every still stretch (once the timeline carries `cap_mode`) | — | J01 savor beats keep their picture · J02 stage captions centred/large/explosive (until the template carries the mode) |
 
 The opening gate covers **P1–P2 only** and says so in its header. Nothing
@@ -159,14 +160,17 @@ register read aloud · the ear (scratch VO).
 ## 4. The runtime sequence
 
 ```
-1. lint_script_pattern.py <script>                          -> exit + FAIL count
-2. audit_script_doctrine.py <script> --pivot "<line>"        -> exit + FAIL/WARN + timing source
-3. gate_opening_structure.py <script> --ring <t> --counterparty <n> [--timeline …]
-                                                             -> exit + FAIL/WARN/PASS/JUDGE counts
-4. enumerate_strength_screens.py <VO>                        -> <script>-SCREENS.md + item counts
-5. AGENT: 3a declared-beat verdicts · 3b JUDGE rows · 3c–3g by name
-6. Fix; re-run 1–4 (X2–X4 are re-runs, not memory); loop to a fixpoint
-7. Report per §5
+1. run_script_gates.py <script> --pivot "<line>" --ring <t> --counterparty <n> [--timeline …]
+       runs, in order:  lint_script_pattern.py          -> exit + FAIL count
+                        audit_script_doctrine.py        -> exit + FAIL/WARN + timing source
+                        gate_opening_structure.py       -> exit + FAIL/WARN/PASS/JUDGE counts
+                        enumerate_strength_screens.py   -> <script>-SCREENS.md + item counts
+       writes <script>-GATES.md: the §5 TOOLS line, each tool's stdout verbatim,
+       script_hash, VERDICT; exit 1 on any FAIL. Recording refuses without a
+       current PASS report (--force "<reason>" overrides, reason into the take manifest).
+2. AGENT: 3a declared-beat verdicts · 3b JUDGE rows · 3c–3g by name
+3. Fix; re-run 1 (X2–X4 are re-runs, not memory); loop to a fixpoint
+4. Report per §5
 ```
 
 ## 5. The report contract

@@ -21,9 +21,8 @@ cannot surface a component you don't know exists.
 |---|---|---|---|---|
 | 1 | **Write** | `patterns/SCRIPT-PATTERN-KIT.md` + `patterns/phase-guides/P1–P6.md` | `patterns/INJECTION.md` (lane params), the previous phase's ledger | script sections + ledger |
 | 2 | **Strength loop** | `patterns/STRENGTH-LOOP.md` | the draft | a fixpoint draft + rewrite log |
-| 3 | **Lint** | `scripts/lint_script_pattern.py` | script text | pass/fail, mechanical tier |
-| 4 | **Audit** | `scripts/audit_script_doctrine.py` (+ `scripts/kit_spec.py`) | script text, the kit's tables, any take on disk | timed-gate findings |
-| 5 | **Record** | `scripts/record_chained_take.py` | script text | `vo-*/audio/*.mp3` + `*.words.json` |
+| 3–4 | **Script gates (runner)** | `scripts/run_script_gates.py` — runs `lint_script_pattern.py` → `audit_script_doctrine.py` (+ `kit_spec.py`) → `gate_opening_structure.py` → `enumerate_strength_screens.py`, in order, each through its own `main()` | script text, `--pivot "<line>"`, `--ring <t>`, `--counterparty <n>`, any take on disk (`--timeline build-f/timeline.json`) | `<script>-GATES.md` beside the script: the CHECK-RESPONSIBILITIES §5 TOOLS block, each tool's stdout verbatim, `script_hash` of the spoken text, `VERDICT: PASS|FAIL`; `<script>-SCREENS.md`; exit 1 on any FAIL |
+| 5 | **Record** | `scripts/record_chained_take.py` | script text **+ a current, passing `<script>-GATES.md`** — the recorders refuse to spend when the report is missing, stale (hash ≠ the script) or carries a FAIL; `--force "<reason>"` records anyway and writes the reason into the take manifest | `vo-*/audio/*.mp3` + `*.words.json` |
 | 6 | **Word timeline** | `scripts/build_timeline_f.py` | the take | merged word timeline (mechanical, safe to automate) |
 | 7 | **SHOT TABLE — AUTHORED** | **a human or model reading the narration** | word timeline · plate `semantic` fields · evidence `context` fields | the window table: plate + Ken Burns + docks + badge times, per beat |
 | 7b | Motion | `scripts/build_render_f.py` | the authored table | motion plan |

@@ -174,6 +174,10 @@ enumeration is itself a deliverable.
 Therefore: `enumerate_strength_screens.py <VO>` emits `<script>-SCREENS.md`
 — X1 pairs with predecessors, deixis openers, additive junctions,
 phonetic-anchor candidates with placement, per-paragraph cadence runs.
+Since 2026-09-02 the screens file also carries a DECLARED section - every
+beat tag with its clock, the opening gate's window verdict and the sentence
+under it - and the strength log verdicts each tag **true / laundered**
+(CHECK-RESPONSIBILITIES R2 / §3a).
 **The strength log must verdict every listed item** (ok / FIXED /
 licensed / carryover). A convergence claim that does not cite the screens
 file and its counts DID NOT CONVERGE. First run on Script G: the

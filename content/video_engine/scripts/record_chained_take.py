@@ -99,6 +99,15 @@ def main() -> int:
         fails.append(f"VO text missing: {VO_TEXT}")
         return _report(fails, go)
     text = VO_TEXT.read_text(encoding="utf-8").strip()
+    # Recording refusal - PRP P34 Human Gate 3 (hard refuse) and
+    # CHECK-RESPONSIBILITIES s5: "a FAIL anywhere in the TOOLS line blocks
+    # recording". The gates report must exist beside the script, hash to
+    # THIS spoken text, and carry VERDICT: PASS. `--force "<reason>"`
+    # records anyway and the reason lands in the take manifest.
+    import run_script_gates as RG
+    gates_meta = RG.recording_preflight(VO_TEXT, sys.argv, fails)
+    if gates_meta is None:
+        return _report(fails, go)
     # Structural beat tags ([promise], [head-fake], ...) are authoring
     # metadata for gate_opening_structure - strip them so nothing downstream
     # (the split, the stray check, compile, the provider) ever sees them.
@@ -232,7 +241,7 @@ def main() -> int:
     print(f"  part 1 ends : ...{spoken(part1)[-58:]}")
     print(f"  part 2 opens: {spoken(part2)[:58]}...")
 
-    return _report(fails, go, text, part1, part2, n1, n2)
+    return _report(fails, go, text, part1, part2, n1, n2, gates_meta)
 
 
 
@@ -278,7 +287,8 @@ def run_probe(go: bool) -> int:
     return 0
 
 
-def _report(fails, go, text=None, part1=None, part2=None, n1=0, n2=0) -> int:
+def _report(fails, go, text=None, part1=None, part2=None, n1=0, n2=0,
+            gates_meta=None) -> int:
     print()
     if fails:
         print("PREFLIGHT FAILED — nothing spent:")
@@ -331,6 +341,8 @@ def _report(fails, go, text=None, part1=None, part2=None, n1=0, n2=0) -> int:
             "chained_from": None if i == 0 else results[0].request_id,
         } for i, r in enumerate(results)],
         "total_duration_s": sum(r.duration_s for r in results),
+        # gates_report + gates_hash, or gates_forced {state, report, reason}
+        **(gates_meta or {}),
     }, indent=2), encoding="utf-8")
     print(f"\n  manifest   : {manifest}")
     print(f"  TOTAL      : {sum(r.duration_s for r in results) / 60:.2f} min")

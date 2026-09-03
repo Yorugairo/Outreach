@@ -82,6 +82,18 @@ def main() -> int:
         text = ""
     else:
         text = VO_TEXT.read_text(encoding="utf-8").strip()
+    # Recording refusal - PRP P34 Human Gate 3 (hard refuse) and
+    # CHECK-RESPONSIBILITIES s5: "a FAIL anywhere in the TOOLS line blocks
+    # recording". The gates report must exist beside the script, hash to
+    # THIS spoken text, and carry VERDICT: PASS. `--force "<reason>"`
+    # records anyway and the reason lands in the take manifest.
+    import run_script_gates as RG
+    gates_meta = RG.recording_preflight(VO_TEXT, sys.argv, fails) if text else None
+    if gates_meta is None:
+        print("\nPREFLIGHT FAILED — nothing spent:")
+        for f in fails:
+            print("   -", f)
+        return 1
     # Structural beat tags ([promise], [head-fake], ...) are authoring
     # metadata for gate_opening_structure - strip them here so nothing
     # downstream (stray check, compile, the provider) ever sees them.
@@ -185,6 +197,8 @@ def main() -> int:
         "characters": result.character_count, "duration_s": result.duration_s,
         "request_id": result.request_id, "audio": str(result.audio_path),
         "settings": SETTINGS, "single_request": True,
+        # gates_report + gates_hash, or gates_forced {state, report, reason}
+        **gates_meta,
     }, indent=2), encoding="utf-8")
     print(f"  manifest     : {manifest}")
     return 0

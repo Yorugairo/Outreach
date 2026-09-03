@@ -28,6 +28,9 @@ BUILD = EP / "build-f"
 TEMPLATE = REPO / "docs/content-video-engine/samples/scene-evidence-player.template.html"
 sys.path.insert(0, str(Path(__file__).parent))
 import build_render_f as R  # noqa: E402  (asset resolver + doc-29 durations)
+import gate_motion_density as MG  # noqa: E402  (E21 motion gate -> GATES-MOTION.md)
+
+TIMELINE_NAME = "steel-and-paper.timeline.json"  # the compiled scene_evidence_timeline.v1 the gate reads
 
 # Ken Burns: doc 29 §1.4 — the world plate drifts while evidence holds locked,
 # so the eye separates narrative world from evidence data with no labelling.
@@ -238,7 +241,7 @@ def main() -> int:
         "evidence": evidence,
         "scenes": scenes,
     }
-    (BUILD / "steel-and-paper.timeline.json").write_text(
+    (BUILD / TIMELINE_NAME).write_text(
         json.dumps(timeline, indent=1), encoding="utf-8")
 
     html = TEMPLATE.read_text(encoding="utf-8")
@@ -282,7 +285,23 @@ def main() -> int:
         print(f"  [WARN] {len(nb)} evidence cards carry no badges - their whole "
               f"information layer is blank: {', '.join(nb[:4])}"
               f"{' ...' if len(nb) > 4 else ''}")
+    motion_gate_report()
     return 0
+
+
+def motion_gate_report() -> int:
+    """E21 / doc 29 s9.25: every compiled timeline gets the motion-density
+    gate run on it and the verdict written to build-f/GATES-MOTION.md. The
+    build still completes on FAIL - the shot table is authored against the
+    report - and render_episode.py refuses a full render while it says FAIL."""
+    path, n_fail = MG.write_report(BUILD, TIMELINE_NAME)
+    print("")
+    print(f"  motion gate : {path}")
+    if n_fail:
+        print(f"MOTION GATE: {n_fail} FAIL - see {MG.REPORT_NAME}")
+    else:
+        print("MOTION GATE: PASS")
+    return n_fail
 
 
 if __name__ == "__main__":

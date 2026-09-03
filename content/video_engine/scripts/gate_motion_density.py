@@ -181,6 +181,46 @@ def run(tl: dict, docks: list[dict], mp: dict) -> tuple[list[Gate], dict]:
     return g, stats
 
 
+REPORT_NAME = "GATES-MOTION.md"  # written beside the timeline by the build (P34 T4); consulted by render_episode.py
+LEVEL_ORDER = {"FAIL": 0, "WARN": 1, "PASS": 2, "INFO": 3, "JUDGE": 4}
+
+
+def fail_count(gates: list[Gate]) -> int:
+    return sum(1 for x in gates if x.level == "FAIL")
+
+
+def report_text(gates: list[Gate], stats: dict, build_dir: Path) -> str:
+    """The gate's stdout, verbatim: header, stats, gates sorted by level, RESULT line."""
+    lines = [f"=== MOTION DENSITY GATE: {build_dir} ==="]
+    lines += [f"  {k:>20}: {v}" for k, v in stats.items()]
+    lines.append("")
+    for x in sorted(gates, key=lambda x: (LEVEL_ORDER[x.level], x.id)):
+        lines.append(f"  [{x.level:5}] {x.id} {x.message}\n          {x.src}")
+    n = lambda lvl: sum(1 for x in gates if x.level == lvl)
+    lines.append(f"\nRESULT: {n('FAIL')} FAIL / {n('WARN')} WARN / {n('PASS')} PASS / {n('JUDGE')} JUDGE / {n('INFO')} INFO")
+    return "\n".join(lines)
+
+
+def write_report(build_dir: Path, timeline_name: str | None = None) -> tuple[Path, int]:
+    """Run the gate on a build dir and write `<build_dir>/GATES-MOTION.md`.
+
+    The report is the gate's stdout inside a fenced block, headed by the
+    build dir name and closed by a `VERDICT: PASS|FAIL (<n> FAIL)` line that
+    `render_episode.py` reads before a full render (E21 / doc 29 s9.25).
+    Returns the report path and the FAIL count.
+    """
+    build_dir = Path(build_dir)
+    tl, docks, mp = _load(build_dir, timeline_name)
+    gates, stats = run(tl, docks, mp)
+    n_fail = fail_count(gates)
+    verdict = "FAIL" if n_fail else "PASS"
+    body = (f"# MOTION GATE — {build_dir.name}\n\n```text\n{report_text(gates, stats, build_dir)}\n```\n\n"
+            f"VERDICT: {verdict} ({n_fail} FAIL)\n")
+    out = build_dir / REPORT_NAME
+    out.write_text(body, encoding="utf-8")
+    return out, n_fail
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("build", type=Path, help="episode build dir (build-f)")
@@ -190,16 +230,8 @@ def main() -> int:
         sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     tl, docks, mp = _load(args.build, args.timeline)
     gates, stats = run(tl, docks, mp)
-    print(f"=== MOTION DENSITY GATE: {args.build} ===")
-    for k, v in stats.items():
-        print(f"  {k:>20}: {v}")
-    print()
-    order = {"FAIL": 0, "WARN": 1, "PASS": 2, "INFO": 3, "JUDGE": 4}
-    for x in sorted(gates, key=lambda x: (order[x.level], x.id)):
-        print(f"  [{x.level:5}] {x.id} {x.message}\n          {x.src}")
-    n = lambda lvl: sum(1 for x in gates if x.level == lvl)
-    print(f"\nRESULT: {n('FAIL')} FAIL / {n('WARN')} WARN / {n('PASS')} PASS / {n('JUDGE')} JUDGE / {n('INFO')} INFO")
-    return 1 if n("FAIL") else 0
+    print(report_text(gates, stats, args.build))
+    return 1 if fail_count(gates) else 0
 
 
 if __name__ == "__main__":
