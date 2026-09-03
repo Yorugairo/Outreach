@@ -1,0 +1,17 @@
+{
+  "judge": "Codex GPT-5",
+  "generation_attempts": {
+    "world-ledger-blank-page-v1": 1,
+    "world-ledger-inked-board-v1": 1
+  },
+  "extraction_attempts": {
+    "world-ledger-blank-page-v1": 0,
+    "world-ledger-inked-board-v1": 0
+  },
+  "approved": [
+    "world-ledger-blank-page-v1",
+    "world-ledger-inked-board-v1"
+  ],
+  "unresolved": [],
+  "notes": "Both slots are world boards and correctly skip extraction/matting; final files verified RGB 1920x1080 with manifest hashes matching delivered bytes."
+}

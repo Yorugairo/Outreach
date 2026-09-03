@@ -1,0 +1,20 @@
+{
+  "judge": "Codex GPT-5",
+  "generation_attempts": {
+    "host-board-present-v1": 1,
+    "host-board-point-v1": 1,
+    "host-board-turned-v1": 1
+  },
+  "extraction_attempts": {
+    "host-board-present-v1": 1,
+    "host-board-point-v1": 1,
+    "host-board-turned-v1": 1
+  },
+  "approved": [
+    "host-board-present-v1",
+    "host-board-point-v1",
+    "host-board-turned-v1"
+  ],
+  "unresolved": [],
+  "notes": "All three plates are opaque RGB 1920x1080 world-board compositions with clear margins and empty charcoal chart surfaces."
+}
