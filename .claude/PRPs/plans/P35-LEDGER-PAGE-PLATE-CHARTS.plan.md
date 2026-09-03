@@ -130,14 +130,16 @@ Acceptance:
 3. **Bar-race motion on a page**: overtaking bars are the busiest thing
    the channel will show; confirm from the render that it reads as a
    ledger and not a dashboard before it becomes a default variant.
-4. **Ship path** (after T1): pages as pre-rendered frame sequences the
-   player tiles as plates (fast, uses the lane as-is, heavy assets) or
-   the stitch ported into the player as a species (T3; lighter, more
-   work, one renderer). Recommendation: frame sequences for the first
-   episode's two or three pages, port when pages become routine.
-5. **Sound**: a paper roll, an ink bleed and a chalk stroke need cues;
-   source CC0 (Freesound, as the whoosh was) or leave the page under the
-   bed only. Confirm the spend rule applies (no paid audio without a yes).
+4. **Ship path** - DECIDED 2026-09-02: port first. The chart must be
+   crisp and ours (the dense-series builder already lives in the player),
+   the page must coexist with docks on one renderer, and the grammar
+   (T0) is authored against the player's timeline. Frame sequences are
+   used only for the prototype and the pick.
+5. **Sound** - DECIDED: source the cues (CC0 via the Freesound client;
+   no paid audio). T9.
+6. **The ring on a page**: "we'd have to see it to know" - the prototype
+   carries one optional variant with the spike drawn on the ledger; the
+   pick decides.
 
 ## Mandatory Reads
 
@@ -167,17 +169,26 @@ Acceptance:
 
 ## Execution Path
 
-1. T1 prototype first, alone: it settles the look (Human Gate 1) and the
-   font (Human Gate 2) before any player code.
-2. T2 (spec + validator) in parallel with T1: pure data contract, no
-   visual dependency.
-3. T3 (player species) after the pick; parent-owned because it edits the
-   reviewed template.
+Operator, 2026-09-02: "the first part of the plan is getting components
+aligned and understanding how these things map over to our evidence
+layer - what determines the full page surface, what belongs as pop-out
+evidence on the plate, how do we determine the choreography that leads
+to different outcomes / plate / evidence layers / transitions." The
+episode rebuild ORDER waits for the verbal re-script; this plan builds
+the vocabulary and the species, not the episode.
+
+0. T0 the surface grammar (doc) first - it is what every later slice
+   authors against.
+1. T1 prototype next: settles the look (Human Gate 1) and the font
+   (Human Gate 2) before any player code.
+2. T2 (spec + validator) in parallel with T1: pure data contract.
+3. T3 port into the player after the pick (Human Gate 4 decided: port
+   first; frame sequences only for the prototype/pick). Parent-owned.
 4. T4 (timeline + shot table + gate) after T3's species exists.
 5. T5 (race + decline variants) after T3; Human Gate 3 on the race.
-6. T6 (motion menu doc + stop-motion plate life) can run in parallel with
-   T3-T5; its write set is disjoint apart from the template, so its
-   template edit lands after T3 by rebase, never concurrently.
+6. T6-T8 as before; T9 (sound cues) any time, disjoint write set.
+7. The Steel and Paper re-script work order names its pages AFTER the
+   verbal rewrite, using T0's grammar; not before.
 
 ## Patterns To Mirror
 
@@ -197,6 +208,33 @@ Acceptance:
 - Gate shape and tests: `gate_motion_density.py` + red/green tests.
 
 ## Task Slices
+
+### T0: The surface grammar - page vs dock vs transition, decided by rule
+- Status: pending
+- Owner: parent (doctrine), explorer (→ `Explore`) for the ep1 window census
+- Depends on: none
+- Write set: `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md` (§9.28),
+  `docs/content-video-engine/patterns/CHECK-RESPONSIBILITIES.md` (§3 row: the agent verdicts surface choice per window),
+  `content/video_engine/projects/systems-and-blowups/steel-and-paper/build-f/SURFACE-CENSUS.md`
+- Acceptance: §9.28 states, as testable rules, (a) what earns the FULL
+  PAGE: a proof that is OURS (we ran it, we drew it), carried by a series
+  we own, at a beat that turns the argument (payoff, tell, catalyst,
+  ring close) or a window the motion gate would otherwise mark still;
+  (b) what stays POP-OUT evidence: their document, their chart, a
+  citation, a stamped slide, anything read rather than built - the dock
+  register (near-black, unchanged); (c) what decides the CHOREOGRAPHY at
+  a boundary: leaving a page → beat-freeze exit or the wipe by whether
+  the next beat continues the proof; a dock landing on a page → the
+  declared quiet zone, never over the emphasized datum; camera moves
+  mutually exclusive per window; the pivot's reversal takes no species;
+  (d) the density rule linking to E21: no window > 12s without a dock,
+  a page build, or plate life. The census applies (a)-(d) to every ep1
+  window and lists, per window, page / dock / plate-life / none with the
+  rule that decided it - the input the re-script's shot table starts
+  from.
+- Validate: the census covers every row of `SHOT-TABLE-F.py`; each row
+  cites a rule letter; `gate_motion_density.py` still runs unchanged
+- Evidence: pending
 
 ### T1: Prototype - the stitch, in the hyperframes lane
 - Status: pending
@@ -344,6 +382,21 @@ Acceptance:
   not edited in this slice.
 - Validate: `preview_start` on the prototypes dir; filmstrip present; the
   reviewed template untouched (`git diff --stat` shows no template change from this slice)
+- Evidence: pending
+
+### T9: Sound cues for the page - paper roll, ink bleed, chalk stroke
+- Status: pending
+- Owner: junior_developer (→ `general-purpose`)
+- Depends on: none
+- Write set: `content/video_engine/configs/sound_palette.json` (three cues),
+  `content/video_engine/projects/systems-and-blowups/steel-and-paper/sound/` (CC0 files + SOURCES.md with Freesound ids and licences),
+  `content/video_engine/projects/systems-and-blowups/steel-and-paper/sound/SOUND-PLAN.json` (page cue slots, gains at the −28 LU bed rule)
+- Acceptance: three CC0 cues sourced through the Freesound client used
+  for the whoosh (operator: "source the sounds"; no paid audio), each
+  ≤1.5s, trimmed, loudness-matched to the existing accent gain (0.9)
+  and aligned to the page's sync points (roll-out start, bleed settle,
+  outline `draw-complete`); SOURCES.md records id, author, licence.
+- Validate: `python -c "import json;json.load(open('content/video_engine/configs/sound_palette.json'))"`; ffprobe on each file; SOURCES.md present
 - Evidence: pending
 
 ## Verification

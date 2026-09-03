@@ -78,6 +78,17 @@ the docs and says so.
 estimated verdict on a 3-second cap is a soft verdict; the report says
 which it was.
 
+**R9 — Lane capabilities come from the docs and the template, never from
+memory.** Any claim about what this lane can or cannot do (what the
+player draws, which renderer a lane uses, whether a species exists, what
+a gate checks) cites the file it was read from - `PIPELINE.md`,
+`CAPABILITIES.md`, doc 29, the player template, the checker - before it
+is stated. A recalled capability is a hypothesis to verify, not a fact to
+report. Operator ruling 2026-09-02, after two same-day assertions the
+repo contradicted ("our charts are static PNGs" - the template draws
+them; "we haven't used hyperframes" - doc 19 is the lane). Enumerate
+before you grep; read before you claim.
+
 ## 2. The tools and what each decides
 
 | Tool | Command | Decides (mechanical) | Checks presence of (declared) | Prints for the agent (JUDGE) |

@@ -1456,6 +1456,17 @@ so the two registers never blur. It is deterministic and real-data, so it
 lives under the EVIDENCE text rule (exact numerals, source line on the
 page), not the generated-imagery ban.
 
+**Geometry and crispness (operator, decided 2026-09-02).** The page is
+FULL cream first; the charcoal is then bled or drawn over it so that
+only a cream-stained margin the bleed did not fully cover remains - not
+a framed board on a page, a stained page. **The set-up is the drawn
+part; the chart is not.** Axes, lines, bars and labels land crisp, exactly
+as they appear in the components and in our current docks. Where a
+display trick and legibility conflict, legibility wins: nothing muddies
+the chart for a visual effect. The chalkboard is a WORLD plate; the
+standard evidence docks remain exactly as they are today and may land on
+it, so a busy variant (the bar race) is not held back by the board.
+
 **The four beats, all derived from t (seek-safe, screenshot-render
 safe, no wall clock, no Math.random):**
 

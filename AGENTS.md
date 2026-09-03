@@ -245,7 +245,8 @@ every agent, not just Google-side ones.
 timeline → shot table → render), what owns each, what consumes what, and
 the capability index it opens with. Read it before building anything;
 the renderer, the player and the gates already exist. Enumerate before
-you grep.**
+you grep. Lane capabilities are stated from the docs and the template,
+never from memory - cite the file (CHECK-RESPONSIBILITIES R9).**
 
 **Three spine documents sit behind that table. Know they exist before
 doing script, review, or motion work — they were unrouted until
