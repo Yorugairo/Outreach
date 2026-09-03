@@ -63,6 +63,16 @@ a `[JUDGE]` row (printed by the CLI, carried on the spec as `judge`) naming the 
 file's `selection` rule, which the sub must state on the page. `unit` (e.g. `%`) is written
 on the zero tick and every value. The hand is **Kalam** (Human Gate 2, decided 2026-09-03).
 
+Both axes, always (operator, 2026-09-03): every builder draws y ticks with the unit
+through `lpYTicks` (log axes at doublings) and its x labels or ticks. **Badges** (same
+day): `page.badges` - the series file's own `badges` plus the evidence dock's authored
+badges for the same asset (`build_scene_timeline_f.ledger_world`), each {label, value,
+tag, accent}; a badge whose accent maps to a series colour takes that series' current
+label as its value (`ledger_page.badges_for`). The page renders them as the dock's own
+pills in the quiet-zone column (or a row under the source when no quiet zone is
+declared), springing in one at a time from build end + 0.4s every 0.9s, painted from t;
+the gate counts each as an event.
+
 Validation: `python content/video_engine/scripts/ledger_page.py <series.json> --variant bars --emphasize 7 --quiet-zone right`
 refuses a missing source, unaligned labels, a race without periods, a
 checklist table ("keep it a dock").

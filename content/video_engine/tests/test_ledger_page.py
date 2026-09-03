@@ -235,6 +235,19 @@ RACE_FILE = OBJECTS / "ev-memory-share-race-v1.series.json"
 SMH = OBJECTS / "ev-smh-drawdown-v3.series.json"
 
 
+def test_badges_ride_on_the_page_synced_to_the_series_labels():
+    # operator 2026-09-03: 'we need the badges back' - the dock's pills, keyed by accent, values from the series itself
+    div = L.load_series(DIVERGENCE)
+    spec = L.build_spec(div, "line", None, "right")
+    assert spec["badges"] and all(set(b) == {"label", "value", "tag", "accent"} for b in spec["badges"])
+    by_accent = {b["accent"]: b["value"] for b in spec["badges"]}
+    labels = {s["color"]: str(s.get("label", "")).split()[0] for s in div["series"] if s.get("label")}
+    assert by_accent["coral"] == labels["crimson"] and by_accent["teal"] == labels["teal"]   # synced, never authored twice
+    extra = L.badges_for(div, [{"label": "X", "value": "stale", "tag": "t", "accent": "cobalt"}])
+    assert extra[-1]["value"] == labels["cobalt"]
+    assert L.build_spec(L.load_series(TRIM), "bars", 7, "right")["badges"][0]["value"] == "7 of 8"
+
+
 def test_sign_hidden_in_a_note_is_refused_e28():
     # operator 2026-09-03: 'every bar appears to be positive at a glance, and the negative move is the tallest bar'
     series = {"title": "t", "src": "s", "bars": [{"label": "a", "value": "3.9", "note": "-4%"}, {"label": "b", "value": "10.9", "note": "+11%"}]}

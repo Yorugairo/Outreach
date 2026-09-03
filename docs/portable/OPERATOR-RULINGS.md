@@ -865,3 +865,38 @@ Standing order:
 Why: the chart is the proof of one sentence (E25). A proof the eye reads
 backwards disproves the sentence.
 
+**E27 addendum (2026-09-03) - the first 1:30 is the unit of proof.**
+*"I'm starting to understand why the guy started with just talking over a
+still image. If you can prove your voice + script + title + thumbnail
+work, you can just add layer after layer beyond that. We're doing a ton of
+work for potentially zero upside with no proof of work, while he can pump
+out 3-4 vids per day of AI talking and slowly add plates and motions ...
+we need to do everything we can to secure the first 3-5 minutes, and most
+importantly the first 1:30. People might be quitting because they don't
+like the deep ElevenLabs voice. They might be quitting because our script
+is bad. They might be quitting because we have too much spacing or too
+slow of delivery."*
+
+Standing order: (1) the first 1:30 of a script is the deliverable that
+earns the rest - it is written, gated (the opening gate) and viewer-tested
+(P36 windows 0-5) before any plate or motion work on the episode; (2) the
+three suspects - voice, script, delivery pace - are tested in ISOLATION,
+cheaply, at the still-image tier: same 1:30 script in two voices, same
+voice at two paces, two scripts in one voice, each a separate upload or
+retention read, one variable at a time; (3) layers (plates, pages,
+species) are added only after a 1:30 that holds, and each layer is
+measured against the still-image control, not against nothing. Why: at
+one trial per month nothing is learned; the still-image channel runs the
+same experiment four times a day, and its rate of learning, not its
+quality, is what compounds. Ours must be higher per trial because we run
+fewer.
+
+**Charts (same day):** *"I don't like that the charts don't always have
+both x and y axis. We also need the badges back - that's how we were
+quickly conveying information and applying a key for the viewer."* Every
+chart carries both axes with ticks and its unit (the ledger builders use
+one helper; the dock charts already do); the ledger page carries the
+dock's badges - verbatim label / value / tag, the series' accent as the
+key - springing in one at a time after the build in the quiet zone, their
+values synced to the series' own labels (B3 by construction).
+

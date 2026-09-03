@@ -69,6 +69,11 @@
   /* E28: the sub carries the selection rule (which dates and why) - written under the title, wrapped by word */
   .lp-sub { font-size: 21px; font-weight: 400; line-height: 1.25; color: var(--lp-chalk); opacity: .8; white-space: normal; }
   .lp-sub .w { display: inline-block; white-space: nowrap; }
+  /* the page's badge rail: the dock's pill, painted from t (no transition) */
+  .lp-rail { position: absolute; display: grid; gap: 9px; pointer-events: none; }
+  .lp-rail.col { grid-template-columns: 1fr; }
+  .lp-rail.row { grid-template-columns: 1fr 1fr 1fr 1fr; }
+  .lp-rail .lp-pill { opacity: 0; transition: none; transform-origin: 50% 100%; }
   .lp-chart { position: absolute; overflow: visible; }
   /* MOTION MENU species (doc 29 s9.27; P35 T6/T7): plate life on the world side, the targeted overlay above the docks */
   #plife { position: absolute; inset: 0; pointer-events: none; }
@@ -1263,6 +1268,10 @@
   const LP = { ROLL: 0.7, SAVOR: 0.8, FIELD: 2.4, PUNCH: 0.5, INK: 2.0, BUILD: 3.0, SEEPS: 9, STROKES: 14, KB_MAX: 0.03,
                PUNCH_SCALE: 1.16, FOCUS_DUR: 3.0 };
   const LP_FOCUS_AT = LP.ROLL + LP.SAVOR + LP.FIELD + LP.PUNCH + LP.BUILD;   /* 7.4s: the focus action fires here */
+  /* BADGES on the page (operator, 2026-09-03: 'we need the badges back'): the dock's own pills - verbatim label /
+     value / tag with the series' accent as the key - spring in one at a time AFTER the build (the callout is the
+     conclusion), in the page's quiet zone, painted as a function of t (never a CSS transition) */
+  const LP_BADGE0 = 0.4, LP_BADGE_STEP = 0.9, LP_BADGE_IN = 0.36;
   /* pure hash of (seed, index, salt) -> [0,1): the only source of jitter (handwriting-text rule 2) */
   const lpHash = (seed, i, salt) => {
     let h = (seed ^ Math.imul(i + 1, 0x9E3779B1) ^ Math.imul(salt + 1, 0x85EBCA77)) >>> 0;
@@ -1382,7 +1391,18 @@
     /* the sub wraps inside the chart's width; the source writes directly under the chart box (never in the caption band) */
     subEl.style.width = chart.style.width; subEl.style.left = chart.style.left;
     src.style.top = ((cb.y + cb.h) * 100 + 1.2).toFixed(2) + "%"; src.style.left = chart.style.left;
-    const st = { root, page, edge, blobs, strokes, nib, rect, goo, glyphs, chart, fieldPlate, boardCentre, kind: pg.builder || "story",
+    /* the badge rail: in the quiet-zone column beside the chart, else a row under the source */
+    const rail = lpEl("div", "lp-rail" + (qz ? " col" : " row"), page);
+    const badges = (pg.badges || []).map((bd, bi) => {
+      const el = lpEl("div", "pill lp-pill", rail);
+      el.innerHTML = '<span class="pill-label">' + bd.label + '</span><span class="pill-row">' +
+        '<span class="pill-num" style="color:' + (ACCENT[bd.accent] || "var(--sunflower)") + '">' + bd.value + '</span>' +
+        '<span class="pill-tag" style="color:' + (ACCENT[bd.accent] || "var(--sunflower)") + '">' + bd.tag + '</span></span>';
+      return { el, at: LP_BADGE0 + LP_BADGE_STEP * bi };
+    });
+    if (qz) { rail.style.left = ((cb.x + (qz === "left" ? 0.02 : 0.66) * cb.w) * 100).toFixed(2) + "%"; rail.style.top = (cb.y * 100).toFixed(2) + "%"; rail.style.width = (0.3 * cb.w * 100).toFixed(2) + "%"; }
+    else { rail.style.left = chart.style.left; rail.style.top = ((cb.y + cb.h) * 100 + 4.6).toFixed(2) + "%"; rail.style.width = chart.style.width; }
+    const st = { root, page, edge, blobs, strokes, nib, rect, goo, glyphs, chart, fieldPlate, boardCentre, badges, kind: pg.builder || "story",
                  bars: [], paths: [], labels: [], callout: null, cval: null, vals: pg.values || [],
                  vstr: pg.value_strings || [], emph: Number.isInteger(pg.emphasize) ? pg.emphasize : -1 };   /* no emphasis declared = no datum styled (spec emits null) */
     /* one builder per treatment (s9.28; P35 Builder Architecture) - each harvested from its own component, never merged */
@@ -1403,9 +1423,8 @@
     const my = (v) => bottom - (v - lo) / (hi - lo || 1) * (bottom - top);
     const base = my(0);
     const bw = (x1 - x0) / n * (1 - gap);
-    for (let k = 1; k <= 4; k++) { const gy = top + (bottom - top) * k / 4; if (Math.abs(gy - base) > 6) lpEl("line", "grid", st.chart, { x1: x0 - 20, x2: x1 + 20, y1: gy.toFixed(1), y2: gy.toFixed(1) }); }
-    lpEl("line", "ax", st.chart, { x1: x0 - 20, x2: x1 + 20, y1: base.toFixed(1), y2: base.toFixed(1) });
-    const zero = lpEl("text", "lab", st.chart, { x: x0 - 26, y: (base + 8).toFixed(1), "text-anchor": "end" }); zero.textContent = "0" + unit;
+    /* both axes, always (operator, 2026-09-03): y ticks with the unit from the shared helper, the zero line as the axis */
+    lpYTicks(st, lo, hi, my, x0 - 20, x1 + 20, unit, x0 - 26);
     st.vals.forEach((v, i) => {
       const x = x0 + (x1 - x0) / n * (i + gap / 2), yv = my(v), neg = v < 0;
       const h = Math.max(3, Math.abs(yv - base)), y = neg ? base : base - h;
@@ -1439,7 +1458,12 @@
     const pad = (y1 - y0) * 0.06 || 1; y0 -= pad; y1 += pad;
     const mx = (x) => L + (x - x0) / (x1 - x0 || 1) * (W - L - R), my = (v) => T + (1 - (Y(v) - y0) / (y1 - y0)) * (B - T);
     lpEl("line", "ax", st.chart, { x1: L, x2: W - R, y1: B, y2: B });
-    for (let k = 1; k <= 4; k++) lpEl("line", "grid", st.chart, { x1: L, x2: W - R, y1: T + (B - T) * k / 4, y2: T + (B - T) * k / 4 });
+    /* both axes, always (operator, 2026-09-03): y ticks - on a log axis at doublings of a power of ten, else the nice-step helper */
+    if (ax.log) {
+      const lo = Math.pow(10, y0), hi = Math.pow(10, y1); let tv = Math.pow(10, Math.floor(y0));
+      while (tv <= hi) { if (tv >= lo) { const y = my(tv); lpEl("line", "grid", st.chart, { x1: L, x2: W - R, y1: y.toFixed(1), y2: y.toFixed(1) }); lpText(st.chart, "lab", L - 10, y + 8, "end", lpTick(tv) + (ax.unit || "")); } tv *= 2; }
+    } else lpYTicks(st, y0, y1, my, L, W - R, ax.unit || "", L - 10);
+    lpYLabel(st, pg, L, T - 12);
     (ax.xticks || []).forEach(([x, lab]) => { const tx = lpEl("text", "lab", st.chart, { x: mx(x).toFixed(1), y: B + 32, "text-anchor": "middle" }); tx.textContent = lab; });
     series.forEach((s, i) => {
       const d = s.pts.map(([x, v], k) => (k ? "L" : "M") + mx(x).toFixed(1) + " " + my(v).toFixed(1)).join(" ");
@@ -1785,6 +1809,13 @@
       pp.name.setAttribute("opacity", clamp01((f - 0.9) / 0.1).toFixed(2));
     });
     if (st.paint) st.paint(st, c, t3);   /* the builder's own build step (race / decline / combo) */
+    /* badges: floored at the build's end, each springs in over LP_BADGE_IN with the dock's back-out overshoot */
+    const tb = t3 - LP.PUNCH - (st.buildDur || LP.BUILD);
+    for (const bd of st.badges || []) {
+      const e = stagePop(clamp01((tb - bd.at) / LP_BADGE_IN));
+      bd.el.style.opacity = Math.min(1, e * 1.4).toFixed(3);
+      bd.el.style.transform = "translateY(" + (18 * (1 - e)).toFixed(1) + "px) scale(" + (0.94 + 0.06 * e).toFixed(4) + ")";
+    }
   };
 
   /* ================= MOTION MENU species (doc 29 s9.27; P35 T6 / T7) =================

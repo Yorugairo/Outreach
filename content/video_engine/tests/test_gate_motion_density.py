@@ -132,6 +132,13 @@ def test_page_build_counts_as_events_and_its_start_as_evidence():
     assert all(t in ev for t in (12.0, 12.7, 13.5, 15.9, 16.4, 19.4)), ev   # roll-out, savor, field, punch, build start, build end + focus (no outline, E22 addendum 7)
 
 
+def test_page_badges_are_events_after_the_build():
+    tl, docks, mp = _page_window(with_page=True)
+    tl["scenes"][2]["world"]["page"]["badges"] = [{"label": "A", "value": "1", "tag": "t", "accent": "teal"}] * 3
+    ev = G.analyse(tl, docks, mp)["events"]
+    assert all(round(12.0 + 7.4 + 0.4 + 0.9 * k, 2) in ev for k in range(3)), ev
+
+
 def test_a_short_page_credits_only_the_beats_it_had_time_to_play():
     # reviewer 2026-09-03: a 1.5s ledger row bought 7.4s of motion inside the bare plate after it
     tl, docks, mp = _page_window(with_page=True)

@@ -77,6 +77,7 @@ PAGE_BEAT_OFFSETS = (0.0, LP_ROLL_S, LP_ROLL_S + LP_SAVOR_S,
                      LP_ROLL_S + LP_SAVOR_S + LP_FIELD_S + LP_PUNCH_S,
                      LP_ROLL_S + LP_SAVOR_S + LP_FIELD_S + LP_PUNCH_S + LP_BUILD_S)
 # = (0.0, 0.7, 1.5, 3.9, 4.4, 7.4): roll-out, savor start, field start, punch, build start, build end + focus
+LP_BADGE0_S, LP_BADGE_STEP_S = 0.4, 0.9   # page badges spring in after the build: build end + 0.4 + 0.9k (template LP.BADGE0 / BADGE_STEP)
 DOCK_SOURCE_TIMELINE = "timeline"            # scenes[].docks enter/exit/badge_at - the player's own clock
 DOCK_SOURCE_FILE = "evidence-dock.json"      # fallback only: a timeline that carries no docks at all
 
@@ -182,6 +183,9 @@ def _page_events(scenes: list[dict]) -> tuple[list[float], list[float]]:
         a, z = float(s["span"][0]), float(s["span"][1])
         starts.append(a)
         beats += [round(a + off, 2) for off in PAGE_BEAT_OFFSETS if a + off < z]
+        n_badges = len((s.get("world", {}).get("page") or {}).get("badges") or [])
+        beats += [round(a + PAGE_BEAT_OFFSETS[-1] + LP_BADGE0_S + LP_BADGE_STEP_S * k, 2) for k in range(n_badges)
+                  if a + PAGE_BEAT_OFFSETS[-1] + LP_BADGE0_S + LP_BADGE_STEP_S * k < z]
     return beats, starts
 
 

@@ -195,7 +195,7 @@ def parse_ledger_id(plate_id: str) -> tuple[str, str, int | None, str]:
     return series_id, variant, emphasize, quiet_zone
 
 
-def ledger_world(plate_id: str, ken: tuple, ep_dir: Path) -> dict:
+def ledger_world(plate_id: str, ken: tuple, ep_dir: Path, dock_badges: list | None = None) -> dict:
     """The LEDGER PAGE world for a ``ledger:`` plate id: ``world.page`` is the
     ``ledger_page.v1`` spec from ``<ep_dir>/evidence/objects/<series>.series.json``
     (doc 29 s9.26: data only from a series.json; s9.28: surface x builder are
@@ -212,16 +212,20 @@ def ledger_world(plate_id: str, ken: tuple, ep_dir: Path) -> dict:
     if errors:
         raise ValueError(f"{plate_id!r}: {path.name} is not a page ({variant}): " + "; ".join(errors))
     page = LPG.build_spec(series, variant, emphasize, quiet_zone)
+    # the evidence dock's authored badges for this asset land on the page too (the key for the
+    # viewer), synced to the series' own labels - never a second copy of the numbers
+    if dock_badges:
+        page["badges"] = LPG.badges_for(series, dock_badges)
     return {"kind": SPECIES_LEDGER, "page": page,
             "ken_burns": {"scale": ken[0], "x": ken[1], "y": ken[2]}}
 
 
-def world_for_plate(plate_id: str, ken: tuple, ep_dir: Path) -> dict:
+def world_for_plate(plate_id: str, ken: tuple, ep_dir: Path, meta: dict | None = None) -> dict:
     """A scene's ``world`` for a shot-table plate id: a ledger page (``ledger:``
     prefix) or an image plate resolved by the asset resolver. Pure apart from
     reading the series / plate file; ValueError on a bad or missing id."""
     if plate_id.startswith(LEDGER_PREFIX):
-        return ledger_world(plate_id, ken, ep_dir)
+        return ledger_world(plate_id, ken, ep_dir, ((meta or {}).get(parse_ledger_id(plate_id)[0]) or {}).get("badges"))
     wp = R.find_asset(plate_id)
     if wp is None:
         raise ValueError(f"{plate_id!r}: no plate asset found")
@@ -325,7 +329,7 @@ def main() -> int:
         # a ledger page is drawn, not embedded (doc 29 s9.26); a bad or
         # missing series is a hard build error naming the row
         try:
-            world = world_for_plate(plate, ken, EP)
+            world = world_for_plate(plate, ken, EP, META)
         except ValueError as exc:
             raise SystemExit(f"FAIL: shot row {i + 1} ({a}-{b}s): {exc}") from exc
         if "asset_id" in world:

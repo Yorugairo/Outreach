@@ -229,6 +229,29 @@ def review_notes(series: dict) -> list[str]:
     return notes
 
 
+BADGE_ACCENT_TO_SERIES = {"coral": "crimson", "teal": "teal", "cobalt": "cobalt", "ink": "deemph", "sunflower": "amber"}
+
+
+def badges_for(series: dict, extra: list | None = None) -> list[dict]:
+    """The page's badges (operator, 2026-09-03: 'we need the badges back - that's how we were
+    quickly conveying information and applying a key for the viewer'): the file's own
+    ``badges`` plus any handed in from the evidence dock, each {label, value, tag, accent}.
+    BADGE-CHART SYNC (build_scene_timeline_f, 2026-08-30): a badge whose accent maps to a
+    series colour takes that series' CURRENT label as its value, so the pill never drifts
+    from the line it keys. Pure."""
+    raw = [b for b in (series.get("badges") or []) + list(extra or []) if isinstance(b, dict)]
+    out = []
+    for b in raw:
+        bd = {"label": str(b.get("label") or ""), "value": str(b.get("value") or ""),
+              "tag": str(b.get("tag") or ""), "accent": str(b.get("accent") or "sunflower")}
+        col = BADGE_ACCENT_TO_SERIES.get(bd["accent"])
+        for entry in dense_series(series):
+            if col and entry.get("color") == col and _text(entry.get("label")):
+                bd["value"] = str(entry["label"]).split()[0]
+        out.append(bd)
+    return out
+
+
 def _validate_shape_for_variant(series: dict, variant: str) -> list[str]:
     """The REQUESTED variant must have data of its own shape: a chartable file is not
     a page for every variant (a race file asked for bars would build an empty page)."""
@@ -324,6 +347,7 @@ def build_spec(series: dict, variant: str, emphasize: int | None = None,
         spec["denominator"] = value_string(series["denominator"])
     spec["unit"] = str(series["unit"]) if _text(series.get("unit")) else ""
     spec["judge"] = review_notes(series)
+    spec["badges"] = badges_for(series)
     count = len(spec["labels"])
     spec["emphasize"] = None if emphasize is None or not count else max(0, min(int(emphasize), count - 1))
     return spec
