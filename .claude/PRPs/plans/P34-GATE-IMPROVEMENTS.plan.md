@@ -111,9 +111,12 @@ Acceptance (all observable):
 2. **Caption stage mode** (blocks keeping T5): a change to how a reviewed
    shot looks is a proposal (REMOTION-UI-HARVEST lesson). T5 renders the
    0:57-1:11 window twice from the same timeline and the operator picks.
-3. **Recording refusal semantics** (confirm before T1 lands): `--force`
-   requires a reason string and records it; no silent bypass. Confirm this
-   is the wanted behaviour, or choose warn-only.
+3. **Recording refusal semantics** - DECIDED 2026-09-02: hard refuse.
+   Cause: a script whose gates report is missing, stale, or failing.
+   Outcome: the recorder does not spend a take; it prints the report
+   path. `--force "<reason>"` overrides and writes the reason into the
+   take metadata. Impact: episode one's promise-at-1:20 could not have
+   been recorded.
 
 ## Mandatory Reads
 
