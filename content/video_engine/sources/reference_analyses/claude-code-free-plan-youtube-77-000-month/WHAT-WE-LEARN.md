@@ -21,43 +21,52 @@ They practise what the video teaches. We don't, and nothing in our gate stack lo
 it. This is the same result our own independent test produced from
 `FINDING-gaps-are-the-edit.md`, arrived at from the other direction.
 
+**And Wealth Logic — the genre comparable — lands at exactly the same 82%**, median
+0.16 s from a word boundary. Two channels, different formats, different pacing, same
+number. Ours is 32%. This is the one finding that survived every control, and it is the
+only measure on which we differ from the reference at all.
+
 *Method caveat, stated because it matters:* their VTT carries word **onsets** only, so
 their "gap" is an onset-to-onset delta and mine for ep1 was end-to-start. Their number
 is therefore generous. The 0.17 s median cut-to-boundary distance is the harder
 evidence, and it is not close.
 
-## 2. The rhythm difference is variance, not rate
+## 2. RETRACTED — "cadence variance" was a tutorial artifact
 
-This is the part the dossier misses entirely, and it is more actionable than the cut
-count.
+My first pass claimed we lack rhythm variance because only 4% of ep1's shots run under
+3 s against the tutorial's 31%. **The operator doubted it, and the control proves them
+right.** Wealth Logic — one of the best-performing faceless finance channels, the
+correct genre comparable — sits where we sit:
 
-| shot length | ep1 | tutorial |
+| | ep1 (ours) | Wealth Logic | tutorial |
+|---|---|---|---|
+| median shot | 9.20 s | **9.55 s** | 4.50 s |
+| under 3 s | 4% | **6%** | 31% |
+| 8–20 s | 56% | **55%** | — |
+| mean shot | 10.75 s | **10.14 s** | 9.55 s |
+| cuts/min | 5.58 | **5.93** | 6.28 |
+
+We are within a few points of the reference on every measure. The tutorial's rapid
+cutting is **format** — it is showing software steps on screen, where a click is a
+beat. Reading it as a retention technique and importing it would have made our
+explainers worse.
+
+## 3. RETRACTED — "we speak too fast" was my parsing error
+
+I measured both references at 120–156 WPM against ep1's 182.8 and concluded we rush.
+**Wrong: my VTT parser undercounted.** YouTube's rolling captions repeat a tail of each
+cue, and only some words carry `<c>` timestamps; a proper suffix-merge reconstruction
+gives:
+
+| | words | WPM |
 |---|---|---|
-| under 3 s | **3 (4%)** | **24 (31%)** |
-| 3–8 s | 23 | 29 |
-| 8–15 s | **38 (51%)** | 13 |
-| over 15 s | 11 | 12 |
-| median | **9.2 s** | **4.5 s** |
-| cuts/min | 5.58 | 6.28 |
+| **ep1 (exact, from the take)** | 2,457 / 806 s | **182.8** |
+| **Wealth Logic** | 3,101 / 1,013 s | **183.7** |
+| tutorial | 1,832 / 744 s | 147.7 |
 
-**We cut at nearly the same rate and with almost no variance.** Half of ep1 sits in an
-8–15 s band; the tutorial punches (31% under three seconds) and then dwells (12 shots
-over fifteen). Same CPM, completely different feel.
-
-A flat nine-second rhythm reads as static even though the screen is technically
-changing — which is E21's failure wearing a disguise our motion gate cannot see, because
-M01 only asks "did something happen in the last 12 s," never "does the rhythm vary."
-
-**We have three punch shots in thirteen minutes.** That is the gap.
-
-## 3. They speak much slower
-
-ep1 runs **182.8 WPM** (post tempo-edit). The tutorial runs **120–147 WPM**. Even
-allowing that our figure is accelerated, the difference is large.
-
-Instructional content buys processing time with pace. Ours spends it. Combined with
-finding 1 — cuts landing mid-word — ep1 gives a viewer no seam anywhere: the words do
-not stop and the pictures change inside them.
+**We match the best-performing finance channel to within one word per minute.** Gemini's
+report had 183.6 and was right; I was wrong. The tutorial is the slow outlier, again
+because of format.
 
 ## 4. What their pipeline does that ours does not
 
@@ -83,15 +92,31 @@ figures are in §2.
 ## 6. What to actually do
 
 1. **Ship gate M13** — a scene boundary lands in an acoustic gap ≥0.30 s or is
-   declared. Mechanical, checkable, fails ep1 at 68%.
-2. **Add a rhythm-variance check.** M01 asks whether *something* happened; nothing asks
-   whether the cadence varies. A proposed shape: at least 20% of shots under 3 s, and no
-   more than 40% inside any single 7-second-wide band.
-3. **Author the shot table onto the gap list**, not onto the clock. Snapping an existing
+   declared. Mechanical, checkable, fails ep1 at 68%. **This is the whole finding.**
+2. **Do not build a rhythm-variance gate.** I proposed one; the control retired it. Our
+   distribution already matches the reference.
+3. **Do not slow the narration.** We are at 182.8 against Wealth Logic's 183.7.
+4. **Author the shot table onto the gap list**, not the clock. Snapping an existing
    table recovers only a third of the cuts.
-4. **Re-examine the tempo edit against pace.** We accelerate to 182 WPM; the reference
-   that works sits at 120–147. That is a listen test, not an arithmetic one.
 
-**Not to copy:** their six-phase story architecture (they have none — the dossier
-invented it), their browser-extension queue (we have the MCP), or their cut *rate*
-(ours is already comparable — it is the distribution that differs).
+**Not to copy:** the tutorial's cut rate or its six-phase reading. What we were missing
+was one thing, and it is where the cut lands — not how often, not how fast we speak.
+
+## 7. What is worth reading in Gemini's Wealth Logic report
+
+That report is materially better than the tutorial one — its pace figure was right and
+mine was wrong. Its shot-band claim overstates slightly (78% in 8–20 s; measured 55%),
+but four takeaways in it are substantive and **unverified by me**, and they are about
+composition rather than timing:
+
+- **the unifying equation spine** — one mechanism evaluated across variants, against a
+  list of six unrelated tips. That is a script-architecture claim worth testing on our
+  own listicle-shaped drafts.
+- **evidence screen time ~10 s**, which matches our own E25 hold ceiling.
+- **one persistent diegetic host** and physical props — which is the actor decision we
+  already made and are still executing.
+- **kinetic floating captions with no background pill** — a direct comparison against
+  our STAGE caption mode.
+
+Those are the next things to check, and they are visual, so they need the frames rather
+than the timings.
