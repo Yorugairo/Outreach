@@ -1,0 +1,22 @@
+{
+ "title": "The lever that will not move",
+ "sub": "Shot 1 - the Fed as an immovable object; the price climbs on its own",
+ "src": "metaphor page - no figures asserted",
+ "props": [
+  {
+   "asset": "prop-lever-locked-v1",
+   "at": "left",
+   "draw_s": 1.2
+  },
+  {
+   "asset": "actor-hands-straining-v1",
+   "at": "left",
+   "enters_at": 0.4
+  },
+  {
+   "asset": "prop-price-tag-rising-v1",
+   "at": "right",
+   "enters_at": 1.6
+  }
+ ]
+}

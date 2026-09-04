@@ -54,7 +54,13 @@ EXIT_INVALID = 2
 SCHEMA_VERSION = "ledger_page.v1"
 MONTHS = ("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
 YEAR_RANGE = (1900, 2100)   # a decimal x outside this is a number, not a date
-VARIANTS = ("line", "bars", "race", "decline", "progress")
+VARIANTS = ("line", "bars", "race", "decline", "progress", "object")
+CHART_VARIANTS = ("line", "bars", "race", "decline", "progress")
+# `object` is the page as a WORKING surface rather than an evidence surface: it draws
+# a registered prop in ink on the cream instead of a chart. Same page clock, same
+# deckle, same focus - so an object page can transform into a chart page without a
+# plate change (RULE-the-page-is-the-ground, 2026-09-04).
+PROP_PLACEMENTS = ("centre", "left", "right", "datum")
 QUIET_ZONES = ("left", "right")
 AXES_KEYS = ("log", "ylabel", "xticks", "hlines", "hline", "marks", "eventbars",
              "ymin", "ymax", "yfmt", "yunit", "panels")
@@ -154,6 +160,8 @@ def race_rows(series: dict) -> list[dict]:
 
 
 def pick_builder(series: dict, variant: str) -> str:
+    if variant == "object":
+        return "object"
     """Builder from the data shape and the variant (P35 Builder Architecture)."""
     if variant in ("race", "decline"):
         return variant
@@ -176,10 +184,12 @@ def validate(series: dict, variant: str) -> list[str]:
         errors.append("missing source line: 'src' is required and is written on the page (s9.26)")
     if series.get("placeholder") is True:   # AGENTS.md: figures are never fabricated - a placeholder never renders
         errors.append("placeholder figures: 'placeholder': true marks values still under SOURCES-TO-VERIFY; a page never renders them")
+    if variant == "object":
+        return errors + _validate_object(series)
     has_race = any(r["values"] for r in race_rows(series))
     if not (_bars(series) or dense_series(series) or has_race):
         return errors + [next((v for k, v in UNCHARTABLE.items() if k in series), UNCHARTABLE_DEFAULT)]
-    if variant in VARIANTS:
+    if variant in CHART_VARIANTS:
         errors += _validate_shape_for_variant(series, variant)
     errors += _validate_sign_in_geometry(series)
     errors += badge_key_conflicts(series)
@@ -189,6 +199,36 @@ def validate(series: dict, variant: str) -> list[str]:
 SIGNED_NOTE_RE = re.compile(r"^\s*[+\u2212-]\s*\d")
 MONTH_LABEL_RE = re.compile(r"^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s*'?(\d{2}|\d{4})$")
 MONTHS = ("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
+
+
+def _validate_object(series: dict) -> list[str]:
+    """An object page's contract. No values, so no sign geometry and no badge keying -
+    but a prop that carries a FIGURE still owes a source, because a number drawn in ink
+    is as much a claim as a number on an axis."""
+    errors: list[str] = []
+    props = series.get("props")
+    if not isinstance(props, list) or not props:
+        return ["an object page needs 'props': a non-empty list of registered prop assets"]
+    seen: set[str] = set()
+    for i, p in enumerate(props):
+        if not isinstance(p, dict):
+            errors.append(f"props[{i}] is not an object"); continue
+        pid = p.get("asset")
+        if not _text(pid):
+            errors.append(f"props[{i}] missing 'asset': props are registered, never inline art")
+        elif pid in seen:
+            errors.append(f"props[{i}] '{pid}' is placed twice; one asset, one placement")
+        else:
+            seen.add(pid)
+        place = p.get("at", "centre")
+        if place not in PROP_PLACEMENTS:
+            errors.append(f"props[{i}] 'at' {place!r} is not one of {'|'.join(PROP_PLACEMENTS)}")
+        if place == "datum" and not isinstance(p.get("index"), int):
+            errors.append(f"props[{i}] placed at a datum needs an integer 'index' - "
+                          "that is how a prop is positioned RELATIVE TO CHART DATA")
+        if _text(p.get("figure")) and not _text(series.get("src")):
+            errors.append(f"props[{i}] carries the figure {p['figure']!r} but the page has no source line")
+    return errors
 
 
 def _validate_sign_in_geometry(series: dict) -> list[str]:
@@ -367,6 +407,13 @@ def build_spec(series: dict, variant: str, emphasize: int | None = None,
         "source": series.get("src"), "quiet_zone": quiet_zone,
         "labels": [], "values": [], "value_strings": [], "colors": [],
     }
+    if builder == "object":
+        spec.update(_object_block(series))
+        spec["unit"] = ""
+        spec["judge"] = review_notes(series)
+        spec["badges"] = badges_for(series)
+        spec["emphasize"] = None
+        return spec
     if builder == "race":
         spec.update(_race_block(series))
     elif builder == "dense-line":
@@ -385,6 +432,22 @@ def build_spec(series: dict, variant: str, emphasize: int | None = None,
     count = len(spec["labels"])
     spec["emphasize"] = None if emphasize is None or not count else max(0, min(int(emphasize), count - 1))
     return spec
+
+
+def _object_block(series: dict) -> dict:
+    """Props, normalised. `at: "datum"` keeps its index so the renderer can resolve the
+    prop against a chart datum - the same resolveTarget the callout and spotlight species
+    already use, which is what lets an object be manipulated in relation to data."""
+    props = []
+    for p in series.get("props") or []:
+        if not isinstance(p, dict):
+            continue
+        entry = {"asset": p.get("asset"), "at": p.get("at", "centre")}
+        for k in ("index", "figure", "label", "scale", "draw_s", "enters_at"):
+            if p.get(k) is not None:
+                entry[k] = p[k]
+        props.append(entry)
+    return {"props": props, "labels": [], "values": [], "value_strings": [], "colors": []}
 
 
 def _decline_block(series: dict, spec: dict) -> dict:

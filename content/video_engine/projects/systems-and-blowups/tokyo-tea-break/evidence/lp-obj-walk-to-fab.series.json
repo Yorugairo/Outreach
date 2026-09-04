@@ -1,0 +1,16 @@
+{
+ "title": "Toward something that pays better",
+ "sub": "Shot 9 - the open loop, pointed without naming",
+ "src": "metaphor page - no figures asserted",
+ "props": [
+  {
+   "asset": "actor-figure-walking-away-v1",
+   "at": "left"
+  },
+  {
+   "asset": "prop-fab-lit-v1",
+   "at": "right",
+   "enters_at": 1.1
+  }
+ ]
+}

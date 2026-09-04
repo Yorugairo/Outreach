@@ -1,0 +1,21 @@
+{
+ "title": "The customer walks out",
+ "sub": "Shot 3 - transforms into ev-japan-holdings-v1",
+ "src": "metaphor page - no figures asserted",
+ "props": [
+  {
+   "asset": "prop-counter-v1",
+   "at": "left"
+  },
+  {
+   "asset": "actor-figure-walking-out-v1",
+   "at": "right",
+   "enters_at": 0.8
+  },
+  {
+   "asset": "prop-goods-unsold-v1",
+   "at": "left",
+   "enters_at": 1.4
+  }
+ ]
+}

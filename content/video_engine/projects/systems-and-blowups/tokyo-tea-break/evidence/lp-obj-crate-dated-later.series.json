@@ -1,0 +1,17 @@
+{
+ "title": "Paying now for a box dated later",
+ "sub": "Shot 11 - transforms into ev-discount-rate-v1",
+ "src": "metaphor page - no figures asserted",
+ "props": [
+  {
+   "asset": "prop-crate-future-date-v1",
+   "at": "centre",
+   "figure": "10 YEARS"
+  },
+  {
+   "asset": "actor-hands-paying-v1",
+   "at": "left",
+   "enters_at": 0.9
+  }
+ ]
+}

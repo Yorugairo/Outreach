@@ -1,0 +1,22 @@
+{
+ "title": "The hedge is a toll gate",
+ "sub": "Shot 6 - personified mechanism: an antagonist with no villain",
+ "src": "metaphor page - no figures asserted",
+ "props": [
+  {
+   "asset": "prop-toll-gate-v1",
+   "at": "centre",
+   "draw_s": 1.4
+  },
+  {
+   "asset": "actor-figure-paying-v1",
+   "at": "left",
+   "enters_at": 1.0
+  },
+  {
+   "asset": "prop-case-of-money-v1",
+   "at": "left",
+   "enters_at": 1.2
+  }
+ ]
+}
