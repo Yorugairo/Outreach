@@ -69,6 +69,7 @@ read.
 
 | Capability | Where | State | Proof |
 |---|---|---|---|
+| **Flow character pack** — the host identity as a validated, hashed, non-renderable contract: `finance-host-v1` (retention: full suit detail, the recognised *woodblock print + vox newspaper, rich anime colors* directive) and `finance-host-stick-v1` (acquisition: locs, glasses, goatee, indigo/copper only); each with front/profile/three-quarter/back, five named expressions and five named poses — the rows double as the cutout rig's slot enumeration. The service FAILs an unenumerated sheet or an orphan variant; tests pin the survivors, the dropped detail, and that the paper-toy medium stays out | `projects/systems-and-blowups/finance-host-flow-character-pack.v1.json` + `configs/flow_character_pack.schema.json` + `src/services/flow_character_pack.py` | DECLARED 2026-09-04 (A0) — `reference_asset_ids` empty until the model sheets are rolled and approved; `@Mike` is already bound in Flow for the retention variant | `tests/test_flow_character_pack.py` (7); `provider-jobs/finance-host-model-sheets-001.google-flow-job.v1.json` |
 | **THE RAILWAY YARDSTICK** — recurring channel instrument: tech share of ALL US capital formation (narrow 28% all-time high vs 23% dot-com; broad 65%; UK railways ~50% one-technology reference); quarterly updater + dated readings log | `content/video_engine/instruments/railway-yardstick/` | LIVE — operator-adopted 2026-08-30; tripwire pending operator decision | readings.jsonl seeded |
 | **Plate library** — 326 plates indexed by SEMANTIC across all worktrees and CHANNEL-AWARE (money-physics 134 / martial-matters 192); channels are identity walls — the resolver refuses cross-channel plates; status from manifests, never paths | `content/video_engine/scripts/build_plate_library.py` → `sources/PLATE-LIBRARY.json` | LIVE — rebuild after any plate wave | resolver falls through to it |
 | **Chart builders** — real-data charts (yfinance/FRED), verbatim end labels, month/year axes, series sidecars | `steel-and-paper/evidence/build_evidence_documents.py` (+ railway, HBM builders) | LIVE | ev-divergence-v1 |
@@ -145,6 +146,20 @@ document** — coverage is the proof of reading — and
 
 These are **reference, not portable**. A rule graduates to `docs/portable/` once proven
 in a shipped build, and its index row says so.
+
+## The frozen baseline (P39 T1, 2026-09-04)
+
+The last known-good player is tagged **`player-baseline-2026-09-04`** (annotated; the
+template last changed in `3a0e092` and is byte-identical there). If a render regresses and
+nobody can say why, get back in one command:
+
+```bash
+git checkout player-baseline-2026-09-04 -- docs/content-video-engine/samples/scene-evidence-player.template.html
+```
+
+Proven on tagging: `git hash-object` of the working file equals `git rev-parse
+player-baseline-2026-09-04:<path>` (`a4705a4a`). Golden frames and per-capability flags
+are P39 T2–T4.
 
 ## What is NOT built yet
 

@@ -432,6 +432,34 @@ The model sheet's **five expressions and five poses** map directly onto the cuto
 generative lane now and the rig later** — which is a reason to enumerate the rows
 deliberately rather than take whatever a generation returns.
 
+### A0 landed — 2026-09-04, with two operator corrections
+
+The pack now meets the table above: both views rows, five named expressions, five named
+poses, and the stick variant declared as `variant: acquisition`, `variant_of: finance-host-v1`.
+The service turns the standard into a gate — a declared `expression_sheet` or `pose_sheet` that
+is not enumerated FAILs, and so does an acquisition variant that does not point home.
+
+Found on the way in: **the pack had never validated.** Its role, `fictional_presenter`, was not
+in its own schema's enum, and the only test loaded the BJJ pack. A contract nobody runs is a
+description, not a contract.
+
+Two corrections from the operator while it landed:
+
+- *"Most of the finance pack is bad, we don't want the paper-toy looking assets, really only
+  the host character is good."* The **hand-cut crinkle-paper puppet** medium is out of the
+  prompt; the identity (locs, glasses, goatee, indigo suit, copper tie, the floral shoes) stays.
+- The recognised Flow directive for our assets is **"A light application of woodblock print
+  and vox newspaper with rich anime colors."** It is in eight shipped Tokyo `_meta.json`
+  prompts beside `@Mike` — our own evidence that it coexists with the binding — and it is now
+  the host's single style atom. The stick variant deliberately does not carry it (flat,
+  high-contrast, per the table above); that is the one call left open for the operator.
+
+What remains is the roll itself: `provider-jobs/finance-host-model-sheets-001` holds the two
+16:9 sheet prompts — the retention sheet names `@Mike` and describes only the composition, the
+stick sheet references the identity master and carries the reduced description — quarantined
+and `ready_for_confirmation`. The sheet exists as registered assets only after the operator
+approves the contact sheet.
+
 ## 53.11 Status after the Flow plan
 
 `briefs/FLOW-OMNI-EXPLAINER-PROMPT-PLAN.md` (2026-09-04) is the production version of this

@@ -112,6 +112,19 @@ def validate_flow_character_pack(
         refs = character.get("reference_asset_ids")
         if refs not in (None, []) and not all(isinstance(item, str) and item for item in refs):
             errors.append(f"{label}.reference_asset_ids must be empty until promotion")
+        views = set(character.get("reference_views") or [])
+        if "expression_sheet" in views and not character.get("expressions"):
+            errors.append(f"{label} declares an expression_sheet but enumerates no expressions")
+        if "pose_sheet" in views and not character.get("poses"):
+            errors.append(f"{label} declares a pose_sheet but enumerates no poses")
+        variant_of = character.get("variant_of")
+        if character.get("variant") == "acquisition" and not variant_of:
+            errors.append(f"{label} is an acquisition variant but names no variant_of")
+        if variant_of and not any(
+            isinstance(other, Mapping) and other.get("id") == variant_of and other is not character
+            for other in characters
+        ):
+            errors.append(f"{label}.variant_of {variant_of!r} is not another character in this pack")
         rights = character.get("rights_policy")
         if isinstance(rights, Mapping) and rights.get("label_as_illustration") is not True:
             errors.append(f"{label}.rights_policy must label the output as illustration")

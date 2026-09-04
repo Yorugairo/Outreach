@@ -1,0 +1,67 @@
+{
+  "schema_version": "google_flow_provider_job.v1",
+  "job_id": "finance-host-model-sheets-001",
+  "channel_id": "systems-and-blowups",
+  "episode_id": "channel-kit",
+  "action": "character_sheet",
+  "backlog_item": "A0",
+  "character_pack": {
+    "path": "content/video_engine/projects/systems-and-blowups/finance-host-flow-character-pack.v1.json",
+    "artifact_hash": "fcf83f60aa88c1b8f5c2a8b02f8cdb24ec2bc5b68620f312cc18d6778120c8b5"
+  },
+  "project_url": "https://labs.google/fx/tools/flow/project/d171ec1f-d4a2-4b79-b76e-32460193dccc",
+  "project_note": "The project where @Mike is verified bound (Tokyo: plate-01-fed-briefing-mike-v3, omni scene-01-02). The older character URL under 62f78040 is the setup record, not the working binding.",
+  "mode": "image",
+  "model": "Nano Banana Pro",
+  "ratio": "16:9",
+  "scenes": [
+    {
+      "id": "finance-host-v1-model-sheet",
+      "character_id": "finance-host-v1",
+      "bound_character": "@Mike",
+      "references": [],
+      "prompt": "@Mike as a character model sheet on a plain cream ground, 16:9, three rows with small handwritten row labels. Top row, standing neutral at identical height: front view, left side view, three-quarter view, back view. Middle row, five head-and-shoulders portraits: happy, neutral, surprised, worried, angry. Bottom row, five full-body poses: waving, thinking with a hand at the chin, presenting with an open palm toward the viewer, explaining with both hands raised, shrugging. Consistent proportions in every cell, fully visible hands and feet. A light application of woodblock print and vox newspaper with rich anime colors. Negative: no text other than the row labels, no numbers, no charts, no logos.",
+      "prompt_sha256": "ba94dff6283b6b1d1176b81ad1e91b57f2e1154415cba7ac487df8eec69085e5"
+    },
+    {
+      "id": "finance-host-stick-v1-model-sheet",
+      "character_id": "finance-host-stick-v1",
+      "bound_character": null,
+      "references": [
+        {
+          "asset_id": "finance-host-identity-master-v3",
+          "path": "assets/generated/host/finance-host-identity-master-v3.png",
+          "sha256": "86242df3292ab528c0645fc8b9f65e8344a4e3f0b60478efb2beb78435c0e403"
+        }
+      ],
+      "prompt": "The same presenter as the reference image, redrawn as a flat high-contrast cartoon, as a character model sheet on a plain white ground, 16:9, three rows with small handwritten row labels. Top row, standing neutral at identical height: front view, left side view, three-quarter view, back view. Middle row, five head-and-shoulders portraits: happy, neutral, surprised, worried, angry. Bottom row, five full-body poses: waving, thinking with a hand at the chin, presenting with an open palm toward the viewer, explaining with both hands raised, shrugging. Consistent proportions in every cell, fully visible hands and feet. He keeps only short sculpted loc twists with a clean taper, black rectangular glasses, a neatly trimmed goatee, warm brown skin, a flat deep-indigo suit block and a flat copper tie block, drawn with thick uniform black outlines and solid colour fills on a plain white ground so he reads at thumbnail size. Negative: no lapel pin, no pocket square, no patterned shoes, no paper texture, no shading gradients, no text other than the row labels, no numbers, no charts, no logos.",
+      "prompt_sha256": "3930246c48e098f94bd807c78778a7265c9a2a4d6a17376a0f35c6c6818b53db"
+    }
+  ],
+  "driver_checks_on_return": [
+    "one figure per cell, fourteen cells",
+    "same face and hair in every cell",
+    "row labels legible, no other text",
+    "stick sheet: no lapel pin, no shoe pattern, no paper texture"
+  ],
+  "credit_budget": {
+    "estimated_credits": null,
+    "credit_note": "Unknown for a 16:9 Nano Banana Pro still in this project - read the meter before the first roll; a paraphrased host prompt cost 40 credits on 2026-09-03.",
+    "actual_credits": null,
+    "allocation": "daily_complimentary",
+    "daily_complimentary_target": true
+  },
+  "approval": {
+    "auto_confirm": false,
+    "state": "not_requested",
+    "approval_id": null,
+    "expected_account_verified": false
+  },
+  "status": "ready_for_confirmation",
+  "outputs": [],
+  "review_state": "quarantined",
+  "render_eligible": false,
+  "style_directive": "A light application of woodblock print and vox newspaper with rich anime colors",
+  "style_note": "The retention sheet carries the recognised phrase. The stick sheet deliberately does not - 53 §53.10 sets the acquisition variant flat and high-contrast. Operator may override.",
+  "artifact_hash": "f30fc182abded819c37c112ad07f826c4369f1b4aa9c780a35b417dda3b3297c"
+}

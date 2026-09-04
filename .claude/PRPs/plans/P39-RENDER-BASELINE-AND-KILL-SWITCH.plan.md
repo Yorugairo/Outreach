@@ -1,7 +1,7 @@
 ---
 id: P39-RENDER-BASELINE-AND-KILL-SWITCH
 title: Freeze the shippable player, catch regressions mechanically, and give every new capability an off switch
-status: draft
+status: running
 operation: chore
 risk: standard
 owner: parent
@@ -108,13 +108,13 @@ a flag read in `scene-evidence-player.template.html`, and one runbook page.
 ## Task Slices
 
 ### T1: tag the known-good state
-- Status: pending
-- Owner: speedster
+- Status: complete
+- Owner: parent (kept - the tag is a protected git action)
 - Depends on: none
 - Write set: git tag, `docs/content-video-engine/CAPABILITIES.md`
 - Acceptance: an annotated tag (`player-baseline-2026-09-04`) on the current template commit, and one line in CAPABILITIES giving the exact restore command. **This alone removes the worst case** - it makes "get back to what worked" a single command rather than an archaeology exercise.
 - Validate: `git tag -l player-baseline-*` and the documented command restores the file byte-identically
-- Evidence: pending
+- Evidence: 2026-09-04 - `player-baseline-2026-09-04` annotated on `2795c49` (main); the template is byte-identical to its last change `3a0e092` (`git diff --quiet` clean). Restore proof: `git hash-object` of the working file == `git rev-parse player-baseline-2026-09-04:<path>` == `a4705a4a40a1b2983c54ee4c61bff72e24d6edd1`. A first `cmp` against `git show` differed at byte 153 - CRLF vs the LF blob, not content; the blob-hash check is the honest one on Windows and the restore command goes through the same clean filter. CAPABILITIES gained "The frozen baseline" with the one restore command.
 
 ### T2: prove the render is deterministic
 - Status: pending
