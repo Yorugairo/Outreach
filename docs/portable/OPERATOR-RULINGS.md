@@ -1010,3 +1010,153 @@ Why: gates and judge both grade against our own intentions, so they cannot
 catch a script that satisfies every rule and still lands on nobody. The
 viewer is the only check in the kit whose answer we do not already know.
 
+
+
+---
+
+## E29 — Trust and verify; never contain by naming the defect (2026-09-04)
+
+*"Negative rules can actually summon the issues. The models are pretty strong — we should
+trust and verify instead of try to contain, when contain means writing negative rules into
+the prompt. Better is for whichever agent is driving Google Flow to check for those
+things."*
+
+**The prompt states what IS present. The driver checks for what must not be.**
+
+| | in the prompt | in the driver |
+|---|---|---|
+| affirmative staging | one figure · static camera · this pose · this prop · 9:16 | — |
+| **content exclusion** | *no background music* · *no on-screen text* — these describe the scene | — |
+| **defect naming** | **never** — `no morphing`, `no extra limbs`, `no duplicate characters` | duplicate figures · extra limbs · style drift · watermark |
+
+The distinction that matters: **excluding content is fine; naming a failure mode is not.**
+"No background music" says what is not in the scene. "No extra limbs" describes a defect
+back to the model.
+
+**Why:** modern transformer video models have no separate negative-conditioning vector the
+way SD 1.5 did — they read the prompt as unified natural language, so cross-attention
+attends to every token and `no extra limbs` injects `extra limbs`. And the deeper reason we
+can afford this and the tutorials cannot: **they have no verification step.** A human
+clicking between browser tabs can only contain in advance; we have an agent driving Flow
+that can look at what came back and re-roll. Detection belongs where it can act.
+
+Backlog **B7** builds the verifier as a pre-filter *before* the contact sheet — never a
+replacement for operator approval. See 53 §53.3.
+
+## E30 — There are no agent-owned lanes (2026-09-04)
+
+*"There's no such thing as Gemini's territory — Gemini is the research agent that sometimes
+does work, and then you end up correcting the work. It can't stay linear enough to reliably
+code."*
+
+The standing rule about not driving the operator's **Flow browser session** without a go
+covers the session, not the repository. Extending it to "do not plan `parallax-runner.mjs`,
+it's the Flow lane" left a fully specified defect — every dial wrong, including the
+`tiling_mode: "mirror"` kaleidoscope — unowned for a day while it was planned around.
+
+**Research agents explore; they do not hold ownership.** Work that needs doing and has no
+plan is simply *unowned*, and unowned work rots. If it deserves a PRP, fold it in; if not,
+it goes to the backlog **with a destination**. Expect to verify and correct generated code;
+the research output is the valuable part.
+
+## E31 — Plates are a retention asset, not an acquisition asset (2026-09-04)
+
+*"My big beautiful plates carrying a semiconductor fab are cool for ambiance for when my
+consumers already WANT to be on my channel because of my brand. They're not going to get
+people in the door though."*
+
+| | **acquisition** | **retention** |
+|---|---|---|
+| job | stop a thumb in a feed | reward someone who already chose you |
+| read time | **under 1 second, no interpretation** | seconds, and it may be atmospheric |
+| art | an instantly nameable object — a house, a pump, a pill bottle | woodblock vox newsprint, the deckle, ink on cream |
+| what we hold | **nothing** | **326 plates** |
+
+A fab in woodblock is beautiful and **illegible as an acquisition asset** — it asks a
+stranger to interpret before they have agreed to care.
+
+**The brand is what makes people stay. It is not what makes them arrive.** Backlog **A2a**
+(sourced icon ring) and **A2a′** (generated hero illustrations) exist because we had built
+only the retention half.
+
+## E32 — Motion is not animation; the original motion premise was flawed (2026-09-04)
+
+*"When I first started, I had 0 understanding of animation, so I thought all of the movement
+happening on screen was animation… part of the original premise of motion demands was
+flawed."*
+
+The chain was: *the screen must never be still* → *I need motion* → **motion means
+animation** → *I need generative video*. **Only the third link is wrong**, and it is what
+sent the engine to Flow, Wan, LTX and Depthflow to solve a problem it had already solved.
+
+`gate_motion_density.py` has always been explicit: a visual event is a scene boundary, a
+dock entering or leaving, a badge reveal, captions in **stage** mode, a ledger page
+building, or a targeted species firing — and *"Ken Burns and lower-third captions do NOT
+count; they are what a viewer reads as stillness."* **Not one of those requires generated
+video.** Every one is free, deterministic, and already shipped.
+
+Consequence: the stick-figure listicle format is trivially E21-compliant with three shipped
+event types — page flip (scene boundary), caption pop (stage mode), slow push
+(`focus_zoom`). **It needs icons and a script, not an engine.**
+
+## E33 — Generated worlds are for illustration, not evidence (2026-09-04)
+
+*"The stick figures work because you can build the world you need to convey; I was trying to
+avoid building that world because I didn't have the skill to do it, so I tried to inherit it
+by image generating plates."*
+
+**A generated plate has no addressable coordinate space.** A diffusion model decided where
+the desk is, so a callout cannot be placed on a pillar whose position is unknown. A
+constructed scene has `M_world = M_parent × M_local` and a Z-stack: every object has an
+address, and a prop can sit `at: "datum"` because both live in one coordinate system.
+
+**This is what E25 was really legislating around** — *"a chart never survives a plate
+change"* reads as a motion rule and is actually scar tissue from the plate not being
+addressable.
+
+**But scoped:** the argument holds for **evidence-bearing** scenes only.
+
+| scene kind | substrate |
+|---|---|
+| evidence-bearing — a chart, a callout, a datum-anchored prop | **construct** |
+| illustrative — the image *is* the claim, nothing is docked to it | **generate**; prompt craft is the cheap path |
+
+*Recorded with a correction: an earlier draft said "do not generate stick art, it is
+vector." That was wrong. The reference art is polished illustration, not stick figures, and
+nothing hand-written as SVG comes close.*
+
+## E34 — Voice, cadence and clip length (2026-09-04)
+
+Three settled numbers, recorded because each was in dispute:
+
+- **Omni in-model voice generation is not viable.** Voice drifts across separate
+  generations and a line that runs long is guillotined at the clip boundary. The lane stays
+  **ElevenLabs for YouTube, Chirp 3 HD Charon for the Facebook/NotebookLM lane**, generated
+  as one continuous master, with clips generated **silent**.
+- **We deliver near 180 WPM.** Measured: ep1 at 182.8, the reference at 183.6. **There was
+  never a 145–165 target** — that number had no origin and was withdrawn (46 §46.6). The
+  doctrine's **140 is a length-estimation constant** for guessing runtime before spending on
+  TTS (`04-STORYBOARD-CONTRACT.md`: *"an estimate, not a promise"*), never a delivery rate.
+- **10 seconds is the verified native Omni clip length.** A 30-second short is three
+  renders, not seven; one render punches into two or three timeline cuts without a second
+  generation.
+
+## E35 — Shorts are a different machine, and they fund the long form (2026-09-04)
+
+*"I need to be able to win this easy-distribution format to justify the long stuff."*
+
+**The failure this corrects: making every short justify the whole knowledge base.** Tokyo
+is the worked example — 11 evidence pages, 10 beat tags, 290 words, 118 s against a 90 s
+cap. A compressed long-form episode wearing a short's runtime.
+
+**Knowledge should make a short cheaper, not more expensive.** The answer is already known,
+so nothing is spent researching it; the cost is production, and production is what the
+engine is for.
+
+The format is not the problem: *Wealth Logic* is the same listicle shape with real
+arithmetic in every item, at 262,684 views. **What separates a thesis from a pile is the
+spine** — ten unrelated nouns versus one equation six times.
+
+The bar is **deliberately lower**: legible type, one clear image, a caption that lands.
+Doc 29 is the long-form bar and applying it here is what made shorts expensive. Spec:
+**51-THE-SHORTS-FORMAT.md**, one page.
