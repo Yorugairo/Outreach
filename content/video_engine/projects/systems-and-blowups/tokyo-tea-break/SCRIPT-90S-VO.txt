@@ -1,18 +1,24 @@
 Your costs jumped anyway. Bond yields crossed critical levels this month, and the Fed didn't move an inch. [post-key]
 
-[archetype] Turn on finance news: three guys in blue ties blaming deficits, debt, or the vibes in Jackson Hole. On YouTube, sixty-three stick figures. [stakes] None of them looked across the Pacific.
+[archetype] Turn on finance news: deficits, consumer debt, or the vibes in Jackson Hole. [stakes] Nobody looked across the Pacific.
 
-[rehook] Here's what nobody's reporting: our biggest customer just stopped buying.
+[rehook] Here's what nobody's reporting: our biggest customer is selling.
 
-[payoff] Japan owns over a trillion dollars of American debt, bought like clockwork for twenty years. But now it costs five and a half percent to hedge the currency on a five percent Treasury. They are paying for the privilege of lending to Washington.
+[payoff] Japan holds over a trillion dollars of American debt — more than anyone. Since February, they have been selling it.
 
-[promise] By the end of this minute you'll know the number keeping yields high — and the one in your portfolio that pays for it.
+[promise] By the end of this minute you'll know the number that says whether they come back — and the one in your portfolio that pays for it.
+
+[head-fake] But here's where everyone goes wrong: the hedge. Two years ago that was right — hedging a dollar cost more than our bonds paid.
+
+[debate] Not now. Hedging costs half what it did, and the trade pays two full points. [loop-close] They're selling into a trade that works.
 
 Tokyo took a tea break. [ring] And left Washington holding an unfunded bar tab.
 
-[opponent] The variable: what Tokyo pays to hedge a dollar for three months. The threshold: more than our bond pays them. Where we sit: five and a half against five — underwater. [rehook] But the real question is what brings them back. [loop-close] The flip: the hedge drops under the yield, and Tokyo returns. If they return and yields don't fall, I was wrong — and I'll say it here.
+[opponent] The real question isn't why they're leaving. It's what they found that pays better.
 
-And this was never a bond story. Tonight, pull up your biggest holding and find its P E. That's how much of the price is profit that hasn't happened yet — and a five percent yield is what discounts it.
+[rehook] But here's what you can watch. The variable: what Japan holds, published every month by the Treasury. The threshold: they were adding, now they're selling. Where we sit: down a hundred and twenty-two billion. The flip: they buy again — and if they do and yields don't fall, I was wrong.
+
+This was never a bond story. Tonight, pull up Meta — you're on it right now — and find its P E. That's how much of the price is profit that hasn't happened yet, and a high yield is what discounts it.
 
 [tricolon] Not a panic. Not a plot. Mechanics.
 
