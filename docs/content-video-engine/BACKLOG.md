@@ -272,6 +272,23 @@ needs an owner before they can promote to FAIL.
 | parallax dial fix | **P37 T9** — folded in, no longer deferred |
 | actor idling (48 §48.4), Euler spirals (42 §42.4), the Z-stack (43 §43.3) | slices inside P40/P41; too small to plan alone |
 
+### B7 — the Flow driver should verify, not the prompt contain
+
+**Operator ruling 2026-09-04:** negative rules in a positive prompt can summon the very
+failures they name — *"trust and verify instead of try to contain."* Observed on our stack;
+scoped to negations placed in the positive prompt.
+
+So the prompt carries only what **is** there, and the driver checks for what must not be:
+**duplicate figures · extra limbs · style drift against the bound `@Mike` · watermark ·
+stray text.** Re-roll on failure. This is an automated **pre-filter before the contact
+sheet**, not a replacement for operator approval.
+
+It is the same missing-runtime point as 53 §53.8: they write negatives because a human
+clicking tabs can only contain in advance. We have a driver that can look at the output.
+
+*Cheap first version: subject/face count, and an OCR pass for text. Style-match against the
+reference is the harder half.*
+
 ### B6 — the multi-plane lane has no owner and the viability matrix needs it
 
 45 §45.2 **bans** Depthflow on any plate carrying a foreground character, an isolated prop,

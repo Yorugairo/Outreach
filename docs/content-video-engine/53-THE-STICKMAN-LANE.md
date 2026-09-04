@@ -100,14 +100,49 @@ ANTI-GLITCH LOCK  "Maintain the exact stickman design from the input frame in ev
                   style drift. Motion is smooth and continuous. Background stays consistent."
 ```
 
-### Three details worth stealing outright
+### What to steal — and what not to
 
-1. **`SUBJECT COUNT: ONE stickman only, appearing exactly once.`** A named defence against
-   the duplicate-figure failure we have hit repeatedly.
-2. **`CAMERA: Static hold.`** The motion is *generated*, not camera-moved. They do not ask
-   the model to pan while it animates — one job per prompt.
+**Take the positive fields.** They tell the model what *is* there:
+
+1. **`SUBJECT COUNT: ONE stickman only, appearing exactly once.`** A **count**, not a
+   negation — the right way to express it.
+2. **`CAMERA: Static hold.`** The motion is *generated*, not camera-moved. One job per
+   prompt; do not ask the model to pan while it animates.
 3. **`SECONDARY MOTION` as its own field.** Prompt engineers arrived independently at
-   48 §48.6's separation of primary from secondary motion. It is the same idea.
+   48 §48.6's separation of primary from secondary motion.
+
+### Do NOT take the negative blocks
+
+**Operator ruling, 2026-09-04, from observed behaviour on our own stack:**
+
+> *"Negative rules can actually summon the issues. The models are pretty strong — we
+> should trust and verify instead of try to contain, when contain means writing negative
+> rules into the prompt. Better is for whichever agent is driving Google Flow to check for
+> those things."*
+
+`NEGATIVE RULES: no duplicate characters, no extra limbs, no style drift…` and the
+`ANTI-GLITCH LOCK`'s *"no morphing, no distortion, no extra limbs appearing"* put those
+exact tokens into the conditioning. **Naming the failure is a way of describing it.**
+
+| | goes in the prompt | goes in the driver |
+|---|---|---|
+| what IS there | one figure · static camera · this pose · this prop · 9:16 | — |
+| what must NOT be | — | duplicate figures · extra limbs · style drift · watermark · text |
+
+**Why they write negatives and we should not: they have no verification step.** A human
+clicking between browser tabs can only contain in advance. **We have an agent driving
+Flow**, and it can look at what came back and re-roll. That is the same missing-runtime
+observation as §53.8, arriving from the other direction — and it makes our prompt
+*shorter* than theirs, again.
+
+**This becomes a real job for the driver** (backlog B7): a post-generation verifier that
+checks subject count, style match against the bound `@Mike`, and text/watermark presence,
+and re-rolls on failure — an automated pre-filter *before* the contact sheet reaches the
+operator, not a replacement for it.
+
+*Scope note: recorded as observed on our stack (Flow / Nano Banana / Omni), not as a
+universal law. Models with a dedicated negative-prompt field are a different case — the
+defect here is negations placed in the **positive** prompt.*
 
 ## 53.4 What this corrects in my own claims
 
@@ -166,8 +201,9 @@ technique is what is worth taking; the content model is not.**
 **Next concrete step:** not a model sheet — `@Mike` already binds. The useful piece is the
 **eight-field image schema and the seven-field animation schema** (§53.3) as *templates our
 pipeline fills*, with `@Mike` in the character slot instead of a paragraph. The fields that
-earn their place are `SUBJECT COUNT`, `NEGATIVE RULES`, `CAMERA: static hold` and
-`ANTI-GLITCH LOCK` — none of which our current Flow prompts carry.
+earn their place are the **positive** ones — `SUBJECT COUNT`, `CAMERA: static hold`,
+`SECONDARY MOTION` — none of which our current Flow prompts carry. **The negative blocks
+move to the driver** (§53.3).
 
 ## 53.8 "Are they over-engineering prompts instead of learning Codex?"
 
