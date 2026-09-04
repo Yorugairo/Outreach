@@ -115,9 +115,9 @@ build gates on these numbers, and a gate resting on an invented threshold silent
 passes bad work forever. Reporting absence costs one line; an invented threshold costs
 every episode that clears it.
 
-## 2.3 Answer status after three passes (2026-09-04)
+## 2.3 Answer status after five passes (2026-09-04)
 
-Recorded so a later pass does not redo settled work. Reference layer: docs 42–48.
+Recorded so a later pass does not redo settled work. Reference layer: docs 42–49.
 
 | answered | question | where |
 |---|---|---|
@@ -131,13 +131,19 @@ Recorded so a later pass does not redo settled work. Reference layer: docs 42–
 | ◐ | **A4 the threshold of "alive"** | **Half answered.** 48 §48.4 gives what a *figure* does at rest (breath 0.20–0.30 Hz, asymmetric I:E, two-regime sway). **No pass found a measured hold-time for a static frame** — the honest gap stands. |
 | ◐ | B4 graphic match cuts | ARAP gives the mechanism (43 §43.5); the *perceptual* rule for when a match reads as continuous is unanswered |
 | ◐ | D1 eye-trace · D3 reading order · E1 metrics | metric sets landed; **thresholds must come from our own footage** |
-| ✗ | **B3 L-cuts / J-cuts under continuous narration** | untouched by three passes |
-| ✗ | **D2 composition on 9:16 with the caption safe zone** | untouched, and **we ship shorts.** All compositing work assumes a 16:9 stage with a horizon. |
-| ✗ | **D4 motion-graphics grids** (vertical) | untouched |
-| ✗ | **Wan** | not in scope of any pass. LTX is specified thoroughly; Wan appears zero times. |
+| ✗ | **B3 L-cuts / J-cuts under continuous narration** | **the only question no pass has touched.** |
+| ✅ | **D2 composition on 9:16** | **closed by pass 5** — 49 §49.1: the Universal Clean Canvas `x[80,880] y[280,1340]` and the 3-zone vertical stage. It also caught a live defect in our own template. |
+| ✅ | **D4 motion-graphics grids** | **closed by pass 5** — the 3-zone vertical stage *is* the vertical grid (49 §49.1). |
+| ✅ | **Wan** | **closed by pass 5** — 49 §49.2: the `4k+1` frame law, CFG ceilings, TeaCache, and the two dials that fail loudly (unscaled FP8 encoder, quantized VAE). |
 
-**A fourth pass, if run, should take: D2, D4, B3, Wan.** Everything else is either settled
-or blocked on measuring our own footage rather than on more reading.
+**Updated after pass 5 (docs 09 and 10 → reference docs 48 and 49).** Of 24 questions,
+**one remains untouched: B3.** Everything else is either settled or **blocked on measuring
+our own footage rather than on more reading** — E1's thresholds, X1's first-minute failure,
+X3's gap threshold.
+
+> **The research phase is functionally complete.** A sixth pass would earn B3 and little
+> else. The binding constraint is now build time, and the open questions want a camera
+> pointed at our own output, not another literature sweep.
 
 ## 3. The questions, by role
 
