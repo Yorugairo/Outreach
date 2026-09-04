@@ -121,6 +121,24 @@ read.
 | **Gemini showcases** | `samples/gemini-decoupled-evidence-showcase.html`, `gemini-scene-evidence-pipeline-showcase.html` | ancestor artifacts — where doctrine CAME from; a reviewed refinement outranks them |
 | **The viewer (P36)** — a blind, windowed perception test: an agent that knows no doctrine reads the script cold in 15s windows with a two-window memory; a deterministic scorer measures beat recall (a declared beat the reader never felt was laundered) and information gain | `scripts/viewer_windows.py` · `viewer_run.py` (Codex headless) · `viewer_score.py`; `run_script_gates.py --viewer-gate` | **shipped and binding** (P36 HG1 granted 2026-09-03 on the ep1 calibration: recall FAILs, confusion WARNs, gain INFO-only) | ep1: 54 windows on measured timings, all 37 declared beats placed; `test_viewer_windows.py` 17 + `test_viewer_score.py` 14 |
 
+## The research reference layer (2026-09-04)
+
+Docs **42–46** condense the research evidence bundle into what is applicable here.
+[`RESEARCH-INDEX.md`](RESEARCH-INDEX.md) dispositions **every heading of every bundle
+document** — coverage is the proof of reading — and
+`python scripts/check_research_extraction.py` enforces it.
+
+| doc | what it settles |
+|---|---|
+| [42-DRAWING-KINETICS](42-DRAWING-KINETICS.md) | why our stroke reads as a plotter, and the closed-form overshoot that replaces guessed timing |
+| [43-SCENE-GRAPH-AND-TRANSFORM](43-SCENE-GRAPH-AND-TRANSFORM.md) | the anchor sandwich, the Z-stack, both morph methods, the cutout rig |
+| [44-INK-AND-SURFACE](44-INK-AND-SURFACE.md) | alpha blending is the wrong operator for layered ink |
+| [45-PARALLAX-AND-PLATE-MOTION](45-PARALLAX-AND-PLATE-MOTION.md) | the viability matrix — parallax is banned on the page — and our dial audit |
+| [46-REFERENCE-RHYTHM](46-REFERENCE-RHYTHM.md) | the shot distribution recomputed, and the equation spine |
+
+These are **reference, not portable**. A rule graduates to `docs/portable/` once proven
+in a shipped build, and its index row says so.
+
 ## What is NOT built yet
 
 [`BACKLOG.md`](BACKLOG.md) — the hand-maintained open work, and the scope shift
