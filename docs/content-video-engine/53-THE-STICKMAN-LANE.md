@@ -14,12 +14,15 @@ Source: the explainer the operator supplied, watched 2026-09-04 (14:48, transcri
 | 3 · choose | ChatGPT | niche → aspect ratio → duration → pick from 10 generated ideas |
 | 4 · script out | ChatGPT | concept · character profile · **scene-by-scene, each with an image prompt AND an animation prompt** |
 | 5 · stills | **Google Flow** | agent mode OFF · image mode · 9:16 · **outputs 2** · model **Nano Banana 2** |
-| 6 · animate | **Google Flow** | video mode · 9:16 · **output 1** · **duration 4 s** · model **Omni flash** |
+| 6 · animate | **Google Flow** | video mode · 9:16 · **output 1** · ~~duration 4 s~~ -> **10 s, verified native Omni length** (operator, 2026-09-04) · model **Omni flash** |
 | 7 · assemble | Flow | chain clips with the `+` → add clips → download as one file |
 | 8 · voice | **ElevenLabs** | paste the script, generate, download |
 | 9 · edit | **CapCut** | drag clips in order · import VO · text → **auto captions** → template "quick" · resize and position clear of the frame |
 
-**Seven scenes × 4 s = a 30-second short.** That is the whole unit.
+~~Seven scenes x 4 s = a 30-second short.~~ **Corrected: 10 s is the verified native Omni
+duration, so a 30-second short is THREE renders, not seven** - and a 60-second video is six.
+That is a 2.3x cut in generation cost, before counting that a single 10-second render can be
+punched into two or three timeline cuts (1.0x -> 1.25x -> wide) without another generation.
 
 **We already hold every tool in this chain.** Flow is configured, ElevenLabs is the
 YouTube voice lane, and the only unfamiliar piece is CapCut, which is doing captions and
@@ -63,6 +66,12 @@ image prompt.** Read off the screen:
 **The tutorial needs the paragraph because its audience has no character feature. We do.**
 A native binding beats a described one: it carries the actual reference, not a description
 of it, and it cannot drift through paraphrase.
+
+**And re-describing a pinned character is actively harmful, not merely redundant** - from
+`FLOW-OMNI-EXPLAINER-PROMPT-PLAN.md` #9: a pinned Flow asset is already conditioned into
+the model as a visual latent, so re-pasting a text description creates **cross-attention
+competition** - text tokens fight reference tokens, producing facial warping, extra limbs
+or clothing shifts. **Refer to a bound character by name and nothing else.**
 
 **What the text technique is still worth:** portability. If we ever generate outside Flow —
 Nano Banana direct, another model, a different platform — the paragraph travels and the
@@ -111,6 +120,27 @@ ANTI-GLITCH LOCK  "Maintain the exact stickman design from the input frame in ev
 3. **`SECONDARY MOTION` as its own field.** Prompt engineers arrived independently at
    48 §48.6's separation of primary from secondary motion.
 
+### The animation prompt is PROSE, not fields - settled from our own artifacts
+
+**Corrected 2026-09-04.** The schema above records the field-based animation prompt as the
+thing to steal. **That was wrong, and our own working prompts already said so.**
+
+`omni-video/scene-01-02-red-arrow-transformation_meta.json` - a prompt that produced usable
+output - is **768 characters, zero newlines, and carries no field markers at all.** It opens
+*"full bleed edge-to-edge 9:16 vertical. A continuous cinematic transition starting on
+@Mike..."* Our plate prompts are the same shape.
+
+| source | says | is it evidence? |
+|---|---|---|
+| **our own Omni prompts** | **prose, one paragraph** | **yes - it shipped** |
+| `FLOW-OMNI-EXPLAINER-PROMPT-PLAN.md` | prose; bracketed tags are *"noise tokens"* | advice |
+| `Untitled document (1).md` | prose; *"the single most important formatting rule"* | advice |
+| the video tutorial | fields | advice |
+
+**Backlog X15 is closed - we did not need a test roll, we needed to read our own metadata.**
+I had recorded a tutorial's schema over our own working practice without checking it. The
+field list is still a useful *checklist of what to cover*; it is not the format to send.
+
 ### Do NOT take the negative blocks
 
 **Operator ruling, 2026-09-04, from observed behaviour on our own stack:**
@@ -139,6 +169,12 @@ observation as §53.8, arriving from the other direction — and it makes our pr
 checks subject count, style match against the bound `@Mike`, and text/watermark presence,
 and re-rolls on failure — an automated pre-filter *before* the contact sheet reaches the
 operator, not a replacement for it.
+
+**The mechanism, added 2026-09-04 from the Flow plan's #10:** modern transformer video
+models have **no separate negative-conditioning vector** the way SD 1.5 did. They process
+the prompt as unified natural language, so self- and cross-attention attend to every token -
+`no extra limbs` injects `extra limbs` into the same attention matrix. That is the "pink
+elephant" effect, and it is why the empirical ruling is true.
 
 *Scope note: recorded as observed on our stack (Flow / Nano Banana / Omni), not as a
 universal law. Models with a dedicated negative-prompt field are a different case — the
@@ -307,7 +343,10 @@ fields poorly at worst, whereas a model that mangles fields fails loudly.
 - **6 seconds holds ~13 spoken words.** Every scene's line must be *exactly* 13 — longer
   gets cut off mid-sentence before the clip ends.
 
-**That is a gate, not a guideline**, and it is mechanically checkable from the script.
+~~**That is a gate, not a guideline.**~~ **Moot, corrected 2026-09-04.** With voice decoupled
+to ElevenLabs, **the video model never speaks** - so there is no per-clip word constraint at
+all. The budget becomes a timeline question (how much narration a clip covers), not a prompt
+constraint. **Backlog X16 is withdrawn.** For the record, the original claim was checkable.
 (Their own prompt contains a bug here: it says *"rewrite any line that is not exactly 15"*
 two sentences after establishing 13. A prompt with no version control, per §53.8.)
 
@@ -393,7 +432,24 @@ The model sheet's **five expressions and five poses** map directly onto the cuto
 generative lane now and the rig later** — which is a reason to enumerate the rows
 deliberately rather than take whatever a generation returns.
 
-## 53.11 Sources
+## 53.11 Status after the Flow plan
+
+`briefs/FLOW-OMNI-EXPLAINER-PROMPT-PLAN.md` (2026-09-04) is the production version of this
+lane, reviewed in its Part 4. What it changed here:
+
+| this doc said | now |
+|---|---|
+| 4-second clips, 7 per short | **10-second clips, 3 per short** (verified) |
+| field-based animation prompt | **prose, one paragraph** (X15 closed from our own metadata) |
+| 13 words per clip is a gate | **moot** - decoupled voice means the model never speaks (X16 withdrawn) |
+| ElevenLabs at stage 8 | **ElevenLabs first**; clips generate silent |
+| CapCut assembly | **Remotion / our own player**, snapped to Whisper gaps (M13) |
+
+**The dependency: A0 gates the plan.** It is written for the stick lane, and
+`finance-host-stick-v1` does not exist yet as a bound Flow character. Everything else in it
+is ready to run.
+
+## 53.12 Sources
 
 `https://www.youtube.com/watch?v=qb7QSsxefZY`, watched 2026-09-04 — transcript plus 100
 extracted frames. Prompt text read directly off frames 16, 30 and 44.
