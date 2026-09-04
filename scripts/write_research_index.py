@@ -35,6 +35,7 @@ Read completed 2026-09-04. Reference layer: docs **42–46**.
 | [44-INK-AND-SURFACE](44-INK-AND-SURFACE.md) | Kubelka-Munk compositing, coffee-ring edge, anisotropic wicking — bounded by E22 | 07 §1.4 |
 | [45-PARALLAX-AND-PLATE-MOTION](45-PARALLAX-AND-PLATE-MOTION.md) | disocclusion limit, the viability matrix, our dial audit, multi-plane inpainting, masked ambient motion | 05 whole, 06 §2–4 |
 | [46-REFERENCE-RHYTHM](46-REFERENCE-RHYTHM.md) | shot distribution recomputed, gap thresholds, the equation spine, phase map | 04 (recomputed), 01, dossier §10 |
+| [47-FINDINGS-TO-CHECKS](47-FINDINGS-TO-CHECKS.md) | which findings can be designed out, gated, judged, or demoted | **derived from 42–46, not from a primary** — the enforcement layer |
 
 ## Declared conflicts and rejections
 
