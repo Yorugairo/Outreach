@@ -60,10 +60,21 @@ plate is spent on one shot; a prop composes and is reusable forever.
 | # | question | how to settle it |
 |---|---|---|
 | R1 | **Cut ON the pause or THROUGH it?** | The measurement says references cut on it; it does not say ours is wrong to sometimes cut through. A/B by ear on one scene pair. |
-| R2 | **Wealth Logic's four composition claims, unverified** | The "unifying equation spine" (one mechanism across variants vs. six unrelated tips), ~10 s evidence holds, one persistent host, captions with no background pill. These are visual — they need the frames, not the timings. R2a: the equation spine is the one that could change *script* architecture. |
+| ~~R2~~ | ~~Wealth Logic's four composition claims~~ | **CLOSED 2026-09-04** by `01_wealth_logic_production_report.md`. The equation spine is confirmed and named: `Spread = (Return − Cost) × Leverage`, all six mechanisms as the same equation with different variables, ring close returning to it verbatim. ~10 s holds and the persistent host confirmed. See [`FINDING-what-the-bundle-already-answered.md`](FINDING-what-the-bundle-already-answered.md). |
 | R3 | **Does a prop library actually compose?** | The claim is that 5–8 props cover most metaphors and compose combinatorially. Testable by briefing three unrelated episodes against one prop set and counting misses. |
-| R4 | **Flow Characters as identity lock** | The `@Mike` binding works for plates. Untested for motion — the identity test showed hair drift on a 6 s clip. |
+| ~~R4~~ | ~~Flow Characters as identity lock~~ | **ANSWERED 2026-09-04** by `02_drawing_engine_and_transforms_research.md`, which says the question is wrong: do not generate the character per shot — build a vector cutout rig with swappable torso/head/hand slots. Drift goes to zero by construction, not by prompting. |
 | R5 | **Parallax + object page** | 2.5D parallax is proven on world plates. Unknown whether it helps or hurts an ink-on-cream page. |
+
+## Opened by the bundle read (2026-09-04)
+
+| # | item | state |
+|---|---|---|
+| N1 | **M10 measures the wrong thing.** The reference's first minute holds 5 of 8 shots past 6 s, three past 13 s. If M10 is enforced as a shot-length ceiling rather than as motion-within-a-shot, we cut against the reference's own practice. The right M10 is an E1 motion-energy metric, not a duration cap. | Needs the gate read; **highest-value correction available.** |
+| N2 | **Shot-length variance is the real gap, not cut rate.** Our CPM (5.6) matches the reference (5.9) and our medians are within 0.1 s — but our IQR is 3.4 s against their 6.9 s, and their longest hold is 26 s to our 19.1 s. We metronome; they vary. | Target the distribution, not the mean. |
+| N3 | **The equation spine as script architecture** — one mechanism evaluated N times with the ring closing on the mechanism itself (R2a's answer). | Applies to the Steel and Paper re-script before anything else does. |
+| N4 | **Speech-rate contradiction.** Reference 183.6 WPM, ep1 182.8, doctrine target 145–165. The target sits below both. | Operator decision. |
+| N5 | **Gap threshold contradiction.** File 01 says ≥ 0.45 s, file 08 and the M13 proposal say ≥ 0.30 s. Different gate behaviour. | Settle from the measurement before M13 ships. |
+| N6 | **Read `06_unified_ledger_drawing_engine_and_comfy_spec.md` before writing the object-page renderer** — it carries a `ledger_page.v2.json` contract built on our existing LP clock, plus the Z0–Z5 stack that is the concrete form of A6/C3. | Prerequisite to A1. |
 
 ## Carried debt
 
