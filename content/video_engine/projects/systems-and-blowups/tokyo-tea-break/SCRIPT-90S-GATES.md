@@ -1,8 +1,8 @@
 # SCRIPT GATES - SCRIPT-90S-VO.txt
 
 script: SCRIPT-90S-VO.txt
-generated: 2026-09-04T01:47:34+00:00
-script_hash: 89078b80e86750ea5515393219671811b2dd01a59dbefe549874e1a46957882d
+generated: 2026-09-04T01:50:21+00:00
+script_hash: 8d62745f2bf45a67b08b5599aca09a0ff4909ce895fc12149eeadb90681ec755
 timing_source: estimated
 
 TOOLS      lint: exit 0, 0 fails | audit: exit 0, 0/1, timing=estimated |
@@ -14,7 +14,7 @@ VIEWER     NOT RUN - `viewer_windows.py` -> `viewer_run.py` -> `viewer_score.py`
 exit 0
 
 ```
-stats: {'sentence_mean': 10.0, 'sentence_count': 27, 'word_count': 269, 'rehook_positions_pct': [20, 64]}
+stats: {'sentence_mean': 9.9, 'sentence_count': 27, 'word_count': 267, 'rehook_positions_pct': [20, 63]}
 RESULT: clean
 ```
 
@@ -23,23 +23,23 @@ exit 0
 
 ```
 === SCRIPT-90S-VO.txt ===
-             chars: 1494
-         runtime_s: 93.1
-           runtime: 1m 33s
+             chars: 1475
+         runtime_s: 92.1
+           runtime: 1m 32s
          sentences: 27
-     sentence_mean: 10.0
-      break_ration: 0.67
-  sentence_mean_carrying: 11.2
+     sentence_mean: 9.9
+      break_ration: 0.68
+  sentence_mean_carrying: 11.1
   short_figure_share: 14.8%
-    sentence_stdev: 5.6
+    sentence_stdev: 5.5
      over_20_share: 7.4%
        hook_spread: 8%
    hook_properties: present-tense=y, viewer-facing=y
-         paradox_s: 7.0
+         paradox_s: 6.4
        first_you_s: 0.0
          cta_count: 0
            rehooks: ['0.3m', '1.0m']
-         phase_map: {'P1 OPEN': '0.0-0.2m', 'P2 ENGINE': '0.2-1.4m', 'P3 GAP': '0.3-0.7m', 'P4 PIVOT': '0.7-0.9m', 'P5 REFLECTION': '0.9-1.3m', 'P6 CLOSE': '0.1-1.6m'}
+         phase_map: {'P1 OPEN': '0.0-0.2m', 'P2 ENGINE': '0.2-1.4m', 'P3 GAP': '0.3-0.7m', 'P4 PIVOT': '0.7-0.8m', 'P5 REFLECTION': '0.8-1.3m', 'P6 CLOSE': '0.0-1.5m'}
   p3_units_expected: 1
          a3_anchor: 0:09
          pivot_pct: None
@@ -57,18 +57,18 @@ exit 1
 
 ```
 === OPENING STRUCTURE GATE: SCRIPT-90S-VO.txt ===
-           runtime: 1:32
+           runtime: 1:31
             timing: estimated (kit rate, 8% band)
           geometry: P1 0:00-0:35 (beat 5 from 0:23), P2 -1:05 (phase guides)
      density_bands: loops (2, 3), new-info (4, 6)
          a3_anchor: 0:09
-             cycle: checked 0:00-1:32; longest gap 22s from 1:02
-      unit_windows: ['P3 unit 1 0:15-0:41', 'P5 unit 2 0:50-1:20']
+             cycle: checked 0:00-1:31; longest gap 22s from 1:01
+      unit_windows: ['P3 unit 1 0:15-0:41', 'P5 unit 2 0:50-1:19']
       counterparty: Tokyo
               ring: tea break
          packaging: title=None thumb=None thumb_file=None
     not_gated_here: Truby Battle / Self-Revelation / New Equilibrium, Snyder midpoint, chiastic center, ring CLOSE (P4-P6)
-    beats_declared: {'archetype': ['0:06'], 'stakes': ['0:15'], 'rehook': ['0:17', '0:59'], 'payoff': ['0:21'], 'promise': ['0:37'], 'ring': ['0:46', '1:26'], 'opponent': ['0:49'], 'loop-close': ['1:02'], 'tricolon': ['1:24']}
+    beats_declared: {'archetype': ['0:06'], 'stakes': ['0:14'], 'rehook': ['0:17', '0:58'], 'payoff': ['0:21'], 'promise': ['0:36'], 'ring': ['0:45', '1:25'], 'opponent': ['0:48'], 'loop-close': ['1:01'], 'tricolon': ['1:23']}
 
   [FAIL ] G10 missing
           Humes pre-key immediately before the promise (P1 pause marks)
@@ -90,7 +90,7 @@ exit 1
           Truby Plan v1 / head-fake #1 planted STRAIGHT, early-mid P2 (P2 MANDATORY / MAP s4)
   [FAIL ] G26 no [foreshadow] near 10%
           Foreshadow schedule F2 at ~10%: the promise sighted again, none of it delivered (P2 / MAP s2)
-  [FAIL ] G29 no dip within 15s of the macro close at 1:02
+  [FAIL ] G29 no dip within 15s of the macro close at 1:01
           PLATFORM breathing dip IMMEDIATELY after the macro close - 2-3 beats of room tone (P2)
   [FAIL ] G37 no [archetype] declared in 0:08-0:30
           Truby Weakness/Need planted AS PEOPLE: an archetype-in-a-setting enters 0:08-0:30 (38 B3 / MAP s3)
@@ -106,7 +106,7 @@ exit 1
           Auditory handrail: exit P2 on a transition signpost into the Gap (P2 / doc 32 s1)
   [PASS ] G01 first sentence 1.47s
           PLATFORM 3s microhook (38 B1 / P1 QC)
-  [PASS ] G03 paid at 6.93s, settle at 6.93s
+  [PASS ] G03 paid at 6.38s, settle at 6.38s
           McKee gap paid WRONG by 0:08 + Humes post-key ON the boundary (38 B2)
   [PASS ] G04 clean
           PLATFORM ban list: no greeting, no 'in this video', no channel talk (38 B2)
@@ -114,15 +114,15 @@ exit 1
           Direct address: 'you' by 0:30 (38 B3 / doc 32 s1)
   [PASS ] G06 clean
           Biography as the twist - AFTER the paradox, never before (38 B3)
-  [PASS ] G07 [stakes] at 0:15
+  [PASS ] G07 [stakes] at 0:14
           Hook anatomy: stakes named by ~0:25 (38 B3)
   [PASS ] G08 [payoff] at 0:21
           One Minute Wall: real value FIRST, before the ask (38 B4)
-  [PASS ] G09 promise at 0:37
+  [PASS ] G09 promise at 0:36
           F1 + A1 + macro-loop-1 SETUP: the dated promise in 0:30-0:45 (38 B4 / MAP s3 / CLK; E24 roadmap by 0:45)
   [PASS ] G11 'By the end of this minute you'll know the number keeping yields high —'
           The promise carries a date or number and is calculable (38 B4 / doc 35)
-  [PASS ] G13 A2 at 0:59
+  [PASS ] G13 A2 at 0:58
           PLATFORM rehook A2 ~1:00, template family (38 B5 / P1 QC)
   [PASS ] G17 clean
           HARD GATE attribution-first; [verify] never in hook/promise (P1/P2 / doc 32 s1)
@@ -134,7 +134,7 @@ exit 1
           PLATFORM rehook A3 at ~10% of runtime = 0:09 (P2 / MAP s4 QC; audit and gate share kit_spec.a3_anchor_s, E23)
   [PASS ] G27 'tea break' 1x in P2
           Ring composition: token TOUCHED exactly once in P2, unresolved (P2 / doc 32 s5)
-  [PASS ] G28 [loop-close] at 1:02
+  [PASS ] G28 [loop-close] at 1:01
           Macro loop 1 CLOSES on a partial answer that opens the bigger question (P2 / MAP s4, LIFO ledger)
   [PASS ] G30 none
           PLATFORM: the ONLY mid-video CTA slot is the 15-30s after the macro payoff (P2)
@@ -148,8 +148,8 @@ exit 1
           U6 / E20 concession budget: an agreement run never exceeds 2 sentences or 10s without a claim of ours
   [PASS ] G35 clean
           U6 / E20: a delivered proof is never hedged in the next sentence
-  [PASS ] G36 longest stretch without a cycle beat: 22s from 1:02
-          CLK the cycle repeats per beat - hook / show it's worth it / promise more / deliver; no >60s without a cycle beat, 0:00-1:32 (E23: whole runtime)
+  [PASS ] G36 longest stretch without a cycle beat: 22s from 1:01
+          CLK the cycle repeats per beat - hook / show it's worth it / promise more / deliver; no >60s without a cycle beat, 0:00-1:31 (E23: whole runtime)
   [PASS ] G44 all 2 unit windows rehook out
           PLATFORM rehook per unit: one template-family line or [rehook] inside every P3/P5 unit window (P3.md u5 / P5 / MAP s9 '1 per unit'; E23)
   [INFO ] G02 edit-clock property - checked with --timeline
