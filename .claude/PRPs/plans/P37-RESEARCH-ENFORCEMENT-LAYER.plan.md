@@ -18,7 +18,7 @@ supersedes_note: amended after doc 48 landed - three gates added
 The 2026-09-04 research read produced docs 42-46 and, in
 [47-FINDINGS-TO-CHECKS](../../../docs/content-video-engine/47-FINDINGS-TO-CHECKS.md), a
 per-finding verdict on what can actually be enforced. This PRP builds the enforcement
-half: **seven mechanical gates and one agent-judged check.**
+half: **ten mechanical gates and one agent-judged check.**
 
 **Amended 2026-09-04** after `09` landed and became doc 48: three gates added (T7), and
 two Tier-1 items moved out of scope into the capability PRP.
@@ -115,6 +115,7 @@ execute all slices as parent; the routes are recorded for whichever system runs 
 | T2 | `implementation_luna` | new script plus a plate-kind lookup; moderate |
 | T4 | **parent** | modifies a shipped gate; human gate attached |
 | T5 | **parent** | new judged-check category, model harness, cost decision |
+| T7 | `implementation_luna` | new script; needs shot-table fields that may not exist yet |
 | T6 | `speedster` | deterministic doc status update |
 
 Write sets are disjoint except T1 and T3, which are sequenced rather than parallel.
