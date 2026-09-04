@@ -324,8 +324,11 @@ new recurring figure**, and it is a better artifact than a single portrait.
 
 A **LOCKED VOICE BLOCK** — one sentence fixing apparent age, gender presentation, accent,
 pitch, pace, warmth and delivery energy — copied verbatim into all five prompts, so the
-narration comes out of the video model itself. **Different from source A, which used
-ElevenLabs.** Worth knowing as an option; our voice lane is settled and does not need it.
+narration comes out of the video model itself. **Different from source A, which used ElevenLabs.**
+
+**Not adopted — operator, 2026-09-04: relying on Omni for voice generation is not viable.**
+Our voice lane is settled: ElevenLabs for YouTube, Chirp 3 HD Charon for the
+Facebook/NotebookLM lane. Recorded so a later pass does not re-propose it.
 
 ### It also violates the operator's own ruling — with a useful distinction
 
@@ -342,7 +345,55 @@ and no background music."* That is exactly the pattern §53.3 rules against.
 
 **Refines B7: exclude content, do not name defects.** Defect detection moves to the driver.
 
-## 53.10 Sources
+## 53.10 Two Mikes, and the character pack needs upgrading
+
+Operator, 2026-09-04:
+
+> *"We need a 'stick figure' Mike variant + our current Mike variant, and the character
+> pack needs to be upgraded to the standard we learned here."*
+
+### The gap in what we hold
+
+`finance-host-flow-character-pack.v1.json` is well-formed — schema, art-bible hash, rights
+policy, a detailed prompt, a dedicated `negative_prompt` field (the acceptable case; the
+B7 ruling is about negations in the *positive* prompt). But measured against §53.9's
+standard:
+
+| model-sheet standard | the pack today |
+|---|---|
+| front · side · three-quarter · **back** | `front`, `three_quarter`, `full_body` — **no side, no back** |
+| **five head expressions**, named | `expression_sheet` — declared but **unenumerated** |
+| **five full-body poses**, named | **absent** |
+| the sheet existing as registered assets | **`reference_asset_ids: []` — empty** |
+
+**The pack describes a character sheet that was never generated.** `render_eligible` is
+`False`, correctly.
+
+### Two variants, and what makes them one character
+
+| | **`finance-host-v1`** — retention | **`finance-host-stick-v1`** — acquisition |
+|---|---|---|
+| lane | world plates, long form | shorts, listicles, thumbnails |
+| detail | deep-indigo suit, pale blue shirt, copper tie, gold circuit lapel pin, brown cap-toe shoes with red-and-gold floral textile | **only what survives simplification** |
+| ground | woodblock crinkle-paper | flat, high contrast, phone-legible |
+
+> **A character's stick variant is defined by the features that survive at 5 % of the
+> pixels.** For Mike that is **the locs, the glasses, the goatee, and the indigo/copper
+> colour pair.** The lapel pin, the shoe textile and the suit's tailoring do not survive —
+> they are retention-lane detail, and carrying them into the stick variant is what would
+> make it muddy.
+
+Both bind as Flow characters. Both are the same person; the second is the first at
+acquisition abstraction (51 §51.7).
+
+### The convergence worth noting
+
+The model sheet's **five expressions and five poses** map directly onto the cutout rig's
+`HeadSlot` / `TorsoSlot` / `HandSlot` enumerations (43 §43.6). **One artifact serves the
+generative lane now and the rig later** — which is a reason to enumerate the rows
+deliberately rather than take whatever a generation returns.
+
+## 53.11 Sources
 
 `https://www.youtube.com/watch?v=qb7QSsxefZY`, watched 2026-09-04 — transcript plus 100
 extracted frames. Prompt text read directly off frames 16, 30 and 44.
