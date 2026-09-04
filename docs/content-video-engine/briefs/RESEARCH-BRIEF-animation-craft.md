@@ -65,8 +65,14 @@ Every finding must arrive as one of:
 3D/character-rig material, game-engine material, generative-model prompting. The
 builder already has the prose and it has not helped.
 
-Every claim carries a source. A number without one goes under SOURCES-TO-VERIFY,
-same as a figure in a script.
+Every claim carries a source, and **every number carries a retrievable locator** —
+page or section of the cited work, or a URL. A number whose source is a book or paper
+with no page is a *design proposal* and must be labelled as one. Proposals are welcome;
+proposals wearing citations are not. **The bibliography certifies nothing about the
+body** — added 2026-09-04 after the first pass returned real papers attached to invented
+figures (see [`VERDICT-research-brief-animation-craft.md`](VERDICT-research-brief-animation-craft.md)).
+
+A number without a locator goes under SOURCES-TO-VERIFY, same as a figure in a script.
 
 ## 3. The questions, by role
 
