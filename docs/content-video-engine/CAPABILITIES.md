@@ -141,6 +141,7 @@ document** — coverage is the proof of reading — and
 | [50-THE-PHONE-IS-THE-SCREEN](50-THE-PHONE-IS-THE-SCREEN.md) | **ep1's real analytics** — the cold cohort leaves at 1:05, 75 % watch on a phone, and our type is illegible there |
 | [51-THE-SHORTS-FORMAT](51-THE-SHORTS-FORMAT.md) | **one page, ship in an afternoon** — the four numbers, the shape, and a deliberately lower production bar |
 | [52-CONSTRUCT-DONT-INHERIT](52-CONSTRUCT-DONT-INHERIT.md) | **the founding-premise correction** — generated plates were a substitute for the ability to construct, and a generated plate has no addressable coordinate space |
+| [53-THE-STICKMAN-LANE](53-THE-STICKMAN-LANE.md) | the tutorial workflow read off the video — CHARACTER LOCK, the two prompt schemas, and why 30-page prompt packs are a missing runtime |
 
 These are **reference, not portable**. A rule graduates to `docs/portable/` once proven
 in a shipped build, and its index row says so.
