@@ -88,6 +88,9 @@ RULES = [
  ("MASTER_RESEARCH_AND_EVIDENCE", r"Diffusion Slideshow|Fatal Flaws|What We Steal|Prompt Audit", "EXTRACTED -> 45 SS45.2, 46 SS46.1"),
  ("MASTER_RESEARCH_AND_EVIDENCE", r"Breath-Gap|Blueprint 4", "EXTRACTED -> 46 SS46.3 - the 0.45s/midpoint variant"),
  ("MASTER_RESEARCH_AND_EVIDENCE", r"Pacing Ledger|Script Map", "EXTRACTED -> 46 SS46.5"),
+ ("MASTER_RESEARCH_AND_EVIDENCE", r"Three-Tier Governance|Animation Craft Breakthroughs", "RECORD - added 2026-09-04 after our response; its Tier1/Tier2/Tier3 split matches our ADOPT / ADOPT-AS-OURS / candidate-doctrine triage independently"),
+ ("MASTER_RESEARCH_AND_EVIDENCE", r"Grand Synergies|Easy Free Wins", "RECORD - restates 42/43/45 content; its parallax item now correctly targets intensity but still omits tiling_mode, ssaa and quality (see conflict 7)"),
+ ("MASTER_RESEARCH_AND_EVIDENCE", r"13.4 Primary Academic", "EXTRACTED -> 46 SS46.1 - the Cutting log-normal claim; the rest duplicate 42-45 sources"),
  ("MASTER_RESEARCH_AND_EVIDENCE", r".*", "DUPLICATE - synthesis of 01/02/05/06/07; extracted at the primary instead"),
  ("MASTER_RESEARCH_INDEX", r".*", "DUPLICATE - index over the same primaries; used to confirm this read covered every domain"),
 ]

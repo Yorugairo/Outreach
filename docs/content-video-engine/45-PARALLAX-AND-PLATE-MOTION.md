@@ -61,20 +61,38 @@ Read from `tools/google-flow-driver/src/parallax-runner.mjs` on 2026-09-04.
 **Banned presets:** `Circle` (orbital wobble), `Orbital` on single-layer (exposes extreme
 occlusion holes).
 
-## 45.4 The one open question — `strength` vs `intensity`
+## 45.4 RESOLVED from source — `intensity` is the displacement, `strength` is dead
 
-`05` says `strength` is the displacement killer. `06` says `strength` feeds the `BaseFlex`
-modulation input — inert without an active audio feature — while `intensity` is the real
-displacement and is hardcoded to `1.0`.
+`05` said `strength` was the killer; `06` said `strength` feeds an inert modulation input
+and `intensity` is the real displacement. **Settled 2026-09-04 by reading the installed
+node, which is the authority both reports were guessing at:**
 
-Our code shape supports `06`: each preset carries `"feature_param": "intensity"` and
-`"feature_mode": "relative"`, which is the signature of a modulation system where
-`strength` scales the parameter *named by* `feature_param`.
+`custom_nodes/ComfyUI-Depthflow-Nodes/src/`
 
-**SOURCES-TO-VERIFY.** Settle by reading the `akatz-ai/ComfyUI-Depthflow-Nodes` schema or
-by one test roll varying each in isolation. Until settled, **clamp both.** Model choice is
-also unsettled: `05` says `vitl_fp16`, `06` says `vitl_fp32` with fp16 "strictly banned due
-to logit underflow." Take ViT-Large; leave the precision to the test.
+- **`base_flex.py:25`** — `"optional": {"feature": ("FEATURE", {"default": None})}`.
+  The feature input is optional and defaults to `None`.
+- **`base_flex.py:66`** — `if feature is None: return (self.create(0.0, strength, ...),)`
+  — the single-preset path.
+- **`base_flex.py:103`** — `if feature is not None:` gates the whole modulation block.
+  `strength` is consumed *only* inside `modulate_param`, which is only reachable from
+  that branch.
+- **`motion/depthflow_motion_presets.py:13`** — `intensity` is a **required** FLOAT on
+  `DepthflowMotionPreset`, `default 1.0, min 0.0, max 10.0`, passed to `create_internal`.
+
+**Conclusion: `06` is right and `05` is wrong.** Our `strength = 1.0` does nothing at
+all — we supply no `feature`, so it is never read. `intensity`, hardcoded to `1.0` in all
+six presets, is the actual camera displacement and is 7–12× the recommended range.
+
+This also means **`08`'s targeting was correct** on this one point, and that
+`05`'s "`intensity: 1.0` is the correct dolly value" line is wrong and must not be
+followed.
+
+**What does not change:** `tiling_mode`, `ssaa`, `quality` and the depth model are
+independent of this dispute, both reports agree on them, and `08` never mentions the
+first three. They remain defects.
+
+Model precision stays open: `05` says `vitl_fp16`, `06` says `vitl_fp32` with fp16
+"strictly banned due to logit underflow." Take ViT-Large; settle precision on a test roll.
 
 ## 45.5 The professional standard — multi-plane inpainting
 

@@ -1,5 +1,19 @@
 # Answers to Research Brief — Animation Craft & The Drawing Engine (Pass 2 Audited)
 
+> **Superseded as a reference, 2026-09-04.** This file is a *filter* over the research
+> bundle, not a primary. Our reference layer is **docs 42–46**, sourced from the
+> primaries directly, and dispositioned in [`RESEARCH-INDEX.md`](../RESEARCH-INDEX.md).
+>
+> **Do not act on §8 (the parallax audit).** Its line coordinates are correct and its
+> `intensity` diagnosis is correct — confirmed from the node source — but it covers one
+> of five defects. `tiling_mode`, `ssaa` and `quality` appear nowhere in this file, so
+> following §8 leaves `tiling_mode: "mirror"` in place: the kaleidoscope glitch.
+> Use [45-PARALLAX-AND-PLATE-MOTION](../45-PARALLAX-AND-PLATE-MOTION.md) instead.
+>
+> Kept as the record of the pass-1 → pass-2 exchange. Its pass-2 corrections were
+> verified; see [VERDICT-research-brief-animation-craft.md](VERDICT-research-brief-animation-craft.md).
+
+
 **Author / Pass**: Gemini Deep-Research Pass 2 (Audited & Corrected)  
 **Target Reference**: [`RESEARCH-BRIEF-animation-craft.md`](file:///c:/Users/Snipe/Downloads/Outreach%20Program/docs/content-video-engine/briefs/RESEARCH-BRIEF-animation-craft.md)  
 **Audit & Review Response**: [`RESPONSE-TO-RESEARCH-PASS-1.md`](file:///c:/Users/Snipe/Downloads/Outreach%20Program/docs/content-video-engine/briefs/RESPONSE-TO-RESEARCH-PASS-1.md)  

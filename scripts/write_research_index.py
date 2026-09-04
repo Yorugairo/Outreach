@@ -41,12 +41,15 @@ Read completed 2026-09-04. Reference layer: docs **42–46**.
 These are the load-bearing disagreements found by reading the primaries against each
 other and against our code. **A conflict can only be found by reading both sides.**
 
-1. **`strength` vs `intensity` in the parallax runner.** `05` names `strength` as the
-   displacement killer; `06` says `strength` feeds an inert `BaseFlex` modulation input
-   and `intensity` is the real displacement. The operator confirms `06` followed a later
-   pass, so it supersedes — but our code's `"feature_param": "intensity"` shape is
-   consistent with `06` and neither is verified against the node schema.
-   **Held as SOURCES-TO-VERIFY in 45 §45.4. Clamp both until settled.**
+1. **RESOLVED — `strength` vs `intensity` in the parallax runner.** Settled 2026-09-04
+   from the installed node source, which is the authority both reports were guessing at.
+   `base_flex.py:25` makes `feature` an optional input defaulting to `None`;
+   `base_flex.py:103` gates all modulation behind `if feature is not None:`; `strength` is
+   consumed *only* inside `modulate_param`, reachable only from that branch. We supply no
+   feature, so **`strength` is dead code in our pipeline.** `intensity`
+   (`depthflow_motion_presets.py:13`, required FLOAT, default 1.0, max 10.0) is the real
+   displacement. **`06` is right, `05` is wrong** — and `05`'s "intensity: 1.0 is the
+   correct dolly value" must not be followed. Recorded in 45 §45.4.
 2. **Depth model precision.** `05` says `vitl_fp16`; `06` says `vitl_fp32` with fp16
    "strictly banned due to logit underflow." Take ViT-Large, leave precision to a test roll.
 3. **Acoustic gap threshold.** `01` and the dossier's `gap_detector.py` use **0.45 s**

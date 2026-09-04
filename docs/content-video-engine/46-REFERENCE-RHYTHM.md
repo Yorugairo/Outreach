@@ -32,6 +32,14 @@ difference is entirely in **spread: our interquartile range is half theirs.**
 A 26-second hold and a 1.6-second punch inside one episode is a rhythmic instrument we do
 not currently play. Target the distribution, not the mean.
 
+**Which distribution.** Cutting, Brunick & DeLong (2011) find Hollywood shot durations are
+**log-normal** — a long right tail of occasional very long holds, not a symmetric spread.
+That is the shape the reference has (median 9.6 s, max 26.0 s) and the shape we lack
+(median 9.7 s, max 19.1 s). So the target is not "vary more" in both directions: it is
+**keep the median and grow the tail** — earn a small number of much longer holds.
+*Claim sourced to Cutting 2011 via the dossier; the log-normal fit has not been tested
+against our own or the reference's data — that test is one line once we want it.*
+
 ## 46.2 What this means for M13 and for M10
 
 **M13 (cut lands in an acoustic gap) is free.** Since our cut *frequency* already matches,

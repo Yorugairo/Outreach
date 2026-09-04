@@ -34,12 +34,15 @@ Read completed 2026-09-04. Reference layer: docs **42–46**.
 These are the load-bearing disagreements found by reading the primaries against each
 other and against our code. **A conflict can only be found by reading both sides.**
 
-1. **`strength` vs `intensity` in the parallax runner.** `05` names `strength` as the
-   displacement killer; `06` says `strength` feeds an inert `BaseFlex` modulation input
-   and `intensity` is the real displacement. The operator confirms `06` followed a later
-   pass, so it supersedes — but our code's `"feature_param": "intensity"` shape is
-   consistent with `06` and neither is verified against the node schema.
-   **Held as SOURCES-TO-VERIFY in 45 §45.4. Clamp both until settled.**
+1. **RESOLVED — `strength` vs `intensity` in the parallax runner.** Settled 2026-09-04
+   from the installed node source, which is the authority both reports were guessing at.
+   `base_flex.py:25` makes `feature` an optional input defaulting to `None`;
+   `base_flex.py:103` gates all modulation behind `if feature is not None:`; `strength` is
+   consumed *only* inside `modulate_param`, reachable only from that branch. We supply no
+   feature, so **`strength` is dead code in our pipeline.** `intensity`
+   (`depthflow_motion_presets.py:13`, required FLOAT, default 1.0, max 10.0) is the real
+   displacement. **`06` is right, `05` is wrong** — and `05`'s "intensity: 1.0 is the
+   correct dolly value" must not be followed. Recorded in 45 §45.4.
 2. **Depth model precision.** `05` says `vitl_fp16`; `06` says `vitl_fp32` with fp16
    "strictly banned due to logit underflow." Take ViT-Large, leave precision to a test roll.
 3. **Acoustic gap threshold.** `01` and the dossier's `gap_detector.py` use **0.45 s**
@@ -291,7 +294,7 @@ other and against our code. **A conflict can only be found by reading both sides
 | 9.2 Practitioner Doctrine (Editorial & Animation Craft) | FILTERED OUTPUT, not a primary. Triaged in VERDICT-research-brief-animation-craft.md; adopted content is re-sourced from the primaries here |
 | 9.3 Internal Repository Measurements | FILTERED OUTPUT, not a primary. Triaged in VERDICT-research-brief-animation-craft.md; adopted content is re-sourced from the primaries here |
 
-### `MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md` — 24 headings
+### `MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md` — 29 headings
 | heading | disposition |
 |---|---|
 | Table of Contents | DUPLICATE - synthesis of 01/02/05/06/07; extracted at the primary instead |
@@ -318,6 +321,11 @@ other and against our code. **A conflict can only be found by reading both sides
 | 12. Unified Ledger Drawing Engine & ComfyUI Specification | DUPLICATE - synthesis of 01/02/05/06/07; extracted at the primary instead |
 | The 3 Local ComfyUI Engines & Role Matrix | DUPLICATE - synthesis of 01/02/05/06/07; extracted at the primary instead |
 | The 6-Stage Ledger Choreography | DUPLICATE - synthesis of 01/02/05/06/07; extracted at the primary instead |
+| 13. Animation Craft Breakthroughs & Three-Tier Pipeline Triage | RECORD - added 2026-09-04 after our response; its Tier1/Tier2/Tier3 split matches our ADOPT / ADOPT-AS-OURS / candidate-doctrine triage independently |
+| 13.1 The Three-Tier Governance Framework | RECORD - added 2026-09-04 after our response; its Tier1/Tier2/Tier3 split matches our ADOPT / ADOPT-AS-OURS / candidate-doctrine triage independently |
+| 13.2 The 5 Grand Synergies to Capitalize On | RECORD - restates 42/43/45 content; its parallax item now correctly targets intensity but still omits tiling_mode, ssaa and quality (see conflict 7) |
+| 13.3 The 5 Disproportionately Easy Free Wins | RECORD - restates 42/43/45 content; its parallax item now correctly targets intensity but still omits tiling_mode, ssaa and quality (see conflict 7) |
+| 13.4 Primary Academic & Empirical Citations | EXTRACTED -> 46 SS46.1 - the Cutting log-normal claim; the rest duplicate 42-45 sources |
 
 ### `MASTER_RESEARCH_INDEX.md` — 32 headings
 | heading | disposition |
@@ -357,5 +365,5 @@ other and against our code. **A conflict can only be found by reading both sides
 
 ---
 
-**232 headings across 11 documents, all dispositioned.**
+**237 headings across 11 documents, all dispositioned.**
 Verified by `python scripts/check_research_extraction.py`.
