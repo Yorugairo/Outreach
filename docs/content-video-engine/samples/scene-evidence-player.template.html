@@ -24,8 +24,13 @@
   h1 b { color: var(--sunflower); font-weight: 700; }
 
   #shell { width: min(96vw, 1400px); }
-  #fit { position: relative; width: 100%; aspect-ratio: 16/9; overflow: hidden; border: 1px solid #14293a; border-radius: 6px; background: var(--slate); }
-  #stage { position: absolute; inset: 0; width: 1920px; height: 1080px; transform-origin: top left; overflow: hidden; }
+  #fit { position: relative; width: 100%; aspect-ratio: var(--stage-ar); overflow: hidden; border: 1px solid #14293a; border-radius: 6px; background: var(--slate); }
+  /* STAGE GEOMETRY (2026-09-03). 16:9 is the default and its numbers are the
+     originals, so existing builds render identically. A 9:16 short opts in with
+     `data-aspect="9:16"` on <html>, which the timeline's `aspect` field sets. */
+  :root { --stage-w: 1920px; --stage-h: 1080px; --stage-ar: 16 / 9; }   /* -ar is unitless: aspect-ratio rejects px */
+  html[data-aspect="9:16"] { --stage-w: 1080px; --stage-h: 1920px; --stage-ar: 9 / 16; }
+  #stage { position: absolute; inset: 0; width: var(--stage-w); height: var(--stage-h); transform-origin: top left; overflow: hidden; }
 
   .world { position: absolute; inset: -5%; background-size: cover; background-position: center; will-change: transform, clip-path; }
 
@@ -81,7 +86,7 @@
   /* MOTION MENU species (doc 29 s9.27; P35 T6/T7): plate life on the world side, the targeted overlay above the docks */
   #plife { position: absolute; inset: 0; pointer-events: none; }
   #plife img { position: absolute; will-change: transform; transform-origin: 50% 100%; }
-  #species { position: absolute; inset: 0; width: 1920px; height: 1080px; pointer-events: none; overflow: visible; }
+  #species { position: absolute; inset: 0; width: var(--stage-w); height: var(--stage-h); pointer-events: none; overflow: visible; }
   #species .co { fill: none; stroke: #F5B72E; stroke-width: 6; stroke-linecap: round; stroke-linejoin: round; }
   #species .sq { fill: none; stroke: #F5B72E; stroke-width: 5; stroke-linecap: round; }
   #species .lab { font: 700 30px Inter, Arial, sans-serif; fill: #F5B72E; paint-order: stroke; stroke: rgba(27,30,35,.85); stroke-width: 8px; }   /* inline series names may run past the plot (s9.23b) */
@@ -142,6 +147,19 @@
   #dock-1.solo.side-r { left: 764px; }
   #dock-1.solo.side-l { left: 100px; }
   #dock-1 { left: 64px; } #dock-2 { left: 992px; }
+
+  /* 9:16 — two 864px docks cannot sit side by side in a 1080px frame. They stack:
+     full width inside 64px margins, dock-2 under dock-1. Vertical room is what a
+     short has instead of horizontal, so the docks get the frame's width and the
+     plate keeps the top third for the world. */
+  html[data-aspect="9:16"] .dock { width: 952px; top: 690px; }
+  /* ID-scoped for the same reason the 16:9 rules are: #dock-2 { left: 992px }
+     outranks any class chain, so the stacked left must be ID-scoped too. */
+  html[data-aspect="9:16"] #dock-1 { left: 64px; }
+  html[data-aspect="9:16"] #dock-2 { left: 64px; top: 1180px; }
+  html[data-aspect="9:16"] #dock-1.solo { width: 952px; left: 64px; top: 690px; }
+  html[data-aspect="9:16"] #dock-1.solo.side-r,
+  html[data-aspect="9:16"] #dock-1.solo.side-l { left: 64px; }
 
   /* The skill puts mix-blend-mode: multiply on the artblock wrapper — correct
      for hand-drawn INK on a paper canvas. It does not transfer to a literal
@@ -366,7 +384,15 @@
   const DUR = TL.runtime_s || (TL.scenes.length ? TL.scenes[TL.scenes.length-1].span[1] : 0);
   scrub.max = DUR;
   const stage = $("stage"), fit = $("fit");
-  const fitStage = () => { stage.style.transform = `scale(${fit.clientWidth / 1920})`; };
+  /* Read once from the CSS variables so the JS and the layout can never disagree. */
+  /* The timeline declares its own frame. Set the attribute BEFORE the constants
+     below read the CSS variables, or the JS and the layout disagree by one frame.
+     Absent or "16:9" keeps the original geometry exactly. */
+  if (String(TL.aspect || "16:9") === "9:16") document.documentElement.setAttribute("data-aspect", "9:16");
+  const STAGE_W = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--stage-w")) || 1920;
+  const STAGE_H = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--stage-h")) || 1080;
+  $("species").setAttribute("viewBox", `0 0 ${STAGE_W} ${STAGE_H}`);
+  const fitStage = () => { stage.style.transform = `scale(${fit.clientWidth / STAGE_W})`; };
   addEventListener("resize", fitStage); fitStage();
 
   const clamp01 = (v) => Math.min(1, Math.max(0, v));
@@ -537,8 +563,8 @@
            spot; the ACTIVE pose (large, near stage center, where the
            card lives WHILE ITS LINE IS SPOKEN) is a transform relative
            to it. Stage is 1920x1080. */
-        const wpx = W / 100 * 1920, hpx = wpx * 480 / 1056;
-        const cx = L / 100 * 1920 + wpx / 2, cy = T / 100 * 1080 + hpx / 2;
+        const wpx = W / 100 * STAGE_W, hpx = wpx * 480 / 1056;
+        const cx = L / 100 * STAGE_W + wpx / 2, cy = T / 100 * STAGE_H + hpx / 2;
         const acx = 930 + (i % 2 ? 70 : -70), acy = 400 + (i % 3) * 26;
         return { card, at: it.at,
                  tilt: [-3, 2, -2, 3, -2.5, 2.5][i % 6],
@@ -1848,11 +1874,11 @@
   const spEase = (k) => 1 - Math.pow(1 - clamp01(k), 3);
   const spIO = (k) => { k = clamp01(k); return k < 0.5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2; };
   /* an element's box in STAGE px (the stage is scaled to fit the pane) */
-  const stageBox = (el) => { const r = el.getBoundingClientRect(), sb = $("stage").getBoundingClientRect(); const k = 1920 / Math.max(1, sb.width); return { x: (r.left - sb.left) * k, y: (r.top - sb.top) * k, w: r.width * k, h: r.height * k }; };
+  const stageBox = (el) => { const r = el.getBoundingClientRect(), sb = $("stage").getBoundingClientRect(); const k = STAGE_W / Math.max(1, sb.width); return { x: (r.left - sb.left) * k, y: (r.top - sb.top) * k, w: r.width * k, h: r.height * k }; };
   const resolveTarget = (tg) => {
     if (!tg) return null;
-    if (tg.kind === "point") return { x: tg.x * 1920, y: tg.y * 1080, w: 0, h: 0 };
-    if (tg.kind === "region") return { x: tg.x0 * 1920, y: tg.y0 * 1080, w: (tg.x1 - tg.x0) * 1920, h: (tg.y1 - tg.y0) * 1080 };
+    if (tg.kind === "point") return { x: tg.x * STAGE_W, y: tg.y * STAGE_H, w: 0, h: 0 };
+    if (tg.kind === "region") return { x: tg.x0 * STAGE_W, y: tg.y0 * STAGE_H, w: (tg.x1 - tg.x0) * STAGE_W, h: (tg.y1 - tg.y0) * STAGE_H };
     if (tg.kind === "datum") {   /* the ledger page's bar, or a point on its dense line */
       const world = wB.classList.contains("ledger") ? wB : wA;
       const bars = world.querySelectorAll(".lp-chart .bar");
@@ -1942,13 +1968,13 @@
         const ca = centre(a), cz = centre(z), cx = ca.cx + (cz.cx - ca.cx) * g, cy = ca.cy + (cz.cy - ca.cy) * g;
         const r0 = (Math.max(a.w, 240) / 2 + 60) / 960, id = "spot" + si;
         const defs = lpEl("defs", "", spSvg);
-        const rg = lpEl("radialGradient", "", defs, { id, cx: (cx / 1920).toFixed(4), cy: (cy / 1080).toFixed(4), r: 0.5 });
+        const rg = lpEl("radialGradient", "", defs, { id, cx: (cx / STAGE_W).toFixed(4), cy: (cy / STAGE_H).toFixed(4), r: 0.5 });
         lpEl("stop", "", rg, { offset: 0, "stop-color": "#000", "stop-opacity": 0 });
         lpEl("stop", "", rg, { offset: r0.toFixed(3), "stop-color": "#000", "stop-opacity": 0 });
         lpEl("stop", "", rg, { offset: (r0 + 0.12).toFixed(3), "stop-color": "#000", "stop-opacity": SP.SPOT_DIM });
         lpEl("stop", "", rg, { offset: 1, "stop-color": "#000", "stop-opacity": SP.SPOT_DIM });
         const fade = Math.min(spEase(k * dur / 0.4), spEase((1 - k) * dur / 0.4));
-        lpEl("rect", "", spSvg, { x: 0, y: 0, width: 1920, height: 1080, fill: "url(#" + id + ")", opacity: fade.toFixed(2) });
+        lpEl("rect", "", spSvg, { x: 0, y: 0, width: STAGE_W, height: STAGE_H, fill: "url(#" + id + ")", opacity: fade.toFixed(2) });
       } else if (sp.kind === "squiggle") {   /* a hand-drawn underline under a declared caption word span (stage mode only) */
         const b = resolveTarget(sp.target); if (!b || !cap.classList.contains("stage")) return;
         drawOn(lpEl("path", "sq", spSvg, { d: squigglePath(b, seed) }), k * dur / SP.SQUIG_DRAW);
@@ -1957,14 +1983,14 @@
         (sp.cutouts || []).forEach((c, ci) => {
           if (!A[c.asset]) return;
           const img = lpEl("img", "", plife); img.src = A[c.asset];
-          const w = (c.w || 0.18) * 1920, x = c.x * 1920, y = c.y * 1080, delay = (c.delay || 0) + ci * 0.15;
+          const w = (c.w || 0.18) * STAGE_W, x = c.x * STAGE_W, y = c.y * STAGE_H, delay = (c.delay || 0) + ci * 0.15;
           const land = clamp01((step - delay) / SP.LIFE_LAND);
           const drop = (1 - spEase(land)) * -220;
           const squash = land >= 1 ? 1 : land > 0.85 ? 1 + (1 - land) * 1.2 : 1;
           const frame = Math.floor(step * SP.LIFE_FPS) % 2;
           const bx = (lpHash(seed, ci * 2 + frame, 31) - 0.5) * 2 * SP.BOIL_PX, by = (lpHash(seed, ci * 2 + frame, 32) - 0.5) * 2 * SP.BOIL_PX;
           const rot = (lpHash(seed, ci * 2 + frame, 33) - 0.5) * 2 * SP.BOIL_DEG;
-          img.style.width = w.toFixed(1) + "px"; img.style.left = (x - w / 2).toFixed(1) + "px"; img.style.bottom = (1080 - y).toFixed(1) + "px";
+          img.style.width = w.toFixed(1) + "px"; img.style.left = (x - w / 2).toFixed(1) + "px"; img.style.bottom = (STAGE_H - y).toFixed(1) + "px";
           img.style.opacity = step >= delay ? 1 : 0;
           img.style.transform = "translate(" + bx.toFixed(1) + "px, " + (drop + by).toFixed(1) + "px) rotate(" + rot.toFixed(2) + "deg) scale(" + (1 / squash).toFixed(3) + ", " + squash.toFixed(3) + ")";
         });
@@ -2032,7 +2058,7 @@
     paint(wA, prev || sc);
     paint(wB, sc);
     seam.style.opacity = seaming ? 1 : 0;
-    seam.style.transform = `translateX(${(sc.exit === "wipe_right" ? (1-wk) : wk) * 1920}px)`;
+    seam.style.transform = `translateX(${(sc.exit === "wipe_right" ? (1-wk) : wk) * STAGE_W}px)`;
 
     /* LAYER 2/3 — docks live on their own schedule */
     const live = DOCKS.filter((d) => t >= d.enter && t < d.exit + EXIT);
@@ -2113,7 +2139,7 @@
            happens to sit, which is how a card got severed mid-air with the
            front nowhere near it (operator screenshot, 0:41). Map the
            front's stage X into element coordinates. */
-        const fx = (sc.exit === "wipe_right" ? (1 - wk) : wk) * 1920;
+        const fx = (sc.exit === "wipe_right" ? (1 - wk) : wk) * STAGE_W;
         const L = el.offsetLeft, W2 = el.offsetWidth || 1;
         /* the stage front mapped into the CARD's space as a HARD inset: the
            card is severed at the same hard edge the page turns on, same
@@ -2356,8 +2382,8 @@
         const r = im.getBoundingClientRect ? null : null;
         if (!vis) im.removeAttribute("src");
       });
-      const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080">` +
-        `<foreignObject width="1920" height="1080">` +
+      const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${STAGE_W}" height="${STAGE_H}">` +
+        `<foreignObject width="${STAGE_W}" height="${STAGE_H}">` +
         `<div xmlns="http://www.w3.org/1999/xhtml">` +
         `<style>${css.replace(/]]>/g, "")}</style>` +
         new XMLSerializer().serializeToString(cl) +
