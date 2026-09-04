@@ -34,9 +34,20 @@ audience. The narration now says: *this was never a bond story — pull up your 
 holding and find its P/E.* Rendering today would put a sell order on screen that the
 voice never gives.
 
-Worse than stale: **it names a ticker.** `TLT` is a personalized directive, which doc
-36 §5.6 forbids outright — education and frameworks, never personalized directives.
-This must be deleted, not updated, and whatever replaces it teaches the P/E point.
+**Correction (operator, 2026-09-03):** my first draft of this row said the ticker was
+the defect. It is not, and no rule says so. Doc 36 §5.6 forbids *personalized
+directives* — the imperative, not the instance. The doctrine positively wants tickers:
+doc 34 praises the Identify beat for naming "actual tickers," doc 36 §204 works in
+"ticker-level figures," and doc 37 §4b carries a pronunciation standard for them
+(spoken name per the operator's ear-probe, "AVAV" → "A-V-A-V" or "AeroVironment") —
+which nobody writes for something never said.
+
+So the defect is the verb. **"Exit 20Y+ Long-Duration Treasuries"** is an instruction;
+`TLT` is the concrete instance doc 32 asks for. The dock is replaced because it
+contradicts the script and issues orders, and its replacement may absolutely name
+securities as examples — a named fund makes "long duration" touchable, which is the
+whole point of cashing an abstraction. **If a ticker enters the narration it is
+spoken, not spelled: "T-L-T," or the fund's name.**
 
 ## 3. FAIL — the TIC table is asserted, not sourced
 
@@ -101,7 +112,9 @@ sign colours, STAGE captions, the cross-reveal wipe, choreography gates, and
 **Evidence first, renderer second.** Rebuilding the player around unsourced numbers
 only moves the problem into a better-looking box.
 
-1. **Delete the strategy dock.** It contradicts the script and names a ticker.
+1. **Replace the strategy dock.** It contradicts the script and speaks in imperatives.
+   Its replacement teaches the P/E point and may name funds or tickers as concrete
+   examples — spoken by name if they reach the narration (doc 37 §4b).
 2. **Write `evidence/build_tokyo_evidence.py`** on the steel-and-paper pattern: fetch
    `DGS10` from FRED, compute the hedge cost from the rate differential, emit both
    charts as `.series.json` sidecars with real source lines and a fetch date, and add
