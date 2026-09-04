@@ -28,6 +28,28 @@ joins them.
 
 ---
 
+## The ground truth we hold: one retention curve
+
+**Ep1 is the only episode we have published and gotten real audience-retention analytics
+back on.** Its curve drops at **0:45–1:00**. That is the whole of our evidence about actual
+viewer behaviour — everything else here is inference from shot tables, comparison against a
+reference, or agent judgment.
+
+`SCRIPT-G-VIEWER-CALIBRATION.md` used it to calibrate P36, and the result is the precedent
+this backlog runs on: **information gain scored 5 at the drop window against an episode
+median of 3** — green exactly where the video failed — so it was retired to INFO rather
+than promoted. Recall and confusion found the window, so they carry authority.
+
+**The asymmetry matters and P40 inherits it: one curve is enough to *kill* a measure, not
+enough to *bless* one.** A metric that lights up at 0:45–1:00 could be coincidence; with
+four metrics and one event, something will correlate. Any threshold from n=1 is a
+hypothesis until a second episode's curve exists.
+
+One more prior worth carrying: the calibration found the script is **information-dense
+everywhere, including where it loses people** — *"density is not the problem, so a density
+measure cannot find it."* That lowers the odds that a motion-energy metric separates w3
+either, and P40 should expect a null result rather than hope for a hit.
+
 ## The standing frame: we lose people in the first minute
 
 Operator ruling 2026-09-04: *our failure is holding the audience; we never even get the
@@ -159,9 +181,9 @@ mechanism per short, which is the short-form form of the equation spine. Logged 
 
 | # | question | how to settle it |
 |---|---|---|
-| **X1** | **What actually loses people in our first minute?** We have never measured our own failure mode — only inferred it. This is the question everything else is serving, and it has not been on this list before. | P36 (the viewer) on ep1's opening, windowed and blind; plus the E1 metrics once X2 lands. Run the reference's opening on the same instruments and compare. |
-| **X2** | **E1 metric thresholds.** Motion energy, centroid of change, saliency and flow coherence are the right metrics; the ranges are not ours yet. | Build the measurement, run it over ep1 and both references, derive from that. **Never adopt a guessed threshold** — that is precisely the error the metrics exist to catch. |
-| **X3** | **Gap threshold: 0.30 s at onset, or 0.45 s at midpoint?** Different gates. | Count both across ep1's word timeline; check the 0.45 s set is large enough to carry every boundary that needs one. **Blocks M13.** |
+| **X1** → **[P40](../../.claude/PRPs/plans/P40-MEASURE-THE-FIRST-MINUTE.plan.md)** T3 | **What actually loses people in our first minute?** We have never measured our own failure mode — only inferred it. This is the question everything else is serving, and it has not been on this list before. | P36 (the viewer) on ep1's opening, windowed and blind; plus the E1 metrics once X2 lands. Run the reference's opening on the same instruments and compare. |
+| **X2** → **P40** T2 | **E1 metric thresholds.** Motion energy, centroid of change, saliency and flow coherence are the right metrics; the ranges are not ours yet. | Build the measurement, run it over ep1 and both references, derive from that. **Never adopt a guessed threshold** — that is precisely the error the metrics exist to catch. |
+| **X3** → **P40 T1 — cheapest useful thing in the stack; no render, no dependency, runs today** | **Gap threshold: 0.30 s at onset, or 0.45 s at midpoint?** Different gates. | Count both across ep1's word timeline; check the 0.45 s set is large enough to carry every boundary that needs one. **Blocks M13.** |
 | ~~X12~~ | ~~Wan is not covered~~ **CLOSED 2026-09-04** by [49](49-GENERATIVE-VIDEO-AND-THE-VERTICAL-STAGE.md) §49.2 — the 4k+1 law, CFG ceilings, TeaCache, and the two dials that fail loudly (unscaled FP8 encoder, quantized VAE). Original: | The bundle specs LTX-Video thoroughly (frame-count law, CFG ceiling, mask-pinning, re-stitch) and mentions Wan **zero** times. The *architecture* transfers — mask-pin the subject, composite the pristine cutout over the decode — but every dial is LTX-specific. | A targeted pass, or one calibration roll per lane. Do not assume LTX numbers carry. |
 | ~~X13~~ | ~~9:16 composition~~ **CLOSED 2026-09-04** by [49](49-GENERATIVE-VIDEO-AND-THE-VERTICAL-STAGE.md) §49.1 — the Universal Clean Canvas and the 3-zone vertical stage. **It caught a live defect in our own template.** Original: | Brief item D2 asked this and **no pass answered it.** All the compositing work (48 §48.7) assumes a 16:9 stage with a horizon; nothing addresses a vertical frame whose bottom third is captions. We ship shorts. | Measure the reference shorts lane, or derive from the safe zone we already enforce. |
 | **X14** | **Our shorts are built on long-form cadence.** 49 §49.6: short-form wants a visual event every 1.2–2.5 s and exactly one mechanism; we run ASL 6–10 s and compound argument. The Tokyo short is 118 s carrying a full six-phase structure. | Re-cut one short at short-form pulse and compare. Cheap, and it bears directly on X1. |
