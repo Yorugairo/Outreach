@@ -1,5 +1,5 @@
 {
- "fetched": "2026-09-03",
+ "fetched": "2026-09-04",
  "japan_holdings": {
   "latest_month": "2026-06",
   "latest": 1116.7,
@@ -24,8 +24,23 @@
  },
  "meta_pe": {
   "status": "REAL",
-  "trailing_pe": 23.0,
-  "fetched": "2026-09-03",
+  "trailing_pe": 23.1,
+  "forward_pe": 17.5,
+  "trailing_eps": 26.56,
+  "price": 612.305,
+  "fetched": "2026-09-04",
   "src": "Yahoo Finance via yfinance"
+ },
+ "discount_rate": {
+  "years": 10,
+  "pv": {
+   "3%": 0.744,
+   "4%": 0.676,
+   "5%": 0.614,
+   "6%": 0.558
+  },
+  "drop_3_to_5_pct": -17.5,
+  "us10y_now": 4.45,
+  "meta_trailing_pe": 23.1
  }
 }

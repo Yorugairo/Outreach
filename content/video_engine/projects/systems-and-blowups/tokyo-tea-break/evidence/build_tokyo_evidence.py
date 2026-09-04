@@ -168,11 +168,53 @@ def meta_pe() -> dict:
         pe = info.get("trailingPE") or info.get("forwardPE")
         if not pe:
             raise ValueError("no trailingPE/forwardPE field")
-        return {"status": "REAL", "trailing_pe": round(float(pe), 1), "fetched": FETCHED,
-                "src": "Yahoo Finance via yfinance"}
+        return {"status": "REAL", "trailing_pe": round(float(pe), 1),
+                "forward_pe": round(float(info["forwardPE"]), 1) if info.get("forwardPE") else None,
+                "trailing_eps": info.get("trailingEps"), "price": info.get("currentPrice"),
+                "fetched": FETCHED, "src": "Yahoo Finance via yfinance"}
     except Exception as e:                                           # noqa: BLE001
         print(f"     ! META P/E unavailable ({type(e).__name__}) — recorded MISSING, not guessed")
         return {"status": "MISSING", "reason": f"{type(e).__name__}", "fetched": FETCHED}
+
+
+# ------------------------------------------------- 4. the payoff: what a yield discounts
+def discount_rate(pe: dict, us10y: float) -> dict:
+    """What a dollar of profit ten years out is worth today, at each discount rate.
+
+    Deliberately NOT a model. This is the discount identity 1/(1+r)^n — arithmetic any
+    viewer can redo on a phone — so the chart proves the script's sentence ("a high
+    yield is what discounts it") without smuggling in growth assumptions, a terminal
+    value, or a fair-value claim about Meta. Meta's real multiple rides as a badge:
+    the P/E says how much of the price is future profit, the bars say what that future
+    profit is worth as the yield moves. Two facts, no forecast.
+    """
+    YEARS = 10
+    rates = [0.03, 0.04, 0.05, 0.06]
+    pv = {r: round(1.0 / (1.0 + r) ** YEARS, 3) for r in rates}
+    lo, hi = pv[0.03], pv[0.05]
+    facts = {"years": YEARS, "pv": {f"{int(r*100)}%": v for r, v in pv.items()},
+             "drop_3_to_5_pct": round((hi / lo - 1) * 100, 1),
+             "us10y_now": us10y, "meta_trailing_pe": pe.get("trailing_pe")}
+    badges = [{"label": "META P/E", "value": f"{pe['trailing_pe']:.1f}x",
+               "tag": "years of profit you're paying for", "accent": "cobalt"}] if pe.get("trailing_pe") else []
+    badges.append({"label": "US 10Y NOW", "value": f"{us10y:.2f}%", "tag": "the discount rate", "accent": "crimson"})
+    write("ev-discount-rate-v1", {
+        "title": "What a dollar of future profit is worth",
+        "sub": f"Present value of $1 of profit arriving in {YEARS} years, by discount rate. "
+               f"Pure arithmetic: 1/(1+r)^{YEARS} — no growth assumed, no forecast",
+        "src": f"Discount identity; US 10-year from FRED DGS10 · fetched {FETCHED}",
+        "unit": "$",
+        # Bars are unsigned present values, and their DESCENDING HEIGHTS are the
+        # argument - a dollar is worth less as the rate rises. The signed change rides
+        # on a badge, never in a bar note: E28 refuses a signed claim beside an
+        # unsigned magnitude, and it caught exactly that here (2026-09-04).
+        "bars": [{"label": f"{int(r*100)}%", "value": pv[r],
+                  "color": "cobalt" if r < 0.05 else "crimson"} for r in rates],
+        "badges": badges + [{"label": "3% TO 5%", "value": f"{facts['drop_3_to_5_pct']:+.0f}%",
+                             "tag": "what the same dollar loses", "accent": "crimson"}],
+        "status": "REAL", "fetched": FETCHED, "facts": facts,
+    })
+    return facts
 
 
 def main() -> int:
@@ -181,15 +223,17 @@ def main() -> int:
     jp = japan_holdings(months, rows)
     hy = hedged_yield()
     pe = meta_pe()
+    dr = discount_rate(pe, hy["us10y"])
     (OUT / "FIGURES.json").write_text(json.dumps(
-        {"fetched": FETCHED, "japan_holdings": jp, "hedged_yield": hy, "meta_pe": pe}, indent=1),
-        encoding="utf-8")
+        {"fetched": FETCHED, "japan_holdings": jp, "hedged_yield": hy, "meta_pe": pe,
+         "discount_rate": dr}, indent=1), encoding="utf-8")
     print(f"     + FIGURES.json")
     print(f"\n  Japan  {jp['latest_month']}  ${jp['latest']:,.1f}B  "
           f"({jp['drop_bn']:+,.1f}B from {jp['peak_month']}, {jp['drop_pct']:+.1f}%)  share {jp['share_pct']}%")
     print(f"  Hedged {hy['latest_month']}  net {hy['net_hedged']:+.2f}%  "
           f"(worst {hy['worst_month']} {hy['worst_net']:+.2f}%, last negative {hy['last_negative_month']})")
-    print(f"  META P/E: {pe.get('trailing_pe', pe['status'])}")
+    print(f"  META P/E: {pe.get('trailing_pe', pe['status'])}   "
+          f"$1 in 10y: {dr['pv']['3%']} at 3% -> {dr['pv']['5%']} at 5% ({dr['drop_3_to_5_pct']:+.0f}%)")
     return 0
 
 

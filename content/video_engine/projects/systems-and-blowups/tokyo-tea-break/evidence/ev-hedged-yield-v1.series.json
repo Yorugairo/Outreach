@@ -1,7 +1,7 @@
 {
  "title": "The reason everyone gives stopped being true",
  "sub": "US 10-year Treasury yield minus the 3-month FX hedge cost (US 3M less Japan 3M), annualized. Below zero the trade loses money. Last negative 2024-11",
- "src": "FRED DGS10, DGS3MO, IR3TIB01JPM156N (hedge cost = US 3M \u2212 JPY 3M) \u00b7 fetched 2026-09-03",
+ "src": "FRED DGS10, DGS3MO, IR3TIB01JPM156N (hedge cost = US 3M \u2212 JPY 3M) \u00b7 fetched 2026-09-04",
  "ylabel": "%",
  "zero_line": true,
  "series": [
@@ -226,7 +226,7 @@
   }
  ],
  "status": "REAL",
- "fetched": "2026-09-03",
+ "fetched": "2026-09-04",
  "facts": {
   "latest_month": "2026-05",
   "us10y": 4.45,

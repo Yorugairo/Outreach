@@ -1,0 +1,60 @@
+{
+  "schema_version": "ledger_page.v1",
+  "surface": "page",
+  "builder": "story",
+  "variant": "bars",
+  "title": "What a dollar of future profit is worth",
+  "sub": "Present value of $1 of profit arriving in 10 years, by discount rate. Pure arithmetic: 1/(1+r)^10 — no growth assumed, no forecast",
+  "source": "Discount identity; US 10-year from FRED DGS10 · fetched 2026-09-04",
+  "quiet_zone": "right",
+  "labels": [
+    "3%",
+    "4%",
+    "5%",
+    "6%"
+  ],
+  "values": [
+    0.744,
+    0.676,
+    0.614,
+    0.558
+  ],
+  "value_strings": [
+    "0.744",
+    "0.676",
+    "0.614",
+    "0.558"
+  ],
+  "colors": [
+    "cobalt",
+    "cobalt",
+    "crimson",
+    "crimson"
+  ],
+  "unit": "$",
+  "judge": [],
+  "badges": [
+    {
+      "label": "META P/E",
+      "value": "23.1x",
+      "tag": "years of profit you're paying for",
+      "accent": "cobalt",
+      "inline": false
+    },
+    {
+      "label": "US 10Y NOW",
+      "value": "4.45%",
+      "tag": "the discount rate",
+      "accent": "crimson",
+      "inline": false
+    },
+    {
+      "label": "3% TO 5%",
+      "value": "-18%",
+      "tag": "what the same dollar loses",
+      "accent": "crimson",
+      "inline": false
+    }
+  ],
+  "emphasize": 2
+}

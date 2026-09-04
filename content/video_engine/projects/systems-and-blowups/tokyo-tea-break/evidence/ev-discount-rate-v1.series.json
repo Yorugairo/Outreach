@@ -1,0 +1,62 @@
+{
+ "title": "What a dollar of future profit is worth",
+ "sub": "Present value of $1 of profit arriving in 10 years, by discount rate. Pure arithmetic: 1/(1+r)^10 \u2014 no growth assumed, no forecast",
+ "src": "Discount identity; US 10-year from FRED DGS10 \u00b7 fetched 2026-09-04",
+ "unit": "$",
+ "bars": [
+  {
+   "label": "3%",
+   "value": 0.744,
+   "color": "cobalt"
+  },
+  {
+   "label": "4%",
+   "value": 0.676,
+   "color": "cobalt"
+  },
+  {
+   "label": "5%",
+   "value": 0.614,
+   "color": "crimson"
+  },
+  {
+   "label": "6%",
+   "value": 0.558,
+   "color": "crimson"
+  }
+ ],
+ "badges": [
+  {
+   "label": "META P/E",
+   "value": "23.1x",
+   "tag": "years of profit you're paying for",
+   "accent": "cobalt"
+  },
+  {
+   "label": "US 10Y NOW",
+   "value": "4.45%",
+   "tag": "the discount rate",
+   "accent": "crimson"
+  },
+  {
+   "label": "3% TO 5%",
+   "value": "-18%",
+   "tag": "what the same dollar loses",
+   "accent": "crimson"
+  }
+ ],
+ "status": "REAL",
+ "fetched": "2026-09-04",
+ "facts": {
+  "years": 10,
+  "pv": {
+   "3%": 0.744,
+   "4%": 0.676,
+   "5%": 0.614,
+   "6%": 0.558
+  },
+  "drop_3_to_5_pct": -17.5,
+  "us10y_now": 4.45,
+  "meta_trailing_pe": 23.1
+ }
+}

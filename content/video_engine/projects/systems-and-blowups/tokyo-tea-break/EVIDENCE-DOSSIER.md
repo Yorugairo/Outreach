@@ -49,8 +49,27 @@ visible rather than asserted.
 | `ev-japan-holdings-v1` | "our biggest customer is selling" | line, 26 months, peak → latest |
 | `ev-hedged-yield-v1` | "the reason everyone gives stopped being true" | line, 2022→now, zero crossing |
 | `ev-hedge-then-now-v1` | the head-fake, compressed | ledger bars, worst vs now |
+| `ev-discount-rate-v1` | "a high yield is what discounts it" | ledger bars, $1 of year-10 profit at 3/4/5/6% |
 
-`ev-hedge-then-now-v1` validates through `ledger_page.py --variant bars` clean.
+`ev-hedge-then-now-v1` and `ev-discount-rate-v1` both validate through
+`ledger_page.py --variant bars` clean.
+
+### The discount-rate chart is arithmetic, deliberately
+
+It plots the discount identity **1/(1+r)^10** — what $1 of profit arriving in ten
+years is worth today at each rate. $0.744 at 3%, $0.614 at 5%: **−18%**. No growth
+assumption, no terminal value, no fair-value claim about Meta. A viewer can redo it on
+a phone.
+
+Meta's real multiple rides as a **badge**, not as a model input: the P/E says how much
+of the price is profit that hasn't happened yet, the bars say what that profit is worth
+as the yield moves. Two facts side by side, no forecast joining them — which is also
+why the script tells the viewer to look the P/E up rather than quoting it.
+
+**E28 caught the first version.** I had put the −18% in a bar *note* while the bar's
+value stayed an unsigned magnitude, and the validator refused it: a signed claim beside
+an unsigned bar. The signed change now lives on a badge and the bars are pure present
+values whose descending heights are the argument.
 
 ## Corrections this dossier forces on `player.html`
 

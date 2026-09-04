@@ -1,7 +1,7 @@
 {
  "title": "Hedging costs half what it did",
  "sub": "Net yield on a hedged US 10-year for a Japanese buyer: 2023-05 versus 2026-05",
- "src": "FRED DGS10, DGS3MO, IR3TIB01JPM156N \u00b7 fetched 2026-09-03",
+ "src": "FRED DGS10, DGS3MO, IR3TIB01JPM156N \u00b7 fetched 2026-09-04",
  "unit": "%",
  "bars": [
   {
@@ -31,7 +31,7 @@
   }
  ],
  "status": "REAL",
- "fetched": "2026-09-03",
+ "fetched": "2026-09-04",
  "facts": {
   "latest_month": "2026-05",
   "us10y": 4.45,
