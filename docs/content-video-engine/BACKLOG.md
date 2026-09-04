@@ -177,7 +177,7 @@ is a luxury for an audience that already stayed.
 | B2 | **3.9 GB pool + `f10b` worktree** | 18.4 GB, of which 8.68 GB is regenerable animatic frames. Needs a home that is not a worktree. |
 | B3 | **~180 unpushed commits** | `main` is local-only since 2026-08-30. A week of doctrine and the whole generative stack on one disk. |
 | B4 | **Gitignore on `review/`** | 46 plate waves' approval manifests are untracked. Narrowing the ignore to images tracks the manifests. |
-| B5 | **Speech-rate contradiction** | Reference 183.6 WPM, our ep1 182.8, doctrine target **145–165**. The target sits below both. A gate neither we nor the best-performing reference satisfies is not describing the work. |
+| ~~B5~~ | ~~Speech-rate contradiction~~ | **WITHDRAWN 2026-09-04 — there was no contradiction.** The "145–165 doctrine target" was mine; the operator asked for its origin and it has none. The doctrine's actual number is **140, an estimation constant** for pre-TTS duration guessing (`04-STORYBOARD-CONTRACT.md`: *"an estimate, not a promise"*), never a delivery rate. We run near 180 and always did. See 46 §46.6. |
 
 ## The plan stack
 

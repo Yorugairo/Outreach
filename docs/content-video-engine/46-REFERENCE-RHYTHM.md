@@ -98,11 +98,36 @@ imply an unspeakable 299 WPM in P1 — the known YouTube caption over-count (rol
 carryover), already run down by the operator. Use the boundaries; ignore the per-phase
 word and WPM figures.
 
-## 46.6 Speech rate
+## 46.6 Speech rate — and a number I invented
 
-Reference **183.6 WPM** overall; our ep1 measured 182.8. Our doctrine target is
-**145–165 WPM**, which sits below both. Flagged for an operator decision — a gate that
-neither we nor the best-performing reference satisfies is not describing the work.
+Reference **183.6 WPM** overall; our ep1 measured 182.8. Those two are real measurements.
+
+**RETRACTED 2026-09-04: the "145–165 WPM doctrine target" was mine, not the doctrine's.**
+The operator asked where it came from and it has no origin. Every occurrence in the repo
+traced back to this line, then to the backlog and one finding doc that both cited *this
+line* — a citation loop with nothing at the centre.
+
+**What the doctrine actually contains is 140 WPM, and it is not a delivery target:**
+
+| where | what it says |
+|---|---|
+| `02-CONTENT-STRATEGY.md` | "short sentences (**140 WPM basis**)" — for planning pauses |
+| `04-STORYBOARD-CONTRACT.md` | `"wpm_target": 140`, and explicitly: ***"`timing.target_s` is an estimate, not a promise"*** — used so the guard can check duration fit *before* spending on TTS |
+| `06-SCRIPT-TRANSFORMATION-SPEC.md` | "Length + pacing math (**140 WPM basis**)" |
+| `19-HYPERFRAMES-LANE.md` | "Deterministic **estimated** timings (140 wpm)… **provisional by definition; never publishable**" |
+
+**140 is a length-estimation constant** — word count → runtime guess before recording. It
+was never a rate anyone was asked to deliver at, and the renderer obeys the *measured*
+duration regardless.
+
+**So there is no contradiction to resolve.** An estimation constant and an actual delivery
+rate are different kinds of number; they were never in tension. Backlog B5 is withdrawn.
+
+**Operator, 2026-09-04:** we run closer to **180** than to 145.
+
+*Lesson, and it is the one this document spent the day applying to other people's work: a
+number with no locator, repeated across three documents, starts to look sourced. The check
+is `grep` for its origin, not a recollection that it feels right.*
 
 ## 46.7 Captions
 

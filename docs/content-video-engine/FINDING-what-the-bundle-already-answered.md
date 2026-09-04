@@ -106,7 +106,7 @@ we write the object-page renderer.
 ## 5. Two discrepancies to settle
 
 **Speech rate.** The reference runs **183.6 WPM**; we measured ep1 at 182.8. Our
-doctrine target is **145–165 WPM**. The target is below both our own practice and the
+doctrine target is ~~145–165 WPM~~ — **retracted, see 46 §46.6; that number was mine and has no origin. The doctrine's 140 is an estimation constant, not a delivery rate.** The line below is left for the record and is wrong: the target is below both our own practice and the
 best-performing reference we have. Someone should decide which is right rather than
 leaving a gate that neither we nor the reference satisfies.
 

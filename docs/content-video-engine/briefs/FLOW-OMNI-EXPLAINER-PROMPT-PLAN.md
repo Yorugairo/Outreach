@@ -268,77 +268,79 @@ lane has produced — it read our doctrine and applied it, and two of its entrie
   path** — all correct, and #11 in particular respects our gates instead of routing around
   them.
 
-## CORRECTION 1 — 170 WPM is a decision the operator has not made
+## ~~CORRECTION 1~~ — WITHDRAWN. The bad number was mine.
 
-The plan states *"our channels deliver at a crisp, high-retention cadence of 170 WPM"* as
-settled fact. It is not. Doc 46 §46.6:
+I wrote that 170 WPM contradicted "our doctrine target of 145–165." **The operator asked
+where 145–165 came from, and it has no origin.** Every occurrence in the repo traced back
+to a line I wrote earlier the same day, plus a backlog row and a finding doc that both
+cited *that line*.
 
-| | |
-|---|---|
-| reference (*Wealth Logic*) | **183.6 WPM** |
-| our ep1, measured | **182.8 WPM** |
-| our doctrine target | **145–165 WPM** |
+**What the doctrine actually holds is 140 WPM, and it is an estimation constant, not a
+delivery rate** — `04-STORYBOARD-CONTRACT.md` says outright *"`timing.target_s` is an
+estimate, not a promise,"* used so the guard can check duration fit before spending on TTS;
+`19-HYPERFRAMES-LANE.md` calls timings derived from it *"provisional by definition; never
+publishable."*
 
-**170 belongs to neither range**, and the gap between the target and our practice is
-**backlog B5, an open operator decision.** A plausible compromise is still an invented
-middle number presented as doctrine.
+**Operator: we run closer to 180 than to 145, and 170 came from his own steer.** So there
+was never a contradiction, Gemini was working from correct input, and the objection was
+manufactured by my invented number. **Backlog B5 is withdrawn** (46 §46.6).
 
-**Fix:** the word budget stays a *derived* value. State the cadence as a variable, and
-until B5 is settled, derive the per-scene budget from whichever number the operator picks —
-at 10 s that is 24–28 words at 145–165, or 30–31 at 183.
+**170 stands.** If anything it is slightly conservative against a measured 182.8.
 
 ## CORRECTION 2 — the persona over-corrects, and pre-empts an ordered test
 
+*This one stands.*
+
 #7 replaces the tutorial's *"warm friendly… gentle enthusiasm"* with a **"Cold
-Institutional Forensic Auditor… strictly banned from cheerfulness."** That is not our
-voice.
+Institutional Forensic Auditor… strictly banned from cheerfulness."**
 
-`OPERATOR-RULINGS.md` names **humour calibration** as one of only *two* things calibrated
-per lane. The delivery north stars are Vox evidence-forward clarity, Obama build-and-pause
-cadence, and Chappelle story loops that snap shut on a hard truth — **humour is playful
-setup, cutting landing.** "Strictly banned from cheerfulness" deletes a component of the
-voice.
+`OPERATOR-RULINGS.md` §88 names **humour calibration** as one of only *two* things
+calibrated per lane. The delivery north stars are Vox evidence-forward clarity, Obama
+build-and-pause cadence, and Chappelle story loops that snap shut on a hard truth — humour
+is playful setup, cutting landing. "Strictly banned from cheerfulness" deletes a component
+of the voice rather than calibrating it.
 
-**And it pre-empts a test the operator explicitly ordered.** The standing order in
-`OPERATOR-RULINGS.md`: *"People might be quitting because they don't like the deep
-ElevenLabs voice… the three suspects — voice, script, delivery pace — are tested in
-ISOLATION, cheaply, at the still-image tier, one variable at a time."* Hard-coding a
-persona shift into a prompt pack changes a variable that is currently under test.
+**And it moves a variable that is currently under test.** The standing order: *"People
+might be quitting because they don't like the deep ElevenLabs voice… the three suspects —
+voice, script, delivery pace — are tested in ISOLATION, cheaply, at the still-image tier,
+one variable at a time."*
 
-**Fix:** take the persona from `VOICE-PACK.md` verbatim rather than re-deriving it, and
-leave voice as a variable the isolation test moves — not one this pack sets.
+**Fix:** take the persona from `VOICE-PACK.md` verbatim rather than re-deriving it, and let
+the isolation test move voice — not this pack.
 
-## CORRECTION 3 — the wardrobe entry contradicts #9, and contradicts the bound character
+## ~~CORRECTION 3~~ — WITHDRAWN. This is the stick lane.
 
-#6 specifies *"crisp white collar and dark minimalist vest."* Two problems:
+I objected that *"crisp white collar and dark minimalist vest"* fights bound `@Mike`
+(indigo suit, copper tie). **Operator: the entire document is about the stick lane.**
 
-1. **`@Mike` is a bound Flow asset** wearing a deep-indigo suit, pale blue shirt and copper
-   tie (`finance-host-flow-character-pack.v1.json`). Specifying different wardrobe fights
-   the binding.
-2. **It contradicts #9 in the same document** — which correctly says not to re-describe a
-   pinned character at all.
+So the wardrobe entry describes the **stick variant** — backlog **A0** — and describing it
+is correct, because that variant is not bound yet and has no `@` token to reference. There
+is no conflict with #9 either: #9 forbids re-describing a *pinned* asset, and this one is
+not pinned.
 
-**Fix:** if the subject is `@Mike`, name him and specify **no wardrobe**. If this is the
-*stick variant*, say so — that is backlog **A0**, and it does not exist yet, so the pack
-should not assume it.
+**One real consequence, and it is a dependency rather than a defect:** the pack cannot run
+until `finance-host-stick-v1` exists as a bound Flow character. **A0 gates this plan.**
 
-## Flagged, not blocking
+## ~~FLAGGED: 10-second clips~~ — RESOLVED
 
-- **10-second clips** (#3) is a **platform capability claim** we have not verified. The
-  tutorial used 6 s; our own dial research (doc 49) covers Wan at `4k+1` and LTX at `8n+1`,
-  not Omni's duration ceiling. **Confirm the tier actually offers 10 s before the word
-  budget is built on it** — the whole scene-length arithmetic depends on it.
-- **Two-phase staged motion** (#4) is plausible and consistent with "models exhaust their
-  action by second 4–5," but it is asserted rather than measured. Cheap to test on one roll,
-  and worth testing since it shapes every animation prompt.
-- The **prose-vs-fields** question (backlog X15) is not addressed here and still needs its
-  one test roll.
+**Operator: 10 seconds is verified Omni length.** The scene arithmetic stands, and the
+three-renders-per-30s-short economics with it.
 
 ## The pattern worth naming
 
-The three corrections are the same shape: **a number or a choice we have open, written down
-as settled.** 170 WPM, the persona, the wardrobe. Each is defensible in isolation; each
-closes a decision that belongs to the operator or to a test.
+**Two of my three corrections were wrong, and the review is worth reading as an example of
+how.**
 
-The rest of the document is exactly what we want from this lane — it read the doctrine,
-applied it, and in two places explained *why* our empirical rules are true.
+- **Correction 1** rested on a number *I* had invented and cited three times until it looked
+  like doctrine. The operator asked one question — *where does that come from* — and it
+  dissolved. **The check was `grep` for its origin, and I never ran it.**
+- **Correction 3** assumed the wrong lane. The document says stick lane throughout; I
+  measured it against `@Mike` because that is the character I had in context.
+- The **10-second flag** was already verified knowledge the operator held.
+
+**Only correction 2 survives**, and it is the one grounded in a line of doctrine I actually
+opened and read rather than recalled.
+
+The document itself is what we want from this lane: it read the doctrine, applied it, and
+in two places (#9, #10) explained *why* our empirical rules are true. The one real
+dependency is that **A0 gates it** — the stick variant has to exist and be bound first.
