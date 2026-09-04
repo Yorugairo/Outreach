@@ -48,8 +48,26 @@ image prompt.** Read off the screen:
 > laces, and white soles… **This is the exact same stickman character — identical design,
 > do not alter or redesign.***
 
-**That is a text-based character binding**, and it is more portable than Flow's own
-Characters feature because it travels with the prompt to any model.
+**That is a text-based character binding — and we already have a better one.**
+
+**Corrected 2026-09-04 by the operator: the character lock is solved for us natively.**
+`@Mike` is a bound Flow character and it is already exercised on Tokyo, in prompts for
+**both stills and motion**:
+
+- `plates/plate-01-fed-briefing-mike-v3_meta.json` — *"@Mike standing beside a wooden
+  podium in a Federal Reserve press briefing room, wearing his tailored indigo suit…"*
+- `omni-video/scene-01-02-red-arrow-transformation_meta.json` — *"starting on @Mike in the
+  investment bank boardroom as a bold red yield arrow spikes…"*, with `bound_frame_0s`
+  through `bound_frame_8s` captured as the identity evidence.
+
+**The tutorial needs the paragraph because its audience has no character feature. We do.**
+A native binding beats a described one: it carries the actual reference, not a description
+of it, and it cannot drift through paraphrase.
+
+**What the text technique is still worth:** portability. If we ever generate outside Flow —
+Nano Banana direct, another model, a different platform — the paragraph travels and the
+`@` token does not. Keep it as the documented fallback, derived *from* the bound character
+rather than instead of it.
 
 ## 53.3 The two prompt schemas
 
@@ -93,22 +111,26 @@ ANTI-GLITCH LOCK  "Maintain the exact stickman design from the input frame in ev
 
 ## 53.4 What this corrects in my own claims
 
-**I said, of the Finance Theory listicle, "those are three different people — they hold
-style consistency, not character consistency."** That was accurate *about that channel*,
-and I then implied generation cannot hold a character. **This tutorial is the counter-
-example**: it exists specifically to hold one character across every scene, and the
-mechanism is a reference sheet plus a verbatim lock paragraph.
+**Two corrections, both mine.**
 
-So both approaches are live, and they are different products:
+**First:** I said of the Finance Theory listicle *"those are three different people — style
+consistency, not character consistency,"* and then implied generation cannot hold a
+character at all. The first half was accurate about that channel; the generalisation was
+not. This tutorial holds one character across every scene.
 
-| | Finance Theory listicle | this tutorial |
-|---|---|---|
-| character | new figure per item | **one, locked** |
-| mechanism | none needed | reference sheet → CHARACTER LOCK → repeated verbatim |
-| our analogue | A2a icon ring | **the answer to @Mike** |
+**Second, and larger: I then presented the lock paragraph as "the answer to the @Mike
+identity problem." We had already solved that.** `@Mike` is a bound Flow character,
+exercised on Tokyo across stills and motion (§53.2). I read a tutorial technique as filling
+a gap that our own artifacts show was closed.
 
-**This is the answer to the identity problem we spent real effort on** — the re-rolls, the
-character binding, the hair drift on a 6-second clip. A model sheet and a locked paragraph.
+Three approaches, and ours is the strongest:
+
+| | Finance Theory listicle | this tutorial | **ours** |
+|---|---|---|---|
+| character | new figure per item | one, described | **one, bound** |
+| mechanism | none needed | reference sheet → paragraph → repeated verbatim | **native `@Mike` reference** |
+| drift risk | n/a | paraphrase can wander | carries the reference itself |
+| our use | A2a icon ring | portable fallback off-platform | **primary** |
 
 ## 53.5 What we would do differently
 
@@ -136,14 +158,16 @@ technique is what is worth taking; the content model is not.**
 
 - **A2a′ (hero illustrations)** now has a concrete spec: a model sheet, a CHARACTER LOCK
   paragraph, and the eight-field image schema.
-- **The @Mike identity problem** has a candidate solution that does not need a platform
-  feature.
+- ~~The @Mike identity problem~~ — **already solved** by the bound Flow character; see the
+  correction in §53.2. The paragraph technique is kept only as an off-platform fallback.
 - **51's shorts format** gains its art pipeline. The format spec said *icons and a script*;
   this is the third piece for the illustrated variant.
 
-**Next concrete step:** write a @Mike model sheet — the colour cartoon, navy suit, orange
-tie, glasses, locs — several angles and poses on one sheet, then derive the CHARACTER LOCK
-paragraph from it. That paragraph becomes a reusable asset, versioned like a plate.
+**Next concrete step:** not a model sheet — `@Mike` already binds. The useful piece is the
+**eight-field image schema and the seven-field animation schema** (§53.3) as *templates our
+pipeline fills*, with `@Mike` in the character slot instead of a paragraph. The fields that
+earn their place are `SUBJECT COUNT`, `NEGATIVE RULES`, `CAMERA: static hold` and
+`ANTI-GLITCH LOCK` — none of which our current Flow prompts carry.
 
 ## 53.8 "Are they over-engineering prompts instead of learning Codex?"
 
