@@ -140,6 +140,7 @@ document** — coverage is the proof of reading — and
 | [49-GENERATIVE-VIDEO-AND-THE-VERTICAL-STAGE](49-GENERATIVE-VIDEO-AND-THE-VERTICAL-STAGE.md) | Wan/LTX/depth dials, mask pinning, and the mobile safe box our 9:16 layout violates |
 | [50-THE-PHONE-IS-THE-SCREEN](50-THE-PHONE-IS-THE-SCREEN.md) | **ep1's real analytics** — the cold cohort leaves at 1:05, 75 % watch on a phone, and our type is illegible there |
 | [51-THE-SHORTS-FORMAT](51-THE-SHORTS-FORMAT.md) | **one page, ship in an afternoon** — the four numbers, the shape, and a deliberately lower production bar |
+| [52-CONSTRUCT-DONT-INHERIT](52-CONSTRUCT-DONT-INHERIT.md) | **the founding-premise correction** — generated plates were a substitute for the ability to construct, and a generated plate has no addressable coordinate space |
 
 These are **reference, not portable**. A rule graduates to `docs/portable/` once proven
 in a shipped build, and its index row says so.

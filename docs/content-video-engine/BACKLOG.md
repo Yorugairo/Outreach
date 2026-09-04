@@ -8,6 +8,26 @@ research settled → docs [42](42-DRAWING-KINETICS.md)–[46](46-REFERENCE-RHYTH
 in [`RESEARCH-INDEX.md`](RESEARCH-INDEX.md) · which findings can be enforced →
 [47](47-FINDINGS-TO-CHECKS.md).
 
+## The founding-premise correction (52)
+
+> *"The stick figures work because you can build the world you need to convey; I was
+> trying to avoid building that world because I didn't have the skill to do it, so I tried
+> to inherit it by image generating plates."* — operator, 2026-09-04
+
+**Generated plates were a substitute for the ability to construct.** The technical form:
+a generated plate has **no addressable coordinate space** — a diffusion model decided
+where everything is, so you cannot place a callout against a pillar you cannot locate. A
+constructed scene has `M_world = M_parent × M_local` and a Z-stack; every object has an
+address, and a prop can sit `at: "datum"` because both live in one coordinate system.
+
+**This explains E25 retroactively.** *"A chart never survives a plate change"* reads as a
+motion rule; it is actually scar tissue from the plate not being addressable. On a
+constructed page it is unnecessary.
+
+**And whiteboard animation — the original intent — is not a new capability.** It is the
+curvature stroke (P38 T2) plus the hands (A5) plus ink (44), composed. See
+[52-CONSTRUCT-DONT-INHERIT](52-CONSTRUCT-DONT-INHERIT.md).
+
 ## The scope shift, named
 
 The engine was scoped to **assemble plates and dock evidence over narration**. It is
@@ -211,7 +231,7 @@ path stops existing. Each ships with the test named in 47.
 
 | # | item |
 |---|---|
-| **A2a** | **Icon library — acquisition.** Flat, single-colour, instantly nameable objects sized for a phone. **We have zero.** This is what a shorts listicle is made of, and it is the cheapest asset class we have never built (51 §51.7) |
+| **A2a** | **Icon library — acquisition.** Flat, single-colour, instantly nameable, phone-sized. **We have zero.** **Do not generate these** — 'bad stick art' fights the model and every roll drifts. They are vector, sourced once (large MIT sets exist), recoloured to tokens, indexed like plates. **Probably an afternoon, not an art project** (52 §52.3) |
 | A2b | **Prop library — retention.** The five Tokyo props validate but do not exist as art: toll gate, empty chair + cold cup + bill, crate stamped with a future year, locked lever, lit fab |
 | A4 | The recede species ("whirlpool") — `spotlight` inverted, radius → 0 |
 | A5 | Actor on the page = hands; `build-f/ledger-hands.html` is an untracked proof |
