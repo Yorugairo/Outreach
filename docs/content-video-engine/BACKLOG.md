@@ -99,6 +99,27 @@ path stops existing. Each ships with the test named in 47.
 | G4 | Tokyo `timeline.json` on the 9:16 template; retires `player.html` and its three wrong TIC figures |
 | G5 | The 8 carried P34 reviewer mediums |
 
+## Planning gap found 2026-09-04: gates whose fix has no owner
+
+An audit of P37 and P38 against docs 42–49 found **three gates that check behaviour
+nothing builds**, and four clusters of research neither plan claims.
+
+| gate | checks | but who builds it? |
+|---|---|---|
+| G-i | the composited figure's eyes sit on the plate horizon | **nobody** — no plan locks the horizon |
+| G-j | grounded sprites anchor `50% 100%` and bind to floor velocity | **nobody** — no plan builds the ground binding |
+| G-k | a contact beat declares IK, a free gesture declares FK | **nobody** — no plan builds an IK solver |
+
+I excluded G-h (Kubelka-Munk) from P37 precisely because it would FAIL every build with no
+path to green, then did not apply the same test to these three. **P37's T7 lands them on
+the M08 INFO-then-FAIL ladder, which is the correct mitigation** — but the build still
+needs an owner before they can promote to FAIL.
+
+**Unclaimed research clusters** (zero mentions across both plans): the dual-shadow /
+light-wrap / substrate-grain compositing set (48 §48.7-48.8) · the 3-zone vertical stage
+(49 §49.1) · the E1 measurement harness (X1/X2) · actor idling, Euler spirals, and the
+Z-stack.
+
 ## Explorations — what we still cannot answer
 
 Ordered by what the first-minute frame makes urgent.
