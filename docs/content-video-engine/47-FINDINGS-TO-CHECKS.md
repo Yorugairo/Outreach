@@ -11,7 +11,8 @@ Three tiers, in order of strength:
 |---|---|---|
 | **1 · DESIGNED OUT** | the wrong path does not exist in the code | nothing to catch; you cannot draw a stroke wrong if there is no linear mode |
 | **2 · GATED** | a mechanical check reads an artifact and FAILs | catches violation after the fact, but catches it every time |
-| **3 · JUDGE** | an agent reads and verdicts by hand | real, not mechanical; honest about being a judgment |
+| **2b · AGENT-JUDGED** | a model executes the judgment on every build | reproducible and automatable; belongs with P36, the viewer |
+| **3 · JUDGE** | a human reads and verdicts by hand | real, not mechanical, not automatable |
 
 Anything that fits none of the three is **DEMOTED** — recorded as knowledge, not doctrine.
 
@@ -67,8 +68,7 @@ Ordered by value. "Fails on" is the pre-finding behaviour the check catches.
 | **G-c** | **Parallax dial lint.** `tiling_mode != "mirror"`, `ssaa ≥ 1.5`, `quality ≥ 80`, `intensity ≤ 0.18`, model is ViT-Large. | `parallax-runner.mjs` config | every value we ship today (45 §45.3) |
 | **G-d** | **No unanchored transform.** Any scale or rotate without an explicit anchor. | template + timeline | the diagonal-drift class (43 §43.2) |
 | **G-e** | **LTX frame count.** `num_frames % 8 == 1`. | ambient job spec | a 120-frame job that silently produces garbage (45 §45.6) |
-| **G-f** | **Actor is a rig, not a generation.** Any host asset in a shot resolves to a registered slot combination. | shot table + asset registry | a per-shot generated @Mike, which is the drift we keep re-rolling (43 §43.6) |
-| **G-g** | **The equation spine.** The mechanism named in P1 recurs in ≥ N later phases and in P6. | script + phase map | a six-item listicle with no spine (46 §46.4). **This is G15 generalised** — we already gate a ring *token*; this gates a ring *mechanism*. |
+| **G-g** | **G15 strengthened: the ring closes on the MECHANISM.** The causal claim named in P1 is what P6 returns to — not merely a repeated token. | script + phase map | a close that echoes a *phrase* while the argument has drifted. See §6 for why the "equation spine" framing was wrong. |
 | **G-h** | **Kubelka–Munk compositing.** Two overlapping ink strokes composite darker than `dst(1−a)+src·a` would give. | rendered plate, sampled | alpha blending, which is the wrong operator (44 §44.1) |
 
 **M13** stays as already proposed, blocked on settling 0.30 s/onset vs 0.45 s/midpoint
@@ -80,15 +80,50 @@ gateable **but not yet** — build the measurement, run it over ep1 and both ref
 derive thresholds from that. Adopting a guessed threshold is the exact error the metrics
 exist to catch.
 
-## 3. JUDGE — real, not mechanical
+## 2b. AGENT-JUDGED — reproducible, automatable, not deterministic
+
+A judgment a model executes on every build. Belongs with **P36 (the viewer)** rather than
+the mechanical gates: it is a blind read by a stand-in for the audience.
+
+### V-a · The muted-caption judge
+
+*Operator contribution, 2026-09-04. This is not from the research.*
+
+`RULE-abstract-to-concrete` already says: cover the caption; if you can still tell what
+claim is being made, the plate is scenery rather than the punch. **I had recorded that as
+a human read. It does not have to be.**
+
+| | |
+|---|---|
+| **reads** | the prior scene rendered **with** captions (for context), then the test scene rendered **with captions removed** |
+| **asks** | what claim is this scene making? |
+| **PASS** | the stated claim matches the narration's claim for that beat |
+| **FAIL** | the model can only describe the scene — *"a desk at dawn"* rather than *"Japan is selling"* |
+
+**The calibration, which is the important half:**
+
+> **If the check needs stronger reasoning than a decent model can manage, the material is
+> too complex for the average viewer.**
+
+That makes a FAIL ambiguous in a *useful* way — it means one of two things, and both are
+defects worth surfacing:
+
+1. **the plate is scenery** — it illustrates the setting the line was spoken in rather
+   than what the line means; or
+2. **the argument is too dense** — the beat asks the viewer to carry more inference than
+   the visual supports.
+
+A human JUDGE row returns one bit and spends operator attention. This returns a diagnosis
+and runs on every build. It is the first check we have that tests the *pairing* of image
+to claim rather than either one alone.
+
+## 3. JUDGE — human, not automatable
 
 - **44.2 coffee-ring edge / 44.3 anisotropic wicking.** Un-gateable *by construction*:
   44.4 says if the effect becomes visible it has violated E22 and is wrong. A check for
   "present but not nameable by eye" is a judgment, not a measurement.
-- **RULE-abstract-to-concrete: does the plate throw the punch?** The muted-caption test is
-  a human read. Already a JUDGE row and correctly so.
 - **43.5 morph method A vs B.** The decision rule ("does this morph carry real rotation")
-  is a judgment at authoring time; only the *result* (G-a's det test) is mechanical.
+  is a judgment at authoring time; only the *result* (T4's det test) is mechanical.
 
 ## 4. DEMOTED — knowledge, not doctrine
 
@@ -105,15 +140,50 @@ looking like a rule.
 | **43.7 BBW / dual quaternions** | Deferred until a prop actually needs to bend. Not doctrine until then. |
 | **46.1 grow the tail** | Deprioritised by operator ruling 2026-09-04: our retention fails at the front, so a 26 s hold is a luxury for an audience that already stayed. Recorded, not actioned. |
 
+## 6. Two corrections from the operator, 2026-09-04
+
+**G-f is withdrawn — it was not animation doctrine.** I had gated "the actor resolves to a
+registered rig, not a generation," reasoning from the forensic proof that *Wealth Logic*
+composites its host. That proves what **they** do; it does not prove generation fails, and
+the operator has shipped plenty of generations carrying the character without issue.
+
+More importantly it was the **wrong kind of rule for this document.** Whether an actor is
+generated or composited is a channel and style decision. This doc governs *animation
+handling* — what motion may be applied to what, and how it is computed. Every other gate
+here passes that test; G-f smuggled asset provenance in beside them.
+
+The cutout rig stays in 43 §43.6 as a **technique available to us**, with a real advantage
+(deterministic posing, no re-roll), and it is a choice, not a rule.
+
+**What this exposes is a genuine hole:** we have no standard for how an actor *moves* in
+our register — generated or composited. 42–46 cover strokes, springs, morphs, ink and
+plate motion, and say almost nothing about figure motion. Logged as an exploration.
+
+**G-g was mis-generalised from a listicle.** I extracted "the equation spine" from a
+reference that happened to be a six-item list, and encoded the list's particular shape —
+one equation, six variable substitutions — as though it were the finding.
+
+The operator's reading is correct: what is durable is the **narrative:image ring** — a
+mechanism stated early, re-instantiated through the body, and closed on at the end. The
+six variants are how a listicle expresses it, not the thing itself.
+
+So G-g is not a new gate. It is **G15 strengthened**: we already check that a ring *token*
+appears in P1; the finding is that the close should land on the **causal claim**, not on a
+repeated phrase. That applies to any shape of episode.
+
 ## 5. The scoreboard
 
-**6 designed out · 8 gated · 3 JUDGE · 7 demoted.**
+**6 designed out · 7 gated · 1 agent-judged · 2 JUDGE · 7 demoted, all routed to the backlog.**
 
-Roughly a quarter of what we extracted today cannot carry a check. That is a healthy
-number and worth stating plainly — a pass where everything converted would mean the
-conversion was not honest.
+Roughly a quarter of what we extracted cannot carry a check, and one gate was withdrawn
+outright as the wrong kind of rule. Both are worth stating plainly — a pass where
+everything converted would mean the conversion was not honest.
+
+**Demoted does not mean dropped.** Each demoted item is routed to the backlog as a build
+item, an exploration, or an explicit closure; none of them just vanish.
 
 **Build order.** The six Tier-1 items ship as code plus their own tests; that is where
 the value is, because they cannot be violated afterwards. G-a and G-c are the cheapest
-gates against defects we ship *today*. G-g is the one that touches writing rather than
-rendering, and it applies to the Steel and Paper re-script before anything else does.
+gates against defects we ship *today*. G-g touches writing rather than rendering and applies to the
+Steel and Paper re-script. **V-a is the one to build first among the judged checks** — it
+is the only check we have that tests the image against the claim rather than either alone.

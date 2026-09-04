@@ -72,10 +72,10 @@ path stops existing. Each ships with the test named in 47.
 | G-b | parallax plate eligibility (the viability matrix) | Depthflow on the page, on @Mike, on any text |
 | G-d | no unanchored transform | the diagonal-drift class |
 | G-e | LTX `num_frames % 8 == 1` | a 120-frame job that silently produces garbage |
-| G-f | actor resolves to a registered rig, not a generation | the per-shot @Mike we keep re-rolling |
-| **G-g** | **the equation spine** — P1's mechanism recurs, P6 closes on it | a listicle with no spine. G15 generalised: we already gate a ring *token*, this gates a ring *mechanism* |
+| **G-g** | **G15 strengthened** — the ring closes on the *mechanism*, not a repeated token | a close that echoes a phrase while the argument has drifted. Not a new gate; not the "equation spine" I first wrote, which was a listicle's shape mistaken for the finding (47 §6) |
 | G-h | Kubelka–Munk compositing on overlapping ink | alpha blending, which is the wrong operator |
 | G1 | **M13** — cut lands in an acoustic gap | 68 % of ep1. Free: our cut rate already matches the reference |
+| **V-a** | **The muted-caption judge** (operator, 47 §2b) — a model reads the test scene with captions removed and states the claim it makes | a plate that is scenery. And a FAIL is *diagnostic*: either the plate does not throw the punch, or the argument is denser than a decent model can follow — which means it is denser than the average viewer can. **The first check that tests image against claim rather than either alone.** |
 
 ## Build — carried, unchanged by the research
 
@@ -103,8 +103,24 @@ Ordered by what the first-minute frame makes urgent.
 | X5 | **Cut ON the pause or THROUGH it?** The measurement says references cut on it; it does not say we are wrong to sometimes cut through. | A/B by ear on one scene pair. |
 | X6 | **Depth model precision** — `vitl_fp16` (05) vs `vitl_fp32` (06, "fp16 strictly banned, logit underflow"). | One test roll. ViT-Large either way. |
 | X7 | **Euler spiral quality threshold** — how much curvature ripple is too much. | No basis yet. Build the generator; gate later or never. |
+| **X10** | **How does a figure move in our register?** 42–47 cover strokes, springs, morphs, ink and plate motion and say almost nothing about **actor motion** — generated or composited. Exposed by withdrawing G-f: we argued about *how the actor is made* and never wrote down how it should *move*. | Name the motion vocabulary a figure needs (enter, gesture, settle, exit), then decide which is designed out, gated, or judged. Prerequisite: none. |
+| X11 | **Per-material `ζ` / `ω₀`, and the secondary-motion ratio** | T2 gives the model; these are the numbers. Derive by eye against reference footage, or declare them ours and tune. |
 | X8 | **Two unverified citations** in the pass-2 rewrite of `08` (Martinez-Conde year/volume, Hasson volume/year). Nothing in 42–47 depends on either. | A library check. Low priority. |
 | ~~X9~~ | ~~Parallax + object page~~ | **CLOSED 2026-09-04** — 45 §45.2 bans parallax on vector evidence and text. Depth on the page comes from the Z-stack instead, which costs no shader and cannot tear. |
+
+## Routed from the demoted list (47 §4)
+
+Demoted from *doctrine* — not dropped. Each lands as a build item, an exploration, or a closure.
+
+| # | item | where it goes |
+|---|---|---|
+| D1 | **Euler-spiral generator** for procedural curves (arrows, balance arms, connectors, axes) | **Build, do not gate.** Quality threshold is X7. |
+| D2 | **Per-material `ζ` / `ω₀` values** — paper, metal, fabric, liquid, ink | **Exploration X10.** T2 gives the model; these are the numbers that make it usable, and they are ours to derive. |
+| D3 | **Secondary-motion ratio** — the 0.22 is invented; the shape (lags 2–4 frames, settles faster) is craft | **Exploration X11.** Needs our own number or an explicit "by eye". |
+| D4 | **Dirty-flag propagation** in the scene graph | **Build, low priority.** Triggered when node counts grow past hand-tuning — props and rigs will do it. |
+| D5 | **BBW / 2D dual-quaternion skinning** | **Deferred with a trigger:** the first prop that must *bend* rather than pivot. |
+| D6 | **A1 timing chart** | **Closed.** Superseded by `M_p = exp(−πζ/√(1−ζ²))` — the model replaces the table. |
+| D7 | **Grow the shot-length tail** | Deprioritised by ruling — see below. |
 
 ## Deprioritised by ruling
 
@@ -116,6 +132,12 @@ Ordered by what the first-minute frame makes urgent.
 
 ## Withdrawn
 
+- **G-f "the actor must be a rig, not a generation."** Withdrawn by the operator
+  2026-09-04. It reasoned from *Wealth Logic* compositing its host to a rule that
+  generation fails — which the operator's own shipped work contradicts — and it was the
+  wrong *kind* of rule for the animation layer: asset provenance is a channel and style
+  decision, not animation handling. The cutout rig remains a technique in 43 §43.6. What
+  it exposed is X10.
 - **N1 "M10 measures the wrong thing."** Wrong. `gate_motion_density.py:277` measures gaps
   between *visual events*, not shot boundaries, and shot length has its own separate
   ceiling (`PLATE_HOLD_MAX_S = 20.0`, two-dock escape). I inferred a defect from a FAIL
