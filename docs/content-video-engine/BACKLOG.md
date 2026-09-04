@@ -105,10 +105,23 @@ short-form wants **exactly one mechanism**.
 cognitive atomicity, 50 §50.2's legibility floor, and the format he is looking at.
 **Shorts are a different machine and we have been building them on the long-form one.**
 
-The honest trade: those channels live on *volume*, not craft — the moat is production
-rate. We do not need to win that game, only to use the surface. Evidence discipline, a
-point of view and a real biography are worth nothing at fifteen seconds and everything at
-thirteen minutes. Two products, two jobs.
+**The resolution is sharper than "two products, two jobs": the format carries substance
+and we already hold the proof.** *Wealth Logic* is the same listicle shape — "6 ways rich
+people make money with debt" — and every item is a real mechanism with real arithmetic.
+**262,684 views.** The format is not the slop.
+
+What separates them is the spine. Finance Theory's ten items share nothing — ten nouns,
+no reason it is those ten or ten rather than twelve. Wealth Logic's six are
+`Spread = (Return − Cost) × Leverage` six times. **One is a pile; one is a thesis**
+(46 §46.4, gated as G-g).
+
+And they are not winning on *no* merit — they win on legibility, completion, aspiration
+and cadence. Those are real crafts, just not informational ones. Naming them as craft is
+what makes them learnable. We cannot beat them at aspiration and should not try; we can
+be the one that is true, in a format people already know how to watch.
+
+**→ [51-THE-SHORTS-FORMAT](51-THE-SHORTS-FORMAT.md) is the one-page spec.** Shorts fund
+the long-form's existence: reach subsidises depth.
 
 *Action: the shorts-lane standard is in memory and in a ruling but not in
 `docs/portable/OPERATOR-RULINGS.md`. It should be, before the next short is built.*
