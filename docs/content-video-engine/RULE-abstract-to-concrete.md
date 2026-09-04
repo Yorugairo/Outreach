@@ -86,6 +86,26 @@ claim is being made rather than after it.
 That is the three findings meeting: cut on the gap (M13), the chart proves one sentence
 and leaves (E25), and the plate is the punch (this rule).
 
+## Execute at the PROP tier, not the world tier
+
+Checked against Wealth Logic's own frames (`COMPOSITING-VERDICT.md`). Their frame for
+"your own money is tied up" is: one character, a pile of coloured pens, a cash bundle,
+five floating calendars — **four asset types on an empty white ground.** No world.
+
+Our revised Tokyo table asks for six *new world plates* to carry six metaphors. Theirs
+would ask for six *new props* against a ground we already own — and a prop is reusable
+forever, where a world plate is spent on one shot.
+
+> **Props compose. Worlds don't.**
+
+The asset registry already separates `world` / `actor` / `prop` / `mechanism`. We have
+been generating at the `world` tier out of habit, which is why every metaphor felt
+expensive and why the plates drifted toward scenery: a fully-dressed scene has to be
+*somewhere*, and "somewhere" is the setting the rule warns against.
+
+A metaphor brief should therefore name **the actor's pose + the props + the ground**,
+not a place. "Toll gate" is a prop and a pose, not a location.
+
 ## Consequences for the shot table
 
 1. **Every narration plate gets a metaphor brief, not a setting brief.** The claim
