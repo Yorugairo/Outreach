@@ -78,11 +78,76 @@ flagged as too long. Read as a *motion* problem that means "add a visual event."
 as a *writing* problem it means "this paragraph carries more than one picture can
 hold." The second reading is better and it costs a free scratch take.
 
+## Test 3 — the question I should have asked first
+
+Tests 1 and 2 asked "do gaps predict where we cut." That was backwards. The claim is
+not that gaps describe good editing; it is that **cutting anywhere else costs you** —
+the transition should live inside the silence so the new visual is already established
+when the next word lands. The testable version is their point 3: *do our cuts hit
+mid-phrase?*
+
+**They do. 68% of them.**
+
+| where our 75 authored scene cuts land | |
+|---|---|
+| **MID-WORD** — inside a spoken syllable | **51 (68%)** |
+| in a gap of any size | 24 (32%) |
+| in a gap ≥0.45 s — their structural threshold | **10 (13%)** |
+
+Cuts land inside `'same'`, `'fund,'`, `'getting:'`, `"isn't"`, `'overshoots.'`,
+`'peak,'`, `'matched'`. This is ep1 — the episode whose retention we are still
+explaining — and no gate we have looks at it.
+
+### And the cadence was already right
+
+| | |
+|---|---|
+| gaps ≥0.45 s in the take | **77** — one every 10.5 s |
+| scenes we authored | **75** — one every 10.7 s |
+| authored cuts within ±2 s of one | 27 of 75 |
+
+The take offers almost exactly as many natural breakpoints as we cut, at almost exactly
+our rate. **We are cutting at the right tempo and the wrong phase.** Snapping the
+existing table fixes only about a third (36% at ±2 s tolerance, zero collisions), so
+this is not a post-process — the shot table has to be authored *onto* the gap list,
+which is their process.
+
+One number reconciles this with our own doctrine: at 0.45 s the gaps arrive every
+10.5 s, inside M01's 12 s ceiling. **Gap-anchored scenes satisfy the motion gate
+naturally.** And note where those gaps come from — our own `insert_edit_pauses.py` put
+15 of them there deliberately. We manufacture the breakpoints and then cut past them.
+
+### The synthesis the operator named
+
+> "We have a stronger process, but were primarily missing the idea of matching the
+> natural rhythm to images, b-roll, evidence."
+
+That is the right shape, and it resolves the apparent conflict with M01:
+
+- **Scene CUTS snap to acoustic gaps.** One thought per shot; the transition happens
+  while nobody is speaking.
+- **Visual EVENTS inside a scene carry the motion** — dock rise, chart reveal, ledger
+  unroll, Ken Burns, caption pop. M01 counts these, not only cuts, so a 10 s
+  gap-anchored scene with a dock at its midpoint is denser than a 10 s arbitrary cut.
+
+Their process stops at "cut on the gap." Ours adds what fills the shot between cuts —
+which is the part worth keeping.
+
+## Proposed gate — M13
+
+> **A scene boundary must land in an acoustic gap ≥0.30 s, or be declared.**
+
+Mechanical, checkable from the word timeline, and it would have failed ep1 at 68%.
+Declared exceptions exist — a hard cut *through* speech is a legitimate momentum move —
+but it should be a choice on the record, not the default 51 times.
+
 ## What I am NOT proposing
 
-I drafted a pipeline change — cuts fall out of gaps, `retime_to_take` retires — on the
-strength of test 1. **Test 2 does not support it and it is withdrawn.** A 44%-recall
-signal is not a cut list.
+I drafted a pipeline change on test 1 — cuts fall out of gaps automatically,
+`retime_to_take` retires. **Still withdrawn.** Test 3 changes the argument for
+gap-anchoring but not the mechanism: gaps are where a cut should *land*, not a
+generator that decides *how many* scenes there are or what is in them. The shot table
+stays authored. It is authored onto the gap list instead of onto the clock.
 
 ## What is worth doing
 
