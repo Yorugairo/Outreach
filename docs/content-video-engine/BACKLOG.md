@@ -120,6 +120,11 @@ and cadence. Those are real crafts, just not informational ones. Naming them as 
 what makes them learnable. We cannot beat them at aspiration and should not try; we can
 be the one that is true, in a format people already know how to watch.
 
+**Plates are a retention asset, not an acquisition asset** (operator, 51 §51.7). A
+semiconductor fab in woodblock rewards someone who already chose the channel; it asks a
+stranger to interpret before they have agreed to care. **We hold 326 retention assets and
+zero acquisition assets** — hence A2a.
+
 **→ [51-THE-SHORTS-FORMAT](51-THE-SHORTS-FORMAT.md) is the one-page spec.** Shorts fund
 the long-form's existence: reach subsidises depth.
 
@@ -199,7 +204,8 @@ path stops existing. Each ships with the test named in 47.
 
 | # | item |
 |---|---|
-| A2 | **Prop asset library** — the five Tokyo props validate but do not exist as art |
+| **A2a** | **Icon library — acquisition.** Flat, single-colour, instantly nameable objects sized for a phone. **We have zero.** This is what a shorts listicle is made of, and it is the cheapest asset class we have never built (51 §51.7) |
+| A2b | **Prop library — retention.** The five Tokyo props validate but do not exist as art: toll gate, empty chair + cold cup + bill, crate stamped with a future year, locked lever, lit fab |
 | A4 | The recede species ("whirlpool") — `spotlight` inverted, radius → 0 |
 | A5 | Actor on the page = hands; `build-f/ledger-hands.html` is an untracked proof |
 | A6 | Expose the chart's coordinate mapper — 43 §43.2's anchor work is its general form |

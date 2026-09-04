@@ -92,8 +92,42 @@ The failure mode this document exists to prevent: **making every short justify t
 knowledge base.** Tokyo is the worked example — 11 evidence pages, 10 beat tags, 290
 words, 118 s against a 90 s cap. A compressed long-form episode wearing a short's runtime.
 
-## 51.7 Checklist
+## 51.7 Plates are a retention asset, not an acquisition asset
 
+Operator, 2026-09-04:
+
+> *"My big beautiful plates carrying a semiconductor fab are cool for ambiance for when my
+> consumers already WANT to be on my channel because of my brand. They're not going to get
+> people in the door though."*
+
+**This is the distinction the whole plate library has been missing.** Two asset classes,
+two jobs, and we have built only one:
+
+| | **acquisition** | **retention** |
+|---|---|---|
+| job | stop a thumb in a feed | reward someone who already chose you |
+| read time | **under 1 second, no interpretation** | seconds, and it can be atmospheric |
+| art | instantly identifiable object — a house, a pump, a pill bottle — flat, huge, high contrast | woodblock vox newsprint, the deckle, ink on cream |
+| what we have | **nothing** | **326 plates** |
+
+A semiconductor fab in woodblock is beautiful and it is *illegible as an acquisition
+asset* — it asks the viewer to interpret before they have agreed to care. The stick-figure
+channel's liquor store asks nothing: you know what it is before you have decided to look.
+
+**Consequence for the prop library (backlog A2), which now splits in two:**
+
+- **Icons** — acquisition. Flat, single-colour, instantly nameable, sized for a phone.
+  Cheap, and there should be dozens. This is what a shorts listicle is made of.
+- **Props** — retention. Inked metaphor objects on the ledger page, at the doc-29 bar.
+  The toll gate, the empty chair, the crate stamped with a later year.
+
+They are different art directions for different jobs, and building the second first is
+part of why acquisition has not moved. **The brand is what makes people stay. It is not
+what makes them arrive.**
+
+## 51.8 Checklist
+
+- [ ] every object nameable in under a second, no interpretation
 - [ ] one mechanism, stated in one sentence
 - [ ] N instances of *that* mechanism, not N unrelated items
 - [ ] the ring returns to the mechanism
@@ -105,7 +139,7 @@ words, 118 s against a 90 s cap. A compressed long-form episode wearing a short'
 - [ ] nothing from the 42–44 production bar
 - [ ] built in an afternoon
 
-## 51.8 Sources
+## 51.9 Sources
 
 46 §46.4 (the spine) · 49 §49.1, §49.6 (safe box, short-form architecture) ·
 50 §50.2 (legibility floor) · operator shorts ruling, 2026-09-03 ·
