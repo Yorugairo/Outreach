@@ -16,12 +16,23 @@ ACTIVE_NAMES = {
     "ast-grep",
     "ast-grep-outline",
     "backend-patterns",
+    "brand-voice",
+    "comfyui",
     "competitive-platform-analysis",
     "deep-research",
     "define-goal",
     "e2e-testing",
     "elite-cro-and-marketing",
+    "evidence-motion-engine",
+    "exa-search",
     "frontend-patterns",
+    "hyperframes",
+    "hyperframes-animation",
+    "hyperframes-cli",
+    "hyperframes-core",
+    "hyperframes-creative",
+    "hyperframes-keyframes",
+    "hyperframes-registry",
     "market-research",
     "modern-design-frameworks",
     "modern-seo-optimizations",
@@ -30,11 +41,22 @@ ACTIVE_NAMES = {
     "prp-plan",
     "prp-router",
     "prp-status",
+    "remotion-to-hyperframes",
+    "research",
+    "script-writer",
     "scrum-master",
     "seo",
     "seo-content-writer",
+    "sigmap",
     "strategic-compact",
+    "taste",
+    "tavily-web",
+    "video-editing",
+    "video-engine",
+    "video-script-architect",
+    "watch",
     "web-perf",
+    "web-research-agent",
 }
 
 ROOTS = [
@@ -57,6 +79,8 @@ def skill_name(skill_file: Path) -> str:
 
 def is_active(name: str, directory: Path) -> bool:
     normalized = str(directory).replace("\\", "/")
+    if name.startswith("hyperframes"):
+        return True
     return name in ACTIVE_NAMES or "/product-design/" in normalized
 
 

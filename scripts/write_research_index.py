@@ -60,7 +60,24 @@ other and against our code. **A conflict can only be found by reading both sides
    not research. Its fabricated figures are catalogued in
    [VERDICT-research-brief-animation-craft.md](briefs/VERDICT-research-brief-animation-craft.md);
    everything adopted from it is re-sourced from a primary here.
-6. **Our parallax dials do not match any target.** Read from
+6. **SOURCES-TO-VERIFY — two citations in the pass-2 rewrite of `08`.** Neither is
+   used by docs 42-46, so nothing here depends on them; they are logged because `08` now
+   presents them as empirical.
+   - *Martinez-Conde, Macknik & Hubel (2006), Nature Reviews Neuroscience 7(10):732-740,
+     "The role of fixational eye movements in visual perception"* - that title is
+     associated with **NRN 5:229-240 (2004)**. Flagged once before pass 2 and returned
+     unchanged with an issue number added. Verify the year/volume pairing.
+   - *Hasson et al. (2008), NeuroImage 28:1026* - NeuroImage volume 28 is 2005; a 2008
+     paper falls in volumes 39-43. Verify.
+
+7. **`08` §8 covers one of five parallax defects.** The pass-2 code audit gets its line
+   coordinates right (line 142 *is* `"inputs": motionInputs`) but addresses only
+   `intensity` and the model. The strings `tiling_mode`, `ssaa` and `quality` appear
+   **nowhere** in its 612 lines, so its proposed fix leaves `tiling_mode: "mirror"` in
+   place - the kaleidoscope glitch `05` names as a specific observed artifact. This is
+   why 45 is sourced from `05`/`06` and not from `08`.
+
+8. **Our parallax dials do not match any target.** Read from
    `tools/google-flow-driver/src/parallax-runner.mjs` on 2026-09-04: `strength=1.0`,
    `intensity=1.0` hardcoded in all six presets, `tiling_mode="mirror"` (the kaleidoscope
    glitch), `ssaa=1.0`, `quality=75`, model `vits_fp16`. Left to the Flow lane; recorded
