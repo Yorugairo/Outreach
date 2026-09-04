@@ -8,6 +8,7 @@ owner: parent
 branch: main
 created: 2026-09-04
 updated: 2026-09-04
+supersedes_note: amended after doc 48 landed - three gates added
 ---
 
 # The Enforcement Layer
@@ -18,6 +19,9 @@ The 2026-09-04 research read produced docs 42-46 and, in
 [47-FINDINGS-TO-CHECKS](../../../docs/content-video-engine/47-FINDINGS-TO-CHECKS.md), a
 per-finding verdict on what can actually be enforced. This PRP builds the enforcement
 half: **seven mechanical gates and one agent-judged check.**
+
+**Amended 2026-09-04** after `09` landed and became doc 48: three gates added (T7), and
+two Tier-1 items moved out of scope into the capability PRP.
 
 It exists because condensing research into a doc is not adoption. The bundle proved that
 in miniature - eleven documents were commissioned, one was read, and two backlog items
@@ -49,7 +53,10 @@ pipeline stage that can actually see the artifact it reads.
 5. `judge_muted_caption.py` returns PASS/FAIL **plus a diagnosis** (scenery vs
    over-dense) for a scene pair (V-a).
 6. Every new check has a test that fails against the pre-finding artifact.
-7. `47-FINDINGS-TO-CHECKS.md` rows for shipped checks say *shipped* and name the script.
+7. A grounding gate FAILs a composited figure whose eye height misses the plate horizon,
+   a grounded sprite not anchored at `50% 100%`, and a contact beat with no declared
+   solver (G-i, G-j, G-k).
+8. `47-FINDINGS-TO-CHECKS.md` rows for shipped checks say *shipped* and name the script.
 
 **Anti-goals.** No check ships against a threshold we invented. No gate blocks a pipeline
 stage that cannot see its artifact. No new gate is added to `run_script_gates.py` without
@@ -62,8 +69,11 @@ a fixture proving it fails on the defect it names.
 
 ## Not Building
 
-- **Tier-1 capability** (47 §1): the curvature stroke, spring evaluator, squash tensor and
-  ARAP morph. Separate PRP; they are designed out, not gated.
+- **Tier-1 capability** (47 §1): the curvature stroke, spring evaluator, squash tensor,
+  ARAP morph, **DQS joint blending and cached-offset prop attachment** (added by doc 48).
+  Separate PRP; they are designed out, not gated. Note the DQS test is the cleanest
+  failing test in the whole set - linear blend skinning returns the zero matrix at 180°
+  and w=0.5 - so that PRP should lead with it.
 - **M13** (cut lands in an acoustic gap) - blocked on exploration X3, which settles
   0.30s/onset vs 0.45s/midpoint. Building it now would encode a coin-flip.
 - **E1 frame metrics** - blocked on X2. The metric set is right; the thresholds must come
@@ -169,10 +179,19 @@ Write sets are disjoint except T1 and T3, which are sequenced rather than parall
 - Validate: `python -m pytest content/video_engine/tests/test_judge_muted_caption.py -q`
 - Evidence: pending
 
+### T7: G-i, G-j, G-k - the grounding gates
+- Status: pending
+- Owner: implementation_luna
+- Depends on: none
+- Write set: `content/video_engine/scripts/gate_grounding.py`, `content/video_engine/tests/test_gate_grounding.py`
+- Acceptance: **G-i** FAILs a shot whose composited figure's eye height misses the plate's declared horizon beyond tolerance (48 §48.7 defect 4 - the "standing in a pit" read). **G-j** FAILs a grounded sprite not anchored `transform-origin: 50% 100%` or bound to an independent screen-space tween rather than floor velocity. **G-k** FAILs a beat that declares contact without declaring a solver, per the FK/IK boundary (48 §48.1). Each needs the shot table to carry a horizon and a contact declaration - if it does not yet, land on the **M08 INFO-then-FAIL ladder** rather than blocking.
+- Validate: `python -m pytest content/video_engine/tests/test_gate_grounding.py -q`
+- Evidence: pending
+
 ### T6: status the 47 rows and register the gates
 - Status: pending
 - Owner: speedster
-- Depends on: T1, T2, T3, T4, T5
+- Depends on: T1, T2, T3, T4, T5, T7
 - Write set: `docs/content-video-engine/47-FINDINGS-TO-CHECKS.md`, `docs/content-video-engine/CAPABILITIES.md`, `content/video_engine/scripts/run_script_gates.py`
 - Acceptance: every shipped check's row names its script and reads *shipped*; CAPABILITIES records the new capability in the same commit (its own recall rule); G-g is registered in the composed runner. Deferred items (M13, E1, G-h) keep their blocking reason.
 - Validate: `python scripts/prp_validate.py .claude/PRPs/plans/P37-RESEARCH-ENFORCEMENT-LAYER.plan.md`
@@ -181,7 +200,7 @@ Write sets are disjoint except T1 and T3, which are sequenced rather than parall
 ## Verification
 
 ```powershell
-python -m pytest content/video_engine/tests/ -q -k "gate_punch or comfy_config or template_transforms or ring_mechanism or muted_caption"
+python -m pytest content/video_engine/tests/ -q -k "gate_punch or comfy_config or template_transforms or ring_mechanism or muted_caption or grounding"
 python content/video_engine/scripts/gate_comfy_config.py tools/google-flow-driver/src/parallax-runner.mjs
 python content/video_engine/scripts/gate_motion_density.py content/video_engine/projects/systems-and-blowups/steel-and-paper/build-f
 python scripts/prp_validate.py .claude/PRPs/plans/P37-RESEARCH-ENFORCEMENT-LAYER.plan.md

@@ -115,6 +115,30 @@ build gates on these numbers, and a gate resting on an invented threshold silent
 passes bad work forever. Reporting absence costs one line; an invented threshold costs
 every episode that clears it.
 
+## 2.3 Answer status after three passes (2026-09-04)
+
+Recorded so a later pass does not redo settled work. Reference layer: docs 42–48.
+
+| answered | question | where |
+|---|---|---|
+| ✅ | A3 spring by material · A5 drawing-on · A6 secondary motion | 42 §42.1-42.2, 48 §48.6 |
+| ✅ | A1 timing charts | **superseded** — `M_p = exp(−πζ/√(1−ζ²))` replaces the table |
+| ✅ | B1 gap-cut · B2 shot length · B5 rhythm | 46. B1's answer is *no external measurement exists*; ours is original |
+| ✅ | C1–C5 the whole engine track | 42, 43, 44 |
+| ✅ | C2 rigging | 43 §43.6 **and** 48 §48.1/§48.3 — the FK/IK boundary is the part that mattered |
+| ✅ | D5 abstract→concrete | 43/Lakoff, via `RULE-abstract-to-concrete` |
+| ✅ | E2 perceptual metrics | 42/46 — stroboscopic aliasing named the "choppy" verdict |
+| ◐ | **A4 the threshold of "alive"** | **Half answered.** 48 §48.4 gives what a *figure* does at rest (breath 0.20–0.30 Hz, asymmetric I:E, two-regime sway). **No pass found a measured hold-time for a static frame** — the honest gap stands. |
+| ◐ | B4 graphic match cuts | ARAP gives the mechanism (43 §43.5); the *perceptual* rule for when a match reads as continuous is unanswered |
+| ◐ | D1 eye-trace · D3 reading order · E1 metrics | metric sets landed; **thresholds must come from our own footage** |
+| ✗ | **B3 L-cuts / J-cuts under continuous narration** | untouched by three passes |
+| ✗ | **D2 composition on 9:16 with the caption safe zone** | untouched, and **we ship shorts.** All compositing work assumes a 16:9 stage with a horizon. |
+| ✗ | **D4 motion-graphics grids** (vertical) | untouched |
+| ✗ | **Wan** | not in scope of any pass. LTX is specified thoroughly; Wan appears zero times. |
+
+**A fourth pass, if run, should take: D2, D4, B3, Wan.** Everything else is either settled
+or blocked on measuring our own footage rather than on more reading.
+
 ## 3. The questions, by role
 
 Priority marked ★ — if the pass can only go deep on five, take the starred ones.

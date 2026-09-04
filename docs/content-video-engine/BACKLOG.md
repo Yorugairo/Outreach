@@ -57,6 +57,8 @@ path stops existing. Each ships with the test named in 47.
 | **T2** | **Analytic spring evaluator**, three damping regimes, the only spring API | seek test: frame N direct == frames 0..N sequential, bit-identical |
 | **T3** | **Area-preserving squash**, driven by velocity and deceleration | `det(A(t)) == 1` for all t and all α |
 | **T4** | **ARAP morph** with polar decomposition inside | morph through >90° of rotation; `det(J(t)) > 0` at every t |
+| **T7** | **DQS joint blending** in the figure rig (48 §48.3) | flex a joint 180° at w=0.5; assert `det(T_blend) == 1`. **Linear blend skinning returns the zero matrix** — the candy-wrapper elbow as one assertion |
+| **T8** | **Prop attachment by cached offset matrix** (48 §48.5) | pick a prop up mid-move; world position continuous across the handover frame, and the node's parent never changed |
 | T5 | Object-page renderer — the template draws registered props on the LP clock | spec side already ships (`--variant object`, 12 tests) |
 | T6 | `object → chart` transform on one page | declared by two Tokyo pages; T4 is its prerequisite |
 
@@ -74,6 +76,9 @@ path stops existing. Each ships with the test named in 47.
 | G-e | LTX `num_frames % 8 == 1` | a 120-frame job that silently produces garbage |
 | **G-g** | **G15 strengthened** — the ring closes on the *mechanism*, not a repeated token | a close that echoes a phrase while the argument has drifted. Not a new gate; not the "equation spine" I first wrote, which was a listicle's shape mistaken for the finding (47 §6) |
 | G-h | Kubelka–Munk compositing on overlapping ink | alpha blending, which is the wrong operator |
+| **G-i** | **eye-line invariant** — a composited figure's eyes sit on the plate's horizon (48 §48.7) | the "standing in a pit" read, the commonest tell in composited 2.5D |
+| **G-j** | **zero-slip anchoring** — grounded sprites anchor `50% 100%` and bind to floor velocity (48 §48.7) | foot slide, and the floor-shear paradox |
+| **G-k** | **solver declared per contact beat** — contact resolves IK, free gesture resolves FK (48 §48.1) | a pointing arc flattened straight, or a planted foot that slides |
 | G1 | **M13** — cut lands in an acoustic gap | 68 % of ep1. Free: our cut rate already matches the reference |
 | **V-a** | **The muted-caption judge** (operator, 47 §2b) — a model reads the test scene with captions removed and states the claim it makes | a plate that is scenery. And a FAIL is *diagnostic*: either the plate does not throw the punch, or the argument is denser than a decent model can follow — which means it is denser than the average viewer can. **The first check that tests image against claim rather than either alone.** |
 
@@ -99,6 +104,8 @@ Ordered by what the first-minute frame makes urgent.
 | **X1** | **What actually loses people in our first minute?** We have never measured our own failure mode — only inferred it. This is the question everything else is serving, and it has not been on this list before. | P36 (the viewer) on ep1's opening, windowed and blind; plus the E1 metrics once X2 lands. Run the reference's opening on the same instruments and compare. |
 | **X2** | **E1 metric thresholds.** Motion energy, centroid of change, saliency and flow coherence are the right metrics; the ranges are not ours yet. | Build the measurement, run it over ep1 and both references, derive from that. **Never adopt a guessed threshold** — that is precisely the error the metrics exist to catch. |
 | **X3** | **Gap threshold: 0.30 s at onset, or 0.45 s at midpoint?** Different gates. | Count both across ep1's word timeline; check the 0.45 s set is large enough to carry every boundary that needs one. **Blocks M13.** |
+| **X12** | **Wan is not covered by any research we hold.** The bundle specs LTX-Video thoroughly (frame-count law, CFG ceiling, mask-pinning, re-stitch) and mentions Wan **zero** times. The *architecture* transfers — mask-pin the subject, composite the pristine cutout over the decode — but every dial is LTX-specific. | A targeted pass, or one calibration roll per lane. Do not assume LTX numbers carry. |
+| **X13** | **Composition on 9:16 with the caption safe zone.** Brief item D2 asked this and **no pass answered it.** All the compositing work (48 §48.7) assumes a 16:9 stage with a horizon; nothing addresses a vertical frame whose bottom third is captions. We ship shorts. | Measure the reference shorts lane, or derive from the safe zone we already enforce. |
 | X4 | **Does a prop library actually compose?** The claim is that 5–8 props cover most metaphors. | Brief three unrelated episodes against one prop set and count the misses. |
 | X5 | **Cut ON the pause or THROUGH it?** The measurement says references cut on it; it does not say we are wrong to sometimes cut through. | A/B by ear on one scene pair. |
 | X6 | **Depth model precision** — `vitl_fp16` (05) vs `vitl_fp32` (06, "fp16 strictly banned, logit underflow"). | One test roll. ViT-Large either way. |
@@ -118,6 +125,8 @@ Demoted from *doctrine* — not dropped. Each lands as a build item, an explorat
 | D2 | **Per-material `ζ` / `ω₀` values** — paper, metal, fabric, liquid, ink | **Exploration X10.** T2 gives the model; these are the numbers that make it usable, and they are ours to derive. |
 | ~~D3~~ | ~~Secondary-motion ratio~~ | **RESOLVED 2026-09-04** by 48 §48.6 — the analytic phase lag `φ = arctan(2ζ(ω_d/ω₀)/(1−(ω_d/ω₀)²))` on the `M_p` we already adopted. No invented ratio needed. |
 | D4 | **Dirty-flag propagation** in the scene graph | **Build, low priority.** Triggered when node counts grow past hand-tuning — props and rigs will do it. |
+| D8 | **Pseudo-3D head turns** — cylindrical projection, the 35–45° three-quarters gate, sprite swap over 2–3 frames at peak angular velocity (09 §2.6) | **Deferred with a trigger:** the first shot that turns a head. |
+| D9 | **Two-handed closed kinematic chains** — the prop is the master, both wrists lock to its sockets (09 §3.7) | **Deferred with a trigger:** the first two-handed prop. |
 | D5 | **BBW / 2D dual-quaternion skinning** | **Trigger corrected 2026-09-04** (48 §48.3): not a bending prop — **rigging a figure**. Elbows and knees need it immediately, because linear blend skinning returns the zero matrix at 180°. Now a Tier-1 designed-out item in 47 §1. |
 | D6 | **A1 timing chart** | **Closed.** Superseded by `M_p = exp(−πζ/√(1−ζ²))` — the model replaces the table. |
 | D7 | **Grow the shot-length tail** | Deprioritised by ruling — see below. |
