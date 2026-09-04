@@ -46,7 +46,7 @@ is a luxury for an audience that already stayed.
 | B4 | **Gitignore on `review/`** | 46 plate waves' approval manifests are untracked. Narrowing the ignore to images tracks the manifests. |
 | B5 | **Speech-rate contradiction** | Reference 183.6 WPM, our ep1 182.8, doctrine target **145–165**. The target sits below both. A gate neither we nor the best-performing reference satisfies is not describing the work. |
 
-## Build — Tier 1, designed out (47 §1)
+## Build — Tier 1, designed out (47 §1) → **[P38](../../.claude/PRPs/plans/P38-KINETICS-CAPABILITY-LAYER.plan.md)**
 
 The strongest results of the day: once built they cannot be violated, because the wrong
 path stops existing. Each ships with the test named in 47.
@@ -66,7 +66,7 @@ path stops existing. Each ships with the test named in 47.
 **Read `06_unified_ledger_drawing_engine_and_comfy_spec.md` before T5** — it carries a
 `ledger_page.v2.json` contract built on our existing LP clock, plus the Z0–Z5 stack.
 
-## Build — Tier 2, gates (47 §2)
+## Build — Tier 2, gates (47 §2) → **[P37](../../.claude/PRPs/plans/P37-RESEARCH-ENFORCEMENT-LAYER.plan.md)**
 
 | # | gate | FAILs on |
 |---|---|---|

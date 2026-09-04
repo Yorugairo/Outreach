@@ -32,7 +32,7 @@ silently stops being true.
 **Not in scope: the Tier-1 capability builds** (curvature stroke, analytic springs,
 area-preserving squash, ARAP morph). Those are code that does not exist yet, and 47 §1
 says they should be *designed out* rather than gated - there is nothing to check until
-they land. They get their own PRP.
+they land. They get their own PRP: **[P38-KINETICS-CAPABILITY-LAYER](P38-KINETICS-CAPABILITY-LAYER.plan.md)**, drafted 2026-09-04.
 
 ## Intent And Acceptance
 
@@ -74,7 +74,7 @@ a fixture proving it fails on the defect it names.
   ARAP morph, **DQS joint blending and cached-offset prop attachment** (added by doc 48).
   Separate PRP; they are designed out, not gated. Note the DQS test is the cleanest
   failing test in the whole set - linear blend skinning returns the zero matrix at 180°
-  and w=0.5 - so that PRP should lead with it.
+  and w=0.5 - so P38 leads with it (its T6).
 - **M13** (cut lands in an acoustic gap) - blocked on exploration X3, which settles
   0.30s/onset vs 0.45s/midpoint. Building it now would encode a coin-flip.
 - **E1 frame metrics** - blocked on X2. The metric set is right; the thresholds must come
