@@ -106,6 +106,11 @@ expensive and why the plates drifted toward scenery: a fully-dressed scene has t
 A metaphor brief should therefore name **the actor's pose + the props + the ground**,
 not a place. "Toll gate" is a prop and a pose, not a location.
 
+**But not on white — on the page.** Their empty ground is their identity; ours is the
+cream ledger (E22). Props get drawn on it in ink, and then the same sheet becomes the
+chart. See `RULE-the-page-is-the-ground.md`: it is the same move in our own language,
+and it makes metaphor→evidence a transformation rather than a cut.
+
 ## Consequences for the shot table
 
 1. **Every narration plate gets a metaphor brief, not a setting brief.** The claim
