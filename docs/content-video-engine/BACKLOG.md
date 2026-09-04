@@ -14,7 +14,10 @@ in [`RESEARCH-INDEX.md`](RESEARCH-INDEX.md) · which findings can be enforced �
 > trying to avoid building that world because I didn't have the skill to do it, so I tried
 > to inherit it by image generating plates."* — operator, 2026-09-04
 
-**Generated plates were a substitute for the ability to construct.** The technical form:
+**Generated plates were a substitute for the ability to construct — in the evidence lane.**
+*Scoped 2026-09-04: this holds where a chart or callout must sit somewhere specific. For an
+illustrative scene where the image IS the claim and nothing is docked to it, generation is
+correct and cheap (52 §52.3).* The technical form:
 a generated plate has **no addressable coordinate space** — a diffusion model decided
 where everything is, so you cannot place a callout against a pillar you cannot locate. A
 constructed scene has `M_world = M_parent × M_local` and a Z-stack; every object has an
@@ -231,7 +234,8 @@ path stops existing. Each ships with the test named in 47.
 
 | # | item |
 |---|---|
-| **A2a** | **Icon library — acquisition.** Flat, single-colour, instantly nameable, phone-sized. **We have zero.** **Do not generate these** — 'bad stick art' fights the model and every roll drifts. They are vector, sourced once (large MIT sets exist), recoloured to tokens, indexed like plates. **Probably an afternoon, not an art project** (52 §52.3) |
+| **A2a** | **The icon ring — sourced.** Flat, single-object, nameable: liquor store, gas pump, hospital. MIT sets (Phosphor, Tabler) recoloured to tokens, indexed like plates. Cheap, an afternoon |
+| **A2a'** | **Hero illustrations — generated.** *Corrected 2026-09-04: an earlier note here said do not generate these. Wrong — that art is polished illustration, not stick art, and the tutorials teach the prompt.* Operator supplies the prompt pattern; the engine makes it repeatable (locked template + style tokens + the existing review quarantine). **Generation works for a listicle because each item is a new figure — style consistency, not character consistency, so the @Mike problem never arises** (52 §52.3) |
 | A2b | **Prop library — retention.** The five Tokyo props validate but do not exist as art: toll gate, empty chair + cold cup + bill, crate stamped with a future year, locked lever, lit fab |
 | A4 | The recede species ("whirlpool") — `spotlight` inverted, radius → 0 |
 | A5 | Actor on the page = hands; `build-f/ledger-hands.html` is an untracked proof |
