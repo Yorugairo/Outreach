@@ -137,6 +137,7 @@ document** — coverage is the proof of reading — and
 | [46-REFERENCE-RHYTHM](46-REFERENCE-RHYTHM.md) | the shot distribution recomputed, and the equation spine |
 | [47-FINDINGS-TO-CHECKS](47-FINDINGS-TO-CHECKS.md) | which findings can be designed out, gated, judged — or demoted |
 | [48-THE-FIGURE-AND-THE-GROUND](48-THE-FIGURE-AND-THE-GROUND.md) | how an actor moves, holds a prop, and stands on a plate without looking pasted |
+| [49-GENERATIVE-VIDEO-AND-THE-VERTICAL-STAGE](49-GENERATIVE-VIDEO-AND-THE-VERTICAL-STAGE.md) | Wan/LTX/depth dials, mask pinning, and the mobile safe box our 9:16 layout violates |
 
 These are **reference, not portable**. A rule graduates to `docs/portable/` once proven
 in a shipped build, and its index row says so.

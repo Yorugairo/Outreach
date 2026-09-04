@@ -57,6 +57,7 @@ path stops existing. Each ships with the test named in 47.
 | **T2** | **Analytic spring evaluator**, three damping regimes, the only spring API | seek test: frame N direct == frames 0..N sequential, bit-identical |
 | **T3** | **Area-preserving squash**, driven by velocity and deceleration | `det(A(t)) == 1` for all t and all α |
 | **T4** | **ARAP morph** with polar decomposition inside | morph through >90° of rotation; `det(J(t)) > 0` at every t |
+| **T0** | **Fix the 9:16 dock geometry** — `scene-evidence-player.template.html:155-162`. Ours: `width 952, left 64`. Safe: `width ≤ 800, x ∈ [80,880]`. We are **136 px into the right rail** where like/comment/share sit. | render one 9:16 frame; assert every dock's bounding box is inside the safe canvas |
 | **T7** | **DQS joint blending** in the figure rig (48 §48.3) | flex a joint 180° at w=0.5; assert `det(T_blend) == 1`. **Linear blend skinning returns the zero matrix** — the candy-wrapper elbow as one assertion |
 | **T8** | **Prop attachment by cached offset matrix** (48 §48.5) | pick a prop up mid-move; world position continuous across the handover frame, and the node's parent never changed |
 | T5 | Object-page renderer — the template draws registered props on the LP clock | spec side already ships (`--variant object`, 12 tests) |
@@ -76,6 +77,9 @@ path stops existing. Each ships with the test named in 47.
 | G-e | LTX `num_frames % 8 == 1` | a 120-frame job that silently produces garbage |
 | **G-g** | **G15 strengthened** — the ring closes on the *mechanism*, not a repeated token | a close that echoes a phrase while the argument has drifted. Not a new gate; not the "equation spine" I first wrote, which was a listicle's shape mistaken for the finding (47 §6) |
 | G-h | Kubelka–Munk compositing on overlapping ink | alpha blending, which is the wrong operator |
+| **G-l** | **mobile safe box** — every 9:16 element inside `x[80,880] y[280,1340]` (49 §49.1) | **our shipped 9:16 dock CSS.** The one gate that fails code we already have |
+| **G-m** | **generative frame-count law** — Wan `4k+1`, LTX `8n+1` (49) | an 80-frame Wan job or a 120-frame LTX job; both flash |
+| **G-n** | **generative guidance ceilings** — CFG ≤ 4.5 both, scaled FP8 encoder, unquantized VAE (49) | frame burning, NaN black frames, VAE banding — a wasted render each |
 | **G-i** | **eye-line invariant** — a composited figure's eyes sit on the plate's horizon (48 §48.7) | the "standing in a pit" read, the commonest tell in composited 2.5D |
 | **G-j** | **zero-slip anchoring** — grounded sprites anchor `50% 100%` and bind to floor velocity (48 §48.7) | foot slide, and the floor-shear paradox |
 | **G-k** | **solver declared per contact beat** — contact resolves IK, free gesture resolves FK (48 §48.1) | a pointing arc flattened straight, or a planted foot that slides |
@@ -99,13 +103,18 @@ path stops existing. Each ships with the test named in 47.
 
 Ordered by what the first-minute frame makes urgent.
 
+**New, from doc 49:** our shorts run on long-form cadence. Short-form wants a visual pulse
+every **1.2–2.5 s** against our ASL of 6–10 s, and **cognitive atomicity** — exactly one
+mechanism per short, which is the short-form form of the equation spine. Logged as X14.
+
 | # | question | how to settle it |
 |---|---|---|
 | **X1** | **What actually loses people in our first minute?** We have never measured our own failure mode — only inferred it. This is the question everything else is serving, and it has not been on this list before. | P36 (the viewer) on ep1's opening, windowed and blind; plus the E1 metrics once X2 lands. Run the reference's opening on the same instruments and compare. |
 | **X2** | **E1 metric thresholds.** Motion energy, centroid of change, saliency and flow coherence are the right metrics; the ranges are not ours yet. | Build the measurement, run it over ep1 and both references, derive from that. **Never adopt a guessed threshold** — that is precisely the error the metrics exist to catch. |
 | **X3** | **Gap threshold: 0.30 s at onset, or 0.45 s at midpoint?** Different gates. | Count both across ep1's word timeline; check the 0.45 s set is large enough to carry every boundary that needs one. **Blocks M13.** |
-| **X12** | **Wan is not covered by any research we hold.** The bundle specs LTX-Video thoroughly (frame-count law, CFG ceiling, mask-pinning, re-stitch) and mentions Wan **zero** times. The *architecture* transfers — mask-pin the subject, composite the pristine cutout over the decode — but every dial is LTX-specific. | A targeted pass, or one calibration roll per lane. Do not assume LTX numbers carry. |
-| **X13** | **Composition on 9:16 with the caption safe zone.** Brief item D2 asked this and **no pass answered it.** All the compositing work (48 §48.7) assumes a 16:9 stage with a horizon; nothing addresses a vertical frame whose bottom third is captions. We ship shorts. | Measure the reference shorts lane, or derive from the safe zone we already enforce. |
+| ~~X12~~ | ~~Wan is not covered~~ **CLOSED 2026-09-04** by [49](49-GENERATIVE-VIDEO-AND-THE-VERTICAL-STAGE.md) §49.2 — the 4k+1 law, CFG ceilings, TeaCache, and the two dials that fail loudly (unscaled FP8 encoder, quantized VAE). Original: | The bundle specs LTX-Video thoroughly (frame-count law, CFG ceiling, mask-pinning, re-stitch) and mentions Wan **zero** times. The *architecture* transfers — mask-pin the subject, composite the pristine cutout over the decode — but every dial is LTX-specific. | A targeted pass, or one calibration roll per lane. Do not assume LTX numbers carry. |
+| ~~X13~~ | ~~9:16 composition~~ **CLOSED 2026-09-04** by [49](49-GENERATIVE-VIDEO-AND-THE-VERTICAL-STAGE.md) §49.1 — the Universal Clean Canvas and the 3-zone vertical stage. **It caught a live defect in our own template.** Original: | Brief item D2 asked this and **no pass answered it.** All the compositing work (48 §48.7) assumes a 16:9 stage with a horizon; nothing addresses a vertical frame whose bottom third is captions. We ship shorts. | Measure the reference shorts lane, or derive from the safe zone we already enforce. |
+| **X14** | **Our shorts are built on long-form cadence.** 49 §49.6: short-form wants a visual event every 1.2–2.5 s and exactly one mechanism; we run ASL 6–10 s and compound argument. The Tokyo short is 118 s carrying a full six-phase structure. | Re-cut one short at short-form pulse and compare. Cheap, and it bears directly on X1. |
 | X4 | **Does a prop library actually compose?** The claim is that 5–8 props cover most metaphors. | Brief three unrelated episodes against one prop set and count the misses. |
 | X5 | **Cut ON the pause or THROUGH it?** The measurement says references cut on it; it does not say we are wrong to sometimes cut through. | A/B by ear on one scene pair. |
 | X6 | **Depth model precision** — `vitl_fp16` (05) vs `vitl_fp32` (06, "fp16 strictly banned, logit underflow"). | One test roll. ViT-Large either way. |

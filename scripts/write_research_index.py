@@ -37,6 +37,7 @@ Read completed 2026-09-04. Reference layer: docs **42–46**.
 | [46-REFERENCE-RHYTHM](46-REFERENCE-RHYTHM.md) | shot distribution recomputed, gap thresholds, the equation spine, phase map | 04 (recomputed), 01, dossier §10 |
 | [47-FINDINGS-TO-CHECKS](47-FINDINGS-TO-CHECKS.md) | which findings can be designed out, gated, judged, or demoted | **derived from 42–46, not from a primary** — the enforcement layer |
 | [48-THE-FIGURE-AND-THE-GROUND](48-THE-FIGURE-AND-THE-GROUND.md) | FK/IK boundary, balance, the rig, idling, reach and grasp, grounding and compositing | 09 whole — **closes X10** |
+| [49-GENERATIVE-VIDEO-AND-THE-VERTICAL-STAGE](49-GENERATIVE-VIDEO-AND-THE-VERTICAL-STAGE.md) | Wan/LTX/depth dials, mask pinning, the mobile safe box, short vs long form | 10 whole — **closes X12 and X13**, and caught a live defect in our own 9:16 CSS |
 
 ## Declared conflicts and rejections
 

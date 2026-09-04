@@ -30,6 +30,7 @@ Read completed 2026-09-04. Reference layer: docs **42–46**.
 | [46-REFERENCE-RHYTHM](46-REFERENCE-RHYTHM.md) | shot distribution recomputed, gap thresholds, the equation spine, phase map | 04 (recomputed), 01, dossier §10 |
 | [47-FINDINGS-TO-CHECKS](47-FINDINGS-TO-CHECKS.md) | which findings can be designed out, gated, judged, or demoted | **derived from 42–46, not from a primary** — the enforcement layer |
 | [48-THE-FIGURE-AND-THE-GROUND](48-THE-FIGURE-AND-THE-GROUND.md) | FK/IK boundary, balance, the rig, idling, reach and grasp, grounding and compositing | 09 whole — **closes X10** |
+| [49-GENERATIVE-VIDEO-AND-THE-VERTICAL-STAGE](49-GENERATIVE-VIDEO-AND-THE-VERTICAL-STAGE.md) | Wan/LTX/depth dials, mask pinning, the mobile safe box, short vs long form | 10 whole — **closes X12 and X13**, and caught a live defect in our own 9:16 CSS |
 
 ## Declared conflicts and rejections
 
@@ -338,7 +339,39 @@ other and against our code. **A conflict can only be found by reading both sides
 | 6.2 Animator Craft & Compositing Doctrine | RECORD - 20 sources with DOIs, split empirical vs craft doctrine; the pass-2 contract held |
 | 7. Pipeline Triage & Doctrine Recommendations | RECORD - its Tier1/2/3 split matches our 47 triage independently |
 
-### `MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md` — 29 headings
+### `10_generative_video_tools_and_cross_platform_composition.md` — 28 headings
+| heading | disposition |
+|---|---|
+| Executive Overview: The Generative Video & Cross-Platform Triad | EXTRACTED -> 49 - the triad map this read followed |
+| Part 1: Alibaba Wan 2.1 (Wan-Video) Technical Mastery | RECORD - structural heading |
+| 1.1 Model Taxonomy & Clarifications | EXTRACTED -> 49 SS49.2 - no standalone Wan I2V 1.3B; consumer runs Fun-InP or VACE |
+| 1.2 Mathematical Foundations: Rectified Flow Matching | RECORD - why 20-30 steps suffice; the dial is what we use |
+| 1.3 DiT Architecture & 3D Causal Wan-VAE | EXTRACTED -> 49 SS49.2 - the 4k+1 frame law |
+| 1.4 Dual Conditioning Architecture (I2V) | RECORD - umT5 + CLIP-Vision fusion; internal |
+| 1.5 Acceleration & VRAM Profiles | EXTRACTED -> 49 SS49.2 - TeaCache 0.15, ~2.2x |
+| 1.6 Calibrated Dials & Failure Fixes (Wan 2.1) | EXTRACTED -> 49 SS49.2 - incl. the two that fail loudly: unscaled FP8 text encoder, quantized VAE |
+| Part 2: Lightricks LTX-Video (0.9.1 / 0.9.5 2B DiT) Technical Mastery | RECORD - structural heading |
+| 2.1 Architecture & Spatio-Temporal Attention | RECORD - 3D RoPE; why LTX takes arbitrary aspect ratios |
+| 2.2 The $N = 8n + 1$ Frame Rule | EXTRACTED -> 49 SS49.3 |
+| 2.3 Spatio-Temporal Guidance (STG) Mechanics | EXTRACTED -> 49 SS49.3 - layer-19 skip is the anti-melt mechanism |
+| 2.4 Mask-Pinned Inpainting (100% Frozen Subject Latents) | EXTRACTED -> 49 SS49.3 - timestep clamp freezes latents bit-for-bit; how atmosphere moves while numbers cannot drift |
+| 2.5 Calibrated Dials & Benchmarks (LTX-Video) | EXTRACTED -> 49 SS49.3 |
+| Part 3: The Depth & Spatial Geometry Suite ("Deep...") | RECORD - structural heading |
+| 3.1 Depth Anything V2 (NeurIPS 2024) | EXTRACTED -> 49 SS49.4 - preserves the washi deckle edge |
+| 3.2 DepthCrafter: Temporally Consistent Video Depth (CVPR 2025 Highlight) | EXTRACTED -> 49 SS49.4 - video depth, fixes flicker and affine drift |
+| 3.3 ComfyUI-Depthflow-Nodes Mastery & Bug Resolution | EXTRACTED -> 49 SS49.5 - cites the same file:lines I read from source; three-way agreement |
+| 3.4 Geometry-Locked Depth-to-Video Generation (0% Character Morphing) | EXTRACTED -> 49 SS49.4 - the real answer to character drift under motion |
+| Part 4: 9:16 vs. 16:9 Cross-Platform Architecture & Short vs. Long Form | RECORD - structural heading |
+| 4.1 Mobile UI Safe Zones (1080 × 1920) | EXTRACTED -> 49 SS49.1 - AND EXPOSED A LIVE DEFECT in our 9:16 dock CSS |
+| 4.2 Aspect Ratio Transformation Strategies | EXTRACTED -> 49 SS49.1 - 68.36% area loss; re-stage, never crop |
+| 4.3 Short-Form vs. Long-Form Production Architecture | EXTRACTED -> 49 SS49.6 - visual pulse 1.2-2.5s vs ASL 6-10s; different engines |
+| Part 5: Production Code Blueprints | RECORD - dual-format Root.tsx and the affine remap; read at build time |
+| Blueprint 1: Unified Remotion Root (`Root.tsx`) | RECORD - dual-format Root.tsx and the affine remap; read at build time |
+| Blueprint 2: Affine Coordinate Remapping Matrix | RECORD - dual-format Root.tsx and the affine remap; read at build time |
+| Part 6: Cross-Model Capability Comparison | EXTRACTED -> 49 SS49.2/SS49.3 - the summary matrix |
+| Authoritative Engineering Directives | EXTRACTED -> 49 SS49.2/SS49.3 - the summary matrix |
+
+### `MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md` — 32 headings
 | heading | disposition |
 |---|---|
 | Table of Contents | DUPLICATE - synthesis of 01/02/05/06/07; extracted at the primary instead |
@@ -370,6 +403,9 @@ other and against our code. **A conflict can only be found by reading both sides
 | 13.2 The 5 Grand Synergies to Capitalize On | RECORD - restates 42/43/45 content; its parallax item now correctly targets intensity but still omits tiling_mode, ssaa and quality (see conflict 7) |
 | 13.3 The 5 Disproportionately Easy Free Wins | RECORD - restates 42/43/45 content; its parallax item now correctly targets intensity but still omits tiling_mode, ssaa and quality (see conflict 7) |
 | 13.4 Primary Academic & Empirical Citations | EXTRACTED -> 46 SS46.1 - the Cutting log-normal claim; the rest duplicate 42-45 sources |
+| 14. Generative Video Foundations & 9:16 vs. 16:9 Cross-Platform Architecture | DUPLICATE - synthesis of 01/02/05/06/07; extracted at the primary instead |
+| 14.1 The Low-Compute Generative Engine Triad | DUPLICATE - synthesis of 01/02/05/06/07; extracted at the primary instead |
+| 14.2 9:16 vs. 16:9 Cross-Platform Architecture & Short vs. Long Form | DUPLICATE - synthesis of 01/02/05/06/07; extracted at the primary instead |
 
 ### `MASTER_RESEARCH_INDEX.md` — 32 headings
 | heading | disposition |
@@ -409,5 +445,5 @@ other and against our code. **A conflict can only be found by reading both sides
 
 ---
 
-**275 headings across 12 documents, all dispositioned.**
+**306 headings across 13 documents, all dispositioned.**
 Verified by `python scripts/check_research_extraction.py`.

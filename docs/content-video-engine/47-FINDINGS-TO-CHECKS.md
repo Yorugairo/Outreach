@@ -74,6 +74,9 @@ Ordered by value. "Fails on" is the pre-finding behaviour the check catches.
 | **G-i** | **The eye-line invariant** (48 §48.7). A composited figure's eye height must sit on the plate's horizon, within tolerance. | shot table + plate metadata + actor placement | the "standing in a pit" read — the single most common tell in composited 2.5D |
 | **G-j** | **Zero-slip anchoring** (48 §48.7). Any grounded sprite declares `transform-origin: 50% 100%` and binds translation to floor velocity, never an independent tween. | timeline + template | foot slide, and the floor-shear paradox when the actor and floor ride different planes |
 | **G-k** | **Solver declared per contact beat** (48 §48.1). A beat that declares contact resolves IK; a free gesture resolves FK. | shot table | a pointing arc flattened into a straight line, or a planted foot that slides |
+| **G-l** | **The mobile safe box** (49 §49.1). On a 9:16 timeline, every dock, caption and evidence element sits inside `x ∈ [80,880], y ∈ [280,1340]`. | template CSS + timeline | **our shipped 9:16 dock CSS** — 136 px into the right rail, 152 px too wide |
+| **G-m** | **Generative frame-count law** (49 §49.2/§49.3). Wan jobs satisfy `T = 4k+1`; LTX jobs satisfy `N = 8n+1`. | job spec | an 80-frame Wan job or a 120-frame LTX job — both break causal VAE alignment and flash |
+| **G-n** | **Generative guidance ceilings** (49). Wan I2V CFG ≤ 4.5, LTX CFG ≤ 4.5, LTX STG declared, Wan text encoder is the **scaled** FP8, Wan VAE unquantized. | job spec | frame burning, edge strobing, NaN black frames, blotchy VAE banding — each a wasted render |
 | **G-h** | **Kubelka–Munk compositing.** Two overlapping ink strokes composite darker than `dst(1−a)+src·a` would give. | rendered plate, sampled | alpha blending, which is the wrong operator (44 §44.1) |
 
 **M13** stays as already proposed, blocked on settling 0.30 s/onset vs 0.45 s/midpoint
@@ -178,9 +181,11 @@ repeated phrase. That applies to any shape of episode.
 
 ## 5. The scoreboard
 
-**8 designed out · 10 gated · 1 agent-judged · 2 JUDGE · 7 demoted, all routed to the backlog.**
+**8 designed out · 13 gated · 1 agent-judged · 2 JUDGE · 7 demoted, all routed to the backlog.**
 
-*(Updated 2026-09-04 after doc 48. File 09 added two designed-out items and three gates, and resolved two previously-demoted findings — see 48 §48.9.)*
+*(Updated 2026-09-04 after docs 48 and 49. G-l is the highest-value gate in the set: it FAILs code we already ship. See 49 §49.1.)*
+
+*(After doc 48. File 09 added two designed-out items and three gates, and resolved two previously-demoted findings — see 48 §48.9.)*
 
 Roughly a quarter of what we extracted cannot carry a check, and one gate was withdrawn
 outright as the wrong kind of rule. Both are worth stating plainly — a pass where

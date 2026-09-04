@@ -8,7 +8,7 @@ owner: parent
 branch: main
 created: 2026-09-04
 updated: 2026-09-04
-supersedes_note: amended after doc 48 landed - three gates added
+supersedes_note: amended twice - docs 48 and 49 added six gates and one urgent fix
 ---
 
 # The Enforcement Layer
@@ -18,10 +18,11 @@ supersedes_note: amended after doc 48 landed - three gates added
 The 2026-09-04 research read produced docs 42-46 and, in
 [47-FINDINGS-TO-CHECKS](../../../docs/content-video-engine/47-FINDINGS-TO-CHECKS.md), a
 per-finding verdict on what can actually be enforced. This PRP builds the enforcement
-half: **ten mechanical gates and one agent-judged check.**
+half: **thirteen mechanical gates and one agent-judged check.**
 
-**Amended 2026-09-04** after `09` landed and became doc 48: three gates added (T7), and
-two Tier-1 items moved out of scope into the capability PRP.
+**Amended twice on 2026-09-04.** Doc 48 added three gates (T7) and moved two Tier-1 items
+to the capability PRP. Doc 49 added three more (T8) — **and one of them fails code we
+already ship**, so T0 jumps the queue.
 
 It exists because condensing research into a doc is not adoption. The bundle proved that
 in miniature - eleven documents were commissioned, one was read, and two backlog items
@@ -115,7 +116,9 @@ execute all slices as parent; the routes are recorded for whichever system runs 
 | T2 | `implementation_luna` | new script plus a plate-kind lookup; moderate |
 | T4 | **parent** | modifies a shipped gate; human gate attached |
 | T5 | **parent** | new judged-check category, model harness, cost decision |
+| **T0** | `junior_developer` | **urgent - fixes shipped geometry; run first** |
 | T7 | `implementation_luna` | new script; needs shot-table fields that may not exist yet |
+| T8 | `implementation_luna` | new script plus comfy-gate additions; T0 is its fixture |
 | T6 | `speedster` | deterministic doc status update |
 
 Write sets are disjoint except T1 and T3, which are sequenced rather than parallel.
@@ -134,6 +137,15 @@ Write sets are disjoint except T1 and T3, which are sequenced rather than parall
   carries the ruling it enforces. New gates do the same.
 
 ## Task Slices
+
+### T0: fix the 9:16 dock geometry - it sits under platform chrome
+- Status: pending
+- Owner: junior_developer
+- Depends on: none
+- Write set: `docs/content-video-engine/samples/scene-evidence-player.template.html`, `content/video_engine/tests/test_vertical_safe_box.py`
+- Acceptance: `.dock` under `html[data-aspect="9:16"]` is `width: 800px; left: 80px`, and the second dock's bottom clears y=1340. **Current CSS (lines 155-162) puts the docks 136 px into the right rail and 152 px over width** (49 §49.1). 16:9 rendering is byte-identical after the change.
+- Validate: `python -m pytest content/video_engine/tests/test_vertical_safe_box.py -q` and a 9:16 render whose dock bounding boxes all sit inside `x[80,880] y[280,1340]`
+- Evidence: pending
 
 ### T1: G-a - a camera move may not overlap an evidence build
 - Status: pending
@@ -180,6 +192,15 @@ Write sets are disjoint except T1 and T3, which are sequenced rather than parall
 - Validate: `python -m pytest content/video_engine/tests/test_judge_muted_caption.py -q`
 - Evidence: pending
 
+### T8: G-l, G-m, G-n - the vertical and generative gates
+- Status: pending
+- Owner: implementation_luna
+- Depends on: T0
+- Write set: `content/video_engine/scripts/gate_vertical_safe_box.py`, `content/video_engine/tests/test_gate_vertical_safe_box.py`, and additions to `gate_comfy_config.py`
+- Acceptance: **G-l** FAILs any 9:16 element outside `x[80,880] y[280,1340]` — and must FAIL the pre-T0 template as its fixture, which is the strongest evidence in this PRP. **G-m** FAILs a Wan job not on `4k+1` or an LTX job not on `8n+1`. **G-n** FAILs Wan I2V CFG > 4.5, LTX CFG > 4.5, an unscaled FP8 text encoder, or a quantized Wan VAE (49 §49.2-49.3).
+- Validate: `python -m pytest content/video_engine/tests/test_gate_vertical_safe_box.py -q`
+- Evidence: pending
+
 ### T7: G-i, G-j, G-k - the grounding gates
 - Status: pending
 - Owner: implementation_luna
@@ -192,7 +213,7 @@ Write sets are disjoint except T1 and T3, which are sequenced rather than parall
 ### T6: status the 47 rows and register the gates
 - Status: pending
 - Owner: speedster
-- Depends on: T1, T2, T3, T4, T5, T7
+- Depends on: T0, T1, T2, T3, T4, T5, T7, T8
 - Write set: `docs/content-video-engine/47-FINDINGS-TO-CHECKS.md`, `docs/content-video-engine/CAPABILITIES.md`, `content/video_engine/scripts/run_script_gates.py`
 - Acceptance: every shipped check's row names its script and reads *shipped*; CAPABILITIES records the new capability in the same commit (its own recall rule); G-g is registered in the composed runner. Deferred items (M13, E1, G-h) keep their blocking reason.
 - Validate: `python scripts/prp_validate.py .claude/PRPs/plans/P37-RESEARCH-ENFORCEMENT-LAYER.plan.md`
@@ -201,7 +222,7 @@ Write sets are disjoint except T1 and T3, which are sequenced rather than parall
 ## Verification
 
 ```powershell
-python -m pytest content/video_engine/tests/ -q -k "gate_punch or comfy_config or template_transforms or ring_mechanism or muted_caption or grounding"
+python -m pytest content/video_engine/tests/ -q -k "gate_punch or comfy_config or template_transforms or ring_mechanism or muted_caption or grounding or vertical_safe_box"
 python content/video_engine/scripts/gate_comfy_config.py tools/google-flow-driver/src/parallax-runner.mjs
 python content/video_engine/scripts/gate_motion_density.py content/video_engine/projects/systems-and-blowups/steel-and-paper/build-f
 python scripts/prp_validate.py .claude/PRPs/plans/P37-RESEARCH-ENFORCEMENT-LAYER.plan.md
