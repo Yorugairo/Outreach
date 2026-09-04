@@ -1,0 +1,46 @@
+{
+ "title": "Hedging costs half what it did",
+ "sub": "Net yield on a hedged US 10-year for a Japanese buyer: 2023-05 versus 2026-05",
+ "src": "FRED DGS10, DGS3MO, IR3TIB01JPM156N \u00b7 fetched 2026-09-03",
+ "unit": "%",
+ "bars": [
+  {
+   "label": "2023-05 (worst)",
+   "value": -1.9,
+   "color": "crimson"
+  },
+  {
+   "label": "2026-05 (now)",
+   "value": 2.03,
+   "color": "cobalt",
+   "note": "the trade works"
+  }
+ ],
+ "badges": [
+  {
+   "label": "HEDGE COST THEN",
+   "value": "5.54%",
+   "tag": "2023-05",
+   "accent": "crimson"
+  },
+  {
+   "label": "HEDGE COST NOW",
+   "value": "2.42%",
+   "tag": "2026-05",
+   "accent": "cobalt"
+  }
+ ],
+ "status": "REAL",
+ "fetched": "2026-09-03",
+ "facts": {
+  "latest_month": "2026-05",
+  "us10y": 4.45,
+  "hedge_cost": 2.42,
+  "net_hedged": 2.03,
+  "worst_month": "2023-05",
+  "worst_net": -1.9,
+  "worst_hedge_cost": 5.54,
+  "last_negative_month": "2024-11",
+  "negative_months": 35
+ }
+}

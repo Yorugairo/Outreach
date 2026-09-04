@@ -1,0 +1,31 @@
+{
+ "fetched": "2026-09-03",
+ "japan_holdings": {
+  "latest_month": "2026-06",
+  "latest": 1116.7,
+  "peak_month": "2026-02",
+  "peak": 1239.3,
+  "drop_bn": -122.6,
+  "drop_pct": -9.9,
+  "share_pct": 12.0,
+  "rank_2_uk": 939.9,
+  "rank_3_china": 633.4
+ },
+ "hedged_yield": {
+  "latest_month": "2026-05",
+  "us10y": 4.45,
+  "hedge_cost": 2.42,
+  "net_hedged": 2.03,
+  "worst_month": "2023-05",
+  "worst_net": -1.9,
+  "worst_hedge_cost": 5.54,
+  "last_negative_month": "2024-11",
+  "negative_months": 35
+ },
+ "meta_pe": {
+  "status": "REAL",
+  "trailing_pe": 23.0,
+  "fetched": "2026-09-03",
+  "src": "Yahoo Finance via yfinance"
+ }
+}
