@@ -50,7 +50,7 @@ RULES = [
  ("05_", r"Viability Matrix|Golden Rule", "EXTRACTED -> 45 SS45.2 - closes backlog R5"),
  ("05_", r"Dial Calibration|Master Node|Motion Presets|BANNED", "EXTRACTED -> 45 SS45.3"),
  ("05_", r"Two-Plane|Layer Inpainting|Step Protocol|Why this wins|Professional Standard", "EXTRACTED -> 45 SS45.5"),
- ("05_", r"Actionable Implementation|File Updates", "EXTRACTED -> 45 SS45.3 - left to the Flow lane to apply"),
+ ("05_", r"Actionable Implementation|File Updates", "EXTRACTED -> 45 SS45.3 - and now OWNED: P37 T9 applies the dials"),
  ("05_", r"Sources", "RECORD"),
  ("06_", r"Executive Architectural Synthesis|Unified 4-Layer", "EXTRACTED -> 45 SS45.5/SS45.6, 43 SS43.3"),
  ("06_", r"Forensic Bug", "EXTRACTED -> 45 SS45.4 - CONFLICT with 05, held as SOURCES-TO-VERIFY"),

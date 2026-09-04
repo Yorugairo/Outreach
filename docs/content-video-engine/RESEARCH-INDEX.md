@@ -79,8 +79,9 @@ other and against our code. **A conflict can only be found by reading both sides
 8. **Our parallax dials do not match any target.** Read from
    `tools/google-flow-driver/src/parallax-runner.mjs` on 2026-09-04: `strength=1.0`,
    `intensity=1.0` hardcoded in all six presets, `tiling_mode="mirror"` (the kaleidoscope
-   glitch), `ssaa=1.0`, `quality=75`, model `vits_fp16`. Left to the Flow lane; recorded
-   in 45 §45.3.
+   glitch), `ssaa=1.0`, `quality=75`, model `vits_fp16`. **Owned: P37 T9.** (Recorded here
+   because it sat unowned for a day under the mistaken idea that another agent's "lane"
+   covered it — see 45 §45.3.)
 
 ## Full disposition table
 
@@ -192,8 +193,8 @@ other and against our code. **A conflict can only be found by reading both sides
 | 4.2 Motion Presets & Strength Bounds | EXTRACTED -> 45 SS45.3 |
 | 5. The Professional Standard: Two-Plane Layer Inpainting | EXTRACTED -> 45 SS45.5 |
 | The 3-Step Protocol: | EXTRACTED -> 45 SS45.5 |
-| 6. Actionable Implementation Changes for Our Pipeline | EXTRACTED -> 45 SS45.3 - left to the Flow lane to apply |
-| File Updates Required in `content/video_engine`: | EXTRACTED -> 45 SS45.3 - left to the Flow lane to apply |
+| 6. Actionable Implementation Changes for Our Pipeline | EXTRACTED -> 45 SS45.3 - and now OWNED: P37 T9 applies the dials |
+| File Updates Required in `content/video_engine`: | EXTRACTED -> 45 SS45.3 - and now OWNED: P37 T9 applies the dials |
 | Sources & Authoritative References | RECORD |
 
 ### `06_unified_ledger_drawing_engine_and_comfy_spec.md` — 21 headings

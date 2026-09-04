@@ -115,10 +115,28 @@ path to green, then did not apply the same test to these three. **P37's T7 lands
 the M08 INFO-then-FAIL ladder, which is the correct mitigation** — but the build still
 needs an owner before they can promote to FAIL.
 
-**Unclaimed research clusters** (zero mentions across both plans): the dual-shadow /
-light-wrap / substrate-grain compositing set (48 §48.7-48.8) · the 3-zone vertical stage
-(49 §49.1) · the E1 measurement harness (X1/X2) · actor idling, Euler spirals, and the
-Z-stack.
+**Unclaimed research clusters.** Each now has a home rather than a lane:
+
+| cluster | where it goes |
+|---|---|
+| dual shadow, light wrap, substrate grain, horizon lock (48 §48.7-48.8) | **P41** when written — and it is what gives G-i/G-j a path to green |
+| the 3-zone vertical stage (49 §49.1) | **P40** when written. T0 fixes dock geometry; the stage itself does not exist and we ship shorts |
+| the E1 measurement harness (X1/X2/X3) | **P39** — recommended next, the only planned work that addresses retention |
+| **multi-plane inpainting, SAM 2 + LaMa (45 §45.5)** | **B6 below — ours, and load-bearing.** G-b bans Depthflow on actor/prop/evidence/text plates and nothing builds the replacement, so today the ban just means those plates hold still |
+| parallax dial fix | **P37 T9** — folded in, no longer deferred |
+| actor idling (48 §48.4), Euler spirals (42 §42.4), the Z-stack (43 §43.3) | slices inside P40/P41; too small to plan alone |
+
+### B6 — the multi-plane lane has no owner and the viability matrix needs it
+
+45 §45.2 **bans** Depthflow on any plate carrying a foreground character, an isolated prop,
+or vector evidence and text. That is correct — it is what stops the melting. But the
+replacement path (SAM 2 segment → LaMa clean plate → composite as Z-stack cards, 45 §45.5
++ 43 §43.3) **is not built and not planned**, so a banned plate currently gets no motion
+at all rather than better motion.
+
+*Recorded 2026-09-04 after the operator corrected a framing error of mine: I had filed this
+under another agent's "lane." There are no lanes. Research agents explore; code has an
+owner, and the owner is whoever is planning.*
 
 ## Explorations — what we still cannot answer
 

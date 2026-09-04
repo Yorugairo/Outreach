@@ -86,8 +86,9 @@ other and against our code. **A conflict can only be found by reading both sides
 8. **Our parallax dials do not match any target.** Read from
    `tools/google-flow-driver/src/parallax-runner.mjs` on 2026-09-04: `strength=1.0`,
    `intensity=1.0` hardcoded in all six presets, `tiling_mode="mirror"` (the kaleidoscope
-   glitch), `ssaa=1.0`, `quality=75`, model `vits_fp16`. Left to the Flow lane; recorded
-   in 45 §45.3.
+   glitch), `ssaa=1.0`, `quality=75`, model `vits_fp16`. **Owned: P37 T9.** (Recorded here
+   because it sat unowned for a day under the mistaken idea that another agent's "lane"
+   covered it — see 45 §45.3.)
 
 ## Full disposition table
 

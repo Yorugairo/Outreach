@@ -83,8 +83,9 @@ a fixture proving it fails on the defect it names.
 - **G-h** (Kubelka-Munk compositing) - deferred with a trigger. It would FAIL every build
   today because we alpha-blend, and a permanently-red gate is noise until 44's ink work
   lands.
-- Any change to `parallax-runner.mjs` itself. G-c **reads** it. The file is the Flow lane
-  and currently carries uncommitted work from another agent.
+- Nothing is excluded on ownership grounds. An earlier draft deferred `parallax-runner.mjs`
+  to "the Flow lane"; there is no such lane. **T9 fixes it here**, and G-c uses the pre-fix
+  file as its fixture — the same pattern as T0 and G-l.
 
 ## Human Gates
 
@@ -92,7 +93,7 @@ a fixture proving it fails on the defect it names.
 |---|---|
 | **T4 (G-g) before merge** | It modifies a **shipped** gate. Strengthening G15 can retroactively FAIL scripts that previously passed. The operator decides whether prior PASSes are grandfathered or re-run. |
 | **T5 (V-a) before wiring to a build** | Each run costs a model call per scene pair. The operator decides cadence: every build, on demand, or opening-minute only. Ships as a CLI first, unwired. |
-| **T2 (G-c) if it is ever made blocking** | It reads a file another lane owns and is actively editing. Report-only until that lane confirms. |
+| **T9 before merge** | `parallax-runner.mjs` currently carries ~86 lines of uncommitted work from a concurrent session. Rebase or coordinate before editing, or the fix collides. |
 
 ## Mandatory Reads
 
@@ -119,6 +120,7 @@ execute all slices as parent; the routes are recorded for whichever system runs 
 | **T0** | `junior_developer` | **urgent - fixes shipped geometry; run first** |
 | T7 | `implementation_luna` | new script; needs shot-table fields that may not exist yet |
 | T8 | `implementation_luna` | new script plus comfy-gate additions; T0 is its fixture |
+| T9 | `junior_developer` | six literal values plus a model string; fully specified |
 | T6 | `speedster` | deterministic doc status update |
 
 Write sets are disjoint except T1 and T3, which are sequenced rather than parallel.
@@ -192,6 +194,15 @@ Write sets are disjoint except T1 and T3, which are sequenced rather than parall
 - Validate: `python -m pytest content/video_engine/tests/test_judge_muted_caption.py -q`
 - Evidence: pending
 
+### T9: apply the parallax dials - every current value is wrong
+- Status: pending
+- Owner: junior_developer
+- Depends on: none (but see the human gate - the file has uncommitted concurrent work)
+- Write set: `tools/google-flow-driver/src/parallax-runner.mjs`
+- Acceptance: `intensity` clamped to `0.10-0.12` in all six presets (resolved from the node source, 45 §45.4 - `strength` is inert without a `feature`), `tiling_mode: "none"` with a 1.10x pre-zoom crop, `ssaa: 2.0`, `quality: 85`, model `depth_anything_v2_vitl` (precision per X6). One test roll on a landscape plate shows no kaleidoscope ceiling and no rubber-sheet tearing.
+- Validate: `python content/video_engine/scripts/gate_comfy_config.py tools/google-flow-driver/src/parallax-runner.mjs` (expect PASS after; it FAILed with 5 findings before)
+- Evidence: pending
+
 ### T8: G-l, G-m, G-n - the vertical and generative gates
 - Status: pending
 - Owner: implementation_luna
@@ -213,7 +224,7 @@ Write sets are disjoint except T1 and T3, which are sequenced rather than parall
 ### T6: status the 47 rows and register the gates
 - Status: pending
 - Owner: speedster
-- Depends on: T0, T1, T2, T3, T4, T5, T7, T8
+- Depends on: T0, T1, T2, T3, T4, T5, T7, T8, T9
 - Write set: `docs/content-video-engine/47-FINDINGS-TO-CHECKS.md`, `docs/content-video-engine/CAPABILITIES.md`, `content/video_engine/scripts/run_script_gates.py`
 - Acceptance: every shipped check's row names its script and reads *shipped*; CAPABILITIES records the new capability in the same commit (its own recall rule); G-g is registered in the composed runner. Deferred items (M13, E1, G-h) keep their blocking reason.
 - Validate: `python scripts/prp_validate.py .claude/PRPs/plans/P37-RESEARCH-ENFORCEMENT-LAYER.plan.md`
