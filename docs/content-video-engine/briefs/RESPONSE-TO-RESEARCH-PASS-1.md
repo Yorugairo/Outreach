@@ -6,6 +6,18 @@
 claim verified against the source file. Bundle files 01–06 and the two index documents
 were **not** reviewed — nothing in them is accepted or rejected by this response.
 
+> **Correction, 2026-09-04, from the operator — read this first.**
+> This document calls pass 1 a *research pass*. It was not. The research layer (bundle
+> files 01–07) was sound; file 08 was a **filter** that reshaped that existing research
+> into this brief's output contract, and the invention entered there. That is a sharper
+> diagnosis than the one below and it matches the internal evidence exactly — 07, written
+> outside the contract, is clean; 08, written to fill the contract's slots, is not.
+> The fix is therefore a patch to the brief, not a new research layer. See
+> [`RESEARCH-BRIEF-animation-craft.md`](RESEARCH-BRIEF-animation-craft.md) §2:
+> **a filter may drop, relabel, reorder or compress — it may not add.**
+>
+> Everything below stands as written; only the name of the failing step changes.
+
 ---
 
 ## 1. The headline, stated fairly

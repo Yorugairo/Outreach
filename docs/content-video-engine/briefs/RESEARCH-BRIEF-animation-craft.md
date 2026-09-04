@@ -50,7 +50,41 @@ we stopped asserting figures and started requiring a fetch date. Animation will 
 same way — **but only if the research comes back with numbers, thresholds and failure
 signatures, not adjectives.**
 
-## 2. The output contract (binding on the research)
+## 2. Two kinds of pass — and which contract binds
+
+**This brief can be run two ways, and confusing them is what broke pass 1.**
+
+- **A research pass** goes out, finds material, and reports what it found.
+- **A filter pass** takes material that already exists — a research bundle, a prior
+  answer, a set of transcripts — and reshapes it into this brief's shape.
+
+Pass 1's underlying research was sound. The damage happened in the *filter* that
+reformatted it to satisfy the contract below: the contract asked for a number with a
+tolerance in every slot, and where the source had none, the filter supplied one.
+
+> **A filter may drop, relabel, reorder, compress or reorganise. It may not add.**
+>
+> If a slot in this brief has no material behind it in the source, **the slot stays
+> empty and says so.** A figure appearing in filtered output that is not in the source
+> is a defect, however plausible it looks — and plausible is exactly how it will look,
+> because a good filter writes in the register of its source.
+
+**Provenance is how this is enforced.** In a filter pass every number names the source
+file and section it came from. That makes the output *diffable against the input*: each
+figure must be findable in the source. A number that cannot name its origin file is an
+addition, and is deleted rather than investigated.
+
+### 2.1 On leads
+
+Where this brief names a lead — a paper, an author, a literature to check — it is
+**marked unverified and is a search direction, not a conclusion.** An answer returning a
+lead we supplied must say whether it found that lead independently or was handed it.
+*A supplied lead coming back as the answer is an echo, not a confirmation.*
+
+### 2.2 The output contract
+
+Binding on a research pass; binding on a filter pass only for material the source
+actually contains.
 
 Every finding must arrive as one of:
 
@@ -73,6 +107,13 @@ body** — added 2026-09-04 after the first pass returned real papers attached t
 figures (see [`VERDICT-research-brief-animation-craft.md`](VERDICT-research-brief-animation-craft.md)).
 
 A number without a locator goes under SOURCES-TO-VERIFY, same as a figure in a script.
+
+**An honest gap is a passing answer.** "No measured value exists; here is the nearest
+adjacent evidence, and here is how far each item sits from the question" is what we want
+when the field has not measured the thing. A fabricated value is a failing one — we
+build gates on these numbers, and a gate resting on an invented threshold silently
+passes bad work forever. Reporting absence costs one line; an invented threshold costs
+every episode that clears it.
 
 ## 3. The questions, by role
 
