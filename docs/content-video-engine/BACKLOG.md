@@ -1,27 +1,38 @@
 # Backlog — content video engine
 
 Hand-maintained. `STATE-OF-WORK.md` is the auto-generated worktree census; this is the
-work itself. Opened 2026-09-04 because the engine outgrew its original scope in one
-week and the context was living in a chat transcript.
+work itself. Rewritten 2026-09-04 after the full research-bundle read.
+
+**Route:** capability that exists → [`CAPABILITIES.md`](CAPABILITIES.md) · what the
+research settled → docs [42](42-DRAWING-KINETICS.md)–[46](46-REFERENCE-RHYTHM.md), indexed
+in [`RESEARCH-INDEX.md`](RESEARCH-INDEX.md) · which findings can be enforced →
+[47](47-FINDINGS-TO-CHECKS.md).
 
 ## The scope shift, named
 
 The engine was scoped to **assemble plates and dock evidence over narration**. It is
-becoming **a narration-timed 2D animation system**. Three findings did it, all from
-this week:
+becoming **a narration-timed 2D animation system**. What did it:
 
-1. **The chart engine was never chart-specific.** `drawOn(path, k)` progressively draws
-   any SVG path — `callout` and `squiggle` already use it and neither is a chart. And
-   `resolveTarget({kind:"datum", index})` resolves to a bar's box in stage coordinates,
-   so anything can be positioned *against data*.
-2. **The ledger page is a working surface, not a chart surface.** Props drawn in ink on
-   the cream, then the same sheet becomes the chart — metaphor→evidence as a
-   transformation, not a cut.
-3. **Cuts belong in acoustic gaps.** Two reference channels sit at 82%; ep1 is at 32%
-   with 68% landing mid-word.
+1. **The chart engine was never chart-specific.** `drawOn` draws any path;
+   `resolveTarget` resolves against data.
+2. **The ledger page is a working surface**, so metaphor → evidence is a transformation
+   rather than a cut.
+3. **Cuts belong in acoustic gaps** — and our cut *rate* already matches the reference,
+   so this is placement only, at no structural cost.
+4. **The reference composites; it does not generate.** Proven forensically — three
+   incompatible illustration styles on one canvas. The actor is a rig with swappable
+   slots, not a per-shot image.
 
-Consequence: **prop assets, not world plates, are the unit of visual work.** A world
-plate is spent on one shot; a prop composes and is reusable forever.
+Consequence: **props, not world plates, are the unit of visual work** — and the actor
+joins them.
+
+---
+
+## The standing frame: we lose people in the first minute
+
+Operator ruling 2026-09-04: *our failure is holding the audience; we never even get the
+chance for a long hold.* Everything below is ordered against that. Richness in the middle
+is a luxury for an audience that already stayed.
 
 ---
 
@@ -29,75 +40,94 @@ plate is spent on one shot; a prop composes and is reusable forever.
 
 | # | item | the decision |
 |---|---|---|
-| B1 | **Tokyo short is 118 s against a 90 s cap** | Which beat loses ~24%. Candidates: cut the archetype (−10.4 s; the head-fake now does "everyone is wrong" with data), compress the tell (−7 s), or accept ~105 s and take the Facebook algorithm hit. Per-paragraph durations in `tokyo-tea-break/scratch/SCRATCH-INDEX.md`. |
-| B2 | **3.9 GB asset pool + `f10b` worktree** | `content-generation-system-52f077` holds a complete parallel `content/video_engine` (14,842 files). `f10b` holds 18.4 GB, of which 8.68 GB is regenerable animatic frames. Needs a durable home that is not a worktree. |
-| B3 | **174 unpushed commits** | `main` is local-only; last push 2026-08-30. Everything this week exists on one disk. Push needs explicit authorization. |
-| B4 | **Gitignore policy on `review/claims`** | `.gitignore:77` ignores `content/video_engine/**/review/` wholesale, so 46 plate waves' approval manifests are untracked. Un-ignoring `*.json`/`*.md` there adds hundreds of files to git. |
+| B1 | **Tokyo short is 118 s against a 90 s cap** | Which beat loses ~24 %. Cutting the archetype is −10.4 s, and the head-fake now does that job with data. |
+| B2 | **3.9 GB pool + `f10b` worktree** | 18.4 GB, of which 8.68 GB is regenerable animatic frames. Needs a home that is not a worktree. |
+| B3 | **~180 unpushed commits** | `main` is local-only since 2026-08-30. A week of doctrine and the whole generative stack on one disk. |
+| B4 | **Gitignore on `review/`** | 46 plate waves' approval manifests are untracked. Narrowing the ignore to images tracks the manifests. |
+| B5 | **Speech-rate contradiction** | Reference 183.6 WPM, our ep1 182.8, doctrine target **145–165**. The target sits below both. A gate neither we nor the best-performing reference satisfies is not describing the work. |
 
-## Build queue — animation
+## Build — Tier 1, designed out (47 §1)
 
-| # | item | state |
+The strongest results of the day: once built they cannot be violated, because the wrong
+path stops existing. Each ships with the test named in 47.
+
+| # | item | the test that fails without it |
 |---|---|---|
-| A1 | **Renderer side of the `object` page** | Spec side SHIPPED (`ledger_page.py --variant object`, 12 tests). The template cannot draw one yet: it needs a branch that draws registered props via `drawOn` on the LP clock. |
-| A2 | **Prop asset library** | The five Tokyo props are declared and validating but **do not exist as art**: toll gate, empty chair + cold cup + bill, crate stamped with a future year, locked lever, lit fab. Needs to be channel-walled and indexed like plates. |
-| A3 | **`object` → chart transform on one page** | Declared by two Tokyo pages (`lp-obj-customer-leaving`, `lp-obj-crate-dated-later`). This is the piece that makes the architecture pay — no plate change, so E25 becomes unbreakable rather than enforced. |
-| A4 | **The recede species ("whirlpool")** | Operator's idea; **not outside reality.** `spotlight` already paints a radial gradient with a moving centre and feathered hole as a function of `t`. Recede = same primitive, stops swapped, radius → 0, optional slow rotation on the masked group. Reveals cream underneath. |
-| A5 | **Actor on the page = hands** | Mike is full colour; the page is ink on cream — a register collision. The record-document species already strokes a highlighter in time with the narrator's words. `build-f/ledger-hands.html` is an existing untracked proof. |
-| A6 | **Expose the chart's coordinate mapper** | Each builder defines `mx()`/`my()` locally. Lifting them lets props share the chart's scale rather than stage pixels — the general form of `at: "datum"`. |
+| **T1** | **Curvature-reparameterised stroke** in `drawOn`, with the κ₀ regulariser and width/ink coupling | `v(max κ) < v(min κ)` on a cornered path; a straight line returns finite v; `w(max κ) > w(min κ)` |
+| **T2** | **Analytic spring evaluator**, three damping regimes, the only spring API | seek test: frame N direct == frames 0..N sequential, bit-identical |
+| **T3** | **Area-preserving squash**, driven by velocity and deceleration | `det(A(t)) == 1` for all t and all α |
+| **T4** | **ARAP morph** with polar decomposition inside | morph through >90° of rotation; `det(J(t)) > 0` at every t |
+| T5 | Object-page renderer — the template draws registered props on the LP clock | spec side already ships (`--variant object`, 12 tests) |
+| T6 | `object → chart` transform on one page | declared by two Tokyo pages; T4 is its prerequisite |
 
-## Build queue — gates and pipeline
+**Read `06_unified_ledger_drawing_engine_and_comfy_spec.md` before T5** — it carries a
+`ledger_page.v2.json` contract built on our existing LP clock, plus the Z0–Z5 stack.
 
-| # | item | state |
+## Build — Tier 2, gates (47 §2)
+
+| # | gate | FAILs on |
 |---|---|---|
-| G1 | **M13: a scene boundary lands in a gap ≥0.30 s, or is declared** | Proposed, **not built**. Fails ep1 at 68%. Mechanical and checkable from the word timeline. |
-| G2 | **Short-runtime mode for `gate_opening_structure.py`** | 17 of the Tokyo short's FAILs are P1/P2 phase-beat rows on a 90 s script whose P1 computes to 9 s. The gate assumes long-form geometry. |
-| G3 | **Stop compressing inter-paragraph silence in `tempo_edit.py`** | On the short it buys 117.8 → 103.3 s against a 90 s target — does not reach the cap, costs the scene signal, and forces the whole `retime_to_take` pass. Keep the tempo curve; drop the dead-space collapse. |
-| G4 | **Tokyo `timeline.json` on the 9:16 template** | The template renders 9:16 (SHIPPED). No timeline uses it yet. Retires `player.html`, which still renders three wrong TIC figures. |
-| G5 | **The 8 carried P34 reviewer mediums** | Audit staleness deferral; unresolvable-species gate events; G45 opt-in without `--title`; M11/M12 chart-dock inference; `--timeline` truncation; G28's dead phase check; `_dock_live_at` vs `_dock_span` schema; P1/P2 tolerance overlap. |
+| **G-a** | punch must not overlap a build | **our renderer today** — camera motion during a data build, so saccadic suppression eats the numbers |
+| **G-c** | parallax dial lint | **every value we ship today**: `mirror`, `ssaa 1.0`, `quality 75`, `intensity 1.0`, `vits` |
+| G-b | parallax plate eligibility (the viability matrix) | Depthflow on the page, on @Mike, on any text |
+| G-d | no unanchored transform | the diagonal-drift class |
+| G-e | LTX `num_frames % 8 == 1` | a 120-frame job that silently produces garbage |
+| G-f | actor resolves to a registered rig, not a generation | the per-shot @Mike we keep re-rolling |
+| **G-g** | **the equation spine** — P1's mechanism recurs, P6 closes on it | a listicle with no spine. G15 generalised: we already gate a ring *token*, this gates a ring *mechanism* |
+| G-h | Kubelka–Munk compositing on overlapping ink | alpha blending, which is the wrong operator |
+| G1 | **M13** — cut lands in an acoustic gap | 68 % of ep1. Free: our cut rate already matches the reference |
 
-## Research — open questions worth an experiment
+## Build — carried, unchanged by the research
+
+| # | item |
+|---|---|
+| A2 | **Prop asset library** — the five Tokyo props validate but do not exist as art |
+| A4 | The recede species ("whirlpool") — `spotlight` inverted, radius → 0 |
+| A5 | Actor on the page = hands; `build-f/ledger-hands.html` is an untracked proof |
+| A6 | Expose the chart's coordinate mapper — 43 §43.2's anchor work is its general form |
+| G2 | Short-runtime mode for `gate_opening_structure.py` — 17 Tokyo FAILs are long-form geometry on a 90 s script |
+| G3 | Stop compressing inter-paragraph silence in `tempo_edit.py` |
+| G4 | Tokyo `timeline.json` on the 9:16 template; retires `player.html` and its three wrong TIC figures |
+| G5 | The 8 carried P34 reviewer mediums |
+
+## Explorations — what we still cannot answer
+
+Ordered by what the first-minute frame makes urgent.
 
 | # | question | how to settle it |
 |---|---|---|
-| R1 | **Cut ON the pause or THROUGH it?** | The measurement says references cut on it; it does not say ours is wrong to sometimes cut through. A/B by ear on one scene pair. |
-| ~~R2~~ | ~~Wealth Logic's four composition claims~~ | **CLOSED 2026-09-04** by `01_wealth_logic_production_report.md`. The equation spine is confirmed and named: `Spread = (Return − Cost) × Leverage`, all six mechanisms as the same equation with different variables, ring close returning to it verbatim. ~10 s holds and the persistent host confirmed. See [`FINDING-what-the-bundle-already-answered.md`](FINDING-what-the-bundle-already-answered.md). |
-| R3 | **Does a prop library actually compose?** | The claim is that 5–8 props cover most metaphors and compose combinatorially. Testable by briefing three unrelated episodes against one prop set and counting misses. |
-| ~~R4~~ | ~~Flow Characters as identity lock~~ | **ANSWERED 2026-09-04** by `02_drawing_engine_and_transforms_research.md`, which says the question is wrong: do not generate the character per shot — build a vector cutout rig with swappable torso/head/hand slots. Drift goes to zero by construction, not by prompting. |
-| R5 | **Parallax + object page** | 2.5D parallax is proven on world plates. Unknown whether it helps or hurts an ink-on-cream page. |
+| **X1** | **What actually loses people in our first minute?** We have never measured our own failure mode — only inferred it. This is the question everything else is serving, and it has not been on this list before. | P36 (the viewer) on ep1's opening, windowed and blind; plus the E1 metrics once X2 lands. Run the reference's opening on the same instruments and compare. |
+| **X2** | **E1 metric thresholds.** Motion energy, centroid of change, saliency and flow coherence are the right metrics; the ranges are not ours yet. | Build the measurement, run it over ep1 and both references, derive from that. **Never adopt a guessed threshold** — that is precisely the error the metrics exist to catch. |
+| **X3** | **Gap threshold: 0.30 s at onset, or 0.45 s at midpoint?** Different gates. | Count both across ep1's word timeline; check the 0.45 s set is large enough to carry every boundary that needs one. **Blocks M13.** |
+| X4 | **Does a prop library actually compose?** The claim is that 5–8 props cover most metaphors. | Brief three unrelated episodes against one prop set and count the misses. |
+| X5 | **Cut ON the pause or THROUGH it?** The measurement says references cut on it; it does not say we are wrong to sometimes cut through. | A/B by ear on one scene pair. |
+| X6 | **Depth model precision** — `vitl_fp16` (05) vs `vitl_fp32` (06, "fp16 strictly banned, logit underflow"). | One test roll. ViT-Large either way. |
+| X7 | **Euler spiral quality threshold** — how much curvature ripple is too much. | No basis yet. Build the generator; gate later or never. |
+| X8 | **Two unverified citations** in the pass-2 rewrite of `08` (Martinez-Conde year/volume, Hasson volume/year). Nothing in 42–47 depends on either. | A library check. Low priority. |
+| ~~X9~~ | ~~Parallax + object page~~ | **CLOSED 2026-09-04** — 45 §45.2 bans parallax on vector evidence and text. Depth on the page comes from the Z-stack instead, which costs no shader and cannot tear. |
 
-## Opened by the bundle read (2026-09-04)
+## Deprioritised by ruling
 
-| # | item | state |
-|---|---|---|
-| N1 | **M10 measures the wrong thing.** The reference's first minute holds 5 of 8 shots past 6 s, three past 13 s. If M10 is enforced as a shot-length ceiling rather than as motion-within-a-shot, we cut against the reference's own practice. The right M10 is an E1 motion-energy metric, not a duration cap. | Needs the gate read; **highest-value correction available.** |
-| N2 | **Shot-length variance is the real gap, not cut rate.** Our CPM (5.6) matches the reference (5.9) and our medians are within 0.1 s — but our IQR is 3.4 s against their 6.9 s, and their longest hold is 26 s to our 19.1 s. We metronome; they vary. | Target the distribution, not the mean. |
-| N3 | **The equation spine as script architecture** — one mechanism evaluated N times with the ring closing on the mechanism itself (R2a's answer). | Applies to the Steel and Paper re-script before anything else does. |
-| N4 | **Speech-rate contradiction.** Reference 183.6 WPM, ep1 182.8, doctrine target 145–165. The target sits below both. | Operator decision. |
-| N5 | **Gap threshold contradiction.** File 01 says ≥ 0.45 s, file 08 and the M13 proposal say ≥ 0.30 s. Different gate behaviour. | Settle from the measurement before M13 ships. |
-| N6 | **Read `06_unified_ledger_drawing_engine_and_comfy_spec.md` before writing the object-page renderer** — it carries a `ledger_page.v2.json` contract built on our existing LP clock, plus the Z0–Z5 stack that is the concrete form of A6/C3. | Prerequisite to A1. |
-| **N7** | **The animation math is extracted and mapped to code.** Curvature-reparameterised stroke (replaces the linear `stroke-dashoffset` in `drawOn`; every drawn object inherits it), the analytic spring evaluator with `M_p = exp(−πζ/√(1−ζ²))` as the **inverse model** that retires A1's guessed timing chart, polar-decomposition morph with a proof against area collapse, area-preserving squash, Euler spirals, Kubelka–Munk ink compositing. | [`FINDING-the-animation-math-and-what-it-changes.md`](FINDING-the-animation-math-and-what-it-changes.md). **Items 1–2 there are the build order.** |
-| **N8** | **Two defects we ship today.** (a) The camera punch overlaps the chart build — saccadic suppression during a camera move blinds the viewer to the numbers landing; the beats must be serialised. (b) STAGE type keys to words, but auditory cortex tracks syllables (theta band, 150–250 ms). | (a) is a boundary fix in the renderer, not new code. |
+- **Grow the shot-length tail.** Our median and CPM match the reference; only the spread
+  is tighter (IQR 3.4 s vs 6.9 s). Operator 2026-09-04: a 26 s hold is a luxury for an
+  audience that already stayed. Recorded in 46 §46.1, not actioned.
+- **Coffee-ring edge and anisotropic wicking** — JUDGE rows bounded by E22's refusal list.
+  Below the motion work, and worth nothing on a page that still draws like a plotter.
+
+## Withdrawn
+
+- **N1 "M10 measures the wrong thing."** Wrong. `gate_motion_density.py:277` measures gaps
+  between *visual events*, not shot boundaries, and shot length has its own separate
+  ceiling (`PLATE_HOLD_MAX_S = 20.0`, two-dock escape). I inferred a defect from a FAIL
+  message without reading the implementation — the error I spent the day cataloguing in
+  others. See 47 §0.
 
 ## Carried debt
 
-- **`f10b` plate rehome.** 55 indexed plates still resolve into the codex worktree; the main-checkout rehome (615 files) did not cover them. Must happen before that tree is removed.
-- **Steel and Paper's timeline references assets by absolute worktree path** (`...\.claude\worktrees\sweet-villani-1c3a16\...`). Breaks when the worktree goes.
-- **Flow driver has no README**, and a fresh checkout needs `npm install` in `tools/google-flow-driver` before either MCP server starts.
-- **Drive connector needs reconnecting** — returned a permissions error on the master-prompt file.
-- **Tokyo `plate-01-*`** — all three rolls are the photoreal stranger from before the character binding was fixed. Re-roll on bound `@Mike`.
-- **The Steel and Paper re-script** (`REWRITE-ORDER-G`) — the original next task, now with M13, object pages and the E28 charts available to it.
-
-## Shipped this week (so the next session knows the ground)
-
-P34/P35/P36 complete · the viewer binds (recall FAILs, confusion WARNs, gain retired) ·
-the generative-video stack rescued onto main and the MCP registered · the plate library
-rehomed and rebuilt (326 plates, 0 worktree paths) · the template renders **9:16** ·
-the break ration counts delivery marks only · Tokyo: script reframed on live TIC data,
-four charts built from FRED/Treasury/yfinance, dossier, shot table, and the ledger
-page's **`object` variant**.
-
-## Rulings and rules opened this week
-
-E22 add. 7 · E24 · E25 · E26 · E27 add. · E28 + addenda ·
-`RULE-abstract-to-concrete.md` · `RULE-the-page-is-the-ground.md` ·
-`FINDING-gaps-are-the-edit.md`
+- **`f10b` plate rehome** — 55 indexed plates still resolve into the codex worktree.
+- **Steel and Paper's timeline uses absolute worktree paths.**
+- **Flow driver has no README**; a fresh checkout needs `npm install` in `tools/google-flow-driver`.
+- **Drive connector needs reconnecting.**
+- **Tokyo `plate-01-*`** — all three rolls predate the character-binding fix.
+- **The Steel and Paper re-script** (`REWRITE-ORDER-G`) — now with G-g available to it,
+  which is the single finding that most changes a script.

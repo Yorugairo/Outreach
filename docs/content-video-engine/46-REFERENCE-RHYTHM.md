@@ -46,12 +46,16 @@ against our own or the reference's data — that test is one line once we want i
 landing cuts in gaps costs nothing structurally — it is pure placement. Our 68 % mid-word
 rate is not a symptom of over-cutting.
 
-**M10 is probably measuring the wrong thing.** The reference's first minute runs
-`10.6, 15.6, 6.0, 3.7, 13.5, 3.7, 2.9, 14.9 s` — five of eight shots past six seconds,
-three past thirteen. "No still over 6 s in the first minute" is only defensible if *still*
-means **no motion within the shot**, which is E21's actual intent and is a motion-energy
-measurement, not a duration cap. If M10 is enforced as a shot-length ceiling we are
-cutting against the reference's own practice.
+**M10 is already correct — an earlier claim here that it was not is withdrawn.**
+The reference's first minute runs `10.6, 15.6, 6.0, 3.7, 13.5, 3.7, 2.9, 14.9 s`, five of
+eight shots past six seconds, which looks like it should fail a "no still over 6 s" gate.
+It does not: `gate_motion_density.py:277` computes a still stretch as the gap between
+**visual events** — dock entries, badge lights, caption beats, species firings — not
+between shots. A 15.6 s shot with a dock at +4 s and a callout at +9 s passes cleanly, and
+that is exactly E21's intent. Shot length has its own separate ceiling
+(`PLATE_HOLD_MAX_S = 20.0`, with a two-dock escape), which the reference also clears.
+**The system already distinguishes "the screen went still" from "the plate held long."**
+See [47-FINDINGS-TO-CHECKS](47-FINDINGS-TO-CHECKS.md) §0.
 
 ## 46.3 The gap threshold is unsettled
 
