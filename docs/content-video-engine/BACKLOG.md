@@ -46,6 +46,17 @@ is a luxury for an audience that already stayed.
 | B4 | **Gitignore on `review/`** | 46 plate waves' approval manifests are untracked. Narrowing the ignore to images tracks the manifests. |
 | B5 | **Speech-rate contradiction** | Reference 183.6 WPM, our ep1 182.8, doctrine target **145–165**. The target sits below both. A gate neither we nor the best-performing reference satisfies is not describing the work. |
 
+## The plan stack
+
+| # | plan | status | note |
+|---|---|---|---|
+| **P39** | **[Render baseline & kill switch](../../.claude/PRPs/plans/P39-RENDER-BASELINE-AND-KILL-SWITCH.plan.md)** | draft | **first.** Tag, golden frames, and a flag per capability. Today there is no rollback point and no way to detect a visual regression |
+| P37 | [Enforcement layer](../../.claude/PRPs/plans/P37-RESEARCH-ENFORCEMENT-LAYER.plan.md) | draft | 13 gates + V-a; T0 fixes the 9:16 docks, T9 the parallax dials |
+| P38 | [Kinetics capability](../../.claude/PRPs/plans/P38-KINETICS-CAPABILITY-LAYER.plan.md) | draft | the six designed-out items; changes what the video looks like |
+| P40 | Measurement — X1/X2/X3 | **to write** | the E1 harness over ep1 + both references; derive thresholds; answer what loses the first minute. Unblocks M13 |
+| P41 | The vertical stage — 49 §49.1 | **backlog** | the 3-zone short-form stage. T0 fixes dock geometry; the stage does not exist and we ship shorts. Folds in short-form cadence (X14) and the caption strip |
+| P42 | Grounding & compositing — 48 §48.7-48.8 | **backlog** | dual shadow, light wrap, substrate grain, horizon lock, ground binding. **Gives G-i/G-j/G-k a path to green** — today they check what nothing builds. Folds in actor idling (48 §48.4) and the Z-stack (43 §43.3) |
+
 ## Build — Tier 1, designed out (47 §1) → **[P38](../../.claude/PRPs/plans/P38-KINETICS-CAPABILITY-LAYER.plan.md)**
 
 The strongest results of the day: once built they cannot be violated, because the wrong
@@ -119,9 +130,9 @@ needs an owner before they can promote to FAIL.
 
 | cluster | where it goes |
 |---|---|
-| dual shadow, light wrap, substrate grain, horizon lock (48 §48.7-48.8) | **P41** when written — and it is what gives G-i/G-j a path to green |
-| the 3-zone vertical stage (49 §49.1) | **P40** when written. T0 fixes dock geometry; the stage itself does not exist and we ship shorts |
-| the E1 measurement harness (X1/X2/X3) | **P39** — recommended next, the only planned work that addresses retention |
+| dual shadow, light wrap, substrate grain, horizon lock (48 §48.7-48.8) | **P42** when written — and it is what gives G-i/G-j a path to green |
+| the 3-zone vertical stage (49 §49.1) | **P41** when written. T0 fixes dock geometry; the stage itself does not exist and we ship shorts |
+| the E1 measurement harness (X1/X2/X3) | **P40** — the only planned work that addresses retention |
 | **multi-plane inpainting, SAM 2 + LaMa (45 §45.5)** | **B6 below — ours, and load-bearing.** G-b bans Depthflow on actor/prop/evidence/text plates and nothing builds the replacement, so today the ban just means those plates hold still |
 | parallax dial fix | **P37 T9** — folded in, no longer deferred |
 | actor idling (48 §48.4), Euler spirals (42 §42.4), the Z-stack (43 §43.3) | slices inside P40/P41; too small to plan alone |

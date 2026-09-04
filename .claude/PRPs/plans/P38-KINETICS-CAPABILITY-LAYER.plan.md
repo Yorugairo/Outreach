@@ -25,6 +25,10 @@ Written now, while the five research passes are in working memory, because a PRP
 to survive context loss — and leaving this unwritten would repeat the mistake that opened
 the backlog this morning.
 
+> **Depends on [P39-RENDER-BASELINE-AND-KILL-SWITCH](P39-RENDER-BASELINE-AND-KILL-SWITCH.plan.md).**
+> T2 changes every drawn object, and today there is no golden-frame test, no tag, and no way to turn a capability
+> off. P39 supplies all three. **Do not start this plan first.**
+
 ## Intent And Acceptance
 
 **Intent.** Six pure-math capabilities land as a node-testable module, each with a test
@@ -48,7 +52,7 @@ renderer so every drawn object inherits it.
 7. `drawOn` in the template routes through the curvature profile; the 16:9 render of ep1
    is visually diffed and approved before merge.
 
-**Anti-goals.** No capability ships without its failing test demonstrated first. No
+**Anti-goals.** No capability ships without its failing test demonstrated first. **Every capability that alters rendered output ships behind its P39 flag, defaulting to current behaviour** - a bad result must be one timeline field away from the old render, never a debugging session. No
 tunable is presented as a finding — `γ`, `λ_w`, `κ_v`, per-material `ζ`/`ω₀` are ours
 (42 §42.5). No change to the standalone-openability of the template.
 

@@ -34,6 +34,10 @@ area-preserving squash, ARAP morph). Those are code that does not exist yet, and
 says they should be *designed out* rather than gated - there is nothing to check until
 they land. They get their own PRP: **[P38-KINETICS-CAPABILITY-LAYER](P38-KINETICS-CAPABILITY-LAYER.plan.md)**, drafted 2026-09-04.
 
+> **Depends on [P39-RENDER-BASELINE-AND-KILL-SWITCH](P39-RENDER-BASELINE-AND-KILL-SWITCH.plan.md).**
+> T0 edits the template, and today there is no golden-frame test, no tag, and no way to turn a capability
+> off. P39 supplies all three. **Do not start this plan first.**
+
 ## Intent And Acceptance
 
 **Intent.** Every finding in 47 §2 and §2b becomes a runnable check, wired into the
