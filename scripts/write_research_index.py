@@ -36,6 +36,7 @@ Read completed 2026-09-04. Reference layer: docs **42–46**.
 | [45-PARALLAX-AND-PLATE-MOTION](45-PARALLAX-AND-PLATE-MOTION.md) | disocclusion limit, the viability matrix, our dial audit, multi-plane inpainting, masked ambient motion | 05 whole, 06 §2–4 |
 | [46-REFERENCE-RHYTHM](46-REFERENCE-RHYTHM.md) | shot distribution recomputed, gap thresholds, the equation spine, phase map | 04 (recomputed), 01, dossier §10 |
 | [47-FINDINGS-TO-CHECKS](47-FINDINGS-TO-CHECKS.md) | which findings can be designed out, gated, judged, or demoted | **derived from 42–46, not from a primary** — the enforcement layer |
+| [48-THE-FIGURE-AND-THE-GROUND](48-THE-FIGURE-AND-THE-GROUND.md) | FK/IK boundary, balance, the rig, idling, reach and grasp, grounding and compositing | 09 whole — **closes X10** |
 
 ## Declared conflicts and rejections
 

@@ -103,7 +103,7 @@ Ordered by what the first-minute frame makes urgent.
 | X5 | **Cut ON the pause or THROUGH it?** The measurement says references cut on it; it does not say we are wrong to sometimes cut through. | A/B by ear on one scene pair. |
 | X6 | **Depth model precision** — `vitl_fp16` (05) vs `vitl_fp32` (06, "fp16 strictly banned, logit underflow"). | One test roll. ViT-Large either way. |
 | X7 | **Euler spiral quality threshold** — how much curvature ripple is too much. | No basis yet. Build the generator; gate later or never. |
-| **X10** | **How does a figure move in our register?** 42–47 cover strokes, springs, morphs, ink and plate motion and say almost nothing about **actor motion** — generated or composited. Exposed by withdrawing G-f: we argued about *how the actor is made* and never wrote down how it should *move*. | Name the motion vocabulary a figure needs (enter, gesture, settle, exit), then decide which is designed out, gated, or judged. Prerequisite: none. |
+| ~~X10~~ | ~~How does a figure move in our register?~~ **CLOSED 2026-09-04** by [48-THE-FIGURE-AND-THE-GROUND](48-THE-FIGURE-AND-THE-GROUND.md) — the FK/IK boundary, XCOM balance, DQS/BBW rigging, breath and sway, reach and grasp, grounding. Original question below.<br><br>~~ 42–47 cover strokes, springs, morphs, ink and plate motion and say almost nothing about **actor motion** — generated or composited. Exposed by withdrawing G-f: we argued about *how the actor is made* and never wrote down how it should *move*. | Name the motion vocabulary a figure needs (enter, gesture, settle, exit), then decide which is designed out, gated, or judged. Prerequisite: none. |
 | X11 | **Per-material `ζ` / `ω₀`, and the secondary-motion ratio** | T2 gives the model; these are the numbers. Derive by eye against reference footage, or declare them ours and tune. |
 | X8 | **Two unverified citations** in the pass-2 rewrite of `08` (Martinez-Conde year/volume, Hasson volume/year). Nothing in 42–47 depends on either. | A library check. Low priority. |
 | ~~X9~~ | ~~Parallax + object page~~ | **CLOSED 2026-09-04** — 45 §45.2 bans parallax on vector evidence and text. Depth on the page comes from the Z-stack instead, which costs no shader and cannot tear. |
@@ -116,9 +116,9 @@ Demoted from *doctrine* — not dropped. Each lands as a build item, an explorat
 |---|---|---|
 | D1 | **Euler-spiral generator** for procedural curves (arrows, balance arms, connectors, axes) | **Build, do not gate.** Quality threshold is X7. |
 | D2 | **Per-material `ζ` / `ω₀` values** — paper, metal, fabric, liquid, ink | **Exploration X10.** T2 gives the model; these are the numbers that make it usable, and they are ours to derive. |
-| D3 | **Secondary-motion ratio** — the 0.22 is invented; the shape (lags 2–4 frames, settles faster) is craft | **Exploration X11.** Needs our own number or an explicit "by eye". |
+| ~~D3~~ | ~~Secondary-motion ratio~~ | **RESOLVED 2026-09-04** by 48 §48.6 — the analytic phase lag `φ = arctan(2ζ(ω_d/ω₀)/(1−(ω_d/ω₀)²))` on the `M_p` we already adopted. No invented ratio needed. |
 | D4 | **Dirty-flag propagation** in the scene graph | **Build, low priority.** Triggered when node counts grow past hand-tuning — props and rigs will do it. |
-| D5 | **BBW / 2D dual-quaternion skinning** | **Deferred with a trigger:** the first prop that must *bend* rather than pivot. |
+| D5 | **BBW / 2D dual-quaternion skinning** | **Trigger corrected 2026-09-04** (48 §48.3): not a bending prop — **rigging a figure**. Elbows and knees need it immediately, because linear blend skinning returns the zero matrix at 180°. Now a Tier-1 designed-out item in 47 §1. |
 | D6 | **A1 timing chart** | **Closed.** Superseded by `M_p = exp(−πζ/√(1−ζ²))` — the model replaces the table. |
 | D7 | **Grow the shot-length tail** | Deprioritised by ruling — see below. |
 

@@ -53,6 +53,8 @@ hold is a luxury for an audience that already stayed.
 | **42.2 closed-form springs** | the analytic evaluator is the only spring API; no integrator exists to call | **The seek test:** evaluate frame N directly, and evaluate frames 0..N in sequence. Assert bit-identical. An iterative spring fails this by construction. |
 | **42.3 area-preserving squash** | the squash matrix is built as `R·diag(1+α, 1/(1+α))·R⁻¹` | `det(A(t)) == 1` within float tolerance, for all t and all α. |
 | **43.5B ARAP morph** | polar decomposition is inside the morph, not a caller choice | **Morph a shape through >90° of rotation. Assert `det(J(t)) > 0` at every t.** Naive vertex lerp fails; polar decomposition cannot. This is the cleanest failing test in the set. |
+| **48.3 DQS skinning** (doc 48) | joints blend on SE(2) geodesics; linear blend skinning is not an option in the rig | Flex a joint through 180° at w=0.5. Assert `det(T_blend) == 1`. **LBS returns the zero matrix here** — the candy-wrapper elbow, as a one-line failing test. |
+| **48.5 prop attachment** (doc 48) | attachment is a cached offset matrix; there is no hierarchy-mutation path | Pick up a prop mid-move; assert world position is continuous across the handover frame (no one-frame pop) and that the node's parent never changed. |
 
 These six are the strongest results of the day, because once built they cannot be
 violated — there is no gate to route around.
@@ -69,6 +71,9 @@ Ordered by value. "Fails on" is the pre-finding behaviour the check catches.
 | **G-d** | **No unanchored transform.** Any scale or rotate without an explicit anchor. | template + timeline | the diagonal-drift class (43 §43.2) |
 | **G-e** | **LTX frame count.** `num_frames % 8 == 1`. | ambient job spec | a 120-frame job that silently produces garbage (45 §45.6) |
 | **G-g** | **G15 strengthened: the ring closes on the MECHANISM.** The causal claim named in P1 is what P6 returns to — not merely a repeated token. | script + phase map | a close that echoes a *phrase* while the argument has drifted. See §6 for why the "equation spine" framing was wrong. |
+| **G-i** | **The eye-line invariant** (48 §48.7). A composited figure's eye height must sit on the plate's horizon, within tolerance. | shot table + plate metadata + actor placement | the "standing in a pit" read — the single most common tell in composited 2.5D |
+| **G-j** | **Zero-slip anchoring** (48 §48.7). Any grounded sprite declares `transform-origin: 50% 100%` and binds translation to floor velocity, never an independent tween. | timeline + template | foot slide, and the floor-shear paradox when the actor and floor ride different planes |
+| **G-k** | **Solver declared per contact beat** (48 §48.1). A beat that declares contact resolves IK; a free gesture resolves FK. | shot table | a pointing arc flattened into a straight line, or a planted foot that slides |
 | **G-h** | **Kubelka–Munk compositing.** Two overlapping ink strokes composite darker than `dst(1−a)+src·a` would give. | rendered plate, sampled | alpha blending, which is the wrong operator (44 §44.1) |
 
 **M13** stays as already proposed, blocked on settling 0.30 s/onset vs 0.45 s/midpoint
@@ -173,7 +178,9 @@ repeated phrase. That applies to any shape of episode.
 
 ## 5. The scoreboard
 
-**6 designed out · 7 gated · 1 agent-judged · 2 JUDGE · 7 demoted, all routed to the backlog.**
+**8 designed out · 10 gated · 1 agent-judged · 2 JUDGE · 7 demoted, all routed to the backlog.**
+
+*(Updated 2026-09-04 after doc 48. File 09 added two designed-out items and three gates, and resolved two previously-demoted findings — see 48 §48.9.)*
 
 Roughly a quarter of what we extracted cannot carry a check, and one gate was withdrawn
 outright as the wrong kind of rule. Both are worth stating plainly — a pass where

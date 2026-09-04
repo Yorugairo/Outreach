@@ -29,6 +29,7 @@ Read completed 2026-09-04. Reference layer: docs **42–46**.
 | [45-PARALLAX-AND-PLATE-MOTION](45-PARALLAX-AND-PLATE-MOTION.md) | disocclusion limit, the viability matrix, our dial audit, multi-plane inpainting, masked ambient motion | 05 whole, 06 §2–4 |
 | [46-REFERENCE-RHYTHM](46-REFERENCE-RHYTHM.md) | shot distribution recomputed, gap thresholds, the equation spine, phase map | 04 (recomputed), 01, dossier §10 |
 | [47-FINDINGS-TO-CHECKS](47-FINDINGS-TO-CHECKS.md) | which findings can be designed out, gated, judged, or demoted | **derived from 42–46, not from a primary** — the enforcement layer |
+| [48-THE-FIGURE-AND-THE-GROUND](48-THE-FIGURE-AND-THE-GROUND.md) | FK/IK boundary, balance, the rig, idling, reach and grasp, grounding and compositing | 09 whole — **closes X10** |
 
 ## Declared conflicts and rejections
 
@@ -295,6 +296,48 @@ other and against our code. **A conflict can only be found by reading both sides
 | 9.2 Practitioner Doctrine (Editorial & Animation Craft) | FILTERED OUTPUT, not a primary. Triaged in VERDICT-research-brief-animation-craft.md; adopted content is re-sourced from the primaries here |
 | 9.3 Internal Repository Measurements | FILTERED OUTPUT, not a primary. Triaged in VERDICT-research-brief-animation-craft.md; adopted content is re-sourced from the primaries here |
 
+### `09_2d_and_2_5d_body_animation_object_handling_and_grounding.md` — 38 headings
+| heading | disposition |
+|---|---|
+| Table of Contents | EXTRACTED -> 48 - the three-track map this read followed |
+| 1. Executive Summary & The Three Pillars of Character Believability | EXTRACTED -> 48 - the three-track map this read followed |
+| 2. Track 1: 2D/2.5D Body Animation & Biomechanics | RECORD - structural heading |
+| 2.1 Center of Mass (COM), Base of Support (BOS), and Hof's XCOM | EXTRACTED -> 48 SS48.2 |
+| 2.2 Postural Equilibrium: Ankle vs. Hip Gesturing Strategies | EXTRACTED -> 48 SS48.2 |
+| 2.3 Inverse Kinematics (IK) in 2D: FABRIK vs. Analytical 2-Bone Trigonometry | EXTRACTED -> 48 SS48.1 - the most useful rule in the document |
+| 2.4 Kinematic Control Boundaries: When to Use FK vs. IK | EXTRACTED -> 48 SS48.1 - the most useful rule in the document |
+| 2.5 2.5D Cutout Rigging vs. Mesh Deformation: LBS Collapse vs. 2D DQS & BBW | EXTRACTED -> 48 SS48.3 - retriggers backlog D5: the trigger is rigging a figure, not a bending prop |
+| 2.6 Pseudo-3D Head Turns & Facial Cylindrical Projection | RECORD - the 35-45 degree three-quarters gate and sprite swap; needed only once a head turns, deferred |
+| 2.7 Natural Idling: Respiration Rhythms, Postural Sway, and Contrapposto | EXTRACTED -> 48 SS48.4 |
+| 2.8 Secondary Motion: Driven Damped Oscillators & Continuum Drag | EXTRACTED -> 48 SS48.6 - RESOLVES backlog D3; phase lag and Mp replace the invented 0.22 ratio |
+| 3. Track 2: Object Handling, Grasp Dynamics, and Hand-Prop Interaction | RECORD - structural heading |
+| 3.1 The Cutkosky & Feix (2016) 33-Grasp Taxonomies Mapped to Props | EXTRACTED -> 48 SS48.5 - fills 43 SS43.6's HandSlot vocabulary |
+| 3.2 Reaching Kinematics: Flash & Hogan Minimum-Jerk Quintic Trajectories | EXTRACTED -> 48 SS48.5 - same quintic as 42 SS42.1; confirms it as a shared primitive |
+| 3.3 Visuomotor Channels & Jeannerod's Hand Aperture Preshaping | EXTRACTED -> 48 SS48.5 |
+| 3.4 Scene Graph Re-Parenting Math & Virtual Constraint Caching | EXTRACTED -> 48 SS48.5 - cached matrix, never a hierarchy mutation |
+| 3.5 Visual Communication of Mass: APAs, Force Coupling, and Lift Recoil | EXTRACTED -> 48 SS48.6 - weight is sold before the lift |
+| 3.6 Placement Dynamics: Damped Harmonic Settling Profiles | EXTRACTED -> 48 SS48.6 - third caller for the 42 SS42.2 spring evaluator |
+| 3.7 Two-Handed Manipulation: Closed Kinematic Chains (CKC) | RECORD - master-slave linkage; deferred until a two-handed prop exists |
+| 4. Track 3: Animating Over a 2D Background (Grounding & Parallax) | RECORD - structural heading |
+| 4.1 Kinematic Zero-Slip & The Ground-Plane Homography Invariant | EXTRACTED -> 48 SS48.7 defect 1 |
+| 4.2 The Dual-Component Contact Shadow Model: AO Slit vs. Diffuse Cast | EXTRACTED -> 48 SS48.7 defect 3 |
+| 4.3 Blinn's Planar Shadow Matrix & 2.5D Affine Shear Projections | EXTRACTED -> 48 SS48.7 defect 3 - the shear matrix behind the cast shadow |
+| 4.4 Multi-Plane Disparity Sampling: LDIs and MPIs in 2.5D | RECORD - uniform disparity sampling; refines 45 SS45.5's multi-plane approach when we build it |
+| 4.5 Vanishing Point Alignment & The Norling Eye-Line Theorem | EXTRACTED -> 48 SS48.7 defect 4 - the horizon is the invariant anchor; GATEABLE |
+| 4.6 Parallax Differentials & Resolving the Floor-Shear Paradox | EXTRACTED -> 48 SS48.7 defect 2 |
+| 4.7 Visual Harmonization: Koschmieder's Law, Light Wrap, and Substrate Bleed | EXTRACTED -> 48 SS48.8 - arrives at E22's own tokens independently |
+| 5. Production Code Blueprints | RECORD - seven TypeScript/SVG blueprints; read at build time, not doctrine |
+| Blueprint A: Flash-Hogan Minimum-Jerk Reach-to-Grasp Generator (TypeScript) | RECORD - seven TypeScript/SVG blueprints; read at build time, not doctrine |
+| Blueprint B: Affine $3 	imes 3$ Matrix Re-Parenting & Attachment Solver (TypeScript) | EXTRACTED -> 48 SS48.5 - cached matrix, never a hierarchy mutation |
+| Blueprint C: Analytical 2-Bone Trigonometric IK Solver (TypeScript) | RECORD - seven TypeScript/SVG blueprints; read at build time, not doctrine |
+| Blueprint D: Placement Settling Damped Spring Evaluator (TypeScript) | EXTRACTED -> 48 SS48.6 - third caller for the 42 SS42.2 spring evaluator |
+| Blueprint E: Dual-Shadow SVG Filter & Substrate Grain Blend (SVG/XML) | EXTRACTED -> 48 SS48.8 - arrives at E22's own tokens independently |
+| Blueprint F: Remotion/React Ground-Locked Parallax Hook | RECORD - seven TypeScript/SVG blueprints; read at build time, not doctrine |
+| 6. Master Citation & Authority Registry | RECORD - 20 sources with DOIs, split empirical vs craft doctrine; the pass-2 contract held |
+| 6.1 Biomechanics, Motor Control & Mathematics | RECORD - 20 sources with DOIs, split empirical vs craft doctrine; the pass-2 contract held |
+| 6.2 Animator Craft & Compositing Doctrine | RECORD - 20 sources with DOIs, split empirical vs craft doctrine; the pass-2 contract held |
+| 7. Pipeline Triage & Doctrine Recommendations | RECORD - its Tier1/2/3 split matches our 47 triage independently |
+
 ### `MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md` — 29 headings
 | heading | disposition |
 |---|---|
@@ -366,5 +409,5 @@ other and against our code. **A conflict can only be found by reading both sides
 
 ---
 
-**237 headings across 11 documents, all dispositioned.**
+**275 headings across 12 documents, all dispositioned.**
 Verified by `python scripts/check_research_extraction.py`.
