@@ -42,12 +42,23 @@ doc 34 praises the Identify beat for naming "actual tickers," doc 36 §204 works
 (spoken name per the operator's ear-probe, "AVAV" → "A-V-A-V" or "AeroVironment") —
 which nobody writes for something never said.
 
-So the defect is the verb. **"Exit 20Y+ Long-Duration Treasuries"** is an instruction;
-`TLT` is the concrete instance doc 32 asks for. The dock is replaced because it
-contradicts the script and issues orders, and its replacement may absolutely name
-securities as examples — a named fund makes "long duration" touchable, which is the
-whole point of cashing an abstraction. **If a ticker enters the narration it is
-spoken, not spelled: "T-L-T," or the fund's name.**
+**And the deeper problem is the advice itself** (operator, same date): *"exiting 20
+year treasuries is still useless advice on a youtube short."* Nobody watching a
+90-second Short holds 20-year Treasuries. Removing the imperative would only have made
+it politely useless — the same audience error as the bond assignment, left standing on
+screen after the script had already been fixed.
+
+So this dock is not rehabilitated, it is **replaced by evidence**. "Actionable Strategy
+Rules" was never a dock species anyway: a dock carries proof — a chart, a record, a
+stat card — not a bulleted opinion. What the script now teaches is the transmission
+from yields to equity multiples, and that has a real, checkable shape: **the same
+company's fair value at a 3% discount rate versus 5%**, or high-P/E versus low-P/E
+derating as yields rise. That is a chart, it proves the sentence the narration
+actually speaks, and the viewer can run it on their own holding.
+
+Tickers stay welcome as instances — a named fund is what makes an abstraction
+touchable (doc 32), and doc 37 §4b spells a reached-narration ticker as spoken, not
+lettered. They just cannot be the payload of an order.
 
 ## 3. FAIL — the TIC table is asserted, not sourced
 
@@ -112,9 +123,11 @@ sign colours, STAGE captions, the cross-reveal wipe, choreography gates, and
 **Evidence first, renderer second.** Rebuilding the player around unsourced numbers
 only moves the problem into a better-looking box.
 
-1. **Replace the strategy dock.** It contradicts the script and speaks in imperatives.
-   Its replacement teaches the P/E point and may name funds or tickers as concrete
-   examples — spoken by name if they reach the narration (doc 37 §4b).
+1. **Replace the strategy dock with a chart.** Not a reworded rule list — advice
+   about 20-year Treasuries is useless to this audience however it is phrased, and a
+   dock carries proof, not opinion. Build the discount-rate chart: one company's value
+   at 3% versus 5%, or P/E derating against yields. It proves the sentence the
+   narration speaks and the viewer can run it on their own holding.
 2. **Write `evidence/build_tokyo_evidence.py`** on the steel-and-paper pattern: fetch
    `DGS10` from FRED, compute the hedge cost from the rate differential, emit both
    charts as `.series.json` sidecars with real source lines and a fetch date, and add
