@@ -71,6 +71,48 @@ everywhere, including where it loses people** — *"density is not the problem, 
 measure cannot find it."* That lowers the odds that a motion-energy metric separates w3
 either, and P40 should expect a null result rather than hope for a hit.
 
+## The shorts question, 2026-09-04
+
+The operator, on the mass-produced listicle format (*"You can become a millionaire just
+by starting these 10 businesses"* — one figure, ten icons, slow zoom, bold yellow caption
+per item):
+
+> *"It's hard to not just want to pump out stick figure content... I'm trying to add value
+> everywhere all at once and getting bogged down in production... But I suppose if we get
+> the drawer right — even drawing shorts like that just becomes a part of the drawer."*
+
+**The closing line is the resolution.** That format is not a different business; it is
+*our engine with the complexity dial at zero*. One page, ten props, ten captions, a slow
+zoom — that is the object page (T5) plus the prop library (A2) and nothing else. Once the
+drawer exists, the format is nearly free.
+
+**And it is not beating us on quality. It is beating us on the one thing 50 §50.2 says we
+fail:** every element in it is enormous. One idea per beat. It is tuned to a phone by
+construction, which is exactly what our 5 px axis labels are not.
+
+**The error is not too much quality — it is uniform quality.** Doc 29's bar is applied to
+everything. A listicle short needs legible type and one clear image; it does not need the
+deckle, ARAP, or a curvature stroke.
+
+**And this was already ruled on, then not applied.** The shorts lane has a phase-1
+standard (hook + compression + dissolves + Ken Burns + doc-29 captions in tokens + safe
+zone; generated plates and chart overlays **rejected**, yen short, 2026-09-03). Against
+that, **Tokyo is 11 evidence pages, 10 beat tags, 290 words and 118 s against a 90 s cap**
+— a compressed long-form episode wearing a short's runtime. 49 §49.6 independently says
+short-form wants **exactly one mechanism**.
+
+**Four things now say the same thing:** the operator's own shorts ruling, 49 §49.6's
+cognitive atomicity, 50 §50.2's legibility floor, and the format he is looking at.
+**Shorts are a different machine and we have been building them on the long-form one.**
+
+The honest trade: those channels live on *volume*, not craft — the moat is production
+rate. We do not need to win that game, only to use the surface. Evidence discipline, a
+point of view and a real biography are worth nothing at fifteen seconds and everything at
+thirteen minutes. Two products, two jobs.
+
+*Action: the shorts-lane standard is in memory and in a ruling but not in
+`docs/portable/OPERATOR-RULINGS.md`. It should be, before the next short is built.*
+
 ## The standing frame: we lose people in the first minute
 
 Operator ruling 2026-09-04: *our failure is holding the audience; we never even get the
