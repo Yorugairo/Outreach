@@ -271,7 +271,78 @@ Everything else is ours to hold.
 `updated master prompt.txt` is bundle file `03`, already extracted into
 `RULE-abstract-to-concrete.md`. Nothing new there.
 
-## 53.9 Sources
+## 53.9 A third prompt — and it contradicts §53.3
+
+Source: `Untitled document (1).md`, the "Stickman Explainer Engine". Better engineered than
+the other two, and it overturns something I recorded as a finding.
+
+### The contradiction: Omni Flash wants prose, not fields
+
+> *"Omni Flash does NOT understand templated prompts. It ignores or mangles section
+> headers, bracketed labels, bullet lists, timestamps, and field-style formatting. Every
+> animation prompt must be ONE single flowing paragraph of plain natural-language English…
+> This is the single most important formatting rule in this system. Breaking it produces
+> glitched output."*
+
+**§53.3 recorded the field-based animation schema** (`INPUT FRAME` / `MOTION` /
+`SECONDARY MOTION` / `CAMERA` / `SOUND DESIGN` / `ANTI-GLITCH LOCK`) as the thing to steal.
+**This source says that exact format is what breaks the model** — and both tutorials use
+Omni Flash.
+
+**They genuinely conflict.** Do not adopt either on faith:
+
+| stage | model | source A (§53.3) | source B (this one) |
+|---|---|---|---|
+| stills | Nano Banana 2 | fields | *(not addressed)* |
+| motion | **Omni Flash** | **fields** | **one prose paragraph, no line breaks** |
+
+**SOURCES-TO-VERIFY — one test roll settles it:** same scene, same bound `@Mike`, once as
+fields and once as prose. Cheap, and it decides how every animation prompt we ever send is
+shaped. **Until then, prose is the safer default** — a model that parses prose will parse
+fields poorly at worst, whereas a model that mangles fields fails loudly.
+
+### The hard production numbers
+
+- **6-second clips, 10 credits each. 50 credits = 5 clips = one 30-second video.**
+- **6 seconds holds ~13 spoken words.** Every scene's line must be *exactly* 13 — longer
+  gets cut off mid-sentence before the clip ends.
+
+**That is a gate, not a guideline**, and it is mechanically checkable from the script.
+(Their own prompt contains a bug here: it says *"rewrite any line that is not exactly 15"*
+two sentences after establishing 13. A prompt with no version control, per §53.8.)
+
+### The character-sheet spec is concrete and reusable
+
+Three labelled rows on a plain cream ground: **front, side, three-quarter and back** views
+standing neutral · **five head-only expressions** — happy, neutral, surprised, worried,
+angry · **five full-body poses** — waving, thinking, presenting, explaining, shrugging.
+
+We do not need it for `@Mike` (already bound, §53.2), but it is the right shape for **any
+new recurring figure**, and it is a better artifact than a single portrait.
+
+### Voice can be generated in Omni
+
+A **LOCKED VOICE BLOCK** — one sentence fixing apparent age, gender presentation, accent,
+pitch, pace, warmth and delivery energy — copied verbatim into all five prompts, so the
+narration comes out of the video model itself. **Different from source A, which used
+ElevenLabs.** Worth knowing as an option; our voice lane is settled and does not need it.
+
+### It also violates the operator's own ruling — with a useful distinction
+
+Every animation paragraph ends with *"no glitching, no warping, no morphing, no flickering,
+no extra limbs, no duplicate characters, no on-screen text, subtitles, watermarks or logos,
+and no background music."* That is exactly the pattern §53.3 rules against.
+
+**But not all of those are the same kind of thing:**
+
+| | example | verdict |
+|---|---|---|
+| **content exclusion** — something that is simply not in the scene | *no background music* · *no on-screen text* · *no watermark* | **fine.** It describes the scene's contents |
+| **defect naming** — a failure mode described back to the model | *no morphing* · *no warping* · *no extra limbs* · *no duplicate characters* | **strip it.** This is what summons the issue (B7) |
+
+**Refines B7: exclude content, do not name defects.** Defect detection moves to the driver.
+
+## 53.10 Sources
 
 `https://www.youtube.com/watch?v=qb7QSsxefZY`, watched 2026-09-04 — transcript plus 100
 extracted frames. Prompt text read directly off frames 16, 30 and 44.

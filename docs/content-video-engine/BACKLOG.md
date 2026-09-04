@@ -278,7 +278,13 @@ needs an owner before they can promote to FAIL.
 failures they name — *"trust and verify instead of try to contain."* Observed on our stack;
 scoped to negations placed in the positive prompt.
 
-So the prompt carries only what **is** there, and the driver checks for what must not be:
+**Refined 2026-09-04 (53 §53.9): exclude content, do not name defects.** *"No background
+music"* and *"no on-screen text"* describe what is not in the scene and are fine. *"No
+morphing, no extra limbs, no duplicate characters"* describes failure modes back to the
+model and is what summons them.
+
+So the prompt carries only what **is** there plus content exclusions, and the driver checks
+for what must not be:
 **duplicate figures · extra limbs · style drift against the bound `@Mike` · watermark ·
 stray text.** Re-roll on failure. This is an automated **pre-filter before the contact
 sheet**, not a replacement for operator approval.
@@ -320,6 +326,8 @@ mechanism per short, which is the short-form form of the equation spine. Logged 
 | **X14** | **Our shorts are built on long-form cadence.** 49 §49.6: short-form wants a visual event every 1.2–2.5 s and exactly one mechanism; we run ASL 6–10 s and compound argument. The Tokyo short is 118 s carrying a full six-phase structure. | Re-cut one short at short-form pulse and compare. Cheap, and it bears directly on X1. |
 | X4 | **Does a prop library actually compose?** The claim is that 5–8 props cover most metaphors. | Brief three unrelated episodes against one prop set and count the misses. |
 | X5 | **Cut ON the pause or THROUGH it?** The measurement says references cut on it; it does not say we are wrong to sometimes cut through. | A/B by ear on one scene pair. |
+| **X15** | **Fields or prose for Omni Flash?** Two tutorials using the same model disagree flatly: one uses a field schema for animation prompts, the other says field formatting is *"the single most important formatting rule"* and breaks the model. **This decides the shape of every animation prompt we send.** | One test roll: same scene, same bound `@Mike`, once as fields and once as prose. Until settled, **prose is the safer default** (53 §53.9). |
+| **X16** | **Does 6 s really hold exactly 13 words?** A hard production constraint from the same source — over 13 and the line is cut off mid-sentence. If true it is a mechanical gate on any 6-second-clip script. | Measure against our own Kokoro/ElevenLabs timings, which we already have. Cheap. |
 | X6 | **Depth model precision** — `vitl_fp16` (05) vs `vitl_fp32` (06, "fp16 strictly banned, logit underflow"). | One test roll. ViT-Large either way. |
 | X7 | **Euler spiral quality threshold** — how much curvature ripple is too much. | No basis yet. Build the generator; gate later or never. |
 | ~~X10~~ | ~~How does a figure move in our register?~~ **CLOSED 2026-09-04** by [48-THE-FIGURE-AND-THE-GROUND](48-THE-FIGURE-AND-THE-GROUND.md) — the FK/IK boundary, XCOM balance, DQS/BBW rigging, breath and sway, reach and grasp, grounding. Original question below.<br><br>~~ 42–47 cover strokes, springs, morphs, ink and plate motion and say almost nothing about **actor motion** — generated or composited. Exposed by withdrawing G-f: we argued about *how the actor is made* and never wrote down how it should *move*. | Name the motion vocabulary a figure needs (enter, gesture, settle, exit), then decide which is designed out, gated, or judged. Prerequisite: none. |
