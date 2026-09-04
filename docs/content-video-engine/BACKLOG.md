@@ -75,6 +75,8 @@ plate is spent on one shot; a prop composes and is reusable forever.
 | N4 | **Speech-rate contradiction.** Reference 183.6 WPM, ep1 182.8, doctrine target 145–165. The target sits below both. | Operator decision. |
 | N5 | **Gap threshold contradiction.** File 01 says ≥ 0.45 s, file 08 and the M13 proposal say ≥ 0.30 s. Different gate behaviour. | Settle from the measurement before M13 ships. |
 | N6 | **Read `06_unified_ledger_drawing_engine_and_comfy_spec.md` before writing the object-page renderer** — it carries a `ledger_page.v2.json` contract built on our existing LP clock, plus the Z0–Z5 stack that is the concrete form of A6/C3. | Prerequisite to A1. |
+| **N7** | **The animation math is extracted and mapped to code.** Curvature-reparameterised stroke (replaces the linear `stroke-dashoffset` in `drawOn`; every drawn object inherits it), the analytic spring evaluator with `M_p = exp(−πζ/√(1−ζ²))` as the **inverse model** that retires A1's guessed timing chart, polar-decomposition morph with a proof against area collapse, area-preserving squash, Euler spirals, Kubelka–Munk ink compositing. | [`FINDING-the-animation-math-and-what-it-changes.md`](FINDING-the-animation-math-and-what-it-changes.md). **Items 1–2 there are the build order.** |
+| **N8** | **Two defects we ship today.** (a) The camera punch overlaps the chart build — saccadic suppression during a camera move blinds the viewer to the numbers landing; the beats must be serialised. (b) STAGE type keys to words, but auditory cortex tracks syllables (theta band, 150–250 ms). | (a) is a boundary fix in the renderer, not new code. |
 
 ## Carried debt
 
