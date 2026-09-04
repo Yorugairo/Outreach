@@ -125,6 +125,13 @@ semiconductor fab in woodblock rewards someone who already chose the channel; it
 stranger to interpret before they have agreed to care. **We hold 326 retention assets and
 zero acquisition assets** — hence A2a.
 
+**Motion is not animation, and the shorts format needs no new capability** (51 §51.8).
+Every event that satisfies E21 — scene boundary, dock entry, badge reveal, stage caption,
+page build, targeted species — is free, deterministic and already shipped; the gate's
+docstring explicitly excludes Ken Burns drift as "what a viewer reads as stillness". The
+stick-figure format is a page flip, a caption pop and a slow push: three shipped event
+types. **It needs icons and a script, not an engine.**
+
 **→ [51-THE-SHORTS-FORMAT](51-THE-SHORTS-FORMAT.md) is the one-page spec.** Shorts fund
 the long-form's existence: reach subsidises depth.
 

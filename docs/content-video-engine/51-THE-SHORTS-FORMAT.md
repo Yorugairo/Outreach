@@ -125,7 +125,47 @@ They are different art directions for different jobs, and building the second fi
 part of why acquisition has not moved. **The brand is what makes people stay. It is not
 what makes them arrive.**
 
-## 51.8 Checklist
+## 51.8 Motion is not animation — and the gate always knew it
+
+Operator, 2026-09-04:
+
+> *"When I first started, I had 0 understanding of animation, so I thought all of the
+> movement happening on screen was animation... part of the original premise of motion
+> demands was flawed."*
+
+The inference chain was: *the screen must never be still* → *I need motion* → ***motion
+means animation*** → *I need generative video*. **Only the third step is wrong**, and it is
+what sent us to Flow, Wan, LTX and Depthflow to solve a problem the engine had already
+solved.
+
+`gate_motion_density.py`'s own docstring is explicit about what satisfies E21:
+
+> a scene boundary · a dock entering or leaving · a badge or pill reveal · captions in
+> **stage** mode · a ledger page building (roll-out, field, punch, build) · a **targeted
+> species** firing (punch, focus zoom, plate life)
+>
+> *"Ken Burns and lower-third captions do NOT count — they are what a viewer reads as
+> stillness."*
+
+**Not one of those requires generated video.** Every one is free, deterministic, and
+already in the template. Drift is explicitly *not* enough; a **discrete event** is.
+
+**Which means the stick-figure format is trivially compliant, and we can build it today:**
+
+| what they do | our event type | status |
+|---|---|---|
+| page flip between items | scene boundary | shipped |
+| bold yellow word pops | stage-mode caption | shipped |
+| slow push onto the icon | `focus_zoom` species | shipped |
+
+**The shorts format needs zero new engine capability.** It needs icons (A2a) and a script.
+Everything else exists.
+
+And it resolves where the generative stack belongs: doc 45's viability matrix already
+confines it to continuous environmental plates — **ambience**, which is precisely the
+retention-not-acquisition category of §51.7. It was never the answer to stillness.
+
+## 51.9 Checklist
 
 - [ ] every object nameable in under a second, no interpretation
 - [ ] one mechanism, stated in one sentence
@@ -139,7 +179,7 @@ what makes them arrive.**
 - [ ] nothing from the 42–44 production bar
 - [ ] built in an afternoon
 
-## 51.9 Sources
+## 51.10 Sources
 
 46 §46.4 (the spine) · 49 §49.1, §49.6 (safe box, short-form architecture) ·
 50 §50.2 (legibility floor) · operator shorts ruling, 2026-09-03 ·
