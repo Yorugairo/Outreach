@@ -1,0 +1,44 @@
+{
+  "title": "The Trade Broke on a Single Calculation",
+  "sub": "US 10-Year Treasury yield minus 3-month USD/JPY FX hedge cost (annualized)",
+  "src": "Bloomberg / Bank of Japan / US Treasury data",
+  "unit": "%",
+  "bars": [
+    {
+      "label": "US 10Y Yield",
+      "value": 5.0,
+      "color": "cobalt"
+    },
+    {
+      "label": "FX Hedge Drag",
+      "value": -5.5,
+      "color": "crimson"
+    },
+    {
+      "label": "Net Hedged Return",
+      "value": -0.5,
+      "color": "coral",
+      "note": "-50 bps"
+    }
+  ],
+  "badges": [
+    {
+      "label": "US 10Y YIELD",
+      "value": "+5.0%",
+      "tag": "headline",
+      "accent": "cobalt"
+    },
+    {
+      "label": "FX HEDGE COST",
+      "value": "-5.5%",
+      "tag": "currency swap",
+      "accent": "crimson"
+    },
+    {
+      "label": "NET TOKYO CARRY",
+      "value": "-50 bps",
+      "tag": "underwater trade",
+      "accent": "coral"
+    }
+  ]
+}

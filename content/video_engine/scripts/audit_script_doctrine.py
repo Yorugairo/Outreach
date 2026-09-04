@@ -280,7 +280,12 @@ def audit(text: str, script_path: Path | None = None) -> tuple[list[Finding], di
     unknown = sorted(set(marks) - MARKS)
     if unknown:
         add("FAIL", "doc 37 sec 1", f"unknown marks would be spoken: {unknown}")
-    ration = len(marks) / (n / 1000) if n else 0.0
+    # Only DELIVERY marks compile into TTS <break> tags (doc 37 sec 1); beat tags are
+    # authoring metadata stripped before synthesis (beat_tags.strip_beat_tags) and
+    # never reach the voice. Counting them here failed every well-annotated short by
+    # arithmetic while Script G slid under at 2.8/1k on length alone (2026-09-03).
+    breaks = [m for m in marks if m in beat_tags.DELIVERY_MARKS]
+    ration = len(breaks) / (n / 1000) if n else 0.0
     if ration > BREAK_RATION_MAX:
         add("FAIL", "doc 37 sec 1",
             f"break ration {ration:.2f}/1k exceeds {BREAK_RATION_MAX} — "

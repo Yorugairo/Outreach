@@ -103,7 +103,9 @@ def _conforming_opening() -> str:
     # E23: the cycle runs the whole video - an (untagged) rehook-family line every ~50s
     # keeps G36 under 60s x tol to the end and lands one in every P3/P5 unit window
     # (kit_spec.unit_windows at 805s: P3 2:16-4:09 / 4:09-6:02, P5 7:23-9:32 / 9:32-11:40).
-    # Untagged on purpose: the audit's doc-37 break ration counts every [mark] per 1k chars.
+    # Untagged: kept minimal for the opening-gate rows under test. (The audit's doc-37
+    # break ration counts DELIVERY marks only since 2026-09-03 - beat tags no longer
+    # count, see test_audit_break_ration.py - so tagging here would no longer trip it.)ars.
     for t in range(340, 800, 50):
         s = _pad_to(s, float(t))
         s += "But look at what the filings say next, because the number moves again. "
