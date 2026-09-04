@@ -121,8 +121,17 @@ read.
 | **Gemini showcases** | `samples/gemini-decoupled-evidence-showcase.html`, `gemini-scene-evidence-pipeline-showcase.html` | ancestor artifacts — where doctrine CAME from; a reviewed refinement outranks them |
 | **The viewer (P36)** — a blind, windowed perception test: an agent that knows no doctrine reads the script cold in 15s windows with a two-window memory; a deterministic scorer measures beat recall (a declared beat the reader never felt was laundered) and information gain | `scripts/viewer_windows.py` · `viewer_run.py` (Codex headless) · `viewer_score.py`; `run_script_gates.py --viewer-gate` | **shipped and binding** (P36 HG1 granted 2026-09-03 on the ep1 calibration: recall FAILs, confusion WARNs, gain INFO-only) | ep1: 54 windows on measured timings, all 37 declared beats placed; `test_viewer_windows.py` 17 + `test_viewer_score.py` 14 |
 
+## What is NOT built yet
+
+[`BACKLOG.md`](BACKLOG.md) — the hand-maintained open work, and the scope shift
+behind it. This file says what exists; the backlog says what is asked for and
+what is blocked on an operator decision. `STATE-OF-WORK.md` is neither: it is
+the auto-generated worktree census.
+
 ## The recall rule
 
 1. `ls` and read the index before searching (PIPELINE.md, this file, PLATE-LIBRARY, CHOREOGRAPHY).
 2. When a doc cites a source artifact, the audit reads the artifact.
 3. A capability added or retired updates this file **in the same commit**.
+4. A capability that ships **closes its BACKLOG.md row in the same commit** — a
+   backlog that outlives its work is worse than none.
