@@ -22,6 +22,13 @@ We are not starting from zero. Two things already exist:
 
 - **One retention curve**, and `SCRIPT-G-VIEWER-CALIBRATION.md` locates the drop at
   **0:45–1:00** (window w3).
+- **The analytics behind it** (50, added 2026-09-04): the **cold cohort averages 1:05**
+  against **4:39 overall**, and **75.2 % of watch time is a phone**. Because average view
+  duration includes the viewers who stayed, the mass departure is *earlier* than 1:05.
+- **A candidate root cause that outranks the metrics** (50 §50.2): 14 of 16 template font
+  sizes render below 12 px in YouTube's default portrait player. **Check X0 before
+  building any of this** — if the type is unreadable, no motion metric will explain the
+  drop, and the fix is a font scale rather than a harness.
 - **P36's finding**: confusion tracks that drop; information gain does not.
 
 So this is not "measure everything and hope." It is one labelled example and a specific
@@ -33,8 +40,7 @@ no render, and can run first.
 
 ## Intent And Acceptance
 
-**Intent.** Build the E1 metric harness, run it over our own render against the known
-drop window, and settle the gap threshold.
+**Intent.** Build the E1 metric harness, run it over our own render against the known drop window, and settle the gap threshold — **after X0 has ruled the legibility explanation in or out.** The target is not "the first minute" but *the cold cohort's first ~60 seconds on a 390 px screen*.
 
 **Acceptance:**
 

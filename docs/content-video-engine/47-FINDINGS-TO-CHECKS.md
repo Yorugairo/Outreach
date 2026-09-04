@@ -65,6 +65,7 @@ Ordered by value. "Fails on" is the pre-finding behaviour the check catches.
 
 | # | check | reads | FAILs on |
 |---|---|---|---|
+| **G-o** | **Mobile legibility** (50 §50.2). Every rendered text size, multiplied by the portrait scale (390/1920 = 0.203), clears a 12 px floor. | template + timeline | **14 of the template's 16 font sizes today.** 75.2 % of our watch time is a phone, and axis labels currently render at 5 px |
 | **G-a** | **Punch does not overlap a build.** A camera scale change and an evidence build may not share a time window. | timeline scenes + dock spans | our current renderer, which zooms while the chart draws — saccadic suppression eats the numbers |
 | **G-b** | **Parallax plate eligibility.** A plate whose asset kind is `actor`, `prop`, `evidence` or carries text may not have parallax applied. | shot table + asset registry | applying Depthflow to the ledger page or to @Mike (45 §45.2, the viability matrix) |
 | **G-c** | **Parallax dial lint.** `tiling_mode != "mirror"`, `ssaa ≥ 1.5`, `quality ≥ 80`, `intensity ≤ 0.18`, model is ViT-Large. | `parallax-runner.mjs` config | every value we ship today (45 §45.3) |
@@ -181,9 +182,9 @@ repeated phrase. That applies to any shape of episode.
 
 ## 5. The scoreboard
 
-**8 designed out · 13 gated · 1 agent-judged · 2 JUDGE · 7 demoted, all routed to the backlog.**
+**8 designed out · 14 gated · 1 agent-judged · 2 JUDGE · 7 demoted, all routed to the backlog.**
 
-*(Updated 2026-09-04 after docs 48 and 49. G-l is the highest-value gate in the set: it FAILs code we already ship. See 49 §49.1.)*
+*(G-o added from **operator analytics**, not research — 50 §50.2. It is the cheapest gate in the set and it FAILs almost the whole template. Updated after docs 48 and 49. G-l is the highest-value gate in the set: it FAILs code we already ship. See 49 §49.1.)*
 
 *(After doc 48. File 09 added two designed-out items and three gates, and resolved two previously-demoted findings — see 48 §48.9.)*
 

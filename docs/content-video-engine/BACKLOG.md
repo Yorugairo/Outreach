@@ -28,10 +28,31 @@ joins them.
 
 ---
 
-## The ground truth we hold: one retention curve
+## The ground truth we hold: one retention curve — and now the analytics behind it
 
-**Ep1 is the only episode we have published and gotten real audience-retention analytics
-back on.** Its curve drops at **0:45–1:00**. That is the whole of our evidence about actual
+**Updated 2026-09-04 with operator-supplied YouTube analytics.** See
+[50-THE-PHONE-IS-THE-SCREEN](50-THE-PHONE-IS-THE-SCREEN.md).
+
+| | |
+|---|---|
+| **cold cohort** (arrived from an impression) | **1:05 average view duration** |
+| **everyone** | **4:39** |
+| **device** | **75.2 % mobile phone** |
+| suggested-video traffic | **11.5 %** — search + channel + direct is 76.9 %, i.e. people came looking |
+| funnel, 2 days | 77 impressions · 6.5 % CTR · 5 engaged views |
+
+**The finding that reprioritises everything: our type is illegible on a phone.** A 16:9
+video in YouTube's default portrait player is a 4.9× downscale, so a font must be ≥ 59 px
+on our 1920 stage to reach 12 px on screen — and **14 of the template's 16 sizes fall
+below that.** Axis labels render at ~5 px for three-quarters of our watch time.
+It is arithmetic, not yet observation: **render one frame at 390 px and look.**
+
+**The uncomfortable version: we spent the week making the drawing better, and the most
+likely reason people leave may be that they cannot read it.**
+
+## The retention curve, and why n=1 still binds
+
+Ep1 is still the only episode with a retention curve. Its curve drops at **0:45–1:00**. That is the whole of our evidence about actual
 viewer behaviour — everything else here is inference from shot tables, comparison against a
 reference, or agent judgment.
 
@@ -181,6 +202,7 @@ mechanism per short, which is the short-form form of the equation spine. Logged 
 
 | # | question | how to settle it |
 |---|---|---|
+| **X0** | **Render one frame at 390 px and read it.** The mobile-legibility finding (50 §50.2) is arithmetic from declared font sizes, not observation. **This is the cheapest check in the entire backlog and it may be the most important.** | Open the player at 390 px wide, screenshot, try to read the axis labels. |
 | **X1** → **[P40](../../.claude/PRPs/plans/P40-MEASURE-THE-FIRST-MINUTE.plan.md)** T3 | **What actually loses people in our first minute?** We have never measured our own failure mode — only inferred it. This is the question everything else is serving, and it has not been on this list before. | P36 (the viewer) on ep1's opening, windowed and blind; plus the E1 metrics once X2 lands. Run the reference's opening on the same instruments and compare. |
 | **X2** → **P40** T2 | **E1 metric thresholds.** Motion energy, centroid of change, saliency and flow coherence are the right metrics; the ranges are not ours yet. | Build the measurement, run it over ep1 and both references, derive from that. **Never adopt a guessed threshold** — that is precisely the error the metrics exist to catch. |
 | **X3** → **P40 T1 — cheapest useful thing in the stack; no render, no dependency, runs today** | **Gap threshold: 0.30 s at onset, or 0.45 s at midpoint?** Different gates. | Count both across ep1's word timeline; check the 0.45 s set is large enough to carry every boundary that needs one. **Blocks M13.** |
