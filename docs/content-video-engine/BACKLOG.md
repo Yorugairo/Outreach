@@ -53,7 +53,7 @@ is a luxury for an audience that already stayed.
 | **P39** | **[Render baseline & kill switch](../../.claude/PRPs/plans/P39-RENDER-BASELINE-AND-KILL-SWITCH.plan.md)** | draft | **first.** Tag, golden frames, and a flag per capability. Today there is no rollback point and no way to detect a visual regression |
 | P37 | [Enforcement layer](../../.claude/PRPs/plans/P37-RESEARCH-ENFORCEMENT-LAYER.plan.md) | draft | 13 gates + V-a; T0 fixes the 9:16 docks, T9 the parallax dials |
 | P38 | [Kinetics capability](../../.claude/PRPs/plans/P38-KINETICS-CAPABILITY-LAYER.plan.md) | draft | the six designed-out items; changes what the video looks like |
-| P40 | Measurement — X1/X2/X3 | **to write** | the E1 harness over ep1 + both references; derive thresholds; answer what loses the first minute. Unblocks M13 |
+| P40 | **[Measure the first minute](../../.claude/PRPs/plans/P40-MEASURE-THE-FIRST-MINUTE.plan.md)** | draft | E1 metrics against **the one retention curve we hold** (drop at 0:45–1:00). **T1 settles X3 and unblocks M13 with no render and no dependency — the cheapest useful thing in the stack** |
 | P41 | The vertical stage — 49 §49.1 | **backlog** | the 3-zone short-form stage. T0 fixes dock geometry; the stage does not exist and we ship shorts. Folds in short-form cadence (X14) and the caption strip |
 | P42 | Grounding & compositing — 48 §48.7-48.8 | **backlog** | dual shadow, light wrap, substrate grain, horizon lock, ground binding. **Gives G-i/G-j/G-k a path to green** — today they check what nothing builds. Folds in actor idling (48 §48.4) and the Z-stack (43 §43.3) |
 
