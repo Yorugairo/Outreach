@@ -62,3 +62,47 @@ the bound `@Mike` would give shot 1 or 5 a stronger world than `plate-02`.
 `player.html` — the GSAP fork with the three wrong TIC figures (Japan 14.5 %,
 China $770.2 B, UK $745.8 B ranked #3) and the strategy dock that contradicts the
 script. None of it survives the move to the template.
+
+---
+
+# REVISION 2026-09-04 — every plate re-briefed as an argument
+
+Applying `RULE-abstract-to-concrete.md`. The table above briefed **settings**; this one
+briefs **claims**. The tell: the ring line *"Tokyo took a tea break and left Washington
+holding an unfunded bar tab"* is a physicalised metaphor already written into the
+script, and I had illustrated it with a desk at dawn — the room it was spoken in.
+
+| # | the sentence | OLD plate (setting) | NEW brief (the argument) |
+|---|---|---|---|
+| 1 | "Your costs jumped. The Fed didn't move an inch." | bill-shock desk | **the Fed as an immovable object** — a figure straining against a lever that will not shift, while the price tag behind it climbs on its own |
+| 2 | three guys in blue ties blaming deficits | three-blue-ties | keep, but **all three pointing different directions** — the disagreement IS the joke, not the men |
+| 3 | "our biggest customer is selling" | Tokyo dawn desk | **the customer walking out** — a figure leaving a counter empty-handed, the shopkeeper still holding the goods |
+| 4 | over a trillion, selling since Feb | Tokyo dawn (held) | **`ev-japan-holdings-v1`** — page builds out of shot 3's ground |
+| 5 | the promise: two numbers | Mike, trading floor | keep — a promise beat is allowed to be a person talking |
+| 6 | "where everyone goes wrong: the hedge" | currency vault | **the hedge as a toll gate** — a figure paying at a barrier to carry a case across a line. Personified mechanism: an antagonist with no villain. |
+| 7 | "costs half what it did... selling anyway" | vault (held) | **the toll halved and ignored** — the price on the gate struck through, lower, and the traveller walking away from it regardless → **`ev-hedge-then-now-v1`** builds |
+| 8 | "took a tea break / unfunded bar tab" | Tokyo dawn desk | **THE SHOT: an empty chair, a cooling cup, an unpaid bill on the table.** Written for us already. |
+| 9 | "what they found that pays better" | *(gap)* | **the same figure walking toward a lit fab** — the open loop, pointed somewhere without naming it |
+| 10 | the tell: variable/threshold/where we sit/flip | Mike (held) | **`ev-japan-holdings-v1` re-enters** on the flip datum (E25) |
+| 11 | "pull up Meta, find its P/E" | Mike (held) | **paying now for a box dated later** — a figure handing over cash for a crate stamped with a future year → **`ev-discount-rate-v1`** builds |
+| 12 | "Not a panic. Not a plot. Mechanics." | outro signoff | keep — the channel line lands on a clean frame |
+| 13 | ring: Fed hasn't moved / tea break / tab is ours | outro signoff | **the empty chair returns**, cup cold, bill still there — shot 8 one register later |
+
+## What changed structurally
+
+- **Six plates get regenerated** (1, 3, 6, 7, 8, 9). Four are kept.
+- **Shot 8 is the priority.** It is the ring, the title, and the thumbnail candidate, and
+  it is currently a desk.
+- **Shot 13 reuses shot 8's world transformed**, so the ring closes visually as well as
+  verbally — the same frame, colder.
+- **Three metaphor→page pairs** (3→4, 7, 11): the plate does not get replaced, its cream
+  ground *becomes* the chart. ROLL+SAVOR (1.5 s) starts in the acoustic gap; the build
+  runs under the next sentence.
+- **Shot 9's gap is now a brief**, not a missing asset — the figure walking toward the
+  fab is generatable, and it does not need a borrowed plate.
+
+## Muted-caption test on the old table
+
+Cover the captions and shots 1, 3, 5, 6, 8, 12, 13 all still read as "a place." Only
+the evidence shots carried an argument. That is seven of thirteen doing no work, which
+is the operator's point measured.
