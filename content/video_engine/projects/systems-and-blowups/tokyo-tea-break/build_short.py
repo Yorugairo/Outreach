@@ -245,7 +245,7 @@ def main() -> int:
     C.KINETICS = {"analytic_spring": True, "min_jerk": True,   # the timing module (FINDING-the-animation-math s2/s3): closed-form springs on the pops, minimum-jerk on the wipe and the suck
                   "area_squash": True,                        # P43 T4: the badge pops stretch along their travel from the spring's own velocity (42 s42.3)
                   "km_ink": False}                            # P43 T3: OFF (operator, 2026-09-05, after six rounds in motion: "our original applications were better, with the ink pooling/blotchiness ... turn ink off"); K-M stays for ink over ink, the soak goes to a plate reveal (BACKLOG)
-    # P43 T2 curvature_stroke and T3 km_ink are landed flag-off; they turn on here after the operator rules on the before/after strips (human gates)
+    C.KINETICS["curvature_stroke"] = True                     # P43 T2: the HAND on every drawn path - the operator ruled from the side-by-side clip (2026-09-05: "curvature stroke should be on")
     return C.main()
 
 

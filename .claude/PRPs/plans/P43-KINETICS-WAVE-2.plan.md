@@ -1,7 +1,7 @@
 ---
 id: P43-KINETICS-WAVE-2
 title: Kinetics wave 2 - the curvature stroke, Kubelka-Munk ink, area squash, and the rest of the spring
-status: review
+status: complete
 operation: feature
 risk: standard
 owner: parent
@@ -14,7 +14,7 @@ updated: 2026-09-05
 
 ## Summary
 
-> **Approved 2026-09-05** by the operator ("proceed with P43"), marked running the same day. **In review 2026-09-05:** T1, T4, T5, T6 complete; T2 and T3 landed flag-off and wait on their human gates (the before/after strips sent) - `complete` when the operator has ruled and the two flags are set for Tokyo accordingly.
+> **Approved 2026-09-05** by the operator ("proceed with P43"), marked running the same day. **In review 2026-09-05:** T1, T4, T5, T6 complete; T2 and T3 landed flag-off and wait on their human gates (the before/after strips sent) - **COMPLETE 2026-09-05:** the operator ruled both gates in motion - the stroke ON (from the side-by-side clip), K-M ink OFF for the soak after six rounds (kept behind its flag for ink over ink; the soak's next step is a plate reveal, BACKLOG 9). Standing: M16's one FAIL at 1:20 (the outro) is unchanged and is not this plan's.
 
 The operator's pick from the 2026-09-05 backlog read: **items 1, 6, 7 and 8** of the
 ready-to-pull-in list in [BACKLOG](../../../docs/content-video-engine/BACKLOG.md) -
@@ -148,7 +148,7 @@ T2-T5 write disjoint files and may run in parallel once T1 lands. T6 is last.
 - Evidence: 2026-09-05 - `kinetics/ease.mjs` (minJerk) and `kinetics/spring.mjs` (springPop) are the sources; `sync_kinetics.py --write` inlined both (`in sync (2 module(s))`); `--check` proven to fail on a one-character drift, a missing region, an orphan module and a wrong import order (`test_kinetics_sync.py`, 8 tests); `test_kinetics_flags.py` 4 pass; `node --test tests/kinetics/{ease,spring}.test.mjs` 6 pass (the first test that reaches the template's math; minJerk's rest-at-both-ends vs the quadratic io's a(0)=4, springPop's peak = 1+Mp at pi/wd); `render_baseline.py --check`: PASS 4 golden frames identical. Deviation: minJerk's inline clamp is `Math.min(1, Math.max(0, u))` instead of the template's `clamp01` so the module is self-contained - numerically identical.
 
 ### T2: the curvature-reparameterised stroke
-- Status: review (code landed flag-off; HUMAN GATE pending - before/after strips sent 2026-09-05)
+- Status: complete - HUMAN GATE RULED 2026-09-05 from the side-by-side clip `t2-stroke-side-by-side.mp4` (the holdings page's line build + focus ring, the phone trace; OFF left, ON right, 30 fps): 'curvature stroke should be on'. `curvature_stroke` ON in `build_short.py`; the short rebuilt (player kinetics: analytic_spring, min_jerk, area_squash, curvature_stroke; km_ink off)
 - Owner: parent
 - Depends on: T1
 - Write set: `content/video_engine/scripts/kinetics/stroke.mjs`, `content/video_engine/tests/kinetics/stroke.test.mjs`, the template's `drawOn` (flag `curvature_stroke`)
@@ -184,7 +184,7 @@ T2-T5 write disjoint files and may run in parallel once T1 lands. T6 is last.
 - Evidence: 2026-09-05 - `kinetics/spring.mjs`: `springParams` (Mp -> zeta, settle -> omega; Mp = 0 asks for critical), `springEval` returning x, v AND a in all three regimes, `POP`, `springPop` as the thin caller. `spring.test.mjs` 5 pass: springPop BIT-IDENTICAL to the 2026-09-05 shipping formula over 2000 u's at Mp 0.04 (and 0.1, 0.2); peak exactly 1 + Mp at pi/wd with zero velocity; zeta = 1 overshoots zero, zeta = 1.6 monotone and never crosses 1; v and a match finite differences of x in all three regimes; THE SEEK TEST - frame N direct === frames 0..N stepped (bit-identical), while a semi-implicit Euler spring reaches a different frame N when stepped through different frames. Goldens PASS 4 identical. Deviation: routed to implementation_luna in the plan, done by the parent (agent type not available here).
 
 ### T6: wire, capture, turn on, record
-- Status: review (everything ungated done; the two flag turn-ons for Tokyo wait on the T2 / T3 human gates)
+- Status: complete - both gates ruled 2026-09-05: the stroke ON, K-M ink OFF for the soak (kept for ink over ink); the short carries analytic_spring, min_jerk, area_squash, curvature_stroke
 - Owner: parent
 - Depends on: T2, T3, T4, T5
 - Write set: the template (flag guards), `content/video_engine/tests/golden/` (flag-ON goldens), `content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build_short.py` (`C.KINETICS`), `docs/content-video-engine/47-FINDINGS-TO-CHECKS.md` §5b, `docs/content-video-engine/CAPABILITIES.md`, `docs/content-video-engine/BACKLOG.md`
