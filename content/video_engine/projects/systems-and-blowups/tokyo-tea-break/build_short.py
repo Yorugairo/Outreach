@@ -110,7 +110,7 @@ OUTRO = HERE / "outro/outro-v2.mov"   # 6.2 s, 1080x1920 ProRes, the DARK starfi
 # THE BRAND LINE (operator, 2026-09-05: 'might as well record it ... so we only ever have to record it once'): one ElevenLabs pickup,
 # "Not a panic. Not a plot. Mechanics.", a CHANNEL asset (channel-assets/money-physics/outro/vo, 2.3 s, request VWz6F5nZII19oUXxsUYt),
 # stitched BRAND_GAP after the last word so it plays under the card; the card's own text is its caption (no caption page)
-BRAND_LINE = HERE.parents[2] / "channel-assets/money-physics/outro/vo/audio/scene_1.mp3"
+BRAND_LINE = HERE.parents[2] / "channel-assets/money-physics/outro/vo/audio/brand-line-paced.mp3"   # the PACED cut (pace_brand_line.py): periods, then a savor before "Mechanics." (operator: "it reads too fast")
 BRAND_GAP, BRAND_TAIL = 0.7, 1.0
 OUTRO_S, OUTRO_LEAD = 6.2, 0.1   # the card's fade begins a tenth before the last word ends and DISSOLVES in (M16: the last caption pops 2.52 s before the VO ends) (operator, 2026-09-05: the wipe into a title card was 'madness')
 

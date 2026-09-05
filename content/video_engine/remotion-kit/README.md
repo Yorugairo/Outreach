@@ -22,8 +22,10 @@ with the editor's `node_modules` on the path, or add `remotion`, `react`, `react
 **The brand line** - "Not a panic. Not a plot. Mechanics." - is a CHANNEL asset recorded once (ElevenLabs, 2026-09-05,
 request `VWz6F5nZII19oUXxsUYt`, 2.3 s, the take's own voice and settings) at
 `content/video_engine/channel-assets/money-physics/outro/` (`BRAND-LINE.txt`, `vo/short-take.json`, `vo/audio/scene_1.words.json`;
-the mp3 is gitignored like every take - it lives in that folder and its `vo/cache/`). Every short stitches it 0.7 s after its
-last word, under the card; the card's own text is its caption.
+the mp3 is gitignored like every take - it lives in that folder and its `vo/cache/`). `pace_brand_line.py` cuts it at its
+own word gaps and gives each stroke a period's room (0.5 s after "panic.", 0.8 s before "Mechanics." - operator: "it reads
+too fast"), writing `vo/audio/brand-line-paced.mp3` + its shifted word clock (3.58 s). Every short stitches THAT file 0.7 s
+after its last word, under the card; the card's own text is its caption.
 
 Renders are gitignored (`*.mov`, `*.png`). The four renders sit beside the Tokyo clips at
 `projects/systems-and-blowups/tokyo-tea-break/outro/` (6.2 s each, ProRes, silent audio track): the short uses
