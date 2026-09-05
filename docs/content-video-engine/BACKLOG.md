@@ -243,7 +243,7 @@ path stops existing. Each ships with the test named in 47.
 | A4 | The recede species ("whirlpool") — `spotlight` inverted, radius → 0 |
 | A5 | Actor on the page = hands; `build-f/ledger-hands.html` is an untracked proof |
 | A6 | Expose the chart's coordinate mapper — 43 §43.2's anchor work is its general form |
-| G2 | Short-runtime mode for `gate_opening_structure.py` — 17 Tokyo FAILs are long-form geometry on a 90 s script |
+| G2 | Short-runtime mode for `gate_opening_structure.py` — 17 Tokyo FAILs are long-form geometry on a 90 s script. **Measured again 2026-09-04 on the rewrite:** the pinned P1 (0:35) + G18 (≤ 3 marks/min) + G12 (tricolon inside P1) leave a two-second slot for the promise, and P2's seven beats must sit in 0:35–1:05 — fitting a clear script to it clipped the prose until the operator said the sentences did not make sense (v3 → v4 → v5 in `tokyo-tea-break/`). The clean cut passes at 2:20; a 45–60 s short (doc 51) cannot. **Destination: a declared short mode — operator, 2026-09-04, on the Tokyo short (v9): the head-fake and the debate are CUT, the back end is cut, the signpost is one clause ("So, the first number:"); hook → mechanism → the tell → the ring survive. Spec it from v9 (`tokyo-tea-break/SCRIPT-90S-VO.claude.txt`, 3 FAILs = exactly the cut beats) with v8-long and ep1 as the long-form fixtures.** |
 | G3 | Stop compressing inter-paragraph silence in `tempo_edit.py` |
 | G4 | Tokyo `timeline.json` on the 9:16 template; retires `player.html` and its three wrong TIC figures |
 | G5 | The 8 carried P34 reviewer mediums |

@@ -1,0 +1,118 @@
+{
+  "schema_version": "viewer_reports.v1",
+  "prompt_version": "v1",
+  "script": "SCRIPT-90S-VO.claude.txt",
+  "windows_file": "SCRIPT-90S.claude-VIEWER-WINDOWS.json",
+  "model": "(codex default)",
+  "effort": "high",
+  "lane": "codex",
+  "started_at": "2026-09-05T05:16:41+00:00",
+  "finished_at": "2026-09-05T05:17:47+00:00",
+  "windows_run": 7,
+  "package": {
+    "status": "asked",
+    "title": "Tokyo Tea Break",
+    "thumb_file": "",
+    "promised": "A brief, atmospheric escape into a tea break in Tokyo, showing the setting, ritual, and mood. I expect to come away knowing what this small everyday moment feels like there."
+  },
+  "reports": [
+    {
+      "i": 0,
+      "span": "0:00-0:15",
+      "new_things": [
+        "Tokyo’s actions allegedly left America with an unfunded financial burden.",
+        "Mortgage rates rose even though the Federal Reserve did not change its position.",
+        "Three men in blue ties offer competing explanations: the deficit, the Fed, or the mood at Jackson Hole.",
+        "YouTube has sixty-three stick figures connected to this topic."
+      ],
+      "held_question": "What did Tokyo actually do, and how did it cause U.S. mortgage rates to rise?",
+      "asked_of_me": "",
+      "could_not_follow": [
+        "The reference to sixty-three stick figures is unclear."
+      ],
+      "promise_answered": "not yet",
+      "answered_by": ""
+    },
+    {
+      "i": 1,
+      "span": "0:15-0:30",
+      "new_things": [
+        "Japan is America's biggest lender.",
+        "Japan holds more than a trillion dollars of U.S. debt.",
+        "Japan has been selling that debt since February.",
+        "The speaker previously worked in risk at JPMorgan."
+      ],
+      "held_question": "What happens to borrowing costs when the biggest buyer of U.S. debt starts walking away?",
+      "asked_of_me": "",
+      "could_not_follow": []
+    },
+    {
+      "i": 2,
+      "span": "0:30-0:45",
+      "new_things": [
+        "When a major Treasury buyer pulls back, the auction reprices the debt.",
+        "The real pressure is coming from Japan's balance sheet, not the Fed.",
+        "Two numbers—one from a Treasury page and one on my phone—will show where the money went."
+      ],
+      "held_question": "What are the two numbers, and where did Japan's money go?",
+      "asked_of_me": "",
+      "could_not_follow": [
+        "The final sentence cut off before saying how much Japan has sold."
+      ]
+    },
+    {
+      "i": 3,
+      "span": "0:45-1:00",
+      "new_things": [
+        "Japan has sold $122 billion in Treasuries since February.",
+        "That sale equals about one-tenth of Japan's Treasury holdings.",
+        "The Treasury publishes Japan's new holdings total every month; that monthly figure is the first number to watch.",
+        "Tokyo has pledged ¥10 trillion to semiconductor investment.",
+        "The speaker claims a successful chip investment would outperform lending, though the comparison is unfinished."
+      ],
+      "held_question": "What exactly would Japan's chip investment beat lending money to, and what is the second number on my phone?",
+      "asked_of_me": "",
+      "could_not_follow": [
+        "The sentence cuts off after “it beats lending,” so the comparison is incomplete."
+      ]
+    },
+    {
+      "i": 4,
+      "span": "1:00-1:15",
+      "new_things": [
+        "The money returned to Japan while the debt burden remained in the United States.",
+        "The first number should be judged by whether Japan’s Treasury holdings are growing or shrinking."
+      ],
+      "held_question": "Is Japan’s pile of American debt now growing or shrinking?",
+      "asked_of_me": "",
+      "could_not_follow": []
+    },
+    {
+      "i": 5,
+      "span": "1:15-1:30",
+      "new_things": [
+        "Japan's Treasury holdings are about 10% below their February peak.",
+        "The claim would be proven wrong if Japan's Treasury holdings start growing again.",
+        "The second indicator is Meta's price-to-earnings multiple, available on a phone.",
+        "A price-to-earnings multiple is being explained as how much of Meta's price relates to something, but the explanation is unfinished."
+      ],
+      "held_question": "What exactly does Meta's price-to-earnings multiple show, and why is it the second indicator?",
+      "asked_of_me": "Pull up Meta on my phone and find its price-to-earnings multiple.",
+      "could_not_follow": []
+    },
+    {
+      "i": 6,
+      "span": "1:30-1:45",
+      "new_things": [
+        "Meta’s price includes profits that have not happened yet.",
+        "Higher yields reduce the present value of those expected profits.",
+        "The Fed has not moved yet.",
+        "Tokyo is still inactive.",
+        "The unfunded cost remains America’s responsibility."
+      ],
+      "held_question": "What change in Meta’s price-to-earnings multiple would confirm or disprove the argument?",
+      "asked_of_me": "",
+      "could_not_follow": []
+    }
+  ]
+}

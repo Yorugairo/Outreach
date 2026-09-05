@@ -267,3 +267,19 @@ def test_promise_after_45s_fails_e24_decided():
     g = _by_id(G.run(_pad_to(s, 805.0), None)[0])
     assert g["G09"].level == "FAIL" and "AFTER 0:45" in g["G09"].message, g["G09"]
     assert G.PROMISE_WIN == (30.0, 45.0) and G.ROADMAP_S == 45.0
+
+
+def test_ring_claim_stems_exclude_every_word_of_a_multi_word_token():
+    # a two-word ring ("tea break") must not count its own words as the argument (G15b, 2026-09-04)
+    stems = G.ring_claim_stems("Tokyo is on a tea break from our debt.", "tea break")
+    assert stems == {"tokyo", "debt"}, stems
+    assert G.ring_claim_stems("An iron spike ruined everyone.", "spike") == {"iron", "ruin", "everyone"}
+
+
+def test_g15b_needs_the_argument_not_the_two_word_token(monkeypatch):
+    s = _pad_to("Tokyo is on a tea break from our debt. So is everyone. `[post-key]` ", 9.0)
+    s = _pad_to(s, 780.0)
+    s += "Tokyo is still on its tea break, and nothing else here returns. "
+    s = _pad_to(s, 805.0)
+    g = _by_id(G.run(s, None, ring="tea break")[0])
+    assert g["G15b"].level == "FAIL", g["G15b"]

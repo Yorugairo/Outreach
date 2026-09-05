@@ -1,0 +1,29 @@
+Tokyo took a tea break and left us the tab.
+
+[stakes] The Fed never moved an inch this month, and your borrowing cost climbed anyway. [post-key]
+
+[archetype] Turn on finance news and three guys in matching blue ties will blame deficits, consumer debt, or the vibes in Jackson Hole. Nobody looks across the Pacific.
+
+[rehook] But here's where the consensus breaks. [opponent] The opponent isn't the Fed chair. It's a balance sheet in Japan. [reflect] When your biggest customer steps away, the bond auction sets your rate, not the central bank.
+
+[payoff] [new] The Treasury's own table says Japan holds over a trillion dollars of American debt, more than any other country, and since February Japan has been selling it. [desire] [map] One number on that table tells you who ends up holding the tab, and that number runs straight through to your tech stocks.
+
+[pre-key] [promise] [tricolon] Not a panic, not a plot, not a forecast: in the next two minutes you'll read that number yourself.
+
+[catalyst] [new] Since February, Japan has sold a hundred and twenty-two billion dollars of Treasuries. [loop] [new] That is a tenth of everything they held, and it is printed on a page anyone can open. [foreshadow] That page is where you'll read the number.
+
+[head-fake] [new] The standard explanation is currency hedging: two years ago, the cost of hedging the dollar wiped out the yield.
+
+[debate] [new] [rehook] But here's where it gets weird. That excuse expired: hedging now costs half what it did, and the hedged trade pays two full points. [loop] [reflect] Tokyo's tea break runs straight through a trade that makes money.
+
+[loop-close] So the hedge didn't send them home. My read: the money went home on its own. Tokyo has pledged ten trillion yen to chips, and if that bet works, it beats a two point trade. [post-key]
+
+[dip] [signpost] Which brings us to the number on your own screen.
+
+The variable: how much American debt Japan holds, published every month by the Treasury. The threshold: that pile grows, or it shrinks. Where we sit: a tenth below the February peak. The flip: the pile grows again while the trade still pays. If that happens, I was wrong, and I'll say it here.
+
+[rehook] This is where most people miss the connection. This was never just a bond story. Tonight, pull up Meta, you're probably on it right now, and check its price-to-earnings multiple. That multiple isn't a score; it's a time machine, pricing profits ten years out. At a five percent yield, a dollar of profit ten years out is worth sixty-one cents today. Against a three percent yield, that is an eighteen percent haircut on the stock, without Meta losing a single customer.
+
+Not a panic. Not a plot. Mechanics.
+
+The Fed still hasn't moved an inch. [ring] Tokyo is still on its tea break, and we are still holding the tab. And the tab is yours.

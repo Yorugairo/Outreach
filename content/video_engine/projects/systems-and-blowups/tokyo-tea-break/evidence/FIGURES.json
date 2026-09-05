@@ -24,10 +24,10 @@
  },
  "meta_pe": {
   "status": "REAL",
-  "trailing_pe": 23.1,
-  "forward_pe": 17.5,
-  "trailing_eps": 26.56,
-  "price": 612.305,
+  "trailing_pe": 23.0,
+  "forward_pe": 17.6,
+  "trailing_eps": 26.83,
+  "price": 616.77,
   "fetched": "2026-09-04",
   "src": "Yahoo Finance via yfinance"
  },
@@ -41,6 +41,6 @@
   },
   "drop_3_to_5_pct": -17.5,
   "us10y_now": 4.45,
-  "meta_trailing_pe": 23.1
+  "meta_trailing_pe": 23.0
  }
 }

@@ -175,3 +175,26 @@ def test_a_window_cut_is_our_artifact_not_the_scripts_defect():
     p0 = res["per_window"][0]
     assert p0["could_not_follow"] == ["Who exactly 'they' refers to."]
     assert len(p0["window_cuts"]) == 1
+
+
+def test_a_promise_is_perceived_when_the_reader_files_it_under_asked_of_me():
+    """A promise beat is what the reader reports as an ask, not as a fact (2026-09-04)."""
+    script = "Rates rose. `[pre-key]` [promise] By the end you'll read that number yourself off the table. "
+    windows = {"schema_version": "viewer_windows.v1", "window_s": 15.0, "memory_windows": 2,
+               "timing_source": "estimated", "runtime_s": 15.0,
+               "windows": [{"i": 0, "start_s": 0.0, "end_s": 15.0, "span": "0:00-0:15",
+                            "text": "Rates rose. By the end you'll read that number yourself off the table.", "memory": ""}]}
+    reports = {"reports": [{"i": 0, "span": "0:00-0:15", "new_things": ["Rates went up."],
+                            "held_question": "", "asked_of_me": "Read that number for myself off the table by the end.",
+                            "could_not_follow": []}]}
+    res = V.score(windows, reports, script)
+    promise = [r for r in res["recall"] if r["tag"] == "promise"][0]
+    assert promise["perceived"], promise
+
+
+def test_a_ring_sentence_maps_to_the_window_that_speaks_it_not_the_opener_it_echoes():
+    windows = [{"i": 0, "text": "Tokyo took a tea break and left America the tab. The Fed sat still."},
+               {"i": 1, "text": "Nothing here."},
+               {"i": 2, "text": "The Fed still sat still. Tokyo is still on its tea break, and America still holds the tab."}]
+    assert V.window_of_sentence(windows, "Tokyo is still on its tea break, and America still holds the tab.") == 2
+    assert V.window_of_sentence(windows, "Tokyo took a tea break and left America the tab.") == 0

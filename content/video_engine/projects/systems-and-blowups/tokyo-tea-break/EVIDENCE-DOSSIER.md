@@ -91,3 +91,27 @@ The TIC release lags by roughly two months and updates monthly; FRED's Japan int
 series is monthly. **Re-run the builder before recording.** If the holdings turn back up
 before publication, the script's own tell fires — "they buy again, and if yields don't
 fall I was wrong" — and the video needs re-cutting, not patching.
+
+---
+
+## Addendum 2026-09-04 — the rewrite's hook, sourced (SCRIPT-90S-VO.claude.txt)
+
+Re-ran the builder the same day: TIC still prints 2026-06 (no July release yet), Japan
+$1,116.7 B, −$122.6 B from the February peak (−9.9 %), net hedged +2.03 %. Every dossier
+row above still PASSes. Two hook lines were new and needed their own sources:
+
+| the script says | actual | source | verdict |
+|---|---|---|---|
+| "The Fed didn't move an inch this month" | upper target 3.75 % on every day 2026-08-30 → 2026-09-04 | FRED `DFEDTARU` | **PASS** |
+| "your borrowing cost climbed anyway" | 30-year mortgage 6.55 % (07-16) → 6.71 % (09-03); 10-year 4.63 % (08-04) → 4.79 % (09-01) | FRED `MORTGAGE30US`, `DGS10` | **PASS** — a 16 bp rise; the script says *climbed*, not *jumped*, on purpose |
+| "a tenth of the pile" | −9.9 % | TIC Table 5 | **PASS** |
+| "two years ago it cost Tokyo more than our bond paid" | last negative month 2024-11 (22 months) | FRED, derived | **PASS** |
+| "hedging now costs half" | 5.54 % → 2.42 % (less than half) | FRED, derived | **PASS** |
+| "The threshold: the pile grows, or shrinks. Where we sit: a tenth below February." | monthly prints Mar −47.7 / Apr **+18.3** / May −66.8 / Jun −26.4 | TIC Table 5 | **PASS** — worded against the *peak*, because "four straight months of selling" would be false: April was up |
+
+Dropped from the spoken text, deliberately: the Meta P/E beat and the discount-rate
+arithmetic (doc 51: one mechanism per short — the number the viewer reads is the holdings
+print; `ev-discount-rate-v1` stays built for the long-form P1), and any sell instruction
+(operator, 2026-09-03: "exiting 20-year Treasuries is useless advice on a short").
+
+| "Tokyo has pledged ten trillion yen to chips and AI" | PM Ishiba's plan: support worth ¥10 trillion (~$65 B) or more by fiscal 2030 for semiconductors and AI (Rapidus + onshored fabs) | CNBC 2024-11-13, "Japan is ramping up efforts to revive its once dominant chip industry"; Bloomberg 2024-11-29, "Japan earmarks extra $9.9 billion for chips and AI this year" | **CITED** — a pledge, spoken as a pledge; "if that works" keeps the return claim conditional. **"My read: the money went home" is the narrator's read, attributed as such, not a sourced flow-of-funds claim** (operator, 2026-09-04: no commitment to Japan buying again) |

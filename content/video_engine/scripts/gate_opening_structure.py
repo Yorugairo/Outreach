@@ -294,11 +294,13 @@ def ring_claim_stems(sentence: str, ring: str) -> set[str]:
     """The content-word stems of a ring sentence, minus the token itself - the ARGUMENT the
     token stands for (G15b). Same stop list and stemmer as the packaging check."""
     out: set[str] = set()
-    ring_stem = _stem(ring.lower())
+    # every word of the token is excluded, not the token as one string: a two-word ring such as
+    # "tea break" would otherwise hand the close two free stems and pass G15b on the echo alone
+    ring_stems = {_stem(w) for w in re.findall(r"[a-z][a-z']*", ring.lower())}
     for raw in re.findall(r"[a-z][a-z']*", sentence.lower()):
         word = raw.replace("'", "")
         stem = _stem(word)
-        if word in PACKAGING_STOPWORDS or len(stem) < PACKAGING_MIN_STEM or stem == ring_stem:
+        if word in PACKAGING_STOPWORDS or len(stem) < PACKAGING_MIN_STEM or stem in ring_stems:
             continue
         out.add(stem)
     return out

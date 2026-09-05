@@ -122,6 +122,12 @@ def window_of_sentence(windows: list[dict], sentence: str) -> int | None:
     beat = content_tokens(sentence)
     if not beat:
         return None
+    # a sentence the window carries VERBATIM wins outright - a ring sentence echoes the opener
+    # by design, and best-overlap used to send it to window 0 (Tokyo, 2026-09-04)
+    needle = " ".join(tokens(sentence))
+    for w in windows:
+        if needle and needle in " ".join(tokens(w.get("text", ""))):
+            return int(w["i"])
     best, best_score = None, 0.0
     for w in windows:
         shared = beat & content_tokens(w.get("text", ""))
@@ -210,7 +216,11 @@ def score(windows_doc: dict, reports_doc: dict, script_text: str) -> dict:
                 rep = reports.get(j)
                 if not rep or "error" in rep:
                     continue
-                lines = list(rep.get("new_things") or []) + [rep.get("held_question") or ""]
+                # the promise / assignment class is what the reader files under "asked of me"
+                # ("read that number for myself by the end") - a promise beat could never be
+                # perceived without it (Tokyo rewrite, 2026-09-04)
+                lines = (list(rep.get("new_things") or []) + [rep.get("held_question") or "",
+                                                              rep.get("asked_of_me") or ""])
                 for line in lines:
                     if isinstance(line, str) and overlap_hit(b["sentence"], line):
                         matched, where = line.strip(), j
