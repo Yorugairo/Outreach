@@ -469,6 +469,7 @@
   const wA = $("wA"), wB = $("wB"), wash = $("wash"), seam = $("seam"), cap = $("caption");
   const docks = [$("dock-1"), $("dock-2")];
   const WIPE = 0.62;
+  const SUCK_S = 0.3, SUCK_TURN = 240;   /* the suck transition: 0.3 s, two thirds of a turn into the point */
   /* remotion-ui directional-wipe port (2026-08-30): FEATHER is the soft
      edge as a share of the frame (their edgeSoftness); DEPTH is the
      parallax the pages carry under the wipe. The mask edge travels from
@@ -2370,7 +2371,12 @@
     /* a page that ARRIVES by spiral is its own transition (operator, 2026-09-05: "we can't do a page wipe AND a spiral back
        in - the transition should BE the spiral"): no seam, the cream is there on the cut and the page surfaces out of it */
     const spiralIn = sc.world && sc.world.kind === "ledger" && sc.world.page && sc.world.page.enter === "spiral";
-    const wk = prev && !spiralIn ? quartIO(clamp01((t - sc.span[0]) / WIPE)) : 1;
+    /* SUCK (operator, 2026-09-05: "it needs to land as near to instantly on the next page as possible ... suck it in from all
+       corners into a single point"): a row whose exit reads suck:<x>,<y> arrives on the cut, and the OUTGOING world collapses
+       into that point of the new plate over SUCK_S, spinning - no wipe front, no seam */
+    const suck = prev && typeof sc.exit === "string" && sc.exit.startsWith("suck") ? sc.exit : null;
+    const su = suck ? clamp01((t - sc.span[0]) / SUCK_S) : 1;
+    const wk = prev && !spiralIn && !suck ? quartIO(clamp01((t - sc.span[0]) / WIPE)) : 1;
     const seaming = prev && wk > 0 && wk < 1;
     /* THE HARD-EDGE CLIP WIPE (restored 2026-09-01). The remotion-ui
        directional-wipe port (dd9e476, 2026-08-30) replaced this with a
@@ -2388,6 +2394,13 @@
       ? `inset(0 0 0 ${(1-wk)*100}%)` : `inset(0 ${(1-wk)*100}% 0 0)`;
     paint(wA, prev || sc);
     paint(wB, sc);
+    if (suck && su < 1) {
+      const [px, py] = (suck.split(":")[1] || "0.5,0.5").split(",").map(Number);
+      const ox = px * STAGE_W - wA.offsetLeft, oy = py * STAGE_H - wA.offsetTop;   /* the point in wA's own box (the world overhangs the stage 5%) */
+      wA.style.transformOrigin = ox.toFixed(1) + "px " + oy.toFixed(1) + "px";
+      wA.style.transform = "rotate(" + (SUCK_TURN * su).toFixed(1) + "deg) scale(" + Math.pow(1 - su, 1.6).toFixed(4) + ") " + wA.style.transform;
+      wA.style.zIndex = 3;   /* the outgoing world rides above the incoming plate while it collapses */
+    } else if (wA.style.zIndex) { wA.style.zIndex = ""; }
     seam.style.opacity = seaming ? 1 : 0;
     seam.style.transform = `translateX(${(sc.exit === "wipe_right" ? (1-wk) : wk) * STAGE_W}px)`;
 

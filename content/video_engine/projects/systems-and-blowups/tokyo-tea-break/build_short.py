@@ -145,7 +145,8 @@ def shot_table(ws: list[dict], runtime_s: float) -> list[tuple]:
         # 5b the PROMISE plate (operator, 2026-09-05: a narrative plate from "a Treasury page, and your phone" through
         #    "read both numbers yourself"): the viewer's desk - a stick figure at a laptop of numbers, a phone with one
         #    falling red line, a mug. An approved still (E40: the still is the asset); its life is the template's
-        (t_promise, t_catalyst, "plate-p-viewers-desk", (0, 0, 0), [], None, [
+        #    enters by SUCK (operator, 2026-09-05: near-instant, everything pulled into one point in the black of the stick figure)
+        (t_promise, t_catalyst, "plate-p-viewers-desk", (0, 0, 0), [], "suck:0.49,0.55", [
             # regions measured on the approved still (fractions of the frame): the mug's rim, the phone's screen, the laptop's grid
             {"kind": "steam", "at": t_promise, "dur": round(t_catalyst - t_promise, 2), "target": {"kind": "region", "x0": 0.80, "y0": 0.55, "x1": 0.95, "y1": 0.60}},
             {"kind": "trace", "at": t_promise + 0.3, "dur": round(t_catalyst - t_promise - 0.3, 2), "target": {"kind": "region", "x0": 0.117, "y0": 0.39, "x1": 0.26, "y1": 0.485}},
@@ -204,9 +205,20 @@ def main() -> int:
     # every ledger entry, on the episode clock, beside the page-relative page_cues (P35 T9)
     plan_path = HERE / "sound/SOUND-PLAN.json"
     plan = json.loads(plan_path.read_text(encoding="utf-8"))
-    plan["cues"] = [{"slot": f"page enter {i + 1}", "at": round(r[0], 2), "gain": 0.9, "fade_in": 0.0,
-                     "variants": {"A": "fs-page-roll-464302.mp3", "B": "fs-whoosh-2-743004.mp3"}}
-                    for i, r in enumerate(rows) if r[2].startswith("ledger:")]
+    # operator, 2026-09-05: the page-roll "tear" at a fifth of its level (0.9 -> 0.18); a spiral - in or out - and the suck are a WHOOSH
+    ROLL, WHOOSH = "fs-page-roll-464302.mp3", "fs-whoosh-2-743004.mp3"
+    RETRACT_S = 2.0   # LP_RETRACT.COLOURS + CHARCOAL (template): the spiral out starts here before the row ends
+    cues = []
+    for i, r in enumerate(rows):
+        if r[2].startswith("ledger:"):
+            spiral_in, cut = ":spiral" in r[2], r[2].endswith(":cut")
+            cues.append({"slot": f"page enter {i + 1}" + (" (spiral)" if spiral_in else ""), "at": round(r[0], 2), "gain": 0.5 if spiral_in else 0.18, "fade_in": 0.0,
+                         "variants": {"A": WHOOSH if spiral_in else ROLL}})
+            if not cut:
+                cues.append({"slot": f"page retract {i + 1}", "at": round(r[1] - RETRACT_S, 2), "gain": 0.5, "fade_in": 0.0, "variants": {"A": WHOOSH}})
+        elif isinstance(r[5], str) and r[5].startswith("suck"):
+            cues.append({"slot": f"suck {i + 1}", "at": round(r[0], 2), "gain": 0.4, "fade_in": 0.0, "variants": {"A": WHOOSH}})
+    plan["cues"] = cues
     plan_path.write_text(json.dumps(plan, indent=1), encoding="utf-8")
     (HERE / "SHOT-TABLE-SHORT.py").write_text(
         '"""Tokyo short - AUTHORED shot table, timed from the take by build_short.py. Do not hand-edit; edit build_short.shot_table."""\n'

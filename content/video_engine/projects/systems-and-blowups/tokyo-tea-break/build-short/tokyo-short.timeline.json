@@ -1954,31 +1954,55 @@
   {
    "slot": "page enter 4",
    "at": 17.17,
-   "gain": 0.9,
+   "gain": 0.18,
    "fade_in": 0.0,
    "variants": {
-    "A": "__snd_0_A__",
-    "B": "__snd_0_B__"
+    "A": "__snd_0_A__"
    }
   },
   {
-   "slot": "page enter 7",
-   "at": 44.88,
-   "gain": 0.9,
+   "slot": "page retract 4",
+   "at": 31.05,
+   "gain": 0.5,
    "fade_in": 0.0,
    "variants": {
-    "A": "__snd_1_A__",
-    "B": "__snd_1_B__"
+    "A": "__snd_1_A__"
+   }
+  },
+  {
+   "slot": "suck 6",
+   "at": 38.96,
+   "gain": 0.4,
+   "fade_in": 0.0,
+   "variants": {
+    "A": "__snd_2_A__"
+   }
+  },
+  {
+   "slot": "page enter 7 (spiral)",
+   "at": 44.88,
+   "gain": 0.5,
+   "fade_in": 0.0,
+   "variants": {
+    "A": "__snd_3_A__"
+   }
+  },
+  {
+   "slot": "page retract 7",
+   "at": 52.52,
+   "gain": 0.5,
+   "fade_in": 0.0,
+   "variants": {
+    "A": "__snd_4_A__"
    }
   },
   {
    "slot": "page enter 9",
    "at": 64.19,
-   "gain": 0.9,
+   "gain": 0.18,
    "fade_in": 0.0,
    "variants": {
-    "A": "__snd_2_A__",
-    "B": "__snd_2_B__"
+    "A": "__snd_5_A__"
    }
   }
  ],
@@ -2210,7 +2234,7 @@
      "y": 0
     }
    },
-   "exit": "cut",
+   "exit": "suck:0.49,0.55",
    "span": [
     38.96,
     44.88
