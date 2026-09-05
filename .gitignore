@@ -155,3 +155,5 @@ CLAUDE.local.md
 
 # Claude Design bundle reference images are copies of tracked assets (see design-system/README.md)
 content/video_engine/channel-assets/money-physics/design-system/assets/
+# golden-frame diffs are outputs, never sources (P39)
+content/video_engine/tests/golden/diffs/

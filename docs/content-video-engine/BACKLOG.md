@@ -273,6 +273,15 @@ needs an owner before they can promote to FAIL.
 | parallax dial fix | **P37 T9** — folded in, no longer deferred |
 | actor idling (48 §48.4), Euler spirals (42 §42.4), the Z-stack (43 §43.3) | slices inside P40/P41; too small to plan alone |
 
+### B8 — the shipped 1440p render is an upscale of a 1398px capture (found by P39 T2, 2026-09-04)
+
+`fitStage()` scales `#stage` to the `#fit` container, so `render_episode.py` screenshots a
+0.728x stage and `resize()`s it to 2560x1440. Every frame of ep1 that shipped was a LANCZOS
+upscale. Alongside: CSS transitions run on the wall clock during a seek-render (dock
+entrances smear at whatever pace capture runs), and `document.fonts.ready` is not awaited.
+`render_baseline.py` has the fixed capture; **P39 T6** moves it into the shipped renderer.
+The rebuild of ep1 and Tokyo waits for it - a free sharpness gain.
+
 ### B7 — the Flow driver should verify, not the prompt contain
 
 **Operator ruling 2026-09-04:** negative rules in a positive prompt can summon the very

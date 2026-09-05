@@ -147,6 +147,23 @@ document** — coverage is the proof of reading — and
 These are **reference, not portable**. A rule graduates to `docs/portable/` once proven
 in a shipped build, and its index row says so.
 
+## The golden-frame harness (P39 T2/T3, 2026-09-04)
+
+Four committed surfaces - ledger page mid-build, chart with a callout, 16:9 dock pair,
+9:16 dock pair - each a small synthetic timeline instantiated from **our** template
+(`tests/golden/sources/`), rendered to a committed frame (`tests/golden/frames/`).
+
+```bash
+python content/video_engine/scripts/render_baseline.py --check     # PASS, or one line per changed surface + a diff PNG
+python content/video_engine/scripts/render_baseline.py --update    # deliberate refresh after an approved change
+python -m pytest content/video_engine/tests/test_golden_frames.py content/video_engine/tests/test_render_determinism.py -q
+```
+
+A failure names the surface and writes `tests/golden/diffs/<surface>.diff.png` (golden |
+actual | diff x8). The suite includes the perturbation that proves the harness catches a
+one-value CSS change. The capture is deterministic because it neutralises what the shipped
+renderer does not yet (B8): wall-clock transitions, the fit-scaled stage, unawaited fonts.
+
 ## The frozen baseline (P39 T1, 2026-09-04)
 
 The last known-good player is tagged **`player-baseline-2026-09-04`** (annotated; the
