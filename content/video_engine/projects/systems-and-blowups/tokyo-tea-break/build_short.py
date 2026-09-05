@@ -133,7 +133,7 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float | None = None) -
     clip = lambda name, src=None: f"clip:{seekable_clip(name, src).as_posix()}"
     t_outro = t_outro if t_outro is not None else runtime_s
     hold = f"ledger:ev-japan-holdings-v1:line:{LAST_IDX}:right"
-    meta = "ledger:ev-meta-yield-v1:bars:3:right:mount:cut"   # enter=mount (operator, 2026-09-05): the fab clip fades while the cream plate mounts over it, then the page draws - no page turn; exit=cut: the punch on "discounts it." is the last beat of the row - no retract under it (E40 #5)
+    meta = None   # set below once t_cut and t_second are known: the mount carries its length
     t_stakes = cut_before(ws, "The Fed hasn't moved")
     t_panel = cut_before(ws, "Three men in blue ties")
     t_lender = cut_before(ws, "Here's what nobody on that panel")
@@ -141,10 +141,12 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float | None = None) -
     t_promise = cut_before(ws, "a Treasury page")      # the cut drops on "went:" (operator, 2026-09-05): the promise plate
     t_catalyst = cut_before(ws, "Since February, Japan")
     t_pledge = cut_before(ws, "Tokyo has pledged")
-    t_second = round(word_time(ws, "here."), 2)   # the mount starts AS "here." is said (operator, 2026-09-05: "start the transition for the mount as soon as we say here") - a mount is a dissolve on the word, not a cut, so M13's gap rule does not apply
+    t_cut = cut_before(ws, "So, the second number")   # the actual transition: the cream is full here and the chart starts drawing
+    t_second = round(word_time(ws, "went home"), 2)   # the mount begins at "went home" (operator, 2026-09-05): the world fades, the cream builds beneath it until t_cut
     t_ring = cut_before(ws, "The Fed still hasn't moved")
     at = lambda phrase: round(word_time(ws, phrase), 2)
     datum = lambda i: {"kind": "datum", "index": i}
+    meta = f"ledger:ev-meta-yield-v1:bars:3:right:mount={round(t_cut - t_second, 2)}:cut"   # enter=mount=<s> (operator, 2026-09-05): from "went home" the fab clip fades in steps while the cream builds beneath it; at t_cut the cream is full and the chart draws - no page turn; exit=cut: the punch on "discounts it." is the last beat (E40 #5)
     return [
         # 1 the hook: the counter, the steaming cup, the tab
         (0.0, t_stakes, clip("clip-a-counter-tab-v2.mp4"), (0, 0, 0), [], None, None),

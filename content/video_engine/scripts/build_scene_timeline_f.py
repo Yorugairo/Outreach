@@ -210,7 +210,7 @@ def parse_ledger_id(plate_id: str) -> tuple[str, str, int | None, str, str | Non
     if quiet_zone not in LPG.QUIET_ZONES:
         raise ValueError(f"{plate_id!r}: quiet_zone {quiet_zone!r} is not one of {'|'.join(LPG.QUIET_ZONES)}")
     enter = parts[5] if len(parts) > 5 and parts[5] != "" else None
-    if enter is not None and enter not in LEDGER_ENTERS:
+    if enter is not None and enter.split("=")[0] not in LEDGER_ENTERS:   # mount may carry its length: mount=<seconds>
         raise ValueError(f"{plate_id!r}: enter {enter!r} is not one of {'|'.join(LEDGER_ENTERS)}")
     exit_ = parts[6] if len(parts) > 6 and parts[6] != "" else None
     if exit_ is not None and exit_ not in LEDGER_EXITS:
@@ -236,7 +236,9 @@ def ledger_world(plate_id: str, ken: tuple, ep_dir: Path, dock_badges: list | No
         raise ValueError(f"{plate_id!r}: {path.name} is not a page ({variant}): " + "; ".join(errors))
     page = LPG.build_spec(series, variant, emphasize, quiet_zone)
     if enter:
-        page["enter"] = enter   # the player: a returning page unwinds from its point (LP_RETRACT.IN)
+        page["enter"] = enter.split("=")[0]   # the player: a returning page unwinds from its point (LP_RETRACT.IN); a mount builds its cream first
+        if "=" in enter:
+            page["mount_s"] = float(enter.split("=", 1)[1])   # the mount phase (world fades, cream builds) before the page's own clock starts
     if exit_:
         page["exit"] = exit_    # the player: no retract, the page leaves on the cut
     # the evidence dock's authored badges for this asset land on the page too (the key for the

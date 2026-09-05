@@ -4897,7 +4897,7 @@
    "exit": "cut",
    "span": [
     54.52,
-    63.35
+    61.76
    ],
    "docks": [],
    "species": []
@@ -4966,6 +4966,7 @@
      ],
      "emphasize": 3,
      "enter": "mount",
+     "mount_s": 2.43,
      "exit": "cut"
     },
     "ken_burns": {
@@ -4976,7 +4977,7 @@
    },
    "exit": "cut",
    "span": [
-    63.35,
+    61.76,
     75.73
    ],
    "docks": [],

@@ -2375,19 +2375,21 @@
     const st = ledgerState.get(el.id + "|" + scene.scene_id) || buildLedger(el, scene);
     const pg = scene.world.page || {};
     if (!st.root.isConnected) { el.querySelectorAll(".lp").forEach((x) => x.remove()); el.appendChild(st.root); }
-    const tr = t - scene.span[0] + (pg.enter === "spiral" ? LP_FOCUS_AT + LP_BADGE0 + LP_BADGE_STEP * ((st.badges || []).length + 1) : pg.enter === "mount" ? LP.ROLL + LP.SAVOR : 0);   /* a spiral entry ARRIVES built: its beats are all past; a MOUNT skips the roll and the savor - its soak IS the entrance */
+    const mountS = pg.enter === "mount" ? (pg.mount_s || LP.FIELD) : 0;   /* the mount phase: the world fades, the cream builds; then the page's clock starts at ROLL + SAVOR (no roll, no savor) */
+    const tr = t - scene.span[0] + (pg.enter === "spiral" ? LP_FOCUS_AT + LP_BADGE0 + LP_BADGE_STEP * ((st.badges || []).length + 1) : pg.enter === "mount" ? LP.ROLL + LP.SAVOR - mountS : 0);   /* a spiral entry ARRIVES built: its beats are all past; a MOUNT arrives after its cream has built */
     /* beat 1: roll-out */
-    const mount = pg.enter === "mount", rk = mount ? 1 : expoOut(clamp01(tr / LP.ROLL));   /* a mounting page is in place from its first frame; it RISES (below) while the world dissolves it in */
-    const mk = mount ? Math.floor(clamp01((tr - LP.ROLL - LP.SAVOR) / LP.FIELD) * MOUNT_STEPS) / MOUNT_STEPS : 1;   /* the rise steps with the fade */
+    const mount = pg.enter === "mount", rk = mount ? 1 : expoOut(clamp01(tr / LP.ROLL));   /* a mounting page is in place from its first frame; it RISES (below) with the cream steps */
+    const mu = mount ? clamp01((t - scene.span[0]) / mountS) : 1;
+    const lpDance = (u) => { if (u >= 1) return 1; const k = Math.floor(u * MOUNT_STEPS), f = u * MOUNT_STEPS - k; return (k + clamp01((f - 0.5) / 0.5)) / MOUNT_STEPS; };
+    const mk = mount ? Math.floor(mu * MOUNT_STEPS) / MOUNT_STEPS : 1;
+    if (mount) { st.page.style.opacity = lpDance(mu).toFixed(4); }   /* the CREAM builds beneath the fading world, in the other half of each step */
     /* (the roll-out translate is composed with the punch below) */
-    st.edge.style.opacity = (1 - clamp01((tr - LP.ROLL) / 0.25)).toFixed(2);
+    st.edge.style.opacity = (mount ? 0 : 1 - clamp01((tr - LP.ROLL) / 0.25)).toFixed(2);   /* no roll edge on a mount */
     /* beat 2: the half savor - the textured page holds, empty (E22 addendum 2) */
     /* beat 3: the field. SOAK: seeps spread and saturate, never contract - paper taking ink;
        SCRIBBLE: strokes accumulate one at a time with the nib at the front. Either ends on the
        crisp rect. */
-    /* the dance: in each of MOUNT_STEPS slots the fade and the rise step at the slot's start; the charcoal grows in its second half */
-    const lpDance = (u) => { if (u >= 1) return 1; const k = Math.floor(u * MOUNT_STEPS), f = u * MOUNT_STEPS - k; return (k + clamp01((f - 0.5) / 0.5)) / MOUNT_STEPS; };
-    const b = mount ? lpDance(clamp01((tr - LP.ROLL - LP.SAVOR) / LP.FIELD)) : clamp01((tr - LP.ROLL - LP.SAVOR) / LP.FIELD);
+    const b = clamp01((tr - LP.ROLL - LP.SAVOR) / LP.FIELD);   /* a mount's soak begins when its cream is full (tr reaches ROLL + SAVOR at mount_s) */
     for (const bl of st.blobs) {
       /* STEP MOTION under km_ink (operator: "too smooth"): a stain's progress is a seeded staircase on the stepped clock, its own phase */
       const u = kin("km_ink") ? soakStepped(clamp01((b - bl.lag) / (1 - bl.lag)), (k) => lpHash(st.seed, bl.i + 1, 200 + k)) : clamp01((b - bl.lag) / (1 - bl.lag));
@@ -2797,11 +2799,13 @@
        arrives by a plain cross-fade over DISSOLVE_S - no front, no seam, the outgoing world keeps playing underneath */
     const mountIn = prev && sc.world && sc.world.kind === "ledger" && sc.world.page && sc.world.page.enter === "mount";   /* MOUNT (operator, 2026-09-05): the outgoing scene fades while the cream plate mounts over it - no page turn */
     const dissolve = prev && (sc.exit === "dissolve" || mountIn);
-    /* THE DANCE (operator, 2026-09-05: "the screen fades a portion - the charcoal builds up some - the screen fades a portion - the
-       charcoal builds up some more, so the character is walking away as it's fading"): a mount cross-fades over the soak's own
-       window (LP.FIELD) in MOUNT_STEPS steps, the outgoing clip playing underneath; the charcoal grows between the steps (lpDance) */
-    const dk = mountIn ? Math.floor(clamp01((t - sc.span[0]) / LP.FIELD) * MOUNT_STEPS) / MOUNT_STEPS
-             : dissolve ? (kin("min_jerk") ? minJerk : quartIO)(clamp01((t - sc.span[0]) / DISSOLVE_S)) : 1;
+    /* THE DANCE (operator, 2026-09-05, corrected: "the fades should be the WORLD fading, beneath it the CREAM should be building,
+       and by the time we reach the actual transition time the full cream should be built and the chart should start drawing"):
+       over the page's mount_s the OUTGOING world rides above and fades in MOUNT_STEPS steps while the page's cream plate builds
+       beneath it in the other half of each step (paintLedger); at mount_s the world is gone, the cream is full, the page's own
+       clock begins. The hand-off itself is no wipe (wk = 1) and no cross-fade of the page (dk = 1). */
+    const mountS = mountIn ? (sc.world.page.mount_s || LP.FIELD) : 0, mu = mountIn ? clamp01((t - sc.span[0]) / mountS) : 1;
+    const dk = dissolve && !mountIn ? (kin("min_jerk") ? minJerk : quartIO)(clamp01((t - sc.span[0]) / DISSOLVE_S)) : 1;
     const wk = prev && !spiralIn && !suck && !dissolve ? (kin("min_jerk") ? minJerk : quartIO)(clamp01((t - sc.span[0]) / WIPE)) : 1;
     const seaming = prev && wk > 0 && wk < 1;
     /* THE HARD-EDGE CLIP WIPE (restored 2026-09-01). The remotion-ui
@@ -2827,7 +2831,9 @@
       const sk = kin("min_jerk") ? 1 - minJerk(su) : Math.pow(1 - su, 1.6);   /* the collapse: minimum-jerk when the build declares it */
       wA.style.transform = "rotate(" + (SUCK_TURN * (kin("min_jerk") ? minJerk(su) : su)).toFixed(1) + "deg) scale(" + sk.toFixed(4) + ") " + wA.style.transform;
       wA.style.zIndex = 3;   /* the outgoing world rides above the incoming plate while it collapses */
-    } else if (wA.style.zIndex) { wA.style.zIndex = ""; }
+    } else if (mountIn && mu < 1) {   /* the dance: the outgoing world above the mounting page, fading in steps */
+      wA.style.opacity = (1 - Math.floor(mu * MOUNT_STEPS) / MOUNT_STEPS).toFixed(4); wA.style.zIndex = 3;
+    } else { if (wA.style.zIndex) wA.style.zIndex = ""; if (wA.style.opacity !== "") wA.style.opacity = ""; }
     seam.style.opacity = seaming ? 1 : 0;
     seam.style.transform = `translateX(${(sc.exit === "wipe_right" ? (1-wk) : wk) * STAGE_W}px)`;
 
