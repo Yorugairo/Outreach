@@ -53,6 +53,8 @@ def main() -> int:
     ap.add_argument("--model", default="base.en")
     ap.add_argument("--probe", action="store_true",
                     help="gate the 2:00 probe against the script's head")
+    ap.add_argument("--audio", type=Path, default=None, help="one take's mp3 (a short: record_short_take.py)")
+    ap.add_argument("--script", type=Path, default=None, help="the script that take was recorded from")
     args = ap.parse_args()
 
     import json as _json
@@ -89,7 +91,9 @@ def main() -> int:
 
     man = EP / "vo-f/chained-take.json"
     pairs = []
-    if man.exists():
+    if args.audio and args.script:            # a single-part take, any episode (Tokyo, 2026-09-04)
+        pairs.append((args.audio, args.script))
+    elif man.exists():
         for prt in _json.loads(man.read_text(encoding="utf-8"))["parts"]:
             audio = Path(prt["audio"])
             text = EP / f"SCRIPT-G-VO-part{prt['part']}.txt"
