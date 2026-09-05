@@ -37,7 +37,9 @@
         "likeness_status": "fictional",
         "label_as_illustration": true
       },
-      "reference_asset_ids": [],
+      "reference_asset_ids": [
+        "finance-host-v1-model-sheet"
+      ],
       "render_eligible": false,
       "expressions": [
         "happy",
@@ -101,7 +103,9 @@
         "likeness_status": "fictional",
         "label_as_illustration": true
       },
-      "reference_asset_ids": [],
+      "reference_asset_ids": [
+        "finance-host-stick-v1-model-sheet"
+      ],
       "render_eligible": false
     }
   ],
@@ -112,5 +116,5 @@
     "provider_output_render_eligible": false
   },
   "render_eligible": false,
-  "artifact_hash": "ce28d0bd6e1cc3d36041eba5d1bcb32124bb25716cd7ae3adac12dc5be7b37d7"
+  "artifact_hash": "71f8a455b754a3abb8148e2601f24c344655a9bd745dc738befa75c356e81023"
 }

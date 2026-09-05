@@ -77,11 +77,11 @@
   },
   "approval": {
     "auto_confirm": false,
-    "state": "not_requested",
-    "approval_id": null,
-    "expected_account_verified": false
+    "state": "approved",
+    "approval_id": "operator-2026-09-04-contact-sheet",
+    "expected_account_verified": true
   },
-  "status": "awaiting_contact_sheet_review",
+  "status": "approved",
   "outputs": [
     {
       "scene_id": "finance-host-v1-model-sheet",
@@ -217,7 +217,7 @@
       "bytes": 751579
     }
   ],
-  "review_state": "quarantined",
+  "review_state": "approved",
   "render_eligible": false,
   "style_directive": "A light application of woodblock print and vox newspaper with rich anime colors",
   "style_note": "The retention sheet carries the recognised phrase. The stick sheet deliberately does not - 53 §53.10 sets the acquisition variant flat and high-contrast. Operator may override.",
@@ -280,5 +280,9 @@
       "recommendation": "finance-host-stick-v1-model-sheet-v5-raw.png"
     }
   ],
-  "artifact_hash": "35235864621a2bc2a03dfde4af7f717f25dd07e9f87fb37b8e0cfccf865ce0f7"
+  "approved_outputs": {
+    "finance-host-v1": "assets/generated/host/finance-host-v1-model-sheet.png (first roll + back view from x4-raw-4)",
+    "finance-host-stick-v1": "assets/generated/host/finance-host-stick-v1-model-sheet.png (v5-raw, cream deckle)"
+  },
+  "artifact_hash": "87a0bcb89fb8bd800eb8b6c789574b009e2e663dfba616e185abee888ea3134a"
 }
