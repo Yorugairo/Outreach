@@ -6,7 +6,7 @@ Tokyo took a tea break. And left America with an unfunded bar tab. [post-key]
 
 [payoff] [new] The Treasury's table shows Japan holds over a trillion dollars of our debt, and it's been selling since February. [reflect] I ran risk at JPMorgan; when your biggest customer walks, the auction sets your price.
 
-[opponent] The opponent isn't anyone at the Fed; it's a Japanese balance sheet. [desire] [map] Two numbers show where the money went: a Treasury page, and your phone.
+[opponent] The opponent isn't the Fed; it's a Japanese balance sheet. [desire] [map] Two numbers show where the money went: a Treasury page, and your phone.
 
 [pre-key] [promise] In two minutes you'll read both numbers yourself.
 

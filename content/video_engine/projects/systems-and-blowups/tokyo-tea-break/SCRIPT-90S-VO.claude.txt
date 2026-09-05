@@ -6,17 +6,15 @@ Tokyo took a tea break. And left America with an unfunded bar tab. [post-key]
 
 [payoff] [new] The Treasury's table shows Japan holds over a trillion dollars of our debt, and it's been selling since February. [reflect] I ran risk at JPMorgan; when your biggest customer walks, the auction sets your price.
 
-[opponent] The opponent isn't anyone at the Fed; it's a Japanese balance sheet. [desire] [map] Two numbers show where the money went: a Treasury page, and your phone.
+[opponent] The opponent isn't the Fed; it's a Japanese balance sheet. [desire] [map] Two numbers show where the money went: a Treasury page, and your phone.
 
 [pre-key] [promise] [rehook] By the end you'll read both numbers yourself.
 
-[catalyst] [new] Since February, Japan has sold a hundred and twenty-two billion dollars of Treasuries, a tenth of everything it held. [loop] [new] [foreshadow] The Treasury prints the new total monthly, and that print is your first number.
+[catalyst] [new] Since February, Japan has sold a hundred and twenty-two billion dollars of it, a tenth of the pile. [loop] [new] [foreshadow] The Treasury prints the new total monthly, and that print is your first number. The threshold: that pile grows, or it shrinks. Where we sit: a tenth below the February peak. The flip: the pile grows again. If it does, I was wrong.
 
-[loop] [new] Tokyo has pledged ten trillion yen to chips, and if that bet works, it beats lending to Washington. [loop-close] [rehook] Here's what nobody on that panel will say: the money went home, and the tab stayed here. [post-key]
+[loop] [new] Tokyo has pledged ten trillion yen to chips, and if that works, it beats our bonds. [loop-close] [rehook] And here's what nobody says: the money went home, and the tab stayed here. [post-key]
 
-[dip] [signpost] So, the first number: how much American debt Japan holds, printed monthly by the Treasury. The threshold: that pile grows, or it shrinks. Where we sit: a tenth below the February peak. The flip: the pile grows again. If it does, I was wrong, and I'll say it here.
-
-The second number is on your phone. Pull up Meta and find its price-to-earnings multiple: that's how much of the price is profit that hasn't happened yet, and a higher yield is what discounts it.
+[dip] [signpost] So, the second number: it's on your phone. Pull up Meta and find its price-to-earnings multiple: that's the share of the price that's profit not yet earned, and a higher yield discounts it.
 
 Not a panic. Not a plot. Mechanics.
 

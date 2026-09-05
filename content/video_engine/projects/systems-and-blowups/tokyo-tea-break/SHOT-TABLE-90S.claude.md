@@ -63,19 +63,19 @@ Cover the captions: shots 4, 5, 7, 9, 12, 13 read the claim from the page alone;
 10, 15 read the prop (chair + tab, toll gate, the fab); shots 2, 3, 6, 11, 14 are a person and
 need the caption. The judge (`judge_muted_caption.py`) decides, not this table.
 
-## The short (v9, `SCRIPT-90S-VO.claude.txt`, 305 words, 1:44 kit / ~1:36 delivered)
+## The short (v10, `SCRIPT-90S-VO.claude.txt`, 276 words, 1:34 kit / ~1:30 delivered)
 
-Same worlds, same pages, same bars. The operator's cut removes the head-fake and the debate
-and compresses the back end, so the table is the long arm's rows with these changes:
+Same worlds, same pages, same bars. The operator's cut removes the head-fake and the debate,
+folds the tell onto the first number, and compresses the back end:
 
 | # | span (kit) | beat | world / evidence | change from the long arm |
 |---|---|---|---|---|
-| 1-7 | 0:00-0:55 | hook → stakes → archetype + rehook → payoff + reflect → opponent + desire/map → promise → catalyst + loop + foreshadow | as rows 1-7 above (clip A, B, C; the holdings page at 0:15 and 0:25; clip G; the page's third entry) | the promise is "by the end", not "in two minutes"; clip G's captions read *TWO NUMBERS / BY THE END* |
-| 8 | 0:55-1:06 | `[loop]` the ten-trillion-yen pledge; `[loop-close]` `[rehook]` what nobody will say: the money went home, the tab stayed here - `[post-key]` | **clip F** - StickMike walks past the open toll gate toward the lit fab; on *tab stayed here* the bar tab from shot 1 is on the counter in the foreground | rows 8-9 (toll gate, then-vs-now page) are **gone** with the head-fake; `ev-hedge-then-now-v1` is not used in the short |
-| 9 | 1:06-1:25 | `[dip]` `[signpost]` so, the first number - the tell in four parts | **LEDGER PAGE `ev-japan-holdings-v1`, fourth entry**; badge per part as row 12 above | the signpost is one clause, spoken over the page's roll-out |
-| 10 | 1:25-1:37 | the second number: Meta's multiple; a higher yield discounts it | **clip H** (the phone) for 3 s, then **LEDGER PAGE `ev-discount-rate-v1`** with a single `punch` on the 5 % bar at *discounts* | the time-machine paragraph is cut to two sentences; the page shows the arithmetic without the narration walking it |
-| 11 | 1:37-1:40 | Not a panic. Not a plot. Mechanics. | **clip K** | unchanged |
-| 12 | 1:40-1:44 | the Fed still hasn't moved; still on its tea break; `[ring]` that unfunded bar tab is still ours | **clip A2** | unchanged |
+| 1-6 | 0:00-0:43 | hook → stakes → archetype + rehook → payoff + reflect → opponent + desire/map → promise | as rows 1-6 above (clip A, B, C; the holdings page at 0:15 and 0:25; clip G) | the promise is "by the end"; clip G's captions read *TWO NUMBERS / BY THE END* |
+| 7 | 0:43-1:05 | `[catalyst]` sold 122 B, a tenth of the pile; `[loop]` `[foreshadow]` the monthly print is your first number; the threshold / where we sit / the flip | **LEDGER PAGE `ev-japan-holdings-v1`, third entry**: `punch` at *sold*, badge `-9.9 %` at *tenth*, `callout` on the page title at *first number*, the peak line at *threshold*, `-9.9 %` again at *where we sit*, a sketched up-arrow + caption *I WAS WRONG* at *the flip* | the tell is spoken on the same page entry as the catalyst - six events in 22 s, no exit and re-entry |
+| 8 | 1:05-1:15 | `[loop]` the ten-trillion-yen pledge; `[loop-close]` `[rehook]` what nobody says: the money went home, the tab stayed here - `[post-key]` | **clip F** - StickMike walks past the open toll gate toward the lit fab; on *tab stayed here* the bar tab from shot 1 is on the counter in the foreground | rows 8-9 of the long arm (toll gate, then-vs-now page) are gone with the head-fake |
+| 9 | 1:15-1:27 | `[dip]` `[signpost]` so, the second number: your phone; Meta's multiple; a higher yield discounts it | **clip H** (the phone) for 3 s, then **LEDGER PAGE `ev-discount-rate-v1`** with one `punch` on the 5 % bar at *discounts* | the time-machine paragraph is two sentences; the page shows the arithmetic without the narration walking it |
+| 10 | 1:27-1:30 | Not a panic. Not a plot. Mechanics. | **clip K** | unchanged |
+| 11 | 1:30-1:34 | the Fed still hasn't moved; still on its tea break; `[ring]` that unfunded bar tab is still ours | **clip A2** | unchanged |
 
 Eight Omni clips (A, B, C, F, G, H, K, A2), three ledger pages. First proof at 0:15, evidence
-at 0:15 / 0:25 / 0:43 / 1:06 / 1:28; no still over 6 s in the first minute.
+at 0:15 / 0:25 / 0:43 / 1:18; no still over 6 s in the first minute.
