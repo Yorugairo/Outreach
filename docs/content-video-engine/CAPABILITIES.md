@@ -159,7 +159,7 @@ The research of 2026-09-04 as checks that run - each shown failing before passin
 | **Transform lint** — scale/rotate without a declared origin | `scripts/lint_template_transforms.py` | INFO ladder; 11 listed on the template | `tests/test_lint_template_transforms.py` |
 | **G15b ring mechanism** — the close returns the P1 claim's content stems, not just the token | `scripts/gate_opening_structure.py` | WARN pending the grandfathering ruling | `tests/test_gate_ring_mechanism.py` |
 | **Grounding gates** — eye-line on the horizon, feet-anchored sprites, solver per contact beat | `scripts/gate_grounding.py` | INFO-then-FAIL ladder (shot table carries no horizon/contact yet) | `tests/test_gate_grounding.py` |
-| **Muted-caption judge** — a model reads the captionless frame; verdict + `scenery` / `over-dense` diagnosis owned by code | `scripts/judge_muted_caption.py` | CLI, unwired; live via OPENAI_API_KEY, tests replay | `tests/test_judge_muted_caption.py` |
+| **Muted-caption judge** — a model reads the captionless frame; verdict + `scenery` / `over-dense` diagnosis owned by code | `scripts/judge_muted_caption.py` | CLI, unwired; **one headless Codex run per manifest** (the viewer's lane), tests replay | `tests/test_judge_muted_caption.py` |
 
 ## The golden-frame harness (P39 T2/T3, 2026-09-04)
 
