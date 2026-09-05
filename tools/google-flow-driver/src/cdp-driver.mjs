@@ -225,6 +225,23 @@ export class FlowCdpDriver {
   // labels with an icon ligature word ("videocam Video", "crop_16_9 16:9"), so the
   // pattern allows one leading token. It never matches by substring: the left nav's
   // "View videos" contains "Video" and clicking it closes the panel (seen live).
+  /** The drawer's mode toggle: two radios named "image Image" / "videocam Video" (an icon word leads
+   *  the label). Click the one for `mode` and VERIFY aria-checked - an unverified optional click left
+   *  image mode selected and the video model family absent (2026-09-05). */
+  async selectMode(mode) {
+    const page = this.flowPage;
+    const want = mode === 'image' ? /Image$/ : /Video$/;
+    const radio = page.getByRole('radio', { name: want }).filter({ visible: true }).first();
+    if (await radio.count() === 0) throw new Error(`Flow mode toggle for "${mode}" not found in the settings drawer`);
+    if ((await radio.getAttribute('aria-checked')) !== 'true') {
+      await radio.click({ timeout: 8000 });
+      await page.waitForTimeout(700);
+    }
+    const checked = await radio.getAttribute('aria-checked');
+    if (checked !== 'true') throw new Error(`Flow mode "${mode}" did not take (aria-checked=${checked})`);
+    console.log(`[FlowCdpDriver] mode: ${mode} (verified)`);
+  }
+
   async clickExact(label, { required = true } = {}) {
     const page = this.flowPage;
     const esc = label.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -320,7 +337,7 @@ export class FlowCdpDriver {
     // no Image/Video toggle at all: the mode follows the model family picked from the 'Select model family'
     // dropdown (Nano Banana Pro = image, Omni / Veo = video), so the toggle click is optional and the
     // credits/pill checks below are what prove the mode.
-    await this.clickExact(mode === 'image' ? 'Image' : 'Video', { required: false });
+    await this.selectMode(mode);
     if (mode !== 'image' && submode) await this.clickExact(submode === 'frames' ? 'Frames' : 'Ingredients', { required: false });
     if (ratio === '9:16' || ratio === '16:9') {
       const iconName = ratio === '9:16' ? 'crop_9_16' : 'crop_16_9';
