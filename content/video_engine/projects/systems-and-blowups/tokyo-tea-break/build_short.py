@@ -103,12 +103,19 @@ def write_timeline(ws: list[dict], runtime_s: float) -> dict:
 KEYFRAME_EVERY = 12   # frames (0.5 s at 24 fps): a seek decodes at most half a second, not the whole clip
 
 
-def seekable_clip(name: str) -> Path:
+# THE OUTRO (operator, 2026-09-05: "we have the outro built already, same as we used for the first reel - the remotion kit outro"):
+# the Remotion kit lives in content/video_engine/remotion-kit/ (rescued from a session scratchpad); its render is appended
+# after the last word - the ring clip hands off by wipe OUTRO_LEAD before the VO ends, the audio is padded to the new runtime
+OUTRO = HERE / "outro/outro-v2.mov"   # 6.2 s, 1080x1920 ProRes, the DARK starfield the operator showed (2026-09-05): "It's not magic. It's mechanics." / "follow for the next teardown" / @MoneyPhysicsHQ; outro-brand is the cream re-skin, outro-yt the "subscribe" variant
+OUTRO_S, OUTRO_LEAD = 6.2, 0.6
+
+
+def seekable_clip(name: str, src: Path | None = None) -> Path:
     """The Flow clip re-encoded with a keyframe every KEYFRAME_EVERY frames (the originals carry ONE keyframe in 240,
     so every seek decoded from frame 0 and live playback fell behind and held - operator, 2026-09-05). Same
     frames, same length; written once into build-short/clips/ and reused while the source is unchanged."""
     import subprocess
-    src, out = CLIPS / name, BUILD / "clips" / name
+    src, out = (src or CLIPS / name), BUILD / "clips" / name
     out.parent.mkdir(parents=True, exist_ok=True)
     if not out.exists() or out.stat().st_mtime < src.stat().st_mtime:
         subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", str(src), "-an", "-c:v", "libx264", "-profile:v", "high", "-crf", "17", "-preset", "slow",
@@ -116,9 +123,10 @@ def seekable_clip(name: str) -> Path:
     return out
 
 
-def shot_table(ws: list[dict], runtime_s: float) -> list[tuple]:
+def shot_table(ws: list[dict], runtime_s: float, t_outro: float | None = None) -> list[tuple]:
     """The authored rows (SHOT-TABLE-90S.claude.md, the short section), timed from the take."""
-    clip = lambda name: f"clip:{seekable_clip(name).as_posix()}"
+    clip = lambda name, src=None: f"clip:{seekable_clip(name, src).as_posix()}"
+    t_outro = t_outro if t_outro is not None else runtime_s
     hold = f"ledger:ev-japan-holdings-v1:line:{LAST_IDX}:right"
     meta = "ledger:ev-meta-yield-v1:bars:3:right::cut"   # exit=cut: the punch on "discounts it." is the last beat of the row - no retract under it (E40 #5)
     t_stakes = cut_before(ws, "The Fed hasn't moved")
@@ -179,7 +187,12 @@ def shot_table(ws: list[dict], runtime_s: float) -> list[tuple]:
             {"kind": "punch", "at": at("discounts it."), "dur": 0.9, "target": datum(3)},
         ]),
         # 9 the ring: the same counter, colder; StickMike lifts the tab
-        (t_ring, runtime_s, clip("clip-a2-counter-colder-v2.mp4"), (0, 0, 0), [], None, None),
+        (t_ring, t_outro, clip("clip-a2-counter-colder-v2.mp4"), (0, 0, 0), [], None, None),
+        # 10 the outro: the Remotion kit's network-nodes card, "It's not magic. It's mechanics." - it animates on its own for the
+        # whole clip (nodes drift and pulse: verified by eye 2026-09-05), declared as `life` so the pulse gate credits it
+        (t_outro, runtime_s, clip("outro-v2.mp4", OUTRO), (0, 0, 0), [], None, [
+            {"kind": "life", "at": t_outro, "dur": round(runtime_s - t_outro, 2)},
+        ]),
     ]
 
 
@@ -199,7 +212,17 @@ def main() -> int:
     if IP.main() != 0:
         raise SystemExit("edit pauses failed")
     ws = shifted_words()
-    runtime_s = json.loads((BUILD / "timeline.json").read_text(encoding="utf-8"))["runtime_s"]
+    tl_built = json.loads((BUILD / "timeline.json").read_text(encoding="utf-8"))
+    runtime_s = tl_built["runtime_s"]
+    # the outro extends the runtime past the VO: pad the (paused) audio with silence so the player plays to the end
+    t_outro = round(runtime_s - OUTRO_LEAD, 3)
+    runtime_s = round(t_outro + OUTRO_S, 3)
+    audio = BUILD / tl_built.get("paused_audio", "audio/episode.mp3")
+    padded = audio.with_name(audio.stem + "-padded.mp3")
+    subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", str(audio), "-af", f"apad=whole_dur={runtime_s}", "-c:a", "libmp3lame", "-q:a", "2", str(padded)], check=True)
+    padded.replace(audio)
+    tl_built["runtime_s"] = runtime_s
+    (BUILD / "timeline.json").write_text(json.dumps(tl_built, indent=1), encoding="utf-8")
     (BUILD / "evidence-dock.json").write_text("[]", encoding="utf-8")   # the short docks nothing; its proof is pages
     (HERE / "evidence/objects").mkdir(exist_ok=True)
     for s in SERIES:
@@ -209,7 +232,7 @@ def main() -> int:
     CP.BUILD = BUILD
     CP.main()
 
-    rows = shot_table(ws, runtime_s)
+    rows = shot_table(ws, runtime_s, t_outro)
     # the page-enter cue (M11: a sound hit within 1.5 s of the first chart): the page roll-out foley at
     # every ledger entry, on the episode clock, beside the page-relative page_cues (P35 T9)
     plan_path = HERE / "sound/SOUND-PLAN.json"

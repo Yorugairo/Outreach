@@ -109,7 +109,8 @@ SPECIES_EVENTS = {"punch": ("at",), "callout": ("at",), "focus_zoom": ("at", "en
                   "spotlight": ("at", "end"), "squiggle": (), "pull_back": ("at", "end"),
                   "plate_life": "stepping", "beat_freeze": ("at", "end"),
                   "radial": ("at",), "push": ("at",),
-                  "steam": "continuous", "trace": ("at", "end"), "ticker": "stepping"}   # STILL LIFE (2026-09-05)
+                  "steam": "continuous", "trace": ("at", "end"), "ticker": "stepping",   # STILL LIFE (2026-09-05)
+                  "life": "continuous"}   # a DECLARED self-animating world (a rendered outro): the claim is the author's, verified by eye, credited here
 LIFE_CONTINUOUS_S = 1.0    # a continuous life (steam) is one event per second of its window - it never lets the frame go still
 PLATE_LIFE_STEP_S = 0.1    # s9.27 plate life: quantize t to 10 fps; each step is an event
 # s9.27 precedence / s9.28 C3: punch, focus zoom, pull-back and Ken Burns are

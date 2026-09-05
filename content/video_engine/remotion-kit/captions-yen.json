@@ -1,0 +1,954 @@
+{
+ "fps": 30,
+ "durationInFrames": 2072,
+ "groups": [
+  {
+   "start": 0.0,
+   "end": 2.248,
+   "tokens": [
+    {
+     "w": "Why",
+     "kw": false
+    },
+    {
+     "w": "are",
+     "kw": false
+    },
+    {
+     "w": "U.S.",
+     "kw": true
+    },
+    {
+     "w": "tech",
+     "kw": true
+    },
+    {
+     "w": "stocks",
+     "kw": true
+    },
+    {
+     "w": "suddenly",
+     "kw": false
+    }
+   ]
+  },
+  {
+   "start": 2.248,
+   "end": 4.319,
+   "tokens": [
+    {
+     "w": "crashing?",
+     "kw": true
+    },
+    {
+     "w": "It's",
+     "kw": false
+    },
+    {
+     "w": "a",
+     "kw": false
+    },
+    {
+     "w": "trap",
+     "kw": true
+    },
+    {
+     "w": "called",
+     "kw": false
+    },
+    {
+     "w": "the",
+     "kw": false
+    }
+   ]
+  },
+  {
+   "start": 4.319,
+   "end": 6.541,
+   "tokens": [
+    {
+     "w": "yen",
+     "kw": true
+    },
+    {
+     "w": "carry",
+     "kw": false
+    },
+    {
+     "w": "trade.",
+     "kw": false
+    },
+    {
+     "w": "For",
+     "kw": false
+    },
+    {
+     "w": "decades,",
+     "kw": false
+    }
+   ]
+  },
+  {
+   "start": 6.541,
+   "end": 8.56,
+   "tokens": [
+    {
+     "w": "Wall",
+     "kw": false
+    },
+    {
+     "w": "Street",
+     "kw": false
+    },
+    {
+     "w": "used",
+     "kw": false
+    },
+    {
+     "w": "Japan's",
+     "kw": true
+    },
+    {
+     "w": "zero",
+     "kw": true
+    },
+    {
+     "w": "interest",
+     "kw": true
+    }
+   ]
+  },
+  {
+   "start": 8.56,
+   "end": 10.827,
+   "tokens": [
+    {
+     "w": "rates",
+     "kw": false
+    },
+    {
+     "w": "as",
+     "kw": false
+    },
+    {
+     "w": "a",
+     "kw": false
+    },
+    {
+     "w": "massive",
+     "kw": false
+    },
+    {
+     "w": "free",
+     "kw": false
+    },
+    {
+     "w": "ATM",
+     "kw": true
+    }
+   ]
+  },
+  {
+   "start": 10.827,
+   "end": 13.55,
+   "tokens": [
+    {
+     "w": "for",
+     "kw": false
+    },
+    {
+     "w": "global",
+     "kw": false
+    },
+    {
+     "w": "bets.",
+     "kw": false
+    },
+    {
+     "w": "Here's",
+     "kw": false
+    },
+    {
+     "w": "the",
+     "kw": false
+    },
+    {
+     "w": "mechanism.",
+     "kw": false
+    }
+   ]
+  },
+  {
+   "start": 13.55,
+   "end": 15.265,
+   "tokens": [
+    {
+     "w": "A",
+     "kw": false
+    },
+    {
+     "w": "hedge",
+     "kw": true
+    },
+    {
+     "w": "fund",
+     "kw": false
+    },
+    {
+     "w": "borrows",
+     "kw": false
+    },
+    {
+     "w": "1",
+     "kw": true
+    },
+    {
+     "w": "billion",
+     "kw": true
+    }
+   ]
+  },
+  {
+   "start": 15.265,
+   "end": 18.023,
+   "tokens": [
+    {
+     "w": "Japanese",
+     "kw": true
+    },
+    {
+     "w": "yen",
+     "kw": true
+    },
+    {
+     "w": "for",
+     "kw": false
+    },
+    {
+     "w": "almost",
+     "kw": false
+    },
+    {
+     "w": "zero",
+     "kw": true
+    },
+    {
+     "w": "interest.",
+     "kw": true
+    }
+   ]
+  },
+  {
+   "start": 18.023,
+   "end": 19.414,
+   "tokens": [
+    {
+     "w": "They",
+     "kw": false
+    },
+    {
+     "w": "swap",
+     "kw": false
+    },
+    {
+     "w": "that",
+     "kw": false
+    },
+    {
+     "w": "yen",
+     "kw": true
+    },
+    {
+     "w": "for",
+     "kw": false
+    },
+    {
+     "w": "U.S.",
+     "kw": true
+    }
+   ]
+  },
+  {
+   "start": 19.414,
+   "end": 21.242,
+   "tokens": [
+    {
+     "w": "dollars,",
+     "kw": true
+    },
+    {
+     "w": "using",
+     "kw": false
+    },
+    {
+     "w": "the",
+     "kw": false
+    },
+    {
+     "w": "cash",
+     "kw": false
+    },
+    {
+     "w": "to",
+     "kw": false
+    },
+    {
+     "w": "buy",
+     "kw": false
+    }
+   ]
+  },
+  {
+   "start": 21.242,
+   "end": 22.82,
+   "tokens": [
+    {
+     "w": "high-growth",
+     "kw": false
+    },
+    {
+     "w": "tech",
+     "kw": true
+    },
+    {
+     "w": "stocks.",
+     "kw": true
+    }
+   ]
+  },
+  {
+   "start": 22.82,
+   "end": 24.011,
+   "tokens": [
+    {
+     "w": "As",
+     "kw": false
+    },
+    {
+     "w": "long",
+     "kw": false
+    },
+    {
+     "w": "as",
+     "kw": false
+    },
+    {
+     "w": "the",
+     "kw": false
+    },
+    {
+     "w": "stocks",
+     "kw": true
+    },
+    {
+     "w": "go",
+     "kw": false
+    }
+   ]
+  },
+  {
+   "start": 24.011,
+   "end": 26.228,
+   "tokens": [
+    {
+     "w": "up,",
+     "kw": false
+    },
+    {
+     "w": "repaying",
+     "kw": false
+    },
+    {
+     "w": "that",
+     "kw": false
+    },
+    {
+     "w": "zero-interest",
+     "kw": true
+    },
+    {
+     "w": "Japanese",
+     "kw": true
+    }
+   ]
+  },
+  {
+   "start": 26.228,
+   "end": 28.322,
+   "tokens": [
+    {
+     "w": "loan",
+     "kw": false
+    },
+    {
+     "w": "is",
+     "kw": false
+    },
+    {
+     "w": "mathematically",
+     "kw": false
+    },
+    {
+     "w": "easy.",
+     "kw": false
+    }
+   ]
+  },
+  {
+   "start": 28.322,
+   "end": 30.353,
+   "tokens": [
+    {
+     "w": "But",
+     "kw": false
+    },
+    {
+     "w": "there's",
+     "kw": false
+    },
+    {
+     "w": "a",
+     "kw": false
+    },
+    {
+     "w": "hidden",
+     "kw": false
+    },
+    {
+     "w": "vulnerability.",
+     "kw": false
+    }
+   ]
+  },
+  {
+   "start": 30.353,
+   "end": 32.486,
+   "tokens": [
+    {
+     "w": "The",
+     "kw": false
+    },
+    {
+     "w": "entire",
+     "kw": false
+    },
+    {
+     "w": "strategy",
+     "kw": false
+    },
+    {
+     "w": "shatters",
+     "kw": false
+    },
+    {
+     "w": "if",
+     "kw": false
+    },
+    {
+     "w": "the",
+     "kw": false
+    }
+   ]
+  },
+  {
+   "start": 32.486,
+   "end": 34.865,
+   "tokens": [
+    {
+     "w": "Japanese",
+     "kw": true
+    },
+    {
+     "w": "yen",
+     "kw": true
+    },
+    {
+     "w": "suddenly",
+     "kw": false
+    },
+    {
+     "w": "gains",
+     "kw": false
+    },
+    {
+     "w": "value.",
+     "kw": false
+    }
+   ]
+  },
+  {
+   "start": 34.865,
+   "end": 36.182,
+   "tokens": [
+    {
+     "w": "Because",
+     "kw": false
+    },
+    {
+     "w": "the",
+     "kw": false
+    },
+    {
+     "w": "debt",
+     "kw": false
+    },
+    {
+     "w": "is",
+     "kw": false
+    },
+    {
+     "w": "owed",
+     "kw": false
+    },
+    {
+     "w": "in",
+     "kw": false
+    }
+   ]
+  },
+  {
+   "start": 36.182,
+   "end": 38.448,
+   "tokens": [
+    {
+     "w": "yen,",
+     "kw": true
+    },
+    {
+     "w": "a",
+     "kw": false
+    },
+    {
+     "w": "stronger",
+     "kw": false
+    },
+    {
+     "w": "currency",
+     "kw": false
+    },
+    {
+     "w": "makes",
+     "kw": false
+    },
+    {
+     "w": "the",
+     "kw": false
+    }
+   ]
+  },
+  {
+   "start": 38.448,
+   "end": 40.84,
+   "tokens": [
+    {
+     "w": "loan",
+     "kw": false
+    },
+    {
+     "w": "physically",
+     "kw": false
+    },
+    {
+     "w": "heavier.",
+     "kw": false
+    },
+    {
+     "w": "The",
+     "kw": false
+    },
+    {
+     "w": "fund",
+     "kw": false
+    },
+    {
+     "w": "now",
+     "kw": false
+    }
+   ]
+  },
+  {
+   "start": 40.84,
+   "end": 42.726,
+   "tokens": [
+    {
+     "w": "needs",
+     "kw": false
+    },
+    {
+     "w": "significantly",
+     "kw": false
+    },
+    {
+     "w": "more",
+     "kw": false
+    },
+    {
+     "w": "U.S.",
+     "kw": true
+    }
+   ]
+  },
+  {
+   "start": 42.726,
+   "end": 44.574,
+   "tokens": [
+    {
+     "w": "dollars",
+     "kw": true
+    },
+    {
+     "w": "just",
+     "kw": false
+    },
+    {
+     "w": "to",
+     "kw": false
+    },
+    {
+     "w": "repay",
+     "kw": false
+    },
+    {
+     "w": "the",
+     "kw": false
+    },
+    {
+     "w": "exact",
+     "kw": false
+    }
+   ]
+  },
+  {
+   "start": 44.574,
+   "end": 46.818,
+   "tokens": [
+    {
+     "w": "same",
+     "kw": false
+    },
+    {
+     "w": "debt.",
+     "kw": false
+    },
+    {
+     "w": "To",
+     "kw": false
+    },
+    {
+     "w": "avoid",
+     "kw": false
+    },
+    {
+     "w": "defaulting,",
+     "kw": false
+    }
+   ]
+  },
+  {
+   "start": 46.818,
+   "end": 49.141,
+   "tokens": [
+    {
+     "w": "the",
+     "kw": false
+    },
+    {
+     "w": "fund",
+     "kw": false
+    },
+    {
+     "w": "must",
+     "kw": false
+    },
+    {
+     "w": "raise",
+     "kw": false
+    },
+    {
+     "w": "cash",
+     "kw": false
+    },
+    {
+     "w": "immediately.",
+     "kw": false
+    }
+   ]
+  },
+  {
+   "start": 49.141,
+   "end": 50.414,
+   "tokens": [
+    {
+     "w": "So",
+     "kw": false
+    },
+    {
+     "w": "they",
+     "kw": false
+    },
+    {
+     "w": "are",
+     "kw": false
+    },
+    {
+     "w": "forced",
+     "kw": false
+    },
+    {
+     "w": "to",
+     "kw": false
+    },
+    {
+     "w": "sell",
+     "kw": false
+    }
+   ]
+  },
+  {
+   "start": 50.414,
+   "end": 52.471,
+   "tokens": [
+    {
+     "w": "off",
+     "kw": false
+    },
+    {
+     "w": "their",
+     "kw": false
+    },
+    {
+     "w": "most",
+     "kw": false
+    },
+    {
+     "w": "liquid",
+     "kw": false
+    },
+    {
+     "w": "assets,",
+     "kw": false
+    }
+   ]
+  },
+  {
+   "start": 52.471,
+   "end": 54.431,
+   "tokens": [
+    {
+     "w": "those",
+     "kw": false
+    },
+    {
+     "w": "exact",
+     "kw": false
+    },
+    {
+     "w": "U.S.",
+     "kw": true
+    },
+    {
+     "w": "tech",
+     "kw": true
+    },
+    {
+     "w": "stocks.",
+     "kw": true
+    }
+   ]
+  },
+  {
+   "start": 54.431,
+   "end": 56.698,
+   "tokens": [
+    {
+     "w": "Now,",
+     "kw": false
+    },
+    {
+     "w": "multiply",
+     "kw": false
+    },
+    {
+     "w": "this",
+     "kw": false
+    },
+    {
+     "w": "mechanical",
+     "kw": false
+    },
+    {
+     "w": "panic",
+     "kw": false
+    },
+    {
+     "w": "across",
+     "kw": false
+    }
+   ]
+  },
+  {
+   "start": 56.698,
+   "end": 59.155,
+   "tokens": [
+    {
+     "w": "thousands",
+     "kw": false
+    },
+    {
+     "w": "of",
+     "kw": false
+    },
+    {
+     "w": "global",
+     "kw": false
+    },
+    {
+     "w": "funds,",
+     "kw": false
+    },
+    {
+     "w": "all",
+     "kw": false
+    },
+    {
+     "w": "trapped",
+     "kw": true
+    }
+   ]
+  },
+  {
+   "start": 59.155,
+   "end": 61.41,
+   "tokens": [
+    {
+     "w": "in",
+     "kw": false
+    },
+    {
+     "w": "the",
+     "kw": false
+    },
+    {
+     "w": "exact",
+     "kw": false
+    },
+    {
+     "w": "same",
+     "kw": false
+    },
+    {
+     "w": "currency",
+     "kw": false
+    },
+    {
+     "w": "trade.",
+     "kw": false
+    }
+   ]
+  },
+  {
+   "start": 61.41,
+   "end": 63.01,
+   "tokens": [
+    {
+     "w": "They",
+     "kw": false
+    },
+    {
+     "w": "are",
+     "kw": false
+    },
+    {
+     "w": "all",
+     "kw": false
+    },
+    {
+     "w": "forced",
+     "kw": false
+    },
+    {
+     "w": "to",
+     "kw": false
+    },
+    {
+     "w": "liquidate",
+     "kw": true
+    }
+   ]
+  },
+  {
+   "start": 63.01,
+   "end": 65.963,
+   "tokens": [
+    {
+     "w": "simultaneously,",
+     "kw": false
+    },
+    {
+     "w": "triggering",
+     "kw": false
+    },
+    {
+     "w": "a",
+     "kw": false
+    },
+    {
+     "w": "massive",
+     "kw": false
+    },
+    {
+     "w": "crash",
+     "kw": true
+    },
+    {
+     "w": "that",
+     "kw": false
+    }
+   ]
+  },
+  {
+   "start": 65.963,
+   "end": 67.696,
+   "tokens": [
+    {
+     "w": "shrinks",
+     "kw": false
+    },
+    {
+     "w": "the",
+     "kw": false
+    },
+    {
+     "w": "tech",
+     "kw": true
+    },
+    {
+     "w": "stocks",
+     "kw": true
+    },
+    {
+     "w": "right",
+     "kw": false
+    },
+    {
+     "w": "inside",
+     "kw": false
+    }
+   ]
+  },
+  {
+   "start": 67.696,
+   "end": 69.372,
+   "tokens": [
+    {
+     "w": "your",
+     "kw": false
+    },
+    {
+     "w": "401k.",
+     "kw": true
+    }
+   ]
+  }
+ ]
+}

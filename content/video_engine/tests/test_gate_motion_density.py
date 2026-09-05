@@ -517,6 +517,18 @@ def test_m16_the_gate_is_the_pulse_on_a_short():
     assert g["M16"].level == "FAIL" and "add motion" in g["M16"].message, g["M16"]
 
 
+def test_m16_credits_a_declared_life_over_a_caption_hole():
+    """The Remotion outro: a clip world that animates on its own carries a `life` species (a declared claim, verified by eye);
+    the gate credits it as continuous, so the tail of a short with no captions is not a hole."""
+    tl, docks, mp = _short_build(page_at=17.0)
+    tl["aspect"] = "9:16"
+    tl["caption_pages"] = [p for p in tl["caption_pages"] if not (60.0 <= p["s"] < 66.0)]
+    assert _by_id(G.run(tl, docks, mp)[0])["M16"].level == "FAIL"
+    tl["scenes"][-1]["species"] = [{"kind": "life", "at": 60.0, "dur": 6.0}]
+    g = _by_id(G.run(tl, docks, mp)[0])
+    assert g["M16"].level == "PASS", g["M16"]
+
+
 def test_m16_is_info_on_long_form():
     tl, docks, mp = _dense_build(runtime=240.0)
     assert _by_id(G.run(tl, docks, mp)[0])["M16"].level == "INFO"

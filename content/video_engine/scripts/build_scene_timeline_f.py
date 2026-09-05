@@ -72,7 +72,10 @@ KEN = {"scale": 0.04, "x": 14, "y": -10}
 # `at` and `dur` are episode seconds on the same clock as dock enter/exit.
 SPECIES_KINDS = ("punch", "callout", "focus_zoom", "spotlight", "squiggle",
                  "pull_back", "plate_life", "beat_freeze", "radial", "push",
-                 "steam", "trace", "ticker")   # STILL LIFE on an approved still (2026-09-05): a region each
+                 "steam", "trace", "ticker",   # STILL LIFE on an approved still (2026-09-05): a region each
+                 "life")                       # a DECLARED claim: this world animates on its own for the window (a Remotion render, a
+                                               # rendered outro) - the template draws nothing for it; the motion gate credits it as continuous;
+                                               # the agent verifies the claim by eye before declaring it (CHECK-RESPONSIBILITIES: declared)
 # s9.27 precedence / s9.28 C3: punch, focus zoom, pull-back and Ken Burns are
 # mutually exclusive per window - one camera move, never over a Ken Burns drift.
 CAMERA_MOVES = ("punch", "focus_zoom", "pull_back")
@@ -87,6 +90,7 @@ SPECIES_TARGETS = {
     "plate_life": (),
     "beat_freeze": ("point", "region"), "radial": ("point", "region"), "push": ("point", "region"),
     "steam": ("region",), "trace": ("region",), "ticker": ("region",),
+    "life": (),
 }
 TARGET_FIELDS = {"datum": ("index",), "point": ("x", "y"),
                  "region": ("x0", "y0", "x1", "y1"), "span": ("from_word", "to_word")}

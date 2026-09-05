@@ -2945,7 +2945,7 @@
     /* a ledger page may pin its captions to the anchor (page.caption === "anchor"): a host plate's quiet zone is the host's (C5 addendum) */
     const capPinned = sc.world.kind === "ledger" && sc.world.page && sc.world.page.caption === "anchor";
     const stage = !quiet && !capPinned && (TL.caption_modes || []).includes("stage");
-    const PG = TL.caption_pages;
+    const PG = TL.caption_pages, CAP_LAST_HOLD_S = 0.4;
     if (PG) {
       /* KINETIC (doc 29 Part 5): 2-4 word groups punch into the fixed anchor,
          power3.out, scale 1.14 -> 1.0, y 12 -> 0; keywords in the accent.
@@ -2954,6 +2954,9 @@
          single fade, keywords still coloured, no punch-in. */
       let pi = -1;
       for (let i = 0; i < PG.length; i++) if (PG[i].s <= t) pi = i;
+      /* a page holds the strip until the next page - except the LAST one: it clears CAP_LAST_HOLD_S after its own end, so a
+         rendered outro after the last word (the Remotion kit card, 2026-09-05) shows nothing but itself */
+      if (pi === PG.length - 1 && PG[pi].e != null && t > PG[pi].e + CAP_LAST_HOLD_S) pi = -1;
       const pg = pi >= 0 ? PG[pi] : null;
       if (pi !== cap._pi) {
         cap._pi = pi;
