@@ -175,6 +175,12 @@ Active plans live under `.claude/PRPs/plans/` as agent-neutral durable state.
 - `reviewer` performs read-only correctness, security, and regression review.
 - `release_steward` performs reviewed Git mechanics only; push still requires
   current explicit user authorization.
+- The eight roles are real agent types on both sides: `.codex/agents/*.toml`
+  and `.claude/agents/*.md`. **Model policy (2026-09-05): the parent session
+  is Fable and spends its tokens on judgement only; every delegated role runs
+  on Opus 5 (`speedster` on Haiku 4.5).** Offload recall (`explorer`), review
+  (`reviewer`), docs checks (`docs_researcher`), bounded implementation and
+  git mechanics (`release_steward`) instead of doing them in the parent.
 - Keep write sets disjoint and review delegated diffs before integration.
 - Subagent summaries are not proof. Require artifact paths, run IDs, diffs, or
   command output.

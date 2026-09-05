@@ -19,3 +19,7 @@ rather than restating it.
   (Parts 3, 8, 9; §9.15).
 - **Voice** → `docs/portable/VOICE-PACK.md`, docs 33 + 36. **Rulings** →
   `docs/portable/OPERATOR-RULINGS.md` (override everything else).
+- **Delegate, don't do** → the eight roles in `.claude/agents/` run on Opus 5
+  (`speedster` Haiku); the Fable parent keeps judgement, integration and the
+  operator. Recall = `explorer`, review = `reviewer`, git = `release_steward`.
+  Policy: `docs/runbooks/PRP_EXECUTION.md` "Dispatch mapping".

@@ -44,21 +44,36 @@ for a small bounded fix that still requires implementation reasoning, and
 
 ### Dispatch mapping
 
-**The names above are roles, not dispatchable agent types.** A harness exposes
-its own set — commonly `general-purpose`, `Explore`, and `Plan`. A slice owned by
-a role name alone cannot be delegated, so map the role to a type the harness
-actually has, and keep the role because it still carries the intent: how much
-judgement the slice needs, and whether it may write.
+**Since 2026-09-05 the eight roles ARE dispatchable types on both sides.**
+Codex: `.codex/config.toml` + `.codex/agents/<role>.toml` (OpenAI models).
+Claude Code: `.claude/agents/<role>.md` (project scope, committed) — pass the
+bare role name as `subagent_type`. Each definition carries its own model, tools
+and the role's stop conditions, so a slice no longer has to be squeezed into
+`general-purpose` / `Explore` / `Plan`.
 
-| Role | Typical type | Write access |
-| --- | --- | --- |
-| `speedster`, `junior_developer`, `implementation_luna` | `general-purpose` | Yes — the slice's write set only |
-| `explorer`, `docs_researcher`, `reviewer` | `Explore` | No |
-| `architect_sol` | `Plan` | Plan and planning evidence only |
-| `release_steward` | **parent only** | Git operations stay with the parent |
+**Model policy (operator, 2026-09-05).** Fable is the scarce model (a 50 %
+weekly cap) and the clearly stronger one, so it is spent only where judgement
+compounds: the PARENT session — architecture, integration, protected actions,
+operator conversation, completion truth. Everything delegated runs on Opus 5;
+`speedster` runs on Haiku 4.5 because judgement is unnecessary by definition.
+Never launch a delegated role with `model: fable` / an inherited Fable model;
+never pull a role's work back into the parent to "save a dispatch" — the
+dispatch is the saving.
 
-Check the harness's available types before dispatching; if a role has no
-equivalent, the parent keeps the slice rather than substituting a weaker agent.
+| Role | Claude type | Model | Write access |
+| --- | --- | --- | --- |
+| `speedster` | `speedster` | Haiku 4.5 | Yes — the slice's write set only |
+| `junior_developer`, `implementation_luna` | same name | Opus 5 | Yes — the slice's write set only |
+| `explorer`, `docs_researcher`, `reviewer` | same name | Opus 5 | No (read-only Bash: git/sigmap/tests) |
+| `architect_sol` | `architect_sol` | Opus 5 | `.claude/PRPs/plans/` and named planning evidence only |
+| `release_steward` | `release_steward` | Opus 5 | `git add <paths>` / `git commit`; push only with the operator's CURRENT authorization quoted in the brief |
+
+What stays with the parent regardless of model: the decision to dispatch, the
+brief, the review of every delegated diff, the human gates, and anything
+outward-facing. Where a harness lacks a role (a bare `claude -p` run, an older
+build), fall back to the previous mapping — `general-purpose` for writers,
+`Explore` for readers, `Plan` for the architect, parent for git — and say so in
+the PRP's deviations.
 
 Whatever the mapping, four rules survive it:
 
