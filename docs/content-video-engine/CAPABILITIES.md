@@ -161,8 +161,10 @@ python -m pytest content/video_engine/tests/test_golden_frames.py content/video_
 
 A failure names the surface and writes `tests/golden/diffs/<surface>.diff.png` (golden |
 actual | diff x8). The suite includes the perturbation that proves the harness catches a
-one-value CSS change. The capture is deterministic because it neutralises what the shipped
-renderer does not yet (B8): wall-clock transitions, the fit-scaled stage, unawaited fonts.
+one-value CSS change. The capture is deterministic because `prepare_page()` neutralises wall-clock
+transitions, the fit-scaled stage and unawaited fonts - and `render_episode.py` captures
+through the same function at native 2560x1440 (B8 fixed, P39 T6). Runbook:
+`docs/runbooks/RENDER-REGRESSION.md`.
 
 ## The frozen baseline (P39 T1, 2026-09-04)
 

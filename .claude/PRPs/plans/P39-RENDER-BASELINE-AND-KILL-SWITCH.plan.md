@@ -1,7 +1,7 @@
 ---
 id: P39-RENDER-BASELINE-AND-KILL-SWITCH
 title: Freeze the shippable player, catch regressions mechanically, and give every new capability an off switch
-status: review
+status: complete
 operation: chore
 risk: standard
 owner: parent
@@ -144,13 +144,13 @@ a flag read in `scene-evidence-player.template.html`, and one runbook page.
 - Evidence: 2026-09-04 - the template carries `KINETICS_DEFAULTS` (six names from doc 47 s1: `curvature_stroke`, `analytic_spring`, `area_squash`, `arap_morph`, `dqs_skinning`, `prop_attach`, every one `false`), `KIN = defaults + TL.kinetics`, unknown names warned and ignored, and the accessor `kin(name)` that P38's code must gate on. `test_kinetics_flags.py`: the defaults block is all-false and matches the six names (static, always runs); an explicit all-false map and a typo flag both render pixel-identical to the golden (rendered). Golden frames unchanged with the block in place - `--check` PASS. P38 amended: each capability slice gates on its flag.
 
 ### T6: the shipped renderer adopts the proven capture
-- Status: review
+- Status: complete
 - Owner: parent
 - Depends on: T4
 - Write set: `content/video_engine/scripts/render_episode.py`
 - Acceptance: `render_episode.py` captures through the same preparation as `render_baseline.render_frame` - transitions off, `#fit` sized to the stage, fonts awaited, clipped shot - at device scale 4/3 so 2560x1440 is captured, not upscaled. Proven by rendering the `--test` slice before and after: the after is sharper (no resize) and two runs of it are byte-identical. **This changes ep1's pixels** (sharper, no transition smear on dock entrances) and is why the rebuild waits for it.
 - Validate: two `--test` renders byte-identical; `test_golden_frames.py` still green
-- Evidence: 2026-09-04 - `render_baseline.prepare_page()` is the one preparation (chrome off, VO muted, fonts awaited, transitions off, `#fit` sized to the stage) and `render_episode.capture()` now calls it at device scale 4/3 and clips the stage: **2560x1440 captured, never resized** - the resize fallback is gone and a wrong size raises. Proven on a committed source: two 4/3 captures of `chart-callout` are 2560x1440 and byte-identical (`293fc1775ca1`). Harness suite 12/12 green. **Deviation:** the `--test` slice before/after pair is not run because `build-f/audio/episode.mp3` (gitignored) is absent on this machine, so `player.html` cannot be built; that pair is the first step of the ep1 rebuild and closes this slice.
+- Evidence: 2026-09-04 - `render_baseline.prepare_page()` is the one preparation (chrome off, VO muted, fonts awaited, transitions off, `#fit` sized to the stage) and `render_episode.capture()` now calls it at device scale 4/3 and clips the stage: **2560x1440 captured, never resized** - the resize fallback is gone and a wrong size raises. Proven on a committed source: two 4/3 captures of `chart-callout` are 2560x1440 and byte-identical (`293fc1775ca1`). Harness suite 12/12 green. **Then run on ep1 itself:** the audio master, evidence cards and sound cues (all gitignored) were found in the worktree checkout and synced into main; `player.html` rebuilt (81 MB); `render_episode.py --test` twice -> both 2560x1440 x 240 frames, **decoded-frame hash identical `5d6773be56fcbd90`** (the Sep-3 render of the same slice: `8d22b8da4c7a7ca5`). The full slice with the audio mix completes: `build-f/render/steel-and-paper-test-1440p.mp4`. Harness 12/12 green after the change.
 
 ### T5: the runbook
 - Status: complete

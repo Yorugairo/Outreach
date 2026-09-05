@@ -183,7 +183,7 @@ is a luxury for an audience that already stayed.
 
 | # | plan | status | note |
 |---|---|---|---|
-| **P39** | **[Render baseline & kill switch](../../.claude/PRPs/plans/P39-RENDER-BASELINE-AND-KILL-SWITCH.plan.md)** | **running — T1 done** (`player-baseline-2026-09-04` tagged, restore proven byte-identical) | **first.** Tag, golden frames, and a flag per capability. Today there is no rollback point and no way to detect a visual regression |
+| ~~P39~~ | **[Render baseline & kill switch](../../.claude/PRPs/plans/P39-RENDER-BASELINE-AND-KILL-SWITCH.plan.md)** | **COMPLETE 2026-09-04** — tag, four golden frames, determinism proven (and the renderer fixed where it was not: B8), six flags defaulting off, runbook | **first.** Tag, golden frames, and a flag per capability. Today there is no rollback point and no way to detect a visual regression |
 | P37 | [Enforcement layer](../../.claude/PRPs/plans/P37-RESEARCH-ENFORCEMENT-LAYER.plan.md) | draft | 13 gates + V-a; T0 fixes the 9:16 docks, T9 the parallax dials |
 | P38 | [Kinetics capability](../../.claude/PRPs/plans/P38-KINETICS-CAPABILITY-LAYER.plan.md) | draft | the six designed-out items; changes what the video looks like |
 | P40 | **[Measure the first minute](../../.claude/PRPs/plans/P40-MEASURE-THE-FIRST-MINUTE.plan.md)** | draft | E1 metrics against **the one retention curve we hold** (drop at 0:45–1:00). **T1 settles X3 and unblocks M13 with no render and no dependency — the cheapest useful thing in the stack** |
@@ -279,8 +279,7 @@ needs an owner before they can promote to FAIL.
 0.728x stage and `resize()`s it to 2560x1440. Every frame of ep1 that shipped was a LANCZOS
 upscale. Alongside: CSS transitions run on the wall clock during a seek-render (dock
 entrances smear at whatever pace capture runs), and `document.fonts.ready` is not awaited.
-`render_baseline.py` has the fixed capture; **P39 T6** moves it into the shipped renderer.
-The rebuild of ep1 and Tokyo waits for it - a free sharpness gain.
+**FIXED 2026-09-04 (P39 T6):** `render_episode.py` captures through `render_baseline.prepare_page` at native 2560x1440 and raises on a wrong size; two `--test` renders of ep1 hash identical. Ep1 and Tokyo rebuild on the fixed capture.
 
 ### B7 — the Flow driver should verify, not the prompt contain
 
