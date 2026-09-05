@@ -1,7 +1,7 @@
 ---
 id: P43-KINETICS-WAVE-2
 title: Kinetics wave 2 - the curvature stroke, Kubelka-Munk ink, area squash, and the rest of the spring
-status: draft
+status: running
 operation: feature
 risk: standard
 owner: parent
@@ -13,6 +13,8 @@ updated: 2026-09-05
 # Kinetics Wave 2
 
 ## Summary
+
+> **Approved 2026-09-05** by the operator ("proceed with P43"), marked running the same day.
 
 The operator's pick from the 2026-09-05 backlog read: **items 1, 6, 7 and 8** of the
 ready-to-pull-in list in [BACKLOG](../../../docs/content-video-engine/BACKLOG.md) -
@@ -137,13 +139,13 @@ T2-T5 write disjoint files and may run in parallel once T1 lands. T6 is last.
 ## Task Slices
 
 ### T1: the testability unlock - modules inlined into the template
-- Status: pending
+- Status: complete
 - Owner: parent
 - Depends on: none
 - Write set: `content/video_engine/scripts/kinetics/` (new), `content/video_engine/scripts/sync_kinetics.py`, `content/video_engine/tests/test_kinetics_sync.py`, the template (markers only, plus `springPop` / `minJerk` moved into `spring.mjs` / `ease.mjs` at identical output)
 - Acceptance: each module is the source of truth; `sync_kinetics.py` inlines it between `/* KINETICS:BEGIN <name> */` and `/* KINETICS:END */`; `--check` fails on drift; the template still opens standalone; the four goldens are byte-identical after the move.
 - Validate: `python content/video_engine/scripts/sync_kinetics.py --check && python -m pytest content/video_engine/tests/test_kinetics_sync.py content/video_engine/tests/test_kinetics_flags.py -q && python content/video_engine/scripts/render_baseline.py --check`
-- Evidence: pending
+- Evidence: 2026-09-05 - `kinetics/ease.mjs` (minJerk) and `kinetics/spring.mjs` (springPop) are the sources; `sync_kinetics.py --write` inlined both (`in sync (2 module(s))`); `--check` proven to fail on a one-character drift, a missing region, an orphan module and a wrong import order (`test_kinetics_sync.py`, 8 tests); `test_kinetics_flags.py` 4 pass; `node --test tests/kinetics/{ease,spring}.test.mjs` 6 pass (the first test that reaches the template's math; minJerk's rest-at-both-ends vs the quadratic io's a(0)=4, springPop's peak = 1+Mp at pi/wd); `render_baseline.py --check`: PASS 4 golden frames identical. Deviation: minJerk's inline clamp is `Math.min(1, Math.max(0, u))` instead of the template's `clamp01` so the module is self-contained - numerically identical.
 
 ### T2: the curvature-reparameterised stroke
 - Status: pending

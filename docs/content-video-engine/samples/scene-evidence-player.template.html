@@ -465,19 +465,33 @@
      snappy, not sluggish. */
   const expoOut = (k) => (k >= 1 ? 1 : 1 - Math.pow(2, -10 * k));
   const quartIO = (k) => (k < 0.5 ? 8*k*k*k*k : 1 - Math.pow(-2*k+2, 4)/2);
-  /* THE TIMING MODULE (FINDING-the-animation-math, build order 2; wired 2026-09-05 behind kinetics flags):
-     minJerk  - Flash & Hogan 1985, the jerk-minimising quintic 10t^3 - 15t^4 + 6t^5: zero velocity AND zero
-                acceleration at both ends, so a spatial transition neither snaps nor sags (kinetics.min_jerk)
+  /* THE TIMING MODULE (FINDING-the-animation-math, build order 2; wired 2026-09-05 behind kinetics flags). The
+     math below is INLINED from content/video_engine/scripts/kinetics/*.mjs by sync_kinetics.py (P43 T1): edit the
+     module, run `python sync_kinetics.py --write`; `--check` fails the tests on drift. The template stays standalone. */
+  /* KINETICS:BEGIN ease */
+  /* kinetics/ease.mjs - the timing module, part 1 (FINDING-the-animation-math s2; wired 2026-09-05 behind
+     kinetics.min_jerk). This file is the SOURCE OF TRUTH: sync_kinetics.py inlines it into the scene-evidence
+     player between the KINETICS:BEGIN ease and KINETICS:END markers, so the template stays standalone and
+     `node --test` reaches the math (P43 T1). Self-contained on purpose: nothing here reads a template symbol.
+     minJerk - Flash & Hogan 1985, the jerk-minimising quintic 10t^3 - 15t^4 + 6t^5: zero velocity AND zero
+               acceleration at both ends, so a spatial transition neither snaps nor sags. */
+  const minJerk = (u) => { u = Math.min(1, Math.max(0, u)); return u * u * u * (10 - 15 * u + 6 * u * u); };
+  /* KINETICS:END */
+  /* KINETICS:BEGIN spring */
+  /* kinetics/spring.mjs - the settle (42 s42.2; FINDING-the-animation-math s3). SOURCE OF TRUTH, inlined into the
+     scene-evidence player by sync_kinetics.py between KINETICS:BEGIN spring and KINETICS:END (P43 T1). T1 moves
+     the shipping springPop here at identical output; P43 T5 adds the three damping regimes, the velocity and the
+     seek contract around it.
      springPop - the closed-form underdamped mass-spring-damper, x(t) = 1 - e^(-z w t)(cos wd t + z w/wd sin wd t),
-                with the INVERSE model: the overshoot you want (Mp) gives z = -ln Mp / sqrt(pi^2 + ln^2 Mp), and the
-                settle you want (0.25% by u = 1) gives w = 6 / z; peaks at pi / wd. Exact at every seek, lands on 1
-                (kinetics.analytic_spring). */
-  const minJerk = (u) => { u = clamp01(u); return u * u * u * (10 - 15 * u + 6 * u * u); };
+                 with the INVERSE model: the overshoot you want (Mp) gives z = -ln Mp / sqrt(pi^2 + ln^2 Mp), and the
+                 settle you want (0.25% by u = 1) gives w = 6 / z; peaks at pi / wd. Exact at every seek, lands on 1
+                 (kinetics.analytic_spring). */
   const springPop = (u, Mp = 0.04) => {
     if (u >= 1) return 1; if (u <= 0) return 0;
     const L = Math.log(Mp), z = -L / Math.sqrt(Math.PI * Math.PI + L * L), w = 6 / z, wd = w * Math.sqrt(1 - z * z);   /* envelope e^-6 = 0.25% at u = 1: lands, never snaps */
     return 1 - Math.exp(-z * w * u) * (Math.cos(wd * u) + (z * w / wd) * Math.sin(wd * u));
   };
+  /* KINETICS:END */
   /* Pills draw TEXT, so they take the text tier - never the graphic tier. */
   const ACCENT = { sunflower: "var(--t-sunflower)", coral: "var(--t-coral)", teal: "var(--t-teal)", cobalt: "var(--t-cobalt)", ink: "#d7dee6" };
 
