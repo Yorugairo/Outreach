@@ -623,7 +623,7 @@ export class FlowCdpDriver {
       const idOf = (s) => s.split('?')[0];
       while (Date.now() - startTime < timeoutMs) {
         this.resetIdleTimer();
-        const currentSrc = await page.evaluate(({ prevs, seen }) => {
+        const currentSrc = await page.evaluate(({ prevs, seen, count }) => {
           const idOf = (s) => s.split('?')[0];
           // Flow lists renders NEWEST FIRST. Only the top `count` tiles can be this generation's output;
           // an unseen image further down is an older render the lazy grid loaded late, and claiming it
