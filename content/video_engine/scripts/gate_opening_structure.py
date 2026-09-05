@@ -102,6 +102,9 @@ STAKES_BY_S = 30.0              # 38 B3: stakes named by ~0:25 (tolerance to 0:3
 PROMISE_WIN = (30.0, 45.0)      # 38 B4 / MAP s3 / CLK: mini-payoff FIRST, then the promise - by 0:45 (E24 DECIDED 2026-09-03: the
                                 # analyst's roadmap-by-0:45 wins over doc 38's 0:60; the analytics drop lands 0:45-1:00)
 ROADMAP_S = PROMISE_WIN[1]      # kept as a name for the report text
+RING_CLOSE_FRACTION = 0.12       # 47 s2 G-g: "the close" = the script's last 12% - where the ring returns
+RING_MECHANISM_MIN = 2           # content stems the close must share with the P1 claim sentence (beyond the token)
+RING_MECHANISM_LEVEL = "WARN"    # human gate (P37 T4): WARN until the operator rules on grandfathering, then FAIL
 BEAT5_START = 60.0              # 38 B5: the map, desire, opponent, A2, ring - 0:60 to P1 end
 A2_ANCHOR = 60.0                # 38 B5 / P1 QC
 # A3 = kit_spec.a3_anchor_s(runtime): P2.md / MAP s4 QC, A3 + F2 at ~10% of runtime (E23; shared with the audit)
@@ -287,6 +290,20 @@ def _stem_match(a: str, b: str) -> bool:
     return min(len(a), len(b)) >= PACKAGING_PREFIX_MIN and (a.startswith(b) or b.startswith(a))
 
 
+def ring_claim_stems(sentence: str, ring: str) -> set[str]:
+    """The content-word stems of a ring sentence, minus the token itself - the ARGUMENT the
+    token stands for (G15b). Same stop list and stemmer as the packaging check."""
+    out: set[str] = set()
+    ring_stem = _stem(ring.lower())
+    for raw in re.findall(r"[a-z][a-z']*", sentence.lower()):
+        word = raw.replace("'", "")
+        stem = _stem(word)
+        if word in PACKAGING_STOPWORDS or len(stem) < PACKAGING_MIN_STEM or stem == ring_stem:
+            continue
+        out.add(stem)
+    return out
+
+
 def packaging_words(title: str | None, thumb: str | None) -> list[str]:
     """The packaging's content-word stems, in order, deduplicated (E24 G45)."""
     out: list[str] = []
@@ -466,6 +483,26 @@ def run(text: str, timeline: list[dict] | None = None, counterparty: str | None 
         rg = [t for t in tag_times("ring") if in_p1(t)]
         add("G15", "Ring composition: the ring token PLANTED in P1 (38 B5 / doc 32 s5)", "PASS" if rg else "FAIL",
             f"[ring] at {mmss(rg[0])}" if rg else "no ring token (pass --ring <object> or tag [ring])")
+    if ring:
+        # G-g (47 s2, operator 2026-09-04): a ring is a RETURN OF THE ARGUMENT, not an echo of a
+        # noun. The claim sentence the token is planted in must recur in the close - measured as
+        # shared content stems beyond the token itself. A close that says the word while the
+        # argument has drifted is the mis-read listicle shape, and it is what this catches.
+        claim_sents = [s for st, _, s, _ in sents if in_p1(st) and rx.search(s)]
+        close_start = runtime * (1 - RING_CLOSE_FRACTION)
+        # the argument may return across the token sentence and its neighbours - read the three together
+        close_idx = [i for i, (st, _, s, _) in enumerate(sents) if st >= close_start and rx.search(s)]
+        close_sents = [" ".join(sents[j][2] for j in range(max(0, i - 1), min(len(sents), i + 2))) for i in close_idx]
+        claim = ring_claim_stems(claim_sents[0], ring) if claim_sents else set()
+        if not claim_sents:
+            add("G15b", "Ring MECHANISM: the claim planted with the token in P1 recurs in the close (47 s2 G-g)", RING_MECHANISM_LEVEL, "no P1 sentence carries the token, so there is no claim to return to")
+        elif not close_sents:
+            add("G15b", "Ring MECHANISM: the claim planted with the token in P1 recurs in the close (47 s2 G-g)", RING_MECHANISM_LEVEL, f"'{ring}' never returns in the last {int(RING_CLOSE_FRACTION * 100)}% ({mmss(close_start)}+)")
+        else:
+            best = max(len(claim & ring_claim_stems(c, ring)) for c in close_sents)
+            add("G15b", "Ring MECHANISM: the claim planted with the token in P1 recurs in the close (47 s2 G-g)",
+                "PASS" if best >= RING_MECHANISM_MIN else RING_MECHANISM_LEVEL,
+                f"close shares {best} content stem(s) with the P1 claim (need {RING_MECHANISM_MIN}); claim stems: {sorted(claim)[:8]}")
     rf1 = [t for t in tag_times("reflect") if in_p1(t)]
     add("G16", "Glass alternation, P1 80/20: exactly ONE reflection dab (P1)", "PASS" if len(rf1) == 1 else "FAIL", f"{len(rf1)} [reflect] in P1")
     trail = [st for st, _, s, _ in sents if st <= opening_s and re.search("|".join(A.TRAILING_ATTR), s)]

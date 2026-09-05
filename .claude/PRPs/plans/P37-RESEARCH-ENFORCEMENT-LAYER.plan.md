@@ -172,31 +172,31 @@ Write sets are disjoint except T1 and T3, which are sequenced rather than parall
 - Evidence: 2026-09-04 - run on the runner as shipped: `VERDICT: FAIL (5 findings)` naming intensity (6 presets at 1.0), tiling_mode mirror, ssaa 1.0, quality 75, vits model, each with its ruling. The shipped dials are a fixture in `test_gate_comfy_config.py` so the gate keeps proving it catches them; frame laws (Wan 4k+1 / LTX 8n+1), CFG <= 4.5, unscaled FP8 encoder, quantized Wan VAE and the plate-kind matrix each have a passing and a failing case. 4 passed. Also carries G-m/G-n from T8's brief, since they are the same reader.
 
 ### T3: G-d - unanchored transform lint
-- Status: pending
-- Owner: junior_developer
+- Status: complete
+- Owner: parent
 - Depends on: T1
 - Write set: `content/video_engine/scripts/lint_template_transforms.py`, `content/video_engine/tests/test_lint_template_transforms.py`
 - Acceptance: reports every `scale(`/`rotate(` applied without an explicit `transformOrigin` or anchor, as **INFO** on first landing (M08 ladder). A synthetic fixture with one anchored and one unanchored transform reports exactly one.
 - Validate: `python content/video_engine/scripts/lint_template_transforms.py docs/content-video-engine/samples/scene-evidence-player.template.html`
-- Evidence: pending
+- Evidence: 2026-09-04 - INFO ladder. CSS reader (a state rule inherits its base selector's origin) + JS reader (the origin must be set on the same receiver within 40 lines, or the element's CSS anchors it). Fixture: one anchored, one loose in each reader -> exactly one finding each. **First landing on the template: 11 unanchored transforms** - `.lp-ink .g` rotate, `.pill`/`.pill.on` scale, the story-bar `scaleY` builds (1798/1864), badge pop 1887, plate-life `rotate` 2024, the camera `scale` 2066, caption words 2237/2241/2253. That list is P38's anchor work; promoting to FAIL waits on it.
 
 ### T4: G-g - G15 closes on the mechanism, not the token
-- Status: pending
+- Status: review
 - Owner: parent
 - Depends on: none
 - Write set: `content/video_engine/scripts/gate_opening_structure.py`, `content/video_engine/tests/test_gate_ring_mechanism.py`
 - Acceptance: G15 keeps its existing token check and adds a mechanism check - the causal claim named in P1 recurs in the close. A script that echoes a P1 *phrase* while the argument has drifted FAILs the new half and PASSes the old. **Human gate: operator decides grandfathering before merge.**
 - Validate: `python -m pytest content/video_engine/tests/test_gate_ring_mechanism.py -q` then `python content/video_engine/scripts/run_script_gates.py <ep1 script>` to confirm no unintended regression
-- Evidence: pending
+- Evidence: 2026-09-04 - G15b in `gate_opening_structure.py`: the P1 sentence carrying the token yields its content stems (token and stopwords removed, `ring_claim_stems`); the last 12% of the runtime is the close; the token sentence there is read with its two neighbours; PASS at >= 2 shared stems. **Lands as WARN** (`RING_MECHANISM_LEVEL`) until the operator rules on grandfathering - the plan's human gate; flip the constant to FAIL on that ruling. Tests: return-of-the-argument PASSes both halves; token echo with a drifted argument PASSes G15 and WARNs G15b; token absent from the close is named. Opening-structure suite still green. **Ep1 as shipped: G15 PASS, G15b WARN - the P1 sentence that plants `spike` has one content stem (`iron`), so there is no claim for the close to return to.** That is a rewrite note, not a gate defect: the ring must be planted inside the claim.
 
 ### T5: V-a - the muted-caption judge
-- Status: pending
+- Status: complete
 - Owner: parent
 - Depends on: none
 - Write set: `content/video_engine/scripts/judge_muted_caption.py`, `content/video_engine/tests/test_judge_muted_caption.py`
 - Acceptance: given a prior scene (captions on) and a test scene (captions off), returns PASS/FAIL **and a diagnosis** - `scenery` when the model can only describe the frame, `over-dense` when it cannot resolve the claim at all. Ships as a CLI, **not wired to any build**. Tests use recorded model responses, no live call.
 - Validate: `python -m pytest content/video_engine/tests/test_judge_muted_caption.py -q`
-- Evidence: pending
+- Evidence: 2026-09-04 - `judge_muted_caption.py`: CLI, unwired. The model returns `{claim_read, confidence, describes_only_scenery}`; the verdict is code, not the model - `scenery` when it can only describe, `over-dense` when confidence < 0.6 or the read shares < 2 terms with the claim, PASS otherwise. Live mode uses the OpenAI-compatible client (the only SDK on this host; `OPENAI_API_KEY` is not set, so live runs are opt-in); tests replay recorded replies through both the function and the CLI (exit 1 on FAIL). Cadence and cost remain the operator's call.
 
 ### T9: apply the parallax dials - every current value is wrong
 - Status: complete
@@ -217,13 +217,13 @@ Write sets are disjoint except T1 and T3, which are sequenced rather than parall
 - Evidence: 2026-09-04 - `gate_vertical_safe_box.py` reads the template's 9:16 CSS (dock width/left/top, height derived at 514/800 per px of width, caption bottom) and judges rendered rectangles by the same rule. **It FAILs the pre-T0 CSS verbatim** (`#dock-1`/`#dock-2` x 64-1016 into the rail, dock-2 y past 1340, no 9:16 caption rule -> bottom dead zone) and PASSes the template now. G-m/G-n landed in T2's `gate_comfy_config.py` (same reader). 3 tests.
 
 ### T7: G-i, G-j, G-k - the grounding gates
-- Status: pending
-- Owner: implementation_luna
+- Status: complete
+- Owner: parent
 - Depends on: none
 - Write set: `content/video_engine/scripts/gate_grounding.py`, `content/video_engine/tests/test_gate_grounding.py`
 - Acceptance: **G-i** FAILs a shot whose composited figure's eye height misses the plate's declared horizon beyond tolerance (48 §48.7 defect 4 - the "standing in a pit" read). **G-j** FAILs a grounded sprite not anchored `transform-origin: 50% 100%` or bound to an independent screen-space tween rather than floor velocity. **G-k** FAILs a beat that declares contact without declaring a solver, per the FK/IK boundary (48 §48.1). Each needs the shot table to carry a horizon and a contact declaration - if it does not yet, land on the **M08 INFO-then-FAIL ladder** rather than blocking.
 - Validate: `python -m pytest content/video_engine/tests/test_gate_grounding.py -q`
-- Evidence: pending
+- Evidence: 2026-09-04 - `gate_grounding.py` on the INFO-then-FAIL ladder: G-i reads `world.horizon` + cutout `eye_y` (tolerance 0.04), G-j reads the template's `#plife img` anchor (`50% 100%`, present today) and any cutout `tween: screen`, G-k requires `solver: fk|ik` on a beat declaring `contact`. INFO while a timeline declares nothing, FAIL on a wrong declaration, PASS on a right one - each state tested. Ep1: G-i INFO, G-j PASS, G-k INFO - the shot table carries no horizon or contact yet, as the brief predicted.
 
 ### T6: status the 47 rows and register the gates
 - Status: pending
