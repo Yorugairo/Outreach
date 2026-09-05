@@ -21,14 +21,14 @@ invalid — the enumeration IS the review.
 ## P5A — phonetic-anchor candidates (3) — legal ONLY at promise / payoff / tell
 
 - [1] (a×) And left America with an unfunded bar tab. [post-key] [stakes] The Fed hasn't moved, but
-- [2] (y×) On YouTube, sixty-three stick figures. [rehook] Here's what nobody on that panel is watc
+- [2] (y×) On YouTube, it's sixty-three stick figures. [rehook] Here's what nobody on that panel is
 - [8] (p×) Pull up Meta and find its price-to-earnings multiple: that's how much of the price is pr
 
 ## P4C — cadence runs (words per sentence, per paragraph)
 
 - ¶1: [5, 10]
 - ¶2: [11]
-- ¶3: [18, 18]
+- ¶3: [18, 19]
 - ¶4: [37]
 - ¶5: [28]
 - ¶6: [12]
@@ -58,15 +58,15 @@ the agent's, per tag: **true / laundered** (CHECK-RESPONSIBILITIES R2,
 - [map]@0:35  window: PASS — G39  "Two numbers show where the money went: a Treasury page, and your phone."  → verdict: ____
 - [promise]@0:40  window: PASS — G09  "By the end you'll read both numbers yourself."  → verdict: ____
 - [rehook]@0:40  window: PASS — G25  "By the end you'll read both numbers yourself."  → verdict: ____
-- [catalyst]@0:42  window: PASS — G40  "Since February, Japan has sold a hundred and twenty-two billion dollars of Treasuries, a tenth of everything …"  → verdict: ____
-- [new]@0:42  window: PASS — G20, FAIL — G22  "Since February, Japan has sold a hundred and twenty-two billion dollars of Treasuries, a tenth of everything …"  → verdict: ____
-- [loop]@0:49  window: PASS — G19, PASS — G21  "The Treasury prints the new total monthly, and that print is your first number."  → verdict: ____
-- [new]@0:49  window: PASS — G20, FAIL — G22  "The Treasury prints the new total monthly, and that print is your first number."  → verdict: ____
-- [foreshadow]@0:49  window: PASS — G26  "The Treasury prints the new total monthly, and that print is your first number."  → verdict: ____
-- [loop]@0:54  window: PASS — G19, PASS — G21  "Tokyo has pledged ten trillion yen to chips, and if that bet works, it beats lending to Washington."  → verdict: ____
-- [new]@0:54  window: PASS — G20, FAIL — G22  "Tokyo has pledged ten trillion yen to chips, and if that bet works, it beats lending to Washington."  → verdict: ____
-- [loop-close]@1:00  window: PASS — G28  "Here's what nobody on that panel will say: the money went home, and the tab stayed here."  → verdict: ____
-- [rehook]@1:00  window: PASS — G25  "Here's what nobody on that panel will say: the money went home, and the tab stayed here."  → verdict: ____
+- [catalyst]@0:43  window: PASS — G40  "Since February, Japan has sold a hundred and twenty-two billion dollars of Treasuries, a tenth of everything …"  → verdict: ____
+- [new]@0:43  window: PASS — G20, FAIL — G22  "Since February, Japan has sold a hundred and twenty-two billion dollars of Treasuries, a tenth of everything …"  → verdict: ____
+- [loop]@0:50  window: PASS — G19, PASS — G21  "The Treasury prints the new total monthly, and that print is your first number."  → verdict: ____
+- [new]@0:50  window: PASS — G20, FAIL — G22  "The Treasury prints the new total monthly, and that print is your first number."  → verdict: ____
+- [foreshadow]@0:50  window: PASS — G26  "The Treasury prints the new total monthly, and that print is your first number."  → verdict: ____
+- [loop]@0:55  window: PASS — G19, PASS — G21  "Tokyo has pledged ten trillion yen to chips, and if that bet works, it beats lending to Washington."  → verdict: ____
+- [new]@0:55  window: PASS — G20, FAIL — G22  "Tokyo has pledged ten trillion yen to chips, and if that bet works, it beats lending to Washington."  → verdict: ____
+- [loop-close]@1:01  window: PASS — G28  "Here's what nobody on that panel will say: the money went home, and the tab stayed here."  → verdict: ____
+- [rehook]@1:01  window: PASS — G25  "Here's what nobody on that panel will say: the money went home, and the tab stayed here."  → verdict: ____
 - [dip]@1:06  window: PASS — G29  "So, the first number: how much American debt Japan holds, printed monthly by the Treasury."  → verdict: ____
 - [signpost]@1:06  window: PASS — G42  "So, the first number: how much American debt Japan holds, printed monthly by the Treasury."  → verdict: ____
-- [ring]@1:41  window: n/a — outside opening window (P2 ends 1:05)  "And that unfunded bar tab is still ours."  → verdict: ____
+- [ring]@1:42  window: n/a — outside opening window (P2 ends 1:05)  "And that unfunded bar tab is still ours."  → verdict: ____

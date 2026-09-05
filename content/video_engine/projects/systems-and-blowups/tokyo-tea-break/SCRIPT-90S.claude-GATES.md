@@ -1,25 +1,25 @@
 # SCRIPT GATES - SCRIPT-90S-VO.claude.txt
 
 script: SCRIPT-90S-VO.claude.txt
-generated: 2026-09-05T05:17:47+00:00
-script_hash: 05122b304118f46b13e523bebf128963b34bfa09b9ebe79b1c3aa56b972ebcad
+generated: 2026-09-05T05:18:11+00:00
+script_hash: e6f5341e74b842c8ab5e07f2116d9ae76cd8a2f2b35d90a02fec06cd6a6cb97c
 timing_source: estimated
 
 TOOLS      lint: exit 0, 0 fails | audit: exit 0, 0/1, timing=estimated |
            opening gate: exit 1, 3/2/40/10 | screens: SCRIPT-90S.claude-SCREENS.md, 7 items
 
-VIEWER     SCRIPT-90S.claude-VIEWER.md
-  [FAIL ] V01 18/24 declared beats perceived (75%); unperceived: [stakes] w0, [promise] w2, [rehook] w2, [loop-close] w4, [rehook] w4, [ring] w6
-  [WARN ] V04 1 window(s) with something unfollowable: 0:00-0:15 The reference to sixty-three stick figures is unclear.
-  [PASS ] V02 no run of 2+ windows without a concrete new thing
-  [PASS ] V03 open loop live in 7/7 windows (100%)
+VIEWER     SCRIPT-90S.claude-VIEWER.md  (advisory: --no-viewer-gate - these rows do not change the VERDICT)
+  [INFO ] V01 18/24 declared beats perceived (75%); unperceived: [stakes] w0, [promise] w2, [rehook] w2, [loop-close] w4, [rehook] w4, [ring] w6
+  [INFO ] V04 1 window(s) with something unfollowable: 0:00-0:15 The reference to sixty-three stick figures is unclear.
+  [INFO ] V02 no run of 2+ windows without a concrete new thing
+  [INFO ] V03 open loop live in 7/7 windows (100%)
   [INFO ] V05 gain per window: median 4, 0 dead of 7 reported
 
 ## lint_script_pattern.py
 exit 0
 
 ```
-stats: {'sentence_mean': 10.9, 'sentence_count': 28, 'word_count': 305, 'rehook_positions_pct': [15, 60]}
+stats: {'sentence_mean': 10.9, 'sentence_count': 28, 'word_count': 306, 'rehook_positions_pct': [16, 60]}
 RESULT: clean
 ```
 
@@ -28,13 +28,13 @@ exit 0
 
 ```
 === SCRIPT-90S-VO.claude.txt ===
-             chars: 1686
-         runtime_s: 105.3
+             chars: 1691
+         runtime_s: 105.6
            runtime: 1m 45s
          sentences: 28
      sentence_mean: 10.9
-      break_ration: 1.78
-  sentence_mean_carrying: 11.9
+      break_ration: 1.77
+  sentence_mean_carrying: 12.0
   short_figure_share: 10.7%
     sentence_stdev: 6.2
      over_20_share: 3.6%
@@ -68,12 +68,12 @@ exit 1
      density_bands: loops (2, 3), new-info (4, 6)
          a3_anchor: 0:10
              cycle: checked 0:00-1:44; longest gap 35s from 1:06
-      unit_windows: ['P3 unit 1 0:17-0:47', 'P5 unit 2 0:57-1:30']
+      unit_windows: ['P3 unit 1 0:17-0:47', 'P5 unit 2 0:57-1:31']
       counterparty: Japan
               ring: tab
          packaging: title='Tokyo Tea Break' thumb=None thumb_file=None
     not_gated_here: Truby Battle / Self-Revelation / New Equilibrium, Snyder midpoint, chiastic center, ring CLOSE (P4-P6)
-    beats_declared: {'stakes': ['0:04'], 'archetype': ['0:07'], 'tricolon': ['0:07'], 'rehook': ['0:15', '0:40', '1:00'], 'payoff': ['0:19'], 'new': ['0:19', '0:42', '0:49', '0:54'], 'reflect': ['0:26'], 'opponent': ['0:31'], 'desire': ['0:35'], 'map': ['0:35'], 'promise': ['0:40'], 'catalyst': ['0:42'], 'loop': ['0:49', '0:54'], 'foreshadow': ['0:49'], 'loop-close': ['1:00'], 'dip': ['1:06'], 'signpost': ['1:06'], 'ring': ['1:41']}
+    beats_declared: {'stakes': ['0:04'], 'archetype': ['0:07'], 'tricolon': ['0:07'], 'rehook': ['0:15', '0:40', '1:01'], 'payoff': ['0:19'], 'new': ['0:19', '0:43', '0:50', '0:55'], 'reflect': ['0:26'], 'opponent': ['0:31'], 'desire': ['0:35'], 'map': ['0:35'], 'promise': ['0:40'], 'catalyst': ['0:43'], 'loop': ['0:50', '0:55'], 'foreshadow': ['0:50'], 'loop-close': ['1:01'], 'dip': ['1:06'], 'signpost': ['1:06'], 'ring': ['1:42']}
 
   [FAIL ] G22 3 [new] in P2
           PLATFORM density: 4-6 new-info beats at this runtime (P2 geometry)
@@ -107,7 +107,7 @@ exit 1
           The promise carries a date or number and is calculable (38 B4 / doc 35)
   [PASS ] G12 1 declared in P1
           Rhetoric: ONE tricolon on the thesis line, none elsewhere in P1 (P1 B4 / doc 32 s3)
-  [PASS ] G13 A2 at 1:00
+  [PASS ] G13 A2 at 1:01
           PLATFORM rehook A2 ~1:00, template family (38 B5 / P1 QC)
   [PASS ] G14 [opponent] at 0:31
           Truby Opponent / McKee antagonism: the opponent named, a MECHANISM never a villain (38 B5)
@@ -121,7 +121,7 @@ exit 1
           HARD GATE attribution-first; [verify] never in hook/promise (P1/P2 / doc 32 s1)
   [PASS ] G18 1 marks in P1 (1.7/min)
           Humes pauses rationed: ~three per minute maximum (P1)
-  [PASS ] G19 closed by [loop] at 0:49
+  [PASS ] G19 closed by [loop] at 0:50
           The catalyst is a micro loop CLOSED inside 30-60s, not exposition (P2)
   [PASS ] G20 longest gap 8s
           PLATFORM new-info cadence: something genuinely new every 15-30s (P2)
@@ -131,11 +131,11 @@ exit 1
           McKee gap, sentence-level: BUT/THEREFORE only - zero AND-THEN chains (P2 / doc 32 s4)
   [PASS ] G25 A3 at 0:15
           PLATFORM rehook A3 at ~10% of runtime = 0:10 (P2 / MAP s4 QC; audit and gate share kit_spec.a3_anchor_s, E23)
-  [PASS ] G26 [foreshadow] at 0:49
+  [PASS ] G26 [foreshadow] at 0:50
           Foreshadow schedule F2 at ~10%: the promise sighted again, none of it delivered (P2 / MAP s2)
   [PASS ] G27 'tab' 1x in P2
           Ring composition: token TOUCHED exactly once in P2, unresolved (P2 / doc 32 s5)
-  [PASS ] G28 [loop-close] at 1:00
+  [PASS ] G28 [loop-close] at 1:01
           Macro loop 1 CLOSES on a partial answer that opens the bigger question (P2 / MAP s4, LIFO ledger)
   [PASS ] G29 [dip] at 1:06
           PLATFORM breathing dip IMMEDIATELY after the macro close - 2-3 beats of room tone (P2)
@@ -157,7 +157,7 @@ exit 1
           Truby Desire named: the goal the video pursues (38 B5)
   [PASS ] G39 [map] at 0:35
           Auditory handrail: map-not-territory signpost - tease the WHAT, hold the HOW (38 B5 / doc 32 s1)
-  [PASS ] G40 [catalyst] at 0:42
+  [PASS ] G40 [catalyst] at 0:43
           Snyder Catalyst / McKee inciting incident: lands as a story beat in P2's first ~60s (P2)
   [PASS ] G42 [signpost] at 1:06
           Auditory handrail: exit P2 on a transition signpost into the Gap (P2 / doc 32 s1)
@@ -198,4 +198,4 @@ exit 0
 SCRIPT-90S.claude-SCREENS.md: X1=3 deixis=0 junctions=1 anchors=3 declared=24
 ```
 
-VERDICT: FAIL (1 failing tools, 1 viewer)
+VERDICT: FAIL (1 failing tools)
