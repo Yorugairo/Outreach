@@ -1,0 +1,21 @@
+{
+ "model": "wan2.1_vace_1.3B_fp16.safetensors",
+ "num_frames": 81,
+ "cfg": 4.0,
+ "steps": 25,
+ "shift": 3.0,
+ "text_encoder": "umt5_xxl_fp8_e4m3fn_scaled.safetensors",
+ "vae": "wan_2.1_vae.safetensors",
+ "width": 480,
+ "height": 864,
+ "fps": 16,
+ "life": [
+  0.78,
+  0.4,
+  0.98,
+  0.56
+ ],
+ "prompt": "A thin plume of steam rises from the hot coffee mug and curls upward, slowly drifting and thinning into the warm lamplight. The mug, the desk, the laptop and the room stay perfectly still. Sketched charcoal illustration on cream paper, soft ambient motion only.",
+ "still": "content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\omni-video\\stills\\approved\\still-p-viewers-desk.png",
+ "seed": 4242
+}
