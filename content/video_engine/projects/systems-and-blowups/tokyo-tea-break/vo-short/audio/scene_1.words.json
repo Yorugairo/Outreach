@@ -1,0 +1,1187 @@
+{
+  "scene_id": 1,
+  "duration_s": 81.223,
+  "words": [
+    {
+      "w": "Tokyo",
+      "start_s": 0.0,
+      "end_s": 0.453
+    },
+    {
+      "w": "took",
+      "start_s": 0.511,
+      "end_s": 0.662
+    },
+    {
+      "w": "a",
+      "start_s": 0.708,
+      "end_s": 0.731
+    },
+    {
+      "w": "tea",
+      "start_s": 0.778,
+      "end_s": 0.929
+    },
+    {
+      "w": "break.",
+      "start_s": 0.975,
+      "end_s": 1.451
+    },
+    {
+      "w": "And",
+      "start_s": 1.776,
+      "end_s": 1.927
+    },
+    {
+      "w": "left",
+      "start_s": 1.985,
+      "end_s": 2.183
+    },
+    {
+      "w": "America",
+      "start_s": 2.229,
+      "end_s": 2.763
+    },
+    {
+      "w": "with",
+      "start_s": 2.914,
+      "end_s": 3.111
+    },
+    {
+      "w": "an",
+      "start_s": 3.158,
+      "end_s": 3.216
+    },
+    {
+      "w": "unfunded",
+      "start_s": 3.286,
+      "end_s": 3.831
+    },
+    {
+      "w": "bar",
+      "start_s": 3.878,
+      "end_s": 4.063
+    },
+    {
+      "w": "tab.",
+      "start_s": 4.133,
+      "end_s": 4.737
+    },
+    {
+      "w": "The",
+      "start_s": 5.178,
+      "end_s": 5.283
+    },
+    {
+      "w": "Fed",
+      "start_s": 5.341,
+      "end_s": 5.538
+    },
+    {
+      "w": "hasn't",
+      "start_s": 5.596,
+      "end_s": 5.851
+    },
+    {
+      "w": "moved,",
+      "start_s": 5.898,
+      "end_s": 6.374
+    },
+    {
+      "w": "but",
+      "start_s": 6.49,
+      "end_s": 6.641
+    },
+    {
+      "w": "your",
+      "start_s": 6.676,
+      "end_s": 6.792
+    },
+    {
+      "w": "borrowing",
+      "start_s": 6.827,
+      "end_s": 7.256
+    },
+    {
+      "w": "costs",
+      "start_s": 7.326,
+      "end_s": 7.593
+    },
+    {
+      "w": "climbed",
+      "start_s": 7.639,
+      "end_s": 7.953
+    },
+    {
+      "w": "anyway.",
+      "start_s": 7.988,
+      "end_s": 8.58
+    },
+    {
+      "w": "Three",
+      "start_s": 9.091,
+      "end_s": 9.334
+    },
+    {
+      "w": "men",
+      "start_s": 9.381,
+      "end_s": 9.532
+    },
+    {
+      "w": "in",
+      "start_s": 9.59,
+      "end_s": 9.659
+    },
+    {
+      "w": "blue",
+      "start_s": 9.718,
+      "end_s": 9.927
+    },
+    {
+      "w": "ties",
+      "start_s": 9.961,
+      "end_s": 10.298
+    },
+    {
+      "w": "blame",
+      "start_s": 10.356,
+      "end_s": 10.635
+    },
+    {
+      "w": "the",
+      "start_s": 10.67,
+      "end_s": 10.739
+    },
+    {
+      "w": "deficit,",
+      "start_s": 10.786,
+      "end_s": 11.389
+    },
+    {
+      "w": "the",
+      "start_s": 11.505,
+      "end_s": 11.61
+    },
+    {
+      "w": "Fed,",
+      "start_s": 11.68,
+      "end_s": 12.005
+    },
+    {
+      "w": "or",
+      "start_s": 12.04,
+      "end_s": 12.144
+    },
+    {
+      "w": "the",
+      "start_s": 12.19,
+      "end_s": 12.26
+    },
+    {
+      "w": "vibes",
+      "start_s": 12.307,
+      "end_s": 12.736
+    },
+    {
+      "w": "at",
+      "start_s": 12.771,
+      "end_s": 12.852
+    },
+    {
+      "w": "Jackson",
+      "start_s": 12.91,
+      "end_s": 13.282
+    },
+    {
+      "w": "Hole.",
+      "start_s": 13.328,
+      "end_s": 13.804
+    },
+    {
+      "w": "On",
+      "start_s": 14.245,
+      "end_s": 14.42
+    },
+    {
+      "w": "YouTube,",
+      "start_s": 14.489,
+      "end_s": 15.047
+    },
+    {
+      "w": "it's",
+      "start_s": 15.093,
+      "end_s": 15.302
+    },
+    {
+      "w": "sixty-three",
+      "start_s": 15.337,
+      "end_s": 15.917
+    },
+    {
+      "w": "stick",
+      "start_s": 15.94,
+      "end_s": 16.161
+    },
+    {
+      "w": "figures.",
+      "start_s": 16.219,
+      "end_s": 16.8
+    },
+    {
+      "w": "Here's",
+      "start_s": 17.008,
+      "end_s": 17.241
+    },
+    {
+      "w": "what",
+      "start_s": 17.276,
+      "end_s": 17.403
+    },
+    {
+      "w": "nobody",
+      "start_s": 17.473,
+      "end_s": 17.844
+    },
+    {
+      "w": "on",
+      "start_s": 17.914,
+      "end_s": 17.995
+    },
+    {
+      "w": "that",
+      "start_s": 18.042,
+      "end_s": 18.169
+    },
+    {
+      "w": "panel",
+      "start_s": 18.239,
+      "end_s": 18.506
+    },
+    {
+      "w": "is",
+      "start_s": 18.564,
+      "end_s": 18.634
+    },
+    {
+      "w": "watching:",
+      "start_s": 18.704,
+      "end_s": 19.214
+    },
+    {
+      "w": "our",
+      "start_s": 19.458,
+      "end_s": 19.598
+    },
+    {
+      "w": "biggest",
+      "start_s": 19.667,
+      "end_s": 19.957
+    },
+    {
+      "w": "lender.",
+      "start_s": 20.015,
+      "end_s": 20.515
+    },
+    {
+      "w": "The",
+      "start_s": 20.84,
+      "end_s": 20.956
+    },
+    {
+      "w": "Treasury's",
+      "start_s": 21.002,
+      "end_s": 21.432
+    },
+    {
+      "w": "table",
+      "start_s": 21.478,
+      "end_s": 21.78
+    },
+    {
+      "w": "shows",
+      "start_s": 21.815,
+      "end_s": 22.059
+    },
+    {
+      "w": "Japan",
+      "start_s": 22.117,
+      "end_s": 22.5
+    },
+    {
+      "w": "holds",
+      "start_s": 22.57,
+      "end_s": 22.802
+    },
+    {
+      "w": "over",
+      "start_s": 22.848,
+      "end_s": 23.046
+    },
+    {
+      "w": "a",
+      "start_s": 23.115,
+      "end_s": 23.15
+    },
+    {
+      "w": "trillion",
+      "start_s": 23.22,
+      "end_s": 23.673
+    },
+    {
+      "w": "dollars",
+      "start_s": 23.731,
+      "end_s": 24.067
+    },
+    {
+      "w": "of",
+      "start_s": 24.102,
+      "end_s": 24.16
+    },
+    {
+      "w": "our",
+      "start_s": 24.218,
+      "end_s": 24.334
+    },
+    {
+      "w": "debt,",
+      "start_s": 24.392,
+      "end_s": 24.741
+    },
+    {
+      "w": "and",
+      "start_s": 24.787,
+      "end_s": 24.938
+    },
+    {
+      "w": "it's",
+      "start_s": 24.985,
+      "end_s": 25.101
+    },
+    {
+      "w": "been",
+      "start_s": 25.135,
+      "end_s": 25.263
+    },
+    {
+      "w": "selling",
+      "start_s": 25.31,
+      "end_s": 25.623
+    },
+    {
+      "w": "since",
+      "start_s": 25.681,
+      "end_s": 25.902
+    },
+    {
+      "w": "February.",
+      "start_s": 25.937,
+      "end_s": 26.738
+    },
+    {
+      "w": "I",
+      "start_s": 27.248,
+      "end_s": 27.318
+    },
+    {
+      "w": "ran",
+      "start_s": 27.434,
+      "end_s": 27.62
+    },
+    {
+      "w": "risk",
+      "start_s": 27.713,
+      "end_s": 27.98
+    },
+    {
+      "w": "at",
+      "start_s": 28.038,
+      "end_s": 28.107
+    },
+    {
+      "w": "JPMorgan;",
+      "start_s": 28.165,
+      "end_s": 29.082
+    },
+    {
+      "w": "when",
+      "start_s": 29.257,
+      "end_s": 29.408
+    },
+    {
+      "w": "your",
+      "start_s": 29.454,
+      "end_s": 29.558
+    },
+    {
+      "w": "biggest",
+      "start_s": 29.605,
+      "end_s": 29.872
+    },
+    {
+      "w": "customer",
+      "start_s": 29.907,
+      "end_s": 30.29
+    },
+    {
+      "w": "walks,",
+      "start_s": 30.348,
+      "end_s": 30.859
+    },
+    {
+      "w": "the",
+      "start_s": 30.94,
+      "end_s": 31.056
+    },
+    {
+      "w": "auction",
+      "start_s": 31.114,
+      "end_s": 31.439
+    },
+    {
+      "w": "sets",
+      "start_s": 31.497,
+      "end_s": 31.718
+    },
+    {
+      "w": "your",
+      "start_s": 31.741,
+      "end_s": 31.846
+    },
+    {
+      "w": "price.",
+      "start_s": 31.892,
+      "end_s": 32.403
+    },
+    {
+      "w": "The",
+      "start_s": 32.647,
+      "end_s": 32.763
+    },
+    {
+      "w": "opponent",
+      "start_s": 32.809,
+      "end_s": 33.181
+    },
+    {
+      "w": "isn't",
+      "start_s": 33.227,
+      "end_s": 33.448
+    },
+    {
+      "w": "the",
+      "start_s": 33.483,
+      "end_s": 33.552
+    },
+    {
+      "w": "Fed;",
+      "start_s": 33.61,
+      "end_s": 34.052
+    },
+    {
+      "w": "it's",
+      "start_s": 34.295,
+      "end_s": 34.481
+    },
+    {
+      "w": "a",
+      "start_s": 34.516,
+      "end_s": 34.551
+    },
+    {
+      "w": "Japanese",
+      "start_s": 34.632,
+      "end_s": 35.108
+    },
+    {
+      "w": "balance",
+      "start_s": 35.154,
+      "end_s": 35.526
+    },
+    {
+      "w": "sheet.",
+      "start_s": 35.549,
+      "end_s": 35.909
+    },
+    {
+      "w": "Two",
+      "start_s": 36.083,
+      "end_s": 36.269
+    },
+    {
+      "w": "numbers",
+      "start_s": 36.339,
+      "end_s": 36.722
+    },
+    {
+      "w": "show",
+      "start_s": 36.85,
+      "end_s": 37.082
+    },
+    {
+      "w": "where",
+      "start_s": 37.117,
+      "end_s": 37.279
+    },
+    {
+      "w": "the",
+      "start_s": 37.314,
+      "end_s": 37.384
+    },
+    {
+      "w": "money",
+      "start_s": 37.43,
+      "end_s": 37.627
+    },
+    {
+      "w": "went:",
+      "start_s": 37.674,
+      "end_s": 38.092
+    },
+    {
+      "w": "a",
+      "start_s": 38.301,
+      "end_s": 38.382
+    },
+    {
+      "w": "Treasury",
+      "start_s": 38.44,
+      "end_s": 38.812
+    },
+    {
+      "w": "page,",
+      "start_s": 38.87,
+      "end_s": 39.334
+    },
+    {
+      "w": "and",
+      "start_s": 39.392,
+      "end_s": 39.566
+    },
+    {
+      "w": "your",
+      "start_s": 39.636,
+      "end_s": 39.764
+    },
+    {
+      "w": "phone.",
+      "start_s": 39.81,
+      "end_s": 40.333
+    },
+    {
+      "w": "By",
+      "start_s": 40.576,
+      "end_s": 40.727
+    },
+    {
+      "w": "the",
+      "start_s": 40.785,
+      "end_s": 40.867
+    },
+    {
+      "w": "end",
+      "start_s": 40.948,
+      "end_s": 41.25
+    },
+    {
+      "w": "you'll",
+      "start_s": 41.633,
+      "end_s": 41.842
+    },
+    {
+      "w": "read",
+      "start_s": 41.888,
+      "end_s": 42.062
+    },
+    {
+      "w": "both",
+      "start_s": 42.132,
+      "end_s": 42.341
+    },
+    {
+      "w": "numbers",
+      "start_s": 42.399,
+      "end_s": 42.713
+    },
+    {
+      "w": "yourself.",
+      "start_s": 42.747,
+      "end_s": 43.398
+    },
+    {
+      "w": "Since",
+      "start_s": 44.001,
+      "end_s": 44.245
+    },
+    {
+      "w": "February,",
+      "start_s": 44.292,
+      "end_s": 44.768
+    },
+    {
+      "w": "Japan",
+      "start_s": 44.802,
+      "end_s": 45.197
+    },
+    {
+      "w": "has",
+      "start_s": 45.267,
+      "end_s": 45.383
+    },
+    {
+      "w": "sold",
+      "start_s": 45.429,
+      "end_s": 45.673
+    },
+    {
+      "w": "a",
+      "start_s": 45.72,
+      "end_s": 45.743
+    },
+    {
+      "w": "hundred",
+      "start_s": 45.801,
+      "end_s": 46.068
+    },
+    {
+      "w": "and",
+      "start_s": 46.091,
+      "end_s": 46.161
+    },
+    {
+      "w": "twenty-two",
+      "start_s": 46.184,
+      "end_s": 46.614
+    },
+    {
+      "w": "billion",
+      "start_s": 46.683,
+      "end_s": 46.985
+    },
+    {
+      "w": "dollars",
+      "start_s": 47.043,
+      "end_s": 47.391
+    },
+    {
+      "w": "of",
+      "start_s": 47.438,
+      "end_s": 47.508
+    },
+    {
+      "w": "it,",
+      "start_s": 47.554,
+      "end_s": 47.716
+    },
+    {
+      "w": "a",
+      "start_s": 47.763,
+      "end_s": 47.833
+    },
+    {
+      "w": "tenth",
+      "start_s": 47.925,
+      "end_s": 48.204
+    },
+    {
+      "w": "of",
+      "start_s": 48.239,
+      "end_s": 48.297
+    },
+    {
+      "w": "the",
+      "start_s": 48.343,
+      "end_s": 48.413
+    },
+    {
+      "w": "pile.",
+      "start_s": 48.448,
+      "end_s": 48.912
+    },
+    {
+      "w": "The",
+      "start_s": 49.295,
+      "end_s": 49.412
+    },
+    {
+      "w": "Treasury",
+      "start_s": 49.458,
+      "end_s": 49.83
+    },
+    {
+      "w": "prints",
+      "start_s": 49.899,
+      "end_s": 50.166
+    },
+    {
+      "w": "the",
+      "start_s": 50.224,
+      "end_s": 50.294
+    },
+    {
+      "w": "new",
+      "start_s": 50.352,
+      "end_s": 50.468
+    },
+    {
+      "w": "total",
+      "start_s": 50.526,
+      "end_s": 50.816
+    },
+    {
+      "w": "monthly,",
+      "start_s": 50.874,
+      "end_s": 51.35
+    },
+    {
+      "w": "and",
+      "start_s": 51.397,
+      "end_s": 51.548
+    },
+    {
+      "w": "that",
+      "start_s": 51.617,
+      "end_s": 51.78
+    },
+    {
+      "w": "print",
+      "start_s": 51.85,
+      "end_s": 52.035
+    },
+    {
+      "w": "is",
+      "start_s": 52.07,
+      "end_s": 52.14
+    },
+    {
+      "w": "your",
+      "start_s": 52.186,
+      "end_s": 52.291
+    },
+    {
+      "w": "first",
+      "start_s": 52.349,
+      "end_s": 52.593
+    },
+    {
+      "w": "number.",
+      "start_s": 52.651,
+      "end_s": 53.092
+    },
+    {
+      "w": "Tokyo",
+      "start_s": 53.371,
+      "end_s": 53.8
+    },
+    {
+      "w": "has",
+      "start_s": 53.87,
+      "end_s": 53.986
+    },
+    {
+      "w": "pledged",
+      "start_s": 54.056,
+      "end_s": 54.415
+    },
+    {
+      "w": "ten",
+      "start_s": 54.462,
+      "end_s": 54.694
+    },
+    {
+      "w": "trillion",
+      "start_s": 54.752,
+      "end_s": 55.135
+    },
+    {
+      "w": "yen",
+      "start_s": 55.205,
+      "end_s": 55.402
+    },
+    {
+      "w": "to",
+      "start_s": 55.472,
+      "end_s": 55.542
+    },
+    {
+      "w": "chips,",
+      "start_s": 55.6,
+      "end_s": 56.018
+    },
+    {
+      "w": "and",
+      "start_s": 56.041,
+      "end_s": 56.18
+    },
+    {
+      "w": "if",
+      "start_s": 56.238,
+      "end_s": 56.319
+    },
+    {
+      "w": "that",
+      "start_s": 56.366,
+      "end_s": 56.528
+    },
+    {
+      "w": "works,",
+      "start_s": 56.586,
+      "end_s": 57.074
+    },
+    {
+      "w": "it",
+      "start_s": 57.109,
+      "end_s": 57.248
+    },
+    {
+      "w": "beats",
+      "start_s": 57.306,
+      "end_s": 57.515
+    },
+    {
+      "w": "our",
+      "start_s": 57.562,
+      "end_s": 57.678
+    },
+    {
+      "w": "bonds.",
+      "start_s": 57.724,
+      "end_s": 58.247
+    },
+    {
+      "w": "And",
+      "start_s": 58.316,
+      "end_s": 58.467
+    },
+    {
+      "w": "here's",
+      "start_s": 58.537,
+      "end_s": 58.711
+    },
+    {
+      "w": "what",
+      "start_s": 58.746,
+      "end_s": 58.874
+    },
+    {
+      "w": "nobody",
+      "start_s": 58.932,
+      "end_s": 59.222
+    },
+    {
+      "w": "says:",
+      "start_s": 59.28,
+      "end_s": 59.86
+    },
+    {
+      "w": "the",
+      "start_s": 60.104,
+      "end_s": 60.197
+    },
+    {
+      "w": "money",
+      "start_s": 60.255,
+      "end_s": 60.453
+    },
+    {
+      "w": "went",
+      "start_s": 60.511,
+      "end_s": 60.685
+    },
+    {
+      "w": "home,",
+      "start_s": 60.743,
+      "end_s": 61.126
+    },
+    {
+      "w": "and",
+      "start_s": 61.149,
+      "end_s": 61.289
+    },
+    {
+      "w": "the",
+      "start_s": 61.335,
+      "end_s": 61.405
+    },
+    {
+      "w": "tab",
+      "start_s": 61.451,
+      "end_s": 61.695
+    },
+    {
+      "w": "stayed",
+      "start_s": 61.753,
+      "end_s": 62.043
+    },
+    {
+      "w": "here.",
+      "start_s": 62.101,
+      "end_s": 62.531
+    },
+    {
+      "w": "So,",
+      "start_s": 63.042,
+      "end_s": 63.541
+    },
+    {
+      "w": "the",
+      "start_s": 63.715,
+      "end_s": 63.831
+    },
+    {
+      "w": "second",
+      "start_s": 63.901,
+      "end_s": 64.179
+    },
+    {
+      "w": "number:",
+      "start_s": 64.237,
+      "end_s": 64.713
+    },
+    {
+      "w": "it's",
+      "start_s": 65.155,
+      "end_s": 65.34
+    },
+    {
+      "w": "on",
+      "start_s": 65.387,
+      "end_s": 65.491
+    },
+    {
+      "w": "your",
+      "start_s": 65.549,
+      "end_s": 65.689
+    },
+    {
+      "w": "phone.",
+      "start_s": 65.735,
+      "end_s": 66.188
+    },
+    {
+      "w": "Pull",
+      "start_s": 66.571,
+      "end_s": 66.78
+    },
+    {
+      "w": "up",
+      "start_s": 66.838,
+      "end_s": 66.919
+    },
+    {
+      "w": "Meta",
+      "start_s": 66.977,
+      "end_s": 67.291
+    },
+    {
+      "w": "and",
+      "start_s": 67.372,
+      "end_s": 67.546
+    },
+    {
+      "w": "find",
+      "start_s": 67.628,
+      "end_s": 67.883
+    },
+    {
+      "w": "its",
+      "start_s": 67.941,
+      "end_s": 68.057
+    },
+    {
+      "w": "price-to-earnings",
+      "start_s": 68.104,
+      "end_s": 68.893
+    },
+    {
+      "w": "multiple:",
+      "start_s": 68.963,
+      "end_s": 69.532
+    },
+    {
+      "w": "that's",
+      "start_s": 69.973,
+      "end_s": 70.229
+    },
+    {
+      "w": "the",
+      "start_s": 70.275,
+      "end_s": 70.356
+    },
+    {
+      "w": "share",
+      "start_s": 70.403,
+      "end_s": 70.635
+    },
+    {
+      "w": "of",
+      "start_s": 70.658,
+      "end_s": 70.716
+    },
+    {
+      "w": "the",
+      "start_s": 70.763,
+      "end_s": 70.832
+    },
+    {
+      "w": "price",
+      "start_s": 70.89,
+      "end_s": 71.169
+    },
+    {
+      "w": "that's",
+      "start_s": 71.204,
+      "end_s": 71.39
+    },
+    {
+      "w": "profit",
+      "start_s": 71.436,
+      "end_s": 71.784
+    },
+    {
+      "w": "not",
+      "start_s": 71.854,
+      "end_s": 71.993
+    },
+    {
+      "w": "yet",
+      "start_s": 72.04,
+      "end_s": 72.191
+    },
+    {
+      "w": "earned,",
+      "start_s": 72.249,
+      "end_s": 72.597
+    },
+    {
+      "w": "and",
+      "start_s": 72.62,
+      "end_s": 72.725
+    },
+    {
+      "w": "a",
+      "start_s": 72.771,
+      "end_s": 72.806
+    },
+    {
+      "w": "higher",
+      "start_s": 72.876,
+      "end_s": 73.131
+    },
+    {
+      "w": "yield",
+      "start_s": 73.201,
+      "end_s": 73.445
+    },
+    {
+      "w": "discounts",
+      "start_s": 73.514,
+      "end_s": 73.99
+    },
+    {
+      "w": "it.",
+      "start_s": 74.037,
+      "end_s": 74.211
+    },
+    {
+      "w": "The",
+      "start_s": 74.292,
+      "end_s": 74.42
+    },
+    {
+      "w": "Fed",
+      "start_s": 74.489,
+      "end_s": 74.698
+    },
+    {
+      "w": "still",
+      "start_s": 74.756,
+      "end_s": 74.965
+    },
+    {
+      "w": "hasn't",
+      "start_s": 75.012,
+      "end_s": 75.279
+    },
+    {
+      "w": "moved.",
+      "start_s": 75.325,
+      "end_s": 75.825
+    },
+    {
+      "w": "Tokyo",
+      "start_s": 76.103,
+      "end_s": 76.568
+    },
+    {
+      "w": "is",
+      "start_s": 76.661,
+      "end_s": 76.753
+    },
+    {
+      "w": "still",
+      "start_s": 76.8,
+      "end_s": 77.09
+    },
+    {
+      "w": "on",
+      "start_s": 77.183,
+      "end_s": 77.311
+    },
+    {
+      "w": "its",
+      "start_s": 77.357,
+      "end_s": 77.485
+    },
+    {
+      "w": "tea",
+      "start_s": 77.531,
+      "end_s": 77.694
+    },
+    {
+      "w": "break.",
+      "start_s": 77.729,
+      "end_s": 78.112
+    },
+    {
+      "w": "And",
+      "start_s": 78.205,
+      "end_s": 78.356
+    },
+    {
+      "w": "that",
+      "start_s": 78.425,
+      "end_s": 78.623
+    },
+    {
+      "w": "unfunded",
+      "start_s": 78.704,
+      "end_s": 79.191
+    },
+    {
+      "w": "bar",
+      "start_s": 79.238,
+      "end_s": 79.412
+    },
+    {
+      "w": "tab",
+      "start_s": 79.482,
+      "end_s": 79.749
+    },
+    {
+      "w": "is",
+      "start_s": 79.842,
+      "end_s": 80.004
+    },
+    {
+      "w": "still",
+      "start_s": 80.051,
+      "end_s": 80.306
+    },
+    {
+      "w": "ours.",
+      "start_s": 80.387,
+      "end_s": 81.223
+    }
+  ],
+  "request_id": "2wLtMwYoOa8vACnSkexx"
+}

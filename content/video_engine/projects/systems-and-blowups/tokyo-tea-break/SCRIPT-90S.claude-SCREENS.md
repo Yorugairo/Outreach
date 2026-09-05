@@ -42,27 +42,27 @@ for the tag's owning gate (R1: final, never re-derived). `verdict` is
 the agent's, per tag: **true / laundered** (CHECK-RESPONSIBILITIES R2,
 §3a) - a laundered tag is a FAIL at the phase, not a note.
 
-- [stakes]@0:04  window: PASS — G07  "The Fed hasn't moved, but your borrowing costs climbed anyway."  → verdict: ____
-- [archetype]@0:07  window: PASS — G37  "Three men in blue ties blame the deficit, the Fed, or the vibes at Jackson Hole."  → verdict: ____
-- [tricolon]@0:07  window: PASS — G12  "Three men in blue ties blame the deficit, the Fed, or the vibes at Jackson Hole."  → verdict: ____
-- [rehook]@0:15  window: PASS — G13  "Here's what nobody on that panel is watching: our biggest lender."  → verdict: ____
-- [payoff]@0:19  window: PASS — G08  "The Treasury's table shows Japan holds over a trillion dollars of our debt, and it's been selling since Febru…"  → verdict: ____
-- [new]@0:19  window: PASS — G20, FAIL — G22  "The Treasury's table shows Japan holds over a trillion dollars of our debt, and it's been selling since Febru…"  → verdict: ____
-- [reflect]@0:26  window: PASS — G16  "I ran risk at JPMorgan; when your biggest customer walks, the auction sets your price."  → verdict: ____
-- [opponent]@0:31  window: PASS — G14  "The opponent isn't the Fed; it's a Japanese balance sheet."  → verdict: ____
-- [desire]@0:35  window: PASS — G38  "Two numbers show where the money went: a Treasury page, and your phone."  → verdict: ____
-- [map]@0:35  window: PASS — G39  "Two numbers show where the money went: a Treasury page, and your phone."  → verdict: ____
-- [promise]@0:39  window: PASS — G09  "By the end you'll read both numbers yourself."  → verdict: ____
-- [rehook]@0:39  window: PASS — G25  "By the end you'll read both numbers yourself."  → verdict: ____
-- [catalyst]@0:42  window: PASS — G40  "Since February, Japan has sold a hundred and twenty-two billion dollars of it, a tenth of the pile."  → verdict: ____
-- [new]@0:42  window: PASS — G20, FAIL — G22  "Since February, Japan has sold a hundred and twenty-two billion dollars of it, a tenth of the pile."  → verdict: ____
-- [loop]@0:48  window: PASS — G19, PASS — G21  "The Treasury prints the new total monthly, and that print is your first number."  → verdict: ____
-- [new]@0:48  window: PASS — G20, FAIL — G22  "The Treasury prints the new total monthly, and that print is your first number."  → verdict: ____
-- [foreshadow]@0:48  window: PASS — G26  "The Treasury prints the new total monthly, and that print is your first number."  → verdict: ____
-- [loop]@0:53  window: PASS — G19, PASS — G21  "Tokyo has pledged ten trillion yen to chips, and if that works, it beats our bonds."  → verdict: ____
-- [new]@0:53  window: PASS — G20, FAIL — G22  "Tokyo has pledged ten trillion yen to chips, and if that works, it beats our bonds."  → verdict: ____
-- [loop-close]@0:59  window: PASS — G28  "And here's what nobody says: the money went home, and the tab stayed here."  → verdict: ____
-- [rehook]@0:59  window: PASS — G25  "And here's what nobody says: the money went home, and the tab stayed here."  → verdict: ____
+- [stakes]@0:05  window: PASS — G07  "The Fed hasn't moved, but your borrowing costs climbed anyway."  → verdict: ____
+- [archetype]@0:09  window: PASS — G37  "Three men in blue ties blame the deficit, the Fed, or the vibes at Jackson Hole."  → verdict: ____
+- [tricolon]@0:09  window: PASS — G12  "Three men in blue ties blame the deficit, the Fed, or the vibes at Jackson Hole."  → verdict: ____
+- [rehook]@0:17  window: PASS — G13  "Here's what nobody on that panel is watching: our biggest lender."  → verdict: ____
+- [payoff]@0:21  window: PASS — G08  "The Treasury's table shows Japan holds over a trillion dollars of our debt, and it's been selling since Febru…"  → verdict: ____
+- [new]@0:21  window: PASS — G20, FAIL — G22  "The Treasury's table shows Japan holds over a trillion dollars of our debt, and it's been selling since Febru…"  → verdict: ____
+- [reflect]@0:27  window: PASS — G16  "I ran risk at JPMorgan; when your biggest customer walks, the auction sets your price."  → verdict: ____
+- [opponent]@0:32  window: PASS — G14  "The opponent isn't the Fed; it's a Japanese balance sheet."  → verdict: ____
+- [desire]@0:36  window: FAIL — G38  "Two numbers show where the money went: a Treasury page, and your phone."  → verdict: ____
+- [map]@0:36  window: FAIL — G39  "Two numbers show where the money went: a Treasury page, and your phone."  → verdict: ____
+- [promise]@0:40  window: PASS — G09  "By the end you'll read both numbers yourself."  → verdict: ____
+- [rehook]@0:40  window: PASS — G25  "By the end you'll read both numbers yourself."  → verdict: ____
+- [catalyst]@0:44  window: PASS — G40  "Since February, Japan has sold a hundred and twenty-two billion dollars of it, a tenth of the pile."  → verdict: ____
+- [new]@0:44  window: PASS — G20, FAIL — G22  "Since February, Japan has sold a hundred and twenty-two billion dollars of it, a tenth of the pile."  → verdict: ____
+- [loop]@0:49  window: PASS — G19, PASS — G21  "The Treasury prints the new total monthly, and that print is your first number."  → verdict: ____
+- [new]@0:49  window: PASS — G20, FAIL — G22  "The Treasury prints the new total monthly, and that print is your first number."  → verdict: ____
+- [foreshadow]@0:49  window: PASS — G26  "The Treasury prints the new total monthly, and that print is your first number."  → verdict: ____
+- [loop]@0:54  window: PASS — G19, PASS — G21  "Tokyo has pledged ten trillion yen to chips, and if that works, it beats our bonds."  → verdict: ____
+- [new]@0:54  window: PASS — G20, FAIL — G22  "Tokyo has pledged ten trillion yen to chips, and if that works, it beats our bonds."  → verdict: ____
+- [loop-close]@0:58  window: PASS — G28  "And here's what nobody says: the money went home, and the tab stayed here."  → verdict: ____
+- [rehook]@0:58  window: PASS — G25  "And here's what nobody says: the money went home, and the tab stayed here."  → verdict: ____
 - [dip]@1:03  window: PASS — G29  "So, the second number: it's on your phone."  → verdict: ____
 - [signpost]@1:03  window: PASS — G42  "So, the second number: it's on your phone."  → verdict: ____
 - [ring]@1:19  window: n/a — outside opening window (P2 ends 1:05)  "And that unfunded bar tab is still ours."  → verdict: ____

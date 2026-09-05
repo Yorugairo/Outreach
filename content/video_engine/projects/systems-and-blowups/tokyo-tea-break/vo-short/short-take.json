@@ -1,0 +1,23 @@
+{
+  "script": "SCRIPT-90S-VO.claude.txt",
+  "parts": 1,
+  "seed": "4242",
+  "model": "eleven_multilingual_v2",
+  "settings": {
+    "stability": 0.4,
+    "similarity_boost": 0.75,
+    "style": 0.2,
+    "use_speaker_boost": true
+  },
+  "characters": 1329,
+  "duration_s": 81.223,
+  "request_id": "2wLtMwYoOa8vACnSkexx",
+  "audio": "content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\vo-short\\audio\\scene_1.mp3",
+  "words": "content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\vo-short\\audio\\scene_1.words.json",
+  "cache_hit": false,
+  "gates_forced": {
+    "state": "fail",
+    "report": "content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\SCRIPT-90S.claude-GATES.md",
+    "reason": "operator approved ElevenLabs 2026-09-04 (v11); the 4 FAILs are the beats cut for the short format - head-fake, debate, new-info density, the late-stage flip (backlog G2 short mode)"
+  }
+}
