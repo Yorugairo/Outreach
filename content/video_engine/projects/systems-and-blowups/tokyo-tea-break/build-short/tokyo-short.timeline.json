@@ -1989,7 +1989,7 @@
    "world": {
     "kind": "clip",
     "asset_id": "clip-a-counter-tab-v2",
-    "sha256": "d50b7f5c116dedc4c2218267b81cfa2bd65fd6137de0a8f2e37cea9482694fd0",
+    "sha256": "596a48a2fa2a7c522823b3232850fdc017778e8523122a0018e9fddb9be026d1",
     "ken_burns": {
      "scale": 0,
      "x": 0,
@@ -2009,7 +2009,7 @@
    "world": {
     "kind": "clip",
     "asset_id": "clip-b-dial-and-bill-v2",
-    "sha256": "2cff03ac76e28af18058c8e0d89176949535f02687ff9d6a045f3445be0c1d64",
+    "sha256": "8cb5086c4d827310d4acbe745756ff048f445cfa8463a6d02db5e1a187962819",
     "ken_burns": {
      "scale": 0,
      "x": 0,
@@ -2029,7 +2029,7 @@
    "world": {
     "kind": "clip",
     "asset_id": "clip-c-blue-ties-panel-v2",
-    "sha256": "99843fa781833cf1373d61dd5d03626aa20c4494cc0068af6e5337f3e612ab72",
+    "sha256": "770b3ac1362c952bb9a92b7c14146ab3cde537bfa894a266d07d10239daea39c",
     "ken_burns": {
      "scale": 0,
      "x": 0,
@@ -2184,7 +2184,7 @@
    "world": {
     "kind": "clip",
     "asset_id": "clip-g-two-fingers-v2",
-    "sha256": "a6be50e2541d4086a08fe7ad5d1d72925fc91ea78c6874373c3c54c998cc484b",
+    "sha256": "99fca9a2578c29af624f30b5d70f21df53ec0930ddfed23e2b7142f308b36426",
     "ken_burns": {
      "scale": 0,
      "x": 0,
@@ -2414,7 +2414,7 @@
    "world": {
     "kind": "clip",
     "asset_id": "clip-f-toll-gate-to-fab-v2",
-    "sha256": "ceb472b41d8a0687b20f29b448ec669b74d95b9c4cb2707218108b1c94631a7d",
+    "sha256": "b944add5a33bd464a20a0fc3078570cfeec53d1f1f67fc75601c1c20406152e5",
     "ken_burns": {
      "scale": 0,
      "x": 0,
@@ -2532,7 +2532,7 @@
    "world": {
     "kind": "clip",
     "asset_id": "clip-a2-counter-colder-v2",
-    "sha256": "97bc38ff5cf12ffdbfb5df4a18a5f5d37ef5aeb7068747e42d72fe88175fd153",
+    "sha256": "a9250428bb36bade662efd71fa5a6926b119a7b7d346716946de2c46ac3fe272",
     "ken_burns": {
      "scale": 0,
      "x": 0,

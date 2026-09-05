@@ -2285,6 +2285,7 @@
   /* CLIP world: one <video> per world element, sourced from the asset map, seeked to the scene clock.
      A clip shorter than its scene holds its last frame (no loop - a loop is a visible seam). */
   const clipSeeks = new Set();
+  let clipLive = false;   /* true while the transport is playing: clip worlds play instead of seeking */
   const paintClip = (el, scene, t) => {
     let v = el.querySelector("video.clipv");
     if (!v || v.dataset.asset !== scene.world.asset_id) {
@@ -2296,6 +2297,15 @@
     }
     const local = Math.max(0, t - scene.span[0]);
     const want = Number.isFinite(v.duration) && v.duration > 0 ? Math.min(local, Math.max(0, v.duration - 0.05)) : local;
+    /* LIVE playback (operator, 2026-09-05: "after ~2 seconds every flow video just holds"): a seek per frame on a clip with
+       one keyframe decodes from frame 0 every time and falls behind; while the transport runs the video PLAYS on its own
+       clock and is only corrected when it drifts. Scrubbing and the renderer still seek exactly (a pure function of t). */
+    if (clipLive) {
+      if (v.paused && want < (v.duration || Infinity) - 0.1) v.play().catch(() => {});
+      if (Math.abs((v.currentTime || 0) - want) > 0.15) { try { v.currentTime = want; } catch (e) {} }
+      return;
+    }
+    if (!v.paused) v.pause();
     if (Math.abs((v.currentTime || 0) - want) > 0.04) {
       const p = new Promise((res) => {
         const done = () => { v.removeEventListener("seeked", done); clipSeeks.delete(p); res(); };
@@ -2639,15 +2649,15 @@
   const tick = () => {
     if (!playing) return;
     t = Math.min(DUR, vo.currentTime);
-    if (t >= DUR) { playing = false; vo.pause(); playBtn.innerHTML = "&#9654; Replay"; }
+    if (t >= DUR) { playing = false; clipLive = false; vo.pause(); playBtn.innerHTML = "&#9654; Replay"; }
     sync();
     if (playing) raf = requestAnimationFrame(tick);
   };
   playBtn.addEventListener("click", () => {
-    if (playing) { playing = false; vo.pause(); cancelAnimationFrame(raf); playBtn.innerHTML = "&#9654; Play with narration"; syncSound(t, false); }
+    if (playing) { playing = false; clipLive = false; vo.pause(); cancelAnimationFrame(raf); playBtn.innerHTML = "&#9654; Play with narration"; syncSound(t, false); }
     else {
       if (t >= DUR) seek(0);
-      playing = true; vo.currentTime = t; vo.play().catch(() => {});
+      playing = true; clipLive = true; vo.currentTime = t; vo.play().catch(() => {});
       playBtn.textContent = "Pause"; raf = requestAnimationFrame(tick);
     }
   });

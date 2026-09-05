@@ -92,9 +92,25 @@ def write_timeline(ws: list[dict], runtime_s: float) -> dict:
     return tl
 
 
+KEYFRAME_EVERY = 12   # frames (0.5 s at 24 fps): a seek decodes at most half a second, not the whole clip
+
+
+def seekable_clip(name: str) -> Path:
+    """The Flow clip re-encoded with a keyframe every KEYFRAME_EVERY frames (the originals carry ONE keyframe in 240,
+    so every seek decoded from frame 0 and live playback fell behind and held - operator, 2026-09-05). Same
+    frames, same length; written once into build-short/clips/ and reused while the source is unchanged."""
+    import subprocess
+    src, out = CLIPS / name, BUILD / "clips" / name
+    out.parent.mkdir(parents=True, exist_ok=True)
+    if not out.exists() or out.stat().st_mtime < src.stat().st_mtime:
+        subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", str(src), "-an", "-c:v", "libx264", "-profile:v", "high", "-crf", "17", "-preset", "slow",
+                        "-g", str(KEYFRAME_EVERY), "-keyint_min", str(KEYFRAME_EVERY), "-sc_threshold", "0", "-bf", "0", "-pix_fmt", "yuv420p", "-movflags", "+faststart", str(out)], check=True)
+    return out
+
+
 def shot_table(ws: list[dict], runtime_s: float) -> list[tuple]:
     """The authored rows (SHOT-TABLE-90S.claude.md, the short section), timed from the take."""
-    clip = lambda name: f"clip:{(CLIPS / name).as_posix()}"
+    clip = lambda name: f"clip:{seekable_clip(name).as_posix()}"
     hold = f"ledger:ev-japan-holdings-v1:line:{LAST_IDX}:right"
     meta = "ledger:ev-meta-yield-v1:bars:3:right::cut"   # exit=cut: the punch on "discounts it." is the last beat of the row - no retract under it (E40 #5)
     t_stakes = cut_before(ws, "The Fed hasn't moved")
