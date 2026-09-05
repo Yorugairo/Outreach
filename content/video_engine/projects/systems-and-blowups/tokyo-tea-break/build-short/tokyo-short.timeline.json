@@ -1954,7 +1954,7 @@
   {
    "slot": "press 3",
    "at": 8.99,
-   "gain": 0.21,
+   "gain": 0.16,
    "fade_in": 0.0,
    "variants": {
     "A": "__snd_0_A__",
@@ -5095,5 +5095,6 @@
   "area_squash": true,
   "km_ink": false,
   "curvature_stroke": true
- }
+ },
+ "caption_style": "phrase"
 }

@@ -4,13 +4,13 @@
   {
    "slot": "press 3",
    "at": 8.99,
-   "gain": 0.21,
+   "gain": 0.16,
    "fade_in": 0.0,
    "variants": {
     "A": "press-pack-A.mp3",
     "B": "press-pack-B.mp3"
    },
-   "note": "the pack meters -16.6 LUFS; 0.21 puts the clicks ~12 dB under the voice (operator, 2026-09-05: a tiny bit quieter, 11-12 dB under instead of 9)"
+   "note": "the pack meters -16.6 LUFS; 0.16 puts the clicks ~14.5 dB under the voice (operator, 2026-09-05: 14-15 dB under)"
   },
   {
    "slot": "page enter 4",

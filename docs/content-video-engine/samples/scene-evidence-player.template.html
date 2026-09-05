@@ -343,6 +343,12 @@
   /* 4.2 quiet mode - smaller, static, single fade, keywords still coloured */
   #caption.quiet { font-size: 33px; font-weight: 600; }
   #caption.quiet .cg { transform: none !important; opacity: 1 !important; }
+  /* PHRASE (shorts, 2026-09-05): the line is read, not chased - every word legible from the page's start, the spoken-word
+     flip retired; only a keyword is punctuated (it re-pops and brightens when spoken, and stays) */
+  #caption.phrase .cw { color: rgba(255,255,255,.92); }
+  #caption.phrase .cw.on { transform: none; }
+  #caption.phrase .cw.ck { color: #c98500; }
+  #caption.phrase .cw.ck.on { color: #e9a020; }
 
   #bar { width: min(96vw,1400px); display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
          background: #0a1620; border: 1px solid #14293a; border-radius: 6px; padding: 10px 13px; }
@@ -1696,6 +1702,7 @@
   /* STAGE caption pop (s9.25 #2): scale 1.16 -> 1.0 with a back-ease over STAGE_POP_S, the tilt
      settling to 0 - a function of (t - word.s), painted inline by the caption pass */
   const STAGE_POP_S = 0.2;
+  const PHRASE = TL.caption_style === "phrase", PHRASE_STAGGER_S = 0.03, PHRASE_KPOP = 1.18;   /* shorts: the page lands as one phrase; only k-words are punctuated */
   const stagePop = (u) => { const c1 = 1.70158, c3 = c1 + 1; const x = u - 1; return 1 + c3 * x * x * x + c1 * x * x; };
   const LP = { ROLL: 0.7, SAVOR: 0.8, FIELD: 2.4, PUNCH: 0.5, INK: 2.0, BUILD: 3.0, SEEPS: 9, STROKES: 14, KB_MAX: 0.03,
                PUNCH_SCALE: 1.16, FOCUS_DUR: 3.0 };
@@ -2994,11 +3001,18 @@
         }
       }
       if (pg) { const ws = cap.querySelectorAll(".cw");
-        pg.t.forEach((x, j) => { if (ws[j]) { const on = x.s <= t && t < x.e; ws[j].classList.toggle("on", on);
+        pg.t.forEach((x, j) => { if (ws[j]) { const on = PHRASE && stage ? (x.k && t >= x.s) : (x.s <= t && t < x.e); ws[j].classList.toggle("on", on);
           /* stage: each word pops in at its own spoken time (words.json), never at the page boundary.
              The pop is a pure function of t painted inline (see stagePop) so a scrubbed render
              captures mid-pop frames and two renders of one second are identical. */
-          if (stage) { const e = (kin("analytic_spring") ? springPop : stagePop)(clamp01((t + 0.05 - x.s) / STAGE_POP_S));
+          if (stage && PHRASE) {   /* PHRASE: the page lands as one (a hand laying the line), a keyword re-pops when spoken */
+            const pop = kin("analytic_spring") ? springPop : stagePop;
+            const e = pop(clamp01((t + 0.05 - (pg.s + j * PHRASE_STAGGER_S)) / STAGE_POP_S));
+            const kp = x.k ? pop(clamp01((t - x.s) / STAGE_POP_S)) : 1;
+            ws[j].style.opacity = Math.min(1, e * 2).toFixed(3);
+            const sc = (1.16 + (1 - 1.16) * e) * (x.k && t >= x.s ? (PHRASE_KPOP + (1 - PHRASE_KPOP) * kp) : 1);
+            ws[j].style.transform = "scale(" + sc.toFixed(4) + ") rotate(calc(var(--tilt, 0deg) * " + (1 - e).toFixed(3) + "))"; }
+          else if (stage) { const e = (kin("analytic_spring") ? springPop : stagePop)(clamp01((t + 0.05 - x.s) / STAGE_POP_S));
             ws[j].style.opacity = Math.min(1, e * 2).toFixed(3);
             const sc = (1.16 + (1 - 1.16) * e) * (on && e >= 1 ? 1.06 : 1);
             ws[j].style.transform = "scale(" + sc.toFixed(4) + ") rotate(calc(var(--tilt, 0deg) * " + (1 - e).toFixed(3) + "))"; }
@@ -3013,6 +3027,7 @@
     }
     cap.classList.toggle("quiet", quiet || capPinned);
     cap.classList.toggle("stage", stage);
+    cap.classList.toggle("phrase", stage && PHRASE);
     paintSpecies(sc, t);
     /* on a LEDGER PAGE the stage caption sits in the page's declared quiet zone (s9.25 #2, s9.28 C2:
        never over the emphasized datum); elsewhere it is centred */

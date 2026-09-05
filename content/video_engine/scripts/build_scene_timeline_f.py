@@ -52,6 +52,7 @@ LEDGER_ID_PARTS = (3, 7)           # ledger:<series>:<variant>[:<emphasize>[:<qu
 LEDGER_ENTERS = ("spiral", "mount")   # enter=spiral: the page RETURNS - unwinds from its point, no roll/soak/ink/build (E25; 2026-09-05)
                                       # enter=mount: no roll-out - the outgoing scene fades while the cream plate MOUNTS over it, then the page draws (operator, 2026-09-05)
 KINETICS: dict = {}                # timeline.kinetics - the template's capability flags a build turns on (P39 kill switch; default all off)
+CAPTION_STYLE: str | None = None   # timeline.caption_style - "phrase" on a short: the page lands as one readable phrase, only k-words punctuated (2026-09-05)
 LEDGER_EXITS = ("cut",)            # exit=cut: no retract - the page leaves on the cut (for a beat that must land on the last line, E40 #5)
 SPECIES_LEDGER = "ledger"          # timeline["species"] entry; the player keys on world.kind == "ledger"
 
@@ -503,6 +504,7 @@ def main() -> int:
         # downstream (gate, render) can see it
         "species": timeline_species(scenes),
         "kinetics": dict(KINETICS),   # the template's capability flags this build turns on (P39: default all off)
+        **({"caption_style": CAPTION_STYLE} if CAPTION_STYLE else {}),
     }
     (BUILD / TIMELINE_NAME).write_text(
         json.dumps(timeline, indent=1), encoding="utf-8")
