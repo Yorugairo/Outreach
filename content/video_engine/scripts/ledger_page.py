@@ -62,7 +62,7 @@ CHART_VARIANTS = ("line", "bars", "race", "decline", "progress")
 # plate change (RULE-the-page-is-the-ground, 2026-09-04).
 PROP_PLACEMENTS = ("centre", "left", "right", "datum")
 QUIET_ZONES = ("left", "right")
-AXES_KEYS = ("log", "ylabel", "xticks", "from_zero", "hlines", "hline", "marks", "eventbars",
+AXES_KEYS = ("log", "ylabel", "xticks", "from_zero", "highlight_from", "hlines", "hline", "marks", "eventbars",
              "ymin", "ymax", "yfmt", "yunit", "panels")
 UNCHARTABLE = {
     "checklist": "no chartable values: 'checklist' is a table, not a chart (keep it a dock)",

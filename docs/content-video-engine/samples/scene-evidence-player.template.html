@@ -127,6 +127,8 @@
   html[data-aspect="9:16"] .lp-chart .sname { font-size: 44px; }
   html[data-aspect="9:16"] .lp-chart .tagchip { font-size: 40px; }
   html[data-aspect="9:16"] .lp-chart .ser { stroke-width: 8; }
+  .lp-chart .ser.muted { stroke-width: 2.5; }
+  html[data-aspect="9:16"] .lp-chart .ser.muted { stroke-width: 4; }
   html[data-aspect="9:16"] .lp-chart .ax { stroke-width: 3; }
   html[data-aspect="9:16"] .lp-chart .grid { stroke-width: 2; }
   html[data-aspect="9:16"] .lp-rail { gap: 12px; }
@@ -1626,27 +1628,39 @@
     } else lpYTicks(st, y0, y1, my, L, W - R, ax.unit || "", L - 10);
     lpYLabel(st, pg, L, T - 12);
     (ax.xticks || []).forEach(([x, lab]) => { const tx = lpEl("text", "lab", st.chart, { x: mx(x).toFixed(1), y: B + (P ? 52 : 32), "text-anchor": "middle" }); tx.textContent = lab; });
-    series.forEach((s, i) => {
+    /* HIGHLIGHT (operator, 2026-09-05, the since-2000 holdings page): axes.highlight_from = an x; the points from there
+       are the STORY'S window and take the sign colour, the history before it is drawn muted and thinner beneath - a
+       26-year line that is up overall must not paint the last four months' selling green, nor the history red */
+    const hfrom = Number.isFinite(+ax.highlight_from) && ax.highlight_from !== null && ax.highlight_from !== "" ? +ax.highlight_from : null;   /* the spec keeps tokens verbatim (strings) */
+    const drawn = [];
+    series.forEach((s) => {
+      if (hfrom !== null && series.length === 1) {
+        const k0 = Math.max(0, s.pts.findIndex(([x]) => +x >= hfrom) - 1);
+        drawn.push({ ...s, pts: s.pts, muted: true });
+        drawn.push({ ...s, pts: s.pts.slice(k0), muted: false });
+      } else drawn.push({ ...s, muted: false });
+    });
+    drawn.forEach((s, i) => {
       const d = s.pts.map(([x, v], k) => (k ? "L" : "M") + mx(x).toFixed(1) + " " + my(v).toFixed(1)).join(" ");
       /* a single-metric line takes its SIGN colour (blood red down, green up); multi-line pages keep their series key */
-      const endsDown = s.pts.length > 1 && s.pts[s.pts.length - 1][1] < s.pts[0][1];
-      const col = series.length === 1 ? (endsDown ? "var(--lp-neg)" : "var(--lp-pos)") : (PAL[s.color] || PAL.deemph);
-      const p = lpEl("path", "ser", st.chart, { d, stroke: col });
+      const endsDown = s.pts.length > 1 && +s.pts[s.pts.length - 1][1] < +s.pts[0][1];   /* numbers, never a string compare ('1116.7' < '325.8' is true) */
+      const col = s.muted ? "rgba(184,196,208,.55)" : series.length === 1 ? (endsDown ? "var(--lp-neg)" : "var(--lp-pos)") : (PAL[s.color] || PAL.deemph);
+      const p = lpEl("path", "ser" + (s.muted ? " muted" : ""), st.chart, { d, stroke: col });
       const len = p.getTotalLength ? p.getTotalLength() : 2000;
       p.setAttribute("stroke-dasharray", len); p.setAttribute("stroke-dashoffset", len);
       const tip = lpEl("circle", "", st.chart, { r: 6, fill: col, opacity: 0 });
       const last = s.pts[s.pts.length - 1];
       const prev = s.pts.length > 1 ? s.pts[s.pts.length - 2] : last;   /* portrait: the name ends left of the last segment so a steep drop never runs through it */
-      const nameBelow = P && my(last[1]) < T + 0.25 * (B - T);   /* a line riding the top of a zero-based chart takes its name BELOW its end */
-      const name = lpEl("text", "sname", st.chart, P ? { x: (Math.min(mx(last[0]), mx(prev[0])) - 8).toFixed(1), y: (my(last[1]) + (nameBelow ? 58 : -30)).toFixed(1), "text-anchor": "end", fill: col, opacity: 0 }
+      const nameBelow = P && my(last[1]) < T + 0.35 * (B - T);   /* a line ending high takes its name in the empty lower right, above the axis */
+      const name = lpEl("text", "sname", st.chart, P ? { x: (nameBelow ? W - R : Math.min(mx(last[0]), mx(prev[0])) - 8).toFixed(1), y: (nameBelow ? B - 28 : my(last[1]) - 30).toFixed(1), "text-anchor": "end", fill: col, opacity: 0 }
                                                      : { x: (mx(last[0]) + 12).toFixed(1), y: (my(last[1]) + 8).toFixed(1), fill: col, opacity: 0 });
       st.linePts.push(s.pts.map(([x, v]) => [mx(x), my(v)]));   /* the exact datum positions, for the species' targets */
-      name.textContent = (s.label ? s.label + " " : "") + (s.name || "");
+      name.textContent = s.muted ? "" : (s.label ? s.label + " " : "") + (s.name || "");   /* the muted history carries no name */
       /* DYNAMIC LABEL: the badge that keys this line rides its inline name as the tag, in the accent - one
          reveal, one real estate (operator, 2026-09-03) */
       const ib = (st.inlineBadges || {})[s.color];
       if (ib && ib.tag) { const tg = lpEl("tspan", "tagchip", name, { dx: 12, fill: col }); tg.textContent = ib.tag; }
-      st.paths.push({ p, len, tip, name, stagger: i / Math.max(1, series.length), ny: my(last[1]) + (P ? (nameBelow ? 58 : -30) : 8) });
+      st.paths.push({ p, len, tip, name, stagger: i / Math.max(1, drawn.length), ny: nameBelow ? B - 28 : my(last[1]) + (P ? -30 : 8) });
     });
     /* s9.23b inline names never overprint: push apart any two ends closer than one line */
     const order = [...st.paths].sort((a, b) => a.ny - b.ny);

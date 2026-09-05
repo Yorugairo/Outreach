@@ -33,8 +33,16 @@ SERIES = ("ev-japan-holdings-v1", "ev-meta-yield-v1")
 CUT_AT = 0.8          # M13: the cut sits at 0.8 of the gap before the next phrase
 MIN_GAP = 0.30        # M13: a gap shorter than this is not a cut point
 
-# the holdings series (13 monthly points, 2025-05 .. 2026-06): the February peak and the latest
-PEAK_IDX, LAST_IDX = 8, 12
+# the holdings series since 2000 (316 monthly points): the February-2026 high the script calls the peak, and the latest
+def _holdings_indices() -> tuple[int, int]:
+    j = json.loads((HERE / "evidence/ev-japan-holdings-v1.series.json").read_text(encoding="utf-8"))
+    pts = j["series"][0]["pts"]
+    peak_x = round(2026 + 1 / 12, 4)
+    peak = min(range(len(pts)), key=lambda i: abs(pts[i][0] - peak_x))
+    return peak, len(pts) - 1
+
+
+PEAK_IDX, LAST_IDX = _holdings_indices()
 
 
 def words() -> list[dict]:

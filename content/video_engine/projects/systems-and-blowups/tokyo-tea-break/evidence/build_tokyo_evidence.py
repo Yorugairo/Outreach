@@ -28,6 +28,8 @@ from pathlib import Path
 OUT = Path(__file__).parent
 FETCHED = date.today().isoformat()
 TIC_URL = "https://ticdata.treasury.gov/resource-center/data-chart-center/tic/Documents/slt_table5.txt"
+MFH_HIST_URL = "https://ticdata.treasury.gov/resource-center/data-chart-center/tic/Documents/mfhhis01.csv"   # Major Foreign Holders, monthly history from 2000-03
+MON = {m: i + 1 for i, m in enumerate(["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"])}
 
 
 def die(msg: str) -> None:
@@ -75,6 +77,35 @@ def month_label(m: str) -> str:
     return ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"][int(m[5:7]) - 1] + " '" + m[2:4]
 
 
+def mfh_history(country: str = "Japan") -> dict[str, float]:
+    """{'YYYY-MM': $bn} for one holder from the Treasury's monthly history file (blocks of one year, newest first).
+    The operator asked for 1980 (2026-09-05): the monthly series starts 2000-03; nothing earlier is in the source."""
+    import csv, io
+    try:
+        raw = urllib.request.urlopen(MFH_HIST_URL, timeout=60).read().decode("utf-8", "replace")
+    except Exception as e:                                          # noqa: BLE001
+        die(f"MFH history unreachable ({type(e).__name__})")
+    rows = list(csv.reader(io.StringIO(raw)))
+    out: dict[str, float] = {}
+    months_hdr = None
+    for i, r in enumerate(rows):
+        if len(r) > 2 and r[1] in MON:
+            months_hdr = r
+        elif r and r[0] == "Country" and months_hdr:
+            keys = [(int(y), MON[m]) for m, y in zip(months_hdr[1:], r[1:]) if y.strip().isdigit()]
+            for rr in rows[i + 1:i + 80]:
+                if rr and rr[0] == country:
+                    for (y, mo), v in zip(keys, rr[1:]):
+                        try:
+                            out[f"{y}-{mo:02d}"] = float(v)
+                        except ValueError:
+                            pass
+                    break
+    if len(out) < 200:
+        die(f"MFH history: only {len(out)} months parsed for {country} - the file format changed")
+    return out
+
+
 def month_to_x(m: str) -> float:
     """'2026-06' -> 2026.458, the decimal-year x the template's drawChart plots on."""
     y, mo = m.split("-")
@@ -90,8 +121,15 @@ def write(name: str, payload: dict) -> None:
 def japan_holdings(months, rows) -> dict:
     jp, tot = rows["Japan"], rows["Grand Total"]
     peak_i = jp.index(max(jp))
-    span = list(zip(months, jp))[:26][::-1]                          # oldest -> newest, ~2y
+    # the whole monthly history since 2000 (operator, 2026-09-05: "a time series that shows Japan's holdings moving up
+    # and down with an actual trend"), the current release winning wherever it covers (its figures are the revised ones)
+    hist = mfh_history("Japan")
+    current = dict(zip(months, jp))
+    merged = {**hist, **current}
+    span = sorted(merged.items())                                     # oldest -> newest
     pts = [[month_to_x(m), round(v, 1)] for m, v in span]
+    seam = min(current)                                               # first month the current release covers
+    low_m, low_v = min(span, key=lambda kv: kv[1])
     drop = jp[0] - jp[peak_i]          # signed: a decline is negative (E28, sign is geometry)
     facts = {
         "latest_month": months[0], "latest": jp[0],
@@ -99,17 +137,20 @@ def japan_holdings(months, rows) -> dict:
         "drop_bn": round(drop, 1), "drop_pct": round((jp[0] / jp[peak_i] - 1) * 100, 1),
         "share_pct": round(jp[0] / tot[0] * 100, 1),
         "rank_2_uk": rows["United Kingdom"][0], "rank_3_china": rows["China, Mainland"][0],
+        "series_from": span[0][0], "months": len(span), "history_to": max(m for m in hist if m < seam), "current_from": seam,
+        "low_since_2000_month": low_m, "low_since_2000": low_v,
     }
     write("ev-japan-holdings-v1", {
         "title": "Our biggest customer is selling",
-        "sub": f"Japan's holdings of US Treasury securities, $bn, monthly. "
-               f"Peak {facts['peak_month']} ${facts['peak']:,.1f}B "
-               f"-> {facts['latest_month']} ${facts['latest']:,.1f}B",
+        "sub": f"Japan's holdings of US Treasuries, $bn, monthly since 2000; "
+               f"{facts['peak_month']} ${facts['peak']:,.1f}B -> {facts['latest_month']} ${facts['latest']:,.1f}B. "
+               f"TIC history to {facts['history_to']}, the current release from {facts['current_from']}",
         "src": f"US Treasury TIC Table 5, Major Foreign Holders · fetched {FETCHED}",
         "ylabel": "$bn",
-        "from_zero": True,   # E28 (operator, 2026-09-05): on a truncated axis a tenth read as a fall to nothing; the page starts at zero
-        # E28: the selected dates state their rule on the page - the first print, the peak, the latest
-        "xticks": [[pts[0][0], month_label(span[0][0])], [month_to_x(facts["peak_month"]), month_label(facts["peak_month"])], [pts[-1][0], month_label(facts["latest_month"])]],
+        # the axis floors at the series' own low since 2000 (the builder pads from the min; operator, 2026-09-05: "start from the
+        # lowest amount Japan has held since 2000"); the selected dates state their rule - every fifth year (E28)
+        "xticks": [[float(y), str(y)] for y in range(2000, int(pts[-1][0]) + 1, 5)],
+        "highlight_from": month_to_x(facts["peak_month"]),   # the story's window (Feb 2026 on) in the sign colour, the history muted beneath
         "series": [{"label": f"{facts['drop_pct']:+.1f}%", "name": "Japan", "color": "crimson", "pts": pts}],
         "status": "REAL", "fetched": FETCHED, "facts": facts,
     })
@@ -279,6 +320,9 @@ def main() -> int:
     print(f"  Tokyo Tea Break evidence — fetched {FETCHED}")
     months, rows = tic_table5()
     jp = japan_holdings(months, rows)
+    if "--only-japan" in sys.argv:   # refresh the holdings page alone; every other figure stays as approved
+        print(f"  Japan  {jp['latest_month']}  ${jp['latest']:,.1f}B  ({jp['months']} months from {jp['series_from']}, low {jp['low_since_2000']} in {jp['low_since_2000_month']})")
+        return 0
     hy = hedged_yield()
     pe = meta_pe()
     dr = discount_rate(pe, hy["us10y"])
