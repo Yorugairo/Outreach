@@ -27,7 +27,8 @@ sys.path.insert(0, str(ROOT / "content/video_engine/scripts"))
 import render_baseline as RB  # noqa: E402
 
 CAPABILITIES = ["curvature_stroke", "analytic_spring", "area_squash", "arap_morph", "dqs_skinning", "prop_attach",
-                "min_jerk"]   # + the minimum-jerk transition (FINDING-the-animation-math s2, 2026-09-05)
+                "min_jerk",    # + the minimum-jerk transition (FINDING-the-animation-math s2, 2026-09-05)
+                "km_ink"]      # + Kubelka-Munk on overlapping ink (44 s44.1, P43 T3, 2026-09-05)
 
 
 def _defaults_block() -> dict[str, str]:

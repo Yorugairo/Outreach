@@ -16,7 +16,7 @@ sys.path.insert(0, str(ROOT / "content/video_engine/scripts"))
 
 import sync_kinetics as SK  # noqa: E402
 
-MODULES = ["ease", "spring", "stroke"]   # the T1 set; later slices append here in the same commit as their module
+MODULES = ["ease", "spring", "stroke", "ink"]   # the T1 set; later slices append here in the same commit as their module
 
 
 def test_committed_template_is_in_sync() -> None:
