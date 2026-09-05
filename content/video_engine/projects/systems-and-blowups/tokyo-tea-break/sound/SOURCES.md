@@ -111,3 +111,30 @@ transition (operator: "the distortion would work in our favour, as if it's being
 (0.55 s, rate up x6), `fs-whoosh-3-spiral-in.mp3` (1.75 s, the whoosh REVERSED, rate up x2.5 - it swells for the whole unwind and lands with the chart), `fs-whoosh-3-drain.mp3` (2.2 s, rate up x4). Same CC0
 source and licence as the whoosh-3 row; peak-normalised to -1 dBFS; the cue gain 0.22 applies as to every accent.
 
+## Tokyo short - the press pack and the beds (2026-09-05)
+
+**Press clicks** (operator: "press camera clicking noises for all of the people with their phones out starting at 0:09"):
+four CC0 shutters, same process as above (leading silence trimmed, gain-matched to -14 LUFS, -1 dBFS limiter);
+`build_short.py` composes them into a seeded PRESS PACK the length of the panel clip (clusters of two or three clicks,
+the sample and its level varied per click) - `press-pack-A.mp3` dense, `press-pack-B.mp3` sparse - one cue at the panel.
+
+| file | Freesound id | title | author | licence | URL |
+|---|---|---|---|---|---|
+| `fs-shutter-pentax-337229.mp3` | 337229 | pentax me - shutter 04.wav | Anthousai | CC0 1.0 — http://creativecommons.org/publicdomain/zero/1.0/ | https://freesound.org/people/Anthousai/sounds/337229/ |
+| `fs-shutter-manual-521854.mp3` | 521854 | Camera Manual Click.wav | D.jones | CC0 1.0 — http://creativecommons.org/publicdomain/zero/1.0/ | https://freesound.org/people/D.jones/sounds/521854/ |
+| `fs-shutter-sony-249750.mp3` | 249750 | Camera shutter in Sony A55 | matthiastidlund | CC0 1.0 — http://creativecommons.org/publicdomain/zero/1.0/ | https://freesound.org/people/matthiastidlund/sounds/249750/ |
+| `fs-shutter-dslr-539136.mp3` | 539136 | DSLR Shutter fast 006.wav | ristooooo1 | CC0 1.0 — http://creativecommons.org/publicdomain/zero/1.0/ | https://freesound.org/people/ristooooo1/sounds/539136/ |
+
+| file | source dur | final dur | raw I | gain | final I | final TP |
+|---|---|---|---|---|---|---|
+| `fs-shutter-pentax-337229.mp3` | 0.70 s | 0.70 s | -33.3 | +19.3 dB | **-21.1** | 1.2 dBTP |
+| `fs-shutter-manual-521854.mp3` | 0.32 s | 0.30 s | -28.9 | +14.9 dB | **-19.6** | 0.7 dBTP |
+| `fs-shutter-sony-249750.mp3` | 0.50 s | 0.47 s | -32.1 | +18.1 dB | **-15.9** | 0.5 dBTP |
+| `fs-shutter-dslr-539136.mp3` | 0.49 s | 0.36 s | -30.1 | +16.1 dB | **-20.4** | 0.6 dBTP |
+
+**Beds** - the Money Physics ep1 beds reused (Suno Pro, the operator's account `yorugairo`, generated 2026-08-31, model v5.5,
+instrumental; provenance and prompts in `steel-and-paper/sound/SUNO-GENERATION-LOG.md`; Pro grants commercial use). Copied
+here as `suno-hook-A/B.mp3` (47.9 / 42.7 s) and `suno-pivot-A/B.mp3` (89.5 / 113.4 s), each gain-matched to -14 LUFS and limited at -1 dBFS (s4b: flat) so one cue gain fits both variants. Level: the platform's LU rule (YouTube -28, Facebook -26 - operator, 2026-09-05)
+(`docs/research/audio/SUBTHRESHOLD_BACKGROUND_MUSIC_RESEARCH_BLUEPRINT.md` s2, calibrated by ear 2026-09-01): gain =
+10^((VO_I - LU - bed_I) / 20) with the VO at -17.9 LUFS and the limited copies measured at -13.0 (hook-A -13.2): 0.0226 on YouTube.
+Continuity (s5): the hook bed from 0:00, the turn bed fading in under it at 0:40 and running to the end.

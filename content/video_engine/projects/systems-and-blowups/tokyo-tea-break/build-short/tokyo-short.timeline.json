@@ -1952,12 +1952,22 @@
  ],
  "sound": [
   {
+   "slot": "press 3",
+   "at": 8.99,
+   "gain": 0.3,
+   "fade_in": 0.0,
+   "variants": {
+    "A": "__snd_0_A__",
+    "B": "__snd_0_B__"
+   }
+  },
+  {
    "slot": "page enter 4",
    "at": 17.17,
    "gain": 0.18,
    "fade_in": 0.0,
    "variants": {
-    "A": "__snd_0_A__"
+    "A": "__snd_1_A__"
    }
   },
   {
@@ -1966,8 +1976,8 @@
    "gain": 0.22,
    "fade_in": 0.0,
    "variants": {
-    "A": "__snd_1_A__",
-    "B": "__snd_1_B__"
+    "A": "__snd_2_A__",
+    "B": "__snd_2_B__"
    }
   },
   {
@@ -1976,10 +1986,10 @@
    "gain": 0.22,
    "fade_in": 0.0,
    "variants": {
-    "A": "__snd_2_A__",
-    "B": "__snd_2_B__",
-    "C": "__snd_2_C__",
-    "D": "__snd_2_D__"
+    "A": "__snd_3_A__",
+    "B": "__snd_3_B__",
+    "C": "__snd_3_C__",
+    "D": "__snd_3_D__"
    }
   },
   {
@@ -1988,9 +1998,9 @@
    "gain": 0.22,
    "fade_in": 0.0,
    "variants": {
-    "A": "__snd_3_A__",
-    "B": "__snd_3_B__",
-    "C": "__snd_3_C__"
+    "A": "__snd_4_A__",
+    "B": "__snd_4_B__",
+    "C": "__snd_4_C__"
    }
   },
   {
@@ -1999,9 +2009,29 @@
    "gain": 0.22,
    "fade_in": 0.0,
    "variants": {
-    "A": "__snd_4_A__",
-    "B": "__snd_4_B__",
-    "C": "__snd_4_C__"
+    "A": "__snd_5_A__",
+    "B": "__snd_5_B__",
+    "C": "__snd_5_C__"
+   }
+  },
+  {
+   "slot": "hook bed",
+   "at": 0.0,
+   "gain": 0.0226,
+   "fade_in": 1.5,
+   "variants": {
+    "A": "__snd_6_A__",
+    "B": "__snd_6_B__"
+   }
+  },
+  {
+   "slot": "turn bed",
+   "at": 40.0,
+   "gain": 0.0226,
+   "fade_in": 3.0,
+   "variants": {
+    "A": "__snd_7_A__",
+    "B": "__snd_7_B__"
    }
   }
  ],

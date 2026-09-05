@@ -115,6 +115,43 @@ BRAND_GAP, BRAND_TAIL = 0.7, 1.0
 OUTRO_S, OUTRO_LEAD = 6.2, 0.1   # the card's fade begins a tenth before the last word ends and DISSOLVES in (M16: the last caption pops 2.52 s before the VO ends) (operator, 2026-09-05: the wipe into a title card was 'madness')
 
 
+# THE PRESS PACK (operator, 2026-09-05: "press camera clicking noises for all of the people with their phones out starting at 0:09"):
+# four CC0 shutters (sound/SOURCES.md) composed into a seeded pack the length of the panel clip - clusters of two or three
+# clicks, a cluster every ~1-1.6 s, the sample and its level varied per click; A dense, B sparse. One cue at the panel.
+SHUTTERS = ["fs-shutter-pentax-337229.mp3", "fs-shutter-manual-521854.mp3", "fs-shutter-sony-249750.mp3", "fs-shutter-dslr-539136.mp3"]
+
+
+def press_pack(window_s: float, out: Path, clusters: int, seed: int) -> Path:
+    """A window of press clicks, seeded, written to out (peak -1 dBFS, then the cue gain sits it under the voice)."""
+    import random
+    import subprocess
+    rnd = random.Random(seed)
+    clicks, t = [], 0.15 + rnd.random() * 0.4
+    for _ in range(clusters):
+        if t > window_s - 0.6:
+            break
+        for k in range(rnd.choice((2, 2, 3))):
+            clicks.append((round(t + k * (0.12 + rnd.random() * 0.16), 3), rnd.choice(SHUTTERS), round(0.55 + rnd.random() * 0.45, 2)))
+        t += 0.9 + rnd.random() * 0.7
+    inputs, parts = [], []
+    for i, (at, f, g) in enumerate(clicks):
+        inputs += ["-i", str(HERE / "sound" / f)]
+        parts.append(f"[{i}:a]aresample=44100,aformat=channel_layouts=mono,volume={g},adelay={int(at * 1000)}|{int(at * 1000)}[c{i}]")
+    fc = ";".join(parts) + ";" + "".join(f"[c{i}]" for i in range(len(clicks))) + f"amix=inputs={len(clicks)}:normalize=0,atrim=0:{window_s:.3f},alimiter=limit=0.891[out]"
+    subprocess.run(["ffmpeg", "-y", "-v", "error", *inputs, "-filter_complex", fc, "-map", "[out]", "-c:a", "libmp3lame", "-q:a", "2", str(out)], check=True)
+    return out
+
+
+# THE BEDS (sub-threshold music, docs/research/audio/SUBTHRESHOLD_BACKGROUND_MUSIC_RESEARCH_BLUEPRINT.md s2, calibrated by ear
+# 2026-09-01; operator, 2026-09-05: "-28 LU is youtube, -26 is facebook"): gain = 10^((VO_I - LU - bed_I) / 20). The ep1 Suno beds
+# reused (SOURCES.md); the hook bed from 0:00, the turn bed fading in under it at 0:40 and running to the end (continuity, s5).
+BED_LU = {"youtube": -28.0, "facebook": -26.0}
+PLATFORM = "youtube"
+VO_LUFS = -17.9   # vo-short/audio/scene_1.mp3, measured 2026-09-05
+BEDS = {"suno-hook-A.mp3": -13.2, "suno-hook-B.mp3": -13.0, "suno-pivot-A.mp3": -13.0, "suno-pivot-B.mp3": -13.0}   # the copies in sound/, matched to -14 then limited at -1 dBFS: MEASURED integrated LUFS (SOURCES.md), so one gain fits both variants
+bed_gain = lambda f: round(10 ** ((VO_LUFS + BED_LU[PLATFORM] - BEDS[f]) / 20), 4)
+
+
 def seekable_clip(name: str, src: Path | None = None) -> Path:
     """The Flow clip re-encoded with a keyframe every KEYFRAME_EVERY frames (the originals carry ONE keyframe in 240,
     so every seek decoded from frame 0 and live playback fell behind and held - operator, 2026-09-05). Same
@@ -284,6 +321,17 @@ def main() -> int:
                     cues.append({"slot": f"page retract {i + 1} (flip)", "at": round(r[1] - RETRACT_S, 2), "gain": ACCENT, "fade_in": 0.0, "variants": {"A": FLIP, "B": AIR1}})
         elif isinstance(r[5], str) and r[5].startswith("suck"):
             cues.append({"slot": f"suck {i + 1}", "at": round(r[0], 2), "gain": ACCENT, "fade_in": 0.0, "variants": {"A": W_SUCK, "B": AIR3, "C": WHIRLPOOL, "D": ROLL}})
+        if "clip-c-blue-ties-panel" in r[2]:   # the press: phones out for the whole panel clip
+            win = round(r[1] - r[0], 3)
+            press_pack(win, HERE / "sound/press-pack-A.mp3", clusters=12, seed=0xC1A55)
+            press_pack(win, HERE / "sound/press-pack-B.mp3", clusters=6, seed=0xC1A56)
+            cues.append({"slot": f"press {i + 1}", "at": round(r[0], 2), "gain": 0.3, "fade_in": 0.0, "variants": {"A": "press-pack-A.mp3", "B": "press-pack-B.mp3"},
+                         "note": "the pack meters -16.6 LUFS; 0.3 puts the clicks ~9 dB under the voice, background like every accent"})
+    # the beds, sub-threshold and continuous: the hook bed from 0, the turn bed fading in under it at 0:40 to the end
+    cues.append({"slot": "hook bed", "at": 0.0, "gain": bed_gain("suno-hook-B.mp3"), "fade_in": 1.5, "variants": {"A": "suno-hook-B.mp3", "B": "suno-hook-A.mp3"},
+                 "note": f"{PLATFORM} {BED_LU[PLATFORM]:+.0f} LU under the VO ({VO_LUFS} LUFS); B at {bed_gain('suno-hook-A.mp3')}"})
+    cues.append({"slot": "turn bed", "at": 40.0, "gain": bed_gain("suno-pivot-A.mp3"), "fade_in": 3.0, "variants": {"A": "suno-pivot-A.mp3", "B": "suno-pivot-B.mp3"},
+                 "note": f"{PLATFORM} {BED_LU[PLATFORM]:+.0f} LU under the VO; B at {bed_gain('suno-pivot-B.mp3')}"})
     plan["cues"] = cues
     plan_path.write_text(json.dumps(plan, indent=1), encoding="utf-8")
     (HERE / "SHOT-TABLE-SHORT.py").write_text(
