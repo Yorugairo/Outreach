@@ -53,15 +53,25 @@ def warp(x: np.ndarray, out_s: float, ratio: float, direction: str) -> np.ndarra
     return y
 
 
+TARGET_I = -14.0   # the ledger's accent level (sound/SOURCES.md); the cue gain 0.22 then puts it ~9 dB under the -17.9 LUFS voice
+
+
+def measure_i(path: Path) -> float:
+    out = subprocess.run(["ffmpeg", "-i", str(path), "-af", "apad=whole_dur=3,loudnorm=print_format=json", "-f", "null", "-"], capture_output=True, text=True).stderr
+    i = out.rfind("{"); import json; return float(json.loads(out[i:out.index("}", i) + 1])["input_i"])
+
+
 def write_mp3(y: np.ndarray, out: Path) -> None:
     peak = np.max(np.abs(y)) or 1.0
-    y = y / peak * 0.891                                 # -1 dBFS peak, the ledger's ceiling
+    y = y / peak * 0.891                                 # -1 dBFS peak first
     tmp = out.with_suffix(".wav")
     with wave.open(str(tmp), "wb") as w:
         w.setnchannels(1); w.setsampwidth(2); w.setframerate(SR)
         w.writeframes((y * 32767).astype(np.int16).tobytes())
-    subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", str(tmp), "-c:a", "libmp3lame", "-q:a", "2", str(out)], check=True)
+    gain = TARGET_I - measure_i(tmp)                     # then loudness-matched to the ledger, limited at -1 dBFS like every accent
+    subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", str(tmp), "-af", f"volume={gain:.2f}dB,alimiter=limit=0.891", "-c:a", "libmp3lame", "-q:a", "2", str(out)], check=True)
     tmp.unlink()
+    print(f"  {out.name}: gain {gain:+.1f} dB -> {measure_i(out):.1f} LUFS")
 
 
 def main() -> int:
