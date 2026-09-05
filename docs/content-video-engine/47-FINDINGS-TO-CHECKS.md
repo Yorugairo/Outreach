@@ -190,7 +190,7 @@ Every row of §2 now names the script that owns it and the state it landed in. A
 | G-a | `gate_motion_density.py` M14 | **shipped** | punch on a card entrance / a badge reveal FAILs; after the settle PASSes |
 | G-b, G-c, G-e, G-m, G-n | `gate_comfy_config.py` | **shipped** | the parallax runner as it shipped: FAIL (5 findings), kept as the test fixture; Wan 80 / LTX 120 frames, CFG 6, unscaled FP8, quantized VAE, actor plate |
 | G-d | `lint_template_transforms.py` | **INFO** (ladder) | one anchored + one loose -> one finding; first landing lists 11 unanchored transforms in the template |
-| G-g | `gate_opening_structure.py` G15b | **WARN** until the grandfathering ruling | token echoed, argument drifted -> WARN; ep1 as shipped WARNs (the planted sentence carries one stem) |
+| G-g | `gate_opening_structure.py` G15b | **shipped as FAIL** (no grandfathering - operator, 2026-09-04) | token echoed, argument drifted -> FAIL; ep1 as shipped FAILs (the planted sentence carries one stem) - the rewrite's first bar |
 | G-i, G-j, G-k | `gate_grounding.py` | **INFO-then-FAIL ladder** | wrong horizon / screen tween / contact without solver each FAIL; nothing declared -> INFO, never a silent PASS |
 | G-l | `gate_vertical_safe_box.py` + `test_vertical_safe_box.py` | **shipped, and the defect fixed** (P37 T0) | the pre-T0 9:16 CSS verbatim FAILs: docks 136 px into the rail, dock-2 to y 1780, caption at y 1759 |
 | V-a | `judge_muted_caption.py` | **shipped as a CLI, unwired** | scenery and over-dense diagnoses on recorded replies; cadence is the operator's |

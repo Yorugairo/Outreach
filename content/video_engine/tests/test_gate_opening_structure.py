@@ -65,9 +65,10 @@ def _conforming_opening() -> str:
     the text has no signature, placed by the kit's estimator so it lands in
     its window. Padded to ~13.4 min so the geometry matches a real episode
     (P1 ~1:10, beat 5 from 0:47, P2 ~1:10-2:46)."""
+    # G15b (P37 T4): the ring token is planted INSIDE the claim, so the close has an argument to
+    # return to - "An iron spike." on its own carries one content stem, which is ep1's defect
     s = ("The safest thing you own looks like this. "
-         "An iron spike. `[post-key]` "
-         "It ruined almost everyone who touched it, and you would have bought it too. ")
+         "An iron spike ruined almost everyone who touched it, and you would have bought it too. `[post-key]` ")
     s = _pad_to(s, 9.0)
     s += "[archetype] A banker in Manhattan is counting a bonus this morning, and a budtender in Denver is counting a till. "
     s += "[stakes] If you hold an index fund it is already holding you, and the bill is yours. "
@@ -109,6 +110,9 @@ def _conforming_opening() -> str:
     for t in range(340, 800, 50):
         s = _pad_to(s, float(t))
         s += "But look at what the filings say next, because the number moves again. "
+    # the close returns the claim, not just the word (G15b): iron / ruined / touched / bought recur
+    s = _pad_to(s, 790.0)
+    s += "So the iron spike is the thing that ruined everyone who touched it, and you would have bought it too. "
     s = _pad_to(s, 805.0)
     return s
 

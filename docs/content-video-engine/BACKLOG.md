@@ -184,7 +184,7 @@ is a luxury for an audience that already stayed.
 | # | plan | status | note |
 |---|---|---|---|
 | ~~P39~~ | **[Render baseline & kill switch](../../.claude/PRPs/plans/P39-RENDER-BASELINE-AND-KILL-SWITCH.plan.md)** | **COMPLETE 2026-09-04** — tag, four golden frames, determinism proven (and the renderer fixed where it was not: B8), six flags defaulting off, runbook | **first.** Tag, golden frames, and a flag per capability. Today there is no rollback point and no way to detect a visual regression |
-| P37 | [Enforcement layer](../../.claude/PRPs/plans/P37-RESEARCH-ENFORCEMENT-LAYER.plan.md) | draft | 13 gates + V-a; T0 fixes the 9:16 docks, T9 the parallax dials |
+| ~~P37~~ | [Enforcement layer](../../.claude/PRPs/plans/P37-RESEARCH-ENFORCEMENT-LAYER.plan.md) | **COMPLETE 2026-09-04** — 14 checks shipped or on the ladder, each shown failing first (47 §5b); G15b FAIL, judge on the Codex lane | 13 gates + V-a; T0 fixes the 9:16 docks, T9 the parallax dials |
 | P38 | [Kinetics capability](../../.claude/PRPs/plans/P38-KINETICS-CAPABILITY-LAYER.plan.md) | draft | the six designed-out items; changes what the video looks like |
 | P40 | **[Measure the first minute](../../.claude/PRPs/plans/P40-MEASURE-THE-FIRST-MINUTE.plan.md)** | draft | E1 metrics against **the one retention curve we hold** (drop at 0:45–1:00). **T1 settles X3 and unblocks M13 with no render and no dependency — the cheapest useful thing in the stack** |
 | P41 | The vertical stage — 49 §49.1 | **backlog** | the 3-zone short-form stage. T0 fixes dock geometry; the stage does not exist and we ship shorts. Folds in short-form cadence (X14) and the caption strip |
@@ -212,7 +212,7 @@ path stops existing. Each ships with the test named in 47.
 
 ## Build — Tier 2, gates (47 §2) → **[P37](../../.claude/PRPs/plans/P37-RESEARCH-ENFORCEMENT-LAYER.plan.md)**
 
-**Shipped 2026-09-04 (P37, see 47 §5b):** G-a (`M14`), G-b/c/e/m/n (`gate_comfy_config`), G-d (lint, INFO), G-g (`G15b`, WARN pending the grandfathering ruling), G-i/j/k (`gate_grounding`, ladder), G-l (`gate_vertical_safe_box` + the T0 fix), V-a (judge CLI, unwired). **Open:** G-h (44's ink work), G-o (X0), M13 (P40 T1). The rows stay below as the record of what each one was built against.
+**Shipped 2026-09-04 (P37, see 47 §5b):** G-a (`M14`), G-b/c/e/m/n (`gate_comfy_config`), G-d (lint, INFO), G-g (`G15b`, FAIL - no grandfathering, operator 2026-09-04), G-i/j/k (`gate_grounding`, ladder), G-l (`gate_vertical_safe_box` + the T0 fix), V-a (judge CLI, unwired). **Open:** G-h (44's ink work), G-o (X0), M13 (P40 T1). The rows stay below as the record of what each one was built against.
 
 | # | gate | FAILs on |
 |---|---|---|
