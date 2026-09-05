@@ -549,6 +549,14 @@ export class FlowCdpDriver {
   async triggerGeneration() {
     const page = this.flowPage;
     if (!page) throw new Error('No active Flow page');
+    // The baseline for "what is new" is taken HERE, before the submit click. Taken after it, a fast
+    // render was already listed and the next scene claimed it - three Tokyo stills came back shifted
+    // by one scene (2026-09-04).
+    this.preSubmit = await page.evaluate(() => ({
+      images: Array.from(document.querySelectorAll("img[src*='getMediaUrlRedirect'], img[src*='flow-content.google/'], img[src*='/asb/']")).map(i => i.src),
+      videos: Array.from(document.querySelectorAll('video')).map(v => v.src || v.getAttribute('src'))
+        .filter(s => Boolean(s) && /getMediaUrlRedirect|flow-content\.google\/|\/asb\//.test(s)),
+    }));
 
     let submitBtn = page.locator("button:has-text('arrow_forward'), button:has-text('Create'), button[aria-label*='Submit'], button[aria-label*='Generate']").last();
     if (await submitBtn.count() > 0 && await submitBtn.isVisible()) {
@@ -601,9 +609,10 @@ export class FlowCdpDriver {
 
     if (isImage) {
       console.log(`[FlowCdpDriver] Waiting for image generation to complete (timeout: ${timeoutMs}ms)...`);
-      const prevList = await page.evaluate(() => {
+      const prevList = (this.preSubmit && this.preSubmit.images) || await page.evaluate(() => {
         return Array.from(document.querySelectorAll("img[src*='getMediaUrlRedirect'], img[src*='flow-content.google/'], img[src*='/asb/']")).map(i => i.src);
       });
+      this.preSubmit = null;
 
       const collected = [];
       let lastFoundAt = Date.now();
@@ -684,11 +693,12 @@ export class FlowCdpDriver {
     }
 
     // Video mode: snapshot all existing video URLs to diff reliably
-    const prevVideoList = await page.evaluate(() => {
+    const prevVideoList = (this.preSubmit && this.preSubmit.videos) || await page.evaluate(() => {
       return Array.from(document.querySelectorAll('video'))
         .map(v => v.src || v.getAttribute('src'))
         .filter(s => Boolean(s) && /getMediaUrlRedirect|flow-content\.google\/|\/asb\//.test(s));
     });
+    this.preSubmit = null;
 
     console.log(`[FlowCdpDriver] Waiting for video generation to complete (timeout: ${timeoutMs}ms, baseline videos: ${prevVideoList.length})...`);
 
