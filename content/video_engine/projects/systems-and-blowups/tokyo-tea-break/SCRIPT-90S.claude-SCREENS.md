@@ -8,8 +8,8 @@ invalid — the enumeration IS the review.
 ## X1 — antecedent pairs (3)
 
 - [1] `…Tokyo took a tea break.` → **And left America with an unfunded bar tab. [post-key] [stakes] The Fed hasn't mo**
-- [7] `…profit not yet earned, and a higher yield discounts it.` → **Not a panic.**
-- [8] `…Not a panic.` → **Not a plot.**
+- [9] `… break. [ring] And that unfunded bar tab is still ours.` → **Not a panic.**
+- [10] `…Not a panic.` → **Not a plot.**
 
 ## P6 — deixis openers (0)
 
@@ -36,8 +36,8 @@ invalid — the enumeration IS the review.
 - ¶8: [37]
 - ¶9: [8, 9, 6, 11]
 - ¶10: [10, 27]
-- ¶11: [3, 3, 1]
-- ¶12: [5, 16]
+- ¶11: [5, 16]
+- ¶12: [3, 3, 1]
 
 ## DECLARED — beat tags (24)
 
@@ -69,4 +69,4 @@ the agent's, per tag: **true / laundered** (CHECK-RESPONSIBILITIES R2,
 - [rehook]@0:59  window: PASS — G25  "And here's what nobody says: the money went home, and the tab stayed here."  → verdict: ____
 - [dip]@1:15  window: n/a — outside opening window (P2 ends 1:05)  "So, the second number: it's on your phone."  → verdict: ____
 - [signpost]@1:15  window: PASS — G42  "So, the second number: it's on your phone."  → verdict: ____
-- [ring]@1:33  window: n/a — outside opening window (P2 ends 1:05)  "And that unfunded bar tab is still ours."  → verdict: ____
+- [ring]@1:30  window: n/a — outside opening window (P2 ends 1:05)  "And that unfunded bar tab is still ours."  → verdict: ____

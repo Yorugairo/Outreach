@@ -1,11 +1,11 @@
 # SCRIPT GATES - SCRIPT-90S-VO.claude.txt
 
 script: SCRIPT-90S-VO.claude.txt
-generated: 2026-09-05T05:25:41+00:00
-script_hash: d26bd48daf05ed3aeb65f226c5fed2001e205b20a715819e7a21383afc50d728
+generated: 2026-09-05T05:41:25+00:00
+script_hash: 745e464fa3aecf0f4659c6a16a4b2ae27074741fb848d3a3fee947007f1a3c27
 timing_source: estimated
 
-TOOLS      lint: exit 0, 0 fails | audit: exit 0, 0/1, timing=estimated |
+TOOLS      lint: exit 1, 1 fails | audit: exit 0, 0/1, timing=estimated |
            opening gate: exit 1, 3/2/40/10 | screens: SCRIPT-90S.claude-SCREENS.md, 7 items
 
 VIEWER     SCRIPT-90S.claude-VIEWER.md  (advisory: --no-viewer-gate - these rows do not change the VERDICT)
@@ -16,11 +16,12 @@ VIEWER     SCRIPT-90S.claude-VIEWER.md  (advisory: --no-viewer-gate - these rows
   [INFO ] V05 gain per window: median 4, 0 dead of 7 reported
 
 ## lint_script_pattern.py
-exit 0
+exit 1
 
 ```
+FAIL RING: no opening token recurs in the close
 stats: {'sentence_mean': 10.4, 'sentence_count': 27, 'word_count': 281, 'rehook_positions_pct': [17, 64]}
-RESULT: clean
+RESULT: 1 failure(s)
 ```
 
 ## audit_script_doctrine.py
@@ -67,13 +68,13 @@ exit 1
           geometry: P1 0:00-0:35 (beat 5 from 0:23), P2 -1:05 (phase guides)
      density_bands: loops (2, 3), new-info (4, 6)
          a3_anchor: 0:09
-             cycle: checked 0:00-1:35; longest gap 18s from 1:15
+             cycle: checked 0:00-1:35; longest gap 16s from 0:59
       unit_windows: ['P3 unit 1 0:16-0:43', 'P5 unit 2 0:52-1:23']
       counterparty: Japan
               ring: tab
          packaging: title='Tokyo Tea Break' thumb=None thumb_file=None
     not_gated_here: Truby Battle / Self-Revelation / New Equilibrium, Snyder midpoint, chiastic center, ring CLOSE (P4-P6)
-    beats_declared: {'stakes': ['0:04'], 'archetype': ['0:07'], 'tricolon': ['0:07'], 'rehook': ['0:15', '0:39', '0:59'], 'payoff': ['0:19'], 'new': ['0:19', '0:42', '0:48', '0:53'], 'reflect': ['0:26'], 'opponent': ['0:31'], 'desire': ['0:35'], 'map': ['0:35'], 'promise': ['0:39'], 'catalyst': ['0:42'], 'loop': ['0:48', '0:53'], 'foreshadow': ['0:48'], 'loop-close': ['0:59'], 'dip': ['1:15'], 'signpost': ['1:15'], 'ring': ['1:33']}
+    beats_declared: {'stakes': ['0:04'], 'archetype': ['0:07'], 'tricolon': ['0:07'], 'rehook': ['0:15', '0:39', '0:59'], 'payoff': ['0:19'], 'new': ['0:19', '0:42', '0:48', '0:53'], 'reflect': ['0:26'], 'opponent': ['0:31'], 'desire': ['0:35'], 'map': ['0:35'], 'promise': ['0:39'], 'catalyst': ['0:42'], 'loop': ['0:48', '0:53'], 'foreshadow': ['0:48'], 'loop-close': ['0:59'], 'dip': ['1:15'], 'signpost': ['1:15'], 'ring': ['1:30']}
 
   [FAIL ] G22 3 [new] in P2
           PLATFORM density: 4-6 new-info beats at this runtime (P2 geometry)
@@ -149,7 +150,7 @@ exit 1
           U6 / E20 concession budget: an agreement run never exceeds 2 sentences or 10s without a claim of ours
   [PASS ] G35 clean
           U6 / E20: a delivered proof is never hedged in the next sentence
-  [PASS ] G36 longest stretch without a cycle beat: 18s from 1:15
+  [PASS ] G36 longest stretch without a cycle beat: 16s from 0:59
           CLK the cycle repeats per beat - hook / show it's worth it / promise more / deliver; no >60s without a cycle beat, 0:00-1:35 (E23: whole runtime)
   [PASS ] G37 [archetype] at 0:07
           Truby Weakness/Need planted AS PEOPLE: an archetype-in-a-setting enters 0:08-0:30 (38 B3 / MAP s3)
@@ -198,4 +199,4 @@ exit 0
 SCRIPT-90S.claude-SCREENS.md: X1=3 deixis=0 junctions=1 anchors=3 declared=24
 ```
 
-VERDICT: FAIL (1 failing tools)
+VERDICT: FAIL (2 failing tools)
