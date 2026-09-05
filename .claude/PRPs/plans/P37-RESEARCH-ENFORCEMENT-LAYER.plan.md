@@ -1,7 +1,7 @@
 ---
 id: P37-RESEARCH-ENFORCEMENT-LAYER
 title: The enforcement layer - the checks that prove today's research reached production
-status: review
+status: complete
 operation: feature
 risk: standard
 owner: parent
@@ -181,13 +181,13 @@ Write sets are disjoint except T1 and T3, which are sequenced rather than parall
 - Evidence: 2026-09-04 - INFO ladder. CSS reader (a state rule inherits its base selector's origin) + JS reader (the origin must be set on the same receiver within 40 lines, or the element's CSS anchors it). Fixture: one anchored, one loose in each reader -> exactly one finding each. **First landing on the template: 11 unanchored transforms** - `.lp-ink .g` rotate, `.pill`/`.pill.on` scale, the story-bar `scaleY` builds (1798/1864), badge pop 1887, plate-life `rotate` 2024, the camera `scale` 2066, caption words 2237/2241/2253. That list is P38's anchor work; promoting to FAIL waits on it.
 
 ### T4: G-g - G15 closes on the mechanism, not the token
-- Status: review
+- Status: complete
 - Owner: parent
 - Depends on: none
 - Write set: `content/video_engine/scripts/gate_opening_structure.py`, `content/video_engine/tests/test_gate_ring_mechanism.py`
 - Acceptance: G15 keeps its existing token check and adds a mechanism check - the causal claim named in P1 recurs in the close. A script that echoes a P1 *phrase* while the argument has drifted FAILs the new half and PASSes the old. **Human gate: operator decides grandfathering before merge.**
 - Validate: `python -m pytest content/video_engine/tests/test_gate_ring_mechanism.py -q` then `python content/video_engine/scripts/run_script_gates.py <ep1 script>` to confirm no unintended regression
-- Evidence: 2026-09-04 - G15b in `gate_opening_structure.py`: the P1 sentence carrying the token yields its content stems (token and stopwords removed, `ring_claim_stems`); the last 12% of the runtime is the close; the token sentence there is read with its two neighbours; PASS at >= 2 shared stems. **Lands as WARN** (`RING_MECHANISM_LEVEL`) until the operator rules on grandfathering - the plan's human gate; flip the constant to FAIL on that ruling. Tests: return-of-the-argument PASSes both halves; token echo with a drifted argument PASSes G15 and WARNs G15b; token absent from the close is named. Opening-structure suite still green. **Ep1 as shipped: G15 PASS, G15b WARN - the P1 sentence that plants `spike` has one content stem (`iron`), so there is no claim for the close to return to.** That is a rewrite note, not a gate defect: the ring must be planted inside the claim.
+- Evidence: 2026-09-04 - G15b in `gate_opening_structure.py`: the P1 sentence carrying the token yields its content stems (token and stopwords removed, `ring_claim_stems`); the last 12% of the runtime is the close; the token sentence there is read with its two neighbours; PASS at >= 2 shared stems. Landed as WARN behind the human gate; **operator ruling 2026-09-04: no grandfathering, FAIL from here** - both scripts are being rewritten, so the rewrite is held to the ring-closes-on-the-mechanism bar from its first draft. `RING_MECHANISM_LEVEL = "FAIL"`. Tests: return-of-the-argument PASSes both halves; token echo with a drifted argument PASSes G15 and WARNs G15b; token absent from the close is named. Opening-structure suite still green. **Ep1 as shipped: G15 PASS, G15b WARN - the P1 sentence that plants `spike` has one content stem (`iron`), so there is no claim for the close to return to.** That is a rewrite note, not a gate defect: the ring must be planted inside the claim.
 
 ### T5: V-a - the muted-caption judge
 - Status: complete

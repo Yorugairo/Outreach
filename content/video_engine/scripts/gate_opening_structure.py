@@ -104,7 +104,7 @@ PROMISE_WIN = (30.0, 45.0)      # 38 B4 / MAP s3 / CLK: mini-payoff FIRST, then 
 ROADMAP_S = PROMISE_WIN[1]      # kept as a name for the report text
 RING_CLOSE_FRACTION = 0.12       # 47 s2 G-g: "the close" = the script's last 12% - where the ring returns
 RING_MECHANISM_MIN = 2           # content stems the close must share with the P1 claim sentence (beyond the token)
-RING_MECHANISM_LEVEL = "WARN"    # human gate (P37 T4): WARN until the operator rules on grandfathering, then FAIL
+RING_MECHANISM_LEVEL = "FAIL"    # operator ruling 2026-09-04: no grandfathering - both scripts are being rewritten to this bar
 BEAT5_START = 60.0              # 38 B5: the map, desire, opponent, A2, ring - 0:60 to P1 end
 A2_ANCHOR = 60.0                # 38 B5 / P1 QC
 # A3 = kit_spec.a3_anchor_s(runtime): P2.md / MAP s4 QC, A3 + F2 at ~10% of runtime (E23; shared with the audit)
