@@ -1616,6 +1616,7 @@
     let x0 = 1e9, x1 = -1e9, y0 = 1e9, y1 = -1e9;
     for (const s of series) for (const [x, v] of s.pts) { x0 = Math.min(x0, x); x1 = Math.max(x1, x); y0 = Math.min(y0, Y(v)); y1 = Math.max(y1, Y(v)); }
     const pad = (y1 - y0) * 0.06 || 1; y0 -= pad; y1 += pad;
+    if (ax.from_zero && !ax.log) y0 = 0;   /* E28 (operator, 2026-09-05): a truncated axis made a tenth look like a fall to nothing - the series declares its zero */
     const mx = (x) => L + (x - x0) / (x1 - x0 || 1) * (W - L - R), my = (v) => T + (1 - (Y(v) - y0) / (y1 - y0)) * (B - T);
     lpEl("line", "ax", st.chart, { x1: L, x2: W - R, y1: B, y2: B });
     /* both axes, always (operator, 2026-09-03): y ticks - on a log axis at doublings of a power of ten, else the nice-step helper */
@@ -1636,7 +1637,8 @@
       const tip = lpEl("circle", "", st.chart, { r: 6, fill: col, opacity: 0 });
       const last = s.pts[s.pts.length - 1];
       const prev = s.pts.length > 1 ? s.pts[s.pts.length - 2] : last;   /* portrait: the name ends left of the last segment so a steep drop never runs through it */
-      const name = lpEl("text", "sname", st.chart, P ? { x: (Math.min(mx(last[0]), mx(prev[0])) - 8).toFixed(1), y: (my(last[1]) - 30).toFixed(1), "text-anchor": "end", fill: col, opacity: 0 }
+      const nameBelow = P && my(last[1]) < T + 0.25 * (B - T);   /* a line riding the top of a zero-based chart takes its name BELOW its end */
+      const name = lpEl("text", "sname", st.chart, P ? { x: (Math.min(mx(last[0]), mx(prev[0])) - 8).toFixed(1), y: (my(last[1]) + (nameBelow ? 58 : -30)).toFixed(1), "text-anchor": "end", fill: col, opacity: 0 }
                                                      : { x: (mx(last[0]) + 12).toFixed(1), y: (my(last[1]) + 8).toFixed(1), fill: col, opacity: 0 });
       st.linePts.push(s.pts.map(([x, v]) => [mx(x), my(v)]));   /* the exact datum positions, for the species' targets */
       name.textContent = (s.label ? s.label + " " : "") + (s.name || "");
@@ -1644,7 +1646,7 @@
          reveal, one real estate (operator, 2026-09-03) */
       const ib = (st.inlineBadges || {})[s.color];
       if (ib && ib.tag) { const tg = lpEl("tspan", "tagchip", name, { dx: 12, fill: col }); tg.textContent = ib.tag; }
-      st.paths.push({ p, len, tip, name, stagger: i / Math.max(1, series.length), ny: my(last[1]) + (P ? -30 : 8) });
+      st.paths.push({ p, len, tip, name, stagger: i / Math.max(1, series.length), ny: my(last[1]) + (P ? (nameBelow ? 58 : -30) : 8) });
     });
     /* s9.23b inline names never overprint: push apart any two ends closer than one line */
     const order = [...st.paths].sort((a, b) => a.ny - b.ny);

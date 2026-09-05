@@ -29,11 +29,9 @@
       "name": "tokyo-short-player",
       "runtimeExecutable": "python",
       "runtimeArgs": [
-        "-m",
-        "http.server",
+        "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/serve_player.py",
         "8733",
-        "--directory",
-        "C:/Users/Snipe/Downloads/Outreach Program/content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-short"
+        "build-short"
       ],
       "port": 8733
     }

@@ -107,6 +107,7 @@ def japan_holdings(months, rows) -> dict:
                f"-> {facts['latest_month']} ${facts['latest']:,.1f}B",
         "src": f"US Treasury TIC Table 5, Major Foreign Holders · fetched {FETCHED}",
         "ylabel": "$bn",
+        "from_zero": True,   # E28 (operator, 2026-09-05): on a truncated axis a tenth read as a fall to nothing; the page starts at zero
         # E28: the selected dates state their rule on the page - the first print, the peak, the latest
         "xticks": [[pts[0][0], month_label(span[0][0])], [month_to_x(facts["peak_month"]), month_label(facts["peak_month"])], [pts[-1][0], month_label(facts["latest_month"])]],
         "series": [{"label": f"{facts['drop_pct']:+.1f}%", "name": "Japan", "color": "crimson", "pts": pts}],
