@@ -189,7 +189,7 @@ Ordered by leverage against what the Tokyo build now exercises. Each names the a
 | 2 | **X0 / G-o: render a 9:16 frame at 390 px and read it** | the portrait page set its type from doc 50's arithmetic; the arithmetic has never been looked at on a phone-sized frame | minutes |
 | 3 | **V-a the muted-caption judge on the short** | shipped unwired; the short is compiled with the promise plate and three pages - the first build worth judging | an hour (Codex CLI batch, E37) |
 | 4 | **G2 short mode in `gate_opening_structure`** | v11's three FAILs are exactly the cut beats; the fixtures exist (v8-long, ep1) | half a day |
-| 5 | **X14 short-form pulse** | measurable from the build's timeline now (events/min is in the motion report: 55/min ≈ one every 1.1 s against 49 §49.6's 1.2-2.5 s) - decide whether the gate is the pulse or the ceiling | an hour |
+| ~~5~~ | ~~X14 short-form pulse~~ | **DONE 2026-09-05 — operator: "the gate is the pulse; we could have much more animation and it would be fine."** `M16`: on a short no gap between visual events over 2.5 s, no ceiling; INFO on long form. Tokyo short PASSes (longest gap 2.5 s at 0:38) | — |
 | 6 | **G-h Kubelka-Munk on overlapping ink** | the stain soak's overlaps read as a patchwork of greys - alpha blending, the exact defect the finding names | a day |
 | 7 | **T3 area-preserving squash as a helper** | the vortex already uses the det=1 form ad hoc; lift it behind `area_squash` and the squash-from-velocity rule follows | half a day |
 | 8 | **T2 the remaining damping cases + the seek test** | the underdamped case shipped today | half a day |

@@ -504,3 +504,19 @@ def test_ledger_id_enter_token_is_validated():
 def test_m07_still_ranks_a_long_form_build():
     tl, docks, mp = _dense_build(runtime=180.0)
     assert _by_id(G.run(tl, docks, mp)[0])["M07"].level in ("PASS", "FAIL")
+
+
+def test_m16_the_gate_is_the_pulse_on_a_short():
+    tl, docks, mp = _short_build(page_at=17.0)
+    tl["aspect"] = "9:16"
+    g = _by_id(G.run(tl, docks, mp)[0])
+    assert g["M16"].level in ("PASS", "FAIL"), g["M16"]           # a short is judged
+    # a 4 s hole with no events: the pulse FAILs, and the message asks for MORE motion, never less
+    tl["caption_pages"] = [p for p in tl["caption_pages"] if not (60.0 <= p["s"] < 64.5)]
+    g = _by_id(G.run(tl, docks, mp)[0])
+    assert g["M16"].level == "FAIL" and "add motion" in g["M16"].message, g["M16"]
+
+
+def test_m16_is_info_on_long_form():
+    tl, docks, mp = _dense_build(runtime=240.0)
+    assert _by_id(G.run(tl, docks, mp)[0])["M16"].level == "INFO"

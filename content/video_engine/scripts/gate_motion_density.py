@@ -56,6 +56,9 @@ from pathlib import Path
 
 STILL_FAIL_S = 12.0        # doc 29 s8.19 MAX_BARE, s9.25 ceiling
 STILL_WARN_S = 8.0         # s9.25 working target
+SHORT_PULSE_MAX_S = 2.5    # doc 49 s49.6: a short needs a visual event every 1.2-2.5 s. THE GATE IS THE PULSE (operator, 2026-09-05):
+                           # a floor on motion, never a ceiling - 'we could have much more animation and it would be fine'
+SRC_M16 = "doc 49 s49.6 / operator 2026-09-05: the short-form gate is the pulse - no gap between visual events over 2.5 s; no ceiling"
 EVIDENCE_GAP_MAX_S = 45.0  # doc 29: evidence every 15-45s
 PLATE_SECONDS = 12.0       # s9.13: runtime / 12s distinct plates
 PLATE_HOLD_MAX_S = 20.0    # s9.13 hard ceiling, unless two docks over it
@@ -431,6 +434,7 @@ def run(tl: dict, docks: list[dict], mp: dict) -> tuple[list[Gate], dict]:
     g.append(_camera_gate(A["camera_clashes"]))
     g.append(_build_gate(_build_clashes(tl.get("scenes", []), docks)))   # M14 (P37 T1)
     g.append(_retract_gate(tl.get("scenes", [])))                         # M15 (E40 #5)
+    g.append(_pulse_gate(tl, A))                                           # M16 (49 s49.6, shorts)
     # E24 / E25: the opening minute and the chart-as-proof rule
     g += [_opening_still_gate(A["still"]), _first_chart_gate(tl, docks, mp), _chart_hold_gate(tl, docks)]
     add("J01", "JUDGE", "every savor beat holds its picture (card up, badge lit), never a bare plate with a drift", "doc 29 s9.25 #3")
@@ -518,6 +522,27 @@ def _first_chart_gate(tl: dict, docks: list[dict], mp: dict) -> Gate:
         return Gate("M11", "FAIL", "; ".join(why) + sound + note, SRC_M11)
     msg = f"first chart {asset} enters at {t:.1f}s" + (f", its build lands at {land:.1f}s," if is_page else "") + f" with {hits[0]['kind']} at {float(hits[0]['at']):.1f}s"
     return Gate("M11", "PASS" if cue else "WARN", msg + sound + note, SRC_M11)
+
+
+def _is_short(tl: dict, runtime: float) -> bool:
+    """A short: the build declares 9:16, or it runs under three full minutes (M07's short read)."""
+    return str(tl.get("aspect") or "16:9") == "9:16" or runtime < SHORT_FULL_MINUTES * WINDOW_S
+
+
+def _pulse_gate(tl: dict, A: dict) -> Gate:
+    """M16: on a short the gate is the PULSE - the longest gap between visual events is a floor on motion (2.5 s), and
+    there is no ceiling. Long-form builds report the pulse as INFO (their law is M01/M02's stillness)."""
+    still = A["still"]
+    if not still:
+        return Gate("M16", "INFO", "no events to measure a pulse from", SRC_M16)
+    at, gap = still[0]
+    slow = sorted((a, d) for a, d in still if d > SHORT_PULSE_MAX_S)
+    msg = f"longest gap between visual events {gap:.1f}s at {_mm(at)}; {len(slow)} gap(s) over {SHORT_PULSE_MAX_S:.1f}s"
+    if not _is_short(tl, A["runtime"]):
+        return Gate("M16", "INFO", msg + " - a long-form build; the pulse law binds shorts", SRC_M16)
+    if slow:
+        return Gate("M16", "FAIL", msg + ": " + ", ".join(f"{_mm(a)}+{d:.1f}s" for a, d in slow[:6]) + " - add motion there (a species, a caption pop, plate life); never cut motion to pass", SRC_M16)
+    return Gate("M16", "PASS", msg, SRC_M16)
 
 
 def _retract_gate(scenes: list[dict]) -> Gate:

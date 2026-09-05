@@ -10,6 +10,8 @@
   still_over_12s_share: 0%
             per_minute: 0:00:111/2 1:00:61/3
 
+  [FAIL ] M16 longest gap between visual events 2.5s at 1:20; 1 gap(s) over 2.5s: 1:20+2.5s - add motion there (a species, a caption pop, plate life); never cut motion to pass
+          doc 49 s49.6 / operator 2026-09-05: the short-form gate is the pulse - no gap between visual events over 2.5 s; no ceiling
   [PASS ] M01 longest still stretch 2.5s at 1:20
           doc 29 s8.19 / s9.25 stillness ceiling
   [PASS ] M02 0 stretches > 8s (working target)
@@ -41,8 +43,8 @@
   [JUDGE] J01 every savor beat holds its picture (card up, badge lit), never a bare plate with a drift
           doc 29 s9.25 #3
 
-RESULT: 0 FAIL / 0 WARN / 13 PASS / 1 JUDGE / 1 INFO
+RESULT: 1 FAIL / 0 WARN / 13 PASS / 1 JUDGE / 1 INFO
 ```
 
 TIMELINE: tokyo-short.timeline.json sha256:e9181ed738118cab3655c09b73f295c5034dce6e81a288baed51149cf4a9260b
-VERDICT: PASS (0 FAIL)
+VERDICT: FAIL (1 FAIL)
