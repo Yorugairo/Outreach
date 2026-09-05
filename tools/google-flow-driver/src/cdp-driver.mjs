@@ -479,8 +479,24 @@ export class FlowCdpDriver {
         chipsNow = await page.locator("div[contenteditable='true'] .mention-chip").count();
       }
       if (chipsNow <= chipsBefore) {
-        const kinds = await page.locator("div[contenteditable='true'] .mention-chip").evaluateAll(els => els.map(e => e.getAttribute('data-reference-type'))).catch(() => []);
-        throw new Error(`Upload of ${path.basename(filePath)} left no media chip in the composer (chips before ${chipsBefore}, now ${chipsNow}, kinds ${JSON.stringify(kinds)}).`);
+        // "Add to prompt" was clicked before the upload finished and nothing landed; the picker is
+        // left open (the operator saw Flow "paused waiting for input", 2026-09-05). The file IS now a
+        // project asset, so close the picker and take the reuse path, which works.
+        console.warn(`[FlowCdpDriver] Upload of ${path.basename(filePath)} landed no chip - closing the picker and reusing the asset.`);
+        await page.keyboard.press('Escape');
+        await page.waitForTimeout(2500);
+        await editor.click(); await page.keyboard.press('End');
+        await page.keyboard.type(' @'); await page.waitForTimeout(900);
+        await page.keyboard.type(baseName); await page.waitForTimeout(1200);
+        const again = page.locator(`[role="option"]:has(.asset-title:text-is("${baseName}"))`).first();
+        if (await again.count() === 0) throw new Error(`Upload of ${baseName} landed no chip and the asset is not listed afterwards.`);
+        await again.click();
+        for (let i = 0; i < 20; i++) {
+          await page.waitForTimeout(400);
+          chipsNow = await page.locator("div[contenteditable='true'] .mention-chip").count();
+          if (chipsNow > chipsBefore) break;
+        }
+        if (chipsNow <= chipsBefore) throw new Error(`Upload of ${baseName}: the reuse path landed no chip either.`);
       }
       console.log(`[FlowCdpDriver] Reference attached as a media chip: ${path.basename(filePath)} (${chipsNow} chips)`);
       await page.keyboard.press('End');
