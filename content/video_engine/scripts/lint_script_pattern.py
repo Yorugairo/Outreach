@@ -207,11 +207,18 @@ def _check_tautology(pairs: list[tuple[str, str]]) -> list[Finding]:
     return findings
 
 
+BRAND_LINE_MAX_WORDS = 8   # operator, 2026-09-04: the brand triad ("Not a panic. Not a plot. Mechanics.")
+                           # is the LAST line and cuttable; the ring one paragraph earlier still carries
+
+
 def _check_ring(paragraphs: list[str]) -> list[Finding]:
     if len(paragraphs) < 2:
         return []
-    shared = _content_tokens(paragraphs[0]) & _content_tokens(paragraphs[-1])
-    if not shared:
+    opening = _content_tokens(paragraphs[0])
+    close = [paragraphs[-1]]
+    if len(paragraphs) >= 3 and len(_WORD.findall(paragraphs[-1])) <= BRAND_LINE_MAX_WORDS:
+        close.append(paragraphs[-2])   # a short brand line last: the close is the paragraph before it too
+    if not any(opening & _content_tokens(c) for c in close):
         return [Finding("RING", "no opening token recurs in the close")]
     return []
 

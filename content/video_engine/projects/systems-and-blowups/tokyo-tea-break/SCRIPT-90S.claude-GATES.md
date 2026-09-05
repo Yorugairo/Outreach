@@ -1,11 +1,11 @@
 # SCRIPT GATES - SCRIPT-90S-VO.claude.txt
 
 script: SCRIPT-90S-VO.claude.txt
-generated: 2026-09-05T05:41:25+00:00
+generated: 2026-09-05T05:42:10+00:00
 script_hash: 745e464fa3aecf0f4659c6a16a4b2ae27074741fb848d3a3fee947007f1a3c27
 timing_source: estimated
 
-TOOLS      lint: exit 1, 1 fails | audit: exit 0, 0/1, timing=estimated |
+TOOLS      lint: exit 0, 0 fails | audit: exit 0, 0/1, timing=estimated |
            opening gate: exit 1, 3/2/40/10 | screens: SCRIPT-90S.claude-SCREENS.md, 7 items
 
 VIEWER     SCRIPT-90S.claude-VIEWER.md  (advisory: --no-viewer-gate - these rows do not change the VERDICT)
@@ -16,12 +16,11 @@ VIEWER     SCRIPT-90S.claude-VIEWER.md  (advisory: --no-viewer-gate - these rows
   [INFO ] V05 gain per window: median 4, 0 dead of 7 reported
 
 ## lint_script_pattern.py
-exit 1
+exit 0
 
 ```
-FAIL RING: no opening token recurs in the close
 stats: {'sentence_mean': 10.4, 'sentence_count': 27, 'word_count': 281, 'rehook_positions_pct': [17, 64]}
-RESULT: 1 failure(s)
+RESULT: clean
 ```
 
 ## audit_script_doctrine.py
@@ -199,4 +198,4 @@ exit 0
 SCRIPT-90S.claude-SCREENS.md: X1=3 deixis=0 junctions=1 anchors=3 declared=24
 ```
 
-VERDICT: FAIL (2 failing tools)
+VERDICT: FAIL (1 failing tools)
