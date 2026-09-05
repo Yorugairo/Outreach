@@ -325,8 +325,8 @@ def main() -> int:
             win = round(r[1] - r[0], 3)
             press_pack(win, HERE / "sound/press-pack-A.mp3", clusters=12, seed=0xC1A55)
             press_pack(win, HERE / "sound/press-pack-B.mp3", clusters=6, seed=0xC1A56)
-            cues.append({"slot": f"press {i + 1}", "at": round(r[0], 2), "gain": 0.3, "fade_in": 0.0, "variants": {"A": "press-pack-A.mp3", "B": "press-pack-B.mp3"},
-                         "note": "the pack meters -16.6 LUFS; 0.3 puts the clicks ~9 dB under the voice, background like every accent"})
+            cues.append({"slot": f"press {i + 1}", "at": round(r[0], 2), "gain": 0.21, "fade_in": 0.0, "variants": {"A": "press-pack-A.mp3", "B": "press-pack-B.mp3"},
+                         "note": "the pack meters -16.6 LUFS; 0.21 puts the clicks ~12 dB under the voice (operator, 2026-09-05: a tiny bit quieter, 11-12 dB under instead of 9)"})
     # the beds, sub-threshold and continuous: the hook bed from 0, the turn bed fading in under it at 0:40 to the end
     cues.append({"slot": "hook bed", "at": 0.0, "gain": bed_gain("suno-hook-B.mp3"), "fade_in": 1.5, "variants": {"A": "suno-hook-B.mp3", "B": "suno-hook-A.mp3"},
                  "note": f"{PLATFORM} {BED_LU[PLATFORM]:+.0f} LU under the VO ({VO_LUFS} LUFS); B at {bed_gain('suno-hook-A.mp3')}"})
