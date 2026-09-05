@@ -152,14 +152,24 @@
      full width inside 64px margins, dock-2 under dock-1. Vertical room is what a
      short has instead of horizontal, so the docks get the frame's width and the
      plate keeps the top third for the world. */
-  html[data-aspect="9:16"] .dock { width: 952px; top: 690px; }
+  /* THE MOBILE SAFE BOX (doc 49 s49.1 / 50, P37 T0, 2026-09-04): platform chrome covers the
+     top 280px, the bottom 480px and the right 200px of a 1080x1920 short, so everything that
+     must be read lives in x[80,880] y[280,1340]. Before this the docks were 952px at x=64 -
+     136px into the right rail - and the second dock ran to y=1780, under the caption bar.
+     At 800px wide a dock is 514px tall (frame 430 + rail 39 + chrome 45); two stack in the
+     1060px box with a 12px gap: 280-794 and 806-1320. */
+  html[data-aspect="9:16"] .dock { width: 800px; top: 280px; }
   /* ID-scoped for the same reason the 16:9 rules are: #dock-2 { left: 992px }
      outranks any class chain, so the stacked left must be ID-scoped too. */
-  html[data-aspect="9:16"] #dock-1 { left: 64px; }
-  html[data-aspect="9:16"] #dock-2 { left: 64px; top: 1180px; }
-  html[data-aspect="9:16"] #dock-1.solo { width: 952px; left: 64px; top: 690px; }
+  html[data-aspect="9:16"] #dock-1 { left: 80px; }
+  html[data-aspect="9:16"] #dock-2 { left: 80px; top: 806px; }
+  /* a solo card sits in the evidence zone (49 s49.3 zone 2), centred in the box */
+  html[data-aspect="9:16"] #dock-1.solo { width: 800px; left: 80px; top: 553px; }
   html[data-aspect="9:16"] #dock-1.solo.side-r,
-  html[data-aspect="9:16"] #dock-1.solo.side-l { left: 64px; }
+  html[data-aspect="9:16"] #dock-1.solo.side-l { left: 80px; }
+  /* the anchored caption takes the strip under the box, y[1340,1440], not the bottom dead
+     zone it inherited from the 16:9 rule (it rendered at y=1759, under the scrub bar) */
+  html[data-aspect="9:16"] #caption.quiet { bottom: 480px; }
 
   /* The skill puts mix-blend-mode: multiply on the artblock wrapper — correct
      for hand-drawn INK on a paper canvas. It does not transfer to a literal

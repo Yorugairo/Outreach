@@ -1,7 +1,7 @@
 ---
 id: P37-RESEARCH-ENFORCEMENT-LAYER
 title: The enforcement layer - the checks that prove today's research reached production
-status: draft
+status: running
 operation: feature
 risk: standard
 owner: parent
@@ -145,13 +145,13 @@ Write sets are disjoint except T1 and T3, which are sequenced rather than parall
 ## Task Slices
 
 ### T0: fix the 9:16 dock geometry - it sits under platform chrome
-- Status: pending
-- Owner: junior_developer
+- Status: complete
+- Owner: parent (kept - shipped geometry, goldens refreshed)
 - Depends on: none
 - Write set: `docs/content-video-engine/samples/scene-evidence-player.template.html`, `content/video_engine/tests/test_vertical_safe_box.py`
 - Acceptance: `.dock` under `html[data-aspect="9:16"]` is `width: 800px; left: 80px`, and the second dock's bottom clears y=1340. **Current CSS (lines 155-162) puts the docks 136 px into the right rail and 152 px over width** (49 §49.1). 16:9 rendering is byte-identical after the change.
 - Validate: `python -m pytest content/video_engine/tests/test_vertical_safe_box.py -q` and a 9:16 render whose dock bounding boxes all sit inside `x[80,880] y[280,1340]`
-- Evidence: pending
+- Evidence: 2026-09-04 - measured before: docks 952 wide at x=64, dock-2 y 1180-1780 (under the caption bar), caption at y=1759. After: `.dock` 800px at x=80, dock-1 y 280-794, dock-2 y 806-1320, solo centred at 553; **the anchored caption also moved** into its strip (`#caption.quiet { bottom: 480px }` -> y ~1399), same finding, same block. `test_vertical_safe_box.py` 3/3: static CSS values, rendered rectangles inside the box with no overlap, **16:9 byte-identical**. The golden harness caught the change on exactly one surface (`dock-pair-9x16`) and the 9:16 golden was refreshed deliberately in the same commit; the other three goldens unchanged.
 
 ### T1: G-a - a camera move may not overlap an evidence build
 - Status: pending

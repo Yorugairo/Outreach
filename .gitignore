@@ -157,3 +157,6 @@ CLAUDE.local.md
 content/video_engine/channel-assets/money-physics/design-system/assets/
 # golden-frame diffs are outputs, never sources (P39)
 content/video_engine/tests/golden/diffs/
+# golden frames are SOURCES: always tracked (P39 T3)
+!content/video_engine/tests/golden/frames/
+!content/video_engine/tests/golden/frames/*.png
