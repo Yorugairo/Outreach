@@ -2244,18 +2244,22 @@
            seeded clock (every TICK_STEP, phase per cell) - a paper patch (sp.paper) covers the drawn digit and a new one is
            written in the hand face. Stepped time: each flip is an event (gate: stepping at TICK_STEP). */
         const b = resolveTarget(sp.target); if (!b) return;
-        const rows = sp.rows || 6, cols = sp.cols || 6, cw = b.w / cols, chh = b.h / rows, step = SP.TICK_STEP;
+        /* the cells: the drawn grid's own lines when the author measured them (sp.col_lines / sp.row_lines, fractions of
+           the frame - a still's grid is never uniform), else rows x cols over the region */
+        const xs = sp.col_lines ? sp.col_lines.map((f) => f * STAGE_W) : [...Array((sp.cols || 6) + 1)].map((_, i) => b.x + b.w * i / (sp.cols || 6));
+        const ys = sp.row_lines ? sp.row_lines.map((f) => f * STAGE_H) : [...Array((sp.rows || 6) + 1)].map((_, i) => b.y + b.h * i / (sp.rows || 6));
+        const rows = ys.length - 1, cols = xs.length - 1, step = SP.TICK_STEP;
         const g = lpEl("g", "", spSvg, sp.tilt ? { transform: "rotate(" + sp.tilt + " " + (b.x + b.w / 2).toFixed(1) + " " + (b.y + b.h / 2).toFixed(1) + ")" } : {});
         for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) {
           const ci = r * cols + c, phase = lpHash(seed, ci, 45) * step, tick = Math.floor((t - sp.at - phase) / step);
           if (tick < 0) continue;
           const on = lpHash(seed, ci * 131 + tick, 46) < (sp.density || 0.35);   /* most cells rest on any given tick */
           if (!on) continue;
-          const x = b.x + c * cw, y = b.y + r * chh, val = String(Math.floor(100 + lpHash(seed, ci * 977 + tick, 47) * 4900));
+          const x = xs[c], y = ys[r], cw = xs[c + 1] - xs[c], chh = ys[r + 1] - ys[r], val = String(Math.floor(100 + lpHash(seed, ci * 977 + tick, 47) * 4900));
           const born = clamp01((t - sp.at - phase - tick * step) / 0.12);
-          lpEl("rect", "", g, { x: (x + cw * 0.12).toFixed(1), y: (y + chh * 0.16).toFixed(1), width: (cw * 0.76).toFixed(1), height: (chh * 0.68).toFixed(1), rx: 3, fill: sp.paper || "#EFE8D5", opacity: (born * 0.92).toFixed(2) });
+          lpEl("rect", "", g, { x: (x + cw * 0.07).toFixed(1), y: (y + chh * 0.1).toFixed(1), width: (cw * 0.86).toFixed(1), height: (chh * 0.8).toFixed(1), rx: 3, fill: sp.paper || "#EFE8D5", opacity: born.toFixed(2) });   /* the patch covers the drawn digit inside its lines - a flip card, not an overprint */
           const tx = lpEl("text", "", g, { x: (x + cw / 2).toFixed(1), y: (y + chh * 0.74).toFixed(1), "text-anchor": "middle", fill: sp.ink || "#25313C", opacity: born.toFixed(2),
-                                          style: "font-family:Kalam,Inter,sans-serif;font-weight:700;font-size:" + (chh * 0.62).toFixed(1) + "px" });
+                                          style: "font-family:Kalam,Inter,sans-serif;font-weight:700;font-size:" + (chh * 0.6).toFixed(1) + "px" });
           tx.textContent = val;
         }
       } else if (sp.kind === "plate_life") { /* our cutouts on a bare plate: stepped time, throw-and-land with squash, two-frame boil */

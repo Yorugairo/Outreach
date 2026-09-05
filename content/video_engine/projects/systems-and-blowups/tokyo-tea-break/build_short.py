@@ -134,8 +134,10 @@ def shot_table(ws: list[dict], runtime_s: float) -> list[tuple]:
             {"kind": "steam", "at": t_promise, "dur": round(t_catalyst - t_promise, 2), "target": {"kind": "region", "x0": 0.80, "y0": 0.55, "x1": 0.95, "y1": 0.60}},
             {"kind": "trace", "at": t_promise + 0.3, "dur": round(t_catalyst - t_promise - 0.3, 2), "target": {"kind": "region", "x0": 0.117, "y0": 0.39, "x1": 0.26, "y1": 0.485}},
             # the four columns of the grid the head does not cover
-            {"kind": "ticker", "at": t_promise + 0.2, "dur": round(t_catalyst - t_promise - 0.2, 2), "rows": 6, "cols": 4, "density": 0.3, "paper": "#EFE8D5", "tilt": -4,
-             "target": {"kind": "region", "x0": 0.585, "y0": 0.412, "x1": 0.815, "y1": 0.552}},
+            {"kind": "ticker", "at": t_promise + 0.2, "dur": round(t_catalyst - t_promise - 0.2, 2), "density": 0.3, "paper": "#EFE8D5", "tilt": -4,
+             # the drawn grid's own lines, measured on the 1080 render (the three columns clear of the head, six rows)
+             "col_lines": [0.602, 0.681, 0.750, 0.812], "row_lines": [0.409, 0.431, 0.454, 0.477, 0.501, 0.525, 0.548],
+             "target": {"kind": "region", "x0": 0.602, "y0": 0.409, "x1": 0.812, "y1": 0.548}},
         ]),
         # 6 catalyst + loop + foreshadow: the page RETURNS (enter=spiral: it unwinds from its point, never drawn like new)
         (t_catalyst, t_pledge, hold + ":spiral", (0, 0, 0), [], None, [
