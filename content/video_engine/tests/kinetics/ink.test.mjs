@@ -2,7 +2,7 @@
 // identities (layers compose, hiding, the paper), the subtractive mix of two different inks, and the filter table.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { INK, SOAK, hexToLin, linToHex, kmChannel, kmLayer, kmStack, alphaOver, chroma, kmHex, kmTable, kmFilterMarkup, ksFromR, soakFilterMarkup, soakGradientMarkup, soakAnim, soakAnimIds } from "../../scripts/kinetics/ink.mjs";
+import { INK, SOAK, hexToLin, linToHex, kmChannel, kmLayer, kmStack, alphaOver, chroma, kmHex, kmTable, kmFilterMarkup, ksFromR, soakFilterMarkup, soakGradientMarkup, soakAnim, soakAnimIds, SOAK_STEP, stepClock, soakStepped, soakJitter } from "../../scripts/kinetics/ink.mjs";
 
 const CREAM = "#F4E6C7", INKS = { charcoal: "#25313C", coral: "#ED6A4A", teal: "#2E9E5B", sunflower: "#F5B72E", blood: "#B0201F" };
 const cream = hexToLin(CREAM);
@@ -86,6 +86,24 @@ test("the fields MOVE on the soak clock: still at u = 0, every drift inside the 
   assert.notDeepEqual(soakAnim(0.3, 1, { MESH: true }).wob, soakAnim(0.6, 1, { MESH: true }).wob, "it moves");
   const ids = soakAnimIds(0x51EC1E5), m = soakFilterMarkup(0x51EC1E5, 1, CREAM, INKS.charcoal, { MESH: true });
   for (const id of Object.values(ids)) assert.ok(m.includes('id="' + id + '"'), id);
+});
+
+test("STEP MOTION: the soak clock quantises at FPS, a stain climbs a seeded staircase (never contracts, lands on 1), stains differ, the wobble jitters per tick", () => {
+  const hash = (a) => (k) => { const x = Math.sin(a * 1000 + k * 12.9898) * 43758.5453; return x - Math.floor(x); };
+  const ticks = new Set(); for (let i = 0; i <= 1000; i++) ticks.add(stepClock(i / 1000));
+  assert.ok(ticks.size <= Math.ceil(SOAK_STEP.FIELD_S * SOAK_STEP.FPS) + 1 && ticks.size >= SOAK_STEP.FIELD_S * SOAK_STEP.FPS - 1, `the clock has ${ticks.size} steps`);
+  for (const a of [1, 2, 3]) {
+    const r = hash(a); let prev = 0, levels = new Set();
+    for (let i = 0; i <= 1000; i++) { const v = soakStepped(i / 1000, r); assert.ok(v >= prev - 1e-12, "never contracts"); assert.ok(v <= 1); prev = v; levels.add(v.toFixed(6)); }
+    assert.equal(soakStepped(0, r), 0); assert.equal(soakStepped(1, r), 1); assert.equal(soakStepped(1.5, r), 1);
+    assert.ok(levels.size >= 8 && levels.size <= SOAK_STEP.BURSTS + 2, `a staircase, not a ramp: ${levels.size} levels`);
+    const sizes = [...levels].map(Number).sort((x, y) => x - y).map((v, i, arr) => i ? v - arr[i - 1] : v).filter((d) => d > 0);
+    assert.ok(Math.max(...sizes) > 2 * Math.min(...sizes), "bursts and dwells: the steps vary in size");
+  }
+  assert.notEqual(soakStepped(0.5, hash(1)), soakStepped(0.5, hash(2)), "time variance between stains");
+  const j1 = soakJitter(0.31, hash(9)), j2 = soakJitter(0.5, hash(9));
+  assert.ok(Math.abs(j1[0]) <= SOAK_STEP.WOB_JITTER && Math.abs(j1[1]) <= SOAK_STEP.WOB_JITTER && (j1[0] !== j2[0] || j1[1] !== j2[1]), "jitter per tick, bounded");
+  assert.deepEqual(soakJitter(0.30, hash(9)), soakJitter(0.31, hash(9)), "constant within a tick (both in tick 5 of 19.2): stepped, not smooth");
 });
 
 test("the filter table runs from the paper to exactly the ink at one full stain, monotone, and its markup carries it", () => {

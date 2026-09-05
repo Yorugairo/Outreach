@@ -147,4 +147,27 @@ export const soakAnim = (u, fk = 1, o = {}) => {
     scale: P.WOBBLE_SCALE * fk * (1 + P.WOBBLE_BREATH * Math.sin(k * tp * P.WOBBLE_CYCLES)),
   };
 };
+/* STEP MOTION (operator, 2026-09-05: "it's too smooth, it needs more step-motion / jitter / delay / time variance"): the soak
+   runs on a quantised clock at FPS; each stain's progress is a seeded staircase of BURSTS bursts whose sizes vary by BURST_VAR
+   (surges and dwells, never contracting, exactly 1 at the flood) with its own PHASE_S of delay; the outline wobble jitters
+   by WOB_JITTER px per tick. rnd(k) is the caller's seeded hash in [0, 1) - the template passes lpHash, so a scrubbed frame is
+   the played frame. FIELD_S mirrors LP.FIELD (the soak's seconds); the dials are ours. */
+export const SOAK_STEP = Object.freeze({ FPS: 8, FIELD_S: 2.4, BURSTS: 20, BURST_VAR: 0.85, WOB_JITTER: 8, PHASE_S: 0.3 });
+const c01 = (v) => Math.min(1, Math.max(0, v));
+export const stepClock = (u, o = {}) => { const P = Object.assign({}, SOAK_STEP, o); return c01(Math.floor(c01(u) * P.FIELD_S * P.FPS) / P.FPS / P.FIELD_S); };
+export const soakStepped = (u, rnd, o = {}) => {
+  const P = Object.assign({}, SOAK_STEP, o);
+  if (u >= 1) return 1;
+  const phase = rnd(90) * P.PHASE_S, span = Math.max(0.2, P.FIELD_S - phase);
+  const uq = c01(Math.floor(Math.max(0, c01(u) * P.FIELD_S - phase) * P.FPS) / P.FPS / span);
+  const n = P.BURSTS, w = []; let tot = 0;
+  for (let k = 0; k < n; k++) { const v = Math.max(0.1, 1 + P.BURST_VAR * (2 * rnd(k) - 1)); w.push(v); tot += v; }
+  const idx = Math.min(n, Math.floor(uq * n)); let acc = 0;
+  for (let k = 0; k < idx; k++) acc += w[k];
+  return acc / tot;
+};
+export const soakJitter = (u, rnd, fk = 1, o = {}) => {
+  const P = Object.assign({}, SOAK_STEP, o), tick = Math.floor(c01(u) * P.FIELD_S * P.FPS);
+  return [P.WOB_JITTER * fk * (2 * rnd(1000 + tick) - 1), P.WOB_JITTER * fk * (2 * rnd(2000 + tick) - 1)];
+};
 export const soakAnimIds = (seed) => { const s = seed & 255; return { wob: "lpsoakw" + s, att: "lpsoaka" + s, grain: "lpsoakg" + s, disp: "lpsoakd" + s }; };
