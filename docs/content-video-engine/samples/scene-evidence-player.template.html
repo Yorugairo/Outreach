@@ -134,7 +134,7 @@
   html[data-aspect="9:16"] .lp-rail .pill-label { font-size: 34px; letter-spacing: .04em; }
   html[data-aspect="9:16"] .lp-rail .pill-num { font-size: 59px; font-family: Inter, Arial, sans-serif; }
   html[data-aspect="9:16"] .lp-rail .pill-tag { display: none; }   /* the tag's clause is the sub's job in portrait: a pill is its label and its number */
-  html[data-aspect="9:16"] #caption.stage.onpage { top: auto; bottom: 480px; left: 80px; right: 200px; font-size: 64px; }   /* the caption strip y1340-1440 (G-l), never over the chart */
+  html[data-aspect="9:16"] #caption.stage.onpage { top: auto; bottom: 480px; left: 80px; right: 200px; font-size: 64px; }   /* the caption strip y1340-1440 (G-l), never over the chart or a plate's subject */
 
   /* Regional shading, not a global dim. The world half stays fully lit;
      darkening only begins around the midpoint and deepens toward whichever
@@ -2086,7 +2086,8 @@
      pose from the step (stop-motion law). Everything from t; jitter only via lpHash. */
   const SP = { PUNCH_IN: 0.42, PUNCH_OUT: 0.5, PUNCH_SCALE: 1.14, FOCUS_SCALE: 1.32, PULL_FROM: 1.9,
                CALLOUT_DRAW: 0.7, SQUIG_DRAW: 0.45, LIFE_FPS: 10, LIFE_LAND: 0.6, BOIL_PX: 1.2, BOIL_DEG: 0.7,
-               SPOT_DIM: 0.49 };   /* operator 2026-09-03: 0.55 was 'way too dark', 0.44 too light - settled at 0.49 */
+               SPOT_DIM: 0.49,   /* operator 2026-09-03: 0.55 was 'way too dark', 0.44 too light - settled at 0.49 */
+               STEAM_PERIOD: 2.6, TRACE_PERIOD: 3.2, TRACE_DRAW: 1.1, TICK_STEP: 0.5 };   /* STILL LIFE (2026-09-05): steam, trace, ticker */
   const CAMERA = new Set(["punch", "focus_zoom", "pull_back"]);
   const spSvg = $("species"), plife = $("plife");
   const spEase = (k) => 1 - Math.pow(1 - clamp01(k), 3);
@@ -2203,6 +2204,60 @@
       } else if (sp.kind === "squiggle") {   /* a hand-drawn underline under a declared caption word span (stage mode only) */
         const b = resolveTarget(sp.target); if (!b || !cap.classList.contains("stage")) return;
         drawOn(lpEl("path", "sq", spSvg, { d: squigglePath(b, seed) }), k * dur / SP.SQUIG_DRAW);
+      } else if (sp.kind === "steam") {   /* STILL LIFE (operator, 2026-09-05): wisps rising off a declared region's top edge - three seeded
+           curls, each a pure function of t (a period of STEAM_PERIOD), fading with height. Never a particle system. */
+        const b = resolveTarget(sp.target); if (!b) return;
+        const g = lpEl("g", "", spSvg, { fill: "none", "stroke-linecap": "round" });
+        const ph = (t - sp.at) / SP.STEAM_PERIOD, rise = Math.max(160, b.w * 2.2), col = sp.color || "rgba(255,248,236,.42)";
+        for (let w = 0; w < 3; w++) {
+          const u = ((ph + w / 3) % 1 + 1) % 1;                        /* this wisp's own phase */
+          const x0 = b.x + b.w * (0.25 + 0.25 * w) + (lpHash(seed, w, 41) - 0.5) * b.w * 0.2, y0 = b.y + 6;
+          const amp = 10 + 14 * lpHash(seed, w, 42), turns = 1.5 + lpHash(seed, w, 43);
+          let d = "M" + x0.toFixed(1) + " " + y0.toFixed(1);
+          for (let k = 1; k <= 8; k++) {
+            const s2 = k / 8, y = y0 - rise * s2 * (0.6 + 0.4 * u), x = x0 + Math.sin((s2 * turns + u) * Math.PI * 2) * amp * (0.4 + s2);
+            d += " L" + x.toFixed(1) + " " + y.toFixed(1);
+          }
+          const op = (0.35 + 0.65 * Math.sin(u * Math.PI)) * clamp01(Math.min(k * dur / 0.6, (1 - k) * dur / 0.6));
+          lpEl("path", "", g, { d, stroke: col, "stroke-width": (3 + 3 * u).toFixed(1), opacity: op.toFixed(3), filter: "blur(4px)" });
+        }
+      } else if (sp.kind === "trace") {   /* the arrow on the phone redraws: a seeded zigzag down the region's diagonal, drawn by dash over
+           TRACE_DRAW, held, faded, again every TRACE_PERIOD */
+        const b = resolveTarget(sp.target); if (!b) return;
+        const ph = (((t - sp.at) / SP.TRACE_PERIOD) % 1 + 1) % 1, drawK = clamp01(ph * SP.TRACE_PERIOD / SP.TRACE_DRAW);
+        const n = 7, pts = [];
+        for (let i = 0; i <= n; i++) {
+          const s2 = i / n, jag = i && i < n ? (lpHash(seed, i, 44) - 0.5) * b.h * 0.35 : 0;
+          pts.push([b.x + b.w * (0.08 + 0.84 * s2), b.y + b.h * (0.12 + 0.76 * s2) + jag]);
+        }
+        const d = pts.map(([x, y], i) => (i ? "L" : "M") + x.toFixed(1) + " " + y.toFixed(1)).join(" ");
+        const p = lpEl("path", "", spSvg, { d, stroke: sp.color || "#B0201F", "stroke-width": Math.max(3, b.w * 0.045).toFixed(1), fill: "none", "stroke-linejoin": "round", "stroke-linecap": "round" });
+        const fade = ph > 0.82 ? 1 - (ph - 0.82) / 0.18 : 1;
+        p.setAttribute("opacity", (fade * clamp01(Math.min(k * dur / 0.4, (1 - k) * dur / 0.4))).toFixed(3));
+        drawOn(p, drawK);
+        if (drawK >= 1) {   /* the arrowhead lands when the line does */
+          const [ax, ay] = pts[n], [bx2, by2] = pts[n - 1], ang = Math.atan2(ay - by2, ax - bx2), L2 = Math.max(8, b.w * 0.12);
+          lpEl("path", "", spSvg, { d: "M" + (ax - L2 * Math.cos(ang - 0.5)).toFixed(1) + " " + (ay - L2 * Math.sin(ang - 0.5)).toFixed(1) + " L" + ax.toFixed(1) + " " + ay.toFixed(1) + " L" + (ax - L2 * Math.cos(ang + 0.5)).toFixed(1) + " " + (ay - L2 * Math.sin(ang + 0.5)).toFixed(1),
+                                     stroke: sp.color || "#B0201F", "stroke-width": Math.max(3, b.w * 0.045).toFixed(1), fill: "none", "stroke-linejoin": "round", "stroke-linecap": "round", opacity: p.getAttribute("opacity") });
+        }
+      } else if (sp.kind === "ticker") {   /* the numbers on the laptop tick: a rows x cols grid over the region; each cell flips on its own
+           seeded clock (every TICK_STEP, phase per cell) - a paper patch (sp.paper) covers the drawn digit and a new one is
+           written in the hand face. Stepped time: each flip is an event (gate: stepping at TICK_STEP). */
+        const b = resolveTarget(sp.target); if (!b) return;
+        const rows = sp.rows || 6, cols = sp.cols || 6, cw = b.w / cols, chh = b.h / rows, step = SP.TICK_STEP;
+        const g = lpEl("g", "", spSvg, sp.tilt ? { transform: "rotate(" + sp.tilt + " " + (b.x + b.w / 2).toFixed(1) + " " + (b.y + b.h / 2).toFixed(1) + ")" } : {});
+        for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) {
+          const ci = r * cols + c, phase = lpHash(seed, ci, 45) * step, tick = Math.floor((t - sp.at - phase) / step);
+          if (tick < 0) continue;
+          const on = lpHash(seed, ci * 131 + tick, 46) < (sp.density || 0.35);   /* most cells rest on any given tick */
+          if (!on) continue;
+          const x = b.x + c * cw, y = b.y + r * chh, val = String(Math.floor(100 + lpHash(seed, ci * 977 + tick, 47) * 4900));
+          const born = clamp01((t - sp.at - phase - tick * step) / 0.12);
+          lpEl("rect", "", g, { x: (x + cw * 0.12).toFixed(1), y: (y + chh * 0.16).toFixed(1), width: (cw * 0.76).toFixed(1), height: (chh * 0.68).toFixed(1), rx: 3, fill: sp.paper || "#EFE8D5", opacity: (born * 0.92).toFixed(2) });
+          const tx = lpEl("text", "", g, { x: (x + cw / 2).toFixed(1), y: (y + chh * 0.74).toFixed(1), "text-anchor": "middle", fill: sp.ink || "#25313C", opacity: born.toFixed(2),
+                                          style: "font-family:Kalam,Inter,sans-serif;font-weight:700;font-size:" + (chh * 0.62).toFixed(1) + "px" });
+          tx.textContent = val;
+        }
       } else if (sp.kind === "plate_life") { /* our cutouts on a bare plate: stepped time, throw-and-land with squash, two-frame boil */
         const step = Math.floor((t - sp.at) * SP.LIFE_FPS) / SP.LIFE_FPS;
         (sp.cutouts || []).forEach((c, ci) => {
@@ -2502,7 +2557,7 @@
     cap.style.left = qz === "right" ? "58%" : qz === "left" ? "120px" : "";
     cap.style.right = qz === "left" ? "58%" : qz === "right" ? "120px" : "";
     /* PORTRAIT (P41): a ledger page fills the frame, so its stage caption takes the caption strip (y 1340-1440, G-l), never the chart */
-    const onPage = PORTRAIT && stage && sc.world.kind === "ledger";
+    const onPage = PORTRAIT && stage;   /* portrait: the caption strip on every world - the 40% band is where a plate's subject lives (the promise plate's laptop, 2026-09-05) */
     cap.classList.toggle("onpage", onPage);
     if (onPage) { cap.style.left = ""; cap.style.right = ""; }
 

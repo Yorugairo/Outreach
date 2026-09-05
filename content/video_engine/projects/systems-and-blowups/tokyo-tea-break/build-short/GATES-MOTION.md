@@ -3,20 +3,20 @@
 ```text
 === MOTION DENSITY GATE: C:\Users\Snipe\Downloads\Outreach Program\content\video_engine\projects\systems-and-blowups\tokyo-tea-break\build-short ===
                runtime: 1:22
-         visual_events: 76 (55.3/min)
+         visual_events: 135 (97.9/min)
                  docks: 0
            dock_source: evidence-dock.json
           ledger_pages: 3
   still_over_12s_share: 0%
-            per_minute: 0:00:52/2 1:00:61/3
+            per_minute: 0:00:111/2 1:00:61/3
 
-  [PASS ] M01 longest still stretch 2.5s at 0:38
+  [PASS ] M01 longest still stretch 2.5s at 1:20
           doc 29 s8.19 / s9.25 stillness ceiling
   [PASS ] M02 0 stretches > 8s (working target)
           doc 29 s9.25
-  [PASS ] M03 longest wait for evidence to enter: 27s from 0:17 (no docks at all)
+  [PASS ] M03 longest wait for evidence to enter: 28s from 0:17 (no docks at all)
           doc 29: evidence every 15-45s, every phase incl. P1 and P6 (E21)
-  [PASS ] M04 9 distinct plates; target runtime/12s = 6
+  [PASS ] M04 10 distinct plates; target runtime/12s = 6
           doc 29 s9.13 plate density
   [PASS ] M05 no plate over the 20s hold ceiling
           doc 29 s9.13 hard ceiling
@@ -36,7 +36,7 @@
           47 s2 G-a / doc 07 Pillar 4 (saccadic suppression): a camera move may not overlap an evidence build - the eye is blind during the move
   [PASS ] M15 no species window overlaps a page's retract
           E40 #5 (operator, 2026-09-05): no spotlight on a spiral out - no species window overlaps a page's retract
-  [INFO ] M07 short: 1 full minute(s) in 82s - opening 52.0 events/min, 2.0 evidence entries/min; tail from 1:00 61.4/min; whole runtime 53.8/min - no minute distribution to rank in (E21 is judged on the whole)
+  [INFO ] M07 short: 1 full minute(s) in 83s - opening 111.0 events/min, 2.0 evidence entries/min; tail from 1:00 60.7/min; whole runtime 96.5/min - no minute distribution to rank in (E21 is judged on the whole)
           E21: the opening is the densest minute, never the thinnest
   [JUDGE] J01 every savor beat holds its picture (card up, badge lit), never a bare plate with a drift
           doc 29 s9.25 #3
@@ -44,5 +44,5 @@
 RESULT: 0 FAIL / 0 WARN / 13 PASS / 1 JUDGE / 1 INFO
 ```
 
-TIMELINE: tokyo-short.timeline.json sha256:0e626acd280e6d9631b2596ee22c704cbedd180d6098eede0f1f38ce8e9dc096
+TIMELINE: tokyo-short.timeline.json sha256:9724868b24a13c5f77cb4c5214fb68075cc5548a259a121766adbb752cdeabc5
 VERDICT: PASS (0 FAIL)

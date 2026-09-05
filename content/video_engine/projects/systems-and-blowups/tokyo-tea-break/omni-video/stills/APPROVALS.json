@@ -61,6 +61,16 @@
    "approved_by": "operator",
    "approved_at": "2026-09-05",
    "operator_words": "approve the stills"
+  },
+  {
+   "shot": "plate-p-viewers-desk",
+   "source": "omni-video/stills/promise-plate/p1b-viewers-desk.png",
+   "approved_path": "omni-video\\stills\u0007pproved\\still-p-viewers-desk.png",
+   "sha256": "67626425ab5ba3e5e208f7eed89b0eec5d4e645f6d08fbb4ec7c422247fa0138",
+   "approved": true,
+   "approved_by": "operator",
+   "approved_at": "2026-09-05",
+   "operator_words": "#2 is fine, we can probably put it through local generation to make the coffee steam, maybe animate the arrow on the phone or make the numbers on the computer scroll or morph around"
   }
  ]
 }

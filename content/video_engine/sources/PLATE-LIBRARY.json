@@ -2,7 +2,7 @@
  "schema_version": "plate_library.v1",
  "built": "2026-08-29",
  "note": "Status comes from the MANIFEST, never the path (ruling E10). The pilot's quarantine/ directory is misnamed - every manifest inside reads operator_approved.",
- "count": 326,
+ "count": 327,
  "plates": [
   {
    "id": "world-banker-apartment-v2",
@@ -4118,6 +4118,16 @@
      "end_word_index": 1284
     }
    ]
+  },
+  {
+   "id": "plate-p-viewers-desk",
+   "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\omni-video\\stills\\approved\\still-p-viewers-desk.png",
+   "semantic": "the viewer's desk at night: a stick figure at a laptop of numbers, a phone with one falling red line, a mug",
+   "register": "stick-on-cream",
+   "channel": "money-physics",
+   "source": "tokyo-tea-break/promise-plate (Nano Banana Pro, 0 credits, 2026-09-05)",
+   "state": "approved",
+   "render_eligible": true
   }
  ]
 }

@@ -70,7 +70,8 @@ KEN = {"scale": 0.04, "x": 14, "y": -10}
 # optional 7th element is a list of {"kind", "at", "dur", "target"} dicts;
 # `at` and `dur` are episode seconds on the same clock as dock enter/exit.
 SPECIES_KINDS = ("punch", "callout", "focus_zoom", "spotlight", "squiggle",
-                 "pull_back", "plate_life", "beat_freeze", "radial", "push")
+                 "pull_back", "plate_life", "beat_freeze", "radial", "push",
+                 "steam", "trace", "ticker")   # STILL LIFE on an approved still (2026-09-05): a region each
 # s9.27 precedence / s9.28 C3: punch, focus zoom, pull-back and Ken Burns are
 # mutually exclusive per window - one camera move, never over a Ken Burns drift.
 CAMERA_MOVES = ("punch", "focus_zoom", "pull_back")
@@ -84,6 +85,7 @@ SPECIES_TARGETS = {
     "spotlight": TARGET_KINDS, "squiggle": TARGET_KINDS, "pull_back": TARGET_KINDS,
     "plate_life": (),
     "beat_freeze": ("point", "region"), "radial": ("point", "region"), "push": ("point", "region"),
+    "steam": ("region",), "trace": ("region",), "ticker": ("region",),
 }
 TARGET_FIELDS = {"datum": ("index",), "point": ("x", "y"),
                  "region": ("x0", "y0", "x1", "y1"), "span": ("from_word", "to_word")}

@@ -101,6 +101,7 @@ def shot_table(ws: list[dict], runtime_s: float) -> list[tuple]:
     t_panel = cut_before(ws, "Three men in blue ties")
     t_lender = cut_before(ws, "Here's what nobody on that panel")
     t_opponent = cut_before(ws, "The opponent isn't the Fed")
+    t_promise = cut_before(ws, "a Treasury page")      # the cut drops on "went:" (operator, 2026-09-05): the promise plate
     t_catalyst = cut_before(ws, "Since February, Japan")
     t_pledge = cut_before(ws, "Tokyo has pledged")
     t_second = cut_before(ws, "So, the second number")
@@ -123,8 +124,19 @@ def shot_table(ws: list[dict], runtime_s: float) -> list[tuple]:
             # (no focus on "the auction sets": the row ends in the retract, and nothing rides a spiral out - E40 #5;
             #  the vortex IS the picture for "walks")
         ]),
-        # 5 opponent + desire/map + promise: two fingers at "Two numbers"
-        (t_opponent, t_catalyst, clip("clip-g-two-fingers-v2.mp4"), (0, 0, 0), [], None, None),
+        # 5 opponent + desire/map: two fingers at "Two numbers"
+        (t_opponent, t_promise, clip("clip-g-two-fingers-v2.mp4"), (0, 0, 0), [], None, None),
+        # 5b the PROMISE plate (operator, 2026-09-05: a narrative plate from "a Treasury page, and your phone" through
+        #    "read both numbers yourself"): the viewer's desk - a stick figure at a laptop of numbers, a phone with one
+        #    falling red line, a mug. An approved still (E40: the still is the asset); its life is the template's
+        (t_promise, t_catalyst, "plate-p-viewers-desk", (0, 0, 0), [], None, [
+            # regions measured on the approved still (fractions of the frame): the mug's rim, the phone's screen, the laptop's grid
+            {"kind": "steam", "at": t_promise, "dur": round(t_catalyst - t_promise, 2), "target": {"kind": "region", "x0": 0.80, "y0": 0.55, "x1": 0.95, "y1": 0.60}},
+            {"kind": "trace", "at": t_promise + 0.3, "dur": round(t_catalyst - t_promise - 0.3, 2), "target": {"kind": "region", "x0": 0.117, "y0": 0.39, "x1": 0.26, "y1": 0.485}},
+            # the four columns of the grid the head does not cover
+            {"kind": "ticker", "at": t_promise + 0.2, "dur": round(t_catalyst - t_promise - 0.2, 2), "rows": 6, "cols": 4, "density": 0.3, "paper": "#EFE8D5", "tilt": -4,
+             "target": {"kind": "region", "x0": 0.585, "y0": 0.412, "x1": 0.815, "y1": 0.552}},
+        ]),
         # 6 catalyst + loop + foreshadow: the page RETURNS (enter=spiral: it unwinds from its point, never drawn like new)
         (t_catalyst, t_pledge, hold + ":spiral", (0, 0, 0), [], None, [
             {"kind": "punch", "at": at("Since February, Japan"), "dur": 0.9, "target": datum(PEAK_IDX)},

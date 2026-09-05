@@ -105,7 +105,9 @@ DOCK_SOURCE_FILE = "evidence-dock.json"      # fallback only: a timeline that ca
 SPECIES_EVENTS = {"punch": ("at",), "callout": ("at",), "focus_zoom": ("at", "end"),
                   "spotlight": ("at", "end"), "squiggle": (), "pull_back": ("at", "end"),
                   "plate_life": "stepping", "beat_freeze": ("at", "end"),
-                  "radial": ("at",), "push": ("at",)}
+                  "radial": ("at",), "push": ("at",),
+                  "steam": "continuous", "trace": ("at", "end"), "ticker": "stepping"}   # STILL LIFE (2026-09-05)
+LIFE_CONTINUOUS_S = 1.0    # a continuous life (steam) is one event per second of its window - it never lets the frame go still
 PLATE_LIFE_STEP_S = 0.1    # s9.27 plate life: quantize t to 10 fps; each step is an event
 # s9.27 precedence / s9.28 C3: punch, focus zoom, pull-back and Ken Burns are
 # mutually exclusive per window. M09 mirrors the builder's validate_species so a
@@ -217,6 +219,10 @@ def _species_events(scenes: list[dict]) -> list[float]:
             # a species that runs past its scene stops with the scene: no event is credited beyond span end
             inside = a is not None and a <= at <= z
             keep = (lambda t: t <= z) if inside else (lambda t: True)
+            if edges == "continuous":
+                n_ev = int(dur // LIFE_CONTINUOUS_S)
+                out += [round(at + k * LIFE_CONTINUOUS_S, 2) for k in range(n_ev + 1) if keep(at + k * LIFE_CONTINUOUS_S)]
+                continue
             if edges == "stepping":
                 steps = int(round(dur / PLATE_LIFE_STEP_S))
                 out += [round(at + k * PLATE_LIFE_STEP_S, 2) for k in range(steps + 1) if keep(at + k * PLATE_LIFE_STEP_S)]
