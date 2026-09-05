@@ -1,12 +1,35 @@
 import fs from 'node:fs';
+import crypto from 'node:crypto';
 import path from 'node:path';
 import { chromium } from 'playwright-core';
+
+// Flow moved hosts on 2026-09-04 (labs.google/fx/tools/flow -> flow.google.com). Match either,
+// and match a target by its project id so a redirect never looks like a different page.
+export const FLOW_HOSTS = ['labs.google/fx/tools/flow', 'flow.google.com'];
+export const isFlowUrl = (url) => FLOW_HOSTS.some((h) => String(url || '').includes(h));
+export const flowProjectId = (url) => (String(url || '').match(/\/project\/([0-9a-f-]{36})/i) || [])[1] || null;
+export const sameFlowTarget = (url, target) => {
+  if (!target) return false;
+  if (String(url).includes(target)) return true;
+  const a = flowProjectId(url); const b = flowProjectId(target);
+  return Boolean(a && b && a === b);
+};
 
 export class FlowCdpDriver {
   constructor(options = {}) {
     this.port = options.port || 9223;
     this.browser = null;
     this.flowPage = null;
+    this.idleTimer = null;
+    this.idleTimeoutMs = options.idleTimeoutMs || 60000;
+  }
+
+  resetIdleTimer() {
+    if (this.idleTimer) clearTimeout(this.idleTimer);
+    this.idleTimer = setTimeout(() => {
+      console.log('[FlowCdpDriver] Idle timeout (60s) reached - auto-closing CDP connection.');
+      this.disconnect().catch(() => {});
+    }, this.idleTimeoutMs);
   }
 
   async getWsEndpoint() {
@@ -53,13 +76,29 @@ export class FlowCdpDriver {
   async getFlowPage(targetUrl = null) {
     if (!this.browser) await this.connect();
     
-    // Scan existing open tabs
+    // Scan existing open tabs - prefer an open project page
     for (const ctx of this.browser.contexts()) {
       for (const page of ctx.pages()) {
         const url = page.url();
-        if (url.includes('labs.google/fx/tools/flow')) {
+        if (targetUrl && sameFlowTarget(url, targetUrl)) {
           this.flowPage = page;
-          if (targetUrl && url !== targetUrl) {
+          await page.bringToFront().catch(() => {});
+          return this.flowPage;
+        }
+        if (!targetUrl && isFlowUrl(url) && flowProjectId(url)) {
+          this.flowPage = page;
+          await page.bringToFront().catch(() => {});
+          return this.flowPage;
+        }
+      }
+    }
+
+    for (const ctx of this.browser.contexts()) {
+      for (const page of ctx.pages()) {
+        const url = page.url();
+        if (isFlowUrl(url)) {
+          this.flowPage = page;
+          if (targetUrl && !sameFlowTarget(url, targetUrl)) {
             await page.goto(targetUrl, { waitUntil: 'domcontentloaded' });
           }
           await page.bringToFront().catch(() => {});
@@ -71,11 +110,115 @@ export class FlowCdpDriver {
     // If not found, navigate active page or open new page
     const ctx = this.browser.contexts()[0];
     const page = ctx.pages()[0] || await ctx.newPage();
-    const dest = targetUrl || 'https://labs.google/fx/tools/flow';
+    const dest = targetUrl || 'https://flow.google.com';
     await page.goto(dest, { waitUntil: 'domcontentloaded' });
     this.flowPage = page;
     await page.bringToFront().catch(() => {});
+    this.resetIdleTimer();
     return this.flowPage;
+  }
+
+  async getProjectDetails() {
+    const page = await this.getFlowPage();
+    this.resetIdleTimer();
+
+    const title = await page.title();
+    const url = page.url();
+    const genState = await this.readGenerationState();
+    const characters = await this.listProjectCharacters();
+    const media = await this.listProjectMedia();
+
+    return {
+      title,
+      url,
+      ratio: genState.pillText.includes('crop_9_16') ? '9:16' : (genState.pillText.includes('crop_16_9') ? '16:9' : 'default'),
+      model: genState.modelText || genState.pillText,
+      characters,
+      mediaCount: media.length,
+      media: media.slice(0, 10)
+    };
+  }
+
+  async listProjectCharacters() {
+    const page = await this.getFlowPage();
+    this.resetIdleTimer();
+
+    // 1. Scan DOM for character image alt tags and cards
+    const names = await page.evaluate(() => {
+      const set = new Set();
+      document.querySelectorAll('img[alt]').forEach(img => {
+        const alt = img.getAttribute('alt')?.trim();
+        const systemLabels = ['Generated image', 'Character preview image', 'Google Flow', 'User profile image', 'Video thumbnail', 'Character reference image'];
+        if (alt && !systemLabels.includes(alt) && !alt.startsWith('http')) {
+          set.add(alt);
+        }
+      });
+      // Also look for character text nodes on canvas cards
+      document.querySelectorAll('span, p').forEach(el => {
+        const txt = el.innerText?.trim();
+        if (txt && txt.length > 1 && txt.length < 25 && !txt.includes('\n')) {
+          if (el.className?.includes('gwpfqt') || el.closest('[class*="character"]')) {
+            set.add(txt);
+          }
+        }
+      });
+      return Array.from(set);
+    });
+
+    if (names.length > 0) return names;
+
+    // 2. Query @-mention dialog Characters tab if not visible on canvas
+    try {
+      const editor = page.locator("div[data-slate-editor='true'], div[contenteditable='true']").first();
+      if (await editor.count() > 0) {
+        await editor.click();
+        await page.keyboard.type('@');
+        await page.waitForTimeout(500);
+
+        const dialog = page.locator('div[role="dialog"]');
+        const charBtn = dialog.locator('button').filter({ hasText: /Characters/i }).first();
+        if (await charBtn.count() > 0) {
+          await charBtn.click();
+          await page.waitForTimeout(500);
+
+          const dialogNames = await dialog.evaluate(el => {
+            const found = [];
+            el.querySelectorAll('img[alt]').forEach(img => {
+              const alt = img.getAttribute('alt')?.trim();
+              if (alt && alt !== 'Character preview image') found.push(alt);
+            });
+            return found;
+          });
+          await page.keyboard.press('Escape');
+          return dialogNames;
+        }
+        await page.keyboard.press('Escape');
+      }
+    } catch {}
+
+    return names;
+  }
+
+  async listProjectMedia() {
+    const page = await this.getFlowPage();
+    this.resetIdleTimer();
+
+    return await page.evaluate(() => {
+      const media = [];
+      document.querySelectorAll('img').forEach(img => {
+        const src = img.src;
+        if (src && (src.includes('getMediaUrlRedirect') || src.includes('googleusercontent'))) {
+          media.push({
+            alt: img.getAttribute('alt') || '',
+            src,
+            width: img.naturalWidth || 0,
+            height: img.naturalHeight || 0,
+            type: 'image'
+          });
+        }
+      });
+      return media;
+    });
   }
 
   // Click a control INSIDE the settings panel by its exact visible label. Flow prefixes
@@ -85,7 +228,7 @@ export class FlowCdpDriver {
   async clickExact(label, { required = true } = {}) {
     const page = this.flowPage;
     const esc = label.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    const re = new RegExp(`^(?:[a-z_0-9]+\\s+)?${esc}$`, 'i');
+    const re = new RegExp(`^(?:[^a-z0-9]*[a-z_0-9]+\\s+|[^a-z0-9]+\\s*)?${esc}$`, 'i');
     const candidates = [
       page.getByRole('button', { name: re }),
       page.getByRole('tab', { name: re }),
@@ -93,6 +236,7 @@ export class FlowCdpDriver {
       page.getByRole('option', { name: re }),
       page.getByRole('menuitem', { name: re }),
       page.getByText(re, { exact: true }),
+      page.locator('button, [role="option"], div[role="button"]').filter({ hasText: new RegExp(esc, 'i') }),
     ];
     for (const loc of candidates) {
       if (await loc.count() > 0) {
@@ -131,7 +275,31 @@ export class FlowCdpDriver {
     const page = this.flowPage;
     if (!page) throw new Error('No active Flow page');
 
-    const pill = this.settingsPill();
+    // Ensure any open preview or lightbox is dismissed so the composer is active
+    let initial = await this.readGenerationState();
+    if (!initial.pillText) {
+      await page.keyboard.press('Escape');
+      await page.waitForTimeout(400);
+      initial = await this.readGenerationState();
+    }
+
+    const currentText = `${initial.modelText} ${initial.pillText}`.toLowerCase();
+    const isImage = mode === 'image';
+    const matchesModel = !model || currentText.includes(model.toLowerCase()) || (isImage && /banana|imagen/i.test(currentText));
+    const matchesRatio = !ratio || currentText.includes(ratio.replace(':', '_')) || currentText.includes(ratio);
+    const matchesMode = isImage ? /banana|imagen/i.test(currentText) : !/banana|imagen/i.test(currentText);
+
+    if (matchesMode && matchesModel && matchesRatio) {
+      console.log(`[FlowCdpDriver] Settings already match active session: "${currentText}". Preserving current drawer.`);
+      return initial;
+    }
+
+    let pill = this.settingsPill();
+    if (await pill.count() === 0) {
+      await page.keyboard.press('Escape');
+      await page.waitForTimeout(500);
+      pill = this.settingsPill();
+    }
     if (await pill.count() === 0) throw new Error('Flow settings pill not found (composer button ending in x1..x4).');
     await pill.click();
     await page.waitForTimeout(700);
@@ -139,7 +307,17 @@ export class FlowCdpDriver {
     // Mode first - it changes which controls exist below it.
     await this.clickExact(mode === 'image' ? 'Image' : 'Video');
     if (mode !== 'image' && submode) await this.clickExact(submode === 'frames' ? 'Frames' : 'Ingredients', { required: false });
-    if (ratio === '9:16' || ratio === '16:9') await this.clickExact(ratio);
+    if (ratio === '9:16' || ratio === '16:9') {
+      const iconName = ratio === '9:16' ? 'crop_9_16' : 'crop_16_9';
+      const clicked = await this.clickExact(ratio, { required: false });
+      if (!clicked) {
+        const ratioLoc = page.locator(`button[aria-label*="${ratio}"], button:has-text("${iconName}"), button:has-text("${ratio}")`).first();
+        if (await ratioLoc.count() > 0) {
+          await ratioLoc.click();
+          await page.waitForTimeout(350);
+        }
+      }
+    }
 
     if (model) {
       // The model dropdown is the panel button carrying the dropdown glyph; open it, pick by exact name.
@@ -147,9 +325,9 @@ export class FlowCdpDriver {
       if (await dd.count() > 0) { await dd.click(); await page.waitForTimeout(500); }
       await this.clickExact(model);
     }
-    if (resolution) await this.clickExact(resolution);
-    if (duration) await this.clickExact(`${duration}s`);
-    if (count) await this.clickExact(`x${count}`);
+    if (resolution) await this.clickExact(resolution, { required: false });
+    if (duration) await this.clickExact(`${duration}s`, { required: false });
+    if (count) await this.clickExact(`x${count}`, { required: false });
 
     // READ BACK: credits line while the panel is open (it lives inside it), pill after it closes.
     const open = await this.readGenerationState();
@@ -170,7 +348,7 @@ export class FlowCdpDriver {
     if (mode !== 'image' && state.credits === 0) {
       problems.push('credits read 0 - that is the Image-mode signature, Flow is not in Video mode');
     }
-    if (state.credits === null) {
+    if (mode !== 'image' && state.credits === null) {
       problems.push(`could not read the credits line (saw: "${state.creditsText}")`);
     }
     if (maxCredits != null && state.credits != null && state.credits > maxCredits) {
@@ -194,20 +372,61 @@ export class FlowCdpDriver {
       throw new Error(`None of the provided reference paths exist: ${filePaths.join(', ')}`);
     }
 
+    const uploadList = validPaths.slice(0, 3);
     const fileInput = page.locator("input[type='file']").first();
-    if (await fileInput.count() === 0) {
-      throw new Error("Could not find file input in Flow page.");
+    if (await fileInput.count() > 0) {
+      // Legacy Flow: a bare file input beside the composer.
+      await fileInput.setInputFiles(uploadList);
+      await page.waitForTimeout(1500);
+      return;
     }
 
-    // Pass up to 3 references simultaneously
-    const uploadList = validPaths.slice(0, 3);
-    await fileInput.setInputFiles(uploadList);
-    await page.waitForTimeout(1500);
+    // New Flow (flow.google.com, 2026-09): uploads go through the '@' asset picker - "Upload media"
+    // opens a native chooser, the file is selected in the picker, and "Add to prompt" drops a
+    // media mention-chip into the composer. Call AFTER setPrompt, which clears the composer.
+    for (const filePath of uploadList) {
+      const editor = page.locator("div[data-slate-editor='true'], div[contenteditable='true']").first();
+      await editor.click();
+      await page.keyboard.press('End');
+      await page.keyboard.type(' @');
+      await page.waitForTimeout(900);
+      // Reuse a previous upload: the picker lists project assets by filename and a media option
+      // inserts on click. Only upload when the name is not there (operator, 2026-09-04).
+      const baseName = path.basename(filePath);
+      await page.keyboard.type(baseName);
+      await page.waitForTimeout(900);
+      const existing = page.locator(`[role="option"]:has(.asset-title:text-is("${baseName}"))`).first();
+      if (await existing.count() > 0) {
+        await existing.click();
+        await page.waitForTimeout(900);
+        const reused = page.locator("div[contenteditable='true'] .mention-chip[data-reference-type='media']");
+        if (await reused.count() === 0) throw new Error(`Existing asset ${baseName} was clicked but no media chip landed.`);
+        console.log(`[FlowCdpDriver] Reference reused from project assets: ${baseName}`);
+        await page.keyboard.press('End');
+        continue;
+      }
+      for (let i = 0; i < baseName.length; i++) await page.keyboard.press('Backspace');
+      await page.waitForTimeout(400);
+      const uploadBtn = page.getByText(/Upload media/i).first();
+      if (await uploadBtn.count() === 0) throw new Error('Asset picker did not offer "Upload media".');
+      const [chooser] = await Promise.all([page.waitForEvent('filechooser', { timeout: 10000 }), uploadBtn.click()]);
+      await chooser.setFiles(filePath);
+      await page.waitForTimeout(4000);
+      const addBtn = page.getByRole('button', { name: /Add to prompt/i }).first();
+      if (await addBtn.count() === 0) throw new Error(`Upload of ${path.basename(filePath)} did not reach "Add to prompt".`);
+      await addBtn.click();
+      await page.waitForTimeout(900);
+      const chip = page.locator("div[contenteditable='true'] .mention-chip[data-reference-type='media']");
+      if (await chip.count() === 0) throw new Error(`Upload of ${path.basename(filePath)} left no media chip in the composer.`);
+      console.log(`[FlowCdpDriver] Reference attached as a media chip: ${path.basename(filePath)}`);
+      await page.keyboard.press('End');
+    }
   }
 
-  async setPrompt(promptText) {
+  async setPrompt(promptText, { characters = [] } = {}) {
     const page = this.flowPage;
     if (!page) throw new Error('No active Flow page');
+    this.resetIdleTimer();
 
     const editor = page.locator("div[data-slate-editor='true'], div[contenteditable='true']").first();
     if (await editor.count() === 0) {
@@ -215,50 +434,209 @@ export class FlowCdpDriver {
     }
 
     await editor.click();
-    await editor.fill(promptText);
-    await page.waitForTimeout(500);
+    await page.keyboard.press('Control+A');
+    await page.keyboard.press('Backspace');
+    await page.waitForTimeout(200);
+
+    // If character names are provided, insert them via the @ mention popover
+    if (characters && characters.length > 0) {
+      for (const charName of characters) {
+        console.log(`[FlowCdpDriver] Attaching native character chip: "${charName}"`);
+        await page.keyboard.type('@');
+        await page.waitForTimeout(600);
+
+        // New Flow (flow.google.com, 2026-09): '@' opens an asset picker listbox whose search field
+        // takes focus - type the name to filter, then click the option that is a Character.
+        const listbox = page.locator('[role="listbox"]');
+        const dialog = page.locator('div[role="dialog"]');
+        if (await listbox.count() > 0) {
+          await page.keyboard.type(charName);
+          await page.waitForTimeout(800);
+          // Media inserts on click; a Character is SELECTED on click (preview pane) and inserted by
+          // the picker's "Add to prompt" button. Observed 2026-09-04 on the redesigned picker.
+          const option = page.locator(`[role="option"]:has(.asset-title:text-is("${charName}"))`).first();
+          if (await option.count() > 0) {
+            await option.click();
+            await page.waitForTimeout(700);
+            const addBtn = page.getByRole('button', { name: /Add to prompt/i }).first();
+            if (await addBtn.count() > 0) {
+              await addBtn.click();
+              await page.waitForTimeout(700);
+            }
+            const chip = page.locator("div[contenteditable='true'] .mention-chip");
+            if (await chip.count() > 0) {
+              console.log(`[FlowCdpDriver] Character chip attached: "${charName}" (${await chip.first().innerText()})`);
+            } else {
+              throw new Error(`Character "${charName}" was selected but no mention-chip landed in the composer.`);
+            }
+          } else {
+            console.warn(`[FlowCdpDriver] No option for "${charName}" in the asset picker; closing.`);
+            await page.keyboard.press('Escape');
+          }
+          // the chip insert leaves focus in the composer; just move the caret to the end
+          await page.keyboard.press('End');
+        } else if (await dialog.count() > 0) {
+          const charBtn = dialog.locator('button').filter({ hasText: /Characters/i }).first();
+          if (await charBtn.count() > 0) {
+            await charBtn.click();
+            await page.waitForTimeout(600);
+          }
+
+          // Look for image with alt or card with text matching character name
+          const target = dialog.locator(`img[alt="${charName}"], [role="button"]:has-text("${charName}"), button:has-text("${charName}")`).first();
+          if (await target.count() > 0) {
+            await target.click();
+            await page.waitForTimeout(500);
+          } else {
+            console.warn(`[FlowCdpDriver] Character card for "${charName}" not found in @ dialog; closing.`);
+            await page.keyboard.press('Escape');
+          }
+        }
+      }
+    }
+
+    // Strip leading @CharacterName from promptText if we already attached it as a chip
+    let body = promptText;
+    for (const charName of characters) {
+      const re = new RegExp(`^\\s*@?${charName}\\s*,?\\s*`, 'i');
+      body = body.replace(re, '');
+    }
+
+    if (body.trim().length > 0) {
+      const prefix = characters && characters.length > 0 ? ' ' : '';
+      await page.keyboard.insertText(prefix + body.trim());
+      await page.waitForTimeout(500);
+    }
   }
 
   async triggerGeneration() {
     const page = this.flowPage;
     if (!page) throw new Error('No active Flow page');
 
-    let submitBtn = page.locator("button[aria-label*='Submit'], button[aria-label*='Generate'], button:has-text('arrow_forward'), button:has-text('➔')").first();
-    if (await submitBtn.count() === 0) {
-      submitBtn = page.locator("button:has(svg)").last();
+    let submitBtn = page.locator("button:has-text('arrow_forward'), button:has-text('Create'), button[aria-label*='Submit'], button[aria-label*='Generate']").last();
+    if (await submitBtn.count() > 0 && await submitBtn.isVisible()) {
+      await submitBtn.click();
+    } else {
+      // Fallback: press Enter inside the composer
+      const editor = page.locator("div[contenteditable='true']").first();
+      if (await editor.count() > 0) {
+        await editor.focus();
+        await editor.press('Enter');
+      } else {
+        throw new Error("Could not find submit button or composer editor on Flow page.");
+      }
     }
-    if (await submitBtn.count() === 0) {
-      throw new Error("Could not find submit button on Flow page.");
-    }
-
-    await submitBtn.click();
     await page.waitForTimeout(2000);
   }
 
-  async waitForGenerationAndDownload(rawOutputPath, timeoutMs = 420000) {
+  async waitForGenerationAndDownload(rawOutputPath, timeoutMs = 420000, mode = 'video', { excludeFiles = [] } = {}) {
     const page = this.flowPage;
     if (!page) throw new Error('No active Flow page');
-
-    const startTime = Date.now();
-    let prevVideoSrc = null;
-    const existingVideo = page.locator("video").first();
-    if (await existingVideo.count() > 0) {
-      prevVideoSrc = await existingVideo.getAttribute("src");
+    // An uploaded reference re-renders on the canvas as a brand-new CDN URL, which looks exactly
+    // like a finished generation. Any candidate whose bytes equal a reference file is skipped.
+    // Flow re-encodes uploads, so bytes differ; a 16x16 average-hash computed in the page catches
+    // the re-render regardless of container format. Hamming distance <= 12 of 256 bits = same picture.
+    const aHashInPage = async (src) => page.evaluate(async (u) => {
+      const blob = await (await fetch(u)).blob();
+      const bmp = await createImageBitmap(blob);
+      const c = document.createElement('canvas'); c.width = 16; c.height = 16;
+      const g = c.getContext('2d'); g.drawImage(bmp, 0, 0, 16, 16);
+      const d = g.getImageData(0, 0, 16, 16).data; const v = [];
+      for (let i = 0; i < d.length; i += 4) v.push(0.299 * d[i] + 0.587 * d[i + 1] + 0.114 * d[i + 2]);
+      const mean = v.reduce((a, b) => a + b, 0) / v.length;
+      return { bits: v.map(x => (x > mean ? '1' : '0')).join(''), w: bmp.width, h: bmp.height };
+    }, src);
+    const hamming = (a, b) => { let n = 0; for (let i = 0; i < a.length; i++) if (a[i] !== b[i]) n++; return n; };
+    const excludeSigs = [];
+    for (const f of excludeFiles.filter(f => fs.existsSync(f))) {
+      const b64 = fs.readFileSync(f).toString('base64');
+      const ext = path.extname(f).slice(1).toLowerCase().replace('jpg', 'jpeg');
+      excludeSigs.push(await aHashInPage(`data:image/${ext};base64,${b64}`));
     }
+    const looksLikeReference = async (src) => {
+      if (excludeSigs.length === 0) return false;
+      const sig = await aHashInPage(src);
+      return excludeSigs.some(r => hamming(r.bits, sig.bits) <= 12);
+    };
 
-    console.log(`[FlowCdpDriver] Waiting for video generation to complete (timeout: ${timeoutMs}ms)...`);
+    const isImage = mode === 'image';
+    const startTime = Date.now();
 
-    let settledSrc = null;
-    while (Date.now() - startTime < timeoutMs) {
-      const currentVideo = page.locator("video").first();
-      if (await currentVideo.count() > 0) {
-        const src = await currentVideo.getAttribute("src");
-        if (src && src.includes('getMediaUrlRedirect')) {
-          if (!prevVideoSrc || src !== prevVideoSrc) {
-            settledSrc = src;
+    if (isImage) {
+      console.log(`[FlowCdpDriver] Waiting for image generation to complete (timeout: ${timeoutMs}ms)...`);
+      const prevList = await page.evaluate(() => {
+        return Array.from(document.querySelectorAll("img[src*='getMediaUrlRedirect'], img[src*='flow-content.google/'], img[src*='/asb/']")).map(i => i.src);
+      });
+
+      let settledSrc = null;
+      let settledBytes = null;
+      while (Date.now() - startTime < timeoutMs) {
+        this.resetIdleTimer();
+        const currentSrc = await page.evaluate((prevs) => {
+          const imgs = Array.from(document.querySelectorAll("img[src*='getMediaUrlRedirect'], img[src*='flow-content.google/'], img[src*='/asb/']")).map(i => i.src);
+          const newImg = imgs.find(s => !prevs.includes(s));
+          if (newImg) return newImg;
+          if (imgs.length > 0 && imgs[0] !== prevs[0]) return imgs[0];
+          return null;
+        }, prevList);
+
+        if (currentSrc) {
+          const bytes = await page.evaluate(async (src) => {
+            const resp = await fetch(src);
+            const buf = await (await resp.blob()).arrayBuffer();
+            return Array.from(new Uint8Array(buf));
+          }, currentSrc);
+          if (await looksLikeReference(currentSrc)) {
+            console.log(`[FlowCdpDriver] Ignoring re-rendered reference upload: ${currentSrc.slice(0, 80)}`);
+            prevList.push(currentSrc);
+          } else {
+            settledSrc = currentSrc;
+            settledBytes = bytes;
             break;
           }
         }
+        await page.waitForTimeout(2500);
+      }
+
+      if (!settledSrc) {
+        throw new Error(`Image generation timed out after ${timeoutMs}ms.`);
+      }
+
+      console.log(`[FlowCdpDriver] Image generation finished! Source endpoint: ${settledSrc}`);
+      const imageBytes = settledBytes;
+
+      fs.mkdirSync(path.dirname(rawOutputPath), { recursive: true });
+      fs.writeFileSync(rawOutputPath, Buffer.from(imageBytes));
+      console.log(`[FlowCdpDriver] Successfully saved raw image (${imageBytes.length} bytes) to ${rawOutputPath}`);
+      return rawOutputPath;
+    }
+
+    // Video mode: snapshot all existing video URLs to diff reliably
+    const prevVideoList = await page.evaluate(() => {
+      return Array.from(document.querySelectorAll('video'))
+        .map(v => v.src || v.getAttribute('src'))
+        .filter(s => Boolean(s) && /getMediaUrlRedirect|flow-content\.google\/|\/asb\//.test(s));
+    });
+
+    console.log(`[FlowCdpDriver] Waiting for video generation to complete (timeout: ${timeoutMs}ms, baseline videos: ${prevVideoList.length})...`);
+
+    let settledSrc = null;
+    while (Date.now() - startTime < timeoutMs) {
+      this.resetIdleTimer();
+
+      const currentSrc = await page.evaluate((prevs) => {
+        const vids = Array.from(document.querySelectorAll('video'))
+          .map(v => v.src || v.getAttribute('src'))
+          .filter(s => Boolean(s) && /getMediaUrlRedirect|flow-content\.google\/|\/asb\//.test(s));
+        for (const s of vids) {
+          if (!prevs.includes(s)) return s;
+        }
+        return null;
+      }, prevVideoList);
+
+      if (currentSrc) {
+        settledSrc = currentSrc;
+        break;
       }
       await page.waitForTimeout(3000);
     }
@@ -281,4 +659,13 @@ export class FlowCdpDriver {
     console.log(`[FlowCdpDriver] Successfully saved raw video (${videoBytes.length} bytes) to ${rawOutputPath}`);
     return rawOutputPath;
   }
+
+  async disconnect() {
+    if (this.browser) {
+      await this.browser.close().catch(() => {});
+      this.browser = null;
+      this.flowPage = null;
+    }
+  }
 }
+

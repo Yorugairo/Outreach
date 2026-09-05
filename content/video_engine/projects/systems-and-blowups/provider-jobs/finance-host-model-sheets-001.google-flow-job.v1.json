@@ -19,7 +19,9 @@
       "id": "finance-host-v1-model-sheet",
       "character_id": "finance-host-v1",
       "bound_character": "@Mike",
-      "references": [],
+      "references": [
+        "@Mike"
+      ],
       "prompt": "@Mike as a character model sheet on a plain cream ground, 16:9, three rows with small handwritten row labels. Top row, standing neutral at identical height: front view, left side view, three-quarter view, back view. Middle row, five head-and-shoulders portraits: happy, neutral, surprised, worried, angry. Bottom row, five full-body poses: waving, thinking with a hand at the chin, presenting with an open palm toward the viewer, explaining with both hands raised, shrugging. Consistent proportions in every cell, fully visible hands and feet. A light application of woodblock print and vox newspaper with rich anime colors. Negative: no text other than the row labels, no numbers, no charts, no logos.",
       "prompt_sha256": "ba94dff6283b6b1d1176b81ad1e91b57f2e1154415cba7ac487df8eec69085e5"
     },
@@ -46,8 +48,8 @@
   ],
   "credit_budget": {
     "estimated_credits": null,
-    "credit_note": "Unknown for a 16:9 Nano Banana Pro still in this project - read the meter before the first roll; a paraphrased host prompt cost 40 credits on 2026-09-03.",
-    "actual_credits": null,
+    "credit_note": "Nano Banana Pro stills read 'Generating will use 0 credits' on every roll.",
+    "actual_credits": 0,
     "allocation": "daily_complimentary",
     "daily_complimentary_target": true
   },
@@ -57,11 +59,43 @@
     "approval_id": null,
     "expected_account_verified": false
   },
-  "status": "ready_for_confirmation",
-  "outputs": [],
+  "status": "awaiting_contact_sheet_review",
+  "outputs": [
+    {
+      "scene_id": "finance-host-v1-model-sheet",
+      "path": "review/claims/finance-host-model-sheets-001/finance-host-v1-model-sheet-raw.png",
+      "sha256": "7b4f2d6b200b1f78215e4247a80d0aec261340ab22177c3156235a4c5d4332bf",
+      "bytes": 788286
+    },
+    {
+      "scene_id": "finance-host-stick-v1-model-sheet",
+      "path": "review/claims/finance-host-model-sheets-001/finance-host-stick-v1-model-sheet-raw.png",
+      "sha256": "6c240e66930edee58e7d4cba5be6b01c1d7c8d30dc4c67c979e4b459d8203cee",
+      "bytes": 403931
+    }
+  ],
   "review_state": "quarantined",
   "render_eligible": false,
   "style_directive": "A light application of woodblock print and vox newspaper with rich anime colors",
   "style_note": "The retention sheet carries the recognised phrase. The stick sheet deliberately does not - 53 §53.10 sets the acquisition variant flat and high-contrast. Operator may override.",
-  "artifact_hash": "f30fc182abded819c37c112ad07f826c4369f1b4aa9c780a35b417dda3b3297c"
+  "roll_log": [
+    {
+      "attempt": 1,
+      "date": "2026-09-04",
+      "result": "REJECTED - @Mike was literal prompt text with no chip; the model drew a different man. Flow moved to flow.google.com the same morning (driver patched: host match, media CDN)."
+    },
+    {
+      "attempt": 2,
+      "date": "2026-09-04",
+      "scene": "finance-host-v1-model-sheet",
+      "result": "LANDED - @Mike attached as a native chip (picker: type name, select, Add to prompt). Identity correct; layout loose (no back view, expressions across two rows, hero figure). Candidate for the contact sheet."
+    },
+    {
+      "attempt": 3,
+      "date": "2026-09-04",
+      "scene": "finance-host-stick-v1-model-sheet",
+      "result": "LANDED after three false downloads - the uploaded reference re-renders on the canvas as a new CDN image and Flow re-encodes it, so the detector took it as the output; fixed with an in-page perceptual hash exclusion, and references are now reused by filename instead of re-uploaded. Output 1376x768, on spec."
+    }
+  ],
+  "artifact_hash": "07c95863aeadb01baa460adb210f57e47aad15803ae9dd12e0466099e3710cfa"
 }

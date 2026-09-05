@@ -38,8 +38,10 @@ export class FlowDagEngine {
 
     const targetDir = path.dirname(outputPath);
     const baseName = path.basename(outputPath, path.extname(outputPath));
-    const rawPath = path.join(targetDir, `${baseName}-raw.mp4`);
-    const finalVideoPath = reverse ? path.join(targetDir, `${baseName}-reversed.mp4`) : outputPath;
+    const isImage = mode === 'image';
+    const rawExt = isImage ? '.png' : '.mp4';
+    const rawPath = path.join(targetDir, `${baseName}-raw${rawExt}`);
+    const finalOutputPath = isImage ? (outputPath.endsWith('.png') ? outputPath : `${outputPath}.png`) : (reverse ? path.join(targetDir, `${baseName}-reversed.mp4`) : outputPath);
 
     // 1. Connect and ensure Flow page
     await this.driver.getFlowPage(projectUrl);
@@ -47,51 +49,94 @@ export class FlowDagEngine {
     // 2. Set the generation state and READ IT BACK - never preserve whatever the project was left on.
     const settings = await this.driver.configureSettings({ mode, submode, model, ratio, duration, resolution, count, maxCredits });
 
-    // 3. Upload References (up to 3)
+    // 3. Resolve references (partition disk files vs named project characters)
+    const fileUploads = [];
+    const characterMentions = [];
     if (references && references.length > 0) {
-      await this.driver.uploadReferences(references);
+      const availableCharacters = await this.driver.listProjectCharacters();
+      for (const ref of references) {
+        if (typeof ref === 'string' && fs.existsSync(ref)) {
+          fileUploads.push(ref);
+        } else if (typeof ref === 'string') {
+          const cleanName = ref.replace(/^@/, '').trim();
+          const matched = availableCharacters.find(c => c.toLowerCase() === cleanName.toLowerCase());
+          if (matched) {
+            characterMentions.push(matched);
+          } else {
+            throw new Error(`Character "${ref}" not found in active Flow project. Available characters: [${availableCharacters.join(', ')}]`);
+          }
+        }
+      }
     }
 
-    // 4. Inject Prompt
-    await this.driver.setPrompt(prompt);
+    // 4. Inject the prompt with native character chips (this clears the composer first)
+    await this.driver.setPrompt(prompt, { characters: characterMentions });
 
-    // 5. Submit Generation
+    // 5. Then attach file references - on the new Flow they land as chips in the composer,
+    //    so they must come after the clear, never before it.
+    if (fileUploads.length > 0) {
+      await this.driver.uploadReferences(fileUploads);
+    }
+
+    // 6. Submit Generation
     await this.driver.triggerGeneration();
 
-    // 6. Wait for Generation & Download
-    await this.driver.waitForGenerationAndDownload(rawPath);
+    // 7. Wait for Generation & Download
+    await this.driver.waitForGenerationAndDownload(rawPath, 420000, mode, { excludeFiles: fileUploads });
 
     // 7. Post-Processing
-    let activeVideoPath = rawPath;
+    let activePath = rawPath;
+    if (isImage) {
+      if (rawPath !== finalOutputPath) {
+        fs.copyFileSync(rawPath, finalOutputPath);
+        activePath = finalOutputPath;
+      }
+      const metadataPath = path.join(targetDir, `${baseName}_meta.json`);
+      const metadata = {
+        prompt,
+        references,
+        settings: settings ?? null,
+        requested_ratio: ratio || '9:16',
+        mode: 'image',
+        files: {
+          image: { path: activePath, sha256: sha256File(activePath) },
+          raw_image: { path: rawPath, sha256: sha256File(rawPath) },
+        },
+      };
+      writeMetadata(metadataPath, metadata);
+      return {
+        success: true,
+        mode: 'image',
+        imagePath: activePath,
+        rawPath,
+        metadataPath,
+        settings,
+      };
+    }
+
     if (reverse) {
-      console.log(`[FlowDagEngine] Applying FFmpeg reversal to ${rawPath} -> ${finalVideoPath}...`);
-      reverseVideo(rawPath, finalVideoPath);
-      activeVideoPath = finalVideoPath;
-    } else if (rawPath !== outputPath) {
-      // If no reversal requested and rawPath != outputPath, save directly to outputPath
-      activeVideoPath = outputPath;
-      // Synchronous on purpose. The previous dynamic import() returned an un-awaited promise,
-      // so the frame extraction below ran before the copy landed and aborted a batch whose
-      // credits were already spent (first live run, 2026-09-03).
-      fs.copyFileSync(rawPath, outputPath);
+      console.log(`[FlowDagEngine] Applying FFmpeg reversal to ${rawPath} -> ${finalOutputPath}...`);
+      reverseVideo(rawPath, finalOutputPath);
+      activePath = finalOutputPath;
+    } else if (rawPath !== finalOutputPath) {
+      activePath = finalOutputPath;
+      fs.copyFileSync(rawPath, finalOutputPath);
     }
 
     // 8. Extract verification frames
     const frame0Path = path.join(targetDir, `${baseName}_frame_0.png`);
     const frameEndPath = path.join(targetDir, `${baseName}_frame_end.png`);
-    // 8-9 are verification, not delivery: the mp4 is already on disk and paid for.
-    // A failure here is logged into the result, never thrown - it must not abort the batch.
     let probe = null;
     let verificationError = null;
     try {
-      extractVerificationFrames(activeVideoPath, frame0Path, frameEndPath);
-      probe = probeVideo(activeVideoPath);
+      extractVerificationFrames(activePath, frame0Path, frameEndPath);
+      probe = probeVideo(activePath);
     } catch (err) {
       verificationError = String(err?.message || err).split(/\r?\n/)[0];
       console.warn(`[FlowDagEngine] verification step failed (video kept): ${verificationError}`);
     }
 
-    // 10. Write Metadata Manifest (null-safe: probe/frames may be absent after a verification failure)
+    // 10. Write Metadata Manifest
     const metadataPath = path.join(targetDir, `${baseName}_meta.json`);
     const metadata = {
       prompt,
@@ -104,7 +149,7 @@ export class FlowDagEngine {
       verification_error: verificationError,
       reversed: reverse,
       files: {
-        video: { path: activeVideoPath, sha256: sha256File(activeVideoPath) },
+        video: { path: activePath, sha256: sha256File(activePath) },
         raw_video: { path: rawPath, sha256: sha256File(rawPath) },
         frame_start: { path: frame0Path, sha256: sha256File(frame0Path) },
         frame_end: { path: frameEndPath, sha256: sha256File(frameEndPath) },
@@ -114,13 +159,37 @@ export class FlowDagEngine {
 
     return {
       success: true,
-      videoPath: activeVideoPath,
+      videoPath: activePath,
       rawVideoPath: rawPath,
       frame0Path,
       frameEndPath,
       metadataPath,
       probe,
     };
+  }
+
+  async generateImage({
+    prompt,
+    references = [],
+    ratio = '9:16',
+    outputPath,
+    projectUrl = null,
+  }) {
+    return await this.generateVideo({
+      prompt,
+      references,
+      mode: 'image',
+      model: 'Nano Banana Pro',
+      ratio,
+      count: 1,
+      outputPath,
+      projectUrl,
+    });
+  }
+
+  async getProjectDetails(projectUrl = null) {
+    if (projectUrl) await this.driver.getFlowPage(projectUrl);
+    return await this.driver.getProjectDetails();
   }
 
   async generateBatch(batch = {}) {

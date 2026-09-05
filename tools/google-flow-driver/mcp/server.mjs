@@ -17,6 +17,51 @@ const server = new Server(
 
 const TOOLS = [
   {
+    name: 'create_flow_image',
+    description: 'Generate a high-fidelity 2.5D still plate using Google Flow (Nano Banana Pro) via active Chrome CDP. BEST FOR: Background plates, character staging plates, cut-in objects, and editorial scenes for 2.5D parallax and Remotion compositing. Supports native character binding (e.g. references: ["Mike"]) and disk image references. Aspect ratio is configurable (9:16 or 16:9).',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        prompt: {
+          type: 'string',
+          description: 'The image generation prompt description and style instructions.'
+        },
+        references: {
+          type: 'array',
+          items: { type: 'string' },
+          description: 'Optional array of references (absolute file paths to images or project character names like "Mike").'
+        },
+        ratio: {
+          type: 'string',
+          enum: ['9:16', '16:9'],
+          description: 'Aspect ratio: "9:16" for vertical or "16:9" for horizontal (defaults to "9:16").'
+        },
+        outputPath: {
+          type: 'string',
+          description: 'Absolute output file path where the resulting PNG image will be saved.'
+        },
+        projectUrl: {
+          type: 'string',
+          description: 'Optional specific Google Flow project URL to navigate to.'
+        }
+      },
+      required: ['prompt', 'outputPath']
+    }
+  },
+  {
+    name: 'get_flow_project',
+    description: 'Inspect the active Google Flow project canvas. Returns project title, canvas aspect ratio, registered character names (e.g. ["Mike"]), active model, and media assets.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        projectUrl: {
+          type: 'string',
+          description: 'Optional specific Google Flow project URL to inspect.'
+        }
+      }
+    }
+  },
+  {
     name: 'create_flow_video',
     description: 'Generate a cinematic video using Google Flow via active Chrome CDP. BEST FOR: Cinematic character hooks, multi-shot narrative scenes, complex physical motion, and 3-reference visual fidelity. FORBIDDEN FOR: Readable financial charts, stat cards, statutory text, or data tables (diffusion hallucinates numbers and mushes text; use Remotion/SVG instead). Supports multi-reference conditioning, explicit or preserved aspect ratio (9:16 or 16:9), and optional FFmpeg reversal for pixel-exact ending-frame handoffs.',
     inputSchema: {
@@ -187,8 +232,21 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       };
     }
 
-    if (name === 'create_flow_video') {
+    if (name === 'create_flow_image') {
+      const result = await engine.generateImage(args || {});
+      return {
+        content: [{ type: 'text', text: JSON.stringify(result, null, 2) }]
+      };
+    }
 
+    if (name === 'get_flow_project') {
+      const result = await engine.getProjectDetails(args?.projectUrl || null);
+      return {
+        content: [{ type: 'text', text: JSON.stringify(result, null, 2) }]
+      };
+    }
+
+    if (name === 'create_flow_video') {
       const result = await engine.generateVideo(args || {});
       return {
         content: [{ type: 'text', text: JSON.stringify(result, null, 2) }]
@@ -207,7 +265,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       const browser = await engine.driver.connect();
       const contexts = browser.contexts();
       const pages = contexts.flatMap(c => c.pages()).map(p => p.url());
-      const flowTabs = pages.filter(u => u.includes('labs.google/fx/tools/flow'));
+      const flowTabs = pages.filter(u => u.includes('labs.google/fx/tools/flow') || u.includes('flow.google.com'));
       return {
         content: [{
           type: 'text',
