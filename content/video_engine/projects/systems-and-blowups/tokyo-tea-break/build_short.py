@@ -255,23 +255,28 @@ def main() -> int:
     # a MOUNT entry has no page turn at all; a page that leaves by the drain: a LIGHT FLIP (whoosh-1, the short swish) if it will
     # come back, a WHIRL (whoosh-4, the long sweep, timed to end on the cut) if it arrived by spiral; a spiral IN is a WHOOSH
     # (whoosh-3); the SUCK is the tear (the page-roll - "if there's not a good one, the tear actually makes some sense")
-    ROLL, FLIP, WHOOSH, WHIRL = "fs-page-roll-464302.mp3", "fs-whoosh-1-706679.mp3", "fs-whoosh-3-648729.mp3", "fs-whoosh-4-648732.mp3"
-    RETRACT_S, WHIRL_S = 2.0, 2.3   # LP_RETRACT.COLOURS + CHARCOAL (template): the drain starts here before the row ends; whoosh-4 runs 2.3 s
+    # THIRD PASS (operator, 2026-09-05: "that whoosh sound is too mechanical, it sounds like a jet almost, ours should sound like a
+    # whirl / whirlpool / spinning / spiralling ... the sounds should still be background sounds, ~8-10 dB below"): WATER - the spiral
+    # in and the drain are basin swirls, the suck is a whirlpool, the flip a quiet page turn (CC0, sound/SOURCES.md); every accent
+    # file is -14 LUFS, so ACCENT = 0.22 puts it ~9 dB under the -17.9 LUFS voice. The review strip carries the alternates (B/C/D).
+    ROLL, FLIP, SWIRL_IN, SWIRL_OUT, WHIRLPOOL = "fs-page-roll-464302.mp3", "fs-pageturn-484968.mp3", "fs-swirl-in-478722.mp3", "fs-swirl-out-478683.mp3", "fs-whirlpool-537920.mp3"
+    SLURP, SLURP2, AIR1, AIR3, AIR4 = "fs-slurp-735164.mp3", "fs-slurp2-583716.mp3", "fs-whoosh-1-706679.mp3", "fs-whoosh-3-648729.mp3", "fs-whoosh-4-648732.mp3"
+    ACCENT, RETRACT_S, WHIRL_S = 0.22, 2.0, 2.2   # the drain starts RETRACT_S before the row ends; the out-swirl runs 2.2 s, timed to end on the cut
     cues = []
     for i, r in enumerate(rows):
         if r[2].startswith("ledger:"):
             spiral_in, mount_in, cut = ":spiral" in r[2], ":mount" in r[2], r[2].endswith(":cut")
             if spiral_in:
-                cues.append({"slot": f"page enter {i + 1} (spiral)", "at": round(r[0], 2), "gain": 0.7, "fade_in": 0.0, "variants": {"A": WHOOSH}})
+                cues.append({"slot": f"page enter {i + 1} (spiral)", "at": round(r[0], 2), "gain": ACCENT, "fade_in": 0.0, "variants": {"A": SWIRL_IN, "B": AIR3}})
             elif not mount_in:
                 cues.append({"slot": f"page enter {i + 1}", "at": round(r[0], 2), "gain": 0.18, "fade_in": 0.0, "variants": {"A": ROLL}})
             if not cut:
                 if spiral_in:
-                    cues.append({"slot": f"page retract {i + 1} (whirl)", "at": round(r[1] - WHIRL_S, 2), "gain": 0.55, "fade_in": 0.0, "variants": {"A": WHIRL}})
+                    cues.append({"slot": f"page retract {i + 1} (whirl)", "at": round(r[1] - WHIRL_S, 2), "gain": ACCENT, "fade_in": 0.0, "variants": {"A": SWIRL_OUT, "B": AIR4}})
                 else:
-                    cues.append({"slot": f"page retract {i + 1} (flip)", "at": round(r[1] - RETRACT_S, 2), "gain": 0.5, "fade_in": 0.0, "variants": {"A": FLIP}})
+                    cues.append({"slot": f"page retract {i + 1} (flip)", "at": round(r[1] - RETRACT_S, 2), "gain": ACCENT, "fade_in": 0.0, "variants": {"A": FLIP, "B": AIR1}})
         elif isinstance(r[5], str) and r[5].startswith("suck"):
-            cues.append({"slot": f"suck {i + 1}", "at": round(r[0], 2), "gain": 0.45, "fade_in": 0.0, "variants": {"A": ROLL}})
+            cues.append({"slot": f"suck {i + 1}", "at": round(r[0], 2), "gain": ACCENT, "fade_in": 0.0, "variants": {"A": WHIRLPOOL, "B": SLURP, "C": SLURP2, "D": ROLL}})
     plan["cues"] = cues
     plan_path.write_text(json.dumps(plan, indent=1), encoding="utf-8")
     (HERE / "SHOT-TABLE-SHORT.py").write_text(

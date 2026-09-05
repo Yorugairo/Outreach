@@ -1963,37 +1963,37 @@
   {
    "slot": "page retract 4 (flip)",
    "at": 31.05,
-   "gain": 0.5,
+   "gain": 0.22,
    "fade_in": 0.0,
    "variants": {
-    "A": "__snd_1_A__"
+    "B": "__snd_1_B__"
    }
   },
   {
    "slot": "suck 6",
    "at": 38.96,
-   "gain": 0.45,
+   "gain": 0.22,
    "fade_in": 0.0,
    "variants": {
-    "A": "__snd_2_A__"
+    "D": "__snd_2_D__"
    }
   },
   {
    "slot": "page enter 7 (spiral)",
    "at": 44.88,
-   "gain": 0.7,
+   "gain": 0.22,
    "fade_in": 0.0,
    "variants": {
-    "A": "__snd_3_A__"
+    "B": "__snd_3_B__"
    }
   },
   {
    "slot": "page retract 7 (whirl)",
-   "at": 52.22,
-   "gain": 0.55,
+   "at": 52.32,
+   "gain": 0.22,
    "fade_in": 0.0,
    "variants": {
-    "A": "__snd_4_A__"
+    "B": "__snd_4_B__"
    }
   }
  ],

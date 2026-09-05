@@ -13,37 +13,43 @@
   {
    "slot": "page retract 4 (flip)",
    "at": 31.05,
-   "gain": 0.5,
+   "gain": 0.22,
    "fade_in": 0.0,
    "variants": {
-    "A": "fs-whoosh-1-706679.mp3"
+    "A": "fs-pageturn-484968.mp3",
+    "B": "fs-whoosh-1-706679.mp3"
    }
   },
   {
    "slot": "suck 6",
    "at": 38.96,
-   "gain": 0.45,
+   "gain": 0.22,
    "fade_in": 0.0,
    "variants": {
-    "A": "fs-page-roll-464302.mp3"
+    "A": "fs-whirlpool-537920.mp3",
+    "B": "fs-slurp-735164.mp3",
+    "C": "fs-slurp2-583716.mp3",
+    "D": "fs-page-roll-464302.mp3"
    }
   },
   {
    "slot": "page enter 7 (spiral)",
    "at": 44.88,
-   "gain": 0.7,
+   "gain": 0.22,
    "fade_in": 0.0,
    "variants": {
-    "A": "fs-whoosh-3-648729.mp3"
+    "A": "fs-swirl-in-478722.mp3",
+    "B": "fs-whoosh-3-648729.mp3"
    }
   },
   {
    "slot": "page retract 7 (whirl)",
-   "at": 52.22,
-   "gain": 0.55,
+   "at": 52.32,
+   "gain": 0.22,
    "fade_in": 0.0,
    "variants": {
-    "A": "fs-whoosh-4-648732.mp3"
+    "A": "fs-swirl-out-478683.mp3",
+    "B": "fs-whoosh-4-648732.mp3"
    }
   }
  ],
