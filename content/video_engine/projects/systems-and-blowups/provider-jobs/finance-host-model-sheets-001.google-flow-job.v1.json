@@ -72,6 +72,24 @@
       "path": "review/claims/finance-host-model-sheets-001/finance-host-stick-v1-model-sheet-raw.png",
       "sha256": "6c240e66930edee58e7d4cba5be6b01c1d7c8d30dc4c67c979e4b459d8203cee",
       "bytes": 403931
+    },
+    {
+      "scene_id": "finance-host-v1-model-sheet-x4",
+      "path": "review/claims/finance-host-model-sheets-001/finance-host-v1-model-sheet-x4-raw.png",
+      "sha256": "c67ef0c4c576854192d996f191949a22df83fe990b37196b29afb17717d84c98",
+      "bytes": 481011
+    },
+    {
+      "scene_id": "finance-host-v1-model-sheet-x4",
+      "path": "review/claims/finance-host-model-sheets-001/finance-host-v1-model-sheet-x4-raw-3.png",
+      "sha256": "dbea42698cd12dd0328688f6195d4f3a36d013cbea2f974ae623eaedc05e2e0e",
+      "bytes": 735887
+    },
+    {
+      "scene_id": "finance-host-v1-model-sheet-x4",
+      "path": "review/claims/finance-host-model-sheets-001/finance-host-v1-model-sheet-x4-raw-4.png",
+      "sha256": "f7f3b3b8350182a1954cc33e78f87bcdd7607d2b3a8ead65159777c926ab4d39",
+      "bytes": 715033
     }
   ],
   "review_state": "quarantined",
@@ -95,7 +113,15 @@
       "date": "2026-09-04",
       "scene": "finance-host-stick-v1-model-sheet",
       "result": "LANDED after three false downloads - the uploaded reference re-renders on the canvas as a new CDN image and Flow re-encodes it, so the detector took it as the output; fixed with an in-page perceptual hash exclusion, and references are now reused by filename instead of re-uploaded. Output 1376x768, on spec."
+    },
+    {
+      "attempt": 4,
+      "date": "2026-09-04",
+      "scene": "finance-host-v1-model-sheet",
+      "count": 4,
+      "result": "Three distinct sheets (one src collected twice; fourth still rendering at the 45s quiet cut-off). raw-4 matches the master: short tapered locs, pin, floral shoes, full 4/5/5 rows. raw and raw-3 drifted to long locs with @Mike bound and no re-description - the binding holds identity loosely under x4 variance.",
+      "recommendation": "finance-host-v1-model-sheet-x4-raw-4.png"
     }
   ],
-  "artifact_hash": "07c95863aeadb01baa460adb210f57e47aad15803ae9dd12e0466099e3710cfa"
+  "artifact_hash": "7b4727277c58c6372aa3c9e90aaeb291997b9c99fb736c073f0cf9e45d9814ee"
 }

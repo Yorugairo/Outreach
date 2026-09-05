@@ -82,7 +82,7 @@ export class FlowDagEngine {
     await this.driver.triggerGeneration();
 
     // 7. Wait for Generation & Download
-    await this.driver.waitForGenerationAndDownload(rawPath, 420000, mode, { excludeFiles: fileUploads });
+    await this.driver.waitForGenerationAndDownload(rawPath, 420000, mode, { excludeFiles: fileUploads, count });
 
     // 7. Post-Processing
     let activePath = rawPath;
@@ -101,6 +101,7 @@ export class FlowDagEngine {
         files: {
           image: { path: activePath, sha256: sha256File(activePath) },
           raw_image: { path: rawPath, sha256: sha256File(rawPath) },
+          raw_images: (this.driver.lastSavedOutputs || [rawPath]).map(p => ({ path: p, sha256: sha256File(p) })),
         },
       };
       writeMetadata(metadataPath, metadata);

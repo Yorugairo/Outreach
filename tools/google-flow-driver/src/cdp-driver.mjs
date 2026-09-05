@@ -288,8 +288,9 @@ export class FlowCdpDriver {
     const matchesModel = !model || currentText.includes(model.toLowerCase()) || (isImage && /banana|imagen/i.test(currentText));
     const matchesRatio = !ratio || currentText.includes(ratio.replace(':', '_')) || currentText.includes(ratio);
     const matchesMode = isImage ? /banana|imagen/i.test(currentText) : !/banana|imagen/i.test(currentText);
+    const matchesCount = !count || new RegExp(`x${count}\b`).test(currentText);
 
-    if (matchesMode && matchesModel && matchesRatio) {
+    if (matchesMode && matchesModel && matchesRatio && matchesCount) {
       console.log(`[FlowCdpDriver] Settings already match active session: "${currentText}". Preserving current drawer.`);
       return initial;
     }
@@ -529,7 +530,7 @@ export class FlowCdpDriver {
     await page.waitForTimeout(2000);
   }
 
-  async waitForGenerationAndDownload(rawOutputPath, timeoutMs = 420000, mode = 'video', { excludeFiles = [] } = {}) {
+  async waitForGenerationAndDownload(rawOutputPath, timeoutMs = 420000, mode = 'video', { excludeFiles = [], count = 1 } = {}) {
     const page = this.flowPage;
     if (!page) throw new Error('No active Flow page');
     // An uploaded reference re-renders on the canvas as a brand-new CDN URL, which looks exactly
@@ -568,8 +569,8 @@ export class FlowCdpDriver {
         return Array.from(document.querySelectorAll("img[src*='getMediaUrlRedirect'], img[src*='flow-content.google/'], img[src*='/asb/']")).map(i => i.src);
       });
 
-      let settledSrc = null;
-      let settledBytes = null;
+      const collected = [];
+      let lastFoundAt = Date.now();
       while (Date.now() - startTime < timeoutMs) {
         this.resetIdleTimer();
         const currentSrc = await page.evaluate((prevs) => {
@@ -586,28 +587,38 @@ export class FlowCdpDriver {
             const buf = await (await resp.blob()).arrayBuffer();
             return Array.from(new Uint8Array(buf));
           }, currentSrc);
-          if (await looksLikeReference(currentSrc)) {
+          prevList.push(currentSrc);
+          if (collected.some(c => c.src === currentSrc)) {
+            // the 'first tile shifted' branch can hand back a src already taken
+          } else if (await looksLikeReference(currentSrc)) {
             console.log(`[FlowCdpDriver] Ignoring re-rendered reference upload: ${currentSrc.slice(0, 80)}`);
-            prevList.push(currentSrc);
           } else {
-            settledSrc = currentSrc;
-            settledBytes = bytes;
-            break;
+            collected.push({ src: currentSrc, bytes });
+            lastFoundAt = Date.now();
+            console.log(`[FlowCdpDriver] Output ${collected.length}/${count} landed: ${currentSrc.slice(0, 80)}`);
+            if (collected.length >= count) break;
           }
+        } else if (collected.length > 0 && Date.now() - lastFoundAt > 45000) {
+          console.warn(`[FlowCdpDriver] Only ${collected.length}/${count} outputs after 45s of quiet; taking what landed.`);
+          break;
         }
         await page.waitForTimeout(2500);
       }
 
-      if (!settledSrc) {
+      if (collected.length === 0) {
         throw new Error(`Image generation timed out after ${timeoutMs}ms.`);
       }
 
-      console.log(`[FlowCdpDriver] Image generation finished! Source endpoint: ${settledSrc}`);
-      const imageBytes = settledBytes;
-
+      // first output at the requested path, the rest as -2, -3, ... beside it (x2..x4 rolls)
       fs.mkdirSync(path.dirname(rawOutputPath), { recursive: true });
-      fs.writeFileSync(rawOutputPath, Buffer.from(imageBytes));
-      console.log(`[FlowCdpDriver] Successfully saved raw image (${imageBytes.length} bytes) to ${rawOutputPath}`);
+      const saved = [];
+      collected.forEach(({ bytes }, i) => {
+        const target = i === 0 ? rawOutputPath : rawOutputPath.replace(/(\.[a-z0-9]+)$/i, `-${i + 1}$1`);
+        fs.writeFileSync(target, Buffer.from(bytes));
+        console.log(`[FlowCdpDriver] Saved raw image ${i + 1}/${collected.length} (${bytes.length} bytes) to ${target}`);
+        saved.push(target);
+      });
+      this.lastSavedOutputs = saved;
       return rawOutputPath;
     }
 
