@@ -469,11 +469,20 @@ export class FlowCdpDriver {
       await page.waitForTimeout(4000);
       const addBtn = page.getByRole('button', { name: /Add to prompt/i }).first();
       if (await addBtn.count() === 0) throw new Error(`Upload of ${path.basename(filePath)} did not reach "Add to prompt".`);
+      const chipsBefore = await page.locator("div[contenteditable='true'] .mention-chip").count();
       await addBtn.click();
-      await page.waitForTimeout(900);
-      const chip = page.locator("div[contenteditable='true'] .mention-chip[data-reference-type='media']");
-      if (await chip.count() === 0) throw new Error(`Upload of ${path.basename(filePath)} left no media chip in the composer.`);
-      console.log(`[FlowCdpDriver] Reference attached as a media chip: ${path.basename(filePath)}`);
+      // the chip lands after the upload finishes processing - poll up to 8 s, and accept any new
+      // mention-chip (the data-reference-type value has drifted between Flow builds)
+      let chipsNow = chipsBefore;
+      for (let i = 0; i < 20 && chipsNow <= chipsBefore; i++) {
+        await page.waitForTimeout(400);
+        chipsNow = await page.locator("div[contenteditable='true'] .mention-chip").count();
+      }
+      if (chipsNow <= chipsBefore) {
+        const kinds = await page.locator("div[contenteditable='true'] .mention-chip").evaluateAll(els => els.map(e => e.getAttribute('data-reference-type'))).catch(() => []);
+        throw new Error(`Upload of ${path.basename(filePath)} left no media chip in the composer (chips before ${chipsBefore}, now ${chipsNow}, kinds ${JSON.stringify(kinds)}).`);
+      }
+      console.log(`[FlowCdpDriver] Reference attached as a media chip: ${path.basename(filePath)} (${chipsNow} chips)`);
       await page.keyboard.press('End');
     }
   }
