@@ -28,7 +28,7 @@ sys.path.insert(0, str(SCRIPTS))
 SCRIPT = HERE / "SCRIPT-90S-VO.claude.txt"
 TAKE = HERE / "vo-short/audio"
 BUILD = HERE / "build-short"
-CLIPS = HERE / "omni-video/short"
+CLIPS = HERE / "omni-video/stills"   # the v2 set: approved stills to video (APPROVALS.json)
 SERIES = ("ev-japan-holdings-v1", "ev-meta-yield-v1")
 CUT_AT = 0.8          # M13: the cut sits at 0.8 of the gap before the next phrase
 MIN_GAP = 0.30        # M13: a gap shorter than this is not a cut point
@@ -109,11 +109,11 @@ def shot_table(ws: list[dict], runtime_s: float) -> list[tuple]:
     datum = lambda i: {"kind": "datum", "index": i}
     return [
         # 1 the hook: the counter, the steaming cup, the tab
-        (0.0, t_stakes, clip("clip-a-counter-tab.mp4"), (0, 0, 0), [], None, None),
+        (0.0, t_stakes, clip("clip-a-counter-tab-v2.mp4"), (0, 0, 0), [], None, None),
         # 2 stakes: the dial that does not turn, the bill that grows
-        (t_stakes, t_panel, clip("clip-b-dial-and-bill.mp4"), (0, 0, 0), [], None, None),
+        (t_stakes, t_panel, clip("clip-b-dial-and-bill-v2.mp4"), (0, 0, 0), [], None, None),
         # 3 archetype: the panel pointing three ways, the crowd on phones (the sixty-three)
-        (t_panel, t_lender, clip("clip-c-blue-ties-panel.mp4"), (0, 0, 0), [], None, None),
+        (t_panel, t_lender, clip("clip-c-blue-ties-panel-v2.mp4"), (0, 0, 0), [], None, None),
         # 4 THE FIRST PROOF (M11, 8-20 s): the holdings page rolls out under "our biggest lender" - spotlit
         #   on the latest print as it enters; the peak called out at "since February"; a focus on the
         #   slide at "the auction sets your price"; the page leaves before the opponent line (< 20 s, M05)
@@ -123,7 +123,7 @@ def shot_table(ws: list[dict], runtime_s: float) -> list[tuple]:
             {"kind": "focus_zoom", "at": at("the auction sets"), "dur": 2.4, "target": datum(LAST_IDX)},
         ]),
         # 5 opponent + desire/map + promise: two fingers at "Two numbers"
-        (t_opponent, t_catalyst, clip("clip-g-two-fingers.mp4"), (0, 0, 0), [], None, None),
+        (t_opponent, t_catalyst, clip("clip-g-two-fingers-v2.mp4"), (0, 0, 0), [], None, None),
         # 6 catalyst + loop + foreshadow: the page again, on its new datum
         (t_catalyst, t_pledge, hold, (0, 0, 0), [], None, [
             {"kind": "punch", "at": at("Since February, Japan"), "dur": 0.9, "target": datum(PEAK_IDX)},
@@ -131,14 +131,14 @@ def shot_table(ws: list[dict], runtime_s: float) -> list[tuple]:
             {"kind": "spotlight", "at": at("that print is"), "dur": 2.0, "target": datum(LAST_IDX)},
         ]),
         # 7 the pledge + the read: past the open toll gate toward the fab
-        (t_pledge, t_second, clip("clip-f-toll-gate-to-fab.mp4"), (0, 0, 0), [], None, None),
+        (t_pledge, t_second, clip("clip-f-toll-gate-to-fab-v2.mp4"), (0, 0, 0), [], None, None),
         # 8 the second number: a Meta share priced at each yield, punch on the 5.5 % bar at "discounts"
         (t_second, t_ring, meta, (0, 0, 0), [], None, [
             {"kind": "callout", "at": at("price-to-earnings multiple"), "dur": 2.0, "target": datum(0)},
             {"kind": "punch", "at": at("discounts it."), "dur": 0.9, "target": datum(3)},
         ]),
         # 9 the ring: the same counter, colder; StickMike lifts the tab
-        (t_ring, runtime_s, clip("clip-a2-counter-colder.mp4"), (0, 0, 0), [], None, None),
+        (t_ring, runtime_s, clip("clip-a2-counter-colder-v2.mp4"), (0, 0, 0), [], None, None),
     ]
 
 
