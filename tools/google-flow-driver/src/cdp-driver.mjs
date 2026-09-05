@@ -444,12 +444,12 @@ export class FlowCdpDriver {
       await editor.click();
       await page.keyboard.press('End');
       await page.keyboard.type(' @');
-      await page.waitForTimeout(900);
+      await page.waitForTimeout(1500);
       // Reuse a previous upload: the picker lists project assets by filename and a media option
       // inserts on click. Only upload when the name is not there (operator, 2026-09-04).
       const baseName = path.basename(filePath);
       await page.keyboard.type(baseName);
-      await page.waitForTimeout(900);
+      await page.waitForTimeout(1500);
       const existing = page.locator(`[role="option"]:has(.asset-title:text-is("${baseName}"))`).first();
       if (await existing.count() > 0) {
         await existing.click();
@@ -513,10 +513,33 @@ export class FlowCdpDriver {
       throw new Error("Could not find prompt editor in Flow page.");
     }
 
+    // CLEAR, then VERIFY the composer is empty - no text and no mention-chips. Chips from the previous
+    // scene (its video, its character, its still) were surviving Ctrl+A / Backspace and the next prompt
+    // was typed on top of them (operator, 2026-09-05: "a video and a character reference sitting there").
+    const chipCount = () => page.locator("div[contenteditable='true'] .mention-chip").count();
+    const composerText = async () => (await editor.innerText().catch(() => '')).replace(/\s+/g, ' ').trim();
     await editor.click();
-    await page.keyboard.press('Control+A');
-    await page.keyboard.press('Backspace');
-    await page.waitForTimeout(200);
+    await page.waitForTimeout(400);
+    for (let attempt = 0; attempt < 4; attempt++) {
+      await page.keyboard.press('Control+A');
+      await page.waitForTimeout(250);
+      await page.keyboard.press('Backspace');
+      await page.waitForTimeout(600);
+      let chips = await chipCount();
+      // chips left behind delete one per Backspace from the end of the line
+      for (let i = 0; i < 12 && chips > 0; i++) {
+        await page.keyboard.press('End'); await page.waitForTimeout(150);
+        await page.keyboard.press('Backspace'); await page.waitForTimeout(350);
+        chips = await chipCount();
+      }
+      if (chips === 0 && (await composerText()) === '') break;
+    }
+    const leftChips = await chipCount(), leftText = await composerText();
+    if (leftChips > 0 || leftText !== '') {
+      throw new Error(`Composer did not clear before the prompt (chips ${leftChips}, text "${leftText.slice(0, 60)}").`);
+    }
+    console.log('[FlowCdpDriver] Composer cleared (0 chips, no text).');
+    await page.waitForTimeout(500);
 
     // If character names are provided, insert them via the @ mention popover
     if (characters && characters.length > 0) {

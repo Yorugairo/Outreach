@@ -1,0 +1,52 @@
+{
+  "_contract": "The remaining three (F, G, A2); B and C rendered.",
+  "mode": "video",
+  "submode": "ingredients",
+  "model": "Omni 1.1 Flash",
+  "count": 1,
+  "ratio": "9:16",
+  "duration": 10,
+  "projectUrl": "https://labs.google/fx/tools/flow/project/d171ec1f-d4a2-4b79-b76e-32460193dccc",
+  "outputDir": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\omni-video\\stills",
+  "scenes": [
+    {
+      "id": "clip-f-toll-gate-to-fab-v2",
+      "mode": "video",
+      "submode": "ingredients",
+      "model": "Omni 1.1 Flash",
+      "count": 1,
+      "duration": 10,
+      "references": [
+        "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\omni-video\\stills\\approved\\still-f-toll-gate-to-fab.png",
+        "StickMike"
+      ],
+      "prompt": "Animate this exact drawing: 9:16 vertical, full bleed. Cream paper page, charcoal ink. A toll gate stands open in the middle of the page with nobody passing through it. The character, in his indigo suit and copper tie, walks past the open gate toward a small drawn factory with lit windows at the far edge of the page. In the foreground corner, the folded paper tab rests on a counter. A single still frame, no on-screen text."
+    },
+    {
+      "id": "clip-g-two-fingers-v2",
+      "mode": "video",
+      "submode": "ingredients",
+      "model": "Omni 1.1 Flash",
+      "count": 1,
+      "duration": 10,
+      "references": [
+        "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\omni-video\\stills\\approved\\still-g-two-fingers.png",
+        "StickMike"
+      ],
+      "prompt": "Animate this exact drawing: 9:16 vertical, full bleed. Cream paper page, charcoal ink. The character, in his indigo suit and copper tie, faces the camera in a medium shot, talking, and holds up two fingers, then taps each finger once. A single still frame, no on-screen text."
+    },
+    {
+      "id": "clip-a2-counter-colder-v2",
+      "mode": "video",
+      "submode": "ingredients",
+      "model": "Omni 1.1 Flash",
+      "count": 1,
+      "duration": 10,
+      "references": [
+        "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\omni-video\\stills\\approved\\still-a2-counter-colder.png",
+        "StickMike"
+      ],
+      "prompt": "Animate this exact drawing: 9:16 vertical, full bleed. Cream paper page, charcoal ink, the same counter as before: one empty stool, the teacup now with no steam, the folded paper tab beside it. The character, in his indigo suit and copper tie, picks the tab up off the counter, turns it toward the camera and holds it there. A single still frame, no on-screen text."
+    }
+  ]
+}
