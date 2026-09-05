@@ -6,7 +6,8 @@ pitch and speed glide together - tape-style, which is the distortion wanted. The
 source is consumed over exactly the output length D:
 
     suck        D = SUCK_S + tail   rate RISES (minJerk) from r0 to RATIO*r0 - pulled into the point
-    spiral in   D = LP_RETRACT.IN   rate FALLS from RATIO*r0 to r0 - it arrives fast out of the drain and settles
+    spiral in   D = LP_RETRACT.IN+  the whoosh REVERSED and rate rising: it swells for the whole unwind and its onset is the
+                                    landing - the sound stays until the chart has spiralled back on (operator, 2026-09-05)
     drain out   D = 2.2 s           rate RISES from r0 to RATIO*r0 - accelerating into the drain, ending on the cut
 
     python warp_sound.py            # writes fs-whoosh-3-suck.mp3, fs-whoosh-3-spiral-in.mp3, fs-whoosh-3-drain.mp3 beside itself
@@ -23,10 +24,10 @@ import numpy as np
 HERE = Path(__file__).resolve().parent
 SRC = HERE / "fs-whoosh-3-648729.mp3"
 SR = 44100
-WARPS = {   # name: (output seconds, rate ratio end/start, direction)
-    "suck": (0.55, 6.0, "up"),        # SUCK_S 0.3 in the template + a short tail
-    "spiral-in": (1.6, 3.0, "down"),  # LP_RETRACT.IN
-    "drain": (2.2, 4.0, "up"),        # the retract: colours 1.0 + charcoal 1.0, timed to end on the cut
+WARPS = {   # name: (output seconds, rate ratio end/start, direction, reversed source)
+    "suck": (0.55, 6.0, "up", False),          # SUCK_S 0.3 in the template + a short tail
+    "spiral-in": (1.75, 2.5, "up", True),      # LP_RETRACT.IN 1.6 + the landing: a reversed whoosh swelling into the chart's arrival
+    "drain": (2.2, 4.0, "up", False),          # the retract: colours 1.0 + charcoal 1.0, timed to end on the cut
 }
 
 
@@ -76,10 +77,10 @@ def write_mp3(y: np.ndarray, out: Path) -> None:
 
 def main() -> int:
     x = decode(SRC)
-    for name, (out_s, ratio, direction) in WARPS.items():
+    for name, (out_s, ratio, direction, rev) in WARPS.items():
         out = HERE / f"fs-whoosh-3-{name}.mp3"
-        write_mp3(warp(x, out_s, ratio, direction), out)
-        print(f"{out.name}: {out_s:.2f}s, rate {direction} x{ratio:g} on the min-jerk curve, from {SRC.name}")
+        write_mp3(warp(x[::-1] if rev else x, out_s, ratio, direction), out)
+        print(f"{out.name}: {out_s:.2f}s, rate {direction} x{ratio:g} on the min-jerk curve, {'REVERSED ' if rev else ''}from {SRC.name}")
     return 0
 
 

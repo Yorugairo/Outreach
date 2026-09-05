@@ -108,6 +108,6 @@ gain-matched to -14 LUFS, `alimiter` at -1 dBFS, `libmp3lame -q:a 2`. The review
 
 `warp_sound.py` resamples the whoosh at a time-varying rate on the min-jerk curve so pitch and speed glide with the
 transition (operator: "the distortion would work in our favour, as if it's being sucked down the drain"): `fs-whoosh-3-suck.mp3`
-(0.55 s, rate up x6), `fs-whoosh-3-spiral-in.mp3` (1.6 s, rate down x3), `fs-whoosh-3-drain.mp3` (2.2 s, rate up x4). Same CC0
+(0.55 s, rate up x6), `fs-whoosh-3-spiral-in.mp3` (1.75 s, the whoosh REVERSED, rate up x2.5 - it swells for the whole unwind and lands with the chart), `fs-whoosh-3-drain.mp3` (2.2 s, rate up x4). Same CC0
 source and licence as the whoosh-3 row; peak-normalised to -1 dBFS; the cue gain 0.22 applies as to every accent.
 
