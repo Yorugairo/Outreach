@@ -62,6 +62,18 @@ def _chromium_available() -> bool:
 
 
 @pytest.mark.skipif(not _chromium_available(), reason="playwright chromium not installed")
+@pytest.mark.parametrize("name", sorted(RB.FLAG_FRAMES))
+def test_each_flag_golden_differs_from_the_flag_off_render(name: str) -> None:
+    """P43 T6: a flag-ON golden that matched the flag-off render at its t would prove nothing. The squash frame is
+    compared against its spring-only twin (the spring is what gives it a velocity), every other against all-off."""
+    surface, flags, t = RB.FLAG_FRAMES[name]
+    off = {"analytic_spring": True} if "area_squash" in flags else {}
+    a = RB.rgb_bytes(RB.render_surface(surface, t, kinetics=off))[1]
+    b = RB.rgb_bytes((RB.FRAMES / f"{name}.png").read_bytes())[1]
+    assert a != b, f"{name}: the flag changed nothing at t={t}"
+
+
+@pytest.mark.skipif(not _chromium_available(), reason="playwright chromium not installed")
 @pytest.mark.parametrize("kinetics", [
     {name: False for name in CAPABILITIES},          # explicit all-off
     {"not_a_capability": True},                      # a typo cannot turn anything on

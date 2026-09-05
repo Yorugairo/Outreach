@@ -5033,6 +5033,7 @@
  ],
  "kinetics": {
   "analytic_spring": true,
-  "min_jerk": true
+  "min_jerk": true,
+  "area_squash": true
  }
 }

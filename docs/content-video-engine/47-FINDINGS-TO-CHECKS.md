@@ -194,7 +194,10 @@ Every row of §2 now names the script that owns it and the state it landed in. A
 | G-i, G-j, G-k | `gate_grounding.py` | **INFO-then-FAIL ladder** | wrong horizon / screen tween / contact without solver each FAIL; nothing declared -> INFO, never a silent PASS |
 | G-l | `gate_vertical_safe_box.py` + `test_vertical_safe_box.py` | **shipped, and the defect fixed** (P37 T0) | the pre-T0 9:16 CSS verbatim FAILs: docks 136 px into the rail, dock-2 to y 1780, caption at y 1759 |
 | V-a | `judge_muted_caption.py` | **shipped as a CLI, unwired** | scenery and over-dense diagnoses on recorded replies; cadence is the operator's |
-| G-h | — | **deferred**: 44's ink work (X-ink) | — |
+| G-h | `kinetics/ink.mjs` + `ink.test.mjs` + `test_kinetics_km_probe.py` (flag `km_ink`) | **shipped flag-off, HUMAN GATE pending** (P43 T3, 2026-09-05) | ink over ink is darker by K-M than by a calibrated film for five inks x five thicknesses; the rendered probe (plus-lighter coverage + per-channel table) reproduces the module within 3/255; a thin charcoal wash goes blue-grey - the operator's call |
+| 42.1 stroke | `kinetics/stroke.mjs` + `stroke.test.mjs`; template `drawOn` / `strokeFrac` at six draw sites (flag `curvature_stroke`) | **shipped flag-off, HUMAN GATE pending** (P43 T2, 2026-09-05) | the sliding mask `len*spEase(k)` is FASTER in the corner than on the straight after it; the hand is slower; `v(max k) < v(min k)`, `w(max k) > w(min k)`, a straight path finite, rest at both ends |
+| 42.2 spring | `kinetics/spring.mjs` + `spring.test.mjs` (flag `analytic_spring`) | **shipped** (P43 T5, 2026-09-05) | THE SEEK TEST: a semi-implicit Euler spring reaches a different frame N when stepped through different frames; the closed form is bit-identical; peak exactly 1 + Mp at pi/wd; zeta = 1 overshoots zero |
+| 42.3 squash | `kinetics/squash.mjs` + `squash.test.mjs`; the vortex via `scaleBy`, the badge pop (flag `area_squash`) | **shipped, ON in the Tokyo short** (P43 T4, 2026-09-05) | `det(A) == 1` within 1e-9 across 48 angles x alpha to 1000; alpha zero at rest, deceleration adds, an acceleration along v does not |
 | G-o | — | **deferred**: X0 — render one 9:16 frame at 390 px and read it | — |
 | M13 | `measure_cut_gaps.py` (the measurement); the gate lands with the edit pass | **settled**: ≥ 0.30 s, cut at 0.8 of the gap, mid-word ≤ 25 % — from Wealth Logic's 99 cuts through Whisper | ep1 as shipped: 39–42 % mid-word, 52 % in-gap — FAILs on both |
 
@@ -204,7 +207,7 @@ with the motion gate on the build; the config and safe-box gates run on their ar
 
 ## 5. The scoreboard
 
-**8 designed out · 14 gated (11 shipped or on the ladder, 3 deferred — §5b) · 1 agent-judged (shipped unwired) · 2 JUDGE · 7 demoted, all routed to the backlog.**
+**8 designed out (four of them SHIPPED 2026-09-05 by P43: the stroke, the spring, the squash, and G-h's K-M ink - §5b) · 14 gated (11 shipped or on the ladder, 2 deferred — §5b) · 1 agent-judged (shipped unwired) · 2 JUDGE · 7 demoted, all routed to the backlog.**
 
 *(G-o added from **operator analytics**, not research — 50 §50.2. It is the cheapest gate in the set and it FAILs almost the whole template. Updated after docs 48 and 49. G-l is the highest-value gate in the set: it FAILs code we already ship. See 49 §49.1.)*
 

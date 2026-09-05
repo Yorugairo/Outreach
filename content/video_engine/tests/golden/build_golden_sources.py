@@ -34,6 +34,7 @@ RUNTIME = 30.0
 FRAME_T = {
     "ledger-page-mid-build": 6.0,   # field filled, outline drawn, ink and bars building
     "chart-callout": 12.0,          # the line has drawn, all four badges have landed
+    "ledger-soak-page": 2.7,        # mid-soak: stains spreading and overlapping (P43 T3 K-M ink is judged here)
     "dock-pair-16x9": 12.0,         # both cards up, badges landed
     "dock-pair-9x16": 12.0,
 }
@@ -112,6 +113,18 @@ def ledger_page_mid_build() -> tuple[dict, dict]:
     return _timeline("Golden: ledger page mid-build", scenes, {}, None), _base_uris()
 
 
+def ledger_soak_page() -> tuple[dict, dict]:
+    """The same page with the SOAK field and a badge rail (P43 T6): the surface for km_ink (mid-soak) and area_squash
+    (the first rail badge mid-pop at t ~ 7.86: ROLL+SAVOR+FIELD 3.9 + PUNCH 0.5 + BUILD 3.0 + BADGE0 0.4 + a sixth of BADGE_IN)."""
+    series = LPG.load_series(SERIES)
+    page = LPG.build_spec(series, "line", 0, "right")
+    page["field"] = "soak"
+    page["badges"] = [dict(b, inline=False) for b in page.get("badges", [])] or _badges()
+    scenes = [{"scene_id": "s01", "world": {"kind": "ledger", "page": page, "ken_burns": {"scale": 0.04, "x": 0, "y": 0}},
+               "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": []}]
+    return _timeline("Golden: ledger soak page", scenes, {}, None), _base_uris()
+
+
 def _chart_evidence() -> dict:
     chart = json.loads(SERIES.read_text(encoding="utf-8"))
     return {"ev-golden-chart": {"title": "Golden chart", "source": "golden series sidecar", "species": "chart",
@@ -149,6 +162,7 @@ def _dock_pair(aspect: str | None) -> tuple[dict, dict]:
 SURFACES = {
     "ledger-page-mid-build": ledger_page_mid_build,
     "chart-callout": chart_callout,
+    "ledger-soak-page": ledger_soak_page,
     "dock-pair-16x9": lambda: _dock_pair(None),
     "dock-pair-9x16": lambda: _dock_pair("9:16"),
 }

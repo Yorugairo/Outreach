@@ -32,6 +32,16 @@ SOURCES = GOLDEN / "sources"
 FRAMES = GOLDEN / "frames"
 DIFFS = GOLDEN / "diffs"
 STAGE = {"16:9": (1920, 1080), "9:16": (1080, 1920)}
+# P43 T6: one golden per capability with its flag ON, at a t where the change is on screen. Each is checked like the
+# base frames; test_kinetics_flags proves each differs from the flag-off render at the same t (a flag golden that
+# matched the base would prove nothing). The squash frame has its spring-only twin so the squash is what differs.
+FLAG_FRAMES = {
+    "chart-callout@curvature_stroke": ("chart-callout", {"curvature_stroke": True}, 10.3),
+    "ledger-page-mid-build@curvature_stroke": ("ledger-page-mid-build", {"curvature_stroke": True}, 5.6),
+    "ledger-soak-page@km_ink": ("ledger-soak-page", {"km_ink": True}, 2.7),
+    "ledger-soak-page@analytic_spring": ("ledger-soak-page", {"analytic_spring": True}, 7.86),
+    "ledger-soak-page@area_squash": ("ledger-soak-page", {"analytic_spring": True, "area_squash": True}, 7.86),
+}
 
 
 def instantiate(timeline: dict, uris: dict, template: Path = TEMPLATE) -> str:
@@ -133,10 +143,16 @@ def load_surface(name: str) -> tuple[dict, dict, float, str]:
     return tl, uris, FRAME_T[name], str(tl.get("aspect") or "16:9")
 
 
-def render_surface(name: str, t: float | None = None, template: Path = TEMPLATE) -> bytes:
+def render_surface(name: str, t: float | None = None, template: Path = TEMPLATE, kinetics: dict | None = None) -> bytes:
+    """A frame of a golden surface; `name` may be a FLAG_FRAMES key (surface@flag), which fixes the flags and the t."""
+    if name in FLAG_FRAMES:
+        surface, flags, t_flag = FLAG_FRAMES[name]
+        return render_surface(surface, t if t is not None else t_flag, template, dict(flags, **(kinetics or {})))
     tl, uris, t_default, aspect = load_surface(name)
+    if kinetics is not None:
+        tl = dict(tl, kinetics=kinetics)
     with tempfile.TemporaryDirectory() as td:
-        html = Path(td) / f"{name}.html"
+        html = Path(td) / f"{name.replace('@', '-')}.html"
         html.write_text(instantiate(tl, uris, template), encoding="utf-8")
         return render_frame(html, t if t is not None else t_default, aspect)
 
@@ -180,15 +196,16 @@ def main() -> int:
     ap.add_argument("--list", action="store_true")
     ap.add_argument("--surface")
     ap.add_argument("--t", type=float)
+    ap.add_argument("--flags", help="comma-separated kinetics flags to turn ON for --surface")
     ap.add_argument("--out")
     ap.add_argument("--update", action="store_true")
     ap.add_argument("--check", action="store_true")
     args = ap.parse_args()
-    names = sorted(p.name[: -len(".timeline.json")] for p in SOURCES.glob("*.timeline.json"))
+    names = sorted(p.name[: -len(".timeline.json")] for p in SOURCES.glob("*.timeline.json")) + sorted(FLAG_FRAMES)
     if args.list:
         print("\n".join(names)); return 0
     if args.surface:
-        png = render_surface(args.surface, args.t)
+        png = render_surface(args.surface, args.t, kinetics={f: True for f in args.flags.split(",")} if args.flags else None)
         Path(args.out or f"{args.surface}.png").write_bytes(png)
         print(args.out or f"{args.surface}.png"); return 0
     if args.update:

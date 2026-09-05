@@ -22,7 +22,7 @@ sys.path.insert(0, str(ROOT / "content/video_engine/scripts"))
 
 import render_baseline as RB  # noqa: E402
 
-SURFACES = ["ledger-page-mid-build", "chart-callout", "dock-pair-16x9", "dock-pair-9x16"]
+SURFACES = ["ledger-page-mid-build", "chart-callout", "dock-pair-16x9", "dock-pair-9x16", "ledger-soak-page"]
 
 
 def _chromium_available() -> bool:
@@ -45,7 +45,7 @@ def test_every_surface_has_a_committed_source_and_golden() -> None:
         assert (RB.FRAMES / f"{name}.png").exists(), f"{name}: no golden frame - run render_baseline.py --update"
 
 
-@pytest.mark.parametrize("surface", SURFACES)
+@pytest.mark.parametrize("surface", SURFACES + sorted(RB.FLAG_FRAMES))
 def test_golden_frame_is_unchanged(surface: str) -> None:
     failures = RB.check([surface])
     assert not failures, "\n".join(failures)

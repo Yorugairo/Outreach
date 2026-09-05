@@ -185,14 +185,14 @@ Ordered by leverage against what the Tokyo build now exercises. Each names the a
 
 | # | item | why now | cost |
 |---|---|---|---|
-| 1 | **T1 curvature-reparameterised stroke in `drawOn`** (finding build order #1, flag `curvature_stroke`) | `drawOn` now draws the callout ring, the trace on the phone, the squiggle and every line build - one function, and the test is written in 47 | half a day |
+| ~~1~~ | ~~T1 curvature-reparameterised stroke in `drawOn`~~ | **LANDED flag-off 2026-09-05 (P43 T2)** - six draw sites, the sliding mask's failure is a test, flag goldens captured; **waits on the operator's before/after verdict** (the ring and ledger strips) before it turns on for Tokyo | — |
 | 2 | **X0 / G-o: render a 9:16 frame at 390 px and read it** | the portrait page set its type from doc 50's arithmetic; the arithmetic has never been looked at on a phone-sized frame | minutes |
 | 3 | **V-a the muted-caption judge on the short** | shipped unwired; the short is compiled with the promise plate and three pages - the first build worth judging | an hour (Codex CLI batch, E37) |
 | 4 | **G2 short mode in `gate_opening_structure`** | v11's three FAILs are exactly the cut beats; the fixtures exist (v8-long, ep1) | half a day |
 | ~~5~~ | ~~X14 short-form pulse~~ | **DONE 2026-09-05 — operator: "the gate is the pulse; we could have much more animation and it would be fine."** `M16`: on a short no gap between visual events over 2.5 s, no ceiling; INFO on long form. **The Tokyo short FAILs it on first run: one 2.5 s hold at 1:20, the ring clip's tail after the last caption** - the outro that carries "It's mechanics." is not built; the fix is motion there, never a cut | — |
-| 6 | **G-h Kubelka-Munk on overlapping ink** | the stain soak's overlaps read as a patchwork of greys - alpha blending, the exact defect the finding names | a day |
-| 7 | **T3 area-preserving squash as a helper** | the vortex already uses the det=1 form ad hoc; lift it behind `area_squash` and the squash-from-velocity rule follows | half a day |
-| 8 | **T2 the remaining damping cases + the seek test** | the underdamped case shipped today | half a day |
+| ~~6~~ | ~~G-h Kubelka-Munk on overlapping ink~~ | **LANDED flag-off 2026-09-05 (P43 T3)** - the two-flux model, a coverage->reflectance filter proven on a rendered probe; a thin charcoal wash goes blue-grey under K-M (physically sumi-like) - **the 0:19-0:21 strip is with the operator**; S1 is the dial | — |
+| ~~7~~ | ~~T3 area-preserving squash as a helper~~ | **DONE 2026-09-05 (P43 T4)** - `kinetics/squash.mjs`, the vortex through `scaleBy` bit-identically, the badge pop stretches from the spring's velocity; ON in the Tokyo short | — |
+| ~~8~~ | ~~T2 the remaining damping cases + the seek test~~ | **DONE 2026-09-05 (P43 T5)** - three regimes with x, v, a; the seek test passes and an Euler spring fails it; `springPop` bit-identical | — |
 | — | T4-T6 (ARAP, the object page, object -> chart) | no object page in the short; **not yet** | — |
 | — | X17-X19 (Flow clip tests) | the Flow lane is paused by E40; **not now** | — |
 
@@ -205,7 +205,7 @@ Ordered by leverage against what the Tokyo build now exercises. Each names the a
 | P38 | [Kinetics capability](../../.claude/PRPs/plans/P38-KINETICS-CAPABILITY-LAYER.plan.md) | draft | the six designed-out items; changes what the video looks like |
 | ~~P40~~ | **[Measure the first minute](../../.claude/PRPs/plans/P40-MEASURE-THE-FIRST-MINUTE.plan.md)** | **COMPLETE 2026-09-04** — gap threshold from the reference (0.30 s, 0.8 of the gap); E1 metrics in numpy; the first-minute report: the drop follows the stillest window (0:30–0:45, a 21 s bare hold) and lands on the late first chart at 0:50 | E1 metrics against **the one retention curve we hold** (drop at 0:45–1:00). **T1 settles X3 and unblocks M13 with no render and no dependency — the cheapest useful thing in the stack** |
 | ~~P41~~ | The vertical stage — 49 §49.1 | **COMPLETE 2026-09-05** — the portrait page (49 §49.1 landing note): the chart IS the world, type floors from doc 50's arithmetic, the caption strip on every world; plus the vortex retract / spiral return (29 §9.31), the suck, the still-life species, the since-2000 holdings page | the 3-zone short-form stage. Folds in the caption strip; X14 (cadence) is measurable on the build now |
-| P43 | [Kinetics wave 2](../../.claude/PRPs/plans/P43-KINETICS-WAVE-2.plan.md) — the curvature stroke, K-M ink, the squash helper, the rest of the spring | **draft 2026-09-05** (operator's pick: items 1, 6, 7, 8 of the ready list) | takes P38's T1-T4; P38 keeps T5-T8 |
+| P43 | [Kinetics wave 2](../../.claude/PRPs/plans/P43-KINETICS-WAVE-2.plan.md) — the curvature stroke, K-M ink, the squash helper, the rest of the spring | **running 2026-09-05** — T1 (modules + sync), T4 (squash), T5 (spring) complete; T2 (stroke) and T3 (K-M) landed flag-off, **awaiting the operator's before/after verdicts**; flag-ON goldens captured; area_squash ON in the short | takes P38's T1-T4; P38 keeps T5-T8 |
 | P42 | Grounding & compositing — 48 §48.7-48.8 | **backlog** | dual shadow, light wrap, substrate grain, horizon lock, ground binding. **Gives G-i/G-j/G-k a path to green** — today they check what nothing builds. Folds in actor idling (48 §48.4) and the Z-stack (43 §43.3) |
 
 ## Build — Tier 1, designed out (47 §1) → **[P38](../../.claude/PRPs/plans/P38-KINETICS-CAPABILITY-LAYER.plan.md)**
@@ -215,9 +215,9 @@ path stops existing. Each ships with the test named in 47.
 
 | # | item | the test that fails without it |
 |---|---|---|
-| **T1** | **Curvature-reparameterised stroke** in `drawOn`, with the κ₀ regulariser and width/ink coupling | `v(max κ) < v(min κ)` on a cornered path; a straight line returns finite v; `w(max κ) > w(min κ)` |
+| ~~**T1**~~ | **Curvature-reparameterised stroke** in `drawOn`, with the κ₀ regulariser and width/ink coupling — **landed flag-off 2026-09-05 (P43 T2), human gate pending** | `v(max κ) < v(min κ)` on a cornered path; a straight line returns finite v; `w(max κ) > w(min κ)` — all pass; the sliding mask fails |
 | **T2** | **Analytic spring evaluator**, three damping regimes, the only spring API. **Partly shipped 2026-09-05:** `springPop` (underdamped, with the M_p inverse) behind `kinetics.analytic_spring`, on the badge and caption pops; the critical / overdamped cases and the seek test remain. `minJerk` shipped beside it behind `kinetics.min_jerk` (the wipe front, the suck) | seek test: frame N direct == frames 0..N sequential, bit-identical |
-| **T3** | **Area-preserving squash**, driven by velocity and deceleration | `det(A(t)) == 1` for all t and all α |
+| ~~**T3**~~ | **Area-preserving squash**, driven by velocity and deceleration — **shipped 2026-09-05 (P43 T4)** | `det(A(t)) == 1` for all t and all α — passes |
 | **T4** | **ARAP morph** with polar decomposition inside | morph through >90° of rotation; `det(J(t)) > 0` at every t |
 | **T0** | **Fix the 9:16 dock geometry** — `scene-evidence-player.template.html:155-162`. Ours: `width 952, left 64`. Safe: `width ≤ 800, x ∈ [80,880]`. We are **136 px into the right rail** where like/comment/share sit. | render one 9:16 frame; assert every dock's bounding box is inside the safe canvas |
 | **T7** | **DQS joint blending** in the figure rig (48 §48.3) | flex a joint 180° at w=0.5; assert `det(T_blend) == 1`. **Linear blend skinning returns the zero matrix** — the candy-wrapper elbow as one assertion |

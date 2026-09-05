@@ -2,7 +2,7 @@
  "episode": "tokyo-tea-break",
  "script": "SCRIPT-90S-VO.claude.txt",
  "take": "vo-short",
- "runtime_s": 82.473,
+ "runtime_s": 82.723,
  "words": [
   {
    "w": "Tokyo",
@@ -648,776 +648,776 @@
   },
   {
    "w": "a",
-   "start": 38.801,
-   "end": 38.882,
+   "start": 39.051,
+   "end": 39.132,
    "part": 1
   },
   {
    "w": "Treasury",
-   "start": 38.94,
-   "end": 39.312,
+   "start": 39.19,
+   "end": 39.562,
    "part": 1
   },
   {
    "w": "page,",
-   "start": 39.37,
-   "end": 39.834,
+   "start": 39.62,
+   "end": 40.084,
    "part": 1
   },
   {
    "w": "and",
-   "start": 39.892,
-   "end": 40.066,
+   "start": 40.142,
+   "end": 40.316,
    "part": 1
   },
   {
    "w": "your",
-   "start": 40.136,
-   "end": 40.264,
+   "start": 40.386,
+   "end": 40.514,
    "part": 1
   },
   {
    "w": "phone.",
-   "start": 40.31,
-   "end": 40.833,
+   "start": 40.56,
+   "end": 41.083,
    "part": 1
   },
   {
    "w": "By",
-   "start": 41.326,
-   "end": 41.477,
+   "start": 41.576,
+   "end": 41.727,
    "part": 1
   },
   {
    "w": "the",
-   "start": 41.535,
-   "end": 41.617,
+   "start": 41.785,
+   "end": 41.867,
    "part": 1
   },
   {
    "w": "end",
-   "start": 41.698,
-   "end": 42.0,
+   "start": 41.948,
+   "end": 42.25,
    "part": 1
   },
   {
    "w": "you'll",
-   "start": 42.383,
-   "end": 42.592,
+   "start": 42.633,
+   "end": 42.842,
    "part": 1
   },
   {
    "w": "read",
-   "start": 42.638,
-   "end": 42.812,
+   "start": 42.888,
+   "end": 43.062,
    "part": 1
   },
   {
    "w": "both",
-   "start": 42.882,
-   "end": 43.091,
+   "start": 43.132,
+   "end": 43.341,
    "part": 1
   },
   {
    "w": "numbers",
-   "start": 43.149,
-   "end": 43.463,
+   "start": 43.399,
+   "end": 43.713,
    "part": 1
   },
   {
    "w": "yourself.",
-   "start": 43.497,
-   "end": 44.148,
+   "start": 43.747,
+   "end": 44.398,
    "part": 1
   },
   {
    "w": "Since",
-   "start": 44.751,
-   "end": 44.995,
+   "start": 45.001,
+   "end": 45.245,
    "part": 1
   },
   {
    "w": "February,",
-   "start": 45.042,
-   "end": 45.518,
+   "start": 45.292,
+   "end": 45.768,
    "part": 1
   },
   {
    "w": "Japan",
-   "start": 45.552,
-   "end": 45.947,
+   "start": 45.802,
+   "end": 46.197,
    "part": 1
   },
   {
    "w": "has",
-   "start": 46.017,
-   "end": 46.133,
+   "start": 46.267,
+   "end": 46.383,
    "part": 1
   },
   {
    "w": "sold",
-   "start": 46.179,
-   "end": 46.423,
+   "start": 46.429,
+   "end": 46.673,
    "part": 1
   },
   {
    "w": "a",
-   "start": 46.47,
-   "end": 46.493,
+   "start": 46.72,
+   "end": 46.743,
    "part": 1
   },
   {
    "w": "hundred",
-   "start": 46.551,
-   "end": 46.818,
+   "start": 46.801,
+   "end": 47.068,
    "part": 1
   },
   {
    "w": "and",
-   "start": 46.841,
-   "end": 46.911,
+   "start": 47.091,
+   "end": 47.161,
    "part": 1
   },
   {
    "w": "twenty-two",
-   "start": 46.934,
-   "end": 47.364,
+   "start": 47.184,
+   "end": 47.614,
    "part": 1
   },
   {
    "w": "billion",
-   "start": 47.433,
-   "end": 47.735,
+   "start": 47.683,
+   "end": 47.985,
    "part": 1
   },
   {
    "w": "dollars",
-   "start": 47.793,
-   "end": 48.141,
+   "start": 48.043,
+   "end": 48.391,
    "part": 1
   },
   {
    "w": "of",
-   "start": 48.188,
-   "end": 48.258,
+   "start": 48.438,
+   "end": 48.508,
    "part": 1
   },
   {
    "w": "it,",
-   "start": 48.304,
-   "end": 48.466,
+   "start": 48.554,
+   "end": 48.716,
    "part": 1
   },
   {
    "w": "a",
-   "start": 48.513,
-   "end": 48.583,
+   "start": 48.763,
+   "end": 48.833,
    "part": 1
   },
   {
    "w": "tenth",
-   "start": 48.675,
-   "end": 48.954,
+   "start": 48.925,
+   "end": 49.204,
    "part": 1
   },
   {
    "w": "of",
-   "start": 48.989,
-   "end": 49.047,
+   "start": 49.239,
+   "end": 49.297,
    "part": 1
   },
   {
    "w": "the",
-   "start": 49.093,
-   "end": 49.163,
+   "start": 49.343,
+   "end": 49.413,
    "part": 1
   },
   {
    "w": "pile.",
-   "start": 49.198,
-   "end": 49.662,
+   "start": 49.448,
+   "end": 49.912,
    "part": 1
   },
   {
    "w": "The",
-   "start": 50.045,
-   "end": 50.162,
+   "start": 50.295,
+   "end": 50.412,
    "part": 1
   },
   {
    "w": "Treasury",
-   "start": 50.208,
-   "end": 50.58,
+   "start": 50.458,
+   "end": 50.83,
    "part": 1
   },
   {
    "w": "prints",
-   "start": 50.649,
-   "end": 50.916,
+   "start": 50.899,
+   "end": 51.166,
    "part": 1
   },
   {
    "w": "the",
-   "start": 50.974,
-   "end": 51.044,
+   "start": 51.224,
+   "end": 51.294,
    "part": 1
   },
   {
    "w": "new",
-   "start": 51.102,
-   "end": 51.218,
+   "start": 51.352,
+   "end": 51.468,
    "part": 1
   },
   {
    "w": "total",
-   "start": 51.276,
-   "end": 51.566,
+   "start": 51.526,
+   "end": 51.816,
    "part": 1
   },
   {
    "w": "monthly,",
-   "start": 51.624,
-   "end": 52.1,
+   "start": 51.874,
+   "end": 52.35,
    "part": 1
   },
   {
    "w": "and",
-   "start": 52.147,
-   "end": 52.298,
+   "start": 52.397,
+   "end": 52.548,
    "part": 1
   },
   {
    "w": "that",
-   "start": 52.367,
-   "end": 52.53,
+   "start": 52.617,
+   "end": 52.78,
    "part": 1
   },
   {
    "w": "print",
-   "start": 52.6,
-   "end": 52.785,
+   "start": 52.85,
+   "end": 53.035,
    "part": 1
   },
   {
    "w": "is",
-   "start": 52.82,
-   "end": 52.89,
+   "start": 53.07,
+   "end": 53.14,
    "part": 1
   },
   {
    "w": "your",
-   "start": 52.936,
-   "end": 53.041,
+   "start": 53.186,
+   "end": 53.291,
    "part": 1
   },
   {
    "w": "first",
-   "start": 53.099,
-   "end": 53.343,
+   "start": 53.349,
+   "end": 53.593,
    "part": 1
   },
   {
    "w": "number.",
-   "start": 53.401,
-   "end": 53.842,
+   "start": 53.651,
+   "end": 54.092,
    "part": 1
   },
   {
    "w": "Tokyo",
-   "start": 54.371,
-   "end": 54.8,
+   "start": 54.621,
+   "end": 55.05,
    "part": 1
   },
   {
    "w": "has",
-   "start": 54.87,
-   "end": 54.986,
+   "start": 55.12,
+   "end": 55.236,
    "part": 1
   },
   {
    "w": "pledged",
-   "start": 55.056,
-   "end": 55.415,
+   "start": 55.306,
+   "end": 55.665,
    "part": 1
   },
   {
    "w": "ten",
-   "start": 55.462,
-   "end": 55.694,
+   "start": 55.712,
+   "end": 55.944,
    "part": 1
   },
   {
    "w": "trillion",
-   "start": 55.752,
-   "end": 56.135,
+   "start": 56.002,
+   "end": 56.385,
    "part": 1
   },
   {
    "w": "yen",
-   "start": 56.205,
-   "end": 56.402,
+   "start": 56.455,
+   "end": 56.652,
    "part": 1
   },
   {
    "w": "to",
-   "start": 56.472,
-   "end": 56.542,
+   "start": 56.722,
+   "end": 56.792,
    "part": 1
   },
   {
    "w": "chips,",
-   "start": 56.6,
-   "end": 57.018,
+   "start": 56.85,
+   "end": 57.268,
    "part": 1
   },
   {
    "w": "and",
-   "start": 57.041,
-   "end": 57.18,
+   "start": 57.291,
+   "end": 57.43,
    "part": 1
   },
   {
    "w": "if",
-   "start": 57.238,
-   "end": 57.319,
+   "start": 57.488,
+   "end": 57.569,
    "part": 1
   },
   {
    "w": "that",
-   "start": 57.366,
-   "end": 57.528,
+   "start": 57.616,
+   "end": 57.778,
    "part": 1
   },
   {
    "w": "works,",
-   "start": 57.586,
-   "end": 58.074,
+   "start": 57.836,
+   "end": 58.324,
    "part": 1
   },
   {
    "w": "it",
-   "start": 58.109,
-   "end": 58.248,
+   "start": 58.359,
+   "end": 58.498,
    "part": 1
   },
   {
    "w": "beats",
-   "start": 58.306,
-   "end": 58.515,
+   "start": 58.556,
+   "end": 58.765,
    "part": 1
   },
   {
    "w": "our",
-   "start": 58.562,
-   "end": 58.678,
+   "start": 58.812,
+   "end": 58.928,
    "part": 1
   },
   {
    "w": "bonds.",
-   "start": 58.724,
-   "end": 59.247,
+   "start": 58.974,
+   "end": 59.497,
    "part": 1
   },
   {
    "w": "And",
-   "start": 59.316,
-   "end": 59.467,
+   "start": 59.566,
+   "end": 59.717,
    "part": 1
   },
   {
    "w": "here's",
-   "start": 59.537,
-   "end": 59.711,
+   "start": 59.787,
+   "end": 59.961,
    "part": 1
   },
   {
    "w": "what",
-   "start": 59.746,
-   "end": 59.874,
+   "start": 59.996,
+   "end": 60.124,
    "part": 1
   },
   {
    "w": "nobody",
-   "start": 59.932,
-   "end": 60.222,
+   "start": 60.182,
+   "end": 60.472,
    "part": 1
   },
   {
    "w": "says:",
-   "start": 60.28,
-   "end": 60.86,
+   "start": 60.53,
+   "end": 61.11,
    "part": 1
   },
   {
    "w": "the",
-   "start": 61.104,
-   "end": 61.197,
+   "start": 61.354,
+   "end": 61.447,
    "part": 1
   },
   {
    "w": "money",
-   "start": 61.255,
-   "end": 61.453,
+   "start": 61.505,
+   "end": 61.703,
    "part": 1
   },
   {
    "w": "went",
-   "start": 61.511,
-   "end": 61.685,
+   "start": 61.761,
+   "end": 61.935,
    "part": 1
   },
   {
    "w": "home,",
-   "start": 61.743,
-   "end": 62.126,
+   "start": 61.993,
+   "end": 62.376,
    "part": 1
   },
   {
    "w": "and",
-   "start": 62.149,
-   "end": 62.289,
+   "start": 62.399,
+   "end": 62.539,
    "part": 1
   },
   {
    "w": "the",
-   "start": 62.335,
-   "end": 62.405,
+   "start": 62.585,
+   "end": 62.655,
    "part": 1
   },
   {
    "w": "tab",
-   "start": 62.451,
-   "end": 62.695,
+   "start": 62.701,
+   "end": 62.945,
    "part": 1
   },
   {
    "w": "stayed",
-   "start": 62.753,
-   "end": 63.043,
+   "start": 63.003,
+   "end": 63.293,
    "part": 1
   },
   {
    "w": "here.",
-   "start": 63.101,
-   "end": 63.531,
+   "start": 63.351,
+   "end": 63.781,
    "part": 1
   },
   {
    "w": "So,",
-   "start": 64.042,
-   "end": 64.541,
+   "start": 64.292,
+   "end": 64.791,
    "part": 1
   },
   {
    "w": "the",
-   "start": 64.715,
-   "end": 64.831,
+   "start": 64.965,
+   "end": 65.081,
    "part": 1
   },
   {
    "w": "second",
-   "start": 64.901,
-   "end": 65.179,
+   "start": 65.151,
+   "end": 65.429,
    "part": 1
   },
   {
    "w": "number:",
-   "start": 65.237,
-   "end": 65.713,
+   "start": 65.487,
+   "end": 65.963,
    "part": 1
   },
   {
    "w": "it's",
-   "start": 66.155,
-   "end": 66.34,
+   "start": 66.405,
+   "end": 66.59,
    "part": 1
   },
   {
    "w": "on",
-   "start": 66.387,
-   "end": 66.491,
+   "start": 66.637,
+   "end": 66.741,
    "part": 1
   },
   {
    "w": "your",
-   "start": 66.549,
-   "end": 66.689,
+   "start": 66.799,
+   "end": 66.939,
    "part": 1
   },
   {
    "w": "phone.",
-   "start": 66.735,
-   "end": 67.188,
+   "start": 66.985,
+   "end": 67.438,
    "part": 1
   },
   {
    "w": "Pull",
-   "start": 67.571,
-   "end": 67.78,
+   "start": 67.821,
+   "end": 68.03,
    "part": 1
   },
   {
    "w": "up",
-   "start": 67.838,
-   "end": 67.919,
+   "start": 68.088,
+   "end": 68.169,
    "part": 1
   },
   {
    "w": "Meta",
-   "start": 67.977,
-   "end": 68.291,
+   "start": 68.227,
+   "end": 68.541,
    "part": 1
   },
   {
    "w": "and",
-   "start": 68.372,
-   "end": 68.546,
+   "start": 68.622,
+   "end": 68.796,
    "part": 1
   },
   {
    "w": "find",
-   "start": 68.628,
-   "end": 68.883,
+   "start": 68.878,
+   "end": 69.133,
    "part": 1
   },
   {
    "w": "its",
-   "start": 68.941,
-   "end": 69.057,
+   "start": 69.191,
+   "end": 69.307,
    "part": 1
   },
   {
    "w": "price-to-earnings",
-   "start": 69.104,
-   "end": 69.893,
+   "start": 69.354,
+   "end": 70.143,
    "part": 1
   },
   {
    "w": "multiple:",
-   "start": 69.963,
-   "end": 70.532,
+   "start": 70.213,
+   "end": 70.782,
    "part": 1
   },
   {
    "w": "that's",
-   "start": 70.973,
-   "end": 71.229,
+   "start": 71.223,
+   "end": 71.479,
    "part": 1
   },
   {
    "w": "the",
-   "start": 71.275,
-   "end": 71.356,
+   "start": 71.525,
+   "end": 71.606,
    "part": 1
   },
   {
    "w": "share",
-   "start": 71.403,
-   "end": 71.635,
+   "start": 71.653,
+   "end": 71.885,
    "part": 1
   },
   {
    "w": "of",
-   "start": 71.658,
-   "end": 71.716,
+   "start": 71.908,
+   "end": 71.966,
    "part": 1
   },
   {
    "w": "the",
-   "start": 71.763,
-   "end": 71.832,
+   "start": 72.013,
+   "end": 72.082,
    "part": 1
   },
   {
    "w": "price",
-   "start": 71.89,
-   "end": 72.169,
+   "start": 72.14,
+   "end": 72.419,
    "part": 1
   },
   {
    "w": "that's",
-   "start": 72.204,
-   "end": 72.39,
+   "start": 72.454,
+   "end": 72.64,
    "part": 1
   },
   {
    "w": "profit",
-   "start": 72.436,
-   "end": 72.784,
+   "start": 72.686,
+   "end": 73.034,
    "part": 1
   },
   {
    "w": "not",
-   "start": 72.854,
-   "end": 72.993,
+   "start": 73.104,
+   "end": 73.243,
    "part": 1
   },
   {
    "w": "yet",
-   "start": 73.04,
-   "end": 73.191,
+   "start": 73.29,
+   "end": 73.441,
    "part": 1
   },
   {
    "w": "earned,",
-   "start": 73.249,
-   "end": 73.597,
+   "start": 73.499,
+   "end": 73.847,
    "part": 1
   },
   {
    "w": "and",
-   "start": 73.62,
-   "end": 73.725,
+   "start": 73.87,
+   "end": 73.975,
    "part": 1
   },
   {
    "w": "a",
-   "start": 73.771,
-   "end": 73.806,
+   "start": 74.021,
+   "end": 74.056,
    "part": 1
   },
   {
    "w": "higher",
-   "start": 73.876,
-   "end": 74.131,
+   "start": 74.126,
+   "end": 74.381,
    "part": 1
   },
   {
    "w": "yield",
-   "start": 74.201,
-   "end": 74.445,
+   "start": 74.451,
+   "end": 74.695,
    "part": 1
   },
   {
    "w": "discounts",
-   "start": 74.514,
-   "end": 74.99,
+   "start": 74.764,
+   "end": 75.24,
    "part": 1
   },
   {
    "w": "it.",
-   "start": 75.037,
-   "end": 75.211,
+   "start": 75.287,
+   "end": 75.461,
    "part": 1
   },
   {
    "w": "The",
-   "start": 75.542,
-   "end": 75.67,
+   "start": 75.792,
+   "end": 75.92,
    "part": 1
   },
   {
    "w": "Fed",
-   "start": 75.739,
-   "end": 75.948,
+   "start": 75.989,
+   "end": 76.198,
    "part": 1
   },
   {
    "w": "still",
-   "start": 76.006,
-   "end": 76.215,
+   "start": 76.256,
+   "end": 76.465,
    "part": 1
   },
   {
    "w": "hasn't",
-   "start": 76.262,
-   "end": 76.529,
+   "start": 76.512,
+   "end": 76.779,
    "part": 1
   },
   {
    "w": "moved.",
-   "start": 76.575,
-   "end": 77.075,
+   "start": 76.825,
+   "end": 77.325,
    "part": 1
   },
   {
    "w": "Tokyo",
-   "start": 77.353,
-   "end": 77.818,
+   "start": 77.603,
+   "end": 78.068,
    "part": 1
   },
   {
    "w": "is",
-   "start": 77.911,
-   "end": 78.003,
+   "start": 78.161,
+   "end": 78.253,
    "part": 1
   },
   {
    "w": "still",
-   "start": 78.05,
-   "end": 78.34,
+   "start": 78.3,
+   "end": 78.59,
    "part": 1
   },
   {
    "w": "on",
-   "start": 78.433,
-   "end": 78.561,
+   "start": 78.683,
+   "end": 78.811,
    "part": 1
   },
   {
    "w": "its",
-   "start": 78.607,
-   "end": 78.735,
+   "start": 78.857,
+   "end": 78.985,
    "part": 1
   },
   {
    "w": "tea",
-   "start": 78.781,
-   "end": 78.944,
+   "start": 79.031,
+   "end": 79.194,
    "part": 1
   },
   {
    "w": "break.",
-   "start": 78.979,
-   "end": 79.362,
+   "start": 79.229,
+   "end": 79.612,
    "part": 1
   },
   {
    "w": "And",
-   "start": 79.455,
-   "end": 79.606,
+   "start": 79.705,
+   "end": 79.856,
    "part": 1
   },
   {
    "w": "that",
-   "start": 79.675,
-   "end": 79.873,
+   "start": 79.925,
+   "end": 80.123,
    "part": 1
   },
   {
    "w": "unfunded",
-   "start": 79.954,
-   "end": 80.441,
+   "start": 80.204,
+   "end": 80.691,
    "part": 1
   },
   {
    "w": "bar",
-   "start": 80.488,
-   "end": 80.662,
+   "start": 80.738,
+   "end": 80.912,
    "part": 1
   },
   {
    "w": "tab",
-   "start": 80.732,
-   "end": 80.999,
+   "start": 80.982,
+   "end": 81.249,
    "part": 1
   },
   {
    "w": "is",
-   "start": 81.092,
-   "end": 81.254,
+   "start": 81.342,
+   "end": 81.504,
    "part": 1
   },
   {
    "w": "still",
-   "start": 81.301,
-   "end": 81.556,
+   "start": 81.551,
+   "end": 81.806,
    "part": 1
   },
   {
    "w": "ours.",
-   "start": 81.637,
-   "end": 82.473,
+   "start": 81.887,
+   "end": 82.723,
    "part": 1
   }
  ],
@@ -1490,86 +1490,86 @@
   },
   {
    "text": "a Treasury page, and your phone.",
-   "start": 38.801,
-   "end": 40.833,
+   "start": 39.051,
+   "end": 41.083,
    "part": 1
   },
   {
    "text": "By the end you'll read both numbers yourself.",
-   "start": 41.326,
-   "end": 44.148,
+   "start": 41.576,
+   "end": 44.398,
    "part": 1
   },
   {
    "text": "Since February, Japan has sold a hundred and twenty-two billion dollars of it, a tenth of the pile.",
-   "start": 44.751,
-   "end": 49.662,
+   "start": 45.001,
+   "end": 49.912,
    "part": 1
   },
   {
    "text": "The Treasury prints the new total monthly, and that print is your first number.",
-   "start": 50.045,
-   "end": 53.842,
+   "start": 50.295,
+   "end": 54.092,
    "part": 1
   },
   {
    "text": "Tokyo has pledged ten trillion yen to chips, and if that works, it beats our bonds.",
-   "start": 54.371,
-   "end": 59.247,
+   "start": 54.621,
+   "end": 59.497,
    "part": 1
   },
   {
    "text": "And here's what nobody says:",
-   "start": 59.316,
-   "end": 60.86,
+   "start": 59.566,
+   "end": 61.11,
    "part": 1
   },
   {
    "text": "the money went home, and the tab stayed here.",
-   "start": 61.104,
-   "end": 63.531,
+   "start": 61.354,
+   "end": 63.781,
    "part": 1
   },
   {
    "text": "So, the second number:",
-   "start": 64.042,
-   "end": 65.713,
+   "start": 64.292,
+   "end": 65.963,
    "part": 1
   },
   {
    "text": "it's on your phone.",
-   "start": 66.155,
-   "end": 67.188,
+   "start": 66.405,
+   "end": 67.438,
    "part": 1
   },
   {
    "text": "Pull up Meta and find its price-to-earnings multiple:",
-   "start": 67.571,
-   "end": 70.532,
+   "start": 67.821,
+   "end": 70.782,
    "part": 1
   },
   {
    "text": "that's the share of the price that's profit not yet earned, and a higher yield discounts it.",
-   "start": 70.973,
-   "end": 75.211,
+   "start": 71.223,
+   "end": 75.461,
    "part": 1
   },
   {
    "text": "The Fed still hasn't moved.",
-   "start": 75.542,
-   "end": 77.075,
+   "start": 75.792,
+   "end": 77.325,
    "part": 1
   },
   {
    "text": "Tokyo is still on its tea break.",
-   "start": 77.353,
-   "end": 79.362,
+   "start": 77.603,
+   "end": 79.612,
    "part": 1
   },
   {
    "text": "And that unfunded bar tab is still ours.",
-   "start": 79.455,
-   "end": 82.473,
+   "start": 79.705,
+   "end": 82.723,
    "part": 1
   }
  ],
