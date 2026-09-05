@@ -91,9 +91,9 @@ export const kmFilterMarkup = (paperHex, inkHex, o = {}) => {
    had; BLUR wets the result. All dials (42 s42.5). */
 /* round 3 (operator, 2026-09-05: "more wobble ... a higher grain"): WOBBLE_SCALE up and its field a little busier; GRAIN is a second,
    fine attraction field multiplied in after the mesh - the speckle inside and along the front */
-export const SOAK = Object.freeze({ WOBBLE_FREQ: "0.008 0.012", WOBBLE_OCT: 3, WOBBLE_SCALE: 210, ATTR_FREQ: "0.008 0.011", ATTR_OCT: 4,
-                                    ATTR_BASE: 0.05, ATTR_GAIN: 3.4, GRAIN_FREQ: "0.055 0.07", GRAIN_OCT: 2, GRAIN_BASE: 0.45, GRAIN_GAIN: 1.6,
-                                    BLUR: 2.5, GRAD_MID: 0.55, GRAD_MID_A: 0.85,
+export const SOAK = Object.freeze({ WOBBLE_FREQ: "0.008 0.012", WOBBLE_OCT: 3, WOBBLE_SCALE: 180, ATTR_FREQ: "0.008 0.011", ATTR_OCT: 4,
+                                    ATTR_BASE: 0.25, ATTR_GAIN: 1.8, GRAIN_FREQ: "0.055 0.07", GRAIN_OCT: 2, GRAIN_BASE: 0.65, GRAIN_GAIN: 0.7,
+                                    BLUR: 5, GRAD_MID: 0.55, GRAD_MID_A: 0.85,
                                     /* the MOTION (operator: 'wriggling / morphing / creeping / crawling'): drifts in field px per unit soak, the breath
                                        as a share of WOBBLE_SCALE; every drift stays inside the filter's 25% margin (1690 * 0.25 = 422 px at fk 1) */
                                     WOBBLE_DRIFT: 150, WOBBLE_BREATH: 0.3, WOBBLE_CYCLES: 2.5, ATTR_DRIFT: 60, GRAIN_DRIFT: 260 });
