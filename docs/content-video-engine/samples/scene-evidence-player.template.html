@@ -353,8 +353,9 @@
      (caption-neon-glow) - the glow painted inline as a function of t */
   #caption.phrase .cw.ck { font-size: 1.2em; color: #F5B72E; }
   #caption.phrase .cw.ck.on { color: #F5B72E; }
-  /* the MARKER (hyperframes caption-highlight, blended 2026-09-05): a VIBRANT cobalt box sweeps behind the spoken word;
-     an ordinary word reads white against it, a keyword stays gold */
+  /* the MARKER (hyperframes caption-highlight, blended 2026-09-05; v3): ONE red front flows across the phrase at a smooth
+     pace and every word lands inside it as it arrives - white against the red, a keyword stays gold; the phrase reads
+     ahead of the front at 55% */
   #caption.phrase .cw.lit { color: #fff; }
   #caption.phrase .cw.ck.lit { color: #F5B72E; }
 
@@ -1713,7 +1714,7 @@
   const PHRASE = TL.caption_style === "phrase", PHRASE_STAGGER_S = 0.03, PHRASE_KPOP = 1.18;   /* shorts: the page lands as one phrase; only k-words are punctuated */
   /* the MARKER (hyperframes caption-highlight): the box sweeps in over SWEEP_S from the left (power2.out), lets go over BOX_FADE_S;
      keywords take the accent box, other words the charcoal box (brand tokens, never the reference's red) */
-  const MARK = { SWEEP_S: 0.15, BOX_FADE_S: 0.12, W: [[23, 105, 194], [47, 139, 230]], GLOW_PX: 22, GLOW_FLARE_S: 0.5, GLOW_HOLD: 0.45 };   /* cobalt box; the keyword's glow flares then holds */
+  const MARK = { RED: [[255, 23, 69], [223, 18, 56]], AHEAD: 0.55 };   /* the reference's red; the phrase's legibility ahead of the front */
   const markBox = (c, a) => "linear-gradient(135deg, rgba(" + c[0].join(",") + "," + a.toFixed(3) + ") 0%, rgba(" + c[1].join(",") + "," + a.toFixed(3) + ") 100%)";
   const stagePop = (u) => { const c1 = 1.70158, c3 = c1 + 1; const x = u - 1; return 1 + c3 * x * x * x + c1 * x * x; };
   const LP = { ROLL: 0.7, SAVOR: 0.8, FIELD: 2.4, PUNCH: 0.5, INK: 2.0, BUILD: 3.0, SEEPS: 9, STROKES: 14, KB_MAX: 0.03,
@@ -3017,23 +3018,21 @@
           /* stage: each word pops in at its own spoken time (words.json), never at the page boundary.
              The pop is a pure function of t painted inline (see stagePop) so a scrubbed render
              captures mid-pop frames and two renders of one second are identical. */
-          if (stage && PHRASE) {   /* PHRASE: the page lands as one (a hand laying the line), a keyword re-pops when spoken */
+          if (stage && PHRASE) {   /* PHRASE v3: the phrase is legible at once; ONE red front flows across it and each word lands inside */
             const pop = kin("analytic_spring") ? springPop : stagePop;
-            const e = pop(clamp01((t + 0.05 - (pg.s + j * PHRASE_STAGGER_S)) / STAGE_POP_S));
-            const kp = x.k ? pop(clamp01((t - x.s) / STAGE_POP_S)) : 1;
-            ws[j].style.opacity = Math.min(1, e * 2).toFixed(3);
-            const sc = (1.16 + (1 - 1.16) * e) * (x.k && t >= x.s ? (PHRASE_KPOP + (1 - PHRASE_KPOP) * kp) : 1);
+            /* the front: characters covered, a smooth function of the page's own clock (never a word's spoken time) */
+            const span = Math.max(0.2, pg.e - pg.s), L = pg.t.reduce((a, y) => a + y.w.length, 0) + pg.t.length - 1;
+            const P = clamp01((t - pg.s) / span);   /* one steady pace across the phrase: the stretch is the point */
+            const c0 = pg.t.slice(0, j).reduce((a, y) => a + y.w.length + 1, 0);
+            const f = clamp01((P * L - c0) / Math.max(1, x.w.length));                   /* this word's box fill as the front crosses it */
+            const tArrive = pg.s + (c0 / L) * span, e = pop(clamp01((t + 0.05 - tArrive) / STAGE_POP_S));   /* the word lands as the front arrives */
+            const lit = f >= 0.5;
+            ws[j].style.opacity = (MARK.AHEAD + (1 - MARK.AHEAD) * Math.min(1, e)).toFixed(3);
+            const sc = (1.16 + (1 - 1.16) * e) * (x.k && t >= tArrive ? (PHRASE_KPOP + (1 - PHRASE_KPOP) * e) : 1);
             ws[j].style.transform = "scale(" + sc.toFixed(4) + ") rotate(calc(var(--tilt, 0deg) * " + (1 - e).toFixed(3) + "))";
-            /* the marker: sweeps in as the word is spoken, lets go as the next takes it */
-            /* the marker on every word; a keyword adds the glow that flares when spoken and settles to a halo */
-            const hk = pow2out(clamp01((t - x.s) / MARK.SWEEP_S)), ba = t < x.s ? 0 : (t < x.e ? 1 : 1 - clamp01((t - x.e) / MARK.BOX_FADE_S));
-            ws[j].style.backgroundImage = ba > 0 ? markBox(MARK.W, ba) : "";
-            ws[j].style.backgroundSize = ba > 0 ? (hk * 100).toFixed(1) + "% 100%" : "";
-            ws[j].classList.toggle("lit", ba > 0.5 && hk > 0.5);
-            if (x.k) {
-              const g = t < x.s ? 0 : MARK.GLOW_HOLD + (1 - MARK.GLOW_HOLD) * (1 - clamp01((t - x.s) / MARK.GLOW_FLARE_S));
-              ws[j].style.textShadow = g > 0 ? "0 0 " + (MARK.GLOW_PX * g).toFixed(1) + "px rgba(245,183,46," + (0.95 * g).toFixed(3) + "), 0 0 " + (MARK.GLOW_PX * 2 * g).toFixed(1) + "px rgba(237,106,74," + (0.55 * g).toFixed(3) + ")" : "";
-            } }
+            ws[j].style.backgroundImage = f > 0 ? markBox(MARK.RED, 1) : "";
+            ws[j].style.backgroundSize = f > 0 ? (f * 100).toFixed(1) + "% 100%" : "";
+            ws[j].classList.toggle("lit", lit); }
           else if (stage) { const e = (kin("analytic_spring") ? springPop : stagePop)(clamp01((t + 0.05 - x.s) / STAGE_POP_S));
             ws[j].style.opacity = Math.min(1, e * 2).toFixed(3);
             const sc = (1.16 + (1 - 1.16) * e) * (on && e >= 1 ? 1.06 : 1);
