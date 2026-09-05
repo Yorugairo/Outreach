@@ -235,21 +235,32 @@ def meta_yield(pe: dict) -> dict:
     rates = [0.04, 0.045, 0.05, 0.055]
     pe_now = pe["trailing_pe"]
     implied = {r: round(pe_now * ((1.0 + now) / (1.0 + r)) ** YEARS, 1) for r in rates}
-    worst = implied[0.055]
+    # the multiple means nothing to a viewer until it is a price (operator, 2026-09-04): the
+    # same trailing profit per share, priced at each yield - so the bars are dollars a share
+    eps, price = pe["trailing_eps"], pe["price"]
+    price_at = {r: round(implied[r] * eps, 2) for r in rates}
+    worst = price_at[0.055]
+    per_share = round(worst - price, 2)
+    on_10k = round(10000 * (worst / price - 1))
     facts = {"years": YEARS, "us10y_now": round(now * 100, 2), "as_of": now_day,
-             "meta_trailing_pe": pe_now, "implied_pe": {f"{r*100:g}%": v for r, v in implied.items()},
-             "change_at_5_5_pct": round((worst / pe_now - 1) * 100, 1)}
+             "meta_trailing_pe": pe_now, "meta_price": price, "meta_trailing_eps": eps,
+             "implied_pe": {f"{r*100:g}%": v for r, v in implied.items()},
+             "price_at": {f"{r*100:g}%": v for r, v in price_at.items()},
+             "change_at_5_5_pct": round((worst / price - 1) * 100, 1),
+             "change_at_5_5_per_share": per_share, "change_at_5_5_on_10k": on_10k}
     write("ev-meta-yield-v1", {
-        "title": "Meta's multiple, by Treasury yield",
-        "sub": f"Trailing P/E {pe_now:.1f}x at today's 10-year ({now*100:.2f}%), and the multiple the same "
-               f"year-{YEARS} dollar supports at each yield. Arithmetic on the discount identity - no forecast",
-        "src": f"META trailing P/E: Yahoo Finance via yfinance; US 10-year: FRED DGS10 ({now_day}) - fetched {FETCHED}",
-        "unit": "x",
-        # unsigned multiples; heights fall as the yield rises - the signed change rides on a badge (E28)
-        "bars": [{"label": f"{r*100:g}%", "value": implied[r],
+        "title": "What a Meta share is worth as the 10-year moves",
+        "sub": f"The same trailing profit per share (${eps:.2f}), priced at each 10-year yield; today's "
+               f"{now*100:.2f}% gives the {pe_now:.1f}x multiple and the ${price:,.0f} price. "
+               f"Arithmetic on the discount identity - no growth assumed, no forecast",
+        "src": f"META price, trailing EPS and P/E: Yahoo Finance via yfinance; US 10-year: FRED DGS10 ({now_day}) - fetched {FETCHED}",
+        "unit": "$",
+        # unsigned prices; heights fall as the yield rises - the signed change rides on badges (E28)
+        "bars": [{"label": f"{r*100:g}%", "value": price_at[r],
                   "color": "cobalt" if r <= now else "crimson"} for r in rates],
-        "badges": [{"label": "META P/E NOW", "value": f"{pe_now:.1f}x", "tag": f"at a {now*100:.2f}% 10-year", "accent": "cobalt"},
-                   {"label": "AT 5.5%", "value": f"{facts['change_at_5_5_pct']:+.0f}%", "tag": "the same profit, discounted harder", "accent": "crimson"}],
+        "badges": [{"label": "META NOW", "value": f"${price:,.0f}", "tag": f"{pe_now:.1f}x at a {now*100:.2f}% 10-year", "accent": "cobalt"},
+                   {"label": "AT 5.5%", "value": f"{per_share:+,.0f} a share", "tag": f"{facts['change_at_5_5_pct']:+.1f}%, same profit", "accent": "crimson"},
+                   {"label": "ON $10,000", "value": f"{on_10k:+,}", "tag": "of Meta, at 5.5%", "accent": "crimson"}],
         "status": "REAL", "fetched": FETCHED, "facts": facts,
     })
     return facts
