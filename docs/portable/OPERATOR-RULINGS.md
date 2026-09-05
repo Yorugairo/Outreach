@@ -1256,3 +1256,34 @@ What this rules:
    rolls out and builds again (E25). And the page LEAVES by spiral: the colours wind into a
    point in the charcoal, the charcoal winds into a point in the cream (template `LP_RETRACT`).
 
+## E41 — The shorts-script ledger: move beats, never clip words; the brand line is the outro's; sentences break for the strip (2026-09-04 / 2026-09-05)
+
+Three rulings from the Tokyo short, recorded together because the script skill has to cite them as one page.
+
+1. **Fit windows by moving beats, never by clipping words (2026-09-04).** Fitting the 90 s script to the
+   long-form geometry (P1 pinned at 0:35, G18's ≤ 3 marks/min, G12's tricolon inside P1, P2's seven beats
+   in 0:35–1:05) went v3 → v4 → v5 by clipping the prose until *the sentences did not make sense*.
+   Comprehension comes first; a gate never licenses a sentence that does not read. The clean cut of a
+   short under that geometry lands ~2:20 — that is the signal that the geometry is wrong for the piece,
+   not that the piece needs cutting harder. **What shipped:** `gate_opening_structure` G2 short mode
+   (doc 51 §51.2 as S01–S08 / J50–J51, 2026-09-05): a measured clock under 3:00 is judged by the shape;
+   the head-fake, the debate, the threshold / where-we-sit / flip block and the 60–90 s open do not bind.
+
+2. **The brand line is a channel asset, not script (2026-09-05).** *"Not a panic. Not a plot. Mechanics."*
+   was recorded once (`channel-assets/money-physics/outro/`, paced with pauses — "half savors, not
+   commas") and is stitched onto the Remotion-kit outro: *"it makes sense to have it stitched on the
+   outro so we only ever have to record it once."* A script never writes the triad; on a short S07 FAILs
+   it. The long form's final triad (P6) is a different device and stays.
+
+3. **Sentences break for the strip (2026-09-05).** On the 9:16 stage the captions are READ, not chased
+   (E21's motion comes from the words' own kinetics, not from flashes — "a lot of flashes, not a lot of
+   motion; an old lesson"). The 800 px strip at 64 px holds 25–28 characters a line, two lines a page:
+   **3–6 words a page**, measured as LINES from the built page's height, not as a word count. A sentence
+   over 18 words is several pages of one breath — S08 WARNs it. The writer breaks at the clause; the
+   caption pages are built from the punctuation, and so are the cuts (M13: gaps ≥ 0.30 s, cut at 0.8 of
+   the gap, mid-word ≤ 25 % — a period is a cut point, a comma is not).
+
+**Why:** every one of these was learned by rewriting a finished take. The gate-fit rewrite cost two
+versions of prose; the brand line was nearly recorded per episode; the caption pages wrapped to three
+lines on a third of the pages before the line rule was measured. Written down, the skill can cite them
+before the first draft instead of after the take.

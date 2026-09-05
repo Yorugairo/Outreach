@@ -32,9 +32,11 @@ fused INTO the phase guides — that fusion is the kit's entire point.
    section + the updated ledger. Never let a phase read ahead or behind.
 3. ASSEMBLE the six sections. The final ledger audit (P6) must show every
    loop closed, the ring sealed, and the CTA budget respected.
-4. LINT the assembled script (mechanical gates: sentence stats, passive
-   scan, CTA count, pause-mark ration, tautology, ring check). Fix and
-   re-run until clean.
+4. GATE the assembled script with the runner (`run_script_gates.py`:
+   lint → audit → opening gate → screens, one report, R1 one row one
+   verdict). Long form: G01–G45 + J01–J12; short: S01–S08 + J50/J51 (G2).
+   Fix and re-run until the tools are clean; then the blind viewer (P36,
+   V01 recall binds).
 5. STRENGTH LOOP (STRENGTH-LOOP.md): run every scale L0-L6 AND the
    cross-scale checks X1-X5, apply fixes, and repeat to a FIXPOINT — a
    round that fires no gates but made an edit runs again, because the edit
@@ -107,6 +109,28 @@ The real rule is **terminal placement and escalation**, not scarcity:
 
 Gate the close, not the count.
 
+## Shorts (doc 51 §51.2 as gates — G2, 2026-09-05)
+
+A short is a different machine (E35), not a compressed episode. The kit's six phases and the
+geometry above are the long form's; a script under 3:00 (measured) is judged by the SHAPE:
+
+```
+0:00–0:03   HOOK           the claim, spoken and on screen              S01
+0:03–0:10   THE MECHANISM  one thing, stated plainly — [post-key]       S02
+0:10–80%    N INSTANCES    the same mechanism, N times — [new]          S03 (≥ 2)  J51 (one spine by stem)
+last 20%    THE RING       the token AND the claim's stems return       S05 (G15b at the short's fraction)
+            a rehook every 30 s · no brand line · no sentence > 18 w    S06 · S07 · S08 (WARN)
+```
+
+What a short does not carry (E41): the head-fake, the debate, the threshold / where-we-sit / flip
+block (doc 35 rule 2 is INFO in short mode), the 60–90 s open, the brand triad. Never fit a short to
+the long-form geometry by clipping words — move beats (E41 §1). The runner routes by itself on a
+measured timeline under 3:00 (`--short` / `--long` to force):
+
+```
+python content/video_engine/scripts/run_script_gates.py <script> --ring "<token>" --title "<title>" --timeline <build>/timeline.json
+```
+
 ## Hard gates (fail the script, not the line)
 
 1. **Attribution-first** — source before assertion, every claim, every
@@ -125,6 +149,17 @@ Gate the close, not the count.
 5. **The triple test** — every line answers: which structural node am I
    serving, which retention duty am I discharging, at what scale does my
    device repeat. Lines that answer none get cut.
+6. **The ring by mechanism (G15b, FAIL since 2026-09-04)** — the close returns
+   the P1 claim's content stems, not just the token. Token echoed with the
+   argument drifted is a FAIL; no grandfathering.
+7. **The brand line is the outro's (E41 §2)** — *"Not a panic. Not a plot.
+   Mechanics."* is recorded once and stitched on the outro; a script never
+   writes it (S07 on a short).
+8. **Sentences break for the strip and the cut (E41 §3)** — on a short 3–6 words
+   a caption page (two lines of 25–28 characters), no sentence over 18 words
+   (S08); the take is cut on gaps ≥ 0.30 s at 0.8 of the gap, mid-word ≤ 25 %
+   (M13, measured on the reference — E38). A period is a cut point; a comma is
+   not.
 
 ## Output contract (what a finished script contains)
 
@@ -132,6 +167,8 @@ Gate the close, not the count.
   flags — nothing else in square brackets.
 - Stage/visual directions in `**[...]**` blocks, one per beat cluster —
   the tautology lint compares these against their narration.
+  Directions ask for STILLS and the engine's own motion (E40); a generated
+  clip is the exception, by START/END frames only — never "ingredients".
 - Figures written out as speech ("two hundred and forty five thousand");
   verbatim strings and exact numerals live on on-screen badges only.
 - A sources block: every figure → its source.
@@ -147,3 +184,7 @@ Gate the close, not the count.
   pivot, close), identical voice/settings/seed — the strength-passed arm
   won by ear and ran ~4% shorter at identical content. The pass is
   standing, not optional.
+- v1.2 (2026-09-05, P44) — the shorts section (doc 51 §51.2 as G2's S01–S08 /
+  J50–J51), hard gates 6–8 (G15b, the brand line, the strip and the cut), the
+  runner as flow step 4, E40 on directions. The script skill
+  (`~/.claude/skills/script-writer`) was synced to the same ids the same day.
