@@ -529,6 +529,17 @@ def test_m16_credits_a_declared_life_over_a_caption_hole():
     assert g["M16"].level == "PASS", g["M16"]
 
 
+def test_m16_credits_each_word_pop_on_a_stage_page():
+    """Sentence-sized pages (2026-09-05): a stage page's words pop on their own spoken times, so a 3 s page whose words land
+    every 0.5 s is not a 3 s hole."""
+    tl, docks, mp = _short_build(page_at=17.0)
+    tl["aspect"] = "9:16"
+    tl["caption_pages"] = [p for p in tl["caption_pages"] if not (60.0 <= p["s"] < 66.0)]
+    assert _by_id(G.run(tl, docks, mp)[0])["M16"].level == "FAIL"
+    tl["caption_pages"].append({"s": 60.0, "e": 66.0, "cap_mode": "stage", "t": [{"w": "x", "s": 60.0 + 0.5 * i, "e": 60.4 + 0.5 * i} for i in range(12)]})
+    assert _by_id(G.run(tl, docks, mp)[0])["M16"].level == "PASS"
+
+
 def test_m16_is_info_on_long_form():
     tl, docks, mp = _dense_build(runtime=240.0)
     assert _by_id(G.run(tl, docks, mp)[0])["M16"].level == "INFO"

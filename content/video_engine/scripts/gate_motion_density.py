@@ -334,6 +334,10 @@ def analyse(tl: dict, docks: list[dict], mp: dict) -> dict:
     # a stage page is a visual event at its start (s9.25 #1: "captions in stage mode")
     stage_rows = [r for r in tl_rows if isinstance(r, dict) and r.get("cap_mode") == "stage"]
     stage_rows += [{"t": pg["s"]} for pg in pages if isinstance(pg, dict) and pg.get("cap_mode") == "stage"]
+    # a stage page's WORDS each pop in on their own spoken time (the golden set; E21: captions ARE the motion) - every word with a
+    # clock is a visual event, not only the page's start (a sentence-sized page would otherwise read as a hold, 2026-09-05)
+    stage_rows += [{"t": float(tok["s"])} for pg in pages if isinstance(pg, dict) and pg.get("cap_mode") == "stage"
+                   for tok in (pg.get("t") or []) if isinstance(tok, dict) and tok.get("s") is not None]
     # P35 T7: targeted species fire as tabled in SPECIES_EVENTS (s9.27 gate column)
     events = _collect_events(tl, mp, spans, badges, page_beats, stage_rows, _species_events(scenes))
     ev = sorted(t for t in events if 0.0 <= t <= runtime)
