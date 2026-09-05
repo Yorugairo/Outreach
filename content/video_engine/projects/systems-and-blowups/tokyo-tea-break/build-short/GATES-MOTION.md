@@ -10,8 +10,6 @@
   still_over_12s_share: 0%
             per_minute: 0:00:247/2 1:00:171/2
 
-  [WARN ] M06 35 caption pages = 24/min, 6.7 words/page
-          s9.15 r7 / build_caption_pages 4-6 words
   [PASS ] M01 longest still stretch 1.3s at 0:26
           doc 29 s8.19 / s9.25 stillness ceiling
   [PASS ] M02 0 stretches > 8s (working target)
@@ -22,6 +20,8 @@
           doc 29 s9.13 plate density
   [PASS ] M05 no plate over the 20s hold ceiling
           doc 29 s9.13 hard ceiling
+  [PASS ] M06 53 caption pages = 36/min, 4.5 words/page
+          s9.15 r7 / build_caption_pages 4-6 words
   [PASS ] M08 timeline declares cap_mode; every stretch over the ceiling carries stage captions (counted as events above)
           doc 29 s9.25 caption STAGE mode (E21: captions ARE the motion when nothing else moves)
   [PASS ] M09 no scene stacks two camera moves (punch | focus_zoom | pull_back) or a camera move over Ken Burns
@@ -43,8 +43,8 @@
   [JUDGE] J01 every savor beat holds its picture (card up, badge lit), never a bare plate with a drift
           doc 29 s9.25 #3
 
-RESULT: 0 FAIL / 1 WARN / 13 PASS / 1 JUDGE / 1 INFO
+RESULT: 0 FAIL / 0 WARN / 14 PASS / 1 JUDGE / 1 INFO
 ```
 
-TIMELINE: tokyo-short.timeline.json sha256:22a6cba36db9c818f10108dd7ef8c6209aaae22b2376ed036d33a9b1bcfebc74
+TIMELINE: tokyo-short.timeline.json sha256:32ed0b05544b7b09867f88dfc1d1f68d1a3eccd2b0cb3aa16b1ddd72e78d8ade
 VERDICT: PASS (0 FAIL)
