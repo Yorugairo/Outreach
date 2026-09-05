@@ -70,6 +70,11 @@ def tic_table5() -> tuple[list[str], dict[str, list[float]]]:
     return months, rows
 
 
+def month_label(m: str) -> str:
+    """'2026-02' -> "Feb '26" (the axis tick)."""
+    return ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"][int(m[5:7]) - 1] + " '" + m[2:4]
+
+
 def month_to_x(m: str) -> float:
     """'2026-06' -> 2026.458, the decimal-year x the template's drawChart plots on."""
     y, mo = m.split("-")
@@ -102,6 +107,8 @@ def japan_holdings(months, rows) -> dict:
                f"-> {facts['latest_month']} ${facts['latest']:,.1f}B",
         "src": f"US Treasury TIC Table 5, Major Foreign Holders · fetched {FETCHED}",
         "ylabel": "$bn",
+        # E28: the selected dates state their rule on the page - the first print, the peak, the latest
+        "xticks": [[pts[0][0], month_label(span[0][0])], [month_to_x(facts["peak_month"]), month_label(facts["peak_month"])], [pts[-1][0], month_label(facts["latest_month"])]],
         "series": [{"label": f"{facts['drop_pct']:+.1f}%", "name": "Japan", "color": "crimson", "pts": pts}],
         "status": "REAL", "fetched": FETCHED, "facts": facts,
     })
@@ -256,11 +263,12 @@ def meta_yield(pe: dict) -> dict:
         "src": f"META price, trailing EPS and P/E: Yahoo Finance via yfinance; US 10-year: FRED DGS10 ({now_day}) - fetched {FETCHED}",
         "unit": "$",
         # unsigned prices; heights fall as the yield rises - the signed change rides on badges (E28)
-        "bars": [{"label": f"{r*100:g}%", "value": price_at[r],
+        "bars": [{"label": f"{r*100:g}%", "value": round(price_at[r]),   # whole dollars on the page (the badges and the dossier are); facts keep the cents
                   "color": "cobalt" if r <= now else "crimson"} for r in rates],
         "badges": [{"label": "META NOW", "value": f"${price:,.0f}", "tag": f"{pe_now:.1f}x at a {now*100:.2f}% 10-year", "accent": "cobalt"},
-                   {"label": "AT 5.5%", "value": f"{per_share:+,.0f} a share", "tag": f"{facts['change_at_5_5_pct']:+.1f}%, same profit", "accent": "crimson"},
-                   {"label": "ON $10,000", "value": f"{on_10k:+,}", "tag": "of Meta, at 5.5%", "accent": "crimson"}],
+                   # signed dollars as the number (a portrait pill is its label and its number); the clause rides the tag
+                   {"label": "AT 5.5%", "value": f"{'-' if per_share < 0 else '+'}${abs(per_share):,.0f}", "tag": f"a share, {facts['change_at_5_5_pct']:+.1f}%, same profit", "accent": "crimson"},
+                   {"label": "ON $10,000", "value": f"{'-' if on_10k < 0 else '+'}${abs(on_10k):,}", "tag": "of Meta, at 5.5%", "accent": "crimson"}],
         "status": "REAL", "fetched": FETCHED, "facts": facts,
     })
     return facts

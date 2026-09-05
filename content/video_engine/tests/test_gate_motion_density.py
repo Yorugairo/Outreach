@@ -412,3 +412,62 @@ def test_chart_dock_across_a_boundary_or_held_as_homework_fails_m12_but_a_re_ent
     assert _by_id(G.run(tl, reenter, mp)[0])["M12"].level == "PASS"          # re-entering the same chart is the pattern
     assert (G.OPENING_STILL_MAX_S, G.PARADOX_S, G.FIRST_CHART_MAX_S) == (6.0, 8.0, 20.0)
     assert (G.CHART_HOLD_MAX_S, G.OPENING_CHART_HOLD_MAX_S) == (10.0, 6.0)
+
+
+# ---- P41 (2026-09-05): the short-mode reads - a page's annotation clock is its landing; a short has no minutes to rank ----
+
+def _page_scene(sid, a, z, species=None, badges=None):
+    return {"scene_id": sid, "span": [a, z], "species": species or [],
+            "world": {"kind": "ledger", "page": {"schema_version": "ledger_page.v1", "builder": "story", "badges": badges or []}}}
+
+
+def _short_build(page_at=17.0, spot_at=None, runtime=82.0):
+    """A short's shape: clip worlds, one ledger page as the first proof, a spotlight declared on it."""
+    scenes = [{"scene_id": "s01", "world": {"kind": "clip"}, "span": [0.0, 5.0]},
+              {"scene_id": "s02", "world": {"kind": "clip"}, "span": [5.0, 9.0]},
+              {"scene_id": "s03", "world": {"kind": "clip"}, "span": [9.0, page_at]},
+              _page_scene("s04", page_at, page_at + 16.0, species=[{"kind": "spotlight", "at": spot_at if spot_at is not None else page_at + 8.4, "dur": 2.0, "target": {"kind": "datum", "index": 12}}]),
+              {"scene_id": "s05", "world": {"kind": "clip"}, "span": [page_at + 16.0, runtime]}]
+    pages, tt = [], 0.0
+    while tt < runtime:
+        pages.append({"s": tt, "e": tt + 1.5, "t": [{"w": "x"}] * 5, "cap_mode": "stage"}); tt += 1.5
+    tl = {"runtime_s": runtime, "scenes": scenes, "caption_pages": pages, "rows": []}
+    mp = {"cues": [{"kind": "evidence", "in": page_at + 0.5, "out": page_at + 1.0}]}   # the page-roll foley at the entry (M11 sound cue)
+    return tl, [], mp
+
+
+def test_page_build_end_is_the_template_landing():
+    assert G.PAGE_BUILD_END_S == 7.4 == G.PAGE_BEAT_OFFSETS[-1]
+
+
+def test_m11_on_a_page_clocks_the_annotation_from_the_build_landing():
+    tl, docks, mp = _short_build(page_at=17.0, spot_at=17.0 + 8.4)       # 1.0s after the build lands at 24.4
+    g = _by_id(G.run(tl, docks, mp)[0])
+    assert g["M11"].level in ("PASS", "WARN"), g["M11"]
+    assert "build lands at 24.4s" in g["M11"].message and "spotlight at 25.4s" in g["M11"].message, g["M11"]
+
+
+def test_m11_on_a_page_refuses_a_highlight_over_the_build():
+    tl, docks, mp = _short_build(page_at=17.0, spot_at=17.2)             # with the roll-out: over the charcoal build
+    g = _by_id(G.run(tl, docks, mp)[0])
+    assert g["M11"].level == "FAIL" and "AFTER the page's build lands at 24.4s" in g["M11"].message, g["M11"]
+    tl, docks, mp = _short_build(page_at=17.0, spot_at=17.0 + 7.4 + 1.6)  # too late as well
+    assert _by_id(G.run(tl, docks, mp)[0])["M11"].level == "FAIL"
+
+
+def test_m11_page_window_is_still_the_page_entry():
+    tl, docks, mp = _short_build(page_at=22.0, spot_at=22.0 + 8.0)       # the page itself enters after 0:20
+    g = _by_id(G.run(tl, docks, mp)[0])
+    assert g["M11"].level == "FAIL" and "outside 8-20s" in g["M11"].message, g["M11"]
+
+
+def test_m07_on_a_short_is_an_info_row_with_both_rates():
+    tl, docks, mp = _short_build()
+    g = _by_id(G.run(tl, docks, mp)[0])
+    assert g["M07"].level == "INFO", g["M07"]
+    assert "short: 1 full minute(s) in 82s" in g["M07"].message and "tail from 1:00" in g["M07"].message and "whole runtime" in g["M07"].message, g["M07"]
+
+
+def test_m07_still_ranks_a_long_form_build():
+    tl, docks, mp = _dense_build(runtime=180.0)
+    assert _by_id(G.run(tl, docks, mp)[0])["M07"].level in ("PASS", "FAIL")

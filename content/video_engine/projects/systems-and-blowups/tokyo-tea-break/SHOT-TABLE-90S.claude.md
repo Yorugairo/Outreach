@@ -22,8 +22,12 @@ with `"aspect": "9:16"`; `player.html` is retired (G4).
 - **Cuts land at 0.8 of a >= 0.30 s gap, mid-word <= 25 %** (M13). The scratch shows
   >= 0.30 s gaps only at **paragraph ends** (14 of them, ~0.7 s); a cut inside a paragraph
   is allowed only where the ElevenLabs take shows the gap.
-- **Mobile safe box** `x[80,880] y[280,1340]`, captions in `y[1340,1440]` (G-l); every text
-  >= 59 px on the 1920 stage (doc 50).
+- **Mobile safe box** `x[80,880] y[280,1340]`, captions in `y[1340,1440]` (G-l); type against
+  doc 50's floor read for the 1080-wide stage (34 px = 12 px on the phone): secondary 40 px, primary
+  >= 59 px (doc 49 s49.1, P41 2026-09-05). The 59 px in doc 50 is the landscape stage's number.
+- **In portrait the chart IS the world** (doc 49 s49.1 amended 2026-09-05, built P41): the page fills
+  the frame to its deckle, no punch, one measured column, the caption in the strip, the series'
+  selected dates on the axis (`xticks`), badges as label-over-number pills under the source.
 - **No still > 6 s in the first minute, no chart dock > 6 s in it** (M10 / M12).
 
 ## Shots (kit clock first, Kokoro cut in brackets)

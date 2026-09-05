@@ -47,6 +47,12 @@ scale = 390 / 1920 = 0.203        a 4.9x downscale
 > **A font must be ≥ 59 px on our stage to reach 12 px on a phone in portrait.
 > Fourteen of the sixteen distinct sizes in the template fall below that.**
 
+> **Addendum 2026-09-05 (P41): the same arithmetic on the native 9:16 stage.** A 1080 x 1920
+> short fills the 390 px phone width, a 2.77x downscale, so 12 px on the phone is **34 px on
+> that stage** (59 px there is 21 px on the phone). The portrait ledger page is set to 40 px
+> secondary / >= 59 px primary against that floor - `doc 49 §49.1`. The 59 px figure above is
+> the LANDSCAPE stage's floor and must not be carried across as a number.
+
 Axis labels, source lines, badge text, dock notes and captions all render between 2 and
 7 px for three-quarters of our watch time.
 

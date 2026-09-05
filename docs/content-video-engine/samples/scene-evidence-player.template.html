@@ -109,6 +109,32 @@
   .lp-chart .ser { fill: none; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
   .lp-chart .sname { font-size: 24px; font-weight: 700; }
   .lp-chart .tagchip { font-size: 18px; font-weight: 600; letter-spacing: .04em; opacity: .85; text-transform: lowercase; }
+  /* PORTRAIT (P41, doc 49 s49.1 amended 2026-09-05): in 9:16 the chart IS the world. The page fills the frame to
+     its deckle, the charcoal fills the page to that edge, the series is re-laid for the tall frame in stage px
+     (the chart's viewBox IS its pixel box, so every size below is a stage pixel), and the type clears doc 50's
+     floor read for THIS stage: 12 px on a 390 px phone = 34 px on the 1080-wide stage; secondary text sits at
+     40 px (14 px on the phone), primary text at >= 59 px (21 px), pill labels at the floor. The punch is skipped:
+     it would crop the deckle the page exists to show and push the title into the Shorts top overlay. */
+  html[data-aspect="9:16"] .lp-field { border-radius: 30px; }
+  html[data-aspect="9:16"] .lp-grain { opacity: .14; }   /* textured cream: the grain reads on a phone only when it is a little louder */
+  html[data-aspect="9:16"] .lp-title { font-size: 68px; line-height: 1.12; white-space: normal; }
+  html[data-aspect="9:16"] .lp-sub { font-size: 40px; line-height: 1.25; }
+  html[data-aspect="9:16"] .lp-src { font-size: 40px; line-height: 1.25; white-space: normal; opacity: .9; }
+  html[data-aspect="9:16"] .lp-title .w, html[data-aspect="9:16"] .lp-src .w { display: inline-block; white-space: nowrap; }
+  html[data-aspect="9:16"] .lp-chart .val { font-size: 59px; }
+  html[data-aspect="9:16"] .lp-chart .lab { font-size: 40px; }
+  html[data-aspect="9:16"] .lp-chart .callout { font-size: 59px; }
+  html[data-aspect="9:16"] .lp-chart .sname { font-size: 44px; }
+  html[data-aspect="9:16"] .lp-chart .tagchip { font-size: 40px; }
+  html[data-aspect="9:16"] .lp-chart .ser { stroke-width: 8; }
+  html[data-aspect="9:16"] .lp-chart .ax { stroke-width: 3; }
+  html[data-aspect="9:16"] .lp-chart .grid { stroke-width: 2; }
+  html[data-aspect="9:16"] .lp-rail { gap: 12px; }
+  html[data-aspect="9:16"] .lp-rail .lp-pill { padding: 8px 18px 10px; border-radius: 12px; flex-direction: column; align-items: flex-start; gap: 0; }   /* label over number: three pills fit one 800px row */
+  html[data-aspect="9:16"] .lp-rail .pill-label { font-size: 34px; letter-spacing: .04em; }
+  html[data-aspect="9:16"] .lp-rail .pill-num { font-size: 59px; font-family: Inter, Arial, sans-serif; }
+  html[data-aspect="9:16"] .lp-rail .pill-tag { display: none; }   /* the tag's clause is the sub's job in portrait: a pill is its label and its number */
+  html[data-aspect="9:16"] #caption.stage.onpage { top: auto; bottom: 480px; left: 80px; right: 200px; font-size: 64px; }   /* the caption strip y1340-1440 (G-l), never over the chart */
 
   /* Regional shading, not a global dim. The world half stays fully lit;
      darkening only begins around the midpoint and deepens toward whichever
@@ -424,6 +450,7 @@
   if (String(TL.aspect || "16:9") === "9:16") document.documentElement.setAttribute("data-aspect", "9:16");
   const STAGE_W = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--stage-w")) || 1920;
   const STAGE_H = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--stage-h")) || 1080;
+  const PORTRAIT = STAGE_H > STAGE_W;   /* 9:16 (P41, doc 49 s49.1 amended 2026-09-05): the chart IS the world */
   $("species").setAttribute("viewBox", `0 0 ${STAGE_W} ${STAGE_H}`);
   const fitStage = () => { stage.style.transform = `scale(${fit.clientWidth / STAGE_W})`; };
   addEventListener("resize", fitStage); fitStage();
@@ -1346,6 +1373,38 @@
     return ((h ^ (h >>> 15)) >>> 0) / 4294967296;
   };
   const ledgerState = new Map();
+  /* the handwriting face is fetched on FIRST USE, so document.fonts.ready can resolve before any Kalam glyph exists; the
+     portrait layout MEASURES its ink (P41), so the faces are fetched up front and every page is rebuilt once they land */
+  const LP_FACES = ["700 68px Kalam", "400 40px Kalam", "500 40px Kalam", "700 34px Kalam"];
+  if (document.fonts && document.fonts.load) Promise.all(LP_FACES.map((f) => document.fonts.load(f))).then(() => { if (PORTRAIT) ledgerState.clear(); }).catch(() => {});   /* landscape pages are laid out in %, never measured: a rebuild there only shifts chart text a sub-pixel against the goldens */
+  /* PORTRAIT LAYOUT (P41): one column in stage px, measured top-down inside doc 49's zones - the title from y=140
+     (zone 1), the chart in zone 2, the caption strip from 1340 (two 64px caption lines reach up to ~1290, so the page
+     ends at 1280); x inside the safe box 80..880 (G-l). FIELD is the charcoal's box: a 3.5% / 2% cream margin IS the deckle. */
+  const LP_PORTRAIT = { FIELD: { x: 0.035, y: 0.02, w: 0.93, h: 0.96 }, TOP: 150, X: 80, W: 800, TITLE_W: 920, BOTTOM: 1280, GAP: 24, CHART_MIN: 320 };   /* TITLE_W: the Shorts right-hand column starts below y~900, so the title band may run to x=1000 */
+  const lpPortraitLayout = (E) => {
+    const P = LP_PORTRAIT, px = (v) => v.toFixed(0) + "px";
+    for (const el of [E.title, E.subEl, E.src, E.rail]) { el.style.left = px(P.X); el.style.width = px(P.W); el.style.maxWidth = px(P.W); }
+    E.title.style.top = px(P.TOP); E.title.style.width = px(P.TITLE_W); E.title.style.maxWidth = px(P.TITLE_W);
+    const h1 = E.title.offsetHeight, subTop = P.TOP + h1 + 16;
+    E.subEl.style.top = px(subTop);
+    const h2 = E.subEl.textContent.trim() ? E.subEl.offsetHeight : 0, chartTop = subTop + h2 + P.GAP + 8;
+    const hs = E.src.textContent.trim() ? E.src.offsetHeight : 0, hr = E.rail.children.length ? E.rail.offsetHeight : 0;
+    const chartH = Math.round(Math.max(P.CHART_MIN, P.BOTTOM - chartTop - (hs ? hs + P.GAP : 0) - (hr ? hr + P.GAP : 0)));
+    E.chart.style.left = px(P.X); E.chart.style.top = px(chartTop); E.chart.style.width = px(P.W); E.chart.style.height = px(chartH);
+    E.chart.setAttribute("viewBox", "0 0 " + P.W + " " + chartH);   /* the viewBox IS the pixel box: builders draw in stage px */
+    E.src.style.top = px(chartTop + chartH + P.GAP);
+    E.rail.style.top = px(chartTop + chartH + P.GAP + (hs ? hs + P.GAP : 0));
+    return { W: P.W, H: chartH };
+  };
+  /* portrait copy: the sub keeps its first clause (to ";" or the first sentence end), the source its first clause (to ";") -
+     one column has no room for the rest, and the selected-date rule moves to the axis ticks (E28) */
+  const lpFirstClause = (str, sentence) => {
+    const s = String(str || ""), cuts = [s.indexOf(";"), sentence ? s.indexOf(". ") : -1].filter((i) => i > 0);
+    if (!cuts.length) return s;
+    const i = Math.min(...cuts); return s.slice(0, i + (s[i] === "." ? 1 : 0)).trim();
+  };
+  /* a currency unit is a prefix ("$577", "-$40"); every other unit is a suffix ("12%") */
+  const lpWithUnit = (str, unit) => unit === "$" ? (String(str).startsWith("-") ? "-$" + String(str).slice(1) : "$" + str) : str + (unit || "");
   const NSV = "http://www.w3.org/2000/svg";
   const lpEl = (tag, cls, parent, at) => {
     const e = tag === "svg" || (parent && parent.namespaceURI === NSV && tag !== "div" && tag !== "span")
@@ -1386,11 +1445,12 @@
     if (pg.plate && A[pg.plate]) { page.style.backgroundImage = 'url("' + A[pg.plate] + '")'; page.style.backgroundSize = ((pg.plate_zoom || 1) * 100).toFixed(1) + "% " + ((pg.plate_zoom || 1) * 100).toFixed(1) + "%"; page.style.backgroundPosition = "center"; }
     /* the BOARD box: measured from the inked plate when one exists (page.board, fractions of the frame), else the
        s9.26 default 6% / 8% / 88% x 84%; the field fallback and the chart take the same box */
-    const bd = pg.board || { x: 0.06, y: 0.08, w: 0.88, h: 0.84 };
+    const bd = pg.board || (PORTRAIT ? LP_PORTRAIT.FIELD : { x: 0.06, y: 0.08, w: 0.88, h: 0.84 });   /* portrait: the charcoal runs to the deckle */
     const boardCentre = { x: (bd.x + bd.w / 2) * 100, y: (bd.y + bd.h / 2) * 100 };
     /* the punch (E22 addendum 6) crops the page to 1/PUNCH_SCALE around the board centre: title, source and the
        chart box are placed inside that region from the first frame so nothing written is ever cut off */
-    const vis = { x: bd.x + bd.w / 2 - 0.5 / LP.PUNCH_SCALE, y: bd.y + bd.h / 2 - 0.5 / LP.PUNCH_SCALE, w: 1 / LP.PUNCH_SCALE, h: 1 / LP.PUNCH_SCALE };
+    const ps = PORTRAIT ? 1 : LP.PUNCH_SCALE;   /* no punch in portrait (P41): the whole frame is the visible region */
+    const vis = { x: bd.x + bd.w / 2 - 0.5 / ps, y: bd.y + bd.h / 2 - 0.5 / ps, w: 1 / ps, h: 1 / ps };
     const boxCss = (el) => { el.style.left = (bd.x * 100).toFixed(2) + "%"; el.style.top = (bd.y * 100).toFixed(2) + "%"; el.style.width = (bd.w * 100).toFixed(2) + "%"; el.style.height = (bd.h * 100).toFixed(2) + "%"; };
     const grain = lpEl("svg", "lp-grain", page, { width: "100%", height: "100%" });
     grain.innerHTML = '<filter id="lpg' + seed + '"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="7" stitchTiles="stitch"/>'
@@ -1401,7 +1461,10 @@
        resolves under either so the ink ends at a definite edge. Clipped by .lp-field. */
     const field = lpEl("div", "lp-field", page);
     boxCss(field);
-    const fsvg = lpEl("svg", "", field, { viewBox: "0 0 1690 907", preserveAspectRatio: "none" });
+    /* the field's own pixel box: 1690x907 is the landscape board (s9.26); portrait takes the board's stage-px size so the
+       seeps stay round and the strokes run the page's width (fk scales the seeded jitter and radii with it) */
+    const fw = PORTRAIT ? Math.round(bd.w * STAGE_W) : 1690, fh = PORTRAIT ? Math.round(bd.h * STAGE_H) : 907, fk = PORTRAIT ? Math.max(fw, fh) / 1690 : 1;
+    const fsvg = lpEl("svg", "", field, { viewBox: "0 0 " + fw + " " + fh, preserveAspectRatio: "none" });
     fsvg.innerHTML = '<defs><filter id="lpsoak' + seed + '" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="14"/></filter></defs>';   /* the soak's wet edge, inside the board */
     const mode = pg.field === "scribble" ? "scribble" : "soak";
     const goo = lpEl("g", "", fsvg, mode === "soak" ? { filter: "url(#lpsoak" + seed + ")" } : {});
@@ -1409,55 +1472,42 @@
     if (mode === "soak") {
       for (let i = 0; i < LP.SEEPS; i++) {
         const col = i % 3, row = Math.floor(i / 3);
-        const cx = 282 + col * 563 + (lpHash(seed, i, 1) - 0.5) * 300, cy = 150 + row * 303 + (lpHash(seed, i, 2) - 0.5) * 160;
+        const cx = (PORTRAIT ? fw / 6 + col * fw / 3 : 282 + col * 563) + (lpHash(seed, i, 1) - 0.5) * 300 * fk;
+        const cy = (PORTRAIT ? fh / 6 + row * fh / 3 : 150 + row * 303) + (lpHash(seed, i, 2) - 0.5) * 160 * fk;
         const c = lpEl("circle", "", goo, { cx: cx.toFixed(1), cy: cy.toFixed(1), r: 0, fill: "#25313C" });
-        blobs.push({ c, R: 560 + lpHash(seed, i, 4) * 360, lag: lpHash(seed, i, 5) * 0.35 });
+        blobs.push({ c, R: (560 + lpHash(seed, i, 4) * 360) * fk, lag: lpHash(seed, i, 5) * 0.35 });
       }
     } else {
       for (let r = 0; r < LP.STROKES; r++) {
-        const y = 40 + (827) * r / (LP.STROKES - 1), pts = [];
+        const y = 40 + (fh - 80) * r / (LP.STROKES - 1), pts = [];
         for (let k = 0; k < 9; k++) {
-          const u = k / 8, x = 60 + 1570 * (r % 2 ? 1 - u : u) + (lpHash(seed, r * 9 + k, 6) - 0.5) * 40;
+          const u = k / 8, x = 60 + (fw - 120) * (r % 2 ? 1 - u : u) + (lpHash(seed, r * 9 + k, 6) - 0.5) * 40;
           pts.push([x, y + (lpHash(seed, r * 9 + k, 7) - 0.5) * 44]);
         }
         const d = pts.map(([x, yy], k) => (k ? "L" : "M") + x.toFixed(1) + " " + yy.toFixed(1)).join(" ");
-        const p = lpEl("path", "", goo, { d, stroke: "#25313C", "stroke-width": 76, "stroke-linecap": "round", "stroke-linejoin": "round", fill: "none" });
+        const p = lpEl("path", "", goo, { d, stroke: "#25313C", "stroke-width": Math.round(76 * fk), "stroke-linecap": "round", "stroke-linejoin": "round", fill: "none" });
         const len = p.getTotalLength ? p.getTotalLength() : 1700;
         p.setAttribute("stroke-dasharray", len); p.setAttribute("stroke-dashoffset", len);
         strokes.push({ p, len });
       }
     }
     const nib = lpEl("circle", "", fsvg, { r: 9, fill: "#25313C", opacity: 0 });
-    const rect = lpEl("rect", "", fsvg, { x: 0, y: 0, width: 1690, height: 907, fill: "#25313C", opacity: 0 });
+    const rect = lpEl("rect", "", fsvg, { x: 0, y: 0, width: fw, height: fh, fill: "#25313C", opacity: 0 });
     /* TWO-PLATE path (operator, 2026-09-03: "have GPT generate a cream plate and a charcoal-filled cream plate,
        then fade the charcoal plate in over the top, then draw the line"): page.field_plate names the inked
        plate; it cross-fades over the cream page in beat 3 and the procedural field stays hidden. */
     const fieldPlate = pg.field_plate && A[pg.field_plate] ? lpEl("div", "lp-fieldplate", page) : null;
     if (fieldPlate) { fieldPlate.style.backgroundImage = 'url("' + A[pg.field_plate] + '")'; field.style.display = "none"; }
     const title = lpEl("div", "lp-ink lp-title", page);
-    title.style.left = (Math.max(bd.x + 0.027, vis.x + 0.03) * 100).toFixed(2) + "%"; title.style.top = (Math.max(bd.y + 0.024, vis.y + 0.035) * 100).toFixed(2) + "%";
     const subEl = lpEl("div", "lp-ink lp-sub", page);
-    subEl.style.left = title.style.left; subEl.style.top = (parseFloat(title.style.top) + 5.6).toFixed(2) + "%";
     const src = lpEl("div", "lp-ink lp-src", page);
-    src.style.left = (Math.max(0.06, vis.x + 0.03) * 100).toFixed(2) + "%";
-    const glyphs = [...lpGlyphs(title, pg.title || "", seed), ...lpGlyphsWrap(subEl, pg.sub || "", seed + 2), ...lpGlyphs(src, pg.source || "", seed + 1)];
+    const subText = PORTRAIT ? lpFirstClause(pg.sub || "", true) : (pg.sub || ""), srcText = PORTRAIT ? lpFirstClause(pg.source || "", false) : (pg.source || "");
+    const glyphs = PORTRAIT
+      ? [...lpGlyphsWrap(title, pg.title || "", seed), ...lpGlyphsWrap(subEl, subText, seed + 2), ...lpGlyphsWrap(src, srcText, seed + 1)]
+      : [...lpGlyphs(title, pg.title || "", seed), ...lpGlyphsWrap(subEl, subText, seed + 2), ...lpGlyphs(src, srcText, seed + 1)];
     /* chart area inside the field, leaving the declared quiet zone for docks (s9.28 B3/C2) */
     const qz = pg.quiet_zone || null;
     const chart = lpEl("svg", "lp-chart", page, { viewBox: "0 0 1000 560" });
-    /* the chart box lives inside the punched region (with room for the title above and the source below) */
-    /* the chart box is the BOARD clipped to the punched region (a host plate's board is only part of the page) */
-    const reg = pg.punch === false ? bd : { x: Math.max(bd.x, vis.x), y: Math.max(bd.y, vis.y), w: Math.min(bd.x + bd.w, vis.x + vis.w) - Math.max(bd.x, vis.x), h: Math.min(bd.y + bd.h, vis.y + vis.h) - Math.max(bd.y, vis.y) };
-    /* a host plate may declare the chart box outright (page.chart_box, measured clear of the host's hand) */
-    const cb = pg.chart_box ? { x: pg.chart_box.x + 0.02 * pg.chart_box.w, y: pg.chart_box.y + 0.15 * pg.chart_box.h, w: 0.96 * pg.chart_box.w, h: 0.74 * pg.chart_box.h }
-                            : { x: reg.x + 0.03 * reg.w, y: reg.y + 0.15 * reg.h, w: 0.94 * reg.w, h: 0.74 * reg.h };
-    /* a page whose captions are pinned to the anchor (a host plate, C5) keeps its chart and source above the
-       caption band: the chart ends at 79% of the frame so the source line under it never meets a caption */
-    if (pg.caption === "anchor") cb.h = Math.max(0.2, Math.min(cb.h, 0.79 - cb.y));
-    chart.style.width = ((qz ? 0.6 : 0.9) * cb.w * 100).toFixed(2) + "%"; chart.style.height = (cb.h * 100).toFixed(2) + "%";
-    chart.style.left = ((cb.x + (qz === "left" ? 0.4 : 0.05) * cb.w) * 100).toFixed(2) + "%"; chart.style.top = (cb.y * 100).toFixed(2) + "%";
-    /* the sub wraps inside the chart's width; the source writes directly under the chart box (never in the caption band) */
-    subEl.style.width = chart.style.width; subEl.style.left = chart.style.left;
-    src.style.top = ((cb.y + cb.h) * 100 + 1.2).toFixed(2) + "%"; src.style.left = chart.style.left;
     /* the badge rail: ALWAYS a row grouped under the chart and its source (operator, 2026-09-03: the quiet zone is the
        caption's; a badge that keys a line is that line's dynamic label instead - see buildLedgerLine) */
     const rail = lpEl("div", "lp-rail", page);
@@ -1468,16 +1518,40 @@
         '<span class="pill-tag" style="color:' + (ACCENT[bd.accent] || "var(--sunflower)") + '">' + bd.tag + '</span></span>';
       return { el, at: LP_BADGE0 + LP_BADGE_STEP * bi };
     });
-    rail.style.left = chart.style.left; rail.style.top = ((cb.y + cb.h) * 100 + 4.4).toFixed(2) + "%"; rail.style.maxWidth = chart.style.width;
+    let geom = { W: 1000, H: 560 };
+    if (PORTRAIT) {
+      geom = lpPortraitLayout({ title, subEl, src, chart, rail });
+    } else {
+      title.style.left = (Math.max(bd.x + 0.027, vis.x + 0.03) * 100).toFixed(2) + "%"; title.style.top = (Math.max(bd.y + 0.024, vis.y + 0.035) * 100).toFixed(2) + "%";
+      subEl.style.left = title.style.left; subEl.style.top = (parseFloat(title.style.top) + 5.6).toFixed(2) + "%";
+      src.style.left = (Math.max(0.06, vis.x + 0.03) * 100).toFixed(2) + "%";
+      /* the chart box lives inside the punched region (with room for the title above and the source below) */
+      /* the chart box is the BOARD clipped to the punched region (a host plate's board is only part of the page) */
+      const reg = pg.punch === false ? bd : { x: Math.max(bd.x, vis.x), y: Math.max(bd.y, vis.y), w: Math.min(bd.x + bd.w, vis.x + vis.w) - Math.max(bd.x, vis.x), h: Math.min(bd.y + bd.h, vis.y + vis.h) - Math.max(bd.y, vis.y) };
+      /* a host plate may declare the chart box outright (page.chart_box, measured clear of the host's hand) */
+      const cb = pg.chart_box ? { x: pg.chart_box.x + 0.02 * pg.chart_box.w, y: pg.chart_box.y + 0.15 * pg.chart_box.h, w: 0.96 * pg.chart_box.w, h: 0.74 * pg.chart_box.h }
+                              : { x: reg.x + 0.03 * reg.w, y: reg.y + 0.15 * reg.h, w: 0.94 * reg.w, h: 0.74 * reg.h };
+      /* a page whose captions are pinned to the anchor (a host plate, C5) keeps its chart and source above the
+         caption band: the chart ends at 79% of the frame so the source line under it never meets a caption */
+      if (pg.caption === "anchor") cb.h = Math.max(0.2, Math.min(cb.h, 0.79 - cb.y));
+      chart.style.width = ((qz ? 0.6 : 0.9) * cb.w * 100).toFixed(2) + "%"; chart.style.height = (cb.h * 100).toFixed(2) + "%";
+      chart.style.left = ((cb.x + (qz === "left" ? 0.4 : 0.05) * cb.w) * 100).toFixed(2) + "%"; chart.style.top = (cb.y * 100).toFixed(2) + "%";
+      /* the sub wraps inside the chart's width; the source writes directly under the chart box (never in the caption band) */
+      subEl.style.width = chart.style.width; subEl.style.left = chart.style.left;
+      src.style.top = ((cb.y + cb.h) * 100 + 1.2).toFixed(2) + "%"; src.style.left = chart.style.left;
+      rail.style.left = chart.style.left; rail.style.top = ((cb.y + cb.h) * 100 + 4.4).toFixed(2) + "%"; rail.style.maxWidth = chart.style.width;
+    }
     const inlineBadges = {}; (pg.badges || []).forEach((bd) => { if (bd.inline) inlineBadges[LP_BADGE_COL[bd.accent]] = bd; });
     const st = { root, page, edge, blobs, strokes, nib, rect, goo, glyphs, chart, fieldPlate, boardCentre, badges, inlineBadges, kind: pg.builder || "story",
                  bars: [], paths: [], labels: [], callout: null, cval: null, vals: pg.values || [],
-                 vstr: pg.value_strings || [], emph: Number.isInteger(pg.emphasize) ? pg.emphasize : -1 };   /* no emphasis declared = no datum styled (spec emits null) */
+                 vstr: pg.value_strings || [], emph: Number.isInteger(pg.emphasize) ? pg.emphasize : -1,
+                 geom, portrait: PORTRAIT, linePts: [] };   /* geom: the chart's drawing box (viewBox units); linePts: each series' points in it, for exact datum targets */   /* no emphasis declared = no datum styled (spec emits null) */
     /* one builder per treatment (s9.28; P35 Builder Architecture) - each harvested from its own component, never merged */
     const builders = { "dense-line": buildLedgerLine, race: buildLedgerRace, decline: buildLedgerDecline, combo: buildLedgerCombo };
     (builders[st.kind] || buildLedgerBars)(st, pg);
     /* keyed per world element: the wipe paints the same scene into wA and wB */
     ledgerState.set(el.id + "|" + scene.scene_id, st);
+    el.__lp = st;   /* resolveTarget reads the active page's points from its world element */
     return st;
   };
   const buildLedgerBars = (st, pg) => {
@@ -1487,7 +1561,8 @@
     const n = Math.max(1, st.vals.length);
     const lo0 = Math.min(0, ...st.vals), hi0 = Math.max(0, ...st.vals);
     const pad = Math.max(1e-9, (hi0 - lo0) * 0.14), lo = lo0 - (lo0 < 0 ? pad : 0), hi = hi0 + (hi0 > 0 ? pad : 0);
-    const bottom = 440, top = 90, x0 = 60, x1 = 980, gap = 0.34, unit = pg.unit || "";
+    const G = st.geom || { W: 1000, H: 560 }, P = !!st.portrait;   /* portrait (P41): stage px, 40px labels below, 59px values and pill above */
+    const bottom = P ? G.H - 70 : 440, top = P ? 150 : 90, x0 = P ? 150 : 60, x1 = P ? G.W - 30 : 980, gap = 0.34, unit = pg.unit || "";
     const my = (v) => bottom - (v - lo) / (hi - lo || 1) * (bottom - top);
     const base = my(0);
     const bw = (x1 - x0) / n * (1 - gap);
@@ -1499,19 +1574,20 @@
       const bar = lpEl("rect", "bar" + (neg ? " neg" : " pos") + (i === st.emph ? " emph" : ""), st.chart,
         { x: x.toFixed(1), y: y.toFixed(1), width: bw.toFixed(1), height: h.toFixed(1), rx: 6 });   /* grows from the zero baseline, up or down */
       bar.style.transformOrigin = "0 " + base.toFixed(1) + "px"; bar.style.transform = "scaleY(0)";
-      const lab = lpEl("text", "lab", st.chart, { x: (x + bw / 2).toFixed(1), y: bottom + 34, "text-anchor": "middle", opacity: 0 });
+      const lab = lpEl("text", "lab", st.chart, { x: (x + bw / 2).toFixed(1), y: bottom + (P ? 52 : 34), "text-anchor": "middle", opacity: 0 });
       lab.textContent = (pg.labels || [])[i] || "";
-      const vy = neg ? base + h + 26 : base - h - 14;
+      const vy = neg ? base + h + (P ? 62 : 26) : base - h - (P ? 22 : 14);
       const val = lpEl("text", "val", st.chart, { x: (x + bw / 2).toFixed(1), y: vy.toFixed(1), "text-anchor": "middle", opacity: 0 });
-      val.textContent = (st.vstr[i] != null ? String(st.vstr[i]) : lpFmt(v)) + unit;
+      val.textContent = lpWithUnit(st.vstr[i] != null ? String(st.vstr[i]) : lpFmt(v), unit);
       st.bars.push({ bar, lab, val, h, x: x + bw / 2, i, neg, end: neg ? base + h : base - h });
     });
     const e = st.bars[Math.min(st.emph, st.bars.length - 1)];
     if (e) {
       const cg = lpEl("g", "", st.chart, { opacity: 0 });
-      const py = e.neg ? e.end + 24 : e.end - 66;   /* the pill sits past the bar's far end, never over it */
-      lpEl("rect", "cpill", cg, { x: (e.x - 64).toFixed(1), y: py.toFixed(1), width: 128, height: 42, rx: 8 });
-      const ct = lpEl("text", "callout", cg, { x: e.x.toFixed(1), y: (py + 30).toFixed(1), "text-anchor": "middle" });
+      const CP = P ? { w: 160, h: 84, ty: 61, up: 128, dn: 40, rx: 14 } : { w: 128, h: 42, ty: 30, up: 66, dn: 24, rx: 8 };   /* portrait pill: 59px type, narrower than a bar pitch so the neighbours' values stay clear */
+      const py = e.neg ? e.end + CP.dn : e.end - CP.up;   /* the pill sits past the bar's far end, never over it */
+      lpEl("rect", "cpill", cg, { x: (e.x - CP.w / 2).toFixed(1), y: py.toFixed(1), width: CP.w, height: CP.h, rx: CP.rx });
+      const ct = lpEl("text", "callout", cg, { x: e.x.toFixed(1), y: (py + CP.ty).toFixed(1), "text-anchor": "middle" });
       e.val.setAttribute("opacity", 0); e.val.style.display = "none";
       st.callout = cg; st.cval = ct; st.cfinal = e.val.textContent; st.cnum = st.vals[e.i]; st.cunit = unit;
     }
@@ -1519,7 +1595,8 @@
   const buildLedgerLine = (st, pg) => {
     const ax = pg.axes || {}, series = pg.series || [];
     const PAL = { crimson: "#ED6A4A", teal: "#178C83", cobalt: "#8fb3f0", amber: "#F5B72E", deemph: "#b8c4d0" };
-    const L = 70, R = 220, T = 40, B = 470, W = 1000;
+    const G = st.geom || { W: 1000, H: 560 }, P = !!st.portrait;   /* portrait (P41): stage px; no right margin for an inline name - it sits above the line's end */
+    const L = P ? 150 : 70, R = P ? 70 : 220, T = P ? 90 : 40, B = P ? G.H - 80 : 470, W = G.W;
     const Y = (v) => ax.log ? Math.log10(v) : v;
     let x0 = 1e9, x1 = -1e9, y0 = 1e9, y1 = -1e9;
     for (const s of series) for (const [x, v] of s.pts) { x0 = Math.min(x0, x); x1 = Math.max(x1, x); y0 = Math.min(y0, Y(v)); y1 = Math.max(y1, Y(v)); }
@@ -1532,7 +1609,7 @@
       while (tv <= hi) { if (tv >= lo) { const y = my(tv); lpEl("line", "grid", st.chart, { x1: L, x2: W - R, y1: y.toFixed(1), y2: y.toFixed(1) }); lpText(st.chart, "lab", L - 10, y + 8, "end", lpTick(tv) + (ax.unit || "")); } tv *= 2; }
     } else lpYTicks(st, y0, y1, my, L, W - R, ax.unit || "", L - 10);
     lpYLabel(st, pg, L, T - 12);
-    (ax.xticks || []).forEach(([x, lab]) => { const tx = lpEl("text", "lab", st.chart, { x: mx(x).toFixed(1), y: B + 32, "text-anchor": "middle" }); tx.textContent = lab; });
+    (ax.xticks || []).forEach(([x, lab]) => { const tx = lpEl("text", "lab", st.chart, { x: mx(x).toFixed(1), y: B + (P ? 52 : 32), "text-anchor": "middle" }); tx.textContent = lab; });
     series.forEach((s, i) => {
       const d = s.pts.map(([x, v], k) => (k ? "L" : "M") + mx(x).toFixed(1) + " " + my(v).toFixed(1)).join(" ");
       /* a single-metric line takes its SIGN colour (blood red down, green up); multi-line pages keep their series key */
@@ -1543,13 +1620,16 @@
       p.setAttribute("stroke-dasharray", len); p.setAttribute("stroke-dashoffset", len);
       const tip = lpEl("circle", "", st.chart, { r: 6, fill: col, opacity: 0 });
       const last = s.pts[s.pts.length - 1];
-      const name = lpEl("text", "sname", st.chart, { x: (mx(last[0]) + 12).toFixed(1), y: (my(last[1]) + 8).toFixed(1), fill: col, opacity: 0 });
+      const prev = s.pts.length > 1 ? s.pts[s.pts.length - 2] : last;   /* portrait: the name ends left of the last segment so a steep drop never runs through it */
+      const name = lpEl("text", "sname", st.chart, P ? { x: (Math.min(mx(last[0]), mx(prev[0])) - 8).toFixed(1), y: (my(last[1]) - 30).toFixed(1), "text-anchor": "end", fill: col, opacity: 0 }
+                                                     : { x: (mx(last[0]) + 12).toFixed(1), y: (my(last[1]) + 8).toFixed(1), fill: col, opacity: 0 });
+      st.linePts.push(s.pts.map(([x, v]) => [mx(x), my(v)]));   /* the exact datum positions, for the species' targets */
       name.textContent = (s.label ? s.label + " " : "") + (s.name || "");
       /* DYNAMIC LABEL: the badge that keys this line rides its inline name as the tag, in the accent - one
          reveal, one real estate (operator, 2026-09-03) */
       const ib = (st.inlineBadges || {})[s.color];
       if (ib && ib.tag) { const tg = lpEl("tspan", "tagchip", name, { dx: 12, fill: col }); tg.textContent = ib.tag; }
-      st.paths.push({ p, len, tip, name, stagger: i / Math.max(1, series.length), ny: my(last[1]) + 8 });
+      st.paths.push({ p, len, tip, name, stagger: i / Math.max(1, series.length), ny: my(last[1]) + (P ? -30 : 8) });
     });
     /* s9.23b inline names never overprint: push apart any two ends closer than one line */
     const order = [...st.paths].sort((a, b) => a.ny - b.ny);
@@ -1594,11 +1674,11 @@
     for (let tv = Math.ceil(lo / step - 1e-9) * step; tv <= hi + 1e-9; tv += step) {
       const v = Math.abs(tv) < step * 1e-6 ? 0 : tv, y = my(v);
       out.push(lpEl("line", v === 0 ? "ax" : "grid", st.chart, { x1: xa, x2: xb, y1: y.toFixed(1), y2: y.toFixed(1) }));
-      out.push(lpText(st.chart, "lab", labX, y + 8, "end", lpTick(v) + unit));
+      out.push(lpText(st.chart, "lab", labX, y + (st.portrait ? 14 : 8), "end", lpWithUnit(lpTick(v), unit)));
     }
     return out;
   };
-  const lpYLabel = (st, pg, x, y, at) => { const t = (pg.axes || {}).ylabel; return t ? lpText(st.chart, "lab", x, y, "start", String(t), { style: "font-size:22px;fill:#aeb6be", ...(at || {}) }) : null; };
+  const lpYLabel = (st, pg, x, y, at) => { const t = (pg.axes || {}).ylabel; return t ? lpText(st.chart, "lab", x, y, "start", String(t), { style: "font-size:" + (st.portrait ? 40 : 22) + "px;fill:#aeb6be", ...(at || {}) }) : null; };
   /* RACE (bar-chart-race): ranked horizontal bars per period. EVERYTHING is a smooth function of u (period units):
      a value eases (smoothstep) between consecutive period values over the WHOLE period - exact at every period,
      still at both ends of each; the rank order is read from those values every frame, and a row SWAP is a pair's
@@ -1856,7 +1936,7 @@
     const n = Math.max(1, st.glyphs.length), per = LP.INK / n;
     st.glyphs.forEach((g, j) => g.style.setProperty("--w", clamp01((t3 - j * per) / (per * 1.6)).toFixed(3)));
     /* beat 5: PUNCH IN on the board - the line and the deckle margin are the room we spend (E22 addendum 6) */
-    const pk = pg.punch === false ? 0 : expoOut(clamp01(t3 / LP.PUNCH));   /* a host plate skips the punch: his gesture is the direction */
+    const pk = (pg.punch === false || PORTRAIT) ? 0 : expoOut(clamp01(t3 / LP.PUNCH));   /* a host plate skips the punch: his gesture is the direction; portrait has no margin to spend (P41) */
     const bdc = st.boardCentre || { x: 50, y: 50 };
     st.page.style.transformOrigin = bdc.x.toFixed(2) + "% " + bdc.y.toFixed(2) + "%";
     st.page.style.transform = "translateX(" + ((rk - 1) * 100).toFixed(2) + "%) scale(" + (1 + (LP.PUNCH_SCALE - 1) * pk).toFixed(4) + ")";
@@ -1870,9 +1950,9 @@
       bb.val.setAttribute("opacity", clamp01((k - 0.9) / 0.1).toFixed(2));
     });
     if (st.callout) {
-      const ck = clamp01((c - 0.55) / 0.45);
+      const ck = c >= 1 ? 1 : clamp01((c - 0.55) / 0.45);   /* (1 - 0.55) / 0.45 is 0.999... in floating point: the count must LAND on the exact string (s9.23b), never one unit short forever */
       st.callout.setAttribute("opacity", clamp01(ck / 0.3).toFixed(2));
-      st.cval.textContent = ck >= 1 ? st.cfinal : lpFmt(st.cnum * expoOut(ck)) + (st.cunit || "");
+      st.cval.textContent = ck >= 1 ? st.cfinal : lpWithUnit(lpFmt(st.cnum * expoOut(ck)), st.cunit || "");
     }
     st.paths.forEach((pp) => {
       const f = expoOut(clamp01((c - pp.stagger * 0.3) / 0.7));
@@ -1916,11 +1996,17 @@
       const world = wB.classList.contains("ledger") ? wB : wA;
       const bars = world.querySelectorAll(".lp-chart .bar");
       if (bars.length) return stageBox(bars[Math.min(tg.index | 0, bars.length - 1)]);
+      /* viewBox -> stage px under the default xMidYMid meet (the landscape chart is letterboxed in its box) */
+      const vbMap = (svg, q) => { const b = stageBox(svg), vb = svg.viewBox.baseVal, k = Math.min(b.w / vb.width, b.h / vb.height);
+        return { x: b.x + (b.w - vb.width * k) / 2 + q.x * k, y: b.y + (b.h - vb.height * k) / 2 + q.y * k, w: 0, h: 0 }; };
+      const lpst = world.__lp, pts = lpst && lpst.linePts ? lpst.linePts[tg.series | 0] : null;
+      if (pts && pts.length) {   /* the exact datum (P41): the builder's own point, never a length fraction */
+        const q = pts[Math.max(0, Math.min(tg.index | 0, pts.length - 1))]; return vbMap(lpst.chart, { x: q[0], y: q[1] });
+      }
       const ser = world.querySelectorAll(".lp-chart .ser")[tg.series | 0];
       if (ser && ser.getPointAtLength) {
         const q = ser.getPointAtLength(ser.getTotalLength() * clamp01((tg.index | 0) / Math.max(1, (tg.count || 100) - 1)));
-        const b = stageBox(ser.ownerSVGElement), vb = ser.ownerSVGElement.viewBox.baseVal;
-        return { x: b.x + q.x / vb.width * b.w, y: b.y + q.y / vb.height * b.h, w: 0, h: 0 };
+        return vbMap(ser.ownerSVGElement, q);
       }
       return null;
     }
@@ -1982,7 +2068,7 @@
   };
   const paintSpecies = (sc, t) => {
     spSvg.replaceChildren(); plife.replaceChildren();
-    plife.style.transformOrigin = "960px 540px"; plife.style.transform = camCss(camXf(sc, t));   /* plate life lives in the world: the camera carries it */
+    plife.style.transformOrigin = (STAGE_W / 2) + "px " + (STAGE_H / 2) + "px"; plife.style.transform = camCss(camXf(sc, t));   /* plate life lives in the world: the camera carries it */
     [...(sc.species || []), ...pageFocus(sc)].forEach((sp, si) => {
       const dur = sp.dur || 1, k = (t - sp.at) / Math.max(0.001, dur);
       if (k < 0 || k > 1) return;
@@ -2001,7 +2087,8 @@
         const ca = centre(a), cz = centre(z), cx = ca.cx + (cz.cx - ca.cx) * g, cy = ca.cy + (cz.cy - ca.cy) * g;
         const r0 = (Math.max(a.w, 240) / 2 + 60) / 960, id = "spot" + si;
         const defs = lpEl("defs", "", spSvg);
-        const rg = lpEl("radialGradient", "", defs, { id, cx: (cx / STAGE_W).toFixed(4), cy: (cy / STAGE_H).toFixed(4), r: 0.5 });
+        const rg = lpEl("radialGradient", "", defs, PORTRAIT ? { id, gradientUnits: "userSpaceOnUse", cx: cx.toFixed(1), cy: cy.toFixed(1), r: 960 }   /* portrait: a round hole, the offsets below keep their landscape size (960 = half the landscape width) */
+                                                            : { id, cx: (cx / STAGE_W).toFixed(4), cy: (cy / STAGE_H).toFixed(4), r: 0.5 });
         lpEl("stop", "", rg, { offset: 0, "stop-color": "#000", "stop-opacity": 0 });
         lpEl("stop", "", rg, { offset: r0.toFixed(3), "stop-color": "#000", "stop-opacity": 0 });
         lpEl("stop", "", rg, { offset: (r0 + 0.12).toFixed(3), "stop-color": "#000", "stop-opacity": SP.SPOT_DIM });
@@ -2306,6 +2393,10 @@
     const qz = stage && sc.world.kind === "ledger" && sc.world.page ? sc.world.page.quiet_zone : null;
     cap.style.left = qz === "right" ? "58%" : qz === "left" ? "120px" : "";
     cap.style.right = qz === "left" ? "58%" : qz === "right" ? "120px" : "";
+    /* PORTRAIT (P41): a ledger page fills the frame, so its stage caption takes the caption strip (y 1340-1440, G-l), never the chart */
+    const onPage = PORTRAIT && stage && sc.world.kind === "ledger";
+    cap.classList.toggle("onpage", onPage);
+    if (onPage) { cap.style.left = ""; cap.style.right = ""; }
 
     [...chips.children].forEach((c, i) => c.classList.toggle("on", i === si));
   };

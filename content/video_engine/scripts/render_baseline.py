@@ -90,6 +90,9 @@ def prepare_page(page, w: int, h: int) -> None:
         f" #fit {{ width: {w}px !important; height: {h}px !important; max-width: none !important; overflow: visible !important; }}"
         " #stage { transform: none !important; }"))
     page.set_viewport_size({"width": w + 64, "height": h + 64})
+    # the handwriting face loads on first use: fetch it explicitly so a portrait page never measures its ink
+    # in the fallback face (P41) - the template rebuilds its pages when the load lands
+    page.evaluate("() => document.fonts.load('700 68px Kalam').then(() => document.fonts.load('400 40px Kalam')).then(() => 1)")
     page.wait_for_function("document.fonts.status === 'loaded'")
     page.wait_for_timeout(250)
 

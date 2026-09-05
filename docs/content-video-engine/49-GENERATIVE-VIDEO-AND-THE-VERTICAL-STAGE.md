@@ -69,6 +69,43 @@ the build. **In portrait the chart IS the world**: the page fills the frame to i
 the charcoal fills the page (E22), the series is re-laid for the tall frame, and every label
 clears doc 50's 59 px floor on the 1920 stage. The chart is never cropped; it is re-staged.
 
+**Landed 2026-09-05 (P41) in `samples/scene-evidence-player.template.html`, keyed on
+`html[data-aspect="9:16"]` / `PORTRAIT`; the 16:9 goldens are byte-identical.** What the
+portrait page is, as built:
+
+- **The field is the frame.** The charcoal's box is `x 3.5 % / y 2 % / w 93 % / h 96 %` of the
+  stage: the cream margin that remains IS the deckle (E22). The soak's seeps are drawn in the
+  box's own pixels (round, not stretched) and the scribble's strokes run the page's width.
+- **No punch.** The landscape page punches in 1.16x to spend the deckle margin (E22 addendum 6);
+  in portrait there is no margin to spend, a punch would crop the deckle the page exists to show
+  and push the title into the Shorts top overlay. The build clock is unchanged (7.4 s).
+- **One column, measured top-down, in stage px** (`LP_PORTRAIT`): title from y=150 (zone 1),
+  sub, chart, source, badge rail, and the page ends at y=1280 so two 64 px caption lines fit the
+  strip above 1440 (G-l). x runs 80-880; the title band may run to x=1000 because the Shorts
+  right-hand column only starts below y~900. The chart's `viewBox` IS its pixel box, so the
+  builders (story bars, dense line) draw in stage pixels and every size below is a stage pixel.
+- **Type floors, derived from doc 50's arithmetic for THIS stage** (not from the landscape
+  number): 12 px on a 390 px-wide phone is the floor; the 1080-wide stage shows at 0.361x, so
+  the floor is **34 px**. Secondary text (sub, source, axis labels, pill labels) sits at 40 px
+  (14 px on the phone; pill labels at the 34 px floor), primary text (title 68, values 59,
+  callout 59, badge numbers 59, captions 64) at >= 59 px (21 px on the phone).
+- **Copy on the page.** The sub keeps its first clause (to `;` or the first sentence end) and
+  the source its first clause (to `;`): one column has no room for the rest. The selected-date
+  rule (E28) moves to the x-axis ticks, which the series declares (`xticks`: first print, peak,
+  latest). A pill is its label over its number; the tag's clause is the sub's job.
+- **The stage caption on a page takes the caption strip** (`#caption.stage.onpage`), never the
+  chart's quiet zone; the spotlight is a round hole (a bbox gradient on a 9:16 rect is a tall
+  ellipse); a `datum` target on a line resolves to the builder's own point, never a length
+  fraction (the callout ring had landed on the wrong month).
+- **Faces are fetched up front.** The handwriting face loads on first use, so a page measured
+  before it lands wraps wrong; the template fetches the Kalam faces at init and rebuilds portrait
+  pages when they land, and `render_baseline.prepare_page` does the same before it scrubs.
+- **Gates.** `gate_motion_density` reads a short honestly: M11 clocks a page's annotation from
+  the build's landing (page entry + 7.4 s) and refuses a species before it (no highlight over
+  the build, operator 2026-09-04); M07 with fewer than three full minutes is an INFO row stating
+  the opening, tail and whole-runtime rates - one full minute and a 22 s tail is no distribution
+  to rank in. Tokyo short: 12 PASS / 1 JUDGE / 1 INFO / 0 FAIL.
+
 ## 49.2 Wan 2.1 — the dials
 
 | dial | setting | why |

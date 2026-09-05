@@ -78,6 +78,10 @@ PAGE_BEAT_OFFSETS = (0.0, LP_ROLL_S, LP_ROLL_S + LP_SAVOR_S,
                      LP_ROLL_S + LP_SAVOR_S + LP_FIELD_S + LP_PUNCH_S,
                      LP_ROLL_S + LP_SAVOR_S + LP_FIELD_S + LP_PUNCH_S + LP_BUILD_S)
 # = (0.0, 0.7, 1.5, 3.9, 4.4, 7.4): roll-out, savor start, field start, punch, build start, build end + focus
+PAGE_BUILD_END_S = PAGE_BEAT_OFFSETS[-1]   # a LEDGER PAGE's chart LANDS here (7.4s after the page enters): M11's annotation clock for a page - the
+                                           # operator's ruling (2026-09-04) is no highlight over the charcoal build, so the species fires after the build, never with the roll-out
+SHORT_FULL_MINUTES = 3                     # M07 ranks whole minutes; with fewer full minutes than this (a short) there is no distribution to rank in -
+                                           # the row reports both rates as INFO (P41, 2026-09-05) instead of failing the opening against a 22s tail
 LP_BADGE0_S, LP_BADGE_STEP_S = 0.4, 0.9   # page badges spring in after the build: build end + 0.4 + 0.9k (template LP.BADGE0 / BADGE_STEP)
 DOCK_SOURCE_TIMELINE = "timeline"            # scenes[].docks enter/exit/badge_at - the player's own clock
 DOCK_SOURCE_FILE = "evidence-dock.json"      # fallback only: a timeline that carries no docks at all
@@ -378,12 +382,22 @@ def run(tl: dict, docks: list[dict], mp: dict) -> tuple[list[Gate], dict]:
         add("M06", "INFO", "no caption pages in the build - M06 not run (no silent skip: build caption-pages.json first)", "s9.15 r7")
     if dens := A["dens"]:
         opening = [d for d in dens if d[0] < OPENING_S][0]
-        ranked = sorted(dens, key=lambda x: x[1])
-        rank = [d[0] for d in ranked].index(opening[0]) + 1
-        med = st.median(d[1] for d in dens)
-        add("M07", "FAIL" if opening[1] < med else "PASS",
-            f"opening minute: {opening[1]:.1f} events/min, {opening[2]:.1f} docks/min - rank {rank}/{len(dens)} from the bottom; episode median {med:.1f}/min",
-            "E21: the opening is the densest minute, never the thinnest")
+        full = sum(1 for d in dens if d[0] + WINDOW_S <= R + 1e-6)
+        if full < SHORT_FULL_MINUTES:
+            # a SHORT (P41): one full minute and a tail is not a distribution - the opening's rate is stated beside
+            # the tail's and the whole's for the judge, never ranked against a single scaled-up tail bucket
+            tail = [d for d in dens if d[0] >= OPENING_S]
+            whole = (len(A["events"]) - 2) / (R / 60)   # the 0 and runtime sentinels are not events
+            add("M07", "INFO", f"short: {full} full minute(s) in {R:.0f}s - opening {opening[1]:.1f} events/min, {opening[2]:.1f} evidence entries/min"
+                + (f"; tail from {mm(tail[0][0])} {tail[0][1]:.1f}/min" if tail else "") + f"; whole runtime {whole:.1f}/min - no minute distribution to rank in (E21 is judged on the whole)",
+                "E21: the opening is the densest minute, never the thinnest")
+        else:
+            ranked = sorted(dens, key=lambda x: x[1])
+            rank = [d[0] for d in ranked].index(opening[0]) + 1
+            med = st.median(d[1] for d in dens)
+            add("M07", "FAIL" if opening[1] < med else "PASS",
+                f"opening minute: {opening[1]:.1f} events/min, {opening[2]:.1f} docks/min - rank {rank}/{len(dens)} from the bottom; episode median {med:.1f}/min",
+                "E21: the opening is the densest minute, never the thinnest")
     else:
         add("M07", "INFO", f"runtime {R:.0f}s has no full minute to rank - M07 not run (no silent skip)", "E21")
     req = [(a, d) for a, d in A["still"] if d > STILL_WARN_S]
@@ -472,17 +486,23 @@ def _first_chart_gate(tl: dict, docks: list[dict], mp: dict) -> Gate:
     why = []
     if not PARADOX_S <= t <= FIRST_CHART_MAX_S:
         why.append(f"first chart {asset} enters at {t:.1f}s - outside {PARADOX_S:.0f}-{FIRST_CHART_MAX_S:.0f}s")
+    # a LEDGER PAGE's chart lands at the build's end, not at the roll-out (the page is a bleed until then): its
+    # annotation clock is the landing, and the species must fire AFTER it (no highlight over the build - operator, 2026-09-04)
+    is_page = bool(scene) and _is_page(scene)
+    land = t + PAGE_BUILD_END_S if is_page else t
     hits = [sp for sp in (scene or {}).get("species", [])
-            if sp.get("kind") in ANNOTATED_KINDS and abs(float(sp.get("at", -1e9)) - t) <= ANNOTATE_TOL_S]
+            if sp.get("kind") in ANNOTATED_KINDS and (land - 1e-6 <= float(sp.get("at", -1e9)) <= land + ANNOTATE_TOL_S if is_page
+                                                     else abs(float(sp.get("at", -1e9)) - t) <= ANNOTATE_TOL_S)]
     if not hits:
-        why.append("first chart enters full and unannotated - declare a spotlight/callout/punch on its divergence")
+        why.append("first chart enters full and unannotated - declare a spotlight/callout/punch on its divergence"
+                   + (f" within {ANNOTATE_TOL_S:.1f}s AFTER the page's build lands at {land:.1f}s (never over the build)" if is_page else ""))
     cue = _cue_near(t, tl, mp)
     sound = "" if cue else ("; WARN no sound structure to check" if cue is None
                             else f"; WARN no sound cue within {CUE_TOL_S:.1f}s of the enter at {t:.1f}s")
     note = "" if known else " (no evidence species in the timeline - every dock treated as a chart candidate)"
     if why:
         return Gate("M11", "FAIL", "; ".join(why) + sound + note, SRC_M11)
-    msg = f"first chart {asset} enters at {t:.1f}s with {hits[0]['kind']} at {float(hits[0]['at']):.1f}s"
+    msg = f"first chart {asset} enters at {t:.1f}s" + (f", its build lands at {land:.1f}s," if is_page else "") + f" with {hits[0]['kind']} at {float(hits[0]['at']):.1f}s"
     return Gate("M11", "PASS" if cue else "WARN", msg + sound + note, SRC_M11)
 
 
