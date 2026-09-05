@@ -230,7 +230,7 @@ export class FlowCdpDriver {
    *  image mode selected and the video model family absent (2026-09-05). */
   async selectMode(mode) {
     const page = this.flowPage;
-    const want = mode === 'image' ? /Image\s*$/ : /Video\s*$/;
+    const want = mode === 'image' ? /Image/ : /Video/;   // textContent carries the icon word and whitespace
     const find = () => page.locator('button[role="radio"], [role="radio"]').filter({ hasText: want }).filter({ visible: true }).first();
     let radio = find();
     if (await radio.count() === 0) {
