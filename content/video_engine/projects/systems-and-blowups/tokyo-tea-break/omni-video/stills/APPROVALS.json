@@ -1,0 +1,16 @@
+{
+ "schema_version": "stills_approval.v1",
+ "note": "Operator approvals of the StickMike stills that seed each shot's video (image-to-video route, 2026-09-04). approved is set by the operator only.",
+ "stills": [
+  {
+   "shot": "clip-a-counter-tab",
+   "source": "omni-video/stills-x4/still-a-counter-tab-x4-raw-3.png",
+   "approved_path": "omni-video\\stills\\approved\\still-a-counter-tab.png",
+   "sha256": "06c8e7e0df5e3ca0aaad1edbc8e8eb41d9295297279e6d4366501059ae113412",
+   "approved": true,
+   "approved_by": "operator",
+   "approved_at": "2026-09-04",
+   "operator_words": "lets go with still 3"
+  }
+ ]
+}

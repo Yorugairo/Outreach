@@ -288,7 +288,9 @@ export class FlowCdpDriver {
     const matchesModel = !model || currentText.includes(model.toLowerCase()) || (isImage && /banana|imagen/i.test(currentText));
     const matchesRatio = !ratio || currentText.includes(ratio.replace(':', '_')) || currentText.includes(ratio);
     const matchesMode = isImage ? /banana|imagen/i.test(currentText) : !/banana|imagen/i.test(currentText);
-    const matchesCount = !count || new RegExp(`x${count}\b`).test(currentText);
+    // a plain string, not a template literal: inside a template literal '\b' is a BACKSPACE, so 'x4' never
+    // matched, and every second still re-clicked a hidden 'Image' tab until it timed out (2026-09-04)
+    const matchesCount = !count || new RegExp('x' + count + '\\b').test(currentText);
 
     if (matchesMode && matchesModel && matchesRatio && matchesCount) {
       console.log(`[FlowCdpDriver] Settings already match active session: "${currentText}". Preserving current drawer.`);
