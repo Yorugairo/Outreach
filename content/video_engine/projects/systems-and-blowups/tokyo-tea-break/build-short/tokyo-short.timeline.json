@@ -5035,6 +5035,6 @@
   "analytic_spring": true,
   "min_jerk": true,
   "area_squash": true,
-  "km_ink": true
+  "km_ink": false
  }
 }
