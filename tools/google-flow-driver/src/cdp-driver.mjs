@@ -230,16 +230,26 @@ export class FlowCdpDriver {
    *  image mode selected and the video model family absent (2026-09-05). */
   async selectMode(mode) {
     const page = this.flowPage;
-    const want = mode === 'image' ? /Image/ : /Video/;   // textContent carries the icon word and whitespace
-    const find = () => page.locator('button[role="radio"], [role="radio"]').filter({ hasText: want }).filter({ visible: true }).first();
-    let radio = find();
-    if (await radio.count() === 0) {
-      // the drawer is not open: the pill is the visible button carrying the ratio glyph
-      const pill = page.locator('button').filter({ hasText: /crop_9_16|crop_16_9|crop_square|crop_portrait|crop_landscape/ }).filter({ visible: true }).first();
-      if (await pill.count() > 0) { await pill.click({ timeout: 8000 }); await page.waitForTimeout(900); }
-      radio = find();
+    const want = mode === 'image' ? /Image/ : /Video/;
+    // The radios' labels are readable through innerText but NOT through Playwright's hasText filter
+    // (2026-09-05, redesigned drawer) - so walk the visible radios and read each one.
+    const find = async () => {
+      const radios = page.locator('[role="radio"]').filter({ visible: true });
+      const n = await radios.count();
+      for (let i = 0; i < n; i++) {
+        const txt = (await radios.nth(i).innerText().catch(() => '')).replace(/\s+/g, ' ').trim();
+        if (want.test(txt)) return radios.nth(i);
+      }
+      return null;
+    };
+    let radio = await find();
+    if (!radio) {
+      // the drawer is not open: open it from the settings pill and look again
+      const pill = this.settingsPill();
+      if (await pill.count() > 0) { await pill.first().click({ timeout: 8000 }); await page.waitForTimeout(900); }
+      radio = await find();
     }
-    if (await radio.count() === 0) throw new Error(`Flow mode toggle for "${mode}" not found in the settings drawer`);
+    if (!radio) throw new Error(`Flow mode toggle for "${mode}" not found in the settings drawer`);
     if ((await radio.getAttribute('aria-checked')) !== 'true') {
       await radio.click({ timeout: 8000 });
       await page.waitForTimeout(700);
