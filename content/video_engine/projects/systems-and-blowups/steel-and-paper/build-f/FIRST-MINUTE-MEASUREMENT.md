@@ -51,6 +51,34 @@ Dense script + empty screen + late, crowded proof — that is the shape of 0:30�
 
 Nothing here contradicts P36; it locates the visual half of the same failure.
 
+## With OpenCV (added the same evening, under the operator's install permission)
+
+The two deferred metrics, over the same 241 frames:
+
+| window | span | optical flow (px/frame, downsampled) | saliency concentration (top 5 % share) |
+|---|---|---|---|
+| w0 | 0:00–0:15 | 1.20 | **0.276** — one clear focus at the open |
+| w1 | 0:15–0:30 | 0.83 | 0.209 |
+| **w2** | **0:30–0:45** | **0.15** — 5–10× less real motion than any other window; the Ken Burns drift is the only thing moving | 0.171 |
+| **w3** | **0:45–1:00** | 1.47 | **0.168** — the four-badge card raises energy but *not* focus: a crowded card is diffuse, not a target |
+| w4 | 1:00–1:15 | 0.88 | 0.200 |
+| w5 | 1:15–1:30 | 1.07 | 0.193 |
+| w6 | 1:30–1:45 | 1.66 | 0.170 |
+| w7 | 1:45–2:00 | 1.02 | 0.148 |
+
+Flow confirms the luminance read and removes the doubt that w2's stillness was a fade or a
+colour shift: it is real stillness, the plate drifting and nothing else. Saliency adds the
+piece motion energy could not: **focus decays monotonically from the open through the drop**
+(0.276 → 0.209 → 0.171 → 0.168) — the frame gives the eye less and less to hold from 0:00 to
+1:00 — and the first proof card does not restore it, because a card carrying four badges at
+once is a field, not a point. (w7's 0.148 says the rest of the episode has the same habit;
+the opening is where it costs the most.)
+
+So the visual shape of the drop, in three instruments: **still (flow), diffuse (saliency),
+then loud but still diffuse (energy without concentration).** The rewrite's first-minute
+rule gains a clause: the first proof should be *one* thing the eye lands on, annotated —
+which is what M11's "annotated on its divergence" already asks for.
+
 ## What this does not settle
 
 - Whether the still window *causes* the exit or merely precedes it. n = 1 cannot say.
@@ -59,8 +87,6 @@ Nothing here contradicts P36; it locates the visual half of the same failure.
 - The `still_share` column (frames under 0.5 energy) reads 0.0 everywhere because Ken
   Burns alone produces ~1–2 units of energy. If a "still" threshold is ever set, it sits
   around **2.0** on this scale — and that number is a hypothesis from this one render.
-- Saliency and flow (deferred): whether the eye had anywhere to go during w2 is exactly
-  what a saliency map would show. Worth doing when OpenCV is added, not before.
 
 ## For the rewrite
 

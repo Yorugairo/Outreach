@@ -43,3 +43,27 @@ def test_window_summary_reports_still_share(tmp_path: Path):
     rows = FM.sequence_metrics(sorted(tmp_path.glob("*.png")))
     w = FM.window_summary(rows, fps=1.0, edges=[0, 3, 6])
     assert w[0]["still_share"] == 1.0 and w[1]["still_share"] < 1.0
+
+
+def test_flow_reads_the_translation_and_a_fade_as_no_motion(tmp_path: Path):
+    import pytest
+    if not FM.HAVE_CV2:
+        pytest.skip("cv2 not installed")
+    _frame(tmp_path / "f0.png", 100); _frame(tmp_path / "f1.png", 116)      # 16 px at full size = 4 px downsampled
+    rows = FM.sequence_metrics(sorted(tmp_path.glob("*.png")))
+    assert rows[0]["flow"] is not None and rows[0]["flow"] > 0.05           # the block moved
+    a = Image.new("L", (480, 180), 20); b = Image.new("L", (480, 180), 60)  # a fade: every pixel changes, nothing moves
+    a.save(tmp_path / "g0.png"); b.save(tmp_path / "g1.png")
+    fade = FM.sequence_metrics([tmp_path / "g0.png", tmp_path / "g1.png"])[0]
+    assert fade["motion_energy"] > 30 and fade["flow"] < 0.05
+
+
+def test_saliency_concentration_is_higher_for_one_focus_than_for_a_flat_frame(tmp_path: Path):
+    import pytest
+    if not FM.HAVE_CV2:
+        pytest.skip("cv2 not installed")
+    _frame(tmp_path / "focus.png", 200)
+    Image.effect_noise((480, 180), 40).save(tmp_path / "noise.png")
+    focus = FM.saliency_concentration(FM.luminance(tmp_path / "focus.png"))
+    noise = FM.saliency_concentration(FM.luminance(tmp_path / "noise.png"))
+    assert focus is not None and noise is not None and focus > noise

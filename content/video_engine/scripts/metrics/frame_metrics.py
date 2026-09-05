@@ -1,8 +1,11 @@
 """E1 frame metrics (P40 T2): what the frames themselves say about motion, computed over a
-directory of rendered frames. Two cheap metrics in numpy; the two that need OpenCV (saliency,
-optical flow) are deferred and say so.
+directory of rendered frames. Two metrics in numpy, two in OpenCV (present on this host since
+2026-09-04; they fall away cleanly and say so when cv2 is absent).
 
     motion_energy   mean absolute luminance change between consecutive frames (0..255)
+    flow            mean dense optical-flow magnitude, downsampled px/frame - real motion, not a fade
+    saliency_concentration  share of the spectral-residual saliency mass in the top 5 % of pixels -
+                    low means the eye has nowhere in particular to go
     change_centroid where the change happened - the luminance-weighted centroid of |diff|,
                     as a fraction of width/height; None when nothing changed
 
@@ -22,7 +25,14 @@ from pathlib import Path
 import numpy as np
 from PIL import Image
 
-DEFERRED = {"saliency": "needs OpenCV (cv2 not installed)", "optical_flow": "needs OpenCV (cv2 not installed)"}
+try:
+    import cv2  # opencv-contrib-python-headless, installed 2026-09-04 under the operator's standing permission
+    HAVE_CV2 = True
+except ImportError:  # the two OpenCV metrics fall away cleanly on a bare checkout
+    cv2 = None
+    HAVE_CV2 = False
+DEFERRED = {} if HAVE_CV2 else {"saliency": "needs OpenCV (cv2 not installed)", "optical_flow": "needs OpenCV (cv2 not installed)"}
+SALIENCY_TOP = 0.05   # concentration = share of saliency mass in the top 5 % of pixels: ~0.05 diffuse, -> 1.0 one clear focus
 
 
 def luminance(path: Path, scale: int = 4) -> np.ndarray:
@@ -46,12 +56,38 @@ def pair_metrics(a: np.ndarray, b: np.ndarray) -> dict:
     return {"motion_energy": round(energy, 4), "change_centroid": [round(cx, 4), round(cy, 4)]}
 
 
+def flow_magnitude(a: np.ndarray, b: np.ndarray) -> float | None:
+    """Mean dense optical-flow magnitude (Farneback), in downsampled px per frame. Real motion,
+    as opposed to luminance change: a fade changes every pixel and moves nothing."""
+    if not HAVE_CV2:
+        return None
+    flow = cv2.calcOpticalFlowFarneback(a.astype(np.uint8), b.astype(np.uint8), None, 0.5, 3, 15, 3, 5, 1.2, 0)
+    return round(float(np.linalg.norm(flow, axis=2).mean()), 4)
+
+
+def saliency_concentration(frame: np.ndarray) -> float | None:
+    """Spectral-residual saliency: what share of the map's mass sits in its top 5 % of pixels.
+    Low = the eye has nowhere in particular to go (a bare plate); high = one clear focus."""
+    if not HAVE_CV2:
+        return None
+    ok, sal = cv2.saliency.StaticSaliencySpectralResidual_create().computeSaliency(frame.astype(np.uint8))
+    if not ok:
+        return None
+    v = np.sort(sal.ravel())[::-1]
+    total = float(v.sum())
+    if total <= 0:
+        return None
+    k = max(1, int(len(v) * SALIENCY_TOP))
+    return round(float(v[:k].sum() / total), 4)
+
+
 def sequence_metrics(frames: list[Path]) -> list[dict]:
     out = []
     prev = luminance(frames[0]) if frames else None
     for i, f in enumerate(frames[1:], start=1):
         cur = luminance(f)
-        out.append({"index": i, "frame": f.name, **pair_metrics(prev, cur)})
+        out.append({"index": i, "frame": f.name, **pair_metrics(prev, cur),
+                    "flow": flow_magnitude(prev, cur), "saliency_concentration": saliency_concentration(cur)})
         prev = cur
     return out
 
@@ -64,7 +100,11 @@ def window_summary(rows: list[dict], fps: float, edges: list[float]) -> list[dic
         energies = [r["motion_energy"] for r in sel]
         cents = [r["change_centroid"] for r in sel if r["change_centroid"]]
         drift = [abs(c2[0] - c1[0]) + abs(c2[1] - c1[1]) for c1, c2 in zip(cents, cents[1:])]
+        flows = [r["flow"] for r in sel if r.get("flow") is not None]
+        sals = [r["saliency_concentration"] for r in sel if r.get("saliency_concentration") is not None]
         out.append({"window": f"{a:g}-{b:g}s", "frames": len(sel),
+                    "flow_mean": round(st.mean(flows), 4) if flows else None,
+                    "saliency_concentration_mean": round(st.mean(sals), 4) if sals else None,
                     "motion_energy_mean": round(st.mean(energies), 4) if energies else None,
                     "motion_energy_max": round(max(energies), 4) if energies else None,
                     "still_share": round(sum(1 for e in energies if e < 0.5) / len(energies), 3) if energies else None,
@@ -83,7 +123,7 @@ def main() -> int:
     summary = window_summary(rows, args.fps, edges)
     report = {"frames": len(frames), "fps": args.fps, "deferred": DEFERRED, "windows": summary}
     for w in summary:
-        print(f"  {w['window']:<10} energy mean {w['motion_energy_mean']!s:>8}  max {w['motion_energy_max']!s:>8}  still {w['still_share']!s:>6}  drift {w['centroid_drift_mean']!s}")
+        print(f"  {w['window']:<10} energy {w['motion_energy_mean']!s:>8}  max {w['motion_energy_max']!s:>8}  flow {w['flow_mean']!s:>7}  saliency-conc {w['saliency_concentration_mean']!s:>7}  drift {w['centroid_drift_mean']!s}")
     if args.json:
         Path(args.json).write_text(json.dumps({**report, "rows": rows}, indent=1), encoding="utf-8")
     return 0
