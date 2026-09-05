@@ -460,6 +460,22 @@ stick sheet references the identity master and carries the reduced description �
 and `ready_for_confirmation`. The sheet exists as registered assets only after the operator
 approves the contact sheet.
 
+### A0 closed — 2026-09-04
+
+Both sheets approved and promoted; `StickMike` is bound in Flow beside `Mike`. What the
+rolls decided, in order:
+
+| roll | what changed | what we learned |
+|---|---|---|
+| stick v1 | detailed identity master as reference | comes back as flat 2D Mike — a detailed reference pulls toward detail |
+| v2 | description only, no reference | a real stick figure, but a mascot |
+| v3 | the operator's six reference frames as *traits*: brush weight, dot features that snap to extremes, mid-action, prop-carried identity | attitude landed; "a few bold strokes" of locs gave three hairs |
+| v4 | one line changed: a full crown of short locs | fixed |
+| **v5** | **ground to cream `#F4E6C7`, ink to charcoal `#25313C`** | **came back on a deckle-edged page unprompted — the E22 signature with the figure on it.** Operator: *"if cream works it gives us a unique space and opens up using the drawing lane to create both styles."* |
+
+**The stick lane's ground is the house ground.** Not white. The page and the man are one system,
+which is what the drawing lane needed to be true.
+
 ## 53.11 Status after the Flow plan
 
 `briefs/FLOW-OMNI-EXPLAINER-PROMPT-PLAN.md` (2026-09-04) is the production version of this

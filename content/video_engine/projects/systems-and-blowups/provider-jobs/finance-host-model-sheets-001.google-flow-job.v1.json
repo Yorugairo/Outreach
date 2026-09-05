@@ -81,7 +81,7 @@
     "approval_id": "operator-2026-09-04-contact-sheet",
     "expected_account_verified": true
   },
-  "status": "approved",
+  "status": "complete",
   "outputs": [
     {
       "scene_id": "finance-host-v1-model-sheet",
@@ -278,11 +278,31 @@
       "count": 4,
       "result": "Cream works. raw-1 came back on a deckle-edged cream page unprompted - the E22 ledger signature with the figure on it, which is the proof the drawing lane can carry both. raw-1 recommended (deckle, strongest attitude, 14/14 consistent); raw-2 alternate (soft pencil, no deckle); raw-3 drops skin fill on three heads; raw-4 painterly, locs long.",
       "recommendation": "finance-host-stick-v1-model-sheet-v5-raw.png"
+    },
+    {
+      "attempt": 9,
+      "date": "2026-09-04",
+      "scene": "bind finance-host-stick-v1",
+      "result": "StickMike bound from the approved deckle sheet; chip verified. X19's Create Body path was not used and stays open."
     }
   ],
   "approved_outputs": {
     "finance-host-v1": "assets/generated/host/finance-host-v1-model-sheet.png (first roll + back view from x4-raw-4)",
     "finance-host-stick-v1": "assets/generated/host/finance-host-stick-v1-model-sheet.png (v5-raw, cream deckle)"
   },
-  "artifact_hash": "87a0bcb89fb8bd800eb8b6c789574b009e2e663dfba616e185abee888ea3134a"
+  "flow_characters": {
+    "finance-host-v1": {
+      "name": "Mike",
+      "note": "bound before A0; the retention sheet is its reference asset in the repo, not re-uploaded to the binding"
+    },
+    "finance-host-stick-v1": {
+      "name": "StickMike",
+      "entity_id": "fe6a3f2b-b6a7-4a79-a918-0d7a4f8cbba1",
+      "bound_from": "assets/generated/host/finance-host-stick-v1-model-sheet.png",
+      "bound_on": "2026-09-04",
+      "how": "New character -> Add from project -> Upload media -> search the picker by filename -> click the option (that alone creates the character; 'Add media' is not part of it) -> name in the Character name input -> Done. Two false starts: 'Add media' once took the picker's first item (wrong sheet, deleted), and a re-run created a duplicate (deleted).",
+      "chip_verified": "mention-chip data-reference-type=entity data-entity-id=fe6a3f2b... in the composer on a dry run"
+    }
+  },
+  "artifact_hash": "b1a0b165406d0ff2bf4d6e3e09572873d24491b1c3724584dbad2a03400f2a64"
 }
