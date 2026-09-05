@@ -107,6 +107,11 @@ KEYFRAME_EVERY = 12   # frames (0.5 s at 24 fps): a seek decodes at most half a 
 # the Remotion kit lives in content/video_engine/remotion-kit/ (rescued from a session scratchpad); its render is appended
 # after the last word - the card DISSOLVES in over the ring clip (which keeps playing underneath), the audio is padded to the new runtime
 OUTRO = HERE / "outro/outro-v2.mov"   # 6.2 s, 1080x1920 ProRes, the DARK starfield the operator showed (2026-09-05): "It's not magic. It's mechanics." / "follow for the next teardown" / @MoneyPhysicsHQ; outro-brand is the cream re-skin, outro-yt the "subscribe" variant
+# THE BRAND LINE (operator, 2026-09-05: 'might as well record it ... so we only ever have to record it once'): one ElevenLabs pickup,
+# "Not a panic. Not a plot. Mechanics.", a CHANNEL asset (channel-assets/money-physics/outro/vo, 2.3 s, request VWz6F5nZII19oUXxsUYt),
+# stitched BRAND_GAP after the last word so it plays under the card; the card's own text is its caption (no caption page)
+BRAND_LINE = HERE.parents[2] / "channel-assets/money-physics/outro/vo/audio/scene_1.mp3"
+BRAND_GAP, BRAND_TAIL = 0.7, 1.0
 OUTRO_S, OUTRO_LEAD = 6.2, 0.1   # the card's fade begins a tenth before the last word ends and DISSOLVES in (M16: the last caption pops 2.52 s before the VO ends) (operator, 2026-09-05: the wipe into a title card was 'madness')
 
 
@@ -215,12 +220,19 @@ def main() -> int:
     tl_built = json.loads((BUILD / "timeline.json").read_text(encoding="utf-8"))
     runtime_s = tl_built["runtime_s"]
     # the outro extends the runtime past the VO: pad the (paused) audio with silence so the player plays to the end
-    t_outro = round(runtime_s - OUTRO_LEAD, 3)
-    runtime_s = round(t_outro + OUTRO_S, 3)
+    t_vo_end = runtime_s
+    t_outro = round(t_vo_end - OUTRO_LEAD, 3)
+    line_s = float(subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", str(BRAND_LINE)], capture_output=True, text=True).stdout or 0)
+    t_line = round(t_vo_end + BRAND_GAP, 3)
+    runtime_s = round(max(t_outro + OUTRO_S, t_line + line_s + BRAND_TAIL), 3)
     audio = BUILD / tl_built.get("paused_audio", "audio/episode.mp3")
-    padded = audio.with_name(audio.stem + "-padded.mp3")
-    subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", str(audio), "-af", f"apad=whole_dur={runtime_s}", "-c:a", "libmp3lame", "-q:a", "2", str(padded)], check=True)
-    padded.replace(audio)
+    stitched = audio.with_name(audio.stem + "-stitched.mp3")
+    # the take, BRAND_GAP of silence, the brand line, then silence to the runtime - one stream, the take's own sample rate
+    subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", str(audio), "-f", "lavfi", "-t", str(BRAND_GAP), "-i", "anullsrc=r=44100:cl=mono", "-i", str(BRAND_LINE),
+                    "-filter_complex", f"[0:a]aresample=44100,aformat=channel_layouts=mono[a];[1:a]aresample=44100,aformat=channel_layouts=mono[g];[2:a]aresample=44100,aformat=channel_layouts=mono[l];[a][g][l]concat=n=3:v=0:a=1,apad=whole_dur={runtime_s}[out]",
+                    "-map", "[out]", "-c:a", "libmp3lame", "-q:a", "2", str(stitched)], check=True)
+    stitched.replace(audio)
+    print(f"  brand line  : {line_s:.2f}s at {t_line:.2f}s (gap {BRAND_GAP}s after the last word); card at {t_outro:.2f}s; runtime {runtime_s:.2f}s")
     tl_built["runtime_s"] = runtime_s
     (BUILD / "timeline.json").write_text(json.dumps(tl_built, indent=1), encoding="utf-8")
     (BUILD / "evidence-dock.json").write_text("[]", encoding="utf-8")   # the short docks nothing; its proof is pages

@@ -19,6 +19,12 @@ the editor's `node_modules` (`content/video_engine/editor/`). To render again, i
 `npx remotion render src/index.tsx Outro out/outro-brand.mov --codec prores` from this folder
 with the editor's `node_modules` on the path, or add `remotion`, `react`, `react-dom` here first.
 
+**The brand line** - "Not a panic. Not a plot. Mechanics." - is a CHANNEL asset recorded once (ElevenLabs, 2026-09-05,
+request `VWz6F5nZII19oUXxsUYt`, 2.3 s, the take's own voice and settings) at
+`content/video_engine/channel-assets/money-physics/outro/` (`BRAND-LINE.txt`, `vo/short-take.json`, `vo/audio/scene_1.words.json`;
+the mp3 is gitignored like every take - it lives in that folder and its `vo/cache/`). Every short stitches it 0.7 s after its
+last word, under the card; the card's own text is its caption.
+
 Renders are gitignored (`*.mov`, `*.png`). The outro render the Tokyo short uses is
 `projects/systems-and-blowups/tokyo-tea-break/outro/outro-brand.mov` (6.2 s, ProRes, silent
 audio track); `build_short.py` re-encodes it to a seekable mp4 and appends it after the last word.

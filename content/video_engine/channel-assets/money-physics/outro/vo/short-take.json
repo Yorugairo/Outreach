@@ -1,0 +1,23 @@
+{
+  "script": "BRAND-LINE.txt",
+  "parts": 1,
+  "seed": "4242",
+  "model": "eleven_multilingual_v2",
+  "settings": {
+    "stability": 0.4,
+    "similarity_boost": 0.75,
+    "style": 0.2,
+    "use_speaker_boost": true
+  },
+  "characters": 35,
+  "duration_s": 2.276,
+  "request_id": "VWz6F5nZII19oUXxsUYt",
+  "audio": "content\\video_engine\\channel-assets\\money-physics\\outro\\vo\\audio\\scene_1.mp3",
+  "words": "content\\video_engine\\channel-assets\\money-physics\\outro\\vo\\audio\\scene_1.words.json",
+  "cache_hit": false,
+  "gates_forced": {
+    "state": "missing",
+    "report": "content\\video_engine\\channel-assets\\money-physics\\outro\\BRAND-LINE-GATES.md",
+    "reason": "the brand line: a one-sentence pickup stitched onto the outro card, recorded ONCE as a channel asset (operator, 2026-09-05: 'might as well record it ... so we only ever have to record it once'); not a script, no opening structure to gate"
+  }
+}
