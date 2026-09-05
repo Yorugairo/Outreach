@@ -25,6 +25,8 @@ request `VWz6F5nZII19oUXxsUYt`, 2.3 s, the take's own voice and settings) at
 the mp3 is gitignored like every take - it lives in that folder and its `vo/cache/`). Every short stitches it 0.7 s after its
 last word, under the card; the card's own text is its caption.
 
-Renders are gitignored (`*.mov`, `*.png`). The outro render the Tokyo short uses is
-`projects/systems-and-blowups/tokyo-tea-break/outro/outro-brand.mov` (6.2 s, ProRes, silent
-audio track); `build_short.py` re-encodes it to a seekable mp4 and appends it after the last word.
+Renders are gitignored (`*.mov`, `*.png`). The four renders sit beside the Tokyo clips at
+`projects/systems-and-blowups/tokyo-tea-break/outro/` (6.2 s each, ProRes, silent audio track): the short uses
+`outro-v2.mov`, the dark card the operator showed; `outro-brand.mov` is the cream brand re-skin, `outro-yt.mov` says
+"subscribe" for YouTube, `outro.mov` is the first reel's `@frmwrkd` card. `build_short.py` re-encodes the chosen one to a
+seekable mp4 and DISSOLVES it in as the last word ends (exit `dissolve`).
