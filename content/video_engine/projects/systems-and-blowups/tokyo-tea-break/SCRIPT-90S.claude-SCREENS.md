@@ -42,7 +42,7 @@ for the tag's owning gate (R1: final, never re-derived). `verdict` is
 the agent's, per tag: **true / laundered** (CHECK-RESPONSIBILITIES R2,
 §3a) - a laundered tag is a FAIL at the phase, not a note.
 
-- [stakes]@0:04  window: PASS — G07  "The Fed hasn't moved, but your mortgage rate climbed anyway."  → verdict: ____
+- [stakes]@0:04  window: PASS — G07  "The Fed hasn't moved, but your borrowing costs climbed anyway."  → verdict: ____
 - [archetype]@0:07  window: PASS — G37  "Three men in blue ties blame the deficit, the Fed, or the vibes at Jackson Hole."  → verdict: ____
 - [tricolon]@0:07  window: PASS — G12  "Three men in blue ties blame the deficit, the Fed, or the vibes at Jackson Hole."  → verdict: ____
 - [rehook]@0:15  window: PASS — G13  "Here's what nobody on that panel is watching: our biggest lender."  → verdict: ____

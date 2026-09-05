@@ -1,8 +1,8 @@
 # SCRIPT GATES - SCRIPT-90S-VO.claude.txt
 
 script: SCRIPT-90S-VO.claude.txt
-generated: 2026-09-05T05:49:21+00:00
-script_hash: 973bc6bbeca509bb82aeda8f401e3da271c4901b4270f193133f2ca54f5b6e90
+generated: 2026-09-05T05:53:26+00:00
+script_hash: 79fc80ceff9df48f52a71f165ef53995f60ed3bc519a3ee629b0f4d948c6eaf4
 timing_source: estimated
 
 TOOLS      lint: exit 0, 0 fails | audit: exit 1, 1/2, timing=estimated |
@@ -28,7 +28,7 @@ exit 1
 
 ```
 === SCRIPT-90S-VO.claude.txt ===
-             chars: 1327
+             chars: 1329
          runtime_s: 82.9
            runtime: 1m 22s
          sentences: 20
@@ -125,7 +125,7 @@ exit 1
           Humes pauses rationed: ~three per minute maximum (P1)
   [PASS ] G19 closed by [loop] at 0:48
           The catalyst is a micro loop CLOSED inside 30-60s, not exposition (P2)
-  [PASS ] G20 longest gap 7s
+  [PASS ] G20 longest gap 8s
           PLATFORM new-info cadence: something genuinely new every 15-30s (P2)
   [PASS ] G21 2 [loop] in P2
           L2 loops: 2-3 micro-loop closes at this runtime (P2 geometry / MAP s0)
