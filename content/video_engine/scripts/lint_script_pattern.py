@@ -15,6 +15,7 @@ import sys
 from dataclasses import dataclass, field
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))   # bare-module import works from any cwd / test runner
 import beat_tags  # noqa: E402  - the one owner of the mark/tag set
 
 ALLOWED_MARKS = beat_tags.ALL_MARKS   # delivery marks + structural beat tags
