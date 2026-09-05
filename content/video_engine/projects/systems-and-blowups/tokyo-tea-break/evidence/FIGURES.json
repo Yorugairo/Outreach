@@ -42,5 +42,18 @@
   "drop_3_to_5_pct": -17.5,
   "us10y_now": 4.45,
   "meta_trailing_pe": 23.0
+ },
+ "meta_yield": {
+  "years": 10,
+  "us10y_now": 4.77,
+  "as_of": "2026-09",
+  "meta_trailing_pe": 23.0,
+  "implied_pe": {
+   "4%": 24.8,
+   "4.5%": 23.6,
+   "5%": 22.5,
+   "5.5%": 21.5
+  },
+  "change_at_5_5_pct": -6.5
  }
 }

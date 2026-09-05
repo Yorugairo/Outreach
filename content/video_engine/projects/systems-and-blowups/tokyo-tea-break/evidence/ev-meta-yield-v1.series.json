@@ -1,0 +1,57 @@
+{
+ "title": "Meta's multiple, by Treasury yield",
+ "sub": "Trailing P/E 23.0x at today's 10-year (4.77%), and the multiple the same year-10 dollar supports at each yield. Arithmetic on the discount identity - no forecast",
+ "src": "META trailing P/E: Yahoo Finance via yfinance; US 10-year: FRED DGS10 (2026-09) - fetched 2026-09-04",
+ "unit": "x",
+ "bars": [
+  {
+   "label": "4%",
+   "value": 24.8,
+   "color": "cobalt"
+  },
+  {
+   "label": "4.5%",
+   "value": 23.6,
+   "color": "cobalt"
+  },
+  {
+   "label": "5%",
+   "value": 22.5,
+   "color": "crimson"
+  },
+  {
+   "label": "5.5%",
+   "value": 21.5,
+   "color": "crimson"
+  }
+ ],
+ "badges": [
+  {
+   "label": "META P/E NOW",
+   "value": "23.0x",
+   "tag": "at a 4.77% 10-year",
+   "accent": "cobalt"
+  },
+  {
+   "label": "AT 5.5%",
+   "value": "-6%",
+   "tag": "the same profit, discounted harder",
+   "accent": "crimson"
+  }
+ ],
+ "status": "REAL",
+ "fetched": "2026-09-04",
+ "facts": {
+  "years": 10,
+  "us10y_now": 4.77,
+  "as_of": "2026-09",
+  "meta_trailing_pe": 23.0,
+  "implied_pe": {
+   "4%": 24.8,
+   "4.5%": 23.6,
+   "5%": 22.5,
+   "5.5%": 21.5
+  },
+  "change_at_5_5_pct": -6.5
+ }
+}

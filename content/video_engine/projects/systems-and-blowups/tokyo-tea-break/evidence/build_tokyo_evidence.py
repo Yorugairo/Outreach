@@ -217,6 +217,44 @@ def discount_rate(pe: dict, us10y: float) -> dict:
     return facts
 
 
+# ------------------------------------------------- 5. the second number: Meta's multiple by yield
+def meta_yield(pe: dict) -> dict:
+    """Meta's ACTUAL trailing P/E, and what the same multiple implies at 10-year yields of
+    4 / 4.5 / 5 / 5.5 % (operator, 2026-09-04: the second-number beat shows a chart with
+    Meta's real P/E and the potential impact of yields on it).
+
+    Same identity as discount_rate(), applied to the multiple: P/E(r) = P/E(now) x
+    ((1 + r_now) / (1 + r))^10 - the multiple a dollar of year-10 profit supports when the
+    discount rate moves from today's 10-year to r. No growth, no terminal value, no
+    fair-value claim; the "now" bar IS the live figure, the others are arithmetic on it.
+    """
+    YEARS = 10
+    us10 = fred("DGS10")
+    now_day, now = sorted(us10.items())[-1]
+    now /= 100.0
+    rates = [0.04, 0.045, 0.05, 0.055]
+    pe_now = pe["trailing_pe"]
+    implied = {r: round(pe_now * ((1.0 + now) / (1.0 + r)) ** YEARS, 1) for r in rates}
+    worst = implied[0.055]
+    facts = {"years": YEARS, "us10y_now": round(now * 100, 2), "as_of": now_day,
+             "meta_trailing_pe": pe_now, "implied_pe": {f"{r*100:g}%": v for r, v in implied.items()},
+             "change_at_5_5_pct": round((worst / pe_now - 1) * 100, 1)}
+    write("ev-meta-yield-v1", {
+        "title": "Meta's multiple, by Treasury yield",
+        "sub": f"Trailing P/E {pe_now:.1f}x at today's 10-year ({now*100:.2f}%), and the multiple the same "
+               f"year-{YEARS} dollar supports at each yield. Arithmetic on the discount identity - no forecast",
+        "src": f"META trailing P/E: Yahoo Finance via yfinance; US 10-year: FRED DGS10 ({now_day}) - fetched {FETCHED}",
+        "unit": "x",
+        # unsigned multiples; heights fall as the yield rises - the signed change rides on a badge (E28)
+        "bars": [{"label": f"{r*100:g}%", "value": implied[r],
+                  "color": "cobalt" if r <= now else "crimson"} for r in rates],
+        "badges": [{"label": "META P/E NOW", "value": f"{pe_now:.1f}x", "tag": f"at a {now*100:.2f}% 10-year", "accent": "cobalt"},
+                   {"label": "AT 5.5%", "value": f"{facts['change_at_5_5_pct']:+.0f}%", "tag": "the same profit, discounted harder", "accent": "crimson"}],
+        "status": "REAL", "fetched": FETCHED, "facts": facts,
+    })
+    return facts
+
+
 def main() -> int:
     print(f"  Tokyo Tea Break evidence — fetched {FETCHED}")
     months, rows = tic_table5()
@@ -224,9 +262,10 @@ def main() -> int:
     hy = hedged_yield()
     pe = meta_pe()
     dr = discount_rate(pe, hy["us10y"])
+    my = meta_yield(pe)
     (OUT / "FIGURES.json").write_text(json.dumps(
         {"fetched": FETCHED, "japan_holdings": jp, "hedged_yield": hy, "meta_pe": pe,
-         "discount_rate": dr}, indent=1), encoding="utf-8")
+         "discount_rate": dr, "meta_yield": my}, indent=1), encoding="utf-8")
     print(f"     + FIGURES.json")
     print(f"\n  Japan  {jp['latest_month']}  ${jp['latest']:,.1f}B  "
           f"({jp['drop_bn']:+,.1f}B from {jp['peak_month']}, {jp['drop_pct']:+.1f}%)  share {jp['share_pct']}%")
