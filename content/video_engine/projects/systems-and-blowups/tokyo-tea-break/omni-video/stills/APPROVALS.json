@@ -11,6 +11,56 @@
    "approved_by": "operator",
    "approved_at": "2026-09-04",
    "operator_words": "lets go with still 3"
+  },
+  {
+   "shot": "clip-b-dial-and-bill",
+   "source": "omni-video/stills/still-b-dial-and-bill-raw.png",
+   "approved_path": "omni-video\\stills\\approved\\still-b-dial-and-bill.png",
+   "sha256": "606592503f8c20a0c0045f08b96cd13e6e90ca00ed8f9984f4a89521c71e4954",
+   "approved": true,
+   "approved_by": "operator",
+   "approved_at": "2026-09-05",
+   "operator_words": "approve the stills"
+  },
+  {
+   "shot": "clip-c-blue-ties-panel",
+   "source": "omni-video/stills/still-c-blue-ties-panel-raw.png",
+   "approved_path": "omni-video\\stills\\approved\\still-c-blue-ties-panel.png",
+   "sha256": "6883fd7d7b49966be0bbfed98d0772cdb8330679fb558cf584a0385aedda93a5",
+   "approved": true,
+   "approved_by": "operator",
+   "approved_at": "2026-09-05",
+   "operator_words": "approve the stills"
+  },
+  {
+   "shot": "clip-f-toll-gate-to-fab",
+   "source": "omni-video/stills/still-f-toll-gate-to-fab-raw.png",
+   "approved_path": "omni-video\\stills\\approved\\still-f-toll-gate-to-fab.png",
+   "sha256": "8883924e0646f0314120668f9fab4476cdf6a16bf5e3e9afc36f60b24929554e",
+   "approved": true,
+   "approved_by": "operator",
+   "approved_at": "2026-09-05",
+   "operator_words": "approve the stills"
+  },
+  {
+   "shot": "clip-g-two-fingers",
+   "source": "omni-video/stills/still-g-two-fingers-raw.png",
+   "approved_path": "omni-video\\stills\\approved\\still-g-two-fingers.png",
+   "sha256": "c989b347db9b55a6b2e24301ad00eb97c73098a3b570f0facb30396899f4252c",
+   "approved": true,
+   "approved_by": "operator",
+   "approved_at": "2026-09-05",
+   "operator_words": "approve the stills"
+  },
+  {
+   "shot": "clip-a2-counter-colder",
+   "source": "omni-video/stills/still-a2-counter-colder-raw.png",
+   "approved_path": "omni-video\\stills\\approved\\still-a2-counter-colder.png",
+   "sha256": "aa47b449ac4a9f83e31fda259432cbbce14c28825fa6f76d66667badd0268bc0",
+   "approved": true,
+   "approved_by": "operator",
+   "approved_at": "2026-09-05",
+   "operator_words": "approve the stills"
   }
  ]
 }
