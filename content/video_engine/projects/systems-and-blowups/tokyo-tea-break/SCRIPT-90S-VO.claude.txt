@@ -10,9 +10,11 @@ Tokyo took a tea break. And left America with an unfunded bar tab. [post-key]
 
 [pre-key] [promise] [rehook] By the end you'll read both numbers yourself.
 
-[catalyst] [new] Since February, Japan has sold a hundred and twenty-two billion dollars of it, a tenth of the pile. [loop] [new] [foreshadow] The Treasury prints the new total monthly, and that print is your first number. The threshold: that pile grows, or it shrinks. Where we sit: a tenth below the February peak. The flip: the pile grows again. If it does, I was wrong.
+[catalyst] [new] Since February, Japan has sold a hundred and twenty-two billion dollars of it, a tenth of the pile. [loop] [new] [foreshadow] The Treasury prints the new total monthly, and that print is your first number.
 
 [loop] [new] Tokyo has pledged ten trillion yen to chips, and if that works, it beats our bonds. [loop-close] [rehook] And here's what nobody says: the money went home, and the tab stayed here. [post-key]
+
+The threshold: that pile grows, or it shrinks. Where we sit: a tenth below the February peak. The flip: the pile grows again. If it does, the money came back, and I was wrong.
 
 [dip] [signpost] So, the second number: it's on your phone. Pull up Meta and find its price-to-earnings multiple: that's the share of the price that's profit not yet earned, and a higher yield discounts it.
 
