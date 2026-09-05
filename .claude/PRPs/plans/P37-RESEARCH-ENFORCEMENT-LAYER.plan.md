@@ -199,13 +199,13 @@ Write sets are disjoint except T1 and T3, which are sequenced rather than parall
 - Evidence: pending
 
 ### T9: apply the parallax dials - every current value is wrong
-- Status: review
+- Status: complete
 - Owner: parent
 - Depends on: none (but see the human gate - the file has uncommitted concurrent work)
 - Write set: `tools/google-flow-driver/src/parallax-runner.mjs`
 - Acceptance: `intensity` clamped to `0.10-0.12` in all six presets (resolved from the node source, 45 §45.4 - `strength` is inert without a `feature`), `tiling_mode: "none"` with a 1.10x pre-zoom crop, `ssaa: 2.0`, `quality: 85`, model `depth_anything_v2_vitl` (precision per X6). One test roll on a landscape plate shows no kaleidoscope ceiling and no rubber-sheet tearing.
 - Validate: `python content/video_engine/scripts/gate_comfy_config.py tools/google-flow-driver/src/parallax-runner.mjs` (expect PASS after; it FAILed with 5 findings before)
-- Evidence: 2026-09-04 - applied on top of the runner's uncommitted concurrent work (E30: unowned code is corrected, not planned around): `intensity` is a named parameter defaulting to 0.11 in all six presets, `strength` annotated inert, `steady_value` 0.40, model `depth_anything_v2_vitl_fp16` (precision per X6), `quality` 85, `ssaa` 2.0, `tiling_mode` none, and the 1.10x crop implemented as `ImageScaleBy` -> `ImageCrop` on the Depthflow frames back to the plate's own size (read from the PNG/JPEG header by `imageSize()`; the crop hides the bare border that tiling none leaves). Gate: `VERDICT: PASS (0 findings)`; `node --check` clean. **Open: the one test roll on a landscape plate** - needs ComfyUI up on :8188.
+- Evidence: 2026-09-04 - applied on top of the runner's uncommitted concurrent work (E30: unowned code is corrected, not planned around): `intensity` is a named parameter defaulting to 0.11 in all six presets, `strength` annotated inert, `steady_value` 0.40, model `depth_anything_v2_vitl_fp16` (precision per X6), `quality` 85, `ssaa` 2.0, `tiling_mode` none, and the 1.10x crop implemented as `ImageScaleBy` -> `ImageCrop` on the Depthflow frames back to the plate's own size (read from the PNG/JPEG header by `imageSize()`; the crop hides the bare border that tiling none leaves). Gate: `VERDICT: PASS (0 findings)`; `node --check` clean. **Test roll done** (ComfyUI 0.34.2, all seven node types present, `vitl_fp16` in the model list): `world-banker-apartment-v2` 1536x1024 through the dolly preset, 30 frames -> 1536x1024 x 30 back at the plate's size. Measured: first-vs-last mean delta 1.2 (the move is real and restrained), **0 dark pixels on every 8px edge strip** (the crop covers the reveal that tiling none leaves), top-band mirror similarity 134 (a kaleidoscope reads ~0). No tearing by eye on frames 0/15/29. Clip in the session's scratchpad `parallax-t9-dolly.mp4`; X6 (fp16 vs fp32 depth) stays open - the fp16 boundaries looked clean on this plate.
 
 ### T8: G-l, G-m, G-n - the vertical and generative gates
 - Status: pending
