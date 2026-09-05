@@ -242,12 +242,14 @@ export class FlowCdpDriver {
       }
       return null;
     };
-    let radio = await find();
+    // the drawer animates open after the pill click: poll before concluding it is closed
+    let radio = null;
+    for (let i = 0; i < 8 && !radio; i++) { radio = await find(); if (!radio) await page.waitForTimeout(400); }
     if (!radio) {
       // the drawer is not open: open it from the settings pill and look again
       const pill = this.settingsPill();
-      if (await pill.count() > 0) { await pill.first().click({ timeout: 8000 }); await page.waitForTimeout(900); }
-      radio = await find();
+      if (await pill.count() > 0) { await pill.first().click({ timeout: 8000 }); }
+      for (let i = 0; i < 8 && !radio; i++) { await page.waitForTimeout(400); radio = await find(); }
     }
     if (!radio) throw new Error(`Flow mode toggle for "${mode}" not found in the settings drawer`);
     if ((await radio.getAttribute('aria-checked')) !== 'true') {
