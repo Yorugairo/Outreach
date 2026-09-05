@@ -284,6 +284,12 @@
       "date": "2026-09-04",
       "scene": "bind finance-host-stick-v1",
       "result": "StickMike bound from the approved deckle sheet; chip verified. X19's Create Body path was not used and stays open."
+    },
+    {
+      "attempt": 10,
+      "date": "2026-09-04",
+      "scene": "bind finance-host-v1",
+      "result": "New Mike bound from the approved retention sheet (1376x768); old binding kept as MikeMasterV3. Lesson: character edits cannot adopt a reference; bind from the file."
     }
   ],
   "approved_outputs": {
@@ -293,7 +299,16 @@
   "flow_characters": {
     "finance-host-v1": {
       "name": "Mike",
-      "note": "bound before A0; the retention sheet is its reference asset in the repo, not re-uploaded to the binding"
+      "entity_id": "dab5d902-9559-44bb-9fea-4823c52de93f",
+      "bound_from": "assets/generated/host/finance-host-v1-model-sheet.png",
+      "bound_on": "2026-09-04",
+      "previous": {
+        "name": "MikeMasterV3",
+        "entity_id": "3c2a35c3-38f7-4302-8469-a6ccfeb00cef",
+        "note": "the original @Mike, bound from the identity master; renamed, kept intact with its history (one edit generation on it from a failed 'adopt this sheet' attempt)"
+      },
+      "how": "Operator: 'you never bound stick mike retention, we still just have the old mike image.' An edit on the existing character conditions on its old image and returns a near-copy - it cannot adopt a sheet. Only creating a character FROM the file binds it. So: rename old -> MikeMasterV3, New character from the sheet -> name Mike.",
+      "chip_verified": "mention-chip entity dab5d902 on a dry run"
     },
     "finance-host-stick-v1": {
       "name": "StickMike",
@@ -304,5 +319,5 @@
       "chip_verified": "mention-chip data-reference-type=entity data-entity-id=fe6a3f2b... in the composer on a dry run"
     }
   },
-  "artifact_hash": "b1a0b165406d0ff2bf4d6e3e09572873d24491b1c3724584dbad2a03400f2a64"
+  "artifact_hash": "c0726ac313d13cb6da9db2a82613226f4c665ccaf5882fcb8c17cd4f770e5845"
 }
