@@ -33,6 +33,24 @@
       "prompt": "A stick figure character as a character model sheet on a plain white ground, 16:9, three rows with small handwritten row labels. Top row, standing neutral at identical height: front view, left side view, three-quarter view, back view. Middle row, five head-only portraits: happy, neutral, surprised, worried, angry. Bottom row, five full-body poses: waving, thinking with a hand at the chin, presenting with an open palm toward the viewer, explaining with both hands raised, shrugging. Consistent proportions in every cell. He is a stick figure with a large round head, a big wide face and big expressive eyes behind black rectangular glasses, a small neatly trimmed goatee, warm brown skin, short sculpted loc twists on top of the head, a thin single-line black stick body with simple stick arms and legs and small round hands, and only a small flat deep-indigo suit block on the torso with a flat copper tie. Thick uniform black lines and solid flat colour fills so he reads at thumbnail size. Negative: no realistic anatomy, no detailed tailoring, no lapel pin, no shoes with pattern, no shading gradients, no text other than the row labels, no numbers, no charts, no logos.",
       "prompt_sha256": "0c495612d09244b2467dc71f3baa6329467cc3308b2810c58edded7c65fe7d91",
       "note": "v2 - a real stick figure (operator: big wide face and eyes, locs). No reference image: the detailed master pulled v1 into flat 2D Mike."
+    },
+    {
+      "id": "finance-host-stick-v1-model-sheet-v3",
+      "character_id": "finance-host-stick-v1",
+      "bound_character": null,
+      "references": [],
+      "prompt": "A stick figure character model sheet on a plain white ground, 16:9, three rows with small handwritten row labels, drawn with thick confident black ink brush lines of varying weight like a viral hand-drawn explainer cartoon. The character: a round head filled flat warm brown with tiny dot eyes behind bold black rectangular glasses, a single expressive mouth line, a tiny goatee, and a cluster of short locs drawn as a few bold black strokes on top; a thin black stick body with a small flat deep-indigo vest block and a copper tie, stick arms and legs, small round hands. He has attitude in every cell - narrowed eyes, a smirk, weight shifted, caught mid-motion with speed lines where he moves. Top row, standing at identical height with a cocky lean: front view, left side view, three-quarter view, back view. Middle row, five head-only expressions pushed to the extreme: happy as a smug grin, neutral as a dead-eyed stare, surprised as huge wide eyes and a tiny o mouth, worried as a sweat drop and wobbling mouth, angry as clenched teeth with anger veins on the forehead. Bottom row, five full-body poses drawn as action: waving big mid-stride, thinking with a hand at the chin and one eyebrow up, presenting with a sharp open palm thrust at the viewer, explaining with both hands flung up and motion lines, shrugging with a smirk and shoulders to the ears. Negative: no realistic anatomy, no shading gradients, no tailoring detail, no text other than the row labels, no numbers, no charts, no logos.",
+      "prompt_sha256": "2acc215aafea8325de9542aa3d0b4aa8043767a85535dd0bdaa5f6d123303b78",
+      "note": "v3 - operator: 'the stick characters aren't cool, these guys look cool' (six reference frames: dot-eye heads, brush lines, extreme expressions, mid-action, prop-carried identity). Style traits described, no reference image."
+    },
+    {
+      "id": "finance-host-stick-v1-model-sheet-v4",
+      "character_id": "finance-host-stick-v1",
+      "bound_character": null,
+      "references": [],
+      "prompt": "A stick figure character model sheet on a plain white ground, 16:9, three rows with small handwritten row labels, drawn with thick confident black ink brush lines of varying weight like a viral hand-drawn explainer cartoon. The character: a round head filled flat warm brown with tiny dot eyes behind bold black rectangular glasses, a single expressive mouth line, a tiny goatee, and a full crown of short chunky locs covering the top of the head, drawn as many bold black strokes; a thin black stick body with a small flat deep-indigo vest block and a copper tie, stick arms and legs, small round hands. He has attitude in every cell - narrowed eyes, a smirk, weight shifted, caught mid-motion with speed lines where he moves. Top row, standing at identical height with a cocky lean: front view, left side view, three-quarter view, back view. Middle row, five head-only expressions pushed to the extreme: happy as a smug grin, neutral as a dead-eyed stare, surprised as huge wide eyes and a tiny o mouth, worried as a sweat drop and wobbling mouth, angry as clenched teeth with anger veins on the forehead. Bottom row, five full-body poses drawn as action: waving big mid-stride, thinking with a hand at the chin and one eyebrow up, presenting with a sharp open palm thrust at the viewer, explaining with both hands flung up and motion lines, shrugging with a smirk and shoulders to the ears. Negative: no realistic anatomy, no shading gradients, no tailoring detail, no text other than the row labels, no numbers, no charts, no logos.",
+      "prompt_sha256": "ce04ab9902f087b6bde4f7362a4bc53749456a1816fd2fbfce95205edbeeab02",
+      "note": "v4 = v3 with only the hair line changed: a full crown of short chunky locs."
     }
   ],
   "driver_checks_on_return": [
@@ -116,6 +134,54 @@
       "sha256": "324e4cc61c44da756071a9427e96432bbcd972009b9ce253e287168bcd8cbec8",
       "bytes": 1648030,
       "note": "operator's pick: the first roll with the back view composited in from x4-raw-4 (PIL, no generation)"
+    },
+    {
+      "scene_id": "finance-host-stick-v1-model-sheet-v3",
+      "path": "review/claims/finance-host-model-sheets-001/finance-host-stick-v1-model-sheet-v3-raw.png",
+      "sha256": "b7acda2e224394d313b62280e4c53056964a84755856cd266096c90d0b3b7d3c",
+      "bytes": 491862
+    },
+    {
+      "scene_id": "finance-host-stick-v1-model-sheet-v3",
+      "path": "review/claims/finance-host-model-sheets-001/finance-host-stick-v1-model-sheet-v3-raw-2.png",
+      "sha256": "6ecf96f62d286882c9e2aebf9e938c343e162f42af84c286be7ee7254fc1223b",
+      "bytes": 513198
+    },
+    {
+      "scene_id": "finance-host-stick-v1-model-sheet-v3",
+      "path": "review/claims/finance-host-model-sheets-001/finance-host-stick-v1-model-sheet-v3-raw-3.png",
+      "sha256": "92530084c1ba05123f6d152c55c21f19c03fa0434a35e885dca07d01397792b4",
+      "bytes": 538743
+    },
+    {
+      "scene_id": "finance-host-stick-v1-model-sheet-v3",
+      "path": "review/claims/finance-host-model-sheets-001/finance-host-stick-v1-model-sheet-v3-raw-4.png",
+      "sha256": "604d189bf159832f7794496bd006c45c3efb8ac106502db267caf221b4001bbf",
+      "bytes": 526919
+    },
+    {
+      "scene_id": "finance-host-stick-v1-model-sheet-v4",
+      "path": "review/claims/finance-host-model-sheets-001/finance-host-stick-v1-model-sheet-v4-raw.png",
+      "sha256": "da162532e48e00efb01735af024d2cfb53ef8d7fdce066af52cb5229efc6a180",
+      "bytes": 554570
+    },
+    {
+      "scene_id": "finance-host-stick-v1-model-sheet-v4",
+      "path": "review/claims/finance-host-model-sheets-001/finance-host-stick-v1-model-sheet-v4-raw-2.png",
+      "sha256": "3f8c11a3cd71882b92112951d89573679b3b9005c9cc0bb116162ff901c89421",
+      "bytes": 519947
+    },
+    {
+      "scene_id": "finance-host-stick-v1-model-sheet-v4",
+      "path": "review/claims/finance-host-model-sheets-001/finance-host-stick-v1-model-sheet-v4-raw-3.png",
+      "sha256": "ac10df6e177d0b1562172859007b4b4dcc470a88f993fc80210d106a53529f28",
+      "bytes": 525741
+    },
+    {
+      "scene_id": "finance-host-stick-v1-model-sheet-v4",
+      "path": "review/claims/finance-host-model-sheets-001/finance-host-stick-v1-model-sheet-v4-raw-4.png",
+      "sha256": "2dea3cc42502678dca54eda2942039456b67fc7fc944a97f8be60cb85f606e65",
+      "bytes": 528999
     }
   ],
   "review_state": "quarantined",
@@ -155,7 +221,23 @@
       "count": 4,
       "result": "Four real stick figures, no reference image. raw-2 recommended (widest eyes, rectangular glasses, most consistent); raw-4 alternate; raw-1 gave round glasses; raw-3 small eyes. A first run of this batch failed on a transient click timeout before submit.",
       "recommendation": "finance-host-stick-v1-model-sheet-v2-raw-2.png"
+    },
+    {
+      "attempt": 6,
+      "date": "2026-09-04",
+      "scene": "finance-host-stick-v1-model-sheet-v3",
+      "count": 4,
+      "result": "The attitude landed: brush weight, speed lines, steam, smirk, extreme expressions. raw-3 recommended (labelled cells, strongest action row), raw-4 alternate. Miss: 'locs as a few bold strokes' produced three hairs - v4 changes only the hair line to a full crown of short locs.",
+      "recommendation": "finance-host-stick-v1-model-sheet-v3-raw-3.png"
+    },
+    {
+      "attempt": 7,
+      "date": "2026-09-04",
+      "scene": "finance-host-stick-v1-model-sheet-v4",
+      "count": 4,
+      "result": "Flow crashed mid-roll and recovered; the four images completed on the canvas and were pulled off it by URL rather than re-rolled. Full crown of locs held. raw-3 recommended (consistent in every cell, strongest action row), raw-4 alternate; raw-2 drops hair and glasses across the expression row.",
+      "recommendation": "finance-host-stick-v1-model-sheet-v4-raw-3.png"
     }
   ],
-  "artifact_hash": "62612ac4b5cebf0b13d18e3c6a9ba651f76fafbf555383b51a1dd856678ffe20"
+  "artifact_hash": "7c40485814f6faebb3af7372de3ab13ce6638896ae6d064126666ce0db27031b"
 }
