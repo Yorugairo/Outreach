@@ -625,13 +625,16 @@ export class FlowCdpDriver {
         this.resetIdleTimer();
         const currentSrc = await page.evaluate(({ prevs, seen }) => {
           const idOf = (s) => s.split('?')[0];
-          const imgs = Array.from(document.querySelectorAll("img[src*='getMediaUrlRedirect'], img[src*='flow-content.google/'], img[src*='/asb/']")).map(i => i.src)
-            .filter(s => !seen.includes(idOf(s)));
-          const newImg = imgs.find(s => !prevs.includes(s));
-          if (newImg) return newImg;
-          if (imgs.length > 0 && imgs[0] !== prevs[0]) return imgs[0];
+          // Flow lists renders NEWEST FIRST. Only the top `count` tiles can be this generation's output;
+          // an unseen image further down is an older render the lazy grid loaded late, and claiming it
+          // shifted three stills by one scene (2026-09-04). Positional, not "first unseen anywhere".
+          const imgs = Array.from(document.querySelectorAll("img[src*='getMediaUrlRedirect'], img[src*='flow-content.google/'], img[src*='/asb/']")).map(i => i.src);
+          for (let i = 0; i < Math.min(count, imgs.length); i++) {
+            const s = imgs[i];
+            if (!prevs.includes(s) && !seen.includes(idOf(s))) return s;
+          }
           return null;
-        }, { prevs: prevList, seen: Array.from(this.seenImageIds) });
+        }, { prevs: prevList, seen: Array.from(this.seenImageIds), count });
 
         if (currentSrc) {
           let bytes = null;
