@@ -179,6 +179,31 @@ is a luxury for an audience that already stayed.
 | B4 | **Gitignore on `review/`** | 46 plate waves' approval manifests are untracked. Narrowing the ignore to images tracks the manifests. |
 | ~~B5~~ | ~~Speech-rate contradiction~~ | **WITHDRAWN 2026-09-04 — there was no contradiction.** The "145–165 doctrine target" was mine; the operator asked for its origin and it has none. The doctrine's actual number is **140, an estimation constant** for pre-TTS duration guessing (`04-STORYBOARD-CONTRACT.md`: *"an estimate, not a promise"*), never a delivery rate. We run near 180 and always did. See 46 §46.6. |
 
+## The day's read — 2026-09-05 evening (the Tokyo short is done: 1:28.8, motion gate PASS)
+
+**What landed today.** P43 complete (the stroke ON, the spring, the squash ON, K-M ink kept for ink over ink); the Remotion kit
+rescued and its dark card on the tail; the brand line recorded once and paced; the water on the drain and the warps; the beds at
+the platform's LU rule and the press pack; the mount (a dance: the world fades above, the cream builds beneath); phrase/kinetic
+captions with the keyword box; the two-line word gate.
+
+**What we learned (each has a memory or a doc line).** A filter chain does not make ink - the image does, the engine keeps the
+motion (soak-ink-is-a-plate). Anything that moves word to word pins the eye; a flash is an event, not motion; energy is continuous
+voice-timed motion (caption-energy-lessons). The vertical word gate is lines, not words. Judge motion in LIVE play from the
+player's Play button (the in-app pane throttles frames while hidden). A whoosh warped to the transition's own clock reads as the
+transition. A mount is a dissolve on a word, not a cut, so M13's gap rule does not apply. Sound files must be gain-matched before
+a cue gain means anything (whoosh-2 sat 13 dB under the rest and four cues were silent for a day).
+
+**Next, in order of leverage.**
+
+| # | item | why | cost |
+|---|---|---|---|
+| 1 | **The script skill is behind the gates** - `~/.claude/skills/script-writer` predates G15b (shipped as FAIL 2026-09-04), the gate-fit ruling (move beats, never clip words), M13's cut thresholds (0.30 s gap, 0.8 of the gap, mid-word <= 25%), doc 51's shorts shape and checklist, the brand line (never write the triad - the outro carries it), E40 (video by frames), and the two-line caption gate (a short's sentences must break at 3-6 words) | every script written from the skill re-learns today's rulings the hard way | a day: a P44 "script skill sync" - one pass over the skill and the pattern kit with every gate cited by id |
+| 2 | **G2 short mode in `gate_opening_structure`** (item 4 above, still open) - there is NO short variant of the script gate; the pattern kit has no shorts section (doc 51 s51.2 describes the shape, nothing enforces it) | the Tokyo script carries 17 long-form-geometry FAILs; the skill cannot cite a gate that does not exist | half a day, before P44's shorts section |
+| 3 | The full render of the short + the muted-caption judge (V-a) on it | the first build worth judging; the render proves the player | an hour each |
+| 4 | Backlog 9: the soak as a plate reveal | the operator's ideal for the ink | one image batch + a mask mode |
+| 5 | X0 / G-o: read a 9:16 frame at 390 px | still the cheapest gate in the set | minutes |
+| 6 | B3: ~380 unpushed commits on main | operator decision | — |
+
 ## Ready to pull in — read 2026-09-05 after the hands-on day (operator: "see if we're ready to pull anything else in")
 
 Ordered by leverage against what the Tokyo build now exercises. Each names the artifact it lands on.
