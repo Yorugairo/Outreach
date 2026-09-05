@@ -12,6 +12,8 @@
 
   [FAIL ] M07 opening minute: 54.0 events/min, 2.0 docks/min - rank 1/2 from the bottom; episode median 57.7/min
           E21: the opening is the densest minute, never the thinnest
+  [FAIL ] M11 first chart enters full and unannotated - declare a spotlight/callout/punch on its divergence (no evidence species in the timeline - every dock treated as a chart candidate)
+          E24 / doc 29 s9.29: the first chart enters 0:08-0:20, annotated on its divergence, with a sound cue
   [PASS ] M01 longest still stretch 2.5s at 0:38
           doc 29 s8.19 / s9.25 stillness ceiling
   [PASS ] M02 0 stretches > 8s (working target)
@@ -30,8 +32,6 @@
           doc 29 s9.27 precedence / s9.28 C3: one camera move per window
   [PASS ] M10 no still stretch > 6s begins in the first 60s
           E24 / doc 29 s9.29: stillness inside the opening minute - 4-6s in the first 30-60s
-  [PASS ] M11 first chart ledger:s04 enters at 17.2s with spotlight at 18.4s (no evidence species in the timeline - every dock treated as a chart candidate)
-          E24 / doc 29 s9.29: the first chart enters 0:08-0:20, annotated on its divergence, with a sound cue
   [PASS ] M12 no chart dock spans a scene boundary or holds past 10s (6s in the opening minute)
           E25 / doc 29 s9.30: the chart is the proof, not the homework
   [PASS ] M14 no camera move (punch | focus_zoom | pull_back) overlaps a card entrance or a badge reveal
@@ -39,8 +39,8 @@
   [JUDGE] J01 every savor beat holds its picture (card up, badge lit), never a bare plate with a drift
           doc 29 s9.25 #3
 
-RESULT: 1 FAIL / 0 WARN / 12 PASS / 1 JUDGE / 0 INFO
+RESULT: 2 FAIL / 0 WARN / 11 PASS / 1 JUDGE / 0 INFO
 ```
 
-TIMELINE: tokyo-short.timeline.json sha256:406257209b8ca39e8cdbafc0d190e273104ec1dc3a9660d73b529d29663a9912
-VERDICT: FAIL (1 FAIL)
+TIMELINE: tokyo-short.timeline.json sha256:957a412afd3638b5e8d1c519434d658388d6bcb99294c856a613db6d55878e47
+VERDICT: FAIL (2 FAIL)

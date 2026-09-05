@@ -1988,8 +1988,8 @@
    "scene_id": "s01",
    "world": {
     "kind": "clip",
-    "asset_id": "clip-a-counter-tab",
-    "sha256": "a46f31b99298c78b4e483e33dc70265d03b0fc496f257475ad7868877e563d55",
+    "asset_id": "clip-a-counter-tab-v2",
+    "sha256": "d50b7f5c116dedc4c2218267b81cfa2bd65fd6137de0a8f2e37cea9482694fd0",
     "ken_burns": {
      "scale": 0,
      "x": 0,
@@ -2008,8 +2008,8 @@
    "scene_id": "s02",
    "world": {
     "kind": "clip",
-    "asset_id": "clip-b-dial-and-bill",
-    "sha256": "140b299d294fe0f500f9678656c10470837efef775dbb8b941b85c1aa40b7a66",
+    "asset_id": "clip-b-dial-and-bill-v2",
+    "sha256": "2cff03ac76e28af18058c8e0d89176949535f02687ff9d6a045f3445be0c1d64",
     "ken_burns": {
      "scale": 0,
      "x": 0,
@@ -2028,8 +2028,8 @@
    "scene_id": "s03",
    "world": {
     "kind": "clip",
-    "asset_id": "clip-c-blue-ties-panel",
-    "sha256": "140b299d294fe0f500f9678656c10470837efef775dbb8b941b85c1aa40b7a66",
+    "asset_id": "clip-c-blue-ties-panel-v2",
+    "sha256": "99843fa781833cf1373d61dd5d03626aa20c4494cc0068af6e5337f3e612ab72",
     "ken_burns": {
      "scale": 0,
      "x": 0,
@@ -2147,7 +2147,7 @@
    "species": [
     {
      "kind": "spotlight",
-     "at": 18.37,
+     "at": 25.57,
      "dur": 2.0,
      "target": {
       "kind": "datum",
@@ -2178,8 +2178,8 @@
    "scene_id": "s05",
    "world": {
     "kind": "clip",
-    "asset_id": "clip-g-two-fingers",
-    "sha256": "77cb76061de34263035b46e877bfdcb369d43d9cc15aff6d718eae96c72afd7e",
+    "asset_id": "clip-g-two-fingers-v2",
+    "sha256": "a6be50e2541d4086a08fe7ad5d1d72925fc91ea78c6874373c3c54c998cc484b",
     "ken_burns": {
      "scale": 0,
      "x": 0,
@@ -2328,8 +2328,8 @@
    "scene_id": "s07",
    "world": {
     "kind": "clip",
-    "asset_id": "clip-f-toll-gate-to-fab",
-    "sha256": "1f68e718b46a4296b94d2abe22fa654febe50bba3d47c4ab17f441569a9b8788",
+    "asset_id": "clip-f-toll-gate-to-fab-v2",
+    "sha256": "ceb472b41d8a0687b20f29b448ec669b74d95b9c4cb2707218108b1c94631a7d",
     "ken_burns": {
      "scale": 0,
      "x": 0,
@@ -2445,8 +2445,8 @@
    "scene_id": "s09",
    "world": {
     "kind": "clip",
-    "asset_id": "clip-a2-counter-colder",
-    "sha256": "e87ae26ba304b049a1147f03854f3e80c8eeb3177ebe89fd75b4c1d158423403",
+    "asset_id": "clip-a2-counter-colder-v2",
+    "sha256": "97bc38ff5cf12ffdbfb5df4a18a5f5d37ef5aeb7068747e42d72fe88175fd153",
     "ken_burns": {
      "scale": 0,
      "x": 0,
