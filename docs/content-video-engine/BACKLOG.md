@@ -173,11 +173,28 @@ is a luxury for an audience that already stayed.
 
 | # | item | the decision |
 |---|---|---|
-| B1 | **Tokyo short is 118 s against a 90 s cap** | Which beat loses ~24 %. Cutting the archetype is −10.4 s, and the head-fake now does that job with data. |
+| ~~B1~~ | ~~Tokyo short is 118 s against a 90 s cap~~ | **CLOSED 2026-09-05** — v11 records at 82 s (the head-fake, debate, threshold/flip and the triad cut; E40 #4). |
 | B2 | **3.9 GB pool + `f10b` worktree** | 18.4 GB, of which 8.68 GB is regenerable animatic frames. Needs a home that is not a worktree. |
-| B3 | **~180 unpushed commits** | `main` is local-only since 2026-08-30. A week of doctrine and the whole generative stack on one disk. |
+| B3 | **~350 unpushed commits (348 on 2026-09-05)** | `main` is local-only since 2026-08-30. A week of doctrine, the generative stack, the portrait page, the vortex, the ambient lane - all on one disk. |
 | B4 | **Gitignore on `review/`** | 46 plate waves' approval manifests are untracked. Narrowing the ignore to images tracks the manifests. |
 | ~~B5~~ | ~~Speech-rate contradiction~~ | **WITHDRAWN 2026-09-04 — there was no contradiction.** The "145–165 doctrine target" was mine; the operator asked for its origin and it has none. The doctrine's actual number is **140, an estimation constant** for pre-TTS duration guessing (`04-STORYBOARD-CONTRACT.md`: *"an estimate, not a promise"*), never a delivery rate. We run near 180 and always did. See 46 §46.6. |
+
+## Ready to pull in — read 2026-09-05 after the hands-on day (operator: "see if we're ready to pull anything else in")
+
+Ordered by leverage against what the Tokyo build now exercises. Each names the artifact it lands on.
+
+| # | item | why now | cost |
+|---|---|---|---|
+| 1 | **T1 curvature-reparameterised stroke in `drawOn`** (finding build order #1, flag `curvature_stroke`) | `drawOn` now draws the callout ring, the trace on the phone, the squiggle and every line build - one function, and the test is written in 47 | half a day |
+| 2 | **X0 / G-o: render a 9:16 frame at 390 px and read it** | the portrait page set its type from doc 50's arithmetic; the arithmetic has never been looked at on a phone-sized frame | minutes |
+| 3 | **V-a the muted-caption judge on the short** | shipped unwired; the short is compiled with the promise plate and three pages - the first build worth judging | an hour (Codex CLI batch, E37) |
+| 4 | **G2 short mode in `gate_opening_structure`** | v11's three FAILs are exactly the cut beats; the fixtures exist (v8-long, ep1) | half a day |
+| 5 | **X14 short-form pulse** | measurable from the build's timeline now (events/min is in the motion report: 55/min ≈ one every 1.1 s against 49 §49.6's 1.2-2.5 s) - decide whether the gate is the pulse or the ceiling | an hour |
+| 6 | **G-h Kubelka-Munk on overlapping ink** | the stain soak's overlaps read as a patchwork of greys - alpha blending, the exact defect the finding names | a day |
+| 7 | **T3 area-preserving squash as a helper** | the vortex already uses the det=1 form ad hoc; lift it behind `area_squash` and the squash-from-velocity rule follows | half a day |
+| 8 | **T2 the remaining damping cases + the seek test** | the underdamped case shipped today | half a day |
+| — | T4-T6 (ARAP, the object page, object -> chart) | no object page in the short; **not yet** | — |
+| — | X17-X19 (Flow clip tests) | the Flow lane is paused by E40; **not now** | — |
 
 ## The plan stack
 
@@ -187,7 +204,7 @@ is a luxury for an audience that already stayed.
 | ~~P37~~ | [Enforcement layer](../../.claude/PRPs/plans/P37-RESEARCH-ENFORCEMENT-LAYER.plan.md) | **COMPLETE 2026-09-04** — 14 checks shipped or on the ladder, each shown failing first (47 §5b); G15b FAIL, judge on the Codex lane | 13 gates + V-a; T0 fixes the 9:16 docks, T9 the parallax dials |
 | P38 | [Kinetics capability](../../.claude/PRPs/plans/P38-KINETICS-CAPABILITY-LAYER.plan.md) | draft | the six designed-out items; changes what the video looks like |
 | ~~P40~~ | **[Measure the first minute](../../.claude/PRPs/plans/P40-MEASURE-THE-FIRST-MINUTE.plan.md)** | **COMPLETE 2026-09-04** — gap threshold from the reference (0.30 s, 0.8 of the gap); E1 metrics in numpy; the first-minute report: the drop follows the stillest window (0:30–0:45, a 21 s bare hold) and lands on the late first chart at 0:50 | E1 metrics against **the one retention curve we hold** (drop at 0:45–1:00). **T1 settles X3 and unblocks M13 with no render and no dependency — the cheapest useful thing in the stack** |
-| P41 | The vertical stage — 49 §49.1 | **backlog** | the 3-zone short-form stage. T0 fixes dock geometry; the stage does not exist and we ship shorts. Folds in short-form cadence (X14) and the caption strip |
+| ~~P41~~ | The vertical stage — 49 §49.1 | **COMPLETE 2026-09-05** — the portrait page (49 §49.1 landing note): the chart IS the world, type floors from doc 50's arithmetic, the caption strip on every world; plus the vortex retract / spiral return (29 §9.31), the suck, the still-life species, the since-2000 holdings page | the 3-zone short-form stage. Folds in the caption strip; X14 (cadence) is measurable on the build now |
 | P42 | Grounding & compositing — 48 §48.7-48.8 | **backlog** | dual shadow, light wrap, substrate grain, horizon lock, ground binding. **Gives G-i/G-j/G-k a path to green** — today they check what nothing builds. Folds in actor idling (48 §48.4) and the Z-stack (43 §43.3) |
 
 ## Build — Tier 1, designed out (47 §1) → **[P38](../../.claude/PRPs/plans/P38-KINETICS-CAPABILITY-LAYER.plan.md)**
@@ -198,7 +215,7 @@ path stops existing. Each ships with the test named in 47.
 | # | item | the test that fails without it |
 |---|---|---|
 | **T1** | **Curvature-reparameterised stroke** in `drawOn`, with the κ₀ regulariser and width/ink coupling | `v(max κ) < v(min κ)` on a cornered path; a straight line returns finite v; `w(max κ) > w(min κ)` |
-| **T2** | **Analytic spring evaluator**, three damping regimes, the only spring API | seek test: frame N direct == frames 0..N sequential, bit-identical |
+| **T2** | **Analytic spring evaluator**, three damping regimes, the only spring API. **Partly shipped 2026-09-05:** `springPop` (underdamped, with the M_p inverse) behind `kinetics.analytic_spring`, on the badge and caption pops; the critical / overdamped cases and the seek test remain. `minJerk` shipped beside it behind `kinetics.min_jerk` (the wipe front, the suck) | seek test: frame N direct == frames 0..N sequential, bit-identical |
 | **T3** | **Area-preserving squash**, driven by velocity and deceleration | `det(A(t)) == 1` for all t and all α |
 | **T4** | **ARAP morph** with polar decomposition inside | morph through >90° of rotation; `det(J(t)) > 0` at every t |
 | **T0** | **Fix the 9:16 dock geometry** — `scene-evidence-player.template.html:155-162`. Ours: `width 952, left 64`. Safe: `width ≤ 800, x ∈ [80,880]`. We are **136 px into the right rail** where like/comment/share sit. | render one 9:16 frame; assert every dock's bounding box is inside the safe canvas |
@@ -240,7 +257,7 @@ path stops existing. Each ships with the test named in 47.
 | **A2a** | **The icon ring — sourced.** Flat, single-object, nameable: liquor store, gas pump, hospital. MIT sets (Phosphor, Tabler) recoloured to tokens, indexed like plates. Cheap, an afternoon |
 | **A2a'** | **Hero illustrations — generated.** **Spec now exists: [53](53-THE-STICKMAN-LANE.md)** — the eight-field image schema and seven-field animation schema, with **bound `@Mike` in the character slot** (no paragraph needed; the binding already works). Flow: Nano Banana 2 9:16 for stills, Omni flash 4 s for motion. **The fields we do not currently send: `SUBJECT COUNT`, `NEGATIVE RULES`, `CAMERA: static hold`, `ANTI-GLITCH LOCK`.** *Corrected 2026-09-04: an earlier note here said do not generate these. Wrong — that art is polished illustration, not stick art, and the tutorials teach the prompt.* Operator supplies the prompt pattern; the engine makes it repeatable (locked template + style tokens + the existing review quarantine). **Generation works for a listicle because each item is a new figure — style consistency, not character consistency, so the @Mike problem never arises** (52 §52.3) |
 | A2b | **Prop library — retention.** The five Tokyo props validate but do not exist as art: toll gate, empty chair + cold cup + bill, crate stamped with a future year, locked lever, lit fab |
-| A4 | The recede species ("whirlpool") — `spotlight` inverted, radius → 0 |
+| ~~A4~~ | **CLOSED 2026-09-05 by the page VORTEX** (29 §9.31): every colour on the page down the drain, then the stains; the reverse is the spiral return. Original: The recede species ("whirlpool") — `spotlight` inverted, radius → 0 |
 | A5 | Actor on the page = hands; `build-f/ledger-hands.html` is an untracked proof |
 | A6 | Expose the chart's coordinate mapper — 43 §43.2's anchor work is its general form |
 | G2 | Short-runtime mode for `gate_opening_structure.py` — 17 Tokyo FAILs are long-form geometry on a 90 s script. **Measured again 2026-09-04 on the rewrite:** the pinned P1 (0:35) + G18 (≤ 3 marks/min) + G12 (tricolon inside P1) leave a two-second slot for the promise, and P2's seven beats must sit in 0:35–1:05 — fitting a clear script to it clipped the prose until the operator said the sentences did not make sense (v3 → v4 → v5 in `tokyo-tea-break/`). The clean cut passes at 2:20; a 45–60 s short (doc 51) cannot. **Destination: a declared short mode — operator, 2026-09-04, on the Tokyo short (v9): the head-fake and the debate are CUT, the back end is cut, the signpost is one clause ("So, the first number:"); hook → mechanism → the ring survive; **and a short has no late-stage flip** (operator, same day: the threshold / where-we-sit / flip block is a long-form draw-out, cut for 1:30 - so `audit_script_doctrine` doc 35 rule 2 must not bind in short mode either); the brand triad is cut when the take runs over because the outro carries it. Spec it from v11 (`tokyo-tea-break/SCRIPT-90S-VO.claude.txt`, 3 FAILs = exactly the cut beats) with v8-long and ep1 as the long-form fixtures.** |
