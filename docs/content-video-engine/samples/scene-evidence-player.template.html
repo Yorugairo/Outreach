@@ -663,6 +663,33 @@
       + '<feComponentTransfer><feFuncR type="table" tableValues="' + f(t.r) + '"/><feFuncG type="table" tableValues="' + f(t.g) + '"/>'
       + '<feFuncB type="table" tableValues="' + f(t.b) + '"/><feFuncA type="linear" slope="' + P.ALPHA_SLOPE + '" intercept="0"/></feComponentTransfer>';
   };
+
+  /* THE ERRATIC SOAK (operator, 2026-09-05: "more erratic ... the variance spread throughout, almost like a mesh with some
+     spots having higher attraction than others"; 44 s44.3 - wicking through a random permeability field). The paper carries
+     a fixed ATTRACTION field (feTurbulence type "turbulence": the |noise| sum is a mesh of ridges between bright spots).
+     Each stain is SOFT coverage (a radial gradient, soakGradientMarkup) that grows outward; the filter multiplies the summed
+     coverage by (BASE + GAIN * attraction) and the K-M stage's alpha ramp then decides where ink has arrived - a high-attraction
+     spot lights up ahead of the front, the front travels along the ridges, low spots stay dry inside a stain until the
+     coverage is heavy, and the K-M table deepens everything that overlaps. WOBBLE is the macro displacement the soak already
+     had; BLUR wets the result. All dials (42 s42.5). */
+  const SOAK = Object.freeze({ WOBBLE_FREQ: "0.006 0.009", WOBBLE_OCT: 3, WOBBLE_SCALE: 120, ATTR_FREQ: "0.008 0.011", ATTR_OCT: 4,
+                                      ATTR_BASE: 0.05, ATTR_GAIN: 3.4, BLUR: 3, GRAD_MID: 0.55, GRAD_MID_A: 0.85 });
+
+  const soakGradientMarkup = (id, o = {}) => {
+    const P = Object.assign({}, SOAK, o);
+    return '<radialGradient id="' + id + '"><stop offset="0" stop-color="#fff" stop-opacity="1"/><stop offset="' + P.GRAD_MID + '" stop-color="#fff" stop-opacity="' + P.GRAD_MID_A + '"/>'
+      + '<stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>';
+  };
+
+  const soakFilterMarkup = (seed, fk, paperHex, inkHex, o = {}) => {
+    const P = Object.assign({}, INK, SOAK, o), s = seed & 255;
+    return '<feTurbulence type="fractalNoise" baseFrequency="' + P.WOBBLE_FREQ + '" numOctaves="' + P.WOBBLE_OCT + '" seed="' + s + '" result="n"/>'
+      + '<feDisplacementMap in="SourceGraphic" in2="n" scale="' + Math.round(P.WOBBLE_SCALE * fk) + '" xChannelSelector="R" yChannelSelector="G" result="d"/>'
+      + '<feTurbulence type="turbulence" baseFrequency="' + P.ATTR_FREQ + '" numOctaves="' + P.ATTR_OCT + '" seed="' + ((s + 13) & 255) + '" result="att"/>'
+      + '<feComposite in="d" in2="att" operator="arithmetic" k1="' + P.ATTR_GAIN + '" k2="' + P.ATTR_BASE + '" k3="0" k4="0" result="c"/>'
+      + '<feGaussianBlur in="c" stdDeviation="' + P.BLUR + '"/>'
+      + kmFilterMarkup(paperHex, inkHex, P);
+  };
   /* KINETICS:END */
   /* KINETICS:BEGIN squash */
   /* kinetics/squash.mjs - area-preserving, motion-driven squash and stretch (42 s42.3; FINDING-the-animation-math s4;
@@ -1711,10 +1738,16 @@
     /* K-M INK (44 s44.1, P43 T3, kinetics.km_ink): the stains are drawn WHITE and add their coverage (plus-lighter); after the
        displacement and blur the filter moves that coverage into the colour channels and maps it through the Kubelka-Munk
        curve of charcoal over cream (kmFilterMarkup) - overlaps deepen instead of greying, and one full stain IS the ink */
-    fsvg.innerHTML = '<defs><filter id="lpsoak' + seed + '" x="-25%" y="-25%" width="150%" height="150%"' + (kin("km_ink") ? ' color-interpolation-filters="sRGB"' : '') + '>'
-      + '<feTurbulence type="fractalNoise" baseFrequency="0.006 0.009" numOctaves="3" seed="' + (seed & 255) + '" result="n"/>'
-      + '<feDisplacementMap in="SourceGraphic" in2="n" scale="' + Math.round(110 * fk) + '" xChannelSelector="R" yChannelSelector="G"/>'
-      + '<feGaussianBlur stdDeviation="12"/>' + (kin("km_ink") ? kmFilterMarkup("#F4E6C7", "#25313C") : '') + '</filter></defs>';
+    /* ... and ERRATIC (operator, 2026-09-05, "a mesh with some spots having higher attraction than others"): under km_ink the
+       stains are soft radial coverage growing through the paper's attraction field (soakFilterMarkup) - fingers, islands
+       ahead of the front, dry holes that fill late, everything deepening by K-M where it overlaps */
+    fsvg.innerHTML = kin("km_ink")
+      ? '<defs>' + soakGradientMarkup("lpsoakg" + seed) + '<filter id="lpsoak' + seed + '" x="-25%" y="-25%" width="150%" height="150%" color-interpolation-filters="sRGB">'
+        + soakFilterMarkup(seed, fk, "#F4E6C7", "#25313C") + '</filter></defs>'
+      : '<defs><filter id="lpsoak' + seed + '" x="-25%" y="-25%" width="150%" height="150%">'
+        + '<feTurbulence type="fractalNoise" baseFrequency="0.006 0.009" numOctaves="3" seed="' + (seed & 255) + '" result="n"/>'
+        + '<feDisplacementMap in="SourceGraphic" in2="n" scale="' + Math.round(110 * fk) + '" xChannelSelector="R" yChannelSelector="G"/>'
+        + '<feGaussianBlur stdDeviation="12"/></filter></defs>';
     const mode = pg.field === "scribble" ? "scribble" : "soak";
     const goo = lpEl("g", "", fsvg, mode === "soak" ? { filter: "url(#lpsoak" + seed + ")" } : {});
     const blobs = [], strokes = [];
@@ -1733,7 +1766,7 @@
           d += " C" + (p1[0] + (p2[0] - p0[0]) / 6).toFixed(3) + " " + (p1[1] + (p2[1] - p0[1]) / 6).toFixed(3) + " " + (p2[0] - (p3[0] - p1[0]) / 6).toFixed(3) + " " + (p2[1] - (p3[1] - p1[1]) / 6).toFixed(3) + " " + p2[0].toFixed(3) + " " + p2[1].toFixed(3);
         }
         const c = lpEl("path", "", goo, Object.assign({ d: d + " Z", fill: "#25313C", transform: "translate(" + cx.toFixed(1) + " " + cy.toFixed(1) + ") scale(0)" },
-                                                    kin("km_ink") ? { fill: "#fff", style: "mix-blend-mode:plus-lighter" } : {}));
+                                                    kin("km_ink") ? { fill: "url(#lpsoakg" + seed + ")", style: "mix-blend-mode:plus-lighter" } : {}));
         blobs.push({ c, cx, cy, R: (620 + lpHash(seed, i, 4) * 420) * fk, lag: lpHash(seed, i, 5) * 0.35 });
       }
     } else {

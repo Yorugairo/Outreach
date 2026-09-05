@@ -2,7 +2,7 @@
 // identities (layers compose, hiding, the paper), the subtractive mix of two different inks, and the filter table.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { INK, hexToLin, linToHex, kmChannel, kmLayer, kmStack, alphaOver, chroma, kmHex, kmTable, kmFilterMarkup, ksFromR } from "../../scripts/kinetics/ink.mjs";
+import { INK, SOAK, hexToLin, linToHex, kmChannel, kmLayer, kmStack, alphaOver, chroma, kmHex, kmTable, kmFilterMarkup, ksFromR, soakFilterMarkup, soakGradientMarkup } from "../../scripts/kinetics/ink.mjs";
 
 const CREAM = "#F4E6C7", INKS = { charcoal: "#25313C", coral: "#ED6A4A", teal: "#2E9E5B", sunflower: "#F5B72E", blood: "#B0201F" };
 const cream = hexToLin(CREAM);
@@ -53,6 +53,16 @@ test("two DIFFERENT inks mix subtractively: sunflower over charcoal goes olive a
   }
   const km = kmLayer(hexToLin(INKS.teal), hexToLin(INKS.coral), 0.4), al = alphaOver(hexToLin(INKS.teal), hexToLin(INKS.coral), 0.5);
   assert.ok(lum(km) < lum(al) && chroma(km) < chroma(al), "coral over teal: K-M darker and browner, alpha brighter and pinker");
+});
+
+test("the erratic soak: soft coverage grows through a seeded attraction MESH and ends in the K-M stage", () => {
+  const m = soakFilterMarkup(0x51EC1E5, 1, CREAM, INKS.charcoal), g = soakGradientMarkup("g1");
+  assert.ok(m.includes('type="turbulence"') && m.includes('result="att"'), "the attraction field is a turbulence mesh, not smooth noise");
+  assert.ok(m.includes('operator="arithmetic" k1="' + SOAK.ATTR_GAIN + '" k2="' + SOAK.ATTR_BASE + '"'), "coverage x (base + gain * attraction)");
+  assert.ok(m.endsWith(kmFilterMarkup(CREAM, INKS.charcoal)), "the K-M table is the last word");
+  assert.ok(m.indexOf("feDisplacementMap") < m.indexOf('result="att"') && m.indexOf("feGaussianBlur") < m.indexOf("feColorMatrix"), "wobble, mesh, wet, then ink");
+  assert.notEqual(soakFilterMarkup(1, 1, CREAM, INKS.charcoal), soakFilterMarkup(2, 1, CREAM, INKS.charcoal), "seeded");
+  assert.ok(g.startsWith('<radialGradient id="g1">') && g.includes('stop-opacity="0"'), "a stain is soft coverage, its edge decided by the field");
 });
 
 test("the filter table runs from the paper to exactly the ink at one full stain, monotone, and its markup carries it", () => {

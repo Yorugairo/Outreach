@@ -73,3 +73,30 @@ export const kmFilterMarkup = (paperHex, inkHex, o = {}) => {
     + '<feComponentTransfer><feFuncR type="table" tableValues="' + f(t.r) + '"/><feFuncG type="table" tableValues="' + f(t.g) + '"/>'
     + '<feFuncB type="table" tableValues="' + f(t.b) + '"/><feFuncA type="linear" slope="' + P.ALPHA_SLOPE + '" intercept="0"/></feComponentTransfer>';
 };
+
+/* THE ERRATIC SOAK (operator, 2026-09-05: "more erratic ... the variance spread throughout, almost like a mesh with some
+   spots having higher attraction than others"; 44 s44.3 - wicking through a random permeability field). The paper carries
+   a fixed ATTRACTION field (feTurbulence type "turbulence": the |noise| sum is a mesh of ridges between bright spots).
+   Each stain is SOFT coverage (a radial gradient, soakGradientMarkup) that grows outward; the filter multiplies the summed
+   coverage by (BASE + GAIN * attraction) and the K-M stage's alpha ramp then decides where ink has arrived - a high-attraction
+   spot lights up ahead of the front, the front travels along the ridges, low spots stay dry inside a stain until the
+   coverage is heavy, and the K-M table deepens everything that overlaps. WOBBLE is the macro displacement the soak already
+   had; BLUR wets the result. All dials (42 s42.5). */
+export const SOAK = Object.freeze({ WOBBLE_FREQ: "0.006 0.009", WOBBLE_OCT: 3, WOBBLE_SCALE: 120, ATTR_FREQ: "0.008 0.011", ATTR_OCT: 4,
+                                    ATTR_BASE: 0.05, ATTR_GAIN: 3.4, BLUR: 3, GRAD_MID: 0.55, GRAD_MID_A: 0.85 });
+
+export const soakGradientMarkup = (id, o = {}) => {
+  const P = Object.assign({}, SOAK, o);
+  return '<radialGradient id="' + id + '"><stop offset="0" stop-color="#fff" stop-opacity="1"/><stop offset="' + P.GRAD_MID + '" stop-color="#fff" stop-opacity="' + P.GRAD_MID_A + '"/>'
+    + '<stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>';
+};
+
+export const soakFilterMarkup = (seed, fk, paperHex, inkHex, o = {}) => {
+  const P = Object.assign({}, INK, SOAK, o), s = seed & 255;
+  return '<feTurbulence type="fractalNoise" baseFrequency="' + P.WOBBLE_FREQ + '" numOctaves="' + P.WOBBLE_OCT + '" seed="' + s + '" result="n"/>'
+    + '<feDisplacementMap in="SourceGraphic" in2="n" scale="' + Math.round(P.WOBBLE_SCALE * fk) + '" xChannelSelector="R" yChannelSelector="G" result="d"/>'
+    + '<feTurbulence type="turbulence" baseFrequency="' + P.ATTR_FREQ + '" numOctaves="' + P.ATTR_OCT + '" seed="' + ((s + 13) & 255) + '" result="att"/>'
+    + '<feComposite in="d" in2="att" operator="arithmetic" k1="' + P.ATTR_GAIN + '" k2="' + P.ATTR_BASE + '" k3="0" k4="0" result="c"/>'
+    + '<feGaussianBlur in="c" stdDeviation="' + P.BLUR + '"/>'
+    + kmFilterMarkup(paperHex, inkHex, P);
+};
