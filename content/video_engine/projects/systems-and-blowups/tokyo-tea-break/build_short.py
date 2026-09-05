@@ -261,22 +261,27 @@ def main() -> int:
     # file is -14 LUFS, so ACCENT = 0.22 puts it ~9 dB under the -17.9 LUFS voice. The review strip carries the alternates (B/C/D).
     ROLL, FLIP, SWIRL_IN, SWIRL_OUT, WHIRLPOOL = "fs-page-roll-464302.mp3", "fs-pageturn-484968.mp3", "fs-swirl-in-478722.mp3", "fs-swirl-out-478683.mp3", "fs-whirlpool-537920.mp3"
     SLURP, SLURP2, AIR1, AIR3, AIR4 = "fs-slurp-735164.mp3", "fs-slurp2-583716.mp3", "fs-whoosh-1-706679.mp3", "fs-whoosh-3-648729.mp3", "fs-whoosh-4-648732.mp3"
-    ACCENT, RETRACT_S, WHIRL_S = 0.22, 2.0, 2.2   # the drain starts RETRACT_S before the row ends; the out-swirl runs 2.2 s, timed to end on the cut
+    # FOURTH PASS (operator, 2026-09-05: "page enter 7 spiral (B) is the way, and it can probably be used for suck 6 also ... stretch/warp
+    # the sound to match the transition - the distortion would work in our favour"): whoosh-3 WARPED to each transition's clock by
+    # sound/warp_sound.py (a time-varying resample on the min-jerk curve: pitch and speed glide together, tape-style) - accelerating
+    # into the suck (0.55 s), decelerating out of the spiral (1.6 s), accelerating into the drain (2.2 s, ending on the cut)
+    W_SUCK, W_SPIRAL, W_DRAIN = "fs-whoosh-3-suck.mp3", "fs-whoosh-3-spiral-in.mp3", "fs-whoosh-3-drain.mp3"
+    ACCENT, RETRACT_S, WHIRL_S = 0.22, 2.0, 2.2   # the drain starts RETRACT_S before the row ends; the out-swirl and the drain warp run 2.2 s, timed to end on the cut
     cues = []
     for i, r in enumerate(rows):
         if r[2].startswith("ledger:"):
             spiral_in, mount_in, cut = ":spiral" in r[2], ":mount" in r[2], r[2].endswith(":cut")
             if spiral_in:
-                cues.append({"slot": f"page enter {i + 1} (spiral)", "at": round(r[0], 2), "gain": ACCENT, "fade_in": 0.0, "variants": {"A": SWIRL_IN, "B": AIR3}})
+                cues.append({"slot": f"page enter {i + 1} (spiral)", "at": round(r[0], 2), "gain": ACCENT, "fade_in": 0.0, "variants": {"A": W_SPIRAL, "B": AIR3, "C": SWIRL_IN}})
             elif not mount_in:
                 cues.append({"slot": f"page enter {i + 1}", "at": round(r[0], 2), "gain": 0.18, "fade_in": 0.0, "variants": {"A": ROLL}})
             if not cut:
                 if spiral_in:
-                    cues.append({"slot": f"page retract {i + 1} (whirl)", "at": round(r[1] - WHIRL_S, 2), "gain": ACCENT, "fade_in": 0.0, "variants": {"A": SWIRL_OUT, "B": AIR4}})
+                    cues.append({"slot": f"page retract {i + 1} (whirl)", "at": round(r[1] - WHIRL_S, 2), "gain": ACCENT, "fade_in": 0.0, "variants": {"A": SWIRL_OUT, "B": W_DRAIN, "C": AIR4}})
                 else:
                     cues.append({"slot": f"page retract {i + 1} (flip)", "at": round(r[1] - RETRACT_S, 2), "gain": ACCENT, "fade_in": 0.0, "variants": {"A": FLIP, "B": AIR1}})
         elif isinstance(r[5], str) and r[5].startswith("suck"):
-            cues.append({"slot": f"suck {i + 1}", "at": round(r[0], 2), "gain": ACCENT, "fade_in": 0.0, "variants": {"A": WHIRLPOOL, "B": SLURP, "C": SLURP2, "D": ROLL}})
+            cues.append({"slot": f"suck {i + 1}", "at": round(r[0], 2), "gain": ACCENT, "fade_in": 0.0, "variants": {"A": W_SUCK, "B": AIR3, "C": WHIRLPOOL, "D": ROLL}})
     plan["cues"] = cues
     plan_path.write_text(json.dumps(plan, indent=1), encoding="utf-8")
     (HERE / "SHOT-TABLE-SHORT.py").write_text(

@@ -26,9 +26,9 @@
    "gain": 0.22,
    "fade_in": 0.0,
    "variants": {
-    "A": "fs-whirlpool-537920.mp3",
-    "B": "fs-slurp-735164.mp3",
-    "C": "fs-slurp2-583716.mp3",
+    "A": "fs-whoosh-3-suck.mp3",
+    "B": "fs-whoosh-3-648729.mp3",
+    "C": "fs-whirlpool-537920.mp3",
     "D": "fs-page-roll-464302.mp3"
    }
   },
@@ -38,8 +38,9 @@
    "gain": 0.22,
    "fade_in": 0.0,
    "variants": {
-    "A": "fs-swirl-in-478722.mp3",
-    "B": "fs-whoosh-3-648729.mp3"
+    "A": "fs-whoosh-3-spiral-in.mp3",
+    "B": "fs-whoosh-3-648729.mp3",
+    "C": "fs-swirl-in-478722.mp3"
    }
   },
   {
@@ -49,7 +50,8 @@
    "fade_in": 0.0,
    "variants": {
     "A": "fs-swirl-out-478683.mp3",
-    "B": "fs-whoosh-4-648732.mp3"
+    "B": "fs-whoosh-3-drain.mp3",
+    "C": "fs-whoosh-4-648732.mp3"
    }
   }
  ],

@@ -103,3 +103,11 @@ gain-matched to -14 LUFS, `alimiter` at -1 dBFS, `libmp3lame -q:a 2`. The review
 | `fs-pageturn-484968.mp3` | 0.48 s | 0.39 s | -26.0 | +12.0 dB | **-19.1** | -0.1 dBTP |
 | `fs-slurp-735164.mp3` | 0.42 s | 0.36 s | -20.7 | +6.7 dB | **-13.9** | 0.8 dBTP |
 | `fs-slurp2-583716.mp3` | 0.48 s | 0.48 s | -16.0 | +2.0 dB | **-14.0** | 0.2 dBTP |
+
+### Derived warps of fs-whoosh-3-648729 (2026-09-05)
+
+`warp_sound.py` resamples the whoosh at a time-varying rate on the min-jerk curve so pitch and speed glide with the
+transition (operator: "the distortion would work in our favour, as if it's being sucked down the drain"): `fs-whoosh-3-suck.mp3`
+(0.55 s, rate up x6), `fs-whoosh-3-spiral-in.mp3` (1.6 s, rate down x3), `fs-whoosh-3-drain.mp3` (2.2 s, rate up x4). Same CC0
+source and licence as the whoosh-3 row; peak-normalised to -1 dBFS; the cue gain 0.22 applies as to every accent.
+
