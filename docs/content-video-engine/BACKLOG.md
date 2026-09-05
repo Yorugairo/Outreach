@@ -310,6 +310,19 @@ owner, and the owner is whoever is planning.*
 
 ## Explorations — what we still cannot answer
 
+**Landed 2026-09-04 from the research agent: [54](54-GOOGLE-FLOW-OMNI-NANO-BANANA-PRODUCTION-RESEARCH.md)
++ `.agents/skills/google-flow-production/SKILL.md`, read in full and reconciled in a header note
+(170 WPM → ~180; negatives narrowed to E29; the cream/charcoal monoline is the ledger token set,
+not the host directive; five claims moved to SOURCES-TO-VERIFY). Three of its claims are cheap
+to test and worth it:**
+
+| # | question | test |
+|---|---|---|
+| **X17** | Does an explicit transition verb **at second 5** defeat the late-clip motion freeze in a 10 s Omni clip? | same scene twice, with and without the second-5 verb; look at seconds 6–10 |
+| **X18** | Is the **cowboy shot** (mid-thigh up, 65–75 % of frame height) the legibility floor for a stick figure in 9:16 720p, and does an extreme wide really dissolve the limbs? | one 9:16 roll at each of EWS / cowboy / ECU with the bound stick Mike |
+| **X19** | `Portrait → Create Body` with no upload, and **15 credits per 10 s** — both asserted, neither observed | verify both while binding `finance-host-stick-v1`; read the meter on the first 10 s roll |
+
+
 Ordered by what the first-minute frame makes urgent.
 
 **New, from doc 49:** our shorts run on long-form cadence. Short-form wants a visual pulse
