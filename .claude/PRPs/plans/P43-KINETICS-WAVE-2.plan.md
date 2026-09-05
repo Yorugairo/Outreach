@@ -1,0 +1,206 @@
+---
+id: P43-KINETICS-WAVE-2
+title: Kinetics wave 2 - the curvature stroke, Kubelka-Munk ink, area squash, and the rest of the spring
+status: draft
+operation: feature
+risk: standard
+owner: parent
+branch: main
+created: 2026-09-05
+updated: 2026-09-05
+---
+
+# Kinetics Wave 2
+
+## Summary
+
+The operator's pick from the 2026-09-05 backlog read: **items 1, 6, 7 and 8** of the
+ready-to-pull-in list in [BACKLOG](../../../docs/content-video-engine/BACKLOG.md) -
+the curvature-reparameterised stroke, Kubelka-Munk compositing on overlapping ink,
+area-preserving squash as a shared helper, and the remaining damping cases of the spring.
+
+This plan takes P38's T1-T4 (the testability unlock, the stroke, the spring, the squash)
+and adds G-h (K-M, [44 §44.1](../../../docs/content-video-engine/44-INK-AND-SURFACE.md)).
+P38 keeps T5-T8 (ARAP, the object page, DQS, prop attachment), which wait on an object page
+that no build yet has. What changed since P38 was drafted, and why this is wave 2:
+
+- the flags exist and are read from `timeline.kinetics`; the compiler writes them from an
+  override and the Tokyo short turns `analytic_spring` and `min_jerk` on (2026-09-05)
+- `springPop` (the underdamped case with the M_p inverse) and `minJerk` are inline in the
+  template behind those flags and shipping on the short's pops, wipe and suck
+- the vortex already uses the det=1 squash form by hand - the helper is a lift, not a design
+- the stain soak's overlaps read as a patchwork of greys: **that is the K-M defect, visible
+  on a page we ship**
+- the template's math is closure-scoped: a probe from playwright cannot reach it, and there
+  is still no test path to it (P38 T1's finding, confirmed by hand 2026-09-05)
+
+## Intent And Acceptance
+
+**Intent.** Four pure-math capabilities land in a node-testable module, each behind its
+kinetics flag, each shown failing against the current implementation first, then wired
+into the template with the flag off by default so every old build and all four goldens
+render byte-identical. The Tokyo short turns each one on as it lands.
+
+**Acceptance:**
+
+1. A stroke drawn over a path with one sharp corner and one long straight satisfies
+   `v(max κ) < v(min κ)` and `w(max κ) > w(min κ)`; a straight path returns finite `v`;
+   the stroke starts and ends at rest. The current `spEase`-driven `drawOn` fails the
+   first two. The callout ring, the phone trace, the squiggle and the line builds route
+   through it when `kin("curvature_stroke")`.
+2. Two overlapping ink strokes composite by K-M when `kin("km_ink")`: the overlap is
+   **darker and more saturated** than either stroke, never the desaturated grey alpha gives.
+   Test: the K-M reflectance of ink over ink is below the alpha result and its chroma is
+   not below the single stroke's. The soak's overlapping stains and the highlighter species
+   are the first callers.
+3. `det(A(t)) == 1` within float tolerance for the squash tensor across a sweep of t and α,
+   including α → 0 and large α; α is driven by speed and deceleration (42 §42.3). The
+   vortex's inline stretch is replaced by the helper with no visual change at the flag's
+   current setting.
+4. The spring evaluator returns position **and velocity** in all three damping regimes;
+   frame N evaluated directly equals frames 0..N stepped, bit-identical (the seek test);
+   the measured peak overshoot matches `M_p = exp(−πζ/√(1−ζ²))` at `t_p = π/ω_d`; `ζ = 1`
+   overshoots zero. `springPop` becomes a thin caller of it.
+5. Every flag still defaults to `false`; `render_baseline.py --check` passes on the four
+   goldens with the flags off; a flag-ON golden is captured beside each for the one page
+   that shows the change.
+6. The Tokyo short rebuilds with all four on, the motion gate stays green (M16 included),
+   and the operator sees a before/after on one ledger page and the callout ring before the
+   stroke lands (the human gate below).
+
+## Scope
+
+- `content/video_engine/scripts/kinetics/` - `stroke.mjs`, `spring.mjs`, `squash.mjs`,
+  `ink.mjs` (K-M), each a pure module with its doc section in the docstring
+- `content/video_engine/scripts/sync_kinetics.py` - inlines each module into the template
+  between `/* KINETICS:BEGIN <name> */` and `/* KINETICS:END */` markers; `--check` fails
+  when the inlined copy drifts from the module (P38 T1's design, unchanged)
+- `content/video_engine/tests/kinetics/*.test.mjs` (node --test) and
+  `content/video_engine/tests/test_kinetics_sync.py`
+- the template's `drawOn`, the badge / caption pops, the vortex stretch, the soak's blob
+  compositing and the highlighter - each wrapped in `if (kin(...))` with the old path as
+  the else branch
+- `KINETICS_DEFAULTS` gains `km_ink: false`; `test_kinetics_flags.py` pins the new name
+- the compiler's `KINETICS` override and `build_short.py` turn the four on for Tokyo
+- doc 47 §5b and CAPABILITIES rows for each capability as it lands
+
+## Not Building
+
+- ARAP / polar-decomposition morph, the object page, `object -> chart` (P38 T5-T6)
+- DQS skinning and prop attachment (P38 T7-T8)
+- the coffee-ring rim and Darcy wicking (44 §44.2-44.3) - ink surface, a later wave
+- Euler-spiral procedural curves (finding build order 6)
+- any change to the wipe / suck / vortex timing beyond replacing inline math with the
+  shared helpers at identical output
+
+## Human Gates
+
+| gate | why |
+|---|---|
+| **T2 before merge** | The stroke changes how every drawn object in the engine looks. Operator sees a before/after on one ledger page and the callout ring first. |
+| **T3 on the stain soak** | K-M darkens overlaps; the operator ruled the soak's look on 2026-09-05 ("splotchy, staining like coffee"). A before/after of the bleed at 0:19-0:21 before it lands. |
+| flags on the short | each capability is turned on for Tokyo only after its own golden with the flag ON is captured and looked at |
+
+## Mandatory Reads
+
+- [FINDING-the-animation-math-and-what-it-changes](../../../docs/content-video-engine/FINDING-the-animation-math-and-what-it-changes.md) §1-§4 and the build order
+- [42-DRAWING-KINETICS](../../../docs/content-video-engine/42-DRAWING-KINETICS.md) §42.1-§42.3, §42.5 (what is ours to tune)
+- [44-INK-AND-SURFACE](../../../docs/content-video-engine/44-INK-AND-SURFACE.md) §44.1
+- [47-FINDINGS-TO-CHECKS](../../../docs/content-video-engine/47-FINDINGS-TO-CHECKS.md) §1 (the tests that fail without each item), §5b
+- [P38](P38-KINETICS-CAPABILITY-LAYER.plan.md) T1-T4 as drafted; [P39](P39-RENDER-BASELINE-AND-KILL-SWITCH.plan.md) for the goldens and the flag contract
+- `docs/content-video-engine/samples/scene-evidence-player.template.html`: `KINETICS_DEFAULTS`, `kin()`, `drawOn`, `springPop`, `minJerk`, `lpVortex` (the inline stretch), the soak's `goo` group
+- `docs/portable/OPERATOR-RULINGS.md` E22 (the ledger page), E40 (2026-09-05)
+
+## Execution Path
+
+| slice | route | why |
+|---|---|---|
+| T1 | **parent** | the assembly decision: modules inlined at generation, the template stays standalone |
+| T2 | **parent** | the largest visual change; human gate attached |
+| T3 | **parent** | changes a page the operator ruled on today; human gate attached |
+| T4, T5 | `implementation_luna` | bounded math with exact acceptance and node tests |
+| T6 | **parent** | wiring, goldens, the short, docs |
+
+T2-T5 write disjoint files and may run in parallel once T1 lands. T6 is last.
+
+## Patterns To Mirror
+
+- `content/video_engine/editor/fixtures/editorial-motion-two-shot/render.mjs` - `.mjs`
+  and `node --test` are already normal here; zero new dependencies
+- `build_scene_timeline_f.py` reads the template and emits a per-build player; the sync
+  step lands beside that, never a new build stage
+- `gate_motion_density.py`'s `SRC_*` constants - every behaviour names its doc section
+- `render_baseline.py --check` - the goldens are the regression test for every template
+  change; the 2026-09-05 work landed five template changes with all four goldens byte-identical, twice catching a sub-pixel drift (an inline transform cleared on an idle element; a layout read mid-paint). Idle frames touch nothing.
+- `springPop` / `minJerk` in the template - the shape of a flag-guarded helper with the old path as the else branch
+
+## Task Slices
+
+### T1: the testability unlock - modules inlined into the template
+- Status: pending
+- Owner: parent
+- Depends on: none
+- Write set: `content/video_engine/scripts/kinetics/` (new), `content/video_engine/scripts/sync_kinetics.py`, `content/video_engine/tests/test_kinetics_sync.py`, the template (markers only, plus `springPop` / `minJerk` moved into `spring.mjs` / `ease.mjs` at identical output)
+- Acceptance: each module is the source of truth; `sync_kinetics.py` inlines it between `/* KINETICS:BEGIN <name> */` and `/* KINETICS:END */`; `--check` fails on drift; the template still opens standalone; the four goldens are byte-identical after the move.
+- Validate: `python content/video_engine/scripts/sync_kinetics.py --check && python -m pytest content/video_engine/tests/test_kinetics_sync.py content/video_engine/tests/test_kinetics_flags.py -q && python content/video_engine/scripts/render_baseline.py --check`
+- Evidence: pending
+
+### T2: the curvature-reparameterised stroke
+- Status: pending
+- Owner: parent
+- Depends on: T1
+- Write set: `content/video_engine/scripts/kinetics/stroke.mjs`, `content/video_engine/tests/kinetics/stroke.test.mjs`, the template's `drawOn` (flag `curvature_stroke`)
+- Acceptance: `v(s) = γ·(|κ(s)| + κ₀)^(−1/3)·ψ(s)`, inverted to `s(t)` by Newton-Raphson, width and ink density coupled to the same profile (42 §42.1). Tests: a path with one corner and one straight gives `v(max κ) < v(min κ)` and `w(max κ) > w(min κ)`; a straight path returns finite `v`; the endpoints start and end at rest. The current `spEase` path fails the first two. `drawOn` samples κ from the path's own geometry (`getPointAtLength` at three offsets), so every caller inherits it. Human gate: before/after on one ledger page and the callout ring.
+- Validate: `node --test content/video_engine/tests/kinetics/stroke.test.mjs && python content/video_engine/scripts/render_baseline.py --check`
+- Evidence: pending
+
+### T3: Kubelka-Munk on overlapping ink
+- Status: pending
+- Owner: parent
+- Depends on: T1
+- Write set: `content/video_engine/scripts/kinetics/ink.mjs`, `content/video_engine/tests/kinetics/ink.test.mjs`, the template's soak `goo` group and the highlighter species (flag `km_ink`), `KINETICS_DEFAULTS`, `test_kinetics_flags.py`
+- Acceptance: a two-flux K-M composite for pigment over pigment (K absorption, S scattering per ink token; the charcoal and the highlighter each declare theirs) replacing alpha where two ink passes overlap. Tests: ink over ink is darker than alpha's result and no less saturated than one stroke; ink over bare paper equals the single stroke; K = 0 reduces to the paper. In the template the soak's stains composite through it (SVG `feComposite` arithmetic / a `mix-blend-mode` derived from the K-M curve, whichever reproduces the module within tolerance on a rendered probe - the module is the truth, the CSS is its approximation and the test says how close). Human gate: the bleed at 0:19-0:21 before and after.
+- Validate: `node --test content/video_engine/tests/kinetics/ink.test.mjs && python -m pytest content/video_engine/tests/test_kinetics_flags.py -q && python content/video_engine/scripts/render_baseline.py --check`
+- Evidence: pending
+
+### T4: area-preserving squash as the shared helper
+- Status: pending
+- Owner: implementation_luna
+- Depends on: T1, T5
+- Write set: `content/video_engine/scripts/kinetics/squash.mjs`, `content/video_engine/tests/kinetics/squash.test.mjs`, the template's `lpVortex` stretch and the still-life species that stretch (flag `area_squash`)
+- Acceptance: `A(t) = R(θ)·diag(1+α, 1/(1+α))·R(−θ)`, `α(t) = κ_v‖v‖ + κ_a·max(0, −v̂·a)` (42 §42.3), with the velocity from T5's evaluator where the caller is a spring and from the finite difference of the map where it is the vortex. Test: `det(A) == 1` within tolerance across t and α, including α → 0 and large α. The vortex's inline `(1+a, 1/(1+a))` is replaced by the helper at identical output when the flag is off.
+- Validate: `node --test content/video_engine/tests/kinetics/squash.test.mjs && python content/video_engine/scripts/render_baseline.py --check`
+- Evidence: pending
+
+### T5: the rest of the spring - three regimes, velocity, the seek test
+- Status: pending
+- Owner: implementation_luna
+- Depends on: T1
+- Write set: `content/video_engine/scripts/kinetics/spring.mjs`, `content/video_engine/tests/kinetics/spring.test.mjs`
+- Acceptance: underdamped, critical and overdamped closed forms returning position and velocity; the inverse model (`M_p -> ζ`, settle -> `ω₀`) as the one entry point; `springPop` becomes a thin caller with identical output at `M_p = 0.04`. Tests: frame N direct equals frames 0..N stepped, bit-identical; measured overshoot matches `M_p` at `t_p = π/ω_d`; `ζ = 1` overshoots zero; `ζ > 1` is monotone.
+- Validate: `node --test content/video_engine/tests/kinetics/spring.test.mjs && python content/video_engine/scripts/render_baseline.py --check`
+- Evidence: pending
+
+### T6: wire, capture, turn on, record
+- Status: pending
+- Owner: parent
+- Depends on: T2, T3, T4, T5
+- Write set: the template (flag guards), `content/video_engine/tests/golden/` (flag-ON goldens), `content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build_short.py` (`C.KINETICS`), `docs/content-video-engine/47-FINDINGS-TO-CHECKS.md` §5b, `docs/content-video-engine/CAPABILITIES.md`, `docs/content-video-engine/BACKLOG.md`
+- Acceptance: flags off -> four goldens byte-identical; one flag-ON golden per capability captured and looked at; the Tokyo short rebuilt with all four on, motion gate green including M16; 47 §5b rows moved from "designed out (pending)" to shipped with the failing case named; CAPABILITIES rows; the backlog's items 1, 6, 7, 8 struck.
+- Validate: `python content/video_engine/scripts/render_baseline.py --check && python content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build_short.py && python -m pytest content/video_engine/tests/test_kinetics_flags.py content/video_engine/tests/test_gate_motion_density.py -q`
+- Evidence: pending
+
+## Verification
+
+- `node --test content/video_engine/tests/kinetics/` - every module's failing case first (47's rule), then passing
+- `python content/video_engine/scripts/sync_kinetics.py --check` - the inlined copies match the modules
+- `python content/video_engine/scripts/render_baseline.py --check` - flags off, four goldens byte-identical, after every slice
+- `python -m pytest content/video_engine/tests/test_kinetics_flags.py content/video_engine/tests/test_kinetics_sync.py content/video_engine/tests/test_gate_motion_density.py -q`
+- the Tokyo short rebuilt and played in the review server (no-store) at the human gates
+
+## Evidence And Handoff
+
+- per slice: the test file, its first run failing, its run passing, the golden check line
+- T2 and T3: a before/after frame pair, sent to the operator before the flag turns on
+- T6: the flag-ON goldens beside the flag-OFF ones, the short's `GATES-MOTION.md`, the doc rows
+- P38 header notes T1-T4 moved here; T5-T8 remain there, waiting on an object page

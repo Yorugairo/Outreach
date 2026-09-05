@@ -7,10 +7,12 @@ risk: standard
 owner: parent
 branch: main
 created: 2026-09-04
-updated: 2026-09-04
+updated: 2026-09-05
 ---
 
 # The Kinetics Capability Layer
+
+> **2026-09-05: T1-T4 moved to [P43-KINETICS-WAVE-2](P43-KINETICS-WAVE-2.plan.md)** (the operator's pick from the backlog read: the stroke, K-M ink, the squash helper, the rest of the spring). T5-T8 stay here, waiting on an object page. The flags and `springPop` / `minJerk` already ship (see P43's summary).
 
 ## Summary
 
