@@ -1,0 +1,48 @@
+{
+  "_contract": "Re-roll: C (drew B's scene), and F / G / A2 (preview thumbnails). Driver now verifies the landed prompt and the chip by name.",
+  "projectUrl": "https://labs.google/fx/tools/flow/project/d171ec1f-d4a2-4b79-b76e-32460193dccc",
+  "outputDir": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\omni-video\\stills",
+  "ratio": "9:16",
+  "scenes": [
+    {
+      "id": "still-c-blue-ties-panel",
+      "references": [
+        "StickMike"
+      ],
+      "prompt": "9:16 vertical, full bleed. Cream paper page, charcoal ink with a single blue accent. Three stick figures in matching blue ties sit behind a long news desk, each pointing a different direction, mouths moving. A crowd of tiny stick figures holding phones fills the lower background. The character steps in front of the desk, turns to face the camera and looks off to his left. A single still frame, no on-screen text.",
+      "mode": "image",
+      "model": "Nano Banana Pro",
+      "count": 1
+    },
+    {
+      "id": "still-f-toll-gate-to-fab",
+      "references": [
+        "StickMike"
+      ],
+      "prompt": "9:16 vertical, full bleed. Cream paper page, charcoal ink. A toll gate stands open in the middle of the page with nobody passing through it. The character walks past the open gate toward a small drawn factory with lit windows at the far edge of the page. In the foreground corner, the folded paper tab rests on a counter. A single still frame, no on-screen text.",
+      "mode": "image",
+      "model": "Nano Banana Pro",
+      "count": 1
+    },
+    {
+      "id": "still-g-two-fingers",
+      "references": [
+        "StickMike"
+      ],
+      "prompt": "9:16 vertical, full bleed. Cream paper page, charcoal ink. The character faces the camera in a medium shot, talking, and holds up two fingers, then taps each finger once. A single still frame, no on-screen text.",
+      "mode": "image",
+      "model": "Nano Banana Pro",
+      "count": 1
+    },
+    {
+      "id": "still-a2-counter-colder",
+      "references": [
+        "StickMike"
+      ],
+      "prompt": "9:16 vertical, full bleed. Cream paper page, charcoal ink, the same counter as before: one empty stool, the teacup now with no steam, the folded paper tab beside it. The character picks the tab up off the counter, turns it toward the camera and holds it there. A single still frame, no on-screen text.",
+      "mode": "image",
+      "model": "Nano Banana Pro",
+      "count": 1
+    }
+  ]
+}

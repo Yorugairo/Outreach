@@ -307,8 +307,11 @@ export class FlowCdpDriver {
     await pill.click();
     await page.waitForTimeout(700);
 
-    // Mode first - it changes which controls exist below it.
-    await this.clickExact(mode === 'image' ? 'Image' : 'Video');
+    // Mode first - it changes which controls exist below it. On the redesigned drawer (2026-09-04) there is
+    // no Image/Video toggle at all: the mode follows the model family picked from the 'Select model family'
+    // dropdown (Nano Banana Pro = image, Omni / Veo = video), so the toggle click is optional and the
+    // credits/pill checks below are what prove the mode.
+    await this.clickExact(mode === 'image' ? 'Image' : 'Video', { required: false });
     if (mode !== 'image' && submode) await this.clickExact(submode === 'frames' ? 'Frames' : 'Ingredients', { required: false });
     if (ratio === '9:16' || ratio === '16:9') {
       const iconName = ratio === '9:16' ? 'crop_9_16' : 'crop_16_9';
