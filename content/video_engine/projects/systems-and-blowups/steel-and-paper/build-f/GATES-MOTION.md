@@ -1,7 +1,7 @@
 # MOTION GATE — build-f
 
 ```text
-=== MOTION DENSITY GATE: C:\Users\Snipe\Downloads\Outreach Program\.claude\worktrees\sweet-villani-1c3a16\content\video_engine\projects\systems-and-blowups\steel-and-paper\build-f ===
+=== MOTION DENSITY GATE: C:\Users\Snipe\Downloads\Outreach Program\content\video_engine\projects\systems-and-blowups\steel-and-paper\build-f ===
                runtime: 13:26
          visual_events: 375 (27.9/min)
                  docks: 43
@@ -34,11 +34,13 @@
           s9.15 r7 / build_caption_pages 4-6 words
   [PASS ] M09 no scene stacks two camera moves (punch | focus_zoom | pull_back) or a camera move over Ken Burns
           doc 29 s9.27 precedence / s9.28 C3: one camera move per window
+  [PASS ] M14 no camera move (punch | focus_zoom | pull_back) overlaps a card entrance or a badge reveal
+          47 s2 G-a / doc 07 Pillar 4 (saccadic suppression): a camera move may not overlap an evidence build - the eye is blind during the move
   [JUDGE] J01 every savor beat holds its picture (card up, badge lit), never a bare plate with a drift
           doc 29 s9.25 #3
 
-RESULT: 8 FAIL / 1 WARN / 3 PASS / 1 JUDGE / 0 INFO
+RESULT: 8 FAIL / 1 WARN / 4 PASS / 1 JUDGE / 0 INFO
 ```
 
-TIMELINE: steel-and-paper.timeline.json sha256:4590d579164435ca54343e3a6705c9be5a1454f2ddfb2721a7b1405804ea63fa
+TIMELINE: steel-and-paper.timeline.json sha256:c2ee8fb213befb0f6b6ec79c79bf53cb143870d8858712ba004e9ab81056d69a
 VERDICT: FAIL (8 FAIL)

@@ -20327,55 +20327,14 @@
   "stage",
   "anchor"
  ],
- "sound": [
-  {
-   "slot": "hook bed",
-   "at": 0.0,
-   "gain": 0.0199,
-   "fade_in": 1.5,
-   "variants": {
-    "A": "__snd_0_A__",
-    "B": "__snd_0_B__"
-   }
-  },
-  {
-   "slot": "pivot turn",
-   "at": 384.0,
-   "gain": 0.0238,
-   "fade_in": 1.0,
-   "variants": {
-    "A": "__snd_1_A__",
-    "B": "__snd_1_B__"
-   }
-  },
-  {
-   "slot": "close bed",
-   "at": 775.0,
-   "gain": 0.0238,
-   "fade_in": 2.0,
-   "variants": {
-    "A": "__snd_2_A__",
-    "B": "__snd_2_B__"
-   }
-  },
-  {
-   "slot": "burst whoosh",
-   "at": 726.68,
-   "gain": 0.9,
-   "fade_in": 0.0,
-   "variants": {
-    "A": "__snd_3_A__",
-    "B": "__snd_3_B__"
-   }
-  }
- ],
+ "sound": [],
  "evidence": {
   "ev-bravos-original-v1": {
    "title": "The original - two lines",
    "source": "Pairing after Bravos Research - data Yahoo Finance",
    "species": "data",
    "document": {
-    "path": "Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-bravos-original-v1.png",
+    "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-bravos-original-v1.png",
     "sha256": "c71f7e88eb973747de2c6c8280313b4ec7e6a62a93a25eeed8f2ebd59844db9f"
    },
    "badges": [
@@ -22430,7 +22389,9 @@
       2026.54,
       "Jul '26"
      ]
-    ]
+    ],
+    "status": "SOURCES-TO-VERIFY",
+    "verify_note": "operator 2026-09-03: Bravos's chart was MAMAA vs the S&P 500, not semiconductors - the +105% teal line named SEMICONDUCTORS cannot be the S&P (+21%); re-read the source before this file is cited for anything"
    }
   },
   "ev-divergence-v1": {
@@ -22438,7 +22399,7 @@
    "source": "Pairing after Bravos Research \u00b7 rebuilt + extended, Yahoo Finance",
    "species": "chart",
    "document": {
-    "path": "Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-divergence-v1.png",
+    "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-divergence-v1.png",
     "sha256": "88f8c57358d54538d2c878de939c994237436ffb25e440ee6ed9c86b8b6045b4"
    },
    "badges": [
@@ -26311,7 +26272,7 @@
       "accent": "ink"
      }
     ],
-    "names_note": "names corrected 2026-09-03 (operator caught the +613% line labelled mega-cap tech): the mapping is the dock's badges and the Bravos original - crimson = memory makers, teal = semiconductors, cobalt = MAMAA, grey = S&P 500"
+    "names_note": "names corrected 2026-09-03 (operator caught the +613% line labelled mega-cap tech): the mapping is the dock's badges - crimson = memory makers, teal = semiconductors, cobalt = MAMAA, grey = S&P 500"
    }
   },
   "silicon-reality-gap-s04-teacher-stamped": {
@@ -26342,7 +26303,7 @@
    "source": "Campbell & Turner \u00b7 442 companies",
    "species": "chart",
    "document": {
-    "path": "Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-railway-index-v1.png",
+    "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-railway-index-v1.png",
     "sha256": "b1f0d752a85e2fc344f9f5c9a7c7bfea6dfd407f8b9fd02af00b68f7e9d7e7e0"
    },
    "badges": [
@@ -26987,7 +26948,7 @@
    "source": "share of GDP at the peak",
    "species": "tile",
    "document": {
-    "path": "Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-railway-gdp-tile-v1.png",
+    "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-railway-gdp-tile-v1.png",
     "sha256": "3ed3fe1ca1f32bc12ead7b9f0e115632f6e0320926b6d4b3a90db851247f39ec"
    },
    "badges": [
@@ -27030,7 +26991,7 @@
    "source": "BEA via FRED - Campbell & Turner yardstick",
    "species": "chart",
    "document": {
-    "path": "Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-capital-formation-v1.png",
+    "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-capital-formation-v1.png",
     "sha256": "240f182f58e76ea04762936f12533b6b1deb92488def68ad203d3b33ab589622"
    },
    "badges": [
@@ -28928,7 +28889,7 @@
    "source": "two manias, one threshold",
    "species": "chart",
    "document": {
-    "path": "Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-tnx-two-eras-v3.png",
+    "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-tnx-two-eras-v3.png",
     "sha256": "9ba88de32ca11b41726bd05807b9d47931910e81140a0cc1476094765524cb64"
    },
    "badges": [
@@ -30179,7 +30140,7 @@
    "source": "CNBC, live",
    "species": "record",
    "document": {
-    "path": "Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-doc-karp.png",
+    "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-doc-karp.png",
     "sha256": "a3b128019868c478e6f785df8e8a95b2e48f13773a8b8366b73dee51cf30101b"
    },
    "badges": [],
@@ -30305,7 +30266,7 @@
    "source": "CTO, on the record",
    "species": "chart",
    "document": {
-    "path": "Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-uber-adoption-v1.png",
+    "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-uber-adoption-v1.png",
     "sha256": "7f31fe7561963dfdc4342bdb500a96f7065acaab66fb9b94780909f2efd23311"
    },
    "badges": [
@@ -30321,7 +30282,7 @@
    "source": "capital \u00b7 pricing \u00b7 outcome",
    "species": "table",
    "document": {
-    "path": "Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-three-manias.png",
+    "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-three-manias.png",
     "sha256": "235a8d3fafa6eca0abcf5e3a0590369db7e9792182375b162978d0116bb99657"
    },
    "badges": [
@@ -30347,7 +30308,7 @@
    "source": "Morgan Stanley IM \u00b7 Mellon",
    "species": "chart",
    "document": {
-    "path": "Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-debt-issuance-v2.png",
+    "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-debt-issuance-v2.png",
     "sha256": "d1ff929433b67d2fa4257bd97c4a5295090123906fbbcb6bab20bc2b31df7df3"
    },
    "badges": [
@@ -30373,7 +30334,7 @@
    "source": "the pool your bond fund buys from",
    "species": "chart",
    "document": {
-    "path": "Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-ig-credit-weighting-v1.png",
+    "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-ig-credit-weighting-v1.png",
     "sha256": "cb56c673945c1c0ac4d55568f7a1260f6b1e7c9ccc9dbffd1ed43cc486e6cc72"
    },
    "badges": [
@@ -30424,7 +30385,7 @@
    "source": "PIMCO \u00b7 five largest hyperscalers",
    "species": "chart",
    "document": {
-    "path": "Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-capex-consensus-v1.png",
+    "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-capex-consensus-v1.png",
     "sha256": "eee1d63820f0a4068942019a302d344eb266a2b8b0dfeeea388345746433f12f"
    },
    "badges": [
@@ -30470,7 +30431,7 @@
    "source": "PIMCO, from 10-Qs",
    "species": "record",
    "document": {
-    "path": "Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-doc-leases.png",
+    "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-doc-leases.png",
     "sha256": "75e98c9e44fd3eb7ad7c65fa9ca6300a9205433f9ff4b48d29e2fa899a0349f8"
    },
    "badges": [
@@ -30486,7 +30447,7 @@
    "source": "PIMCO \u00b7 next two years",
    "species": "record",
    "document": {
-    "path": "Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-doc-macdonald.png",
+    "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-doc-macdonald.png",
     "sha256": "c82a64869507df6a41ce078012babcc95b38e332a47ed8dcaa3c3efd196398a0"
    },
    "badges": [
@@ -30502,7 +30463,7 @@
    "source": "Company filings via Epoch AI; PIMCO forward estimate cited in narration",
    "species": "data",
    "document": {
-    "path": "Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-capex-funding-v1.png",
+    "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-capex-funding-v1.png",
     "sha256": "32fe6154091a5274c57d6667ccf0069b0322a18d6d4495f30179680f68f5fb0a"
    },
    "badges": [
@@ -30733,7 +30694,7 @@
    "source": "paper priced off the best year",
    "species": "chart",
    "document": {
-    "path": "Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-railway-mileage-v1.png",
+    "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-railway-mileage-v1.png",
     "sha256": "f10ef24187fb0361ffeec9871ba6e3ec74a5b66016e4757d5742764e3f2bff3e"
    },
    "badges": [
@@ -30773,7 +30734,7 @@
    "source": "iShares Russell 3000 filing via SCML ledger",
    "species": "data",
    "document": {
-    "path": "Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-weight-check-v1.png",
+    "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-weight-check-v1.png",
     "sha256": "3570385231670d5146a85f9b4f7b1726943f1036e2a8285c9543298c00884dbd"
    },
    "badges": [
@@ -30818,7 +30779,7 @@
    "source": "arithmetic on a fifth of the index",
    "species": "chart",
    "document": {
-    "path": "Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-smh-drawdown-v3.png",
+    "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-smh-drawdown-v3.png",
     "sha256": "18fc931fe19c0d012c8ef4b2b2fbc2f2e93ea22773ede3ad984f4d7558c41530"
    },
    "badges": [
@@ -31595,7 +31556,7 @@
    "source": "Money Physics - the three-question test",
    "species": "data",
    "document": {
-    "path": "Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-test-scorecard-v1.png",
+    "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-test-scorecard-v1.png",
     "sha256": "08920a7aad915b313eb434df3ad1fd15e71ee6064a9f2756dc6ba90ff589e859"
    },
    "badges": [
@@ -31657,7 +31618,7 @@
    "source": "the most extreme number on the board",
    "species": "chart",
    "document": {
-    "path": "Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-krx-memory-v3.png",
+    "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-krx-memory-v3.png",
     "sha256": "6ae72647f0594212689323ebd42c437f7226ca7f618501e60fac34801167cb52"
    },
    "badges": [
@@ -33058,7 +33019,7 @@
    "source": "per gigabyte, against standard DRAM",
    "species": "tile",
    "document": {
-    "path": "Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-hbm-wafer-ratio-v1.png",
+    "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-hbm-wafer-ratio-v1.png",
     "sha256": "f2f5e8d1c21772c696b5cab44dcddbeb32a23d52f3f399824d1f48a838353837"
    },
    "badges": [
@@ -33112,7 +33073,7 @@
    "source": "SK hynix, October earnings call",
    "species": "chart",
    "document": {
-    "path": "Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-dram-contract-v1.png",
+    "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-dram-contract-v1.png",
     "sha256": "234f53f4fc43f4841e6cacd1e8815740083b30938b85ef9d5e033d0a677130a3"
    },
    "badges": [
@@ -33202,7 +33163,7 @@
    "source": "FRED DFF + SCML contagion monitor",
    "species": "data",
    "document": {
-    "path": "Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-tripwire-board-v1.png",
+    "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-tripwire-board-v1.png",
     "sha256": "60734899c4d8ce3e20280b54fab5449b658f4c1c70af6f41cff4b7dada0cefcd"
    },
    "badges": [
@@ -33272,7 +33233,7 @@
    "source": "Korean & Taiwanese customs via the SCML memory monitor",
    "species": "data",
    "document": {
-    "path": "Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-memory-monitor-v1.png",
+    "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-memory-monitor-v1.png",
     "sha256": "57204119af0c9d613efe782161a86ff040616189ada3d254623df0786ddd060e"
    },
    "badges": [
@@ -33876,7 +33837,7 @@
    "source": "SCML monitor backtest - weak prints, Aug '24 - Aug '26",
    "species": "data",
    "document": {
-    "path": "Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-trim-proof-v1.png",
+    "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-trim-proof-v1.png",
     "sha256": "d2c3c503361904b6ab04e5f883a9dd4e603d37ff95138556e0e1aaffc386768b"
    },
    "badges": [
@@ -33970,7 +33931,7 @@
    "source": "data period 2026-07 \u00b7 customs ~1mo behind",
    "species": "chart",
    "document": {
-    "path": "Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-hbm-export-series.png",
+    "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-hbm-export-series.png",
     "sha256": "70dbc5b0c3839a887162e20b30fc19cdaa4981bf01450bab7a6c0851f8d7ff3b"
    },
    "badges": [
@@ -33996,7 +33957,7 @@
    "source": "hynix + Micron vs Korean customs via SCML monitor",
    "species": "data",
    "document": {
-    "path": "Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-june-print-v1.png",
+    "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-june-print-v1.png",
     "sha256": "10c9aa9e33e47048ef3ab65776351912038ea89563eab2b81ab123b9481b7e0f"
    },
    "badges": [
@@ -34388,7 +34349,7 @@
    "source": "six documents from this episode - each shown with its own source earlier",
    "species": "stack",
    "document": {
-    "path": "Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-holds-stack-v1.png",
+    "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-holds-stack-v1.png",
     "sha256": "a3c1e798d771ec5e0bb40448b8504c9aed393560108c46c136198e3e725dd3e7"
    },
    "badges": [],
@@ -34439,7 +34400,7 @@
    "source": "Yahoo Finance - cross-checked vs SK hynix DART filings",
    "species": "data",
    "document": {
-    "path": "Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-hynix-steel-v1.png",
+    "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-hynix-steel-v1.png",
     "sha256": "0c8fc934589f934952f47a080fbe594046ca4387c29ea3d57dfe3b185c6a69bb"
    },
    "badges": [
@@ -35489,7 +35450,7 @@
    "source": "fab timelines + NVIDIA memory-per-chip generations",
    "species": "data",
    "document": {
-    "path": "Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-memory-arithmetic-v1.png",
+    "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-memory-arithmetic-v1.png",
     "sha256": "0f79a8bad3874e4abd14ea4b31e2773f9325f3644ebbb50d24f422276429d407"
    },
    "badges": [
@@ -35575,7 +35536,7 @@
    "source": "Figures via Bravos Research",
    "species": "data",
    "document": {
-    "path": "Users\\Snipe\\Downloads\\Outreach Program\\.claude\\worktrees\\sweet-villani-1c3a16\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-index-concentration-v1.png",
+    "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\evidence\\objects\\ev-index-concentration-v1.png",
     "sha256": "97118796cafaef3ba367186dcb23d2750abbed5593947c799c86a08683feb6d7"
    },
    "badges": [
