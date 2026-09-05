@@ -51,6 +51,15 @@
       "prompt": "A stick figure character model sheet on a plain white ground, 16:9, three rows with small handwritten row labels, drawn with thick confident black ink brush lines of varying weight like a viral hand-drawn explainer cartoon. The character: a round head filled flat warm brown with tiny dot eyes behind bold black rectangular glasses, a single expressive mouth line, a tiny goatee, and a full crown of short chunky locs covering the top of the head, drawn as many bold black strokes; a thin black stick body with a small flat deep-indigo vest block and a copper tie, stick arms and legs, small round hands. He has attitude in every cell - narrowed eyes, a smirk, weight shifted, caught mid-motion with speed lines where he moves. Top row, standing at identical height with a cocky lean: front view, left side view, three-quarter view, back view. Middle row, five head-only expressions pushed to the extreme: happy as a smug grin, neutral as a dead-eyed stare, surprised as huge wide eyes and a tiny o mouth, worried as a sweat drop and wobbling mouth, angry as clenched teeth with anger veins on the forehead. Bottom row, five full-body poses drawn as action: waving big mid-stride, thinking with a hand at the chin and one eyebrow up, presenting with a sharp open palm thrust at the viewer, explaining with both hands flung up and motion lines, shrugging with a smirk and shoulders to the ears. Negative: no realistic anatomy, no shading gradients, no tailoring detail, no text other than the row labels, no numbers, no charts, no logos.",
       "prompt_sha256": "ce04ab9902f087b6bde4f7362a4bc53749456a1816fd2fbfce95205edbeeab02",
       "note": "v4 = v3 with only the hair line changed: a full crown of short chunky locs."
+    },
+    {
+      "id": "finance-host-stick-v1-model-sheet-v5",
+      "character_id": "finance-host-stick-v1",
+      "bound_character": null,
+      "references": [],
+      "prompt": "A stick figure character model sheet on a solid untextured cream washi paper ground (#F4E6C7), 16:9, three rows with small handwritten row labels, drawn with thick confident charcoal ink brush lines (#25313C) of varying weight like a viral hand-drawn explainer cartoon. The character: a round head filled flat warm brown with tiny dot eyes behind bold black rectangular glasses, a single expressive mouth line, a tiny goatee, and a full crown of short chunky locs covering the top of the head, drawn as many bold charcoal strokes; a thin charcoal stick body with a small flat deep-indigo vest block and a copper tie, stick arms and legs, small round hands. He has attitude in every cell - narrowed eyes, a smirk, weight shifted, caught mid-motion with speed lines where he moves. Top row, standing at identical height with a cocky lean: front view, left side view, three-quarter view, back view. Middle row, five head-only expressions pushed to the extreme: happy as a smug grin, neutral as a dead-eyed stare, surprised as huge wide eyes and a tiny o mouth, worried as a sweat drop and wobbling mouth, angry as clenched teeth with anger veins on the forehead. Bottom row, five full-body poses drawn as action: waving big mid-stride, thinking with a hand at the chin and one eyebrow up, presenting with a sharp open palm thrust at the viewer, explaining with both hands flung up and motion lines, shrugging with a smirk and shoulders to the ears. Negative: no realistic anatomy, no shading gradients, no tailoring detail, no text other than the row labels, no numbers, no charts, no logos.",
+      "prompt_sha256": "3ff8dc6b1f3471b90960cf17360b2a71037923eccc06fe52d2caf863da686482",
+      "note": "v5 = v4 on the house ground: cream #F4E6C7 paper, charcoal #25313C ink; indigo/copper the only accents. Operator: 'if cream works it gives us a unique space and opens up using the drawing lane to create both styles.'"
     }
   ],
   "driver_checks_on_return": [
@@ -182,6 +191,30 @@
       "path": "review/claims/finance-host-model-sheets-001/finance-host-stick-v1-model-sheet-v4-raw-4.png",
       "sha256": "2dea3cc42502678dca54eda2942039456b67fc7fc944a97f8be60cb85f606e65",
       "bytes": 528999
+    },
+    {
+      "scene_id": "finance-host-stick-v1-model-sheet-v5",
+      "path": "review/claims/finance-host-model-sheets-001/finance-host-stick-v1-model-sheet-v5-raw.png",
+      "sha256": "20a56171ee43f4b4fbce3dee07cc442528a42e74bb01b3ea0b1283c728738e8a",
+      "bytes": 819463
+    },
+    {
+      "scene_id": "finance-host-stick-v1-model-sheet-v5",
+      "path": "review/claims/finance-host-model-sheets-001/finance-host-stick-v1-model-sheet-v5-raw-2.png",
+      "sha256": "648bb794758065e5f1cfaf9cc2366449491ef0440508bd9b312903f1221b3b96",
+      "bytes": 861472
+    },
+    {
+      "scene_id": "finance-host-stick-v1-model-sheet-v5",
+      "path": "review/claims/finance-host-model-sheets-001/finance-host-stick-v1-model-sheet-v5-raw-3.png",
+      "sha256": "de4f5aa97e5c1151c3f7c2ccd7ee34aedb040d30710f33ac9cc2df9624d9112c",
+      "bytes": 703201
+    },
+    {
+      "scene_id": "finance-host-stick-v1-model-sheet-v5",
+      "path": "review/claims/finance-host-model-sheets-001/finance-host-stick-v1-model-sheet-v5-raw-4.png",
+      "sha256": "5c03d59ae298b80cc449eb2016daea448de42c2e0603378f046dcad8976ffaa9",
+      "bytes": 751579
     }
   ],
   "review_state": "quarantined",
@@ -237,7 +270,15 @@
       "count": 4,
       "result": "Flow crashed mid-roll and recovered; the four images completed on the canvas and were pulled off it by URL rather than re-rolled. Full crown of locs held. raw-3 recommended (consistent in every cell, strongest action row), raw-4 alternate; raw-2 drops hair and glasses across the expression row.",
       "recommendation": "finance-host-stick-v1-model-sheet-v4-raw-3.png"
+    },
+    {
+      "attempt": 8,
+      "date": "2026-09-04",
+      "scene": "finance-host-stick-v1-model-sheet-v5",
+      "count": 4,
+      "result": "Cream works. raw-1 came back on a deckle-edged cream page unprompted - the E22 ledger signature with the figure on it, which is the proof the drawing lane can carry both. raw-1 recommended (deckle, strongest attitude, 14/14 consistent); raw-2 alternate (soft pencil, no deckle); raw-3 drops skin fill on three heads; raw-4 painterly, locs long.",
+      "recommendation": "finance-host-stick-v1-model-sheet-v5-raw.png"
     }
   ],
-  "artifact_hash": "7c40485814f6faebb3af7372de3ab13ce6638896ae6d064126666ce0db27031b"
+  "artifact_hash": "35235864621a2bc2a03dfde4af7f717f25dd07e9f87fb37b8e0cfccf865ce0f7"
 }
