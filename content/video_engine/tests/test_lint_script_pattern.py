@@ -199,21 +199,31 @@ def test_main_returns_zero_on_clean_and_one_on_findings(tmp_path: Path, capsys):
 
 def test_ring_may_sit_one_paragraph_before_a_short_brand_line():
     """Operator, 2026-09-04: the brand triad is the last line and cuttable; the ring before it carries."""
-    script = "Tokyo took a tea break and left America the tab.
+    script = (
+        "Tokyo took a tea break and left America the tab.
 
-The middle says other things entirely.
-
-"              "Tokyo is still on its tea break and the tab is still ours.
-
-Not a panic. Not a plot. Mechanics.
 "
+        "The middle says other things entirely.
+
+"
+        "Tokyo is still on its tea break and the tab is still ours.
+
+"
+        "Not a panic. Not a plot. Mechanics.
+"
+    )
     assert "RING" not in _codes(lint_script(script))
-    long_last = "Tokyo took a tea break and left America the tab.
+    long_last = (
+        "Tokyo took a tea break and left America the tab.
 
-The middle says other things entirely.
-
-"                 "Tokyo is still on its tea break.
-
-A long closing paragraph with no opening token in it at all, running past the brand-line length.
 "
+        "The middle says other things entirely.
+
+"
+        "Tokyo is still on its tea break.
+
+"
+        "A long closing paragraph with no opening token in it at all, running well past the brand-line length.
+"
+    )
     assert "RING" in _codes(lint_script(long_last))
