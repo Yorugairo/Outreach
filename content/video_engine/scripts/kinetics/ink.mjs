@@ -91,7 +91,15 @@ export const kmFilterMarkup = (paperHex, inkHex, o = {}) => {
    had; BLUR wets the result. All dials (42 s42.5). */
 /* round 3 (operator, 2026-09-05: "more wobble ... a higher grain"): WOBBLE_SCALE up and its field a little busier; GRAIN is a second,
    fine attraction field multiplied in after the mesh - the speckle inside and along the front */
-export const SOAK = Object.freeze({ WOBBLE_FREQ: "0.008 0.012", WOBBLE_OCT: 3, WOBBLE_SCALE: 180, ATTR_FREQ: "0.008 0.011", ATTR_OCT: 4,
+/* MESH (operator, 2026-09-05, after seeing it in motion: "it absolutely looks like a burn-in because of the boil ... tempted to just
+   revert to the original kubelka munk, i also don't like how the spiral looks now when it soaks back up the layer"): OFF by default -
+   the K-M soak is the original chain (the soak's own wobble and blur, flat white stains, the table) and the retract drags clean
+   stains down the drain. The attraction field, the grain and the motion below only exist behind MESH: true. */
+/* PLAIN_* (operator: "more wobble without causing the issues"): a deeper, busier outline displacement than the alpha soak's 110,
+   and a slow CREEP of that low-frequency noise through the soak (PLAIN_DRIFT px per unit soak, PLAIN_BREATH on the scale) -
+   smooth and slow reads as ink moving; the fast fine grain that read as a burn-in is not part of it */
+export const SOAK = Object.freeze({ MESH: false, PLAIN_FREQ: "0.007 0.011", PLAIN_SCALE: 170, PLAIN_BLUR: 12, PLAIN_DRIFT: 90, PLAIN_BREATH: 0.15,
+                                    WOBBLE_FREQ: "0.008 0.012", WOBBLE_OCT: 3, WOBBLE_SCALE: 180, ATTR_FREQ: "0.008 0.011", ATTR_OCT: 4,
                                     ATTR_BASE: 0.25, ATTR_GAIN: 1.8, GRAIN_FREQ: "0.055 0.07", GRAIN_OCT: 2, GRAIN_BASE: 0.65, GRAIN_GAIN: 0.7,
                                     BLUR: 5, GRAD_MID: 0.55, GRAD_MID_A: 0.85,
                                     /* the MOTION (operator: 'wriggling / morphing / creeping / crawling'): drifts in field px per unit soak, the breath
@@ -106,6 +114,10 @@ export const soakGradientMarkup = (id, o = {}) => {
 
 export const soakFilterMarkup = (seed, fk, paperHex, inkHex, o = {}) => {
   const P = Object.assign({}, INK, SOAK, o), s = seed & 255;
+  if (!P.MESH) return '<feTurbulence type="fractalNoise" baseFrequency="' + P.PLAIN_FREQ + '" numOctaves="3" seed="' + s + '" result="n0"/>'
+    + '<feOffset in="n0" dx="0" dy="0" result="n" id="lpsoakw' + s + '"/>'
+    + '<feDisplacementMap in="SourceGraphic" in2="n" scale="' + Math.round(P.PLAIN_SCALE * fk) + '" xChannelSelector="R" yChannelSelector="G" id="lpsoakd' + s + '"/>'
+    + '<feGaussianBlur stdDeviation="' + P.PLAIN_BLUR + '"/>' + kmFilterMarkup(paperHex, inkHex, P);
   return '<feTurbulence type="fractalNoise" baseFrequency="' + P.WOBBLE_FREQ + '" numOctaves="' + P.WOBBLE_OCT + '" seed="' + s + '" result="n0"/>'
     + '<feOffset in="n0" dx="0" dy="0" result="n" id="lpsoakw' + s + '"/>'
     + '<feDisplacementMap in="SourceGraphic" in2="n" scale="' + Math.round(P.WOBBLE_SCALE * fk) + '" xChannelSelector="R" yChannelSelector="G" result="d" id="lpsoakd' + s + '"/>'
@@ -124,6 +136,10 @@ export const soakFilterMarkup = (seed, fk, paperHex, inkHex, o = {}) => {
    and the front crawls after them), the grain boils. Offsets in field px (fk scales a portrait field). */
 export const soakAnim = (u, fk = 1, o = {}) => {
   const P = Object.assign({}, SOAK, o), tp = Math.PI * 2, k = Math.min(1, Math.max(0, u));
+  if (!P.MESH) return {   /* the plain chain: only the outline noise creeps, slowly, and its depth breathes a little */
+    wob: [P.PLAIN_DRIFT * fk * k, P.PLAIN_DRIFT * fk * 0.5 * Math.sin(k * tp * 0.75)], att: [0, 0], grain: [0, 0],
+    scale: P.PLAIN_SCALE * fk * (1 + P.PLAIN_BREATH * Math.sin(k * tp * 2)),
+  };
   return {
     wob: [P.WOBBLE_DRIFT * fk * k, P.WOBBLE_DRIFT * fk * 0.6 * Math.sin(k * tp * 0.75)],
     att: [P.ATTR_DRIFT * fk * Math.sin(k * tp * 0.5), -(P.ATTR_DRIFT * fk * k) || 0],

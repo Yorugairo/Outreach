@@ -55,25 +55,36 @@ test("two DIFFERENT inks mix subtractively: sunflower over charcoal goes olive a
   assert.ok(lum(km) < lum(al) && chroma(km) < chroma(al), "coral over teal: K-M darker and browner, alpha brighter and pinker");
 });
 
-test("the erratic soak: soft coverage grows through a seeded attraction MESH and ends in the K-M stage", () => {
-  const m = soakFilterMarkup(0x51EC1E5, 1, CREAM, INKS.charcoal), g = soakGradientMarkup("g1");
+test("MESH off (the default, operator 2026-09-05): the K-M soak is the original chain - one wobble, one blur, the table, nothing that boils", () => {
+  assert.equal(SOAK.MESH, false);
+  const m = soakFilterMarkup(0x51EC1E5, 1, CREAM, INKS.charcoal);
+  assert.ok(m.startsWith('<feTurbulence type="fractalNoise" baseFrequency="' + SOAK.PLAIN_FREQ + '"') && m.includes('scale="' + SOAK.PLAIN_SCALE + '"') && m.includes('stdDeviation="' + SOAK.PLAIN_BLUR + '"'));
+  assert.ok(!m.includes('type="turbulence"') && !m.includes("grain"), "no attraction field, no grain");
+  assert.equal((m.match(/<feOffset/g) || []).length, 1, "one creeping noise: the outline wobble");
+  const a = soakAnim(0.5, 1); assert.deepEqual([a.att, a.grain], [[0, 0], [0, 0]]); assert.ok(a.wob[0] > 0 && Math.abs(a.wob[0]) <= 422 && Math.abs(a.scale - SOAK.PLAIN_SCALE) <= SOAK.PLAIN_SCALE * SOAK.PLAIN_BREATH + 1e-9);
+  assert.deepEqual(soakAnim(0, 1).wob, [0, 0]);
+  assert.ok(m.endsWith(kmFilterMarkup(CREAM, INKS.charcoal)));
+});
+
+test("the erratic soak behind MESH: soft coverage grows through a seeded attraction mesh and ends in the K-M stage", () => {
+  const m = soakFilterMarkup(0x51EC1E5, 1, CREAM, INKS.charcoal, { MESH: true }), g = soakGradientMarkup("g1");
   assert.ok(m.includes('type="turbulence"') && m.includes('result="att"'), "the attraction field is a turbulence mesh, not smooth noise");
   assert.ok(m.includes('operator="arithmetic" k1="' + SOAK.ATTR_GAIN + '" k2="' + SOAK.ATTR_BASE + '"'), "coverage x (base + gain * attraction)");
   assert.ok(m.includes('result="grain"') && m.includes('k1="' + SOAK.GRAIN_GAIN + '" k2="' + SOAK.GRAIN_BASE + '"'), "then x (base + gain * fine grain)");
   assert.ok(m.endsWith(kmFilterMarkup(CREAM, INKS.charcoal)), "the K-M table is the last word");
   assert.ok(m.indexOf("feDisplacementMap") < m.indexOf('result="att"') && m.indexOf("feGaussianBlur") < m.indexOf("feColorMatrix"), "wobble, mesh, wet, then ink");
-  assert.notEqual(soakFilterMarkup(1, 1, CREAM, INKS.charcoal), soakFilterMarkup(2, 1, CREAM, INKS.charcoal), "seeded");
+  assert.notEqual(soakFilterMarkup(1, 1, CREAM, INKS.charcoal, { MESH: true }), soakFilterMarkup(2, 1, CREAM, INKS.charcoal, { MESH: true }), "seeded");
   assert.ok(g.startsWith('<radialGradient id="g1">') && g.includes('stop-opacity="0"'), "a stain is soft coverage, its edge decided by the field");
 });
 
 test("the fields MOVE on the soak clock: still at u = 0, every drift inside the filter's 25% margin, the breath around WOBBLE_SCALE, ids in the markup", () => {
-  const z = soakAnim(0);
+  const z = soakAnim(0, 1, { MESH: true });
   assert.deepEqual([z.wob, z.att, z.grain], [[0, 0], [0, 0], [0, 0]]); assert.equal(z.scale, SOAK.WOBBLE_SCALE);
-  for (let i = 0; i <= 100; i++) { const a = soakAnim(i / 100, 1.2);
+  for (let i = 0; i <= 100; i++) { const a = soakAnim(i / 100, 1.2, { MESH: true });
     for (const v of [...a.wob, ...a.att, ...a.grain]) assert.ok(Math.abs(v) <= 1690 * 1.2 * 0.25, `drift ${v} leaves the margin`);
     assert.ok(a.scale > 0 && Math.abs(a.scale - SOAK.WOBBLE_SCALE * 1.2) <= SOAK.WOBBLE_SCALE * 1.2 * SOAK.WOBBLE_BREATH + 1e-9); }
-  assert.notDeepEqual(soakAnim(0.3).wob, soakAnim(0.6).wob, "it moves");
-  const ids = soakAnimIds(0x51EC1E5), m = soakFilterMarkup(0x51EC1E5, 1, CREAM, INKS.charcoal);
+  assert.notDeepEqual(soakAnim(0.3, 1, { MESH: true }).wob, soakAnim(0.6, 1, { MESH: true }).wob, "it moves");
+  const ids = soakAnimIds(0x51EC1E5), m = soakFilterMarkup(0x51EC1E5, 1, CREAM, INKS.charcoal, { MESH: true });
   for (const id of Object.values(ids)) assert.ok(m.includes('id="' + id + '"'), id);
 });
 
