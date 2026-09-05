@@ -29,6 +29,9 @@ with `"aspect": "9:16"`; `player.html` is retired (G4).
   the frame to its deckle, no punch, one measured column, the caption in the strip, the series'
   selected dates on the axis (`xticks`), badges as label-over-number pills under the source.
 - **No still > 6 s in the first minute, no chart dock > 6 s in it** (M10 / M12).
+- **The wipe follows the character** (operator, 2026-09-05): a clip where he enters from the right wipes in
+  from the right (`wipe_right` in the row's exit slot); from the left, from the left (the default). Clip C
+  enters right; A and F enter left; B, G, A2 are static. A plate that must land instantly takes `suck:<x>,<y>`.
 
 ## Shots (kit clock first, Kokoro cut in brackets)
 

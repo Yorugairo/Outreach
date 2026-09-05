@@ -137,8 +137,9 @@ def shot_table(ws: list[dict], runtime_s: float) -> list[tuple]:
         (0.0, t_stakes, clip("clip-a-counter-tab-v2.mp4"), (0, 0, 0), [], None, None),
         # 2 stakes: the dial that does not turn, the bill that grows
         (t_stakes, t_panel, clip("clip-b-dial-and-bill-v2.mp4"), (0, 0, 0), [], None, None),
-        # 3 archetype: the panel pointing three ways, the crowd on phones (the sixty-three)
-        (t_panel, t_lender, clip("clip-c-blue-ties-panel-v2.mp4"), (0, 0, 0), [], None, None),
+        # 3 archetype: the panel pointing three ways, the crowd on phones (the sixty-three). Mike walks in from the RIGHT,
+        #   so the wipe comes from the right (operator, 2026-09-05: the wipe follows the side the character enters from)
+        (t_panel, t_lender, clip("clip-c-blue-ties-panel-v2.mp4"), (0, 0, 0), [], "wipe_right", None),
         # 4 THE FIRST PROOF (M11, 8-20 s): the holdings page rolls out under "our biggest lender" - spotlit
         #   on the latest print as it enters; the peak called out at "since February"; a focus on the
         #   slide at "the auction sets your price"; the page leaves before the opponent line (< 20 s, M05)
