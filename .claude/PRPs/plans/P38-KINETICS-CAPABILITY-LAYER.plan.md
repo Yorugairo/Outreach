@@ -52,6 +52,8 @@ renderer so every drawn object inherits it.
 7. `drawOn` in the template routes through the curvature profile; the 16:9 render of ep1
    is visually diffed and approved before merge.
 
+**The flags exist (P39 T4, 2026-09-04).** The template reads `timeline.kinetics` into `KIN` and exposes `kin(name)`; the six names are `curvature_stroke`, `analytic_spring`, `area_squash`, `arap_morph`, `dqs_skinning`, `prop_attach`, all defaulting to `false`. Every slice below wraps its rendered-output change in `if (kin("<name>"))` with the old path as the else branch, and adds a golden-frame variant with the flag ON beside the flag-OFF golden. `test_kinetics_flags.py` fails any default that is not `false`.
+
 **Anti-goals.** No capability ships without its failing test demonstrated first. **Every capability that alters rendered output ships behind its P39 flag, defaulting to current behaviour** - a bad result must be one timeline field away from the old render, never a debugging session. No
 tunable is presented as a finding — `γ`, `λ_w`, `κ_v`, per-material `ζ`/`ω₀` are ours
 (42 §42.5). No change to the standalone-openability of the template.

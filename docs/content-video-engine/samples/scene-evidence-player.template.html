@@ -376,6 +376,25 @@
   const $ = (id) => document.getElementById(id);
   const TL = JSON.parse(document.getElementById("timeline-data").textContent);
   const A  = JSON.parse(document.getElementById("asset-data").textContent);
+  /* P39 T4 - THE KILL SWITCH. Every capability that changes rendered output reads a flag
+     from timeline.kinetics and DEFAULTS TO FALSE, which means the behaviour tagged at
+     player-baseline-2026-09-04. A bad result is one timeline field away from the old
+     render, never a debugging session. Unknown names are ignored with a warning, so a
+     typo cannot turn anything on. The six names are doc 47 s1 / P38; add a name here and
+     in test_kinetics_flags.py in the same commit, default false, or the test fails. */
+  const KINETICS_DEFAULTS = Object.freeze({
+    curvature_stroke: false,   // 42.1 two-thirds power law on drawOn
+    analytic_spring:  false,   // 42.2 closed-form spring evaluator
+    area_squash:      false,   // 42.3 det=1 squash matrix
+    arap_morph:       false,   // 43.5B polar-decomposition morph
+    dqs_skinning:     false,   // 48.3 SE(2) geodesic joint blend
+    prop_attach:      false,   // 48.5 cached-offset prop attachment
+  });
+  const KIN = Object.assign({}, KINETICS_DEFAULTS,
+    (TL.kinetics && typeof TL.kinetics === "object") ? TL.kinetics : {});
+  for (const k of Object.keys(TL.kinetics || {}))
+    if (!(k in KINETICS_DEFAULTS)) console.warn("kinetics: unknown flag ignored: " + k);
+  const kin = (name) => KIN[name] === true;
   /* Runtime comes from the TIMELINE, never hardcoded. A template that
      carries the sample's duration clamps every episode to it. */
   if (TL.title) { document.title = TL.title; $("eptitle").textContent = TL.title;
