@@ -212,6 +212,8 @@ path stops existing. Each ships with the test named in 47.
 
 ## Build — Tier 2, gates (47 §2) → **[P37](../../.claude/PRPs/plans/P37-RESEARCH-ENFORCEMENT-LAYER.plan.md)**
 
+**Shipped 2026-09-04 (P37, see 47 §5b):** G-a (`M14`), G-b/c/e/m/n (`gate_comfy_config`), G-d (lint, INFO), G-g (`G15b`, WARN pending the grandfathering ruling), G-i/j/k (`gate_grounding`, ladder), G-l (`gate_vertical_safe_box` + the T0 fix), V-a (judge CLI, unwired). **Open:** G-h (44's ink work), G-o (X0), M13 (P40 T1). The rows stay below as the record of what each one was built against.
+
 | # | gate | FAILs on |
 |---|---|---|
 | **G-a** | punch must not overlap a build | **our renderer today** — camera motion during a data build, so saccadic suppression eats the numbers |

@@ -180,9 +180,31 @@ So G-g is not a new gate. It is **G15 strengthened**: we already check that a ri
 appears in P1; the finding is that the close should land on the **causal claim**, not on a
 repeated phrase. That applies to any shape of episode.
 
+## 5b. Shipped — P37, 2026-09-04
+
+Every row of §2 now names the script that owns it and the state it landed in. A gate is
+*shipped* only when its failing case was demonstrated first (the PRP's rule).
+
+| check | script | state | failing case shown |
+|---|---|---|---|
+| G-a | `gate_motion_density.py` M14 | **shipped** | punch on a card entrance / a badge reveal FAILs; after the settle PASSes |
+| G-b, G-c, G-e, G-m, G-n | `gate_comfy_config.py` | **shipped** | the parallax runner as it shipped: FAIL (5 findings), kept as the test fixture; Wan 80 / LTX 120 frames, CFG 6, unscaled FP8, quantized VAE, actor plate |
+| G-d | `lint_template_transforms.py` | **INFO** (ladder) | one anchored + one loose -> one finding; first landing lists 11 unanchored transforms in the template |
+| G-g | `gate_opening_structure.py` G15b | **WARN** until the grandfathering ruling | token echoed, argument drifted -> WARN; ep1 as shipped WARNs (the planted sentence carries one stem) |
+| G-i, G-j, G-k | `gate_grounding.py` | **INFO-then-FAIL ladder** | wrong horizon / screen tween / contact without solver each FAIL; nothing declared -> INFO, never a silent PASS |
+| G-l | `gate_vertical_safe_box.py` + `test_vertical_safe_box.py` | **shipped, and the defect fixed** (P37 T0) | the pre-T0 9:16 CSS verbatim FAILs: docks 136 px into the rail, dock-2 to y 1780, caption at y 1759 |
+| V-a | `judge_muted_caption.py` | **shipped as a CLI, unwired** | scenery and over-dense diagnoses on recorded replies; cadence is the operator's |
+| G-h | — | **deferred**: 44's ink work (X-ink) | — |
+| G-o | — | **deferred**: X0 — render one 9:16 frame at 390 px and read it | — |
+| M13 | — | **deferred**: P40 T1 settles 0.30 s vs 0.45 s from the data | — |
+
+The composed script runner (`run_script_gates.py`) carries G15b by construction - it lives
+inside the opening-structure gate it already calls. The timeline gates (M14, G-i/j/k) run
+with the motion gate on the build; the config and safe-box gates run on their artifacts.
+
 ## 5. The scoreboard
 
-**8 designed out · 14 gated · 1 agent-judged · 2 JUDGE · 7 demoted, all routed to the backlog.**
+**8 designed out · 14 gated (11 shipped or on the ladder, 3 deferred — §5b) · 1 agent-judged (shipped unwired) · 2 JUDGE · 7 demoted, all routed to the backlog.**
 
 *(G-o added from **operator analytics**, not research — 50 §50.2. It is the cheapest gate in the set and it FAILs almost the whole template. Updated after docs 48 and 49. G-l is the highest-value gate in the set: it FAILs code we already ship. See 49 §49.1.)*
 

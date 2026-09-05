@@ -147,6 +147,20 @@ document** — coverage is the proof of reading — and
 These are **reference, not portable**. A rule graduates to `docs/portable/` once proven
 in a shipped build, and its index row says so.
 
+## The enforcement layer (P37, 2026-09-04)
+
+The research of 2026-09-04 as checks that run - each shown failing before passing (47 §5b).
+
+| Capability | Where | State | Proof |
+|---|---|---|---|
+| **M14** — a camera move never overlaps an evidence build (entrance through the last badge settle) | `scripts/gate_motion_density.py` `_build_clashes` | LIVE in the motion gate | `tests/test_gate_punch_build_overlap.py` |
+| **Comfy / parallax config gate** — dials (intensity 0.10-0.12, tiling none, ssaa >= 1.5, quality >= 80, ViT-L), Wan 4k+1 / LTX 8n+1, CFG <= 4.5, FP8/quantized checks, plate-kind matrix | `scripts/gate_comfy_config.py` | LIVE; the runner it FAILed is its fixture | `tests/test_gate_comfy_config.py` |
+| **Vertical safe-box gate** — 9:16 docks in x[80,880] y[280,1340], caption in the strip; static CSS reader + rendered rectangles | `scripts/gate_vertical_safe_box.py` | LIVE; FAILs the pre-T0 template verbatim | `tests/test_gate_vertical_safe_box.py`, `tests/test_vertical_safe_box.py` |
+| **Transform lint** — scale/rotate without a declared origin | `scripts/lint_template_transforms.py` | INFO ladder; 11 listed on the template | `tests/test_lint_template_transforms.py` |
+| **G15b ring mechanism** — the close returns the P1 claim's content stems, not just the token | `scripts/gate_opening_structure.py` | WARN pending the grandfathering ruling | `tests/test_gate_ring_mechanism.py` |
+| **Grounding gates** — eye-line on the horizon, feet-anchored sprites, solver per contact beat | `scripts/gate_grounding.py` | INFO-then-FAIL ladder (shot table carries no horizon/contact yet) | `tests/test_gate_grounding.py` |
+| **Muted-caption judge** — a model reads the captionless frame; verdict + `scenery` / `over-dense` diagnosis owned by code | `scripts/judge_muted_caption.py` | CLI, unwired; live via OPENAI_API_KEY, tests replay | `tests/test_judge_muted_caption.py` |
+
 ## The golden-frame harness (P39 T2/T3, 2026-09-04)
 
 Four committed surfaces - ledger page mid-build, chart with a callout, 16:9 dock pair,

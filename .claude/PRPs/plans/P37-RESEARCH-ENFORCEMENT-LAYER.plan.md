@@ -1,7 +1,7 @@
 ---
 id: P37-RESEARCH-ENFORCEMENT-LAYER
 title: The enforcement layer - the checks that prove today's research reached production
-status: running
+status: review
 operation: feature
 risk: standard
 owner: parent
@@ -226,13 +226,13 @@ Write sets are disjoint except T1 and T3, which are sequenced rather than parall
 - Evidence: 2026-09-04 - `gate_grounding.py` on the INFO-then-FAIL ladder: G-i reads `world.horizon` + cutout `eye_y` (tolerance 0.04), G-j reads the template's `#plife img` anchor (`50% 100%`, present today) and any cutout `tween: screen`, G-k requires `solver: fk|ik` on a beat declaring `contact`. INFO while a timeline declares nothing, FAIL on a wrong declaration, PASS on a right one - each state tested. Ep1: G-i INFO, G-j PASS, G-k INFO - the shot table carries no horizon or contact yet, as the brief predicted.
 
 ### T6: status the 47 rows and register the gates
-- Status: pending
-- Owner: speedster
+- Status: complete
+- Owner: parent
 - Depends on: T0, T1, T2, T3, T4, T5, T7, T8, T9
 - Write set: `docs/content-video-engine/47-FINDINGS-TO-CHECKS.md`, `docs/content-video-engine/CAPABILITIES.md`, `content/video_engine/scripts/run_script_gates.py`
 - Acceptance: every shipped check's row names its script and reads *shipped*; CAPABILITIES records the new capability in the same commit (its own recall rule); G-g is registered in the composed runner. Deferred items (M13, E1, G-h) keep their blocking reason.
 - Validate: `python scripts/prp_validate.py .claude/PRPs/plans/P37-RESEARCH-ENFORCEMENT-LAYER.plan.md`
-- Evidence: pending
+- Evidence: 2026-09-04 - 47 §5b tables every row with its script, state and the failing case shown; the scoreboard line updated; BACKLOG's Tier-2 table headed with the shipped/open split; CAPABILITIES gains "The enforcement layer" (seven rows). G15b needs no registration - it lives inside the gate the composed runner already calls. Deferred with reasons: G-h (44 ink), G-o (X0), M13 (P40 T1).
 
 ## Verification
 
