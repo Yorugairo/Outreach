@@ -1,7 +1,7 @@
 ---
 id: P40-MEASURE-THE-FIRST-MINUTE
 title: Point an instrument at our own output - the E1 metrics against the one retention curve we hold
-status: draft
+status: running
 operation: feature
 risk: standard
 owner: parent
@@ -115,13 +115,13 @@ artifact under the ep1 build.
 ## Task Slices
 
 ### T1: settle the gap threshold - X3
-- Status: pending
-- Owner: junior_developer
+- Status: complete
+- Owner: parent
 - Depends on: none
 - Write set: `content/video_engine/scripts/gate_gap_threshold.py`, `content/video_engine/tests/test_gap_threshold.py`
 - Acceptance: from `build-f/timeline.json`'s word list, count acoustic gaps at **≥0.30 s** and **≥0.45 s**; for each, report how many shot-table boundaries could land in one, and the mean distance from a boundary to its nearest gap. Report onset vs midpoint placement. **Deliverable is a recommendation with its numbers**, not a preference. Runs today with no render and no new dependency.
-- Validate: `python content/video_engine/scripts/gate_gap_threshold.py content/video_engine/projects/systems-and-blowups/steel-and-paper/build-f`
-- Evidence: pending
+- Validate: `python content/video_engine/scripts/measure_cut_gaps.py --words <words.json> --cuts <ledger.md | timeline.json>` on the reference and on ep1
+- Evidence: 2026-09-04 - **Deviation, on the operator's correction:** the slice as written measured our own timeline; *"is basing the gap threshold off our own work really the right way?"* So the reference was measured first: Wealth Logic's audio (yt-dlp, gitignored) through local Whisper `small.en` with word timestamps (3158 words, 187 WPM), its 99 cuts from `04_shot_ledger_100_cuts.md`; ours re-run through the same Whisper for a like-for-like. The script is `measure_cut_gaps.py` (not `gate_gap_threshold.py` - it measures; the gate ships with the edit pass). Numbers: reference 72-81 % of cuts in gaps >= 0.30 s vs 49-56 % at 0.45; median cut position 0.80-0.83 of the gap; 15-25 % mid-word. Ours: 52-54 % / 0.46 / 39-42 %. Gap supply 21.4/min (ours) vs 17.9 (theirs). **Recommendation with its numbers: threshold 0.30 s, cut at 0.8 of the gap, mid-word <= 25 %.** Written into 46 s46.3, 47 M13, FINDING-gaps-are-the-edit; X3 closed.
 
 ### T2: the E1 metric harness
 - Status: pending

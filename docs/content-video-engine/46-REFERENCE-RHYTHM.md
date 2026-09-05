@@ -57,15 +57,42 @@ that is exactly E21's intent. Shot length has its own separate ceiling
 **The system already distinguishes "the screen went still" from "the plate held long."**
 See [47-FINDINGS-TO-CHECKS](47-FINDINGS-TO-CHECKS.md) §0.
 
-## 46.3 The gap threshold is unsettled
+## 46.3 The gap threshold — settled from the reference, 2026-09-04
 
-`01` and the dossier's `gap_detector.py` blueprint use **Δt ≥ 0.45 s** and place the cut
-at the gap's **midpoint** (`cut = word[i].end + gap·0.5`). `06` and `08` use **Δt ≥ 0.30 s**
-and place it at gap **onset**.
+`01` and the dossier's `gap_detector.py` blueprint used **Δt ≥ 0.45 s** and the gap's
+**midpoint**; `06` and `08` used **Δt ≥ 0.30 s** and gap **onset**. An earlier draft of this
+section proposed settling it from our own word timeline. **Operator: *"is basing the gap
+threshold off our own work really the right way? We should check Wealth Logic's gap
+threshold and compare against ours."*** So it was measured on the reference — its audio
+through local Whisper (`small.en`, word timestamps), its 99 cuts from the frame-accurate
+ledger (`04_shot_ledger_100_cuts.md`) — and ours the same way (`measure_cut_gaps.py`):
 
-These are different gates. **Settle from our own word timeline before M13 ships** — count
-how many gaps each threshold yields across ep1 and whether the 0.45 s set is large enough
-to carry every needed boundary.
+| measured through the same Whisper pass | Wealth Logic (99 ledger cuts) | Steel and Paper (103 scene starts + dock enters) |
+|---|---|---|
+| cuts that land **mid-word** | **15–25 %** (tolerance 0.10 / 0.05 s against the ledger's 0.1 s precision) | **39–42 %** |
+| cuts inside a gap **≥ 0.30 s** | **72–81 %** | 52–54 % |
+| cuts inside a gap ≥ 0.45 s | 49–56 % | 42–43 % |
+| where the cut sits inside its gap (median, 0 = onset, 1 = next word) | **0.80–0.83** | 0.46 |
+| gaps ≥ 0.30 s available per minute | 17.9 | **21.4** |
+| words per minute | 187 | 177 |
+
+**Three things settled, none of them what either report guessed:**
+
+1. **The threshold is 0.30 s.** 0.45 s would exclude nearly half of the reference's own
+   cuts. Their in-gap cuts sit in silences of 0.42 / 0.48 / 0.64 s (p25/p50/p75), with a
+   p10 of 0.36 s — 0.30 is the floor that keeps them all.
+2. **The cut lands late in the gap, not at its onset and not at its midpoint** — median
+   0.8 of the way through the silence, i.e. just before the next word begins. The picture
+   changes as the next phrase arrives. `cut = gap_start + 0.8 · gap`.
+3. **We do not lack slots; we ignore them.** With the same aligner we have *more* gaps
+   ≥ 0.30 s per minute than the reference (21.4 vs 17.9) and still put 4 in 10 cuts inside
+   a word. The earlier "our delivery has fewer pauses" read was an aligner artifact — the
+   ElevenLabs alignment abuts words that Whisper separates.
+
+**M13 as it will ship (47 §2):** every cut within 0.05 s of a gap ≥ 0.30 s or FAIL, placed
+at 0.8 of the gap; a mid-word share above **25 %** FAILs the build (the reference's own
+ceiling at the ledger's precision). Data: `sources/reference_analyses/6-ways-…/audio/
+wealth-logic-6-ways.words.json` (committed) and `build-f/episode-paused.whisper.words.json`.
 
 ## 46.4 The equation spine — the script-architecture finding
 

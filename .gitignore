@@ -160,3 +160,6 @@ content/video_engine/tests/golden/diffs/
 # golden frames are SOURCES: always tracked (P39 T3)
 !content/video_engine/tests/golden/frames/
 !content/video_engine/tests/golden/frames/*.png
+# reference audio is downloaded for measurement, never committed; the Whisper word timeline beside it is
+content/video_engine/sources/reference_analyses/**/audio/*.m4a
+content/video_engine/sources/reference_analyses/**/audio/*.mp3

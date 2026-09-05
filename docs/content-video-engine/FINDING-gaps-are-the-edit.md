@@ -166,3 +166,27 @@ Test 2's: `steel-and-paper/build-f/timeline.json` (processed clock, matched agai
 scene table on the same clock) and `vo-f/audio/scene_*.words.json` (raw, for the
 distribution). The processed timeline carries `dead_space_compressed: true`, which is
 why the raw parts were pulled separately.
+
+
+## Reference-first — 2026-09-04
+
+The tests above measured ourselves. The operator's correction: *"is basing the gap threshold
+off our own work really the right way?"* It is not — our practice is the thing under
+suspicion. So the reference was measured the same way (its audio through local Whisper, its
+99 cuts from the frame-accurate ledger), and ours re-measured through the same aligner:
+
+| measured through the same Whisper pass | Wealth Logic (99 ledger cuts) | Steel and Paper (103 scene starts + dock enters) |
+|---|---|---|
+| cuts that land **mid-word** | **15–25 %** (tolerance 0.10 / 0.05 s against the ledger's 0.1 s precision) | **39–42 %** |
+| cuts inside a gap **≥ 0.30 s** | **72–81 %** | 52–54 % |
+| cuts inside a gap ≥ 0.45 s | 49–56 % | 42–43 % |
+| where the cut sits inside its gap (median, 0 = onset, 1 = next word) | **0.80–0.83** | 0.46 |
+| gaps ≥ 0.30 s available per minute | 17.9 | **21.4** |
+| words per minute | 187 | 177 |
+
+**Settled (46 §46.3):** threshold 0.30 s; the cut sits at ~0.8 of the gap, just before the
+next word; a mid-word share above 25 % is a FAIL. And the standing Tokyo decision — *cut
+words rather than re-time* — is confirmed from the other side: the slots exist (21 per
+minute at ≥ 0.30 s); the cuts are simply not placed in them.
+
+Script: `content/video_engine/scripts/measure_cut_gaps.py --words <words.json> --cuts <ledger.md | timeline.json>`.

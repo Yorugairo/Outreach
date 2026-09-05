@@ -80,7 +80,7 @@ Ordered by value. "Fails on" is the pre-finding behaviour the check catches.
 | **G-n** | **Generative guidance ceilings** (49). Wan I2V CFG ≤ 4.5, LTX CFG ≤ 4.5, LTX STG declared, Wan text encoder is the **scaled** FP8, Wan VAE unquantized. | job spec | frame burning, edge strobing, NaN black frames, blotchy VAE banding — each a wasted render |
 | **G-h** | **Kubelka–Munk compositing.** Two overlapping ink strokes composite darker than `dst(1−a)+src·a` would give. | rendered plate, sampled | alpha blending, which is the wrong operator (44 §44.1) |
 
-**M13** stays as already proposed, blocked on settling 0.30 s/onset vs 0.45 s/midpoint
+**M13** is settled from the reference (46 §46.3, 2026-09-04): **≥ 0.30 s, cut at 0.8 of the gap, mid-word share ≤ 25 %** — neither report's placement was right
 (46 §46.3). It is free: our cut rate already matches the reference, so this is placement
 only.
 
@@ -196,7 +196,7 @@ Every row of §2 now names the script that owns it and the state it landed in. A
 | V-a | `judge_muted_caption.py` | **shipped as a CLI, unwired** | scenery and over-dense diagnoses on recorded replies; cadence is the operator's |
 | G-h | — | **deferred**: 44's ink work (X-ink) | — |
 | G-o | — | **deferred**: X0 — render one 9:16 frame at 390 px and read it | — |
-| M13 | — | **deferred**: P40 T1 settles 0.30 s vs 0.45 s from the data | — |
+| M13 | `measure_cut_gaps.py` (the measurement); the gate lands with the edit pass | **settled**: ≥ 0.30 s, cut at 0.8 of the gap, mid-word ≤ 25 % — from Wealth Logic's 99 cuts through Whisper | ep1 as shipped: 39–42 % mid-word, 52 % in-gap — FAILs on both |
 
 The composed script runner (`run_script_gates.py`) carries G15b by construction - it lives
 inside the opening-structure gate it already calls. The timeline gates (M14, G-i/j/k) run
