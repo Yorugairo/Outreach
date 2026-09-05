@@ -230,8 +230,15 @@ export class FlowCdpDriver {
    *  image mode selected and the video model family absent (2026-09-05). */
   async selectMode(mode) {
     const page = this.flowPage;
-    const want = mode === 'image' ? /Image$/ : /Video$/;
-    const radio = page.getByRole('radio', { name: want }).filter({ visible: true }).first();
+    const want = mode === 'image' ? /Image\s*$/ : /Video\s*$/;
+    const find = () => page.locator('button[role="radio"], [role="radio"]').filter({ hasText: want }).filter({ visible: true }).first();
+    let radio = find();
+    if (await radio.count() === 0) {
+      // the drawer is not open: the pill is the visible button carrying the ratio glyph
+      const pill = page.locator('button').filter({ hasText: /crop_9_16|crop_16_9|crop_square|crop_portrait|crop_landscape/ }).filter({ visible: true }).first();
+      if (await pill.count() > 0) { await pill.click({ timeout: 8000 }); await page.waitForTimeout(900); }
+      radio = find();
+    }
     if (await radio.count() === 0) throw new Error(`Flow mode toggle for "${mode}" not found in the settings drawer`);
     if ((await radio.getAttribute('aria-checked')) !== 'true') {
       await radio.click({ timeout: 8000 });
