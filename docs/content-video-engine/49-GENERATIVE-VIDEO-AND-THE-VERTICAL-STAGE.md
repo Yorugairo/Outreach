@@ -158,6 +158,16 @@ get fringing.
 `CRF 28–32 on the guide image` is the counter-intuitive one: deliberately compressing the
 input frees motion dynamics in I2V.
 
+**Landed 2026-09-05 (operator Option C on the promise plate).** The mask-pinned ambient lane exists on the
+local ComfyUI for both backends (`comfy_vace_ambient.py`, `comfy_ltx_ambient.py`, the SAM 2 mask from
+`comfy_sam2_mask.py`). What four runs established: the **pin is exact in practice** — the cup, desk and laptop
+stayed within compression noise of the still for the whole clip on every run (VACE via `control_masks`, where
+1 = reactive; LTX via `SetLatentNoiseMask` over a latent that is the still on every frame). What they did not
+establish: **a thin bright effect in a small dark region**. VACE 1.3B kept the room (region left as the still)
+or rebuilt the room (region greyed); LTX 2B imagined a second desk at full denoise and only shifted the tone at
+0.6. Steam off a mug is a drawn species (doc 29 §9.27 `steam`), and the lane is for ambient life that fills its
+region. Speed on the 4070: VACE ~8 min for 81 portrait frames at 480p; LTX distilled 12-18 s for 121.
+
 ## 49.4 The depth suite
 
 - **Depth Anything V2** — `vitl_fp32`, ~335 M params, 2.8 GB. Trained on 595 K synthetic

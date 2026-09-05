@@ -1,0 +1,23 @@
+{
+ "model": "ltxv-2b-0.9.8-distilled.safetensors",
+ "num_frames": 121,
+ "cfg": 1.0,
+ "steps": 8,
+ "text_encoder": "t5xxl_fp8_e4m3fn_scaled.safetensors",
+ "width": 480,
+ "height": 864,
+ "fps": 24,
+ "life": [
+  0.78,
+  0.4,
+  0.98,
+  0.565
+ ],
+ "prompt": "White steam rising from a hot cup of coffee, thin wisps of vapor curling upward and fading. Everything else perfectly still.",
+ "still": "content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\omni-video\\stills\\approved\\still-p-viewers-desk.png",
+ "seed": 4242,
+ "crf": 30,
+ "denoise": 0.6,
+ "inpaint": false,
+ "stg": "off (distilled)"
+}
