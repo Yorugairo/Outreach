@@ -5,7 +5,7 @@ Three things are pinned here:
   1. the defaults block exists in the template and every value in it is `false`
   2. an explicit all-false map, and an unknown flag name, both render pixel-identical to the
      golden frame (the switch is inert when off, and a typo cannot turn anything on)
-  3. the flag names are exactly the six designed-out capabilities of doc 47 s1 / P38
+  3. the flag names are exactly the six designed-out capabilities of doc 47 s1 / P38, plus min_jerk (2026-09-05)
 
 Rendering tests need playwright + chromium and are skipped without them; the static checks
 always run.
@@ -26,7 +26,8 @@ sys.path.insert(0, str(ROOT / "content/video_engine/scripts"))
 
 import render_baseline as RB  # noqa: E402
 
-CAPABILITIES = ["curvature_stroke", "analytic_spring", "area_squash", "arap_morph", "dqs_skinning", "prop_attach"]
+CAPABILITIES = ["curvature_stroke", "analytic_spring", "area_squash", "arap_morph", "dqs_skinning", "prop_attach",
+                "min_jerk"]   # + the minimum-jerk transition (FINDING-the-animation-math s2, 2026-09-05)
 
 
 def _defaults_block() -> dict[str, str]:

@@ -5030,5 +5030,9 @@
   "trace",
   "ticker",
   "punch"
- ]
+ ],
+ "kinetics": {
+  "analytic_spring": true,
+  "min_jerk": true
+ }
 }

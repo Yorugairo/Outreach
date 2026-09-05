@@ -242,6 +242,7 @@ def main() -> int:
     C.SHOT_TABLE_FILE = "SHOT-TABLE-SHORT.py"
     C.TITLE, C.SUBTITLE, C.EPISODE_ID = "Tokyo Tea Break", "Money Physics · short", "tokyo-tea-break"
     C.ASPECT = "9:16"
+    C.KINETICS = {"analytic_spring": True, "min_jerk": True}   # the timing module (FINDING-the-animation-math s2/s3): closed-form springs on the pops, minimum-jerk on the wipe and the suck
     return C.main()
 
 
