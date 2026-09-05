@@ -154,13 +154,13 @@ Write sets are disjoint except T1 and T3, which are sequenced rather than parall
 - Evidence: 2026-09-04 - measured before: docks 952 wide at x=64, dock-2 y 1180-1780 (under the caption bar), caption at y=1759. After: `.dock` 800px at x=80, dock-1 y 280-794, dock-2 y 806-1320, solo centred at 553; **the anchored caption also moved** into its strip (`#caption.quiet { bottom: 480px }` -> y ~1399), same finding, same block. `test_vertical_safe_box.py` 3/3: static CSS values, rendered rectangles inside the box with no overlap, **16:9 byte-identical**. The golden harness caught the change on exactly one surface (`dock-pair-9x16`) and the 9:16 golden was refreshed deliberately in the same commit; the other three goldens unchanged.
 
 ### T1: G-a - a camera move may not overlap an evidence build
-- Status: pending
-- Owner: junior_developer
+- Status: complete
+- Owner: parent
 - Depends on: none
 - Write set: `content/video_engine/scripts/gate_motion_density.py`, `content/video_engine/tests/test_gate_punch_build_overlap.py`
 - Acceptance: a scene whose camera species window intersects a dock build window FAILs; the same timeline with the build starting after the move settles PASSes. Verdict carries `SRC_M14` naming 47 §2 G-a and doc 07 Pillar 4 (saccadic suppression).
 - Validate: `python -m pytest content/video_engine/tests/test_gate_punch_build_overlap.py -q`
-- Evidence: pending
+- Evidence: 2026-09-04 - M14 in `gate_motion_density.py`: a build window is the card's entrance (1.5 s) through its last badge reveal + 0.6 s; any `punch | focus_zoom | pull_back` window intersecting one FAILs, naming scene, move, slide and both windows; `SRC_M14` carries 47 s2 G-a / doc 07 Pillar 4. Five tests: window arithmetic, punch on the entrance FAILs, on a badge FAILs, after the settle PASSes, the evidence-dock.json shape is read too. Ep1: M14 PASS (it carries no species rows); the wiring baseline gains the row (4 PASS).
 
 ### T2: G-b, G-c, G-e - the comfy/parallax config gate
 - Status: complete
@@ -208,13 +208,13 @@ Write sets are disjoint except T1 and T3, which are sequenced rather than parall
 - Evidence: 2026-09-04 - applied on top of the runner's uncommitted concurrent work (E30: unowned code is corrected, not planned around): `intensity` is a named parameter defaulting to 0.11 in all six presets, `strength` annotated inert, `steady_value` 0.40, model `depth_anything_v2_vitl_fp16` (precision per X6), `quality` 85, `ssaa` 2.0, `tiling_mode` none, and the 1.10x crop implemented as `ImageScaleBy` -> `ImageCrop` on the Depthflow frames back to the plate's own size (read from the PNG/JPEG header by `imageSize()`; the crop hides the bare border that tiling none leaves). Gate: `VERDICT: PASS (0 findings)`; `node --check` clean. **Test roll done** (ComfyUI 0.34.2, all seven node types present, `vitl_fp16` in the model list): `world-banker-apartment-v2` 1536x1024 through the dolly preset, 30 frames -> 1536x1024 x 30 back at the plate's size. Measured: first-vs-last mean delta 1.2 (the move is real and restrained), **0 dark pixels on every 8px edge strip** (the crop covers the reveal that tiling none leaves), top-band mirror similarity 134 (a kaleidoscope reads ~0). No tearing by eye on frames 0/15/29. Clip in the session's scratchpad `parallax-t9-dolly.mp4`; X6 (fp16 vs fp32 depth) stays open - the fp16 boundaries looked clean on this plate.
 
 ### T8: G-l, G-m, G-n - the vertical and generative gates
-- Status: pending
-- Owner: implementation_luna
+- Status: complete
+- Owner: parent
 - Depends on: T0
 - Write set: `content/video_engine/scripts/gate_vertical_safe_box.py`, `content/video_engine/tests/test_gate_vertical_safe_box.py`, and additions to `gate_comfy_config.py`
 - Acceptance: **G-l** FAILs any 9:16 element outside `x[80,880] y[280,1340]` — and must FAIL the pre-T0 template as its fixture, which is the strongest evidence in this PRP. **G-m** FAILs a Wan job not on `4k+1` or an LTX job not on `8n+1`. **G-n** FAILs Wan I2V CFG > 4.5, LTX CFG > 4.5, an unscaled FP8 text encoder, or a quantized Wan VAE (49 §49.2-49.3).
 - Validate: `python -m pytest content/video_engine/tests/test_gate_vertical_safe_box.py -q`
-- Evidence: pending
+- Evidence: 2026-09-04 - `gate_vertical_safe_box.py` reads the template's 9:16 CSS (dock width/left/top, height derived at 514/800 per px of width, caption bottom) and judges rendered rectangles by the same rule. **It FAILs the pre-T0 CSS verbatim** (`#dock-1`/`#dock-2` x 64-1016 into the rail, dock-2 y past 1340, no 9:16 caption rule -> bottom dead zone) and PASSes the template now. G-m/G-n landed in T2's `gate_comfy_config.py` (same reader). 3 tests.
 
 ### T7: G-i, G-j, G-k - the grounding gates
 - Status: pending

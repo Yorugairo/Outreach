@@ -31,6 +31,7 @@ reads as stillness.
   M08  stage-mode captions declared on every still stretch FAIL once the timeline carries cap_mode;
        until then INFO listing where stage captions are REQUIRED + a JUDGE row
   M09  one camera move per window: no scene stacks two of   FAIL   (s9.27 precedence / s9.28 C3)
+  M14  a camera move never overlaps an evidence build      FAIL   (47 s2 G-a / doc 07 Pillar 4)
        punch | focus_zoom | pull_back, or one over Ken Burns
   M10  opening stillness: no still stretch > 6s begins      FAIL   (E24 / s9.29: 4-6s in the first 30-60s)
        in the first 60s
@@ -118,6 +119,10 @@ OPENING_CHART_HOLD_MAX_S = 6.0   # E25 / doc 29 s9.30: ... and inside the openin
 SRC_M10 = "E24 / doc 29 s9.29: stillness inside the opening minute - 4-6s in the first 30-60s"
 SRC_M11 = "E24 / doc 29 s9.29: the first chart enters 0:08-0:20, annotated on its divergence, with a sound cue"
 SRC_M12 = "E25 / doc 29 s9.30: the chart is the proof, not the homework"
+DOCK_BUILD_S = 1.5               # 47 s2 G-a: a card's entrance - the wipe / fly-in - is a build the eye must be free to read
+BADGE_SETTLE_S = 0.6             # ... and each badge reveal is one too, settling ~0.6s after badge_at
+CAMERA_MOVE_S = 1.2              # a camera species with no declared dur is credited this long
+SRC_M14 = "47 s2 G-a / doc 07 Pillar 4 (saccadic suppression): a camera move may not overlap an evidence build - the eye is blind during the move"
 
 
 @dataclass(frozen=True)
@@ -225,6 +230,47 @@ def _camera_clashes(scenes: list[dict]) -> list[tuple[str, str]]:
         elif moves and scale > 0:
             out.append((sid, f"{moves[0]} over Ken Burns scale {scale:g}"))
     return out
+
+
+def _build_windows(scenes: list[dict], docks: list[dict]) -> list[tuple[str, float, float]]:
+    """(slide, start, end) for every evidence BUILD: the card's entrance plus its badge reveals.
+    The timeline's own docks win; the evidence-dock.json shape is the fallback (P35 T0)."""
+    tl_docks = [d for s in scenes for d in s.get("docks", [])]
+    out = []
+    for d in (tl_docks or docks):
+        span = _dock_span(d)
+        if not span:
+            continue
+        a = span[0]
+        z = max(a + DOCK_BUILD_S, *[float(b) + BADGE_SETTLE_S for b in d.get("badge_at", [])] or [a])
+        out.append((str(d.get("slide", d.get("asset", "?"))), a, min(z, span[1])))
+    return out
+
+
+def _build_clashes(scenes: list[dict], docks: list[dict]) -> list[tuple[str, str]]:
+    """(scene_id, why) for every camera move whose window intersects an evidence build window
+    anywhere on the clock - M14 (47 s2 G-a). M09 is about stacking moves; this is about moving
+    while the viewer is supposed to be reading a build."""
+    builds = _build_windows(scenes, docks)
+    out = []
+    for s in scenes:
+        for sp in s.get("species", []):
+            if sp.get("kind") not in CAMERA_MOVES:
+                continue
+            at = float(sp.get("at", 0.0)); end = at + float(sp.get("dur", CAMERA_MOVE_S) or CAMERA_MOVE_S)
+            for slide, a, z in builds:
+                if at < z and a < end:
+                    out.append((s.get("scene_id", "?"), f"{sp['kind']} {at:.1f}-{end:.1f}s over {slide} build {a:.1f}-{z:.1f}s"))
+    return out
+
+
+def _build_gate(clashes: list[tuple[str, str]]) -> Gate:
+    if clashes:
+        msg = (f"{len(clashes)} camera moves land on an evidence build: " + ", ".join(f"{sid} ({why})" for sid, why in clashes[:12])
+               + (" ..." if len(clashes) > 12 else ""))
+    else:
+        msg = "no camera move (punch | focus_zoom | pull_back) overlaps a card entrance or a badge reveal"
+    return Gate("M14", "FAIL" if clashes else "PASS", msg, SRC_M14)
 
 
 def _collect_events(tl: dict, mp: dict, spans: list, badges: list, page_beats: list, stage_rows: list,
@@ -356,6 +402,7 @@ def run(tl: dict, docks: list[dict], mp: dict) -> tuple[list[Gate], dict]:
             "doc 29 s9.25 caption STAGE mode (player template pending)")
         add("J02", "JUDGE", "captions on the still stretches above are centred, large, per-word explosive - not the lower-third anchor", "doc 29 s9.25 #2")
     g.append(_camera_gate(A["camera_clashes"]))
+    g.append(_build_gate(_build_clashes(tl.get("scenes", []), docks)))   # M14 (P37 T1)
     # E24 / E25: the opening minute and the chart-as-proof rule
     g += [_opening_still_gate(A["still"]), _first_chart_gate(tl, docks, mp), _chart_hold_gate(tl, docks)]
     add("J01", "JUDGE", "every savor beat holds its picture (card up, badge lit), never a bare plate with a drift", "doc 29 s9.25 #3")
