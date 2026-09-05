@@ -124,8 +124,8 @@ def shot_table(ws: list[dict], runtime_s: float) -> list[tuple]:
         ]),
         # 5 opponent + desire/map + promise: two fingers at "Two numbers"
         (t_opponent, t_catalyst, clip("clip-g-two-fingers-v2.mp4"), (0, 0, 0), [], None, None),
-        # 6 catalyst + loop + foreshadow: the page again, on its new datum
-        (t_catalyst, t_pledge, hold, (0, 0, 0), [], None, [
+        # 6 catalyst + loop + foreshadow: the page RETURNS (enter=spiral: it unwinds from its point, never drawn like new)
+        (t_catalyst, t_pledge, hold + ":spiral", (0, 0, 0), [], None, [
             {"kind": "punch", "at": at("Since February, Japan"), "dur": 0.9, "target": datum(PEAK_IDX)},
             {"kind": "callout", "at": at("a tenth of"), "dur": 2.0, "target": datum(LAST_IDX)},
             {"kind": "spotlight", "at": at("that print is"), "dur": 2.0, "target": datum(LAST_IDX)},

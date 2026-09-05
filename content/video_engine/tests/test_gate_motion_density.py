@@ -265,9 +265,9 @@ def test_world_for_plate_bogus_ledger_ids_are_hard_errors():
 @needs_ep1
 def test_parse_ledger_id_defaults_emphasize_and_quiet_zone():
     B = _builder()
-    assert B.parse_ledger_id("ledger:ev-x:line") == ("ev-x", "line", None, "right")
-    assert B.parse_ledger_id("ledger:ev-x:bars:3") == ("ev-x", "bars", 3, "right")
-    assert B.parse_ledger_id("ledger:ev-x:bars::left") == ("ev-x", "bars", None, "left")
+    assert B.parse_ledger_id("ledger:ev-x:line") == ("ev-x", "line", None, "right", None)
+    assert B.parse_ledger_id("ledger:ev-x:bars:3") == ("ev-x", "bars", 3, "right", None)
+    assert B.parse_ledger_id("ledger:ev-x:bars::left") == ("ev-x", "bars", None, "left", None)
 
 
 # ---- P34 T5: caption STAGE mode declared per page; M08 enforced -----------------------------
@@ -466,6 +466,24 @@ def test_m07_on_a_short_is_an_info_row_with_both_rates():
     g = _by_id(G.run(tl, docks, mp)[0])
     assert g["M07"].level == "INFO", g["M07"]
     assert "short: 1 full minute(s) in 82s" in g["M07"].message and "tail from 1:00" in g["M07"].message and "whole runtime" in g["M07"].message, g["M07"]
+
+
+def test_a_spiral_entry_credits_one_beat_and_every_page_credits_its_retract():
+    tl, docks, mp = _short_build(page_at=17.0)
+    tl["scenes"][3]["world"]["page"]["enter"] = "spiral"
+    ev = G.analyse(tl, docks, mp)["events"]
+    assert 17.0 in ev and 18.2 in ev and 17.7 not in ev, ev           # the unwind, not the roll-out
+    assert 31.3 in ev and 32.2 in ev, ev                              # the retract on a page ending at 33.0
+    ev2 = G.analyse(_short_build(page_at=17.0)[0], docks, mp)["events"]
+    assert 17.7 in ev2 and 31.3 in ev2, ev2                           # a full entry keeps its beats and still retracts
+
+
+def test_ledger_id_enter_token_is_validated():
+    import build_scene_timeline_f as B
+    assert B.parse_ledger_id("ledger:x:line:12:right:spiral")[4] == "spiral"
+    assert B.parse_ledger_id("ledger:x:line")[4] is None
+    with pytest.raises(ValueError):
+        B.parse_ledger_id("ledger:x:line:12:right:wobble")
 
 
 def test_m07_still_ranks_a_long_form_build():

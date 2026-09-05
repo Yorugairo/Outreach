@@ -3,12 +3,12 @@
 ```text
 === MOTION DENSITY GATE: C:\Users\Snipe\Downloads\Outreach Program\content\video_engine\projects\systems-and-blowups\tokyo-tea-break\build-short ===
                runtime: 1:22
-         visual_events: 78 (56.7/min)
+         visual_events: 80 (58.2/min)
                  docks: 0
            dock_source: evidence-dock.json
           ledger_pages: 3
   still_over_12s_share: 0%
-            per_minute: 0:00:54/2 1:00:61/3
+            per_minute: 0:00:54/2 1:00:67/3
 
   [PASS ] M01 longest still stretch 2.5s at 0:38
           doc 29 s8.19 / s9.25 stillness ceiling
@@ -34,7 +34,7 @@
           E25 / doc 29 s9.30: the chart is the proof, not the homework
   [PASS ] M14 no camera move (punch | focus_zoom | pull_back) overlaps a card entrance or a badge reveal
           47 s2 G-a / doc 07 Pillar 4 (saccadic suppression): a camera move may not overlap an evidence build - the eye is blind during the move
-  [INFO ] M07 short: 1 full minute(s) in 82s - opening 54.0 events/min, 2.0 evidence entries/min; tail from 1:00 61.4/min; whole runtime 55.3/min - no minute distribution to rank in (E21 is judged on the whole)
+  [INFO ] M07 short: 1 full minute(s) in 82s - opening 54.0 events/min, 2.0 evidence entries/min; tail from 1:00 66.7/min; whole runtime 56.7/min - no minute distribution to rank in (E21 is judged on the whole)
           E21: the opening is the densest minute, never the thinnest
   [JUDGE] J01 every savor beat holds its picture (card up, badge lit), never a bare plate with a drift
           doc 29 s9.25 #3
@@ -42,5 +42,5 @@
 RESULT: 0 FAIL / 0 WARN / 12 PASS / 1 JUDGE / 1 INFO
 ```
 
-TIMELINE: tokyo-short.timeline.json sha256:134516a9dbb4b64983a66686ca6933abba909c113f70898c41180243bbadde6f
+TIMELINE: tokyo-short.timeline.json sha256:f7d5710f8c30f6ce4e5f6b329a334e18ee67b8dd15c7effc7580c320da98fa5e
 VERDICT: PASS (0 FAIL)

@@ -2308,7 +2308,8 @@
      "unit": "",
      "judge": [],
      "badges": [],
-     "emphasize": 0
+     "emphasize": 0,
+     "enter": "spiral"
     },
     "ken_burns": {
      "scale": 0,

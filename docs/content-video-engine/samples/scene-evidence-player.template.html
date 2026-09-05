@@ -1556,7 +1556,7 @@
       rail.style.left = chart.style.left; rail.style.top = ((cb.y + cb.h) * 100 + 4.4).toFixed(2) + "%"; rail.style.maxWidth = chart.style.width;
     }
     const inlineBadges = {}; (pg.badges || []).forEach((bd) => { if (bd.inline) inlineBadges[LP_BADGE_COL[bd.accent]] = bd; });
-    const st = { root, page, edge, blobs, strokes, nib, rect, goo, glyphs, chart, fieldPlate, boardCentre, badges, inlineBadges, kind: pg.builder || "story",
+    const st = { root, page, edge, blobs, strokes, nib, rect, goo, glyphs, chart, fieldPlate, boardCentre, badges, inlineBadges, field, rail, inkEls: [title, subEl, src], kind: pg.builder || "story",
                  bars: [], paths: [], labels: [], callout: null, cval: null, vals: pg.values || [],
                  vstr: pg.value_strings || [], emph: Number.isInteger(pg.emphasize) ? pg.emphasize : -1,
                  geom, portrait: PORTRAIT, linePts: [] };   /* geom: the chart's drawing box (viewBox units); linePts: each series' points in it, for exact datum targets */   /* no emphasis declared = no datum styled (spec emits null) */
@@ -1564,6 +1564,7 @@
     const builders = { "dense-line": buildLedgerLine, race: buildLedgerRace, decline: buildLedgerDecline, combo: buildLedgerCombo };
     (builders[st.kind] || buildLedgerBars)(st, pg);
     /* keyed per world element: the wipe paints the same scene into wA and wB */
+    st.homes = new Map([chart, rail, title, subEl, src, field, fieldPlate].filter(Boolean).map((x) => [x, lpHome(page, x)]));   /* for the spiral: measured once, untransformed */
     ledgerState.set(el.id + "|" + scene.scene_id, st);
     el.__lp = st;   /* resolveTarget reads the active page's points from its world element */
     return st;
@@ -1912,11 +1913,52 @@
       ln.name.setAttribute("opacity", clamp01((g - 1) / 0.05).toFixed(2));
     });
   };
+  /* RETRACT (operator, 2026-09-05: "all of the colours spiral back into a single point in the charcoal, and all of the
+     charcoal swirls back to a single point in the cream"): the page LEAVES on its scene's last COLOURS + CHARCOAL
+     seconds - the chart, the ink and the badges wind into one point (TURNS turns, shrinking), then the charcoal field
+     winds into the same point and the cream is bare at the cut. A page declared enter:"spiral" ARRIVES by the same
+     path in reverse over IN seconds: no roll, no soak, no ink, no build - a chart that RETURNS is not drawn like new
+     (E25; operator: "re-using the same chart back to back and drawing it like it's new"). Pure functions of t. */
+  const LP_RETRACT = { COLOURS: 0.9, CHARCOAL: 0.8, IN: 1.2, TURNS: 1.5 };
+  const lpHome = (page, el) => {   /* an element's untransformed box in page px (SVG has no offsetLeft) */
+    const pr = page.getBoundingClientRect(), r = el.getBoundingClientRect();
+    if (!pr.width || !pr.height) return { x: 0, y: 0 };
+    return { x: (r.left - pr.left) / pr.width * page.offsetWidth, y: (r.top - pr.top) / pr.height * page.offsetHeight };
+  };
+  const lpSpiralXf = (st, el, P, k) => {   /* k: 1 = home, 0 = wound into the point */
+    if (!el) return;
+    if (k >= 1) { el.style.transform = ""; if (el === st.field) el.style.borderRadius = ""; return; }
+    if (el === st.field) el.style.borderRadius = (50 * (1 - k)).toFixed(1) + "%";   /* the charcoal rounds into a blob as it winds down - a drain, not a spinning card */
+    const h = st.homes.get(el) || { x: 0, y: 0 };
+    el.style.transformOrigin = (P.x - h.x).toFixed(1) + "px " + (P.y - h.y).toFixed(1) + "px";
+    el.style.transform = "rotate(" + (LP_RETRACT.TURNS * 360 * (1 - k)).toFixed(1) + "deg) scale(" + Math.max(0, k).toFixed(4) + ")";
+  };
+  const lpSpiral = (st, scene, t, pg) => {
+    const a = scene.span ? scene.span[0] : 0, z = scene.span ? scene.span[1] : Infinity;
+    let kc = 1, kf = 1;   /* the colours, the field */
+    const to = t - (z - LP_RETRACT.COLOURS - LP_RETRACT.CHARCOAL);
+    if (to > 0) {
+      kc = Math.pow(1 - clamp01(to / LP_RETRACT.COLOURS), 1.6);
+      kf = Math.pow(1 - clamp01((to - LP_RETRACT.COLOURS) / LP_RETRACT.CHARCOAL), 1.6);
+    }
+    if (pg.enter === "spiral") {   /* the field unwinds first, the colours follow */
+      const ui = clamp01((t - a) / LP_RETRACT.IN);
+      kf = Math.min(kf, 1 - Math.pow(1 - clamp01(ui / 0.45), 1.6));
+      kc = Math.min(kc, 1 - Math.pow(1 - clamp01((ui - 0.35) / 0.65), 1.6));
+    }
+    const on = kc < 1 || kf < 1;
+    if (!on && !st.spiralOn) return;   /* idle: touch no style (an inline transform cleared on an untouched element still nudges text a sub-pixel) */
+    st.spiralOn = on;
+    const P = { x: st.page.offsetWidth * st.boardCentre.x / 100, y: st.page.offsetHeight * st.boardCentre.y / 100 };   /* read only when a spiral is on frame: a layout flush mid-paint re-snaps text on the punched page */
+    for (const el of [st.chart, st.rail, ...(st.inkEls || [])]) lpSpiralXf(st, el, P, kc);
+    lpSpiralXf(st, st.field, P, kf);
+    if (st.fieldPlate) lpSpiralXf(st, st.fieldPlate, P, kf);
+  };
   const paintLedger = (el, scene, t) => {
     const st = ledgerState.get(el.id + "|" + scene.scene_id) || buildLedger(el, scene);
     const pg = scene.world.page || {};
     if (!st.root.isConnected) { el.querySelectorAll(".lp").forEach((x) => x.remove()); el.appendChild(st.root); }
-    const tr = t - scene.span[0];
+    const tr = t - scene.span[0] + (pg.enter === "spiral" ? LP_FOCUS_AT + LP_BADGE0 + LP_BADGE_STEP * ((st.badges || []).length + 1) : 0);   /* a spiral entry ARRIVES built: its beats are all past */
     /* beat 1: roll-out */
     const rk = expoOut(clamp01(tr / LP.ROLL));
     /* (the roll-out translate is composed with the punch below) */
@@ -1984,6 +2026,7 @@
       bd.el.style.opacity = Math.min(1, e * 1.4).toFixed(3);
       bd.el.style.transform = "translateY(" + (18 * (1 - e)).toFixed(1) + "px) scale(" + (0.94 + 0.06 * e).toFixed(4) + ")";
     }
+    lpSpiral(st, scene, t, pg);   /* the retract at the scene's end; the spiral entry at its start */
   };
 
   /* ================= MOTION MENU species (doc 29 s9.27; P35 T6 / T7) =================

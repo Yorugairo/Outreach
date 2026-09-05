@@ -82,6 +82,8 @@ PAGE_BUILD_END_S = PAGE_BEAT_OFFSETS[-1]   # a LEDGER PAGE's chart LANDS here (7
                                            # operator's ruling (2026-09-04) is no highlight over the charcoal build, so the species fires after the build, never with the roll-out
 SHORT_FULL_MINUTES = 3                     # M07 ranks whole minutes; with fewer full minutes than this (a short) there is no distribution to rank in -
                                            # the row reports both rates as INFO (P41, 2026-09-05) instead of failing the opening against a 22s tail
+LP_SPIRAL_IN_S = 1.2                       # a page declared enter=spiral unwinds from its point over this (template LP_RETRACT.IN): one beat, then the species
+LP_RETRACT_S = (0.9, 0.8)                  # every page LEAVES by the retract: the colours wind in, then the charcoal (template LP_RETRACT.COLOURS / CHARCOAL)
 LP_BADGE0_S, LP_BADGE_STEP_S = 0.4, 0.9   # page badges spring in after the build: build end + 0.4 + 0.9k (template LP.BADGE0 / BADGE_STEP)
 DOCK_SOURCE_TIMELINE = "timeline"            # scenes[].docks enter/exit/badge_at - the player's own clock
 DOCK_SOURCE_FILE = "evidence-dock.json"      # fallback only: a timeline that carries no docks at all
@@ -191,7 +193,10 @@ def _page_events(scenes: list[dict]) -> tuple[list[float], list[float]]:
             continue
         a, z = float(s["span"][0]), float(s["span"][1])
         starts.append(a)
-        beats += [round(a + off, 2) for off in PAGE_BEAT_OFFSETS if a + off < z]
+        spiral = ((s.get("world", {}).get("page") or {}).get("enter") == "spiral")
+        beats += [round(a + off, 2) for off in ((0.0, LP_SPIRAL_IN_S) if spiral else PAGE_BEAT_OFFSETS) if a + off < z]
+        # the retract: the colours start winding in, then the charcoal - two beats at the page's end
+        beats += [round(z - sum(LP_RETRACT_S), 2), round(z - LP_RETRACT_S[1], 2)]
         # inline badges ride their line's draw-complete (already a build event); only rail pills are extra reveals
         n_badges = sum(1 for b in ((s.get("world", {}).get("page") or {}).get("badges") or []) if not b.get("inline"))
         beats += [round(a + PAGE_BEAT_OFFSETS[-1] + LP_BADGE0_S + LP_BADGE_STEP_S * k, 2) for k in range(n_badges)

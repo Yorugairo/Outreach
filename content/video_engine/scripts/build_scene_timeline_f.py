@@ -48,7 +48,8 @@ import gate_motion_density as MG  # noqa: E402  (E21 motion gate -> GATES-MOTION
 import ledger_page as LPG  # noqa: E402  (series.json -> ledger_page.v1 spec, doc 29 s9.26)
 
 LEDGER_PREFIX = "ledger:"          # shot-table plate id prefix for a LEDGER PAGE world (s9.28 surface = page)
-LEDGER_ID_PARTS = (3, 5)           # ledger:<series>:<variant>[:<emphasize>[:<quiet_zone>]]
+LEDGER_ID_PARTS = (3, 6)           # ledger:<series>:<variant>[:<emphasize>[:<quiet_zone>[:<enter>]]]
+LEDGER_ENTERS = ("spiral",)        # enter=spiral: the page RETURNS - unwinds from its point, no roll/soak/ink/build (E25; 2026-09-05)
 SPECIES_LEDGER = "ledger"          # timeline["species"] entry; the player keys on world.kind == "ledger"
 
 TIMELINE_NAME = "steel-and-paper.timeline.json"  # the compiled scene_evidence_timeline.v1 the gate reads
@@ -181,13 +182,13 @@ def sha(p: Path) -> str:
     return hashlib.sha256(p.read_bytes()).hexdigest()
 
 
-def parse_ledger_id(plate_id: str) -> tuple[str, str, int | None, str]:
-    """``ledger:<series>:<variant>[:<emphasize>[:<quiet_zone>]]`` -> its parts.
+def parse_ledger_id(plate_id: str) -> tuple[str, str, int | None, str, str | None]:
+    """``ledger:<series>:<variant>[:<emphasize>[:<quiet_zone>[:<enter>]]]`` -> its parts.
     ValueError names the id; the caller names the row."""
     parts = plate_id.split(":")
     lo, hi = LEDGER_ID_PARTS
     if parts[0] != LEDGER_PREFIX[:-1] or not (lo <= len(parts) <= hi) or not parts[1]:
-        raise ValueError(f"{plate_id!r}: expected ledger:<series-id>:<variant>[:<emphasize>[:<quiet_zone>]]")
+        raise ValueError(f"{plate_id!r}: expected ledger:<series-id>:<variant>[:<emphasize>[:<quiet_zone>[:<enter>]]]")
     series_id, variant = parts[1], parts[2]
     if variant not in LPG.VARIANTS:
         raise ValueError(f"{plate_id!r}: variant {variant!r} is not one of {'|'.join(LPG.VARIANTS)}")
@@ -199,7 +200,10 @@ def parse_ledger_id(plate_id: str) -> tuple[str, str, int | None, str]:
     quiet_zone = parts[4] if len(parts) > 4 else "right"
     if quiet_zone not in LPG.QUIET_ZONES:
         raise ValueError(f"{plate_id!r}: quiet_zone {quiet_zone!r} is not one of {'|'.join(LPG.QUIET_ZONES)}")
-    return series_id, variant, emphasize, quiet_zone
+    enter = parts[5] if len(parts) > 5 and parts[5] != "" else None
+    if enter is not None and enter not in LEDGER_ENTERS:
+        raise ValueError(f"{plate_id!r}: enter {enter!r} is not one of {'|'.join(LEDGER_ENTERS)}")
+    return series_id, variant, emphasize, quiet_zone, enter
 
 
 def ledger_world(plate_id: str, ken: tuple, ep_dir: Path, dock_badges: list | None = None) -> dict:
@@ -207,7 +211,7 @@ def ledger_world(plate_id: str, ken: tuple, ep_dir: Path, dock_badges: list | No
     ``ledger_page.v1`` spec from ``<ep_dir>/evidence/objects/<series>.series.json``
     (doc 29 s9.26: data only from a series.json; s9.28: surface x builder are
     two axes). No asset_id / sha256 - the player draws the page."""
-    series_id, variant, emphasize, quiet_zone = parse_ledger_id(plate_id)
+    series_id, variant, emphasize, quiet_zone, enter = parse_ledger_id(plate_id)
     path = Path(ep_dir) / "evidence/objects" / f"{series_id}.series.json"
     if not path.exists():
         raise ValueError(f"{plate_id!r}: series file missing: {path}")
@@ -219,6 +223,8 @@ def ledger_world(plate_id: str, ken: tuple, ep_dir: Path, dock_badges: list | No
     if errors:
         raise ValueError(f"{plate_id!r}: {path.name} is not a page ({variant}): " + "; ".join(errors))
     page = LPG.build_spec(series, variant, emphasize, quiet_zone)
+    if enter:
+        page["enter"] = enter   # the player: a returning page unwinds from its point (LP_RETRACT.IN)
     # the evidence dock's authored badges for this asset land on the page too (the key for the
     # viewer), synced to the series' own labels - never a second copy of the numbers
     if dock_badges:
