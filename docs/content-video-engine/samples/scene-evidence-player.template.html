@@ -2289,14 +2289,30 @@
      A clip shorter than its scene holds its last frame (no loop - a loop is a visible seam). */
   const clipSeeks = new Set();
   let clipLive = false;   /* true while the transport is playing: clip worlds play instead of seeking */
+  /* THE CLIP POOL (operator, 2026-09-05: "as soon as the scene change happens there's a black flash, THEN the page
+     wipes"): a <video> created at the boundary has no decoded frame yet and paints black under the wipe's first
+     frames. Every clip world's video is created at load, buffered, and parked in a hidden holder; a scene change
+     MOVES the element into the world - its first frame is already there. Nothing is ever destroyed. */
+  const clipPool = new Map(), clipHold = document.createElement("div");
+  clipHold.id = "clippool"; clipHold.style.display = "none"; document.body.appendChild(clipHold);
+  const clipFor = (asset) => {
+    let v = clipPool.get(asset);
+    if (!v) {
+      v = document.createElement("video");
+      v.className = "clipv"; v.muted = true; v.playsInline = true; v.preload = "auto";
+      v.dataset.asset = asset; v.src = A[asset];
+      clipPool.set(asset, v); clipHold.appendChild(v);
+      try { v.load(); } catch (e) {}
+    }
+    return v;
+  };
+  (TL.scenes || []).forEach((sc) => { if (sc.world && sc.world.kind === "clip" && A[sc.world.asset_id]) clipFor(sc.world.asset_id); });
+  const parkClips = (el) => el.querySelectorAll("video.clipv").forEach((x) => { x.pause(); clipHold.appendChild(x); });
   const paintClip = (el, scene, t) => {
     let v = el.querySelector("video.clipv");
     if (!v || v.dataset.asset !== scene.world.asset_id) {
-      el.querySelectorAll("video.clipv").forEach((x) => { x.pause(); x.remove(); });
-      v = document.createElement("video");
-      v.className = "clipv"; v.muted = true; v.playsInline = true; v.preload = "auto";
-      v.dataset.asset = scene.world.asset_id; v.src = A[scene.world.asset_id];
-      el.appendChild(v);
+      parkClips(el);
+      v = clipFor(scene.world.asset_id); v.pause(); el.appendChild(v);
     }
     const local = Math.max(0, t - scene.span[0]);
     const want = Number.isFinite(v.duration) && v.duration > 0 ? Math.min(local, Math.max(0, v.duration - 0.05)) : local;
@@ -2351,7 +2367,7 @@
         el.style.backgroundImage = `url("${A[scene.world.asset_id]}")`;
         el.querySelectorAll(".lp").forEach((x) => x.remove());
       }
-      if (!isClip) el.querySelectorAll("video.clipv").forEach((v) => { v.pause(); v.remove(); });
+      if (!isClip) parkClips(el);   /* back to the pool, never destroyed */
       const kb0 = scene.world.ken_burns || { scale: 0, x: 0, y: 0 };
       const kb = isLedger ? { scale: Math.min(kb0.scale, LP.KB_MAX), x: 0, y: 0 } : kb0;
       const p = clamp01((t - scene.span[0]) / Math.max(0.1, scene.span[1] - scene.span[0]));
