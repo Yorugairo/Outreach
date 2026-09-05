@@ -265,9 +265,9 @@ def test_world_for_plate_bogus_ledger_ids_are_hard_errors():
 @needs_ep1
 def test_parse_ledger_id_defaults_emphasize_and_quiet_zone():
     B = _builder()
-    assert B.parse_ledger_id("ledger:ev-x:line") == ("ev-x", "line", None, "right", None)
-    assert B.parse_ledger_id("ledger:ev-x:bars:3") == ("ev-x", "bars", 3, "right", None)
-    assert B.parse_ledger_id("ledger:ev-x:bars::left") == ("ev-x", "bars", None, "left", None)
+    assert B.parse_ledger_id("ledger:ev-x:line") == ("ev-x", "line", None, "right", None, None)
+    assert B.parse_ledger_id("ledger:ev-x:bars:3") == ("ev-x", "bars", 3, "right", None, None)
+    assert B.parse_ledger_id("ledger:ev-x:bars::left") == ("ev-x", "bars", None, "left", None, None)
 
 
 # ---- P34 T5: caption STAGE mode declared per page; M08 enforced -----------------------------
@@ -473,15 +473,30 @@ def test_a_spiral_entry_credits_one_beat_and_every_page_credits_its_retract():
     tl["scenes"][3]["world"]["page"]["enter"] = "spiral"
     ev = G.analyse(tl, docks, mp)["events"]
     assert 17.0 in ev and 18.2 in ev and 17.7 not in ev, ev           # the unwind, not the roll-out
-    assert 31.3 in ev and 32.2 in ev, ev                              # the retract on a page ending at 33.0
+    assert 31.2 in ev and 32.0 in ev, ev                              # the retract on a page ending at 33.0
     ev2 = G.analyse(_short_build(page_at=17.0)[0], docks, mp)["events"]
-    assert 17.7 in ev2 and 31.3 in ev2, ev2                           # a full entry keeps its beats and still retracts
+    assert 17.7 in ev2 and 31.2 in ev2, ev2                           # a full entry keeps its beats and still retracts
+    tl3 = _short_build(page_at=17.0)[0]; tl3["scenes"][3]["world"]["page"]["exit"] = "cut"
+    assert 31.2 not in G.analyse(tl3, docks, mp)["events"]            # exit=cut: no retract beats
+
+
+def test_m15_refuses_a_species_over_the_retract_unless_the_page_exits_on_the_cut():
+    tl, docks, mp = _short_build(page_at=17.0)
+    assert _by_id(G.run(tl, docks, mp)[0])["M15"].level == "PASS"
+    tl["scenes"][3]["species"].append({"kind": "punch", "at": 32.5, "dur": 0.9, "target": {"kind": "datum", "index": 3}})
+    g = _by_id(G.run(tl, docks, mp)[0])
+    assert g["M15"].level == "FAIL" and "punch 32.5-33.4s over the retract from 31.2s" in g["M15"].message, g["M15"]
+    tl["scenes"][3]["world"]["page"]["exit"] = "cut"
+    assert _by_id(G.run(tl, docks, mp)[0])["M15"].level == "PASS"
 
 
 def test_ledger_id_enter_token_is_validated():
     import build_scene_timeline_f as B
     assert B.parse_ledger_id("ledger:x:line:12:right:spiral")[4] == "spiral"
     assert B.parse_ledger_id("ledger:x:line")[4] is None
+    assert B.parse_ledger_id("ledger:x:bars:3:right::cut")[4:] == (None, "cut")
+    with pytest.raises(ValueError):
+        B.parse_ledger_id("ledger:x:bars:3:right::fade")
     with pytest.raises(ValueError):
         B.parse_ledger_id("ledger:x:line:12:right:wobble")
 

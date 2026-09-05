@@ -1564,7 +1564,6 @@
     const builders = { "dense-line": buildLedgerLine, race: buildLedgerRace, decline: buildLedgerDecline, combo: buildLedgerCombo };
     (builders[st.kind] || buildLedgerBars)(st, pg);
     /* keyed per world element: the wipe paints the same scene into wA and wB */
-    st.homes = new Map([chart, rail, title, subEl, src, field, fieldPlate].filter(Boolean).map((x) => [x, lpHome(page, x)]));   /* for the spiral: measured once, untransformed */
     ledgerState.set(el.id + "|" + scene.scene_id, st);
     el.__lp = st;   /* resolveTarget reads the active page's points from its world element */
     return st;
@@ -1913,46 +1912,95 @@
       ln.name.setAttribute("opacity", clamp01((g - 1) / 0.05).toFixed(2));
     });
   };
-  /* RETRACT (operator, 2026-09-05: "all of the colours spiral back into a single point in the charcoal, and all of the
-     charcoal swirls back to a single point in the cream"): the page LEAVES on its scene's last COLOURS + CHARCOAL
-     seconds - the chart, the ink and the badges wind into one point (TURNS turns, shrinking), then the charcoal field
-     winds into the same point and the cream is bare at the cut. A page declared enter:"spiral" ARRIVES by the same
-     path in reverse over IN seconds: no roll, no soak, no ink, no build - a chart that RETURNS is not drawn like new
-     (E25; operator: "re-using the same chart back to back and drawing it like it's new"). Pure functions of t. */
-  const LP_RETRACT = { COLOURS: 0.9, CHARCOAL: 0.8, IN: 1.2, TURNS: 1.5 };
-  const lpHome = (page, el) => {   /* an element's untransformed box in page px (SVG has no offsetLeft) */
+  /* RETRACT as a VORTEX (operator, 2026-09-05: "a true spiral of everything getting sucked back into the cream as if a
+     vortex / whirlpool"): every colour on the page is a PARTICLE - each ink glyph, each bar, value, tick and label, each
+     pill, each point of the series line - with a home position and a distance r from the drain (the board centre).
+     The map is analytic in u (FINDING-the-animation-math s3: a seek renderer may only use closed forms):
+       the drain takes the centre first     ui  = clamp((u - LAG*rn) / (1 - LAG)),  rn = r / Rmax
+       the radius falls slowly, then fast   r'  = r * (1 - ui^1.7)
+       differential rotation (the whirl)    th  = TURNS * 2pi * ui * (0.6 + 0.9 * (1 - rn))   - the centre spins faster
+       stretch along the flow, area kept    diag(1+a, 1/(1+a)) about the tangent (s4), a = ALPHA * 4ui(1-ui)
+       the particle shrinks                 s   = (1 - ui)^0.7
+     The series line is re-drawn from its mapped points, so it curls into the drain like a noodle. Phase two: the crisp
+     charcoal fades and the STAINS it settled over are sucked down the same drain. A page declared enter:"spiral"
+     ARRIVES by the same map run backwards (E25: a returning chart is not drawn like new); exit:"cut" skips the retract
+     (a punch that must land on the last line, E40 #5: no species over a spiral out). Idle frames touch nothing. */
+  const LP_RETRACT = { COLOURS: 0.8, CHARCOAL: 1.0, IN: 1.2, TURNS: 1.25, LAG: 0.3, ALPHA: 0.55, RECT_FADE: 0.3 };
+  const lpVortex = (x, y, c, Rmax, u) => {
+    const dx = x - c.x, dy = y - c.y, r = Math.hypot(dx, dy) || 1e-6, phi = Math.atan2(dy, dx), rn = Math.min(1, r / Rmax);
+    const ui = clamp01((u - LP_RETRACT.LAG * rn) / (1 - LP_RETRACT.LAG));
+    const rr = r * (1 - Math.pow(ui, 1.7)), th = LP_RETRACT.TURNS * 2 * Math.PI * ui * (0.6 + 0.9 * (1 - rn));
+    const a = LP_RETRACT.ALPHA * 4 * ui * (1 - ui), s = Math.pow(1 - ui, 0.7);
+    const ang = phi + th;
+    return { x: c.x + rr * Math.cos(ang), y: c.y + rr * Math.sin(ang), th: th * 180 / Math.PI, tan: ang * 180 / Math.PI + 90, sx: s * (1 + a), sy: s / (1 + a), ui };
+  };
+  /* a CSS transform (HTML particle, its own centre as origin) and an SVG one (user units) for the same map */
+  const lpVortexCss = (v, hx, hy) => "translate(" + (v.x - hx).toFixed(2) + "px," + (v.y - hy).toFixed(2) + "px) rotate(" + v.tan.toFixed(2) + "deg) scale(" + v.sx.toFixed(4) + "," + v.sy.toFixed(4) + ") rotate(" + (v.th - v.tan).toFixed(2) + "deg)";
+  const lpVortexSvg = (v, hx, hy) => "translate(" + v.x.toFixed(2) + " " + v.y.toFixed(2) + ") rotate(" + v.tan.toFixed(2) + ") scale(" + v.sx.toFixed(4) + " " + v.sy.toFixed(4) + ") rotate(" + (v.th - v.tan).toFixed(2) + ") translate(" + (-hx).toFixed(2) + " " + (-hy).toFixed(2) + ")";
+  const lpHome = (page, el) => {   /* an element's untransformed centre in page px (SVG has no offsetLeft) */
     const pr = page.getBoundingClientRect(), r = el.getBoundingClientRect();
     if (!pr.width || !pr.height) return { x: 0, y: 0 };
-    return { x: (r.left - pr.left) / pr.width * page.offsetWidth, y: (r.top - pr.top) / pr.height * page.offsetHeight };
+    return { x: (r.left - pr.left + r.width / 2) / pr.width * page.offsetWidth, y: (r.top - pr.top + r.height / 2) / pr.height * page.offsetHeight };
   };
-  const lpSpiralXf = (st, el, P, k) => {   /* k: 1 = home, 0 = wound into the point */
-    if (!el) return;
-    if (k >= 1) { el.style.transform = ""; if (el === st.field) el.style.borderRadius = ""; return; }
-    if (el === st.field) el.style.borderRadius = (50 * (1 - k)).toFixed(1) + "%";   /* the charcoal rounds into a blob as it winds down - a drain, not a spinning card */
-    const h = st.homes.get(el) || { x: 0, y: 0 };
-    el.style.transformOrigin = (P.x - h.x).toFixed(1) + "px " + (P.y - h.y).toFixed(1) + "px";
-    el.style.transform = "rotate(" + (LP_RETRACT.TURNS * 360 * (1 - k)).toFixed(1) + "deg) scale(" + Math.max(0, k).toFixed(4) + ")";
+  /* the particles, measured once at build (untransformed): page-px ones (glyphs, pills), chart ones (viewBox units),
+     and the drain in each space - the chart's meet mapping and the field's stretch mapping are inverted from the page */
+  const lpParticles = (st, page) => {
+    const glyphs = st.glyphs.map((g) => ({ el: g, ...lpHome(page, g) }));
+    const pills = (st.badges || []).map((b) => ({ el: b.el, ...lpHome(page, b.el) }));
+    const skip = new Set([...st.paths.map((p) => p.p), ...st.paths.map((p) => p.tip)]);
+    const svg = [...st.chart.children].filter((e) => !skip.has(e) && e.tagName !== "defs").map((e) => {
+      let b; try { b = e.getBBox(); } catch (x) { b = { x: 0, y: 0, width: 0, height: 0 }; }
+      return { el: e, x: b.x + b.width / 2, y: b.y + b.height / 2 };
+    });
+    const c = { x: page.offsetWidth * st.boardCentre.x / 100, y: page.offsetHeight * st.boardCentre.y / 100 };
+    const pr = page.getBoundingClientRect(), cr = st.chart.getBoundingClientRect(), vb = st.chart.viewBox.baseVal;
+    const cw = cr.width / pr.width * page.offsetWidth, ch = cr.height / pr.height * page.offsetHeight;
+    const cx0 = (cr.left - pr.left) / pr.width * page.offsetWidth, cy0 = (cr.top - pr.top) / pr.height * page.offsetHeight;
+    const k = Math.min(cw / (vb.width || 1), ch / (vb.height || 1)) || 1;   /* xMidYMid meet */
+    const cChart = { x: (c.x - cx0 - (cw - vb.width * k) / 2) / k, y: (c.y - cy0 - (ch - vb.height * k) / 2) / k };
+    const fr = st.field.getBoundingClientRect(), fsvg = st.field.querySelector("svg"), fvb = fsvg ? fsvg.viewBox.baseVal : { width: 1690, height: 907 };
+    const cField = { x: (c.x - (fr.left - pr.left) / pr.width * page.offsetWidth) / (fr.width / pr.width * page.offsetWidth || 1) * fvb.width,
+                     y: (c.y - (fr.top - pr.top) / pr.height * page.offsetHeight) / (fr.height / pr.height * page.offsetHeight || 1) * fvb.height };
+    const Rpage = Math.hypot(page.offsetWidth, page.offsetHeight) / 2;
+    return { glyphs, pills, svg, c, cChart, cField, Rpage, Rchart: Rpage / k, Rfield: Math.hypot(fvb.width, fvb.height) / 2 };
   };
   const lpSpiral = (st, scene, t, pg) => {
     const a = scene.span ? scene.span[0] : 0, z = scene.span ? scene.span[1] : Infinity;
-    let kc = 1, kf = 1;   /* the colours, the field */
+    let uc = 0, uf = 0;   /* how far the colours, the field, are down the drain */
     const to = t - (z - LP_RETRACT.COLOURS - LP_RETRACT.CHARCOAL);
-    if (to > 0) {
-      kc = Math.pow(1 - clamp01(to / LP_RETRACT.COLOURS), 1.6);
-      kf = Math.pow(1 - clamp01((to - LP_RETRACT.COLOURS) / LP_RETRACT.CHARCOAL), 1.6);
-    }
-    if (pg.enter === "spiral") {   /* the field unwinds first, the colours follow */
+    if (pg.exit !== "cut" && to > 0) { uc = clamp01(to / LP_RETRACT.COLOURS); uf = clamp01((to - LP_RETRACT.COLOURS) / LP_RETRACT.CHARCOAL); }
+    if (pg.enter === "spiral") {   /* the field surfaces first, the colours follow */
       const ui = clamp01((t - a) / LP_RETRACT.IN);
-      kf = Math.min(kf, 1 - Math.pow(1 - clamp01(ui / 0.45), 1.6));
-      kc = Math.min(kc, 1 - Math.pow(1 - clamp01((ui - 0.35) / 0.65), 1.6));
+      uf = Math.max(uf, 1 - clamp01(ui / 0.45)); uc = Math.max(uc, 1 - clamp01((ui - 0.35) / 0.65));
     }
-    const on = kc < 1 || kf < 1;
-    if (!on && !st.spiralOn) return;   /* idle: touch no style (an inline transform cleared on an untouched element still nudges text a sub-pixel) */
+    const on = uc > 0 || uf > 0;
+    if (!on && !st.spiralOn) return;   /* idle: touch no style, read no layout (either re-snaps text a sub-pixel on the punched page) */
     st.spiralOn = on;
-    const P = { x: st.page.offsetWidth * st.boardCentre.x / 100, y: st.page.offsetHeight * st.boardCentre.y / 100 };   /* read only when a spiral is on frame: a layout flush mid-paint re-snaps text on the punched page */
-    for (const el of [st.chart, st.rail, ...(st.inkEls || [])]) lpSpiralXf(st, el, P, kc);
-    lpSpiralXf(st, st.field, P, kf);
-    if (st.fieldPlate) lpSpiralXf(st, st.fieldPlate, P, kf);
+    if (!st.parts) st.parts = lpParticles(st, st.page);
+    const P = st.parts;
+    for (const g of P.glyphs) g.el.style.transform = uc > 0 ? lpVortexCss(lpVortex(g.x, g.y, P.c, P.Rpage, uc), g.x, g.y) + " rotate(var(--tilt))" : "";
+    for (const p of P.pills) if (uc > 0) p.el.style.transform = lpVortexCss(lpVortex(p.x, p.y, P.c, P.Rpage, uc), p.x, p.y);
+    for (const q of P.svg) {
+      if (uc > 0) { const v = lpVortex(q.x, q.y, P.cChart, P.Rchart, uc); q.el.style.transformOrigin = ""; q.el.style.transform = ""; q.el.setAttribute("transform", lpVortexSvg(v, q.x, q.y)); }
+      else q.el.removeAttribute("transform");
+    }
+    /* the series line curls in point by point; the tips hide */
+    st.paths.forEach((pp, i) => {
+      const pts = (st.linePts || [])[i];
+      if (!pts) return;
+      if (uc > 0) {
+        const d = pts.map(([x, y], k) => { const v = lpVortex(x, y, P.cChart, P.Rchart, uc); return (k ? "L" : "M") + v.x.toFixed(1) + " " + v.y.toFixed(1); }).join(" ");
+        pp.p.setAttribute("d", d); pp.p.setAttribute("stroke-dashoffset", 0); pp.p.style.strokeWidth = (8 * Math.pow(1 - Math.min(1, uc * 1.15), 0.7) + 0.5).toFixed(2) + "px"; pp.tip.style.display = "none";
+      } else { pp.p.setAttribute("d", pts.map(([x, y], k) => (k ? "L" : "M") + x.toFixed(1) + " " + y.toFixed(1)).join(" ")); pp.p.style.strokeWidth = ""; pp.tip.style.display = ""; }
+    });
+    /* phase two: the crisp charcoal fades to the stains beneath, and the stains go down the drain */
+    st.rect.style.opacity = uf > 0 ? (1 - clamp01(uf / LP_RETRACT.RECT_FADE)).toFixed(3) : "";
+    if (st.fieldPlate) st.fieldPlate.style.opacity = uf > 0 ? (1 - clamp01(uf / LP_RETRACT.RECT_FADE)).toFixed(3) : st.fieldPlate.style.opacity;
+    for (const bl of st.blobs) {
+      if (uf > 0) { const v = lpVortex(bl.cx, bl.cy, P.cField, P.Rfield, uf); bl.c.setAttribute("transform", "translate(" + v.x.toFixed(1) + " " + v.y.toFixed(1) + ") rotate(" + v.th.toFixed(1) + ") scale(" + (bl.R * v.sx).toFixed(2) + " " + (bl.R * v.sy).toFixed(2) + ")"); }
+      /* else: the soak beat has already painted the blob's home transform this frame */
+    }
+    for (const sk of st.strokes || []) sk.p.style.opacity = uf > 0 ? (1 - uf).toFixed(3) : "";
   };
   const paintLedger = (el, scene, t) => {
     const st = ledgerState.get(el.id + "|" + scene.scene_id) || buildLedger(el, scene);

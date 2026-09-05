@@ -83,7 +83,8 @@ PAGE_BUILD_END_S = PAGE_BEAT_OFFSETS[-1]   # a LEDGER PAGE's chart LANDS here (7
 SHORT_FULL_MINUTES = 3                     # M07 ranks whole minutes; with fewer full minutes than this (a short) there is no distribution to rank in -
                                            # the row reports both rates as INFO (P41, 2026-09-05) instead of failing the opening against a 22s tail
 LP_SPIRAL_IN_S = 1.2                       # a page declared enter=spiral unwinds from its point over this (template LP_RETRACT.IN): one beat, then the species
-LP_RETRACT_S = (0.9, 0.8)                  # every page LEAVES by the retract: the colours wind in, then the charcoal (template LP_RETRACT.COLOURS / CHARCOAL)
+LP_RETRACT_S = (0.8, 1.0)                  # every page LEAVES by the retract unless exit=cut: the colours go down the drain, then the charcoal (template LP_RETRACT.COLOURS / CHARCOAL)
+SRC_M15 = "E40 #5 (operator, 2026-09-05): no spotlight on a spiral out - no species window overlaps a page's retract"
 LP_BADGE0_S, LP_BADGE_STEP_S = 0.4, 0.9   # page badges spring in after the build: build end + 0.4 + 0.9k (template LP.BADGE0 / BADGE_STEP)
 DOCK_SOURCE_TIMELINE = "timeline"            # scenes[].docks enter/exit/badge_at - the player's own clock
 DOCK_SOURCE_FILE = "evidence-dock.json"      # fallback only: a timeline that carries no docks at all
@@ -195,8 +196,9 @@ def _page_events(scenes: list[dict]) -> tuple[list[float], list[float]]:
         starts.append(a)
         spiral = ((s.get("world", {}).get("page") or {}).get("enter") == "spiral")
         beats += [round(a + off, 2) for off in ((0.0, LP_SPIRAL_IN_S) if spiral else PAGE_BEAT_OFFSETS) if a + off < z]
-        # the retract: the colours start winding in, then the charcoal - two beats at the page's end
-        beats += [round(z - sum(LP_RETRACT_S), 2), round(z - LP_RETRACT_S[1], 2)]
+        # the retract: the colours start winding in, then the charcoal - two beats at the page's end (none on exit=cut)
+        if (s.get("world", {}).get("page") or {}).get("exit") != "cut":
+            beats += [round(z - sum(LP_RETRACT_S), 2), round(z - LP_RETRACT_S[1], 2)]
         # inline badges ride their line's draw-complete (already a build event); only rail pills are extra reveals
         n_badges = sum(1 for b in ((s.get("world", {}).get("page") or {}).get("badges") or []) if not b.get("inline"))
         beats += [round(a + PAGE_BEAT_OFFSETS[-1] + LP_BADGE0_S + LP_BADGE_STEP_S * k, 2) for k in range(n_badges)
@@ -422,6 +424,7 @@ def run(tl: dict, docks: list[dict], mp: dict) -> tuple[list[Gate], dict]:
         add("J02", "JUDGE", "captions on the still stretches above are centred, large, per-word explosive - not the lower-third anchor", "doc 29 s9.25 #2")
     g.append(_camera_gate(A["camera_clashes"]))
     g.append(_build_gate(_build_clashes(tl.get("scenes", []), docks)))   # M14 (P37 T1)
+    g.append(_retract_gate(tl.get("scenes", [])))                         # M15 (E40 #5)
     # E24 / E25: the opening minute and the chart-as-proof rule
     g += [_opening_still_gate(A["still"]), _first_chart_gate(tl, docks, mp), _chart_hold_gate(tl, docks)]
     add("J01", "JUDGE", "every savor beat holds its picture (card up, badge lit), never a bare plate with a drift", "doc 29 s9.25 #3")
@@ -509,6 +512,22 @@ def _first_chart_gate(tl: dict, docks: list[dict], mp: dict) -> Gate:
         return Gate("M11", "FAIL", "; ".join(why) + sound + note, SRC_M11)
     msg = f"first chart {asset} enters at {t:.1f}s" + (f", its build lands at {land:.1f}s," if is_page else "") + f" with {hits[0]['kind']} at {float(hits[0]['at']):.1f}s"
     return Gate("M11", "PASS" if cue else "WARN", msg + sound + note, SRC_M11)
+
+
+def _retract_gate(scenes: list[dict]) -> Gate:
+    """M15 (E40 #5): a targeted species may not run into a page's retract - the vortex is the picture there."""
+    bad = []
+    for s in scenes:
+        if not _is_page(s) or not s.get("span") or (s.get("world", {}).get("page") or {}).get("exit") == "cut":
+            continue
+        z = float(s["span"][1]); r0 = z - sum(LP_RETRACT_S)
+        for sp in s.get("species", []):
+            at, dur = float(sp.get("at", 0.0)), float(sp.get("dur", 0.0))
+            if at < z and at + dur > r0:
+                bad.append(f"{s.get('scene_id', '?')} {sp.get('kind')} {at:.1f}-{at + dur:.1f}s over the retract from {r0:.1f}s")
+    if bad:
+        return Gate("M15", "FAIL", "; ".join(bad) + " - end the species before the retract, or declare exit=cut", SRC_M15)
+    return Gate("M15", "PASS", "no species window overlaps a page's retract", SRC_M15)
 
 
 def _chart_hold_offences(tl: dict, docks: list[dict]) -> list[str]:

@@ -96,7 +96,7 @@ def shot_table(ws: list[dict], runtime_s: float) -> list[tuple]:
     """The authored rows (SHOT-TABLE-90S.claude.md, the short section), timed from the take."""
     clip = lambda name: f"clip:{(CLIPS / name).as_posix()}"
     hold = f"ledger:ev-japan-holdings-v1:line:{LAST_IDX}:right"
-    meta = "ledger:ev-meta-yield-v1:bars:3:right"
+    meta = "ledger:ev-meta-yield-v1:bars:3:right::cut"   # exit=cut: the punch on "discounts it." is the last beat of the row - no retract under it (E40 #5)
     t_stakes = cut_before(ws, "The Fed hasn't moved")
     t_panel = cut_before(ws, "Three men in blue ties")
     t_lender = cut_before(ws, "Here's what nobody on that panel")
@@ -120,7 +120,8 @@ def shot_table(ws: list[dict], runtime_s: float) -> list[tuple]:
         (t_lender, t_opponent, hold, (0, 0, 0), [], None, [
             {"kind": "spotlight", "at": round(t_lender + 8.4, 2), "dur": 2.0, "target": datum(LAST_IDX)},   # after the build completes (+8.2 s): no highlight over the charcoal build (operator, 2026-09-04)
             {"kind": "callout", "at": at("selling since February"), "dur": 2.0, "target": datum(PEAK_IDX)},
-            {"kind": "focus_zoom", "at": at("the auction sets"), "dur": 2.4, "target": datum(LAST_IDX)},
+            # (no focus on "the auction sets": the row ends in the retract, and nothing rides a spiral out - E40 #5;
+            #  the vortex IS the picture for "walks")
         ]),
         # 5 opponent + desire/map + promise: two fingers at "Two numbers"
         (t_opponent, t_catalyst, clip("clip-g-two-fingers-v2.mp4"), (0, 0, 0), [], None, None),
@@ -128,7 +129,7 @@ def shot_table(ws: list[dict], runtime_s: float) -> list[tuple]:
         (t_catalyst, t_pledge, hold + ":spiral", (0, 0, 0), [], None, [
             {"kind": "punch", "at": at("Since February, Japan"), "dur": 0.9, "target": datum(PEAK_IDX)},
             {"kind": "callout", "at": at("a tenth of"), "dur": 2.0, "target": datum(LAST_IDX)},
-            {"kind": "spotlight", "at": at("that print is"), "dur": 2.0, "target": datum(LAST_IDX)},
+            # (no spotlight at "that print is": it ran into the retract - E40 #5)
         ]),
         # 7 the pledge + the read: past the open toll gate toward the fab
         (t_pledge, t_second, clip("clip-f-toll-gate-to-fab-v2.mp4"), (0, 0, 0), [], None, None),

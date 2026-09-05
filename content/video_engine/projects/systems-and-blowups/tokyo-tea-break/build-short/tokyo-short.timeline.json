@@ -2176,15 +2176,6 @@
       "kind": "datum",
       "index": 8
      }
-    },
-    {
-     "kind": "focus_zoom",
-     "at": 31.19,
-     "dur": 2.4,
-     "target": {
-      "kind": "datum",
-      "index": 12
-     }
     }
    ]
   },
@@ -2341,15 +2332,6 @@
       "kind": "datum",
       "index": 12
      }
-    },
-    {
-     "kind": "spotlight",
-     "at": 52.37,
-     "dur": 2.0,
-     "target": {
-      "kind": "datum",
-      "index": 12
-     }
     }
    ]
   },
@@ -2435,7 +2417,8 @@
        "inline": false
       }
      ],
-     "emphasize": 3
+     "emphasize": 3,
+     "exit": "cut"
     },
     "ken_burns": {
      "scale": 0,
@@ -2495,7 +2478,6 @@
   "ledger",
   "spotlight",
   "callout",
-  "focus_zoom",
   "punch"
  ]
 }
