@@ -2010,5 +2010,16 @@ may overlap a retract (gate M15). A beat that must land on a page's last line de
 `exit=cut` and the page leaves on the cut instead. Idle frames touch no style and read no layout
 (either one moved landscape text a sub-pixel against the goldens).
 
-Shot-table id: `ledger:<series>:<variant>:<emphasize>:<quiet_zone>[:spiral][:cut]`. Template:
-`LP_RETRACT`, `lpVortex`, `lpParticles`, `lpSpiral`. Tokyo short: 0:31 out, 0:44.6 back.
+**The mount** (operator, 2026-09-05: "the world fading, beneath it the cream building, and by the time we reach the
+actual transition time the full cream should be built and the chart should start drawing"). A page declared
+`enter=mount=<seconds>` has no roll-out, no savor and no page turn. Over those seconds the OUTGOING world rides above
+the page and fades in five steps while it keeps playing (a character walks away as it fades); beneath it the page's
+cream plate builds in the other half of each step and rises with them - a dance, fade then build. When the seconds are
+up the world is gone, the cream is full, and the page's own clock starts at ROLL + SAVOR: the soak, the ink, the chart.
+The row starts on a WORD, not on a gap - a mount is a dissolve, so M13's cut rule does not apply; the row's start is
+the word's own time and the mount's length is the distance to where the cut would have been. No sound cue: the page
+turn is the thing the mount removes. Tokyo short: `went home` (1:01.76) to 1:04.19, `mount=2.43`.
+
+Shot-table id: `ledger:<series>:<variant>:<emphasize>:<quiet_zone>[:spiral|:mount=<s>][:cut]`. Template:
+`LP_RETRACT`, `lpVortex`, `lpParticles`, `lpSpiral`; the mount: `mountIn` / `lpDance` / `MOUNT_STEPS` / `LP_MOUNT_RISE`.
+Tokyo short: 0:31 out, 0:44.6 back, 1:01.8 the mount.

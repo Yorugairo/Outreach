@@ -48,7 +48,7 @@ import gate_motion_density as MG  # noqa: E402  (E21 motion gate -> GATES-MOTION
 import ledger_page as LPG  # noqa: E402  (series.json -> ledger_page.v1 spec, doc 29 s9.26)
 
 LEDGER_PREFIX = "ledger:"          # shot-table plate id prefix for a LEDGER PAGE world (s9.28 surface = page)
-LEDGER_ID_PARTS = (3, 7)           # ledger:<series>:<variant>[:<emphasize>[:<quiet_zone>[:<enter>[:<exit>]]]]
+LEDGER_ID_PARTS = (3, 7)           # ledger:<series>:<variant>[:<emphasize>[:<quiet_zone>[:<enter>[:<exit>]]]]  enter = spiral | mount=<seconds>; exit = cut
 LEDGER_ENTERS = ("spiral", "mount")   # enter=spiral: the page RETURNS - unwinds from its point, no roll/soak/ink/build (E25; 2026-09-05)
                                       # enter=mount: no roll-out - the outgoing scene fades while the cream plate MOUNTS over it, then the page draws (operator, 2026-09-05)
 KINETICS: dict = {}                # timeline.kinetics - the template's capability flags a build turns on (P39 kill switch; default all off)
@@ -193,11 +193,13 @@ def sha(p: Path) -> str:
 
 def parse_ledger_id(plate_id: str) -> tuple[str, str, int | None, str, str | None, str | None]:
     """``ledger:<series>:<variant>[:<emphasize>[:<quiet_zone>[:<enter>[:<exit>]]]]`` -> its parts.
+    enter: ``spiral`` (the page returns by the vortex) or ``mount=<seconds>`` (the world fades above the page while its
+    cream builds beneath, for that long, then the page draws - doc 29 s9.31); exit: ``cut`` (no retract).
     ValueError names the id; the caller names the row."""
     parts = plate_id.split(":")
     lo, hi = LEDGER_ID_PARTS
     if parts[0] != LEDGER_PREFIX[:-1] or not (lo <= len(parts) <= hi) or not parts[1]:
-        raise ValueError(f"{plate_id!r}: expected ledger:<series-id>:<variant>[:<emphasize>[:<quiet_zone>[:<enter>[:<exit>]]]]")
+        raise ValueError(f"{plate_id!r}: expected ledger:<series-id>:<variant>[:<emphasize>[:<quiet_zone>[:spiral|mount=<s>[:cut]]]]")
     series_id, variant = parts[1], parts[2]
     if variant not in LPG.VARIANTS:
         raise ValueError(f"{plate_id!r}: variant {variant!r} is not one of {'|'.join(LPG.VARIANTS)}")
