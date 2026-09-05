@@ -1715,7 +1715,9 @@
   const PHRASE = TL.caption_style === "phrase", PHRASE_STAGGER_S = 0.03, PHRASE_KPOP = 1.18;   /* shorts: the page lands as one phrase; only k-words are punctuated */
   /* the MARKER (hyperframes caption-highlight): the box sweeps in over SWEEP_S from the left (power2.out), lets go over BOX_FADE_S;
      keywords take the accent box, other words the charcoal box (brand tokens, never the reference's red) */
-  const MARK = { RED: [[255, 23, 69], [223, 18, 56]], GOLD: [245, 183, 46], FLASH_S: 0.3, RISE_PX: 14, SWEEP_S: 0.15, KPOP: 1.3 };   /* the landing flash gold -> white; the keyword's box and pop */
+  /* knobs turned down (operator, 2026-09-05: 'it starts out WAY too busy ... a lot of flashes, not a lot of motion - an old lesson'):
+     no flash; the phrase SETTLES over LAND_S from a small scale and rise; the keyword's pop is slight and its box sweeps slowly */
+  const MARK = { RED: [[255, 23, 69], [223, 18, 56]], LAND_S: 0.45, LAND_SCALE: 1.06, RISE_PX: 10, SWEEP_S: 0.28, KPOP: 1.1 };
   const markBox = (c, a) => "linear-gradient(135deg, rgba(" + c[0].join(",") + "," + a.toFixed(3) + ") 0%, rgba(" + c[1].join(",") + "," + a.toFixed(3) + ") 100%)";
   const stagePop = (u) => { const c1 = 1.70158, c3 = c1 + 1; const x = u - 1; return 1 + c3 * x * x * x + c1 * x * x; };
   const LP = { ROLL: 0.7, SAVOR: 0.8, FIELD: 2.4, PUNCH: 0.5, INK: 2.0, BUILD: 3.0, SEEPS: 9, STROKES: 14, KB_MAX: 0.03,
@@ -3021,14 +3023,12 @@
              captures mid-pop frames and two renders of one second are identical. */
           if (stage && PHRASE) {   /* THE BLEND: the phrase lands as one (gold flash -> white); only a keyword moves with the voice */
             const pop = kin("analytic_spring") ? springPop : stagePop;
-            const e = pop(clamp01((t + 0.05 - pg.s) / STAGE_POP_S));                     /* the phrase's one pop and rise */
-            const flash = 1 - clamp01((t - pg.s - 0.1) / MARK.FLASH_S);                  /* gold on landing, white by FLASH_S */
-            const ke = x.k ? pop(clamp01((t - x.s) / STAGE_POP_S)) : 0, kOn = x.k && t >= x.s;
+            const e = pop(clamp01((t + 0.05 - pg.s) / MARK.LAND_S));                      /* the phrase's one settle and rise - motion, not a flash */
+            const ke = x.k ? pop(clamp01((t - x.s) / MARK.LAND_S)) : 0, kOn = x.k && t >= x.s;
             const hk = x.k ? pow2out(clamp01((t - x.s) / MARK.SWEEP_S)) : 0;            /* the keyword's box sweeps in when spoken, stays */
             ws[j].style.opacity = Math.min(1, e * 2).toFixed(3);
-            const sc = (1.16 + (1 - 1.16) * e) * (kOn ? (MARK.KPOP + (1 - MARK.KPOP) * ke) : 1);
+            const sc = (MARK.LAND_SCALE + (1 - MARK.LAND_SCALE) * e) * (kOn ? (MARK.KPOP + (1 - MARK.KPOP) * ke) : 1);
             ws[j].style.transform = "translateY(" + (MARK.RISE_PX * (1 - e)).toFixed(1) + "px) scale(" + sc.toFixed(4) + ") rotate(calc(var(--tilt, 0deg) * " + (1 - e).toFixed(3) + "))";
-            if (!x.k) ws[j].style.color = flash > 0 ? "rgb(" + Math.round(255 + (MARK.GOLD[0] - 255) * flash) + "," + Math.round(255 + (MARK.GOLD[1] - 255) * flash) + "," + Math.round(255 + (MARK.GOLD[2] - 255) * flash) + ")" : "";
             ws[j].style.backgroundImage = hk > 0 ? markBox(MARK.RED, 1) : "";
             ws[j].style.backgroundSize = hk > 0 ? (hk * 100).toFixed(1) + "% 100%" : "";
             ws[j].classList.toggle("lit", hk > 0.5); }
