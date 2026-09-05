@@ -20,7 +20,7 @@ def main() -> int:
     ap.add_argument("--width", type=int, default=360)
     ap.add_argument("--glob", default="*.png")
     args = ap.parse_args()
-    files = sorted(p for p in args.dir.glob(args.glob) if not re.search(r"(_frame_|-raw|contact-sheet)", p.name))
+    files = sorted(p for p in args.dir.glob(args.glob) if not re.search(r"(_frame_|contact-sheet|.mp4.png$)", p.name))
     if not files:
         print("no stills"); return 1
     tiles = []
