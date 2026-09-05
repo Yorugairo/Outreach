@@ -604,7 +604,11 @@
      The dials - S1 (the optical thickness of one full stain), the table resolution, the alpha slope, the coverage
      that means one full stain - are ours to tune (42 s42.5 / 44); the two-flux model is the finding. */
 
-  const INK = Object.freeze({ S1: 0.05, TABLE_N: 33, ALPHA_SLOPE: 8, COVERAGE: 0.5, HIGHLIGHT_X: 0.4 });   /* S1: a full stain is thin - carbon hides fast (44); HIGHLIGHT_X: the band as a layer */
+  const INK = Object.freeze({ S1: 0.03, TABLE_N: 33, ALPHA_SLOPE: 8, COVERAGE: 0.5, HIGHLIGHT_X: 0.4, WASH_NEUTRAL: 0.8 });
+  /* S1: a full stain is thin - carbon hides fast (44), and 0.03 keeps the first wash LIGHT (operator: 'start out more as a lighter gray');
+     HIGHLIGHT_X: the band as a layer; WASH_NEUTRAL: how far a THIN layer's per-channel K/S is pulled to their mean - a thin charcoal
+     layer is bluish by the model (its blue channel absorbs least), the operator wants grey, and the blend relaxes to the exact
+     ink at full coverage so the flood still ends on #25313C (operator, 2026-09-05: 'less blue tinge') */
 
   const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
   const srgbToLin = (c) => c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
@@ -615,14 +619,16 @@
   /* K/S of a pigment from its full-coverage (infinite-thickness) reflectance - the K-M inversion, one channel. */
   const ksFromR = (Rinf) => { const R = clamp(Rinf, 0.005, 0.995); return (1 - R) * (1 - R) / (2 * R); };
 
-  /* One channel: a layer of optical thickness SX of an ink with full-coverage reflectance Rinf over a ground Rg. */
-  const kmChannel = (Rg, Rinf, SX) => {
+  /* One channel from its K/S: a layer of optical thickness SX over a ground Rg. */
+  const kmChannelKS = (Rg, ks, SX) => {
     if (!(SX > 0)) return Rg;
-    const a = 1 + ksFromR(Rinf), b = Math.sqrt(a * a - 1);
+    const a = 1 + ks, b = Math.sqrt(a * a - 1);
     if (b === 0) return Rg;                                       /* K = 0: a non-absorbing ink - see the tests */
     const x = b * SX, coth = x > 20 ? 1 : 1 / Math.tanh(x);
     return (1 - Rg * (a - b * coth)) / (a - Rg + b * coth);
   };
+  /* One channel of an ink with full-coverage reflectance Rinf. */
+  const kmChannel = (Rg, Rinf, SX) => kmChannelKS(Rg, ksFromR(Rinf), SX);
 
   /* Three channels of linear reflectance. */
   const kmLayer = (Rg, Rinf, SX) => [0, 1, 2].map((i) => kmChannel(Rg[i], Rinf[i], SX));
@@ -646,8 +652,9 @@
     const P = Object.assign({}, INK, o), paper = hexToLin(paperHex), ink = hexToLin(inkHex), n = P.TABLE_N;
     const cols = [[], [], []];
     for (let i = 0; i < n; i++) {
-      const c = i / (n - 1), full = c >= P.COVERAGE - 1e-9;
-      const R = full ? ink : kmLayer(paper, ink, c / P.COVERAGE * P.S1);
+      const c = i / (n - 1), full = c >= P.COVERAGE - 1e-9, f = Math.min(1, c / P.COVERAGE);
+      const ks = ink.map(ksFromR), mean = (ks[0] + ks[1] + ks[2]) / 3, w = (P.WASH_NEUTRAL || 0) * (1 - f * f * f * f);   /* neutral while thin and mid, the ink's own at full */
+      const R = full ? ink : [0, 1, 2].map((k) => kmChannelKS(paper[k], ks[k] * (1 - w) + mean * w, f * P.S1));
       for (let k = 0; k < 3; k++) cols[k].push(full ? srgbTo8(inkHex, k) : linToSrgb(R[k]));
     }
     return { r: cols[0], g: cols[1], b: cols[2], n };
@@ -672,8 +679,14 @@
      spot lights up ahead of the front, the front travels along the ridges, low spots stay dry inside a stain until the
      coverage is heavy, and the K-M table deepens everything that overlaps. WOBBLE is the macro displacement the soak already
      had; BLUR wets the result. All dials (42 s42.5). */
-  const SOAK = Object.freeze({ WOBBLE_FREQ: "0.006 0.009", WOBBLE_OCT: 3, WOBBLE_SCALE: 120, ATTR_FREQ: "0.008 0.011", ATTR_OCT: 4,
-                                      ATTR_BASE: 0.05, ATTR_GAIN: 3.4, BLUR: 3, GRAD_MID: 0.55, GRAD_MID_A: 0.85 });
+  /* round 3 (operator, 2026-09-05: "more wobble ... a higher grain"): WOBBLE_SCALE up and its field a little busier; GRAIN is a second,
+     fine attraction field multiplied in after the mesh - the speckle inside and along the front */
+  const SOAK = Object.freeze({ WOBBLE_FREQ: "0.008 0.012", WOBBLE_OCT: 3, WOBBLE_SCALE: 210, ATTR_FREQ: "0.008 0.011", ATTR_OCT: 4,
+                                      ATTR_BASE: 0.05, ATTR_GAIN: 3.4, GRAIN_FREQ: "0.055 0.07", GRAIN_OCT: 2, GRAIN_BASE: 0.45, GRAIN_GAIN: 1.6,
+                                      BLUR: 2.5, GRAD_MID: 0.55, GRAD_MID_A: 0.85,
+                                      /* the MOTION (operator: 'wriggling / morphing / creeping / crawling'): drifts in field px per unit soak, the breath
+                                         as a share of WOBBLE_SCALE; every drift stays inside the filter's 25% margin (1690 * 0.25 = 422 px at fk 1) */
+                                      WOBBLE_DRIFT: 150, WOBBLE_BREATH: 0.3, WOBBLE_CYCLES: 2.5, ATTR_DRIFT: 60, GRAIN_DRIFT: 260 });
 
   const soakGradientMarkup = (id, o = {}) => {
     const P = Object.assign({}, SOAK, o);
@@ -683,13 +696,32 @@
 
   const soakFilterMarkup = (seed, fk, paperHex, inkHex, o = {}) => {
     const P = Object.assign({}, INK, SOAK, o), s = seed & 255;
-    return '<feTurbulence type="fractalNoise" baseFrequency="' + P.WOBBLE_FREQ + '" numOctaves="' + P.WOBBLE_OCT + '" seed="' + s + '" result="n"/>'
-      + '<feDisplacementMap in="SourceGraphic" in2="n" scale="' + Math.round(P.WOBBLE_SCALE * fk) + '" xChannelSelector="R" yChannelSelector="G" result="d"/>'
-      + '<feTurbulence type="turbulence" baseFrequency="' + P.ATTR_FREQ + '" numOctaves="' + P.ATTR_OCT + '" seed="' + ((s + 13) & 255) + '" result="att"/>'
+    return '<feTurbulence type="fractalNoise" baseFrequency="' + P.WOBBLE_FREQ + '" numOctaves="' + P.WOBBLE_OCT + '" seed="' + s + '" result="n0"/>'
+      + '<feOffset in="n0" dx="0" dy="0" result="n" id="lpsoakw' + s + '"/>'
+      + '<feDisplacementMap in="SourceGraphic" in2="n" scale="' + Math.round(P.WOBBLE_SCALE * fk) + '" xChannelSelector="R" yChannelSelector="G" result="d" id="lpsoakd' + s + '"/>'
+      + '<feTurbulence type="turbulence" baseFrequency="' + P.ATTR_FREQ + '" numOctaves="' + P.ATTR_OCT + '" seed="' + ((s + 13) & 255) + '" result="att0"/>'
+      + '<feOffset in="att0" dx="0" dy="0" result="att" id="lpsoaka' + s + '"/>'
       + '<feComposite in="d" in2="att" operator="arithmetic" k1="' + P.ATTR_GAIN + '" k2="' + P.ATTR_BASE + '" k3="0" k4="0" result="c"/>'
-      + '<feGaussianBlur in="c" stdDeviation="' + P.BLUR + '"/>'
+      + '<feTurbulence type="fractalNoise" baseFrequency="' + P.GRAIN_FREQ + '" numOctaves="' + P.GRAIN_OCT + '" seed="' + ((s + 29) & 255) + '" result="grain0"/>'
+      + '<feOffset in="grain0" dx="0" dy="0" result="grain" id="lpsoakg' + s + '"/>'
+      + '<feComposite in="c" in2="grain" operator="arithmetic" k1="' + P.GRAIN_GAIN + '" k2="' + P.GRAIN_BASE + '" k3="0" k4="0" result="cg"/>'
+      + '<feGaussianBlur in="cg" stdDeviation="' + P.BLUR + '"/>'
       + kmFilterMarkup(paperHex, inkHex, P);
   };
+
+  /* the fields' motion at soak progress u in [0, 1] - a pure function, so a scrubbed frame is the played one: the wobble noise
+     slides and its displacement breathes (the outline wriggles and morphs), the attraction mesh creeps (the dark spots migrate
+     and the front crawls after them), the grain boils. Offsets in field px (fk scales a portrait field). */
+  const soakAnim = (u, fk = 1, o = {}) => {
+    const P = Object.assign({}, SOAK, o), tp = Math.PI * 2, k = Math.min(1, Math.max(0, u));
+    return {
+      wob: [P.WOBBLE_DRIFT * fk * k, P.WOBBLE_DRIFT * fk * 0.6 * Math.sin(k * tp * 0.75)],
+      att: [P.ATTR_DRIFT * fk * Math.sin(k * tp * 0.5), -(P.ATTR_DRIFT * fk * k) || 0],
+      grain: [P.GRAIN_DRIFT * fk * k, P.GRAIN_DRIFT * fk * 0.5 * Math.sin(k * tp)],
+      scale: P.WOBBLE_SCALE * fk * (1 + P.WOBBLE_BREATH * Math.sin(k * tp * P.WOBBLE_CYCLES)),
+    };
+  };
+  const soakAnimIds = (seed) => { const s = seed & 255; return { wob: "lpsoakw" + s, att: "lpsoaka" + s, grain: "lpsoakg" + s, disp: "lpsoakd" + s }; };
   /* KINETICS:END */
   /* KINETICS:BEGIN squash */
   /* kinetics/squash.mjs - area-preserving, motion-driven squash and stretch (42 s42.3; FINDING-the-animation-math s4;
@@ -1742,13 +1774,16 @@
        stains are soft radial coverage growing through the paper's attraction field (soakFilterMarkup) - fingers, islands
        ahead of the front, dry holes that fill late, everything deepening by K-M where it overlaps */
     fsvg.innerHTML = kin("km_ink")
-      ? '<defs>' + soakGradientMarkup("lpsoakg" + seed) + '<filter id="lpsoak' + seed + '" x="-25%" y="-25%" width="150%" height="150%" color-interpolation-filters="sRGB">'
+      ? '<defs>' + soakGradientMarkup("lpsoakgr" + seed) + '<filter id="lpsoak' + seed + '" x="-25%" y="-25%" width="150%" height="150%" color-interpolation-filters="sRGB">'
         + soakFilterMarkup(seed, fk, "#F4E6C7", "#25313C") + '</filter></defs>'
       : '<defs><filter id="lpsoak' + seed + '" x="-25%" y="-25%" width="150%" height="150%">'
         + '<feTurbulence type="fractalNoise" baseFrequency="0.006 0.009" numOctaves="3" seed="' + (seed & 255) + '" result="n"/>'
         + '<feDisplacementMap in="SourceGraphic" in2="n" scale="' + Math.round(110 * fk) + '" xChannelSelector="R" yChannelSelector="G"/>'
         + '<feGaussianBlur stdDeviation="12"/></filter></defs>';
     const mode = pg.field === "scribble" ? "scribble" : "soak";
+    /* the moving fields (soakAnim): the feOffsets and the displacement the paint loop drives while the soak runs */
+    const soakFx = kin("km_ink") && mode === "soak" ? (() => { const ids = soakAnimIds(seed), q = (id) => fsvg.querySelector("#" + id);
+      return { wob: q(ids.wob), att: q(ids.att), grain: q(ids.grain), disp: q(ids.disp) }; })() : null;
     const goo = lpEl("g", "", fsvg, mode === "soak" ? { filter: "url(#lpsoak" + seed + ")" } : {});
     const blobs = [], strokes = [];
     if (mode === "soak") {
@@ -1766,7 +1801,7 @@
           d += " C" + (p1[0] + (p2[0] - p0[0]) / 6).toFixed(3) + " " + (p1[1] + (p2[1] - p0[1]) / 6).toFixed(3) + " " + (p2[0] - (p3[0] - p1[0]) / 6).toFixed(3) + " " + (p2[1] - (p3[1] - p1[1]) / 6).toFixed(3) + " " + p2[0].toFixed(3) + " " + p2[1].toFixed(3);
         }
         const c = lpEl("path", "", goo, Object.assign({ d: d + " Z", fill: "#25313C", transform: "translate(" + cx.toFixed(1) + " " + cy.toFixed(1) + ") scale(0)" },
-                                                    kin("km_ink") ? { fill: "url(#lpsoakg" + seed + ")", style: "mix-blend-mode:plus-lighter" } : {}));
+                                                    kin("km_ink") ? { fill: "url(#lpsoakgr" + seed + ")", style: "mix-blend-mode:plus-lighter" } : {}));
         blobs.push({ c, cx, cy, R: (620 + lpHash(seed, i, 4) * 420) * fk, lag: lpHash(seed, i, 5) * 0.35 });
       }
     } else {
@@ -1834,7 +1869,7 @@
       rail.style.left = chart.style.left; rail.style.top = ((cb.y + cb.h) * 100 + 4.4).toFixed(2) + "%"; rail.style.maxWidth = chart.style.width;
     }
     const inlineBadges = {}; (pg.badges || []).forEach((bd) => { if (bd.inline) inlineBadges[LP_BADGE_COL[bd.accent]] = bd; });
-    const st = { root, page, edge, blobs, strokes, nib, rect, goo, glyphs, chart, fieldPlate, boardCentre, badges, inlineBadges, field, rail, inkEls: [title, subEl, src], kind: pg.builder || "story",
+    const st = { root, page, edge, blobs, strokes, nib, rect, goo, soakFx, soakFk: fk, glyphs, chart, fieldPlate, boardCentre, badges, inlineBadges, field, rail, inkEls: [title, subEl, src], kind: pg.builder || "story",
                  bars: [], paths: [], labels: [], callout: null, cval: null, vals: pg.values || [],
                  vstr: pg.value_strings || [], emph: Number.isInteger(pg.emphasize) ? pg.emphasize : -1,
                  geom, portrait: PORTRAIT, linePts: [] };   /* geom: the chart's drawing box (viewBox units); linePts: each series' points in it, for exact datum targets */   /* no emphasis declared = no datum styled (spec emits null) */
@@ -2314,6 +2349,11 @@
       const u = clamp01((b - bl.lag) / (1 - bl.lag));
       bl.c.setAttribute("transform", "translate(" + bl.cx.toFixed(1) + " " + bl.cy.toFixed(1) + ") scale(" + (bl.R * Math.pow(u, 1.5)).toFixed(2) + ")");   /* stains creep, then flood */
       bl.c.setAttribute("opacity", ((0.55 + 0.45 * u) * (kin("km_ink") ? INK.COVERAGE : 1)).toFixed(2));
+    }
+    if (st.soakFx && b > 0 && b < 1) {   /* the fields move only while the soak runs: idle frames touch nothing */
+      const a = soakAnim(b, st.soakFk), fx = st.soakFx, set = (el, v) => { if (el) { el.setAttribute("dx", v[0].toFixed(1)); el.setAttribute("dy", v[1].toFixed(1)); } };
+      set(fx.wob, a.wob); set(fx.att, a.att); set(fx.grain, a.grain);
+      if (fx.disp) fx.disp.setAttribute("scale", a.scale.toFixed(1));
     }
     if (st.strokes.length) {
       const n = st.strokes.length, per = 1 / n;

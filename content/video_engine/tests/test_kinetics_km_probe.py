@@ -35,9 +35,9 @@ def _chromium_available() -> bool:
 
 def _module_numbers() -> dict:
     """The module's own prediction for the probe geometry, from node (the same file the template inlines)."""
-    src = ("import { INK, hexToLin, kmLayer, linToSrgb } from " + json.dumps((SK.MODULES / "ink.mjs").resolve().as_uri()) + ";\n"
-           f"const paper = hexToLin({CREAM!r}), ink = hexToLin({CHARCOAL!r});\n"
-           "const single = kmLayer(paper, ink, 0.25 / INK.COVERAGE * INK.S1).map((v) => Math.round(linToSrgb(v) * 255));\n"
+    src = ("import { INK, kmTable } from " + json.dumps((SK.MODULES / "ink.mjs").resolve().as_uri()) + ";\n"
+           f"const t = kmTable({CREAM!r}, {CHARCOAL!r}), i = Math.round(0.25 * (t.n - 1));   // coverage 0.25 lands on an entry\n"
+           "const single = [t.r[i], t.g[i], t.b[i]].map((v) => Math.round(v * 255));\n"
            "console.log(JSON.stringify({ single, coverage: INK.COVERAGE, slope: INK.ALPHA_SLOPE }));\n")
     out = subprocess.run(["node", "--input-type=module", "-e", src], capture_output=True, text=True, check=True)
     return json.loads(out.stdout.strip().splitlines()[-1])

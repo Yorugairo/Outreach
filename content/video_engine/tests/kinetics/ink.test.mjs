@@ -2,7 +2,7 @@
 // identities (layers compose, hiding, the paper), the subtractive mix of two different inks, and the filter table.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { INK, SOAK, hexToLin, linToHex, kmChannel, kmLayer, kmStack, alphaOver, chroma, kmHex, kmTable, kmFilterMarkup, ksFromR, soakFilterMarkup, soakGradientMarkup } from "../../scripts/kinetics/ink.mjs";
+import { INK, SOAK, hexToLin, linToHex, kmChannel, kmLayer, kmStack, alphaOver, chroma, kmHex, kmTable, kmFilterMarkup, ksFromR, soakFilterMarkup, soakGradientMarkup, soakAnim, soakAnimIds } from "../../scripts/kinetics/ink.mjs";
 
 const CREAM = "#F4E6C7", INKS = { charcoal: "#25313C", coral: "#ED6A4A", teal: "#2E9E5B", sunflower: "#F5B72E", blood: "#B0201F" };
 const cream = hexToLin(CREAM);
@@ -59,10 +59,22 @@ test("the erratic soak: soft coverage grows through a seeded attraction MESH and
   const m = soakFilterMarkup(0x51EC1E5, 1, CREAM, INKS.charcoal), g = soakGradientMarkup("g1");
   assert.ok(m.includes('type="turbulence"') && m.includes('result="att"'), "the attraction field is a turbulence mesh, not smooth noise");
   assert.ok(m.includes('operator="arithmetic" k1="' + SOAK.ATTR_GAIN + '" k2="' + SOAK.ATTR_BASE + '"'), "coverage x (base + gain * attraction)");
+  assert.ok(m.includes('result="grain"') && m.includes('k1="' + SOAK.GRAIN_GAIN + '" k2="' + SOAK.GRAIN_BASE + '"'), "then x (base + gain * fine grain)");
   assert.ok(m.endsWith(kmFilterMarkup(CREAM, INKS.charcoal)), "the K-M table is the last word");
   assert.ok(m.indexOf("feDisplacementMap") < m.indexOf('result="att"') && m.indexOf("feGaussianBlur") < m.indexOf("feColorMatrix"), "wobble, mesh, wet, then ink");
   assert.notEqual(soakFilterMarkup(1, 1, CREAM, INKS.charcoal), soakFilterMarkup(2, 1, CREAM, INKS.charcoal), "seeded");
   assert.ok(g.startsWith('<radialGradient id="g1">') && g.includes('stop-opacity="0"'), "a stain is soft coverage, its edge decided by the field");
+});
+
+test("the fields MOVE on the soak clock: still at u = 0, every drift inside the filter's 25% margin, the breath around WOBBLE_SCALE, ids in the markup", () => {
+  const z = soakAnim(0);
+  assert.deepEqual([z.wob, z.att, z.grain], [[0, 0], [0, 0], [0, 0]]); assert.equal(z.scale, SOAK.WOBBLE_SCALE);
+  for (let i = 0; i <= 100; i++) { const a = soakAnim(i / 100, 1.2);
+    for (const v of [...a.wob, ...a.att, ...a.grain]) assert.ok(Math.abs(v) <= 1690 * 1.2 * 0.25, `drift ${v} leaves the margin`);
+    assert.ok(a.scale > 0 && Math.abs(a.scale - SOAK.WOBBLE_SCALE * 1.2) <= SOAK.WOBBLE_SCALE * 1.2 * SOAK.WOBBLE_BREATH + 1e-9); }
+  assert.notDeepEqual(soakAnim(0.3).wob, soakAnim(0.6).wob, "it moves");
+  const ids = soakAnimIds(0x51EC1E5), m = soakFilterMarkup(0x51EC1E5, 1, CREAM, INKS.charcoal);
+  for (const id of Object.values(ids)) assert.ok(m.includes('id="' + id + '"'), id);
 });
 
 test("the filter table runs from the paper to exactly the ink at one full stain, monotone, and its markup carries it", () => {
@@ -72,8 +84,14 @@ test("the filter table runs from the paper to exactly the ink at one full stain,
   const full = Math.ceil(INK.COVERAGE * (t.n - 1));
   for (const [col, v] of [[t.r, 0x25], [t.g, 0x31], [t.b, 0x3C]]) {
     for (let i = full; i < t.n; i++) assert.equal(col[i], v / 255, "one full stain IS the ink");
-    for (let i = 1; i < t.n; i++) assert.ok(col[i] <= col[i - 1] + 1e-12, "never lightens as ink accumulates");
   }
+  const lumOf = (i) => 0.2126 * t.r[i] + 0.7152 * t.g[i] + 0.0722 * t.b[i];
+  for (let i = 1; i < t.n; i++) assert.ok(lumOf(i) <= lumOf(i - 1) + 1e-12, "never lightens as ink accumulates");
+  // the wash is GREY, not blue (operator): the thinnest entries have their channels within a hair of each other, the ink at full does not
+  const raw = kmTable(CREAM, INKS.charcoal, { WASH_NEUTRAL: 0 });
+  for (const i of [4, 8]) assert.ok(t.r[i] >= t.b[i], `entry ${i}: the blended wash stays a warm-neutral grey like the paper (r ${t.r[i]} >= b ${t.b[i]})`);
+  assert.ok(raw.b[8] > raw.r[8], "the raw model's mid wash is cold (b > r) - the blue tinge the operator refused");
+  assert.ok(t.r[2] > 0.5, `the first wash is light: r ${t.r[2]}`);
   const m = kmFilterMarkup(CREAM, INKS.charcoal);
   assert.equal((m.match(/tableValues=/g) || []).length, 3);
   assert.ok(m.includes('slope="' + INK.ALPHA_SLOPE + '"') && m.startsWith("<feColorMatrix"));

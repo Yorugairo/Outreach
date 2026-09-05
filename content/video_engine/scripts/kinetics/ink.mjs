@@ -14,7 +14,11 @@
    The dials - S1 (the optical thickness of one full stain), the table resolution, the alpha slope, the coverage
    that means one full stain - are ours to tune (42 s42.5 / 44); the two-flux model is the finding. */
 
-export const INK = Object.freeze({ S1: 0.05, TABLE_N: 33, ALPHA_SLOPE: 8, COVERAGE: 0.5, HIGHLIGHT_X: 0.4 });   /* S1: a full stain is thin - carbon hides fast (44); HIGHLIGHT_X: the band as a layer */
+export const INK = Object.freeze({ S1: 0.03, TABLE_N: 33, ALPHA_SLOPE: 8, COVERAGE: 0.5, HIGHLIGHT_X: 0.4, WASH_NEUTRAL: 0.8 });
+/* S1: a full stain is thin - carbon hides fast (44), and 0.03 keeps the first wash LIGHT (operator: 'start out more as a lighter gray');
+   HIGHLIGHT_X: the band as a layer; WASH_NEUTRAL: how far a THIN layer's per-channel K/S is pulled to their mean - a thin charcoal
+   layer is bluish by the model (its blue channel absorbs least), the operator wants grey, and the blend relaxes to the exact
+   ink at full coverage so the flood still ends on #25313C (operator, 2026-09-05: 'less blue tinge') */
 
 const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
 export const srgbToLin = (c) => c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
@@ -25,14 +29,16 @@ export const linToHex = (rgb) => "#" + rgb.map((v) => Math.round(linToSrgb(v) * 
 /* K/S of a pigment from its full-coverage (infinite-thickness) reflectance - the K-M inversion, one channel. */
 export const ksFromR = (Rinf) => { const R = clamp(Rinf, 0.005, 0.995); return (1 - R) * (1 - R) / (2 * R); };
 
-/* One channel: a layer of optical thickness SX of an ink with full-coverage reflectance Rinf over a ground Rg. */
-export const kmChannel = (Rg, Rinf, SX) => {
+/* One channel from its K/S: a layer of optical thickness SX over a ground Rg. */
+export const kmChannelKS = (Rg, ks, SX) => {
   if (!(SX > 0)) return Rg;
-  const a = 1 + ksFromR(Rinf), b = Math.sqrt(a * a - 1);
+  const a = 1 + ks, b = Math.sqrt(a * a - 1);
   if (b === 0) return Rg;                                       /* K = 0: a non-absorbing ink - see the tests */
   const x = b * SX, coth = x > 20 ? 1 : 1 / Math.tanh(x);
   return (1 - Rg * (a - b * coth)) / (a - Rg + b * coth);
 };
+/* One channel of an ink with full-coverage reflectance Rinf. */
+export const kmChannel = (Rg, Rinf, SX) => kmChannelKS(Rg, ksFromR(Rinf), SX);
 
 /* Three channels of linear reflectance. */
 export const kmLayer = (Rg, Rinf, SX) => [0, 1, 2].map((i) => kmChannel(Rg[i], Rinf[i], SX));
@@ -56,8 +62,9 @@ export const kmTable = (paperHex, inkHex, o = {}) => {
   const P = Object.assign({}, INK, o), paper = hexToLin(paperHex), ink = hexToLin(inkHex), n = P.TABLE_N;
   const cols = [[], [], []];
   for (let i = 0; i < n; i++) {
-    const c = i / (n - 1), full = c >= P.COVERAGE - 1e-9;
-    const R = full ? ink : kmLayer(paper, ink, c / P.COVERAGE * P.S1);
+    const c = i / (n - 1), full = c >= P.COVERAGE - 1e-9, f = Math.min(1, c / P.COVERAGE);
+    const ks = ink.map(ksFromR), mean = (ks[0] + ks[1] + ks[2]) / 3, w = (P.WASH_NEUTRAL || 0) * (1 - f * f * f * f);   /* neutral while thin and mid, the ink's own at full */
+    const R = full ? ink : [0, 1, 2].map((k) => kmChannelKS(paper[k], ks[k] * (1 - w) + mean * w, f * P.S1));
     for (let k = 0; k < 3; k++) cols[k].push(full ? srgbTo8(inkHex, k) : linToSrgb(R[k]));
   }
   return { r: cols[0], g: cols[1], b: cols[2], n };
@@ -82,8 +89,14 @@ export const kmFilterMarkup = (paperHex, inkHex, o = {}) => {
    spot lights up ahead of the front, the front travels along the ridges, low spots stay dry inside a stain until the
    coverage is heavy, and the K-M table deepens everything that overlaps. WOBBLE is the macro displacement the soak already
    had; BLUR wets the result. All dials (42 s42.5). */
-export const SOAK = Object.freeze({ WOBBLE_FREQ: "0.006 0.009", WOBBLE_OCT: 3, WOBBLE_SCALE: 120, ATTR_FREQ: "0.008 0.011", ATTR_OCT: 4,
-                                    ATTR_BASE: 0.05, ATTR_GAIN: 3.4, BLUR: 3, GRAD_MID: 0.55, GRAD_MID_A: 0.85 });
+/* round 3 (operator, 2026-09-05: "more wobble ... a higher grain"): WOBBLE_SCALE up and its field a little busier; GRAIN is a second,
+   fine attraction field multiplied in after the mesh - the speckle inside and along the front */
+export const SOAK = Object.freeze({ WOBBLE_FREQ: "0.008 0.012", WOBBLE_OCT: 3, WOBBLE_SCALE: 210, ATTR_FREQ: "0.008 0.011", ATTR_OCT: 4,
+                                    ATTR_BASE: 0.05, ATTR_GAIN: 3.4, GRAIN_FREQ: "0.055 0.07", GRAIN_OCT: 2, GRAIN_BASE: 0.45, GRAIN_GAIN: 1.6,
+                                    BLUR: 2.5, GRAD_MID: 0.55, GRAD_MID_A: 0.85,
+                                    /* the MOTION (operator: 'wriggling / morphing / creeping / crawling'): drifts in field px per unit soak, the breath
+                                       as a share of WOBBLE_SCALE; every drift stays inside the filter's 25% margin (1690 * 0.25 = 422 px at fk 1) */
+                                    WOBBLE_DRIFT: 150, WOBBLE_BREATH: 0.3, WOBBLE_CYCLES: 2.5, ATTR_DRIFT: 60, GRAIN_DRIFT: 260 });
 
 export const soakGradientMarkup = (id, o = {}) => {
   const P = Object.assign({}, SOAK, o);
@@ -93,10 +106,29 @@ export const soakGradientMarkup = (id, o = {}) => {
 
 export const soakFilterMarkup = (seed, fk, paperHex, inkHex, o = {}) => {
   const P = Object.assign({}, INK, SOAK, o), s = seed & 255;
-  return '<feTurbulence type="fractalNoise" baseFrequency="' + P.WOBBLE_FREQ + '" numOctaves="' + P.WOBBLE_OCT + '" seed="' + s + '" result="n"/>'
-    + '<feDisplacementMap in="SourceGraphic" in2="n" scale="' + Math.round(P.WOBBLE_SCALE * fk) + '" xChannelSelector="R" yChannelSelector="G" result="d"/>'
-    + '<feTurbulence type="turbulence" baseFrequency="' + P.ATTR_FREQ + '" numOctaves="' + P.ATTR_OCT + '" seed="' + ((s + 13) & 255) + '" result="att"/>'
+  return '<feTurbulence type="fractalNoise" baseFrequency="' + P.WOBBLE_FREQ + '" numOctaves="' + P.WOBBLE_OCT + '" seed="' + s + '" result="n0"/>'
+    + '<feOffset in="n0" dx="0" dy="0" result="n" id="lpsoakw' + s + '"/>'
+    + '<feDisplacementMap in="SourceGraphic" in2="n" scale="' + Math.round(P.WOBBLE_SCALE * fk) + '" xChannelSelector="R" yChannelSelector="G" result="d" id="lpsoakd' + s + '"/>'
+    + '<feTurbulence type="turbulence" baseFrequency="' + P.ATTR_FREQ + '" numOctaves="' + P.ATTR_OCT + '" seed="' + ((s + 13) & 255) + '" result="att0"/>'
+    + '<feOffset in="att0" dx="0" dy="0" result="att" id="lpsoaka' + s + '"/>'
     + '<feComposite in="d" in2="att" operator="arithmetic" k1="' + P.ATTR_GAIN + '" k2="' + P.ATTR_BASE + '" k3="0" k4="0" result="c"/>'
-    + '<feGaussianBlur in="c" stdDeviation="' + P.BLUR + '"/>'
+    + '<feTurbulence type="fractalNoise" baseFrequency="' + P.GRAIN_FREQ + '" numOctaves="' + P.GRAIN_OCT + '" seed="' + ((s + 29) & 255) + '" result="grain0"/>'
+    + '<feOffset in="grain0" dx="0" dy="0" result="grain" id="lpsoakg' + s + '"/>'
+    + '<feComposite in="c" in2="grain" operator="arithmetic" k1="' + P.GRAIN_GAIN + '" k2="' + P.GRAIN_BASE + '" k3="0" k4="0" result="cg"/>'
+    + '<feGaussianBlur in="cg" stdDeviation="' + P.BLUR + '"/>'
     + kmFilterMarkup(paperHex, inkHex, P);
 };
+
+/* the fields' motion at soak progress u in [0, 1] - a pure function, so a scrubbed frame is the played one: the wobble noise
+   slides and its displacement breathes (the outline wriggles and morphs), the attraction mesh creeps (the dark spots migrate
+   and the front crawls after them), the grain boils. Offsets in field px (fk scales a portrait field). */
+export const soakAnim = (u, fk = 1, o = {}) => {
+  const P = Object.assign({}, SOAK, o), tp = Math.PI * 2, k = Math.min(1, Math.max(0, u));
+  return {
+    wob: [P.WOBBLE_DRIFT * fk * k, P.WOBBLE_DRIFT * fk * 0.6 * Math.sin(k * tp * 0.75)],
+    att: [P.ATTR_DRIFT * fk * Math.sin(k * tp * 0.5), -(P.ATTR_DRIFT * fk * k) || 0],
+    grain: [P.GRAIN_DRIFT * fk * k, P.GRAIN_DRIFT * fk * 0.5 * Math.sin(k * tp)],
+    scale: P.WOBBLE_SCALE * fk * (1 + P.WOBBLE_BREATH * Math.sin(k * tp * P.WOBBLE_CYCLES)),
+  };
+};
+export const soakAnimIds = (seed) => { const s = seed & 255; return { wob: "lpsoakw" + s, att: "lpsoaka" + s, grain: "lpsoakg" + s, disp: "lpsoakd" + s }; };
