@@ -230,7 +230,7 @@ export class FlowCdpDriver {
    *  image mode selected and the video model family absent (2026-09-05). */
   async selectMode(mode) {
     const page = this.flowPage;
-    const want = mode === 'image' ? /Image/ : /Video/;
+    const want = mode === 'image' ? /Image/ : /Video/;   // case-sensitive: the icon word is 'videocam', the label 'Video'
     // The radios' labels are readable through innerText but NOT through Playwright's hasText filter
     // (2026-09-05, redesigned drawer) - so walk the visible radios and read each one.
     const find = async () => {
@@ -251,7 +251,11 @@ export class FlowCdpDriver {
       if (await pill.count() > 0) { await pill.first().click({ timeout: 8000 }); }
       for (let i = 0; i < 8 && !radio; i++) { await page.waitForTimeout(400); radio = await find(); }
     }
-    if (!radio) throw new Error(`Flow mode toggle for "${mode}" not found in the settings drawer`);
+    if (!radio) {
+      const seen = await page.locator('[role="radio"]').filter({ visible: true }).allInnerTexts().catch(() => []);
+      const pills = await page.locator('button').filter({ visible: true }).allInnerTexts().catch(() => []);
+      throw new Error(`Flow mode toggle for "${mode}" not found in the settings drawer (visible radios: ${JSON.stringify(seen.map(s => s.replace(/\s+/g, ' ').trim()))}; visible buttons with x1-4/crop: ${JSON.stringify(pills.map(s => s.replace(/\s+/g, ' ').trim()).filter(s => /x[1-4]|crop_/.test(s)))})`);
+    }
     if ((await radio.getAttribute('aria-checked')) !== 'true') {
       await radio.click({ timeout: 8000 });
       await page.waitForTimeout(700);
