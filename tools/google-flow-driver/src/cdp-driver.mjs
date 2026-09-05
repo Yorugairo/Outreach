@@ -442,7 +442,8 @@ export class FlowCdpDriver {
     for (const filePath of uploadList) {
       const editor = page.locator("div[data-slate-editor='true'], div[contenteditable='true']").first();
       await editor.click();
-      await page.keyboard.press('End');
+      await page.keyboard.press('Control+End');     // End alone stops at the end of the current LINE - the '@' landed mid-prompt ("@toward")
+      await page.waitForTimeout(300);
       await page.keyboard.type(' @');
       await page.waitForTimeout(1500);
       // Reuse a previous upload: the picker lists project assets by filename and a media option
@@ -452,12 +453,19 @@ export class FlowCdpDriver {
       await page.waitForTimeout(1500);
       const existing = page.locator(`[role="option"]:has(.asset-title:text-is("${baseName}"))`).first();
       if (await existing.count() > 0) {
+        // clicking the asset only SELECTS it into the picker's preview; "Add to prompt" inserts the chip
+        // (operator, 2026-09-05: "you're not clicking add to prompt, that's why the composer is not clearing")
+        const before = await page.locator("div[contenteditable='true'] .mention-chip").count();
         await existing.click();
-        await page.waitForTimeout(900);
-        const reused = page.locator("div[contenteditable='true'] .mention-chip[data-reference-type='media']");
-        if (await reused.count() === 0) throw new Error(`Existing asset ${baseName} was clicked but no media chip landed.`);
-        console.log(`[FlowCdpDriver] Reference reused from project assets: ${baseName}`);
-        await page.keyboard.press('End');
+        await page.waitForTimeout(1200);
+        const add = page.getByRole('button', { name: /Add to prompt/i }).filter({ visible: true }).first();
+        if (await add.count() > 0) { await add.click({ timeout: 8000 }); }
+        let now = before;
+        for (let i = 0; i < 20 && now <= before; i++) { await page.waitForTimeout(400); now = await page.locator("div[contenteditable='true'] .mention-chip").count(); }
+        if (now <= before) throw new Error(`Existing asset ${baseName} was selected but no media chip landed after "Add to prompt".`);
+        console.log(`[FlowCdpDriver] Reference reused from project assets: ${baseName} (${now} chips)`);
+        await page.keyboard.press('Control+End');
+        await page.waitForTimeout(500);
         continue;
       }
       for (let i = 0; i < baseName.length; i++) await page.keyboard.press('Backspace');
@@ -491,6 +499,9 @@ export class FlowCdpDriver {
         const again = page.locator(`[role="option"]:has(.asset-title:text-is("${baseName}"))`).first();
         if (await again.count() === 0) throw new Error(`Upload of ${baseName} landed no chip and the asset is not listed afterwards.`);
         await again.click();
+        await page.waitForTimeout(1200);
+        const addAgain = page.getByRole('button', { name: /Add to prompt/i }).filter({ visible: true }).first();
+        if (await addAgain.count() > 0) { await addAgain.click({ timeout: 8000 }); }
         for (let i = 0; i < 20; i++) {
           await page.waitForTimeout(400);
           chipsNow = await page.locator("div[contenteditable='true'] .mention-chip").count();
