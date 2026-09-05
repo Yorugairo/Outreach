@@ -63,19 +63,18 @@ Cover the captions: shots 4, 5, 7, 9, 12, 13 read the claim from the page alone;
 10, 15 read the prop (chair + tab, toll gate, the fab); shots 2, 3, 6, 11, 14 are a person and
 need the caption. The judge (`judge_muted_caption.py`) decides, not this table.
 
-## The short (v10, `SCRIPT-90S-VO.claude.txt`, 276 words, 1:34 kit / ~1:30 delivered)
+## The short (v11, `SCRIPT-90S-VO.claude.txt`, 236 spoken words, 1:22 kit / Chirp 1:18)
 
-Same worlds, same pages, same bars. The operator's cut removes the head-fake and the debate,
-folds the tell onto the first number, and compresses the back end:
+Same worlds, same pages, same bars. The operator's cuts for 1:30: no head-fake, no debate, no
+threshold / flip, no triad - the outro carries the brand line. Rows:
 
-| # | span (kit) | beat | world / evidence | change from the long arm |
+| # | span (Chirp) | beat | world / evidence | note |
 |---|---|---|---|---|
-| 1-6 | 0:00-0:43 | hook → stakes → archetype + rehook → payoff + reflect → opponent + desire/map → promise | as rows 1-6 above (clip A, B, C; the holdings page at 0:15 and 0:25; clip G) | the promise is "by the end"; clip G's captions read *TWO NUMBERS / BY THE END* |
-| 7 | 0:43-1:05 | `[catalyst]` sold 122 B, a tenth of the pile; `[loop]` `[foreshadow]` the monthly print is your first number; the threshold / where we sit / the flip | **LEDGER PAGE `ev-japan-holdings-v1`, third entry**: `punch` at *sold*, badge `-9.9 %` at *tenth*, `callout` on the page title at *first number*, the peak line at *threshold*, `-9.9 %` again at *where we sit*, a sketched up-arrow + caption *I WAS WRONG* at *the flip* | the tell is spoken on the same page entry as the catalyst - six events in 22 s, no exit and re-entry |
-| 8 | 1:05-1:15 | `[loop]` the ten-trillion-yen pledge; `[loop-close]` `[rehook]` what nobody says: the money went home, the tab stayed here - `[post-key]` | **clip F** - StickMike walks past the open toll gate toward the lit fab; on *tab stayed here* the bar tab from shot 1 is on the counter in the foreground | rows 8-9 of the long arm (toll gate, then-vs-now page) are gone with the head-fake |
-| 9 | 1:15-1:27 | `[dip]` `[signpost]` so, the second number: your phone; Meta's multiple; a higher yield discounts it | **LEDGER PAGE `ev-meta-yield-v1`** rolls out ON the signpost (operator: a chart is on screen for this beat, not a phone): four bars in DOLLARS A SHARE - what the same Meta profit is priced at when the 10-year is 4 / 4.5 / 5 / 5.5 % ($665 / $633 / $604 / $577); badge `META NOW $617` at *price-to-earnings*, `punch` on the 5.5 % bar with badges `-$40 a share` and `ON $10,000: -$647` at *discounts* | operator: a multiple means nothing to a viewer until it is a price; the bars are the discount identity applied to Meta's live P/E and EPS (dossier), no forecast |
-| 10 | 1:27-1:31 | the Fed still hasn't moved; still on its tea break; `[ring]` that unfunded bar tab is still ours | **clip A2** | the ring is now the conclusion |
-| 11 | 1:31-1:34 | Not a panic. Not a plot. Mechanics. | **clip K** | LAST, as the brand line into the outro; **cuttable if the take runs over** (operator, 2026-09-04) - the ring one line earlier still carries |
+| 1-6 | 0:00-0:40 | hook → stakes → archetype + rehook → payoff + reflect → opponent + desire/map → promise | rows 1-6 of the long arm (clip A, B, C; the holdings page at 0:15 and 0:25; clip G) | clip G's captions read *TWO NUMBERS / BY THE END* |
+| 7 | 0:40-0:52 | `[catalyst]` sold 122 B, a tenth of the pile; `[loop]` `[foreshadow]` the monthly print is your first number | **LEDGER PAGE `ev-japan-holdings-v1`, third entry**: `punch` at *sold*, badge `-9.9 %` at *tenth*, `callout` on the page title at *first number* | three events in 12 s |
+| 8 | 0:52-1:02 | `[loop]` the ten-trillion-yen pledge; `[loop-close]` `[rehook]` what nobody says: the money went home, the tab stayed here - `[post-key]` | **clip F** - StickMike past the open toll gate toward the lit fab; the bar tab on the counter in the foreground at *tab stayed here* | the dip is the post-key breath |
+| 9 | 1:02-1:13 | `[dip]` `[signpost]` so, the second number: your phone; Meta's multiple; a higher yield discounts it | **LEDGER PAGE `ev-meta-yield-v1`** on the signpost: a Meta share priced at 4 / 4.5 / 5 / 5.5 %; badge `META NOW $617` at *price-to-earnings*, `punch` on the 5.5 % bar with `-$40 a share` / `ON $10,000: -$647` at *discounts* | the number a viewer feels |
+| 10 | 1:13-1:18 | the Fed still hasn't moved; still on its tea break; `[ring]` that unfunded bar tab is still ours | **clip A2** - the counter one register later, StickMike picks up the tab | the ring is the last line; the outro card carries "It's mechanics." |
 
-Seven Omni clips (A, B, C, F, G, K, A2), three ledger pages (`ev-japan-holdings-v1` x3, `ev-meta-yield-v1`). First proof at 0:15, evidence
-at 0:15 / 0:25 / 0:43 / 1:15; no still over 6 s in the first minute.
+Six Omni clips (A, B, C, F, G, A2), two ledger pages entered four times. First proof at 0:15,
+evidence at 0:15 / 0:25 / 0:40 / 1:02; no still over 6 s in the first minute.

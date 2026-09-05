@@ -1,12 +1,12 @@
 # SCRIPT GATES - SCRIPT-90S-VO.claude.txt
 
 script: SCRIPT-90S-VO.claude.txt
-generated: 2026-09-05T05:42:10+00:00
-script_hash: 745e464fa3aecf0f4659c6a16a4b2ae27074741fb848d3a3fee947007f1a3c27
+generated: 2026-09-05T05:49:21+00:00
+script_hash: 973bc6bbeca509bb82aeda8f401e3da271c4901b4270f193133f2ca54f5b6e90
 timing_source: estimated
 
-TOOLS      lint: exit 0, 0 fails | audit: exit 0, 0/1, timing=estimated |
-           opening gate: exit 1, 3/2/40/10 | screens: SCRIPT-90S.claude-SCREENS.md, 7 items
+TOOLS      lint: exit 0, 0 fails | audit: exit 1, 1/2, timing=estimated |
+           opening gate: exit 1, 3/2/40/10 | screens: SCRIPT-90S.claude-SCREENS.md, 5 items
 
 VIEWER     SCRIPT-90S.claude-VIEWER.md  (advisory: --no-viewer-gate - these rows do not change the VERDICT)
   [INFO ] V01 21/24 declared beats perceived (88%); unperceived: [stakes] w0, [promise] w2, [rehook] w2
@@ -19,42 +19,44 @@ VIEWER     SCRIPT-90S.claude-VIEWER.md  (advisory: --no-viewer-gate - these rows
 exit 0
 
 ```
-stats: {'sentence_mean': 10.4, 'sentence_count': 27, 'word_count': 281, 'rehook_positions_pct': [17, 64]}
+stats: {'sentence_mean': 12.0, 'sentence_count': 20, 'word_count': 240, 'rehook_positions_pct': [20, 73]}
 RESULT: clean
 ```
 
 ## audit_script_doctrine.py
-exit 0
+exit 1
 
 ```
 === SCRIPT-90S-VO.claude.txt ===
-             chars: 1539
-         runtime_s: 96.6
-           runtime: 1m 36s
-         sentences: 27
-     sentence_mean: 10.4
-      break_ration: 1.95
-  sentence_mean_carrying: 11.4
-  short_figure_share: 11.1%
-    sentence_stdev: 5.7
-     over_20_share: 3.7%
+             chars: 1327
+         runtime_s: 82.9
+           runtime: 1m 22s
+         sentences: 20
+     sentence_mean: 12.0
+      break_ration: 2.26
+  sentence_mean_carrying: 12.0
+  short_figure_share: 0.0%
+    sentence_stdev: 5.4
+     over_20_share: 5.0%
        hook_spread: 20%
    hook_properties: present-tense=y, viewer-facing=n
          paradox_s: 4.3
        first_you_s: 6.0
          cta_count: 0
            rehooks: ['0.3m', '1.0m']
-         phase_map: {'P1 OPEN': '0.0-0.2m', 'P2 ENGINE': '0.2-1.5m', 'P3 GAP': '0.3-0.7m', 'P4 PIVOT': '0.7-0.9m', 'P5 REFLECTION': '0.9-1.4m', 'P6 CLOSE': '0.1-1.6m'}
+         phase_map: {'P1 OPEN': '0.0-0.2m', 'P2 ENGINE': '0.2-1.4m', 'P3 GAP': '0.2-0.6m', 'P4 PIVOT': '0.6-0.8m', 'P5 REFLECTION': '0.8-1.2m', 'P6 CLOSE': '-0.1-1.4m'}
   p3_units_expected: 1
-         a3_anchor: 0:09
+         a3_anchor: 0:08
          pivot_pct: None
      timing_source: estimated (no take on disk)
 
-  [WARN] MAP sec 1: P1 computes to 13s; the open is pinned 60-90s at every runtime
+  [FAIL] doc 35 rule 2: no falsifiable tell — an answer video must name one variable, one threshold, where we sit, and what flips us
+  [WARN] MAP sec 1: P1 computes to 11s; the open is pinned 60-90s at every runtime
+  [WARN] doc 35 rule 2: the tell does not state what being wrong looks like
   [INFO] estimator: the two rate estimates disagree by 20% on the first sentence (numerals read longer than they look) — record a take to settle it
   [INFO] doc 38 B1-B4: owned by gate_opening_structure - see content\video_engine\projects\systems-and-blowups\tokyo-tea-break\SCRIPT-90S.claude-GATES.md
 
-RESULT: 0 FAIL, 1 WARN
+RESULT: 1 FAIL, 2 WARN
 ```
 
 ## gate_opening_structure.py
@@ -62,18 +64,18 @@ exit 1
 
 ```
 === OPENING STRUCTURE GATE: SCRIPT-90S-VO.claude.txt ===
-           runtime: 1:35
+           runtime: 1:22
             timing: estimated (kit rate, 8% band)
           geometry: P1 0:00-0:35 (beat 5 from 0:23), P2 -1:05 (phase guides)
      density_bands: loops (2, 3), new-info (4, 6)
-         a3_anchor: 0:09
-             cycle: checked 0:00-1:35; longest gap 16s from 0:59
-      unit_windows: ['P3 unit 1 0:16-0:43', 'P5 unit 2 0:52-1:23']
+         a3_anchor: 0:08
+             cycle: checked 0:00-1:22; longest gap 16s from 1:03
+      unit_windows: ['P3 unit 1 0:13-0:37', 'P5 unit 2 0:45-1:11']
       counterparty: Japan
               ring: tab
          packaging: title='Tokyo Tea Break' thumb=None thumb_file=None
     not_gated_here: Truby Battle / Self-Revelation / New Equilibrium, Snyder midpoint, chiastic center, ring CLOSE (P4-P6)
-    beats_declared: {'stakes': ['0:04'], 'archetype': ['0:07'], 'tricolon': ['0:07'], 'rehook': ['0:15', '0:39', '0:59'], 'payoff': ['0:19'], 'new': ['0:19', '0:42', '0:48', '0:53'], 'reflect': ['0:26'], 'opponent': ['0:31'], 'desire': ['0:35'], 'map': ['0:35'], 'promise': ['0:39'], 'catalyst': ['0:42'], 'loop': ['0:48', '0:53'], 'foreshadow': ['0:48'], 'loop-close': ['0:59'], 'dip': ['1:15'], 'signpost': ['1:15'], 'ring': ['1:30']}
+    beats_declared: {'stakes': ['0:04'], 'archetype': ['0:07'], 'tricolon': ['0:07'], 'rehook': ['0:15', '0:39', '0:59'], 'payoff': ['0:19'], 'new': ['0:19', '0:42', '0:48', '0:53'], 'reflect': ['0:26'], 'opponent': ['0:31'], 'desire': ['0:35'], 'map': ['0:35'], 'promise': ['0:39'], 'catalyst': ['0:42'], 'loop': ['0:48', '0:53'], 'foreshadow': ['0:48'], 'loop-close': ['0:59'], 'dip': ['1:03'], 'signpost': ['1:03'], 'ring': ['1:19']}
 
   [FAIL ] G22 3 [new] in P2
           PLATFORM density: 4-6 new-info beats at this runtime (P2 geometry)
@@ -130,14 +132,14 @@ exit 1
   [PASS ] G23 clean
           McKee gap, sentence-level: BUT/THEREFORE only - zero AND-THEN chains (P2 / doc 32 s4)
   [PASS ] G25 A3 at 0:15
-          PLATFORM rehook A3 at ~10% of runtime = 0:09 (P2 / MAP s4 QC; audit and gate share kit_spec.a3_anchor_s, E23)
+          PLATFORM rehook A3 at ~10% of runtime = 0:08 (P2 / MAP s4 QC; audit and gate share kit_spec.a3_anchor_s, E23)
   [PASS ] G26 [foreshadow] at 0:48
           Foreshadow schedule F2 at ~10%: the promise sighted again, none of it delivered (P2 / MAP s2)
   [PASS ] G27 'tab' 1x in P2
           Ring composition: token TOUCHED exactly once in P2, unresolved (P2 / doc 32 s5)
   [PASS ] G28 [loop-close] at 0:59
           Macro loop 1 CLOSES on a partial answer that opens the bigger question (P2 / MAP s4, LIFO ledger)
-  [PASS ] G29 [dip] at 1:15
+  [PASS ] G29 [dip] at 1:03
           PLATFORM breathing dip IMMEDIATELY after the macro close - 2-3 beats of room tone (P2)
   [PASS ] G30 none
           PLATFORM: the ONLY mid-video CTA slot is the 15-30s after the macro payoff (P2)
@@ -149,8 +151,8 @@ exit 1
           U6 / E20 concession budget: an agreement run never exceeds 2 sentences or 10s without a claim of ours
   [PASS ] G35 clean
           U6 / E20: a delivered proof is never hedged in the next sentence
-  [PASS ] G36 longest stretch without a cycle beat: 16s from 0:59
-          CLK the cycle repeats per beat - hook / show it's worth it / promise more / deliver; no >60s without a cycle beat, 0:00-1:35 (E23: whole runtime)
+  [PASS ] G36 longest stretch without a cycle beat: 16s from 1:03
+          CLK the cycle repeats per beat - hook / show it's worth it / promise more / deliver; no >60s without a cycle beat, 0:00-1:22 (E23: whole runtime)
   [PASS ] G37 [archetype] at 0:07
           Truby Weakness/Need planted AS PEOPLE: an archetype-in-a-setting enters 0:08-0:30 (38 B3 / MAP s3)
   [PASS ] G38 [desire] at 0:35
@@ -159,7 +161,7 @@ exit 1
           Auditory handrail: map-not-territory signpost - tease the WHAT, hold the HOW (38 B5 / doc 32 s1)
   [PASS ] G40 [catalyst] at 0:42
           Snyder Catalyst / McKee inciting incident: lands as a story beat in P2's first ~60s (P2)
-  [PASS ] G42 [signpost] at 1:15
+  [PASS ] G42 [signpost] at 1:03
           Auditory handrail: exit P2 on a transition signpost into the Gap (P2 / doc 32 s1)
   [PASS ] G44 all 2 unit windows rehook out
           PLATFORM rehook per unit: one template-family line or [rehook] inside every P3/P5 unit window (P3.md u5 / P5 / MAP s9 '1 per unit'; E23)
@@ -195,7 +197,7 @@ RESULT: 3 FAIL / 2 WARN / 40 PASS / 10 JUDGE (read these) / 1 INFO
 exit 0
 
 ```
-SCRIPT-90S.claude-SCREENS.md: X1=3 deixis=0 junctions=1 anchors=3 declared=24
+SCRIPT-90S.claude-SCREENS.md: X1=1 deixis=0 junctions=1 anchors=3 declared=24
 ```
 
-VERDICT: FAIL (1 failing tools)
+VERDICT: FAIL (2 failing tools)

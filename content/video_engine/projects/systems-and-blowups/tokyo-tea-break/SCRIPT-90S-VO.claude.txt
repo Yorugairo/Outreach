@@ -14,10 +14,6 @@ Tokyo took a tea break. And left America with an unfunded bar tab. [post-key]
 
 [loop] [new] Tokyo has pledged ten trillion yen to chips, and if that works, it beats our bonds. [loop-close] [rehook] And here's what nobody says: the money went home, and the tab stayed here. [post-key]
 
-The threshold: that pile grows, or it shrinks. Where we sit: a tenth below the February peak. The flip: the pile grows again. If it does, the money came back, and I was wrong.
-
 [dip] [signpost] So, the second number: it's on your phone. Pull up Meta and find its price-to-earnings multiple: that's the share of the price that's profit not yet earned, and a higher yield discounts it.
 
 The Fed still hasn't moved. Tokyo is still on its tea break. [ring] And that unfunded bar tab is still ours.
-
-Not a panic. Not a plot. Mechanics.

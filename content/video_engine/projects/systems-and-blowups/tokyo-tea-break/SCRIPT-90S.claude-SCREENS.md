@@ -1,15 +1,13 @@
 # STRENGTH SCREENS — SCRIPT-90S-VO.claude.txt
 
-12 sentences. Every candidate below requires a
+6 sentences. Every candidate below requires a
 per-item verdict in the strength log (ok / FIXED / licensed /
 carryover). A convergence claim without this file walked is
 invalid — the enumeration IS the review.
 
-## X1 — antecedent pairs (3)
+## X1 — antecedent pairs (1)
 
 - [1] `…Tokyo took a tea break.` → **And left America with an unfunded bar tab. [post-key] [stakes] The Fed hasn't mo**
-- [9] `… break. [ring] And that unfunded bar tab is still ours.` → **Not a panic.**
-- [10] `…Not a panic.` → **Not a plot.**
 
 ## P6 — deixis openers (0)
 
@@ -22,7 +20,7 @@ invalid — the enumeration IS the review.
 
 - [1] (a×) And left America with an unfunded bar tab. [post-key] [stakes] The Fed hasn't moved, but
 - [2] (y×) On YouTube, it's sixty-three stick figures. [rehook] Here's what nobody on that panel is
-- [6] (p×) Pull up Meta and find its price-to-earnings multiple: that's the share of the price that
+- [3] (p×) Pull up Meta and find its price-to-earnings multiple: that's the share of the price that
 
 ## P4C — cadence runs (words per sentence, per paragraph)
 
@@ -34,10 +32,8 @@ invalid — the enumeration IS the review.
 - ¶6: [12]
 - ¶7: [38]
 - ¶8: [37]
-- ¶9: [8, 9, 6, 11]
-- ¶10: [10, 27]
-- ¶11: [5, 16]
-- ¶12: [3, 3, 1]
+- ¶9: [10, 27]
+- ¶10: [5, 16]
 
 ## DECLARED — beat tags (24)
 
@@ -67,6 +63,6 @@ the agent's, per tag: **true / laundered** (CHECK-RESPONSIBILITIES R2,
 - [new]@0:53  window: PASS — G20, FAIL — G22  "Tokyo has pledged ten trillion yen to chips, and if that works, it beats our bonds."  → verdict: ____
 - [loop-close]@0:59  window: PASS — G28  "And here's what nobody says: the money went home, and the tab stayed here."  → verdict: ____
 - [rehook]@0:59  window: PASS — G25  "And here's what nobody says: the money went home, and the tab stayed here."  → verdict: ____
-- [dip]@1:15  window: n/a — outside opening window (P2 ends 1:05)  "So, the second number: it's on your phone."  → verdict: ____
-- [signpost]@1:15  window: PASS — G42  "So, the second number: it's on your phone."  → verdict: ____
-- [ring]@1:30  window: n/a — outside opening window (P2 ends 1:05)  "And that unfunded bar tab is still ours."  → verdict: ____
+- [dip]@1:03  window: PASS — G29  "So, the second number: it's on your phone."  → verdict: ____
+- [signpost]@1:03  window: PASS — G42  "So, the second number: it's on your phone."  → verdict: ____
+- [ring]@1:19  window: n/a — outside opening window (P2 ends 1:05)  "And that unfunded bar tab is still ours."  → verdict: ____
