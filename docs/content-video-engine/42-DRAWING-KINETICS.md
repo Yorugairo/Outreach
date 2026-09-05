@@ -86,7 +86,7 @@ Choose the overshoot the shot wants, solve for ζ. Choose when it should peak, s
 numbers, and the frame counts follow from them.
 
 A working evaluator returning position *and* velocity for all three damping regimes is
-in `07` §5.3; velocity is needed because §42.3 drives squash from it.
+in `07` §5.3 (`content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/07_academic_literature_drawing_and_2_5d_animation_engine.md`, "5.3 O(1) Seek-Safe Analytic Spring Evaluator"); velocity is needed because §42.3 drives squash from it.
 
 ## 42.3 Squash and stretch, area-preserving and motion-driven
 

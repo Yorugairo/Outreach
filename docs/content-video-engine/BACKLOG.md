@@ -404,6 +404,19 @@ mechanism per short, which is the short-form form of the equation spine. Logged 
 | X8 | **Two unverified citations** in the pass-2 rewrite of `08` (Martinez-Conde year/volume, Hasson volume/year). Nothing in 42–47 depends on either. | A library check. Low priority. |
 | ~~X9~~ | ~~Parallax + object page~~ | **CLOSED 2026-09-04** — 45 §45.2 bans parallax on vector evidence and text. Depth on the page comes from the Z-stack instead, which costs no shader and cannot tear. |
 
+## Found by the retrieval benchmark — 2026-09-05 (evals/RETRIEVAL-BENCHMARK-2026-09-05.md)
+
+Two rounds of delegated lookups (Fable `Explore` vs the Opus `explorer` role) surfaced these while answering; each is doc-grounded and its absence was proven by grep.
+
+| # | item | where it goes |
+|---|---|---|
+| R1 | **The Deegan dark rim** — 44 §44.2 specifies a one-to-two-pixel edge density at the ink boundary (coffee-ring, Deegan 1997); nothing in `kinetics/ink.mjs` or the template draws a perimeter term | Build behind a flag next to `km_ink`; the one cue that separates sumi from a filled vector shape |
+| R2 | **Syllable-locked STAGE type** — `FINDING-the-animation-math-and-what-it-changes.md` §(147-150) and its build-order row: pops phase-locked to the 4–8 Hz speech envelope; no `syllab` anywhere in the template | Exploration; needs a syllable timeline from the take (Whisper word times are the input) |
+| R3 | **`arap_morph` is a stub flag** — declared in `KINETICS_DEFAULTS` (template :446) and never read; T4 above is the real item | Fold into T4; the flag-roster test should refuse a declared flag no site reads |
+| R4 | **The docs index** — SigMap indexes code symbols only, so "animation math" ranked the retired Manim scene; `build_docs_index.py` (in flight 2026-09-05) emits `docs/DOCS-INDEX.jsonl` (every heading, lead line, bold labels, CAPABILITIES/BACKLOG rows) for one-call `rg`; follow with a labelling pass — every doc's H2 numbered `NN.x`, a lead sentence under every heading | Build; then the explorer role's brief says "rg the index first" |
+| R5 | **A persistent explorer** — continuation is `/resume` in the agent view (CLI only, not the desktop Code tab - docs agent-view.md); `memory: project` is now set on explorer / docs_researcher / reviewer (`.claude/agent-memory/<role>/MEMORY.md`, version-controlled, auto-loaded up to 200 lines) so the map of the tree accumulates across sessions; re-run the benchmark in a later session and compare tool calls, not tokens (an agent's growing context never touches the Fable cap) | Harness; after the docs index lands |
+| R6 | **Negative claims from a delegated agent are verified by the parent** — one Opus miss in ten hard lookups was "07 §5.3 does not exist" (it is `sources/reference_analyses/complete_research_evidence_bundle/07_academic_literature_drawing_and_2_5d_animation_engine.md:311`); the brief now says "not found where I looked", never "does not exist" | Runbook rule; doc 42 §42.2 now names the path |
+
 ## Routed from the demoted list (47 §4)
 
 Demoted from *doctrine* — not dropped. Each lands as a build item, an exploration, or a closure.
