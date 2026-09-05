@@ -583,23 +583,41 @@ export class FlowCdpDriver {
 
       const collected = [];
       let lastFoundAt = Date.now();
+      // an image downloaded earlier in this session is never "new" again (same defect as the video
+      // path: the page lists an earlier output after the baseline is taken; its signed URL may also
+      // have expired, which is the "Failed to fetch" that killed the stills batch, 2026-09-04)
+      this.seenImageIds = this.seenImageIds || new Set();
+      const idOf = (s) => s.split('?')[0];
       while (Date.now() - startTime < timeoutMs) {
         this.resetIdleTimer();
-        const currentSrc = await page.evaluate((prevs) => {
-          const imgs = Array.from(document.querySelectorAll("img[src*='getMediaUrlRedirect'], img[src*='flow-content.google/'], img[src*='/asb/']")).map(i => i.src);
+        const currentSrc = await page.evaluate(({ prevs, seen }) => {
+          const idOf = (s) => s.split('?')[0];
+          const imgs = Array.from(document.querySelectorAll("img[src*='getMediaUrlRedirect'], img[src*='flow-content.google/'], img[src*='/asb/']")).map(i => i.src)
+            .filter(s => !seen.includes(idOf(s)));
           const newImg = imgs.find(s => !prevs.includes(s));
           if (newImg) return newImg;
           if (imgs.length > 0 && imgs[0] !== prevs[0]) return imgs[0];
           return null;
-        }, prevList);
+        }, { prevs: prevList, seen: Array.from(this.seenImageIds) });
 
         if (currentSrc) {
-          const bytes = await page.evaluate(async (src) => {
-            const resp = await fetch(src);
-            const buf = await (await resp.blob()).arrayBuffer();
-            return Array.from(new Uint8Array(buf));
-          }, currentSrc);
+          let bytes = null;
+          try {
+            bytes = await page.evaluate(async (src) => {
+              const resp = await fetch(src);
+              if (!resp.ok) throw new Error('HTTP ' + resp.status);
+              const buf = await (await resp.blob()).arrayBuffer();
+              return Array.from(new Uint8Array(buf));
+            }, currentSrc);
+          } catch (e) {
+            console.warn(`[FlowCdpDriver] Could not fetch ${currentSrc.slice(0, 80)} (${e.message}); skipping it.`);
+            this.seenImageIds.add(idOf(currentSrc));
+            prevList.push(currentSrc);
+            await page.waitForTimeout(2500);
+            continue;
+          }
           prevList.push(currentSrc);
+          this.seenImageIds.add(idOf(currentSrc));
           if (collected.some(c => c.src === currentSrc)) {
             // the 'first tile shifted' branch can hand back a src already taken
           } else if (await looksLikeReference(currentSrc)) {
