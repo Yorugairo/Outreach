@@ -805,7 +805,7 @@
   const vo = $("vo"); vo.src = A["__audio__"];
   const wA = $("wA"), wB = $("wB"), wash = $("wash"), seam = $("seam"), cap = $("caption");
   const docks = [$("dock-1"), $("dock-2")];
-  const WIPE = 0.62, DISSOLVE_S = 0.8;   /* DISSOLVE_S: the cross-fade a row declares with exit dissolve (the outro card) */
+  const WIPE = 0.62, DISSOLVE_S = 0.8, MOUNT_STEPS = 5;   /* DISSOLVE_S: the cross-fade a row declares with exit dissolve (the outro card); MOUNT_STEPS: the DANCE - a mounting page fades in this many steps over its soak, the charcoal growing between them */
   const SUCK_S = 0.3, SUCK_TURN = 240;   /* the suck transition: 0.3 s, two thirds of a turn into the point */
   /* remotion-ui directional-wipe port (2026-08-30): FEATHER is the soft
      edge as a share of the frame (their edgeSoftness); DEPTH is the
@@ -2375,17 +2375,19 @@
     const st = ledgerState.get(el.id + "|" + scene.scene_id) || buildLedger(el, scene);
     const pg = scene.world.page || {};
     if (!st.root.isConnected) { el.querySelectorAll(".lp").forEach((x) => x.remove()); el.appendChild(st.root); }
-    const tr = t - scene.span[0] + (pg.enter === "spiral" ? LP_FOCUS_AT + LP_BADGE0 + LP_BADGE_STEP * ((st.badges || []).length + 1) : 0);   /* a spiral entry ARRIVES built: its beats are all past */
+    const tr = t - scene.span[0] + (pg.enter === "spiral" ? LP_FOCUS_AT + LP_BADGE0 + LP_BADGE_STEP * ((st.badges || []).length + 1) : pg.enter === "mount" ? LP.ROLL + LP.SAVOR : 0);   /* a spiral entry ARRIVES built: its beats are all past; a MOUNT skips the roll and the savor - its soak IS the entrance */
     /* beat 1: roll-out */
     const mount = pg.enter === "mount", rk = mount ? 1 : expoOut(clamp01(tr / LP.ROLL));   /* a mounting page is in place from its first frame; it RISES (below) while the world dissolves it in */
-    const mk = mount ? (kin("min_jerk") ? minJerk : quartIO)(clamp01(tr / DISSOLVE_S)) : 1;
+    const mk = mount ? Math.floor(clamp01((tr - LP.ROLL - LP.SAVOR) / LP.FIELD) * MOUNT_STEPS) / MOUNT_STEPS : 1;   /* the rise steps with the fade */
     /* (the roll-out translate is composed with the punch below) */
     st.edge.style.opacity = (1 - clamp01((tr - LP.ROLL) / 0.25)).toFixed(2);
     /* beat 2: the half savor - the textured page holds, empty (E22 addendum 2) */
     /* beat 3: the field. SOAK: seeps spread and saturate, never contract - paper taking ink;
        SCRIBBLE: strokes accumulate one at a time with the nib at the front. Either ends on the
        crisp rect. */
-    const b = clamp01((tr - LP.ROLL - LP.SAVOR) / LP.FIELD);
+    /* the dance: in each of MOUNT_STEPS slots the fade and the rise step at the slot's start; the charcoal grows in its second half */
+    const lpDance = (u) => { if (u >= 1) return 1; const k = Math.floor(u * MOUNT_STEPS), f = u * MOUNT_STEPS - k; return (k + clamp01((f - 0.5) / 0.5)) / MOUNT_STEPS; };
+    const b = mount ? lpDance(clamp01((tr - LP.ROLL - LP.SAVOR) / LP.FIELD)) : clamp01((tr - LP.ROLL - LP.SAVOR) / LP.FIELD);
     for (const bl of st.blobs) {
       /* STEP MOTION under km_ink (operator: "too smooth"): a stain's progress is a seeded staircase on the stepped clock, its own phase */
       const u = kin("km_ink") ? soakStepped(clamp01((b - bl.lag) / (1 - bl.lag)), (k) => lpHash(st.seed, bl.i + 1, 200 + k)) : clamp01((b - bl.lag) / (1 - bl.lag));
@@ -2795,7 +2797,11 @@
        arrives by a plain cross-fade over DISSOLVE_S - no front, no seam, the outgoing world keeps playing underneath */
     const mountIn = prev && sc.world && sc.world.kind === "ledger" && sc.world.page && sc.world.page.enter === "mount";   /* MOUNT (operator, 2026-09-05): the outgoing scene fades while the cream plate mounts over it - no page turn */
     const dissolve = prev && (sc.exit === "dissolve" || mountIn);
-    const dk = dissolve ? (kin("min_jerk") ? minJerk : quartIO)(clamp01((t - sc.span[0]) / DISSOLVE_S)) : 1;
+    /* THE DANCE (operator, 2026-09-05: "the screen fades a portion - the charcoal builds up some - the screen fades a portion - the
+       charcoal builds up some more, so the character is walking away as it's fading"): a mount cross-fades over the soak's own
+       window (LP.FIELD) in MOUNT_STEPS steps, the outgoing clip playing underneath; the charcoal grows between the steps (lpDance) */
+    const dk = mountIn ? Math.floor(clamp01((t - sc.span[0]) / LP.FIELD) * MOUNT_STEPS) / MOUNT_STEPS
+             : dissolve ? (kin("min_jerk") ? minJerk : quartIO)(clamp01((t - sc.span[0]) / DISSOLVE_S)) : 1;
     const wk = prev && !spiralIn && !suck && !dissolve ? (kin("min_jerk") ? minJerk : quartIO)(clamp01((t - sc.span[0]) / WIPE)) : 1;
     const seaming = prev && wk > 0 && wk < 1;
     /* THE HARD-EDGE CLIP WIPE (restored 2026-09-01). The remotion-ui
