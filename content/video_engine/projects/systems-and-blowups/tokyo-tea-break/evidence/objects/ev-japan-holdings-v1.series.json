@@ -1,0 +1,80 @@
+{
+ "title": "Our biggest customer is selling",
+ "sub": "Japan's holdings of US Treasury securities, $bn, monthly. Peak 2026-02 $1,239.3B -> 2026-06 $1,116.7B",
+ "src": "US Treasury TIC Table 5, Major Foreign Holders \u00b7 fetched 2026-09-04",
+ "ylabel": "$bn",
+ "series": [
+  {
+   "label": "-9.9%",
+   "name": "Japan",
+   "color": "crimson",
+   "pts": [
+    [
+     2025.4167,
+     1154.8
+    ],
+    [
+     2025.5,
+     1155.4
+    ],
+    [
+     2025.5833,
+     1183.9
+    ],
+    [
+     2025.6667,
+     1189.3
+    ],
+    [
+     2025.75,
+     1200.0
+    ],
+    [
+     2025.8333,
+     1202.7
+    ],
+    [
+     2025.9167,
+     1185.5
+    ],
+    [
+     2026.0,
+     1225.3
+    ],
+    [
+     2026.0833,
+     1239.3
+    ],
+    [
+     2026.1667,
+     1191.6
+    ],
+    [
+     2026.25,
+     1209.9
+    ],
+    [
+     2026.3333,
+     1143.1
+    ],
+    [
+     2026.4167,
+     1116.7
+    ]
+   ]
+  }
+ ],
+ "status": "REAL",
+ "fetched": "2026-09-04",
+ "facts": {
+  "latest_month": "2026-06",
+  "latest": 1116.7,
+  "peak_month": "2026-02",
+  "peak": 1239.3,
+  "drop_bn": -122.6,
+  "drop_pct": -9.9,
+  "share_pct": 12.0,
+  "rank_2_uk": 939.9,
+  "rank_3_china": 633.4
+ }
+}

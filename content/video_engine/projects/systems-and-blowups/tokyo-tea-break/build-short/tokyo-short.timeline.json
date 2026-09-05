@@ -1,0 +1,2472 @@
+{
+ "schema_version": "scene_evidence_timeline.v1",
+ "runtime_s": 82.473,
+ "title": "Tokyo Tea Break",
+ "subtitle": "Money Physics \u00b7 short",
+ "episode_id": "tokyo-tea-break",
+ "project_id": "systems-and-blowups",
+ "aspect": "9:16",
+ "narration": {
+  "canonical_hash": "b99f7b6a03c1695dd0ca0a9db1751f4371188c0f14b70382de9f517814c3e0f2",
+  "words_path": "build-short/timeline.json"
+ },
+ "captions": [
+  {
+   "at": 0.0,
+   "until": 1.93,
+   "text": "Tokyo took a tea break. And"
+  },
+  {
+   "at": 1.99,
+   "until": 4.06,
+   "text": "left America with an unfunded bar"
+  },
+  {
+   "at": 4.13,
+   "until": 6.64,
+   "text": "tab. The Fed hasn't moved, but"
+  },
+  {
+   "at": 6.68,
+   "until": 7.95,
+   "text": "your borrowing costs climbed"
+  },
+  {
+   "at": 7.99,
+   "until": 10.3,
+   "text": "anyway. Three men in blue ties"
+  },
+  {
+   "at": 10.36,
+   "until": 12.14,
+   "text": "blame the deficit, the Fed, or"
+  },
+  {
+   "at": 12.19,
+   "until": 14.42,
+   "text": "the vibes at Jackson Hole. On"
+  },
+  {
+   "at": 14.49,
+   "until": 16.16,
+   "text": "YouTube, it's sixty-three stick"
+  },
+  {
+   "at": 16.22,
+   "until": 18.25,
+   "text": "figures. Here's what nobody on"
+  },
+  {
+   "at": 18.29,
+   "until": 19.85,
+   "text": "that panel is watching: our"
+  },
+  {
+   "at": 19.92,
+   "until": 21.68,
+   "text": "biggest lender. The Treasury's"
+  },
+  {
+   "at": 21.73,
+   "until": 23.4,
+   "text": "table shows Japan holds over a"
+  },
+  {
+   "at": 23.47,
+   "until": 25.19,
+   "text": "trillion dollars of our debt, and"
+  },
+  {
+   "at": 25.23,
+   "until": 26.99,
+   "text": "it's been selling since February."
+  },
+  {
+   "at": 27.5,
+   "until": 29.66,
+   "text": "I ran risk at JPMorgan; when"
+  },
+  {
+   "at": 29.7,
+   "until": 31.31,
+   "text": "your biggest customer walks, the"
+  },
+  {
+   "at": 31.36,
+   "until": 33.26,
+   "text": "auction sets your price. The"
+  },
+  {
+   "at": 33.31,
+   "until": 35.05,
+   "text": "opponent isn't the Fed; it's a"
+  },
+  {
+   "at": 35.13,
+   "until": 36.77,
+   "text": "Japanese balance sheet. Two"
+  },
+  {
+   "at": 36.84,
+   "until": 38.59,
+   "text": "numbers show where the money went:"
+  },
+  {
+   "at": 38.8,
+   "until": 40.83,
+   "text": "a Treasury page, and your phone."
+  },
+  {
+   "at": 41.33,
+   "until": 43.09,
+   "text": "By the end you'll read both"
+  },
+  {
+   "at": 43.15,
+   "until": 44.15,
+   "text": "numbers yourself."
+  },
+  {
+   "at": 44.75,
+   "until": 46.49,
+   "text": "Since February, Japan has sold a"
+  },
+  {
+   "at": 46.55,
+   "until": 47.73,
+   "text": "hundred and twenty-two billion"
+  },
+  {
+   "at": 47.79,
+   "until": 49.05,
+   "text": "dollars of it, a tenth of"
+  },
+  {
+   "at": 49.09,
+   "until": 51.04,
+   "text": "the pile. The Treasury prints the"
+  },
+  {
+   "at": 51.1,
+   "until": 52.78,
+   "text": "new total monthly, and that print"
+  },
+  {
+   "at": 52.82,
+   "until": 54.99,
+   "text": "is your first number. Tokyo has"
+  },
+  {
+   "at": 55.06,
+   "until": 57.02,
+   "text": "pledged ten trillion yen to chips,"
+  },
+  {
+   "at": 57.04,
+   "until": 58.52,
+   "text": "and if that works, it beats"
+  },
+  {
+   "at": 58.56,
+   "until": 60.22,
+   "text": "our bonds. And here's what nobody"
+  },
+  {
+   "at": 60.28,
+   "until": 62.29,
+   "text": "says: the money went home, and"
+  },
+  {
+   "at": 62.34,
+   "until": 64.83,
+   "text": "the tab stayed here. So, the"
+  },
+  {
+   "at": 64.9,
+   "until": 67.19,
+   "text": "second number: it's on your phone."
+  },
+  {
+   "at": 67.57,
+   "until": 69.06,
+   "text": "Pull up Meta and find its"
+  },
+  {
+   "at": 69.1,
+   "until": 71.23,
+   "text": "price-to-earnings multiple: that's"
+  },
+  {
+   "at": 71.28,
+   "until": 72.39,
+   "text": "the share of the price that's"
+  },
+  {
+   "at": 72.44,
+   "until": 73.81,
+   "text": "profit not yet earned, and a"
+  },
+  {
+   "at": 73.88,
+   "until": 75.95,
+   "text": "higher yield discounts it. The Fed"
+  },
+  {
+   "at": 76.01,
+   "until": 78.34,
+   "text": "still hasn't moved. Tokyo is still"
+  },
+  {
+   "at": 78.43,
+   "until": 79.87,
+   "text": "on its tea break. And that"
+  },
+  {
+   "at": 79.95,
+   "until": 82.47,
+   "text": "unfunded bar tab is still ours."
+  }
+ ],
+ "caption_pages": [
+  {
+   "s": 0.0,
+   "e": 1.93,
+   "t": [
+    {
+     "w": "Tokyo",
+     "s": 0.0,
+     "e": 0.45,
+     "k": false
+    },
+    {
+     "w": "took",
+     "s": 0.51,
+     "e": 0.66,
+     "k": false
+    },
+    {
+     "w": "a",
+     "s": 0.71,
+     "e": 0.73,
+     "k": false
+    },
+    {
+     "w": "tea",
+     "s": 0.78,
+     "e": 0.93,
+     "k": false
+    },
+    {
+     "w": "break.",
+     "s": 0.97,
+     "e": 1.45,
+     "k": false
+    },
+    {
+     "w": "And",
+     "s": 1.78,
+     "e": 1.93,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 1.99,
+   "e": 4.06,
+   "t": [
+    {
+     "w": "left",
+     "s": 1.99,
+     "e": 2.18,
+     "k": false
+    },
+    {
+     "w": "America",
+     "s": 2.23,
+     "e": 2.76,
+     "k": true
+    },
+    {
+     "w": "with",
+     "s": 2.91,
+     "e": 3.11,
+     "k": false
+    },
+    {
+     "w": "an",
+     "s": 3.16,
+     "e": 3.22,
+     "k": false
+    },
+    {
+     "w": "unfunded",
+     "s": 3.29,
+     "e": 3.83,
+     "k": false
+    },
+    {
+     "w": "bar",
+     "s": 3.88,
+     "e": 4.06,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 4.13,
+   "e": 6.64,
+   "t": [
+    {
+     "w": "tab.",
+     "s": 4.13,
+     "e": 4.74,
+     "k": false
+    },
+    {
+     "w": "The",
+     "s": 5.18,
+     "e": 5.28,
+     "k": false
+    },
+    {
+     "w": "Fed",
+     "s": 5.34,
+     "e": 5.54,
+     "k": true
+    },
+    {
+     "w": "hasn't",
+     "s": 5.6,
+     "e": 5.85,
+     "k": false
+    },
+    {
+     "w": "moved,",
+     "s": 5.9,
+     "e": 6.37,
+     "k": false
+    },
+    {
+     "w": "but",
+     "s": 6.49,
+     "e": 6.64,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 6.68,
+   "e": 7.95,
+   "t": [
+    {
+     "w": "your",
+     "s": 6.68,
+     "e": 6.79,
+     "k": false
+    },
+    {
+     "w": "borrowing",
+     "s": 6.83,
+     "e": 7.26,
+     "k": false
+    },
+    {
+     "w": "costs",
+     "s": 7.33,
+     "e": 7.59,
+     "k": false
+    },
+    {
+     "w": "climbed",
+     "s": 7.64,
+     "e": 7.95,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 7.99,
+   "e": 10.3,
+   "t": [
+    {
+     "w": "anyway.",
+     "s": 7.99,
+     "e": 8.58,
+     "k": false
+    },
+    {
+     "w": "Three",
+     "s": 9.09,
+     "e": 9.33,
+     "k": true
+    },
+    {
+     "w": "men",
+     "s": 9.38,
+     "e": 9.53,
+     "k": false
+    },
+    {
+     "w": "in",
+     "s": 9.59,
+     "e": 9.66,
+     "k": false
+    },
+    {
+     "w": "blue",
+     "s": 9.72,
+     "e": 9.93,
+     "k": false
+    },
+    {
+     "w": "ties",
+     "s": 9.96,
+     "e": 10.3,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 10.36,
+   "e": 12.14,
+   "t": [
+    {
+     "w": "blame",
+     "s": 10.36,
+     "e": 10.63,
+     "k": false
+    },
+    {
+     "w": "the",
+     "s": 10.67,
+     "e": 10.74,
+     "k": false
+    },
+    {
+     "w": "deficit,",
+     "s": 10.79,
+     "e": 11.39,
+     "k": false
+    },
+    {
+     "w": "the",
+     "s": 11.51,
+     "e": 11.61,
+     "k": false
+    },
+    {
+     "w": "Fed,",
+     "s": 11.68,
+     "e": 12.01,
+     "k": true
+    },
+    {
+     "w": "or",
+     "s": 12.04,
+     "e": 12.14,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 12.19,
+   "e": 14.42,
+   "t": [
+    {
+     "w": "the",
+     "s": 12.19,
+     "e": 12.26,
+     "k": false
+    },
+    {
+     "w": "vibes",
+     "s": 12.31,
+     "e": 12.74,
+     "k": false
+    },
+    {
+     "w": "at",
+     "s": 12.77,
+     "e": 12.85,
+     "k": false
+    },
+    {
+     "w": "Jackson",
+     "s": 12.91,
+     "e": 13.28,
+     "k": true
+    },
+    {
+     "w": "Hole.",
+     "s": 13.33,
+     "e": 13.8,
+     "k": true
+    },
+    {
+     "w": "On",
+     "s": 14.24,
+     "e": 14.42,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 14.49,
+   "e": 16.16,
+   "t": [
+    {
+     "w": "YouTube,",
+     "s": 14.49,
+     "e": 15.05,
+     "k": true
+    },
+    {
+     "w": "it's",
+     "s": 15.09,
+     "e": 15.3,
+     "k": false
+    },
+    {
+     "w": "sixty-three",
+     "s": 15.34,
+     "e": 15.92,
+     "k": false
+    },
+    {
+     "w": "stick",
+     "s": 15.94,
+     "e": 16.16,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 16.22,
+   "e": 18.25,
+   "t": [
+    {
+     "w": "figures.",
+     "s": 16.22,
+     "e": 16.8,
+     "k": false
+    },
+    {
+     "w": "Here's",
+     "s": 17.26,
+     "e": 17.49,
+     "k": false
+    },
+    {
+     "w": "what",
+     "s": 17.53,
+     "e": 17.65,
+     "k": false
+    },
+    {
+     "w": "nobody",
+     "s": 17.72,
+     "e": 18.09,
+     "k": false
+    },
+    {
+     "w": "on",
+     "s": 18.16,
+     "e": 18.25,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 18.29,
+   "e": 19.85,
+   "t": [
+    {
+     "w": "that",
+     "s": 18.29,
+     "e": 18.42,
+     "k": false
+    },
+    {
+     "w": "panel",
+     "s": 18.49,
+     "e": 18.76,
+     "k": false
+    },
+    {
+     "w": "is",
+     "s": 18.81,
+     "e": 18.88,
+     "k": false
+    },
+    {
+     "w": "watching:",
+     "s": 18.95,
+     "e": 19.46,
+     "k": false
+    },
+    {
+     "w": "our",
+     "s": 19.71,
+     "e": 19.85,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 19.92,
+   "e": 21.68,
+   "t": [
+    {
+     "w": "biggest",
+     "s": 19.92,
+     "e": 20.21,
+     "k": false
+    },
+    {
+     "w": "lender.",
+     "s": 20.27,
+     "e": 20.77,
+     "k": false
+    },
+    {
+     "w": "The",
+     "s": 21.09,
+     "e": 21.21,
+     "k": false
+    },
+    {
+     "w": "Treasury's",
+     "s": 21.25,
+     "e": 21.68,
+     "k": true
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 21.73,
+   "e": 23.4,
+   "t": [
+    {
+     "w": "table",
+     "s": 21.73,
+     "e": 22.03,
+     "k": false
+    },
+    {
+     "w": "shows",
+     "s": 22.07,
+     "e": 22.31,
+     "k": false
+    },
+    {
+     "w": "Japan",
+     "s": 22.37,
+     "e": 22.75,
+     "k": true
+    },
+    {
+     "w": "holds",
+     "s": 22.82,
+     "e": 23.05,
+     "k": false
+    },
+    {
+     "w": "over",
+     "s": 23.1,
+     "e": 23.3,
+     "k": false
+    },
+    {
+     "w": "a",
+     "s": 23.36,
+     "e": 23.4,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 23.47,
+   "e": 25.19,
+   "t": [
+    {
+     "w": "trillion",
+     "s": 23.47,
+     "e": 23.92,
+     "k": true
+    },
+    {
+     "w": "dollars",
+     "s": 23.98,
+     "e": 24.32,
+     "k": false
+    },
+    {
+     "w": "of",
+     "s": 24.35,
+     "e": 24.41,
+     "k": false
+    },
+    {
+     "w": "our",
+     "s": 24.47,
+     "e": 24.58,
+     "k": false
+    },
+    {
+     "w": "debt,",
+     "s": 24.64,
+     "e": 24.99,
+     "k": false
+    },
+    {
+     "w": "and",
+     "s": 25.04,
+     "e": 25.19,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 25.23,
+   "e": 26.99,
+   "t": [
+    {
+     "w": "it's",
+     "s": 25.23,
+     "e": 25.35,
+     "k": false
+    },
+    {
+     "w": "been",
+     "s": 25.39,
+     "e": 25.51,
+     "k": false
+    },
+    {
+     "w": "selling",
+     "s": 25.56,
+     "e": 25.87,
+     "k": false
+    },
+    {
+     "w": "since",
+     "s": 25.93,
+     "e": 26.15,
+     "k": false
+    },
+    {
+     "w": "February.",
+     "s": 26.19,
+     "e": 26.99,
+     "k": true
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 27.5,
+   "e": 29.66,
+   "t": [
+    {
+     "w": "I",
+     "s": 27.5,
+     "e": 27.57,
+     "k": false
+    },
+    {
+     "w": "ran",
+     "s": 27.68,
+     "e": 27.87,
+     "k": false
+    },
+    {
+     "w": "risk",
+     "s": 27.96,
+     "e": 28.23,
+     "k": false
+    },
+    {
+     "w": "at",
+     "s": 28.29,
+     "e": 28.36,
+     "k": false
+    },
+    {
+     "w": "JPMorgan;",
+     "s": 28.41,
+     "e": 29.33,
+     "k": true
+    },
+    {
+     "w": "when",
+     "s": 29.51,
+     "e": 29.66,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 29.7,
+   "e": 31.31,
+   "t": [
+    {
+     "w": "your",
+     "s": 29.7,
+     "e": 29.81,
+     "k": false
+    },
+    {
+     "w": "biggest",
+     "s": 29.86,
+     "e": 30.12,
+     "k": false
+    },
+    {
+     "w": "customer",
+     "s": 30.16,
+     "e": 30.54,
+     "k": false
+    },
+    {
+     "w": "walks,",
+     "s": 30.6,
+     "e": 31.11,
+     "k": false
+    },
+    {
+     "w": "the",
+     "s": 31.19,
+     "e": 31.31,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 31.36,
+   "e": 33.26,
+   "t": [
+    {
+     "w": "auction",
+     "s": 31.36,
+     "e": 31.69,
+     "k": false
+    },
+    {
+     "w": "sets",
+     "s": 31.75,
+     "e": 31.97,
+     "k": false
+    },
+    {
+     "w": "your",
+     "s": 31.99,
+     "e": 32.1,
+     "k": false
+    },
+    {
+     "w": "price.",
+     "s": 32.14,
+     "e": 32.65,
+     "k": false
+    },
+    {
+     "w": "The",
+     "s": 33.15,
+     "e": 33.26,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 33.31,
+   "e": 35.05,
+   "t": [
+    {
+     "w": "opponent",
+     "s": 33.31,
+     "e": 33.68,
+     "k": false
+    },
+    {
+     "w": "isn't",
+     "s": 33.73,
+     "e": 33.95,
+     "k": false
+    },
+    {
+     "w": "the",
+     "s": 33.98,
+     "e": 34.05,
+     "k": false
+    },
+    {
+     "w": "Fed;",
+     "s": 34.11,
+     "e": 34.55,
+     "k": true
+    },
+    {
+     "w": "it's",
+     "s": 34.8,
+     "e": 34.98,
+     "k": false
+    },
+    {
+     "w": "a",
+     "s": 35.02,
+     "e": 35.05,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 35.13,
+   "e": 36.77,
+   "t": [
+    {
+     "w": "Japanese",
+     "s": 35.13,
+     "e": 35.61,
+     "k": true
+    },
+    {
+     "w": "balance",
+     "s": 35.65,
+     "e": 36.03,
+     "k": false
+    },
+    {
+     "w": "sheet.",
+     "s": 36.05,
+     "e": 36.41,
+     "k": false
+    },
+    {
+     "w": "Two",
+     "s": 36.58,
+     "e": 36.77,
+     "k": true
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 36.84,
+   "e": 38.59,
+   "t": [
+    {
+     "w": "numbers",
+     "s": 36.84,
+     "e": 37.22,
+     "k": false
+    },
+    {
+     "w": "show",
+     "s": 37.35,
+     "e": 37.58,
+     "k": false
+    },
+    {
+     "w": "where",
+     "s": 37.62,
+     "e": 37.78,
+     "k": false
+    },
+    {
+     "w": "the",
+     "s": 37.81,
+     "e": 37.88,
+     "k": false
+    },
+    {
+     "w": "money",
+     "s": 37.93,
+     "e": 38.13,
+     "k": false
+    },
+    {
+     "w": "went:",
+     "s": 38.17,
+     "e": 38.59,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 38.8,
+   "e": 40.83,
+   "t": [
+    {
+     "w": "a",
+     "s": 38.8,
+     "e": 38.88,
+     "k": false
+    },
+    {
+     "w": "Treasury",
+     "s": 38.94,
+     "e": 39.31,
+     "k": true
+    },
+    {
+     "w": "page,",
+     "s": 39.37,
+     "e": 39.83,
+     "k": false
+    },
+    {
+     "w": "and",
+     "s": 39.89,
+     "e": 40.07,
+     "k": false
+    },
+    {
+     "w": "your",
+     "s": 40.14,
+     "e": 40.26,
+     "k": false
+    },
+    {
+     "w": "phone.",
+     "s": 40.31,
+     "e": 40.83,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 41.33,
+   "e": 43.09,
+   "t": [
+    {
+     "w": "By",
+     "s": 41.33,
+     "e": 41.48,
+     "k": false
+    },
+    {
+     "w": "the",
+     "s": 41.53,
+     "e": 41.62,
+     "k": false
+    },
+    {
+     "w": "end",
+     "s": 41.7,
+     "e": 42.0,
+     "k": false
+    },
+    {
+     "w": "you'll",
+     "s": 42.38,
+     "e": 42.59,
+     "k": false
+    },
+    {
+     "w": "read",
+     "s": 42.64,
+     "e": 42.81,
+     "k": false
+    },
+    {
+     "w": "both",
+     "s": 42.88,
+     "e": 43.09,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 43.15,
+   "e": 44.15,
+   "t": [
+    {
+     "w": "numbers",
+     "s": 43.15,
+     "e": 43.46,
+     "k": false
+    },
+    {
+     "w": "yourself.",
+     "s": 43.5,
+     "e": 44.15,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 44.75,
+   "e": 46.49,
+   "t": [
+    {
+     "w": "Since",
+     "s": 44.75,
+     "e": 44.99,
+     "k": false
+    },
+    {
+     "w": "February,",
+     "s": 45.04,
+     "e": 45.52,
+     "k": true
+    },
+    {
+     "w": "Japan",
+     "s": 45.55,
+     "e": 45.95,
+     "k": true
+    },
+    {
+     "w": "has",
+     "s": 46.02,
+     "e": 46.13,
+     "k": false
+    },
+    {
+     "w": "sold",
+     "s": 46.18,
+     "e": 46.42,
+     "k": false
+    },
+    {
+     "w": "a",
+     "s": 46.47,
+     "e": 46.49,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 46.55,
+   "e": 47.73,
+   "t": [
+    {
+     "w": "hundred",
+     "s": 46.55,
+     "e": 46.82,
+     "k": true
+    },
+    {
+     "w": "and",
+     "s": 46.84,
+     "e": 46.91,
+     "k": false
+    },
+    {
+     "w": "twenty-two",
+     "s": 46.93,
+     "e": 47.36,
+     "k": false
+    },
+    {
+     "w": "billion",
+     "s": 47.43,
+     "e": 47.73,
+     "k": true
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 47.79,
+   "e": 49.05,
+   "t": [
+    {
+     "w": "dollars",
+     "s": 47.79,
+     "e": 48.14,
+     "k": false
+    },
+    {
+     "w": "of",
+     "s": 48.19,
+     "e": 48.26,
+     "k": false
+    },
+    {
+     "w": "it,",
+     "s": 48.3,
+     "e": 48.47,
+     "k": false
+    },
+    {
+     "w": "a",
+     "s": 48.51,
+     "e": 48.58,
+     "k": false
+    },
+    {
+     "w": "tenth",
+     "s": 48.67,
+     "e": 48.95,
+     "k": false
+    },
+    {
+     "w": "of",
+     "s": 48.99,
+     "e": 49.05,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 49.09,
+   "e": 51.04,
+   "t": [
+    {
+     "w": "the",
+     "s": 49.09,
+     "e": 49.16,
+     "k": false
+    },
+    {
+     "w": "pile.",
+     "s": 49.2,
+     "e": 49.66,
+     "k": false
+    },
+    {
+     "w": "The",
+     "s": 50.05,
+     "e": 50.16,
+     "k": false
+    },
+    {
+     "w": "Treasury",
+     "s": 50.21,
+     "e": 50.58,
+     "k": true
+    },
+    {
+     "w": "prints",
+     "s": 50.65,
+     "e": 50.92,
+     "k": false
+    },
+    {
+     "w": "the",
+     "s": 50.97,
+     "e": 51.04,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 51.1,
+   "e": 52.78,
+   "t": [
+    {
+     "w": "new",
+     "s": 51.1,
+     "e": 51.22,
+     "k": false
+    },
+    {
+     "w": "total",
+     "s": 51.28,
+     "e": 51.57,
+     "k": false
+    },
+    {
+     "w": "monthly,",
+     "s": 51.62,
+     "e": 52.1,
+     "k": false
+    },
+    {
+     "w": "and",
+     "s": 52.15,
+     "e": 52.3,
+     "k": false
+    },
+    {
+     "w": "that",
+     "s": 52.37,
+     "e": 52.53,
+     "k": false
+    },
+    {
+     "w": "print",
+     "s": 52.6,
+     "e": 52.78,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 52.82,
+   "e": 54.99,
+   "t": [
+    {
+     "w": "is",
+     "s": 52.82,
+     "e": 52.89,
+     "k": false
+    },
+    {
+     "w": "your",
+     "s": 52.94,
+     "e": 53.04,
+     "k": false
+    },
+    {
+     "w": "first",
+     "s": 53.1,
+     "e": 53.34,
+     "k": false
+    },
+    {
+     "w": "number.",
+     "s": 53.4,
+     "e": 53.84,
+     "k": false
+    },
+    {
+     "w": "Tokyo",
+     "s": 54.37,
+     "e": 54.8,
+     "k": false
+    },
+    {
+     "w": "has",
+     "s": 54.87,
+     "e": 54.99,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 55.06,
+   "e": 57.02,
+   "t": [
+    {
+     "w": "pledged",
+     "s": 55.06,
+     "e": 55.41,
+     "k": false
+    },
+    {
+     "w": "ten",
+     "s": 55.46,
+     "e": 55.69,
+     "k": true
+    },
+    {
+     "w": "trillion",
+     "s": 55.75,
+     "e": 56.13,
+     "k": true
+    },
+    {
+     "w": "yen",
+     "s": 56.2,
+     "e": 56.4,
+     "k": false
+    },
+    {
+     "w": "to",
+     "s": 56.47,
+     "e": 56.54,
+     "k": false
+    },
+    {
+     "w": "chips,",
+     "s": 56.6,
+     "e": 57.02,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 57.04,
+   "e": 58.52,
+   "t": [
+    {
+     "w": "and",
+     "s": 57.04,
+     "e": 57.18,
+     "k": false
+    },
+    {
+     "w": "if",
+     "s": 57.24,
+     "e": 57.32,
+     "k": false
+    },
+    {
+     "w": "that",
+     "s": 57.37,
+     "e": 57.53,
+     "k": false
+    },
+    {
+     "w": "works,",
+     "s": 57.59,
+     "e": 58.07,
+     "k": false
+    },
+    {
+     "w": "it",
+     "s": 58.11,
+     "e": 58.25,
+     "k": false
+    },
+    {
+     "w": "beats",
+     "s": 58.31,
+     "e": 58.52,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 58.56,
+   "e": 60.22,
+   "t": [
+    {
+     "w": "our",
+     "s": 58.56,
+     "e": 58.68,
+     "k": false
+    },
+    {
+     "w": "bonds.",
+     "s": 58.72,
+     "e": 59.25,
+     "k": false
+    },
+    {
+     "w": "And",
+     "s": 59.32,
+     "e": 59.47,
+     "k": false
+    },
+    {
+     "w": "here's",
+     "s": 59.54,
+     "e": 59.71,
+     "k": false
+    },
+    {
+     "w": "what",
+     "s": 59.75,
+     "e": 59.87,
+     "k": false
+    },
+    {
+     "w": "nobody",
+     "s": 59.93,
+     "e": 60.22,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 60.28,
+   "e": 62.29,
+   "t": [
+    {
+     "w": "says:",
+     "s": 60.28,
+     "e": 60.86,
+     "k": false
+    },
+    {
+     "w": "the",
+     "s": 61.1,
+     "e": 61.2,
+     "k": false
+    },
+    {
+     "w": "money",
+     "s": 61.26,
+     "e": 61.45,
+     "k": false
+    },
+    {
+     "w": "went",
+     "s": 61.51,
+     "e": 61.69,
+     "k": false
+    },
+    {
+     "w": "home,",
+     "s": 61.74,
+     "e": 62.13,
+     "k": false
+    },
+    {
+     "w": "and",
+     "s": 62.15,
+     "e": 62.29,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 62.34,
+   "e": 64.83,
+   "t": [
+    {
+     "w": "the",
+     "s": 62.34,
+     "e": 62.41,
+     "k": false
+    },
+    {
+     "w": "tab",
+     "s": 62.45,
+     "e": 62.7,
+     "k": false
+    },
+    {
+     "w": "stayed",
+     "s": 62.75,
+     "e": 63.04,
+     "k": false
+    },
+    {
+     "w": "here.",
+     "s": 63.1,
+     "e": 63.53,
+     "k": false
+    },
+    {
+     "w": "So,",
+     "s": 64.04,
+     "e": 64.54,
+     "k": false
+    },
+    {
+     "w": "the",
+     "s": 64.72,
+     "e": 64.83,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 64.9,
+   "e": 67.19,
+   "t": [
+    {
+     "w": "second",
+     "s": 64.9,
+     "e": 65.18,
+     "k": false
+    },
+    {
+     "w": "number:",
+     "s": 65.24,
+     "e": 65.71,
+     "k": false
+    },
+    {
+     "w": "it's",
+     "s": 66.16,
+     "e": 66.34,
+     "k": false
+    },
+    {
+     "w": "on",
+     "s": 66.39,
+     "e": 66.49,
+     "k": false
+    },
+    {
+     "w": "your",
+     "s": 66.55,
+     "e": 66.69,
+     "k": false
+    },
+    {
+     "w": "phone.",
+     "s": 66.73,
+     "e": 67.19,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 67.57,
+   "e": 69.06,
+   "t": [
+    {
+     "w": "Pull",
+     "s": 67.57,
+     "e": 67.78,
+     "k": false
+    },
+    {
+     "w": "up",
+     "s": 67.84,
+     "e": 67.92,
+     "k": false
+    },
+    {
+     "w": "Meta",
+     "s": 67.98,
+     "e": 68.29,
+     "k": true
+    },
+    {
+     "w": "and",
+     "s": 68.37,
+     "e": 68.55,
+     "k": false
+    },
+    {
+     "w": "find",
+     "s": 68.63,
+     "e": 68.88,
+     "k": false
+    },
+    {
+     "w": "its",
+     "s": 68.94,
+     "e": 69.06,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 69.1,
+   "e": 71.23,
+   "t": [
+    {
+     "w": "price-to-earnings",
+     "s": 69.1,
+     "e": 69.89,
+     "k": false
+    },
+    {
+     "w": "multiple:",
+     "s": 69.96,
+     "e": 70.53,
+     "k": false
+    },
+    {
+     "w": "that's",
+     "s": 70.97,
+     "e": 71.23,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 71.28,
+   "e": 72.39,
+   "t": [
+    {
+     "w": "the",
+     "s": 71.28,
+     "e": 71.36,
+     "k": false
+    },
+    {
+     "w": "share",
+     "s": 71.4,
+     "e": 71.64,
+     "k": false
+    },
+    {
+     "w": "of",
+     "s": 71.66,
+     "e": 71.72,
+     "k": false
+    },
+    {
+     "w": "the",
+     "s": 71.76,
+     "e": 71.83,
+     "k": false
+    },
+    {
+     "w": "price",
+     "s": 71.89,
+     "e": 72.17,
+     "k": false
+    },
+    {
+     "w": "that's",
+     "s": 72.2,
+     "e": 72.39,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 72.44,
+   "e": 73.81,
+   "t": [
+    {
+     "w": "profit",
+     "s": 72.44,
+     "e": 72.78,
+     "k": false
+    },
+    {
+     "w": "not",
+     "s": 72.85,
+     "e": 72.99,
+     "k": false
+    },
+    {
+     "w": "yet",
+     "s": 73.04,
+     "e": 73.19,
+     "k": false
+    },
+    {
+     "w": "earned,",
+     "s": 73.25,
+     "e": 73.6,
+     "k": false
+    },
+    {
+     "w": "and",
+     "s": 73.62,
+     "e": 73.72,
+     "k": false
+    },
+    {
+     "w": "a",
+     "s": 73.77,
+     "e": 73.81,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 73.88,
+   "e": 75.95,
+   "t": [
+    {
+     "w": "higher",
+     "s": 73.88,
+     "e": 74.13,
+     "k": false
+    },
+    {
+     "w": "yield",
+     "s": 74.2,
+     "e": 74.44,
+     "k": false
+    },
+    {
+     "w": "discounts",
+     "s": 74.51,
+     "e": 74.99,
+     "k": false
+    },
+    {
+     "w": "it.",
+     "s": 75.04,
+     "e": 75.21,
+     "k": false
+    },
+    {
+     "w": "The",
+     "s": 75.54,
+     "e": 75.67,
+     "k": false
+    },
+    {
+     "w": "Fed",
+     "s": 75.74,
+     "e": 75.95,
+     "k": true
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 76.01,
+   "e": 78.34,
+   "t": [
+    {
+     "w": "still",
+     "s": 76.01,
+     "e": 76.22,
+     "k": false
+    },
+    {
+     "w": "hasn't",
+     "s": 76.26,
+     "e": 76.53,
+     "k": false
+    },
+    {
+     "w": "moved.",
+     "s": 76.58,
+     "e": 77.08,
+     "k": false
+    },
+    {
+     "w": "Tokyo",
+     "s": 77.35,
+     "e": 77.82,
+     "k": false
+    },
+    {
+     "w": "is",
+     "s": 77.91,
+     "e": 78.0,
+     "k": false
+    },
+    {
+     "w": "still",
+     "s": 78.05,
+     "e": 78.34,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 78.43,
+   "e": 79.87,
+   "t": [
+    {
+     "w": "on",
+     "s": 78.43,
+     "e": 78.56,
+     "k": false
+    },
+    {
+     "w": "its",
+     "s": 78.61,
+     "e": 78.73,
+     "k": false
+    },
+    {
+     "w": "tea",
+     "s": 78.78,
+     "e": 78.94,
+     "k": false
+    },
+    {
+     "w": "break.",
+     "s": 78.98,
+     "e": 79.36,
+     "k": false
+    },
+    {
+     "w": "And",
+     "s": 79.45,
+     "e": 79.61,
+     "k": false
+    },
+    {
+     "w": "that",
+     "s": 79.67,
+     "e": 79.87,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 79.95,
+   "e": 82.47,
+   "t": [
+    {
+     "w": "unfunded",
+     "s": 79.95,
+     "e": 80.44,
+     "k": false
+    },
+    {
+     "w": "bar",
+     "s": 80.49,
+     "e": 80.66,
+     "k": false
+    },
+    {
+     "w": "tab",
+     "s": 80.73,
+     "e": 81.0,
+     "k": false
+    },
+    {
+     "w": "is",
+     "s": 81.09,
+     "e": 81.25,
+     "k": false
+    },
+    {
+     "w": "still",
+     "s": 81.3,
+     "e": 81.56,
+     "k": false
+    },
+    {
+     "w": "ours.",
+     "s": 81.64,
+     "e": 82.47,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  }
+ ],
+ "caption_modes": [
+  "stage",
+  "anchor"
+ ],
+ "sound": [
+  {
+   "slot": "page enter 4",
+   "at": 17.17,
+   "gain": 0.9,
+   "fade_in": 0.0,
+   "variants": {
+    "A": "__snd_0_A__",
+    "B": "__snd_0_B__"
+   }
+  },
+  {
+   "slot": "page enter 6",
+   "at": 44.63,
+   "gain": 0.9,
+   "fade_in": 0.0,
+   "variants": {
+    "A": "__snd_1_A__",
+    "B": "__snd_1_B__"
+   }
+  },
+  {
+   "slot": "page enter 8",
+   "at": 63.94,
+   "gain": 0.9,
+   "fade_in": 0.0,
+   "variants": {
+    "A": "__snd_2_A__",
+    "B": "__snd_2_B__"
+   }
+  }
+ ],
+ "evidence": {},
+ "scenes": [
+  {
+   "scene_id": "s01",
+   "world": {
+    "kind": "clip",
+    "asset_id": "clip-a-counter-tab",
+    "sha256": "a46f31b99298c78b4e483e33dc70265d03b0fc496f257475ad7868877e563d55",
+    "ken_burns": {
+     "scale": 0,
+     "x": 0,
+     "y": 0
+    }
+   },
+   "exit": "cut",
+   "span": [
+    0.0,
+    5.09
+   ],
+   "docks": [],
+   "species": []
+  },
+  {
+   "scene_id": "s02",
+   "world": {
+    "kind": "clip",
+    "asset_id": "clip-b-dial-and-bill",
+    "sha256": "140b299d294fe0f500f9678656c10470837efef775dbb8b941b85c1aa40b7a66",
+    "ken_burns": {
+     "scale": 0,
+     "x": 0,
+     "y": 0
+    }
+   },
+   "exit": "cut",
+   "span": [
+    5.09,
+    8.99
+   ],
+   "docks": [],
+   "species": []
+  },
+  {
+   "scene_id": "s03",
+   "world": {
+    "kind": "clip",
+    "asset_id": "clip-c-blue-ties-panel",
+    "sha256": "140b299d294fe0f500f9678656c10470837efef775dbb8b941b85c1aa40b7a66",
+    "ken_burns": {
+     "scale": 0,
+     "x": 0,
+     "y": 0
+    }
+   },
+   "exit": "cut",
+   "span": [
+    8.99,
+    17.17
+   ],
+   "docks": [],
+   "species": []
+  },
+  {
+   "scene_id": "s04",
+   "world": {
+    "kind": "ledger",
+    "page": {
+     "schema_version": "ledger_page.v1",
+     "surface": "page",
+     "builder": "dense-line",
+     "variant": "line",
+     "title": "Our biggest customer is selling",
+     "sub": "Japan's holdings of US Treasury securities, $bn, monthly. Peak 2026-02 $1,239.3B -> 2026-06 $1,116.7B",
+     "source": "US Treasury TIC Table 5, Major Foreign Holders \u00b7 fetched 2026-09-04",
+     "quiet_zone": "right",
+     "labels": [
+      "Japan"
+     ],
+     "values": [],
+     "value_strings": [],
+     "colors": [],
+     "series": [
+      {
+       "label": "-9.9%",
+       "name": "Japan",
+       "color": "crimson",
+       "pts": [
+        [
+         "2025.4167",
+         "1154.8"
+        ],
+        [
+         "2025.5",
+         "1155.4"
+        ],
+        [
+         "2025.5833",
+         "1183.9"
+        ],
+        [
+         "2025.6667",
+         "1189.3"
+        ],
+        [
+         "2025.75",
+         "1200.0"
+        ],
+        [
+         "2025.8333",
+         "1202.7"
+        ],
+        [
+         "2025.9167",
+         "1185.5"
+        ],
+        [
+         "2026.0",
+         "1225.3"
+        ],
+        [
+         "2026.0833",
+         "1239.3"
+        ],
+        [
+         "2026.1667",
+         "1191.6"
+        ],
+        [
+         "2026.25",
+         "1209.9"
+        ],
+        [
+         "2026.3333",
+         "1143.1"
+        ],
+        [
+         "2026.4167",
+         "1116.7"
+        ]
+       ]
+      }
+     ],
+     "axes": {
+      "ylabel": "$bn"
+     },
+     "unit": "",
+     "judge": [],
+     "badges": [],
+     "emphasize": 0
+    },
+    "ken_burns": {
+     "scale": 0,
+     "x": 0,
+     "y": 0
+    }
+   },
+   "exit": "cut",
+   "span": [
+    17.17,
+    33.05
+   ],
+   "docks": [],
+   "species": [
+    {
+     "kind": "spotlight",
+     "at": 18.37,
+     "dur": 2.0,
+     "target": {
+      "kind": "datum",
+      "index": 12
+     }
+    },
+    {
+     "kind": "callout",
+     "at": 25.56,
+     "dur": 2.0,
+     "target": {
+      "kind": "datum",
+      "index": 8
+     }
+    },
+    {
+     "kind": "focus_zoom",
+     "at": 31.19,
+     "dur": 2.4,
+     "target": {
+      "kind": "datum",
+      "index": 12
+     }
+    }
+   ]
+  },
+  {
+   "scene_id": "s05",
+   "world": {
+    "kind": "clip",
+    "asset_id": "clip-g-two-fingers",
+    "sha256": "77cb76061de34263035b46e877bfdcb369d43d9cc15aff6d718eae96c72afd7e",
+    "ken_burns": {
+     "scale": 0,
+     "x": 0,
+     "y": 0
+    }
+   },
+   "exit": "cut",
+   "span": [
+    33.05,
+    44.63
+   ],
+   "docks": [],
+   "species": []
+  },
+  {
+   "scene_id": "s06",
+   "world": {
+    "kind": "ledger",
+    "page": {
+     "schema_version": "ledger_page.v1",
+     "surface": "page",
+     "builder": "dense-line",
+     "variant": "line",
+     "title": "Our biggest customer is selling",
+     "sub": "Japan's holdings of US Treasury securities, $bn, monthly. Peak 2026-02 $1,239.3B -> 2026-06 $1,116.7B",
+     "source": "US Treasury TIC Table 5, Major Foreign Holders \u00b7 fetched 2026-09-04",
+     "quiet_zone": "right",
+     "labels": [
+      "Japan"
+     ],
+     "values": [],
+     "value_strings": [],
+     "colors": [],
+     "series": [
+      {
+       "label": "-9.9%",
+       "name": "Japan",
+       "color": "crimson",
+       "pts": [
+        [
+         "2025.4167",
+         "1154.8"
+        ],
+        [
+         "2025.5",
+         "1155.4"
+        ],
+        [
+         "2025.5833",
+         "1183.9"
+        ],
+        [
+         "2025.6667",
+         "1189.3"
+        ],
+        [
+         "2025.75",
+         "1200.0"
+        ],
+        [
+         "2025.8333",
+         "1202.7"
+        ],
+        [
+         "2025.9167",
+         "1185.5"
+        ],
+        [
+         "2026.0",
+         "1225.3"
+        ],
+        [
+         "2026.0833",
+         "1239.3"
+        ],
+        [
+         "2026.1667",
+         "1191.6"
+        ],
+        [
+         "2026.25",
+         "1209.9"
+        ],
+        [
+         "2026.3333",
+         "1143.1"
+        ],
+        [
+         "2026.4167",
+         "1116.7"
+        ]
+       ]
+      }
+     ],
+     "axes": {
+      "ylabel": "$bn"
+     },
+     "unit": "",
+     "judge": [],
+     "badges": [],
+     "emphasize": 0
+    },
+    "ken_burns": {
+     "scale": 0,
+     "x": 0,
+     "y": 0
+    }
+   },
+   "exit": "cut",
+   "span": [
+    44.63,
+    54.27
+   ],
+   "docks": [],
+   "species": [
+    {
+     "kind": "punch",
+     "at": 44.75,
+     "dur": 0.9,
+     "target": {
+      "kind": "datum",
+      "index": 8
+     }
+    },
+    {
+     "kind": "callout",
+     "at": 48.51,
+     "dur": 2.0,
+     "target": {
+      "kind": "datum",
+      "index": 12
+     }
+    },
+    {
+     "kind": "spotlight",
+     "at": 52.37,
+     "dur": 2.0,
+     "target": {
+      "kind": "datum",
+      "index": 12
+     }
+    }
+   ]
+  },
+  {
+   "scene_id": "s07",
+   "world": {
+    "kind": "clip",
+    "asset_id": "clip-f-toll-gate-to-fab",
+    "sha256": "1f68e718b46a4296b94d2abe22fa654febe50bba3d47c4ab17f441569a9b8788",
+    "ken_burns": {
+     "scale": 0,
+     "x": 0,
+     "y": 0
+    }
+   },
+   "exit": "cut",
+   "span": [
+    54.27,
+    63.94
+   ],
+   "docks": [],
+   "species": []
+  },
+  {
+   "scene_id": "s08",
+   "world": {
+    "kind": "ledger",
+    "page": {
+     "schema_version": "ledger_page.v1",
+     "surface": "page",
+     "builder": "story",
+     "variant": "bars",
+     "title": "What a Meta share is worth as the 10-year moves",
+     "sub": "The same trailing profit per share ($26.83), priced at each 10-year yield; today's 4.77% gives the 23.0x multiple and the $617 price. Arithmetic on the discount identity - no growth assumed, no forecast",
+     "source": "META price, trailing EPS and P/E: Yahoo Finance via yfinance; US 10-year: FRED DGS10 (2026-09) - fetched 2026-09-04",
+     "quiet_zone": "right",
+     "labels": [
+      "4%",
+      "4.5%",
+      "5%",
+      "5.5%"
+     ],
+     "values": [
+      665.38,
+      633.19,
+      603.67,
+      576.84
+     ],
+     "value_strings": [
+      "665.38",
+      "633.19",
+      "603.67",
+      "576.84"
+     ],
+     "colors": [
+      "cobalt",
+      "cobalt",
+      "crimson",
+      "crimson"
+     ],
+     "unit": "$",
+     "judge": [],
+     "badges": [
+      {
+       "label": "META NOW",
+       "value": "$617",
+       "tag": "23.0x at a 4.77% 10-year",
+       "accent": "cobalt",
+       "inline": false
+      },
+      {
+       "label": "AT 5.5%",
+       "value": "-40 a share",
+       "tag": "-6.5%, same profit",
+       "accent": "crimson",
+       "inline": false
+      },
+      {
+       "label": "ON $10,000",
+       "value": "-647",
+       "tag": "of Meta, at 5.5%",
+       "accent": "crimson",
+       "inline": false
+      }
+     ],
+     "emphasize": 3
+    },
+    "ken_burns": {
+     "scale": 0,
+     "x": 0,
+     "y": 0
+    }
+   },
+   "exit": "cut",
+   "span": [
+    63.94,
+    75.48
+   ],
+   "docks": [],
+   "species": [
+    {
+     "kind": "callout",
+     "at": 69.1,
+     "dur": 2.0,
+     "target": {
+      "kind": "datum",
+      "index": 0
+     }
+    },
+    {
+     "kind": "punch",
+     "at": 74.51,
+     "dur": 0.9,
+     "target": {
+      "kind": "datum",
+      "index": 3
+     }
+    }
+   ]
+  },
+  {
+   "scene_id": "s09",
+   "world": {
+    "kind": "clip",
+    "asset_id": "clip-a2-counter-colder",
+    "sha256": "e87ae26ba304b049a1147f03854f3e80c8eeb3177ebe89fd75b4c1d158423403",
+    "ken_burns": {
+     "scale": 0,
+     "x": 0,
+     "y": 0
+    }
+   },
+   "exit": "cut",
+   "span": [
+    75.48,
+    82.47
+   ],
+   "docks": [],
+   "species": []
+  }
+ ],
+ "species": [
+  "ledger",
+  "spotlight",
+  "callout",
+  "focus_zoom",
+  "punch"
+ ]
+}

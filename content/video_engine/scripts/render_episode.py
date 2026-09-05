@@ -24,11 +24,15 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))  # render_baseline.prepare_page (P39 T6)
 
 REPO = Path(__file__).resolve().parents[3]
+import os
+# Another episode renders by setting these (env, Tokyo 2026-09-04): RENDER_BUILD=<build dir>,
+# RENDER_URL=<player url on its own preview server>, RENDER_NAME=<output stem>.
 EP = REPO / "content/video_engine/projects/systems-and-blowups/steel-and-paper"
-BUILD = EP / "build-f"
+BUILD = Path(os.environ.get("RENDER_BUILD") or (EP / "build-f"))
 OUT = BUILD / "render"
 FPS = 30
-URL = "http://127.0.0.1:8731/player.html"
+URL = os.environ.get("RENDER_URL") or "http://127.0.0.1:8731/player.html"
+NAME = os.environ.get("RENDER_NAME") or "steel-and-paper"
 GATE_REPORT = "GATES-MOTION.md"  # gate_motion_density.write_report output; last line VERDICT: PASS|FAIL
 GATE_REFUSED = 2                 # exit code: the gate refused, nothing was captured
 FORCE_RECORD = "FORCED-RENDER.md"  # render/FORCED-RENDER.md: every --force with its reason
@@ -56,7 +60,9 @@ def mix_audio(dur: float) -> Path:
     return out
 
 
-RAW_W, RAW_H = 2560, 1440  # #stage 1920x1080 at device_scale_factor 4/3
+# the stage: 1920x1080 (16:9) or 1080x1920 (RENDER_ASPECT=9:16, a short) - captured at device scale 4/3
+STAGE_W, STAGE_H = (1080, 1920) if os.environ.get("RENDER_ASPECT") == "9:16" else (1920, 1080)
+RAW_W, RAW_H = STAGE_W * 4 // 3, STAGE_H * 4 // 3  # #stage at device_scale_factor 4/3 (2560x1440 / 1440x2560)
 
 
 def capture(t0: float, t1: float, video_out: Path) -> None:
@@ -75,7 +81,7 @@ def capture(t0: float, t1: float, video_out: Path) -> None:
     with sync_playwright() as pw:
         browser = pw.chromium.launch(headless=True)
         page = browser.new_context(
-            viewport={"width": 1920, "height": 1080},
+            viewport={"width": STAGE_W, "height": STAGE_H},
             device_scale_factor=4 / 3).new_page()
         page.goto(URL, wait_until="networkidle", timeout=120000)
         # P39 T6: the one capture path. prepare_page kills the review chrome, mutes VO,
@@ -83,7 +89,7 @@ def capture(t0: float, t1: float, video_out: Path) -> None:
         # the stage is captured at 1920x1080 CSS px = 2560x1440 device px. Before this the
         # stage was fit-scaled to ~1398px and every frame was LANCZOS-upscaled (B8).
         from render_baseline import prepare_page, frame_png
-        prepare_page(page, 1920, 1080)
+        prepare_page(page, STAGE_W, STAGE_H)
         t_start = time.time()
         import io as _io
         from PIL import Image as _Img
@@ -103,14 +109,14 @@ def capture(t0: float, t1: float, video_out: Path) -> None:
 
         for i in range(n):
             t = t0 + i / FPS
-            rgb = frame_rgb(frame_png(page, t, (1920, 1080)))
+            rgb = frame_rgb(frame_png(page, t, (STAGE_W, STAGE_H)))
             tries = 0
             while rgb is None:
                 tries += 1
                 if tries > 8:
                     raise RuntimeError(f"corrupt frame at t={t:.3f} after 8 retries")
                 time.sleep(0.15)
-                rgb = frame_rgb(frame_png(page, t, (1920, 1080)))
+                rgb = frame_rgb(frame_png(page, t, (STAGE_W, STAGE_H)))
             try:
                 enc.stdin.write(rgb)
             except OSError as e:
@@ -245,7 +251,7 @@ def main() -> int:
     OUT.mkdir(exist_ok=True)
     tag = "test" if args.test else ("full" if (t0, t1) == (0.0, dur) else f"{t0:.0f}-{t1:.0f}")
     video = OUT / f"video-{tag}.mp4"
-    final = OUT / f"steel-and-paper-{tag}-1440p.mp4"
+    final = OUT / f"{NAME}-{tag}-1440p.mp4"
     n = int(round((t1 - t0) * FPS))
     print(f"capture {t0:.2f}-{t1:.2f}s @ {FPS}fps x{args.workers} workers -> {video.name}")
     if args.workers > 1 and t0 == 0.0:

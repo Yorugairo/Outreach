@@ -645,15 +645,21 @@ export class FlowCdpDriver {
     while (Date.now() - startTime < timeoutMs) {
       this.resetIdleTimer();
 
-      const currentSrc = await page.evaluate((prevs) => {
+      // a video downloaded EARLIER in this session is never "new" again - the page lists the previous
+      // scene's output after the baseline was taken and scene 2 got scene 1's file (Tokyo, 2026-09-04).
+      // Compared by media id (the path before '?'): the signed query differs on every listing.
+      this.seenVideoIds = this.seenVideoIds || new Set();
+      const seen = Array.from(this.seenVideoIds);
+      const currentSrc = await page.evaluate(({ prevs, seen }) => {
+        const idOf = (s) => s.split('?')[0];
         const vids = Array.from(document.querySelectorAll('video'))
           .map(v => v.src || v.getAttribute('src'))
           .filter(s => Boolean(s) && /getMediaUrlRedirect|flow-content\.google\/|\/asb\//.test(s));
         for (const s of vids) {
-          if (!prevs.includes(s)) return s;
+          if (!prevs.includes(s) && !seen.includes(idOf(s))) return s;
         }
         return null;
-      }, prevVideoList);
+      }, { prevs: prevVideoList, seen });
 
       if (currentSrc) {
         settledSrc = currentSrc;
@@ -666,6 +672,7 @@ export class FlowCdpDriver {
       throw new Error(`Video generation timed out after ${timeoutMs}ms.`);
     }
 
+    this.seenVideoIds.add(settledSrc.split('?')[0]);
     console.log(`[FlowCdpDriver] Video generation finished! Source endpoint: ${settledSrc}`);
 
     const videoBytes = await page.evaluate(async (src) => {

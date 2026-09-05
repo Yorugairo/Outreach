@@ -4,16 +4,38 @@
     {
       "name": "episode-player",
       "runtimeExecutable": "python",
-      "runtimeArgs": ["-m", "http.server", "8731", "--directory",
-                      "content/video_engine/projects/systems-and-blowups/steel-and-paper/build-f"],
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "8731",
+        "--directory",
+        "content/video_engine/projects/systems-and-blowups/steel-and-paper/build-f"
+      ],
       "port": 8731
     },
     {
       "name": "brand-cards",
       "runtimeExecutable": "python",
-      "runtimeArgs": ["-m", "http.server", "8732", "--directory",
-                      "content/video_engine/channel-assets/money-physics/design-system"],
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "8732",
+        "--directory",
+        "content/video_engine/channel-assets/money-physics/design-system"
+      ],
       "port": 8732
+    },
+    {
+      "name": "tokyo-short-player",
+      "runtimeExecutable": "python",
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "8733",
+        "--directory",
+        "C:/Users/Snipe/Downloads/Outreach Program/content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-short"
+      ],
+      "port": 8733
     }
   ]
 }

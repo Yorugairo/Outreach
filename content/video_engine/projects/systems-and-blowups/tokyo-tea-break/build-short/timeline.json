@@ -1,0 +1,1578 @@
+{
+ "episode": "tokyo-tea-break",
+ "script": "SCRIPT-90S-VO.claude.txt",
+ "take": "vo-short",
+ "runtime_s": 82.473,
+ "words": [
+  {
+   "w": "Tokyo",
+   "start": 0.0,
+   "end": 0.453,
+   "part": 1
+  },
+  {
+   "w": "took",
+   "start": 0.511,
+   "end": 0.662,
+   "part": 1
+  },
+  {
+   "w": "a",
+   "start": 0.708,
+   "end": 0.731,
+   "part": 1
+  },
+  {
+   "w": "tea",
+   "start": 0.778,
+   "end": 0.929,
+   "part": 1
+  },
+  {
+   "w": "break.",
+   "start": 0.975,
+   "end": 1.451,
+   "part": 1
+  },
+  {
+   "w": "And",
+   "start": 1.776,
+   "end": 1.927,
+   "part": 1
+  },
+  {
+   "w": "left",
+   "start": 1.985,
+   "end": 2.183,
+   "part": 1
+  },
+  {
+   "w": "America",
+   "start": 2.229,
+   "end": 2.763,
+   "part": 1
+  },
+  {
+   "w": "with",
+   "start": 2.914,
+   "end": 3.111,
+   "part": 1
+  },
+  {
+   "w": "an",
+   "start": 3.158,
+   "end": 3.216,
+   "part": 1
+  },
+  {
+   "w": "unfunded",
+   "start": 3.286,
+   "end": 3.831,
+   "part": 1
+  },
+  {
+   "w": "bar",
+   "start": 3.878,
+   "end": 4.063,
+   "part": 1
+  },
+  {
+   "w": "tab.",
+   "start": 4.133,
+   "end": 4.737,
+   "part": 1
+  },
+  {
+   "w": "The",
+   "start": 5.178,
+   "end": 5.283,
+   "part": 1
+  },
+  {
+   "w": "Fed",
+   "start": 5.341,
+   "end": 5.538,
+   "part": 1
+  },
+  {
+   "w": "hasn't",
+   "start": 5.596,
+   "end": 5.851,
+   "part": 1
+  },
+  {
+   "w": "moved,",
+   "start": 5.898,
+   "end": 6.374,
+   "part": 1
+  },
+  {
+   "w": "but",
+   "start": 6.49,
+   "end": 6.641,
+   "part": 1
+  },
+  {
+   "w": "your",
+   "start": 6.676,
+   "end": 6.792,
+   "part": 1
+  },
+  {
+   "w": "borrowing",
+   "start": 6.827,
+   "end": 7.256,
+   "part": 1
+  },
+  {
+   "w": "costs",
+   "start": 7.326,
+   "end": 7.593,
+   "part": 1
+  },
+  {
+   "w": "climbed",
+   "start": 7.639,
+   "end": 7.953,
+   "part": 1
+  },
+  {
+   "w": "anyway.",
+   "start": 7.988,
+   "end": 8.58,
+   "part": 1
+  },
+  {
+   "w": "Three",
+   "start": 9.091,
+   "end": 9.334,
+   "part": 1
+  },
+  {
+   "w": "men",
+   "start": 9.381,
+   "end": 9.532,
+   "part": 1
+  },
+  {
+   "w": "in",
+   "start": 9.59,
+   "end": 9.659,
+   "part": 1
+  },
+  {
+   "w": "blue",
+   "start": 9.718,
+   "end": 9.927,
+   "part": 1
+  },
+  {
+   "w": "ties",
+   "start": 9.961,
+   "end": 10.298,
+   "part": 1
+  },
+  {
+   "w": "blame",
+   "start": 10.356,
+   "end": 10.635,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 10.67,
+   "end": 10.739,
+   "part": 1
+  },
+  {
+   "w": "deficit,",
+   "start": 10.786,
+   "end": 11.389,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 11.505,
+   "end": 11.61,
+   "part": 1
+  },
+  {
+   "w": "Fed,",
+   "start": 11.68,
+   "end": 12.005,
+   "part": 1
+  },
+  {
+   "w": "or",
+   "start": 12.04,
+   "end": 12.144,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 12.19,
+   "end": 12.26,
+   "part": 1
+  },
+  {
+   "w": "vibes",
+   "start": 12.307,
+   "end": 12.736,
+   "part": 1
+  },
+  {
+   "w": "at",
+   "start": 12.771,
+   "end": 12.852,
+   "part": 1
+  },
+  {
+   "w": "Jackson",
+   "start": 12.91,
+   "end": 13.282,
+   "part": 1
+  },
+  {
+   "w": "Hole.",
+   "start": 13.328,
+   "end": 13.804,
+   "part": 1
+  },
+  {
+   "w": "On",
+   "start": 14.245,
+   "end": 14.42,
+   "part": 1
+  },
+  {
+   "w": "YouTube,",
+   "start": 14.489,
+   "end": 15.047,
+   "part": 1
+  },
+  {
+   "w": "it's",
+   "start": 15.093,
+   "end": 15.302,
+   "part": 1
+  },
+  {
+   "w": "sixty-three",
+   "start": 15.337,
+   "end": 15.917,
+   "part": 1
+  },
+  {
+   "w": "stick",
+   "start": 15.94,
+   "end": 16.161,
+   "part": 1
+  },
+  {
+   "w": "figures.",
+   "start": 16.219,
+   "end": 16.8,
+   "part": 1
+  },
+  {
+   "w": "Here's",
+   "start": 17.258,
+   "end": 17.491,
+   "part": 1
+  },
+  {
+   "w": "what",
+   "start": 17.526,
+   "end": 17.653,
+   "part": 1
+  },
+  {
+   "w": "nobody",
+   "start": 17.723,
+   "end": 18.094,
+   "part": 1
+  },
+  {
+   "w": "on",
+   "start": 18.164,
+   "end": 18.245,
+   "part": 1
+  },
+  {
+   "w": "that",
+   "start": 18.292,
+   "end": 18.419,
+   "part": 1
+  },
+  {
+   "w": "panel",
+   "start": 18.489,
+   "end": 18.756,
+   "part": 1
+  },
+  {
+   "w": "is",
+   "start": 18.814,
+   "end": 18.884,
+   "part": 1
+  },
+  {
+   "w": "watching:",
+   "start": 18.954,
+   "end": 19.464,
+   "part": 1
+  },
+  {
+   "w": "our",
+   "start": 19.708,
+   "end": 19.848,
+   "part": 1
+  },
+  {
+   "w": "biggest",
+   "start": 19.917,
+   "end": 20.207,
+   "part": 1
+  },
+  {
+   "w": "lender.",
+   "start": 20.265,
+   "end": 20.765,
+   "part": 1
+  },
+  {
+   "w": "The",
+   "start": 21.09,
+   "end": 21.206,
+   "part": 1
+  },
+  {
+   "w": "Treasury's",
+   "start": 21.252,
+   "end": 21.682,
+   "part": 1
+  },
+  {
+   "w": "table",
+   "start": 21.728,
+   "end": 22.03,
+   "part": 1
+  },
+  {
+   "w": "shows",
+   "start": 22.065,
+   "end": 22.309,
+   "part": 1
+  },
+  {
+   "w": "Japan",
+   "start": 22.367,
+   "end": 22.75,
+   "part": 1
+  },
+  {
+   "w": "holds",
+   "start": 22.82,
+   "end": 23.052,
+   "part": 1
+  },
+  {
+   "w": "over",
+   "start": 23.098,
+   "end": 23.296,
+   "part": 1
+  },
+  {
+   "w": "a",
+   "start": 23.365,
+   "end": 23.4,
+   "part": 1
+  },
+  {
+   "w": "trillion",
+   "start": 23.47,
+   "end": 23.923,
+   "part": 1
+  },
+  {
+   "w": "dollars",
+   "start": 23.981,
+   "end": 24.317,
+   "part": 1
+  },
+  {
+   "w": "of",
+   "start": 24.352,
+   "end": 24.41,
+   "part": 1
+  },
+  {
+   "w": "our",
+   "start": 24.468,
+   "end": 24.584,
+   "part": 1
+  },
+  {
+   "w": "debt,",
+   "start": 24.642,
+   "end": 24.991,
+   "part": 1
+  },
+  {
+   "w": "and",
+   "start": 25.037,
+   "end": 25.188,
+   "part": 1
+  },
+  {
+   "w": "it's",
+   "start": 25.235,
+   "end": 25.351,
+   "part": 1
+  },
+  {
+   "w": "been",
+   "start": 25.385,
+   "end": 25.513,
+   "part": 1
+  },
+  {
+   "w": "selling",
+   "start": 25.56,
+   "end": 25.873,
+   "part": 1
+  },
+  {
+   "w": "since",
+   "start": 25.931,
+   "end": 26.152,
+   "part": 1
+  },
+  {
+   "w": "February.",
+   "start": 26.187,
+   "end": 26.988,
+   "part": 1
+  },
+  {
+   "w": "I",
+   "start": 27.498,
+   "end": 27.568,
+   "part": 1
+  },
+  {
+   "w": "ran",
+   "start": 27.684,
+   "end": 27.87,
+   "part": 1
+  },
+  {
+   "w": "risk",
+   "start": 27.963,
+   "end": 28.23,
+   "part": 1
+  },
+  {
+   "w": "at",
+   "start": 28.288,
+   "end": 28.357,
+   "part": 1
+  },
+  {
+   "w": "JPMorgan;",
+   "start": 28.415,
+   "end": 29.332,
+   "part": 1
+  },
+  {
+   "w": "when",
+   "start": 29.507,
+   "end": 29.658,
+   "part": 1
+  },
+  {
+   "w": "your",
+   "start": 29.704,
+   "end": 29.808,
+   "part": 1
+  },
+  {
+   "w": "biggest",
+   "start": 29.855,
+   "end": 30.122,
+   "part": 1
+  },
+  {
+   "w": "customer",
+   "start": 30.157,
+   "end": 30.54,
+   "part": 1
+  },
+  {
+   "w": "walks,",
+   "start": 30.598,
+   "end": 31.109,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 31.19,
+   "end": 31.306,
+   "part": 1
+  },
+  {
+   "w": "auction",
+   "start": 31.364,
+   "end": 31.689,
+   "part": 1
+  },
+  {
+   "w": "sets",
+   "start": 31.747,
+   "end": 31.968,
+   "part": 1
+  },
+  {
+   "w": "your",
+   "start": 31.991,
+   "end": 32.096,
+   "part": 1
+  },
+  {
+   "w": "price.",
+   "start": 32.142,
+   "end": 32.653,
+   "part": 1
+  },
+  {
+   "w": "The",
+   "start": 33.147,
+   "end": 33.263,
+   "part": 1
+  },
+  {
+   "w": "opponent",
+   "start": 33.309,
+   "end": 33.681,
+   "part": 1
+  },
+  {
+   "w": "isn't",
+   "start": 33.727,
+   "end": 33.948,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 33.983,
+   "end": 34.052,
+   "part": 1
+  },
+  {
+   "w": "Fed;",
+   "start": 34.11,
+   "end": 34.552,
+   "part": 1
+  },
+  {
+   "w": "it's",
+   "start": 34.795,
+   "end": 34.981,
+   "part": 1
+  },
+  {
+   "w": "a",
+   "start": 35.016,
+   "end": 35.051,
+   "part": 1
+  },
+  {
+   "w": "Japanese",
+   "start": 35.132,
+   "end": 35.608,
+   "part": 1
+  },
+  {
+   "w": "balance",
+   "start": 35.654,
+   "end": 36.026,
+   "part": 1
+  },
+  {
+   "w": "sheet.",
+   "start": 36.049,
+   "end": 36.409,
+   "part": 1
+  },
+  {
+   "w": "Two",
+   "start": 36.583,
+   "end": 36.769,
+   "part": 1
+  },
+  {
+   "w": "numbers",
+   "start": 36.839,
+   "end": 37.222,
+   "part": 1
+  },
+  {
+   "w": "show",
+   "start": 37.35,
+   "end": 37.582,
+   "part": 1
+  },
+  {
+   "w": "where",
+   "start": 37.617,
+   "end": 37.779,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 37.814,
+   "end": 37.884,
+   "part": 1
+  },
+  {
+   "w": "money",
+   "start": 37.93,
+   "end": 38.127,
+   "part": 1
+  },
+  {
+   "w": "went:",
+   "start": 38.174,
+   "end": 38.592,
+   "part": 1
+  },
+  {
+   "w": "a",
+   "start": 38.801,
+   "end": 38.882,
+   "part": 1
+  },
+  {
+   "w": "Treasury",
+   "start": 38.94,
+   "end": 39.312,
+   "part": 1
+  },
+  {
+   "w": "page,",
+   "start": 39.37,
+   "end": 39.834,
+   "part": 1
+  },
+  {
+   "w": "and",
+   "start": 39.892,
+   "end": 40.066,
+   "part": 1
+  },
+  {
+   "w": "your",
+   "start": 40.136,
+   "end": 40.264,
+   "part": 1
+  },
+  {
+   "w": "phone.",
+   "start": 40.31,
+   "end": 40.833,
+   "part": 1
+  },
+  {
+   "w": "By",
+   "start": 41.326,
+   "end": 41.477,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 41.535,
+   "end": 41.617,
+   "part": 1
+  },
+  {
+   "w": "end",
+   "start": 41.698,
+   "end": 42.0,
+   "part": 1
+  },
+  {
+   "w": "you'll",
+   "start": 42.383,
+   "end": 42.592,
+   "part": 1
+  },
+  {
+   "w": "read",
+   "start": 42.638,
+   "end": 42.812,
+   "part": 1
+  },
+  {
+   "w": "both",
+   "start": 42.882,
+   "end": 43.091,
+   "part": 1
+  },
+  {
+   "w": "numbers",
+   "start": 43.149,
+   "end": 43.463,
+   "part": 1
+  },
+  {
+   "w": "yourself.",
+   "start": 43.497,
+   "end": 44.148,
+   "part": 1
+  },
+  {
+   "w": "Since",
+   "start": 44.751,
+   "end": 44.995,
+   "part": 1
+  },
+  {
+   "w": "February,",
+   "start": 45.042,
+   "end": 45.518,
+   "part": 1
+  },
+  {
+   "w": "Japan",
+   "start": 45.552,
+   "end": 45.947,
+   "part": 1
+  },
+  {
+   "w": "has",
+   "start": 46.017,
+   "end": 46.133,
+   "part": 1
+  },
+  {
+   "w": "sold",
+   "start": 46.179,
+   "end": 46.423,
+   "part": 1
+  },
+  {
+   "w": "a",
+   "start": 46.47,
+   "end": 46.493,
+   "part": 1
+  },
+  {
+   "w": "hundred",
+   "start": 46.551,
+   "end": 46.818,
+   "part": 1
+  },
+  {
+   "w": "and",
+   "start": 46.841,
+   "end": 46.911,
+   "part": 1
+  },
+  {
+   "w": "twenty-two",
+   "start": 46.934,
+   "end": 47.364,
+   "part": 1
+  },
+  {
+   "w": "billion",
+   "start": 47.433,
+   "end": 47.735,
+   "part": 1
+  },
+  {
+   "w": "dollars",
+   "start": 47.793,
+   "end": 48.141,
+   "part": 1
+  },
+  {
+   "w": "of",
+   "start": 48.188,
+   "end": 48.258,
+   "part": 1
+  },
+  {
+   "w": "it,",
+   "start": 48.304,
+   "end": 48.466,
+   "part": 1
+  },
+  {
+   "w": "a",
+   "start": 48.513,
+   "end": 48.583,
+   "part": 1
+  },
+  {
+   "w": "tenth",
+   "start": 48.675,
+   "end": 48.954,
+   "part": 1
+  },
+  {
+   "w": "of",
+   "start": 48.989,
+   "end": 49.047,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 49.093,
+   "end": 49.163,
+   "part": 1
+  },
+  {
+   "w": "pile.",
+   "start": 49.198,
+   "end": 49.662,
+   "part": 1
+  },
+  {
+   "w": "The",
+   "start": 50.045,
+   "end": 50.162,
+   "part": 1
+  },
+  {
+   "w": "Treasury",
+   "start": 50.208,
+   "end": 50.58,
+   "part": 1
+  },
+  {
+   "w": "prints",
+   "start": 50.649,
+   "end": 50.916,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 50.974,
+   "end": 51.044,
+   "part": 1
+  },
+  {
+   "w": "new",
+   "start": 51.102,
+   "end": 51.218,
+   "part": 1
+  },
+  {
+   "w": "total",
+   "start": 51.276,
+   "end": 51.566,
+   "part": 1
+  },
+  {
+   "w": "monthly,",
+   "start": 51.624,
+   "end": 52.1,
+   "part": 1
+  },
+  {
+   "w": "and",
+   "start": 52.147,
+   "end": 52.298,
+   "part": 1
+  },
+  {
+   "w": "that",
+   "start": 52.367,
+   "end": 52.53,
+   "part": 1
+  },
+  {
+   "w": "print",
+   "start": 52.6,
+   "end": 52.785,
+   "part": 1
+  },
+  {
+   "w": "is",
+   "start": 52.82,
+   "end": 52.89,
+   "part": 1
+  },
+  {
+   "w": "your",
+   "start": 52.936,
+   "end": 53.041,
+   "part": 1
+  },
+  {
+   "w": "first",
+   "start": 53.099,
+   "end": 53.343,
+   "part": 1
+  },
+  {
+   "w": "number.",
+   "start": 53.401,
+   "end": 53.842,
+   "part": 1
+  },
+  {
+   "w": "Tokyo",
+   "start": 54.371,
+   "end": 54.8,
+   "part": 1
+  },
+  {
+   "w": "has",
+   "start": 54.87,
+   "end": 54.986,
+   "part": 1
+  },
+  {
+   "w": "pledged",
+   "start": 55.056,
+   "end": 55.415,
+   "part": 1
+  },
+  {
+   "w": "ten",
+   "start": 55.462,
+   "end": 55.694,
+   "part": 1
+  },
+  {
+   "w": "trillion",
+   "start": 55.752,
+   "end": 56.135,
+   "part": 1
+  },
+  {
+   "w": "yen",
+   "start": 56.205,
+   "end": 56.402,
+   "part": 1
+  },
+  {
+   "w": "to",
+   "start": 56.472,
+   "end": 56.542,
+   "part": 1
+  },
+  {
+   "w": "chips,",
+   "start": 56.6,
+   "end": 57.018,
+   "part": 1
+  },
+  {
+   "w": "and",
+   "start": 57.041,
+   "end": 57.18,
+   "part": 1
+  },
+  {
+   "w": "if",
+   "start": 57.238,
+   "end": 57.319,
+   "part": 1
+  },
+  {
+   "w": "that",
+   "start": 57.366,
+   "end": 57.528,
+   "part": 1
+  },
+  {
+   "w": "works,",
+   "start": 57.586,
+   "end": 58.074,
+   "part": 1
+  },
+  {
+   "w": "it",
+   "start": 58.109,
+   "end": 58.248,
+   "part": 1
+  },
+  {
+   "w": "beats",
+   "start": 58.306,
+   "end": 58.515,
+   "part": 1
+  },
+  {
+   "w": "our",
+   "start": 58.562,
+   "end": 58.678,
+   "part": 1
+  },
+  {
+   "w": "bonds.",
+   "start": 58.724,
+   "end": 59.247,
+   "part": 1
+  },
+  {
+   "w": "And",
+   "start": 59.316,
+   "end": 59.467,
+   "part": 1
+  },
+  {
+   "w": "here's",
+   "start": 59.537,
+   "end": 59.711,
+   "part": 1
+  },
+  {
+   "w": "what",
+   "start": 59.746,
+   "end": 59.874,
+   "part": 1
+  },
+  {
+   "w": "nobody",
+   "start": 59.932,
+   "end": 60.222,
+   "part": 1
+  },
+  {
+   "w": "says:",
+   "start": 60.28,
+   "end": 60.86,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 61.104,
+   "end": 61.197,
+   "part": 1
+  },
+  {
+   "w": "money",
+   "start": 61.255,
+   "end": 61.453,
+   "part": 1
+  },
+  {
+   "w": "went",
+   "start": 61.511,
+   "end": 61.685,
+   "part": 1
+  },
+  {
+   "w": "home,",
+   "start": 61.743,
+   "end": 62.126,
+   "part": 1
+  },
+  {
+   "w": "and",
+   "start": 62.149,
+   "end": 62.289,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 62.335,
+   "end": 62.405,
+   "part": 1
+  },
+  {
+   "w": "tab",
+   "start": 62.451,
+   "end": 62.695,
+   "part": 1
+  },
+  {
+   "w": "stayed",
+   "start": 62.753,
+   "end": 63.043,
+   "part": 1
+  },
+  {
+   "w": "here.",
+   "start": 63.101,
+   "end": 63.531,
+   "part": 1
+  },
+  {
+   "w": "So,",
+   "start": 64.042,
+   "end": 64.541,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 64.715,
+   "end": 64.831,
+   "part": 1
+  },
+  {
+   "w": "second",
+   "start": 64.901,
+   "end": 65.179,
+   "part": 1
+  },
+  {
+   "w": "number:",
+   "start": 65.237,
+   "end": 65.713,
+   "part": 1
+  },
+  {
+   "w": "it's",
+   "start": 66.155,
+   "end": 66.34,
+   "part": 1
+  },
+  {
+   "w": "on",
+   "start": 66.387,
+   "end": 66.491,
+   "part": 1
+  },
+  {
+   "w": "your",
+   "start": 66.549,
+   "end": 66.689,
+   "part": 1
+  },
+  {
+   "w": "phone.",
+   "start": 66.735,
+   "end": 67.188,
+   "part": 1
+  },
+  {
+   "w": "Pull",
+   "start": 67.571,
+   "end": 67.78,
+   "part": 1
+  },
+  {
+   "w": "up",
+   "start": 67.838,
+   "end": 67.919,
+   "part": 1
+  },
+  {
+   "w": "Meta",
+   "start": 67.977,
+   "end": 68.291,
+   "part": 1
+  },
+  {
+   "w": "and",
+   "start": 68.372,
+   "end": 68.546,
+   "part": 1
+  },
+  {
+   "w": "find",
+   "start": 68.628,
+   "end": 68.883,
+   "part": 1
+  },
+  {
+   "w": "its",
+   "start": 68.941,
+   "end": 69.057,
+   "part": 1
+  },
+  {
+   "w": "price-to-earnings",
+   "start": 69.104,
+   "end": 69.893,
+   "part": 1
+  },
+  {
+   "w": "multiple:",
+   "start": 69.963,
+   "end": 70.532,
+   "part": 1
+  },
+  {
+   "w": "that's",
+   "start": 70.973,
+   "end": 71.229,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 71.275,
+   "end": 71.356,
+   "part": 1
+  },
+  {
+   "w": "share",
+   "start": 71.403,
+   "end": 71.635,
+   "part": 1
+  },
+  {
+   "w": "of",
+   "start": 71.658,
+   "end": 71.716,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 71.763,
+   "end": 71.832,
+   "part": 1
+  },
+  {
+   "w": "price",
+   "start": 71.89,
+   "end": 72.169,
+   "part": 1
+  },
+  {
+   "w": "that's",
+   "start": 72.204,
+   "end": 72.39,
+   "part": 1
+  },
+  {
+   "w": "profit",
+   "start": 72.436,
+   "end": 72.784,
+   "part": 1
+  },
+  {
+   "w": "not",
+   "start": 72.854,
+   "end": 72.993,
+   "part": 1
+  },
+  {
+   "w": "yet",
+   "start": 73.04,
+   "end": 73.191,
+   "part": 1
+  },
+  {
+   "w": "earned,",
+   "start": 73.249,
+   "end": 73.597,
+   "part": 1
+  },
+  {
+   "w": "and",
+   "start": 73.62,
+   "end": 73.725,
+   "part": 1
+  },
+  {
+   "w": "a",
+   "start": 73.771,
+   "end": 73.806,
+   "part": 1
+  },
+  {
+   "w": "higher",
+   "start": 73.876,
+   "end": 74.131,
+   "part": 1
+  },
+  {
+   "w": "yield",
+   "start": 74.201,
+   "end": 74.445,
+   "part": 1
+  },
+  {
+   "w": "discounts",
+   "start": 74.514,
+   "end": 74.99,
+   "part": 1
+  },
+  {
+   "w": "it.",
+   "start": 75.037,
+   "end": 75.211,
+   "part": 1
+  },
+  {
+   "w": "The",
+   "start": 75.542,
+   "end": 75.67,
+   "part": 1
+  },
+  {
+   "w": "Fed",
+   "start": 75.739,
+   "end": 75.948,
+   "part": 1
+  },
+  {
+   "w": "still",
+   "start": 76.006,
+   "end": 76.215,
+   "part": 1
+  },
+  {
+   "w": "hasn't",
+   "start": 76.262,
+   "end": 76.529,
+   "part": 1
+  },
+  {
+   "w": "moved.",
+   "start": 76.575,
+   "end": 77.075,
+   "part": 1
+  },
+  {
+   "w": "Tokyo",
+   "start": 77.353,
+   "end": 77.818,
+   "part": 1
+  },
+  {
+   "w": "is",
+   "start": 77.911,
+   "end": 78.003,
+   "part": 1
+  },
+  {
+   "w": "still",
+   "start": 78.05,
+   "end": 78.34,
+   "part": 1
+  },
+  {
+   "w": "on",
+   "start": 78.433,
+   "end": 78.561,
+   "part": 1
+  },
+  {
+   "w": "its",
+   "start": 78.607,
+   "end": 78.735,
+   "part": 1
+  },
+  {
+   "w": "tea",
+   "start": 78.781,
+   "end": 78.944,
+   "part": 1
+  },
+  {
+   "w": "break.",
+   "start": 78.979,
+   "end": 79.362,
+   "part": 1
+  },
+  {
+   "w": "And",
+   "start": 79.455,
+   "end": 79.606,
+   "part": 1
+  },
+  {
+   "w": "that",
+   "start": 79.675,
+   "end": 79.873,
+   "part": 1
+  },
+  {
+   "w": "unfunded",
+   "start": 79.954,
+   "end": 80.441,
+   "part": 1
+  },
+  {
+   "w": "bar",
+   "start": 80.488,
+   "end": 80.662,
+   "part": 1
+  },
+  {
+   "w": "tab",
+   "start": 80.732,
+   "end": 80.999,
+   "part": 1
+  },
+  {
+   "w": "is",
+   "start": 81.092,
+   "end": 81.254,
+   "part": 1
+  },
+  {
+   "w": "still",
+   "start": 81.301,
+   "end": 81.556,
+   "part": 1
+  },
+  {
+   "w": "ours.",
+   "start": 81.637,
+   "end": 82.473,
+   "part": 1
+  }
+ ],
+ "sentences": [
+  {
+   "text": "Tokyo took a tea break.",
+   "start": 0.0,
+   "end": 1.451,
+   "part": 1
+  },
+  {
+   "text": "And left America with an unfunded bar tab.",
+   "start": 1.776,
+   "end": 4.737,
+   "part": 1
+  },
+  {
+   "text": "The Fed hasn't moved, but your borrowing costs climbed anyway.",
+   "start": 5.178,
+   "end": 8.58,
+   "part": 1
+  },
+  {
+   "text": "Three men in blue ties blame the deficit, the Fed, or the vibes at Jackson Hole.",
+   "start": 9.091,
+   "end": 13.804,
+   "part": 1
+  },
+  {
+   "text": "On YouTube, it's sixty-three stick figures.",
+   "start": 14.245,
+   "end": 16.8,
+   "part": 1
+  },
+  {
+   "text": "Here's what nobody on that panel is watching:",
+   "start": 17.258,
+   "end": 19.464,
+   "part": 1
+  },
+  {
+   "text": "our biggest lender.",
+   "start": 19.708,
+   "end": 20.765,
+   "part": 1
+  },
+  {
+   "text": "The Treasury's table shows Japan holds over a trillion dollars of our debt, and it's been selling since February.",
+   "start": 21.09,
+   "end": 26.988,
+   "part": 1
+  },
+  {
+   "text": "I ran risk at JPMorgan; when your biggest customer walks, the auction sets your price.",
+   "start": 27.498,
+   "end": 32.653,
+   "part": 1
+  },
+  {
+   "text": "The opponent isn't the Fed; it's a Japanese balance sheet.",
+   "start": 33.147,
+   "end": 36.409,
+   "part": 1
+  },
+  {
+   "text": "Two numbers show where the money went:",
+   "start": 36.583,
+   "end": 38.592,
+   "part": 1
+  },
+  {
+   "text": "a Treasury page, and your phone.",
+   "start": 38.801,
+   "end": 40.833,
+   "part": 1
+  },
+  {
+   "text": "By the end you'll read both numbers yourself.",
+   "start": 41.326,
+   "end": 44.148,
+   "part": 1
+  },
+  {
+   "text": "Since February, Japan has sold a hundred and twenty-two billion dollars of it, a tenth of the pile.",
+   "start": 44.751,
+   "end": 49.662,
+   "part": 1
+  },
+  {
+   "text": "The Treasury prints the new total monthly, and that print is your first number.",
+   "start": 50.045,
+   "end": 53.842,
+   "part": 1
+  },
+  {
+   "text": "Tokyo has pledged ten trillion yen to chips, and if that works, it beats our bonds.",
+   "start": 54.371,
+   "end": 59.247,
+   "part": 1
+  },
+  {
+   "text": "And here's what nobody says:",
+   "start": 59.316,
+   "end": 60.86,
+   "part": 1
+  },
+  {
+   "text": "the money went home, and the tab stayed here.",
+   "start": 61.104,
+   "end": 63.531,
+   "part": 1
+  },
+  {
+   "text": "So, the second number:",
+   "start": 64.042,
+   "end": 65.713,
+   "part": 1
+  },
+  {
+   "text": "it's on your phone.",
+   "start": 66.155,
+   "end": 67.188,
+   "part": 1
+  },
+  {
+   "text": "Pull up Meta and find its price-to-earnings multiple:",
+   "start": 67.571,
+   "end": 70.532,
+   "part": 1
+  },
+  {
+   "text": "that's the share of the price that's profit not yet earned, and a higher yield discounts it.",
+   "start": 70.973,
+   "end": 75.211,
+   "part": 1
+  },
+  {
+   "text": "The Fed still hasn't moved.",
+   "start": 75.542,
+   "end": 77.075,
+   "part": 1
+  },
+  {
+   "text": "Tokyo is still on its tea break.",
+   "start": 77.353,
+   "end": 79.362,
+   "part": 1
+  },
+  {
+   "text": "And that unfunded bar tab is still ours.",
+   "start": 79.455,
+   "end": 82.473,
+   "part": 1
+  }
+ ],
+ "edit_pauses_applied": true,
+ "paused_audio": "audio/episode-paused.mp3"
+}

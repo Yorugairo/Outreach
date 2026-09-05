@@ -21,7 +21,7 @@ import sys
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
-REPO = HERE.parents[3]
+REPO = HERE.parents[4]
 SCRIPTS = REPO / "content/video_engine/scripts"
 sys.path.insert(0, str(SCRIPTS))
 
@@ -99,9 +99,9 @@ def shot_table(ws: list[dict], runtime_s: float) -> list[tuple]:
     meta = "ledger:ev-meta-yield-v1:bars:3:right"
     t_stakes = cut_before(ws, "The Fed hasn't moved")
     t_panel = cut_before(ws, "Three men in blue ties")
-    t_payoff = cut_before(ws, "The Treasury's table shows")
-    t_promise = cut_before(ws, "By the end")
-    t_catalyst = cut_before(ws, "Since February,")
+    t_lender = cut_before(ws, "Here's what nobody on that panel")
+    t_opponent = cut_before(ws, "The opponent isn't the Fed")
+    t_catalyst = cut_before(ws, "Since February, Japan")
     t_pledge = cut_before(ws, "Tokyo has pledged")
     t_second = cut_before(ws, "So, the second number")
     t_ring = cut_before(ws, "The Fed still hasn't moved")
@@ -112,20 +112,21 @@ def shot_table(ws: list[dict], runtime_s: float) -> list[tuple]:
         (0.0, t_stakes, clip("clip-a-counter-tab.mp4"), (0, 0, 0), [], None, None),
         # 2 stakes: the dial that does not turn, the bill that grows
         (t_stakes, t_panel, clip("clip-b-dial-and-bill.mp4"), (0, 0, 0), [], None, None),
-        # 3 archetype + rehook: the panel pointing three ways, StickMike turns to our biggest lender
-        (t_panel, t_payoff, clip("clip-c-blue-ties-panel.mp4"), (0, 0, 0), [], None, None),
-        # 4 payoff + reflect + opponent on ONE page entry: the first proof at 0:20 - build, then a
-        #   focus on the slide at "auction sets your price", a callout on the latest print at "balance sheet"
-        (t_payoff, t_promise, hold, (0, 0, 0), [], None, [
+        # 3 archetype: the panel pointing three ways, the crowd on phones (the sixty-three)
+        (t_panel, t_lender, clip("clip-c-blue-ties-panel.mp4"), (0, 0, 0), [], None, None),
+        # 4 THE FIRST PROOF (M11, 8-20 s): the holdings page rolls out under "our biggest lender" - spotlit
+        #   on the latest print as it enters; the peak called out at "since February"; a focus on the
+        #   slide at "the auction sets your price"; the page leaves before the opponent line (< 20 s, M05)
+        (t_lender, t_opponent, hold, (0, 0, 0), [], None, [
+            {"kind": "spotlight", "at": round(t_lender + 1.2, 2), "dur": 2.0, "target": datum(LAST_IDX)},   # M11: annotated within 1.5 s of the enter
+            {"kind": "callout", "at": at("selling since February"), "dur": 2.0, "target": datum(PEAK_IDX)},
             {"kind": "focus_zoom", "at": at("the auction sets"), "dur": 2.4, "target": datum(LAST_IDX)},
-            {"kind": "callout", "at": at("a Japanese balance"), "dur": 2.0, "target": datum(LAST_IDX)},
-            {"kind": "spotlight", "at": at("Two numbers show"), "dur": 2.0, "target": datum(PEAK_IDX)},
         ]),
-        # 5 the promise: two fingers ("both numbers")
-        (t_promise, t_catalyst, clip("clip-g-two-fingers.mp4"), (0, 0, 0), [], None, None),
+        # 5 opponent + desire/map + promise: two fingers at "Two numbers"
+        (t_opponent, t_catalyst, clip("clip-g-two-fingers.mp4"), (0, 0, 0), [], None, None),
         # 6 catalyst + loop + foreshadow: the page again, on its new datum
         (t_catalyst, t_pledge, hold, (0, 0, 0), [], None, [
-            {"kind": "punch", "at": at("Since February,"), "dur": 0.9, "target": datum(PEAK_IDX)},
+            {"kind": "punch", "at": at("Since February, Japan"), "dur": 0.9, "target": datum(PEAK_IDX)},
             {"kind": "callout", "at": at("a tenth of"), "dur": 2.0, "target": datum(LAST_IDX)},
             {"kind": "spotlight", "at": at("that print is"), "dur": 2.0, "target": datum(LAST_IDX)},
         ]),
@@ -168,9 +169,17 @@ def main() -> int:
     CP.main()
 
     rows = shot_table(ws, runtime_s)
+    # the page-enter cue (M11: a sound hit within 1.5 s of the first chart): the page roll-out foley at
+    # every ledger entry, on the episode clock, beside the page-relative page_cues (P35 T9)
+    plan_path = HERE / "sound/SOUND-PLAN.json"
+    plan = json.loads(plan_path.read_text(encoding="utf-8"))
+    plan["cues"] = [{"slot": f"page enter {i + 1}", "at": round(r[0], 2), "gain": 0.9, "fade_in": 0.0,
+                     "variants": {"A": "fs-page-roll-464302.mp3", "B": "fs-whoosh-2-743004.mp3"}}
+                    for i, r in enumerate(rows) if r[2].startswith("ledger:")]
+    plan_path.write_text(json.dumps(plan, indent=1), encoding="utf-8")
     (HERE / "SHOT-TABLE-SHORT.py").write_text(
         '"""Tokyo short - AUTHORED shot table, timed from the take by build_short.py. Do not hand-edit; edit build_short.shot_table."""\n'
-        f"W = {json.dumps(rows, indent=1)}\n", encoding="utf-8")
+        "W = " + repr(rows).replace("), (", "),\n     (") + "\n", encoding="utf-8")
     for r in rows:
         print(f"  {r[0]:6.2f}-{r[1]:6.2f}  {r[2].split('/')[-1] if r[2].startswith('clip:') else r[2]}"
               + (f"  species {[s['kind'] for s in r[6]]}" if r[6] else ""))

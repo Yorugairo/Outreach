@@ -1,0 +1,71 @@
+{
+ "note": "Tokyo short (2026-09-04): the ledger-page foley only - no music beds. Page cues are RELATIVE to each page's start (P35 T9); the same fs-* files as ep1 (sound/SOURCES.md).",
+ "cues": [
+  {
+   "slot": "page enter 4",
+   "at": 17.17,
+   "gain": 0.9,
+   "fade_in": 0.0,
+   "variants": {
+    "A": "fs-page-roll-464302.mp3",
+    "B": "fs-whoosh-2-743004.mp3"
+   }
+  },
+  {
+   "slot": "page enter 6",
+   "at": 44.63,
+   "gain": 0.9,
+   "fade_in": 0.0,
+   "variants": {
+    "A": "fs-page-roll-464302.mp3",
+    "B": "fs-whoosh-2-743004.mp3"
+   }
+  },
+  {
+   "slot": "page enter 8",
+   "at": 63.94,
+   "gain": 0.9,
+   "fade_in": 0.0,
+   "variants": {
+    "A": "fs-page-roll-464302.mp3",
+    "B": "fs-whoosh-2-743004.mp3"
+   }
+  }
+ ],
+ "page_cues_note": "LEDGER PAGE CUES (P35 T9, 2026-09-02). 'at' values here are RELATIVE to the page's own start on the timeline, NOT the episode clock - the page species adds the page start when it schedules them. Kept out of 'cues' on purpose: build_scene_timeline_f.py and render_episode.mix_audio() flatten every entry in 'cues' onto the episode clock. Gains = whoosh accent 0.9 scaled by the measured integrated-loudness difference vs fs-whoosh-1-706679.mp3 (-14.06 LUFS): 0.9 * 10^(-(I_cue - I_whoosh)/20). Whoosh accent exempt from the -28 LU bed rule and so are these (they are accents, not beds). All CC0 - sound/SOURCES.md.",
+ "page_cues": [
+  {
+   "slot": "page roll-out",
+   "at": 0.0,
+   "sync_point": "roll-out start",
+   "gain": 0.893,
+   "fade_in": 0.0,
+   "variants": {
+    "A": "fs-page-roll-464302.mp3"
+   },
+   "note": "Fires when the page transform begins (prototype ledger-page-v1: roll-out 0-0.6s). Measured I=-13.99 LUFS, delta +0.07 LU vs whoosh."
+  },
+  {
+   "slot": "page bleed settle",
+   "at": 2.8,
+   "sync_point": "ink-bleed-reveal IN_BASE",
+   "gain": 0.903,
+   "fade_in": 0.0,
+   "variants": {
+    "A": "fs-page-bleed-166322.mp3"
+   },
+   "note": "Fires as the charcoal field bleeds in (prototype: field at 2.8s). Measured I=-14.09 LUFS, delta -0.03 LU vs whoosh."
+  },
+  {
+   "slot": "page outline",
+   "at": 4.2,
+   "sync_point": "outline draw-complete",
+   "gain": 0.941,
+   "fade_in": 0.0,
+   "variants": {
+    "A": "fs-page-stroke-447925.mp3"
+   },
+   "note": "Fires at the outline's published draw-complete sync point: outline starts 3.4s after page start, draw-complete +0.8s after the field lands = 4.2s in the prototype. Re-read the sync point per page; 4.2 is the prototype default. Measured I=-14.45 LUFS, delta -0.39 LU vs whoosh."
+  }
+ ]
+}
