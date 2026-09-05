@@ -348,7 +348,6 @@
   #caption.phrase .cw { color: rgba(255,255,255,.92); padding: 0 .14em; margin: 0 -.02em; border-radius: .14em;
                         background-repeat: no-repeat; background-position: left center;
                         text-shadow: 0 2px 10px rgba(0,0,0,.55), 0 4px 22px rgba(0,0,0,.3); }   /* contrast from the text itself (the reference) */
-  #caption.phrase .cw.on { transform: none; }
   /* a KEYWORD keeps its GOLD whatever sits behind it (operator, 2026-09-05: 'the box should go on it, but it shouldn't change
      the gold'): solid accent, a fifth larger (hyperframes caption-editorial-emphasis), and it FLARES with a glow when spoken
      (caption-neon-glow) - the glow painted inline as a function of t */
@@ -3017,7 +3016,7 @@
         }
       }
       if (pg) { const ws = cap.querySelectorAll(".cw");
-        pg.t.forEach((x, j) => { if (ws[j]) { const on = PHRASE && stage ? (x.k && t >= x.s) : (x.s <= t && t < x.e); ws[j].classList.toggle("on", on);
+        pg.t.forEach((x, j) => { if (ws[j]) { const on = x.s <= t && t < x.e; ws[j].classList.toggle("on", on);
           /* stage: each word pops in at its own spoken time (words.json), never at the page boundary.
              The pop is a pure function of t painted inline (see stagePop) so a scrubbed render
              captures mid-pop frames and two renders of one second are identical. */
@@ -3029,8 +3028,13 @@
             const ke = e, kOn = x.k && t >= x.s;
             const hk = x.k ? pow2out(clamp01((t - x.s) / MARK.SWEEP_S)) : 0;            /* the keyword's box sweeps in when spoken, stays */
             ws[j].style.opacity = Math.min(1, e * 2).toFixed(3);
-            const sc = (1.16 + (1 - 1.16) * e) * (kOn ? (MARK.KPOP + (1 - MARK.KPOP) * ke) : 1);
-            ws[j].style.transform = "translateY(" + (MARK.RISE_PX * (1 - e)).toFixed(1) + "px) scale(" + sc.toFixed(4) + ") rotate(calc(var(--tilt, 0deg) * " + (1 - e).toFixed(3) + "))";
+            /* ALIVE (operator, 2026-09-05: 'the words shifting slightly to stay alive, like the golden set'): the spoken word lifts 6% as the
+               voice passes it, and every landed word BOILS - the engine's two-frame boil (SP.BOIL_PX / BOIL_DEG at LIFE_FPS), seeded per word */
+            const sc = (1.16 + (1 - 1.16) * e) * (kOn ? (MARK.KPOP + (1 - MARK.KPOP) * ke) : 1) * (on && e >= 1 ? 1.06 : 1);
+            const tick = Math.floor(t * SP.LIFE_FPS), bseed = Math.round(pg.s * 100) + j * 97, boil = e >= 1;
+            const bx = boil ? (lpHash(bseed, tick, 61) - 0.5) * 2 * SP.BOIL_PX : 0, by = boil ? (lpHash(bseed, tick, 62) - 0.5) * 2 * SP.BOIL_PX : 0;
+            const bdeg = boil ? (lpHash(bseed, tick, 63) - 0.5) * 2 * SP.BOIL_DEG : 0;
+            ws[j].style.transform = "translate(" + bx.toFixed(2) + "px," + (MARK.RISE_PX * (1 - e) + by).toFixed(2) + "px) scale(" + sc.toFixed(4) + ") rotate(calc(var(--tilt, 0deg) * " + (1 - e).toFixed(3) + " + " + bdeg.toFixed(2) + "deg))";
             ws[j].style.backgroundImage = hk > 0 ? markBox(MARK.RED, 1) : "";
             ws[j].style.backgroundSize = hk > 0 ? (hk * 100).toFixed(1) + "% 100%" : "";
             ws[j].classList.toggle("lit", hk > 0.5); }
