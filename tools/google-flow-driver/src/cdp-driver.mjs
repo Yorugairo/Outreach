@@ -618,6 +618,13 @@ export class FlowCdpDriver {
           }
           prevList.push(currentSrc);
           this.seenImageIds.add(idOf(currentSrc));
+          // Flow's asset-service '/asb/' entries are PREVIEW thumbnails (286x512, ~20 KB); the render is the
+          // flow-content.google/image URL. Three Tokyo stills came back as thumbnails (2026-09-04).
+          if (bytes.length < 120000 && /\/asb\//.test(currentSrc)) {
+            console.log(`[FlowCdpDriver] Ignoring preview thumbnail (${bytes.length} bytes): ${currentSrc.slice(0, 80)}`);
+            await page.waitForTimeout(2500);
+            continue;
+          }
           if (collected.some(c => c.src === currentSrc)) {
             // the 'first tile shifted' branch can hand back a src already taken
           } else if (await looksLikeReference(currentSrc)) {
