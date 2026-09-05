@@ -528,7 +528,8 @@ export class FlowCdpDriver {
     // scene (its video, its character, its still) were surviving Ctrl+A / Backspace and the next prompt
     // was typed on top of them (operator, 2026-09-05: "a video and a character reference sitting there").
     const chipCount = () => page.locator("div[contenteditable='true'] .mention-chip").count();
-    const composerText = async () => (await editor.innerText().catch(() => '')).replace(/\s+/g, ' ').trim();
+    const PLACEHOLDER = /^what do you want to create\??$/i;   // the empty composer's placeholder reads as text
+    const composerText = async () => { const s = (await editor.innerText().catch(() => '')).replace(/\s+/g, ' ').trim(); return PLACEHOLDER.test(s) ? '' : s; };
     await editor.click();
     await page.waitForTimeout(400);
     for (let attempt = 0; attempt < 4; attempt++) {
