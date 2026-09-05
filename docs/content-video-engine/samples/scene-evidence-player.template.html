@@ -1716,7 +1716,9 @@
      keywords take the accent box, other words the charcoal box (brand tokens, never the reference's red) */
   /* knobs turned down (operator, 2026-09-05: 'it starts out WAY too busy ... a lot of flashes, not a lot of motion - an old lesson'):
      no flash; the phrase SETTLES over LAND_S from a small scale and rise; the keyword's pop is slight and its box sweeps slowly */
-  const MARK = { RED: [[255, 23, 69], [223, 18, 56]], RISE_PX: 10, SWEEP_S: 0.2, KPOP: 1.1 };   /* the keyword's box sweep and slight extra pop */
+  /* toned down (operator, 2026-09-05: 'better, just tone it down now'): the captions' own dials - the pop, the lift on the spoken word, the
+     rise, the keyword's extra pop, and a boil of their own at about half the plates' */
+  const MARK = { RED: [[255, 23, 69], [223, 18, 56]], POP: 1.10, LIFT: 1.03, RISE_PX: 6, SWEEP_S: 0.2, KPOP: 1.06, BOIL_PX: 0.7, BOIL_DEG: 0.4 };
   const markBox = (c, a) => "linear-gradient(135deg, rgba(" + c[0].join(",") + "," + a.toFixed(3) + ") 0%, rgba(" + c[1].join(",") + "," + a.toFixed(3) + ") 100%)";
   const stagePop = (u) => { const c1 = 1.70158, c3 = c1 + 1; const x = u - 1; return 1 + c3 * x * x * x + c1 * x * x; };
   const LP = { ROLL: 0.7, SAVOR: 0.8, FIELD: 2.4, PUNCH: 0.5, INK: 2.0, BUILD: 3.0, SEEPS: 9, STROKES: 14, KB_MAX: 0.03,
@@ -3030,10 +3032,10 @@
             ws[j].style.opacity = Math.min(1, e * 2).toFixed(3);
             /* ALIVE (operator, 2026-09-05: 'the words shifting slightly to stay alive, like the golden set'): the spoken word lifts 6% as the
                voice passes it, and every landed word BOILS - the engine's two-frame boil (SP.BOIL_PX / BOIL_DEG at LIFE_FPS), seeded per word */
-            const sc = (1.16 + (1 - 1.16) * e) * (kOn ? (MARK.KPOP + (1 - MARK.KPOP) * ke) : 1) * (on && e >= 1 ? 1.06 : 1);
+            const sc = (MARK.POP + (1 - MARK.POP) * e) * (kOn ? (MARK.KPOP + (1 - MARK.KPOP) * ke) : 1) * (on && e >= 1 ? MARK.LIFT : 1);
             const tick = Math.floor(t * SP.LIFE_FPS), bseed = Math.round(pg.s * 100) + j * 97, boil = e >= 1;
-            const bx = boil ? (lpHash(bseed, tick, 61) - 0.5) * 2 * SP.BOIL_PX : 0, by = boil ? (lpHash(bseed, tick, 62) - 0.5) * 2 * SP.BOIL_PX : 0;
-            const bdeg = boil ? (lpHash(bseed, tick, 63) - 0.5) * 2 * SP.BOIL_DEG : 0;
+            const bx = boil ? (lpHash(bseed, tick, 61) - 0.5) * 2 * MARK.BOIL_PX : 0, by = boil ? (lpHash(bseed, tick, 62) - 0.5) * 2 * MARK.BOIL_PX : 0;
+            const bdeg = boil ? (lpHash(bseed, tick, 63) - 0.5) * 2 * MARK.BOIL_DEG : 0;
             ws[j].style.transform = "translate(" + bx.toFixed(2) + "px," + (MARK.RISE_PX * (1 - e) + by).toFixed(2) + "px) scale(" + sc.toFixed(4) + ") rotate(calc(var(--tilt, 0deg) * " + (1 - e).toFixed(3) + " + " + bdeg.toFixed(2) + "deg))";
             ws[j].style.backgroundImage = hk > 0 ? markBox(MARK.RED, 1) : "";
             ws[j].style.backgroundSize = hk > 0 ? (hk * 100).toFixed(1) + "% 100%" : "";
