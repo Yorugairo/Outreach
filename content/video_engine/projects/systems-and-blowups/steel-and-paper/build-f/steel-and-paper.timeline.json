@@ -20327,7 +20327,48 @@
   "stage",
   "anchor"
  ],
- "sound": [],
+ "sound": [
+  {
+   "slot": "hook bed",
+   "at": 0.0,
+   "gain": 0.0199,
+   "fade_in": 1.5,
+   "variants": {
+    "A": "__snd_0_A__",
+    "B": "__snd_0_B__"
+   }
+  },
+  {
+   "slot": "pivot turn",
+   "at": 384.0,
+   "gain": 0.0238,
+   "fade_in": 1.0,
+   "variants": {
+    "A": "__snd_1_A__",
+    "B": "__snd_1_B__"
+   }
+  },
+  {
+   "slot": "close bed",
+   "at": 775.0,
+   "gain": 0.0238,
+   "fade_in": 2.0,
+   "variants": {
+    "A": "__snd_2_A__",
+    "B": "__snd_2_B__"
+   }
+  },
+  {
+   "slot": "burst whoosh",
+   "at": 726.68,
+   "gain": 0.9,
+   "fade_in": 0.0,
+   "variants": {
+    "A": "__snd_3_A__",
+    "B": "__snd_3_B__"
+   }
+  }
+ ],
  "evidence": {
   "ev-bravos-original-v1": {
    "title": "The original - two lines",
