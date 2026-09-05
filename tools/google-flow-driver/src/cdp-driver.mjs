@@ -238,11 +238,20 @@ export class FlowCdpDriver {
       page.getByText(re, { exact: true }),
       page.locator('button, [role="option"], div[role="button"]').filter({ hasText: new RegExp(esc, 'i') }),
     ];
+    // Prefer a VISIBLE match: the drawer keeps hidden controls in the DOM (the old Image/Video toggle
+    // is a mat-icon with the text and no box), and the first hidden match used to eat the whole
+    // 30 s click timeout. An optional control gets a short timeout and never throws.
     for (const loc of candidates) {
-      if (await loc.count() > 0) {
-        await loc.first().click();
-        await page.waitForTimeout(350);
-        return true;
+      const vis = loc.filter({ visible: true });
+      const n = await vis.count().catch(() => 0);
+      if (n > 0) {
+        try {
+          await vis.first().click({ timeout: required ? 30000 : 4000 });
+          await page.waitForTimeout(350);
+          return true;
+        } catch (e) {
+          if (required) throw e;
+        }
       }
     }
     if (required) throw new Error(`Flow settings control not found: "${label}"`);
