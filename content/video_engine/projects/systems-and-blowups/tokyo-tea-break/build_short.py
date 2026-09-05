@@ -118,7 +118,7 @@ def shot_table(ws: list[dict], runtime_s: float) -> list[tuple]:
         #   on the latest print as it enters; the peak called out at "since February"; a focus on the
         #   slide at "the auction sets your price"; the page leaves before the opponent line (< 20 s, M05)
         (t_lender, t_opponent, hold, (0, 0, 0), [], None, [
-            {"kind": "spotlight", "at": round(t_lender + 1.2, 2), "dur": 2.0, "target": datum(LAST_IDX)},   # M11: annotated within 1.5 s of the enter
+            {"kind": "spotlight", "at": round(t_lender + 8.4, 2), "dur": 2.0, "target": datum(LAST_IDX)},   # after the build completes (+8.2 s): no highlight over the charcoal build (operator, 2026-09-04)
             {"kind": "callout", "at": at("selling since February"), "dur": 2.0, "target": datum(PEAK_IDX)},
             {"kind": "focus_zoom", "at": at("the auction sets"), "dur": 2.4, "target": datum(LAST_IDX)},
         ]),

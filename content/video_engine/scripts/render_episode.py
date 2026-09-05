@@ -40,11 +40,17 @@ FORCE_RECORD = "FORCED-RENDER.md"  # render/FORCED-RENDER.md: every --force with
 
 def mix_audio(dur: float) -> Path:
     OUT.mkdir(exist_ok=True)
-    plan = json.loads((EP / "sound/SOUND-PLAN.json").read_text(encoding="utf-8"))
-    inputs = ["-i", str(EP / "build-f/audio/episode-paused.mp3")]
+    # the episode is the build's parent, its VO is the file the timeline names (Tokyo, 2026-09-04:
+    # this read ep1's plan and ep1's take for every episode - the wrong audio under the short)
+    ep = BUILD.parent
+    tl = json.loads((BUILD / "timeline.json").read_text(encoding="utf-8"))
+    vo = BUILD / (tl.get("paused_audio", "audio/episode-paused.mp3") if tl.get("edit_pauses_applied") else "audio/episode.mp3")
+    plan_p = ep / "sound/SOUND-PLAN.json"
+    plan = json.loads(plan_p.read_text(encoding="utf-8")) if plan_p.exists() else {"cues": []}
+    inputs = ["-i", str(vo)]
     chains, mix = [], ["[0:a]"]
     for i, c in enumerate(plan["cues"], start=1):
-        clip = EP / "sound" / c["variants"]["A"]
+        clip = ep / "sound" / c["variants"]["A"]
         inputs += ["-i", str(clip)]
         fade = f",afade=t=in:d={c['fade_in']}" if c.get("fade_in") else ""
         delay = int(round(c["at"] * 1000))
