@@ -25,6 +25,7 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parents[3]
 EP = REPO / "content/video_engine/projects/systems-and-blowups/steel-and-paper"
 BUILD = EP / "build-f"
+PLAN_FILE = EP / "SCRIPT-G-EDIT-PAUSES.json"   # another episode's build sets EP / BUILD / PLAN_FILE, then calls main()
 
 
 def norm(s: str) -> str:
@@ -42,8 +43,7 @@ def main() -> int:
               "THEN add our breaks (operator, 2026-08-30). "
               "--skip-tighten-check to override.")
         return 1
-    plan = json.loads((EP / "SCRIPT-G-EDIT-PAUSES.json")
-                      .read_text(encoding="utf-8"))["pauses"]
+    plan = json.loads(PLAN_FILE.read_text(encoding="utf-8"))["pauses"]
     words = tl["words"]
     joined = " ".join(w["w"] for w in words)
     njoined = norm(joined)

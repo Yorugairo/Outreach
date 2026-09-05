@@ -441,6 +441,12 @@ export class FlowCdpDriver {
 
     // If character names are provided, insert them via the @ mention popover
     if (characters && characters.length > 0) {
+      // A literal '@' in the prompt TEXT re-opens the picker while the text is being typed and
+      // the character never binds - Tokyo 2026-09-04: 5 of 6 clips drew a stranger, one printed
+      // "@StickMike" on the page. The chip is the only way a character enters a prompt.
+      if (/@/.test(promptText)) {
+        throw new Error(`Prompt text contains '@' (${promptText.match(/@\S*/)[0]}); name the character in \`references\` and write "he"/"the character" in the text - the chip binds, typed text does not.`);
+      }
       for (const charName of characters) {
         console.log(`[FlowCdpDriver] Attaching native character chip: "${charName}"`);
         await page.keyboard.type('@');
@@ -464,11 +470,15 @@ export class FlowCdpDriver {
               await addBtn.click();
               await page.waitForTimeout(700);
             }
-            const chip = page.locator("div[contenteditable='true'] .mention-chip");
-            if (await chip.count() > 0) {
-              console.log(`[FlowCdpDriver] Character chip attached: "${charName}" (${await chip.first().innerText()})`);
+            // the chip must be THIS character's - a stale chip from a previous prompt, or a media
+            // chip, satisfied a bare count check and let five clips go out unbound (2026-09-04)
+            const chips = page.locator("div[contenteditable='true'] .mention-chip");
+            const texts = await chips.allInnerTexts();
+            const mine = texts.filter((x) => x.replace(/^@/, '').trim().toLowerCase() === charName.toLowerCase());
+            if (mine.length > 0) {
+              console.log(`[FlowCdpDriver] Character chip attached: "${charName}" (${texts.join(' | ')})`);
             } else {
-              throw new Error(`Character "${charName}" was selected but no mention-chip landed in the composer.`);
+              throw new Error(`Character "${charName}" was selected but no mention-chip named "${charName}" landed in the composer (chips: ${JSON.stringify(texts)}).`);
             }
           } else {
             console.warn(`[FlowCdpDriver] No option for "${charName}" in the asset picker; closing.`);

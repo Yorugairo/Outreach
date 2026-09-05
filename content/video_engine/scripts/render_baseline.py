@@ -59,6 +59,9 @@ def frame_png(page, t: float, size: tuple[int, int]) -> bytes:
     page.evaluate(
         "t => { const s = document.getElementById('scrub');"
         " s.value = t; s.dispatchEvent(new Event('input', {bubbles:true})); }", t)
+    # a CLIP world seeks a <video> to the scene clock; the frame is not a function of t until
+    # the seek has landed (the template resolves __clipsSeeked once every pending seek fires)
+    page.evaluate("() => window.__clipsSeeked ? window.__clipsSeeked() : null")
     # a clipped page shot at the stage's exact rectangle: an element screenshot inherits the
     # container's fractional offset and comes back a pixel wide (1081x1920 on 9:16)
     r = page.evaluate("(() => { const b = document.getElementById('stage').getBoundingClientRect(); return [b.x, b.y]; })()")

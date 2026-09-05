@@ -1,0 +1,43 @@
+{
+  "_contract": "FlowDagEngine batch runner - Tokyo short v11: the six @StickMike worlds (SHOT-TABLE-90S.claude.md, the short rows). E29: prompts state what IS present; the driver verifies. E39: stick figure on the cream page, charcoal ink, deckle edge. E34: silent clips, one continuous voice master. Ratio 9:16, static camera unless named.",
+  "mode": "video",
+  "submode": "ingredients",
+  "model": "Omni 1.1 Flash",
+  "count": 1,
+  "ratio": "9:16",
+  "duration": 10,
+  "projectUrl": "https://labs.google/fx/tools/flow/project/d171ec1f-d4a2-4b79-b76e-32460193dccc",
+  "outputDir": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\omni-video\\short",
+  "scenes": [
+    {
+      "id": "clip-a-counter-tab",
+      "references": ["StickMike"],
+      "prompt": "9:16 vertical, full bleed. A cream paper page with a soft deckle edge, charcoal ink drawing. A small counter with one empty stool, a teacup on the counter with a thin curl of steam, and a folded paper tab standing beside it. @StickMike walks in from the left, stops at the empty stool and looks at the cup. Static camera, silent, no on-screen text."
+    },
+    {
+      "id": "clip-b-dial-and-bill",
+      "references": ["StickMike"],
+      "prompt": "9:16 vertical, full bleed. Cream paper page, charcoal ink. @StickMike sits at a plain desk. On the wall a large round dial with a single needle that stays still. On the desk a paper bill that slowly grows taller in a stack while he watches it. Static camera, silent, no on-screen text."
+    },
+    {
+      "id": "clip-c-blue-ties-panel",
+      "references": ["StickMike"],
+      "prompt": "9:16 vertical, full bleed. Cream paper page, charcoal ink with a single blue accent. Three stick figures in matching blue ties sit behind a long news desk, each pointing a different direction, mouths moving. A crowd of tiny stick figures holding phones fills the lower background. @StickMike steps in front of the desk, turns to face the camera and looks off to his left. Static camera, silent, no on-screen text."
+    },
+    {
+      "id": "clip-f-toll-gate-to-fab",
+      "references": ["StickMike"],
+      "prompt": "9:16 vertical, full bleed. Cream paper page, charcoal ink. A toll gate stands open in the middle of the page with nobody passing through it. @StickMike walks past the open gate toward a small drawn factory with lit windows at the far edge of the page. In the foreground corner, the folded paper tab rests on a counter. Static camera, silent, no on-screen text."
+    },
+    {
+      "id": "clip-g-two-fingers",
+      "references": ["StickMike"],
+      "prompt": "9:16 vertical, full bleed. Cream paper page, charcoal ink. @StickMike faces the camera in a medium shot, talking, and holds up two fingers, then taps each finger once. Static camera, silent, no on-screen text."
+    },
+    {
+      "id": "clip-a2-counter-colder",
+      "references": ["StickMike"],
+      "prompt": "9:16 vertical, full bleed. Cream paper page, charcoal ink, the same counter as before: one empty stool, the teacup now with no steam, the folded paper tab beside it. @StickMike picks the tab up off the counter, turns it toward the camera and holds it there. Static camera, silent, no on-screen text."
+    }
+  ]
+}

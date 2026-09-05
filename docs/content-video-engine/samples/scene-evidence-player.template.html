@@ -42,6 +42,10 @@
      come from lpHash, never Math.random. The .lp box is the 1920x1080 stage
      mapped into the .world element (which overhangs 5% for Ken Burns). */
   .world.ledger { background: #F4E6C7 !important; }
+  /* CLIP world (Tokyo, 2026-09-04): a silent generated clip is the world plate. The <video> fills the
+     .world element exactly as a background image would; the player SEEKS it to (t - scene start), so a
+     frame at t is a pure function of t and the renderer can await the seek (window.__clipsSeeked). */
+  .world video.clipv { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
   .lp { position: absolute; left: 4.545%; top: 4.545%; width: 90.91%; height: 90.91%; overflow: hidden;
         --lp-cream: #F4E6C7; --lp-char: #25313C; --lp-chalk: #F2F2F2; --lp-acc: #F5B72E; --lp-pos: #2E9E5B; --lp-neg: #B0201F;   /* chart SIGN colours (operator, 2026-09-03): green up, blood red down - the sunflower callout is the only yellow */ --lp-brand: #1769C2; }
   .lp-page { position: absolute; inset: 0; background: var(--lp-cream); will-change: transform; overflow: hidden; }
@@ -2027,6 +2031,33 @@
     });
   };
 
+  /* CLIP world: one <video> per world element, sourced from the asset map, seeked to the scene clock.
+     A clip shorter than its scene holds its last frame (no loop - a loop is a visible seam). */
+  const clipSeeks = new Set();
+  const paintClip = (el, scene, t) => {
+    let v = el.querySelector("video.clipv");
+    if (!v || v.dataset.asset !== scene.world.asset_id) {
+      el.querySelectorAll("video.clipv").forEach((x) => { x.pause(); x.remove(); });
+      v = document.createElement("video");
+      v.className = "clipv"; v.muted = true; v.playsInline = true; v.preload = "auto";
+      v.dataset.asset = scene.world.asset_id; v.src = A[scene.world.asset_id];
+      el.appendChild(v);
+    }
+    const local = Math.max(0, t - scene.span[0]);
+    const want = Number.isFinite(v.duration) && v.duration > 0 ? Math.min(local, Math.max(0, v.duration - 0.05)) : local;
+    if (Math.abs((v.currentTime || 0) - want) > 0.04) {
+      const p = new Promise((res) => {
+        const done = () => { v.removeEventListener("seeked", done); clipSeeks.delete(p); res(); };
+        v.addEventListener("seeked", done);
+        setTimeout(done, 1500);   /* a seek that never fires (no metadata yet) must not hang a render */
+      });
+      clipSeeks.add(p);
+      try { v.currentTime = want; } catch (e) { clipSeeks.delete(p); }
+    }
+  };
+  /* the renderer awaits this after scrubbing to t (render_baseline.frame_png) */
+  window.__clipsSeeked = () => Promise.all([...clipSeeks]);
+
   const render = (t) => {
     let si = 0;
     for (let i = 0; i < TL.scenes.length; i++) if (t >= TL.scenes[i].span[0]) si = i;
@@ -2044,12 +2075,19 @@
          paints itself from t; the authored Ken Burns still applies below,
          capped to a slow push (s9.26 rules). */
       const isLedger = scene.world.kind === "ledger";
+      const isClip = scene.world.kind === "clip";
       el.classList.toggle("ledger", isLedger);
       if (isLedger) { el.style.backgroundImage = "none"; paintLedger(el, scene, t); }
+      else if (isClip) {
+        el.style.backgroundImage = "none";
+        el.querySelectorAll(".lp").forEach((x) => x.remove());
+        paintClip(el, scene, t);
+      }
       else {
         el.style.backgroundImage = `url("${A[scene.world.asset_id]}")`;
         el.querySelectorAll(".lp").forEach((x) => x.remove());
       }
+      if (!isClip) el.querySelectorAll("video.clipv").forEach((v) => { v.pause(); v.remove(); });
       const kb0 = scene.world.ken_burns || { scale: 0, x: 0, y: 0 };
       const kb = isLedger ? { scale: Math.min(kb0.scale, LP.KB_MAX), x: 0, y: 0 } : kb0;
       const p = clamp01((t - scene.span[0]) / Math.max(0.1, scene.span[1] - scene.span[0]));

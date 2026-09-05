@@ -52,6 +52,13 @@ LEDGER_ID_PARTS = (3, 5)           # ledger:<series>:<variant>[:<emphasize>[:<qu
 SPECIES_LEDGER = "ledger"          # timeline["species"] entry; the player keys on world.kind == "ledger"
 
 TIMELINE_NAME = "steel-and-paper.timeline.json"  # the compiled scene_evidence_timeline.v1 the gate reads
+# Per-episode overrides (Tokyo, 2026-09-04): another episode's build script imports this module,
+# sets these, and calls main() - the compiler stays ONE thing rather than a fork per episode.
+SHOT_TABLE_FILE = "SHOT-TABLE-F.py"
+TITLE, SUBTITLE, EPISODE_ID = "Steel and Paper", "Money Physics · answer to Bravos Research", "steel-and-paper"
+ASPECT = None                      # "9:16" for a short: the template reads timeline.aspect (html[data-aspect])
+CLIP_PREFIX = "clip:"              # shot-table plate id for a CLIP world: clip:<path to a silent mp4>
+SPECIES_CLIP = "clip"              # world.kind for a clip; the player seeks a <video> to the scene clock
 
 # Ken Burns: doc 29 §1.4 — the world plate drifts while evidence holds locked,
 # so the eye separates narrative world from evidence data with no labelling.
@@ -229,6 +236,13 @@ def world_for_plate(plate_id: str, ken: tuple, ep_dir: Path, meta: dict | None =
     reading the series / plate file; ValueError on a bad or missing id."""
     if plate_id.startswith(LEDGER_PREFIX):
         return ledger_world(plate_id, ken, ep_dir, ((meta or {}).get(parse_ledger_id(plate_id)[0]) or {}).get("badges"))
+    if plate_id.startswith(CLIP_PREFIX):
+        cp = Path(plate_id[len(CLIP_PREFIX):])
+        cp = cp if cp.is_absolute() else Path(ep_dir) / cp
+        if not cp.exists():
+            raise ValueError(f"{plate_id!r}: clip missing: {cp}")
+        return {"kind": SPECIES_CLIP, "asset_id": cp.stem, "clip_path": str(cp), "sha256": sha(cp),
+                "ken_burns": {"scale": ken[0], "x": ken[1], "y": ken[2]}}
     wp = R.find_asset(plate_id)
     if wp is None:
         raise ValueError(f"{plate_id!r}: no plate asset found")
@@ -298,7 +312,7 @@ def main() -> int:
     tl = json.loads((BUILD / "timeline.json").read_text(encoding="utf-8"))
     # THE AUTHORED SHOT TABLE is the source. Not an allocator.
     import importlib.util
-    sp = importlib.util.spec_from_file_location("shot", EP / "SHOT-TABLE-F.py")
+    sp = importlib.util.spec_from_file_location("shot", EP / SHOT_TABLE_FILE)
     shot = importlib.util.module_from_spec(sp); sp.loader.exec_module(shot)
     plan = sorted(shot.W)
     dock = json.loads((BUILD / "evidence-dock.json").read_text(encoding="utf-8"))
@@ -335,7 +349,9 @@ def main() -> int:
             world = world_for_plate(plate, ken, EP, META)
         except ValueError as exc:
             raise SystemExit(f"FAIL: shot row {i + 1} ({a}-{b}s): {exc}") from exc
-        if "asset_id" in world:
+        if world.get("kind") == SPECIES_CLIP:
+            uris[world["asset_id"]] = data_uri(Path(world.pop("clip_path")))   # raw mp4, keyed by the clip's stem
+        elif "asset_id" in world:
             uris[plate] = data_uri(R.find_asset(plate), STAGE_W)
         docks = []
         for aid, slot, enter, exitt in ds:
@@ -439,11 +455,12 @@ def main() -> int:
     timeline = {
         "schema_version": "scene_evidence_timeline.v1",
         "runtime_s": tl["runtime_s"],
-        "title": "Steel and Paper",
-        "subtitle": "Money Physics · answer to Bravos Research",
-        "episode_id": "steel-and-paper", "project_id": "systems-and-blowups",
+        "title": TITLE,
+        "subtitle": SUBTITLE,
+        "episode_id": EPISODE_ID, "project_id": "systems-and-blowups",
+        **({"aspect": ASPECT} if ASPECT else {}),
         "narration": {"canonical_hash": sha(audio),
-                      "words_path": "build-f/timeline.json"},
+                      "words_path": f"{BUILD.name}/timeline.json"},
         # Block captions for the template's own layer; the kinetic layer reads
         # caption_pages. Both carry CANONICAL timings — never resampled onto
         # beat boundaries (doc 29 Part 5, and the standing correction).

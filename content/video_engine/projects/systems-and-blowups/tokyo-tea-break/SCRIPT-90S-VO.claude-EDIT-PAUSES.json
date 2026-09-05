@@ -1,0 +1,35 @@
+{
+ "schema_version": "edit_pauses.v1",
+ "script": "SCRIPT-90S-VO.claude",
+ "note": "Tokyo short (2026-09-04): the take carries 0.24 s at four sentence ends the cut needs; M13 (from the reference) cuts inside a >= 0.30 s gap, so the room is added in the editor's timeline, never by re-recording. 0.25 s each: the gap becomes ~0.45-0.5 s, a cut lands at 0.8 of it.",
+ "pauses": [
+  {
+   "before": "The opponent isn't the Fed",
+   "s": 0.25,
+   "kind": "lead",
+   "phase": "P1",
+   "why": "cut into the opponent line (the page holds; a callout lands on 'balance sheet')"
+  },
+  {
+   "before": "By the end you'll read",
+   "s": 0.25,
+   "kind": "lead",
+   "phase": "P1",
+   "why": "the promise's pre-key breath, and the cut to clip G"
+  },
+  {
+   "before": "Tokyo has pledged",
+   "s": 0.25,
+   "kind": "lead",
+   "phase": "P2",
+   "why": "the cut from the page to clip F (the toll gate, the fab)"
+  },
+  {
+   "before": "The Fed still hasn't moved",
+   "s": 0.25,
+   "kind": "lead",
+   "phase": "P6",
+   "why": "the cut to the ring clip A2"
+  }
+ ]
+}
