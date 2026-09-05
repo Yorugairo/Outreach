@@ -65,7 +65,33 @@ def frame_png(page, t: float, size: tuple[int, int]) -> bytes:
     return page.screenshot(type="png", clip={"x": round(r[0]), "y": round(r[1]), "width": size[0], "height": size[1]})
 
 
-def render_frame(html_path: Path, t: float, aspect: str = "16:9") -> bytes:
+def prepare_page(page, w: int, h: int) -> None:
+    """Make the loaded player a pure function of t, at the stage's native size.
+
+    The four wall-clock / geometry dependencies P39 T2 found, neutralised in one place so
+    the golden harness and the shipped renderer capture identically:
+      - CSS transitions (.dock opacity .75s, pills .34s, captions .12s) run on the WALL CLOCK,
+        so a seek-and-screenshot can land mid-transition (caught: run 2 of 3 differed on 9:16)
+      - fitStage() scales #stage to the #fit container (~0.73x at 1920x1080), so an element
+        screenshot is a downscaled stage that render_episode used to LANCZOS-upscale
+      - document.fonts.ready.then(()=>1) is not awaited by page.evaluate; the bare promise is
+      - an element screenshot inherits the container's fractional offset (1081x1920)
+    """
+    page.wait_for_selector("#stage", timeout=60000)
+    page.evaluate("document.fonts.ready")
+    page.evaluate("document.getElementById('vo').muted = true")
+    page.evaluate("for (const id of ['sndbar']) { const e=document.getElementById(id); if (e) e.style.display='none'; }")
+    page.add_style_tag(content=(
+        "*, *::before, *::after { transition: none !important; animation: none !important; }"
+        f" #shell {{ width: auto !important; max-width: none !important; }}"
+        f" #fit {{ width: {w}px !important; height: {h}px !important; max-width: none !important; overflow: visible !important; }}"
+        " #stage { transform: none !important; }"))
+    page.set_viewport_size({"width": w + 64, "height": h + 64})
+    page.wait_for_function("document.fonts.status === 'loaded'")
+    page.wait_for_timeout(250)
+
+
+def render_frame(html_path: Path, t: float, aspect: str = "16:9", device_scale_factor: float = 1.0) -> bytes:
     """One PNG of #stage at time t, from a fresh browser, served over a throwaway local server."""
     from playwright.sync_api import sync_playwright
     w, h = STAGE[aspect]
@@ -73,29 +99,14 @@ def render_frame(html_path: Path, t: float, aspect: str = "16:9") -> bytes:
     try:
         with sync_playwright() as pw:
             browser = pw.chromium.launch(headless=True)
-            page = browser.new_context(viewport={"width": w, "height": h}, device_scale_factor=1).new_page()
+            page = browser.new_context(viewport={"width": w, "height": h}, device_scale_factor=device_scale_factor).new_page()
             page.goto(f"http://127.0.0.1:{port}/{html_path.name}", wait_until="networkidle", timeout=120000)
-            page.wait_for_selector("#stage", timeout=60000)
-            page.evaluate("document.fonts.ready")  # playwright awaits the promise; the .then(()=>1) form in render_episode does not
-            page.evaluate("document.getElementById('vo').muted = true")
-            page.evaluate("for (const id of ['sndbar']) { const e=document.getElementById(id); if (e) e.style.display='none'; }")
-            # T2 findings, neutralised here so the frame is a pure function of t:
-            #  - CSS transitions (.dock opacity .75s, pills .34s, captions .12s) run on the WALL CLOCK,
-            #    so a seek-and-screenshot can land mid-transition (caught: run 2 of 3 differed on 9:16)
-            #  - fitStage() scales #stage to the #fit container (~0.73x at 1920x1080), so an element
-            #    screenshot is a downscaled stage; render_episode.py then LANCZOS-upscales to 2560x1440
-            page.add_style_tag(content=(
-                "*, *::before, *::after { transition: none !important; animation: none !important; }"
-                f" #shell {{ width: auto !important; max-width: none !important; }}"
-                f" #fit {{ width: {w}px !important; height: {h}px !important; max-width: none !important; overflow: visible !important; }}"
-                " #stage { transform: none !important; }"))
-            page.set_viewport_size({"width": w + 64, "height": h + 64})
-            page.wait_for_function("document.fonts.status === 'loaded'")
-            page.wait_for_timeout(250)
+            prepare_page(page, w, h)
             png = frame_png(page, t, (w, h))
             size = rgb_bytes(png)[0]
-            if size != (w, h):
-                raise RuntimeError(f"stage captured at {size}, expected {(w, h)} - fitStage is still scaling")
+            expect = (round(w * device_scale_factor), round(h * device_scale_factor))
+            if size != expect:
+                raise RuntimeError(f"stage captured at {size}, expected {expect} - fitStage is still scaling")
             browser.close()
     finally:
         srv.shutdown()

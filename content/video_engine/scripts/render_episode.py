@@ -21,6 +21,8 @@ Requires the episode-player server on :8731 (preview harness).
 import argparse, hashlib, json, re, subprocess, sys, time
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))  # render_baseline.prepare_page (P39 T6)
+
 REPO = Path(__file__).resolve().parents[3]
 EP = REPO / "content/video_engine/projects/systems-and-blowups/steel-and-paper"
 BUILD = EP / "build-f"
@@ -76,40 +78,39 @@ def capture(t0: float, t1: float, video_out: Path) -> None:
             viewport={"width": 1920, "height": 1080},
             device_scale_factor=4 / 3).new_page()
         page.goto(URL, wait_until="networkidle", timeout=120000)
-        page.wait_for_selector("#stage", timeout=60000)
-        page.evaluate("document.fonts.ready.then(()=>1)")
-        page.evaluate("document.getElementById('vo').muted = true")
-        # kill the review chrome so it never bleeds into a capture
-        page.evaluate("for (const id of ['sndbar']) { const e=document.getElementById(id); if (e) e.style.display='none'; }")
-        stage = page.locator("#stage")
+        # P39 T6: the one capture path. prepare_page kills the review chrome, mutes VO,
+        # awaits fonts, switches wall-clock transitions off and sizes #fit to the stage so
+        # the stage is captured at 1920x1080 CSS px = 2560x1440 device px. Before this the
+        # stage was fit-scaled to ~1398px and every frame was LANCZOS-upscaled (B8).
+        from render_baseline import prepare_page, frame_png
+        prepare_page(page, 1920, 1080)
         t_start = time.time()
         import io as _io
         from PIL import Image as _Img
 
         def frame_rgb(buf: bytes):
             # decode screenshot -> exact-size RGB pixel bytes; returns None if
-            # the screenshot itself came back corrupt (then we re-shoot).
+            # the screenshot itself came back corrupt (then we re-shoot). A wrong
+            # size is a geometry regression, not corruption - it raises, it is
+            # never resized away (that resize hid B8 for the whole of ep1).
             try:
                 im = _Img.open(_io.BytesIO(buf)).convert("RGB")
-                if im.size != (RAW_W, RAW_H):
-                    im = im.resize((RAW_W, RAW_H), _Img.LANCZOS)
-                return im.tobytes()
             except Exception:
                 return None
+            if im.size != (RAW_W, RAW_H):
+                raise RuntimeError(f"stage captured at {im.size}, expected {(RAW_W, RAW_H)} - fitStage is scaling again")
+            return im.tobytes()
 
         for i in range(n):
             t = t0 + i / FPS
-            page.evaluate(
-                "t => { const s = document.getElementById('scrub');"
-                " s.value = t; s.dispatchEvent(new Event('input', {bubbles:true})); }", t)
-            rgb = frame_rgb(stage.screenshot(type="png"))
+            rgb = frame_rgb(frame_png(page, t, (1920, 1080)))
             tries = 0
             while rgb is None:
                 tries += 1
                 if tries > 8:
                     raise RuntimeError(f"corrupt frame at t={t:.3f} after 8 retries")
                 time.sleep(0.15)
-                rgb = frame_rgb(stage.screenshot(type="png"))
+                rgb = frame_rgb(frame_png(page, t, (1920, 1080)))
             try:
                 enc.stdin.write(rgb)
             except OSError as e:

@@ -1,7 +1,7 @@
 ---
 id: P39-RENDER-BASELINE-AND-KILL-SWITCH
 title: Freeze the shippable player, catch regressions mechanically, and give every new capability an off switch
-status: running
+status: review
 operation: chore
 risk: standard
 owner: parent
@@ -144,22 +144,22 @@ a flag read in `scene-evidence-player.template.html`, and one runbook page.
 - Evidence: 2026-09-04 - the template carries `KINETICS_DEFAULTS` (six names from doc 47 s1: `curvature_stroke`, `analytic_spring`, `area_squash`, `arap_morph`, `dqs_skinning`, `prop_attach`, every one `false`), `KIN = defaults + TL.kinetics`, unknown names warned and ignored, and the accessor `kin(name)` that P38's code must gate on. `test_kinetics_flags.py`: the defaults block is all-false and matches the six names (static, always runs); an explicit all-false map and a typo flag both render pixel-identical to the golden (rendered). Golden frames unchanged with the block in place - `--check` PASS. P38 amended: each capability slice gates on its flag.
 
 ### T6: the shipped renderer adopts the proven capture
-- Status: pending
+- Status: review
 - Owner: parent
 - Depends on: T4
 - Write set: `content/video_engine/scripts/render_episode.py`
 - Acceptance: `render_episode.py` captures through the same preparation as `render_baseline.render_frame` - transitions off, `#fit` sized to the stage, fonts awaited, clipped shot - at device scale 4/3 so 2560x1440 is captured, not upscaled. Proven by rendering the `--test` slice before and after: the after is sharper (no resize) and two runs of it are byte-identical. **This changes ep1's pixels** (sharper, no transition smear on dock entrances) and is why the rebuild waits for it.
 - Validate: two `--test` renders byte-identical; `test_golden_frames.py` still green
-- Evidence: pending
+- Evidence: 2026-09-04 - `render_baseline.prepare_page()` is the one preparation (chrome off, VO muted, fonts awaited, transitions off, `#fit` sized to the stage) and `render_episode.capture()` now calls it at device scale 4/3 and clips the stage: **2560x1440 captured, never resized** - the resize fallback is gone and a wrong size raises. Proven on a committed source: two 4/3 captures of `chart-callout` are 2560x1440 and byte-identical (`293fc1775ca1`). Harness suite 12/12 green. **Deviation:** the `--test` slice before/after pair is not run because `build-f/audio/episode.mp3` (gitignored) is absent on this machine, so `player.html` cannot be built; that pair is the first step of the ep1 rebuild and closes this slice.
 
 ### T5: the runbook
-- Status: pending
+- Status: complete
 - Owner: junior_developer
 - Depends on: T4
 - Write set: `docs/runbooks/RENDER-REGRESSION.md`
 - Acceptance: one page, no jargon, answering three questions - *what changed and where do I see it*, *how do I turn a capability off*, *how do I get back to the baseline*. Written for someone who does not read the animation math and should not have to. Names the exact commands.
 - Validate: a reader who has not seen this PRP can restore the baseline from the runbook alone
-- Evidence: pending
+- Evidence: 2026-09-04 - `docs/runbooks/RENDER-REGRESSION.md`: three questions, three commands (`--check` and how to read the diff PNG; the six flags with plain-language meanings; the one-line tag restore), plus how to refresh deliberately and what the harness cannot see. No math on the page.
 
 ## Verification
 
