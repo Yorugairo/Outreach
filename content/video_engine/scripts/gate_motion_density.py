@@ -82,7 +82,7 @@ PAGE_BUILD_END_S = PAGE_BEAT_OFFSETS[-1]   # a LEDGER PAGE's chart LANDS here (7
                                            # operator's ruling (2026-09-04) is no highlight over the charcoal build, so the species fires after the build, never with the roll-out
 SHORT_FULL_MINUTES = 3                     # M07 ranks whole minutes; with fewer full minutes than this (a short) there is no distribution to rank in -
                                            # the row reports both rates as INFO (P41, 2026-09-05) instead of failing the opening against a 22s tail
-LP_SPIRAL_IN_S = 1.2                       # a page declared enter=spiral unwinds from its point over this (template LP_RETRACT.IN): one beat, then the species
+LP_SPIRAL_IN_S = 1.6                       # a page declared enter=spiral unwinds from its point over this (template LP_RETRACT.IN): one beat, then the species
 LP_RETRACT_S = (1.0, 1.0)                  # every page LEAVES by the retract unless exit=cut: the colours go down the drain, then the charcoal (template LP_RETRACT.COLOURS / CHARCOAL)
 SRC_M15 = "E40 #5 (operator, 2026-09-05): no spotlight on a spiral out - no species window overlaps a page's retract"
 LP_BADGE0_S, LP_BADGE_STEP_S = 0.4, 0.9   # page badges spring in after the build: build end + 0.4 + 0.9k (template LP.BADGE0 / BADGE_STEP)

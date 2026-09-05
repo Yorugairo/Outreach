@@ -472,7 +472,7 @@ def test_a_spiral_entry_credits_one_beat_and_every_page_credits_its_retract():
     tl, docks, mp = _short_build(page_at=17.0)
     tl["scenes"][3]["world"]["page"]["enter"] = "spiral"
     ev = G.analyse(tl, docks, mp)["events"]
-    assert 17.0 in ev and 18.2 in ev and 17.7 not in ev, ev           # the unwind, not the roll-out
+    assert 17.0 in ev and 18.6 in ev and 17.7 not in ev, ev           # the unwind, not the roll-out
     assert 31.0 in ev and 32.0 in ev, ev                              # the retract on a page ending at 33.0
     ev2 = G.analyse(_short_build(page_at=17.0)[0], docks, mp)["events"]
     assert 17.7 in ev2 and 31.0 in ev2, ev2                           # a full entry keeps its beats and still retracts

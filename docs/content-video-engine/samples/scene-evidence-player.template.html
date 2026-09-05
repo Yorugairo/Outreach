@@ -1925,7 +1925,7 @@
      charcoal fades and the STAINS it settled over are sucked down the same drain. A page declared enter:"spiral"
      ARRIVES by the same map run backwards (E25: a returning chart is not drawn like new); exit:"cut" skips the retract
      (a punch that must land on the last line, E40 #5: no species over a spiral out). Idle frames touch nothing. */
-  const LP_RETRACT = { COLOURS: 1.0, CHARCOAL: 1.0, IN: 1.3, TURNS: 3.0, LAG: 0.25, ALPHA: 0.85, RECT_FADE: 0.3 };   /* operator: "a way tighter vortex, almost celestial" - three turns, the core spinning four times the rim */
+  const LP_RETRACT = { COLOURS: 1.0, CHARCOAL: 1.0, IN: 1.6, TURNS: 3.0, LAG: 0.25, ALPHA: 0.85, RECT_FADE: 0.3 };   /* operator: "a way tighter vortex, almost celestial" - three turns, the core spinning four times the rim */
   const lpVortex = (x, y, c, Rmax, u) => {
     const dx = x - c.x, dy = y - c.y, r = Math.hypot(dx, dy) || 1e-6, phi = Math.atan2(dy, dx), rn = Math.min(1, r / Rmax);
     const ui = clamp01((u - LP_RETRACT.LAG * rn) / (1 - LP_RETRACT.LAG));
@@ -1971,7 +1971,7 @@
     if (pg.exit !== "cut" && to > 0) { uc = clamp01(to / LP_RETRACT.COLOURS); uf = clamp01((to - LP_RETRACT.COLOURS) / LP_RETRACT.CHARCOAL); }
     if (pg.enter === "spiral") {   /* the field surfaces first, the colours follow */
       const ui = clamp01((t - a) / LP_RETRACT.IN);
-      uf = Math.max(uf, 1 - clamp01(ui / 0.45)); uc = Math.max(uc, 1 - clamp01((ui - 0.35) / 0.65));
+      uf = Math.max(uf, 1 - clamp01(ui / 0.55)); uc = Math.max(uc, 1 - clamp01((ui - 0.4) / 0.6));   /* the stains surface over the first 0.9 s, the colours unwind over the last 1 s */
     }
     const on = uc > 0 || uf > 0;
     if (!on && !st.spiralOn) return;   /* idle: touch no style, read no layout (either re-snaps text a sub-pixel on the punched page) */
@@ -2298,7 +2298,10 @@
     };
     const prev = TL.scenes[si - 1];
     wA.style.display = "";
-    const wk = prev ? quartIO(clamp01((t - sc.span[0]) / WIPE)) : 1;
+    /* a page that ARRIVES by spiral is its own transition (operator, 2026-09-05: "we can't do a page wipe AND a spiral back
+       in - the transition should BE the spiral"): no seam, the cream is there on the cut and the page surfaces out of it */
+    const spiralIn = sc.world && sc.world.kind === "ledger" && sc.world.page && sc.world.page.enter === "spiral";
+    const wk = prev && !spiralIn ? quartIO(clamp01((t - sc.span[0]) / WIPE)) : 1;
     const seaming = prev && wk > 0 && wk < 1;
     /* THE HARD-EDGE CLIP WIPE (restored 2026-09-01). The remotion-ui
        directional-wipe port (dd9e476, 2026-08-30) replaced this with a
