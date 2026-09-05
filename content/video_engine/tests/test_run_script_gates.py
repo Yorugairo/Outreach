@@ -255,3 +255,40 @@ def test_a_viewer_fail_reaches_the_written_report_not_just_stdout(tmp_path):
     body = RG.render_report(script, ok, "measured", stamp="s", viewer=["VIEWER x"], viewer_fails=1)
     assert "VERDICT: FAIL (1 viewer)" in body
     assert "VERDICT: PASS" in RG.render_report(script, ok, "measured", stamp="s", viewer=["VIEWER x"])
+
+
+# ---- G2: --short reaches the audit and the opening gate; a measured clock under 3:00 routes by itself -------------
+
+def _short_script(tmp_path: Path) -> Path:
+    from test_gate_opening_structure import _conforming_short
+    p = tmp_path / "SHORT-VO.txt"
+    p.write_text(_conforming_short(), encoding="utf-8")
+    return p
+
+
+def test_short_mode_reaches_both_checkers(tmp_path):
+    script = _short_script(tmp_path)
+    code = RG.main([str(script), "--ring", "tea break", "--short"])
+    report = (tmp_path / "SHORT-GATES.md").read_text(encoding="utf-8")
+    assert code == 0, report
+    assert "[PASS ] S02" in report and "[JUDGE] J50" in report and "G01" not in report.split("## gate_opening_structure.py")[1]
+    assert "[INFO] doc 35 rule 2: short (G2)" in report                 # the flip block does not bind on a short
+    assert "[FAIL] doc 35 rule 2" not in report
+
+
+def test_long_form_still_binds_the_flip_rule(tmp_path):
+    script = _short_script(tmp_path)
+    code = RG.main([str(script), "--ring", "tea break", "--long"])
+    report = (tmp_path / "SHORT-GATES.md").read_text(encoding="utf-8")
+    assert code == 1
+    assert "[FAIL] doc 35 rule 2" in report and "[FAIL ] G0" in report
+
+
+def test_is_short_routes_on_a_measured_clock(tmp_path):
+    import argparse, json
+    tl = tmp_path / "timeline.json"
+    tl.write_text(json.dumps({"words": [{"w": "a", "s": 0.0, "e": 0.3}, {"w": "b.", "s": 0.4, "e": 70.0}]}), encoding="utf-8")
+    ns = lambda **kw: argparse.Namespace(**{"short": None, "timeline": None, **kw})   # noqa: E731
+    assert RG.is_short(ns(short=True)) and not RG.is_short(ns(short=False))
+    assert not RG.is_short(ns())                                         # an estimated clock never routes to the short mode
+    assert RG.is_short(ns(timeline=tl)) == (RG.G.load_timeline(tl)[-1]["e"] < RG.G.SHORT_MAX_S)

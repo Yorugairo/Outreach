@@ -283,3 +283,67 @@ def test_g15b_needs_the_argument_not_the_two_word_token(monkeypatch):
     s = _pad_to(s, 805.0)
     g = _by_id(G.run(s, None, ring="tea break")[0])
     assert g["G15b"].level == "FAIL", g["G15b"]
+
+
+# ---- G2: the SHORT mode (doc 51 s51.2 the shape; backlog item 4, 2026-09-05) --------------------
+
+def _conforming_short() -> str:
+    return (
+        "Tokyo took a tea break. And left you holding the tab. [post-key]\n\n"
+        "[stakes] Your borrowing costs climbed anyway.\n\n"
+        "[rehook] Here's what nobody is watching: the lender.\n\n"
+        "[new] Japan holds a trillion dollars of the tab and is selling it.\n\n"
+        "[rehook] Here's where it gets dangerous.\n\n"
+        "[catalyst] [new] Since February they sold a tenth of the tab.\n\n"
+        "[rehook] This is where most people miss it.\n\n"
+        "[new] The auction sets the price of the tab, not the Fed.\n\n"
+        "[ring] Tokyo is still on its tea break, and the tab is still yours.\n"
+    )
+
+
+def test_short_mode_green_passes_the_shape():
+    gates, stats = G.run(_conforming_short(), None, ring="tea break", short=True)
+    g = _by_id(gates)
+    assert stats["mode"].startswith("short")
+    for gid in ("S01", "S02", "S03", "S05", "S06", "S07"):
+        assert g[gid].level == "PASS", (gid, g[gid].message)
+    assert g["J50"].level == "JUDGE" and g["J51"].level == "JUDGE"
+    # the long-form geometry is not asked of a short
+    assert not {"G02", "G03", "G21", "G22", "G37", "G39"} & set(g)
+
+
+def test_short_mode_red_fails_where_the_shape_breaks():
+    s = _conforming_short()
+    g = _by_id(G.run(s.replace("[new] ", ""), None, ring="tea break", short=True)[0])
+    assert g["S03"].level == "FAIL", g["S03"].message                       # no instances
+    g = _by_id(G.run(s.replace("Tokyo is still on its tea break, and", "And"), None, ring="tea break", short=True)[0])
+    assert g["S05"].level == "FAIL", g["S05"].message                       # the ring never returns
+    g = _by_id(G.run(s + "\nNot a panic. Not a plot. Mechanics.\n", None, ring="tea break", short=True)[0])
+    assert g["S07"].level == "FAIL"                                          # the brand line belongs to the outro
+    g = _by_id(G.run(s.replace(" [post-key]", ""), None, ring="tea break", short=True)[0])
+    assert g["S02"].level == "FAIL"                                          # no mechanism declared
+
+
+def test_short_mode_routes_only_on_a_measured_clock_or_the_flag():
+    s = _conforming_short()
+    ids = set(_by_id(G.run(s, None, ring="tea break")[0]))                    # estimated clock: long form as before
+    assert "G01" in ids and "S01" not in ids
+    ids = set(_by_id(G.run(s, None, ring="tea break", short=True)[0]))
+    assert "S01" in ids and "G01" not in ids
+
+
+TOKYO = ROOT / "content/video_engine/projects/systems-and-blowups/tokyo-tea-break"
+needs_tokyo = pytest.mark.skipif(not ((TOKYO / "SCRIPT-90S-VO.claude.txt").exists() and (TOKYO / "build-short/timeline.json").exists()),
+                                 reason="the Tokyo take is not built here")
+
+
+@needs_tokyo
+def test_tokyo_short_is_judged_by_the_shape():
+    """The take (82.7 s, measured) routes to the short mode by itself; the shape holds, and it is judged by the S gates only."""
+    text = (TOKYO / "SCRIPT-90S-VO.claude.txt").read_text(encoding="utf-8")
+    gates, stats = G.run(text, G.load_timeline(TOKYO / "build-short/timeline.json"), ring="tea break")
+    g = _by_id(gates)
+    assert stats["mode"].startswith("short") and stats["timing"] == "measured"
+    assert g["S01"].level == "PASS" and g["S02"].level == "PASS" and g["S03"].level == "PASS" and g["S05"].level == "PASS"
+    assert g["S06"].level == "PASS" and g["S07"].level == "PASS"
+    assert not {"G02", "G21", "G22", "G37", "G39"} & set(g)

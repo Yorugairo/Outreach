@@ -255,7 +255,9 @@ def _doc38_opening(sp: str, sents: list[str], stats: dict, add) -> None:
             "no dated/checkable promise detected inside the first 60s")
 
 
-def audit(text: str, script_path: Path | None = None) -> tuple[list[Finding], dict]:
+def audit(text: str, script_path: Path | None = None, short: bool = False) -> tuple[list[Finding], dict]:
+    """short=True (G2, 2026-09-05): the shorts shape - doc 35 rule 2's flip block and the MAP sec 1 P1 pin are long-form
+    draw-outs and do not bind (operator 2026-09-04 on the Tokyo short: 'a short has no late-stage flip')."""
     out: list[Finding] = []
     sp = spoken(text)
     n = len(sp)
@@ -392,7 +394,9 @@ def audit(text: str, script_path: Path | None = None) -> tuple[list[Finding], di
     }
     stats["phase_map"] = {k: f"{a / 60:.1f}-{b / 60:.1f}m"
                           for k, (a, b) in phases.items()}
-    if not (P1_OPEN_S[0] <= p1_end <= P1_OPEN_S[1]):
+    if short:
+        add("INFO", "MAP sec 1", f"short (G2): P1 computes to {p1_end:.0f}s; the 60-90s open is long-form geometry and does not bind")
+    elif not (P1_OPEN_S[0] <= p1_end <= P1_OPEN_S[1]):
         add("WARN", "MAP sec 1",
             f"P1 computes to {p1_end:.0f}s; the open is pinned 60-90s at "
             f"every runtime")
@@ -440,11 +444,13 @@ def audit(text: str, script_path: Path | None = None) -> tuple[list[Finding], di
                 f"paragraph {i} carries {k} break tags (ceiling 3)")
 
     # ---- doc 35: answer format -------------------------------------------
-    if not re.search(r"\bthreshold\b|\btripwire\b|\bthe flip\b", sp, re.I):
+    if short:   # G2: the threshold / where-we-sit / flip block is a long-form draw-out; a short is hook -> mechanism -> ring
+        add("INFO", "doc 35 rule 2", "short (G2): no late-stage flip is asked of a short - the long form carries the tell")
+    elif not re.search(r"\bthreshold\b|\btripwire\b|\bthe flip\b", sp, re.I):
         add("FAIL", "doc 35 rule 2",
             "no falsifiable tell — an answer video must name one variable, "
             "one threshold, where we sit, and what flips us")
-    if not re.search(r"\bwrong\b|\bso am I\b", sp, re.I):
+    if not short and not re.search(r"\bwrong\b|\bso am I\b", sp, re.I):
         add("WARN", "doc 35 rule 2",
             "the tell does not state what being wrong looks like")
 
@@ -515,10 +521,13 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("script", type=Path)
     ap.add_argument("--pivot", help="verbatim anchor for the phase-4 pivot")
+    ap.add_argument("--short", action="store_true", help="G2: the shorts shape - doc 35 rule 2 and the P1 pin do not bind")
     args = ap.parse_args()
 
     text = args.script.read_text(encoding="utf-8")
-    findings, stats = audit(text, script_path=args.script)
+    findings, stats = audit(text, script_path=args.script, short=args.short)
+    if args.short:
+        stats["mode"] = "short (G2)"
     deferred = gate_report(args.script) is not None
 
     # If a take exists, measure the tight gates instead of estimating them.

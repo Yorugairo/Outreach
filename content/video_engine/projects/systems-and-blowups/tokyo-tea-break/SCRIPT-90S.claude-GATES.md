@@ -1,18 +1,18 @@
 # SCRIPT GATES - SCRIPT-90S-VO.claude.txt
 
 script: SCRIPT-90S-VO.claude.txt
-generated: 2026-09-05T05:55:12+00:00
+generated: 2026-09-05T22:54:48+00:00
 script_hash: 79fc80ceff9df48f52a71f165ef53995f60ed3bc519a3ee629b0f4d948c6eaf4
 timing_source: measured
 
-TOOLS      lint: exit 0, 0 fails | audit: exit 1, 1/2, timing=estimated |
-           opening gate: exit 1, 6/2/38/9 | screens: SCRIPT-90S.claude-SCREENS.md, 5 items
+TOOLS      lint: exit 0, 0 fails | audit: exit 0, 0/0, timing=estimated |
+           opening gate: exit 0, 0/1/9/3 | screens: SCRIPT-90S.claude-SCREENS.md, 5 items
 
-VIEWER     SCRIPT-90S.claude-VIEWER.md  (advisory: --no-viewer-gate - these rows do not change the VERDICT)
-  [INFO ] V01 21/24 declared beats perceived (88%); unperceived: [stakes] w0, [promise] w2, [rehook] w2
-  [INFO ] V04 1 window(s) with something unfollowable: 0:00-0:15 What “Tokyo took a tea break” means
-  [INFO ] V02 no run of 2+ windows without a concrete new thing
-  [INFO ] V03 open loop live in 6/7 windows (86%)
+VIEWER     SCRIPT-90S.claude-VIEWER.md
+  [FAIL ] V01 21/24 declared beats perceived (88%); unperceived: [stakes] w0, [promise] w2, [rehook] w2
+  [WARN ] V04 1 window(s) with something unfollowable: 0:00-0:15 What “Tokyo took a tea break” means
+  [PASS ] V02 no run of 2+ windows without a concrete new thing
+  [PASS ] V03 open loop live in 6/7 windows (86%)
   [INFO ] V05 gain per window: median 4, 0 dead of 7 reported
 
 ## lint_script_pattern.py
@@ -24,7 +24,7 @@ RESULT: clean
 ```
 
 ## audit_script_doctrine.py
-exit 1
+exit 0
 
 ```
 === SCRIPT-90S-VO.claude.txt ===
@@ -48,147 +48,58 @@ exit 1
   p3_units_expected: 1
          a3_anchor: 0:08
          pivot_pct: None
+              mode: short (G2)
      timing_source: estimated (no take on disk)
 
-  [FAIL] doc 35 rule 2: no falsifiable tell — an answer video must name one variable, one threshold, where we sit, and what flips us
-  [WARN] MAP sec 1: P1 computes to 11s; the open is pinned 60-90s at every runtime
-  [WARN] doc 35 rule 2: the tell does not state what being wrong looks like
   [INFO] estimator: the two rate estimates disagree by 20% on the first sentence (numerals read longer than they look) — record a take to settle it
-  [INFO] doc 38 B1-B4: owned by gate_opening_structure - see content\video_engine\projects\systems-and-blowups\tokyo-tea-break\SCRIPT-90S.claude-GATES.md
+  [INFO] doc 38 B1-B4: owned by gate_opening_structure - see projects\systems-and-blowups\tokyo-tea-break\SCRIPT-90S.claude-GATES.md
+  [INFO] MAP sec 1: short (G2): P1 computes to 11s; the 60-90s open is long-form geometry and does not bind
+  [INFO] doc 35 rule 2: short (G2): no late-stage flip is asked of a short - the long form carries the tell
 
-RESULT: 1 FAIL, 2 WARN
+RESULT: 0 FAIL, 0 WARN
 ```
 
 ## gate_opening_structure.py
-exit 1
+exit 0
 
 ```
 === OPENING STRUCTURE GATE: SCRIPT-90S-VO.claude.txt ===
-           runtime: 1:21
-            timing: measured (take)
-          geometry: P1 0:00-0:35 (beat 5 from 0:23), P2 -1:05 (phase guides)
-     density_bands: loops (2, 3), new-info (4, 6)
-         a3_anchor: 0:08
-             cycle: checked 0:00-1:21; longest gap 16s from 1:03
-      unit_windows: ['P3 unit 1 0:13-0:36', 'P5 unit 2 0:44-1:10']
-      counterparty: Japan
-              ring: tab
-         packaging: title='Tokyo Tea Break' thumb=None thumb_file=None
-    not_gated_here: Truby Battle / Self-Revelation / New Equilibrium, Snyder midpoint, chiastic center, ring CLOSE (P4-P6)
-    beats_declared: {'stakes': ['0:05'], 'archetype': ['0:09'], 'tricolon': ['0:09'], 'rehook': ['0:17', '0:40', '0:58'], 'payoff': ['0:21'], 'new': ['0:21', '0:44', '0:49', '0:54'], 'reflect': ['0:27'], 'opponent': ['0:32'], 'desire': ['0:36'], 'map': ['0:36'], 'promise': ['0:40'], 'catalyst': ['0:44'], 'loop': ['0:49', '0:54'], 'foreshadow': ['0:49'], 'loop-close': ['0:58'], 'dip': ['1:03'], 'signpost': ['1:03'], 'ring': ['1:19']}
+              mode: short (G2: doc 51 s51.2)
+           runtime: 1:22
+            timing: measured
+         mechanism: And left America with an unfunded bar tab.
+         instances: 5
+   ring_close_from: 1:06
+    beats_declared: {'post-key': ['0:01', '0:59'], 'stakes': ['0:05'], 'archetype': ['0:05'], 'tricolon': ['0:09'], 'rehook': ['0:14', '0:41', '0:59'], 'payoff': ['0:17'], 'new': ['0:21', '0:45', '0:50', '0:55'], 'reflect': ['0:21'], 'opponent': ['0:27'], 'desire': ['0:33'], 'map': ['0:36'], 'pre-key': ['0:36'], 'promise': ['0:41'], 'catalyst': ['0:41'], 'loop': ['0:45', '0:50'], 'foreshadow': ['0:50'], 'loop-close': ['0:55'], 'dip': ['1:05'], 'signpost': ['1:05'], 'ring': ['1:18']}
 
-  [FAIL ] G02 first word at 0.00s in the edit clock
-          Humes pre-opener, bent visual: the plate breathes 0.5-0.8s before the first word (38 B1 / doc 32 s7)
-  [FAIL ] G22 3 [new] in P2
-          PLATFORM density: 4-6 new-info beats at this runtime (P2 geometry)
-  [FAIL ] G24 no [head-fake] declared in P2
-          Truby Plan v1 / head-fake #1 planted STRAIGHT, early-mid P2 (P2 MANDATORY / MAP s4)
-  [FAIL ] G38 no [desire] declared in 0:23-0:35
-          Truby Desire named: the goal the video pursues (38 B5)
-  [FAIL ] G39 no [map] declared in beat 5
-          Auditory handrail: map-not-territory signpost - tease the WHAT, hold the HOW (38 B5 / doc 32 s1)
-  [FAIL ] G41 no [debate] declared after the head-fake in mid-late P2
-          Snyder Debate / Truby Plan v1 FAILS: the obvious answer tried and found wanting, after the head-fake, mid-late P2 (P2 / MAP s4)
-  [WARN ] G31 0 dabs for 2 loops
-          Glass alternation, P2 70/30: two loops with no reflection = listing (P2)
-  [WARN ] G43 1/3 declared beats open on a gap/consequence connector
-          McKee gap: beats connect by BUT/THEREFORE - a beat that could swap places is filler (P2 / doc 32 s4)
-  [PASS ] G01 first sentence 1.45s
-          PLATFORM 3s microhook (38 B1 / P1 QC)
-  [PASS ] G03 paid at 4.74s, settle at 4.74s
-          McKee gap paid WRONG by 0:08 + Humes post-key ON the boundary (38 B2)
+  [WARN ] S08 longest sentence 27 words: 'Pull up Meta and find its price-to-earnings multiple: that's the share'
+          doc 37 speech: sentences 10-15 words; over 18 is several caption pages of one breath
   [PASS ] G04 clean
           PLATFORM ban list: no greeting, no 'in this video', no channel talk (38 B2)
   [PASS ] G05 'you' at 0:05
           Direct address: 'you' by 0:30 (38 B3 / doc 32 s1)
-  [PASS ] G06 clean
-          Biography as the twist - AFTER the paradox, never before (38 B3)
-  [PASS ] G07 [stakes] at 0:05
-          Hook anatomy: stakes named by ~0:25 (38 B3)
-  [PASS ] G08 [payoff] at 0:21
-          One Minute Wall: real value FIRST, before the ask (38 B4)
-  [PASS ] G09 promise at 0:40
-          F1 + A1 + macro-loop-1 SETUP: the dated promise in 0:30-0:45 (38 B4 / MAP s3 / CLK; E24 roadmap by 0:45)
-  [PASS ] G10 placed
-          Humes pre-key immediately before the promise (P1 pause marks)
-  [PASS ] G11 'By the end you'll read both numbers yourself.'
-          The promise carries a date or number and is calculable (38 B4 / doc 35)
-  [PASS ] G12 1 declared in P1
-          Rhetoric: ONE tricolon on the thesis line, none elsewhere in P1 (P1 B4 / doc 32 s3)
-  [PASS ] G13 A2 at 0:58
-          PLATFORM rehook A2 ~1:00, template family (38 B5 / P1 QC)
-  [PASS ] G14 [opponent] at 0:32
-          Truby Opponent / McKee antagonism: the opponent named, a MECHANISM never a villain (38 B5)
-  [PASS ] G15 'tab' planted at 0:01
-          Ring composition: the ring token PLANTED in P1 (38 B5 / doc 32 s5)
-  [PASS ] G15b close shares 2 content stem(s) with the P1 claim (need 2); claim stems: ['america', 'bar', 'left', 'unfund']
-          Ring MECHANISM: the claim planted with the token in P1 recurs in the close (47 s2 G-g)
-  [PASS ] G16 1 [reflect] in P1
-          Glass alternation, P1 80/20: exactly ONE reflection dab (P1)
-  [PASS ] G17 clean
-          HARD GATE attribution-first; [verify] never in hook/promise (P1/P2 / doc 32 s1)
-  [PASS ] G18 1 marks in P1 (1.7/min)
-          Humes pauses rationed: ~three per minute maximum (P1)
-  [PASS ] G19 closed by [loop] at 0:49
-          The catalyst is a micro loop CLOSED inside 30-60s, not exposition (P2)
-  [PASS ] G20 longest gap 9s
-          PLATFORM new-info cadence: something genuinely new every 15-30s (P2)
-  [PASS ] G21 2 [loop] in P2
-          L2 loops: 2-3 micro-loop closes at this runtime (P2 geometry / MAP s0)
-  [PASS ] G23 clean
-          McKee gap, sentence-level: BUT/THEREFORE only - zero AND-THEN chains (P2 / doc 32 s4)
-  [PASS ] G25 A3 at 0:17
-          PLATFORM rehook A3 at ~10% of runtime = 0:08 (P2 / MAP s4 QC; audit and gate share kit_spec.a3_anchor_s, E23)
-  [PASS ] G26 [foreshadow] at 0:49
-          Foreshadow schedule F2 at ~10%: the promise sighted again, none of it delivered (P2 / MAP s2)
-  [PASS ] G27 'tab' 1x in P2
-          Ring composition: token TOUCHED exactly once in P2, unresolved (P2 / doc 32 s5)
-  [PASS ] G28 [loop-close] at 0:58
-          Macro loop 1 CLOSES on a partial answer that opens the bigger question (P2 / MAP s4, LIFO ledger)
-  [PASS ] G29 [dip] at 1:03
-          PLATFORM breathing dip IMMEDIATELY after the macro close - 2-3 beats of room tone (P2)
-  [PASS ] G30 none
-          PLATFORM: the ONLY mid-video CTA slot is the 15-30s after the macro payoff (P2)
-  [PASS ] G32 tricolon 0, anaphora P1 0 / P2 0
-          Rhetoric: ONE momentum tricolon max in P2; anaphora (if debuted in P1) recurs exactly once (P2 / doc 32 s3)
-  [PASS ] G33 2 marks in P2
-          Humes pauses in P2: no [pre-key] before the head-fake (that pause belongs to the pivot); <=3 marks in the phase
-  [PASS ] G34 clean
-          U6 / E20 concession budget: an agreement run never exceeds 2 sentences or 10s without a claim of ours
-  [PASS ] G35 clean
-          U6 / E20: a delivered proof is never hedged in the next sentence
-  [PASS ] G36 longest stretch without a cycle beat: 16s from 1:03
-          CLK the cycle repeats per beat - hook / show it's worth it / promise more / deliver; no >60s without a cycle beat, 0:00-1:21 (E23: whole runtime)
-  [PASS ] G37 [archetype] at 0:09
-          Truby Weakness/Need planted AS PEOPLE: an archetype-in-a-setting enters 0:08-0:30 (38 B3 / MAP s3)
-  [PASS ] G40 [catalyst] at 0:44
-          Snyder Catalyst / McKee inciting incident: lands as a story beat in P2's first ~60s (P2)
-  [PASS ] G42 [signpost] at 1:03
-          Auditory handrail: exit P2 on a transition signpost into the Gap (P2 / doc 32 s1)
-  [PASS ] G44 all 2 unit windows rehook out
-          PLATFORM rehook per unit: one template-family line or [rehook] inside every P3/P5 unit window (P3.md u5 / P5 / MAP s9 '1 per unit'; E23)
   [PASS ] G45 title-word proxy: ['tokyo', 'tea', 'break'] echoed in sentence 1
           E24 / doc 29 s9.29: proxy for 'the first sentence answers the thumbnail' - the title is the words packaged with it
-  [JUDGE] J01 read the [opponent] line at 0:32
-          McKee antagonism: the opponent is a mechanism, not a villain
-  [JUDGE] J03 'Tokyo took a tea break.'
-          Rhetoric: microhook concrete, terminal stress on the surprising word (38 B1)
-  [JUDGE] J04 read P1 B5 and the P2 catalyst
-          38 B5 context-dump ban: every abstraction cashed into an object or number within one sentence
-  [JUDGE] J05 'Tokyo took a tea break.' -> 'And left America with an unfunded bar tab.'
-          McKee: the gap opens - line 2 violates line 1's expected consequence (38 B1-B2)
-  [JUDGE] J06 P1
-          A/V irony counterpoint: the image TENSIONS the line, never illustrates it (38 B1 / doc 32 s6) - check the plate plan
-  [JUDGE] J07 P2
-          A/V contextual mapping: plates carry the archive, the voice carries motive and cost; a line that captions its visual fails (P2 / doc 32 s6) - check the plate plan
-  [JUDGE] J08 read the promise line
-          Rhetoric: phonetic anchor only on the promise/payoff/tell (doc 32 s3)
-  [JUDGE] J09 read the line at 0:09
-          McKee archetype, not stereotype: a universal experience in a specific setting (doc 32 s4)
+  [PASS ] S01 first sentence 1.45s
+          51.2 HOOK 0:00-0:03: the claim, spoken and on screen, no throat-clearing
+  [PASS ] S02 [post-key] sentence ends at 4.74s: 'And left America with an unfunded bar tab.'
+          51.2 THE MECHANISM by 0:10: the one thing this short is about, stated plainly - declared with [post-key]
+  [PASS ] S03 5 instance(s) at 0:21, 0:41, 0:45, 0:50, 0:55
+          51.2 N INSTANCES 0:10-1:06: the same mechanism N times, different variables ([new] / [catalyst])
+  [PASS ] S05 'tea break' returns at the close sharing ['tokyo']
+          51.2 THE RING in the last 20%: return to the mechanism, not to a phrase (G-g)
+  [PASS ] S06 4 rehooks; no gap over 30 s
+          CLK on a short: a rehook (template line or [rehook]) every 30 s, 0:00 to the end
+  [PASS ] S07 clean
+          the brand line ('Not a panic. Not a plot. Mechanics.') is stitched under the outro card - a script that speaks it doubles it
   [JUDGE] J12 no --thumb-file given - open the FINAL thumbnail; sentence 1: 'Tokyo took a tea break.'
           E24 / doc 29 s9.29: the first sentence answers what the thumbnail poses - open the thumbnail and read sentence 1 against it
+  [JUDGE] J50 2s 'And left America with an unfunded bar tab.'; 60s 'And here's what nobody says: the money went home, and the ta'
+          51.1 exactly ONE mechanism (49 s49.6 cognitive atomicity) - [post-key] is a delivery mark and may settle more than one key line: read the key lines as one mechanism or not
+  [JUDGE] J51 0:21 shares nothing by stem; 0:41 shares nothing by stem; 0:45 shares nothing by stem; 0:50 shares nothing by stem; 0:55 shares nothing by stem
+          51.2 the spine: 'if it is a list, the items must be one mechanism N times' (46 s46.4, G-g) - read each instance against the mechanism
 
-RESULT: 6 FAIL / 2 WARN / 38 PASS / 9 JUDGE (read these) / 0 INFO
+RESULT: 0 FAIL / 1 WARN / 9 PASS / 3 JUDGE (read these) / 0 INFO
 ```
 
 ## enumerate_strength_screens.py
@@ -198,4 +109,4 @@ exit 0
 SCRIPT-90S.claude-SCREENS.md: X1=1 deixis=0 junctions=1 anchors=3 declared=24
 ```
 
-VERDICT: FAIL (2 failing tools)
+VERDICT: FAIL (1 viewer)

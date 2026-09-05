@@ -174,8 +174,22 @@ def run_lint(script: Path) -> ToolResult:
                       f"lint: exit {code}, {_n(fails)} fails")
 
 
-def run_audit(script: Path, pivot: str | None) -> ToolResult:
-    argv = [str(script)] + (["--pivot", pivot] if pivot else [])
+def is_short(args: argparse.Namespace) -> bool:
+    """G2 (2026-09-05): --short / --long decide; otherwise a MEASURED clock under the gate's SHORT_MAX_S is a short -
+    the same rule the opening gate applies, decided once here so the audit and the gate agree."""
+    if getattr(args, "short", None) is not None:
+        return bool(args.short)
+    if not getattr(args, "timeline", None):
+        return False
+    try:
+        tl = G.load_timeline(Path(args.timeline))
+    except Exception:                      # noqa: BLE001 - an unreadable timeline is the gate's finding, not the router's
+        return False
+    return bool(tl) and float(tl[-1].get("e", 0.0)) < G.SHORT_MAX_S
+
+
+def run_audit(script: Path, pivot: str | None, short: bool = False) -> ToolResult:
+    argv = [str(script)] + (["--pivot", pivot] if pivot else []) + (["--short"] if short else [])
     code, out = _call_main("audit_script_doctrine.py", A.main, argv)
     m = AUDIT_RESULT_RE.search(out)
     fails, warns = (int(m.group(1)), int(m.group(2))) if m else (-1, -1)
@@ -194,6 +208,7 @@ def run_opening_gate(script: Path, args: argparse.Namespace) -> ToolResult:
             argv += [f"--{flag.replace('_', '-')}", str(getattr(args, flag))]
     if args.opening_s is not None:
         argv += ["--opening-s", str(args.opening_s)]
+    argv += ["--short" if is_short(args) else "--long"]        # G2: decided once, the audit got the same answer
     code, out = _call_main("gate_opening_structure.py", G.main, argv)
     m = GATE_RESULT_RE.search(out)
     f, w, p, j = (int(x) for x in m.groups()) if m else (-1, -1, -1, -1)
@@ -220,7 +235,7 @@ def _n(count: int) -> str:
 
 
 def run_all(script: Path, args: argparse.Namespace) -> list[ToolResult]:
-    return [run_lint(script), run_audit(script, args.pivot),
+    return [run_lint(script), run_audit(script, args.pivot, is_short(args)),
             run_opening_gate(script, args), run_screens(script)]
 
 
@@ -326,6 +341,9 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--title", help="the locked title - opening gate G45 packaging echo (E24)")
     ap.add_argument("--thumb", help="the thumbnail's words, when recorded in text (E24 G45)")
     ap.add_argument("--thumb-file", help="the FINAL thumbnail path the opening gate's J12 prints (E24)")
+    ap.add_argument("--short", dest="short", action="store_true", default=None,
+                    help="G2: judge by the shorts shape (doc 51 s51.2) - S01-S08 + J50/J51; default: a measured clock under 3:00")
+    ap.add_argument("--long", dest="short", action="store_false", help="force the long-form geometry")
     # P36 Human Gate 1 GRANTED (operator, 2026-09-03, on the ep1 calibration): the viewer binds.
     # V01 beat recall is a FAIL, V04 confusion a WARN; V05 information gain stays INFO with no
     # authority because it read GREEN on the episode whose retention curve we hold.

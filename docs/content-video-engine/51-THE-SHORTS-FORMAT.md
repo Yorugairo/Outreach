@@ -30,6 +30,8 @@ production is what the engine is for.
 0:45–0:55   THE RING      return to the mechanism, not to a phrase
 ```
 
+**Gated (G2, 2026-09-05) — `gate_opening_structure.py` reads a measured clock under 3:00 as a short and asks this shape, not the long-form geometry: S01 the hook by 0:03 · S02 the `[post-key]` sentence by 0:10 · S03 ≥ 2 `[new]`/`[catalyst]` instances inside 0:10–80% · S05 the ring (token and stems) in the last 20% · S06 a rehook every 30 s · S07 no brand line (the outro carries it) · S08 no sentence over 18 words (the two-line caption gate) · J50 one mechanism · J51 the instances share a spine. The audit's late-stage flip (doc 35 rule 2) and the 60–90 s open do not bind on a short. Run: `run_script_gates.py <script> --timeline <build>/timeline.json --ring <token> --title "<title>"`.**
+
 **If it is a list, the items must be one mechanism N times.** That is the whole difference
 between the two channels in this niche:
 
@@ -168,14 +170,14 @@ retention-not-acquisition category of §51.7. It was never the answer to stillne
 ## 51.9 Checklist
 
 - [ ] every object nameable in under a second, no interpretation
-- [ ] one mechanism, stated in one sentence
-- [ ] N instances of *that* mechanism, not N unrelated items
-- [ ] the ring returns to the mechanism
+- [ ] one mechanism, stated in one sentence — S02 / J50
+- [ ] N instances of *that* mechanism, not N unrelated items — S03 / J51
+- [ ] the ring returns to the mechanism — S05
 - [ ] the operator's sentence — the thing only he can say — is in it
 - [ ] every text ≥ 59 px on stage
 - [ ] everything inside `x[80,880] y[280,1340]`
-- [ ] a visual event every 1.2–2.5 s
-- [ ] 45–60 s
+- [ ] a visual event every 1.2–2.5 s — M16
+- [ ] 45–60 s (S01–S08 hold to 3:00; the Tokyo take runs 1:21)
 - [ ] nothing from the 42–44 production bar
 - [ ] built in an afternoon
 

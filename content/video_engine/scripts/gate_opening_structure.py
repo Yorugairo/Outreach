@@ -103,6 +103,18 @@ PROMISE_WIN = (30.0, 45.0)      # 38 B4 / MAP s3 / CLK: mini-payoff FIRST, then 
                                 # analyst's roadmap-by-0:45 wins over doc 38's 0:60; the analytics drop lands 0:45-1:00)
 ROADMAP_S = PROMISE_WIN[1]      # kept as a name for the report text
 RING_CLOSE_FRACTION = 0.12       # 47 s2 G-g: "the close" = the script's last 12% - where the ring returns
+# G2 - THE SHORT MODE (doc 51 s51.2 the shape; backlog item 4; shipped 2026-09-05). A script under SHORT_MAX_S with a measured
+# clock is a short: the shape is HOOK 0-3 s, THE MECHANISM by 0:10, N INSTANCES of ONE mechanism to 80% of the runtime, THE RING
+# in the last 20%; the retention cycle every 30 s (not 60); the brand line lives on the outro, never in the script (2026-09-05).
+SHORT_MAX_S = 180.0              # under three full minutes (the motion gate's SHORT_FULL_MINUTES)
+SHORT_HOOK_S = 3.0               # 51.2: the claim, spoken and on screen
+SHORT_MECH_BY_S = 10.0           # 51.2: the one thing this short is about, stated plainly - the [post-key] sentence lands by here
+SHORT_INSTANCES_MIN = 2          # 51.2: N instances, N >= 2 ([new] / [catalyst] beats between the mechanism and the ring)
+SHORT_INSTANCES_TO = 0.80        # 51.2: the instances run to ~80% of the runtime; the ring takes the rest
+SHORT_RING_FRACTION = 0.20       # 51.2: the ring = the last 20% (long form: 12%)
+SHORT_CYCLE_S = 30.0             # the retention clock on a short: a rehook every 30 s (long form: 60)
+SHORT_SENT_WARN_WORDS = 18       # doc 37: 10-15 words for speech; a caption page holds 3-6 words, so a long sentence is many pages
+BRAND_LINE = re.compile(r"not\s+a\s+panic\W+not\s+a\s+plot\W+mechanics", re.I)   # the recorded brand line (channel-assets/money-physics/outro)
 RING_MECHANISM_MIN = 2           # content stems the close must share with the P1 claim sentence (beyond the token)
 RING_MECHANISM_LEVEL = "FAIL"    # operator ruling 2026-09-04: no grandfathering - both scripts are being rewritten to this bar
 BEAT5_START = 60.0              # 38 B5: the map, desire, opponent, A2, ring - 0:60 to P1 end
@@ -347,13 +359,99 @@ def _packaging_gates(sents, title: str | None, thumb: str | None, thumb_file: st
 
 
 # ---- the gate ---------------------------------------------------------------
+def _content_stems(sentence: str) -> set[str]:
+    return {st for st in _stems(sentence) if st not in PACKAGING_STOPWORDS and len(st) >= PACKAGING_MIN_STEM}
+
+
+def run_short(text: str, timeline: list[dict] | None, sents, marks, ring: str | None, title: str | None,
+              thumb: str | None, thumb_file: str | None) -> tuple[list[Gate], dict]:
+    """G2: the shorts shape (doc 51 s51.2) as gates. S01-S08 plus the shared platform gates."""
+    runtime = sents[-1][1] if sents else 0.0
+    tol = 1.0 if timeline else EST_TOL
+    g: list[Gate] = []
+    add = lambda i, src, lvl, m: g.append(Gate(i, src, lvl, m))
+    mmss = lambda t: f"{int(t // 60)}:{int(t % 60):02d}"
+    host = lambda off: _sentence_index_of(off, sents)
+    beats = {}
+    for tag, off in marks:
+        if tag in beat_tags.BEAT_TAGS or tag in ("post-key", "pre-key"):   # the key marks are settle marks, not beat tags - the short reads them as the mechanism
+            k = host(off)
+            if k >= 1 and off < _first_alnum(text, sents[k][3]):
+                k -= 1                      # a mark leading chunk k settles sentence k-1
+            if k < len(sents):
+                beats.setdefault(tag, []).append(k)
+    # S01 the hook: the claim in the first 3 s, and it answers the packaging (G45 / J12 shared)
+    if sents:
+        d = sents[0][1] - sents[0][0]
+        add("S01", "51.2 HOOK 0:00-0:03: the claim, spoken and on screen, no throat-clearing", "FAIL" if d > SHORT_HOOK_S * tol else "PASS", f"first sentence {d:.2f}s")
+    g += _packaging_gates(sents, title, thumb, thumb_file)
+    ban = [st for st, _, s_, _ in sents if st <= YOU_BY_S and (re.search("|".join(A.GREETINGS), s_, re.I) or CHANNEL_TALK.search(s_))]
+    add("G04", "PLATFORM ban list: no greeting, no 'in this video', no channel talk (38 B2)", "FAIL" if ban else "PASS", f"banned construction at {mmss(ban[0])}" if ban else "clean")
+    ty = next((st for st, _, s_, _ in sents if st <= YOU_BY_S * tol and re.search(r"\byou(?:r|'ll|'re|'ve)?\b", s_, re.I)), None)
+    add("G05", "Direct address: 'you' by 0:30 (38 B3 / doc 32 s1)", "PASS" if ty is not None else "FAIL", f"'you' at {mmss(ty)}" if ty is not None else "no 'you' before 0:30")
+    # S02 the mechanism by 0:10: the [post-key] sentence (the one thing this short is about) lands by the boundary
+    pk = beats.get("post-key", [])
+    mech_k = pk[0] if pk else None
+    if mech_k is None:
+        add("S02", "51.2 THE MECHANISM by 0:10: the one thing this short is about, stated plainly - declared with [post-key]", "FAIL", "no [post-key] - the mechanism sentence is not declared")
+    else:
+        e = sents[mech_k][1]
+        add("S02", "51.2 THE MECHANISM by 0:10: the one thing this short is about, stated plainly - declared with [post-key]", "PASS" if e <= SHORT_MECH_BY_S * tol else "FAIL", f"[post-key] sentence ends at {e:.2f}s: '{sents[mech_k][2][:70]}'")
+    add("J50", "51.1 exactly ONE mechanism (49 s49.6 cognitive atomicity) - [post-key] is a delivery mark and may settle more than one key line: read the key lines as one mechanism or not", "JUDGE",
+        "; ".join(f"{sents[k][0]:.0f}s '{sents[k][2][:60]}'" for k in pk) or "no key line declared")
+    # S03 N instances of the mechanism between it and the ring
+    lo, hi = (sents[mech_k][1] if mech_k is not None else SHORT_MECH_BY_S) / tol, runtime * SHORT_INSTANCES_TO * tol
+    inst = sorted({k for tag in ("new", "catalyst") for k in beats.get(tag, []) if lo <= sents[k][0] <= hi})
+    add("S03", f"51.2 N INSTANCES 0:10-{mmss(hi)}: the same mechanism N times, different variables ([new] / [catalyst])", "PASS" if len(inst) >= SHORT_INSTANCES_MIN else "FAIL", f"{len(inst)} instance(s) at {', '.join(mmss(sents[k][0]) for k in inst) or 'none'}")
+    # S04 the spine (G-g, 51.2): every instance shares content with the mechanism sentence - a JUDGE row, stems are only a hint
+    if mech_k is not None and inst:
+        mech = _content_stems(sents[mech_k][2])
+        rows = [f"{mmss(sents[k][0])} shares {sorted(mech & _content_stems(sents[k][2])) or 'nothing by stem'}" for k in inst]
+        add("J51", "51.2 the spine: 'if it is a list, the items must be one mechanism N times' (46 s46.4, G-g) - read each instance against the mechanism", "JUDGE", "; ".join(rows))
+    # S05 the ring in the last 20%: the token returns AND the claim's stems return (G15b at the short's fraction)
+    close_start = runtime * (1 - SHORT_RING_FRACTION)
+    if ring:
+        rx = re.compile(r"\b" + re.escape(ring) + r"\b", re.I)
+        claim = [s_ for st, _, s_, _ in sents if st <= SHORT_MECH_BY_S * tol and rx.search(s_)]
+        close = [s_ for st, _, s_, _ in sents if st >= close_start and rx.search(s_)]
+        if not claim:
+            add("S05", "51.2 THE RING in the last 20%: return to the mechanism, not to a phrase (G-g)", "FAIL", f"'{ring}' is not planted in the first 10 s")
+        elif not close:
+            add("S05", "51.2 THE RING in the last 20%: return to the mechanism, not to a phrase (G-g)", "FAIL", f"'{ring}' never returns in the last 20% ({mmss(close_start)}+)")
+        else:
+            shared = ring_claim_stems(claim[0], ring) & set().union(*(_content_stems(c) for c in close))
+            add("S05", "51.2 THE RING in the last 20%: return to the mechanism, not to a phrase (G-g)", "PASS" if len(shared) >= 1 else RING_MECHANISM_LEVEL, f"'{ring}' returns at the close sharing {sorted(shared) or 'no claim stem - the token echoes, the argument does not'}")
+    else:
+        rg = beats.get("ring", [])
+        add("S05", "51.2 THE RING in the last 20%: return to the mechanism, not to a phrase (G-g)", "PASS" if any(sents[k][0] >= close_start for k in rg) and any(sents[k][0] <= SHORT_MECH_BY_S * tol for k in rg) else "FAIL",
+            "[ring] planted and returned" if rg else "no ring (pass --ring <token> or tag [ring] at the open and the close)")
+    # S06 the cycle: a rehook every 30 s on a short
+    hits = sorted(set([st for st, _, s_, _ in sents if re.search("|".join(A.REHOOKS), s_, re.I)] + [sents[k][0] for k in beats.get("rehook", [])]))
+    gaps = [(a, b - a) for a, b in zip([0.0] + hits, hits + [runtime]) if b - a > SHORT_CYCLE_S * tol]
+    add("S06", f"CLK on a short: a rehook (template line or [rehook]) every {SHORT_CYCLE_S:.0f} s, 0:00 to the end", "FAIL" if gaps else "PASS", f"{len(hits)} rehooks; " + ("longest gap " + ", ".join(f"{mmss(a)}+{d:.0f}s" for a, d in gaps[:3]) if gaps else "no gap over 30 s"))
+    # S07 the brand line is the outro's, never the script's (2026-09-05: recorded once, stitched under the card)
+    add("S07", "the brand line ('Not a panic. Not a plot. Mechanics.') is stitched under the outro card - a script that speaks it doubles it", "FAIL" if BRAND_LINE.search(text) else "PASS", "spoken in the script" if BRAND_LINE.search(text) else "clean")
+    # S08 sentences short enough to speak and to caption (doc 37; the two-line caption gate holds 3-6 words a page)
+    longest = max(((len(re.findall(r"[A-Za-z0-9'%$]+", s_)), s_) for _, _, s_, _ in sents), default=(0, ""))
+    add("S08", f"doc 37 speech: sentences 10-15 words; over {SHORT_SENT_WARN_WORDS} is several caption pages of one breath", "WARN" if longest[0] > SHORT_SENT_WARN_WORDS else "PASS", f"longest sentence {longest[0]} words: '{longest[1][:70]}'")
+    stats = {"mode": "short (G2: doc 51 s51.2)", "runtime": mmss(runtime), "timing": "measured" if timeline else "estimated",
+             "mechanism": sents[mech_k][2][:60] if mech_k is not None else "-", "instances": len(inst), "ring_close_from": mmss(close_start),
+             "beats_declared": {k: [mmss(sents[i][0]) for i in v] for k, v in beats.items()}}   # the screens enumerator reads these (R2 / s3a)
+    return g, stats
+
+
 def run(text: str, timeline: list[dict] | None = None, counterparty: str | None = None,
         ring: str | None = None, opening_s: float = 300.0,
         cycle_s: float | None = None, title: str | None = None, thumb: str | None = None,
-        thumb_file: str | None = None) -> tuple[list[Gate], dict]:
+        thumb_file: str | None = None, short: bool | None = None) -> tuple[list[Gate], dict]:
     """cycle_s: how far G36's cycle check runs; None = the whole runtime (E23).
-    title / thumb: the packaging's words for G45; thumb_file: the thumbnail path J12 prints (E24)."""
+    title / thumb: the packaging's words for G45; thumb_file: the thumbnail path J12 prints (E24).
+    short: True forces the shorts shape (G2), False the long form; None = a MEASURED clock under SHORT_MAX_S is a short."""
     sents = _sentences_timed(text, timeline)
+    if short is None:
+        short = timeline is not None and bool(sents) and sents[-1][1] < SHORT_MAX_S
+    if short:
+        return run_short(text, timeline, sents, beat_tags.find_marks(text), ring, title, thumb, thumb_file)
     marks = beat_tags.find_marks(text)
     beats: dict[str, list[tuple[float, int]]] = {}
     for tag, off in marks:
@@ -707,6 +805,8 @@ def main() -> int:
     ap.add_argument("--title", help="the locked title - G45 packaging echo (E24)")
     ap.add_argument("--thumb", help="the thumbnail's words, when recorded in text (E24 G45)")
     ap.add_argument("--thumb-file", help="the FINAL thumbnail path J12 prints for the agent to open (E24)")
+    ap.add_argument("--short", dest="short", action="store_true", default=None, help="G2: judge by the shorts shape (doc 51 s51.2); default: a measured clock under 3:00 is a short")
+    ap.add_argument("--long", dest="short", action="store_false", help="force the long-form geometry")
     args = ap.parse_args()
     if hasattr(sys.stdout, "reconfigure"):
         sys.stdout.reconfigure(encoding="utf-8", errors="replace")
@@ -714,7 +814,7 @@ def main() -> int:
     unknown = beat_tags.unknown_marks(text)
     tl = load_timeline(args.timeline) if args.timeline else A.load_timings(args.script)
     gates, stats = run(text, tl, args.counterparty, args.ring, args.opening_s, args.cycle_s,
-                       args.title, args.thumb, args.thumb_file)
+                       args.title, args.thumb, args.thumb_file, short=args.short)
     if unknown:
         gates.insert(0, Gate("G00", "doc 37 marks", "FAIL", f"unknown marks would be spoken: {sorted(unknown)}"))
     print(f"=== OPENING STRUCTURE GATE: {args.script.name} ===")
