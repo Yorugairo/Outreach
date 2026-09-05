@@ -1,13 +1,13 @@
 {
  "schema_version": "scene_evidence_timeline.v1",
- "runtime_s": 88.323,
+ "runtime_s": 88.823,
  "title": "Tokyo Tea Break",
  "subtitle": "Money Physics \u00b7 short",
  "episode_id": "tokyo-tea-break",
  "project_id": "systems-and-blowups",
  "aspect": "9:16",
  "narration": {
-  "canonical_hash": "d4a80a9ba0b4dedb9cf665fc55c9b10f0f040bff5e6e462664a46bff2bb9ce9d",
+  "canonical_hash": "d9cb9d4bac80a46c660eb4630173901c6238f676a3c57fa6fb0c0de5a5c2f5b9",
   "words_path": "build-short/timeline.json"
  },
  "captions": [
@@ -5016,7 +5016,7 @@
    "exit": "cut",
    "span": [
     75.73,
-    82.12
+    82.62
    ],
    "docks": [],
    "species": []
@@ -5033,16 +5033,16 @@
      "y": 0
     }
    },
-   "exit": "cut",
+   "exit": "dissolve",
    "span": [
-    82.12,
-    88.32
+    82.62,
+    88.82
    ],
    "docks": [],
    "species": [
     {
      "kind": "life",
-     "at": 82.123,
+     "at": 82.623,
      "dur": 6.2
     }
    ]

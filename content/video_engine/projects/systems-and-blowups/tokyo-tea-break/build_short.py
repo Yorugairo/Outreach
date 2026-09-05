@@ -105,9 +105,9 @@ KEYFRAME_EVERY = 12   # frames (0.5 s at 24 fps): a seek decodes at most half a 
 
 # THE OUTRO (operator, 2026-09-05: "we have the outro built already, same as we used for the first reel - the remotion kit outro"):
 # the Remotion kit lives in content/video_engine/remotion-kit/ (rescued from a session scratchpad); its render is appended
-# after the last word - the ring clip hands off by wipe OUTRO_LEAD before the VO ends, the audio is padded to the new runtime
+# after the last word - the card DISSOLVES in over the ring clip (which keeps playing underneath), the audio is padded to the new runtime
 OUTRO = HERE / "outro/outro-v2.mov"   # 6.2 s, 1080x1920 ProRes, the DARK starfield the operator showed (2026-09-05): "It's not magic. It's mechanics." / "follow for the next teardown" / @MoneyPhysicsHQ; outro-brand is the cream re-skin, outro-yt the "subscribe" variant
-OUTRO_S, OUTRO_LEAD = 6.2, 0.6
+OUTRO_S, OUTRO_LEAD = 6.2, 0.1   # the card's fade begins a tenth before the last word ends and DISSOLVES in (M16: the last caption pops 2.52 s before the VO ends) (operator, 2026-09-05: the wipe into a title card was 'madness')
 
 
 def seekable_clip(name: str, src: Path | None = None) -> Path:
@@ -190,7 +190,7 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float | None = None) -
         (t_ring, t_outro, clip("clip-a2-counter-colder-v2.mp4"), (0, 0, 0), [], None, None),
         # 10 the outro: the Remotion kit's network-nodes card, "It's not magic. It's mechanics." - it animates on its own for the
         # whole clip (nodes drift and pulse: verified by eye 2026-09-05), declared as `life` so the pulse gate credits it
-        (t_outro, runtime_s, clip("outro-v2.mp4", OUTRO), (0, 0, 0), [], None, [
+        (t_outro, runtime_s, clip("outro-v2.mp4", OUTRO), (0, 0, 0), [], "dissolve", [
             {"kind": "life", "at": t_outro, "dur": round(runtime_s - t_outro, 2)},
         ]),
     ]

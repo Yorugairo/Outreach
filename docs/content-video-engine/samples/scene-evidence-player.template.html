@@ -805,7 +805,7 @@
   const vo = $("vo"); vo.src = A["__audio__"];
   const wA = $("wA"), wB = $("wB"), wash = $("wash"), seam = $("seam"), cap = $("caption");
   const docks = [$("dock-1"), $("dock-2")];
-  const WIPE = 0.62;
+  const WIPE = 0.62, DISSOLVE_S = 0.8;   /* DISSOLVE_S: the cross-fade a row declares with exit dissolve (the outro card) */
   const SUCK_S = 0.3, SUCK_TURN = 240;   /* the suck transition: 0.3 s, two thirds of a turn into the point */
   /* remotion-ui directional-wipe port (2026-08-30): FEATHER is the soft
      edge as a share of the frame (their edgeSoftness); DEPTH is the
@@ -2789,7 +2789,11 @@
        into that point of the new plate over SUCK_S, spinning - no wipe front, no seam */
     const suck = prev && typeof sc.exit === "string" && sc.exit.startsWith("suck") ? sc.exit : null;
     const su = suck ? clamp01((t - sc.span[0]) / SUCK_S) : 1;
-    const wk = prev && !spiralIn && !suck ? (kin("min_jerk") ? minJerk : quartIO)(clamp01((t - sc.span[0]) / WIPE)) : 1;
+    /* DISSOLVE (operator, 2026-09-05, on the wipe into the outro card - "what is this madness?"): a row whose exit reads dissolve
+       arrives by a plain cross-fade over DISSOLVE_S - no front, no seam, the outgoing world keeps playing underneath */
+    const dissolve = prev && sc.exit === "dissolve";
+    const dk = dissolve ? (kin("min_jerk") ? minJerk : quartIO)(clamp01((t - sc.span[0]) / DISSOLVE_S)) : 1;
+    const wk = prev && !spiralIn && !suck && !dissolve ? (kin("min_jerk") ? minJerk : quartIO)(clamp01((t - sc.span[0]) / WIPE)) : 1;
     const seaming = prev && wk > 0 && wk < 1;
     /* THE HARD-EDGE CLIP WIPE (restored 2026-09-01). The remotion-ui
        directional-wipe port (dd9e476, 2026-08-30) replaced this with a
@@ -2802,7 +2806,7 @@
        inset hides wB completely, so the old plate holds and there is no
        destination-plate flash at the boundary. */
     wB.style.maskImage = "none"; wB.style.webkitMaskImage = "none";
-    wB.style.opacity = 1;
+    wB.style.opacity = dissolve ? dk.toFixed(4) : 1;
     wB.style.clipPath = sc.exit === "wipe_right"
       ? `inset(0 0 0 ${(1-wk)*100}%)` : `inset(0 ${(1-wk)*100}% 0 0)`;
     paint(wA, prev || sc);

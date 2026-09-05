@@ -3,12 +3,12 @@
 ```text
 === MOTION DENSITY GATE: C:\Users\Snipe\Downloads\Outreach Program\content\video_engine\projects\systems-and-blowups\tokyo-tea-break\build-short ===
                runtime: 1:28
-         visual_events: 142 (96.5/min)
+         visual_events: 142 (95.9/min)
                  docks: 0
            dock_source: evidence-dock.json
           ledger_pages: 3
   still_over_12s_share: 0%
-            per_minute: 0:00:111/2 1:00:64/2
+            per_minute: 0:00:111/2 1:00:62/2
 
   [PASS ] M01 longest still stretch 2.4s at 1:16
           doc 29 s8.19 / s9.25 stillness ceiling
@@ -38,7 +38,7 @@
           E40 #5 (operator, 2026-09-05): no spotlight on a spiral out - no species window overlaps a page's retract
   [PASS ] M16 longest gap between visual events 2.4s at 1:16; 0 gap(s) over 2.5s
           doc 49 s49.6 / operator 2026-09-05: the short-form gate is the pulse - no gap between visual events over 2.5 s; no ceiling
-  [INFO ] M07 short: 1 full minute(s) in 88s - opening 111.0 events/min, 2.0 evidence entries/min; tail from 1:00 63.6/min; whole runtime 95.1/min - no minute distribution to rank in (E21 is judged on the whole)
+  [INFO ] M07 short: 1 full minute(s) in 89s - opening 111.0 events/min, 2.0 evidence entries/min; tail from 1:00 62.5/min; whole runtime 94.6/min - no minute distribution to rank in (E21 is judged on the whole)
           E21: the opening is the densest minute, never the thinnest
   [JUDGE] J01 every savor beat holds its picture (card up, badge lit), never a bare plate with a drift
           doc 29 s9.25 #3
@@ -46,5 +46,5 @@
 RESULT: 0 FAIL / 0 WARN / 14 PASS / 1 JUDGE / 1 INFO
 ```
 
-TIMELINE: tokyo-short.timeline.json sha256:0fb3a43faac49eb271bfbe59ed6500ec9f53110496565e7aa04f9eeacce60d57
+TIMELINE: tokyo-short.timeline.json sha256:d87f5e957a2eaeddfeb81b127722914616881f1ddabe0f45b1ce5692fd116c2c
 VERDICT: PASS (0 FAIL)
