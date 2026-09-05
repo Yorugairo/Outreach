@@ -1,7 +1,7 @@
 ---
 id: P40-MEASURE-THE-FIRST-MINUTE
 title: Point an instrument at our own output - the E1 metrics against the one retention curve we hold
-status: running
+status: complete
 operation: feature
 risk: standard
 owner: parent
@@ -124,22 +124,22 @@ artifact under the ep1 build.
 - Evidence: 2026-09-04 - **Deviation, on the operator's correction:** the slice as written measured our own timeline; *"is basing the gap threshold off our own work really the right way?"* So the reference was measured first: Wealth Logic's audio (yt-dlp, gitignored) through local Whisper `small.en` with word timestamps (3158 words, 187 WPM), its 99 cuts from `04_shot_ledger_100_cuts.md`; ours re-run through the same Whisper for a like-for-like. The script is `measure_cut_gaps.py` (not `gate_gap_threshold.py` - it measures; the gate ships with the edit pass). Numbers: reference 72-81 % of cuts in gaps >= 0.30 s vs 49-56 % at 0.45; median cut position 0.80-0.83 of the gap; 15-25 % mid-word. Ours: 52-54 % / 0.46 / 39-42 %. Gap supply 21.4/min (ours) vs 17.9 (theirs). **Recommendation with its numbers: threshold 0.30 s, cut at 0.8 of the gap, mid-word <= 25 %.** Written into 46 s46.3, 47 M13, FINDING-gaps-are-the-edit; X3 closed.
 
 ### T2: the E1 metric harness
-- Status: pending
-- Owner: implementation_luna
+- Status: complete
+- Owner: parent
 - Depends on: P39 T2 (deterministic render) for the frames
 - Write set: `content/video_engine/scripts/metrics/frame_metrics.py`, `content/video_engine/tests/test_frame_metrics.py`
 - Acceptance: the four metrics compute over a frame directory. **OpenCV is not currently installed** — the slice adds it as an explicit dependency or implements the two cheap metrics (motion energy, centroid of change) in numpy and defers saliency and flow. Tests use synthetic sequences with known answers: a static pair gives zero motion energy; a translating block gives a centroid shift equal to its translation.
 - Validate: `python -m pytest content/video_engine/tests/test_frame_metrics.py -q`
-- Evidence: pending
+- Evidence: 2026-09-04 - `scripts/metrics/frame_metrics.py`: motion energy and centroid of change in numpy over a frame directory, windowed; saliency and optical flow deferred and named as such (no cv2 on this host; no new dependency added). Tests: a static pair gives zero energy and no centroid; a translating block moves the centroid by exactly its translation; the window summary reports a still share. 3 passed.
 
 ### T3: run it against the drop and report honestly
-- Status: pending
+- Status: complete
 - Owner: parent
 - Depends on: T1, T2
 - Write set: `content/video_engine/projects/systems-and-blowups/steel-and-paper/build-f/FIRST-MINUTE-MEASUREMENT.md`
 - Acceptance: metrics across ep1's opening, windowed to match `viewer_windows.py`, with **w3 (0:45–1:00) called out against its neighbours**. For each metric: does it separate w3, and by how much. Cross-read against P36's finding that confusion tracks the drop. **Every number labelled hypothesis-from-n=1.** If nothing separates, the report says so and that is the finding — it would mean the drop is not visually-legible in these metrics and the cause is in the script or the package instead, which is itself worth knowing.
 - Validate: operator reads the report and can state what it found without reading code
-- Evidence: pending
+- Evidence: 2026-09-04 - `build-f/FIRST-MINUTE-MEASUREMENT.md` (+ `.json`): 241 frames at 2 fps through the P39 capture, the viewer's 15 s windows. **w3 is not the still window - w2 is**, by 3x (energy 1.94 vs a next-lowest 5.36): a bare plate held 0:29-0:50 with Ken Burns only. w3 is the first minute's loudest window: the first chart arrives at 0:50 with four badges in four seconds. So the drop follows the stillest window and lands on the late, dense first proof - which is exactly M10/M01 and M11 breaking together, and the visual half of P36's confusion finding. Every number labelled n = 1; the still threshold (~2.0 on this scale) and any causal claim wait on a second episode's curve (the human gate).
 
 ## Verification
 
