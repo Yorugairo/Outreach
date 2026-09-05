@@ -345,10 +345,14 @@
   #caption.quiet .cg { transform: none !important; opacity: 1 !important; }
   /* PHRASE (shorts, 2026-09-05): the line is read, not chased - every word legible from the page's start, the spoken-word
      flip retired; only a keyword is punctuated (it re-pops and brightens when spoken, and stays) */
-  #caption.phrase .cw { color: rgba(255,255,255,.92); }
+  #caption.phrase .cw { color: rgba(255,255,255,.92); padding: 0 .14em; margin: 0 -.02em; border-radius: .14em;
+                        background-repeat: no-repeat; background-position: left center; }
   #caption.phrase .cw.on { transform: none; }
   #caption.phrase .cw.ck { color: #c98500; }
   #caption.phrase .cw.ck.on { color: #e9a020; }
+  /* the MARKER (hyperframes caption-highlight, blended 2026-09-05): while its box is up the word reads against it */
+  #caption.phrase .cw.lit { color: #fff; }
+  #caption.phrase .cw.ck.lit { color: #25313C; }
 
   #bar { width: min(96vw,1400px); display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
          background: #0a1620; border: 1px solid #14293a; border-radius: 6px; padding: 10px 13px; }
@@ -1703,6 +1707,10 @@
      settling to 0 - a function of (t - word.s), painted inline by the caption pass */
   const STAGE_POP_S = 0.2;
   const PHRASE = TL.caption_style === "phrase", PHRASE_STAGGER_S = 0.03, PHRASE_KPOP = 1.18;   /* shorts: the page lands as one phrase; only k-words are punctuated */
+  /* the MARKER (hyperframes caption-highlight): the box sweeps in over SWEEP_S from the left (power2.out), lets go over BOX_FADE_S;
+     keywords take the accent box, other words the charcoal box (brand tokens, never the reference's red) */
+  const MARK = { SWEEP_S: 0.15, BOX_FADE_S: 0.12, K: [[245, 183, 46], [233, 160, 32]], W: [[37, 49, 60], [27, 36, 44]] };
+  const markBox = (c, a) => "linear-gradient(135deg, rgba(" + c[0].join(",") + "," + a.toFixed(3) + ") 0%, rgba(" + c[1].join(",") + "," + a.toFixed(3) + ") 100%)";
   const stagePop = (u) => { const c1 = 1.70158, c3 = c1 + 1; const x = u - 1; return 1 + c3 * x * x * x + c1 * x * x; };
   const LP = { ROLL: 0.7, SAVOR: 0.8, FIELD: 2.4, PUNCH: 0.5, INK: 2.0, BUILD: 3.0, SEEPS: 9, STROKES: 14, KB_MAX: 0.03,
                PUNCH_SCALE: 1.16, FOCUS_DUR: 3.0 };
@@ -3011,7 +3019,12 @@
             const kp = x.k ? pop(clamp01((t - x.s) / STAGE_POP_S)) : 1;
             ws[j].style.opacity = Math.min(1, e * 2).toFixed(3);
             const sc = (1.16 + (1 - 1.16) * e) * (x.k && t >= x.s ? (PHRASE_KPOP + (1 - PHRASE_KPOP) * kp) : 1);
-            ws[j].style.transform = "scale(" + sc.toFixed(4) + ") rotate(calc(var(--tilt, 0deg) * " + (1 - e).toFixed(3) + "))"; }
+            ws[j].style.transform = "scale(" + sc.toFixed(4) + ") rotate(calc(var(--tilt, 0deg) * " + (1 - e).toFixed(3) + "))";
+            /* the marker: sweeps in as the word is spoken, lets go as the next takes it */
+            const hk = pow2out(clamp01((t - x.s) / MARK.SWEEP_S)), ba = t < x.s ? 0 : (t < x.e ? 1 : 1 - clamp01((t - x.e) / MARK.BOX_FADE_S));
+            ws[j].style.backgroundImage = ba > 0 ? markBox(x.k ? MARK.K : MARK.W, ba) : "";
+            ws[j].style.backgroundSize = ba > 0 ? (hk * 100).toFixed(1) + "% 100%" : "";
+            ws[j].classList.toggle("lit", ba > 0.5 && hk > 0.5); }
           else if (stage) { const e = (kin("analytic_spring") ? springPop : stagePop)(clamp01((t + 0.05 - x.s) / STAGE_POP_S));
             ws[j].style.opacity = Math.min(1, e * 2).toFixed(3);
             const sc = (1.16 + (1 - 1.16) * e) * (on && e >= 1 ? 1.06 : 1);
