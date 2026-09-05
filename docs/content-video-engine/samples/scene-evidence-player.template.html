@@ -479,18 +479,46 @@
   const minJerk = (u) => { u = Math.min(1, Math.max(0, u)); return u * u * u * (10 - 15 * u + 6 * u * u); };
   /* KINETICS:END */
   /* KINETICS:BEGIN spring */
-  /* kinetics/spring.mjs - the settle (42 s42.2; FINDING-the-animation-math s3). SOURCE OF TRUTH, inlined into the
-     scene-evidence player by sync_kinetics.py between KINETICS:BEGIN spring and KINETICS:END (P43 T1). T1 moves
-     the shipping springPop here at identical output; P43 T5 adds the three damping regimes, the velocity and the
-     seek contract around it.
-     springPop - the closed-form underdamped mass-spring-damper, x(t) = 1 - e^(-z w t)(cos wd t + z w/wd sin wd t),
-                 with the INVERSE model: the overshoot you want (Mp) gives z = -ln Mp / sqrt(pi^2 + ln^2 Mp), and the
-                 settle you want (0.25% by u = 1) gives w = 6 / z; peaks at pi / wd. Exact at every seek, lands on 1
-                 (kinetics.analytic_spring). */
+  /* kinetics/spring.mjs - the settle (42 s42.2; FINDING-the-animation-math s3; 47 s1 row 4). SOURCE OF TRUTH, inlined into
+     the scene-evidence player by sync_kinetics.py between KINETICS:BEGIN spring and KINETICS:END (P43 T1, T5). Behind
+     kinetics.analytic_spring.
+     The closed-form second-order step response x(0) = 0, v(0) = 0 -> 1, in all three damping regimes, with velocity and
+     acceleration - stateless, so frame N evaluated directly IS frames 0..N (the seek test); an integrator cannot say that.
+       underdamped  z < 1 : x = 1 - e^(-z w t)(cos wd t + z w / wd sin wd t),  wd = w sqrt(1 - z^2)
+       critical     z = 1 : x = 1 - e^(-w t)(1 + w t)
+       overdamped   z > 1 : x = 1 - (s2 e^(s1 t) - s1 e^(s2 t)) / (s2 - s1),  s1,2 = -w (z -+ sqrt(z^2 - 1))
+     The INVERSE model is the one entry point (springParams): the overshoot you want, Mp, gives z = -ln Mp / sqrt(pi^2 +
+     ln^2 Mp) (Mp = 0 asks for critical damping); the settle you want - the envelope at 0.25% by u = 1, e^-6 - gives
+     w = 6 / z. The peak lands at t_p = pi / wd and is exactly 1 + Mp. springPop is the thin caller at Mp = 0.04, unchanged
+     to the bit from the 2026-09-05 shipping version. The dials - Mp per material, the settle - are ours (42 s42.5). */
+
+  const SPRING = Object.freeze({ MP: 0.04, SETTLE: 6 });
+
+  /* overshoot + settle -> the model's parameters */
+  const springParams = (Mp = SPRING.MP, settle = SPRING.SETTLE) => {
+    if (!(Mp > 0)) return { z: 1, w: settle, wd: 0 };
+    const L = Math.log(Math.min(Mp, 0.999)), z = -L / Math.sqrt(Math.PI * Math.PI + L * L), w = settle / z;
+    return { z, w, wd: w * Math.sqrt(1 - z * z) };
+  };
+
+  /* position, velocity and acceleration at t >= 0 */
+  const springEval = (t, p) => {
+    if (!(t > 0)) return { x: 0, v: 0, a: 0 };
+    const { z, w } = p;
+    if (z < 1) {
+      const wd = p.wd || w * Math.sqrt(1 - z * z), e = Math.exp(-z * w * t), sn = Math.sin(wd * t), cs = Math.cos(wd * t);
+      return { x: 1 - e * (cs + (z * w / wd) * sn), v: e * (w * w / wd) * sn, a: (w * w / wd) * e * (wd * cs - z * w * sn) };
+    }
+    if (z === 1) { const e = Math.exp(-w * t); return { x: 1 - e * (1 + w * t), v: w * w * t * e, a: w * w * e * (1 - w * t) }; }
+    const q = Math.sqrt(z * z - 1), s1 = -w * (z - q), s2 = -w * (z + q), e1 = Math.exp(s1 * t), e2 = Math.exp(s2 * t);
+    return { x: 1 - (s2 * e1 - s1 * e2) / (s2 - s1), v: w * w * (e1 - e2) / (s1 - s2), a: w * w * (s1 * e1 - s2 * e2) / (s1 - s2) };
+  };
+
+  /* the shipping pop: overshoot Mp, lands on exactly 1 */
+  const POP = springParams(SPRING.MP);
   const springPop = (u, Mp = 0.04) => {
     if (u >= 1) return 1; if (u <= 0) return 0;
-    const L = Math.log(Mp), z = -L / Math.sqrt(Math.PI * Math.PI + L * L), w = 6 / z, wd = w * Math.sqrt(1 - z * z);   /* envelope e^-6 = 0.25% at u = 1: lands, never snaps */
-    return 1 - Math.exp(-z * w * u) * (Math.cos(wd * u) + (z * w / wd) * Math.sin(wd * u));
+    return springEval(u, Mp === SPRING.MP ? POP : springParams(Mp)).x;
   };
   /* KINETICS:END */
   /* KINETICS:BEGIN stroke */
@@ -634,6 +662,43 @@
     return '<feColorMatrix type="matrix" values="0 0 0 1 0  0 0 0 1 0  0 0 0 1 0  0 0 0 1 0"/>'
       + '<feComponentTransfer><feFuncR type="table" tableValues="' + f(t.r) + '"/><feFuncG type="table" tableValues="' + f(t.g) + '"/>'
       + '<feFuncB type="table" tableValues="' + f(t.b) + '"/><feFuncA type="linear" slope="' + P.ALPHA_SLOPE + '" intercept="0"/></feComponentTransfer>';
+  };
+  /* KINETICS:END */
+  /* KINETICS:BEGIN squash */
+  /* kinetics/squash.mjs - area-preserving, motion-driven squash and stretch (42 s42.3; FINDING-the-animation-math s4;
+     47 s1 row 5). SOURCE OF TRUTH, inlined into the scene-evidence player by sync_kinetics.py between KINETICS:BEGIN
+     squash and KINETICS:END (P43 T4), after spring - it reads the spring's velocity and acceleration. The vortex's
+     inline stretch routes through scaleBy at identical output; the pops apply the tensor behind kinetics.area_squash.
+       A = R(theta) diag(1 + alpha, 1 / (1 + alpha)) R(-theta)     det(A) = 1 by construction
+       alpha = kappa_v |v| + kappa_a max(0, -v_hat . a)               stretch along the velocity, compress across it
+     alpha is driven by speed and by deceleration, so squash emerges from the motion rather than being keyframed.
+     kappa_v, kappa_a and the clamp are ours to tune (42 s42.5). */
+
+  const SQUASH = Object.freeze({ KV: 0.0004, KA: 0.00002, MAX: 0.25 });   /* per px/s and px/s^2; MAX keeps a pop a pop */
+
+  /* the amount, from a velocity and an acceleration (2-vectors) */
+  const squashAlpha = (v, a, o = {}) => {
+    const P = Object.assign({}, SQUASH, o), speed = Math.hypot(v[0], v[1]);
+    if (!(speed > 0)) return 0;
+    const decel = Math.max(0, -(v[0] * a[0] + v[1] * a[1]) / speed);
+    return Math.min(P.MAX, P.KV * speed + P.KA * decel);
+  };
+
+  /* the tensor as [a, b, c, d] for matrix(a b c d 0 0): stretch 1 + alpha along theta, 1 / (1 + alpha) across it */
+  const squashMatrix = (theta, alpha) => {
+    const sx = 1 + alpha, sy = 1 / (1 + alpha), c = Math.cos(theta), s = Math.sin(theta), cs = c * s * (sx - sy);
+    return [c * c * sx + s * s * sy, cs, cs, s * s * sx + c * c * sy];
+  };
+  const det2 = (m) => m[0] * m[3] - m[1] * m[2];
+
+  /* the vortex's form: a uniform scale s with the area-preserving stretch along the tangent - the exact expressions the
+     vortex shipped with (s * (1 + a), s / (1 + a)), so its output is unchanged to the bit */
+  const scaleBy = (s, alpha) => ({ sx: s * (1 + alpha), sy: s / (1 + alpha) });
+
+  /* a 1-D pop's alpha from its spring: travel px over dur seconds along one axis */
+  const springSquash = (u, params, travel, dur, o = {}) => {
+    const p = springEval(u, params), v = travel * p.v / dur, a = travel * p.a / (dur * dur);
+    return squashAlpha([0, v], [0, a], o);
   };
   /* KINETICS:END */
   /* Pills draw TEXT, so they take the text tier - never the graphic tier. */
@@ -2127,7 +2192,8 @@
     const rr = r * (1 - Math.pow(ui, 1.7)), th = LP_RETRACT.TURNS * 2 * Math.PI * ui * (0.4 + 1.6 * Math.pow(1 - rn, 1.5));   /* the core spins ~4x the rim: spiral arms, not a wheel */
     const a = LP_RETRACT.ALPHA * 4 * ui * (1 - ui), s = Math.pow(1 - ui, 0.7);
     const ang = phi + th;
-    return { x: c.x + rr * Math.cos(ang), y: c.y + rr * Math.sin(ang), th: th * 180 / Math.PI, tan: ang * 180 / Math.PI + 90, sx: s * (1 + a), sy: s / (1 + a), ui };
+    const q = scaleBy(s, a);   /* the area-preserving stretch along the tangent (42 s42.3 helper, P43 T4) */
+    return { x: c.x + rr * Math.cos(ang), y: c.y + rr * Math.sin(ang), th: th * 180 / Math.PI, tan: ang * 180 / Math.PI + 90, sx: q.sx, sy: q.sy, ui };
   };
   /* a CSS transform (HTML particle, its own centre as origin) and an SVG one (user units) for the same map */
   const lpVortexCss = (v, hx, hy) => "translate(" + (v.x - hx).toFixed(2) + "px," + (v.y - hy).toFixed(2) + "px) rotate(" + v.tan.toFixed(2) + "deg) scale(" + v.sx.toFixed(4) + "," + v.sy.toFixed(4) + ") rotate(" + (v.th - v.tan).toFixed(2) + "deg)";
@@ -2265,9 +2331,13 @@
     /* badges: floored at the build's end, each springs in over LP_BADGE_IN with the dock's back-out overshoot */
     const tb = t3 - LP.PUNCH - (st.buildDur || LP.BUILD);
     for (const bd of st.badges || []) {
-      const e = (kin("analytic_spring") ? springPop : stagePop)(clamp01((tb - bd.at) / LP_BADGE_IN));
+      const ub = clamp01((tb - bd.at) / LP_BADGE_IN), e = (kin("analytic_spring") ? springPop : stagePop)(ub);
       bd.el.style.opacity = Math.min(1, e * 1.4).toFixed(3);
-      bd.el.style.transform = "translateY(" + (18 * (1 - e)).toFixed(1) + "px) scale(" + (0.94 + 0.06 * e).toFixed(4) + ")";
+      /* SQUASH (42 s42.3, P43 T4, kinetics.area_squash + analytic_spring): the badge travels 18 px up; its spring's velocity and
+         deceleration set alpha, the tensor stretches along the travel and compresses across it, area kept */
+      const sq = kin("area_squash") && kin("analytic_spring") && ub > 0 && ub < 1
+        ? " matrix(" + squashMatrix(Math.PI / 2, springSquash(ub, POP, 18, LP_BADGE_IN)).map((v) => v.toFixed(4)).join(",") + ",0,0)" : "";
+      bd.el.style.transform = "translateY(" + (18 * (1 - e)).toFixed(1) + "px) scale(" + (0.94 + 0.06 * e).toFixed(4) + ")" + sq;
     }
     lpSpiral(st, scene, t, pg);   /* the retract at the scene's end; the spiral entry at its start */
   };
