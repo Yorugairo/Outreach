@@ -1,0 +1,24 @@
+{
+  "_contract": "The PROMISE plate (operator, 2026-09-05: a narrative plate from 'a Treasury page, and your phone' through 'read both numbers yourself' - the cut drops on 'went:', 38.7 s to 44.63 s on the take, with a 0.25 s edit pause because that gap is 0.21 s). E40: a still is the asset; image mode, free, two ideas x two candidates, contact sheet, operator approves one. No '@' in prompt text - the chip is the reference where the host appears.",
+  "projectUrl": "https://labs.google/fx/tools/flow/project/d171ec1f-d4a2-4b79-b76e-32460193dccc",
+  "outputDir": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\omni-video\\stills",
+  "ratio": "9:16",
+  "scenes": [
+    {
+      "id": "still-p1-viewers-desk",
+      "references": [],
+      "prompt": "9:16 vertical, full bleed. Cream paper page, charcoal ink drawing, a single red accent. Over-the-shoulder view of a stick figure sitting at a desk late at night, seen from behind. On the laptop screen in front of them a government data table with rows of numbers. In their raised hand a phone showing one falling red line chart. A mug beside the keyboard. Quiet, close, the viewer's own desk. A single still frame, no on-screen text.",
+      "mode": "image",
+      "model": "Nano Banana Pro",
+      "count": 2
+    },
+    {
+      "id": "still-p2-two-objects",
+      "references": [],
+      "prompt": "9:16 vertical, full bleed. Cream paper page, charcoal ink drawing, a single red accent. Two hands enter the frame: the left hand at the top holds a printed government table page with rows of numbers, the right hand at the bottom holds a phone showing one falling red line chart. Cream page between them, nothing else. A diptych of two objects. A single still frame, no on-screen text.",
+      "mode": "image",
+      "model": "Nano Banana Pro",
+      "count": 2
+    }
+  ]
+}

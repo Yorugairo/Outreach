@@ -1979,3 +1979,36 @@ Consequence for the census (§9.28): the fourteen "held-dock stills" are
 not stage-caption cases; they are charts that should have left and come
 back. The re-script's shot table re-enters, it does not hold.
 
+### 9.31 The page VORTEX — how a page leaves, and how it returns (operator, 2026-09-05)
+
+*"All of the colours spiral back into a single point in the charcoal, and all of the charcoal
+swirls back to a single point in the cream."* Then: *"a true spiral of everything getting sucked
+back into the cream as if a vortex / whirlpool"*, *"a way tighter vortex, almost celestial"*, and
+*"we can't do a page wipe AND a spiral back in - the transition should BE the spiral."*
+
+**The retract.** On a page's last two seconds every colour on the page is a particle: each ink
+glyph, each bar, value, tick and label, each badge pill, and every point of the series line. The
+map is closed-form in time (a seek renderer may not integrate):
+
+- the drain takes the centre first — a particle's own clock lags by its radius;
+- the radius falls slowly, then fast (`r(1 − u^1.7)`);
+- the whirl is differential: three turns, the core spinning about four times the rim, which is
+  what makes arms instead of a wheel;
+- each particle stretches along the flow and thins across it, area preserved, then shrinks away;
+- the series line is redrawn point by point through the same map, so it curls into the drain.
+
+Phase two: the crisp charcoal fades to the stains it settled over, and the stains go down the
+same drain. Bare cream at the cut.
+
+**The return.** A page declared `enter=spiral` arrives by the same map run backwards over 1.6 s:
+the stains surface at the drain point and flood, then the galaxy unwinds into the built page. No
+roll-out, no soak, no ink, no build (§9.30: a chart that comes back is never drawn like new), and
+**no page wipe** — the cut lands on bare cream and the spiral is the transition.
+
+**The rules that came with it.** Nothing rides a spiral out: no spotlight, callout, punch or focus
+may overlap a retract (gate M15). A beat that must land on a page's last line declares
+`exit=cut` and the page leaves on the cut instead. Idle frames touch no style and read no layout
+(either one moved landscape text a sub-pixel against the goldens).
+
+Shot-table id: `ledger:<series>:<variant>:<emphasize>:<quiet_zone>[:spiral][:cut]`. Template:
+`LP_RETRACT`, `lpVortex`, `lpParticles`, `lpSpiral`. Tokyo short: 0:31 out, 0:44.6 back.
