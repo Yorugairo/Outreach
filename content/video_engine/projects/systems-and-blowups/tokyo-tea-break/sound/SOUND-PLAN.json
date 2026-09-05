@@ -11,48 +11,39 @@
    }
   },
   {
-   "slot": "page retract 4",
+   "slot": "page retract 4 (flip)",
    "at": 31.05,
    "gain": 0.5,
    "fade_in": 0.0,
    "variants": {
-    "A": "fs-whoosh-2-743004.mp3"
+    "A": "fs-whoosh-1-706679.mp3"
    }
   },
   {
    "slot": "suck 6",
    "at": 38.96,
-   "gain": 0.4,
+   "gain": 0.45,
    "fade_in": 0.0,
    "variants": {
-    "A": "fs-whoosh-2-743004.mp3"
+    "A": "fs-page-roll-464302.mp3"
    }
   },
   {
    "slot": "page enter 7 (spiral)",
    "at": 44.88,
-   "gain": 0.5,
+   "gain": 0.7,
    "fade_in": 0.0,
    "variants": {
-    "A": "fs-whoosh-2-743004.mp3"
+    "A": "fs-whoosh-3-648729.mp3"
    }
   },
   {
-   "slot": "page retract 7",
-   "at": 52.52,
-   "gain": 0.5,
+   "slot": "page retract 7 (whirl)",
+   "at": 52.22,
+   "gain": 0.55,
    "fade_in": 0.0,
    "variants": {
-    "A": "fs-whoosh-2-743004.mp3"
-   }
-  },
-  {
-   "slot": "page enter 9",
-   "at": 64.19,
-   "gain": 0.18,
-   "fade_in": 0.0,
-   "variants": {
-    "A": "fs-page-roll-464302.mp3"
+    "A": "fs-whoosh-4-648732.mp3"
    }
   }
  ],

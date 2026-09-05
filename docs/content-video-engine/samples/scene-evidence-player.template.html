@@ -2292,6 +2292,7 @@
      charcoal fades and the STAINS it settled over are sucked down the same drain. A page declared enter:"spiral"
      ARRIVES by the same map run backwards (E25: a returning chart is not drawn like new); exit:"cut" skips the retract
      (a punch that must land on the last line, E40 #5: no species over a spiral out). Idle frames touch nothing. */
+  const LP_MOUNT_RISE = 28;   /* px a mounting page rises while it dissolves in (enter=mount) */
   const LP_RETRACT = { COLOURS: 1.0, CHARCOAL: 1.0, IN: 1.6, TURNS: 3.0, LAG: 0.25, ALPHA: 0.85, RECT_FADE: 0.3 };   /* operator: "a way tighter vortex, almost celestial" - three turns, the core spinning four times the rim */
   const lpVortex = (x, y, c, Rmax, u) => {
     const dx = x - c.x, dy = y - c.y, r = Math.hypot(dx, dy) || 1e-6, phi = Math.atan2(dy, dx), rn = Math.min(1, r / Rmax);
@@ -2376,7 +2377,8 @@
     if (!st.root.isConnected) { el.querySelectorAll(".lp").forEach((x) => x.remove()); el.appendChild(st.root); }
     const tr = t - scene.span[0] + (pg.enter === "spiral" ? LP_FOCUS_AT + LP_BADGE0 + LP_BADGE_STEP * ((st.badges || []).length + 1) : 0);   /* a spiral entry ARRIVES built: its beats are all past */
     /* beat 1: roll-out */
-    const rk = expoOut(clamp01(tr / LP.ROLL));
+    const mount = pg.enter === "mount", rk = mount ? 1 : expoOut(clamp01(tr / LP.ROLL));   /* a mounting page is in place from its first frame; it RISES (below) while the world dissolves it in */
+    const mk = mount ? (kin("min_jerk") ? minJerk : quartIO)(clamp01(tr / DISSOLVE_S)) : 1;
     /* (the roll-out translate is composed with the punch below) */
     st.edge.style.opacity = (1 - clamp01((tr - LP.ROLL) / 0.25)).toFixed(2);
     /* beat 2: the half savor - the textured page holds, empty (E22 addendum 2) */
@@ -2418,7 +2420,7 @@
     const pk = (pg.punch === false || PORTRAIT) ? 0 : expoOut(clamp01(t3 / LP.PUNCH));   /* a host plate skips the punch: his gesture is the direction; portrait has no margin to spend (P41) */
     const bdc = st.boardCentre || { x: 50, y: 50 };
     st.page.style.transformOrigin = bdc.x.toFixed(2) + "% " + bdc.y.toFixed(2) + "%";
-    st.page.style.transform = "translateX(" + ((rk - 1) * 100).toFixed(2) + "%) scale(" + (1 + (LP.PUNCH_SCALE - 1) * pk).toFixed(4) + ")";
+    st.page.style.transform = "translateX(" + ((rk - 1) * 100).toFixed(2) + "%) " + (mount ? "translateY(" + ((1 - mk) * LP_MOUNT_RISE).toFixed(1) + "px) " : "") + "scale(" + (1 + (LP.PUNCH_SCALE - 1) * pk).toFixed(4) + ")";
     /* beat 6: the build - crisp, landing on the exact strings - on the punched page */
     const c = clamp01((t3 - LP.PUNCH) / (st.buildDur || LP.BUILD));   /* race/decline/combo declare their own envelope */
     st.chart.style.opacity = c > 0 ? 1 : 0;   /* axes and grid belong to the build, not the bleed */
@@ -2791,7 +2793,8 @@
     const su = suck ? clamp01((t - sc.span[0]) / SUCK_S) : 1;
     /* DISSOLVE (operator, 2026-09-05, on the wipe into the outro card - "what is this madness?"): a row whose exit reads dissolve
        arrives by a plain cross-fade over DISSOLVE_S - no front, no seam, the outgoing world keeps playing underneath */
-    const dissolve = prev && sc.exit === "dissolve";
+    const mountIn = prev && sc.world && sc.world.kind === "ledger" && sc.world.page && sc.world.page.enter === "mount";   /* MOUNT (operator, 2026-09-05): the outgoing scene fades while the cream plate mounts over it - no page turn */
+    const dissolve = prev && (sc.exit === "dissolve" || mountIn);
     const dk = dissolve ? (kin("min_jerk") ? minJerk : quartIO)(clamp01((t - sc.span[0]) / DISSOLVE_S)) : 1;
     const wk = prev && !spiralIn && !suck && !dissolve ? (kin("min_jerk") ? minJerk : quartIO)(clamp01((t - sc.span[0]) / WIPE)) : 1;
     const seaming = prev && wk > 0 && wk < 1;
