@@ -281,6 +281,7 @@ def main() -> int:
 
     import build_caption_pages as CP
     CP.BUILD = BUILD
+    CP.CHAR_BUDGET, CP.MAX_WORDS = 46, 7   # a page holds a SENTENCE, 4-7 words (operator, 2026-09-05): the kinetic pops need a unit to read
     CP.main()
 
     rows = shot_table(ws, runtime_s, t_outro)

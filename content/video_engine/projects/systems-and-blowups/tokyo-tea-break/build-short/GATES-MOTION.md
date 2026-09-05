@@ -3,14 +3,18 @@
 ```text
 === MOTION DENSITY GATE: C:\Users\Snipe\Downloads\Outreach Program\content\video_engine\projects\systems-and-blowups\tokyo-tea-break\build-short ===
                runtime: 1:28
-         visual_events: 142 (95.9/min)
+         visual_events: 135 (91.2/min)
                  docks: 0
            dock_source: evidence-dock.json
           ledger_pages: 3
   still_over_12s_share: 0%
-            per_minute: 0:00:111/2 1:00:62/2
+            per_minute: 0:00:105/2 1:00:60/2
 
-  [PASS ] M01 longest still stretch 2.4s at 1:16
+  [FAIL ] M16 longest gap between visual events 3.0s at 0:12; 4 gap(s) over 2.5s: 0:02+2.9s, 0:12+3.0s, 0:35+2.7s, 1:16+2.5s - add motion there (a species, a caption pop, plate life); never cut motion to pass
+          doc 49 s49.6 / operator 2026-09-05: the short-form gate is the pulse - no gap between visual events over 2.5 s; no ceiling
+  [WARN ] M06 35 caption pages = 24/min, 6.7 words/page
+          s9.15 r7 / build_caption_pages 4-6 words
+  [PASS ] M01 longest still stretch 3.0s at 0:12
           doc 29 s8.19 / s9.25 stillness ceiling
   [PASS ] M02 0 stretches > 8s (working target)
           doc 29 s9.25
@@ -20,8 +24,6 @@
           doc 29 s9.13 plate density
   [PASS ] M05 no plate over the 20s hold ceiling
           doc 29 s9.13 hard ceiling
-  [PASS ] M06 43 caption pages = 29/min, 5.5 words/page
-          s9.15 r7 / build_caption_pages 4-6 words
   [PASS ] M08 timeline declares cap_mode; every stretch over the ceiling carries stage captions (counted as events above)
           doc 29 s9.25 caption STAGE mode (E21: captions ARE the motion when nothing else moves)
   [PASS ] M09 no scene stacks two camera moves (punch | focus_zoom | pull_back) or a camera move over Ken Burns
@@ -36,15 +38,13 @@
           47 s2 G-a / doc 07 Pillar 4 (saccadic suppression): a camera move may not overlap an evidence build - the eye is blind during the move
   [PASS ] M15 no species window overlaps a page's retract
           E40 #5 (operator, 2026-09-05): no spotlight on a spiral out - no species window overlaps a page's retract
-  [PASS ] M16 longest gap between visual events 2.4s at 1:16; 0 gap(s) over 2.5s
-          doc 49 s49.6 / operator 2026-09-05: the short-form gate is the pulse - no gap between visual events over 2.5 s; no ceiling
-  [INFO ] M07 short: 1 full minute(s) in 89s - opening 111.0 events/min, 2.0 evidence entries/min; tail from 1:00 62.5/min; whole runtime 94.6/min - no minute distribution to rank in (E21 is judged on the whole)
+  [INFO ] M07 short: 1 full minute(s) in 89s - opening 105.0 events/min, 2.0 evidence entries/min; tail from 1:00 60.4/min; whole runtime 89.8/min - no minute distribution to rank in (E21 is judged on the whole)
           E21: the opening is the densest minute, never the thinnest
   [JUDGE] J01 every savor beat holds its picture (card up, badge lit), never a bare plate with a drift
           doc 29 s9.25 #3
 
-RESULT: 0 FAIL / 0 WARN / 14 PASS / 1 JUDGE / 1 INFO
+RESULT: 1 FAIL / 1 WARN / 12 PASS / 1 JUDGE / 1 INFO
 ```
 
-TIMELINE: tokyo-short.timeline.json sha256:e39061a60ba6830f5f6205a0ecc2f918979f1125e62b6781697353837e3381f2
-VERDICT: PASS (0 FAIL)
+TIMELINE: tokyo-short.timeline.json sha256:22a6cba36db9c818f10108dd7ef8c6209aaae22b2376ed036d33a9b1bcfebc74
+VERDICT: FAIL (1 FAIL)

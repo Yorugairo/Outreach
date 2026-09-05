@@ -1717,7 +1717,7 @@
      keywords take the accent box, other words the charcoal box (brand tokens, never the reference's red) */
   /* knobs turned down (operator, 2026-09-05: 'it starts out WAY too busy ... a lot of flashes, not a lot of motion - an old lesson'):
      no flash; the phrase SETTLES over LAND_S from a small scale and rise; the keyword's pop is slight and its box sweeps slowly */
-  const MARK = { RED: [[255, 23, 69], [223, 18, 56]], LAND_S: 0.45, LAND_SCALE: 1.06, RISE_PX: 10, SWEEP_S: 0.28, KPOP: 1.1 };
+  const MARK = { RED: [[255, 23, 69], [223, 18, 56]], RISE_PX: 10, SWEEP_S: 0.2, KPOP: 1.1 };   /* the keyword's box sweep and slight extra pop */
   const markBox = (c, a) => "linear-gradient(135deg, rgba(" + c[0].join(",") + "," + a.toFixed(3) + ") 0%, rgba(" + c[1].join(",") + "," + a.toFixed(3) + ") 100%)";
   const stagePop = (u) => { const c1 = 1.70158, c3 = c1 + 1; const x = u - 1; return 1 + c3 * x * x * x + c1 * x * x; };
   const LP = { ROLL: 0.7, SAVOR: 0.8, FIELD: 2.4, PUNCH: 0.5, INK: 2.0, BUILD: 3.0, SEEPS: 9, STROKES: 14, KB_MAX: 0.03,
@@ -3021,13 +3021,15 @@
           /* stage: each word pops in at its own spoken time (words.json), never at the page boundary.
              The pop is a pure function of t painted inline (see stagePop) so a scrubbed render
              captures mid-pop frames and two renders of one second are identical. */
-          if (stage && PHRASE) {   /* THE BLEND: the phrase lands as one (gold flash -> white); only a keyword moves with the voice */
+          if (stage && PHRASE) {   /* KINETIC (operator, 2026-09-05: 'we need more kinetic activity ... back to dynamic captions, 4-7 words per
+             sentence'): the golden set's word pops - each word lands on its own spoken time with the explosive spring and a rise -
+             on a page that holds a sentence; a keyword takes the red box as it lands and stays gold on it */
             const pop = kin("analytic_spring") ? springPop : stagePop;
-            const e = pop(clamp01((t + 0.05 - pg.s) / MARK.LAND_S));                      /* the phrase's one settle and rise - motion, not a flash */
-            const ke = x.k ? pop(clamp01((t - x.s) / MARK.LAND_S)) : 0, kOn = x.k && t >= x.s;
+            const e = pop(clamp01((t + 0.05 - x.s) / STAGE_POP_S));                       /* this word's own pop and rise */
+            const ke = e, kOn = x.k && t >= x.s;
             const hk = x.k ? pow2out(clamp01((t - x.s) / MARK.SWEEP_S)) : 0;            /* the keyword's box sweeps in when spoken, stays */
             ws[j].style.opacity = Math.min(1, e * 2).toFixed(3);
-            const sc = (MARK.LAND_SCALE + (1 - MARK.LAND_SCALE) * e) * (kOn ? (MARK.KPOP + (1 - MARK.KPOP) * ke) : 1);
+            const sc = (1.16 + (1 - 1.16) * e) * (kOn ? (MARK.KPOP + (1 - MARK.KPOP) * ke) : 1);
             ws[j].style.transform = "translateY(" + (MARK.RISE_PX * (1 - e)).toFixed(1) + "px) scale(" + sc.toFixed(4) + ") rotate(calc(var(--tilt, 0deg) * " + (1 - e).toFixed(3) + "))";
             ws[j].style.backgroundImage = hk > 0 ? markBox(MARK.RED, 1) : "";
             ws[j].style.backgroundSize = hk > 0 ? (hk * 100).toFixed(1) + "% 100%" : "";

@@ -18,7 +18,7 @@ BUILD = REPO / ("content/video_engine/projects/systems-and-blowups/"
 # CHAR_BUDGET raised 18 -> 34 (operator/watch feedback 2026-09-01: pages
 # were reading 2-3 words; wants 4-6 at a time). MAX_WORDS is the hard cap
 # so a run of short words can't overfill a page past readability.
-CHAR_BUDGET = 34
+CHAR_BUDGET = 34   # a build may raise these (the Tokyo short: 46 / 7 - a page holds a sentence, operator 2026-09-05)
 MAX_WORDS = 6
 GAP_BREAK = 0.60
 NUM = {"one", "two", "three", "four", "five", "six", "seven", "eight",
