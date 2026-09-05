@@ -255,9 +255,12 @@ def _doc38_opening(sp: str, sents: list[str], stats: dict, add) -> None:
             "no dated/checkable promise detected inside the first 60s")
 
 
-def audit(text: str, script_path: Path | None = None, short: bool = False) -> tuple[list[Finding], dict]:
+def audit(text: str, script_path: Path | None = None, short: bool = False,
+          defer_opening: bool = False) -> tuple[list[Finding], dict]:
     """short=True (G2, 2026-09-05): the shorts shape - doc 35 rule 2's flip block and the MAP sec 1 P1 pin are long-form
-    draw-outs and do not bind (operator 2026-09-04 on the Tokyo short: 'a short has no late-stage flip')."""
+    draw-outs and do not bind (operator 2026-09-04 on the Tokyo short: 'a short has no late-stage flip').
+    defer_opening=True: the caller (the runner) is about to write the gates report that owns doc 38 beats 1-4, so the
+    audit points at it instead of restating them (R1) even though the file is not on disk yet."""
     out: list[Finding] = []
     sp = spoken(text)
     n = len(sp)
@@ -353,6 +356,9 @@ def audit(text: str, script_path: Path | None = None, short: bool = False) -> tu
     # R1: one row, one verdict. With a gates report beside the script the
     # opening gate owns beats 1-4; the audit points at it instead.
     report = gate_report(script_path)
+    if report is None and defer_opening and script_path is not None:
+        import run_script_gates  # lazy: run_script_gates imports this module
+        report = run_script_gates.report_path(Path(script_path))   # the runner writes it right after this audit
     if report is not None:
         add("INFO", "doc 38 B1-B4",
             f"owned by gate_opening_structure - see {report}")
@@ -522,13 +528,15 @@ def main() -> int:
     ap.add_argument("script", type=Path)
     ap.add_argument("--pivot", help="verbatim anchor for the phase-4 pivot")
     ap.add_argument("--short", action="store_true", help="G2: the shorts shape - doc 35 rule 2 and the P1 pin do not bind")
+    ap.add_argument("--defer-opening", action="store_true",
+                    help="the runner is writing the gates report: doc 38 beats 1-4 are its rows (R1), even before the file exists")
     args = ap.parse_args()
 
     text = args.script.read_text(encoding="utf-8")
-    findings, stats = audit(text, script_path=args.script, short=args.short)
+    findings, stats = audit(text, script_path=args.script, short=args.short, defer_opening=args.defer_opening)
     if args.short:
         stats["mode"] = "short (G2)"
-    deferred = gate_report(args.script) is not None
+    deferred = args.defer_opening or gate_report(args.script) is not None
 
     # If a take exists, measure the tight gates instead of estimating them.
     first = sentences(spoken(text))[0] if sentences(spoken(text)) else ""

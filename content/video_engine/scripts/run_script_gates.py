@@ -189,7 +189,9 @@ def is_short(args: argparse.Namespace) -> bool:
 
 
 def run_audit(script: Path, pivot: str | None, short: bool = False) -> ToolResult:
-    argv = [str(script)] + (["--pivot", pivot] if pivot else []) + (["--short"] if short else [])
+    # --defer-opening: this runner writes the gates report that owns doc 38 beats 1-4 (R1) - the audit runs first, so
+    # without the flag a FRESH script had the audit restating beats the gate was about to rule on (red since 2026-09-03)
+    argv = [str(script), "--defer-opening"] + (["--pivot", pivot] if pivot else []) + (["--short"] if short else [])
     code, out = _call_main("audit_script_doctrine.py", A.main, argv)
     m = AUDIT_RESULT_RE.search(out)
     fails, warns = (int(m.group(1)), int(m.group(2))) if m else (-1, -1)

@@ -125,3 +125,16 @@ def test_main_prints_the_pointer_and_keeps_the_result_line(tmp_path, monkeypatch
     assert out.count(POINTER) == 1, out
     assert not re.search(r"\[(?:FAIL|WARN)\] doc 38 beat [1-4]", out), out
     assert re.search(r"^RESULT: \d+ FAIL, \d+ WARN$", out, re.M), out
+
+
+def test_defer_opening_flag_defers_before_the_report_exists(tmp_path):
+    """The runner audits first and writes the report second; it says so, and the audit points at the path it will write."""
+    script = _script(tmp_path)
+    assert A.gate_report(script) is None
+    findings, _ = A.audit(script.read_text(encoding="utf-8"), script_path=script, defer_opening=True)
+    assert _deferred(findings) == []
+    pointers = [f for f in findings if POINTER in f.message]
+    assert len(pointers) == 1 and str(RG.report_path(script)) in pointers[0].message
+    # without a script path there is nothing to point at: the rows stay
+    findings, _ = A.audit(script.read_text(encoding="utf-8"), defer_opening=True)
+    assert _deferred(findings) != []
