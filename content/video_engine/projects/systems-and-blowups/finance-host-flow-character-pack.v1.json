@@ -57,12 +57,12 @@
     },
     {
       "id": "finance-host-stick-v1",
-      "label": "The same presenter at acquisition abstraction - shorts, listicles, thumbnails",
+      "label": "The same presenter as a stick figure - shorts, listicles, thumbnails",
       "role": "fictional_presenter",
       "variant": "acquisition",
       "variant_of": "finance-host-v1",
-      "prompt": "The same original fictional Black male finance presenter in his thirties, warm brown skin, drawn as a flat high-contrast cartoon that stays legible when he fills five percent of a phone screen. He keeps exactly the features that survive simplification: short sculpted loc twists with a clean taper, black rectangular glasses, a neatly trimmed goatee, a flat deep-indigo suit block and a flat copper tie block. Thick uniform black outlines, solid colour fills, a large readable head, simple clearly-separated hands, plain white ground, friendly analytical expression, fully visible hands and feet.",
-      "negative_prompt": "No lapel pin, no pocket square, no patterned or textured shoes, no suit tailoring detail, no paper or woodblock texture, no shading gradients, no photorealism, no celebrity likeness, no generated words, numbers, charts, logos, currency symbols, or watermarks.",
+      "prompt": "A stick figure version of the original fictional Black male finance presenter: a large round head with a big wide face and big expressive eyes behind black rectangular glasses, a small neatly trimmed goatee, warm brown skin, and short sculpted loc twists on top of the head. The body is a thin single-line black stick figure with simple stick arms and legs and small round hands, wearing only a small flat deep-indigo suit block on the torso with a flat copper tie. Thick uniform black lines, solid flat colour fills, plain white ground, friendly analytical expression, legible when he fills five percent of a phone screen.",
+      "negative_prompt": "No realistic anatomy, no detailed tailoring, no lapel pin, no pocket square, no shoes with pattern, no paper or woodblock texture, no shading gradients, no photorealism, no celebrity likeness, no generated words, numbers, charts, logos, currency symbols, or watermarks.",
       "reference_views": [
         "front",
         "profile",
@@ -87,7 +87,7 @@
         "shrugging"
       ],
       "style_atom_ids": [
-        "flat-acquisition-icon-v1",
+        "stick-figure-big-face-locs-v1",
         "thick-outline-solid-fill"
       ],
       "scene_uses": [
@@ -112,5 +112,5 @@
     "provider_output_render_eligible": false
   },
   "render_eligible": false,
-  "artifact_hash": "fcf83f60aa88c1b8f5c2a8b02f8cdb24ec2bc5b68620f312cc18d6778120c8b5"
+  "artifact_hash": "ce28d0bd6e1cc3d36041eba5d1bcb32124bb25716cd7ae3adac12dc5be7b37d7"
 }

@@ -7,7 +7,7 @@
   "backlog_item": "A0",
   "character_pack": {
     "path": "content/video_engine/projects/systems-and-blowups/finance-host-flow-character-pack.v1.json",
-    "artifact_hash": "fcf83f60aa88c1b8f5c2a8b02f8cdb24ec2bc5b68620f312cc18d6778120c8b5"
+    "artifact_hash": "ce28d0bd6e1cc3d36041eba5d1bcb32124bb25716cd7ae3adac12dc5be7b37d7"
   },
   "project_url": "https://labs.google/fx/tools/flow/project/d171ec1f-d4a2-4b79-b76e-32460193dccc",
   "project_note": "The project where @Mike is verified bound (Tokyo: plate-01-fed-briefing-mike-v3, omni scene-01-02). The older character URL under 62f78040 is the setup record, not the working binding.",
@@ -26,18 +26,13 @@
       "prompt_sha256": "ba94dff6283b6b1d1176b81ad1e91b57f2e1154415cba7ac487df8eec69085e5"
     },
     {
-      "id": "finance-host-stick-v1-model-sheet",
+      "id": "finance-host-stick-v1-model-sheet-v2",
       "character_id": "finance-host-stick-v1",
       "bound_character": null,
-      "references": [
-        {
-          "asset_id": "finance-host-identity-master-v3",
-          "path": "assets/generated/host/finance-host-identity-master-v3.png",
-          "sha256": "86242df3292ab528c0645fc8b9f65e8344a4e3f0b60478efb2beb78435c0e403"
-        }
-      ],
-      "prompt": "The same presenter as the reference image, redrawn as a flat high-contrast cartoon, as a character model sheet on a plain white ground, 16:9, three rows with small handwritten row labels. Top row, standing neutral at identical height: front view, left side view, three-quarter view, back view. Middle row, five head-and-shoulders portraits: happy, neutral, surprised, worried, angry. Bottom row, five full-body poses: waving, thinking with a hand at the chin, presenting with an open palm toward the viewer, explaining with both hands raised, shrugging. Consistent proportions in every cell, fully visible hands and feet. He keeps only short sculpted loc twists with a clean taper, black rectangular glasses, a neatly trimmed goatee, warm brown skin, a flat deep-indigo suit block and a flat copper tie block, drawn with thick uniform black outlines and solid colour fills on a plain white ground so he reads at thumbnail size. Negative: no lapel pin, no pocket square, no patterned shoes, no paper texture, no shading gradients, no text other than the row labels, no numbers, no charts, no logos.",
-      "prompt_sha256": "3930246c48e098f94bd807c78778a7265c9a2a4d6a17376a0f35c6c6818b53db"
+      "references": [],
+      "prompt": "A stick figure character as a character model sheet on a plain white ground, 16:9, three rows with small handwritten row labels. Top row, standing neutral at identical height: front view, left side view, three-quarter view, back view. Middle row, five head-only portraits: happy, neutral, surprised, worried, angry. Bottom row, five full-body poses: waving, thinking with a hand at the chin, presenting with an open palm toward the viewer, explaining with both hands raised, shrugging. Consistent proportions in every cell. He is a stick figure with a large round head, a big wide face and big expressive eyes behind black rectangular glasses, a small neatly trimmed goatee, warm brown skin, short sculpted loc twists on top of the head, a thin single-line black stick body with simple stick arms and legs and small round hands, and only a small flat deep-indigo suit block on the torso with a flat copper tie. Thick uniform black lines and solid flat colour fills so he reads at thumbnail size. Negative: no realistic anatomy, no detailed tailoring, no lapel pin, no shoes with pattern, no shading gradients, no text other than the row labels, no numbers, no charts, no logos.",
+      "prompt_sha256": "0c495612d09244b2467dc71f3baa6329467cc3308b2810c58edded7c65fe7d91",
+      "note": "v2 - a real stick figure (operator: big wide face and eyes, locs). No reference image: the detailed master pulled v1 into flat 2D Mike."
     }
   ],
   "driver_checks_on_return": [
@@ -90,6 +85,37 @@
       "path": "review/claims/finance-host-model-sheets-001/finance-host-v1-model-sheet-x4-raw-4.png",
       "sha256": "f7f3b3b8350182a1954cc33e78f87bcdd7607d2b3a8ead65159777c926ab4d39",
       "bytes": 715033
+    },
+    {
+      "scene_id": "finance-host-stick-v1-model-sheet-v2",
+      "path": "review/claims/finance-host-model-sheets-001/finance-host-stick-v1-model-sheet-v2-raw.png",
+      "sha256": "3d7794018d33b0fd6e4af553c5ff1956e06945ca46e5d042f9b98fb48bff7ee7",
+      "bytes": 454967
+    },
+    {
+      "scene_id": "finance-host-stick-v1-model-sheet-v2",
+      "path": "review/claims/finance-host-model-sheets-001/finance-host-stick-v1-model-sheet-v2-raw-2.png",
+      "sha256": "26ffb2a863acc195649119a9a2f5f2428bea8db7dae720c5eff16a33dbe71053",
+      "bytes": 479727
+    },
+    {
+      "scene_id": "finance-host-stick-v1-model-sheet-v2",
+      "path": "review/claims/finance-host-model-sheets-001/finance-host-stick-v1-model-sheet-v2-raw-3.png",
+      "sha256": "320911141ae0b7279eb417f1cd9c8d7a53dbcd3071d8d952f77af0c10e6a9679",
+      "bytes": 522124
+    },
+    {
+      "scene_id": "finance-host-stick-v1-model-sheet-v2",
+      "path": "review/claims/finance-host-model-sheets-001/finance-host-stick-v1-model-sheet-v2-raw-4.png",
+      "sha256": "93985dd92c4aadf5152d7103233fd2b821f85ae22a848a28b3d2a1e651876e5c",
+      "bytes": 470184
+    },
+    {
+      "scene_id": "finance-host-v1-model-sheet",
+      "path": "review/claims/finance-host-model-sheets-001/finance-host-v1-model-sheet-composite.png",
+      "sha256": "324e4cc61c44da756071a9427e96432bbcd972009b9ce253e287168bcd8cbec8",
+      "bytes": 1648030,
+      "note": "operator's pick: the first roll with the back view composited in from x4-raw-4 (PIL, no generation)"
     }
   ],
   "review_state": "quarantined",
@@ -121,7 +147,15 @@
       "count": 4,
       "result": "Three distinct sheets (one src collected twice; fourth still rendering at the 45s quiet cut-off). raw-4 matches the master: short tapered locs, pin, floral shoes, full 4/5/5 rows. raw and raw-3 drifted to long locs with @Mike bound and no re-description - the binding holds identity loosely under x4 variance.",
       "recommendation": "finance-host-v1-model-sheet-x4-raw-4.png"
+    },
+    {
+      "attempt": 5,
+      "date": "2026-09-04",
+      "scene": "finance-host-stick-v1-model-sheet-v2",
+      "count": 4,
+      "result": "Four real stick figures, no reference image. raw-2 recommended (widest eyes, rectangular glasses, most consistent); raw-4 alternate; raw-1 gave round glasses; raw-3 small eyes. A first run of this batch failed on a transient click timeout before submit.",
+      "recommendation": "finance-host-stick-v1-model-sheet-v2-raw-2.png"
     }
   ],
-  "artifact_hash": "7b4727277c58c6372aa3c9e90aaeb291997b9c99fb736c073f0cf9e45d9814ee"
+  "artifact_hash": "62612ac4b5cebf0b13d18e3c6a9ba651f76fafbf555383b51a1dd856678ffe20"
 }
