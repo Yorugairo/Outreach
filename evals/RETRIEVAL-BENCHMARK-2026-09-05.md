@@ -71,3 +71,40 @@ reasoning, the operator's conversation, the brief and the review of every delega
 4. The bench to keep is this one: questions with held ground truth, re-run per model or harness change.
    Next additions: a build task (regenerate a gates report; compile the short's timeline and diff it) and
    a doc-maintenance task (strike a BACKLOG row, add a CAPABILITIES row) with the same three metrics.
+
+## Round 2 — the hard retrievals (same day, same method)
+
+Operator: "what about difficult retrievals - deep in the evidence layer, obscure maths research in sections
+not labelled on the evidence layer, unknown animation problems, new animation opportunities from the research?"
+Five harder questions; ground truth established by the parent verifying every cited `path:line` after the fact.
+
+| Q | lookup | Explore (Fable) tokens / tools / s | explorer (Opus) tokens / tools / s | verdict |
+|---|---|---|---|---|
+| 6 | analytic spring: the derivation doc, regimes, params, where each lands in code | 58,352 / 9 / 46 ✓ found the research bundle (`sources/.../07_academic_literature_…md:218-229`, §5.3 at :311) | 42,136 / 7 / 34 ✗ on one claim: called doc 42's pointer to "07 §5.3" a **dangling reference** - it exists | Fable deeper |
+| 7 | Kubelka-Munk: the research, the K/S choice, constants, why ruled OFF, what the flag is kept for | 58,608 / 8 / 209 ✓ (+ the P43 plan) | 38,298 / 7 / 39 ✓ (+ noted the ruling is absent from OPERATOR-RULINGS) | tie |
+| 8 | evidence layer: which record established the hedged-yield figure, source, date, consumer | 57,194 / 10 / 57 ✓ | 55,704 / 11 / 65 ✓ same conclusion ("no gate consumes it") | tie |
+| 9 | caption boil/lift constants, boil fps, the tone-down and its previous values, the flashes lesson | 65,478 / 18 / 191 ✓ (three git generations of values) | 38,308 / 9 / 81 ✓ (one generation, via `git show 301d7c8`) | Fable deeper |
+| 10 | THREE documented-but-unimplemented drawing techniques with absence proofs | 60,327 / 12 / 64 ✓ clothoid (42 §42.4), ARAP (flag declared at template :446, never read), syllable-locked type | 46,907 / 12 / 71 ✓ Deegan dark rim (44 §44.2), clothoid, ARAP | both valid |
+| | **total** | **299,959 / 57 / 567 s — 5/5** | **221,353 / 46 / 290 s — 4.5/5** | |
+
+- On hard questions the Opus role still costs **26 % fewer tokens and half the wall time**, and both found the
+  obscure material (the research bundle, the evidence finding files, git history for values no doc records).
+- **The one Opus error is the failure mode to guard: a false negative** ("that section does not exist"). Fable
+  went one directory deeper (the `sources/` research bundle) and one more git generation back. Rule for the
+  brief: a delegated agent may report "not found in the places I searched", never "does not exist"; the parent
+  verifies every negative claim (one grep) before acting on it.
+- Open-ended synthesis (Q10) works on both: every opportunity named was doc-grounded and its absence proof
+  reproduced (the ARAP flag is declared and never read; no clothoid anywhere; the dark rim is spec'd in 44 §44.2
+  and absent from `ink.mjs`). Two of the three are already BACKLOG rows (D1, T4); the Deegan rim and the
+  syllable-locked type are documented but unlisted.
+
+## The persistence question
+
+"Don't we save dispatch tokens with a named agent that persists?" Could not be measured in this build: the
+`SendMessage` continuation tool is not exposed here, so every dispatch was fresh. What is known: the fixed
+overhead (~20-25 k) is the system prompt + rules + repo instruction files; a continued agent pays it once as
+fresh tokens and afterwards as prompt-cache reads, but each continued turn re-sends its whole accumulated
+context, so a long-lived explorer gets heavier per turn, not lighter. The saving a persistent agent really
+offers is fewer *tool calls* (it already knows the tree). ECC's agents are the same frontmatter mechanism and do
+not persist either; the native lever is the `memory` frontmatter key (per-agent memory across sessions) - the
+next experiment: enable it on `explorer`, run rounds 1-2 again in a later session, compare tool calls.
