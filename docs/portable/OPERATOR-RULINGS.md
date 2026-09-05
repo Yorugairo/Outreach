@@ -1228,3 +1228,31 @@ Three linked rulings on the host's art:
 character alike (E33's construct/generate split stays; the *look* is now shared). Bound as
 `@StickMike` beside `@Mike` (rebound from the approved retention sheet as `@Mike`; the
 original master kept as `@MikeMasterV3`).
+
+## E40 — Image generation is the strong tool; video only by FRAMES, never by ingredients (2026-09-05)
+
+On the first full pass of the Tokyo short, with six Omni clips as worlds:
+
+- *"The video generation is hit and miss. I also don't know how much value these omni videos are
+  actually adding. Some of them I feel we could do with our own setup now that we researched the
+  animation math and tool capabilities."*
+- *"The truth is that the image generation is very powerful, the video generation is less so, and
+  if it is going to be used, it has to be by frames, not ingredients. Frames give us two points
+  and a character to control the scene with."*
+
+What this rules:
+
+1. **Generated stills are the asset.** Image mode (free, contact-sheeted, approved) is where the
+   character and the world come from. A still plus our own motion (the page, the stage captions,
+   the push, the ledger's build / retract / spiral re-entry, the species) is the default world.
+2. **A generated clip is the exception, and it is frame-driven**: a START frame and an END frame,
+   both approved stills, with the character chip. "Ingredients" mode (chip + prompt) is out for
+   shots: it holds the character about one time in six and cannot be steered.
+3. **Before any clip is generated, ask whether our own setup already does the motion** (doc 29
+   Parts 3/8/9, doc 47 the animation math, E32's list). The clip has to buy something a still
+   cannot.
+4. Same day, on the pages: *"the biggest problem is re-using the same chart back to back and
+   drawing it like it's new"* — a returning page unwinds from its point (`enter=spiral`), never
+   rolls out and builds again (E25). And the page LEAVES by spiral: the colours wind into a
+   point in the charcoal, the charcoal winds into a point in the cream (template `LP_RETRACT`).
+
