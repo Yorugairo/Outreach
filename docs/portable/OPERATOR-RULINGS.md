@@ -1160,3 +1160,71 @@ spine** — ten unrelated nouns versus one equation six times.
 The bar is **deliberately lower**: legible type, one clear image, a caption that lands.
 Doc 29 is the long-form bar and applying it here is what made shorts expensive. Spec:
 **51-THE-SHORTS-FORMAT.md**, one page.
+
+
+---
+
+## E36 — The Flow driver is standing-approved; images are free (2026-09-04)
+
+*"I get 10,000 Flow credits per month, +50 free per day. Image generation is free — you are
+always free to use the Google MCP for image generation and to test thumbnails. The Google
+Flow Chrome was set up specifically for this; you are always approved for MCP use."*
+
+Drive Flow (the CDP driver / `video-engine` MCP) without asking, for stills, model sheets,
+thumbnail tests and video within the budget. What still holds: outputs stay in **review
+quarantine** until the operator approves a contact sheet; a bound character is named, never
+re-described; paid audio is a separate lane.
+
+**Why:** the earlier per-action consent rule was written when credits looked scarce and the
+Chrome was the operator's own working session. It is now a dedicated automation browser, and
+asking per roll was the bottleneck. The day's evidence: seven model-sheet rolls, two bound
+characters, one corrected parallax roll — all at 0 credits.
+
+## E37 — Judges drive Codex through the CLI, as a batch; never an API (2026-09-04)
+
+*"You don't API call, you just drive Codex via CLI like we do for the other judging. And since
+Codex is judging we don't have to ship individual pairs — it can do it all at once."*
+
+Every judged check (47 §2b) is: a manifest, one headless `codex exec` with every image attached
+(`-i` first — it is variadic and swallows the prompt), one JSON array back, and a **verdict
+computed in code** from the model's reading. No `openai` / `anthropic` imports for judging.
+
+**Why:** the operator's subscription agents are the judging capacity; no model API keys exist on
+this host by design. One run per episode is cheaper and faster than one per pair, and it
+matches the viewer (P36), which already works this way.
+
+## E38 — Thresholds are measured on the reference, then compared to ours (2026-09-04)
+
+*"Is basing the gap threshold off our own work really the right way? I think we should check
+Wealth Logic's gap threshold and compare against ours."*
+
+A production number — rhythm, density, placement — is measured on the reference that works
+with the same tool, then ours is measured the same way, and the comparison is the finding.
+Our own practice is never the calibration source: it is the thing under suspicion.
+
+**Why:** done that way the cut-gap answer was different from *both* research reports — 0.30 s
+(not 0.45), the cut at ~0.8 of the gap (not onset, not midpoint) — and it overturned a false
+"we have fewer pauses" read that came from mixing aligners. A threshold fitted to our own
+episode would have formalised the failure the retention curve is reporting.
+
+## E39 — The stick lane lives on the house ground; the paper-toy medium is out (2026-09-04)
+
+Three linked rulings on the host's art:
+
+- *"Most of the finance pack is bad — we don't want the paper-toy looking assets; really only
+  the host character is good."* The hand-cut crinkle-paper puppet medium is gone from the
+  character prompt. The identity (locs, glasses, goatee, indigo suit, copper tie, floral shoes)
+  is what survives.
+- The recognised Flow directive for our assets, verbatim: **"A light application of woodblock
+  print and vox newspaper with rich anime colors."** It is in eight shipped Tokyo prompts beside
+  `@Mike`; it is the host's single style atom.
+- *"I agree we should try the cream. If cream works it gives us a unique space and opens up
+  using the drawing lane to create both styles."* Stick Mike is a **stick figure on the cream
+  `#F4E6C7` page with charcoal `#25313C` ink** — not white ground, not a flattened 2D Mike, not a
+  mascot: brush weight, features that snap to extremes, mid-action, attitude. The roll came
+  back on a deckle-edged page unprompted: the E22 signature with the figure on it.
+
+**Why:** one ground for the page and the man means one drawing lane can carry evidence and
+character alike (E33's construct/generate split stays; the *look* is now shared). Bound as
+`@StickMike` beside `@Mike` (rebound from the approved retention sheet as `@Mike`; the
+original master kept as `@MikeMasterV3`).
