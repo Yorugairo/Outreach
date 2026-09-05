@@ -245,10 +245,11 @@ export class FlowCdpDriver {
     // the drawer animates open after the pill click: poll before concluding it is closed
     let radio = null;
     for (let i = 0; i < 8 && !radio; i++) { radio = await find(); if (!radio) await page.waitForTimeout(400); }
-    if (!radio) {
-      // the drawer is not open: open it from the settings pill and look again
+    // the pill TOGGLES the drawer: if it was left open by the previous scene, one click closes it and
+    // a second reopens it - so try the pill up to twice, polling after each
+    for (let attempt = 0; attempt < 2 && !radio; attempt++) {
       const pill = this.settingsPill();
-      if (await pill.count() > 0) { await pill.first().click({ timeout: 8000 }); }
+      if (await pill.count() > 0) { await pill.first().click({ timeout: 8000 }).catch(() => {}); }
       for (let i = 0; i < 8 && !radio; i++) { await page.waitForTimeout(400); radio = await find(); }
     }
     if (!radio) {
