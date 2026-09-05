@@ -519,6 +519,18 @@ export class FlowCdpDriver {
       const prefix = characters && characters.length > 0 ? ' ' : '';
       await page.keyboard.insertText(prefix + body.trim());
       await page.waitForTimeout(500);
+      // E29: verify what LANDED. Scenes after the first in a batch were generating the previous
+      // scene's picture (Tokyo stills, 2026-09-04) - the composer text is read back and must carry
+      // this prompt's opening words and nothing like twice its length (a leftover prompt).
+      const landed = (await editor.innerText().catch(() => '')).replace(/\s+/g, ' ').trim();
+      const head = body.trim().slice(0, 40).replace(/\s+/g, ' ');
+      if (!landed.includes(head)) {
+        throw new Error(`Prompt did not land in the composer (expected "${head}...", composer reads "${landed.slice(0, 80)}").`);
+      }
+      if (landed.length > body.trim().length * 1.6 + 40) {
+        throw new Error(`Composer carries more than this prompt (${landed.length} chars for a ${body.trim().length}-char prompt) - a previous prompt was not cleared: "${landed.slice(0, 80)}"`);
+      }
+      console.log(`[FlowCdpDriver] Prompt verified in the composer (${landed.length} chars).`);
     }
   }
 
