@@ -473,11 +473,11 @@ def test_a_spiral_entry_credits_one_beat_and_every_page_credits_its_retract():
     tl["scenes"][3]["world"]["page"]["enter"] = "spiral"
     ev = G.analyse(tl, docks, mp)["events"]
     assert 17.0 in ev and 18.2 in ev and 17.7 not in ev, ev           # the unwind, not the roll-out
-    assert 31.2 in ev and 32.0 in ev, ev                              # the retract on a page ending at 33.0
+    assert 31.0 in ev and 32.0 in ev, ev                              # the retract on a page ending at 33.0
     ev2 = G.analyse(_short_build(page_at=17.0)[0], docks, mp)["events"]
-    assert 17.7 in ev2 and 31.2 in ev2, ev2                           # a full entry keeps its beats and still retracts
+    assert 17.7 in ev2 and 31.0 in ev2, ev2                           # a full entry keeps its beats and still retracts
     tl3 = _short_build(page_at=17.0)[0]; tl3["scenes"][3]["world"]["page"]["exit"] = "cut"
-    assert 31.2 not in G.analyse(tl3, docks, mp)["events"]            # exit=cut: no retract beats
+    assert 31.0 not in G.analyse(tl3, docks, mp)["events"]            # exit=cut: no retract beats
 
 
 def test_m15_refuses_a_species_over_the_retract_unless_the_page_exits_on_the_cut():
@@ -485,7 +485,7 @@ def test_m15_refuses_a_species_over_the_retract_unless_the_page_exits_on_the_cut
     assert _by_id(G.run(tl, docks, mp)[0])["M15"].level == "PASS"
     tl["scenes"][3]["species"].append({"kind": "punch", "at": 32.5, "dur": 0.9, "target": {"kind": "datum", "index": 3}})
     g = _by_id(G.run(tl, docks, mp)[0])
-    assert g["M15"].level == "FAIL" and "punch 32.5-33.4s over the retract from 31.2s" in g["M15"].message, g["M15"]
+    assert g["M15"].level == "FAIL" and "punch 32.5-33.4s over the retract from 31.0s" in g["M15"].message, g["M15"]
     tl["scenes"][3]["world"]["page"]["exit"] = "cut"
     assert _by_id(G.run(tl, docks, mp)[0])["M15"].level == "PASS"
 
