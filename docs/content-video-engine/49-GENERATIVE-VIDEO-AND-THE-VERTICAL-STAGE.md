@@ -58,11 +58,16 @@ alike. Do not crop; **re-stage**:
 | zone | y | holds |
 |---|---|---|
 | 1 · hook & metric | 140–480 | category chip, headline, live delta |
-| 2 · evidence | 480–1340 | **the cream ledger card, 1000 × 562.5, uncropped** — 100 % of the chart |
-| 3 · captions & host | 1340–1800 | word-level kinetic type, host hands docked to the card |
+| 2 · evidence | 480–1340 | **the chart, rebuilt for the portrait frame** — 100 % of the series, on the page's own ground |
+| 3 · captions & host | 1340–1800 | word-level kinetic type, host hands docked to the page |
 
-The ledger page keeps its own 16:9 proportion *inside* the vertical frame. The chart is
-never cropped; the frame is rebuilt around it.
+~~The ledger page keeps its own 16:9 proportion *inside* the vertical frame.~~ **Amended
+2026-09-05 (operator: "I have no idea why 49.1 would say that").** A 16:9 card floating in a
+9:16 frame is the landscape stage shrunk, and it failed on sight on the first Tokyo render:
+a chart at 60 % scale, type at 20 px on a phone, the page bleed unfinished, a highlight over
+the build. **In portrait the chart IS the world**: the page fills the frame to its deckle,
+the charcoal fills the page (E22), the series is re-laid for the tall frame, and every label
+clears doc 50's 59 px floor on the 1920 stage. The chart is never cropped; it is re-staged.
 
 ## 49.2 Wan 2.1 — the dials
 
