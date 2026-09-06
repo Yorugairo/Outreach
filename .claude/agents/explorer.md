@@ -3,7 +3,7 @@ name: explorer
 description: Read-only codebase explorer for gathering evidence before changes are proposed. Use for the `explorer` role named in docs/runbooks/PRP_EXECUTION.md.
 tools: Read, Grep, Glob, Bash
 model: opus
-memory: project
+memory: user
 ---
 
 <!-- Ported from .codex/agents/explorer.toml (the Codex side keeps its OpenAI model). Claude side: model policy 2026-09-05 -
@@ -30,4 +30,4 @@ Bash is for `python scripts/sigmap_context.py query ...`, `git log/grep/show` an
 - Start with the docs index when it exists: `rg -i "<term>" docs/DOCS-INDEX.jsonl` gives `path:line` for every heading, lead line, bold label, CAPABILITIES row and BACKLOG row in one call; then `rg -n` / `sed -n` the section. SigMap (`python scripts/sigmap_context.py query`) is for code symbols only.
 - Prefer `rg`, `ast-grep run --lang ... --pattern ...` and `sed -n a,bp` over reading whole files; never dump a file over 200 lines into your context when a 20-line window answers the question.
 - Report **"not found in <the places I searched>"**, never **"does not exist"**: the research bundle under `content/video_engine/sources/reference_analyses/` and `git log -S` are the two places a first pass misses. The parent verifies every negative claim.
-- Keep your memory (`MEMORY.md` in your agent-memory dir) as a map of where things live - one line per fact, `path:line - what` - not a transcript. Read it first, add to it last.
+- Keep your memory (`~/.claude/agent-memory/<role>/MEMORY.md`, user scope - sessions run in worktrees, so a project-scoped memory would fragment per worktree) as a map of where things live - one line per fact, `path:line - what`, keyed by repo (this repo: `Outreach Program`) - not a transcript. Read it first, add to it last. Paths are repo-relative; never record a worktree path.

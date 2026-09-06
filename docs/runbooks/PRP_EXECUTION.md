@@ -1,3 +1,4 @@
+| Sonnet 5 | **not adopted as a searcher** (a `searcher` variant was tried and removed the same day) | round 3, the easy five with the docs index available: 3.5/5 (mislabelled a ruling E46 for E38; named the flag default, not the build that sets it), 238 k tokens vs Opus's 156 k for the same five (the fixed overhead dominates, so the cheaper model is not cheaper per lookup), 336 s vs 138 s |
 # PRP Execution
 
 Status: current
@@ -67,6 +68,52 @@ dispatch is the saving.
 | `explorer`, `docs_researcher`, `reviewer` | same name | Opus 5 | No (read-only Bash: git/sigmap/tests) |
 | `architect_sol` | `architect_sol` | Opus 5 | `.claude/PRPs/plans/` and named planning evidence only |
 | `release_steward` | `release_steward` | Opus 5 | `git add <paths>` / `git commit`; push only with the operator's CURRENT authorization quoted in the brief |
+
+### Hand-off policy (measured 2026-09-05, `evals/RETRIEVAL-BENCHMARK-2026-09-05.md`)
+
+**What a dispatch costs.** A fresh subagent pays ~20-25 k tokens before its first tool call (system
+prompt, rules, repo instructions); a lookup then runs 30-60 k on the agent's model. What returns to
+the parent is the result text only - ~300 tokens - and *nothing* of the agent's context. What the
+parent reads inline is different in kind: every byte of tool output stays in the parent's context
+for the rest of the session and is re-sent on every later turn. Rule of thumb: 1 KB of tool output
+≈ 300 tokens, forever. One inline asset hunt this session pulled 1.75 MB (~450 k tokens) into the
+Fable context; the same hunt delegated would have cost the parent 300.
+
+**When to delegate (any one is enough):**
+- the hunt will take more than ~5 tool calls, or you cannot name the file before starting;
+- you need a part of a file over 200 lines and do not know which part;
+- the question is "does X exist / did we build X" (a search across worktrees, sources, git history);
+- the work is review, test runs, gates regeneration, git mechanics, or doc maintenance.
+
+**When to do it inline:** one `rg` on `docs/DOCS-INDEX.jsonl` or SigMap plus one `sed -n` window
+under ~40 lines answers it; or the fact is already in context. Below ~5 tool calls the dispatch
+overhead is the larger cost.
+
+**The brief** names: plan path / task id, allowed files, acceptance, the exact validation command,
+the answer cap (≤ 200 words as `path:line` + values), and where the full evidence goes.
+
+**The return contract:** the agent returns the ≤ 200-word answer inline. Anything longer (a
+research pack, a diff review, a transcript of runs) is written to `docs/research/runs/<slug>/`
+(gitignored disk-as-bus) - boilerplate stripped, command logs through `sqz compress --mode safe`
+- and the return names the path. The parent reads that file only with `sed -n` windows, never
+whole. A delegated agent reports **"not found in <the places I searched>"**, never "does not
+exist"; the parent verifies every negative claim with one grep, reads every diff, and runs the
+slice's validation itself before integrating.
+
+**Model routing, from the benchmark:**
+
+| model | use | evidence |
+| --- | --- | --- |
+| Fable 5.1 | the parent only: design, planning, animation reasoning, the operator's conversation, briefs, JUDGE verdicts, diff review | it is the scarce model; nothing delegated runs on it |
+| Opus 5 | `explorer` for any hunt with judgement in it (evidence layer, research bundle, open-ended "what is documented but unbuilt"); `implementation_luna` / `junior_developer` for slices; `reviewer`; `architect_sol`; `release_steward` | round 1: 5/5 at 36 % fewer tokens than Fable; round 2 (hard): 4.5/5 at 26 % fewer and half the time; one false negative |
+| Sonnet 5 | `searcher` - well-specified lookups where the file is nameable and the index or memory points at it | round 3: fast (9-20 s) but mislabelled a ruling (E46 for E38) and answered "which build turns it on" with the default only; tokens per dispatch NOT lower than Opus (the fixed overhead dominates) - use for volume, verify the labels |
+| Haiku 4.5 | `speedster` - deterministic edits with the exact line given; never a lookup with a judgement in it | 23 k tokens for a one-line edit: correct, but the overhead is the whole cost |
+
+Separate search and implementation agents: yes - their memories are different maps (`explorer`:
+where things live; `implementation_luna`: patterns and pitfalls) and contexts never share in this
+harness anyway. Persistence is per-agent memory (`memory: user` - sessions run in worktrees, so
+`project` scope would fragment per worktree), which accumulates *where things live* across
+sessions and cuts tool calls, not the fixed overhead; `/resume` continuation is CLI-only.
 
 What stays with the parent regardless of model: the decision to dispatch, the
 brief, the review of every delegated diff, the human gates, and anything

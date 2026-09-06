@@ -108,3 +108,31 @@ context, so a long-lived explorer gets heavier per turn, not lighter. The saving
 offers is fewer *tool calls* (it already knows the tree). ECC's agents are the same frontmatter mechanism and do
 not persist either; the native lever is the `memory` frontmatter key (per-agent memory across sessions) - the
 next experiment: enable it on `explorer`, run rounds 1-2 again in a later session, compare tool calls.
+
+## Round 3 — Sonnet 5 as the searcher (same day; the easy five again, with the docs index available)
+
+Operator: "does it make sense to have a Sonnet 5 file searcher?" Same five questions as round 1, `Explore` with
+`model: sonnet`, each prompt told about `docs/DOCS-INDEX.jsonl`.
+
+| Q | Sonnet tokens / tools / s | verdict |
+|---|---|---|
+| 1 | 47,662 / 2 / 9 | ✗ half: numbers right, ruling mislabelled **"E46 §46.3"** (doc 46 is not a ruling; the answer is E38) |
+| 2 | 46,828 / 3 / 20 | ✗ half: flag default found, "what turns it on in a build" (build_short.py:352) missed |
+| 3 | 50,548 / 9 / 155 | ✓ |
+| 4 | 48,432 / 8 / 138 | ✓ (line 282 for 284, right statement) |
+| 5 | 44,691 / 3 / 13 | ✓ |
+| | **238,161 / 25 / 336 s — 3.5/5** | Opus explorer on the same five: **155,988 / 31 / 138 s — 5/5** |
+
+- Sonnet is not cheaper per lookup: the ~20-25 k fixed overhead plus a full prompt dominates, so its five cost
+  **more** tokens than Opus's five, and two runs were slow. Its errors are the expensive kind - a confidently
+  wrong label - which the parent then has to catch.
+- **Decision: no Sonnet searcher.** The Opus `explorer` is the searcher; Haiku stays on `speedster` for
+  edits with the exact line given. The `searcher.md` variant was removed.
+
+## Persistence — verified
+
+`memory: project` on `explorer` produced `agent-memory/explorer/{MEMORY.md, map_audio_bed.md}` on the first
+dispatch: six `path:line - what` lines plus two traps no doc records ("the dir is tokyo-tea-break but the ids
+say il-tea-break - grep both"; "the index's 'bed' hits are 'embed' noise - search lufs/bed_gain"). It landed in
+the **worktree** (`project` scope = the session's project dir), so the roles now use `memory: user`
+(`~/.claude/agent-memory/<role>/`), keyed by repo; the map moved there. Continuation (`/resume`) is CLI-only.
