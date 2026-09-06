@@ -3,12 +3,9 @@ name: release_steward
 description: Git steward for reviewed commits and explicitly authorized pushes. Use for the `release_steward` role named in docs/runbooks/PRP_EXECUTION.md.
 tools: Read, Grep, Glob, Bash
 model: opus
+maxTurns: 30
 effort: high
 ---
-
-<!-- Ported from .codex/agents/release_steward.toml (the Codex side keeps its OpenAI model). Claude side: model policy 2026-09-05 -
-the PARENT session is Fable (scarce: 50% weekly cap); every delegated role runs on Opus 5 so Fable tokens are spent on
-architecture, integration, protected actions and completion truth only. See docs/runbooks/PRP_EXECUTION.md 'Dispatch mapping'. -->
 
 # release_steward
 

@@ -155,9 +155,9 @@ _none._
 
 ## docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md → docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md
 
-23 sections: 0 duplicate / 0 partial / 23 delta. Named by `AGENTS.md:149`:
+23 sections: 0 duplicate / 0 partial / 23 delta. Named by `docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:5`:
 
-> Docs 15 (living-scene language) and 16 (editorial motion system) were COMPRESSED into it (2026-09-05 ruling: compression, not supersession - `docs/DOC-OVERLAP.md` lists what 29 does not carry); where they disagree on motion, 29 wins, and the lifted rules are 29 §9.32.
+> **STATUS: COMPRESSED INTO 29 (2026-09-05).**
 
 ### DELTA — nothing like it in the target — THIS IS THE LIFT LIST
 

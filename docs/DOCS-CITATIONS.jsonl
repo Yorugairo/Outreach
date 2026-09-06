@@ -682,6 +682,16 @@
 {"from": {"path": "docs/agentic-analysis-contract.md", "line": 145, "heading": "11) Vertical decision and journey evidence v1"}, "ref": "P11", "to": null}
 {"from": {"path": "docs/agentic-analysis-contract.md", "line": 145, "heading": "11) Vertical decision and journey evidence v1"}, "ref": "P12", "to": null}
 {"from": {"path": "docs/agentic-analysis-contract.md", "line": 145, "heading": "11) Vertical decision and journey evidence v1"}, "ref": "P12", "to": null}
+{"from": {"path": "docs/AGENTS-VIDEO-ENGINE.md", "line": 1, "heading": "AGENTS — Content video engine (the doctrine section)"}, "ref": "P45", "to": {"path": "docs/content-video-engine/BACKLOG.md", "line": 420, "heading": "P45 triage — 2026-09-05 (the corpus reconciled with what is built)"}}
+{"from": {"path": "docs/AGENTS-VIDEO-ENGINE.md", "line": 5, "heading": "Content video engine (second workstream)"}, "ref": "29§9.15", "to": {"path": "docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md", "line": 900, "heading": "9.15 The curtain, persistence, and the recovered showcase mechanisms (operator, 2026-08-29)"}}
+{"from": {"path": "docs/AGENTS-VIDEO-ENGINE.md", "line": 5, "heading": "Content video engine (second workstream)"}, "ref": "29§9.32", "to": {"path": "docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md", "line": 2027, "heading": "9.32 Lifted from the compressed docs (15, 16) — 2026-09-05"}}
+{"from": {"path": "docs/AGENTS-VIDEO-ENGINE.md", "line": 5, "heading": "Content video engine (second workstream)"}, "ref": "P1", "to": null}
+{"from": {"path": "docs/AGENTS-VIDEO-ENGINE.md", "line": 5, "heading": "Content video engine (second workstream)"}, "ref": "P6", "to": null}
+{"from": {"path": "docs/AGENTS-VIDEO-ENGINE.md", "line": 5, "heading": "Content video engine (second workstream)"}, "ref": "R9", "to": null}
+{"from": {"path": "docs/AGENTS-VIDEO-ENGINE.md", "line": 5, "heading": "Content video engine (second workstream)"}, "ref": "doc15", "to": {"path": "docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md", "line": 1, "heading": "Living Scene Communication Language"}}
+{"from": {"path": "docs/AGENTS-VIDEO-ENGINE.md", "line": 5, "heading": "Content video engine (second workstream)"}, "ref": "§2", "to": null}
+{"from": {"path": "docs/AGENTS-VIDEO-ENGINE.md", "line": 5, "heading": "Content video engine (second workstream)"}, "ref": "§3", "to": null}
+{"from": {"path": "docs/AGENTS-VIDEO-ENGINE.md", "line": 5, "heading": "Content video engine (second workstream)"}, "ref": "§5", "to": null}
 {"from": {"path": "docs/content-video-engine/00-BRAINSTORM-AND-DECISIONS.md", "line": 61, "heading": "3.1 \"100% automated\" → human-gated automation with **graduated autonomy**"}, "ref": "P1", "to": null}
 {"from": {"path": "docs/content-video-engine/00-BRAINSTORM-AND-DECISIONS.md", "line": 61, "heading": "3.1 \"100% automated\" → human-gated automation with **graduated autonomy**"}, "ref": "P2", "to": null}
 {"from": {"path": "docs/content-video-engine/00-BRAINSTORM-AND-DECISIONS.md", "line": 70, "heading": "3.2 Four pillars on one channel → **lanes within one audience promise**"}, "ref": "P2", "to": null}

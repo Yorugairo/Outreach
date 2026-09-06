@@ -14,7 +14,7 @@ Levels 1-6 are Markdown heading depth; level 7 is a table row (CAPABILITIES, BAC
 A `{...}` tail lists the section's bold phrases; a `<...>` tail its body terms - code
 spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 
-3127 records across 241 files.
+3129 records across 242 files.
 
 ## content/video_engine/projects/history-of-bjj/episode-1-research-brief.md
 
@@ -1440,6 +1440,11 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 - L71 [2] 6. Verification commands — Run a quick pipeline and inspect output:
 - L109 [2] 7. Artifact layout — Never hand-edit artifacts manually. They are produced by the repository layer only. <hand-edit>
 - L135 [2] 8. Repo conventions — - Python: run with the 3.11 interpreter. If a venv exists use it; otherwise `python` resolves to 3.11.15 on this host. {Python; Imports; Config; Models; Stages} <sys.path; from src...; .env; slots=True; to_dict(); DEFAULT_STAGES; _stage_start; _stage_complete; output_summary>
+
+## docs/AGENTS-VIDEO-ENGINE.md
+
+- L1 [1] AGENTS — Content video engine (the doctrine section) — Moved out of the always-loaded `AGENTS.md` on 2026-09-05 (P45 grill: the dispatch floor). Every subagent dispatch re-paid this section; the parent and any agent <always-loaded; re-paid; YouTube; model-agnostic; DOCTRINE-CORE; six-phase; never-list; system-instruction; OPERATOR-RULINGS; VOICE-PACK; ear-judgments; text-checkable>
+- L5 [2] Content video engine (second workstream) — This repo also hosts a faceless YouTube production operation (three {Any agent doing script, visual, evidence, or channel work lo} <YouTube; model-agnostic; DOCTRINE-CORE; six-phase; never-list; system-instruction; OPERATOR-RULINGS; VOICE-PACK; ear-judgments; text-checkable; work-order; Google-side>
 
 ## docs/ARCHITECTURE_DECISION_SEO_PLATFORM.md
 

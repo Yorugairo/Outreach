@@ -3,12 +3,9 @@ name: implementation_luna
 description: Bounded implementation agent for well-defined moderate features and fixes. Use for the `implementation_luna` role named in docs/runbooks/PRP_EXECUTION.md.
 tools: Read, Grep, Glob, Edit, Write, Bash
 model: opus
+maxTurns: 120
 effort: high
 ---
-
-<!-- Ported from .codex/agents/implementation_luna.toml (the Codex side keeps its OpenAI model). Claude side: model policy 2026-09-05 -
-the PARENT session is Fable (scarce: 50% weekly cap); every delegated role runs on Opus 5 so Fable tokens are spent on
-architecture, integration, protected actions and completion truth only. See docs/runbooks/PRP_EXECUTION.md 'Dispatch mapping'. -->
 
 # implementation_luna
 

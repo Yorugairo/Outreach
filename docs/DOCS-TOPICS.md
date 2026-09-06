@@ -18,10 +18,10 @@ reference as normalised (`42§42.2` - which `46 s46.4` also writes - `29§Part3`
 `E38`, `M13`, `G-j`); a list (`docs 39 and 40`) makes one edge per document, and `to` is
 null when nothing in the index answers it.
 
-4008 topics, 3612 citation edges. The 200 largest topics follow,
+4008 topics, 3622 citation edges. The 200 largest topics follow,
 at most 12 sections each - the JSONL holds every one.
 
-## youtube (125)
+## youtube (127)
 
 - content/video_engine/projects/history-of-bjj/README.md:1 — History of BJJ Series — This directory contains source-controlled editorial inputs for History Documentary
 - content/video_engine/projects/systems-and-blowups/steel-and-paper/REWRITE-ORDER-G.md:7 — Editorial changes (the reason for the rewrite) — 1. Hook: the audience claim retargets to what is TRUE. The single
@@ -35,7 +35,7 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/projects/systems-and-blowups/tokyo-tea-break/REVIEW-2026-09-04.claude.md:99 — VIEWER (P36, binds) — - v2 first pass: V01 15/28 (54 %). The raw reports showed the reader had filed the
 - content/video_engine/projects/systems-and-blowups/tokyo-tea-break/REVIEW-2026-09-04.claude.md:132 — DECISION (operator rules; recommendation on each) — 1. Runtime 2:20 against doc 51's 45–60 s. Every clear cut that clears G01–G45 has
 - content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-90S.claude.md:36 — Shots (kit clock first, Kokoro cut in brackets) — | # | span | beat | world | evidence / species | why this pairing |
-- … 113 more in `docs/DOCS-TOPICS.jsonl`
+- … 115 more in `docs/DOCS-TOPICS.jsonl`
 
 ## review-only (102)
 
@@ -798,7 +798,7 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/12-HIGGSFIELD-EXPLAINER-LEARNINGS.md:1 — Higgsfield Explainer Learnings and Producer Orchestration — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine
 - docs/content-video-engine/14-HIGGSFIELD-AUDIO-DRIVEN-LANE.md:1 — P13 Higgsfield Audio-Driven Explainer Lane — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine
 - docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:1 — Living Scene Communication Language — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine
-  cited by: docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:2027, docs/content-video-engine/BACKLOG.md:483, docs/content-video-engine/TRIAGE-2026-09-05.md:147
+  cited by: docs/AGENTS-VIDEO-ENGINE.md:5, docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:2027, docs/content-video-engine/BACKLOG.md:483, docs/content-video-engine/TRIAGE-2026-09-05.md:147
 - docs/content-video-engine/18-GRAPHIC-SILHOUETTE-WOODBLOCK-EXPLAINER-SPEC.md:1 — Graphic Silhouette + Combat Woodblock Explainer — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine
 - … 8 more in `docs/DOCS-TOPICS.jsonl`
 
@@ -934,7 +934,7 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/12-HIGGSFIELD-EXPLAINER-LEARNINGS.md:1 — Higgsfield Explainer Learnings and Producer Orchestration — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine
 - docs/content-video-engine/14-HIGGSFIELD-AUDIO-DRIVEN-LANE.md:1 — P13 Higgsfield Audio-Driven Explainer Lane — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine
 - docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:1 — Living Scene Communication Language — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine
-  cited by: docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:2027, docs/content-video-engine/BACKLOG.md:483, docs/content-video-engine/TRIAGE-2026-09-05.md:147
+  cited by: docs/AGENTS-VIDEO-ENGINE.md:5, docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:2027, docs/content-video-engine/BACKLOG.md:483, docs/content-video-engine/TRIAGE-2026-09-05.md:147
 - docs/content-video-engine/18-GRAPHIC-SILHOUETTE-WOODBLOCK-EXPLAINER-SPEC.md:1 — Graphic Silhouette + Combat Woodblock Explainer — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine
 - … 7 more in `docs/DOCS-TOPICS.jsonl`
 
@@ -1519,6 +1519,22 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/DRAWING_ENGINE_ANIMATION_TRANSFORM_RESEARCH.md:98 — The 2D Affine Transformation Matrix (Homogeneous $3 \times 3$) — In 2D space, translation, rotation, scale, and shear are unified into a single $3 \times 3$ matrix:
 - … 4 more in `docs/DOCS-TOPICS.jsonl`
 
+## voice-pack (16)
+
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-C-PRODUCTION.md:1 — Steel and Paper — SCRIPT C (PRODUCTION TEXT) — Script B with Revision C applied. Structure, beats and the five hardest
+- docs/AGENTS-VIDEO-ENGINE.md:1 — AGENTS — Content video engine (the doctrine section) — Moved out of the always-loaded `AGENTS.md` on 2026-09-05 (P45 grill: the dispatch floor). Every subagent dispatch re-pai
+- docs/AGENTS-VIDEO-ENGINE.md:5 — Content video engine (second workstream) — This repo also hosts a faceless YouTube production operation (three
+- docs/content-video-engine/28-AOY-MCP-EVALUATION.md:536 — `review_script` on Steel and Paper — measured (2026-08-29) — Submitted Script D (1,954 words, 11m 40s) to `review_script`. Confirms the
+- docs/content-video-engine/40-PROCESS-AS-EVIDENCE.md:1 — 40 — Process as Evidence — Operator ruling, 2026-08-25:
+- docs/content-video-engine/40-PROCESS-AS-EVIDENCE.md:34 — 2. The audit beat — the narration device — A five-step unit, 20–35 seconds. It is an anecdote with a reversal,
+- docs/content-video-engine/briefs/RESEARCH-BRIEF-animation-craft.md:1 — Research brief — what the drawing engine's builder does not know — For the Gemini deep-research pass, 2026-09-04. Same process as speech (docs 32–37)
+- docs/content-video-engine/briefs/RESEARCH-BRIEF-animation-craft.md:53 — 2. Two kinds of pass — and which contract binds — This brief can be run two ways, and confusing them is what broke pass 1.
+- docs/content-video-engine/briefs/RESEARCH-BRIEF-animation-craft.md:84 — 2.2 The output contract — Binding on a research pass; binding on a filter pass only for material the source
+- docs/content-video-engine/briefs/RESEARCH-BRIEF-animation-craft.md:201 — 4. What the extraction will produce — Same as the speech pass. Research → a numbered doc (42-ANIMATION-TIMING or similar)
+- docs/content-video-engine/briefs/STEEL-AND-PAPER-REVISION-C.md:63 — 2. ADD — the audit beat (doc 40) — Goes in P2, immediately after the GDP-share claim, in the steelman.
+- docs/content-video-engine/briefs/STEEL-AND-PAPER-REVISION-C.md:134 — 4. UNCHANGED — do not touch — The microhook, the promise, the reversal, the thesis, the ring echo and
+- … 4 more in `docs/DOCS-TOPICS.jsonl`
+
 ## 0.15 (15)
 
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md:342 — 12. Unified Ledger Drawing Engine & ComfyUI Specification — The channel's signature Ledger Page (cream washi paper `#F4E6C7`, subtle grid `#E5D5B5`, 1080x720 active evidence board)
@@ -1809,7 +1825,7 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/BACKLOG.md:274 — G-j zero-slip anchoring — grounded sprites anchor `50% 100%` and bind to floor velocity (48 §48.7)
   cited by: docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:62, docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:183, docs/content-video-engine/BACKLOG.md:225, docs/content-video-engine/BACKLOG.md:257, docs/content-video-engine/BACKLOG.md:296, docs/content-video-engine/BACKLOG.md:429, +4 more
 - docs/content-video-engine/BACKLOG.md:420 — P45 triage — 2026-09-05 (the corpus reconciled with what is built) — The judgment pass over the generated registries: [TRIAGE-2026-09-05.md](TRIAGE-2026-09-05.md) —
-  cited by: docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:2027, docs/content-video-engine/BACKLOG.md:237, docs/content-video-engine/BACKLOG.md:279, docs/content-video-engine/BACKLOG.md:296, docs/content-video-engine/BACKLOG.md:366, docs/content-video-engine/BACKLOG.md:407, +9 more
+  cited by: docs/AGENTS-VIDEO-ENGINE.md:1, docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:2027, docs/content-video-engine/BACKLOG.md:237, docs/content-video-engine/BACKLOG.md:279, docs/content-video-engine/BACKLOG.md:296, docs/content-video-engine/BACKLOG.md:366, +10 more
 - docs/content-video-engine/BACKLOG.md:429 — TOP — the next list (each becomes its own order, plan:67) — | id | item — what and where | why / evidence | cost |
 - docs/content-video-engine/BACKLOG.md:500 — pending D3 / D6 — held until the operator rules — | id | item — what and where | why / evidence | cost |
 - docs/content-video-engine/RESEARCH-INDEX.md:301 — `09_2d_and_2_5d_body_animation_object_handling_and_grounding.md` — 38 headings — | heading | disposition |
@@ -1898,6 +1914,22 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:165 — 2.2 Nothing living is ever still — Every active card breathes: slow sine drift (±16px, ~1.8% scale swell,
 - docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:267 — Part 8 — The scene-evidence lane (default production pattern) — Status: accepted 2026-08-24. Proven by
 - docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:278 — 8.1 The shape — One continuous ken-burns move per scene, not per beat, with a distinct
+- … 2 more in `docs/DOCS-TOPICS.jsonl`
+
+## model-agnostic (14)
+
+- docs/AGENTS-VIDEO-ENGINE.md:1 — AGENTS — Content video engine (the doctrine section) — Moved out of the always-loaded `AGENTS.md` on 2026-09-05 (P45 grill: the dispatch floor). Every subagent dispatch re-pai
+- docs/AGENTS-VIDEO-ENGINE.md:5 — Content video engine (second workstream) — This repo also hosts a faceless YouTube production operation (three
+- docs/content-video-engine/00-BRAINSTORM-AND-DECISIONS.md:125 — 3.9 Agent org chart ≠ architecture — "Claude = architect, GPT = developer, Hermes = runtime" became: model-agnostic stages with
+- docs/content-video-engine/PIPELINE.md:185 — Handoff — `docs/portable/BUILD-PIPELINE.md` is the model-agnostic version of this
+- docs/content-video-engine/README.md:1 — Content video engine — document index — 43 files live here. Fewer than half are current doctrine. This index
+- docs/content-video-engine/README.md:20 — Start here, not at doc 00 — The working doctrine is not in this folder. It is three files in
+- docs/content-video-engine/SCRIPT-CONTEXT-COMBINED.md:1 — DOCTRINE CORE — portable content-operation context — Model-agnostic; paste whole into any system-instruction or rules box
+- docs/content-video-engine/SCRIPT-CONTEXT-COMBINED.md:191 — VOICE PACK — portable brand voice by exemplar — Third portable file, loaded with `DOCTRINE-CORE.md` and
+- docs/portable/BUILD-PIPELINE.md:1 — BUILD PIPELINE — portable contract — Model-agnostic. Paste this into any assistant — Gemini, GPT, a fresh Claude —
+- docs/portable/CHART-DISCIPLINE.md:1 — CHART DISCIPLINE — portable — Model-agnostic, renderer-agnostic. A fresh agent with only this repo
+- docs/portable/DOCTRINE-CORE.md:1 — DOCTRINE CORE — portable content-operation context — Model-agnostic; paste whole into any system-instruction box (fits a
+- docs/portable/MOTION-GRAMMAR.md:1 — MOTION GRAMMAR — narration-locked choreography, portable — Model-agnostic, renderer-agnostic (vanilla JS/CSS, GSAP, Remotion —
 - … 2 more in `docs/DOCS-TOPICS.jsonl`
 
 ## not (14)
@@ -2095,22 +2127,6 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/49-GENERATIVE-VIDEO-AND-THE-VERTICAL-STAGE.md:224 — 49.8 Sources — Wan-Video 2.1 (Alibaba) · Lightricks LTX-Video 0.9.1/0.9.5 · Depth Anything V2 (NeurIPS
 - docs/content-video-engine/54-GOOGLE-FLOW-OMNI-NANO-BANANA-PRODUCTION-RESEARCH.md:169 — 5. 16:9 Landscape vs. 9:16 Vertical Mobile Architecture
 - docs/content-video-engine/54-GOOGLE-FLOW-OMNI-NANO-BANANA-PRODUCTION-RESEARCH.md:171 — 5.1 The Universal Clean Canvas (Mobile UI Safe Zones) — Mobile platforms (TikTok, YouTube Shorts, Instagram Reels) overlay UI chrome that obstructs up to 59.1% of a 9:16 vertic
-- … 2 more in `docs/DOCS-TOPICS.jsonl`
-
-## voice-pack (14)
-
-- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-C-PRODUCTION.md:1 — Steel and Paper — SCRIPT C (PRODUCTION TEXT) — Script B with Revision C applied. Structure, beats and the five hardest
-- docs/content-video-engine/28-AOY-MCP-EVALUATION.md:536 — `review_script` on Steel and Paper — measured (2026-08-29) — Submitted Script D (1,954 words, 11m 40s) to `review_script`. Confirms the
-- docs/content-video-engine/40-PROCESS-AS-EVIDENCE.md:1 — 40 — Process as Evidence — Operator ruling, 2026-08-25:
-- docs/content-video-engine/40-PROCESS-AS-EVIDENCE.md:34 — 2. The audit beat — the narration device — A five-step unit, 20–35 seconds. It is an anecdote with a reversal,
-- docs/content-video-engine/briefs/RESEARCH-BRIEF-animation-craft.md:1 — Research brief — what the drawing engine's builder does not know — For the Gemini deep-research pass, 2026-09-04. Same process as speech (docs 32–37)
-- docs/content-video-engine/briefs/RESEARCH-BRIEF-animation-craft.md:53 — 2. Two kinds of pass — and which contract binds — This brief can be run two ways, and confusing them is what broke pass 1.
-- docs/content-video-engine/briefs/RESEARCH-BRIEF-animation-craft.md:84 — 2.2 The output contract — Binding on a research pass; binding on a filter pass only for material the source
-- docs/content-video-engine/briefs/RESEARCH-BRIEF-animation-craft.md:201 — 4. What the extraction will produce — Same as the speech pass. Research → a numbered doc (42-ANIMATION-TIMING or similar)
-- docs/content-video-engine/briefs/STEEL-AND-PAPER-REVISION-C.md:63 — 2. ADD — the audit beat (doc 40) — Goes in P2, immediately after the GDP-share claim, in the steelman.
-- docs/content-video-engine/briefs/STEEL-AND-PAPER-REVISION-C.md:134 — 4. UNCHANGED — do not touch — The microhook, the promise, the reversal, the thesis, the ring echo and
-- docs/content-video-engine/briefs/STEEL-AND-PAPER-UNITS-D.md:1 — Steel and Paper — the two extension units (Revision D) — Two P3/P5 pattern units extending Script C. Units go on both sides of
-- docs/content-video-engine/briefs/STEEL-AND-PAPER-UNITS-D.md:36 — 1. P3 — THE DEBT UNIT — Placement: after the existing P3 unit, before *"And that's where most
 - … 2 more in `docs/DOCS-TOPICS.jsonl`
 
 ## wall-clock (14)
@@ -2387,7 +2403,7 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/14-HIGGSFIELD-AUDIO-DRIVEN-LANE.md:34 — Local-first contract — The current Episode 1 coverage contains 138 reviewed editorial slots and the
 - docs/content-video-engine/14-HIGGSFIELD-AUDIO-DRIVEN-LANE.md:63 — Provider preflight and task ledger — `seedance_2_0` is preferred only when a live capability snapshot confirms
 - docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:1 — Living Scene Communication Language — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine
-  cited by: docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:2027, docs/content-video-engine/BACKLOG.md:483, docs/content-video-engine/TRIAGE-2026-09-05.md:147
+  cited by: docs/AGENTS-VIDEO-ENGINE.md:5, docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:2027, docs/content-video-engine/BACKLOG.md:483, docs/content-video-engine/TRIAGE-2026-09-05.md:147
 - docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:9 — 1. Product decision — P13 does not use a full-video generator as its default renderer. The observed
 - docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:264 — 9. Cost control — Until a lower verified quote exists, estimates use 3.33 Higgsfield credits per
 - docs/content-video-engine/16-EDITORIAL-MOTION-SYSTEM.md:1 — Editorial Motion System — > STATUS: PARTIALLY SUPERSEDED. The production pattern is now the scene-evidence lane in 29. Sections that 29 does not r
@@ -2661,21 +2677,6 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/07_academic_literature_drawing_and_2_5d_animation_engine.md:178 — Mathematical Proof of Zero Area Inversion: — $$\det(J_k(t)) = \det(R_k(t)) \cdot \det(S_k(t)) = 1 \cdot (\lambda_1 \lambda_2)^t > 0 \quad orall t \in [0, 1]$$
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_INDEX.md:210 — 6.3 Non-Rigid Shape Morphing (ARAP) & Skinning — - As-Rigid-As-Possible (ARAP) Shape Interpolation: Polar decomposition of deformation gradient $J_k = R_k S_k$ (Alexa, C
 - content/video_engine/sources/reference_analyses/MASTER_RESEARCH_INDEX.md:209 — 6.3 Non-Rigid Shape Morphing (ARAP) & Skinning — - As-Rigid-As-Possible (ARAP) Shape Interpolation: Polar decomposition of deformation gradient $J_k = R_k S_k$ (Alexa, C
-
-## model-agnostic (12)
-
-- docs/content-video-engine/00-BRAINSTORM-AND-DECISIONS.md:125 — 3.9 Agent org chart ≠ architecture — "Claude = architect, GPT = developer, Hermes = runtime" became: model-agnostic stages with
-- docs/content-video-engine/PIPELINE.md:185 — Handoff — `docs/portable/BUILD-PIPELINE.md` is the model-agnostic version of this
-- docs/content-video-engine/README.md:1 — Content video engine — document index — 43 files live here. Fewer than half are current doctrine. This index
-- docs/content-video-engine/README.md:20 — Start here, not at doc 00 — The working doctrine is not in this folder. It is three files in
-- docs/content-video-engine/SCRIPT-CONTEXT-COMBINED.md:1 — DOCTRINE CORE — portable content-operation context — Model-agnostic; paste whole into any system-instruction or rules box
-- docs/content-video-engine/SCRIPT-CONTEXT-COMBINED.md:191 — VOICE PACK — portable brand voice by exemplar — Third portable file, loaded with `DOCTRINE-CORE.md` and
-- docs/portable/BUILD-PIPELINE.md:1 — BUILD PIPELINE — portable contract — Model-agnostic. Paste this into any assistant — Gemini, GPT, a fresh Claude —
-- docs/portable/CHART-DISCIPLINE.md:1 — CHART DISCIPLINE — portable — Model-agnostic, renderer-agnostic. A fresh agent with only this repo
-- docs/portable/DOCTRINE-CORE.md:1 — DOCTRINE CORE — portable content-operation context — Model-agnostic; paste whole into any system-instruction box (fits a
-- docs/portable/MOTION-GRAMMAR.md:1 — MOTION GRAMMAR — narration-locked choreography, portable — Model-agnostic, renderer-agnostic (vanilla JS/CSS, GSAP, Remotion —
-- docs/portable/OPERATOR-RULINGS.md:1 — OPERATOR RULINGS — the standing corrections ledger — Portable, model-agnostic. Load alongside `DOCTRINE-CORE.md`.
-- docs/portable/VOICE-PACK.md:1 — VOICE PACK — portable brand voice by exemplar — Third portable file, loaded with `DOCTRINE-CORE.md` and
 
 ## paint-order-stroke-fill (12)
 

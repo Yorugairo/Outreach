@@ -15,12 +15,13 @@ its own headings, capability names, backlog ids. `terms` are its most frequent b
 terms. Purpose, terms and defines are truncated here to keep the file cheap to grep;
 the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 
-241 documents across 13 kinds.
+242 documents across 13 kinds.
 
 ## doctrine
 
 - content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/edit/hyperframes-opening-v1/AGENTS.md — HyperFrames Composition Project — Always invoke the relevant skill before writing or modifying compositions. — defines: — — terms: window.__timelines; framework-specific; data-*; shader-compatible; SaaS; talking-head
 - docs/AGENTS-SEO-PLATFORM.md — AGENTS — SEO Insights Platform (sections 2–8) — Moved out of the always-loaded `AGENTS.md` on 2026-09-05 so video-engine sessions and ever — defines: — — terms: InsightRun; DEFAULT_STAGES; Run-centric; InsightRepository; file-backed; InsightRunPipeline
+- docs/AGENTS-VIDEO-ENGINE.md — AGENTS — Content video engine (the doctrine section) — Moved out of the always-loaded `AGENTS.md` on 2026-09-05 (P45 grill: the dispatch floor). — defines: — — terms: YouTube; model-agnostic; DOCTRINE-CORE; six-phase; never-list; system-instruction
 - docs/content-video-engine/00-BRAINSTORM-AND-DECISIONS.md — Content-to-Video Flywheel — Brainstorm, Challenges, and Deci — V4 decision (2026-07-30): the primary product is an evidence-backed three-part History of — defines: P0 — terms: YouTube; long-form; channel-level; multi-person; art-bible; non-renderable
 - docs/content-video-engine/01-PRD.md — PRD — Content-to-Video Flywheel Engine — Active scope: History Documentary V4. Earlier technique requirements describe preserved V1 — defines: — — terms: YouTube; evidence-backed; three-part; documentary-explainer; chapter-level; StickFigureScene
 - docs/content-video-engine/02-CONTENT-STRATEGY.md — Content Strategy — Channel Architecture, Editorial Standards — V4 lane priority: Combat History is the launch lane. — defines: — — terms: long-form; lane-rotation; MinutePhysics; MinuteEarth; MinuteFood; combat-history

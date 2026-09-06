@@ -88,6 +88,26 @@ sources, the output path, the proof-line rule, and the validation command (`buil
 Cross-harness contract: `docs/runbooks/HANDOFF-ASTRA-GEMINI-2026-09-05.md`; the Astra plan P2 supersedes
 this section's mechanics when its order/result schema ships.
 
+### Gemini's research profiles, used against THIS repo (2026-09-05)
+
+`animation-video-researcher` and `finance-narrative-researcher` exist in the Gemini config (synced into an
+untracked `.agents/agents/` here, which no lane reads). Two corrections apply to every order that targets this repo:
+
+1. **Paths and the index step are this repo's, not the trades repo's.** Reports land under `docs/research/<area>/`
+   (step 1 above), never `docs/architecture/research/`; the index step is `python content/video_engine/scripts/build_docs_layers.py --write`,
+   never `npm run research:index`.
+2. **The order carries the existing evidence, and the output is research, not doctrine.** Before the order is written the
+   commissioning lane runs `docs_find.py "<topic>"` and pastes the hits into the order as "existing evidence"; the profile's
+   generic priors (a pattern interrupt every 4-7 s, Euler/Verlet springs, the Harmon story circle) contradict measured doctrine
+   here (M16's 1.2-2.5 s pulse, the analytic closed-form spring in `kinetics/spring.mjs`, the FULL-VIDEO-MAP spine), so a
+   report that ignores the evidence is advice, not a finding (`our artifacts beat outside advice`). The finance profile's
+   narrative deliverable (titles, hooks, posts) is raw material for the script skill and passes the gates like any draft.
+
+Order template: `agentapi new-conversation --model=pro --profile="<profile>" "<question>. Existing evidence: <docs_find hits>.
+Write the report to docs/research/<area>/<TOPIC>_RESEARCH_BLUEPRINT.md per GEMINI.md 'Research intake' (proof lines with URL
++ verified date, [UNVERIFIED]/[DERIVED] tags, a NOT FOUND WHERE I LOOKED block naming roots), then run
+python content/video_engine/scripts/build_docs_layers.py --write"`.
+
 ## Execution bounds & Node guardrails
 
 - **Zero ad-hoc browser automation**: Never author ad-hoc Playwright, Puppeteer, or CDP scripts to simulate clicks, typing, or take exploratory screenshot loops against Google Flow or other web interfaces. Flow generation runs strictly through the `google-flow` MCP server or `FlowDagEngine` via `node tools/google-flow-driver/scripts/run-batch.mjs <batch.json>`.
