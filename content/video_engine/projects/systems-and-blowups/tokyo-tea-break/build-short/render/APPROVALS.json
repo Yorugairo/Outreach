@@ -1,0 +1,19 @@
+{
+  "schema": "render_approval.v1",
+  "file": "tokyo-short-full-1440p.mp4",
+  "sha256": "4e5ad455543a6d555b62ec32812946bcc6cb607842162b0fcc72efb93975c2fd",
+  "width": 1440,
+  "height": 2560,
+  "fps": 30,
+  "duration_s": 88.833,
+  "approved": true,
+  "approved_by": "operator",
+  "approved_at": "2026-09-06T10:51:49-0700",
+  "approved_via": "chat, the word 'approved' after the render was sent",
+  "viewer_read": "SCRIPT-90S.claude-VIEWER.md 2026-09-06 (V01 FAIL on [promise]/[rehook] 0:30-0:45 ruled not a miss by E43; [ring] and V04 advisory)",
+  "render_command": "RENDER_ASPECT=9:16 RENDER_BUILD=<build-short> RENDER_URL=http://127.0.0.1:8731/player.html RENDER_NAME=tokyo-short python content/video_engine/scripts/render_episode.py",
+  "still_open": [
+    "muted-caption judge (V-a) on the render",
+    "publish package: title, first frame, description"
+  ]
+}
