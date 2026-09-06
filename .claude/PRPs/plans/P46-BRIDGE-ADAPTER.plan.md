@@ -146,13 +146,13 @@ actionable: the inbox hook for live sessions, the daemon + per-lane handlers for
 - Evidence: pending
 
 ### T5: pointers and the first live order (HG2)
-- Status: pending
+- Status: complete (HG2 done; the hand procedure is replaced)
 - Owner: parent
 - Depends on: T4
 - Write set: `GEMINI.md`, `docs/runbooks/HANDOFF-ASTRA-GEMINI-2026-09-05.md`, `evals/RETRIEVAL-BENCHMARK-2026-09-05.md` (a bridge round: seconds and turns to a usable reply)
 - Acceptance: the hand procedure is replaced by the three commands; one live order sent, watched and ledgered with the tools
 - Validate: `python content/video_engine/scripts/bridge_watch.py --lane gemini --id <new> ` exits done
-- Evidence: pending
+- Evidence: 2026-09-06 15:52-16:22, the first live orders through the tools (HG2, operator: "you can write the work order to Gemini for the cut review"). Order 1 (Wealth Logic cuts, report-landed, conversation 12655d39): sent -> reply landed by the daemon in 241 s -> tier 0 closed it with no model; the parent found the report was an honest abstention, tier 0 gained the `verdict-verified` rule; a follow-up with the video on disk went out by `bridge_reply` on the same conversation (followup 1) and the second reply landed; its content is contradicted by the parent's spot check and is being re-measured by our own tool (TR-1). Order 2 (profiles on the flash tier, paths-written, conversation a3c4ce5c): reply landed in 3.7 min; tier 0 failed on a half-path from a transcript-truncated reply; **the first tier-1 run** (`bridge_handler`, 16:19:57-16:22:04, $0.54, 6134 output tokens) verified all 30 copies on disk, named the truncation as the cause, decided done. Defects found and fixed the same hour: cp1252 console (UTF-8 reconfigure), conversation id recovery (brain-transcript fallback on the brief's first line), claude.CMD resolution for tier 1, markdown-link paths, truncated replies, prior-verdict moves. GEMINI.md and memory carry the commands. Bridge ledger: `evals/BRIDGE-LOG.jsonl`.
 
 ### T6: Landed replies become actionable without the operator - Python first, a model only for the residue (2026-09-06)
 - Status: complete
