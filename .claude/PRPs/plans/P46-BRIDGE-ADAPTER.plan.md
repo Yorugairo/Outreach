@@ -61,7 +61,7 @@ GEMINI.md and the hand-off note (pointer edits).
 
 ## Not Building
 
-- No daemon, no polling service, no message queue, **and no agent of any kind**: the watcher is a command that runs until one reply or a deadline; as a background Bash command the harness re-invokes the parent when it exits, so the alert costs the tokens of one printed line.
+- No message broker, no database, **and no agent of any kind inside the bridge**: the queue is a folder state machine (queue → sent → replied → done by atomic rename); the daemon (T6) makes no model call itself - it triggers a lane's own handler, which is the only place tokens are spent, under the operator's budget.
 - No driving of Astra's runner from here (its packets come to us; its adapters are P2 T6).
 - No Flow session driving (E36 consent), no web research from the Claude lane (that is the order's job).
 - No reading of the CSRF token into any file, log or ledger.
@@ -70,6 +70,7 @@ GEMINI.md and the hand-off note (pointer edits).
 
 - HG1: the packet shape and reply grammar (a cross-lane contract; Astra reviews it through the same bridge).
 - HG2: the first live send with the tool (one order, the operator names it).
+- HG3: the unattended handler's grace window, SLA and daily budget (each handler run is a headless session, ~25k tokens floor + the work).
 
 ## Mandatory Reads
 
@@ -83,7 +84,8 @@ GEMINI.md and the hand-off note (pointer edits).
 ## Execution Path
 
 T1 env + send (dry-run first) → T2 watch (replay the worked example) → T3 reply + ledger → T4 the packet doc (HG1,
-sent to Astra through the bridge for review) → T5 pointers + the first live order (HG2). Implementing role:
+sent to Astra through the bridge for review) → T5 pointers + the first live order (HG2) → T6 landed replies become
+actionable: the inbox hook for live sessions, the daemon + per-lane handlers for unattended, the SLA toast (HG3). Implementing role:
 `implementation_luna`; `reviewer` before each commit; the parent runs the live sends.
 
 ## Patterns To Mirror
@@ -137,6 +139,15 @@ sent to Astra through the bridge for review) → T5 pointers + the first live or
 - Write set: `GEMINI.md`, `docs/runbooks/HANDOFF-ASTRA-GEMINI-2026-09-05.md`, `evals/RETRIEVAL-BENCHMARK-2026-09-05.md` (a bridge round: seconds and turns to a usable reply)
 - Acceptance: the hand procedure is replaced by the three commands; one live order sent, watched and ledgered with the tools
 - Validate: `python content/video_engine/scripts/bridge_watch.py --lane gemini --id <new> ` exits done
+- Evidence: pending
+
+### T6: Landed replies become actionable without the operator (the requirement, 2026-09-06)
+- Status: pending
+- Owner: implementation_luna (the daemon and hook), parent (the handler instruction), operator (SLA and budget)
+- Depends on: T1-T3
+- Write set: `content/video_engine/scripts/bridge_daemon.py` (+ tests), `~/.claude/hooks/bridge_inbox.py` (UserPromptSubmit + SessionStart: prints "N bridge replies waiting: <packetId lane first-line>" when `replied/` is non-empty, nothing otherwise), `docs/runbooks/BRIDGE-REPLY-HANDLER.md` (the standing instruction a handler run receives: verify the reply against disk, integrate or file the follow-up order, write `done/<packetId>/result.md`, append the ledger; never ask the operator to check anything), a Task Scheduler entry at logon (documented, operator-installed), `.gitignore`
+- Acceptance: (1) with a live session, a reply that lands is announced on the very next prompt with no tokens spent before it; (2) unattended, a reply unhandled past the grace window is dispatched to its lane's handler - Claude via a headless `claude -p` run with the handler instruction + order + reply, Gemini via `new-conversation`/`send-message`, Astra via a packet into its queue folder - and the result lands in `done/`; (3) a reply still unhandled past the SLA raises one desktop toast naming the packet; (4) the daemon is idempotent across restarts (folder state + pid lock), makes no model call itself, and stays within the operator's daily handler budget (count and token cap read from a config file)
+- Validate: `python -m pytest content/video_engine/tests/test_bridge_daemon.py -q -p no:cacheprovider` (synthetic folders: a landed reply is announced by the hook; the grace-window dispatch invokes a stubbed handler once; the SLA toast fires once; restart recovery); then one live cycle on a real order
 - Evidence: pending
 
 ## Verification
