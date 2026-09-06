@@ -56,6 +56,11 @@ rather than what makes it *long*. Put it in the mechanism beat and move on.
 
 ## 51.4 Production standard — deliberately lower
 
+> **Amended 2026-09-06 by E46** (`docs/portable/OPERATOR-RULINGS.md`): the exclusion list below is withdrawn for the chart
+> shorts - E44/E45 govern (the chart on the hook, the world as the stage, docks by the springs, the mount as the roll-out).
+> Dissolves and Ken Burns remain valid tools used for what they are (a dissolve is the mount on a word or the outro join;
+> Ken Burns is plate life on a still that must hold), never the glue between unrelated full-frame clips.
+
 Per the operator's shorts ruling (yen short, 2026-09-03), and unchanged:
 
 **IN:** hook · compression · dissolves · Ken Burns · doc-29 captions in brand tokens ·

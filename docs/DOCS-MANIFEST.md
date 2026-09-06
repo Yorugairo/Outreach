@@ -15,7 +15,7 @@ its own headings, capability names, backlog ids. `terms` are its most frequent b
 terms. Purpose, terms and defines are truncated here to keep the file cheap to grep;
 the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 
-250 documents across 13 kinds.
+251 documents across 13 kinds.
 
 ## doctrine
 
@@ -73,7 +73,7 @@ the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 - docs/content-video-engine/48-THE-FIGURE-AND-THE-GROUND.md — 48 — The figure and the ground: actor motion, object ha — Extracted from `09_2d_and_2_5d_body_animation_object_handling_and_grou — defines: — — terms: minimum-jerk; O(1); Gazendam & Sinke 2005; α(τ) = 10τ³ − 15τ⁴ + 6τ⁵; O(N); counter-balance
 - docs/content-video-engine/49-GENERATIVE-VIDEO-AND-THE-VERTICAL-STAGE.md — 49 — Generative video and the vertical stage — Extracted from `10_generative_video_tools_and_cross_platform_compositi — defines: — — terms: width: 800px; left: 80px; Centre-cropping; balance-scale; re-stage; word-level; re-laid
 - docs/content-video-engine/50-THE-PHONE-IS-THE-SCREEN.md — 50 — The phone is the screen: ep1's real analytics, and — Operator-supplied YouTube analytics for ep1, 2026-09-04. — defines: — — terms: YouTube; Operator-supplied; DERIVED; doc 49 §49.1; three-quarters; watch-time
-- docs/content-video-engine/51-THE-SHORTS-FORMAT.md — 51 — The shorts format: one page, ship in an afternoon — Everything needed to build a short, consolidated from docs 46, 49, 50 — defines: — — terms: long-form; x[80,880] y[280,1340]; stick-figure; [post-key]; [new]; [catalyst]
+- docs/content-video-engine/51-THE-SHORTS-FORMAT.md — 51 — The shorts format: one page, ship in an afternoon — Everything needed to build a short, consolidated from docs 46, 49, 50 — defines: — — terms: long-form; roll-out; x[80,880] y[280,1340]; [post-key]; [new]; [catalyst]
 - docs/content-video-engine/52-CONSTRUCT-DONT-INHERIT.md — 52 — Construct, don't inherit — Operator, 2026-09-04: — defines: — — terms: RULE-the-page-is-the-ground; real-estate; thirteen-minute; pre-composed; M_world = M_parent × M_local; Z-stack
 - docs/content-video-engine/53-THE-STICKMAN-LANE.md — 53 — The stickman lane: the workflow, read off the tuto — Seven scenes x 4 s = a 30-second short. Corrected: 10 s is the verifie — defines: — — terms: @Mike; CapCut; ANTI-GLITCH LOCK; stage-gated; SECONDARY MOTION; field-based
 - docs/content-video-engine/54-GOOGLE-FLOW-OMNI-NANO-BANANA-PRODUCTION-RESEARCH.md — 54 — Google Flow Production Research: Gemini Omni 1.1 F — Title: Production Optimization, Prompt Engineering, Multimodal Conditi — defines: — — terms: Create Body; gemini-omni-1.1-flash; Two-phase; pre-cropped; Portrait; director-level
@@ -91,7 +91,7 @@ the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 
 ## ruling-ledger
 
-- docs/portable/OPERATOR-RULINGS.md — OPERATOR RULINGS — the standing corrections ledger — Portable, model-agnostic. Load alongside `DOCTRINE-CORE.md`. — defines: A3; E11; E12; E13; +32 more — terms: long-form; drop-off; YouTube; world-building; high-paid; info-systems
+- docs/portable/OPERATOR-RULINGS.md — OPERATOR RULINGS — the standing corrections ledger — Portable, model-agnostic. Load alongside `DOCTRINE-CORE.md`. — defines: A3; E11; E12; E13; +33 more — terms: long-form; drop-off; YouTube; world-building; six-phase; high-paid
 
 ## capabilities
 
@@ -133,6 +133,7 @@ the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 - docs/runbooks/PRP_EXECUTION.md — PRP Execution — PRPs are durable execution contracts for work too broad or risky to ma — defines: P2 — terms: junior_developer; implementation_luna; cross-module; speedster; architect_sol; SigMap
 - docs/runbooks/RENDER-REGRESSION.md — When a render looks wrong — You do not need to read any animation math to use this page. — defines: — — terms: PASS 4 golden frames identical; dock-pair; mid-build; false; kinetics: unknown flag ignored; curvature_stroke
 - docs/runbooks/WORK-ORDER-GEMINI-PROFILES-2026-09-05.md — Work order — Gemini research profiles, corrections at t — To: the Gemini / Antigravity lane (the profile source, synced to every — defines: — — terms: Outreach Program; npm run research:index; closed-form; [DERIVED: from <sources>, <how>]; [UNVERIFIED]; ## NOT FOUND WHERE I LOOKED
+- docs/runbooks/WORK-ORDER-GEMINI-WEALTH-LOGIC-CUTS-2026-09-06.md — Work order — classify every cut in the Wealth Logic ref — To: the Gemini research lane (profile `video-researcher`). — defines: — — terms: unclassified; re-deriving; video.en.vtt; word-timed; hard-cut; dissolve
 
 ## spec
 

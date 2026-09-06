@@ -1380,3 +1380,24 @@ like always the better transition for full-page scene going to full-page ledger.
 3. **Consequences.** Tokyo v2: the holdings page mounts over the host's bar (s01 → s02) and over the desk plate (s06 → s07);
    the four docks shrink and move to the quiet zone. The shorts shape (doc 51 §51.2) and the script skill's SHORTS-SHAPE
    carry both rules.
+
+## E46 — E44/E45 are the shorts standard; the older transition rules were long-form and reactive; dissolves and Ken Burns are valid tools we misused (2026-09-06)
+
+Ruled on the transitions review (`docs/content-video-engine/TRANSITIONS-REVIEW-2026-09-06.md`), which found doc 51 §51.4 (dissolves
+and Ken Burns IN, everything from docs 42–44 OUT for shorts) contradicted by the Tokyo build and by E44/E45. The operator:
+*"dissolves and Ken Burns are valid tools, we were just using them incorrectly"* and *"E44 and E45 are probably more valid for
+shorts; old docs largely focused on long format, and to be honest a lot of it was reactive as we were failing to build."*
+
+1. **On a short, E44 and E45 govern.** The chart flexes on the hook; the world is the stage; clips dock and move by the
+   springs; the mount is the roll-out with the savor; spirals for returns. Where a rule written for the long-form opening
+   minute (doc 29 Part 9's 8–20 s first chart, the six-phase geometry, the plate cadence) conflicts with them on a short,
+   the short follows E44/E45. Doc 51 §51.4's exclusion list is withdrawn: the engine's pages, plates, deckle and morphs are
+   IN for the chart shorts. Its inclusion list stands, read correctly (2).
+2. **Dissolves and Ken Burns stay in the kit, used for what they are.** A dissolve is the mount on a word into a page, or the
+   join into the outro card; it is not the glue between two unrelated full-frame clips. Ken Burns is plate life on a still
+   that must hold, not a substitute for a page or a species. The misuse the Tokyo v1 curve punished was the chain of
+   full-frame clips joined by cuts and dissolves with no world persisting; the tools were not the fault.
+3. **The older docs are not wrong, they are dated.** Rules in docs 06, 15, 16, 29 and 51 written while the engine could not
+   yet build were reactive to that failure; they bind the long form until a long-form curve says otherwise, and they do not
+   bind a short against E44/E45. When a doc-29 rule is lifted into the shorts shape, it is lifted by name in doc 51, not
+   assumed.

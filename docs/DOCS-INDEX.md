@@ -14,7 +14,7 @@ Levels 1-6 are Markdown heading depth; level 7 is a table row (CAPABILITIES, BAC
 A `{...}` tail lists the section's bold phrases; a `<...>` tail its body terms - code
 spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 
-3186 records across 250 files.
+3193 records across 251 files.
 
 ## content/video_engine/projects/history-of-bjj/episode-1-research-brief.md
 
@@ -2361,17 +2361,17 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 
 ## docs/content-video-engine/51-THE-SHORTS-FORMAT.md
 
-- L1 [1] 51 — The shorts format: one page, ship in an afternoon — Everything needed to build a short, consolidated from docs 46, 49, 50 and the operator's {It is one page on purpose.; Why this exists:; Knowledge should make a short cheaper, not more expensive} <long-form; [post-key]; [new]; [catalyst]; two-line; late-stage; Spread = (Return − Cost) × Leverage; G-g; x[80,880] y[280,1340]; phone-native; stick-figure; single-colour>
+- L1 [1] 51 — The shorts format: one page, ship in an afternoon — Everything needed to build a short, consolidated from docs 46, 49, 50 and the operator's {It is one page on purpose.; Why this exists:; Knowledge should make a short cheaper, not more expensive} <long-form; [post-key]; [new]; [catalyst]; two-line; late-stage; Spread = (Return − Cost) × Leverage; G-g; roll-out; full-frame; x[80,880] y[280,1340]; phone-native>
 - L15 [2] 51.1 The four numbers — | | | {runtime; mechanisms; exactly one; visual pulse; 1.2–2.5 s; minimum type} <long-form>
 - L24 [2] 51.2 The shape — Gated (G2, 2026-09-05) — `gate_opening_structure.py` reads a measured clock under 3:00 as a short and asks this shape, not the long-form geometry: S01 the hook <long-form; [post-key]; [new]; [catalyst]; two-line; late-stage; Spread = (Return − Cost) × Leverage; G-g>
 - L46 [2] 51.3 What the operator's knowledge actually buys — One sentence nobody else in the format can say. {One sentence nobody else in the format can say.; That edge costs one sentence, not thirteen minutes.}
-- L57 [2] 51.4 Production standard — deliberately lower — Per the operator's shorts ruling (yen short, 2026-09-03), and unchanged: {IN:; OUT:; A short does not need the production bar. It needs legible t} <x[80,880] y[280,1340]; long-form>
-- L71 [2] 51.5 The honest read on the competition — They are not winning on no merit. They are winning on merits that are not informational: {legibility; completion; emotional job; cadence; We cannot beat them at aspiration and should not try.} <phone-native>
-- L88 [2] 51.6 The strategic point — Shorts fund the long-form's existence. Reach subsidises depth. The long essays are {Shorts fund the long-form's existence.; making every short justify the whole knowledge base.}
-- L97 [2] 51.7 Plates are a retention asset, not an acquisition asset — Operator, 2026-09-04: {This is the distinction the whole plate library has been mis; acquisition; retention; under 1 second, no interpretation} <stick-figure; single-colour>
-- L130 [2] 51.8 Motion is not animation — and the gate always knew it — Operator, 2026-09-04: {*motion means animation; Only the third step is wrong} <roll-out; lower-third; stick-figure; stage-mode; focus_zoom; retention-not-acquisition>
-- L170 [2] 51.9 Checklist — - [ ] every object nameable in under a second, no interpretation <x[80,880] y[280,1340]>
-- L184 [2] 51.10 Sources — 46 §46.4 (the spine) · 49 §49.1, §49.6 (safe box, short-form architecture) · <short-form>
+- L57 [2] 51.4 Production standard — deliberately lower — > Amended 2026-09-06 by E46 (`docs/portable/OPERATOR-RULINGS.md`): the exclusion list below is withdrawn for the chart {Amended 2026-09-06 by E46; IN:} <roll-out; full-frame; x[80,880] y[280,1340]; long-form>
+- L76 [2] 51.5 The honest read on the competition — They are not winning on no merit. They are winning on merits that are not informational: {legibility; completion; emotional job; cadence; We cannot beat them at aspiration and should not try.} <phone-native>
+- L93 [2] 51.6 The strategic point — Shorts fund the long-form's existence. Reach subsidises depth. The long essays are {Shorts fund the long-form's existence.; making every short justify the whole knowledge base.}
+- L102 [2] 51.7 Plates are a retention asset, not an acquisition asset — Operator, 2026-09-04: {This is the distinction the whole plate library has been mis; acquisition; retention; under 1 second, no interpretation} <stick-figure; single-colour>
+- L135 [2] 51.8 Motion is not animation — and the gate always knew it — Operator, 2026-09-04: {*motion means animation; Only the third step is wrong} <roll-out; lower-third; stick-figure; stage-mode; focus_zoom; retention-not-acquisition>
+- L175 [2] 51.9 Checklist — - [ ] every object nameable in under a second, no interpretation <x[80,880] y[280,1340]>
+- L189 [2] 51.10 Sources — 46 §46.4 (the spine) · 49 §49.1, §49.6 (safe box, short-form architecture) · <short-form>
 
 ## docs/content-video-engine/52-CONSTRUCT-DONT-INHERIT.md
 
@@ -3497,6 +3497,7 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 - L1306 [2] E43 — On a short the chart carries the number; the blind reader cannot see it, so a chart-carried beat is not a viewer miss (2026-09-06) — Ruled on the Tokyo short's fresh viewer read (V01 21/24: `[promise]` and `[rehook]` at 0:30–0:45 unperceived on "By the end {Conjoined beats are the shorts doctrine, not a defect.} <[promise]; [rehook]; re-describing; under-read; JUDGE-by-ear>
 - L1326 [2] E44 — The chart flexes on the hook: the first ledger page rolls out on the hook line, not after the archetype (2026-09-06) — Ruled on the Tokyo short's first Facebook read (`tokyo-tea-break/ANALYTICS-2026-09-06.md`, n = 8: the drop-off at 0:11, inside {The first ledger page lands on the hook line.} <drop-off; stick-figure; [DERIVED]; cut-on>
 - L1347 [2] E45 — A dock on a page is small and sits in the page's quiet space; the mount is the transition into a full-page ledger (2026-09-06) — Ruled on the first Tokyo v2 player with video docks (004698d). The operator: *"the dock needs to not cover the middle of the {A dock never covers the chart.} <quiet_zone; hand-placed; min-jerk; roll-out; full-frame; FADE-AND-MOUNT; SHORTS-SHAPE>
+- L1384 [2] E46 — E44/E45 are the shorts standard; the older transition rules were long-form and reactive; dissolves and Ken Burns are valid tools we misused (2026-09-06) — Ruled on the transitions review (`docs/content-video-engine/TRANSITIONS-REVIEW-2026-09-06.md`), which found doc 51 §51.4 (dissolves {On a short, E44 and E45 govern.} <roll-out; six-phase; full-frame>
 
 ## docs/portable/OUTRO-CTA-PLAYBOOK.md
 
@@ -3810,6 +3811,15 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 - L16 [2] 2. A `video-researcher` profile for this repo — Scope: the drawing / ink engine (docs 42-53, the kinetics modules), retention analytics (doc 50, the analytics behind the retention curve), audio (beds, cuts, d
 - L20 [2] 3. Trusted folders — Add `C:/Users/Snipe/Downloads/Outreach Program` (the main checkout; never a worktree path) to `~/.gemini/trustedFolders.json` and `projects.json` so orders run <projects.json>
 - L24 [2] Validation — An order against this repo ends with `build_docs_layers.py --check` green and `docs_find.py "<topic>"` returning the new report's sections. Report back the prof <build_docs_layers.py --check; docs_find.py "<topic>">
+
+## docs/runbooks/WORK-ORDER-GEMINI-WEALTH-LOGIC-CUTS-2026-09-06.md
+
+- L1 [1] Work order — classify every cut in the Wealth Logic reference by transition kind (2026-09-06) — To: the Gemini research lane (profile `video-researcher`). From: the Claude lane of `Outreach Program`. {To:; From:; Repo root:} <video-researcher; Outreach Program; report-landed; unclassified; re-deriving; video.en.vtt; word-timed; hard-cut; dissolve; wipe; push; zoom-through>
+- L6 [2] Why — Our shot ledger for Wealth Logic's "6 Ways Rich People Make Money With Debt" measures cadence (5.9 cuts/min, median 9.6 s) and <unclassified; re-deriving>
+- L13 [2] Read first (existing evidence, do not redo) — - `content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/04_shot_ledger_100_cuts.md` — the 100 shots <video.en.vtt; word-timed>
+- L23 [2] The order — For each of the 99 shot boundaries (shot N → N+1), from the source video at the boundary time (the ledger's End of N), {each of the 99 shot boundaries} <kind; hard-cut; dissolve; wipe; push; zoom-through; world-persists; other; duration_frames; world; persists; changes>
+- L39 [2] Where it lands and how (GEMINI.md "Research intake") — - The report: `docs/research/motion/WEALTH_LOGIC_TRANSITIONS_RESEARCH_BLUEPRINT.md` — title, the pass line, `## The question`, <## The question; ## Verdict up front; ## Sources; ## NOT FOUND WHERE I LOOKED; [UNVERIFIED]; [DERIVED: from the csv, <how>]; --check>
+- L53 [2] Reply — Open with the grammar: `POSITION: done | conditional | blocked`, `PATHS WRITTEN:` (absolute), `DISAGREEMENTS:`, `PREREQUISITES:`, <POSITION: done | conditional | blocked; PATHS WRITTEN:; DISAGREEMENTS:; PREREQUISITES:; NOT FOUND WHERE I LOOKED:>
 
 ## docs/seo-ingestion-implementation-tasks.md
 
