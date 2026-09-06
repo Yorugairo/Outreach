@@ -108,6 +108,23 @@ Write the report to docs/research/<area>/<TOPIC>_RESEARCH_BLUEPRINT.md per GEMIN
 + verified date, [UNVERIFIED]/[DERIVED] tags, a NOT FOUND WHERE I LOOKED block naming roots), then run
 python content/video_engine/scripts/build_docs_layers.py --write"`.
 
+### Commissioning Gemini from the Claude lane - the bridge, as measured (2026-09-06)
+
+The CLI is `~/.gemini/antigravity-cli/bin/agentapi.bat` (wraps `agy.exe agentapi`), a client of the RUNNING Antigravity IDE.
+It needs three environment variables: `ANTIGRAVITY_LS_ADDRESS=127.0.0.1:<the language server's second listening port>`
+(`netstat -ano | findstr LISTENING | findstr <language_server.exe pid>`; the first port refuses gRPC),
+`ANTIGRAVITY_CSRF_TOKEN` (the `--csrf_token` value on `language_server.exe`'s command line - read it into the env, never print it),
+and `ANTIGRAVITY_PROJECT_ID` = the repository PATH (`C:/Users/Snipe/Downloads/Outreach Program`; a project name from
+projects.json fails with "file does not exist"). The repo must be in `~/.gemini/trustedFolders.json` (added 2026-09-06).
+Commands: `new-conversation [--model=pro] [--profile=<p>] [--title=<t>] "<prompt>"` (echoes the prompt; the conversation id is
+the newest `~/.gemini/antigravity/conversations/<id>.db`), `get-conversation-metadata <id>`, `send-message <id> "<text>"`.
+Progress lives on disk: `~/.gemini/antigravity/brain/<id>/.system_generated/logs/transcript.jsonl`, one record per step
+(PLANNER_RESPONSE with tool_calls, GENERIC tool output, SYSTEM_MESSAGE) - tail it instead of polling the IDE.
+The other direction already runs: Astra opens headless Claude sessions (`~/.claude/projects/C--Users-Snipe-AppData-Local-Temp-agent-bridge-run-*`)
+with one JSON packet {packetId, brief <= 6 KB, review-only} and gets one structured reply (POSITION / DISAGREEMENTS / PREREQUISITES).
+Nobody polls `docs/runbooks/` for orders: an order is a file AND a send. First order sent 2026-09-06 00:43: conversation
+`7aaa9146-88f1-4f03-b004-d5bdf18a5492` (the profile work order).
+
 ## Execution bounds & Node guardrails
 
 - **Zero ad-hoc browser automation**: Never author ad-hoc Playwright, Puppeteer, or CDP scripts to simulate clicks, typing, or take exploratory screenshot loops against Google Flow or other web interfaces. Flow generation runs strictly through the `google-flow` MCP server or `FlowDagEngine` via `node tools/google-flow-driver/scripts/run-batch.mjs <batch.json>`.
