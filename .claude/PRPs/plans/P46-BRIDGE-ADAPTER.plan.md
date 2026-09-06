@@ -1,13 +1,13 @@
 ---
 id: P46-BRIDGE-ADAPTER
 title: The lane bridge as code - send an order, watch the reply, log the cost; one packet shape for Claude, Gemini and Astra
-status: draft
+status: running
 operation: feature
 risk: standard
 owner: parent
 branch: main
 created: 2026-09-06
-updated: 2026-09-06
+updated: 2026-09-06 (approved by /prp-implement; HG3 defaults set by the parent pending the operator: grace 10 min, SLA 60 min, residue budget 6 runs / 200k tokens per day)
 ---
 
 # The lane bridge as code
@@ -97,7 +97,7 @@ actionable: the inbox hook for live sessions, the daemon + per-lane handlers for
 ## Task Slices
 
 ### T1: bridge_env + bridge_send
-- Status: pending
+- Status: running
 - Owner: implementation_luna
 - Depends on: none
 - Write set: `content/video_engine/scripts/bridge_env.py`, `content/video_engine/scripts/bridge_send.py`, `content/video_engine/tests/test_bridge_send.py`, `.gitignore`
