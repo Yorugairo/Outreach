@@ -35,3 +35,31 @@ The June print is the latest TIC has released; the July table lands about two mo
 - **The brand line closes the description, not the script** (E41 / S07): it is a channel asset, and here it is written, not spoken, so nothing doubles.
 - **Length**: ~170 words before the tags, inside the range a phone reader finishes while the short loops.
 - **Tags**: five, topical, no stuffing.
+
+## Facebook version (operator's draft 2026-09-06, figures corrected against the dossier addendum)
+
+Your borrowing costs climbed while the Fed sat still. Thank Japan.
+
+Japan is America's biggest lender: $1.12 trillion of Treasuries on June's table—more than the UK or China.
+
+Since its February peak, Tokyo has quietly sold $122.6 billion of them in four months. Roughly a tenth of a pile decades in the making, back to where it stood in January 2025.
+
+When your biggest buyer walks away, the auction has to raise the yield to find new buyers. That is the whole mechanism.
+
+The two numbers you can track yourself, monthly:
+1. Japan's holdings on U.S. Treasury TIC Table 5. Growing or shrinking is the only question. Link in the first comment.
+2. The P/E multiple on your stocks. A higher bond yield discounts future earnings instantly. I know you don't think it matters much, because tech growth will outperform. I used to think so too.
+
+What changed is that Tokyo pledged ¥10 trillion (about $65 billion) to domestic chips and AI by 2030. If those investments pay off, it beats our bonds, and that flow might never come back.
+
+The money went home. The tab stayed here.
+
+I ran risk at JPMorgan. This channel is the mechanics, one number at a time.
+
+Not a panic. Not a plot. Mechanics.
+
+#MoneyPhysics #Treasuries #InterestRates #Economy #Reels
+
+First comment: the TIC Table 5 link (`https://ticdata.treasury.gov/resource-center/data-chart-center/tic/Documents/slt_table5.txt`) and the pinned note on the July print.
+
+Cut from the draft, with the reason: "4 years of it gone" (the pile did not grow evenly; the true figure is January 2025, dossier addendum), "and we may just be getting started" (April's print rose +18.3 B; the data is not yet a trend), "the same with Memory stocks in Korea" (the next episode's claim, unsourced here), three reach tags.

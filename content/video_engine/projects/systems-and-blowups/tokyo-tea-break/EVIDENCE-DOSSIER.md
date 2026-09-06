@@ -117,3 +117,16 @@ print; `ev-discount-rate-v1` stays built for the long-form P1), and any sell ins
 | "Tokyo has pledged ten trillion yen to chips and AI" | PM Ishiba's plan: support worth ¥10 trillion (~$65 B) or more by fiscal 2030 for semiconductors and AI (Rapidus + onshored fabs) | CNBC 2024-11-13, "Japan is ramping up efforts to revive its once dominant chip industry"; Bloomberg 2024-11-29, "Japan earmarks extra $9.9 billion for chips and AI this year" | **CITED** — a pledge, spoken as a pledge; "if that works" keeps the return claim conditional. **"My read: the money went home" is the narrator's read, attributed as such, not a sourced flow-of-funds claim** (operator, 2026-09-04: no commitment to Japan buying again) |
 
 | "the second number is on your phone... a higher yield discounts it" | **`ev-meta-yield-v1`** (2026-09-04): Meta trailing P/E **23.0x** (Yahoo via yfinance) at the 10-year's **4.77 %** (FRED DGS10); the same year-10 dollar supports **24.8 / 23.6 / 22.5 / 21.5x** at 4 / 4.5 / 5 / 5.5 %, shown as a PRICE on the page: trailing EPS $26.83 x the multiple = **$665 / $633 / $604 / $577** against **$617 now** - **-$40 a share, -$647 on $10,000, -6.5 % at 5.5 %** | builder `meta_yield()`; validates through `ledger_page.py --variant bars` | **CITED + derived** - the "now" bar is live, the others are arithmetic on it; no growth, no forecast. Operator, 2026-09-04: the signpost beat shows this chart, not a phone |
+
+## Addendum 2026-09-06 — the description's history claim, sourced (SCRIPT-90S-DESCRIPTION.md)
+
+The draft description said "40 years of accumulation, with 4 years of it gone" (linear arithmetic on "a tenth of the
+pile"). The pile did not grow evenly, so the arithmetic is not a figure. Checked against the TIC historical table
+(`https://ticdata.treasury.gov/resource-center/data-chart-center/tic/Documents/mfhhis01.txt`, fetched 2026-09-06,
+columns run Dec → Jan within each year):
+
+| the description says | actual | source | verdict |
+|---|---|---|---|
+| "4 years of it gone in 4 months" | Japan's holdings were last at or below June's $1,116.7 B in **January 2025 ($1,079.3 B)**; the February 2026 peak undid **about 17 months** of buying, not four years | mfhhis01.txt 2025 row (Jan 2025 = last column) vs TIC Table 5 2026-06 | **FAIL as written → reworded "back to where it stood in January 2025"** |
+| "40 years of accumulation" | the historical file starts in 2000 (Japan $317.7 B, Jan 2000); a 40-year span is plausible from other TIC series but is not on file here | mfhhis01.txt | **[VERIFY]** — say "decades" or source the 1980s series first |
+| the February 2026 peak | $1,239.3 B is the recent peak, not the record: the all-time high is **$1,325.5 B, November 2021**; June 2026's level was exceeded through most of 2015–16 and 2020–22 | mfhhis01.txt 2021 row | context for any "record" wording — never say record |
