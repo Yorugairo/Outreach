@@ -18,7 +18,7 @@ reference as normalised (`42§42.2` - which `46 s46.4` also writes - `29§Part3`
 `E38`, `M13`, `G-j`); a list (`docs 39 and 40`) makes one edge per document, and `to` is
 null when nothing in the index answers it.
 
-4052 topics, 3707 citation edges. The 200 largest topics follow,
+4052 topics, 3708 citation edges. The 200 largest topics follow,
 at most 12 sections each - the JSONL holds every one.
 
 ## youtube (126)
@@ -3096,21 +3096,6 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/UNIFIED_LEDGER_DRAWING_ENGINE_AND_COMFY_SPEC.md:73 — 2.4 Calibrated Dial Matrix for Engine 1 — - Model: `depth_anything_v2_vitl_fp32.safetensors` (ViT-Large in FP32; FP16 is strictly banned due to logit underflow).
 - docs/AGENTS-SEO-PLATFORM.md:135 — 8. Repo conventions — - Python: run with the 3.11 interpreter. If a venv exists use it; otherwise `python` resolves to 3.11.15 on this host.
 
-## muted-caption (11)
-
-- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-90S.claude.md:67 — Muted-caption test (V-a, run on the build) — Cover the captions: shots 4, 5, 7, 9, 12, 13 read the claim from the page alone; shots 1, 8,
-- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-90S.md:68 — REVISION 2026-09-04 — every plate re-briefed as an argument — Applying `RULE-abstract-to-concrete.md`. The table above briefed settings; this one
-- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-90S.md:104 — Muted-caption test on the old table — Cover the captions and shots 1, 3, 5, 6, 8, 12, 13 all still read as "a place." Only
-- docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:92 — 2b. AGENT-JUDGED — reproducible, automatable, not deterministic — A judgment a model executes on every build. Belongs with P36 (the viewer) rather than
-- docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:97 — V-a · The muted-caption judge — Operator contribution, 2026-09-04. This is not from the research.
-- docs/content-video-engine/BACKLOG.md:182 — The day's read — 2026-09-05 evening (the Tokyo short is done: 1:28.8, motion gate PASS) — What landed today. P43 complete (the stroke ON, the spring, the squash ON, K-M ink kept for ink over ink); the Remotion
-- docs/content-video-engine/BACKLOG.md:207 — Ready to pull in — read 2026-09-05 after the hands-on day (operator: "see if we're ready to pull anything else in") — Ordered by leverage against what the Tokyo build now exercises. Each names the artifact it lands on.
-- docs/content-video-engine/BACKLOG.md:277 — V-a The muted-caption judge — (operator, 47 §2b) — a model reads the test scene with captions removed and states the claim it makes
-  cited by: content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-90S.claude.md:67, docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:97, docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:185, docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:210, docs/content-video-engine/BACKLOG.md:182, docs/content-video-engine/BACKLOG.md:207, +2 more
-- docs/content-video-engine/CAPABILITIES.md:164 — The enforcement layer (P37, 2026-09-04) — The research of 2026-09-04 as checks that run - each shown failing before passing (47 §5b).
-- docs/content-video-engine/CAPABILITIES.md:176 — Muted-caption judge — a model reads the captionless frame; verdict + `scenery` / `over-dense` diagnosis owned by code
-- docs/content-video-engine/RULE-abstract-to-concrete.md:1 — The plate throws the punch — abstract-to-concrete, 2026-09-04 — Adopted from the doodle-channel master prompt's rule 5, which is the one genuinely
-
 ## one-line (11)
 
 - docs/agent-context/SKILL_ROUTER.md:42 — Named Agent Routing — - Parent task: owns the critical path, shared-file integration, protected
@@ -3183,7 +3168,7 @@ at most 12 sections each - the JSONL holds every one.
 - docs/portable/OPERATOR-RULINGS.md:667 — E23 — A3 sits at 10% of runtime; the cycle check runs the whole video (2026-09-02) — Two tools disagreed on where rehook A3 belongs. The opening gate read
   cited by: docs/content-video-engine/CAPABILITIES.md:94, docs/content-video-engine/patterns/phase-guides/P2.md:144
 - docs/portable/OPERATOR-RULINGS.md:1306 — E43 — On a short the chart carries the number; the blind reader cannot see it, so a chart-carried beat is not a viewer miss (2026-09-06) — Ruled on the Tokyo short's fresh viewer read (V01 21/24: `[promise]` and `[rehook]` at 0:30–0:45 unperceived on "By the
-  cited by: docs/content-video-engine/BACKLOG.md:420
+  cited by: docs/content-video-engine/BACKLOG.md:182, docs/content-video-engine/BACKLOG.md:420
 
 ## research-packet.v1 (11)
 
@@ -3256,3 +3241,19 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/21-ART-STYLE-REFERENCE-REVIEW.md:196 — Register dial — The lane spans a dial rather than a single style, and the dial is set by the script, not the art:
 - docs/content-video-engine/21-ART-STYLE-REFERENCE-REVIEW.md:308 — Why that does not mean this lane is out of reach — Count the primitives. An oval, a hair scribble, two dots, one curve, five lines —
 - docs/content-video-engine/21-ART-STYLE-REFERENCE-REVIEW.md:582 — What this changes — - `stick_figure` is removed as a lane name — but not as a capability. Lane D is a
+
+## stroke-dashoffset (11)
+
+- content/video_engine/sources/reference_analyses/ACADEMIC_LITERATURE_DRAWING_AND_2_5D_ANIMATION_ENGINE.md:95 — 1.2 Kinematic Arc-Length Reparameterization for SVG & Canvas — Standard web animations interpolate SVG `stroke-dashoffset` linearly with clock time ($s(t) = rac{L}{T} t$), producing r
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/07_academic_literature_drawing_and_2_5d_animation_engine.md:95 — 1.2 Kinematic Arc-Length Reparameterization for SVG & Canvas — Standard web animations interpolate SVG `stroke-dashoffset` linearly with clock time ($s(t) = rac{L}{T} t$), producing r
+- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:474 — 8.10 The hand follows the reveal-engine contract (correction, 2026-08-24) — The first hand pass slid a marker along a straight clip-path edge. That is
+- docs/content-video-engine/39-EVIDENCE-CHART-SYSTEM.md:377 — 11. Data documents animate too — the line is drawn by narration beats — Operator question, 2026-08-25: keep charts as they are, or move to manim?
+- docs/content-video-engine/39-EVIDENCE-CHART-SYSTEM.md:420 — Mechanics — | Element | Technique |
+- docs/content-video-engine/42-DRAWING-KINETICS.md:1 — 42 — Drawing kinetics: how a stroke, a settle, and a squash are computed — Extracted from `07_academic_literature_drawing_and_2_5d_animation_engine.md` (Pillars 1
+  cited by: docs/content-video-engine/48-THE-FIGURE-AND-THE-GROUND.md:1, docs/content-video-engine/48-THE-FIGURE-AND-THE-GROUND.md:73, docs/content-video-engine/50-THE-PHONE-IS-THE-SCREEN.md:1, docs/content-video-engine/BACKLOG.md:296, docs/content-video-engine/BACKLOG.md:407, docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:1, +3 more
+- docs/content-video-engine/42-DRAWING-KINETICS.md:12 — 42.1 The stroke — curvature-reparameterised drawing — The defect it fixes. `stroke-dashoffset` interpolated linearly in time is constant
+  cited by: docs/content-video-engine/44-INK-AND-SURFACE.md:71, docs/content-video-engine/48-THE-FIGURE-AND-THE-GROUND.md:92, docs/content-video-engine/52-CONSTRUCT-DONT-INHERIT.md:42, docs/content-video-engine/52-CONSTRUCT-DONT-INHERIT.md:167, docs/content-video-engine/briefs/RESEARCH-BRIEF-animation-craft.md:118, docs/content-video-engine/CAPABILITIES.md:14
+- docs/content-video-engine/52-CONSTRUCT-DONT-INHERIT.md:1 — 52 — Construct, don't inherit — Operator, 2026-09-04:
+- docs/content-video-engine/52-CONSTRUCT-DONT-INHERIT.md:42 — 52.2 Whiteboard animation is not a new capability — The operator's original intent — a hand drawing to life what the narration is saying —
+- docs/content-video-engine/FINDING-the-animation-math-and-what-it-changes.md:1 — The animation math, and what each piece changes in our code — 2026-09-04 — From `07_academic_literature_drawing_and_2_5d_animation_engine.md`, read in full after the
+- docs/content-video-engine/FINDING-the-animation-math-and-what-it-changes.md:15 — 1. Every stroke we draw is wrong in one specific, fixable way — Now: `stroke-dashoffset` interpolated linearly in time. Constant velocity along the
