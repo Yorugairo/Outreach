@@ -65,8 +65,9 @@ retrievable and is not evidence.
    model). Working files go under `docs/research/runs/<slug>/` (gitignored, never indexed, never cited).
 2. **Shape.** Title line, then `*Pass-N · YYYY-MM-DD · sources: … · for: <episode / capability>*`, then
    `## The question`, `## Verdict up front`, numbered `## N. <the concept, in the words it is searched by>`
-   sections, `## Sources`, and a final `## NOT FOUND WHERE I LOOKED` block (what was searched for and not
-   found - never "does not exist"). **Headings name the concept**: a section about the minimum-jerk law says
+   sections, `## Sources`, and a final `## NOT FOUND WHERE I LOOKED` block: each item names what was searched for, the roots and
+   sources actually searched, and the coverage limits (paywalled, not crawled, time-boxed) - never "does not
+   exist", which a search cannot establish. **Headings name the concept**: a section about the minimum-jerk law says
    "minimum-jerk" in its heading or first sentence, or no index will find it.
 3. **Every figure carries its proof line**, one per figure:
    `[Metric or statute | exact value with units | primary authority | URL: https://… | Verified YYYY-MM-DD]`.

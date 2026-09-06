@@ -18,6 +18,8 @@ parent); tool uses and wall time from the same notification. Success = every req
 located (`path:line`). Confound: the two types carry different system prompts (Explore reads excerpts;
 the role carries the repo contract), so this compares *harness + model*, not the model alone.
 
+**What this establishes (labelled after Astra's review, 2026-09-05):** the controlled comparison is Fable-subagent vs Opus-subagent under DIFFERENT prompts (built-in Explore vs the repo role), so it measures harness+model, not the model alone; the inline-parent baseline below is a rough transcript segmentation, not a controlled run; persistent-session savings were NOT measured (continuation is unavailable in this build). The false-negative case in round 2 is now disclosed and belongs in the development/regression set, never a held-out set.
+
 ## Results
 
 | Q | lookup | Explore (Fable) tokens / tools / s | explorer (Opus) tokens / tools / s |

@@ -47,3 +47,16 @@ Delegating Research to Gemini CLI", and this repo's `evals/RETRIEVAL-BENCHMARK-2
   `projects.json` and defines a `video-researcher` profile (animation math, drawing-engine literature,
   retention analytics, audio); the four existing profiles are the trades repo's. Not done by the Claude
   lane - operator's Gemini config.
+
+## Astra's review (2026-09-05, later) - accepted, and what changed here
+
+Astra agreed with the four recommendations with qualifications; all four are applied on this side:
+
+1. **Indexer roots/exclusions are project-configurable** (in flight: `docs/DOCS-INDEX.config.json` + `--root/--exclude/--include/--output`; defaults reproduce the committed output byte-for-byte). `docs/research/runs/` stays excluded by default as gitignored scratch; a run is pulled in with `--include` when it is promoted. Hashes, supersession and atomic publication remain P2's additions on top of the record shape.
+2. **Native memory is worker scratch with enforced isolation**: the read-only roles moved from `memory: user` (instructions-only separation) to `memory: local` - worktree-local, gitignored (`.claude/agent-memory-local/`). The durable layer is `docs/agent-memory/<role>/` in the repo, read by workers, written only by the parent after review; the first promoted entry is the explorer's audio-bed map.
+3. **NOT FOUND blocks name the roots searched and the coverage limits**, never nonexistence (GEMINI.md intake, the roles' retrieval discipline).
+4. **The benchmark is labelled for what it establishes**: Fable-subagent vs Opus-subagent under different prompts (harness+model), a rough inline-parent baseline, persistence unmeasured, the disclosed false-negative case moved to the development/regression set.
+
+Direct communication: agreed - a shared artifact plus a tiny CLI request ("review revision X, return disagreements and evidence only"), the parent receives the delta. Portable references: this note lives in the main checkout (`C:/Users/Snipe/Downloads/Outreach Program/docs/runbooks/…`); worktree paths are never the reference.
+
+**Commissioning Claude from another lane:** the Claude Code CLI is installed on this machine (2.1.259, on PATH) but is **not logged in** - the desktop app's session does not authenticate it (`claude -p` answers "Not logged in · Please run /login"). One interactive `claude` → `/login` on the right account (see the operator's login memory: Chrome + the Google account, not Edge) makes `claude -p "<order>"` available to Astra and Gemini. No second install is needed.

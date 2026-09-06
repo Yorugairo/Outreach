@@ -138,15 +138,16 @@ carries the fix); `~/.claude/hooks/dispatch_ledger.py` on SubagentStop appends e
 `evals/DISPATCH-LOG.jsonl`. Both pipe-tested; hooks load at session start. The always-loaded layer was cut the same
 day: AGENTS.md sections 2-8 (the SEO platform) moved to `docs/AGENTS-SEO-PLATFORM.md` (15.4 -> 9.9 KB), the ECC meta
 rules trimmed; the quality rules (TDD, review, security, style, git) stay. Agent memories record anchors
-(`path - heading or symbol`), never line numbers. Main is bundled to `G:/My Drive/Backups/outreach-program/` (Google
+(`path | heading or symbol | what`), never line numbers. Main is bundled to `G:/My Drive/Backups/outreach-program/` (Google
 Drive) as the off-machine backup until the push decision. One checkout per agent stays an open problem: the agents
 coordinate across projects (operator, 2026-09-05). Non-trivial diffs go through `reviewer` before the commit.
 
 Separate search and implementation agents: yes - their memories are different maps (`explorer`:
 where things live; `implementation_luna`: patterns and pitfalls) and contexts never share in this
-harness anyway. Persistence is per-agent memory (`memory: user` - sessions run in worktrees, so
-`project` scope would fragment per worktree), which accumulates *where things live* across
-sessions and cuts tool calls, not the fixed overhead; `/resume` continuation is CLI-only.
+harness anyway. Persistence is two layers (P2 memory contract, accepted 2026-09-05): worker scratch is `memory: local`
+(worktree-local, gitignored, anchors only) and the durable layer is `docs/agent-memory/<role>/` in the repo,
+read by workers and written only by the parent after review. Memory cuts tool calls, not the fixed
+overhead; `/resume` continuation is CLI-only.
 
 What stays with the parent regardless of model: the decision to dispatch, the
 brief, the review of every delegated diff, the human gates, and anything
