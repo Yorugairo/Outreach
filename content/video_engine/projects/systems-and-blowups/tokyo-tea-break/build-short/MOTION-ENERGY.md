@@ -1,6 +1,6 @@
 # Motion energy - tokyo-tea-break
 
-`E = integral |v|^2 dt`, sampled from the built `player.html` at **15 fps** (0-88.823 s, 1333 frames, DOM depth <= 4), measured in 30.1 s.
+`E = integral |v|^2 dt`, sampled from the built `player.html` at **15 fps** (0-88.823 s, 1333 frames, DOM depth <= 4), measured in 27.1 s.
 
 Reference: **0.22** - ANSWERS-RESEARCH-BRIEF-animation-craft.md A6 - invented, reclassified in 47-FINDINGS-TO-CHECKS.md:146. It is a starting reference, not a threshold; a scene over it is a question, not a failure.
 
@@ -10,24 +10,21 @@ The template carries no `data-motion` attributes, so motion is discovered by cha
 
 | | E_primary | E_secondary | ratio | reference | difference |
 |---|---:|---:|---:|---:|---:|
-| translation (px^2/s) | 1,050,345,224.4 | 27,050,074.5 | **0.026** | 0.22 | -0.194 |
-| opacity (1/s) | 752.5 | 1,806.8 | **2.401** | 0.22 | 2.181 |
+| translation (px^2/s) | 1,307,384,547.1 | 32,999,269.8 | **0.025** | 0.22 | -0.195 |
+| opacity (1/s) | 1,588.6 | 1,762.7 | **1.110** | 0.22 | 0.890 |
 
 ## 2. Per scene
 
 | scene | span (s) | E_primary | E_secondary | ratio | vs 0.22 | movers mean/max | max step (px) |
 |---|---|---:|---:|---:|---|---:|---:|
-| s01 | 0.00-5.09 | 0.0 | 64,707.3 | **-** | - | 1.3 / 5 | 36 |
-| s02 | 5.09-8.99 | 2,666,017.2 | 96,274.5 | **0.036** | under | 1.3 / 6 | 221 |
-| s03 | 8.99-17.17 | 2,672,457.9 | 12,507.1 | **0.005** | under | 1.3 / 5 | 207 |
-| s04 | 17.17-33.05 | 413,468,760.8 | 6,618,514.2 | **0.016** | under | 4.0 / 37 | 833 |
-| s05 | 33.05-38.96 | 2,666,007.9 | 57,198.2 | **0.021** | under | 1.5 / 4 | 227 |
-| s06 | 38.96-44.88 | 733,115.8 | 19,589,943.2 | **26.721** | OVER | 9.7 / 18 | 203 |
-| s07 | 44.88-54.52 | 619,455,226.2 | 369,126.3 | **0.001** | under | 6.6 / 51 | 830 |
-| s08 | 54.52-61.76 | 2,667,538.2 | 5,447.4 | **0.002** | under | 1.6 / 5 | 227 |
-| s09 | 61.76-75.73 | 3,350,092.4 | 194,114.3 | **0.058** | under | 10.3 / 66 | 52 |
-| s10 | 75.73-82.62 | 2,666,007.9 | 42,212.0 | **0.016** | under | 1.5 / 5 | 227 |
-| s11 | 82.62-88.82 | 0.0 | 30.0 | **-** | - | 0.3 / 3 | 1 |
+| s01 | 0.00-3.29 | 0.0 | 25,792.0 | **-** | - | 1.5 / 5 | 29 |
+| s02 | 3.29-38.96 | 87,989,848.0 | 7,805,687.0 | **0.089** | under | 1.9 / 36 | 363 |
+| s03 | 38.96-44.88 | 555,273,499.9 | 23,049,948.8 | **0.042** | under | 12.0 / 60 | 995 |
+| s04 | 44.88-61.76 | 311,196,750.7 | 1,322,775.4 | **0.004** | under | 3.3 / 51 | 830 |
+| s05 | 61.76-75.73 | 3,355,421.0 | 752,824.7 | **0.224** | OVER | 11.8 / 97 | 151 |
+| s06 | 75.73-81.55 | 335,310,952.9 | 3,495.1 | **0.000** | under | 3.9 / 57 | 863 |
+| s07 | 81.55-82.62 | 14,258,074.7 | 38,716.9 | **0.003** | under | 4.1 / 32 | 607 |
+| s08 | 82.62-88.82 | 0.0 | 30.0 | **-** | - | 0.3 / 3 | 1 |
 
 `max step` is the largest single-frame centre displacement in the scene - the tell for a re-layout counted as motion. A rebuilt subtree jumps once; a real move spreads over consecutive frames.
 
@@ -35,35 +32,35 @@ The template carries no `data-motion` attributes, so motion is discovered by cha
 
 | element | class | label | E_trans | E_opacity | frames moving |
 |---|---|---|---:|---:|---:|
-| `/#wB/div.lp:0/div.lp-page:0/svg.lp-chart:6/text.lab:5` | lab | PRIMARY | 158,038,161.4 | 30.00 | 48 |
-| `/#wB/div.lp:0/div.lp-page:0/svg.lp-chart:6/text.lab:4` | lab | PRIMARY | 132,522,055.7 | 15.00 | 33 |
-| `/#wB/div.lp:0/div.lp-page:0/svg.lp-chart:6/path.ser:15` | ser | PRIMARY | 110,777,242.4 | 15.00 | 33 |
-| `/#wB/div.lp:0/div.lp-page:0/svg.lp-chart:6/text.lab:2` | lab | PRIMARY | 95,793,902.0 | 15.00 | 33 |
-| `/#wB/div.lp:0/div.lp-page:0/svg.lp-chart:6/text.lab:6` | lab | PRIMARY | 93,683,741.3 | 15.00 | 35 |
-| `/#wB/div.lp:0/div.lp-page:0/svg.lp-chart:6/line.grid:3` | grid | PRIMARY | 67,965,976.5 | 15.00 | 31 |
-| `/#wB/div.lp:0/div.lp-page:0/svg.lp-chart:6/text.lab:11` | lab | PRIMARY | 65,982,199.9 | 15.00 | 34 |
-| `/#wB/div.lp:0/div.lp-page:0/svg.lp-chart:6/text.lab:7` | lab | PRIMARY | 54,889,624.4 | 30.00 | 46 |
-| `/#wB/div.lp:0/div.lp-page:0/svg.lp-chart:6/text.lab:10` | lab | PRIMARY | 36,036,725.9 | 15.00 | 33 |
-| `/#wB/div.lp:0/div.lp-page:0/svg.lp-chart:6/text.lab:8` | lab | PRIMARY | 29,650,475.9 | 15.00 | 33 |
-| `/#wB/div.lp:0/div.lp-page:0/svg.lp-chart:6/text.sname:17` | sname | PRIMARY | 28,144,316.6 | 3.53 | 33 |
-| `/#wB/div.lp:0/div.lp-page:0/svg.lp-chart:6/text.lab:9` | lab | PRIMARY | 22,578,236.5 | 16.62 | 46 |
-| `/#wB/div.lp:0/div.lp-page:0/svg.lp-chart:6/path.ser:12` | ser muted | PRIMARY | 18,706,230.8 | 15.00 | 36 |
-| `/#seam` | div | PRIMARY | 16,009,070.2 | 180.00 | 50 |
-| `/#wB/div.lp:0/div.lp-page:0/svg.lp-chart:6/line.ax:0` | ax | PRIMARY | 11,180,070.9 | 30.00 | 29 |
-| `/#wB/div.lp:0/div.lp-page:0/div.lp-ink:3/span.w:4` | w | PRIMARY | 3,401,988.9 | 0.75 | 42 |
-| `/#wB/div.lp:0/div.lp-page:0/div.lp-ink:3/span.w:3` | w | PRIMARY | 3,376,172.3 | 0.75 | 42 |
-| `/#wB/div.lp:0/div.lp-page:0/div.lp-ink:3/span.w:0` | w | PRIMARY | 3,376,035.3 | 0.75 | 42 |
-| `/#wB/div.lp:0/div.lp-page:0/div.lp-ink:3/span.w:1` | w | PRIMARY | 3,358,905.4 | 0.75 | 42 |
-| `/#wB/div.lp:0/div.lp-page:0/div.lp-ink:3/span.w:2` | w | PRIMARY | 3,358,475.8 | 0.75 | 42 |
-| `/#wB/div.lp:0/div.lp-page:0/div.lp-ink:3` | lp-ink lp-title | PRIMARY | 3,350,040.8 | 0.75 | 42 |
-| `/#wB/div.lp:0/div.lp-page:0/div.lp-ink:4/span.w:0` | w | PRIMARY | 3,324,709.1 | 0.48 | 42 |
-| `/#wB/div.lp:0/div.lp-page:0/div.lp-ink:4/span.w:6` | w | PRIMARY | 3,320,010.9 | 0.48 | 42 |
-| `/#wB/div.lp:0/div.lp-page:0/div.lp-ink:4/span.w:5` | w | PRIMARY | 3,319,377.9 | 0.48 | 42 |
-| `/#wB/div.lp:0/div.lp-page:0/div.lp-ink:4/span.w:1` | w | PRIMARY | 3,309,565.5 | 0.48 | 42 |
+| `/#wB/div.lp:0/div.lp-page:0/svg.lp-chart:6/text.lab:5` | lab | PRIMARY | 108,417,585.8 | 30.00 | 35 |
+| `/#wB/div.lp:0/div.lp-page:0/svg.lp-chart:6/text.lab:4` | lab | PRIMARY | 88,872,442.7 | 15.00 | 22 |
+| `/#wB/div.lp:0/div.lp-page:0/svg.lp-chart:6/path.ser:15` | ser | PRIMARY | 74,383,829.2 | 15.00 | 22 |
+| `/#wB/div.lp:0/div.lp-page:0/svg.lp-chart:6/text.lab:2` | lab | PRIMARY | 63,575,069.8 | 15.00 | 21 |
+| `/#wB/div.lp:0/div.lp-page:0/svg.lp-chart:6/text.lab:6` | lab | PRIMARY | 62,242,230.7 | 15.00 | 21 |
+| `/#wB/div.lp:0/div.lp-page:0/svg.lp-chart:6/text.lab:11` | lab | PRIMARY | 44,428,260.6 | 15.00 | 21 |
+| `/#wB/div.lp:0/div.lp-page:0/svg.lp-chart:6/line.grid:3` | grid | PRIMARY | 41,579,166.1 | 15.00 | 19 |
+| `/#wA/div.lp:0/div.lp-page:0/div.lp-ink:4/span.w:6` | w | PRIMARY | 38,203,884.2 | 7.68 | 6 |
+| `/#wB/div.lp:0/div.lp-page:0/svg.lp-chart:6/text.lab:7` | lab | PRIMARY | 36,676,229.3 | 30.00 | 35 |
+| `/#wA/div.lp:0/div.lp-page:0/div.lp-ink:3/span.w:4` | w | PRIMARY | 36,196,162.1 | 12.00 | 6 |
+| `/#wA/div.lp:0/div.lp-page:0/div.lp-ink:3/span.w:0` | w | PRIMARY | 35,907,166.0 | 12.00 | 6 |
+| `/#wA/div.lp:0/div.lp-page:0/div.lp-ink:3/span.w:3` | w | PRIMARY | 32,704,663.7 | 12.00 | 6 |
+| `/#wA/div.lp:0/div.lp-page:0/div.lp-ink:3/span.w:1` | w | PRIMARY | 31,515,926.2 | 12.00 | 6 |
+| `/#wA/div.lp:0/div.lp-page:0/div.lp-ink:3/span.w:2` | w | PRIMARY | 30,667,469.0 | 12.00 | 6 |
+| `/#wA/div.lp:0/div.lp-page:0/div.lp-ink:4/span.w:0` | w | PRIMARY | 30,607,274.4 | 7.68 | 6 |
+| `/#wA/div.lp:0/div.lp-page:0/div.lp-ink:3` | lp-ink lp-title | PRIMARY | 29,635,987.8 | 12.00 | 6 |
+| `/#wA/div.lp:0/div.lp-page:0/div.lp-ink:4/span.w:1` | w | PRIMARY | 27,203,171.8 | 7.68 | 6 |
+| `/#wA/div.lp:0/div.lp-page:0/div.lp-ink:4/span.w:5` | w | PRIMARY | 26,127,082.1 | 7.68 | 6 |
+| `/#wA/div.lp:0/div.lp-page:0/div.lp-ink:4/span.w:2` | w | PRIMARY | 25,584,188.7 | 7.68 | 6 |
+| `/#wA/div.lp:0/div.lp-page:0/div.lp-ink:4/span.w:3` | w | PRIMARY | 24,939,675.0 | 7.68 | 6 |
+| `/#wA/div.lp:0/div.lp-page:0/div.lp-ink:4/span.w:7` | w | PRIMARY | 24,806,446.9 | 7.68 | 6 |
+| `/#wA/div.lp:0/div.lp-page:0/div.lp-ink:4/span.w:4` | w | PRIMARY | 24,731,590.3 | 7.68 | 6 |
+| `/#wB/div.lp:0/div.lp-page:0/svg.lp-chart:6/text.lab:10` | lab | PRIMARY | 23,627,271.7 | 15.00 | 22 |
+| `/#wA/div.lp:0/div.lp-page:0/div.lp-ink:4/span.w:8` | w | PRIMARY | 23,368,236.5 | 7.68 | 6 |
+| `/#wA/div.lp:0/div.lp-page:0/div.lp-ink:4` | lp-ink lp-sub | PRIMARY | 23,195,129.4 | 7.68 | 6 |
 
 ## 4. The read
 
-Whole-screen secondary/primary translation ratio is **0.026** against the 0.22 reference (under it). 1 of 11 scenes exceed it: s06 (26.721). The pieces that dominate are `text.lab:5` (PRIMARY, 158,038,161), `text.lab:4` (PRIMARY, 132,522,056), `path.ser:15` (PRIMARY, 110,777,242), `text.lab:2` (PRIMARY, 95,793,902), `text.lab:6` (PRIMARY, 93,683,741). Read the ratio as a description of this build, not a verdict on it - the number it is compared against was invented, and the point of measuring is to replace it with one derived from our own footage and the references (BACKLOG X2).
+Whole-screen secondary/primary translation ratio is **0.025** against the 0.22 reference (under it). 1 of 8 scenes exceed it: s05 (0.224). The pieces that dominate are `text.lab:5` (PRIMARY, 108,417,586), `text.lab:4` (PRIMARY, 88,872,443), `path.ser:15` (PRIMARY, 74,383,829), `text.lab:2` (PRIMARY, 63,575,070), `text.lab:6` (PRIMARY, 62,242,231). Read the ratio as a description of this build, not a verdict on it - the number it is compared against was invented, and the point of measuring is to replace it with one derived from our own footage and the references (BACKLOG X2).
 
 ## 5. Classification table (declared, not guessed)
 
@@ -121,4 +118,4 @@ This is DOM geometry, not pixels. Four kinds of on-screen motion are invisible t
 3. **Shape change that leaves the bounding-box centre where it was** - a symmetric grow, a boil, a colour or stroke-width change.
 4. **Motion across a content swap** - when an element's text or `src` changes, identity is reset and the step is dropped, because a caption page turning over is a cut, not a pan.
 
-Scenes measuring `E_primary = 0` here: **s01, s11**. Read that as "no primary DOM element translated", never as "nothing moved" - check the scene's world layer before drawing any conclusion from it.
+Scenes measuring `E_primary = 0` here: **s01, s08**. Read that as "no primary DOM element translated", never as "nothing moved" - check the scene's world layer before drawing any conclusion from it.

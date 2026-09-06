@@ -1,1 +1,30 @@
-[]
+[
+ {
+  "asset": "dock-c-blue-ties-panel",
+  "title": "Three men in blue ties",
+  "source": "@StickMike \u00b7 Money Physics",
+  "species": "deck",
+  "badges": []
+ },
+ {
+  "asset": "dock-a2-counter-colder",
+  "title": "The host at the counter",
+  "source": "@StickMike \u00b7 Money Physics",
+  "species": "deck",
+  "badges": []
+ },
+ {
+  "asset": "dock-g-two-fingers",
+  "title": "Two numbers",
+  "source": "@StickMike \u00b7 Money Physics",
+  "species": "deck",
+  "badges": []
+ },
+ {
+  "asset": "dock-f-toll-gate-to-fab",
+  "title": "The gate to the fab",
+  "source": "@StickMike \u00b7 Money Physics",
+  "species": "deck",
+  "badges": []
+ }
+]

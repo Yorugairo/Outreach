@@ -165,75 +165,135 @@ def seekable_clip(name: str, src: Path | None = None) -> Path:
     return out
 
 
+# THE DOCKS (E44 / operator, 2026-09-06: "use the chart plate/ledger AND THEN DOCK the animation videos"): under v2 the page
+# is the constant and the clips arrive OVER it. The VIDEO DOCK shipped 2026-09-06 (c0c6a17: a clip docks as a <video> on the
+# scene clock, sharing the world clip's seek; the motion gate credits a live video dock as motion). A dock asset that resolves
+# to an .mp4 becomes a video dock in the compiler (`build_scene_timeline_f.is_video_asset`), so the build registers the CLIP
+# itself. The crop columns below are kept for the still fallback (`--still-docks`), which was v2's first build before the
+# video dock existed: a 9:16 solo card is 800px wide at top 553 inside the mobile safe box y[280,1340] (doc 49 s49.1).
+DOCK_STILLS = {                     # dock asset id -> (source clip, crop height, crop y) on the clips' own 720x1280
+    "dock-c-blue-ties-panel":   ("clip-c-blue-ties-panel-v2.mp4", 540, 380),   # the panel, the desk, the boy on his phone
+    "dock-a2-counter-colder":   ("clip-a2-counter-colder-v2.mp4", 660, 240),   # the host at the counter, the two cups
+    "dock-g-two-fingers":       ("clip-g-two-fingers-v2.mp4", 660, 200),       # both hands, the two fingers up
+    "dock-f-toll-gate-to-fab":  ("clip-f-toll-gate-to-fab-v2.mp4", 620, 190),  # the open gate, the road, the fab
+}
+
+
+STILL_DOCKS = "--still-docks" in sys.argv   # the pre-video-dock fallback: dock each clip's first frame instead
+
+
+def dock_still(aid: str) -> str:
+    """Register the dock asset with the resolver (`build_render_f.find_asset` checks STAMPED first, build_render_f.py:49).
+    Default: the CLIP itself, so the compiler makes a VIDEO dock (E44 / R26-7, video dock c0c6a17). With `--still-docks`:
+    the clip's first frame cropped to the card, written to build-short/docks/ - v2's first build, kept as the fallback."""
+    import subprocess
+    import build_render_f as R
+    name, h, y = DOCK_STILLS[aid]
+    src = CLIPS / name
+    if not STILL_DOCKS:
+        R.STAMPED[aid] = str(src)
+        return aid
+    out = BUILD / "docks" / f"{aid}.png"
+    out.parent.mkdir(parents=True, exist_ok=True)
+    if not out.exists() or out.stat().st_mtime < src.stat().st_mtime:
+        subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", str(src), "-frames:v", "1",
+                        "-vf", f"crop=720:{h}:0:{y}", str(out)], check=True)
+    R.STAMPED[aid] = str(out)
+    return aid
+
+
+# the docked stills' evidence cards. species "deck": these are the channel's own drawn stills and never a chart, so the
+# opening-minute chart gates (M11 first chart, M12 chart hold) must not read one as the chart. No badges: ruling B3 - a badge
+# numeral must appear verbatim in the document behind it, and a drawn still carries no numerals.
+DOCK_META = [
+    {"asset": "dock-c-blue-ties-panel", "title": "Three men in blue ties", "source": "@StickMike · Money Physics", "species": "deck", "badges": []},
+    {"asset": "dock-a2-counter-colder", "title": "The host at the counter", "source": "@StickMike · Money Physics", "species": "deck", "badges": []},
+    {"asset": "dock-g-two-fingers", "title": "Two numbers", "source": "@StickMike · Money Physics", "species": "deck", "badges": []},
+    {"asset": "dock-f-toll-gate-to-fab", "title": "The gate to the fab", "source": "@StickMike · Money Physics", "species": "deck", "badges": []},
+]
+
+# the LEDGER PAGE's own clock, mirrored from the player's `const LP` (template :1724) exactly as the motion gate mirrors it:
+# ROLL .7 + SAVOR .8 + FIELD 2.4 + PUNCH .5 + BUILD 3.0. The chart LANDS at 7.4s after the page enters and the focus action
+# fires there - no highlight over the charcoal build (operator, 2026-09-04). A page cannot land a callout sooner than this.
+PAGE_BUILD_END_S = 7.4
+
+
 def shot_table(ws: list[dict], runtime_s: float, t_outro: float | None = None) -> list[tuple]:
-    """The authored rows (SHOT-TABLE-90S.claude.md, the short section), timed from the take."""
+    """The authored rows, timed from the take. V2 (E44, operator 2026-09-06 on SHOT-TABLE-V2-PROPOSAL.md): the
+    holdings page ROLLS OUT ON THE HOOK and stays; the clips stop being scenes and arrive as DOCKS over it; the ring
+    returns the page unwound and the host mounts on the last line. Clip b (dial and bill) has no slot in this cut."""
     clip = lambda name, src=None: f"clip:{seekable_clip(name, src).as_posix()}"
     t_outro = t_outro if t_outro is not None else runtime_s
     hold = f"ledger:ev-japan-holdings-v1:line:{LAST_IDX}:right"
-    meta = None   # set below once t_cut and t_second are known: the mount carries its length
-    t_stakes = cut_before(ws, "The Fed hasn't moved")
-    t_panel = cut_before(ws, "Three men in blue ties")
-    t_lender = cut_before(ws, "Here's what nobody on that panel")
-    t_opponent = cut_before(ws, "The opponent isn't the Fed")
-    t_promise = cut_before(ws, "a Treasury page")      # the cut drops on "went:" (operator, 2026-09-05): the promise plate
-    t_catalyst = cut_before(ws, "Since February, Japan")
-    t_pledge = cut_before(ws, "Tokyo has pledged")
-    t_cut = cut_before(ws, "So, the second number")   # the actual transition: the cream is full here and the chart starts drawing
-    t_second = round(word_time(ws, "went home"), 2)   # the mount begins at "went home" (operator, 2026-09-05): the world fades, the cream builds beneath it until t_cut
-    t_ring = cut_before(ws, "The Fed still hasn't moved")
     at = lambda phrase: round(word_time(ws, phrase), 2)
     datum = lambda i: {"kind": "datum", "index": i}
-    meta = f"ledger:ev-meta-yield-v1:bars:3:right:mount={round(t_cut - t_second, 2)}:cut"   # enter=mount=<s> (operator, 2026-09-05): from "went home" the fab clip fades in steps while the cream builds beneath it; at t_cut the cream is full and the chart draws - no page turn; exit=cut: the punch on "discounts it." is the last beat (E40 #5)
+    # V2 anchors. A dock MOUNTS on a word (s9.15: a mount is a dissolve on a word), so these are word times, not cut
+    # points; only the world changes that are still cuts (the promise plate, the catalyst, the ring) take cut_before.
+    t_page = at("unfunded")                              # the roll-out lands on "unfunded" (E44: the chart flexes on the hook)
+    t_panel = at("Three men in blue ties")               # the panel docks on "Three"
+    t_sixty = at("sixty-three stick figures")            # ... and swaps to the host on the joke
+    t_watch = at("watching")                             # ... and retracts on "watching", leaving the page bare for the datum
+    t_lender = at("our biggest lender")
+    t_trillion = at("over a trillion")
+    t_two = at("Two numbers")
+    t_promise = cut_before(ws, "a Treasury page")        # the cut drops on "went:" (operator, 2026-09-05): the promise plate
+    t_catalyst = cut_before(ws, "Since February, Japan")
+    t_pledge = at("pledged")                             # the gate docks on "pledged"
+    t_cut = cut_before(ws, "So, the second number")      # the cream is full here and the Meta chart starts drawing
+    t_second = at("went home")                           # the Meta page's mount begins under the holdings page
+    t_ring = cut_before(ws, "The Fed still hasn't moved")
+    t_relit = at("that unfunded")                        # the second "unfunded bar tab" - the callout is re-lit on it
+    t_ours = at("still ours")                            # the host mounts here as the last image before the card
+    meta = f"ledger:ev-meta-yield-v1:bars:3:right:mount={round(t_cut - t_second, 2)}:cut"   # as v1; the world it mounts over is now the page
     return [
-        # 1 the hook: the counter, the steaming cup, the tab
-        (0.0, t_stakes, clip("clip-a-counter-tab-v2.mp4"), (0, 0, 0), [], None, None),
-        # 2 stakes: the dial that does not turn, the bill that grows
-        (t_stakes, t_panel, clip("clip-b-dial-and-bill-v2.mp4"), (0, 0, 0), [], None, None),
-        # 3 archetype: the panel pointing three ways, the crowd on phones (the sixty-three). Mike walks in from the RIGHT,
-        #   so the wipe comes from the right (operator, 2026-09-05: the wipe follows the side the character enters from)
-        (t_panel, t_lender, clip("clip-c-blue-ties-panel-v2.mp4"), (0, 0, 0), [], "wipe_right", None),
-        # 4 THE FIRST PROOF (M11, 8-20 s): the holdings page rolls out under "our biggest lender" - spotlit
-        #   on the latest print as it enters; the peak called out at "since February"; a focus on the
-        #   slide at "the auction sets your price"; the page leaves before the opponent line (< 20 s, M05)
-        (t_lender, t_opponent, hold, (0, 0, 0), [], None, [
-            {"kind": "spotlight", "at": round(t_lender + 8.4, 2), "dur": 2.0, "target": datum(LAST_IDX)},   # after the build completes (+8.2 s): no highlight over the charcoal build (operator, 2026-09-04)
-            {"kind": "callout", "at": at("selling since February"), "dur": 2.0, "target": datum(PEAK_IDX)},
-            # (no focus on "the auction sets": the row ends in the retract, and nothing rides a spiral out - E40 #5;
-            #  the vortex IS the picture for "walks")
+        # 1 the hook: the counter, the steaming cup, the tab - as v1, ending where the page rolls out
+        (0.0, t_page, clip("clip-a-counter-tab-v2.mp4"), (0, 0, 0), [], None, None),
+        # 2 THE PAGE ON THE HOOK (E44) and everything over it. The holdings page rolls out on "unfunded" and holds for 36s:
+        #   the panel, the host and the two fingers arrive as DOCKS (operator, 2026-09-06) instead of taking the frame.
+        #   exit=cut: the page never retracts here - it is SUCKED into the promise plate (row 3), and a live dock must not
+        #   ride a page's exit (E40 #5). The callout cannot land on "climbed anyway" (8.0): the page's own build lands at
+        #   t_page + 7.4 and the operator's ruling is no highlight over the charcoal build - so the -$122.6B lands there.
+        (t_page, t_promise, hold + "::cut", (0, 0, 0), [
+            (dock_still("dock-c-blue-ties-panel"), 0, t_panel, t_sixty),
+            (dock_still("dock-a2-counter-colder"), 0, t_sixty, t_watch),
+            (dock_still("dock-g-two-fingers"), 0, t_two, t_promise),
+        ], "cut", [
+            {"kind": "callout", "at": round(t_page + PAGE_BUILD_END_S + 0.1, 2), "dur": 2.0, "target": datum(LAST_IDX)},   # -$122.6B, at the build's landing
+            {"kind": "spotlight", "at": t_lender, "dur": 2.0, "target": datum(LAST_IDX)},                                  # the June datum on "our biggest lender"
+            {"kind": "callout", "at": t_trillion, "dur": 2.0, "target": datum(PEAK_IDX)},                                  # the February peak on "over a trillion"
         ]),
-        # 5 opponent + desire/map: two fingers at "Two numbers"
-        (t_opponent, t_promise, clip("clip-g-two-fingers-v2.mp4"), (0, 0, 0), [], None, None),
-        # 5b the PROMISE plate (operator, 2026-09-05: a narrative plate from "a Treasury page, and your phone" through
-        #    "read both numbers yourself"): the viewer's desk - a stick figure at a laptop of numbers, a phone with one
-        #    falling red line, a mug. An approved still (E40: the still is the asset); its life is the template's
-        #    enters by SUCK (operator, 2026-09-05: near-instant, everything pulled into one point in the black of the stick figure)
+        # 3 the PROMISE plate: the viewer's desk, entered by SUCK - the page collapses into the black of the stick figure
+        #   (operator, 2026-09-05). Unchanged from v1 except that what gets sucked away is now the page, not a clip.
         (t_promise, t_catalyst, "plate-p-viewers-desk", (0, 0, 0), [], "suck:0.49,0.55", [
-            # regions measured on the approved still (fractions of the frame): the mug's rim, the phone's screen, the laptop's grid
             {"kind": "steam", "at": t_promise, "dur": round(t_catalyst - t_promise, 2), "target": {"kind": "region", "x0": 0.80, "y0": 0.55, "x1": 0.95, "y1": 0.60}},
             {"kind": "trace", "at": t_promise + 0.3, "dur": round(t_catalyst - t_promise - 0.3, 2), "target": {"kind": "region", "x0": 0.117, "y0": 0.39, "x1": 0.26, "y1": 0.485}},
-            # the four columns of the grid the head does not cover
             {"kind": "ticker", "at": t_promise + 0.2, "dur": round(t_catalyst - t_promise - 0.2, 2), "density": 0.3, "paper": "#EFE8D5", "tilt": -4,
-             # the drawn grid's own lines, measured on the 1080 render (the three columns clear of the head, six rows)
              "col_lines": [0.602, 0.681, 0.750, 0.812], "row_lines": [0.409, 0.431, 0.454, 0.477, 0.501, 0.525, 0.548],
              "target": {"kind": "region", "x0": 0.602, "y0": 0.409, "x1": 0.812, "y1": 0.548}},
         ]),
-        # 6 catalyst + loop + foreshadow: the page RETURNS (enter=spiral: it unwinds from its point, never drawn like new)
-        (t_catalyst, t_pledge, hold + ":spiral", (0, 0, 0), [], None, [
+        # 4 catalyst + the pledge: the page RETURNS by the spiral (it unwinds from its point, never drawn like new - E40 s4)
+        #   and STAYS through the pledge, which docks the gate instead of cutting to it. exit=cut: the Meta page MOUNTS over
+        #   this one at "went home", so there is no retract to double it, and the gate card does not ride one (E40 #5).
+        (t_catalyst, t_second, hold + ":spiral:cut", (0, 0, 0), [
+            (dock_still("dock-f-toll-gate-to-fab"), 0, t_pledge, t_second),
+        ], "cut", [
             {"kind": "punch", "at": at("Since February, Japan"), "dur": 0.9, "target": datum(PEAK_IDX)},
             {"kind": "callout", "at": at("a tenth of"), "dur": 2.0, "target": datum(LAST_IDX)},
-            # (no spotlight at "that print is": it ran into the retract - E40 #5)
         ]),
-        # 7 the pledge + the read: past the open toll gate toward the fab
-        (t_pledge, t_second, clip("clip-f-toll-gate-to-fab-v2.mp4"), (0, 0, 0), [], None, None),
-        # 8 the second number: a Meta share priced at each yield, punch on the 5.5 % bar at "discounts"
+        # 5 the second number: a Meta share priced at each yield, punch on the 5.5 % bar at "discounts" - as v1
         (t_second, t_ring, meta, (0, 0, 0), [], None, [
             {"kind": "callout", "at": at("price-to-earnings multiple"), "dur": 2.0, "target": datum(0)},
             {"kind": "punch", "at": at("discounts it."), "dur": 0.9, "target": datum(3)},
         ]),
-        # 9 the ring: the same counter, colder; StickMike lifts the tab
-        (t_ring, t_outro, clip("clip-a2-counter-colder-v2.mp4"), (0, 0, 0), [], None, None),
-        # 10 the outro: the Remotion kit's network-nodes card, "It's not magic. It's mechanics." - it animates on its own for the
-        # whole clip (nodes drift and pulse: verified by eye 2026-09-05), declared as `life` so the pulse gate credits it
+        # 6 THE RING on the mechanism, not the phrase (G15b): the holdings page returns UNWOUND on "The Fed still hasn't
+        #   moved" with the drop already drawn, and the -$122.6B is re-lit on the second "unfunded bar tab". exit=cut
+        #   because the callout would otherwise ride the retract (M15 / E40 #5) and because the host mounts on top of it.
+        (t_ring, t_ours, hold + ":spiral:cut", (0, 0, 0), [], "cut", [
+            {"kind": "callout", "at": t_relit, "dur": 2.0, "target": datum(LAST_IDX)},
+        ]),
+        # 7 the host, mounted on "still ours" (s9.15: a mount is a dissolve on a word) - the last image before the card
+        (t_ours, t_outro, clip("clip-a2-counter-colder-v2.mp4"), (0, 0, 0), [], "dissolve", None),
+        # 8 the outro: the Remotion kit's card dissolving in over the ring clip; `life` so the pulse gate credits its drift
         (t_outro, runtime_s, clip("outro-v2.mp4", OUTRO), (0, 0, 0), [], "dissolve", [
             {"kind": "life", "at": t_outro, "dur": round(runtime_s - t_outro, 2)},
         ]),
@@ -274,7 +334,9 @@ def main() -> int:
     print(f"  brand line  : {line_s:.2f}s at {t_line:.2f}s (gap {BRAND_GAP}s after the last word); card at {t_outro:.2f}s; runtime {runtime_s:.2f}s")
     tl_built["runtime_s"] = runtime_s
     (BUILD / "timeline.json").write_text(json.dumps(tl_built, indent=1), encoding="utf-8")
-    (BUILD / "evidence-dock.json").write_text("[]", encoding="utf-8")   # the short docks nothing; its proof is pages
+    # v2: the short DOES dock - the clips arrive over the page as stills (E44 / operator, 2026-09-06). The cards carry an
+    # authored title, source and species; the pages are still the proof.
+    (BUILD / "evidence-dock.json").write_text(json.dumps(DOCK_META, indent=1), encoding="utf-8")
     (HERE / "evidence/objects").mkdir(exist_ok=True)
     for s in SERIES:
         shutil.copy2(HERE / "evidence" / f"{s}.series.json", HERE / "evidence/objects" / f"{s}.series.json")
@@ -306,7 +368,11 @@ def main() -> int:
     # sound/warp_sound.py (a time-varying resample on the min-jerk curve: pitch and speed glide together, tape-style) - accelerating
     # into the suck (0.55 s), decelerating out of the spiral (1.6 s), accelerating into the drain (2.2 s, ending on the cut)
     W_SUCK, W_SPIRAL, W_DRAIN = "fs-whoosh-3-suck.mp3", "fs-whoosh-3-spiral-in.mp3", "fs-whoosh-3-drain.mp3"
-    ACCENT, RETRACT_S, WHIRL_S = 0.22, 2.0, 2.2   # the drain starts RETRACT_S before the row ends; the out-swirl and the drain warp run 2.2 s, timed to end on the cut
+    # FIFTH PASS (E44, operator 2026-09-06 on SHOT-TABLE-V2-PROPOSAL.md): under v2 the pages are the CONSTANT and the sound
+    # should not announce them - every page accent comes down from 0.22 to 0.12 (~14.5 dB under the -17.9 LUFS voice, the
+    # level the operator set for the press pack on 2026-09-05), and the roll-out enter comes down from 0.18 to the same 0.12.
+    ACCENT, RETRACT_S, WHIRL_S = 0.12, 2.0, 2.2   # the drain starts RETRACT_S before the row ends; the out-swirl and the drain warp run 2.2 s, timed to end on the cut
+    ENTER_GAIN = 0.12                             # a roll-out page enter (was 0.18)
     cues = []
     for i, r in enumerate(rows):
         if r[2].startswith("ledger:"):
@@ -314,7 +380,7 @@ def main() -> int:
             if spiral_in:
                 cues.append({"slot": f"page enter {i + 1} (spiral)", "at": round(r[0], 2), "gain": ACCENT, "fade_in": 0.0, "variants": {"A": W_SPIRAL, "B": AIR3, "C": SWIRL_IN}})
             elif not mount_in:
-                cues.append({"slot": f"page enter {i + 1}", "at": round(r[0], 2), "gain": 0.18, "fade_in": 0.0, "variants": {"A": ROLL}})
+                cues.append({"slot": f"page enter {i + 1}", "at": round(r[0], 2), "gain": ENTER_GAIN, "fade_in": 0.0, "variants": {"A": ROLL}})
             if not cut:
                 if spiral_in:
                     cues.append({"slot": f"page retract {i + 1} (whirl)", "at": round(r[1] - WHIRL_S, 2), "gain": ACCENT, "fade_in": 0.0, "variants": {"A": SWIRL_OUT, "B": W_DRAIN, "C": AIR4}})
