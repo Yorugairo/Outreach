@@ -14,7 +14,7 @@ Levels 1-6 are Markdown heading depth; level 7 is a table row (CAPABILITIES, BAC
 A `{...}` tail lists the section's bold phrases; a `<...>` tail its body terms - code
 spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 
-2015 records across 141 files.
+2017 records across 142 files.
 
 ## docs/agent-context/SKILL_ROUTER.md
 
@@ -23,6 +23,10 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 - L28 [2] Tool Routing — 1. Use `python scripts/sigmap_context.py ask "<question>"` before broad code <ast-grep outline; ast-grep; syntax-aware; JavaScript; docs_researcher; human-gate>
 - L42 [2] Named Agent Routing — - Parent task: owns the critical path, shared-file integration, protected {Parent task; `speedster`; `junior_developer`} <shared-file; one-line; Re-route; implementation_luna; architect_sol; implementation-ready; explorer; read-only; docs_researcher; release-note; reviewer; missing-test>
 - L70 [2] Maintaining The Allowlist — Preview: <named-agent; skill-disable>
+
+## docs/agent-memory/explorer/MEMORY.md
+
+- L1 [1] explorer - durable memory (reviewed) — Promoted from worker scratch by the parent after review. Anchors only (`path | heading or symbol | what`); never line numbers, never a transcript. Workers read <path | heading or symbol | what; per-platform; tokyo-tea-break; il-tea-break>
 
 ## docs/AGENT_START_HERE.md
 
@@ -2282,9 +2286,10 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 ## docs/runbooks/HANDOFF-ASTRA-GEMINI-2026-09-05.md
 
 - L1 [1] Hand-off note to the Astra plan and the Gemini protocol (2026-09-05) — From the Claude lane of `Outreach Program`, after a day of measurement. Paste-ready. Three sources: <Outreach Program; Paste-ready; Multi-Agent; section-level; top-level-only; body-vocabulary; terms; Node-only; re-derive; parent-retrieval; false-negative; ready-made>
-- L7 [2] What this repo already has that both plans ask for — | the plan asks for | exists here | notes | <section-level; top-level-only; body-vocabulary; terms; Node-only; re-derive; parent-retrieval; false-negative; ready-made; held-out; SubagentStop; memory: user>
+- L7 [2] What this repo already has that both plans ask for — | the plan asks for | exists here | notes | <section-level; top-level-only; body-vocabulary; terms; Node-only; re-derive; parent-retrieval; false-negative; ready-made; held-out; SubagentStop; memory: local>
 - L17 [2] Four changes I would make to the plans — 1. P2 T2: seed from `build_docs_index.py`, do not rebuild. Section spans with exact headings and search {P2 T2: seed from `build_docs_index.py`, do not rebuild.; P2 memory vs the native `memory:` key: reconcile as two laye} <per-project; auto-loaded; per-agent; six-line; memory: project; worktree-local; npm run research:index; section-level; build_docs_index.py --write; NOT FOUND WHERE I LOOKED; promotion-gate>
 - L40 [2] What this repo does on its own side (done 2026-09-05) — - `GEMINI.md` carries the research-intake contract for THIS repo: where reports land, the evidence line <research-intake; [UNVERIFIED]; SOURCES-TO-VERIFY; directory-scoped; projects.json; video-researcher; drawing-engine>
+- L51 [2] Astra's review (2026-09-05, later) - accepted, and what changed here — Astra agreed with the four recommendations with qualifications; all four are applied on this side: {Indexer roots/exclusions are project-configurable; Native memory is worker scratch with enforced isolation} <byte-for-byte; --include; read-only; memory: user; instructions-only; memory: local; worktree-local; audio-bed; Fable-subagent; Opus-subagent; inline-parent; false-negative>
 
 ## docs/runbooks/HEADLESS_CLAIM_RESUME.md
 
@@ -2302,7 +2307,7 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 - L46 [3] Dispatch mapping — Since 2026-09-05 the eight roles ARE dispatchable types on both sides. {Since 2026-09-05 the eight roles ARE dispatchable types on b; Model policy (operator, 2026-09-05).} <OpenAI; subagent_type; general-purpose; Explore; Plan; speedster; model: fable; junior_developer; implementation_luna; explorer; docs_researcher; reviewer>
 - L73 [3] Lane write sets (three harnesses, one checkout - interim until P2's order contract) — | lane | owns (may write without a cross-lane brief) | never writes | {` (reports + index run), Flow batch manifests and their quar} <cross-lane; tests>
 - L87 [3] Hand-off policy (measured 2026-09-05, `evals/RETRIEVAL-BENCHMARK-2026-09-05.md`) — What a dispatch costs. A fresh subagent pays ~20-25 k tokens before its first tool call (system {What a dispatch costs.} <re-sent; SigMap; sed -n; path:line; disk-as-bus; sqz compress --mode safe; explorer; open-ended; implementation_luna; junior_developer; reviewer; architect_sol>
-- L171 [2] PRP Format — New plans use YAML frontmatter: <draft; approved; running; review; blocked; complete; ## Summary; ## Intent And Acceptance; ## Scope; ## Not Building; ## Human Gates; ## Mandatory Reads>
+- L172 [2] PRP Format — New plans use YAML frontmatter: <draft; approved; running; review; blocked; complete; ## Summary; ## Intent And Acceptance; ## Scope; ## Not Building; ## Human Gates; ## Mandatory Reads>
 
 ## docs/runbooks/RENDER-REGRESSION.md
 

@@ -4,9 +4,15 @@ These pin the record shape on a synthetic docs tree (fenced headings excluded, `
 excluded, CAPABILITIES / BACKLOG rows indexed), the body-vocabulary `terms` (code spans in,
 paths and fenced blocks out, capped), that `--write` is deterministic and `--check` follows the
 source, and that the index built over the REAL `docs/` reaches the sections a doctrine query must
-land on (42's settle, the E41 ruling, the minimum-jerk chain, Deegan's rim)."""
+land on (42's settle, the E41 ruling, the minimum-jerk chain, Deegan's rim).
+
+The walk is configurable (`docs/DOCS-INDEX.config.json`, `--root/--exclude/--include/--output`),
+so they also pin that the built-in defaults still produce exactly the historical records, that a
+config file can add a root and pull one `runs/` directory back in, that CLI beats config and an
+include beats an exclude, and that `--write` prints the effective configuration."""
 from __future__ import annotations
 
+import json
 import sys
 from pathlib import Path
 
@@ -100,6 +106,40 @@ def _tree(tmp_path: Path) -> Path:
     return _write_tree(tmp_path, {DOC_REL: DOC_42, CAPS_REL: CAPS, RUNS_REL: RUNS})
 
 
+EXPECTED_DEFAULT_RECORDS = [
+    {
+        "path": DOC_REL, "line": 1, "level": 1, "doc": "42", "heading": "Fake kinetics",
+        "lead": "The settle is closed form, with three regimes and three regimes again.",
+        "labels": ["settle", "three regimes"], "terms": [],
+    },
+    {
+        "path": DOC_REL, "line": 5, "level": 2, "doc": "42", "heading": "42.1 The stroke — curvature",
+        "lead": "| a | b |", "labels": [], "terms": [],
+    },
+    {
+        "path": DOC_REL, "line": 15, "level": 3, "doc": "42", "heading": "Deeper still",
+        "lead": "", "labels": [], "terms": [],
+    },
+    {
+        "path": CAPS_REL, "line": 1, "level": 1, "doc": None, "heading": "Capabilities",
+        "lead": "", "labels": [], "terms": [],
+    },
+    {
+        "path": CAPS_REL, "line": 3, "level": 2, "doc": None, "heading": "Rendering",
+        "lead": "| Capability | Where | State | Proof |",
+        "labels": ["Scene player", "Ledger page"], "terms": [],
+    },
+    {
+        "path": CAPS_REL, "line": 7, "level": 7, "doc": None, "heading": "Scene player",
+        "lead": "the review renderer", "labels": [], "terms": [],
+    },
+    {
+        "path": CAPS_REL, "line": 8, "level": 7, "doc": None, "heading": "Ledger page",
+        "lead": "a world plate that IS a chart", "labels": [], "terms": [],
+    },
+]
+
+
 def test_synthetic_tree_yields_exactly_the_expected_records(tmp_path: Path) -> None:
     # Arrange
     root = _tree(tmp_path)
@@ -108,38 +148,7 @@ def test_synthetic_tree_yields_exactly_the_expected_records(tmp_path: Path) -> N
     records = BDI.build_index(root)
 
     # Assert
-    assert records == [
-        {
-            "path": DOC_REL, "line": 1, "level": 1, "doc": "42", "heading": "Fake kinetics",
-            "lead": "The settle is closed form, with three regimes and three regimes again.",
-            "labels": ["settle", "three regimes"], "terms": [],
-        },
-        {
-            "path": DOC_REL, "line": 5, "level": 2, "doc": "42", "heading": "42.1 The stroke — curvature",
-            "lead": "| a | b |", "labels": [], "terms": [],
-        },
-        {
-            "path": DOC_REL, "line": 15, "level": 3, "doc": "42", "heading": "Deeper still",
-            "lead": "", "labels": [], "terms": [],
-        },
-        {
-            "path": CAPS_REL, "line": 1, "level": 1, "doc": None, "heading": "Capabilities",
-            "lead": "", "labels": [], "terms": [],
-        },
-        {
-            "path": CAPS_REL, "line": 3, "level": 2, "doc": None, "heading": "Rendering",
-            "lead": "| Capability | Where | State | Proof |",
-            "labels": ["Scene player", "Ledger page"], "terms": [],
-        },
-        {
-            "path": CAPS_REL, "line": 7, "level": 7, "doc": None, "heading": "Scene player",
-            "lead": "the review renderer", "labels": [], "terms": [],
-        },
-        {
-            "path": CAPS_REL, "line": 8, "level": 7, "doc": None, "heading": "Ledger page",
-            "lead": "a world plate that IS a chart", "labels": [], "terms": [],
-        },
-    ]
+    assert records == EXPECTED_DEFAULT_RECORDS
 
 
 def test_the_fenced_heading_and_the_runs_file_are_excluded(tmp_path: Path) -> None:
@@ -173,9 +182,9 @@ def test_backlog_rows_index_by_id_and_fall_back_to_the_decision_column(tmp_path:
 def test_write_is_byte_identical_across_runs_and_lands_lf(tmp_path: Path) -> None:
     root = _tree(tmp_path)
 
-    assert BDI.main(["--write", "--root", str(root)]) == 0
+    assert BDI.main(["--write", "--repo", str(root)]) == 0
     first = {rel: (root / rel).read_bytes() for rel in (BDI.JSONL_REL, BDI.MD_REL)}
-    assert BDI.main(["--write", "--root", str(root)]) == 0
+    assert BDI.main(["--write", "--repo", str(root)]) == 0
     second = {rel: (root / rel).read_bytes() for rel in (BDI.JSONL_REL, BDI.MD_REL)}
 
     assert first == second
@@ -184,17 +193,17 @@ def test_write_is_byte_identical_across_runs_and_lands_lf(tmp_path: Path) -> Non
 
 def test_check_passes_after_write_and_fails_when_a_doc_gains_a_heading(tmp_path: Path) -> None:
     root = _tree(tmp_path)
-    assert BDI.main(["--write", "--root", str(root)]) == 0
+    assert BDI.main(["--write", "--repo", str(root)]) == 0
 
-    assert BDI.main(["--check", "--root", str(root)]) == 0
-    assert BDI.main(["--root", str(root)]) == 0          # no flag is --check
+    assert BDI.main(["--check", "--repo", str(root)]) == 0
+    assert BDI.main(["--repo", str(root)]) == 0          # no flag is --check
 
     doc = root / DOC_REL
     doc.write_text(doc.read_text(encoding="utf-8") + "\n## Appended later\n", encoding="utf-8")
 
     assert BDI.check(root) != []
-    assert BDI.main(["--check", "--root", str(root)]) == 1
-    assert BDI.main(["--root", str(root)]) == 1
+    assert BDI.main(["--check", "--repo", str(root)]) == 1
+    assert BDI.main(["--repo", str(root)]) == 1
 
 
 def test_check_reports_a_missing_artifact(tmp_path: Path) -> None:
@@ -262,3 +271,112 @@ def test_real_docs_terms_close_the_minimum_jerk_and_deegan_hops() -> None:
     assert "flash & hogan" in terms("42-DRAWING-KINETICS.md")
     assert any("minimum-jerk" in t for t in terms("48-THE-FIGURE-AND-THE-GROUND.md"))
     assert any("deegan" in t for t in terms("44-INK-AND-SURFACE.md"))
+
+
+# --- the configurable walk ----------------------------------------------------------------
+
+CONFIG_REL = "docs/DOCS-INDEX.config.json"
+NOTES_REL = "notes/handbook.md"
+APPENDIX_REL = "notes/appendix.md"
+OTHER_RUN_REL = "docs/research/runs/2026-02-02/scratch.md"
+
+NOTES = "# Handbook\n\n## A second root\n"
+APPENDIX = "# Appendix\n"
+
+
+def _configured(tmp_path: Path, config: dict, files: dict[str, str] | None = None) -> Path:
+    """The synthetic tree plus a second root, one more run, and a config file."""
+    tree = {DOC_REL: DOC_42, RUNS_REL: RUNS, OTHER_RUN_REL: RUNS,
+            NOTES_REL: NOTES, APPENDIX_REL: APPENDIX, CONFIG_REL: json.dumps(config)}
+    return _write_tree(tmp_path, {**tree, **(files or {})})
+
+
+def _indexed_paths(root: Path, argv: list[str]) -> set[str]:
+    """The paths the CLI actually wrote into the JSONL."""
+    assert BDI.main(argv) == 0
+    lines = (root / BDI.JSONL_REL).read_text(encoding="utf-8").splitlines()
+    return {json.loads(line)["path"] for line in lines}
+
+
+def test_the_defaults_are_the_historical_walk_and_records(tmp_path: Path) -> None:
+    # Arrange - no config file in this tree, as there is none in the repo
+    root = _tree(tmp_path)
+
+    # Act
+    config = BDI.load_config(root)
+
+    # Assert
+    assert config == BDI.IndexConfig()
+    assert config.roots == ("docs",)
+    assert config.exclude == ("docs/research/runs/**", "**/node_modules/**")
+    assert config.include == () and config.extra_files == ()
+    assert (config.jsonl_rel, config.md_rel) == (BDI.JSONL_REL, BDI.MD_REL)
+    assert BDI.build_index(root, config) == EXPECTED_DEFAULT_RECORDS
+    assert BDI.build_index(root) == EXPECTED_DEFAULT_RECORDS
+    assert BDI.render_md(BDI.build_index(root), config) == BDI.render_md(BDI.build_index(root))
+
+
+def test_a_config_file_adds_a_root_and_an_include_pulls_one_run_back_in(tmp_path: Path) -> None:
+    # Arrange
+    root = _configured(tmp_path, {
+        "roots": ["docs", "notes"],
+        "exclude": ["docs/research/runs/**", "**/node_modules/**"],
+        "include": ["docs/research/runs/2026-01-01/**"],
+    })
+
+    # Act
+    records = BDI.build_index(root, BDI.load_config(root))
+    paths = {r["path"] for r in records}
+
+    # Assert
+    assert NOTES_REL in paths and APPENDIX_REL in paths      # the second root is walked
+    assert RUNS_REL in paths                                 # the include beats the exclude
+    assert OTHER_RUN_REL not in paths                        # and only for the run it names
+    assert any(r["heading"] == "A second root" for r in records)
+
+
+def test_cli_overrides_the_config_and_an_include_beats_an_exclude(tmp_path: Path) -> None:
+    # Arrange
+    root = _configured(tmp_path, {"roots": ["docs", "notes"]})
+    base = ["--write", "--repo", str(root), "--config", str(root / CONFIG_REL)]
+
+    # Act
+    configured = _indexed_paths(root, base)
+    excluded = _indexed_paths(root, base + ["--exclude", "notes/appendix.md"])
+    rescued = _indexed_paths(root, base + ["--exclude", "notes/**", "--include", "notes/appendix.md"])
+
+    # Assert
+    assert {NOTES_REL, APPENDIX_REL} <= configured
+    assert APPENDIX_REL not in excluded and NOTES_REL in excluded
+    assert APPENDIX_REL in rescued and NOTES_REL not in rescued
+
+
+def test_write_prints_the_effective_configuration(tmp_path: Path, capsys) -> None:
+    # Arrange
+    root = _tree(tmp_path)
+
+    # Act
+    code = BDI.main(["--write", "--repo", str(root),
+                     "--exclude", "docs/research/**", "--include", "docs/research/runs/2026-01-01/**"])
+    out = capsys.readouterr().out
+
+    # Assert
+    assert code == 0
+    effective = next(line for line in out.splitlines() if "roots=" in line)
+    assert effective == ("build_docs_index: roots=[docs] exclude=[docs/research/**] "
+                         "include=[docs/research/runs/2026-01-01/**] extra_files=[] "
+                         "output=docs/DOCS-INDEX")
+    assert RUNS_REL in {json.loads(l)["path"]
+                        for l in (root / BDI.JSONL_REL).read_text(encoding="utf-8").splitlines()}
+
+
+def test_a_broken_config_is_refused_and_is_not_reported_as_staleness(tmp_path: Path, capsys) -> None:
+    # Arrange
+    root = _configured(tmp_path, {"roots": "docs"})            # a string is not a list of globs
+
+    # Act
+    code = BDI.main(["--check", "--repo", str(root)])
+
+    # Assert
+    assert code == 2
+    assert "CONFIG ERROR" in capsys.readouterr().out

@@ -15,30 +15,41 @@ same records:
     python content/video_engine/scripts/build_docs_index.py --write   # regenerate both
     python content/video_engine/scripts/build_docs_index.py --check   # exit 1 when stale (the default)
 
-Excluded from the walk: `docs/research/runs/**` (gitignored scratch), anything under a
-`node_modules`, and `docs/DOCS-INDEX.md` itself - indexing the index is a fixpoint, not an index.
-Standard library only; the output is deterministic (no timestamps) and written with LF endings.
+What is walked is configurable and the default IS the old hard-coded behaviour: root `docs`,
+excluding `docs/research/runs/**` (gitignored scratch) and `**/node_modules/**`. An optional
+`docs/DOCS-INDEX.config.json` - `{"roots", "exclude", "include", "extra_files", "output"}` - moves
+them, and `--root/--exclude/--include/--output` override the file (CLI > config file > built-in
+defaults, field by field). An include wins over an exclude, so `--include "docs/research/runs/x/**"`
+pulls one run back in. The tool's own two artifacts are always excluded: indexing the index is a
+fixpoint, not an index. Standard library only; the output is deterministic (no timestamps) and
+written with LF endings.
 """
 from __future__ import annotations
 
 import argparse
 import difflib
+import fnmatch
 import json
 import re
 import sys
+from dataclasses import dataclass, replace
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[3]
 
-DOCS_DIR = "docs"
-JSONL_REL = "docs/DOCS-INDEX.jsonl"
-MD_REL = "docs/DOCS-INDEX.md"
+CONFIG_REL = "docs/DOCS-INDEX.config.json"   # optional: absent means the defaults below
+DEFAULT_ROOTS = ("docs",)
+DEFAULT_EXCLUDE = ("docs/research/runs/**", "**/node_modules/**")
+DEFAULT_INCLUDE: tuple[str, ...] = ()
+DEFAULT_EXTRA_FILES: tuple[str, ...] = ()
+DEFAULT_OUTPUT = "docs/DOCS-INDEX"
+
+JSONL_REL = f"{DEFAULT_OUTPUT}.jsonl"
+MD_REL = f"{DEFAULT_OUTPUT}.md"
 CAPABILITIES_REL = "docs/content-video-engine/CAPABILITIES.md"
 BACKLOG_REL = "docs/content-video-engine/BACKLOG.md"
 
-EXCLUDED_FILES = (MD_REL,)
-EXCLUDED_PREFIXES = ("docs/research/runs/",)
-EXCLUDED_PARTS = ("node_modules",)
+GLOB_MAGIC = re.compile(r"[*?\[]")
 
 LEAD_MAX = 160
 TITLE_MAX = 120
@@ -317,27 +328,132 @@ def file_records(rel_path: str, text: str) -> list[dict]:
     return out
 
 
-def is_excluded(rel_path: str, parts: tuple[str, ...]) -> bool:
-    return (
-        rel_path in EXCLUDED_FILES
-        or any(rel_path.startswith(prefix) for prefix in EXCLUDED_PREFIXES)
-        or any(part in EXCLUDED_PARTS for part in parts)
-    )
+@dataclass(frozen=True, slots=True)
+class IndexConfig:
+    """What to walk. The field defaults are the built-in defaults, i.e. the historical behaviour."""
+
+    roots: tuple[str, ...] = DEFAULT_ROOTS
+    exclude: tuple[str, ...] = DEFAULT_EXCLUDE
+    include: tuple[str, ...] = DEFAULT_INCLUDE          # an include wins over an exclude
+    extra_files: tuple[str, ...] = DEFAULT_EXTRA_FILES  # single files outside the roots
+    output: str = DEFAULT_OUTPUT                        # basename of the .jsonl / .md pair
+
+    @property
+    def jsonl_rel(self) -> str:
+        return f"{self.output}.jsonl"
+
+    @property
+    def md_rel(self) -> str:
+        return f"{self.output}.md"
+
+    def describe(self) -> str:
+        """The effective configuration on one line, so a run is auditable from its log."""
+        def show(patterns: tuple[str, ...]) -> str:
+            return ", ".join(patterns) if patterns else ""
+        return (f"roots=[{show(self.roots)}] exclude=[{show(self.exclude)}] "
+                f"include=[{show(self.include)}] extra_files=[{show(self.extra_files)}] "
+                f"output={self.output}")
 
 
-def doc_files(root: Path) -> list[Path]:
-    """Every indexable `docs/**/*.md`, sorted case-insensitively for determinism."""
-    base = root / DOCS_DIR
-    if not base.is_dir():
-        return []
-    kept = [p for p in base.rglob("*.md") if not is_excluded(p.relative_to(root).as_posix(), p.parts)]
-    return sorted(kept, key=lambda p: (p.relative_to(root).as_posix().lower(), p.relative_to(root).as_posix()))
+CONFIG_LIST_KEYS = ("roots", "exclude", "include", "extra_files")
+CONFIG_KEYS = CONFIG_LIST_KEYS + ("output",)
 
 
-def build_index(root: Path = REPO) -> list[dict]:
+def _patterns(value: object, key: str, where: str) -> tuple[str, ...]:
+    """A config list field: strings only, normalised to forward slashes."""
+    if not isinstance(value, list) or not all(isinstance(v, str) for v in value):
+        raise ValueError(f"{where}: \"{key}\" must be a list of strings")
+    return tuple(v.replace("\\", "/").strip() for v in value if v.strip())
+
+
+def load_config(root: Path = REPO, config_path: Path | str | None = None) -> IndexConfig:
+    """The config file if there is one, else the built-in defaults. An explicit path must exist."""
+    path = Path(config_path) if config_path is not None else Path(root) / CONFIG_REL
+    if not path.is_file():
+        if config_path is not None:
+            raise ValueError(f"{path} not found")
+        return IndexConfig()
+    where = path.as_posix()
+    data = json.loads(path.read_text(encoding="utf-8"))
+    if not isinstance(data, dict):
+        raise ValueError(f"{where}: the config must be a JSON object")
+    unknown = sorted(set(data) - set(CONFIG_KEYS))
+    if unknown:
+        raise ValueError(f"{where}: unknown key(s) {', '.join(unknown)}; known: {', '.join(CONFIG_KEYS)}")
+    fields = {key: _patterns(data[key], key, where) for key in CONFIG_LIST_KEYS if key in data}
+    if "output" in data:
+        if not isinstance(data["output"], str) or not data["output"].strip():
+            raise ValueError(f"{where}: \"output\" must be a non-empty string basename")
+        fields["output"] = data["output"].replace("\\", "/").strip()
+    return IndexConfig(**fields)
+
+
+def matches(rel_path: str, pattern: str) -> bool:
+    """`fnmatch` on a forward-slash path: `*` crosses `/`, a leading `**/` is optional, and a
+    pattern with no glob magic also covers everything beneath it."""
+    for pat in ((pattern, pattern[3:]) if pattern.startswith("**/") else (pattern,)):
+        if fnmatch.fnmatchcase(rel_path, pat):
+            return True
+        if not GLOB_MAGIC.search(pat) and rel_path.startswith(pat.rstrip("/") + "/"):
+            return True
+    return False
+
+
+def matches_any(rel_path: str, patterns: tuple[str, ...]) -> bool:
+    return any(matches(rel_path, pattern) for pattern in patterns)
+
+
+def is_excluded(rel_path: str, config: IndexConfig = IndexConfig()) -> bool:
+    """The tool's own artifacts always; then an include beats an exclude."""
+    if rel_path in (config.jsonl_rel, config.md_rel):
+        return True
+    if matches_any(rel_path, config.include):
+        return False
+    return matches_any(rel_path, config.exclude)
+
+
+def expand(root: Path, patterns: tuple[str, ...]) -> list[Path]:
+    """Every existing path a repo-relative pattern names; a glob is expanded, a literal is taken."""
+    out: list[Path] = []
+    for raw in patterns:
+        pattern = raw.replace("\\", "/").strip().rstrip("/")
+        if not pattern:
+            continue
+        out += sorted(root.glob(pattern)) if GLOB_MAGIC.search(pattern) else [root / pattern]
+    return out
+
+
+def candidate_files(root: Path, config: IndexConfig) -> list[Path]:
+    """Every Markdown file the roots and `extra_files` reach, before exclusion."""
+    found: list[Path] = []
+    for path in expand(root, config.roots):
+        if path.is_dir():
+            found += path.rglob("*.md")
+        elif path.suffix.lower() == ".md" and path.is_file():
+            found.append(path)
+    found += [p for p in expand(root, config.extra_files) if p.is_file()]
+    return found
+
+
+def doc_files(root: Path = REPO, config: IndexConfig | None = None) -> list[Path]:
+    """Every indexable Markdown file, deduplicated and sorted case-insensitively for determinism."""
+    root, config = Path(root), config or IndexConfig()
+    kept: dict[str, Path] = {}
+    for path in candidate_files(root, config):
+        try:
+            rel_path = path.relative_to(root).as_posix()
+        except ValueError:                       # outside the repo: not addressable as a record
+            continue
+        if not is_excluded(rel_path, config):
+            kept[rel_path] = path
+    return [kept[rel] for rel in sorted(kept, key=lambda r: (r.lower(), r))]
+
+
+def build_index(root: Path = REPO, config: IndexConfig | None = None) -> list[dict]:
     """Every record, sorted by (path, line)."""
+    root, config = Path(root), config or IndexConfig()
     out: list[dict] = []
-    for path in doc_files(root):
+    for path in doc_files(root, config):
         rel_path = path.relative_to(root).as_posix()
         out += file_records(rel_path, path.read_text(encoding="utf-8"))
     return sorted(out, key=lambda r: (r["path"].lower(), r["path"], r["line"]))
@@ -347,10 +463,12 @@ def render_jsonl(records: list[dict]) -> str:
     return "".join(json.dumps(r, ensure_ascii=False) + "\n" for r in records)
 
 
-def render_md(records: list[dict]) -> str:
+def render_md(records: list[dict], config: IndexConfig | None = None) -> str:
+    config = config or IndexConfig()
+    scope = ", ".join("`%s/`" % r.rstrip("/") for r in config.roots)
     files = sorted({r["path"] for r in records}, key=lambda p: (p.lower(), p))
     head = [
-        "# DOCS-INDEX - every heading in `docs/`, flat and greppable",
+        f"# DOCS-INDEX - every heading in {scope}, flat and greppable",
         "",
         "Generated by `python content/video_engine/scripts/build_docs_index.py --write`. Do not",
         "hand-edit it: `--check` fails when it drifts from the docs.",
@@ -358,7 +476,7 @@ def render_md(records: list[dict]) -> str:
         "The recipe - two calls, no tree walk:",
         "",
         "```bash",
-        'rg -i "<term>" docs/DOCS-INDEX.jsonl     # find the section',
+        f'rg -i "<term>" {config.jsonl_rel}     # find the section',
         'rg -n "<heading>" <path>                 # jump to it in the file',
         "```",
         "",
@@ -385,26 +503,28 @@ def render_md(records: list[dict]) -> str:
     return "\n".join(head + body)
 
 
-def rendered(root: Path = REPO) -> dict[str, str]:
+def rendered(root: Path = REPO, config: IndexConfig | None = None) -> dict[str, str]:
     """{relative path: wanted text} for both artifacts."""
-    records = build_index(root)
-    return {JSONL_REL: render_jsonl(records), MD_REL: render_md(records)}
+    config = config or IndexConfig()
+    records = build_index(root, config)
+    return {config.jsonl_rel: render_jsonl(records), config.md_rel: render_md(records, config)}
 
 
-def write(root: Path = REPO) -> tuple[int, int]:
+def write(root: Path = REPO, config: IndexConfig | None = None) -> tuple[int, int]:
     """Regenerate both artifacts (LF). Returns (records, files)."""
-    records = build_index(root)
-    for rel_path, text in {JSONL_REL: render_jsonl(records), MD_REL: render_md(records)}.items():
-        path = root / rel_path
+    config = config or IndexConfig()
+    for rel_path, text in rendered(root, config).items():
+        path = Path(root) / rel_path
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_bytes(text.encode("utf-8"))
+    records = build_index(root, config)
     return len(records), len({r["path"] for r in records})
 
 
-def check(root: Path = REPO) -> list[str]:
+def check(root: Path = REPO, config: IndexConfig | None = None) -> list[str]:
     """One entry per stale artifact: "<path> (+added/-removed lines)". Empty means in sync."""
     problems: list[str] = []
-    for rel_path, want in rendered(root).items():
+    for rel_path, want in rendered(root, config).items():
         path = root / rel_path
         if not path.is_file():
             problems.append(f"{rel_path} (missing)")
@@ -419,21 +539,49 @@ def check(root: Path = REPO) -> list[str]:
     return problems
 
 
+def resolve_config(root: Path, args: argparse.Namespace) -> IndexConfig:
+    """CLI > config file > built-in defaults, field by field: a given flag replaces that field."""
+    given: dict[str, object] = {
+        key: tuple(value)
+        for key, value in (("roots", args.root), ("exclude", args.exclude), ("include", args.include))
+        if value is not None
+    }
+    if args.output:
+        given["output"] = args.output
+    return replace(load_config(root, args.config), **given)
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("--check", action="store_true", help="exit 1 when either artifact is stale (default)")
     ap.add_argument("--write", action="store_true", help="regenerate both artifacts")
-    ap.add_argument("--root", type=Path, default=REPO, help="repository root")
+    ap.add_argument("--repo", type=Path, default=REPO, help="repository root (default: this checkout)")
+    ap.add_argument("--config", type=Path, default=None,
+                    help=f"configuration file (default: {CONFIG_REL} when it exists)")
+    ap.add_argument("--root", action="append", metavar="GLOB",
+                    help=f"index root, repeatable (default: {', '.join(DEFAULT_ROOTS)})")
+    ap.add_argument("--exclude", action="append", metavar="GLOB", help="skip matching files, repeatable")
+    ap.add_argument("--include", action="append", metavar="GLOB",
+                    help="keep matching files even when excluded, repeatable")
+    ap.add_argument("--output", metavar="BASENAME",
+                    help=f"basename of the .jsonl/.md pair (default: {DEFAULT_OUTPUT})")
     a = ap.parse_args(argv)
-    root = a.root.resolve()
+    root = a.repo.resolve()
+    try:
+        config = resolve_config(root, a)
+    except (OSError, ValueError) as exc:                       # a bad config is not staleness
+        print(f"build_docs_index: CONFIG ERROR - {exc}")
+        return 2
     if a.write:
-        records, files = write(root)
-        print(f"build_docs_index: {records} record(s) from {files} file(s) -> {JSONL_REL} + {MD_REL}")
-    problems = check(root)
+        print(f"build_docs_index: {config.describe()}")
+        records, files = write(root, config)
+        print(f"build_docs_index: {records} record(s) from {files} file(s) "
+              f"-> {config.jsonl_rel} + {config.md_rel}")
+    problems = check(root, config)
     if problems:
         print("build_docs_index: STALE - " + "; ".join(problems) + " - run --write")
         return 1
-    index = build_index(root)
+    index = build_index(root, config)
     print(f"build_docs_index: in sync ({len(index)} records, {len({r['path'] for r in index})} files)")
     return 0
 
