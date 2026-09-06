@@ -42,7 +42,7 @@ Your borrowing costs climbed while the Fed sat still. Thank Japan.
 
 Japan is America's biggest lender: $1.12 trillion of Treasuries on June's table—more than the UK or China.
 
-Since its February peak, Tokyo has quietly sold $122.6 billion of them in four months. Roughly a tenth of a pile decades in the making, back to where it stood in January 2025.
+Since its February peak, Tokyo has quietly sold $122.6 billion of them. 40 years of accumulation, a tenth of it gone in 4 months.
 
 When your biggest buyer walks away, the auction has to raise the yield to find new buyers. That is the whole mechanism.
 
@@ -61,5 +61,7 @@ Not a panic. Not a plot. Mechanics.
 #MoneyPhysics #Treasuries #InterestRates #Economy #Reels
 
 First comment: the TIC Table 5 link (`https://ticdata.treasury.gov/resource-center/data-chart-center/tic/Documents/slt_table5.txt`) and the pinned note on the July print.
+
+Operator's wording kept for the history line (2026-09-06): "40 years of accumulation, a tenth of it gone in 4 months" - the 40 stays [VERIFY] in the dossier (the file on hand starts in 2000); the tenth and the four months are TIC Table 5 rows.
 
 Cut from the draft, with the reason: "4 years of it gone" (the pile did not grow evenly; the true figure is January 2025, dossier addendum), "and we may just be getting started" (April's print rose +18.3 B; the data is not yet a trend), "the same with Memory stocks in Korea" (the next episode's claim, unsourced here), three reach tags.
