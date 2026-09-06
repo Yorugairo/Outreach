@@ -199,3 +199,18 @@ Three facts that overturn earlier assumptions:
 3. **AGENTS.md is read from the session's project dir**: in a worktree session that is the worktree branch's copy, so trimming main's does nothing for a session started in an old-branch worktree.
 
 Cuts made (land next session; verify as round 7 from a fresh session's first probe): AGENTS.md on main 15.0 → 3.9 KB; the always-loaded rules 13.4 → 1.5 KB (security + git), the rest as the `quality-rules` skill preloaded only by the implementing roles; MEMORY.md 10.8 → 6.8 KB (hooks capped); role files 4.4 → 1.3 KB (the retrieval discipline is the `retrieval-layers` skill, preloaded by the read-only roles); `maxTurns` per role. Expected instructions block for a read-only dispatch: ≈ 10.8k → ≈ 3k. The harness share moves only when the account connectors are disabled in the app (AOY 30 tools, Vercel ~40, Supabase ~30, Google Drive 11, claude-in-chrome, computer-use - the operator's ruling). The worktree copy of AGENTS.md is the remaining lever: start sessions on main or on a worktree fast-forwarded to it.
+
+## Round 7 — fresh session after the cuts (2026-09-06, 00:00)
+
+| probe | first-turn prompt | read |
+|---|---|---|
+| `probe_min` (tools: Read, `mcpServers: []`) | 13,214 | |
+| `probe_mcp` (tools: Read, MCP inherited) | 13,214 | **connectors / MCP add nothing to a subagent's prompt** |
+| `explorer` (Read, Grep, Glob, Bash + the retrieval-layers skill + memory) | 26,386 (was 27,647) | the tool schemas + role body + skill + memory ≈ 13k; unmeasured split - `probe_tools` (same tools, no skill/memory) runs next session |
+
+The instructions block was still 38.3 KB in this session, for two reasons the round-6 cuts missed: (1) the rules
+loader reads every `.md` under `~/.claude/rules` recursively, so the seven files moved into a subfolder still loaded -
+they are now deleted (the `quality-rules` skill holds their content); (2) the session's project dir is the worktree, whose
+AGENTS.md is the old branch's 15 KB - `git checkout main -- AGENTS.md CLAUDE.md` in the worktree fixes that for the
+next session here. The memory-index cap did land (10.1 → 7.1 KB). Expected next session: instructions block ≈ 3.9 + 7.1
++ 1.5 + 1.2 KB ≈ 13.7 KB ≈ 3.5k tokens (from 38.3 KB ≈ 10k), i.e. a bare explorer near 19k and a minimal role near 6k.
