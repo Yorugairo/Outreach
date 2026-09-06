@@ -1367,7 +1367,10 @@ like always the better transition for full-page scene going to full-page ledger.
    page, the page arrives by the mount (the outgoing world fades above while the cream page builds beneath, doc 29
    s9.15 / the 2026-09-05 dance), not by a cut into the roll-out. **Spirals stay for returns** (operator, same day): a page already seen comes back by
    the spiral, unwound from its point (E40 §4); the mount is for a page arriving for the first time over a full-frame
-   scene. The roll-out from black stays the cold open when nothing is on screen before it.
+   scene. The roll-out from black stays the cold open when nothing is on screen before it. **The mount IS the roll-out, and the
+   savor stays** (operator, same day): the mount replaces beat 1 only; the page's clock then runs savor 0.8 -> field ->
+   punch -> build exactly as after a roll-out, so a mounted page's chart lands at mount end + 6.7 s (the 0.7 s roll is the
+   only beat a mount skips). The player's mount clock before this ruling skipped the savor too; corrected 2026-09-06.
 3. **Consequences.** Tokyo v2: the holdings page mounts over the host's bar (s01 → s02) and over the desk plate (s06 → s07);
    the four docks shrink and move to the quiet zone. The shorts shape (doc 51 §51.2) and the script skill's SHORTS-SHAPE
    carry both rules.
