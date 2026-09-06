@@ -421,10 +421,13 @@ def newest_conversation(
     accepted. Returns None when nothing matches - not found where I looked.
     """
 
-    brain = BRAIN_ROOT if brain is None else brain
+    # the brain fallback follows the REAL store only: a caller that scopes the store to a temp dir (tests,
+    # a replay) gets no reach into the machine's live conversations unless it passes ``brain`` itself
+    if brain is None:
+        brain = BRAIN_ROOT if Path(store) == CONVERSATION_STORE else None
     root = Path(store)
     if not root.is_dir():
-        return newest_brain_conversation(brain, after_ts, title)
+        return newest_brain_conversation(brain, after_ts, title) if brain is not None else None
     candidates = []
     for db in root.glob("*.db"):
         try:
@@ -437,7 +440,7 @@ def newest_conversation(
         if title and not _mentions(db, title):
             continue
         return db.stem
-    return newest_brain_conversation(brain, after_ts, title)
+    return newest_brain_conversation(brain, after_ts, title) if brain is not None else None
 
 
 def newest_brain_conversation(brain: Path | str = BRAIN_ROOT, after_ts: float = 0.0, title: str | None = None) -> str | None:

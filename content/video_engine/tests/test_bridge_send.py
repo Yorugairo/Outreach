@@ -472,13 +472,15 @@ def test_a_missing_brief_file_stops_the_send(tmp_path):
 def test_the_id_falls_back_to_the_brain_transcript_that_opens_with_the_title(tmp_path):
     import json, os, time
     import bridge_env as E
-    store = tmp_path / "conversations"; store.mkdir()          # no .db files at all
+    store = tmp_path / "conversations"
+    store.mkdir()          # no .db files at all
     brain = tmp_path / "brain"
-    for cid, first in (("old-1111", "<USER_REQUEST> something else"), ("new-2222", "<USER_REQUEST> # Work order - classify every cut")):
-        log = brain / cid / ".system_generated" / "logs"; log.mkdir(parents=True)
-        (log / "transcript.jsonl").write_text(json.dumps({"content": first}) + "
-" + json.dumps({"content": "x"}) + "
-", encoding="utf-8")
+    for cid, first in (("old-1111", "<USER_REQUEST> something else"),
+                       ("new-2222", "<USER_REQUEST> # Work order - classify every cut")):
+        log = brain / cid / ".system_generated" / "logs"
+        log.mkdir(parents=True)
+        lines = [json.dumps({"content": first}), json.dumps({"content": "x"})]
+        (log / "transcript.jsonl").write_text("\n".join(lines) + "\n", encoding="utf-8")
     old = brain / "old-1111" / ".system_generated" / "logs" / "transcript.jsonl"
     os.utime(old, (time.time() - 3600, time.time() - 3600))
     assert E.newest_conversation(store, after_ts=time.time() - 60, title="Work order - classify every cut", brain=brain) == "new-2222"
