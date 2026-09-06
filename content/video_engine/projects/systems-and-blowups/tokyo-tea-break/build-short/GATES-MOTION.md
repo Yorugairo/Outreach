@@ -10,6 +10,8 @@
   still_over_12s_share: 0%
             per_minute: 0:00:205/6 1:00:167/4
 
+  [WARN ] M11 first chart ledger:s02 enters at 2.0s, its build lands at 9.2s, with callout at 9.3s; WARN no sound cue within 1.5s of the enter at 2.0s; window 0-10s (E44 short: the page rolls out on the hook - the chart is the mechanism by 0:10)
+          E24 / doc 29 s9.29 (long form) + E44 (short): the first chart enters 0:08-0:20, or 0:00-0:10 on a short, annotated on its divergence, with a sound cue
   [PASS ] M01 longest still stretch 1.3s at 0:26
           doc 29 s8.19 / s9.25 stillness ceiling
   [PASS ] M02 0 stretches > 8s (working target)
@@ -28,8 +30,6 @@
           doc 29 s9.27 precedence / s9.28 C3: one camera move per window
   [PASS ] M10 no still stretch > 6s begins in the first 60s
           E24 / doc 29 s9.29: stillness inside the opening minute - 4-6s in the first 30-60s
-  [PASS ] M11 first chart ledger:s02 enters at 3.3s, its build lands at 10.7s, with callout at 10.8s; window 0-10s (E44 short: the page rolls out on the hook - the chart is the mechanism by 0:10)
-          E24 / doc 29 s9.29 (long form) + E44 (short): the first chart enters 0:08-0:20, or 0:00-0:10 on a short, annotated on its divergence, with a sound cue
   [PASS ] M12 no chart dock spans a scene boundary or holds past 10s (6s in the opening minute)
           E25 / doc 29 s9.30: the chart is the proof, not the homework
   [PASS ] M14 no camera move (punch | focus_zoom | pull_back) overlaps a card entrance or a badge reveal
@@ -43,8 +43,8 @@
   [JUDGE] J01 every savor beat holds its picture (card up, badge lit), never a bare plate with a drift
           doc 29 s9.25 #3
 
-RESULT: 0 FAIL / 0 WARN / 14 PASS / 1 JUDGE / 1 INFO
+RESULT: 0 FAIL / 1 WARN / 13 PASS / 1 JUDGE / 1 INFO
 ```
 
-TIMELINE: tokyo-short.timeline.json sha256:d49c92cfec833bb9186f337bb427936fe7cfbc09f80ebade15f35829a50ea958
+TIMELINE: tokyo-short.timeline.json sha256:ed38696f49551384ae71a476ce595c13ff7f43646e5ece8168505979e504b60b
 VERDICT: PASS (0 FAIL)

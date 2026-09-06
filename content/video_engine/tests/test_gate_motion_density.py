@@ -653,3 +653,14 @@ def test_the_evidence_dock_file_is_the_video_fallback_when_the_timeline_carries_
     file_docks = [{"asset": "clip-a", "at": 2.0, "end": 30.0, "kind": "video"}]
     assert G._video_dock_events(tl["scenes"], file_docks)[:3] == [2.0, 3.0, 4.0]
     assert _by_id(G.run(tl, file_docks, mp)[0])["M10"].level == "PASS"
+
+
+# ---- E45 s2: a MOUNTED page lands its chart mount_s + 5.9 s after enter, not 7.4 s ----
+def test_a_mounted_pages_landing_skips_the_roll_and_the_savor():
+    import gate_motion_density as G
+    rolled = {"world": {"kind": "ledger", "page": {"enter": "roll"}}}
+    mounted = {"world": {"kind": "ledger", "page": {"enter": "mount", "mount_s": 1.51}}}
+    defaulted = {"world": {"kind": "ledger", "page": {"enter": "mount"}}}
+    assert G._page_land_offset(rolled) == G.PAGE_BUILD_END_S
+    assert abs(G._page_land_offset(mounted) - (1.51 + G.PAGE_BUILD_END_S - G.LP_ROLL_S - G.LP_SAVOR_S)) < 1e-9
+    assert abs(G._page_land_offset(defaulted) - (G.LP_FIELD_S + G.PAGE_BUILD_END_S - G.LP_ROLL_S - G.LP_SAVOR_S)) < 1e-9

@@ -2072,29 +2072,31 @@
  ],
  "sound": [
   {
-   "slot": "page enter 2",
-   "at": 3.29,
-   "gain": 0.12,
-   "fade_in": 0.0,
-   "variants": {
-    "A": "__snd_0_A__"
-   }
-  },
-  {
    "slot": "suck 3",
    "at": 38.96,
    "gain": 0.12,
    "fade_in": 0.0,
    "variants": {
-    "A": "__snd_1_A__",
-    "B": "__snd_1_B__",
-    "C": "__snd_1_C__",
-    "D": "__snd_1_D__"
+    "A": "__snd_0_A__",
+    "B": "__snd_0_B__",
+    "C": "__snd_0_C__",
+    "D": "__snd_0_D__"
    }
   },
   {
    "slot": "page enter 4 (spiral)",
    "at": 44.88,
+   "gain": 0.12,
+   "fade_in": 0.0,
+   "variants": {
+    "A": "__snd_1_A__",
+    "B": "__snd_1_B__",
+    "C": "__snd_1_C__"
+   }
+  },
+  {
+   "slot": "page enter 6 (spiral)",
+   "at": 75.73,
    "gain": 0.12,
    "fade_in": 0.0,
    "variants": {
@@ -2104,24 +2106,13 @@
    }
   },
   {
-   "slot": "page enter 6 (spiral)",
-   "at": 75.73,
-   "gain": 0.12,
-   "fade_in": 0.0,
-   "variants": {
-    "A": "__snd_3_A__",
-    "B": "__snd_3_B__",
-    "C": "__snd_3_C__"
-   }
-  },
-  {
    "slot": "hook bed",
    "at": 0.0,
    "gain": 0.0226,
    "fade_in": 1.5,
    "variants": {
-    "A": "__snd_4_A__",
-    "B": "__snd_4_B__"
+    "A": "__snd_3_A__",
+    "B": "__snd_3_B__"
    }
   },
   {
@@ -2130,8 +2121,8 @@
    "gain": 0.0226,
    "fade_in": 3.0,
    "variants": {
-    "A": "__snd_5_A__",
-    "B": "__snd_5_B__"
+    "A": "__snd_4_A__",
+    "B": "__snd_4_B__"
    }
   }
  ],
@@ -2197,7 +2188,7 @@
    "exit": "cut",
    "span": [
     0.0,
-    3.29
+    1.99
    ],
    "docks": [],
    "species": []
@@ -3528,6 +3519,8 @@
      "judge": [],
      "badges": [],
      "emphasize": 0,
+     "enter": "mount",
+     "mount_s": 1.3,
      "exit": "cut"
     },
     "ken_burns": {
@@ -3538,7 +3531,7 @@
    },
    "exit": "cut",
    "span": [
-    3.29,
+    1.99,
     38.96
    ],
    "docks": [
@@ -3570,7 +3563,7 @@
    "species": [
     {
      "kind": "callout",
-     "at": 10.79,
+     "at": 9.29,
      "dur": 2.0,
      "target": {
       "kind": "datum",

@@ -14,7 +14,7 @@ Levels 1-6 are Markdown heading depth; level 7 is a table row (CAPABILITIES, BAC
 A `{...}` tail lists the section's bold phrases; a `<...>` tail its body terms - code
 spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 
-3172 records across 249 files.
+3173 records across 249 files.
 
 ## content/video_engine/projects/history-of-bjj/episode-1-research-brief.md
 
@@ -3480,6 +3480,7 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 - L1291 [2] E42 — The stick lane swaps approved poses; a rig only for what the first shot cannot fake. Our own thresholds carry `[DERIVED]` (2026-09-06) — Two P45 decisions the parent held open, ruled in one line each. {D3 — poses first.} <re-parenting; zero-slip; G-c; intensity ≤ 0.18; G-o>
 - L1306 [2] E43 — On a short the chart carries the number; the blind reader cannot see it, so a chart-carried beat is not a viewer miss (2026-09-06) — Ruled on the Tokyo short's fresh viewer read (V01 21/24: `[promise]` and `[rehook]` at 0:30–0:45 unperceived on "By the end {Conjoined beats are the shorts doctrine, not a defect.} <[promise]; [rehook]; re-describing; under-read; JUDGE-by-ear>
 - L1326 [2] E44 — The chart flexes on the hook: the first ledger page rolls out on the hook line, not after the archetype (2026-09-06) — Ruled on the Tokyo short's first Facebook read (`tokyo-tea-break/ANALYTICS-2026-09-06.md`, n = 8: the drop-off at 0:11, inside {The first ledger page lands on the hook line.} <drop-off; stick-figure; [DERIVED]; cut-on>
+- L1347 [2] E45 — A dock on a page is small and sits in the page's quiet space; the mount is the transition into a full-page ledger (2026-09-06) — Ruled on the first Tokyo v2 player with video docks (004698d). The operator: *"the dock needs to not cover the middle of the {A dock never covers the chart.} <quiet_zone; hand-placed; min-jerk; roll-out; full-frame; SHORTS-SHAPE>
 
 ## docs/portable/OUTRO-CTA-PLAYBOOK.md
 

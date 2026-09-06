@@ -1343,3 +1343,31 @@ against."*
 3. **The test.** n = 8 rules nothing about the audience; it rules where we spend the first ten seconds. The next two shorts
    are built under this ruling and read against Tokyo at n ≥ 100. If the 0:11 step survives with the chart at 0:03, the
    ruling is wrong and says so here.
+
+## E45 — A dock on a page is small and sits in the page's quiet space; the mount is the transition into a full-page ledger (2026-09-06)
+
+Ruled on the first Tokyo v2 player with video docks (004698d). The operator: *"the dock needs to not cover the middle of the
+chart, it needs to find less busy space and be smaller. Also, the fade/mount transition that we worked on yesterday seems
+like always the better transition for full-page scene going to full-page ledger."*
+
+1. **A dock never covers the chart.** On a ledger page the dock is a small card - about half the stage width, not the
+   800 px solo card - and it sits in the page's least busy space: the zone the page already keeps quiet for its callouts
+   and badges (`quiet_zone` on the ledger spec), never over the plot, the title or the source line, and never in the
+   caption's anchor. The placement is computed from the page's own geometry by the compiler, not hand-placed per shot.
+   A dock on a plain plate keeps the solo card.
+   **The choreography (operator, same day):** *\"drawing on the heading, springing the dock, then shrinking it while we
+   slide it to the corner or over the title, so that the graph gains its readability back\"* - the dock SPRINGS in at
+   reading size on its word, holds a beat, then shrinks and slides to the parked rectangle in the quiet space (the
+   corner, or over the title block), and the chart is fully readable again while the dock stays live.
+   **By the springs, not by a cut** (operator, same day: *\"you're just cutting the docks in instead of using our strong
+   maths/springs\"*): the dock's arrival, its shrink and its slide are the engine's own kinetics - the analytic spring
+   (doc 42 §42.2, `kinetics/spring.mjs`, the material presets) that already lands the badge rail, and the min-jerk
+   path for the slide - never a plain dissolve or a cut.
+2. **Full page → full page ledger = the mount.** When a clip or a plate fills the frame and the next scene is a ledger
+   page, the page arrives by the mount (the outgoing world fades above while the cream page builds beneath, doc 29
+   s9.15 / the 2026-09-05 dance), not by a cut into the roll-out. **Spirals stay for returns** (operator, same day): a page already seen comes back by
+   the spiral, unwound from its point (E40 §4); the mount is for a page arriving for the first time over a full-frame
+   scene. The roll-out from black stays the cold open when nothing is on screen before it.
+3. **Consequences.** Tokyo v2: the holdings page mounts over the host's bar (s01 → s02) and over the desk plate (s06 → s07);
+   the four docks shrink and move to the quiet zone. The shorts shape (doc 51 §51.2) and the script skill's SHORTS-SHAPE
+   carry both rules.

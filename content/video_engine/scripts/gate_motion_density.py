@@ -532,6 +532,17 @@ def _opening_still_gate(still: list[tuple[float, float]]) -> Gate:
     return Gate("M10", "PASS", f"no still stretch > {OPENING_STILL_MAX_S:.0f}s begins in the first {OPENING_S:.0f}s", SRC_M10)
 
 
+
+def _page_land_offset(scene: dict) -> float:
+    """Seconds from a ledger page's enter to its chart landing: PAGE_BUILD_END_S on a roll-out; on a mount
+    (E45 s2) mount_s + PAGE_BUILD_END_S - ROLL - SAVOR, the roll and savor being what a mount skips
+    (the player defaults mount_s to the FIELD beat when the spec carries none)."""
+    page = ((scene or {}).get("world") or {}).get("page") or {}
+    if page.get("enter") == "mount":
+        mount_s = float(page.get("mount_s") or LP_FIELD_S)
+        return mount_s + PAGE_BUILD_END_S - LP_ROLL_S - LP_SAVOR_S
+    return PAGE_BUILD_END_S
+
 def _first_chart_window(tl: dict) -> tuple[float, float, str]:
     """M11's window and the mode that set it: 0:00-0:10 on a SHORT (E44 - the first ledger page rolls
     out on the hook line, the chart IS the mechanism), 0:08-0:20 on long form (E24 / doc 29 s9.29).
@@ -561,7 +572,10 @@ def _first_chart_gate(tl: dict, docks: list[dict], mp: dict) -> Gate:
     # a LEDGER PAGE's chart lands at the build's end, not at the roll-out (the page is a bleed until then): its
     # annotation clock is the landing, and the species must fire AFTER it (no highlight over the build - operator, 2026-09-04)
     is_page = bool(scene) and _is_page(scene)
-    land = t + PAGE_BUILD_END_S if is_page else t
+    # a MOUNTED page (E45 s2) skips the roll-out and the savor: the player's clock is advanced by ROLL + SAVOR - mount_s
+    # (template `const tr = ... pg.enter === "mount" ? LP.ROLL + LP.SAVOR - mountS`), so its chart lands at
+    # enter + mount_s + (PAGE_BUILD_END_S - ROLL - SAVOR); a rolled-out page lands at enter + PAGE_BUILD_END_S.
+    land = t + _page_land_offset(scene) if is_page else t
     hits = [sp for sp in (scene or {}).get("species", [])
             if sp.get("kind") in ANNOTATED_KINDS and (land - 1e-6 <= float(sp.get("at", -1e9)) <= land + ANNOTATE_TOL_S if is_page
                                                      else abs(float(sp.get("at", -1e9)) - t) <= ANNOTATE_TOL_S)]

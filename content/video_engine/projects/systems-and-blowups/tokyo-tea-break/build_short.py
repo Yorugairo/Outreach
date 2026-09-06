@@ -216,6 +216,7 @@ DOCK_META = [
 # ROLL .7 + SAVOR .8 + FIELD 2.4 + PUNCH .5 + BUILD 3.0. The chart LANDS at 7.4s after the page enters and the focus action
 # fires there - no highlight over the charcoal build (operator, 2026-09-04). A page cannot land a callout sooner than this.
 PAGE_BUILD_END_S = 7.4
+MOUNT_SKIP_S = 1.5   # ROLL 0.7 + SAVOR 0.8: a MOUNTED page (E45 s2) skips both, so its chart lands at mount end + (7.4 - 1.5)
 
 
 def shot_table(ws: list[dict], runtime_s: float, t_outro: float | None = None) -> list[tuple]:
@@ -229,7 +230,9 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float | None = None) -
     datum = lambda i: {"kind": "datum", "index": i}
     # V2 anchors. A dock MOUNTS on a word (s9.15: a mount is a dissolve on a word), so these are word times, not cut
     # points; only the world changes that are still cuts (the promise plate, the catalyst, the ring) take cut_before.
-    t_page = at("unfunded")                              # the roll-out lands on "unfunded" (E44: the chart flexes on the hook)
+    t_page = at("unfunded")                              # the page's own clock starts on "unfunded" (E44: the chart flexes on the hook)
+    t_mount = at("left America")                         # E45 s2: the page MOUNTS over the host - the bar fades above while the cream builds beneath
+    mount_hook = round(t_page - t_mount, 2)              #   from "left America" to "unfunded"; the page's clock then runs from t_page as before
     t_panel = at("Three men in blue ties")               # the panel docks on "Three"
     t_sixty = at("sixty-three stick figures")            # ... and swaps to the host on the joke
     t_watch = at("watching")                             # ... and retracts on "watching", leaving the page bare for the datum
@@ -247,18 +250,18 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float | None = None) -
     meta = f"ledger:ev-meta-yield-v1:bars:3:right:mount={round(t_cut - t_second, 2)}:cut"   # as v1; the world it mounts over is now the page
     return [
         # 1 the hook: the counter, the steaming cup, the tab - as v1, ending where the page rolls out
-        (0.0, t_page, clip("clip-a-counter-tab-v2.mp4"), (0, 0, 0), [], None, None),
+        (0.0, t_mount, clip("clip-a-counter-tab-v2.mp4"), (0, 0, 0), [], None, None),
         # 2 THE PAGE ON THE HOOK (E44) and everything over it. The holdings page rolls out on "unfunded" and holds for 36s:
         #   the panel, the host and the two fingers arrive as DOCKS (operator, 2026-09-06) instead of taking the frame.
         #   exit=cut: the page never retracts here - it is SUCKED into the promise plate (row 3), and a live dock must not
         #   ride a page's exit (E40 #5). The callout cannot land on "climbed anyway" (8.0): the page's own build lands at
         #   t_page + 7.4 and the operator's ruling is no highlight over the charcoal build - so the -$122.6B lands there.
-        (t_page, t_promise, hold + "::cut", (0, 0, 0), [
+        (t_mount, t_promise, hold + f":mount={mount_hook}:cut", (0, 0, 0), [   # E45 s2: the mount, not a cut into the roll-out
             (dock_still("dock-c-blue-ties-panel"), 0, t_panel, t_sixty),
             (dock_still("dock-a2-counter-colder"), 0, t_sixty, t_watch),
             (dock_still("dock-g-two-fingers"), 0, t_two, t_promise),
         ], "cut", [
-            {"kind": "callout", "at": round(t_page + PAGE_BUILD_END_S + 0.1, 2), "dur": 2.0, "target": datum(LAST_IDX)},   # -$122.6B, at the build's landing
+            {"kind": "callout", "at": round(t_page + PAGE_BUILD_END_S - MOUNT_SKIP_S + 0.1, 2), "dur": 2.0, "target": datum(LAST_IDX)},   # -$122.6B, at the build's landing
             {"kind": "spotlight", "at": t_lender, "dur": 2.0, "target": datum(LAST_IDX)},                                  # the June datum on "our biggest lender"
             {"kind": "callout", "at": t_trillion, "dur": 2.0, "target": datum(PEAK_IDX)},                                  # the February peak on "over a trillion"
         ]),
