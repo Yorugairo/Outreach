@@ -15,7 +15,7 @@ its own headings, capability names, backlog ids. `terms` are its most frequent b
 terms. Purpose, terms and defines are truncated here to keep the file cheap to grep;
 the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 
-249 documents across 13 kinds.
+250 documents across 13 kinds.
 
 ## doctrine
 
@@ -303,4 +303,5 @@ the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 - content/video_engine/projects/systems-and-blowups/tokyo-tea-break/sound/SOURCES.md — SOURCES — steel-and-paper sound — Per-asset licence ledger (SOUND-SOURCING.md rule: an asset missing its — defines: P35 — terms: gain-matched; highest-rated; preview-hq-mp3; -ss; sort=rating_desc; afade
 - docs/agent-memory/explorer/MEMORY.md — explorer - durable memory (reviewed) — Promoted from worker scratch by the parent after review. — defines: — — terms: path | heading or symbol | what; per-platform; tokyo-tea-break; il-tea-break
 - docs/content-video-engine/SCRIPT-CONTEXT-COMBINED.md — DOCTRINE CORE — portable content-operation context — Model-agnostic; paste whole into any system-instruction or rules box ( — defines: — — terms: scene-setting; pause-framed; seed-locked; paragraph-shaped; quarter-billion; de-risk
+- docs/content-video-engine/TRANSITIONS-REVIEW-2026-09-06.md — Transitions — the review (2026-09-06) — The operator: "I think we should review our research on transitions al — defines: — — terms: unclassified; [DERIVED]; quart-in-out; evidence-free; wipe; L-cuts
 - docs/content-video-engine/TRIAGE-2026-09-05.md — TRIAGE 2026-09-05 — the corpus against what is built — Counts as of the registry at 86c46f5. The animation registry was fixed — defines: M13 — terms: recent-stumble; zero-slip; BACKLOG.md:218 (row 6); arc-length; motion-authoring; ANIMATION-REGISTRY.md (SOAK_STEP.FPS 8)
