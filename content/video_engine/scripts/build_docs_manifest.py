@@ -13,9 +13,13 @@ artifacts, the same records:
     python content/video_engine/scripts/build_docs_manifest.py --write   # regenerate both
     python content/video_engine/scripts/build_docs_manifest.py --check   # exit 1 when stale
 
-`headings` is JSONL-only - the document's level-1 to level-3 headings, numbering stripped, so
-one `rg` over the JSONL lands on a document by a phrase that only ever appears in a heading
-inside it. The Markdown keeps its size ladder and never carries them.
+`headings`, `labels` and `leads` are JSONL-only, and they are the same idea at three depths:
+the document's level-1 to level-3 headings (numbering stripped), the distinct **bold** labels the
+index read out of its sections, and the opening dozen words of every level-1 to level-3 lead. A
+word a query is typed in often lives one layer below the heading - `spiral` is doc 29's, and it
+is in section 9.31's lead, not in its heading and not in its label - so all three are indexed and
+one `rg` over the JSONL lands on the document. The Markdown keeps its size ladder and carries
+none of them.
 
 The input is `docs/DOCS-INDEX.jsonl` (`--index` moves it) plus the documents themselves, read
 for the H1, its byline and its first paragraph. Level-7 records (CAPABILITIES / BACKLOG table
@@ -79,6 +83,13 @@ MENTION_LIMIT = 24
 HEADING_LEVEL_MAX = 3    # H4 and below are paragraph markers, not what a document is about
 HEADING_TEXT_MAX = 80
 HEADING_LIMIT = 40
+LABEL_TEXT_MAX = 60
+LABEL_LIMIT = 60
+LEAD_WORDS = 12          # the subject of the opening sentence, never its argument
+LEAD_SCAN = 400          # room for LEAD_WORDS words before the lead is cut mid-word
+LEAD_TEXT_MAX = 120
+LEAD_LIMIT = 80          # a runaway guard, not a budget: 40 cut doc 29 at 9.30, and the
+                         # newest section of a long doc is always the one at the end
 SENTENCE_MIN = 40        # below this a "sentence" is a stub ("Hand-maintained.") - read on
 
 MD_MAX_BYTES = 60_000
@@ -296,6 +307,40 @@ def headings_of(sections: list[dict]) -> list[str]:
     return out[:HEADING_LIMIT]
 
 
+def labels_of(records: list[dict]) -> list[str]:
+    """The distinct **bold** labels the index read out of this document's sections, in
+    first-appearance order: the vocabulary a section names itself with, which its heading often
+    does not repeat. Capped at LABEL_LIMIT labels of LABEL_TEXT_MAX characters."""
+    out: list[str] = []
+    seen: set[str] = set()
+    for record in records:
+        for raw in record["labels"]:
+            text = plain(raw, LABEL_TEXT_MAX)
+            key = text.casefold()
+            if not text or key in seen:
+                continue
+            seen.add(key)
+            out.append(text)
+            if len(out) == LABEL_LIMIT:
+                return out
+    return out
+
+
+def leads_of(records: list[dict]) -> list[str]:
+    """The opening LEAD_WORDS words of every level-1 to level-3 lead, in file order: the last
+    layer a query can hide in once its word is in neither the heading nor a label - `spiral` is
+    doc 29 section 9.31's, and it is in the lead. Capped at LEAD_LIMIT leads."""
+    out: list[str] = []
+    for record in records:
+        if record["level"] > HEADING_LEVEL_MAX:
+            continue
+        opening = plain(record["lead"], LEAD_SCAN).split()[:LEAD_WORDS]
+        text = truncate(" ".join(opening), LEAD_TEXT_MAX)
+        if text:
+            out.append(text)
+    return out[:LEAD_LIMIT]
+
+
 # --- kind ----------------------------------------------------------------------------------
 
 def classify(rel_path: str) -> str:
@@ -394,6 +439,8 @@ def build(records: list[dict], repo_root: Path = REPO) -> list[dict]:
             "purpose": purpose,
             "sections": len(sections),
             "headings": headings_of(sections),
+            "labels": labels_of(file_records),
+            "leads": leads_of(file_records),
             "defines": defines,
             "mentions": mentions_of(file_records, set(defines)),
             "key_terms": key_terms_of(file_records),

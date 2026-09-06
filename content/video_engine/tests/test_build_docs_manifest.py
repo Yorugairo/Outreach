@@ -229,8 +229,8 @@ def test_one_record_per_document_with_the_contract_keys(tmp_path: Path) -> None:
     entries = _entries(_tree(tmp_path))
     assert set(entries) == set(TREE)
     assert list(entries[DOCTRINE_REL]) == ["path", "doc", "title", "kind", "purpose", "sections",
-                                           "headings", "defines", "mentions", "key_terms",
-                                           "byline"]
+                                           "headings", "labels", "leads", "defines", "mentions",
+                                           "key_terms", "byline"]
     doctrine = entries[DOCTRINE_REL]
     assert doctrine["doc"] == "29"
     assert doctrine["title"] == "29 — Fake Motion Standards"
@@ -305,14 +305,52 @@ def test_headings_are_bounded_in_length_and_in_count() -> None:
     assert headings[0].startswith("heading long")
 
 
+def test_labels_are_distinct_and_in_first_appearance_order(tmp_path: Path) -> None:
+    entries = _entries(_tree(tmp_path))
+    assert entries[CAPS_REL]["labels"][:2] == ["G2 short mode (doc 51 s51.2 as gates)",
+                                               "Caption STAGE mode"]
+    assert entries[HEADINGS_REL]["labels"] == []           # nothing bold in it: labels miss it
+
+
+def test_labels_are_bounded_in_length_and_in_count() -> None:
+    records = [{"path": "docs/x.md", "level": 2, "heading": "h", "lead": "",
+                "labels": [f"label {n} " + "long " * 40, "REPEATED", "repeated"],
+                "terms": [], "doc": None} for n in range(80)]
+    labels = BDM.labels_of(records)
+    assert len(labels) == BDM.LABEL_LIMIT
+    assert max(len(v) for v in labels) <= BDM.LABEL_TEXT_MAX
+    assert sum(1 for v in labels if v.casefold() == "repeated") == 1   # distinct, case-folded
+
+
+def test_leads_carry_the_opening_words_of_levels_one_to_three(tmp_path: Path) -> None:
+    """The layer under the heading and the label: doc 29 hides `spiral` in a lead, not a heading."""
+    leads = _entries(_tree(tmp_path))[HEADINGS_REL]["leads"]
+    assert leads == ["The document whose headings are the thing an agent greps for, not",
+                     "It leaves by a spiral and comes back the same way, which",
+                     "Every colour on the page becomes a particle, and this lead clears"]
+    assert all(len(lead.split()) <= BDM.LEAD_WORDS for lead in leads)
+    assert not any("level-4" in lead for lead in leads)    # H4 leads are paragraph markers
+
+
+def test_leads_are_bounded_in_length_and_in_count() -> None:
+    records = [{"path": "docs/x.md", "level": 3, "heading": "h", "labels": [], "terms": [],
+                "lead": f"lead {n} " + "verylongword" * 20, "doc": None} for n in range(120)]
+    leads = BDM.leads_of(records)
+    assert len(leads) == BDM.LEAD_LIMIT
+    assert max(len(v) for v in leads) <= BDM.LEAD_TEXT_MAX
+    assert leads[0].startswith("lead 0")
+
+
 def test_the_markdown_does_not_carry_the_heading_list(tmp_path: Path) -> None:
     root = _with_index(tmp_path)
     assert BDM.main(["--write", "--repo", str(root)]) == 0
     text = (root / BDM.MD_REL).read_text(encoding="utf-8")
     record = json.loads(next(line for line in (root / BDM.JSONL_REL).read_text(
         encoding="utf-8").splitlines() if HEADINGS_REL in line))
-    assert record["headings"]                                  # the JSONL has them
+    assert record["headings"] and record["leads"]              # the JSONL has them
     assert "The page VORTEX" not in text                       # the size ladder stays
+    assert "It leaves by a spiral" not in text                 # and never carries a lead
+    assert "labels:" not in text and "leads:" not in text      # the line keeps its four fields
 
 
 # --- the artifacts --------------------------------------------------------------------------------
@@ -409,3 +447,25 @@ def test_real_heading_phrases_reach_their_document_through_the_jsonl() -> None:
     rulings = entries["docs/portable/OPERATOR-RULINGS.md"]["headings"]
     assert any("brand line" in h.lower() for h in rulings)     # E41's own heading, not its body
     assert all(len(h) <= BDM.HEADING_TEXT_MAX for e in entries.values() for h in e["headings"])
+
+
+def test_a_word_that_lives_only_in_a_lead_still_reaches_its_document() -> None:
+    """`spiral` is doc 29 section 9.31's page vortex, and it is in neither the heading ("The page
+    VORTEX") nor the label ("The retract") - `leads` is the layer that carries it."""
+    lines = (ROOT / BDM.JSONL_REL).read_text(encoding="utf-8").splitlines()
+    hits = [json.loads(line)["path"] for line in lines if "spiral" in line.lower()]
+    doc29 = "docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md"
+    assert doc29 in hits, hits
+    entry = _real_entries()[doc29]
+    assert any("spiral" in lead.lower() for lead in entry["leads"])
+    assert not any("spiral" in v.lower() for v in [*entry["headings"], *entry["labels"]])
+    assert all(len(v) <= BDM.LABEL_TEXT_MAX for e in _real_entries().values() for v in e["labels"])
+
+
+def test_the_committed_markdown_is_byte_identical_after_the_jsonl_grew() -> None:
+    """`labels` and `leads` are JSONL-only: the committed Markdown, generated before they existed,
+    has to come back out of the builder at the same size, byte for byte."""
+    committed = (ROOT / BDM.MD_REL).read_bytes()
+    rebuilt = BDM.rendered(ROOT)[BDM.MD_REL].encode("utf-8")
+    assert len(rebuilt) == len(committed) == (ROOT / BDM.MD_REL).stat().st_size
+    assert rebuilt == committed
