@@ -56,14 +56,15 @@ and the role's stop conditions, so a slice no longer has to be squeezed into
 weekly cap) and the clearly stronger one, so it is spent only where judgement
 compounds: the PARENT session — architecture, integration, protected actions,
 operator conversation, completion truth. Everything delegated runs on Opus 5;
-`speedster` runs on Haiku 4.5 because judgement is unnecessary by definition.
+`speedster` runs on Sonnet 5 (not Haiku: the ~23 k fixed overhead makes the price gap on one edit
+negligible, and a plausible wrong edit costs a review round - operator, 2026-09-05).
 Never launch a delegated role with `model: fable` / an inherited Fable model;
 never pull a role's work back into the parent to "save a dispatch" — the
 dispatch is the saving.
 
 | Role | Claude type | Model | Write access |
 | --- | --- | --- | --- |
-| `speedster` | `speedster` | Haiku 4.5 | Yes — the slice's write set only |
+| `speedster` | `speedster` | Sonnet 5 | Yes — the slice's write set only |
 | `junior_developer`, `implementation_luna` | same name | Opus 5 | Yes — the slice's write set only |
 | `explorer`, `docs_researcher`, `reviewer` | same name | Opus 5 | No (read-only Bash: git/sigmap/tests) |
 | `architect_sol` | `architect_sol` | Opus 5 | `.claude/PRPs/plans/` and named planning evidence only |
@@ -107,7 +108,8 @@ slice's validation itself before integrating.
 | Fable 5.1 | the parent only: design, planning, animation reasoning, the operator's conversation, briefs, JUDGE verdicts, diff review | it is the scarce model; nothing delegated runs on it |
 | Opus 5 | `explorer` for any hunt with judgement in it (evidence layer, research bundle, open-ended "what is documented but unbuilt"); `implementation_luna` / `junior_developer` for slices; `reviewer`; `architect_sol`; `release_steward` | round 1: 5/5 at 36 % fewer tokens than Fable; round 2 (hard): 4.5/5 at 26 % fewer and half the time; one false negative |
 | Sonnet 5 | `searcher` - well-specified lookups where the file is nameable and the index or memory points at it | round 3: fast (9-20 s) but mislabelled a ruling (E46 for E38) and answered "which build turns it on" with the default only; tokens per dispatch NOT lower than Opus (the fixed overhead dominates) - use for volume, verify the labels |
-| Haiku 4.5 | `speedster` - deterministic edits with the exact line given; never a lookup with a judgement in it | 23 k tokens for a one-line edit: correct, but the overhead is the whole cost |
+| Sonnet 5 (`speedster`) | deterministic edits with the exact line given; never a lookup with a judgement in it | Haiku did the one sampled edit correctly at 23 k tokens, but the overhead is the whole cost, so the cheaper model saves nothing and a plausible wrong edit costs a review round - Sonnet (operator, 2026-09-05) |
+| Haiku 4.5 | nothing in this repo | — |
 
 Separate search and implementation agents: yes - their memories are different maps (`explorer`:
 where things live; `implementation_luna`: patterns and pitfalls) and contexts never share in this

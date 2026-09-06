@@ -178,7 +178,7 @@ Active plans live under `.claude/PRPs/plans/` as agent-neutral durable state.
 - The eight roles are real agent types on both sides: `.codex/agents/*.toml`
   and `.claude/agents/*.md`. **Model policy (2026-09-05): the parent session
   is Fable and spends its tokens on judgement only; every delegated role runs
-  on Opus 5 (`speedster` on Haiku 4.5).** Offload recall (`explorer`), review
+  on Opus 5 (`speedster` on Sonnet 5 - not Haiku: the overhead is the cost, a wrong edit is dearer).** Offload recall (`explorer`), review
   (`reviewer`), docs checks (`docs_researcher`), bounded implementation and
   git mechanics (`release_steward`) instead of doing them in the parent.
 - Keep write sets disjoint and review delegated diffs before integration.

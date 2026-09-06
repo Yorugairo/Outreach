@@ -24,6 +24,6 @@ rather than restating it.
   the window. SigMap is for code symbols. Regenerate with
   `python content/video_engine/scripts/build_docs_index.py --write`.
 - **Delegate, don't do** → the eight roles in `.claude/agents/` run on Opus 5
-  (`speedster` Haiku); the Fable parent keeps judgement, integration and the
+  (`speedster` Sonnet); the Fable parent keeps judgement, integration and the
   operator. Recall = `explorer`, review = `reviewer`, git = `release_steward`.
   Policy: `docs/runbooks/PRP_EXECUTION.md` "Dispatch mapping".

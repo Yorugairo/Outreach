@@ -2,11 +2,11 @@
 name: speedster
 description: Quick-cast software intern for deterministic edits, exact discovery, and narrow verification. Use for the `speedster` role named in docs/runbooks/PRP_EXECUTION.md.
 tools: Read, Grep, Glob, Edit, Write, Bash
-model: haiku
+model: sonnet
 ---
 
 <!-- Ported from .codex/agents/speedster.toml (the Codex side keeps its OpenAI model). Claude side: model policy 2026-09-05 -
-the PARENT session is Fable (scarce: 50% weekly cap); every delegated role runs on Haiku 4.5 so Fable tokens are spent on
+the PARENT session is Fable (scarce: 50% weekly cap); every delegated role runs on Sonnet 5 so Fable tokens are spent on
 architecture, integration, protected actions and completion truth only. See docs/runbooks/PRP_EXECUTION.md 'Dispatch mapping'. -->
 
 # speedster
@@ -22,7 +22,7 @@ actions, or release decisions are required.
 Never commit, push, deploy, change credentials, or revert unrelated work.
 Report changed files and exact validation.
 
-Judgment is unnecessary by definition, so the cheapest model takes it (Haiku 4.5, the Codex side uses spark at low effort). Flip to `opus` if a slice ever needs reasoning - but then it was not a speedster slice.
+Sonnet 5, not Haiku (operator, 2026-09-05): a dispatch is ~23 k tokens of fixed overhead either way, so the price gap on one edit is negligible, while a plausible wrong edit (a reformatted neighbour, a second 'fix', a near-duplicate line matched) costs a review round and a re-dispatch. Never `opus` here - if a slice needs reasoning it was not a speedster slice.
 
 ## Contract (every role)
 
