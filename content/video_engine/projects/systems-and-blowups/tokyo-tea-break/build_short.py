@@ -216,7 +216,7 @@ DOCK_META = [
 # ROLL .7 + SAVOR .8 + FIELD 2.4 + PUNCH .5 + BUILD 3.0. The chart LANDS at 7.4s after the page enters and the focus action
 # fires there - no highlight over the charcoal build (operator, 2026-09-04). A page cannot land a callout sooner than this.
 PAGE_BUILD_END_S = 7.4
-MOUNT_SKIP_S = 1.5   # ROLL 0.7 + SAVOR 0.8: a MOUNTED page (E45 s2) skips both, so its chart lands at mount end + (7.4 - 1.5)
+MOUNT_SKIP_S = 0.7   # ROLL only: the mount IS the roll-out and the savor stays (E45 s2), so a mounted chart lands at mount end + (7.4 - 0.7)
 
 
 def shot_table(ws: list[dict], runtime_s: float, t_outro: float | None = None) -> list[tuple]:

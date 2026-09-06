@@ -333,19 +333,119 @@ def dock_uri(p: Path) -> str:
     return data_uri(p) if is_video_asset(p) else data_uri(p, CARD_W)
 
 
+# ---- DOCK PLACEMENT ON A PAGE (ruling E45 §1, 2026-09-06) -------------------------------------
+# "A dock never covers the chart ... the dock is a small card - about half the stage width, not the
+# 800px solo card - and it sits in the page's least busy space ... never over the plot, the title
+# or the source line, and never in the caption's anchor. The placement is computed from the page's
+# own geometry by the compiler, not hand-placed per shot. A dock on a plain plate keeps the solo card."
+#
+# THE RULE. LPG.page_boxes reports the page's own ink in stage pixels. Subtract the four forbidden
+# boxes from the mobile safe box and what is left is five candidate bands: `above` (title foot ->
+# plot head), `below` (plot foot -> source), `foot` (under the source/rail, above the anchored
+# caption) and the two side columns beside the plot. Each band yields the widest card it can hold
+# at 16:9 - capped at DOCK_ON_PAGE_W of the stage, floored at DOCK_ON_PAGE_MIN_W - and the band
+# that yields the widest card wins, the declared quiet zone breaking ties. In the band the card is
+# pushed to the quiet-zone side and parked against the PLOT (bottom-aligned in a horizontal band),
+# so the estimator's one risk - a title that wraps one line off the model - eats into the title
+# block E45's own choreography offers ("slide it to the corner or over the title"), never the chart.
+#
+# THE CALLOUT/BADGE SPECIES STILL LAND (E45 review point): the emphasized datum's callout is drawn
+# INSIDE the chart's viewBox, on the datum, and the badge rail is drawn under the source line -
+# both inside boxes this search already forbids, so no placement can ever cross them. The quiet
+# zone only chooses WHICH free band and which end of it, never whether the plot is fair game.
+DOCK_ON_PAGE_W = 0.48        # the small card, as a fraction of the stage width (9:16 -> 518, 16:9 -> 922)
+DOCK_ON_PAGE_MIN_W = 240     # a card narrower than this is not evidence any more: stop shrinking
+DOCK_PLACE_PAD = 16          # clear air between the card and the ink; also absorbs the page's Ken Burns drift
+DOCK_CARD_CHROME_W = 38      # card width - frame width (padding 15+15 + border 4+4), measured
+DOCK_CARD_CHROME_H = 45      # card height - frame height (padding 13+13 + border 4+4 + rail gap), measured
+DOCK_BAND_ORDER = ("above", "right", "left", "below", "foot")   # ties break in this order, always
+
+
+def dock_card_h(width: int) -> int:
+    """A video card's stage height at `width`: a 16:9 slide-frame plus the card's chrome."""
+    return round((width - DOCK_CARD_CHROME_W) * 9 / 16) + DOCK_CARD_CHROME_H
+
+
+def _card_w_for(height: float) -> int:
+    """The widest card whose 16:9 frame plus chrome fits `height`."""
+    return int((height - DOCK_CARD_CHROME_H) * 16 / 9) + DOCK_CARD_CHROME_W
+
+
+def free_bands(boxes: dict) -> list[dict]:
+    """The rectangles inside the safe box that the page's own ink leaves free (E45)."""
+    safe, plot, title = boxes["safe"], boxes["plot"], boxes["title"]
+    src, rail, cap = boxes["source"], boxes["rail"], boxes["caption_anchor"]
+    left, right = safe["x"], safe["x"] + safe["w"]
+    head = max(safe["y"], title["y"] + title["h"])
+    foot = min(safe["y"] + safe["h"], cap["y"])
+    ink_foot = max(src["y"] + src["h"], rail["y"] + rail["h"])
+    bands = {
+        "above": (left, head, right - left, plot["y"] - head),
+        "below": (left, plot["y"] + plot["h"], right - left, src["y"] - plot["y"] - plot["h"]),
+        "foot": (left, ink_foot, right - left, foot - ink_foot),
+        "left": (left, head, plot["x"] - left, foot - head),
+        "right": (plot["x"] + plot["w"], head, right - plot["x"] - plot["w"], foot - head),
+    }
+    return [{"band": name, "x": x, "y": y, "w": w, "h": h}
+            for name, (x, y, w, h) in bands.items() if w > 0 and h > 0]
+
+
+def page_place(page: dict, aspect: str) -> dict | None:
+    """The parked rectangle for a dock on this ledger page, in stage pixels (E45 §1).
+
+    ``{"x", "y", "w", "h"}``, or None when the page reports no band wide enough for a card -
+    the caller then leaves the dock on its solo geometry. Pure: the page spec is never mutated."""
+    boxes = LPG.page_boxes(page, aspect)
+    stage_w = boxes["stage"]["w"]
+    want = round(DOCK_ON_PAGE_W * stage_w)
+    quiet = boxes.get("quiet_zone")
+    best = None
+    for band in free_bands(boxes):
+        room_w, room_h = band["w"] - 2 * DOCK_PLACE_PAD, band["h"] - 2 * DOCK_PLACE_PAD
+        width = max(DOCK_ON_PAGE_MIN_W, min(want, room_w, _card_w_for(room_h)))
+        if width > band["w"] - 2 or dock_card_h(width) > band["h"] - 2:
+            continue                       # even the floor card does not fit this band
+        key = (width, band["band"] == quiet, -DOCK_BAND_ORDER.index(band["band"]))
+        if best is None or key > best[0]:
+            best = (key, band, width)
+    if best is None:
+        return None
+    _, band, width = best
+    height = dock_card_h(width)
+    if band["band"] in ("left", "right"):   # a side column: hug the page's margin, centre vertically
+        x = band["x"] + DOCK_PLACE_PAD if band["band"] == "left" else band["x"] + band["w"] - DOCK_PLACE_PAD - width
+        y = band["y"] + (band["h"] - height) / 2
+    else:                                   # a horizontal band: park against the plot, quiet-zone end
+        x = band["x"] + DOCK_PLACE_PAD if quiet == "left" else band["x"] + band["w"] - DOCK_PLACE_PAD - width
+        y = band["y"] + band["h"] - DOCK_PLACE_PAD - height if band["band"] == "above" else band["y"] + DOCK_PLACE_PAD
+    x = min(max(x, band["x"]), band["x"] + band["w"] - width)
+    y = min(max(y, band["y"]), band["y"] + band["h"] - height)
+    return {"x": round(x), "y": round(y), "w": width, "h": height}
+
+
+def dock_place(world: dict, aspect: str | None) -> dict | None:
+    """The placement every dock on this scene takes, or None on a plain plate (E45: "a dock on a
+    plain plate keeps the solo card"). One rectangle per scene, from the page's geometry alone."""
+    if not isinstance(world, dict) or world.get("kind") != SPECIES_LEDGER or not world.get("page"):
+        return None
+    return page_place(world["page"], aspect or "16:9")
+
+
 def dock_entry(aid: str, slot: int, enter: float, exitt: float, n_badges: int,
-               kind: str = DOCK_KIND_IMAGE) -> dict:
+               kind: str = DOCK_KIND_IMAGE, place: dict | None = None) -> dict:
     """One dock on a compiled scene.
 
     Spans come from the dock: evidence enters before its claim and holds through the whole
     discussion. A flat hold drops the document mid-argument, which is what left 42% of claims
     naked. ``kind`` is written ONLY for a video dock - the motion gate credits a live video dock
-    as continuous motion (M10 / M16) and an image dock's shape stays exactly as it was."""
+    as continuous motion (M10 / M16) and an image dock's shape stays exactly as it was. ``place``
+    is written ONLY for a dock on a ledger page (E45), so a plain-plate build compiles unchanged."""
     return {
         "slide": aid, "slot": slot,
         "enter": round(enter, 2), "exit": round(exitt, 2),
         "badge_at": [round(enter + 0.75 + 1.3 * (n + 1), 2) for n in range(n_badges)],
         **({"kind": DOCK_KIND_VIDEO} if kind == DOCK_KIND_VIDEO else {}),
+        **({"place": place} if place else {}),
     }
 
 
@@ -432,6 +532,10 @@ def main() -> int:
         elif "asset_id" in world:
             uris[plate] = data_uri(R.find_asset(plate), STAGE_W)
         docks = []
+        # E45 §1: on a ledger page every dock parks in the same rectangle, computed from the
+        # page's own geometry. Only the SOLO card (slot 0) is placed - a paired/stacked dock keeps
+        # the layout its slot declares, and a plain plate keeps the solo card entirely.
+        place = dock_place(world, ASPECT)
         for aid, slot, enter, exitt in ds:
             d = META.get(aid, {"title": aid, "source": "", "species": "deck",
                                "badges": []})
@@ -489,7 +593,8 @@ def main() -> int:
                                     bd["value"] = sr["label"]
                     uris[aid] = dock_uri(ap)
                 docks.append(dock_entry(aid, slot, enter, exitt, len(d["badges"]),
-                                        evidence[aid].get("kind", DOCK_KIND_IMAGE)))
+                                        evidence[aid].get("kind", DOCK_KIND_IMAGE),
+                                        place if slot == 0 else None))
         scenes.append({
             "scene_id": f"s{i+1:02d}",
             # Ken Burns is AUTHORED per shot in the table, not one constant.

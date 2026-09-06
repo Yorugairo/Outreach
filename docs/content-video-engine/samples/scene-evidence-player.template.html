@@ -2413,7 +2413,7 @@
     const pg = scene.world.page || {};
     if (!st.root.isConnected) { el.querySelectorAll(".lp").forEach((x) => x.remove()); el.appendChild(st.root); }
     const mountS = pg.enter === "mount" ? (pg.mount_s || LP.FIELD) : 0;   /* the mount phase: the world fades, the cream builds; then the page's clock starts at ROLL + SAVOR (no roll, no savor) */
-    const tr = t - scene.span[0] + (pg.enter === "spiral" ? LP_FOCUS_AT + LP_BADGE0 + LP_BADGE_STEP * ((st.badges || []).length + 1) : pg.enter === "mount" ? LP.ROLL + LP.SAVOR - mountS : 0);   /* a spiral entry ARRIVES built: its beats are all past; a MOUNT arrives after its cream has built */
+    const tr = t - scene.span[0] + (pg.enter === "spiral" ? LP_FOCUS_AT + LP_BADGE0 + LP_BADGE_STEP * ((st.badges || []).length + 1) : pg.enter === "mount" ? LP.ROLL - mountS : 0);   /* a spiral entry ARRIVES built: its beats are all past; a MOUNT is the roll-out (E45 s2): its cream builds over mount_s, then the SAVOR holds the empty page before the ink */
     /* beat 1: roll-out */
     const mount = pg.enter === "mount", rk = mount ? 1 : expoOut(clamp01(tr / LP.ROLL));   /* a mounting page is in place from its first frame; it RISES (below) with the cream steps */
     const mu = mount ? clamp01((t - scene.span[0]) / mountS) : 1;
@@ -2426,7 +2426,7 @@
     /* beat 3: the field. SOAK: seeps spread and saturate, never contract - paper taking ink;
        SCRIBBLE: strokes accumulate one at a time with the nib at the front. Either ends on the
        crisp rect. */
-    const b = clamp01((tr - LP.ROLL - LP.SAVOR) / LP.FIELD);   /* a mount's soak begins when its cream is full (tr reaches ROLL + SAVOR at mount_s) */
+    const b = clamp01((tr - LP.ROLL - LP.SAVOR) / LP.FIELD);   /* a mount's soak begins a savor after its cream is full (tr reaches ROLL at mount_s; E45 s2: the savor stays) */
     for (const bl of st.blobs) {
       /* STEP MOTION under km_ink (operator: "too smooth"): a stain's progress is a seeded staircase on the stepped clock, its own phase */
       const u = kin("km_ink") ? soakStepped(clamp01((b - bl.lag) / (1 - bl.lag)), (k) => lpHash(st.seed, bl.i + 1, 200 + k)) : clamp01((b - bl.lag) / (1 - bl.lag));
@@ -2961,6 +2961,17 @@
       el.classList.toggle("solo", solo);
       el.classList.toggle("side-r", solo && d.side === "r");
       el.classList.toggle("side-l", solo && d.side === "l");
+      /* E45 s1 (2026-09-06): a dock on a LEDGER PAGE parks in a rectangle the COMPILER computed
+         from the page's own geometry - `d.place` in stage pixels {x, y, w, h}: a small card (about
+         half the stage width) in the page's quiet space, never over the plot, the title, the source
+         line or the caption's anchor. Inline width/left/top outrank the .solo defaults; the card's
+         height stays its content's (the video slide-frame keeps aspect-ratio 16/9 and an image keeps
+         its intrinsic height), so `place.h` is the compiler's prediction, never a forced box. A dock
+         with no `place` - every dock on a plain plate - is left exactly as it was, and the mount /
+         retract choreography below reads the card's own box either way. */
+      el.style.width = d.place ? d.place.w + "px" : "";
+      el.style.left = d.place ? d.place.x + "px" : "";
+      el.style.top = d.place ? d.place.y + "px" : "";
 
       /* Card settle — the whole entrance. The document is simply present on
          the card; no mask, no drawing hand. Reference timing: a 0.75s

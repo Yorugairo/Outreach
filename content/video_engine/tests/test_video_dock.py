@@ -253,3 +253,169 @@ def test_a_video_dock_frame_is_the_same_frame_on_every_seek(tmp_path: Path):
     assert a[0] == b[0] == RB.STAGE["16:9"]
     assert hashlib.sha256(a[1]).hexdigest() == hashlib.sha256(b[1]).hexdigest(), (
         "a video dock frame differs between two renders of the same t - the seek is not awaited")
+
+
+# ---- E45 §1: a dock on a ledger page parks in the page's quiet space -------------------------
+# "A dock never covers the chart ... a small card - about half the stage width, not the 800px solo
+# card - in the page's least busy space ... never over the plot, the title or the source line, and
+# never in the caption's anchor. The placement is computed from the page's own geometry by the
+# compiler, not hand-placed per shot. A dock on a plain plate keeps the solo card."
+#
+# The 9:16 page these cases use is the golden ledger source with ONE change: an E28 sub long enough
+# that the band between the title's foot and the plot's head can hold a half-width 16:9 card (a
+# card 518 px wide stands 315 px tall, so the band must clear ~347 px, and a portrait page's band
+# is `138 + sub height - the basis label`). The golden page's own 2-line sub leaves 186 px, so it
+# is covered separately: the compiler shrinks the card rather than covering the chart.
+
+import ledger_page as LPG  # noqa: E402
+
+TALL_SUB = ("Every close from August 2025 to today, four layers on one log axis, indexed to 100 at "
+            "the start so the shapes can be compared rather than the prices, and the window chosen "
+            "because it is where the divergence begins")
+PLACE_T = DOCK_IN + 2.0          # a beat after the card has settled
+
+
+def _portrait_ledger_timeline(tall_sub: bool = True) -> tuple[dict, dict]:
+    """The golden ledger scene as a 9:16 short, with one video dock over the page."""
+    tl = json.loads((SOURCES / "ledger-page-mid-build.timeline.json").read_text(encoding="utf-8"))
+    uris = json.loads((SOURCES / "ledger-page-mid-build.uris.json").read_text(encoding="utf-8"))
+    tl["aspect"] = "9:16"
+    page = tl["scenes"][0]["world"]["page"]
+    if tall_sub:
+        page["sub"] = TALL_SUB
+        page["axes"].pop("ylabel", None)
+        page.pop("focus", None)          # the sunflower callout would tint the chart the clip's own colours
+    return tl, uris
+
+
+def _overlap(a: dict, b: dict) -> bool:
+    return (a["x"] < b["x"] + b["w"] and b["x"] < a["x"] + a["w"]
+            and a["y"] < b["y"] + b["h"] and b["y"] < a["y"] + a["h"])
+
+
+def test_a_dock_on_a_ledger_page_takes_a_half_width_card_in_the_quiet_space():
+    tl, _ = _portrait_ledger_timeline()
+    world = tl["scenes"][0]["world"]
+    place = B.dock_place(world, "9:16")
+    assert place is not None, "a dock on a ledger page must be placed by the compiler"
+    assert abs(place["w"] - round(B.DOCK_ON_PAGE_W * 1080)) <= 20, place    # ~518px: about half the stage
+    assert place["h"] == B.dock_card_h(place["w"])                          # the card's own 16:9 height
+    boxes = LPG.page_boxes(world["page"], "9:16")
+    for name in ("plot", "title", "source", "caption_anchor", "rail"):
+        assert not _overlap(place, boxes[name]), f"the card crosses the page's {name}: {place} vs {boxes[name]}"
+    safe = boxes["safe"]
+    assert safe["x"] <= place["x"] and place["x"] + place["w"] <= safe["x"] + safe["w"], (place, safe)
+    # the declared quiet zone picks the END of the band: `right` hugs the safe box's right edge
+    assert boxes["quiet_zone"] == "right"
+    assert place["x"] + place["w"] > safe["x"] + safe["w"] / 2, "a right quiet zone parks the card right"
+
+
+def test_the_placement_is_a_pure_function_of_the_page_and_never_mutates_it():
+    tl, _ = _portrait_ledger_timeline()
+    page = tl["scenes"][0]["world"]["page"]
+    before = json.dumps(page, sort_keys=True)
+    assert B.page_place(page, "9:16") == B.page_place(page, "9:16")
+    assert json.dumps(page, sort_keys=True) == before
+
+
+def test_a_tight_page_shrinks_the_card_rather_than_covering_the_chart():
+    """The golden page's own sub leaves a 186px band. E45 is 'a dock never covers the chart', so the
+    card shrinks to what the band holds - it does not fall back to the 800px solo card."""
+    tl, _ = _portrait_ledger_timeline(tall_sub=False)
+    world = tl["scenes"][0]["world"]
+    place = B.dock_place(world, "9:16")
+    boxes = LPG.page_boxes(world["page"], "9:16")
+    assert place is not None and place["w"] < round(B.DOCK_ON_PAGE_W * 1080)
+    assert place["w"] >= B.DOCK_ON_PAGE_MIN_W
+    for name in ("plot", "title", "source", "caption_anchor"):
+        assert not _overlap(place, boxes[name]), f"the shrunk card crosses the page's {name}"
+
+
+def test_the_landscape_page_still_places_its_dock_in_the_declared_quiet_zone():
+    """16:9 keeps working: there the page's own layout reserves the quiet zone (the chart takes 60%
+    of the board), so the card lands in that column, clear of the plot."""
+    tl, _ = _portrait_ledger_timeline(tall_sub=False)
+    world = tl["scenes"][0]["world"]
+    place = B.dock_place(world, "16:9")
+    boxes = LPG.page_boxes(world["page"], "16:9")
+    assert place is not None and place["w"] >= B.DOCK_ON_PAGE_MIN_W
+    assert place["x"] >= boxes["plot"]["x"] + boxes["plot"]["w"], "a right quiet zone is right of the plot"
+    for name in ("plot", "title", "source", "caption_anchor"):
+        assert not _overlap(place, boxes[name]), f"the landscape card crosses the page's {name}"
+
+
+def test_a_dock_on_a_plain_plate_keeps_the_solo_card():
+    plate = {"asset_id": "p-desk", "ken_burns": {"scale": 0.04, "x": 0, "y": 0}}
+    assert B.dock_place(plate, "9:16") is None
+    assert B.dock_place({"kind": "clip", "asset_id": "c"}, "9:16") is None
+    entry = B.dock_entry("ev-still", 0, 4.0, 20.0, 0, B.DOCK_KIND_IMAGE, None)
+    assert "place" not in entry, "a plain-plate dock must compile exactly as it did before E45"
+
+
+def test_the_dock_entry_carries_the_placement_only_when_it_has_one():
+    place = {"x": 346, "y": 435, "w": 518, "h": 315}
+    entry = B.dock_entry("clip-a", 0, 4.0, 20.0, 0, B.DOCK_KIND_VIDEO, place)
+    assert entry == {"slide": "clip-a", "slot": 0, "enter": 4.0, "exit": 20.0,
+                     "badge_at": [], "kind": "video", "place": place}
+
+
+def test_the_player_reads_place_and_overrides_the_solo_defaults():
+    html = TEMPLATE.read_text(encoding="utf-8")
+    for prop in ("width", "left", "top"):
+        assert f'el.style.{prop} = d.place ? d.place.' in html, f"the card's {prop} must come from place"
+    # the frame keeps the clip's aspect and the image case keeps its intrinsic height
+    assert ".dock.video .slide-frame { aspect-ratio: 16 / 9;" in html
+    assert ".slide-frame img { display: block; width: 100%; height: auto; }" in html
+
+
+def _synthetic_portrait_build(tmp_path: Path) -> tuple[Path, dict, dict]:
+    """The 9:16 ledger scene with one placed video dock - self-contained, like _synthetic_build."""
+    tl, uris = _portrait_ledger_timeline()
+    clip = _make_clip(tmp_path / "clip-p.mp4")
+    aid = "clip-p"
+    tl["evidence"] = {aid: {"kind": "video", "title": "docked clip", "source": "synthetic",
+                            "species": "clip", "badges": []}}
+    place = B.dock_place(tl["scenes"][0]["world"], "9:16")
+    tl["scenes"][0]["docks"] = [B.dock_entry(aid, 0, DOCK_IN, DOCK_OUT, 0, B.DOCK_KIND_VIDEO, place)]
+    uris[aid] = B.dock_uri(clip)
+    html = tmp_path / "video-dock-portrait.html"
+    html.write_text(RB.instantiate(tl, uris, TEMPLATE), encoding="utf-8")
+    return html, place, LPG.page_boxes(tl["scenes"][0]["world"]["page"], "9:16")
+
+
+def _clip_pixel_bbox(png: bytes) -> tuple[int, int, int, int] | None:
+    """The bounding box of the CLIP's own pixels. testsrc's bars carry cyan and magenta - a
+    saturated primary pair the ledger page's register (cream, charcoal, sunflower, the sign
+    colours) contains nowhere, so a cyan/magenta pixel is a clip pixel and nothing else."""
+    from PIL import Image
+    import io
+    im = Image.open(io.BytesIO(png)).convert("RGB")
+    w, h = im.size
+    px = im.load()
+    xs, ys = [], []
+    for y in range(0, h, 2):
+        for x in range(0, w, 2):
+            r, g, b = px[x, y]
+            if (r < 90 and g > 170 and b > 170) or (r > 170 and g < 90 and b > 170):
+                xs.append(x); ys.append(y)
+    if not xs:
+        return None
+    return (min(xs), min(ys), max(xs) - min(xs), max(ys) - min(ys))
+
+
+@needs_ffmpeg
+@needs_browser
+def test_the_placed_clip_paints_inside_its_rectangle_and_never_on_the_plot(tmp_path: Path):
+    """The frame proof for E45 §1: on a 9:16 ledger page the docked clip's own pixels lie inside
+    the compiler's `place` rectangle, and not one of them lands inside the page's plot box."""
+    html, place, boxes = _synthetic_portrait_build(tmp_path)
+    png = RB.render_frame(html, PLACE_T, "9:16")
+    box = _clip_pixel_bbox(png)
+    assert box is not None, "no clip pixels on the frame - the card did not mount"
+    x, y, w, h = box
+    assert w > 200 and h > 100, box
+    assert place["x"] <= x and x + w <= place["x"] + place["w"], (box, place)
+    assert place["y"] <= y and y + h <= place["y"] + place["h"], (box, place)
+    plot = boxes["plot"]
+    assert not _overlap({"x": x, "y": y, "w": w, "h": h}, plot), (
+        f"clip pixels at {box} reach into the plot {plot} - the dock is covering the chart")

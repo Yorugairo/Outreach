@@ -484,6 +484,141 @@ def _race_block(series: dict) -> dict:
             "colors": [r["color"] for r in rows]}
 
 
+# ---- PAGE GEOMETRY (ruling E45 §1, 2026-09-06) ------------------------------------------------
+# "The placement is computed from the page's own geometry by the compiler, not hand-placed per
+# shot." The page's boxes live in the PLAYER (the template lays a portrait page out top-down in
+# stage px and a landscape page in fractions of the board), so this is a READ-ONLY MIRROR of that
+# layout: the same constants, the same order of operations, reported in stage pixels so the
+# compiler can park a dock clear of the ink. It adds an accessor and changes no existing output -
+# `build_spec` is untouched and the golden frames stay pinned.
+#
+# The one thing the template does that Python cannot is MEASURE the handwriting. Title, sub and
+# source wrap at run time in Kalam; here they are wrapped greedily with an average advance
+# calibrated against the rendered golden page (bold 0.52 em, regular 0.44 em - the golden's
+# 3-line title, 2-line sub and 1-line source all reproduce). A page whose ink lands one line off
+# the estimate shifts these boxes by one line height, which is why the dock placement leaves a pad
+# and parks against the PLOT's edge (protecting the chart, per E45) rather than the title's.
+STAGE_PX = {"16:9": (1920, 1080), "9:16": (1080, 1920)}
+# doc 49 §49.1 / doc 50: platform chrome covers the top 280, the bottom 480 and the right 200 of a
+# 1080x1920 short; everything that must be read lives in x[80,880] y[280,1340].
+SAFE_BOX = {"9:16": (80, 280, 800, 1060), "16:9": (64, 64, 1792, 814)}
+# the anchored caption's strip - a dock demotes the caption to it, so a dock may never sit there
+CAPTION_ANCHOR = {"9:16": (80, 1290, 800, 150), "16:9": (145, 878, 1630, 82)}
+PORTRAIT_LAYOUT = {"TOP": 150, "X": 80, "W": 800, "TITLE_W": 920, "BOTTOM": 1280, "GAP": 24, "CHART_MIN": 320}
+PORTRAIT_INK = {"title": (68, 1.12, 0.52, 920), "sub": (40, 1.25, 0.44, 800), "src": (40, 1.25, 0.44, 800)}
+PORTRAIT_PLOT = {"L": 150, "R": 70, "T": 90, "B": 80}
+PORTRAIT_PILL_H, PORTRAIT_PILLS_PER_ROW = 132, 3   # the badge rail's row height and how many fit 800px
+YLABEL_H = 52          # axes.ylabel floats top-left INSIDE the plot (template: lpYLabel at T-12)
+XTICK_H = 62           # the x tick labels hang below the axis line (y = B + 52, 40px type)
+LAND_BOARD = (0.06, 0.08, 0.88, 0.84)   # s9.26 default board; the punch crops to 1/PUNCH_SCALE
+PUNCH_SCALE = 1.16
+LAND_PLOT = {"L": 0.070, "R": 0.220, "T": 0.071, "B": 0.839}   # dense-line margins / the 1000x560 viewBox
+
+
+def _ink_lines(text: str, size_px: float, box_w: float, advance: float) -> int:
+    """Greedy word wrap at `advance` ems per character - the line count the page will write."""
+    words = str(text or "").split()
+    if not words:
+        return 0
+    char, lines, run = size_px * advance, 1, 0.0
+    for word in words:
+        want = len(word) * char
+        if run and run + char + want > box_w:
+            lines, run = lines + 1, want
+        else:
+            run = run + char + want if run else want
+    return lines
+
+
+def _ink_height(text: str, key: str) -> float:
+    size, line_h, advance, box_w = PORTRAIT_INK[key]
+    return _ink_lines(text, size, box_w, advance) * size * line_h
+
+
+def first_clause(text: str, sentence: bool) -> str:
+    """The portrait copy rule, mirrored: the sub keeps its first clause (to ';' or the first
+    sentence end), the source its first clause (to ';') - one column has no room for the rest."""
+    value = str(text or "")
+    cuts = [i for i in (value.find(";"), value.find(". ") if sentence else -1) if i > 0]
+    if not cuts:
+        return value
+    i = min(cuts)
+    return value[: i + (1 if value[i] == "." else 0)].strip()
+
+
+def _box(x: float, y: float, w: float, h: float) -> dict:
+    return {"x": round(x), "y": round(y), "w": round(w), "h": round(h)}
+
+
+def _portrait_boxes(spec: dict, w_s: int, h_s: int) -> dict:
+    P, PL = PORTRAIT_LAYOUT, PORTRAIT_PLOT
+    title_h = _ink_height(spec.get("title"), "title")
+    sub_h = _ink_height(first_clause(spec.get("sub"), True), "sub")
+    src_h = _ink_height(first_clause(spec.get("source"), False), "src")
+    rail = [b for b in spec.get("badges") or [] if not b.get("inline")]
+    rail_h = PORTRAIT_PILL_H * -(-len(rail) // PORTRAIT_PILLS_PER_ROW) if rail else 0
+    sub_top = P["TOP"] + title_h + 16
+    chart_top = sub_top + sub_h + P["GAP"] + 8
+    chart_h = max(P["CHART_MIN"], P["BOTTOM"] - chart_top
+                  - (src_h + P["GAP"] if src_h else 0) - (rail_h + P["GAP"] if rail_h else 0))
+    src_top = chart_top + chart_h + P["GAP"]
+    plot_top = chart_top + PL["T"] - (YLABEL_H if (spec.get("axes") or {}).get("ylabel") else 0)
+    plot_bot = chart_top + chart_h - PL["B"] + XTICK_H
+    return {
+        "title": _box(P["X"], P["TOP"], P["TITLE_W"], title_h),
+        "sub": _box(P["X"], sub_top, P["W"], sub_h),
+        "chart": _box(P["X"], chart_top, P["W"], chart_h),
+        "plot": _box(P["X"] + PL["L"], plot_top, P["W"] - PL["L"] - PL["R"], plot_bot - plot_top),
+        "source": _box(P["X"], src_top, P["W"], src_h),
+        "rail": _box(P["X"], src_top + (src_h + P["GAP"] if src_h else 0), P["W"], rail_h),
+    }
+
+
+def _landscape_boxes(spec: dict, w_s: int, h_s: int) -> dict:
+    bx, by, bw, bh = LAND_BOARD
+    half = 0.5 / PUNCH_SCALE
+    vx, vy = bx + bw / 2 - half, by + bh / 2 - half
+    rx, ry = max(bx, vx), max(by, vy)
+    rw, rh = min(bx + bw, vx + 2 * half) - rx, min(by + bh, vy + 2 * half) - ry
+    cx, cy, cw, ch = rx + 0.03 * rw, ry + 0.15 * rh, 0.94 * rw, 0.74 * rh
+    qz = spec.get("quiet_zone")
+    chart_w = (0.6 if qz else 0.9) * cw
+    chart_x = cx + (0.4 if qz == "left" else 0.05) * cw
+    L = LAND_PLOT
+    return {
+        "title": _box(max(bx + 0.027, vx + 0.03) * w_s, max(by + 0.024, vy + 0.035) * h_s, chart_w * w_s, 46),
+        "sub": _box(chart_x * w_s, (max(by + 0.024, vy + 0.035) + 0.056) * h_s, chart_w * w_s, 54),
+        "chart": _box(chart_x * w_s, cy * h_s, chart_w * w_s, ch * h_s),
+        "plot": _box((chart_x + L["L"] * chart_w) * w_s, (cy + L["T"] * ch) * h_s,
+                     (1 - L["L"] - L["R"]) * chart_w * w_s, (L["B"] - L["T"]) * ch * h_s + 40),
+        "source": _box(chart_x * w_s, (cy + ch + 0.012) * h_s, chart_w * w_s, 32),
+        "rail": _box(chart_x * w_s, (cy + ch + 0.044) * h_s, chart_w * w_s, 48),
+    }
+
+
+def page_boxes(spec: dict, aspect: str = "16:9") -> dict:
+    """Where this page puts its ink, in STAGE pixels (E45 §1).
+
+    Keys: ``stage``/``safe``/``caption_anchor`` (the frame's own bands) and ``title``/``sub``/
+    ``chart``/``plot``/``source``/``rail`` (the page's), each ``{x, y, w, h}``; ``quiet_zone``
+    passes the spec's declared side through. ``plot`` is the DATA box plus the ink that lives
+    inside it - the basis label above it (``axes.ylabel``) and the x tick labels below the axis -
+    because a card over either of them covers the chart just as surely.
+
+    Pure and deterministic; the spec is never mutated. An `object` page (no chart) reports the
+    prop's field as its chart and an empty plot."""
+    if aspect not in STAGE_PX:
+        raise ValueError(f"aspect must be one of {'|'.join(STAGE_PX)}")
+    w_s, h_s = STAGE_PX[aspect]
+    boxes = (_portrait_boxes if aspect == "9:16" else _landscape_boxes)(spec, w_s, h_s)
+    if spec.get("builder") == "object":
+        boxes["plot"] = _box(boxes["chart"]["x"], boxes["chart"]["y"], 0, 0)
+    sx, sy, sw, sh = SAFE_BOX[aspect]
+    cx, cy, cw, ch = CAPTION_ANCHOR[aspect]
+    return {"aspect": aspect, "stage": _box(0, 0, w_s, h_s), "safe": _box(sx, sy, sw, sh),
+            "caption_anchor": _box(cx, cy, cw, ch), "quiet_zone": spec.get("quiet_zone"), **boxes}
+
+
 def load_series(path: Path) -> dict:
     """Decode with parse_float=str so every float stays the file's own token."""
     data = json.loads(path.read_text(encoding="utf-8"), parse_float=str)
