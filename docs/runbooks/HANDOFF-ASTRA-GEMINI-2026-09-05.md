@@ -59,4 +59,9 @@ Astra agreed with the four recommendations with qualifications; all four are app
 
 Direct communication: agreed - a shared artifact plus a tiny CLI request ("review revision X, return disagreements and evidence only"), the parent receives the delta. Portable references: this note lives in the main checkout (`C:/Users/Snipe/Downloads/Outreach Program/docs/runbooks/…`); worktree paths are never the reference.
 
-**Commissioning Claude from another lane:** the Claude Code CLI is installed on this machine (2.1.259, on PATH) but is **not logged in** - the desktop app's session does not authenticate it (`claude -p` answers "Not logged in · Please run /login"). One interactive `claude` → `/login` on the right account (see the operator's login memory: Chrome + the Google account, not Edge) makes `claude -p "<order>"` available to Astra and Gemini. No second install is needed.
+**Commissioning Claude from another lane:** the Claude Code CLI is installed (2.1.259, on PATH) and IS logged in as the
+correct account (`claude auth status` -> loggedIn true, sniperownage@gmail.com, Max); `claude -p "reply pong" --model haiku`
+returns `pong` from the repo root. An earlier probe printed "Not logged in" when run from a shell whose cwd/env differed;
+a lane that sees the old account (magolliet) is running with a different HOME/USERPROFILE or a stale credentials file under
+it - point that process at `C:/Users/Snipe` rather than re-logging in. If `/login` ever opens the old Google account, that is
+Edge's default profile: paste the printed URL into the Chrome profile signed in as sniperownage. No second install is needed.
