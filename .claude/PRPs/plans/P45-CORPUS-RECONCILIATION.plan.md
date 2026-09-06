@@ -183,7 +183,7 @@ python scripts/prp_validate.py .claude/PRPs/plans/P45-CORPUS-RECONCILIATION.plan
 ## Evidence And Handoff
 
 - 2026-09-05: layers shipped before this plan - index (e208bbf, 5aecab0), manifest (eaaf780), topics + citations (98447ba, 91deb0b), audit (fad2f29); lead-line review findings in the session record and `docs/DOCS-STANDARD.md`.
-- Decisions surfaced at draft time (the parent's recommendation in brackets):
+- Decisions surfaced at draft time (8, the last added after the gates registry landed) (the parent's recommendation in brackets):
   1. The motion-authoring order (docs 15 §5 / 16 §3: character or prop action, then camera, then secondary) lives only in the compressed docs and doc 29 does not carry it - restore into doc 29 and encode as a motion-gate check? [restore; gate only after one episode is measured against it]
   2. The on-1s / on-2s / on-3s cadence rule (animation brief) - orphaned, yet `SOAK_STEP` FPS 8 and `LIFE_FPS` 10 are already stepped clocks and the operator asked for "more step-motion / jitter" on 2026-09-05 - TOP as a kinetics module (cadence by translation speed), or EXPLORE? [TOP: it names a stumble we had this week]
   3. The 0.22 secondary-motion budget - test as a starting reference on the Tokyo short's spring velocities (X11 exists) - EXPLORE with a measurement, and the number marked `[DERIVED]`? [yes, both]
@@ -191,3 +191,4 @@ python scripts/prp_validate.py .claude/PRPs/plans/P45-CORPUS-RECONCILIATION.plan
   5. Multi-plane inpainting SAM 2 + LaMa (45 §45.5, B6 "load-bearing") - E40 says stills are the asset and clips only by frames; multi-plane cards from stills is that rule's positive form - TOP or BACKLOG? [BACKLOG until a plate needs parallax the current species cannot give]
   6. The `[DERIVED]` tag - adopt in the proof-line format, or fold into `[UNVERIFIED]`? [adopt: derived-from-sources is a different class from unverified]
   7. Docs marked "record only": reword to "compressed into 29" everywhere, and should the citation graph treat a compressed doc's sections as aliases of the target? [reword yes; aliasing only where T2 finds identical rules]
+  8. **M13 is not a built gate** (gates registry, 2026-09-05): doc 47 row 202 says "the gate lands with the edit pass"; what exists is the measurement (`measure_cut_gaps.py`) and a per-project constant (`build_short.py` `CUT_AT = 0.8`). The cut thresholds were settled from the reference on 2026-09-04 (E38) - a recent stumble by the rule. Build the gate in the edit pass now (TOP), or leave it as a measurement until the edit pass is itself built? [TOP: the numbers are settled and a project already hard-codes one of them]
