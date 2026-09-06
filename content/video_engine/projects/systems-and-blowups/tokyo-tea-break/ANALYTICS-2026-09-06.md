@@ -63,3 +63,20 @@ matters is Tokyo against the next short built under E44, not Tokyo against ep1.
 the twelve seconds of clips before the first page, and the flattening starts the moment the page rolls out. This is the
 E44 pattern with 51 viewers instead of 8. It says nothing yet about the voice: the voice is the same across the plateaus
 and the bleeds.
+
+## Third read, ~3 h after posting (n = 254 viewers, 303 views, 25 fifteen-second views, watch time 51 m 21 s)
+
+| metric | value |
+|---|---|
+| average watch time | **12 s** of 89 (13 %) - 50 s at n = 8, 25 s at n = 51, 12 s at n = 254: the sample settling toward the cold audience |
+| biggest drop-off | **0:04** (most of the audience); a second at **0:12** (= the average watch time) |
+| views vs the page's typical curve | this post ~300 at 3 h; the typical line's 620 at 4 h is ep1's spike |
+| curve | 100 % to 0:03, **50 % by 0:08, ~30 % by 0:22**, then a slow slide to ~10 % by 1:07, flat to the end |
+
+**Read against the scene list:** the cliff is still the clip chain - 0:03 to 0:12 is s01's tail, s02 (dial and bill) and
+s03 (the panel with the press cue and the cut); half the audience is gone before the first ledger page at 0:17. With 254
+viewers the plateaus have smoothed into a slope, but the slope is shallowest across the page sections (0:17-0:40,
+0:45-0:55) and steepest across the clips. Operator's read, same hour: *"rate of drop-off is flattening but still looks
+telling that the chart performs higher. Audience doesn't appear happy with the way videos are chained in, for sure."*
+Against ep1 (7 s of 73, 9 %): 12 s of 89 (13 %) at a comparable sample. v2 (the page mounted at 0:02, docks over it, no
+clip chain) is the test of this read.

@@ -1371,6 +1371,12 @@ like always the better transition for full-page scene going to full-page ledger.
    savor stays** (operator, same day): the mount replaces beat 1 only; the page's clock then runs savor 0.8 -> field ->
    punch -> build exactly as after a roll-out, so a mounted page's chart lands at mount end + 6.7 s (the 0.7 s roll is the
    only beat a mount skips). The player's mount clock before this ruling skipped the savor too; corrected 2026-09-06.
+   **The two mounts, and the clock (operator, same day):** a page arrives either (a) by the WIPE onto an already stable
+   cream - then the charcoal builds, then the graph draws - or (b) by the FADE-AND-MOUNT: the prior scene fades above
+   while the cream mounts beneath, then the charcoal builds, then the graph draws. In both, the page's own clock after the
+   cream (savor 0.8 -> field -> punch -> build) keeps its durations; *"the timing should not change - the fade/mount cuts
+   into the prior scene to make the time align"*: the mount is scheduled to END at the page's cut point, eating into the
+   outgoing scene, so the cream is stable exactly when a roll-out would have been, and the graph lands on the same word.
 3. **Consequences.** Tokyo v2: the holdings page mounts over the host's bar (s01 → s02) and over the desk plate (s06 → s07);
    the four docks shrink and move to the quiet zone. The shorts shape (doc 51 §51.2) and the script skill's SHORTS-SHAPE
    carry both rules.
