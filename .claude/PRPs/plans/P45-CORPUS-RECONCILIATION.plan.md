@@ -1,13 +1,13 @@
 ---
 id: P45-CORPUS-RECONCILIATION
 title: Reconcile the doctrine corpus with what is built - registries, triage, the operator's decisions
-status: draft
+status: approved
 operation: feature
 risk: standard
 owner: parent
 branch: main
 created: 2026-09-05
-updated: 2026-09-05
+updated: 2026-09-05 (rulings 1-7 in; 8 pending)
 ---
 
 # Reconcile the doctrine corpus with what is built
@@ -136,13 +136,13 @@ owns HG decisions, integration and every diff review; `reviewer` before each com
 - Validate: `python content/video_engine/scripts/build_docs_layers.py --check`
 - Evidence: pending
 
-### T4: Compressed-doc labels and restored rules
+### T4: Compressed docs - lift the differences out, dedupe, relabel
 - Status: pending
-- Owner: parent (doctrine), junior_developer for the mechanical rewording
-- Depends on: T2, HG2
-- Write set: `AGENTS.md` (the docs 15/16 sentence), `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md` (restored rules, additive only), the compressed docs' status lines
-- Acceptance: no doc is described as superseded when it was compressed; every rule the operator ratified as binding is in the target doc with a citation back to its source section; additive-only diff on doc 29 (`git diff --numstat` shows 0 deletions)
-- Validate: `git diff --numstat -- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md`
+- Owner: implementation_luna (the overlap report, deterministic), parent + reviewer (the restored deltas)
+- Depends on: T1, HG2 (ruled 2026-09-05: "we compressed the docs because we didn't have a proper search system; now that we do we shouldn't kill everything in the compressed docs - lift the differences out and dedupe")
+- Write set: `content/video_engine/scripts/report_doc_overlap.py` + test, `docs/DOC-OVERLAP.md` (generated: for each compressed doc → target pair, sections whose labels/terms match a target section = DUPLICATE, sections with no match = DELTA, with `path:line` both sides); then, per ratified delta: the target doc (additive, cited back), the compressed doc's status line ("compressed into <doc>; the deltas below were lifted on <date>"), `AGENTS.md` (the docs 15/16 sentence)
+- Acceptance: the overlap report exists for docs 15 → 29, 16 → 29 and every other "superseded / record only" pair the manifest's bylines name; every DELTA row is either lifted into the target (additive-only diff, `git diff --numstat` 0 deletions on the target) or listed for the operator with a reason; DUPLICATE sections are struck in the compressed doc with a pointer, never deleted; no operator quote reworded
+- Validate: `python content/video_engine/scripts/report_doc_overlap.py --check; git diff --numstat -- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md`
 - Evidence: pending
 
 ### T5: Derived-number provenance
@@ -150,7 +150,7 @@ owns HG decisions, integration and every diff review; `reviewer` before each com
 - Owner: junior_developer, parent for GEMINI.md
 - Depends on: T2, HG3
 - Write set: the docs carrying derived figures (from the triage), `GEMINI.md` (intake step 3), `content/video_engine/scripts/build_animation_registry.py` (+ test: `provenance: derived` when a `[DERIVED:` tag is within the section)
-- Acceptance: 0.22 in doc 47 / the brief carries `[DERIVED: from …]`; the registry lists every derived figure; the intake names the tag
+- Acceptance: 0.22 in doc 47 / the brief carries `[DERIVED: from …, how]`; each tag links the sources it was computed from when they are readily available in the sources bundle / research docs, or says `sources: not on file`; the registry lists every derived figure; the intake names the tag (ruled 2026-09-05)
 - Validate: `rg -c "\[DERIVED:" docs/ | tail -1; python -m pytest content/video_engine/tests/test_build_animation_registry.py -q -p no:cacheprovider`
 - Evidence: pending
 
@@ -172,6 +172,15 @@ owns HG decisions, integration and every diff review; `reviewer` before each com
 - Validate: `rg -c "Round 4" evals/RETRIEVAL-BENCHMARK-2026-09-05.md`
 - Evidence: pending
 
+### T8: Measure the secondary-motion ratio - per motion, per scene, per screen
+- Status: pending
+- Owner: implementation_luna (the measurement), explorer (the buried research), parent (the read)
+- Depends on: T1
+- Write set: `content/video_engine/scripts/measure_motion_energy.py` + test, `content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-short/MOTION-ENERGY.md` (generated), a BACKLOG X11 update
+- Acceptance: on the Tokyo short's compiled timeline, `E = ∫|v|² dt` is reported for every motion piece (each kinetic: pops, lifts, the ledger build/retract/spiral, the soak, captions' boil) classified primary vs secondary by the shot table's roles, then aggregated per scene and for the whole screen; the 0.22 reference is printed beside each measured ratio with the difference; the explorer first answers, via the layers, whether the research docs already hold anything on motion cohesion (motions working together vs individually) and cites it or reports not found where it looked (roots named)
+- Validate: `python content/video_engine/scripts/measure_motion_energy.py content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-short/tokyo-short.timeline.json --report`
+- Evidence: pending
+
 ## Verification
 
 ```
@@ -183,6 +192,8 @@ python scripts/prp_validate.py .claude/PRPs/plans/P45-CORPUS-RECONCILIATION.plan
 ## Evidence And Handoff
 
 - 2026-09-05: layers shipped before this plan - index (e208bbf, 5aecab0), manifest (eaaf780), topics + citations (98447ba, 91deb0b), audit (fad2f29); lead-line review findings in the session record and `docs/DOCS-STANDARD.md`.
+- Rulings, operator 2026-09-05 (HG1 partial, HG2, HG3): (1) restore the motion-authoring order into doc 29 now, gate after one measured episode; (2) the cadence rule is TOP as a kinetics module; (3) yes - measure the 0.22 on every individual motion piece AND per scene AND for total on-screen motion, and look for buried research on motion cohesion (T8); (4) the stick lane is in flight → FK/IK + zero-slip are TOP; (5) multi-plane inpainting → BACKLOG unless it gives capability beyond parallax ("our other local generation stuff kind of failed on us, except for parallax, which isn't much better than Ken Burns"); (6) adopt `[DERIVED]`, link sources when readily available or say they are not on file; (7) compressed docs: lift the differences out and dedupe, never kill (T4 reshaped). (8) M13 as a built gate: pending the operator's word (recommendation TOP).
+- TOP seeds for T3, from the rulings: the cadence kinetics module (on-1s/2s/3s by translation speed); FK/IK boundary + zero-slip anchoring (G-j) for the stick lane; the motion-authoring order restored into doc 29; M13 gate (pending 8).
 - Decisions surfaced at draft time (8, the last added after the gates registry landed) (the parent's recommendation in brackets):
   1. The motion-authoring order (docs 15 §5 / 16 §3: character or prop action, then camera, then secondary) lives only in the compressed docs and doc 29 does not carry it - restore into doc 29 and encode as a motion-gate check? [restore; gate only after one episode is measured against it]
   2. The on-1s / on-2s / on-3s cadence rule (animation brief) - orphaned, yet `SOAK_STEP` FPS 8 and `LIFE_FPS` 10 are already stepped clocks and the operator asked for "more step-motion / jitter" on 2026-09-05 - TOP as a kinetics module (cadence by translation speed), or EXPLORE? [TOP: it names a stumble we had this week]
