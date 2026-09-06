@@ -1,7 +1,8 @@
 {
   "roots": [
     "docs",
-    "content/video_engine/sources/reference_analyses"
+    "content/video_engine/sources/reference_analyses",
+    "content/video_engine/projects"
   ],
   "exclude": [
     "docs/research/runs/**",
@@ -19,7 +20,15 @@
     "docs/ANIMATION-REGISTRY.jsonl",
     "docs/ANIMATION-REGISTRY.md",
     "docs/DOC-OVERLAP.jsonl",
-    "docs/DOC-OVERLAP.md"
+    "docs/DOC-OVERLAP.md",
+    "content/video_engine/projects/**/build-*/**",
+    "content/video_engine/projects/**/*-GATES.md",
+    "content/video_engine/projects/**/*-SCREENS.md",
+    "content/video_engine/projects/**/*-VIEWER*.md",
+    "content/video_engine/projects/**/vo*/**",
+    "content/video_engine/projects/**/omni-video/**",
+    "content/video_engine/projects/**/plates/**",
+    "content/video_engine/projects/**/review/**"
   ],
   "include": [],
   "extra_files": [],

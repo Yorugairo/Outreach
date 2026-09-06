@@ -14,13 +14,14 @@ item, a quote, a table row or a fence.
 | Group | Files | Headings | Lead % | Termed % | Generic | Median score |
 |---|---:|---:|---:|---:|---:|---:|
 | Research (`docs/research/**`) | 7 | 122 | 93.4% | 93.4% | 0 | 96.0 |
-| Process (everything else) | 168 | 2385 | 97.1% | 90.8% | 6 | 98.0 |
-| All docs | 175 | 2507 | 97.0% | 90.9% | 6 | 98.0 |
+| Process (everything else) | 233 | 2819 | 97.5% | 91.4% | 9 | 100.0 |
+| All docs | 240 | 2941 | 97.3% | 91.5% | 9 | 100.0 |
 
 ## The 20 lowest-scoring docs
 
 | Score | Doc | Headings | Leads | Termed | Generic |
 |---:|---|---:|---:|---:|---:|
+| 65 | `content/video_engine/projects/systems-and-blowups/steel-and-paper/packaging/PINNED-COMMENT.md` | 2 | 2/2 | 0/2 | 0 |
 | 70 | `docs/seo-insights-platform-implementation-plan.md` | 27 | 17/27 | 18/27 | 0 |
 | 73 | `docs/seo-ingestion-implementation-tasks.md` | 14 | 10/14 | 9/14 | 0 |
 | 76 | `docs/content-video-engine/prompts/PROBE-AGENT-LOOP-V1.md` | 8 | 7/8 | 4/8 | 0 |
@@ -28,24 +29,26 @@ item, a quote, a table row or a fence.
 | 79 | `content/video_engine/sources/reference_analyses/why-us-bond-yields-are-surging-again-do-this-asap/NICHE_BEND_DOSSIER.md` | 12 | 9/12 | 9/12 | 0 |
 | 81 | `docs/seo-ingestion-pipeline-spec.md` | 21 | 16/21 | 17/21 | 0 |
 | 81 | `docs/seo-insights-platform-architecture.md` | 58 | 51/58 | 37/58 | 0 |
+| 82 | `content/video_engine/projects/systems-and-blowups/steel-and-paper/packaging/VIDEO-DESCRIPTION.md` | 2 | 2/2 | 1/2 | 0 |
+| 82 | `content/video_engine/projects/systems-and-blowups/style-spine.woodblock-vox-newsprint.v2.md` | 4 | 4/4 | 2/4 | 0 |
 | 82 | `docs/content-video-engine/patterns/INJECTION.md` | 6 | 6/6 | 3/6 | 0 |
 | 86 | `docs/content-video-engine/14-HIGGSFIELD-AUDIO-DRIVEN-LANE.md` | 6 | 5/6 | 5/6 | 0 |
 | 86 | `docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md` | 23 | 23/23 | 14/23 | 0 |
 | 86 | `docs/run-centric-schema-notes.md` | 8 | 6/8 | 8/8 | 1 |
+| 87 | `content/video_engine/projects/systems-and-blowups/learning/world-plate-evidence-caption-grammar.v1.md` | 5 | 4/5 | 5/5 | 1 |
 | 87 | `docs/ARCHITECTURE_DECISION_SEO_PLATFORM.md` | 8 | 7/8 | 7/8 | 1 |
+| 88 | `content/video_engine/projects/systems-and-blowups/learning/world-plate-evidence-rail-breakthrough.v1.md` | 4 | 3/4 | 4/4 | 0 |
 | 88 | `docs/runbooks/DEMAND_CONVERSION_EVIDENCE.md` | 6 | 6/6 | 4/6 | 0 |
 | 89 | `docs/AGENT_START_HERE.md` | 11 | 10/11 | 9/11 | 0 |
 | 89 | `docs/content-video-engine/patterns/phase-guides/P3.md` | 13 | 13/13 | 9/13 | 0 |
-| 90 | `docs/agent-context/SKILL_ROUTER.md` | 5 | 4/5 | 5/5 | 0 |
-| 90 | `docs/content-video-engine/P13-GATE-A-ARMBAR-REVIEW.md` | 5 | 4/5 | 5/5 | 0 |
-| 90 | `docs/content-video-engine/briefs/ALICIA-SCRIPT-PERSONA-PASS.md` | 5 | 4/5 | 5/5 | 0 |
-| 90 | `docs/content-video-engine/patterns/STRENGTH-LOOP.md` | 15 | 12/15 | 15/15 | 0 |
-| 90 | `docs/content-video-engine/patterns/phase-guides/P5.md` | 17 | 17/17 | 12/17 | 0 |
 
 ## Appendix A - sections missing a lead line
 
-Non-exempt sections whose first real line is under 40 characters (76).
+Non-exempt sections whose first real line is under 40 characters (79).
 
+- `content/video_engine/projects/martial-matters/pilots/marshall-monday-001/script-draft.md:1` Why Rap Violence is Actually a Sign of Peace | Marshall Matters Ep. 1
+- `content/video_engine/projects/systems-and-blowups/learning/world-plate-evidence-caption-grammar.v1.md:1` World Plate, Evidence, and Caption Grammar v1
+- `content/video_engine/projects/systems-and-blowups/learning/world-plate-evidence-rail-breakthrough.v1.md:1` World Plate + Evidence Rail Breakthrough v1
 - `content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:1` Production Research Report: Wealth Logic — 6 Ways Rich People Make Money With Debt
 - `content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:18` Core Production Metrics
 - `content/video_engine/sources/reference_analyses/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:1` Production Research Report: Wealth Logic — 6 Ways Rich People Make Money With Debt
@@ -125,8 +128,11 @@ Non-exempt sections whose first real line is under 40 characters (76).
 
 ## Appendix B - generic headings
 
-Headings that name a filing slot, not a concept (6).
+Headings that name a filing slot, not a concept (9).
 
+- `content/video_engine/projects/history-of-bjj/episode-2-research-questions.md:5` Questions
+- `content/video_engine/projects/history-of-bjj/episode-3-research-questions.md:5` Questions
+- `content/video_engine/projects/systems-and-blowups/learning/world-plate-evidence-caption-grammar.v1.md:7` Purpose
 - `docs/ARCHITECTURE_DECISION_SEO_PLATFORM.md:6` Context
 - `docs/content-video-engine/18-GRAPHIC-SILHOUETTE-WOODBLOCK-EXPLAINER-SPEC.md:8` Purpose
 - `docs/content-video-engine/35-ANSWER-FORMAT-DOCTRINE.md:140` 5. Rules

@@ -18,27 +18,94 @@ reference as normalised (`42§42.2` - which `46 s46.4` also writes - `29§Part3`
 `E38`, `M13`, `G-j`); a list (`docs 39 and 40`) makes one edge per document, and `to` is
 null when nothing in the index answers it.
 
-3504 topics, 2536 citation edges. The 200 largest topics follow,
+3957 topics, 3044 citation edges. The 200 largest topics follow,
 at most 12 sections each - the JSONL holds every one.
 
-## youtube (112)
+## youtube (125)
 
-- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:1 — Production Research Report: Wealth Logic — 6 Ways Rich People Make Money With Debt — - Author / Channel: Wealth Logic
-- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:14 — Executive Summary & Production Benchmarks — This video represents the current gold standard for institutional-grade, faceless financial explainers on YouTube. Unlik
-- content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/KEY_LEARNINGS_FOR_CLAUDE.md:1 — Dossier: Claude Code (Free Plan) + YouTube Deconstruction — Source Video: https://www.youtube.com/watch?v=WVT2FCjhDDY
-- content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/KEY_LEARNINGS_FOR_CLAUDE.md:31 — 2. Dossier Files in This Directory — | File | Description |
-- content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/KEY_LEARNINGS_FOR_CLAUDE.md:44 — 3. Notable Keyframe References — - frames/frame_0001.jpg: Opening hook image ('2 AM stick figure scrolling YouTube').
-- content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/REPORT.md:1 — PRODUCTION REFERENCE REPORT: Claude Code (Free Plan) + YouTube = $77,000/Month — - Source: `https://www.youtube.com/watch?v=WVT2FCjhDDY`
-- content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/REPORT.md:17 — 6-Phase Retention Architecture Deconstruction
-- content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/REPORT.md:19 — P1: The Open (0–90s / Hook & Contract) [00:00 - 01:30] — - Pacing: 30 shots | 382 words | 254.7 WPM
-- content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/SHOT_LEDGER.md:1 — SHOT LEDGER: Frame-Accurate Pacing & Visual Species Breakdown — | Shot # | Start | End | Dur (s) | Keyframe | Classified Species | Spoken Line / Audio Beat |
-- content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/WHAT-WE-LEARN.md:1 — What we actually learn from the zapiwala tutorial — verified, 2026-09-04 — Read against Gemini's dossier in this directory, then re-measured from the primary
-- content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/WHAT-WE-LEARN.md:54 — 3. RETRACTED — "we speak too fast" was my parsing error — I measured both references at 120–156 WPM against ep1's 182.8 and concluded we rush.
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/01_wealth_logic_production_report.md:1 — Production Research Report: Wealth Logic — 6 Ways Rich People Make Money With Debt — - Author / Channel: Wealth Logic
-- … 100 more in `docs/DOCS-TOPICS.jsonl`
+- content/video_engine/projects/history-of-bjj/README.md:1 — History of BJJ Series — This directory contains source-controlled editorial inputs for History Documentary
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/REWRITE-ORDER-G.md:7 — Editorial changes (the reason for the rewrite) — 1. Hook: the audience claim retargets to what is TRUE. The single
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-C-PRODUCTION.md:1 — Steel and Paper — SCRIPT C (PRODUCTION TEXT) — Script B with Revision C applied. Structure, beats and the five hardest
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-E-EXTERNAL-REVIEW.md:1 — Script E — external review — Two independent readings, deliberately outside our own doc set.
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-E-EXTERNAL-REVIEW.md:7 — 1. Art of YouTube `review_script` — three runs, and the scores do not hold — | | Script D | Script E mid | Script E final |
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-G-PRODUCTION.md:1 — STEEL AND PAPER — Script G (production) — Base: Script F. Changes per REWRITE-ORDER-G. Pause marks per doc 37.
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/REVIEW-2026-09-04.claude.md:1 — Tokyo — the rewrite, reviewed (arm: `SCRIPT-90S-VO.claude.txt` v6, 2026-09-04) — Two arms were written today; the operator tests both. This is the Claude arm's final cut
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/REVIEW-2026-09-04.claude.md:11 — How the day went, honestly — 1. v2 — 281 words, every gate green, ~92 s. The operator's read: "from our debt" is
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/REVIEW-2026-09-04.claude.md:75 — DECLARED (R2 — every tag verdicted) — | tag | line | verdict |
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/REVIEW-2026-09-04.claude.md:99 — VIEWER (P36, binds) — - v2 first pass: V01 15/28 (54 %). The raw reports showed the reader had filed the
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/REVIEW-2026-09-04.claude.md:132 — DECISION (operator rules; recommendation on each) — 1. Runtime 2:20 against doc 51's 45–60 s. Every clear cut that clears G01–G45 has
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-90S.claude.md:36 — Shots (kit clock first, Kokoro cut in brackets) — | # | span | beat | world | evidence / species | why this pairing |
+- … 113 more in `docs/DOCS-TOPICS.jsonl`
 
-## long-form (64)
+## review-only (102)
 
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/animatic/revisions/single-world-index-mechanism-proof-v1/REVIEW.md:1 — Single-World Index Mechanism Proof — Review — - Window: canonical narration words 1072–1121 (`423.867s`–`437.809s`), 13.942 seconds.
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/animatic/revisions/single-world-index-mechanism-proof-v1/REVIEW.md:19 — Asset decision — The former Wave 07 index, dual-failure, and shared-weather assets remain review-only and are excluded from the proof man
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:1 — Deck asset selection index — Manifest: `silicon-decks-source-manifest-v2`
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:7 — The Silicon Reality Gap (`silicon-reality-gap`)
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:9 — S01 · The Great Valuation Paradox — Opening source plate contrasting the S&P 500 bubble with the physical memory triopoly opportunity.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:15 — S02 · The S&P 500 Paper Bubble versus Physical Compute — Source comparison of index narrative expansion with the physical bottleneck inside modern compute systems.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:21 — S03 · Record Earnings versus Historic Valuation Discounts — Source matrix comparing valuation, operating performance, market-cap contribution, and forward multiples.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:27 — S04 · The Market’s Cyclical Trauma — Source cycle diagram linking high returns, excess capital, oversupply, and debt-financed capacity expansion.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:33 — S05 · The Triopoly Genesis — A source plate describing the consolidation from many semiconductor rivals to Samsung, Micron, and SK hynix.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:39 — S06 · The Breakdown of Moore’s Law — Source historical chart showing slowing process gains and the shift toward capital discipline in memory manufacturing.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:45 — S07 · The Anatomy of a Bottleneck — A source plate showing the stacked HBM physical structure and its manufacturing constraints.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:51 — S08 · The Three-Dimensional Packaging War — Source comparison of Samsung and SK hynix packaging approaches, thermal constraints, yield, and market dominance.
+- … 90 more in `docs/DOCS-TOPICS.jsonl`
+
+## slides-cleaned (93)
+
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:1 — Deck asset selection index — Manifest: `silicon-decks-source-manifest-v2`
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:7 — The Silicon Reality Gap (`silicon-reality-gap`)
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:9 — S01 · The Great Valuation Paradox — Opening source plate contrasting the S&P 500 bubble with the physical memory triopoly opportunity.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:15 — S02 · The S&P 500 Paper Bubble versus Physical Compute — Source comparison of index narrative expansion with the physical bottleneck inside modern compute systems.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:21 — S03 · Record Earnings versus Historic Valuation Discounts — Source matrix comparing valuation, operating performance, market-cap contribution, and forward multiples.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:27 — S04 · The Market’s Cyclical Trauma — Source cycle diagram linking high returns, excess capital, oversupply, and debt-financed capacity expansion.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:33 — S05 · The Triopoly Genesis — A source plate describing the consolidation from many semiconductor rivals to Samsung, Micron, and SK hynix.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:39 — S06 · The Breakdown of Moore’s Law — Source historical chart showing slowing process gains and the shift toward capital discipline in memory manufacturing.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:45 — S07 · The Anatomy of a Bottleneck — A source plate showing the stacked HBM physical structure and its manufacturing constraints.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:51 — S08 · The Three-Dimensional Packaging War — Source comparison of Samsung and SK hynix packaging approaches, thermal constraints, yield, and market dominance.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:57 — S09 · The Three-to-One Capacity Penalty — Source plate showing HBM consuming the wafer capacity of multiple standard DRAM units and contributing to RAM-ageddon.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:63 — S10 · The Global DRAM Battlefield — Source market map showing Samsung, SK hynix, Micron, CXMT, and the shifting global DRAM competitive field.
+- … 81 more in `docs/DOCS-TOPICS.jsonl`
+
+## head-fake (74)
+
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/REWRITE-ORDER-G.md:90 — Standing gates that bind the new draft — - Doc 37 + paragraph rules: the VO payload is REFLOWED (~8–10 paragraphs
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-E-LEDGER.md:1 — Steel and Paper — Script E ledger — The determinism state the kit requires travelling with the script: ring
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-E-LEDGER.md:40 — Open loops — LIFO closure — | # | Opens | At | Closes | At |
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-E-LEDGER.md:54 — Head-fake — Planted straight at 21.9% — "So the obvious move looks like this: take
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-G-LEDGER.md:1 — Steel and Paper — Script G ledger — Script G: 13,268 chars · ~13m 34s speech (+15s edit pauses ≈ 13m 49s) · pivot 50.6% · both checkers clean
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-G-LEDGER.md:38 — Open loops — LIFO closure (unchanged shape from E/F) — wrong-address (1.2%→52.1%) · promise→test (7.9%→63%) · head-fake→pivot
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-G-LEDGER.md:43 — Head-fake — Planted straight ~20%: "take profits on the AI trade. Chipmakers doubling
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-NOTES-retention-2-46.md:31 — The unit as it should read (target ~62s, turn lands ~3:10) — > At the dot-com peak, that share hit twenty-three cents. Today it's
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/EVIDENCE-DOSSIER.md:1 — Tokyo Tea Break — evidence dossier — Every figure the script speaks, its source, and the date it was fetched. Nothing here
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/EVIDENCE-DOSSIER.md:45 — Charts built — | sidecar | proves | form |
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/EVIDENCE-FINDING-2-the-real-story.md:1 — The stronger story, from the Treasury's own release — Fetched 2026-09-03 from `ticdata.treasury.gov/…/slt_table5.txt` — TIC Table 5, Major
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/EVIDENCE-FINDING-2-the-real-story.md:35 — Why this is the better video, not the weaker one — The original frame ("hedging costs too much so Tokyo stopped") was a *true story about
+- … 62 more in `docs/DOCS-TOPICS.jsonl`
+
+## post-key (72)
+
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-C-PRODUCTION.md:1 — Steel and Paper — SCRIPT C (PRODUCTION TEXT) — Script B with Revision C applied. Structure, beats and the five hardest
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-E-LEDGER.md:1 — Steel and Paper — Script E ledger — The determinism state the kit requires travelling with the script: ring
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-E-LEDGER.md:107 — Savor beats (P5) — Six `[post-key]` settles inside 55–87%, against a roster minimum of 2.
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-E-STRENGTH-LOG.md:203 — Loop pass 5 — the hook, after the operator reframed the episode — Operator: *"this isn't truly a historical parallel episode, it's a real-time
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-G-PRODUCTION.md:1 — STEEL AND PAPER — Script G (production) — Base: Script F. Changes per REWRITE-ORDER-G. Pause marks per doc 37.
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/REVIEW-2026-09-03.md:1 — Tokyo Tea Break — review, 2026-09-03 — Reviewed: `SCRIPT-90S-VO.txt` (67 s at the Chirp scratch pace, 194 words) and
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/REVIEW-2026-09-03.md:30 — DECLARED — Tags present and in window: `[post-key]` `[archetype]` `[stakes]` `[payoff]` `[ring]`
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/REVIEW-2026-09-04.claude.md:75 — DECLARED (R2 — every tag verdicted) — | tag | line | verdict |
+- docs/content-video-engine/32-WRITING-FOR-THE-EAR.md:181 — 8. Pipeline adoption candidates — 1. Script QC additions (join doc 31 §4's three passes): terminal-stress
+- docs/content-video-engine/37-TTS-DELIVERY-STANDARDS.md:24 — 1. Pause marks — the compiler rule — Docs 32/33 mandate `[pre-key]` / `[post-key]` marks in scripts. ElevenLabs'
+- docs/content-video-engine/37-TTS-DELIVERY-STANDARDS.md:213 — 7. Implementation status (built 2026-08-24, TDD, 18/18 tests green) — All five gaps closed in `content/video_engine/src/services/audio_synth.py`:
+- docs/content-video-engine/37-TTS-DELIVERY-STANDARDS.md:486 — 19. The pause grammar (operator, probe listen, 2026-08-30) — The probe's word timings turned the ear notes into a grammar. Four
+- … 60 more in `docs/DOCS-TOPICS.jsonl`
+
+## long-form (67)
+
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/EVIDENCE-DOSSIER.md:97 — Addendum 2026-09-04 — the rewrite's hook, sourced (SCRIPT-90S-VO.claude.txt) — Re-ran the builder the same day: TIC still prints 2026-06 (no July release yet), Japan
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/REVIEW-2026-09-03.md:1 — Tokyo Tea Break — review, 2026-09-03 — Reviewed: `SCRIPT-90S-VO.txt` (67 s at the Chirp scratch pace, 194 words) and
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/REVIEW-2026-09-03.md:14 — TOOLS (final verdicts) — A finding about our instrument, not the script: 17 of the 90-second short's 23
 - content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:1 — Production Research Report: Wealth Logic — 6 Ways Rich People Make Money With Debt — - Author / Channel: Wealth Logic
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/01_wealth_logic_production_report.md:1 — Production Research Report: Wealth Logic — 6 Ways Rich People Make Money With Debt — - Author / Channel: Wealth Logic
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/10_generative_video_tools_and_cross_platform_composition.md:161 — Part 4: 9:16 vs. 16:9 Cross-Platform Architecture & Short vs. Long Form
@@ -48,28 +115,7 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:1 — Production Research Report: Wealth Logic — 6 Ways Rich People Make Money With Debt — - Author / Channel: Wealth Logic
 - docs/content-video-engine/00-BRAINSTORM-AND-DECISIONS.md:37 — 1. The reframe: Act 1 is already built — The raw spec describes "Write Once, Publish Thrice" as something to build. Repo evidence says
 - docs/content-video-engine/00-BRAINSTORM-AND-DECISIONS.md:77 — 3.3 The missed coupling → **embeds are the base case, YouTube is the upside** — Confirmed harder than assumed: Shorts description/pinned links are not clickable at all
-- docs/content-video-engine/00-BRAINSTORM-AND-DECISIONS.md:167 — 4. Assumption register (ranked by risk × uncertainty) — | # | Assumption | If wrong | Confidence | Cheapest test |
-- docs/content-video-engine/00-BRAINSTORM-AND-DECISIONS.md:180 — 5. Pre-committed kill / pivot criteria — Evaluated once, at pilot end (~5 long-form + 12–16 shorts over 4–6 weeks) — and only on
-- docs/content-video-engine/01-PRD.md:60 — 4. Goals (ranked) and success metrics — G1 — Upgrade the owned property (base case). Every produced technique video embedded on its
-- … 52 more in `docs/DOCS-TOPICS.jsonl`
-
-## post-key (64)
-
-- docs/content-video-engine/32-WRITING-FOR-THE-EAR.md:181 — 8. Pipeline adoption candidates — 1. Script QC additions (join doc 31 §4's three passes): terminal-stress
-- docs/content-video-engine/37-TTS-DELIVERY-STANDARDS.md:24 — 1. Pause marks — the compiler rule — Docs 32/33 mandate `[pre-key]` / `[post-key]` marks in scripts. ElevenLabs'
-- docs/content-video-engine/37-TTS-DELIVERY-STANDARDS.md:213 — 7. Implementation status (built 2026-08-24, TDD, 18/18 tests green) — All five gaps closed in `content/video_engine/src/services/audio_synth.py`:
-- docs/content-video-engine/37-TTS-DELIVERY-STANDARDS.md:486 — 19. The pause grammar (operator, probe listen, 2026-08-30) — The probe's word timings turned the ear notes into a grammar. Four
-- docs/content-video-engine/38-SCRIPT-ARCHITECTURE.md:45 — 2. Phase 1 — THE OPEN (0:00–1:30), fully fused — The research blueprint says: Truby's Weakness & Need · Glass's Anecdote ·
-- docs/content-video-engine/38-SCRIPT-ARCHITECTURE.md:68 — Beat 2 — QUICK RETURN (0:03–0:08) — - Pay the microhook immediately, and pay it wrong. The second line
-- docs/content-video-engine/38-SCRIPT-ARCHITECTURE.md:113 — Beat 5 — THE MAP, NOT THE TERRITORY (0:60–0:90) — - Signposting without spoiling: where this is going, framed as journey
-- docs/content-video-engine/38-SCRIPT-ARCHITECTURE.md:143 — 3. The full skeleton (phases 2–6, same fusion — to be expanded per use) — | Phase | Classical spine (doc 32) | Platform fill (doc 31) |
-- docs/content-video-engine/40-PROCESS-AS-EVIDENCE.md:1 — 40 — Process as Evidence — Operator ruling, 2026-08-25:
-- docs/content-video-engine/40-PROCESS-AS-EVIDENCE.md:34 — 2. The audit beat — the narration device — A five-step unit, 20–35 seconds. It is an anecdote with a reversal,
-- docs/content-video-engine/51-THE-SHORTS-FORMAT.md:1 — 51 — The shorts format: one page, ship in an afternoon — Everything needed to build a short, consolidated from docs 46, 49, 50 and the operator's
-  cited by: docs/content-video-engine/BACKLOG.md:279
-- docs/content-video-engine/51-THE-SHORTS-FORMAT.md:24 — 51.2 The shape — Gated (G2, 2026-09-05) — `gate_opening_structure.py` reads a measured clock under 3:00 as a short and asks this shape, n
-  cited by: docs/content-video-engine/CAPABILITIES.md:94, docs/content-video-engine/patterns/SCRIPT-PATTERN-KIT.md:112, docs/content-video-engine/patterns/SCRIPT-PATTERN-KIT.md:177, docs/portable/OPERATOR-RULINGS.md:1259
-- … 52 more in `docs/DOCS-TOPICS.jsonl`
+- … 55 more in `docs/DOCS-TOPICS.jsonl`
 
 ## closed-form (58)
 
@@ -103,8 +149,11 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/05_comfyui_parallax_technical_standards.md:96 — 4. Dial Calibration Guide for ComfyUI Depthflow — When an image qualifies as artistically viable (continuous environmental ground), apply these exact dialed parameters:
 - … 46 more in `docs/DOCS-TOPICS.jsonl`
 
-## elevenlabs (54)
+## elevenlabs (57)
 
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/REVIEW-2026-09-04.claude.md:158 — Production, same evening (stages 5-8) — - Take: ElevenLabs, one request (`record_short_take.py`), 81.2 s at 174 wpm, gaps intact; whisper
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-90S.claude.md:10 — The bars this table is built to — - Worlds are 10 s Omni clips of `@StickMike` on the cream page (`#F4E6C7` ground,
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-90S.md:1 — Tokyo Tea Break — shot table, 9:16 short — Authored 2026-09-04 against `SCRIPT-90S-VO.txt` (282 words, ~89 s after the tempo
 - docs/content-video-engine/00-BRAINSTORM-AND-DECISIONS.md:101 — 3.6 The voice is the moat — and our biggest exposure — Strongest single finding across all eight researched channels: zero success examples with
 - docs/content-video-engine/01-PRD.md:149 — 9. Dependencies and open questions — - Corpus inventory (blocker for P0 scale): count of technique records with transcripts.
 - docs/content-video-engine/02-CONTENT-STRATEGY.md:121 — 4. Voice policy — - Recommended: clone the operator's own voice. Strongest persona ownership; explicitly
@@ -114,29 +163,13 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/07-PILOT-SEASON.md:144 — 4. Distribution constraints the pilot must respect (confirmed 2026 mechanics) — - Shorts carry no clickable links (descriptions and pinned comments — links disabled
 - docs/content-video-engine/08-TOOLING-ALTERNATIVES.md:1 — Tooling Alternatives — Higgsfield AI, Gemini Omni, and Where They Fit — *Date: 2026-07-28 · Method: dedicated research stream (official docs + pricing pages preferred;
 - docs/content-video-engine/10-HISTORY-DOCUMENTARY-EDITORIAL-SPEC.md:219 — 6. Narration and citation behavior — Narration should be precise, conversational, and explicit about uncertainty.
-- docs/content-video-engine/14-HIGGSFIELD-AUDIO-DRIVEN-LANE.md:1 — P13 Higgsfield Audio-Driven Explainer Lane — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine
-- docs/content-video-engine/14-HIGGSFIELD-AUDIO-DRIVEN-LANE.md:5 — Narration ownership correction — The first implementation exposed a timing bug: it partitioned the visual
-- docs/content-video-engine/14-HIGGSFIELD-AUDIO-DRIVEN-LANE.md:34 — Local-first contract — The current Episode 1 coverage contains 138 reviewed editorial slots and the
-- … 42 more in `docs/DOCS-TOPICS.jsonl`
+- … 45 more in `docs/DOCS-TOPICS.jsonl`
 
-## head-fake (52)
+## pre-key (55)
 
-- docs/content-video-engine/31-FACELESS-CHANNEL-DOCTRINE.md:39 — 1b. The Dopamine Ladder — six levels of engagement — Complete (retrieved across three probes). The viewer climbs; the goal is to
-- docs/content-video-engine/40-PROCESS-AS-EVIDENCE.md:1 — 40 — Process as Evidence — Operator ruling, 2026-08-25:
-- docs/content-video-engine/BACKLOG.md:172 — Blocked on an operator decision — | # | item | the decision |
-- docs/content-video-engine/briefs/ALICIA-SCRIPT-V3-CALCULUS.md:22 — Script v3 (~550 words, ~3:00) — [P1 · s01 — cold open ON THE TILL PLATE, drawer sounds under; captions
-- docs/content-video-engine/briefs/ALICIA-SCRIPT-V3-CALCULUS.md:164 — Duty ledger (the map's roster, scaled to 3:00) — | System | Required | v3 | v2 | AOY-C |
-- docs/content-video-engine/briefs/ALICIA-SCRIPT-V3-CALCULUS.md:186 — The three-way verdict — Did the calculus make us meaningfully stronger? Yes — and the delta is
-- docs/content-video-engine/briefs/ANSWER-BRAVOS-HYPE-CYCLE.md:32 — SCRIPT A (v1 baseline — A/B test arm A) — [P1 · s01 — macro: an iron railway spike on dark wood, already rotating
-- docs/content-video-engine/briefs/ANSWER-BRAVOS-HYPE-CYCLE.md:456 — Strength Log (A → B, gates per SENTENCE-STRENGTH-CHECK) — | # | A (original) | Gates failed | B (final) |
-- docs/content-video-engine/briefs/STEEL-AND-PAPER-REVISION-C.md:1 — Steel and Paper — Revision C — Script B adapted to the rules established 2026-08-25 → 08-28. Structure,
-- docs/content-video-engine/briefs/STEEL-AND-PAPER-REVISION-C.md:63 — 2. ADD — the audit beat (doc 40) — Goes in P2, immediately after the GDP-share claim, in the steelman.
-- docs/content-video-engine/CAPABILITIES.md:94 — Script & voice — | Capability | Where | State | Proof |
-- docs/content-video-engine/patterns/CHECK-RESPONSIBILITIES.md:1 — CHECK RESPONSIBILITIES — what the tools decide, what the agent decides — The kit has four tool-enforced checkers and one reading-enforced loop. This
-- … 40 more in `docs/DOCS-TOPICS.jsonl`
-
-## pre-key (52)
-
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-C-PRODUCTION.md:1 — Steel and Paper — SCRIPT C (PRODUCTION TEXT) — Script B with Revision C applied. Structure, beats and the five hardest
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/REVIEW-2026-09-03.md:30 — DECLARED — Tags present and in window: `[post-key]` `[archetype]` `[stakes]` `[payoff]` `[ring]`
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/REVIEW-2026-09-04.claude.md:11 — How the day went, honestly — 1. v2 — 281 words, every gate green, ~92 s. The operator's read: "from our debt" is
 - docs/content-video-engine/32-WRITING-FOR-THE-EAR.md:181 — 8. Pipeline adoption candidates — 1. Script QC additions (join doc 31 §4's three passes): terminal-stress
 - docs/content-video-engine/37-TTS-DELIVERY-STANDARDS.md:24 — 1. Pause marks — the compiler rule — Docs 32/33 mandate `[pre-key]` / `[post-key]` marks in scripts. ElevenLabs'
 - docs/content-video-engine/37-TTS-DELIVERY-STANDARDS.md:213 — 7. Implementation status (built 2026-08-24, TDD, 18/18 tests green) — All five gaps closed in `content/video_engine/src/services/audio_synth.py`:
@@ -146,13 +179,15 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/40-PROCESS-AS-EVIDENCE.md:1 — 40 — Process as Evidence — Operator ruling, 2026-08-25:
 - docs/content-video-engine/40-PROCESS-AS-EVIDENCE.md:34 — 2. The audit beat — the narration device — A five-step unit, 20–35 seconds. It is an anecdote with a reversal,
 - docs/content-video-engine/briefs/ALICIA-SCRIPT-PERSONA-PASS.md:1 — Alicia Script — Persona Pass (v2) — The approved 3:00 script from
-- docs/content-video-engine/briefs/ALICIA-SCRIPT-PERSONA-PASS.md:15 — Script v2 (~575 words, ~3:00) — [s01 — cold open ON THE TILL PLATE, captions punching in word groups; till
-- docs/content-video-engine/briefs/ALICIA-SCRIPT-PERSONA-PASS.md:106 — Comparison — what the persona pass changed, and under which rule — | Slot | v1 | v2 | Rule |
-- docs/content-video-engine/briefs/ALICIA-SCRIPT-V3-CALCULUS.md:1 — Alicia Script — v3 (The Calculus Pass) + Three-Way Verdict — The bake-off before committing to the phase guides (P10 T2). Same
-- … 40 more in `docs/DOCS-TOPICS.jsonl`
+- … 43 more in `docs/DOCS-TOPICS.jsonl`
 
-## two-thirds (49)
+## two-thirds (54)
 
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/evidence/EVIDENCE-DOSSIER.md:76 — A. Railway mania (1840s Britain) — A1 — Peak railway investment ≈ 7% of British GDP. VERIFIED.
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-E-EXTERNAL-REVIEW.md:137 — 4. Fixes applied, 2026-08-29 — All three landed in the final ninety seconds. None required restructuring.
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-G-JUDGE.md:1 — SCRIPT G — JUDGE adjudication (the rows a tool cannot verdict) — Adjudicated 2026-09-03 against the annotated script, the recorded take's word
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-G-JUDGE.md:55 — J04 — context-dump ban: abstractions cashed within one sentence — **WARN** — The P2 catalyst passes cleanly: *"Every transformative technology
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-G-PRODUCTION.md:1 — STEEL AND PAPER — Script G (production) — Base: Script F. Changes per REWRITE-ORDER-G. Pause marks per doc 37.
 - content/video_engine/sources/reference_analyses/ACADEMIC_LITERATURE_DRAWING_AND_2_5D_ANIMATION_ENGINE.md:49 — Pillar 1: Biomechanical Motor Control & Procedural Stroke Mechanics
 - content/video_engine/sources/reference_analyses/ACADEMIC_LITERATURE_DRAWING_AND_2_5D_ANIMATION_ENGINE.md:51 — 1.1 The Two-Thirds Power Law of Human Drawing — In voluntary human handwriting, sketching, and mark-making, tangential speed is fundamentally coupled to path geometry (
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/00_README_INDEX.md:7 — File Inventory & Agent Navigation Guide — | File | Purpose & Contents | Recommended Consumer |
@@ -160,12 +195,23 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/07_academic_literature_drawing_and_2_5d_animation_engine.md:51 — 1.1 The Two-Thirds Power Law of Human Drawing — In voluntary human handwriting, sketching, and mark-making, tangential speed is fundamentally coupled to path geometry (
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/08_answers_animation_craft_brief.md:1 — Answers to Research Brief — Animation Craft & The Drawing Engine (Pass 2 Audited) — Author / Pass: Gemini Deep-Research Pass 2 (Audited & Corrected)
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/08_answers_animation_craft_brief.md:13 — 0. Pass 1 Audit & Retrospective: The Honest Correction — In Pass 1, the binding contract requiring "a number with a tolerance and its condition" created artificial pressure to f
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/08_answers_animation_craft_brief.md:74 — 2. Executive Synthesis: Synergies & The Free High-Leverage Wins
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/08_answers_animation_craft_brief.md:76 — 2.1 The 5 Overlapping Synergies to Capitalize On — 1. Acoustic Silence Gaps $\times$ Scene Cuts $\times$ Saccadic Suppression $\times$ Tversky Savor Holds:
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/08_answers_animation_craft_brief.md:272 — A5: Drawing-On [CLOSED & RECLASSIFIED]
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/08_answers_animation_craft_brief.md:274 — 1. The Kinematic Two-Thirds Power Law (Tier 1 Math — CLOSED) — Human handwriting and drawing velocity strictly tracks path curvature $\kappa(s)$:
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/08_answers_animation_craft_brief.md:387 — 5. Track C — The Drawing-Engine Builder
-- … 37 more in `docs/DOCS-TOPICS.jsonl`
+- … 42 more in `docs/DOCS-TOPICS.jsonl`
+
+## hyperframes (44)
+
+- content/video_engine/projects/systems-and-blowups/learning/world-plate-evidence-rail-breakthrough.v1.md:1 — World Plate + Evidence Rail Breakthrough v1 — Status: accepted design direction
+- content/video_engine/projects/systems-and-blowups/learning/world-plate-evidence-rail-breakthrough.v1.md:29 — Proof evidence — - World plates: `finance-world-plate-evidence-rail-proof-v1/assets/world/`
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/edit/hyperframes-opening-v1/AGENTS.md:1 — HyperFrames Composition Project
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/edit/hyperframes-opening-v1/CLAUDE.md:1 — HyperFrames Composition Project
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/edit/hyperframes-opening-v1/FRAME.md:10 — Current Bubble — HyperFrames object choreography — This is a dark, warm woodblock-paper theatre for a finance explainer. The world
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/edit/hyperframes-opening-v1/STORYBOARD.md:1 — Current Bubble — 90-second HyperFrames opening proof — This proof tells the viewer that the memory trade and the index-fund problem
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-whiteboard-asset-blend-proof-v1/README.md:1 — Finance Whiteboard Asset Blend Proof — An isolated, proof-only HyperFrames composition for testing PDF-derived
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-whiteboard-code-drawn-proof-v1/README.md:1 — Finance Whiteboard Code-Drawn MVP — An isolated P27 HyperFrames proof for a warm whiteboard plate with a restrained
+- content/video_engine/projects/systems-and-blowups/README.md:23 — Agent-native media review and composition — Use the tools as separate responsibilities:
+- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:141 — Actionable Takeaways for Outreach Engine Pipelines — 1. Adopt the Audio-Gap Boundary Detector: Automatically generate `storyboard.json` scene cuts from `words.json` breath p
+- content/video_engine/sources/reference_analyses/ACADEMIC_LITERATURE_DRAWING_AND_2_5D_ANIMATION_ENGINE.md:1 — Academic Literature Monograph: Mathematical Foundations of 2D & 2.5D Drawing and Animation Engines — Unified Academic Synthesis: Differential Geometry, Biomechanical Motor Control, Variational Continuum Mechanics, and Per
+- content/video_engine/sources/reference_analyses/COMFYUI_PARALLAX_TECHNICAL_STANDARDS_RESEARCH.md:136 — 5. The Professional Standard: Two-Plane Layer Inpainting — To achieve the 2.5D depth seen in professional documentaries (Ken Burns on steroids) where characters and props move aga
+- … 32 more in `docs/DOCS-TOPICS.jsonl`
 
 ## lama (38)
 
@@ -199,6 +245,22 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/10_generative_video_tools_and_cross_platform_composition.md:288 — Authoritative Engineering Directives — 1. Enforce the Frame Arithmetic:
 - … 26 more in `docs/DOCS-TOPICS.jsonl`
 
+## on-screen (38)
+
+- content/video_engine/projects/systems-and-blowups/registration/README.md:43 — Figures are on-screen assertions — Each `figures[].value` is transcribed exactly as typeset — symbols,
+- content/video_engine/projects/systems-and-blowups/registration/WORK-ORDER.md:1 — Work Order — Slide Semantic Registration + Figure Extraction — Register 86 approved source slides against a closed claim vocabulary and
+- content/video_engine/projects/systems-and-blowups/registration/WORK-ORDER.md:7 — Why this exists — Our narration is already semantically registered: every narration cue carries
+- docs/content-video-engine/00-BRAINSTORM-AND-DECISIONS.md:116 — 3.8 Finance: un-parked by the operator's credentials — Original decision parked finance (named 2026 enforcement bucket: "AI personas on
+- docs/content-video-engine/06-SCRIPT-TRANSFORMATION-SPEC.md:71 — 3. Conflict-loop arc (mapped to `scene.act`) — Linear summary (hook → explanation → conclusion) retains worse than a looped conflict arc:
+- docs/content-video-engine/07-PILOT-SEASON.md:144 — 4. Distribution constraints the pilot must respect (confirmed 2026 mechanics) — - Shorts carry no clickable links (descriptions and pinned comments — links disabled
+- docs/content-video-engine/07-PILOT-SEASON.md:164 — 5. Per-episode definition of done — - [ ] Storyboard approved at Gate A (rubric scores recorded in `job.json`)
+- docs/content-video-engine/10-HISTORY-DOCUMENTARY-EDITORIAL-SPEC.md:219 — 6. Narration and citation behavior — Narration should be precise, conversational, and explicit about uncertainty.
+- docs/content-video-engine/16-EDITORIAL-MOTION-SYSTEM.md:1 — Editorial Motion System — > STATUS: PARTIALLY SUPERSEDED. The production pattern is now the scene-evidence lane in 29. Sections that 29 does not r
+- docs/content-video-engine/16-EDITORIAL-MOTION-SYSTEM.md:192 — 9. On-screen text and added-layer policy — - The default is no added text and no added prop. A layer must earn its place.
+- docs/content-video-engine/17-TIMESTAMPED-PLATE-PRODUCTION.md:251 — 8. Intent and action brief before generation — Each timestamped prompt also receives an editorial intent and an action brief
+- docs/content-video-engine/21-ART-STYLE-REFERENCE-REVIEW.md:148 — The floor reference, as a list of enumerable defects — Same concept, executed with an image model and no QC — and still a six-figure performer. What
+- … 26 more in `docs/DOCS-TOPICS.jsonl`
+
 ## pacing (36)
 
 - content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/REPORT.md:19 — P1: The Open (0–90s / Hook & Contract) [00:00 - 01:30] — - Pacing: 11 shots | 449 words | 299.3 WPM
@@ -215,36 +277,22 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:122 — P6: The Close (14:21 – 16:53) | Resolution & Ring Echo — - Pacing: 15 shots | 600 words | 236.8 WPM
 - … 24 more in `docs/DOCS-TOPICS.jsonl`
 
-## hyperframes (35)
+## mckee (35)
 
-- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:141 — Actionable Takeaways for Outreach Engine Pipelines — 1. Adopt the Audio-Gap Boundary Detector: Automatically generate `storyboard.json` scene cuts from `words.json` breath p
-- content/video_engine/sources/reference_analyses/ACADEMIC_LITERATURE_DRAWING_AND_2_5D_ANIMATION_ENGINE.md:1 — Academic Literature Monograph: Mathematical Foundations of 2D & 2.5D Drawing and Animation Engines — Unified Academic Synthesis: Differential Geometry, Biomechanical Motor Control, Variational Continuum Mechanics, and Per
-- content/video_engine/sources/reference_analyses/COMFYUI_PARALLAX_TECHNICAL_STANDARDS_RESEARCH.md:136 — 5. The Professional Standard: Two-Plane Layer Inpainting — To achieve the 2.5D depth seen in professional documentaries (Ken Burns on steroids) where characters and props move aga
-- content/video_engine/sources/reference_analyses/COMFYUI_PARALLAX_TECHNICAL_STANDARDS_RESEARCH.md:156 — The 3-Step Protocol: — 1. Step 1: Automatic Foreground Segmentation (`RMBG-2.0` / `SAM 2`):
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/01_wealth_logic_production_report.md:141 — Actionable Takeaways for Outreach Engine Pipelines — 1. Adopt the Audio-Gap Boundary Detector: Automatically generate `storyboard.json` scene cuts from `words.json` breath p
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/02_drawing_engine_and_transforms_research.md:1 — Deep Research Report: Drawing Engines, Animation Mechanics, Object Management, and Transform Architectures for Faceless Video Production — Generated: 2026-09-04 | Status: Authoritative Technical Architecture | Scope: Video Engine Rendering & Compositing
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/02_drawing_engine_and_transforms_research.md:7 — Executive Summary — State-of-the-art programmatic video generation systems (such as Remotion, Motion Canvas, Figma Motion, and Rive) achieve
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/02_drawing_engine_and_transforms_research.md:116 — 2. Animation Mechanics & Deterministic Clocking
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/02_drawing_engine_and_transforms_research.md:118 — 2.1 The Deadly Flaw of Wall-Clock Animations in Headless Video — In interactive web browsers, animations rely on `requestAnimationFrame(timestamp)` or `setInterval`. If the CPU stutters
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/02_drawing_engine_and_transforms_research.md:228 — 5. Architectural Blueprint for Outreach Video Engine — To elevate our current Remotion / HyperFrames / HTML player to institutional standards, we outline five concrete improve
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/05_comfyui_parallax_technical_standards.md:136 — 5. The Professional Standard: Two-Plane Layer Inpainting — To achieve the 2.5D depth seen in professional documentaries (Ken Burns on steroids) where characters and props move aga
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/05_comfyui_parallax_technical_standards.md:156 — The 3-Step Protocol: — 1. Step 1: Automatic Foreground Segmentation (`RMBG-2.0` / `SAM 2`):
-- … 23 more in `docs/DOCS-TOPICS.jsonl`
-
-## on-screen (35)
-
-- docs/content-video-engine/00-BRAINSTORM-AND-DECISIONS.md:116 — 3.8 Finance: un-parked by the operator's credentials — Original decision parked finance (named 2026 enforcement bucket: "AI personas on
-- docs/content-video-engine/06-SCRIPT-TRANSFORMATION-SPEC.md:71 — 3. Conflict-loop arc (mapped to `scene.act`) — Linear summary (hook → explanation → conclusion) retains worse than a looped conflict arc:
-- docs/content-video-engine/07-PILOT-SEASON.md:144 — 4. Distribution constraints the pilot must respect (confirmed 2026 mechanics) — - Shorts carry no clickable links (descriptions and pinned comments — links disabled
-- docs/content-video-engine/07-PILOT-SEASON.md:164 — 5. Per-episode definition of done — - [ ] Storyboard approved at Gate A (rubric scores recorded in `job.json`)
-- docs/content-video-engine/10-HISTORY-DOCUMENTARY-EDITORIAL-SPEC.md:219 — 6. Narration and citation behavior — Narration should be precise, conversational, and explicit about uncertainty.
-- docs/content-video-engine/16-EDITORIAL-MOTION-SYSTEM.md:1 — Editorial Motion System — > STATUS: PARTIALLY SUPERSEDED. The production pattern is now the scene-evidence lane in 29. Sections that 29 does not r
-- docs/content-video-engine/16-EDITORIAL-MOTION-SYSTEM.md:192 — 9. On-screen text and added-layer policy — - The default is no added text and no added prop. A layer must earn its place.
-- docs/content-video-engine/17-TIMESTAMPED-PLATE-PRODUCTION.md:251 — 8. Intent and action brief before generation — Each timestamped prompt also receives an editorial intent and an action brief
-- docs/content-video-engine/21-ART-STYLE-REFERENCE-REVIEW.md:148 — The floor reference, as a list of enumerable defects — Same concept, executed with an image model and no QC — and still a six-figure performer. What
-- docs/content-video-engine/21-ART-STYLE-REFERENCE-REVIEW.md:499 — Two production models, and they are a real choice — | | Composite from library | Generate whole plates |
-- docs/content-video-engine/23-EP1-LIBRARY-INTAKE-REVIEW.md:424 — Scale Block — paste into every world prompt — Image models handle on-screen proportions far better than metres, so state the
-- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:18 — Current state — what actually governs production — Consolidated 2026-08-28. Where this section and anything below it
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-G-JUDGE.md:1 — SCRIPT G — JUDGE adjudication (the rows a tool cannot verdict) — Adjudicated 2026-09-03 against the annotated script, the recorded take's word
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-G-JUDGE.md:41 — J05 — the gap opens: line 2 violates line 1's expected consequence — **PASS** — "The safest thing you own looks like this." → "An iron spike." Line 1 sets an
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-G-JUDGE.md:105 — What the judge adds to the mechanical gates — The gates say the promise is late and the first sentence misses the title
+- docs/content-video-engine/32-WRITING-FOR-THE-EAR.md:1 — 32 — Writing for the Ear (craft doctrine, non-YouTube) — The fundamental-craft layer under the YouTube layer. Doc 31 holds the
+  cited by: content/video_engine/projects/systems-and-blowups/tokyo-tea-break/EVIDENCE-AUDIT-2026-09-03.md:25, docs/content-video-engine/28-AOY-MCP-EVALUATION.md:486, docs/content-video-engine/28-AOY-MCP-EVALUATION.md:536, docs/content-video-engine/34-AOY-SCRIPT-WRITER-STUDY.md:87, docs/content-video-engine/34-AOY-SCRIPT-WRITER-STUDY.md:306, docs/content-video-engine/37-TTS-DELIVERY-STANDARDS.md:24, +4 more
+- docs/content-video-engine/32-WRITING-FOR-THE-EAR.md:163 — 7. Diff against doc 31 — what is additive — | This doc | vs AOY (doc 31) | Status |
+- docs/content-video-engine/35-ANSWER-FORMAT-DOCTRINE.md:87 — 3. The format — eight beats — From the operator's own worked example:
+- docs/content-video-engine/38-SCRIPT-ARCHITECTURE.md:1 — 38 — Script Architecture: the deterministic prompt structure — Operator thesis (2026-08-24), and this document's organizing principle:
+  cited by: content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-E-EXTERNAL-REVIEW.md:100, content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-E-EXTERNAL-REVIEW.md:118, content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-E-EXTERNAL-REVIEW.md:137, content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-E-STRENGTH-LOG.md:203, content/video_engine/projects/systems-and-blowups/tokyo-tea-break/REVIEW-2026-09-03.md:55, docs/content-video-engine/28-AOY-MCP-EVALUATION.md:536, +7 more
+- docs/content-video-engine/38-SCRIPT-ARCHITECTURE.md:45 — 2. Phase 1 — THE OPEN (0:00–1:30), fully fused — The research blueprint says: Truby's Weakness & Need · Glass's Anecdote ·
+- docs/content-video-engine/38-SCRIPT-ARCHITECTURE.md:53 — Beat 1 — MICROHOOK (0:00–0:03) — - The first sentence is the grab. Present tense, viewer-facing, concrete,
+- docs/content-video-engine/38-SCRIPT-ARCHITECTURE.md:143 — 3. The full skeleton (phases 2–6, same fusion — to be expanded per use) — | Phase | Classical spine (doc 32) | Platform fill (doc 31) |
+- docs/content-video-engine/patterns/CHECK-RESPONSIBILITIES.md:117 — 3. The agent's territory — verdicted by name, every run
+- docs/content-video-engine/patterns/CHECK-RESPONSIBILITIES.md:130 — 3c. The classical nodes outside the gate (P3–P6) — | Node | Where | What the agent decides |
 - … 23 more in `docs/DOCS-TOPICS.jsonl`
 
 ## attribution-first (32)
@@ -277,24 +325,6 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/01_wealth_logic_production_report.md:18 — Core Production Metrics — - Total Cuts: 100 shots
 - content/video_engine/sources/reference_analyses/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:1 — Production Research Report: Wealth Logic — 6 Ways Rich People Make Money With Debt — - Author / Channel: Wealth Logic
 - content/video_engine/sources/reference_analyses/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:14 — Executive Summary & Production Benchmarks — This video represents the current gold standard for institutional-grade, faceless financial explainers on YouTube. Unlik
-- … 20 more in `docs/DOCS-TOPICS.jsonl`
-
-## mckee (32)
-
-- docs/content-video-engine/32-WRITING-FOR-THE-EAR.md:1 — 32 — Writing for the Ear (craft doctrine, non-YouTube) — The fundamental-craft layer under the YouTube layer. Doc 31 holds the
-  cited by: docs/content-video-engine/28-AOY-MCP-EVALUATION.md:486, docs/content-video-engine/28-AOY-MCP-EVALUATION.md:536, docs/content-video-engine/34-AOY-SCRIPT-WRITER-STUDY.md:87, docs/content-video-engine/34-AOY-SCRIPT-WRITER-STUDY.md:306, docs/content-video-engine/37-TTS-DELIVERY-STANDARDS.md:24, docs/content-video-engine/38-SCRIPT-ARCHITECTURE.md:1, +3 more
-- docs/content-video-engine/32-WRITING-FOR-THE-EAR.md:163 — 7. Diff against doc 31 — what is additive — | This doc | vs AOY (doc 31) | Status |
-- docs/content-video-engine/35-ANSWER-FORMAT-DOCTRINE.md:87 — 3. The format — eight beats — From the operator's own worked example:
-- docs/content-video-engine/38-SCRIPT-ARCHITECTURE.md:1 — 38 — Script Architecture: the deterministic prompt structure — Operator thesis (2026-08-24), and this document's organizing principle:
-  cited by: docs/content-video-engine/28-AOY-MCP-EVALUATION.md:536, docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1885, docs/content-video-engine/35-ANSWER-FORMAT-DOCTRINE.md:140, docs/content-video-engine/briefs/STEEL-AND-PAPER-UNITS-D.md:1, docs/content-video-engine/briefs/STEEL-AND-PAPER-WAVE-5-PLAN.md:1, docs/content-video-engine/CAPABILITIES.md:94, +2 more
-- docs/content-video-engine/38-SCRIPT-ARCHITECTURE.md:45 — 2. Phase 1 — THE OPEN (0:00–1:30), fully fused — The research blueprint says: Truby's Weakness & Need · Glass's Anecdote ·
-- docs/content-video-engine/38-SCRIPT-ARCHITECTURE.md:53 — Beat 1 — MICROHOOK (0:00–0:03) — - The first sentence is the grab. Present tense, viewer-facing, concrete,
-- docs/content-video-engine/38-SCRIPT-ARCHITECTURE.md:143 — 3. The full skeleton (phases 2–6, same fusion — to be expanded per use) — | Phase | Classical spine (doc 32) | Platform fill (doc 31) |
-- docs/content-video-engine/patterns/CHECK-RESPONSIBILITIES.md:117 — 3. The agent's territory — verdicted by name, every run
-- docs/content-video-engine/patterns/CHECK-RESPONSIBILITIES.md:130 — 3c. The classical nodes outside the gate (P3–P6) — | Node | Where | What the agent decides |
-- docs/content-video-engine/patterns/FULL-VIDEO-MAP.md:1 — FULL VIDEO MAP — McKee Extended to the YouTube Era — The calculus. The classical six-phase architecture (doc 32 / the research
-- docs/content-video-engine/patterns/FULL-VIDEO-MAP.md:22 — 0. The extended unit hierarchy — McKee: beat → scene → sequence → act → story. Extended:
-- docs/content-video-engine/patterns/FULL-VIDEO-MAP.md:141 — 4. P2 — THE ENGINE (1:30–5:00) — Classical: Snyder Catalyst & Debate · McKee inciting incident · contextual
 - … 20 more in `docs/DOCS-TOPICS.jsonl`
 
 ## dit (31)
@@ -370,7 +400,7 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/34-AOY-SCRIPT-WRITER-STUDY.md:264 — 5. Findings — Run 1 landed (35 min, 1886 words against a 1900 target) — Verdict: `write_script_v2` is real. It is the one genuinely valuable
 - docs/content-video-engine/34-AOY-SCRIPT-WRITER-STUDY.md:285 — Sourcing verified — it holds — The load-bearing claim was checked against the primary source. FHFA Working
 - docs/content-video-engine/35-ANSWER-FORMAT-DOCTRINE.md:1 — 35 — The Answer Format — Positioning doctrine. How this channel competes against established macro
-  cited by: content/video_engine/sources/reference_analyses/why-us-bond-yields-are-surging-again-do-this-asap/REPORT.md:50, docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:855, docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1103, docs/content-video-engine/34-AOY-SCRIPT-WRITER-STUDY.md:306, docs/content-video-engine/36-WRITER-PERSONA.md:15, docs/content-video-engine/36-WRITER-PERSONA.md:108, +11 more
+  cited by: content/video_engine/projects/systems-and-blowups/steel-and-paper/evidence/EVIDENCE-DOSSIER.md:148, content/video_engine/projects/systems-and-blowups/steel-and-paper/REWRITE-ORDER-G.md:7, content/video_engine/projects/systems-and-blowups/tokyo-tea-break/REVIEW-2026-09-03.md:55, content/video_engine/sources/reference_analyses/why-us-bond-yields-are-surging-again-do-this-asap/REPORT.md:50, docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:855, docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1103, +14 more
 - docs/content-video-engine/35-ANSWER-FORMAT-DOCTRINE.md:11 — 1. Correction: earned credibility is a real source tier — An earlier draft of doc 34 marked Bravos Research down for presenting their
 - docs/content-video-engine/36-WRITER-PERSONA.md:200 — 3b. Portfolio doctrine — named frameworks (operator-defined, 2026-08-24) — Coined, proprietary concepts — the concept-naming authority device
 - docs/content-video-engine/36-WRITER-PERSONA.md:392 — 6. Thread status (grill of 2026-08-24 — answered) — Resolved this date: the "beating the market" completion (→ T11) · both
@@ -443,6 +473,22 @@ at most 12 sections each - the JSONL holds every one.
 - docs/seo-ingestion-implementation-tasks.md:98 — Success criteria for MVP — - ingest one domain end-to-end in under 5 minutes
 - … 15 more in `docs/DOCS-TOPICS.jsonl`
 
+## full-frame (27)
+
+- content/video_engine/projects/systems-and-blowups/learning/continuous-learning-import.v1.md:12 — Action — Keep the canonical world plate full-frame as the continuity layer. Let the
+- content/video_engine/projects/systems-and-blowups/learning/continuous-learning-import.v1.md:110 — Evidence — The five-minute cut uses 20 evidence beats with at most two simultaneously,
+- content/video_engine/projects/systems-and-blowups/learning/world-plate-evidence-caption-grammar.v1.md:1 — World Plate, Evidence, and Caption Grammar v1 — Status: accepted design direction
+- content/video_engine/projects/systems-and-blowups/learning/world-plate-evidence-caption-grammar.v1.md:13 — Production rules — 1. Keep the selected world plate full-frame and legible as the hero.
+- content/video_engine/projects/systems-and-blowups/learning/world-plate-evidence-caption-grammar.v1.md:45 — Proven proof — - Master: `current-bubble-mechanism/five-minute-semantic-demo-v3/render/current-bubble-five-minute-v3.mp4`
+- content/video_engine/projects/systems-and-blowups/learning/world-plate-evidence-rail-breakthrough.v1.md:1 — World Plate + Evidence Rail Breakthrough v1 — Status: accepted design direction
+- content/video_engine/projects/systems-and-blowups/learning/world-plate-evidence-rail-breakthrough.v1.md:7 — Durable composition contract — Use the canonical woodblock world plate as the full-frame story environment.
+- content/video_engine/projects/systems-and-blowups/learning/world-plate-evidence-rail-breakthrough.v1.md:15 — Atomic rules — 1. World owns attention. Keep the selected world plate full-frame for the
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/edit/hyperframes-opening-v1/FRAME.md:10 — Current Bubble — HyperFrames object choreography — This is a dark, warm woodblock-paper theatre for a finance explainer. The world
+- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/SHOT_LEDGER.md:1 — SHOT LEDGER: Frame-Accurate Pacing & Visual Species Breakdown — | Shot # | Start | End | Dur (s) | Keyframe | Classified Species | Spoken Line / Audio Beat |
+- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/SHOT_LEDGER.md:106 — Visual Species Taxonomy Legend — - `chart`: Quantitative coordinate graph (line, bar, scatter, yield curve).
+- content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/SHOT_LEDGER.md:1 — SHOT LEDGER: Frame-Accurate Pacing & Visual Species Breakdown — | Shot # | Start | End | Dur (s) | Keyframe | Classified Species | Spoken Line / Audio Beat |
+- … 15 more in `docs/DOCS-TOPICS.jsonl`
+
 ## s-y (26)
 
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/02_drawing_engine_and_transforms_research.md:15 — Architecture Diagram & The 4 Core Mechanical Pillars
@@ -490,6 +536,22 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_INDEX.md:137 — 4.1 Comfy Engine 1: Parallax & Ray-Marcher — - Shader: Image-space continuous heightfield ray marcher (`depthflow.glsl`).
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_INDEX.md:262 — 8. Calibrated Parameter Dials & Node Contracts
 - … 14 more in `docs/DOCS-TOPICS.jsonl`
+
+## f4e6c7 (25)
+
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/EVIDENCE-AUDIT-2026-09-03.md:93 — 5. WARN — the ledger composition is off-palette — `ledger-page-tokyo-v1.html` uses `#E05A47`, `#61A8FF`, `#FF7B80`, `#D13438`,
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-90S.claude.md:1 — Tokyo Tea Break — shot table (9:16, 2026-09-04): the long arm `SCRIPT-90S-VO.claude.v8-long.txt`, and the short `SCRIPT-90S-VO.claude.txt` (v9) below it — Authored, never generated (PIPELINE stage 7). Two clocks are quoted: the kit estimate
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-90S.claude.md:10 — The bars this table is built to — - Worlds are 10 s Omni clips of `@StickMike` on the cream page (`#F4E6C7` ground,
+- content/video_engine/sources/reference_analyses/ACADEMIC_LITERATURE_DRAWING_AND_2_5D_ANIMATION_ENGINE.md:1 — Academic Literature Monograph: Mathematical Foundations of 2D & 2.5D Drawing and Animation Engines — Unified Academic Synthesis: Differential Geometry, Biomechanical Motor Control, Variational Continuum Mechanics, and Per
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/00_README_INDEX.md:29 — Key Architectural Decisions — 1. The Page is the Ground (`RULE-the-page-is-the-ground.md`): The cream Ledger Page (`#F4E6C7`) is not just a chart card
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/06_unified_ledger_drawing_engine_and_comfy_spec.md:127 — 5. The Ledger Page as the Core Drawing & Animation Engine
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/07_academic_literature_drawing_and_2_5d_animation_engine.md:1 — Academic Literature Monograph: Mathematical Foundations of 2D & 2.5D Drawing and Animation Engines — Unified Academic Synthesis: Differential Geometry, Biomechanical Motor Control, Variational Continuum Mechanics, and Per
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/09_2d_and_2_5d_body_animation_object_handling_and_grounding.md:497 — 4.7 Visual Harmonization: Koschmieder's Law, Light Wrap, and Substrate Bleed — 1. Aerial Perspective & Koschmieder's Law (Koschmieder 1924):
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/10_generative_video_tools_and_cross_platform_composition.md:161 — Part 4: 9:16 vs. 16:9 Cross-Platform Architecture & Short vs. Long Form
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/10_generative_video_tools_and_cross_platform_composition.md:193 — 4.2 Aspect Ratio Transformation Strategies
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/10_generative_video_tools_and_cross_platform_composition.md:199 — The 3-Zone Vertical Stage Solution — Partition the $1080 \times 1920$ canvas into three distinct vertical zones:
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md:342 — 12. Unified Ledger Drawing Engine & ComfyUI Specification — The channel's signature Ledger Page (cream washi paper `#F4E6C7`, subtle grid `#E5D5B5`, 1080x720 active evidence board)
+- … 13 more in `docs/DOCS-TOPICS.jsonl`
 
 ## stick-figure (25)
 
@@ -555,22 +617,6 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/DRAWING_ENGINE_ANIMATION_TRANSFORM_RESEARCH.md:398 — Improvement 5: Word-Gap Boundary Snapping Engine — Integrate the acoustic transition finding directly into the script-to-storyboard compiler (`src/services/storyboard_gene
 - … 11 more in `docs/DOCS-TOPICS.jsonl`
 
-## f4e6c7 (22)
-
-- content/video_engine/sources/reference_analyses/ACADEMIC_LITERATURE_DRAWING_AND_2_5D_ANIMATION_ENGINE.md:1 — Academic Literature Monograph: Mathematical Foundations of 2D & 2.5D Drawing and Animation Engines — Unified Academic Synthesis: Differential Geometry, Biomechanical Motor Control, Variational Continuum Mechanics, and Per
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/00_README_INDEX.md:29 — Key Architectural Decisions — 1. The Page is the Ground (`RULE-the-page-is-the-ground.md`): The cream Ledger Page (`#F4E6C7`) is not just a chart card
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/06_unified_ledger_drawing_engine_and_comfy_spec.md:127 — 5. The Ledger Page as the Core Drawing & Animation Engine
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/07_academic_literature_drawing_and_2_5d_animation_engine.md:1 — Academic Literature Monograph: Mathematical Foundations of 2D & 2.5D Drawing and Animation Engines — Unified Academic Synthesis: Differential Geometry, Biomechanical Motor Control, Variational Continuum Mechanics, and Per
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/09_2d_and_2_5d_body_animation_object_handling_and_grounding.md:497 — 4.7 Visual Harmonization: Koschmieder's Law, Light Wrap, and Substrate Bleed — 1. Aerial Perspective & Koschmieder's Law (Koschmieder 1924):
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/10_generative_video_tools_and_cross_platform_composition.md:161 — Part 4: 9:16 vs. 16:9 Cross-Platform Architecture & Short vs. Long Form
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/10_generative_video_tools_and_cross_platform_composition.md:193 — 4.2 Aspect Ratio Transformation Strategies
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/10_generative_video_tools_and_cross_platform_composition.md:199 — The 3-Zone Vertical Stage Solution — Partition the $1080 \times 1920$ canvas into three distinct vertical zones:
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md:342 — 12. Unified Ledger Drawing Engine & ComfyUI Specification — The channel's signature Ledger Page (cream washi paper `#F4E6C7`, subtle grid `#E5D5B5`, 1080x720 active evidence board)
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_INDEX.md:305 — 10. Doctrine Rules, Operating Rulings, & Quality Gates — All engineering recommendations are cross-referenced with standing repository doctrine:
-- content/video_engine/sources/reference_analyses/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md:342 — 12. Unified Ledger Drawing Engine & ComfyUI Specification — The channel's signature Ledger Page (cream washi paper `#F4E6C7`, subtle grid `#E5D5B5`, 1080x720 active evidence board)
-- content/video_engine/sources/reference_analyses/MASTER_RESEARCH_INDEX.md:304 — 10. Doctrine Rules, Operating Rulings, & Quality Gates — All engineering recommendations are cross-referenced with standing repository doctrine:
-- … 10 more in `docs/DOCS-TOPICS.jsonl`
-
 ## viviani-terzuolo-1982 (22)
 
 - content/video_engine/sources/reference_analyses/ACADEMIC_LITERATURE_DRAWING_AND_2_5D_ANIMATION_ENGINE.md:49 — Pillar 1: Biomechanical Motor Control & Procedural Stroke Mechanics
@@ -635,6 +681,38 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:550 — 8. Procedural Code Audit: `parallax-runner.mjs` — Per Claude's RE-ASK 5, we cite the exact, verified file coordinates and code from `tools/google-flow-driver/src/parallax
 - … 9 more in `docs/DOCS-TOPICS.jsonl`
 
+## real-time (21)
+
+- content/video_engine/projects/systems-and-blowups/korea-memory-toll/EVIDENCE-DOSSIER.md:1 — The Trillion Dollar Toll Booth — Evidence Dossier — Every figure the script speaks, its source, and the date it was reported. Nothing here
+- content/video_engine/projects/systems-and-blowups/korea-memory-toll/EVIDENCE-DOSSIER.md:27 — Primary Sources — | ID | What | Cadence | Notes |
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-E-STRENGTH-LOG.md:1 — Script E — sentence-strength pass log — `patterns/SENTENCE-STRENGTH-CHECK.md`, run 2026-08-29. Every sentence
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-E-STRENGTH-LOG.md:203 — Loop pass 5 — the hook, after the operator reframed the episode — Operator: *"this isn't truly a historical parallel episode, it's a real-time
+- content/video_engine/sources/reference_analyses/ACADEMIC_LITERATURE_DRAWING_AND_2_5D_ANIMATION_ENGINE.md:289 — 5. The Ledger Page Kinetic Engine Synthesis
+- content/video_engine/sources/reference_analyses/ACADEMIC_LITERATURE_DRAWING_AND_2_5D_ANIMATION_ENGINE.md:386 — 6. Authoritative Academic Citations — 1. Viviani, P., & Terzuolo, C. (1982). Trajectory determines movement dynamics. Neuroscience, 7(2), 431-437.
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/02_drawing_engine_and_transforms_research.md:15 — Architecture Diagram & The 4 Core Mechanical Pillars
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/02_drawing_engine_and_transforms_research.md:51 — Pillar 2: Deterministic Clocking & Closed-Form Spring Physics — - Video renderers do not run at real-time speeds; iterative physics loops (Euler/Verlet) or wall-clock timers (`Date.now
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/02_drawing_engine_and_transforms_research.md:116 — 2. Animation Mechanics & Deterministic Clocking
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/07_academic_literature_drawing_and_2_5d_animation_engine.md:289 — 5. The Ledger Page Kinetic Engine Synthesis
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/07_academic_literature_drawing_and_2_5d_animation_engine.md:386 — 6. Authoritative Academic Citations — 1. Viviani, P., & Terzuolo, C. (1982). Trajectory determines movement dynamics. Neuroscience, 7(2), 431-437.
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/09_2d_and_2_5d_body_animation_object_handling_and_grounding.md:739 — 6. Master Citation & Authority Registry
+- … 9 more in `docs/DOCS-TOPICS.jsonl`
+
+## self-contained (21)
+
+- content/video_engine/projects/history-of-bjj/README.md:1 — History of BJJ Series — This directory contains source-controlled editorial inputs for History Documentary
+- docs/content-video-engine/07-PILOT-SEASON.md:1 — Pilot Season — Phase 0 Validation Cohort — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine
+- docs/content-video-engine/07-PILOT-SEASON.md:8 — History Documentary V4 cohort — 1. How Judo Became Brazilian Jiu-Jitsu — approximately 10-minute acceptance
+- docs/content-video-engine/10-HISTORY-DOCUMENTARY-EDITORIAL-SPEC.md:277 — 9. Chapter subvideos — Each chapter may become a landscape or vertical subvideo only when it has a
+- docs/content-video-engine/briefs/ALICIA-FORMAT-RECREATION-BRIEF.md:1 — Recreation Brief — Alicia-Format Systems Test (3:00) — The end-to-end pipeline test: recreate the format of Alicia Invests'
+- docs/content-video-engine/briefs/ALICIA-SCRIPT-COMPARISON.md:148 — Four-way verdict — - Voice (the moat test): A wins by construction; C scored zero first-person
+- docs/content-video-engine/briefs/ANSWER-BRAVOS-HYPE-CYCLE.md:519 — Sources block (production gate) — | Claim | Source | Status |
+- docs/content-video-engine/patterns/phase-guides/P1.md:1 — P1 — THE OPEN — > Self-contained generation guide. Consume ONLY: the INJECTION block and
+- docs/content-video-engine/patterns/phase-guides/P2.md:1 — P2 — THE ENGINE — > Self-contained generation guide. Consume ONLY: the INJECTION block, the
+- docs/content-video-engine/patterns/phase-guides/P3.md:1 — P3 — THE GAP (the pattern unit) — > Self-contained generation guide. Consume ONLY: the INJECTION block, the
+- docs/content-video-engine/patterns/phase-guides/P4.md:1 — P4 — THE MIDPOINT PIVOT — > Self-contained generation guide. Consume ONLY: the INJECTION block, the
+- docs/content-video-engine/patterns/phase-guides/P5.md:1 — P5 — REFLECTION & CONVERGENCE — > Self-contained generation guide. Consume ONLY: the INJECTION block, the
+- … 9 more in `docs/DOCS-TOPICS.jsonl`
+
 ## source (21)
 
 - content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/REPORT.md:1 — PRODUCTION REFERENCE REPORT: 6 Ways Rich People Make Money With Debt — - Source: `https://www.youtube.com/watch?v=rCHYttyvaw8`
@@ -650,6 +728,40 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/07-PILOT-SEASON.md:46 — E1 — "The Bizarre History of BJJ: From Samurai Battlefields to Tacoma" — - Sources: registry BJJ history + Gracie-migration articles (national history corpus).
 - docs/content-video-engine/07-PILOT-SEASON.md:57 — E2 — "Why Basic BJJ Beats Complex Guard Systems (The Science of Roger Gracie)" — - Sources: national history + Gracie migration article (technique-philosophy sections).
 - … 9 more in `docs/DOCS-TOPICS.jsonl`
+
+## 25313c (20)
+
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/EVIDENCE-AUDIT-2026-09-03.md:93 — 5. WARN — the ledger composition is off-palette — `ledger-page-tokyo-v1.html` uses `#E05A47`, `#61A8FF`, `#FF7B80`, `#D13438`,
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-90S.claude.md:1 — Tokyo Tea Break — shot table (9:16, 2026-09-04): the long arm `SCRIPT-90S-VO.claude.v8-long.txt`, and the short `SCRIPT-90S-VO.claude.txt` (v9) below it — Authored, never generated (PIPELINE stage 7). Two clocks are quoted: the kit estimate
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-90S.claude.md:10 — The bars this table is built to — - Worlds are 10 s Omni clips of `@StickMike` on the cream page (`#F4E6C7` ground,
+- content/video_engine/sources/reference_analyses/ACADEMIC_LITERATURE_DRAWING_AND_2_5D_ANIMATION_ENGINE.md:1 — Academic Literature Monograph: Mathematical Foundations of 2D & 2.5D Drawing and Animation Engines — Unified Academic Synthesis: Differential Geometry, Biomechanical Motor Control, Variational Continuum Mechanics, and Per
+- content/video_engine/sources/reference_analyses/ACADEMIC_LITERATURE_DRAWING_AND_2_5D_ANIMATION_ENGINE.md:276 — Pillar 4: Perceptual Psychophysics & Cross-Modal Phase Locking
+- content/video_engine/sources/reference_analyses/ACADEMIC_LITERATURE_DRAWING_AND_2_5D_ANIMATION_ENGINE.md:278 — 4.1 Cognitive Load Theory & Diagram Comprehension — - The Apprehension Principle (Tversky, Morrison, & Betrancourt 2002): Continuous animation overwhelms working memory if
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/07_academic_literature_drawing_and_2_5d_animation_engine.md:1 — Academic Literature Monograph: Mathematical Foundations of 2D & 2.5D Drawing and Animation Engines — Unified Academic Synthesis: Differential Geometry, Biomechanical Motor Control, Variational Continuum Mechanics, and Per
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/07_academic_literature_drawing_and_2_5d_animation_engine.md:276 — Pillar 4: Perceptual Psychophysics & Cross-Modal Phase Locking
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/07_academic_literature_drawing_and_2_5d_animation_engine.md:278 — 4.1 Cognitive Load Theory & Diagram Comprehension — - The Apprehension Principle (Tversky, Morrison, & Betrancourt 2002): Continuous animation overwhelms working memory if
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/09_2d_and_2_5d_body_animation_object_handling_and_grounding.md:422 — 4.2 The Dual-Component Contact Shadow Model: AO Slit vs. Diffuse Cast — A single blurred ellipse or uniform CSS `drop-shadow` is the primary reason composited elements look like "floating stic
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/09_2d_and_2_5d_body_animation_object_handling_and_grounding.md:497 — 4.7 Visual Harmonization: Koschmieder's Law, Light Wrap, and Substrate Bleed — 1. Aerial Perspective & Koschmieder's Law (Koschmieder 1924):
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_INDEX.md:232 — 6.6 Perceptual Psychophysics & Audio-Visual Entrainment — - Apprehension Principle (Tversky et al. 2002): Continuous animation overwhelms working memory; mandates the $0.8 ext{s}
+- … 8 more in `docs/DOCS-TOPICS.jsonl`
+
+## follow-up (20)
+
+- content/video_engine/projects/systems-and-blowups/registration/README.md:50 — Open follow-ups — 1. Merge into the deck manifest in the p29 worktree (cross-branch — deliberate
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/REVIEW-2026-09-03.md:1 — Tokyo Tea Break — review, 2026-09-03 — Reviewed: `SCRIPT-90S-VO.txt` (67 s at the Chirp scratch pace, 194 words) and
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/REVIEW-2026-09-03.md:14 — TOOLS (final verdicts) — A finding about our instrument, not the script: 17 of the 90-second short's 23
+- docs/content-video-engine/00-BRAINSTORM-AND-DECISIONS.md:1 — Content-to-Video Flywheel — Brainstorm, Challenges, and Decisions — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine
+  cited by: docs/content-video-engine/README.md:20
+- docs/content-video-engine/00-BRAINSTORM-AND-DECISIONS.md:12 — V4 pivot record — The anchorable 2D experiment improved body ownership but did not remove the
+- docs/content-video-engine/28-AOY-MCP-EVALUATION.md:133 — What our pipeline does not yet encode — Measured against the 16:21 p34 cut: one visual event every 9.2s (60 evidence
+- docs/content-video-engine/28-AOY-MCP-EVALUATION.md:328 — Voiceover and title doctrine — probed 2026-08-24 — Follow-up probes after the fact-check, plus one live run of the
+- docs/content-video-engine/32-WRITING-FOR-THE-EAR.md:181 — 8. Pipeline adoption candidates — 1. Script QC additions (join doc 31 §4's three passes): terminal-stress
+- docs/content-video-engine/38-SCRIPT-ARCHITECTURE.md:1 — 38 — Script Architecture: the deterministic prompt structure — Operator thesis (2026-08-24), and this document's organizing principle:
+  cited by: content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-E-EXTERNAL-REVIEW.md:100, content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-E-EXTERNAL-REVIEW.md:118, content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-E-EXTERNAL-REVIEW.md:137, content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-E-STRENGTH-LOG.md:203, content/video_engine/projects/systems-and-blowups/tokyo-tea-break/REVIEW-2026-09-03.md:55, docs/content-video-engine/28-AOY-MCP-EVALUATION.md:536, +7 more
+- docs/content-video-engine/38-SCRIPT-ARCHITECTURE.md:19 — 1. Audit — how the script skills address this today — Honest state, per the operator's question:
+- docs/content-video-engine/patterns/FULL-VIDEO-MAP.md:277 — CHANGELOG — - 2026-08-24 — v1, T1 of the P10 plan. Geometry decision recorded: open and
+- docs/product-revenue-contract.md:102 — Explicit milestone exclusions — - no automated outbound or autonomous follow-up;
+- … 8 more in `docs/DOCS-TOPICS.jsonl`
 
 ## point-in-time (20)
 
@@ -669,20 +781,20 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/18-GRAPHIC-SILHOUETTE-WOODBLOCK-EXPLAINER-SPEC.md:1 — Graphic Silhouette + Combat Woodblock Explainer — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine
 - … 8 more in `docs/DOCS-TOPICS.jsonl`
 
-## self-contained (20)
+## punch-in (20)
 
-- docs/content-video-engine/07-PILOT-SEASON.md:1 — Pilot Season — Phase 0 Validation Cohort — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine
-- docs/content-video-engine/07-PILOT-SEASON.md:8 — History Documentary V4 cohort — 1. How Judo Became Brazilian Jiu-Jitsu — approximately 10-minute acceptance
-- docs/content-video-engine/10-HISTORY-DOCUMENTARY-EDITORIAL-SPEC.md:277 — 9. Chapter subvideos — Each chapter may become a landscape or vertical subvideo only when it has a
-- docs/content-video-engine/briefs/ALICIA-FORMAT-RECREATION-BRIEF.md:1 — Recreation Brief — Alicia-Format Systems Test (3:00) — The end-to-end pipeline test: recreate the format of Alicia Invests'
-- docs/content-video-engine/briefs/ALICIA-SCRIPT-COMPARISON.md:148 — Four-way verdict — - Voice (the moat test): A wins by construction; C scored zero first-person
-- docs/content-video-engine/briefs/ANSWER-BRAVOS-HYPE-CYCLE.md:519 — Sources block (production gate) — | Claim | Source | Status |
-- docs/content-video-engine/patterns/phase-guides/P1.md:1 — P1 — THE OPEN — > Self-contained generation guide. Consume ONLY: the INJECTION block and
-- docs/content-video-engine/patterns/phase-guides/P2.md:1 — P2 — THE ENGINE — > Self-contained generation guide. Consume ONLY: the INJECTION block, the
-- docs/content-video-engine/patterns/phase-guides/P3.md:1 — P3 — THE GAP (the pattern unit) — > Self-contained generation guide. Consume ONLY: the INJECTION block, the
-- docs/content-video-engine/patterns/phase-guides/P4.md:1 — P4 — THE MIDPOINT PIVOT — > Self-contained generation guide. Consume ONLY: the INJECTION block, the
-- docs/content-video-engine/patterns/phase-guides/P5.md:1 — P5 — REFLECTION & CONVERGENCE — > Self-contained generation guide. Consume ONLY: the INJECTION block, the
-- docs/content-video-engine/patterns/phase-guides/P6.md:1 — P6 — THE CLOSE — > Self-contained generation guide. Consume ONLY: the INJECTION block, the
+- content/video_engine/projects/systems-and-blowups/korea-memory-toll/SHOT-TABLE-90S.md:30 — Density & Motion Check (Doc 29 / E21 / E25) — * 13 shots in ~148 s (~11.4 s mean per shot).
+- content/video_engine/sources/reference_analyses/ACADEMIC_LITERATURE_DRAWING_AND_2_5D_ANIMATION_ENGINE.md:276 — Pillar 4: Perceptual Psychophysics & Cross-Modal Phase Locking
+- content/video_engine/sources/reference_analyses/ACADEMIC_LITERATURE_DRAWING_AND_2_5D_ANIMATION_ENGINE.md:278 — 4.1 Cognitive Load Theory & Diagram Comprehension — - The Apprehension Principle (Tversky, Morrison, & Betrancourt 2002): Continuous animation overwhelms working memory if
+- content/video_engine/sources/reference_analyses/ACADEMIC_LITERATURE_DRAWING_AND_2_5D_ANIMATION_ENGINE.md:283 — 4.2 Cross-Modal Phase Locking: Syllable Rates & Gate M13 — - Cortical Theta Entrainment (Ding et al. Nature Neuroscience 2016): Human auditory cortex tracks speech envelopes in th
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/07_academic_literature_drawing_and_2_5d_animation_engine.md:276 — Pillar 4: Perceptual Psychophysics & Cross-Modal Phase Locking
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/07_academic_literature_drawing_and_2_5d_animation_engine.md:278 — 4.1 Cognitive Load Theory & Diagram Comprehension — - The Apprehension Principle (Tversky, Morrison, & Betrancourt 2002): Continuous animation overwhelms working memory if
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/07_academic_literature_drawing_and_2_5d_animation_engine.md:283 — 4.2 Cross-Modal Phase Locking: Syllable Rates & Gate M13 — - Cortical Theta Entrainment (Ding et al. Nature Neuroscience 2016): Human auditory cortex tracks speech envelopes in th
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_INDEX.md:232 — 6.6 Perceptual Psychophysics & Audio-Visual Entrainment — - Apprehension Principle (Tversky et al. 2002): Continuous animation overwhelms working memory; mandates the $0.8 ext{s}
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_INDEX.md:305 — 10. Doctrine Rules, Operating Rulings, & Quality Gates — All engineering recommendations are cross-referenced with standing repository doctrine:
+- content/video_engine/sources/reference_analyses/MASTER_RESEARCH_INDEX.md:231 — 6.6 Perceptual Psychophysics & Audio-Visual Entrainment — - Apprehension Principle (Tversky et al. 2002): Continuous animation overwhelms working memory; mandates the $0.8 ext{s}
+- content/video_engine/sources/reference_analyses/MASTER_RESEARCH_INDEX.md:304 — 10. Doctrine Rules, Operating Rulings, & Quality Gates — All engineering recommendations are cross-referenced with standing repository doctrine:
+- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:197 — Part 4 — The literal evidence layer (teacher-stamped deck slides) — Source of truth: `sources/decks/teacher-stamped-production-visuals/` — full
 - … 8 more in `docs/DOCS-TOPICS.jsonl`
 
 ## as-rigid-as-possible (19)
@@ -701,20 +813,74 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md:398 — 13.4 Primary Academic & Empirical Citations — - Viviani & Terzuolo (1982), Trajectory determines movement dynamics, Neuroscience: Two-Thirds Power Law ($v \propto \ka
 - … 7 more in `docs/DOCS-TOPICS.jsonl`
 
-## punch-in (19)
+## dot-com (19)
 
-- content/video_engine/sources/reference_analyses/ACADEMIC_LITERATURE_DRAWING_AND_2_5D_ANIMATION_ENGINE.md:276 — Pillar 4: Perceptual Psychophysics & Cross-Modal Phase Locking
-- content/video_engine/sources/reference_analyses/ACADEMIC_LITERATURE_DRAWING_AND_2_5D_ANIMATION_ENGINE.md:278 — 4.1 Cognitive Load Theory & Diagram Comprehension — - The Apprehension Principle (Tversky, Morrison, & Betrancourt 2002): Continuous animation overwhelms working memory if
-- content/video_engine/sources/reference_analyses/ACADEMIC_LITERATURE_DRAWING_AND_2_5D_ANIMATION_ENGINE.md:283 — 4.2 Cross-Modal Phase Locking: Syllable Rates & Gate M13 — - Cortical Theta Entrainment (Ding et al. Nature Neuroscience 2016): Human auditory cortex tracks speech envelopes in th
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/07_academic_literature_drawing_and_2_5d_animation_engine.md:276 — Pillar 4: Perceptual Psychophysics & Cross-Modal Phase Locking
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/07_academic_literature_drawing_and_2_5d_animation_engine.md:278 — 4.1 Cognitive Load Theory & Diagram Comprehension — - The Apprehension Principle (Tversky, Morrison, & Betrancourt 2002): Continuous animation overwhelms working memory if
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/07_academic_literature_drawing_and_2_5d_animation_engine.md:283 — 4.2 Cross-Modal Phase Locking: Syllable Rates & Gate M13 — - Cortical Theta Entrainment (Ding et al. Nature Neuroscience 2016): Human auditory cortex tracks speech envelopes in th
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_INDEX.md:232 — 6.6 Perceptual Psychophysics & Audio-Visual Entrainment — - Apprehension Principle (Tversky et al. 2002): Continuous animation overwhelms working memory; mandates the $0.8 ext{s}
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_INDEX.md:305 — 10. Doctrine Rules, Operating Rulings, & Quality Gates — All engineering recommendations are cross-referenced with standing repository doctrine:
-- content/video_engine/sources/reference_analyses/MASTER_RESEARCH_INDEX.md:231 — 6.6 Perceptual Psychophysics & Audio-Visual Entrainment — - Apprehension Principle (Tversky et al. 2002): Continuous animation overwhelms working memory; mandates the $0.8 ext{s}
-- content/video_engine/sources/reference_analyses/MASTER_RESEARCH_INDEX.md:304 — 10. Doctrine Rules, Operating Rulings, & Quality Gates — All engineering recommendations are cross-referenced with standing repository doctrine:
-- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:197 — Part 4 — The literal evidence layer (teacher-stamped deck slides) — Source of truth: `sources/decks/teacher-stamped-production-visuals/` — full
-- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:225 — 4.2 One reading surface at a time (new rule, 2026-08-24) — While a literal document holds the stage, captions yield to quiet mode:
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/evidence/EVIDENCE-DOSSIER.md:246 — Correction found while building (2026-08-25) — The GDP-share claim needed weakening, not strengthening. Recomputing
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-G-LEDGER.md:1 — Steel and Paper — Script G ledger — Script G: 13,268 chars · ~13m 34s speech (+15s edit pauses ≈ 13m 49s) · pivot 50.6% · both checkers clean
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-G-LEDGER.md:70 — The yardstick (P2 — NEW central self-pulled evidence) — Railways ~50% of UK capital formation (one technology, caveat SPOKEN) →
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-G-PRODUCTION.md:1 — STEEL AND PAPER — Script G (production) — Base: Script F. Changes per REWRITE-ORDER-G. Pause marks per doc 37.
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-G-PRODUCTION.md:274 — Sources — - Bravos Research divergence pairing (MAMAA vs semiconductors) — recreated,
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-NOTES-retention-2-46.md:1 — Steel and Paper - the 2:46-3:23 sputter, and how the unit should read — Retention read 2026-09-02: AVD 2:49 at n=2 (noise), but it lands three
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-NOTES-retention-2-46.md:31 — The unit as it should read (target ~62s, turn lands ~3:10) — > At the dot-com peak, that share hit twenty-three cents. Today it's
+- docs/content-video-engine/28-AOY-MCP-EVALUATION.md:372 — `Titles_Format_Library` live run — template quality check — Ran against "finance and investing (market bubbles, wealth mechanics)",
+- docs/content-video-engine/34-AOY-SCRIPT-WRITER-STUDY.md:110 — 4b. Baseline analysis — the chart-story reference (`Jw8ykhoOVBQ`) — Analysed before the AOY script lands, so the comparison is measured rather
+- docs/content-video-engine/34-AOY-SCRIPT-WRITER-STUDY.md:128 — Beat map — | Beat | Move |
+- docs/content-video-engine/34-AOY-SCRIPT-WRITER-STUDY.md:147 — What it does better than our current script — 1. Analogy is the spine, not decoration. Railways and dot-com are not
+- docs/content-video-engine/34-AOY-SCRIPT-WRITER-STUDY.md:196 — 4c. The competitor template, extracted (`Jw8ykhoOVBQ` + `YXFvwJQBzJc`) — Two videos from the same channel (Bravos Research, self-identified in the
+- … 7 more in `docs/DOCS-TOPICS.jsonl`
+
+## mid-word (19)
+
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-90S.claude.md:1 — Tokyo Tea Break — shot table (9:16, 2026-09-04): the long arm `SCRIPT-90S-VO.claude.v8-long.txt`, and the short `SCRIPT-90S-VO.claude.txt` (v9) below it — Authored, never generated (PIPELINE stage 7). Two clocks are quoted: the kit estimate
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-90S.claude.md:10 — The bars this table is built to — - Worlds are 10 s Omni clips of `@StickMike` on the cream page (`#F4E6C7` ground,
+- content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/KEY_LEARNINGS_FOR_CLAUDE.md:1 — Dossier: Claude Code (Free Plan) + YouTube Deconstruction — Source Video: https://www.youtube.com/watch?v=WVT2FCjhDDY
+- content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/KEY_LEARNINGS_FOR_CLAUDE.md:8 — 1. The Core Architectural Learning: Audio Gaps as Scene Breaks — The single most valuable technical takeaway from this deconstruction:
+- content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/KEY_LEARNINGS_FOR_CLAUDE.md:14 — The Mechanism — 1. The Flawed Status Quo:
+- content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/WHAT-WE-LEARN.md:1 — What we actually learn from the zapiwala tutorial — verified, 2026-09-04 — Read against Gemini's dossier in this directory, then re-measured from the primary
+- content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/WHAT-WE-LEARN.md:10 — 1. The finding that matters: they cut on the gap, we cut through the word — Their video's own edit, measured from its caption word timings against its own cut list:
+- docs/content-video-engine/46-REFERENCE-RHYTHM.md:1 — 46 — Reference rhythm: what the shot ledger actually measures — Extracted from `04_shot_ledger_100_cuts.md` (primary measurement, recomputed here) and
+  cited by: docs/content-video-engine/51-THE-SHORTS-FORMAT.md:1
+- docs/content-video-engine/46-REFERENCE-RHYTHM.md:43 — 46.2 What this means for M13 and for M10 — M13 (cut lands in an acoustic gap) is free. Since our cut frequency already matches,
+  cited by: docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:21, docs/content-video-engine/54-GOOGLE-FLOW-OMNI-NANO-BANANA-PRODUCTION-RESEARCH.md:1
+- docs/content-video-engine/46-REFERENCE-RHYTHM.md:60 — 46.3 The gap threshold — settled from the reference, 2026-09-04 — `01` and the dossier's `gap_detector.py` blueprint used Δt ≥ 0.45 s and the gap's
+  cited by: docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:62, docs/content-video-engine/BACKLOG.md:366, docs/content-video-engine/FINDING-gaps-are-the-edit.md:171, docs/content-video-engine/RESEARCH-INDEX.md:35
+- docs/content-video-engine/BACKLOG.md:366 — Explorations — what we still cannot answer — Landed 2026-09-04 from the research agent: [54](54-GOOGLE-FLOW-OMNI-NANO-BANANA-PRODUCTION-RESEARCH.md)
+- docs/content-video-engine/FINDING-gaps-are-the-edit.md:81 — Test 3 — the question I should have asked first — Tests 1 and 2 asked "do gaps predict where we cut." That was backwards. The claim is
+- … 7 more in `docs/DOCS-TOPICS.jsonl`
+
+## mike (19)
+
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/REVIEW-2026-09-03.md:72 — WARN — - Ring never returns (G15). The short closes on the opponent line; it should close
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-90S.md:43 — Two gaps, both real — Shot 9 has no world. "What they found that pays better" points at Japan's own
+- docs/content-video-engine/53-THE-STICKMAN-LANE.md:31 — 53.2 The identity mechanism — this is the part that matters — The prompt's own words, from the Doc:
+  cited by: docs/content-video-engine/53-THE-STICKMAN-LANE.md:183, docs/content-video-engine/53-THE-STICKMAN-LANE.md:228, docs/content-video-engine/53-THE-STICKMAN-LANE.md:353
+- docs/content-video-engine/53-THE-STICKMAN-LANE.md:81 — 53.3 The two prompt schemas — Image prompt — every field appears in every scene:
+  cited by: docs/content-video-engine/53-THE-STICKMAN-LANE.md:228, docs/content-video-engine/53-THE-STICKMAN-LANE.md:310, docs/content-video-engine/53-THE-STICKMAN-LANE.md:315, docs/content-video-engine/53-THE-STICKMAN-LANE.md:372, docs/content-video-engine/briefs/FLOW-OMNI-EXPLAINER-PROMPT-PLAN.md:253, docs/portable/OPERATOR-RULINGS.md:1017
+- docs/content-video-engine/53-THE-STICKMAN-LANE.md:144 — Do NOT take the negative blocks — Operator ruling, 2026-09-04, from observed behaviour on our own stack:
+- docs/content-video-engine/53-THE-STICKMAN-LANE.md:183 — 53.4 What this corrects in my own claims — Two corrections, both mine.
+- docs/content-video-engine/53-THE-STICKMAN-LANE.md:228 — 53.7 What this unblocks — - A2a′ (hero illustrations) now has a concrete spec: a model sheet, a CHARACTER LOCK
+- docs/content-video-engine/53-THE-STICKMAN-LANE.md:310 — 53.9 A third prompt — and it contradicts §53.3 — Source: `Untitled document (1).md`, the "Stickman Explainer Engine". Better engineered than
+  cited by: docs/content-video-engine/53-THE-STICKMAN-LANE.md:394, docs/content-video-engine/BACKLOG.md:279, docs/content-video-engine/BACKLOG.md:331, docs/content-video-engine/BACKLOG.md:366
+- docs/content-video-engine/53-THE-STICKMAN-LANE.md:315 — The contradiction: Omni Flash wants prose, not fields — > *"Omni Flash does NOT understand templated prompts. It ignores or mangles section
+- docs/content-video-engine/53-THE-STICKMAN-LANE.md:353 — The character-sheet spec is concrete and reusable — Three labelled rows on a plain cream ground: front, side, three-quarter and back views
+- docs/content-video-engine/53-THE-STICKMAN-LANE.md:435 — A0 landed — 2026-09-04, with two operator corrections — The pack now meets the table above: both views rows, five named expressions, five named
+- docs/content-video-engine/53-THE-STICKMAN-LANE.md:463 — A0 closed — 2026-09-04 — Both sheets approved and promoted; `StickMike` is bound in Flow beside `Mike`. What the
+- … 7 more in `docs/DOCS-TOPICS.jsonl`
+
+## re-run (19)
+
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/edit/hyperframes-opening-v1/AGENTS.md:33 — Commands — > `npm run dev` is a long-running server, not a one-shot command. It blocks until stopped.
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/edit/hyperframes-opening-v1/CLAUDE.md:33 — Commands — > `npm run dev` is a long-running server, not a one-shot command. It blocks until stopped.
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/REWRITE-ORDER-G.md:90 — Standing gates that bind the new draft — - Doc 37 + paragraph rules: the VO payload is REFLOWED (~8–10 paragraphs
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-G-STRENGTH-LOG.md:78 — Round 4 — the ENUMERATED screens (operator audit, 2026-08-30) — The operator asked whether L1/L3 and the X1 orphan screen ran to the
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/REVIEW-2026-09-04.claude.md:132 — DECISION (operator rules; recommendation on each) — 1. Runtime 2:20 against doc 51's 45–60 s. Every clear cut that clears G01–G45 has
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/REVIEW-2026-09-04.claude.md:152 — SOURCES-TO-VERIFY — None outstanding. TIC July prints soon; re-run `evidence/build_tokyo_evidence.py` before
+- docs/content-video-engine/37-TTS-DELIVERY-STANDARDS.md:633 — 23. Micro-repair - the editor excises what the provider stutters (operator, 2026-08-30) — Amends the old splice ban. When the provider RENDERS a sub-word defect
+- docs/content-video-engine/39-EVIDENCE-CHART-SYSTEM.md:201 — 8. Checks before a document ships — - [ ] Form chosen by §6 — and it is not a chart when it should be a tile
+- docs/content-video-engine/39-EVIDENCE-CHART-SYSTEM.md:213 — 9. Provenance — Palette and checks produced with the `dataviz` skill's validator
+- docs/content-video-engine/briefs/STEEL-AND-PAPER-REVISION-C.md:172 — 6. Order of operations — 1. Apply §1–§3 to the script text.
+- docs/content-video-engine/patterns/SENTENCE-STRENGTH-CHECK.md:1 — SENTENCE STRENGTH CHECK — the line-by-line gate — A per-sentence pass run AFTER a script conforms structurally and BEFORE it
+- docs/content-video-engine/patterns/SENTENCE-STRENGTH-CHECK.md:9 — Procedure — 1. Extract narration only (no stage directions, no annotations).
 - … 7 more in `docs/DOCS-TOPICS.jsonl`
 
 ## single-layer (19)
@@ -733,6 +899,24 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/05_comfyui_parallax_technical_standards.md:55 — 2. The Mathematical Limit: The Disocclusion Problem — Why did the stick figure and the Tokyo pillar melt?
 - … 7 more in `docs/DOCS-TOPICS.jsonl`
 
+## sources-to-verify (19)
+
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/evidence/EVIDENCE-DOSSIER.md:148 — D. The ROI beats — D1 — Alex Karp. VERIFIED, and the real quote is stronger than the
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/CLOSE-CANDIDATES-2026-09-03.md:1 — Tokyo Tea Break — the close, rewritten (2026-09-03) — What the old close did wrong, against the exemplars: the ring token ("tea break")
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/CLOSE-CANDIDATES-2026-09-03.md:46 — What the tell is NOT claiming — The threshold is arithmetic, not a statistic: the trade is underwater when the hedge
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/REVIEW-2026-09-03.md:111 — SOURCES-TO-VERIFY (nothing here has a dossier row; nothing is fabricated, nothing is dated) — - Japan holds $1.1 T of Treasuries and is the largest foreign holder — needs the
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/REVIEW-2026-09-04.claude.md:152 — SOURCES-TO-VERIFY — None outstanding. TIC July prints soon; re-run `evidence/build_tokyo_evidence.py` before
+- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1103 — 9.11 Rebuild source charts — do not extract frames (operator, 2026-08-25) — Operator ruling, superseding the clip-extraction workflow in 9.10:
+  cited by: content/video_engine/projects/systems-and-blowups/steel-and-paper/evidence/EVIDENCE-DOSSIER.md:1, docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:18
+- docs/content-video-engine/53-THE-STICKMAN-LANE.md:310 — 53.9 A third prompt — and it contradicts §53.3 — Source: `Untitled document (1).md`, the "Stickman Explainer Engine". Better engineered than
+  cited by: docs/content-video-engine/53-THE-STICKMAN-LANE.md:394, docs/content-video-engine/BACKLOG.md:279, docs/content-video-engine/BACKLOG.md:331, docs/content-video-engine/BACKLOG.md:366
+- docs/content-video-engine/53-THE-STICKMAN-LANE.md:315 — The contradiction: Omni Flash wants prose, not fields — > *"Omni Flash does NOT understand templated prompts. It ignores or mangles section
+- docs/content-video-engine/54-GOOGLE-FLOW-OMNI-NANO-BANANA-PRODUCTION-RESEARCH.md:1 — 54 — Google Flow Production Research: Gemini Omni 1.1 Flash & Nano Banana Pro — Title: Production Optimization, Prompt Engineering, Multimodal Conditioning, and Responsive Composition for Google Flow
+- docs/content-video-engine/BACKLOG.md:366 — Explorations — what we still cannot answer — Landed 2026-09-04 from the research agent: [54](54-GOOGLE-FLOW-OMNI-NANO-BANANA-PRODUCTION-RESEARCH.md)
+- docs/content-video-engine/briefs/RESEARCH-BRIEF-animation-craft.md:53 — 2. Two kinds of pass — and which contract binds — This brief can be run two ways, and confusing them is what broke pass 1.
+- docs/content-video-engine/briefs/RESEARCH-BRIEF-animation-craft.md:84 — 2.2 The output contract — Binding on a research pass; binding on a filter pass only for material the source
+- … 7 more in `docs/DOCS-TOPICS.jsonl`
+
 ## status-record (19)
 
 - docs/content-video-engine/00-BRAINSTORM-AND-DECISIONS.md:1 — Content-to-Video Flywheel — Brainstorm, Challenges, and Decisions — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine
@@ -749,6 +933,23 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/14-HIGGSFIELD-AUDIO-DRIVEN-LANE.md:1 — P13 Higgsfield Audio-Driven Explainer Lane — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine
 - docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:1 — Living Scene Communication Language — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine
 - docs/content-video-engine/18-GRAPHIC-SILHOUETTE-WOODBLOCK-EXPLAINER-SPEC.md:1 — Graphic Silhouette + Combat Woodblock Explainer — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine
+- … 7 more in `docs/DOCS-TOPICS.jsonl`
+
+## word-level (19)
+
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/edit/hyperframes-opening-v1/AGENTS.md:67 — Project Structure — - `index.html` — main composition (root timeline)
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/edit/hyperframes-opening-v1/CLAUDE.md:67 — Project Structure — - `index.html` — main composition (root timeline)
+- content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/KEY_LEARNINGS_FOR_CLAUDE.md:1 — Dossier: Claude Code (Free Plan) + YouTube Deconstruction — Source Video: https://www.youtube.com/watch?v=WVT2FCjhDDY
+- content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/KEY_LEARNINGS_FOR_CLAUDE.md:8 — 1. The Core Architectural Learning: Audio Gaps as Scene Breaks — The single most valuable technical takeaway from this deconstruction:
+- content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/KEY_LEARNINGS_FOR_CLAUDE.md:14 — The Mechanism — 1. The Flawed Status Quo:
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/10_generative_video_tools_and_cross_platform_composition.md:161 — Part 4: 9:16 vs. 16:9 Cross-Platform Architecture & Short vs. Long Form
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/10_generative_video_tools_and_cross_platform_composition.md:193 — 4.2 Aspect Ratio Transformation Strategies
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/10_generative_video_tools_and_cross_platform_composition.md:199 — The 3-Zone Vertical Stage Solution — Partition the $1080 \times 1920$ canvas into three distinct vertical zones:
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md:436 — 14.2 9:16 vs. 16:9 Cross-Platform Architecture & Short vs. Long Form — 1. The Universal Clean Canvas ($800 \times 1060\text{ px}$):
+- content/video_engine/sources/reference_analyses/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md:436 — 14.2 9:16 vs. 16:9 Cross-Platform Architecture & Short vs. Long Form — 1. The Universal Clean Canvas ($800 \times 1060\text{ px}$):
+- docs/content-video-engine/03-SYSTEM-ARCHITECTURE.md:213 — 5. Service specs (the operator's three tools, hardened) — `audio_synth.py` — calls ElevenLabs `POST /v1/text-to-speech/{voice_id}/with-timestamps` per
+- docs/content-video-engine/49-GENERATIVE-VIDEO-AND-THE-VERTICAL-STAGE.md:1 — 49 — Generative video and the vertical stage — Extracted from `10_generative_video_tools_and_cross_platform_composition.md`.
+  cited by: docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:208, docs/content-video-engine/51-THE-SHORTS-FORMAT.md:1, docs/content-video-engine/BACKLOG.md:366, docs/content-video-engine/briefs/RESEARCH-BRIEF-animation-craft.md:118, docs/content-video-engine/CAPABILITIES.md:47
 - … 7 more in `docs/DOCS-TOPICS.jsonl`
 
 ## a-x (18)
@@ -799,20 +1000,20 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/why-us-bond-yields-are-surging-again-do-this-asap/NICHE_BEND_DOSSIER.md:18 — Competitor Narrative & Art Style Patterns: — - Thumbnail & Title Trope: High-urgency doom ('Surging AGAIN - Do This ASAP!', 'Catastrophe ahead').
 - … 6 more in `docs/DOCS-TOPICS.jsonl`
 
-## full-frame (18)
+## evidence (18)
 
-- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/SHOT_LEDGER.md:1 — SHOT LEDGER: Frame-Accurate Pacing & Visual Species Breakdown — | Shot # | Start | End | Dur (s) | Keyframe | Classified Species | Spoken Line / Audio Beat |
-- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/SHOT_LEDGER.md:106 — Visual Species Taxonomy Legend — - `chart`: Quantitative coordinate graph (line, bar, scatter, yield curve).
-- content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/SHOT_LEDGER.md:1 — SHOT LEDGER: Frame-Accurate Pacing & Visual Species Breakdown — | Shot # | Start | End | Dur (s) | Keyframe | Classified Species | Spoken Line / Audio Beat |
-- content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/SHOT_LEDGER.md:106 — Visual Species Taxonomy Legend — - `chart`: Quantitative coordinate graph (line, bar, scatter, yield curve).
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/04_shot_ledger_100_cuts.md:1 — SHOT LEDGER: Frame-Accurate Pacing & Visual Species Breakdown — | Shot # | Start | End | Dur (s) | Keyframe | Classified Species | Spoken Line / Audio Beat |
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/04_shot_ledger_100_cuts.md:106 — Visual Species Taxonomy Legend — - `chart`: Quantitative coordinate graph (line, bar, scatter, yield curve).
-- content/video_engine/sources/reference_analyses/why-us-bond-yields-are-surging-again-do-this-asap/SHOT_LEDGER.md:106 — Visual Species Taxonomy Legend — - `chart`: Quantitative coordinate graph (line, bar, scatter, yield curve).
-- docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:158 — 6. Living scene bundle — A normal bundle lasts twenty to thirty seconds and supports two to four
-- docs/content-video-engine/16-EDITORIAL-MOTION-SYSTEM.md:1 — Editorial Motion System — > STATUS: PARTIALLY SUPERSEDED. The production pattern is now the scene-evidence lane in 29. Sections that 29 does not r
+- content/video_engine/projects/systems-and-blowups/registration/WORK-ORDER.md:45 — Per slide, produce
+- content/video_engine/projects/systems-and-blowups/registration/WORK-ORDER.md:65 — 3. `semantic_id` — the alias — - The claim segment must equal `claim_refs[0]`. That is what makes this a
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-E-STRENGTH-LOG.md:203 — Loop pass 5 — the hook, after the operator reframed the episode — Operator: *"this isn't truly a historical parallel episode, it's a real-time
 - docs/content-video-engine/16-EDITORIAL-MOTION-SYSTEM.md:48 — 3. Motion ownership — Motion is authored in this order:
-- docs/content-video-engine/17-TIMESTAMPED-PLATE-PRODUCTION.md:118 — 4. Batch and review policy — The complete production plan may contain all 138 prompts. Generation and human
-- docs/content-video-engine/21-ART-STYLE-REFERENCE-REVIEW.md:34 — Lane A — `cutout_history` — Reference: long-form Depression-era history explainer.
+- docs/content-video-engine/16-EDITORIAL-MOTION-SYSTEM.md:65 — Semantic cut routing — Every shot declares one visual intent before asset selection: `academic`,
+- docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:62 — 2. GATED — mechanical checks against an artifact — Ordered by value. "Fails on" is the pre-finding behaviour the check catches.
+- docs/content-video-engine/patterns/phase-guides/P1.md:1 — P1 — THE OPEN — > Self-contained generation guide. Consume ONLY: the INJECTION block and
+- docs/content-video-engine/patterns/phase-guides/P1.md:31 — Inputs (injection slots) — - `{TOPIC}` — one claim cluster, one dramatic question.
+- docs/content-video-engine/patterns/phase-guides/P2.md:1 — P2 — THE ENGINE — > Self-contained generation guide. Consume ONLY: the INJECTION block, the
+- docs/content-video-engine/patterns/phase-guides/P2.md:24 — Inputs — `{TOPIC}` `{VOICE}` `{PERSONA}` `{EVIDENCE}` + P1 ledger (ring token,
+- docs/content-video-engine/patterns/phase-guides/P3.md:1 — P3 — THE GAP (the pattern unit) — > Self-contained generation guide. Consume ONLY: the INJECTION block, the
+- docs/content-video-engine/patterns/phase-guides/P3.md:27 — Inputs — `{TOPIC}` `{VOICE}` `{PERSONA}` `{EVIDENCE}` + P2 ledger (open loops,
 - … 6 more in `docs/DOCS-TOPICS.jsonl`
 
 ## high-performing (18)
@@ -863,6 +1064,23 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/REPORT.md:44 — P6: The Close (Resolution & Ring Echo) [10:35 - 12:27] — - Pacing: 21 shots | 532 words | 284.9 WPM
 - … 6 more in `docs/DOCS-TOPICS.jsonl`
 
+## word-timed (18)
+
+- content/video_engine/projects/systems-and-blowups/learning/continuous-learning-import.v1.md:64 — Evidence — The accepted proof made the world and evidence roles visually distinct while
+- content/video_engine/projects/systems-and-blowups/learning/continuous-learning-import.v1.md:80 — Action — Bind each caption to the active evidence region for its semantic cue. Position
+- content/video_engine/projects/systems-and-blowups/learning/world-plate-evidence-caption-grammar.v1.md:1 — World Plate, Evidence, and Caption Grammar v1 — Status: accepted design direction
+- content/video_engine/projects/systems-and-blowups/learning/world-plate-evidence-caption-grammar.v1.md:7 — Purpose — World plates provide the story environment. Literal deck/PDF crops provide the
+- content/video_engine/projects/systems-and-blowups/learning/world-plate-evidence-caption-grammar.v1.md:13 — Production rules — 1. Keep the selected world plate full-frame and legible as the hero.
+- content/video_engine/projects/systems-and-blowups/learning/world-plate-evidence-caption-grammar.v1.md:45 — Proven proof — - Master: `current-bubble-mechanism/five-minute-semantic-demo-v3/render/current-bubble-five-minute-v3.mp4`
+- docs/content-video-engine/21-ART-STYLE-REFERENCE-REVIEW.md:219 — The natural experiment that reframes everything — Reviewed 2026-08-22 from three operator-supplied sources in one niche (trading
+- docs/content-video-engine/21-ART-STYLE-REFERENCE-REVIEW.md:233 — What this does and does not prove — It does not support "we win on presentation." The 242K video has the worst
+- docs/content-video-engine/21-ART-STYLE-REFERENCE-REVIEW.md:582 — What this changes — - `stick_figure` is removed as a lane name — but not as a capability. Lane D is a
+- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1 — 29 — Evidence Motion Standards (Gemini findings + v1 momentum + linked choreography) — Status: accepted working standard, 2026-08-24
+  cited by: content/video_engine/projects/systems-and-blowups/korea-memory-toll/SHOT-TABLE-90S.md:1, content/video_engine/projects/systems-and-blowups/korea-memory-toll/SHOT-TABLE-90S.md:30, content/video_engine/projects/systems-and-blowups/style-spine.woodblock-vox-newsprint.v2.md:39, content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-90S.claude.md:56, content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-90S.md:31, content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/REPORT.md:1, +30 more
+- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:18 — Current state — what actually governs production — Consolidated 2026-08-28. Where this section and anything below it
+- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:345 — 8.6 Evidence selection rules (operator correction, 2026-08-24) — The first v4 pass failed review on three counts. Each is now enforced in
+- … 6 more in `docs/DOCS-TOPICS.jsonl`
+
 ## z-0 (18)
 
 - content/video_engine/sources/reference_analyses/ACADEMIC_LITERATURE_DRAWING_AND_2_5D_ANIMATION_ENGINE.md:202 — 2.3 Bounded Biharmonic Weights (BBW) & 2D Dual Quaternion Skinning — For animating cutout characters and flexible props driven by control handles:
@@ -878,22 +1096,6 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md:354 — The 6-Stage Ledger Choreography — 1. Stage 1 — Roll-Out (0.7s): Ledger card slides and unfolds from bottom margin onto the wooden desk ($Z_0 \to Z_1$).
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_INDEX.md:210 — 6.3 Non-Rigid Shape Morphing (ARAP) & Skinning — - As-Rigid-As-Possible (ARAP) Shape Interpolation: Polar decomposition of deformation gradient $J_k = R_k S_k$ (Alexa, C
 - … 6 more in `docs/DOCS-TOPICS.jsonl`
-
-## 25313c (17)
-
-- content/video_engine/sources/reference_analyses/ACADEMIC_LITERATURE_DRAWING_AND_2_5D_ANIMATION_ENGINE.md:1 — Academic Literature Monograph: Mathematical Foundations of 2D & 2.5D Drawing and Animation Engines — Unified Academic Synthesis: Differential Geometry, Biomechanical Motor Control, Variational Continuum Mechanics, and Per
-- content/video_engine/sources/reference_analyses/ACADEMIC_LITERATURE_DRAWING_AND_2_5D_ANIMATION_ENGINE.md:276 — Pillar 4: Perceptual Psychophysics & Cross-Modal Phase Locking
-- content/video_engine/sources/reference_analyses/ACADEMIC_LITERATURE_DRAWING_AND_2_5D_ANIMATION_ENGINE.md:278 — 4.1 Cognitive Load Theory & Diagram Comprehension — - The Apprehension Principle (Tversky, Morrison, & Betrancourt 2002): Continuous animation overwhelms working memory if
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/07_academic_literature_drawing_and_2_5d_animation_engine.md:1 — Academic Literature Monograph: Mathematical Foundations of 2D & 2.5D Drawing and Animation Engines — Unified Academic Synthesis: Differential Geometry, Biomechanical Motor Control, Variational Continuum Mechanics, and Per
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/07_academic_literature_drawing_and_2_5d_animation_engine.md:276 — Pillar 4: Perceptual Psychophysics & Cross-Modal Phase Locking
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/07_academic_literature_drawing_and_2_5d_animation_engine.md:278 — 4.1 Cognitive Load Theory & Diagram Comprehension — - The Apprehension Principle (Tversky, Morrison, & Betrancourt 2002): Continuous animation overwhelms working memory if
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/09_2d_and_2_5d_body_animation_object_handling_and_grounding.md:422 — 4.2 The Dual-Component Contact Shadow Model: AO Slit vs. Diffuse Cast — A single blurred ellipse or uniform CSS `drop-shadow` is the primary reason composited elements look like "floating stic
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/09_2d_and_2_5d_body_animation_object_handling_and_grounding.md:497 — 4.7 Visual Harmonization: Koschmieder's Law, Light Wrap, and Substrate Bleed — 1. Aerial Perspective & Koschmieder's Law (Koschmieder 1924):
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_INDEX.md:232 — 6.6 Perceptual Psychophysics & Audio-Visual Entrainment — - Apprehension Principle (Tversky et al. 2002): Continuous animation overwhelms working memory; mandates the $0.8 ext{s}
-- content/video_engine/sources/reference_analyses/MASTER_RESEARCH_INDEX.md:231 — 6.6 Perceptual Psychophysics & Audio-Visual Entrainment — - Apprehension Principle (Tversky et al. 2002): Continuous animation overwhelms working memory; mandates the $0.8 ext{s}
-- docs/content-video-engine/48-THE-FIGURE-AND-THE-GROUND.md:154 — 48.8 Harmonisation, in our own tokens — The document integrates with E22 rather than around it:
-- docs/content-video-engine/53-THE-STICKMAN-LANE.md:463 — A0 closed — 2026-09-04 — Both sheets approved and promoted; `StickMike` is bound in Flow beside `Mike`. What the
-- … 5 more in `docs/DOCS-TOPICS.jsonl`
 
 ## cash-out (17)
 
@@ -927,60 +1129,21 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/DRAWING_ENGINE_ANIMATION_TRANSFORM_RESEARCH.md:344 — Improvement 4: Dynamic SVG Balance Scale Component — The iconic Wealth Logic visual is the dynamic balance scale balancing EARNS vs. COSTS / RENT. We build this as a paramet
 - … 5 more in `docs/DOCS-TOPICS.jsonl`
 
-## follow-up (17)
+## hand-drawn (17)
 
-- docs/content-video-engine/00-BRAINSTORM-AND-DECISIONS.md:1 — Content-to-Video Flywheel — Brainstorm, Challenges, and Decisions — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine
-  cited by: docs/content-video-engine/README.md:20
-- docs/content-video-engine/00-BRAINSTORM-AND-DECISIONS.md:12 — V4 pivot record — The anchorable 2D experiment improved body ownership but did not remove the
-- docs/content-video-engine/28-AOY-MCP-EVALUATION.md:133 — What our pipeline does not yet encode — Measured against the 16:21 p34 cut: one visual event every 9.2s (60 evidence
-- docs/content-video-engine/28-AOY-MCP-EVALUATION.md:328 — Voiceover and title doctrine — probed 2026-08-24 — Follow-up probes after the fact-check, plus one live run of the
-- docs/content-video-engine/32-WRITING-FOR-THE-EAR.md:181 — 8. Pipeline adoption candidates — 1. Script QC additions (join doc 31 §4's three passes): terminal-stress
-- docs/content-video-engine/38-SCRIPT-ARCHITECTURE.md:1 — 38 — Script Architecture: the deterministic prompt structure — Operator thesis (2026-08-24), and this document's organizing principle:
-  cited by: docs/content-video-engine/28-AOY-MCP-EVALUATION.md:536, docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1885, docs/content-video-engine/35-ANSWER-FORMAT-DOCTRINE.md:140, docs/content-video-engine/briefs/STEEL-AND-PAPER-UNITS-D.md:1, docs/content-video-engine/briefs/STEEL-AND-PAPER-WAVE-5-PLAN.md:1, docs/content-video-engine/CAPABILITIES.md:94, +2 more
-- docs/content-video-engine/38-SCRIPT-ARCHITECTURE.md:19 — 1. Audit — how the script skills address this today — Honest state, per the operator's question:
-- docs/content-video-engine/patterns/FULL-VIDEO-MAP.md:277 — CHANGELOG — - 2026-08-24 — v1, T1 of the P10 plan. Geometry decision recorded: open and
-- docs/product-revenue-contract.md:102 — Explicit milestone exclusions — - no automated outbound or autonomous follow-up;
-- docs/research/2026-07-26-product-strength-competitive-research.md:111 — Where the current AI score needs strengthening — Many checks are binary page ratios:
-- docs/research/2026-07-26-product-strength-competitive-research.md:131 — 2. Recommended score architecture — Do not create one universal score. Use a small score stack with unambiguous
-- docs/research/2026-07-26-product-strength-competitive-research.md:184 — AI Readiness v3 — Retain the current customer-facing formula until calibration data justifies
-- … 5 more in `docs/DOCS-TOPICS.jsonl`
-
-## mid-word (17)
-
-- content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/KEY_LEARNINGS_FOR_CLAUDE.md:1 — Dossier: Claude Code (Free Plan) + YouTube Deconstruction — Source Video: https://www.youtube.com/watch?v=WVT2FCjhDDY
-- content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/KEY_LEARNINGS_FOR_CLAUDE.md:8 — 1. The Core Architectural Learning: Audio Gaps as Scene Breaks — The single most valuable technical takeaway from this deconstruction:
-- content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/KEY_LEARNINGS_FOR_CLAUDE.md:14 — The Mechanism — 1. The Flawed Status Quo:
-- content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/WHAT-WE-LEARN.md:1 — What we actually learn from the zapiwala tutorial — verified, 2026-09-04 — Read against Gemini's dossier in this directory, then re-measured from the primary
-- content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/WHAT-WE-LEARN.md:10 — 1. The finding that matters: they cut on the gap, we cut through the word — Their video's own edit, measured from its caption word timings against its own cut list:
-- docs/content-video-engine/46-REFERENCE-RHYTHM.md:1 — 46 — Reference rhythm: what the shot ledger actually measures — Extracted from `04_shot_ledger_100_cuts.md` (primary measurement, recomputed here) and
-  cited by: docs/content-video-engine/51-THE-SHORTS-FORMAT.md:1
-- docs/content-video-engine/46-REFERENCE-RHYTHM.md:43 — 46.2 What this means for M13 and for M10 — M13 (cut lands in an acoustic gap) is free. Since our cut frequency already matches,
-  cited by: docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:21, docs/content-video-engine/54-GOOGLE-FLOW-OMNI-NANO-BANANA-PRODUCTION-RESEARCH.md:1
-- docs/content-video-engine/46-REFERENCE-RHYTHM.md:60 — 46.3 The gap threshold — settled from the reference, 2026-09-04 — `01` and the dossier's `gap_detector.py` blueprint used Δt ≥ 0.45 s and the gap's
-  cited by: docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:62, docs/content-video-engine/BACKLOG.md:366, docs/content-video-engine/FINDING-gaps-are-the-edit.md:171, docs/content-video-engine/RESEARCH-INDEX.md:35
-- docs/content-video-engine/BACKLOG.md:366 — Explorations — what we still cannot answer — Landed 2026-09-04 from the research agent: [54](54-GOOGLE-FLOW-OMNI-NANO-BANANA-PRODUCTION-RESEARCH.md)
-- docs/content-video-engine/FINDING-gaps-are-the-edit.md:81 — Test 3 — the question I should have asked first — Tests 1 and 2 asked "do gaps predict where we cut." That was backwards. The claim is
-- docs/content-video-engine/FINDING-gaps-are-the-edit.md:171 — Reference-first — 2026-09-04 — The tests above measured ourselves. The operator's correction: *"is basing the gap threshold
-- docs/content-video-engine/FINDING-what-the-bundle-already-answered.md:1 — What the research bundle already answered — 2026-09-04 — I reviewed the answers file (08) and spot-checked the academic monograph (07), then
-- … 5 more in `docs/DOCS-TOPICS.jsonl`
-
-## mike (17)
-
-- docs/content-video-engine/53-THE-STICKMAN-LANE.md:31 — 53.2 The identity mechanism — this is the part that matters — The prompt's own words, from the Doc:
-  cited by: docs/content-video-engine/53-THE-STICKMAN-LANE.md:183, docs/content-video-engine/53-THE-STICKMAN-LANE.md:228, docs/content-video-engine/53-THE-STICKMAN-LANE.md:353
-- docs/content-video-engine/53-THE-STICKMAN-LANE.md:81 — 53.3 The two prompt schemas — Image prompt — every field appears in every scene:
-  cited by: docs/content-video-engine/53-THE-STICKMAN-LANE.md:228, docs/content-video-engine/53-THE-STICKMAN-LANE.md:310, docs/content-video-engine/53-THE-STICKMAN-LANE.md:315, docs/content-video-engine/53-THE-STICKMAN-LANE.md:372, docs/content-video-engine/briefs/FLOW-OMNI-EXPLAINER-PROMPT-PLAN.md:253, docs/portable/OPERATOR-RULINGS.md:1017
-- docs/content-video-engine/53-THE-STICKMAN-LANE.md:144 — Do NOT take the negative blocks — Operator ruling, 2026-09-04, from observed behaviour on our own stack:
-- docs/content-video-engine/53-THE-STICKMAN-LANE.md:183 — 53.4 What this corrects in my own claims — Two corrections, both mine.
-- docs/content-video-engine/53-THE-STICKMAN-LANE.md:228 — 53.7 What this unblocks — - A2a′ (hero illustrations) now has a concrete spec: a model sheet, a CHARACTER LOCK
-- docs/content-video-engine/53-THE-STICKMAN-LANE.md:310 — 53.9 A third prompt — and it contradicts §53.3 — Source: `Untitled document (1).md`, the "Stickman Explainer Engine". Better engineered than
-  cited by: docs/content-video-engine/53-THE-STICKMAN-LANE.md:394, docs/content-video-engine/BACKLOG.md:279, docs/content-video-engine/BACKLOG.md:331, docs/content-video-engine/BACKLOG.md:366
-- docs/content-video-engine/53-THE-STICKMAN-LANE.md:315 — The contradiction: Omni Flash wants prose, not fields — > *"Omni Flash does NOT understand templated prompts. It ignores or mangles section
-- docs/content-video-engine/53-THE-STICKMAN-LANE.md:353 — The character-sheet spec is concrete and reusable — Three labelled rows on a plain cream ground: front, side, three-quarter and back views
-- docs/content-video-engine/53-THE-STICKMAN-LANE.md:435 — A0 landed — 2026-09-04, with two operator corrections — The pack now meets the table above: both views rows, five named expressions, five named
-- docs/content-video-engine/53-THE-STICKMAN-LANE.md:463 — A0 closed — 2026-09-04 — Both sheets approved and promoted; `StickMike` is bound in Flow beside `Mike`. What the
-- docs/content-video-engine/BACKLOG.md:331 — B7 — the Flow driver should verify, not the prompt contain — Operator ruling 2026-09-04: negative rules in a positive prompt can summon the very
-- docs/content-video-engine/briefs/FLOW-OMNI-EXPLAINER-PROMPT-PLAN.md:247 — PART 4: REVIEW (Claude, 2026-09-04) — Verdict: adopt, with three corrections. This is the strongest artifact the research
+- content/video_engine/projects/systems-and-blowups/learning/continuous-learning-import.v1.md:153 — Exclusion — Full-scene hand-draw replacement is not production-ready. A successful
+- content/video_engine/projects/systems-and-blowups/learning/continuous-learning-import.v1.md:159 — Evidence — `current-bubble-mechanism/fresh-60s-transition-evidence-v4` was accepted with
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:7 — The Silicon Reality Gap (`silicon-reality-gap`)
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:99 — Semantic crops — - `silicon-reality-gap-s05-triopoly-formation-v1` · S05 · mechanism · `review_only`
+- content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/SHOT_LEDGER.md:1 — SHOT LEDGER: Frame-Accurate Pacing & Visual Species Breakdown — | Shot # | Start | End | Dur (s) | Keyframe | Classified Species | Spoken Line / Audio Beat |
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/09_2d_and_2_5d_body_animation_object_handling_and_grounding.md:214 — 2.6 Pseudo-3D Head Turns & Facial Cylindrical Projection — In a 2.5D explainer engine, rendering characters as full 3D polygon models looks sterile and violates hand-drawn brand d
+  cited by: docs/content-video-engine/BACKLOG.md:420
+- docs/content-video-engine/12-HIGGSFIELD-EXPLAINER-LEARNINGS.md:60 — Option A: orchestrate producers, keep our editor — The engine now compiles `producer_plan.v1` beside
+- docs/content-video-engine/21-ART-STYLE-REFERENCE-REVIEW.md:34 — Lane A — `cutout_history` — Reference: long-form Depression-era history explainer.
+- docs/content-video-engine/21-ART-STYLE-REFERENCE-REVIEW.md:100 — Lane D — `stick_explainer` — Two references in the same format with a ~400x view gap between them. Reviewed together on
+- docs/content-video-engine/21-ART-STYLE-REFERENCE-REVIEW.md:129 — The ceiling reference, as a spec — - Characters. True stick figures — circle head, single-weight line limbs — but with a
+- docs/content-video-engine/21-ART-STYLE-REFERENCE-REVIEW.md:196 — Register dial — The lane spans a dial rather than a single style, and the dial is set by the script, not the art:
+- docs/content-video-engine/21-ART-STYLE-REFERENCE-REVIEW.md:273 — Lane E — `parametric_stick` (Casual Finance) — Reference: Casual Finance, "The SpaceX IPO... It's Worse Than You Think", 14:52,
 - … 5 more in `docs/DOCS-TOPICS.jsonl`
 
 ## not-yet (17)
@@ -999,20 +1162,21 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/DRAWING_ENGINE_ANIMATION_TRANSFORM_RESEARCH.md:116 — 2. Animation Mechanics & Deterministic Clocking
 - … 5 more in `docs/DOCS-TOPICS.jsonl`
 
-## real-time (17)
+## scene-evidence (17)
 
-- content/video_engine/sources/reference_analyses/ACADEMIC_LITERATURE_DRAWING_AND_2_5D_ANIMATION_ENGINE.md:289 — 5. The Ledger Page Kinetic Engine Synthesis
-- content/video_engine/sources/reference_analyses/ACADEMIC_LITERATURE_DRAWING_AND_2_5D_ANIMATION_ENGINE.md:386 — 6. Authoritative Academic Citations — 1. Viviani, P., & Terzuolo, C. (1982). Trajectory determines movement dynamics. Neuroscience, 7(2), 431-437.
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/02_drawing_engine_and_transforms_research.md:15 — Architecture Diagram & The 4 Core Mechanical Pillars
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/02_drawing_engine_and_transforms_research.md:51 — Pillar 2: Deterministic Clocking & Closed-Form Spring Physics — - Video renderers do not run at real-time speeds; iterative physics loops (Euler/Verlet) or wall-clock timers (`Date.now
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/02_drawing_engine_and_transforms_research.md:116 — 2. Animation Mechanics & Deterministic Clocking
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/07_academic_literature_drawing_and_2_5d_animation_engine.md:289 — 5. The Ledger Page Kinetic Engine Synthesis
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/07_academic_literature_drawing_and_2_5d_animation_engine.md:386 — 6. Authoritative Academic Citations — 1. Viviani, P., & Terzuolo, C. (1982). Trajectory determines movement dynamics. Neuroscience, 7(2), 431-437.
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/09_2d_and_2_5d_body_animation_object_handling_and_grounding.md:739 — 6. Master Citation & Authority Registry
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/09_2d_and_2_5d_body_animation_object_handling_and_grounding.md:741 — 6.1 Biomechanics, Motor Control & Mathematics — 1. Hof, A. L., Gazendam, M. G. J., & Sinke, W. E. (2005). The condition for dynamic stability. Journal of Biomechanics,
-- content/video_engine/sources/reference_analyses/DRAWING_ENGINE_ANIMATION_TRANSFORM_RESEARCH.md:15 — Architecture Diagram & The 4 Core Mechanical Pillars
-- content/video_engine/sources/reference_analyses/DRAWING_ENGINE_ANIMATION_TRANSFORM_RESEARCH.md:51 — Pillar 2: Deterministic Clocking & Closed-Form Spring Physics — - Video renderers do not run at real-time speeds; iterative physics loops (Euler/Verlet) or wall-clock timers (`Date.now
-- content/video_engine/sources/reference_analyses/DRAWING_ENGINE_ANIMATION_TRANSFORM_RESEARCH.md:116 — 2. Animation Mechanics & Deterministic Clocking
+- content/video_engine/projects/systems-and-blowups/registration/README.md:50 — Open follow-ups — 1. Merge into the deck manifest in the p29 worktree (cross-branch — deliberate
+- docs/content-video-engine/16-EDITORIAL-MOTION-SYSTEM.md:1 — Editorial Motion System — > STATUS: PARTIALLY SUPERSEDED. The production pattern is now the scene-evidence lane in 29. Sections that 29 does not r
+- docs/content-video-engine/28-AOY-MCP-EVALUATION.md:328 — Voiceover and title doctrine — probed 2026-08-24 — Follow-up probes after the fact-check, plus one live run of the
+- docs/content-video-engine/28-AOY-MCP-EVALUATION.md:333 — Voiceover — delivery rules exist; ElevenLabs settings do not — What came back, all chunk-stable:
+- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1 — 29 — Evidence Motion Standards (Gemini findings + v1 momentum + linked choreography) — Status: accepted working standard, 2026-08-24
+  cited by: content/video_engine/projects/systems-and-blowups/korea-memory-toll/SHOT-TABLE-90S.md:1, content/video_engine/projects/systems-and-blowups/korea-memory-toll/SHOT-TABLE-90S.md:30, content/video_engine/projects/systems-and-blowups/style-spine.woodblock-vox-newsprint.v2.md:39, content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-90S.claude.md:56, content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-90S.md:31, content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/REPORT.md:1, +30 more
+- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:18 — Current state — what actually governs production — Consolidated 2026-08-28. Where this section and anything below it
+- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:267 — Part 8 — The scene-evidence lane (default production pattern) — Status: accepted 2026-08-24. Proven by
+- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:335 — 8.5 Lane selection — | | scene-evidence lane | linked choreography |
+- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:615 — 8.14 The camera lock does not apply to this lane (correction, 2026-08-24) — 8.10 imported the skill's camera rule verbatim — "camera LOCKED between
+- docs/content-video-engine/briefs/STEEL-AND-PAPER-WAVE-5-PLAN.md:107 — 4. Order of operations — 1. Wave-5 claim — delivered, 15 plates.
+- docs/content-video-engine/CAPABILITIES.md:1 — CAPABILITIES — what is already built — Check this file before building anything. Three asset classes were
+- docs/content-video-engine/CAPABILITIES.md:18 — Scene-evidence player — the review renderer: cross-reveal wipe with carried light, coalesced docks, snap-to-boundary, dock-owned sides, interval
 - … 5 more in `docs/DOCS-TOPICS.jsonl`
 
 ## seek-safe (17)
@@ -1032,6 +1196,22 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/MASTER_RESEARCH_INDEX.md:287 — 9. Production Code Blueprints & Data Schemas — The research reports contain complete, production-ready TypeScript, Python, GLSL, and JSON modules:
 - … 5 more in `docs/DOCS-TOPICS.jsonl`
 
+## silicon-reality-gap (17)
+
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:1 — Deck asset selection index — Manifest: `silicon-decks-source-manifest-v2`
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:9 — S01 · The Great Valuation Paradox — Opening source plate contrasting the S&P 500 bubble with the physical memory triopoly opportunity.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:15 — S02 · The S&P 500 Paper Bubble versus Physical Compute — Source comparison of index narrative expansion with the physical bottleneck inside modern compute systems.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:21 — S03 · Record Earnings versus Historic Valuation Discounts — Source matrix comparing valuation, operating performance, market-cap contribution, and forward multiples.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:27 — S04 · The Market’s Cyclical Trauma — Source cycle diagram linking high returns, excess capital, oversupply, and debt-financed capacity expansion.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:33 — S05 · The Triopoly Genesis — A source plate describing the consolidation from many semiconductor rivals to Samsung, Micron, and SK hynix.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:39 — S06 · The Breakdown of Moore’s Law — Source historical chart showing slowing process gains and the shift toward capital discipline in memory manufacturing.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:45 — S07 · The Anatomy of a Bottleneck — A source plate showing the stacked HBM physical structure and its manufacturing constraints.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:51 — S08 · The Three-Dimensional Packaging War — Source comparison of Samsung and SK hynix packaging approaches, thermal constraints, yield, and market dominance.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:57 — S09 · The Three-to-One Capacity Penalty — Source plate showing HBM consuming the wafer capacity of multiple standard DRAM units and contributing to RAM-ageddon.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:63 — S10 · The Global DRAM Battlefield — Source market map showing Samsung, SK hynix, Micron, CXMT, and the shifting global DRAM competitive field.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:69 — S11 · The Dual-Front NAND War — Source market structure plate showing the leading NAND manufacturers and the challenger tiers around them.
+- … 5 more in `docs/DOCS-TOPICS.jsonl`
+
 ## slot-swapped (17)
 
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/00_README_INDEX.md:1 — Complete Research & Evidence Bundle: Master Index — This directory consolidates the full research, engineering specifications, forensic breakdowns, and visual evidence gath
@@ -1046,24 +1226,6 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/DRAWING_ENGINE_ANIMATION_TRANSFORM_RESEARCH.md:1 — Deep Research Report: Drawing Engines, Animation Mechanics, Object Management, and Transform Architectures for Faceless Video Production — Generated: 2026-09-04 | Status: Authoritative Technical Architecture | Scope: Video Engine Rendering & Compositing
 - content/video_engine/sources/reference_analyses/DRAWING_ENGINE_ANIMATION_TRANSFORM_RESEARCH.md:7 — Executive Summary — State-of-the-art programmatic video generation systems (such as Remotion, Motion Canvas, Figma Motion, and Rive) achieve
 - content/video_engine/sources/reference_analyses/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md:1 — Master Research & Evidence Dossier: High-Retention Video Production Engine — Unified Technical Synthesis: Video Deconstruction, Drawing Engines, Transform Mechanics, and Forensic Compositing Analys
-- … 5 more in `docs/DOCS-TOPICS.jsonl`
-
-## word-level (17)
-
-- content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/KEY_LEARNINGS_FOR_CLAUDE.md:1 — Dossier: Claude Code (Free Plan) + YouTube Deconstruction — Source Video: https://www.youtube.com/watch?v=WVT2FCjhDDY
-- content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/KEY_LEARNINGS_FOR_CLAUDE.md:8 — 1. The Core Architectural Learning: Audio Gaps as Scene Breaks — The single most valuable technical takeaway from this deconstruction:
-- content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/KEY_LEARNINGS_FOR_CLAUDE.md:14 — The Mechanism — 1. The Flawed Status Quo:
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/10_generative_video_tools_and_cross_platform_composition.md:161 — Part 4: 9:16 vs. 16:9 Cross-Platform Architecture & Short vs. Long Form
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/10_generative_video_tools_and_cross_platform_composition.md:193 — 4.2 Aspect Ratio Transformation Strategies
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/10_generative_video_tools_and_cross_platform_composition.md:199 — The 3-Zone Vertical Stage Solution — Partition the $1080 \times 1920$ canvas into three distinct vertical zones:
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md:436 — 14.2 9:16 vs. 16:9 Cross-Platform Architecture & Short vs. Long Form — 1. The Universal Clean Canvas ($800 \times 1060\text{ px}$):
-- content/video_engine/sources/reference_analyses/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md:436 — 14.2 9:16 vs. 16:9 Cross-Platform Architecture & Short vs. Long Form — 1. The Universal Clean Canvas ($800 \times 1060\text{ px}$):
-- docs/content-video-engine/03-SYSTEM-ARCHITECTURE.md:213 — 5. Service specs (the operator's three tools, hardened) — `audio_synth.py` — calls ElevenLabs `POST /v1/text-to-speech/{voice_id}/with-timestamps` per
-- docs/content-video-engine/49-GENERATIVE-VIDEO-AND-THE-VERTICAL-STAGE.md:1 — 49 — Generative video and the vertical stage — Extracted from `10_generative_video_tools_and_cross_platform_composition.md`.
-  cited by: docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:208, docs/content-video-engine/51-THE-SHORTS-FORMAT.md:1, docs/content-video-engine/BACKLOG.md:366, docs/content-video-engine/briefs/RESEARCH-BRIEF-animation-craft.md:118, docs/content-video-engine/CAPABILITIES.md:47
-- docs/content-video-engine/49-GENERATIVE-VIDEO-AND-THE-VERTICAL-STAGE.md:13 — 49.1 The vertical safe box, and the defect it exposed — Mobile platforms overlay UI on up to 59.1 % of a vertical frame. The intersection that
-  cited by: docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:62, docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:208, docs/content-video-engine/49-GENERATIVE-VIDEO-AND-THE-VERTICAL-STAGE.md:1, docs/content-video-engine/50-THE-PHONE-IS-THE-SCREEN.md:30, docs/content-video-engine/51-THE-SHORTS-FORMAT.md:57, docs/content-video-engine/51-THE-SHORTS-FORMAT.md:184, +7 more
-- docs/content-video-engine/49-GENERATIVE-VIDEO-AND-THE-VERTICAL-STAGE.md:52 — The 3-zone vertical stage — Centre-cropping 16:9 → 9:16 destroys 68.36 % of horizontal area
 - … 5 more in `docs/DOCS-TOPICS.jsonl`
 
 ## x-0 (17)
@@ -1149,6 +1311,22 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md:63 — The 4 Pillars: — 1. The Coordinate Transform Pipeline & Anchor Normalization: Elements live in local space and transform to screen space
 - … 4 more in `docs/DOCS-TOPICS.jsonl`
 
+## high-contrast (16)
+
+- content/video_engine/projects/systems-and-blowups/korea-memory-toll/assets/characters/hollow-stick-mike/CHARACTER-PACK.md:1 — @HollowStickMike — Character Asset Dossier & Prompt Architecture — Registered Asset: `content/video_engine/projects/systems-and-blowups/korea-memory-toll/assets/characters/hollow-stick-mi
+- content/video_engine/projects/systems-and-blowups/korea-memory-toll/assets/characters/hollow-stick-mike/CHARACTER-PACK.md:9 — 1. Physical Anatomy & Visual Identity — The character design has a major architectural advantage for AI video generation: a hollow face with floating geometric
+- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:1 — Production Research Report: Wealth Logic — 6 Ways Rich People Make Money With Debt — - Author / Channel: Wealth Logic
+- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:32 — Comparative Scorecard: Tutorial vs. Wealth Logic vs. Outreach Doctrine — | Metric / Dimension | Zapiwala (AI Stickman Tutorial) | Wealth Logic (High-Performing Finance) | Outreach Engine Target
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/01_wealth_logic_production_report.md:1 — Production Research Report: Wealth Logic — 6 Ways Rich People Make Money With Debt — - Author / Channel: Wealth Logic
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/01_wealth_logic_production_report.md:32 — Comparative Scorecard: Tutorial vs. Wealth Logic vs. Outreach Doctrine — | Metric / Dimension | Zapiwala (AI Stickman Tutorial) | Wealth Logic (High-Performing Finance) | Outreach Engine Target
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md:71 — 2. Comparative Scorecard & Production Benchmarks — | Metric / Dimension | Zapiwala (AI Stickman Tutorial) | Wealth Logic (High-Performing Finance) | Outreach Engine Target
+- content/video_engine/sources/reference_analyses/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md:71 — 2. Comparative Scorecard & Production Benchmarks — | Metric / Dimension | Zapiwala (AI Stickman Tutorial) | Wealth Logic (High-Performing Finance) | Outreach Engine Target
+- content/video_engine/sources/reference_analyses/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:1 — Production Research Report: Wealth Logic — 6 Ways Rich People Make Money With Debt — - Author / Channel: Wealth Logic
+- content/video_engine/sources/reference_analyses/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:32 — Comparative Scorecard: Tutorial vs. Wealth Logic vs. Outreach Doctrine — | Metric / Dimension | Zapiwala (AI Stickman Tutorial) | Wealth Logic (High-Performing Finance) | Outreach Engine Target
+- docs/content-video-engine/02-CONTENT-STRATEGY.md:109 — 3.1 Visual language by lane — | Lane | Default visual language | Appropriate generative assist |
+- docs/content-video-engine/09-YOUTUBE-REFERENCE-PACK-LEARNINGS.md:99 — 3. What each reference family contributes
+- … 4 more in `docs/DOCS-TOPICS.jsonl`
+
 ## k-x (16)
 
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/02_drawing_engine_and_transforms_research.md:80 — 1. Mechanics of 2D/2.5D Drawing Engines
@@ -1181,6 +1359,39 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/DRAWING_ENGINE_ANIMATION_TRANSFORM_RESEARCH.md:98 — The 2D Affine Transformation Matrix (Homogeneous $3 \times 3$) — In 2D space, translation, rotation, scale, and shear are unified into a single $3 \times 3$ matrix:
 - … 4 more in `docs/DOCS-TOPICS.jsonl`
 
+## load-bearing (16)
+
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/EVIDENCE-FINDING-2-the-real-story.md:1 — The stronger story, from the Treasury's own release — Fetched 2026-09-03 from `ticdata.treasury.gov/…/slt_table5.txt` — TIC Table 5, Major
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/EVIDENCE-FINDING-2-the-real-story.md:35 — Why this is the better video, not the weaker one — The original frame ("hedging costs too much so Tokyo stopped") was a *true story about
+- docs/content-video-engine/06-SCRIPT-TRANSFORMATION-SPEC.md:184 — 9. Gate A rubric (human, ~5–10 min) — | Dimension | Question | Scored |
+- docs/content-video-engine/21-ART-STYLE-REFERENCE-REVIEW.md:441 — Retraction: rendition level is not a consistency risk — An earlier revision of this document argued that the existing host assets were
+- docs/content-video-engine/21-ART-STYLE-REFERENCE-REVIEW.md:454 — What was claimed, and what the evidence shows — Claim 1 — "every rendered detail is another drift axis across 150 plates."
+- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:249 — Part 7 — Standing corrections recorded elsewhere but load-bearing here — - `caption-follows-active-evidence` (confidence .95 in
+- docs/content-video-engine/34-AOY-SCRIPT-WRITER-STUDY.md:87 — 4. What to measure when the scripts land — Baselines are the cleaned originals, so every question is a delta against
+- docs/content-video-engine/34-AOY-SCRIPT-WRITER-STUDY.md:264 — 5. Findings — Run 1 landed (35 min, 1886 words against a 1900 target) — Verdict: `write_script_v2` is real. It is the one genuinely valuable
+- docs/content-video-engine/34-AOY-SCRIPT-WRITER-STUDY.md:285 — Sourcing verified — it holds — The load-bearing claim was checked against the primary source. FHFA Working
+- docs/content-video-engine/34-AOY-SCRIPT-WRITER-STUDY.md:359 — 5b. Run 2 findings — the quality holds without a chart — The open question after Run 1 was whether the writer's quality depended on
+- docs/content-video-engine/35-ANSWER-FORMAT-DOCTRINE.md:87 — 3. The format — eight beats — From the operator's own worked example:
+- docs/content-video-engine/38-SCRIPT-ARCHITECTURE.md:1 — 38 — Script Architecture: the deterministic prompt structure — Operator thesis (2026-08-24), and this document's organizing principle:
+  cited by: content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-E-EXTERNAL-REVIEW.md:100, content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-E-EXTERNAL-REVIEW.md:118, content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-E-EXTERNAL-REVIEW.md:137, content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-E-STRENGTH-LOG.md:203, content/video_engine/projects/systems-and-blowups/tokyo-tea-break/REVIEW-2026-09-03.md:55, docs/content-video-engine/28-AOY-MCP-EVALUATION.md:536, +7 more
+- … 4 more in `docs/DOCS-TOPICS.jsonl`
+
+## memory-supercycle (16)
+
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:339 — S01 · The Decadal Realignment — Opening source plate framing the structural shift in global semiconductor memory and the outlook through 2030.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:345 — S02 · Memory Is No Longer an Interchangeable Commodity — Source plate contrasting legacy consumer memory with specialized infrastructure-grade memory.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:351 — S03 · The Root of the Shortage: The Three-to-One Physics Penalty — Source plate illustrating how HBM packaging consumes more wafer capacity than standard DDR5 and constrains supply.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:357 — S04 · The Revenue Paradox: Market Share in the AI Era — Source chart showing the changing revenue share of memory manufacturers during the AI-era mix shift.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:363 — S05 · The Bottom Falls as the Top Accelerates — Source plate comparing enterprise demand acceleration with the declining commodity-memory base beneath it.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:369 — S06 · The End of Transactional Memory — Source plate showing the transition away from spot-market memory toward contracted and strategic supply relationships.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:375 — S07 · Diverging Roadmaps: The HBM4 Logic Base Die — Source comparison of Samsung, SK hynix, and Micron roadmaps for custom logic and HBM integration.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:381 — S08 · Bridging the AI Bandwidth Gap — Source mechanism plate contrasting traditional DRAM with HBM and high-capacity storage in an AI memory stack.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:387 — S09 · The 10 fF Wall — Source plate describing the physical limits of two-dimensional DRAM and the move toward three-dimensional structures.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:393 — S10 · The Next Supercycle Vector: Automotive and Robotics — Source plate mapping memory demand from AI infrastructure into automotive, robotics, and edge systems.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:399 — S11 · One Hundred Billion Dollar Blueprints — Source map of planned cleanroom and fabrication investment supporting the memory buildout.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:405 — S12 · Subsidies, Sunset Clauses, and Civil Friction — Source plate comparing public subsidies, expiration conditions, and local-government friction around new capacity.
+- … 4 more in `docs/DOCS-TOPICS.jsonl`
+
 ## operator-supplied (16)
 
 - docs/content-video-engine/00-BRAINSTORM-AND-DECISIONS.md:1 — Content-to-Video Flywheel — Brainstorm, Challenges, and Decisions — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine
@@ -1195,29 +1406,29 @@ at most 12 sections each - the JSONL holds every one.
   cited by: docs/content-video-engine/briefs/ALICIA-FORMAT-RECREATION-BRIEF.md:1
 - docs/content-video-engine/21-ART-STYLE-REFERENCE-REVIEW.md:219 — The natural experiment that reframes everything — Reviewed 2026-08-22 from three operator-supplied sources in one niche (trading
 - docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1103 — 9.11 Rebuild source charts — do not extract frames (operator, 2026-08-25) — Operator ruling, superseding the clip-extraction workflow in 9.10:
-  cited by: docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:18
+  cited by: content/video_engine/projects/systems-and-blowups/steel-and-paper/evidence/EVIDENCE-DOSSIER.md:1, docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:18
 - docs/content-video-engine/32-WRITING-FOR-THE-EAR.md:1 — 32 — Writing for the Ear (craft doctrine, non-YouTube) — The fundamental-craft layer under the YouTube layer. Doc 31 holds the
-  cited by: docs/content-video-engine/28-AOY-MCP-EVALUATION.md:486, docs/content-video-engine/28-AOY-MCP-EVALUATION.md:536, docs/content-video-engine/34-AOY-SCRIPT-WRITER-STUDY.md:87, docs/content-video-engine/34-AOY-SCRIPT-WRITER-STUDY.md:306, docs/content-video-engine/37-TTS-DELIVERY-STANDARDS.md:24, docs/content-video-engine/38-SCRIPT-ARCHITECTURE.md:1, +3 more
+  cited by: content/video_engine/projects/systems-and-blowups/tokyo-tea-break/EVIDENCE-AUDIT-2026-09-03.md:25, docs/content-video-engine/28-AOY-MCP-EVALUATION.md:486, docs/content-video-engine/28-AOY-MCP-EVALUATION.md:536, docs/content-video-engine/34-AOY-SCRIPT-WRITER-STUDY.md:87, docs/content-video-engine/34-AOY-SCRIPT-WRITER-STUDY.md:306, docs/content-video-engine/37-TTS-DELIVERY-STANDARDS.md:24, +4 more
 - docs/content-video-engine/36-WRITER-PERSONA.md:392 — 6. Thread status (grill of 2026-08-24 — answered) — Resolved this date: the "beating the market" completion (→ T11) · both
 - docs/content-video-engine/50-THE-PHONE-IS-THE-SCREEN.md:1 — 50 — The phone is the screen: ep1's real analytics, and what they say — Operator-supplied YouTube analytics for ep1, 2026-09-04. This is ground truth, not
-  cited by: docs/content-video-engine/49-GENERATIVE-VIDEO-AND-THE-VERTICAL-STAGE.md:52, docs/content-video-engine/51-THE-SHORTS-FORMAT.md:1, docs/content-video-engine/BACKLOG.md:207, docs/content-video-engine/BACKLOG.md:225, docs/content-video-engine/BACKLOG.md:279
+  cited by: content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-90S.claude.md:10, docs/content-video-engine/49-GENERATIVE-VIDEO-AND-THE-VERTICAL-STAGE.md:52, docs/content-video-engine/51-THE-SHORTS-FORMAT.md:1, docs/content-video-engine/BACKLOG.md:207, docs/content-video-engine/BACKLOG.md:225, docs/content-video-engine/BACKLOG.md:279
 - … 4 more in `docs/DOCS-TOPICS.jsonl`
 
-## scene-evidence (16)
+## re-derive (16)
 
-- docs/content-video-engine/16-EDITORIAL-MOTION-SYSTEM.md:1 — Editorial Motion System — > STATUS: PARTIALLY SUPERSEDED. The production pattern is now the scene-evidence lane in 29. Sections that 29 does not r
-- docs/content-video-engine/28-AOY-MCP-EVALUATION.md:328 — Voiceover and title doctrine — probed 2026-08-24 — Follow-up probes after the fact-check, plus one live run of the
-- docs/content-video-engine/28-AOY-MCP-EVALUATION.md:333 — Voiceover — delivery rules exist; ElevenLabs settings do not — What came back, all chunk-stable:
-- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1 — 29 — Evidence Motion Standards (Gemini findings + v1 momentum + linked choreography) — Status: accepted working standard, 2026-08-24
-  cited by: content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/REPORT.md:1, content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:32, content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:74, content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/REPORT.md:1, content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/01_wealth_logic_production_report.md:32, content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/01_wealth_logic_production_report.md:74, +25 more
-- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:18 — Current state — what actually governs production — Consolidated 2026-08-28. Where this section and anything below it
-- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:267 — Part 8 — The scene-evidence lane (default production pattern) — Status: accepted 2026-08-24. Proven by
-- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:335 — 8.5 Lane selection — | | scene-evidence lane | linked choreography |
-- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:615 — 8.14 The camera lock does not apply to this lane (correction, 2026-08-24) — 8.10 imported the skill's camera rule verbatim — "camera LOCKED between
-- docs/content-video-engine/briefs/STEEL-AND-PAPER-WAVE-5-PLAN.md:107 — 4. Order of operations — 1. Wave-5 claim — delivered, 15 plates.
-- docs/content-video-engine/CAPABILITIES.md:1 — CAPABILITIES — what is already built — Check this file before building anything. Three asset classes were
-- docs/content-video-engine/CAPABILITIES.md:18 — Scene-evidence player — the review renderer: cross-reveal wipe with carried light, coalesced docks, snap-to-boundary, dock-owned sides, interval
-- docs/portable/DOCTRINE-CORE.md:172 — PRODUCTION AWARENESS — Motion and evidence choreography: `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md`
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/sound/SOURCES.md:55 — Slots in SOUND-PLAN.json (`page_cues`, page-relative) — The three slots live under a separate top-level `page_cues` list, not in
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-90S.md:1 — Tokyo Tea Break — shot table, 9:16 short — Authored 2026-09-04 against `SCRIPT-90S-VO.txt` (282 words, ~89 s after the tempo
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/sound/SOURCES.md:55 — Slots in SOUND-PLAN.json (`page_cues`, page-relative) — The three slots live under a separate top-level `page_cues` list, not in
+- docs/content-video-engine/22-AUDIO-FIX-RUNBOOK.md:110 — Procedure — 1. Obtain the stem (see blocker above). Verify it before use:
+- docs/content-video-engine/33-VOICE-PROFILE.md:1 — 33 — Voice Profile — The reusable artefact. Scripts and work orders reference this file by
+  cited by: content/video_engine/projects/systems-and-blowups/steel-and-paper/packaging/TITLE-CANDIDATES.md:1, docs/content-video-engine/34-AOY-SCRIPT-WRITER-STUDY.md:344, docs/content-video-engine/34-AOY-SCRIPT-WRITER-STUDY.md:399, docs/content-video-engine/38-SCRIPT-ARCHITECTURE.md:19, docs/content-video-engine/briefs/ALICIA-SCRIPT-PERSONA-PASS.md:106, docs/portable/OPERATOR-RULINGS.md:810
+- docs/content-video-engine/33-VOICE-PROFILE.md:152 — Maintenance — Widen the corpus after three or four more approved scripts and re-derive —
+- docs/content-video-engine/36-WRITER-PERSONA.md:108 — 3. The core theses — the lens every script argues through — These are the persona's standing claims. Scripts don't re-derive them; they
+- docs/content-video-engine/briefs/RESEARCH-BRIEF-animation-craft.md:173 — Track C — the drawing-engine builder — | # | question | why it matters here |
+- docs/content-video-engine/patterns/CHECK-RESPONSIBILITIES.md:1 — CHECK RESPONSIBILITIES — what the tools decide, what the agent decides — The kit has four tool-enforced checkers and one reading-enforced loop. This
+- docs/content-video-engine/patterns/CHECK-RESPONSIBILITIES.md:42 — 1. The rules — R1 — A tool's mechanical verdict is final. The agent does not re-derive
+- docs/content-video-engine/SCRIPT-CONTEXT-COMBINED.md:390 — 7. Maintenance — This pack is downstream of evidence, never a substitute for it. When the
+- docs/portable/MOTION-GRAMMAR.md:1 — MOTION GRAMMAR — narration-locked choreography, portable — Model-agnostic, renderer-agnostic (vanilla JS/CSS, GSAP, Remotion —
 - … 4 more in `docs/DOCS-TOPICS.jsonl`
 
 ## secondary-motion (16)
@@ -1238,6 +1449,38 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/BACKLOG.md:428 — D3 Secondary-motion ratio — RESOLVED 2026-09-04 by 48 §48.6 — the analytic phase lag `φ = arctan(2ζ(ω_d/ω₀)/(1−(ω_d/ω₀)²))` on the `M_p` we already
 - docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:302 — A6: The Secondary-Motion Budget [RECLASSIFIED: Design Proposal] — - Energy Ratio Proposal:
 - docs/content-video-engine/briefs/RESEARCH-BRIEF-animation-craft.md:148 — 3. The questions, by role — Priority marked ★ — if the pass can only go deep on five, take the starred ones.
+- … 4 more in `docs/DOCS-TOPICS.jsonl`
+
+## silicon-antidote (16)
+
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:114 — S01 · The Ultimate Antidote to an S&P 500 Bubble — Opening source plate framing physical memory infrastructure as the counterpoint to a software-led market bubble.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:120 — S02 · The Great Valuation Paradox — A source plate contrasting the S&P 500 valuation bubble with the memory triopoly and its operating-margin/valuation card
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:126 — S03 · Flashing Red on Extreme Concentration — Source plate showing top-ten mega-cap concentration and the mismatch between index weight and earnings contribution.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:132 — S04 · The Market’s Historical Blind Spot — Source warning plate linking high prices, debt-financed overinvestment, and industry oversupply to prior market cycles.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:138 — S05 · The Crucible of Compute — Source consolidation plate showing the funnel from many competitors to the Samsung, Micron, and SK hynix triopoly.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:144 — S06 · The Strange Genesis of Silicon’s Most Brutal Cartel — Source history plate describing the debt-fueled, founder-led, and abandoned-asset paths of the surviving memory makers.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:150 — S07 · The AI Catalyst: Breaking the Physical Bottleneck — Source mechanism plate contrasting traditional planar DRAM with the stacked HBM structure feeding AI accelerators.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:156 — S08 · The Brutal Physics of the Moat — Source process plate showing backgrinding, TSV etching, and packaging as yield-sensitive HBM bottlenecks.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:162 — S09 · The Three-to-One Capacity Penalty — A source plate comparing standard DRAM capacity with the wafer cost of HBM.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:168 — S10 · Welcome to RAM-ageddon — A source plate showing supply pressure, AI and consumer demand, and the RAM-ageddon price shock.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:174 — S11 · Locking Down the Financial Paradigm — Source comparison of volatile spot-market pricing with multi-year supply agreements and strategic co-engineering.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:180 — S12 · The Strategic Hardware Choke Point — Source plate showing memory as a large share of the AI server bill of materials and a dominant compute input.
+- … 4 more in `docs/DOCS-TOPICS.jsonl`
+
+## silicon-value-software-bubble (16)
+
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:234 — S01 · The Physical Bottleneck versus the Software Bubble — Opening source plate contrasting the physical scarcity of AI memory with the software market’s elevated valuation.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:240 — S02 · The Earnings Concentration Funnel — Source plate showing passive flows, top-ten mega-cap concentration, and reported earnings growth around the index bubble
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:246 — S03 · The Inescapable Physical Reality — Source plate using an hourglass to connect software layers, AI compute, and the global physical memory stack beneath the
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:252 — S04 · The Triopoly Was Forged through Risk and Survival — Source history plate showing how Samsung, Micron, and SK hynix survived through distinct capital-cycle paths.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:258 — S05 · The Price-Deflation Capital Cycle — Source cycle diagram linking Moore’s Law, price deflation, bankruptcies, and industry consolidation.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:264 — S06 · The Physical Breakdown of Moore’s Law — Source chart showing process volatility, declining gains, and the structural transition toward stacked silicon.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:270 — S07 · HBM Breaks the Historical Commodity Pattern — Source mechanism plate comparing planar DRAM with the stacked HBM architecture and its physical constraints.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:276 — S08 · Physical Failure Points — A source plate showing three physical failure points introduced by stacked silicon: backgrinding, TSV etching, and wafer
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:282 — S09 · Connecting the Dies Is the Hardest Step — Source process plate comparing Samsung and SK hynix interconnect methods and their thermal and yield constraints.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:288 — S10 · The RAM-ageddon Effect — Source mechanism plate linking HBM’s wafer penalty to a structural supply shortage in standard memory.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:294 — S11 · The DRAM Triopoly Is Rebalancing — Source market-share plate showing how Samsung, SK hynix, Micron, and CXMT fit into shifting DRAM supply chains.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:300 — S12 · The NAND Disruption Track — Source market-share plate showing the NAND storage competitive field and fast-moving challengers.
 - … 4 more in `docs/DOCS-TOPICS.jsonl`
 
 ## stepped-up (16)
@@ -1302,22 +1545,6 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/MASTER_RESEARCH_INDEX.md:120 — 4. Domain 3: Local ComfyUI GPU Stack — Our local ComfyUI instance (`127.0.0.1:8188`) provides three physical engines that lift 2D cards into broadcast-grade 2.
 - content/video_engine/sources/reference_analyses/MASTER_RESEARCH_INDEX.md:136 — 4.1 Comfy Engine 1: Parallax & Ray-Marcher — - Shader: Image-space continuous heightfield ray marcher (`depthflow.glsl`).
 - content/video_engine/sources/reference_analyses/MASTER_RESEARCH_INDEX.md:261 — 8. Calibrated Parameter Dials & Node Contracts
-- … 3 more in `docs/DOCS-TOPICS.jsonl`
-
-## evidence (15)
-
-- docs/content-video-engine/16-EDITORIAL-MOTION-SYSTEM.md:48 — 3. Motion ownership — Motion is authored in this order:
-- docs/content-video-engine/16-EDITORIAL-MOTION-SYSTEM.md:65 — Semantic cut routing — Every shot declares one visual intent before asset selection: `academic`,
-- docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:62 — 2. GATED — mechanical checks against an artifact — Ordered by value. "Fails on" is the pre-finding behaviour the check catches.
-- docs/content-video-engine/patterns/phase-guides/P1.md:1 — P1 — THE OPEN — > Self-contained generation guide. Consume ONLY: the INJECTION block and
-- docs/content-video-engine/patterns/phase-guides/P1.md:31 — Inputs (injection slots) — - `{TOPIC}` — one claim cluster, one dramatic question.
-- docs/content-video-engine/patterns/phase-guides/P2.md:1 — P2 — THE ENGINE — > Self-contained generation guide. Consume ONLY: the INJECTION block, the
-- docs/content-video-engine/patterns/phase-guides/P2.md:24 — Inputs — `{TOPIC}` `{VOICE}` `{PERSONA}` `{EVIDENCE}` + P1 ledger (ring token,
-- docs/content-video-engine/patterns/phase-guides/P3.md:1 — P3 — THE GAP (the pattern unit) — > Self-contained generation guide. Consume ONLY: the INJECTION block, the
-- docs/content-video-engine/patterns/phase-guides/P3.md:27 — Inputs — `{TOPIC}` `{VOICE}` `{PERSONA}` `{EVIDENCE}` + P2 ledger (open loops,
-- docs/content-video-engine/patterns/phase-guides/P4.md:1 — P4 — THE MIDPOINT PIVOT — > Self-contained generation guide. Consume ONLY: the INJECTION block, the
-- docs/content-video-engine/patterns/phase-guides/P4.md:27 — Inputs — `{TOPIC}` `{VOICE}` `{PERSONA}` `{EVIDENCE}` + P3 ledger (head-fake,
-- docs/content-video-engine/patterns/phase-guides/P5.md:1 — P5 — REFLECTION & CONVERGENCE — > Self-contained generation guide. Consume ONLY: the INJECTION block, the
 - … 3 more in `docs/DOCS-TOPICS.jsonl`
 
 ## eye-trace (15)
@@ -1386,6 +1613,22 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:474 — 8.10 The hand follows the reveal-engine contract (correction, 2026-08-24) — The first hand pass slid a marker along a straight clip-path edge. That is
 - … 3 more in `docs/DOCS-TOPICS.jsonl`
 
+## production-ready (15)
+
+- content/video_engine/projects/systems-and-blowups/learning/continuous-learning-import.v1.md:153 — Exclusion — Full-scene hand-draw replacement is not production-ready. A successful
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/edit/evidence-coverage-v1/coverage-summary.md:1 — P32 Full-Episode Evidence Coverage Baseline — Artifact: `ab547e586cefbb53e699bc69b88633648d4ac2a4c5114929a58281bc87d18254`
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/edit/evidence-coverage-v1/coverage-summary.md:7 — Baseline — - 11 scenes · 290 cues · 980.806 seconds
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/02_drawing_engine_and_transforms_research.md:1 — Deep Research Report: Drawing Engines, Animation Mechanics, Object Management, and Transform Architectures for Faceless Video Production — Generated: 2026-09-04 | Status: Authoritative Technical Architecture | Scope: Video Engine Rendering & Compositing
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/02_drawing_engine_and_transforms_research.md:7 — Executive Summary — State-of-the-art programmatic video generation systems (such as Remotion, Motion Canvas, Figma Motion, and Rive) achieve
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md:192 — 9. Production-Ready Code Blueprints
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_INDEX.md:288 — 9. Production Code Blueprints & Data Schemas — The research reports contain complete, production-ready TypeScript, Python, GLSL, and JSON modules:
+- content/video_engine/sources/reference_analyses/DRAWING_ENGINE_ANIMATION_TRANSFORM_RESEARCH.md:1 — Deep Research Report: Drawing Engines, Animation Mechanics, Object Management, and Transform Architectures for Faceless Video Production — Generated: 2026-09-04 | Status: Authoritative Technical Architecture | Scope: Video Engine Rendering & Compositing
+- content/video_engine/sources/reference_analyses/DRAWING_ENGINE_ANIMATION_TRANSFORM_RESEARCH.md:7 — Executive Summary — State-of-the-art programmatic video generation systems (such as Remotion, Motion Canvas, Figma Motion, and Rive) achieve
+- content/video_engine/sources/reference_analyses/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md:192 — 9. Production-Ready Code Blueprints
+- content/video_engine/sources/reference_analyses/MASTER_RESEARCH_INDEX.md:287 — 9. Production Code Blueprints & Data Schemas — The research reports contain complete, production-ready TypeScript, Python, GLSL, and JSON modules:
+- docs/content-video-engine/briefs/FLOW-OMNI-EXPLAINER-PROMPT-PLAN.md:1 — FLOW-OMNI-EXPLAINER-PROMPT-PLAN.md — Title: Institutional 2.5D & Stickman Explainer Engine (Google Flow / Gemini Omni Flash Edition)
+- … 3 more in `docs/DOCS-TOPICS.jsonl`
+
 ## render-eligible-false (15)
 
 - docs/content-video-engine/08-TOOLING-ALTERNATIVES.md:120 — Server-side video wrapper — The browser workspace is not an authentication dependency. Google OAuth cookies
@@ -1419,6 +1662,22 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:74 — 4. Persistent Cast & Metaphorical Physical Props — - No Random AI Hallucinations: Wealth Logic uses a single consistent diegetic character (a calm, smart analyst in a whit
 - … 3 more in `docs/DOCS-TOPICS.jsonl`
 
+## risk-score (15)
+
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-G-STRENGTH-LOG.md:1 — Script G — strength log (the fixpoint audit trail) — Protocol: STRENGTH-LOOP.md. Round 1 walked every sentence (225); the
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-G-STRENGTH-LOG.md:58 — Carryover seam checks (X1) — all pass — "So here's what you're getting" ← credit para ✓ · "But a machine you can
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-NOTES-retention-2-46.md:1 — Steel and Paper - the 2:46-3:23 sputter, and how the unit should read — Retention read 2026-09-02: AVD 2:49 at n=2 (noise), but it lands three
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-NOTES-retention-2-46.md:8 — What the timeline shows (2:23 -> 3:39) — | Time | Script | On screen |
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-NOTES-retention-2-46.md:31 — The unit as it should read (target ~62s, turn lands ~3:10) — > At the dot-com peak, that share hit twenty-three cents. Today it's
+- docs/content-video-engine/briefs/ALICIA-SCRIPT-PERSONA-PASS.md:1 — Alicia Script — Persona Pass (v2) — The approved 3:00 script from
+- docs/content-video-engine/briefs/ALICIA-SCRIPT-PERSONA-PASS.md:15 — Script v2 (~575 words, ~3:00) — [s01 — cold open ON THE TILL PLATE, captions punching in word groups; till
+- docs/content-video-engine/briefs/ALICIA-SCRIPT-PERSONA-PASS.md:106 — Comparison — what the persona pass changed, and under which rule — | Slot | v1 | v2 | Rule |
+- docs/content-video-engine/briefs/ALICIA-SCRIPT-V3-CALCULUS.md:1 — Alicia Script — v3 (The Calculus Pass) + Three-Way Verdict — The bake-off before committing to the phase guides (P10 T2). Same
+- docs/content-video-engine/briefs/ALICIA-SCRIPT-V3-CALCULUS.md:22 — Script v3 (~550 words, ~3:00) — [P1 · s01 — cold open ON THE TILL PLATE, drawer sounds under; captions
+- docs/content-video-engine/briefs/ANSWER-BRAVOS-HYPE-CYCLE.md:32 — SCRIPT A (v1 baseline — A/B test arm A) — [P1 · s01 — macro: an iron railway spike on dark wood, already rotating
+- docs/content-video-engine/briefs/ANSWER-BRAVOS-HYPE-CYCLE.md:267 — SCRIPT B — **PRODUCTION TEXT** (sentence-strength pass; won the A/B ear test) — A/B verdict (operator, 2026-08-24, by ear): three matched pairs — open,
+- … 3 more in `docs/DOCS-TOPICS.jsonl`
+
 ## run-centric (15)
 
 - docs/AGENT_START_HERE.md:48 — Pipeline, Fetching, And Scoring — Read:
@@ -1433,6 +1692,38 @@ at most 12 sections each - the JSONL holds every one.
 - docs/run-centric-schema-notes.md:1 — Run-Centric Schema Notes — Prepared: 2026-07-07
 - docs/run-centric-schema-notes.md:5 — Purpose — This refactor changes the SEO database model from an entity-centric crawl schema into a run-centric platform schema.
 - docs/seo-insights-platform-implementation-plan.md:22 — Phase 1 — Data model hardening — Convert schema from generic ingestion support to explicit platform objects.
+- … 3 more in `docs/DOCS-TOPICS.jsonl`
+
+## saas (15)
+
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/edit/hyperframes-opening-v1/AGENTS.md:1 — HyperFrames Composition Project
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/edit/hyperframes-opening-v1/AGENTS.md:3 — Skills — USE THESE FIRST — Always invoke the relevant skill before writing or modifying compositions. Skills encode framework-specific patterns (e.
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/edit/hyperframes-opening-v1/CLAUDE.md:1 — HyperFrames Composition Project
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/edit/hyperframes-opening-v1/CLAUDE.md:3 — Skills — USE THESE FIRST — Always invoke the relevant skill before writing or modifying compositions. Skills encode framework-specific patterns (e.
+- docs/content-video-engine/00-BRAINSTORM-AND-DECISIONS.md:51 — 2. What survives from the raw spec — Stick-figure + Manim CE format (Manim confirmed healthy 2026; the style is uniquely suited to
+- docs/content-video-engine/05-COMPETITIVE-BRIEF.md:99 — 2.6 Monetization layering (sequenced expectations) — Observed order: Patreon/Ko-fi at first traction → memberships → merch + brand sponsors in the
+- docs/harness/AGENT_SELF_EVALUATION_GUIDE.md:1 — 🤖 Agent Self-Evaluation & Adoption Guide — > Instructions for the AI Agent reading this file:
+- docs/product-revenue-contract.md:1 — Product / Revenue Contract: Outreach Program
+- docs/product-revenue-contract.md:102 — Explicit milestone exclusions — - no automated outbound or autonomous follow-up;
+- docs/research/2026-07-26-product-strength-competitive-research.md:295 — Owner-authorized sources after engagement — These sources turn a persuasive estimate into an accountable growth system:
+- docs/research/2026-07-28-accretive-revenue-assessment.md:149 — 2.5 Pricing structure — two findings that should set the model — Retention is a function of price point, not product quality. Below $10/month ARPA, even
+- docs/research/2026-07-28-accretive-revenue-assessment.md:269 — 5. Ranked paths — | # | Path | Time to cash | Accretion | Evidence strength |
+- … 3 more in `docs/DOCS-TOPICS.jsonl`
+
+## sha256 (15)
+
+- content/video_engine/projects/systems-and-blowups/registration/README.md:16 — Files — | File | Role |
+- content/video_engine/projects/systems-and-blowups/registration/WORK-ORDER.md:1 — Work Order — Slide Semantic Registration + Figure Extraction — Register 86 approved source slides against a closed claim vocabulary and
+- content/video_engine/projects/systems-and-blowups/registration/WORK-ORDER.md:20 — Inputs in this directory — | File | What it is |
+- content/video_engine/projects/systems-and-blowups/registration/WORK-ORDER.md:45 — Per slide, produce
+- content/video_engine/projects/systems-and-blowups/registration/WORK-ORDER.md:47 — 1. Frozen keys — copy, never alter — `slide_id` and `sha256` are copied verbatim from `slide-index.json`. They bind
+- content/video_engine/projects/systems-and-blowups/registration/WORK-ORDER.md:127 — Self-check before writing each deck file — 1. Every `slide_id` and `sha256` matches `slide-index.json` exactly.
+- docs/content-video-engine/23-EP1-LIBRARY-INTAKE-REVIEW.md:102 — Delivery integrity — clean — All 25 files are on disk and every `sha256` in the catalogue matches the bytes.
+- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:413 — 8.8 No production chrome in the frame (operator correction, 2026-08-24) — The v4 dock shipped with a citation footer reading
+- docs/content-video-engine/prompts/LIBRARY-BUILD-EP1-INDEX-FUNDS.md:357 — After generating — and one field you must not skip — Drop everything into `assets/generated/cutouts/`, then register each asset in
+- docs/content-video-engine/prompts/LIBRARY-BUILD-EP1-V3-REGENERATION.md:216 — On delivery — Register each asset with `asset_id`, `path`, `sha256`, `kind`, `semantic_tags`,
+- docs/content-video-engine/prompts/SLIDE-SEMANTIC-REGISTRATION.md:1 — Work Order — Slide Semantic Registration + Figure Extraction — Register 86 approved source slides against a closed claim vocabulary and
+- docs/content-video-engine/prompts/SLIDE-SEMANTIC-REGISTRATION.md:20 — Inputs in this directory — | File | What it is |
 - … 3 more in `docs/DOCS-TOPICS.jsonl`
 
 ## single-mesh (15)
@@ -1518,6 +1809,25 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/SCRIPT-CONTEXT-COMBINED.md:1 — DOCTRINE CORE — portable content-operation context — Model-agnostic; paste whole into any system-instruction or rules box
 - … 2 more in `docs/DOCS-TOPICS.jsonl`
 
+## drop-off (14)
+
+- content/video_engine/projects/systems-and-blowups/korea-memory-toll/SHOT-TABLE-90S.md:1 — The Trillion Dollar Toll Booth — Shot Table, 9:16 Short — Authored 2026-09-05 against `SCRIPT-90S-VO.txt` (402 words, ~148 s estimated, ~90–100 s after tempo edit).
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/08_answers_animation_craft_brief.md:233 — A4: The Threshold of "Alive" [RE-ASK 1 ★: Audited & Answered]
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/08_answers_animation_craft_brief.md:265 — 3. Pipeline & Doctrine Status — Because no controlled study exists for our exact medium, our shipped gates represent operator-derived design doctrine:
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md:436 — 14.2 9:16 vs. 16:9 Cross-Platform Architecture & Short vs. Long Form — 1. The Universal Clean Canvas ($800 \times 1060\text{ px}$):
+- content/video_engine/sources/reference_analyses/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md:436 — 14.2 9:16 vs. 16:9 Cross-Platform Architecture & Short vs. Long Form — 1. The Universal Clean Canvas ($800 \times 1060\text{ px}$):
+- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1885 — 9.29 The OPENING MINUTE — the confirmation gap, the packaging match, and no full chart before the thesis (operator, 2026-09-03) — Ruling E24. An outside analyst's read of Steel and Paper's drop-off,
+  cited by: docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1940, docs/content-video-engine/CAPABILITIES.md:94, docs/content-video-engine/patterns/CHECK-RESPONSIBILITIES.md:101, docs/content-video-engine/patterns/phase-guides/P1.md:175, docs/content-video-engine/PIPELINE.md:18
+- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1940 — 9.30 The chart is the PROOF, not the homework — no chart held across plates (operator, 2026-09-03) — Ruling E25. The operator's own read of the analytics behind §9.29: the
+  cited by: docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1982, docs/content-video-engine/patterns/CHECK-RESPONSIBILITIES.md:101
+- docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:247 — A4: The Threshold of "Alive" [RE-ASK 1 ★: Audited & Answered]
+- docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:279 — 3. Pipeline & Doctrine Status — Because no controlled study exists for our exact medium, our shipped gates represent operator-derived design doctrine:
+- docs/content-video-engine/briefs/RESPONSE-TO-RESEARCH-PASS-1.md:85 — 4. REOPENED — four items, with acceptance criteria
+- docs/content-video-engine/briefs/RESPONSE-TO-RESEARCH-PASS-1.md:87 — RE-ASK 1 — A4, "the threshold of alive" ★ highest priority — What was wrong. The entire section rests on Mackworth 1948, cited for: "after
+- docs/portable/OPERATOR-RULINGS.md:743 — E24 — The opening minute: confirm the click, match the packaging, never open on the full chart (2026-09-03) — An outside analyst's drop-off read, checked by the operator against the
+  cited by: content/video_engine/projects/systems-and-blowups/korea-memory-toll/SHOT-TABLE-90S.md:1, content/video_engine/projects/systems-and-blowups/korea-memory-toll/SHOT-TABLE-90S.md:30, content/video_engine/projects/systems-and-blowups/steel-and-paper/REWRITE-ORDER-G.md:109, content/video_engine/projects/systems-and-blowups/steel-and-paper/REWRITE-ORDER-G.md:136, content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-90S.md:31, docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1885, +6 more
+- … 2 more in `docs/DOCS-TOPICS.jsonl`
+
 ## expectation-reality (14)
 
 - docs/content-video-engine/35-ANSWER-FORMAT-DOCTRINE.md:87 — 3. The format — eight beats — From the operator's own worked example:
@@ -1532,22 +1842,6 @@ at most 12 sections each - the JSONL holds every one.
 - docs/research/2026-08-24-writing-for-the-ear-craft-source.md:34 — **Deep Narrative Engineering: Screenwriting Mechanics and Structural Machinery** — While broadcast mechanics govern the sentence-level acoustic delivery of a script, screenwriting mechanics provide the s
 - docs/research/2026-08-24-writing-for-the-ear-craft-source.md:38 — **McKee’s Beat Mechanics and the Expectation-Reality Gap** — Robert McKee's foundational framework decomposes story architecture into a rigorous structural hierarchy extending from
 - docs/research/2026-08-24-writing-for-the-ear-craft-source.md:59 — **Snyder’s Mid-Pacing Machinery and Act Transitions** — Blake Snyder’s Save the Cat framework provides a granular beat sheet that prevents middle-act narrative decay—the point
-- … 2 more in `docs/DOCS-TOPICS.jsonl`
-
-## high-contrast (14)
-
-- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:1 — Production Research Report: Wealth Logic — 6 Ways Rich People Make Money With Debt — - Author / Channel: Wealth Logic
-- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:32 — Comparative Scorecard: Tutorial vs. Wealth Logic vs. Outreach Doctrine — | Metric / Dimension | Zapiwala (AI Stickman Tutorial) | Wealth Logic (High-Performing Finance) | Outreach Engine Target
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/01_wealth_logic_production_report.md:1 — Production Research Report: Wealth Logic — 6 Ways Rich People Make Money With Debt — - Author / Channel: Wealth Logic
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/01_wealth_logic_production_report.md:32 — Comparative Scorecard: Tutorial vs. Wealth Logic vs. Outreach Doctrine — | Metric / Dimension | Zapiwala (AI Stickman Tutorial) | Wealth Logic (High-Performing Finance) | Outreach Engine Target
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md:71 — 2. Comparative Scorecard & Production Benchmarks — | Metric / Dimension | Zapiwala (AI Stickman Tutorial) | Wealth Logic (High-Performing Finance) | Outreach Engine Target
-- content/video_engine/sources/reference_analyses/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md:71 — 2. Comparative Scorecard & Production Benchmarks — | Metric / Dimension | Zapiwala (AI Stickman Tutorial) | Wealth Logic (High-Performing Finance) | Outreach Engine Target
-- content/video_engine/sources/reference_analyses/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:1 — Production Research Report: Wealth Logic — 6 Ways Rich People Make Money With Debt — - Author / Channel: Wealth Logic
-- content/video_engine/sources/reference_analyses/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:32 — Comparative Scorecard: Tutorial vs. Wealth Logic vs. Outreach Doctrine — | Metric / Dimension | Zapiwala (AI Stickman Tutorial) | Wealth Logic (High-Performing Finance) | Outreach Engine Target
-- docs/content-video-engine/02-CONTENT-STRATEGY.md:109 — 3.1 Visual language by lane — | Lane | Default visual language | Appropriate generative assist |
-- docs/content-video-engine/09-YOUTUBE-REFERENCE-PACK-LEARNINGS.md:99 — 3. What each reference family contributes
-- docs/content-video-engine/09-YOUTUBE-REFERENCE-PACK-LEARNINGS.md:101 — 3.1 BJJ fight shorts: physical legibility — `BJJ vs Taekwondo`, `BJJ vs Aikido`, and `BJJ vs Muay Thai` provide the closest movement grammar:
-- docs/content-video-engine/18-GRAPHIC-SILHOUETTE-WOODBLOCK-EXPLAINER-SPEC.md:1 — Graphic Silhouette + Combat Woodblock Explainer — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine
 - … 2 more in `docs/DOCS-TOPICS.jsonl`
 
 ## int-0 (14)
@@ -1566,21 +1860,21 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/09_2d_and_2_5d_body_animation_object_handling_and_grounding.md:289 — 3. Track 2: Object Handling, Grasp Dynamics, and Hand-Prop Interaction
 - … 2 more in `docs/DOCS-TOPICS.jsonl`
 
-## load-bearing (14)
+## ken-burns (14)
 
-- docs/content-video-engine/06-SCRIPT-TRANSFORMATION-SPEC.md:184 — 9. Gate A rubric (human, ~5–10 min) — | Dimension | Question | Scored |
-- docs/content-video-engine/21-ART-STYLE-REFERENCE-REVIEW.md:441 — Retraction: rendition level is not a consistency risk — An earlier revision of this document argued that the existing host assets were
-- docs/content-video-engine/21-ART-STYLE-REFERENCE-REVIEW.md:454 — What was claimed, and what the evidence shows — Claim 1 — "every rendered detail is another drift axis across 150 plates."
-- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:249 — Part 7 — Standing corrections recorded elsewhere but load-bearing here — - `caption-follows-active-evidence` (confidence .95 in
-- docs/content-video-engine/34-AOY-SCRIPT-WRITER-STUDY.md:87 — 4. What to measure when the scripts land — Baselines are the cleaned originals, so every question is a delta against
-- docs/content-video-engine/34-AOY-SCRIPT-WRITER-STUDY.md:264 — 5. Findings — Run 1 landed (35 min, 1886 words against a 1900 target) — Verdict: `write_script_v2` is real. It is the one genuinely valuable
-- docs/content-video-engine/34-AOY-SCRIPT-WRITER-STUDY.md:285 — Sourcing verified — it holds — The load-bearing claim was checked against the primary source. FHFA Working
-- docs/content-video-engine/34-AOY-SCRIPT-WRITER-STUDY.md:359 — 5b. Run 2 findings — the quality holds without a chart — The open question after Run 1 was whether the writer's quality depended on
-- docs/content-video-engine/35-ANSWER-FORMAT-DOCTRINE.md:87 — 3. The format — eight beats — From the operator's own worked example:
-- docs/content-video-engine/38-SCRIPT-ARCHITECTURE.md:1 — 38 — Script Architecture: the deterministic prompt structure — Operator thesis (2026-08-24), and this document's organizing principle:
-  cited by: docs/content-video-engine/28-AOY-MCP-EVALUATION.md:536, docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1885, docs/content-video-engine/35-ANSWER-FORMAT-DOCTRINE.md:140, docs/content-video-engine/briefs/STEEL-AND-PAPER-UNITS-D.md:1, docs/content-video-engine/briefs/STEEL-AND-PAPER-WAVE-5-PLAN.md:1, docs/content-video-engine/CAPABILITIES.md:94, +2 more
-- docs/content-video-engine/BACKLOG.md:296 — Planning gap found 2026-09-04: gates whose fix has no owner — An audit of P37 and P38 against docs 42–49 found three gates that check behaviour
-- docs/content-video-engine/patterns/KNOWLEDGE-GRAPH.md:57 — 3. Cross-links that prevent the classic failure modes — | Failure mode | Prevented by the edge |
+- content/video_engine/projects/systems-and-blowups/learning/continuous-learning-import.v1.md:126 — Action — Use a restrained Ken-Burns reframe only to direct attention within a plate or
+- content/video_engine/projects/systems-and-blowups/learning/world-plate-evidence-caption-grammar.v1.md:1 — World Plate, Evidence, and Caption Grammar v1 — Status: accepted design direction
+- content/video_engine/projects/systems-and-blowups/learning/world-plate-evidence-caption-grammar.v1.md:13 — Production rules — 1. Keep the selected world plate full-frame and legible as the hero.
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/ken-burns-effect-proof-v1/README.md:1 — Ken Burns Effect Proof v1 — Purpose: evaluate the reviewed local `ken-burns-effect` Remotion Bit against
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/ken-burns-effect-proof-v1/README.md:6 — Sequence — 1. Frames 0–143: slow Ken-Burns reframe over the memory-supports world plate.
+- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1 — 29 — Evidence Motion Standards (Gemini findings + v1 momentum + linked choreography) — Status: accepted working standard, 2026-08-24
+  cited by: content/video_engine/projects/systems-and-blowups/korea-memory-toll/SHOT-TABLE-90S.md:1, content/video_engine/projects/systems-and-blowups/korea-memory-toll/SHOT-TABLE-90S.md:30, content/video_engine/projects/systems-and-blowups/style-spine.woodblock-vox-newsprint.v2.md:39, content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-90S.claude.md:56, content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-90S.md:31, content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/REPORT.md:1, +30 more
+- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:18 — Current state — what actually governs production — Consolidated 2026-08-28. Where this section and anything below it
+- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:93 — Part 1 — The Gemini evidence-dock grammar (most significant findings) — Source: `docs/content-video-engine/samples/gemini-decoupled-evidence-showcase.html` (archived copy; original landed in t
+- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:146 — Part 2 — Momentum mechanics (recovered from hyperframes-opening-v1) — Source: `edit/hyperframes-opening-v1/index.html` (f10b worktree). These four
+- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:165 — 2.2 Nothing living is ever still — Every active card breathes: slow sine drift (±16px, ~1.8% scale swell,
+- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:267 — Part 8 — The scene-evidence lane (default production pattern) — Status: accepted 2026-08-24. Proven by
+- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:278 — 8.1 The shape — One continuous ken-burns move per scene, not per beat, with a distinct
 - … 2 more in `docs/DOCS-TOPICS.jsonl`
 
 ## not (14)
@@ -1599,6 +1893,54 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/README.md:20 — Start here, not at doc 00 — The working doctrine is not in this folder. It is three files in
 - … 2 more in `docs/DOCS-TOPICS.jsonl`
 
+## off-white (14)
+
+- content/video_engine/projects/systems-and-blowups/korea-memory-toll/assets/characters/hollow-stick-mike/CHARACTER-PACK.md:1 — @HollowStickMike — Character Asset Dossier & Prompt Architecture — Registered Asset: `content/video_engine/projects/systems-and-blowups/korea-memory-toll/assets/characters/hollow-stick-mi
+- content/video_engine/projects/systems-and-blowups/korea-memory-toll/assets/characters/hollow-stick-mike/CHARACTER-PACK.md:9 — 1. Physical Anatomy & Visual Identity — The character design has a major architectural advantage for AI video generation: a hollow face with floating geometric
+- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:1 — Production Research Report: Wealth Logic — 6 Ways Rich People Make Money With Debt — - Author / Channel: Wealth Logic
+- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:32 — Comparative Scorecard: Tutorial vs. Wealth Logic vs. Outreach Doctrine — | Metric / Dimension | Zapiwala (AI Stickman Tutorial) | Wealth Logic (High-Performing Finance) | Outreach Engine Target
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/01_wealth_logic_production_report.md:1 — Production Research Report: Wealth Logic — 6 Ways Rich People Make Money With Debt — - Author / Channel: Wealth Logic
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/01_wealth_logic_production_report.md:32 — Comparative Scorecard: Tutorial vs. Wealth Logic vs. Outreach Doctrine — | Metric / Dimension | Zapiwala (AI Stickman Tutorial) | Wealth Logic (High-Performing Finance) | Outreach Engine Target
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md:30 — 1. Executive Summary & The 4 Core Pillars — State-of-the-art programmatic video generation systems (Remotion, Motion Canvas, Figma Motion, Rive) achieve institution
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md:63 — The 4 Pillars: — 1. The Coordinate Transform Pipeline & Anchor Normalization: Elements live in local space and transform to screen space
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md:71 — 2. Comparative Scorecard & Production Benchmarks — | Metric / Dimension | Zapiwala (AI Stickman Tutorial) | Wealth Logic (High-Performing Finance) | Outreach Engine Target
+- content/video_engine/sources/reference_analyses/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md:30 — 1. Executive Summary & The 4 Core Pillars — State-of-the-art programmatic video generation systems (Remotion, Motion Canvas, Figma Motion, Rive) achieve institution
+- content/video_engine/sources/reference_analyses/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md:63 — The 4 Pillars: — 1. The Coordinate Transform Pipeline & Anchor Normalization: Elements live in local space and transform to screen space
+- content/video_engine/sources/reference_analyses/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md:71 — 2. Comparative Scorecard & Production Benchmarks — | Metric / Dimension | Zapiwala (AI Stickman Tutorial) | Wealth Logic (High-Performing Finance) | Outreach Engine Target
+- … 2 more in `docs/DOCS-TOPICS.jsonl`
+
+## operator-approved (14)
+
+- content/video_engine/projects/systems-and-blowups/learning/continuous-learning-import.v1.md:153 — Exclusion — Full-scene hand-draw replacement is not production-ready. A successful
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-E-STRENGTH-LOG.md:1 — Script E — sentence-strength pass log — `patterns/SENTENCE-STRENGTH-CHECK.md`, run 2026-08-29. Every sentence
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-E-STRENGTH-LOG.md:8 — Licensed exceptions claimed — | Where | Gate | Why |
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-G-STRENGTH-LOG.md:78 — Round 4 — the ENUMERATED screens (operator audit, 2026-08-30) — The operator asked whether L1/L3 and the X1 orphan screen ran to the
+- docs/content-video-engine/01-PRD.md:140 — 8. Phases — | Phase | Contents | Exit criteria |
+- docs/content-video-engine/06-SCRIPT-TRANSFORMATION-SPEC.md:1 — Script Transformation Spec — Essay/Corpus → Beat Sheet → Storyboard — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine
+- docs/content-video-engine/28-AOY-MCP-EVALUATION.md:396 — The decisive test, run: `review_script` + `review_title` on our own work — 2026-08-24 — Phase 2 of the harvest plan. Fed the Alicia-format script (narration only,
+- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:18 — Current state — what actually governs production — Consolidated 2026-08-28. Where this section and anything below it
+- docs/content-video-engine/37-TTS-DELIVERY-STANDARDS.md:518 — 20. THE TEMPO FIELD - one choreography across script AND video (operator-approved 2026-08-30) — The realization (obvious only in hindsight, and only reachable through
+- docs/content-video-engine/CAPABILITIES.md:70 — Evidence & assets — Martial Matters episode 1 (merged from p16, 2026-08-29): 192 asset files
+- docs/content-video-engine/patterns/STRENGTH-LOOP.md:108 — 7. The loop protocol — Operator rulings, 2026-08-29.
+- docs/content-video-engine/patterns/STRENGTH-LOOP.md:138 — Rewrite budget — the over-smoothing guard — Any sentence rewritten more than twice stops and goes to the operator
+- … 2 more in `docs/DOCS-TOPICS.jsonl`
+
+## quarter-billion (14)
+
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-C-PRODUCTION.md:1 — Steel and Paper — SCRIPT C (PRODUCTION TEXT) — Script B with Revision C applied. Structure, beats and the five hardest
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-E-STRENGTH-LOG.md:252 — Loop pass 6 — orphan sweep — Checked all 76 dependency-opening sentences (those beginning on a
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-G-JUDGE.md:1 — SCRIPT G — JUDGE adjudication (the rows a tool cannot verdict) — Adjudicated 2026-09-03 against the annotated script, the recorded take's word
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-G-JUDGE.md:55 — J04 — context-dump ban: abstractions cashed within one sentence — **WARN** — The P2 catalyst passes cleanly: *"Every transformative technology
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-G-JUDGE.md:92 — J07 — P2 A/V contextual mapping: plates carry the archive — **WARN** — The historical plates do exactly what doctrine asks: `world-navvy-cutting-v1`
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-G-PRODUCTION.md:1 — STEEL AND PAPER — Script G (production) — Base: Script F. Changes per REWRITE-ORDER-G. Pause marks per doc 37.
+- docs/content-video-engine/briefs/ANSWER-BRAVOS-HYPE-CYCLE.md:32 — SCRIPT A (v1 baseline — A/B test arm A) — [P1 · s01 — macro: an iron railway spike on dark wood, already rotating
+- docs/content-video-engine/briefs/ANSWER-BRAVOS-HYPE-CYCLE.md:267 — SCRIPT B — **PRODUCTION TEXT** (sentence-strength pass; won the A/B ear test) — A/B verdict (operator, 2026-08-24, by ear): three matched pairs — open,
+- docs/content-video-engine/briefs/ANSWER-BRAVOS-HYPE-CYCLE.md:456 — Strength Log (A → B, gates per SENTENCE-STRENGTH-CHECK) — | # | A (original) | Gates failed | B (final) |
+- docs/content-video-engine/SCRIPT-CONTEXT-COMBINED.md:191 — VOICE PACK — portable brand voice by exemplar — Third portable file, loaded with `DOCTRINE-CORE.md` and
+- docs/content-video-engine/SCRIPT-CONTEXT-COMBINED.md:250 — 2. Approved production lines, by function — From Script B ("Steel and Paper"), which won a seed-locked A/B by ear
+- docs/content-video-engine/SCRIPT-CONTEXT-COMBINED.md:302 — 3. What the exemplars are doing (the patterns worth naming) — - Abstractions get cashed inside the sentence. Never "enormous
+- … 2 more in `docs/DOCS-TOPICS.jsonl`
+
 ## s-k (14)
 
 - content/video_engine/sources/reference_analyses/ACADEMIC_LITERATURE_DRAWING_AND_2_5D_ANIMATION_ENGINE.md:95 — 1.2 Kinematic Arc-Length Reparameterization for SVG & Canvas — Standard web animations interpolate SVG `stroke-dashoffset` linearly with clock time ($s(t) = rac{L}{T} t$), producing r
@@ -1615,22 +1957,36 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/07_academic_literature_drawing_and_2_5d_animation_engine.md:178 — Mathematical Proof of Zero Area Inversion: — $$\det(J_k(t)) = \det(R_k(t)) \cdot \det(S_k(t)) = 1 \cdot (\lambda_1 \lambda_2)^t > 0 \quad orall t \in [0, 1]$$
 - … 2 more in `docs/DOCS-TOPICS.jsonl`
 
-## sources-to-verify (14)
+## sold-out (14)
 
-- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1103 — 9.11 Rebuild source charts — do not extract frames (operator, 2026-08-25) — Operator ruling, superseding the clip-extraction workflow in 9.10:
-  cited by: docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:18
-- docs/content-video-engine/53-THE-STICKMAN-LANE.md:310 — 53.9 A third prompt — and it contradicts §53.3 — Source: `Untitled document (1).md`, the "Stickman Explainer Engine". Better engineered than
-  cited by: docs/content-video-engine/53-THE-STICKMAN-LANE.md:394, docs/content-video-engine/BACKLOG.md:279, docs/content-video-engine/BACKLOG.md:331, docs/content-video-engine/BACKLOG.md:366
-- docs/content-video-engine/53-THE-STICKMAN-LANE.md:315 — The contradiction: Omni Flash wants prose, not fields — > *"Omni Flash does NOT understand templated prompts. It ignores or mangles section
-- docs/content-video-engine/54-GOOGLE-FLOW-OMNI-NANO-BANANA-PRODUCTION-RESEARCH.md:1 — 54 — Google Flow Production Research: Gemini Omni 1.1 Flash & Nano Banana Pro — Title: Production Optimization, Prompt Engineering, Multimodal Conditioning, and Responsive Composition for Google Flow
-- docs/content-video-engine/BACKLOG.md:366 — Explorations — what we still cannot answer — Landed 2026-09-04 from the research agent: [54](54-GOOGLE-FLOW-OMNI-NANO-BANANA-PRODUCTION-RESEARCH.md)
-- docs/content-video-engine/briefs/RESEARCH-BRIEF-animation-craft.md:53 — 2. Two kinds of pass — and which contract binds — This brief can be run two ways, and confusing them is what broke pass 1.
-- docs/content-video-engine/briefs/RESEARCH-BRIEF-animation-craft.md:84 — 2.2 The output contract — Binding on a research pass; binding on a filter pass only for material the source
-- docs/content-video-engine/briefs/STEEL-AND-PAPER-REVISION-C.md:1 — Steel and Paper — Revision C — Script B adapted to the rules established 2026-08-25 → 08-28. Structure,
-- docs/content-video-engine/briefs/STEEL-AND-PAPER-REVISION-C.md:13 — 1. MANDATORY — facts
-- docs/content-video-engine/briefs/STEEL-AND-PAPER-REVISION-C.md:36 — 1c. Microsoft — CUT ENTIRELY — Cut: "Microsoft now rations AI tools inside its own walls — the bills
-- docs/content-video-engine/RESEARCH-INDEX.md:200 — `06_unified_ledger_drawing_engine_and_comfy_spec.md` — 21 headings — | heading | disposition |
-- docs/content-video-engine/SCRIPT-CONTEXT-COMBINED.md:163 — PRODUCTION AWARENESS — Narration is synthesized: numbers as spoken words, exact numerals on
+- content/video_engine/projects/systems-and-blowups/EPISODE-SEEDS.md:1 — EPISODE SEEDS — banked hooks and mechanisms (operator, 2026-08-30)
+- content/video_engine/projects/systems-and-blowups/EPISODE-SEEDS.md:17 — The steel→paper lag, measured (memory/Korea episode spine) — From the ledger's own customs series: physics led paper by ~36 months.
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/evidence/EVIDENCE-DOSSIER.md:195 — E. The tell — memory — E1 — Memory is sold out and prices are climbing hard. VERIFIED, and
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-E-EXTERNAL-REVIEW.md:1 — Script E — external review — Two independent readings, deliberately outside our own doc set.
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-E-EXTERNAL-REVIEW.md:60 — 2. Independent frameworks — classical rhetoric, Toulmin, Monroe — None of these are in our doc set. All three are standard outside it.
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-E-EXTERNAL-REVIEW.md:80 — 2b. Toulmin — argument integrity of the central claim — | Element | Present? |
+- docs/content-video-engine/briefs/ANSWER-BRAVOS-HYPE-CYCLE.md:1 — Answer Script — "Steel and Paper" (response to Bravos: "History is About to Be Made") — First full production run of the script-pattern kit (P1→P6 ledger chain),
+- docs/content-video-engine/briefs/ANSWER-BRAVOS-HYPE-CYCLE.md:267 — SCRIPT B — **PRODUCTION TEXT** (sentence-strength pass; won the A/B ear test) — A/B verdict (operator, 2026-08-24, by ear): three matched pairs — open,
+- docs/content-video-engine/briefs/ANSWER-BRAVOS-HYPE-CYCLE.md:519 — Sources block (production gate) — | Claim | Source | Status |
+- docs/content-video-engine/briefs/STEEL-AND-PAPER-REVISION-C.md:96 — 3. UPGRADE — the tell becomes an instrument — The tell is the channel's standing audit and now has real apparatus
+- docs/content-video-engine/SCRIPT-CONTEXT-COMBINED.md:191 — VOICE PACK — portable brand voice by exemplar — Third portable file, loaded with `DOCTRINE-CORE.md` and
+- docs/content-video-engine/SCRIPT-CONTEXT-COMBINED.md:250 — 2. Approved production lines, by function — From Script B ("Steel and Paper"), which won a seed-locked A/B by ear
+- … 2 more in `docs/DOCS-TOPICS.jsonl`
+
+## sovereign-memory-infrastructure (14)
+
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:431 — S01 · The Memory Chokepoint — Opening source plate framing memory as the strategic bottleneck in sovereign compute infrastructure.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:437 — S02 · Compute Has Crossed the Rubicon — Source plate contrasting legacy IT operating expense with sovereign infrastructure capital expense.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:443 — S03 · The Nine-Layer Compute Stack — Source mechanism plate mapping accelerator silicon, HBM, thermal management, packaging, and power layers.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:449 — S04 · Hitting the Physical Limits of AI — Source plate showing compute throughput, interconnect, and memory-bandwidth walls in scaled AI systems.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:455 — S05 · The Geographic Monopoly — Source map showing the geographic concentration of advanced memory and packaging supply chains.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:461 — S06 · Financial Physics: S&P 500 versus Sovereign Scalers — Source comparison of the S&P 500 allocator and the capital requirements of strategic memory infrastructure.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:467 — S07 · The Accretive Burn Framework — Source framework separating incremental return, backlog-to-burn conversion, and capital-growth metrics.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:473 — S08 · CapEx Mechanics of the Memory Giants — Source plate comparing capital expenditure and manufacturing posture across Micron, Samsung, and SK hynix.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:479 — S09 · The Structural Re-Rating Cycle — Source cycle diagram showing how memory technology, physical capacity, and earnings can drive a structural re-rating.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:485 — S10 · Trend One: Reshoring versus Sovereign Stacks — Source supply-chain map contrasting domestic reshoring with integrated sovereign AI stacks.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:491 — S11 · Trend Two: The Advanced Packaging Bottleneck — Source mechanism plate showing advanced packaging as the critical interface between HBM stacks and AI logic.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:497 — S12 · Trend Three: Co-Packaged Optics — Source mechanism plate showing the optical interconnect wall and the proposed co-packaged optics response.
 - … 2 more in `docs/DOCS-TOPICS.jsonl`
 
 ## spatio-temporal (14)
@@ -1665,6 +2021,22 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:489 — D3: Saliency Hierarchy & Mayer's Spatial Contiguity [Tier 1 Cognitive Science — CLOSED] — - Visual priority order: Kinetic Motion ($40\text{--}80\text{ms}$) $\to$ Luminance Contrast ($90\text{--}140\text{ms}$)
 - … 2 more in `docs/DOCS-TOPICS.jsonl`
 
+## take-or-pay (14)
+
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-stealth-wealth-proof-v1/source/narration.locked.md:1 — P24 Narration Lock — - Proof: `finance-stealth-wealth-proof-v1`
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-stealth-wealth-proof-v1/source/narration.locked.md:10 — Render transcript window — The market may be labeling the wrong bubble. AI memory stocks have gone vertical and the earnings numbers look almost fa
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-whiteboard-asset-blend-proof-v1/source/narration.locked.md:1 — P24 Narration Lock — - Proof: `finance-stealth-wealth-proof-v1`
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-whiteboard-asset-blend-proof-v1/source/narration.locked.md:10 — Render transcript window — The market may be labeling the wrong bubble. AI memory stocks have gone vertical and the earnings numbers look almost fa
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-whiteboard-code-drawn-proof-v1/source/narration.locked.md:1 — P24 Narration Lock — - Proof: `finance-stealth-wealth-proof-v1`
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-whiteboard-code-drawn-proof-v1/source/narration.locked.md:10 — Render transcript window — The market may be labeling the wrong bubble. AI memory stocks have gone vertical and the earnings numbers look almost fa
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-whiteboard-deck-asset-proof-v1/source/narration.locked.md:1 — P24 Narration Lock — - Proof: `finance-stealth-wealth-proof-v1`
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-whiteboard-deck-asset-proof-v1/source/narration.locked.md:10 — Render transcript window — The market may be labeling the wrong bubble. AI memory stocks have gone vertical and the earnings numbers look almost fa
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-whiteboard-world-blend-proof-v1/source/narration.locked.md:1 — P24 Narration Lock — - Proof: `finance-stealth-wealth-proof-v1`
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-whiteboard-world-blend-proof-v1/source/narration.locked.md:10 — Render transcript window — The market may be labeling the wrong bubble. AI memory stocks have gone vertical and the earnings numbers look almost fa
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-world-plate-evidence-rail-proof-v1/source/narration.locked.md:1 — P24 Narration Lock — - Proof: `finance-stealth-wealth-proof-v1`
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-world-plate-evidence-rail-proof-v1/source/narration.locked.md:10 — Render transcript window — The market may be labeling the wrong bubble. AI memory stocks have gone vertical and the earnings numbers look almost fa
+- … 2 more in `docs/DOCS-TOPICS.jsonl`
+
 ## three-quarter (14)
 
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/09_2d_and_2_5d_body_animation_object_handling_and_grounding.md:214 — 2.6 Pseudo-3D Head Turns & Facial Cylindrical Projection — In a 2.5D explainer engine, rendering characters as full 3D polygon models looks sterile and violates hand-drawn brand d
@@ -1675,7 +2047,7 @@ at most 12 sections each - the JSONL holds every one.
   cited by: docs/content-video-engine/briefs/ALICIA-FORMAT-RECREATION-BRIEF.md:1
 - docs/content-video-engine/21-ART-STYLE-REFERENCE-REVIEW.md:15 — The finding that matters — None of the reference channels animate characters. No articulated limbs, no rigs, no
 - docs/content-video-engine/50-THE-PHONE-IS-THE-SCREEN.md:1 — 50 — The phone is the screen: ep1's real analytics, and what they say — Operator-supplied YouTube analytics for ep1, 2026-09-04. This is ground truth, not
-  cited by: docs/content-video-engine/49-GENERATIVE-VIDEO-AND-THE-VERTICAL-STAGE.md:52, docs/content-video-engine/51-THE-SHORTS-FORMAT.md:1, docs/content-video-engine/BACKLOG.md:207, docs/content-video-engine/BACKLOG.md:225, docs/content-video-engine/BACKLOG.md:279
+  cited by: content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-90S.claude.md:10, docs/content-video-engine/49-GENERATIVE-VIDEO-AND-THE-VERTICAL-STAGE.md:52, docs/content-video-engine/51-THE-SHORTS-FORMAT.md:1, docs/content-video-engine/BACKLOG.md:207, docs/content-video-engine/BACKLOG.md:225, docs/content-video-engine/BACKLOG.md:279
 - docs/content-video-engine/50-THE-PHONE-IS-THE-SCREEN.md:30 — 50.2 The finding: our type is illegible on a phone — 75.2 % of watch time is a phone. Our stage is 1920 px wide. On a phone in portrait —
   cited by: docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:62, docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:208, docs/content-video-engine/50-THE-PHONE-IS-THE-SCREEN.md:86, docs/content-video-engine/51-THE-SHORTS-FORMAT.md:15, docs/content-video-engine/51-THE-SHORTS-FORMAT.md:184, docs/content-video-engine/BACKLOG.md:97, +1 more
 - docs/content-video-engine/53-THE-STICKMAN-LANE.md:387 — 53.10 Two Mikes, and the character pack needs upgrading — Operator, 2026-09-04:
@@ -1702,6 +2074,22 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/54-GOOGLE-FLOW-OMNI-NANO-BANANA-PRODUCTION-RESEARCH.md:171 — 5.1 The Universal Clean Canvas (Mobile UI Safe Zones) — Mobile platforms (TikTok, YouTube Shorts, Instagram Reels) overlay UI chrome that obstructs up to 59.1% of a 9:16 vertic
 - … 2 more in `docs/DOCS-TOPICS.jsonl`
 
+## voice-pack (14)
+
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-C-PRODUCTION.md:1 — Steel and Paper — SCRIPT C (PRODUCTION TEXT) — Script B with Revision C applied. Structure, beats and the five hardest
+- docs/content-video-engine/28-AOY-MCP-EVALUATION.md:536 — `review_script` on Steel and Paper — measured (2026-08-29) — Submitted Script D (1,954 words, 11m 40s) to `review_script`. Confirms the
+- docs/content-video-engine/40-PROCESS-AS-EVIDENCE.md:1 — 40 — Process as Evidence — Operator ruling, 2026-08-25:
+- docs/content-video-engine/40-PROCESS-AS-EVIDENCE.md:34 — 2. The audit beat — the narration device — A five-step unit, 20–35 seconds. It is an anecdote with a reversal,
+- docs/content-video-engine/briefs/RESEARCH-BRIEF-animation-craft.md:1 — Research brief — what the drawing engine's builder does not know — For the Gemini deep-research pass, 2026-09-04. Same process as speech (docs 32–37)
+- docs/content-video-engine/briefs/RESEARCH-BRIEF-animation-craft.md:53 — 2. Two kinds of pass — and which contract binds — This brief can be run two ways, and confusing them is what broke pass 1.
+- docs/content-video-engine/briefs/RESEARCH-BRIEF-animation-craft.md:84 — 2.2 The output contract — Binding on a research pass; binding on a filter pass only for material the source
+- docs/content-video-engine/briefs/RESEARCH-BRIEF-animation-craft.md:201 — 4. What the extraction will produce — Same as the speech pass. Research → a numbered doc (42-ANIMATION-TIMING or similar)
+- docs/content-video-engine/briefs/STEEL-AND-PAPER-REVISION-C.md:63 — 2. ADD — the audit beat (doc 40) — Goes in P2, immediately after the GDP-share claim, in the steelman.
+- docs/content-video-engine/briefs/STEEL-AND-PAPER-REVISION-C.md:134 — 4. UNCHANGED — do not touch — The microhook, the promise, the reversal, the thesis, the ring echo and
+- docs/content-video-engine/briefs/STEEL-AND-PAPER-UNITS-D.md:1 — Steel and Paper — the two extension units (Revision D) — Two P3/P5 pattern units extending Script C. Units go on both sides of
+- docs/content-video-engine/briefs/STEEL-AND-PAPER-UNITS-D.md:36 — 1. P3 — THE DEBT UNIT — Placement: after the existing P3 unit, before *"And that's where most
+- … 2 more in `docs/DOCS-TOPICS.jsonl`
+
 ## wall-clock (14)
 
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/02_drawing_engine_and_transforms_research.md:15 — Architecture Diagram & The 4 Core Mechanical Pillars
@@ -1717,6 +2105,23 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/RESEARCH-INDEX.md:86 — Full disposition table
 - docs/content-video-engine/RESEARCH-INDEX.md:117 — `02_drawing_engine_and_transforms_research.md` — 29 headings — | heading | disposition |
 - … 2 more in `docs/DOCS-TOPICS.jsonl`
+
+## 0.18 (13)
+
+- content/video_engine/projects/systems-and-blowups/registration/WORK-ORDER.md:89 — 5. `figures[]` — verbatim numerals — Extract every printed number that states a fact. Exclude page numbers, axis
+- content/video_engine/sources/reference_analyses/COMFYUI_PARALLAX_TECHNICAL_STANDARDS_RESEARCH.md:27 — 1. Technical Anatomy of Our Current ComfyUI Stack — Our current pipeline executes the following graph in ComfyUI:
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/05_comfyui_parallax_technical_standards.md:27 — 1. Technical Anatomy of Our Current ComfyUI Stack — Our current pipeline executes the following graph in ComfyUI:
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/06_unified_ledger_drawing_engine_and_comfy_spec.md:73 — 2.4 Calibrated Dial Matrix for Engine 1 — - Model: `depth_anything_v2_vitl_fp32.safetensors` (ViT-Large in FP32; FP16 is strictly banned due to logit underflow).
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_INDEX.md:262 — 8. Calibrated Parameter Dials & Node Contracts
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_INDEX.md:264 — 8.1 Depthflow & Depth Anything v2 (Engine 1) — - Model: `depth_anything_v2_vitl_fp32.safetensors` (ViT-Large FP32; FP16 strictly banned).
+- content/video_engine/sources/reference_analyses/MASTER_RESEARCH_INDEX.md:261 — 8. Calibrated Parameter Dials & Node Contracts
+- content/video_engine/sources/reference_analyses/MASTER_RESEARCH_INDEX.md:263 — 8.1 Depthflow & Depth Anything v2 (Engine 1) — - Model: `depth_anything_v2_vitl_fp32.safetensors` (ViT-Large FP32; FP16 strictly banned).
+- content/video_engine/sources/reference_analyses/UNIFIED_LEDGER_DRAWING_ENGINE_AND_COMFY_SPEC.md:73 — 2.4 Calibrated Dial Matrix for Engine 1 — - Model: `depth_anything_v2_vitl_fp32.safetensors` (ViT-Large in FP32; FP16 is strictly banned due to logit underflow).
+- docs/content-video-engine/45-PARALLAX-AND-PLATE-MOTION.md:46 — 45.3 Our current dials, and what they should be — Read from `tools/google-flow-driver/src/parallax-runner.mjs` on 2026-09-04.
+  cited by: docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:62, docs/content-video-engine/RESEARCH-INDEX.md:35
+- docs/content-video-engine/P13-GATE-B-ARMBAR-REVIEW.md:1 — P13 Gate B Review — Armbar From Guard — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine
+- docs/content-video-engine/P13-GATE-B-ARMBAR-REVIEW.md:23 — Automated QC — `qc/report.json` is pass for duration drift, word-timing coverage, loudness,
+- … 1 more in `docs/DOCS-TOPICS.jsonl`
 
 ## ad-hoc (13)
 
@@ -1752,24 +2157,20 @@ at most 12 sections each - the JSONL holds every one.
 - docs/portable/OUTRO-CTA-PLAYBOOK.md:1 — OUTRO / CTA / END-SCREEN PLAYBOOK — portable — Source: AOY coaching base (ask_tim, 2026-08-30) reconciled against our
 - … 1 more in `docs/DOCS-TOPICS.jsonl`
 
-## drop-off (13)
+## date.now (13)
 
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/08_answers_animation_craft_brief.md:233 — A4: The Threshold of "Alive" [RE-ASK 1 ★: Audited & Answered]
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/08_answers_animation_craft_brief.md:265 — 3. Pipeline & Doctrine Status — Because no controlled study exists for our exact medium, our shipped gates represent operator-derived design doctrine:
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md:436 — 14.2 9:16 vs. 16:9 Cross-Platform Architecture & Short vs. Long Form — 1. The Universal Clean Canvas ($800 \times 1060\text{ px}$):
-- content/video_engine/sources/reference_analyses/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md:436 — 14.2 9:16 vs. 16:9 Cross-Platform Architecture & Short vs. Long Form — 1. The Universal Clean Canvas ($800 \times 1060\text{ px}$):
-- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1885 — 9.29 The OPENING MINUTE — the confirmation gap, the packaging match, and no full chart before the thesis (operator, 2026-09-03) — Ruling E24. An outside analyst's read of Steel and Paper's drop-off,
-  cited by: docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1940, docs/content-video-engine/CAPABILITIES.md:94, docs/content-video-engine/patterns/CHECK-RESPONSIBILITIES.md:101, docs/content-video-engine/patterns/phase-guides/P1.md:175, docs/content-video-engine/PIPELINE.md:18
-- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1940 — 9.30 The chart is the PROOF, not the homework — no chart held across plates (operator, 2026-09-03) — Ruling E25. The operator's own read of the analytics behind §9.29: the
-  cited by: docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1982, docs/content-video-engine/patterns/CHECK-RESPONSIBILITIES.md:101
-- docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:247 — A4: The Threshold of "Alive" [RE-ASK 1 ★: Audited & Answered]
-- docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:279 — 3. Pipeline & Doctrine Status — Because no controlled study exists for our exact medium, our shipped gates represent operator-derived design doctrine:
-- docs/content-video-engine/briefs/RESPONSE-TO-RESEARCH-PASS-1.md:85 — 4. REOPENED — four items, with acceptance criteria
-- docs/content-video-engine/briefs/RESPONSE-TO-RESEARCH-PASS-1.md:87 — RE-ASK 1 — A4, "the threshold of alive" ★ highest priority — What was wrong. The entire section rests on Mackworth 1948, cited for: "after
-- docs/portable/OPERATOR-RULINGS.md:743 — E24 — The opening minute: confirm the click, match the packaging, never open on the full chart (2026-09-03) — An outside analyst's drop-off read, checked by the operator against the
-  cited by: docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1885, docs/content-video-engine/CAPABILITIES.md:94, docs/content-video-engine/patterns/CHECK-RESPONSIBILITIES.md:101, docs/content-video-engine/patterns/phase-guides/P1.md:175, docs/content-video-engine/PIPELINE.md:18, docs/portable/OPERATOR-RULINGS.md:761, +1 more
-- docs/portable/OPERATOR-RULINGS.md:761 — E25 — The chart is the proof, not the homework (2026-09-03) — The analytics behind E24, read by the operator: the thumbnail converts at
-  cited by: content/video_engine/sources/reference_analyses/ACADEMIC_LITERATURE_DRAWING_AND_2_5D_ANIMATION_ENGINE.md:1, content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/WHAT-WE-LEARN.md:105, content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/07_academic_literature_drawing_and_2_5d_animation_engine.md:1, content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_INDEX.md:158, content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_INDEX.md:305, content/video_engine/sources/reference_analyses/MASTER_RESEARCH_INDEX.md:157, +21 more
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/edit/hyperframes-opening-v1/AGENTS.md:84 — Key Rules — 1. Every timed element needs `data-start`, `data-duration`, and `data-track-index`
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/edit/hyperframes-opening-v1/CLAUDE.md:84 — Key Rules — 1. Every timed element needs `data-start`, `data-duration`, and `data-track-index`
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/02_drawing_engine_and_transforms_research.md:15 — Architecture Diagram & The 4 Core Mechanical Pillars
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/02_drawing_engine_and_transforms_research.md:51 — Pillar 2: Deterministic Clocking & Closed-Form Spring Physics — - Video renderers do not run at real-time speeds; iterative physics loops (Euler/Verlet) or wall-clock timers (`Date.now
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/02_drawing_engine_and_transforms_research.md:116 — 2. Animation Mechanics & Deterministic Clocking
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/02_drawing_engine_and_transforms_research.md:118 — 2.1 The Deadly Flaw of Wall-Clock Animations in Headless Video — In interactive web browsers, animations rely on `requestAnimationFrame(timestamp)` or `setInterval`. If the CPU stutters
+- content/video_engine/sources/reference_analyses/DRAWING_ENGINE_ANIMATION_TRANSFORM_RESEARCH.md:15 — Architecture Diagram & The 4 Core Mechanical Pillars
+- content/video_engine/sources/reference_analyses/DRAWING_ENGINE_ANIMATION_TRANSFORM_RESEARCH.md:51 — Pillar 2: Deterministic Clocking & Closed-Form Spring Physics — - Video renderers do not run at real-time speeds; iterative physics loops (Euler/Verlet) or wall-clock timers (`Date.now
+- content/video_engine/sources/reference_analyses/DRAWING_ENGINE_ANIMATION_TRANSFORM_RESEARCH.md:116 — 2. Animation Mechanics & Deterministic Clocking
+- content/video_engine/sources/reference_analyses/DRAWING_ENGINE_ANIMATION_TRANSFORM_RESEARCH.md:118 — 2.1 The Deadly Flaw of Wall-Clock Animations in Headless Video — In interactive web browsers, animations rely on `requestAnimationFrame(timestamp)` or `setInterval`. If the CPU stutters
+- docs/research/tech/MOTION_GRAPHICS_FROM_STILL_IMAGES_BLUEPRINT.md:33 — 3. Technological & Mathematical Primary Grounding
+- docs/research/tech/MOTION_GRAPHICS_FROM_STILL_IMAGES_BLUEPRINT.md:41 — B. Frame-Deterministic React Timing — - The Remotion Frame Law: Remotion prohibits asynchronous clock dependencies (`Date.now()`, `requestAnimationFrame`). An
 - … 1 more in `docs/DOCS-TOPICS.jsonl`
 
 ## flash-hogan (13)
@@ -1805,23 +2206,6 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/patterns/phase-guides/P6.md:47 — Beat template
 - … 1 more in `docs/DOCS-TOPICS.jsonl`
 
-## hand-drawn (13)
-
-- content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/SHOT_LEDGER.md:1 — SHOT LEDGER: Frame-Accurate Pacing & Visual Species Breakdown — | Shot # | Start | End | Dur (s) | Keyframe | Classified Species | Spoken Line / Audio Beat |
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/09_2d_and_2_5d_body_animation_object_handling_and_grounding.md:214 — 2.6 Pseudo-3D Head Turns & Facial Cylindrical Projection — In a 2.5D explainer engine, rendering characters as full 3D polygon models looks sterile and violates hand-drawn brand d
-  cited by: docs/content-video-engine/BACKLOG.md:420
-- docs/content-video-engine/12-HIGGSFIELD-EXPLAINER-LEARNINGS.md:60 — Option A: orchestrate producers, keep our editor — The engine now compiles `producer_plan.v1` beside
-- docs/content-video-engine/21-ART-STYLE-REFERENCE-REVIEW.md:34 — Lane A — `cutout_history` — Reference: long-form Depression-era history explainer.
-- docs/content-video-engine/21-ART-STYLE-REFERENCE-REVIEW.md:100 — Lane D — `stick_explainer` — Two references in the same format with a ~400x view gap between them. Reviewed together on
-- docs/content-video-engine/21-ART-STYLE-REFERENCE-REVIEW.md:129 — The ceiling reference, as a spec — - Characters. True stick figures — circle head, single-weight line limbs — but with a
-- docs/content-video-engine/21-ART-STYLE-REFERENCE-REVIEW.md:196 — Register dial — The lane spans a dial rather than a single style, and the dial is set by the script, not the art:
-- docs/content-video-engine/21-ART-STYLE-REFERENCE-REVIEW.md:273 — Lane E — `parametric_stick` (Casual Finance) — Reference: Casual Finance, "The SpaceX IPO... It's Worse Than You Think", 14:52,
-- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:518 — 8.11 Do not blend a literal document (bug, 2026-08-24) — The first reveal-engine build drew nothing visible. The mask was correct —
-- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:720 — 8.17 The hand is retired from this lane (operator decision, 2026-08-24) — After building the reveal engine correctly (8.10-8.16), the hand-drawn
-- docs/content-video-engine/briefs/RESEARCH-BRIEF-animation-craft.md:173 — Track C — the drawing-engine builder — | # | question | why it matters here |
-- docs/content-video-engine/FINDING-the-animation-math-and-what-it-changes.md:1 — The animation math, and what each piece changes in our code — 2026-09-04 — From `07_academic_literature_drawing_and_2_5d_animation_engine.md`, read in full after the
-- … 1 more in `docs/DOCS-TOPICS.jsonl`
-
 ## headslot (13)
 
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/02_drawing_engine_and_transforms_research.md:61 — Pillar 4: Modular Vector Cutout Rigging (The Host Solution) — - Skeletal mesh deformation produces rubbery distortions; generating full-body images per frame causes severe AI face/st
@@ -1854,37 +2238,39 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:74 — 4. Persistent Cast & Metaphorical Physical Props — - No Random AI Hallucinations: Wealth Logic uses a single consistent diegetic character (a calm, smart analyst in a whit
 - … 1 more in `docs/DOCS-TOPICS.jsonl`
 
-## re-derive (13)
+## lower-third (13)
 
-- docs/content-video-engine/22-AUDIO-FIX-RUNBOOK.md:110 — Procedure — 1. Obtain the stem (see blocker above). Verify it before use:
-- docs/content-video-engine/33-VOICE-PROFILE.md:1 — 33 — Voice Profile — The reusable artefact. Scripts and work orders reference this file by
-  cited by: docs/content-video-engine/34-AOY-SCRIPT-WRITER-STUDY.md:344, docs/content-video-engine/34-AOY-SCRIPT-WRITER-STUDY.md:399, docs/content-video-engine/38-SCRIPT-ARCHITECTURE.md:19, docs/content-video-engine/briefs/ALICIA-SCRIPT-PERSONA-PASS.md:106, docs/portable/OPERATOR-RULINGS.md:810
-- docs/content-video-engine/33-VOICE-PROFILE.md:152 — Maintenance — Widen the corpus after three or four more approved scripts and re-derive —
-- docs/content-video-engine/36-WRITER-PERSONA.md:108 — 3. The core theses — the lens every script argues through — These are the persona's standing claims. Scripts don't re-derive them; they
-- docs/content-video-engine/briefs/RESEARCH-BRIEF-animation-craft.md:173 — Track C — the drawing-engine builder — | # | question | why it matters here |
-- docs/content-video-engine/patterns/CHECK-RESPONSIBILITIES.md:1 — CHECK RESPONSIBILITIES — what the tools decide, what the agent decides — The kit has four tool-enforced checkers and one reading-enforced loop. This
-- docs/content-video-engine/patterns/CHECK-RESPONSIBILITIES.md:42 — 1. The rules — R1 — A tool's mechanical verdict is final. The agent does not re-derive
-- docs/content-video-engine/SCRIPT-CONTEXT-COMBINED.md:390 — 7. Maintenance — This pack is downstream of evidence, never a substitute for it. When the
-- docs/portable/MOTION-GRAMMAR.md:1 — MOTION GRAMMAR — narration-locked choreography, portable — Model-agnostic, renderer-agnostic (vanilla JS/CSS, GSAP, Remotion —
-- docs/portable/MOTION-GRAMMAR.md:9 — The core discovery — The dance is the focus hand-off, not the entrance. Elements that
-- docs/portable/VOICE-PACK.md:230 — 7. Maintenance — Downstream of evidence, never a substitute for it. A rejected line goes
-- docs/runbooks/HANDOFF-ASTRA-GEMINI-2026-09-05.md:1 — Hand-off note to the Astra plan and the Gemini protocol (2026-09-05) — From the Claude lane of `Outreach Program`, after a day of measurement. Paste-ready. Three sources:
+- content/video_engine/projects/systems-and-blowups/learning/world-plate-evidence-caption-grammar.v1.md:1 — World Plate, Evidence, and Caption Grammar v1 — Status: accepted design direction
+- content/video_engine/projects/systems-and-blowups/learning/world-plate-evidence-caption-grammar.v1.md:13 — Production rules — 1. Keep the selected world plate full-frame and legible as the hero.
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/edit/hyperframes-opening-v1/AGENTS.md:1 — HyperFrames Composition Project
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/edit/hyperframes-opening-v1/AGENTS.md:3 — Skills — USE THESE FIRST — Always invoke the relevant skill before writing or modifying compositions. Skills encode framework-specific patterns (e.
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/edit/hyperframes-opening-v1/CLAUDE.md:1 — HyperFrames Composition Project
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/edit/hyperframes-opening-v1/CLAUDE.md:3 — Skills — USE THESE FIRST — Always invoke the relevant skill before writing or modifying compositions. Skills encode framework-specific patterns (e.
+- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:231 — Part 5 — Captions (Alicia rhythm under the caption-grammar doc) — - One fixed lower-third anchor. Evidence roams by semantic slot; captions
+- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1359 — 9.25 The screen never goes still; captions take the stage (operator, 2026-09-02) — Ruling E21. Steel and Paper shipped with 23% of its runtime in stretches
+  cited by: docs/content-video-engine/CAPABILITIES.md:14, docs/content-video-engine/patterns/SCRIPT-PATTERN-KIT.md:78, docs/content-video-engine/PIPELINE.md:18, docs/portable/OPERATOR-RULINGS.md:557
+- docs/content-video-engine/51-THE-SHORTS-FORMAT.md:130 — 51.8 Motion is not animation — and the gate always knew it — Operator, 2026-09-04:
+  cited by: docs/content-video-engine/52-CONSTRUCT-DONT-INHERIT.md:120, docs/content-video-engine/52-CONSTRUCT-DONT-INHERIT.md:167, docs/content-video-engine/BACKLOG.md:97
+- docs/content-video-engine/briefs/RESEARCH-BRIEF-animation-craft.md:184 — Track D — placement (the "where" question) — | # | question | why it matters here |
+- docs/content-video-engine/PIPELINE.md:109 — Captions — doc 29 Part 5, not your own design — - One fixed lower-third anchor. Evidence roams; the caption does not.
+- docs/portable/OPERATOR-RULINGS.md:557 — E21 — The screen never goes still; captions ARE the motion when nothing else moves (2026-09-02) — Operator, watching Steel and Paper after a week of flat performance: "we
+  cited by: content/video_engine/projects/systems-and-blowups/korea-memory-toll/SHOT-TABLE-90S.md:30, content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-90S.claude.md:36, content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-90S.claude.md:56, content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-90S.md:31, content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/08_answers_animation_craft_brief.md:265, docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1359, +18 more
 - … 1 more in `docs/DOCS-TOPICS.jsonl`
 
-## re-run (13)
+## multi-year (13)
 
-- docs/content-video-engine/37-TTS-DELIVERY-STANDARDS.md:633 — 23. Micro-repair - the editor excises what the provider stutters (operator, 2026-08-30) — Amends the old splice ban. When the provider RENDERS a sub-word defect
-- docs/content-video-engine/39-EVIDENCE-CHART-SYSTEM.md:201 — 8. Checks before a document ships — - [ ] Form chosen by §6 — and it is not a chart when it should be a tile
-- docs/content-video-engine/39-EVIDENCE-CHART-SYSTEM.md:213 — 9. Provenance — Palette and checks produced with the `dataviz` skill's validator
-- docs/content-video-engine/briefs/STEEL-AND-PAPER-REVISION-C.md:172 — 6. Order of operations — 1. Apply §1–§3 to the script text.
-- docs/content-video-engine/patterns/SENTENCE-STRENGTH-CHECK.md:1 — SENTENCE STRENGTH CHECK — the line-by-line gate — A per-sentence pass run AFTER a script conforms structurally and BEFORE it
-- docs/content-video-engine/patterns/SENTENCE-STRENGTH-CHECK.md:9 — Procedure — 1. Extract narration only (no stage directions, no annotations).
-- docs/research/2026-07-28-accretive-revenue-assessment.md:1 — Accretive Revenue: Research Report & Strategic Assessment — Generated 2026-07-28 · Sources: ~90 across three parallel research streams + repo audit · Confidence: High on market evi
-- docs/research/2026-07-28-accretive-revenue-assessment.md:7 — Executive Summary — You have built a complete, working revenue machine and never switched it on. Plans P3–P12 are
-- docs/research/2026-07-28-accretive-revenue-assessment.md:149 — 2.5 Pricing structure — two findings that should set the model — Retention is a function of price point, not product quality. Below $10/month ARPA, even
-- docs/research/2026-07-28-accretive-revenue-assessment.md:269 — 5. Ranked paths — | # | Path | Time to cash | Accretion | Evidence strength |
-- docs/research/2026-07-28-accretive-revenue-assessment.md:287 — 6. 30 / 60 / 90 — Days 1–30 — switch the machine on.
-- docs/runbooks/HEADLESS_CLAIM_RESUME.md:1 — Runbook — Headless Claim Resume — What runs when a generation delivery lands, and how to drive the loop end to
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-stealth-wealth-proof-v1/source/narration.locked.md:1 — P24 Narration Lock — - Proof: `finance-stealth-wealth-proof-v1`
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-stealth-wealth-proof-v1/source/narration.locked.md:10 — Render transcript window — The market may be labeling the wrong bubble. AI memory stocks have gone vertical and the earnings numbers look almost fa
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-whiteboard-asset-blend-proof-v1/source/narration.locked.md:1 — P24 Narration Lock — - Proof: `finance-stealth-wealth-proof-v1`
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-whiteboard-asset-blend-proof-v1/source/narration.locked.md:10 — Render transcript window — The market may be labeling the wrong bubble. AI memory stocks have gone vertical and the earnings numbers look almost fa
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-whiteboard-code-drawn-proof-v1/source/narration.locked.md:1 — P24 Narration Lock — - Proof: `finance-stealth-wealth-proof-v1`
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-whiteboard-code-drawn-proof-v1/source/narration.locked.md:10 — Render transcript window — The market may be labeling the wrong bubble. AI memory stocks have gone vertical and the earnings numbers look almost fa
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-whiteboard-deck-asset-proof-v1/source/narration.locked.md:1 — P24 Narration Lock — - Proof: `finance-stealth-wealth-proof-v1`
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-whiteboard-deck-asset-proof-v1/source/narration.locked.md:10 — Render transcript window — The market may be labeling the wrong bubble. AI memory stocks have gone vertical and the earnings numbers look almost fa
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-whiteboard-world-blend-proof-v1/source/narration.locked.md:1 — P24 Narration Lock — - Proof: `finance-stealth-wealth-proof-v1`
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-whiteboard-world-blend-proof-v1/source/narration.locked.md:10 — Render transcript window — The market may be labeling the wrong bubble. AI memory stocks have gone vertical and the earnings numbers look almost fa
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-world-plate-evidence-rail-proof-v1/source/narration.locked.md:1 — P24 Narration Lock — - Proof: `finance-stealth-wealth-proof-v1`
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-world-plate-evidence-rail-proof-v1/source/narration.locked.md:10 — Render transcript window — The market may be labeling the wrong bubble. AI memory stocks have gone vertical and the earnings numbers look almost fa
 - … 1 more in `docs/DOCS-TOPICS.jsonl`
 
 ## render-eligible (13)
@@ -1936,6 +2322,22 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/FINDING-what-the-bundle-already-answered.md:13 — 1. B5 is answered from our own data — and it kills my hypothesis — `04_shot_ledger_100_cuts.md` is a frame-accurate 100-shot ledger of the reference
 - … 1 more in `docs/DOCS-TOPICS.jsonl`
 
+## target-date (13)
+
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-C-PRODUCTION.md:1 — Steel and Paper — SCRIPT C (PRODUCTION TEXT) — Script B with Revision C applied. Structure, beats and the five hardest
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-E-LEDGER.md:1 — Steel and Paper — Script E ledger — The determinism state the kit requires travelling with the script: ring
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-E-LEDGER.md:12 — Ring token — the iron spike — The first token planted is the last one closed. LIFO holds.
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-E-STRENGTH-LOG.md:243 — Loop pass 4 — found by reading the assembled text — My S113 split orphaned the next sentence: "And calls it the market."
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-G-STRENGTH-LOG.md:1 — Script G — strength log (the fixpoint audit trail) — Protocol: STRENGTH-LOOP.md. Round 1 walked every sentence (225); the
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-G-STRENGTH-LOG.md:42 — Licensed exceptions (claimed, not assumed) — - "Different voice, same two lines, same warning: AI is 1845 again." —
+- docs/content-video-engine/briefs/ANSWER-BRAVOS-HYPE-CYCLE.md:267 — SCRIPT B — **PRODUCTION TEXT** (sentence-strength pass; won the A/B ear test) — A/B verdict (operator, 2026-08-24, by ear): three matched pairs — open,
+- docs/content-video-engine/briefs/ANSWER-BRAVOS-HYPE-CYCLE.md:456 — Strength Log (A → B, gates per SENTENCE-STRENGTH-CHECK) — | # | A (original) | Gates failed | B (final) |
+- docs/content-video-engine/briefs/ANSWER-BRAVOS-IMAGE-PACK.md:30 — The plates
+- docs/content-video-engine/briefs/ANSWER-BRAVOS-IMAGE-PACK.md:92 — P-08 · s04 — the modern certificate (the index as paper) — *Duty: lands on "ETF, target-date, 'the market'"; same framing family as
+- docs/content-video-engine/patterns/STRENGTH-LOOP.md:108 — 7. The loop protocol — Operator rulings, 2026-08-29.
+- docs/content-video-engine/patterns/STRENGTH-LOOP.md:138 — Rewrite budget — the over-smoothing guard — Any sentence rewritten more than twice stops and goes to the operator
+- … 1 more in `docs/DOCS-TOPICS.jsonl`
+
 ## ten-second (13)
 
 - docs/content-video-engine/12-HIGGSFIELD-EXPLAINER-LEARNINGS.md:1 — Higgsfield Explainer Learnings and Producer Orchestration — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine
@@ -1950,6 +2352,25 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/16-EDITORIAL-MOTION-SYSTEM.md:1 — Editorial Motion System — > STATUS: PARTIALLY SUPERSEDED. The production pattern is now the scene-evidence lane in 29. Sections that 29 does not r
 - docs/content-video-engine/16-EDITORIAL-MOTION-SYSTEM.md:22 — 2. Timing authority — The continuous, hash-matched canonical narration and its word timings are the
 - docs/content-video-engine/17-TIMESTAMPED-PLATE-PRODUCTION.md:99 — 3. Primary plate rule — For this lane:
+- … 1 more in `docs/DOCS-TOPICS.jsonl`
+
+## third-party (13)
+
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-E-STRENGTH-LOG.md:203 — Loop pass 5 — the hook, after the operator reframed the episode — Operator: *"this isn't truly a historical parallel episode, it's a real-time
+- docs/content-video-engine/00-BRAINSTORM-AND-DECISIONS.md:153 — 3.11 Stick figures → anchorable 2D technique visuals — The Armbar Gate-B review exposed a visual-system failure: generic stick figures collapse when
+  cited by: docs/content-video-engine/09-YOUTUBE-REFERENCE-PACK-LEARNINGS.md:314
+- docs/content-video-engine/08-TOOLING-ALTERNATIVES.md:1 — Tooling Alternatives — Higgsfield AI, Gemini Omni, and Where They Fit — *Date: 2026-07-28 · Method: dedicated research stream (official docs + pricing pages preferred;
+- docs/content-video-engine/08-TOOLING-ALTERNATIVES.md:38 — 3. Higgsfield: mostly avoid, one thing to monitor seriously — What it is (mid-2026): a social-first AI video suite aggregating 15+ frontier models (Sora 2,
+- docs/content-video-engine/08-TOOLING-ALTERNATIVES.md:88 — 6. Monitor list — Higgsfield Explainer REST/API + per-video cost · Gemini Omni Pro (length/res) · Gemini TTS
+- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1 — 29 — Evidence Motion Standards (Gemini findings + v1 momentum + linked choreography) — Status: accepted working standard, 2026-08-24
+  cited by: content/video_engine/projects/systems-and-blowups/korea-memory-toll/SHOT-TABLE-90S.md:1, content/video_engine/projects/systems-and-blowups/korea-memory-toll/SHOT-TABLE-90S.md:30, content/video_engine/projects/systems-and-blowups/style-spine.woodblock-vox-newsprint.v2.md:39, content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-90S.claude.md:56, content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-90S.md:31, content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/REPORT.md:1, +30 more
+- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:18 — Current state — what actually governs production — Consolidated 2026-08-28. Where this section and anything below it
+- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1103 — 9.11 Rebuild source charts — do not extract frames (operator, 2026-08-25) — Operator ruling, superseding the clip-extraction workflow in 9.10:
+  cited by: content/video_engine/projects/systems-and-blowups/steel-and-paper/evidence/EVIDENCE-DOSSIER.md:1, docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:18
+- docs/content-video-engine/34-AOY-SCRIPT-WRITER-STUDY.md:57 — 3. Experiment design — Source material: five caption sets the operator pulled, cleaned locally to
+- docs/product-revenue-contract.md:179 — Demand-conversion evidence modes — `demand-conversion.v1` is a separate commercial evidence contract. It never
+- docs/research/2026-08-22-agent-design-tooling-assessment.md:1 — Agent-Native Design Tooling: Buy, Borrow, or Build — Status: current
+- docs/research/2026-08-22-agent-design-tooling-assessment.md:47 — Tool-by-tool
 - … 1 more in `docs/DOCS-TOPICS.jsonl`
 
 ## tiling-mode (13)
@@ -1985,38 +2406,6 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/patterns/phase-guides/P5.md:29 — Inputs — `{TOPIC}` `{VOICE}` `{PERSONA}` `{EVIDENCE}` `{TELL}` (variable +
 - docs/content-video-engine/patterns/phase-guides/P6.md:1 — P6 — THE CLOSE — > Self-contained generation guide. Consume ONLY: the INJECTION block, the
 - … 1 more in `docs/DOCS-TOPICS.jsonl`
-
-## voice-pack (13)
-
-- docs/content-video-engine/28-AOY-MCP-EVALUATION.md:536 — `review_script` on Steel and Paper — measured (2026-08-29) — Submitted Script D (1,954 words, 11m 40s) to `review_script`. Confirms the
-- docs/content-video-engine/40-PROCESS-AS-EVIDENCE.md:1 — 40 — Process as Evidence — Operator ruling, 2026-08-25:
-- docs/content-video-engine/40-PROCESS-AS-EVIDENCE.md:34 — 2. The audit beat — the narration device — A five-step unit, 20–35 seconds. It is an anecdote with a reversal,
-- docs/content-video-engine/briefs/RESEARCH-BRIEF-animation-craft.md:1 — Research brief — what the drawing engine's builder does not know — For the Gemini deep-research pass, 2026-09-04. Same process as speech (docs 32–37)
-- docs/content-video-engine/briefs/RESEARCH-BRIEF-animation-craft.md:53 — 2. Two kinds of pass — and which contract binds — This brief can be run two ways, and confusing them is what broke pass 1.
-- docs/content-video-engine/briefs/RESEARCH-BRIEF-animation-craft.md:84 — 2.2 The output contract — Binding on a research pass; binding on a filter pass only for material the source
-- docs/content-video-engine/briefs/RESEARCH-BRIEF-animation-craft.md:201 — 4. What the extraction will produce — Same as the speech pass. Research → a numbered doc (42-ANIMATION-TIMING or similar)
-- docs/content-video-engine/briefs/STEEL-AND-PAPER-REVISION-C.md:63 — 2. ADD — the audit beat (doc 40) — Goes in P2, immediately after the GDP-share claim, in the steelman.
-- docs/content-video-engine/briefs/STEEL-AND-PAPER-REVISION-C.md:134 — 4. UNCHANGED — do not touch — The microhook, the promise, the reversal, the thesis, the ring echo and
-- docs/content-video-engine/briefs/STEEL-AND-PAPER-UNITS-D.md:1 — Steel and Paper — the two extension units (Revision D) — Two P3/P5 pattern units extending Script C. Units go on both sides of
-- docs/content-video-engine/briefs/STEEL-AND-PAPER-UNITS-D.md:36 — 1. P3 — THE DEBT UNIT — Placement: after the existing P3 unit, before *"And that's where most
-- docs/content-video-engine/patterns/STRENGTH-LOOP.md:1 — THE STRENGTH LOOP — gates at every scale, and across them — `SENTENCE-STRENGTH-CHECK.md` gates L0. The phase guides gate L4. The duty
-- … 1 more in `docs/DOCS-TOPICS.jsonl`
-
-## 0.18 (12)
-
-- content/video_engine/sources/reference_analyses/COMFYUI_PARALLAX_TECHNICAL_STANDARDS_RESEARCH.md:27 — 1. Technical Anatomy of Our Current ComfyUI Stack — Our current pipeline executes the following graph in ComfyUI:
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/05_comfyui_parallax_technical_standards.md:27 — 1. Technical Anatomy of Our Current ComfyUI Stack — Our current pipeline executes the following graph in ComfyUI:
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/06_unified_ledger_drawing_engine_and_comfy_spec.md:73 — 2.4 Calibrated Dial Matrix for Engine 1 — - Model: `depth_anything_v2_vitl_fp32.safetensors` (ViT-Large in FP32; FP16 is strictly banned due to logit underflow).
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_INDEX.md:262 — 8. Calibrated Parameter Dials & Node Contracts
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_INDEX.md:264 — 8.1 Depthflow & Depth Anything v2 (Engine 1) — - Model: `depth_anything_v2_vitl_fp32.safetensors` (ViT-Large FP32; FP16 strictly banned).
-- content/video_engine/sources/reference_analyses/MASTER_RESEARCH_INDEX.md:261 — 8. Calibrated Parameter Dials & Node Contracts
-- content/video_engine/sources/reference_analyses/MASTER_RESEARCH_INDEX.md:263 — 8.1 Depthflow & Depth Anything v2 (Engine 1) — - Model: `depth_anything_v2_vitl_fp32.safetensors` (ViT-Large FP32; FP16 strictly banned).
-- content/video_engine/sources/reference_analyses/UNIFIED_LEDGER_DRAWING_ENGINE_AND_COMFY_SPEC.md:73 — 2.4 Calibrated Dial Matrix for Engine 1 — - Model: `depth_anything_v2_vitl_fp32.safetensors` (ViT-Large in FP32; FP16 is strictly banned due to logit underflow).
-- docs/content-video-engine/45-PARALLAX-AND-PLATE-MOTION.md:46 — 45.3 Our current dials, and what they should be — Read from `tools/google-flow-driver/src/parallax-runner.mjs` on 2026-09-04.
-  cited by: docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:62, docs/content-video-engine/RESEARCH-INDEX.md:35
-- docs/content-video-engine/P13-GATE-B-ARMBAR-REVIEW.md:1 — P13 Gate B Review — Armbar From Guard — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine
-- docs/content-video-engine/P13-GATE-B-ARMBAR-REVIEW.md:23 — Automated QC — `qc/report.json` is pass for duration drift, word-timing coverage, loudness,
-- docs/content-video-engine/prompts/SLIDE-SEMANTIC-REGISTRATION.md:89 — 5. `figures[]` — verbatim numerals — Extract every printed number that states a fact. Exclude page numbers, axis
 
 ## 2.0 (12)
 
@@ -2063,20 +2452,81 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/MASTER_RESEARCH_INDEX.md:197 — 6. Domain 5: Academic Literature & Mathematical Foundations
 - content/video_engine/sources/reference_analyses/MASTER_RESEARCH_INDEX.md:199 — 6.1 Biomechanical Motor Control — - Two-Thirds Power Law: $v(t) = \gamma \kappa(t)^{-1/3}$, angular speed $\omega(t) = \gamma \kappa(t)^{2/3}$ (Viviani &
 
-## dot-com (12)
+## claim-refs (12)
 
-- docs/content-video-engine/28-AOY-MCP-EVALUATION.md:372 — `Titles_Format_Library` live run — template quality check — Ran against "finance and investing (market bubbles, wealth mechanics)",
-- docs/content-video-engine/34-AOY-SCRIPT-WRITER-STUDY.md:110 — 4b. Baseline analysis — the chart-story reference (`Jw8ykhoOVBQ`) — Analysed before the AOY script lands, so the comparison is measured rather
-- docs/content-video-engine/34-AOY-SCRIPT-WRITER-STUDY.md:128 — Beat map — | Beat | Move |
-- docs/content-video-engine/34-AOY-SCRIPT-WRITER-STUDY.md:147 — What it does better than our current script — 1. Analogy is the spine, not decoration. Railways and dot-com are not
-- docs/content-video-engine/34-AOY-SCRIPT-WRITER-STUDY.md:196 — 4c. The competitor template, extracted (`Jw8ykhoOVBQ` + `YXFvwJQBzJc`) — Two videos from the same channel (Bravos Research, self-identified in the
-- docs/content-video-engine/34-AOY-SCRIPT-WRITER-STUDY.md:202 — The template — | # | Beat | Video A (AI capex) | Video B (confidence gap) |
-- docs/content-video-engine/39-EVIDENCE-CHART-SYSTEM.md:134 — 5. Threshold and annotation marks (our addition) — The reference method has no vocabulary for "this crossed a historic line,"
-- docs/content-video-engine/40-PROCESS-AS-EVIDENCE.md:1 — 40 — Process as Evidence — Operator ruling, 2026-08-25:
-- docs/content-video-engine/40-PROCESS-AS-EVIDENCE.md:34 — 2. The audit beat — the narration device — A five-step unit, 20–35 seconds. It is an anecdote with a reversal,
-- docs/content-video-engine/40-PROCESS-AS-EVIDENCE.md:117 — 6. The honesty that makes it work — The device is only credible if it cuts both ways. Our own numbers get
-- docs/content-video-engine/briefs/STEEL-AND-PAPER-REVISION-C.md:1 — Steel and Paper — Revision C — Script B adapted to the rules established 2026-08-25 → 08-28. Structure,
-- docs/content-video-engine/briefs/STEEL-AND-PAPER-REVISION-C.md:63 — 2. ADD — the audit beat (doc 40) — Goes in P2, immediately after the GDP-share claim, in the steelman.
+- content/video_engine/projects/systems-and-blowups/registration/README.md:1 — Slide Semantic Registration — systems-and-blowups — Returned 2026-08-24, validated PASS: 86/86 slides, 340 verbatim figures,
+- content/video_engine/projects/systems-and-blowups/registration/README.md:7 — What this is — The missing half of a one-sided join. Narration cues already carried
+- content/video_engine/projects/systems-and-blowups/registration/README.md:50 — Open follow-ups — 1. Merge into the deck manifest in the p29 worktree (cross-branch — deliberate
+- content/video_engine/projects/systems-and-blowups/registration/WORK-ORDER.md:1 — Work Order — Slide Semantic Registration + Figure Extraction — Register 86 approved source slides against a closed claim vocabulary and
+- content/video_engine/projects/systems-and-blowups/registration/WORK-ORDER.md:7 — Why this exists — Our narration is already semantically registered: every narration cue carries
+- content/video_engine/projects/systems-and-blowups/registration/WORK-ORDER.md:45 — Per slide, produce
+- content/video_engine/projects/systems-and-blowups/registration/WORK-ORDER.md:53 — 2. `claim_refs` — from the closed set only — Read `claim-vocabulary.json`. Match on the claim text, not the id slug.
+- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:805 — 8.19 Dead-air ceiling, and the one-sided semantic join — Dead air is bounded. A long scene previously ran one build and then sat
+  cited by: docs/portable/OPERATOR-RULINGS.md:557
+- docs/content-video-engine/prompts/SLIDE-SEMANTIC-REGISTRATION.md:1 — Work Order — Slide Semantic Registration + Figure Extraction — Register 86 approved source slides against a closed claim vocabulary and
+- docs/content-video-engine/prompts/SLIDE-SEMANTIC-REGISTRATION.md:7 — Why this exists — Our narration is already semantically registered: every narration cue carries
+- docs/content-video-engine/prompts/SLIDE-SEMANTIC-REGISTRATION.md:45 — Per slide, produce
+- docs/content-video-engine/prompts/SLIDE-SEMANTIC-REGISTRATION.md:53 — 2. `claim_refs` — from the closed set only — Read `claim-vocabulary.json`. Match on the claim text, not the id slug.
+
+## claim-vocabulary.json (12)
+
+- content/video_engine/projects/systems-and-blowups/registration/README.md:1 — Slide Semantic Registration — systems-and-blowups — Returned 2026-08-24, validated PASS: 86/86 slides, 340 verbatim figures,
+- content/video_engine/projects/systems-and-blowups/registration/README.md:16 — Files — | File | Role |
+- content/video_engine/projects/systems-and-blowups/registration/WORK-ORDER.md:1 — Work Order — Slide Semantic Registration + Figure Extraction — Register 86 approved source slides against a closed claim vocabulary and
+- content/video_engine/projects/systems-and-blowups/registration/WORK-ORDER.md:20 — Inputs in this directory — | File | What it is |
+- content/video_engine/projects/systems-and-blowups/registration/WORK-ORDER.md:45 — Per slide, produce
+- content/video_engine/projects/systems-and-blowups/registration/WORK-ORDER.md:53 — 2. `claim_refs` — from the closed set only — Read `claim-vocabulary.json`. Match on the claim text, not the id slug.
+- content/video_engine/projects/systems-and-blowups/registration/WORK-ORDER.md:127 — Self-check before writing each deck file — 1. Every `slide_id` and `sha256` matches `slide-index.json` exactly.
+- docs/content-video-engine/prompts/SLIDE-SEMANTIC-REGISTRATION.md:1 — Work Order — Slide Semantic Registration + Figure Extraction — Register 86 approved source slides against a closed claim vocabulary and
+- docs/content-video-engine/prompts/SLIDE-SEMANTIC-REGISTRATION.md:20 — Inputs in this directory — | File | What it is |
+- docs/content-video-engine/prompts/SLIDE-SEMANTIC-REGISTRATION.md:45 — Per slide, produce
+- docs/content-video-engine/prompts/SLIDE-SEMANTIC-REGISTRATION.md:53 — 2. `claim_refs` — from the closed set only — Read `claim-vocabulary.json`. Match on the claim text, not the id slug.
+- docs/content-video-engine/prompts/SLIDE-SEMANTIC-REGISTRATION.md:127 — Self-check before writing each deck file — 1. Every `slide_id` and `sha256` matches `slide-index.json` exactly.
+
+## de-risk (12)
+
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-G-LEDGER.md:1 — Steel and Paper — Script G ledger — Script G: 13,268 chars · ~13m 34s speech (+15s edit pauses ≈ 13m 49s) · pivot 50.6% · both checkers clean
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-G-LEDGER.md:63 — The tell (P5, four parts — unchanged from F) — Variable: memory cost leaving Korea (customs exports). Threshold: below
+- docs/content-video-engine/briefs/ANSWER-BRAVOS-HYPE-CYCLE.md:267 — SCRIPT B — **PRODUCTION TEXT** (sentence-strength pass; won the A/B ear test) — A/B verdict (operator, 2026-08-24, by ear): three matched pairs — open,
+- docs/content-video-engine/briefs/ANSWER-BRAVOS-HYPE-CYCLE.md:456 — Strength Log (A → B, gates per SENTENCE-STRENGTH-CHECK) — | # | A (original) | Gates failed | B (final) |
+- docs/content-video-engine/briefs/ANSWER-BRAVOS-HYPE-CYCLE.md:501 — Final ledger audit (P6 out) — - ring_echo: spike returns transformed ("still carrying trains… paper
+- docs/content-video-engine/briefs/STEEL-AND-PAPER-REVISION-C.md:96 — 3. UPGRADE — the tell becomes an instrument — The tell is the channel's standing audit and now has real apparatus
+- docs/content-video-engine/SCRIPT-CONTEXT-COMBINED.md:191 — VOICE PACK — portable brand voice by exemplar — Third portable file, loaded with `DOCTRINE-CORE.md` and
+- docs/content-video-engine/SCRIPT-CONTEXT-COMBINED.md:250 — 2. Approved production lines, by function — From Script B ("Steel and Paper"), which won a seed-locked A/B by ear
+- docs/content-video-engine/SCRIPT-CONTEXT-COMBINED.md:302 — 3. What the exemplars are doing (the patterns worth naming) — - Abstractions get cashed inside the sentence. Never "enormous
+- docs/portable/VOICE-PACK.md:1 — VOICE PACK — portable brand voice by exemplar — Third portable file, loaded with `DOCTRINE-CORE.md` and
+- docs/portable/VOICE-PACK.md:52 — 2. Approved production lines, by function — From Script B ("Steel and Paper"), which won a seed-locked A/B by ear
+- docs/portable/VOICE-PACK.md:101 — 3. What the exemplars are doing (the patterns worth naming) — - The opponent is a mechanism, never a person. Not "Bravos is wrong"
+
+## demand-free (12)
+
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-stealth-wealth-proof-v1/source/narration.locked.md:1 — P24 Narration Lock — - Proof: `finance-stealth-wealth-proof-v1`
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-stealth-wealth-proof-v1/source/narration.locked.md:10 — Render transcript window — The market may be labeling the wrong bubble. AI memory stocks have gone vertical and the earnings numbers look almost fa
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-whiteboard-asset-blend-proof-v1/source/narration.locked.md:1 — P24 Narration Lock — - Proof: `finance-stealth-wealth-proof-v1`
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-whiteboard-asset-blend-proof-v1/source/narration.locked.md:10 — Render transcript window — The market may be labeling the wrong bubble. AI memory stocks have gone vertical and the earnings numbers look almost fa
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-whiteboard-code-drawn-proof-v1/source/narration.locked.md:1 — P24 Narration Lock — - Proof: `finance-stealth-wealth-proof-v1`
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-whiteboard-code-drawn-proof-v1/source/narration.locked.md:10 — Render transcript window — The market may be labeling the wrong bubble. AI memory stocks have gone vertical and the earnings numbers look almost fa
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-whiteboard-deck-asset-proof-v1/source/narration.locked.md:1 — P24 Narration Lock — - Proof: `finance-stealth-wealth-proof-v1`
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-whiteboard-deck-asset-proof-v1/source/narration.locked.md:10 — Render transcript window — The market may be labeling the wrong bubble. AI memory stocks have gone vertical and the earnings numbers look almost fa
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-whiteboard-world-blend-proof-v1/source/narration.locked.md:1 — P24 Narration Lock — - Proof: `finance-stealth-wealth-proof-v1`
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-whiteboard-world-blend-proof-v1/source/narration.locked.md:10 — Render transcript window — The market may be labeling the wrong bubble. AI memory stocks have gone vertical and the earnings numbers look almost fa
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-world-plate-evidence-rail-proof-v1/source/narration.locked.md:1 — P24 Narration Lock — - Proof: `finance-stealth-wealth-proof-v1`
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-world-plate-evidence-rail-proof-v1/source/narration.locked.md:10 — Render transcript window — The market may be labeling the wrong bubble. AI memory stocks have gone vertical and the earnings numbers look almost fa
+
+## direct-to-camera (12)
+
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-stealth-wealth-proof-v1/source/narration.locked.md:1 — P24 Narration Lock — - Proof: `finance-stealth-wealth-proof-v1`
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-stealth-wealth-proof-v1/source/narration.locked.md:14 — Beat map — | Time | Job | Visual anchor |
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-whiteboard-asset-blend-proof-v1/source/narration.locked.md:1 — P24 Narration Lock — - Proof: `finance-stealth-wealth-proof-v1`
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-whiteboard-asset-blend-proof-v1/source/narration.locked.md:14 — Beat map — | Time | Job | Visual anchor |
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-whiteboard-code-drawn-proof-v1/source/narration.locked.md:1 — P24 Narration Lock — - Proof: `finance-stealth-wealth-proof-v1`
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-whiteboard-code-drawn-proof-v1/source/narration.locked.md:14 — Beat map — | Time | Job | Visual anchor |
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-whiteboard-deck-asset-proof-v1/source/narration.locked.md:1 — P24 Narration Lock — - Proof: `finance-stealth-wealth-proof-v1`
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-whiteboard-deck-asset-proof-v1/source/narration.locked.md:14 — Beat map — | Time | Job | Visual anchor |
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-whiteboard-world-blend-proof-v1/source/narration.locked.md:1 — P24 Narration Lock — - Proof: `finance-stealth-wealth-proof-v1`
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-whiteboard-world-blend-proof-v1/source/narration.locked.md:14 — Beat map — | Time | Job | Visual anchor |
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-world-plate-evidence-rail-proof-v1/source/narration.locked.md:1 — P24 Narration Lock — - Proof: `finance-stealth-wealth-proof-v1`
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-world-plate-evidence-rail-proof-v1/source/narration.locked.md:14 — Beat map — | Time | Job | Visual anchor |
 
 ## far (12)
 
@@ -2171,21 +2621,6 @@ at most 12 sections each - the JSONL holds every one.
 - docs/portable/OPERATOR-RULINGS.md:1 — OPERATOR RULINGS — the standing corrections ledger — Portable, model-agnostic. Load alongside `DOCTRINE-CORE.md`.
 - docs/portable/VOICE-PACK.md:1 — VOICE PACK — portable brand voice by exemplar — Third portable file, loaded with `DOCTRINE-CORE.md` and
 
-## off-white (12)
-
-- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:1 — Production Research Report: Wealth Logic — 6 Ways Rich People Make Money With Debt — - Author / Channel: Wealth Logic
-- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:32 — Comparative Scorecard: Tutorial vs. Wealth Logic vs. Outreach Doctrine — | Metric / Dimension | Zapiwala (AI Stickman Tutorial) | Wealth Logic (High-Performing Finance) | Outreach Engine Target
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/01_wealth_logic_production_report.md:1 — Production Research Report: Wealth Logic — 6 Ways Rich People Make Money With Debt — - Author / Channel: Wealth Logic
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/01_wealth_logic_production_report.md:32 — Comparative Scorecard: Tutorial vs. Wealth Logic vs. Outreach Doctrine — | Metric / Dimension | Zapiwala (AI Stickman Tutorial) | Wealth Logic (High-Performing Finance) | Outreach Engine Target
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md:30 — 1. Executive Summary & The 4 Core Pillars — State-of-the-art programmatic video generation systems (Remotion, Motion Canvas, Figma Motion, Rive) achieve institution
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md:63 — The 4 Pillars: — 1. The Coordinate Transform Pipeline & Anchor Normalization: Elements live in local space and transform to screen space
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md:71 — 2. Comparative Scorecard & Production Benchmarks — | Metric / Dimension | Zapiwala (AI Stickman Tutorial) | Wealth Logic (High-Performing Finance) | Outreach Engine Target
-- content/video_engine/sources/reference_analyses/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md:30 — 1. Executive Summary & The 4 Core Pillars — State-of-the-art programmatic video generation systems (Remotion, Motion Canvas, Figma Motion, Rive) achieve institution
-- content/video_engine/sources/reference_analyses/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md:63 — The 4 Pillars: — 1. The Coordinate Transform Pipeline & Anchor Normalization: Elements live in local space and transform to screen space
-- content/video_engine/sources/reference_analyses/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md:71 — 2. Comparative Scorecard & Production Benchmarks — | Metric / Dimension | Zapiwala (AI Stickman Tutorial) | Wealth Logic (High-Performing Finance) | Outreach Engine Target
-- content/video_engine/sources/reference_analyses/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:1 — Production Research Report: Wealth Logic — 6 Ways Rich People Make Money With Debt — - Author / Channel: Wealth Logic
-- content/video_engine/sources/reference_analyses/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:32 — Comparative Scorecard: Tutorial vs. Wealth Logic vs. Outreach Doctrine — | Metric / Dimension | Zapiwala (AI Stickman Tutorial) | Wealth Logic (High-Performing Finance) | Outreach Engine Target
-
 ## paint-order-stroke-fill (12)
 
 - content/video_engine/sources/reference_analyses/ACADEMIC_LITERATURE_DRAWING_AND_2_5D_ANIMATION_ENGINE.md:276 — Pillar 4: Perceptual Psychophysics & Cross-Modal Phase Locking
@@ -2215,21 +2650,6 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/patterns/phase-guides/P5.md:29 — Inputs — `{TOPIC}` `{VOICE}` `{PERSONA}` `{EVIDENCE}` `{TELL}` (variable +
 - docs/content-video-engine/patterns/phase-guides/P6.md:1 — P6 — THE CLOSE — > Self-contained generation guide. Consume ONLY: the INJECTION block, the
 - docs/content-video-engine/patterns/phase-guides/P6.md:27 — Inputs — `{VOICE}` `{PERSONA}` `{FORMAT}` `{NEXT}` (the next video/segment's hook,
-
-## production-ready (12)
-
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/02_drawing_engine_and_transforms_research.md:1 — Deep Research Report: Drawing Engines, Animation Mechanics, Object Management, and Transform Architectures for Faceless Video Production — Generated: 2026-09-04 | Status: Authoritative Technical Architecture | Scope: Video Engine Rendering & Compositing
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/02_drawing_engine_and_transforms_research.md:7 — Executive Summary — State-of-the-art programmatic video generation systems (such as Remotion, Motion Canvas, Figma Motion, and Rive) achieve
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md:192 — 9. Production-Ready Code Blueprints
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_INDEX.md:288 — 9. Production Code Blueprints & Data Schemas — The research reports contain complete, production-ready TypeScript, Python, GLSL, and JSON modules:
-- content/video_engine/sources/reference_analyses/DRAWING_ENGINE_ANIMATION_TRANSFORM_RESEARCH.md:1 — Deep Research Report: Drawing Engines, Animation Mechanics, Object Management, and Transform Architectures for Faceless Video Production — Generated: 2026-09-04 | Status: Authoritative Technical Architecture | Scope: Video Engine Rendering & Compositing
-- content/video_engine/sources/reference_analyses/DRAWING_ENGINE_ANIMATION_TRANSFORM_RESEARCH.md:7 — Executive Summary — State-of-the-art programmatic video generation systems (such as Remotion, Motion Canvas, Figma Motion, and Rive) achieve
-- content/video_engine/sources/reference_analyses/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md:192 — 9. Production-Ready Code Blueprints
-- content/video_engine/sources/reference_analyses/MASTER_RESEARCH_INDEX.md:287 — 9. Production Code Blueprints & Data Schemas — The research reports contain complete, production-ready TypeScript, Python, GLSL, and JSON modules:
-- docs/content-video-engine/briefs/FLOW-OMNI-EXPLAINER-PROMPT-PLAN.md:1 — FLOW-OMNI-EXPLAINER-PROMPT-PLAN.md — Title: Institutional 2.5D & Stickman Explainer Engine (Google Flow / Gemini Omni Flash Edition)
-- docs/content-video-engine/RESEARCH-INDEX.md:375 — `MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md` — 32 headings — | heading | disposition |
-- docs/research/2026-08-22-agent-design-tooling-assessment.md:47 — Tool-by-tool
-- docs/research/2026-08-22-agent-design-tooling-assessment.md:73 — Claude Design — check this first, it is already configured — Anthropic's own tool generates production-ready HTML, CSS and JavaScript from
 
 ## r-k (12)
 
@@ -2276,6 +2696,41 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/RULE-the-page-is-the-ground.md:1 — The page is our ground — how props-compose works in OUR style, 2026-09-04 — Wealth Logic composes props on empty white. We are not going to adopt white: their
 - docs/content-video-engine/RULE-the-page-is-the-ground.md:37 — The three tiers, and what each is for — WORLD (woodblock vox newsprint — 71 approved plates). Establishing beats and the big
 
+## report-backed (12)
+
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-stealth-wealth-proof-v1/source/narration.locked.md:1 — P24 Narration Lock — - Proof: `finance-stealth-wealth-proof-v1`
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-stealth-wealth-proof-v1/source/narration.locked.md:14 — Beat map — | Time | Job | Visual anchor |
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-whiteboard-asset-blend-proof-v1/source/narration.locked.md:1 — P24 Narration Lock — - Proof: `finance-stealth-wealth-proof-v1`
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-whiteboard-asset-blend-proof-v1/source/narration.locked.md:14 — Beat map — | Time | Job | Visual anchor |
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-whiteboard-code-drawn-proof-v1/source/narration.locked.md:1 — P24 Narration Lock — - Proof: `finance-stealth-wealth-proof-v1`
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-whiteboard-code-drawn-proof-v1/source/narration.locked.md:14 — Beat map — | Time | Job | Visual anchor |
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-whiteboard-deck-asset-proof-v1/source/narration.locked.md:1 — P24 Narration Lock — - Proof: `finance-stealth-wealth-proof-v1`
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-whiteboard-deck-asset-proof-v1/source/narration.locked.md:14 — Beat map — | Time | Job | Visual anchor |
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-whiteboard-world-blend-proof-v1/source/narration.locked.md:1 — P24 Narration Lock — - Proof: `finance-stealth-wealth-proof-v1`
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-whiteboard-world-blend-proof-v1/source/narration.locked.md:14 — Beat map — | Time | Job | Visual anchor |
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-world-plate-evidence-rail-proof-v1/source/narration.locked.md:1 — P24 Narration Lock — - Proof: `finance-stealth-wealth-proof-v1`
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-world-plate-evidence-rail-proof-v1/source/narration.locked.md:14 — Beat map — | Time | Job | Visual anchor |
+
+## roll-out (12)
+
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/sound/SOURCES.md:8 — Ledger page cues (P35 T9, sourced 2026-09-02) — Human Gate 5 DECIDED: CC0 via the Freesound v2 API, zero paid audio.
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/sound/SOURCES.md:55 — Slots in SOUND-PLAN.json (`page_cues`, page-relative) — The three slots live under a separate top-level `page_cues` list, not in
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/sound/SOURCES.md:8 — Ledger page cues (P35 T9, sourced 2026-09-02) — Human Gate 5 DECIDED: CC0 via the Freesound v2 API, zero paid audio.
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/sound/SOURCES.md:55 — Slots in SOUND-PLAN.json (`page_cues`, page-relative) — The three slots live under a separate top-level `page_cues` list, not in
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/06_unified_ledger_drawing_engine_and_comfy_spec.md:127 — 5. The Ledger Page as the Core Drawing & Animation Engine
+- content/video_engine/sources/reference_analyses/UNIFIED_LEDGER_DRAWING_ENGINE_AND_COMFY_SPEC.md:127 — 5. The Ledger Page as the Core Drawing & Animation Engine
+- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1427 — 9.26 The LEDGER PAGE — the plate-chart species, the channel's signature (operator, 2026-09-02) — Ruling E22. Operator: *"if we could roll out a cream paper that gets
+  cited by: content/video_engine/sources/reference_analyses/ACADEMIC_LITERATURE_DRAWING_AND_2_5D_ANIMATION_ENGINE.md:1, content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/06_unified_ledger_drawing_engine_and_comfy_spec.md:7, content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/07_academic_literature_drawing_and_2_5d_animation_engine.md:1, content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_INDEX.md:158, content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_INDEX.md:305, content/video_engine/sources/reference_analyses/MASTER_RESEARCH_INDEX.md:157, +9 more
+- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1706 — 9.27 The MOTION MENU — opt-in species, each with a slot, a mechanism, and a gate treatment (operator, 2026-09-02) — Ruling E22 addendum. The registry items the operator flagged, read from
+  cited by: docs/content-video-engine/41-LEDGER-PAGE-SPECIES.md:1, docs/content-video-engine/49-GENERATIVE-VIDEO-AND-THE-VERTICAL-STAGE.md:128, docs/content-video-engine/patterns/CHECK-RESPONSIBILITIES.md:101, docs/content-video-engine/PIPELINE.md:18, docs/portable/OPERATOR-RULINGS.md:614
+- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1775 — 9.28 The SURFACE GRAMMAR — page, dock, or transition, decided by rule (operator, 2026-09-03) — P35 T0. Operator: *"the first part of the plan is getting components
+  cited by: content/video_engine/projects/systems-and-blowups/steel-and-paper/REWRITE-ORDER-G.md:109, docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1940, docs/content-video-engine/41-LEDGER-PAGE-SPECIES.md:1, docs/content-video-engine/41-LEDGER-PAGE-SPECIES.md:85, docs/content-video-engine/CAPABILITIES.md:14, docs/content-video-engine/patterns/CHECK-RESPONSIBILITIES.md:101, +2 more
+- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1982 — 9.31 The page VORTEX — how a page leaves, and how it returns (operator, 2026-09-05) — *"All of the colours spiral back into a single point in the charcoal, and all of the charcoal
+  cited by: docs/content-video-engine/BACKLOG.md:225, docs/content-video-engine/BACKLOG.md:279, docs/content-video-engine/CAPABILITIES.md:14
+- docs/content-video-engine/41-LEDGER-PAGE-SPECIES.md:128 — 6. Sound — `sound/SOUND-PLAN.json` → `page_cues` (page-relative): paper slide at
+- docs/content-video-engine/51-THE-SHORTS-FORMAT.md:130 — 51.8 Motion is not animation — and the gate always knew it — Operator, 2026-09-04:
+  cited by: docs/content-video-engine/52-CONSTRUCT-DONT-INHERIT.md:120, docs/content-video-engine/52-CONSTRUCT-DONT-INHERIT.md:167, docs/content-video-engine/BACKLOG.md:97
+
 ## short-form (12)
 
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/10_generative_video_tools_and_cross_platform_composition.md:161 — Part 4: 9:16 vs. 16:9 Cross-Platform Architecture & Short vs. Long Form
@@ -2308,6 +2763,51 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/briefs/ALICIA-FORMAT-RECREATION-BRIEF.md:171 — Test acceptance — 1. Every pipeline stage runs on this brief with no hand-carried files except
 - docs/content-video-engine/CAPABILITIES.md:130 — Reference builds (locked) — | Reference | Where | Governs |
 
+## silicon-silent-triopoly (12)
+
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:517 — S01 · The Ultimate Antidote to the S&P 500 Bubble — Opening source plate framing silicon memory as the physical counterpoint to a software-led market bubble.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:523 — S02 · The Great Valuation Paradox — Source plate contrasting an extreme S&P 500 CAPE ratio with memory-triopoly forward valuation and margins.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:529 — S03 · The Strange Genesis of a Cartel — Source history plate describing how Samsung, Micron, and SK hynix emerged from separate survival paths.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:535 — S04 · The Capital Cycle Meat Grinder — Source mechanism plate showing price wars, excess capital expenditure, and the collapse of weaker memory rivals.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:541 — S05 · The Physical Moat of HBM — Source mechanism plate showing the stacked HBM structure and the physical fragility of ultra-thin silicon.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:547 — S06 · The Packaging Battle Matrix — Source comparison of Samsung film-based packaging and SK hynix liquid-epoxy packaging approaches.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:553 — S07 · The RAM-ageddon Penalty — Source plate illustrating the three-to-one wafer-capacity penalty created by HBM production.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:559 — S08 · The Expanding DRAM Battlefield — Source market-share map showing the memory triopoly, CXMT, and the expanding DRAM competitive field.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:565 — S09 · The NAND Counteroffensive — Source plate showing the NAND market lanes, leading manufacturers, and a disruptive challenger.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:571 — S10 · The S&P 500 Liquidity Mirage — Source plate contrasting reported index earnings growth with the underlying composition of market liquidity.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:577 — S11 · The Unbreakable Chokepoint — Source comparison of the outdated commodity view with the memory triopoly's contracted, integrated, and capacity-bound m
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:583 — S12 · The Crucible of Compute — Closing source plate framing memory as the physical bottleneck that controls the economics of AI compute.
+
+## slide-id (12)
+
+- content/video_engine/projects/systems-and-blowups/registration/README.md:1 — Slide Semantic Registration — systems-and-blowups — Returned 2026-08-24, validated PASS: 86/86 slides, 340 verbatim figures,
+- content/video_engine/projects/systems-and-blowups/registration/README.md:16 — Files — | File | Role |
+- content/video_engine/projects/systems-and-blowups/registration/WORK-ORDER.md:1 — Work Order — Slide Semantic Registration + Figure Extraction — Register 86 approved source slides against a closed claim vocabulary and
+- content/video_engine/projects/systems-and-blowups/registration/WORK-ORDER.md:20 — Inputs in this directory — | File | What it is |
+- content/video_engine/projects/systems-and-blowups/registration/WORK-ORDER.md:45 — Per slide, produce
+- content/video_engine/projects/systems-and-blowups/registration/WORK-ORDER.md:47 — 1. Frozen keys — copy, never alter — `slide_id` and `sha256` are copied verbatim from `slide-index.json`. They bind
+- content/video_engine/projects/systems-and-blowups/registration/WORK-ORDER.md:127 — Self-check before writing each deck file — 1. Every `slide_id` and `sha256` matches `slide-index.json` exactly.
+- docs/content-video-engine/prompts/SLIDE-SEMANTIC-REGISTRATION.md:1 — Work Order — Slide Semantic Registration + Figure Extraction — Register 86 approved source slides against a closed claim vocabulary and
+- docs/content-video-engine/prompts/SLIDE-SEMANTIC-REGISTRATION.md:20 — Inputs in this directory — | File | What it is |
+- docs/content-video-engine/prompts/SLIDE-SEMANTIC-REGISTRATION.md:45 — Per slide, produce
+- docs/content-video-engine/prompts/SLIDE-SEMANTIC-REGISTRATION.md:47 — 1. Frozen keys — copy, never alter — `slide_id` and `sha256` are copied verbatim from `slide-index.json`. They bind
+- docs/content-video-engine/prompts/SLIDE-SEMANTIC-REGISTRATION.md:127 — Self-check before writing each deck file — 1. Every `slide_id` and `sha256` matches `slide-index.json` exactly.
+
+## slide-index.json (12)
+
+- content/video_engine/projects/systems-and-blowups/registration/README.md:1 — Slide Semantic Registration — systems-and-blowups — Returned 2026-08-24, validated PASS: 86/86 slides, 340 verbatim figures,
+- content/video_engine/projects/systems-and-blowups/registration/README.md:16 — Files — | File | Role |
+- content/video_engine/projects/systems-and-blowups/registration/WORK-ORDER.md:1 — Work Order — Slide Semantic Registration + Figure Extraction — Register 86 approved source slides against a closed claim vocabulary and
+- content/video_engine/projects/systems-and-blowups/registration/WORK-ORDER.md:20 — Inputs in this directory — | File | What it is |
+- content/video_engine/projects/systems-and-blowups/registration/WORK-ORDER.md:45 — Per slide, produce
+- content/video_engine/projects/systems-and-blowups/registration/WORK-ORDER.md:47 — 1. Frozen keys — copy, never alter — `slide_id` and `sha256` are copied verbatim from `slide-index.json`. They bind
+- content/video_engine/projects/systems-and-blowups/registration/WORK-ORDER.md:127 — Self-check before writing each deck file — 1. Every `slide_id` and `sha256` matches `slide-index.json` exactly.
+- docs/content-video-engine/prompts/SLIDE-SEMANTIC-REGISTRATION.md:1 — Work Order — Slide Semantic Registration + Figure Extraction — Register 86 approved source slides against a closed claim vocabulary and
+- docs/content-video-engine/prompts/SLIDE-SEMANTIC-REGISTRATION.md:20 — Inputs in this directory — | File | What it is |
+- docs/content-video-engine/prompts/SLIDE-SEMANTIC-REGISTRATION.md:45 — Per slide, produce
+- docs/content-video-engine/prompts/SLIDE-SEMANTIC-REGISTRATION.md:47 — 1. Frozen keys — copy, never alter — `slide_id` and `sha256` are copied verbatim from `slide-index.json`. They bind
+- docs/content-video-engine/prompts/SLIDE-SEMANTIC-REGISTRATION.md:127 — Self-check before writing each deck file — 1. Every `slide_id` and `sha256` matches `slide-index.json` exactly.
+
 ## storyboard.json (12)
 
 - content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:1 — Production Research Report: Wealth Logic — 6 Ways Rich People Make Money With Debt — - Author / Channel: Wealth Logic
@@ -2322,6 +2822,22 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:47 — The 5 Foundational Takeaways for Our Channels (*Money Physics* / *Building Money*)
 - content/video_engine/sources/reference_analyses/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:49 — 1. Audio Gaps as Structural Scene Dividers (The Breath Pause Rule) — - The Finding: The speaker talks at an assertive 183.6 WPM, yet the video never feels frantic. Every visual transition (
 - content/video_engine/sources/reference_analyses/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:141 — Actionable Takeaways for Outreach Engine Pipelines — 1. Adopt the Audio-Gap Boundary Detector: Automatically generate `storyboard.json` scene cuts from `words.json` breath p
+
+## strength-loop (12)
+
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/REWRITE-ORDER-G.md:1 — SCRIPT G — REWRITE ORDER (operator-confirmed 2026-08-30) — Significant rewrite, through the full script-writer loop (STRENGTH-LOOP to
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-G-STRENGTH-LOG.md:1 — Script G — strength log (the fixpoint audit trail) — Protocol: STRENGTH-LOOP.md. Round 1 walked every sentence (225); the
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-G-STRENGTH-LOG.md:42 — Licensed exceptions (claimed, not assumed) — - "Different voice, same two lines, same warning: AI is 1845 again." —
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-G-STRENGTH-LOG.md:119 — Round 5 — the emitted screens, walked to verdict (SCRIPT-G-SCREENS.md) — Under the enumeration mandate (STRENGTH-LOOP §8a, ruling E11), every
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-NOTES-retention-2-46.md:77 — The gate this adds (STRENGTH-LOOP U6 / ruling E20) — A run of agreement with the counterparty - steelman, concession,
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/REVIEW-2026-09-04.claude.md:11 — How the day went, honestly — 1. v2 — 281 words, every gate green, ~92 s. The operator's read: "from our debt" is
+- docs/content-video-engine/CAPABILITIES.md:94 — Script & voice — | Capability | Where | State | Proof |
+- docs/content-video-engine/patterns/CHECK-RESPONSIBILITIES.md:1 — CHECK RESPONSIBILITIES — what the tools decide, what the agent decides — The kit has four tool-enforced checkers and one reading-enforced loop. This
+- docs/content-video-engine/patterns/CHECK-RESPONSIBILITIES.md:17 — 0. The four verdict kinds — Every check in the kit is exactly one of these. The kind decides the owner.
+- docs/content-video-engine/patterns/CHECK-RESPONSIBILITIES.md:42 — 1. The rules — R1 — A tool's mechanical verdict is final. The agent does not re-derive
+- docs/content-video-engine/PIPELINE.md:18 — The stages, in order — | # | Stage | Owned by | Consumes | Emits |
+- docs/portable/OPERATOR-RULINGS.md:531 — E20 — Concession runs are budgeted; a delivered proof is never hedged next-line (2026-09-02) — Retention read on Steel and Paper (AVD 2:49 at n=2 - noise, but it lands
+  cited by: content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-NOTES-retention-2-46.md:77, docs/content-video-engine/patterns/STRENGTH-LOOP.md:71, docs/portable/OPERATOR-RULINGS.md:557
 
 ## tax-free (12)
 
@@ -2338,23 +2854,21 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:89 — 6-Phase Retention Architecture Deconstruction
 - content/video_engine/sources/reference_analyses/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:105 — P3: The Gap (02:52 – 07:36) | Mounting Contradiction & Initial Mechanisms — - Pacing: 28 shots | 992 words | 209.7 WPM
 
-## third-party (12)
+## viewer-facing (12)
 
-- docs/content-video-engine/00-BRAINSTORM-AND-DECISIONS.md:153 — 3.11 Stick figures → anchorable 2D technique visuals — The Armbar Gate-B review exposed a visual-system failure: generic stick figures collapse when
-  cited by: docs/content-video-engine/09-YOUTUBE-REFERENCE-PACK-LEARNINGS.md:314
-- docs/content-video-engine/08-TOOLING-ALTERNATIVES.md:1 — Tooling Alternatives — Higgsfield AI, Gemini Omni, and Where They Fit — *Date: 2026-07-28 · Method: dedicated research stream (official docs + pricing pages preferred;
-- docs/content-video-engine/08-TOOLING-ALTERNATIVES.md:38 — 3. Higgsfield: mostly avoid, one thing to monitor seriously — What it is (mid-2026): a social-first AI video suite aggregating 15+ frontier models (Sora 2,
-- docs/content-video-engine/08-TOOLING-ALTERNATIVES.md:88 — 6. Monitor list — Higgsfield Explainer REST/API + per-video cost · Gemini Omni Pro (length/res) · Gemini TTS
-- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1 — 29 — Evidence Motion Standards (Gemini findings + v1 momentum + linked choreography) — Status: accepted working standard, 2026-08-24
-  cited by: content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/REPORT.md:1, content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:32, content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:74, content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/REPORT.md:1, content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/01_wealth_logic_production_report.md:32, content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/01_wealth_logic_production_report.md:74, +25 more
-- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:18 — Current state — what actually governs production — Consolidated 2026-08-28. Where this section and anything below it
-- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1103 — 9.11 Rebuild source charts — do not extract frames (operator, 2026-08-25) — Operator ruling, superseding the clip-extraction workflow in 9.10:
-  cited by: docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:18
-- docs/content-video-engine/34-AOY-SCRIPT-WRITER-STUDY.md:57 — 3. Experiment design — Source material: five caption sets the operator pulled, cleaned locally to
-- docs/product-revenue-contract.md:179 — Demand-conversion evidence modes — `demand-conversion.v1` is a separate commercial evidence contract. It never
-- docs/research/2026-08-22-agent-design-tooling-assessment.md:1 — Agent-Native Design Tooling: Buy, Borrow, or Build — Status: current
-- docs/research/2026-08-22-agent-design-tooling-assessment.md:47 — Tool-by-tool
-- docs/research/2026-08-22-agent-design-tooling-assessment.md:49 — paper.design — the best of the borrowed options — - Canvas is HTML and CSS. Every element renders as real HTML/CSS, so designs
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-E-STRENGTH-LOG.md:203 — Loop pass 5 — the hook, after the operator reframed the episode — Operator: *"this isn't truly a historical parallel episode, it's a real-time
+- docs/content-video-engine/30-VOICE-SOURCE-MATERIAL.md:1 — 30 — Voice Source Material — Input for `brand-voice`. Everything here is evidence of how the operator
+  cited by: docs/content-video-engine/36-WRITER-PERSONA.md:45
+- docs/content-video-engine/30-VOICE-SOURCE-MATERIAL.md:38 — 2. Worked example — a rejected hook and its replacement — The single most useful artefact here, because both versions survive.
+- docs/content-video-engine/38-SCRIPT-ARCHITECTURE.md:45 — 2. Phase 1 — THE OPEN (0:00–1:30), fully fused — The research blueprint says: Truby's Weakness & Need · Glass's Anecdote ·
+- docs/content-video-engine/38-SCRIPT-ARCHITECTURE.md:53 — Beat 1 — MICROHOOK (0:00–0:03) — - The first sentence is the grab. Present tense, viewer-facing, concrete,
+- docs/content-video-engine/briefs/ALICIA-FORMAT-RECREATION-BRIEF.md:1 — Recreation Brief — Alicia-Format Systems Test (3:00) — The end-to-end pipeline test: recreate the format of Alicia Invests'
+- docs/content-video-engine/patterns/CRAFT-DEVICES.md:1 — CRAFT DEVICES — the curated seed for the craft map — Operator, 2026-09-05: *"the map of both micro and macro literary and speech
+- docs/content-video-engine/patterns/CRAFT-DEVICES.md:34 — The devices — | device | scale | what it does | defined in | exemplar |
+- docs/content-video-engine/SCRIPT-CONTEXT-COMBINED.md:191 — VOICE PACK — portable brand voice by exemplar — Third portable file, loaded with `DOCTRINE-CORE.md` and
+- docs/content-video-engine/SCRIPT-CONTEXT-COMBINED.md:218 — 1. The calibration pair (read before writing anything) — Same assignment, same facts, same person. One was rejected, one shipped.
+- docs/portable/VOICE-PACK.md:1 — VOICE PACK — portable brand voice by exemplar — Third portable file, loaded with `DOCTRINE-CORE.md` and
+- docs/portable/VOICE-PACK.md:21 — 1. The calibration pair (read before writing anything) — Same assignment, same facts, same person. One was rejected, one shipped.
 
 ## vitl-fp32 (12)
 
@@ -2371,22 +2885,6 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/briefs/VERDICT-research-brief-animation-craft.md:42 — ADOPT AS OURS — sound engineering, but a design choice we own and tune — These are not findings. They are reasonable starting constants. Take them, label them
 - docs/content-video-engine/RESEARCH-INDEX.md:35 — Declared conflicts and rejections — These are the load-bearing disagreements found by reading the primaries against each
 
-## word-timed (12)
-
-- docs/content-video-engine/21-ART-STYLE-REFERENCE-REVIEW.md:219 — The natural experiment that reframes everything — Reviewed 2026-08-22 from three operator-supplied sources in one niche (trading
-- docs/content-video-engine/21-ART-STYLE-REFERENCE-REVIEW.md:233 — What this does and does not prove — It does not support "we win on presentation." The 242K video has the worst
-- docs/content-video-engine/21-ART-STYLE-REFERENCE-REVIEW.md:582 — What this changes — - `stick_figure` is removed as a lane name — but not as a capability. Lane D is a
-- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1 — 29 — Evidence Motion Standards (Gemini findings + v1 momentum + linked choreography) — Status: accepted working standard, 2026-08-24
-  cited by: content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/REPORT.md:1, content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:32, content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:74, content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/REPORT.md:1, content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/01_wealth_logic_production_report.md:32, content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/01_wealth_logic_production_report.md:74, +25 more
-- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:18 — Current state — what actually governs production — Consolidated 2026-08-28. Where this section and anything below it
-- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:345 — 8.6 Evidence selection rules (operator correction, 2026-08-24) — The first v4 pass failed review on three counts. Each is now enforced in
-- docs/content-video-engine/53-THE-STICKMAN-LANE.md:206 — 53.5 What we would do differently — The workflow is sound; two stages are worse than what we already have.
-- docs/content-video-engine/CAPABILITIES.md:70 — Evidence & assets — Martial Matters episode 1 (merged from p16, 2026-08-29): 192 asset files
-- docs/content-video-engine/SCRIPT-CONTEXT-COMBINED.md:163 — PRODUCTION AWARENESS — Narration is synthesized: numbers as spoken words, exact numerals on
-- docs/portable/BUILD-PIPELINE.md:1 — BUILD PIPELINE — portable contract — Model-agnostic. Paste this into any assistant — Gemini, GPT, a fresh Claude —
-- docs/portable/BUILD-PIPELINE.md:37 — Stage 4 → 5: the take is ground truth — Word timings decide everything downstream. Never resample captions onto
-- docs/portable/DOCTRINE-CORE.md:172 — PRODUCTION AWARENESS — Motion and evidence choreography: `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md`
-
 ## write-script-v2 (12)
 
 - docs/content-video-engine/28-AOY-MCP-EVALUATION.md:1 — 28 — Art of YouTube MCP: Trial Evaluation — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine
@@ -2397,10 +2895,10 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/28-AOY-MCP-EVALUATION.md:158 — Analogies — not a named concept in the doctrine — A direct probe (rules, counts, placement, whether analogy is prompted when
 - docs/content-video-engine/28-AOY-MCP-EVALUATION.md:509 — Verdict (running) — Pending the script comparison and Niche_Hunter test. Early lean: the
 - docs/content-video-engine/34-AOY-SCRIPT-WRITER-STUDY.md:1 — 34 — AOY Script Writer Study — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine
-  cited by: docs/content-video-engine/35-ANSWER-FORMAT-DOCTRINE.md:11
+  cited by: content/video_engine/projects/systems-and-blowups/steel-and-paper/evidence/EVIDENCE-DOSSIER.md:14, content/video_engine/projects/systems-and-blowups/tokyo-tea-break/EVIDENCE-AUDIT-2026-09-03.md:25, docs/content-video-engine/35-ANSWER-FORMAT-DOCTRINE.md:11
 - docs/content-video-engine/34-AOY-SCRIPT-WRITER-STUDY.md:399 — Study conclusion — `write_script_v2` is a real research-and-structure engine on both format
 - docs/content-video-engine/36-WRITER-PERSONA.md:1 — 36 — Writer Persona — Who is speaking. [33-VOICE-PROFILE.md](33-VOICE-PROFILE.md) governs how the
-  cited by: docs/content-video-engine/37-TTS-DELIVERY-STANDARDS.md:659, docs/content-video-engine/40-PROCESS-AS-EVIDENCE.md:17, docs/portable/OPERATOR-RULINGS.md:294
+  cited by: content/video_engine/projects/systems-and-blowups/EPISODE-SEEDS.md:31, content/video_engine/projects/systems-and-blowups/steel-and-paper/packaging/TITLE-CANDIDATES.md:1, content/video_engine/projects/systems-and-blowups/tokyo-tea-break/REVIEW-2026-09-03.md:95, docs/content-video-engine/37-TTS-DELIVERY-STANDARDS.md:659, docs/content-video-engine/40-PROCESS-AS-EVIDENCE.md:17, docs/portable/OPERATOR-RULINGS.md:294
 - docs/content-video-engine/36-WRITER-PERSONA.md:365 — 5. What this changes in generated scripts — the persona pass — Applied to any skeleton (ours or `write_script_v2` output):
 - docs/content-video-engine/38-SCRIPT-ARCHITECTURE.md:153 — 4. The SCRIPT WORK ORDER (deterministic prompt structure) — The generation contract. A script is never "written" ad hoc; it is produced
 - docs/content-video-engine/briefs/ALICIA-SCRIPT-COMPARISON.md:1 — Four-Way Script Comparison — "Why a Budtender Retires Before a Banker" — The decisive AOY-trial test, expanded: same title, same references, same
@@ -2419,20 +2917,6 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/53-THE-STICKMAN-LANE.md:268 — The reframe — > They are not over-engineering prompts. They are hand-executing a pipeline.
 - docs/content-video-engine/53-THE-STICKMAN-LANE.md:479 — 53.11 Status after the Flow plan — `briefs/FLOW-OMNI-EXPLAINER-PROMPT-PLAN.md` (2026-09-04) is the production version of this
 - docs/content-video-engine/briefs/FLOW-OMNI-EXPLAINER-PROMPT-PLAN.md:1 — FLOW-OMNI-EXPLAINER-PROMPT-PLAN.md — Title: Institutional 2.5D & Stickman Explainer Engine (Google Flow / Gemini Omni Flash Edition)
-
-## date.now (11)
-
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/02_drawing_engine_and_transforms_research.md:15 — Architecture Diagram & The 4 Core Mechanical Pillars
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/02_drawing_engine_and_transforms_research.md:51 — Pillar 2: Deterministic Clocking & Closed-Form Spring Physics — - Video renderers do not run at real-time speeds; iterative physics loops (Euler/Verlet) or wall-clock timers (`Date.now
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/02_drawing_engine_and_transforms_research.md:116 — 2. Animation Mechanics & Deterministic Clocking
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/02_drawing_engine_and_transforms_research.md:118 — 2.1 The Deadly Flaw of Wall-Clock Animations in Headless Video — In interactive web browsers, animations rely on `requestAnimationFrame(timestamp)` or `setInterval`. If the CPU stutters
-- content/video_engine/sources/reference_analyses/DRAWING_ENGINE_ANIMATION_TRANSFORM_RESEARCH.md:15 — Architecture Diagram & The 4 Core Mechanical Pillars
-- content/video_engine/sources/reference_analyses/DRAWING_ENGINE_ANIMATION_TRANSFORM_RESEARCH.md:51 — Pillar 2: Deterministic Clocking & Closed-Form Spring Physics — - Video renderers do not run at real-time speeds; iterative physics loops (Euler/Verlet) or wall-clock timers (`Date.now
-- content/video_engine/sources/reference_analyses/DRAWING_ENGINE_ANIMATION_TRANSFORM_RESEARCH.md:116 — 2. Animation Mechanics & Deterministic Clocking
-- content/video_engine/sources/reference_analyses/DRAWING_ENGINE_ANIMATION_TRANSFORM_RESEARCH.md:118 — 2.1 The Deadly Flaw of Wall-Clock Animations in Headless Video — In interactive web browsers, animations rely on `requestAnimationFrame(timestamp)` or `setInterval`. If the CPU stutters
-- docs/research/tech/MOTION_GRAPHICS_FROM_STILL_IMAGES_BLUEPRINT.md:33 — 3. Technological & Mathematical Primary Grounding
-- docs/research/tech/MOTION_GRAPHICS_FROM_STILL_IMAGES_BLUEPRINT.md:41 — B. Frame-Deterministic React Timing — - The Remotion Frame Law: Remotion prohibits asynchronous clock dependencies (`Date.now()`, `requestAnimationFrame`). An
-- docs/research/tech/MOTION_GRAPHICS_FROM_STILL_IMAGES_BLUEPRINT.md:179 — 5. Critical Gotchas, Anti-Patterns & Risk Matrix — | Risk / Failure Mode | Root Cause | Impact | Mitigation Strategy |
 
 ## edge-fix (11)
 
@@ -2490,6 +2974,34 @@ at most 12 sections each - the JSONL holds every one.
 - docs/research/tech/MOTION_GRAPHICS_FROM_STILL_IMAGES_BLUEPRINT.md:1 — Motion Graphics & Animation from Still Images — Research Blueprint — Date: 2026-09-03 | Domain: Tech / Video Engine | Method: Deep Research Pass 1 & Pass 2 Synthesis
 - docs/research/tech/MOTION_GRAPHICS_FROM_STILL_IMAGES_BLUEPRINT.md:7 — 1. Executive Summary & Core Hypothesis — High-retention, broadcast-grade video content does not require rendering every frame from scratch using slow, expensive,
 
+## long-term (11)
+
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:232 — Silicon Value in a Software Bubble (`silicon-value-software-bubble`)
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:312 — S14 · Memory Is a Strategic Asset, Not a Cheap Input — Source moat plate showing long-term agreements, custom co-engineering, logic integration, and expanding bill-of-material
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/09_2d_and_2_5d_body_animation_object_handling_and_grounding.md:248 — 2.7 Natural Idling: Respiration Rhythms, Postural Sway, and Contrapposto
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/09_2d_and_2_5d_body_animation_object_handling_and_grounding.md:258 — B. Postural Sway (Inverted Pendulum Model) — Even when standing perfectly still, humans undergo continuous postural sway (Winter 1995; Peterka 2002; Collins & De Luc
+- content/video_engine/sources/reference_analyses/why-us-bond-yields-are-surging-again-do-this-asap/SHOT_LEDGER.md:1 — SHOT LEDGER: Frame-Accurate Pacing & Visual Species Breakdown — | Shot # | Start | End | Dur (s) | Keyframe | Classified Species | Spoken Line / Audio Beat |
+- docs/content-video-engine/36-WRITER-PERSONA.md:200 — 3b. Portfolio doctrine — named frameworks (operator-defined, 2026-08-24) — Coined, proprietary concepts — the concept-naming authority device
+- docs/content-video-engine/36-WRITER-PERSONA.md:207 — "Accretive burn" — A capital-allocation dynamic where a company — typically early-stage — runs
+- docs/content-video-engine/36-WRITER-PERSONA.md:272 — De-risking without bonds (the T6 rotation, answered) — Defensive thematic balancing + large index + cash. For the properly
+- docs/content-video-engine/36-WRITER-PERSONA.md:292 — The $500 19-year-old — personal accretive burn — The youth register, resolved: they don't need to buy current earnings or
+- docs/research/2026-08-24-writing-for-the-ear-craft-source.md:70 — **Rhetorical Acoustics and Oral Cadence: Lessons from Speechwriting** — Speechwriting rhetoric is the art of engineering acoustic memory23. Because spoken words dissolve instantly upon utteran
+- docs/research/2026-08-24-writing-for-the-ear-craft-source.md:74 — **The Dynamics of Strategic Silence** — In his study of presidential rhetoric, James Humes identifies the Power Pause as the single most critical vocal techniqu
+
+## mega-cap (11)
+
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:1 — Deck asset selection index — Manifest: `silicon-decks-source-manifest-v2`
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:7 — The Silicon Reality Gap (`silicon-reality-gap`)
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:75 — S12 · The S&P 500 Paper Bubble Mechanics — Source mechanism plate showing mega-cap concentration, passive indexing, and the gap between earnings contribution and i
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:112 — The Silicon Antidote (`silicon-antidote`)
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:126 — S03 · Flashing Red on Extreme Concentration — Source plate showing top-ten mega-cap concentration and the mismatch between index weight and earnings contribution.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:232 — Silicon Value in a Software Bubble (`silicon-value-software-bubble`)
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:240 — S02 · The Earnings Concentration Funnel — Source plate showing passive flows, top-ten mega-cap concentration, and reported earnings growth around the index bubble
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/evidence/EVIDENCE-DOSSIER.md:218 — Production queue — | # | Document | Species | Source | Built |
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-G-PRODUCTION.md:1 — STEEL AND PAPER — Script G (production) — Base: Script F. Changes per REWRITE-ORDER-G. Pause marks per doc 37.
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-G-STRENGTH-LOG.md:119 — Round 5 — the emitted screens, walked to verdict (SCRIPT-G-SCREENS.md) — Under the enumeration mandate (STRENGTH-LOOP §8a, ruling E11), every
+- docs/content-video-engine/37-TTS-DELIVERY-STANDARDS.md:460 — 18. The half-beat - chart reads breathe at the reveal (operator, 2026-08-30) — Chart-read delivery has a rhythm problem the full-second pause class is
+
 ## model (11)
 
 - content/video_engine/sources/reference_analyses/COMFYUI_PARALLAX_TECHNICAL_STANDARDS_RESEARCH.md:43 — The 5 Technical Failures in Our Configuration: — | Parameter | Current Value | Why It Ruined the Output | Target Professional Value |
@@ -2503,6 +3015,21 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/MASTER_RESEARCH_INDEX.md:263 — 8.1 Depthflow & Depth Anything v2 (Engine 1) — - Model: `depth_anything_v2_vitl_fp32.safetensors` (ViT-Large FP32; FP16 strictly banned).
 - content/video_engine/sources/reference_analyses/UNIFIED_LEDGER_DRAWING_ENGINE_AND_COMFY_SPEC.md:73 — 2.4 Calibrated Dial Matrix for Engine 1 — - Model: `depth_anything_v2_vitl_fp32.safetensors` (ViT-Large in FP32; FP16 is strictly banned due to logit underflow).
 - docs/AGENTS-SEO-PLATFORM.md:135 — 8. Repo conventions — - Python: run with the 3.11 interpreter. If a venv exists use it; otherwise `python` resolves to 3.11.15 on this host.
+
+## muted-caption (11)
+
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-90S.claude.md:67 — Muted-caption test (V-a, run on the build) — Cover the captions: shots 4, 5, 7, 9, 12, 13 read the claim from the page alone; shots 1, 8,
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-90S.md:68 — REVISION 2026-09-04 — every plate re-briefed as an argument — Applying `RULE-abstract-to-concrete.md`. The table above briefed settings; this one
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-90S.md:104 — Muted-caption test on the old table — Cover the captions and shots 1, 3, 5, 6, 8, 12, 13 all still read as "a place." Only
+- docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:92 — 2b. AGENT-JUDGED — reproducible, automatable, not deterministic — A judgment a model executes on every build. Belongs with P36 (the viewer) rather than
+- docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:97 — V-a · The muted-caption judge — Operator contribution, 2026-09-04. This is not from the research.
+- docs/content-video-engine/BACKLOG.md:182 — The day's read — 2026-09-05 evening (the Tokyo short is done: 1:28.8, motion gate PASS) — What landed today. P43 complete (the stroke ON, the spring, the squash ON, K-M ink kept for ink over ink); the Remotion
+- docs/content-video-engine/BACKLOG.md:207 — Ready to pull in — read 2026-09-05 after the hands-on day (operator: "see if we're ready to pull anything else in") — Ordered by leverage against what the Tokyo build now exercises. Each names the artifact it lands on.
+- docs/content-video-engine/BACKLOG.md:277 — V-a The muted-caption judge — (operator, 47 §2b) — a model reads the test scene with captions removed and states the claim it makes
+  cited by: content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-90S.claude.md:67, docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:97, docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:183, docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:208, docs/content-video-engine/BACKLOG.md:182, docs/content-video-engine/BACKLOG.md:207, +2 more
+- docs/content-video-engine/CAPABILITIES.md:163 — The enforcement layer (P37, 2026-09-04) — The research of 2026-09-04 as checks that run - each shown failing before passing (47 §5b).
+- docs/content-video-engine/CAPABILITIES.md:175 — Muted-caption judge — a model reads the captionless frame; verdict + `scenery` / `over-dense` diagnosis owned by code
+- docs/content-video-engine/RULE-abstract-to-concrete.md:1 — The plate throws the punch — abstract-to-concrete, 2026-09-04 — Adopted from the doodle-channel master prompt's rule 5, which is the one genuinely
 
 ## one-line (11)
 
@@ -2533,6 +3060,50 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/UNIFIED_LEDGER_DRAWING_ENGINE_AND_COMFY_SPEC.md:73 — 2.4 Calibrated Dial Matrix for Engine 1 — - Model: `depth_anything_v2_vitl_fp32.safetensors` (ViT-Large in FP32; FP16 is strictly banned due to logit underflow).
 - docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:1 — Answers to Research Brief — Animation Craft & The Drawing Engine (Pass 2 Audited) — > Superseded as a reference, 2026-09-04. This file is a filter over the research
 
+## re-hook (11)
+
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-NOTES-retention-2-46.md:1 — Steel and Paper - the 2:46-3:23 sputter, and how the unit should read — Retention read 2026-09-02: AVD 2:49 at n=2 (noise), but it lands three
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-NOTES-retention-2-46.md:8 — What the timeline shows (2:23 -> 3:39) — | Time | Script | On screen |
+- docs/content-video-engine/28-AOY-MCP-EVALUATION.md:536 — `review_script` on Steel and Paper — measured (2026-08-29) — Submitted Script D (1,954 words, 11m 40s) to `review_script`. Confirms the
+- docs/content-video-engine/37-TTS-DELIVERY-STANDARDS.md:362 — 13. Probe-first recording (operator, 2026-08-30) — Whisper cannot generate a read - it only transcribes. So "test before
+- docs/content-video-engine/briefs/ALICIA-SCRIPT-COMPARISON.md:1 — Four-Way Script Comparison — "Why a Budtender Retires Before a Banker" — The decisive AOY-trial test, expanded: same title, same references, same
+- docs/content-video-engine/briefs/ALICIA-SCRIPT-COMPARISON.md:15 — Panel B — predicted write_script_v2 output — Falsifiable tells predicted (score C against these when it lands):
+- docs/content-video-engine/briefs/ALICIA-SCRIPT-COMPARISON.md:91 — Panel B self-notes — Deliberately embedded their tells: third-person cold open (D-pattern), two
+- docs/content-video-engine/briefs/ALICIA-SCRIPT-COMPARISON.md:99 — Scoring axes (for the four-way) — 1. Hook mechanics — time-to-tension, concreteness
+- docs/content-video-engine/briefs/ALICIA-SCRIPT-COMPARISON.md:108 — Panel C landed — prediction scorecard (2026-08-24) — | Tell | Predicted | Actual | Score |
+- docs/portable/OPERATOR-RULINGS.md:463 — E13 — Probe first, then whisper-gate every take (2026-08-30) — Whisper cannot generate a read; "test before spending" means the 2:00
+- docs/portable/OPERATOR-RULINGS.md:531 — E20 — Concession runs are budgeted; a delivered proof is never hedged next-line (2026-09-02) — Retention read on Steel and Paper (AVD 2:49 at n=2 - noise, but it lands
+  cited by: content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-NOTES-retention-2-46.md:77, docs/content-video-engine/patterns/STRENGTH-LOOP.md:71, docs/portable/OPERATOR-RULINGS.md:557
+
+## read-only (11)
+
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-G-STRENGTH-LOG.md:1 — Script G — strength log (the fixpoint audit trail) — Protocol: STRENGTH-LOOP.md. Round 1 walked every sentence (225); the
+- docs/agent-context/SKILL_ROUTER.md:42 — Named Agent Routing — - Parent task: owns the critical path, shared-file integration, protected
+- docs/AGENT_START_HERE.md:1 — Agent Start Here — Status: current
+- docs/AGENT_START_HERE.md:23 — Task Routes
+- docs/AGENT_START_HERE.md:25 — Skill And Agent Router — The durable router is [`agent-context/SKILL_ROUTER.md`](agent-context/SKILL_ROUTER.md).
+- docs/content-video-engine/25-EDITOR-EMBEDDING-SPIKE.md:43 — Revisit triggers — Reopen this decision only if one of these becomes true: Remotion ships a
+- docs/content-video-engine/26-AGENT-GENERATION-LOOP.md:67 — Work-order authoring — The claim service renders the work order; do not hand-write one. It encodes:
+- docs/content-video-engine/27-DURABILITY-AND-LAYOUT.md:64 — The disaster-recovery contract — A bare catalogue plus credentials is sufficient to rebuild every canonical
+- docs/content-video-engine/CAPABILITIES.md:124 — External evidence sources — | Source | Where | Gives | Rule |
+- docs/runbooks/HANDOFF-ASTRA-GEMINI-2026-09-05.md:51 — Astra's review (2026-09-05, later) - accepted, and what changed here — Astra agreed with the four recommendations with qualifications; all four are applied on this side:
+- docs/runbooks/PRP_EXECUTION.md:24 — Named Agents — | Agent | Use | Hard stop |
+
+## research-packet.v1 (11)
+
+- content/video_engine/projects/history-of-bjj/episode-2-research-questions.md:1 — Episode 2 Question Brief — The Branches BJJ History Forgot — This file is not an approved script or claim packet.
+- content/video_engine/projects/history-of-bjj/episode-2-research-questions.md:5 — Questions — - What documentary evidence establishes George Gracie’s teaching, travel, and
+- docs/content-video-engine/01-PRD.md:1 — PRD — Content-to-Video Flywheel Engine — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine
+- docs/content-video-engine/01-PRD.md:8 — V4 product override — The engine's primary product is an evidence-backed three-part History of BJJ
+- docs/content-video-engine/03-SYSTEM-ARCHITECTURE.md:1 — Content-to-Video Engine — System Architecture — > V4 architecture overlay: V1–V3 remain resumable. New History V4 jobs use the
+- docs/content-video-engine/03-SYSTEM-ARCHITECTURE.md:7 — V4 history pipeline — `research_packet.v1`, `asset_manifest.v1`, and `art_bible.v2` are independently
+- docs/content-video-engine/06-SCRIPT-TRANSFORMATION-SPEC.md:1 — Script Transformation Spec — Essay/Corpus → Beat Sheet → Storyboard — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine
+- docs/content-video-engine/10-HISTORY-DOCUMENTARY-EDITORIAL-SPEC.md:1 — History Documentary Editorial Specification — > STATUS: LANE DOCTRINE — history / documentary. The history lane is not retired; it is simply outside the finance set r
+  cited by: docs/content-video-engine/briefs/RESEARCH-BRIEF-animation-craft.md:118
+- docs/content-video-engine/10-HISTORY-DOCUMENTARY-EDITORIAL-SPEC.md:25 — 2. Editorial invariant — Every sentence presented as historical fact resolves to an approved claim in the
+- docs/content-video-engine/11-ARCHIVAL-ASSET-AND-CITATION-SPEC.md:1 — Archival Asset and Citation Specification — *Specification of record for History Documentary V4 rights, likeness, attribution,
+- docs/content-video-engine/11-ARCHIVAL-ASSET-AND-CITATION-SPEC.md:6 — 1. Separate evidence from permission — `research_packet.v1` answers “may we say this?”. `asset_manifest.v1` answers
+
 ## rubber-sheet (11)
 
 - content/video_engine/sources/reference_analyses/COMFYUI_PARALLAX_TECHNICAL_STANDARDS_RESEARCH.md:1 — Deep Research Report: ComfyUI Parallax Engine — Technical Mechanics, Dial Calibration, and Professional Production Standards — Generated: 2026-09-04 | Status: Authoritative Technical Standard | Scope: 2.5D Parallax, Depthflow, and Camera Motion in
@@ -2546,20 +3117,6 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/08_answers_animation_craft_brief.md:570 — 8.2 The Precise Defect & Proposed Fix — - The Defect: `intensity` is hardcoded to `1.0` across all six preset blocks. In ComfyUI-Depthflow-Nodes, `intensity` is
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/10_generative_video_tools_and_cross_platform_composition.md:140 — 3.3 ComfyUI-Depthflow-Nodes Mastery & Bug Resolution — ComfyUI-Depthflow-Nodes (`depthflow.glsl`) executes an image-space continuous heightfield ray-march:
 - docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:584 — 8.2 The Precise Defect & Proposed Fix — - The Defect: `intensity` is hardcoded to `1.0` across all six preset blocks. In ComfyUI-Depthflow-Nodes, `intensity` is
-
-## saas (11)
-
-- docs/content-video-engine/00-BRAINSTORM-AND-DECISIONS.md:51 — 2. What survives from the raw spec — Stick-figure + Manim CE format (Manim confirmed healthy 2026; the style is uniquely suited to
-- docs/content-video-engine/05-COMPETITIVE-BRIEF.md:99 — 2.6 Monetization layering (sequenced expectations) — Observed order: Patreon/Ko-fi at first traction → memberships → merch + brand sponsors in the
-- docs/harness/AGENT_SELF_EVALUATION_GUIDE.md:1 — 🤖 Agent Self-Evaluation & Adoption Guide — > Instructions for the AI Agent reading this file:
-- docs/product-revenue-contract.md:1 — Product / Revenue Contract: Outreach Program
-- docs/product-revenue-contract.md:102 — Explicit milestone exclusions — - no automated outbound or autonomous follow-up;
-- docs/research/2026-07-26-product-strength-competitive-research.md:295 — Owner-authorized sources after engagement — These sources turn a persuasive estimate into an accountable growth system:
-- docs/research/2026-07-28-accretive-revenue-assessment.md:149 — 2.5 Pricing structure — two findings that should set the model — Retention is a function of price point, not product quality. Below $10/month ARPA, even
-- docs/research/2026-07-28-accretive-revenue-assessment.md:269 — 5. Ranked paths — | # | Path | Time to cash | Accretion | Evidence strength |
-- docs/research/2026-08-24-twenty-n8n-attio-evaluation.md:57 — 2. Attio — managed, metered, capable — Pricing rose ~21% in July 2026. Nearly every comparison article still quotes the old numbers. Live from [attio.com/prici
-- docs/seo-insights-platform-architecture.md:388 — 12. Product roadmap
-- docs/seo-insights-platform-architecture.md:399 — Phase D — outreach activation — Commercially package validated run evidence into a short, human-reviewed expertise demonstration: what was observed, why
 
 ## second-person (11)
 
@@ -2620,6 +3177,20 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/briefs/FLOW-OMNI-EXPLAINER-PROMPT-PLAN.md:223 — 10. Affirmative Physical Anchoring vs. Negative Prompt Contamination — - The Original Defect: Loaded the prompt with negative constraints ("no 3D shading, no photorealism, no color gradients,
 - docs/content-video-engine/briefs/FLOW-OMNI-EXPLAINER-PROMPT-PLAN.md:229 — 11. External Script Gating & The Stage 7 Role (Visual Director, Not Amateur Copywriter) — - The Original Defect: The original prompt assumed an interactive AI chat should invent the script from a raw topic out
 
+## three-to-one (11)
+
+- content/video_engine/projects/systems-and-blowups/korea-memory-toll/EVIDENCE-DOSSIER.md:1 — The Trillion Dollar Toll Booth — Evidence Dossier — Every figure the script speaks, its source, and the date it was reported. Nothing here
+- content/video_engine/projects/systems-and-blowups/korea-memory-toll/EVIDENCE-DOSSIER.md:39 — Mechanical Arithmetic & The Three-to-One Penalty
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:1 — Deck asset selection index — Manifest: `silicon-decks-source-manifest-v2`
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:7 — The Silicon Reality Gap (`silicon-reality-gap`)
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:57 — S09 · The Three-to-One Capacity Penalty — Source plate showing HBM consuming the wafer capacity of multiple standard DRAM units and contributing to RAM-ageddon.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:112 — The Silicon Antidote (`silicon-antidote`)
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:162 — S09 · The Three-to-One Capacity Penalty — A source plate comparing standard DRAM capacity with the wafer cost of HBM.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:337 — The Memory Supercycle (`memory-supercycle`)
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:351 — S03 · The Root of the Shortage: The Three-to-One Physics Penalty — Source plate illustrating how HBM packaging consumes more wafer capacity than standard DDR5 and constrains supply.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:515 — Silicon’s Silent Triopoly (`silicon-silent-triopoly`)
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:553 — S07 · The RAM-ageddon Penalty — Source plate illustrating the three-to-one wafer-capacity penalty created by HBM production.
+
 ## throat-clearing (11)
 
 - docs/content-video-engine/06-SCRIPT-TRANSFORMATION-SPEC.md:71 — 3. Conflict-loop arc (mapped to `scene.act`) — Linear summary (hook → explanation → conclusion) retains worse than a looped conflict arc:
@@ -2651,21 +3222,6 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/briefs/RESPONSE-TO-RESEARCH-PASS-1.md:23 — 1. The headline, stated fairly — Most of the mechanism work is correct and is being adopted. The two-thirds power
 - docs/content-video-engine/FINDING-the-animation-math-and-what-it-changes.md:126 — 6. Why our ink looks sterile — three stacked models — - Coffee ring (Deegan 1997). Evaporative flux diverges at a pinned perimeter,
 
-## viewer-facing (11)
-
-- docs/content-video-engine/30-VOICE-SOURCE-MATERIAL.md:1 — 30 — Voice Source Material — Input for `brand-voice`. Everything here is evidence of how the operator
-  cited by: docs/content-video-engine/36-WRITER-PERSONA.md:45
-- docs/content-video-engine/30-VOICE-SOURCE-MATERIAL.md:38 — 2. Worked example — a rejected hook and its replacement — The single most useful artefact here, because both versions survive.
-- docs/content-video-engine/38-SCRIPT-ARCHITECTURE.md:45 — 2. Phase 1 — THE OPEN (0:00–1:30), fully fused — The research blueprint says: Truby's Weakness & Need · Glass's Anecdote ·
-- docs/content-video-engine/38-SCRIPT-ARCHITECTURE.md:53 — Beat 1 — MICROHOOK (0:00–0:03) — - The first sentence is the grab. Present tense, viewer-facing, concrete,
-- docs/content-video-engine/briefs/ALICIA-FORMAT-RECREATION-BRIEF.md:1 — Recreation Brief — Alicia-Format Systems Test (3:00) — The end-to-end pipeline test: recreate the format of Alicia Invests'
-- docs/content-video-engine/patterns/CRAFT-DEVICES.md:1 — CRAFT DEVICES — the curated seed for the craft map — Operator, 2026-09-05: *"the map of both micro and macro literary and speech
-- docs/content-video-engine/patterns/CRAFT-DEVICES.md:34 — The devices — | device | scale | what it does | defined in | exemplar |
-- docs/content-video-engine/SCRIPT-CONTEXT-COMBINED.md:191 — VOICE PACK — portable brand voice by exemplar — Third portable file, loaded with `DOCTRINE-CORE.md` and
-- docs/content-video-engine/SCRIPT-CONTEXT-COMBINED.md:218 — 1. The calibration pair (read before writing anything) — Same assignment, same facts, same person. One was rejected, one shipped.
-- docs/portable/VOICE-PACK.md:1 — VOICE PACK — portable brand voice by exemplar — Third portable file, loaded with `DOCTRINE-CORE.md` and
-- docs/portable/VOICE-PACK.md:21 — 1. The calibration pair (read before writing anything) — Same assignment, same facts, same person. One was rejected, one shipped.
-
 ## vit-large (11)
 
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/06_unified_ledger_drawing_engine_and_comfy_spec.md:73 — 2.4 Calibrated Dial Matrix for Engine 1 — - Model: `depth_anything_v2_vitl_fp32.safetensors` (ViT-Large in FP32; FP16 is strictly banned due to logit underflow).
@@ -2679,467 +3235,3 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/UNIFIED_LEDGER_DRAWING_ENGINE_AND_COMFY_SPEC.md:73 — 2.4 Calibrated Dial Matrix for Engine 1 — - Model: `depth_anything_v2_vitl_fp32.safetensors` (ViT-Large in FP32; FP16 is strictly banned due to logit underflow).
 - docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:62 — 2. GATED — mechanical checks against an artifact — Ordered by value. "Fails on" is the pre-finding behaviour the check catches.
 - docs/content-video-engine/RESEARCH-INDEX.md:35 — Declared conflicts and rejections — These are the load-bearing disagreements found by reading the primaries against each
-
-## webgl (11)
-
-- content/video_engine/sources/reference_analyses/ACADEMIC_LITERATURE_DRAWING_AND_2_5D_ANIMATION_ENGINE.md:1 — Academic Literature Monograph: Mathematical Foundations of 2D & 2.5D Drawing and Animation Engines — Unified Academic Synthesis: Differential Geometry, Biomechanical Motor Control, Variational Continuum Mechanics, and Per
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/02_drawing_engine_and_transforms_research.md:80 — 1. Mechanics of 2D/2.5D Drawing Engines
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/07_academic_literature_drawing_and_2_5d_animation_engine.md:1 — Academic Literature Monograph: Mathematical Foundations of 2D & 2.5D Drawing and Animation Engines — Unified Academic Synthesis: Differential Geometry, Biomechanical Motor Control, Variational Continuum Mechanics, and Per
-- content/video_engine/sources/reference_analyses/DRAWING_ENGINE_ANIMATION_TRANSFORM_RESEARCH.md:80 — 1. Mechanics of 2D/2.5D Drawing Engines
-- docs/content-video-engine/43-SCENE-GRAPH-AND-TRANSFORM.md:1 — 43 — The scene graph, transforms, and the object→chart morph — Extracted from `02_drawing_engine_and_transforms_research.md` (§1, §3, §4) and
-- docs/content-video-engine/43-SCENE-GRAPH-AND-TRANSFORM.md:13 — 43.1 Retained mode, and why we are already right — Immediate mode (raw Canvas/WebGL) issues draw calls per frame with no persistent object
-- docs/content-video-engine/briefs/RESEARCH-BRIEF-animation-craft.md:1 — Research brief — what the drawing engine's builder does not know — For the Gemini deep-research pass, 2026-09-04. Same process as speech (docs 32–37)
-- docs/content-video-engine/briefs/RESEARCH-BRIEF-animation-craft.md:10 — 1. The honest diagnosis — The operator's premise is that the math is already there. It is, and it is not the
-- docs/content-video-engine/briefs/RESEARCH-BRIEF-animation-craft.md:173 — Track C — the drawing-engine builder — | # | question | why it matters here |
-- docs/research/tech/MOTION_GRAPHICS_FROM_STILL_IMAGES_BLUEPRINT.md:1 — Motion Graphics & Animation from Still Images — Research Blueprint — Date: 2026-09-03 | Domain: Tech / Video Engine | Method: Deep Research Pass 1 & Pass 2 Synthesis
-- docs/research/tech/MOTION_GRAPHICS_FROM_STILL_IMAGES_BLUEPRINT.md:7 — 1. Executive Summary & Core Hypothesis — High-retention, broadcast-grade video content does not require rendering every frame from scratch using slow, expensive,
-
-## x-1 (11)
-
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/10_generative_video_tools_and_cross_platform_composition.md:32 — 1.2 Mathematical Foundations: Rectified Flow Matching — Wan 2.1 replaces curved DDPM Gaussian diffusion with straight-line probability trajectories:
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md:413 — 14. Generative Video Foundations & 9:16 vs. 16:9 Cross-Platform Architecture — Detailed in [`10_generative_video_tools_and_cross_platform_composition.md`](complete_research_evidence_bundle/10_generat
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md:417 — 14.1 The Low-Compute Generative Engine Triad — 1. Alibaba Wan 2.1 Family (`Wan2.1-1.3B` & `Wan2.1-14B`):
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_INDEX.md:198 — 6. Domain 5: Academic Literature & Mathematical Foundations
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_INDEX.md:200 — 6.1 Biomechanical Motor Control — - Two-Thirds Power Law: $v(t) = \gamma \kappa(t)^{-1/3}$, angular speed $\omega(t) = \gamma \kappa(t)^{2/3}$ (Viviani &
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_INDEX.md:240 — 7. Mathematical Formulas & Theoretical Laws Quick-Lookup — | Law / Formulation | Exact Mathematical Expression | Primary Application in Engine |
-- content/video_engine/sources/reference_analyses/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md:413 — 14. Generative Video Foundations & 9:16 vs. 16:9 Cross-Platform Architecture — Detailed in [`10_generative_video_tools_and_cross_platform_composition.md`](complete_research_evidence_bundle/10_generat
-- content/video_engine/sources/reference_analyses/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md:417 — 14.1 The Low-Compute Generative Engine Triad — 1. Alibaba Wan 2.1 Family (`Wan2.1-1.3B` & `Wan2.1-14B`):
-- content/video_engine/sources/reference_analyses/MASTER_RESEARCH_INDEX.md:197 — 6. Domain 5: Academic Literature & Mathematical Foundations
-- content/video_engine/sources/reference_analyses/MASTER_RESEARCH_INDEX.md:199 — 6.1 Biomechanical Motor Control — - Two-Thirds Power Law: $v(t) = \gamma \kappa(t)^{-1/3}$, angular speed $\omega(t) = \gamma \kappa(t)^{2/3}$ (Viviani &
-- content/video_engine/sources/reference_analyses/MASTER_RESEARCH_INDEX.md:239 — 7. Mathematical Formulas & Theoretical Laws Quick-Lookup — | Law / Formulation | Exact Mathematical Expression | Primary Application in Engine |
-
-## answer-format (10)
-
-- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:855 — Part 9 — Operator corrections, 2026-08-25 (Steel and Paper build) — 1. Dynamic captions are mandatory, always. Word-by-word (or word-group
-- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1222 — 9.20 Topic-governed exits, and the two-chart open (operator, 2026-08-30) — Evidence leaves when its TOPIC ends, never because a plate ended.
-  cited by: docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1940, docs/content-video-engine/CAPABILITIES.md:94
-- docs/content-video-engine/34-AOY-SCRIPT-WRITER-STUDY.md:110 — 4b. Baseline analysis — the chart-story reference (`Jw8ykhoOVBQ`) — Analysed before the AOY script lands, so the comparison is measured rather
-- docs/content-video-engine/34-AOY-SCRIPT-WRITER-STUDY.md:116 — The finding that matters most: this is our topic — The reference video is not a neutral format sample. It argues the same
-- docs/content-video-engine/36-WRITER-PERSONA.md:392 — 6. Thread status (grill of 2026-08-24 — answered) — Resolved this date: the "beating the market" completion (→ T11) · both
-- docs/content-video-engine/README.md:112 — DOCTRINE — the live set — | Doc | Subject |
-- docs/portable/OPERATOR-RULINGS.md:1 — OPERATOR RULINGS — the standing corrections ledger — Portable, model-agnostic. Load alongside `DOCTRINE-CORE.md`.
-- docs/portable/OPERATOR-RULINGS.md:21 — A. Identity and packaging — A1 — The hook prop is not the brand. (2026-08-25, stated twice.)
-- docs/portable/PACKAGING-PLAYBOOK.md:1 — PACKAGING PLAYBOOK — titles & thumbnails, portable — Source: AOY coaching base (ask_tim, two queries, 2026-08-30). Data
-- docs/portable/PACKAGING-PLAYBOOK.md:6 — Titles — - Specificity beats vague, always. "How He Lost $47M" beats "How
-
-## append-only (10)
-
-- docs/agentic-analysis-contract.md:36 — 3) Agent call ledger — `AgentCallRecord` is append-only and includes:
-- docs/agentic-analysis-contract.md:53 — 4) Assessment lifecycle and review state — `AgenticAssessmentSnapshot` is immutable and contains:
-- docs/agentic-analysis-contract.md:145 — 11) Vertical decision and journey evidence v1 — P12 adds a separate `vertical-agentic-pack.v1` contract. A reviewed pack owns
-- docs/product-revenue-contract.md:1 — Product / Revenue Contract: Outreach Program
-- docs/product-revenue-contract.md:48 — Default operator workflow — 1. Paste a URL and run the scan with safe defaults.
-- docs/product-revenue-contract.md:91 — Activation and attribution — Commercial measurement uses append-only `OutreachActivationEvent` records:
-- docs/research/2026-07-26-product-strength-competitive-research.md:401 — 6. Durability improvements
-- docs/research/2026-07-26-product-strength-competitive-research.md:403 — Preserve the strengths — Keep:
-- docs/research/2026-07-28-accretive-revenue-assessment.md:1 — Accretive Revenue: Research Report & Strategic Assessment — Generated 2026-07-28 · Sources: ~90 across three parallel research streams + repo audit · Confidence: High on market evi
-- docs/research/2026-07-28-accretive-revenue-assessment.md:27 — 1. The repo finding (highest-confidence input) — | Artifact | Count | Source |
-
-## art-bible (10)
-
-- docs/content-video-engine/00-BRAINSTORM-AND-DECISIONS.md:1 — Content-to-Video Flywheel — Brainstorm, Challenges, and Decisions — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine
-  cited by: docs/content-video-engine/README.md:20
-- docs/content-video-engine/00-BRAINSTORM-AND-DECISIONS.md:12 — V4 pivot record — The anchorable 2D experiment improved body ownership but did not remove the
-- docs/content-video-engine/08-TOOLING-ALTERNATIVES.md:154 — Producer orchestration (V4.1) — The engine now compiles `producer_plan.v1` from editorial coverage. This is the
-- docs/content-video-engine/12-HIGGSFIELD-EXPLAINER-LEARNINGS.md:1 — Higgsfield Explainer Learnings and Producer Orchestration — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine
-- docs/content-video-engine/12-HIGGSFIELD-EXPLAINER-LEARNINGS.md:14 — Durable learnings — 1. Choose the visual system first. A concise style key and descriptor are
-- docs/content-video-engine/12-HIGGSFIELD-EXPLAINER-LEARNINGS.md:60 — Option A: orchestrate producers, keep our editor — The engine now compiles `producer_plan.v1` beside
-- docs/content-video-engine/13-GOOGLE-FLOW-CHARACTER-BUILDER-SPEC.md:1 — Google Flow Character Builder — P13 V4.1 — The History of BJJ lane now treats Google Flow's character builder as an
-- docs/content-video-engine/13-GOOGLE-FLOW-CHARACTER-BUILDER-SPEC.md:8 — Contract — `flow_character_pack.v1` is the durable input contract. The acceptance pilot's
-- docs/content-video-engine/53-THE-STICKMAN-LANE.md:387 — 53.10 Two Mikes, and the character pack needs upgrading — Operator, 2026-09-04:
-  cited by: docs/content-video-engine/BACKLOG.md:279
-- docs/content-video-engine/53-THE-STICKMAN-LANE.md:394 — The gap in what we hold — `finance-host-flow-character-pack.v1.json` is well-formed — schema, art-bible hash, rights
-
-## asset-manifest.v1 (10)
-
-- docs/content-video-engine/01-PRD.md:1 — PRD — Content-to-Video Flywheel Engine — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine
-- docs/content-video-engine/01-PRD.md:8 — V4 product override — The engine's primary product is an evidence-backed three-part History of BJJ
-- docs/content-video-engine/03-SYSTEM-ARCHITECTURE.md:1 — Content-to-Video Engine — System Architecture — > V4 architecture overlay: V1–V3 remain resumable. New History V4 jobs use the
-- docs/content-video-engine/03-SYSTEM-ARCHITECTURE.md:7 — V4 history pipeline — `research_packet.v1`, `asset_manifest.v1`, and `art_bible.v2` are independently
-- docs/content-video-engine/11-ARCHIVAL-ASSET-AND-CITATION-SPEC.md:1 — Archival Asset and Citation Specification — *Specification of record for History Documentary V4 rights, likeness, attribution,
-- docs/content-video-engine/11-ARCHIVAL-ASSET-AND-CITATION-SPEC.md:6 — 1. Separate evidence from permission — `research_packet.v1` answers “may we say this?”. `asset_manifest.v1` answers
-- docs/content-video-engine/13-GOOGLE-FLOW-CHARACTER-BUILDER-SPEC.md:66 — Promotion boundary — The pack, generated sheet, and provider clip are non-renderable until an
-- docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:29 — 2. Five communication surfaces
-- docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:31 — Combat Woodblock parent identity — The channel's defining visual language is Combat Woodblock: clean graphic
-- docs/content-video-engine/17-TIMESTAMPED-PLATE-PRODUCTION.md:159 — 6. Promotion after candidate-pack approval — An approved contact sheet does not mutate the candidate inventory. The
-
-## best-performing (10)
-
-- content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/WHAT-WE-LEARN.md:1 — What we actually learn from the zapiwala tutorial — verified, 2026-09-04 — Read against Gemini's dossier in this directory, then re-measured from the primary
-- content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/WHAT-WE-LEARN.md:34 — 2. RETRACTED — "cadence variance" was a tutorial artifact — My first pass claimed we lack rhythm variance because only 4% of ep1's shots run under
-- docs/content-video-engine/31-FACELESS-CHANNEL-DOCTRINE.md:188 — 8b. Endings, outros and CTAs — Peak-End Theory governs the whole close: viewers judge an experience by
-- docs/content-video-engine/FINDING-what-the-bundle-already-answered.md:106 — 5. Two discrepancies to settle — Speech rate. The reference runs 183.6 WPM; we measured ep1 at 182.8. Our
-- docs/content-video-engine/patterns/FULL-VIDEO-MAP.md:227 — 8. P6 — THE CLOSE (26:00–30:00: true close 60–90s + end screen 20s) — Classical: Self-Revelation → New Equilibrium · chiastic echo · ring
-- docs/content-video-engine/patterns/phase-guides/P6.md:1 — P6 — THE CLOSE — > Self-contained generation guide. Consume ONLY: the INJECTION block, the
-- docs/content-video-engine/patterns/phase-guides/P6.md:47 — Beat template
-- docs/content-video-engine/patterns/phase-guides/P6.md:83 — The assignment + outro template (phase end) — - The viewer assignment: the calculable take-home restated as
-- docs/portable/OUTRO-CTA-PLAYBOOK.md:1 — OUTRO / CTA / END-SCREEN PLAYBOOK — portable — Source: AOY coaching base (ask_tim, 2026-08-30) reconciled against our
-- docs/portable/OUTRO-CTA-PLAYBOOK.md:31 — End-screen SOP (the 20 seconds) — Full 20s end screen carrying: a subscribe button + the most recent
-
-## character (10)
-
-- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/COMPOSITING-VERDICT.md:22 — Disagreed — the "multi-style collision" is not there — > *"On the left a sleek thin-line corporate executive… in the center the host in bold
-- docs/content-video-engine/11-ARCHIVAL-ASSET-AND-CITATION-SPEC.md:67 — 7. Asset intake workflow — Changing bytes, rights, attribution, or likeness approval changes the manifest hash
-- docs/content-video-engine/11-ARCHIVAL-ASSET-AND-CITATION-SPEC.md:111 — 7.2 Generated-reference and flow lane — Magnific references, custom characters/styles, Spaces flows, Designer templates,
-- docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:180 — Google Flow terminology — A Google Flow character is a persistent reference bundle. A Google Flow
-- docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:206 — 7. Scene flow — Each adjacency declares at least one connector:
-- docs/content-video-engine/21-ART-STYLE-REFERENCE-REVIEW.md:34 — Lane A — `cutout_history` — Reference: long-form Depression-era history explainer.
-- docs/content-video-engine/21-ART-STYLE-REFERENCE-REVIEW.md:57 — Lane B — `flat_cartoon_explainer` — Reference: personal-finance channel, single recurring narrator.
-- docs/content-video-engine/21-ART-STYLE-REFERENCE-REVIEW.md:81 — Lane C — `presenter_infographic` — Reference: personal-finance channel, presenter-anchored.
-- docs/content-video-engine/21-ART-STYLE-REFERENCE-REVIEW.md:129 — The ceiling reference, as a spec — - Characters. True stick figures — circle head, single-weight line limbs — but with a
-- docs/content-video-engine/54-GOOGLE-FLOW-OMNI-NANO-BANANA-PRODUCTION-RESEARCH.md:151 — 4. Ingredients-to-Video Architecture — Omni 1.1 Flash supports multi-latent conditioning with up to 3 reference ingredients:
-
-## close-up (10)
-
-- docs/content-video-engine/09-YOUTUBE-REFERENCE-PACK-LEARNINGS.md:99 — 3. What each reference family contributes
-- docs/content-video-engine/09-YOUTUBE-REFERENCE-PACK-LEARNINGS.md:101 — 3.1 BJJ fight shorts: physical legibility — `BJJ vs Taekwondo`, `BJJ vs Aikido`, and `BJJ vs Muay Thai` provide the closest movement grammar:
-- docs/content-video-engine/09-YOUTUBE-REFERENCE-PACK-LEARNINGS.md:272 — 8. Gate A and automated QC additions — Gate A should reject a technique storyboard when any of the following is true:
-- docs/content-video-engine/09-YOUTUBE-REFERENCE-PACK-LEARNINGS.md:303 — 10. Implementation order — 1. Extend the storyboard/guard contract with `function`, motion phases, persistent cast state, and
-- docs/content-video-engine/23-EP1-LIBRARY-INTAKE-REVIEW.md:383 — 9. The worlds were drawn at the wrong human scale — the root cause — Every scale problem in this review traces back here, and it is a plate defect,
-- docs/content-video-engine/23-EP1-LIBRARY-INTAKE-REVIEW.md:424 — Scale Block — paste into every world prompt — Image models handle on-screen proportions far better than metres, so state the
-- docs/content-video-engine/24-COMPOSITION-AND-SCALE-SPEC.md:1 — Composition and Scale Spec — Specification of record for how figures, worlds, and depth planes relate in a
-  cited by: content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:74, content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/01_wealth_logic_production_report.md:74, content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/02_drawing_engine_and_transforms_research.md:7, content/video_engine/sources/reference_analyses/DRAWING_ENGINE_ANIMATION_TRANSFORM_RESEARCH.md:7, content/video_engine/sources/reference_analyses/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:74
-- docs/content-video-engine/54-GOOGLE-FLOW-OMNI-NANO-BANANA-PRODUCTION-RESEARCH.md:169 — 5. 16:9 Landscape vs. 9:16 Vertical Mobile Architecture
-- docs/content-video-engine/prompts/LIBRARY-BUILD-EP1-V3-REGENERATION.md:1 — Library Build — Episode 1 v3 Regeneration — Supersedes [LIBRARY-BUILD-EP1-INDEX-FUNDS.md](LIBRARY-BUILD-EP1-INDEX-FUNDS.md).
-- docs/content-video-engine/prompts/LIBRARY-BUILD-EP1-V3-REGENERATION.md:70 — New: Scale Block — every world plane — This is the change that matters most. The v2 interiors were generated as close-up
-
-## cosh (10)
-
-- content/video_engine/sources/reference_analyses/ACADEMIC_LITERATURE_DRAWING_AND_2_5D_ANIMATION_ENGINE.md:229 — Pillar 3: Analytic Second-Order Dynamics & Spacetime Constraints
-- content/video_engine/sources/reference_analyses/ACADEMIC_LITERATURE_DRAWING_AND_2_5D_ANIMATION_ENGINE.md:231 — 3.1 Closed-Form Physics vs. Numerical Integration — In cloud rendering architectures (AWS Lambda, Google Cloud Run) and timeline scrubbers, animations must obey the Frame I
-- content/video_engine/sources/reference_analyses/ACADEMIC_LITERATURE_DRAWING_AND_2_5D_ANIMATION_ENGINE.md:238 — Derivation of Damped Harmonic Oscillator Step Response — $$m \ddot{x}(t) + c \dot{x}(t) + k (x(t) - x_{ ext{target}}) = 0 \implies \ddot{y} + 2\zeta \omega_0 \dot{y} + \omega_0^
-- content/video_engine/sources/reference_analyses/ACADEMIC_LITERATURE_DRAWING_AND_2_5D_ANIMATION_ENGINE.md:250 — 3. Overdamped ($\zeta > 1$): Sluggish dual-exponential approach ($\omega_r = \omega_0 \sqrt{\zeta^2 - 1}$) — $$x(t) = 1 - e^{-\zeta \omega_0 t} \left( \cosh(\omega_r t) + rac{\zeta \omega_0}{\omega_r} \sinh(\omega_r t)
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/07_academic_literature_drawing_and_2_5d_animation_engine.md:229 — Pillar 3: Analytic Second-Order Dynamics & Spacetime Constraints
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/07_academic_literature_drawing_and_2_5d_animation_engine.md:231 — 3.1 Closed-Form Physics vs. Numerical Integration — In cloud rendering architectures (AWS Lambda, Google Cloud Run) and timeline scrubbers, animations must obey the Frame I
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/07_academic_literature_drawing_and_2_5d_animation_engine.md:238 — Derivation of Damped Harmonic Oscillator Step Response — $$m \ddot{x}(t) + c \dot{x}(t) + k (x(t) - x_{ ext{target}}) = 0 \implies \ddot{y} + 2\zeta \omega_0 \dot{y} + \omega_0^
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/07_academic_literature_drawing_and_2_5d_animation_engine.md:250 — 3. Overdamped ($\zeta > 1$): Sluggish dual-exponential approach ($\omega_r = \omega_0 \sqrt{\zeta^2 - 1}$) — $$x(t) = 1 - e^{-\zeta \omega_0 t} \left( \cosh(\omega_r t) + rac{\zeta \omega_0}{\omega_r} \sinh(\omega_r t)
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_INDEX.md:218 — 6.4 Analytic Second-Order Dynamical Systems — - Mass-Spring-Damper Governing ODE: $m\ddot{x} + c\dot{x} + k(x - x_{ ext{target}}) = 0$.
-- content/video_engine/sources/reference_analyses/MASTER_RESEARCH_INDEX.md:217 — 6.4 Analytic Second-Order Dynamical Systems — - Mass-Spring-Damper Governing ODE: $m\ddot{x} + c\dot{x} + k(x - x_{ ext{target}}) = 0$.
-
-## de-risk (10)
-
-- docs/content-video-engine/briefs/ANSWER-BRAVOS-HYPE-CYCLE.md:267 — SCRIPT B — **PRODUCTION TEXT** (sentence-strength pass; won the A/B ear test) — A/B verdict (operator, 2026-08-24, by ear): three matched pairs — open,
-- docs/content-video-engine/briefs/ANSWER-BRAVOS-HYPE-CYCLE.md:456 — Strength Log (A → B, gates per SENTENCE-STRENGTH-CHECK) — | # | A (original) | Gates failed | B (final) |
-- docs/content-video-engine/briefs/ANSWER-BRAVOS-HYPE-CYCLE.md:501 — Final ledger audit (P6 out) — - ring_echo: spike returns transformed ("still carrying trains… paper
-- docs/content-video-engine/briefs/STEEL-AND-PAPER-REVISION-C.md:96 — 3. UPGRADE — the tell becomes an instrument — The tell is the channel's standing audit and now has real apparatus
-- docs/content-video-engine/SCRIPT-CONTEXT-COMBINED.md:191 — VOICE PACK — portable brand voice by exemplar — Third portable file, loaded with `DOCTRINE-CORE.md` and
-- docs/content-video-engine/SCRIPT-CONTEXT-COMBINED.md:250 — 2. Approved production lines, by function — From Script B ("Steel and Paper"), which won a seed-locked A/B by ear
-- docs/content-video-engine/SCRIPT-CONTEXT-COMBINED.md:302 — 3. What the exemplars are doing (the patterns worth naming) — - Abstractions get cashed inside the sentence. Never "enormous
-- docs/portable/VOICE-PACK.md:1 — VOICE PACK — portable brand voice by exemplar — Third portable file, loaded with `DOCTRINE-CORE.md` and
-- docs/portable/VOICE-PACK.md:52 — 2. Approved production lines, by function — From Script B ("Steel and Paper"), which won a seed-locked A/B by ear
-- docs/portable/VOICE-PACK.md:101 — 3. What the exemplars are doing (the patterns worth naming) — - The opponent is a mechanism, never a person. Not "Bravos is wrong"
-
-## double-imaging (10)
-
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/08_answers_animation_craft_brief.md:149 — 3. Track A — The Animator (Timing and Motion)
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/08_answers_animation_craft_brief.md:151 — A1: The Timing Charts [RECLASSIFIED: Design Proposal] — The figures below represent animator craft heuristics synthesized from classical practitioners (Richard Williams 2001; J
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/08_answers_animation_craft_brief.md:171 — The On-1s / On-2s / On-3s Decision Rule (Proposal) — $$\text{Frame Cadence} = \begin{cases}
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/08_answers_animation_craft_brief.md:497 — 7. Track E — The Feedback Loop (The Structural Gap)
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/08_answers_animation_craft_brief.md:524 — E2: Diagnosing "The Race Feels Choppy" [Tier 1 Psychophysics — CLOSED]
-- docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:163 — 3. Track A — The Animator (Timing and Motion)
-- docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:165 — A1: The Timing Charts [RECLASSIFIED: Design Proposal] — The figures below represent animator craft heuristics synthesized from classical practitioners (Richard Williams 2001; J
-- docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:185 — The On-1s / On-2s / On-3s Decision Rule (Proposal) — $$\text{Frame Cadence} = \begin{cases}
-- docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:511 — 7. Track E — The Feedback Loop (The Structural Gap)
-- docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:538 — E2: Diagnosing "The Race Feels Choppy" [Tier 1 Psychophysics — CLOSED]
-
-## first-class (10)
-
-- docs/ARCHITECTURE_DECISION_SEO_PLATFORM.md:1 — Architecture Decision: SEO Insights Platform over Script-First Pipeline — Date: 2026-07-07
-- docs/ARCHITECTURE_DECISION_SEO_PLATFORM.md:35 — Rule going forward — Future implementation should prefer:
-- docs/content-video-engine/01-PRD.md:38 — 2. Product — A run-centric render pipeline (`03-SYSTEM-ARCHITECTURE.md`) that turns corpus records and
-- docs/content-video-engine/04-STORYBOARD-CONTRACT.md:44 — 1. What changed from the draft (v1 → v2) — The operator's draft schema had the right skeleton (job id, global theme, typed scenes with
-- docs/content-video-engine/08-TOOLING-ALTERNATIVES.md:154 — Producer orchestration (V4.1) — The engine now compiles `producer_plan.v1` from editorial coverage. This is the
-- docs/content-video-engine/patterns/STRENGTH-LOOP.md:108 — 7. The loop protocol — Operator rulings, 2026-08-29.
-- docs/research/2026-08-24-twenty-n8n-attio-evaluation.md:57 — 2. Attio — managed, metered, capable — Pricing rose ~21% in July 2026. Nearly every comparison article still quotes the old numbers. Live from [attio.com/prici
-- docs/seo-insights-platform-architecture.md:423 — 13. Bottom-line architecture decision — Redesign the system as a platform for SEO insight runs, not as a loose collection of scripts.
-- docs/seo-insights-platform-implementation-plan.md:137 — What to change in the current implementation approach
-- docs/seo-insights-platform-implementation-plan.md:145 — Change — - stop treating `scripts/*.py` as the product boundary
-
-## follow-through (10)
-
-- content/video_engine/sources/reference_analyses/ACADEMIC_LITERATURE_DRAWING_AND_2_5D_ANIMATION_ENGINE.md:229 — Pillar 3: Analytic Second-Order Dynamics & Spacetime Constraints
-- content/video_engine/sources/reference_analyses/ACADEMIC_LITERATURE_DRAWING_AND_2_5D_ANIMATION_ENGINE.md:270 — 3.3 Spacetime Constraints & Elastic Paper Mechanics — - Spacetime Constraints (Witkin & Kass SIGGRAPH 1988): Animation formulated as variational trajectory optimization $\min
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/07_academic_literature_drawing_and_2_5d_animation_engine.md:229 — Pillar 3: Analytic Second-Order Dynamics & Spacetime Constraints
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/07_academic_literature_drawing_and_2_5d_animation_engine.md:270 — 3.3 Spacetime Constraints & Elastic Paper Mechanics — - Spacetime Constraints (Witkin & Kass SIGGRAPH 1988): Animation formulated as variational trajectory optimization $\min
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/09_2d_and_2_5d_body_animation_object_handling_and_grounding.md:739 — 6. Master Citation & Authority Registry
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/09_2d_and_2_5d_body_animation_object_handling_and_grounding.md:758 — 6.2 Animator Craft & Compositing Doctrine — 16. Williams, Richard (2001). The Animator's Survival Kit. Faber & Faber. (Opposing angles, weight anticipation, follow-
-- docs/content-video-engine/briefs/RESEARCH-BRIEF-animation-craft.md:1 — Research brief — what the drawing engine's builder does not know — For the Gemini deep-research pass, 2026-09-04. Same process as speech (docs 32–37)
-- docs/content-video-engine/briefs/RESEARCH-BRIEF-animation-craft.md:10 — 1. The honest diagnosis — The operator's premise is that the math is already there. It is, and it is not the
-- docs/content-video-engine/briefs/RESEARCH-BRIEF-animation-craft.md:148 — 3. The questions, by role — Priority marked ★ — if the pass can only go deep on five, take the starred ones.
-- docs/content-video-engine/briefs/RESEARCH-BRIEF-animation-craft.md:152 — Track A — the animator (timing and motion) — | # | question | why it matters here |
-
-## frame-0080.jpg (10)
-
-- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:74 — 4. Persistent Cast & Metaphorical Physical Props — - No Random AI Hallucinations: Wealth Logic uses a single consistent diegetic character (a calm, smart analyst in a whit
-- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:129 — Visual Evidence Manifest — All reference frames extracted from the native stream are archived in `frames/`:
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/01_wealth_logic_production_report.md:74 — 4. Persistent Cast & Metaphorical Physical Props — - No Random AI Hallucinations: Wealth Logic uses a single consistent diegetic character (a calm, smart analyst in a whit
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/01_wealth_logic_production_report.md:129 — Visual Evidence Manifest — All reference frames extracted from the native stream are archived in `frames/`:
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/02_drawing_engine_and_transforms_research.md:218 — Advantages of Slot-Swapping for Outreach Video Engine: — 1. Zero Aesthetic Drift: Every hand and face is pre-rendered and verified against our style guide. No AI warping.
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md:86 — 3. Forensic Visual Evidence & Proof of 2.5D Compositing — A central question in AI video production is whether top channels generate hosts into scenes via diffusion prompts or co
-- content/video_engine/sources/reference_analyses/DRAWING_ENGINE_ANIMATION_TRANSFORM_RESEARCH.md:218 — Advantages of Slot-Swapping for Outreach Video Engine: — 1. Zero Aesthetic Drift: Every hand and face is pre-rendered and verified against our style guide. No AI warping.
-- content/video_engine/sources/reference_analyses/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md:86 — 3. Forensic Visual Evidence & Proof of 2.5D Compositing — A central question in AI video production is whether top channels generate hosts into scenes via diffusion prompts or co
-- content/video_engine/sources/reference_analyses/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:74 — 4. Persistent Cast & Metaphorical Physical Props — - No Random AI Hallucinations: Wealth Logic uses a single consistent diegetic character (a calm, smart analyst in a whit
-- content/video_engine/sources/reference_analyses/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:129 — Visual Evidence Manifest — All reference frames extracted from the native stream are archived in `frames/`:
-
-## gap-cut (10)
-
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/08_answers_animation_craft_brief.md:297 — 4. Track B — The Editor (Cutting and Rhythm)
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/08_answers_animation_craft_brief.md:299 — B1: The Gap-Cut Finding, Generalised [RE-ASK 4: Audited & Answered]
-- docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:311 — 4. Track B — The Editor (Cutting and Rhythm)
-- docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:313 — B1: The Gap-Cut Finding, Generalised [RE-ASK 4: Audited & Answered]
-- docs/content-video-engine/briefs/RESEARCH-BRIEF-animation-craft.md:118 — 2.3 Answer status after five passes (2026-09-04) — Recorded so a later pass does not redo settled work. Reference layer: docs 42–49.
-- docs/content-video-engine/briefs/RESEARCH-BRIEF-animation-craft.md:148 — 3. The questions, by role — Priority marked ★ — if the pass can only go deep on five, take the starred ones.
-- docs/content-video-engine/briefs/RESPONSE-TO-RESEARCH-PASS-1.md:138 — RE-ASK 4 — B1, which did not answer the question asked — What was wrong. B1 restates our own measurement (82% of reference cuts in
-- docs/content-video-engine/briefs/RESPONSE-TO-RESEARCH-PASS-1.md:192 — 6. Priority for pass 2 — 1. A4 — re-ask. Two shipped gates depend on it and it is currently unsupported.
-- docs/content-video-engine/briefs/VERDICT-research-brief-animation-craft.md:54 — REFUSE — the citation does not support the claim — | claim | why it is refused |
-- docs/content-video-engine/RESEARCH-INDEX.md:255 — `08_answers_animation_craft_brief.md` — 42 headings — | heading | disposition |
-
-## hash-bound (10)
-
-- docs/content-video-engine/10-HISTORY-DOCUMENTARY-EDITORIAL-SPEC.md:235 — 7. Human gates
-- docs/content-video-engine/10-HISTORY-DOCUMENTARY-EDITORIAL-SPEC.md:243 — Visual Direction Gate — The style board contains cold open, archive, illustration, document, map/timeline,
-- docs/content-video-engine/12-HIGGSFIELD-EXPLAINER-LEARNINGS.md:121 — World plates for weak documentary roles — The first Episode 1 pass exposed a boundary in Option A: deterministic local
-- docs/content-video-engine/14-HIGGSFIELD-AUDIO-DRIVEN-LANE.md:1 — P13 Higgsfield Audio-Driven Explainer Lane — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine
-- docs/content-video-engine/14-HIGGSFIELD-AUDIO-DRIVEN-LANE.md:34 — Local-first contract — The current Episode 1 coverage contains 138 reviewed editorial slots and the
-- docs/content-video-engine/16-EDITORIAL-MOTION-SYSTEM.md:154 — 7. Provider boundary — Every shot declares one provider-motion classification:
-- docs/content-video-engine/16-EDITORIAL-MOTION-SYSTEM.md:192 — 9. On-screen text and added-layer policy — - The default is no added text and no added prop. A layer must earn its place.
-- docs/content-video-engine/18-GRAPHIC-SILHOUETTE-WOODBLOCK-EXPLAINER-SPEC.md:122 — Sample-pack use — `content/video_engine/projects/history-of-bjj/style-samples/combat-woodblock-graphic-silhouette-explainer-v1/`
-- docs/content-video-engine/19-HYPERFRAMES-LANE.md:1 — HyperFrames Unit Lane — *Date: 2026-08-08 · Implements `P13-REMOTION-INSTALL-AND-HYPERFRAMES-LANE.plan.md` · Extends the
-  cited by: docs/content-video-engine/patterns/CHECK-RESPONSIBILITIES.md:42
-- docs/content-video-engine/19-HYPERFRAMES-LANE.md:35 — 3. Timing authority per unit kind — | Unit kind | Timing source |
-
-## in-world (10)
-
-- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/SHOT_LEDGER.md:1 — SHOT LEDGER: Frame-Accurate Pacing & Visual Species Breakdown — | Shot # | Start | End | Dur (s) | Keyframe | Classified Species | Spoken Line / Audio Beat |
-- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/SHOT_LEDGER.md:106 — Visual Species Taxonomy Legend — - `chart`: Quantitative coordinate graph (line, bar, scatter, yield curve).
-- content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/SHOT_LEDGER.md:1 — SHOT LEDGER: Frame-Accurate Pacing & Visual Species Breakdown — | Shot # | Start | End | Dur (s) | Keyframe | Classified Species | Spoken Line / Audio Beat |
-- content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/SHOT_LEDGER.md:106 — Visual Species Taxonomy Legend — - `chart`: Quantitative coordinate graph (line, bar, scatter, yield curve).
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/04_shot_ledger_100_cuts.md:1 — SHOT LEDGER: Frame-Accurate Pacing & Visual Species Breakdown — | Shot # | Start | End | Dur (s) | Keyframe | Classified Species | Spoken Line / Audio Beat |
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/04_shot_ledger_100_cuts.md:106 — Visual Species Taxonomy Legend — - `chart`: Quantitative coordinate graph (line, bar, scatter, yield curve).
-- content/video_engine/sources/reference_analyses/why-us-bond-yields-are-surging-again-do-this-asap/SHOT_LEDGER.md:106 — Visual Species Taxonomy Legend — - `chart`: Quantitative coordinate graph (line, bar, scatter, yield curve).
-- docs/content-video-engine/SCRIPT-CONTEXT-COMBINED.md:163 — PRODUCTION AWARENESS — Narration is synthesized: numbers as spoken words, exact numerals on
-- docs/portable/DOCTRINE-CORE.md:172 — PRODUCTION AWARENESS — Motion and evidence choreography: `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md`
-- docs/portable/OPERATOR-RULINGS.md:761 — E25 — The chart is the proof, not the homework (2026-09-03) — The analytics behind E24, read by the operator: the thumbnail converts at
-  cited by: content/video_engine/sources/reference_analyses/ACADEMIC_LITERATURE_DRAWING_AND_2_5D_ANIMATION_ENGINE.md:1, content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/WHAT-WE-LEARN.md:105, content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/07_academic_literature_drawing_and_2_5d_animation_engine.md:1, content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_INDEX.md:158, content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_INDEX.md:305, content/video_engine/sources/reference_analyses/MASTER_RESEARCH_INDEX.md:157, +21 more
-
-## left-to-right (10)
-
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/08_answers_animation_craft_brief.md:446 — 6. Track D — Placement (The "Where" Question)
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/08_answers_animation_craft_brief.md:455 — D2: Non-Decorative Composition for 9:16 [Candidate Doctrine] — - Tangency Elimination Rule: Minimum clearance $\ge 24\text{px}$ OR deliberate overlap $\ge 48\text{px}$ with cast shado
-- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:441 — 8.9 Documents draw on, and they leave (operator correction, 2026-08-24) — Two failures in the v4 build, one cause: the dock was a state, not an event.
-- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:575 — 8.13 Hand pose set v2 — host-consistent, two poses, per-pose nib — The asset pack shipped exactly one hand: `draw-hand-a-v1`, light-skinned, and
-- docs/content-video-engine/39-EVIDENCE-CHART-SYSTEM.md:377 — 11. Data documents animate too — the line is drawn by narration beats — Operator question, 2026-08-25: keep charts as they are, or move to manim?
-- docs/content-video-engine/39-EVIDENCE-CHART-SYSTEM.md:399 — The beat-keyed draw — The important idea, and the thing that makes this better than a chart
-- docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:460 — 6. Track D — Placement (The "Where" Question)
-- docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:469 — D2: Non-Decorative Composition for 9:16 [Candidate Doctrine] — - Tangency Elimination Rule: Minimum clearance $\ge 24\text{px}$ OR deliberate overlap $\ge 48\text{px}$ with cast shado
-- docs/content-video-engine/RULE-abstract-to-concrete.md:1 — The plate throws the punch — abstract-to-concrete, 2026-09-04 — Adopted from the doodle-channel master prompt's rule 5, which is the one genuinely
-- docs/content-video-engine/RULE-abstract-to-concrete.md:39 — Frame types that carry a punch — Adapted from the source's rule 8, kept where it fits our register and dropped where it
-
-## low-resolution (10)
-
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/08_answers_animation_craft_brief.md:110 — 2.2 The 5 Disproportionately Easy Free Wins — 1. $7\text{px}$ Field-Colored Halo on Direct Inline Labels (`paint-order: stroke fill`):
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/08_answers_animation_craft_brief.md:570 — 8.2 The Precise Defect & Proposed Fix — - The Defect: `intensity` is hardcoded to `1.0` across all six preset blocks. In ComfyUI-Depthflow-Nodes, `intensity` is
-- content/video_engine/sources/reference_analyses/us-japan-bond-yield-shock/NICHE_BEND_DOSSIER.md:1 — NICHE BEND RESEARCH DOSSIER: WHY US BOND YIELDS ARE SURGING AGAIN — > Strategic repositioning brief. Contrasts crowded competitor tropes with forensic mechanics,
-- content/video_engine/sources/reference_analyses/us-japan-bond-yield-shock/NICHE_BEND_DOSSIER.md:8 — 1. Top Competitor Cluster (The Crowded Mainstream) — | Competitor Title | Channel / Source | Core Hook Trope | Video URL |
-- content/video_engine/sources/reference_analyses/us-japan-bond-yield-shock/NICHE_BEND_DOSSIER.md:18 — Competitor Narrative & Art Style Patterns: — - Thumbnail & Title Trope: High-urgency doom ('Surging AGAIN - Do This ASAP!', 'Catastrophe ahead').
-- content/video_engine/sources/reference_analyses/why-us-bond-yields-are-surging-again-do-this-asap/NICHE_BEND_DOSSIER.md:1 — NICHE BEND RESEARCH DOSSIER: WHY US BOND YIELDS ARE SURGING AGAIN — DO THIS ASAP! — > Strategic repositioning brief. Contrasts crowded competitor tropes with forensic mechanics,
-- content/video_engine/sources/reference_analyses/why-us-bond-yields-are-surging-again-do-this-asap/NICHE_BEND_DOSSIER.md:8 — 1. Top Competitor Cluster (The Crowded Mainstream) — | Competitor Title | Channel / Source | Core Hook Trope | Video URL |
-- content/video_engine/sources/reference_analyses/why-us-bond-yields-are-surging-again-do-this-asap/NICHE_BEND_DOSSIER.md:18 — Competitor Narrative & Art Style Patterns: — - Thumbnail & Title Trope: High-urgency doom ('Surging AGAIN - Do This ASAP!', 'Catastrophe ahead').
-- docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:124 — 2.2 The 5 Disproportionately Easy Free Wins — 1. $7\text{px}$ Field-Colored Halo on Direct Inline Labels (`paint-order: stroke fill`):
-- docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:584 — 8.2 The Precise Defect & Proposed Fix — - The Defect: `intensity` is hardcoded to `1.0` across all six preset blocks. In ComfyUI-Depthflow-Nodes, `intensity` is
-
-## map-not-territory (10)
-
-- docs/content-video-engine/38-SCRIPT-ARCHITECTURE.md:196 — 5. Worked instance — The v5 hook + Alicia v2 persona pass
-- docs/content-video-engine/briefs/ALICIA-SCRIPT-V3-CALCULUS.md:1 — Alicia Script — v3 (The Calculus Pass) + Three-Way Verdict — The bake-off before committing to the phase guides (P10 T2). Same
-- docs/content-video-engine/briefs/ALICIA-SCRIPT-V3-CALCULUS.md:22 — Script v3 (~550 words, ~3:00) — [P1 · s01 — cold open ON THE TILL PLATE, drawer sounds under; captions
-- docs/content-video-engine/briefs/ANSWER-BRAVOS-HYPE-CYCLE.md:32 — SCRIPT A (v1 baseline — A/B test arm A) — [P1 · s01 — macro: an iron railway spike on dark wood, already rotating
-- docs/content-video-engine/patterns/FULL-VIDEO-MAP.md:125 — 3. P1 — THE OPEN (0:00–1:30, absolute) — Classical: Truby Weakness & Need · Glass anecdote opens · irony counterpoint.
-- docs/content-video-engine/patterns/phase-guides/P1.md:155 — Worked micro-example (~compressed, 3:00-scale segment) — > [till plate, drawer sounds under; image breathes 0.6s]
-- docs/content-video-engine/SCRIPT-CONTEXT-COMBINED.md:1 — DOCTRINE CORE — portable content-operation context — Model-agnostic; paste whole into any system-instruction or rules box
-- docs/content-video-engine/SCRIPT-CONTEXT-COMBINED.md:58 — ARCHITECTURE (six phases) — Open and close are absolute 60–90s at any runtime; midpoint pinned
-- docs/portable/DOCTRINE-CORE.md:1 — DOCTRINE CORE — portable content-operation context — Model-agnostic; paste whole into any system-instruction box (fits a
-- docs/portable/DOCTRINE-CORE.md:65 — ARCHITECTURE (six phases) — Spine: `docs/content-video-engine/patterns/FULL-VIDEO-MAP.md` (classical
-
-## mini-pivot (10)
-
-- docs/content-video-engine/patterns/FULL-VIDEO-MAP.md:1 — FULL VIDEO MAP — McKee Extended to the YouTube Era — The calculus. The classical six-phase architecture (doc 32 / the research
-- docs/content-video-engine/patterns/FULL-VIDEO-MAP.md:36 — 1. Geometry and the scaling law — - Pinned absolute: P1 THE OPEN is 60–90 seconds at every runtime —
-- docs/content-video-engine/patterns/FULL-VIDEO-MAP.md:162 — 5. P3 — THE GAP (5:00–13:30, elastic: the pattern unit) — Classical: Expectation-Reality Gap engine · Opponent & Plan · subtext
-- docs/content-video-engine/patterns/FULL-VIDEO-MAP.md:277 — CHANGELOG — - 2026-08-24 — v1, T1 of the P10 plan. Geometry decision recorded: open and
-- docs/content-video-engine/patterns/phase-guides/P3.md:1 — P3 — THE GAP (the pattern unit) — > Self-contained generation guide. Consume ONLY: the INJECTION block, the
-- docs/content-video-engine/patterns/phase-guides/P3.md:15 — Geometry — | Runtime | P3 window | Units (2:00–2:30 each) |
-- docs/content-video-engine/patterns/phase-guides/P4.md:1 — P4 — THE MIDPOINT PIVOT — > Self-contained generation guide. Consume ONLY: the INJECTION block, the
-- docs/content-video-engine/patterns/phase-guides/P4.md:17 — Geometry — PINNED at 45–55% of runtime, every length — | Runtime | P4 window |
-- docs/content-video-engine/patterns/SCRIPT-PATTERN-KIT.md:1 — SCRIPT PATTERN KIT — A portable, deterministic script-generation kit for long-form narrated
-- docs/content-video-engine/patterns/SCRIPT-PATTERN-KIT.md:55 — Geometry (the scaling law) — - Absolute, every runtime: the OPEN is 60–90 seconds (60 at 8 min);
-
-## one-off (10)
-
-- docs/ARCHITECTURE_DECISION_SEO_PLATFORM.md:1 — Architecture Decision: SEO Insights Platform over Script-First Pipeline — Date: 2026-07-07
-- docs/ARCHITECTURE_DECISION_SEO_PLATFORM.md:35 — Rule going forward — Future implementation should prefer:
-- docs/content-video-engine/00-BRAINSTORM-AND-DECISIONS.md:51 — 2. What survives from the raw spec — Stick-figure + Manim CE format (Manim confirmed healthy 2026; the style is uniquely suited to
-- docs/content-video-engine/21-ART-STYLE-REFERENCE-REVIEW.md:359 — Lane F — `expert_explainer` (Wealth Logic) — the recommended target — Reference: Wealth Logic, 83,300 subscribers.
-- docs/content-video-engine/21-ART-STYLE-REFERENCE-REVIEW.md:373 — The cast — - A recurring expert: white lab coat, black tie, dark slicked hair, heavy black
-- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:345 — 8.6 Evidence selection rules (operator correction, 2026-08-24) — The first v4 pass failed review on three counts. Each is now enforced in
-- docs/research/2026-07-28-accretive-revenue-assessment.md:1 — Accretive Revenue: Research Report & Strategic Assessment — Generated 2026-07-28 · Sources: ~90 across three parallel research streams + repo audit · Confidence: High on market evi
-- docs/research/2026-07-28-accretive-revenue-assessment.md:7 — Executive Summary — You have built a complete, working revenue machine and never switched it on. Plans P3–P12 are
-- docs/seo-insights-platform-architecture.md:345 — 10. Recommended implementation shape — Do not think of the worker entrypoints as the product. Think of them as adapters around platform services.
-- docs/seo-insights-platform-architecture.md:354 — Avoid — - logic living only in one-off scripts
-
-## operator-approved (10)
-
-- docs/content-video-engine/01-PRD.md:140 — 8. Phases — | Phase | Contents | Exit criteria |
-- docs/content-video-engine/06-SCRIPT-TRANSFORMATION-SPEC.md:1 — Script Transformation Spec — Essay/Corpus → Beat Sheet → Storyboard — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine
-- docs/content-video-engine/28-AOY-MCP-EVALUATION.md:396 — The decisive test, run: `review_script` + `review_title` on our own work — 2026-08-24 — Phase 2 of the harvest plan. Fed the Alicia-format script (narration only,
-- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:18 — Current state — what actually governs production — Consolidated 2026-08-28. Where this section and anything below it
-- docs/content-video-engine/37-TTS-DELIVERY-STANDARDS.md:518 — 20. THE TEMPO FIELD - one choreography across script AND video (operator-approved 2026-08-30) — The realization (obvious only in hindsight, and only reachable through
-- docs/content-video-engine/CAPABILITIES.md:70 — Evidence & assets — Martial Matters episode 1 (merged from p16, 2026-08-29): 192 asset files
-- docs/content-video-engine/patterns/STRENGTH-LOOP.md:108 — 7. The loop protocol — Operator rulings, 2026-08-29.
-- docs/content-video-engine/patterns/STRENGTH-LOOP.md:138 — Rewrite budget — the over-smoothing guard — Any sentence rewritten more than twice stops and goes to the operator
-- docs/STATE-OF-WORK.md:1 — STATE OF WORK - every worktree, regenerated — Generated 2026-09-03 06:02 by `survey_worktrees.py`. DO NOT hand-edit - rerun the script.
-- docs/STATE-OF-WORK.md:35 — `C:\Users\Snipe\Downloads\Outreach Program\.claude\worktrees\sweet-villani-1c3a16` — - branch `claude/content-generation-system-52f077` - HEAD 613e5d3 2026-09-03 docs(review): commit the two operator-appro
-
-## operator-derived (10)
-
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/08_answers_animation_craft_brief.md:149 — 3. Track A — The Animator (Timing and Motion)
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/08_answers_animation_craft_brief.md:233 — A4: The Threshold of "Alive" [RE-ASK 1 ★: Audited & Answered]
-- docs/content-video-engine/30-VOICE-SOURCE-MATERIAL.md:153 — 9. Faceless personality mechanisms — external doctrine (AOY), adapted — Everything above is operator-derived. This section is the one piece of
-- docs/content-video-engine/33-VOICE-PROFILE.md:1 — 33 — Voice Profile — The reusable artefact. Scripts and work orders reference this file by
-  cited by: docs/content-video-engine/34-AOY-SCRIPT-WRITER-STUDY.md:344, docs/content-video-engine/34-AOY-SCRIPT-WRITER-STUDY.md:399, docs/content-video-engine/38-SCRIPT-ARCHITECTURE.md:19, docs/content-video-engine/briefs/ALICIA-SCRIPT-PERSONA-PASS.md:106, docs/portable/OPERATOR-RULINGS.md:810
-- docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:163 — 3. Track A — The Animator (Timing and Motion)
-- docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:247 — A4: The Threshold of "Alive" [RE-ASK 1 ★: Audited & Answered]
-- docs/content-video-engine/briefs/RESEARCH-BRIEF-animation-craft.md:148 — 3. The questions, by role — Priority marked ★ — if the pass can only go deep on five, take the starred ones.
-- docs/content-video-engine/briefs/RESEARCH-BRIEF-animation-craft.md:152 — Track A — the animator (timing and motion) — | # | question | why it matters here |
-- docs/content-video-engine/briefs/RESPONSE-TO-RESEARCH-PASS-1.md:85 — 4. REOPENED — four items, with acceptance criteria
-- docs/content-video-engine/briefs/RESPONSE-TO-RESEARCH-PASS-1.md:87 — RE-ASK 1 — A4, "the threshold of alive" ★ highest priority — What was wrong. The entire section rests on Mackworth 1948, cited for: "after
-
-## p-6 (10)
-
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/00_README_INDEX.md:1 — Complete Research & Evidence Bundle: Master Index — This directory consolidates the full research, engineering specifications, forensic breakdowns, and visual evidence gath
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/00_README_INDEX.md:7 — File Inventory & Agent Navigation Guide — | File | Purpose & Contents | Recommended Consumer |
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/10_generative_video_tools_and_cross_platform_composition.md:161 — Part 4: 9:16 vs. 16:9 Cross-Platform Architecture & Short vs. Long Form
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/10_generative_video_tools_and_cross_platform_composition.md:207 — 4.3 Short-Form vs. Long-Form Production Architecture — | Dimension | Short-Form (15–60s Shorts/TikTok) | Long-Form (8–20m+ Video Essay) |
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md:436 — 14.2 9:16 vs. 16:9 Cross-Platform Architecture & Short vs. Long Form — 1. The Universal Clean Canvas ($800 \times 1060\text{ px}$):
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_INDEX.md:25 — 1. Master File & Artifact Inventory — All research, evidence frames, technical specifications, and mathematical treatises produced during this research cycle
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_INDEX.md:29 — 1.1 Complete Evidence Bundle (`complete_research_evidence_bundle/`) — | File / Artifact | Size / Scope | Primary Role & Description | Recommended Agent / Consumer |
-- content/video_engine/sources/reference_analyses/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md:436 — 14.2 9:16 vs. 16:9 Cross-Platform Architecture & Short vs. Long Form — 1. The Universal Clean Canvas ($800 \times 1060\text{ px}$):
-- content/video_engine/sources/reference_analyses/MASTER_RESEARCH_INDEX.md:25 — 1. Master File & Artifact Inventory — All research, evidence frames, technical specifications, and mathematical treatises produced during this research cycle
-- content/video_engine/sources/reference_analyses/MASTER_RESEARCH_INDEX.md:29 — 1.1 Complete Evidence Bundle (`complete_research_evidence_bundle/`) — | File / Artifact | Size / Scope | Primary Role & Description | Recommended Agent / Consumer |
-
-## pre-opener (10)
-
-- docs/content-video-engine/32-WRITING-FOR-THE-EAR.md:163 — 7. Diff against doc 31 — what is additive — | This doc | vs AOY (doc 31) | Status |
-- docs/content-video-engine/38-SCRIPT-ARCHITECTURE.md:45 — 2. Phase 1 — THE OPEN (0:00–1:30), fully fused — The research blueprint says: Truby's Weakness & Need · Glass's Anecdote ·
-- docs/content-video-engine/38-SCRIPT-ARCHITECTURE.md:53 — Beat 1 — MICROHOOK (0:00–0:03) — - The first sentence is the grab. Present tense, viewer-facing, concrete,
-- docs/content-video-engine/patterns/CRAFT-DEVICES.md:34 — The devices — | device | scale | what it does | defined in | exemplar |
-- docs/content-video-engine/patterns/FULL-VIDEO-MAP.md:125 — 3. P1 — THE OPEN (0:00–1:30, absolute) — Classical: Truby Weakness & Need · Glass anecdote opens · irony counterpoint.
-- docs/content-video-engine/patterns/KNOWLEDGE-GRAPH.md:21 — 1. Vertical edges — classical frame ← filled by → platform micro — | Classical node | is filled / operationalized by | Where |
-- docs/content-video-engine/patterns/phase-guides/P1.md:56 — Beat template
-- docs/content-video-engine/patterns/phase-guides/P1.md:58 — Beat 1 — MICROHOOK (0:00–0:03) — - `[MICROHOOK_LINE]` — one sentence, present tense, concrete, the
-- docs/research/2026-08-24-writing-for-the-ear-craft-source.md:70 — **Rhetorical Acoustics and Oral Cadence: Lessons from Speechwriting** — Speechwriting rhetoric is the art of engineering acoustic memory23. Because spoken words dissolve instantly upon utteran
-- docs/research/2026-08-24-writing-for-the-ear-craft-source.md:128 — **Integrated Synthesis Framework for Long-Form Audio-Visual Scripts** — To synthesize these diverse methodologies into an operational workflow, the following master blueprint maps broadcast me
-
-## push-in (10)
-
-- content/video_engine/sources/reference_analyses/COMFYUI_PARALLAX_TECHNICAL_STANDARDS_RESEARCH.md:77 — 3. The Artistic Viability Matrix: When to Use What — Not all scenes are eligible for single-layer depth displacement. Using Depthflow on the wrong image is an automatic qual
-- content/video_engine/sources/reference_analyses/COMFYUI_PARALLAX_TECHNICAL_STANDARDS_RESEARCH.md:96 — 4. Dial Calibration Guide for ComfyUI Depthflow — When an image qualifies as artistically viable (continuous environmental ground), apply these exact dialed parameters:
-- content/video_engine/sources/reference_analyses/COMFYUI_PARALLAX_TECHNICAL_STANDARDS_RESEARCH.md:114 — 4.2 Motion Presets & Strength Bounds
-- content/video_engine/sources/reference_analyses/COMFYUI_PARALLAX_TECHNICAL_STANDARDS_RESEARCH.md:116 — 1. The Cinematic Dolly (Recommended Default) — - Node: `DepthflowMotionPresetDolly`
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/05_comfyui_parallax_technical_standards.md:77 — 3. The Artistic Viability Matrix: When to Use What — Not all scenes are eligible for single-layer depth displacement. Using Depthflow on the wrong image is an automatic qual
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/05_comfyui_parallax_technical_standards.md:96 — 4. Dial Calibration Guide for ComfyUI Depthflow — When an image qualifies as artistically viable (continuous environmental ground), apply these exact dialed parameters:
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/05_comfyui_parallax_technical_standards.md:114 — 4.2 Motion Presets & Strength Bounds
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/05_comfyui_parallax_technical_standards.md:116 — 1. The Cinematic Dolly (Recommended Default) — - Node: `DepthflowMotionPresetDolly`
-- docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:139 — 5. Motion discipline — Motion is authored in this order:
-- docs/content-video-engine/54-GOOGLE-FLOW-OMNI-NANO-BANANA-PRODUCTION-RESEARCH.md:310 — 9. Primary Citations & Evidence Ledger — 1. Google DeepMind:
-
-## ray-marcher (10)
-
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/06_unified_ledger_drawing_engine_and_comfy_spec.md:1 — Unified System Specification: The 3 ComfyUI Engines & The Ledger Page Drawing/Animation Architecture — Generated: 2026-09-04 | Status: Authoritative Architecture Specification | Scope: Video Engine Compositing, ComfyUI Loca
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/06_unified_ledger_drawing_engine_and_comfy_spec.md:56 — 2. Engine 1: 2.5D Parallax Ray-Marcher (`Depthflow` + `Depth Anything v2`)
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_INDEX.md:121 — 4. Domain 3: Local ComfyUI GPU Stack — Our local ComfyUI instance (`127.0.0.1:8188`) provides three physical engines that lift 2D cards into broadcast-grade 2.
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_INDEX.md:137 — 4.1 Comfy Engine 1: Parallax & Ray-Marcher — - Shader: Image-space continuous heightfield ray marcher (`depthflow.glsl`).
-- content/video_engine/sources/reference_analyses/MASTER_RESEARCH_INDEX.md:120 — 4. Domain 3: Local ComfyUI GPU Stack — Our local ComfyUI instance (`127.0.0.1:8188`) provides three physical engines that lift 2D cards into broadcast-grade 2.
-- content/video_engine/sources/reference_analyses/MASTER_RESEARCH_INDEX.md:136 — 4.1 Comfy Engine 1: Parallax & Ray-Marcher — - Shader: Image-space continuous heightfield ray marcher (`depthflow.glsl`).
-- content/video_engine/sources/reference_analyses/UNIFIED_LEDGER_DRAWING_ENGINE_AND_COMFY_SPEC.md:1 — Unified System Specification: The 3 ComfyUI Engines & The Ledger Page Drawing/Animation Architecture — Generated: 2026-09-04 | Status: Authoritative Architecture Specification | Scope: Video Engine Compositing, ComfyUI Loca
-- content/video_engine/sources/reference_analyses/UNIFIED_LEDGER_DRAWING_ENGINE_AND_COMFY_SPEC.md:56 — 2. Engine 1: 2.5D Parallax Ray-Marcher (`Depthflow` + `Depth Anything v2`)
-- docs/content-video-engine/RESEARCH-INDEX.md:200 — `06_unified_ledger_drawing_engine_and_comfy_spec.md` — 21 headings — | heading | disposition |
-- docs/content-video-engine/RESEARCH-INDEX.md:411 — `MASTER_RESEARCH_INDEX.md` — 32 headings — | heading | disposition |
-
-## read-only (10)
-
-- docs/agent-context/SKILL_ROUTER.md:42 — Named Agent Routing — - Parent task: owns the critical path, shared-file integration, protected
-- docs/AGENT_START_HERE.md:1 — Agent Start Here — Status: current
-- docs/AGENT_START_HERE.md:23 — Task Routes
-- docs/AGENT_START_HERE.md:25 — Skill And Agent Router — The durable router is [`agent-context/SKILL_ROUTER.md`](agent-context/SKILL_ROUTER.md).
-- docs/content-video-engine/25-EDITOR-EMBEDDING-SPIKE.md:43 — Revisit triggers — Reopen this decision only if one of these becomes true: Remotion ships a
-- docs/content-video-engine/26-AGENT-GENERATION-LOOP.md:67 — Work-order authoring — The claim service renders the work order; do not hand-write one. It encodes:
-- docs/content-video-engine/27-DURABILITY-AND-LAYOUT.md:64 — The disaster-recovery contract — A bare catalogue plus credentials is sufficient to rebuild every canonical
-- docs/content-video-engine/CAPABILITIES.md:124 — External evidence sources — | Source | Where | Gives | Rule |
-- docs/runbooks/HANDOFF-ASTRA-GEMINI-2026-09-05.md:51 — Astra's review (2026-09-05, later) - accepted, and what changed here — Astra agreed with the four recommendations with qualifications; all four are applied on this side:
-- docs/runbooks/PRP_EXECUTION.md:24 — Named Agents — | Agent | Use | Hard stop |
-
-## risk-score (10)
-
-- docs/content-video-engine/briefs/ALICIA-SCRIPT-PERSONA-PASS.md:1 — Alicia Script — Persona Pass (v2) — The approved 3:00 script from
-- docs/content-video-engine/briefs/ALICIA-SCRIPT-PERSONA-PASS.md:15 — Script v2 (~575 words, ~3:00) — [s01 — cold open ON THE TILL PLATE, captions punching in word groups; till
-- docs/content-video-engine/briefs/ALICIA-SCRIPT-PERSONA-PASS.md:106 — Comparison — what the persona pass changed, and under which rule — | Slot | v1 | v2 | Rule |
-- docs/content-video-engine/briefs/ALICIA-SCRIPT-V3-CALCULUS.md:1 — Alicia Script — v3 (The Calculus Pass) + Three-Way Verdict — The bake-off before committing to the phase guides (P10 T2). Same
-- docs/content-video-engine/briefs/ALICIA-SCRIPT-V3-CALCULUS.md:22 — Script v3 (~550 words, ~3:00) — [P1 · s01 — cold open ON THE TILL PLATE, drawer sounds under; captions
-- docs/content-video-engine/briefs/ANSWER-BRAVOS-HYPE-CYCLE.md:32 — SCRIPT A (v1 baseline — A/B test arm A) — [P1 · s01 — macro: an iron railway spike on dark wood, already rotating
-- docs/content-video-engine/briefs/ANSWER-BRAVOS-HYPE-CYCLE.md:267 — SCRIPT B — **PRODUCTION TEXT** (sentence-strength pass; won the A/B ear test) — A/B verdict (operator, 2026-08-24, by ear): three matched pairs — open,
-- docs/content-video-engine/briefs/ANSWER-BRAVOS-HYPE-CYCLE.md:456 — Strength Log (A → B, gates per SENTENCE-STRENGTH-CHECK) — | # | A (original) | Gates failed | B (final) |
-- docs/content-video-engine/patterns/phase-guides/P1.md:155 — Worked micro-example (~compressed, 3:00-scale segment) — > [till plate, drawer sounds under; image breathes 0.6s]
-- docs/content-video-engine/patterns/phase-guides/P2.md:129 — Worked micro-example (3:00-scale) — > Start in his apartment. A suit rack that cost a paycheck. A watch box
-
-## self-revelation (10)
-
-- docs/content-video-engine/32-WRITING-FOR-THE-EAR.md:90 — 4. Macro narrative machinery (screenwriting) — - McKee — the Expectation-Reality Gap: tension lives exclusively in the
-- docs/content-video-engine/38-SCRIPT-ARCHITECTURE.md:143 — 3. The full skeleton (phases 2–6, same fusion — to be expanded per use) — | Phase | Classical spine (doc 32) | Platform fill (doc 31) |
-- docs/content-video-engine/patterns/CHECK-RESPONSIBILITIES.md:117 — 3. The agent's territory — verdicted by name, every run
-- docs/content-video-engine/patterns/CHECK-RESPONSIBILITIES.md:130 — 3c. The classical nodes outside the gate (P3–P6) — | Node | Where | What the agent decides |
-- docs/content-video-engine/patterns/FULL-VIDEO-MAP.md:210 — 7. P5 — REFLECTION & CONVERGENCE (16:30–26:00) — Classical: Glass Reflection dominant · chiastic center · Self-Revelation
-- docs/content-video-engine/patterns/FULL-VIDEO-MAP.md:227 — 8. P6 — THE CLOSE (26:00–30:00: true close 60–90s + end screen 20s) — Classical: Self-Revelation → New Equilibrium · chiastic echo · ring
-- docs/content-video-engine/patterns/LLM-CONTEXT-CLASSICAL.md:1 — LLM Context Block — Classical Craft Layer — Provenance: Gemini densification of the operator's writing-for-the-ear deep
-- docs/research/2026-08-24-writing-for-the-ear-craft-source.md:34 — **Deep Narrative Engineering: Screenwriting Mechanics and Structural Machinery** — While broadcast mechanics govern the sentence-level acoustic delivery of a script, screenwriting mechanics provide the s
-- docs/research/2026-08-24-writing-for-the-ear-craft-source.md:44 — **Truby’s Organic Architecture and the Designing Principle** — John Truby rejects rigid three-act templates, arguing that narrative must grow organically from character weakness, mora
-- docs/research/2026-08-24-writing-for-the-ear-craft-source.md:128 — **Integrated Synthesis Framework for Long-Form Audio-Visual Scripts** — To synthesize these diverse methodologies into an operational workflow, the following master blueprint maps broadcast me
-
-## sinh (10)
-
-- content/video_engine/sources/reference_analyses/ACADEMIC_LITERATURE_DRAWING_AND_2_5D_ANIMATION_ENGINE.md:229 — Pillar 3: Analytic Second-Order Dynamics & Spacetime Constraints
-- content/video_engine/sources/reference_analyses/ACADEMIC_LITERATURE_DRAWING_AND_2_5D_ANIMATION_ENGINE.md:231 — 3.1 Closed-Form Physics vs. Numerical Integration — In cloud rendering architectures (AWS Lambda, Google Cloud Run) and timeline scrubbers, animations must obey the Frame I
-- content/video_engine/sources/reference_analyses/ACADEMIC_LITERATURE_DRAWING_AND_2_5D_ANIMATION_ENGINE.md:238 — Derivation of Damped Harmonic Oscillator Step Response — $$m \ddot{x}(t) + c \dot{x}(t) + k (x(t) - x_{ ext{target}}) = 0 \implies \ddot{y} + 2\zeta \omega_0 \dot{y} + \omega_0^
-- content/video_engine/sources/reference_analyses/ACADEMIC_LITERATURE_DRAWING_AND_2_5D_ANIMATION_ENGINE.md:250 — 3. Overdamped ($\zeta > 1$): Sluggish dual-exponential approach ($\omega_r = \omega_0 \sqrt{\zeta^2 - 1}$) — $$x(t) = 1 - e^{-\zeta \omega_0 t} \left( \cosh(\omega_r t) + rac{\zeta \omega_0}{\omega_r} \sinh(\omega_r t)
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/07_academic_literature_drawing_and_2_5d_animation_engine.md:229 — Pillar 3: Analytic Second-Order Dynamics & Spacetime Constraints
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/07_academic_literature_drawing_and_2_5d_animation_engine.md:231 — 3.1 Closed-Form Physics vs. Numerical Integration — In cloud rendering architectures (AWS Lambda, Google Cloud Run) and timeline scrubbers, animations must obey the Frame I
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/07_academic_literature_drawing_and_2_5d_animation_engine.md:238 — Derivation of Damped Harmonic Oscillator Step Response — $$m \ddot{x}(t) + c \dot{x}(t) + k (x(t) - x_{ ext{target}}) = 0 \implies \ddot{y} + 2\zeta \omega_0 \dot{y} + \omega_0^
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/07_academic_literature_drawing_and_2_5d_animation_engine.md:250 — 3. Overdamped ($\zeta > 1$): Sluggish dual-exponential approach ($\omega_r = \omega_0 \sqrt{\zeta^2 - 1}$) — $$x(t) = 1 - e^{-\zeta \omega_0 t} \left( \cosh(\omega_r t) + rac{\zeta \omega_0}{\omega_r} \sinh(\omega_r t)
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_INDEX.md:218 — 6.4 Analytic Second-Order Dynamical Systems — - Mass-Spring-Damper Governing ODE: $m\ddot{x} + c\dot{x} + k(x - x_{ ext{target}}) = 0$.
-- content/video_engine/sources/reference_analyses/MASTER_RESEARCH_INDEX.md:217 — 6.4 Analytic Second-Order Dynamical Systems — - Mass-Spring-Damper Governing ODE: $m\ddot{x} + c\dot{x} + k(x - x_{ ext{target}}) = 0$.
-
-## the-mechanism (10)
-
-- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:49 — 1. Audio Gaps as Structural Scene Dividers (The Breath Pause Rule) — - The Finding: The speaker talks at an assertive 183.6 WPM, yet the video never feels frantic. Every visual transition (
-- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:56 — 2. The Unifying Equation Spine (Curing "Listicle Fatigue") — - The Finding: The video covers 6 debt mechanisms, but it never feels like a disconnected listicle.
-- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:100 — P2: The Engine (01:30 – 02:52) | Foundational Model — - Pacing: 9 shots | 359 words | 261.8 WPM
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/01_wealth_logic_production_report.md:49 — 1. Audio Gaps as Structural Scene Dividers (The Breath Pause Rule) — - The Finding: The speaker talks at an assertive 183.6 WPM, yet the video never feels frantic. Every visual transition (
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/01_wealth_logic_production_report.md:56 — 2. The Unifying Equation Spine (Curing "Listicle Fatigue") — - The Finding: The video covers 6 debt mechanisms, but it never feels like a disconnected listicle.
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/01_wealth_logic_production_report.md:100 — P2: The Engine (01:30 – 02:52) | Foundational Model — - Pacing: 9 shots | 359 words | 261.8 WPM
-- content/video_engine/sources/reference_analyses/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:49 — 1. Audio Gaps as Structural Scene Dividers (The Breath Pause Rule) — - The Finding: The speaker talks at an assertive 183.6 WPM, yet the video never feels frantic. Every visual transition (
-- content/video_engine/sources/reference_analyses/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:56 — 2. The Unifying Equation Spine (Curing "Listicle Fatigue") — - The Finding: The video covers 6 debt mechanisms, but it never feels like a disconnected listicle.
-- content/video_engine/sources/reference_analyses/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:100 — P2: The Engine (01:30 – 02:52) | Foundational Model — - Pacing: 9 shots | 359 words | 261.8 WPM
-- docs/content-video-engine/54-GOOGLE-FLOW-OMNI-NANO-BANANA-PRODUCTION-RESEARCH.md:95 — 2.2 Affirmative Physical Anchoring (The Ban on Negative Prompts) — * The Mechanism: Multimodal autoregressive transformers calculate self-attention across every input token. Including tok
-
-## the-original-defect (10)
-
-- docs/content-video-engine/briefs/FLOW-OMNI-EXPLAINER-PROMPT-PLAN.md:171 — 1. Decoupled Voiceover: ElevenLabs First vs. In-Model Omni Speech — - The Original Defect: The original prompt forced Gemini Omni Flash to generate spoken audio inside the video generation
-- docs/content-video-engine/briefs/FLOW-OMNI-EXPLAINER-PROMPT-PLAN.md:177 — 2. Eliminating the 13-Word Contradiction & Calibrating to 170 WPM — - The Original Defect: The original prompt contained an explicit internal contradiction (mandating "exactly 13 words" in
-- docs/content-video-engine/briefs/FLOW-OMNI-EXPLAINER-PROMPT-PLAN.md:181 — 3. Escaping the 50-Credit Free-Tier Clamp (10s vs. 6s Clips) — - The Original Defect: 6 seconds was selected solely so a creator could market a video on the free tier ($5 \times 10\te
-- docs/content-video-engine/briefs/FLOW-OMNI-EXPLAINER-PROMPT-PLAN.md:194 — 5. Universal Mobile Safe Zones (9:16 Viewport Geometry) — - The Original Defect: The original prompt made zero mention of vertical framing or platform UI obstruction.
-- docs/content-video-engine/briefs/FLOW-OMNI-EXPLAINER-PROMPT-PLAN.md:198 — 6. Visual Brand Palette Alignment — - The Original Defect: State 4 specified a "mustard-yellow tunic children's book doodle". This looks amateurish and dest
-- docs/content-video-engine/briefs/FLOW-OMNI-EXPLAINER-PROMPT-PLAN.md:206 — 7. Voice & Persona Calibration (`VOICE-PACK.md`) — - The Original Defect: Defaulted to a "warm friendly male narrator in his early thirties with gentle enthusiasm."
-- docs/content-video-engine/briefs/FLOW-OMNI-EXPLAINER-PROMPT-PLAN.md:213 — 8. Visceral Paradox Hooks vs. Dry Textbook Syllabus — - The Original Defect: The draft hooks read like college syllabus titles ("Why commercial banks do not lend out deposito
-- docs/content-video-engine/briefs/FLOW-OMNI-EXPLAINER-PROMPT-PLAN.md:219 — 9. Eliminating the Redundant Character Block (Flow Pinned Asset Architecture) — - The Original Defect: Mandated copy-pasting a 40-word text description of the stickman into every single animation prom
-- docs/content-video-engine/briefs/FLOW-OMNI-EXPLAINER-PROMPT-PLAN.md:223 — 10. Affirmative Physical Anchoring vs. Negative Prompt Contamination — - The Original Defect: Loaded the prompt with negative constraints ("no 3D shading, no photorealism, no color gradients,
-- docs/content-video-engine/briefs/FLOW-OMNI-EXPLAINER-PROMPT-PLAN.md:229 — 11. External Script Gating & The Stage 7 Role (Visual Director, Not Amateur Copywriter) — - The Original Defect: The original prompt assumed an interactive AI chat should invent the script from a raw topic out
