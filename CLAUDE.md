@@ -19,6 +19,10 @@ rather than restating it.
   (Parts 3, 8, 9; §9.15).
 - **Voice** → `docs/portable/VOICE-PACK.md`, docs 33 + 36. **Rulings** →
   `docs/portable/OPERATOR-RULINGS.md` (override everything else).
+- **Find a doc section** → `rg -i "<term>" docs/DOCS-INDEX.jsonl` (every heading,
+  lead line, label, CAPABILITIES and BACKLOG row → `path:line`), then `sed -n`
+  the window. SigMap is for code symbols. Regenerate with
+  `python content/video_engine/scripts/build_docs_index.py --write`.
 - **Delegate, don't do** → the eight roles in `.claude/agents/` run on Opus 5
   (`speedster` Haiku); the Fable parent keeps judgement, integration and the
   operator. Recall = `explorer`, review = `reviewer`, git = `release_steward`.
