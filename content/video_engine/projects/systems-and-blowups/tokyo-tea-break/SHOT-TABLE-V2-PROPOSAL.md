@@ -59,7 +59,7 @@ package) and the analytics file says so.
 
 ## Three decisions for the operator
 
-1. **The dock or the cut for the blue-ties panel (s03).** The dock keeps the proof on screen for the whole tricolon; the cut
+1. **The dock or the cut for the blue-ties panel (s03).** → **DOCK (operator, 2026-09-06: "use the chart plate/ledger AND THEN DOCK the animation videos").** The rest of the row is the reasoning kept for the record. The dock keeps the proof on screen for the whole tricolon; the cut
    keeps the panel full-frame for the joke. The data says dock; the joke says cut. Recommendation: dock, the joke lands on
    the caption.
 2. **Whether clip b (dial and bill) is worth keeping anywhere.** It is the one image that shows *your* cost; under v2 the
