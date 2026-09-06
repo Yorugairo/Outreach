@@ -1,0 +1,19 @@
+{
+  "roots": [
+    "docs",
+    "content/video_engine/sources/reference_analyses"
+  ],
+  "exclude": [
+    "docs/research/runs/**",
+    "**/node_modules/**",
+    "docs/DOCS-TOPICS.jsonl",
+    "docs/DOCS-TOPICS.md",
+    "docs/DOCS-CITATIONS.jsonl",
+    "docs/DOCS-STANDARD.md",
+    "docs/DOCS-MANIFEST.jsonl",
+    "docs/DOCS-MANIFEST.md"
+  ],
+  "include": [],
+  "extra_files": [],
+  "output": "docs/DOCS-INDEX"
+}
