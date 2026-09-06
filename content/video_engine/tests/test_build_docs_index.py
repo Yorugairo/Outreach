@@ -1,9 +1,10 @@
 """The docs index is a retrieval contract: one record per heading, greppable in one `rg` call.
 
 These pin the record shape on a synthetic docs tree (fenced headings excluded, `docs/research/runs`
-excluded, CAPABILITIES / BACKLOG rows indexed), that `--write` is deterministic and `--check`
-follows the source, and that the index built over the REAL `docs/` reaches the two sections a
-doctrine query must land on (42's settle, the E41 ruling)."""
+excluded, CAPABILITIES / BACKLOG rows indexed), the body-vocabulary `terms` (code spans in,
+paths and fenced blocks out, capped), that `--write` is deterministic and `--check` follows the
+source, and that the index built over the REAL `docs/` reaches the sections a doctrine query must
+land on (42's settle, the E41 ruling, the minimum-jerk chain, Deegan's rim)."""
 from __future__ import annotations
 
 import sys
@@ -15,6 +16,7 @@ sys.path.insert(0, str(ROOT / "content/video_engine/scripts"))
 import build_docs_index as BDI  # noqa: E402
 
 DOC_REL = "docs/content-video-engine/42-FAKE-KINETICS.md"
+TERMS_REL = "docs/content-video-engine/47-FAKE-VOCABULARY.md"
 CAPS_REL = "docs/content-video-engine/CAPABILITIES.md"
 BACKLOG_REL = "docs/content-video-engine/BACKLOG.md"
 RUNS_REL = "docs/research/runs/2026-01-01/scratch.md"
@@ -60,6 +62,29 @@ BACKLOG = (
     "| — | T4-T6 (ARAP, the object page) | not yet |\n"                             # 8
 )
 
+DOC_47 = (
+    "# 47 — Fake vocabulary\n"                                                      # 1
+    "\n"                                                                            # 2
+    "## 47.1 The stroke clock\n"                                                    # 3
+    "\n"                                                                            # 4
+    "The clock is `strokeProf`, never `kinetics/stroke.mjs`, and the front is\n"     # 5
+    "min-jerk after Flash & Hogan (1985); `springPop` settles it, Deegan 1997\n"     # 6
+    "pinned the rim, Kubelka-Munk layered it. Symbols: ζ, ω₀, M_p, coth.\n"          # 7
+    "\n"                                                                            # 8
+    "```js\n"                                                                       # 9
+    'const fencedOut = "never-a-term";\n'                                           # 10
+    "```\n"                                                                         # 11
+    "\n"                                                                            # 12
+    "Overflow: alpha-beta, gamma-delta, epsilon-zeta, eta-theta, iota-kappa.\n"      # 13
+)
+
+# The body vocabulary of 47.1, in first-appearance order: a code span, the hyphenated and
+# CamelCase tokens, both citation forms, the formula symbols - then the cap bites.
+DOC_47_TERMS = [
+    "strokeProf", "min-jerk", "Flash & Hogan", "springPop", "Deegan 1997", "Kubelka-Munk",
+    "ζ", "ω₀", "M_p", "coth", "alpha-beta", "gamma-delta",
+]
+
 RUNS = "# Scratch run\n\nGitignored noise that must never enter the index.\n"
 
 
@@ -87,31 +112,32 @@ def test_synthetic_tree_yields_exactly_the_expected_records(tmp_path: Path) -> N
         {
             "path": DOC_REL, "line": 1, "level": 1, "doc": "42", "heading": "Fake kinetics",
             "lead": "The settle is closed form, with three regimes and three regimes again.",
-            "labels": ["settle", "three regimes"],
+            "labels": ["settle", "three regimes"], "terms": [],
         },
         {
             "path": DOC_REL, "line": 5, "level": 2, "doc": "42", "heading": "42.1 The stroke — curvature",
-            "lead": "| a | b |", "labels": [],
+            "lead": "| a | b |", "labels": [], "terms": [],
         },
         {
             "path": DOC_REL, "line": 15, "level": 3, "doc": "42", "heading": "Deeper still",
-            "lead": "", "labels": [],
+            "lead": "", "labels": [], "terms": [],
         },
         {
             "path": CAPS_REL, "line": 1, "level": 1, "doc": None, "heading": "Capabilities",
-            "lead": "", "labels": [],
+            "lead": "", "labels": [], "terms": [],
         },
         {
             "path": CAPS_REL, "line": 3, "level": 2, "doc": None, "heading": "Rendering",
-            "lead": "| Capability | Where | State | Proof |", "labels": ["Scene player", "Ledger page"],
+            "lead": "| Capability | Where | State | Proof |",
+            "labels": ["Scene player", "Ledger page"], "terms": [],
         },
         {
             "path": CAPS_REL, "line": 7, "level": 7, "doc": None, "heading": "Scene player",
-            "lead": "the review renderer", "labels": [],
+            "lead": "the review renderer", "labels": [], "terms": [],
         },
         {
             "path": CAPS_REL, "line": 8, "level": 7, "doc": None, "heading": "Ledger page",
-            "lead": "a world plate that IS a chart", "labels": [],
+            "lead": "a world plate that IS a chart", "labels": [], "terms": [],
         },
     ]
 
@@ -131,15 +157,15 @@ def test_backlog_rows_index_by_id_and_fall_back_to_the_decision_column(tmp_path:
     assert rows == [
         {
             "path": BACKLOG_REL, "line": 5, "level": 7, "doc": None,
-            "heading": "T2 Analytic spring evaluator", "lead": "three damping regimes", "labels": [],
+            "heading": "T2 Analytic spring evaluator", "lead": "three damping regimes", "labels": [], "terms": [],
         },
         {
             "path": BACKLOG_REL, "line": 6, "level": 7, "doc": None,
-            "heading": "G2 Short mode", "lead": "CLOSED 2026-09-05", "labels": [],
+            "heading": "G2 Short mode", "lead": "CLOSED 2026-09-05", "labels": [], "terms": [],
         },
         {
             "path": BACKLOG_REL, "line": 7, "level": 7, "doc": None,
-            "heading": "D1 Euler-spiral generator", "lead": "for procedural curves", "labels": [],
+            "heading": "D1 Euler-spiral generator", "lead": "for procedural curves", "labels": [], "terms": [],
         },
     ]
 
@@ -204,3 +230,35 @@ def test_real_docs_reach_the_kinetics_settle_and_the_e41_ruling() -> None:
     assert all(not r["path"].startswith("docs/research/runs/") for r in records)
     assert all(r["path"] != BDI.MD_REL for r in records)
     assert all("node_modules" not in r["path"] for r in records)
+
+
+def test_terms_lift_the_body_vocabulary_in_order_and_stop_at_the_cap(tmp_path: Path) -> None:
+    # Arrange
+    root = _write_tree(tmp_path, {TERMS_REL: DOC_47})
+
+    # Act
+    records = BDI.build_index(root)
+    section = next(r for r in records if r["heading"] == "47.1 The stroke clock")
+
+    # Assert
+    assert section["terms"] == DOC_47_TERMS
+    assert len(section["terms"]) == BDI.TERM_LIMIT
+    assert "kinetics/stroke.mjs" not in section["terms"]          # a path is not a term
+    assert all("fencedOut" not in t and "never-a-term" not in t   # a fenced block is not body
+               for r in records for t in r["terms"])
+    assert all(t not in section["terms"] for t in ("epsilon-zeta", "eta-theta", "iota-kappa"))
+    assert " <" + "; ".join(DOC_47_TERMS) + ">" in BDI.render_md(records)
+
+
+def test_real_docs_terms_close_the_minimum_jerk_and_deegan_hops() -> None:
+    records = BDI.build_index(BDI.REPO)
+
+    def terms(rel_path: str) -> list[str]:
+        return [t.lower() for r in records if r["path"].endswith(rel_path) for t in r["terms"]]
+
+    # 42 never writes "min-jerk" - it writes "minimising squared jerk" and cites the paper, so the
+    # term that lands the section is the citation; 48 §48.5, which points at 42 §42.1, carries the
+    # hyphenated token itself. One `rg` now reaches both.
+    assert "flash & hogan" in terms("42-DRAWING-KINETICS.md")
+    assert any("minimum-jerk" in t for t in terms("48-THE-FIGURE-AND-THE-GROUND.md"))
+    assert any("deegan" in t for t in terms("44-INK-AND-SURFACE.md"))

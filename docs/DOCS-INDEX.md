@@ -11,1042 +11,1054 @@ rg -n "<heading>" <path>                 # jump to it in the file
 ```
 
 Levels 1-6 are Markdown heading depth; level 7 is a table row (CAPABILITIES, BACKLOG).
-A `{...}` tail lists the section's bold phrases.
+A `{...}` tail lists the section's bold phrases; a `<...>` tail its body terms - code
+spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 
-2001 records across 139 files.
+2010 records across 140 files.
 
 ## docs/agent-context/SKILL_ROUTER.md
 
-- L1 [1] Skill And Agent Router — Status: current
-- L10 [2] Active Skill Lanes — | Trigger | Skills |
-- L28 [2] Tool Routing — 1. Use `python scripts/sigmap_context.py ask "<question>"` before broad code
-- L42 [2] Named Agent Routing — - Parent task: owns the critical path, shared-file integration, protected {Parent task; `speedster`; `junior_developer`}
-- L70 [2] Maintaining The Allowlist — Preview:
+- L1 [1] Skill And Agent Router — Status: current <allowlist-first; prp-router; prp-plan; prp-implement; prp-status; define-goal; agentic-tpm-and-execution; scrum-master; modern-seo-optimizations; seo; seo-content-writer; frontend-patterns>
+- L10 [2] Active Skill Lanes — | Trigger | Skills | <prp-router; prp-plan; prp-implement; prp-status; define-goal; agentic-tpm-and-execution; scrum-master; modern-seo-optimizations; seo; seo-content-writer; frontend-patterns; modern-design-frameworks>
+- L28 [2] Tool Routing — 1. Use `python scripts/sigmap_context.py ask "<question>"` before broad code <ast-grep outline; ast-grep; syntax-aware; JavaScript; docs_researcher; human-gate>
+- L42 [2] Named Agent Routing — - Parent task: owns the critical path, shared-file integration, protected {Parent task; `speedster`; `junior_developer`} <shared-file; one-line; Re-route; implementation_luna; architect_sol; implementation-ready; explorer; read-only; docs_researcher; release-note; reviewer; missing-test>
+- L70 [2] Maintaining The Allowlist — Preview: <named-agent; skill-disable>
 
 ## docs/AGENT_START_HERE.md
 
-- L1 [1] Agent Start Here — Status: current
-- L9 [2] Discovery — For coding, debugging, review, refactoring, or architecture:
-- L23 [2] Task Routes
-- L25 [3] Skill And Agent Router — The durable router is [`agent-context/SKILL_ROUTER.md`](agent-context/SKILL_ROUTER.md).
-- L48 [3] Pipeline, Fetching, And Scoring — Read:
-- L62 [3] Agentic Analysis And Client Reports — Read:
-- L74 [3] API, Dashboard, And Product — Use `backend-patterns` for API and persistence changes. Use
-- L80 [3] SEO Research And Marketing — Use `seo`, `modern-seo-optimizations`, `market-research`, and
-- L86 [3] Planning And Multi-Agent Execution — Use `prp-router`, `prp-plan`, `prp-implement`, and `prp-status` with
+- L1 [1] Agent Start Here — Status: current <ast-grep outline; human-readable; test-verdict; agent-context; named-agent; speedster; junior_developer; well-defined; implementation_luna; Read-only; explorer; docs_researcher>
+- L9 [2] Discovery — For coding, debugging, review, refactoring, or architecture: <ast-grep outline; human-readable; test-verdict>
+- L23 [2] Task Routes <agent-context; named-agent; speedster; junior_developer; well-defined; implementation_luna; Read-only; explorer; docs_researcher; reviewer; architect_sol; release_steward>
+- L25 [3] Skill And Agent Router — The durable router is [`agent-context/SKILL_ROUTER.md`](agent-context/SKILL_ROUTER.md). <agent-context; named-agent; speedster; junior_developer; well-defined; implementation_luna; Read-only; explorer; docs_researcher; reviewer; architect_sol; release_steward>
+- L48 [3] Pipeline, Fetching, And Scoring — Read: <seo-insights-platform-architecture; seo-ingestion-pipeline-spec; product-strength-contract; run-centric; evidence-backed>
+- L62 [3] Agentic Analysis And Client Reports — Read: <agentic-analysis-contract; report-snapshot; evidence-pack>
+- L74 [3] API, Dashboard, And Product — Use `backend-patterns` for API and persistence changes. Use <backend-patterns; frontend-patterns; modern-design-frameworks; product-design>
+- L80 [3] SEO Research And Marketing — Use `seo`, `modern-seo-optimizations`, `market-research`, and <modern-seo-optimizations; market-research; elite-cro-and-marketing>
+- L86 [3] Planning And Multi-Agent Execution — Use `prp-router`, `prp-plan`, `prp-implement`, and `prp-status` with <prp-router; prp-plan; prp-implement; prp-status>
 - L93 [3] Release And External Actions — The parent task retains credential, deployment, database, billing, external
 - L98 [2] Verification — Start narrow, then broaden:
 
 ## docs/agentic-analysis-contract.md
 
-- L1 [1] Agentic Analysis Contract: P10 Runtime and Governance
-- L3 [2] 1) Evidence boundary — `SiteEvidencePack` is generated only from persisted Outreach artifacts and is
-- L16 [2] 2) Job lifecycle — `AgenticAnalysisJob` state machine:
-- L36 [2] 3) Agent call ledger — `AgentCallRecord` is append-only and includes:
-- L53 [2] 4) Assessment lifecycle and review state — `AgenticAssessmentSnapshot` is immutable and contains:
-- L73 [2] 5) Validation and safety gates — - A validator resolves every candidate claim to evidence references and provenance.
+- L1 [1] Agentic Analysis Contract: P10 Runtime and Governance <SiteEvidencePack; report-snapshot; vertical-pack; keyword-set; market-run; AgenticAnalysisJob; queued; packing; running; validating; needs_review; complete>
+- L3 [2] 1) Evidence boundary — `SiteEvidencePack` is generated only from persisted Outreach artifacts and is <SiteEvidencePack; report-snapshot; vertical-pack; keyword-set; market-run>
+- L16 [2] 2) Job lifecycle — `AgenticAnalysisJob` state machine: <AgenticAnalysisJob; queued; packing; running; validating; needs_review; complete; partial; failed; superseded; evidence-pack>
+- L36 [2] 3) Agent call ledger — `AgentCallRecord` is append-only and includes: <AgentCallRecord; append-only>
+- L53 [2] 4) Assessment lifecycle and review state — `AgenticAssessmentSnapshot` is immutable and contains: <AgenticAssessmentSnapshot; observed; inference; recommendation; append-only; unreviewed; needs_review; approved; rejected>
+- L73 [2] 5) Validation and safety gates — - A validator resolves every candidate claim to evidence references and provenance. <prompt-injection; customer-unsafe>
 - L80 [2] 6) Passes and sequencing — Four fixed passes execute over the same immutable evidence pack:
-- L91 [2] 7) Runtime identities and policy — - Routine route:
-- L105 [2] 8) Promotion gates — Routine DeepSeek route remains disabled until measured pass conditions are met:
-- L125 [2] 9) Interfaces and provenance boundaries — Mandatory endpoints:
+- L91 [2] 7) Runtime identities and policy — - Routine route: <OpenRouter; outreach-analysis; operator-gated; $0.10>
+- L105 [2] 8) Promotion gates — Routine DeepSeek route remains disabled until measured pass conditions are met: <DeepSeek; evidence-reference; service-fit; top-three; $0.10; operator-triggered; auto-routed>
+- L125 [2] 9) Interfaces and provenance boundaries — Mandatory endpoints: <safe-by-default; review-request>
 - L139 [2] 10) Legacy-read and persistence compatibility — - Existing legacy assessment/rubric/model outputs must remain readable for old runs.
-- L145 [2] 11) Vertical decision and journey evidence v1 — P12 adds a separate `vertical-agentic-pack.v1` contract. A reviewed pack owns
+- L145 [2] 11) Vertical decision and journey evidence v1 — P12 adds a separate `vertical-agentic-pack.v1` contract. A reviewed pack owns <vertical-agentic-pack.v1; action-host; ready-to-convert; agentic-work-item.v1; $0.25; $0.75; append-only; candidate-action; personal-data; needs_approval; after-navigation; persisted-field>
+
+## docs/AGENTS-SEO-PLATFORM.md
+
+- L1 [1] AGENTS — SEO Insights Platform (sections 2–8) — Moved out of the always-loaded `AGENTS.md` on 2026-09-05 so video-engine sessions and every subagent dispatch stop paying for it. Load this file for any SEO-pla <always-loaded; video-engine; SEO-platform; Run-centric; InsightRun; InsightRepository; file-backed; InsightRunPipeline; DEFAULT_STAGES; RunStageEvent; stage_name; status>
+- L5 [2] 2. Architecture summary — - Run-centric: everything is anchored to an `InsightRun` (see `src/models.py`). {Run-centric; Repository abstraction; Service layer; Single orchestrator; One entrypoint} <InsightRun; InsightRepository; file-backed; InsightRunPipeline>
+- L15 [2] 3. Canonical run object — `InsightRun` (`src/models.py`) is the core execution unit. <InsightRun; DEFAULT_STAGES; RunStageEvent; stage_name; status; started_at; completed_at; output_summary>
+- L39 [2] 4. Stage definitions — | Stage | Owner service | Output | <normalizing_target; TargetIntakeService; SEOTarget; discovering_sitemaps; CrawlDiscoveryService; DiscoveredAsset; fetching_pages; PageAnalysisService; PageRecord; pulling_search_intelligence; SearchIntelligenceService; DataForSEO>
+- L55 [2] 5. Definition of done (evidence-first) — A run is not "done" until artifacts exist on disk and are readable. The agent must verify, not assert. {not} <run.json; status == "completed"; summary; overall_score; DataForSEO>
+- L71 [2] 6. Verification commands — Run a quick pipeline and inspect output:
+- L109 [2] 7. Artifact layout — Never hand-edit artifacts manually. They are produced by the repository layer only. <hand-edit>
+- L135 [2] 8. Repo conventions — - Python: run with the 3.11 interpreter. If a venv exists use it; otherwise `python` resolves to 3.11.15 on this host. {Python; Imports; Config; Models; Stages} <sys.path; from src...; .env; slots=True; to_dict(); DEFAULT_STAGES; _stage_start; _stage_complete; output_summary>
 
 ## docs/ARCHITECTURE_DECISION_SEO_PLATFORM.md
 
-- L1 [1] Architecture Decision: SEO Insights Platform over Script-First Pipeline — Date: 2026-07-07
-- L6 [2] Context — The initial planning artifacts framed the SEO system primarily as an ingestion pipeline with multiple standalone scripts. That was a useful bootstrap for valida
-- L11 [2] Decision — Adopt a platform architecture centered on persisted `SEO Insight Runs`. {platform architecture}
-- L16 [2] Rationale — - the product surface is a run/report, not a terminal command
-- L23 [2] Consequences
+- L1 [1] Architecture Decision: SEO Insights Platform over Script-First Pipeline — Date: 2026-07-07 <operator-friendly; SEO Insight Runs; run-state; up-front; run-centric; first-class; one-off>
+- L6 [2] Context — The initial planning artifacts framed the SEO system primarily as an ingestion pipeline with multiple standalone scripts. That was a useful bootstrap for valida <operator-friendly>
+- L11 [2] Decision — Adopt a platform architecture centered on persisted `SEO Insight Runs`. {platform architecture} <SEO Insight Runs>
+- L16 [2] Rationale — - the product surface is a run/report, not a terminal command <run-state>
+- L23 [2] Consequences <up-front; script-first>
 - L24 [3] Positive — - cleaner fit with broader normalized data platform
-- L30 [3] Tradeoffs — - requires more up-front modeling around run lifecycle and report objects
-- L35 [2] Rule going forward — Future implementation should prefer:
+- L30 [3] Tradeoffs — - requires more up-front modeling around run lifecycle and report objects <up-front; script-first>
+- L35 [2] Rule going forward — Future implementation should prefer: <run-centric; first-class; one-off>
 
 ## docs/content-video-engine/00-BRAINSTORM-AND-DECISIONS.md
 
-- L1 [1] Content-to-Video Flywheel — Brainstorm, Challenges, and Decisions — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine — read it for how a decision was reached {STATUS: RECORD.; V4 decision (2026-07-30):}
-- L12 [2] V4 pivot record — The anchorable 2D experiment improved body ownership but did not remove the
-- L37 [2] 1. The reframe: Act 1 is already built — The raw spec describes "Write Once, Publish Thrice" as something to build. Repo evidence says {step 1 exists and is production-shaped; technique axis}
-- L51 [2] 2. What survives from the raw spec — Stick-figure + Manim CE format (Manim confirmed healthy 2026; the style is uniquely suited to
-- L59 [2] 3. Challenges and decisions
-- L61 [3] 3.1 "100% automated" → human-gated automation with **graduated autonomy** — Fully-autonomous publish violates the repo's own import-gate rule and optimizes for YouTube's {shrink by design}
-- L70 [3] 3.2 Four pillars on one channel → **lanes within one audience promise** — Evidence settles the operator's lane-rotation model vs my initial one-pillar-per-channel split: {lanes rotate within one audience promise; new promises get n}
-- L77 [3] 3.3 The missed coupling → **embeds are the base case, YouTube is the upside** — Confirmed harder than assumed: Shorts description/pinned links are not clickable at all {not clickable at all}
-- L85 [3] 3.4 Scripts are the bottleneck → **conflict-loop arc, enforced** — Retention is won in the script. The 3-act contract was upgraded on the operator's research to a
-- L92 [3] 3.5 Story flow is a render-level guarantee (operator directive: no random cuts) — `transition` contract per scene (default `continuous`); consecutive compatible scenes render as {verticals}
-- L101 [3] 3.6 The voice is the moat — and our biggest exposure — Strongest single finding across all eight researched channels: zero success examples with {zero success examples with AI-sounding narration; the person}
-- L110 [3] 3.7 Claims risk → ledger + guard (repo hard-truth rules, extended to video) — Every number/medical/financial/historical assertion needs a sourced, verified `claims[]` entry
-- L116 [3] 3.8 Finance: un-parked by the operator's credentials — Original decision parked finance (named 2026 enforcement bucket: "AI personas on {Systems & Blowups lane, post-pilot}
-- L125 [3] 3.9 Agent org chart ≠ architecture — "Claude = architect, GPT = developer, Hermes = runtime" became: model-agnostic stages with
-- L133 [3] 3.10 Trend tools propose; the human owns the thesis — The operator's MKBHD / The Studio research input adds a useful enterprise-brand correction to {inversion; skill stacking}
-- L153 [3] 3.11 Stick figures → anchorable 2D technique visuals — The Armbar Gate-B review exposed a visual-system failure: generic stick figures collapse when
-- L167 [2] 4. Assumption register (ranked by risk × uncertainty) — | # | Assumption | If wrong | Confidence | Cheapest test | {the riskiest}
-- L180 [2] 5. Pre-committed kill / pivot criteria — Evaluated once, at pilot end (~5 long-form + 12–16 shorts over 4–6 weeks) — and only on {once, at pilot end; Retention floor:; Labor ceiling:; Embed signal:}
-- L195 [2] 6. Adopted / adapted / rejected (operator's pasted findings, disposition ledger) — | Finding | Disposition | {Adopted; Adapted; Adopted P1+}
-- L218 [2] 7. Parked (explicitly, with reasons) — Reddit/X distribution automation (policy minefield; manual, value-dense only) · Substack Notes
-- L228 [2] 8. Inputs needed from the operator (blockers for P0, not for doc approval) — 1. Corpus inventory — how many technique records with transcripts exist? (Pilot needs ≥12.) {Corpus inventory; Voice; Music library; Trades naming; One Trade Network; Embed targets}
-- L239 [2] 9. Doc map — | Doc | Holds |
+- L1 [1] Content-to-Video Flywheel — Brainstorm, Challenges, and Decisions — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine — read it for how a decision was reached {STATUS: RECORD.; V4 decision (2026-07-30):} <point-in-time; evidence-backed; three-part; StickFigureScene; legacy-compatible; multi-person; art-bible; non-renderable; follow-up; operator-supplied; YouTube; production-shaped>
+- L12 [2] V4 pivot record — The anchorable 2D experiment improved body ownership but did not remove the <multi-person; art-bible; non-renderable; Content-to-Video; follow-up; operator-supplied; YouTube>
+- L37 [2] 1. The reframe: Act 1 is already built — The raw spec describes "Write Once, Publish Thrice" as something to build. Repo evidence says {step 1 exists and is production-shaped; technique axis} <common_errors; related; storyboards-in-waiting; corpus-driven; long-form>
+- L51 [2] 2. What survives from the raw spec — Stick-figure + Manim CE format (Manim confirmed healthy 2026; the style is uniquely suited to <Stick-figure; SaaS; scene-class; one-off>
+- L59 [2] 3. Challenges and decisions <human-gated; Fully-autonomous; import-gate; YouTube; channel-level; mass-produced; exception-based; auto-approve; model-scored; Per-video; human-in-the-loop; lane-rotation>
+- L61 [3] 3.1 "100% automated" → human-gated automation with **graduated autonomy** — Fully-autonomous publish violates the repo's own import-gate rule and optimizes for YouTube's {shrink by design} <Fully-autonomous; import-gate; YouTube; channel-level; mass-produced; exception-based; auto-approve; model-scored; Per-video; human-in-the-loop>
+- L70 [3] 3.2 Four pillars on one channel → **lanes within one audience promise** — Evidence settles the operator's lane-rotation model vs my initial one-pillar-per-channel split: {lanes rotate within one audience promise; new promises get n} <lane-rotation; one-pillar-per-channel; MinutePhysics; spin-offs; combat-science; badge-coded>
+- L77 [3] 3.3 The missed coupling → **embeds are the base case, YouTube is the upside** — Confirmed harder than assumed: Shorts description/pinned links are not clickable at all {not clickable at all} <Aug 2023; VideoObject; JSON-LD; HowTo; long-form>
+- L85 [3] 3.4 Scripts are the bottleneck → **conflict-loop arc, enforced** — Retention is won in the script. The 3-act contract was upgraded on the operator's research to a <guard-enforced>
+- L92 [3] 3.5 Story flow is a render-level guarantee (operator directive: no random cuts) — `transition` contract per scene (default `continuous`); consecutive compatible scenes render as {verticals} <transition; continuous; micro-beats; always-in-motion>
+- L101 [3] 3.6 The voice is the moat — and our biggest exposure — Strongest single finding across all eight researched channels: zero success examples with {zero success examples with AI-sounding narration; the person} <disclosure-exempt; ElevenLabs; persona-bearing; pose-library; pilot-critical; operator-recorded>
+- L110 [3] 3.7 Claims risk → ledger + guard (repo hard-truth rules, extended to video) — Every number/medical/financial/historical assertion needs a sourced, verified `claims[]` entry <claims[]; expert; Raw-spec>
+- L116 [3] 3.8 Finance: un-parked by the operator's credentials — Original decision parked finance (named 2026 enforcement bucket: "AI personas on {Systems & Blowups lane, post-pilot} <ex-JPMorgan; no-recommendations; on-screen; expert; top-quartile>
+- L125 [3] 3.9 Agent org chart ≠ architecture — "Claude = architect, GPT = developer, Hermes = runtime" became: model-agnostic stages with <model-agnostic; InsightRunPipeline; env-swap; Reference-recipe; operator-curated; viral-video>
+- L133 [3] 3.10 Trend tools propose; the human owns the thesis — The operator's MKBHD / The Studio research input adds a useful enterprise-brand correction to {inversion; skill stacking} <enterprise-brand; viral-growth; counter-angle; sports-medicine; dark-mode; Gate-B-approved; per-run; trust-first; first-party; high-CPM; low-fit>
+- L153 [3] 3.11 Stick figures → anchorable 2D technique visuals — The Armbar Gate-B review exposed a visual-system failure: generic stick figures collapse when <Gate-B; visual-system; color-coded; multi-limb; cut-ins; Operator-owned; third-party>
+- L167 [2] 4. Assumption register (ranked by risk × uncertainty) — | # | Assumption | If wrong | Confidence | Cheapest test | {the riskiest} <long-form; embeds-only; rich-results; Medium-high; finished-min; per-stage; operator-recorded; Medium-low; human-VO; Human-gated; channel-level; click-through>
+- L180 [2] 5. Pre-committed kill / pivot criteria — Evaluated once, at pilot end (~5 long-form + 12–16 shorts over 4–6 weeks) — and only on {once, at pilot end; Retention floor:; Labor ceiling:; Embed signal:} <long-form; cold-start; format-iteration; embeds-only; automation-gap; per-minute; human-VO>
+- L195 [2] 6. Adopted / adapted / rejected (operator's pasted findings, disposition ledger) — | Finding | Disposition | {Adopted; Adapted; Adopted P1+} <first-frame; --reference-url; operator-curated; anecdotal-tagged; Custom-cloned; Default-voice; macro-trend; operator-owned; source-backed; Three-video; pre-launch; Gate-B-approved>
+- L218 [2] 7. Parked (explicitly, with reasons) — Reddit/X distribution automation (policy minefield; manual, value-dense only) · Substack Notes <value-dense; fight-choreography; re-creations>
+- L228 [2] 8. Inputs needed from the operator (blockers for P0, not for doc approval) — 1. Corpus inventory — how many technique records with transcripts exist? (Pilot needs ≥12.) {Corpus inventory; Voice; Music library; Trades naming; One Trade Network; Embed targets} <YouTube; AI-generated; WashingtonLaborNetwork.com>
+- L239 [2] 9. Doc map — | Doc | Holds | <run-centric; storyboard.schema.json; cold-start; pre-screener>
 
 ## docs/content-video-engine/01-PRD.md
 
-- L1 [1] PRD — Content-to-Video Flywheel Engine — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine — read it for how a decision was reached {STATUS: RECORD.; Active scope: History Documentary V4.}
-- L8 [2] V4 product override — The engine's primary product is an evidence-backed three-part History of BJJ
-- L27 [2] 1. Problem — The operator owns two discovery properties (National BJJ Registry; the trades vertical) whose
-- L38 [2] 2. Product — A run-centric render pipeline (`03-SYSTEM-ARCHITECTURE.md`) that turns corpus records and {series lanes}
-- L51 [2] 3. Users — | User | Interaction | What they need | {Operator}
-- L60 [2] 4. Goals (ranked) and success metrics — G1 — Upgrade the owned property (base case). Every produced technique video embedded on its {G1 — Upgrade the owned property (base case).; G2 — Prove a retainable format.; G3 — Prove the unit economics.}
-- L86 [2] 5. Non-goals (v1) — 1. YouTube upload API/OAuth automation (manual upload with generated checklist).
-- L101 [2] 6. Functional requirements — | # | Requirement | Stage/artifact |
-- L121 [2] 7. Non-functional requirements — - Reproducibility: same storyboard + configs ⇒ same video (schema major-version refusal; {Reproducibility:; Honesty:; Security:; Resumability & evidence:}
-- L140 [2] 8. Phases — | Phase | Contents | Exit criteria | {P0 — Thin slice + pilot; P1 — Productization}
-- L149 [2] 9. Dependencies and open questions — - Corpus inventory (blocker for P0 scale): count of technique records with transcripts. {Corpus inventory; Voice decision; Music licensing}
+- L1 [1] PRD — Content-to-Video Flywheel Engine — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine — read it for how a decision was reached {STATUS: RECORD.; Active scope: History Documentary V4.} <point-in-time; evidence-backed; three-part; documentary-explainer; chapter-level; StickFigureScene; fail-closed; history_episode.v1; research_packet.v1; asset_manifest.v1; HISTORY-DOCUMENTARY-EDITORIAL-SPEC; ARCHIVAL-ASSET-AND-CITATION-SPEC>
+- L8 [2] V4 product override — The engine's primary product is an evidence-backed three-part History of BJJ <evidence-backed; three-part; documentary-explainer; chapter-level; StickFigureScene; fail-closed; history_episode.v1; research_packet.v1; asset_manifest.v1; HISTORY-DOCUMENTARY-EDITORIAL-SPEC; ARCHIVAL-ASSET-AND-CITATION-SPEC>
+- L27 [2] 1. Problem — The operator owns two discovery properties (National BJJ Registry; the trades vertical) whose <highest-attention; YouTube; AI-video; brand-destroying; near-zero; inauthentic-content; never-fabricate>
+- L38 [2] 2. Product — A run-centric render pipeline (`03-SYSTEM-ARCHITECTURE.md`) that turns corpus records and {series lanes} <run-centric; stick-figure; UTM-tagged; first-class; YouTube; lane-rotation; single-channel; combat-science>
+- L51 [2] 3. Users — | User | Interaction | What they need | {Operator} <YouTube; retention-grade>
+- L60 [2] 4. Goals (ranked) and success metrics — G1 — Upgrade the owned property (base case). Every produced technique video embedded on its {G1 — Upgrade the owned property (base case).; G2 — Prove a retainable format.; G3 — Prove the unit economics.} <VideoObject; JSON-LD; long-form; UTM-attributed; verbal-CTA; raw-spec; Gate-B-approved; QC-passing>
+- L86 [2] 5. Non-goals (v1) — 1. YouTube upload API/OAuth automation (manual upload with generated checklist). <YouTube; ex-JPMorgan; no-recommendations; educational-only; post-pilot; re-creations; Multi-agent; operator-supplied; provenance-preserving>
+- L101 [2] 6. Functional requirements — | # | Requirement | Stage/artifact | <SourceBundle; ingesting_source; 06-SCRIPT-TRANSFORMATION-SPEC; transforming_script; schema-valid; building_storyboard; storyboard_guard; re-validated; awaiting_storyboard_approval; Per-scene; word-timing; content-hash>
+- L121 [2] 7. Non-functional requirements — - Reproducibility: same storyboard + configs ⇒ same video (schema major-version refusal; {Reproducibility:; Honesty:; Security:; Resumability & evidence:} <major-version; wall-clock; never-fabricate; hard-truth; env-only; DoD; per-minute; human-in-the-loop; exception-based; auto-approve; model-scored; transition>
+- L140 [2] 8. Phases — | Phase | Contents | Exit criteria | {P0 — Thin slice + pilot; P1 — Productization} <three-video; pre-launch; public-ready; exception-based; operator-approved; reference-recipe; no-recommendations; no-go>
+- L149 [2] 9. Dependencies and open questions — - Corpus inventory (blocker for P0 scale): count of technique records with transcripts. {Corpus inventory; Voice decision; Music licensing} <cloned-own-voice; disclosure-exempt; ElevenLabs; Default-voice; custom-designed; YouTube; AI-generated; WashingtonLaborNetwork.com>
 
 ## docs/content-video-engine/02-CONTENT-STRATEGY.md
 
-- L1 [1] Content Strategy — Channel Architecture, Editorial Standards, Compliance — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine — read it for how a decision was reached {STATUS: RECORD.; V4 lane priority:; show how grappling systems changed as people, institutions,}
+- L1 [1] Content Strategy — Channel Architecture, Editorial Standards, Compliance — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine — read it for how a decision was reached {STATUS: RECORD.; V4 lane priority:; show how grappling systems changed as people, institutions,} <point-in-time; rights-cleared; PILOT-SEASON; HISTORY-DOCUMENTARY-EDITORIAL-SPEC; cold-start; operator-provided; fact-check; lane-rotation; MinutePhysics; MinuteEarth; MinuteFood; combat-history>
 - L21 [2] 1. The funnel, corrected for 2026 mechanics — The strategic inversion from the raw spec: Tier 3 embeds are the guaranteed payoff; Tier 1
-- L38 [2] 2. Channel architecture: one audience promise per channel, lanes within it — Evidence cuts both ways and the resolution is scoped breadth: {persona + art style is the product; lanes rotate within one audience promise; new audience promi}
-- L67 [2] 3. Editorial standards (the accretive tier, enforced) — 1. Information gain is mandatory. ≥3 only-here specifics per long-form video, drawn from the {Information gain is mandatory.; Persona lives in the writing.}
-- L109 [3] 3.1 Visual language by lane — | Lane | Default visual language | Appropriate generative assist |
-- L121 [2] 4. Voice policy — - Recommended: clone the operator's own voice. Strongest persona ownership; explicitly {Recommended: clone the operator's own voice.}
-- L132 [2] 5. Platform compliance posture (YPP "inauthentic content," 2026 state) — Enforcement is channel-level (theme, top videos, newest uploads, metadata) with three {channel-level; finance}
-- L152 [2] 6. Cadence — - Pilot (wks 1–6): ~2–3 shorts/week + 1 long-form per ~10 days (5 episodes total), per {Pilot (wks 1–6):; Pre-launch buffer:; Post-pilot target (P1):}
-- L165 [2] 7. Distribution beyond the channel — - Embeds first: every technique video → its technique page + technique × location pages via {Embeds first:; manual, value-dense, human; Post-pilot monetization trust rule:}
-- L177 [2] 8. Measurement discipline — - UTM taxonomy: `utm_source=youtube&utm_medium={longform|profile}&utm_campaign={job_slug}`.
+- L38 [2] 2. Channel architecture: one audience promise per channel, lanes within it — Evidence cuts both ways and the resolution is scoped breadth: {persona + art style is the product; lanes rotate within one audience promise; new audience promi} <lane-rotation; MinutePhysics; MinuteEarth; MinuteFood; combat-history; Data-center; badge-coded; rotation-scheduled; combat-science; gym-culture; post-pilot; ex-JPMorgan>
+- L67 [2] 3. Editorial standards (the accretive tier, enforced) — 1. Information gain is mandatory. ≥3 only-here specifics per long-form video, drawn from the {Information gain is mandatory.; Persona lives in the writing.} <only-here; long-form; 06-SCRIPT-TRANSFORMATION-SPEC; tap_frantic; gym_enforcer; bowler_hat_maeda; pose-library; claims-ledger; forward-looking; not-financial-advice; ex-JPMorgan; expert>
+- L109 [3] 3.1 Visual language by lane — | Lane | Default visual language | Appropriate generative assist | <color-coded; cut-ins; woodblock-inspired; high-contrast>
+- L121 [2] 4. Voice policy — - Recommended: clone the operator's own voice. Strongest persona ownership; explicitly {Recommended: clone the operator's own voice.} <YouTube; synthetic-content; ElevenLabs; Default-voice; re-records; custom-designed; mass-production; Script-side; punctuation-driven>
+- L132 [2] 5. Platform compliance posture (YPP "inauthentic content," 2026 state) — Enforcement is channel-level (theme, top videos, newest uploads, metadata) with three {channel-level; finance} <YouTube; tool-agnostic; Per-video; catalog-level; Fact-layer; stock-voice; Health-adjacent; no-recommendations>
+- L152 [2] 6. Cadence — - Pilot (wks 1–6): ~2–3 shorts/week + 1 long-form per ~10 days (5 episodes total), per {Pilot (wks 1–6):; Pre-launch buffer:; Post-pilot target (P1):} <long-form; Gate-B-approve; public-ready; quality-gated; volume-funnel; event-upload; OverSimplified; channel-level-reviewed>
+- L165 [2] 7. Distribution beyond the channel — - Embeds first: every technique video → its technique page + technique × location pages via {Embeds first:; manual, value-dense, human; Post-pilot monetization trust rule:} <embed_payload.json; Rich-result; HowTo; VideoObject; cross-linking; long-form; first-party; low-trust>
+- L177 [2] 8. Measurement discipline — - UTM taxonomy: `utm_source=youtube&utm_medium={longform|profile}&utm_campaign={job_slug}`. <one-page; embed-cohort; human-minutes>
 
 ## docs/content-video-engine/03-SYSTEM-ARCHITECTURE.md
 
-- L1 [1] Content-to-Video Engine — System Architecture — > V4 architecture overlay: V1–V3 remain resumable. New History V4 jobs use the {V4 architecture overlay:}
-- L7 [2] V4 history pipeline — `research_packet.v1`, `asset_manifest.v1`, and `art_bible.v2` are independently
-- L63 [2] 1. System context — The engine never invents content: sources are the fact layer. For corpus records the storyboard
-- L82 [2] 2. Monorepo layout — The operator's draft proposed a standalone `video-flywheel/` tree with `tools/*.py` and a root {services under a single pipeline}
-- L137 [2] 3. Pipeline stages — Every stage emits a `VideoStageEvent` (`stage_name`, `status`, `started_at`, `completed_at`,
-- L188 [2] 4. Job artifact layout (`runtime/jobs/<job_id>/`) — TTS results are cached by `sha256(voice_id + narration_text + voice_settings)` — storyboard edits
-- L213 [2] 5. Service specs (the operator's three tools, hardened) — `audio_synth.py` — calls ElevenLabs `POST /v1/text-to-speech/{voice_id}/with-timestamps` per {`audio_synth.py`}
-- L238 [3] 5.1 Technique visual system (P13 v2) — The first Armbar render exposed a contract gap: a narration beat can pass schema validation while
-- L275 [2] 6. Dual-format rendering (9:16 is a layout, not a crop) — `render_profiles.json`:
-- L301 [2] 7. Guards (the no-slop enforcement layer) — `storyboard_guard.py` runs before Gate A and again after any Gate A edit. Extends the {Schema validation; Claims ledger enforcement; Credential-framing ban}
-- L328 [2] 8. LLM stages are configuration, not architecture — Only two stages may call an LLM: `transforming_script` and `storyboard_build` assembly prose.
-- L351 [2] 9. Definition of done (per run) — A run may be reported complete only when ALL exist on disk:
-- L365 [2] 10. Not building (v1) — - YouTube upload API / OAuth — v1 publish emits a checklist + metadata for manual upload {YouTube upload API / OAuth; Orchestration frameworks / multi-agent runtimes; Auto-embed writes to the registry}
+- L1 [1] Content-to-Video Engine — System Architecture — > V4 architecture overlay: V1–V3 remain resumable. New History V4 jobs use the {V4 architecture overlay:} <technique-manifest; StickFigureScene; research_packet.v1; asset_manifest.v1; art_bible.v2; shot_plan.v3; visual_treatment.v2; Renderer-facing; storyboard.schema.json; corpus-driven; run-centric; stage-evented>
+- L7 [2] V4 history pipeline — `research_packet.v1`, `asset_manifest.v1`, and `art_bible.v2` are independently <research_packet.v1; asset_manifest.v1; art_bible.v2; shot_plan.v3; visual_treatment.v2; Renderer-facing; storyboard.schema.json; corpus-driven; run-centric; stage-evented; InsightRunPipeline; RunStageEvent>
+- L63 [2] 1. System context — The engine never invents content: sources are the fact layer. For corpus records the storyboard <LLM-assisted>
+- L82 [2] 2. Monorepo layout — The operator's draft proposed a standalone `video-flywheel/` tree with `tools/*.py` and a root {services under a single pipeline} <schema-first; repo-native; always-loaded>
+- L137 [2] 3. Pipeline stages — Every stage emits a `VideoStageEvent` (`stage_name`, `status`, `started_at`, `completed_at`, <VideoStageEvent; stage_name; status; started_at; completed_at; output_summary; RunStageEvent; awaiting_*; job_id; re-validating; DoD; human-in-the-loop>
+- L188 [2] 4. Job artifact layout (`runtime/jobs/<job_id>/`) — TTS results are cached by `sha256(voice_id + narration_text + voice_settings)` — storyboard edits <re-synthesize; scene-spec; cli.py resume <job_id>>
+- L213 [2] 5. Service specs (the operator's three tools, hardened) — `audio_synth.py` — calls ElevenLabs `POST /v1/text-to-speech/{voice_id}/with-timestamps` per {`audio_synth.py`} <ElevenLabs; word-level; ELEVENLABS_API_KEY; repository-root; .env; already-set; re-transcription; audio_duration; manim -ql; -ql --fps 60; render_profiles.json; -qh>
+- L238 [3] 5.1 Technique visual system (P13 v2) — The first Armbar render exposed a contract gap: a narration beat can pass schema validation while <BJJActionScene; StickFigureScene; body-part; White-line; visual-beat; cut-ins; operator-supplied; safety-critical; pose-only; state_from; state_to; visual-change>
+- L275 [2] 6. Dual-format rendering (9:16 is a layout, not a crop) — `render_profiles.json`: <render_profiles.json; landscape_draft; landscape_final; YouTube; long-form; vertical_draft; vertical_final; ThemedScene; title-zone; action-zone; caption-zone; left-diagram>
+- L301 [2] 7. Guards (the no-slop enforcement layer) — `storyboard_guard.py` runs before Gate A and again after any Gate A edit. Extends the {Schema validation; Claims ledger enforcement; Credential-framing ban} <storyboard.schema.json; narration_text; claims[]; source; verified: true; expert; conflict-loop; conflict; comeback; visual-change; per-aspect; manim_class>
+- L328 [2] 8. LLM stages are configuration, not architecture — Only two stages may call an LLM: `transforming_script` and `storyboard_build` assembly prose. <transforming_script; storyboard_build; LLM_MODEL; LLM_PROVIDER; LLM_API_KEY; LLM_BASE_URL; OpenRouter-first; OpenRouter; Corpus-sourced; essay-sourced; LLM-first; guard-gated>
+- L351 [2] 9. Definition of done (per run) — A run may be reported complete only when ALL exist on disk: <job.json; status == "published"; "packaged"; completed; vertical_final; overall: pass>
+- L365 [2] 10. Not building (v1) — - YouTube upload API / OAuth — v1 publish emits a checklist + metadata for manual upload {YouTube upload API / OAuth; Orchestration frameworks / multi-agent runtimes; Auto-embed writes to the registry} <auto-publish; embed_payload.json; Per-frame>
 
 ## docs/content-video-engine/04-STORYBOARD-CONTRACT.md
 
-- L1 [1] Storyboard Data Contract (v2) — Rationale and Usage — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine — read it for how a decision was reached {STATUS: RECORD.; Current extension: Storyboard 2.3.0.}
-- L8 [2] Storyboard 2.3 living-editorial extension — Storyboard 2.3 adds immutable `coverage_plan_hash` and
-- L20 [2] Storyboard 2.2 documentary extension — Storyboard 2.2 adds `history_episode` as a source kind and records immutable
-- L44 [2] 1. What changed from the draft (v1 → v2) — The operator's draft schema had the right skeleton (job id, global theme, typed scenes with
-- L66 [2] 2. Authoring workflow (who writes which fields, when) — Two rules keep this sane:
-- L91 [2] 3. The TTS-first timing rule (restated once, normatively) — Narration length is unknowable until synthesized; animation length is fully controllable. {audio is the clock}
-- L100 [2] 4. Worked example (abridged) — corpus technique → storyboard — Source: `content/bjj-registry/corpus/armbar-from-guard.json`. Deterministic floor: transcript
-- L174 [2] 5. Guard obligations (summary — full list in `03-SYSTEM-ARCHITECTURE.md` §7) — Schema-valid is necessary, not sufficient. The guard additionally enforces: arc shape (one hook
+- L1 [1] Storyboard Data Contract (v2) — Rationale and Usage — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine — read it for how a decision was reached {STATUS: RECORD.; Current extension: Storyboard 2.3.0.} <point-in-time; living-editorial; coverage_plan_hash; asset_selection_hash; evidence-backed; visual_beats; micro-event; clause-level; history_episode; research_hash; asset_manifest_hash; art_bible_hash>
+- L8 [2] Storyboard 2.3 living-editorial extension — Storyboard 2.3 adds immutable `coverage_plan_hash` and <coverage_plan_hash; asset_selection_hash; evidence-backed; visual_beats; micro-event; clause-level>
+- L20 [2] Storyboard 2.2 documentary extension — Storyboard 2.2 adds `history_episode` as a source kind and records immutable <history_episode; research_hash; asset_manifest_hash; art_bible_hash; visual_treatment.v2; Multi-source; artifact_cold_open; archival_portrait; illustrated_reconstruction; document_quote_closeup; migration_map_timeline; lineage_graph>
+- L44 [2] 1. What changed from the draft (v1 → v2) — The operator's draft schema had the right skeleton (job id, global theme, typed scenes with <manim_class; parameters; scene.timing; TTS-first; re-renders; global_settings.targets; scene.layout_hints; top-level; shorts[]; blurred-pad; Word-timing; first-class>
+- L66 [2] 2. Authoring workflow (who writes which fields, when) — Two rules keep this sane: <at_word; re-approved; timing.target_s; total-duration; [min_s, max_s]>
+- L91 [2] 3. The TTS-first timing rule (restated once, normatively) — Narration length is unknowable until synthesized; animation length is fully controllable. {audio is the clock} <audio_synth; audio_duration; padding_s; time-warp>
+- L100 [2] 4. Worked example (abridged) — corpus technique → storyboard — Source: `content/bjj-registry/corpus/armbar-from-guard.json`. Deterministic floor: transcript <develop; common_errors; related; registry-level; scroll-stopper>
+- L174 [2] 5. Guard obligations (summary — full list in `03-SYSTEM-ARCHITECTURE.md` §7) — Schema-valid is necessary, not sufficient. The guard additionally enforces: arc shape (one hook <Schema-valid; cross-referencing; credential-framing; expert; custom-voice; scene-id; total-duration>
 
 ## docs/content-video-engine/05-COMPETITIVE-BRIEF.md
 
-- L1 [1] Competitive Brief — Animated Explainer Channels + 2026 Platform Economics — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine — read it for how a decision was reached {STATUS: RECORD.}
-- L14 [2] 1. The map
-- L16 [3] Benchmark giants (what the format ceiling looks like) — | Channel | Scale (approx., 2026) | Format | Cadence | Breadth | Voice | {widest; spun off}
-- L25 [3] Emerging cohort (what our first 24 months could look like — live + Wayback data) — | Channel | Age | Scale (2026-07-28) | Growth shape | Voice | {0→133K in ~5 months Shorts-led; 13 videos}
-- L36 [2] 2. What the evidence settles for our plan
-- L38 [3] 2.1 Channel breadth → lanes within one promise (decision affirmed) — Sam O'Nella proves single-channel breadth when persona + art style is the product; MinutePhysics {when persona + art style is the product}
-- L47 [3] 2.2 The two growth lanes — and which is ours — - Event-upload lane (OverSimplified 3–4/yr; Jhanzou 13 videos → 1.5M subs): works only at {Event-upload lane; Volume-funnel lane; A programmatic pipeline's marginal cost is unbeatable exactl}
-- L62 [3] 2.3 The voice finding (the plan's biggest caution, now with zero counterexamples) — Across all eight channels: no AI-sounding narration anywhere in the success set. The giants {no AI-sounding narration anywhere in the success set.}
-- L74 [3] 2.4 Cold-start expectations (pre-commit these to calibrate the kill criteria) — - Plan for 5–12 months of obscurity on merit formats; less only if the Shorts flywheel {5–12 months of obscurity; Finished units only.; Ship a repeatable promise, sequel the winners fast.}
-- L90 [3] 2.5 Motion-quality bar warning — Stick-figure fight animation is Jhanzou territory: the genre's bar is choreography spectacle {diagrams, jokes, and mechanics}
-- L99 [3] 2.6 Monetization layering (sequenced expectations) — Observed order: Patreon/Ko-fi at first traction → memberships → merch + brand sponsors in the
-- L109 [3] 2.7 Operator-provided MKBHD / The Studio strategy input — Source: [How To Start A Million Subscriber YouTube Channel by MKBHD / The Studio](https://www.youtube.com/watch?v=Puny-2wkMZA). {not; Outlier theory:; Trend theory:; Inversion over imitation:}
-- L134 [2] 3. 2026 platform economics (fact-checked; full details in stream 3 output) — | Item | Verified state (mid-2026) | Confidence | {AI personas on health/finance/legal/politics}
-- L150 [2] 4. Implications ledger (where each finding landed in the docs) — 1. Lanes-within-one-promise decision → `02` §2 (affirmed by 2.1).
+- L1 [1] Competitive Brief — Animated Explainer Channels + 2026 Platform Economics — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine — read it for how a decision was reached {STATUS: RECORD.} <point-in-time; stick-figure; YouTube; fact-check; operator-provided; OverSimplified; edu-comedy; MinutePhysics; Jan 2026; MinuteEarth; MinuteFood; TikTok-batch>
+- L14 [2] 1. The map <OverSimplified; stick-figure; edu-comedy; MinutePhysics; Jan 2026; MinuteEarth; MinuteFood; TikTok-batch; TikTok; Shorts-led; re-accelerated; long-form>
+- L16 [3] Benchmark giants (what the format ceiling looks like) — | Channel | Scale (approx., 2026) | Format | Cadence | Breadth | Voice | {widest; spun off} <OverSimplified; stick-figure; edu-comedy; MinutePhysics; Jan 2026; MinuteEarth; MinuteFood; TikTok-batch; TikTok>
+- L25 [3] Emerging cohort (what our first 24 months could look like — live + Wayback data) — | Channel | Age | Scale (2026-07-28) | Growth shape | Voice | {0→133K in ~5 months Shorts-led; 13 videos} <re-accelerated; long-form; sound-design-forward; music-backed>
+- L36 [2] 2. What the evidence settles for our plan <single-channel; MinutePhysics; spin-off; badge-coded; lane-rotation; Sam-style; watch-next; Event-upload; OverSimplified; out-choreograph; Volume-funnel; TikTok-batch>
+- L38 [3] 2.1 Channel breadth → lanes within one promise (decision affirmed) — Sam O'Nella proves single-channel breadth when persona + art style is the product; MinutePhysics {when persona + art style is the product} <single-channel; MinutePhysics; spin-off; badge-coded; lane-rotation; Sam-style; watch-next>
+- L47 [3] 2.2 The two growth lanes — and which is ours — - Event-upload lane (OverSimplified 3–4/yr; Jhanzou 13 videos → 1.5M subs): works only at {Event-upload lane; Volume-funnel lane; A programmatic pipeline's marginal cost is unbeatable exactl} <OverSimplified; out-choreograph; TikTok-batch; TikTok; Shorts-led; short-form; long-form; middle-path>
+- L62 [3] 2.3 The voice finding (the plan's biggest caution, now with zero counterexamples) — Across all eight channels: no AI-sounding narration anywhere in the success set. The giants {no AI-sounding narration anywhere in the success set.} <creator-voiced; disclosure-exempt; persona-bearing; ElevenLabs-Default-retirement-proof; ElevenLabs; pilot-critical; operator-recorded>
+- L74 [3] 2.4 Cold-start expectations (pre-commit these to calibrate the kill criteria) — - Plan for 5–12 months of obscurity on merit formats; less only if the Shorts flywheel {5–12 months of obscurity; Finished units only.; Ship a repeatable promise, sequel the winners fast.} <QC-passed; re-pull; next-episode>
+- L90 [3] 2.5 Motion-quality bar warning — Stick-figure fight animation is Jhanzou territory: the genre's bar is choreography spectacle {diagrams, jokes, and mechanics} <Stick-figure; JointLeverageScene; format-niche>
+- L99 [3] 2.6 Monetization layering (sequenced expectations) — Observed order: Patreon/Ko-fi at first traction → memberships → merch + brand sponsors in the <Ko-fi; OverSimplified; NordVPN-as-recurring-character; NordVPN; SaaS; Patreon-equivalent; sponsor-friendly; self-inflicted>
+- L109 [3] 2.7 Operator-provided MKBHD / The Studio strategy input — Source: [How To Start A Million Subscriber YouTube Channel by MKBHD / The Studio](https://www.youtube.com/watch?v=Puny-2wkMZA). {not; Outlier theory:; Trend theory:; Inversion over imitation:} <YouTube; source-backed; Pre-launch; Gate-B-approved>
+- L134 [2] 3. 2026 platform economics (fact-checked; full details in stream 3 output) — | Item | Verified state (mid-2026) | Confidence | {AI personas on health/finance/legal/politics} <Channel-level; tool-agnostic; Synthetic-content; non-realistic; fully-animated; own-voice; other-person; ElevenLabs; post-Mar; Long-form; top-quartile; off-platform>
+- L150 [2] 4. Implications ledger (where each finding landed in the docs) — 1. Lanes-within-one-promise decision → `02` §2 (affirmed by 2.1). <Lanes-within-one-promise; Volume-funnel; Shorts-then-long-form; Cloned-own-voice; Finished-units-only; sequel-the-winner; fight-choreography; Patreon-equivalent; sponsor-friendly; Three-video; pre-launch; Human-directs>
 
 ## docs/content-video-engine/06-SCRIPT-TRANSFORMATION-SPEC.md
 
-- L1 [1] Script Transformation Spec — Essay/Corpus → Beat Sheet → Storyboard — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine — read it for how a decision was reached {STATUS: RECORD.; History V4 override:}
-- L9 [2] Evidence-constrained documentary transformation — For a `history_episode.v1`, every narration sentence carries one or more approved
-- L34 [2] 0. Angle selection precedes transformation — The transformer does not decide what the channel believes. Before beat generation, the operator {Pattern:; Inversion:; Skill stack:; Human thesis:}
-- L50 [2] 1. Length + pacing math (140 WPM basis) — | Output | Words | Runtime | Scenes (typ.) |
-- L61 [2] 2. Pacing hierarchy (reconciling the 3–5s / 15–20s / 20–30s numbers) — The operator's sources give three cadence numbers; they're different layers, not contradictions: {Micro; Interrupt; Act}
-- L71 [2] 3. Conflict-loop arc (mapped to `scene.act`) — Linear summary (hook → explanation → conclusion) retains worse than a looped conflict arc: {looped conflict arc; `hook` (first scene, ≤12s).}
-- L97 [3] Flow rules (anti-random-cut) — Automated video dies by disjointed jumps. Every scene boundary must be authored: {Connective tissue is script.; Continuous is the default.}
-- L116 [2] 4. Visual trigger syntax — Beat sheets use inline markers, compiled to `beats[]`: {named action or pose that exists}
-- L149 [2] 5. Information gain (Golden Rule 2, made checkable) — Every long-form script must carry ≥3 only-here specifics — facts a generic summary channel {≥3 only-here specifics; our fact layer is the content advantage.}
-- L158 [2] 6. Humor + persona (the accretive tier, not the slop tier) — - Recurring visual gags live in the pose library (`tap_frantic`, `gym_enforcer`, `bowler_hat_maeda`)
-- L167 [2] 7. Claims extraction (runs inside transformation) — The transformer must emit the `claims[]` ledger alongside the script: every number, superlative,
+- L1 [1] Script Transformation Spec — Essay/Corpus → Beat Sheet → Storyboard — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine — read it for how a decision was reached {STATUS: RECORD.; History V4 override:} <point-in-time; operator-approved; research_packet.v1; Evidence-constrained; history_episode.v1; exact-text; Illustration; Reconstruction; HISTORY-DOCUMENTARY-EDITORIAL-SPEC; first-pass; claim-boundary; LLM-assisted>
+- L9 [2] Evidence-constrained documentary transformation — For a `history_episode.v1`, every narration sentence carries one or more approved <history_episode.v1; exact-text; Illustration; Reconstruction; HISTORY-DOCUMENTARY-EDITORIAL-SPEC; first-pass; claim-boundary; LLM-assisted; deterministic-floor; storyboard_build>
+- L34 [2] 0. Angle selection precedes transformation — The transformer does not decide what the channel believes. Before beat generation, the operator {Pattern:; Inversion:; Skill stack:; Human thesis:} <counter-premise; one-sentence>
+- L50 [2] 1. Length + pacing math (140 WPM basis) — | Output | Words | Runtime | Scenes (typ.) | <Long-form; YouTube>
+- L61 [2] 2. Pacing hierarchy (reconciling the 3–5s / 15–20s / 20–30s numbers) — The operator's sources give three cadence numbers; they're different layers, not contradictions: {Micro; Interrupt; Act} <pacing.visual_change_max_s; shorts_visual_change_max_s; stick-figure; pacing.pattern_interrupt_max_s; interrupt-tagged>
+- L71 [2] 3. Conflict-loop arc (mapped to `scene.act`) — Linear summary (hook → explanation → conclusion) retains worse than a looped conflict arc: {looped conflict arc; `hook` (first scene, ≤12s).} <throat-clearing; punchline-first; develop; provenance-checked; llm_guard.guard_technique; comeback; payoff; information-gain; cta; on-screen; UTM-tagged; Double-CTAs>
+- L97 [3] Flow rules (anti-random-cut) — Automated video dies by disjointed jumps. Every scene boundary must be authored: {Connective tissue is script.; Continuous is the default.} <hand-off; transition.in; motif; transition.in: continuous; hard_cut; cast:; ThemedScene>
+- L116 [2] 4. Visual trigger syntax — Beat sheets use inline markers, compiled to `beats[]`: {named action or pose that exists} <beats[]; scene-class; guard-checked; at_word; word-timing; color-coded>
+- L149 [2] 5. Information gain (Golden Rule 2, made checkable) — Every long-form script must carry ≥3 only-here specifics — facts a generic summary channel {≥3 only-here specifics; our fact layer is the content advantage.} <long-form; registry-derived; primary-source; claims[]>
+- L158 [2] 6. Humor + persona (the accretive tier, not the slop tier) — - Recurring visual gags live in the pose library (`tap_frantic`, `gym_enforcer`, `bowler_hat_maeda`) <tap_frantic; gym_enforcer; bowler_hat_maeda; ad-hoc; safety-critical; joint-injury; em-dashes>
+- L167 [2] 7. Claims extraction (runs inside transformation) — The transformer must emit the `claims[]` ledger alongside the script: every number, superlative, <claims[]; expert>
 - L175 [2] 8. Condensation heuristics (2,000 words → 750) — 1. One spine idea per minute of runtime; everything else is cut or becomes a beat.
-- L184 [2] 9. Gate A rubric (human, ~5–10 min) — | Dimension | Question | Scored |
+- L184 [2] 9. Gate A rubric (human, ~5–10 min) — | Dimension | Question | Scored | <source-backed; human-owned; only-here; load-bearing; machine-verified; read-through; job.json>
 
 ## docs/content-video-engine/07-PILOT-SEASON.md
 
-- L1 [1] Pilot Season — Phase 0 Validation Cohort — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine — read it for how a decision was reached {STATUS: RECORD.; Superseded cohort:}
-- L8 [2] History Documentary V4 cohort — 1. How Judo Became Brazilian Jiu-Jitsu — approximately 10-minute acceptance {How Judo Became Brazilian Jiu-Jitsu; The Branches BJJ History Forgot; How BJJ Became a Global Sport}
-- L44 [2] 1. The five episodes (operator-defined, production-annotated)
-- L46 [3] E1 — "The Bizarre History of BJJ: From Samurai Battlefields to Tacoma" — - Sources: registry BJJ history + Gracie-migration articles (national history corpus). {Sources:; Visual spine:; Claims profile:}
-- L57 [3] E2 — "Why Basic BJJ Beats Complex Guard Systems (The Science of Roger Gracie)" — - Sources: national history + Gracie migration article (technique-philosophy sections). {Sources:; Visual spine:; Claims profile:; Why it's in the pilot:}
-- L68 [3] E3 — "How Not to Ruin Your Joints by 35 (Orthopedic BJJ)" — - Sources: National BJJ Registry strategic guide — orthopedic & joint-protection section. {Sources:; Visual spine:; Claims profile:; HIGH — the medical episode.; No credential framing}
-- L80 [3] E4 — "The Pacific Northwest Grappling Boom" — - Sources: Washington/PNW BJJ pollination article + registry region aggregates — {Sources:; registry region aggregates; Visual spine:; Claims profile:; Why it's in the pilot:}
-- L92 [3] E5 — "The Open Mat Survival Guide" — - Sources: Washington BJJ Registry playbook (etiquette/drop-in sections). {Sources:; Visual spine:; Claims profile:; Why it's first in production order:; Production order ≠ episode order: E5 → E2 → E4 → E1 → E3}
-- L105 [2] 2. Technique shorts (the deterministic floor, in parallel) — 4–6 corpus records (starting `armbar-from-guard`) → vertical-first storyboards via the {embeds}
-- L113 [3] 2.1 Pre-launch batch gate — Do not make the first public channel upload until three distinct videos are {three distinct videos}
-- L127 [2] 3. Measurement targets (calibrated to 2026 benchmarks, sourced in `05-COMPETITIVE-BRIEF.md`) — | Metric | Pass | Strong | Context |
-- L144 [2] 4. Distribution constraints the pilot must respect (confirmed 2026 mechanics) — - Shorts carry no clickable links (descriptions and pinned comments — links disabled {Shorts carry no clickable links; UTM-measured clicks are a long-form-description phenomenon;; No disclosure checkbox needed; Let uploads breathe.}
-- L164 [2] 5. Per-episode definition of done — - [ ] Storyboard approved at Gate A (rubric scores recorded in `job.json`)
+- L1 [1] Pilot Season — Phase 0 Validation Cohort — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine — read it for how a decision was reached {STATUS: RECORD.; Superseded cohort:} <point-in-time; technique-heavy; three-part; Jiu-Jitsu; one-line; chapter-level; self-contained; Gate-B-approved; stick-figure; thin-slice; long-form; armbar-from-guard>
+- L8 [2] History Documentary V4 cohort — 1. How Judo Became Brazilian Jiu-Jitsu — approximately 10-minute acceptance {How Judo Became Brazilian Jiu-Jitsu; The Branches BJJ History Forgot; How BJJ Became a Global Sport} <one-line; chapter-level; self-contained; Gate-B-approved; stick-figure; thin-slice; long-form; armbar-from-guard>
+- L44 [2] 1. The five episodes (operator-defined, production-annotated) <Gracie-migration; StickFigureScene; MapNetworkScene; timeline; non-practitioners; technique-philosophy; side-by-side; stick-figure; cross-collar; JointLeverageScene; signature-format; competitive-record>
+- L46 [3] E1 — "The Bizarre History of BJJ: From Samurai Battlefields to Tacoma" — - Sources: registry BJJ history + Gracie-migration articles (national history corpus). {Sources:; Visual spine:; Claims profile:} <Gracie-migration; StickFigureScene; MapNetworkScene; timeline; non-practitioners>
+- L57 [3] E2 — "Why Basic BJJ Beats Complex Guard Systems (The Science of Roger Gracie)" — - Sources: national history + Gracie migration article (technique-philosophy sections). {Sources:; Visual spine:; Claims profile:; Why it's in the pilot:} <technique-philosophy; side-by-side; stick-figure; cross-collar; JointLeverageScene; signature-format; competitive-record; ledger-sourced>
+- L68 [3] E3 — "How Not to Ruin Your Joints by 35 (Orthopedic BJJ)" — - Sources: National BJJ Registry strategic guide — orthopedic & joint-protection section. {Sources:; Visual spine:; Claims profile:; HIGH — the medical episode.; No credential framing} <joint-protection; JointLeverageScene; literature-grade; expert; sports-medicine; claims-sourcing; operator-reviewed>
+- L80 [3] E4 — "The Pacific Northwest Grappling Boom" — - Sources: Washington/PNW BJJ pollination article + registry region aggregates — {Sources:; registry region aggregates; Visual spine:; Claims profile:; Why it's in the pilot:} <MapNetworkScene; LOW-MEDIUM; derived-counts; only-here-data>
+- L92 [3] E5 — "The Open Mat Survival Guide" — - Sources: Washington BJJ Registry playbook (etiquette/drop-in sections). {Sources:; Visual spine:; Claims profile:; Why it's first in production order:; Production order ≠ episode order: E5 → E2 → E4 → E1 → E3} <drop-in; gym_enforcer; StickFigureScene; claim-free; scene-class>
+- L105 [2] 2. Technique shorts (the deterministic floor, in parallel) — 4–6 corpus records (starting `armbar-from-guard`) → vertical-first storyboards via the {embeds} <armbar-from-guard; vertical-first; long-form; Pre-launch; Gate-B-approved; QC-passing; native-vertical; per-run; publish-queue>
+- L113 [3] 2.1 Pre-launch batch gate — Do not make the first public channel upload until three distinct videos are {three distinct videos} <Gate-B-approved; QC-passing; native-vertical; per-run; publish-queue>
+- L127 [2] 3. Measurement targets (calibrated to 2026 benchmarks, sourced in `05-COMPETITIVE-BRIEF.md`) — | Metric | Pass | Strong | Context | <platform-tracked; Long-form; platform-wide; pre-committed; per-video>
+- L144 [2] 4. Distribution constraints the pilot must respect (confirmed 2026 mechanics) — - Shorts carry no clickable links (descriptions and pinned comments — links disabled {Shorts carry no clickable links; UTM-measured clicks are a long-form-description phenomenon;; No disclosure checkbox needed; Let uploads breathe.} <platform-wide; Aug 2023; on-screen; related-video; non-realistic; own-voice; per-run; realistic_recreation; single-creator; three-video; ElevenLabs; mass-production>
+- L164 [2] 5. Per-episode definition of done — - [ ] Storyboard approved at Gate A (rubric scores recorded in `job.json`) <job.json; fact-layer; QC-passed; UTM-tagged; long-form; on-screen; pre-launch; pre-publication>
 
 ## docs/content-video-engine/08-TOOLING-ALTERNATIVES.md
 
-- L1 [1] Tooling Alternatives — Higgsfield AI, Gemini Omni, and Where They Fit — *Date: 2026-07-28 · Method: dedicated research stream (official docs + pricing pages preferred;
-- L7 [2] 1. Decision summary — | Pipeline stage | Primary (unchanged) | Verdict on alternatives | {USE-optional:; Keep ElevenLabs.; no documented word/char timestamps; Keep. Differentiation restated}
-- L18 [2] 2. The headline adoption: Gemini as Gate-B pre-screener — Gemini models natively ingest video+audio (~300 tokens/s default res, 1 fps sampling, audio {graduated autonomy}
-- L38 [2] 3. Higgsfield: mostly avoid, one thing to monitor seriously — What it is (mid-2026): a social-first AI video suite aggregating 15+ frontier models (Sora 2, {Soul 2.0; Script LLM / TTS / QC: AVOID; B-roll: COMPLEMENT at best}
-- L63 [2] 4. Gemini Omni, precisely (so we stop guessing what the name means) — Announced Google I/O 2026 (May 19): DeepMind's first any-to-any model — ingests {any-to-any; video with synchronized audio; Gemini Omni Flash; 3–10s, 720p clips}
-- L74 [2] 5. Changes this makes to the plan — 1. P1 adds `review_model` QC pre-screening (Gemini, calibrated during pilot against human {P1 adds `review_model` QC pre-screening; Thumbnail service gets an optional Gemini image backend; B-roll policy codified:}
-- L88 [2] 6. Monitor list — Higgsfield Explainer REST/API + per-video cost · Gemini Omni Pro (length/res) · Gemini TTS
-- L94 [2] 7. Magnific: adopt as a governed media workbench — Verdict: USE for reviewed asset production and stock intake; do not make it the {Verdict: USE for reviewed asset production and stock intake;}
-- L120 [3] Server-side video wrapper — The browser workspace is not an authentication dependency. Google OAuth cookies
-- L154 [3] Producer orchestration (V4.1) — The engine now compiles `producer_plan.v1` from editorial coverage. This is the
-- L166 [2] 8. HyperFrames: adopted for the unit lane (2026-08-08) — HyperFrames (pinned 0.7.101) is now the renderer for short/caption/motion units — {units}
+- L1 [1] Tooling Alternatives — Higgsfield AI, Gemini Omni, and Where They Fit — *Date: 2026-07-28 · Method: dedicated research stream (official docs + pricing pages preferred; <third-party; OpenRouter-configured; OpenRouter; env-swap; USE-optional; commodity-grade; LLM_MODEL; ElevenLabs; with-timestamps; sync-driven; b-roll; SynthID>
+- L7 [2] 1. Decision summary — | Pipeline stage | Primary (unchanged) | Verdict on alternatives | {USE-optional:; Keep ElevenLabs.; no documented word/char timestamps; Keep. Differentiation restated} <OpenRouter-configured; OpenRouter; env-swap; commodity-grade; LLM_MODEL; with-timestamps; sync-driven; b-roll; SynthID; Gate-B; pre-screen; TitleConceptCard>
+- L18 [2] 2. The headline adoption: Gemini as Gate-B pre-screener — Gemini models natively ingest video+audio (~300 tokens/s default res, 1 fps sampling, audio {graduated autonomy} <Flash-Lite; review_model; sub-second>
+- L38 [2] 3. Higgsfield: mostly avoid, one thing to monitor seriously — What it is (mid-2026): a social-first AI video suite aggregating 15+ frontier models (Sora 2, {Soul 2.0; Script LLM / TTS / QC: AVOID; B-roll: COMPLEMENT at best} <social-first; character-consistency; third-party; editorial-biased; First-party; per-video; brand-exact; fact-layer; only-here; script-to-video>
+- L63 [2] 4. Gemini Omni, precisely (so we stop guessing what the name means) — Announced Google I/O 2026 (May 19): DeepMind's first any-to-any model — ingests {any-to-any; video with synchronized audio; Gemini Omni Flash; 3–10s, 720p clips} <DeepMind; gemini-omni-flash-preview; pipeline-collapse; conversational-editable; b-roll; video-understanding; non-deterministic; SynthID>
+- L74 [2] 5. Changes this makes to the plan — 1. P1 adds `review_model` QC pre-screening (Gemini, calibrated during pilot against human {P1 adds `review_model` QC pre-screening; Thumbnail service gets an optional Gemini image backend; B-roll policy codified:} <graduated-autonomy; TitleConceptCard; diffusion-generated; realistic_recreation: true; SynthID; re-affirmed; timestamp-driven>
+- L88 [2] 6. Monitor list — Higgsfield Explainer REST/API + per-video cost · Gemini Omni Pro (length/res) · Gemini TTS <per-video; YouTube; auto-labeling; SynthID; third-party>
+- L94 [2] 7. Magnific: adopt as a governed media workbench — Verdict: USE for reviewed asset production and stock intake; do not make it the {Verdict: USE for reviewed asset production and stock intake;} <raw-prompt; cut-paper; rights-cleared; Operator-owned; self-approval; shot-brief; cut-ins; asset-manifest; Reference-to-video; already-approved; YouTube; acquisition-time>
+- L120 [3] Server-side video wrapper — The browser workspace is not an authentication dependency. Google OAuth cookies <MAGNIFIC_API_KEY; .env; magnific-video-generate; image-to-video; ten-minute; render_eligible: false; CI-safe; operator-facing; local-hash; human-review>
+- L154 [3] Producer orchestration (V4.1) — The engine now compiles `producer_plan.v1` from editorial coverage. This is the <producer_plan.v1; provider-neutral; first-class; art-bible; HIGGSFIELD-EXPLAINER-LEARNINGS>
+- L166 [2] 8. HyperFrames: adopted for the unit lane (2026-08-08) — HyperFrames (pinned 0.7.101) is now the renderer for short/caption/motion units — {units} <asset-ID-only; hyperframes_unit.v1; port-spike; HYPERFRAMES-LANE>
 
 ## docs/content-video-engine/09-YOUTUBE-REFERENCE-PACK-LEARNINGS.md
 
-- L1 [1] YouTube Reference Pack — P13 Visual-System Learnings — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine — read it for how a decision was reached {STATUS: RECORD.; Research-only provenance:}
-- L20 [2] Active carry-forward subset — 2026-07-31 — Only the rules in this subsection are operative for the living-scene History
-- L54 [2] 1. Executive decisions — 1. Replace pose repetition with causal state changes. The unit of visual storytelling is {Replace pose repetition with causal state changes.; Use an anchorable 2D cast for technique mechanics.; Cover each technique with multiple shot functions.}
-- L73 [2] 2. Evidence and measurement limits — The pack contains 14 MP4s with metadata, thumbnails, contact sheets, audio measurements, and
-- L99 [2] 3. What each reference family contributes
-- L101 [3] 3.1 BJJ fight shorts: physical legibility — `BJJ vs Taekwondo`, `BJJ vs Aikido`, and `BJJ vs Muay Thai` provide the closest movement grammar:
-- L116 [3] 3.2 Concept animation: make the world obey the lesson — `Animation vs. Geometry` demonstrates that a low cut rate is not visually static. Points, pivots,
+- L1 [1] YouTube Reference Pack — P13 Visual-System Learnings — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine — read it for how a decision was reached {STATUS: RECORD.; Research-only provenance:} <point-in-time; render_eligible: false; evidence-bearing; Technique-specific; carry-forward; living-scene; section-title; color-coded; photo-to-diagram; small-screen; operator-supplied; one-for-one>
+- L20 [2] Active carry-forward subset — 2026-07-31 — Only the rules in this subsection are operative for the living-scene History <living-scene; section-title; color-coded; photo-to-diagram; small-screen; operator-supplied; one-for-one; fine-tune; operator-owned>
+- L54 [2] 1. Executive decisions — 1. Replace pose repetition with causal state changes. The unit of visual storytelling is {Replace pose repetition with causal state changes.; Use an anchorable 2D cast for technique mechanics.; Cover each technique with multiple shot functions.} <state_from → action → state_to; non-grappling; cut-in; hip-angle; hand-off; non-instructional>
+- L73 [2] 2. Evidence and measurement limits — The pack contains 14 MP4s with metadata, thumbnails, contact sheets, audio measurements, and <per-video; six-frame; .info.json; Scene-change; Narration-led; BJJ vs Taekwondo>
+- L99 [2] 3. What each reference family contributes <BJJ vs Taekwondo; BJJ vs Aikido; BJJ vs Muay Thai; High-contrast; Close-ups; full-body; Animation vs. Geometry; Long-form; Combat gods II; The Ultimate Showdown; The Assault!!; Avatar Element Animation 2>
+- L101 [3] 3.1 BJJ fight shorts: physical legibility — `BJJ vs Taekwondo`, `BJJ vs Aikido`, and `BJJ vs Muay Thai` provide the closest movement grammar: <BJJ vs Taekwondo; BJJ vs Aikido; BJJ vs Muay Thai; High-contrast; Close-ups; full-body>
+- L116 [3] 3.2 Concept animation: make the world obey the lesson — `Animation vs. Geometry` demonstrates that a low cut rate is not visually static. Points, pivots, <Animation vs. Geometry>
 - L129 [3] 3.3 Long-form explainers: stable visual grammar — The Historically, Animated History, Trust Me Bro, and Paint Explainer samples use maps, cards,
-- L143 [3] 3.4 Action and music animation: timing hierarchy — `Combat gods II`, `The Ultimate Showdown`, `The Assault!!`, and `Avatar Element Animation 2`
-- L156 [3] 3.5 Martial-art catalog explainer: evidence plus shorthand — `Every Martial Art Type Explained in 12 Minutes` alternates a reusable heading/icon layout,
-- L169 [2] 4. P13 shot grammar — Every 30–60 second technique explainer should contain the following functions. A single rendered
-- L199 [2] 5. Storyboard action contract — The current `BJJActionScene` direction is correct. Reference-derived recipes should compile into a
-- L240 [2] 6. Armbar v2 coverage plan — This is a coverage recipe, not a new technique claim. Final states and wording must resolve to the {Result preview:; Wide setup:; Grip/contact cut-in:; Wrong/right comparison:; Angle transition:}
-- L260 [2] 7. Sound grammar — Narration remains the authority for instructional videos. Use three sparse effect layers: {Movement:; Contact:; Aftermath:}
-- L272 [2] 8. Gate A and automated QC additions — Gate A should reject a technique storyboard when any of the following is true:
-- L289 [2] 9. Tool boundary — | Tool class | Appropriate P13 use | Not appropriate |
-- L303 [2] 10. Implementation order — 1. Extend the storyboard/guard contract with `function`, motion phases, persistent cast state, and
-- L314 [2] 11. Strategic Compact handoff — The durable checkpoint is: {P13 visual v2: replace repeated pose fades with rights-aware}
+- L143 [3] 3.4 Action and music animation: timing hierarchy — `Combat gods II`, `The Ultimate Showdown`, `The Assault!!`, and `Avatar Element Animation 2` <Combat gods II; The Ultimate Showdown; The Assault!!; Avatar Element Animation 2; Music-led; narration-led; fight-spectacle>
+- L156 [3] 3.5 Martial-art catalog explainer: evidence plus shorthand — `Every Martial Art Type Explained in 12 Minutes` alternates a reusable heading/icon layout, <photo-to-diagram; rights-cleared>
+- L169 [2] 4. P13 shot grammar — Every 30–60 second technique explainer should contain the following functions. A single rendered <result_preview; wide_setup; contact_closeup; color-coded; mechanic_transition; wrong_right_compare; force_diagram; result_hold; story_or_persona_cutaway; non-instructional; cut-ins; state_from → action → state_to>
+- L199 [2] 5. Storyboard action contract — The current `BJJActionScene` direction is correct. Reference-derived recipes should compile into a <BJJActionScene; Reference-derived; state_from; state_to; reference_refs>
+- L240 [2] 6. Armbar v2 coverage plan — This is a coverage recipe, not a new technique claim. Final states and wording must resolve to the {Result preview:; Wide setup:; Grip/contact cut-in:; Wrong/right comparison:; Angle transition:} <rights-cleared; match-cut; secondary-control; source-backed; full-body>
+- L260 [2] 7. Sound grammar — Narration remains the authority for instructional videos. Use three sparse effect layers: {Movement:; Contact:; Aftermath:} <force-marker>
+- L272 [2] 8. Gate A and automated QC additions — Gate A should reject a technique storyboard when any of the following is true: <close-up; cut-ins; action-phase; per-scene; visual-function>
+- L289 [2] 9. Tool boundary — | Tool class | Appropriate P13 use | Not appropriate | <Pose-conditioned; cut-in; Kling-class; non-instructional; rights-cleared; continuity-critical; Midjourney-class; non-technical; multi-shot; Operator-owned; model-training; shot-function>
+- L303 [2] 10. Implementation order — 1. Extend the storyboard/guard contract with `function`, motion phases, persistent cast state, and <function; close-up; held-result; unresolved-reference>
+- L314 [2] 11. Strategic Compact handoff — The durable checkpoint is: {P13 visual v2: replace repeated pose fades with rights-aware} <color-coded; multi-function; source-of-truth; Gate-B; re-reading>
 
 ## docs/content-video-engine/10-HISTORY-DOCUMENTARY-EDITORIAL-SPEC.md
 
-- L1 [1] History Documentary Editorial Specification — > STATUS: LANE DOCTRINE — history / documentary. The history lane is not retired; it is simply outside the finance set right now. The editorial content here sta {STATUS: LANE DOCTRINE — history / documentary.; §4 Visual modes and §5 Editorial motion ownership are supers; 29; 39}
-- L7 [2] 1. Product — History V4 produces evidence-backed, entertainment-focused documentary explainers: {How Judo Became Brazilian Jiu-Jitsu; The Branches BJJ History Forgot; How BJJ Became a Global Sport}
-- L25 [2] 2. Editorial invariant — Every sentence presented as historical fact resolves to an approved claim in the
+- L1 [1] History Documentary Editorial Specification — > STATUS: LANE DOCTRINE — history / documentary. The history lane is not retired; it is simply outside the finance set right now. The editorial content here sta {STATUS: LANE DOCTRINE — history / documentary.; §4 Visual modes and §5 Editorial motion ownership are supers; 29; 39} <evidence-backed; entertainment-focused; chapter-level; Jiu-Jitsu; research_packet.v1; combat-history-longform-cutout-fork-v1; research-only; longform-illustrated-history-v1; combat-history-archival-editorial-v1; combat-history-branded-literature-v1; Production-profile; shot-scale>
+- L7 [2] 1. Product — History V4 produces evidence-backed, entertainment-focused documentary explainers: {How Judo Became Brazilian Jiu-Jitsu; The Branches BJJ History Forgot; How BJJ Became a Global Sport} <evidence-backed; entertainment-focused; chapter-level>
+- L25 [2] 2. Editorial invariant — Every sentence presented as historical fact resolves to an approved claim in the <research_packet.v1>
 - L42 [2] 3. Episode grammar — Each episode follows this documentary rhythm: {Artifact cold open; Thesis and stakes; Chronological chapters; Evidence turn; Complication; Synthesis}
-- L62 [2] 4. Visual modes — The current production direction is a profile fork, implemented by {profile fork}
-- L71 [3] Production-profile fork — The system may clone a reviewed production profile rather than reducing every
-- L139 [2] 5. Editorial motion ownership — - Remotion owns editorial assembly, captions, citation overlays, archive parallax,
-- L152 [3] World first, vectors second — Fast local vectors are an annotation language, not a sufficient environment.
-- L166 [3] V4.1 living-editorial cadence — `editorial_coverage.v1` resolves visual coverage before treatments:
-- L219 [2] 6. Narration and citation behavior — Narration should be precise, conversational, and explicit about uncertainty.
-- L235 [2] 7. Human gates
+- L62 [2] 4. Visual modes — The current production direction is a profile fork, implemented by {profile fork} <combat-history-longform-cutout-fork-v1; research-only; longform-illustrated-history-v1; combat-history-archival-editorial-v1; combat-history-branded-literature-v1; Production-profile; shot-scale; limited-animation; long-form; illustrated-history; Historically; map-to-character>
+- L71 [3] Production-profile fork — The system may clone a reviewed production profile rather than reducing every <shot-scale; limited-animation; long-form; illustrated-history; Historically; map-to-character; prop-led; BJJ-specific; render_eligible: false; Low-fi; Limited-palette; Rights-reviewed>
+- L139 [2] 5. Editorial motion ownership — - Remotion owns editorial assembly, captions, citation overlays, archive parallax, <Illustration; Reconstruction; Historical-comic; rights-reviewed; background-only; living-editorial; editorial_coverage.v1; already-visible; deletion-only; EDITORIAL-MOTION-SYSTEM; positive-visual-events; parallax_push>
+- L152 [3] World first, vectors second — Fast local vectors are an annotation language, not a sufficient environment. <Historical-comic; rights-reviewed; background-only>
+- L166 [3] V4.1 living-editorial cadence — `editorial_coverage.v1` resolves visual coverage before treatments: <editorial_coverage.v1; already-visible; deletion-only; EDITORIAL-MOTION-SYSTEM; positive-visual-events; parallax_push; detail_punch; masked_reveal; evidence_highlight; map_trace; comic_pop; split_compare>
+- L219 [2] 6. Narration and citation behavior — Narration should be precise, conversational, and explicit about uncertainty. <On-screen; platform-control; ElevenLabs; operator-recorded>
+- L235 [2] 7. Human gates <hash-bound; AI-assisted; cold_open; illustration; map_timeline; and; generated-asset; ARCHIVAL-ASSET-AND-CITATION-SPEC>
 - L237 [3] Research Gate — The operator reviews thesis clarity, source quality, contested framing, claim
-- L243 [3] Visual Direction Gate — The style board contains cold open, archive, illustration, document, map/timeline,
+- L243 [3] Visual Direction Gate — The style board contains cold open, archive, illustration, document, map/timeline, <hash-bound; AI-assisted; cold_open; illustration; map_timeline; and; generated-asset; ARCHIVAL-ASSET-AND-CITATION-SPEC>
 - L258 [3] Gate A — Gate A reviews motion, story comprehension, pacing, narration fit, transition
 - L264 [3] Gate B — Gate B reviews the landscape master, both native vertical clips, captions,
 - L270 [2] 8. Native verticals — Vertical clips are authored from an approved claim cluster, not cropped from the
-- L277 [2] 9. Chapter subvideos — Each chapter may become a landscape or vertical subvideo only when it has a
-- L288 [3] World-first generated plates for documentary explanation — The map, lineage, and concept functions use a hybrid composition when a
-- L314 [3] One generated plate per narration block — When a documentary beat needs a fully authored world, V4.1 may compile
-- L336 [3] Plate-to-video motion handoff — The generated plate is now the input to an optional image-to-video producer,
+- L277 [2] 9. Chapter subvideos — Each chapter may become a landscape or vertical subvideo only when it has a <self-contained; re-authored; World-first; meaning-bearing; migration_map_timeline; lineage_graph; concept_mechanics_cutaway; multi-step; motion_selected; revision-only; preview-only; rights-cleared>
+- L288 [3] World-first generated plates for documentary explanation — The map, lineage, and concept functions use a hybrid composition when a <meaning-bearing; migration_map_timeline; lineage_graph; concept_mechanics_cutaway; multi-step; motion_selected; revision-only; preview-only; rights-cleared; world-building>
+- L314 [3] One generated plate per narration block — When a documentary beat needs a fully authored world, V4.1 may compile <generated_image_block_plan.v1; noun-per-cut; text-free; woodblock-informed; generated_image_block_batch.v1; render_eligible; evidence_eligible; generated-block; review-only; rights-cleared>
+- L336 [3] Plate-to-video motion handoff — The generated plate is now the input to an optional image-to-video producer, <image-to-video; plate_motion_plan.v1; route_trace; branch_reveal; page_turn_or_highlight; content-addressed; job-local; render_eligible: false; motion_mode: deterministic_fallback>
 
 ## docs/content-video-engine/11-ARCHIVAL-ASSET-AND-CITATION-SPEC.md
 
-- L1 [1] Archival Asset and Citation Specification — *Specification of record for History Documentary V4 rights, likeness, attribution,
-- L6 [2] 1. Separate evidence from permission — `research_packet.v1` answers “may we say this?”. `asset_manifest.v1` answers {“may we say this?”; “may we render this local file?”}
-- L15 [2] 2. Render-eligible rights categories — The pilot may render only original, operator-owned, licensed, verified public
-- L24 [2] 3. Required asset record — Each manifest entry includes a stable ID, local path, SHA-256 content hash, origin,
-- L35 [2] 4. Likeness, logos, and reconstructions — - A living-person likeness requires an approved reference and explicit operator
+- L1 [1] Archival Asset and Citation Specification — *Specification of record for History Documentary V4 rights, likeness, attribution, <research_packet.v1; asset_manifest.v1; reference-pack; Render-eligible; operator-owned; BY-SA; fair_use; merely-public; research-only; render_eligible: false; YouTube; job-local>
+- L6 [2] 1. Separate evidence from permission — `research_packet.v1` answers “may we say this?”. `asset_manifest.v1` answers {“may we say this?”; “may we render this local file?”} <research_packet.v1; asset_manifest.v1; reference-pack>
+- L15 [2] 2. Render-eligible rights categories — The pilot may render only original, operator-owned, licensed, verified public <operator-owned; BY-SA; fair_use; merely-public; research-only; render_eligible: false; YouTube>
+- L24 [2] 3. Required asset record — Each manifest entry includes a stable ID, local path, SHA-256 content hash, origin, <job-local; resolved_assets.json>
+- L35 [2] 4. Likeness, logos, and reconstructions — - A living-person likeness requires an approved reference and explicit operator <living-person; rights-cleared; AI-assisted; non-photorealistic; Illustration>
 - L47 [2] 5. Alteration rules — The manifest records whether cropping, color treatment, parallax separation,
-- L56 [2] 6. Attribution and credits — Credits are aggregated deterministically from every rendered asset and displayed
-- L67 [2] 7. Asset intake workflow — Changing bytes, rights, attribution, or likeness approval changes the manifest hash
-- L85 [3] 7.1 Stock cut-in lane — Stock photos, vectors, illustrations, icons, video, and templates are a separate
-- L111 [3] 7.2 Generated-reference and flow lane — Magnific references, custom characters/styles, Spaces flows, Designer templates,
-- L148 [3] 7.3 Generated Visual Direction candidates — `generated_visual_candidates.v1` is the only contract that may place newly
-- L193 [2] 8. Pilot policy — Episode 1 is rights-cleared-only. If suitable archive media cannot be cleared, use
+- L56 [2] 6. Attribution and credits — Credits are aggregated deterministically from every rendered asset and displayed <credits.json>
+- L67 [2] 7. Asset intake workflow — Changing bytes, rights, attribution, or likeness approval changes the manifest hash <cut-in; YouTube; paid-plan; free; Generated-reference; style; character; element; location; template; operator-owned; Research-pack>
+- L85 [3] 7.1 Stock cut-in lane — Stock photos, vectors, illustrations, icons, video, and templates are a separate <YouTube; paid-plan; free>
+- L111 [3] 7.2 Generated-reference and flow lane — Magnific references, custom characters/styles, Spaces flows, Designer templates, <style; character; element; location; template; operator-owned; Research-pack>
+- L148 [3] 7.3 Generated Visual Direction candidates — `generated_visual_candidates.v1` is the only contract that may place newly <generated_visual_candidates.v1; preview_eligible: true; render_eligible: false; evidence_eligible: false; contains_factual_text: false; source-video; cold-open; asset-manifest; document; map_timeline; usage: background_only; lineage_concept>
+- L193 [2] 8. Pilot policy — Episode 1 is rights-cleared-only. If suitable archive media cannot be cleared, use <rights-cleared-only>
 
 ## docs/content-video-engine/12-HIGGSFIELD-EXPLAINER-LEARNINGS.md
 
-- L1 [1] Higgsfield Explainer Learnings and Producer Orchestration — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine — read it for how a decision was reached {STATUS: RECORD.}
-- L14 [2] Durable learnings — 1. Choose the visual system first. A concise style key and descriptor are {Choose the visual system first.; Compile narration into typed blocks.}
-- L40 [2] Candidate visual signature: woodblock comic — The recent GPT video experiment suggests a stronger anchor than generic flat {period-informed visual abstraction}
-- L60 [2] Option A: orchestrate producers, keep our editor — The engine now compiles `producer_plan.v1` beside
-- L99 [2] Provider boundary and current capability — The current Codex environment exposes the built-in GPT image generator, which
-- L113 [2] What we intentionally do not copy — - No provider-generated narration, captions, logos, or historical claims.
-- L121 [2] World plates for weak documentary roles — The first Episode 1 pass exposed a boundary in Option A: deterministic local
+- L1 [1] Higgsfield Explainer Learnings and Producer Orchestration — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine — read it for how a decision was reached {STATUS: RECORD.} <point-in-time; higgsfield-ai; higgsfield-video-explainer; art-bible; ten-second; block-to-clip; micro-events; asset-manifest; woodblock-informed; carved-looking; martial-arts; period-informed>
+- L14 [2] Durable learnings — 1. Choose the visual system first. A concise style key and descriptor are {Choose the visual system first.; Compile narration into typed blocks.} <art-bible; ten-second; block-to-clip; micro-events; asset-manifest>
+- L40 [2] Candidate visual signature: woodblock comic — The recent GPT video experiment suggests a stronger anchor than generic flat {period-informed visual abstraction} <woodblock-informed; carved-looking; martial-arts; woodblock-paper-field; carved-ink-contour; limited-period-palette; illustrated-martial-silhouette; branded-literature>
+- L60 [2] Option A: orchestrate producers, keep our editor — The engine now compiles `producer_plan.v1` beside <producer_plan.v1; editorial_coverage.v1; art-bible; style-key; built-in; provider-safe; render-eligible; hand-drawn>
+- L99 [2] Provider boundary and current capability — The current Codex environment exposes the built-in GPT image generator, which <built-in; video-generation; task-ID>
+- L113 [2] What we intentionally do not copy — - No provider-generated narration, captions, logos, or historical claims. <provider-generated; reference-pack; ten-minute>
+- L121 [2] World plates for weak documentary roles — The first Episode 1 pass exposed a boundary in Option A: deterministic local <high-quality; map_timeline; lineage_concept; concept_mechanics; meaning-bearing; review-only; motion_selected: true; style_board_selected; render_eligible: false; hash-bound>
 
 ## docs/content-video-engine/13-GOOGLE-FLOW-CHARACTER-BUILDER-SPEC.md
 
-- L1 [1] Google Flow Character Builder — P13 V4.1 — The History of BJJ lane now treats Google Flow's character builder as an
-- L8 [2] Contract — `flow_character_pack.v1` is the durable input contract. The acceptance pilot's
-- L25 [2] Browser workflow — 1. Open Google Flow's character builder and select Nano Banana Pro. {Nano Banana Pro}
-- L46 [2] Style and editorial rules — The character pack is bound to `combat-history-longform-cutout-fork-v1` and its
-- L66 [2] Promotion boundary — The pack, generated sheet, and provider clip are non-renderable until an
-- L89 [2] Local character-in-scene motion — The editor's `DocumentaryShot.character_layers` contract is the provider-neutral
-- L105 [2] Credit accounting — Pricing is recorded as Flow credits rather than as a dollar estimate. In the
+- L1 [1] Google Flow Character Builder — P13 V4.1 — The History of BJJ lane now treats Google Flow's character builder as an <flow_character_pack.v1; episode-1-flow-character-pack.json; history-of-bjj; flow-character-pack; art-bible; named-person-free; prompt; three-quarter; full-body; job-local; render_eligible: false; asset-manifest>
+- L8 [2] Contract — `flow_character_pack.v1` is the durable input contract. The acceptance pilot's <flow_character_pack.v1; episode-1-flow-character-pack.json; history-of-bjj; flow-character-pack; art-bible; named-person-free>
+- L25 [2] Browser workflow — 1. Open Google Flow's character builder and select Nano Banana Pro. {Nano Banana Pro} <prompt; three-quarter; full-body; job-local; render_eligible: false; asset-manifest; single-action; reference-to-video>
+- L46 [2] Style and editorial rules — The character pack is bound to `combat-history-longform-cutout-fork-v1` and its <combat-history-longform-cutout-fork-v1; woodblock-informed; prop-led; YouTube; map-to-character; multi-step; rights-reviewed>
+- L66 [2] Promotion boundary — The pack, generated sheet, and provider clip are non-renderable until an <non-renderable; job-local; source_kind: generated_original; historical-reconstruction; living-person; generated-asset; rights-reviewed; asset_manifest.v1; reference_asset_ids; google_flow_character; google_flow_ingredients_to_video; character_pack_id>
+- L89 [2] Local character-in-scene motion — The editor's `DocumentaryShot.character_layers` contract is the provider-neutral <DocumentaryShot.character_layers; provider-neutral; enter_from_left; enter_from_right; rise; pop; settle; float; awaiting_operator_sample_review>
+- L105 [2] Credit accounting — Pricing is recorded as Flow credits rather than as a dollar estimate. In the <signed-in; Ingredients-to-Video; $14; per-block>
 
 ## docs/content-video-engine/14-HIGGSFIELD-AUDIO-DRIVEN-LANE.md
 
-- L1 [1] P13 Higgsfield Audio-Driven Explainer Lane — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine — read it for how a decision was reached {STATUS: RECORD.}
-- L5 [2] Narration ownership correction — The first implementation exposed a timing bug: it partitioned the visual
-- L34 [2] Local-first contract — The current Episode 1 coverage contains 138 reviewed editorial slots and the
-- L49 [2] Audio identity and rights boundary — Episode audio is selected only through
-- L63 [2] Provider preflight and task ledger — `seedance_2_0` is preferred only when a live capability snapshot confirms
+- L1 [1] P13 Higgsfield Audio-Driven Explainer Lane — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine — read it for how a decision was reached {STATUS: RECORD.} <point-in-time; ten-second; narration_excerpt; ElevenLabs; history_narration.v1; visual_beats[].narration_excerpt; word-boundary; request-size; Local-first; generated-image; hash-bound; time-fitted>
+- L5 [2] Narration ownership correction — The first implementation exposed a timing bug: it partitioned the visual <ten-second; narration_excerpt; ElevenLabs; history_narration.v1; visual_beats[].narration_excerpt; word-boundary; request-size>
+- L34 [2] Local-first contract — The current Episode 1 coverage contains 138 reviewed editorial slots and the <generated-image; hash-bound; ten-second; time-fitted; ElevenLabs; micro-events; higgsfield_audio_blocks.v1; render_eligible: false>
+- L49 [2] Audio identity and rights boundary — Episode audio is selected only through <elevenlabs_block_audio.v1; block-plan; awaiting_audio; opt-in; AudioSynthService; ElevenLabs; ELEVENLABS_VOICE_ID; .env; checked-in; provider-generated>
+- L63 [2] Provider preflight and task ledger — `seedance_2_0` is preferred only when a live capability snapshot confirms <seedance_2_0; ten-second; audio-reference; wan2_6; generate_audio: false; dry-run; requires_operator_live_preflight: true; higgsfield_audio_job.v1; ElevenLabs; one-action; render_eligible: false; higgsfield_local_assembly.v1>
 - L85 [2] Dry-run commands — No command above submits a provider task. A live capability check and a
 
 ## docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md
 
-- L1 [1] Living Scene Communication Language — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine — read it for how a decision was reached {STATUS: RECORD.}
-- L7 [2] 1. Product decision — P13 does not use a full-video generator as its default renderer. The observed {living scene bundle}
-- L29 [2] 2. Five communication surfaces
-- L31 [3] Combat Woodblock parent identity — The channel's defining visual language is Combat Woodblock: clean graphic {Combat Woodblock}
+- L1 [1] Living Scene Communication Language — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine — read it for how a decision was reached {STATUS: RECORD.} <point-in-time; living-scene; full-video; ten-minute; ten-second; TIMESTAMPED-PLATE-PRODUCTION; circular-medallion; photographic-noise; cross-cutting; woodblock-anime-action-v1; woodblock-historical-editorial-v1; plate-driven>
+- L7 [2] 1. Product decision — P13 does not use a full-video generator as its default renderer. The observed {living scene bundle} <full-video; ten-minute; ten-second; TIMESTAMPED-PLATE-PRODUCTION>
+- L29 [2] 2. Five communication surfaces <circular-medallion; photographic-noise; cross-cutting; woodblock-anime-action-v1; woodblock-historical-editorial-v1; plate-driven; woodblock-comic-whitespace-v1; historical-editorial; rapid-response; human-study; asset_manifest.v1; art-pack>
+- L31 [3] Combat Woodblock parent identity — The channel's defining visual language is Combat Woodblock: clean graphic {Combat Woodblock} <circular-medallion; photographic-noise; cross-cutting; woodblock-anime-action-v1; woodblock-historical-editorial-v1; plate-driven; woodblock-comic-whitespace-v1; historical-editorial; rapid-response; human-study; asset_manifest.v1; art-pack>
 - L68 [3] World — The world establishes place, period, mood, weather, architecture, terrain, and
 - L78 [3] Character — The recurring fictional learner is the audience's stable point of view.
 - L88 [3] Evidence — The evidence surface carries exact dates, sourced claims, quotations, archival
-- L97 [3] Explanation — The explanation surface makes sequence and relationships legible. It owns
+- L97 [3] Explanation — The explanation surface makes sequence and relationships legible. It owns <entity-to-entity>
 - L104 [3] Transition — A transition carries meaning between scenes through a shared direction, shape,
 - L110 [2] 3. Documentary beat grammar — Every factual passage uses this recurring sequence when applicable: {Picture it; Name it; Show the relationship; Qualify it; Carry it forward}
-- L124 [2] 4. Fact surfaces — | Surface | Use | Constraint |
-- L139 [2] 5. Motion discipline — Motion is authored in this order:
-- L158 [2] 6. Living scene bundle — A normal bundle lasts twenty to thirty seconds and supports two to four
-- L180 [3] Google Flow terminology — A Google Flow character is a persistent reference bundle. A Google Flow {character; scene; world pack}
-- L194 [3] Catalog and comparison rhythm — Section-title cards, color-coded icon changes, photo-to-diagram swaps, and
-- L206 [2] 7. Scene flow — Each adjacency declares at least one connector:
+- L124 [2] 4. Fact surfaces — | Surface | Use | Constraint | <source-bound; Rights-reviewed; record confirms; evidence suggests; accounts differ; record missing>
+- L139 [2] 5. Motion discipline — Motion is authored in this order: <Positive-event; deletion-only; EDITORIAL-MOTION-SYSTEM; positive-visual-events; push-in>
+- L158 [2] 6. Living scene bundle — A normal bundle lasts twenty to thirty seconds and supports two to four <micro-event; timestamp-bound; full-frame; provider-neutral; Section-title; color-coded; photo-to-diagram>
+- L180 [3] Google Flow terminology — A Google Flow character is a persistent reference bundle. A Google Flow {character; scene; world pack} <provider-neutral>
+- L194 [3] Catalog and comparison rhythm — Section-title cards, color-coded icon changes, photo-to-diagram swaps, and <Section-title; color-coded; photo-to-diagram>
+- L206 [2] 7. Scene flow — Each adjacency declares at least one connector: <direction; shape; material; object; color; character>
 - L224 [2] 8. Composition wireframes
 - L226 [3] Story world plus narrator
 - L239 [3] Evidence interruption
 - L249 [3] Journey and relationship explanation
-- L262 [2] 9. Cost control — Until a lower verified quote exists, estimates use 3.33 Higgsfield credits per
-- L272 [3] Sound — The mix is narration-led. Music remains restrained, UI/card sounds stay subtle,
+- L262 [2] 9. Cost control — Until a lower verified quote exists, estimates use 3.33 Higgsfield credits per <connected-scene; ten-second; narration-led>
+- L272 [3] Sound — The mix is narration-led. Music remains restrained, UI/card sounds stay subtle, <narration-led>
 - L279 [2] 10. Gate rubric — The Communication Language Gate scores each dimension at least 4/5:
 
 ## docs/content-video-engine/16-EDITORIAL-MOTION-SYSTEM.md
 
-- L1 [1] Editorial Motion System — > STATUS: PARTIALLY SUPERSEDED. The production pattern is now the scene-evidence lane in 29. Sections that 29 does not replace — timing authority, plan contract {STATUS: PARTIALLY SUPERSEDED.; 29}
-- L8 [2] 1. Decision — The engine edits a film; it does not apply a generic animation to every image.
-- L22 [2] 2. Timing authority — The continuous, hash-matched canonical narration and its word timings are the
-- L48 [2] 3. Motion ownership — Motion is authored in this order:
-- L65 [3] Semantic cut routing — Every shot declares one visual intent before asset selection: `academic`, {Academic; Martial; Scenic; Journey}
-- L89 [3] Positive visual events — A cut to a newly loaded, narration-relevant archive, illustration, technique
-- L102 [2] 4. Shot grammar — The v1 vocabulary is deliberately small:
-- L123 [2] 5. Plan contract — `editorial_motion_plan.v1` is a single job-level, content-addressed artifact.
-- L145 [2] 6. Pacing recipe — `editorial_pacing_recipe.v1` stores the channel's abstract edit grammar:
-- L154 [2] 7. Provider boundary — Every shot declares one provider-motion classification:
-- L169 [2] 8. Revision proof and QC — The first proof is a 30–60 second A/B revision using the same approved source
-- L192 [2] 9. On-screen text and added-layer policy — - The default is no added text and no added prop. A layer must earn its place.
+- L1 [1] Editorial Motion System — > STATUS: PARTIALLY SUPERSEDED. The production pattern is now the scene-evidence lane in 29. Sections that 29 does not replace — timing authority, plan contract {STATUS: PARTIALLY SUPERSEDED.; 29} <scene-evidence; on-screen; provider-motion; editorial_motion_plan.v1; hash-matched; editorial_beat_plan.v1; Ten-second; primary-image; semantic-generation; TIMESTAMPED-PLATE-PRODUCTION; image-review; Full-frame>
+- L8 [2] 1. Decision — The engine edits a film; it does not apply a generic animation to every image. <editorial_motion_plan.v1>
+- L22 [2] 2. Timing authority — The continuous, hash-matched canonical narration and its word timings are the <hash-matched; editorial_beat_plan.v1; Ten-second; primary-image; semantic-generation; TIMESTAMPED-PLATE-PRODUCTION; image-review>
+- L48 [2] 3. Motion ownership — Motion is authored in this order: <Full-frame; academic; martial; scenic; journey; evidence; explanation; humor; transition; non-instructional; place-specific; cut-in>
+- L65 [3] Semantic cut routing — Every shot declares one visual intent before asset selection: `academic`, {Academic; Martial; Scenic; Journey} <evidence; explanation; humor; transition; non-instructional; place-specific; cut-in; list-item>
+- L89 [3] Positive visual events — A cut to a newly loaded, narration-relevant archive, illustration, technique <narration-relevant; deletion-only>
+- L102 [2] 4. Shot grammar — The v1 vocabulary is deliberately small: <push-settle; pull-settle; cut-on-motion; scene_flow_graph.v1>
+- L123 [2] 5. Plan contract — `editorial_motion_plan.v1` is a single job-level, content-addressed artifact. <editorial_motion_plan.v1; job-level; content-addressed; editorial-beat; scene-bundle; scene-flow; asset-map; canonical-audio; pacing-recipe; provider-motion; Renderer-facing; Moving-shot>
+- L145 [2] 6. Pacing recipe — `editorial_pacing_recipe.v1` stores the channel's abstract edit grammar: <editorial_pacing_recipe.v1; shot-duration; motion-density; research-derived>
+- L154 [2] 7. Provider boundary — Every shot declares one provider-motion classification: <provider-motion; none; preferred; required; hash-bound; non-renderable>
+- L169 [2] 8. Revision proof and QC — The first proof is a 30–60 second A/B revision using the same approved source <cut-adjacent; structural-QC; whole-frame; revision-path>
+- L192 [2] 9. On-screen text and added-layer policy — - The default is no added text and no added prop. A layer must earn its place. <hash-bound; non-evidence>
 
 ## docs/content-video-engine/17-TIMESTAMPED-PLATE-PRODUCTION.md
 
-- L1 [1] Timestamped Plate Production — > STATUS: DEPRECATED. Kept for the reasoning trail; the held-still / hard-cut pattern is deprecated — see 29 Part 8–9. Do not follow this document as current do {STATUS: DEPRECATED.; 29}
-- L8 [2] 1. Decision — The production schedule is the approved, timestamped editorial coverage—not {primary plate; not; 559.922 seconds}
-- L49 [2] 2. Congruence before generation — `timestamped_plate_prompt_spine.v1` is the creative continuity contract. It
-- L84 [3] World identity is independent of visual medium — “Woodblock” is a rendering language, never a substitute for location or
-- L99 [2] 3. Primary plate rule — For this lane: {world kit}
-- L118 [2] 4. Batch and review policy — The complete production plan may contain all 138 prompts. Generation and human {8–12 images}
-- L135 [2] 5. Episode 1 commands — The Episode 1 source spine is
-- L159 [2] 6. Promotion after candidate-pack approval — An approved contact sheet does not mutate the candidate inventory. The
-- L193 [2] 7. Canonical-audio editorial binding — The plate plan is a candidate visual inventory; canonical ElevenLabs word {six seconds}
-- L251 [2] 8. Intent and action brief before generation — Each timestamped prompt also receives an editorial intent and an action brief
-- L270 [2] 9. Active V11 coverage and 1930s Brazilian reinvention wave — `canonical-visual-coverage.v11.json` is the current authoritative schedule: {public performances; institutions; promotion; nationalism}
+- L1 [1] Timestamped Plate Production — > STATUS: DEPRECATED. Kept for the reasoning trail; the held-still / hard-cut pattern is deprecated — see 29 Part 8–9. Do not follow this document as current do {STATUS: DEPRECATED.; 29} <held-still; hard-cut; still-image; canonical_visual_coverage.v9; ElevenLabs; sentence-boundary; subject-led; narration-relevant; rights-approved; start_s; duration_s; timestamped_plate_prompt_spine.v1>
+- L8 [2] 1. Decision — The production schedule is the approved, timestamped editorial coverage—not {primary plate; not; 559.922 seconds} <canonical_visual_coverage.v9; ElevenLabs; sentence-boundary; subject-led; narration-relevant; rights-approved; start_s; duration_s>
+- L49 [2] 2. Congruence before generation — `timestamped_plate_prompt_spine.v1` is the creative continuity contract. It <timestamped_plate_prompt_spine.v1; generated-text; chapter-specific; shot_sequences; pre-written; plate_directions; document-shaped; source-like; multi-path; river-city; job-local; parallel-role>
+- L84 [3] World identity is independent of visual medium — “Woodblock” is a rendering language, never a substitute for location or <river-city; job-local; parallel-role; research-inventory>
+- L99 [2] 3. Primary plate rule — For this lane: {world kit} <rights-reviewed; ten-second; generated_image_block_plan.v1; excerpt-grouping; timestamped_plate_plan.v1; continuity_reprise>
+- L118 [2] 4. Batch and review policy — The complete production plan may contain all 138 prompts. Generation and human {8–12 images} <next-scene; full-frame>
+- L135 [2] 5. Episode 1 commands — The Episode 1 source spine is <history-of-bjj; timestamped-plate-prompt-spine; job-local>
+- L159 [2] 6. Promotion after candidate-pack approval — An approved contact sheet does not mutate the candidate inventory. The <promote-timestamped-plates; asset_manifest.v1; renderer-facing; quarantined_review_required; render-eligible; canonical-slot; all-original>
+- L193 [2] 7. Canonical-audio editorial binding — The plate plan is a candidate visual inventory; canonical ElevenLabs word {six seconds} <ElevenLabs; analyze-timestamped-semantic-coverage; generation_required; compile-timestamped-editorial-motion; pseudo-scene; compile-canonical-visual-coverage; burn-in; focal-point; non-renderable; sub-slot; promoted-adoption; all-original>
+- L251 [2] 8. Intent and action brief before generation — Each timestamped prompt also receives an editorial intent and an action brief <place-first; cut-in; place-specific; pop-out; on-screen>
+- L270 [2] 9. Active V11 coverage and 1930s Brazilian reinvention wave — `canonical-visual-coverage.v11.json` is the current authoritative schedule: {public performances; institutions; promotion; nationalism} <canonical-visual-coverage.v11.json; non-renderable; subject-led; helped distinguish; noun-per-cut; when; public-performances; public-identity; cut-ins; render_eligible: false>
 
 ## docs/content-video-engine/18-GRAPHIC-SILHOUETTE-WOODBLOCK-EXPLAINER-SPEC.md
 
-- L1 [1] Graphic Silhouette + Combat Woodblock Explainer — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine — read it for how a decision was reached {STATUS: RECORD.}
-- L8 [2] Purpose — This is an original visual language for history, sport culture, and timely
-- L21 [2] Provenance boundary — The adjacent `reference_studies/external-explainer-retention-observations-v1.json`
-- L36 [2] The visual system — | Layer | Job | Rules |
-- L45 [3] Palette and material — - Paper: `#E7D3A1`; carved ink: `#1B1A17`; deep indigo: `#17324D`.
-- L56 [2] Narrative and edit grammar — Every meaningful sentence or contrast receives a distinct visual concept. A {Hook; Contrast; Correction}
+- L1 [1] Graphic Silhouette + Combat Woodblock Explainer — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine — read it for how a decision was reached {STATUS: RECORD.} <point-in-time; high-contrast; stick-figure; research-only; render_eligible: false; multi-person; #E7D3A1; #1B1A17; #17324D; #B64F36; #D99B32; #2F7F7A>
+- L8 [2] Purpose — This is an original visual language for history, sport culture, and timely <high-contrast; stick-figure>
+- L21 [2] Provenance boundary — The adjacent `reference_studies/external-explainer-retention-observations-v1.json` <research-only; render_eligible: false; multi-person>
+- L36 [2] The visual system — | Layer | Job | Rules | <#E7D3A1; #1B1A17; #17324D; #B64F36; #D99B32; #2F7F7A>
+- L45 [3] Palette and material — - Paper: `#E7D3A1`; carved ink: `#1B1A17`; deep indigo: `#17324D`. <#E7D3A1; #1B1A17; #17324D; #B64F36; #D99B32; #2F7F7A>
+- L56 [2] Narrative and edit grammar — Every meaningful sentence or contrast receives a distinct visual concept. A {Hook; Contrast; Correction} <already-visible; Micro-events; ten-second>
 - L88 [2] Shot selection — Classify each beat before assets are assigned:
-- L105 [2] Motion discipline — 1. Lock the world camera unless the shot plan names a small, eased push toward
-- L122 [2] Sample-pack use — `content/video_engine/projects/history-of-bjj/style-samples/combat-woodblock-graphic-silhouette-explainer-v1/`
+- L105 [2] Motion discipline — 1. Lock the world camera unless the shot plan names a small, eased push toward <vanish; ink-puff; cut-in; full-background>
+- L122 [2] Sample-pack use — `content/video_engine/projects/history-of-bjj/style-samples/combat-woodblock-graphic-silhouette-explainer-v1/` <hash-bound>
 - L130 [2] Acceptance checklist — - [ ] A frame reads as the same channel without a title or citation.
 
 ## docs/content-video-engine/19-HYPERFRAMES-LANE.md
 
-- L1 [1] HyperFrames Unit Lane — *Date: 2026-08-08 · Implements `P13-REMOTION-INSTALL-AND-HYPERFRAMES-LANE.plan.md` · Extends the
-- L6 [2] 1. Renderer ownership (extended) — | Renderer | Owns | {Remotion; HyperFrames; Short/caption/motion units}
-- L19 [2] 2. Contract and flow — `hyperframes_unit.v1` (`configs/hyperframes_unit.schema.json`) →
-- L35 [2] 3. Timing authority per unit kind — | Unit kind | Timing source | {Canonical ElevenLabs word timings only; estimated}
-- L42 [2] 4. v1 limitations (explicit) — 1. Silent visual builds — narration audio muxing stays with the compositor/FFmpeg per the {Silent visual builds; Image plates only}
-- L51 [2] 5. Evidence (2026-08-08) — - Editor hardened: typecheck 0 errors; smoke render `editor/out/smoke.mp4` (1.088s, 70,685 B). {drift 0.14%}
-- L61 [2] 6. Port-evaluation spike — status: NOT RUN — The plan's T6 (port `Editorial.tsx` ~15s slice via `/remotion-to-hyperframes`, measure parity + {deferred, not executed; keep Remotion for the documentary lane}
-- L69 [2] 7. Environment — `doctor` note: whisper/Kokoro/MusicGen report as missing — all optional local fallbacks this
+- L1 [1] HyperFrames Unit Lane — *Date: 2026-08-08 · Implements `P13-REMOTION-INSTALL-AND-HYPERFRAMES-LANE.plan.md` · Extends the <renderer-ownership; asset-ID-only; rights-reviewed; hyperframes_unit.v1; vertical_short; caption_unit; title_card; ElevenLabs; hash-bound; operator-gated; animatic_preview; canonical_hash>
+- L6 [2] 1. Renderer ownership (extended) — | Renderer | Owns | {Remotion; HyperFrames; Short/caption/motion units} <asset-ID-only; rights-reviewed>
+- L19 [2] 2. Contract and flow — `hyperframes_unit.v1` (`configs/hyperframes_unit.schema.json`) → <hyperframes_unit.v1>
+- L35 [2] 3. Timing authority per unit kind — | Unit kind | Timing source | {Canonical ElevenLabs word timings only; estimated} <vertical_short; caption_unit; title_card; hash-bound; operator-gated; animatic_preview; canonical_hash>
+- L42 [2] 4. v1 limitations (explicit) — 1. Silent visual builds — narration audio muxing stays with the compositor/FFmpeg per the {Silent visual builds; Image plates only} <composition-level; HyperFrames>
+- L51 [2] 5. Evidence (2026-08-08) — - Editor hardened: typecheck 0 errors; smoke render `editor/out/smoke.mp4` (1.088s, 70,685 B). {drift 0.14%} <hyperframes check; ep1-teaser-animatic-v1; fail-closed; dry-run>
+- L61 [2] 6. Port-evaluation spike — status: NOT RUN — The plan's T6 (port `Editorial.tsx` ~15s slice via `/remotion-to-hyperframes`, measure parity + {deferred, not executed; keep Remotion for the documentary lane} <Editorial.tsx>
+- L69 [2] 7. Environment — `doctor` note: whisper/Kokoro/MusicGen report as missing — all optional local fallbacks this <doctor; MusicGen; pipeline-owned; compositor-owned>
 
 ## docs/content-video-engine/21-ART-STYLE-REFERENCE-REVIEW.md
 
-- L1 [1] Art Style Reference Review — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine — read it for how a decision was reached {STATUS: RECORD.}
-- L15 [2] The finding that matters — None of the reference channels animate characters. No articulated limbs, no rigs, no {None of the reference channels animate characters.; character consistency across poses}
-- L34 [2] Lane A — `cutout_history` — Reference: long-form Depression-era history explainer. {Characters.; Backgrounds.; The trick.}
-- L57 [2] Lane B — `flat_cartoon_explainer` — Reference: personal-finance channel, single recurring narrator. {Characters.; Backgrounds.; Props.}
-- L81 [2] Lane C — `presenter_infographic` — Reference: personal-finance channel, presenter-anchored. {Characters.; Content zone.; Backgrounds.}
-- L100 [2] Lane D — `stick_explainer` — Two references in the same format with a ~400x view gap between them. Reviewed together on {Strong reference:; Floor reference:}
-- L115 [3] Grading rubric — Operator position as of 2026-08-22: *"Mr Finance would be amazing if we can get there. Stick {Ship gate (floor).; Target (ceiling).}
-- L129 [3] The ceiling reference, as a spec — - Characters. True stick figures — circle head, single-weight line limbs — but with a {Characters.; solid coloured T-shirt block for the torso; Line.; Environments.}
-- L148 [3] The floor reference, as a list of enumerable defects — Same concept, executed with an image model and no QC — and still a six-figure performer. What
-- L177 [3] Volume math, and why it changes the selection gate — Measured from the sampled Stick Trader episode: 22:18 runtime, 230 keyframe candidates, 76 {154 distinct plates at ~8.7 seconds of hold each; 450-810 image generations per episode; Throughput, not artistry, is the blocker.}
-- L196 [3] Register dial — The lane spans a dial rather than a single style, and the dial is set by the script, not the art: {Psychology / finance register; Comedy register; Why this lane inverts the usual risk.}
-- L219 [2] The natural experiment that reframes everything — Reviewed 2026-08-22 from three operator-supplied sources in one niche (trading {One static image for the entire 20:38.; 241,953}
-- L233 [3] What this does and does not prove — It does not support "we win on presentation." The 242K video has the worst {not}
-- L252 [3] Where the real differentiation is — Compare what is actually said. The trading-psychology channels are assertion
-- L273 [2] Lane E — `parametric_stick` (Casual Finance) — Reference: Casual Finance, "The SpaceX IPO... It's Worse Than You Think", 14:52,
-- L280 [3] What is actually on screen — - One crude stick character. Skin-fill oval head, black hair scribble, two dot {One crude stick character.; Hand-drawn props in the same hand.; Real brand assets dropped in clean.}
+- L1 [1] Art Style Reference Review — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine — read it for how a decision was reached {STATUS: RECORD.} <point-in-time; operator-supplied; stick_figure; re-poses; slide-in; scale-pop; twenty-minute; character-sheet-and-pose-library; flow_character_pack.v1; three-quarter; full-body; cutout_history>
+- L15 [2] The finding that matters — None of the reference channels animate characters. No articulated limbs, no rigs, no {None of the reference channels animate characters.; character consistency across poses} <re-poses; slide-in; scale-pop; twenty-minute; character-sheet-and-pose-library; flow_character_pack.v1; three-quarter; full-body>
+- L34 [2] Lane A — `cutout_history` — Reference: long-form Depression-era history explainer. {Characters.; Backgrounds.; The trick.} <long-form; Depression-era; hand-drawn; near-blank; accent-colour; Full-frame>
+- L57 [2] Lane B — `flat_cartoon_explainer` — Reference: personal-finance channel, single recurring narrator. {Characters.; Backgrounds.; Props.} <personal-finance; near-white; Icon-scale; two-sided>
+- L81 [2] Lane C — `presenter_infographic` — Reference: personal-finance channel, presenter-anchored. {Characters.; Content zone.; Backgrounds.} <personal-finance; presenter-anchored; semi-realistic; side-by-side; blue-grey; near-black; accent-colour; Top-positioned; slide-deck>
+- L100 [2] Lane D — `stick_explainer` — Two references in the same format with a ~400x view gap between them. Reviewed together on {Strong reference:; Floor reference:} <paint-style; curiosity-gap; COMPETITIVE-BRIEF; comedy-first; psychology-first; anti-example; single-weight; T-shirt; hand-drawn; struck-through; hand-lettered; hand-circled>
+- L115 [3] Grading rubric — Operator position as of 2026-08-22: *"Mr Finance would be amazing if we can get there. Stick {Ship gate (floor).; Target (ceiling).} <anti-example>
+- L129 [3] The ceiling reference, as a spec — - Characters. True stick figures — circle head, single-weight line limbs — but with a {Characters.; solid coloured T-shirt block for the torso; Line.; Environments.} <single-weight; hand-drawn; struck-through; hand-lettered; hand-circled; full-bleed>
+- L148 [3] The floor reference, as a list of enumerable defects — Same concept, executed with an image model and no QC — and still a six-figure performer. What <six-figure; T-shirt; On-screen; Hand-lettered; half-formed; near-duplicates; contains_factual_text; GOOGLE-FLOW-CHARACTER-BUILDER-SPEC; floor-to-ceiling; Model-generated; render-eligible; cutout_history>
+- L177 [3] Volume math, and why it changes the selection gate — Measured from the sampled Stick Trader episode: 22:18 runtime, 230 keyframe candidates, 76 {154 distinct plates at ~8.7 seconds of hold each; 450-810 image generations per episode; Throughput, not artistry, is the blocker.} <near-duplicates; fan-out; minimize-human-in-the-loop; auto-select; low-confidence; identity-anchor; near-duplicate; graduated-autonomy; exception-based>
+- L196 [3] Register dial — The lane spans a dial rather than a single style, and the dial is set by the script, not the art: {Psychology / finance register; Comedy register; Why this lane inverts the usual risk.} <Second-person; chapter-marked; reframe-driven; paint-style; block-capital; curiosity-gap; hand-drawn; plate-and-motion; A-C; model-written; StickFigureScene>
+- L219 [2] The natural experiment that reframes everything — Reviewed 2026-08-22 from three operator-supplied sources in one niche (trading {One static image for the entire 20:38.; 241,953} <operator-supplied; long-form; word-by-word; blue-shirt; ZenTraderXBT; out-animating; two-video; well-chosen; word-timed; six-figure; hyperframes_unit.schema.json; caption_unit>
+- L233 [3] What this does and does not prove — It does not support "we win on presentation." The 242K video has the worst {not} <out-animating; two-video; well-chosen; word-timed; six-figure; hyperframes_unit.schema.json; caption_unit>
+- L252 [3] Where the real differentiation is — Compare what is actually said. The trading-psychology channels are assertion <trading-psychology; context-aware; never-fabricate>
+- L273 [2] Lane E — `parametric_stick` (Casual Finance) — Reference: Casual Finance, "The SpaceX IPO... It's Worse Than You Think", 14:52, <SpaceX; Operator-flagged; Skin-fill; single-line; Hand-drawn; hand-lettering; full-bleed; Hand-lettered; Squiggle-as-text; Seek-safe; HyperFrames; checked-in>
+- L280 [3] What is actually on screen — - One crude stick character. Skin-fill oval head, black hair scribble, two dot {One crude stick character.; Hand-drawn props in the same hand.; Real brand assets dropped in clean.} <Skin-fill; single-line; hand-lettering; SpaceX; full-bleed; Hand-lettered; Squiggle-as-text>
 - L299 [3] Why prompting an image model for this fails — The operator's finding — *"telling them 'make bad stick figure explainers' does {muddy; confident}
-- L308 [3] Why that does not mean this lane is out of reach — Count the primitives. An oval, a hair scribble, two dots, one curve, five lines — {This is the one style in this document that should never be; Consistency for free.; Unlimited poses at zero marginal cost; Seek-safe rendering}
+- L308 [3] Why that does not mean this lane is out of reach — Count the primitives. An oval, a hair scribble, two dots, one curve, five lines — {This is the one style in this document that should never be; Consistency for free.; Unlimited poses at zero marginal cost; Seek-safe rendering} <HyperFrames; checked-in; StickFigureScene>
 - L327 [3] Correcting the earlier retirement of the stick-figure lane — An earlier revision of this document retired the stick-figure lane outright {armbar technique diagrams}
-- L336 [3] The honest risk — A parametric rig can read as sterile. Part of Casual Finance's charm is that no
-- L345 [3] What still cannot be automated — - The writing. Every sentence in the opening carries a figure: a $1.75 trillion {The writing.; Prop invention.}
-- L359 [2] Lane F — `expert_explainer` (Wealth Logic) — the recommended target — Reference: Wealth Logic, 83,300 subscribers. {algorithmically distributed on topic and packaging, not carr}
-- L373 [3] The cast — - A recurring expert: white lab coat, black tie, dark slicked hair, heavy black {A recurring expert; same character appears across both episodes; Per-episode civilians; costume block}
-- L385 [3] The content zone is mostly type, not illustration — This is the finding that makes the lane reproducible. Sampled plates include: {All of that lettering is crisp and correct.}
+- L336 [3] The honest risk — A parametric rig can read as sterile. Part of Casual Finance's charm is that no <per-instance; pixel-identical; side-by-side>
+- L345 [3] What still cannot be automated — - The writing. Every sentence in the opening carries a figure: a $1.75 trillion {The writing.; Prop invention.} <Coca-Cola; McDonald; SpaceX; pre-AI; claim-bound>
+- L359 [2] Lane F — `expert_explainer` (Wealth Logic) — the recommended target — Reference: Wealth Logic, 83,300 subscribers. {algorithmically distributed on topic and packaging, not carr} <views-per-subscriber; one-off; Per-episode; identity_anchor; $50K + $36K; $86K TOTAL IN.; 3% BOND; 5% BOND; air-conditioning; $7,000; DAILY; no-generated-text>
+- L373 [3] The cast — - A recurring expert: white lab coat, black tie, dark slicked hair, heavy black {A recurring expert; same character appears across both episodes; Per-episode civilians; costume block} <one-off; identity_anchor>
+- L385 [3] The content zone is mostly type, not illustration — This is the finding that makes the lane reproducible. Sampled plates include: {All of that lettering is crisp and correct.} <$50K + $36K; $86K TOTAL IN.; 3% BOND; 5% BOND; air-conditioning; $7,000; DAILY; no-generated-text>
 - L400 [3] The script is a parametric model — The opening specifies the entire calculation before any conclusion: two named {the plates are downstream of a model, so they can be generat}
 - L414 [3] Craft details — - Captions: burned in, bottom, all caps, white with exactly one word per phrase {Captions; Palette; Their bar is not perfection.}
-- L424 [3] Why this is the target rather than Casual Finance — Lane E's moat is a human drawing hand accumulated pre-AI, which is the least
-- L432 [3] Plan implication: plates are not all generated — A large share of Lane F plates need no image model at all. That argues for an
-- L441 [2] Retraction: rendition level is not a consistency risk — An earlier revision of this document argued that the existing host assets were {All three grounds were wrong or overstated, and the central}
-- L454 [3] What was claimed, and what the evidence shows — Claim 1 — "every rendered detail is another drift axis across 150 plates." {Claim 1 — "every rendered detail is another drift axis acros; Claim 2 — "the detail does not survive playback scale."}
-- L481 [3] Correction to this correction: Alicia does not composite her figures — A closer read of the same frames shows the numbers are generated into the plate, not {generated into the plate}
-- L499 [3] Two production models, and they are a real choice — | | Composite from library | Generate whole plates | {frequently wrong}
-- L521 [3] The rule that stands — Rendition level and data legibility are independent axes. The earlier draft {independent axes}
-- L536 [3] Numeric density, measured — Figures per 1,000 transcript words, counting currency amounts, percentages and {44.3; 6.2}
+- L424 [3] Why this is the target rather than Casual Finance — Lane E's moat is a human drawing hand accumulated pre-AI, which is the least <pre-AI; costume-anchored; plate-from-model>
+- L432 [3] Plan implication: plates are not all generated — A large share of Lane F plates need no image model at all. That argues for an <plate-kind; generated_plate; composed_plate>
+- L441 [2] Retraction: rendition level is not a consistency risk — An earlier revision of this document argued that the existing host assets were {All three grounds were wrong or overstated, and the central} <over-detailed; Re-reviewed; soft-shaded; conveyor-belt; Reference-image; load-bearing; corner-stamp; high-information; $900,000 + 30% = $210,000; $32.98; $31.51; $12.991>
+- L454 [3] What was claimed, and what the evidence shows — Claim 1 — "every rendered detail is another drift axis across 150 plates." {Claim 1 — "every rendered detail is another drift axis acros; Claim 2 — "the detail does not survive playback scale."} <soft-shaded; conveyor-belt; Reference-image; load-bearing; corner-stamp; high-information; $900,000 + 30% = $210,000; $32.98; $31.51; $12.991; $11.90; 10.2% INCREASE IN SPENDING>
+- L481 [3] Correction to this correction: Alicia does not composite her figures — A closer read of the same frames shows the numbers are generated into the plate, not {generated into the plate} <$32.98; $31.51; $12.991; $11.90; $900,000 + 30% = $210,000; $300,000; $10000; ITEM TO ENERGY TRANSFORM; over-credited; plausible-looking>
+- L499 [3] Two production models, and they are a real choice — | | Composite from library | Generate whole plates | {frequently wrong} <depth_layers; Per-episode; Reference-conditioned; On-screen; Up-front; style-profile.v1.json; generated_text_rule; whole-scene>
+- L521 [3] The rule that stands — Rendition level and data legibility are independent axes. The earlier draft {independent axes} <trade-off; high-rendition; evidence_safe_region; style-profile.v1.json; asset-pipeline; art-direction>
+- L536 [3] Numeric density, measured — Figures per 1,000 transcript words, counting currency amounts, percentages and {44.3; 6.2} <seven-times-denser>
 - L551 [3] Audience fit — The operator's position is that a more formal, fully rendered presenter suits the
-- L559 [2] Methodology correction — An earlier draft of this document used the keyframe near-duplicate rate as a {That proxy is unreliable when captions are burned in.}
-- L572 [2] Additional thumbnail-only references — Supplied as thumbnails without video, so treated as weaker evidence:
-- L582 [2] What this changes — - `stick_figure` is removed as a lane name — but not as a capability. Lane D is a {character policy, background policy, caption policy, and col}
-- L614 [2] Related — - [`08-TOOLING-ALTERNATIVES.md`](08-TOOLING-ALTERNATIVES.md) — provider verdicts.
+- L559 [2] Methodology correction — An earlier draft of this document used the keyframe near-duplicate rate as a {That proxy is unreliable when captions are burned in.} <near-duplicate; near-duplicates>
+- L572 [2] Additional thumbnail-only references — Supplied as thumbnails without video, so treated as weaker evidence: <whiteboard-style>
+- L582 [2] What this changes — - `stick_figure` is removed as a lane name — but not as a capability. Lane D is a {character policy, background policy, caption policy, and col} <stick_figure; stick-figure; StickFigureScene; stick_explainer; plate-and-motion; cutout_history; flat_cartoon_explainer; presenter_infographic; caption_unit; word-timed; parametric_stick; per-plate>
+- L614 [2] Related — - [`08-TOOLING-ALTERNATIVES.md`](08-TOOLING-ALTERNATIVES.md) — provider verdicts. <TOOLING-ALTERNATIVES; GOOGLE-FLOW-CHARACTER-BUILDER-SPEC; character-sheet>
 
 ## docs/content-video-engine/22-AUDIO-FIX-RUNBOOK.md
 
-- L1 [1] Audio Fix Runbook — `current-bubble-mechanism` mispronunciation — > STATUS: DEPRECATED. Kept for the reasoning trail; superseded by 37 §8, Recording Standards v2 (master-take rule; splice-repair banned). Do not follow this doc {STATUS: DEPRECATED.; 37 §8}
-- L9 [2] The defect, located exactly — Word #811, `"won"`, at 324.521–324.799s, read as the past tense of win {#811; 324.521–324.799s; 320.643s → 326.924s; 94 characters — 0.64% of the episode; scene_9002}
-- L31 [2] Source artifacts — | Artifact | Path (relative to the pilot dir) |
-- L43 [2] Blocker: there is no narration audio on disk — Searched the whole pilot directory — no `.mp3`, `.wav` or `.m4a` exists. Only {no `.mp3`, `.wav` or `.m4a` exists; And the final render's audio cannot substitute.}
-- L70 [2] Structural notes — - The 99 "blocks" in `canonical-audio.v1.json` are a derived 10-second timing {derived 10-second timing partition; 4 scene takes; overlap}
-- L82 [2] The pronunciation rule — The obvious rule is dead. `preview` against the real 2,445-word script: {dead; 0; 1; Alias, not phoneme.}
-- L110 [2] Procedure — 1. Obtain the stem (see blocker above). Verify it before use: {Obtain the stem; Build the dictionary; Sync it; Re-synthesise}
-- L134 [2] What re-timing already guarantees — `ingest-canonical-audio` reconciles the read against the attested script before {980.806s}
+- L1 [1] Audio Fix Runbook — `current-bubble-mechanism` mispronunciation — > STATUS: DEPRECATED. Kept for the reasoning trail; superseded by 37 §8, Recording Standards v2 (master-take rule; splice-repair banned). Do not follow this doc {STATUS: DEPRECATED.; 37 §8} <master-take; splice-repair; re-recording; "won"; full_text; Per-take; .mp3; .wav; .m4a; audio_path; per-block; canonical-audio.v1.json>
+- L9 [2] The defect, located exactly — Word #811, `"won"`, at 324.521–324.799s, read as the past tense of win {#811; 324.521–324.799s; 320.643s → 326.924s; 94 characters — 0.64% of the episode; scene_9002} <"won">
+- L31 [2] Source artifacts — | Artifact | Path (relative to the pilot dir) | <full_text; Per-take>
+- L43 [2] Blocker: there is no narration audio on disk — Searched the whole pilot directory — no `.mp3`, `.wav` or `.m4a` exists. Only {no `.mp3`, `.wav` or `.m4a` exists; And the final render's audio cannot substitute.} <audio_path; per-block; canonical-audio.v1.json; current-bubble-episode-one-full-p34.mp4; ElevenLabs; stem-clean; Re-synthesise; scene_9002>
+- L70 [2] Structural notes — - The 99 "blocks" in `canonical-audio.v1.json` are a derived 10-second timing {derived 10-second timing partition; 4 scene takes; overlap} <canonical-audio.v1.json; word_timings; words_path; project_root; storyboard_hash: "">
+- L82 [2] The pronunciation rule — The obvious rule is dead. `preview` against the real 2,445-word script: {dead; 0; 1; Alias, not phoneme.} <preview; "Korean won"; "won"; "trillion won"; "trillion wahn"; eleven_multilingual_v2; eleven_flash_v2; eleven_v3>
+- L110 [2] Procedure — 1. Obtain the stem (see blocker above). Verify it before use: {Obtain the stem; Build the dictionary; Sync it; Re-synthesise} <inter-word; trillion won; compile-pronunciation-sync; record_sync_result; dictionary_id; version_id; scene_9002; re-time; word-offset; re-derives; Re-mix; re-render>
+- L134 [2] What re-timing already guarantees — `ingest-canonical-audio` reconciles the read against the attested script before {980.806s} <ingest-canonical-audio; re-record; re-timed>
 - L145 [2] Related — - `.claude/PRPs/plans/P14-DIRECTOR-AND-SCENE-BOARD.plan.md` — T15 (built), T17
 
 ## docs/content-video-engine/23-EP1-LIBRARY-INTAKE-REVIEW.md
 
-- L1 [1] Episode 1 Library — Intake Review — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine — read it for how a decision was reached {STATUS: RECORD.}
-- L9 [2] Verdict — Medium: settled by the operator — the paper-cut direction did not work and the {Medium: settled by the operator — the paper-cut direction di; Density: still open, and it is a separate axis from medium.}
-- L31 [3] The measurement — Busy-pixel fraction is internal detail with the cutout silhouette eroded away, so {7.5%; 11.8%; 29.4%; 51.7%}
-- L63 [3] What the composite actually shows — Metrics said the props would outrank the host. Compositing them proved that {5.2%; The host reads exactly as designed.}
-- L102 [2] Delivery integrity — clean — All 25 files are on disk and every `sha256` in the catalogue matches the bytes.
-- L118 [2] Accept — cast (15) — Identity holds across all five poses for each character. Garment colours stay {The rendering-weight instruction worked.}
-- L136 [2] Accept — worlds (3) — On-spec cut paper: flat, matte, cream ground, 2–3 elements, no text. The
-- L150 [2] Objects and mechanisms (7) — what arrived — The engraved treatment is approved. Recorded here for the regeneration brief is
-- L192 [2] Defects found and fixed
-- L194 [3] 1. Self-promotion — rolled back — All 25 arrived as `rights_state: "approved"`, `review_state: {`approved` is never set by product code}
-- L204 [3] 2. Mis-tiered registration — 19 of 25 were unreachable — Every new asset was registered at `resolution_tier: 3`. Tier 3 is {the resolver could never return them}
-- L216 [3] 3. Resolver: a one-word coincidence pre-empted a real match — `resolve_slot` walked the cascade and returned the first tier with any
-- L234 [3] 4. Resolver: slot tags and asset tags were matched asymmetrically — Asset tags were split on `-` and required to match term-by-term, while slot tags {After all four fixes: 0 of 25 unreachable, and eight realist}
-- L246 [3] 5. The style guard was too crude — fixed — The batch carries two `style_version` values across one coherent cast: the host {The composite proves that block was wrong.}
-- L274 [3] 6. Worlds carried no placement data — figures landed on the furniture — The first two-figure composite put civilian A standing on the office chair. That {A perspective rule alone does not fix it.}
-- L304 [3] 7. Scale was a third hierarchy signal, and one too many — Placing the civilian smaller as well as duller read as "unimportant" rather than {52%; 46%; 59%; 54%; 2:1 on both saturation and internal detail}
-- L347 [3] 8. Figure scale standard: 50% of frame height — Operator's call, and the fit maths backs it. Combined figure width at 1920 wide: {50%; 607px; 872px; At 80% a two-shot does not fit any world.; At 50% a two-shot fits every world}
-- L383 [3] 9. The worlds were drawn at the wrong human scale — the root cause — Every scale problem in this review traces back here, and it is a plate defect, {Figure size is not a free choice; the furniture already in t; 0.92; 0.94; 0.53}
-- L424 [3] Scale Block — paste into every world prompt — Image models handle on-screen proportions far better than metres, so state the
-- L443 [3] 10. Composition standard: cast 0.76, world drawn for 0.50 — Operator's call, and it resolves the scale problem properly. Rather than one {two independent numbers; `world_figure_scale: 0.50`; `cast_figure_height: 0.72–0.80`, standard 0.76}
-- L479 [3] 11. 2.5D worlds — the renderer is already waiting for them — Operator proposal, and the infrastructure exists already: {P13 already renders bounded foreground parallax; P14 already names four `depth_layers`; The only missing piece is that worlds ship as one flat image}
-- L516 [2] Open — operator's call
-- L518 [3] Eleven catalogue entries point at files that do not exist — Pre-existing, not introduced by this batch. `actor-worker-household-v2`,
-- L526 [2] Regeneration brief for the seven — Keep the engraved direction and keep the subjects. The problem is accumulation, {too big, and not enough paper.}
-- L549 [2] Related — - [21-ART-STYLE-REFERENCE-REVIEW.md](21-ART-STYLE-REFERENCE-REVIEW.md)
+- L1 [1] Episode 1 Library — Intake Review — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine — read it for how a decision was reached {STATUS: RECORD.} <point-in-time; library-build-ep1-index-funds-v2; LIBRARY-BUILD; INDEX-FUNDS; paper-cut; reduced-density; eight-second; Busy-pixel; full-bleed; kind: prop; rendering-weight; world-home-living-v1>
+- L9 [2] Verdict — Medium: settled by the operator — the paper-cut direction did not work and the {Medium: settled by the operator — the paper-cut direction di; Density: still open, and it is a separate axis from medium.} <reduced-density; eight-second; Busy-pixel; full-bleed; kind: prop; rendering-weight; world-home-living-v1; actor-host-point-right-v1; object-coin-stack-v1; density-and-occupancy; cut-paper; micro-detail>
+- L31 [3] The measurement — Busy-pixel fraction is internal detail with the cutout silhouette eroded away, so {7.5%; 11.8%; 29.4%; 51.7%} <Busy-pixel; full-bleed; kind: prop; rendering-weight; eight-second>
+- L63 [3] What the composite actually shows — Metrics said the props would outrank the host. Compositing them proved that {5.2%; The host reads exactly as designed.} <world-home-living-v1; actor-host-point-right-v1; object-coin-stack-v1; rendering-weight; density-and-occupancy; cut-paper; micro-detail>
+- L102 [2] Delivery integrity — clean — All 25 files are on disk and every `sha256` in the catalogue matches the bytes. <sha256; Partially-transparent; matted-in; (50,45,40); mid-tone; (191,165,128)>
+- L118 [2] Accept — cast (15) — Identity holds across all five poses for each character. Garment colours stay {The rendering-weight instruction worked.} <full-body; accessory-free; actor-civilian-a-identity-v1; actor-civilian-a-content-v1; near-duplicates; hands-in-pockets>
+- L136 [2] Accept — worlds (3) — On-spec cut paper: flat, matte, cream ground, 2–3 elements, no text. The <On-spec; right-third; σ; world-exchange-floor-v1; world-home-living-v1; world-office-desk-v1>
+- L150 [2] Objects and mechanisms (7) — what arrived — The engraved treatment is approved. Recorded here for the regeneration brief is <object-index-basket-v1; object-single-share-v1; object-coin-stack-v1; object-dividend-drip-v1; mechanism-capital-flow-v1; mechanism-growth-comparison-v1; mechanism-risk-concentration-v1; contains_factual_text: false; cross-lane; dollar-sign; bread; medicine>
+- L192 [2] Defects found and fixed <Self-promotion; rights_state: "approved"; approved; off-spec; render-eligible; original_review_only; review_only; Mis-tiered; resolution_tier: 3; deterministic_evidence_or_mechanism; kind; {mechanism, world_board}>
+- L194 [3] 1. Self-promotion — rolled back — All 25 arrived as `rights_state: "approved"`, `review_state: {`approved` is never set by product code} <rights_state: "approved"; off-spec; render-eligible; original_review_only; review_only>
+- L204 [3] 2. Mis-tiered registration — 19 of 25 were unreachable — Every new asset was registered at `resolution_tier: 3`. Tier 3 is {the resolver could never return them} <resolution_tier: 3; deterministic_evidence_or_mechanism; kind; {mechanism, world_board}; bespoke_plate; Re-tiered; actor; prop; world_board; world; cast_board; mechanism>
+- L216 [3] 3. Resolver: a one-word coincidence pre-empted a real match — `resolve_slot` walked the cascade and returned the first tier with any <resolve_slot; comparison; mechanism-growth-comparison-v1; tie-break; worker; commuter; founder; pose-purpose; caution; risk; explanation>
+- L234 [3] 4. Resolver: slot tags and asset tags were matched asymmetrically — Asset tags were split on `-` and required to match term-by-term, while slot tags {After all four fixes: 0 of 25 unreachable, and eight realist} <term-by-term; bar-comparison; world-exchange-floor-v1>
+- L246 [3] 5. The style guard was too crude — fixed — The batch carries two `style_version` values across one coherent cast: the host {The composite proves that block was wrong.} <style_version; paper-cut-reduced-density-v2; woodblock-finance-editorial-v3; resolve_episode_assets; version-string; style_families; ep1-index-funds; legacy-crinkle-cut>
+- L274 [3] 6. Worlds carried no placement data — figures landed on the furniture — The first two-figure composite put civilian A standing on the office chair. That {A perspective rule alone does not fix it.} <two-figure; world-office-desk-v1; world-exchange-floor-v1; world-home-living-v1; hand-declared>
+- L304 [3] 7. Scale was a third hierarchy signal, and one too many — Placing the civilian smaller as well as duller read as "unimportant" rather than {52%; 46%; 59%; 54%; 2:1 on both saturation and internal detail} <world-office-desk-v1; same-scale; world-exchange-floor-v1; world-home-living-v1; two-shots>
+- L347 [3] 8. Figure scale standard: 50% of frame height — Operator's call, and the fit maths backs it. Combined figure width at 1920 wide: {50%; 607px; 872px; At 80% a two-shot does not fit any world.; At 50% a two-shot fits every world} <scale-down; three-shot; figure_height: 0.50; placement; max_figures; evidence_safe_region; illustrative-or-evidential; broadcast-size>
+- L383 [3] 9. The worlds were drawn at the wrong human scale — the root cause — Every scale problem in this review traces back here, and it is a plate defect, {Figure size is not a free choice; the furniture already in t; 0.92; 0.94; 0.53} <world-office-desk-v1; world-home-living-v1; world-exchange-floor-v1; close-up; correctly-scaled; three-shot; two-shot; max_figures; single-figure; group-shot; scale_reference; load_catalog>
+- L424 [3] Scale Block — paste into every world prompt — Image models handle on-screen proportions far better than metres, so state the <on-screen; group-shot; single-figure; close-up; nine-tenths>
+- L443 [3] 10. Composition standard: cast 0.76, world drawn for 0.50 — Operator's call, and it resolves the scale problem properly. Rather than one {two independent numbers; `world_figure_scale: 0.50`; `cast_figure_height: 0.72–0.80`, standard 0.76} <mid-distance; three-shot; single-figure>
+- L479 [3] 11. 2.5D worlds — the renderer is already waiting for them — Operator proposal, and the infrastructure exists already: {P13 already renders bounded foreground parallax; P14 already names four `depth_layers`; The only missing piece is that worlds ship as one flat image} <EditorialMotion.tsx; building_or_environment; evidence_safe_region; actor_or_machine; foreground_cutout; generation-side; parallax_factor; load_catalog; <world>-far.png; <world>-board.png; <world>-mid.png; <world>-near.png>
+- L516 [2] Open — operator's call <Pre-existing; actor-worker-household-v2; actor-founder-v2; building-*; whiteboard-easel-v2; mechanism-town-v1; finance-host-presenter-direct-v1; stealth-wealth-*; crinkle-cut-v1>
+- L518 [3] Eleven catalogue entries point at files that do not exist — Pre-existing, not introduced by this batch. `actor-worker-household-v2`, <Pre-existing; actor-worker-household-v2; actor-founder-v2; building-*; whiteboard-easel-v2; mechanism-town-v1; finance-host-presenter-direct-v1; stealth-wealth-*; crinkle-cut-v1>
+- L526 [2] Regeneration brief for the seven — Keep the engraved direction and keep the subjects. The problem is accumulation, {too big, and not enough paper.} <eight-second; full-frame>
+- L549 [2] Related — - [21-ART-STYLE-REFERENCE-REVIEW.md](21-ART-STYLE-REFERENCE-REVIEW.md) <ART-STYLE-REFERENCE-REVIEW>
 
 ## docs/content-video-engine/24-COMPOSITION-AND-SCALE-SPEC.md
 
-- L1 [1] Composition and Scale Spec — Specification of record for how figures, worlds, and depth planes relate in a
+- L1 [1] Composition and Scale Spec — Specification of record for how figures, worlds, and depth planes relate in a <LIBRARY-INTAKE-REVIEW; world_figure_scale; mid-distance; cast_figure_height; figure_height; Group-shot; Close-up; three-shot; figure_zone; [x0, x1]; baseline_y; max_figures>
 - L8 [2] The rule that governs everything else — Figure size is not a compositing choice. The furniture already in the plate {Figure size is not a compositing choice. The furniture alrea}
-- L18 [2] Two independent numbers — The episode-1 review initially conflated these into one, which is why several {0.50; 0.76}
-- L44 [2] Shot types — A world is generated for one shot type. They are different shots, not different {Group-shot world; Close-up room}
-- L61 [2] Placement — Every world declares where a figure may stand. Without it a compositor has no way
-- L89 [2] In-scene plates — the third scale band — Beyond worlds and cast there is a third role, introduced by the v3 delivery and {into}
-- L118 [2] Scale verification — A world may declare one real object as a scale reference: {15%}
+- L18 [2] Two independent numbers — The episode-1 review initially conflated these into one, which is why several {0.50; 0.76} <world_figure_scale; mid-distance; cast_figure_height>
+- L44 [2] Shot types — A world is generated for one shot type. They are different shots, not different {Group-shot world; Close-up room} <figure_height; three-shot>
+- L61 [2] Placement — Every world declares where a figure may stand. Without it a compositor has no way <figure_zone; [x0, x1]; baseline_y; figure_height; max_figures; hand-declared>
+- L89 [2] In-scene plates — the third scale band — Beyond worlds and cast there is a third role, introduced by the v3 delivery and {into} <figure_zone>
+- L118 [2] Scale verification — A world may declare one real object as a scale reference: {15%} <load_catalog; figure_height>
 - L135 [2] Rendering-weight hierarchy — The host is the most defined figure on screen; supporting cast is deliberately {2:1 on both saturation and internal detail}
-- L156 [2] 2.5D depth planes — A world may ship as separated planes instead of one flat image. The renderer's
-- L184 [2] Cutout requirements — - Character poses 1024x1536 portrait, transparent, full body with feet visible.
-- L196 [2] Representational register — Assets in one frame must claim the same degree of reality. This is distinct from {photographic texture and legible micro-detail}
-- L210 [2] Enforcement — | Rule | Enforced by |
-- L220 [2] Related — - [23-EP1-LIBRARY-INTAKE-REVIEW.md](23-EP1-LIBRARY-INTAKE-REVIEW.md) — the measurements behind every number here
+- L156 [2] 2.5D depth planes — A world may ship as separated planes instead of one flat image. The renderer's <depth_layer; parallax_factor; -far; building_or_environment; -board; evidence_safe_region; -mid; actor_or_machine; -near; foreground_cutout; mid; near>
+- L184 [2] Cutout requirements — - Character poses 1024x1536 portrait, transparent, full body with feet visible. <Worlds 1536; -far; hard-cut; matted-in>
+- L196 [2] Representational register — Assets in one frame must claim the same degree of reality. This is distinct from {photographic texture and legible micro-detail} <cut-paper>
+- L210 [2] Enforcement — | Rule | Enforced by | <_scale_errors; _layer_errors; _style_errors; style_families; operator-promoted; _eligible(for_render=True); asset_catalog.schema.json>
+- L220 [2] Related — - [23-EP1-LIBRARY-INTAKE-REVIEW.md](23-EP1-LIBRARY-INTAKE-REVIEW.md) — the measurements behind every number here <LIBRARY-INTAKE-REVIEW; EDITORIAL-MOTION-SYSTEM; LIBRARY-BUILD>
 
 ## docs/content-video-engine/25-EDITOR-EMBEDDING-SPIKE.md
 
-- L1 [1] 25 — Editor Embedding Spike: iframe Studio, or deep links? — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine — read it for how a decision was reached {STATUS: RECORD.; Recommendation: deep links. No iframe.}
-- L10 [2] Evidence — 1. Studio is an SPA that owns its full window. The pinned 4.0.502 routes {Studio is an SPA that owns its full window.; Cross-origin, by construction.}
-- L36 [2] What ships instead — - `studio_link()` — one tested helper building `http://127.0.0.1:<port>/<id>`
-- L43 [2] Revisit triggers — Reopen this decision only if one of these becomes true: Remotion ships a
+- L1 [1] 25 — Editor Embedding Spike: iframe Studio, or deep links? — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine — read it for how a decision was reached {STATUS: RECORD.; Recommendation: deep links. No iframe.} <point-in-time; deep-linking; window.location.pathname; getRoute(); pushUrl; history.pushState; Cross-origin; 127.0.0.1:8765; :3000; fast-refresh; hot-middleware; offline-strict>
+- L10 [2] Evidence — 1. Studio is an SPA that owns its full window. The pinned 4.0.502 routes {Studio is an SPA that owns its full window.; Cross-origin, by construction.} <window.location.pathname; getRoute(); pushUrl; history.pushState; 127.0.0.1:8765; :3000; fast-refresh; hot-middleware; offline-strict; off-origin; dual-monitor; full-window>
+- L36 [2] What ships instead — - `studio_link()` — one tested helper building `http://127.0.0.1:<port>/<id>` <studio_link(); serving>
+- L43 [2] Revisit triggers — Reopen this decision only if one of these becomes true: Remotion ships a <read-only; remotion_isReadOnlyStudio; query-string; multi-user; single-window>
 
 ## docs/content-video-engine/26-AGENT-GENERATION-LOOP.md
 
-- L1 [1] 26 — The Agent Generation Loop — Image generation runs on the operator's subscription agents, not metered APIs. {claims; work orders}
-- L20 [2] The two-gate rationale — The generating agent judges its own output — and proved calibrated under test {Independent failure modes}
-- L36 [2] The relocated human gate — Per-asset triage is no longer the default path (operator decision, {every}
-- L47 [2] Probe evidence (2026-08-23/24) — - Delivery mechanics: exact paths, verified hashes, honest `unresolved` — v1.
+- L1 [1] 26 — The Agent Generation Loop — Image generation runs on the operator's subscription agents, not metered APIs. {claims; work orders} <two-gate; partial-alpha; style-family; CONFLICT; second-model; hands-off; Per-asset; render-ready; dual-mode; allow-listed; job-id; on-machine>
+- L20 [2] The two-gate rationale — The generating agent judges its own output — and proved calibrated under test {Independent failure modes} <partial-alpha; style-family; CONFLICT; second-model; hands-off>
+- L36 [2] The relocated human gate — Per-asset triage is no longer the default path (operator decision, {every} <Per-asset; render-ready; dual-mode; allow-listed; job-id; on-machine; Flow-lane>
+- L47 [2] Probe evidence (2026-08-23/24) — - Delivery mechanics: exact paths, verified hashes, honest `unresolved` — v1. <unresolved; Hard-alpha; round-trip; Reference-conditioned; gpt-5.3-codex-spark; claim-config>
 - L59 [2] Machine state, not repo state — Claims (`~/.video-engine/claims/`), paid jobs (`~/.video-engine/paid-jobs/`),
-- L67 [2] Work-order authoring — The claim service renders the work order; do not hand-write one. It encodes:
-- L75 [2] Motion library — The animation pass resolves motion from the registered HyperFrames unit
+- L67 [2] Work-order authoring — The claim service renders the work order; do not hand-write one. It encodes: <hand-write; read-only; best-of; approvals.json>
+- L75 [2] Motion library — The animation pass resolves motion from the registered HyperFrames unit <HyperFrames; resolution-order; Design-authored>
 
 ## docs/content-video-engine/27-DURABILITY-AND-LAYOUT.md
 
-- L1 [1] 27 — Durability Classes And The Path Contract — One principle, and everything else follows from it: {A file's durability class is readable from its path alone.}
-- L10 [2] The classes — Per project root (`VIDEO_ENGINE_PROJECT_ROOT`): {on promote}
-- L24 [2] The contract module — `content/video_engine/src/services/paths.py` is the single owner of class {single owner}
-- L34 [2] Migration — `scripts/migrate_layout.py` moves a legacy tree into the layout. Dry-run by {Execution is operator-gated}
-- L42 [2] The store (Cloudflare R2) — `asset_store.py` keys every object by its catalogue digest: `sha256/<digest>`. {Sync-on-promote:}
-- L64 [2] The disaster-recovery contract — A bare catalogue plus credentials is sufficient to rebuild every canonical
-- L79 [2] Porting the principle — Other products (bjjregistry, tradesinsights) port the principle — classes {principle}
-- L85 [2] P17 mapping — The agent generation loop implements against this layout: claim deliveries
+- L1 [1] 27 — Durability Classes And The Path Contract — One principle, and everything else follows from it: {A file's durability class is readable from its path alone.} <one-line; VIDEO_ENGINE_PROJECT_ROOT; Catalogue-referenced; Content-addressed; In-flight; re-deliver; short-lived; .gitignore; QUARANTINE_DIR; EXPORT_SUBPATH; class-root; console>
+- L10 [2] The classes — Per project root (`VIDEO_ENGINE_PROJECT_ROOT`): {on promote} <VIDEO_ENGINE_PROJECT_ROOT; Catalogue-referenced; Content-addressed; In-flight; re-deliver; short-lived; one-line; .gitignore>
+- L24 [2] The contract module — `content/video_engine/src/services/paths.py` is the single owner of class {single owner} <QUARANTINE_DIR; EXPORT_SUBPATH; class-root; console; composite_preview; paths.is_runtime_path>
+- L34 [2] Migration — `scripts/migrate_layout.py` moves a legacy tree into the layout. Dry-run by {Execution is operator-gated} <Dry-run; --execute; resume-safe>
+- L42 [2] The store (Cloudflare R2) — `asset_store.py` keys every object by its catalogue digest: `sha256/<digest>`. {Sync-on-promote:} <environment-only; commit_confirm; register_assets; opt-out; VIDEO_ENGINE_ALLOW_UNSYNCED_PROMOTE=1; "unsynced": true>
+- L64 [2] The disaster-recovery contract — A bare catalogue plus credentials is sufficient to rebuild every canonical <store-audit; read-only; unsynced; store-restore; --force>
+- L79 [2] Porting the principle — Other products (bjjregistry, tradesinsights) port the principle — classes {principle} <one-line>
+- L85 [2] P17 mapping — The agent generation loop implements against this layout: claim deliveries <catalogue-registered; watch-paths>
 
 ## docs/content-video-engine/28-AOY-MCP-EVALUATION.md
 
-- L1 [1] 28 — Art of YouTube MCP: Trial Evaluation — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine — read it for how a decision was reached {STATUS: RECORD.; Decision at stake:; Evaluation frame:}
-- L15 [2] Scorecard (updated as tested) — | Tool | Tested | Verdict | Moat? | {public static page}
-- L32 [2] Infrastructure observations — - Rate limit: 5 calls per 3 minutes across all tools. At $3.8k/mo. {Rate limit: 5 calls per 3 minutes across all tools.}
-- L42 [2] The decisive test: three-way script comparison — Same title, same references, same 3-minute target: {Ours; Theirs; Ground truth}
-- L57 [2] Extraction plan for the trial window — What to harvest legitimately while access lasts (their tools emit this {Doctrine via `ask_tim`}
-- L75 [2] Long-form script structure — what `ask_tim` returns (2026-08-24) — Probe: *"On a 16-minute finance explainer, where does the writing effort go — {Half confirmed.}
-- L84 [3] Partly confirmed — CORRECTED 2026-08-24 after a second probe — The first probe surfaced only two long-form structures, both timestamped to {That was a retrieval artefact, not a fact.; length-tier system: T1 8-10 min, T2 12-18 min, T3 20+}
-- L106 [3] Not confirmed: the middle is managed, by cadence rather than content — Real constraints do exist for the middle. They are density rules, not content {STR loops; 4-6 macro loops per 15 minutes; Rehooks every 60-90s; Point ordering:}
-- L122 [3] Where this lands on the moat question — The point-ordering rule and the loop-density numbers are the most transferable {content real, delivery a RAG dump, no recurring moat.}
-- L133 [3] What our pipeline does not yet encode — Measured against the 16:21 p34 cut: one visual event every 9.2s (60 evidence {no named macro loops at all; This is an artefact of asset availability, not an editorial}
-- L152 [2] Production loop and analogy prompting — probed 2026-08-24 — Two operator hypotheses tested: (a) they prompt explicitly for analogies, for
-- L158 [3] Analogies — not a named concept in the doctrine — A direct probe (rules, counts, placement, whether analogy is prompted when {none of which mention analogy or metaphor; Unresolved.}
-- L174 [3] Ranking — disconfirmed; the loop is linear refinement — No variants, no candidate pools, no comparative scoring appear anywhere in the {three filter passes on a single draft; Red Tape Theory, four checkpoints; The Never Repeat Rule / Highlighter Method; The "Would I Watch This?" test}
-- L197 [3] Worth adopting — - The Never Repeat Rule is the most directly implementable thing extracted {The Never Repeat Rule; Connecting Thread}
-- L207 [2] Fact-check: `ask_tim` against the library itself — 2026-08-24 — Operator ask: probe `ask_tim` on brand voice, script retention and hooks, then
-- L213 [3] The direct check is blocked — and that finding matters on its own — `search_library`, `get_document` and `list_library` all return the same {verbatim-stability probes}
-- L227 [3] Finding 1 — `ask_tim` is a chunk retriever, not a synthesizer — Its own description promises answers "filtered, concise, in Tim's voice." What {verbatim-identical; For the workshop tier, `ask_tim` effectively is the library}
-- L243 [3] Finding 2 — the "contradictory" timing numbers are layered windows — First-pass probes surfaced what looked like conflicts (8s vs 15s decision;
-- L262 [3] Finding 3 — rehook cadence: three mechanisms, not one rule — The apparent 30–60s vs 60–90s conflict dissolves the same way: {Default placement is positional, not periodic; 30s, 1min, 3min, and mid-video; Every 60–90s is a diagnostic remedy; Every 30–60s is STR micro-loop cadence}
-- L282 [3] Finding 4 — there is no brand-voice doctrine in the course — The brand-voice probe returned naming advice, thumbnail policy, and avatar {"Faceless Personality — Writing Techniques"}
-- L302 [3] Finding 5 — fabrication probe — Asked for a "Retention Pyramid framework — the five levels," a framework with {no fabrication.; silent nearest-neighbour substitution.}
+- L1 [1] 28 — Art of YouTube MCP: Trial Evaluation — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine — read it for how a decision was reached {STATUS: RECORD.; Decision at stake:; Evaluation frame:} <point-in-time; vibe-coded; review_script; AI-slop; review_title; Titles_Format_Library; fill-in; search_library; ask_tim; write_script_v2; Three-way; deep_channel_analysis>
+- L15 [2] Scorecard (updated as tested) — | Tool | Tested | Verdict | Moat? | {public static page} <review_script; AI-slop; review_title; Titles_Format_Library; fill-in; search_library; ask_tim; write_script_v2; Three-way; deep_channel_analysis; by-views; Niche_Hunter>
+- L32 [2] Infrastructure observations — - Rate limit: 5 calls per 3 minutes across all tools. At $3.8k/mo. {Rate limit: 5 calls per 3 minutes across all tools.} <skill-file; auto-install>
+- L42 [2] The decisive test: three-way script comparison — Same title, same references, same 3-minute target: {Ours; Theirs; Ground truth} <two-altitude; write_script_v2; post-editing>
+- L57 [2] Extraction plan for the trial window — What to harvest legitimately while access lasts (their tools emit this {Doctrine via `ask_tim`} <cold-open; compound-math; impressions-vs-views; earn-your-right; to-experiment; lucky-shot; untapped-niche; past-self; faceless-personality; ceiling-pattern; deep_channel_analysis; Niche_Hunter>
+- L75 [2] Long-form script structure — what `ask_tim` returns (2026-08-24) — Probe: *"On a 16-minute finance explainer, where does the writing effort go — {Half confirmed.} <length-tier; Re-probe; third-best; Retention-graph; mid-video; re-engagement; hook-craft; point-ordering; loop-density; scene-and-evidence; front-loaded; Re-plan>
+- L84 [3] Partly confirmed — CORRECTED 2026-08-24 after a second probe — The first probe surfaced only two long-form structures, both timestamped to {That was a retrieval artefact, not a fact.; length-tier system: T1 8-10 min, T2 12-18 min, T3 20+} <long-form; ask_tim; Re-probe>
+- L106 [3] Not confirmed: the middle is managed, by cadence rather than content — Real constraints do exist for the middle. They are density rules, not content {STR loops; 4-6 macro loops per 15 minutes; Rehooks every 60-90s; Point ordering:} <third-best; Retention-graph; mid-video; re-engagement; hook-craft>
+- L122 [3] Where this lands on the moat question — The point-ordering rule and the loop-density numbers are the most transferable {content real, delivery a RAG dump, no recurring moat.} <point-ordering; loop-density; ask_tim>
+- L133 [3] What our pipeline does not yet encode — Measured against the 16:21 p34 cut: one visual event every 9.2s (60 evidence {no named macro loops at all; This is an artefact of asset availability, not an editorial} <scene-and-evidence; front-loaded; point-ordering; Re-plan; slide-registration; follow-up; scene_evidence_timeline.v1; macro-loop; bare-plate>
+- L152 [2] Production loop and analogy prompting — probed 2026-08-24 — Two operator hypotheses tested: (a) they prompt explicitly for analogies, for <write_script_v2; recording-ready; through-line; mid-video; search-first; N-candidate; pool-then-discard; generate-many-select; ask_tim; intentional_text; marked-exception>
+- L158 [3] Analogies — not a named concept in the doctrine — A direct probe (rules, counts, placement, whether analogy is prompted when {none of which mention analogy or metaphor; Unresolved.} <write_script_v2>
+- L174 [3] Ranking — disconfirmed; the loop is linear refinement — No variants, no candidate pools, no comparative scoring appear anywhere in the {three filter passes on a single draft; Red Tape Theory, four checkpoints; The Never Repeat Rule / Highlighter Method; The "Would I Watch This?" test} <recording-ready; through-line; mid-video; search-first; N-candidate; pool-then-discard; generate-many-select>
+- L197 [3] Worth adopting — - The Never Repeat Rule is the most directly implementable thing extracted {The Never Repeat Rule; Connecting Thread} <ask_tim; intentional_text; marked-exception; through-line>
+- L207 [2] Fact-check: `ask_tim` against the library itself — 2026-08-24 — Operator ask: probe `ask_tim` on brand voice, script retention and hooks, then <search_library; get_document; list_library; full-program; OK9uUVKF; document-vs-answer; verbatim-stability; differently-phrased; verbatim-identical; byte-stable; source-of-truth; course-doctrine>
+- L213 [3] The direct check is blocked — and that finding matters on its own — `search_library`, `get_document` and `list_library` all return the same {verbatim-stability probes} <search_library; get_document; list_library; full-program; ask_tim; OK9uUVKF; document-vs-answer; fact-check>
+- L227 [3] Finding 1 — `ask_tim` is a chunk retriever, not a synthesizer — Its own description promises answers "filtered, concise, in Tim's voice." What {verbatim-identical; For the workshop tier, `ask_tim` effectively is the library} <differently-phrased; byte-stable; source-of-truth; search_library; course-doctrine; template-ceiling>
+- L243 [3] Finding 2 — the "contradictory" timing numbers are layered windows — First-pass probes surfaced what looked like conflicts (8s vs 15s decision; <First-pass; re-probes; stop-the-scroll>
+- L262 [3] Finding 3 — rehook cadence: three mechanisms, not one rule — The apparent 30–60s vs 60–90s conflict dissolves the same way: {Default placement is positional, not periodic; 30s, 1min, 3min, and mid-video; Every 60–90s is a diagnostic remedy; Every 30–60s is STR micro-loop cadence} <YouTube; fast-forward; mid-runtime; rolling-interval>
+- L282 [3] Finding 4 — there is no brand-voice doctrine in the course — The brand-voice probe returned naming advice, thumbnail policy, and avatar {"Faceless Personality — Writing Techniques"} <VOICE-SOURCE-MATERIAL; co-workers; Cross-check; mini-payoff-plus-bigger-loop>
+- L302 [3] Finding 5 — fabrication probe — Asked for a "Retention Pyramid framework — the five levels," a framework with {no fabrication.; silent nearest-neighbour substitution.} <ask_tim; Content-Type; STR-dominant; mechanism-first>
 - L323 [3] Operational note — Rate limit discovered: 5 requests per 3 minutes across all AOY tools {5 requests per 3 minutes across all AOY tools combined}
-- L328 [2] Voiceover and title doctrine — probed 2026-08-24 — Follow-up probes after the fact-check, plus one live run of the
-- L333 [3] Voiceover — delivery rules exist; ElevenLabs settings do not — What came back, all chunk-stable: {Voice selection is deliberately unopinionated; generic AI voice is fine, real-person voice cloning is not; Write for the edit; cuts every 2–4 seconds}
-- L357 [3] Titles — mechanical rules plus a native A/B doctrine — - Formatting: never put a word before a number — "Top 20", not "The Top {Formatting; Honesty as strategy, not ethics; Post-upload iteration is doctrine; Test & Compare}
-- L372 [3] `Titles_Format_Library` live run — template quality check — Ran against "finance and investing (market bubbles, wealth mechanics)", {frames; fills}
-- L389 [3] Extraction status — Faceless Personality (#49) extracted in full and folded into
-- L396 [2] The decisive test, run: `review_script` + `review_title` on our own work — 2026-08-24 — Phase 2 of the harvest plan. Fed the Alicia-format script (narration only, {Results: script 6.5/10, title 5.7/10.; the evaluator's concrete rewrites violate the doctrine it ci}
-- L406 [3] Finding 1 — a hard bug: the duration calculation — The header reads `Word Count: 675 | Duration: ~6-7s`. 675 spoken words is {4.5 minutes}
-- L413 [3] Finding 2 — the suggested hook fabricates a claim — | | Text | {their own rules; not in the script and is not true of it}
-- L431 [3] Finding 3 — the "anti-fluff" rewrite is more generic, not less — Ours: *"Every object in here was, at some point, a reward for surviving the
-- L442 [3] Finding 4 — the ending rewrite contradicts two of their own frameworks — Ours: "That's next." → theirs: *"And it's the secret that could retire you {Outro Templates; Cliffhanger Bridge; title/metadata doctrine}
-- L454 [3] Finding 5 — same pattern in `review_title` — Scores were more reasonable, but the "improved versions" include {Title Formatting Rules; specificity-beats-sensationalism; legitimate}
-- L466 [3] Finding 6 — what it failed to catch — The script contains one genuinely risky line: the self-storage-vs-fast-food {A finance script reviewer flagged nothing about an unsourced}
-- L475 [3] Findings worth keeping (the honest bucket) — 1. Rehook gap in the rule-delivery stretch. Between the receipt rule and {Rehook gap in the rule-delivery stretch.; One genuinely abstract line; Specificity could go up; Title needs a format-pattern spine}
-- L486 [3] What this settles about the moat — The split is now clean and evidenced: {The RAG doctrine layer is real, grounded, and extractable; The generative layer on top of it is not doctrine-bound.; Practical rule for us:}
-- L509 [2] Verdict (running) — Pending the script comparison and Niche_Hunter test. Early lean: the {content; software; price; "software thin" was wrong about one tool.}
-- L536 [2] `review_script` on Steel and Paper — measured (2026-08-29) — Submitted Script D (1,954 words, 11m 40s) to `review_script`. Confirms the {Its own measurements were wrong, and half the rubric depends; +101%; ~20s; Two of its three rewrites break our doctrine, and one makes}
+- L328 [2] Voiceover and title doctrine — probed 2026-08-24 — Follow-up probes after the fact-check, plus one live run of the <Follow-up; fact-check; Titles_Format_Library; ElevenLabs; chunk-stable; real-person; July 2025; inauthentic-content; shot-length; scene-evidence; two-gear; Voice-config>
+- L333 [3] Voiceover — delivery rules exist; ElevenLabs settings do not — What came back, all chunk-stable: {Voice selection is deliberately unopinionated; generic AI voice is fine, real-person voice cloning is not; Write for the edit; cuts every 2–4 seconds} <chunk-stable; July 2025; inauthentic-content; shot-length; scene-evidence; two-gear; Voice-config>
+- L357 [3] Titles — mechanical rules plus a native A/B doctrine — - Formatting: never put a word before a number — "Top 20", not "The Top {Formatting; Honesty as strategy, not ethics; Post-upload iteration is doctrine; Test & Compare} <YouTube; week-experiment; Top-performing>
+- L372 [3] `Titles_Format_Library` live run — template quality check — Ran against "finance and investing (market bubbles, wealth mechanics)", {frames; fills} <current-bubble; dot-com; hand-fill>
+- L389 [3] Extraction status — Faceless Personality (#49) extracted in full and folded into <VOICE-SOURCE-MATERIAL; finance-register; loop-openers>
+- L396 [2] The decisive test, run: `review_script` + `review_title` on our own work — 2026-08-24 — Phase 2 of the harvest plan. Fed the Alicia-format script (narration only, {Results: script 6.5/10, title 5.7/10.; the evaluator's concrete rewrites violate the doctrine it ci} <Alicia-format; operator-approved; Word Count: 675 | Duration: ~6-7s; script-review; anti-fluff; spoken-register; short-fragment; Anti-AI-Slop; machine-detected; vague-hype; specificity-beats-sensationalism; format-pattern>
+- L406 [3] Finding 1 — a hard bug: the duration calculation — The header reads `Word Count: 675 | Duration: ~6-7s`. 675 spoken words is {4.5 minutes} <Word Count: 675 | Duration: ~6-7s; script-review>
+- L413 [3] Finding 2 — the suggested hook fabricates a claim — | | Text | {their own rules; not in the script and is not true of it} <review_script>
+- L431 [3] Finding 3 — the "anti-fluff" rewrite is more generic, not less — Ours: *"Every object in here was, at some point, a reward for surviving the <spoken-register; short-fragment; Anti-AI-Slop>
+- L442 [3] Finding 4 — the ending rewrite contradicts two of their own frameworks — Ours: "That's next." → theirs: *"And it's the secret that could retire you {Outro Templates; Cliffhanger Bridge; title/metadata doctrine} <machine-detected; vague-hype>
+- L454 [3] Finding 5 — same pattern in `review_title` — Scores were more reasonable, but the "improved versions" include {Title Formatting Rules; specificity-beats-sensationalism; legitimate} <Anti-AI-Slop; format-pattern>
+- L466 [3] Finding 6 — what it failed to catch — The script contains one genuinely risky line: the self-storage-vs-fast-food {A finance script reviewer flagged nothing about an unsourced} <self-storage-vs-fast-food; [verify]; Peak-End; audio-visual; beat-by-beat>
+- L475 [3] Findings worth keeping (the honest bucket) — 1. Rehook gap in the rule-delivery stretch. Between the receipt rule and {Rehook gap in the rule-delivery stretch.; One genuinely abstract line; Specificity could go up; Title needs a format-pattern spine} <re-justifying; positional-rehook; channel-level>
+- L486 [3] What this settles about the moat — The split is now clean and evidenced: {The RAG doctrine layer is real, grounded, and extractable; The generative layer on top of it is not doctrine-bound.; Practical rule for us:} <source-labelled; fact-check; review_script; anti-fluff>
+- L509 [2] Verdict (running) — Pending the script comparison and Niche_Hunter test. Early lean: the {content; software; price; "software thin" was wrong about one tool.} <script-writer; write_script_v2; thesis-driven; AOY-SCRIPT-WRITER-STUDY; decisive-test; Fact-check; ask_tim; retrieval-backed; verbatim-stable; de-facto; course-doctrine; slice-not-enumeration>
+- L536 [2] `review_script` on Steel and Paper — measured (2026-08-29) — Submitted Script D (1,954 words, 11m 40s) to `review_script`. Confirms the {Its own measurements were wrong, and half the rubric depends; +101%; ~20s; Two of its three rewrites break our doctrine, and one makes} <duration-dependent; VOICE-PACK; anti-pattern; Anti-Fluff; number-stacking; descending-run; re-hook; Rehook-family>
 
 ## docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md
 
-- L1 [1] 29 — Evidence Motion Standards (Gemini findings + v1 momentum + linked choreography) — Status: accepted working standard, 2026-08-24 {STATUS: DOCTRINE — the production bar for every channel.}
-- L18 [2] Current state — what actually governs production — Consolidated 2026-08-28. Where this section and anything below it {The lane.; Plate density is runtime-derived.}
-- L83 [2] The format thesis (operator decision) — Complex, semantically related world plates overlaid with clear, clean evidence
-- L93 [2] Part 1 — The Gemini evidence-dock grammar (most significant findings) — Source: `docs/content-video-engine/samples/gemini-decoupled-evidence-showcase.html` (archived copy; original landed in the gitignored review/ class)
-- L98 [3] 1.1 Asymmetric scrim — never global dim — A directional gradient quiets ONLY the zone the evidence needs; the rest of
-- L112 [3] 1.2 2.5D physical card — hard-edge shadow, no fake 3D blur — Evidence surfaces are physical documents on an editorial desk:
-- L127 [3] 1.3 Micro-scale spring entrance — 0.88 → 1.00, never from zero — Scale-from-0 with bounce reads cartoon. Adult documentary feel: {0.88 → 1.00}
+- L1 [1] 29 — Evidence Motion Standards (Gemini findings + v1 momentum + linked choreography) — Status: accepted working standard, 2026-08-24 {STATUS: DOCTRINE — the production bar for every channel.} <current-bubble; evidence-dock; hyperframes-opening; teacher-stamped; scene-evidence; ken-burns; word-timed; evidence-free; runtime-derived; word-by-word; voice-track; third-party>
+- L18 [2] Current state — what actually governs production — Consolidated 2026-08-28. Where this section and anything below it {The lane.; Plate density is runtime-derived.} <scene-evidence; ken-burns; word-timed; evidence-free; word-by-word; voice-track; third-party; on-screen; Host-in-world; agent-verified; operator-approved; Finance-niche>
+- L83 [2] The format thesis (operator decision) — Complex, semantically related world plates overlaid with clear, clean evidence <per-episode>
+- L93 [2] Part 1 — The Gemini evidence-dock grammar (most significant findings) — Source: `docs/content-video-engine/samples/gemini-decoupled-evidence-showcase.html` (archived copy; original landed in the gitignored review/ class) <Gemini-authored; world_plate_is_hero; to left; hard-edge; object-window; hard-shadow; Micro-scale; Scale-from; damping 18, stiffness 90; power3.out; ken-burns>
+- L98 [3] 1.1 Asymmetric scrim — never global dim — A directional gradient quiets ONLY the zone the evidence needs; the rest of <world_plate_is_hero; to left>
+- L112 [3] 1.2 2.5D physical card — hard-edge shadow, no fake 3D blur — Evidence surfaces are physical documents on an editorial desk: <object-window; hard-shadow>
+- L127 [3] 1.3 Micro-scale spring entrance — 0.88 → 1.00, never from zero — Scale-from-0 with bounce reads cartoon. Adult documentary feel: {0.88 → 1.00} <Scale-from; damping 18, stiffness 90; power3.out>
 - L136 [3] 1.4 Background parallax — the layers separate themselves — While evidence holds locked, the world plate drifts (scale 1.00 → 1.04, a few {uniform ken-burns across all plates reads as drift, not dire}
-- L146 [2] Part 2 — Momentum mechanics (recovered from hyperframes-opening-v1) — Source: `edit/hyperframes-opening-v1/index.html` (f10b worktree). These four
-- L152 [3] 2.1 Entrances have a semantic direction — Cards fly in FROM where they come from, slightly rotated, settling hard:
-- L165 [3] 2.2 Nothing living is ever still — Every active card breathes: slow sine drift (±16px, ~1.8% scale swell,
+- L146 [2] Part 2 — Momentum mechanics (recovered from hyperframes-opening-v1) — Source: `edit/hyperframes-opening-v1/index.html` (f10b worktree). These four <motion_rule; x:+520, y:-40, rot:2°, scale:.72; off-right; x:-460, y:+120, rot:-2°; x:+420, y:+360, rot:4°, scale:.38; power3.out; sine.inOut; Card-level; ken-burns>
+- L152 [3] 2.1 Entrances have a semantic direction — Cards fly in FROM where they come from, slightly rotated, settling hard: <x:+520, y:-40, rot:2°, scale:.72; off-right; x:-460, y:+120, rot:-2°; x:+420, y:+360, rot:4°, scale:.38; power3.out>
+- L165 [3] 2.2 Nothing living is ever still — Every active card breathes: slow sine drift (±16px, ~1.8% scale swell, <sine.inOut; Card-level; ken-burns>
 - L171 [3] 2.3 Demotion is continuous recession, not a step — v1 shrinks the memory card in four chained moves (.58 → .54 → .50 → .46 over
 - L178 [3] 2.4 The world reacts to the evidence — At the callback the world pulses (scale 1.00 → 1.04 → 1.00) as cards retract.
-- L185 [2] Part 3 — Linked-evidence choreography (the chain is the transition) — From the v1 STORYBOARD rhythm: settle → open → braid → expand → qualify → {beside; opens-from; bridge; retract + callback}
-- L197 [2] Part 4 — The literal evidence layer (teacher-stamped deck slides) — Source of truth: `sources/decks/teacher-stamped-production-visuals/` — full {Species rule:; source-bound crop}
+- L185 [2] Part 3 — Linked-evidence choreography (the chain is the transition) — From the v1 STORYBOARD rhythm: settle → open → braid → expand → qualify → {beside; opens-from; bridge; retract + callback} <scaleX; scaleY; power2.inOut; card-pileup>
+- L197 [2] Part 4 — The literal evidence layer (teacher-stamped deck slides) — Source of truth: `sources/decks/teacher-stamped-production-visuals/` — full {Species rule:; source-bound crop} <object-window; clip-path; hand-led-mask; power3.out; code-drawn; generated_text_rule; punch-in>
 - L217 [3] 4.1 Documents displace the trail (new rule, 2026-08-24) — A literal document's entrance pushes DEMOTED cards further into recession,
-- L225 [3] 4.2 One reading surface at a time (new rule, 2026-08-24) — While a literal document holds the stage, captions yield to quiet mode: {quiet mode}
-- L231 [2] Part 5 — Captions (Alicia rhythm under the caption-grammar doc) — - One fixed lower-third anchor. Evidence roams by semantic slot; captions
-- L240 [2] Part 6 — Transitions (semantic palette, unchanged + one addition) — Clean cut = contrast/correction. Directional wipe = process continuation. {evidence-free boundaries}
-- L249 [2] Part 7 — Standing corrections recorded elsewhere but load-bearing here — - `caption-follows-active-evidence` (confidence .95 in {cap}
-- L267 [2] Part 8 — The scene-evidence lane (default production pattern) — Status: accepted 2026-08-24. Proven by {linked choreography}
-- L278 [3] 8.1 The shape — One continuous ken-burns move per scene, not per beat, with a distinct {scene}
-- L293 [3] 8.2 The timeline is data, not tweens — This is the whole reason the lane is repeatable. Every visual state is one
-- L309 [3] 8.3 Do not bury the plate (operator correction, 2026-08-24) — The first build washed the world to ~86% and used opaque docks. The plates {Wash is light and banded; Dock chrome is translucent washi}
-- L325 [3] 8.4 Badge provenance — the checkable property — Every badge numeral is quoted verbatim from the stamped document it sits {verbatim}
-- L335 [3] 8.5 Lane selection — | | scene-evidence lane | linked choreography |
-- L345 [3] 8.6 Evidence selection rules (operator correction, 2026-08-24) — The first v4 pass failed review on three counts. Each is now enforced in {Captions keep their canonical timings.; Evidence comes from the approved stamped catalogue, and neve}
-- L373 [3] 8.7 Evidence matching is a global assignment, not a per-scene pick — Reviewing the first stamped build, the opening beat ("AI memory stocks have {earnings; Scoring compared unlike things.; cosine}
-- L413 [3] 8.8 No production chrome in the frame (operator correction, 2026-08-24) — The v4 dock shipped with a citation footer reading {It is our filing system, not a source.}
-- L441 [3] 8.9 Documents draw on, and they leave (operator correction, 2026-08-24) — Two failures in the v4 build, one cause: the dock was a state, not an event. {The hand comes back for evidence reveals.; exists only while an artifact is being revealed}
-- L474 [3] 8.10 The hand follows the reveal-engine contract (correction, 2026-08-24) — The first hand pass slid a marker along a straight clip-path edge. That is {The mechanic.; animated mask sweeping a serpentine path}
-- L518 [3] 8.11 Do not blend a literal document (bug, 2026-08-24) — The first reveal-engine build drew nothing visible. The mask was correct — {A blend group escapes its parent.}
-- L545 [3] 8.12 The actual bug: a stale hide-state clip (2026-08-24) — 8.11 fixed a real compositing fault but not the reported symptom. The reveal
-- L575 [3] 8.13 Hand pose set v2 — host-consistent, two poses, per-pose nib — The asset pack shipped exactly one hand: `draw-hand-a-v1`, light-skinned, and {Skin tone is a continuity fix, not a preference.}
-- L615 [3] 8.14 The camera lock does not apply to this lane (correction, 2026-08-24) — 8.10 imported the skill's camera rule verbatim — "camera LOCKED between {It produced a visible fault.; The rule should never have been applied.}
-- L646 [3] 8.15 Timing constants, measured against the reference — Reviewed side by side, our build read less polished than
-- L681 [3] 8.16 Region reveals may ease slightly; line traces may not — The reveal-engine contract specifies a LINEAR mask sweep. That rule exists for {`SWEEP_EASE = 0.08`}
-- L720 [3] 8.17 The hand is retired from this lane (operator decision, 2026-08-24) — After building the reveal engine correctly (8.10-8.16), the hand-drawn {What the lane is now.}
-- L753 [3] 8.18 Regional shading, and the choreographic rhythm — Two corrections from review, both about restraint rather than mechanism. {Shading is regional, never global.; Directional gradient; Radial spotlight}
-- L805 [3] 8.19 Dead-air ceiling, and the one-sided semantic join — Dead air is bounded. A long scene previously ran one build and then sat {Dead air is bounded.; Build cycles.; Gap-fill pass.}
-- L855 [2] Part 9 — Operator corrections, 2026-08-25 (Steel and Paper build) — 1. Dynamic captions are mandatory, always. Word-by-word (or word-group {Dynamic captions are mandatory, always.; Plate floor: every episode ships ≥10 distinct world plates m; The evidence layer is sharp, never soft — and never an info}
-- L900 [3] 9.15 The curtain, persistence, and the recovered showcase mechanisms (operator, 2026-08-29) — Re-reading `samples/gemini-scene-evidence-pipeline-showcase.html` (the {The wipe is the CROSS-REVEAL with carried light}
-- L966 [3] 9.16 Motion verification and authority (operator decisions, 2026-08-29) — 1. The gold standard is a RENDERED reference, not a table of constants. {The gold standard is a RENDERED reference, not a table of co; The boundary filmstrip is a HARD GATE.}
-- L989 [3] 9.17 The choreography statement, and the scrim serves the evidence (operator, 2026-08-29) — 1. Every build emits a CHOREOGRAPHY STATEMENT (`emit_choreography.py` -> {Every build emits a CHOREOGRAPHY STATEMENT}
-- L1013 [3] 9.18 Strong match or nothing (operator, 2026-08-30) — *"Let's not carry weak evidence for the sake of carrying evidence anymore {A dock exists to prove a spoken claim.; A slide that carries complexities the narration never discus}
-- L1034 [3] 9.7 Host-in-world plates approved (operator, 2026-08-25) — The host-in-world experiment passed: generated host shots inside world
-- L1047 [3] 9.8 Generated text, conditionally re-licensed (operator, 2026-08-25) — Amendment to the generated-text prohibition: when a generation is {Codex verification}
-- L1067 [3] 9.9 Preference order for host+evidence (operator, 2026-08-25) — The DIEGETIC COMPOSITE is the default whenever it can be prompted
-- L1082 [3] 9.10 Finance-niche dock scale + era-correct clip extraction (operator, 2026-08-25) — 1. Dock scale is niche-tuned. Chart-reading niches (finance) run {Dock scale is niche-tuned.; "First stable frame" is NOT a sufficient extraction criterio}
-- L1103 [3] 9.11 Rebuild source charts — do not extract frames (operator, 2026-08-25) — Operator ruling, superseding the clip-extraction workflow in 9.10: {Default: rebuild.}
-- L1130 [3] 9.12 Work orders are immutable after dispatch (operator, 2026-08-25) — The mp-thumbs-wave-2 order was patched in place after the batch
-- L1143 [3] 9.13 Plate density is runtime-derived, not a flat floor (operator, 2026-08-25) — The ">=10 plates per episode" floor in 9.2 is a MINIMUM for a short {Target: runtime / 12s.; Hard ceiling: 20s on a single plate}
-- L1165 [3] 9.14 World plates MAY show screens, boards, and trend imagery (operator, 2026-08-25) — Correction to an over-triggered review guard. On the wave-3 contact sheet
-- L1193 [3] 9.19 The metallic slate text ramp (operator, 2026-08-30) — "We use too many greys on black" — and the operator's fix names the {the grey palette moves from neutral grey to metallic slate.; the floor; Nothing dimmer than brushed slate ever renders as text.}
-- L1222 [3] 9.20 Topic-governed exits, and the two-chart open (operator, 2026-08-30) — Evidence leaves when its TOPIC ends, never because a plate ended. {Evidence leaves when its TOPIC ends, never because a plate e}
-- L1245 [3] 9.21 Purpose-built beats reuse, and audience units (operator, 2026-08-30) — A non-specific card never appears twice when a specific one can be {A non-specific card never appears twice when a specific one; Figures speak the audience's currency.}
-- L1261 [3] 9.22 Charts read like analysts, not toys (operator, 2026-08-30) — "We should be building actual charts that read like financial analysts."
-- L1297 [3] 9.23 A chart carries its OWN story (operator, 2026-08-30) — "The charts need to fully communicate their own story without {Every series on the plot is named; An offset annotation is TIED to its point; Log charts get date ticks too}
-- L1315 [3] 9.24 The VERDICT STACK species (operator, s68, 2026-08-30) — At a verdict beat ("Everything we checked holds") the episode's best {Members are documents already shown; Word-matched enters}
-- L1359 [3] 9.25 The screen never goes still; captions take the stage (operator, 2026-09-02) — Ruling E21. Steel and Paper shipped with 23% of its runtime in stretches {Three mechanics, all gated by `scripts/gate_motion_density.p; Stillness ceiling.}
-- L1427 [3] 9.26 The LEDGER PAGE — the plate-chart species, the channel's signature (operator, 2026-09-02) — Ruling E22. Operator: *"if we could roll out a cream paper that gets {What it is.}
-- L1706 [3] 9.27 The MOTION MENU — opt-in species, each with a slot, a mechanism, and a gate treatment (operator, 2026-09-02) — Ruling E22 addendum. The registry items the operator flagged, read from {Targeting law (operator: "one problem with this type of thin}
-- L1775 [3] 9.28 The SURFACE GRAMMAR — page, dock, or transition, decided by rule (operator, 2026-09-03) — P35 T0. Operator: *"the first part of the plan is getting components {surface; builder}
-- L1885 [3] 9.29 The OPENING MINUTE — the confirmation gap, the packaging match, and no full chart before the thesis (operator, 2026-09-03) — Ruling E24. An outside analyst's read of Steel and Paper's drop-off, {1. The confirmation gap (0–15s).}
-- L1940 [3] 9.30 The chart is the PROOF, not the homework — no chart held across plates (operator, 2026-09-03) — Ruling E25. The operator's own read of the analytics behind §9.29: the
-- L1982 [3] 9.31 The page VORTEX — how a page leaves, and how it returns (operator, 2026-09-05) — *"All of the colours spiral back into a single point in the charcoal, and all of the charcoal {The retract.}
+- L225 [3] 4.2 One reading surface at a time (new rule, 2026-08-24) — While a literal document holds the stage, captions yield to quiet mode: {quiet mode} <punch-in>
+- L231 [2] Part 5 — Captions (Alicia rhythm under the caption-grammar doc) — - One fixed lower-third anchor. Evidence roams by semantic slot; captions <lower-third; power3.out; words.json>
+- L240 [2] Part 6 — Transitions (semantic palette, unchanged + one addition) — Clean cut = contrast/correction. Directional wipe = process continuation. {evidence-free boundaries} <book-flip; Full-scene; hand-draw; not-production-ready>
+- L249 [2] Part 7 — Standing corrections recorded elsewhere but load-bearing here — - `caption-follows-active-evidence` (confidence .95 in {cap} <caption-follows-active-evidence; fixed-anchor; Reveal-window; overlay-money-transfer-woodblock; --format mov|webm|png-sequence; --format; --best-effort; --no-best-effort; no-timeline>
+- L267 [2] Part 8 — The scene-evidence lane (default production pattern) — Status: accepted 2026-08-24. Proven by {linked choreography} <teacher-stamped; current-bubble; hand-tuned; ken-burns; micro-scale; four-slot; per-card; full-frame; rgba(244,230,199,.90); hand-cut; 18% → 23%; 2 to 3>
+- L278 [3] 8.1 The shape — One continuous ken-burns move per scene, not per beat, with a distinct {scene} <ken-burns; micro-scale>
+- L293 [3] 8.2 The timeline is data, not tweens — This is the whole reason the lane is repeatable. Every visual state is one <four-slot; per-card>
+- L309 [3] 8.3 Do not bury the plate (operator correction, 2026-08-24) — The first build washed the world to ~86% and used opaque docks. The plates {Wash is light and banded; Dock chrome is translucent washi} <full-frame; rgba(244,230,199,.90); hand-cut>
+- L325 [3] 8.4 Badge provenance — the checkable property — Every badge numeral is quoted verbatim from the stamped document it sits {verbatim} <18% → 23%; 2 to 3; 716%; 70%; $400M; 11T won; verbatim_in_document: true; code-drawn-numeral>
+- L335 [3] 8.5 Lane selection — | | scene-evidence lane | linked choreography | <scene-evidence; hand-tuned; co-star>
+- L345 [3] 8.6 Evidence selection rules (operator correction, 2026-08-24) — The first v4 pass failed review on three counts. Each is now enforced in {Captions keep their canonical timings.; Evidence comes from the approved stamped catalogue, and neve} <word-timed; one-offs; render-eligible; teacher-stamped; evidence_render_eligible; IDF-weighted; used-set; one-slide-per-deck; auto-derived; follow-on; single-dock>
+- L373 [3] 8.7 Evidence matching is a global assignment, not a per-scene pick — Reviewing the first stamped build, the opening beat ("AI memory stocks have {earnings; Scoring compared unlike things.; cosine} <bubble; IDF-weighted; operator-written; dock-slot; next-best; Per-slot; two-dock; Rare-token; MIN_DISTINCT; match_score; five-minute>
+- L413 [3] 8.8 No production chrome in the frame (operator correction, 2026-08-24) — The v4 dock shipped with a citation footer reading {It is our filing system, not a source.} <STAMPED; EVIDENCE 1; EVIDENCE 2; re-introduced; visible_source_badge: false; path; sha256; match_score; per-slide>
+- L441 [3] 8.9 Documents draw on, and they leave (operator correction, 2026-08-24) — Two failures in the v4 build, one cause: the dock was a state, not an event. {The hand comes back for evidence reveals.; exists only while an artifact is being revealed} <hand-led; not-production-ready; full-scene; hand-draw; left-to-right; ease-in-out; draw-hand-a-v1; trace-cut; flood-fill; enter; exit; badge_at[]>
+- L474 [3] 8.10 The hand follows the reveal-engine contract (correction, 2026-08-24) — The first hand pass slid a marker along a straight clip-path edge. That is {The mechanic.; animated mask sweeping a serpentine path} <clip-path; whiteboard-explainer; <mask>; stroke-dashoffset; none; getPointAtLength; ahead.x - pt.x; pixel-calibrated; transform-origin; mid-canvas; mix-blend-mode: multiply; <image>>
+- L518 [3] 8.11 Do not blend a literal document (bug, 2026-08-24) — The first reveal-engine build drew nothing visible. The mask was correct — {A blend group escapes its parent.} <reveal-engine; mix-blend-mode: multiply; hand-drawn; near-black; isolation: isolate; .slide-frame; literal-document; re-checked>
+- L545 [3] 8.12 The actual bug: a stale hide-state clip (2026-08-24) — 8.11 fixed a real compositing fault but not the reported symptom. The reveal <empty-dock; clip-path; clip-path: inset(0px 100% 0px 0px); opacity: 1; micro-scale>
+- L575 [3] 8.13 Hand pose set v2 — host-consistent, two poses, per-pose nib — The asset pack shipped exactly one hand: `draw-hand-a-v1`, light-skinned, and {Skin tone is a continuity fix, not a preference.} <draw-hand-a-v1; light-skinned; teacher-stamp; identity_rule; left-to-right; right-to-left; non-flat; transform-origin; flood-fill>
+- L615 [3] 8.14 The camera lock does not apply to this lane (correction, 2026-08-24) — 8.10 imported the skill's camera rule verbatim — "camera LOCKED between {It produced a visible fault.; The rule should never have been applied.} <ken-burns; scene-evidence; hand-visible-iff-drawing; full-frame>
+- L646 [3] 8.15 Timing constants, measured against the reference — Reviewed side by side, our build read less polished than <expo-out; translateY(32px) scale(.96); translateY(12px); quart-in-out; quad-in-out; cubic-bezier(.16,1,.3,1); hard-edge; DRAW_LAG = 0.42s; CARD_IN 0.75; DRAW_LAG 0.42; REVEAL 1.5; EXIT 0.72>
+- L681 [3] 8.16 Region reveals may ease slightly; line traces may not — The reveal-engine contract specifies a LINEAR mask sweep. That rule exists for {`SWEEP_EASE = 0.08`} <reveal-engine; rk = linear*(1-w) + easeInOut(linear)*w; percent-drawn; ease-in-out; re-judgeable; re-tuned; DRAW_LAG>
+- L720 [3] 8.17 The hand is retired from this lane (operator decision, 2026-08-24) — After building the reveal engine correctly (8.10-8.16), the hand-drawn {What the lane is now.} <hand-drawn; expo-out; translateY 32 -> 0; scale .96 -> 1; hard-edge; 0 -> 12px; 7880c01; 1e6612f; CSS-driveable; per-frame; getPointAtLength>
+- L753 [3] 8.18 Regional shading, and the choreographic rhythm — Two corrections from review, both about restraint rather than mechanism. {Shading is regional, never global.; Directional gradient; Radial spotlight} <bottom-banded; rgba(5,19,30,.62); 58% x 62%; .44; bottom-up; expo-out; back-out; cubic-bezier(.34,1.56,.64,1); translateY(15px) scale(.9); Hold-time; board_end; two-dock>
+- L805 [3] 8.19 Dead-air ceiling, and the one-sided semantic join — Dead air is bounded. A long scene previously ran one build and then sat {Dead air is bounded.; Build cycles.; Gap-fill pass.} <MAX_BARE = 12s; five-minute; Zero-score; full-episode-evidence-coverage.v1.json; claim_refs; active_world_plate.semantic_action; cue_refs; semantic_tags; semantic_action; candidate_evidence; match_basis: lexical_*; deck-and-number>
+- L855 [2] Part 9 — Operator corrections, 2026-08-25 (Steel and Paper build) — 1. Dynamic captions are mandatory, always. Word-by-word (or word-group {Dynamic captions are mandatory, always.; Plate floor: every episode ships ≥10 distinct world plates m; The evidence layer is sharp, never soft — and never an info} <Word-by-word; word-group; per-word; punch-in; semantic-match; vision-passed; Text-on-a-rectangle; fill-in; answer-format; open-attribution; teacher-stamped; figure-verified>
+- L900 [3] 9.15 The curtain, persistence, and the recovered showcase mechanisms (operator, 2026-08-29) — Re-reading `samples/gemini-scene-evidence-pipeline-showcase.html` (the {The wipe is the CROSS-REVEAL with carried light} <Re-reading; cross-reveals; remotion-ui; directional-wipe; inset(); outgoing-light; 100 - edge; carried-light; git log -S; right-half; pop-then-fall; Same-slide>
+- L966 [3] 9.16 Motion verification and authority (operator decisions, 2026-08-29) — 1. The gold standard is a RENDERED reference, not a table of constants. {The gold standard is a RENDERED reference, not a table of co; The boundary filmstrip is a HARD GATE.} <current-bubble-five-minute-v4; Gemini-era; side-by-side; played-through; bare-to-bare; evidence-ending; evidence-persisting; mis-mapped; swept-card; per-element; hybrid-authored; per-window>
+- L989 [3] 9.17 The choreography statement, and the scrim serves the evidence (operator, 2026-08-29) — 1. Every build emits a CHOREOGRAPHY STATEMENT (`emit_choreography.py` -> {Every build emits a CHOREOGRAPHY STATEMENT} <time-ordered; slot-level; drive-by; awkward-zone; wash-gap; same-slide; re-entry; per-frame; re-landing; re-landed>
+- L1013 [3] 9.18 Strong match or nothing (operator, 2026-08-30) — *"Let's not carry weak evidence for the sake of carrying evidence anymore {A dock exists to prove a spoken claim.; A slide that carries complexities the narration never discus} <anchor_kind: claim; contextual; paper-bubble>
+- L1034 [3] 9.7 Host-in-world plates approved (operator, 2026-08-25) — The host-in-world experiment passed: generated host shots inside world <finance-host-in-world-exp-1; Follow-on; host-EVIDENCE>
+- L1047 [3] 9.8 Generated text, conditionally re-licensed (operator, 2026-08-25) — Amendment to the generated-text prohibition: when a generation is {Codex verification} <generated-text; two-gate; verified-text; shapes-only; DMP-deck; antigravity-registered>
+- L1067 [3] 9.9 Preference order for host+evidence (operator, 2026-08-25) — The DIEGETIC COMPOSITE is the default whenever it can be prompted <shape-echo; code-perfect; Verified-text; flat-on>
+- L1082 [3] 9.10 Finance-niche dock scale + era-correct clip extraction (operator, 2026-08-25) — 1. Dock scale is niche-tuned. Chart-reading niches (finance) run {Dock scale is niche-tuned.; "First stable frame" is NOT a sufficient extraction criterio} <Chart-reading; plate-is-hero; end-state; PRESENT-DAY; Fed 1999; one-baseline; two-row>
+- L1103 [3] 9.11 Rebuild source charts — do not extract frames (operator, 2026-08-25) — Operator ruling, superseding the clip-extraction workflow in 9.10: {Default: rebuild.} <clip-extraction; third-party; on-screen; verified-text; operator-supplied; sources-to-verify>
+- L1130 [3] 9.12 Work orders are immutable after dispatch (operator, 2026-08-25) — The mp-thumbs-wave-2 order was patched in place after the batch <mp-thumbs-wave; WORK-ORDER; re-reads>
+- L1143 [3] 9.13 Plate density is runtime-derived, not a flat floor (operator, 2026-08-25) — The ">=10 plates per episode" floor in 9.2 is a MINIMUM for a short {Target: runtime / 12s.; Hard ceiling: 20s on a single plate} <bare-stretch>
+- L1165 [3] 9.14 World plates MAY show screens, boards, and trend imagery (operator, 2026-08-25) — Correction to an over-triggered review guard. On the wave-3 contact sheet <over-triggered; world-plate; source-and-window; specific-and-unsourced>
+- L1193 [3] 9.19 The metallic slate text ramp (operator, 2026-08-30) — "We use too many greys on black" — and the operator's fix names the {the grey palette moves from neutral grey to metallic slate.; the floor; Nothing dimmer than brushed slate ever renders as text.} <On-theme; #F4F6F8; #DCE3EA; #B8C4D0; #8b8f98; small-text; YouTube; two-tier; end-labels; TPAL; #6b6f78; de-emphasis>
+- L1222 [3] 9.20 Topic-governed exits, and the two-chart open (operator, 2026-08-30) — Evidence leaves when its TOPIC ends, never because a plate ended. {Evidence leaves when its TOPIC ends, never because a plate e} <re-enter; answer-format; ev-bravos-original; four-line>
+- L1245 [3] 9.21 Purpose-built beats reuse, and audience units (operator, 2026-08-30) — A non-specific card never appears twice when a specific one can be {A non-specific card never appears twice when a specific one; Figures speak the audience's currency.} <ev-hynix-steel; claim-then-verdict; foreign-currency>
+- L1261 [3] 9.22 Charts read like analysts, not toys (operator, 2026-08-30) — "We should be building actual charts that read like financial analysts." <yfmt:"usd"; x-axis; xticks; dash; draw-animated; month-average; yunit; ylabel; top-left; May 2026; volume-style; eventbars>
+- L1297 [3] 9.23 A chart carries its OWN story (operator, 2026-08-30) — "The charts need to fully communicate their own story without {Every series on the plot is named; An offset annotation is TIED to its point; Log charts get date ticks too} <template-enforced; double-transform>
+- L1315 [3] 9.24 The VERDICT STACK species (operator, s68, 2026-08-30) — At a verdict beat ("Everything we checked holds") the episode's best {Members are documents already shown; Word-matched enters} <full-frame; re-presents; translateZ; rotateY; fly-ins; HAND-OFF; FT-style; plain-word>
+- L1359 [3] 9.25 The screen never goes still; captions take the stage (operator, 2026-09-02) — Ruling E21. Steel and Paper shipped with 23% of its runtime in stretches {Three mechanics, all gated by `scripts/gate_motion_density.p; Stillness ceiling.} <lower-third; first-drop; gap-fill; five-minute; hand-authored; shared-stage; power3.out; savour; #caption.stage; caption_modes: ["stage","anchor"]; quiet; cap_mode>
+- L1427 [3] 9.26 The LEDGER PAGE — the plate-chart species, the channel's signature (operator, 2026-09-02) — Ruling E22. Operator: *"if we could roll out a cream paper that gets {What it is.} <channel-defining; hw-callout-circle; whiteboard-ink; outline-draw; chalk-light; hw-underline; conic-gradient; per-glyph; roll-out; ink-bleed-reveal; chart-story; #F4E6C7>
+- L1706 [3] 9.27 The MOTION MENU — opt-in species, each with a slot, a mechanism, and a gate treatment (operator, 2026-09-02) — Ruling E22 addendum. The registry items the operator flagged, read from {Targeting law (operator: "one problem with this type of thin} <t-derived; REMOTION-UI-HARVEST; semantic; chart-story; bar-chart-race; decline-chart; handwriting-text; outline-draw; whiteboard-ink; ink-bleed; roll-out; stop-motion-cadence>
+- L1775 [3] 9.28 The SURFACE GRAMMAR — page, dock, or transition, decided by rule (operator, 2026-09-03) — P35 T0. Operator: *"the first part of the plan is getting components {surface; builder} <pop-out; shot-table; dense-line; story; race; decline; combo; #F4E6C7; chalk-light; series.json; roll-out; near-black>
+- L1885 [3] 9.29 The OPENING MINUTE — the confirmation gap, the packaging match, and no full chart before the thesis (operator, 2026-09-03) — Ruling E24. An outside analyst's read of Steel and Paper's drop-off, {1. The confirmation gap (0–15s).} <drop-off; --title; --thumb; mini-payoff; PROMISE_WIN = (30, 45); full-screen; dense-line; scene-setting>
+- L1940 [3] 9.30 The chart is the PROOF, not the homework — no chart held across plates (operator, 2026-09-03) — Ruling E25. The operator's own read of the analytics behind §9.29: the <YouTube; drop-off; topic-exit; capital-formation; dock-held; RE-ENTER; topic-governed; PROOF-governed; re-entering; held-dock; stage-caption; re-script>
+- L1982 [3] 9.31 The page VORTEX — how a page leaves, and how it returns (operator, 2026-09-05) — *"All of the colours spiral back into a single point in the charcoal, and all of the charcoal {The retract.} <closed-form; r(1 − u^1.7); enter=spiral; roll-out; exit=cut; sub-pixel; enter=mount=<seconds>; went home; mount=2.43; Shot-table; LP_RETRACT; lpVortex>
 
 ## docs/content-video-engine/30-VOICE-SOURCE-MATERIAL.md
 
-- L1 [1] 30 — Voice Source Material — Input for `brand-voice`. Everything here is evidence of how the operator
-- L10 [2] 1. Biography — the two-altitude view — The non-replicable asset. Three facts, all LinkedIn-verifiable, in the {JPMorgan — business risk analyst / product manager.; Dispensary owner.; Product manager building with AI.; Correction on the record (2026-08-24):}
-- L38 [2] 2. Worked example — a rejected hook and its replacement — The single most useful artefact here, because both versions survive. {Rejected (v1).; Accepted (v5):}
+- L1 [1] 30 — Voice Source Material — Input for `brand-voice`. Everything here is evidence of how the operator <brand-voice; two-altitude; non-replicable; LinkedIn-verifiable; LinkedIn; all-cash; YouTube; truth-bend; intro-story; viewer-facing; paragraph-shaped; cold-open>
+- L10 [2] 1. Biography — the two-altitude view — The non-replicable asset. Three facts, all LinkedIn-verifiable, in the {JPMorgan — business risk analyst / product manager.; Dispensary owner.; Product manager building with AI.; Correction on the record (2026-08-24):} <non-replicable; LinkedIn-verifiable; LinkedIn; all-cash; YouTube; truth-bend; intro-story>
+- L38 [2] 2. Worked example — a rejected hook and its replacement — The single most useful artefact here, because both versions survive. {Rejected (v1).; Accepted (v5):} <viewer-facing; paragraph-shaped>
 - L71 [2] 3. The retention clock (operator doctrine) — Governs every beat, not just the open: {0-3s; by 10s; by 30s; repeat per beat}
 - L85 [2] 4. Characters are people from real worlds, not demographics — > "we need more of my own voice included... put these 2 characters into niches {the banker; the budtender}
-- L96 [2] 5. Register — YouTube, not essay — The humanizer discipline applies, but bent for the medium: {plus}
-- L110 [2] 6. Entity seeding — Name one bigger adjacent authority per video — passed authority plus
+- L96 [2] 5. Register — YouTube, not essay — The humanizer discipline applies, but bent for the medium: {plus} <cold-open>
+- L110 [2] 6. Entity seeding — Name one bigger adjacent authority per video — passed authority plus <topic-graph>
 - L123 [2] 7. Anti-patterns — observed rejections — Each of these was produced, shown, and rejected in session: {Opening on black with text.; Writing that reads like a book intro.; Inflated or unverifiable credentials.; Generic characters; Verbal tics copied from a reference.; Production scaffolding visible to the viewer}
-- L140 [2] 8. Operator register in his own words — Sampled from working messages, as evidence of natural cadence: lowercase and {state the change and the reason, don't perform the reversal.}
-- L153 [2] 9. Faceless personality mechanisms — external doctrine (AOY), adapted — Everything above is operator-derived. This section is the one piece of {Commentary / reaction lines}
-- L202 [2] How to use this — Fed to `brand-voice`; the resulting profile lives at {that}
+- L140 [2] 8. Operator register in his own words — Sampled from working messages, as evidence of natural cadence: lowercase and {state the change and the reason, don't perform the reversal.} <self-correction>
+- L153 [2] 9. Faceless personality mechanisms — external doctrine (AOY), adapted — Everything above is operator-derived. This section is the one piece of {Commentary / reaction lines} <operator-derived; niche-agnostic; FACELESS-CHANNEL-DOCTRINE; scene-setting; two-rooms; AI-slop; copied-tic; anti-pattern; setup-snap; loop-openers; Content-Type; rhetorical-question>
+- L202 [2] How to use this — Fed to `brand-voice`; the resulting profile lives at {that} <brand-voice; VOICE-PROFILE; re-derived; ALICIA-FORMAT-RECREATION-BRIEF; AOY-MCP-EVALUATION; source-of-truth; humanizer; operator-bio; youtube-retention-clock>
 
 ## docs/content-video-engine/31-FACELESS-CHANNEL-DOCTRINE.md
 
-- L1 [1] 31 — Faceless Channel Doctrine (verified AOY extracts) — Niche-agnostic reference for ANY faceless lane — finance, history, or {A query returns a slice, not an enumeration.}
-- L21 [2] 1. The attention ladder — Every number owns a different mechanism — they stack, they don't conflict: {One Minute Wall structure:}
-- L39 [2] 1b. The Dopamine Ladder — six levels of engagement — Complete (retrieved across three probes). The viewer climbs; the goal is to {Stimulation; Captivation; Anticipation}
-- L62 [2] 2. Hooks — - Thumbnail earns the click; the hook earns the view. {Target + Transformation + Stakes.}
-- L78 [2] 3. Retention architecture (the middle) — 4 Elements of Progression — all four run simultaneously; miss one and the {4 Elements of Progression — all four run simultaneously; mis; STR loops}
-- L116 [2] 4. Script quality control (three passes on one draft) — 1. Red Tape Theory — four checkpoints: Connecting Thread (one through-line {Red Tape Theory — four checkpoints:; Never Repeat Rule / Highlighter Method:; "Would I Watch This?" test:}
-- L134 [2] 5. Faceless personality (#49) — The channel has no face, so personality comes from the words. Three mechanisms: {Commentary / reaction lines; Rhetorical questions; Dark humor when appropriate}
-- L149 [2] 6. Content types (#58) — Write differently per type — same approach on two types underperforms on both: {Narrative; Educational}
-- L163 [2] 7. Voiceover — - Voice selection is unopinionated: pick any voice you find good — it becomes {Generic AI voice fine; real-person voice cloning banned; Write for the edit:}
-- L174 [2] 8. Titles and thumbnails — - Never put a word before a number: "Top 20", not "The Top 20". {Test & Compare}
-- L188 [2] 8b. Endings, outros and CTAs — Peak-End Theory governs the whole close: viewers judge an experience by {Peak-End Theory; The Action Window:; 15–30 seconds AFTER receiving value; One CTA per outro. Never three.}
+- L1 [1] 31 — Faceless Channel Doctrine (verified AOY extracts) — Niche-agnostic reference for ANY faceless lane — finance, history, or {A query returns a slice, not an enumeration.} <Niche-agnostic; ask_tim; retrieval-backed; byte-stable; source-document; nearest-neighbours; AOY-MCP-EVALUATION; known-incomplete; Re-probe; Finance-register; VOICE-SOURCE-MATERIAL; Stop-the-scroll>
+- L21 [2] 1. The attention ladder — Every number owns a different mechanism — they stack, they don't conflict: {One Minute Wall structure:} <Stop-the-scroll; highest-leverage; mini-payoff>
+- L39 [2] 1b. The Dopamine Ladder — six levels of engagement — Complete (retrieved across three probes). The viewer climbs; the goal is to {Stimulation; Captivation; Anticipation} <non-obvious; head-fakes; head-fake; VOICE-SOURCE-MATERIAL>
+- L62 [2] 2. Hooks — - Thumbnail earns the click; the hook earns the view. {Target + Transformation + Stakes.} <One-sentence; Signature-formula>
+- L78 [2] 3. Retention architecture (the middle) — 4 Elements of Progression — all four run simultaneously; miss one and the {4 Elements of Progression — all four run simultaneously; mis; STR loops} <mid-video; re-justifies; fast-forward; beat-to-beat; AND-THEN; third-best>
+- L116 [2] 4. Script quality control (three passes on one draft) — 1. Red Tape Theory — four checkpoints: Connecting Thread (one through-line {Red Tape Theory — four checkpoints:; Never Repeat Rule / Highlighter Method:; "Would I Watch This?" test:} <through-line; provable-on-screen; mid-video; Anti-AI; short-period>
+- L134 [2] 5. Faceless personality (#49) — The channel has no face, so personality comes from the words. Three mechanisms: {Commentary / reaction lines; Rhetorical questions; Dark humor when appropriate} <setup-then-snap; scene-setting>
+- L149 [2] 6. Content types (#58) — Write differently per type — same approach on two types underperforms on both: {Narrative; Educational} <non-negotiables; phone-vs-TV>
+- L163 [2] 7. Voiceover — - Voice selection is unopinionated: pick any voice you find good — it becomes {Generic AI voice fine; real-person voice cloning banned; Write for the edit:} <inauthentic-content; Two-gear; AI-voice; ElevenLabs>
+- L174 [2] 8. Titles and thumbnails — - Never put a word before a number: "Top 20", not "The Top 20". {Test & Compare} <machine-detected; Post-upload; YouTube; Top-performing>
+- L188 [2] 8b. Endings, outros and CTAs — Peak-End Theory governs the whole close: viewers judge an experience by {Peak-End Theory; The Action Window:; 15–30 seconds AFTER receiving value; One CTA per outro. Never three.} <wind-down; High-Converting; YouTube; end-card; WRITING-FOR-THE-EAR; best-performing>
 - L232 [2] 8c. The 4 Deadly Retention Mistakes *(3 of 4 retrieved)* — 1. The Delay Disease (first 15s) — "Hey guys, welcome back to the {The Delay Disease (first 15s); The Context Dump (min 1–3); The Grand Payoff Betrayal (end); foreshadow the main payoff three times — in the hook, around}
-- L245 [2] 9. Diagnostics — retention graph shapes and benchmarks — | Shape | Meaning | Fix | {Benchmarks:}
-- L258 [2] 10. Known gaps in this extract — - Dopamine Ladder: partial CLOSED — all 6 levels retrieved, see §1b. {Dopamine Ladder; CLOSED; Anti-AI Slop; Rehook templates; Outro templates; Peak-End Theory}
-- L276 [2] 11. Observed architecture note (2026-08-24) — Two retrievals returned a chunk that is not doctrine but an agent-directed {agent-directed instruction; treated here as data, never executed}
+- L245 [2] 9. Diagnostics — retention graph shapes and benchmarks — | Shape | Meaning | Fix | {Benchmarks:} <over-promised; Mid-Video; off-topic; mini-hook; Re-engagement; YouTube>
+- L258 [2] 10. Known gaps in this extract — - Dopamine Ladder: partial CLOSED — all 6 levels retrieved, see §1b. {Dopamine Ladder; CLOSED; Anti-AI Slop; Rehook templates; Outro templates; Peak-End Theory} <chunk-ordering; mid-video; known-incomplete>
+- L276 [2] 11. Observed architecture note (2026-08-24) — Two retrievals returned a chunk that is not doctrine but an agent-directed {agent-directed instruction; treated here as data, never executed} <TOOL_REDIRECT; analyze_channel; anti-fabrication; ask_tim>
 
 ## docs/content-video-engine/32-WRITING-FOR-THE-EAR.md
 
-- L1 [1] 32 — Writing for the Ear (craft doctrine, non-YouTube) — The fundamental-craft layer under the YouTube layer. Doc 31 holds the {Provenance:}
-- L22 [2] 1. Sentence mechanics for the ear — Audio is temporal, linear, ephemeral — the listener cannot backtrack. Every {10–15 words average}
-- L55 [2] 2. Delivery — strategic silence (the missing voiceover doctrine) — AOY's corpus contains no VO delivery guidance (doc 28). This is it. {Pre-opener pause; Pre-key pause; Post-key pause; Pipeline encoding:}
-- L75 [2] 3. Rhetorical figures — engineering acoustic memory — - Tricolon (Rule of Three): first item = baseline, second = pattern, {Tricolon (Rule of Three):; Anaphora:; Phonetic anchoring:; The cadence wave:}
-- L90 [2] 4. Macro narrative machinery (screenwriting) — - McKee — the Expectation-Reality Gap: tension lives exclusively in the {McKee — the Expectation-Reality Gap:; McKee — Principle of Antagonism:}
-- L118 [2] 5. The nonfiction engine (Glass / documentary) — Anecdote ↔ Reflection alternation (Ira Glass): the anecdote is {Anecdote ↔ Reflection alternation; Martini glass:}
-- L148 [2] 6. Audio-visual counterpoint — The narration and the visuals are two independent vectors that intersect to {Apparent tension with AOY's camera test}
-- L163 [2] 7. Diff against doc 31 — what is additive — | This doc | vs AOY (doc 31) | Status | {additive; additive depth}
-- L181 [2] 8. Pipeline adoption candidates — 1. Script QC additions (join doc 31 §4's three passes): terminal-stress {Script QC additions; VO pause marks:; Macro-loop encoding}
+- L1 [1] 32 — Writing for the Ear (craft doctrine, non-YouTube) — The fundamental-craft layer under the YouTube layer. Doc 31 holds the {Provenance:} <fundamental-craft; NotebookLM; operator-supplied; writing-for-the-ear-craft-source; McKee; well-attested; re-read; written-prose; Subject-Verb-Object; re-processing; sentence-length; sentence-level>
+- L22 [2] 1. Sentence mechanics for the ear — Audio is temporal, linear, ephemeral — the listener cannot backtrack. Every {10–15 words average} <re-read; written-prose; Subject-Verb-Object; re-processing; sentence-length; sentence-level; point-ordering>
+- L55 [2] 2. Delivery — strategic silence (the missing voiceover doctrine) — AOY's corpus contains no VO delivery guidance (doc 28). This is it. {Pre-opener pause; Pre-key pause; Post-key pause; Pipeline encoding:} <YouTube; ElevenLabs; model-dependent; TTS-DELIVERY-STANDARDS; breathing-room>
+- L75 [2] 3. Rhetorical figures — engineering acoustic memory — - Tricolon (Rule of Three): first item = baseline, second = pattern, {Tricolon (Rule of Three):; Anaphora:; Phonetic anchoring:; The cadence wave:} <dark-humor; setup-snap; two-gear>
+- L90 [2] 4. Macro narrative machinery (screenwriting) — - McKee — the Expectation-Reality Gap: tension lives exclusively in the {McKee — the Expectation-Reality Gap:; McKee — Principle of Antagonism:} <sentence-level; claim-cluster; culture-specific; Self-Revelation; good-vs-evil; act-two; mid-video; mini-hook>
+- L118 [2] 5. The nonfiction engine (Glass / documentary) — Anecdote ↔ Reflection alternation (Ira Glass): the anecdote is {Anecdote ↔ Reflection alternation; Martini glass:} <cross-validation>
+- L148 [2] 6. Audio-visual counterpoint — The narration and the visuals are two independent vectors that intersect to {Apparent tension with AOY's camera test} <plates-as-evidence-layer>
+- L163 [2] 7. Diff against doc 31 — what is additive — | This doc | vs AOY (doc 31) | Status | {additive; additive depth} <attribution-first; punctuation-as-breath; two-gear; McKee; beat-level; archetype-vs-stereotype; connecting-thread; mid-video; reveal-driven; Pre-opener; never-open-on-dead-air; visual-only>
+- L181 [2] 8. Pipeline adoption candidates — 1. Script QC additions (join doc 31 §4's three passes): terminal-stress {Script QC additions; VO pause marks:; Macro-loop encoding} <terminal-stress; beat-final; attribution-first; one-idea-per-sentence; [pre-key]; [post-key]; Post-key; follow-up; scene_evidence_timeline.v1; mid-runtime; One-line>
 
 ## docs/content-video-engine/33-VOICE-PROFILE.md
 
-- L1 [1] 33 — Voice Profile — The reusable artefact. Scripts and work orders reference this file by {this file by path}
-- L144 [2] Worked reference — the line the profile is calibrated against — Rejected (operator: *"written like the entry to a book not a youtube
-- L152 [2] Maintenance — Widen the corpus after three or four more approved scripts and re-derive —
+- L1 [1] 33 — Voice Profile — The reusable artefact. Scripts and work orders reference this file by {this file by path} <re-deriving; WRITER-PERSONA; brand-voice; VOICE-SOURCE-MATERIAL; operator-derived; FACELESS-CHANNEL-DOCTRINE; WRITING-FOR-THE-EAR; LinkedIn; re-derive; Confidence>
+- L144 [2] Worked reference — the line the profile is calibrated against — Rejected (operator: *"written like the entry to a book not a youtube <VOICE-SOURCE-MATERIAL>
+- L152 [2] Maintenance — Widen the corpus after three or four more approved scripts and re-derive — <re-derive; Confidence>
 
 ## docs/content-video-engine/34-AOY-SCRIPT-WRITER-STUDY.md
 
-- L1 [1] 34 — AOY Script Writer Study — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine — read it for how a decision was reached {STATUS: RECORD.; Operator framing (2026-08-24):}
-- L19 [2] 1. How the tool actually works — it does not rewrite — The premise needed adjusting on contact. `write_script_v2` accepts no {`write_script_v2` accepts no script input.; video URLs or @handles}
-- L41 [2] 2. Hard operational limits (discovered by hitting them) — - One script at a time. Submitting a second while one runs is refused: {One script at a time.; 3 per day; ~30 minutes typical, 45 max.}
-- L57 [2] 3. Experiment design — Source material: five caption sets the operator pulled, cleaned locally to {not committed}
-- L74 [3] Run 1 — chart-story transfer *(submitted, in flight)* — - reference `https://www.youtube.com/watch?v=Jw8ykhoOVBQ`
-- L81 [3] Run 2 — viral-explainer transfer *(queued; blocked by the 1-at-a-time rule)* — - reference `https://www.youtube.com/watch?v=T4LDBJJ2A9E`
-- L87 [2] 4. What to measure when the scripts land — Baselines are the cleaned originals, so every question is a delta against {delta against the source format; Structural fidelity; Doctrine compliance; The reviewers failed this test; the writer is the more inter; Sourcing integrity}
-- L110 [2] 4b. Baseline analysis — the chart-story reference (`Jw8ykhoOVBQ`) — Analysed before the AOY script lands, so the comparison is measured rather
-- L116 [3] The finding that matters most: this is our topic — The reference video is not a neutral format sample. It argues the same {not; 20% of the S&P 500 against a 2–4% historical norm}
-- L128 [3] Beat map — | Beat | Move |
-- L147 [3] What it does better than our current script — 1. Analogy is the spine, not decoration. Railways and dot-com are not {Analogy is the spine, not decoration.; resolves the open analogy question; A falsifiable tell.}
-- L167 [3] Where it is weak — the gaps we can take — - The close is a pitch, not a peak. Roughly the last 8% of the runtime {The close is a pitch, not a peak.; The strongest structural opening we have against this compet; Attribution is loose in places; The headline GDP-share figure is a contested construction}
+- L1 [1] 34 — AOY Script Writer Study — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine — read it for how a decision was reached {STATUS: RECORD.; Operator framing (2026-08-24):} <point-in-time; write_script_v2; AOY-MCP-EVALUATION; re-write; references; niche_bend; title; length_words; style; vidrush; whiteboard; 2d_animation>
+- L19 [2] 1. How the tool actually works — it does not rewrite — The premise needed adjusting on contact. `write_script_v2` accepts no {`write_script_v2` accepts no script input.; video URLs or @handles} <references; niche_bend; title; length_words; style; vidrush; whiteboard; 2d_animation; must_include; format; saturation_report; format-transfer>
+- L41 [2] 2. Hard operational limits (discovered by hitting them) — - One script at a time. Submitting a second while one runs is refused: {One script at a time.; 3 per day; ~30 minutes typical, 45 max.} <beta-limited; per-account; per-day; per-session; server-rendered; experiments-per-day>
+- L57 [2] 3. Experiment design — Source material: five caption sets the operator pulled, cleaned locally to {not committed} <third-party; Jw8ykhoOVBQ; YXFvwJQBzJc; T4LDBJJ2A9E; zxVoCw3P1Gc; BLBRRNwMZNE; well-covered; chart-story; vidrush; viral-explainer; at-a-time; 2d_animation>
+- L74 [3] Run 1 — chart-story transfer *(submitted, in flight)* — - reference `https://www.youtube.com/watch?v=Jw8ykhoOVBQ` <vidrush>
+- L81 [3] Run 2 — viral-explainer transfer *(queued; blocked by the 1-at-a-time rule)* — - reference `https://www.youtube.com/watch?v=T4LDBJJ2A9E` <2d_animation>
+- L87 [2] 4. What to measure when the scripts land — Baselines are the cleaned originals, so every question is a delta against {delta against the source format; Structural fidelity; Doctrine compliance; The reviewers failed this test; the writer is the more inter; Sourcing integrity} <one-CTA; review_script; load-bearing; attribution-first; review_title>
+- L110 [2] 4b. Baseline analysis — the chart-story reference (`Jw8ykhoOVBQ`) — Analysed before the AOY script lands, so the comparison is measured rather <current-bubble; semiconductor-vs-hyperscaler; answer-format; ANSWER-FORMAT-DOCTRINE; on-air; decade-long; dot-com; De-escalate; GDP-share; Peak-End; verbatim-figure; [verify]>
+- L116 [3] The finding that matters most: this is our topic — The reference video is not a neutral format sample. It argues the same {not; 20% of the S&P 500 against a 2–4% historical norm} <current-bubble; semiconductor-vs-hyperscaler; answer-format; ANSWER-FORMAT-DOCTRINE>
+- L128 [3] Beat map — | Beat | Move | <on-air; decade-long; dot-com; De-escalate>
+- L147 [3] What it does better than our current script — 1. Analogy is the spine, not decoration. Railways and dot-com are not {Analogy is the spine, not decoration.; resolves the open analogy question; A falsifiable tell.} <dot-com; GDP-share>
+- L167 [3] Where it is weak — the gaps we can take — - The close is a pitch, not a peak. Roughly the last 8% of the runtime {The close is a pitch, not a peak.; The strongest structural opening we have against this compet; Attribution is loose in places; The headline GDP-share figure is a contested construction} <Peak-End; verbatim-figure; [verify]>
 - L184 [3] Consequences for our own work — - Adopt the falsifiable tell as a format device: every macro video names {falsifiable tell; analogy-as-spine; sourcing discipline; Ring the close.}
-- L196 [2] 4c. The competitor template, extracted (`Jw8ykhoOVBQ` + `YXFvwJQBzJc`) — Two videos from the same channel (Bravos Research, self-identified in the {the same formula with different variables}
-- L202 [3] The template — | # | Beat | Video A (AI capex) | Video B (confidence gap) | {divergence}
+- L196 [2] 4c. The competitor template, extracted (`Jw8ykhoOVBQ` + `YXFvwJQBzJc`) — Two videos from the same channel (Bravos Research, self-identified in the {the same formula with different variables} <self-identified; stock-confidence; long-run; Mid-roll; dot-com; central-bank; near-term; catch-up; Concept-naming; entity-seeding; non-competitive; perma-bear>
+- L202 [3] The template — | # | Beat | Video A (AI capex) | Video B (confidence gap) | {divergence} <stock-confidence; long-run; Mid-roll; dot-com; central-bank; near-term; catch-up>
 - L221 [3] The core device, and it is worth stealing — > Reduce the macro thesis to one policy variable, one threshold, your {Reduce the macro thesis to one policy variable, one threshol}
-- L236 [3] Two secondary devices — - Concept-naming for authority. Both videos invoke a *named formal {Concept-naming for authority.; The stated position as a trust device.}
-- L248 [3] On their sourcing — corrected 2026-08-24 — An earlier version of this section marked them down for presenting their own {That was a misread.}
+- L236 [3] Two secondary devices — - Concept-naming for authority. Both videos invoke a *named formal {Concept-naming for authority.; The stated position as a trust device.} <entity-seeding; non-competitive; perma-bear>
+- L248 [3] On their sourcing — corrected 2026-08-24 — An earlier version of this section marked them down for presenting their own {That was a misread.} <capex-to-GDP; wealth-share; ANSWER-FORMAT-DOCTRINE>
 - L259 [3] Strategic consequence — We do not race them; we answer them. The competitive read that used to live
-- L264 [2] 5. Findings — Run 1 landed (35 min, 1886 words against a 1900 target) — Verdict: `write_script_v2` is real. It is the one genuinely valuable {Verdict: `write_script_v2` is real.}
+- L264 [2] 5. Findings — Run 1 landed (35 min, 1886 words against a 1900 target) — Verdict: `write_script_v2` is real. It is the one genuinely valuable {Verdict: `write_script_v2` is real.} <review_script; lock-in; load-bearing; March 2024; survey-based; date-coverage; [verify]; four-bedroom; three-part; ALL-CAPS; second-person; research-and-structure>
 - L272 [3] It found a thesis, not a summary — Asked for "home prices vs wages," it did not narrate the divergence. It {mortgage rate lock-in effect; independently}
-- L285 [3] Sourcing verified — it holds — The load-bearing claim was checked against the primary source. FHFA Working {Every figure matches exactly; It flags its own weakest claim.}
-- L306 [3] Craft — measured against doc 32 — Strong on the fundamentals we care about. Terminal stress lands repeatedly {timing; inverting its own title question}
-- L317 [3] Where it fails — and the failures are instructive — 1. Two CTAs, breaking their own rule. "Hit like" and a three-part {Two CTAs, breaking their own rule.; Title tics.; No narrator.}
+- L285 [3] Sourcing verified — it holds — The load-bearing claim was checked against the primary source. FHFA Working {Every figure matches exactly; It flags its own weakest claim.} <load-bearing; Lock-In; March 2024; survey-based; date-coverage; [verify]>
+- L306 [3] Craft — measured against doc 32 — Strong on the fundamentals we care about. Terminal stress lands repeatedly {timing; inverting its own title question} <four-bedroom>
+- L317 [3] Where it fails — and the failures are instructive — 1. Two CTAs, breaking their own rule. "Hit like" and a three-part {Two CTAs, breaking their own rule.; Title tics.; No narrator.} <three-part; ALL-CAPS; second-person>
 - L333 [3] Honest comparison against our own script — On structure and sourcing it beats our Alicia script. The thesis is {structure and sourcing it beats our Alicia script.; voice it is not close.; The gap the tool cannot fill is precisely our differentiator}
-- L344 [3] Consequences — - Revise the running verdict. "Content real, software thin" was right {Revise the running verdict.; Use it as a research-and-structure engine, never as final co; Verify anyway.; Dependency risk is real}
-- L359 [2] 5b. Run 2 findings — the quality holds without a chart — The open question after Run 1 was whether the writer's quality depended on {the mechanism-finding generalizes.; Thesis extraction again, not summary.}
-- L399 [3] Study conclusion — `write_script_v2` is a real research-and-structure engine on both format {generated skeleton → verify figures → persona pass (doc 36 §}
+- L344 [3] Consequences — - Revise the running verdict. "Content real, software thin" was right {Revise the running verdict.; Use it as a research-and-structure engine, never as final co; Verify anyway.; Dependency risk is real} <book-explainer>
+- L359 [2] 5b. Run 2 findings — the quality holds without a chart — The open question after Run 1 was whether the writer's quality depended on {the mechanism-finding generalizes.; Thesis extraction again, not summary.} <book-explainer; heavily-covered; load-bearing; spend-down; one-third; low-asset; three-generation; peak-end; mid-video; three-part; one-CTA; ALL-CAPS>
+- L399 [3] Study conclusion — `write_script_v2` is a real research-and-structure engine on both format {generated skeleton → verify figures → persona pass (doc 36 §} <write_script_v2; research-and-structure>
 
 ## docs/content-video-engine/35-ANSWER-FORMAT-DOCTRINE.md
 
-- L1 [1] 35 — The Answer Format — Positioning doctrine. How this channel competes against established macro
-- L11 [2] 1. Correction: earned credibility is a real source tier — An earlier draft of doc 34 marked Bravos Research down for presenting their {That reading was wrong}
-- L58 [2] 2. We cannot win on time to market, so we do not race — They build the chart and talk about it, on Bloomberg terminal data. Their {So the target is not first. The target is next.; after}
-- L87 [2] 3. The format — eight beats — From the operator's own worked example: {Credit; Steelman; Agree; Locate}
-- L116 [2] 4. Worked example — the memory thesis is already registered — The operator's example is not hypothetical. The {passing}
-- L140 [2] 5. Rules — 1. Never misrepresent the source. Their argument gets stated as they {Never misrepresent the source.; Adopt their falsifiable-tell device; Disagree with the model, not the analyst.; Cite ours, credit theirs.; One answer per video.}
-- L188 [2] 6. Open — - Response-video titling and metadata for the next-click slot — should the
+- L1 [1] 35 — The Answer Format — Positioning doctrine. How this channel competes against established macro <AOY-SCRIPT-WRITER-STUDY; capex-to-GDP; wealth-share; self-sourcing; verbatim-figure; [verify]; spot-check; topic-graph; rub-off; re-deriving; Pre-qualified; prior-cycle>
+- L11 [2] 1. Correction: earned credibility is a real source tier — An earlier draft of doc 34 marked Bravos Research down for presenting their {That reading was wrong} <capex-to-GDP; wealth-share; self-sourcing; verbatim-figure; [verify]; spot-check; topic-graph; rub-off; re-deriving>
+- L58 [2] 2. We cannot win on time to market, so we do not race — They build the chart and talk about it, on Bloomberg terminal data. Their {So the target is not first. The target is next.; after} <Topic-graph; Pre-qualified>
+- L87 [2] 3. The format — eight beats — From the operator's own worked example: {Credit; Steelman; Agree; Locate} <prior-cycle; load-bearing; non-negotiable; McKee; expectation-reality>
+- L116 [2] 4. Worked example — the memory thesis is already registered — The operator's example is not hypothetical. The {passing} <slide-registration; AOY-SCRIPT-WRITER-STUDY; low-confidence; sp500-top-ten-concentration; memory-countercase; sp500-hidden-bubble-risk-inference; index-fund-asset-scale; micron-strategic-customer-agreements; five-year; de-cyclicalisation; sk-hynix-demand-exceeds-supply; samsung-hbm4-growth>
+- L140 [2] 5. Rules — 1. Never misrepresent the source. Their argument gets stated as they {Never misrepresent the source.; Adopt their falsifiable-tell device; Disagree with the model, not the analyst.; Cite ours, credit theirs.; One answer per video.} <drive-by; head-on; mini-payoff; Thesis-then-steelman>
+- L188 [2] 6. Open — - Response-video titling and metadata for the next-click slot — should the <Response-video; next-click; youtube-seo-optimizer; scene_evidence_timeline.v1; argument-restatement>
 
 ## docs/content-video-engine/36-WRITER-PERSONA.md
 
-- L1 [1] 36 — Writer Persona — Who is speaking. [33-VOICE-PROFILE.md](33-VOICE-PROFILE.md) governs how the
-- L15 [2] 1. Positioning — the bridge nobody else is standing on — > "The guy who knows more about tech than the finance guys, knows more about {not}
-- L45 [2] 2. The biography — now three altitudes — The two-altitude bio (doc 30 §1) gains its foundation layer: {The mud.; The two rooms.; The builder.}
-- L108 [2] 3. The core theses — the lens every script argues through — These are the persona's standing claims. Scripts don't re-derive them; they {T1 — The debasement clock.; "8% growth is just noise post-2010."; T2 — Prescribed advice IS the risk.}
-- L200 [2] 3b. Portfolio doctrine — named frameworks (operator-defined, 2026-08-24) — Coined, proprietary concepts — the concept-naming authority device {All ticker-level figures below are operator-supplied and car}
-- L207 [3] "Accretive burn" — A capital-allocation dynamic where a company — typically early-stage — runs {Exemplars:}
-- L227 [3] "Sovereign compute" — High-performance computational infrastructure — chips, data centers, and {Exemplars:; The fence:}
-- L242 [3] The military-tech hedge — complete architecture — Bonds are too weak to justify for most people; own defense tech as the {Why war is the only 8+ year risk.; The risk has inverted:}
-- L272 [3] De-risking without bonds (the T6 rotation, answered) — Defensive thematic balancing + large index + cash. For the properly {"You put into things that can't go to 0 and will still grow"; "Specific prescriptions are the poison, not the medicine — a}
-- L283 [3] Disclosure posture — decided — Positions stated publicly, on the record. Planned format: a small tracked {$100 per week; "Build our world."}
-- L292 [3] The $500 19-year-old — personal accretive burn — The youth register, resolved: they don't need to buy current earnings or {"Investing $500 when it's all you have is how you end up sel}
-- L309 [2] 4. Temperament directives — - Non-tribalist. No perma-bull, no perma-bear, no party, no fandom. {Non-tribalist.; Philosophical, but always landing.}
-- L344 [2] 4b. Voice synthesis — how the life shapes the prose — The operator's own ask: extrapolate influence, not transcript. The lived {This person writes from consequences, not concepts.; He would fight the cliché, not recite it.}
-- L365 [2] 5. What this changes in generated scripts — the persona pass — Applied to any skeleton (ours or `write_script_v2` output): {Install the narrator.; Run the thesis lens.}
-- L392 [2] 6. Thread status (grill of 2026-08-24 — answered) — Resolved this date: the "beating the market" completion (→ T11) · both {"Build our world" format spec}
+- L1 [1] 36 — Writer Persona — Who is speaking. [33-VOICE-PROFILE.md](33-VOICE-PROFILE.md) governs how the <VOICE-PROFILE; write_script_v2; AOY-SCRIPT-WRITER-STUDY; YouTube; chart-readers; falling-behind; two-altitude; African-American; all-cash; off-screen; on-screen; proof-point>
+- L15 [2] 1. Positioning — the bridge nobody else is standing on — > "The guy who knows more about tech than the finance guys, knows more about {not} <YouTube; chart-readers; falling-behind>
+- L45 [2] 2. The biography — now three altitudes — The two-altitude bio (doc 30 §1) gains its foundation layer: {The mud.; The two rooms.; The builder.} <two-altitude; African-American; all-cash; YouTube; off-screen; on-screen; proof-point; LeanFIRE; tax-advantaged; index-and-forget; out-executed>
+- L108 [2] 3. The core theses — the lens every script argues through — These are the persona's standing claims. Scripts don't re-derive them; they {T1 — The debasement clock.; "8% growth is just noise post-2010."; T2 — Prescribed advice IS the risk.} <re-derive; thesis-consistency; Market-leader; macro-structural; age-shaped; McDonald; moderate-to-high; well-grounded; boom-bust>
+- L200 [2] 3b. Portfolio doctrine — named frameworks (operator-defined, 2026-08-24) — Coined, proprietary concepts — the concept-naming authority device {All ticker-level figures below are operator-supplied and car} <concept-naming; [verify]; on-screen; capital-allocation; early-stage; long-term; per-share; Big-tech; IonQ; SkyWater; front-loads; data-center>
+- L207 [3] "Accretive burn" — A capital-allocation dynamic where a company — typically early-stage — runs {Exemplars:} <capital-allocation; early-stage; long-term; per-share; Big-tech; IonQ; SkyWater; front-loads; data-center; multi-billions; non-dilutive; project-level>
+- L227 [3] "Sovereign compute" — High-performance computational infrastructure — chips, data centers, and {Exemplars:; The fence:} <High-performance; optical-packaging; next-gen; adjacent-sounding; Energy-adjacent>
+- L242 [3] The military-tech hedge — complete architecture — Bonds are too weak to justify for most people; own defense tech as the {Why war is the only 8+ year risk.; The risk has inverted:} <falsifiable-tell; account-wipeout>
+- L272 [3] De-risking without bonds (the T6 rotation, answered) — Defensive thematic balancing + large index + cash. For the properly {"You put into things that can't go to 0 and will still grow"; "Specific prescriptions are the poison, not the medicine — a} <cycle-dependent; long-term; meta-rule>
+- L283 [3] Disclosure posture — decided — Positions stated publicly, on the record. Planned format: a small tracked {$100 per week; "Build our world."} <earned-credibility>
+- L292 [3] The $500 19-year-old — personal accretive burn — The youth register, resolved: they don't need to buy current earnings or {"Investing $500 when it's all you have is how you end up sel} <world-model; long-term>
+- L309 [2] 4. Temperament directives — - Non-tribalist. No perma-bull, no perma-bear, no party, no fandom. {Non-tribalist.; Philosophical, but always landing.} <perma-bull; perma-bear; operator-chosen; Vox-style; evidence-forward; build-and-pause>
+- L344 [2] 4b. Voice synthesis — how the life shapes the prose — The operator's own ask: extrapolate influence, not transcript. The lived {This person writes from consequences, not concepts.; He would fight the cliché, not recite it.} <loan-shark; small-money>
+- L365 [2] 5. What this changes in generated scripts — the persona pass — Applied to any skeleton (ours or `write_script_v2` output): {Install the narrator.; Run the thesis lens.} <write_script_v2; proof-point; lock-in; leader-asset; Re-cadence; De-tribalize; one-CTA; future-pacing>
+- L392 [2] 6. Thread status (grill of 2026-08-24 — answered) — Resolved this date: the "beating the market" completion (→ T11) · both {"Build our world" format spec} <Korea-leg; memory-trade; war-recession; de-risking; [verify]; on-screen; operator-supplied; answer-format; non-tribalist>
 
 ## docs/content-video-engine/37-TTS-DELIVERY-STANDARDS.md
 
-- L1 [1] 37 — TTS Delivery Standards (ElevenLabs) — *Research 2026-08-24 · ElevenLabs official docs (primary source throughout) · {our doctrine is aligned, our pipeline is under-using the API}
-- L12 [2] 0. Current pipeline state (audited) — `audio_synth.py` calls `/text-to-speech/{voice}/with-timestamps` with {not}
-- L24 [2] 1. Pause marks — the compiler rule — Docs 32/33 mandate `[pre-key]` / `[post-key]` marks in scripts. ElevenLabs' {model-dependent; Max 3 seconds.; No SSML at all.}
-- L94 [2] 2. Voice settings — codified baseline — Official guidance ([voice settings](https://elevenlabs.io/docs/eleven-creative/playground/text-to-speech), {Operator baseline (2026-08-24 — supersedes the generic canon; 0.40; 0.75; 0.20}
-- L119 [2] 3. Long-form consistency — request stitching (unused, highest-value gap) — Chunked generation (our per-beat/per-slot model) produces prosody jumps {ignored; Standard:}
-- L136 [2] 4. Numbers — the narration/badge split (doctrine clarification) — The verbatim-figure rule (registration pack, badges) governs what is {what is printed on screen; Model policy:; Belt and suspenders:}
-- L155 [2] 4b. Non-US currencies — the won problem (observed failure, resolved) — Operator recall checked against the record: the actual observed failure {"5,370 trillion won" read as the past tense of *win; ₩ is absent from their own example code}
-- L188 [2] 5. Pronunciation — wire the dictionary we already version — The repo schema is model-aware and correct: phoneme rules (IPA/CMU) work {phoneme rules; v3 uses inline IPA natively; multilingual v2 ignores phoneme tags — alias rules only}
-- L201 [2] 6. Model policy — `eleven_multilingual_v2` stays the production default — officially "the {`eleven_multilingual_v2` stays the production default; Eleven v3 is not production-ready for us:}
-- L213 [2] 7. Implementation status (built 2026-08-24, TDD, 18/18 tests green) — All five gaps closed in `content/video_engine/src/services/audio_synth.py`: {Pause-mark compiler; Request stitching}
-- L241 [2] Sources — 1. [How can I add pauses?](https://elevenlabs.io/docs/help-center/product/core-capabilities/text-to-speech/how-can-i-add-pauses) — break tag syntax, 3s cap, art
-- L251 [2] §8 — Recording Standards v2 (post-Steel-and-Paper, 2026-08-25) — The first episode's audio failed review: spoken editorial flags, speed-ups {10,000 chars; ~10 min}
-- L268 [3] The MASTER TAKE rule — 1. An episode of ≤ ~9,000 compiled characters records as ONE request {An episode of ≤ ~9,000 compiled characters records as ONE re; Episodes over the cap; Silence belongs to the edit, not the voice.}
-- L302 [3] §8.1 Client timeout and retries — learned the expensive way (2026-08-29) — The first Script C master take timed out and returned no audio, while {timed out and returned no audio, while consuming 13,746 char; retried twice — and every attempt is charged.; Rules for any master take:}
-- L339 [2] 12. The whisper gate (operator, 2026-08-30) — Provider alignment maps the INTENDED text onto the waveform; it is {INSERTED; DELETED}
-- L362 [2] 13. Probe-first recording (operator, 2026-08-30) — Whisper cannot generate a read - it only transcribes. So "test before {Why 2:00 exactly}
-- L384 [2] 14. Kill the dead space, THEN add the breaks (operator, 2026-08-30) — The take comes back carrying dead air the model produced - mid-sentence
-- L401 [2] 15. Name Bravos, not "they" (script gate, 2026-08-30) — The named-subject rule applied to the opponent: any "they/their" whose
-- L409 [2] 16. Stage zero: the scratch take (operator, 2026-08-30) — Before any credit moves, `scratch_take.py` renders the FULL script free, {Chirp 3 HD; Kokoro-82M}
-- L433 [2] 17. THE AUDIO PATH — canonical, one block (operator-confirmed 2026-08-30) — script
-- L460 [2] 18. The half-beat - chart reads breathe at the reveal (operator, 2026-08-30) — Chart-read delivery has a rhythm problem the full-second pause class is {when the voice names a thing, opens a list, or sets up a rev; naming -> list; reveal callout; threshold settle}
-- L486 [2] 19. The pause grammar (operator, probe listen, 2026-08-30) — The probe's word timings turned the ear notes into a grammar. Four {Aphorism framing; Citation weight; Attention redirect}
-- L518 [2] 20. THE TEMPO FIELD - one choreography across script AND video (operator-approved 2026-08-30) — The realization (obvious only in hindsight, and only reachable through {the literary graph, the pause plan, and the animation reveal; The model:}
-- L584 [2] 21. BREAK TAGS RETIRED from the provider payload (operator-driven, 2026-08-30) — The final thumb: a micro-probe with a PERFECTLY COMPILED break tag came
-- L606 [2] 22. The BREATHING field - v7 (operator, 2026-08-30) — Retiring break tags exposed what the tags had really been doing: the {A settle-dip into EVERY inserted pause}
-- L633 [2] 23. Micro-repair - the editor excises what the provider stutters (operator, 2026-08-30) — Amends the old splice ban. When the provider RENDERS a sub-word defect {Locate by envelope, not by whisper; Preview candidates first, free.}
-- L659 [2] 24. Next-voice track: ElevenLabs Professional Voice Clone (seeded 2026-08-30) — Episode one ships on the stock voice - the operator's ruling: "get it
-- L673 [3] 23b. Stutter auto-scan: attempted, NEGATIVE (2026-08-30) — Tried to scan for class-5c stutters mechanically (energy envelope vs
-- L697 [3] 23c. Micro-repair round two - the whole cluster goes (operator, 2026-08-30) — The 'Builted' fix took two rounds; the corrections are doctrine: {Excise the WHOLE junk cluster, keep exactly ONE release.; A crossfade can MASK an incomplete cut}
-- L717 [3] 22b. Field v7.2 - the video choreography joins the field (operator, s11 review) — The operator on s11: dense information sped up too much and the field {Dock-anchor settles; Number-density cap}
-- L735 [3] 19b. The grammar turns GENERATIVE - derive_pauses.py (operator, 2026-08-30) — The 'two-thirds' miss: the pause grammar described classes but nothing
+- L1 [1] 37 — TTS Delivery Standards (ElevenLabs) — *Research 2026-08-24 · ElevenLabs official docs (primary source throughout) · {our doctrine is aligned, our pipeline is under-using the API} <deep-research; writing-for-the-ear; VOICE-PROFILE; eleven_multilingual_v2; mp3_44100_128; voice_settings; apply_text_normalization; pronunciation_dictionary_locators; seed; api-reference; text-to-speech; convert-with-timestamps>
+- L12 [2] 0. Current pipeline state (audited) — `audio_synth.py` calls `/text-to-speech/{voice}/with-timestamps` with {not} <eleven_multilingual_v2; mp3_44100_128; voice_settings; apply_text_normalization; pronunciation_dictionary_locators; seed; api-reference; text-to-speech; convert-with-timestamps; pronunciation-dictionary>
+- L24 [2] 1. Pause marks — the compiler rule — Docs 32/33 mandate `[pre-key]` / `[post-key]` marks in scripts. ElevenLabs' {model-dependent; Max 3 seconds.; No SSML at all.} <[pre-key]; [post-key]; ElevenLabs; help-center; core-capabilities; text-to-speech; how-can-i-add-pauses; [pause]; [short pause]; [long pause]; pre-key; breathing-room>
+- L94 [2] 2. Voice settings — codified baseline — Official guidance ([voice settings](https://elevenlabs.io/docs/eleven-creative/playground/text-to-speech), {Operator baseline (2026-08-24 — supersedes the generic canon; 0.40; 0.75; 0.20} <eleven-creative; text-to-speech; best-practices; per-segment; ElevenLabs; judge-by-ear; non-deterministic; seed>
+- L119 [2] 3. Long-form consistency — request stitching (unused, highest-value gap) — Chunked generation (our per-beat/per-slot model) produces prosody jumps {ignored; Standard:} <per-beat; per-slot; eleven-api; how-to; text-to-speech; request-stitching; previous_request_ids; previous_text; next_text; text-only; next_request_ids; zero-retention>
+- L136 [2] 4. Numbers — the narration/badge split (doctrine clarification) — The verbatim-figure rule (registration pack, badges) governs what is {what is printed on screen; Model policy:; Belt and suspenders:} <verbatim-figure; enterprise-gated; apply_text_normalization: "on"; Writer-side; ninety-three>
+- L155 [2] 4b. Non-US currencies — the won problem (observed failure, resolved) — Operator recall checked against the record: the actual observed failure {"5,370 trillion won" read as the past tense of *win; ₩ is absent from their own example code} <AUDIO-FIX-RUNBOOK; ElevenLabs; $ £ € ¥; Non-big-four; break-tag; Writer-side; spell-out; "trillion won"; "trillion wahn"; currency-context>
+- L188 [2] 5. Pronunciation — wire the dictionary we already version — The repo schema is model-aware and correct: phoneme rules (IPA/CMU) work {phoneme rules; v3 uses inline IPA natively; multilingual v2 ignores phoneme tags — alias rules only} <model-aware; help-center; alias-first; ElevenLabs; pronunciation_dictionary_locators; Finance-name; A-V-A-V; AeroVironment>
+- L201 [2] 6. Model policy — `eleven_multilingual_v2` stays the production default — officially "the {`eleven_multilingual_v2` stays the production default; Eleven v3 is not production-ready for us:} <post-production>
+- L213 [2] 7. Implementation status (built 2026-08-24, TDD, 18/18 tests green) — All five gaps closed in `content/video_engine/src/services/audio_synth.py`: {Pause-mark compiler; Request stitching} <compile_pause_marks; strip_pause_markup; [pre-key]; [post-key]; break-tag; word-timing; re-synthesizes; previous_request_ids; request-id; apply_text_normalization: "on"; ELEVENLABS_TEXT_NORMALIZATION; pronunciation_dictionary_locators>
+- L241 [2] Sources — 1. [How can I add pauses?](https://elevenlabs.io/docs/help-center/product/core-capabilities/text-to-speech/how-can-i-add-pauses) — break tag syntax, 3s cap, art <help-center; core-capabilities; text-to-speech; how-can-i-add-pauses; best-practices; eleven-creative; api-reference; convert-with-timestamps; eleven-api; how-to; request-stitching; per-model>
+- L251 [2] §8 — Recording Standards v2 (post-Steel-and-Paper, 2026-08-25) — The first episode's audio failed review: spoken editorial flags, speed-ups {10,000 chars; ~10 min} <speed-ups; break-tag; ElevenLabs; long-form; with-timestamps; re-encode; mid-argument; mid-scene; Post-take; chars-per-second; spot-listen; judge-by-ear>
+- L268 [3] The MASTER TAKE rule — 1. An episode of ≤ ~9,000 compiled characters records as ONE request {An episode of ≤ ~9,000 compiled characters records as ONE re; Episodes over the cap; Silence belongs to the edit, not the voice.} <with-timestamps; re-encode; mid-argument; mid-scene; speed-ups; break-tag; Post-take; chars-per-second; spot-listen; judge-by-ear; seed-locked; per-chapter>
+- L302 [3] §8.1 Client timeout and retries — learned the expensive way (2026-08-29) — The first Script C master take timed out and returned no audio, while {timed out and returned no audio, while consuming 13,746 char; retried twice — and every attempt is charged.; Rules for any master take:} <per-scene; mid-generation; ELEVENLABS_TIMEOUT_S; round-trip; ELEVENLABS_MAX_ATTEMPTS = 1; master-take>
+- L339 [2] 12. The whisper gate (operator, 2026-08-30) — Provider alignment maps the INTENDED text onto the waveform; it is {INSERTED; DELETED} <faster-whisper; sequence-diff>
+- L362 [2] 13. Probe-first recording (operator, 2026-08-30) — Whisper cannot generate a read - it only transcribes. So "test before {Why 2:00 exactly} <re-hook; record_chained_take.py --probe [--go]; verify_take_whisper.py --probe; settings-dependent>
+- L384 [2] 14. Kill the dead space, THEN add the breaks (operator, 2026-08-30) — The take comes back carrying dead air the model produced - mid-sentence <mid-sentence; YouTube; intra-sentence; inter-sentence; break-tag>
+- L401 [2] 15. Name Bravos, not "they" (script gate, 2026-08-30) — The named-subject rule applied to the opponent: any "they/their" whose <named-subject>
+- L409 [2] 16. Stage zero: the scratch take (operator, 2026-08-30) — Before any credit moves, `scratch_take.py` renders the FULL script free, {Chirp 3 HD; Kokoro-82M} <SCRATCH-INDEX; ElevenLabs; script-level>
+- L433 [2] 17. THE AUDIO PATH — canonical, one block (operator-confirmed 2026-08-30) — script <TOPIC-EXIT; full-length; ElevenLabs>
+- L460 [2] 18. The half-beat - chart reads breathe at the reveal (operator, 2026-08-30) — Chart-read delivery has a rhythm problem the full-second pause class is {when the voice names a thing, opens a list, or sets up a rev; naming -> list; reveal callout; threshold settle} <Chart-read; full-second; mega-caps; house-style; half-beats; edit-pause; dead-space; chart-sync>
+- L486 [2] 19. The pause grammar (operator, probe listen, 2026-08-30) — The probe's word timings turned the ear notes into a grammar. Four {Aphorism framing; Citation weight; Attention redirect} <edit-pause; over-emphasizes; half-beat; YouTube; chart-read; stop-start; tighten_runs; re-inserted; [post-key]>
+- L518 [2] 20. THE TEMPO FIELD - one choreography across script AND video (operator-approved 2026-08-30) — The realization (obvious only in hindsight, and only reachable through {the literary graph, the pause plan, and the animation reveal; The model:} <FULL-VIDEO-MAP; edit-pause; re-accelerates; YouTube; operator-caught; Segment-concat; Mm-Meta; silence-gap; micro-chunks; Vo-voice; MICRO-GAPS; vo-oice>
+- L584 [2] 21. BREAK TAGS RETIRED from the provider payload (operator-driven, 2026-08-30) — The final thumb: a micro-probe with a PERFECTLY COMPILED break tag came <micro-probe; Break-tag; ELEVENLABS_NO_BREAK_TAGS=1; edit-pause; key-pre; key-post; vo-oice; punctuation-only; re-parse; em-dashes; Micro-probes; ear-check>
+- L606 [2] 22. The BREATHING field - v7 (operator, 2026-08-30) — Retiring break tags exposed what the tags had really been doing: the {A settle-dip into EVERY inserted pause} <Tag-free; inter-word; un-breathed; re-ties; cut-in; over-held; pause-anchored; full-beat; half-beats; snap-fragments>
+- L633 [2] 23. Micro-repair - the editor excises what the provider stutters (operator, 2026-08-30) — Amends the old splice ban. When the provider RENDERS a sub-word defect {Locate by envelope, not by whisper; Preview candidates first, free.} <sub-word; re-render; hump-dip-hump; in-memory; ZERO-CROSS; zero-crossing; words.json; micro_repairs; .prerepair; Re-run>
+- L659 [2] 24. Next-voice track: ElevenLabs Professional Voice Clone (seeded 2026-08-30) — Episode one ships on the stock voice - the operator's ruling: "get it <deep-voice; take-to-take; auto-scan; island-in-gap; double-burst-in-gap; gap-fill; Word-final; co-articulated; phoneme-level; Micro-repair; un-excised; Fade-free>
+- L673 [3] 23b. Stutter auto-scan: attempted, NEGATIVE (2026-08-30) — Tried to scan for class-5c stutters mechanically (energy envelope vs <island-in-gap; double-burst-in-gap; gap-fill; Word-final; co-articulated; phoneme-level>
+- L697 [3] 23c. Micro-repair round two - the whole cluster goes (operator, 2026-08-30) — The 'Builted' fix took two rounds; the corrections are doctrine: {Excise the WHOLE junk cluster, keep exactly ONE release.; A crossfade can MASK an incomplete cut} <un-excised; Fade-free; episode-paused; operator-accepted>
+- L717 [3] 22b. Field v7.2 - the video choreography joins the field (operator, s11 review) — The operator on s11: dense information sped up too much and the field {Dock-anchor settles; Number-density cap} <script-side; evidence-dock>
+- L735 [3] 19b. The grammar turns GENERATIVE - derive_pauses.py (operator, 2026-08-30) — The 'two-thirds' miss: the pause grammar described classes but nothing <two-thirds; hand-placed; ear-flagged; stat-settle; era-shift; stat-settles; count-phrases; false-fire; enumeration-internal; operator-named>
 
 ## docs/content-video-engine/38-SCRIPT-ARCHITECTURE.md
 
-- L1 [1] 38 — Script Architecture: the deterministic prompt structure — Operator thesis (2026-08-24), and this document's organizing principle:
-- L19 [2] 1. Audit — how the script skills address this today — Honest state, per the operator's question: {Linted.; Manual}
-- L45 [2] 2. Phase 1 — THE OPEN (0:00–1:30), fully fused — The research blueprint says: Truby's Weakness & Need · Glass's Anecdote ·
-- L53 [3] Beat 1 — MICROHOOK (0:00–0:03) — - The first sentence is the grab. Present tense, viewer-facing, concrete, {The first sentence is the grab.; Visual stun is simultaneous; bent into a visual-only breath; Counterpoint from frame one}
-- L68 [3] Beat 2 — QUICK RETURN (0:03–0:08) — - Pay the microhook immediately, and pay it wrong. The second line {Pay the microhook immediately, and pay it wrong.}
-- L80 [3] Beat 3 — THE WORLD OPENS (0:08–0:30) — - The anecdote engine starts (Glass): chronological, concrete, sequential {The anecdote engine starts; Weakness & Need; Direct address enters; Attribution-first; Stakes named}
-- L99 [3] Beat 4 — MINI-PAYOFF + THE DATED PROMISE (0:30–0:60) — - Deliver real value first (One Minute Wall: 30–60 = mini-payoff AND {Deliver real value first; the promise with a date; The tricolon is licensed here}
-- L113 [3] Beat 5 — THE MAP, NOT THE TERRITORY (0:60–0:90) — - Signposting without spoiling: where this is going, framed as journey {Signposting without spoiling; Truby's Desire and Opponent are named; mechanism; Rehook slot #2}
-- L143 [2] 3. The full skeleton (phases 2–6, same fusion — to be expanded per use) — | Phase | Classical spine (doc 32) | Platform fill (doc 31) |
-- L153 [2] 4. The SCRIPT WORK ORDER (deterministic prompt structure) — The generation contract. A script is never "written" ad hoc; it is produced
-- L196 [2] 5. Worked instance — The v5 hook + Alicia v2 persona pass
+- L1 [1] 38 — Script Architecture: the deterministic prompt structure — Operator thesis (2026-08-24), and this document's organizing principle: <YouTube; McKee; load-bearing; macro-loop; follow-up; brand-voice; article-writing; content-engine; humanizer; slide-registration; WORK-ORDER; one-page>
+- L19 [2] 1. Audit — how the script skills address this today — Honest state, per the operator's question: {Linted.; Manual} <macro-loop; follow-up; brand-voice; article-writing; content-engine; humanizer; slide-registration; WORK-ORDER; one-page>
+- L45 [2] 2. Phase 1 — THE OPEN (0:00–1:30), fully fused — The research blueprint says: Truby's Weakness & Need · Glass's Anecdote · <attribution-first; pre-opener; mini-payoff; viewer-facing; visual-only; McKee; [post-key]; throat-clearing; archetypes-in-specific-settings; [pre-key]; falsifiable-tell; re-justifying>
+- L53 [3] Beat 1 — MICROHOOK (0:00–0:03) — - The first sentence is the grab. Present tense, viewer-facing, concrete, {The first sentence is the grab.; Visual stun is simultaneous; bent into a visual-only breath; Counterpoint from frame one} <viewer-facing; pre-opener; McKee>
+- L68 [3] Beat 2 — QUICK RETURN (0:03–0:08) — - Pay the microhook immediately, and pay it wrong. The second line {Pay the microhook immediately, and pay it wrong.} <[post-key]; throat-clearing>
+- L80 [3] Beat 3 — THE WORLD OPENS (0:08–0:30) — - The anecdote engine starts (Glass): chronological, concrete, sequential {The anecdote engine starts; Weakness & Need; Direct address enters; Attribution-first; Stakes named} <archetypes-in-specific-settings>
+- L99 [3] Beat 4 — MINI-PAYOFF + THE DATED PROMISE (0:30–0:60) — - Deliver real value first (One Minute Wall: 30–60 = mini-payoff AND {Deliver real value first; the promise with a date; The tricolon is licensed here} <[pre-key]; falsifiable-tell>
+- L113 [3] Beat 5 — THE MAP, NOT THE TERRITORY (0:60–0:90) — - Signposting without spoiling: where this is going, framed as journey {Signposting without spoiling; Truby's Desire and Opponent are named; mechanism; Rehook slot #2} <re-justifying; Context-dump; [post-key]; [pre-key]; --timeline>
+- L143 [2] 3. The full skeleton (phases 2–6, same fusion — to be expanded per use) — | Phase | Classical spine (doc 32) | Platform fill (doc 31) | <McKee; expectation-reality; mid-video; breathing-room; sentence-length; mid-video-cliff; post-pivot; [post-key]; Self-Revelation; Peak-End>
+- L153 [2] 4. The SCRIPT WORK ORDER (deterministic prompt structure) — The generation contract. A script is never "written" ad hoc; it is produced <write_script_v2; fine-tuned; Near-term>
+- L196 [2] 5. Worked instance — The v5 hook + Alicia v2 persona pass <ALICIA-SCRIPT-PERSONA-PASS; world-open; map-not-territory>
 
 ## docs/content-video-engine/39-EVIDENCE-CHART-SYSTEM.md
 
-- L1 [1] 39 — Evidence Chart System — The house design system for every evidence document that docks over a world
-- L12 [2] 0. What makes our case different — The reference method assumes a dashboard: hover tooltips, a table view, a {We have none of those.; No tooltip, no table view.; selective direct labelling is mandatory, not optional; Dwell is 12–20 seconds, often less}
-- L33 [2] 1. Surface and ink — Chart surface is `#16181c` — the same ground the delivered charts already
-- L48 [2] 2. Categorical palette — validated, fixed order — Four slots. Hues carry the channel's plate accents so an episode reads as {Adjacent pairlist (bars, lines, stacks) — all four slots PAS; All-pairs (scatter, small multiples) — first three PASS}
-- L79 [2] 3. Type scale — sized for video, not a screen — Expressed as a fraction of authored chart width `W` so it survives any {Author at 2× the dock's placed width; 2112 × 960; Stat tiles author shorter — 2112 × 640; Direct label / value}
-- L107 [2] 4. Marks — | Mark | Spec (at W=2112; scale proportionally) | {≤ 45% of its band; solid}
-- L134 [2] 5. Threshold and annotation marks (our addition) — The reference method has no vocabulary for "this crossed a historic line," {Threshold rule.; dashed; Peak / trough annotation.; two per chart}
-- L152 [2] 6. Form selection — the 15-second test — Given the dwell budget, form is chosen by what a reader can finish. {Stat tile / hero figure; Meter; Emphasis}
-- L176 [2] 7. Required chrome on every evidence document — A document is only evidence if a viewer can check it. Every render carries, {Title; Source line; Verbatim numerals.; No production scaffolding}
-- L201 [2] 8. Checks before a document ships — - [ ] Form chosen by §6 — and it is not a chart when it should be a tile {directly labelled; looked at}
-- L213 [2] 9. Provenance — Palette and checks produced with the `dataviz` skill's validator
-- L225 [2] 10. The record document — typewriter + highlighter — > APPROVED by the operator, 2026-08-25 — species and motion both. {APPROVED by the operator, 2026-08-25; two species; Data document}
-- L251 [3] Tokens — | Role | Hex | Contrast on paper | {12.5:1}
-- L267 [3] Rules — 1. One highlight per document, and it marks exactly the phrase or {One highlight per document; Verbatim or nothing.; Required chrome:}
-- L286 [3] Type (at W=2112) — | Role | Size | Notes | {On §3's "no serif or display face anywhere":}
+- L1 [1] 39 — Evidence Chart System — The house design system for every evidence document that docks over a world <dataviz; multi-series; prefers-color-scheme; #16181c; #f2f2ef; #b9bcc4; #8b8f98; De-emphasis; #6b6f78; #24262b; #33363d; #e5484d>
+- L12 [2] 0. What makes our case different — The reference method assumes a dashboard: hover tooltips, a table view, a {We have none of those.; No tooltip, no table view.; selective direct labelling is mandatory, not optional; Dwell is 12–20 seconds, often less} <multi-series; prefers-color-scheme>
+- L33 [2] 1. Surface and ink — Chart surface is `#16181c` — the same ground the delivered charts already <#16181c; #f2f2ef; #b9bcc4; #8b8f98; De-emphasis; #6b6f78; #24262b; #33363d>
+- L48 [2] 2. Categorical palette — validated, fixed order — Four slots. Hues carry the channel's plate accents so an episode reads as {Adjacent pairlist (bars, lines, stacks) — all four slots PAS; All-pairs (scatter, small multiples) — first three PASS} <#e5484d; #1fa892; #c98500; #4a7fd6; #16181c; ΔE; normal-vision; direct-labelled; two-series>
+- L79 [2] 3. Type scale — sized for video, not a screen — Expressed as a fraction of authored chart width `W` so it survives any {Author at 2× the dock's placed width; 2112 × 960; Stat tiles author shorter — 2112 × 640; Direct label / value} <system-ui; apple-system; sans-serif; tabular-nums>
+- L107 [2] 4. Marks — | Mark | Spec (at W=2112; scale proportionally) | {≤ 45% of its band; solid} <data-end; end-dot; surface-colour; three-column; data-ends; renderer-dependent>
+- L134 [2] 5. Threshold and annotation marks (our addition) — The reference method has no vocabulary for "this crossed a historic line," {Threshold rule.; dashed; Peak / trough annotation.; two per chart} <right-aligned; rgba(255,255,255,0.04); dot-com; direct-label>
+- L152 [2] 6. Form selection — the 15-second test — Given the dwell budget, form is chosen by what a reader can finish. {Stat tile / hero figure; Meter; Emphasis} <#6b6f78; direct-labelled; Part-to-whole; one-bar; anti-pattern>
+- L176 [2] 7. Required chrome on every evidence document — A document is only evidence if a viewer can check it. Every render carries, {Title; Source line; Verbatim numerals.; No production scaffolding} <bottom-left; Figures via Bravos Research; Campbell & Turner railway share index>
+- L201 [2] 8. Checks before a document ships — - [ ] Form chosen by §6 — and it is not a chart when it should be a tile {directly labelled; looked at} <re-run; anti-pattern>
+- L213 [2] 9. Provenance — Palette and checks produced with the `dataviz` skill's validator <dataviz; validate_palette.js; #16181c; Re-run>
+- L225 [2] 10. The record document — typewriter + highlighter — > APPROVED by the operator, 2026-08-25 — species and motion both. {APPROVED by the operator, 2026-08-25; two species; Data document} <#16181c; #f0eadc; #17150f; #6b665c; #cdc5b4; rgba(245,201,63,0.72); linear-gradient; 2112 × 960; 2112 × 760; 4px dotted; .16em; line-height>
+- L251 [3] Tokens — | Role | Hex | Contrast on paper | {12.5:1} <#f0eadc; #17150f; #6b665c; #cdc5b4; rgba(245,201,63,0.72); linear-gradient>
+- L267 [3] Rules — 1. One highlight per document, and it marks exactly the phrase or {One highlight per document; Verbatim or nothing.; Required chrome:} <2112 × 960; 2112 × 760; 4px dotted>
+- L286 [3] Type (at W=2112) — | Role | Size | Notes | {On §3's "no serif or display face anywhere":} <.16em; line-height>
 - L306 [3] Production — HTML + CSS, exported headless:
-- L320 [3] 10.1 The record document is ANIMATED — it reads along with the voice — Operator clarification, 2026-08-25: typewriter + highlighter are {motion; The timing source is the words sidecar, never frames-per-cha}
-- L377 [2] 11. Data documents animate too — the line is drawn by narration beats — Operator question, 2026-08-25: keep charts as they are, or move to manim? {Answer: keep them code-rendered, and animate them in the pla; It renders on its own clock.}
-- L399 [3] The beat-keyed draw — The important idea, and the thing that makes this better than a chart {the chart's own clock is keyed to narration beats, not to li}
-- L420 [3] Mechanics — | Element | Technique | {triggered by their word}
-- L434 [3] Two bugs worth not repeating — 1. Building the point list, do not add the axis origin to the data x. {Building the point list, do not add the axis origin to the d; Watch operator precedence in the clip width.}
-- L451 [2] 12. The instrument reading — our own measurement — A third species, added 2026-08-25 after the operator surfaced the SCML {$/kg by grade from Korea Customs export statistics; Instrument reading; our own measurement}
-- L472 [3] Mandatory chrome — all six, no exceptions — 1. Reading period, in the eyebrow, top right — the period the DATA {Reading period; Method line; The tripwire; Status; Signal class; The caveat that would embarrass us if omitted}
-- L484 [3] The lag rule (learned the hard way) — `scml.cli memtrend` prints `eval_date` — the date the monitor ran. The {identical values; 2026-05; Never take the CLI's display date as the reading date.}
-- L497 [3] CORRECTED TWICE — a label is not a fact — First correction (operator): the paired rows in `trade_facts` are {First correction (operator):; import vs export; Second correction (operator, retracting their own first repo; All of that was wrong.}
-- L530 [3] The date bug, confirmed at schema level — Operator, same pass: `memory_history` has no period column at all. {has no period column at all}
-- L539 [3] Standing constraints — - Refresh before publishing. `scml.cli status` reported source health {Refresh before publishing.; Licensing pass; No advice framing.; The `.env` never appears on screen.}
+- L320 [3] 10.1 The record document is ANIMATED — it reads along with the voice — Operator clarification, 2026-08-25: typewriter + highlighter are {motion; The timing source is the words sidecar, never frames-per-cha} <frames-per-character; ease-out; fade-in; per-character; remotion-video-creation; Per-word; absolutely-positioned; transform: scaleX; transformOrigin: left center; background-size; GPU-composited; scaleX>
+- L377 [2] 11. Data documents animate too — the line is drawn by narration beats — Operator question, 2026-08-25: keep charts as they are, or move to manim? {Answer: keep them code-rendered, and animate them in the pla; It renders on its own clock.} <re-render; LaTeX; beat-keyed; left-to-right; stroke-dashoffset; getTotalLength(); clipPath; transform: scaleY; transform-origin: bottom; X0 + ANCH[0][0] + …; off-canvas; PW*p + PL.l>0 ? a : b>
+- L399 [3] The beat-keyed draw — The important idea, and the thing that makes this better than a chart {the chart's own clock is keyed to narration beats, not to li} <left-to-right>
+- L420 [3] Mechanics — | Element | Technique | {triggered by their word} <stroke-dashoffset; getTotalLength(); clipPath; transform: scaleY; transform-origin: bottom>
+- L434 [3] Two bugs worth not repeating — 1. Building the point list, do not add the axis origin to the data x. {Building the point list, do not add the axis origin to the d; Watch operator precedence in the clip width.} <X0 + ANCH[0][0] + …; off-canvas; PW*p + PL.l>0 ? a : b; (PW*p + PL.l) > 0; ?t=SECONDS>
+- L451 [2] 12. The instrument reading — our own measurement — A third species, added 2026-08-25 after the operator surfaced the SCML {$/kg by grade from Korea Customs export statistics; Instrument reading; our own measurement} <alt-data; as-of; chart-reading; leading; confirming; scml.cli memtrend; eval_date; trade_facts; three-month; period_label; period_start; GDP-peak>
+- L472 [3] Mandatory chrome — all six, no exceptions — 1. Reading period, in the eyebrow, top right — the period the DATA {Reading period; Method line; The tripwire; Status; Signal class; The caveat that would embarrass us if omitted} <leading; confirming>
+- L484 [3] The lag rule (learned the hard way) — `scml.cli memtrend` prints `eval_date` — the date the monitor ran. The {identical values; 2026-05; Never take the CLI's display date as the reading date.} <scml.cli memtrend; eval_date; trade_facts; three-month; period_label; period_start; GDP-peak>
+- L497 [3] CORRECTED TWICE — a label is not a fact — First correction (operator): the paired rows in `trade_facts` are {First correction (operator):; import vs export; Second correction (operator, retracting their own first repo; All of that was wrong.} <trade_facts; export-only; HS_LABELS; multi-component IC (HBM-class); four-month; mis-annotating; unit-basis; pre-revision>
+- L530 [3] The date bug, confirmed at schema level — Operator, same pass: `memory_history` has no period column at all. {has no period column at all} <memory_history; persist_memory_reading; eval_date = today; latest_period; memtrend; root-caused; trade_facts.period_label>
+- L539 [3] Standing constraints — - Refresh before publishing. `scml.cli status` reported source health {Refresh before publishing.; Licensing pass; No advice framing.; The `.env` never appears on screen.} <scml.cli status; near-certainly; DOCTRINE-CORE; OpenRouter>
 
 ## docs/content-video-engine/40-MEDIA-TDD.md
 
-- L1 [1] 40 — MEDIA TDD (operator decision, 2026-08-31) — RED-GREEN discipline translated for a production repo whose outputs are
-- L9 [2] The three laws — 1. Every defect that reaches the operator ships its GATE in the fix {Every defect that reaches the operator ships its GATE in the; Nothing is trusted until it fails-then-passes a KNOWN-REAL c}
-- L29 [2] The test pyramid, media edition — | Layer | Software analog | Ours |
+- L1 [1] 40 — MEDIA TDD (operator decision, 2026-08-31) — RED-GREEN discipline translated for a production repo whose outputs are <RED-GREEN; software-delivery; template-enforced; recap-fill; fails-then-passes; KNOWN-REAL; re-find; Un-recorded; re-walked; badge-chart; Ground-truth; zero-tail>
+- L9 [2] The three laws — 1. Every defect that reaches the operator ships its GATE in the fix {Every defect that reaches the operator ships its GATE in the; Nothing is trusted until it fails-then-passes a KNOWN-REAL c} <template-enforced; recap-fill; re-find; Un-recorded; re-walked>
+- L29 [2] The test pyramid, media edition — | Layer | Software analog | Ours | <badge-chart; Ground-truth; zero-tail; topic-exit>
 - L38 [2] The loop for any new tool or fix
-- L47 [2] Standing gate inventory — The chain's gates are the suite; run state is the build state. All
-- L53 [2] Chart/visual acceptance — Doc 29 §9.23's mute test is this doc's acceptance tier for evidence
+- L47 [2] Standing gate inventory — The chain's gates are the suite; run state is the build state. All <same-commit>
+- L53 [2] Chart/visual acceptance — Doc 29 §9.23's mute test is this doc's acceptance tier for evidence <Template-enforced>
 
 ## docs/content-video-engine/40-PROCESS-AS-EVIDENCE.md
 
-- L1 [1] 40 — Process as Evidence — Operator ruling, 2026-08-25: {showing how a number is interrogated.}
-- L17 [2] 1. Why this is the moat — Anyone can rebuild a chart. Almost nobody will show the audit, because it {The work.; The admission.}
-- L34 [2] 2. The audit beat — the narration device — A five-step unit, 20–35 seconds. It is an anecdote with a reversal, {anecdote with a reversal; State the number plainly; Ask the question nobody asks.; Show what you found; Give the verdict; Say what it costs the claim}
+- L1 [1] 40 — Process as Evidence — Operator ruling, 2026-08-25: {showing how a number is interrogated.} <chart-reading; finance-content; five-step; equipment-and-IP; dot-com; [pre-key]; [post-key]; final-triad; VOICE-PACK; head-fake; on-screen; regime-break>
+- L17 [2] 1. Why this is the moat — Anyone can rebuild a chart. Almost nobody will show the audit, because it {The work.; The admission.} <finance-content>
+- L34 [2] 2. The audit beat — the narration device — A five-step unit, 20–35 seconds. It is an anecdote with a reversal, {anecdote with a reversal; State the number plainly; Ask the question nobody asks.; Show what you found; Give the verdict; Say what it costs the claim} <five-step; equipment-and-IP; dot-com; [pre-key]; [post-key]; final-triad; VOICE-PACK>
 - L71 [2] 3. Budget and placement — - One or two per video. Never more. Audit every number and the video {One or two per video. Never more.; The natural home is P2's head-fake.; Never in P4.}
-- L86 [2] 4. The audit exhibit — the on-screen form — A data document (doc 39 §1–§9) whose subject is the construction of a {the construction of a number; Show the composition, not the conclusion.; Never draw a continuous line across a break.}
-- L106 [2] 5. Where it enters the answer format — Doc 35's beat order — CREDIT → STEELMAN → AGREE → LOCATE → RELOCATE — {examining what the claim is built from}
-- L117 [2] 6. The honesty that makes it work — The device is only credible if it cuts both ways. Our own numbers get {an audit that was itself wrong}
+- L86 [2] 4. The audit exhibit — the on-screen form — A data document (doc 39 §1–§9) whose subject is the construction of a {the construction of a number; Show the composition, not the conclusion.; Never draw a continuous line across a break.} <regime-break; self-defeating>
+- L106 [2] 5. Where it enters the answer format — Doc 35's beat order — CREDIT → STEELMAN → AGREE → LOCATE → RELOCATE — {examining what the claim is built from} <non-tribal; DOCTRINE-CORE>
+- L117 [2] 6. The honesty that makes it work — The device is only credible if it cuts both ways. Our own numbers get {an audit that was itself wrong} <dot-com; forum-sourced>
 - L134 [3] The audit that was wrong — and why it belongs here — The fourth row is the sharpest lesson this doctrine has produced. A {all without checking it against the source.; An audit is a claim like any other, and gets audited.}
 - L156 [2] 7. Anti-patterns — - The methodology lecture. Explaining process in the abstract instead {The methodology lecture.; Auditing a trivial number.; Performing scepticism.; Audit as attack.; Auditing only other people.}
 
 ## docs/content-video-engine/41-LEDGER-PAGE-SPECIES.md
 
-- L1 [1] 41 — THE LEDGER PAGE SPECIES (component doc) — Status: BUILT 2026-09-03 (P35 T0–T9); the field and the plates are decided (the deckle); the font and the race read stay open. Ruling E22 + addenda
+- L1 [1] 41 — THE LEDGER PAGE SPECIES (component doc) — Status: BUILT 2026-09-03 (P35 T0–T9); the field and the plates are decided (the deckle); the font and the race read stay open. Ruling E22 + addenda <OPERATOR-RULINGS; seek-safe; translateX; clip-path; curl-shadow; page.field_plate; cross-fades; page.field = "scribble"; "soak"; page.board; page.edge_path; story>
 - L8 [2] 1. What it is — A world plate that IS a chart. Not a dock: the page fills the frame, the
-- L15 [2] 2. The seven beats (all derived from `t`, seek-safe) — | # | Beat | Window | Mechanism (player) | {DECIDED (E22 addendum 4): the deckle is the feature.}
-- L36 [2] 3. The page spec (`ledger_page.v1`) — what the template consumes — Produced by `content/video_engine/scripts/ledger_page.py` from a
-- L85 [2] 4. Authoring — the shot-table row — `build_scene_timeline_f.world_for_plate` resolves it to
-- L101 [2] 5. Plates — Claim `steel-and-paper-ledger-page-v1` (style family
-- L114 [2] 5b. The host at the board (C5 addendum, 2026-09-03) — Host-on-board plates are page plates (`plate` / `field_plate`) in which the
-- L128 [2] 6. Sound — `sound/SOUND-PLAN.json` → `page_cues` (page-relative): paper slide at
-- L135 [2] 7. Gates — - `gate_motion_density.py`: a page's five beats count as visual events, its
-- L145 [2] 8. Open picks (the operator's) — 1. The field DECIDED: the two-plate build with the charcoal filled to the deckle. {The font; Race on a page; The plates}
-- L152 [2] 9. Review checklist for this component — - [ ] Proof: `http://localhost:8731/ledger-species-proof.html` (episode-player server on build-f) — seek 1.2 / 2.8 / 4.5 / 8.5 / 15.8 / 21.5
+- L15 [2] 2. The seven beats (all derived from `t`, seek-safe) — | # | Beat | Window | Mechanism (player) | {DECIDED (E22 addendum 4): the deckle is the feature.} <translateX; clip-path; curl-shadow; page.field_plate; cross-fades; page.field = "scribble"; "soak"; page.board; page.edge_path; story; dense-line; dash-offset>
+- L36 [2] 3. The page spec (`ledger_page.v1`) — what the template consumes — Produced by `content/video_engine/scripts/ledger_page.py` from a <series.json; world.page; builder; story; dense-line; race; decline; combo; pick_builder; variant; line; bars>
+- L85 [2] 4. Authoring — the shot-table row — `build_scene_timeline_f.world_for_plate` resolves it to <build_scene_timeline_f.world_for_plate>
+- L101 [2] 5. Plates — Claim `steel-and-paper-ledger-page-v1` (style family <steel-and-paper-ledger-page-v1; woodblock-vox-newsprint-v2; world-ledger-page-v1.png; world-ledger-blank-page-v1; world-ledger-inked-board-v1; rounded-board; world-ledger-blank-page-cream-v1; world-ledger-inked-deckle-cream-v1; claim-resume; re-order; full-bleed; field_plate>
+- L114 [2] 5b. The host at the board (C5 addendum, 2026-09-03) — Host-on-board plates are page plates (`plate` / `field_plate`) in which the <Host-on-board; plate; field_plate; steel-and-paper-host-board-v1; inked-board; claim-resume; host-board-present-v1; host-board-point-v1; host-board-turned-v1; *-blank.png; host-boards.json; cut-outs>
+- L128 [2] 6. Sound — `sound/SOUND-PLAN.json` → `page_cues` (page-relative): paper slide at <page_cues; page-relative; roll-out; re-cued>
+- L135 [2] 7. Gates — - `gate_motion_density.py`: a page's five beats count as visual events, its <scenes[].docks; innerHTML; Math.random>
+- L145 [2] 8. Open picks (the operator's) — 1. The field DECIDED: the two-plate build with the charcoal filled to the deckle. {The font; Race on a page; The plates} <two-plate; world-ledger-blank-page-v1; -inked-board-v1>
+- L152 [2] 9. Review checklist for this component — - [ ] Proof: `http://localhost:8731/ledger-species-proof.html` (episode-player server on build-f) — seek 1.2 / 2.8 / 4.5 / 8.5 / 15.8 / 21.5 <episode-player; build-f; re-script>
 
 ## docs/content-video-engine/42-DRAWING-KINETICS.md
 
-- L1 [1] 42 — Drawing kinetics: how a stroke, a settle, and a squash are computed — Extracted from `07_academic_literature_drawing_and_2_5d_animation_engine.md` (Pillars 1 {reference — not yet folded to portable.}
-- L12 [2] 42.1 The stroke — curvature-reparameterised drawing — The defect it fixes. `stroke-dashoffset` interpolated linearly in time is constant {The defect it fixes.; The law.}
-- L63 [2] 42.2 The settle — closed-form second-order dynamics — Why iterative physics is not merely slow but wrong for us. We render frame-by-frame {Why iterative physics is not merely slow but wrong for us.; The inverse model — the important line.}
-- L91 [2] 42.3 Squash and stretch, area-preserving and motion-driven — Stretch along the velocity direction, compress across it, area conserved. α is driven {α is driven by speed and by deceleration}
-- L102 [2] 42.4 Curve quality — Euler spirals for generated geometry — Cubic Bézier curvature is a degree-3-over-degree-6 rational function: it ripples, throws {generates}
-- L112 [2] 42.5 What is ours to tune, not a finding — `γ`, `λ_w`, `α_w`, `λ_ρ`, `α_ρ`, `κ_v`, `κ_a`, per-material `ζ`/`ω₀`, and any corner {No paper is cited for them.}
-- L118 [2] 42.6 Sources — Viviani & Terzuolo 1982 · Lacquaniti, Terzuolo & Viviani 1983 · Flash & Hogan 1985 ·
+- L1 [1] 42 — Drawing kinetics: how a stroke, a settle, and a squash are computed — Extracted from `07_academic_literature_drawing_and_2_5d_animation_engine.md` (Pillars 1 {reference — not yet folded to portable.} <curvature-reparameterised; stroke-dashoffset; draw-on; Viviani & Terzuolo 1982; Terzuolo & Viviani 1983; Flash & Hogan; minimum-jerk; min-jerk; C_J = ½∫‖r⃛(t)‖² dt; rest-to-rest; κ; ψ(s)>
+- L12 [2] 42.1 The stroke — curvature-reparameterised drawing — The defect it fixes. `stroke-dashoffset` interpolated linearly in time is constant {The defect it fixes.; The law.} <stroke-dashoffset; draw-on; Viviani & Terzuolo 1982; Terzuolo & Viviani 1983; Flash & Hogan; minimum-jerk; min-jerk; C_J = ½∫‖r⃛(t)‖² dt; rest-to-rest; κ; ψ(s); drawOn(path, k)>
+- L63 [2] 42.2 The settle — closed-form second-order dynamics — Why iterative physics is not merely slow but wrong for us. We render frame-by-frame {Why iterative physics is not merely slow but wrong for us.; The inverse model — the important line.} <frame-by-frame; frame-invariance; ζ; ω₀; Seek-Safe>
+- L91 [2] 42.3 Squash and stretch, area-preserving and motion-driven — Stretch along the velocity direction, compress across it, area conserved. α is driven {α is driven by speed and by deceleration} <κ_v; κ_a>
+- L102 [2] 42.4 Curve quality — Euler spirals for generated geometry — Cubic Bézier curvature is a degree-3-over-degree-6 rational function: it ripples, throws {generates} <over-degree; Levien 2009; Séquin 1992; Hand-authored>
+- L112 [2] 42.5 What is ours to tune, not a finding — `γ`, `λ_w`, `α_w`, `λ_ρ`, `α_ρ`, `κ_v`, `κ_a`, per-material `ζ`/`ω₀`, and any corner {No paper is cited for them.} <γ; λ_w; α_w; λ_ρ; α_ρ; κ_v; κ_a; per-material; ζ; ω₀>
+- L118 [2] 42.6 Sources — Viviani & Terzuolo 1982 · Lacquaniti, Terzuolo & Viviani 1983 · Flash & Hogan 1985 · <Viviani & Terzuolo 1982; Terzuolo & Viviani 1983; Flash & Hogan 1985; Harris & Wolpert 1998; Levien 2009; Moreton & Séquin 1992; Witkin & Kass 1988>
 
 ## docs/content-video-engine/43-SCENE-GRAPH-AND-TRANSFORM.md
 
-- L1 [1] 43 — The scene graph, transforms, and the object→chart morph — Extracted from `02_drawing_engine_and_transforms_research.md` (§1, §3, §4) and {reference — not yet folded to portable.}
-- L13 [2] 43.1 Retained mode, and why we are already right — Immediate mode (raw Canvas/WebGL) issues draw calls per frame with no persistent object {Retained mode}
-- L20 [2] 43.2 The anchor sandwich — the single most common defect — Without the sandwich, scaling drifts diagonally and rotating an arm disconnects the {Without the sandwich, scaling drifts diagonally and rotating}
-- L37 [2] 43.3 The Z-stack — Painter's algorithm, strictly back-to-front. Depth cue without 3D: {This is the safe way to get depth on a page that §45 forbids}
-- L55 [2] 43.4 Dirty flags — Each node holds `localMatrix`, `worldMatrix`, `isDirty`. A property change marks the node
-- L62 [2] 43.5 The morph — two methods, and when each applies — Method A — vertex-based (Flubber / d3-interpolate-path), from `02` §2.3. Cheap, {Method A — vertex-based (Flubber / d3-interpolate-path), fro; Rotational alignment:; Method B — triangle-based ARAP (`07` Pillar 2).}
-- L99 [2] 43.6 The host is a cutout rig, not a generation — Forensic proof, from the dossier §3: frame_0020 of the reference carries three {Forensic proof, from the dossier §3:; That proves the reference composites independent vector asse}
-- L120 [2] 43.7 Bounded biharmonic weights and 2D dual quaternions — For props that must bend rather than pivot: BBW (Jacobson et al. 2011) gives C¹ {Defer until a prop needs it}
-- L127 [2] 43.8 Sources — Alexa, Cohen-Or & Levin 2000 · Sorkine & Alexa 2007 · Igarashi, Moscovich & Hughes 2005 ·
+- L1 [1] 43 — The scene graph, transforms, and the object→chart morph — Extracted from `02_drawing_engine_and_transforms_research.md` (§1, §3, §4) and {reference — not yet folded to portable.} <WebGL; scene-graph; at: "datum"; Z-stack; back-to-front; localMatrix; worldMatrix; isDirty; vertex-based; interpolate-path; already-available; Ring-normalise>
+- L13 [2] 43.1 Retained mode, and why we are already right — Immediate mode (raw Canvas/WebGL) issues draw calls per frame with no persistent object {Retained mode} <WebGL; scene-graph>
+- L20 [2] 43.2 The anchor sandwich — the single most common defect — Without the sandwich, scaling drifts diagonally and rotating an arm disconnects the {Without the sandwich, scaling drifts diagonally and rotating} <at: "datum">
+- L37 [2] 43.3 The Z-stack — Painter's algorithm, strictly back-to-front. Depth cue without 3D: {This is the safe way to get depth on a page that §45 forbids} <back-to-front>
+- L55 [2] 43.4 Dirty flags — Each node holds `localMatrix`, `worldMatrix`, `isDirty`. A property change marks the node <localMatrix; worldMatrix; isDirty>
+- L62 [2] 43.5 The morph — two methods, and when each applies — Method A — vertex-based (Flubber / d3-interpolate-path), from `02` §2.3. Cheap, {Method A — vertex-based (Flubber / d3-interpolate-path), fro; Rotational alignment:; Method B — triangle-based ARAP (`07` Pillar 2).} <already-available; Ring-normalise; inside-out; J = D′D⁻¹; polar-decomposed; c_ij = ½(cot α_ij + cot β_ij); back-substitution; Outline-to-outline; object → chart>
+- L99 [2] 43.6 The host is a cutout rig, not a generation — Forensic proof, from the dossier §3: frame_0020 of the reference carries three {Forensic proof, from the dossier §3:; That proves the reference composites independent vector asse} <thin-line; thick-line; retro-cartoon>
+- L120 [2] 43.7 Bounded biharmonic weights and 2D dual quaternions — For props that must bend rather than pivot: BBW (Jacobson et al. 2011) gives C¹ {Defer until a prop needs it} <Jacobson et al.; dual-quaternion>
+- L127 [2] 43.8 Sources — Alexa, Cohen-Or & Levin 2000 · Sorkine & Alexa 2007 · Igarashi, Moscovich & Hughes 2005 · <Cohen-Or; Or & Levin 2000; Sorkine & Alexa 2007; Moscovich & Hughes 2005; Jacobson et al.; Hertzmann & Zorin 2000>
 
 ## docs/content-video-engine/44-INK-AND-SURFACE.md
 
-- L1 [1] 44 — Ink and surface: why vector ink looks sterile, and the three models that fix it — Extracted from `07_academic_literature_drawing_and_2_5d_animation_engine.md` §1.4. {reference — not yet folded to portable.}
-- L9 [2] 44.1 Alpha blending is the wrong operator (Kubelka–Munk 1931) — This is a compositing bug, not a taste preference. Standard {This is a compositing bug, not a taste preference.; Where it applies:}
+- L1 [1] 44 — Ink and surface: why vector ink looks sterile, and the three models that fix it — Extracted from `07_academic_literature_drawing_and_2_5d_animation_engine.md` §1.4. {reference — not yet folded to portable.} <Munk 1931; dst·(1−a) + src·a; two-flux; Deegan et al.; Chu & Tai 2005; sub-pixel; one-to-two-pixel; Kubelka & Munk 1931>
+- L9 [2] 44.1 Alpha blending is the wrong operator (Kubelka–Munk 1931) — This is a compositing bug, not a taste preference. Standard {This is a compositing bug, not a taste preference.; Where it applies:} <dst·(1−a) + src·a; two-flux>
 - L27 [2] 44.2 The dark rim (Deegan et al. 1997) — Real sumi and watercolour do not fill uniformly. A pinned droplet perimeter evaporates {dense dark ring; Where it applies:}
 - L44 [2] 44.3 The halo (Chu & Tai 2005) — Wicking through kozo fibres obeys Darcy's law for porous media: {K an anisotropic permeability tensor aligned to the deckle g; Where it applies:}
-- L60 [2] 44.4 What this does not license — E22 is a final operator ruling with an explicit refusal list: blob bleed, gap, coffee {final; sub-pixel behaviour at the ink boundary; If either becomes visible as an effect, it has violated the}
+- L60 [2] 44.4 What this does not license — E22 is a final operator ruling with an explicit refusal list: blob bleed, gap, coffee {final; sub-pixel behaviour at the ink boundary; If either becomes visible as an effect, it has violated the} <one-to-two-pixel>
 - L71 [2] 44.5 Priority — Below §42.1 and §42.2. This is the finish, not the motion — it raises the ceiling on a
-- L77 [2] 44.6 Sources — Kubelka & Munk 1931 · Deegan et al. 1997, 2000 · Chu & Tai 2005 · Winkenbach & Salesin
+- L77 [2] 44.6 Sources — Kubelka & Munk 1931 · Deegan et al. 1997, 2000 · Chu & Tai 2005 · Winkenbach & Salesin <Kubelka & Munk 1931; Deegan et al.; Chu & Tai 2005>
 
 ## docs/content-video-engine/45-PARALLAX-AND-PLATE-MOTION.md
 
-- L1 [1] 45 — Parallax and plate motion: what may move, how much, and what is banned — Extracted from `05_comfyui_parallax_technical_standards.md` and {reference — not yet folded to portable.}
-- L12 [2] 45.1 Why our parallax melted — Depthflow is an image-space heightfield ray marcher, not a scene. It coarse-probes {image-space heightfield ray marcher; there are zero pixels behind the foreground.}
-- L28 [2] 45.2 The viability matrix — a gate, not advice — | plate content | depth discontinuity | verdict | {viable; conditional; BANNED; Depthflow is an environmental atmosphere tool, not an object}
-- L46 [2] 45.3 Our current dials, and what they should be — Read from `tools/google-flow-driver/src/parallax-runner.mjs` on 2026-09-04. {the kaleidoscope ceiling glitch}
-- L64 [2] 45.4 RESOLVED from source — `intensity` is the displacement, `strength` is dead — `05` said `strength` was the killer; `06` said `strength` feeds an inert modulation input {Settled 2026-09-04 by reading the installed node, which is t; `base_flex.py:25`; `base_flex.py:66`; `base_flex.py:103`}
-- L97 [2] 45.5 The professional standard — multi-plane inpainting — Instead of stretching one mesh: {SAM 2.1; LaMa; ~50 ms, ~1.2 GB VRAM, deterministic.; cards at different Z in the renderer}
-- L111 [2] 45.6 Ambient motion without diffusing the subject — LTX-Video 2B DiT with latent noise masking: {the actor and the page do not move at all; `num_frames = 8n + 1`; Re-stitch the pristine cutout over the decoded video}
-- L130 [2] 45.7 Sources — Depth Anything v2 (ByteDance/HKU) · `akatz-ai/ComfyUI-Depthflow-Nodes` · Shih et al.,
+- L1 [1] 45 — Parallax and plate motion: what may move, how much, and what is banned — Extracted from `05_comfyui_parallax_technical_standards.md` and {reference — not yet folded to portable.} <image-space; coarse-probes; Z_surf = height × D(u,v); sub-texel; Δ ≤ 8 px; Δ > 20 px; ΔZ; Z-stack; strength; 1.0; intensity; 0.08>
+- L12 [2] 45.1 Why our parallax melted — Depthflow is an image-space heightfield ray marcher, not a scene. It coarse-probes {image-space heightfield ray marcher; there are zero pixels behind the foreground.} <coarse-probes; Z_surf = height × D(u,v); sub-texel; Δ ≤ 8 px; Δ > 20 px>
+- L28 [2] 45.2 The viability matrix — a gate, not advice — | plate content | depth discontinuity | verdict | {viable; conditional; BANNED; Depthflow is an environmental atmosphere tool, not an object} <ΔZ; Z-stack>
+- L46 [2] 45.3 Our current dials, and what they should be — Read from `tools/google-flow-driver/src/parallax-runner.mjs` on 2026-09-04. {the kaleidoscope ceiling glitch} <strength; 1.0; intensity; 0.08; 0.15; 0.18; tiling_mode; "mirror"; "none"; pre-zoom; ssaa; 1.5>
+- L64 [2] 45.4 RESOLVED from source — `intensity` is the displacement, `strength` is dead — `05` said `strength` was the killer; `06` said `strength` feeds an inert modulation input {Settled 2026-09-04 by reading the installed node, which is t; `base_flex.py:25`; `base_flex.py:66`; `base_flex.py:103`} <None; single-preset; if feature is not None:; modulate_param; DepthflowMotionPreset; default 1.0, min 0.0, max 10.0; create_internal; strength = 1.0; feature; 1.0; intensity: 1.0; tiling_mode>
+- L97 [2] 45.5 The professional standard — multi-plane inpainting — Instead of stretching one mesh: {SAM 2.1; LaMa; ~50 ms, ~1.2 GB VRAM, deterministic.; cards at different Z in the renderer} <multi-scale; big-lama.pt; image-wide; R_grow = ⌈2σ_optical⌉ + 12 px; INPAINT_ColorMatch; μ; σ>
+- L111 [2] 45.6 Ambient motion without diffusing the subject — LTX-Video 2B DiT with latent noise masking: {the actor and the page do not move at all; `num_frames = 8n + 1`; Re-stitch the pristine cutout over the decoded video} <LTX-Video; DiT; 2.5; 3.2; 3.5; FlowMatch>
+- L130 [2] 45.7 Sources — Depth Anything v2 (ByteDance/HKU) · `akatz-ai/ComfyUI-Depthflow-Nodes` · Shih et al., <ByteDance; Shih et al.; Suvorov et al.; LaMa>
 
 ## docs/content-video-engine/46-REFERENCE-RHYTHM.md
 
-- L1 [1] 46 — Reference rhythm: what the shot ledger actually measures — Extracted from `04_shot_ledger_100_cuts.md` (primary measurement, recomputed here) and {reference — not yet folded to portable.}
-- L12 [2] 46.1 The distribution — recomputed from the ledger, not quoted — | | reference | ours | {cuts / min; 5.9; 5.6; Q1 / Q3; 6.3 / 13.2 s; 7.6 / 11.0 s}
-- L43 [2] 46.2 What this means for M13 and for M10 — M13 (cut lands in an acoustic gap) is free. Since our cut frequency already matches, {M13 (cut lands in an acoustic gap) is free.; M10 is already correct — an earlier claim here that it was n; visual events}
-- L60 [2] 46.3 The gap threshold — settled from the reference, 2026-09-04 — `01` and the dossier's `gap_detector.py` blueprint used Δt ≥ 0.45 s and the gap's {Δt ≥ 0.45 s; midpoint; Δt ≥ 0.30 s; onset; Operator: *"is basing the gap threshold off our own work rea}
-- L97 [2] 46.4 The equation spine — the script-architecture finding — The reference covers six mechanisms and never reads as a listicle, because it is one {one equation evaluated six times; P6 closes by restating the equation.; the mechanism coming back}
-- L114 [2] 46.5 The phase map — The pivot lands at 45 % of runtime, inside our chiastic 45–55 % window. Phase {45 %; Phase word counts in `01` are not.}
-- L128 [2] 46.6 Speech rate — and a number I invented — Reference 183.6 WPM overall; our ep1 measured 182.8. Those two are real measurements. {183.6 WPM; RETRACTED 2026-09-04: the "145–165 WPM doctrine target" was; What the doctrine actually contains is 140 WPM, and it is no; 140 WPM basis}
-- L159 [2] 46.7 Captions — Reference captions: bottom centre, no container box, no frosted pill, no tint — white {no container box, no frosted pill, no tint}
+- L1 [1] 46 — Reference rhythm: what the shot ledger actually measures — Extracted from `04_shot_ledger_100_cuts.md` (primary measurement, recomputed here) and {reference — not yet folded to portable.} <Brunick & DeLong; DeLong; log-normal; Cutting 2011; mid-word; over-cutting; gate_motion_density.py:277; PLATE_HOLD_MAX_S = 20.0; two-dock; FINDINGS-TO-CHECKS; Δt; small.en>
+- L12 [2] 46.1 The distribution — recomputed from the ledger, not quoted — | | reference | ours | {cuts / min; 5.9; 5.6; Q1 / Q3; 6.3 / 13.2 s; 7.6 / 11.0 s} <Brunick & DeLong; DeLong; log-normal; Cutting 2011>
+- L43 [2] 46.2 What this means for M13 and for M10 — M13 (cut lands in an acoustic gap) is free. Since our cut frequency already matches, {M13 (cut lands in an acoustic gap) is free.; M10 is already correct — an earlier claim here that it was n; visual events} <mid-word; over-cutting; gate_motion_density.py:277; PLATE_HOLD_MAX_S = 20.0; two-dock; FINDINGS-TO-CHECKS>
+- L60 [2] 46.3 The gap threshold — settled from the reference, 2026-09-04 — `01` and the dossier's `gap_detector.py` blueprint used Δt ≥ 0.45 s and the gap's {Δt ≥ 0.45 s; midpoint; Δt ≥ 0.30 s; onset; Operator: *"is basing the gap threshold off our own work rea} <small.en; frame-accurate; mid-word; in-gap; cut = gap_start + 0.8 · gap; ElevenLabs; wealth-logic; (committed) and; build-f; episode-paused>
+- L97 [2] 46.4 The equation spine — the script-architecture finding — The reference covers six mechanisms and never reads as a listicle, because it is one {one equation evaluated six times; P6 closes by restating the equation.; the mechanism coming back} <cash-out; buy-borrow-die; margin-call; re-scripts>
+- L114 [2] 46.5 The phase map — The pivot lands at 45 % of runtime, inside our chiastic 45–55 % window. Phase {45 %; Phase word counts in `01` are not.} <YouTube; over-count; per-phase>
+- L128 [2] 46.6 Speech rate — and a number I invented — Reference 183.6 WPM overall; our ep1 measured 182.8. Those two are real measurements. {183.6 WPM; RETRACTED 2026-09-04: the "145–165 WPM doctrine target" was; What the doctrine actually contains is 140 WPM, and it is no; 140 WPM basis} <"wpm_target": 140; timing.target_s; length-estimation; grep>
+- L159 [2] 46.7 Captions — Reference captions: bottom centre, no container box, no frosted pill, no tint — white {no container box, no frosted pill, no tint} <floating-caption>
 - L165 [2] 46.8 Sources — Primary: `04` (recomputed), `01`, `MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md` §10.
 
 ## docs/content-video-engine/47-FINDINGS-TO-CHECKS.md
 
-- L1 [1] 47 — Findings to checks: what today's research can actually enforce — The TDD discipline applied to doctrine: for every finding in 42–46, name the check that {for every finding in 42–46, name the check that would fail w; 1 · DESIGNED OUT; 2 · GATED}
-- L21 [2] 0. First, a correction: M10 was already right — I claimed in 46 §46.2 and backlog N1 that M10 measures shot length and therefore forces {That is wrong.; visual events}
-- L46 [2] 1. DESIGNED OUT — make the wrong thing unrepresentable — | finding | how it is designed out | the test that proves it | {42.1 curvature-reparameterised stroke; A linear implementation fails this.; 42.1 the κ₀ regulariser; 42.1 width/ink coupling}
-- L62 [2] 2. GATED — mechanical checks against an artifact — Ordered by value. "Fails on" is the pre-finding behaviour the check catches. {G-o; Mobile legibility; 14 of the template's 16 font sizes today.; G-a; Punch does not overlap a build.}
-- L92 [2] 2b. AGENT-JUDGED — reproducible, automatable, not deterministic — A judgment a model executes on every build. Belongs with P36 (the viewer) rather than {P36 (the viewer)}
-- L97 [3] V-a · The muted-caption judge — Operator contribution, 2026-09-04. This is not from the research. {I had recorded that as a human read. It does not have to be.; reads; with; with captions removed; asks; PASS}
-- L129 [2] 3. JUDGE — human, not automatable — - 44.2 coffee-ring edge / 44.3 anisotropic wicking. Un-gateable by construction: {44.2 coffee-ring edge / 44.3 anisotropic wicking.; 43.5 morph method A vs B.}
-- L137 [2] 4. DEMOTED — knowledge, not doctrine — Named honestly, because a finding that cannot carry a check should not sit in a doc {42.4 Euler spirals over Béziers; 42.5 all tunables; A6 secondary-motion ratio (0.22)}
-- L152 [2] 6. Two corrections from the operator, 2026-09-04 — G-f is withdrawn — it was not animation doctrine. I had gated "the actor resolves to a {G-f is withdrawn — it was not animation doctrine.; they; wrong kind of rule for this document.}
-- L183 [2] 5b. Shipped — P37, 2026-09-04 — Every row of §2 now names the script that owns it and the state it landed in. A gate is {shipped}
-- L208 [2] 5. The scoreboard — 8 designed out (four of them SHIPPED 2026-09-05 by P43: the stroke, the spring, the squash, and G-h's K-M ink - §5b) · 14 gated (11 shipped or on the ladder, 2 {8 designed out (four of them SHIPPED 2026-09-05 by P43: the; operator analytics}
+- L1 [1] 47 — Findings to checks: what today's research can actually enforce — The TDD discipline applied to doctrine: for every finding in 42–46, name the check that {for every finding in 42–46, name the check that would fail w; 1 · DESIGNED OUT; 2 · GATED} <AGENT-JUDGED; gate_motion_density.py:277; stage-mode; PLATE_HOLD_MAX_S = 20.0; first-minute; tail-growing; curvature-reparameterised; drawOn(path, k); curvature-driven; v(at max κ) < v(at min κ); κ₀; straight-line>
+- L21 [2] 0. First, a correction: M10 was already right — I claimed in 46 §46.2 and backlog N1 that M10 measures shot length and therefore forces {That is wrong.; visual events} <gate_motion_density.py:277; stage-mode; PLATE_HOLD_MAX_S = 20.0; first-minute; tail-growing>
+- L46 [2] 1. DESIGNED OUT — make the wrong thing unrepresentable — | finding | how it is designed out | the test that proves it | {42.1 curvature-reparameterised stroke; A linear implementation fails this.; 42.1 the κ₀ regulariser; 42.1 width/ink coupling} <drawOn(path, k); curvature-driven; v(at max κ) < v(at min κ); straight-line; NaN; divide-by-zero; v(s); w(at max κ) > w(at min κ); closed-form; bit-identical; area-preserving; det(A(t)) == 1>
+- L62 [2] 2. GATED — mechanical checks against an artifact — Ordered by value. "Fails on" is the pre-finding behaviour the check catches. {G-o; Mobile legibility; 14 of the template's 16 font sizes today.; G-a; Punch does not overlap a build.} <pre-finding; G-b; actor; prop; evidence; G-c; tiling_mode != "mirror"; ssaa ≥ 1.5; quality ≥ 80; intensity ≤ 0.18; ViT-Large; ViT>
+- L92 [2] 2b. AGENT-JUDGED — reproducible, automatable, not deterministic — A judgment a model executes on every build. Belongs with P36 (the viewer) rather than {P36 (the viewer)} <stand-in; V-a; muted-caption; RULE-abstract-to-concrete>
+- L97 [3] V-a · The muted-caption judge — Operator contribution, 2026-09-04. This is not from the research. {I had recorded that as a human read. It does not have to be.; reads; with; with captions removed; asks; PASS} <RULE-abstract-to-concrete>
+- L129 [2] 3. JUDGE — human, not automatable — - 44.2 coffee-ring edge / 44.3 anisotropic wicking. Un-gateable by construction: {44.2 coffee-ring edge / 44.3 anisotropic wicking.; 43.5 morph method A vs B.} <Un-gateable>
+- L137 [2] 4. DEMOTED — knowledge, not doctrine — Named honestly, because a finding that cannot carry a check should not sit in a doc {42.4 Euler spirals over Béziers; 42.5 all tunables; A6 secondary-motion ratio (0.22)} <γ; λ_w; κ_v; per-material; ζ; ω₀>
+- L152 [2] 6. Two corrections from the operator, 2026-09-04 — G-f is withdrawn — it was not animation doctrine. I had gated "the actor resolves to a {G-f is withdrawn — it was not animation doctrine.; they; wrong kind of rule for this document.} <re-roll; G-g; mis-generalised; six-item; re-instantiated>
+- L183 [2] 5b. Shipped — P37, 2026-09-04 — Every row of §2 now names the script that owns it and the state it landed in. A gate is {shipped} <G-a; G-b; G-c; G-e; G-m; G-n; G-d; G-g; G-i; G-j; G-k; INFO-then-FAIL>
+- L208 [2] 5. The scoreboard — 8 designed out (four of them SHIPPED 2026-09-05 by P43: the stroke, the spring, the squash, and G-h's K-M ink - §5b) · 14 gated (11 shipped or on the ladder, 2 {8 designed out (four of them SHIPPED 2026-09-05 by P43: the; operator analytics} <G-h; K-M; agent-judged; G-o; G-l; highest-value; designed-out; previously-demoted; G-a; G-c; G-g; re-script>
 
 ## docs/content-video-engine/48-THE-FIGURE-AND-THE-GROUND.md
 
-- L1 [1] 48 — The figure and the ground: actor motion, object handling, grounding — Extracted from `09_2d_and_2_5d_body_animation_object_handling_and_grounding.md`. {reference — not yet folded to portable.; This closes X10}
-- L16 [2] 48.1 The FK/IK boundary — the most useful rule in the document — Two laws, and they are exclusive: {The arc law; FK.; The contact law; IK.}
-- L37 [2] 48.2 Balance — why a gesturing figure must move its hips — `XCOM = r_COM + v_COM/ω₀`, `ω₀ = √(g/l)` (Hof, Gazendam & Sinke 2005). Static COM is {Ankle; Hip; the pelvis translates posteriorly in anti-phase to the arm; The failure this names:}
-- L58 [2] 48.3 The rig — why linear blend skinning collapses — SO(2) is not a linear subspace. Blending rotation matrices linearly gives {zero; 2D dual-quaternion skinning; Bounded biharmonic weights; This changes a deferral.}
-- L73 [2] 48.4 Idling — the "alive" answer, for a figure — Doc 42's A4 came back empty on how long a frame can hold. This answers the narrower and {Breath: 0.20–0.30 Hz; never a sine; Postural sway}
-- L92 [2] 48.5 Reach and grasp — - Transport follows the same minimum-jerk quintic as everything else in 42 §42.1 — {Transport; Grasp runs on its own channel; τ ≈ 0.68; Re-parenting is a cached matrix, never a hierarchy mutation.}
-- L111 [2] 48.6 Mass is communicated before the object moves — - APA: for a heavy prop, postural muscles fire 100–150 ms before lift-off and the {APA; 100–150 ms before lift-off; Grip–load coupling; fingers clamp and flesh squashes for 6–10 frames before the; The unloading dip; Weight is sold before the lift, not during it.}
-- L133 [2] 48.7 Grounding — why composited figures look pasted — Four defects, each with a fix: {Foot slide.; never to an independent screen-space tween; The floor-shear paradox.; The floating sticker.}
-- L154 [2] 48.8 Harmonisation, in our own tokens — The document integrates with E22 rather than around it: {Koschmieder attenuation; `#F4E6C7`; Light wrap; Substrate grain; `#25313C`}
-- L168 [2] 48.9 What this changes — | | | {closes; X10; retriggers; D5; resolves; D3}
-- L179 [2] 48.10 Sources — Hof, Gazendam & Sinke 2005 · Horak & Nashner 1986 · Aristidou & Lasenby 2011 ·
+- L1 [1] 48 — The figure and the ground: actor motion, object handling, grounding — Extracted from `09_2d_and_2_5d_body_animation_object_handling_and_grounding.md`. {reference — not yet folded to portable.; This closes X10} <G-f; minimum-jerk; α(τ) = 10τ³ − 15τ⁴ + 6τ⁵; O(1); O(N); Gazendam & Sinke 2005; anti-phase; counter-balance; slot-swap; anti-gravity; det(R_blend) < 1; Δθ>
+- L16 [2] 48.1 The FK/IK boundary — the most useful rule in the document — Two laws, and they are exclusive: {The arc law; FK.; The contact law; IK.} <minimum-jerk; α(τ) = 10τ³ − 15τ⁴ + 6τ⁵; O(1); O(N)>
+- L37 [2] 48.2 Balance — why a gesturing figure must move its hips — `XCOM = r_COM + v_COM/ω₀`, `ω₀ = √(g/l)` (Hof, Gazendam & Sinke 2005). Static COM is {Ankle; Hip; the pelvis translates posteriorly in anti-phase to the arm; The failure this names:} <Gazendam & Sinke 2005; counter-balance; slot-swap; anti-gravity>
+- L58 [2] 48.3 The rig — why linear blend skinning collapses — SO(2) is not a linear subspace. Blending rotation matrices linearly gives {zero; 2D dual-quaternion skinning; Bounded biharmonic weights; This changes a deferral.} <det(R_blend) < 1; Δθ; paper-thin; candy-wrapper; Kavan et al.; det(T_blend) ≡ 1; Jacobson et al.; Δ²w = 0>
+- L73 [2] 48.4 Idling — the "alive" answer, for a figure — Doc 42's A4 came back empty on how long a frame can hold. This answers the narrower and {Breath: 0.20–0.30 Hz; never a sine; Postural sway} <post-expiratory; two-regime; open-loop; closed-loop; A-P; M-L; pink-noise; non-looping>
+- L92 [2] 48.5 Reach and grasp — - Transport follows the same minimum-jerk quintic as everything else in 42 §42.1 — {Transport; Grasp runs on its own channel; τ ≈ 0.68; Re-parenting is a cached matrix, never a hierarchy mutation.} <minimum-jerk; v_max = 1.875·v̄; Jeannerod 1984; MGA = d + 20–40 mm; M_world,prop(t) = M_hand(t) · M_offset; v_hand + ω_hand × r_offset; one-frame; O(1); seek-safe; HandSlot>
+- L111 [2] 48.6 Mass is communicated before the object moves — - APA: for a heavy prop, postural muscles fire 100–150 ms before lift-off and the {APA; 100–150 ms before lift-off; Grip–load coupling; fingers clamp and flesh squashes for 6–10 frames before the; The unloading dip; Weight is sold before the lift, not during it.} <pre-motion; ζ; secondary-motion>
+- L133 [2] 48.7 Grounding — why composited figures look pasted — Four defects, each with a fix: {Foot slide.; never to an independent screen-space tween; The floor-shear paradox.; The floating sticker.} <Zero-slip; v_contact − v_surface = 0; transform-origin: 50% 100%; far; cast; v_sprite(t) ≡ v_floor(y_baseline, t); α; #141B22; σ; σ(y) = σ₀ + k(y_base − y); eye-line>
+- L154 [2] 48.8 Harmonisation, in our own tokens — The document integrates with E22 rather than around it: {Koschmieder attenuation; `#F4E6C7`; Light wrap; Substrate grain; `#25313C`} <rendering-weight; C = C_vector · [1 + κ(T_washi − 0.5)]; κ>
+- L168 [2] 48.9 What this changes — | | | {closes; X10; retriggers; D5; resolves; D3} <secondary-motion; ζ; phase-lag; HandSlot; minimum-jerk; rest-to-rest>
+- L179 [2] 48.10 Sources — Hof, Gazendam & Sinke 2005 · Horak & Nashner 1986 · Aristidou & Lasenby 2011 · <Gazendam & Sinke 2005; Horak & Nashner 1986; Aristidou & Lasenby 2011; Flash & Hogan 1985; Feix et al.; Cutkosky 1989; Jeannerod 1984; Jacobson et al.; Kavan et al.; Winter 2009; Bouisset & Do 2008; Johansson & Flanagan 2009>
 
 ## docs/content-video-engine/49-GENERATIVE-VIDEO-AND-THE-VERTICAL-STAGE.md
 
-- L1 [1] 49 — Generative video and the vertical stage — Extracted from `10_generative_video_tools_and_cross_platform_composition.md`. {reference — not yet folded to portable.; Closes X12 and X13; §49.1 found a live defect in shipped code — ours.}
-- L13 [2] 49.1 The vertical safe box, and the defect it exposed — Mobile platforms overlay UI on up to 59.1 % of a vertical frame. The intersection that {59.1 %}
-- L27 [3] Our 9:16 docks are outside it — `scene-evidence-player.template.html:155-162` — which I wrote: {1016; 136 px into the right rail — under the like/comment/share bu; 952; 152 px too wide}
-- L52 [3] The 3-zone vertical stage — Centre-cropping 16:9 → 9:16 destroys 68.36 % of horizontal area {68.36 %; re-stage; the chart, rebuilt for the portrait frame}
-- L109 [2] 49.2 Wan 2.1 — the dials — | dial | setting | why | {frame count; `T = 4k+1`; 81; CFG (I2V); 3.5–4.0, hard ceiling 4.5; ~2.2× speedup, no visual loss}
-- L128 [2] 49.3 LTX-Video — the dials, and mask pinning — `N = 8n + 1` → 25, 49, 73, 97, 121, 161. 121 @ 24 fps = 5.04 s. Off-law counts break {121; STG; 1.0, `skip_block_list=[19]`; STG is the anti-melt mechanism.}
-- L171 [2] 49.4 The depth suite — - Depth Anything V2 — `vitl_fp32`, ~335 M params, 2.8 GB. Trained on 595 K synthetic {Depth Anything V2; the washi deckle; DepthCrafter; Geometry-locked generation}
-- L185 [2] 49.5 The parallax question, now settled three ways — §3.3 cites `base_flex.py:66` and `depthflow_motion_presets.py:13` — the exact lines I read {`strength` is bypassed when `feature is None`; `intensity` i; 0.10–0.12}
-- L195 [2] 49.6 Short-form is a different machine — | | short (15–60 s) | long (8–20 m) | {hook window; 0.0–3.0 s; threshold; viewed-vs-swiped > 75 %; visual pulse; every 1.2–2.5 s}
-- L213 [2] 49.7 What this changes — | | | {closes; X12; X13; exposes; adds a gate; confirms}
-- L224 [2] 49.8 Sources — Wan-Video 2.1 (Alibaba) · Lightricks LTX-Video 0.9.1/0.9.5 · Depth Anything V2 (NeurIPS
+- L1 [1] 49 — Generative video and the vertical stage — Extracted from `10_generative_video_tools_and_cross_platform_composition.md`. {reference — not yet folded to portable.; Closes X12 and X13; §49.1 found a live defect in shipped code — ours.} <width: 800px; left: 80px; Centre-cropping; balance-scale; re-stage; word-level; re-laid; re-staged; html[data-aspect="9:16"]; PORTRAIT; byte-identical; top-down; LP_PORTRAIT>
+- L13 [2] 49.1 The vertical safe box, and the defect it exposed — Mobile platforms overlay UI on up to 59.1 % of a vertical frame. The intersection that {59.1 %} <width: 800px; left: 80px; Centre-cropping; balance-scale; re-stage; word-level; re-laid; re-staged; html[data-aspect="9:16"]; PORTRAIT; byte-identical; top-down; LP_PORTRAIT>
+- L27 [3] Our 9:16 docks are outside it — `scene-evidence-player.template.html:155-162` — which I wrote: {1016; 136 px into the right rail — under the like/comment/share bu; 952; 152 px too wide} <width: 800px; left: 80px>
+- L52 [3] The 3-zone vertical stage — Centre-cropping 16:9 → 9:16 destroys 68.36 % of horizontal area {68.36 %; re-stage; the chart, rebuilt for the portrait frame} <Centre-cropping; balance-scale; word-level; re-laid; re-staged; html[data-aspect="9:16"]; byte-identical; top-down; LP_PORTRAIT; G-l; right-hand; viewBox>
+- L109 [2] 49.2 Wan 2.1 — the dials — | dial | setting | why | {frame count; `T = 4k+1`; 81; CFG (I2V); 3.5–4.0, hard ceiling 4.5; ~2.2× speedup, no visual loss} <TeaCache; umt5_xxl_fp8_e4m3fn_**scaled**; NaNs; Wan2.1-I2V-1.3B; image-to-video; Wan2.1-Fun-1.3B-InP; Wan2.1-VACE-1.3B; non-obviously>
+- L128 [2] 49.3 LTX-Video — the dials, and mask pinning — `N = 8n + 1` → 25, 49, 73, 97, 121, 161. 121 @ 24 fps = 5.04 s. Off-law counts break {121; STG; 1.0, `skip_block_list=[19]`; STG is the anti-melt mechanism.} <N = 8n + 1; Off-law; CFG-star; True; M = 0; bit-for-bit; M = 1; CRF 28–32 on the guide image; counter-intuitive; mask-pinned; ComfyUI; control_masks>
+- L171 [2] 49.4 The depth suite — - Depth Anything V2 — `vitl_fp32`, ~335 M params, 2.8 GB. Trained on 595 K synthetic {Depth Anything V2; the washi deckle; DepthCrafter; Geometry-locked generation} <vitl_fp32; ray-traced; pseudo-labelled; ViT-Giant; ViT; step-function; per-frame; scale-shift; D_t = s_t D* + t_t; SVD-xt; zero-conv; ControlNet>
+- L185 [2] 49.5 The parallax question, now settled three ways — §3.3 cites `base_flex.py:66` and `depthflow_motion_presets.py:13` — the exact lines I read {`strength` is bypassed when `feature is None`; `intensity` i; 0.10–0.12} <base_flex.py:66; depthflow_motion_presets.py:13; tiling_mode: "none"; Δ>
+- L195 [2] 49.6 Short-form is a different machine — | | short (15–60 s) | long (8–20 m) | {hook window; 0.0–3.0 s; threshold; viewed-vs-swiped > 75 %; visual pulse; every 1.2–2.5 s} <throat-clearing; six-phase; visual-pulse; long-form>
+- L213 [2] 49.7 What this changes — | | | {closes; X12; X13; exposes; adds a gate; confirms} <long-form>
+- L224 [2] 49.8 Sources — Wan-Video 2.1 (Alibaba) · Lightricks LTX-Video 0.9.1/0.9.5 · Depth Anything V2 (NeurIPS <Wan-Video; LTX-Video; NeurIPS; DepthCrafter; YouTube; TikTok>
 
 ## docs/content-video-engine/50-THE-PHONE-IS-THE-SCREEN.md
 
-- L1 [1] 50 — The phone is the screen: ep1's real analytics, and what they say — Operator-supplied YouTube analytics for ep1, 2026-09-04. This is ground truth, not {This is ground truth, not research}
-- L9 [2] 50.1 The numbers — Impressions funnel (Sep 2–3, 2 days): {Impressions funnel; 77; 6.5 %; 5; average view duration, that cohort; 1:05}
-- L30 [2] 50.2 The finding: our type is illegible on a phone — 75.2 % of watch time is a phone. Our stage is 1920 px wide. On a phone in portrait — {YouTube's default player}
+- L1 [1] 50 — The phone is the screen: ep1's real analytics, and what they say — Operator-supplied YouTube analytics for ep1, 2026-09-04. This is ground truth, not {This is ground truth, not research} <Operator-supplied; YouTube; doc 49 §49.1; three-quarters; watch-time; Retention-curve>
+- L9 [2] 50.1 The numbers — Impressions funnel (Sep 2–3, 2 days): {Impressions funnel; 77; 6.5 %; 5; average view duration, that cohort; 1:05} <YouTube>
+- L30 [2] 50.2 The finding: our type is illegible on a phone — 75.2 % of watch time is a phone. Our stage is 1920 px wide. On a phone in portrait — {YouTube's default player} <doc 49 §49.1; three-quarters>
 - L68 [2] 50.3 What the retention split actually says — Two cohorts, and they behave differently: {Two cohorts, and they behave differently:; Cold; 1:05; Everyone; 4:39.; the mass departure is earlier than 1:05}
-- L86 [2] 50.4 Reading the other two numbers honestly — The CTR fall, 20 % → 6.5 %. The operator's mechanism — YouTube seeding first to an {The CTR fall, 20 % → 6.5 %.; But these numbers cannot show it.; 5 clicks; "YouTube is serving it, so I can't blame them."}
+- L86 [2] 50.4 Reading the other two numbers honestly — The CTR fall, 20 % → 6.5 %. The operator's mechanism — YouTube seeding first to an {The CTR fall, 20 % → 6.5 %.; But these numbers cannot show it.; 5 clicks; "YouTube is serving it, so I can't blame them."} <watch-time>
 - L114 [2] 50.5 What this changes — | | | {new gate; mobile legibility; reprioritises; sharpens P40; the cold cohort's first ~60 seconds on a 390 px screen; does not overturn}
-- L126 [2] 50.6 Sources — Operator-supplied YouTube Studio analytics, 2026-09-04 (funnel Sep 2–3; traffic sources
+- L126 [2] 50.6 Sources — Operator-supplied YouTube Studio analytics, 2026-09-04 (funnel Sep 2–3; traffic sources <Operator-supplied; YouTube; Retention-curve>
 
 ## docs/content-video-engine/51-THE-SHORTS-FORMAT.md
 
-- L1 [1] 51 — The shorts format: one page, ship in an afternoon — Everything needed to build a short, consolidated from docs 46, 49, 50 and the operator's {It is one page on purpose.; Why this exists:; Knowledge should make a short cheaper, not more expensive}
-- L15 [2] 51.1 The four numbers — | | | {runtime; mechanisms; exactly one; visual pulse; 1.2–2.5 s; minimum type}
-- L24 [2] 51.2 The shape — Gated (G2, 2026-09-05) — `gate_opening_structure.py` reads a measured clock under 3:00 as a short and asks this shape, not the long-form geometry: S01 the hook
+- L1 [1] 51 — The shorts format: one page, ship in an afternoon — Everything needed to build a short, consolidated from docs 46, 49, 50 and the operator's {It is one page on purpose.; Why this exists:; Knowledge should make a short cheaper, not more expensive} <long-form; [post-key]; [new]; [catalyst]; two-line; late-stage; Spread = (Return − Cost) × Leverage; G-g; x[80,880] y[280,1340]; phone-native; stick-figure; single-colour>
+- L15 [2] 51.1 The four numbers — | | | {runtime; mechanisms; exactly one; visual pulse; 1.2–2.5 s; minimum type} <long-form>
+- L24 [2] 51.2 The shape — Gated (G2, 2026-09-05) — `gate_opening_structure.py` reads a measured clock under 3:00 as a short and asks this shape, not the long-form geometry: S01 the hook <long-form; [post-key]; [new]; [catalyst]; two-line; late-stage; Spread = (Return − Cost) × Leverage; G-g>
 - L46 [2] 51.3 What the operator's knowledge actually buys — One sentence nobody else in the format can say. {One sentence nobody else in the format can say.; That edge costs one sentence, not thirteen minutes.}
-- L57 [2] 51.4 Production standard — deliberately lower — Per the operator's shorts ruling (yen short, 2026-09-03), and unchanged: {IN:; OUT:; A short does not need the production bar. It needs legible t}
-- L71 [2] 51.5 The honest read on the competition — They are not winning on no merit. They are winning on merits that are not informational: {legibility; completion; emotional job; cadence; We cannot beat them at aspiration and should not try.}
+- L57 [2] 51.4 Production standard — deliberately lower — Per the operator's shorts ruling (yen short, 2026-09-03), and unchanged: {IN:; OUT:; A short does not need the production bar. It needs legible t} <x[80,880] y[280,1340]; long-form>
+- L71 [2] 51.5 The honest read on the competition — They are not winning on no merit. They are winning on merits that are not informational: {legibility; completion; emotional job; cadence; We cannot beat them at aspiration and should not try.} <phone-native>
 - L88 [2] 51.6 The strategic point — Shorts fund the long-form's existence. Reach subsidises depth. The long essays are {Shorts fund the long-form's existence.; making every short justify the whole knowledge base.}
-- L97 [2] 51.7 Plates are a retention asset, not an acquisition asset — Operator, 2026-09-04: {This is the distinction the whole plate library has been mis; acquisition; retention; under 1 second, no interpretation}
-- L130 [2] 51.8 Motion is not animation — and the gate always knew it — Operator, 2026-09-04: {*motion means animation; Only the third step is wrong}
-- L170 [2] 51.9 Checklist — - [ ] every object nameable in under a second, no interpretation
-- L184 [2] 51.10 Sources — 46 §46.4 (the spine) · 49 §49.1, §49.6 (safe box, short-form architecture) ·
+- L97 [2] 51.7 Plates are a retention asset, not an acquisition asset — Operator, 2026-09-04: {This is the distinction the whole plate library has been mis; acquisition; retention; under 1 second, no interpretation} <stick-figure; single-colour>
+- L130 [2] 51.8 Motion is not animation — and the gate always knew it — Operator, 2026-09-04: {*motion means animation; Only the third step is wrong} <roll-out; lower-third; stick-figure; stage-mode; focus_zoom; retention-not-acquisition>
+- L170 [2] 51.9 Checklist — - [ ] every object nameable in under a second, no interpretation <x[80,880] y[280,1340]>
+- L184 [2] 51.10 Sources — 46 §46.4 (the spine) · 49 §49.1, §49.6 (safe box, short-form architecture) · <short-form>
 
 ## docs/content-video-engine/52-CONSTRUCT-DONT-INHERIT.md
 
-- L1 [1] 52 — Construct, don't inherit — Operator, 2026-09-04: {That is the founding-premise correction, and it explains sev}
-- L15 [2] 52.1 The technical form of the intuition — A generated plate has no addressable coordinate space. {no addressable coordinate space.; Every object has an address.}
-- L31 [3] This is why E25 had to exist — E25 — "a chart never survives a plate change" — reads as a motion rule. It is not. {E25; the plate was not addressable}
-- L42 [2] 52.2 Whiteboard animation is not a new capability — The operator's original intent — a hand drawing to life what the narration is saying — {three planned pieces composed}
-- L56 [2] 52.3 That art is generated, and the prompt is the skill — Corrected 2026-09-04, same day, after the operator pushed back. The first version of {Corrected 2026-09-04, same day, after the operator pushed ba; It is not stick art.}
-- L78 [3] Why generation works there and kept failing here — Across their three frames - the millionaire, the real-estate agent, the pharmacist - {those are three different people.; That is the whole difference.; A listicle has no such constraint}
-- L91 [3] The scope this correction puts on 52.1 — The addressable-coordinate-space argument holds - for evidence-bearing scenes, where a {for evidence-bearing scenes; For an illustrative scene, where the image is the message an; evidence-bearing; construct; illustrative}
-- L108 [3] The division of labour — The operator has the prompt technique and I do not - he has watched the tutorials that {The operator has the prompt technique and I do not; repeatable; A2a therefore splits again:}
-- L120 [2] 52.4 What this demotes — The generative stack keeps a real job, but a smaller one than it was hired for: {was; is; retention; It remains the right tool for an illustrative scene}
-- L140 [2] 52.5 What this promotes — 1. A2a - the icon ring. Sourced and recoloured, not generated. Cheap. {A2a - the icon ring.; A2a-prime - the hero illustrations.; A2b — the prop library.; P38 T2 — the curvature stroke; A5 — the hands.; None of these is a research problem.}
+- L1 [1] 52 — Construct, don't inherit — Operator, 2026-09-04: {That is the founding-premise correction, and it explains sev} <pre-composed; M_world = M_parent × M_local; Z-stack; at: "datum"; RULE-the-page-is-the-ground; stroke-dashoffset; medical-store; hand-written; single-object; multi-element; real-estate; thirteen-minute>
+- L15 [2] 52.1 The technical form of the intuition — A generated plate has no addressable coordinate space. {no addressable coordinate space.; Every object has an address.} <pre-composed; M_world = M_parent × M_local; Z-stack; at: "datum"; RULE-the-page-is-the-ground>
+- L31 [3] This is why E25 had to exist — E25 — "a chart never survives a plate change" — reads as a motion rule. It is not. {E25; the plate was not addressable} <RULE-the-page-is-the-ground>
+- L42 [2] 52.2 Whiteboard animation is not a new capability — The operator's original intent — a hand drawing to life what the narration is saying — {three planned pieces composed} <stroke-dashoffset>
+- L56 [2] 52.3 That art is generated, and the prompt is the skill — Corrected 2026-09-04, same day, after the operator pushed back. The first version of {Corrected 2026-09-04, same day, after the operator pushed ba; It is not stick art.} <medical-store; hand-written; single-object; multi-element; real-estate; thirteen-minute; re-rolls; cutout-rig; addressable-coordinate-space; evidence-bearing; datum-anchored; contact-sheet>
+- L78 [3] Why generation works there and kept failing here — Across their three frames - the millionaire, the real-estate agent, the pharmacist - {those are three different people.; That is the whole difference.; A listicle has no such constraint} <real-estate; thirteen-minute; re-rolls; cutout-rig>
+- L91 [3] The scope this correction puts on 52.1 — The addressable-coordinate-space argument holds - for evidence-bearing scenes, where a {for evidence-bearing scenes; For an illustrative scene, where the image is the message an; evidence-bearing; construct; illustrative} <addressable-coordinate-space; datum-anchored>
+- L108 [3] The division of labour — The operator has the prompt technique and I do not - he has watched the tutorials that {The operator has the prompt technique and I do not; repeatable; A2a therefore splits again:} <contact-sheet; re-deriving>
+- L120 [2] 52.4 What this demotes — The generative stack keeps a real job, but a smaller one than it was hired for: {was; is; retention; It remains the right tool for an illustrative scene} <mask-pinned; mis-assigned; right-sized; mask-pinning>
+- L140 [2] 52.5 What this promotes — 1. A2a - the icon ring. Sourced and recoloured, not generated. Cheap. {A2a - the icon ring.; A2a-prime - the hero illustrations.; A2b — the prop library.; P38 T2 — the curvature stroke; A5 — the hands.; None of these is a research problem.} <Retention-grade>
 - L152 [2] 52.6 The honest summary — We spent real effort inheriting worlds because building them was out of reach. For the {evidence lane; For the illustrative lane it was the right trade and remains}
 - L167 [2] 52.7 Sources — Operator, 2026-09-04. 42 §42.1 · 43 §43.2, §43.3, §43.6 · 44 · 45 §45.2 · 48 §48.5 ·
 
 ## docs/content-video-engine/53-THE-STICKMAN-LANE.md
 
-- L1 [1] 53 — The stickman lane: the workflow, read off the tutorial — Source: the explainer the operator supplied, watched 2026-09-04 (14:48, transcript + {This is the technique I said we did not have, and it runs on}
-- L8 [2] 53.1 The workflow, end to end — | stage | tool | settings named in the video | {ChatGPT; upload a reference sheet image; scene-by-scene, each with an image prompt AND an animation p; Google Flow; outputs 2; Nano Banana 2}
-- L31 [2] 53.2 The identity mechanism — this is the part that matters — The prompt's own words, from the Doc: {model sheet; CHARACTER LOCK paragraph, repeated verbatim in every scene's}
-- L81 [2] 53.3 The two prompt schemas — Image prompt — every field appears in every scene: {Image prompt}
-- L112 [3] What to steal — and what not to — Take the positive fields. They tell the model what is there: {Take the positive fields.; `SUBJECT COUNT: ONE stickman only, appearing exactly once.`; count; `CAMERA: Static hold.`; `SECONDARY MOTION` as its own field.}
-- L123 [3] The animation prompt is PROSE, not fields - settled from our own artifacts — Corrected 2026-09-04. The schema above records the field-based animation prompt as the {Corrected 2026-09-04.; That was wrong, and our own working prompts already said so.; 768 characters, zero newlines, and carries no field markers; our own Omni prompts; prose, one paragraph}
-- L144 [3] Do NOT take the negative blocks — Operator ruling, 2026-09-04, from observed behaviour on our own stack: {Operator ruling, 2026-09-04, from observed behaviour on our}
-- L183 [2] 53.4 What this corrects in my own claims — Two corrections, both mine. {Two corrections, both mine.; First:; Second, and larger: I then presented the lock paragraph as "}
-- L206 [2] 53.5 What we would do differently — The workflow is sound; two stages are worse than what we already have. {our player; add; the spine}
+- L1 [1] 53 — The stickman lane: the workflow, read off the tutorial — Source: the explainer the operator supplied, watched 2026-09-04 (14:48, transcript + {This is the technique I said we did not have, and it runs on} <ChatGPT; stage-gated; scene-by-scene; ElevenLabs; CapCut; YouTube; dark-brown; mitten-like; dusty-blue; short-sleeve; blue-gray; blue-and-white>
+- L8 [2] 53.1 The workflow, end to end — | stage | tool | settings named in the video | {ChatGPT; upload a reference sheet image; scene-by-scene, each with an image prompt AND an animation p; Google Flow; outputs 2; Nano Banana 2} <stage-gated; ElevenLabs; CapCut; YouTube>
+- L31 [2] 53.2 The identity mechanism — this is the part that matters — The prompt's own words, from the Doc: {model sheet; CHARACTER LOCK paragraph, repeated verbatim in every scene's} <dark-brown; mitten-like; dusty-blue; short-sleeve; blue-gray; blue-and-white; low-top; text-based; @Mike; bound_frame_0s; bound_frame_8s; re-describing>
+- L81 [2] 53.3 The two prompt schemas — Image prompt — every field appears in every scene: {Image prompt} <image-to-video; CAMERA: Static hold.; camera-moved; SECONDARY MOTION; field-based; edge-to-edge; ANTI-GLITCH LOCK; re-roll; missing-runtime; post-generation; @Mike; re-rolls>
+- L112 [3] What to steal — and what not to — Take the positive fields. They tell the model what is there: {Take the positive fields.; `SUBJECT COUNT: ONE stickman only, appearing exactly once.`; count; `CAMERA: Static hold.`; `SECONDARY MOTION` as its own field.} <camera-moved>
+- L123 [3] The animation prompt is PROSE, not fields - settled from our own artifacts — Corrected 2026-09-04. The schema above records the field-based animation prompt as the {Corrected 2026-09-04.; That was wrong, and our own working prompts already said so.; 768 characters, zero newlines, and carries no field markers; our own Omni prompts; prose, one paragraph} <field-based; edge-to-edge>
+- L144 [3] Do NOT take the negative blocks — Operator ruling, 2026-09-04, from observed behaviour on our own stack: {Operator ruling, 2026-09-04, from observed behaviour on our} <ANTI-GLITCH LOCK; re-roll; missing-runtime; post-generation; @Mike; re-rolls; pre-filter; negative-conditioning; cross-attention; no extra limbs; extra limbs; negative-prompt>
+- L183 [2] 53.4 What this corrects in my own claims — Two corrections, both mine. {Two corrections, both mine.; First:; Second, and larger: I then presented the lock paragraph as "} <@Mike; off-platform>
+- L206 [2] 53.5 What we would do differently — The workflow is sound; two stages are worse than what we already have. {our player; add; the spine} <CapCut; auto-captions; word-timed>
 - L222 [2] 53.6 The honest read on the sample output — The 30-second demo ("You don't need a perfect plan… you just need 5 minutes") is {The production technique is what is worth taking; the conten}
-- L228 [2] 53.7 What this unblocks — - A2a′ (hero illustrations) now has a concrete spec: a model sheet, a CHARACTER LOCK {A2a′ (hero illustrations); already solved; 51's shorts format; Next concrete step:}
-- L244 [2] 53.8 "Are they over-engineering prompts instead of learning Codex?" — Operator's hypothesis, 2026-09-04. Half right — and the wrong half is the important one. {Half right — and the wrong half is the important one.}
+- L228 [2] 53.7 What this unblocks — - A2a′ (hero illustrations) now has a concrete spec: a model sheet, a CHARACTER LOCK {A2a′ (hero illustrations); already solved; 51's shorts format; Next concrete step:} <eight-field; off-platform; @Mike; seven-field; SUBJECT COUNT; CAMERA: static hold; SECONDARY MOTION>
+- L244 [2] 53.8 "Are they over-engineering prompts instead of learning Codex?" — Operator's hypothesis, 2026-09-04. Half right — and the wrong half is the important one. {Half right — and the wrong half is the important one.} <ChatGPT; CHARACTER LOCK; version-controlled; copy-pasted; NEGATIVE RULES; SUBJECT COUNT; ANTI-GLITCH LOCK; hand-executing; stage-gated; to_dict(); G-l; CapCut>
 - L248 [3] The half that is right — The orchestration is a program pretending to be a prompt. Stage gates ("wait for the {orchestration; ChatGPT has no state between turns and no filesystem.}
-- L258 [3] The half that is wrong, and it matters more — The `CHARACTER LOCK` paragraph is not bloat. It is state injection into a stateless {The `CHARACTER LOCK` paragraph is not bloat. It is state inj; generated and version-controlled instead of copy-pasted.}
-- L268 [3] The reframe — > They are not over-engineering prompts. They are hand-executing a pipeline. {They are not over-engineering prompts. They are hand-executi; The prompt is fine. The runtime is missing.; if you cannot diff, test or reuse a prompt, exhaustiveness i}
-- L296 [3] What `Prompts.txt` adds that the video did not — - 10 scenes × ~6 s for a ~59 s video (the video used 7 × 4 s for 30 s). Two workable {10 scenes × ~6 s for a ~59 s video; "Only animate: arms, head, facial expression, or props. Body; "At least one prop (required in every scene)."; Worth stealing as a validator}
-- L310 [2] 53.9 A third prompt — and it contradicts §53.3 — Source: `Untitled document (1).md`, the "Stickman Explainer Engine". Better engineered than
-- L315 [3] The contradiction: Omni Flash wants prose, not fields — > *"Omni Flash does NOT understand templated prompts. It ignores or mangles section {§53.3 recorded the field-based animation schema}
-- L340 [3] The hard production numbers — - 6-second clips, 10 credits each. 50 credits = 5 clips = one 30-second video. {6-second clips, 10 credits each. 50 credits = 5 clips = one; 6 seconds holds ~13 spoken words.; That is a gate, not a guideline.; Moot, corrected 2026-09-04.; the video model never speaks; Backlog X16 is withdrawn.}
-- L353 [3] The character-sheet spec is concrete and reusable — Three labelled rows on a plain cream ground: front, side, three-quarter and back views {front, side, three-quarter and back; five head-only expressions; five full-body poses; any new recurring figure}
-- L362 [3] Voice can be generated in Omni — A LOCKED VOICE BLOCK — one sentence fixing apparent age, gender presentation, accent, {LOCKED VOICE BLOCK; Different from source A, which used ElevenLabs.; Not adopted — operator, 2026-09-04: relying on Omni for voic}
-- L372 [3] It also violates the operator's own ruling — with a useful distinction — Every animation paragraph ends with *"no glitching, no warping, no morphing, no flickering, {But not all of those are the same kind of thing:; content exclusion; fine.; defect naming}
-- L387 [2] 53.10 Two Mikes, and the character pack needs upgrading — Operator, 2026-09-04:
-- L394 [3] The gap in what we hold — `finance-host-flow-character-pack.v1.json` is well-formed — schema, art-bible hash, rights {back; no side, no back; five head expressions; unenumerated; five full-body poses; absent}
-- L411 [3] Two variants, and what makes them one character — | | `finance-host-v1` — retention | `finance-host-stick-v1` — acquisition | {`finance-host-v1`; `finance-host-stick-v1`; only what survives simplification; A character's stick variant is defined by the features that}
-- L428 [3] The convergence worth noting — The model sheet's five expressions and five poses map directly onto the cutout rig's {five expressions and five poses; One artifact serves the generative lane now and the rig late}
-- L435 [3] A0 landed — 2026-09-04, with two operator corrections — The pack now meets the table above: both views rows, five named expressions, five named {the pack had never validated.}
-- L463 [3] A0 closed — 2026-09-04 — Both sheets approved and promoted; `StickMike` is bound in Flow beside `Mike`. What the
-- L479 [2] 53.11 Status after the Flow plan — `briefs/FLOW-OMNI-EXPLAINER-PROMPT-PLAN.md` (2026-09-04) is the production version of this {10-second clips, 3 per short; prose, one paragraph; moot; ElevenLabs first; Remotion / our own player}
+- L258 [3] The half that is wrong, and it matters more — The `CHARACTER LOCK` paragraph is not bloat. It is state injection into a stateless {The `CHARACTER LOCK` paragraph is not bloat. It is state inj; generated and version-controlled instead of copy-pasted.} <NEGATIVE RULES; SUBJECT COUNT; ANTI-GLITCH LOCK>
+- L268 [3] The reframe — > They are not over-engineering prompts. They are hand-executing a pipeline. {They are not over-engineering prompts. They are hand-executi; The prompt is fine. The runtime is missing.; if you cannot diff, test or reuse a prompt, exhaustiveness i} <hand-executing; stage-gated; CHARACTER LOCK; to_dict(); G-l; CapCut>
+- L296 [3] What `Prompts.txt` adds that the video did not — - 10 scenes × ~6 s for a ~59 s video (the video used 7 × 4 s for 30 s). Two workable {10 scenes × ~6 s for a ~59 s video; "Only animate: arms, head, facial expression, or props. Body; "At least one prop (required in every scene)."; Worth stealing as a validator} <updated master prompt.txt>
+- L310 [2] 53.9 A third prompt — and it contradicts §53.3 — Source: `Untitled document (1).md`, the "Stickman Explainer Engine". Better engineered than <field-style; natural-language; field-based; INPUT FRAME; MOTION; SECONDARY MOTION; CAMERA; SOUND DESIGN; ANTI-GLITCH LOCK; SOURCES-TO-VERIFY; @Mike; mid-sentence>
+- L315 [3] The contradiction: Omni Flash wants prose, not fields — > *"Omni Flash does NOT understand templated prompts. It ignores or mangles section {§53.3 recorded the field-based animation schema} <field-style; natural-language; INPUT FRAME; MOTION; SECONDARY MOTION; CAMERA; SOUND DESIGN; ANTI-GLITCH LOCK; SOURCES-TO-VERIFY; @Mike>
+- L340 [3] The hard production numbers — - 6-second clips, 10 credits each. 50 credits = 5 clips = one 30-second video. {6-second clips, 10 credits each. 50 credits = 5 clips = one; 6 seconds holds ~13 spoken words.; That is a gate, not a guideline.; Moot, corrected 2026-09-04.; the video model never speaks; Backlog X16 is withdrawn.} <mid-sentence; ElevenLabs; per-clip>
+- L353 [3] The character-sheet spec is concrete and reusable — Three labelled rows on a plain cream ground: front, side, three-quarter and back views {front, side, three-quarter and back; five head-only expressions; five full-body poses; any new recurring figure} <@Mike>
+- L362 [3] Voice can be generated in Omni — A LOCKED VOICE BLOCK — one sentence fixing apparent age, gender presentation, accent, {LOCKED VOICE BLOCK; Different from source A, which used ElevenLabs.; Not adopted — operator, 2026-09-04: relying on Omni for voic} <YouTube; NotebookLM; re-propose>
+- L372 [3] It also violates the operator's own ruling — with a useful distinction — Every animation paragraph ends with *"no glitching, no warping, no morphing, no flickering, {But not all of those are the same kind of thing:; content exclusion; fine.; defect naming} <on-screen>
+- L387 [2] 53.10 Two Mikes, and the character pack needs upgrading — Operator, 2026-09-04: <finance-host-flow-character-pack.v1.json; well-formed; art-bible; negative_prompt; model-sheet; three-quarter; front; three_quarter; full_body; expression_sheet; full-body; reference_asset_ids: []>
+- L394 [3] The gap in what we hold — `finance-host-flow-character-pack.v1.json` is well-formed — schema, art-bible hash, rights {back; no side, no back; five head expressions; unenumerated; five full-body poses; absent} <finance-host-flow-character-pack.v1.json; well-formed; art-bible; negative_prompt; model-sheet; three-quarter; front; three_quarter; full_body; expression_sheet; reference_asset_ids: []; render_eligible>
+- L411 [3] Two variants, and what makes them one character — | | `finance-host-v1` — retention | `finance-host-stick-v1` — acquisition | {`finance-host-v1`; `finance-host-stick-v1`; only what survives simplification; A character's stick variant is defined by the features that} <deep-indigo; cap-toe; red-and-gold; crinkle-paper; phone-legible; retention-lane>
+- L428 [3] The convergence worth noting — The model sheet's five expressions and five poses map directly onto the cutout rig's {five expressions and five poses; One artifact serves the generative lane now and the rig late} <HeadSlot; TorsoSlot; HandSlot>
+- L435 [3] A0 landed — 2026-09-04, with two operator corrections — The pack now meets the table above: both views rows, five named expressions, five named {the pack had never validated.} <variant: acquisition; variant_of: finance-host-v1; expression_sheet; pose_sheet; fictional_presenter; paper-toy; hand-cut; crinkle-paper; _meta.json; @Mike; high-contrast; ready_for_confirmation>
+- L463 [3] A0 closed — 2026-09-04 — Both sheets approved and promoted; `StickMike` is bound in Flow beside `Mike`. What the <StickMike; Mike; mid-action; prop-carried; #F4E6C7; #25313C; deckle-edged>
+- L479 [2] 53.11 Status after the Flow plan — `briefs/FLOW-OMNI-EXPLAINER-PROMPT-PLAN.md` (2026-09-04) is the production version of this {10-second clips, 3 per short; prose, one paragraph; moot; ElevenLabs first; Remotion / our own player} <field-based; CapCut; finance-host-stick-v1>
 - L496 [2] 53.12 Sources — `https://www.youtube.com/watch?v=qb7QSsxefZY`, watched 2026-09-04 — transcript plus 100
 
 ## docs/content-video-engine/54-GOOGLE-FLOW-OMNI-NANO-BANANA-PRODUCTION-RESEARCH.md
 
-- L1 [1] 54 — Google Flow Production Research: Gemini Omni 1.1 Flash & Nano Banana Pro — Title: Production Optimization, Prompt Engineering, Multimodal Conditioning, and Responsive Composition for Google Flow {Title:; Engines Covered:; Target Channels:; Status:; Date:; Reconciliation — 2026-09-04, read in full against the live U}
-- L38 [2] Executive Summary & Architectural Core — This research monograph documents the complete findings of four parallel agentic deep-research loops investigating Google Flow's next-generation production pipe {Google Flow; Gemini Omni 1.1 Flash; Nano Banana Pro; Veo is replaced by Gemini Omni 1.1 Flash.; Unified Multimodal Autoregressive Transformer}
-- L51 [2] 1. Engine Stack & Workspace Architecture
-- L75 [3] 1.1 Technical Comparison: Omni 1.1 Flash vs. Veo 3.1 — | Evaluation Axis | Gemini Omni 1.1 Flash (`gemini-omni-1.1-flash`) | Google Veo 3 / 3.1 | Production Verdict | {Underlying Architecture; Unified Multimodal Autoregressive Transformer; Generation Latency; 15 – 30 seconds; 70% speedup; Credit Economics}
-- L88 [2] 2. Gemini Omni 1.1 Flash: Video Prompt Engineering
-- L90 [3] 2.1 The Single Continuous Prose Paragraph — Omni 1.1 Flash parses prompts as dense multimodal prose (40–90 words). {The Tag Soup Failure Mode:; The Rule:; one continuous, flowing paragraph}
-- L95 [3] 2.2 Affirmative Physical Anchoring (The Ban on Negative Prompts) — * The Mechanism: Multimodal autoregressive transformers calculate self-attention across every input token. Including tokens like `"no 3D, no extra limbs, no cam {The Mechanism:; The Production Standard:}
-- L101 [3] 2.3 Two-Phase Staged Kinetics (Defeating the Second-5 Motion Stall) — Video generation models exhibit a universal inductive bias: they execute prompt action aggressively in seconds 0–3, resolve the movement by second 4 or 5, and f {The Protocol:; explicit transition verb at second 5}
-- L107 [3] 2.4 Cinematic Camera Lexicon (Adhered Directives) — Omni 1.1 Flash responds with high fidelity to director-level camera terms. Use exactly one primary camera directive per prompt:
-- L116 [2] 3. Frames to Video & Tail-Frame Extension Chaining — Creating coherent 30- to 60-second video sequences requires chaining multiple 10-second Omni 1.1 Flash clips together without spatial popping or character morph
-- L134 [3] 3.1 Terminal Frame Extraction — 1. Generate Clip $N$ (10.0 seconds) in Google Flow. {`+ Add start frame`}
-- L144 [3] 3.2 Kinetic-Delta-Only Prompting — When an initial frame is anchored, never re-describe what is already visible in the image. If the prompt re-describes the character's clothing, desk, or room, O {never re-describe what is already visible in the image}
-- L151 [2] 4. Ingredients-to-Video Architecture — Omni 1.1 Flash supports multi-latent conditioning with up to 3 reference ingredients: {3 reference ingredients; Ingredient 1; Subject; Ingredient 2; Object / Prop; Ingredient 3}
-- L161 [3] 4.1 Strict Technical Rules for Ingredients — 1. Mandatory Pre-Cropping: All reference images must be pre-cropped to the destination aspect ratio (`16:9` or `9:16`) and exceed $1024\text{ px}$. Mismatched a {Mandatory Pre-Cropping:; destination aspect ratio; Clear-Zone Margin:; Explicit Role Binding:}
-- L169 [2] 5. 16:9 Landscape vs. 9:16 Vertical Mobile Architecture
-- L171 [3] 5.1 The Universal Clean Canvas (Mobile UI Safe Zones) — Mobile platforms (TikTok, YouTube Shorts, Instagram Reels) overlay UI chrome that obstructs up to 59.1% of a 9:16 vertical viewport. {59.1%}
-- L205 [3] 5.2 The 3-Zone Vertical Stage (Never Blur-Pad) — Converting 16:9 to 9:16 via center-crop destroys 68.36% of horizontal area ($1 - 607.5/1920$). Blurred-background padding is a banned slop pattern. Stack elemen {68.36% of horizontal area; Zone 1: Metric Headline / Hook ($Y: 10\%\text{--}25\%$):; Zone 2: Core Evidence Canvas ($Y: 25\%\text{--}70\%$):; Zone 3: Kinetic Captions & Baseline ($Y: 70\%\text{--}90\%$)}
-- L211 [3] 5.3 The Cowboy Shot "Golden Zone" for Stickman Legibility — * Extreme Wide Shots (EWS) Fail: In a 9:16 vertical 720p frame, an EWS scales a stickman down to $\approx 250\text{ px}$. At that resolution, $2\text{ px}$ vect {Extreme Wide Shots (EWS) Fail:; Extreme Close-Ups (ECU) Fail:; The Cowboy Shot (Mid-thigh up, $65\%\text{--}75\%$ frame hei}
-- L218 [2] 6. Nano Banana Pro Image Generation Engineering — Nano Banana Pro (`gemini-3-pro-image`) is built on Gemini 3 Pro (vs. Nano Banana 2 on Gemini 3.1 Flash Image). {Nano Banana Pro (`gemini-3-pro-image`)}
-- L257 [3] 6.1 Common Image Failure Modes & Countermeasures — | Failure Mode | Root Cause | Exact Prompt Countermeasure | {Unwanted Photorealism; 3D Clay / Plastic Shading}
-- L268 [2] 7. Slim-LLM Production Formulas & State-Machine Prompts — Slim LLMs (Claude 3.5 Haiku, Gemini Flash, GPT-4o-mini) operate best with deterministic, schema-bound generation patterns. Use these production formulas.
+- L1 [1] 54 — Google Flow Production Research: Gemini Omni 1.1 Flash & Nano Banana Pro — Title: Production Optimization, Prompt Engineering, Multimodal Conditioning, and Responsive Composition for Google Flow {Title:; Engines Covered:; Target Channels:; Status:; Date:; Reconciliation — 2026-09-04, read in full against the live U} <gemini-omni-1.1-flash; gemini-3-pro-image; never; without; Portrait → Create Body; SOURCES-TO-VERIFY; finance-host-stick-v1; #F4E6C7; #25313C; Two-phase; pre-cropped; @Name>
+- L38 [2] Executive Summary & Architectural Core — This research monograph documents the complete findings of four parallel agentic deep-research loops investigating Google Flow's next-generation production pipe {Google Flow; Gemini Omni 1.1 Flash; Nano Banana Pro; Veo is replaced by Gemini Omni 1.1 Flash.; Unified Multimodal Autoregressive Transformer} <deep-research; next-generation; studio-level; on-screen; #F4E6C7; #25313C; role-syntax; dual-layer; full-body; Portrait; Create Body; Multi-scene>
+- L51 [2] 1. Engine Stack & Workspace Architecture <gemini-omni-1.1-flash; DiT; real-time; punch-in; ElevenLabs>
+- L75 [3] 1.1 Technical Comparison: Omni 1.1 Flash vs. Veo 3.1 — | Evaluation Axis | Gemini Omni 1.1 Flash (`gemini-omni-1.1-flash`) | Google Veo 3 / 3.1 | Production Verdict | {Underlying Architecture; Unified Multimodal Autoregressive Transformer; Generation Latency; 15 – 30 seconds; 70% speedup; Credit Economics} <gemini-omni-1.1-flash; real-time; punch-in; ElevenLabs>
+- L88 [2] 2. Gemini Omni 1.1 Flash: Video Prompt Engineering <[SHOT: WIDE]; [CAMERA: PAN]; out-of-distribution; self-attention; extra limbs; camera shake; Two-Phase; counter-weight; director-level>
+- L90 [3] 2.1 The Single Continuous Prose Paragraph — Omni 1.1 Flash parses prompts as dense multimodal prose (40–90 words). {The Tag Soup Failure Mode:; The Rule:; one continuous, flowing paragraph} <[SHOT: WIDE]; [CAMERA: PAN]; out-of-distribution>
+- L95 [3] 2.2 Affirmative Physical Anchoring (The Ban on Negative Prompts) — * The Mechanism: Multimodal autoregressive transformers calculate self-attention across every input token. Including tokens like `"no 3D, no extra limbs, no cam {The Mechanism:; The Production Standard:} <self-attention; extra limbs; camera shake>
+- L101 [3] 2.3 Two-Phase Staged Kinetics (Defeating the Second-5 Motion Stall) — Video generation models exhibit a universal inductive bias: they execute prompt action aggressively in seconds 0–3, resolve the movement by second 4 or 5, and f {The Protocol:; explicit transition verb at second 5} <counter-weight>
+- L107 [3] 2.4 Cinematic Camera Lexicon (Adhered Directives) — Omni 1.1 Flash responds with high fidelity to director-level camera terms. Use exactly one primary camera directive per prompt: <director-level>
+- L116 [2] 3. Frames to Video & Tail-Frame Extension Chaining — Creating coherent 30- to 60-second video sequences requires chaining multiple 10-second Omni 1.1 Flash clips together without spatial popping or character morph <"Save Frame"; + Add start frame; clip_01_tail.png; Kinetic-Delta-Only; re-describe; re-describes; re-synthesize>
+- L134 [3] 3.1 Terminal Frame Extraction — 1. Generate Clip $N$ (10.0 seconds) in Google Flow. {`+ Add start frame`} <"Save Frame"; clip_01_tail.png>
+- L144 [3] 3.2 Kinetic-Delta-Only Prompting — When an initial frame is anchored, never re-describe what is already visible in the image. If the prompt re-describes the character's clothing, desk, or room, O {never re-describe what is already visible in the image} <re-describes; re-synthesize>
+- L151 [2] 4. Ingredients-to-Video Architecture — Omni 1.1 Flash supports multi-latent conditioning with up to 3 reference ingredients: {3 reference ingredients; Ingredient 1; Subject; Ingredient 2; Object / Prop; Ingredient 3} <multi-latent; @character; "@Mike [performs action]"; @prop; "interacts with @prop"; @background; "against @background"; Pre-Cropping; pre-cropped; 16:9; 9:16; anamorphic-stretch>
+- L161 [3] 4.1 Strict Technical Rules for Ingredients — 1. Mandatory Pre-Cropping: All reference images must be pre-cropped to the destination aspect ratio (`16:9` or `9:16`) and exceed $1024\text{ px}$. Mismatched a {Mandatory Pre-Cropping:; destination aspect ratio; Clear-Zone Margin:; Explicit Role Binding:} <pre-cropped; 16:9; 9:16; anamorphic-stretch>
+- L169 [2] 5. 16:9 Landscape vs. 9:16 Vertical Mobile Architecture <TikTok; YouTube; Blur-Pad; center-crop; Blurred-background; Word-level; Close-Ups; Mid-thigh; line-art>
+- L171 [3] 5.1 The Universal Clean Canvas (Mobile UI Safe Zones) — Mobile platforms (TikTok, YouTube Shorts, Instagram Reels) overlay UI chrome that obstructs up to 59.1% of a 9:16 vertical viewport. {59.1%} <TikTok; YouTube>
+- L205 [3] 5.2 The 3-Zone Vertical Stage (Never Blur-Pad) — Converting 16:9 to 9:16 via center-crop destroys 68.36% of horizontal area ($1 - 607.5/1920$). Blurred-background padding is a banned slop pattern. Stack elemen {68.36% of horizontal area; Zone 1: Metric Headline / Hook ($Y: 10\%\text{--}25\%$):; Zone 2: Core Evidence Canvas ($Y: 25\%\text{--}70\%$):; Zone 3: Kinetic Captions & Baseline ($Y: 70\%\text{--}90\%$)} <center-crop; Blurred-background; Word-level>
+- L211 [3] 5.3 The Cowboy Shot "Golden Zone" for Stickman Legibility — * Extreme Wide Shots (EWS) Fail: In a 9:16 vertical 720p frame, an EWS scales a stickman down to $\approx 250\text{ px}$. At that resolution, $2\text{ px}$ vect {Extreme Wide Shots (EWS) Fail:; Extreme Close-Ups (ECU) Fail:; The Cowboy Shot (Mid-thigh up, $65\%\text{--}75\%$ frame hei} <line-art>
+- L218 [2] 6. Nano Banana Pro Image Generation Engineering — Nano Banana Pro (`gemini-3-pro-image`) is built on Gemini 3 Pro (vs. Nano Banana 2 on Gemini 3.1 Flash Image). {Nano Banana Pro (`gemini-3-pro-image`)} <"Flat 2D monoline vector illustration"; "Orthographic 2D CAD elevation"; role-bound; Role-Binding; on-screen; Portrait; Create Body; @CharacterName; token-latent; hyper-detailed>
+- L257 [3] 6.1 Common Image Failure Modes & Countermeasures — | Failure Mode | Root Cause | Exact Prompt Countermeasure | {Unwanted Photorealism; 3D Clay / Plastic Shading} <hyper-detailed>
+- L268 [2] 7. Slim-LLM Production Formulas & State-Machine Prompts — Slim LLMs (Claude 3.5 Haiku, Gemini Flash, GPT-4o-mini) operate best with deterministic, schema-bound generation patterns. Use these production formulas. <schema-bound; Create Body; Tail-Frame>
 - L272 [3] Formula A: Nano Banana Pro Character Builder (`Create Body`)
 - L277 [3] Formula B: Nano Banana Pro Isolated Prop Ingredient (≥1024px)
 - L282 [3] Formula C: Gemini Omni 1.1 Flash 10-Second Scene Prompt
 - L287 [3] Formula D: Gemini Omni 1.1 Flash Tail-Frame Chained Scene
-- L294 [2] 8. Agent Pre-Flight Execution Checklist — Before submitting generation requests to Google Flow: {Model Selection Confirmed:; Aspect Ratio Alignment:; Dual-Layer Character Stored:; Token Stripping Enforced:}
-- L310 [2] 9. Primary Citations & Evidence Ledger — 1. Google DeepMind: {Google DeepMind:}
+- L294 [2] 8. Agent Pre-Flight Execution Checklist — Before submitting generation requests to Google Flow: {Model Selection Confirmed:; Aspect Ratio Alignment:; Dual-Layer Character Stored:; Token Stripping Enforced:} <🍌 Nano Banana Pro; Gemini Omni 1.1 Flash; 16:9; 9:16; Portrait; Create Body; @CharacterName; never; without; do not; Two-Phase; late-clip>
+- L310 [2] 9. Primary Citations & Evidence Ledger — 1. Google DeepMind: {Google DeepMind:} <Director-level; locked off; push in; dolly zoom; eye level; Nov 2025; "aspectRatio": "16:9" | "9:16"; center-crop; multi-scene>
 
 ## docs/content-video-engine/BACKLOG.md
 
-- L1 [1] Backlog — content video engine — Hand-maintained. `STATE-OF-WORK.md` is the auto-generated worktree census; this is the {Route:}
-- L11 [2] The founding-premise correction (52) — > *"The stick figures work because you can build the world you need to convey; I was {Generated plates were a substitute for the ability to constr}
-- L34 [2] The scope shift, named — The engine was scoped to assemble plates and dock evidence over narration. It is {assemble plates and dock evidence over narration; a narration-timed 2D animation system; The chart engine was never chart-specific.; The ledger page is a working surface; Cuts belong in acoustic gaps; The reference composites; it does not generate.}
-- L54 [2] The ground truth we hold: one retention curve — and now the analytics behind it — Updated 2026-09-04 with operator-supplied YouTube analytics. See {Updated 2026-09-04 with operator-supplied YouTube analytics.; cold cohort; 1:05 average view duration; everyone; 4:39; device}
-- L76 [2] The retention curve, and why n=1 still binds — Ep1 is still the only episode with a retention curve. Its curve drops at 0:45–1:00. That is the whole of our evidence about actual {0:45–1:00; information gain scored 5 at the drop window against an epis}
-- L97 [2] The shorts question, 2026-09-04 — The operator, on the mass-produced listicle format (*"You can become a millionaire just {The closing line is the resolution.}
+- L1 [1] Backlog — content video engine — Hand-maintained. `STATE-OF-WORK.md` is the auto-generated worktree census; this is the {Route:} <Hand-maintained; auto-generated; research-bundle; DRAWING-KINETICS; REFERENCE-RHYTHM; RESEARCH-INDEX; FINDINGS-TO-CHECKS; founding-premise; M_world = M_parent × M_local; Z-stack; at: "datum"; CONSTRUCT-DONT-INHERIT>
+- L11 [2] The founding-premise correction (52) — > *"The stick figures work because you can build the world you need to convey; I was {Generated plates were a substitute for the ability to constr} <M_world = M_parent × M_local; Z-stack; at: "datum"; CONSTRUCT-DONT-INHERIT>
+- L34 [2] The scope shift, named — The engine was scoped to assemble plates and dock evidence over narration. It is {assemble plates and dock evidence over narration; a narration-timed 2D animation system; The chart engine was never chart-specific.; The ledger page is a working surface; Cuts belong in acoustic gaps; The reference composites; it does not generate.} <drawOn; resolveTarget; per-shot>
+- L54 [2] The ground truth we hold: one retention curve — and now the analytics behind it — Updated 2026-09-04 with operator-supplied YouTube analytics. See {Updated 2026-09-04 with operator-supplied YouTube analytics.; cold cohort; 1:05 average view duration; everyone; 4:39; device} <THE-PHONE-IS-THE-SCREEN; suggested-video; three-quarters>
+- L76 [2] The retention curve, and why n=1 still binds — Ep1 is still the only episode with a retention curve. Its curve drops at 0:45–1:00. That is the whole of our evidence about actual {0:45–1:00; information gain scored 5 at the drop window against an epis} <information-dense; motion-energy>
+- L97 [2] The shorts question, 2026-09-04 — The operator, on the mass-produced listicle format (*"You can become a millionaire just {The closing line is the resolution.} <mass-produced; long-form; short-form; Spread = (Return − Cost) × Leverage; G-g; stick-figure; THE-SHORTS-FORMAT; one-page; shorts-lane>
 - L164 [2] The standing frame: we lose people in the first minute — Operator ruling 2026-09-04: *our failure is holding the audience; we never even get the
-- L172 [2] Blocked on an operator decision — | # | item | the decision | {CLOSED 2026-09-05; 3.9 GB pool + `f10b` worktree; ~350 unpushed commits (348 on 2026-09-05); Gitignore on `review/`}
+- L172 [2] Blocked on an operator decision — | # | item | the decision | {CLOSED 2026-09-05; 3.9 GB pool + `f10b` worktree; ~350 unpushed commits (348 on 2026-09-05); Gitignore on `review/`} <head-fake; main; local-only; Speech-rate; pre-TTS>
 - L176 [7] B1 Tokyo short is 118 s against a 90 s cap — CLOSED 2026-09-05 — v11 records at 82 s (the head-fake, debate, threshold/flip and the triad cut; E40 #4).
 - L177 [7] B2 3.9 GB pool + `f10b` worktree — 18.4 GB, of which 8.68 GB is regenerable animatic frames. Needs a home that is not a worktree.
 - L178 [7] B3 ~350 unpushed commits (348 on 2026-09-05) — `main` is local-only since 2026-08-30. A week of doctrine, the generative stack, the portrait page, the vortex, the ambient lane - all on one disk.
 - L179 [7] B4 Gitignore on `review/` — 46 plate waves' approval manifests are untracked. Narrowing the ignore to images tracks the manifests.
 - L180 [7] B5 Speech-rate contradiction — WITHDRAWN 2026-09-04 — there was no contradiction. The "145–165 doctrine target" was mine; the operator asked for its origin and it has none. The doctrine's act
-- L182 [2] The day's read — 2026-09-05 evening (the Tokyo short is done: 1:28.8, motion gate PASS) — What landed today. P43 complete (the stroke ON, the spring, the squash ON, K-M ink kept for ink over ink); the Remotion kit {What landed today.; What we learned (each has a memory or a doc line).}
-- L207 [2] Ready to pull in — read 2026-09-05 after the hands-on day (operator: "see if we're ready to pull anything else in") — Ordered by leverage against what the Tokyo build now exercises. Each names the artifact it lands on. {LANDED flag-off 2026-09-05 (P43 T2); ON in the Tokyo short; X0 / G-o: render a 9:16 frame at 390 px and read it}
-- L225 [2] The plan stack — | # | plan | status | note | {[Render baseline & kill switch](../../.claude/PRPs/plans/P39; COMPLETE 2026-09-04; first.}
+- L182 [2] The day's read — 2026-09-05 evening (the Tokyo short is done: 1:28.8, motion gate PASS) — What landed today. P43 complete (the stroke ON, the spring, the squash ON, K-M ink kept for ink over ink); the Remotion kit {What landed today.; What we learned (each has a memory or a doc line).} <K-M; two-line; soak-ink-is-a-plate; voice-timed; caption-energy-lessons; in-app; gain-matched; three-tool; gate_opening_structure; run_short; muted-caption; V-a>
+- L207 [2] Ready to pull in — read 2026-09-05 after the hands-on day (operator: "see if we're ready to pull anything else in") — Ordered by leverage against what the Tokyo build now exercises. Each names the artifact it lands on. {LANDED flag-off 2026-09-05 (P43 T2); ON in the Tokyo short; X0 / G-o: render a 9:16 frame at 390 px and read it} <curvature-reparameterised; drawOn; side-by-side; phone-sized; V-a; muted-caption; gate_opening_structure; short-form; M16; outro-v2; life; G-h>
+- L225 [2] The plan stack — | # | plan | status | note | {[Render baseline & kill switch](../../.claude/PRPs/plans/P39; COMPLETE 2026-09-04; first.} <RENDER-BASELINE-AND-KILL-SWITCH; RESEARCH-ENFORCEMENT-LAYER; V-a; KINETICS-CAPABILITY-LAYER; designed-out; MEASURE-THE-FIRST-MINUTE; first-minute; still-life; short-form; KINETICS-WAVE; K-M; side-by-side>
 - L229 [7] P39 [Render baseline & kill switch](../../.claude/PRPs/plans/P39-RENDER-BASELINE-AND-KILL-SWITCH.plan.md) — COMPLETE 2026-09-04 — tag, four golden frames, determinism proven (and the renderer fixed where it was not: B8), six flags defaulting off, runbook · first. Tag,
 - L230 [7] P37 [Enforcement layer](../../.claude/PRPs/plans/P37-RESEARCH-ENFORCEMENT-LAYER.plan.md) — COMPLETE 2026-09-04 — 14 checks shipped or on the ladder, each shown failing first (47 §5b); G15b FAIL, judge on the Codex lane · 13 gates + V-a; T0 fixes the 9
 - L231 [7] P38 [Kinetics capability](../../.claude/PRPs/plans/P38-KINETICS-CAPABILITY-LAYER.plan.md) — draft · the six designed-out items; changes what the video looks like
@@ -1054,7 +1066,7 @@ A `{...}` tail lists the section's bold phrases.
 - L233 [7] P41 The vertical stage — 49 §49.1 — COMPLETE 2026-09-05 — the portrait page (49 §49.1 landing note): the chart IS the world, type floors from doc 50's arithmetic, the caption strip on every world;
 - L234 [7] P43 [Kinetics wave 2](../../.claude/PRPs/plans/P43-KINETICS-WAVE-2.plan.md) — the curvature stroke, K-M ink, the squash help — COMPLETE 2026-09-05 — modules + sync, the stroke (ON in the short, ruled from a side-by-side clip), K-M ink (landed, RULED OFF for the soak after six rounds in
 - L235 [7] P42 Grounding & compositing — 48 §48.7-48.8 — backlog · dual shadow, light wrap, substrate grain, horizon lock, ground binding. Gives G-i/G-j/G-k a path to green — today they check what nothing builds. Fold
-- L237 [2] Build — Tier 1, designed out (47 §1) → **[P38](../../.claude/PRPs/plans/P38-KINETICS-CAPABILITY-LAYER.plan.md)** — The strongest results of the day: once built they cannot be violated, because the wrong {T1; Curvature-reparameterised stroke; landed flag-off 2026-09-05 (P43 T2), human gate pending; T2; Analytic spring evaluator}
+- L237 [2] Build — Tier 1, designed out (47 §1) → **[P38](../../.claude/PRPs/plans/P38-KINETICS-CAPABILITY-LAYER.plan.md)** — The strongest results of the day: once built they cannot be violated, because the wrong {T1; Curvature-reparameterised stroke; landed flag-off 2026-09-05 (P43 T2), human gate pending; T2; Analytic spring evaluator} <drawOn; κ₀; v(max κ) < v(min κ); w(max κ) > w(min κ); springPop; M_p; kinetics.analytic_spring; minJerk; kinetics.min_jerk; bit-identical; Area-preserving; det(A(t)) == 1>
 - L244 [7] T1 Curvature-reparameterised stroke — in `drawOn`, with the κ₀ regulariser and width/ink coupling — landed flag-off 2026-09-05 (P43 T2), human gate pending
 - L245 [7] T2 Analytic spring evaluator — three damping regimes, the only spring API. Partly shipped 2026-09-05: `springPop` (underdamped, with the M_p inverse) behind `kinetics.analytic_spring`, on the
 - L246 [7] T3 Area-preserving squash — driven by velocity and deceleration — shipped 2026-09-05 (P43 T4)
@@ -1064,7 +1076,7 @@ A `{...}` tail lists the section's bold phrases.
 - L250 [7] T8 Prop attachment by cached offset matrix — (48 §48.5)
 - L251 [7] T5 Object-page renderer — the template draws registered props on the LP clock — spec side already ships (`--variant object`, 12 tests)
 - L252 [7] T6 `object → chart` transform on one page — declared by two Tokyo pages; T4 is its prerequisite
-- L257 [2] Build — Tier 2, gates (47 §2) → **[P37](../../.claude/PRPs/plans/P37-RESEARCH-ENFORCEMENT-LAYER.plan.md)** — Shipped 2026-09-04 (P37, see 47 §5b): G-a (`M14`), G-b/c/e/m/n (`gate_comfy_config`), G-d (lint, INFO), G-g (`G15b`, FAIL - no grandfathering, operator 2026-09- {Shipped 2026-09-04 (P37, see 47 §5b):; Open:; G-a; our renderer today; G-c}
+- L257 [2] Build — Tier 2, gates (47 §2) → **[P37](../../.claude/PRPs/plans/P37-RESEARCH-ENFORCEMENT-LAYER.plan.md)** — Shipped 2026-09-04 (P37, see 47 §5b): G-a (`M14`), G-b/c/e/m/n (`gate_comfy_config`), G-d (lint, INFO), G-g (`G15b`, FAIL - no grandfathering, operator 2026-09- {Shipped 2026-09-04 (P37, see 47 §5b):; Open:; G-a; our renderer today; G-c} <M14; G-b; gate_comfy_config; G-d; G-g; G15b; G-i; gate_grounding; G-l; gate_vertical_safe_box; V-a; G-h>
 - L263 [7] G-a punch must not overlap a build — our renderer today — camera motion during a data build, so saccadic suppression eats the numbers
 - L264 [7] G-c parallax dial lint — every value we ship today: `mirror`, `ssaa 1.0`, `quality 75`, `intensity 1.0`, `vits`
 - L265 [7] G-b parallax plate eligibility (the viability matrix) — Depthflow on the page, on @Mike, on any text
@@ -1080,7 +1092,7 @@ A `{...}` tail lists the section's bold phrases.
 - L275 [7] G-k solver declared per contact beat — contact resolves IK, free gesture resolves FK (48 §48.1)
 - L276 [7] G1 M13 — cut lands in an acoustic gap
 - L277 [7] V-a The muted-caption judge — (operator, 47 §2b) — a model reads the test scene with captions removed and states the claim it makes
-- L279 [2] Build — carried, unchanged by the research — | # | item | {CLOSED 2026-09-04 — contact sheet approved; both sheets prom; never validated}
+- L279 [2] Build — carried, unchanged by the research — | # | item | {CLOSED 2026-09-04 — contact sheet approved; both sheets prom; never validated} <StickMike; fe6a3f2b; roll_log; fictional_presenter; back; pose_sheet; expressions; poses; variant; variant_of; finance-host-v1; three-quarter>
 - L283 [7] A0 CLOSED 2026-09-04 — contact sheet approved; both sheets promoted and catalogued; `StickMike` bound in Flow (entity `fe6a — Stick Mike is a stick figure on the cream deckle page (v5) — the house ground carries both styles. Nine attempts in the job's `roll_log`. Earlier state: Found o
 - L284 [7] A2a The icon ring — sourced. — Flat, single-object, nameable: liquor store, gas pump, hospital. MIT sets (Phosphor, Tabler) recoloured to tokens, indexed like plates. Cheap, an afternoon
 - L285 [7] A2a' Hero illustrations — generated. — Spec now exists: [53](53-THE-STICKMAN-LANE.md) — the eight-field image schema and seven-field animation schema, with bound `@Mike` in the character slot (no par
@@ -1093,14 +1105,14 @@ A `{...}` tail lists the section's bold phrases.
 - L292 [7] G4 CLOSED 2026-09-04 — `tokyo-tea-break/build_short.py` compiles the short onto the 9:16 template (six CLIP worlds, three ledger-page entries); `player.html` is retired. Original: Tok
 - L293 [7] P41 The PORTRAIT ledger page (operator, 2026-09-04, on the first Tokyo render). — On a short the page IS the world, not an evidence card: (a) re-stage the chart for 9:16 - the chart box fills the safe box `x[80,880] y[280,1340]` and the chart
 - L294 [7] G5 The 8 carried P34 reviewer mediums
-- L296 [2] Planning gap found 2026-09-04: gates whose fix has no owner — An audit of P37 and P38 against docs 42–49 found three gates that check behaviour {three gates that check behaviour nothing builds; nobody}
+- L296 [2] Planning gap found 2026-09-04: gates whose fix has no owner — An audit of P37 and P38 against docs 42–49 found three gates that check behaviour {three gates that check behaviour nothing builds; nobody} <G-i; G-j; 50% 100%; G-k; G-h; Kubelka-Munk; INFO-then-FAIL; multi-plane; LaMa; load-bearing; G-b; Z-stack>
 - L303 [7] G-i the composited figure's eyes sit on the plate horizon — nobody — no plan locks the horizon
 - L304 [7] G-j grounded sprites anchor `50% 100%` and bind to floor velocity — nobody — no plan builds the ground binding
 - L305 [7] G-k a contact beat declares IK, a free gesture declares FK — nobody — no plan builds an IK solver
-- L323 [3] B8 — the shipped 1440p render is an upscale of a 1398px capture (found by P39 T2, 2026-09-04) — `fitStage()` scales `#stage` to the `#fit` container, so `render_episode.py` screenshots a {FIXED 2026-09-04 (P39 T6):}
-- L331 [3] B7 — the Flow driver should verify, not the prompt contain — Operator ruling 2026-09-04: negative rules in a positive prompt can summon the very {Operator ruling 2026-09-04:; Refined 2026-09-04 (53 §53.9): exclude content, do not name; is}
-- L354 [3] B6 — the multi-plane lane has no owner and the viability matrix needs it — 45 §45.2 bans Depthflow on any plate carrying a foreground character, an isolated prop, {bans; is not built and not planned}
-- L366 [2] Explorations — what we still cannot answer — Landed 2026-09-04 from the research agent: [54](54-GOOGLE-FLOW-OMNI-NANO-BANANA-PRODUCTION-RESEARCH.md) {Landed 2026-09-04 from the research agent: [54](54-GOOGLE-FL; X17; at second 5}
+- L323 [3] B8 — the shipped 1440p render is an upscale of a 1398px capture (found by P39 T2, 2026-09-04) — `fitStage()` scales `#stage` to the `#fit` container, so `render_episode.py` screenshots a {FIXED 2026-09-04 (P39 T6):} <fitStage(); #stage; #fit; resize(); seek-render; document.fonts.ready; render_baseline.prepare_page; --test>
+- L331 [3] B7 — the Flow driver should verify, not the prompt contain — Operator ruling 2026-09-04: negative rules in a positive prompt can summon the very {Operator ruling 2026-09-04:; Refined 2026-09-04 (53 §53.9): exclude content, do not name; is} <on-screen; @Mike; Re-roll; pre-filter; missing-runtime; Style-match>
+- L354 [3] B6 — the multi-plane lane has no owner and the viability matrix needs it — 45 §45.2 bans Depthflow on any plate carrying a foreground character, an isolated prop, {bans; is not built and not planned} <LaMa; Z-stack>
+- L366 [2] Explorations — what we still cannot answer — Landed 2026-09-04 from the research agent: [54](54-GOOGLE-FLOW-OMNI-NANO-BANANA-PRODUCTION-RESEARCH.md) {Landed 2026-09-04 from the research agent: [54](54-GOOGLE-FL; X17; at second 5} <SOURCES-TO-VERIFY; late-clip; mid-thigh; Portrait → Create Body; finance-host-stick-v1; first-minute; long-form; Short-form; mobile-legibility; MEASURE-THE-FIRST-MINUTE; reference-first; mid-word>
 - L376 [7] X17 at second 5 — defeat the late-clip motion freeze in a 10 s Omni clip?
 - L377 [7] X18 cowboy shot — (mid-thigh up, 65–75 % of frame height) the legibility floor for a stick figure in 9:16 720p, and does an extreme wide really dissolve the limbs?
 - L378 [7] X19 15 credits per 10 s — both asserted, neither observed
@@ -1118,14 +1130,14 @@ A `{...}` tail lists the section's bold phrases.
 - L403 [7] X11 Per-material `ζ` / `ω₀`, and the secondary-motion ratio — T2 gives the model; these are the numbers. Derive by eye against reference footage, or declare them ours and tune.
 - L404 [7] X8 Two unverified citations — in the pass-2 rewrite of `08` (Martinez-Conde year/volume, Hasson volume/year). Nothing in 42–47 depends on either.
 - L405 [7] X9 Parallax + object page — CLOSED 2026-09-04 — 45 §45.2 bans parallax on vector evidence and text. Depth on the page comes from the Z-stack instead, which costs no shader and cannot tear.
-- L407 [2] Found by the retrieval benchmark — 2026-09-05 (evals/RETRIEVAL-BENCHMARK-2026-09-05.md) — Two rounds of delegated lookups (Fable `Explore` vs the Opus `explorer` role) surfaced these while answering; each is doc-grounded and its absence was proven by {The Deegan dark rim; Syllable-locked STAGE type}
+- L407 [2] Found by the retrieval benchmark — 2026-09-05 (evals/RETRIEVAL-BENCHMARK-2026-09-05.md) — Two rounds of delegated lookups (Fable `Explore` vs the Opus `explorer` role) surfaced these while answering; each is doc-grounded and its absence was proven by {The Deegan dark rim; Syllable-locked STAGE type} <Explore; explorer; doc-grounded; one-to-two-pixel; coffee-ring; Deegan 1997; km_ink; build-order; phase-locked; arap_morph; KINETICS_DEFAULTS; flag-roster>
 - L413 [7] R1 The Deegan dark rim — 44 §44.2 specifies a one-to-two-pixel edge density at the ink boundary (coffee-ring, Deegan 1997); nothing in `kinetics/ink.mjs` or the template draws a perimet
 - L414 [7] R2 Syllable-locked STAGE type — `FINDING-the-animation-math-and-what-it-changes.md` §(147-150) and its build-order row: pops phase-locked to the 4–8 Hz speech envelope; no `syllab` anywhere in
 - L415 [7] R3 `arap_morph` is a stub flag — declared in `KINETICS_DEFAULTS` (template :446) and never read; T4 above is the real item
-- L416 [7] R4 The docs index — SigMap indexes code symbols only, so "animation math" ranked the retired Manim scene; `build_docs_index.py` (shipped 2026-09-05, 2000 records / 139 files; headi
+- L416 [7] R4 The docs index — SigMap indexes code symbols only, so "animation math" ranked the retired Manim scene; `build_docs_index.py` (shipped 2026-09-05, and the body-vocabulary slice t
 - L417 [7] R5 A persistent explorer — continuation is `/resume` in the agent view (CLI only, not the desktop Code tab - docs agent-view.md); `memory: project` is now set on explorer / docs_researche
 - L418 [7] R6 Negative claims from a delegated agent are verified by the parent — one Opus miss in ten hard lookups was "07 §5.3 does not exist" (it is `sources/reference_analyses/complete_research_evidence_bundle/07_academic_literature_drawi
-- L420 [2] Routed from the demoted list (47 §4) — Demoted from doctrine — not dropped. Each lands as a build item, an exploration, or a closure. {Euler-spiral generator; Build, do not gate.; Per-material `ζ` / `ω₀` values; Exploration X10.; RESOLVED 2026-09-04}
+- L420 [2] Routed from the demoted list (47 §4) — Demoted from doctrine — not dropped. Each lands as a build item, an exploration, or a closure. {Euler-spiral generator; Build, do not gate.; Per-material `ζ` / `ω₀` values; Exploration X10.; RESOLVED 2026-09-04} <Secondary-motion; M_p; Dirty-flag; hand-tuning; three-quarters; Two-handed; dual-quaternion; designed-out; shot-length>
 - L426 [7] D1 Euler-spiral generator — for procedural curves (arrows, balance arms, connectors, axes)
 - L427 [7] D2 Per-material `ζ` / `ω₀` values — paper, metal, fabric, liquid, ink
 - L428 [7] D3 Secondary-motion ratio — RESOLVED 2026-09-04 by 48 §48.6 — the analytic phase lag `φ = arctan(2ζ(ω_d/ω₀)/(1−(ω_d/ω₀)²))` on the `M_p` we already adopted. No invented ratio needed.
@@ -1136,240 +1148,240 @@ A `{...}` tail lists the section's bold phrases.
 - L433 [7] D6 A1 timing chart — Closed. Superseded by `M_p = exp(−πζ/√(1−ζ²))` — the model replaces the table.
 - L434 [7] D7 Grow the shot-length tail — Deprioritised by ruling — see below.
 - L436 [2] Deprioritised by ruling — - Grow the shot-length tail. Our median and CPM match the reference; only the spread {Grow the shot-length tail.; Coffee-ring edge and anisotropic wicking}
-- L444 [2] Withdrawn — - G-f "the actor must be a rig, not a generation." Withdrawn by the operator {G-f "the actor must be a rig, not a generation."; N1 "M10 measures the wrong thing."}
-- L458 [2] Carried debt — - `f10b` plate rehome — 55 indexed plates still resolve into the codex worktree. {`f10b` plate rehome; Steel and Paper's timeline uses absolute worktree paths.; Flow driver has no README; Drive connector needs reconnecting.; Tokyo `plate-01-*`; The Steel and Paper re-script}
+- L444 [2] Withdrawn — - G-f "the actor must be a rig, not a generation." Withdrawn by the operator {G-f "the actor must be a rig, not a generation."; N1 "M10 measures the wrong thing."} <gate_motion_density.py:277; PLATE_HOLD_MAX_S = 20.0; two-dock>
+- L458 [2] Carried debt — - `f10b` plate rehome — 55 indexed plates still resolve into the codex worktree. {`f10b` plate rehome; Steel and Paper's timeline uses absolute worktree paths.; Flow driver has no README; Drive connector needs reconnecting.; Tokyo `plate-01-*`; The Steel and Paper re-script} <npm install; character-binding; REWRITE-ORDER-G; G-g>
 
 ## docs/content-video-engine/briefs/ALICIA-FORMAT-RECREATION-BRIEF.md
 
-- L1 [1] Recreation Brief — Alicia-Format Systems Test (3:00) — The end-to-end pipeline test: recreate the format of Alicia Invests' {format; our register}
-- L37 [2] Beat sheet → coverage slots — | Slot | Time | Beat | Scene (our register) | Motion units |
-- L62 [2] Narrator voice — First person, earned from the operator's actual biography — the rare {ex-JPMorgan, business risk analyst / product manager; ex-dispensary owner; product manager who builds with AI; the banker}
-- L78 [2] Script (original, ~560 words, ~3:00 at spoken pace) — [s01 — black screen, captions punching in word groups; till sounds under] {[s01 — black screen, captions punching in word groups; till; [s02 — the banker's apartment]}
-- L162 [2] Source signature patterns (top-5 catalog scan, 2026-08-24) — Across her five most-viewed videos (1.9M / 325K / 295K / 290K / 256K): {not}
-- L171 [2] Test acceptance — 1. Every pipeline stage runs on this brief with no hand-carried files except
+- L1 [1] Recreation Brief — Alicia-Format Systems Test (3:00) — The end-to-end pipeline test: recreate the format of Alicia Invests' {format; our register} <end-to-end; scene-per-beat; dim-to-black; ep1-index-funds-vox-newsprint-v3; YouTube; cold-open; self-contained; [verify]; viewer-facing; topic-graph; kinetic-caption; icon-pop>
+- L37 [2] Beat sheet → coverage slots — | Slot | Time | Beat | Scene (our register) | Motion units | <kinetic-caption; icon-pop; coin-drop; bar-grow; underline-reveal; Storage-nation; [verify]; dim-transition; cutaway-room; shield-stack; storage-map>
+- L62 [2] Narrator voice — First person, earned from the operator's actual biography — the rare {ex-JPMorgan, business risk analyst / product manager; ex-dispensary owner; product manager who builds with AI; the banker} <two-altitude; all-cash; YouTube>
+- L78 [2] Script (original, ~560 words, ~3:00 at spoken pace) — [s01 — black screen, captions punching in word groups; till sounds under] {[s01 — black screen, captions punching in word groups; till; [s02 — the banker's apartment]} <Ninety-five; out-earns; self-storage; fast-food; [verify]>
+- L162 [2] Source signature patterns (top-5 catalog scan, 2026-08-24) — Across her five most-viewed videos (1.9M / 325K / 295K / 290K / 256K): {not} <most-viewed; cold-open; compound-dollar; two-paths>
+- L171 [2] Test acceptance — 1. Every pipeline stage runs on this brief with no hand-carried files except <hand-carried; work-order; Flow-lane; Side-by-side; scene-per-beat>
 
 ## docs/content-video-engine/briefs/ALICIA-SCRIPT-COMPARISON.md
 
-- L1 [1] Four-Way Script Comparison — "Why a Budtender Retires Before a Banker" — The decisive AOY-trial test, expanded: same title, same references, same {before; Predicted-theirs}
-- L15 [2] Panel B — predicted write_script_v2 output — Falsifiable tells predicted (score C against these when it lands): {not; The persona gets diluted}
-- L35 [3] The predicted script (~600 words) — There's a banker in Manhattan who makes ninety-five thousand dollars a year.
-- L91 [3] Panel B self-notes — Deliberately embedded their tells: third-person cold open (D-pattern), two
-- L99 [2] Scoring axes (for the four-way) — 1. Hook mechanics — time-to-tension, concreteness
-- L108 [2] Panel C landed — prediction scorecard (2026-08-24) — | Tell | Predicted | Actual | Score | {HIT; HIT (the core bet)}
-- L124 [2] Backend prompting, inferred from the output — 1. Numbers written as words ("two thousand twenty five", "two hundred and {Numbers written as words; Verbatim quotation as policy armor; Research is search-first, not primary-source}
-- L148 [2] Four-way verdict — - Voice (the moat test): A wins by construction; C scored zero first-person {Voice (the moat test):; Best single idea:; Retention:; Grounding:}
+- L1 [1] Four-Way Script Comparison — "Why a Budtender Retires Before a Banker" — The decisive AOY-trial test, expanded: same title, same references, same {before; Predicted-theirs} <AOY-trial; write_script_v2; third-person; first-person; ex-JPMorgan; advice-rules; named-source; paycheck-to-paycheck; Rhetorical-question; re-hooks; compound-dollar; AI-tell>
+- L15 [2] Panel B — predicted write_script_v2 output — Falsifiable tells predicted (score C against these when it lands): {not; The persona gets diluted} <third-person; first-person; ex-JPMorgan; advice-rules; named-source; paycheck-to-paycheck; Rhetorical-question; re-hooks; compound-dollar; AI-tell; ninety-five; four-hundred-dollar>
+- L35 [3] The predicted script (~600 words) — There's a banker in Manhattan who makes ninety-five thousand dollars a year. <ninety-five; four-hundred-dollar; seventy-five-inch>
+- L91 [3] Panel B self-notes — Deliberately embedded their tells: third-person cold open (D-pattern), two <third-person; D-pattern; named-ish; re-hooks; soft-CTA>
+- L99 [2] Scoring axes (for the four-way) — 1. Hook mechanics — time-to-tension, concreteness <time-to-tension; re-hook; AI-tell>
+- L108 [2] Panel C landed — prediction scorecard (2026-08-24) — | Tell | Predicted | Actual | Score | {HIT; HIT (the core bet)} <Third-person; named-source; LendingClub; Rhetorical-question; re-hooks; Compound-dollar; AI-tell>
+- L124 [2] Backend prompting, inferred from the output — 1. Numbers written as words ("two thousand twenty five", "two hundred and {Numbers written as words; Verbatim quotation as policy armor; Research is search-first, not primary-source} <pre-formatted; advice-rules; credible-ish; Pool-then-discard; cannabis-business; dispensary-OWNER; Reference-following; stuff-vs-money; savings-rate>
+- L148 [2] Four-way verdict — - Voice (the moat test): A wins by construction; C scored zero first-person {Voice (the moat test):; Best single idea:; Retention:; Grounding:} <first-person; non-replicable; self-contained; number-spelling; research-pool; bonus-volatility; operator-caught; in-scene; topic-graph; rule-two; Reviewer-tool; re-scoring>
 
 ## docs/content-video-engine/briefs/ALICIA-SCRIPT-PERSONA-PASS.md
 
-- L1 [1] Alicia Script — Persona Pass (v2) — The approved 3:00 script from
-- L15 [2] Script v2 (~575 words, ~3:00) — [s01 — cold open ON THE TILL PLATE, captions punching in word groups; till {[s01 — cold open ON THE TILL PLATE, captions punching in wor; [s02 — the banker's apartment]}
-- L106 [2] Comparison — what the persona pass changed, and under which rule — | Slot | v1 | v2 | Rule | {black; on the till plate; v1 violated standing doctrine; the pass caught it.}
+- L1 [1] Alicia Script — Persona Pass (v2) — The approved 3:00 script from <ALICIA-FORMAT-RECREATION-BRIEF; VOICE-PROFILE; WRITER-PERSONA; Judge-by-ear; [post-key]; risk-score; Ninety-five; out-earns; [pre-key]; self-storage; McDonald; [verify]>
+- L15 [2] Script v2 (~575 words, ~3:00) — [s01 — cold open ON THE TILL PLATE, captions punching in word groups; till {[s01 — cold open ON THE TILL PLATE, captions punching in wor; [s02 — the banker's apartment]} <[post-key]; risk-score; Ninety-five; out-earns; [pre-key]; self-storage; McDonald; [verify]>
+- L106 [2] Comparison — what the persona pass changed, and under which rule — | Slot | v1 | v2 | Rule | {black; on the till plate; v1 violated standing doctrine; the pass caught it.} <anti-pattern; [post-key]; risk-score; falling-behind; fast-food; McDonald; [verify]; re-cadenced; [pre-key]>
 - L120 [2] What deliberately did NOT change — - The v5 hook — it is the approved calibration reference (doc 30 §2); {The v5 hook}
-- L128 [2] The honest read — v1 was already voice-adjacent — it was written toward this operator before {lens}
+- L128 [2] The honest read — v1 was already voice-adjacent — it was written toward this operator before {lens} <voice-adjacent; risk-analyst; black-screen>
 
 ## docs/content-video-engine/briefs/ALICIA-SCRIPT-V3-CALCULUS.md
 
-- L1 [1] Alicia Script — v3 (The Calculus Pass) + Three-Way Verdict — The bake-off before committing to the phase guides (P10 T2). Same {structure at micro density}
-- L22 [2] Script v3 (~550 words, ~3:00) — [P1 · s01 — cold open ON THE TILL PLATE, drawer sounds under; captions {[P1 · s01 — cold open ON THE TILL PLATE, drawer sounds under}
-- L164 [2] Duty ledger (the map's roster, scaled to 3:00) — | System | Required | v3 | v2 | AOY-C |
-- L186 [2] The three-way verdict — Did the calculus make us meaningfully stronger? Yes — and the delta is {Did the calculus make us meaningfully stronger? Yes — and th; v2 → v3 closes real holes, not cosmetic ones.}
+- L1 [1] Alicia Script — v3 (The Calculus Pass) + Three-Way Verdict — The bake-off before committing to the phase guides (P10 T2). Same {structure at micro density} <bake-off; ALICIA-SCRIPT-PERSONA-PASS; FULL-VIDEO-MAP; knowledge-graph; compressed-absolute; Judge-by-ear; [post-key]; risk-score; biography-as-twist; [pre-key]; map-not-territory; anecdote-heavy>
+- L22 [2] Script v3 (~550 words, ~3:00) — [P1 · s01 — cold open ON THE TILL PLATE, drawer sounds under; captions {[P1 · s01 — cold open ON THE TILL PLATE, drawer sounds under} <[post-key]; risk-score; biography-as-twist; [pre-key]; map-not-territory; anecdote-heavy; risk-analyst; new-info; head-fake; ninety-five; proof-of-purchase; rent-pipe>
+- L164 [2] Duty ledger (the map's roster, scaled to 3:00) — | System | Required | v3 | v2 | AOY-C | <AOY-C; rowing-machine; re-stated; Head-fake; mid-video; anecdote-thin; Attribution-first; risk-analyst; dissent-in-character; first-person>
+- L186 [2] The three-way verdict — Did the calculus make us meaningfully stronger? Yes — and the delta is {Did the calculus make us meaningfully stronger? Yes — and th; v2 → v3 closes real holes, not cosmetic ones.} <head-fake; AOY-C; first-person; mid-video; bonus-volatility; primary-quote; [verify]; judge-by-ear>
 
 ## docs/content-video-engine/briefs/ANSWER-BRAVOS-HYPE-CYCLE.md
 
-- L1 [1] Answer Script — "Steel and Paper" (response to Bravos: "History is About to Be Made") — First full production run of the script-pattern kit (P1→P6 ledger chain), {8:00 (T1)}
-- L32 [2] SCRIPT A (v1 baseline — A/B test arm A) — [P1 · s01 — macro: an iron railway spike on dark wood, already rotating {[P1 · s01 — macro: an iron railway spike on dark wood, alrea}
-- L267 [2] SCRIPT B — **PRODUCTION TEXT** (sentence-strength pass; won the A/B ear test) — A/B verdict (operator, 2026-08-24, by ear): three matched pairs — open, {B won}
-- L456 [2] Strength Log (A → B, gates per SENTENCE-STRENGTH-CHECK) — | # | A (original) | Gates failed | B (final) |
-- L501 [2] Final ledger audit (P6 out) — - ring_echo: spike returns transformed ("still carrying trains… paper
-- L519 [2] Sources block (production gate) — | Claim | Source | Status |
+- L1 [1] Answer Script — "Steel and Paper" (response to Bravos: "History is About to Be Made") — First full production run of the script-pattern kit (P1→P6 ledger chain), {8:00 (T1)} <script-pattern; agreeing-but-contrarian; Jw8ykhoOVBQ; sold-out; risk-analyst; memory-as-trade; memory-price; In 1845; [post-key]; YouTube; attribution-first; [pre-key]>
+- L32 [2] SCRIPT A (v1 baseline — A/B test arm A) — [P1 · s01 — macro: an iron railway spike on dark wood, already rotating {[P1 · s01 — macro: an iron railway spike on dark wood, alrea} <In 1845; [post-key]; YouTube; attribution-first; [pre-key]; map-not-territory; dual-line; quarter-billion; new-info; risk-score; HEAD-FAKE; twenty-six>
+- L267 [2] SCRIPT B — **PRODUCTION TEXT** (sentence-strength pass; won the A/B ear test) — A/B verdict (operator, 2026-08-24, by ear): three matched pairs — open, {B won} <SENTENCE-STRENGTH-CHECK; In 1845; [post-key]; YouTube; [pre-key]; dual-line; quarter-billion; risk-score; profit-taking; target-date; sold-out; de-risk>
+- L456 [2] Strength Log (A → B, gates per SENTENCE-STRENGTH-CHECK) — | # | A (original) | Gates failed | B (final) | <YouTube; chart-read; quarter-billion; risk-score; profit-taking; head-fake; twenty-six; pre-leaks; target-date; page-ism; de-risk; agent-hiding>
+- L501 [2] Final ledger audit (P6 out) — - ring_echo: spike returns transformed ("still carrying trains… paper <token-verifiable; micro-CTA; unit-structured; reflection-heavy; de-risk>
+- L519 [2] Sources block (production gate) — | Claim | Source | Status | <Apr 2025; token-ROI; spot-check; BoE; operator-verified; sold-out; memory-supercycle; self-contained>
 - L542 [2] Notes — - Their CTA sells strategy calls; ours sells the tripwire watch — the
 
 ## docs/content-video-engine/briefs/ANSWER-BRAVOS-IMAGE-PACK.md
 
-- L1 [1] Image Prompt Pack — "Steel and Paper" (GPT image generation) — Companion to [ANSWER-BRAVOS-HYPE-CYCLE.md](ANSWER-BRAVOS-HYPE-CYCLE.md). {every data chart is built in-house from the registered figur}
-- L10 [2] Global style block (paste as the prefix of every prompt) — > Painterly editorial illustration, cinematic 16:9, muted documentary {Hard rules for every generation:}
-- L30 [2] The plates
-- L32 [3] P-01 · s01 OPEN — the spike (RING TOKEN, master plate) — *Duty: microhook visual stun; irony counterpoint — the future shown as
+- L1 [1] Image Prompt Pack — "Steel and Paper" (GPT image generation) — Companion to [ANSWER-BRAVOS-HYPE-CYCLE.md](ANSWER-BRAVOS-HYPE-CYCLE.md). {every data chart is built in-house from the registered figur} <ANSWER-BRAVOS-HYPE-CYCLE; coal-fire; real-person; ring-token; hand-forged; square-shanked; hammer-marked; oiled-wood; near-black; contextual-mapping; BoE; archival-blue>
+- L10 [2] Global style block (paste as the prefix of every prompt) — > Painterly editorial illustration, cinematic 16:9, muted documentary {Hard rules for every generation:} <coal-fire; real-person; ring-token; hand-forged; square-shanked; hammer-marked>
+- L30 [2] The plates <oiled-wood; square-shanked; hammer-marked; near-black; contextual-mapping; in-house; BoE; archival-blue; breathing-dip; slate-dark; floor-to-ceiling; target-date>
+- L32 [3] P-01 · s01 OPEN — the spike (RING TOKEN, master plate) — *Duty: microhook visual stun; irony counterpoint — the future shown as <oiled-wood; square-shanked; hammer-marked; near-black>
 - L41 [3] P-02 · s01 — the certificate shadow (foreshadow texture) — Duty: sits behind the promise line; plants "paper" before it is named.
-- L49 [3] P-03 · s02 ENGINE — the two rooms (divergence, as world) — *Duty: contextual-mapping counterpoint under the steelman; the in-house
-- L58 [3] P-04 · s02 — the borrowed river (rates as fuel) — *Duty: under the trigger steelman (BoE 6%, Fed 6.5%, the 5.5% tripwire);
+- L49 [3] P-03 · s02 ENGINE — the two rooms (divergence, as world) — *Duty: contextual-mapping counterpoint under the steelman; the in-house <contextual-mapping; in-house>
+- L58 [3] P-04 · s02 — the borrowed river (rates as fuel) — *Duty: under the trigger steelman (BoE 6%, Fed 6.5%, the 5.5% tripwire); <BoE; archival-blue>
 - L66 [3] P-05 · s03 GAP — the tourists leaving (trough anecdotes) — *Duty: subtext counterpoint for the Karp/Uber/Microsoft run — confidence
-- L75 [3] P-06 · s03 — the working line (steel survives the crash) — *Duty: u3/u4 — "trains ran straight through the crash"; breathing-dip
-- L83 [3] P-07 · s04 PIVOT — the certificate wall (RECONTEXTUALIZATION) — *Duty: the visual register SHIFT — charts give way to paper; on screen at
-- L92 [3] P-08 · s04 — the modern certificate (the index as paper) — *Duty: lands on "ETF, target-date, 'the market'"; same framing family as
-- L101 [3] P-09 · s05 REFLECTION — the pour (chiastic-center plate) — *Duty: abstract synthesis; slow macro imagery under THE thesis; the
-- L109 [3] P-10 · s05 — the three-question test (payoff backdrop) — *Duty: negative-space plate; the in-house type-build of the three
-- L117 [3] P-11 · s05 — the memory tell (the channel's standing tripwire) — *Duty: under the four-part tell; ties to the catalogue-level memory
-- L126 [3] P-12 · s06 CLOSE — the spike, one light lower (RING ECHO) — *Duty: ring symmetry — same frame family as P-01, transformed by time.
+- L75 [3] P-06 · s03 — the working line (steel survives the crash) — *Duty: u3/u4 — "trains ran straight through the crash"; breathing-dip <breathing-dip; slate-dark>
+- L83 [3] P-07 · s04 PIVOT — the certificate wall (RECONTEXTUALIZATION) — *Duty: the visual register SHIFT — charts give way to paper; on screen at <floor-to-ceiling>
+- L92 [3] P-08 · s04 — the modern certificate (the index as paper) — *Duty: lands on "ETF, target-date, 'the market'"; same framing family as <target-date>
+- L101 [3] P-09 · s05 REFLECTION — the pour (chiastic-center plate) — *Duty: abstract synthesis; slow macro imagery under THE thesis; the <Slow-motion; coral-to-amber; mid-air>
+- L109 [3] P-10 · s05 — the three-question test (payoff backdrop) — *Duty: negative-space plate; the in-house type-build of the three <negative-space; in-house; type-build; half-light>
+- L117 [3] P-11 · s05 — the memory tell (the channel's standing tripwire) — *Duty: under the four-part tell; ties to the catalogue-level memory <four-part; catalogue-level>
+- L126 [3] P-12 · s06 CLOSE — the spike, one light lower (RING ECHO) — *Duty: ring symmetry — same frame family as P-01, transformed by time. <oiled-wood>
 - L135 [3] P-13 · s06 — the walls of the bankrupt club (escalate beat) — *Duty: under "papered the walls of bankrupt clubs"; historical shame as
-- L143 [3] P-14 · final — the resting spike (STORY CLOSE, last frame) — Duty: the last image; also the end-screen underlay.
-- L150 [2] Production notes — - Generate P-01 first; feed it as the reference image for P-12 and P-14
+- L143 [3] P-14 · final — the resting spike (STORY CLOSE, last frame) — Duty: the last image; also the end-screen underlay. <end-screen>
+- L150 [2] Production notes — - Generate P-01 first; feed it as the reference image for P-12 and P-14 <in-house; Bravos-recreated; of-GDP>
 
 ## docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md
 
-- L1 [1] Answers to Research Brief — Animation Craft & The Drawing Engine (Pass 2 Audited) — > Superseded as a reference, 2026-09-04. This file is a filter over the research {Superseded as a reference, 2026-09-04.; docs 42–46; Do not act on §8 (the parallax audit).}
-- L27 [2] 0. Pass 1 Audit & Retrospective: The Honest Correction — In Pass 1, the binding contract requiring "a number with a tolerance and its condition" created artificial pressure to fill every analytical slot. While core me
+- L1 [1] Answers to Research Brief — Animation Craft & The Drawing Engine (Pass 2 Audited) — > Superseded as a reference, 2026-09-04. This file is a filter over the research {Superseded as a reference, 2026-09-04.; docs 42–46; Do not act on §8 (the parallax audit).} <RESEARCH-INDEX; intensity; tiling_mode; ssaa; quality; tiling_mode: "mirror"; PARALLAX-AND-PLATE-MOTION; VERDICT-research-brief-animation-craft; Deep-Research; content-video-engine; RESEARCH-BRIEF-animation-craft; RESPONSE-TO-RESEARCH-PASS>
+- L27 [2] 0. Pass 1 Audit & Retrospective: The Honest Correction — In Pass 1, the binding contract requiring "a number with a tolerance and its condition" created artificial pressure to fill every analytical slot. While core me <Two-Thirds; closed-form>
 - L31 [3] 0.1 Specific Errors Conceded & Corrected
-- L61 [2] 1. Pipeline & Doctrine Triage: What Goes Where — We establish a strict three-tier boundary to prevent unproven research from becoming untested doctrine:
-- L88 [2] 2. Executive Synthesis: Synergies & The Free High-Leverage Wins
-- L90 [3] 2.1 The 5 Overlapping Synergies to Capitalize On — 1. Acoustic Silence Gaps $\times$ Scene Cuts $\times$ Saccadic Suppression $\times$ Tversky Savor Holds:
-- L124 [3] 2.2 The 5 Disproportionately Easy Free Wins — 1. $7\text{px}$ Field-Colored Halo on Direct Inline Labels (`paint-order: stroke fill`):
-- L163 [2] 3. Track A — The Animator (Timing and Motion)
-- L165 [3] A1: The Timing Charts [RECLASSIFIED: Design Proposal] — The figures below represent animator craft heuristics synthesized from classical practitioners (Richard Williams 2001; John Lasseter 1987). They are design prop {animator craft heuristics; design proposals}
-- L185 [4] The On-1s / On-2s / On-3s Decision Rule (Proposal) — $$\text{Frame Cadence} = \begin{cases} {Failure Signature; Source}
+- L61 [2] 1. Pipeline & Doctrine Triage: What Goes Where — We establish a strict three-tier boundary to prevent unproven research from becoming untested doctrine: <three-tier>
+- L88 [2] 2. Executive Synthesis: Synergies & The Free High-Leverage Wins <eye-reset; Bridgeman et al.; Whisper-detected; re-orientation; Two-Thirds; Viviani & Terzuolo 1982; Re-parameterizing; line-width; LaMa; Multi-Plane; Low-Intensity; Single-mesh>
+- L90 [3] 2.1 The 5 Overlapping Synergies to Capitalize On — 1. Acoustic Silence Gaps $\times$ Scene Cuts $\times$ Saccadic Suppression $\times$ Tversky Savor Holds: <eye-reset; Bridgeman et al.; Whisper-detected; re-orientation; Two-Thirds; Viviani & Terzuolo 1982; Re-parameterizing; line-width; LaMa; Multi-Plane; Low-Intensity; Single-mesh>
+- L124 [3] 2.2 The 5 Disproportionately Easy Free Wins — 1. $7\text{px}$ Field-Colored Halo on Direct Inline Labels (`paint-order: stroke fill`): <Field-Colored; paint-order: stroke fill; Split-Attention; Ginns 2006; meta-analysis; text-diagram; mid-phoneme; post-processing; Tversky et al.; "intensity": 1.0; depth_anything_v2_vits_fp16.safetensors; low-resolution>
+- L163 [2] 3. Track A — The Animator (Timing and Motion) <Williams 2001; Lasseter 1987; double-imaging; Watson et al.; Mass-Spring-Damper; RE-ASK; Mackworth; clock-pointer; sub-second; multi-second; operator-derived; YouTube>
+- L165 [3] A1: The Timing Charts [RECLASSIFIED: Design Proposal] — The figures below represent animator craft heuristics synthesized from classical practitioners (Richard Williams 2001; John Lasseter 1987). They are design prop {animator craft heuristics; design proposals} <Williams 2001; Lasseter 1987; double-imaging; Watson et al.>
+- L185 [4] The On-1s / On-2s / On-3s Decision Rule (Proposal) — $$\text{Frame Cadence} = \begin{cases} {Failure Signature; Source} <double-imaging; Watson et al.>
 - L196 [3] A2: Ease Equivalence [RECLASSIFIED: Design Proposal]
-- L219 [3] A3: Spring vs. Curve [RECLASSIFIED: Design Proposal]
+- L219 [3] A3: Spring vs. Curve [RECLASSIFIED: Design Proposal] <Mass-Spring-Damper>
 - L221 [4] Analytic Mass-Spring-Damper Formulation (Tier 1 Math) — $$m \ddot{x}(t) + c \dot{x}(t) + k x(t) = 0, \quad \omega_0 = \sqrt{\frac{k}{m}}, \quad \zeta = \frac{c}{2\sqrt{k m}}$$
 - L226 [4] Material Parameter Presets [Tier 2 Proposal]
-- L247 [3] A4: The Threshold of "Alive" [RE-ASK 1 ★: Audited & Answered]
-- L249 [4] 1. The Direct Answer — We could not find a measured academic study that establishes an empirical attention decay curve specifically for a held static frame inside moving video. {We could not find a measured academic study that establishes}
+- L247 [3] A4: The Threshold of "Alive" [RE-ASK 1 ★: Audited & Answered] <Mackworth; clock-pointer; sub-second; multi-second; operator-derived; YouTube; drop-offs>
+- L249 [4] 1. The Direct Answer — We could not find a measured academic study that establishes an empirical attention decay curve specifically for a held static frame inside moving video. {We could not find a measured academic study that establishes} <Mackworth; clock-pointer; sub-second; multi-second>
 - L254 [4] 2. Nearest Adjacent Scientific Evidence
-- L279 [4] 3. Pipeline & Doctrine Status — Because no controlled study exists for our exact medium, our shipped gates represent operator-derived design doctrine: {operator-derived design doctrine; Gate E21 ("Screen Never Still"); Gate M10 ("No Still Over 6s in First Minute")}
-- L286 [3] A5: Drawing-On [CLOSED & RECLASSIFIED]
+- L279 [4] 3. Pipeline & Doctrine Status — Because no controlled study exists for our exact medium, our shipped gates represent operator-derived design doctrine: {operator-derived design doctrine; Gate E21 ("Screen Never Still"); Gate M10 ("No Still Over 6s in First Minute")} <YouTube; drop-offs>
+- L286 [3] A5: Drawing-On [CLOSED & RECLASSIFIED] <Two-Thirds; w_0>
 - L288 [4] 1. The Kinematic Two-Thirds Power Law (Tier 1 Math — CLOSED) — Human handwriting and drawing velocity strictly tracks path curvature $\kappa(s)$: {Source}
-- L295 [4] 2. Dynamic Nib Pooling [RECLASSIFIED: Engineering Heuristic Proposal] — Viviani's power law governs velocity, not width. The formula below is an engineering heuristic proposal for stroke dilation: {engineering heuristic proposal; Corner Discontinuity Rule}
-- L302 [3] A6: The Secondary-Motion Budget [RECLASSIFIED: Design Proposal] — - Energy Ratio Proposal: {Energy Ratio Proposal; Lag & Settle Proposal; Source}
-- L311 [2] 4. Track B — The Editor (Cutting and Rhythm)
-- L313 [3] B1: The Gap-Cut Finding, Generalised [RE-ASK 4: Audited & Answered]
-- L315 [4] 1. Practitioner Doctrine vs. Empirical Science — - Walter Murch (In the Blink of an Eye, 1995): Murch posits that cuts should align with natural eye blinks and conversational breath pauses, proposing the famou {Walter Murch (In the Blink of an Eye, 1995); practitioner doctrine; Empirical Film Cognition (Tim J. Smith & John M. Henderson 2}
+- L295 [4] 2. Dynamic Nib Pooling [RECLASSIFIED: Engineering Heuristic Proposal] — Viviani's power law governs velocity, not width. The formula below is an engineering heuristic proposal for stroke dilation: {engineering heuristic proposal; Corner Discontinuity Rule} <w_0>
+- L302 [3] A6: The Secondary-Motion Budget [RECLASSIFIED: Design Proposal] — - Energy Ratio Proposal: {Energy Ratio Proposal; Lag & Settle Proposal; Source} <int_0; Lasseter; Williams>
+- L311 [2] 4. Track B — The Editor (Cutting and Rhythm) <Gap-Cut; RE-ASK; Eye-trace; Henderson 2008; turn-taking; re-analysis; re-orientation; Sweller et al.; Potter et al.; Rayner; Carpenter & Shah; Cleveland & McGill>
+- L313 [3] B1: The Gap-Cut Finding, Generalised [RE-ASK 4: Audited & Answered] <Eye-trace; Henderson 2008; turn-taking; re-analysis; re-orientation; Sweller et al.>
+- L315 [4] 1. Practitioner Doctrine vs. Empirical Science — - Walter Murch (In the Blink of an Eye, 1995): Murch posits that cuts should align with natural eye blinks and conversational breath pauses, proposing the famou {Walter Murch (In the Blink of an Eye, 1995); practitioner doctrine; Empirical Film Cognition (Tim J. Smith & John M. Henderson 2} <Eye-trace; Henderson 2008; turn-taking>
 - L321 [4] 2. Has Acoustic Silence Gap Alignment Ever Been Measured in Literature? — No. A systematic measurement of video cut alignment specifically relative to acoustic speech silence intervals does not exist in published film literature. {No. A systematic measurement of video cut alignment specific; original empirical measurements from our repository's forens}
-- L327 [4] 3. Gate M13 Status: Candidate Doctrine — - Decision Rule: Proposed cut points check the Whisper acoustic timestamp track. If audio level $< -32\text{ dBFS}$ for $\ge 200\text{ms}$ within $\pm 8$ frames {Decision Rule; Cognitive Mechanism}
-- L333 [3] B2: Shot Length & Reading Floors [RE-ASK 2: Audited & Answered] — We decouple the three thresholds conflated in Pass 1:
+- L327 [4] 3. Gate M13 Status: Candidate Doctrine — - Decision Rule: Proposed cut points check the Whisper acoustic timestamp track. If audio level $< -32\text{ dBFS}$ for $\ge 200\text{ms}$ within $\pm 8$ frames {Decision Rule; Cognitive Mechanism} <re-analysis; re-orientation; Sweller et al.>
+- L333 [3] B2: Shot Length & Reading Floors [RE-ASK 2: Audited & Answered] — We decouple the three thresholds conflated in Pass 1: <Potter et al.; Rayner; Carpenter & Shah; Cleveland & McGill; McGill>
 - L364 [3] B3: L-Cuts / J-Cuts under Continuous Narration [RECLASSIFIED: Design Proposal] — - Source: E. Pincus & S. Ascher, The Filmmaker's Handbook (2013). (Classified as film craft doctrine).
 - L384 [3] B4: Graphic Match Cuts (ARAP Invariants) [Tier 1 Math — CLOSED] — To ensure an object morphing into a chart reads as one physical entity transforming rather than a dissolve: {Centroid Shift Invariant; Dominant Axis Invariant; Bounding Area Continuity}
-- L393 [3] B5: Rhythm as a Distribution [Tier 1 Science — CLOSED] — High-retention shot lengths follow a Log-Normal Distribution exhibiting $1/f$ pink noise scaling: {Log-Normal Distribution; Source}
-- L401 [2] 5. Track C — The Drawing-Engine Builder
-- L403 [3] C1: Shape Interpolation (ARAP) [Tier 1 Math — CLOSED] — - Polar decomposition of deformation gradient: {Source}
+- L393 [3] B5: Rhythm as a Distribution [Tier 1 Science — CLOSED] — High-retention shot lengths follow a Log-Normal Distribution exhibiting $1/f$ pink noise scaling: {Log-Normal Distribution; Source} <High-retention; DeLong>
+- L401 [2] 5. Track C — The Drawing-Engine Builder <Cohen-Or; As-Rigid-As-Possible; Igarashi et al.; x_i; y_i; feTurbulence; feGaussianBlur; WebP; high-frequency; Two-Thirds; re-parameterization; lpHash>
+- L403 [3] C1: Shape Interpolation (ARAP) [Tier 1 Math — CLOSED] — - Polar decomposition of deformation gradient: {Source} <Cohen-Or; As-Rigid-As-Possible; Igarashi et al.>
 - L411 [3] C2: Rigging Without a Rig (The 5 Core Constraints) [Tier 1 Architecture — CLOSED]
-- L429 [3] C3: Nested Coordinate Spaces [Tier 1 Architecture — CLOSED] — - Matrix transform stack:
-- L436 [3] C4: Deterministic Runtime Under Seek [Tier 1 Architecture — CLOSED] — - Chromium headless seek performance envelope: {Production Standard}
-- L444 [3] C5: Ink on Paper, Specifically [Tier 1 Math & Shaders — CLOSED] — - Three physical components: {Source}
-- L453 [3] C6: What Rive / Lottie / Flash Got Right [Tier 1 Architecture — CLOSED] — - Separate timeline keyframe evaluation from state machine transitions.
-- L460 [2] 6. Track D — Placement (The "Where" Question)
-- L462 [3] D1: Eye-Trace & Fixation Decay [Tier 1 Psychophysics — CLOSED] — - Mean fixation duration in scene viewing: $260\text{--}330\text{ms}$ (Rayner 1998). {Design Proposal (15° Visual Cone)}
-- L469 [3] D2: Non-Decorative Composition for 9:16 [Candidate Doctrine] — - Tangency Elimination Rule: Minimum clearance $\ge 24\text{px}$ OR deliberate overlap $\ge 48\text{px}$ with cast shadow.
-- L489 [3] D3: Saliency Hierarchy & Mayer's Spatial Contiguity [Tier 1 Cognitive Science — CLOSED] — - Visual priority order: Kinetic Motion ($40\text{--}80\text{ms}$) $\to$ Luminance Contrast ($90\text{--}140\text{ms}$) $\to$ Scale/Area ($150\text{--}220\text{ {Mayer's Spatial Contiguity Principle}
+- L429 [3] C3: Nested Coordinate Spaces [Tier 1 Architecture — CLOSED] — - Matrix transform stack: <x_i; y_i>
+- L436 [3] C4: Deterministic Runtime Under Seek [Tier 1 Architecture — CLOSED] — - Chromium headless seek performance envelope: {Production Standard} <feTurbulence; feGaussianBlur; WebP; high-frequency>
+- L444 [3] C5: Ink on Paper, Specifically [Tier 1 Math & Shaders — CLOSED] — - Three physical components: {Source} <Two-Thirds; re-parameterization; lpHash; Computer-Generated; Pen-and-Ink>
+- L453 [3] C6: What Rive / Lottie / Flash Got Right [Tier 1 Architecture — CLOSED] — - Separate timeline keyframe evaluation from state machine transitions. <SceneGraph>
+- L460 [2] 6. Track D — Placement (The "Where" Question) <Eye-Trace; Rayner 1998; Non-Decorative; left-to-right; Niebur 1998; split-attention; Mayer 2001; Ginns 2006; meta-analysis; Motion-Graphics; High-pressure; First-Derivative>
+- L462 [3] D1: Eye-Trace & Fixation Decay [Tier 1 Psychophysics — CLOSED] — - Mean fixation duration in scene viewing: $260\text{--}330\text{ms}$ (Rayner 1998). {Design Proposal (15° Visual Cone)} <Rayner 1998>
+- L469 [3] D2: Non-Decorative Composition for 9:16 [Candidate Doctrine] — - Tangency Elimination Rule: Minimum clearance $\ge 24\text{px}$ OR deliberate overlap $\ge 48\text{px}$ with cast shadow. <left-to-right>
+- L489 [3] D3: Saliency Hierarchy & Mayer's Spatial Contiguity [Tier 1 Cognitive Science — CLOSED] — - Visual priority order: Kinetic Motion ($40\text{--}80\text{ms}$) $\to$ Luminance Contrast ($90\text{--}140\text{ms}$) $\to$ Scale/Area ($150\text{--}220\text{ {Mayer's Spatial Contiguity Principle} <Niebur 1998; split-attention; Mayer 2001; Ginns 2006; meta-analysis>
 - L495 [3] D4: Motion-Graphics Grids (12-Column Vertical) [Tier 2 Proposal] — - 12-column layout: $1080\text{px}$ width, $48\text{px}$ outer margins, $12 \times 62\text{px}$ columns, $22\text{px}$ gutters.
-- L501 [3] D5: The Abstract $	o$ Concrete Metaphor Library [Tier 1 Cognitive Linguistics — CLOSED] — - Derived directly from Lakoff & Johnson (Metaphors We Live By, 1980):
-- L511 [2] 7. Track E — The Feedback Loop (The Structural Gap)
-- L513 [3] E1: Frame Sequence Quality Metrics [Metrics: Tier 1 CLOSED; Thresholds: Tier 2 Proposal] — The four mathematical metrics are accepted as our diagnostic suite; the numerical thresholds are initial calibration proposals to be benchmarked against our act {initial calibration proposals}
-- L538 [3] E2: Diagnosing "The Race Feels Choppy" [Tier 1 Psychophysics — CLOSED]
-- L540 [4] 1. Mechanical Root Cause — Watson, Ahumada, & Farrell (1986, JOSA A 3(3): 300–307) formulated the "Window of Visibility": human vision integrates light over a temporal aperture ($\sim 30 {stroboscopic aliasing (retinal double-imaging)}
+- L501 [3] D5: The Abstract $	o$ Concrete Metaphor Library [Tier 1 Cognitive Linguistics — CLOSED] — - Derived directly from Lakoff & Johnson (Metaphors We Live By, 1980): <High-pressure; First-Derivative; Dual-column>
+- L511 [2] 7. Track E — The Feedback Loop (The Structural Gap) <Neuroscience 2001; Two-Frame; high-velocity; double-imaging>
+- L513 [3] E1: Frame Sequence Quality Metrics [Metrics: Tier 1 CLOSED; Thresholds: Tier 2 Proposal] — The four mathematical metrics are accepted as our diagnostic suite; the numerical thresholds are initial calibration proposals to be benchmarked against our act {initial calibration proposals} <Neuroscience 2001; Two-Frame>
+- L538 [3] E2: Diagnosing "The Race Feels Choppy" [Tier 1 Psychophysics — CLOSED] <high-velocity; double-imaging>
+- L540 [4] 1. Mechanical Root Cause — Watson, Ahumada, & Farrell (1986, JOSA A 3(3): 300–307) formulated the "Window of Visibility": human vision integrates light over a temporal aperture ($\sim 30 {stroboscopic aliasing (retinal double-imaging)} <high-velocity>
 - L544 [4] 2. Pipeline Fix — 1. If object velocity $v > 100\text{ px/s}$, force rendering to On-1s (24fps). {On-1s (24fps)}
-- L550 [2] 8. Procedural Code Audit: `parallax-runner.mjs` — Per Claude's RE-ASK 5, we cite the exact, verified file coordinates and code from `tools/google-flow-driver/src/parallax-runner.mjs` (234 lines total):
-- L554 [3] 8.1 Current Code & Line Coordinates — 1. Lines 33–43 (`motionInputs` in default Dolly preset): {Lines 33–43 (`motionInputs` in default Dolly preset); Lines 49, 62, 76, 90, 108; Line 129 (Node "2" inputs)}
-- L584 [3] 8.2 The Precise Defect & Proposed Fix — - The Defect: `intensity` is hardcoded to `1.0` across all six preset blocks. In ComfyUI-Depthflow-Nodes, `intensity` is the displacement multiplier. Combined w {The Defect; The Exact Code Edit}
-- L593 [2] 9. Sourcing Integrity & Bibliography — Every citation below carries a retrievable locator and is strictly categorized by type:
-- L597 [3] 9.1 Empirical Psychophysics & Mathematics (Primary Scientific Evidence) — 1. Paolo Viviani & C. Terzuolo (1982). Trajectory determines movement dynamics. Neuroscience, 7(2), 431–437. DOI: 10.1016/0306-4522(82)90277-9. (Cited for Two-T {Paolo Viviani & C. Terzuolo; M. C. Potter, B. Wyble, C. E. Hagmann, & E. S. McCourt; Keith Rayner}
-- L619 [3] 9.2 Practitioner Doctrine (Editorial & Animation Craft) — 21. Walter Murch (1995). In the Blink of an Eye: A Perspective on Film Editing. Silman-James Press. (Practitioner doctrine: Rule of Six, blink alignment). {Walter Murch; Richard Williams; John Lasseter; Edward Pincus & Steven Ascher}
+- L550 [2] 8. Procedural Code Audit: `parallax-runner.mjs` — Per Claude's RE-ASK 5, we cite the exact, verified file coordinates and code from `tools/google-flow-driver/src/parallax-runner.mjs` (234 lines total): <RE-ASK; motionInputs; zoom; horizontal; vertical; circle; orbital; "intensity": 1.0; vits_fp16; ViT-Small; ViT; vitl_fp32>
+- L554 [3] 8.1 Current Code & Line Coordinates — 1. Lines 33–43 (`motionInputs` in default Dolly preset): {Lines 33–43 (`motionInputs` in default Dolly preset); Lines 49, 62, 76, 90, 108; Line 129 (Node "2" inputs)} <zoom; horizontal; vertical; circle; orbital; "intensity": 1.0; vits_fp16; ViT-Small; ViT; vitl_fp32; DepthflowMotionPreset*>
+- L584 [3] 8.2 The Precise Defect & Proposed Fix — - The Defect: `intensity` is hardcoded to `1.0` across all six preset blocks. In ComfyUI-Depthflow-Nodes, `intensity` is the displacement multiplier. Combined w {The Defect; The Exact Code Edit} <intensity; 1.0; ComfyUI-Depthflow-Nodes; ComfyUI; low-resolution; vits_fp16; melted-cheese; rubber-sheet; depth_anything_v2_vitl_fp32.safetensors; vitl_fp16>
+- L593 [2] 9. Sourcing Integrity & Bibliography — Every citation below carries a retrievable locator and is strictly categorized by type: <Two-Thirds; McCourt; AToCC; DeLong; Log-Normal; time-sampled; Cohen-Or; As-rigid-as-possible; Minimum-Jerk; saliency-based; Pastrana-Vidal; spatio-temporal>
+- L597 [3] 9.1 Empirical Psychophysics & Mathematics (Primary Scientific Evidence) — 1. Paolo Viviani & C. Terzuolo (1982). Trajectory determines movement dynamics. Neuroscience, 7(2), 431–437. DOI: 10.1016/0306-4522(82)90277-9. (Cited for Two-T {Paolo Viviani & C. Terzuolo; M. C. Potter, B. Wyble, C. E. Hagmann, & E. S. McCourt; Keith Rayner} <Two-Thirds; AToCC; DeLong; Log-Normal; time-sampled; Cohen-Or; As-rigid-as-possible; Minimum-Jerk; saliency-based; Pastrana-Vidal; spatio-temporal; QoE>
+- L619 [3] 9.2 Practitioner Doctrine (Editorial & Animation Craft) — 21. Walter Murch (1995). In the Blink of an Eye: A Perspective on Film Editing. Silman-James Press. (Practitioner doctrine: Rule of Six, blink alignment). {Walter Murch; Richard Williams; John Lasseter; Edward Pincus & Steven Ascher} <Silman-James; J-cuts; L-cuts>
 - L625 [3] 9.3 Internal Repository Measurements — 25. `04_shot_ledger_100_cuts.md` (2026-09-04). Forensic analysis of Wealth Logic (100 cuts): 82% reference cuts in acoustic silence gaps ($\ge 0.30\text{s}$) vs {`04_shot_ledger_100_cuts.md`}
 
 ## docs/content-video-engine/briefs/FLOW-OMNI-EXPLAINER-PROMPT-PLAN.md
 
-- L1 [1] FLOW-OMNI-EXPLAINER-PROMPT-PLAN.md — Title: Institutional 2.5D & Stickman Explainer Engine (Google Flow / Gemini Omni Flash Edition) {Title:; Target Channels:; Operational Stack:; Document Purpose:}
-- L10 [1] PART 1: THE MASTER PROMPT PACK (COPY-PASTE READY) — (Paste everything in the block below directly into ChatGPT, Claude, or DeepSeek as a custom system prompt).
-- L150 [1] PART 2: EXPLANATION FOR CLAUDE (THE ARCHITECTURAL CHANGE LEDGER) — This section details every technical, editorial, and mathematical modification made to the original document (`Untitled document (1).md`) to align it with our v
-- L171 [3] 1. Decoupled Voiceover: ElevenLabs First vs. In-Model Omni Speech — - The Original Defect: The original prompt forced Gemini Omni Flash to generate spoken audio inside the video generation model via a lengthy `LOCKED VOICE BLOCK {The Original Defect:; The Upgrade:}
-- L177 [3] 2. Eliminating the 13-Word Contradiction & Calibrating to 170 WPM — - The Original Defect: The original prompt contained an explicit internal contradiction (mandating "exactly 13 words" in lines 19/33, but citing "the exact 15-w {The Original Defect:; The Upgrade:; 170 WPM; 26 to 30 words per scene}
-- L181 [3] 3. Escaping the 50-Credit Free-Tier Clamp (10s vs. 6s Clips) — - The Original Defect: 6 seconds was selected solely so a creator could market a video on the free tier ($5 \times 10\text{ credits} = 50\text{ credits}$). {The Original Defect:; The Upgrade:; 3 renders; 6 renders}
-- L187 [3] 4. Two-Phase Staged Motion (Preventing the Second-6 Freeze) — - The Physical Reality: In video diffusion models (Omni, Wan, LTX), open-ended prompts cause characters to exhaust their action by second 4 or 5, resulting in a {The Physical Reality:; The Upgrade:; Two-Phase Staged Motion}
-- L194 [3] 5. Universal Mobile Safe Zones (9:16 Viewport Geometry) — - The Original Defect: The original prompt made zero mention of vertical framing or platform UI obstruction. {The Original Defect:; The Upgrade:; Universal Clean Canvas}
-- L198 [3] 6. Visual Brand Palette Alignment — - The Original Defect: State 4 specified a "mustard-yellow tunic children's book doodle". This looks amateurish and destroys authority for serious financial or {The Original Defect:; The Upgrade:; Canvas Ground:; Line Art:; Wardrobe:; Props:}
-- L206 [3] 7. Voice & Persona Calibration (`VOICE-PACK.md`) — - The Original Defect: Defaulted to a "warm friendly male narrator in his early thirties with gentle enthusiasm." {The Original Defect:; The Upgrade:; Cold Institutional Observer}
+- L1 [1] FLOW-OMNI-EXPLAINER-PROMPT-PLAN.md — Title: Institutional 2.5D & Stickman Explainer Engine (Google Flow / Gemini Omni Flash Edition) {Title:; Target Channels:; Operational Stack:; Document Purpose:} <DeepSeek; ChatGPT; ElevenLabs; CapCut; Production-ready>
+- L10 [1] PART 1: THE MASTER PROMPT PACK (COPY-PASTE READY) — (Paste everything in the block below directly into ChatGPT, Claude, or DeepSeek as a custom system prompt). <ChatGPT; DeepSeek>
+- L150 [1] PART 2: EXPLANATION FOR CLAUDE (THE ARCHITECTURAL CHANGE LEDGER) — This section details every technical, editorial, and mathematical modification made to the original document (`Untitled document (1).md`) to align it with our v <ElevenLabs; In-Model; LOCKED VOICE BLOCK; speech-timing; bit-perfect; high-retention; Free-Tier; Punch-In; Two-Phase; open-ended; DiT; TikTok>
+- L171 [3] 1. Decoupled Voiceover: ElevenLabs First vs. In-Model Omni Speech — - The Original Defect: The original prompt forced Gemini Omni Flash to generate spoken audio inside the video generation model via a lengthy `LOCKED VOICE BLOCK {The Original Defect:; The Upgrade:} <LOCKED VOICE BLOCK; speech-timing; bit-perfect>
+- L177 [3] 2. Eliminating the 13-Word Contradiction & Calibrating to 170 WPM — - The Original Defect: The original prompt contained an explicit internal contradiction (mandating "exactly 13 words" in lines 19/33, but citing "the exact 15-w {The Original Defect:; The Upgrade:; 170 WPM; 26 to 30 words per scene} <high-retention>
+- L181 [3] 3. Escaping the 50-Credit Free-Tier Clamp (10s vs. 6s Clips) — - The Original Defect: 6 seconds was selected solely so a creator could market a video on the free tier ($5 \times 10\text{ credits} = 50\text{ credits}$). {The Original Defect:; The Upgrade:; 3 renders; 6 renders} <Punch-In>
+- L187 [3] 4. Two-Phase Staged Motion (Preventing the Second-6 Freeze) — - The Physical Reality: In video diffusion models (Omni, Wan, LTX), open-ended prompts cause characters to exhaust their action by second 4 or 5, resulting in a {The Physical Reality:; The Upgrade:; Two-Phase Staged Motion} <open-ended; DiT>
+- L194 [3] 5. Universal Mobile Safe Zones (9:16 Viewport Geometry) — - The Original Defect: The original prompt made zero mention of vertical framing or platform UI obstruction. {The Original Defect:; The Upgrade:; Universal Clean Canvas} <TikTok; YouTube; right-hand>
+- L198 [3] 6. Visual Brand Palette Alignment — - The Original Defect: State 4 specified a "mustard-yellow tunic children's book doodle". This looks amateurish and destroys authority for serious financial or {The Original Defect:; The Upgrade:; Canvas Ground:; Line Art:; Wardrobe:; Props:} <mustard-yellow; #F4E6C7; #25313C; T-accounts>
+- L206 [3] 7. Voice & Persona Calibration (`VOICE-PACK.md`) — - The Original Defect: Defaulted to a "warm friendly male narrator in his early thirties with gentle enthusiasm." {The Original Defect:; The Upgrade:; Cold Institutional Observer} <mid-Atlantic; throat-clearing; YouTube>
 - L213 [3] 8. Visceral Paradox Hooks vs. Dry Textbook Syllabus — - The Original Defect: The draft hooks read like college syllabus titles ("Why commercial banks do not lend out depositor cash"). They traded compelling human t {The Original Defect:; The Upgrade:}
-- L219 [3] 9. Eliminating the Redundant Character Block (Flow Pinned Asset Architecture) — - The Original Defect: Mandated copy-pasting a 40-word text description of the stickman into every single animation prompt, even when the user already had a cha {The Original Defect:; The Upgrade:; cross-attention competition}
-- L223 [3] 10. Affirmative Physical Anchoring vs. Negative Prompt Contamination — - The Original Defect: Loaded the prompt with negative constraints ("no 3D shading, no photorealism, no color gradients, no extra limbs, no duplicate characters {The Original Defect:; The Upgrade:}
-- L229 [3] 11. External Script Gating & The Stage 7 Role (Visual Director, Not Amateur Copywriter) — - The Original Defect: The original prompt assumed an interactive AI chat should invent the script from a raw topic out of thin air. In our production operation {The Original Defect:; The Upgrade:; Approved Script Intake}
-- L237 [2] Part 3: Downstream Interop with Remotion & Whisper — When this prompt pack outputs the script and silent clips: {Audio Recording:; Acoustic Snapping (Gate M13):; Timeline Conforming:}
-- L247 [1] PART 4: REVIEW (Claude, 2026-09-04) — Verdict: adopt, with three corrections. This is the strongest artifact the research {Verdict: adopt, with three corrections.}
-- L253 [2] Accepted, and it extends what we knew — - #10 Affirmative anchoring. The operator ruled empirically that negative rules summon {#10 Affirmative anchoring.; That explanation is now the citation for B7.; #9 Cross-attention competition.}
-- L271 [2] ~~CORRECTION 1~~ — WITHDRAWN. The bad number was mine. — I wrote that 170 WPM contradicted "our doctrine target of 145–165." The operator asked {The operator asked where 145–165 came from, and it has no or; What the doctrine actually holds is 140 WPM, and it is an es}
-- L290 [2] CORRECTION 2 — the persona over-corrects, and pre-empts an ordered test — This one stands. {"Cold Institutional Forensic Auditor… strictly banned from c; humour calibration}
-- L311 [2] ~~CORRECTION 3~~ — WITHDRAWN. This is the stick lane. — I objected that "crisp white collar and dark minimalist vest" fights bound `@Mike` {Operator: the entire document is about the stick lane.; stick variant; A0; One real consequence, and it is a dependency rather than a d}
-- L324 [2] ~~FLAGGED: 10-second clips~~ — RESOLVED — Operator: 10 seconds is verified Omni length. The scene arithmetic stands, and the {Operator: 10 seconds is verified Omni length.}
-- L329 [2] The pattern worth naming — Two of my three corrections were wrong, and the review is worth reading as an example of {Two of my three corrections were wrong, and the review is wo; Correction 1; The check was `grep` for its origin, and I never ran it.; Correction 3; 10-second flag}
+- L219 [3] 9. Eliminating the Redundant Character Block (Flow Pinned Asset Architecture) — - The Original Defect: Mandated copy-pasting a 40-word text description of the stickman into every single animation prompt, even when the user already had a cha {The Original Defect:; The Upgrade:; cross-attention competition} <copy-pasting; Re-pasting; two-phase>
+- L223 [3] 10. Affirmative Physical Anchoring vs. Negative Prompt Contamination — - The Original Defect: Loaded the prompt with negative constraints ("no 3D shading, no photorealism, no color gradients, no extra limbs, no duplicate characters {The Original Defect:; The Upgrade:} <LTX-Video; self-attention; cross-attention; photorealism; extra limbs>
+- L229 [3] 11. External Script Gating & The Stage 7 Role (Visual Director, Not Amateur Copywriter) — - The Original Defect: The original prompt assumed an interactive AI chat should invent the script from a raw topic out of thin air. In our production operation {The Original Defect:; The Upgrade:; Approved Script Intake} <STATE 1; gate-cleared>
+- L237 [2] Part 3: Downstream Interop with Remotion & Whisper — When this prompt pack outputs the script and silent clips: {Audio Recording:; Acoustic Snapping (Gate M13):; Timeline Conforming:} <ElevenLabs; Adam; master_vo.mp3; word-level; Vertical9x16>
+- L247 [1] PART 4: REVIEW (Claude, 2026-09-04) — Verdict: adopt, with three corrections. This is the strongest artifact the research {Verdict: adopt, with three corrections.} <negative-conditioning; no extra limbs; extra limbs; Cross-attention; Re-pasting; @Mike; re-describing; approved-script; timing.target_s; over-corrects; pre-empts; evidence-forward>
+- L253 [2] Accepted, and it extends what we knew — - #10 Affirmative anchoring. The operator ruled empirically that negative rules summon {#10 Affirmative anchoring.; That explanation is now the citation for B7.; #9 Cross-attention competition.} <negative-conditioning; no extra limbs; extra limbs; Re-pasting; @Mike; re-describing; approved-script>
+- L271 [2] ~~CORRECTION 1~~ — WITHDRAWN. The bad number was mine. — I wrote that 170 WPM contradicted "our doctrine target of 145–165." The operator asked {The operator asked where 145–165 came from, and it has no or; What the doctrine actually holds is 140 WPM, and it is an es} <timing.target_s>
+- L290 [2] CORRECTION 2 — the persona over-corrects, and pre-empts an ordered test — This one stands. {"Cold Institutional Forensic Auditor… strictly banned from c; humour calibration} <evidence-forward; build-and-pause; ElevenLabs; still-image; re-deriving>
+- L311 [2] ~~CORRECTION 3~~ — WITHDRAWN. This is the stick lane. — I objected that "crisp white collar and dark minimalist vest" fights bound `@Mike` {Operator: the entire document is about the stick lane.; stick variant; A0; One real consequence, and it is a dependency rather than a d} <@Mike; re-describing; finance-host-stick-v1>
+- L324 [2] ~~FLAGGED: 10-second clips~~ — RESOLVED — Operator: 10 seconds is verified Omni length. The scene arithmetic stands, and the {Operator: 10 seconds is verified Omni length.} <three-renders-per>
+- L329 [2] The pattern worth naming — Two of my three corrections were wrong, and the review is worth reading as an example of {Two of my three corrections were wrong, and the review is wo; Correction 1; The check was `grep` for its origin, and I never ran it.; Correction 3; 10-second flag} <@Mike>
 
 ## docs/content-video-engine/briefs/RESEARCH-BRIEF-animation-craft.md
 
-- L1 [1] Research brief — what the drawing engine's builder does not know — For the Gemini deep-research pass, 2026-09-04. Same process as speech (docs 32–37)
-- L10 [2] 1. The honest diagnosis — The operator's premise is that the math is already there. It is, and it is not the {Closed-form math.; API fluency.; Principle names.; This third one is the trap}
+- L1 [1] Research brief — what the drawing engine's builder does not know — For the Gemini deep-research pass, 2026-09-04. Same process as speech (docs 32–37) <deep-research; Closed-form; arc-length; signed-distance; WebGL; follow-through; Eye-trace; figure-ground; gaze-ownership; VOICE-PACK; character-rig; game-engine>
+- L10 [2] 1. The honest diagnosis — The operator's premise is that the math is already there. It is, and it is not the {Closed-form math.; API fluency.; Principle names.; This third one is the trap} <arc-length; signed-distance; WebGL; follow-through; Eye-trace; figure-ground; gaze-ownership>
 - L45 [3] The fix is the one this repo has already run twice — Voice became transferable when we stopped describing tone and started counting {but only if the research comes back with numbers, thresholds}
-- L53 [2] 2. Two kinds of pass — and which contract binds — This brief can be run two ways, and confusing them is what broke pass 1. {This brief can be run two ways, and confusing them is what b; A research pass; A filter pass}
+- L53 [2] 2. Two kinds of pass — and which contract binds — This brief can be run two ways, and confusing them is what broke pass 1. {This brief can be run two ways, and confusing them is what b; A research pass; A filter pass} <VOICE-PACK; character-rig; game-engine; generative-model; VERDICT-research-brief-animation-craft; SOURCES-TO-VERIFY>
 - L77 [3] 2.1 On leads — Where this brief names a lead — a paper, an author, a literature to check — it is {marked unverified and is a search direction, not a conclusio}
-- L84 [3] 2.2 The output contract — Binding on a research pass; binding on a filter pass only for material the source {a number with a tolerance and its condition; a decision rule; a failure signature; an exemplar pair}
-- L118 [2] 2.3 Answer status after five passes (2026-09-04) — Recorded so a later pass does not redo settled work. Reference layer: docs 42–49. {superseded; and}
-- L148 [2] 3. The questions, by role — Priority marked ★ — if the pass can only go deep on five, take the starred ones.
-- L152 [3] Track A — the animator (timing and motion) — | # | question | why it matters here | {A1 ★; The timing charts.; Ease equivalence.}
-- L163 [3] Track B — the editor (cutting and rhythm) — | # | question | why it matters here | {B1 ★; The gap-cut finding, generalised.; Minimum shot length and reset cost.}
-- L173 [3] Track C — the drawing-engine builder — | # | question | why it matters here | {Shape interpolation.; C2 ★; Rigging without a rig.}
-- L184 [3] Track D — placement (the "where" question) — | # | question | why it matters here | {Eye-trace.; The non-decorative composition rules.; and how each changes on 9:16 with a caption safe zone eating}
-- L194 [3] Track E — the feedback loop (the structural gap) — | # | question | why it matters here | {E1 ★; What can be measured from a rendered frame sequence?; Existing perceptual metrics.}
-- L201 [2] 4. What the extraction will produce — Same as the speech pass. Research → a numbered doc (42-ANIMATION-TIMING or similar)
-- L209 [2] 5. Where this sits — - [`BACKLOG.md`](../BACKLOG.md) — the open work this research feeds (A1–A6, C1–C6, R1–R5).
+- L84 [3] 2.2 The output contract — Binding on a research pass; binding on a filter pass only for material the source {a number with a tolerance and its condition; a decision rule; a failure signature; an exemplar pair} <VOICE-PACK; character-rig; game-engine; generative-model; VERDICT-research-brief-animation-craft; SOURCES-TO-VERIFY>
+- L118 [2] 2.3 Answer status after five passes (2026-09-04) — Recorded so a later pass does not redo settled work. Reference layer: docs 42–49. {superseded; and} <drawing-on; gap-cut; RULE-abstract-to-concrete; two-regime; hold-time; eye-trace; L-cuts; J-cuts; x[80,880] y[280,1340]; motion-graphics; 4k+1; TeaCache>
+- L148 [2] 3. The questions, by role — Priority marked ★ — if the pass can only go deep on five, take the starred ones. <cubic-bezier; slow-in; sub-threshold; operator-derived; sub-threshold-music; Drawing-on; pen-lift; drawOn(path, k); secondary-motion; follow-through; under-budgeted; gap-cut>
+- L152 [3] Track A — the animator (timing and motion) — | # | question | why it matters here | {A1 ★; The timing charts.; Ease equivalence.} <cubic-bezier; slow-in; sub-threshold; operator-derived; sub-threshold-music; Drawing-on; pen-lift; drawOn(path, k); secondary-motion; follow-through; under-budgeted>
+- L163 [3] Track B — the editor (cutting and rhythm) — | # | question | why it matters here | {B1 ★; The gap-cut finding, generalised.; Minimum shot length and reset cost.} <saccade-masking; re-orientation; scene-length; L-cuts; J-cuts; wall-to-wall; shot-length; high-retention; short-form>
+- L173 [3] Track C — the drawing-engine builder — | # | question | why it matters here | {Shape interpolation.; C2 ★; Rigging without a rig.} <As-rigid-as-possible; arc-length; chart-drawn; look-at; path-follow; WebGL; frame-by-frame; hand-drawn; timeline-driven; re-derive>
+- L184 [3] Track D — placement (the "where" question) — | # | question | why it matters here | {Eye-trace.; The non-decorative composition rules.; and how each changes on 9:16 with a caption safe zone eating} <figure-ground; negative-space; Motion-graphics; lower-thirds; RULE-abstract-to-concrete; Conceptual-metaphor>
+- L194 [3] Track E — the feedback loop (the structural gap) — | # | question | why it matters here | {E1 ★; What can be measured from a rendered frame sequence?; Existing perceptual metrics.} <Per-frame; glance-readability>
+- L201 [2] 4. What the extraction will produce — Same as the speech pass. Research → a numbered doc (42-ANIMATION-TIMING or similar) <ANIMATION-TIMING; MOTION-PACK; VOICE-PACK>
+- L209 [2] 5. Where this sits — - [`BACKLOG.md`](../BACKLOG.md) — the open work this research feeds (A1–A6, C1–C6, R1–R5). <RULE-abstract-to-concrete; RULE-the-page-is-the-ground; FINDING-gaps-are-the-edit>
 
 ## docs/content-video-engine/briefs/RESPONSE-TO-RESEARCH-PASS-1.md
 
-- L1 [1] Response to research pass 1 — what closed, what reopens — To: the research layer (Gemini deep-research pass) {To:; Re:; Reviewed:; not; Correction, 2026-09-04, from the operator — read this first.; filter}
-- L23 [2] 1. The headline, stated fairly — Most of the mechanism work is correct and is being adopted. The two-thirds power {Most of the mechanism work is correct and is being adopted.; A specific and repeated defect blocks the rest: real papers}
-- L54 [2] 2. CLOSED — accepted, do not redo — Effort spent re-researching these is wasted. They are being built. {A5; This is the single most valuable result of the pass; E1; E2}
-- L69 [2] 3. RECLASSIFIED — kept, but relabelled as proposals — These are being used. They are not being recorded as findings, and no paper will be {not; E1's threshold ranges}
-- L85 [2] 4. REOPENED — four items, with acceptance criteria
-- L87 [3] RE-ASK 1 — A4, "the threshold of alive" ★ highest priority — What was wrong. The entire section rests on Mackworth 1948, cited for: "after {What was wrong.; vigilance decrement in a radar-watch task measured over roug; the one citation absent from your own bibliography; Why this one matters most.}
-- L117 [3] RE-ASK 2 — the Potter misuse (affects A1 and B2) — What was wrong. Potter et al. 2014 is cited for a minimum 8-frame (333 ms) {What was wrong.; meaning is detected at 13 ms; A passing answer distinguishes three different thresholds}
-- L130 [3] RE-ASK 3 — the two 38% statistics — "Elevating cognitive workload by 38% (Sweller 2011)" and "saves 38% cognitive {Source them or delete them.}
-- L138 [3] RE-ASK 4 — B1, which did not answer the question asked — What was wrong. B1 restates our own measurement (82% of reference cuts in {What was wrong.; our own; independently in the literature; A passing answer:; practitioner doctrine; measured result}
-- L158 [3] RE-ASK 5 (procedural) — claims about our code — The parallax finding asserted that `tools/google-flow-driver/src/parallax-runner.mjs` {hardcoded to `1.0` in all six preset blocks; The defect you identified is real and is in fact worse than}
+- L1 [1] Response to research pass 1 — what closed, what reopens — To: the research layer (Gemini deep-research pass) {To:; Re:; Reviewed:; not; Correction, 2026-09-04, from the operator — read this first.; filter} <deep-research; 07_academic_literature...; spot-checked; RESEARCH-BRIEF-animation-craft; two-thirds; frame-metric; Kubelka-Munk; closed-form; two-flux; contact-line; free-floating; re-researching>
+- L23 [2] 1. The headline, stated fairly — Most of the mechanism work is correct and is being adopted. The two-thirds power {Most of the mechanism work is correct and is being adopted.; A specific and repeated defect blocks the rest: real papers} <two-thirds; frame-metric; Kubelka-Munk; closed-form; two-flux; contact-line; free-floating>
+- L54 [2] 2. CLOSED — accepted, do not redo — Effort spent re-researching these is wasted. They are being built. {A5; This is the single most valuable result of the pass; E1; E2} <re-researching; two-thirds; Viviani & Terzuolo 1982; four-metric; Itti-Koch; optical-flow; Farrell 1986; ear-verdict; J = R·S; det(J) > 0; Cohen-Or; Levin 2000>
+- L69 [2] 3. RECLASSIFIED — kept, but relabelled as proposals — These are being used. They are not being recorded as findings, and no paper will be {not; E1's threshold ranges} <re-research; secondary-motion; nib-pooling; w ∝ v^(-0.25); shot-length; 0.012 ≤ ME ≤ 0.28; ΔC ≤ 280 px>
+- L85 [2] 4. REOPENED — four items, with acceptance criteria <RE-ASK; Mackworth 1948; radar-watch; operator-derived; Motion-onset; newly-moving; fixation-evolution; drop-off; Potter et al.; multi-digit; shot-length; Sweller 2011>
+- L87 [3] RE-ASK 1 — A4, "the threshold of alive" ★ highest priority — What was wrong. The entire section rests on Mackworth 1948, cited for: "after {What was wrong.; vigilance decrement in a radar-watch task measured over roug; the one citation absent from your own bibliography; Why this one matters most.} <Mackworth 1948; operator-derived; Motion-onset; newly-moving; fixation-evolution; drop-off>
+- L117 [3] RE-ASK 2 — the Potter misuse (affects A1 and B2) — What was wrong. Potter et al. 2014 is cited for a minimum 8-frame (333 ms) {What was wrong.; meaning is detected at 13 ms; A passing answer distinguishes three different thresholds} <Potter et al.; multi-digit; shot-length>
+- L130 [3] RE-ASK 3 — the two 38% statistics — "Elevating cognitive workload by 38% (Sweller 2011)" and "saves 38% cognitive {Source them or delete them.} <Sweller 2011; split-attention>
+- L138 [3] RE-ASK 4 — B1, which did not answer the question asked — What was wrong. B1 restates our own measurement (82% of reference cuts in {What was wrong.; our own; independently in the literature; A passing answer:; practitioner doctrine; measured result} <gap-cut; [VERIFY-01]; film-cognition; acoustic-gap>
+- L158 [3] RE-ASK 5 (procedural) — claims about our code — The parallax finding asserted that `tools/google-flow-driver/src/parallax-runner.mjs` {hardcoded to `1.0` in all six preset blocks; The defect you identified is real and is in fact worse than} <strength; vitl_fp32; intensity; depth_anything_v2_vits_fp16; current-value>
 - L176 [2] 5. The operating contract, revised — Replacing the sourcing clause in the brief: {Every number carries a retrievable locator; A number with no locator is a design proposal and must be la; The bibliography certifies nothing about the body.; An honest gap beats a filled slot.}
-- L192 [2] 6. Priority for pass 2 — 1. A4 — re-ask. Two shipped gates depend on it and it is currently unsupported. {A4; B1; A1/B2}
+- L192 [2] 6. Priority for pass 2 — 1. A4 — re-ask. Two shipped gates depend on it and it is currently unsupported. {A4; B1; A1/B2} <re-ask; gap-cut; shot-length>
 
 ## docs/content-video-engine/briefs/STEEL-AND-PAPER-REVISION-C.md
 
-- L1 [1] Steel and Paper — Revision C — Script B adapted to the rules established 2026-08-25 → 08-28. Structure, {unchanged; +17s}
-- L13 [2] 1. MANDATORY — facts
-- L15 [3] 1a. The railway crash figure — Cut: "Then the stocks crashed seventy percent." {Cut:; Use:; 64.1%}
-- L24 [3] 1b. Karp — use the verbatim — Cut: "Alex Karp of Palantir, on national television: companies buying {Cut:; Use:}
-- L36 [3] 1c. Microsoft — CUT ENTIRELY — Cut: "Microsoft now rations AI tools inside its own walls — the bills {Cut:; "But look at what those three stories actually are"; "But look at what those two stories actually are."}
+- L1 [1] Steel and Paper — Revision C — Script B adapted to the rules established 2026-08-25 → 08-28. Structure, {unchanged; +17s} <seed-locked; two-thirds; Oct 1845; sixty-four; ev-doc-karp; LinkedIn; usage-based; SOURCES-TO-VERIFY; GDP-share; head-fake; [pre-key]; dot-com>
+- L13 [2] 1. MANDATORY — facts <two-thirds; Oct 1845; sixty-four; ev-doc-karp; LinkedIn; usage-based; SOURCES-TO-VERIFY>
+- L15 [3] 1a. The railway crash figure — Cut: "Then the stocks crashed seventy percent." {Cut:; Use:; 64.1%} <two-thirds; Oct 1845; sixty-four>
+- L24 [3] 1b. Karp — use the verbatim — Cut: "Alex Karp of Palantir, on national television: companies buying {Cut:; Use:} <ev-doc-karp>
+- L36 [3] 1c. Microsoft — CUT ENTIRELY — Cut: "Microsoft now rations AI tools inside its own walls — the bills {Cut:; "But look at what those three stories actually are"; "But look at what those two stories actually are."} <LinkedIn; usage-based; SOURCES-TO-VERIFY>
 - L49 [3] 1d. Uber — keep the two people straight — Cut: "Uber burned its whole annual AI budget by April. Its own COO {Cut:; Use:}
-- L63 [2] 2. ADD — the audit beat (doc 40) — Goes in P2, immediately after the GDP-share claim, in the steelman. {P2; After:; Insert:}
-- L96 [2] 3. UPGRADE — the tell becomes an instrument — The tell is the channel's standing audit and now has real apparatus {Cut:; Use:}
-- L134 [2] 4. UNCHANGED — do not touch — The microhook, the promise, the reversal, the thesis, the ring echo and
-- L152 [2] 5. Evidence attachment (12 documents + 1 instrument) — | Beat | Document |
-- L172 [2] 6. Order of operations — 1. Apply §1–§3 to the script text. {new}
+- L63 [2] 2. ADD — the audit beat (doc 40) — Goes in P2, immediately after the GDP-share claim, in the steelman. {P2; After:; Insert:} <GDP-share; head-fake; [pre-key]; dot-com; [post-key]; Credit-before-dissent; VOICE-PACK; ev-equip-ipp-gdp-v1>
+- L96 [2] 3. UPGRADE — the tell becomes an instrument — The tell is the channel's standing audit and now has real apparatus {Cut:; Use:} <sold-out; [pre-key]; [post-key]; de-risk; as-of; re-verified; May 2026; July 2026; HBM-class; value-weighted; ev-instrument-memory; ev-dram-contract-v1>
+- L134 [2] 4. UNCHANGED — do not touch — The microhook, the promise, the reversal, the thesis, the ring echo and <VOICE-PACK; In 1845>
+- L152 [2] 5. Evidence attachment (12 documents + 1 instrument) — | Beat | Document | <ev-railway-index-v1; ev-railway-gdp-tile; ev-railway-mileage-v1; ev-equip-ipp-gdp-v1; ev-doc-karp; ev-doc-macdonald; ev-uber-adoption-v1; ev-mega-vs-spy-v3; ev-listing-barge; ev-doc-leases; ev-capex-consensus-v1; re-read>
+- L172 [2] 6. Order of operations — 1. Apply §1–§3 to the script text. {new} <Re-run; Sentence-strength; ElevenLabs>
 
 ## docs/content-video-engine/briefs/STEEL-AND-PAPER-UNITS-D.md
 
-- L1 [1] Steel and Paper — the two extension units (Revision D) — Two P3/P5 pattern units extending Script C. Units go on both sides of {both sides of the pivot; Assembled and measured: Script D is 11,188 characters, 11m 3}
-- L13 [2] 0. A claim that died in verification — The Korea unit was going to run on the ledger's own example: *"Samsung SDI {Checked it against the tape, and it is false today:; +517.5%; +164.4%; lagging them badly.}
-- L36 [2] 1. P3 — THE DEBT UNIT — Placement: after the existing P3 unit, before *"And that's where most
-- L77 [2] 2. P5 — THE BIGGEST WINNER — Placement: after "It's the test, administered in public", before the
-- L133 [2] 3. Measured, as assembled — Both units are spliced into `SCRIPT-D-VO.txt`. Linter clean: sentence mean {Script D; 11,188; 11m 38s; 49.2%}
-- L148 [2] 4. Delivery — chained — 11,188 exceeds the mv2 10,000 cap, so the take is two requests split at {Chaining is not splice-repair.}
-- L166 [2] 5. Plate density — resolved — 56 usable plates at 11m 38s is 12.5s each, inside the 20s ceiling and at the
+- L1 [1] Steel and Paper — the two extension units (Revision D) — Two P3/P5 pattern units extending Script C. Units go on both sides of {both sides of the pivot; Assembled and measured: Script D is 11,188 characters, 11m 3} <five-fold; ev-capex-consensus-v1; ev-doc-leases; Between 2020; twenty-eight; twenty-one; [pre-key]; [post-key]; twenty-two; VOICE-PACK; ev-krx-memory-v3; ev-instrument-memory>
+- L13 [2] 0. A claim that died in verification — The Korea unit was going to run on the ledger's own example: *"Samsung SDI {Checked it against the tape, and it is false today:; +517.5%; +164.4%; lagging them badly.} <five-fold>
+- L36 [2] 1. P3 — THE DEBT UNIT — Placement: after the existing P3 unit, before *"And that's where most <ev-capex-consensus-v1; ev-doc-leases; Between 2020; twenty-eight; twenty-one; [pre-key]; [post-key]; twenty-two; VOICE-PACK>
+- L77 [2] 2. P5 — THE BIGGEST WINNER — Placement: after "It's the test, administered in public", before the <ev-krx-memory-v3; ev-instrument-memory; [pre-key]; [post-key]; affiliate-froth; highest-risk>
+- L133 [2] 3. Measured, as assembled — Both units are spliced into `SCRIPT-D-VO.txt`. Linter clean: sentence mean {Script D; 11,188; 11m 38s; 49.2%} <SCRIPT-D-VO.txt>
+- L148 [2] 4. Delivery — chained — 11,188 exceeds the mv2 10,000 cap, so the take is two requests split at {Chaining is not splice-repair.} <Now the test — the one from the top.; SCRIPT-D-VO-part1.txt; SCRIPT-D-VO-part2.txt; previous_request_ids; two-part; long-form>
+- L166 [2] 5. Plate density — resolved — 56 usable plates at 11m 38s is 12.5s each, inside the 20s ceiling and at the <cut-ins>
 
 ## docs/content-video-engine/briefs/STEEL-AND-PAPER-WAVE-5-PLAN.md
 
-- L1 [1] Steel and Paper — wave 5 state (plates + evidence) — Script D is assembled and linter-clean. `SCRIPT-D-VO.txt`, 11,188 spoken {Script D is assembled and linter-clean.; 11m 38s; 49.2%; 56; 12.5s each; 202 approved objects}
-- L16 [2] 1. Script D — measured — Script C with the two extension units spliced on opposite sides of the pivot, {P4 pivot; 49.4%; clean.}
-- L47 [2] 2. Evidence — the gate is cleared — Operator ruling, 2026-08-29: *"all of the evidence should be approved not
-- L87 [2] 3. Plates — 56 usable, no wave 7 required — | Wave | Usable | Note | {operator review outstanding}
-- L107 [2] 4. Order of operations — 1. Wave-5 claim — delivered, 15 plates. {delivered; done; Chained master take.}
+- L1 [1] Steel and Paper — wave 5 state (plates + evidence) — Script D is assembled and linter-clean. `SCRIPT-D-VO.txt`, 11,188 spoken {Script D is assembled and linter-clean.; 11m 38s; 49.2%; 56; 12.5s each; 202 approved objects} <SCRIPT-D-VO.txt; two-part; units-D; chained-take; Now the test — the one from the top.; SCRIPT-D-VO-part1.txt; SCRIPT-D-VO-part2.txt; previous_request_ids; long-form; splice-repair; Teacher-stamped; render-eligible>
+- L16 [2] 1. Script D — measured — Script C with the two extension units spliced on opposite sides of the pivot, {P4 pivot; 49.4%; clean.} <units-D; chained-take; Now the test — the one from the top.; SCRIPT-D-VO-part1.txt; SCRIPT-D-VO-part2.txt; previous_request_ids; long-form; splice-repair>
+- L47 [2] 2. Evidence — the gate is cleared — Operator ruling, 2026-08-29: *"all of the evidence should be approved not <Teacher-stamped; approved; render-eligible; operator_verified; ev-railway-index-v1; ev-krx-memory-v3; ev-debt-issuance-v2; ev-three-manias; ev-mechanism-ladder; ev-doc-karp; ev-doc-macdonald; ev-doc-leases>
+- L87 [2] 3. Plates — 56 usable, no wave 7 required — | Wave | Usable | Note | {operator review outstanding} <spike-certificate-ring-v2; spike-rest-v2; index-weights-v1; price-board-wiped-v1; broadcast-set-v1; broadcast-set-v2; listing-barge-v1; world-molten-pour-v2; paper-and-steel-press-v1; signature-nib-v2; Codex-approved; finance-episodes-wave>
+- L107 [2] 4. Order of operations — 1. Wave-5 claim — delivered, 15 plates. {delivered; done; Chained master take.} <Figure-verify; scene-evidence>
 - L120 [2] 5. Risks — - The chained join sits at P4→P5, immediately after the pivot. If prosody {The chained join sits at P4→P5; The deck figures.; Reuse caps are easy to breach silently}
 
 ## docs/content-video-engine/briefs/VERDICT-research-brief-animation-craft.md
 
-- L1 [1] Extraction verdict — the animation-craft research pass — Reviewed 2026-09-04 against [`ANSWERS-RESEARCH-BRIEF-animation-craft.md`](ANSWERS-RESEARCH-BRIEF-animation-craft.md). {point at the artifact, not the claim.}
-- L7 [2] The one-line read — Strong on mechanism, unreliable on magnitude. Where the pass names a real {Strong on mechanism, unreliable on magnitude.}
-- L14 [3] The process lesson, which is the most valuable thing here — My output contract demanded numbers with tolerances. It got numbers with tolerances. {The form was satisfied without the sourcing.; A number must trace to a retrievable page, not to a bibliogr}
-- L30 [2] ADOPT — mechanism real, cited correctly, buildable now — | # | finding | status | {A5; The two-thirds power law.; The single best result in the pass.; E1; Four computable frame metrics}
-- L42 [2] ADOPT AS OURS — sound engineering, but a design choice we own and tune — These are not findings. They are reasonable starting constants. Take them, label them {Do not cite a paper for any of them.; A1; A2; A3; A6}
-- L54 [2] REFUSE — the citation does not support the claim — | claim | why it is refused | {All of A4 — "the threshold of alive."; Mackworth 1948 is a vigilance-decrement study over a 30-minu; absent from the pass's own bibliography}
-- L63 [2] What to do next, in order — 1. Build A5. The curvature-coupled draw rate on `drawOn`. Highest value, lowest risk, fully sourced. It is backlog A1's renderer work and the ink problem (C5) a {Build A5.; Build E1 as a measurement script, not a gate.; Re-ask A4; C2's five constraints}
+- L1 [1] Extraction verdict — the animation-craft research pass — Reviewed 2026-09-04 against [`ANSWERS-RESEARCH-BRIEF-animation-craft.md`](ANSWERS-RESEARCH-BRIEF-animation-craft.md). {point at the artifact, not the claim.} <ANSWERS-RESEARCH-BRIEF-animation-craft; one-line; correctly-formatted; two-thirds; Viviani & Terzuolo 1982; Flash & Hogan 1985; drawOn(path, k); Itti-Koch; optical-flow; OpenCV; Farrell 1986; window-of-visibility>
+- L7 [2] The one-line read — Strong on mechanism, unreliable on magnitude. Where the pass names a real {Strong on mechanism, unreliable on magnitude.} <correctly-formatted>
+- L14 [3] The process lesson, which is the most valuable thing here — My output contract demanded numbers with tolerances. It got numbers with tolerances. {The form was satisfied without the sourcing.; A number must trace to a retrievable page, not to a bibliogr} <correctly-formatted>
+- L30 [2] ADOPT — mechanism real, cited correctly, buildable now — | # | finding | status | {A5; The two-thirds power law.; The single best result in the pass.; E1; Four computable frame metrics} <Viviani & Terzuolo 1982; Flash & Hogan 1985; drawOn(path, k); Itti-Koch; optical-flow; OpenCV; Farrell 1986; window-of-visibility; ear-verdict; Cohen-Or; Levin 2000; Igarashi 2005>
+- L42 [2] ADOPT AS OURS — sound engineering, but a design choice we own and tune — These are not findings. They are reasonable starting constants. Take them, label them {Do not cite a paper for any of them.; A1; A2; A3; A6} <secondary-motion; nib-pooling; w ∝ v^(-0.25); shot-length; 0.012 ≤ ME ≤ 0.28; ΔC ≤ 280 px; intensity; 1.0; strength; depth_anything_v2_vits_fp16; vitl_fp32; 0.12>
+- L54 [2] REFUSE — the citation does not support the claim — | claim | why it is refused | {All of A4 — "the threshold of alive."; Mackworth 1948 is a vigilance-decrement study over a 30-minu; absent from the pass's own bibliography} <τ_decay = 1.25 s; minute-to; highest-stakes; Re-ask; Potter et al.; Sweller 2011; split-attention; gap-cut; Bridgeman 1975; [VERIFY-01]>
+- L63 [2] What to do next, in order — 1. Build A5. The curvature-coupled draw rate on `drawOn`. Highest value, lowest risk, fully sourced. It is backlog A1's renderer work and the ink problem (C5) a {Build A5.; Build E1 as a measurement script, not a gate.; Re-ask A4; C2's five constraints} <curvature-coupled; drawOn>
 - L71 [2] What changes in the brief for the next pass — Add to §2's output contract: {retrievable locator}
 
 ## docs/content-video-engine/CAPABILITIES.md
 
-- L1 [1] CAPABILITIES — what is already built — Check this file before building anything. Three asset classes were {Check this file before building anything.; capabilities}
-- L14 [2] Rendering & playback — | Capability | Where | State | Proof | {Scene-evidence player; Record-document species}
+- L1 [1] CAPABILITIES — what is already built — Check this file before building anything. Three asset classes were {Check this file before building anything.; capabilities} <curtain-era; Scene-evidence; cross-reveal; snap-to-boundary; dock-owned; one-baseline; text-tier; Record-document; per-word; drawRecord; Live-chart; two-panel>
+- L14 [2] Rendering & playback — | Capability | Where | State | Proof | {Scene-evidence player; Record-document species} <cross-reveal; snap-to-boundary; dock-owned; one-baseline; text-tier; per-word; drawRecord; Live-chart; two-panel; per-color; stat-tile; .series.json>
 - L18 [7] Scene-evidence player — the review renderer: cross-reveal wipe with carried light, coalesced docks, snap-to-boundary, dock-owned sides, interval wash, finance geometry (864/1056), one-
 - L19 [7] Record-document species — typewriter + per-word highlighter, stroke synced to the NARRATOR's word timings
 - L20 [7] Live-chart species — the ANIMATED EVIDENCE LAYER: line draw (+area fill revealed with the line), BAR charts (staggered grow, notes land with bars), two-panel small multiples, annota
@@ -1398,7 +1410,7 @@ A `{...}` tail lists the section's bold phrases.
 - L43 [7] Editor fixtures — editorial-motion two-shot with render harness (`render.mjs`), canonical audio fixture
 - L44 [7] remotion-ui registry — (external, MIT) — ~200 copy-in `.tsx` components: captions, data/live metrics, SVG draw-on paths, TransitionSeries transitions, motion primitives; MCP server (`
 - L45 [7] Hyperframes — HTML-to-video rendering framework & motion system (DOM `data-*` timeline, clips, tracks, sub-compositions, 7 runtime adapters [GSAP, Lottie, Three.js, Anime.js,
-- L47 [2] Generative video, 2.5D parallax & driver automation (2026-09) — Rescued onto main 2026-09-03: this stack was written UNTRACKED in the main checkout {ComfyUI 2.5D Parallax Engine}
+- L47 [2] Generative video, 2.5D parallax & driver automation (2026-09) — Rescued onto main 2026-09-03: this stack was written UNTRACKED in the main checkout {ComfyUI 2.5D Parallax Engine} <127.0.0.1:8188; zero-hallucination; Depth Anything v2; Depthflow; re-generates; *.mp4; Mask-pinned; bit-for-bit; LTX-Video; --denoise; LaMa; DiT>
 - L56 [7] ComfyUI 2.5D Parallax Engine — zero-hallucination monocular metric depth (`Depth Anything v2`) + virtual 3D camera trajectory displacement (`Depthflow` GLSL: dolly, zoom, circle, horizontal,
 - L57 [7] Mask-pinned AMBIENT lane (local ComfyUI) — an approved still, a SAM 2 object mask, a LIFE region, a prompt -> an mp4 where everything outside the region is the still bit-for-bit and only the region is ge
 - L58 [7] SAM 2 + LaMa occlusion inpainting — (ComfyUI nodes) - the precondition for parallax on any plate carrying an actor: SAM 2 cuts the subject to an alpha PNG, LaMa fills the hole behind it (~0.3s), a
@@ -1407,7 +1419,7 @@ A `{...}` tail lists the section's bold phrases.
 - L61 [7] Video engine MCP - TWO surfaces, verified by live handshake 2026-09-03
 - L62 [7] Chrome extension + native messaging host + the `flow-queue` MCP surface — the pre-CDP bridge: a packaged extension (`extension/`), a native messaging host (`native-host/`) and 11 queue/bridge tools (`flow_enqueue_batch`, `flow_bridge_
 - L63 [7] Video perception (`/watch`) — acquisition via `yt-dlp`, frame extraction via `ffmpeg` (scene-aware or keyframe), timestamped transcript from native captions or Whisper
-- L70 [2] Evidence & assets — Martial Matters episode 1 (merged from p16, 2026-08-29): 192 asset files {Martial Matters episode 1; Flow character pack}
+- L70 [2] Evidence & assets — Martial Matters episode 1 (merged from p16, 2026-08-29): 192 asset files {Martial Matters episode 1; Flow character pack} <martial-matters; word-timed; candidate; non-renderable; finance-host-v1; finance-host-stick-v1; three-quarter; paper-toy; operator-approved; @Mike; dab5d902; @MikeMasterV3>
 - L83 [7] Flow character pack — the host identity as a validated, hashed, non-renderable contract: `finance-host-v1` (retention: full suit detail, the recognised woodblock print + vox newspape
 - L84 [7] THE RAILWAY YARDSTICK — recurring channel instrument: tech share of ALL US capital formation (narrow 28% all-time high vs 23% dot-com; broad 65%; UK railways ~50% one-technology refere
 - L85 [7] Plate library — 326 plates indexed by SEMANTIC across all worktrees and CHANNEL-AWARE (money-physics 134 / martial-matters 192); channels are identity walls — the resolver refu
@@ -1417,7 +1429,7 @@ A `{...}` tail lists the section's bold phrases.
 - L89 [7] Two-tier palette — graphic tier for lines/fills, lifted text tier for numerals on dark pills
 - L91 [7] VERDICT STACK species — N proofs fly in from depth over the world plate, word-matched; hyperframes focus hand-off (active card LARGE center-stage for its phrase, recedes to rail on the
 - L92 [7] Chart self-containment gates — auto-fit checklist columns, skew-pivot highlighter sweeps, nowrap pills, mark backing chips + dotted leaders, named reference series, log-chart date ticks, head
-- L94 [2] Script & voice — | Capability | Where | State | Proof | {Strength loop; Doctrine audit + pattern lint; Opening-structure gate}
+- L94 [2] Script & voice — | Capability | Where | State | Proof | {Strength loop; Doctrine audit + pattern lint; Opening-structure gate} <multi-scale; script-writer; mini-payoff; head-fake; loop-close; kit_spec.a3_anchor_s; unit_windows; CHECK-RESPONSIBILITIES; Script-gate; main(); script_hash; VERDICT>
 - L98 [7] Strength loop — multi-scale fixpoint (L0–L6 + X1–X5), rewrite budget, oscillation escalation
 - L99 [7] Doctrine audit + pattern lint — timed gates from text via dual rate estimators (16.29 c/s, 170.9 wpm)
 - L100 [7] Opening-structure gate — G01–G44 + J01–J11: the doc-38 / P1 / P2 shape as a real gate (3s grab, 8s paradox, "you" by 0:30, mini-payoff then the promise by 0:60, A1/A2/A3 with A3 = 10% o
@@ -1442,14 +1454,14 @@ A `{...}` tail lists the section's bold phrases.
 - L120 [7] Pause grammar, GENERATIVE — scans the VO for grammar classes (stat-settle→era-shift FULL; snap settles / era breaths / reveal leads HALF), diffs against the standing plan; run before every
 - L121 [7] Micro-repair — sub-word provider stutters excised free: envelope-localize, fade-free preview candidates, zero-cross butt splice, words.json shifted, verify from the EDITED mas
 - L122 [7] Stutter auto-scan — NEGATIVE result, do not rebuild: three envelope detectors all failed validation against the known case; ear detects, envelope localizes
-- L124 [2] External evidence sources — | Source | Where | Gives | Rule | {SCML ledger; memory export tracker}
+- L124 [2] External evidence sources — | Source | Where | Gives | Rule | {SCML ledger; memory export tracker} <DART-filed; cross-validate; value-per-kg; primary-source; read-only; cross-checked>
 - L128 [7] SCML ledger — the operator's Korea/memory intelligence base
-- L130 [2] Reference builds (locked) — | Reference | Where | Governs | {current-bubble-five-minute-v4; Gemini showcases; The viewer (P36)}
+- L130 [2] Reference builds (locked) — | Reference | Where | Governs | {current-bubble-five-minute-v4; Gemini showcases; The viewer (P36)} <side-by-side; two-window; run_script_gates.py --viewer-gate; INFO-only>
 - L134 [7] current-bubble-five-minute-v4
 - L135 [7] Gemini showcases
 - L136 [7] The viewer (P36) — a blind, windowed perception test: an agent that knows no doctrine reads the script cold in 15s windows with a two-window memory; a deterministic scorer measure
-- L138 [2] The research reference layer (2026-09-04) — Docs 42–46 condense the research evidence bundle into what is applicable here. {42–46; every heading of every bundle document}
-- L163 [2] The enforcement layer (P37, 2026-09-04) — The research of 2026-09-04 as checks that run - each shown failing before passing (47 §5b). {M14; Comfy / parallax config gate}
+- L138 [2] The research reference layer (2026-09-04) — Docs 42–46 condense the research evidence bundle into what is applicable here. {42–46; every heading of every bundle document} <RESEARCH-INDEX; DRAWING-KINETICS; closed-form; SCENE-GRAPH-AND-TRANSFORM; Z-stack; INK-AND-SURFACE; PARALLAX-AND-PLATE-MOTION; REFERENCE-RHYTHM; FINDINGS-TO-CHECKS; THE-FIGURE-AND-THE-GROUND; GENERATIVE-VIDEO-AND-THE-VERTICAL-STAGE; THE-PHONE-IS-THE-SCREEN>
+- L163 [2] The enforcement layer (P37, 2026-09-04) — The research of 2026-09-04 as checks that run - each shown failing before passing (47 §5b). {M14; Comfy / parallax config gate} <_build_clashes; ViT-L; ViT; plate-kind; safe-box; eye-line; feet-anchored; INFO-then-FAIL; Muted-caption; scenery; over-dense>
 - L169 [7] M14 — a camera move never overlaps an evidence build (entrance through the last badge settle)
 - L170 [7] Comfy / parallax config gate — dials (intensity 0.10-0.12, tiling none, ssaa >= 1.5, quality >= 80, ViT-L), Wan 4k+1 / LTX 8n+1, CFG <= 4.5, FP8/quantized checks, plate-kind matrix
 - L171 [7] Vertical safe-box gate — 9:16 docks in x[80,880] y[280,1340], caption in the strip; static CSS reader + rendered rectangles
@@ -1457,917 +1469,918 @@ A `{...}` tail lists the section's bold phrases.
 - L173 [7] G15b ring mechanism — the close returns the P1 claim's content stems, not just the token
 - L174 [7] Grounding gates — eye-line on the horizon, feet-anchored sprites, solver per contact beat
 - L175 [7] Muted-caption judge — a model reads the captionless frame; verdict + `scenery` / `over-dense` diagnosis owned by code
-- L177 [2] The golden-frame harness (P39 T2/T3, 2026-09-04) — Four committed surfaces - ledger page mid-build, chart with a callout, 16:9 dock pair, {our}
-- L196 [2] The frozen baseline (P39 T1, 2026-09-04) — The last known-good player is tagged `player-baseline-2026-09-04` (annotated; the {`player-baseline-2026-09-04`}
-- L210 [2] What is NOT built yet — [`BACKLOG.md`](BACKLOG.md) — the hand-maintained open work, and the scope shift
-- L217 [2] The recall rule — 1. `ls` and read the index before searching (PIPELINE.md, this file, PLATE-LIBRARY, CHOREOGRAPHY). {in the same commit; closes its BACKLOG.md row in the same commit}
+- L177 [2] The golden-frame harness (P39 T2/T3, 2026-09-04) — Four committed surfaces - ledger page mid-build, chart with a callout, 16:9 dock pair, {our} <mid-build; one-value; prepare_page(); wall-clock; fit-scaled>
+- L196 [2] The frozen baseline (P39 T1, 2026-09-04) — The last known-good player is tagged `player-baseline-2026-09-04` (annotated; the {`player-baseline-2026-09-04`} <known-good; 3a0e092; byte-identical; git hash-object; rev-parse; per-capability>
+- L210 [2] What is NOT built yet — [`BACKLOG.md`](BACKLOG.md) — the hand-maintained open work, and the scope shift <hand-maintained; auto-generated>
+- L217 [2] The recall rule — 1. `ls` and read the index before searching (PIPELINE.md, this file, PLATE-LIBRARY, CHOREOGRAPHY). {in the same commit; closes its BACKLOG.md row in the same commit} <PLATE-LIBRARY>
 
 ## docs/content-video-engine/FINDING-gaps-are-the-edit.md
 
-- L1 [1] The gaps and the edit — measured, then corrected, 2026-09-04 — Operator brought back an observation from a video on AI-generated content: the makers {use the gaps to dictate scene generation; The first result looked like a clean confirmation and was an}
-- L14 [2] Test 1 — the 90-second short (Kokoro TTS). Looked perfect. Isn't. — `SCRIPT-90S-VO.txt`, 327 words, 117.8 s, cut wherever a gap exceeds 0.30 s: {13; It was circular, and the circularity was the whole result.}
-- L32 [2] Test 2 — the real ElevenLabs take. The finding does not survive. — Steel and Paper, 2,457 words, 806 s, 75 hand-authored scenes. Gap-driven cuts against {44%; The gaps do not predict where we cut.}
-- L59 [2] What actually holds — 1. We cut more often than the narrator pauses, and not at the pauses. 75 scenes in {1. We cut more often than the narrator pauses, and not at th; unexamined; 2. Compressing the gaps is a bad trade, and this survives bo}
-- L81 [2] Test 3 — the question I should have asked first — Tests 1 and 2 asked "do gaps predict where we cut." That was backwards. The claim is {cutting anywhere else costs you; They do. 68% of them.; MID-WORD; 51 (68%); 10 (13%)}
-- L101 [3] And the cadence was already right — | | | {77; 75; We are cutting at the right tempo and the wrong phase.}
-- L120 [3] The synthesis the operator named — > "We have a stronger process, but were primarily missing the idea of matching the {Scene CUTS snap to acoustic gaps.; Visual EVENTS inside a scene carry the motion}
+- L1 [1] The gaps and the edit — measured, then corrected, 2026-09-04 — Operator brought back an observation from a video on AI-generated content: the makers {use the gaps to dictate scene generation; The first result looked like a clean confirmation and was an} <AI-generated; re-timing; SCRIPT-90S-VO.txt; gap-driven; hand-authored; ElevenLabs; pre-tempo-edit; pre-inserted-pause; micro-gap; mid-sentence; retime_to_take; mid-phrase>
+- L14 [2] Test 1 — the 90-second short (Kokoro TTS). Looked perfect. Isn't. — `SCRIPT-90S-VO.txt`, 327 words, 117.8 s, cut wherever a gap exceeds 0.30 s: {13; It was circular, and the circularity was the whole result.} <SCRIPT-90S-VO.txt; gap-driven; hand-authored>
+- L32 [2] Test 2 — the real ElevenLabs take. The finding does not survive. — Steel and Paper, 2,457 words, 806 s, 75 hand-authored scenes. Gap-driven cuts against {44%; The gaps do not predict where we cut.} <hand-authored; Gap-driven; pre-tempo-edit; pre-inserted-pause; micro-gap>
+- L59 [2] What actually holds — 1. We cut more often than the narrator pauses, and not at the pauses. 75 scenes in {1. We cut more often than the narrator pauses, and not at th; unexamined; 2. Compressing the gaps is a bad trade, and this survives bo} <mid-sentence; retime_to_take>
+- L81 [2] Test 3 — the question I should have asked first — Tests 1 and 2 asked "do gaps predict where we cut." That was backwards. The claim is {cutting anywhere else costs you; They do. 68% of them.; MID-WORD; 51 (68%); 10 (13%)} <mid-phrase; 'same'; 'fund,'; 'getting:'; "isn't"; 'overshoots.'; 'peak,'; 'matched'; post-process; Gap-anchored; b-roll>
+- L101 [3] And the cadence was already right — | | | {77; 75; We are cutting at the right tempo and the wrong phase.} <post-process; Gap-anchored>
+- L120 [3] The synthesis the operator named — > "We have a stronger process, but were primarily missing the idea of matching the {Scene CUTS snap to acoustic gaps.; Visual EVENTS inside a scene carry the motion} <b-roll; gap-anchored>
 - L136 [2] Proposed gate — M13 — > A scene boundary must land in an acoustic gap ≥0.30 s, or be declared. {A scene boundary must land in an acoustic gap ≥0.30 s, or be}
-- L144 [2] What I am NOT proposing — I drafted a pipeline change on test 1 — cuts fall out of gaps automatically, {Still withdrawn.}
-- L152 [2] What is worth doing — - Keep the gap census as a pre-record writing check. Scenes over 12 s in the {Keep the gap census as a pre-record writing check.; Stop compressing inter-paragraph silence to hit a runtime.; Test the real question on the next episode:}
-- L162 [2] Method note — Test 1's data: `tokyo-tea-break/scratch/scratch-kokoro.words.json`.
-- L171 [2] Reference-first — 2026-09-04 — The tests above measured ourselves. The operator's correction: *"is basing the gap threshold {mid-word; 15–25 %}
+- L144 [2] What I am NOT proposing — I drafted a pipeline change on test 1 — cuts fall out of gaps automatically, {Still withdrawn.} <retime_to_take; gap-anchoring>
+- L152 [2] What is worth doing — - Keep the gap census as a pre-record writing check. Scenes over 12 s in the {Keep the gap census as a pre-record writing check.; Stop compressing inter-paragraph silence to hit a runtime.; Test the real question on the next episode:} <re-time>
+- L162 [2] Method note — Test 1's data: `tokyo-tea-break/scratch/scratch-kokoro.words.json`. <dead_space_compressed: true>
+- L171 [2] Reference-first — 2026-09-04 — The tests above measured ourselves. The operator's correction: *"is basing the gap threshold {mid-word; 15–25 %} <frame-accurate; re-measured; re-time>
 
 ## docs/content-video-engine/FINDING-the-animation-math-and-what-it-changes.md
 
-- L1 [1] The animation math, and what each piece changes in our code — 2026-09-04 — From `07_academic_literature_drawing_and_2_5d_animation_engine.md`, read in full after the {it derives the LP clock we already ship}
-- L15 [2] 1. Every stroke we draw is wrong in one specific, fixable way — Now: `stroke-dashoffset` interpolated linearly in time. Constant velocity along the {Now:; The fix, in full:; `κ₀` is the detail that makes it buildable.}
-- L48 [2] 2. The object → chart transform has a proven-safe formulation — My open worry was that a morph would read as a crossfade or collapse mid-way. There is a
-- L79 [2] 3. Closed-form springs — and the inverse model I said we didn't have — For a seek-based renderer, iterative integrators are not slow, they are broken: Euler {broken; That is the inverse model.}
-- L106 [2] 4. Squash and stretch that preserves area, driven by motion — Stretch along the velocity direction, compress across it, area conserved. And α is driven {speed and deceleration}
-- L117 [2] 5. Euler spirals over cubic Béziers for anything we generate — Cubic Bézier curvature is a degree-3-over-degree-6 rational function — it ripples, throws
-- L126 [2] 6. Why our ink looks sterile — three stacked models — - Coffee ring (Deegan 1997). Evaporative flux diverges at a pinned perimeter, {Coffee ring (Deegan 1997).; dark crisp rim, not a uniform fill.; Anisotropic Darcy flow (Chu & Tai 2005).; Kubelka–Munk (1931).; compositing bug, not an aesthetic}
-- L140 [2] 7. Two things we are actively doing wrong, from Pillar 4 — We zoom while the chart builds. Saccadic suppression during a camera move blinds the {We zoom while the chart builds.; Kinetic type should pop on syllables, not words.}
-- L152 [2] 8. The LP clock is validated, not replaced — The master 6-beat timeline in §5.1 is our clock exactly — 0.7 / 0.8 / 2.4 / 0.5 / 3.0,
-- L161 [2] Build order — | # | change | where | why first | {1; Curvature-reparameterised stroke + coupled width; 2; Analytic spring evaluator; Serialise punch and build; Polar-decomposition morph}
+- L1 [1] The animation math, and what each piece changes in our code — 2026-09-04 — From `07_academic_literature_drawing_and_2_5d_animation_engine.md`, read in full after the {it derives the LP clock we already ship} <motor-control; stroke-dashoffset; draw-on; κ₀; κ; ψ(s); highest-value; drawOn(path, k); object-agnostic; hand-drawn; proven-safe; mid-way>
+- L15 [2] 1. Every stroke we draw is wrong in one specific, fixable way — Now: `stroke-dashoffset` interpolated linearly in time. Constant velocity along the {Now:; The fix, in full:; `κ₀` is the detail that makes it buildable.} <stroke-dashoffset; draw-on; ψ(s); highest-value; drawOn(path, k); object-agnostic; hand-drawn>
+- L48 [2] 2. The object → chart transform has a proven-safe formulation — My open worry was that a morph would read as a crossfade or collapse mid-way. There is a <mid-way; J = D'D⁻¹; Polar-decompose; J = R·S; Sorkine & Alexa 2007; back-substitution>
+- L79 [2] 3. Closed-form springs — and the inverse model I said we didn't have — For a seek-based renderer, iterative integrators are not slow, they are broken: Euler {broken; That is the inverse model.} <seek-based; desired-perception; ζ; ω₀>
+- L106 [2] 4. Squash and stretch that preserves area, driven by motion — Stretch along the velocity direction, compress across it, area conserved. And α is driven {speed and deceleration} <α>
+- L117 [2] 5. Euler spirals over cubic Béziers for anything we generate — Cubic Bézier curvature is a degree-3-over-degree-6 rational function — it ripples, throws <over-degree; dκ; Hand-authored>
+- L126 [2] 6. Why our ink looks sterile — three stacked models — - Coffee ring (Deegan 1997). Evaporative flux diverges at a pinned perimeter, {Coffee ring (Deegan 1997).; dark crisp rim, not a uniform fill.; Anisotropic Darcy flow (Chu & Tai 2005).; Kubelka–Munk (1931).; compositing bug, not an aesthetic} <J(r) ∝ (R−r)^(−λ); two-flux; dst·(1−a) + src·a>
+- L140 [2] 7. Two things we are actively doing wrong, from Pillar 4 — We zoom while the chart builds. Saccadic suppression during a camera move blinds the {We zoom while the chart builds.; Kinetic type should pop on syllables, not words.} <Syllable-locked; phase-locked>
+- L152 [2] 8. The LP clock is validated, not replaced — The master 6-beat timeline in §5.1 is our clock exactly — 0.7 / 0.8 / 2.4 / 0.5 / 3.0, <minimum-jerk>
+- L161 [2] Build order — | # | change | where | why first | {1; Curvature-reparameterised stroke + coupled width; 2; Analytic spring evaluator; Serialise punch and build; Polar-decomposition morph} <drawOn(); M_p; object; Euler-spiral; Syllable-locked>
 
 ## docs/content-video-engine/FINDING-what-the-bundle-already-answered.md
 
-- L1 [1] What the research bundle already answered — 2026-09-04 — I reviewed the answers file (08) and spot-checked the academic monograph (07), then {Files 01–06 I flagged as unreviewed and then never went back}
-- L13 [2] 1. B5 is answered from our own data — and it kills my hypothesis — `04_shot_ledger_100_cuts.md` is a frame-accurate 100-shot ledger of the reference {cuts per minute; 5.9; 5.6; Q1 / Q3; 6.3 s / 13.2 s; 7.6 s / 11.0 s}
-- L49 [2] 2. M10 is measuring the wrong thing — Reference first minute: 10.6, 15.6, 6.0, 3.7, 13.5, 3.7, 2.9, 14.9 s. Five of eight {10.6, 15.6, 6.0, 3.7, 13.5, 3.7, 2.9, 14.9 s.; still means "no motion within the shot," not "no shot longer}
-- L66 [2] 3. Backlog R2 is closed by `01_wealth_logic_production_report.md` — All four of the "unverified Wealth Logic composition claims" are answered, and R2a — {R2a — the one I flagged as the only item that could change s; The unifying equation spine.}
-- L86 [2] 4. Backlog R4 is answered by `02_drawing_engine_and_transforms_research.md` — R4 asked whether Flow Characters lock identity under motion; our own test showed hair {Do not generate the character per shot. Build a vector cutou}
-- L106 [2] 5. Two discrepancies to settle — Speech rate. The reference runs 183.6 WPM; we measured ep1 at 182.8. Our {Speech rate.; 183.6 WPM; retracted, see 46 §46.6; that number was mine and has no ori; The acoustic gap threshold.; ≥ 0.45 s}
-- L124 [2] 6. The process note — The bundle's own index (`00_README_INDEX.md`) routes each file to a consumer — 04 to the {I read the file addressed to me and treated the rest as cont; a research bundle is read by its index, not by its summary.}
+- L1 [1] What the research bundle already answered — 2026-09-04 — I reviewed the answers file (08) and spot-checked the academic monograph (07), then {Files 01–06 I flagged as unreviewed and then never went back} <spot-checked; frame-accurate; mid-word; cut-budget; Shot-length; stillness-within-a-shot; cash-out; buy-borrow-die; credit-score; six-item; script-architecture; art-direction>
+- L13 [2] 1. B5 is answered from our own data — and it kills my hypothesis — `04_shot_ledger_100_cuts.md` is a frame-accurate 100-shot ledger of the reference {cuts per minute; 5.9; 5.6; Q1 / Q3; 6.3 s / 13.2 s; 7.6 s / 11.0 s} <frame-accurate; mid-word; cut-budget; Shot-length>
+- L49 [2] 2. M10 is measuring the wrong thing — Reference first minute: 10.6, 15.6, 6.0, 3.7, 13.5, 3.7, 2.9, 14.9 s. Five of eight {10.6, 15.6, 6.0, 3.7, 13.5, 3.7, 2.9, 14.9 s.; still means "no motion within the shot," not "no shot longer} <shot-length; stillness-within-a-shot>
+- L66 [2] 3. Backlog R2 is closed by `01_wealth_logic_production_report.md` — All four of the "unverified Wealth Logic composition claims" are answered, and R2a — {R2a — the one I flagged as the only item that could change s; The unifying equation spine.} <cash-out; buy-borrow-die; credit-score; six-item; script-architecture; art-direction>
+- L86 [2] 4. Backlog R4 is answered by `02_drawing_engine_and_transforms_research.md` — R4 asked whether Flow Characters lock identity under motion; our own test showed hair {Do not generate the character per shot. Build a vector cutou} <Z-stack; ledger_page.v2.json; object-page>
+- L106 [2] 5. Two discrepancies to settle — Speech rate. The reference runs 183.6 WPM; we measured ep1 at 182.8. Our {Speech rate.; 183.6 WPM; retracted, see 46 §46.6; that number was mine and has no ori; The acoustic gap threshold.; ≥ 0.45 s} <best-performing; breath-gap; intensity; steady_value; edge_fix; ssaa; depth_anything_v2_vitl_fp32; vits_fp16>
+- L124 [2] 6. The process note — The bundle's own index (`00_README_INDEX.md`) routes each file to a consumer — 04 to the {I read the file addressed to me and treated the rest as cont; a research bundle is read by its index, not by its summary.} <half-used>
 
 ## docs/content-video-engine/P13-GATE-A-ARMBAR-REVIEW.md
 
-- L1 [1] P13 Gate A Review — Armbar From Guard — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine — read it for how a decision was reached {STATUS: RECORD.; approved by operator; provider generation has not been autho}
-- L11 [2] Evidence — - Job: `1687b272-eb0f-4bb1-aa3f-ee534ecf7991`
-- L22 [2] Creative Review — The story moves through hook → seven transcript-derived instruction scenes →
-- L38 [2] Locked Defaults — - Dark background `#0F0F12`
-- L45 [2] Approval Checks — Before Gate A approval, the operator must confirm:
+- L1 [1] P13 Gate A Review — Armbar From Guard — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine — read it for how a decision was reached {STATUS: RECORD.; approved by operator; provider generation has not been autho} <point-in-time; ElevenLabs; 1687b272-eb0f-4bb1-aa3f-ee534ecf7991; combat-science; physics-of-grappling; credential-framed; transcript-derived; common-error; JointLeverageScene; Armbar From Guard Explained; How Armbar From Guard Creates Leverage; POSITION CREATES LEVERAGE>
+- L11 [2] Evidence — - Job: `1687b272-eb0f-4bb1-aa3f-ee534ecf7991` <1687b272-eb0f-4bb1-aa3f-ee534ecf7991; combat-science; physics-of-grappling; credential-framed>
+- L22 [2] Creative Review — The story moves through hook → seven transcript-derived instruction scenes → <transcript-derived; common-error; JointLeverageScene; Armbar From Guard Explained; How Armbar From Guard Creates Leverage; POSITION CREATES LEVERAGE>
+- L38 [2] Locked Defaults — - Dark background `#0F0F12` <#0F0F12; #3B82F6; #10B981; ElevenLabs>
+- L45 [2] Approval Checks — Before Gate A approval, the operator must confirm: <transcript-derived; common-error; leverage-payoff; synthetic-content; own-voice clone; ELEVENLABS_API_KEY; ELEVENLABS_VOICE_ID; worktree-root; .env>
 
 ## docs/content-video-engine/P13-GATE-B-ARMBAR-REVIEW.md
 
-- L1 [1] P13 Gate B Review — Armbar From Guard — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine — read it for how a decision was reached {STATUS: RECORD.; awaiting operator review; not approved for publication}
-- L7 [2] Run — - Job: `1687b272-eb0f-4bb1-aa3f-ee534ecf7991`
-- L15 [2] Deliverables — - Landscape final: `.context/wpg-cli-evidence/1687b272-eb0f-4bb1-aa3f-ee534ecf7991/video/landscape_final/final.mp4`
-- L23 [2] Automated QC — `qc/report.json` is pass for duration drift, word-timing coverage, loudness, {pass}
-- L30 [2] Operator checks — - Watch the full landscape final for narration, scene timing, legibility, and
+- L1 [1] P13 Gate B Review — Armbar From Guard — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine — read it for how a decision was reached {STATUS: RECORD.; awaiting operator review; not approved for publication} <point-in-time; 1687b272-eb0f-4bb1-aa3f-ee534ecf7991; awaiting_gate_b; ElevenLabs; $0.1692; vertical.srt; word-timing; 49.505s; 49.417s; 0.18%; synthetic-content>
+- L7 [2] Run — - Job: `1687b272-eb0f-4bb1-aa3f-ee534ecf7991` <1687b272-eb0f-4bb1-aa3f-ee534ecf7991; awaiting_gate_b; ElevenLabs; $0.1692>
+- L15 [2] Deliverables — - Landscape final: `.context/wpg-cli-evidence/1687b272-eb0f-4bb1-aa3f-ee534ecf7991/video/landscape_final/final.mp4` <vertical.srt>
+- L23 [2] Automated QC — `qc/report.json` is pass for duration drift, word-timing coverage, loudness, {pass} <word-timing; 49.505s; 49.417s; 0.18%>
+- L30 [2] Operator checks — - Watch the full landscape final for narration, scene timing, legibility, and <synthetic-content>
 
 ## docs/content-video-engine/patterns/CHECK-RESPONSIBILITIES.md
 
-- L1 [1] CHECK RESPONSIBILITIES — what the tools decide, what the agent decides — The kit has four tool-enforced checkers and one reading-enforced loop. This {which verdicts belong to a tool, which belong to whoever is}
-- L17 [2] 0. The four verdict kinds — Every check in the kit is exactly one of these. The kind decides the owner. {mechanical; tool; declared; agent}
-- L42 [2] 1. The rules — R1 — A tool's mechanical verdict is final. The agent does not re-derive {R1 — A tool's mechanical verdict is final.; R2 — A declared beat is a claim, and tag-laundering is the f}
-- L101 [2] 2. The tools and what each decides — | Tool | Command | Decides (mechanical) | Checks presence of (declared) | Prints for the agent (JUDGE) | {tautology}
-- L117 [2] 3. The agent's territory — verdicted by name, every run
-- L119 [3] 3a. Verify the declared beats (R2) — For each tag the gate found: quote the line, verdict true / laundered.
+- L1 [1] CHECK RESPONSIBILITIES — what the tools decide, what the agent decides — The kit has four tool-enforced checkers and one reading-enforced loop. This {which verdicts belong to a tool, which belong to whoever is} <tool-enforced; reading-enforced; run-time; AND-THEN; [catalyst]; [rehook]; head-fake; declared; PERCEIVED; STRENGTH-LOOP; re-derive; tag-laundering>
+- L17 [2] 0. The four verdict kinds — Every check in the kit is exactly one of these. The kind decides the owner. {mechanical; tool; declared; agent} <AND-THEN; [catalyst]; [rehook]; head-fake; PERCEIVED; STRENGTH-LOOP>
+- L42 [2] 1. The rules — R1 — A tool's mechanical verdict is final. The agent does not re-derive {R1 — A tool's mechanical verdict is final.; R2 — A declared beat is a claim, and tag-laundering is the f} <re-derive; [loop]; [reflect]; [debate]; one-line; STRENGTH-LOOP; script-writer; by-hand; operator-caught; --timeline; same-day>
+- L101 [2] 2. The tools and what each decides — | Tool | Command | Decides (mechanical) | Checks presence of (declared) | Prints for the agent (JUDGE) | {tautology} <lint …py <script>; stage-direction; rehook-family; … <script> --pivot "<line>"; --ring; --title; --thumb; title-word; --short; long-form; head-fake; loop-close>
+- L117 [2] 3. The agent's territory — verdicted by name, every run <[loop]; [new]; re-phrases; [payoff]; [debate]; [reflect]; [catalyst]; head-fake; Self-Revelation; McKee; in-unit; token-verifiable>
+- L119 [3] 3a. Verify the declared beats (R2) — For each tag the gate found: quote the line, verdict true / laundered. <[loop]; [new]; re-phrases; [payoff]; [debate]; [reflect]; [catalyst]>
 - L126 [3] 3b. Verdict the JUDGE rows (R3) — J01–J11 from the opening gate, each with the quoted line. J06/J07 need the
-- L130 [3] 3c. The classical nodes outside the gate (P3–P6) — | Node | Where | What the agent decides | {Battle; Self-Revelation; New Equilibrium; midpoint}
-- L147 [3] 3d. The roster rows the audit does not count — Foreshadows · macro loops (LIFO) · STR micros outside P2 · callback tokens ·
-- L152 [3] 3e. The loop scales with no tool — L1 P1–P6 (phrase) · L2 B1–B4 (beat; the gate's G19–G23 cover P2's loop and
-- L158 [3] 3f. L0 — the reader's five — S2/S3/S5/S7/S9 are screenable; S1, S4, S6, S8, S10 need a reader, every {S1, S4, S6, S8, S10 need a reader}
-- L163 [3] 3g. Surface choice per window (doc 29 §9.28) — For every shot-table row: PAGE (A1 ours + A2 owned series + A3 turning
-- L177 [3] 3h. Not structural, still the agent's — Evidence tracing (every figure → dossier row; ledger figures re-checked
+- L130 [3] 3c. The classical nodes outside the gate (P3–P6) — | Node | Where | What the agent decides | {Battle; Self-Revelation; New Equilibrium; midpoint} <head-fake; McKee; in-unit; token-verifiable; re-promises; [post-key]>
+- L147 [3] 3d. The roster rows the audit does not count — Foreshadows · macro loops (LIFO) · STR micros outside P2 · callback tokens · <head-fake>
+- L152 [3] 3e. The loop scales with no tool — L1 P1–P6 (phrase) · L2 B1–B4 (beat; the gate's G19–G23 cover P2's loop and <re-running>
+- L158 [3] 3f. L0 — the reader's five — S2/S3/S5/S7/S9 are screenable; S1, S4, S6, S8, S10 need a reader, every {S1, S4, S6, S8, S10 need a reader} <SENTENCE-STRENGTH-CHECK>
+- L163 [3] 3g. Surface choice per window (doc 29 §9.28) — For every shot-table row: PAGE (A1 ours + A2 owned series + A3 turning <shot-table; dense-line; ledger:<series>:<variant>; ledger_pages>
+- L177 [3] 3h. Not structural, still the agent's — Evidence tracing (every figure → dossier row; ledger figures re-checked <re-checked; source-strength>
 - L184 [2] 4. The runtime sequence
-- L200 [2] 5. The report contract — The report is not accepted without every block below.
-- L223 [2] 6. Moving a row across the line (R6) — A row moves from §3 into a tool when all of these hold: the verdict is a
+- L200 [2] 5. The report contract — The report is not accepted without every block below. <script-writer>
+- L223 [2] 6. Moving a row across the line (R6) — A row moves from §3 into a tool when all of these hold: the verdict is a <false-positive; known-real; MEDIA-TDD>
 
 ## docs/content-video-engine/patterns/FULL-VIDEO-MAP.md
 
-- L1 [1] FULL VIDEO MAP — McKee Extended to the YouTube Era — The calculus. The classical six-phase architecture (doc 32 / the research {integral; differentials}
-- L22 [2] 0. The extended unit hierarchy — McKee: beat → scene → sequence → act → story. Extended: {Line; Beat; Loop; Unit; Phase}
-- L36 [2] 1. Geometry and the scaling law — - Pinned absolute: P1 THE OPEN is 60–90 seconds at every runtime — {Pinned absolute:; 45–55% of runtime; Elastic:; Beyond 30 minutes}
-- L69 [2] 2. Cross-phase constants (the constants of integration) — Rehook anchors (positional, AOY): A1 ≈ 0:30 · A2 ≈ 1:00 · A3 ≈ 3:00 · {Rehook anchors (positional, AOY):; Foreshadow schedule (Grand-Payoff-Betrayal fix):}
-- L125 [2] 3. P1 — THE OPEN (0:00–1:30, absolute) — Classical: Truby Weakness & Need · Glass anecdote opens · irony counterpoint.
-- L141 [2] 4. P2 — THE ENGINE (1:30–5:00) — Classical: Snyder Catalyst & Debate · McKee inciting incident · contextual {Head-fake #1 planted; A3; F2}
-- L162 [2] 5. P3 — THE GAP (5:00–13:30, elastic: the pattern unit) — Classical: Expectation-Reality Gap engine · Opponent & Plan · subtext {THE PATTERN UNIT (2:00–2:30, repeated 3–4× at reference):}
-- L190 [2] 6. P4 — THE MIDPOINT PIVOT (13:30–16:30, pinned 45–55%) — Classical: Snyder false peak OR false collapse · Truby Battle · the mode {A4}
-- L210 [2] 7. P5 — REFLECTION & CONVERGENCE (16:30–26:00) — Classical: Glass Reflection dominant · chiastic center · Self-Revelation {Chiastic center; Grand payoff delivered}
-- L227 [2] 8. P6 — THE CLOSE (26:00–30:00: true close 60–90s + end screen 20s) — Classical: Self-Revelation → New Equilibrium · chiastic echo · ring {Ring echo; Final anaphoric triad; Action Window}
-- L246 [2] 9. The one-page duty roster (what must exist, counted, @30:00) — | System | Count | Where |
-- L263 [2] Provenance — Built from: the operator's marked passages — final count 35 {35}
-- L277 [2] CHANGELOG — - 2026-08-24 — v1, T1 of the P10 plan. Geometry decision recorded: open and {Alicia v2}
+- L1 [1] FULL VIDEO MAP — McKee Extended to the YouTube Era — The calculus. The classical six-phase architecture (doc 32 / the research {integral; differentials} <six-phase; micro-rules; surface-level; long-form; Sentence-layer; mini-pivots; Cross-phase; fast-forward; Grand-Payoff-Betrayal; re-promises; re-sighted; micro-CTA>
+- L22 [2] 0. The extended unit hierarchy — McKee: beat → scene → sequence → act → story. Extended: {Line; Beat; Loop; Unit; Phase} <McKee>
+- L36 [2] 1. Geometry and the scaling law — - Pinned absolute: P1 THE OPEN is 60–90 seconds at every runtime — {Pinned absolute:; 45–55% of runtime; Elastic:; Beyond 30 minutes} <mini-pivots>
+- L69 [2] 2. Cross-phase constants (the constants of integration) — Rehook anchors (positional, AOY): A1 ≈ 0:30 · A2 ≈ 1:00 · A3 ≈ 3:00 · {Rehook anchors (positional, AOY):; Foreshadow schedule (Grand-Payoff-Betrayal fix):} <fast-forward; re-promises; re-sighted; micro-CTA; head-fakes; S-V-O; attribution-first; [pre-key]; [post-key]; pile-on; operator-priority; thesis-grade>
+- L125 [2] 3. P1 — THE OPEN (0:00–1:30, absolute) — Classical: Truby Weakness & Need · Glass anecdote opens · irony counterpoint. <pre-opener; [post-key]; archetypes-in-settings; biography-as-twist; Mini-payoff; [pre-key]; macro-loop; Map-not-territory; context-dump>
+- L141 [2] 4. P2 — THE ENGINE (1:30–5:00) — Classical: Snyder Catalyst & Debate · McKee inciting incident · contextual {Head-fake #1 planted; A3; F2} <McKee; new-info; strong-but-not-best; micro-CTA; AND-THEN; post-payoff>
+- L162 [2] 5. P3 — THE GAP (5:00–13:30, elastic: the pattern unit) — Classical: Expectation-Reality Gap engine · Opponent & Plan · subtext {THE PATTERN UNIT (2:00–2:30, repeated 3–4× at reference):} <Expectation-Reality; new-info; McKee; [post-key]; re-justifying; Across-unit; dead-air; mini-pivots; best-evidence; all-anecdote>
+- L190 [2] 6. P4 — THE MIDPOINT PIVOT (13:30–16:30, pinned 45–55%) — Classical: Snyder false peak OR false collapse · Truby Battle · the mode {A4} <[pre-key]; sentence-length; mid-video; re-justification; head-fake; mid-roll; pre-key>
+- L210 [2] 7. P5 — REFLECTION & CONVERGENCE (16:30–26:00) — Classical: Glass Reflection dominant · chiastic center · Self-Revelation {Chiastic center; Grand payoff delivered} <Self-Revelation; [pre-key]; [post-key]; new-info>
+- L227 [2] 8. P6 — THE CLOSE (26:00–30:00: true close 60–90s + end screen 20s) — Classical: Self-Revelation → New Equilibrium · chiastic echo · ring {Ring echo; Final anaphoric triad; Action Window} <Self-Revelation; first-planted; Peak-End; take-home; ring-native; best-performing; token-verifiable>
+- L246 [2] 9. The one-page duty roster (what must exist, counted, @30:00) — | System | Count | Where | <LIFO-closed; Head-fakes; post-macro; pre-key; post-key; token-verifiable>
+- L263 [2] Provenance — Built from: the operator's marked passages — final count 35 {35} <HIGHLIGHT-SESSION; operator-named; double-marked; attribution-first; McKee-hierarchy; McKee; FACELESS-CHANNEL-DOCTRINE; WRITING-FOR-THE-EAR; SCRIPT-ARCHITECTURE; LLM-CONTEXT-CLASSICAL>
+- L277 [2] CHANGELOG — - 2026-08-24 — v1, T1 of the P10 plan. Geometry decision recorded: open and {Alicia v2} <mini-pivot; retro-fit; pre-map; mid-video; head-fake; rule-one; rehook-family; front-loaded; pre-pivot; scene-and-evidence-driven; re-distribution; follow-up>
 
 ## docs/content-video-engine/patterns/HIGHLIGHT-SESSION-2026-08-24.md
 
-- L1 [1] Highlight Session — 2026-08-24 (gate-1 record, P10 plan) — FINAL: 45 passages marked on the shared reading copy. Operator-named {Ira Glass dual engine; syntactical triads + anaphora; ring composition}
+- L1 [1] Highlight Session — 2026-08-24 (gate-1 record, P10 plan) — FINAL: 45 passages marked on the shared reading copy. Operator-named {Ira Glass dual engine; syntactical triads + anaphora; ring composition} <Operator-named; Triple-marked; Double-marked; attribution-first; audio-visual; archetype-vs-stereotype; KNOWLEDGE-GRAPH; Subject-Verb-Object; micro-pause; second-person; sentence-level; surface-level>
 
 ## docs/content-video-engine/patterns/INJECTION.md
 
-- L1 [1] INJECTION — the kit's parameter surface — The phase guides (P1–P6) are lane-agnostic generation contracts. Everything
+- L1 [1] INJECTION — the kit's parameter surface — The phase guides (P1–P6) are lane-agnostic generation contracts. Everything <lane-agnostic; channel-specific; attribution-first; [verify]; Writer-chosen>
 - L8 [2] The block
-- L39 [2] Rules of the surface — 1. Nothing else enters. If a phase needs a fact not present here or in {Nothing else enters.; EVIDENCE is the attribution-first gate's fuel.; VOICE and PERSONA are prose lenses, not structure.; One block per script.}
+- L39 [2] Rules of the surface — 1. Nothing else enters. If a phase needs a fact not present here or in {Nothing else enters.; EVIDENCE is the attribution-first gate's fuel.; VOICE and PERSONA are prose lenses, not structure.; One block per script.} <[verify]>
 - L52 [2] Worked example — finance lane (condensed)
 - L74 [2] Worked example — BJJ lane (condensed)
-- L99 [2] Assembly order (who fills what) — 1. Operator/produce: RUNTIME, TIER, FORMAT, TOPIC, EVIDENCE, TELL,
+- L99 [2] Assembly order (who fills what) — 1. Operator/produce: RUNTIME, TIER, FORMAT, TOPIC, EVIDENCE, TELL, <Writer-chosen>
 
 ## docs/content-video-engine/patterns/KNOWLEDGE-GRAPH.md
 
-- L1 [1] The Script Knowledge Graph — The operator's closing read of the 45-mark session: *"you can see the {edges}
-- L21 [2] 1. Vertical edges — classical frame ← filled by → platform micro — | Classical node | is filled / operationalized by | Where |
-- L39 [2] 2. Scale-free devices (work identically at every level — the strongest class) — - Terminal stress: surprising word ends the sentence → best evidence {Terminal stress; Attribution-first; The gap; The triad}
-- L57 [2] 3. Cross-links that prevent the classic failure modes — | Failure mode | Prevented by the edge |
-- L68 [2] 4. Execution consequence — A script generated from this graph differs from standard generation in a
+- L1 [1] The Script Knowledge Graph — The operator's closing read of the 45-mark session: *"you can see the {edges} <inter-link; information-dense; FULL-VIDEO-MAP; triple-marked; Double-marked; attribution-first; McKee; Expectation-Reality; head-fakes; mid-video; mechanism-antagonist; per-video>
+- L21 [2] 1. Vertical edges — classical frame ← filled by → platform micro — | Classical node | is filled / operationalized by | Where | <McKee; Expectation-Reality; head-fakes; mid-video; mechanism-antagonist; per-video; per-catalogue; new-info; [post-key]; [pre-key]; pre-opener; visual-only>
+- L39 [2] 2. Scale-free devices (work identically at every level — the strongest class) — - Terminal stress: surprising word ends the sentence → best evidence {Terminal stress; Attribution-first; The gap; The triad} <head-fakes>
+- L57 [2] 3. Cross-links that prevent the classic failure modes — | Failure mode | Prevented by the edge | <Tactics-only; load-bearing; re-justify; AI-slop; Trendy-format; archetype-vs-stereotype; Fact-dump>
+- L68 [2] 4. Execution consequence — A script generated from this graph differs from standard generation in a <triple-accountability; HIGHLIGHT-SESSION>
 
 ## docs/content-video-engine/patterns/LLM-CONTEXT-CLASSICAL.md
 
-- L1 [1] LLM Context Block — Classical Craft Layer — Provenance: Gemini densification of the operator's writing-for-the-ear deep {layer 1 of the portable kit's context}
+- L1 [1] LLM Context Block — Classical Craft Layer — Provenance: Gemini densification of the operator's writing-for-the-ear deep {layer 1 of the portable kit's context} <writing-for-the-ear; key-value; real-time; working-memory; Single-idea; Subject-Verb-Object; S-V-O; Attribution-First; second-person; McKee; Expectation-Reality; Self-Revelation>
 
 ## docs/content-video-engine/patterns/phase-guides/P1.md
 
-- L1 [1] P1 — THE OPEN — > Self-contained generation guide. Consume ONLY: the INJECTION block and
+- L1 [1] P1 — THE OPEN — > Self-contained generation guide. Consume ONLY: the INJECTION block and <Self-contained; ring-token; {TOPIC}; {VOICE}; never-list; {PERSONA}; biography-as-twist; {EVIDENCE}; {RING_TOKEN}; {FORMAT}; answer-to-a-channel; [MICROHOOK_LINE]>
 - L9 [2] Function — Plant the story's instability as people, open a gap the viewer needs {people}
-- L18 [2] Geometry — ABSOLUTE, not proportional — | Runtime | P1 window | {compress beats, never drop them}
-- L31 [2] Inputs (injection slots) — - `{TOPIC}` — one claim cluster, one dramatic question. {choose it here if not injected}
+- L18 [2] Geometry — ABSOLUTE, not proportional — | Runtime | P1 window | {compress beats, never drop them} <ring-token>
+- L31 [2] Inputs (injection slots) — - `{TOPIC}` — one claim cluster, one dramatic question. {choose it here if not injected} <{TOPIC}; {VOICE}; never-list; {PERSONA}; biography-as-twist; {EVIDENCE}; {RING_TOKEN}; {FORMAT}; answer-to-a-channel>
 - L45 [2] Ledger OUT (hand to P2)
-- L56 [2] Beat template
-- L58 [3] Beat 1 — MICROHOOK (0:00–0:03) — - `[MICROHOOK_LINE]` — one sentence, present tense, concrete, the {visual-only breath}
-- L70 [3] Beat 2 — QUICK RETURN (0:03–0:08) — - `[QUICK_RETURN_LINE]` — pay the microhook immediately, and pay it {and pay it wrong}
-- L81 [3] Beat 3 — THE WORLD OPENS (0:08–0:30) — - The anecdote engine starts: chronological, concrete, sequential {anecdote engine; archetypes-in-specific-settings; "You" enters here}
-- L97 [3] Beat 4 — MINI-PAYOFF + THE DATED PROMISE (0:30–0:60) — - Deliver real value FIRST: a genuine partial answer, proof the video {Deliver real value FIRST; date or number; rehook anchor A1 (~0:30); TRICOLON LICENSED HERE (mandatory placement):}
-- L114 [3] Beat 5 — THE MAP, NOT THE TERRITORY (0:60–0:90) — - Signpost the journey without spoiling it: tease the WHAT, hold the HOW {opponent — always a mechanism; Rehook anchor A2 (~1:00)}
-- L132 [2] MANDATORY: Glass alternation — phase ratio ≈ 80/20 anecdote — This phase runs the anecdote engine almost throughout. Exactly ONE
-- L141 [2] HARD GATE: attribution-first — Every factual claim opens with its source BEFORE the assertion ("The New
-- L149 [2] Pause marks — `[post-key]` after the paradox (Beat 2) and after any line that must
-- L155 [2] Worked micro-example (~compressed, 3:00-scale segment) — > [till plate, drawer sounds under; image breathes 0.6s] {[till plate, drawer sounds under; image breathes 0.6s]}
-- L175 [2] QC line — > Executable (2026-09-02): `gate_opening_structure.py` enforces every {Executable (2026-09-02):}
+- L56 [2] Beat template <[MICROHOOK_LINE]; pre-opener; visual-only; [QUICK_RETURN_LINE]; [post-key]; settle-pause; throat-clearing; atmosphere-setting; archetypes-in-specific-settings; second-person; [BIOGRAPHY_TWIST]; subject-verb-object>
+- L58 [3] Beat 1 — MICROHOOK (0:00–0:03) — - `[MICROHOOK_LINE]` — one sentence, present tense, concrete, the {visual-only breath} <[MICROHOOK_LINE]; pre-opener>
+- L70 [3] Beat 2 — QUICK RETURN (0:03–0:08) — - `[QUICK_RETURN_LINE]` — pay the microhook immediately, and pay it {and pay it wrong} <[QUICK_RETURN_LINE]; [post-key]; settle-pause; throat-clearing; atmosphere-setting>
+- L81 [3] Beat 3 — THE WORLD OPENS (0:08–0:30) — - The anecdote engine starts: chronological, concrete, sequential {anecdote engine; archetypes-in-specific-settings; "You" enters here} <second-person; [BIOGRAPHY_TWIST]; subject-verb-object; long-then-punchy>
+- L97 [3] Beat 4 — MINI-PAYOFF + THE DATED PROMISE (0:30–0:60) — - Deliver real value FIRST: a genuine partial answer, proof the video {Deliver real value FIRST; date or number; rehook anchor A1 (~0:30); TRICOLON LICENSED HERE (mandatory placement):} <[pre-key]; [PROMISE_LINE]; thesis-grade>
+- L114 [3] Beat 5 — THE MAP, NOT THE TERRITORY (0:60–0:90) — - Signpost the journey without spoiling it: tease the WHAT, hold the HOW {opponent — always a mechanism; Rehook anchor A2 (~1:00)} <re-justifying; {RING_TOKEN}; Context-dump>
+- L132 [2] MANDATORY: Glass alternation — phase ratio ≈ 80/20 anecdote — This phase runs the anecdote engine almost throughout. Exactly ONE <persona-lens; All-anecdote; all-reflection>
+- L141 [2] HARD GATE: attribution-first — Every factual claim opens with its source BEFORE the assertion ("The New <[verify]>
+- L149 [2] Pause marks — `[post-key]` after the paradox (Beat 2) and after any line that must <[post-key]; [pre-key]>
+- L155 [2] Worked micro-example (~compressed, 3:00-scale segment) — > [till plate, drawer sounds under; image breathes 0.6s] {[till plate, drawer sounds under; image breathes 0.6s]} <[post-key]; risk-score; archetypes-in-settings; biography-as-twist; [pre-key]; map-not-territory>
+- L175 [2] QC line — > Executable (2026-09-02): `gate_opening_structure.py` enforces every {Executable (2026-09-02):} <[archetype]; [desire]; [opponent]; [reflect]; [stakes]; [payoff]; [promise]; [tricolon]; [map]; [ring]; --ring; McKee>
 
 ## docs/content-video-engine/patterns/phase-guides/P2.md
 
-- L1 [1] P2 — THE ENGINE — > Self-contained generation guide. Consume ONLY: the INJECTION block, the
+- L1 [1] P2 — THE ENGINE — > Self-contained generation guide. Consume ONLY: the INJECTION block, the <Self-contained; micro-loop; new-info; head-fake; {TOPIC}; {VOICE}; {PERSONA}; {EVIDENCE}; New-information; re-phrased; AND-THEN; early-mid>
 - L7 [2] Function — The catalyst and the debate. The event or fact that makes the question
-- L15 [2] Geometry — | Runtime | P2 window | Density targets |
-- L24 [2] Inputs — `{TOPIC}` `{VOICE}` `{PERSONA}` `{EVIDENCE}` + P1 ledger (ring token, {P1 ledger}
+- L15 [2] Geometry — | Runtime | P2 window | Density targets | <micro-loop; new-info; head-fake>
+- L24 [2] Inputs — `{TOPIC}` `{VOICE}` `{PERSONA}` `{EVIDENCE}` + P1 ledger (ring token, {P1 ledger} <{TOPIC}; {VOICE}; {PERSONA}; {EVIDENCE}; head-fake>
 - L29 [2] Ledger OUT (hand to P3)
-- L41 [2] Beat template
-- L43 [3] The catalyst (phase start, first ~60s of the phase) — - The inciting fact/event arrives as a micro story loop: setup → {micro story loop; New-information cadence starts: something genuinely new ever}
-- L55 [3] The head-fake (early-mid phase) — MANDATORY — - `[HEAD_FAKE_LINE]` — offer the obvious answer straight, with no {straight}
-- L63 [3] Positional anchor A3 + foreshadow F2 (~10% of runtime; 3:00 @30min) — - A3 rehook: one template-family line ("But here's where it gets {A3 rehook; F2}
-- L71 [3] The debate (mid-late phase) — - The obvious answer is tried and found wanting — as a gap (an {tried and found wanting}
-- L81 [3] Macro close + dip + optional CTA (phase end) — - Macro loop 1 closes on a partial answer that opens the bigger {Macro loop 1 closes; one breathing dip; The ONLY permitted mid-video CTA slot in the entire video}
-- L94 [2] MANDATORY: Glass alternation — phase ratio ≈ 70/30 anecdote — The catalyst and debate run as action; after each micro-loop close, ONE
+- L41 [2] Beat template <New-information; re-phrased; AND-THEN; head-fake; early-mid; [HEAD_FAKE_LINE]; template-family; re-justifying; mid-late; strong-but-not-best; re-sighted; mid-video>
+- L43 [3] The catalyst (phase start, first ~60s of the phase) — - The inciting fact/event arrives as a micro story loop: setup → {micro story loop; New-information cadence starts: something genuinely new ever} <re-phrased; AND-THEN>
+- L55 [3] The head-fake (early-mid phase) — MANDATORY — - `[HEAD_FAKE_LINE]` — offer the obvious answer straight, with no {straight} <[HEAD_FAKE_LINE]>
+- L63 [3] Positional anchor A3 + foreshadow F2 (~10% of runtime; 3:00 @30min) — - A3 rehook: one template-family line ("But here's where it gets {A3 rehook; F2} <template-family; re-justifying>
+- L71 [3] The debate (mid-late phase) — - The obvious answer is tried and found wanting — as a gap (an {tried and found wanting} <strong-but-not-best; re-sighted>
+- L81 [3] Macro close + dip + optional CTA (phase end) — - Macro loop 1 closes on a partial answer that opens the bigger {Macro loop 1 closes; one breathing dip; The ONLY permitted mid-video CTA slot in the entire video} <{FORMAT}>
+- L94 [2] MANDATORY: Glass alternation — phase ratio ≈ 70/30 anecdote — The catalyst and debate run as action; after each micro-loop close, ONE <micro-loop>
 - L102 [2] MANDATORY: tricolon/anaphora placement — - ONE momentum tricolon is licensed at the catalyst or the debate's
-- L111 [2] HARD GATE: attribution-first — Source before assertion on every claim, no exceptions. New figures enter
+- L111 [2] HARD GATE: attribution-first — Source before assertion on every claim, no exceptions. New figures enter <[verify]>
 - L117 [2] Counterpoint: contextual mapping — Visuals carry the archive — data, documents, places. The voice carries
-- L123 [2] Pause marks — `[post-key]` after the macro-close payoff line. `[pre-key]` before the
-- L129 [2] Worked micro-example (3:00-scale) — > Start in his apartment. A suit rack that cost a paycheck. A watch box
-- L144 [2] QC line — > Executable (2026-09-02): `gate_opening_structure.py` enforces every {Executable (2026-09-02):}
+- L123 [2] Pause marks — `[post-key]` after the macro-close payoff line. `[pre-key]` before the <[post-key]; macro-close; [pre-key]; head-fake>
+- L129 [2] Worked micro-example (3:00-scale) — > Start in his apartment. A suit rack that cost a paycheck. A watch box <risk-score; [post-key]; head-fake>
+- L144 [2] QC line — > Executable (2026-09-02): `gate_opening_structure.py` enforces every {Executable (2026-09-02):} <McKee; [catalyst]; [loop]; [head-fake]; [debate]; mid-late; [new]; [foreshadow]; [loop-close]; [dip]; [signpost]; [reflect]>
 
 ## docs/content-video-engine/patterns/phase-guides/P3.md
 
-- L1 [1] P3 — THE GAP (the pattern unit) — > Self-contained generation guide. Consume ONLY: the INJECTION block, the
-- L7 [2] Function — The expectation-reality engine, and the runtime knob for the whole {the runtime knob for the whole video}
-- L15 [2] Geometry — | Runtime | P3 window | Units (2:00–2:30 each) |
-- L27 [2] Inputs — `{TOPIC}` `{VOICE}` `{PERSONA}` `{EVIDENCE}` + P2 ledger (open loops, {P2 ledger}
+- L1 [1] P3 — THE GAP (the pattern unit) — > Self-contained generation guide. Consume ONLY: the INJECTION block, the <Self-contained; expectation-reality; mini-pivots; {TOPIC}; {VOICE}; {PERSONA}; {EVIDENCE}; head-fake; F-schedule; AND-THEN; [post-key]; template-family>
+- L7 [2] Function — The expectation-reality engine, and the runtime knob for the whole {the runtime knob for the whole video} <expectation-reality>
+- L15 [2] Geometry — | Runtime | P3 window | Units (2:00–2:30 each) | <mini-pivots>
+- L27 [2] Inputs — `{TOPIC}` `{VOICE}` `{PERSONA}` `{EVIDENCE}` + P2 ledger (open loops, {P2 ledger} <{TOPIC}; {VOICE}; {PERSONA}; {EVIDENCE}; head-fake; F-schedule>
 - L32 [2] Ledger OUT (hand to P4)
-- L44 [2] THE PATTERN UNIT (repeat N times) — | Step | Content | Rules | {u1; u2; BUT; u3; THEREFORE; u4}
-- L58 [2] Across-unit placement rules — - Best evidence lands in the FINAL unit before the pivot — the {Best evidence lands in the FINAL unit before the pivot; F3}
+- L44 [2] THE PATTERN UNIT (repeat N times) — | Step | Content | Rules | {u1; u2; BUT; u3; THEREFORE; u4} <AND-THEN; [post-key]; template-family; re-justifying; Per-unit>
+- L58 [2] Across-unit placement rules — - Best evidence lands in the FINAL unit before the pivot — the {Best evidence lands in the FINAL unit before the pivot; F3} <re-promises; unit-exit; mid-video; re-justify; head-fake>
 - L72 [2] MANDATORY: Glass alternation — ratio ≈ 60/40, structured INSIDE the unit — The unit IS the alternation: u1–u3 are anecdote (bait), u4 is reflection
 - L80 [2] MANDATORY: the anaphora arc (this phase owns it) — The anaphora phrase — constant opening, evolving tail — recurs in at
-- L89 [2] HARD GATE: attribution-first — Source before assertion on every claim. Each unit's evidence enters with
+- L89 [2] HARD GATE: attribution-first — Source before assertion on every claim. Each unit's evidence enters with <[verify]>
 - L95 [2] Counterpoint: subtext layering — The voice stops describing and starts meaning: visuals carry the surface
-- L102 [2] Worked micro-example (one compressed unit, 3:00-scale) — > Her place, on half the income. The first thing you notice is floor. A
-- L120 [2] QC line — - [ ] Units countable and complete — all five steps present in each
+- L102 [2] Worked micro-example (one compressed unit, 3:00-scale) — > Her place, on half the income. The first thing you notice is floor. A <head-fake; [post-key]>
+- L120 [2] QC line — - [ ] Units countable and complete — all five steps present in each <pre-pivot; dead-air; Head-fake; Attribution-first>
 
 ## docs/content-video-engine/patterns/phase-guides/P4.md
 
-- L1 [1] P4 — THE MIDPOINT PIVOT — > Self-contained generation guide. Consume ONLY: the INJECTION block, the
-- L7 [2] Function — The hinge. A false peak (things look solved — they aren't) or a false
-- L17 [2] Geometry — PINNED at 45–55% of runtime, every length — | Runtime | P4 window | {A4 = reversal = head-fake demolition in a single move}
-- L27 [2] Inputs — `{TOPIC}` `{VOICE}` `{PERSONA}` `{EVIDENCE}` + P3 ledger (head-fake, {P3 ledger}
+- L1 [1] P4 — THE MIDPOINT PIVOT — > Self-contained generation guide. Consume ONLY: the INJECTION block, the <Self-contained; mid-video; re-justified; bolted-on; head-fake; mid-segment; mini-pivots; {TOPIC}; {VOICE}; {PERSONA}; {EVIDENCE}; [pre-key]>
+- L7 [2] Function — The hinge. A false peak (things look solved — they aren't) or a false <mid-video; re-justified; bolted-on; head-fake>
+- L17 [2] Geometry — PINNED at 45–55% of runtime, every length — | Runtime | P4 window | {A4 = reversal = head-fake demolition in a single move} <mid-segment; mini-pivots>
+- L27 [2] Inputs — `{TOPIC}` `{VOICE}` `{PERSONA}` `{EVIDENCE}` + P3 ledger (head-fake, {P3 ledger} <{TOPIC}; {VOICE}; {PERSONA}; {EVIDENCE}; head-fake>
 - L32 [2] Ledger OUT (hand to P5)
-- L43 [2] Beat template
+- L43 [2] Beat template <[pre-key]; [REVERSAL_LINE]; head-fake; mid-video; re-justification>
 - L45 [3] Signpost IN (phase start) — - One explicit line telling the viewer the ground is about to move:
-- L52 [3] The reversal (the pivot's center) — - `[pre-key]` — the pause BEFORE the reveal is scripted, mandatory, and {sentence length CONTRACTS; The head-fake resolves INTO the reversal}
+- L52 [3] The reversal (the pivot's center) — - `[pre-key]` — the pause BEFORE the reveal is scripted, mandatory, and {sentence length CONTRACTS; The head-fake resolves INTO the reversal} <[pre-key]; [REVERSAL_LINE]; mid-video; re-justification>
 - L66 [3] Recontextualization (immediately after the reversal) — - The ring token flips meaning: same object, opposite significance — {The ring token flips meaning: same object, opposite signific}
 - L76 [3] Stakes elevation (phase back half) — - Raise what's at risk in concrete numbers, not adjectives. The {concrete numbers}
-- L85 [2] MANDATORY: Glass alternation — ratio ≈ 50/50, fused — The pivot fuses the engines: the reversal is REFLECTION delivered with
-- L92 [2] MANDATORY: tricolon/anaphora — ZERO new figures — No new tricolon. No anaphora recurrence. This phase's rhetoric is the
-- L100 [2] HARD GATE: attribution-first — The reversal's mechanism must stand on VERIFIED ground — the flip is the
+- L85 [2] MANDATORY: Glass alternation — ratio ≈ 50/50, fused — The pivot fuses the engines: the reversal is REFLECTION delivered with <line-by-line>
+- L92 [2] MANDATORY: tricolon/anaphora — ZERO new figures — No new tricolon. No anaphora recurrence. This phase's rhetoric is the <head-fake>
+- L100 [2] HARD GATE: attribution-first — The reversal's mechanism must stand on VERIFIED ground — the flip is the <[verify]>
 - L107 [2] Counterpoint: visual register shift — This phase's counterpoint IS the shift: the narration flips the meaning
-- L113 [2] Pause marks — Exactly one `[pre-key]` (before the reversal line). One `[post-key]`
-- L119 [2] Worked micro-example (3:00-scale — merged construction) — > And this is where most people get the whole thing wrong.
-- L134 [2] QC line — - [ ] Reversal lands inside 45–55% of runtime
+- L113 [2] Pause marks — Exactly one `[pre-key]` (before the reversal line). One `[post-key]` <[pre-key]; [post-key]>
+- L119 [2] Worked micro-example (3:00-scale — merged construction) — > And this is where most people get the whole thing wrong. <rehook-out; [pre-key]; head-fake; [post-key]; proof-of-purchase>
+- L134 [2] QC line — - [ ] Reversal lands inside 45–55% of runtime <[pre-key]; Head-fake; [verify]>
 
 ## docs/content-video-engine/patterns/phase-guides/P5.md
 
-- L1 [1] P5 — REFLECTION & CONVERGENCE — > Self-contained generation guide. Consume ONLY: the INJECTION block, the
+- L1 [1] P5 — REFLECTION & CONVERGENCE — > Self-contained generation guide. Consume ONLY: the INJECTION block, the <Self-contained; post-pivot; gap-pattern; mid-phase; New-information; {TOPIC}; {VOICE}; {PERSONA}; {EVIDENCE}; {TELL}; [pre-key]; [post-key]>
 - L7 [2] Function — The meaning engine takes over. The transformative thesis is stated at the
-- L16 [2] Geometry — | Runtime | P5 window | Payoff lands |
-- L29 [2] Inputs — `{TOPIC}` `{VOICE}` `{PERSONA}` `{EVIDENCE}` `{TELL}` (variable + {P4 ledger}
+- L16 [2] Geometry — | Runtime | P5 window | Payoff lands | <post-pivot; gap-pattern; mid-phase; New-information>
+- L29 [2] Inputs — `{TOPIC}` `{VOICE}` `{PERSONA}` `{EVIDENCE}` `{TELL}` (variable + {P4 ledger} <{TOPIC}; {VOICE}; {PERSONA}; {EVIDENCE}; {TELL}>
 - L35 [2] Ledger OUT (hand to P6)
-- L47 [2] Beat template
-- L49 [3] The chiastic center (phase start) — - THE transformative thesis — the one sentence the video exists to earn —
+- L47 [2] Beat template <[pre-key]; [post-key]; post-payoff; newest-first; re-sighted; mid-phase>
+- L49 [3] The chiastic center (phase start) — - THE transformative thesis — the one sentence the video exists to earn — <[pre-key]; [post-key]>
 - L57 [3] The grand payoff (60–70% of runtime) — MANDATORY position — - The promise from the open — teased at ~10% and ~27%, never since — is {paid in full as a natural culmination; Every opened loop closes COMPLETELY, in reverse order of ope}
 - L68 [3] The falsifiable tell (post-payoff) — - One claim with all four parts: the variable being watched, the {the variable; the threshold; the current position; the flip condition}
-- L78 [3] The callback cascade (phase end) — - Remaining planted tokens close newest-first — every object, {newest-first; ≥2 savor beats}
+- L78 [3] The callback cascade (phase end) — - Remaining planted tokens close newest-first — every object, {newest-first; ≥2 savor beats} <re-sighted; [post-key]; mid-phase>
 - L89 [2] MANDATORY: Glass alternation — phase ratio ≈ 30/70 reflection — Reflection dominates but the anecdote engine NEVER stops: every 2–3
 - L97 [2] MANDATORY: tricolon/anaphora placement — - The anaphora phrase makes its LAST evolved recurrence here and is left
-- L106 [2] HARD GATE: attribution-first — Source before assertion, every claim. The payoff's arithmetic must trace
+- L106 [2] HARD GATE: attribution-first — Source before assertion, every claim. The payoff's arithmetic must trace <current-position; first-person; [verify]>
 - L113 [2] Counterpoint: abstract synthesis — The screen abstracts (maps, aggregates, motion of numbers) while the
-- L119 [2] Pause marks — `[pre-key]` + `[post-key]` framing the thesis · `[post-key]` on each
-- L125 [2] Worked micro-example (3:00-scale) — > Take the rowing machine. His place runs eighteen hundred a month for
-- L143 [2] QC line — - [ ] Thesis at the chiastic center, pause-framed, cadence expanded
+- L119 [2] Pause marks — `[pre-key]` + `[post-key]` framing the thesis · `[post-key]` on each <[pre-key]; [post-key]; over-pause>
+- L125 [2] Worked micro-example (3:00-scale) — > Take the rowing machine. His place runs eighteen hundred a month for <[post-key]; take-home; self-storage; McDonald; [verify]>
+- L143 [2] QC line — - [ ] Thesis at the chiastic center, pause-framed, cadence expanded <pause-framed; Promise-trace; post-payoff; newest-first; [post-key]; Attribution-first; [verify]>
 
 ## docs/content-video-engine/patterns/phase-guides/P6.md
 
-- L1 [1] P6 — THE CLOSE — > Self-contained generation guide. Consume ONLY: the INJECTION block, the
-- L7 [2] Function — The ring seals, the thesis lands in its final form, and the ONE ask is
+- L1 [1] P6 — THE CLOSE — > Self-contained generation guide. Consume ONLY: the INJECTION block, the <Self-contained; twenty-nine; {VOICE}; {PERSONA}; {FORMAT}; {NEXT}; audio-first; take-home; ring-native; meta-talk; best-performing; attribution-first>
+- L7 [2] Function — The ring seals, the thesis lands in its final form, and the ONE ask is <twenty-nine>
 - L16 [2] Geometry — true close is ABSOLUTE: 60–90s + 20s end screen — | Runtime | P6 window | {ZERO CTA}
-- L27 [2] Inputs — `{VOICE}` `{PERSONA}` `{FORMAT}` `{NEXT}` (the next video/segment's hook, {P5 ledger}
+- L27 [2] Inputs — `{VOICE}` `{PERSONA}` `{FORMAT}` `{NEXT}` (the next video/segment's hook, {P5 ledger} <{VOICE}; {PERSONA}; {FORMAT}; {NEXT}>
 - L33 [2] Ledger OUT (final audit)
-- L47 [2] Beat template
-- L49 [3] The ring echo (phase start) — - The opening image returns, transformed — verbally AND visually: {The opening image returns, transformed; The ring token — first planted, still open — closes LAST of}
+- L47 [2] Beat template <audio-first; {FORMAT}; take-home; ring-native; meta-talk; best-performing>
+- L49 [3] The ring echo (phase start) — - The opening image returns, transformed — verbally AND visually: {The opening image returns, transformed; The ring token — first planted, still open — closes LAST of} <audio-first>
 - L60 [3] The final triad (the emotional peak) — - The thesis in three strokes — the video's LAST licensed tricolon — {The thesis in three strokes — the video's LAST licensed tric}
-- L70 [3] The action window (15–30s AFTER the final payoff) — the ONE ask — - Exactly ONE call to action, structured on three pillars in order: {Value reinforcement; Clear direction; Future pacing}
-- L83 [3] The assignment + outro template (phase end) — - The viewer assignment: the calculable take-home restated as {The viewer assignment; Story Close; Cliffhanger Bridge; Hard stop.}
+- L70 [3] The action window (15–30s AFTER the final payoff) — the ONE ask — - Exactly ONE call to action, structured on three pillars in order: {Value reinforcement; Clear direction; Future pacing} <{FORMAT}>
+- L83 [3] The assignment + outro template (phase end) — - The viewer assignment: the calculable take-home restated as {The viewer assignment; Story Close; Cliffhanger Bridge; Hard stop.} <take-home; ring-native; meta-talk; best-performing>
 - L97 [2] MANDATORY: Glass alternation — ratio ≈ 40/60, closing on image — The close alternates one last time: the ring echo is ANECDOTE (an image,
 - L104 [2] MANDATORY: tricolon/anaphora — the convergence point — This phase OWNS both figures' resolutions: the final tricolon and the
-- L111 [2] HARD GATE: attribution-first — Still binding — including the bridge: any factual tease for the next
+- L111 [2] HARD GATE: attribution-first — Still binding — including the bridge: any factual tease for the next <first-person; [verify]>
 - L117 [2] Counterpoint: ring symmetry — The visual close mirrors the visual open — the counterpoint here is
-- L124 [2] Pause marks — `[post-key]` after the ring echo · `[pre-key]` before the triad's third
-- L129 [2] Worked micro-example (3:00-scale, serialized → Cliffhanger Bridge) — > [return to the till plate — same frame as 0:00, drawer now closing] {[return to the till plate — same frame as 0:00, drawer now c}
-- L146 [2] QC line — - [ ] Ring echo present, token-verifiable, visually scripted
+- L124 [2] Pause marks — `[post-key]` after the ring echo · `[pre-key]` before the triad's third <[post-key]; [pre-key]>
+- L129 [2] Worked micro-example (3:00-scale, serialized → Cliffhanger Bridge) — > [return to the till plate — same frame as 0:00, drawer now closing] {[return to the till plate — same frame as 0:00, drawer now c} <[post-key]>
+- L146 [2] QC line — - [ ] Ring echo present, token-verifiable, visually scripted <token-verifiable; post-CTA>
 
 ## docs/content-video-engine/patterns/SCRIPT-PATTERN-KIT.md
 
-- L1 [1] SCRIPT PATTERN KIT — A portable, deterministic script-generation kit for long-form narrated
-- L10 [2] Contents (the kit is exactly these files) — | File | Role | {The loop}
-- L25 [2] The generation flow — The ledger is the determinism mechanism: ring token, foreshadow schedule
-- L55 [2] Geometry (the scaling law) — - Absolute, every runtime: the OPEN is 60–90 seconds (60 at 8 min); {Absolute, every runtime:; Elastic:; Beyond 30 minutes:; Short runtimes MERGE systems, never drop them:}
-- L78 [2] The duty roster (what must exist, counted, @30:00) — | System | Count | Placement |
-- L112 [2] Shorts (doc 51 §51.2 as gates — G2, 2026-09-05) — A short is a different machine (E35), not a compressed episode. The kit's six phases and the
-- L134 [2] Hard gates (fail the script, not the line) — 1. Attribution-first — source before assertion, every claim, every {Attribution-first; The score; 10–15 word average in a wave}
-- L164 [2] Output contract (what a finished script contains) — - Narration with pause marks (`[pre-key]` / `[post-key]`) and `[verify]` {[...]}
-- L177 [2] CHANGELOG — - v1 — kit assembled: binder + injection surface + six phase guides.
+- L1 [1] SCRIPT PATTERN KIT — A portable, deterministic script-generation kit for long-form narrated <script-generation; long-form; micro-rules; channel-specific; micro-examples; cross-scale; per-sentence; declared-beat; open-loop; head-fake; mini-pivots; mid-video>
+- L10 [2] Contents (the kit is exactly these files) — | File | Role | {The loop} <channel-specific; micro-examples; cross-scale; per-sentence; declared-beat; micro-rules>
+- L25 [2] The generation flow — The ledger is the determinism mechanism: ring token, foreshadow schedule <open-loop; head-fake>
+- L55 [2] Geometry (the scaling law) — - Absolute, every runtime: the OPEN is 60–90 seconds (60 at 8 min); {Absolute, every runtime:; Elastic:; Beyond 30 minutes:; Short runtimes MERGE systems, never drop them:} <mini-pivots; mid-video; head-fake; micro-CTA>
+- L78 [2] The duty roster (what must exist, counted, @30:00) — | System | Count | Placement | <Head-fake; post-payoff; post-macro; token-verifiable; in-unit; three-question; three-beat>
+- L112 [2] Shorts (doc 51 §51.2 as gates — G2, 2026-09-05) — A short is a different machine (E35), not a compressed episode. The kit's six phases and the <head-fake; where-we-sit; long-form; --short; --long>
+- L134 [2] Hard gates (fail the script, not the line) — 1. Attribution-first — source before assertion, every claim, every {Attribution-first; The score; 10–15 word average in a wave} <[verify]; S-V-O; written-prose; beat-final; [pre-key]; [post-key]; Per-phase; mid-word>
+- L164 [2] Output contract (what a finished script contains) — - Narration with pause marks (`[pre-key]` / `[post-key]`) and `[verify]` {[...]} <[pre-key]; [post-key]; [verify]; **[...]**; on-screen>
+- L177 [2] CHANGELOG — - v1 — kit assembled: binder + injection surface + six phase guides. <Fresh-context; SENTENCE-STRENGTH-CHECK; strength-passed>
 
 ## docs/content-video-engine/patterns/SENTENCE-STRENGTH-CHECK.md
 
-- L1 [1] SENTENCE STRENGTH CHECK — the line-by-line gate — A per-sentence pass run AFTER a script conforms structurally and BEFORE it
-- L9 [2] Procedure — 1. Extract narration only (no stage directions, no annotations).
-- L22 [2] The ten gates — | # | Gate | Fails when | {One idea; Active, concrete subject; Terminal stress; Cashed concreteness}
-- L37 [2] The named-subject rule (operator, 2026-08-30) — Specify the instrument, person, place, or thing. Where a sentence {Specify the instrument, person, place, or thing.}
-- L52 [2] Licensed exceptions (must be claimed in the log, never assumed) — - Contraction runs (the pivot, the final triad): fragments and {Contraction runs; Deliberate get/is-parallelism; Enumerations that mirror a declared structure; Chart-read fragments}
+- L1 [1] SENTENCE STRENGTH CHECK — the line-by-line gate — A per-sentence pass run AFTER a script conforms structurally and BEFORE it <per-sentence; Re-check; Re-run; page-ism; Attribution-first; throat-clearing; thesis-grade; never-list; named-subject; WRITE-side; is-parallelism; Chart-read>
+- L9 [2] Procedure — 1. Extract narration only (no stage directions, no annotations). <Re-check; Re-run>
+- L22 [2] The ten gates — | # | Gate | Fails when | {One idea; Active, concrete subject; Terminal stress; Cashed concreteness} <page-ism; Attribution-first; throat-clearing; thesis-grade; never-list>
+- L37 [2] The named-subject rule (operator, 2026-08-30) — Specify the instrument, person, place, or thing. Where a sentence {Specify the instrument, person, place, or thing.} <WRITE-side>
+- L52 [2] Licensed exceptions (must be claimed in the log, never assumed) — - Contraction runs (the pivot, the final triad): fragments and {Contraction runs; Deliberate get/is-parallelism; Enumerations that mirror a declared structure; Chart-read fragments} <Agent-hiding>
 - L68 [2] What this gate is NOT — It does not judge structure (duties, loops, ratios — the phase guides own
-- L77 [2] Subject-first restatement (operator, 2026-08-30 — ruling E16) — The named-subject rule extends to FRAGMENTS: a licensed fragment or
+- L77 [2] Subject-first restatement (operator, 2026-08-30 — ruling E16) — The named-subject rule extends to FRAGMENTS: a licensed fragment or <named-subject>
 
 ## docs/content-video-engine/patterns/STRENGTH-LOOP.md
 
-- L1 [1] THE STRENGTH LOOP — gates at every scale, and across them — `SENTENCE-STRENGTH-CHECK.md` gates L0. The phase guides gate L4. The duty {L1, L2 and L3 had no gates at all, and nothing checked betwe}
-- L13 [2] 0. Why the loop exists — Every edit at scale N can break N−1 and N+1. Observed on Script E in one
-- L29 [2] 1. The scales and their gates — | Scale | Unit | Gate | Status | {L0; L1; new; L2; L3; L4}
-- L42 [2] 2. L1 — PHRASE strength — Sub-sentence craft. A sentence can pass all ten S-gates and still be built {P1; Connective integrity; P2; Figure referent; P3; Clause earns its place}
+- L1 [1] THE STRENGTH LOOP — gates at every scale, and across them — `SENTENCE-STRENGTH-CHECK.md` gates L0. The phase guides gate L4. The duty {L1, L2 and L3 had no gates at all, and nothing checked betwe} <re-verifies; Cross-scale; Sub-sentence; S-gates; AND-THEN; VOICE-PACK; throat-clearing; New-info; re-verify; [post-key]; self-contradiction; line-craft>
+- L13 [2] 0. Why the loop exists — Every edit at scale N can break N−1 and N+1. Observed on Script E in one <re-verifies>
+- L29 [2] 1. The scales and their gates — | Scale | Unit | Gate | Status | {L0; L1; new; L2; L3; L4} <Cross-scale>
+- L42 [2] 2. L1 — PHRASE strength — Sub-sentence craft. A sentence can pass all ten S-gates and still be built {P1; Connective integrity; P2; Figure referent; P3; Clause earns its place} <Sub-sentence; S-gates; AND-THEN; VOICE-PACK; throat-clearing>
 - L59 [2] 3. L2 — BEAT strength — The STR micro loop: setup → tension → resolution, closing every 30–60s and {B1; The loop closes; B2; New-info cadence; B3; Charge shifts}
 - L71 [2] 4. L3 — SECTION strength (the pattern unit) — The P3/P5 unit, 2:00–2:30, five steps. {U1; All five steps; U2; Register shifts at u4; U3; One breathing dip}
-- L84 [2] 5. X — CROSS-SCALE checks (run after EVERY edit) — This is the section that did not exist, and it is the whole point. {This is the section that did not exist, and it is the whole; X1; Antecedent integrity; X2; Position drift; X3}
+- L84 [2] 5. X — CROSS-SCALE checks (run after EVERY edit) — This is the section that did not exist, and it is the whole point. {This is the section that did not exist, and it is the whole; X1; Antecedent integrity; X2; Position drift; X3} <re-verify; [post-key]>
 - L96 [2] 6. L6 — CATALOGUE — Across videos, not within one. {C1; Thesis lens; C2; Instrument continuity; C3; No self-contradiction}
-- L108 [2] 7. The loop protocol — Operator rulings, 2026-08-29. {Convergence is a fixpoint, not an empty gate list.; No cost ceiling.}
+- L108 [2] 7. The loop protocol — Operator rulings, 2026-08-29. {Convergence is a fixpoint, not an empty gate list.; No cost ceiling.} <line-craft; over-smoothing; target-date; operator-approved; trade-off; phase-by-phase; first-class; terminal-stress>
 - L129 [3] Precedence when scales conflict — Comprehension > structure > line-craft. {Comprehension > structure > line-craft.}
-- L138 [3] Rewrite budget — the over-smoothing guard — Any sentence rewritten more than twice stops and goes to the operator {Any sentence rewritten more than twice stops and goes to the}
-- L148 [3] Oscillation — If a sentence reverts to a prior state, stop. Name both gates, state the {If a sentence reverts to a prior state, stop.}
-- L156 [3] Generation order — All six phases, then loop the whole thing (operator's call over {All six phases, then loop the whole thing; L3 and L4 findings as first-class}
-- L165 [2] 8a. The enumeration mandate (operator, 2026-08-30) — A gate that emits no artifact will eventually be skipped. Observed {A gate that emits no artifact will eventually be skipped.}
-- L187 [2] 8. What stays human — No gate in L1, L2 or L3 is safely automatable end to end. A regex proxy for {the reader decides.}
+- L138 [3] Rewrite budget — the over-smoothing guard — Any sentence rewritten more than twice stops and goes to the operator {Any sentence rewritten more than twice stops and goes to the} <target-date; operator-approved>
+- L148 [3] Oscillation — If a sentence reverts to a prior state, stop. Name both gates, state the {If a sentence reverts to a prior state, stop.} <trade-off>
+- L156 [3] Generation order — All six phases, then loop the whole thing (operator's call over {All six phases, then loop the whole thing; L3 and L4 findings as first-class} <phase-by-phase; trade-off; terminal-stress>
+- L165 [2] 8a. The enumeration mandate (operator, 2026-08-30) — A gate that emits no artifact will eventually be skipped. Observed {A gate that emits no artifact will eventually be skipped.} <tool-enforced; reading-enforced; ten-gate; spot-checked; enumerate_strength_screens.py <VO>; phonetic-anchor; per-paragraph; CHECK-RESPONSIBILITIES>
+- L187 [2] 8. What stays human — No gate in L1, L2 or L3 is safely automatable end to end. A regex proxy for {the reader decides.} <by-hand>
 
 ## docs/content-video-engine/PIPELINE.md
 
-- L1 [1] PIPELINE — what exists, what consumes what — > Before building anything, read `CAPABILITIES.md` — the index of {Before building anything, read `CAPABILITIES.md`; Read this before building anything in this folder.; enumerate before you grep.}
-- L18 [2] The stages, in order — | # | Stage | Owned by | Consumes | Emits | {Write; Strength loop; Script gates (runner)}
-- L33 [2] Stage 7 is AUTHORED. There is no allocator. — This is the step that was replaced with a loop and broke the build. {This is the step that was replaced with a loop and broke the; someone wrote that line}
-- L69 [2] The render contract — READ THIS BEFORE WRITING A PLAYER — There is already a player. Do not write another one. {There is already a player. Do not write another one.; plus; Assets are base64-embedded, not referenced by path.}
+- L1 [1] PIPELINE — what exists, what consumes what — > Before building anything, read `CAPABILITIES.md` — the index of {Before building anything, read `CAPABILITIES.md`; Read this before building anything in this folder.; enumerate before you grep.} <main(); --pivot "<line>"; --ring <t>; --counterparty <n>; CHECK-RESPONSIBILITIES; script_hash; VERDICT: PASS|FAIL; INFO-only; --force "<reason>"; *.words.json; semantic; context>
+- L18 [2] The stages, in order — | # | Stage | Owned by | Consumes | Emits | {Write; Strength loop; Script gates (runner)} <main(); --pivot "<line>"; --ring <t>; --counterparty <n>; CHECK-RESPONSIBILITIES; script_hash; VERDICT: PASS|FAIL; INFO-only; --force "<reason>"; *.words.json; semantic; context>
+- L33 [2] Stage 7 is AUTHORED. There is no allocator. — This is the step that was replaced with a loop and broke the build. {This is the step that was replaced with a loop and broke the; someone wrote that line} <hand-written; semantic; world-spike-desk-v1; context.what_it_is; visual_role>
+- L69 [2] The render contract — READ THIS BEFORE WRITING A PLAYER — There is already a player. Do not write another one. {There is already a player. Do not write another one.; plus; Assets are base64-embedded, not referenced by path.} <{{TIMELINE}}; scene_evidence_timeline.v1; {{URIS}}; __audio__; two-part; re-encode>
 - L87 [3] `scene_evidence_timeline.v1` — Worked example: `samples/current-bubble-five-minute-v4.timeline.json`.
-- L109 [2] Captions — doc 29 Part 5, not your own design — - One fixed lower-third anchor. Evidence roams; the caption does not. {fixed; No pill, no panel.; Kinetic:; Quiet (§4.2):; sole text layer on stage}
-- L124 [2] Plate motion — parallax, ambient, sequential generation (2026-09) — Applies to an APPROVED plate; it never regenerates locked art. Full rows and the {A still plate to a camera move; A sequential plate chain}
-- L146 [2] The plate library — ONE index, search it before generating — `content/video_engine/sources/PLATE-LIBRARY.json` — every generated plate {semantic; as the manifest records it; Status comes from the manifest, never the path}
-- L170 [2] Asset libraries — the sources the index reads — | Library | Where | Count | {(main checkout)}
-- L185 [2] Handoff — `docs/portable/BUILD-PIPELINE.md` is the model-agnostic version of this
-- L194 [2] Doctrine — derivation, not operation — Run the kit. Read a numbered doc to learn why a rule exists or to change {one owner}
+- L109 [2] Captions — doc 29 Part 5, not your own design — - One fixed lower-third anchor. Evidence roams; the caption does not. {fixed; No pill, no panel.; Kinetic:; Quiet (§4.2):; sole text layer on stage} <lower-third; power3.out; words.json; punch-in; Word-by-word; createTikTokStyleCaptions; fromMs <= now < toMs>
+- L124 [2] Plate motion — parallax, ambient, sequential generation (2026-09) — Applies to an APPROVED plate; it never regenerates locked art. Full rows and the {A still plate to a camera move; A sequential plate chain} <ComfyUI; imagePath; outputPath; on the; video-engine; 127.0.0.1:8188; outputDir; LaMa; LTX-Video; narration-keyed>
+- L146 [2] The plate library — ONE index, search it before generating — `content/video_engine/sources/PLATE-LIBRARY.json` — every generated plate {semantic; as the manifest records it; Status comes from the manifest, never the path} <image_id; register; approvals.json>
+- L170 [2] Asset libraries — the sources the index reads — | Library | Where | Count | {(main checkout)} <Teacher-stamped; image_id; extracted_path; deck-asset-manifest.json>
+- L185 [2] Handoff — `docs/portable/BUILD-PIPELINE.md` is the model-agnostic version of this <model-agnostic; paste-able; Claude-specific; script-writer; episode-build>
+- L194 [2] Doctrine — derivation, not operation — Run the kit. Read a numbered doc to learn why a rule exists or to change {one owner} <sentence-length>
 
 ## docs/content-video-engine/prompts/LIBRARY-BUILD-EP1-INDEX-FUNDS.md
 
-- L1 [1] Library Build — Episode 1 (S&P 500 / Index Funds) — > Superseded by [LIBRARY-BUILD-EP1-V3-REGENERATION.md](LIBRARY-BUILD-EP1-V3-REGENERATION.md). {Superseded}
-- L24 [2] The style call, and why — Your `current-bubble-episode-one-full-p34.mp4` render is better-looking than every {8+ distinct elements per plate; deep navy grounds; no host in any sampled frame; That was a sampling error}
-- L75 [2] Style Block — paste into every prompt — On element count — the budget applies to the generated plate, not the finished
-- L106 [2] Composition Block — paste into every prompt — Lighting direction is the one that breaks composites. Assets lit from different {Lighting direction is the one that breaks composites.}
-- L122 [2] Transparency Block — cutouts only — Set `background="transparent"` and `output_format="png"` on the request as well. {On shading:}
-- L140 [2] Negative Block — paste into every prompt — The no-text rule is absolute. Every figure, label and caption is composited by {The no-text rule is absolute.}
-- L155 [2] Generation settings — | Asset class | Size | Background | Quality | {Transparent; High; low; High only where identity is at stake.}
-- L176 [2] Batch 1 — Cast (highest value; do this first)
-- L178 [3] 1A. Host — poses only, identity unchanged — Do not regenerate the host. `finance-host-identity-master-v3.png` stays as the {Do not regenerate the host.}
-- L212 [3] Rendering weight — the host outranks the cast — The host is the most defined figure on screen; the civilians are deliberately
-- L232 [3] 1B. Civilian A — the index investor — `actor-civilian-a-identity-v1.png`
-- L247 [3] 1C. Civilian B — the stock picker — `actor-civilian-b-identity-v1.png`
-- L268 [2] Batch 2 — Worlds (light grounds, right third clear) — | File | Prompt body |
-- L276 [2] Batch 3 — Objects — | File | Prompt body |
-- L285 [2] Batch 4 — Mechanisms — | File | Prompt body |
-- L300 [2] Acceptance — reject and regenerate if — 1. Any text, numeral or label appears anywhere in the image. No exceptions. {Any text, numeral or label appears anywhere in the image.}
-- L315 [2] Evidence layer — diagnosis from the p34 render — Dense sampling of 02:00–03:30 corrects an earlier claim that the render carries no {Bug: the second evidence board often does not appear.; that was an artefact of frame extraction, not something on s}
+- L1 [1] Library Build — Episode 1 (S&P 500 / Index Funds) — > Superseded by [LIBRARY-BUILD-EP1-V3-REGENERATION.md](LIBRARY-BUILD-EP1-V3-REGENERATION.md). {Superseded} <LIBRARY-BUILD; human-scale; LIBRARY-INTAKE-REVIEW; expert_explainer; two-civilian; paper-cut; per-asset; current-bubble-episode-one-full-p34.mp4; better-looking; on-screen; evidence-layer; near-empty>
+- L24 [2] The style call, and why — Your `current-bubble-episode-one-full-p34.mp4` render is better-looking than every {8+ distinct elements per plate; deep navy grounds; no host in any sampled frame; That was a sampling error} <current-bubble-episode-one-full-p34.mp4; better-looking; paper-cut; on-screen; evidence-layer; near-empty; finance-host-identity-master-v3.png; eight-element>
+- L75 [2] Style Block — paste into every prompt — On element count — the budget applies to the generated plate, not the finished <near-empty; illustrative-or-evidential>
+- L106 [2] Composition Block — paste into every prompt — Lighting direction is the one that breaks composites. Assets lit from different {Lighting direction is the one that breaks composites.} <Upper-left>
+- L122 [2] Transparency Block — cutouts only — Set `background="transparent"` and `output_format="png"` on the request as well. {On shading:} <background="transparent"; output_format="png"; output_compression>
+- L140 [2] Negative Block — paste into every prompt — The no-text rule is absolute. Every figure, label and caption is composited by {The no-text rule is absolute.} <render-eligible>
+- L155 [2] Generation settings — | Asset class | Size | Background | Quality | {Transparent; High; low; High only where identity is at stake.} <identity-sensitive; text-bearing; over-cautious>
+- L176 [2] Batch 1 — Cast (highest value; do this first) <finance-host-identity-master-v3.png; actor-host-present-open-v1.png; actor-host-point-right-v1.png; actor-host-arms-crossed-v1.png; actor-host-explain-both-hands-v1.png; actor-host-concerned-v1.png; direct-address; lab-coat; three-person; actor-civilian-a-identity-v1.png; actor-civilian-a-present-v1.png; actor-civilian-a-shrug-v1.png>
+- L178 [3] 1A. Host — poses only, identity unchanged — Do not regenerate the host. `finance-host-identity-master-v3.png` stays as the {Do not regenerate the host.} <finance-host-identity-master-v3.png; actor-host-present-open-v1.png; actor-host-point-right-v1.png; actor-host-arms-crossed-v1.png; actor-host-explain-both-hands-v1.png; actor-host-concerned-v1.png; direct-address>
+- L212 [3] Rendering weight — the host outranks the cast — The host is the most defined figure on screen; the civilians are deliberately <lab-coat; three-person>
+- L232 [3] 1B. Civilian A — the index investor — `actor-civilian-a-identity-v1.png` <actor-civilian-a-identity-v1.png; actor-civilian-a-present-v1.png; actor-civilian-a-shrug-v1.png; actor-civilian-a-content-v1.png; actor-civilian-a-point-v1.png>
+- L247 [3] 1C. Civilian B — the stock picker — `actor-civilian-b-identity-v1.png` <actor-civilian-b-identity-v1.png; actor-civilian-b-present-v1.png; actor-civilian-b-shrug-v1.png; actor-civilian-b-stressed-v1.png; actor-civilian-b-point-v1.png>
+- L268 [2] Batch 2 — Worlds (light grounds, right third clear) — | File | Prompt body | <world-exchange-floor-v1.png; world-home-living-v1.png; world-office-desk-v1.png>
+- L276 [2] Batch 3 — Objects — | File | Prompt body | <object-index-basket-v1.png; object-single-share-v1.png; object-coin-stack-v1.png; object-dividend-drip-v1.png>
+- L285 [2] Batch 4 — Mechanisms — | File | Prompt body | <mechanism-capital-flow-v1.png; mechanism-growth-comparison-v1.png; mechanism-risk-concentration-v1.png>
+- L300 [2] Acceptance — reject and regenerate if — 1. Any text, numeral or label appears anywhere in the image. No exceptions. {Any text, numeral or label appears anywhere in the image.} <full-bleed; full-body>
+- L315 [2] Evidence layer — diagnosis from the p34 render — Dense sampling of 02:00–03:30 corrects an earlier claim that the render carries no {Bug: the second evidence board often does not appear.; that was an artefact of frame extraction, not something on s} <on-screen; Operator-confirmed; High-Bandwidth; YR 1: $55,000; T13; figure_board; arithmetic_stack; comparison_pair; stat_row; right third clear>
 - L353 [2] Count — 25 assets: 15 character (3 sheets plus 12 poses), 3 worlds, 4 objects, 3 mechanisms.
-- L357 [2] After generating — and one field you must not skip — Drop everything into `assets/generated/cutouts/`, then register each asset in {Add `style_version: "paper-cut-reduced-density-v2"` to every}
+- L357 [2] After generating — and one field you must not skip — Drop everything into `assets/generated/cutouts/`, then register each asset in {Add `style_version: "paper-cut-reduced-density-v2"` to every} <asset-catalog.v1.json; asset_id; path; sha256; kind; semantic_tags; visual_worlds; identity_lenses; resolution_tier; host-matched; style_version: "crinkle-cut-v1"; one-line>
 
 ## docs/content-video-engine/prompts/LIBRARY-BUILD-EP1-V3-REGENERATION.md
 
-- L1 [1] Library Build — Episode 1 v3 Regeneration — Supersedes [LIBRARY-BUILD-EP1-INDEX-FUNDS.md](LIBRARY-BUILD-EP1-INDEX-FUNDS.md).
-- L7 [2] What this batch is, and what it is not — Keep, do not regenerate: all 15 character poses. Host and both civilians came {Keep, do not regenerate: all 15 character poses.; Regenerate: 3 worlds and 7 objects/mechanisms.}
-- L26 [2] Blocks that carry forward unchanged — These produced the cast, which is the part that worked. Do not edit them.
+- L1 [1] Library Build — Episode 1 v3 Regeneration — Supersedes [LIBRARY-BUILD-EP1-INDEX-FUNDS.md](LIBRARY-BUILD-EP1-INDEX-FUNDS.md). <LIBRARY-BUILD; INDEX-FUNDS; COMPOSITION-AND-SCALE-SPEC; rendering-weight; Upper-left; -far; background="transparent"; output_format="png"; close-up; <world>-far.png; free-standing; <world>-board.png>
+- L7 [2] What this batch is, and what it is not — Keep, do not regenerate: all 15 character poses. Host and both civilians came {Keep, do not regenerate: all 15 character poses.; Regenerate: 3 worlds and 7 objects/mechanisms.} <rendering-weight>
+- L26 [2] Blocks that carry forward unchanged — These produced the cast, which is the part that worked. Do not edit them. <Upper-left; -far; background="transparent"; output_format="png">
 - L30 [3] Style Block
-- L42 [3] Camera and Lighting Block — Lighting direction is the single setting that breaks composites. Upper-left is
-- L56 [3] Transparency Block — every plane except `-far` — Set `background="transparent"` and `output_format="png"` on the request as well —
-- L70 [2] New: Scale Block — every world plane — This is the change that matters most. The v2 interiors were generated as close-up
+- L42 [3] Camera and Lighting Block — Lighting direction is the single setting that breaks composites. Upper-left is <Upper-left>
+- L56 [3] Transparency Block — every plane except `-far` — Set `background="transparent"` and `output_format="png"` on the request as well — <background="transparent"; output_format="png">
+- L70 [2] New: Scale Block — every world plane — This is the change that matters most. The v2 interiors were generated as close-up <close-up>
 - L86 [3] Composition Block — worlds — The old rule said "right third clear." That was written for the host alone. Two
-- L100 [2] New: Layer Block — worlds ship as 2.5D — Generate each world as separate planes at identical dimensions, in one pass with {in one pass with the same prompt and seed}
-- L125 [3] The three worlds — | World | `-far` | `-mid` | `-board` | `-near` |
-- L137 [2] Objects and mechanisms — same subjects, corrected surface — The engraved direction is approved. The problem was never the style; it was {photographic surface and accumulated filler}
-- L160 [3] Subjects — unchanged from v2 — | File | Prompt body |
-- L174 [3] Negative Block — all assets — `no dollar signs` is new and explicit. Five of the seven v2 assets carried `$`
-- L189 [2] Generation settings — | Asset class | Size | Background | Quality | {transparent; Transparent}
-- L198 [2] Acceptance — reject and regenerate if — 1. Any text, numeral, label or currency symbol appears anywhere. No exceptions. {Any text, numeral, label or currency symbol appears anywhere}
-- L216 [2] On delivery — Register each asset with `asset_id`, `path`, `sha256`, `kind`, `semantic_tags`, {Do not set `rights_state: approved`, `review_state: approved}
-- L235 [2] Related — - [24-COMPOSITION-AND-SCALE-SPEC.md](../24-COMPOSITION-AND-SCALE-SPEC.md) — the rules of record
+- L100 [2] New: Layer Block — worlds ship as 2.5D — Generate each world as separate planes at identical dimensions, in one pass with {in one pass with the same prompt and seed} <<world>-far.png; free-standing; <world>-board.png; <world>-mid.png; <world>-near.png; -board; -near; -far; -mid; Per-plane; world-exchange-floor-v2; world-home-living-v2>
+- L125 [3] The three worlds — | World | `-far` | `-mid` | `-board` | `-near` | <-far; -mid; -board; -near; world-exchange-floor-v2; world-home-living-v2; world-office-desk-v2>
+- L137 [2] Objects and mechanisms — same subjects, corrected surface — The engraved direction is approved. The problem was never the style; it was {photographic surface and accumulated filler} <object-index-basket-v2.png; object-single-share-v2.png; object-coin-stack-v2.png; object-dividend-drip-v2.png; mechanism-capital-flow-v2.png; mechanism-growth-comparison-v2.png; mechanism-risk-concentration-v2.png; no dollar signs>
+- L160 [3] Subjects — unchanged from v2 — | File | Prompt body | <object-index-basket-v2.png; object-single-share-v2.png; object-coin-stack-v2.png; object-dividend-drip-v2.png; mechanism-capital-flow-v2.png; mechanism-growth-comparison-v2.png; mechanism-risk-concentration-v2.png>
+- L174 [3] Negative Block — all assets — `no dollar signs` is new and explicit. Five of the seven v2 assets carried `$` <no dollar signs>
+- L189 [2] Generation settings — | Asset class | Size | Background | Quality | {transparent; Transparent} <-far>
+- L198 [2] Acceptance — reject and regenerate if — 1. Any text, numeral, label or currency symbol appears anywhere. No exceptions. {Any text, numeral, label or currency symbol appears anywhere} <-far; micro-detail; upper-left>
+- L216 [2] On delivery — Register each asset with `asset_id`, `path`, `sha256`, `kind`, `semantic_tags`, {Do not set `rights_state: approved`, `review_state: approved} <asset_id; path; sha256; kind; semantic_tags; visual_worlds; identity_lenses; resolution_tier; style_version; placement; scale_reference; layers>
+- L235 [2] Related — - [24-COMPOSITION-AND-SCALE-SPEC.md](../24-COMPOSITION-AND-SCALE-SPEC.md) — the rules of record <COMPOSITION-AND-SCALE-SPEC; LIBRARY-INTAKE-REVIEW>
 
 ## docs/content-video-engine/prompts/PROBE-AGENT-LOOP-V1.md
 
-- L1 [1] Probe: Agent Generation Loop — Work Order v1 — Paste this whole document into Antigravity (or GPT desktop). It is a complete, {probe}
-- L15 [2] Delivery contract — - Target folder (create it): {Target folder; directly in that folder; 1024×1024, PNG, fully transparent background}
-- L71 [2] The two subjects — Deliberately absent from the existing library, so probe output can never be {object-abacus-probe-v1; object-hourglass-probe-v1}
+- L1 [1] Probe: Agent Generation Loop — Work Order v1 — Paste this whole document into Antigravity (or GPT desktop). It is a complete, {probe} <self-contained; ep1-index-funds-vox-newsprint-v3; objects; probe-agent-loop-v1.manifest.json; PowerShell; Get-FileHash -Algorithm SHA256 <file>; approvals.json; object-abacus-probe; side-on; object-hourglass-probe; mid-pour; unresolved>
+- L15 [2] Delivery contract — - Target folder (create it): {Target folder; directly in that folder; 1024×1024, PNG, fully transparent background} <objects; probe-agent-loop-v1.manifest.json; PowerShell; Get-FileHash -Algorithm SHA256 <file>; approvals.json>
+- L71 [2] The two subjects — Deliberately absent from the existing library, so probe output can never be {object-abacus-probe-v1; object-hourglass-probe-v1} <side-on; mid-pour>
 - L81 [2] Style Block (verbatim from the v3 library build — do not paraphrase)
 - L93 [2] Camera and Lighting Block (verbatim)
 - L104 [2] Negative Block (verbatim)
-- L116 [2] Judge rubric — you are the reviewer before delivery — After each generation, judge the image against every criterion. Maximum two {Maximum two attempts per subject.}
+- L116 [2] Judge rubric — you are the reviewer before delivery — After each generation, judge the image against every criterion. Maximum two {Maximum two attempts per subject.} <unresolved; approvals.json; micro-detail; upper-left>
 - L136 [2] After delivery — Reply in your own session with: the two file paths as delivered, the attempt
 
 ## docs/content-video-engine/prompts/PROBE-AGENT-LOOP-V2.md
 
-- L1 [1] Probe: Agent Generation Loop — Work Order v2 — Supersedes v1. What changed and why: v1 demanded native alpha at generation
+- L1 [1] Probe: Agent Generation Loop — Work Order v2 — Supersedes v1. What changed and why: v1 demanded native alpha at generation <two-attempt; self-judge; partial-alpha; best-of; true-alpha; anti-aliased; upper-left; unresolved; probe-agent-loop-v2.manifest.json; approvals.json; per-stage; generation_attempts>
 - L21 [2] Stage A — Generate (2 subjects, best-of, opaque allowed) — Subjects, style, camera/lighting, and negative blocks are unchanged from v1 {unchanged from v1; Background: a single flat solid ground is expected; Margin is a hard rule:}
-- L39 [2] Stage B — Extract — Matte each chosen source to a true-alpha cutout (rembg or equivalent — your
-- L49 [2] Stage C — Self-judge the cutout (max 2 extraction attempts per subject) — Judge the cutout, not the source: {cutout}
-- L67 [2] Stage D — Deliver — `probe-agent-loop-v2.manifest.json` in the target folder, same shape as v1 but {both}
-- L93 [2] After you — The engine's deterministic scan measures every cutout's alpha rim
+- L39 [2] Stage B — Extract — Matte each chosen source to a true-alpha cutout (rembg or equivalent — your <true-alpha>
+- L49 [2] Stage C — Self-judge the cutout (max 2 extraction attempts per subject) — Judge the cutout, not the source: {cutout} <anti-aliased; upper-left; unresolved>
+- L67 [2] Stage D — Deliver — `probe-agent-loop-v2.manifest.json` in the target folder, same shape as v1 but {both} <probe-agent-loop-v2.manifest.json; approvals.json; per-stage; generation_attempts; extraction_attempts>
+- L93 [2] After you — The engine's deterministic scan measures every cutout's alpha rim <partial-alpha>
 
 ## docs/content-video-engine/prompts/SLIDE-SEMANTIC-REGISTRATION.md
 
-- L1 [1] Work Order — Slide Semantic Registration + Figure Extraction — Register 86 approved source slides against a closed claim vocabulary and
-- L7 [2] Why this exists — Our narration is already semantically registered: every narration cue carries {verbatim}
-- L20 [2] Inputs in this directory — | File | What it is | {21 claims — a CLOSED set.}
+- L1 [1] Work Order — Slide Semantic Registration + Figure Extraction — Register 86 approved source slides against a closed claim vocabulary and <slide_semantic_registration.schema.json; claim_refs; on-screen; value; slide-index.json; slide_id; deck_id; sha256; image_file; claim-vocabulary.json; taxonomy.json; notes>
+- L7 [2] Why this exists — Our narration is already semantically registered: every narration cue carries {verbatim} <claim_refs; on-screen; value>
+- L20 [2] Inputs in this directory — | File | What it is | {21 claims — a CLOSED set.} <slide-index.json; slide_id; deck_id; sha256; image_file; claim-vocabulary.json; taxonomy.json; slide_semantic_registration.schema.json>
 - L30 [2] Output — One file per deck, in this directory:
-- L45 [2] Per slide, produce
-- L47 [3] 1. Frozen keys — copy, never alter — `slide_id` and `sha256` are copied verbatim from `slide-index.json`. They bind {Do not rename anything.}
-- L53 [3] 2. `claim_refs` — from the closed set only — Read `claim-vocabulary.json`. Match on the claim text, not the id slug. {text; and}
-- L65 [3] 3. `semantic_id` — the alias — - The claim segment must equal `claim_refs[0]`. That is what makes this a {must equal `claim_refs[0]`}
+- L45 [2] Per slide, produce <slide_id; sha256; slide-index.json; notes; claim_refs; claim-vocabulary.json; claim_refs[0]; "claim_refs": []; unmatched_reason; semantic_id; role; evidence>
+- L47 [3] 1. Frozen keys — copy, never alter — `slide_id` and `sha256` are copied verbatim from `slide-index.json`. They bind {Do not rename anything.} <slide_id; sha256; slide-index.json; notes>
+- L53 [3] 2. `claim_refs` — from the closed set only — Read `claim-vocabulary.json`. Match on the claim text, not the id slug. {text; and} <claim-vocabulary.json; claim_refs[0]; "claim_refs": []; unmatched_reason>
+- L65 [3] 3. `semantic_id` — the alias — - The claim segment must equal `claim_refs[0]`. That is what makes this a {must equal `claim_refs[0]`} <role; evidence; context; countercase; form; chart; table; diagram; timeline; quote; photo; composite>
 - L82 [3] 4. `headline` — One sentence, max 90 characters, stating what this slide asserts — in plain
-- L89 [3] 5. `figures[]` — verbatim numerals — Extract every printed number that states a fact. Exclude page numbers, axis {The `value` rule.; exactly as typeset}
-- L120 [3] 6. `taxonomy` and `confidence` — Taxonomy terms come from `taxonomy.json` only; omit an axis rather than invent
-- L127 [2] Self-check before writing each deck file — 1. Every `slide_id` and `sha256` matches `slide-index.json` exactly.
-- L136 [2] When finished — Write `approvals.json`:
+- L89 [3] 5. `figures[]` — verbatim numerals — Extract every printed number that states a fact. Exclude page numbers, axis {The `value` rule.; exactly as typeset} <18%; 0.18; 18 percent; $140B+; $140B; 140000000000; 2 to 3; 2-3; 2.5; ~5 years; 5 years; 3.0 : 1>
+- L120 [3] 6. `taxonomy` and `confidence` — Taxonomy terms come from `taxonomy.json` only; omit an axis rather than invent <taxonomy.json; low; stretched-match; Low-confidence; over-claiming; high>
+- L127 [2] Self-check before writing each deck file — 1. Every `slide_id` and `sha256` matches `slide-index.json` exactly. <slide_id; sha256; slide-index.json; claim-vocabulary.json; semantic_id; claim_refs[0]; figures[].value>
+- L136 [2] When finished — Write `approvals.json`: <approvals.json; closed-vocabulary; no-rename>
 
 ## docs/content-video-engine/README.md
 
-- L1 [1] Content video engine — document index — 43 files live here. Fewer than half are current doctrine. This index {Fewer than half are current doctrine.; DOCTRINE; RECORD; DEPRECATED}
-- L20 [2] Start here, not at doc 00 — The working doctrine is not in this folder. It is three files in {not; `DOCTRINE-CORE.md`; `OPERATOR-RULINGS.md`; `BUILD-PIPELINE.md`}
-- L36 [2] Building anything? Read PIPELINE.md first — [`PIPELINE.md`](PIPELINE.md) is the one-page map of every stage, what owns {There is already a player; Enumerate before you grep.}
-- L51 [2] To WRITE or REVIEW a script, start at the kit — [`patterns/SCRIPT-PATTERN-KIT.md`](patterns/SCRIPT-PATTERN-KIT.md) is the {Nothing in this folder pointed at it until 2026-08-29; the duty roster}
-- L84 [2] The ghost in the machine (the organising principle) — Operator, 2026-08-28: *"the voice, brand, style should translate across all {World view · voice · logic standards; Invariant.; 30 · 32 · 33 · 36 · 38 · 40; Production craft; 26 · 29 · 37 · 39}
-- L112 [2] DOCTRINE — the live set — | Doc | Subject | {26; 29; Start at "Current state" at the top; 30; 31; 32}
+- L1 [1] Content video engine — document index — 43 files live here. Fewer than half are current doctrine. This index {Fewer than half are current doctrine.; DOCTRINE; RECORD; DEPRECATED} <point-in-time; six-phase; never-list; Model-agnostic; system-instruction; one-page; SCRIPT-PATTERN-KIT; channel-specific; cross-scale; per-sentence; McKee; YouTube>
+- L20 [2] Start here, not at doc 00 — The working doctrine is not in this folder. It is three files in {not; `DOCTRINE-CORE.md`; `OPERATOR-RULINGS.md`; `BUILD-PIPELINE.md`} <six-phase; never-list; Model-agnostic; system-instruction>
+- L36 [2] Building anything? Read PIPELINE.md first — [`PIPELINE.md`](PIPELINE.md) is the one-page map of every stage, what owns {There is already a player; Enumerate before you grep.} <one-page>
+- L51 [2] To WRITE or REVIEW a script, start at the kit — [`patterns/SCRIPT-PATTERN-KIT.md`](patterns/SCRIPT-PATTERN-KIT.md) is the {Nothing in this folder pointed at it until 2026-08-29; the duty roster} <SCRIPT-PATTERN-KIT; channel-specific; cross-scale; per-sentence; McKee; YouTube; script-writer>
+- L84 [2] The ghost in the machine (the organising principle) — Operator, 2026-08-28: *"the voice, brand, style should translate across all {World view · voice · logic standards; Invariant.; 30 · 32 · 33 · 36 · 38 · 40; Production craft; 26 · 29 · 37 · 39} <lane-specific; world-building>
+- L112 [2] DOCTRINE — the live set — | Doc | Subject | {26; 29; Start at "Current state" at the top; 30; 31; 32} <Answer-format; ledger_page.v1>
 - L133 [2] Supporting specs (live, narrower scope) — 03 system architecture · 08 tooling alternatives · 11 archival {03; 08; 11; 13; 19; 24}
-- L139 [2] DEPRECATED — | Doc | Superseded by | {17; 29; 22; 37 §8; Partially superseded:; 16}
-- L150 [2] RECORD — not maintained — 00 brainstorm · 01 PRD · 02 content strategy · 04 {00; 01; 02; 04; 05; 06}
+- L139 [2] DEPRECATED — | Doc | Superseded by | {17; 29; 22; 37 §8; Partially superseded:; 16} <master-take; splice-repair>
+- L150 [2] RECORD — not maintained — 00 brainstorm · 01 PRD · 02 content strategy · 04 {00; 01; 02; 04; 05; 06} <YouTube; reference-pack; audio-driven; living-scene; graphic-silhouette; art-style; script-writer>
 - L168 [2] Rules for adding to this folder — 1. Amend before you number. A new ruling on an existing subject {Amend before you number.; A doc that stops being followed gets a STATUS banner; Numbering is append-only.}
 
 ## docs/content-video-engine/REMOTION-UI-HARVEST.md
 
-- L1 [1] remotion-ui harvest notes (operator review, 2026-08-31) — Component sources reviewed via the registry MCP. Targets `src/remotion/*`
-- L7 [2] Steal into OUR player template (technique, not React) — - line-chart-draw: the tip head + deposited dots. A glowing dot {line-chart-draw: the tip head + deposited dots.; comparison-bars: the callout is the conclusion.}
-- L19 [2] Species candidates (future episodes, build in whichever surface) — - bar-chart-race: the soft fractional rank. Rank = sum of sigmoids {bar-chart-race: the soft fractional rank.; hook-card (block): shorts/opener packaging.}
-- L32 [2] Doctrine echoes worth absorbing (doc 29 candidates) — - "Exits accelerate away; entrances decelerate in. Never ease-out an
-- L41 [2] Install commands (run in the p29 editor after harvest, NOT here) — npx remotion-ui@latest add bar-chart-race
-- L48 [2] Lesson (2026-09-01): harvest the idea, never replace the mechanism — The directional-wipe port (dd9e476) is the counter-example. It swapped
+- L1 [1] remotion-ui harvest notes (operator review, 2026-08-31) — Component sources reviewed via the registry MCP. Targets `src/remotion/*` <line-chart-draw; getPointAtLength; comparison-bars; bar-chart-race; surface-agnostic; memory-maker; index-weight; hook-card; Line-by-line; per-line; live-dot; balanceLines>
+- L7 [2] Steal into OUR player template (technique, not React) — - line-chart-draw: the tip head + deposited dots. A glowing dot {line-chart-draw: the tip head + deposited dots.; comparison-bars: the callout is the conclusion.} <getPointAtLength>
+- L19 [2] Species candidates (future episodes, build in whichever surface) — - bar-chart-race: the soft fractional rank. Rank = sum of sigmoids {bar-chart-race: the soft fractional rank.; hook-card (block): shorts/opener packaging.} <surface-agnostic; memory-maker; index-weight; Line-by-line; per-line; live-dot; balanceLines>
+- L32 [2] Doctrine echoes worth absorbing (doc 29 candidates) — - "Exits accelerate away; entrances decelerate in. Never ease-out an <ease-out; motion-tokens; per-row>
+- L41 [2] Install commands (run in the p29 editor after harvest, NOT here) — npx remotion-ui@latest add bar-chart-race <remotion-ui; bar-chart-race; comparison-bars; hook-card; line-chart-draw; animated-bar-chart>
+- L48 [2] Lesson (2026-09-01): harvest the idea, never replace the mechanism — The directional-wipe port (dd9e476) is the counter-example. It swapped <directional-wipe; counter-example; inset(); remotion-ui; cross-reveal; two-direction; over-stepped; steal-now; git log -S<constant>>
 
 ## docs/content-video-engine/RESEARCH-INDEX.md
 
-- L1 [1] Research extraction index — Every heading of every document in the research evidence bundle, with what happened to {Coverage is the proof of reading; 42–46}
-- L11 [2] Disposition vocabulary — | tag | meaning |
-- L22 [2] The reference layer — | doc | covers | primaries behind it |
-- L35 [2] Declared conflicts and rejections — These are the load-bearing disagreements found by reading the primaries against each {A conflict can only be found by reading both sides.; RESOLVED — `strength` vs `intensity` in the parallax runner.}
-- L86 [2] Full disposition table
+- L1 [1] Research extraction index — Every heading of every document in the research evidence bundle, with what happened to {Coverage is the proof of reading; 42–46} <EXTRACTED -> NN; RECORD; DUPLICATE; PRIOR; FILTERED OUTPUT; REJECTED; DRAWING-KINETICS; closed-form; SCENE-GRAPH-AND-TRANSFORM; Z-stack; INK-AND-SURFACE; Kubelka-Munk>
+- L11 [2] Disposition vocabulary — | tag | meaning | <EXTRACTED -> NN; RECORD; DUPLICATE; PRIOR; FILTERED OUTPUT; REJECTED>
+- L22 [2] The reference layer — | doc | covers | primaries behind it | <DRAWING-KINETICS; closed-form; SCENE-GRAPH-AND-TRANSFORM; Z-stack; INK-AND-SURFACE; Kubelka-Munk; coffee-ring; PARALLAX-AND-PLATE-MOTION; multi-plane; REFERENCE-RHYTHM; FINDINGS-TO-CHECKS; THE-FIGURE-AND-THE-GROUND>
+- L35 [2] Declared conflicts and rejections — These are the load-bearing disagreements found by reading the primaries against each {A conflict can only be found by reading both sides.; RESOLVED — `strength` vs `intensity` in the parallax runner.} <load-bearing; base_flex.py:25; feature; None; base_flex.py:103; if feature is not None:; modulate_param; depthflow_motion_presets.py:13; vitl_fp16; vitl_fp32; ViT-Large; ViT>
+- L86 [2] Full disposition table <YouTube; over-count; operator-known; Closed-Form; Wall-Clock; interpolate-path; Z-Stacking; Slot-Swapping; balance-scale; Word-Gap; 03_tutorial_master_prompt.txt; RULE-abstract-to-concrete>
 - L89 [3] `00_README_INDEX.md` — 2 headings — | heading | disposition |
-- L95 [3] `01_wealth_logic_production_report.md` — 18 headings — | heading | disposition |
-- L117 [3] `02_drawing_engine_and_transforms_research.md` — 29 headings — | heading | disposition |
-- L150 [3] `03_tutorial_master_prompt.txt` — 21 headings — | heading | disposition |
+- L95 [3] `01_wealth_logic_production_report.md` — 18 headings — | heading | disposition | <YouTube; over-count; operator-known>
+- L117 [3] `02_drawing_engine_and_transforms_research.md` — 29 headings — | heading | disposition | <Closed-Form; Wall-Clock; interpolate-path; Z-Stacking; Slot-Swapping; balance-scale; Word-Gap>
+- L150 [3] `03_tutorial_master_prompt.txt` — 21 headings — | heading | disposition | <RULE-abstract-to-concrete; Pre-loaded>
 - L175 [3] `04_shot_ledger_100_cuts.md` — 1 headings — | heading | disposition |
-- L180 [3] `05_comfyui_parallax_technical_standards.md` — 16 headings — | heading | disposition |
-- L200 [3] `06_unified_ledger_drawing_engine_and_comfy_spec.md` — 21 headings — | heading | disposition |
-- L225 [3] `07_academic_literature_drawing_and_2_5d_animation_engine.md` — 26 headings — | heading | disposition |
-- L255 [3] `08_answers_animation_craft_brief.md` — 42 headings — | heading | disposition |
-- L301 [3] `09_2d_and_2_5d_body_animation_object_handling_and_grounding.md` — 38 headings — | heading | disposition |
-- L343 [3] `10_generative_video_tools_and_cross_platform_composition.md` — 28 headings — | heading | disposition |
-- L375 [3] `MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md` — 32 headings — | heading | disposition |
-- L411 [3] `MASTER_RESEARCH_INDEX.md` — 32 headings — | heading | disposition |
+- L180 [3] `05_comfyui_parallax_technical_standards.md` — 16 headings — | heading | disposition | <Root-Cause; Depthflow; Two-Plane>
+- L200 [3] `06_unified_ledger_drawing_engine_and_comfy_spec.md` — 21 headings — | heading | disposition | <Ray-Marcher; Depthflow; Depth Anything v2; SOURCES-TO-VERIFY; Multi-Plane; SAM 2; LaMa; ComfyUI; Mask-Pinned; LTX-Video 2B DiT; LTX-Video; RULE-the-page-is-the-ground>
+- L225 [3] `07_academic_literature_drawing_and_2_5d_animation_engine.md` — 26 headings — | heading | disposition | <four-pillar; Two-Thirds; Minimum-Jerk; Arc-Length; Deegan et al.; Chu & Tai 2005; Kubelka-Munk; Transfer; Cohen-Or; Levin 2000; Local-Global; Sorkine & Alexa 2007>
+- L255 [3] `08_answers_animation_craft_brief.md` — 42 headings — | heading | disposition | <VERDICT-research-brief-animation-craft; re-sourced; High-Leverage; RE-ASK; Drawing-On; Secondary-Motion; Gap-Cut; L-Cuts; J-Cuts; Drawing-Engine; Eye-Trace; Non-Decorative>
+- L301 [3] `09_2d_and_2_5d_body_animation_object_handling_and_grounding.md` — 38 headings — | heading | disposition | <three-track; three-quarters; Hand-Prop; Cutkosky & Feix; HandSlot; Minimum-Jerk; Re-Parenting; Two-Handed; master-slave; Zero-Slip; Ground-Plane; Dual-Component>
+- L343 [3] `10_generative_video_tools_and_cross_platform_composition.md` — 28 headings — | heading | disposition | <Cross-Platform; Wan-Video; Fun-InP; InP; DiT; Wan-VAE; umT5; CLIP-Vision; TeaCache; LTX-Video; Spatio-Temporal; RoPE>
+- L375 [3] `MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md` — 32 headings — | heading | disposition | <three-styles-on-one-canvas; Closed-Form; Production-Ready; SceneNode.ts; useAnalyticSpring.ts; DynamicBalanceScale.tsx; Breath-Gap; ComfyUI; Three-Tier; ADOPT-AS-OURS; candidate-doctrine; log-normal>
+- L411 [3] `MASTER_RESEARCH_INDEX.md` — 32 headings — | heading | disposition | <Slot-Swapped; ComfyUI; Ray-Marcher; LaMa; LTX-Video; DiT; Non-Rigid; Second-Order; Audio-Visual; Quick-Lookup>
 
 ## docs/content-video-engine/RULE-abstract-to-concrete.md
 
-- L1 [1] The plate throws the punch — abstract-to-concrete, 2026-09-04 — Adopted from the doodle-channel master prompt's rule 5, which is the one genuinely {background; action}
+- L1 [1] The plate throws the punch — abstract-to-concrete, 2026-09-04 — Adopted from the doodle-channel master prompt's rule 5, which is the one genuinely {background; action} <doodle-channel; plate-05-tokyo-dawn-desk; left-to-right; globe-and-creatures; acoustic-gap; world; actor; prop; mechanism; fully-dressed; muted-caption; stage-gated>
 - L17 [2] The proof, from our own work — The Tokyo short's ring line is already a physicalised metaphor, written: {already a physicalised metaphor, written; The plate I authored for it is `plate-05-tokyo-dawn-desk` —}
 - L29 [2] The rule — > A plate depicts what the sentence MEANS, not where it was said. {A plate depicts what the sentence MEANS, not where it was sa; cover the caption. Can you still tell what claim is being ma}
-- L39 [2] Frame types that carry a punch — Adapted from the source's rule 8, kept where it fits our register and dropped where it {Personified mechanism; the strongest one for us.; Concept object}
-- L55 [2] What this unlocks with the ledger page — the operator's structural point — > *"It was hard to move from narration plate to narration plate while carrying charts. {Before:; Now:; the page itself becomes the chart}
-- L89 [2] Execute at the PROP tier, not the world tier — Checked against Wealth Logic's own frames (`COMPOSITING-VERDICT.md`). Their frame for {four asset types on an empty white ground.; Props compose. Worlds don't.}
+- L39 [2] Frame types that carry a punch — Adapted from the source's rule 8, kept where it fits our register and dropped where it {Personified mechanism; the strongest one for us.; Concept object} <left-to-right; globe-and-creatures>
+- L55 [2] What this unlocks with the ledger page — the operator's structural point — > *"It was hard to move from narration plate to narration plate while carrying charts. {Before:; Now:; the page itself becomes the chart} <acoustic-gap>
+- L89 [2] Execute at the PROP tier, not the world tier — Checked against Wealth Logic's own frames (`COMPOSITING-VERDICT.md`). Their frame for {four asset types on an empty white ground.; Props compose. Worlds don't.} <actor; mechanism; fully-dressed>
 - L114 [2] Consequences for the shot table — 1. Every narration plate gets a metaphor brief, not a setting brief. The claim {Every narration plate gets a metaphor brief, not a setting b; Metaphor plate → ledger page is the default pair.; A plate that survives the muted-caption test is flagged}
-- L122 [2] What else is in that master prompt — Almost nothing for us. It is a stage-gated wizard (topic ideas → script → prompts → {Its rule 7 — "hold scenes across consecutive timestamps, do; It has no evidence discipline at all.}
+- L122 [2] What else is in that master prompt — Almost nothing for us. It is a stage-gated wizard (topic ideas → script → prompts → {Its rule 7 — "hold scenes across consecutive timestamps, do; It has no evidence discipline at all.} <stage-gated>
 
 ## docs/content-video-engine/RULE-the-page-is-the-ground.md
 
-- L1 [1] The page is our ground — how props-compose works in OUR style, 2026-09-04 — Wealth Logic composes props on empty white. We are not going to adopt white: their {We already built it. The ledger page is our white.}
+- L1 [1] The page is our ground — how props-compose works in OUR style, 2026-09-04 — Wealth Logic composes props on empty white. We are not going to adopt white: their {We already built it. The ledger page is our white.} <Parallax-capable; frame_0026; record-document; line; bars; race; decline; progress; non-chart; object; channel-walled; Shot-table>
 - L11 [2] The move — E22 fixed the page: cream ground, charcoal filling to the deckle, the line, then the {a chart surface; working surface; Metaphors are drawn ON the page, in ink, on the cream. Then}
 - L24 [2] Why this is better than copying them, not just different — | | their white | our cream page | {one surface transforming; starts inside the acoustic gap; structurally impossible to break}
-- L37 [2] The three tiers, and what each is for — WORLD (woodblock vox newsprint — 71 approved plates). Establishing beats and the big {WORLD (woodblock vox newsprint — 71 approved plates).; Three to five per episode, not thirteen.; PAGE (cream ledger).; ACTOR (@Mike, full colour).}
-- L54 [2] What has to be built — `ledger_page.py` currently emits five variants — `line`, `bars`, `race`, `decline`, {all of them charts.; A non-chart page variant; A prop library at the page tier}
-- L70 [2] What this changes for Tokyo — The revision I wrote asked for six new world plates. On this architecture: {six new world plates; transforms into; `ev-hedge-then-now-v1`; keep as a WORLD plate}
+- L37 [2] The three tiers, and what each is for — WORLD (woodblock vox newsprint — 71 approved plates). Establishing beats and the big {WORLD (woodblock vox newsprint — 71 approved plates).; Three to five per episode, not thirteen.; PAGE (cream ledger).; ACTOR (@Mike, full colour).} <Parallax-capable; frame_0026; record-document>
+- L54 [2] What has to be built — `ledger_page.py` currently emits five variants — `line`, `bars`, `race`, `decline`, {all of them charts.; A non-chart page variant; A prop library at the page tier} <line; bars; race; decline; progress; object; channel-walled; Shot-table>
+- L70 [2] What this changes for Tokyo — The revision I wrote asked for six new world plates. On this architecture: {six new world plates; transforms into; `ev-hedge-then-now-v1`; keep as a WORLD plate} <ev-japan-holdings-v1; ev-discount-rate-v1>
 - L86 [2] What we keep that no reference has — Evidence discipline. Every figure on those pages traces to a series and a fetch date.
 
 ## docs/content-video-engine/SCRIPT-CONTEXT-COMBINED.md
 
-- L1 [1] DOCTRINE CORE — portable content-operation context — Model-agnostic; paste whole into any system-instruction or rules box
-- L8 [2] OPERATION — Faceless YouTube production across three channels. One animated host {MONEY PHYSICS; BUILDING MONEY; personal and business finance}
+- L1 [1] DOCTRINE CORE — portable content-operation context — Model-agnostic; paste whole into any system-instruction or rules box <Model-agnostic; system-instruction; YouTube; market-watchers; agreeing-but-relocating; high-paid; information-systems; trade-work; combat-sports; scene-setting; map-not-territory; AND-THEN>
+- L8 [2] OPERATION — Faceless YouTube production across three channels. One animated host {MONEY PHYSICS; BUILDING MONEY; personal and business finance} <YouTube; market-watchers; agreeing-but-relocating; high-paid; information-systems; trade-work; combat-sports>
 - L33 [2] NARRATOR — Biography is material, never trophy: homeless teen who climbed out; bank
-- L49 [2] RETENTION CLOCK (judged by ear, never on the page) — 0–3s the hook itself, first sentence, no atmosphere or scene-setting.
-- L58 [2] ARCHITECTURE (six phases) — Open and close are absolute 60–90s at any runtime; midpoint pinned {P1 OPEN}
-- L112 [2] DEVICES — The dual engine is master: anecdote (action raising unresolved {dual engine is master; Triads; Anaphora; Terminal stress}
-- L129 [2] SENTENCE GATES (every drafted sentence passes all ten) — 1 one idea · 2 active, concrete subject, never an agent-hiding passive
-- L142 [2] ANSWER FORMAT (Money Physics reactions) — We never compete on the source's chart-reading. Their evidence is {their evidence, our relocation.}
+- L49 [2] RETENTION CLOCK (judged by ear, never on the page) — 0–3s the hook itself, first sentence, no atmosphere or scene-setting. <scene-setting>
+- L58 [2] ARCHITECTURE (six phases) — Open and close are absolute 60–90s at any runtime; midpoint pinned {P1 OPEN} <map-not-territory; AND-THEN; HEAD-FAKE; promise-tease; mid-video; pre-pivot; re-promises; pause-framed>
+- L112 [2] DEVICES — The dual engine is master: anecdote (action raising unresolved {dual engine is master; Triads; Anaphora; Terminal stress} <single-engine; scale-free; [pre-key]; [post-key]; mid-video; grand-payoff>
+- L129 [2] SENTENCE GATES (every drafted sentence passes all ten) — 1 one idea · 2 active, concrete subject, never an agent-hiding passive <agent-hiding; chart-reads; page-isms; seed-locked>
+- L142 [2] ANSWER FORMAT (Money Physics reactions) — We never compete on the source's chart-reading. Their evidence is {their evidence, our relocation.} <chart-reading; viewer-scale>
 - L152 [2] TITLES + THUMBNAILS = ONE CLICK-CONTRACT — Judge them together. Title: tension in the first ~40 chars, ≤~55 total; {Thumbnails sell the episode's question or thesis — never its}
-- L163 [2] PRODUCTION AWARENESS — Narration is synthesized: numbers as spoken words, exact numerals on
+- L163 [2] PRODUCTION AWARENESS — Narration is synthesized: numbers as spoken words, exact numerals on <on-screen; in-world; word-timed; SOURCES-TO-VERIFY>
 - L179 [2] NEVER — Greetings · "in this video" · "let that sink in" · stock filler · bait
-- L191 [1] VOICE PACK — portable brand voice by exemplar — Third portable file, loaded with `DOCTRINE-CORE.md` and
-- L196 [2] Why this file is mostly examples — Voice does not transfer as description. A model handed "direct, {exemplars; contrast pairs}
-- L218 [2] 1. The calibration pair (read before writing anything) — Same assignment, same facts, same person. One was rejected, one shipped. {REJECTED.; ACCEPTED:}
-- L250 [2] 2. Approved production lines, by function — From Script B ("Steel and Paper"), which won a seed-locked A/B by ear {MICROHOOK; PROMISE}
-- L302 [2] 3. What the exemplars are doing (the patterns worth naming) — - Abstractions get cashed inside the sentence. Never "enormous {Abstractions get cashed inside the sentence.; The opponent is a mechanism, never a person.; Dissent arrives after agreement, on the record.}
-- L330 [2] 4. Ear-judgments converted to text rules — Every one of these came from hearing a failure, so apply them even when {The first sentence is the grab.; One idea per sentence; one cut per sentence.; Attribution before assertion.; Active agents, named.}
-- L360 [2] 5. Hard bans (voice-specific; the never-list in CORE also applies) — Book-intro register (expository, past tense, paragraph-shaped) ·
+- L191 [1] VOICE PACK — portable brand voice by exemplar — Third portable file, loaded with `DOCTRINE-CORE.md` and <Model-agnostic; ear-judgments; text-checkable; viewer-facing; paragraph-shaped; seed-locked; In 1845; quarter-billion; pause-framed; sold-out; de-risk; In 1850>
+- L196 [2] Why this file is mostly examples — Voice does not transfer as description. A model handed "direct, {exemplars; contrast pairs} <ear-judgments; text-checkable>
+- L218 [2] 1. The calibration pair (read before writing anything) — Same assignment, same facts, same person. One was rejected, one shipped. {REJECTED.; ACCEPTED:} <viewer-facing; paragraph-shaped>
+- L250 [2] 2. Approved production lines, by function — From Script B ("Steel and Paper"), which won a seed-locked A/B by ear {MICROHOOK; PROMISE} <seed-locked; In 1845; quarter-billion; pause-framed; sold-out; de-risk; In 1850>
+- L302 [2] 3. What the exemplars are doing (the patterns worth naming) — - Abstractions get cashed inside the sentence. Never "enormous {Abstractions get cashed inside the sentence.; The opponent is a mechanism, never a person.; Dissent arrives after agreement, on the record.} <quarter-billion; non-tribal; de-risk>
+- L330 [2] 4. Ear-judgments converted to text rules — Every one of these came from hearing a failure, so apply them even when {The first sentence is the grab.; One idea per sentence; one cut per sentence.; Attribution before assertion.; Active agents, named.} <scene-setting; agent-hiding; on-screen; [pre-key]; [post-key]>
+- L360 [2] 5. Hard bans (voice-specific; the never-list in CORE also applies) — Book-intro register (expository, past tense, paragraph-shaped) · <Book-intro; paragraph-shaped; colon-stacking>
 - L373 [2] 6. Calibration protocol — test a model before trusting it — Before a new model (or a new session) writes production copy, have it {Atmosphere creeping into sentence one; Credentials promoted to their own sentence; Abstractions left uncashed}
-- L390 [2] 7. Maintenance — This pack is downstream of evidence, never a substitute for it. When the
+- L390 [2] 7. Maintenance — This pack is downstream of evidence, never a substitute for it. When the <re-derive>
 
 ## docs/harness/AGENT_SELF_EVALUATION_GUIDE.md
 
-- L1 [1] 🤖 Agent Self-Evaluation & Adoption Guide — > Instructions for the AI Agent reading this file: {Instructions for the AI Agent reading this file:}
-- L8 [2] Stage 1: Autonomous Diagnostic Self-Audit — Review your current repository against these 5 diagnostic questions: {Do your subagents or tool executions cause context window bl; Do you lack deterministic structural linting for codebase in; Do you lack an automated evaluation bench to test your own r}
-- L25 [2] Stage 2: Select Your Adoption Profile — Match your repository's primary focus to one of 4 profiles: {`web` (Web Apps, SaaS, Fullstack):; `video` (Video Engines, Motion, Media):; `api` (Backend Services, APIs, Microservices):; `full` (Monorepos & Multi-Lane Platforms):}
-- L36 [2] Stage 3: 1-Command Adoption Playbook — To apply this harness to your active repository without breaking existing code: {Execute the Stamping Tool:; Verify AST-Grep Structural Rules:; Run the Deterministic Evaluation Benchmark:; Document Repository Invariants in `.claude/memory.md`:}
-- L57 [2] Stage 4: Post-Adoption Invariants — Once adopted, you MUST adhere to these non-negotiable rules: {Never dump raw search/scrape text into main context:; Never mutate database schema without a migration:; Pre-plan non-trivial changes in `implementation_plan.md`:}
+- L1 [1] 🤖 Agent Self-Evaluation & Adoption Guide — > Instructions for the AI Agent reading this file: {Instructions for the AI Agent reading this file:} <Self-Audit; Disk-as-Bus; AST-Grep; Intent-Driven; Save-Stating; web; SaaS; video; VideoDB; api; full; Multi-Lane>
+- L8 [2] Stage 1: Autonomous Diagnostic Self-Audit — Review your current repository against these 5 diagnostic questions: {Do your subagents or tool executions cause context window bl; Do you lack deterministic structural linting for codebase in; Do you lack an automated evaluation bench to test your own r} <Disk-as-Bus; AST-Grep; Intent-Driven; Save-Stating>
+- L25 [2] Stage 2: Select Your Adoption Profile — Match your repository's primary focus to one of 4 profiles: {`web` (Web Apps, SaaS, Fullstack):; `video` (Video Engines, Motion, Media):; `api` (Backend Services, APIs, Microservices):; `full` (Monorepos & Multi-Lane Platforms):} <VideoDB>
+- L36 [2] Stage 3: 1-Command Adoption Playbook — To apply this harness to your active repository without breaking existing code: {Execute the Stamping Tool:; Verify AST-Grep Structural Rules:; Run the Deterministic Evaluation Benchmark:; Document Repository Invariants in `.claude/memory.md`:} <project-specific>
+- L57 [2] Stage 4: Post-Adoption Invariants — Once adopted, you MUST adhere to these non-negotiable rules: {Never dump raw search/scrape text into main context:; Never mutate database schema without a migration:; Pre-plan non-trivial changes in `implementation_plan.md`:} <non-negotiable>
 
 ## docs/harness/HARNESS_EVALUATION_CHECKLIST.md
 
-- L1 [1] 📋 Repository Agentic Maturity Checklist — Use this scorecard to rate any codebase's agentic readiness before and after adopting the 2026 Harness.
-- L7 [2] Maturity Scorecard (100 pts Total) — | Dimension | Evaluation Criteria | Max Pts | Target | {1. Tool & Context Efficiency; 2. Deterministic Quality Gating; 3. Continuous Evaluation Bench}
-- L19 [2] Grading Scale — - 80 – 100 pts: 🟢 Production Grade 2026 Agentic Harness (Deterministic, zero-bloat, resilient). {80 – 100 pts:; Production Grade 2026 Agentic Harness; 50 – 79 pts:; Partial Harness; < 50 pts:; Unstructured Legacy Agent}
+- L1 [1] 📋 Repository Agentic Maturity Checklist — Use this scorecard to rate any codebase's agentic readiness before and after adopting the 2026 Harness. <Disk-as-Bus; AST-Grep; sgconfig.yml; Intent-driven; save-stating; --dry-run; single-coordinator; Grade 2026; zero-bloat>
+- L7 [2] Maturity Scorecard (100 pts Total) — | Dimension | Evaluation Criteria | Max Pts | Target | {1. Tool & Context Efficiency; 2. Deterministic Quality Gating; 3. Continuous Evaluation Bench} <Disk-as-Bus; AST-Grep; sgconfig.yml; Intent-driven; save-stating; --dry-run; single-coordinator>
+- L19 [2] Grading Scale — - 80 – 100 pts: 🟢 Production Grade 2026 Agentic Harness (Deterministic, zero-bloat, resilient). {80 – 100 pts:; Production Grade 2026 Agentic Harness; 50 – 79 pts:; Partial Harness; < 50 pts:; Unstructured Legacy Agent} <zero-bloat>
 
 ## docs/harness/README.md
 
-- L1 [1] 🏛️ 2026 Agentic Engineering Standards & Harness System — A portable, deterministic operating harness for autonomous AI coding agents (Antigravity, Claude Code, Codex, Cursor).
-- L7 [2] What This Harness Solves — | Traditional Agent Pain Point | 2026 Harness Solution | {Context Window Exhaustion:; "Disk-as-Bus" Isolation:; Silent Invariant Violations:; Dual-Layer AST-Grep Gating:; No Regression Defense:}
-- L19 [2] Stamping Onto Any Repository — Run the self-contained stamping CLI:
-- L27 [3] Profiles Available — - `full` — All 33 curated skills, full subagent library, AST-grep gates, and 5-journey eval suite. {`full`; `web`; `video`; `api`}
-- L35 [2] Documentation for Agents — - [Agent Self-Evaluation & Adoption Guide](./AGENT_SELF_EVALUATION_GUIDE.md) — Step-by-step instructions for an agent in an external repo to evaluate and adopt {[Agent Self-Evaluation & Adoption Guide](./AGENT_SELF_EVALUA; [Harness Evaluation Checklist](./HARNESS_EVALUATION_CHECKLIS}
+- L1 [1] 🏛️ 2026 Agentic Engineering Standards & Harness System — A portable, deterministic operating harness for autonomous AI coding agents (Antigravity, Claude Code, Codex, Cursor). <Disk-as-Bus; multi-tenant; Dual-Layer; AST-Grep; syntax-tree; problem-solving; in-progress; Intent-Driven; Save-Stating; in-flight; Multi-Agent; Single-Coordinator>
+- L7 [2] What This Harness Solves — | Traditional Agent Pain Point | 2026 Harness Solution | {Context Window Exhaustion:; "Disk-as-Bus" Isolation:; Silent Invariant Violations:; Dual-Layer AST-Grep Gating:; No Regression Defense:} <multi-tenant; syntax-tree; problem-solving; in-progress; Intent-Driven; Save-Stating; in-flight; Multi-Agent; Single-Coordinator>
+- L19 [2] Stamping Onto Any Repository — Run the self-contained stamping CLI: <self-contained; full; AST-grep; web; video; VideoDB; api>
+- L27 [3] Profiles Available — - `full` — All 33 curated skills, full subagent library, AST-grep gates, and 5-journey eval suite. {`full`; `web`; `video`; `api`} <AST-grep; VideoDB>
+- L35 [2] Documentation for Agents — - [Agent Self-Evaluation & Adoption Guide](./AGENT_SELF_EVALUATION_GUIDE.md) — Step-by-step instructions for an agent in an external repo to evaluate and adopt {[Agent Self-Evaluation & Adoption Guide](./AGENT_SELF_EVALUA; [Harness Evaluation Checklist](./HARNESS_EVALUATION_CHECKLIS} <Step-by-step>
 
 ## docs/portable/BUILD-PIPELINE.md
 
-- L1 [1] BUILD PIPELINE — portable contract — Model-agnostic. Paste this into any assistant — Gemini, GPT, a fresh Claude —
+- L1 [1] BUILD PIPELINE — portable contract — Model-agnostic. Paste this into any assistant — Gemini, GPT, a fresh Claude — <Model-agnostic; Claude-specific; *.words.json; semantic; context; self-contained; word-timed; re-encode; speed-ups; Em-dashes; micro-pauses; channel>
 - L13 [2] The one rule that prevents the common failure — Enumerate before you search. List the directory and read the index {Enumerate before you search.; Before building any tool or generating any asset, check whet}
-- L24 [2] Stages — | # | Stage | Input | Output | {SHOT TABLE — AUTHORED}
-- L37 [2] Stage 4 → 5: the take is ground truth — Word timings decide everything downstream. Never resample captions onto {Never resample captions onto beat boundaries; two chained parts; last word end; 1.2s settle; one re-encode pass}
-- L59 [2] The plate library — One index of every generated plate: `sources/PLATE-LIBRARY.json` — id, {semantic; Search it by meaning before generating anything.; Channels are identity walls, not tags}
-- L69 [2] Stage 6 is AUTHORED — there is no allocator — Someone reads the narration beat by beat and chooses the plate that depicts {Read those, never filenames.; The density rules below are a CHECKLIST on authored work, no}
+- L24 [2] Stages — | # | Stage | Input | Output | {SHOT TABLE — AUTHORED} <*.words.json; semantic; context; self-contained>
+- L37 [2] Stage 4 → 5: the take is ground truth — Word timings decide everything downstream. Never resample captions onto {Never resample captions onto beat boundaries; two chained parts; last word end; 1.2s settle; one re-encode pass} <word-timed; speed-ups; Em-dashes; micro-pauses>
+- L59 [2] The plate library — One index of every generated plate: `sources/PLATE-LIBRARY.json` — id, {semantic; Search it by meaning before generating anything.; Channels are identity walls, not tags} <martial-arts; --channel <name>>
+- L69 [2] Stage 6 is AUTHORED — there is no allocator — Someone reads the narration beat by beat and chooses the plate that depicts {Read those, never filenames.; The density rules below are a CHECKLIST on authored work, no} <semantic; context>
 - L88 [2] The plate cadence (the default pattern) — One shape, repeated. It is easy to produce, easy to check, and it is what the {Two evidence pieces per plate, two badges each, a breath bet; one big piece; 12-20s plate -> two pieces.; breath 1.1s; savour 2.2s; Cannot field two -> one solo card, wide.}
 - L117 [2] The density CHECK (operator rule) — run it against the authored table — - One plate per 12 seconds of runtime, minimum. {One plate per 12 seconds of runtime, minimum.; 20 seconds is the absolute ceiling; two strong evidence pieces of different species; per bare stretch; Plates tile continuously.}
-- L129 [2] Evidence — what to reach for when authoring — Dock each object to the sentence whose claim it proves. No anchor in the {the sentence whose claim it proves; Six species, and variety is the density mechanism:; different species}
-- L147 [2] Stage 7: motion — | Element | Value | {0.88 → 1.00; Never scale from zero.; Settles are slow, moves are fast.}
-- L165 [2] Stage 8: render contract — The player takes a timeline document and an asset map: {Assets are base64-embedded, not referenced by path.; `audio` is one joined file}
-- L179 [3] `scene_evidence_timeline.v1` — A scene owns its world plate and that plate's Ken Burns move. Docks carry
-- L199 [2] Captions — a hard gate — > A caption that swaps as a static block is a defect. {A caption that swaps as a static block is a defect.; One fixed lower-third anchor.; No pill, no panel.; Kinetic:; Quiet mode:; no punch-in}
-- L217 [2] Palette (validated, dark surface `#16181c`) — crimson `#e5484d` · teal `#1fa892` · amber `#c98500` · cobalt `#4a7fd6` {Two tiers.}
-- L230 [2] Verify before reporting — 1. Every asset resolves and opens as a valid image. {and opens as a valid image; Zero uncovered frames; Open it and look.}
-- L241 [2] The recorded-take chain (2026-08-30 — first full run) — Order: whisper gate → defended join → timeline → edit pauses → retime → {topic-exit audit; A retime is half a migration.}
+- L129 [2] Evidence — what to reach for when authoring — Dock each object to the sentence whose claim it proves. No anchor in the {the sentence whose claim it proves; Six species, and variety is the density mechanism:; different species} <figure-verified>
+- L147 [2] Stage 7: motion — | Element | Value | {0.88 → 1.00; Never scale from zero.; Settles are slow, moves are fast.} <expo-out; cubic-bezier(.16,1,.3,1); translateY; quart-in-out; Scale-from-zero>
+- L165 [2] Stage 8: render contract — The player takes a timeline document and an asset map: {Assets are base64-embedded, not referenced by path.; `audio` is one joined file} <path-referenced; __audio__; scene_evidence_timeline.v1; caption_pages>
+- L179 [3] `scene_evidence_timeline.v1` — A scene owns its world plate and that plate's Ken Burns move. Docks carry <caption_pages>
+- L199 [2] Captions — a hard gate — > A caption that swaps as a static block is a defect. {A caption that swaps as a static block is a defect.; One fixed lower-third anchor.; No pill, no panel.; Kinetic:; Quiet mode:; no punch-in} <power3.out; Word-by-word; token.start <= now < token.end>
+- L217 [2] Palette (validated, dark surface `#16181c`) — crimson `#e5484d` · teal `#1fa892` · amber `#c98500` · cobalt `#4a7fd6` {Two tiers.} <#e5484d; #1fa892; #c98500; #4a7fd6; #f2f2ef; #b9bcc4; #8b8f98; de-emphasis; #6b6f78; #24262b; #33363d; #F5B72E>
+- L230 [2] Verify before reporting — 1. Every asset resolves and opens as a valid image. {and opens as a valid image; Zero uncovered frames; Open it and look.} <{{placeholders}}; bare-plate>
+- L241 [2] The recorded-take chain (2026-08-30 — first full run) — Order: whisper gate → defended join → timeline → edit pauses → retime → {topic-exit audit; A retime is half a migration.} <close-region; re-authoring; enter-moments; re-staging; re-sync; same-slot; on-card>
 
 ## docs/portable/CHART-DISCIPLINE.md
 
-- L1 [1] CHART DISCIPLINE — portable — Model-agnostic, renderer-agnostic. A fresh agent with only this repo
+- L1 [1] CHART DISCIPLINE — portable — Model-agnostic, renderer-agnostic. A fresh agent with only this repo <Model-agnostic; renderer-agnostic; Template-enforced; late-fading; self-contained; x-baseline; double-transform; glyph-squeeze; mid-word; Mid-number; Wrong-origin; auto-synced>
 - L9 [2] The acceptance gate (operator ruling) — "The charts need to fully communicate their own story without {"The charts need to fully communicate their own story withou}
-- L16 [2] The ten failure classes (each shipped past a linter once) — 1. Anonymous reference line — every series is named, dashed {Anonymous reference line; Accidental annotation; Dateless time axis}
-- L57 [2] Standing analyst-grade rules (doc 29 §9.22) — Lines not bar-trios for series; y-format + units; x-ticks in their own
-- L67 [2] Validation doctrine — Never trust a detector, effect, or fix not validated against a known
+- L16 [2] The ten failure classes (each shipped past a linter once) — 1. Anonymous reference line — every series is named, dashed {Anonymous reference line; Accidental annotation; Dateless time axis} <late-fading; self-contained; x-baseline; double-transform; glyph-squeeze; mid-word; Mid-number; Wrong-origin; auto-synced; narration-keyed; re-showing>
+- L57 [2] Standing analyst-grade rules (doc 29 §9.22) — Lines not bar-trios for series; y-format + units; x-ticks in their own <bar-trios; y-format; x-ticks; top-left; right-aligned; event-bar>
+- L67 [2] Validation doctrine — Never trust a detector, effect, or fix not validated against a known <ground-truth; known-real>
 
 ## docs/portable/DOCTRINE-CORE.md
 
-- L1 [1] DOCTRINE CORE — portable content-operation context — Model-agnostic; paste whole into any system-instruction box (fits a {THE ORDER OF WHAT MATTERS (E27, 2026-09-03).}
-- L14 [2] OPERATION — Faceless YouTube production across three channels. One animated host {The world view, the voice, and the logic standards are INVAR; delivery style; evidence precision; MONEY PHYSICS}
+- L1 [1] DOCTRINE CORE — portable content-operation context — Model-agnostic; paste whole into any system-instruction box (fits a {THE ORDER OF WHAT MATTERS (E27, 2026-09-03).} <Model-agnostic; system-instruction; out-produced; YouTube; market-watchers; agreeing-but-relocating; high-paid; information-systems; trade-work; combat-sports; scene-setting; map-not-territory>
+- L14 [2] OPERATION — Faceless YouTube production across three channels. One animated host {The world view, the voice, and the logic standards are INVAR; delivery style; evidence precision; MONEY PHYSICS} <YouTube; market-watchers; agreeing-but-relocating; high-paid; information-systems; trade-work; combat-sports>
 - L40 [2] NARRATOR — Biography is material, never trophy: homeless teen who climbed out; bank
-- L56 [2] RETENTION CLOCK (judged by ear, never on the page) — 0–3s the hook itself, first sentence, no atmosphere or scene-setting.
-- L65 [2] ARCHITECTURE (six phases) — Spine: `docs/content-video-engine/patterns/FULL-VIDEO-MAP.md` (classical {P1 OPEN}
-- L122 [2] DEVICES — The dual engine is master: anecdote (action raising unresolved {dual engine is master; Triads; Anaphora; Terminal stress}
-- L139 [2] SENTENCE GATES (every drafted sentence passes all ten) — 1 one idea · 2 active, concrete subject, never an agent-hiding passive
-- L152 [2] ANSWER FORMAT (Money Physics reactions) — We never compete on the source's chart-reading. Their evidence is {their evidence, our relocation.}
+- L56 [2] RETENTION CLOCK (judged by ear, never on the page) — 0–3s the hook itself, first sentence, no atmosphere or scene-setting. <scene-setting>
+- L65 [2] ARCHITECTURE (six phases) — Spine: `docs/content-video-engine/patterns/FULL-VIDEO-MAP.md` (classical {P1 OPEN} <map-not-territory; AND-THEN; HEAD-FAKE; promise-tease; mid-video; pre-pivot; re-promises; pause-framed>
+- L122 [2] DEVICES — The dual engine is master: anecdote (action raising unresolved {dual engine is master; Triads; Anaphora; Terminal stress} <single-engine; scale-free; [pre-key]; [post-key]; mid-video; grand-payoff>
+- L139 [2] SENTENCE GATES (every drafted sentence passes all ten) — 1 one idea · 2 active, concrete subject, never an agent-hiding passive <agent-hiding; chart-reads; page-isms; seed-locked>
+- L152 [2] ANSWER FORMAT (Money Physics reactions) — We never compete on the source's chart-reading. Their evidence is {their evidence, our relocation.} <chart-reading; viewer-scale>
 - L162 [2] TITLES + THUMBNAILS = ONE CLICK-CONTRACT — Judge them together. Title: tension in the first ~40 chars, ≤~55 total; {Thumbnails sell the episode's question or thesis — never its}
-- L172 [2] PRODUCTION AWARENESS — Motion and evidence choreography: `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md`
+- L172 [2] PRODUCTION AWARENESS — Motion and evidence choreography: `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md` <linked-evidence; scene-evidence; on-screen; BUILD-PIPELINE; in-world; word-timed; SOURCES-TO-VERIFY>
 - L191 [2] NEVER — Greetings · "in this video" · "let that sink in" · stock filler · bait
 
 ## docs/portable/MOTION-GRAMMAR.md
 
-- L1 [1] MOTION GRAMMAR — narration-locked choreography, portable — Model-agnostic, renderer-agnostic (vanilla JS/CSS, GSAP, Remotion —
-- L9 [2] The core discovery — The dance is the focus hand-off, not the entrance. Elements that {The dance is the focus hand-off, not the entrance.; Word-matched beats; Focus hand-off}
-- L36 [2] The architecture rule (generalizes furthest) — Every pose is a pure function of the master clock (the audio {Every pose is a pure function of the master clock}
-- L50 [2] Content rule — Finale/recap elements are documents the viewer has ALREADY seen with
-- L55 [2] Lifecycle rules — - Stage-mounted layers outlive their host's draw loop — extend the
+- L1 [1] MOTION GRAMMAR — narration-locked choreography, portable — Model-agnostic, renderer-agnostic (vanilla JS/CSS, GSAP, Remotion — <Model-agnostic; renderer-agnostic; frame-addressable; scene-evidence; stackbox; drawStack; hyperframes-opening; hand-off; Word-matched; hard-coded; re-derive; center-stage>
+- L9 [2] The core discovery — The dance is the focus hand-off, not the entrance. Elements that {The dance is the focus hand-off, not the entrance.; Word-matched beats; Focus hand-off} <hard-coded; re-derive; center-stage; near-stillness; Full-frame>
+- L36 [2] The architecture rule (generalizes furthest) — Every pose is a pure function of the master clock (the audio {Every pose is a pure function of the master clock} <clock-portability; GSAP-style; expo-out; Y-rotation; in-out>
+- L50 [2] Content rule — Finale/recap elements are documents the viewer has ALREADY seen with <re-presents>
+- L55 [2] Lifecycle rules — - Stage-mounted layers outlive their host's draw loop — extend the <Stage-mounted; scrub-back; re-shown; CHART-DISCIPLINE>
 
 ## docs/portable/OPERATOR-RULINGS.md
 
-- L1 [1] OPERATOR RULINGS — the standing corrections ledger — Portable, model-agnostic. Load alongside `DOCTRINE-CORE.md`. {The reason is the load-bearing part}
-- L21 [2] A. Identity and packaging — A1 — The hook prop is not the brand. (2026-08-25, stated twice.) {A1 — The hook prop is not the brand.}
-- L102 [2] B. Evidence — B1 — Rebuild charts; do not extract frames. (2026-08-25. SUPERSEDES {B1 — Rebuild charts; do not extract frames.}
-- L168 [2] C. Production — C1 — The production layer is universal; only scripting is lane-specific. {C1 — The production layer is universal; only scripting is la; Two layers, and the split is the point:; Production (universal, forever):}
-- L242 [2] D. Voice and recording — D1b — Above the cap, chain; never splice. (2026-08-29.) An episode {D1b — Above the cap, chain; never splice.}
-- L294 [2] E. Agent process — E1 — Work orders are immutable after dispatch. (2026-08-25.) {E1 — Work orders are immutable after dispatch.; E2 — Nothing promotes without a contact sheet.}
-- L433 [2] E11 — Reviews are artifact-gated (2026-08-30) — Ruling: any review or protocol step whose only evidence is the {Ruling:; Why:}
-- L454 [2] E12 — Evidence exits with its topic, never with its plate (2026-08-30) — "We shouldn't be removing evidence layers just for the sake of removing
-- L463 [2] E13 — Probe first, then whisper-gate every take (2026-08-30) — Whisper cannot generate a read; "test before spending" means the 2:00
-- L474 [2] E14 — Purpose-built evidence, in the audience's units (2026-08-30) — Never reuse a non-specific card where a specific one can be built (the
+- L1 [1] OPERATOR RULINGS — the standing corrections ledger — Portable, model-agnostic. Load alongside `DOCTRINE-CORE.md`. {The reason is the load-bearing part} <model-agnostic; high-paid; info-systems; trade-like; YouTube; mis-sells; business-building; chart-reading; answer-format; non-tribal; as-of; world-building>
+- L21 [2] A. Identity and packaging — A1 — The hook prop is not the brand. (2026-08-25, stated twice.) {A1 — The hook prop is not the brand.} <high-paid; info-systems; trade-like; YouTube; mis-sells; business-building; chart-reading; answer-format; non-tribal; as-of; world-building>
+- L102 [2] B. Evidence — B1 — Rebuild charts; do not extract frames. (2026-08-25. SUPERSEDES {B1 — Rebuild charts; do not extract frames.} <era-correct; clip-extraction; on-screen; mid-draw; present-day; operator-supplied; Text-on-a-rectangle; fill-in; figure-verified; Era-marked; Finance-niche; Single-plate>
+- L168 [2] C. Production — C1 — The production layer is universal; only scripting is lane-specific. {C1 — The production layer is universal; only scripting is la; Two layers, and the split is the point:; Production (universal, forever):} <lane-specific; scene-evidence; world-building; history-lane; full-screen; ken-burns; evidence-free; Word-by-word; punch-in; runtime-derived; evidence-dock; code-perfect>
+- L242 [2] D. Voice and recording — D1b — Above the cap, chain; never splice. (2026-08-29.) An episode {D1b — Above the cap, chain; never splice.} <previous_request_ids; long-form; inter-word; splice-repair; [post-key]; re-encode; half-episode; multi-scale; cross-scale; line-craft; speed-ups; [verify]>
+- L294 [2] E. Agent process — E1 — Work orders are immutable after dispatch. (2026-08-25.) {E1 — Work orders are immutable after dispatch.; E2 — Nothing promotes without a contact sheet.} <WORK-ORDER; in-place; six-phase; long-form; style-only; sentence-strength; sentence-length; FULL-VIDEO-MAP; review_script; rehook-density; hand-written; hype-machine>
+- L433 [2] E11 — Reviews are artifact-gated (2026-08-30) — Ruling: any review or protocol step whose only evidence is the {Ruling:; Why:} <tool-enforced; reading-enforced; spot-checked; per-item>
+- L454 [2] E12 — Evidence exits with its topic, never with its plate (2026-08-30) — "We shouldn't be removing evidence layers just for the sake of removing <topic-exit; per-dock; mid-topic>
+- L463 [2] E13 — Probe first, then whisper-gate every take (2026-08-30) — Whisper cannot generate a read; "test before spending" means the 2:00 <same-settings; ElevenLabs; whisper-gated; re-hook>
+- L474 [2] E14 — Purpose-built evidence, in the audience's units (2026-08-30) — Never reuse a non-specific card where a specific one can be built (the <non-specific; price-vs-profit; on-card>
 - L481 [2] E15 — One choreography: the tempo field (2026-08-30) — Script devices, edit pauses, and animation reveals are one graph. The
-- L488 [2] E16 — Subject-first restatement (2026-08-30) — "We shouldn't ask viewers to hold context in their heads when we can
-- L497 [2] E17 — Don't soften: rhetorical sharpness is licensed (2026-08-30) — "Half the market" is not a figure claim - it is a cut. Verification
-- L505 [2] E18 — The pre-review pass is Claude's, standing (2026-08-31) — "You ALWAYS have the pre-review pass, please be my guest." Before any
-- L515 [2] E19 — Isolation is by PROJECT, not by worktree (2026-08-31) — "I think you should be able to write across worktrees; what we want to {The boundary, precisely (operator, same day):; Outreach vs the BJJ Registry project}
-- L531 [2] E20 — Concession runs are budgeted; a delivered proof is never hedged next-line (2026-09-02) — Retention read on Steel and Paper (AVD 2:49 at n=2 - noise, but it lands
-- L557 [2] E21 — The screen never goes still; captions ARE the motion when nothing else moves (2026-09-02) — Operator, watching Steel and Paper after a week of flat performance: "we
-- L614 [2] E22 — The ledger page: charts that ARE the plate, on cream paper in charcoal ink (2026-09-02) — Operator, on plate charts: "All of these charts actually become viable
-- L667 [2] E23 — A3 sits at 10% of runtime; the cycle check runs the whole video (2026-09-02) — Two tools disagreed on where rehook A3 belongs. The opening gate read
-- L743 [2] E24 — The opening minute: confirm the click, match the packaging, never open on the full chart (2026-09-03) — An outside analyst's drop-off read, checked by the operator against the
-- L761 [2] E25 — The chart is the proof, not the homework (2026-09-03) — The analytics behind E24, read by the operator: the thumbnail converts at
-- L810 [2] E27 — The order of what matters: the package answered, then the voice, then everything else (2026-09-03) — Operator: *"We saw people doing 30k subscribers on a totally still image, {The package is answered.}
-- L835 [2] E28 — A chart reads right at a glance, or it is not on the page (2026-09-03) — On the trim-proof page (the paper's move after each weak customs print),
-- L941 [2] E26 — Three roles check a script, and the third one knows nothing (2026-09-03) — The gates are mechanical: counts, positions, durations, decided from the {mechanical; doctrinal; viewer}
-- L1017 [2] E29 — Trust and verify; never contain by naming the defect (2026-09-04) — *"Negative rules can actually summon the issues. The models are pretty strong — we should {The prompt states what IS present. The driver checks for wha; content exclusion}
-- L1046 [2] E30 — There are no agent-owned lanes (2026-09-04) — *"There's no such thing as Gemini's territory — Gemini is the research agent that sometimes {Flow browser session}
+- L488 [2] E16 — Subject-first restatement (2026-08-30) — "We shouldn't ask viewers to hold context in their heads when we can <named-subject>
+- L497 [2] E17 — Don't soften: rhetorical sharpness is licensed (2026-08-30) — "Half the market" is not a figure claim - it is a cut. Verification <non-literal; fact-check>
+- L505 [2] E18 — The pre-review pass is Claude's, standing (2026-08-31) — "You ALWAYS have the pre-review pass, please be my guest." Before any <evidence-coverage; mute-test>
+- L515 [2] E19 — Isolation is by PROJECT, not by worktree (2026-08-31) — "I think you should be able to write across worktrees; what we want to {The boundary, precisely (operator, same day):; Outreach vs the BJJ Registry project} <systems-and-blowups; martial-matters; JiuJitsu; cross-contaminated; stage-complete>
+- L531 [2] E20 — Concession runs are budgeted; a delivered proof is never hedged next-line (2026-09-02) — Retention read on Steel and Paper (AVD 2:49 at n=2 - noise, but it lands <re-hook; three-beat; STRENGTH-LOOP; systems-and-blowups; steel-and-paper; SCRIPT-NOTES-retention>
+- L557 [2] E21 — The screen never goes still; captions ARE the motion when nothing else moves (2026-09-02) — Operator, watching Steel and Paper after a week of flat performance: "we <build-f; lower-third; first-drop; day-one; hand-authored; SHOT-TABLE-F; gap-fill; five-minute; per-word; opening-structure; re-script>
+- L614 [2] E22 — The ledger page: charts that ARE the plate, on cream paper in charcoal ink (2026-09-02) — Operator, on plate charts: "All of these charts actually become viable <channel-defining; world-layer; #F4E6C7; #25313C; near-black; generated-imagery; REMOTION-UI-HARVEST; chart-story; bar-race; on-brand; two-evidence; pull-back>
+- L667 [2] E23 — A3 sits at 10% of runtime; the cycle check runs the whole video (2026-09-02) — Two tools disagreed on where rehook A3 belongs. The opening gate read <hard-coded; mid-video; self-healing; kit_spec.a3_anchor_s(runtime); by-hand; --cycle-s; rehook-family; [rehook]; kit_spec.unit_windows; youtube-retention-clock; blob-bloom-and-contract; coffee-ring>
+- L743 [2] E24 — The opening minute: confirm the click, match the packaging, never open on the full chart (2026-09-03) — An outside analyst's drop-off read, checked by the operator against the <drop-off; title-word>
+- L761 [2] E25 — The chart is the proof, not the homework (2026-09-03) — The analytics behind E24, read by the operator: the thumbnail converts at <YouTube; drop-off; re-enters; topic-governed; proof-governed; trim-proof; page.board; Host-on-board; in-world; first-person; confirmation-gap>
+- L810 [2] E27 — The order of what matters: the package answered, then the voice, then everything else (2026-09-03) — Operator: *"We saw people doing 30k subscribers on a totally still image, {The package is answered.} <AI-generated; six-phase; out-produced>
+- L835 [2] E28 — A chart reads right at a glance, or it is not on the page (2026-09-03) — On the trim-proof page (the paper's move after each weak customs print), <trim-proof; twenty-five; ledger_page.validate; selection; first-glance; ElevenLabs; viewer-tested; still-image; ledger_page.badge_key_conflicts; names_note; --lp-neg; --lp-pos>
+- L941 [2] E26 — Three roles check a script, and the third one knows nothing (2026-09-03) — The gates are mechanical: counts, positions, durations, decided from the {mechanical; doctrinal; viewer} <time-bounded; information-gain; quality-based; made-up; drop-off; dock-held; Window-cut; mid-sentence; --no-viewer-gate; known-bad>
+- L1017 [2] E29 — Trust and verify; never contain by naming the defect (2026-09-04) — *"Negative rules can actually summon the issues. The models are pretty strong — we should {The prompt states what IS present. The driver checks for wha; content exclusion} <on-screen; no morphing; no extra limbs; no duplicate characters; negative-conditioning; cross-attention; extra limbs; re-roll; pre-filter>
+- L1046 [2] E30 — There are no agent-owned lanes (2026-09-04) — *"There's no such thing as Gemini's territory — Gemini is the research agent that sometimes {Flow browser session} <tiling_mode: "mirror">
 - L1062 [2] E31 — Plates are a retention asset, not an acquisition asset (2026-09-04) — *"My big beautiful plates carrying a semiconductor fab are cool for ambiance for when my {acquisition; retention; under 1 second, no interpretation; nothing; 326 plates}
-- L1082 [2] E32 — Motion is not animation; the original motion premise was flawed (2026-09-04) — *"When I first started, I had 0 understanding of animation, so I thought all of the movement {motion means animation; Only the third link is wrong}
-- L1102 [2] E33 — Generated worlds are for illustration, not evidence (2026-09-04) — *"The stick figures work because you can build the world you need to convey; I was trying to {A generated plate has no addressable coordinate space.}
-- L1128 [2] E34 — Voice, cadence and clip length (2026-09-04) — Three settled numbers, recorded because each was in dispute: {Omni in-model voice generation is not viable.; ElevenLabs for YouTube, Chirp 3 HD Charon for the Facebook/N; silent; We deliver near 180 WPM.; There was never a 145–165 target}
-- L1144 [2] E35 — Shorts are a different machine, and they fund the long form (2026-09-04) — "I need to be able to win this easy-distribution format to justify the long stuff." {The failure this corrects: making every short justify the wh; Knowledge should make a short cheaper, not more expensive.}
-- L1167 [2] E36 — The Flow driver is standing-approved; images are free (2026-09-04) — *"I get 10,000 Flow credits per month, +50 free per day. Image generation is free — you are {review quarantine; Why:}
-- L1183 [2] E37 — Judges drive Codex through the CLI, as a batch; never an API (2026-09-04) — *"You don't API call, you just drive Codex via CLI like we do for the other judging. And since {verdict computed in code; Why:}
-- L1196 [2] E38 — Thresholds are measured on the reference, then compared to ours (2026-09-04) — *"Is basing the gap threshold off our own work really the right way? I think we should check {Why:}
-- L1210 [2] E39 — The stick lane lives on the house ground; the paper-toy medium is out (2026-09-04) — Three linked rulings on the host's art: {"A light application of woodblock print and vox newspaper wi}
-- L1232 [2] E40 — Image generation is the strong tool; video only by FRAMES, never by ingredients (2026-09-05) — On the first full pass of the Tokyo short, with six Omni clips as worlds:
-- L1259 [2] E41 — The shorts-script ledger: move beats, never clip words; the brand line is the outro's; sentences break for the strip (2026-09-04 / 2026-09-05) — Three rulings from the Tokyo short, recorded together because the script skill has to cite them as one page. {Fit windows by moving beats, never by clipping words (2026-0}
+- L1082 [2] E32 — Motion is not animation; the original motion premise was flawed (2026-09-04) — *"When I first started, I had 0 understanding of animation, so I thought all of the movement {motion means animation; Only the third link is wrong} <lower-third; stick-figure; focus_zoom>
+- L1102 [2] E33 — Generated worlds are for illustration, not evidence (2026-09-04) — *"The stick figures work because you can build the world you need to convey; I was trying to {A generated plate has no addressable coordinate space.} <M_world = M_parent × M_local; Z-stack; at: "datum"; evidence-bearing; datum-anchored; hand-written>
+- L1128 [2] E34 — Voice, cadence and clip length (2026-09-04) — Three settled numbers, recorded because each was in dispute: {Omni in-model voice generation is not viable.; ElevenLabs for YouTube, Chirp 3 HD Charon for the Facebook/N; silent; We deliver near 180 WPM.; There was never a 145–165 target} <NotebookLM; length-estimation>
+- L1144 [2] E35 — Shorts are a different machine, and they fund the long form (2026-09-04) — "I need to be able to win this easy-distribution format to justify the long stuff." {The failure this corrects: making every short justify the wh; Knowledge should make a short cheaper, not more expensive.} <easy-distribution; long-form; THE-SHORTS-FORMAT>
+- L1167 [2] E36 — The Flow driver is standing-approved; images are free (2026-09-04) — *"I get 10,000 Flow credits per month, +50 free per day. Image generation is free — you are {review quarantine; Why:} <video-engine; re-described; per-action; model-sheet>
+- L1183 [2] E37 — Judges drive Codex through the CLI, as a batch; never an API (2026-09-04) — *"You don't API call, you just drive Codex via CLI like we do for the other judging. And since {verdict computed in code; Why:} <codex exec; openai; anthropic>
+- L1196 [2] E38 — Thresholds are measured on the reference, then compared to ours (2026-09-04) — *"Is basing the gap threshold off our own work really the right way? I think we should check {Why:} <cut-gap>
+- L1210 [2] E39 — The stick lane lives on the house ground; the paper-toy medium is out (2026-09-04) — Three linked rulings on the host's art: {"A light application of woodblock print and vox newspaper wi} <hand-cut; crinkle-paper; @Mike; #F4E6C7; #25313C; mid-action; deckle-edged; @StickMike; @MikeMasterV3>
+- L1232 [2] E40 — Image generation is the strong tool; video only by FRAMES, never by ingredients (2026-09-05) — On the first full pass of the Tokyo short, with six Omni clips as worlds: <contact-sheeted; re-entry; frame-driven; re-using; enter=spiral; LP_RETRACT>
+- L1259 [2] E41 — The shorts-script ledger: move beats, never clip words; the brand line is the outro's; sentences break for the strip (2026-09-04 / 2026-09-05) — Three rulings from the Tokyo short, recorded together because the script skill has to cite them as one page. {Fit windows by moving beats, never by clipping words (2026-0} <long-form; gate_opening_structure; head-fake; where-we-sit; Remotion-kit; mid-word; gate-fit>
 
 ## docs/portable/OUTRO-CTA-PLAYBOOK.md
 
-- L1 [1] OUTRO / CTA / END-SCREEN PLAYBOOK — portable — Source: AOY coaching base (ask_tim, 2026-08-30) reconciled against our
-- L7 [2] The rules — 1. ONE CTA per outro. Never three. "Like, comment AND subscribe" {ONE CTA per outro. Never three.; Value reinforcement BEFORE any ask; Clear direction = a SPECIFIC subscribe reason.}
-- L31 [2] End-screen SOP (the 20 seconds) — Full 20s end screen carrying: a subscribe button + the most recent {Episode-one adaptation}
-- L42 [2] Explicitly NOT imported — AOY's general pacing benchmark (visual change every 1.4–1.6s) is for
+- L1 [1] OUTRO / CTA / END-SCREEN PLAYBOOK — portable — Source: AOY coaching base (ask_tim, 2026-08-30) reconciled against our <ask_tim; FULL-VIDEO-MAP; Peak-end; end-card; best-performing; Episode-one; stock-footage; scene-evidence>
+- L7 [2] The rules — 1. ONE CTA per outro. Never three. "Like, comment AND subscribe" {ONE CTA per outro. Never three.; Value reinforcement BEFORE any ask; Clear direction = a SPECIFIC subscribe reason.} <Peak-end; end-card>
+- L31 [2] End-screen SOP (the 20 seconds) — Full 20s end screen carrying: a subscribe button + the most recent {Episode-one adaptation} <best-performing>
+- L42 [2] Explicitly NOT imported — AOY's general pacing benchmark (visual change every 1.4–1.6s) is for <stock-footage; scene-evidence>
 
 ## docs/portable/PACKAGING-PLAYBOOK.md
 
-- L1 [1] PACKAGING PLAYBOOK — titles & thumbnails, portable — Source: AOY coaching base (ask_tim, two queries, 2026-08-30). Data
-- L6 [2] Titles — - Specificity beats vague, always. "How He Lost $47M" beats "How {Specificity beats vague, always.; Packaging is a promise the hook must keep.}
-- L18 [2] Thumbnails — - THUMBNAIL-FIRST RULE: make the thumbnail before scripting. If a {THUMBNAIL-FIRST RULE; No faces on a faceless channel — strongly against.; Contrast is the composition rule}
-- L33 [2] Diagnostics (post-upload) — - High impressions + low views = CTR problem → fix thumbnail/ {CTR problem}
-- L40 [2] Our-lane reconciliation — - Steel and Paper packaging: the iron spike IS the thumbnail object
-- L53 [2] Standing policy (operator decision, 2026-08-31) — True niche bends for titles + thumbnails until the channel has {True niche bends for titles + thumbnails until the channel h}
+- L1 [1] PACKAGING PLAYBOOK — titles & thumbnails, portable — Source: AOY coaching base (ask_tim, two queries, 2026-08-30). Data <ask_tim; verbatim-in-substance; our-lane; two-party; answer-format; THUMBNAIL-FIRST; personal-brand; post-upload; YouTube; Channel-asset; episode-seed; House-style>
+- L6 [2] Titles — - Specificity beats vague, always. "How He Lost $47M" beats "How {Specificity beats vague, always.; Packaging is a promise the hook must keep.} <two-party; answer-format>
+- L18 [2] Thumbnails — - THUMBNAIL-FIRST RULE: make the thumbnail before scripting. If a {THUMBNAIL-FIRST RULE; No faces on a faceless channel — strongly against.; Contrast is the composition rule} <personal-brand>
+- L33 [2] Diagnostics (post-upload) — - High impressions + low views = CTR problem → fix thumbnail/ {CTR problem} <YouTube>
+- L40 [2] Our-lane reconciliation — - Steel and Paper packaging: the iron spike IS the thumbnail object <Channel-asset; two-party; Thumbnail-first; episode-seed>
+- L53 [2] Standing policy (operator decision, 2026-08-31) — True niche bends for titles + thumbnails until the channel has {True niche bends for titles + thumbnails until the channel h} <House-style; Style-fatigue; sparse-white; portfolio-scale; script-verbatim; on-story>
 
 ## docs/portable/SOUND-SOURCING.md
 
-- L1 [1] SOUND SOURCING — portable — The audio stack, zero incremental spend (operator decision, 2026-08-31).
-- L8 [2] The stack, by layer — | Layer | Engine | Cost | License posture | {Suno Pro; Stable Audio Open in Comfy Desktop; Sonniss GDC archives}
-- L20 [2] Licensing rules (hard gates) — 1. CC0 / public domain: free for monetized use, no credit needed. {CC0 / public domain; CC-BY; BANNED: CC-NC; CC-ND; BBC Sound Effects archive: banned}
-- L34 [2] Attribution SOP — Each episode carries `packaging/ATTRIBUTIONS.md` — one line per CC-BY
-- L41 [2] Design doctrine pointer — Cue points derive from the choreography ledger (CHOREOGRAPHY.md) — the
+- L1 [1] SOUND SOURCING — portable — The audio stack, zero incremental spend (operator decision, 2026-08-31). <operator-supplied; Studio-grade; royalty-free; CC-BY; Zero-risk; YouTube; ElevenLabs; CC-NC; non-commercial; CC-ND; no-derivatives; AI-generated>
+- L8 [2] The stack, by layer — | Layer | Engine | Cost | License posture | {Suno Pro; Stable Audio Open in Comfy Desktop; Sonniss GDC archives} <Studio-grade; royalty-free; CC-BY; Zero-risk; YouTube; ElevenLabs>
+- L20 [2] Licensing rules (hard gates) — 1. CC0 / public domain: free for monetized use, no credit needed. {CC0 / public domain; CC-BY; BANNED: CC-NC; CC-ND; BBC Sound Effects archive: banned} <non-commercial; no-derivatives; AI-generated; similarity-based>
+- L34 [2] Attribution SOP — Each episode carries `packaging/ATTRIBUTIONS.md` — one line per CC-BY <CC-BY; YouTube>
+- L41 [2] Design doctrine pointer — Cue points derive from the choreography ledger (CHOREOGRAPHY.md) — the <half-authors>
 
 ## docs/portable/VOICE-PACK.md
 
-- L1 [1] VOICE PACK — portable brand voice by exemplar — Third portable file, loaded with `DOCTRINE-CORE.md` and
-- L6 [2] Why this file is mostly examples — Voice does not transfer as description — every adjective in a voice {exemplars; contrast pairs; judged by ear against synthesized audio, never on the page.}
-- L21 [2] 1. The calibration pair (read before writing anything) — Same assignment, same facts, same person. One was rejected, one shipped. {REJECTED.; ACCEPTED:}
-- L52 [2] 2. Approved production lines, by function — From Script B ("Steel and Paper"), which won a seed-locked A/B by ear {MICROHOOK; PROMISE}
-- L101 [2] 3. What the exemplars are doing (the patterns worth naming) — - The opponent is a mechanism, never a person. Not "Bravos is wrong" {The opponent is a mechanism, never a person.; Dissent arrives after agreement, on the record.; Terminal stress everywhere.}
-- L127 [2] 4. Ear-judgments converted to text rules — Each came from hearing a failure — apply them even when the sentence looks {The first sentence is the grab.; One idea per sentence; one cut per sentence.; Attribution before assertion.; Active agents, named.}
-- L156 [2] 4b. The referent test — where a figure of speech may land — Operator, 2026-08-25, on the line "the average never noticed": it is {the average investor; the referent was.; The test, before spending any figure of speech:}
-- L200 [2] 5. Hard bans (voice-specific; the never-list in CORE also applies) — Book-intro register (expository, past tense, paragraph-shaped) ·
+- L1 [1] VOICE PACK — portable brand voice by exemplar — Third portable file, loaded with `DOCTRINE-CORE.md` and <Model-agnostic; ear-judgments; text-checkable; viewer-facing; paragraph-shaped; seed-locked; In 1845; quarter-billion; pause-framed; sold-out; de-risk; In 1850>
+- L6 [2] Why this file is mostly examples — Voice does not transfer as description — every adjective in a voice {exemplars; contrast pairs; judged by ear against synthesized audio, never on the page.} <ear-judgments; text-checkable>
+- L21 [2] 1. The calibration pair (read before writing anything) — Same assignment, same facts, same person. One was rejected, one shipped. {REJECTED.; ACCEPTED:} <viewer-facing; paragraph-shaped>
+- L52 [2] 2. Approved production lines, by function — From Script B ("Steel and Paper"), which won a seed-locked A/B by ear {MICROHOOK; PROMISE} <seed-locked; In 1845; quarter-billion; pause-framed; sold-out; de-risk; In 1850>
+- L101 [2] 3. What the exemplars are doing (the patterns worth naming) — - The opponent is a mechanism, never a person. Not "Bravos is wrong" {The opponent is a mechanism, never a person.; Dissent arrives after agreement, on the record.; Terminal stress everywhere.} <de-risk; target-date>
+- L127 [2] 4. Ear-judgments converted to text rules — Each came from hearing a failure — apply them even when the sentence looks {The first sentence is the grab.; One idea per sentence; one cut per sentence.; Attribution before assertion.; Active agents, named.} <scene-setting; agent-hiding; on-screen; [pre-key]; [post-key]>
+- L156 [2] 4b. The referent test — where a figure of speech may land — Operator, 2026-08-25, on the line "the average never noticed": it is {the average investor; the referent was.; The test, before spending any figure of speech:} <Clever-sounding; double-sense; failure-to-notice>
+- L200 [2] 5. Hard bans (voice-specific; the never-list in CORE also applies) — Book-intro register (expository, past tense, paragraph-shaped) · <Book-intro; paragraph-shaped; colon-stacking>
 - L213 [2] 6. Calibration protocol — test a model before trusting it — Before a new model (or a new session) writes production copy, have it {Atmosphere creeping into sentence one; Credentials promoted to their own sentence; Abstractions left uncashed}
-- L230 [2] 7. Maintenance — Downstream of evidence, never a substitute for it. A rejected line goes
+- L230 [2] 7. Maintenance — Downstream of evidence, never a substitute for it. A rejected line goes <re-derive>
 
 ## docs/product-revenue-contract.md
 
-- L1 [1] Product / Revenue Contract: Outreach Program
-- L3 [2] Product goal — The Outreach Program is an internal, URL-first expertise demonstration. An
-- L17 [2] Owned vertical products — - One Trade Network is the owned discovery/pSEO property for home-service {One Trade Network; National BJJ Registry}
-- L28 [2] Primary service packages — Each vertical pack exposes the same three commercial paths with {Improve the existing website + sitemap/SEO + vertical visibi; Vertical plugin/embed upgrades; Custom website + optional CRM/SaaS}
-- L48 [2] Default operator workflow — 1. Paste a URL and run the scan with safe defaults.
-- L61 [2] Outreach package promise — Every approved package contains:
+- L1 [1] Product / Revenue Contract: Outreach Program <URL-first; evidence-backed; human-reviewed; home-service; vertical-specific; SaaS; human-review; append-only; what_we_would_fix; recommended_service_package; OutreachActivationEvent; package_approved>
+- L3 [2] Product goal — The Outreach Program is an internal, URL-first expertise demonstration. An <URL-first; evidence-backed; human-reviewed>
+- L17 [2] Owned vertical products — - One Trade Network is the owned discovery/pSEO property for home-service {One Trade Network; National BJJ Registry} <home-service>
+- L28 [2] Primary service packages — Each vertical pack exposes the same three commercial paths with {Improve the existing website + sitemap/SEO + vertical visibi; Vertical plugin/embed upgrades; Custom website + optional CRM/SaaS} <vertical-specific>
+- L48 [2] Default operator workflow — 1. Paste a URL and run the scan with safe defaults. <human-review; append-only; URL-first>
+- L61 [2] Outreach package promise — Every approved package contains: <what_we_would_fix; recommended_service_package>
 - L77 [2] Hard truth rules — - Never fabricate traffic, leads, conversion, or revenue loss.
-- L91 [2] Activation and attribution — Commercial measurement uses append-only `OutreachActivationEvent` records:
-- L102 [2] Explicit milestone exclusions — - no automated outbound or autonomous follow-up;
-- L112 [2] Optional market-evidence outreach — An approved `v3` outreach package may snapshot up to three strongest
-- L121 [2] Demand and commercial opportunity — Demand and revenue forecasts are downstream, immutable model versions. They do {monthly search occasions}
-- L157 [2] Provider recovery truth — Each paid operation records provider, operation, query/target, market context,
-- L171 [2] Aggregate calibration — Calibration accepts only aggregate period counts from operator-uploaded Google
-- L179 [2] Demand-conversion evidence modes — `demand-conversion.v1` is a separate commercial evidence contract. It never {Prospect mode; Owner-verified mode}
+- L91 [2] Activation and attribution — Commercial measurement uses append-only `OutreachActivationEvent` records: <append-only; OutreachActivationEvent; package_approved; outreach_sent; positive_reply; call_booked; proposal_sent; closed_won; closed_lost; correction_recorded; qualified-to-approved; approved-to-sent>
+- L102 [2] Explicit milestone exclusions — - no automated outbound or autonomous follow-up; <follow-up; multi-tenancy; customer-facing; SaaS; score-changing; market-evidence; operator-gated>
+- L112 [2] Optional market-evidence outreach — An approved `v3` outreach package may snapshot up to three strongest <market-run>
+- L121 [2] Demand and commercial opportunity — Demand and revenue forecasts are downstream, immutable model versions. They do {monthly search occasions} <Keyword-tool; close-variant; net-new; searches-per-prospect; field-level; operator-observed; business-supplied; Forecast, not guarantee; opportunity-formula.v1; Active-customer; run-rate; visitor-to-signup>
+- L157 [2] Provider recovery truth — Each paid operation records provider, operation, query/target, market context, <partial; resume_unresolved; same-context>
+- L171 [2] Aggregate calibration — Calibration accepts only aggregate period counts from operator-uploaded Google <operator-uploaded>
+- L179 [2] Demand-conversion evidence modes — `demand-conversion.v1` is a separate commercial evidence contract. It never {Prospect mode; Owner-verified mode} <demand-conversion.v1; conversion-readiness; third-party; owner-first-party; context-matched; operator-supplied; provider-specific; observed; supplied; assumed; modeled; Search-volume>
 
 ## docs/product-strength-contract.md
 
-- L1 [1] Product Strength Contract: P10 Scoring Surfaces
-- L3 [2] 1) Scope and versioning — This contract defines deterministic, surfaced scoring in P10 while preserving
-- L19 [2] 2) Product surfaces — 1. Technical SEO Health (`seo-health.v2`)
-- L43 [2] 3) No universal average — - Do not produce one “overall health” average across the seven surfaces.
-- L48 [2] 4) Formula and unknown/inapplicable semantics
-- L50 [3] A. Technical SEO Health v2 — - Family weights:
-- L68 [3] B. AI Readiness v3 — - Family weights remain:
-- L76 [3] C. Search, local, and AI visibility — - Require approved market set, identity, place/grid, prompt/topic scope, and date/device context.
-- L82 [3] D. Conversion readiness v1 — - Deterministic evidence only from site-derived signals.
-- L87 [2] 5) Snapshot, bundle, and comparison contracts
-- L89 [3] Report snapshots — - Reports are emitted from immutable `ReportSnapshot` records.
-- L96 [3] Aliases — - `ReportAlias` may move pointers (e.g., `latest`), but never mutates snapshot content.
+- L1 [1] Product Strength Contract: P10 Scoring Surfaces <seo-health.v2; search-visibility.v2; local-visibility.v1; ai-readiness.v3; ai-visibility.v1; conversion-readiness.v1; evidence-confidence.v1; overall_score; legacy_surface = true; status = "unknown"; tracked-keyword; AI-provider>
+- L3 [2] 1) Scope and versioning — This contract defines deterministic, surfaced scoring in P10 while preserving <seo-health.v2; search-visibility.v2; local-visibility.v1; ai-readiness.v3; ai-visibility.v1; conversion-readiness.v1; evidence-confidence.v1; overall_score; legacy_surface = true; status = "unknown">
+- L19 [2] 2) Product surfaces — 1. Technical SEO Health (`seo-health.v2`) <seo-health.v2; search-visibility.v2; tracked-keyword; local-visibility.v1; ai-readiness.v3; ai-visibility.v1; AI-provider; conversion-readiness.v1; evidence-confidence.v1>
+- L43 [2] 3) No universal average — - Do not produce one “overall health” average across the seven surfaces. <overall_score>
+- L48 [2] 4) Formula and unknown/inapplicable semantics <0.30; on-page; 0.20; 0.15; Per-check; 0..100; aeo 40%; geo 35%; aio 25%; applicability-aware; llms.txt; FAQPage>
+- L50 [3] A. Technical SEO Health v2 — - Family weights: <0.30; on-page; 0.20; 0.15; Per-check; 0..100>
+- L68 [3] B. AI Readiness v3 — - Family weights remain: <aeo 40%; geo 35%; aio 25%; applicability-aware; llms.txt; FAQPage; HowTo; auto-bias>
+- L76 [3] C. Search, local, and AI visibility — - Require approved market set, identity, place/grid, prompt/topic scope, and date/device context. <unknown>
+- L82 [3] D. Conversion readiness v1 — - Deterministic evidence only from site-derived signals. <site-derived>
+- L87 [2] 5) Snapshot, bundle, and comparison contracts <ReportSnapshot; ReportAlias; latest; unknown>
+- L89 [3] Report snapshots — - Reports are emitted from immutable `ReportSnapshot` records. <ReportSnapshot>
+- L96 [3] Aliases — - `ReportAlias` may move pointers (e.g., `latest`), but never mutates snapshot content. <ReportAlias; latest>
 - L100 [3] Bundle — - Bundle layout:
-- L111 [3] Comparison — - Comparison runs are immutable.
-- L122 [2] 6) Legacy-read and compatibility rules — - All legacy `overall_score`, `ai-v1`, `ai-v2`, `market-v1`,
-- L129 [2] 7) P12 decision-intelligence separation — - `decision-intelligence-v1` and combined `v6` are additive report contracts.
+- L111 [3] Comparison — - Comparison runs are immutable. <unknown>
+- L122 [2] 6) Legacy-read and compatibility rules — - All legacy `overall_score`, `ai-v1`, `ai-v2`, `market-v1`, <overall_score; ai-v1; ai-v2; market-v1; checkpoints; six-stage; backward-compatible>
+- L129 [2] 7) P12 decision-intelligence separation — - `decision-intelligence-v1` and combined `v6` are additive report contracts. <decision-intelligence-v1; product-surface; prospect-mode; Owner-mode; Recommendation-outcome>
 
 ## docs/production-api-ui-database.md
 
-- L1 [1] Production API, UI, and database
-- L3 [2] Runtime — The control plane is a FastAPI application backed by a migration-managed SQLite database and a file artifact mirror.
-- L14 [2] Start locally — Open `http://127.0.0.1:8765/`, enter the API key for the current browser session, and connect. The key is stored in `sessionStorage`, never embedded in HTML or
+- L1 [1] Production API, UI, and database <FastAPI; migration-managed; SEO_INSIGHTS_DATABASE_PATH; SEO_INSIGHTS_ARTIFACT_ROOT; X-API-Key; SEO_INSIGHTS_API_KEY; same-origin; sessionStorage; localStorage; DataForSEO; request-level; InsightRepository>
+- L3 [2] Runtime — The control plane is a FastAPI application backed by a migration-managed SQLite database and a file artifact mirror. <FastAPI; migration-managed; SEO_INSIGHTS_DATABASE_PATH; SEO_INSIGHTS_ARTIFACT_ROOT; X-API-Key; SEO_INSIGHTS_API_KEY; same-origin>
+- L14 [2] Start locally — Open `http://127.0.0.1:8765/`, enter the API key for the current browser session, and connect. The key is stored in `sessionStorage`, never embedded in HTML or <sessionStorage; localStorage>
 - L26 [2] Production requirements — Set:
-- L38 [2] Paid enrichment approval — DataForSEO credentials alone do not authorize paid calls. Paid search enrichment requires an explicit request-level approval through the API/dashboard. Unapprov
-- L42 [2] Persistence contract — SQLite uses:
+- L38 [2] Paid enrichment approval — DataForSEO credentials alone do not authorize paid calls. Paid search enrichment requires an explicit request-level approval through the API/dashboard. Unapprov <DataForSEO; request-level>
+- L42 [2] Persistence contract — SQLite uses: <InsightRepository; PostgreSQL>
 
 ## docs/research/2026-07-26-product-strength-competitive-research.md
 
-- L1 [1] Outreach Program: Product-Strength and Competitive Research — Generated: 2026-07-26
-- L7 [2] Executive conclusion — The Outreach Program is already stronger than a generic audit generator in its {SEO overall score}
-- L32 [2] 1. Current product assessment
-- L34 [3] What is already unusually strong — - Evidence references resolve to persisted values rather than report
-- L57 [3] Where the current headline SEO score is weak — The implementation in {The score mixes health and performance.}
-- L92 [3] Where the current AI score is strong — The implementation in
-- L111 [3] Where the current AI score needs strengthening — Many checks are binary page ratios:
-- L131 [2] 2. Recommended score architecture — Do not create one universal score. Use a small score stack with unambiguous
-- L146 [3] Technical SEO Health v2 — Start with a transparent issue-density formula:
-- L184 [3] AI Readiness v3 — Retain the current customer-facing formula until calibration data justifies {coverage of answerable sections}
-- L215 [3] Observed AI Visibility — Add this as a separate optional evidence layer:
+- L1 [1] Outreach Program: Product-Strength and Competitive Research — Generated: 2026-07-26 <client-facing; site-wide; time-series; hand-authoring; owner-authorized; vertical-specific; self-claims; lead-generation; white-label; WooRank; field-level; seo-api>
+- L7 [2] Executive conclusion — The Outreach Program is already stronger than a generic audit generator in its {SEO overall score} <product-strength; site-wide; time-series; hand-authoring; owner-authorized; vertical-specific>
+- L32 [2] 1. Current product assessment <self-claims; lead-generation; white-label; WooRank; field-level; seo-api; seo-agencies; site-wide; technical-audit; error-level; total-score; HowTo>
+- L34 [3] What is already unusually strong — - Evidence references resolve to persisted values rather than report <self-claims; lead-generation; white-label; WooRank; field-level; seo-api; seo-agencies>
+- L57 [3] Where the current headline SEO score is weak — The implementation in {The score mixes health and performance.} <site-wide; technical-audit; error-level; total-score>
+- L92 [3] Where the current AI score is strong — The implementation in <HowTo; page-level; machine-readable; ai-features>
+- L111 [3] Where the current AI score needs strengthening — Many checks are binary page ratios: <direct-answer; follow-up; JSON-LD; structured-data; customer_claim_eligible>
+- L131 [2] 2. Recommended score architecture — Do not create one universal score. Use a small score stack with unambiguous <issue-density; On-page; page-level; affected-page; score-affecting; customer-facing; direct-answer; follow-ups; first-party; HTTP-versus-rendered; main-content; meaningful-text>
+- L146 [3] Technical SEO Health v2 — Start with a transparent issue-density formula: <issue-density; On-page; page-level; affected-page; score-affecting>
+- L184 [3] AI Readiness v3 — Retain the current customer-facing formula until calibration data justifies {coverage of answerable sections} <customer-facing; direct-answer; follow-ups; first-party; HTTP-versus-rendered; main-content; meaningful-text; page-class; llms.txt; ai-search-health-audit; ai-optimization-guide>
+- L215 [3] Observed AI Visibility — Add this as a separate optional evidence layer: <ai-visibility-metrics; brand-radar-methodology; ai-visibility-toolkit; DataForSEO; multi-target; cold-prospect; local-brand; provider-modeled; help-center>
 - L242 [3] Recommendation priority — Do not select actions only because they have the lowest check score. Rank
-- L261 [2] 3. Better sources
-- L263 [3] Cold-prospect sources — Use sources that do not require owner access:
-- L295 [3] Owner-authorized sources after engagement — These sources turn a persuasive estimate into an accountable growth system: {Google Search Console:; Google Business Profile Performance:}
-- L331 [2] 4. What competitors do better or differently — | Product group | What they do better | What Outreach should copy | What not to copy |
-- L350 [2] 5. Client-facing design improvements — The current Nova deck is visually strong, but it is a handcrafted derivative
-- L356 [3] Layer 1: 90-second owner brief — - What is already working.
-- L364 [3] Layer 2: interactive evidence — - Search and Maps tabs.
-- L374 [3] Layer 3: methodology and export — - Evidence completeness by source.
-- L401 [2] 6. Durability improvements
-- L403 [3] Preserve the strengths — Keep:
-- L416 [3] Correct the remaining overwrite paths — The market layer preserves market-run-scoped report snapshots, but canonical
-- L444 [3] Create a portable report bundle — Every client report should be a self-contained generated bundle:
-- L472 [3] Reduce report duplication — The current combined Nova `v3.json` is approximately 4.8 MB because source
-- L480 [3] Add temporal proof — Competitors repeatedly emphasize crawl comparison, rank history, and
-- L495 [2] 7. Recommended delivery order
-- L497 [3] P0 — credibility and repeatability — 1. Replace `overall_score` presentation with Technical SEO Health v2 while
-- L508 [3] P1 — stronger market proof — 6. Add Conversion Readiness as a separate, deterministic score.
-- L515 [3] P2 — calibration and moat — 10. Calibrate severity and recommendation priority from vertical outcomes:
-- L524 [2] Acceptance metrics — - Every client headline score has a documented, site-wide formula and evidence
-- L539 [2] Methodology — Repository behavior was inspected through the scoring, AI readiness,
+- L261 [2] 3. Better sources <Cold-prospect; DataForSEO; highest-value; CrUX; business-listing; device-specific; BrightLocal; local-seo-tools; local-search-grid; Owner-authorized; webmaster-tools; keyword-tool>
+- L263 [3] Cold-prospect sources — Use sources that do not require owner access: <DataForSEO; highest-value; CrUX; business-listing; device-specific; BrightLocal; local-seo-tools; local-search-grid>
+- L295 [3] Owner-authorized sources after engagement — These sources turn a persuasive estimate into an accountable growth system: {Google Search Console:; Google Business Profile Performance:} <webmaster-tools; keyword-tool; my-business; api-schema; SaaS; generative-AI; gen-ai-performance-reports; grounding-query; owned-site>
+- L331 [2] 4. What competitors do better or differently — | Product group | What they do better | What Outreach should copy | What not to copy | <site-wide; special-AI-file; PageSpeed; CrUX; Rendered-content; Expert-only; BrightLocal; share-of-voice; WooRank; white-label; Template-driven; AgencyAnalytics>
+- L350 [2] 5. Client-facing design improvements — The current Nova deck is visually strong, but it is a handcrafted derivative <non-brand; next-step; Target-versus-competitor; landing-page; Print-safe; after-engagement; creating-a-pdf-report; AgencyAnalytics; seo-reporting>
+- L356 [3] Layer 1: 90-second owner brief — - What is already working. <non-brand; next-step>
+- L364 [3] Layer 2: interactive evidence — - Search and Maps tabs. <Target-versus-competitor; landing-page>
+- L374 [3] Layer 3: methodology and export — - Evidence completeness by source. <Print-safe; client-facing; after-engagement; creating-a-pdf-report; AgencyAnalytics; seo-reporting>
+- L401 [2] 6. Durability improvements <attempt-scoped; append-only; market-run-scoped; (run, report_version); ON CONFLICT ... DO UPDATE; (run, attempt, stage); ReportSnapshot; latest; self-contained; content-address; v3.json; Maps-grid>
+- L403 [3] Preserve the strengths — Keep: <attempt-scoped; append-only>
+- L416 [3] Correct the remaining overwrite paths — The market layer preserves market-run-scoped report snapshots, but canonical <market-run-scoped; (run, report_version); ON CONFLICT ... DO UPDATE; (run, attempt, stage); ReportSnapshot; latest>
+- L444 [3] Create a portable report bundle — Every client report should be a self-contained generated bundle: <self-contained; content-address>
+- L472 [3] Reduce report duplication — The current combined Nova `v3.json` is approximately 4.8 MB because source <v3.json>
+- L480 [3] Add temporal proof — Competitors repeatedly emphasize crawl comparison, rank history, and <Maps-grid>
+- L495 [2] 7. Recommended delivery order <overall_score; site-wide; affected-page; ReportSnapshot; Maps-grid; high-intent; report-to-report; local-grid; service-fit>
+- L497 [3] P0 — credibility and repeatability — 1. Replace `overall_score` presentation with Technical SEO Health v2 while <overall_score; site-wide; affected-page; ReportSnapshot; Maps-grid; high-intent; report-to-report>
+- L508 [3] P1 — stronger market proof — 6. Add Conversion Readiness as a separate, deterministic score. <local-grid>
+- L515 [3] P2 — calibration and moat — 10. Calibrate severity and recommendation priority from vertical outcomes: <service-fit>
+- L524 [2] Acceptance metrics — - Every client headline score has a documented, site-wide formula and evidence <site-wide; report-snapshot; Owner-authorized; client-report; unsupported-claim>
+- L539 [2] Methodology — Repository behavior was inspected through the scoring, AI readiness, <first-party; OpenAI; DataForSEO; BrightLocal; WooRank; AgencyAnalytics>
 
 ## docs/research/2026-07-28-accretive-revenue-assessment.md
 
-- L1 [1] Accretive Revenue: Research Report & Strategic Assessment — Generated 2026-07-28 · Sources: ~90 across three parallel research streams + repo audit · Confidence: High on market evidence, High on the repo finding, Medium
-- L7 [2] Executive Summary — You have built a complete, working revenue machine and never switched it on. Plans P3–P12 are {35 insight runs; 4 prospects, 0 outreach workflows, and 1 activation event.}
-- L27 [2] 1. The repo finding (highest-confidence input) — | Artifact | Count | Source |
-- L47 [2] 2. Where the money actually is (and isn't)
-- L49 [3] 2.1 Vertical selection — decisive — | Vertical | Monthly marketing spend | Cost per lead | Job value | Verdict | {Home services / trades; Roofing $228.15; Primary}
-- L64 [3] 2.2 The legal wedge — the strongest single asset in this research — The FTC brought an action against HomeAdvisor/Angi and obtained a consent order that bars them {bars them from representing lead conversion rates without su; redacted}
-- L78 [3] 2.2b The incumbent published your pitch for you (strongest finding in the report) — On the Angi Q1 2026 earnings call (May 6, 2026), management stated on the record that pros {Angi Q1 2026 earnings call (May 6, 2026); $50 a lead; 1 in 7, 1 in 8; $4,000; double the win rate; The arithmetic they just handed you:}
-- L98 [3] 2.2c The repositioning this forces — sell win-rate, not better leads — ⚠️ Do not build or pitch "exclusive/non-shared leads." That lane is already crowded: the {Do not build or pitch "exclusive/non-shared leads."; seven distinct entrants; the incumbent is moving onto that ground}
-- L120 [3] 2.3 The conversion gap — your engine already measures it — Contractors with fewer than 5 technicians book only 24% of inbound calls, versus 59% for {fewer than 5 technicians book only 24% of inbound calls}
-- L130 [3] 2.4 What NOT to lead with — AI visibility — I recommended this mid-research and the evidence reversed it. Correcting: {Only 8% of consumers begin a local search with an AI tool; 18% of AI users would contact a business on an AI recommenda; 43% who start with AI revert to Google; misstatement}
-- L149 [3] 2.5 Pricing structure — two findings that should set the model — Retention is a function of price point, not product quality. Below $10/month ARPA, even {Retention is a function of price point, not product quality.; 2.7% achieve net revenue retention above 100%; ~93% retention, 41% expanding; Retainers beat projects decisively.; under $1,000}
-- L165 [3] 2.6 The BJJ registry — your paying customer is not the gym — The gap flagged in the first draft is now closed, and the answer inverts the obvious model. {A direct competitor publishes its rate card.; $99/year; $299/year (or $29/mo); $1,500 setup + $99/month; Willingness-to-pay anchors are strong, but capped.; $146.15/month}
-- L210 [2] 3. What the evidence says to avoid — 1. White-label audit infrastructure sold to agencies. White-labeling is now free at {White-label audit infrastructure sold to agencies.; free; 73% of agencies already produce a client report in under an; Semrush sunset its entire Agency Growth Kit; AEO/GEO retainers to local SMBs.; Low-ARPA self-serve micro-SaaS.}
-- L237 [2] 4. What agents do well vs. what only you can do — You asked what I could do well. The honest split: {What automation genuinely does well here — near-zero margina; Manufacture evidence at scale.; Prospect discovery, qualification, and enrichment; Draft}
-- L269 [2] 5. Ranked paths — | # | Path | Time to cash | Accretion | Evidence strength | {Run the trades audit motion; High; Registry monetized through vendors, not gyms}
-- L287 [2] 6. 30 / 60 / 90 — Days 1–30 — switch the machine on. {Days 1–30 — switch the machine on.; Days 31–60 — find the price.}
-- L310 [2] Methodology & limits — Three parallel research streams (plus one child agent on trades economics) covering: the {Known gaps:; No credible independent data exists on niche directory reven}
+- L1 [1] Accretive Revenue: Research Report & Strategic Assessment — Generated 2026-07-28 · Sources: ~90 across three parallel research streams + repo audit · Confidence: High on market evidence, High on the repo finding, Medium <complete; AI-readiness; demand-to-revenue; AI-leveraged; evidence-backed; lead-waste; re-run; one-off; highest-confidence; append-only; anti-fabrication; LocaliQ>
+- L7 [2] Executive Summary — You have built a complete, working revenue machine and never switched it on. Plans P3–P12 are {35 insight runs; 4 prospects, 0 outreach workflows, and 1 activation event.} <complete; AI-readiness; demand-to-revenue; AI-leveraged; evidence-backed; lead-waste; re-run; one-off>
+- L27 [2] 1. The repo finding (highest-confidence input) — | Artifact | Count | Source | <append-only; anti-fabrication>
+- L47 [2] 2. Where the money actually is (and isn't) <LocaliQ; Apr 2024; Mar 2025; plumber-cost; Houzz & Home 2025; US-Houzz-and-Home; Value 2025; cost-vs-value; services-revenue; HomeAdvisor; Project-ready; price-shopping>
+- L49 [3] 2.1 Vertical selection — decisive — | Vertical | Monthly marketing spend | Cost per lead | Job value | Verdict | {Home services / trades; Roofing $228.15; Primary} <LocaliQ; Apr 2024; Mar 2025; plumber-cost; Houzz & Home 2025; US-Houzz-and-Home; Value 2025; cost-vs-value; services-revenue>
+- L64 [3] 2.2 The legal wedge — the strongest single asset in this research — The FTC brought an action against HomeAdvisor/Angi and obtained a consent order that bars them {bars them from representing lead conversion rates without su; redacted} <HomeAdvisor; Project-ready; price-shopping; legal-library; cases-proceedings; Mar 2022; Apr 2023; win-rate; lead-gen>
+- L78 [3] 2.2b The incumbent published your pitch for you (strongest finding in the report) — On the Angi Q1 2026 earnings call (May 6, 2026), management stated on the record that pros {Angi Q1 2026 earnings call (May 6, 2026); $50 a lead; 1 in 7, 1 in 8; $4,000; double the win rate; The arithmetic they just handed you:} <call-transcripts; angi-angi; earnings-call-transcript; YoY>
+- L98 [3] 2.2c The repositioning this forces — sell win-rate, not better leads — ⚠️ Do not build or pitch "exclusive/non-shared leads." That lane is already crowded: the {Do not build or pitch "exclusive/non-shared leads."; seven distinct entrants; the incumbent is moving onto that ground} <exclusive-lead; flat-fee; speed-to-lead; January 2025; blast-to-everyone; ConversionReadinessService; October 2025>
+- L120 [3] 2.3 The conversion gap — your engine already measures it — Contractors with fewer than 5 technicians book only 24% of inbound calls, versus 59% for {fewer than 5 technicians book only 24% of inbound calls} <ServiceTitan; data-call-booking-rates; ConversionReadinessService; vertical-aware>
+- L130 [3] 2.4 What NOT to lead with — AI visibility — I recommended this mid-research and the evidence reversed it. Correcting: {Only 8% of consumers begin a local search with an AI tool; 18% of AI users would contact a business on an AI recommenda; 43% who start with AI revert to Google; misstatement} <mid-research; BrightLocal; Jul 2026; consumer-search-behavior-channels; widely-circulated; ChatGPT; multi-location; all-topics; business-growth-and-entrepreneurship; understanding-ai-use-by-small-businesses; Apr 2026; Self-reported>
+- L149 [3] 2.5 Pricing structure — two findings that should set the model — Retention is a function of price point, not product quality. Below $10/month ARPA, even {Retention is a function of price point, not product quality.; 2.7% achieve net revenue retention above 100%; ~93% retention, 41% expanding; Retainers beat projects decisively.; under $1,000} <top-quartile; SaaS; ChartMogul; saas-retention-report; Digital 2026; WebFX; how-much-does-seo-audit-cost; seo-pricing; re-run>
+- L165 [3] 2.6 The BJJ registry — your paying customer is not the gym — The gap flagged in the first draft is now closed, and the answer inverts the obvious model. {A direct competitor publishes its rate card.; $99/year; $299/year (or $29/mo); $1,500 setup + $99/month; Willingness-to-pay anchors are strong, but capped.; $146.15/month} <jiujitsu-gyms; feature-your-gym; hard-capped; proof-of-shape; Stripe-verified; OpenAlternative; solo-run; all-time; TrustMRR; high-priced; PushPress; gym-SaaS>
+- L210 [2] 3. What the evidence says to avoid — 1. White-label audit infrastructure sold to agencies. White-labeling is now free at {White-label audit infrastructure sold to agencies.; free; 73% of agencies already produce a client report in under an; Semrush sunset its entire Agency Growth Kit; AEO/GEO retainers to local SMBs.; Low-ARPA self-serve micro-SaaS.} <White-labeling; AgencyAnalytics; DashThis; net-expansion; top-rated; low-skilled; failure-rate; YoY; registry-page; load-bearing>
+- L237 [2] 4. What agents do well vs. what only you can do — You asked what I could do well. The honest split: {What automation genuinely does well here — near-zero margina; Manufacture evidence at scale.; Prospect discovery, qualification, and enrichment; Draft} <vertical-specific; provenance-linked; highest-leverage; owned-property; Ex-JPMorgan; operator-review>
+- L269 [2] 5. Ranked paths — | # | Path | Time to cash | Accretion | Evidence strength | {Run the trades audit motion; High; Registry monetized through vendors, not gyms} <lead-waste; re-run; Medium-high; gym-SaaS; SaaS; PushPress; free-audit>
+- L287 [2] 6. 30 / 60 / 90 — Days 1–30 — switch the machine on. {Days 1–30 — switch the machine on.; Days 31–60 — find the price.} <FTC-backed; operator-reviewed; re-run>
+- L310 [2] Methodology & limits — Three parallel research streams (plus one child agent on trades economics) covering: the {Known gaps:; No credible independent data exists on niche directory reven} <AI-leveraged; post-AI-Overviews; well-evidenced; free-audit; paid-engagement; WebSearch; WebFetch>
 
 ## docs/research/2026-08-22-agent-design-tooling-assessment.md
 
-- L1 [1] Agent-Native Design Tooling: Buy, Borrow, or Build — Status: current
-- L8 [2] Answer — Neither, as posed. The pipeline has two jobs with opposite requirements, and {Neither, as posed.; Production; 100% self-built.; Art direction; Borrow a tool.}
-- L21 [2] Why no tool can do the production job — Every agent-native design tool surveyed shares one disqualifying property: {it requires a desktop application open with a file loaded.}
-- L47 [2] Tool-by-tool
-- L49 [3] paper.design — the best of the borrowed options — - Canvas is HTML and CSS. Every element renders as real HTML/CSS, so designs {Canvas is HTML and CSS.; HyperFrames consumes HTML/CSS; MCP is bidirectional; Built-in image generation; multi-reference}
-- L73 [3] Claude Design — check this first, it is already configured — Anthropic's own tool generates production-ready HTML, CSS and JavaScript from {automatically inherits the organisation's design system}
-- L88 [3] Figma — wrong canvas, higher cost — Write-to-canvas works and is currently free during beta (Figma states it will
-- L97 [3] Canva — blocked by its own API — Shipped an MCP in February 2026 with 12M+ designs created, but the Connect API {cannot edit existing free-form design content}
-- L106 [3] Others considered — CoDesign (IMG.LY, free local MCP, technical preview June 2026) is the only
-- L113 [2] Recommendation — 1. Run `/design-login` and evaluate Claude Design first. Zero marginal cost, {Run `/design-login` and evaluate Claude Design first.; If it does not, buy Paper Pro at $16/month.; Do not connect either during production runs.}
-- L131 [2] Correction (2026-08-22, same day) — An earlier revision of this document claimed the bottleneck was "roughly 150 {Both claims were downstream of one wrong number.; composites of reusable layers}
-- L166 [2] The remaining hard problem — Library quality, then coverage. Operator assessment on review: of the existing cutouts only {Library quality, then coverage.}
-- L184 [2] Sources — - [paper.design/pricing](https://paper.design/pricing)
+- L1 [1] Agent-Native Design Tooling: Buy, Borrow, or Build — Status: current <self-built; byte-identical; write-to-canvas; JSON-RPC; ask-the-community; $0.00; Tool-by-tool; HyperFrames; Built-in; multi-reference; OpenAI; third-party>
+- L8 [2] Answer — Neither, as posed. The pipeline has two jobs with opposite requirements, and {Neither, as posed.; Production; 100% self-built.; Art direction; Borrow a tool.} <byte-identical>
+- L21 [2] Why no tool can do the production job — Every agent-native design tool surveyed shares one disqualifying property: {it requires a desktop application open with a file loaded.} <agent-native; write-to-canvas; JSON-RPC; ask-the-community; byte-identical; $0.00>
+- L47 [2] Tool-by-tool <HyperFrames; Built-in; multi-reference; OpenAI; third-party; March 2026; frontend-design; auto-launches; claude-code; production-ready; JavaScript; get-started-with-claude-design>
+- L49 [3] paper.design — the best of the borrowed options — - Canvas is HTML and CSS. Every element renders as real HTML/CSS, so designs {Canvas is HTML and CSS.; HyperFrames consumes HTML/CSS; MCP is bidirectional; Built-in image generation; multi-reference} <OpenAI; third-party; March 2026; frontend-design; auto-launches; claude-code>
+- L73 [3] Claude Design — check this first, it is already configured — Anthropic's own tool generates production-ready HTML, CSS and JavaScript from {automatically inherits the organisation's design system} <production-ready; JavaScript; get-started-with-claude-design>
+- L88 [3] Figma — wrong canvas, higher cost — Write-to-canvas works and is currently free during beta (Figma states it will <Write-to-canvas; usage-based; HyperFrames; design-system; one-operator>
+- L97 [3] Canva — blocked by its own API — Shipped an MCP in February 2026 with 12M+ designs created, but the Connect API {cannot edit existing free-form design content} <February 2026; community-maintained>
+- L106 [3] Others considered — CoDesign (IMG.LY, free local MCP, technical preview June 2026) is the only <CoDesign; June 2026; multi-format>
+- L113 [2] Recommendation — 1. Run `/design-login` and evaluate Claude Design first. Zero marginal cost, {Run `/design-login` and evaluate Claude Design first.; If it does not, buy Paper Pro at $16/month.; Do not connect either during production runs.} <HyperFrames; multi-reference; auto-launches; art-direction; fan-out; self-built>
+- L131 [2] Correction (2026-08-22, same day) — An earlier revision of this document claimed the bottleneck was "roughly 150 {Both claims were downstream of one wrong number.; composites of reusable layers} <per-plate; systems-and-blowups; asset-taxonomy.v1.json; style-profile.v1.json; depth_layers; evidence-safe; topic-specific; one-time; attended-desktop; dual-monitor; art-direction; library-building>
+- L166 [2] The remaining hard problem — Library quality, then coverage. Operator assessment on review: of the existing cutouts only {Library quality, then coverage.} <one-time; art-directed; art-direction; highest-value; catalog-completeness>
+- L184 [2] Sources — - [paper.design/pricing](https://paper.design/pricing) <paper-design-mcp-review; figma-mcp-vs-paper; Paper; figma-vs-paper; en-us; Guide-to-the-Figma-MCP-server; ask-the-community; ai-design-agents; June 2026; ai-agent-design-mcp-tools; OpenClaw; openclaw-canva-ai-design-guide>
 
 ## docs/research/2026-08-24-twenty-n8n-attio-evaluation.md
 
-- L1 [1] Twenty vs n8n vs Attio: Workflow Fit Evaluation — Generated 2026-08-24 · ~60 sources across tavily + exa · Confidence: High on pricing/licensing (primary sources), Medium on operational claims (vendor-adjacent
-- L5 [2] Executive summary — Three tools, three different seams, three different answers. {n8n — no, for the pipeline.; A CRM — yes, but only one seam of it, and not yet.}
-- L17 [2] The three seams — | Seam | State today | Candidate | Verdict | {missing entirely; working}
-- L27 [2] 1. n8n — the clearest answer
-- L29 [3] Licensing is fine for this use — Not OSI open source; it is the [Sustainable Use License](https://github.com/n8n-io/n8n/blob/master/LICENSE.md) ("fair-code"). Internal business use, self-hosted
-- L33 [3] But the fit is poor, and structurally so — 1. The two nodes you would actually need are disabled by default since v2.0. [Execute Command](https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-bas {The two nodes you would actually need are disabled by defaul; Python regressed.}
-- L40 [3] What it genuinely does better than anything you'd build — Human-in-the-loop. `Send and Wait for Response` exists across Telegram, Slack, Gmail, Discord and more, with approval buttons, free text, or an editable pre-fil {offload state to the database}
-- L46 [3] The decision rule from the field — Independent practitioners converge hard here. [Edward Chalupa](https://echalupa.com/blog/n8n-silent-failure-docker-networking) found a 17-node workflow silently {silently broken for weeks}
-- L57 [2] 2. Attio — managed, metered, capable — Pricing rose ~21% in July 2026. Nearly every comparison article still quotes the old numbers. Live from [attio.com/pricing](https://attio.com/pricing): {Pricing rose ~21% in July 2026.; $35; $79; The important structural fact: API, webhooks, MCP server, Wo}
-- L78 [2] 3. Twenty — the better data model, the worse operations
-- L80 [3] Genuinely strong where it matters here — Schema-per-tenant with auto-generated API. Per [official docs](https://docs.twenty.com/developers/extend/api): add a custom object and "it immediately gets REST {Schema-per-tenant with auto-generated API.; metadata API is writable}
-- L86 [3] The operational risk is real and first-party evidenced — Upgrades must step through every minor version. Skipping corrupts the workspace. Maintainer, on [#9419](https://github.com/twentyhq/twenty/issues/9419): {Upgrades must step through every minor version. Skipping cor}
-- L98 [3] Licensing: three-way split — [AGPLv3](https://github.com/twentyhq/twenty/blob/main/LICENSE) core · commercial licence for `@license Enterprise` files · MIT for SDKs. Critically, the Twenty {Twenty Application Exception; not}
-- L104 [2] Recommendation — 1. Skip n8n. The evidence is specific, not vibes: the nodes you need are off by default, Python regressed, version control is paywalled above your budget, and t {1. Skip n8n.; 2. Do not adopt a CRM this week.}
+- L1 [1] Twenty vs n8n vs Attio: Workflow Fit Evaluation — Generated 2026-08-24 · ~60 sources across tavily + exa · Confidence: High on pricing/licensing (primary sources), Medium on operational claims (vendor-adjacent <vendor-adjacent; most-needed; security-disabled; everything-in-git; human-in-the-loop; SEOTarget; InsightReport; proto-CRM; one-operator; video-engine; git-versioned; sha-bound>
+- L5 [2] Executive summary — Three tools, three different seams, three different answers. {n8n — no, for the pipeline.; A CRM — yes, but only one seam of it, and not yet.} <most-needed; security-disabled; everything-in-git; human-in-the-loop; SEOTarget; InsightReport; proto-CRM; one-operator; video-engine; git-versioned>
+- L17 [2] The three seams — | Seam | State today | Candidate | Verdict | {missing entirely; working} <sha-bound; git-versioned; in-repo>
+- L27 [2] 1. n8n — the clearest answer <fair-code; self-hosted; white-labelling; carve-outs; master; .ee.; core-nodes; nodes-base; filesystem-watch; run-a-script; breaking-changes; n8n-task-runners.json>
+- L29 [3] Licensing is fine for this use — Not OSI open source; it is the [Sustainable Use License](https://github.com/n8n-io/n8n/blob/master/LICENSE.md) ("fair-code"). Internal business use, self-hosted <fair-code; self-hosted; white-labelling; carve-outs; master; .ee.>
+- L33 [3] But the fit is poor, and structurally so — 1. The two nodes you would actually need are disabled by default since v2.0. [Execute Command](https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-bas {The two nodes you would actually need are disabled by defaul; Python regressed.} <core-nodes; nodes-base; filesystem-watch; run-a-script; breaking-changes; n8n-task-runners.json; code-in; using-the-code-node; source-control-environments; ForgeFlow; we-didnt-migrate-from; to-python-because>
+- L40 [3] What it genuinely does better than anything you'd build — Human-in-the-loop. `Send and Wait for Response` exists across Telegram, Slack, Gmail, Discord and more, with approval buttons, free text, or an editable pre-fil {offload state to the database} <Human-in-the-loop; Send and Wait for Response; pre-filled; core-nodes; nodes-base>
+- L46 [3] The decision rule from the field — Independent practitioners converge hard here. [Edward Chalupa](https://echalupa.com/blog/n8n-silent-failure-docker-networking) found a 17-node workflow silently {silently broken for weeks} <silent-failure-docker-networking; when-to-reach-for; vs-writing-the-orchestrator-yourself; Mar 2026; expression-sandbox>
+- L57 [2] 2. Attio — managed, metered, capable — Pricing rose ~21% in July 2026. Nearly every comparison article still quotes the old numbers. Live from [attio.com/pricing](https://attio.com/pricing): {Pricing rose ~21% in July 2026.; $35; $79; The important structural fact: API, webhooks, MCP server, Wo} <first-class; objects-and-lists; HMAC-signed; rest-api; rate-limiting; OAuth-only; auto-approve; self-hosting; SaaS; hard-capped; lock-in>
+- L78 [2] 3. Twenty — the better data model, the worse operations <Schema-per-tenant; auto-generated; GraphQL; built-in; second-class; HubSpot; Enterprise-gated; Nov 2024; GitHub; Apr 2026; git-backed; first-party>
+- L80 [3] Genuinely strong where it matters here — Schema-per-tenant with auto-generated API. Per [official docs](https://docs.twenty.com/developers/extend/api): add a custom object and "it immediately gets REST {Schema-per-tenant with auto-generated API.; metadata API is writable} <GraphQL; built-in; second-class; HubSpot; Enterprise-gated; Nov 2024; GitHub; Apr 2026; git-backed>
+- L86 [3] The operational risk is real and first-party evidenced — Upgrades must step through every minor version. Skipping corrupts the workspace. Maintainer, on [#9419](https://github.com/twentyhq/twenty/issues/9419): {Upgrades must step through every minor version. Skipping cor} <non-idempotent; ALTER TABLE; crash-restart; sed; hand-edited; cross-version; x-era; post-mortem; claimed-but-unverified; community-only; self-hosters; SERVER_URL>
+- L98 [3] Licensing: three-way split — [AGPLv3](https://github.com/twentyhq/twenty/blob/main/LICENSE) core · commercial licence for `@license Enterprise` files · MIT for SDKs. Critically, the Twenty {Twenty Application Exception; not} <@license Enterprise; GraphQL; Self-hosted; row-level>
+- L104 [2] Recommendation — 1. Skip n8n. The evidence is specific, not vibes: the nodes you need are off by default, Python regressed, version control is paywalled above your budget, and t {1. Skip n8n.; 2. Do not adopt a CRM this week.} <fan-out; SEOTarget; InsightReport; InsightRepository; self-hosting; video-engine; schema-validated; git-versioned>
 - L114 [3] The asymmetry that decides it — Build Daily's line applies to all three: it is cheaper to move from code to a platform than back. Everything currently in Python — gates, watchdog, claim regist
-- L120 [2] Gaps in this research — - Twenty 2.x multi-version upgrade reliability at scale — no post-mortem found. {no post-mortem found; self-hosted}
+- L120 [2] Gaps in this research — - Twenty 2.x multi-version upgrade reliability at scale — no post-mortem found. {no post-mortem found; self-hosted} <multi-version; single-source; March 2026; first-party>
 
 ## docs/research/2026-08-24-writing-for-the-ear-craft-source.md
 
-- L1 [1] **Acoustic Narrative Architecture: Integrating Classical Rhetorical, Screenwriting, and Broadcast Principles into Faceless Audio-Visual Media**
-- L3 [2] **The Acoustic Imperative: Broadcast and Radio Writing Mechanics** — Writing for spoken delivery requires a fundamental reorientation of linguistic mechanics. Unlike visual text, which permits the reader to pause, backtrack, and
-- L7 [3] **Cognitive Load and Oral Syntax** — The core principle of broadcast writing is the "one idea per sentence" rule3. Complex written prose frequently relies on nested clauses, parenthetical insertion
+- L1 [1] **Acoustic Narrative Architecture: Integrating Classical Rhetorical, Screenwriting, and Broadcast Principles into Faceless Audio-Visual Media** <re-parse; multi-layered; Subject-Verb-Object; single-idea; Attribution-first; micro-pause; second-person; long-form; sentence-level; surface-level; McKee; Expectation-Reality>
+- L3 [2] **The Acoustic Imperative: Broadcast and Radio Writing Mechanics** — Writing for spoken delivery requires a fundamental reorientation of linguistic mechanics. Unlike visual text, which permits the reader to pause, backtrack, and <re-parse; multi-layered; Subject-Verb-Object; single-idea; Attribution-first; micro-pause; second-person; long-form>
+- L7 [3] **Cognitive Load and Oral Syntax** — The core principle of broadcast writing is the "one idea per sentence" rule3. Complex written prose frequently relies on nested clauses, parenthetical insertion <multi-layered; Subject-Verb-Object; single-idea; Attribution-first>
 - L20 [3] **Attribution-First Architecture and Acoustic Clarity** — A fundamental rule of broadcast news writing is placing attributions at the beginning of a sentence rather than at the end7. In visual print, a reader can absor
-- L25 [3] **The Terminal Stress Principle** — In oral composition, the position of a word within a sentence dictates its psychological impact6. Scriptwriters utilize the Terminal Stress Principle, which dic
-- L29 [3] **Direct Address and Auditory Signposting** — Effective spoken scripts reject the framing of a mass audience1. Broadcasters write for a single individual, utilizing direct second-person address ("you") rath
-- L34 [2] **Deep Narrative Engineering: Screenwriting Mechanics and Structural Machinery** — While broadcast mechanics govern the sentence-level acoustic delivery of a script, screenwriting mechanics provide the structural engine that sustains viewer en
-- L38 [3] **McKee’s Beat Mechanics and the Expectation-Reality Gap** — Robert McKee's foundational framework decomposes story architecture into a rigorous structural hierarchy extending from the individual beat up to the complete s
-- L44 [3] **Truby’s Organic Architecture and the Designing Principle** — John Truby rejects rigid three-act templates, arguing that narrative must grow organically from character weakness, moral choice, and internal theme16. Truby ou {Weakness and Need; Desire; Opponent; Plan}
-- L59 [3] **Snyder’s Mid-Pacing Machinery and Act Transitions** — Blake Snyder’s Save the Cat framework provides a granular beat sheet that prevents middle-act narrative decay—the point where audience engagement typically drop
-- L70 [2] **Rhetorical Acoustics and Oral Cadence: Lessons from Speechwriting** — Speechwriting rhetoric is the art of engineering acoustic memory23. Because spoken words dissolve instantly upon utterance, speechwriters employ classical rheto
-- L74 [3] **The Dynamics of Strategic Silence** — In his study of presidential rhetoric, James Humes identifies the Power Pause as the single most critical vocal technique for commanding authority and shaping l {The Pre-Opener Pause}
-- L82 [3] **Syntactical Triads and Anaphora** — The human brain is an efficient pattern-matching engine24. Speechwriting leverages this cognitive reality through the Rule of Three, or tricolon24. Triads creat
+- L25 [3] **The Terminal Stress Principle** — In oral composition, the position of a word within a sentence dictates its psychological impact6. Scriptwriters utilize the Terminal Stress Principle, which dic <micro-pause>
+- L29 [3] **Direct Address and Auditory Signposting** — Effective spoken scripts reject the framing of a mass audience1. Broadcasters write for a single individual, utilizing direct second-person address ("you") rath <second-person; long-form>
+- L34 [2] **Deep Narrative Engineering: Screenwriting Mechanics and Structural Machinery** — While broadcast mechanics govern the sentence-level acoustic delivery of a script, screenwriting mechanics provide the structural engine that sustains viewer en <sentence-level; surface-level; long-form; McKee; Expectation-Reality; high-performing; three-act; Self-Revelation; re-establishment; heavy-handed; Mid-Pacing; middle-act>
+- L38 [3] **McKee’s Beat Mechanics and the Expectation-Reality Gap** — Robert McKee's foundational framework decomposes story architecture into a rigorous structural hierarchy extending from the individual beat up to the complete s <high-performing>
+- L44 [3] **Truby’s Organic Architecture and the Designing Principle** — John Truby rejects rigid three-act templates, arguing that narrative must grow organically from character weakness, moral choice, and internal theme16. Truby ou {Weakness and Need; Desire; Opponent; Plan} <three-act; Self-Revelation; re-establishment; heavy-handed>
+- L59 [3] **Snyder’s Mid-Pacing Machinery and Act Transitions** — Blake Snyder’s Save the Cat framework provides a granular beat sheet that prevents middle-act narrative decay—the point where audience engagement typically drop <middle-act; non-fiction; re-energizes; McKee; Micro-Beats; Expectation-Reality; line-by-line; audio-visual; micro-reversals; Fifteen-Beat; long-form; act-two>
+- L70 [2] **Rhetorical Acoustics and Oral Cadence: Lessons from Speechwriting** — Speechwriting rhetoric is the art of engineering acoustic memory23. Because spoken words dissolve instantly upon utterance, speechwriters employ classical rheto <Pre-Opener; Pre-Key; Post-Key; long-term; pattern-matching; high-impact>
+- L74 [3] **The Dynamics of Strategic Silence** — In his study of presidential rhetoric, James Humes identifies the Power Pause as the single most critical vocal technique for commanding authority and shaping l {The Pre-Opener Pause} <Pre-Key; Post-Key; long-term>
+- L82 [3] **Syntactical Triads and Anaphora** — The human brain is an efficient pattern-matching engine24. Speechwriting leverages this cognitive reality through the Rule of Three, or tricolon24. Triads creat <pattern-matching; high-impact>
 - L87 [3] **Acoustic Cadence and Phonetic Anchoring** — Master speechwriters compose with explicit vocal cadence, varying sentence length to create an auditory wave4. A series of longer, rhythmic setup sentences buil
-- L91 [2] **Nonfiction Narrative Architecture and Documentary Voiceover** — Nonfiction storytelling must convey complex factual, historical, or technical information without degenerating into an abstract lecture22. The craft of document
-- L95 [3] **The Ira Glass Dual-Engine Model** — Ira Glass conceptualizes narrative nonfiction as an engine driven by two continuously alternating building blocks: the Anecdote and the Reflection31.
-- L102 [3] **Structural Paradigms: The Martini Glass and the Kabob** — To structure documentary non-fiction scripts, narrative producers rely on structural models that depart from traditional print journalism's inverted pyramid28. {The Martini Glass Structure}
-- L109 [3] **Audio-Visual Counterpoint and Subtext** — In faceless visual media, a common pitfall is tautology—writing script narration that merely describes what is simultaneously displayed on screen14. Documentary
-- L114 [2] **Ancient Oral Mechanics and Archetypal Design** — Long before written text, broadcast journalism, or screenwriting existed, complex cultural narratives were transmitted across generations strictly through oral
+- L91 [2] **Nonfiction Narrative Architecture and Documentary Voiceover** — Nonfiction storytelling must convey complex factual, historical, or technical information without degenerating into an abstract lecture22. The craft of document <non-fiction; Dual-Engine; step-by-step; High-performing; Audio-Visual; McKee>
+- L95 [3] **The Ira Glass Dual-Engine Model** — Ira Glass conceptualizes narrative nonfiction as an engine driven by two continuously alternating building blocks: the Anecdote and the Reflection31. <step-by-step; High-performing>
+- L102 [3] **Structural Paradigms: The Martini Glass and the Kabob** — To structure documentary non-fiction scripts, narrative producers rely on structural models that depart from traditional print journalism's inverted pyramid28. {The Martini Glass Structure} <non-fiction>
+- L109 [3] **Audio-Visual Counterpoint and Subtext** — In faceless visual media, a common pitfall is tautology—writing script narration that merely describes what is simultaneously displayed on screen14. Documentary <McKee>
+- L114 [2] **Ancient Oral Mechanics and Archetypal Design** — Long before written text, broadcast journalism, or screenwriting existed, complex cultural narratives were transmitted across generations strictly through oral <McKee; culture-specific>
 - L118 [3] **Ring Composition and Chiastic Structures** — A powerful structural tool inherited from oral tradition is Ring Composition, also known as Chiasmus35. Ring composition is a symmetrical narrative structure wh
-- L123 [3] **Universal Archetypes versus Algorithmic Stereotypes** — Robert McKee draws a vital distinction between archetypal storytelling and stereotypical storytelling13. A stereotypical script relies on superficial, culture-s
-- L128 [2] **Integrated Synthesis Framework for Long-Form Audio-Visual Scripts** — To synthesize these diverse methodologies into an operational workflow, the following master blueprint maps broadcast mechanics, screenwriting machinery, rhetor {00:00 \- 01:30; Truby; Glass}
-- L141 [2] **Strategic Synthesis and Practical Execution** — Elevating faceless audio-visual scripts requires synthesizing acoustic precision with deep narrative engineering. At the sentence level, scripts must be compose
-- L147 [4] **Works cited** — > 1. Radio Production \- Inside Book Publishing, [https://routledgetextbooks.com/textbooks/9781138819979/chapters.php](https://routledgetextbooks.com/textbooks/
+- L123 [3] **Universal Archetypes versus Algorithmic Stereotypes** — Robert McKee draws a vital distinction between archetypal storytelling and stereotypical storytelling13. A stereotypical script relies on superficial, culture-s <McKee; culture-specific>
+- L128 [2] **Integrated Synthesis Framework for Long-Form Audio-Visual Scripts** — To synthesize these diverse methodologies into an operational workflow, the following master blueprint maps broadcast mechanics, screenwriting machinery, rhetor {00:00 \- 01:30; Truby; Glass} <Attribution-first; Pre-Opener; second-person; McKee; Expectation-Reality; sentence-length; Pre-Key; single-word; Post-Key; Self-Revelation>
+- L141 [2] **Strategic Synthesis and Practical Execution** — Elevating faceless audio-visual scripts requires synthesizing acoustic precision with deep narrative engineering. At the sentence level, scripts must be compose <audio-visual; active-voice; single-idea; high-value; McKee; expectation-reality; long-form; high-impact; podcast-production; Broadcast-Writing; ResearchGate; SocialRevver>
+- L147 [4] **Works cited** — > 1. Radio Production \- Inside Book Publishing, [https://routledgetextbooks.com/textbooks/9781138819979/chapters.php](https://routledgetextbooks.com/textbooks/ <podcast-production; Broadcast-Writing; ResearchGate; McKee; SocialRevver; robert-mckee-story-structure; RobertMcKeeStorypdf; the-anatomy-of-a-story-john-truby; John-Truby-Anatomy-of-Story; well-defined; WritingHub; story-structure>
 
 ## docs/research/audio/SUBTHRESHOLD_BACKGROUND_MUSIC_RESEARCH_BLUEPRINT.md
 
-- L1 [1] Sub-threshold Background Music — Research Blueprint — *Pass-1 discovery brief · 2026-09-01 · sources: Exa semantic + Tavily
+- L1 [1] Sub-threshold Background Music — Research Blueprint — *Pass-1 discovery brief · 2026-09-01 · sources: Exa semantic + Tavily <well-supported; just-audible; room-tone; zero-cross; subliminal-audio; sub-question; Egermann et al.; SPL-verified; Greenwald et al.; double-blind; self-help; detection-without-identification>
 - L6 [2] The question — Operator hypothesis: episode music should be "almost as low as
-- L12 [2] Verdict up front — Half right, and the half that's wrong has a better replacement. {Half right, and the half that's wrong has a better replaceme; The masking/continuity function is real and well-supported}
-- L31 [2] Evidence, by sub-question
-- L33 [3] 1. Truly imperceptible audio does nothing — - Merikle (1988, Psychology & Marketing): commercial "subliminal" {zero effect on choice behavior}
-- L52 [3] 2. Audible background music: instrumental ≈ safe, lyrics = speech — - Souza & Barbosa 2023 (J. of Cognition, N≈120): lyrics hurt verbal {instrumental (lo-fi) had no credible effect either way.; instrumental music = indistinguishable from silence, sometim}
-- L79 [3] 3. The masking/continuity mechanism (the real payoff) — - iZotope (room-tone canon): "The brain is so good at filtering room
-- L94 [3] 4. Where to set the fader (industry numbers) — - General practice: music −18 to −22 dB nominal (WeVideo); under {under dialogue specifically −30 to −35 dB}
-- L103 [2] Operational spec for Steel and Paper (and MP default) — 1. VO anchor: master the mix so integrated loudness lands ≈ {VO anchor:; Bed level:; −28 LU below the VO}
-- L148 [2] Confidence & gaps — - HIGH: subliminal-audio null result; lyrics-are-speech; instrumental
+- L12 [2] Verdict up front — Half right, and the half that's wrong has a better replacement. {Half right, and the half that's wrong has a better replaceme; The masking/continuity function is real and well-supported} <just-audible; room-tone; zero-cross; subliminal-audio; sub-threshold>
+- L31 [2] Evidence, by sub-question <Egermann et al.; SPL-verified; Greenwald et al.; double-blind; self-help; detection-without-identification; Borgeat 1984; Signoret et al.; dB-A; word-level; Souza & Barbosa 2023; lo-fi>
+- L33 [3] 1. Truly imperceptible audio does nothing — - Merikle (1988, Psychology & Marketing): commercial "subliminal" {zero effect on choice behavior} <Egermann et al.; SPL-verified; Greenwald et al.; double-blind; self-help; detection-without-identification; Borgeat 1984; Signoret et al.; dB-A; word-level>
+- L52 [3] 2. Audible background music: instrumental ≈ safe, lyrics = speech — - Souza & Barbosa 2023 (J. of Cognition, N≈120): lyrics hurt verbal {instrumental (lo-fi) had no credible effect either way.; instrumental music = indistinguishable from silence, sometim} <Souza & Barbosa 2023; Vasilev et al.; self-paced; word-rate; Brown & Bidelman 2022; Reports 2020; study-music; Gonzalez & Aiello 2019; Research 2025; under-stimulating; purpose-made; low-complexity>
+- L79 [3] 3. The masking/continuity mechanism (the real payoff) — - iZotope (room-tone canon): "The brain is so good at filtering room <room-tone; basics-of-room-tone-audio-editing; inter-phrase; just-audible; steady-state>
+- L94 [3] 4. Where to set the fader (industry numbers) — - General practice: music −18 to −22 dB nominal (WeVideo); under {under dialogue specifically −30 to −35 dB} <WeVideo; high-pass; Dialogue-anchored; YouTube; full-mix>
+- L103 [2] Operational spec for Steel and Paper (and MP default) — 1. VO anchor: master the mix so integrated loudness lands ≈ {VO anchor:; Bed level:; −28 LU below the VO} <YouTube; measured-interference; number-dense; high-load; complex-task; simple-task; purpose-made; LU-below-VO; Cross-checked; dense-analysis; error-masking; steady-state>
+- L148 [2] Confidence & gaps — - HIGH: subliminal-audio null result; lyrics-are-speech; instrumental <subliminal-audio; lyrics-are-speech; room-tone>
 
 ## docs/research/tech/MOTION_GRAPHICS_FROM_STILL_IMAGES_BLUEPRINT.md
 
-- L1 [1] Motion Graphics & Animation from Still Images — Research Blueprint — Date: 2026-09-03 | Domain: Tech / Video Engine | Method: Deep Research Pass 1 & Pass 2 Synthesis {Date:; Domain:; Method:}
-- L7 [2] 1. Executive Summary & Core Hypothesis — High-retention, broadcast-grade video content does not require rendering every frame from scratch using slow, expensive, and unpredictable generative video mode {three-tier hybrid compositing stack; Deterministic Vector Chrome & Micro-Motion (Layer 3 - Remoti}
-- L19 [2] 2. Master Data & Technology Matrix — | Technique / Model | Primary Function | Compute / Latency | Marginal Cost | Determinism | Best Used For | {Remotion + Native Springs; 100%; GSAP via `@remotion/gsap`; Depth Anything v2 + Depthflow}
-- L33 [2] 3. Technological & Mathematical Primary Grounding
-- L35 [3] A. Monocular Depth & Volumetric Projection — - Depth Anything v2: Uses synthetic data pre-training paired with large-scale unlabeled image teacher-student distillation. Replaces MiDaS by resolving metric d {Depth Anything v2; Occlusion Hallucination (Shih et al. / Layered Depth Images)}
-- L41 [3] B. Frame-Deterministic React Timing — - The Remotion Frame Law: Remotion prohibits asynchronous clock dependencies (`Date.now()`, `requestAnimationFrame`). Animation state must be a strict pure func {The Remotion Frame Law; Spring Physics}
+- L1 [1] Motion Graphics & Animation from Still Images — Research Blueprint — Date: 2026-09-03 | Domain: Tech / Video Engine | Method: Deep Research Pass 1 & Pass 2 Synthesis {Date:; Domain:; Method:} <High-retention; broadcast-grade; high-engagement; three-tier; Micro-Motion; frame-level; DepthFlow; WebGL; context-aware; LaMa; Shih et al.; LTX-Video>
+- L7 [2] 1. Executive Summary & Core Hypothesis — High-retention, broadcast-grade video content does not require rendering every frame from scratch using slow, expensive, and unpredictable generative video mode {three-tier hybrid compositing stack; Deterministic Vector Chrome & Micro-Motion (Layer 3 - Remoti} <High-retention; broadcast-grade; high-engagement; frame-level; DepthFlow; WebGL; context-aware; LaMa; Shih et al.; LTX-Video; text-to-video>
+- L19 [2] 2. Master Data & Technology Matrix — | Technique / Model | Primary Function | Compute / Latency | Marginal Cost | Determinism | Best Used For | {Remotion + Native Springs; 100%; GSAP via `@remotion/gsap`; Depth Anything v2 + Depthflow} <Code-driven; fly-ins; LaMa; Multi-plane; LTX-Video; DiT; Real-time; video-to-video; Hyper-realistic; Multi-reference; prompt-driven; fly-throughs>
+- L33 [2] 3. Technological & Mathematical Primary Grounding <pre-training; large-scale; teacher-student; MiDaS; Shih et al.; Context-aware; RGB-D; edge-stretching; Frame-Deterministic; Date.now(); requestAnimationFrame; spring()>
+- L35 [3] A. Monocular Depth & Volumetric Projection — - Depth Anything v2: Uses synthetic data pre-training paired with large-scale unlabeled image teacher-student distillation. Replaces MiDaS by resolving metric d {Depth Anything v2; Occlusion Hallucination (Shih et al. / Layered Depth Images)} <pre-training; large-scale; teacher-student; MiDaS; Context-aware; RGB-D; edge-stretching>
+- L41 [3] B. Frame-Deterministic React Timing — - The Remotion Frame Law: Remotion prohibits asynchronous clock dependencies (`Date.now()`, `requestAnimationFrame`). Animation state must be a strict pure func {The Remotion Frame Law; Spring Physics} <Date.now(); requestAnimationFrame; spring(); snap-to-dock>
 - L50 [2] 4. Production Architecture Blueprint
 - L94 [3] Complete Remotion Implementation Recipe: 2.5D Parallax with Vector HUD
-- L179 [2] 5. Critical Gotchas, Anti-Patterns & Risk Matrix — | Risk / Failure Mode | Root Cause | Impact | Mitigation Strategy | {"Rubber Sheet" Smearing; Generative Text Degeneration; Hard Rule:}
-- L191 [2] 6. Primary-Source URL Bibliography — 1. Depth Anything v2: [github.com/DepthAnything/Depth-Anything-V2](https://github.com/DepthAnything/Depth-Anything-V2) — SOTA Monocular Depth Estimation. {Depth Anything v2; Segment Anything 2 (SAM 2); Context-aware Layered Depth Inpainting; Remotion Documentation}
+- L179 [2] 5. Critical Gotchas, Anti-Patterns & Risk Matrix — | Risk / Failure Mode | Root Cause | Impact | Mitigation Strategy | {"Rubber Sheet" Smearing; Generative Text Degeneration; Hard Rule:} <single-layer; LaMa; frame-to-frame; linear(frame); spring(); cubic-bezier; cubic-bezier(0.16, 1, 0.3, 1); wall-clock; Date.now(); un-paused; micro-stuttering; useCurrentFrame()>
+- L191 [2] 6. Primary-Source URL Bibliography — 1. Depth Anything v2: [github.com/DepthAnything/Depth-Anything-V2](https://github.com/DepthAnything/Depth-Anything-V2) — SOTA Monocular Depth Estimation. {Depth Anything v2; Segment Anything 2 (SAM 2); Context-aware Layered Depth Inpainting; Remotion Documentation} <DepthAnything; Depth-Anything; segment-anything; Real-time; Shih et al.; vt-vl-lab; photo-inpainting; frame-based; Wan-Video; open-source; ComfyUI; akatz-ai>
 
 ## docs/run-centric-schema-notes.md
 
-- L1 [1] Run-Centric Schema Notes — Prepared: 2026-07-07
-- L5 [2] Purpose — This refactor changes the SEO database model from an entity-centric crawl schema into a run-centric platform schema.
-- L18 [2] New anchor tables — - `seo_targets` — normalized URL/domain targets independent of whether a canonical business entity exists
-- L28 [2] Important modeling changes
-- L29 [3] Before — Most tables were anchored directly to `business_entities`.
-- L32 [3] After — Most tables are anchored to `insight_runs`, with `seo_target_id` attached where useful and `business_entity_id` optional.
-- L40 [2] Design rule — If a record exists because a specific analysis run happened, it should reference `insight_runs`.
-- L51 [2] What remains entity-centric — - `business_entities`
+- L1 [1] Run-Centric Schema Notes — Prepared: 2026-07-07 <entity-centric; insight_runs; entity-backed; seo_targets; run_stage_events; stage-by-stage; run_artifacts; discovered_assets; page_records; coverage_scorecards; per-run; insight_reports>
+- L5 [2] Purpose — This refactor changes the SEO database model from an entity-centric crawl schema into a run-centric platform schema. <entity-centric; run-centric; insight_runs; entity-backed>
+- L18 [2] New anchor tables — - `seo_targets` — normalized URL/domain targets independent of whether a canonical business entity exists <seo_targets; insight_runs; run_stage_events; stage-by-stage; run_artifacts; discovered_assets; page_records; coverage_scorecards; per-run; insight_reports; operator-facing>
+- L28 [2] Important modeling changes <business_entities; insight_runs; seo_target_id; business_entity_id; run-specific>
+- L29 [3] Before — Most tables were anchored directly to `business_entities`. <business_entities>
+- L32 [3] After — Most tables are anchored to `insight_runs`, with `seo_target_id` attached where useful and `business_entity_id` optional. <insight_runs; seo_target_id; business_entity_id; run-specific>
+- L40 [2] Design rule — If a record exists because a specific analysis run happened, it should reference `insight_runs`. <insight_runs>
+- L51 [2] What remains entity-centric — - `business_entities` <business_entities; entity_aliases; entity_domains>
 
 ## docs/runbooks/DEMAND_CONVERSION_EVIDENCE.md
 
-- L1 [1] Demand-to-conversion evidence runbook — Use this layer to estimate a bounded commercial opportunity, not to promise
-- L7 [2] Prospect mode — 1. Complete an Insight Run for the qualified prospect.
-- L21 [2] Owner-verified mode — 1. Obtain explicit owner authorization for aggregate exports.
+- L1 [1] Demand-to-conversion evidence runbook — Use this layer to estimate a bounded commercial opportunity, not to promise <close-variant; business-supplied; demand-conversion; owner-first-party; Owner-verified; row-level; conversion-event; owner-mode; evidence-scoped; demand-conversion-formula.v1; capacity-bound>
+- L7 [2] Prospect mode — 1. Complete an Insight Run for the qualified prospect. <close-variant; business-supplied; demand-conversion; owner-first-party>
+- L21 [2] Owner-verified mode — 1. Obtain explicit owner authorization for aggregate exports. <row-level; conversion-event; owner-mode; evidence-scoped>
 - L36 [2] Review and corrections — - Reject or supersede the draft when a source, grouping, price, capacity, event
-- L47 [2] Formula and interpretation — The current formula is `demand-conversion-formula.v1`:
+- L47 [2] Formula and interpretation — The current formula is `demand-conversion-formula.v1`: <demand-conversion-formula.v1; capacity-bound>
 - L58 [2] Release check — Run:
 
 ## docs/runbooks/HEADLESS_CLAIM_RESUME.md
 
-- L1 [1] Runbook — Headless Claim Resume — What runs when a generation delivery lands, and how to drive the loop end to
-- L6 [2] The loop, one claim — `claim-resume` re-runs the deterministic scan, renders placement composites
-- L30 [2] The watchdog (fallback trigger) — For batches run by hand in a desktop app:
-- L48 [2] The paid gate — Config `~/.video-engine/config.json`: `telegram_ceiling_usd` (default 5), {true}
-- L63 [2] Promotion — Triage/commit from `/intake` as always. Two extra guards hold on claimed
+- L1 [1] Runbook — Headless Claim Resume — What runs when a generation delivery lands, and how to drive the loop end to <claim-resume; re-runs; follow-ups; .watchdog-scanned.json; VIDEO_ENGINE_CLAIM_RESUME_COMMAND; telegram_ceiling_usd; flow_queue_paused; VIDEO_ENGINE_TELEGRAM_BOT_TOKEN; VIDEO_ENGINE_TELEGRAM_CHAT_ID; opt-out>
+- L6 [2] The loop, one claim — `claim-resume` re-runs the deterministic scan, renders placement composites <claim-resume; re-runs; follow-ups>
+- L30 [2] The watchdog (fallback trigger) — For batches run by hand in a desktop app: <.watchdog-scanned.json; VIDEO_ENGINE_CLAIM_RESUME_COMMAND>
+- L48 [2] The paid gate — Config `~/.video-engine/config.json`: `telegram_ceiling_usd` (default 5), {true} <telegram_ceiling_usd; flow_queue_paused; VIDEO_ENGINE_TELEGRAM_BOT_TOKEN; VIDEO_ENGINE_TELEGRAM_CHAT_ID>
+- L63 [2] Promotion — Triage/commit from `/intake` as always. Two extra guards hold on claimed <opt-out>
 
 ## docs/runbooks/PRP_EXECUTION.md
 
-- L1 [1] PRP Execution — Status: current
-- L10 [2] Workflow — 1. Route by operation, risk, human gates, and owner. {Route; Plan; Approve; Implement; Review; Close}
-- L23 [2] Named Agents — | Agent | Use | Hard stop |
-- L45 [3] Dispatch mapping — Since 2026-09-05 the eight roles ARE dispatchable types on both sides. {Since 2026-09-05 the eight roles ARE dispatchable types on b; Model policy (operator, 2026-09-05).}
-- L91 [2] PRP Format — New plans use YAML frontmatter:
+- L2 [1] PRP Execution — Status: current <agent-neutral; high-risk; dependency-aware; non-overlapping; cross-module; speedster; junior_developer; implementation_luna; architect_sol; SigMap-led; SigMap; self-approval>
+- L11 [2] Workflow — 1. Route by operation, risk, human gates, and owner. {Route; Plan; Approve; Implement; Review; Close} <high-risk; dependency-aware; non-overlapping; cross-module>
+- L24 [2] Named Agents — | Agent | Use | Hard stop | <speedster; junior_developer; cross-module; implementation_luna; architect_sol; SigMap-led; SigMap; self-approval; explorer; Read-only; docs_researcher; reviewer>
+- L46 [3] Dispatch mapping — Since 2026-09-05 the eight roles ARE dispatchable types on both sides. {Since 2026-09-05 the eight roles ARE dispatchable types on b; Model policy (operator, 2026-09-05).} <OpenAI; subagent_type; general-purpose; Explore; Plan; speedster; model: fable; junior_developer; implementation_luna; explorer; docs_researcher; reviewer>
+- L73 [3] Hand-off policy (measured 2026-09-05, `evals/RETRIEVAL-BENCHMARK-2026-09-05.md`) — What a dispatch costs. A fresh subagent pays ~20-25 k tokens before its first tool call (system {What a dispatch costs.} <re-sent; SigMap; sed -n; path:line; disk-as-bus; sqz compress --mode safe; explorer; open-ended; implementation_luna; junior_developer; reviewer; architect_sol>
+- L157 [2] PRP Format — New plans use YAML frontmatter: <draft; approved; running; review; blocked; complete; ## Summary; ## Intent And Acceptance; ## Scope; ## Not Building; ## Human Gates; ## Mandatory Reads>
 
 ## docs/runbooks/RENDER-REGRESSION.md
 
-- L1 [1] When a render looks wrong — Status: current
-- L9 [2] 1. What changed, and where do I see it? — - `PASS 4 golden frames identical` — the player draws exactly what it drew when the {GOLDEN; ACTUAL; DIFF ×8}
-- L26 [2] 2. How do I turn a capability off? — Every new drawing capability reads a flag from the episode's timeline and is off unless {off unless the timeline says otherwise}
-- L57 [2] 3. How do I get back to the baseline? — The last approved player is tagged. One command restores its file exactly:
-- L75 [2] If you approved a change and want it to become the new baseline — Refreshing is a decision, never a reflex: `--check` failing is the harness doing its job.
-- L86 [2] What the harness cannot see — It renders four synthetic surfaces from committed sources, at native size, with wall-clock
+- L1 [1] When a render looks wrong — Status: current <PASS 4 golden frames identical; dock-pair; mid-build; false; kinetics: unknown flag ignored; curvature_stroke; analytic_spring; area_squash; squash-and-stretch; arap_morph; dqs_skinning; prop_attach>
+- L9 [2] 1. What changed, and where do I see it? — - `PASS 4 golden frames identical` — the player draws exactly what it drew when the {GOLDEN; ACTUAL; DIFF ×8} <PASS 4 golden frames identical; dock-pair; mid-build>
+- L26 [2] 2. How do I turn a capability off? — Every new drawing capability reads a flag from the episode's timeline and is off unless {off unless the timeline says otherwise} <false; kinetics: unknown flag ignored; curvature_stroke; analytic_spring; area_squash; squash-and-stretch; arap_morph; dqs_skinning; prop_attach>
+- L57 [2] 3. How do I get back to the baseline? — The last approved player is tagged. One command restores its file exactly: <PASS>
+- L75 [2] If you approved a change and want it to become the new baseline — Refreshing is a decision, never a reflex: `--check` failing is the harness doing its job. <--check>
+- L86 [2] What the harness cannot see — It renders four synthetic surfaces from committed sources, at native size, with wall-clock <wall-clock>
 
 ## docs/seo-ingestion-implementation-tasks.md
 
-- L1 [1] SEO Ingestion Implementation Tasks — Prepared: 2026-07-06
-- L5 [2] Phase 1 — Foundation — 1. Create DB migration from `db/seo_ingestion_schema.sql`.
-- L12 [2] Phase 2 — Single-domain ingestion — 6. Build `scripts/ingest_domain.py`:
-- L28 [2] Phase 3 — Search intelligence — 9. Build `scripts/pull_keyword_seeds.py` using DataForSEO.
+- L1 [1] SEO Ingestion Implementation Tasks — Prepared: 2026-07-06 <robots.txt; sitemap.xml; Single-domain; crawl_pages; DataForSEO; machine-readable; areas-served; locations; projects; portfolio; case-study; blog>
+- L5 [2] Phase 1 — Foundation — 1. Create DB migration from `db/seo_ingestion_schema.sql`. <robots.txt; sitemap.xml>
+- L12 [2] Phase 2 — Single-domain ingestion — 6. Build `scripts/ingest_domain.py`: <crawl_pages>
+- L28 [2] Phase 3 — Search intelligence — 9. Build `scripts/pull_keyword_seeds.py` using DataForSEO. <DataForSEO>
 - L33 [2] Phase 4 — Recommendation engine — 12. Build `scripts/generate_page_recommendations.py`.
-- L38 [2] Phase 5 — Output artifacts — 15. Write machine-readable output files per domain:
-- L46 [2] Initial page classification heuristics — - homepage: root URL
+- L38 [2] Phase 5 — Output artifacts — 15. Write machine-readable output files per domain: <machine-readable>
+- L46 [2] Initial page classification heuristics — - homepage: root URL <areas-served; locations; projects; portfolio; case-study; blog; resources; guides; faq; privacy; terms; 404>
 - L56 [2] MVP scoring formulas
 - L57 [3] Coverage score — - service_page_count * 2
 - L65 [3] Metadata quality score — Per indexable page:
 - L73 [3] Sitemap hygiene score — - included_indexable_urls / candidate_indexable_urls
-- L78 [2] Recommended first real build sequence — 1. schema migration
-- L90 [2] Suggested first test case — Use one controlled domain first, such as a known prospect case, and verify:
-- L98 [2] Success criteria for MVP — - ingest one domain end-to-end in under 5 minutes
+- L78 [2] Recommended first real build sequence — 1. schema migration <DataForSEO; single-domain>
+- L90 [2] Suggested first test case — Use one controlled domain first, such as a known prospect case, and verify: <human-readable>
+- L98 [2] Success criteria for MVP — - ingest one domain end-to-end in under 5 minutes <end-to-end; DataForSEO>
 
 ## docs/seo-ingestion-pipeline-spec.md
 
-- L1 [1] SEO Ingestion Pipeline Spec — Prepared: 2026-07-06
-- L6 [2] Objective — Build a low-fixed-cost SEO intelligence and content-ingestion pipeline that maximizes:
+- L1 [1] SEO Ingestion Pipeline Spec — Prepared: 2026-07-06 <low-fixed-cost; content-ingestion; internal-linking; DataForSEO; case-study; supporting-content; low-value; internal-link; entity_intake_job; site_discovery_job; page_fetch_job; page_parse_job>
+- L6 [2] Objective — Build a low-fixed-cost SEO intelligence and content-ingestion pipeline that maximizes: <low-fixed-cost; content-ingestion; internal-linking>
 - L17 [2] Core principle — Deterministic before generative. {Deterministic before generative.}
 - L35 [2] Stack — - Postgres/Supabase: system of record {Postgres/Supabase; DataForSEO; Managed extraction or crawler; Playwright/browser automation; Python job runners; Vercel/Next.js}
-- L43 [2] Pipeline stages
+- L43 [2] Pipeline stages <case-study; supporting-content; low-value; internal-link>
 - L45 [3] 1. Canonical entity intake — Input:
-- L57 [3] 2. Crawl and fetch — Per domain, collect:
+- L57 [3] 2. Crawl and fetch — Per domain, collect: <case-study>
 - L69 [3] 3. Deterministic page classification — Each URL gets one primary class:
 - L81 [3] 4. Search intelligence — For each entity + market cluster:
-- L89 [3] 5. Coverage modeling — Quantify:
-- L98 [3] 6. Recommendation generation — Create:
-- L106 [2] Job flow — 1. `entity_intake_job`
-- L120 [2] Page-to-keyword mapping logic — Each keyword cluster should map to exactly one primary page target type:
-- L129 [3] Mapping rules — - no two pages should target the same primary cluster unless one is intentionally regional and one is local
-- L135 [2] Scoring model — Compute a weighted score per domain:
-- L146 [2] Sitemap generation rules — Include only URLs that are:
-- L162 [3] Sitemap outputs — - `sitemap_index.xml`
-- L170 [2] Competitive model — For each target domain, compare against 3-5 competitors on:
-- L181 [2] What not to depend on — Do not make these mandatory for core operation:
+- L89 [3] 5. Coverage modeling — Quantify: <supporting-content; low-value>
+- L98 [3] 6. Recommendation generation — Create: <internal-link>
+- L106 [2] Job flow — 1. `entity_intake_job` <entity_intake_job; site_discovery_job; page_fetch_job; page_parse_job; page_classification_job; keyword_seed_job; serp_snapshot_job; competitor_gap_job; coverage_scoring_job; sitemap_recommendation_job; content_brief_job; audit_summary_job>
+- L120 [2] Page-to-keyword mapping logic — Each keyword cluster should map to exactly one primary page target type: <top-level; geography-only; case-study; low-confidence>
+- L129 [3] Mapping rules — - no two pages should target the same primary cluster unless one is intentionally regional and one is local <low-confidence>
+- L135 [2] Scoring model — Compute a weighted score per domain: <internal-link>
+- L146 [2] Sitemap generation rules — Include only URLs that are: <non-duplicate; duplicate-intent; sitemap_index.xml; sitemap-services.xml; sitemap-locations.xml; sitemap-service-locations.xml; sitemap-projects.xml; sitemap-blog.xml>
+- L162 [3] Sitemap outputs — - `sitemap_index.xml` <sitemap_index.xml; sitemap-services.xml; sitemap-locations.xml; sitemap-service-locations.xml; sitemap-projects.xml; sitemap-blog.xml>
+- L170 [2] Competitive model — For each target domain, compare against 3-5 competitors on: <case-study>
+- L181 [2] What not to depend on — Do not make these mandatory for core operation: <spreadsheet-only; DataForSEO>
 - L194 [2] Required outputs per account — 1. normalized entity
-- L205 [2] First implementation target — Implement the smallest viable path:
+- L205 [2] First implementation target — Implement the smallest viable path: <DataForSEO>
 
 ## docs/seo-insights-platform-architecture.md
 
-- L1 [1] SEO Insights Platform Architecture — Prepared: 2026-07-07
-- L6 [2] Product goal — Build a consistent platform where an operator can point the system at a URL/domain and receive a normalized, repeatable SEO intelligence package focused on: {not}
-- L19 [2] Product thesis — The core product is not "scripts that fetch pages." The core product is a URL -> SEO intelligence report engine with a stable data model, deterministic pipeline {URL -> SEO intelligence report engine}
-- L29 [2] 1. Product boundary
-- L31 [3] In scope for v1 — Given a URL/domain, the platform should:
-- L45 [3] Explicitly out of scope for v1 — - competitor intelligence as a platform module
-- L56 [2] 2. User-facing product model
-- L58 [3] Primary workflow — Input: operator pastes a domain or URL {Input:; System output:}
+- L1 [1] SEO Insights Platform Architecture — Prepared: 2026-07-07 <current-page; evidence-backed; already-collected; operator-facing; internal-link; DataForSEO; follow-up; contact-pipeline; InsightReport; User-facing; SEO Insight Run; Target>
+- L6 [2] Product goal — Build a consistent platform where an operator can point the system at a URL/domain and receive a normalized, repeatable SEO intelligence package focused on: {not} <current-page; evidence-backed; already-collected>
+- L19 [2] Product thesis — The core product is not "scripts that fetch pages." The core product is a URL -> SEO intelligence report engine with a stable data model, deterministic pipeline {URL -> SEO intelligence report engine} <operator-facing>
+- L29 [2] 1. Product boundary <internal-link; evidence-backed; DataForSEO; operator-facing; follow-up; contact-pipeline; InsightReport>
+- L31 [3] In scope for v1 — Given a URL/domain, the platform should: <internal-link; evidence-backed; DataForSEO; operator-facing>
+- L45 [3] Explicitly out of scope for v1 — - competitor intelligence as a platform module <follow-up; contact-pipeline; InsightReport>
+- L56 [2] 2. User-facing product model <SEO Insight Run>
+- L58 [3] Primary workflow — Input: operator pastes a domain or URL {Input:; System output:} <SEO Insight Run>
 - L76 [3] Operator expectations — The operator should not have to think in terms of scripts. They should think in terms of:
-- L87 [2] 3. Platform architecture
-- L89 [3] 3.1 Core domain objects — - `Target` — canonical business/site target
-- L102 [3] 3.2 Service boundaries — The platform should be split into five product services:
+- L87 [2] 3. Platform architecture <Target; InsightRun; DiscoveredAsset; PageRecord; PageEvidence; page-level; KeywordCluster; SerpSnapshot; CoverageScorecard; AIReadinessOutput; SitemapRecommendation; InsightReport>
+- L89 [3] 3.1 Core domain objects — - `Target` — canonical business/site target <Target; InsightRun; DiscoveredAsset; PageRecord; PageEvidence; page-level; KeywordCluster; SerpSnapshot; CoverageScorecard; AIReadinessOutput; SitemapRecommendation; InsightReport>
+- L102 [3] 3.2 Service boundaries — The platform should be split into five product services: <primary-requested-page; max_pages; page-coverage; secondary-page; target-level; DataForSEO; prospect_issue; evidence_limit; operator-review; report-friendly; host-restricted; ai-v2>
 - L105 [4] A. Target Intake Service — Responsibilities:
 - L112 [4] B. Crawl Discovery Service — Responsibilities:
-- L120 [4] C. SEO Analysis Service — Responsibilities:
-- L130 [4] D. Search Intelligence Service — Responsibilities:
-- L140 [4] E. Reporting Service — Responsibilities:
-- L148 [4] F. AI Readiness Service — Responsibilities:
+- L120 [4] C. SEO Analysis Service — Responsibilities: <primary-requested-page; max_pages; page-coverage; secondary-page; target-level>
+- L130 [4] D. Search Intelligence Service — Responsibilities: <DataForSEO>
+- L140 [4] E. Reporting Service — Responsibilities: <prospect_issue; evidence_limit; operator-review; report-friendly>
+- L148 [4] F. AI Readiness Service — Responsibilities: <host-restricted; ai-v2; ai-v1>
 - L157 [3] 3.3 Infrastructure layer — - Postgres/Supabase for state
-- L166 [2] 4. Recommended UI modules
-- L168 [3] 4.1 Run Launcher — Minimal form:
+- L166 [2] 4. Recommended UI modules <quick; standard; full; low-value; Top-level; highest-value>
+- L168 [3] 4.1 Run Launcher — Minimal form: <quick; standard; full>
 - L175 [3] 4.2 Run Detail View — Sections:
 - L190 [3] 4.3 Page Explorer — For each page:
-- L201 [3] 4.4 Sitemap Workbench — Show:
-- L210 [3] 4.5 Insight Summary / Scorecard — Top-level answer for the operator:
-- L221 [2] 5. Run lifecycle — A platform run should move through these states:
-- L239 [2] 6. Deterministic scoring surfaces
-- L241 [3] 6.1 Sitemap quality — Score components:
+- L201 [3] 4.4 Sitemap Workbench — Show: <low-value>
+- L210 [3] 4.5 Insight Summary / Scorecard — Top-level answer for the operator: <Top-level; highest-value>
+- L221 [2] 5. Run lifecycle — A platform run should move through these states: <queued; normalizing_target; discovering_sitemaps; fetching_pages; extracting_page_evidence; classifying_pages; pulling_search_intelligence; scoring; assembling_report; completed; failed>
+- L239 [2] 6. Deterministic scoring surfaces <class-aware; service-location; supporting-content; high-intent>
+- L241 [3] 6.1 Sitemap quality — Score components: <class-aware; service-location>
 - L249 [3] 6.2 Metadata quality — Per indexable page:
-- L258 [3] 6.3 Page coverage quality — Measure:
-- L266 [3] 6.4 Search visibility surface — Measure:
+- L258 [3] 6.3 Page coverage quality — Measure: <supporting-content>
+- L266 [3] 6.4 Search visibility surface — Measure: <high-intent>
 - L275 [2] 7. Why competitor research moves later — Competitor analysis is useful, but it is not the irreducible core.
-- L293 [2] 8. Data architecture fit — This platform fits directly with a broader normalized data architecture. {the platform should consume normalized entities, but it shou}
+- L293 [2] 8. Data architecture fit — This platform fits directly with a broader normalized data architecture. {the platform should consume normalized entities, but it shou} <entity-backed run; ad hoc URL run>
 - L313 [2] 9. Recommended API surface
 - L315 [3] Create run — `POST /api/seo-insights/runs`
 - L328 [3] Get run status — `GET /api/seo-insights/runs/:runId`
@@ -2375,60 +2388,60 @@ A `{...}` tail lists the section's bold phrases.
 - L334 [3] Get page inventory — `GET /api/seo-insights/runs/:runId/pages`
 - L337 [3] Get sitemap recommendations — `GET /api/seo-insights/runs/:runId/sitemap`
 - L340 [3] Export artifacts — `GET /api/seo-insights/runs/:runId/export?format=json|md`
-- L345 [2] 10. Recommended implementation shape — Do not think of the worker entrypoints as the product. Think of them as adapters around platform services.
+- L345 [2] 10. Recommended implementation shape — Do not think of the worker entrypoints as the product. Think of them as adapters around platform services. <one-off; run-state>
 - L348 [3] Good shape — - reusable Python or TS service modules in `src/`
-- L354 [3] Avoid — - logic living only in one-off scripts
-- L362 [2] 11. Productized MVP — The MVP should still be small, but platform-shaped.
+- L354 [3] Avoid — - logic living only in one-off scripts <one-off; run-state>
+- L362 [2] 11. Productized MVP — The MVP should still be small, but platform-shaped. <platform-shaped; DataForSEO; multi-tenant>
 - L365 [3] MVP capability — Paste one URL -> get one persisted SEO insight report.
-- L368 [3] MVP includes — - run creation
-- L380 [3] MVP excludes — - multi-tenant permissions sophistication
-- L388 [2] 12. Product roadmap
+- L368 [3] MVP includes — - run creation <DataForSEO>
+- L380 [3] MVP excludes — - multi-tenant permissions sophistication <multi-tenant>
+- L388 [2] 12. Product roadmap <entity-integrated; human-reviewed; vertical-specific; SaaS; target-health; market-evidence; ten-page; provider-specific; market-run; market-v1>
 - L390 [3] Phase A — SEO insight engine — URL -> persisted run -> scorecard/report
 - L393 [3] Phase B — operator app — UI for runs, evidence, and recommendations
 - L396 [3] Phase C — entity-integrated mode — attach runs to canonical businesses and normalized categories
-- L399 [3] Phase D — outreach activation — Commercially package validated run evidence into a short, human-reviewed expertise demonstration: what was observed, why it matters, and what the owner may want {One Trade Network; National BJJ Registry}
-- L404 [3] Phase E — optional competitor enrichment — The Tacoma BJJ pilot implements this as a deterministic market-evidence child
+- L399 [3] Phase D — outreach activation — Commercially package validated run evidence into a short, human-reviewed expertise demonstration: what was observed, why it matters, and what the owner may want {One Trade Network; National BJJ Registry} <human-reviewed; vertical-specific; SaaS; target-health>
+- L404 [3] Phase E — optional competitor enrichment — The Tacoma BJJ pilot implements this as a deterministic market-evidence child <market-evidence; ten-page; provider-specific; market-run; market-v1>
 - L418 [3] Phase F — action layer — content recommendations, sitemap rewrites, publishing workflows
-- L423 [2] 13. Bottom-line architecture decision — Redesign the system as a platform for SEO insight runs, not as a loose collection of scripts. {platform for SEO insight runs}
-- L432 [3] Market-evidence persistence boundary — - `KeywordSet` and `KeywordTarget` preserve source hash, Tacoma market/location,
-- L447 [3] Demand-to-revenue persistence boundary — P9 adds four independently versioned aggregates beneath the commercial layer:
-- L477 [3] Product-strength score stack and immutable delivery — P10 replaces the client-facing use of the legacy mixed `overall_score` with
+- L423 [2] 13. Bottom-line architecture decision — Redesign the system as a platform for SEO insight runs, not as a loose collection of scripts. {platform for SEO insight runs} <first-class; Market-evidence; KeywordSet; KeywordTarget; KeywordSetBinding; MarketEvidenceRun; InsightRun; keyword-set; PageRecord; Demand-to-revenue; DemandEvidenceSet; source-hashed>
+- L432 [3] Market-evidence persistence boundary — - `KeywordSet` and `KeywordTarget` preserve source hash, Tacoma market/location, <KeywordSet; KeywordTarget; KeywordSetBinding; MarketEvidenceRun; InsightRun; keyword-set; PageRecord>
+- L447 [3] Demand-to-revenue persistence boundary — P9 adds four independently versioned aggregates beneath the commercial layer: <DemandEvidenceSet; source-hashed; search-occasion; operator-reviewed; close-variant; BusinessEconomicsProfile; field-level; OpportunityScenario; opportunity-formula.v1; AcquisitionCalibrationRecord; prospect-scoped; opportunity-v1>
+- L477 [3] Product-strength score stack and immutable delivery — P10 replaces the client-facing use of the legacy mixed `overall_score` with <client-facing; overall_score; seo-health.v2; search-visibility.v2; local-visibility.v1; ai-readiness.v3; ai-visibility.v1; conversion-readiness.v1; evidence-confidence.v1; write-once; ReportSnapshot; AgenticAssessmentSnapshot>
 
 ## docs/seo-insights-platform-implementation-plan.md
 
-- L1 [1] SEO Insights Platform Implementation Plan — Prepared: 2026-07-07
-- L6 [2] Goal — Reshape the current SEO ingestion work into a product/platform whose core workflow is: {URL/domain in -> persisted SEO insight run out}
-- L13 [2] Guiding decisions — 1. competitor research is not a blocking v1 module
-- L22 [2] Phase 1 — Data model hardening — Convert schema from generic ingestion support to explicit platform objects.
-- L25 [3] Add / rename conceptual anchors — Treat these as core app concepts whether or not table names stay the same:
-- L38 [3] Immediate schema additions — Add tables or equivalents for:
-- L45 [3] Deliverable — A run-centric schema where every output ties back to a specific insight run.
-- L50 [2] Phase 2 — Service layer extraction — Make reusable modules the source of truth.
-- L53 [3] Core services — - `target_intake_service`
+- L1 [1] SEO Insights Platform Implementation Plan — Prepared: 2026-07-07 <run-state; search-intelligence; operator-facing; DataForSEO; InsightRun; targets; insight_runs; run_stage_events; page_records; page_evidence; keyword_clusters; serp_snapshots>
+- L6 [2] Goal — Reshape the current SEO ingestion work into a product/platform whose core workflow is: {URL/domain in -> persisted SEO insight run out} <run-state; search-intelligence; operator-facing>
+- L13 [2] Guiding decisions — 1. competitor research is not a blocking v1 module <DataForSEO; search-intelligence; InsightRun>
+- L22 [2] Phase 1 — Data model hardening — Convert schema from generic ingestion support to explicit platform objects. <targets; insight_runs; run_stage_events; page_records; page_evidence; keyword_clusters; serp_snapshots; coverage_scorecards; sitemap_recommendations; insight_reports; per-run; run-centric>
+- L25 [3] Add / rename conceptual anchors — Treat these as core app concepts whether or not table names stay the same: <targets; insight_runs; run_stage_events; page_records; page_evidence; keyword_clusters; serp_snapshots; coverage_scorecards; sitemap_recommendations; insight_reports>
+- L38 [3] Immediate schema additions — Add tables or equivalents for: <per-run>
+- L45 [3] Deliverable — A run-centric schema where every output ties back to a specific insight run. <run-centric>
+- L50 [2] Phase 2 — Service layer extraction — Make reusable modules the source of truth. <target_intake_service; sitemap_discovery_service; page_fetch_service; page_analysis_service; search_intelligence_service; scorecard_service; report_assembly_service>
+- L53 [3] Core services — - `target_intake_service` <target_intake_service; sitemap_discovery_service; page_fetch_service; page_analysis_service; search_intelligence_service; scorecard_service; report_assembly_service>
 - L62 [3] Rule — No important business logic should live only inside CLI scripts.
 - L65 [3] Deliverable — `src/` contains reusable services; scripts become thin wrappers.
-- L70 [2] Phase 3 — Run orchestration — Build a run coordinator.
-- L73 [3] Coordinator responsibilities — - create `insight_run`
+- L70 [2] Phase 3 — Run orchestration — Build a run coordinator. <insight_run>
+- L73 [3] Coordinator responsibilities — - create `insight_run` <insight_run>
 - L80 [3] Minimum states — - queued
 - L92 [3] Deliverable — A single orchestration path that can be triggered from API or CLI.
-- L97 [2] Phase 4 — Product API — Add product-facing endpoints.
+- L97 [2] Phase 4 — Product API — Add product-facing endpoints. <product-facing>
 - L100 [3] Minimum endpoints — - create run
 - L108 [3] Deliverable — A stable API contract for the operator app.
 - L113 [2] Phase 5 — Operator UI — Build minimal UI surfaces.
 - L116 [3] Minimum screens — 1. run launcher
 - L123 [3] Deliverable — An operator can launch and inspect a run without touching CLI.
-- L128 [2] Phase 6 — Deferred enrichments — Only after the core loop works:
-- L137 [2] What to change in the current implementation approach
-- L139 [3] Keep — - normalized evidence mindset
-- L145 [3] Change — - stop treating `scripts/*.py` as the product boundary
-- L154 [2] Immediate next engineering tasks — 1. revise schema around `insight_runs` and `run_stage_events`
-- L164 [2] Recommended v1 success definition — The platform is successful when you can:
+- L128 [2] Phase 6 — Deferred enrichments — Only after the core loop works: <content-generation>
+- L137 [2] What to change in the current implementation approach <DataForSEO; run-centric; first-class>
+- L139 [3] Keep — - normalized evidence mindset <DataForSEO>
+- L145 [3] Change — - stop treating `scripts/*.py` as the product boundary <run-centric; first-class>
+- L154 [2] Immediate next engineering tasks — 1. revise schema around `insight_runs` and `run_stage_events` <insight_runs; run_stage_events>
+- L164 [2] Recommended v1 success definition — The platform is successful when you can: <machine-readable>
 
 ## docs/STATE-OF-WORK.md
 
-- L1 [1] STATE OF WORK - every worktree, regenerated — Generated 2026-09-03 06:02 by `survey_worktrees.py`. DO NOT hand-edit - rerun the script.
-- L11 [2] `C:\Users\Snipe\Downloads\Outreach Program` — - branch `main` - HEAD 9bd23d8 2026-09-03 docs(review): keep the yen scene-3 plate claim's records before its worktree is deleted
-- L17 [2] `C:\Users\Snipe\.codex\worktrees\f10b\Outreach Program` — - branch `codex/stickly-woodblock-variant` - HEAD 808eb14 2026-08-23 chore(video): commit accumulated engine source and set the binary policy
-- L23 [2] `C:\Users\Snipe\.codex\worktrees\p29-remotion-console\Outreach Program` — - branch `codex/p31-semantic-evidence-and-word-timed-captions` - HEAD 461fbea 2026-08-23 feat(video): production console, timeline editor, and semantic evidence
-- L29 [2] `C:\Users\Snipe\Downloads\Outreach Program\.claude\worktrees\content-generation-system-52f077` — - branch `claude/spark-animations-marketing-cc6738` - HEAD 4b7bdf2 2026-07-28 fix: preserve Nova column on mobile comparison
-- L35 [2] `C:\Users\Snipe\Downloads\Outreach Program\.claude\worktrees\sweet-villani-1c3a16` — - branch `claude/content-generation-system-52f077` - HEAD 613e5d3 2026-09-03 docs(review): commit the two operator-approved plate claims out of quarantine
+- L1 [1] STATE OF WORK - every worktree, regenerated — Generated 2026-09-03 06:02 by `survey_worktrees.py`. DO NOT hand-edit - rerun the script. <hand-edit; main; history-of-bjj; reference-studies; style-samples; martial-matters; systems-and-blowups; provider-jobs; steel-and-paper; visual-library; visual-review; operator-approved>
+- L11 [2] `C:\Users\Snipe\Downloads\Outreach Program` — - branch `main` - HEAD 9bd23d8 2026-09-03 docs(review): keep the yen scene-3 plate claim's records before its worktree is deleted <main; history-of-bjj; reference-studies; style-samples; martial-matters; systems-and-blowups; provider-jobs; steel-and-paper>
+- L17 [2] `C:\Users\Snipe\.codex\worktrees\f10b\Outreach Program` — - branch `codex/stickly-woodblock-variant` - HEAD 808eb14 2026-08-23 chore(video): commit accumulated engine source and set the binary policy <history-of-bjj; reference-studies; style-samples; martial-matters; visual-library; visual-review; systems-and-blowups; provider-jobs>
+- L23 [2] `C:\Users\Snipe\.codex\worktrees\p29-remotion-console\Outreach Program` — - branch `codex/p31-semantic-evidence-and-word-timed-captions` - HEAD 461fbea 2026-08-23 feat(video): production console, timeline editor, and semantic evidence <history-of-bjj; reference-studies; style-samples; systems-and-blowups; provider-jobs>
+- L29 [2] `C:\Users\Snipe\Downloads\Outreach Program\.claude\worktrees\content-generation-system-52f077` — - branch `claude/spark-animations-marketing-cc6738` - HEAD 4b7bdf2 2026-07-28 fix: preserve Nova column on mobile comparison <history-of-bjj>
+- L35 [2] `C:\Users\Snipe\Downloads\Outreach Program\.claude\worktrees\sweet-villani-1c3a16` — - branch `claude/content-generation-system-52f077` - HEAD 613e5d3 2026-09-03 docs(review): commit the two operator-approved plate claims out of quarantine <operator-approved; history-of-bjj; reference-studies; style-samples; martial-matters; systems-and-blowups; provider-jobs; steel-and-paper>

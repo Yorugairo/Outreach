@@ -4,7 +4,10 @@ SigMap indexes declared code symbols, so a doctrine query ("animation math min-j
 ranks a retired scene and never reaches doc 42 or 47; the agent then walks the whole docs tree.
 This builds the missing index: one record per Markdown heading under `docs/`, plus the
 CAPABILITIES / BACKLOG table rows (those carry capability and backlog names that never appear as
-headings). Two artifacts, the same records:
+headings). Each heading record also carries `terms`: up to TERM_LIMIT search words lifted from the
+section BODY - inline-code spans, hyphenated / CamelCase / formula tokens, and `Name YYYY`
+citations - because a heading-only index needs two hops for body vocabulary. Two artifacts, the
+same records:
 
     docs/DOCS-INDEX.jsonl   one JSON object per line - the thing you `rg`
     docs/DOCS-INDEX.md      the same, readable, grouped by file
@@ -42,6 +45,9 @@ TITLE_MAX = 120
 LABEL_MAX = 60
 LABEL_LIMIT = 6
 LABEL_SCAN = 600
+TERM_LIMIT = 12
+TERM_MIN = 3             # a symbol (Greek, subscript, `M_p`) is exempt: it is short by nature
+TERM_MAX = 40
 ROW_LEVEL = 7            # a table row is not a heading; it sorts after level 6 on sight
 
 HEADING = re.compile(r"^(#{1,6})\s+(.*?)\s*#*\s*$")
@@ -52,6 +58,21 @@ CELL_SPLIT = re.compile(r"(?<!\\)\|")
 ROW_ID = re.compile(r"[A-Z][A-Za-z0-9]{0,3}(?:-[A-Za-z0-9]{1,2})?'?")
 WRAPPED = re.compile(r"~~(.+)~~|\*\*(.+)\*\*", re.S)
 LEAD_SEPARATORS = "—–-·:, "
+
+# --- body vocabulary ----------------------------------------------------------------------
+CODE_SPAN = re.compile(r"`([^`\n]+)`")
+PATH_SUFFIXES = (".md", ".py", ".mjs", ".html")
+HYPHEN_TOKEN = re.compile(r"\b[A-Za-z]+(?:-[A-Za-z]+)+\b")            # min-jerk, Kubelka-Munk
+CAMEL_TOKEN = re.compile(r"\b[A-Za-z][A-Za-z0-9]*[a-z][A-Z][A-Za-z0-9]*\b")   # springPop, drawOn
+WORD_TOKEN = re.compile(r"[A-Za-zͰ-Ͽ][A-Za-z0-9Ͱ-Ͽ₀-₉_]*")
+SYMBOL_CHARS = re.compile(r"[Ͱ-Ͽ₀-₉]")            # Greek, subscript digits
+UNDERSCORE_SYMBOL = re.compile(r"[A-Za-zͰ-Ͽ]{1,3}_[A-Za-z0-9]{1,3}")   # M_p, omega_d
+MATH_WORDS = frozenset({"coth", "sinh", "cosh", "tanh", "sech", "csch"})
+NAME = r"[A-Z][A-Za-zÀ-ɏ'’]*[a-zß-ɏ]"
+YEAR = r"1[5-9]\d{2}|20\d{2}"
+CITATION = re.compile(
+    rf"\b({NAME}(?:\s*(?:&|and)\s*{NAME})?)\s+(?:(et al\.)|\((?:{YEAR})\)|({YEAR})(?![-\d]))"
+)
 
 
 # --- text helpers -------------------------------------------------------------------------
@@ -91,9 +112,11 @@ def doc_id(rel_path: str) -> str | None:
     return m.group(1) if m else None
 
 
-def record(path: str, line: int, level: int, doc: str | None, heading: str, lead: str, labels: list[str]) -> dict:
+def record(path: str, line: int, level: int, doc: str | None, heading: str, lead: str,
+           labels: list[str], terms: list[str] | None = None) -> dict:
     """The record, keys in the contract's order."""
-    return {"path": path, "line": line, "level": level, "doc": doc, "heading": heading, "lead": lead, "labels": labels}
+    return {"path": path, "line": line, "level": level, "doc": doc, "heading": heading, "lead": lead,
+            "labels": labels, "terms": terms or []}
 
 
 # --- headings -----------------------------------------------------------------------------
@@ -129,6 +152,75 @@ def labels_of(lines: list[str], start: int, end: int) -> list[str]:
         if len(labels) == LABEL_LIMIT:
             break
     return labels
+
+
+# --- terms: the section's body vocabulary -------------------------------------------------
+
+def is_symbol(token: str) -> bool:
+    """A formula symbol - Greek, a subscript, `M_p`, or a named math function."""
+    return bool(
+        SYMBOL_CHARS.search(token)
+        or UNDERSCORE_SYMBOL.fullmatch(token)
+        or token.casefold() in MATH_WORDS
+    )
+
+
+def sized(term: str) -> bool:
+    """3-40 characters, symbols exempt from the floor."""
+    return len(term) <= TERM_MAX and (len(term) >= TERM_MIN or is_symbol(term))
+
+
+def keep_code(text: str) -> bool:
+    """A code span is a term unless it is a path or too long."""
+    return "/" not in text and not text.lower().endswith(PATH_SUFFIXES) and sized(text)
+
+
+def citation_of(m: re.Match) -> str:
+    """The citation as written: "Deegan 1997", "Deegan et al.", "Flash & Hogan" - a bare year is
+    part of the name, a parenthesised one is not."""
+    return " ".join(part for part in (m.group(1), m.group(2) or m.group(3)) if part)
+
+
+def prose_terms(line: str, spans: list[tuple[int, int]]) -> list[tuple[int, int, str]]:
+    """The tokens and citations outside every code span - a path's insides cannot leak."""
+    def outside(m: re.Match) -> bool:
+        return not any(s <= m.start() < e for s, e in spans)
+
+    found = [(m.start(), -len(m.group(0)), m.group(0))
+             for pattern in (HYPHEN_TOKEN, CAMEL_TOKEN) for m in pattern.finditer(line)
+             if outside(m) and sized(m.group(0))]
+    found += [(m.start(), -len(m.group(0)), m.group(0)) for m in WORD_TOKEN.finditer(line)
+              if outside(m) and is_symbol(m.group(0)) and sized(m.group(0))]
+    found += [(m.start(), -len(citation_of(m)), citation_of(m)) for m in CITATION.finditer(line)
+              if outside(m) and sized(citation_of(m))]
+    return found
+
+
+def line_candidates(line: str) -> list[tuple[int, int, str]]:
+    """(position, -length, term) for every candidate in one line, in reading order; the longest
+    wins a tie so a hyphenated token beats its own first word."""
+    spans = [(m.start(), m.end()) for m in CODE_SPAN.finditer(line)]
+    code = [(m.start(), -len(m.group(1)), m.group(1).strip())
+            for m in CODE_SPAN.finditer(line) if keep_code(m.group(1).strip())]
+    return sorted(code + prose_terms(line, spans))
+
+
+def terms_of(lines: list[str], start: int, end: int, heading: str, labels: list[str]) -> list[str]:
+    """Up to TERM_LIMIT distinct body terms in first-appearance order. Anything already reachable
+    through the heading or a label is not a term - the point is the vocabulary they miss."""
+    reachable = " ".join([heading, *labels]).casefold()
+    terms: list[str] = []
+    seen: set[str] = set()
+    for _, line in unfenced(lines[start:end]):
+        for _, _, term in line_candidates(line):
+            key = term.casefold()
+            if key in seen or key in reachable:
+                continue
+            seen.add(key)
+            terms.append(term)
+            if len(terms) == TERM_LIMIT:
+                return terms
+    return terms
 
 
 # --- table rows (CAPABILITIES, BACKLOG) ---------------------------------------------------
@@ -214,7 +306,10 @@ def file_records(rel_path: str, text: str) -> list[dict]:
     out: list[dict] = []
     for n, (i, level, heading) in enumerate(heads):
         end = heads[n + 1][0] if n + 1 < len(heads) else len(lines)
-        out.append(record(rel_path, i + 1, level, doc, heading, lead_of(lines, i + 1, end), labels_of(lines, i + 1, end)))
+        section = next((j for j, lv, _ in heads[n + 1:] if lv <= level), len(lines))
+        labels = labels_of(lines, i + 1, end)
+        out.append(record(rel_path, i + 1, level, doc, heading, lead_of(lines, i + 1, end), labels,
+                          terms_of(lines, i + 1, section, heading, labels)))
     if rel_path == CAPABILITIES_REL:
         out += capability_rows(rel_path, lines, doc)
     elif rel_path == BACKLOG_REL:
@@ -268,7 +363,8 @@ def render_md(records: list[dict]) -> str:
         "```",
         "",
         "Levels 1-6 are Markdown heading depth; level 7 is a table row (CAPABILITIES, BACKLOG).",
-        "A `{...}` tail lists the section's bold phrases.",
+        "A `{...}` tail lists the section's bold phrases; a `<...>` tail its body terms - code",
+        "spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.",
         "",
         f"{len(records)} records across {len(files)} files.",
         "",
@@ -282,6 +378,8 @@ def render_md(records: list[dict]) -> str:
                 line += f" — {r['lead']}"
             if r["labels"]:
                 line += " {" + "; ".join(r["labels"]) + "}"
+            if r["terms"]:
+                line += " <" + "; ".join(r["terms"]) + ">"
             body.append(line)
         body.append("")
     return "\n".join(head + body)

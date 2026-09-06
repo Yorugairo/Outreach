@@ -23,7 +23,7 @@ v = γ · ρ^(1/3) = γ · κ^(−1/3)          ρ = radius of curvature, κ = c
 A = γ · κ^(2/3)                          angular speed — the "two-thirds" the law is named for
 ```
 
-Flash & Hogan (1985) showed this falls out of the CNS minimising squared jerk
+Flash & Hogan (1985) showed this falls out of the CNS minimising squared jerk — the minimum-jerk (min-jerk) law
 `C_J = ½∫‖r⃛(t)‖² dt`; the variational solution for rest-to-rest motion is the quintic
 
 ```
