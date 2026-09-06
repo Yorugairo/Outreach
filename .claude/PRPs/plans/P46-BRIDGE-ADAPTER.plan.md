@@ -23,7 +23,7 @@ run, one structured reply). No lane has an inbound watcher; Gemini has never ope
 the Claude/Antigravity adapters (P2 T6) as unbuilt. The operator's ask: "python agents to actually monitor the file
 locations" and bring our side up to speed.
 
-The plan builds two thin tools on our side and adopts Astra's packet shape, so this is an adapter, never a second harness
+The plan builds three thin Python commands on our side - **no agents, no model calls, zero tokens** (operator, 2026-09-06: "we don't need sender/watcher agents; python helpers for alerts are much cheaper") - and adopts Astra's packet shape, so this is an adapter, never a second harness
 (P2: "do not launch a second harness around a native worker"). Everything the tools learn is a file: the order, the
 packet id, the reply delta, the usage line.
 
@@ -61,7 +61,7 @@ GEMINI.md and the hand-off note (pointer edits).
 
 ## Not Building
 
-- No daemon, no polling service, no message queue: a watcher is a command that runs until one reply or a deadline.
+- No daemon, no polling service, no message queue, **and no agent of any kind**: the watcher is a command that runs until one reply or a deadline; as a background Bash command the harness re-invokes the parent when it exits, so the alert costs the tokens of one printed line.
 - No driving of Astra's runner from here (its packets come to us; its adapters are P2 T6).
 - No Flow session driving (E36 consent), no web research from the Claude lane (that is the order's job).
 - No reading of the CSRF token into any file, log or ledger.
