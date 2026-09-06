@@ -11,7 +11,13 @@
     "docs/DOCS-CITATIONS.jsonl",
     "docs/DOCS-STANDARD.md",
     "docs/DOCS-MANIFEST.jsonl",
-    "docs/DOCS-MANIFEST.md"
+    "docs/DOCS-MANIFEST.md",
+    "docs/GATES-REGISTRY.jsonl",
+    "docs/GATES-REGISTRY.md",
+    "docs/CRAFT-MAP.jsonl",
+    "docs/CRAFT-MAP.md",
+    "docs/ANIMATION-REGISTRY.jsonl",
+    "docs/ANIMATION-REGISTRY.md"
   ],
   "include": [],
   "extra_files": [],
