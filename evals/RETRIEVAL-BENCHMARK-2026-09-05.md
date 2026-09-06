@@ -214,3 +214,5 @@ they are now deleted (the `quality-rules` skill holds their content); (2) the se
 AGENTS.md is the old branch's 15 KB - `git checkout main -- AGENTS.md CLAUDE.md` in the worktree fixes that for the
 next session here. The memory-index cap did land (10.1 → 7.1 KB). Expected next session: instructions block ≈ 3.9 + 7.1
 + 1.5 + 1.2 KB ≈ 13.7 KB ≈ 3.5k tokens (from 38.3 KB ≈ 10k), i.e. a bare explorer near 19k and a minimal role near 6k.
+
+**Round 7 addendum:** `probe_tools` (Read, Grep, Glob, Bash; no skill, no memory) = **17,411** → the three extra tool schemas cost ≈ 4.2k; the explorer's remaining ≈ 9k (26,386 − 17,411) is the role body + the preloaded `retrieval-layers` skill + `memory: local` (+ whatever `effort: high` prefaces) - split unmeasured; next probe: the explorer with the `skills:` and `memory:` keys removed.
