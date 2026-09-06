@@ -273,6 +273,10 @@ def _parse_json(text: str | None) -> Any:
 
 
 def main(argv: Sequence[str] | None = None) -> int:
+    # a brief may carry any Unicode (a ">=" sign, an em dash); the Windows console defaults to cp1252 and would raise mid-send
+    for stream in (sys.stdout, sys.stderr):
+        if hasattr(stream, "reconfigure"):
+            stream.reconfigure(encoding="utf-8", errors="replace")
     args = build_parser().parse_args(argv)
     brief = read_brief(args.brief_file)
     order = build_order(args, brief)

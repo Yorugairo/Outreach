@@ -466,3 +466,21 @@ def test_a_failing_cli_leaves_the_packet_in_queue_and_reports_the_exit(fake_mach
 def test_a_missing_brief_file_stops_the_send(tmp_path):
     with pytest.raises(SystemExit):
         BS.main(["--lane", "gemini", "--brief-file", str(tmp_path / "absent.md"), "--dry-run"])
+
+
+# ---- the conversation id falls back to the brain transcript when the database lags the send ----
+def test_the_id_falls_back_to_the_brain_transcript_that_opens_with_the_title(tmp_path):
+    import json, os, time
+    import bridge_env as E
+    store = tmp_path / "conversations"; store.mkdir()          # no .db files at all
+    brain = tmp_path / "brain"
+    for cid, first in (("old-1111", "<USER_REQUEST> something else"), ("new-2222", "<USER_REQUEST> # Work order - classify every cut")):
+        log = brain / cid / ".system_generated" / "logs"; log.mkdir(parents=True)
+        (log / "transcript.jsonl").write_text(json.dumps({"content": first}) + "
+" + json.dumps({"content": "x"}) + "
+", encoding="utf-8")
+    old = brain / "old-1111" / ".system_generated" / "logs" / "transcript.jsonl"
+    os.utime(old, (time.time() - 3600, time.time() - 3600))
+    assert E.newest_conversation(store, after_ts=time.time() - 60, title="Work order - classify every cut", brain=brain) == "new-2222"
+    assert E.newest_conversation(store, after_ts=time.time() - 60, title="not in any transcript", brain=brain) is None
+    assert E.newest_conversation(tmp_path / "missing-store", after_ts=0.0, title=None, brain=brain) == "new-2222"

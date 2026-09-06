@@ -42,6 +42,7 @@ REPO = SCRIPTS.parents[2]
 
 GEMINI_HOME = Path.home() / ".gemini"
 CONVERSATION_STORE = GEMINI_HOME / "antigravity" / "conversations"
+BRAIN_ROOT = GEMINI_HOME / "antigravity" / "brain"   # brain/<id>/.system_generated/logs/transcript.jsonl - written before the .db
 AGENTAPI_BAT = GEMINI_HOME / "antigravity-cli" / "bin" / "agentapi.bat"
 
 LANGUAGE_SERVER = "language_server.exe"
@@ -411,6 +412,7 @@ def newest_conversation(
     store: Path | str = CONVERSATION_STORE,
     after_ts: float = 0.0,
     title: str | None = None,
+    brain: Path | str | None = None,
 ) -> str | None:
     """The conversation id the CLI just created: the newest `<uuid>.db` touched after ``after_ts``.
 
@@ -419,9 +421,10 @@ def newest_conversation(
     accepted. Returns None when nothing matches - not found where I looked.
     """
 
+    brain = BRAIN_ROOT if brain is None else brain
     root = Path(store)
     if not root.is_dir():
-        return None
+        return newest_brain_conversation(brain, after_ts, title)
     candidates = []
     for db in root.glob("*.db"):
         try:
@@ -434,6 +437,35 @@ def newest_conversation(
         if title and not _mentions(db, title):
             continue
         return db.stem
+    return newest_brain_conversation(brain, after_ts, title)
+
+
+def newest_brain_conversation(brain: Path | str = BRAIN_ROOT, after_ts: float = 0.0, title: str | None = None) -> str | None:
+    """Fallback for the id: the newest `brain/<id>/.system_generated/logs/transcript.jsonl` touched after
+    ``after_ts`` whose FIRST record carries the title (the CLI's prompt echo). The conversation database can
+    lag the send by more than the sender waits (seen 2026-09-06: 503 databases, none matched, the transcript
+    was already 7 records long), and the transcript is written first."""
+
+    root = Path(brain)
+    if not root.is_dir():
+        return None
+    found = []
+    for tr in root.glob("*/.system_generated/logs/transcript.jsonl"):
+        try:
+            mtime = tr.stat().st_mtime
+        except OSError:
+            continue
+        if mtime >= after_ts - 5:
+            found.append((mtime, tr))
+    for _, tr in sorted(found, reverse=True):
+        try:
+            with tr.open("r", encoding="utf-8") as handle:
+                first = handle.readline()
+        except OSError:
+            continue
+        if title and title not in first:
+            continue
+        return tr.parents[2].name
     return None
 
 
