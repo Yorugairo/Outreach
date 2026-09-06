@@ -168,3 +168,16 @@ Nine of the ten questions re-run (Q7 not re-run). "Before" = the Opus role's rou
 - **Time:** mixed; two slow runs (Q5, the first Q8) were the built-in-grep straggler pattern, not the layers.
 - **What this establishes:** same harness, same model, same prompts, layers added - a clean before/after on accuracy and
   hops; the token line is the honest cost of the current output shape, not of the idea.
+
+## Round 5 — the compact query helper (`docs_find.py`) in the roles
+
+| Q | round 4 tokens / tools / s | round 5 tokens / tools / s | read |
+|---|---|---|---|
+| 3 mount (one target, code windows) | 42,642 / 7 / 30 | 46,827 / 7 / 32 | no change: the cost is the fixed dispatch overhead plus the code windows it must open, not the layer hits |
+| 10 documented-but-unbuilt (spans layers) | 70,164 / 12 / 82 | 57,841 / 14 / 87 | **−18 % tokens** where a hunt touches several layers |
+
+- The helper cuts what it targets (a layer hit is 12x cheaper) and nothing else. The floor of a dispatch is ~30 k
+  tokens on this harness (system prompt, rules, repo instructions, the role file, the auto-loaded durable memory) plus
+  every window the answer needs; the layers cannot move that floor. The next lever on cost is the always-loaded layer
+  (AGENTS.md 9.9 KB, CLAUDE.md, the ECC rules, the growing role files), not retrieval.
+- Both runs correct; the Q10 answer now cites the day's backlog rows (R1-R3) by number.
