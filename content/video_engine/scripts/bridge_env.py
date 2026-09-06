@@ -52,6 +52,7 @@ LOOPBACK = ("127.0.0.1", "[::1]")
 BRIDGE_ROOT = Path("docs/research/runs/bridge")
 STATES = ("queue", "sent", "replied", "done")
 LEDGER = Path("evals/BRIDGE-LOG.jsonl")
+LEDGER_EVENTS = ("sent", "replied", "followup", "tier0", "tier1", "timeout", "escalated")
 TELEMETRY_KEYS = ("conversationId", "secondsToReply", "inputTokens", "outputTokens", "totalTokens")
 
 _CSRF_RE = re.compile(r"--csrf_token[=\s]+(\S+)")
@@ -383,12 +384,16 @@ def ledger_append(repo: Path | str, record: dict[str, Any], ledger: Path | str =
     """Append one bridge event to `evals/BRIDGE-LOG.jsonl`.
 
     Missing telemetry is written as ``null`` and never as zero, so a later average over the column cannot be
-    quietly wrong. A secret-looking key is refused outright - the CSRF token belongs in no file.
+    quietly wrong. A secret-looking key is refused outright - the CSRF token belongs in no file. ``event`` is
+    a closed vocabulary (`LEDGER_EVENTS`): a typo would split a column that the escape rate is measured on,
+    so it is refused rather than written.
     """
 
     for key in record:
         if _is_secret_key(key):
             raise ValueError(f"refusing to ledger a secret-looking key: {key}")
+    if record.get("event") not in LEDGER_EVENTS:
+        raise ValueError(f"unknown ledger event {record.get('event')!r}; expected one of {LEDGER_EVENTS}")
     row: dict[str, Any] = {"ts": time.strftime("%Y-%m-%dT%H:%M:%S")}
     row.update({key: None for key in TELEMETRY_KEYS})
     row.update(record)

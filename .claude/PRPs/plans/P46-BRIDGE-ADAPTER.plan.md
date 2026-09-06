@@ -128,13 +128,13 @@ actionable: the inbox hook for live sessions, the daemon + per-lane handlers for
 - Evidence: pending
 
 ### T3: bridge_reply + the ledger
-- Status: pending
+- Status: complete
 - Owner: junior_developer
 - Depends on: T1
 - Write set: `content/video_engine/scripts/bridge_reply.py`, the ledger append in `bridge_env.py`, tests
 - Acceptance: a reply is recorded in the packet folder and the ledger; dry-run never calls the CLI
 - Validate: `python -m pytest content/video_engine/tests/test_bridge_reply.py -q -p no:cacheprovider`
-- Evidence: pending
+- Evidence: 2026-09-06 (junior_developer; parent re-ran the tests, read the bridge_env diff - two hunks in the ledger section only - and scanned for secrets). `bridge_reply.py` (300 lines), `test_bridge_reply.py` (306 lines), `bridge_env.LEDGER_EVENTS = (sent, replied, followup, tier0, tier1, timeout, escalated)` with `ledger_append` refusing anything else. `42 passed in 0.33s` across reply + send; two mutations (followup numbering, event guard) fail 2 tests each. Deltas from the brief, kept: `conversationId` is not in `order.json` - `bridge_send` writes it to `conversation.json` (gemini) / `reply.json` `session_id` (claude), so the resolver falls back through both; send-first-then-record, so a refused send leaves no file, no move, no ledger line. `--packet` takes the full 64-hex id.
 
 ### T4: the packet contract (HG1)
 - Status: pending
