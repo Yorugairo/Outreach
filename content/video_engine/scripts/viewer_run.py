@@ -240,7 +240,9 @@ def make_run_dirs(root: Path) -> RunDirs:
 
 def artifact_stem(script: Path) -> str:
     """`SCRIPT-G-VO.txt` -> `SCRIPT-G`, as viewer_windows/viewer_score name it."""
-    return script.stem[:-len(VO_SUFFIX)] if script.stem.endswith(VO_SUFFIX) else script.stem
+    # `-VO` may sit before an author marker (`SCRIPT-90S-VO.claude.txt`): strip it wherever it is, as
+    # viewer_windows.py and run_script_gates.py do, or the gate runner folds in a stale report.
+    return script.stem.replace(VO_SUFFIX, "")
 
 
 def windows_path(script: Path) -> Path:

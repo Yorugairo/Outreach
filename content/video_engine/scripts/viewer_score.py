@@ -311,7 +311,7 @@ def render(res: dict, script_name: str) -> str:
 
 # ---- io --------------------------------------------------------------------
 def paths_for(script: Path) -> tuple[Path, Path, Path]:
-    stem = script.stem[:-3] if script.stem.endswith("-VO") else script.stem
+    stem = script.stem.replace("-VO", "")   # anywhere in the stem (`SCRIPT-90S-VO.claude`), as viewer_windows/run_script_gates do
     return (script.with_name(stem + "-VIEWER-WINDOWS.json"),
             script.with_name(stem + "-VIEWER-REPORTS.json"),
             script.with_name(stem + "-VIEWER.md"))
