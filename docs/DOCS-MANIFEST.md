@@ -15,7 +15,7 @@ its own headings, capability names, backlog ids. `terms` are its most frequent b
 terms. Purpose, terms and defines are truncated here to keep the file cheap to grep;
 the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 
-174 documents across 12 kinds.
+174 documents across 13 kinds.
 
 ## doctrine
 
@@ -127,6 +127,20 @@ the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 - docs/runbooks/PRP_EXECUTION.md — PRP Execution — PRPs are durable execution contracts for work too broad or risky to manage from chat history. — defines: P2 — terms: junior_developer; implementation_luna; cross-module; speedster; architect_sol; SigMap
 - docs/runbooks/RENDER-REGRESSION.md — When a render looks wrong — You do not need to read any animation math to use this page. — defines: — — terms: PASS 4 golden frames identical; dock-pair; mid-build; false; kinetics: unknown flag ignored; curvature_stroke
 
+## spec
+
+- docs/agentic-analysis-contract.md — Agentic Analysis Contract: P10 Runtime and Governance — `SiteEvidencePack` is generated only from persisted Outreach artifacts and is the only input to any agentic an — defines: P10 — terms: needs_review; append-only; SiteEvidencePack; report-snapshot; vertical-pack; keyword-set
+- docs/ARCHITECTURE_DECISION_SEO_PLATFORM.md — Architecture Decision: SEO Insights Platform over Script-First Pipelin — The initial planning artifacts framed the SEO system primarily as an ingestion pipeline with multiple standalo — defines: — — terms: up-front; operator-friendly; SEO Insight Runs; run-state; run-centric; first-class
+- docs/product-revenue-contract.md — Product / Revenue Contract: Outreach Program — The Outreach Program is an internal, URL-first expertise demonstration. — defines: — — terms: URL-first; append-only; evidence-backed; human-reviewed; home-service; vertical-specific
+- docs/product-strength-contract.md — Product Strength Contract: P10 Scoring Surfaces — This contract defines deterministic, surfaced scoring in P10 while preserving legacy compatibility. — defines: P10; P12 — terms: overall_score; seo-health.v2; search-visibility.v2; local-visibility.v1; ai-readiness.v3; ai-visibility.v1
+- docs/production-api-ui-database.md — Production API, UI, and database — The control plane is a FastAPI application backed by a migration-managed SQLite database and a file artifact m — defines: — — terms: FastAPI; migration-managed; SEO_INSIGHTS_DATABASE_PATH; SEO_INSIGHTS_ARTIFACT_ROOT; X-API-Key; SEO_INSIGHTS_API_KEY
+- docs/run-centric-schema-notes.md — Run-Centric Schema Notes — Prepared: 2026-07-07 — defines: — — terms: insight_runs; business_entities; entity-centric; entity-backed; seo_targets; run_stage_events
+- docs/seo-ingestion-implementation-tasks.md — SEO Ingestion Implementation Tasks — Prepared: 2026-07-06 — defines: — — terms: DataForSEO; robots.txt; sitemap.xml; Single-domain; crawl_pages; machine-readable
+- docs/seo-ingestion-pipeline-spec.md — SEO Ingestion Pipeline Spec — Prepared: 2026-07-06 Workspace: `C:\Users\Snipe\Downloads\Outreach Program` — defines: — — terms: case-study; DataForSEO; internal-link; supporting-content; low-value; low-fixed-cost
+- docs/seo-insights-platform-architecture.md — SEO Insights Platform Architecture — Prepared: 2026-07-07 Workspace: `C:\Users\Snipe\Downloads\Outreach Program` — defines: — — terms: DataForSEO; InsightReport; evidence-backed; operator-facing; InsightRun; PageRecord
+- docs/seo-insights-platform-implementation-plan.md — SEO Insights Platform Implementation Plan — Prepared: 2026-07-07 Workspace: `C:\Users\Snipe\Downloads\Outreach Program` — defines: — — terms: DataForSEO; insight_runs; run_stage_events; run-centric; search-intelligence; targets
+- docs/STATE-OF-WORK.md — STATE OF WORK - every worktree, regenerated — Generated 2026-09-03 06:02 by `survey_worktrees.py`. — defines: — — terms: history-of-bjj; reference-studies; style-samples; systems-and-blowups; provider-jobs; martial-matters
+
 ## research
 
 - docs/content-video-engine/FINDING-gaps-are-the-edit.md — The gaps and the edit — measured, then corrected, 2026-09-04 — Operator brought back an observation from a video on AI-generated content: the makers record audio, transcribe — defines: M13 — terms: gap-driven; hand-authored; retime_to_take; Gap-anchored; SCRIPT-90S-VO.txt; pre-tempo-edit
@@ -214,15 +228,4 @@ the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 ## other
 
 - docs/agent-memory/explorer/MEMORY.md — explorer - durable memory (reviewed) — Promoted from worker scratch by the parent after review. — defines: — — terms: path | heading or symbol | what; per-platform; tokyo-tea-break; il-tea-break
-- docs/agentic-analysis-contract.md — Agentic Analysis Contract: P10 Runtime and Governance — `SiteEvidencePack` is generated only from persisted Outreach artifacts and is the only input to any agentic an — defines: P10 — terms: needs_review; append-only; SiteEvidencePack; report-snapshot; vertical-pack; keyword-set
-- docs/ARCHITECTURE_DECISION_SEO_PLATFORM.md — Architecture Decision: SEO Insights Platform over Script-First Pipelin — The initial planning artifacts framed the SEO system primarily as an ingestion pipeline with multiple standalo — defines: — — terms: up-front; operator-friendly; SEO Insight Runs; run-state; run-centric; first-class
 - docs/content-video-engine/SCRIPT-CONTEXT-COMBINED.md — DOCTRINE CORE — portable content-operation context — Model-agnostic; paste whole into any system-instruction or rules box (fits a 10,000-char limit). — defines: — — terms: scene-setting; pause-framed; seed-locked; paragraph-shaped; quarter-billion; de-risk
-- docs/product-revenue-contract.md — Product / Revenue Contract: Outreach Program — The Outreach Program is an internal, URL-first expertise demonstration. — defines: — — terms: URL-first; append-only; evidence-backed; human-reviewed; home-service; vertical-specific
-- docs/product-strength-contract.md — Product Strength Contract: P10 Scoring Surfaces — This contract defines deterministic, surfaced scoring in P10 while preserving legacy compatibility. — defines: P10; P12 — terms: overall_score; seo-health.v2; search-visibility.v2; local-visibility.v1; ai-readiness.v3; ai-visibility.v1
-- docs/production-api-ui-database.md — Production API, UI, and database — The control plane is a FastAPI application backed by a migration-managed SQLite database and a file artifact m — defines: — — terms: FastAPI; migration-managed; SEO_INSIGHTS_DATABASE_PATH; SEO_INSIGHTS_ARTIFACT_ROOT; X-API-Key; SEO_INSIGHTS_API_KEY
-- docs/run-centric-schema-notes.md — Run-Centric Schema Notes — Prepared: 2026-07-07 — defines: — — terms: insight_runs; business_entities; entity-centric; entity-backed; seo_targets; run_stage_events
-- docs/seo-ingestion-implementation-tasks.md — SEO Ingestion Implementation Tasks — Prepared: 2026-07-06 — defines: — — terms: DataForSEO; robots.txt; sitemap.xml; Single-domain; crawl_pages; machine-readable
-- docs/seo-ingestion-pipeline-spec.md — SEO Ingestion Pipeline Spec — Prepared: 2026-07-06 Workspace: `C:\Users\Snipe\Downloads\Outreach Program` — defines: — — terms: case-study; DataForSEO; internal-link; supporting-content; low-value; low-fixed-cost
-- docs/seo-insights-platform-architecture.md — SEO Insights Platform Architecture — Prepared: 2026-07-07 Workspace: `C:\Users\Snipe\Downloads\Outreach Program` — defines: — — terms: DataForSEO; InsightReport; evidence-backed; operator-facing; InsightRun; PageRecord
-- docs/seo-insights-platform-implementation-plan.md — SEO Insights Platform Implementation Plan — Prepared: 2026-07-07 Workspace: `C:\Users\Snipe\Downloads\Outreach Program` — defines: — — terms: DataForSEO; insight_runs; run_stage_events; run-centric; search-intelligence; targets
-- docs/STATE-OF-WORK.md — STATE OF WORK - every worktree, regenerated — Generated 2026-09-03 06:02 by `survey_worktrees.py`. — defines: — — terms: history-of-bjj; reference-studies; style-samples; systems-and-blowups; provider-jobs; martial-matters

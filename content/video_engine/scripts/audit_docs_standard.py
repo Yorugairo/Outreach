@@ -16,7 +16,10 @@ Per heading (table rows, level 7, are not headings and are skipped):
 
 A lead exemption is read from the source file, not guessed: a section that opens on a table, a
 fenced block, a sub-heading, a long list item, or (for the H1) an italic byline is doing its job
-without a prose lead. The per-doc score weights them 0.5 / 0.35 / 0.15.
+without a prose lead. So is a short line that hands straight to structure - a lead-in ending in
+`:`, or an `Operator, 2026-09-05:` attribution - when the next real line is a list item, a quote,
+a table row or a fence: the structure under it is the section. The per-doc score weights them
+0.5 / 0.35 / 0.15.
 
     python content/video_engine/scripts/audit_docs_standard.py                  # write the report
     python content/video_engine/scripts/audit_docs_standard.py --only docs/research
@@ -60,6 +63,8 @@ TRAILING = re.compile(r"[\s:.?!,;]+$")
 FENCE = re.compile(r"^(?:```|~~~)")
 BULLET = re.compile(r"^(?:[-*+]|\d+[.)])\s+")
 ITALIC = re.compile(r"^\*[^\s*].*[^\s*]\*$")
+# "Operator, 2026-09-05:", "Operator rulings, 2026-08-29." - who said it and when, not a lead
+ATTRIBUTION = re.compile(r"^\**[A-Z][^,\n]{0,40},\s*\d{4}(?:-\d{2}){0,2}\s*\**[:.]?\**$")
 
 
 # --- heading judgements -------------------------------------------------------------------
@@ -75,24 +80,47 @@ def is_generic(heading: str) -> bool:
     return normalized(heading) in GENERIC
 
 
+def next_nonempty_at(lines: list[str], line_no: int) -> tuple[int, str] | None:
+    """(0-based index, stripped text) of the first non-blank line after the 1-based `line_no`."""
+    for offset, line in enumerate(lines[line_no:], start=line_no):
+        if line.strip():
+            return (offset, line.strip())
+    return None
+
+
 def next_nonempty(lines: list[str], line_no: int) -> str | None:
     """The first non-blank line after the 1-based heading line, stripped; None at end of file."""
-    for line in lines[line_no:]:
-        if line.strip():
-            return line.strip()
-    return None
+    found = next_nonempty_at(lines, line_no)
+    return found[1] if found else None
+
+
+def opens_structure(line: str) -> bool:
+    """A list item, a quote, a table row or a fence - the section's body is the structure."""
+    return bool(BULLET.match(line) or line.startswith((">", "|")) or FENCE.match(line))
+
+
+def hands_to_structure(lines: list[str], lead_index: int, lead: str) -> bool:
+    """A short lead that is only a hand-off: a lead-in ending in `:`, or a `<Name>, <date>:`
+    attribution, whose next real line is the structure it announced."""
+    if not (lead.rstrip("*").endswith(":") or ATTRIBUTION.match(lead)):
+        return False
+    nxt = next_nonempty(lines, lead_index + 1)
+    return bool(nxt and opens_structure(nxt))
 
 
 def lead_exempt(lines: list[str], line_no: int, level: int) -> bool:
     """A section that opens on structure, not prose, owes no lead line."""
-    nxt = next_nonempty(lines, line_no)
-    if nxt is None:
+    found = next_nonempty_at(lines, line_no)
+    if found is None:
         return False
+    index, nxt = found
     if nxt.startswith("|") or FENCE.match(nxt) or nxt.startswith("#"):
         return True
     if BULLET.match(nxt) and len(nxt) >= LEAD_MIN:
         return True
-    return level == 1 and bool(ITALIC.match(nxt))
+    if level == 1 and ITALIC.match(nxt):
+        return True
+    return hands_to_structure(lines, index, nxt)
 
 
 def has_terms(rec: dict) -> bool:
@@ -230,7 +258,9 @@ def render(result: dict, only: str | None = None) -> str:
         "Every section is scored on the three things a query needs: a lead line that says what the",
         "section is (0.5), body vocabulary to land on (0.35), and a heading that names a concept",
         "rather than a filing slot (0.15). Sections that open on a table, a fenced block, a",
-        "sub-heading, a long list item, or an H1 byline are exempt from the lead check.",
+        "sub-heading, a long list item, or an H1 byline are exempt from the lead check, and so is",
+        "a short lead-in (`...:`) or a `<Name>, <date>:` attribution whose next real line is a list",
+        "item, a quote, a table row or a fence.",
         "",
         "## Summary",
         "",

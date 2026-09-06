@@ -4,7 +4,9 @@ A synthetic docs tree carries one instance of each judgement the audit makes: a 
 lead line, three sections whose lead is exempt because they open on a table / a sub-heading / a
 fenced block, an H1 exempt by its italic byline, a generic filing heading, a `Sources` heading that
 is structural and must NOT count as generic, and numbering (`42.6`, `3.`, `§`) stripped before the
-generic test. The records come from `build_docs_index.file_records` - the audit's real producer -
+generic test. Synthetic E carries the hand-off leads - a lead-in ending in `:` and a
+`<Name>, <date>` attribution, each handing to a table, a list, a quote or a fence - plus the one
+that hands to prose and is therefore still a missing lead. The records come from `build_docs_index.file_records` - the audit's real producer -
 except in the score test, where they are hand-written so the arithmetic is checkable by eye.
 
 The last test runs over the REAL `docs/DOCS-INDEX.jsonl`: the tree it measures is large (>100
@@ -28,6 +30,7 @@ A_REL = "docs/synthetic/A.md"
 B_REL = "docs/synthetic/B.md"
 C_REL = "docs/synthetic/C.md"
 D_REL = "docs/synthetic/D.md"
+E_REL = "docs/synthetic/E.md"
 
 DOC_A = (
     "# Synthetic A - the retrieval standard\n"                                        # 1
@@ -89,6 +92,53 @@ DOC_D = (
     "| a | b |\n"                                                                     # 15
     "|---|---|\n"                                                                     # 16
     "| 1 | 2 |\n"                                                                     # 17
+)
+
+DOC_E = (
+    "# Synthetic E - the hand-off leads\n"                                      # 1
+    "\n"                                                                        # 2
+    "Every section here opens on a line that only announces what is under it.\n" # 3
+    "\n"                                                                        # 4
+    "## The render profiles\n"                                                  # 5
+    "\n"                                                                        # 6
+    "`render_profiles.json`:\n"                                                 # 7
+    "\n"                                                                        # 8
+    "| Profile | FPS |\n"                                                       # 9
+    "|---|---|\n"                                                               # 10
+    "| social | 30 |\n"                                                         # 11
+    "\n"                                                                        # 12
+    "## The authoring order\n"                                                  # 13
+    "\n"                                                                        # 14
+    "Motion is authored in this order:\n"                                       # 15
+    "\n"                                                                        # 16
+    "1. Character or prop action.\n"                                            # 17
+    "2. Camera move.\n"                                                         # 18
+    "\n"                                                                        # 19
+    "## The ruling that opens on the quote\n"                                   # 20
+    "\n"                                                                        # 21
+    "Operator, 2026-09-05:\n"                                                   # 22
+    "\n"                                                                        # 23
+    "> \"The process thinking is enough value on its own.\"\n"                  # 24
+    "\n"                                                                        # 25
+    "## The headless export\n"                                                  # 26
+    "\n"                                                                        # 27
+    "HTML + CSS, exported headless:\n"                                          # 28
+    "\n"                                                                        # 29
+    "```bash\n"                                                                 # 30
+    "python export_chart.py\n"                                                  # 31
+    "```\n"                                                                     # 32
+    "\n"                                                                        # 33
+    "## The standing corrections\n"                                             # 34
+    "\n"                                                                        # 35
+    "Operator rulings, 2026-08-29.\n"                                           # 36
+    "\n"                                                                        # 37
+    "- the reason is the load-bearing part\n"                                   # 38
+    "\n"                                                                        # 39
+    "## The checkpoint that never lands\n"                                      # 40
+    "\n"                                                                        # 41
+    "The durable checkpoint is:\n"                                              # 42
+    "\n"                                                                        # 43
+    "prose after a colon is a lead that says nothing, and this line proves it.\n" # 44
 )
 
 LONG_LEAD = "A first section whose lead line runs past the forty character floor."
@@ -189,6 +239,59 @@ def test_a_missing_source_file_fails_the_exemption_closed(tmp_path: Path):
     result = ADS.audit(records, tmp_path)
 
     assert entries(result, "missing_leads") == {("docs/gone.md", 1, "Overview")}
+
+
+# --- the hand-off lead --------------------------------------------------------------------
+
+@pytest.fixture()
+def hand_off(tmp_path: Path) -> tuple[Path, list[dict]]:
+    return tmp_path, write_doc(tmp_path, E_REL, DOC_E)
+
+
+@pytest.mark.parametrize("line,heading", [(5, "The render profiles"),      # hands to a table
+                                          (13, "The authoring order"),     # hands to a list
+                                          (20, "The ruling that opens on the quote"),
+                                          (26, "The headless export"),     # hands to a fence
+                                          (34, "The standing corrections")])
+def test_a_short_lead_that_hands_to_structure_is_exempt(hand_off, line, heading):
+    root, records = hand_off
+
+    result = ADS.audit(records, root)
+
+    record = next(r for r in records if r["line"] == line)
+    assert len(record["lead"]) < ADS.LEAD_MIN                  # it is a short lead, not a lead
+    assert (E_REL, line, heading) not in entries(result, "missing_leads")
+
+
+def test_a_short_lead_that_hands_to_prose_is_still_reported(hand_off):
+    root, records = hand_off
+
+    result = ADS.audit(records, root)
+
+    assert (E_REL, 40, "The checkpoint that never lands") in entries(result, "missing_leads")
+    assert [e["line"] for e in result["missing_leads"]] == [40]      # the only one in the doc
+    assert doc_named(result, E_REL)["lead_ok"] == len(records) - 1
+
+
+def test_an_attribution_line_is_a_hand_off_with_or_without_its_colon():
+    assert ADS.ATTRIBUTION.match("Operator, 2026-09-05:")
+    assert ADS.ATTRIBUTION.match("Operator rulings, 2026-08-29.")
+    assert ADS.ATTRIBUTION.match("**Operator, 2026-09-04:**")
+    assert not ADS.ATTRIBUTION.match("The chart proves one sentence and leaves.")
+    assert not ADS.ATTRIBUTION.match("we cut the plate, 2026 was the year it broke")
+
+
+@pytest.mark.parametrize("follower", ["- one", "1. one", "> quoted", "| a | b |", "```bash"])
+def test_every_structural_follower_completes_the_hand_off(follower):
+    lines = ["## The section", "", "The order is:", "", follower]
+
+    assert ADS.opens_structure(follower)
+    assert ADS.lead_exempt(lines, 1, 2)
+
+
+def test_a_lead_in_with_nothing_under_it_is_not_exempt():
+    assert not ADS.lead_exempt(["## The section", "", "The order is:", "", "Prose follows."], 1, 2)
+    assert not ADS.lead_exempt(["## The section", "", "The order is:"], 1, 2)
 
 
 # --- generic headings ---------------------------------------------------------------------

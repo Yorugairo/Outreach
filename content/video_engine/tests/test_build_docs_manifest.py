@@ -3,11 +3,12 @@
 `DOCS-INDEX` answers "where is the section about X"; this answers the question that keeps
 costing tree walks - "do we have X, and which doc holds it". These pin the record shape on a
 synthetic docs tree (kind by path and filename, the purpose fallback chain, `defines` vs
-`mentions`, key-term ordering, CAPABILITIES / BACKLOG rows folding into their file), that
+`mentions`, key-term ordering, the JSONL-only heading list, CAPABILITIES / BACKLOG rows folding
+into their file), that
 `--write` is deterministic and `--check` follows the docs, and that the manifest built over the
 REAL tree still carries what an agent looks for: the rulings ledger owns E41, CAPABILITIES owns
-the G2 short-mode row, `kubelka` lands on doc 44, and the Markdown stays small enough to read
-whole."""
+the G2 short-mode row, `kubelka` lands on doc 44, a heading phrase reaches its document, and the
+Markdown stays small enough to read whole."""
 from __future__ import annotations
 
 import json
@@ -31,6 +32,7 @@ TERMS_REL = "docs/content-video-engine/47-FAKE-VOCABULARY.md"
 PATTERN_REL = "docs/content-video-engine/patterns/FAKE-MAP.md"
 README_REL = "docs/content-video-engine/README.md"
 CONTRACT_REL = "docs/fake-platform-contract.md"
+HEADINGS_REL = "docs/content-video-engine/48-FAKE-HEADINGS.md"
 
 RULINGS = (
     "# OPERATOR RULINGS — the standing corrections ledger\n"
@@ -117,7 +119,26 @@ BACKLOG = (
     "| ~~M11~~ | ~~**Spotlit chart**~~ | shipped |\n"
 )
 
+HEADINGS_DOC = (
+    "# 48 — Fake headings\n"
+    "\n"
+    "The document whose headings are the thing an agent greps for, not its body.\n"
+    "\n"
+    "## 9.31 The page VORTEX — how a page leaves\n"
+    "\n"
+    "It leaves by a spiral and comes back the same way, which is a long enough lead.\n"
+    "\n"
+    "### § 2. The retract\n"
+    "\n"
+    "Every colour on the page becomes a particle, and this lead clears the floor.\n"
+    "\n"
+    "#### The fourth level is not what the document is about\n"
+    "\n"
+    "A paragraph under a level-4 heading, long enough to be a lead in its own right.\n"
+)
+
 TREE = {
+    HEADINGS_REL: HEADINGS_DOC,
     RULINGS_REL: RULINGS,
     DOCTRINE_REL: DOCTRINE,
     TERMS_REL: TERMS_DOC,
@@ -184,7 +205,17 @@ def test_kind_is_decided_by_path_prefix_and_filename() -> None:
         "docs/content-video-engine/FINDING-gaps-are-the-edit.md": "research",
         "docs/content-video-engine/P13-GATE-A-ARMBAR-REVIEW.md": "research",
         "docs/content-video-engine/REMOTION-UI-HARVEST.md": "research",
-        CONTRACT_REL: "other",
+        CONTRACT_REL: "spec",
+        "docs/seo-insights-platform-architecture.md": "spec",
+        "docs/seo-ingestion-pipeline-spec.md": "spec",
+        "docs/seo-insights-platform-implementation-plan.md": "spec",
+        "docs/ARCHITECTURE_DECISION_SEO_PLATFORM.md": "spec",
+        "docs/run-centric-schema-notes.md": "spec",
+        "docs/production-api-ui-database.md": "spec",
+        "docs/STATE-OF-WORK.md": "spec",
+        # the spec rules are last and only catch `docs/`: an earlier rule and another tree win
+        "docs/runbooks/PROMOTION-plan.md": "runbook",
+        "content/video_engine/seo-notes.md": "other",
         "docs/agent-memory/explorer/MEMORY.md": "other",
     }
     assert {p: BDM.classify(p) for p in cases} == cases
@@ -198,7 +229,8 @@ def test_one_record_per_document_with_the_contract_keys(tmp_path: Path) -> None:
     entries = _entries(_tree(tmp_path))
     assert set(entries) == set(TREE)
     assert list(entries[DOCTRINE_REL]) == ["path", "doc", "title", "kind", "purpose", "sections",
-                                           "defines", "mentions", "key_terms", "byline"]
+                                           "headings", "defines", "mentions", "key_terms",
+                                           "byline"]
     doctrine = entries[DOCTRINE_REL]
     assert doctrine["doc"] == "29"
     assert doctrine["title"] == "29 — Fake Motion Standards"
@@ -254,6 +286,33 @@ def test_key_terms_rank_by_count_then_first_appearance(tmp_path: Path) -> None:
     assert key_terms[:2] == ["alpha-one", "zulu-two"]      # zulu-two appears first, alpha-one wins
     assert "Why:" not in key_terms                         # a lead-in is not vocabulary
     assert len(key_terms) <= BDM.KEY_TERM_LIMIT
+
+
+def test_headings_are_levels_one_to_three_with_the_numbering_stripped(tmp_path: Path) -> None:
+    headings = _entries(_tree(tmp_path))[HEADINGS_REL]["headings"]
+    assert headings == ["Fake headings",                      # "48 — " is a filing coordinate
+                        "The page VORTEX — how a page leaves",
+                        "The retract"]                        # "§ 2." stripped too
+    assert not any("fourth level" in h for h in headings)     # H4 is a paragraph marker
+
+
+def test_headings_are_bounded_in_length_and_in_count() -> None:
+    records = [{"path": "docs/x.md", "level": 2, "heading": f"{n}. heading " + "long " * 40,
+                "lead": "", "labels": [], "terms": [], "doc": None} for n in range(60)]
+    headings = BDM.headings_of(records)
+    assert len(headings) == BDM.HEADING_LIMIT
+    assert max(len(h) for h in headings) <= BDM.HEADING_TEXT_MAX
+    assert headings[0].startswith("heading long")
+
+
+def test_the_markdown_does_not_carry_the_heading_list(tmp_path: Path) -> None:
+    root = _with_index(tmp_path)
+    assert BDM.main(["--write", "--repo", str(root)]) == 0
+    text = (root / BDM.MD_REL).read_text(encoding="utf-8")
+    record = json.loads(next(line for line in (root / BDM.JSONL_REL).read_text(
+        encoding="utf-8").splitlines() if HEADINGS_REL in line))
+    assert record["headings"]                                  # the JSONL has them
+    assert "The page VORTEX" not in text                       # the size ladder stays
 
 
 # --- the artifacts --------------------------------------------------------------------------------
@@ -339,3 +398,14 @@ def test_real_docs_own_their_ids_and_reach_the_body_vocabulary() -> None:
     text = BDM.render_md(list(entries.values()))
     hits = [line for line in text.splitlines() if "kubelka" in line.lower()]
     assert any("44-INK-AND-SURFACE.md" in line for line in hits), hits
+
+
+def test_real_heading_phrases_reach_their_document_through_the_jsonl() -> None:
+    """`rg -i "brand line" docs/DOCS-MANIFEST.jsonl` has to land on the ledger that ruled it."""
+    entries = _real_entries()
+    lines = (ROOT / BDM.JSONL_REL).read_text(encoding="utf-8").splitlines()
+    hits = [json.loads(line)["path"] for line in lines if "brand line" in line.lower()]
+    assert "docs/portable/OPERATOR-RULINGS.md" in hits, hits
+    rulings = entries["docs/portable/OPERATOR-RULINGS.md"]["headings"]
+    assert any("brand line" in h.lower() for h in rulings)     # E41's own heading, not its body
+    assert all(len(h) <= BDM.HEADING_TEXT_MAX for e in entries.values() for h in e["headings"])

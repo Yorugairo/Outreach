@@ -4,14 +4,18 @@
 keeps costing walks of the docs tree is document-level - "do we have X at all, and which doc
 holds it" - and a heading index answers that only after you already know the heading. This
 folds the index into one record per file: title, purpose, what the file OWNS (`defines`), what
-it only refers to (`mentions`), and its ten most frequent body terms. Two artifacts, the same
-records:
+it only refers to (`mentions`), its ten most frequent body terms, and its heading list. Two
+artifacts, the same records:
 
     docs/DOCS-MANIFEST.jsonl   one JSON object per document
     docs/DOCS-MANIFEST.md      the same, grouped by kind, one line per document, <= 60 KB
 
     python content/video_engine/scripts/build_docs_manifest.py --write   # regenerate both
     python content/video_engine/scripts/build_docs_manifest.py --check   # exit 1 when stale
+
+`headings` is JSONL-only - the document's level-1 to level-3 headings, numbering stripped, so
+one `rg` over the JSONL lands on a document by a phrase that only ever appears in a heading
+inside it. The Markdown keeps its size ladder and never carries them.
 
 The input is `docs/DOCS-INDEX.jsonl` (`--index` moves it) plus the documents themselves, read
 for the H1, its byline and its first paragraph. Level-7 records (CAPABILITIES / BACKLOG table
@@ -39,6 +43,10 @@ timestamps) and written with LF endings.
     |   *-REVIEW.md, *-HARVEST.md                 |               |
     | docs/portable/**, RULE-*.md, PIPELINE.md,   | doctrine      |
     |   AGENTS*.md                                |               |
+    | docs/** named seo-*, *-contract.md,         | spec          |
+    |   *-spec.md, *-plan.md, *-schema-notes.md,  |               |
+    |   production-*.md, ARCHITECTURE_DECISION_*, |               |
+    |   STATE-OF-WORK.md                          |               |
     | anything else                               | other         |
 """
 from __future__ import annotations
@@ -68,6 +76,9 @@ BYLINE_MAX = 160
 CAPABILITY_TITLE_MAX = 60
 KEY_TERM_LIMIT = 10
 MENTION_LIMIT = 24
+HEADING_LEVEL_MAX = 3    # H4 and below are paragraph markers, not what a document is about
+HEADING_TEXT_MAX = 80
+HEADING_LIMIT = 40
 SENTENCE_MIN = 40        # below this a "sentence" is a stub ("Hand-maintained.") - read on
 
 MD_MAX_BYTES = 60_000
@@ -78,12 +89,13 @@ MD_LADDER = ((120, 240, 10, 12), (110, 180, 10, 10), (100, 150, 9, 9), (90, 130,
              (80, 120, 7, 7), (70, 110, 6, 6), (60, 90, 6, 5), (55, 70, 6, 4), (50, 60, 6, 3),
              (45, 50, 5, 3), (40, 40, 4, 2))
 
-KINDS = ("doctrine", "ruling-ledger", "capabilities", "backlog", "pattern", "runbook", "research",
-         "source-bundle", "brief", "prompt", "index", "other")
+KINDS = ("doctrine", "ruling-ledger", "capabilities", "backlog", "pattern", "runbook", "spec",
+         "research", "source-bundle", "brief", "prompt", "index", "other")
 FALLBACK_KIND = "other"
 
 # (matcher, pattern, kind); "path" is exact, "prefix" a directory, "glob" the whole repo-relative
-# path, "name" the basename. First match wins - see the table in the module docstring.
+# path, "name" the basename, "docs-name" the basename of a file under `docs/`. First match wins -
+# see the table in the module docstring.
 KIND_RULES = (
     ("path", "docs/portable/OPERATOR-RULINGS.md", "ruling-ledger"),
     ("path", "docs/content-video-engine/CAPABILITIES.md", "capabilities"),
@@ -108,13 +120,29 @@ KIND_RULES = (
     ("name", "RULE-*.md", "doctrine"),
     ("name", "PIPELINE.md", "doctrine"),
     ("name", "AGENTS*.md", "doctrine"),
+    # the SEO platform's specs, contracts and plans - last, so they only catch what fell through
+    ("docs-name", "seo-*", "spec"),
+    ("docs-name", "*-contract.md", "spec"),
+    ("docs-name", "*-spec.md", "spec"),
+    ("docs-name", "*-plan.md", "spec"),
+    ("docs-name", "*-schema-notes.md", "spec"),
+    ("docs-name", "production-*.md", "spec"),
+    ("docs-name", "ARCHITECTURE_DECISION_*", "spec"),
+    ("docs-name", "STATE-OF-WORK.md", "spec"),
 )
+
+DOCS_PREFIX = "docs/"
 
 # --- id shapes ----------------------------------------------------------------------------
 RULING_ID = re.compile(r"\b[EA]\d{1,3}\b")            # E41, A7 - owned by the rulings ledger
 GATE_ID = re.compile(r"\b(?:[GMSVJ]\d\d[a-z]?|G-[a-z])\b")   # G45, M08, S12a, G-g
 PLAN_ID = re.compile(r"\bP\d{1,3}\b")                 # P13, P36
 ID_SHAPES = (RULING_ID, GATE_ID, PLAN_ID)
+
+# "9.31 ", "42.6.", "3) ", "§ 9.2" - filing coordinates, never the words a query is typed in
+HEADING_NUMBER = re.compile(r"^[\s\u00a7#]*\d+(?:\.\d+)*[.)]?\s+|^[\s\u00a7#]*\d+(?:\.\d+)*[.)]\s*|^\s*\u00a7\s*")
+# what a stripped number leaves behind in "29 - Evidence Motion Standards"
+HEADING_SEPARATOR = re.compile(r"^[\s\u2014\u2013:-]+")
 
 LINK = re.compile(r"\[([^\]\n]+)\]\([^)\n]*\)")
 LEADING_MARKER = re.compile(r"^\s*(?:[-*+]\s+|>\s*|\d+\.\s+)+")
@@ -253,6 +281,21 @@ def document_head(rel_path: str, text: str) -> tuple[str, str, str | None]:
     return (title, plain(first_h2(lines), PURPOSE_MAX), byline)
 
 
+def headings_of(sections: list[dict]) -> list[str]:
+    """The document's own headings, levels 1-3, in file order: the phrase a section was named by,
+    numbering stripped, so `rg` over the JSONL reaches a document through its inside. Capped at
+    HEADING_LIMIT headings of HEADING_TEXT_MAX characters - a record stays one greppable line."""
+    out: list[str] = []
+    for record in sections:
+        if record["level"] > HEADING_LEVEL_MAX:
+            continue
+        stripped = HEADING_SEPARATOR.sub("", HEADING_NUMBER.sub("", record["heading"], count=1))
+        text = plain(stripped, HEADING_TEXT_MAX)
+        if text:
+            out.append(text)
+    return out[:HEADING_LIMIT]
+
+
 # --- kind ----------------------------------------------------------------------------------
 
 def classify(rel_path: str) -> str:
@@ -264,6 +307,8 @@ def classify(rel_path: str) -> str:
             "prefix": rel_path.startswith(pattern),
             "glob": fnmatch.fnmatchcase(rel_path, pattern),
             "name": fnmatch.fnmatchcase(name, pattern),
+            "docs-name": (rel_path.startswith(DOCS_PREFIX)
+                          and fnmatch.fnmatchcase(name, pattern)),
         }[matcher]
         if hit:
             return kind
@@ -348,6 +393,7 @@ def build(records: list[dict], repo_root: Path = REPO) -> list[dict]:
             "kind": kind,
             "purpose": purpose,
             "sections": len(sections),
+            "headings": headings_of(sections),
             "defines": defines,
             "mentions": mentions_of(file_records, set(defines)),
             "key_terms": key_terms_of(file_records),
