@@ -46,6 +46,9 @@ Active plans live under `.claude/PRPs/plans/` as agent-neutral durable state.
   on Opus 5 (`speedster` on Sonnet 5 - not Haiku: the overhead is the cost, a wrong edit is dearer).** Offload recall (`explorer`), review
   (`reviewer`), docs checks (`docs_researcher`), bounded implementation and
   git mechanics (`release_steward`) instead of doing them in the parent.
+- Three harnesses share this checkout (Gemini research, Codex/Astra→Luna
+  implementation, Claude/Fable→Opus doctrine and gates): lane write sets in
+  `docs/runbooks/PRP_EXECUTION.md`; research intake in `GEMINI.md`.
 - Keep write sets disjoint and review delegated diffs before integration.
 - Subagent summaries are not proof. Require artifact paths, run IDs, diffs, or
   command output.

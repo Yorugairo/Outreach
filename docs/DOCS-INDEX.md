@@ -14,7 +14,7 @@ Levels 1-6 are Markdown heading depth; level 7 is a table row (CAPABILITIES, BAC
 A `{...}` tail lists the section's bold phrases; a `<...>` tail its body terms - code
 spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 
-2010 records across 140 files.
+2015 records across 141 files.
 
 ## docs/agent-context/SKILL_ROUTER.md
 
@@ -2279,6 +2279,13 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 - L47 [2] Formula and interpretation — The current formula is `demand-conversion-formula.v1`: <demand-conversion-formula.v1; capacity-bound>
 - L58 [2] Release check — Run:
 
+## docs/runbooks/HANDOFF-ASTRA-GEMINI-2026-09-05.md
+
+- L1 [1] Hand-off note to the Astra plan and the Gemini protocol (2026-09-05) — From the Claude lane of `Outreach Program`, after a day of measurement. Paste-ready. Three sources: <Outreach Program; Paste-ready; Multi-Agent; section-level; top-level-only; body-vocabulary; terms; Node-only; re-derive; parent-retrieval; false-negative; ready-made>
+- L7 [2] What this repo already has that both plans ask for — | the plan asks for | exists here | notes | <section-level; top-level-only; body-vocabulary; terms; Node-only; re-derive; parent-retrieval; false-negative; ready-made; held-out; SubagentStop; memory: user>
+- L17 [2] Four changes I would make to the plans — 1. P2 T2: seed from `build_docs_index.py`, do not rebuild. Section spans with exact headings and search {P2 T2: seed from `build_docs_index.py`, do not rebuild.; P2 memory vs the native `memory:` key: reconcile as two laye} <per-project; auto-loaded; per-agent; six-line; memory: project; worktree-local; npm run research:index; section-level; build_docs_index.py --write; NOT FOUND WHERE I LOOKED; promotion-gate>
+- L40 [2] What this repo does on its own side (done 2026-09-05) — - `GEMINI.md` carries the research-intake contract for THIS repo: where reports land, the evidence line <research-intake; [UNVERIFIED]; SOURCES-TO-VERIFY; directory-scoped; projects.json; video-researcher; drawing-engine>
+
 ## docs/runbooks/HEADLESS_CLAIM_RESUME.md
 
 - L1 [1] Runbook — Headless Claim Resume — What runs when a generation delivery lands, and how to drive the loop end to <claim-resume; re-runs; follow-ups; .watchdog-scanned.json; VIDEO_ENGINE_CLAIM_RESUME_COMMAND; telegram_ceiling_usd; flow_queue_paused; VIDEO_ENGINE_TELEGRAM_BOT_TOKEN; VIDEO_ENGINE_TELEGRAM_CHAT_ID; opt-out>
@@ -2293,8 +2300,9 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 - L11 [2] Workflow — 1. Route by operation, risk, human gates, and owner. {Route; Plan; Approve; Implement; Review; Close} <high-risk; dependency-aware; non-overlapping; cross-module>
 - L24 [2] Named Agents — | Agent | Use | Hard stop | <speedster; junior_developer; cross-module; implementation_luna; architect_sol; SigMap-led; SigMap; self-approval; explorer; Read-only; docs_researcher; reviewer>
 - L46 [3] Dispatch mapping — Since 2026-09-05 the eight roles ARE dispatchable types on both sides. {Since 2026-09-05 the eight roles ARE dispatchable types on b; Model policy (operator, 2026-09-05).} <OpenAI; subagent_type; general-purpose; Explore; Plan; speedster; model: fable; junior_developer; implementation_luna; explorer; docs_researcher; reviewer>
-- L73 [3] Hand-off policy (measured 2026-09-05, `evals/RETRIEVAL-BENCHMARK-2026-09-05.md`) — What a dispatch costs. A fresh subagent pays ~20-25 k tokens before its first tool call (system {What a dispatch costs.} <re-sent; SigMap; sed -n; path:line; disk-as-bus; sqz compress --mode safe; explorer; open-ended; implementation_luna; junior_developer; reviewer; architect_sol>
-- L157 [2] PRP Format — New plans use YAML frontmatter: <draft; approved; running; review; blocked; complete; ## Summary; ## Intent And Acceptance; ## Scope; ## Not Building; ## Human Gates; ## Mandatory Reads>
+- L73 [3] Lane write sets (three harnesses, one checkout - interim until P2's order contract) — | lane | owns (may write without a cross-lane brief) | never writes | {` (reports + index run), Flow batch manifests and their quar} <cross-lane; tests>
+- L87 [3] Hand-off policy (measured 2026-09-05, `evals/RETRIEVAL-BENCHMARK-2026-09-05.md`) — What a dispatch costs. A fresh subagent pays ~20-25 k tokens before its first tool call (system {What a dispatch costs.} <re-sent; SigMap; sed -n; path:line; disk-as-bus; sqz compress --mode safe; explorer; open-ended; implementation_luna; junior_developer; reviewer; architect_sol>
+- L171 [2] PRP Format — New plans use YAML frontmatter: <draft; approved; running; review; blocked; complete; ## Summary; ## Intent And Acceptance; ## Scope; ## Not Building; ## Human Gates; ## Mandatory Reads>
 
 ## docs/runbooks/RENDER-REGRESSION.md
 

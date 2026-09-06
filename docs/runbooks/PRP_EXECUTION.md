@@ -70,6 +70,20 @@ dispatch is the saving.
 | `architect_sol` | `architect_sol` | Opus 5 | `.claude/PRPs/plans/` and named planning evidence only |
 | `release_steward` | `release_steward` | Opus 5 | `git add <paths>` / `git commit`; push only with the operator's CURRENT authorization quoted in the brief |
 
+### Lane write sets (three harnesses, one checkout - interim until P2's order contract)
+
+| lane | owns (may write without a cross-lane brief) | never writes |
+| --- | --- | --- |
+| Gemini / Antigravity (research, Flow driver) | `docs/research/**` (reports + index run), Flow batch manifests and their quarantine, `docs/DOCS-INDEX.*` via the indexer | scripts, gates, doctrine, rulings, scripts' evidence pages, anything under `content/video_engine/scripts` |
+| Codex / Astra → Luna (tools, bounded implementation) | `tools/**`, implementation slices named by an order under `content/video_engine/scripts` and `tests`, `.codex/**` | doctrine (`docs/content-video-engine/*.md`, `docs/portable/*`), `CAPABILITIES.md` / `BACKLOG.md` rows (report them for the parent), rulings |
+| Claude / Fable → Opus roles (doctrine, gates, evidence, review) | `docs/content-video-engine/**`, `docs/portable/**`, `docs/runbooks/**`, gates and tests, evidence pages and dossiers, `.claude/**` | Flow sessions (E36/E40 consent), `docs/research/**` reports (commission them) |
+
+Shared files (`AGENTS.md`, `GEMINI.md`, `CLAUDE.md`, `CAPABILITIES.md`, `BACKLOG.md`, `OPERATOR-RULINGS.md`)
+are edited by the lane that owns the fact, in the same commit as the change that made it true, one
+row at a time; two lanes never hold an edit to the same shared file open at once. Each lane commits its
+own work under its own author with explicit paths; nobody commits another lane's uncommitted files.
+Cross-lane work goes through a brief (this file) or, when it ships, P2's execution order.
+
 ### Hand-off policy (measured 2026-09-05, `evals/RETRIEVAL-BENCHMARK-2026-09-05.md`)
 
 **What a dispatch costs.** A fresh subagent pays ~20-25 k tokens before its first tool call (system
