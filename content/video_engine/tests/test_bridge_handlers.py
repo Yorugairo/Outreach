@@ -330,3 +330,17 @@ def test_paths_written_items_in_markdown_link_form_yield_the_path_alone():
     assert H._path_from_item("[link](file:///C:/a%20b/c.md)") == "C:/a b/c.md"
     assert H._path_from_item("C:/plain/path.md (synced copy)") == "C:/plain/path.md"
     assert H._path_from_item("C:/plain/path.md") == "C:/plain/path.md"
+
+
+# ---- a reply the transcript cut in half is verified for what survived and failed on the cut itself ----
+def test_paths_written_on_a_truncated_reply_verifies_the_whole_items_and_fails_on_the_cut(tmp_path):
+    import bridge_handlers as H
+    a = tmp_path / "a.md"; a.write_text("x", encoding="utf-8")
+    text = ("POSITION: done\nPATHS WRITTEN:\n- `" + str(a) + "`\n- [`C:/half/pa\n<truncated 3478 bytes>\n"
+            ".md`](file:///C:/half/other.md)\nDISAGREEMENTS: None.\n")
+    res = H.check_paths_written({"replyShape": "paths-written"}, text, tmp_path)
+    names = [c["name"] for c in res["checks"]]
+    assert res["pass"] is False and "truncated" in res["reason"]
+    assert names[0] == "reply-whole"
+    assert any(n == f"exists:{a}" and c["ok"] for n, c in zip(names, res["checks"]))
+    assert not any("half/pa" in n for n in names)

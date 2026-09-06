@@ -391,3 +391,21 @@ def test_a_result_written_straight_into_done_is_merged_not_lost(tmp_path):
     assert landed == done and not folder.exists()
     assert (done / "order.json").exists() and (done / "reply.md").exists()
     assert BD.decision_of(result_path) == "follow-up"
+
+
+# ---- a replied packet with a passing prior verdict moves to done on the next tick, with no re-check ----
+def test_a_replied_packet_with_a_passing_prior_verdict_is_moved_not_rechecked(tmp_path, monkeypatch):
+    import json
+    import bridge_daemon as D
+    import bridge_env as E
+    pid = "p-prior"
+    folder = E.packet_dir(tmp_path, pid, "replied"); folder.mkdir(parents=True)
+    (folder / "order.json").write_text(json.dumps({"packetId": pid, "lane": "gemini", "replyShape": "paths-written"}), encoding="utf-8")
+    (folder / "reply.md").write_text("POSITION: done\nPATHS WRITTEN: none\n", encoding="utf-8")
+    (folder / "tier0.json").write_text(json.dumps({"pass": True, "shape": "paths-written", "reason": "", "checks": []}), encoding="utf-8")
+    called = []
+    monkeypatch.setattr(D.handlers, "classify", lambda *a, **k: called.append(1))
+    tick = D.Tick(repo=tmp_path, config=D.load_config(None), dry_run=False)
+    D.step_tier0(tick)
+    assert not called
+    assert not folder.exists() and E.packet_dir(tmp_path, pid, "done").exists()

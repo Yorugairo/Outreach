@@ -331,6 +331,13 @@ def minutes_since(when: dt.datetime | None) -> float | None:
 def step_tier0(tick: Tick) -> None:
     for folder in packets(tick.repo, "replied"):
         if (folder / "tier0.json").exists():
+            prior = read_json(folder / "tier0.json")
+            if prior.get("pass") and not tick.dry_run:
+                # checked on an earlier tick (or reopened by hand) and never moved: finish the move, no re-check, no ledger
+                order = read_json(folder / "order.json")
+                packet = order.get("packetId") or folder.name
+                env_mod.move_packet(packet, "replied", "done", repo=tick.repo)
+                tick.say(f"TIER0-DONE {packet[:12]} (prior verdict, moved)")
             continue
         order = read_json(folder / "order.json")
         packet = order.get("packetId") or folder.name

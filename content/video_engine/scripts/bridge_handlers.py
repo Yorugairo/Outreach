@@ -51,6 +51,7 @@ _HEADER_COMMENT = re.compile(r"^<!--.*?-->", re.DOTALL)
 _BACKTICKED = re.compile(r"`([^`\n]+)`")
 _ABSOLUTE = re.compile(r"^([a-zA-Z]:[\\/]|[\\/]|~[\\/])")
 _BULLET = re.compile(r"^\s*(?:[-*+]|\d+\.)\s+")
+_TRUNCATED = re.compile(r"<truncated (\d+) bytes>")   # Antigravity's transcript writer cuts long fields in place
 _GRAMMAR_HEADER = re.compile(
     r"^\s*(?:[-*]\s*)?\*{0,2}(POSITION|PATHS WRITTEN|DISAGREEMENTS|PREREQUISITES|NOT FOUND WHERE I LOOKED)"
     r"\*{0,2}\s*:\s*(.*)$",
@@ -204,6 +205,12 @@ def _path_from_item(item: str) -> str:
     return re.sub(r"\s+\([^)]*\)\s*$", "", item).strip()
 
 
+def _looks_whole(path: str) -> bool:
+    """A path item that ends in a file suffix or a directory separator; a half-path cut mid-name does not."""
+    tail = path.rstrip(")").rstrip()
+    return bool(re.search(r"\.[A-Za-z0-9]{1,6}$", tail)) or tail.endswith(("/", "\\"))
+
+
 def _named_dirs(paths: Sequence[str], repo: Path) -> list[Path]:
     """Every directory the reply itself named - a bare filename is resolved against these too."""
 
@@ -242,9 +249,17 @@ def check_paths_written(order: dict[str, Any], text: str, repo: Path) -> Tier0Re
     paths = named_paths(order, text)
     if not paths:
         return result(False, "no paths named", [check("paths-named", False, "the reply names no path")])
+    cut = _TRUNCATED.search(text or "")
+    if cut:
+        # the list is partial and one item is a half-path: verify what survived, then fail on the truncation itself
+        paths = [p for p in paths if "<truncated" not in p and not text.count(p) == 0]
+        paths = [p for p in paths if _looks_whole(p)]
     dirs = _named_dirs(paths, repo)
     marker = order.get("marker")
     checks: list[dict[str, Any]] = []
+    if cut:
+        checks.append(check("reply-whole", False,
+                            f"reply truncated by the transcript ({cut.group(1)} bytes cut): {len(paths)} listed path(s) verified below, the rest unseen - tier 1 or the full reply"))
     for raw in paths:
         found, ok = locate(raw, repo, dirs)
         checks.append(check(f"exists:{raw}", ok, f"{found}" if ok else f"not found where I looked: {found}"))
