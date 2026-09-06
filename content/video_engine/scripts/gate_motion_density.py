@@ -17,9 +17,11 @@ LEDGER PAGE building (s9.28 C5 / D1: roll-out, field, punch, build start,
 build complete - the hold after that is still), or a TARGETED SPECIES
 firing on a scene (s9.27 MOTION MENU "Gate treatment" column: a punch at
 its punch, a focus zoom at departure and arrival, plate life stepping at
-10 fps, ...). A page START is an EVIDENCE ENTRY (D2). Ken Burns and
-lower-third (anchor-mode) captions do NOT count - they are what a viewer
-reads as stillness.
+10 fps, ...), or a VIDEO DOCK holding the card (E44 / R26-7: a docked clip
+is moving pictures, credited one event per second it is on screen - an
+IMAGE dock is a still card and credits only its enter and exit). A page
+START is an EVIDENCE ENTRY (D2). Ken Burns and lower-third (anchor-mode)
+captions do NOT count - they are what a viewer reads as stillness.
 
   M01  no stretch > 12s without a visual event            FAIL   (s8.19 / s9.25)
   M02  stretches > 8s (working target)                    WARN
@@ -35,7 +37,8 @@ reads as stillness.
        punch | focus_zoom | pull_back, or one over Ken Burns
   M10  opening stillness: no still stretch > 6s begins      FAIL   (E24 / s9.29: 4-6s in the first 30-60s)
        in the first 60s
-  M11  the first chart: enters 0:08-0:20, annotated by a    FAIL   (E24 / s9.29; sound cue absent = WARN)
+  M11  the first chart: enters 0:08-0:20 (long form) or     FAIL   (E24 / s9.29 long, E44 short;
+       0:00-0:10 on a short, annotated by a                        sound cue absent = WARN)
        spotlight/callout/punch/focus_zoom within 1.5s
   M12  a chart is the proof, not the homework: a chart dock FAIL   (E25 / s9.30)
        never spans a scene boundary; hold <= 10s anywhere,
@@ -112,6 +115,11 @@ SPECIES_EVENTS = {"punch": ("at",), "callout": ("at",), "focus_zoom": ("at", "en
                   "steam": "continuous", "trace": ("at", "end"), "ticker": "stepping",   # STILL LIFE (2026-09-05)
                   "life": "continuous"}   # a DECLARED self-animating world (a rendered outro): the claim is the author's, verified by eye, credited here
 LIFE_CONTINUOUS_S = 1.0    # a continuous life (steam) is one event per second of its window - it never lets the frame go still
+# VIDEO DOCK (ruling E44 / backlog R26-7, 2026-09-06): a dock whose asset is a clip is moving pictures on
+# the card, so the frame is never still while it is up - credited continuously, exactly like a "life"
+# species. An IMAGE dock is a still card and keeps its enter/exit events only (today's behaviour).
+DOCK_KIND_VIDEO = "video"
+VIDEO_DOCK_STEP_S = LIFE_CONTINUOUS_S
 PLATE_LIFE_STEP_S = 0.1    # s9.27 plate life: quantize t to 10 fps; each step is an event
 # s9.27 precedence / s9.28 C3: punch, focus zoom, pull-back and Ken Burns are
 # mutually exclusive per window. M09 mirrors the builder's validate_species so a
@@ -122,7 +130,11 @@ CAMERA_MOVES = ("punch", "focus_zoom", "pull_back")
 # operator verified against analytics) and the chart-hold rule (ruling E25 / s9.30).
 OPENING_STILL_MAX_S = 6.0        # E24 / doc 29 s9.29: 4-6s in the first 30-60s - the opening's own stillness ceiling
 PARADOX_S = 8.0                  # E24 / doc 29 s9.29: the first chart enters only after the 8s paradox is paid
-FIRST_CHART_MAX_S = 20.0         # E24 / doc 29 s9.29: ... and no later than 0:20
+FIRST_CHART_MAX_S = 20.0         # E24 / doc 29 s9.29: ... and no later than 0:20 (LONG FORM)
+FIRST_CHART_SHORT = (0.0, 10.0)  # E44 (2026-09-06): on a SHORT the first ledger page rolls out ON THE HOOK line -
+                                 # the chart IS the mechanism and lands by 0:10, so there is no paradox to pay first.
+                                 # A short is the tool's own read (_is_short: 9:16, or runtime < SHORT_FULL_MINUTES *
+                                 # WINDOW_S = 180s, mirrored from gate_opening_structure.SHORT_MAX_S = 180.0)
 CHART_SPECIES = ("chart", "data")  # E24 / doc 29 s9.29: the evidence species that count as "the first chart"
 ANNOTATED_KINDS = ("spotlight", "callout", "punch", "focus_zoom")  # E24 / doc 29 s9.29: the chart's divergence is pointed at
 ANNOTATE_TOL_S = 1.5             # E24 / doc 29 s9.29: the targeted species fires with the enter, not later
@@ -130,7 +142,7 @@ CUE_TOL_S = 1.5                  # E24 / doc 29 s9.29: a sound cue lands with th
 CHART_HOLD_MAX_S = 10.0          # E25 / doc 29 s9.30: the chart is the proof, not the homework - hold ceiling anywhere
 OPENING_CHART_HOLD_MAX_S = 6.0   # E25 / doc 29 s9.30: ... and inside the opening minute
 SRC_M10 = "E24 / doc 29 s9.29: stillness inside the opening minute - 4-6s in the first 30-60s"
-SRC_M11 = "E24 / doc 29 s9.29: the first chart enters 0:08-0:20, annotated on its divergence, with a sound cue"
+SRC_M11 = "E24 / doc 29 s9.29 (long form) + E44 (short): the first chart enters 0:08-0:20, or 0:00-0:10 on a short, annotated on its divergence, with a sound cue"
 SRC_M12 = "E25 / doc 29 s9.30: the chart is the proof, not the homework"
 DOCK_BUILD_S = 1.5               # 47 s2 G-a: a card's entrance - the wipe / fly-in - is a build the eye must be free to read
 BADGE_SETTLE_S = 0.6             # ... and each badge reveal is one too, settling ~0.6s after badge_at
@@ -238,6 +250,28 @@ def _species_events(scenes: list[dict]) -> list[float]:
     return out
 
 
+def _video_dock_events(scenes: list[dict], docks: list[dict]) -> list[float]:
+    """Visual events contributed by VIDEO docks (E44 / R26-7).
+
+    A dock declaring ``kind: "video"`` carries a clip on the card: while it is on screen the frame
+    is moving, so it is credited one event per second of its live span - the same treatment a
+    "continuous" species gets (LIFE_CONTINUOUS_S), and the reason M10's opening stillness and
+    M16's pulse no longer read a dock hold as a hold. A dock with no kind is a still card and
+    adds nothing here. The timeline's own docks win; evidence-dock.json is the fallback (P35 T0)."""
+    tl_docks = [d for s in scenes for d in s.get("docks", [])]
+    out: list[float] = []
+    for d in (tl_docks or docks):
+        if d.get("kind") != DOCK_KIND_VIDEO:
+            continue
+        span = _dock_span(d)
+        if not span:
+            continue
+        a, z = span
+        n = int(max(0.0, z - a) // VIDEO_DOCK_STEP_S)
+        out += [round(a + k * VIDEO_DOCK_STEP_S, 2) for k in range(n + 1)]
+    return out
+
+
 def _camera_clashes(scenes: list[dict]) -> list[tuple[str, str]]:
     """(scene_id, why) for every scene that stacks two camera moves, or one over
     a Ken Burns drift (scale > 0) - s9.27 precedence / s9.28 C3."""
@@ -295,8 +329,9 @@ def _build_gate(clashes: list[tuple[str, str]]) -> Gate:
 
 
 def _collect_events(tl: dict, mp: dict, spans: list, badges: list, page_beats: list, stage_rows: list,
-                    species_events: list = ()) -> set[float]:
+                    species_events: list = (), video_dock_events: list = ()) -> set[float]:
     events: set[float] = set()
+    events.update(video_dock_events)
     for s in tl.get("scenes", []):
         events.add(float(s["span"][0])); events.add(float(s["span"][1]))
     for a, z in spans:
@@ -339,7 +374,8 @@ def analyse(tl: dict, docks: list[dict], mp: dict) -> dict:
     stage_rows += [{"t": float(tok["s"])} for pg in pages if isinstance(pg, dict) and pg.get("cap_mode") == "stage"
                    for tok in (pg.get("t") or []) if isinstance(tok, dict) and tok.get("s") is not None]
     # P35 T7: targeted species fire as tabled in SPECIES_EVENTS (s9.27 gate column)
-    events = _collect_events(tl, mp, spans, badges, page_beats, stage_rows, _species_events(scenes))
+    events = _collect_events(tl, mp, spans, badges, page_beats, stage_rows, _species_events(scenes),
+                             _video_dock_events(scenes, docks))   # E44: a live video dock is continuous motion
     ev = sorted(t for t in events if 0.0 <= t <= runtime)
     if not ev or ev[0] > 0:
         ev.insert(0, 0.0)
@@ -496,19 +532,32 @@ def _opening_still_gate(still: list[tuple[float, float]]) -> Gate:
     return Gate("M10", "PASS", f"no still stretch > {OPENING_STILL_MAX_S:.0f}s begins in the first {OPENING_S:.0f}s", SRC_M10)
 
 
+def _first_chart_window(tl: dict) -> tuple[float, float, str]:
+    """M11's window and the mode that set it: 0:00-0:10 on a SHORT (E44 - the first ledger page rolls
+    out on the hook line, the chart IS the mechanism), 0:08-0:20 on long form (E24 / doc 29 s9.29).
+    The short read is _is_short's, the tool's own (9:16 or runtime < 180s)."""
+    runtime = float(tl.get("runtime_s") or max((float(s["span"][1]) for s in tl.get("scenes", [])), default=0.0))
+    if _is_short(tl, runtime):
+        return (*FIRST_CHART_SHORT, "E44 short: the page rolls out on the hook - the chart is the mechanism by 0:10")
+    return PARADOX_S, FIRST_CHART_MAX_S, "E24 long form: the 8s paradox is paid before the chart enters"
+
+
 def _first_chart_gate(tl: dict, docks: list[dict], mp: dict) -> Gate:
-    """M11 (E24): the first chart (chart/data dock, or ledger page) enters 8-20s, carries a
-    targeted species within ANNOTATE_TOL_S, and a sound cue within CUE_TOL_S (WARN)."""
+    """M11: the first chart (chart/data dock, or ledger page) enters inside its window - 8-20s on long
+    form (E24), 0-10s on a short (E44) - carries a targeted species within ANNOTATE_TOL_S, and a sound
+    cue within CUE_TOL_S (WARN). The row's message names the window and the ruling it applied."""
     charts, known = chart_docks(tl, docks)
+    lo, hi, mode = _first_chart_window(tl)
+    win = f"; window {lo:.0f}-{hi:.0f}s ({mode})"
     pages = [{"enter": float(s["span"][0]), "asset": f"ledger:{s.get('scene_id', '?')}", "scene": s}
              for s in tl.get("scenes", []) if _is_page(s)]
     cands = sorted(charts + pages, key=lambda x: x["enter"])
     if not cands:
-        return Gate("M11", "FAIL", "no chart enters at all - no chart/data dock and no ledger page in the timeline", SRC_M11)
+        return Gate("M11", "FAIL", "no chart enters at all - no chart/data dock and no ledger page in the timeline" + win, SRC_M11)
     t, asset, scene = cands[0]["enter"], cands[0]["asset"], cands[0]["scene"]
     why = []
-    if not PARADOX_S <= t <= FIRST_CHART_MAX_S:
-        why.append(f"first chart {asset} enters at {t:.1f}s - outside {PARADOX_S:.0f}-{FIRST_CHART_MAX_S:.0f}s")
+    if not lo <= t <= hi:
+        why.append(f"first chart {asset} enters at {t:.1f}s - outside {lo:.0f}-{hi:.0f}s")
     # a LEDGER PAGE's chart lands at the build's end, not at the roll-out (the page is a bleed until then): its
     # annotation clock is the landing, and the species must fire AFTER it (no highlight over the build - operator, 2026-09-04)
     is_page = bool(scene) and _is_page(scene)
@@ -524,9 +573,9 @@ def _first_chart_gate(tl: dict, docks: list[dict], mp: dict) -> Gate:
                             else f"; WARN no sound cue within {CUE_TOL_S:.1f}s of the enter at {t:.1f}s")
     note = "" if known else " (no evidence species in the timeline - every dock treated as a chart candidate)"
     if why:
-        return Gate("M11", "FAIL", "; ".join(why) + sound + note, SRC_M11)
+        return Gate("M11", "FAIL", "; ".join(why) + sound + note + win, SRC_M11)
     msg = f"first chart {asset} enters at {t:.1f}s" + (f", its build lands at {land:.1f}s," if is_page else "") + f" with {hits[0]['kind']} at {float(hits[0]['at']):.1f}s"
-    return Gate("M11", "PASS" if cue else "WARN", msg + sound + note, SRC_M11)
+    return Gate("M11", "PASS" if cue else "WARN", msg + sound + note + win, SRC_M11)
 
 
 def _is_short(tl: dict, runtime: float) -> bool:

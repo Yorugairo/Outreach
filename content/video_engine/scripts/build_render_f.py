@@ -45,6 +45,13 @@ LIBRARY = json.loads(
 
 
 def find_asset(name: str) -> Path | None:
+    # A CLIP names its file outright: `clip:<path>`, absolute or episode-relative. That is the form
+    # a clip WORLD takes and, since E44 / R26-7, the form a VIDEO DOCK may take - the resolver must
+    # reach it, or the motion plan reports a docked clip as an asset missing from disk.
+    if name.startswith("clip:"):
+        p = Path(name[len("clip:"):])
+        p = p if p.is_absolute() else EP / p
+        return p if p.exists() else None
     # Teacher-stamped visuals are stored by slide path, keyed by image_id.
     if name in STAMPED and Path(STAMPED[name]).exists():
         return Path(STAMPED[name])

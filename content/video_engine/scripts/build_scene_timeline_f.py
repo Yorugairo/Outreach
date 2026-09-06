@@ -64,6 +64,12 @@ TITLE, SUBTITLE, EPISODE_ID = "Steel and Paper", "Money Physics · answer to Bra
 ASPECT = None                      # "9:16" for a short: the template reads timeline.aspect (html[data-aspect])
 CLIP_PREFIX = "clip:"              # shot-table plate id for a CLIP world: clip:<path to a silent mp4>
 SPECIES_CLIP = "clip"              # world.kind for a clip; the player seeks a <video> to the scene clock
+# VIDEO DOCK (ruling E44 / backlog R26-7, operator 2026-09-06: "use the chart plate/ledger AND THEN DOCK
+# the animation videos"): a dock asset may be a clip. It embeds raw like a clip world and the player seeks
+# it on the same code path (seekVideo); the dock entry declares its kind so the motion gate can credit it.
+VIDEO_SUFFIXES = (".mp4", ".webm")
+DOCK_KIND_VIDEO = "video"          # written onto the dock entry and the evidence map for a clip asset
+DOCK_KIND_IMAGE = "image"          # the default - never written, so an all-image build compiles byte-identically
 
 # Ken Burns: doc 29 §1.4 — the world plate drifts while evidence holds locked,
 # so the eye separates narrative world from evidence data with no labelling.
@@ -296,6 +302,53 @@ def data_uri(p: Path, cap: int | None = None) -> str:
     return f"data:image/jpeg;base64,{base64.b64encode(buf.getvalue()).decode()}"
 
 
+def is_video_asset(p: Path) -> bool:
+    """True for a dock asset that is a clip rather than a still (E44 / R26-7)."""
+    return p.suffix.lower() in VIDEO_SUFFIXES
+
+
+def dock_asset_path(aid: str, ep_dir: Path) -> Path:
+    """The file behind one dock asset id.
+
+    ``clip:<path>`` names a video file outright - the same form a CLIP WORLD takes, relative to
+    the episode unless absolute - so a generated clip docks without first being catalogued as a
+    plate. Every other id goes through the asset resolver, which already reaches an
+    ``evidence/objects/<id>.mp4``. ValueError names the id when the file is not there."""
+    if aid.startswith(CLIP_PREFIX):
+        p = Path(aid[len(CLIP_PREFIX):])
+        p = p if p.is_absolute() else Path(ep_dir) / p
+        if not p.exists():
+            raise ValueError(f"{aid!r}: dock clip missing: {p}")
+        return p
+    p = R.find_asset(aid)
+    if p is None:
+        raise ValueError(f"{aid!r}: no dock asset found")
+    return p
+
+
+def dock_uri(p: Path) -> str:
+    """Embed one dock asset. A VIDEO embeds raw with its own mime - byte for byte what a clip
+    world does - because re-encoding it as a still JPEG is exactly the motion we are docking it
+    for; anything else is downscaled to the card width."""
+    return data_uri(p) if is_video_asset(p) else data_uri(p, CARD_W)
+
+
+def dock_entry(aid: str, slot: int, enter: float, exitt: float, n_badges: int,
+               kind: str = DOCK_KIND_IMAGE) -> dict:
+    """One dock on a compiled scene.
+
+    Spans come from the dock: evidence enters before its claim and holds through the whole
+    discussion. A flat hold drops the document mid-argument, which is what left 42% of claims
+    naked. ``kind`` is written ONLY for a video dock - the motion gate credits a live video dock
+    as continuous motion (M10 / M16) and an image dock's shape stays exactly as it was."""
+    return {
+        "slide": aid, "slot": slot,
+        "enter": round(enter, 2), "exit": round(exitt, 2),
+        "badge_at": [round(enter + 0.75 + 1.3 * (n + 1), 2) for n in range(n_badges)],
+        **({"kind": DOCK_KIND_VIDEO} if kind == DOCK_KIND_VIDEO else {}),
+    }
+
+
 def title_for(asset: str) -> tuple[str, str]:
     """Human title and source line for an evidence asset."""
     if asset.startswith("ev-"):
@@ -384,8 +437,15 @@ def main() -> int:
                                "badges": []})
             if True:
                 if aid not in evidence:
-                    ap = R.find_asset(aid)
+                    try:
+                        ap = dock_asset_path(aid, EP)
+                    except ValueError as exc:
+                        raise SystemExit(f"FAIL: shot row {i + 1} ({a}-{b}s): {exc}") from exc
                     evidence[aid] = {
+                        # a VIDEO dock (E44 / R26-7): the card carries moving pictures, seeked to
+                        # the scene clock by the player's one seek. Declared here so the player
+                        # mounts a <video> instead of an <img> and the gate can see it.
+                        **({"kind": DOCK_KIND_VIDEO} if is_video_asset(ap) else {}),
                         # Authored in the dock - a machine-mangled asset id is
                         # not a title, and empty badges leave the card's whole
                         # information layer blank (ruling B3: a badge numeral
@@ -427,16 +487,9 @@ def main() -> int:
                             for sr in ch["series"]:
                                 if sr.get("color") == sc_col and sr.get("label"):
                                     bd["value"] = sr["label"]
-                    uris[aid] = data_uri(ap, CARD_W)
-                # Spans come from the dock: evidence enters before its claim
-                # and holds through the whole discussion. A flat hold drops the
-                # document mid-argument, which is what left 42% of claims naked.
-                docks.append({
-                    "slide": aid, "slot": slot,
-                    "enter": round(enter, 2), "exit": round(exitt, 2),
-                    "badge_at": [round(enter + 0.75 + 1.3 * (n + 1), 2)
-                                 for n in range(len(d["badges"]))],
-                })
+                    uris[aid] = dock_uri(ap)
+                docks.append(dock_entry(aid, slot, enter, exitt, len(d["badges"]),
+                                        evidence[aid].get("kind", DOCK_KIND_IMAGE)))
         scenes.append({
             "scene_id": f"s{i+1:02d}",
             # Ken Burns is AUTHORED per shot in the table, not one constant.

@@ -441,24 +441,79 @@ def test_page_build_end_is_the_template_landing():
 
 
 def test_m11_on_a_page_clocks_the_annotation_from_the_build_landing():
-    tl, docks, mp = _short_build(page_at=17.0, spot_at=17.0 + 8.4)       # 1.0s after the build lands at 24.4
+    # runtime 240s = long form: M11 keeps E24's 8-20s window there (E44's 0-10s is under 3:00)
+    tl, docks, mp = _short_build(page_at=17.0, spot_at=17.0 + 8.4, runtime=240.0)   # 1.0s after the build lands at 24.4
     g = _by_id(G.run(tl, docks, mp)[0])
     assert g["M11"].level in ("PASS", "WARN"), g["M11"]
     assert "build lands at 24.4s" in g["M11"].message and "spotlight at 25.4s" in g["M11"].message, g["M11"]
 
 
 def test_m11_on_a_page_refuses_a_highlight_over_the_build():
-    tl, docks, mp = _short_build(page_at=17.0, spot_at=17.2)             # with the roll-out: over the charcoal build
+    tl, docks, mp = _short_build(page_at=17.0, spot_at=17.2, runtime=240.0)   # with the roll-out: over the charcoal build
     g = _by_id(G.run(tl, docks, mp)[0])
     assert g["M11"].level == "FAIL" and "AFTER the page's build lands at 24.4s" in g["M11"].message, g["M11"]
-    tl, docks, mp = _short_build(page_at=17.0, spot_at=17.0 + 7.4 + 1.6)  # too late as well
+    tl, docks, mp = _short_build(page_at=17.0, spot_at=17.0 + 7.4 + 1.6, runtime=240.0)  # too late as well
     assert _by_id(G.run(tl, docks, mp)[0])["M11"].level == "FAIL"
 
 
 def test_m11_page_window_is_still_the_page_entry():
-    tl, docks, mp = _short_build(page_at=22.0, spot_at=22.0 + 8.0)       # the page itself enters after 0:20
+    tl, docks, mp = _short_build(page_at=22.0, spot_at=22.0 + 8.0, runtime=240.0)   # the page itself enters after 0:20
     g = _by_id(G.run(tl, docks, mp)[0])
     assert g["M11"].level == "FAIL" and "outside 8-20s" in g["M11"].message, g["M11"]
+    assert "E24 long form" in g["M11"].message, g["M11"]
+
+
+# ---- E44 (2026-09-06): on a SHORT the first ledger page rolls out ON THE HOOK - window 0:00-0:10 ----
+
+def _short_e44_build(page_at=3.3, spot_at=None, runtime=88.0):
+    """A short whose first proof is a ledger page rolling out on the hook line (E44): the lead
+    is only the hook, the page holds, a clip closes it out. Mirrors _short_build's page shape."""
+    land = page_at + G.PAGE_BUILD_END_S
+    scenes = [{"scene_id": "s01", "world": {"kind": "clip"}, "span": [0.0, page_at]},
+              _page_scene("s02", page_at, page_at + 20.0,
+                          species=[{"kind": "spotlight", "at": spot_at if spot_at is not None else land + 1.0,
+                                    "dur": 2.0, "target": {"kind": "datum", "index": 12}}]),
+              {"scene_id": "s03", "world": {"kind": "clip"}, "span": [page_at + 20.0, runtime]}]
+    pages, tt = [], 0.0
+    while tt < runtime:
+        pages.append({"s": tt, "e": tt + 1.5, "t": [{"w": "x"}] * 5, "cap_mode": "stage"}); tt += 1.5
+    tl = {"runtime_s": runtime, "aspect": "9:16", "scenes": scenes, "caption_pages": pages, "rows": []}
+    mp = {"cues": [{"kind": "evidence", "in": page_at + 0.5, "out": page_at + 1.0}]}   # the page-roll foley
+    return tl, [], mp
+
+
+def test_m11_on_a_short_takes_the_e44_window_and_passes_a_page_on_the_hook():
+    tl, docks, mp = _short_e44_build(page_at=3.3)
+    g = _by_id(G.run(tl, docks, mp)[0])
+    assert g["M11"].level == "PASS", g["M11"]
+    assert "enters at 3.3s" in g["M11"].message, g["M11"]
+    assert "window 0-10s (E44 short" in g["M11"].message, g["M11"]
+
+
+def test_m11_on_a_short_fails_a_first_chart_that_waits_past_0_10():
+    tl, docks, mp = _short_e44_build(page_at=12.0)
+    g = _by_id(G.run(tl, docks, mp)[0])
+    assert g["M11"].level == "FAIL" and "enters at 12.0s - outside 0-10s" in g["M11"].message, g["M11"]
+    assert "E44 short" in g["M11"].message, g["M11"]
+
+
+def test_m11_on_a_short_still_wants_the_annotation_after_the_build_and_a_sound_cue():
+    tl, docks, mp = _short_e44_build(page_at=3.3, spot_at=3.5)               # over the charcoal build
+    g = _by_id(G.run(tl, docks, mp)[0])
+    assert g["M11"].level == "FAIL" and "AFTER the page's build lands at 10.7s" in g["M11"].message, g["M11"]
+    tl, docks, _ = _short_e44_build(page_at=3.3)
+    g = _by_id(G.run(tl, docks, {"cues": []})[0])                            # no cue structure at all
+    assert g["M11"].level == "WARN" and "no sound structure to check" in g["M11"].message, g["M11"]
+
+
+def test_m11_long_form_keeps_the_e24_window_and_the_short_window_is_declared():
+    tl, docks, mp = _dense_build()                                           # runtime 180s: long form
+    g = _by_id(G.run(tl, docks, mp)[0])
+    assert g["M11"].level == "PASS" and "window 8-20s (E24 long form" in g["M11"].message, g["M11"]
+    early = [{**docks[0], "at": 3.3, "end": 8.3}] + docks[1:]                # E44's short window, on long form
+    g = _by_id(G.run(tl, early, mp)[0])
+    assert g["M11"].level == "FAIL" and "enters at 3.3s - outside 8-20s" in g["M11"].message, g["M11"]
+    assert G.FIRST_CHART_SHORT == (0.0, 10.0)                                # E44
 
 
 def test_m07_on_a_short_is_an_info_row_with_both_rates():
@@ -543,3 +598,58 @@ def test_m16_credits_each_word_pop_on_a_stage_page():
 def test_m16_is_info_on_long_form():
     tl, docks, mp = _dense_build(runtime=240.0)
     assert _by_id(G.run(tl, docks, mp)[0])["M16"].level == "INFO"
+
+
+# ---- E44 / R26-7: a VIDEO dock is moving pictures, an IMAGE dock is a still card ------------
+
+
+def _one_dock_build(kind: str | None = None, runtime: float = 30.0, enter: float = 2.0):
+    """One 30s scene under one dock that holds from `enter` to the end. As an IMAGE card that is a
+    28s hold with nothing moving; as a VIDEO card (E44) the frame moves the whole time."""
+    d = {"slide": "clip-a", "slot": 0, "enter": enter, "exit": runtime, "badge_at": []}
+    if kind:
+        d["kind"] = kind
+    scenes = [{"scene_id": "s01", "world": {"asset_id": "plate"}, "span": [0.0, runtime], "docks": [d]}]
+    return {"runtime_s": runtime, "scenes": scenes, "caption_pages": [], "rows": []}, [], {"cues": []}
+
+
+def test_a_video_dock_counts_as_continuous_motion_and_an_image_dock_does_not():
+    still_tl, docks, mp = _one_dock_build()                       # today's behaviour: a still card
+    g = _by_id(G.run(still_tl, docks, mp)[0])
+    assert g["M01"].level == "FAIL", g["M01"]
+    assert g["M10"].level == "FAIL" and "0:02+28s" in g["M10"].message, g["M10"]
+    assert g["M16"].level == "FAIL" and "0:02+28.0s" in g["M16"].message, g["M16"]
+
+    video_tl, docks, mp = _one_dock_build(kind="video")           # E44: the card carries a clip
+    A = G.analyse(video_tl, docks, mp)
+    assert A["still"][0][1] <= 2.0, A["still"][:3]                # only the bare 0-2s before the card lands
+    g = _by_id(G.run(video_tl, docks, mp)[0])
+    assert g["M01"].level == "PASS", g["M01"]
+    assert g["M10"].level == "PASS", g["M10"]
+    assert g["M16"].level == "PASS", g["M16"]
+
+
+def test_a_video_dock_credits_one_event_a_second_it_is_on_screen():
+    tl, docks, mp = _one_dock_build(kind="video")
+    ev = G.analyse(tl, docks, mp)["events"]
+    assert G.VIDEO_DOCK_STEP_S == G.LIFE_CONTINUOUS_S             # credited exactly like a continuous species
+    for t in (2.0, 3.0, 12.0, 29.0):
+        assert t in ev, (t, ev[:12])
+    assert G._video_dock_events(tl["scenes"], []) == [round(2.0 + k, 2) for k in range(29)]
+
+
+def test_the_video_credit_stops_with_the_dock_and_never_runs_past_it():
+    tl, docks, mp = _one_dock_build(kind="video", runtime=30.0)
+    tl["scenes"][0]["docks"][0]["exit"] = 10.0
+    ev = G.analyse(tl, docks, mp)["events"]
+    assert max(t for t in ev if t < 30.0) == 10.0, ev             # 10s dock, 30s scene: no credit after the card leaves
+    g = _by_id(G.run(tl, docks, mp)[0])
+    assert g["M01"].level == "FAIL" and "0:10" in g["M01"].message, g["M01"]
+
+
+def test_the_evidence_dock_file_is_the_video_fallback_when_the_timeline_carries_no_docks():
+    tl, _, mp = _one_dock_build(kind="video")
+    tl["scenes"][0].pop("docks")
+    file_docks = [{"asset": "clip-a", "at": 2.0, "end": 30.0, "kind": "video"}]
+    assert G._video_dock_events(tl["scenes"], file_docks)[:3] == [2.0, 3.0, 4.0]
+    assert _by_id(G.run(tl, file_docks, mp)[0])["M10"].level == "PASS"

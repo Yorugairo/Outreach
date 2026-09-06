@@ -215,6 +215,13 @@
     background: #fff; isolation: isolate;
   }
   .slide-frame img { display: block; width: 100%; height: auto; }
+  /* VIDEO DOCK (ruling E44 / R26-7, 2026-09-06): the dock's asset is a clip, so the card carries
+     moving pictures instead of a still. The frame takes the card's own 16:9 rectangle (a still
+     sizes the frame from its intrinsic height; a video has none until metadata lands, and a card
+     that resizes mid-hold is a second motion nobody authored) and the clip COVERS it. */
+  .dock.video .slide-frame { aspect-ratio: 16 / 9; background: #16181c; }
+  .dock.video .slide-frame img { display: none; }
+  .slide-frame video.clipv { display: block; width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
 
   /* RECORD DOCUMENT (doc 29 species) — typewriter on paper, one highlighter
      stroke on the exact phrase spoken. Live type, never a static image:
@@ -1408,7 +1415,13 @@
       dockEl.querySelector(".slide-frame").appendChild(svg);
       chartState[slot] = st;
     }
-    $("i" + n).src = (ev.record || ev.chart) ? "" : (A[aid] || "");
+    /* VIDEO DOCK (E44): the slide is a clip, so the card mounts a <video> (paintDockClip, on the
+       clip world's own seek) and the <img> stands down. A slide that is NOT a clip parks whatever
+       clip the previous slide left in this card's frame. */
+    const isVideo = dockIsVideo(aid);
+    dockEl.classList.toggle("video", isVideo);
+    if (!isVideo) parkDockClips(dockEl);
+    $("i" + n).src = (ev.record || ev.chart || isVideo) ? "" : (A[aid] || "");
     const rail = $("r" + n); rail.innerHTML = "";
     rail.classList.toggle("single", ev.badges.length === 1);
     ev.badges.forEach((bd, bi) => {
@@ -2732,20 +2745,23 @@
     return v;
   };
   (TL.scenes || []).forEach((sc) => { if (sc.world && sc.world.kind === "clip" && A[sc.world.asset_id]) clipFor(sc.world.asset_id); });
+  /* a VIDEO DOCK's clip is pooled at load for the same reason a world clip is: a <video> created at
+     the mount has no decoded frame and paints black under the card's 0.75s rise */
+  const dockIsVideo = (aid) => ((TL.evidence || {})[aid] || {}).kind === "video";
+  (TL.scenes || []).forEach((sc) => (sc.docks || []).forEach((d) => {
+    if (dockIsVideo(d.slide) && A[d.slide]) clipFor(d.slide).loop = true;
+  }));
   const parkClips = (el) => el.querySelectorAll("video.clipv").forEach((x) => { x.pause(); clipHold.appendChild(x); });
-  const paintClip = (el, scene, t) => {
-    let v = el.querySelector("video.clipv");
-    if (!v || v.dataset.asset !== scene.world.asset_id) {
-      parkClips(el);
-      v = clipFor(scene.world.asset_id); v.pause(); el.appendChild(v);
-    }
-    const local = Math.max(0, t - scene.span[0]);
-    const want = Number.isFinite(v.duration) && v.duration > 0 ? Math.min(local, Math.max(0, v.duration - 0.05)) : local;
-    /* LIVE playback (operator, 2026-09-05: "after ~2 seconds every flow video just holds"): a seek per frame on a clip with
-       one keyframe decodes from frame 0 every time and falls behind; while the transport runs the video PLAYS on its own
-       clock and is only corrected when it drifts. Scrubbing and the renderer still seek exactly (a pure function of t). */
+  /* THE ONE SEEK. Every <video> in this player - the world clip and the VIDEO DOCK alike - lands on
+     its frame through this function. render(t) resolves fully from t, so there is exactly one answer
+     to "which frame is on screen at t" and exactly one thing the renderer waits on (__clipsSeeked).
+     LIVE playback (operator, 2026-09-05: "after ~2 seconds every flow video just holds"): a seek per
+     frame on a clip with one keyframe decodes from frame 0 every time and falls behind; while the
+     transport runs the video PLAYS on its own clock and is only corrected when it drifts. Scrubbing
+     and the renderer still seek exactly (a pure function of t). */
+  const seekVideo = (v, want) => {
     if (clipLive) {
-      if (v.paused && want < (v.duration || Infinity) - 0.1) v.play().catch(() => {});
+      if (v.paused && (v.loop || want < (v.duration || Infinity) - 0.1)) v.play().catch(() => {});
       if (Math.abs((v.currentTime || 0) - want) > 0.15) { try { v.currentTime = want; } catch (e) {} }
       return;
     }
@@ -2759,6 +2775,36 @@
       clipSeeks.add(p);
       try { v.currentTime = want; } catch (e) { clipSeeks.delete(p); }
     }
+  };
+  const paintClip = (el, scene, t) => {
+    let v = el.querySelector("video.clipv");
+    if (!v || v.dataset.asset !== scene.world.asset_id) {
+      parkClips(el);
+      v = clipFor(scene.world.asset_id); v.pause(); v.loop = false; el.appendChild(v);
+    }
+    const local = Math.max(0, t - scene.span[0]);
+    const want = Number.isFinite(v.duration) && v.duration > 0 ? Math.min(local, Math.max(0, v.duration - 0.05)) : local;
+    seekVideo(v, want);
+  };
+
+  /* THE VIDEO DOCK (ruling E44 / backlog R26-7, operator 2026-09-06: "use the chart plate/ledger AND
+     THEN DOCK the animation videos"). The dock's asset is a clip: the same pooled <video>, the same
+     seek, mounted inside the card's slide-frame instead of the world. Its clock is the DOCK's -
+     the clip starts at its own 0 when the card mounts (t - d.enter) and LOOPS if the card outlives
+     it, because a card holding a frozen last frame is the still card this ruling exists to remove.
+     The mount/retract choreography above is untouched: the <video> only replaces the <img>. */
+  const parkDockClips = (el) => el.querySelectorAll(".slide-frame video.clipv")
+    .forEach((x) => { x.pause(); clipHold.appendChild(x); });
+  const paintDockClip = (el, d, t) => {
+    const frame = el.querySelector(".slide-frame"); if (!frame) return;
+    let v = frame.querySelector("video.clipv");
+    if (!v || v.dataset.asset !== d.slide) {
+      parkDockClips(el);
+      v = clipFor(d.slide); v.pause(); v.loop = true; frame.appendChild(v);
+    }
+    const local = Math.max(0, t - d.enter);
+    const dur = Number.isFinite(v.duration) && v.duration > 0 ? v.duration : 0;
+    seekVideo(v, dur ? Math.min(local % dur, Math.max(0, dur - 0.05)) : local);
   };
   /* the renderer awaits this after scrubbing to t (render_baseline.frame_png) */
   window.__clipsSeeked = () => Promise.all([...clipSeeks]);
@@ -2905,11 +2951,12 @@
     for (let s = 0; s < 2; s++) {
       const d = live.find((x) => x.slot === s);
       const el = docks[s];
-      if (!d) { el.style.opacity = 0; el.style.clipPath = "inset(0 100% 0 0)"; continue; }
+      if (!d) { el.style.opacity = 0; el.style.clipPath = "inset(0 100% 0 0)"; parkDockClips(el); continue; }
       if (d.slide !== shown[s]) { fillDock(s, d.slide); shown[s] = d.slide; }
       drawRecord(s, t);
       drawChart(s, t, d);
       drawStack(s, t, d);
+      if (dockIsVideo(d.slide)) paintDockClip(el, d, t);   /* E44: the card's clip, on the dock's clock */
       const solo = d.side !== "pair" && s === 0;
       el.classList.toggle("solo", solo);
       el.classList.toggle("side-r", solo && d.side === "r");
