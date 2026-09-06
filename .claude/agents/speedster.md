@@ -3,6 +3,7 @@ name: speedster
 description: Quick-cast software intern for deterministic edits, exact discovery, and narrow verification. Use for the `speedster` role named in docs/runbooks/PRP_EXECUTION.md.
 tools: Read, Grep, Glob, Edit, Write, Bash
 model: sonnet
+skills: [quality-rules]
 maxTurns: 30
 effort: low
 ---

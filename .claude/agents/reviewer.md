@@ -4,7 +4,7 @@ description: Read-only reviewer focused on correctness, security, regressions, a
 tools: Read, Grep, Glob, Bash
 model: opus
 memory: local
-skills: [retrieval-layers]
+skills: [quality-rules, retrieval-layers]
 maxTurns: 60
 effort: high
 ---

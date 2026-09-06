@@ -181,3 +181,21 @@ Nine of the ten questions re-run (Q7 not re-run). "Before" = the Opus role's rou
   every window the answer needs; the layers cannot move that floor. The next lever on cost is the always-loaded layer
   (AGENTS.md 9.9 KB, CLAUDE.md, the ECC rules, the growing role files), not retrieval.
 - Both runs correct; the Q10 answer now cites the day's backlog rows (R1-R3) by number.
+
+## Round 6 — the dispatch floor, decomposed (grill 2026-09-05)
+
+Measured from subagent transcripts (`~/.claude/projects/<session>/subagents/agent-*.jsonl`, first assistant turn):
+
+| component | tokens | evidence |
+|---|---|---|
+| first-turn prompt of a bare `explorer` ("reply pong", no tools) | **27,647** | three probes: 27,649 / 27,653 / 27,653 |
+| harness system prompt + tool schemas + connector listing | **≈ 16.3k** | the remainder after the attachments |
+| the `instructions` attachment (CLAUDE.md → AGENTS.md, the ECC rules, the memory index) | **≈ 10.8k** | 41,385 chars: AGENTS.md 15,018 (the WORKTREE branch's old copy, not main's), MEMORY.md 10,120, the rules 13,429 across 9 files, CLAUDE.md 1,153, ~/CLAUDE.md 348 |
+| session context + date | ≈ 0.5k | 2,073 + 83 chars |
+
+Three facts that overturn earlier assumptions:
+1. **The instructions block is snapshotted at session start.** Rules moved aside mid-session: 27,653. All 47 user skills moved aside: 27,653. AGENTS.md and the role file trimmed: 27,649. Every cut lands at the next session start, none in a running one.
+2. **The rules DO load into every subagent** (3.2k), and so does the parent's memory index (2.5k): a read-only lookup was paying for the TDD checklist and 45 memory hooks. The user skills do NOT load (only their listing, inside the harness share).
+3. **AGENTS.md is read from the session's project dir**: in a worktree session that is the worktree branch's copy, so trimming main's does nothing for a session started in an old-branch worktree.
+
+Cuts made (land next session; verify as round 7 from a fresh session's first probe): AGENTS.md on main 15.0 → 3.9 KB; the always-loaded rules 13.4 → 1.5 KB (security + git), the rest as the `quality-rules` skill preloaded only by the implementing roles; MEMORY.md 10.8 → 6.8 KB (hooks capped); role files 4.4 → 1.3 KB (the retrieval discipline is the `retrieval-layers` skill, preloaded by the read-only roles); `maxTurns` per role. Expected instructions block for a read-only dispatch: ≈ 10.8k → ≈ 3k. The harness share moves only when the account connectors are disabled in the app (AOY 30 tools, Vercel ~40, Supabase ~30, Google Drive 11, claude-in-chrome, computer-use - the operator's ruling). The worktree copy of AGENTS.md is the remaining lever: start sessions on main or on a worktree fast-forwarded to it.

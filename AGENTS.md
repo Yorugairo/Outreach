@@ -22,69 +22,13 @@ Architecture summary, the canonical `InsightRun`, the nine stages, the evidence-
 
 ---
 
-## 9. Agent routing and durable execution
+## 9. Agent routing and durable execution → [`docs/runbooks/PRP_EXECUTION.md`](docs/runbooks/PRP_EXECUTION.md)
 
-Use [`docs/runbooks/PRP_EXECUTION.md`](docs/runbooks/PRP_EXECUTION.md) for
-complex, multi-slice, architectural, data-model, security, or release work.
-Active plans live under `.claude/PRPs/plans/` as agent-neutral durable state.
+Complex, multi-slice, architectural, data-model, security or release work runs as a PRP under `.claude/PRPs/plans/`. The eight roles (`speedster`, `junior_developer`, `implementation_luna`, `architect_sol`, `explorer`, `docs_researcher`, `reviewer`, `release_steward`) are real agent types on both the Codex and Claude sides; the runbook's "Dispatch mapping", "Hand-off policy" and "Lane write sets" sections are the contract: the parent (Fable) owns architecture, integration, protected actions and the completion claim; delegated roles run on Opus 5 (`speedster` on Sonnet 5); every delegated diff is reviewed before integration; push requires current explicit user authorization; subagent summaries are not proof - artifact paths, run IDs, diffs or command output are.
 
-- The parent task owns architecture, integration, protected actions, and the
-  final completion claim.
-- `speedster` handles exact deterministic microtasks only.
-- `junior_developer` handles bounded limited implementation, scoped fixes,
-  explicit line changes, and small reads/writes.
-- `implementation_luna` handles bounded moderate implementation with tests.
-- `architect_sol` researches and drafts implementation-ready PRPs.
-- `explorer` performs read-only repository tracing and evidence gathering.
-- `docs_researcher` performs read-only primary-documentation verification.
-- `reviewer` performs read-only correctness, security, and regression review.
-- `release_steward` performs reviewed Git mechanics only; push still requires
-  current explicit user authorization.
-- The eight roles are real agent types on both sides: `.codex/agents/*.toml`
-  and `.claude/agents/*.md`. **Model policy (2026-09-05): the parent session
-  is Fable and spends its tokens on judgement only; every delegated role runs
-  on Opus 5 (`speedster` on Sonnet 5 - not Haiku: the overhead is the cost, a wrong edit is dearer).** Offload recall (`explorer`), review
-  (`reviewer`), docs checks (`docs_researcher`), bounded implementation and
-  git mechanics (`release_steward`) instead of doing them in the parent.
-- Three harnesses share this checkout (Gemini research, Codex/Astra→Luna
-  implementation, Claude/Fable→Opus doctrine and gates): lane write sets in
-  `docs/runbooks/PRP_EXECUTION.md`; research intake in `GEMINI.md`.
-- Keep write sets disjoint and review delegated diffs before integration.
-- Subagent summaries are not proof. Require artifact paths, run IDs, diffs, or
-  command output.
-- Keep task state in the PRP, not in transcripts or this file.
+## 10. Local code navigation → SigMap for code, `docs_find.py` for docs
 
----
-
-## 10. Local code-navigation workflow
-
-Use the portable wrapper from the repository root when a named symbol, service, or architecture path needs ranked evidence:
-
-```bash
-python scripts/sigmap_context.py build
-python scripts/sigmap_context.py query "sitemap discovery" --top 5
-python scripts/sigmap_context.py evidence "CrawlDiscoveryService" --markdown
-```
-
-Every wrapper command regenerates the local index first with `--no-track`. Its configuration writes only the gitignored `.github/copilot-instructions.md`; it does not modify `AGENTS.md` or `CLAUDE.md`, register MCP clients, or invoke Codex/Claude adapters.
-
-Route questions to the smallest suitable tool:
-
-- **SigMap**: declared symbols, ranked architecture discovery, and evidence packs.
-- **ast-grep**: structural patterns and exact call-site sweeps. Always set `--lang`, use a narrow pattern, and scope it to repo-relative paths; one-shot `run` needs no `sgconfig.yml`, while reusable configured rules use `scan`.
-- **Text search** (`git grep` or `search_files`): literals, configuration keys, SQL, docs, and test descriptions.
-- **SQZ**: compress noisy command output or logs only after saving the original evidence. Feed the SAVED output on stdin: `sqz compress --mode safe --verify --no-cache --cmd <producer-name> < .context/<file>` (`--cmd` is a label for `sqz stats`, not a runner - it does not execute the producer; verified 2026-09-02, sqz 1.3.0). Do not compress hashes, exact test verdicts, security evidence, or small outputs (a 30-line gate report compressed 2%), and never use SQZ as a search or correctness tool.
-
-Windows path rule: set the command/tool workdir to the exact repository root and pass `.` or repo-relative paths. The native Windows `rg` used by `search_files` does not accept MSYS-style absolute paths such as `/c/Users/...`; if an absolute-path search fails, retry from the exact workdir with a relative path before concluding that nothing matched.
-
-Bound a structural sweep and preserve its raw output before optional compression:
-
-```bash
-ast-grep run --lang python --pattern 'class $C: $$$BODY' src/services --json=stream > .context/ast-grep-classes.jsonl
-sqz compress --mode safe --verify --no-cache --cmd ast-grep < .context/ast-grep-classes.jsonl
-```
-
----
+`python scripts/sigmap_context.py query "<symbol or concept>" --top 5` ranks code paths (regenerates the index first; writes only the gitignored `.github/copilot-instructions.md`); `ast-grep run --lang <lang> --pattern ... <scope>` for structural sweeps; `rg` for literals; `python content/video_engine/scripts/docs_find.py "<term>"` for anything in the docs. Windows: set the workdir to the repo root and pass repo-relative paths (the native `rg` rejects MSYS absolute paths). SQZ compresses saved noisy output only, never test verdicts, hashes or security evidence.
 
 ## Content video engine (second workstream) — moved to [`docs/AGENTS-VIDEO-ENGINE.md`](docs/AGENTS-VIDEO-ENGINE.md)
 
