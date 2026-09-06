@@ -14,7 +14,9 @@ in dependency order, in one process tree, and prints one summary line per layer.
     | 2     | docs-manifest  | build_docs_manifest.py  | docs/DOCS-MANIFEST.jsonl + .md      |
     | 3     | topic-index    | build_topic_index.py    | docs/DOCS-TOPICS.* + DOCS-CITATIONS |
     | 4     | gates-registry | build_gates_registry.py | docs/GATES-REGISTRY.jsonl + .md     |
-    | 5     | docs-standard  | audit_docs_standard.py  | docs/DOCS-STANDARD.md               |
+    | 5     | animation-registry | build_animation_registry.py | docs/ANIMATION-REGISTRY.jsonl + .md |
+    | 6     | craft-map      | build_craft_map.py      | docs/CRAFT-MAP.jsonl + .md          |
+    | 7     | docs-standard  | audit_docs_standard.py  | docs/DOCS-STANDARD.md               |
 
 A tool that is not in the tree yet is SKIPPED with a printed note, never silently: the stack grows
 a layer at a time and a missing script is a fact about this checkout, not a failure. The audit
@@ -51,6 +53,8 @@ LAYERS = (
     Layer("docs-manifest", "build_docs_manifest.py"),
     Layer("topic-index", "build_topic_index.py"),
     Layer("gates-registry", "build_gates_registry.py"),
+    Layer("animation-registry", "build_animation_registry.py"),
+    Layer("craft-map", "build_craft_map.py"),
     Layer("docs-standard", "audit_docs_standard.py",
           write_args=("--report", REPORT_REL), check_args=None, repo_flag="--root"),
 )
