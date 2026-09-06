@@ -14,7 +14,7 @@ Levels 1-6 are Markdown heading depth; level 7 is a table row (CAPABILITIES, BAC
 A `{...}` tail lists the section's bold phrases; a `<...>` tail its body terms - code
 spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 
-3134 records across 243 files.
+3145 records across 245 files.
 
 ## content/video_engine/projects/history-of-bjj/episode-1-research-brief.md
 
@@ -3685,6 +3685,23 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 - L32 [3] After — Most tables are anchored to `insight_runs`, with `seo_target_id` attached where useful and `business_entity_id` optional. <insight_runs; seo_target_id; business_entity_id; run-specific>
 - L40 [2] Design rule — If a record exists because a specific analysis run happened, it should reference `insight_runs`. <insight_runs>
 - L51 [2] What remains entity-centric — - `business_entities` <business_entities; entity_aliases; entity_domains>
+
+## docs/runbooks/BRIDGE-PACKET.md
+
+- L1 [1] The bridge packet — one shape for Claude, Gemini and Astra (P46 T4, draft for Astra's review) — An order between lanes is a file and a send. Nobody polls a folder for orders; the sender emits the packet through the {a file and a send} <re-deriving; order.json; packetId; brief; lane; from; title; replyShape; paths-written; contract-block; report-landed; test-run>
+- L8 [2] 1. The packet (`order.json`) — | field | required | meaning | {≤ 6 KB} <packetId; brief; lane; gemini; claude; astra; from; title; replyShape; paths-written; contract-block; report-landed>
+- L25 [2] 2. The reply grammar — Every reply, whatever the lane, opens with one of these lines and keeps the order: <conditional; done>
+- L40 [2] 3. The lanes — | lane | how a packet reaches it | where its reply appears | <ANTIGRAVITY_LS_ADDRESS; ANTIGRAVITY_CSRF_TOKEN; ANTIGRAVITY_PROJECT_ID; PLANNER_RESPONSE; send-message <id> "<text>"; --resume>
+- L48 [2] 4. What happens when a reply lands (P46 T6) — `replied/<packetId>/reply.md` is written by the watcher. Then, in order: tier 0 — the deterministic handler for the {tier 0; tier 1; escalation} <replyShape; tier: 0; addressee-side; bridge_handler; follow-up; N bridge replies waiting>
+- L58 [2] 5. The ledger — `evals/BRIDGE-LOG.jsonl` (per machine, gitignored): one line per event — `sent`, `replied`, `tier0`, `tier1`, `timeout`, <sent; replied; tier0; tier1; timeout; escalated; lane; packetId; conversationId; sentAt>
+- L64 [2] 6. Open for Astra's review (sent through the bridge as a `review` packet) — 1. Field names: match P2's execution-order schema where one exists (`packetId` vs P2's run/task ids; `replyShape` vs P2's return schema). <execution-order; packetId; replyShape>
+
+## docs/runbooks/BRIDGE-REPLY-HANDLER.md
+
+- L1 [1] The reply handler's standing instruction (P46 T6, tier 1 only) — You are `bridge_handler`, run headlessly by `bridge_daemon` because a landed reply could not be closed by Python. You receive one <bridge_handler; bridge_daemon; order.json; tier0.json; PATHS WRITTEN; sed -n; done; path:line; follow-up; from: claude; escalate; DECISION:>
+- L7 [2] Do, in this order — 1. Verify against disk, never against the reply's claims. Every path in `PATHS WRITTEN` exists; every block the reply says it {Verify against disk, never against the reply's claims.; Decide exactly one:} <PATHS WRITTEN; sed -n; done; path:line; follow-up; from: claude; escalate; DECISION:; EVIDENCE:; NOT VERIFIED:>
+- L21 [2] Never — - Never ask anyone to "check the bridge", to "confirm", or to "let me know" — the folder state is the message. <follow-up>
+- L28 [2] Reply shapes you will see and what tier 0 already checked — | replyShape | tier 0 checked | you are here because | <replyShape; paths-written; contract-block; report-landed; review; test-run; free; free-shaped>
 
 ## docs/runbooks/DEMAND_CONVERSION_EVIDENCE.md
 

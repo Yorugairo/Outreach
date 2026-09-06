@@ -18,7 +18,7 @@ reference as normalised (`42§42.2` - which `46 s46.4` also writes - `29§Part3`
 `E38`, `M13`, `G-j`); a list (`docs 39 and 40`) makes one edge per document, and `to` is
 null when nothing in the index answers it.
 
-4018 topics, 3629 citation edges. The 200 largest topics follow,
+4036 topics, 3643 citation edges. The 200 largest topics follow,
 at most 12 sections each - the JSONL holds every one.
 
 ## youtube (127)
@@ -586,6 +586,24 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/08_answers_animation_craft_brief.md:389 — C1: Shape Interpolation (ARAP) [Tier 1 Math — CLOSED] — - Polar decomposition of deformation gradient:
 - … 12 more in `docs/DOCS-TOPICS.jsonl`
 
+## follow-up (24)
+
+- content/video_engine/projects/systems-and-blowups/registration/README.md:50 — Open follow-ups — 1. Merge into the deck manifest in the p29 worktree (cross-branch — deliberate
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/REVIEW-2026-09-03.md:1 — Tokyo Tea Break — review, 2026-09-03 — Reviewed: `SCRIPT-90S-VO.txt` (67 s at the Chirp scratch pace, 194 words) and
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/REVIEW-2026-09-03.md:14 — TOOLS (final verdicts) — A finding about our instrument, not the script: 17 of the 90-second short's 23
+- docs/content-video-engine/00-BRAINSTORM-AND-DECISIONS.md:1 — Content-to-Video Flywheel — Brainstorm, Challenges, and Decisions — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine
+  cited by: docs/content-video-engine/README.md:20
+- docs/content-video-engine/00-BRAINSTORM-AND-DECISIONS.md:12 — V4 pivot record — The anchorable 2D experiment improved body ownership but did not remove the
+- docs/content-video-engine/28-AOY-MCP-EVALUATION.md:133 — What our pipeline does not yet encode — Measured against the 16:21 p34 cut: one visual event every 9.2s (60 evidence
+- docs/content-video-engine/28-AOY-MCP-EVALUATION.md:328 — Voiceover and title doctrine — probed 2026-08-24 — Follow-up probes after the fact-check, plus one live run of the
+- docs/content-video-engine/32-WRITING-FOR-THE-EAR.md:181 — 8. Pipeline adoption candidates — 1. Script QC additions (join doc 31 §4's three passes): terminal-stress
+- docs/content-video-engine/38-SCRIPT-ARCHITECTURE.md:1 — 38 — Script Architecture: the deterministic prompt structure — Operator thesis (2026-08-24), and this document's organizing principle:
+  cited by: content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-E-EXTERNAL-REVIEW.md:100, content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-E-EXTERNAL-REVIEW.md:118, content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-E-EXTERNAL-REVIEW.md:137, content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-E-STRENGTH-LOG.md:203, content/video_engine/projects/systems-and-blowups/tokyo-tea-break/REVIEW-2026-09-03.md:55, docs/content-video-engine/28-AOY-MCP-EVALUATION.md:536, +7 more
+- docs/content-video-engine/38-SCRIPT-ARCHITECTURE.md:19 — 1. Audit — how the script skills address this today — Honest state, per the operator's question:
+- docs/content-video-engine/patterns/FULL-VIDEO-MAP.md:277 — CHANGELOG — - 2026-08-24 — v1, T1 of the P10 plan. Geometry decision recorded: open and
+- docs/product-revenue-contract.md:102 — Explicit milestone exclusions — - no automated outbound or autonomous follow-up;
+- … 12 more in `docs/DOCS-TOPICS.jsonl`
+
 ## strength (23)
 
 - content/video_engine/sources/reference_analyses/COMFYUI_PARALLAX_TECHNICAL_STANDARDS_RESEARCH.md:27 — 1. Technical Anatomy of Our Current ComfyUI Stack — Our current pipeline executes the following graph in ComfyUI:
@@ -746,24 +764,6 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_INDEX.md:232 — 6.6 Perceptual Psychophysics & Audio-Visual Entrainment — - Apprehension Principle (Tversky et al. 2002): Continuous animation overwhelms working memory; mandates the $0.8 ext{s}
 - … 8 more in `docs/DOCS-TOPICS.jsonl`
 
-## follow-up (20)
-
-- content/video_engine/projects/systems-and-blowups/registration/README.md:50 — Open follow-ups — 1. Merge into the deck manifest in the p29 worktree (cross-branch — deliberate
-- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/REVIEW-2026-09-03.md:1 — Tokyo Tea Break — review, 2026-09-03 — Reviewed: `SCRIPT-90S-VO.txt` (67 s at the Chirp scratch pace, 194 words) and
-- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/REVIEW-2026-09-03.md:14 — TOOLS (final verdicts) — A finding about our instrument, not the script: 17 of the 90-second short's 23
-- docs/content-video-engine/00-BRAINSTORM-AND-DECISIONS.md:1 — Content-to-Video Flywheel — Brainstorm, Challenges, and Decisions — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine
-  cited by: docs/content-video-engine/README.md:20
-- docs/content-video-engine/00-BRAINSTORM-AND-DECISIONS.md:12 — V4 pivot record — The anchorable 2D experiment improved body ownership but did not remove the
-- docs/content-video-engine/28-AOY-MCP-EVALUATION.md:133 — What our pipeline does not yet encode — Measured against the 16:21 p34 cut: one visual event every 9.2s (60 evidence
-- docs/content-video-engine/28-AOY-MCP-EVALUATION.md:328 — Voiceover and title doctrine — probed 2026-08-24 — Follow-up probes after the fact-check, plus one live run of the
-- docs/content-video-engine/32-WRITING-FOR-THE-EAR.md:181 — 8. Pipeline adoption candidates — 1. Script QC additions (join doc 31 §4's three passes): terminal-stress
-- docs/content-video-engine/38-SCRIPT-ARCHITECTURE.md:1 — 38 — Script Architecture: the deterministic prompt structure — Operator thesis (2026-08-24), and this document's organizing principle:
-  cited by: content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-E-EXTERNAL-REVIEW.md:100, content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-E-EXTERNAL-REVIEW.md:118, content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-E-EXTERNAL-REVIEW.md:137, content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-E-STRENGTH-LOG.md:203, content/video_engine/projects/systems-and-blowups/tokyo-tea-break/REVIEW-2026-09-03.md:55, docs/content-video-engine/28-AOY-MCP-EVALUATION.md:536, +7 more
-- docs/content-video-engine/38-SCRIPT-ARCHITECTURE.md:19 — 1. Audit — how the script skills address this today — Honest state, per the operator's question:
-- docs/content-video-engine/patterns/FULL-VIDEO-MAP.md:277 — CHANGELOG — - 2026-08-24 — v1, T1 of the P10 plan. Geometry decision recorded: open and
-- docs/product-revenue-contract.md:102 — Explicit milestone exclusions — - no automated outbound or autonomous follow-up;
-- … 8 more in `docs/DOCS-TOPICS.jsonl`
-
 ## mid-word (20)
 
 - content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-90S.claude.md:1 — Tokyo Tea Break — shot table (9:16, 2026-09-04): the long arm `SCRIPT-90S-VO.claude.v8-long.txt`, and the short `SCRIPT-90S-VO.claude.txt` (v9) below it — Authored, never generated (PIPELINE stage 7). Two clocks are quoted: the kit estimate
@@ -848,6 +848,22 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/34-AOY-SCRIPT-WRITER-STUDY.md:128 — Beat map — | Beat | Move |
 - docs/content-video-engine/34-AOY-SCRIPT-WRITER-STUDY.md:147 — What it does better than our current script — 1. Analogy is the spine, not decoration. Railways and dot-com are not
 - docs/content-video-engine/34-AOY-SCRIPT-WRITER-STUDY.md:196 — 4c. The competitor template, extracted (`Jw8ykhoOVBQ` + `YXFvwJQBzJc`) — Two videos from the same channel (Bravos Research, self-identified in the
+- … 7 more in `docs/DOCS-TOPICS.jsonl`
+
+## evidence (19)
+
+- content/video_engine/projects/systems-and-blowups/registration/WORK-ORDER.md:45 — Per slide, produce
+- content/video_engine/projects/systems-and-blowups/registration/WORK-ORDER.md:65 — 3. `semantic_id` — the alias — - The claim segment must equal `claim_refs[0]`. That is what makes this a
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-E-STRENGTH-LOG.md:203 — Loop pass 5 — the hook, after the operator reframed the episode — Operator: *"this isn't truly a historical parallel episode, it's a real-time
+- docs/content-video-engine/16-EDITORIAL-MOTION-SYSTEM.md:50 — 3. Motion ownership — Motion is authored in this order:
+- docs/content-video-engine/16-EDITORIAL-MOTION-SYSTEM.md:67 — Semantic cut routing — Every shot declares one visual intent before asset selection: `academic`,
+- docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:62 — 2. GATED — mechanical checks against an artifact — Ordered by value. "Fails on" is the pre-finding behaviour the check catches.
+- docs/content-video-engine/patterns/phase-guides/P1.md:1 — P1 — THE OPEN — > Self-contained generation guide. Consume ONLY: the INJECTION block and
+- docs/content-video-engine/patterns/phase-guides/P1.md:31 — Inputs (injection slots) — - `{TOPIC}` — one claim cluster, one dramatic question.
+- docs/content-video-engine/patterns/phase-guides/P2.md:1 — P2 — THE ENGINE — > Self-contained generation guide. Consume ONLY: the INJECTION block, the
+- docs/content-video-engine/patterns/phase-guides/P2.md:24 — Inputs — `{TOPIC}` `{VOICE}` `{PERSONA}` `{EVIDENCE}` + P1 ledger (ring token,
+- docs/content-video-engine/patterns/phase-guides/P3.md:1 — P3 — THE GAP (the pattern unit) — > Self-contained generation guide. Consume ONLY: the INJECTION block, the
+- docs/content-video-engine/patterns/phase-guides/P3.md:27 — Inputs — `{TOPIC}` `{VOICE}` `{PERSONA}` `{EVIDENCE}` + P2 ledger (open loops,
 - … 7 more in `docs/DOCS-TOPICS.jsonl`
 
 ## mike (19)
@@ -1001,22 +1017,6 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/why-us-bond-yields-are-surging-again-do-this-asap/NICHE_BEND_DOSSIER.md:1 — NICHE BEND RESEARCH DOSSIER: WHY US BOND YIELDS ARE SURGING AGAIN — DO THIS ASAP! — > Strategic repositioning brief. Contrasts crowded competitor tropes with forensic mechanics,
 - content/video_engine/sources/reference_analyses/why-us-bond-yields-are-surging-again-do-this-asap/NICHE_BEND_DOSSIER.md:8 — 1. Top Competitor Cluster (The Crowded Mainstream) — | Competitor Title | Channel / Source | Core Hook Trope | Video URL |
 - content/video_engine/sources/reference_analyses/why-us-bond-yields-are-surging-again-do-this-asap/NICHE_BEND_DOSSIER.md:18 — Competitor Narrative & Art Style Patterns: — - Thumbnail & Title Trope: High-urgency doom ('Surging AGAIN - Do This ASAP!', 'Catastrophe ahead').
-- … 6 more in `docs/DOCS-TOPICS.jsonl`
-
-## evidence (18)
-
-- content/video_engine/projects/systems-and-blowups/registration/WORK-ORDER.md:45 — Per slide, produce
-- content/video_engine/projects/systems-and-blowups/registration/WORK-ORDER.md:65 — 3. `semantic_id` — the alias — - The claim segment must equal `claim_refs[0]`. That is what makes this a
-- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-E-STRENGTH-LOG.md:203 — Loop pass 5 — the hook, after the operator reframed the episode — Operator: *"this isn't truly a historical parallel episode, it's a real-time
-- docs/content-video-engine/16-EDITORIAL-MOTION-SYSTEM.md:50 — 3. Motion ownership — Motion is authored in this order:
-- docs/content-video-engine/16-EDITORIAL-MOTION-SYSTEM.md:67 — Semantic cut routing — Every shot declares one visual intent before asset selection: `academic`,
-- docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:62 — 2. GATED — mechanical checks against an artifact — Ordered by value. "Fails on" is the pre-finding behaviour the check catches.
-- docs/content-video-engine/patterns/phase-guides/P1.md:1 — P1 — THE OPEN — > Self-contained generation guide. Consume ONLY: the INJECTION block and
-- docs/content-video-engine/patterns/phase-guides/P1.md:31 — Inputs (injection slots) — - `{TOPIC}` — one claim cluster, one dramatic question.
-- docs/content-video-engine/patterns/phase-guides/P2.md:1 — P2 — THE ENGINE — > Self-contained generation guide. Consume ONLY: the INJECTION block, the
-- docs/content-video-engine/patterns/phase-guides/P2.md:24 — Inputs — `{TOPIC}` `{VOICE}` `{PERSONA}` `{EVIDENCE}` + P1 ledger (ring token,
-- docs/content-video-engine/patterns/phase-guides/P3.md:1 — P3 — THE GAP (the pattern unit) — > Self-contained generation guide. Consume ONLY: the INJECTION block, the
-- docs/content-video-engine/patterns/phase-guides/P3.md:27 — Inputs — `{TOPIC}` `{VOICE}` `{PERSONA}` `{EVIDENCE}` + P2 ledger (open loops,
 - … 6 more in `docs/DOCS-TOPICS.jsonl`
 
 ## high-performing (18)
