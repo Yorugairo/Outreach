@@ -17,7 +17,9 @@
     "docs/CRAFT-MAP.jsonl",
     "docs/CRAFT-MAP.md",
     "docs/ANIMATION-REGISTRY.jsonl",
-    "docs/ANIMATION-REGISTRY.md"
+    "docs/ANIMATION-REGISTRY.md",
+    "docs/DOC-OVERLAP.jsonl",
+    "docs/DOC-OVERLAP.md"
   ],
   "include": [],
   "extra_files": [],
