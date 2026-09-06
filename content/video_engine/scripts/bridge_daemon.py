@@ -405,7 +405,9 @@ def tier1_prompt(folder: Path) -> str:
 def run_tier1(repo: Path, folder: Path) -> dict[str, Any]:
     """One headless run of the `bridge_handler` role from the repo root. Monkeypatched in tests."""
 
-    argv = ["claude", "-p", "--agent", HANDLER_AGENT, "--output-format", "json", tier1_prompt(folder)]
+    # Windows installs `claude` as claude.CMD; CreateProcess does not search PATHEXT, so resolve it first
+    exe = shutil.which("claude") or "claude"
+    argv = [exe, "-p", "--agent", HANDLER_AGENT, "--output-format", "json", tier1_prompt(folder)]
     proc = subprocess.run(argv, cwd=str(repo), capture_output=True, text=True)
     try:
         payload = json.loads(proc.stdout or "")

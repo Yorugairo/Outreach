@@ -320,3 +320,13 @@ def test_report_landed_fails_when_the_verdict_is_an_abstention(tmp_path, monkeyp
     assert "abstention" in res["reason"]
     names = {c["name"]: c["ok"] for c in res["checks"]}
     assert names["verdict-verified"] is False and names["proof-line"] is True and names["not-found-block"] is True
+
+
+# ---- a PATHS WRITTEN item may be a markdown link with a backticked path and a note - the path alone is checked ----
+def test_paths_written_items_in_markdown_link_form_yield_the_path_alone():
+    import bridge_handlers as H
+    item = "[`C:/x/y/video-researcher.md`](file:///C:/x/y/video-researcher.md) (Source)"
+    assert H._path_from_item(item) == "C:/x/y/video-researcher.md"
+    assert H._path_from_item("[link](file:///C:/a%20b/c.md)") == "C:/a b/c.md"
+    assert H._path_from_item("C:/plain/path.md (synced copy)") == "C:/plain/path.md"
+    assert H._path_from_item("C:/plain/path.md") == "C:/plain/path.md"

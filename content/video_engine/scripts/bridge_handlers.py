@@ -186,7 +186,22 @@ def named_paths(order: dict[str, Any], text: str) -> list[str]:
     """The reply's PATHS WRITTEN when it used the grammar, the backticked paths when it did not."""
 
     grammar = parse_reply(text)
-    return list(grammar.paths_written) if grammar.paths_written else extract_paths(text)
+    if grammar.paths_written:
+        return [_path_from_item(item) for item in grammar.paths_written]
+    return extract_paths(text)
+
+
+def _path_from_item(item: str) -> str:
+    """A PATHS WRITTEN item may be a bare path, a backticked path, a markdown link `[`path`](file:///...)`, or a
+    path followed by a note in parentheses. Return the path alone."""
+    from urllib.parse import unquote, urlparse
+    m = _BACKTICKED.search(item)
+    if m:
+        return m.group(1).strip()
+    m = re.search(r"\]\((file:///[^)]+)\)", item)
+    if m:
+        return unquote(urlparse(m.group(1)).path).lstrip("/")
+    return re.sub(r"\s+\([^)]*\)\s*$", "", item).strip()
 
 
 def _named_dirs(paths: Sequence[str], repo: Path) -> list[Path]:
