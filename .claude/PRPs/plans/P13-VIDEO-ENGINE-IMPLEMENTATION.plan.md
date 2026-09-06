@@ -83,7 +83,7 @@ pattern instead).
 | P0 | This file's **Interface Contracts** section | The boundaries between packages |
 | P1 | `docs/content-video-engine/04-STORYBOARD-CONTRACT.md` | Worked example = canonical fixture |
 | P1 | `docs/content-video-engine/06-SCRIPT-TRANSFORMATION-SPEC.md` | Arc/pacing/flow rules the guard enforces |
-| P2 | `AGENTS.md` §5 | Evidence-first definition of done |
+| P2 | `docs/AGENTS-SEO-PLATFORM.md` §5 (moved out of `AGENTS.md` 2026-09-05) | Evidence-first definition of done |
 | P2 | `docs/content-video-engine/07-PILOT-SEASON.md` | What WP-G produces |
 
 ## External Documentation

@@ -54,7 +54,7 @@ Design principles are inherited from this repo, not invented:
 | Run-centric, stage events persisted per job | `src/pipeline.py` (`InsightRunPipeline`, `RunStageEvent`) |
 | Deterministic before generative; guarded LLM steps with fallback | `content/bjj-registry/src/llm_writer.py` + `llm_guard.py` |
 | Human gate before anything publishes | Import gate in `content/bjj-registry/README.md` |
-| Evidence-first definition of done (artifacts on disk, not claims) | `AGENTS.md` §5 |
+| Evidence-first definition of done (artifacts on disk, not claims) | `docs/AGENTS-SEO-PLATFORM.md` §5 (moved out of `AGENTS.md` 2026-09-05) |
 | Repository abstraction; file-backed store first, DB later | `src/repositories/` |
 | Model-agnostic LLM stages via env vars (OpenRouter-first) | `llm_writer.py` env contract |
 

@@ -75,7 +75,7 @@ modules; render/TTS integration tests marked slow with mocked providers by defau
 | Repository | `src/repositories/base.py`, `file_repository.py` | Protocol + file-backed impl under `runtime/` |
 | Guarded LLM w/ fallback | `content/bjj-registry/src/llm_writer.py`, `llm_guard.py` | env-var model config; guard rejects, pipeline falls back / fails closed |
 | CLI entrypoint | `scripts/run_insight_pipeline.py` | one entrypoint, explicit flags, no hidden state |
-| Evidence-first DoD | `AGENTS.md` §5 | verify artifacts on disk before reporting done |
+| Evidence-first DoD | `docs/AGENTS-SEO-PLATFORM.md` §5 (moved out of `AGENTS.md` 2026-09-05) | verify artifacts on disk before reporting done |
 
 ## Task Slices
 
