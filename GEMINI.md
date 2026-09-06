@@ -122,7 +122,14 @@ Progress lives on disk: `~/.gemini/antigravity/brain/<id>/.system_generated/logs
 (PLANNER_RESPONSE with tool_calls, GENERIC tool output, SYSTEM_MESSAGE) - tail it instead of polling the IDE.
 The other direction already runs: Astra opens headless Claude sessions (`~/.claude/projects/C--Users-Snipe-AppData-Local-Temp-agent-bridge-run-*`)
 with one JSON packet {packetId, brief <= 6 KB, review-only} and gets one structured reply (POSITION / DISAGREEMENTS / PREREQUISITES).
-Nobody polls `docs/runbooks/` for orders: an order is a file AND a send. First order sent 2026-09-06 00:43: conversation
+Nobody polls `docs/runbooks/` for orders: an order is a file AND a send.
+**The tools (P46, 2026-09-06) replace the hand procedure above:** `python content/video_engine/scripts/bridge_send.py --lane gemini
+--brief-file <order.md> --title "<title>" --reply-shape <paths-written|contract-block|report-landed|review|test-run|free> [--profile <p>] [--dry-run]`
+writes the packet under `docs/research/runs/bridge/queue/` and sends it; `bridge_watch.py --lane gemini --id <conversationId>
+--packet <packetId>` lands the reply (`--replay` for history, `--once` for one daemon tick); `bridge_reply.py --packet <packetId>
+--text "<follow-up>"` continues the same conversation; `bridge_daemon.py --once` does all three per tick and closes replies at
+tier 0 without a model (`docs/runbooks/BRIDGE-DAEMON.md`). Packet shape and reply grammar: `docs/runbooks/BRIDGE-PACKET.md`.
+A live Claude session sees `N bridge replies waiting` on its next prompt; nobody is told to check the bridge. First order sent 2026-09-06 00:43: conversation
 `7aaa9146-88f1-4f03-b004-d5bdf18a5492` (the profile work order).
 
 ## Execution bounds & Node guardrails
