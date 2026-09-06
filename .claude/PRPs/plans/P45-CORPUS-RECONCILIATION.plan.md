@@ -7,7 +7,7 @@ risk: standard
 owner: parent
 branch: main
 created: 2026-09-05
-updated: 2026-09-05 (rulings 1-7 in; 8 pending)
+updated: 2026-09-05 (rulings 1-8 in)
 ---
 
 # Reconcile the doctrine corpus with what is built
@@ -192,8 +192,8 @@ python scripts/prp_validate.py .claude/PRPs/plans/P45-CORPUS-RECONCILIATION.plan
 ## Evidence And Handoff
 
 - 2026-09-05: layers shipped before this plan - index (e208bbf, 5aecab0), manifest (eaaf780), topics + citations (98447ba, 91deb0b), audit (fad2f29); lead-line review findings in the session record and `docs/DOCS-STANDARD.md`.
-- Rulings, operator 2026-09-05 (HG1 partial, HG2, HG3): (1) restore the motion-authoring order into doc 29 now, gate after one measured episode; (2) the cadence rule is TOP as a kinetics module; (3) yes - measure the 0.22 on every individual motion piece AND per scene AND for total on-screen motion, and look for buried research on motion cohesion (T8); (4) the stick lane is in flight → FK/IK + zero-slip are TOP; (5) multi-plane inpainting → BACKLOG unless it gives capability beyond parallax ("our other local generation stuff kind of failed on us, except for parallax, which isn't much better than Ken Burns"); (6) adopt `[DERIVED]`, link sources when readily available or say they are not on file; (7) compressed docs: lift the differences out and dedupe, never kill (T4 reshaped). (8) M13 as a built gate: pending the operator's word (recommendation TOP).
-- TOP seeds for T3, from the rulings: the cadence kinetics module (on-1s/2s/3s by translation speed); FK/IK boundary + zero-slip anchoring (G-j) for the stick lane; the motion-authoring order restored into doc 29; M13 gate (pending 8).
+- Rulings, operator 2026-09-05 (HG1 partial, HG2, HG3): (1) restore the motion-authoring order into doc 29 now, gate after one measured episode; (2) the cadence rule is TOP as a kinetics module; (3) yes - measure the 0.22 on every individual motion piece AND per scene AND for total on-screen motion, and look for buried research on motion cohesion (T8); (4) the stick lane is in flight → FK/IK + zero-slip are TOP; (5) multi-plane inpainting → BACKLOG unless it gives capability beyond parallax ("our other local generation stuff kind of failed on us, except for parallax, which isn't much better than Ken Burns"); (6) adopt `[DERIVED]`, link sources when readily available or say they are not on file; (7) compressed docs: lift the differences out and dedupe, never kill (T4 reshaped). (8) M13 as a built gate in the edit pass: TOP (operator, 2026-09-05).
+- TOP seeds for T3, from the rulings: the cadence kinetics module (on-1s/2s/3s by translation speed); FK/IK boundary + zero-slip anchoring (G-j) for the stick lane; the motion-authoring order restored into doc 29; the M13 cut-gap gate in the edit pass (>= 0.30 s, cut at 0.8 of the gap, mid-word <= 25 %; the measurement exists in `measure_cut_gaps.py`, the constant in `build_short.py`).
 - Decisions surfaced at draft time (8, the last added after the gates registry landed) (the parent's recommendation in brackets):
   1. The motion-authoring order (docs 15 §5 / 16 §3: character or prop action, then camera, then secondary) lives only in the compressed docs and doc 29 does not carry it - restore into doc 29 and encode as a motion-gate check? [restore; gate only after one episode is measured against it]
   2. The on-1s / on-2s / on-3s cadence rule (animation brief) - orphaned, yet `SOAK_STEP` FPS 8 and `LIFE_FPS` 10 are already stepped clocks and the operator asked for "more step-motion / jitter" on 2026-09-05 - TOP as a kinetics module (cadence by translation speed), or EXPLORE? [TOP: it names a stumble we had this week]
