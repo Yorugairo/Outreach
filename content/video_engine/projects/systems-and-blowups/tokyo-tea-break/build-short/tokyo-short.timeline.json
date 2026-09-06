@@ -3543,11 +3543,14 @@
      "badge_at": [],
      "kind": "video",
      "place": {
-      "x": 624,
-      "y": 313,
-      "w": 240,
-      "h": 159
-     }
+      "x": 594,
+      "y": 297,
+      "w": 270,
+      "h": 175
+     },
+     "read_s": 1.2,
+     "park_s": 0.7,
+     "park": true
     },
     {
      "slide": "dock-a2-counter-colder",
@@ -3557,11 +3560,14 @@
      "badge_at": [],
      "kind": "video",
      "place": {
-      "x": 624,
-      "y": 313,
-      "w": 240,
-      "h": 159
-     }
+      "x": 594,
+      "y": 297,
+      "w": 270,
+      "h": 175
+     },
+     "read_s": 1.2,
+     "park_s": 0.7,
+     "park": true
     },
     {
      "slide": "dock-g-two-fingers",
@@ -3571,11 +3577,14 @@
      "badge_at": [],
      "kind": "video",
      "place": {
-      "x": 624,
-      "y": 313,
-      "w": 240,
-      "h": 159
-     }
+      "x": 594,
+      "y": 297,
+      "w": 270,
+      "h": 175
+     },
+     "read_s": 1.2,
+     "park_s": 0.7,
+     "park": true
     }
    ],
    "species": [
@@ -5031,11 +5040,14 @@
      "badge_at": [],
      "kind": "video",
      "place": {
-      "x": 624,
-      "y": 313,
-      "w": 240,
-      "h": 159
-     }
+      "x": 594,
+      "y": 297,
+      "w": 270,
+      "h": 175
+     },
+     "read_s": 1.2,
+     "park_s": 0.7,
+     "park": true
     }
    ],
    "species": [
