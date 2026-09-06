@@ -97,13 +97,26 @@ actionable: the inbox hook for live sessions, the daemon + per-lane handlers for
 ## Task Slices
 
 ### T1: bridge_env + bridge_send
-- Status: running
+- Status: complete
 - Owner: implementation_luna
 - Depends on: none
 - Write set: `content/video_engine/scripts/bridge_env.py`, `content/video_engine/scripts/bridge_send.py`, `content/video_engine/tests/test_bridge_send.py`, `.gitignore`
 - Acceptance: `bridge_send.py --lane gemini --dry-run --brief-file <md>` prints the resolved env (token masked) and the packet path without sending; tests cover port discovery from a synthetic netstat, token masking, the packet id, registry idempotence, and the conversation-id recovery by title; no live call in tests
 - Validate: `python -m pytest content/video_engine/tests/test_bridge_send.py -q -p no:cacheprovider`
-- Evidence: pending
+- Evidence: 2026-09-06 (implementation_luna; parent re-ran the 27 tests and scanned the diff for secrets - the only hex string is the synthetic test fixture). `content/video_engine/scripts/bridge_env.py`,
+  `bridge_send.py`, `content/video_engine/tests/test_bridge_send.py`, `.gitignore` (+`evals/BRIDGE-LOG.jsonl`,
+  +`docs/research/runs/bridge/`; the bare `runs/` rule at line 53 already caught the packet path).
+  `27 passed in 0.20s`; a mutation of the port rule (grpc = the LOWER port) fails 2 tests, so the pin bites.
+  Live dry run against the running IDE (pid 38592): `ANTIGRAVITY_LS_ADDRESS=127.0.0.1:49635`,
+  `_FALLBACK=127.0.0.1:49634`, `ANTIGRAVITY_CSRF_TOKEN=<masked>`,
+  `ANTIGRAVITY_PROJECT_ID=C:\Users\Snipe\Downloads\Outreach Program`, `registered: projects=already
+  trustedFolders=already`, packet at `docs/research/runs/bridge/queue/e691b82bd5b4…6921f2/order.json`; no
+  ledger line and no CLI call on a dry run. Three deltas from the GEMINI.md description, all in the code:
+  (1) `agentapi.bat` cannot be run by CreateProcess, so the command resolves to the `agy.exe` the wrapper
+  names (`cmd /c` fallback); (2) the language server's command line also carries `--host_bridge_token`, a
+  second secret - the raw command line is therefore never printed, only the masked env; (3) GEMINI.md shows
+  the project id with forward slashes, the T1 brief demands backslashes - backslashes are what ships, and
+  the live send (T5) is where the two forms get decided.
 
 ### T2: bridge_watch
 - Status: pending

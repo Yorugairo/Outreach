@@ -166,5 +166,10 @@ content/video_engine/sources/reference_analyses/**/audio/*.mp3
 
 # per-machine dispatch ledger written by the SubagentStop hook (~/.claude/hooks/dispatch_ledger.py); summarised into evals/*.md by hand
 evals/DISPATCH-LOG.jsonl
+# per-machine bridge ledger written by content/video_engine/scripts/bridge_send.py (P46) - one JSON line per send/reply
+evals/BRIDGE-LOG.jsonl
+# bridge packets are live state, not sources: order.json, conversation.json, reply.md move queue -> sent -> replied -> done
+# (the bare `runs/` rule above already catches this path; stated explicitly so a narrowing of that rule cannot leak a packet)
+docs/research/runs/bridge/
 # worker-scratch agent memory (memory: local) - worktree-local, promoted into docs/agent-memory/ by review
 .claude/agent-memory-local/
