@@ -14,7 +14,7 @@ Levels 1-6 are Markdown heading depth; level 7 is a table row (CAPABILITIES, BAC
 A `{...}` tail lists the section's bold phrases; a `<...>` tail its body terms - code
 spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 
-3153 records across 246 files.
+3163 records across 248 files.
 
 ## content/video_engine/projects/history-of-bjj/episode-1-research-brief.md
 
@@ -530,6 +530,12 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 - L29 [2] HOST IDENTITY ANCHOR (verbatim wherever the host appears)
 - L39 [2] WORLD-BOARD OVERRIDE (verbatim on world_board slots) — Quiet-zone rule: keep one side of the frame visually quiet (mostly bare <Quiet-zone; steel-and-paper-plates-wave>
 
+## content/video_engine/projects/systems-and-blowups/tokyo-tea-break/ANALYTICS-2026-09-06.md
+
+- L1 [1] Analytics — the Tokyo short on Facebook, first read (2026-09-06, ~1 h after posting) — Operator screenshots, 2026-09-06 (Sunday, posted during the NFL as a timing test). n = 8 viewers — a sample, not a {n = 8 viewers} <chip-machine; drop-off; press 3; camera-flash; stick-figure; Re-read>
+- L18 [2] Where 0:11 falls in the build (`build-short/tokyo-short.timeline.json`) — | scene | span | world | what happens | {cut; the `press 3` cue fires at 8.99 (gain 0.16); cuts; ledger} <drop-off; camera-flash; stick-figure>
+- L34 [2] What this does not yet say — Eight viewers cannot separate the hook from the timing test from the audience. The second step at 0:55 (s08, a clip <Re-read>
+
 ## content/video_engine/projects/systems-and-blowups/tokyo-tea-break/CLOSE-CANDIDATES-2026-09-03.md
 
 - L1 [1] Tokyo Tea Break — the close, rewritten (2026-09-03) — What the old close did wrong, against the exemplars: the ring token ("tea break") <tell; assignment; SCRIPT-90S-VO.txt; loop-close; Five-and-a-half; SOURCES-TO-VERIFY; Break-mark; [promise]; SCRIPT-90S-VO.prev-2026-09-03.txt>
@@ -558,6 +564,7 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 - L74 [2] Corrections this dossier forces on `player.html` — Three figures currently rendered are wrong and must not ship: {12.0%; $633.4 B; $939.9 B, ranked #2} <tokyo-hedged-yield.{page,series}.json; ev-hedge-then-now-v1>
 - L88 [2] Standing exposure — The TIC release lags by roughly two months and updates monthly; FRED's Japan interbank {Re-run the builder before recording.} <re-cutting>
 - L97 [2] Addendum 2026-09-04 — the rewrite's hook, sourced (SCRIPT-90S-VO.claude.txt) — Re-ran the builder the same day: TIC still prints 2026-06 (no July release yet), Japan {PASS} <Re-ran; DFEDTARU; MORTGAGE30US; DGS10; discount-rate; ev-discount-rate-v1; long-form; flow-of-funds; ev-meta-yield-v1; meta_yield(); ledger_page.py --variant bars>
+- L121 [2] Addendum 2026-09-06 — the description's history claim, sourced (SCRIPT-90S-DESCRIPTION.md) — The draft description said "40 years of accumulation, with 4 years of it gone" (linear arithmetic on "a tenth of the {January 2025 ($1,079.3 B)} <February 2026; Jan 2025; Jan 2000; all-time; November 2021; June 2026>
 
 ## content/video_engine/projects/systems-and-blowups/tokyo-tea-break/EVIDENCE-FINDING-2-the-real-story.md
 
@@ -611,6 +618,14 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 ## content/video_engine/projects/systems-and-blowups/tokyo-tea-break/scratch/SCRATCH-INDEX.md
 
 - L1 [1] SCRATCH INDEX - jump points for the ear pass — kokoro 2.0 min for 1,690 chars -> 14.34 chars/s actual (estimators assume 16.05 c/s / 165.6 wpm) <head-fake>
+
+## content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SCRIPT-90S-DESCRIPTION.md
+
+- L1 [1] Tokyo Tea Break — the publish description (YouTube Short) — Drafted 2026-09-06 against the approved render (`build-short/render/APPROVALS.json`) and the dossier <June 2026; re-verified; as-is; resource-center; data-chart-center; price-to-earnings; MoneyPhysics; InterestRates; Sixty-three; January 2025>
+- L7 [2] The description (paste as-is) — Your borrowing costs climbed while the Fed sat still. Japan is why. <resource-center; data-chart-center; price-to-earnings; MoneyPhysics; InterestRates>
+- L26 [2] Pinned comment (post right after publishing) — The June print is the latest TIC has released; the July table lands about two months late, as always. When it does, the first number moves and I will post the n
+- L30 [2] Why it is shaped this way — - Line 1 is the grab, and it answers the thumbnail question (E27, voice pack §1): the viewer's own cost, the Fed still, Japan named. It is not the spoken hook r {Line 1 is the grab, and it answers the thumbnail question; Figures are the dossier's, with their units and their table; The promise is kept in text} <Sixty-three>
+- L39 [2] Facebook version (operator's draft 2026-09-06, figures corrected against the dossier addendum) — Your borrowing costs climbed while the Fed sat still. Thank Japan. <MoneyPhysics; InterestRates; January 2025>
 
 ## content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-90S.claude.md
 
@@ -2520,26 +2535,26 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 - L416 [7] R4 The docs index — SigMap indexes code symbols only, so "animation math" ranked the retired Manim scene; `build_docs_index.py` (shipped 2026-09-05, and the body-vocabulary slice t
 - L417 [7] R5 A persistent explorer — continuation is `/resume` in the agent view (CLI only, not the desktop Code tab - docs agent-view.md); `memory: project` is now set on explorer / docs_researche
 - L418 [7] R6 Negative claims from a delegated agent are verified by the parent — one Opus miss in ten hard lookups was "07 §5.3 does not exist" (it is `sources/reference_analyses/complete_research_evidence_bundle/07_academic_literature_drawi
-- L420 [2] Registry read — 2026-09-06 (what is written but never built, now that the layers show it) — The first read of `docs/ANIMATION-REGISTRY.md` after P45: the 66 "orphaned" records collapse to nine ideas, and most are {R26-0 TOP} <log-normal; charcoal-to-the-deckle; G-c; [screen]; chart-carried; [promise]; [rehook]; text-only; windows-builder; re-read; Field-coloured; paint-order: stroke fill>
-- L435 [2] P45 triage — 2026-09-05 (the corpus reconciled with what is built) — The judgment pass over the generated registries: [TRIAGE-2026-09-05.md](TRIAGE-2026-09-05.md) — {Every row below carries its triage id and nothing was added; pending D3 / D6} <CORPUS-RECONCILIATION; write-up; ANIMATION-REGISTRY.md:582; hand-tuned; SOAK_STEP.FPS 8; ANIMATION-REGISTRY.md:84; SP.LIFE_FPS 10; :231; BACKLOG.md:218; briefs:187; :545; zero-slip>
-- L444 [3] TOP — the next list (each becomes its own order, plan:67) — | id | item — what and where | why / evidence | cost | {P45 O1; The cadence kinetics module; R2 + D7.} <ANIMATION-REGISTRY.md:582; hand-tuned; SOAK_STEP.FPS 8; ANIMATION-REGISTRY.md:84; SP.LIFE_FPS 10; :231; BACKLOG.md:218; briefs:187; :545; zero-slip; min-jerk; 48-THE-FIGURE-AND-THE-GROUND.md:16,26>
-- L453 [3] BACKLOG — real work, owned by a plan or a row, not now (29 of 31; two held below) — | id | item — what and where | why / evidence | cost | {P45 O6; C3 nested coordinate spaces; P45 O8; 43.5 the morph, two methods} <BACKLOG.md:289; cotangent-weight; 43-SCENE-GRAPH-AND-TRANSFORM.md:91; BACKLOG.md:247; κ; 48…:163; G-i; G-j; BACKLOG.md:235; :316; ANIMATION-REGISTRY.md:530; zero-area>
-- L487 [3] EXPLORE — the first step is a measurement or a read, not a build (6) — | id | item — what and where | why / evidence | cost | {P45 S2; Figure kinematics / biomechanics; P45 S5; Secondary motion and placement dynamics} <FK-vs-IK; two-bone; ÿ+2ζω₀ẏ+ω₀²y = −ẍ_base; φ; :383; motion-cohesion; :283-285; follow-through; M_p; BACKLOG.md:516; secondary-motion; [DERIVED]>
-- L498 [3] RETIRE — struck from the triage list only; no doc line is deleted (R7) (12) — | id | item — what and where | why / evidence | cost | {P45 O2; Dynamic nib pooling; P45 O3; The five overlapping synergies} <corner-dwell; LAMBDA_W 0.12; ALPHA_W 1; mass-spring-damper; mẍ+cẋ+kx=0; ω₀; ζ; 47-FINDINGS-TO-CHECKS.md:199; BACKLOG.md:526-528; 47-FINDINGS-TO-CHECKS.md:150; BACKLOG.md:229; arc-length>
-- L515 [3] D3 / D6 — ruled 2026-09-06 (E42): poses first; tag all thirteen — | id | item — what and where | why / evidence | cost | {P45 O9; 48.2 balance — the gesturing figure's hips; D3; E42: BACKLOG; P45 T5} <Hof 2005; 48-THE-FIGURE-AND-THE-GROUND.md:39; zero-slip; ANIMATION-REGISTRY.md:366-367; BACKLOG.md:249; [DERIVED]; G-c; intensity ≤ 0.18; 45-PARALLAX-AND-PLATE-MOTION.md:53; G-o; 50-THE-PHONE-IS-THE-SCREEN.md:36,41-48>
-- L523 [2] Routed from the demoted list (47 §4) — Demoted from doctrine — not dropped. Each lands as a build item, an exploration, or a closure. {Euler-spiral generator; Build, do not gate.; Per-material `ζ` / `ω₀` values; Exploration X10.; RESOLVED 2026-09-04} <Secondary-motion; M_p; Dirty-flag; hand-tuning; three-quarters; Two-handed; dual-quaternion; designed-out; shot-length>
-- L529 [7] D1 Euler-spiral generator — for procedural curves (arrows, balance arms, connectors, axes)
-- L530 [7] D2 Per-material `ζ` / `ω₀` values — paper, metal, fabric, liquid, ink
-- L531 [7] D3 Secondary-motion ratio — RESOLVED 2026-09-04 by 48 §48.6 — the analytic phase lag `φ = arctan(2ζ(ω_d/ω₀)/(1−(ω_d/ω₀)²))` on the `M_p` we already adopted. No invented ratio needed.
-- L532 [7] D4 Dirty-flag propagation — in the scene graph
-- L533 [7] D8 Pseudo-3D head turns — cylindrical projection, the 35–45° three-quarters gate, sprite swap over 2–3 frames at peak angular velocity (09 §2.6)
-- L534 [7] D9 Two-handed closed kinematic chains — the prop is the master, both wrists lock to its sockets (09 §3.7)
-- L535 [7] D5 BBW / 2D dual-quaternion skinning — Trigger corrected 2026-09-04 (48 §48.3): not a bending prop — rigging a figure. Elbows and knees need it immediately, because linear blend skinning returns the
-- L536 [7] D6 A1 timing chart — Closed. Superseded by `M_p = exp(−πζ/√(1−ζ²))` — the model replaces the table.
-- L537 [7] D7 Grow the shot-length tail — Deprioritised by ruling — see below.
-- L539 [2] Deprioritised by ruling — - Grow the shot-length tail. Our median and CPM match the reference; only the spread {Grow the shot-length tail.; Coffee-ring edge and anisotropic wicking}
-- L547 [2] Withdrawn — - G-f "the actor must be a rig, not a generation." Withdrawn by the operator {G-f "the actor must be a rig, not a generation."; N1 "M10 measures the wrong thing."} <gate_motion_density.py:277; PLATE_HOLD_MAX_S = 20.0; two-dock>
-- L561 [2] Carried debt — - `f10b` plate rehome — 55 indexed plates still resolve into the codex worktree. {`f10b` plate rehome; Steel and Paper's timeline uses absolute worktree paths.; Flow driver has no README; Drive connector needs reconnecting.; Tokyo `plate-01-*`; The Steel and Paper re-script} <npm install; character-binding; REWRITE-ORDER-G; G-g>
+- L420 [2] Registry read — 2026-09-06 (what is written but never built, now that the layers show it) — The first read of `docs/ANIMATION-REGISTRY.md` after P45: the 66 "orphaned" records collapse to nine ideas, and most are {R26-4 TOP; The chart on the hook (E44)} <log-normal; charcoal-to-the-deckle; G-c; drop-off; stick-figure; press 3; gate_motion; re-render; cut; re-entry; [screen]; chart-carried>
+- L438 [2] P45 triage — 2026-09-05 (the corpus reconciled with what is built) — The judgment pass over the generated registries: [TRIAGE-2026-09-05.md](TRIAGE-2026-09-05.md) — {Every row below carries its triage id and nothing was added; pending D3 / D6} <CORPUS-RECONCILIATION; write-up; ANIMATION-REGISTRY.md:582; hand-tuned; SOAK_STEP.FPS 8; ANIMATION-REGISTRY.md:84; SP.LIFE_FPS 10; :231; BACKLOG.md:218; briefs:187; :545; zero-slip>
+- L447 [3] TOP — the next list (each becomes its own order, plan:67) — | id | item — what and where | why / evidence | cost | {P45 O1; The cadence kinetics module; R2 + D7.} <ANIMATION-REGISTRY.md:582; hand-tuned; SOAK_STEP.FPS 8; ANIMATION-REGISTRY.md:84; SP.LIFE_FPS 10; :231; BACKLOG.md:218; briefs:187; :545; zero-slip; min-jerk; 48-THE-FIGURE-AND-THE-GROUND.md:16,26>
+- L456 [3] BACKLOG — real work, owned by a plan or a row, not now (29 of 31; two held below) — | id | item — what and where | why / evidence | cost | {P45 O6; C3 nested coordinate spaces; P45 O8; 43.5 the morph, two methods} <BACKLOG.md:289; cotangent-weight; 43-SCENE-GRAPH-AND-TRANSFORM.md:91; BACKLOG.md:247; κ; 48…:163; G-i; G-j; BACKLOG.md:235; :316; ANIMATION-REGISTRY.md:530; zero-area>
+- L490 [3] EXPLORE — the first step is a measurement or a read, not a build (6) — | id | item — what and where | why / evidence | cost | {P45 S2; Figure kinematics / biomechanics; P45 S5; Secondary motion and placement dynamics} <FK-vs-IK; two-bone; ÿ+2ζω₀ẏ+ω₀²y = −ẍ_base; φ; :383; motion-cohesion; :283-285; follow-through; M_p; BACKLOG.md:516; secondary-motion; [DERIVED]>
+- L501 [3] RETIRE — struck from the triage list only; no doc line is deleted (R7) (12) — | id | item — what and where | why / evidence | cost | {P45 O2; Dynamic nib pooling; P45 O3; The five overlapping synergies} <corner-dwell; LAMBDA_W 0.12; ALPHA_W 1; mass-spring-damper; mẍ+cẋ+kx=0; ω₀; ζ; 47-FINDINGS-TO-CHECKS.md:199; BACKLOG.md:526-528; 47-FINDINGS-TO-CHECKS.md:150; BACKLOG.md:229; arc-length>
+- L518 [3] D3 / D6 — ruled 2026-09-06 (E42): poses first; tag all thirteen — | id | item — what and where | why / evidence | cost | {P45 O9; 48.2 balance — the gesturing figure's hips; D3; E42: BACKLOG; P45 T5} <Hof 2005; 48-THE-FIGURE-AND-THE-GROUND.md:39; zero-slip; ANIMATION-REGISTRY.md:366-367; BACKLOG.md:249; [DERIVED]; G-c; intensity ≤ 0.18; 45-PARALLAX-AND-PLATE-MOTION.md:53; G-o; 50-THE-PHONE-IS-THE-SCREEN.md:36,41-48>
+- L526 [2] Routed from the demoted list (47 §4) — Demoted from doctrine — not dropped. Each lands as a build item, an exploration, or a closure. {Euler-spiral generator; Build, do not gate.; Per-material `ζ` / `ω₀` values; Exploration X10.; RESOLVED 2026-09-04} <Secondary-motion; M_p; Dirty-flag; hand-tuning; three-quarters; Two-handed; dual-quaternion; designed-out; shot-length>
+- L532 [7] D1 Euler-spiral generator — for procedural curves (arrows, balance arms, connectors, axes)
+- L533 [7] D2 Per-material `ζ` / `ω₀` values — paper, metal, fabric, liquid, ink
+- L534 [7] D3 Secondary-motion ratio — RESOLVED 2026-09-04 by 48 §48.6 — the analytic phase lag `φ = arctan(2ζ(ω_d/ω₀)/(1−(ω_d/ω₀)²))` on the `M_p` we already adopted. No invented ratio needed.
+- L535 [7] D4 Dirty-flag propagation — in the scene graph
+- L536 [7] D8 Pseudo-3D head turns — cylindrical projection, the 35–45° three-quarters gate, sprite swap over 2–3 frames at peak angular velocity (09 §2.6)
+- L537 [7] D9 Two-handed closed kinematic chains — the prop is the master, both wrists lock to its sockets (09 §3.7)
+- L538 [7] D5 BBW / 2D dual-quaternion skinning — Trigger corrected 2026-09-04 (48 §48.3): not a bending prop — rigging a figure. Elbows and knees need it immediately, because linear blend skinning returns the
+- L539 [7] D6 A1 timing chart — Closed. Superseded by `M_p = exp(−πζ/√(1−ζ²))` — the model replaces the table.
+- L540 [7] D7 Grow the shot-length tail — Deprioritised by ruling — see below.
+- L542 [2] Deprioritised by ruling — - Grow the shot-length tail. Our median and CPM match the reference; only the spread {Grow the shot-length tail.; Coffee-ring edge and anisotropic wicking}
+- L550 [2] Withdrawn — - G-f "the actor must be a rig, not a generation." Withdrawn by the operator {G-f "the actor must be a rig, not a generation."; N1 "M10 measures the wrong thing."} <gate_motion_density.py:277; PLATE_HOLD_MAX_S = 20.0; two-dock>
+- L564 [2] Carried debt — - `f10b` plate rehome — 55 indexed plates still resolve into the codex worktree. {`f10b` plate rehome; Steel and Paper's timeline uses absolute worktree paths.; Flow driver has no README; Drive connector needs reconnecting.; Tokyo `plate-01-*`; The Steel and Paper re-script} <npm install; character-binding; REWRITE-ORDER-G; G-g>
 
 ## docs/content-video-engine/briefs/ALICIA-FORMAT-RECREATION-BRIEF.md
 
@@ -3452,6 +3467,7 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 - L1259 [2] E41 — The shorts-script ledger: move beats, never clip words; the brand line is the outro's; sentences break for the strip (2026-09-04 / 2026-09-05) — Three rulings from the Tokyo short, recorded together because the script skill has to cite them as one page. {Fit windows by moving beats, never by clipping words (2026-0} <long-form; gate_opening_structure; head-fake; where-we-sit; Remotion-kit; mid-word; gate-fit>
 - L1291 [2] E42 — The stick lane swaps approved poses; a rig only for what the first shot cannot fake. Our own thresholds carry `[DERIVED]` (2026-09-06) — Two P45 decisions the parent held open, ruled in one line each. {D3 — poses first.} <re-parenting; zero-slip; G-c; intensity ≤ 0.18; G-o>
 - L1306 [2] E43 — On a short the chart carries the number; the blind reader cannot see it, so a chart-carried beat is not a viewer miss (2026-09-06) — Ruled on the Tokyo short's fresh viewer read (V01 21/24: `[promise]` and `[rehook]` at 0:30–0:45 unperceived on "By the end {Conjoined beats are the shorts doctrine, not a defect.} <[promise]; [rehook]; re-describing; under-read; JUDGE-by-ear>
+- L1326 [2] E44 — The chart flexes on the hook: the first ledger page rolls out on the hook line, not after the archetype (2026-09-06) — Ruled on the Tokyo short's first Facebook read (`tokyo-tea-break/ANALYTICS-2026-09-06.md`, n = 8: the drop-off at 0:11, inside {The first ledger page lands on the hook line.} <drop-off; stick-figure; [DERIVED]; cut-on>
 
 ## docs/portable/OUTRO-CTA-PLAYBOOK.md
 

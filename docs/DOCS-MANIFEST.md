@@ -15,7 +15,7 @@ its own headings, capability names, backlog ids. `terms` are its most frequent b
 terms. Purpose, terms and defines are truncated here to keep the file cheap to grep;
 the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 
-246 documents across 13 kinds.
+248 documents across 13 kinds.
 
 ## doctrine
 
@@ -91,7 +91,7 @@ the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 
 ## ruling-ledger
 
-- docs/portable/OPERATOR-RULINGS.md — OPERATOR RULINGS — the standing corrections ledger — Portable, model-agnostic. Load alongside `DOCTRINE-CORE.md`. — defines: A3; E11; E12; E13; +30 more — terms: long-form; YouTube; world-building; drop-off; high-paid; info-systems
+- docs/portable/OPERATOR-RULINGS.md — OPERATOR RULINGS — the standing corrections ledger — Portable, model-agnostic. Load alongside `DOCTRINE-CORE.md`. — defines: A3; E11; E12; E13; +31 more — terms: long-form; drop-off; YouTube; world-building; high-paid; info-systems
 
 ## capabilities
 
@@ -288,6 +288,7 @@ the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 - content/video_engine/projects/systems-and-blowups/steel-and-paper/sound/SOURCES.md — SOURCES — steel-and-paper sound — Per-asset licence ledger (SOUND-SOURCING.md rule: an asset missing its — defines: P35 — terms: highest-rated; -ss; sort=rating_desc; preview-hq-mp3; afade; gain-matched
 - content/video_engine/projects/systems-and-blowups/steel-and-paper/sound/SUNO-GENERATION-LOG.md — Suno generation log — Content ID dispute evidence (SOUN — Account: yorugairo (Suno Pro — commercial rights). — defines: — — terms: context-mix
 - content/video_engine/projects/systems-and-blowups/style-spine.woodblock-vox-newsprint.v2.md — Style Spine v2 — woodblock vox newsprint (finance chann — Correction of record (operator, 2026-08-25): generation drifted toward — defines: — — terms: Quiet-zone; steel-and-paper-plates-wave; woodblock vox newsprint; evidence-dock; world-plate; WORLD-BOARD
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/ANALYTICS-2026-09-06.md — Analytics — the Tokyo short on Facebook, first read (20 — Operator screenshots, 2026-09-06 (Sunday, posted during the NFL as a t — defines: — — terms: drop-off; camera-flash; stick-figure; Re-read; n = 8 viewers; chip-machine
 - content/video_engine/projects/systems-and-blowups/tokyo-tea-break/CLOSE-CANDIDATES-2026-09-03.md — Tokyo Tea Break — the close, rewritten (2026-09-03) — What the old close did wrong, against the exemplars: the ring token (" — defines: — — terms: loop-close; Five-and-a-half; SOURCES-TO-VERIFY; Break-mark; [promise]; SCRIPT-90S-VO.prev-2026-09-03.txt
 - content/video_engine/projects/systems-and-blowups/tokyo-tea-break/EVIDENCE-AUDIT-2026-09-03.md — Tokyo Tea Break — evidence & chart audit, 2026-09-03 — Every figure that reaches the screen, where it comes from, and whether — defines: — — terms: Hedged-yield; off-palette; Long-Duration; Zero-Coupon; ticker-level; ear-probe
 - content/video_engine/projects/systems-and-blowups/tokyo-tea-break/EVIDENCE-DOSSIER.md — Tokyo Tea Break — evidence dossier — Every figure the script speaks, its source, and the date it was fetche — defines: — — terms: DGS10; ev-hedge-then-now-v1; twenty-two; sixty-three; DGS3MO; IR3TIB01JPM156N
@@ -295,6 +296,7 @@ the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 - content/video_engine/projects/systems-and-blowups/tokyo-tea-break/EVIDENCE-FINDING-hedged-yield.md — BLOCKING FINDING — the short's central arithmetic does — Fetched live from FRED, 2026-09-03. Every figure below is re-fetchable — defines: — — terms: DGS10; DGS3MO; IR3TIB01JPM156N; BoJ; re-target; tea-break
 - content/video_engine/projects/systems-and-blowups/tokyo-tea-break/REVIEW-2026-09-03.md — Tokyo Tea Break — review, 2026-09-03 — VERDICT: FAIL — blocks recording. Four things block; none is large. — defines: — — terms: opening-gate; head-fake; long-form; Follow-up; short-runtime; [post-key]
 - content/video_engine/projects/systems-and-blowups/tokyo-tea-break/REVIEW-2026-09-04.claude.md — Tokyo — the rewrite, reviewed (arm: `SCRIPT-90S-VO.clau — Two arms were written today; the operator tests both. — defines: P36 — terms: YouTube; head-fake; sixty-three; blue-ties; bar-tab; StickMike
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SCRIPT-90S-DESCRIPTION.md — Tokyo Tea Break — the publish description (YouTube Shor — Drafted 2026-09-06 against the approved render (`build-short/render/AP — defines: — — terms: MoneyPhysics; InterestRates; resource-center; data-chart-center; price-to-earnings; Sixty-three
 - content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-90S.claude.md — Tokyo Tea Break — shot table (9:16, 2026-09-04): the lo — Authored, never generated (PIPELINE stage 7). — defines: M10; M14 — terms: ev-japan-holdings-v1; @StickMike; #F4E6C7; #25313C; re-enters; mid-word
 - content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-90S.md — Tokyo Tea Break — shot table, 9:16 short — Authored 2026-09-04 against `SCRIPT-90S-VO.txt` (282 words, ~89 s afte — defines: — — terms: ev-japan-holdings-v1; plate-05; plate-02-bill-shock-desk; [archetype]; plate-03-three-blue-ties; [rehook]
 - content/video_engine/projects/systems-and-blowups/tokyo-tea-break/sound/SOURCES.md — SOURCES — steel-and-paper sound — Per-asset licence ledger (SOUND-SOURCING.md rule: an asset missing its — defines: P35 — terms: gain-matched; highest-rated; preview-hq-mp3; -ss; sort=rating_desc; afade

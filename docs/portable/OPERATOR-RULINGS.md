@@ -1322,3 +1322,24 @@ them. That's why we get conjoined actions, which is our doctrine: if running sho
    flagging chart-carried numbers. Until then, on a short the V01 row is read beat by beat against the SCREENS file before
    it binds. Evidence: `content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SCRIPT-90S.claude-VIEWER.md`
    (2026-09-06, six measured windows on the final take).
+
+## E44 — The chart flexes on the hook: the first ledger page rolls out on the hook line, not after the archetype (2026-09-06)
+
+Ruled on the Tokyo short's first Facebook read (`tokyo-tea-break/ANALYTICS-2026-09-06.md`, n = 8: the drop-off at 0:11, inside
+a clip scene, with the first ledger page at 0:17). The operator: *"our strongest mechanism is our chart plates now, but we
+don't flex it until 20 seconds in. On 'Tokyo took a tea break. And left America with an unfunded bar tab.' we're supposed to
+roll out the graph. That's what makes us different. That's the only thing the stick-figure companies can't just drown me
+against."*
+
+1. **The first ledger page lands on the hook line.** On a short the hook (0:00–0:03) is followed by the chart rolling out
+   under the second sentence, before the archetype, the tricolon and the reflect. Doc 51's "mechanism by 0:10" is satisfied
+   by the page itself: the chart is the mechanism, the figure on it is the stakes. The host and the archetype come after
+   the page, or over it as a species.
+2. **Consequences for the build.** (a) The press / flash cue at a cut is not a hook device; at 0:09 it is the last thing a
+   viewer hears before leaving. Its gain is a dial to test downward (0.16 → 0.08 as the starting reference, `[DERIVED]`),
+   and no transient cue lands inside 0:05–0:12 unless a page lands with it. (b) A returning character **mounts** the way he
+   first mounted (a dissolve on a word, doc 29 s9.15); a cut-on for a character already introduced is a defect - gate it
+   with the mount rule, not by hand.
+3. **The test.** n = 8 rules nothing about the audience; it rules where we spend the first ten seconds. The next two shorts
+   are built under this ruling and read against Tokyo at n ≥ 100. If the 0:11 step survives with the chart at 0:03, the
+   ruling is wrong and says so here.
