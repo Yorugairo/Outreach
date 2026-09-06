@@ -1,7 +1,7 @@
 ---
 id: P45-CORPUS-RECONCILIATION
 title: Reconcile the doctrine corpus with what is built - registries, triage, the operator's decisions
-status: approved
+status: running
 operation: feature
 risk: standard
 owner: parent
@@ -110,7 +110,7 @@ owns HG decisions, integration and every diff review; `reviewer` before each com
 ## Task Slices
 
 ### T1: Registries land (gates, animation and maths, layers wrapper)
-- Status: running
+- Status: complete
 - Owner: implementation_luna / junior_developer (dispatched 2026-09-05), parent verifies and commits
 - Depends on: none
 - Write set: `content/video_engine/scripts/build_gates_registry.py`, `build_animation_registry.py`, `build_docs_layers.py` + tests; `docs/GATES-REGISTRY.*`, `docs/ANIMATION-REGISTRY.*`, `docs/DOCS-MANIFEST.*` (headings field), `docs/DOCS-STANDARD.md`
@@ -119,7 +119,7 @@ owns HG decisions, integration and every diff review; `reviewer` before each com
 - Evidence: pending
 
 ### T2: The triage draft and the operator's decision list
-- Status: pending
+- Status: complete
 - Owner: architect_sol (Opus, read-only except the plan evidence file)
 - Depends on: T1
 - Write set: `docs/content-video-engine/TRIAGE-2026-09-05.md` (draft), this plan's Evidence section
@@ -128,7 +128,7 @@ owns HG decisions, integration and every diff review; `reviewer` before each com
 - Evidence: pending
 
 ### T3: Backlog and capabilities rows from the ratified triage
-- Status: pending
+- Status: review (pending D3/D6 rows)
 - Owner: junior_developer, parent integrates
 - Depends on: T2, HG1
 - Write set: `docs/content-video-engine/BACKLOG.md`, `docs/content-video-engine/CAPABILITIES.md` (rows only)
@@ -137,7 +137,7 @@ owns HG decisions, integration and every diff review; `reviewer` before each com
 - Evidence: pending
 
 ### T4: Compressed docs - lift the differences out, dedupe, relabel
-- Status: pending
+- Status: complete (deterministic half + the four lifted rules; the remaining 418 delta rule lines are the operator's lift list in docs/DOC-OVERLAP.md)
 - Owner: implementation_luna (the overlap report, deterministic), parent + reviewer (the restored deltas)
 - Depends on: T1, HG2 (ruled 2026-09-05: "we compressed the docs because we didn't have a proper search system; now that we do we shouldn't kill everything in the compressed docs - lift the differences out and dedupe")
 - Write set: `content/video_engine/scripts/report_doc_overlap.py` + test, `docs/DOC-OVERLAP.md` (generated: for each compressed doc → target pair, sections whose labels/terms match a target section = DUPLICATE, sections with no match = DELTA, with `path:line` both sides); then, per ratified delta: the target doc (additive, cited back), the compressed doc's status line ("compressed into <doc>; the deltas below were lifted on <date>"), `AGENTS.md` (the docs 15/16 sentence)
@@ -146,7 +146,7 @@ owns HG decisions, integration and every diff review; `reviewer` before each com
 - Evidence: pending
 
 ### T5: Derived-number provenance
-- Status: pending
+- Status: pending (HG3 D6 open)
 - Owner: junior_developer, parent for GEMINI.md
 - Depends on: T2, HG3
 - Write set: the docs carrying derived figures (from the triage), `GEMINI.md` (intake step 3), `content/video_engine/scripts/build_animation_registry.py` (+ test: `provenance: derived` when a `[DERIVED:` tag is within the section)
@@ -155,7 +155,7 @@ owns HG decisions, integration and every diff review; `reviewer` before each com
 - Evidence: pending
 
 ### T6: The craft map
-- Status: pending
+- Status: complete
 - Owner: implementation_luna (generated part), parent + reviewer (curated part)
 - Depends on: T1 (gate ids)
 - Write set: `content/video_engine/scripts/build_craft_map.py` + test, `docs/CRAFT-MAP.jsonl`, `docs/CRAFT-MAP.md`, `docs/content-video-engine/patterns/CRAFT-DEVICES.md` (curated seed: device → scale, gate id, doc section, exemplar)
@@ -164,7 +164,7 @@ owns HG decisions, integration and every diff review; `reviewer` before each com
 - Evidence: pending
 
 ### T7: The discoverability delta
-- Status: pending
+- Status: complete (rounds 4-5)
 - Owner: parent (dispatches `explorer`, grades against the held answers)
 - Depends on: T1, T6
 - Write set: `evals/RETRIEVAL-BENCHMARK-2026-09-05.md` (round 4), the explorer role's retrieval-discipline text (manifest → index → topics order)
@@ -173,7 +173,7 @@ owns HG decisions, integration and every diff review; `reviewer` before each com
 - Evidence: pending
 
 ### T8: Measure the secondary-motion ratio - per motion, per scene, per screen
-- Status: pending
+- Status: complete
 - Owner: implementation_luna (the measurement), explorer (the buried research), parent (the read)
 - Depends on: T1
 - Write set: `content/video_engine/scripts/measure_motion_energy.py` + test, `content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-short/MOTION-ENERGY.md` (generated), a BACKLOG X11 update
@@ -196,6 +196,7 @@ python scripts/prp_validate.py .claude/PRPs/plans/P45-CORPUS-RECONCILIATION.plan
 - TOP seeds for T3, from the rulings: the cadence kinetics module (on-1s/2s/3s by translation speed); FK/IK boundary + zero-slip anchoring (G-j) for the stick lane; the motion-authoring order restored into doc 29; the M13 cut-gap gate in the edit pass (>= 0.30 s, cut at 0.8 of the gap, mid-word <= 25 %; the measurement exists in `measure_cut_gaps.py`, the constant in `build_short.py`).
 - T2 landed 2026-09-05 (86c46f5): `docs/content-video-engine/TRIAGE-2026-09-05.md` - 54 decisions (5 TOP all pre-ruled, 31 BACKLOG, 6 EXPLORE, 12 RETIRE), four registry misreads corrected (FK/IK and closed-chain 'retired' were graduations; 38 of the 128 research orphans are CITATION orphans - the modules cite our numbered docs, never the research file). Parent rulings on the architect's eight (the operator asked the parent to judge): D2 Deegan rim -> BACKLOG (this week's ink verdict was 'paint it with ink', not another filter term); D4 'a camera move alone is not a visual event' -> restore the prose into 29, change no threshold until one episode is measured both ways; D5 the 2-6 s plate ceiling -> lift into 29 as the first-minute rule M10 already is, no runtime-wide 6 s without a measurement; D7 cadence threshold -> test BOTH 250 and 100 px/s against our stepped clocks, adopt neither on the page; D8 gates-registry scope -> state it in the header now, extend the scan when the comfy/grounding gates next change; D1 the fourteen unowned judge-only devices -> add the block to CHECK-RESPONSIBILITIES §3 (the craft map is generated; a second roster would drift). **Open for the operator: D3** (does the stick lane animate a rig or swap approved poses? recommendation: poses first per E40, rig only what the first shot cannot fake) and **D6** (does `[DERIVED]` also tag our own computed thresholds such as G-c 0.18 and G-o 12 px, not only research-derived figures? recommendation: yes - E38 says our own practice is never the calibration source).
 - Registry follow-up queued: propagate `implemented` through the citation chain (module -> our doc section -> the research section it cites) so the 38 citation orphans stop reading as gaps.
+- 2026-09-05 late: T1 83a472f/33ec81e/a994f82/4247c65, T2 86c46f5, T3+T4 83a472f (reviewer-verified doctrine lift; CHECK-RESP 3i), T6 4247c65, T7 rounds 4-5 cd59717/bb00b1b (9/9, false negative gone, tool calls -7%, tokens +16% then -18% with docs_find on multi-layer hunts; the ~30k dispatch floor is the always-loaded layer), T8 cc60a52 (translation ratio 0.026, opacity ratio 2.4, s06 121x over, corpus is pairwise only). Registry chain fix: orphaned 107 -> 66. Open: D3 (rig vs poses), D6 (tag our own thresholds), T5.
 - Decisions surfaced at draft time (8, the last added after the gates registry landed) (the parent's recommendation in brackets):
   1. The motion-authoring order (docs 15 §5 / 16 §3: character or prop action, then camera, then secondary) lives only in the compressed docs and doc 29 does not carry it - restore into doc 29 and encode as a motion-gate check? [restore; gate only after one episode is measured against it]
   2. The on-1s / on-2s / on-3s cadence rule (animation brief) - orphaned, yet `SOAK_STEP` FPS 8 and `LIFE_FPS` 10 are already stepped clocks and the operator asked for "more step-motion / jitter" on 2026-09-05 - TOP as a kinetics module (cadence by translation speed), or EXPLORE? [TOP: it names a stumble we had this week]
