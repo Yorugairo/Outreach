@@ -19,7 +19,9 @@ rather than restating it.
   (Parts 3, 8, 9; §9.15).
 - **Voice** → `docs/portable/VOICE-PACK.md`, docs 33 + 36. **Rulings** →
   `docs/portable/OPERATOR-RULINGS.md` (override everything else).
-- **Do we have X? Where is it? Everything about it?** → one `rg` per layer:
+- **Do we have X? Where is it? Everything about it?** →
+  `python content/video_engine/scripts/docs_find.py "<term>"` first (one compact line per
+  hit, cheapest layer first, names the window to open); the raw layers as fallback, one `rg` each:
   `docs/DOCS-MANIFEST.jsonl` (per document: purpose, defines, headings),
   `docs/DOCS-INDEX.jsonl` (per section → `path:line`), `docs/DOCS-TOPICS.jsonl` +
   `docs/DOCS-CITATIONS.jsonl` (across docs; who cites what), `docs/GATES-REGISTRY.md`
