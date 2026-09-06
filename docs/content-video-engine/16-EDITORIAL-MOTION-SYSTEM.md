@@ -2,6 +2,8 @@
 
 > **STATUS: PARTIALLY SUPERSEDED.** The production pattern is now the scene-evidence lane in **29**. Sections that 29 does not replace — timing authority, plan contract, provider boundary, revision proof and QC, on-screen text policy — still apply. Where this doc and 29 disagree on motion, 29 wins.
 
+> **STATUS: COMPRESSED INTO 29 (2026-09-05).** Not superseded: the compression kept doc 29 short; `docs/DOC-OVERLAP.md` lists every section here that 29 does not carry (12 delta sections, 58 rule lines). Four rules were lifted into 29 §9.32 on 2026-09-05; the rest stands as detail. Consult this doc for it.
+
 *Specification of record for deterministic shot timing, local cinematography,
 and provider-motion exceptions in the History documentary lane.*
 

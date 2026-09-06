@@ -146,10 +146,11 @@ doing script, review, or motion work — they were unrouted until
   channel.** Part 3 is the linked-evidence choreography (the chain is the
   transition), Part 8 the scene-evidence lane that ships, Part 9 the
   operator corrections, §9.15 the cross-reveal wipe and caption safe zone.
-  Doc 16 (editorial motion system) is partially superseded by it and doc 15
-  (living-scene language) is record only — where they disagree on motion,
-  29 wins. The renderer is `samples/scene-evidence-player.template.html`;
-  do not write another.
+  Docs 15 (living-scene language) and 16 (editorial motion system) were
+  COMPRESSED into it (2026-09-05 ruling: compression, not supersession -
+  `docs/DOC-OVERLAP.md` lists what 29 does not carry); where they disagree on
+  motion, 29 wins, and the lifted rules are 29 §9.32. The renderer is
+  `samples/scene-evidence-player.template.html`; do not write another.
 
 Three rules bind agents generating assets here:
 

@@ -2023,3 +2023,75 @@ turn is the thing the mount removes. Tokyo short: `went home` (1:01.76) to 1:04.
 Shot-table id: `ledger:<series>:<variant>:<emphasize>:<quiet_zone>[:spiral|:mount=<s>][:cut]`. Template:
 `LP_RETRACT`, `lpVortex`, `lpParticles`, `lpSpiral`; the mount: `mountIn` / `lpDance` / `MOUNT_STEPS` / `LP_MOUNT_RISE`.
 Tokyo short: 0:31 out, 0:44.6 back, 1:01.8 the mount.
+
+### 9.32 Lifted from the compressed docs (15, 16) — 2026-09-05
+
+P45 T4 under ruling 7 (operator, 2026-09-05: *"we compressed the docs because we didn't have a
+proper search system; now that we do we shouldn't kill everything in the compressed docs. The right
+way is to lift the differences out and dedupe."*). Docs 15 and 16 are **compressed into this doc,
+not superseded**: `docs/DOC-OVERLAP.md` lists everything 29 does not carry — 23 delta sections / 52
+rule lines for 15 → 29, and 12 delta sections / 58 rule lines for 16 → 29. Four rules were read line
+by line against the tree today (`docs/content-video-engine/TRIAGE-2026-09-05.md` §1g) and are lifted
+below verbatim, each with how it binds. Nothing here renumbers a section, changes a threshold, or
+removes a line from the compressed docs.
+
+**1. The motion-authoring order.** `docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:141-150`
+(§5 Motion discipline), the same four-layer order at `docs/content-video-engine/16-EDITORIAL-MOTION-SYSTEM.md:50-59` (the closing line, "a meaningful narration beat must change at least one of the first three layers", is doc 15's only - `15-…:150`)
+(§3 Motion ownership):
+
+> Motion is authored in this order:
+>
+> 1. Character or prop action.
+> 2. Localized environmental action.
+> 3. Information reveal.
+> 4. Camera action.
+>
+> A meaningful narration beat must change at least one of the first three layers.
+
+**Binds as prose** (ruling 1, `.claude/PRPs/plans/P45-CORPUS-RECONCILIATION.plan.md:195`): the author
+orders a beat's motion this way and the reviewer verdicts it by eye, per window, against the shot
+table. It is not a gate today and no check counts it — `gate_motion_density.py` counts events, never
+which layer they belong to. **A gate follows one measured episode**, not this lift.
+
+**2. A camera move alone is not a visual event.** The sub-clause that rides with rule 1, at
+`docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:151`:
+
+> A camera move alone is not a visual event.
+
+and at `docs/content-video-engine/16-EDITORIAL-MOTION-SYSTEM.md:59`:
+
+> A camera move by itself is not a meaningful visual event.
+
+**Binds as prose** (ruling D4, plan:197). It is deliberately not wired: the shipped counter
+`SPECIES_EVENTS` in `content/video_engine/scripts/gate_motion_density.py:108-111` still credits
+`punch`, `push` and `focus_zoom` as visual events, and the M01 / M10 / M16 verdicts are built on that
+count. **That counter is NOT changed until one episode is measured both ways** — flipping it
+re-verdicts every build we have already judged. Until that measurement exists the counter decides the
+gate and this rule decides the author: a beat that moves only the camera is not the beat's event.
+
+**3. The plate hold — two to six seconds, six a hard ceiling.**
+`docs/content-video-engine/16-EDITORIAL-MOTION-SYSTEM.md:43-44` (§2 Timing authority):
+
+> Each primary plate holds for **two to six seconds**, with six seconds a hard ceiling.
+
+**Lifted as the first-minute rule it already is** (ruling D5, plan:197). Inside the opening minute
+this is live and gated — the **M10** row in `docs/GATES-REGISTRY.md` (`:123` as generated on
+2026-09-05): "E24 / doc 29 §9.29: stillness inside the opening minute — 4-6s in the first 30-60s",
+levels FAIL / PASS, `gate_motion_density.py:494`. Outside the first minute the shipped ceiling stays
+`PLATE_HOLD_MAX_S = 20.0` (`gate_motion_density.py:64`, §9.13, runtime-derived). **Six seconds does
+not generalise to the whole runtime without a measurement**, and none has been run.
+
+**4. No facts, dates, labels or quotations inside generated pixels.**
+`docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:137-139` (§4 Fact surfaces) —
+the fourth rule §1g verified by hand:
+
+> Facts, dates, labels, maps, quotations, and citations are prohibited inside
+> generated pixels. Generated scene prompts reserve negative space and anchor
+> regions; Remotion supplies the reviewed information afterward.
+
+**Binds already, under other names** — recorded here so the rule has a home in 29, not as a new
+obligation: E33 (`docs/portable/OPERATOR-RULINGS.md:1102` — generated worlds are for illustration,
+not evidence), §9.9 above (the diegetic composite carries the host's gesture and a blank evidence
+surface while the edit composites the real, sharp evidence into it), and gate **G-b**
+(`docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:70`) for the parallax case. Doc 15's line is the
+general form of all three: the information layer is composited afterward, never generated.

@@ -92,7 +92,7 @@ or jaccard >= 0.40; DELTA = neither.
 - `docs/content-video-engine/10-HISTORY-DOCUMENTARY-EDITORIAL-SPEC.md:152` — World first, vectors second — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:178` 2.4 The world reacts to the evidence — h 0.00 / j 0.07 / b 0.00 — 2 rules
     - `:160` For document and map compositions, generated imagery is background-only. A
     - `:164` world may be interpretive; the explanation layer must remain exact.
-- `docs/content-video-engine/10-HISTORY-DOCUMENTARY-EDITORIAL-SPEC.md:166` — V4.1 living-editorial cadence — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:413` 8.8 No production chrome in the frame (operator correction, 2026-08-24) — h 0.00 / j 0.05 / b 0.00 — 14 rules
+- `docs/content-video-engine/10-HISTORY-DOCUMENTARY-EDITORIAL-SPEC.md:166` — V4.1 living-editorial cadence — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:2027` 9.32 Lifted from the compressed docs (15, 16) — 2026-09-05 — h 0.00 / j 0.06 / b 0.00 — 14 rules
     - `:168` `editorial_coverage.v1` resolves visual coverage before treatments:
     - `:170` - every complete sentence receives at least one distinct visual concept;
     - `:171` - long sentences split only at contrast or meaningful clause boundaries;
@@ -157,85 +157,86 @@ _none._
 
 23 sections: 0 duplicate / 0 partial / 23 delta. Named by `AGENTS.md:149`:
 
-> Doc 16 (editorial motion system) is partially superseded by it and doc 15 (living-scene language) is record only — where they disagree on motion, 29 wins.
+> Docs 15 (living-scene language) and 16 (editorial motion system) were COMPRESSED into it (2026-09-05 ruling: compression, not supersession - `docs/DOC-OVERLAP.md` lists what 29 does not carry); where they disagree on motion, 29 wins, and the lifted rules are 29 §9.32.
 
 ### DELTA — nothing like it in the target — THIS IS THE LIFT LIST
 
-- `docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:1` — Living Scene Communication Language — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:240` Part 6 — Transitions (semantic palette, unchanged + one addition) — h 0.00 / j 0.06 / b 0.00 — 0 rules
-- `docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:7` — 1. Product decision — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:240` Part 6 — Transitions (semantic palette, unchanged + one addition) — h 0.00 / j 0.10 / b 0.00 — 0 rules
-- `docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:29` — 2. Five communication surfaces — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:805` 8.19 Dead-air ceiling, and the one-sided semantic join — h 0.00 / j 0.04 / b 0.00 — 0 rules
-- `docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:31` — Combat Woodblock parent identity — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:805` 8.19 Dead-air ceiling, and the one-sided semantic join — h 0.00 / j 0.02 / b 0.00 — 4 rules
-    - `:43` | Pack | Primary use | Distinguishing rule |
-    - `:53` the rapid-response lane and must not solve urgency by generating filler worlds.
-    - `:57` Images used to calibrate these rules remain human-study inputs and cannot enter
-    - `:65` prompt, motion, and evidence-surface rules are in
-- `docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:68` — World — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:178` 2.4 The world reacts to the evidence — h 0.00 / j 0.33 / b 0.07 — 0 rules
-- `docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:78` — Character — no target section scores above zero — h 0.00 / j 0.00 / b 0.00 — 1 rule
-    - `:81` Historical reconstructions and composites perform only actions supported by the
-- `docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:88` — Evidence — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:178` 2.4 The world reacts to the evidence — h 0.00 / j 0.33 / b 0.07 — 1 rule
-    - `:94` Generated paper, scrolls, desks, and frames may surround evidence. They never
-- `docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:97` — Explanation — no target section scores above zero — h 0.00 / j 0.00 / b 0.00 — 0 rules
-- `docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:104` — Transition — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1775` 9.28 The SURFACE GRAMMAR — page, dock, or transition, decided by rule (operator, 2026-09-03) — h 0.00 / j 0.03 / b 0.00 — 0 rules
-- `docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:110` — 3. Documentary beat grammar — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1165` 9.14 World plates MAY show screens, boards, and trend imagery (operator, 2026-08-25) — h 0.00 / j 0.04 / b 0.00 — 6 rules
-    - `:112` Every factual passage uses this recurring sequence when applicable:
-    - `:114` 1. Picture it — establish the human situation through world or character.
-    - `:115` 2. Name it — introduce the exact person, place, date, or proposition.
-    - `:116` 3. Show the relationship — make the consequence legible through action or
-    - `:118` 4. Qualify it — show what the evidence can and cannot prove.
-    - `:119` 5. Carry it forward — transform the exit motif into the next scene's entry.
-- `docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:124` — 4. Fact surfaces — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:197` Part 4 — The literal evidence layer (teacher-stamped deck slides) — h 0.00 / j 0.07 / b 0.00 — 2 rules
-    - `:128` | Date seal | Introduce one date and one event | One date only; source-bound |
-    - `:132` | Relationship scroll | Connect named entities with sourced verbs | Unknown or contested edges are labelled, never completed silently |
-- `docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:139` — 5. Motion discipline — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:413` 8.8 No production chrome in the frame (operator correction, 2026-08-24) — h 0.00 / j 0.03 / b 0.00 — 7 rules
-    - `:141` Motion is authored in this order:
-    - `:143` 1. Character or prop action.
-    - `:144` 2. Localized environmental action.
-    - `:145` 3. Information reveal.
-    - `:146` 4. Camera action.
-    - `:148` A meaningful narration beat must change at least one of the first three layers.
-    - `:151` Positive-event and deletion-only semantics are owned by
-- `docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:158` — 6. Living scene bundle — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:615` 8.14 The camera lock does not apply to this lane (correction, 2026-08-24) — h 0.00 / j 0.09 / b 0.00 — 10 rules
-    - `:161` narration beats. It contains:
-    - `:163` - a stable master world and optional foreground/depth layers;
-    - `:164` - local environmental loops and their masks;
-    - `:165` - character and prop slots;
-    - `:166` - fact/explanation anchors and safe zones;
-    - `:167` - narration, claim, and citation references;
-    - `:168` - a micro-event timeline;
-    - `:169` - one entry state and one exit state; and
-    - `:170` - fallbacks for unavailable motion assets.
-    - `:177` Longer scenes are allowed only while character blocking, facts, props, or
-- `docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:180` — Google Flow terminology — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:178` 2.4 The world reacts to the evidence — h 0.00 / j 0.08 / b 0.00 — 0 rules
-- `docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:194` — Catalog and comparison rhythm — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1885` 9.29 The OPENING MINUTE — the confirmation gap, the packaging match, and no full chart before the thesis (operator, 2026-09-03) — h 0.00 / j 0.02 / b 0.00 — 0 rules
-- `docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:206` — 7. Scene flow — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:278` 8.1 The shape — h 0.00 / j 0.14 / b 0.00 — 12 rules
-    - `:208` Each adjacency declares at least one connector:
-    - `:210` - `direction`: travel continues into a route trace;
-    - `:211` - `shape`: a water wheel becomes a circular date seal;
-    - `:212` - `material`: river foam becomes torn paper;
-    - `:213` - `object`: a ledger opens into an archive excerpt;
-    - `:214` - `color`: rust ink becomes a correction stamp; or
-    - `:215` - `character`: the learner carries a prop into the next world.
-    - `:217` Candidate Episode 1 transitions include:
-    - `:219` - battlefield smoke dissolving into quiet dojo steam;
-    - `:220` - a river becoming an inked migration route;
-    - `:221` - a turning water wheel becoming a document seal; and
-    - `:222` - a page turn revealing the next historical period.
-- `docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:224` — 8. Composition wireframes — no target section scores above zero — h 0.00 / j 0.00 / b 0.00 — 0 rules
-- `docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:226` — Story world plus narrator — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:178` 2.4 The world reacts to the evidence — h 0.00 / j 0.17 / b 0.00 — 0 rules
-- `docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:239` — Evidence interruption — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:178` 2.4 The world reacts to the evidence — h 0.00 / j 0.25 / b 0.00 — 0 rules
-- `docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:249` — Journey and relationship explanation — no target section scores above zero — h 0.00 / j 0.00 / b 0.00 — 0 rules
-- `docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:262` — 9. Cost control — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:278` 8.1 The shape — h 0.00 / j 0.06 / b 0.00 — 0 rules
-- `docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:272` — Sound — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1013` 9.18 Strong match or nothing (operator, 2026-08-30) — h 0.00 / j 0.04 / b 0.00 — 0 rules
-- `docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:279` — 10. Gate rubric — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1047` 9.8 Generated text, conditionally re-licensed (operator, 2026-08-25) — h 0.00 / j 0.05 / b 0.00 — 9 rules
-    - `:281` The Communication Language Gate scores each dimension at least 4/5:
-    - `:283` - surface ownership is immediately understandable;
-    - `:284` - the learner supplies a stable human anchor;
-    - `:285` - factual information is legible and distinct from illustration;
-    - `:286` - subject/environment motion has priority over camera motion;
-    - `:287` - adjacent scenes have a meaningful connector;
-    - `:288` - humor cannot be mistaken for evidence; and
-    - `:289` - the system appears reusable across the three planned history episodes.
-    - `:291` Gate approval selects the language only. It does not approve asset generation,
+- `docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:1` — Living Scene Communication Language — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:240` Part 6 — Transitions (semantic palette, unchanged + one addition) — h 0.00 / j 0.06 / b 0.00 — 1 rule
+    - `:5` STATUS: COMPRESSED INTO 29 (2026-09-05). Not superseded: the compression kept doc 29 short; `docs/DOC-OVERLAP.md` lists every section here that 29 does not carr
+- `docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:9` — 1. Product decision — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:240` Part 6 — Transitions (semantic palette, unchanged + one addition) — h 0.00 / j 0.10 / b 0.00 — 0 rules
+- `docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:31` — 2. Five communication surfaces — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:805` 8.19 Dead-air ceiling, and the one-sided semantic join — h 0.00 / j 0.04 / b 0.00 — 0 rules
+- `docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:33` — Combat Woodblock parent identity — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:805` 8.19 Dead-air ceiling, and the one-sided semantic join — h 0.00 / j 0.02 / b 0.00 — 4 rules
+    - `:45` | Pack | Primary use | Distinguishing rule |
+    - `:55` the rapid-response lane and must not solve urgency by generating filler worlds.
+    - `:59` Images used to calibrate these rules remain human-study inputs and cannot enter
+    - `:67` prompt, motion, and evidence-surface rules are in
+- `docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:70` — World — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:178` 2.4 The world reacts to the evidence — h 0.00 / j 0.33 / b 0.07 — 0 rules
+- `docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:80` — Character — no target section scores above zero — h 0.00 / j 0.00 / b 0.00 — 1 rule
+    - `:83` Historical reconstructions and composites perform only actions supported by the
+- `docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:90` — Evidence — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:178` 2.4 The world reacts to the evidence — h 0.00 / j 0.33 / b 0.07 — 1 rule
+    - `:96` Generated paper, scrolls, desks, and frames may surround evidence. They never
+- `docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:99` — Explanation — no target section scores above zero — h 0.00 / j 0.00 / b 0.00 — 0 rules
+- `docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:106` — Transition — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1775` 9.28 The SURFACE GRAMMAR — page, dock, or transition, decided by rule (operator, 2026-09-03) — h 0.00 / j 0.03 / b 0.00 — 0 rules
+- `docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:112` — 3. Documentary beat grammar — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1165` 9.14 World plates MAY show screens, boards, and trend imagery (operator, 2026-08-25) — h 0.00 / j 0.04 / b 0.00 — 6 rules
+    - `:114` Every factual passage uses this recurring sequence when applicable:
+    - `:116` 1. Picture it — establish the human situation through world or character.
+    - `:117` 2. Name it — introduce the exact person, place, date, or proposition.
+    - `:118` 3. Show the relationship — make the consequence legible through action or
+    - `:120` 4. Qualify it — show what the evidence can and cannot prove.
+    - `:121` 5. Carry it forward — transform the exit motif into the next scene's entry.
+- `docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:126` — 4. Fact surfaces — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:197` Part 4 — The literal evidence layer (teacher-stamped deck slides) — h 0.00 / j 0.07 / b 0.00 — 2 rules
+    - `:130` | Date seal | Introduce one date and one event | One date only; source-bound |
+    - `:134` | Relationship scroll | Connect named entities with sourced verbs | Unknown or contested edges are labelled, never completed silently |
+- `docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:141` — 5. Motion discipline — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:2027` 9.32 Lifted from the compressed docs (15, 16) — 2026-09-05 — h 0.00 / j 0.06 / b 0.00 — 7 rules
+    - `:143` Motion is authored in this order:
+    - `:145` 1. Character or prop action.
+    - `:146` 2. Localized environmental action.
+    - `:147` 3. Information reveal.
+    - `:148` 4. Camera action.
+    - `:150` A meaningful narration beat must change at least one of the first three layers.
+    - `:153` Positive-event and deletion-only semantics are owned by
+- `docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:160` — 6. Living scene bundle — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:615` 8.14 The camera lock does not apply to this lane (correction, 2026-08-24) — h 0.00 / j 0.09 / b 0.00 — 10 rules
+    - `:163` narration beats. It contains:
+    - `:165` - a stable master world and optional foreground/depth layers;
+    - `:166` - local environmental loops and their masks;
+    - `:167` - character and prop slots;
+    - `:168` - fact/explanation anchors and safe zones;
+    - `:169` - narration, claim, and citation references;
+    - `:170` - a micro-event timeline;
+    - `:171` - one entry state and one exit state; and
+    - `:172` - fallbacks for unavailable motion assets.
+    - `:179` Longer scenes are allowed only while character blocking, facts, props, or
+- `docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:182` — Google Flow terminology — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:178` 2.4 The world reacts to the evidence — h 0.00 / j 0.08 / b 0.00 — 0 rules
+- `docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:196` — Catalog and comparison rhythm — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1885` 9.29 The OPENING MINUTE — the confirmation gap, the packaging match, and no full chart before the thesis (operator, 2026-09-03) — h 0.00 / j 0.02 / b 0.00 — 0 rules
+- `docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:208` — 7. Scene flow — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:278` 8.1 The shape — h 0.00 / j 0.14 / b 0.00 — 12 rules
+    - `:210` Each adjacency declares at least one connector:
+    - `:212` - `direction`: travel continues into a route trace;
+    - `:213` - `shape`: a water wheel becomes a circular date seal;
+    - `:214` - `material`: river foam becomes torn paper;
+    - `:215` - `object`: a ledger opens into an archive excerpt;
+    - `:216` - `color`: rust ink becomes a correction stamp; or
+    - `:217` - `character`: the learner carries a prop into the next world.
+    - `:219` Candidate Episode 1 transitions include:
+    - `:221` - battlefield smoke dissolving into quiet dojo steam;
+    - `:222` - a river becoming an inked migration route;
+    - `:223` - a turning water wheel becoming a document seal; and
+    - `:224` - a page turn revealing the next historical period.
+- `docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:226` — 8. Composition wireframes — no target section scores above zero — h 0.00 / j 0.00 / b 0.00 — 0 rules
+- `docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:228` — Story world plus narrator — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:178` 2.4 The world reacts to the evidence — h 0.00 / j 0.17 / b 0.00 — 0 rules
+- `docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:241` — Evidence interruption — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:178` 2.4 The world reacts to the evidence — h 0.00 / j 0.25 / b 0.00 — 0 rules
+- `docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:251` — Journey and relationship explanation — no target section scores above zero — h 0.00 / j 0.00 / b 0.00 — 0 rules
+- `docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:264` — 9. Cost control — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:278` 8.1 The shape — h 0.00 / j 0.06 / b 0.00 — 0 rules
+- `docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:274` — Sound — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1013` 9.18 Strong match or nothing (operator, 2026-08-30) — h 0.00 / j 0.04 / b 0.00 — 0 rules
+- `docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:281` — 10. Gate rubric — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1047` 9.8 Generated text, conditionally re-licensed (operator, 2026-08-25) — h 0.00 / j 0.05 / b 0.00 — 9 rules
+    - `:283` The Communication Language Gate scores each dimension at least 4/5:
+    - `:285` - surface ownership is immediately understandable;
+    - `:286` - the learner supplies a stable human anchor;
+    - `:287` - factual information is legible and distinct from illustration;
+    - `:288` - subject/environment motion has priority over camera motion;
+    - `:289` - adjacent scenes have a meaningful connector;
+    - `:290` - humor cannot be mistaken for evidence; and
+    - `:291` - the system appears reusable across the three planned history episodes.
+    - `:293` Gate approval selects the language only. It does not approve asset generation,
 
 ### PARTIAL — the target carries some of it — check what it dropped
 
@@ -247,82 +248,83 @@ _none._
 
 ## docs/content-video-engine/16-EDITORIAL-MOTION-SYSTEM.md → docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md
 
-12 sections: 0 duplicate / 0 partial / 12 delta. Named by `AGENTS.md:149`:
+12 sections: 0 duplicate / 0 partial / 12 delta. Named by `docs/content-video-engine/16-EDITORIAL-MOTION-SYSTEM.md:3`:
 
-> Doc 16 (editorial motion system) is partially superseded by it and doc 15 (living-scene language) is record only — where they disagree on motion, 29 wins.
+> **STATUS: PARTIALLY SUPERSEDED.**
 
 ### DELTA — nothing like it in the target — THIS IS THE LIFT LIST
 
-- `docs/content-video-engine/16-EDITORIAL-MOTION-SYSTEM.md:1` — Editorial Motion System — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:615` 8.14 The camera lock does not apply to this lane (correction, 2026-08-24) — h 0.00 / j 0.11 / b 0.00 — 0 rules
-- `docs/content-video-engine/16-EDITORIAL-MOTION-SYSTEM.md:8` — 1. Decision — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:146` Part 2 — Momentum mechanics (recovered from hyperframes-opening-v1) — h 0.00 / j 0.03 / b 0.00 — 1 rule
-    - `:20` Generated motion is an optional source layer. It never becomes the editor.
-- `docs/content-video-engine/16-EDITORIAL-MOTION-SYSTEM.md:22` — 2. Timing authority — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:18` Current state — what actually governs production — h 0.00 / j 0.03 / b 0.00 — 4 rules
-    - `:32` The motion plan must cover its selected audio interval exactly, with no gaps or
-    - `:33` overlaps. A visual beat may become several shots only when all child shots retain
-    - `:39` plate can bind only to its exact, ordered narration phrase; any uncovered prose
-    - `:46` for prompt compilation and bounded image-review rules.
-- `docs/content-video-engine/16-EDITORIAL-MOTION-SYSTEM.md:48` — 3. Motion ownership — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:309` 8.3 Do not bury the plate (operator correction, 2026-08-24) — h 0.00 / j 0.11 / b 0.00 — 6 rules
-    - `:50` Motion is authored in this order:
-    - `:52` 1. Character or prop action.
-    - `:53` 2. Localized environmental action.
-    - `:54` 3. Information reveal.
-    - `:55` 4. Camera action.
-    - `:58` to locked. A moving shot must name a focal point, use a bounded amount, and
-- `docs/content-video-engine/16-EDITORIAL-MOTION-SYSTEM.md:65` — Semantic cut routing — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1245` 9.21 Purpose-built beats reuse, and audience units (operator, 2026-08-30) — h 0.00 / j 0.05 / b 0.00 — 7 rules
-    - `:72` - Academic passages cut to institutions, study, teaching, records, or
-    - `:74` - Martial passages cut to safe, non-instructional practice, contests, or
-    - `:76` - Scenic passages establish a place through ports, rivers, streets,
-    - `:78` - Journey passages cut to a reviewed local map/route surface, then a
-    - `:80` but it never supplies factual geography.
-    - `:81` - Lists receive one distinct action per meaningful item—an object cut-in,
-    - `:83` a list-item rule, not a literal cut on every ordinary noun.
-- `docs/content-video-engine/16-EDITORIAL-MOTION-SYSTEM.md:89` — Positive visual events — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1013` 9.18 Strong match or nothing (operator, 2026-08-30) — h 0.00 / j 0.04 / b 0.00 — 2 rules
-    - `:96` itself. A deletion-only beat leaves the viewer with less information and must
-    - `:98` action. A camera move and a transition effect do not rescue a deletion-only
-- `docs/content-video-engine/16-EDITORIAL-MOTION-SYSTEM.md:102` — 4. Shot grammar — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:278` 8.1 The shape — h 0.00 / j 0.05 / b 0.00 — 6 rules
-    - `:104` The v1 vocabulary is deliberately small:
-    - `:106` - purposes: hook, establish, reveal, explain, detail, reaction, payoff, and
-    - `:108` - scales: wide, medium, medium detail, close, and insert;
-    - `:109` - camera actions: locked, push-settle, pull-settle, lateral reveal, foreground
-    - `:111` - transitions: hard cut, match cut, paper wipe, chapter fade, and crossfade.
-    - `:117` document, page, or chapter change; it must not replace a stronger archival or
-- `docs/content-video-engine/16-EDITORIAL-MOTION-SYSTEM.md:123` — 5. Plan contract — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:146` Part 2 — Momentum mechanics (recovered from hyperframes-opening-v1) — h 0.00 / j 0.03 / b 0.00 — 10 rules
-    - `:126` It binds:
-    - `:128` - storyboard and editorial-beat hashes;
-    - `:129` - scene-bundle and scene-flow hashes;
-    - `:130` - approved asset-map and canonical-audio hashes;
-    - `:131` - an abstract pacing-recipe hash;
-    - `:132` - exact shot timing and narration word ranges;
-    - `:133` - approved asset IDs and layer roles;
-    - `:134` - focal point, shot scale, action ownership, camera phases, transitions, and
-    - `:136` - provider-motion requirement and fallback.
-    - `:142` zero movement duration. Moving-shot phases must sum to the shot duration unless
-- `docs/content-video-engine/16-EDITORIAL-MOTION-SYSTEM.md:145` — 6. Pacing recipe — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1143` 9.13 Plate density is runtime-derived, not a flat floor (operator, 2026-08-25) — h 0.00 / j 0.08 / b 0.00 — 1 rule
-    - `:151` The recipe is research-derived structure only. It cannot contain creator names,
-- `docs/content-video-engine/16-EDITORIAL-MOTION-SYSTEM.md:154` — 7. Provider boundary — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:966` 9.16 Motion verification and authority (operator decisions, 2026-08-29) — h 0.00 / j 0.04 / b 0.00 — 5 rules
-    - `:156` Every shot declares one provider-motion classification:
-    - `:158` - `none`: local layers express the shot;
-    - `:159` - `preferred`: organic motion could improve the shot, but a reviewed local
-    - `:161` - `required`: the shot must be omitted or separately authorized because the
-    - `:165` quarantined until their existing promotion gate passes. Provider clips may
-- `docs/content-video-engine/16-EDITORIAL-MOTION-SYSTEM.md:169` — 8. Revision proof and QC — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:309` 8.3 Do not bury the plate (operator correction, 2026-08-24) — h 0.00 / j 0.07 / b 0.00 — 9 rules
-    - `:172` excerpt. It produces:
-    - `:174` - baseline and revised previews;
-    - `:175` - a diagnostic preview showing shot ID, focal point, motion phase, transform,
-    - `:177` - the motion and pacing contracts;
-    - `:178` - cut-adjacent frame samples and a contact sheet;
-    - `:179` - FFprobe and structural-QC reports; and
-    - `:180` - before/after hashes for every active Gate A artifact.
-    - `:185` escape. Metadata cannot prove cinematic quality, so a human must watch the
-    - `:190` Editorial Motion Proof Gate passes and a separate spending ceiling is approved.
-- `docs/content-video-engine/16-EDITORIAL-MOTION-SYSTEM.md:192` — 9. On-screen text and added-layer policy — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:197` Part 4 — The literal evidence layer (teacher-stamped deck slides) — h 0.00 / j 0.11 / b 0.00 — 7 rules
-    - `:194` - The default is no added text and no added prop. A layer must earn its place.
-    - `:195` - English narration uses platform captions; it is not burned into the landscape
-    - `:197` - Claim citations remain hash-bound to shots but resolve in end credits and the
-    - `:199` - Text that merely restates narration is prohibited. On-screen text is reserved
-    - `:202` - A prop is prohibited when the plate already contains the same semantic object,
-    - `:203` and a non-evidence prop must never be presented as documentary evidence.
-    - `:204` - If text is necessary, it uses a designed surface rather than a generic card.
+- `docs/content-video-engine/16-EDITORIAL-MOTION-SYSTEM.md:1` — Editorial Motion System — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:615` 8.14 The camera lock does not apply to this lane (correction, 2026-08-24) — h 0.00 / j 0.10 / b 0.00 — 1 rule
+    - `:5` STATUS: COMPRESSED INTO 29 (2026-09-05). Not superseded: the compression kept doc 29 short; `docs/DOC-OVERLAP.md` lists every section here that 29 does not carr
+- `docs/content-video-engine/16-EDITORIAL-MOTION-SYSTEM.md:10` — 1. Decision — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:146` Part 2 — Momentum mechanics (recovered from hyperframes-opening-v1) — h 0.00 / j 0.03 / b 0.00 — 1 rule
+    - `:22` Generated motion is an optional source layer. It never becomes the editor.
+- `docs/content-video-engine/16-EDITORIAL-MOTION-SYSTEM.md:24` — 2. Timing authority — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:18` Current state — what actually governs production — h 0.00 / j 0.03 / b 0.00 — 4 rules
+    - `:34` The motion plan must cover its selected audio interval exactly, with no gaps or
+    - `:35` overlaps. A visual beat may become several shots only when all child shots retain
+    - `:41` plate can bind only to its exact, ordered narration phrase; any uncovered prose
+    - `:48` for prompt compilation and bounded image-review rules.
+- `docs/content-video-engine/16-EDITORIAL-MOTION-SYSTEM.md:50` — 3. Motion ownership — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:309` 8.3 Do not bury the plate (operator correction, 2026-08-24) — h 0.00 / j 0.11 / b 0.00 — 6 rules
+    - `:52` Motion is authored in this order:
+    - `:54` 1. Character or prop action.
+    - `:55` 2. Localized environmental action.
+    - `:56` 3. Information reveal.
+    - `:57` 4. Camera action.
+    - `:60` to locked. A moving shot must name a focal point, use a bounded amount, and
+- `docs/content-video-engine/16-EDITORIAL-MOTION-SYSTEM.md:67` — Semantic cut routing — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1245` 9.21 Purpose-built beats reuse, and audience units (operator, 2026-08-30) — h 0.00 / j 0.05 / b 0.00 — 7 rules
+    - `:74` - Academic passages cut to institutions, study, teaching, records, or
+    - `:76` - Martial passages cut to safe, non-instructional practice, contests, or
+    - `:78` - Scenic passages establish a place through ports, rivers, streets,
+    - `:80` - Journey passages cut to a reviewed local map/route surface, then a
+    - `:82` but it never supplies factual geography.
+    - `:83` - Lists receive one distinct action per meaningful item—an object cut-in,
+    - `:85` a list-item rule, not a literal cut on every ordinary noun.
+- `docs/content-video-engine/16-EDITORIAL-MOTION-SYSTEM.md:91` — Positive visual events — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1013` 9.18 Strong match or nothing (operator, 2026-08-30) — h 0.00 / j 0.04 / b 0.00 — 2 rules
+    - `:98` itself. A deletion-only beat leaves the viewer with less information and must
+    - `:100` action. A camera move and a transition effect do not rescue a deletion-only
+- `docs/content-video-engine/16-EDITORIAL-MOTION-SYSTEM.md:104` — 4. Shot grammar — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:278` 8.1 The shape — h 0.00 / j 0.05 / b 0.00 — 6 rules
+    - `:106` The v1 vocabulary is deliberately small:
+    - `:108` - purposes: hook, establish, reveal, explain, detail, reaction, payoff, and
+    - `:110` - scales: wide, medium, medium detail, close, and insert;
+    - `:111` - camera actions: locked, push-settle, pull-settle, lateral reveal, foreground
+    - `:113` - transitions: hard cut, match cut, paper wipe, chapter fade, and crossfade.
+    - `:119` document, page, or chapter change; it must not replace a stronger archival or
+- `docs/content-video-engine/16-EDITORIAL-MOTION-SYSTEM.md:125` — 5. Plan contract — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:146` Part 2 — Momentum mechanics (recovered from hyperframes-opening-v1) — h 0.00 / j 0.03 / b 0.00 — 10 rules
+    - `:128` It binds:
+    - `:130` - storyboard and editorial-beat hashes;
+    - `:131` - scene-bundle and scene-flow hashes;
+    - `:132` - approved asset-map and canonical-audio hashes;
+    - `:133` - an abstract pacing-recipe hash;
+    - `:134` - exact shot timing and narration word ranges;
+    - `:135` - approved asset IDs and layer roles;
+    - `:136` - focal point, shot scale, action ownership, camera phases, transitions, and
+    - `:138` - provider-motion requirement and fallback.
+    - `:144` zero movement duration. Moving-shot phases must sum to the shot duration unless
+- `docs/content-video-engine/16-EDITORIAL-MOTION-SYSTEM.md:147` — 6. Pacing recipe — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1143` 9.13 Plate density is runtime-derived, not a flat floor (operator, 2026-08-25) — h 0.00 / j 0.08 / b 0.00 — 1 rule
+    - `:153` The recipe is research-derived structure only. It cannot contain creator names,
+- `docs/content-video-engine/16-EDITORIAL-MOTION-SYSTEM.md:156` — 7. Provider boundary — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:966` 9.16 Motion verification and authority (operator decisions, 2026-08-29) — h 0.00 / j 0.04 / b 0.00 — 5 rules
+    - `:158` Every shot declares one provider-motion classification:
+    - `:160` - `none`: local layers express the shot;
+    - `:161` - `preferred`: organic motion could improve the shot, but a reviewed local
+    - `:163` - `required`: the shot must be omitted or separately authorized because the
+    - `:167` quarantined until their existing promotion gate passes. Provider clips may
+- `docs/content-video-engine/16-EDITORIAL-MOTION-SYSTEM.md:171` — 8. Revision proof and QC — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:309` 8.3 Do not bury the plate (operator correction, 2026-08-24) — h 0.00 / j 0.07 / b 0.00 — 9 rules
+    - `:174` excerpt. It produces:
+    - `:176` - baseline and revised previews;
+    - `:177` - a diagnostic preview showing shot ID, focal point, motion phase, transform,
+    - `:179` - the motion and pacing contracts;
+    - `:180` - cut-adjacent frame samples and a contact sheet;
+    - `:181` - FFprobe and structural-QC reports; and
+    - `:182` - before/after hashes for every active Gate A artifact.
+    - `:187` escape. Metadata cannot prove cinematic quality, so a human must watch the
+    - `:192` Editorial Motion Proof Gate passes and a separate spending ceiling is approved.
+- `docs/content-video-engine/16-EDITORIAL-MOTION-SYSTEM.md:194` — 9. On-screen text and added-layer policy — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:197` Part 4 — The literal evidence layer (teacher-stamped deck slides) — h 0.00 / j 0.11 / b 0.00 — 7 rules
+    - `:196` - The default is no added text and no added prop. A layer must earn its place.
+    - `:197` - English narration uses platform captions; it is not burned into the landscape
+    - `:199` - Claim citations remain hash-bound to shots but resolve in end credits and the
+    - `:201` - Text that merely restates narration is prohibited. On-screen text is reserved
+    - `:204` - A prop is prohibited when the plate already contains the same semantic object,
+    - `:205` and a non-evidence prop must never be presented as documentary evidence.
+    - `:206` - If text is necessary, it uses a designed surface rather than a generic card.
 
 ### PARTIAL — the target carries some of it — check what it dropped
 
@@ -720,4 +722,6 @@ _none._
 - `docs/content-video-engine/08-TOOLING-ALTERNATIVES.md:16` — marker "deprecated" names no target — (Do NOT build on Imagen 4 — deprecated, shuts down 2026-08-17) |
 - `docs/content-video-engine/README.md:12` — marker "superseded" names no target — Read it for *how* a decision was reached, never for what to do now. | | **DEPRECATED** | Superseded.
 - `docs/content-video-engine/README.md:15` — marker "deprecated" names no target — RECORD and DEPRECATED files carry a status banner at the top.
+- `docs/content-video-engine/TRIAGE-2026-09-05.md:10` — marker "superseded by" names no target — "Superseded by" labels came from compression, not from bad docs — lift the differences, dedupe, never kill.
+- `docs/content-video-engine/TRIAGE-2026-09-05.md:15` — marker "superseded by" names no target — **RETIRE** = strike from the triage list only — the item is already built under another name, superseded by a measurement, or is not a buildable claim.
 - `docs/portable/OPERATOR-RULINGS.md:11` — marker "superseded" names no target — Nothing is deleted when superseded — it is marked SUPERSEDED with a pointer, so the reasoning chain stays legible.

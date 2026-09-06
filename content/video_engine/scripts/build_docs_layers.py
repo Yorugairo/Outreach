@@ -16,6 +16,7 @@ in dependency order, in one process tree, and prints one summary line per layer.
     | 4     | gates-registry | build_gates_registry.py | docs/GATES-REGISTRY.jsonl + .md     |
     | 5     | animation-registry | build_animation_registry.py | docs/ANIMATION-REGISTRY.jsonl + .md |
     | 6     | craft-map      | build_craft_map.py      | docs/CRAFT-MAP.jsonl + .md          |
+    | 7     | doc-overlap    | report_doc_overlap.py   | docs/DOC-OVERLAP.jsonl + .md        |
     | 7     | docs-standard  | audit_docs_standard.py  | docs/DOCS-STANDARD.md               |
 
 A tool that is not in the tree yet is SKIPPED with a printed note, never silently: the stack grows
@@ -55,6 +56,7 @@ LAYERS = (
     Layer("gates-registry", "build_gates_registry.py"),
     Layer("animation-registry", "build_animation_registry.py"),
     Layer("craft-map", "build_craft_map.py"),
+    Layer("doc-overlap", "report_doc_overlap.py"),
     Layer("docs-standard", "audit_docs_standard.py",
           write_args=("--report", REPORT_REL), check_args=None, repo_flag="--root"),
 )

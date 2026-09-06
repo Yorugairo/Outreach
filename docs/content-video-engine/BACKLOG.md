@@ -244,10 +244,10 @@ path stops existing. Each ships with the test named in 47.
 | ~~**T1**~~ | **Curvature-reparameterised stroke** in `drawOn`, with the κ₀ regulariser and width/ink coupling — **landed flag-off 2026-09-05 (P43 T2), human gate pending** | `v(max κ) < v(min κ)` on a cornered path; a straight line returns finite v; `w(max κ) > w(min κ)` — all pass; the sliding mask fails |
 | **T2** | **Analytic spring evaluator**, three damping regimes, the only spring API. **Partly shipped 2026-09-05:** `springPop` (underdamped, with the M_p inverse) behind `kinetics.analytic_spring`, on the badge and caption pops; the critical / overdamped cases and the seek test remain. `minJerk` shipped beside it behind `kinetics.min_jerk` (the wipe front, the suck) | seek test: frame N direct == frames 0..N sequential, bit-identical |
 | ~~**T3**~~ | **Area-preserving squash**, driven by velocity and deceleration — **shipped 2026-09-05 (P43 T4)** | `det(A(t)) == 1` for all t and all α — passes |
-| **T4** | **ARAP morph** with polar decomposition inside | morph through >90° of rotation; `det(J(t)) > 0` at every t |
+| **T4** | **ARAP morph** with polar decomposition inside | morph through >90° of rotation; `det(J(t)) > 0` at every t → P45 T1 |
 | **T0** | **Fix the 9:16 dock geometry** — `scene-evidence-player.template.html:155-162`. Ours: `width 952, left 64`. Safe: `width ≤ 800, x ∈ [80,880]`. We are **136 px into the right rail** where like/comment/share sit. | render one 9:16 frame; assert every dock's bounding box is inside the safe canvas |
-| **T7** | **DQS joint blending** in the figure rig (48 §48.3) | flex a joint 180° at w=0.5; assert `det(T_blend) == 1`. **Linear blend skinning returns the zero matrix** — the candy-wrapper elbow as one assertion |
-| **T8** | **Prop attachment by cached offset matrix** (48 §48.5) | pick a prop up mid-move; world position continuous across the handover frame, and the node's parent never changed |
+| **T7** | **DQS joint blending** in the figure rig (48 §48.3) | flex a joint 180° at w=0.5; assert `det(T_blend) == 1`. **Linear blend skinning returns the zero matrix** — the candy-wrapper elbow as one assertion → P45 T5 (held for D3) |
+| **T8** | **Prop attachment by cached offset matrix** (48 §48.5) | pick a prop up mid-move; world position continuous across the handover frame, and the node's parent never changed → P45 T6 |
 | T5 | Object-page renderer — the template draws registered props on the LP clock | spec side already ships (`--variant object`, 12 tests) |
 | T6 | `object → chart` transform on one page | declared by two Tokyo pages; T4 is its prerequisite |
 
@@ -286,7 +286,7 @@ path stops existing. Each ships with the test named in 47.
 | A2b | **Prop library — retention.** The five Tokyo props validate but do not exist as art: toll gate, empty chair + cold cup + bill, crate stamped with a future year, locked lever, lit fab |
 | ~~A4~~ | **CLOSED 2026-09-05 by the page VORTEX** (29 §9.31): every colour on the page down the drain, then the stains; the reverse is the spiral return. Original: The recede species ("whirlpool") — `spotlight` inverted, radius → 0 |
 | A5 | Actor on the page = hands; `build-f/ledger-hands.html` is an untracked proof |
-| A6 | Expose the chart's coordinate mapper — 43 §43.2's anchor work is its general form |
+| A6 | Expose the chart's coordinate mapper — 43 §43.2's anchor work is its general form → P45 O6 |
 | ~~G2~~ | **CLOSED 2026-09-05 (G2 shipped: `run_short`, `--short/--long`, the audit's short flag; CAPABILITIES row).** Original: Short-runtime mode for `gate_opening_structure.py` — 17 Tokyo FAILs are long-form geometry on a 90 s script. **Measured again 2026-09-04 on the rewrite:** the pinned P1 (0:35) + G18 (≤ 3 marks/min) + G12 (tricolon inside P1) leave a two-second slot for the promise, and P2's seven beats must sit in 0:35–1:05 — fitting a clear script to it clipped the prose until the operator said the sentences did not make sense (v3 → v4 → v5 in `tokyo-tea-break/`). The clean cut passes at 2:20; a 45–60 s short (doc 51) cannot. **Destination: a declared short mode — operator, 2026-09-04, on the Tokyo short (v9): the head-fake and the debate are CUT, the back end is cut, the signpost is one clause ("So, the first number:"); hook → mechanism → the ring survive; **and a short has no late-stage flip** (operator, same day: the threshold / where-we-sit / flip block is a long-form draw-out, cut for 1:30 - so `audit_script_doctrine` doc 35 rule 2 must not bind in short mode either); the brand triad is cut when the take runs over because the outro carries it. Spec it from v11 (`tokyo-tea-break/SCRIPT-90S-VO.claude.txt`, 3 FAILs = exactly the cut beats) with v8-long and ep1 as the long-form fixtures.** |
 | G3 | Stop compressing inter-paragraph silence in `tempo_edit.py` |
 | ~~G4~~ | **CLOSED 2026-09-04** — `tokyo-tea-break/build_short.py` compiles the short onto the 9:16 template (six CLIP worlds, three ledger-page entries); `player.html` is retired. Original: Tokyo `timeline.json` on the 9:16 template; retires `player.html` and its three wrong TIC figures |
@@ -300,9 +300,9 @@ nothing builds**, and four clusters of research neither plan claims.
 
 | gate | checks | but who builds it? |
 |---|---|---|
-| G-i | the composited figure's eyes sit on the plate horizon | **nobody** — no plan locks the horizon |
-| G-j | grounded sprites anchor `50% 100%` and bind to floor velocity | **nobody** — no plan builds the ground binding |
-| G-k | a contact beat declares IK, a free gesture declares FK | **nobody** — no plan builds an IK solver |
+| G-i | the composited figure's eyes sit on the plate horizon | **nobody** — no plan locks the horizon → P45 T8 |
+| G-j | grounded sprites anchor `50% 100%` and bind to floor velocity | **nobody** — no plan builds the ground binding → P45 T3 (TOP) |
+| G-k | a contact beat declares IK, a free gesture declares FK | **nobody** — no plan builds an IK solver → P45 T4 (TOP) |
 
 I excluded G-h (Kubelka-Munk) from P37 precisely because it would FAIL every build with no
 path to green, then did not apply the same test to these three. **P37's T7 lands them on
@@ -313,10 +313,10 @@ needs an owner before they can promote to FAIL.
 
 | cluster | where it goes |
 |---|---|
-| dual shadow, light wrap, substrate grain, horizon lock (48 §48.7-48.8) | **P42** when written — and it is what gives G-i/G-j a path to green |
+| dual shadow, light wrap, substrate grain, horizon lock (48 §48.7-48.8) | **P42** when written — and it is what gives G-i/G-j a path to green → P45 O10, P45 T8 |
 | the 3-zone vertical stage (49 §49.1) | **P41** when written. T0 fixes dock geometry; the stage itself does not exist and we ship shorts |
 | the E1 measurement harness (X1/X2/X3) | **P40** — the only planned work that addresses retention |
-| **multi-plane inpainting, SAM 2 + LaMa (45 §45.5)** | **B6 below — ours, and load-bearing.** G-b bans Depthflow on actor/prop/evidence/text plates and nothing builds the replacement, so today the ban just means those plates hold still |
+| **multi-plane inpainting, SAM 2 + LaMa (45 §45.5)** | **B6 below — ours, and load-bearing.** G-b bans Depthflow on actor/prop/evidence/text plates and nothing builds the replacement, so today the ban just means those plates hold still → P45 T9 |
 | parallax dial fix | **P37 T9** — folded in, no longer deferred |
 | actor idling (48 §48.4), Euler spirals (42 §42.4), the Z-stack (43 §43.3) | slices inside P40/P41; too small to plan alone |
 
@@ -398,9 +398,9 @@ mechanism per short, which is the short-form form of the equation spine. Logged 
 | ~~X15~~ | **CLOSED 2026-09-04 - prose, from our own artifacts, no test roll needed.** `scene-01-02-red-arrow-transformation_meta.json` is 768 chars, zero newlines, no field markers, and it shipped. I had recorded a tutorial's field schema over our own working practice. Original: ~~Fields or prose for Omni Flash?~~ Two tutorials using the same model disagree flatly: one uses a field schema for animation prompts, the other says field formatting is *"the single most important formatting rule"* and breaks the model. **This decides the shape of every animation prompt we send.** | One test roll: same scene, same bound `@Mike`, once as fields and once as prose. Until settled, **prose is the safer default** (53 §53.9). |
 | ~~X16~~ | **WITHDRAWN 2026-09-04 - moot.** Voice is decoupled to ElevenLabs, so the video model never speaks and there is no per-clip word constraint to verify. Original: ~~Does 6 s hold exactly 13 words?~~ A hard production constraint from the same source — over 13 and the line is cut off mid-sentence. If true it is a mechanical gate on any 6-second-clip script. | Measure against our own Kokoro/ElevenLabs timings, which we already have. Cheap. |
 | X6 | **Depth model precision** — `vitl_fp16` (05) vs `vitl_fp32` (06, "fp16 strictly banned, logit underflow"). | One test roll. ViT-Large either way. |
-| X7 | **Euler spiral quality threshold** — how much curvature ripple is too much. | No basis yet. Build the generator; gate later or never. |
+| X7 | **Euler spiral quality threshold** — how much curvature ripple is too much. | No basis yet. Build the generator; gate later or never. → P45 T2 |
 | ~~X10~~ | ~~How does a figure move in our register?~~ **CLOSED 2026-09-04** by [48-THE-FIGURE-AND-THE-GROUND](48-THE-FIGURE-AND-THE-GROUND.md) — the FK/IK boundary, XCOM balance, DQS/BBW rigging, breath and sway, reach and grasp, grounding. Original question below.<br><br>~~ 42–47 cover strokes, springs, morphs, ink and plate motion and say almost nothing about **actor motion** — generated or composited. Exposed by withdrawing G-f: we argued about *how the actor is made* and never wrote down how it should *move*. | Name the motion vocabulary a figure needs (enter, gesture, settle, exit), then decide which is designed out, gated, or judged. Prerequisite: none. |
-| X11 | **Per-material `ζ` / `ω₀`, and the secondary-motion ratio** | T2 gives the model; these are the numbers. Derive by eye against reference footage, or declare them ours and tune. |
+| X11 | **Per-material `ζ` / `ω₀`, and the secondary-motion ratio** | T2 gives the model; these are the numbers. Derive by eye against reference footage, or declare them ours and tune. → P45 T13 |
 | X8 | **Two unverified citations** in the pass-2 rewrite of `08` (Martinez-Conde year/volume, Hasson volume/year). Nothing in 42–47 depends on either. | A library check. Low priority. |
 | ~~X9~~ | ~~Parallax + object page~~ | **CLOSED 2026-09-04** — 45 §45.2 bans parallax on vector evidence and text. Depth on the page comes from the Z-stack instead, which costs no shader and cannot tear. |
 
@@ -410,12 +410,100 @@ Two rounds of delegated lookups (Fable `Explore` vs the Opus `explorer` role) su
 
 | # | item | where it goes |
 |---|---|---|
-| R1 | **The Deegan dark rim** — 44 §44.2 specifies a one-to-two-pixel edge density at the ink boundary (coffee-ring, Deegan 1997); nothing in `kinetics/ink.mjs` or the template draws a perimeter term | Build behind a flag next to `km_ink`; the one cue that separates sumi from a filled vector shape |
+| R1 | **The Deegan dark rim** — 44 §44.2 specifies a one-to-two-pixel edge density at the ink boundary (coffee-ring, Deegan 1997); nothing in `kinetics/ink.mjs` or the template draws a perimeter term | Build behind a flag next to `km_ink`; the one cue that separates sumi from a filled vector shape → P45 T10 |
 | R2 | **Syllable-locked STAGE type** — `FINDING-the-animation-math-and-what-it-changes.md` §(147-150) and its build-order row: pops phase-locked to the 4–8 Hz speech envelope; no `syllab` anywhere in the template | Exploration; needs a syllable timeline from the take (Whisper word times are the input) |
-| R3 | **`arap_morph` is a stub flag** — declared in `KINETICS_DEFAULTS` (template :446) and never read; T4 above is the real item | Fold into T4; the flag-roster test should refuse a declared flag no site reads |
+| R3 | **`arap_morph` is a stub flag** — declared in `KINETICS_DEFAULTS` (template :446) and never read; T4 above is the real item | Fold into T4; the flag-roster test should refuse a declared flag no site reads → P45 F1, F4 |
 | R4 | **The docs index** — SigMap indexes code symbols only, so "animation math" ranked the retired Manim scene; `build_docs_index.py` (**shipped 2026-09-05**, and the body-vocabulary slice the same evening: `terms` per section - inline-code spans, hyphenated/CamelCase tokens, symbols, citations - 2010 records / 140 files; doc 42 now names "the minimum-jerk law" so the term it is searched by is in its own text) emits `docs/DOCS-INDEX.jsonl` (every heading, lead line, bold labels, CAPABILITIES/BACKLOG rows) for one-call `rg`; follow with a labelling pass — every doc's H2 numbered `NN.x`, a lead sentence under every heading | Build; then the explorer role's brief says "rg the index first" |
 | R5 | **A persistent explorer** — continuation is `/resume` in the agent view (CLI only, not the desktop Code tab - docs agent-view.md); `memory: project` is now set on explorer / docs_researcher / reviewer (`.claude/agent-memory/<role>/MEMORY.md`, version-controlled, auto-loaded up to 200 lines) so the map of the tree accumulates across sessions; re-run the benchmark in a later session and compare tool calls, not tokens (an agent's growing context never touches the Fable cap) | Harness; after the docs index lands |
 | R6 | **Negative claims from a delegated agent are verified by the parent** — one Opus miss in ten hard lookups was "07 §5.3 does not exist" (it is `sources/reference_analyses/complete_research_evidence_bundle/07_academic_literature_drawing_and_2_5d_animation_engine.md:311`); the brief now says "not found where I looked", never "does not exist" | Runbook rule; doc 42 §42.2 now names the path |
+
+## P45 triage — 2026-09-05 (the corpus reconciled with what is built)
+
+The judgment pass over the generated registries: [TRIAGE-2026-09-05.md](TRIAGE-2026-09-05.md) —
+54 decisions (5 TOP, 31 BACKLOG, 6 EXPLORE, 12 RETIRE), plan
+[P45](../../.claude/PRPs/plans/P45-CORPUS-RECONCILIATION.plan.md). **Every row below carries its
+triage id and nothing was added in the write-up**; the rulings cited as R1–R8 (operator) and D1–D8
+(the parent's judgments on the architect's eight) are at `P45-CORPUS-RECONCILIATION.plan.md:195-207`.
+Two rows are held for open operator decisions — see **pending D3 / D6** at the end.
+
+### TOP — the next list (each becomes its own order, plan:67)
+
+| id | item — what and where | why / evidence | cost |
+|---|---|---|---|
+| **P45 O1** | **The cadence kinetics module** — frame cadence chosen by translation speed (on-1s / on-2s / on-3s), `briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:185-193` \| The On-1s/On-2s/On-3s Decision Rule | **R2 + D7.** Orphaned in the registry (`ANIMATION-REGISTRY.md:582`) while two stepped clocks already ship hand-tuned with no rule behind them: `SOAK_STEP.FPS 8` (`ANIMATION-REGISTRY.md:84`) and `SP.LIFE_FPS 10` (`:231`), and the operator asked for more step motion this week (`BACKLOG.md:218`). **The source contradicts itself — 250 px/s at `briefs:187`, 100 px/s at `:545` — so test BOTH against those two clocks, report the crossover we actually see, and adopt neither number on the page** | one order |
+| **P45 T4 + P45 T3** | **FK/IK boundary + zero-slip anchoring for the stick lane** — contact resolves IK, free gesture resolves FK, handover blended on the min-jerk quintic (`48-THE-FIGURE-AND-THE-GROUND.md:16,26` \| 48.1); a grounded sprite anchors `50% 100%` and binds to floor velocity (`48…:16` \| 48.7, G-j) | **R4**, the stick lane in flight (E39, `OPERATOR-RULINGS.md:1210-1230`). Tracked in the registry at `ANIMATION-REGISTRY.md:453-456` (FK/IK — the row reads *retired* only because `BACKLOG.md:402` is X10 **closed by doc 48**, a graduation, not a withdrawal) and `:440-446` (zero-slip, 8 records). **G-j and G-k check behaviour nothing builds** (`BACKLOG.md:304-305`) and can only ever INFO until something binds the ground | one order |
+| **P45 X1** | **The motion-authoring order, restored into doc 29** — character/prop action → localized environmental action → information reveal → camera action, `15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:139-149` \| 5. Motion discipline and `16-EDITORIAL-MOTION-SYSTEM.md:48-60` \| 3. Motion ownership | **R1.** Present in both compressed docs and absent from 29: `rg "authored in this order" docs/` returns only those two files and the index copies (`DOCS-INDEX.jsonl:890,905`). Restore the prose **now**, gate only after one episode is measured against it; the "a camera move alone is not a visual event" clause rides with it as EXPLORE (D4 → P45 X2) | one order (lands with T4's lift) |
+| **P45 M13** | **The M13 cut-gap gate in the edit pass** — a cut lands in an acoustic gap ≥ 0.30 s, at 0.8 of the gap, mid-word share ≤ 25 % (`47-FINDINGS-TO-CHECKS.md:202`; 46 §46.3) | **R8.** Not a gate: absent from `GATES-REGISTRY.md` (128 records / 116 ids across the five script-side checkers, `:19` — a scope the registry header now states, D8). What exists is the measurement `content/video_engine/scripts/measure_cut_gaps.py` and one per-project constant, `tokyo-tea-break/build_short.py:33` `CUT_AT = 0.8`. The thresholds were settled from the reference 2026-09-04 (E38, `OPERATOR-RULINGS.md:1196-1208`) and E41 §3 writes M13 into the caption/cut rule (`:1283-1284`) | one order |
+
+### BACKLOG — real work, owned by a plan or a row, not now (29 of 31; two held below)
+
+| id | item — what and where | why / evidence | cost |
+|---|---|---|---|
+| **P45 O6** | **C3 nested coordinate spaces** — `M_world = M_viewport × M_camera × M_ledger × M_chart`, `briefs/…animation-craft.md:431` | A6 already owns it (`BACKLOG.md:289`, expose the chart's coordinate mapper); 43 §43.2's anchor work is its general form | — |
+| **P45 O8** | **43.5 the morph, two methods** — cotangent-weight Laplacian; vertex (A) vs triangle ARAP (B), `43-SCENE-GRAPH-AND-TRANSFORM.md:91` | the same item as P45 T1 under a different name — the heading only reads orphaned because the name differs; dedupe into P38 T4 (`BACKLOG.md:247`) | — |
+| **P45 O10** | **48.8 harmonisation in our tokens** — Koschmieder contrast drift to the cream, 4–12 px light wrap, washi grain κ≈0.12–0.16, `48…:163` | P42's content, and what gives G-i/G-j a path to green (`BACKLOG.md:235`, `:316`); orphaned at `ANIMATION-REGISTRY.md:530` | — |
+| **P45 S3** | **Skinning and deformation** — BBW, DQS, the LBS volume collapse, path morphing, the zero-area proof (`…/09_…grounding.md:192,200,208` and three more) | the live items are P38 T4 (ARAP) and T7 (DQS), `BACKLOG.md:247`, `:249`; the other 19 records are their bibliography | — |
+| **P45 S6** | **Paper and ink physics** — anisotropic Darcy wicking in washi (Chu & Tai 2005), elastic paper, Koschmieder harmonisation (`…/ACADEMIC_LITERATURE…md:146,272`) | 44.3 wicking is a JUDGE row bounded by E22 (`47-FINDINGS-TO-CHECKS.md:131-133`) and deprioritised (`BACKLOG.md:529-530`); K-M was ruled off the soak after six rounds (`:218`); harmonisation rides with P45 O10 | — |
+| **P45 S7** | **Geometry and projection** — the 2.5D stack: transform pipeline, anchor point, Z-stacking, ground projection, homography, disocclusion, contact shadow (24 records) | P42 (grounding) and 43 §43.3 (the Z-stack) own the buildable parts, `BACKLOG.md:235`, `:321`; the ground-plane homography (`…/09_…grounding.md:415`) is the acceptance test G-i/G-j lack | — |
+| **P45 T1** | **ARAP / polar decomposition** — `J=RS`, `det(J(t))>0` at every t, `47-FINDINGS-TO-CHECKS.md:55`; 40 records at `ANIMATION-REGISTRY.md:373-412` | P38 T4 owns it; no object page in the short (`BACKLOG.md:222`), and its flag is declared and unread (P45 F1) | — |
+| **P45 T2** | **Euler spiral / clothoid** — `dκ/ds = const`, minimise `E_MVS=∫(dκ/ds)²ds`, `42-DRAWING-KINETICS.md:112` \| 42.4 | D1 says build, do not gate; the quality threshold is X7 and has no basis yet (`BACKLOG.md:401`) | — |
+| **P45 T6** | **48.5 reach and grasp / prop attachment** — `v_max=1.875·v̄` at τ=0.50, grip aperture peaks at τ≈0.68; attach by cached offset matrix | P38 T8 (`BACKLOG.md:250`); its flag `prop_attach` is declared and unread (P45 F3) | — |
+| **P45 T8** | **48.7 grounding, the eye-line half** — a composited figure's eyes sit on the plate's horizon; the shadow softens with distance (G-i) | P42; the zero-slip half is TOP (P45 T3), the harmonisation half is P45 O10; the gate has no owner today (`BACKLOG.md:303`) | — |
+| **P45 T9** | **Multi-plane geometry / LDIs / inpainting** — `H=K₂(R+tnᵀ/d)K₁⁻¹`, SAM 2 → LaMa → Z-stack cards, `45-PARALLAX-AND-PLATE-MOTION.md` \| 45.5 | **R5**: only if it buys capability beyond parallax — "our other local generation stuff kind of failed on us, except for parallax, which isn't much better than Ken Burns"; B6's ban currently leaves those plates still (`BACKLOG.md:356-360`) | — |
+| **P45 T10** | **The Deegan dark rim (coffee-ring)** — a 1–2 px darker edge density at the ink boundary, `44-INK-AND-SURFACE.md:27` \| 44.2 | **D2**: this week's ink verdict was "actually paint it with ink" (Backlog 9, `BACKLOG.md:219`), not another filter term; the coffee-ring edge was deprioritised 2026-09-04 (`:529-530`) and R1 is a retrieval finding, not a production stumble | — |
+| **P45 T11** | **2.6 pseudo-3D head turns** — cylindrical projection of feature points, sprite swap over 2–3 frames at peak angular velocity | deferred with a trigger — the first shot that turns a head (`BACKLOG.md:518`, D8 row) | — |
+| **P45 T12** | **3.7 two-handed closed kinematic chains** — both wrists lock to a prop's sockets, the prop is the master | the registry's *retired* is a keyword misread (the retire rule fired on the word **closed** in the section title); `BACKLOG.md:519` says deferred with a trigger — the first two-handed prop | — |
+| **P45 T14** | **43.4 dirty flags** — mark a subtree dirty instead of recomputing `M_world` every frame | build, low priority; triggered when node counts grow (`BACKLOG.md:517`) | — |
+| **P45 C1** | **The opening gate's JUDGE rows** — terminal stress (J03), the context-dump ban (J04), the phonetic anchor (J08) | already owned by name and already emitted; the verdict kind is correct — no gap (`CHECK-RESPONSIBILITIES.md:126-128`) | — |
+| **P45 C2** | **The classical nodes outside the gate** — the grand payoff, the chiastic centre, recontextualization, the final triad, best evidence late, the pattern unit | §3c owns all six by name (`CHECK-RESPONSIBILITIES.md:130-145`); the craft map now carries them with `gates: judge`, which is the enumeration they lacked | — |
+| **P45 C3** | **The roster rows the audit does not count** — the callback ledger, the duty roster (`CHECK-RESPONSIBILITIES.md:147-150`) | owned by name; the audit counts what it can and §3d says the rest is the agent's | — |
+| **P45 C4** | **Antecedent integrity** — every sentence opening on a connective or bare pronoun resolves to its predecessor (`patterns/STRENGTH-LOOP.md:84`) | `enumerate_strength_screens.py:19` already enumerates the candidates; only the verdict is human (X1, `CHECK-RESPONSIBILITIES.md:155-156`) | — |
+| **P45 C5** | **The L0 reader's five** — cashed concreteness (S4), the ear test (S6), the delete test (S8), the never-list (S10) | owned by name (`CHECK-RESPONSIBILITIES.md:158-161`); the log is the deliverable | — |
+| **P45 C6** | **The thesis lens** — the script argues one of the standing theses (`patterns/STRENGTH-LOOP.md:96`) | owned, T1–T12 named in §3h (`CHECK-RESPONSIBILITIES.md:180`) | — |
+| **P45 C7** | **The fixpoint loop** — a round that fires no gate but made an edit runs again (`patterns/STRENGTH-LOOP.md:108`) | owned by the runtime sequence, §4 (`CHECK-RESPONSIBILITIES.md:196`) | — |
+| **P45 C8** | **Fourteen judge-only devices with no §3 owner row** — the answer format, peak-end, the dopamine ladder, the assignment, the never-repeat rule, the camera test, the cadence wave, the aside voice, the named-subject rule, the referent test, instrument continuity, mechanisms not prescriptions, the rewrite budget, the enumeration mandate (`CRAFT-MAP.md:35,48,49,53,57,63,66,67,97,103,108,110,111,114`) | by CHECK-RESPONSIBILITIES R4 an unreached device must be named; **D1**: one additive block in §3, not fourteen items — the craft map is generated and a second roster would drift | — |
+| **P45 F1** | **`arap_morph` is a declared flag no site reads** — `samples/scene-evidence-player.template.html:446` | folds into P38 T4 (P45 T1); the flag is a promise the code does not keep (R3, `BACKLOG.md:415`) | — |
+| **P45 F2** | **`dqs_skinning` is a declared flag no site reads** — `…template.html:447` | folds into P38 T7 (P45 T5, held for D3) | — |
+| **P45 F3** | **`prop_attach` is a declared flag no site reads** — `…template.html:448` | folds into P38 T8 (P45 T6) | — |
+| **P45 F4** | **The flag-roster test refuses a declared flag nothing reads** — `content/video_engine/tests/test_kinetics_flags.py` | cheap and mechanical, but it gates nothing we shipped wrong — the three flags above are already known (asked for by R3, `BACKLOG.md:415`) | — |
+| **P45 W1** | **Four shipped gate scripts sit outside the registry scan** — `gate_comfy_config.py`, `gate_grounding.py`, `gate_vertical_safe_box.py`, `judge_muted_caption.py` | **D8**: the scope sentence landed in the registry header with this pass (`docs/GATES-REGISTRY.md`, generated from `build_gates_registry.py`); **extending the scan** waits for the next comfy/grounding gate change — a wrong scope claim is how M13 could have been read as present | — |
+| **P45 W2** | **The research bundle is counted twice** — three scanned files exist byte-identically under `complete_research_evidence_bundle/` (`ANIMATION-REGISTRY.md:606-612`) | dedupe by content hash in `build_animation_registry.py` so the orphan count means what it says (~half of the 128 research-side records are duplicate paths) | — |
+
+### EXPLORE — the first step is a measurement or a read, not a build (6)
+
+| id | item — what and where | why / evidence | cost |
+|---|---|---|---|
+| **P45 S2** | **Figure kinematics / biomechanics** — 2-bone analytical trig IK, the FK-vs-IK boundary, ankle/hip strategies, COM/BOS, respiration (`…/09_…grounding.md:149,182,120,92,252`, 19 records) | the buildable half is already TOP (P45 T3/T4); these are its source derivations — the law of cosines is the whole solver for a two-bone arm, so read them when the rig exists, do not plan them separately | — |
+| **P45 S5** | **Secondary motion and placement dynamics** — appendages as driven damped oscillators, `ÿ+2ζω₀ẏ+ω₀²y = −ẍ_base`, phase lag φ (`…/09_…grounding.md:277` \| 2.8, `:383` \| 3.6) | **this is the buried motion-cohesion research plan T8 was sent to find**: `:283-285` names follow-through, overlapping action and drag, and doc 48 §48.6 lifted only the phase lag out of it | — |
+| **P45 T7** | **48.6 mass before the object moves** — `φ = arctan(2ζ(ω_d/ω₀)/(1−(ω_d/ω₀)²))` on the `M_p` we already adopted | this is what replaced the 0.22 (`BACKLOG.md:516`); plan T8 measures whether the phase lag alone accounts for what we see | — |
+| **P45 T13** | **The 0.22 secondary-motion budget** — `E_secondary = ∫ v_sec² dt ≤ 0.22·E_primary`, lag 2–4 frames, settle ≤ 1.5× primary, `briefs/…animation-craft.md:302-307` | **R3**: measure per motion piece, per scene and per screen (plan T8) and print 0.22 beside each measured ratio; it is a **starting reference** carrying `[DERIVED]` (R6), never a cited finding — already called an invented number at `47-FINDINGS-TO-CHECKS.md:146` | — |
+| **P45 X2** | **"A camera move alone is not a visual event"** — the sub-clause of the authoring order, `15-…:148-149`, `16-…:57` | **D4**: restoring the prose is free (it rides with P45 X1); flipping `SPECIES_EVENTS` — `gate_motion_density.py:108-111` credits `punch` / `push` / `focus_zoom` — re-verdicts every build we have judged, so measure one episode both ways first | — |
+| **P45 X3** | **The 2–6 s plate-hold ceiling** — `16-EDITORIAL-MOTION-SYSTEM.md:42` \| 2. Timing authority | **D5**: the number survives *inside the first minute*, where M10 already applies it (`GATES-REGISTRY.md:121`), and nowhere else — the shipped gate holds `PLATE_HOLD_MAX_S = 20.0` (`gate_motion_density.py:64`); whether 6 s generalises to the whole runtime is a measurement, not a merge | — |
+
+### RETIRE — struck from the triage list only; no doc line is deleted (R7) (12)
+
+| id | item — what and where | why / evidence | cost |
+|---|---|---|---|
+| ~~**P45 O2**~~ | ~~**Dynamic nib pooling** — `w(s)=w₀(v/v_mean)^-0.25` plus a 75° corner-dwell rule, `briefs/…animation-craft.md:295-298`~~ | width/ink coupling ships with our own dials (`kinetics/stroke.mjs:16,39`, `LAMBDA_W 0.12`, `ALPHA_W 1`); the −0.25 exponent is a competing derived number | — |
+| ~~**P45 O3**~~ | ~~**The five overlapping synergies** — a synthesis blurb, `briefs/…animation-craft.md:120`~~ | prose, not a formula; the registry matched a `$`-bearing line inside it — there is nothing to build | — |
+| ~~**P45 O4**~~ | ~~**Analytic mass-spring-damper** — `mẍ+cẋ+kx=0`, ω₀, ζ, the underdamped step response, `briefs/…animation-craft.md:222-224`~~ | shipped: `kinetics/spring.mjs:6-8`, all three regimes (P43 T5, `47-FINDINGS-TO-CHECKS.md:199`) | — |
+| ~~**P45 O5**~~ | ~~**B5 rhythm as a distribution** — shot lengths as a lognormal, `briefs/…animation-craft.md:396`~~ | the tail item it implies is deprioritised by ruling (`BACKLOG.md:526-528`, `47-FINDINGS-TO-CHECKS.md:150`) | — |
+| ~~**P45 O7**~~ | ~~**C6 what Rive / Lottie / Flash got right** — `State(f) = SceneGraph(t = f/fps)`, `briefs/…animation-craft.md:456`~~ | this is what P39 proved and locked: determinism + golden frames (`BACKLOG.md:229`) | — |
+| ~~**P45 S1**~~ | ~~**Stroke kinematics** — arc-length reparameterisation, the κ₀ regulariser, the physiological mandates (20 records)~~ | implemented verbatim in `kinetics/stroke.mjs:5-7,16,38-39` (P43 T2) — a **citation** orphan, not a capability gap: the module cites our numbered doc, never the research file | — |
+| ~~**P45 S4**~~ | ~~**The damping regimes** — the closed-form second-order step response, underdamped / critical / overdamped (14 records)~~ | shipped as `kinetics/spring.mjs:6-8` with the seek test (P43 T5); keeping it open would re-open a closed item | — |
+| ~~**P45 S8**~~ | ~~**LTX mechanics under the hood** — the 3D VAE compression, `num_frames = 8n+1`, latent mask pinning~~ | the frame law is a shipped gate: `gate_comfy_config.py:81-82` (G-m, `47-FINDINGS-TO-CHECKS.md:191`) | — |
+| ~~**P45 S9**~~ | ~~**Word-gap boundary snapping at Δt ≥ 0.45 s** — `…/DRAWING_ENGINE…RESEARCH.md:400-403`~~ | superseded by our own measurement on the reference — 0.30 s, cut at 0.8 of the gap (46 §46.3, X3 closed at `BACKLOG.md:392`); keeping 0.45 would reinstate the error E38 corrected. Keep the method, drop the constant | — |
+| ~~**P45 T15**~~ | ~~**The doc-47 section headings** ("1. DESIGNED OUT", "4. DEMOTED") captured as laws — `ANIMATION-REGISTRY.md:351`, `:361`~~ | registry artifact: the captured text is the squash row (shipped, P43 T4) and the A1-timing-chart row (superseded by `M_p`, `47:147`) — both already decided | — |
+| ~~**P45 X4**~~ | ~~**No facts, dates, labels or quotations inside generated pixels** — `15-…:135-137` \| Fact surfaces~~ | a DUPLICATE in T4's terms: already live as E33 (`OPERATOR-RULINGS.md:1102`), partly in `29-EVIDENCE-MOTION-STANDARDS.md:1070`, and enforced for parallax by G-b — strike in doc 15 with a pointer, never delete | — |
+| ~~**P45 W3**~~ | ~~**89 dial records carry no status** — `ANIMATION-REGISTRY.md:6`, `:138-243`~~ | correct as designed — a dial is a value, not a claim; noted only so the header's 191/96/7/145 is not read as covering dials | — |
+
+### pending D3 / D6 — held until the operator rules
+
+| id | item — what and where | why / evidence | cost |
+|---|---|---|---|
+| **P45 O9** | **48.2 balance — the gesturing figure's hips** — `XCOM = r_COM + v_COM/ω₀`, `ω₀=√(g/l)` (Hof 2005): static COM is not the balance condition, `48-THE-FIGURE-AND-THE-GROUND.md:39` | **D3**: R4 named FK/IK and zero-slip, not balance. A stick figure that *gestures* needs hips. Held: does the lane animate a rig, or swap approved poses? (parent's recommendation: poses first per E40 — that keeps this in BACKLOG) | — |
+| **P45 T5** | **48.3 the rig / DQS / LBS collapse** — joints blend on SE(2) geodesics; LBS returns the zero matrix at 180°, w=0.5 (`ANIMATION-REGISTRY.md:366-367`; P38 T7, `BACKLOG.md:249`) | **D3**, same decision: a stick figure with bending elbows needs DQS; a pose swap does not. TOP only if the lane rigs joints | — |
+| — | **D6 — where `[DERIVED]` stops** — the three live FAIL thresholds computed from our own material: G-c `intensity ≤ 0.18` (`45-PARALLAX-AND-PLATE-MOTION.md:53`), G-o's 12 px legibility floor and its ≥ 59 px consequence (`50-THE-PHONE-IS-THE-SCREEN.md:36,41-48`) — TRIAGE §3, no §1 row | the tagging is plan T5's write set, not a backlog row; **nothing is tagged in those sections until D6 lands** (parent's recommendation: tag all thirteen — a threshold computed from our own template is exactly the class E38 warned about) | — |
 
 ## Routed from the demoted list (47 §4)
 
@@ -423,12 +511,12 @@ Demoted from *doctrine* — not dropped. Each lands as a build item, an explorat
 
 | # | item | where it goes |
 |---|---|---|
-| D1 | **Euler-spiral generator** for procedural curves (arrows, balance arms, connectors, axes) | **Build, do not gate.** Quality threshold is X7. |
+| D1 | **Euler-spiral generator** for procedural curves (arrows, balance arms, connectors, axes) | **Build, do not gate.** Quality threshold is X7. → P45 T2 |
 | D2 | **Per-material `ζ` / `ω₀` values** — paper, metal, fabric, liquid, ink | **Exploration X10.** T2 gives the model; these are the numbers that make it usable, and they are ours to derive. |
 | ~~D3~~ | ~~Secondary-motion ratio~~ | **RESOLVED 2026-09-04** by 48 §48.6 — the analytic phase lag `φ = arctan(2ζ(ω_d/ω₀)/(1−(ω_d/ω₀)²))` on the `M_p` we already adopted. No invented ratio needed. |
-| D4 | **Dirty-flag propagation** in the scene graph | **Build, low priority.** Triggered when node counts grow past hand-tuning — props and rigs will do it. |
-| D8 | **Pseudo-3D head turns** — cylindrical projection, the 35–45° three-quarters gate, sprite swap over 2–3 frames at peak angular velocity (09 §2.6) | **Deferred with a trigger:** the first shot that turns a head. |
-| D9 | **Two-handed closed kinematic chains** — the prop is the master, both wrists lock to its sockets (09 §3.7) | **Deferred with a trigger:** the first two-handed prop. |
+| D4 | **Dirty-flag propagation** in the scene graph | **Build, low priority.** Triggered when node counts grow past hand-tuning — props and rigs will do it. → P45 T14 |
+| D8 | **Pseudo-3D head turns** — cylindrical projection, the 35–45° three-quarters gate, sprite swap over 2–3 frames at peak angular velocity (09 §2.6) | **Deferred with a trigger:** the first shot that turns a head. → P45 T11 |
+| D9 | **Two-handed closed kinematic chains** — the prop is the master, both wrists lock to its sockets (09 §3.7) | **Deferred with a trigger:** the first two-handed prop. → P45 T12 |
 | D5 | **BBW / 2D dual-quaternion skinning** | **Trigger corrected 2026-09-04** (48 §48.3): not a bending prop — **rigging a figure**. Elbows and knees need it immediately, because linear blend skinning returns the zero matrix at 180°. Now a Tier-1 designed-out item in 47 §1. |
 | D6 | **A1 timing chart** | **Closed.** Superseded by `M_p = exp(−πζ/√(1−ζ²))` — the model replaces the table. |
 | D7 | **Grow the shot-length tail** | Deprioritised by ruling — see below. |

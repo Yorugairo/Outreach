@@ -157,5 +157,6 @@ def test_the_committed_tree_passes_check():
         "build_docs_index.py", "build_docs_manifest.py", "build_topic_index.py",
         "build_gates_registry.py",
         "build_animation_registry.py",
-        "build_craft_map.py", "audit_docs_standard.py"]
+        "build_craft_map.py",
+        "report_doc_overlap.py", "audit_docs_standard.py"]
     assert BDL.main(["--check", "--repo", str(ROOT)]) == 0

@@ -181,6 +181,38 @@ persona pass (doc 36 §5, six checks) · thesis lens T1–T12 · dated
 references · promises the script makes about itself · number density ·
 register read aloud · the ear (scratch VO).
 
+### 3i. Devices the craft map holds as judge-only with no owner row above (added 2026-09-05)
+P45 D1 (`docs/content-video-engine/TRIAGE-2026-09-05.md` §1d, row C8). `docs/CRAFT-MAP.md`
+is the **generated** roster — every craft device, its scale, the gate ids that
+enforce it, where it is defined, one exemplar (`build_craft_map.py --check`).
+Fourteen of its `judge` devices are named by no row in §3a–§3h: no tool decides
+them and nobody was told to. By **R4** they are the agent's *by name*, verdicted
+every run like every other §3 row (NOT RUN is a verdict; omission is not), and
+reported under §5. This block points at the craft map rather than copying its
+columns — the map is generated, and a second hand-kept roster would drift.
+
+| Device | Scale | Defined (the section that states it) | Craft map |
+|---|---|---|---|
+| the answer format | L6 | `35-ANSWER-FORMAT-DOCTRINE.md:87` · `docs/portable/DOCTRINE-CORE.md:152` | `docs/CRAFT-MAP.md:35` |
+| the assignment | L5 | `patterns/phase-guides/P6.md:83` · `docs/portable/DOCTRINE-CORE.md:40` | `docs/CRAFT-MAP.md:48` |
+| peak-end | L5 | `31-FACELESS-CHANNEL-DOCTRINE.md:188` · `patterns/FULL-VIDEO-MAP.md:227` | `docs/CRAFT-MAP.md:49` |
+| the dopamine ladder | L5 | `31-FACELESS-CHANNEL-DOCTRINE.md:39` · `patterns/FULL-VIDEO-MAP.md:69` | `docs/CRAFT-MAP.md:53` |
+| the never-repeat rule | L5 | `31-FACELESS-CHANNEL-DOCTRINE.md:116` | `docs/CRAFT-MAP.md:57` |
+| the enumeration mandate | L6 | `patterns/STRENGTH-LOOP.md:165` · this file §5 (the enumeration mandate; line numbers move, cite the section) | `docs/CRAFT-MAP.md:63` |
+| instrument continuity | L6 | `patterns/STRENGTH-LOOP.md:96` | `docs/CRAFT-MAP.md:66` |
+| mechanisms not prescriptions | L6 | `docs/portable/DOCTRINE-CORE.md:172`, `:191` | `docs/CRAFT-MAP.md:67` |
+| the camera test | L0 | `31-FACELESS-CHANNEL-DOCTRINE.md:116` · `32-WRITING-FOR-THE-EAR.md:148` | `docs/CRAFT-MAP.md:97` |
+| the cadence wave | L1 | `32-WRITING-FOR-THE-EAR.md:75` · `patterns/STRENGTH-LOOP.md:42` | `docs/CRAFT-MAP.md:103` |
+| the named-subject rule | L1 | `patterns/SENTENCE-STRENGTH-CHECK.md:37`, `:77` | `docs/CRAFT-MAP.md:108` |
+| the referent test | L1 | `docs/portable/VOICE-PACK.md:156` · `patterns/STRENGTH-LOOP.md:42` | `docs/CRAFT-MAP.md:110` |
+| the aside voice | L1 | `31-FACELESS-CHANNEL-DOCTRINE.md:134` · `docs/portable/VOICE-PACK.md:156` | `docs/CRAFT-MAP.md:111` |
+| the rewrite budget | L0 | `patterns/STRENGTH-LOOP.md:138` | `docs/CRAFT-MAP.md:114` |
+
+Bare `NN-NAME.md` and `patterns/…` are under `docs/content-video-engine/`. The
+craft-map line numbers are its 2026-09-05 generation; the device name is the
+stable key (`rg -i "<device>" docs/CRAFT-MAP.md`). §4 step 2 reads
+"3c–3i by name" — this block is part of that pass.
+
 ## 4. The runtime sequence
 
 ```
@@ -192,7 +224,7 @@ register read aloud · the ear (scratch VO).
        writes <script>-GATES.md: the §5 TOOLS line, each tool's stdout verbatim,
        script_hash, VERDICT; exit 1 on any FAIL. Recording refuses without a
        current PASS report (--force "<reason>" overrides, reason into the take manifest).
-2. AGENT: 3a declared-beat verdicts · 3b JUDGE rows · 3c–3h by name
+2. AGENT: 3a declared-beat verdicts · 3b JUDGE rows · 3c–3i by name
 3. Fix; re-run 1 (X2–X4 are re-runs, not memory); loop to a fixpoint
 4. Report per §5
 ```
@@ -209,7 +241,7 @@ VIEWER     V01 recall N/M (unperceived: [tag]@w…) · V04 confusion · V05 gain
            (V01 FAIL and V04 WARN bind since P36 HG1; NOT RUN is legal, with a reason)
 JUDGE      J01 "<line>" -> verdict … J11                     (one per row)
 P3–P6      each §3c node -> verdict / NOT RUN
-ROSTER     each §3d row -> count + verdict / NOT RUN
+ROSTER     each §3d row -> count + verdict / NOT RUN (and, since 2026-09-05, the §3i devices the craft map holds as judge-only: one verdict line each, by name)
 LOOP       L1/L2/L3/L6 findings; X1 from screens (K verdicted); X2–X4 re-run
 L0         log: original -> gates failed -> final, every rewrite
 EVIDENCE   figures traced: n/n; quotes verbatim: y/n

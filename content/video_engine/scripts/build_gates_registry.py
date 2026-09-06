@@ -634,6 +634,13 @@ def render_md(records: list[dict], repo_root: Path = REPO) -> str:
         "",
         f"{len(records)} records, {len(ids)} distinct ids, across {len(FAMILY)} checkers.",
         "",
+        "**Scope (P45 D8, 2026-09-05).** This scan reads the "
+        f"{len(FAMILY)} script-side checkers only - "
+        + ", ".join(f"`{name}`" for name in FAMILY)
+        + " - so four shipped gate scripts are outside it and their ids are absent here rather "
+          "than unbuilt: `gate_comfy_config.py`, `gate_grounding.py`, "
+          "`gate_vertical_safe_box.py` and `judge_muted_caption.py`.",
+        "",
     ]
     body: list[str] = []
     for family in FAMILIES:

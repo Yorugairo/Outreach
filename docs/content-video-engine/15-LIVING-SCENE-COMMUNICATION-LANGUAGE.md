@@ -2,6 +2,8 @@
 
 > **STATUS: RECORD.** A point-in-time research note, review, or planning document. Not maintained, and not current doctrine — read it for how a decision was reached, not for what to do now. Live doctrine is indexed in [README.md](README.md).
 
+> **STATUS: COMPRESSED INTO 29 (2026-09-05).** Not superseded: the compression kept doc 29 short; `docs/DOC-OVERLAP.md` lists every section here that 29 does not carry (23 delta sections, 52 rule lines). Four rules were lifted into 29 §9.32 on 2026-09-05; the rest stands as detail. Consult this doc for it.
+
 *Specification of record for P13 living-scene communication and motion.*
 
 ## 1. Product decision

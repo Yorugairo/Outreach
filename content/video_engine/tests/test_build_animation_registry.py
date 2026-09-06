@@ -8,8 +8,9 @@ each status with the evidence that produced it. `closed-form` is not `closed`.
 
 The last block runs over the REAL repository and asserts today's findings, which is the reason the
 tool exists: the two-thirds power law is implemented in `stroke.mjs` and nobody calls it by name;
-zero-slip is tracked and unbuilt; On-1s / On-2s is orphaned; the secondary-motion 0.22 ratio is
-retired as an invented number.
+zero-slip is tracked and unbuilt; the secondary-motion 0.22 ratio is retired as an invented number;
+and the three citation orphans the 2026-09-05 triage found (07 §1.2, the damping regimes, the LTX
+`8n+1` frame law) read implemented through the chain that reaches them.
 """
 from __future__ import annotations
 
@@ -22,6 +23,7 @@ import pytest
 ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT / "content/video_engine/scripts"))
 
+import animation_registry_render as ARR  # noqa: E402  (the Markdown face, split out 2026-09-05)
 import build_animation_registry as BAR  # noqa: E402
 import build_docs_index as BDI  # noqa: E402
 import build_topic_index as BTI  # noqa: E402
@@ -33,6 +35,8 @@ DOC_48_REL = "docs/content-video-engine/48-FAKE-FIGURE.md"
 BACKLOG_REL = "docs/content-video-engine/BACKLOG.md"
 CHECKS_REL = "docs/content-video-engine/47-FINDINGS-TO-CHECKS.md"
 TEST_REL = "content/video_engine/tests/test_fake_kinetics.py"
+RESEARCH_REL = f"{BAR.SOURCES_DIR}/07_academic_literature_fake.md"
+RESEARCH_INDEX_REL = BAR.RESEARCH_INDEX_REL
 
 MODULE = (
     "/* kinetics/fake.mjs - the fake stroke (42 s42.1; FINDING-the-fake-math s1). Inlined into\n"  # 1
@@ -66,7 +70,7 @@ DOC_42 = (
     "\n"                                                                        # 2
     "## 42.1 The stroke — curvature-reparameterised drawing\n"                  # 3
     "\n"                                                                        # 4
-    "The law is the two-thirds power law of Viviani.\n"                         # 5
+    "The law is the two-thirds power law of Viviani, out of `07` §1.2.\n"       # 5
     "\n"                                                                        # 6
     "$$v = \\gamma (\\kappa + \\kappa_0)^{-1/3}$$\n"                            # 7
     "\n"                                                                        # 8
@@ -95,6 +99,14 @@ DOC_48 = (
     "### A6: The Secondary-Motion Budget\n"                                     # 13
     "\n"                                                                        # 14
     "$$E_{secondary} \\le 0.22 · E_{primary}$$\n"                               # 15
+    "\n"                                                                        # 16
+    "### 3.7 Two-Handed Closed Kinematic Chains\n"                              # 17
+    "\n"                                                                        # 18
+    "Both wrists lock to the prop: p = M_prop · s^socket.\n"                    # 19
+    "\n"                                                                        # 20
+    "### 4.2 Grasp aperture\n"                                                  # 21
+    "\n"                                                                        # 22
+    "The aperture peaks: a = 0.68 · τ^2.\n"                                     # 23
 )
 
 BACKLOG = (
@@ -103,6 +115,7 @@ BACKLOG = (
     "| id | item | why |\n"                                                     # 3
     "|---|---|---|\n"                                                           # 4
     "| **G-j** | **zero-slip anchoring** — sprites bind to floor velocity (48 s48.7) | foot slide |\n"  # 5
+    "| D9 | **Two-Handed Closed Kinematic Chains** — the prop is the master | **Deferred with a trigger:** the first two-handed prop. |\n"  # 6
 )
 
 CHECKS = (
@@ -113,6 +126,40 @@ CHECKS = (
     "| **A6 secondary-motion ratio (0.22)** | An invented number. |\n"          # 5
     "| **42.2 closed-form springs** | shipped 2026-09-05 |\n"                   # 6
     "| **42.3 squash** | `det(A) = 1` for all α, by construction | the tolerance test |\n"  # 7
+    "| **4.2 Grasp aperture** | ~~open~~ **CLOSED 2026-09-04** by doc 48 |\n"   # 8
+)
+
+# one numbered research file, the way the bundle numbers them: the module cites OUR doc, our doc
+# cites `07` §1.2, and the RESEARCH-INDEX row carries §3.1 the other way. §9.9 is reached by neither.
+RESEARCH = (
+    "# 07 — Fake academic literature\n"                                         # 1
+    "\n"                                                                        # 2
+    "## 1.2 Fake Arc-Length Reparameterisation\n"                               # 3
+    "\n"                                                                        # 4
+    "$$v(s) = \\gamma (|\\kappa| + \\kappa_0)^{-1/3}$$\n"                       # 5
+    "\n"                                                                        # 6
+    "### The regulariser\n"                                                     # 7
+    "\n"                                                                        # 8
+    "$$\\kappa_0 = (v_{max} / \\gamma)^{-3}$$\n"                                # 9
+    "\n"                                                                        # 10
+    "## 3.1 Fake Damping Regimes\n"                                             # 11
+    "\n"                                                                        # 12
+    "$$x(t) = 1 - e^{-\\zeta \\omega t}$$\n"                                    # 13
+    "\n"                                                                        # 14
+    "## 9.9 Reached by nobody\n"                                                # 15
+    "\n"                                                                        # 16
+    "$$q = p^2$$\n"                                                             # 17
+)
+
+RESEARCH_INDEX = (
+    "# Research index\n"                                                        # 1
+    "\n"                                                                        # 2
+    "### `07_academic_literature_fake.md` — 4 headings\n"                       # 3
+    "\n"                                                                        # 4
+    "| heading | disposition |\n"                                               # 5
+    "|---|---|\n"                                                               # 6
+    "| 3.1 Fake Damping Regimes | EXTRACTED -> 42 SS42.1 |\n"                   # 7
+    "| 9.9 Reached by nobody | RECORD - nothing took it |\n"                    # 8
 )
 
 FINDING_REL = "docs/content-video-engine/FINDING-the-fake-math-and-what-it-changes.md"
@@ -126,6 +173,7 @@ FINDING = (
 
 FILES = {MODULE_REL: MODULE, TEMPLATE_REL: TEMPLATE, DOC_42_REL: DOC_42, DOC_48_REL: DOC_48,
          BACKLOG_REL: BACKLOG, CHECKS_REL: CHECKS, FINDING_REL: FINDING,
+         RESEARCH_REL: RESEARCH, RESEARCH_INDEX_REL: RESEARCH_INDEX,
          TEST_REL: "def test_fake_draw():\n    assert fakeDraw(1) == 0.5\n"}
 
 
@@ -289,6 +337,84 @@ def test_closed_form_is_not_closed() -> None:
     assert BAR.RETIRED_WORD.search("An invented number.")
 
 
+# --- the citation chain -------------------------------------------------------------------
+
+def test_a_research_section_our_doc_cites_inherits_the_modules_status_with_the_chain(records) -> None:
+    # Arrange / Act - fake.mjs cites 42 §42.1, and 42 §42.1's body cites `07` §1.2
+    rec = _one(records, "formula", "1.2 Fake Arc-Length Reparameterisation", line=5)
+
+    # Assert - the research section is not an orphan: it is what the module implements, and the
+    # evidence is the whole chain, starting at the header line the citation is written on
+    assert rec["status"] == "implemented"
+    assert rec["status_evidence"] == [f"{MODULE_REL}:1 → 42§42.1 → 07§1.2"]
+
+
+def test_the_chain_covers_the_subsections_of_the_section_it_reaches(records) -> None:
+    rec = _one(records, "formula", "The regulariser")
+
+    # `07 §1.2` reaches §1.2 and everything stated under it - the regulariser is inside that span
+    assert rec["status"] == "implemented"
+    assert all("42§42.1 → 07§1.2" in e for e in rec["status_evidence"])
+
+
+def test_a_research_index_row_carries_the_chain_where_the_doc_body_does_not(records) -> None:
+    rec = _one(records, "formula", "3.1 Fake Damping Regimes")
+
+    # nothing in doc 42 cites `07` §3.1; RESEARCH-INDEX's `| 3.1 … | EXTRACTED -> 42 SS42.1 |` does,
+    # and `SS` is the spelling the citation graph cannot see
+    assert rec["status"] == "implemented"
+    assert all(e.endswith("→ 42§42.1 → 07§3.1") for e in rec["status_evidence"])
+
+
+def test_a_research_section_no_chain_reaches_is_still_an_orphan(records) -> None:
+    rec = _one(records, "formula", "9.9 Reached by nobody")
+
+    # its RESEARCH-INDEX row is a RECORD disposition with no doc reference: nothing took it
+    assert (rec["status"], rec["status_evidence"]) == ("orphaned", [])
+
+
+# --- retirement is a verdict, not a word --------------------------------------------------
+
+def test_the_word_closed_inside_a_title_does_not_retire_the_row_it_names(records) -> None:
+    rec = _one(records, "formula", "3.7 Two-Handed Closed Kinematic Chains")
+
+    # D9's verdict is "Deferred with a trigger"; `closed` sits in the bolded item title
+    assert rec["status"] == "tracked"
+    assert rec["status_evidence"] == [f"{BACKLOG_REL}:6"]
+
+
+def test_closed_by_a_doc_is_a_graduation_and_carries_the_doc_it_graduated_to(records) -> None:
+    rec = _one(records, "formula", "4.2 Grasp aperture")
+
+    # "**CLOSED 2026-09-04** by doc 48" retires nothing - the question became a written standard
+    assert rec["status"] == "tracked"
+    assert rec["status_evidence"] == [f"{CHECKS_REL}:8", f"{DOC_48_REL}:1"]
+
+
+def test_a_row_is_read_for_the_verdict_it_states_not_for_a_word_in_its_title() -> None:
+    assert BAR.retirement("| D9 | **Two-Handed Closed Kinematic Chains** | deferred |") is None
+    assert BAR.retirement("| A6 | An invented number. |") == "retired"
+    assert BAR.retirement("| ~~X10~~ | **CLOSED 2026-09-04** by [48-X](48-X.md) |") == "graduated"
+    assert BAR.retirement("| 42.2 spring | **shipped** | the closed form is stateless |") is None
+
+
+# --- provenance ----------------------------------------------------------------------------
+
+def test_a_row_calling_a_figure_invented_makes_it_derived(records) -> None:
+    assert _one(records, "formula", "A6: The Secondary-Motion Budget")["provenance"] == "derived"
+
+
+def test_a_section_that_reaches_a_research_file_is_sourced(records) -> None:
+    # the research file itself, and our own section whose body cites it
+    assert _one(records, "formula", "3.1 Fake Damping Regimes")["provenance"] == "sourced"
+    assert _one(records, "formula", "two-thirds power law")["provenance"] == "sourced"
+
+
+def test_a_figure_with_nothing_behind_it_is_unsourced(records) -> None:
+    assert _one(records, "formula", "On-1s / On-2s")["provenance"] == "unsourced"
+    assert _one(records, "formula", "zero-slip")["provenance"] == "unsourced"
+
+
 # --- artifacts ----------------------------------------------------------------------------
 
 def test_the_build_is_deterministic_and_write_is_byte_identical_twice(tmp_path: Path) -> None:
@@ -350,9 +476,15 @@ def test_the_two_thirds_power_law_is_implemented_and_stroke_mjs_is_the_evidence(
                for r in hits for e in r["status_evidence"]), [r["status_evidence"] for r in hits]
 
 
-def test_zero_slip_is_tracked_and_on_1s_is_orphaned(real) -> None:
+def test_zero_slip_and_the_cadence_rule_are_tracked_and_unbuilt(real) -> None:
+    # zero-slip: G-j tracks it, a gate checks a proxy, and nothing binds the ground - the gate's
+    # citation of 48 §48.7 is not an implementation, so the row's verdict stands
     assert {r["status"] for r in _named(real, "formula", "zero-slip")} == {"tracked"}
-    assert {r["status"] for r in _named(real, "formula", "On-1s / On-2s")} == {"orphaned"}
+    # On-1s / On-2s was the orphan of 2026-09-05 and the triage opened P45 O1 for it that day
+    cadence = _named(real, "formula", "On-1s / On-2s")
+    assert {r["status"] for r in cadence} == {"tracked"}
+    assert all(e.startswith("docs/content-video-engine/BACKLOG.md")
+               for r in cadence for e in r["status_evidence"]), "no code may name the cadence rule"
 
 
 def test_the_secondary_motion_ratio_is_retired_by_the_doc_47_row(real) -> None:
@@ -362,6 +494,57 @@ def test_the_secondary_motion_ratio_is_retired_by_the_doc_47_row(real) -> None:
     assert hits, "not found in the real registry: a Secondary-Motion formula carrying 0.22"
     assert {r["status"] for r in hits} == {"retired"}
     assert any("47-FINDINGS-TO-CHECKS.md" in e for r in hits for e in r["status_evidence"])
+
+
+def _at(records: list[dict], name_part: str, heading_part: str) -> list[dict]:
+    hits = [r for r in records if r["kind"] == "formula" and name_part in r["path"]
+            and heading_part in (r["section"] or "")]
+    assert hits, f"not found in the real registry: {heading_part!r} in a path holding {name_part!r}"
+    return hits
+
+
+def test_the_three_citation_orphans_the_triage_found_are_implemented_through_their_chain(real) -> None:
+    # TRIAGE-2026-09-05 §1b, rows S1 / S4 / S8: shipped verbatim, orphaned only because the module
+    # cites our doc and the doc's research section was never linked back
+    arc = _at(real, "ACADEMIC_LITERATURE", "1.2 Kinematic Arc-Length")
+    damping = _at(real, "ACADEMIC_LITERATURE", "Derivation of Damped Harmonic Oscillator")
+    frames = _at(real, "UNIFIED_LEDGER", "4.1 Mechanics Under the Hood")
+
+    assert {r["status"] for r in arc} == {"implemented"}
+    assert all("stroke.mjs" in e for r in arc for e in r["status_evidence"])
+    assert {r["status"] for r in damping} == {"implemented"}
+    assert any("spring.mjs" in e for r in damping for e in r["status_evidence"])
+    assert {r["status"] for r in frames} == {"implemented"}
+    assert any("gate_comfy_config.py" in e for r in frames for e in r["status_evidence"])
+
+
+def test_the_two_handed_chains_row_tracks_it_and_the_word_closed_in_its_title_does_not_retire_it(real) -> None:
+    hits = _at(real, "09_2d", "Closed Kinematic Chains")
+
+    # TRIAGE T12: `BACKLOG.md` defers D9 with a trigger; the retire keyword was reading the title
+    assert {r["status"] for r in hits} == {"tracked"}
+
+
+def test_every_formula_record_carries_one_of_the_three_provenances(real) -> None:
+    formulas = [r for r in real if r["kind"] == "formula"]
+
+    assert {r["provenance"] for r in formulas} <= set(ARR.PROVENANCE_ORDER)
+    assert all(r.get("provenance") for r in formulas)
+    # a research-side record is never unsourced - it IS the source. It can still be derived: doc 47
+    # calls the 0.22 an invented number, and that verdict reaches the bundled copy of the brief too
+    assert "unsourced" not in {r["provenance"] for r in formulas
+                               if r["path"].startswith(BAR.SOURCES_DIR)}
+    assert {r["provenance"] for r in formulas if "0.22" in r["expr"]
+            and "Secondary-Motion" in r["name"]} == {"derived"}
+
+
+def test_the_chain_cut_the_research_side_orphans(real) -> None:
+    orphans = [r for r in real if r["kind"] == "formula" and r["status"] == "orphaned"]
+
+    # 107 formula records were orphaned before the chain read the research layer (2026-09-05)
+    assert 0 < len(orphans) < 107, len(orphans)
+    assert all(BAR.CHAIN_ARROW not in e for r in real if r["kind"] == "formula"
+               and r["status"] != "implemented" for e in r["status_evidence"])
 
 
 def test_the_shipped_kinetics_symbols_carry_their_flag_and_their_tests(real) -> None:
