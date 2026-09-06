@@ -138,3 +138,33 @@ dispatch: six `path:line - what` lines plus two traps no doc records ("the dir i
 say il-tea-break - grep both"; "the index's 'bed' hits are 'embed' noise - search lufs/bed_gain"). It landed in
 the **worktree** (`project` scope = the session's project dir), so the roles now use `memory: user`
 (`~/.claude/agent-memory/<role>/`), keyed by repo; the map moved there. Continuation (`/resume`) is CLI-only.
+
+## Round 4 — the discoverability delta (same day, same prompts, same Opus `explorer`, the layers present)
+
+Layers added between rounds 2 and 4: the docs index with body terms (roots: docs, the sources bundle, the projects' evidence
+layer), the manifest, the topic index + citation graph, the gates / animation / craft registries, `memory: local` on the role.
+Nine of the ten questions re-run (Q7 not re-run). "Before" = the Opus role's rounds 1-2 figures.
+
+| Q | before tokens / tools / s | after tokens / tools / s | verdict |
+|---|---|---|---|
+| 1 cut-gap rule | 31,275 / 6 / 27 | 33,865 / 4 / 24 | ✓ |
+| 2 min-jerk | 31,311 / 7 / 29 | 40,883 / 5 / 26 | ✓ |
+| 3 mount | 34,294 / 8 / 32 | 42,642 / 7 / 30 | ✓ |
+| 4 caption budgets | 30,318 / 7 / 32 | 33,720 / 5 / 19 | ✓ |
+| 5 bed loudness | 28,790 / 3 / 18 | 35,071 / 6 / 146 | ✓ (one slow run) |
+| 6 spring derivation | 42,136 / 7 / 34 — **false negative** | 46,090 / 5 / 37 | ✓ — found the research bundle; the gap phrased "not found in the roots searched" |
+| 8 hedged-yield evidence | 55,704 / 11 / 65 | 54,970 / 11 / 94 before the projects root; **47,955 / 11 / 60 after** | ✓ — the evidence layer had to be IN the roots |
+| 9 caption constants | 38,308 / 9 / 81 | 41,424 / 10 / 66 | ✓ |
+| 10 documented-but-unbuilt | 46,907 / 12 / 72 | 70,164 / 12 / 82 | ✓ — richer (cites the day's new backlog rows), heavier |
+| | **338k / 70 / 390 s — 8.5/9** | **392k / 65 / 488 s — 9/9** | |
+
+- **Accuracy:** the false negative is gone; every negative claim now names the roots searched. That was the failure mode the
+  operator flagged, and the layers closed it.
+- **Tool calls:** down 7 % overall, down 25-40 % on the well-specified questions (Q1, Q2, Q4).
+- **Tokens: up 16 %.** A grep on a layer returns whole JSONL records (an index record carries lead + labels + up to 12
+  terms; a manifest record carries headings, labels and leads), so each hit costs more than a `grep -n` line did. The
+  layers buy accuracy and fewer hops at a per-hit price. Fix queued: a query helper that prints one compact line per hit
+  (`path:line — heading`) with a hit cap, so the agent reads a window only where it decides to.
+- **Time:** mixed; two slow runs (Q5, the first Q8) were the built-in-grep straggler pattern, not the layers.
+- **What this establishes:** same harness, same model, same prompts, layers added - a clean before/after on accuracy and
+  hops; the token line is the honest cost of the current output shape, not of the idea.
