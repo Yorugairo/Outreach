@@ -3,6 +3,7 @@ name: speedster
 description: Quick-cast software intern for deterministic edits, exact discovery, and narrow verification. Use for the `speedster` role named in docs/runbooks/PRP_EXECUTION.md.
 tools: Read, Grep, Glob, Edit, Write, Bash
 model: sonnet
+effort: low
 ---
 
 <!-- Ported from .codex/agents/speedster.toml (the Codex side keeps its OpenAI model). Claude side: model policy 2026-09-05 -

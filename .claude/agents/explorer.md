@@ -4,6 +4,7 @@ description: Read-only codebase explorer for gathering evidence before changes a
 tools: Read, Grep, Glob, Bash
 model: opus
 memory: user
+effort: high
 ---
 
 <!-- Ported from .codex/agents/explorer.toml (the Codex side keeps its OpenAI model). Claude side: model policy 2026-09-05 -

@@ -163,3 +163,6 @@ content/video_engine/tests/golden/diffs/
 # reference audio is downloaded for measurement, never committed; the Whisper word timeline beside it is
 content/video_engine/sources/reference_analyses/**/audio/*.m4a
 content/video_engine/sources/reference_analyses/**/audio/*.mp3
+
+# per-machine dispatch ledger written by the SubagentStop hook (~/.claude/hooks/dispatch_ledger.py); summarised into evals/*.md by hand
+evals/DISPATCH-LOG.jsonl

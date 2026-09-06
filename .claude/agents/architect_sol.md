@@ -3,6 +3,7 @@ name: architect_sol
 description: Lead architect and planner for repository research and implementation-ready PRP drafts. Use for the `architect_sol` role named in docs/runbooks/PRP_EXECUTION.md.
 tools: Read, Grep, Glob, Edit, Write, Bash, WebFetch, WebSearch
 model: opus
+effort: high
 ---
 
 <!-- Ported from .codex/agents/architect_sol.toml (the Codex side keeps its OpenAI model). Claude side: model policy 2026-09-05 -

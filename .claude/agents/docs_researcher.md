@@ -4,6 +4,7 @@ description: Read-only documentation specialist for APIs, framework behavior, an
 tools: Read, Grep, Glob, Bash, WebFetch, WebSearch
 model: opus
 memory: user
+effort: high
 ---
 
 <!-- Ported from .codex/agents/docs_researcher.toml (the Codex side keeps its OpenAI model). Claude side: model policy 2026-09-05 -

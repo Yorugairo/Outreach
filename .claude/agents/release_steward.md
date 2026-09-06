@@ -3,6 +3,7 @@ name: release_steward
 description: Git steward for reviewed commits and explicitly authorized pushes. Use for the `release_steward` role named in docs/runbooks/PRP_EXECUTION.md.
 tools: Read, Grep, Glob, Bash
 model: opus
+effort: high
 ---
 
 <!-- Ported from .codex/agents/release_steward.toml (the Codex side keeps its OpenAI model). Claude side: model policy 2026-09-05 -

@@ -111,6 +111,12 @@ slice's validation itself before integrating.
 | Sonnet 5 (`speedster`) | deterministic edits with the exact line given; never a lookup with a judgement in it | Haiku did the one sampled edit correctly at 23 k tokens, but the overhead is the whole cost, so the cheaper model saves nothing and a plausible wrong edit costs a review round - Sonnet (operator, 2026-09-05) |
 | Haiku 4.5 | nothing in this repo | — |
 
+**Effort (operator, 2026-09-05):** `effort: high` on Fable and every Opus role - high is the efficient frontier and
+governs how deep research goes and how well attention holds over a long integration; `effort: low` on the Sonnet
+`speedster`, which must execute the exact command given and not think about how else to improve. A zero-token
+`SubagentStop` command hook (`~/.claude/hooks/dispatch_ledger.py`) appends every dispatch's usage to
+`evals/DISPATCH-LOG.jsonl` (gitignored, per machine) - the data for tuning these later.
+
 Separate search and implementation agents: yes - their memories are different maps (`explorer`:
 where things live; `implementation_luna`: patterns and pitfalls) and contexts never share in this
 harness anyway. Persistence is per-agent memory (`memory: user` - sessions run in worktrees, so
