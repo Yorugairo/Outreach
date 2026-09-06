@@ -14,8 +14,8 @@ item, a quote, a table row or a fence.
 | Group | Files | Headings | Lead % | Termed % | Generic | Median score |
 |---|---:|---:|---:|---:|---:|---:|
 | Research (`docs/research/**`) | 9 | 149 | 91.3% | 88.6% | 3 | 96.0 |
-| Process (everything else) | 245 | 2907 | 97.6% | 91.6% | 9 | 100.0 |
-| All docs | 254 | 3056 | 97.3% | 91.5% | 12 | 100.0 |
+| Process (everything else) | 245 | 2909 | 97.6% | 91.6% | 9 | 100.0 |
+| All docs | 254 | 3058 | 97.3% | 91.5% | 12 | 100.0 |
 
 ## The 20 lowest-scoring docs
 
@@ -94,11 +94,11 @@ Non-exempt sections whose first real line is under 40 characters (83).
 - `docs/research/2026-07-26-product-strength-competitive-research.md:374` Layer 3: methodology and export
 - `docs/research/2026-07-28-accretive-revenue-assessment.md:287` 6. 30 / 60 / 90
 - `docs/research/2026-08-22-agent-design-tooling-assessment.md:1` Agent-Native Design Tooling: Buy, Borrow, or Build
-- `docs/research/motion/WEALTH_LOGIC_TRANSITIONS_RESEARCH_BLUEPRINT.md:11` 1. Hard cut
-- `docs/research/motion/WEALTH_LOGIC_TRANSITIONS_RESEARCH_BLUEPRINT.md:18` 3. Wipe
-- `docs/research/motion/WEALTH_LOGIC_TRANSITIONS_RESEARCH_BLUEPRINT.md:21` 4. Push
-- `docs/research/motion/WEALTH_LOGIC_TRANSITIONS_RESEARCH_BLUEPRINT.md:28` 6. World-persists
-- `docs/research/motion/WEALTH_LOGIC_TRANSITIONS_RESEARCH_BLUEPRINT.md:31` 7. Other
+- `docs/research/motion/WEALTH_LOGIC_TRANSITIONS_RESEARCH_BLUEPRINT.md:16` 1. Hard cut
+- `docs/research/motion/WEALTH_LOGIC_TRANSITIONS_RESEARCH_BLUEPRINT.md:23` 3. Wipe
+- `docs/research/motion/WEALTH_LOGIC_TRANSITIONS_RESEARCH_BLUEPRINT.md:26` 4. Push
+- `docs/research/motion/WEALTH_LOGIC_TRANSITIONS_RESEARCH_BLUEPRINT.md:33` 6. World-persists
+- `docs/research/motion/WEALTH_LOGIC_TRANSITIONS_RESEARCH_BLUEPRINT.md:36` 7. Other
 - `docs/run-centric-schema-notes.md:1` Run-Centric Schema Notes
 - `docs/run-centric-schema-notes.md:51` What remains entity-centric
 - `docs/runbooks/PRP_EXECUTION.md:2` PRP Execution
@@ -143,6 +143,6 @@ Headings that name a filing slot, not a concept (12).
 - `docs/content-video-engine/39-EVIDENCE-CHART-SYSTEM.md:267` Rules
 - `docs/content-video-engine/briefs/ANSWER-BRAVOS-HYPE-CYCLE.md:542` Notes
 - `docs/research/motion/WEALTH_LOGIC_TRANSITIONS_MEASURED.md:168` 6. Other
-- `docs/research/motion/WEALTH_LOGIC_TRANSITIONS_RESEARCH_BLUEPRINT.md:31` 7. Other
-- `docs/research/motion/WEALTH_LOGIC_TRANSITIONS_RESEARCH_BLUEPRINT.md:34` 8. Summary
+- `docs/research/motion/WEALTH_LOGIC_TRANSITIONS_RESEARCH_BLUEPRINT.md:36` 7. Other
+- `docs/research/motion/WEALTH_LOGIC_TRANSITIONS_RESEARCH_BLUEPRINT.md:39` 8. Summary
 - `docs/run-centric-schema-notes.md:5` Purpose

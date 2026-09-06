@@ -153,3 +153,32 @@ Roots: `docs/` (all), `content/video_engine/sources/` (incl. `reference_analyses
 Zero hits: "cut on action", "invisible cut", "Bordwell", "whip pan"; "match cut" only as the ARAP graphic match; "one world" only
 as the CSS wrapper; transition kinds in the Wealth Logic shot ledger. Coverage limits: doc 29 read in windows (Parts 3/4/6/8,
 §§9.15, 9.16, 9.25, 9.27, 9.28, 9.31), not end to end; doc 47 grepped for M13–M16 only; bundle 02/05/06/07 not opened in full.
+
+## 6. TR-1 landed — the reference's transition mix, measured (2026-09-06, same day)
+
+`content/video_engine/scripts/measure_cut_kinds.py` over the 720p upload (30 fps), all 99 boundaries in 2.4 s, calibrated on
+seven boundaries by eye (`docs/research/motion/WEALTH_LOGIC_TRANSITIONS_MEASURED.md`, `wealth_logic_transitions_measured.csv`):
+
+| kind | count | share | median shot before it | what it is |
+|---|---|---|---|---|
+| hard cut | 36 | 36.4 % | 9.35 s | one-frame switch, both plates steady |
+| **dip through black** | 35 | 35.4 % | 6.9 s | a full fade to L = 0 and back, **14 frames (0.47 s) wide at every one** |
+| **blur-zoom** | 28 | 28.3 % | 9.8 s | the outgoing plate magnifies until detail is gone, switches, the incoming plate scales up out of softness |
+| dissolve / wipe / push / world-persists | 0 | 0 | — | never |
+
+Every boundary changes the world; 71 of 99 sit in a caption gap ≥ 0.30 s (Gemini's transcript pass, agreed); 69 of 99 still
+carry measurable motion 0.5 s after the boundary. The Gemini vision pass said "all 99 hard cuts, nothing moves"; with the
+`/watch` skill named it verified two boundaries, both agreeing with the tool, and marked the other 97 unverified by its own
+fetch limit. Frame-level classification is a Python job.
+
+**What it changes in the judgment above.** The reference has exactly three transitions, and two of them are things our
+doctrine forbids or does not have: doc 29 §9.28 says "a page never simply fades", and the reference's single most common
+non-cut transition is a 0.47 s fade through black; and the blur-zoom is a zoom-through we have as the `suck` only in the
+inverted form. None of the reference's three is a mount, a spiral, a wipe or a dissolve. This does not make E45 wrong: our
+world persists (the page is the stage) and the reference's never does, so the reference has no "arrival into a page" to solve.
+It does say that for a WORLD CHANGE (clip to clip, plate to plate, page to a different page) the reference's kit is cut in the
+gap, dip through black in 0.47 s, or blur-zoom, and nothing else - and that the dip and the blur-zoom are what our kit lacks.
+The next measurement (TR-2) is the voice-to-picture offset on the same boundaries, now a Python job on data on disk.
+
+Rows: TR-1 done; TR-2 next; a new TR-12 (decision) - whether the dip through black and the blur-zoom enter our kit for world
+changes, with the 14-frame dip as the starting reference `[DERIVED: from the reference, measured]`.

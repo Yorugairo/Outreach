@@ -726,3 +726,4 @@ _none._
 - `docs/content-video-engine/TRIAGE-2026-09-05.md:15` — marker "superseded by" names no target — "Superseded by" labels came from compression, not from bad docs — lift the differences, dedupe, never kill.
 - `docs/content-video-engine/TRIAGE-2026-09-05.md:20` — marker "superseded by" names no target — **RETIRE** = strike from the triage list only — the item is already built under another name, superseded by a measurement, or is not a buildable claim.
 - `docs/portable/OPERATOR-RULINGS.md:11` — marker "superseded" names no target — Nothing is deleted when superseded — it is marked SUPERSEDED with a pointer, so the reasoning chain stays legible.
+- `docs/research/motion/WEALTH_LOGIC_TRANSITIONS_RESEARCH_BLUEPRINT.md:3` — marker "superseded" names no target — **Superseded 2026-09-06 by `WEALTH_LOGIC_TRANSITIONS_MEASURED.md`** (our own frame-series measurement of all 99 boundaries: 36 hard cuts, 35 dips through black, 28 blur-zooms).

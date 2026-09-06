@@ -168,3 +168,12 @@ treatment; it is a confirmation, not a change.
 
 Primary: `04` (recomputed), `01`, `MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md` §10.
 Our comparison data: `SHOT-TABLE-F.md`, `build-f/timeline.json`.
+
+## 46.5 The reference's transition kinds — measured 2026-09-06 (TR-1)
+
+`measure_cut_kinds.py` on the 720p upload, 99 boundaries: **hard cut 36 (36.4 %), dip through black 35 (35.4 %, 14 frames =
+0.47 s wide at every one), blur-zoom 28 (28.3 %); dissolve, wipe, push, world-persists 0.** Median shot before a hard cut
+9.35 s, before a dip 6.9 s, before a blur-zoom 9.8 s. Every boundary changes the world; 71 sit in a caption gap ≥ 0.30 s. Full
+series per boundary in `docs/research/motion/wealth_logic_transitions_measured.csv`; the rules and their `[DERIVED]` thresholds
+in `docs/research/motion/WEALTH_LOGIC_TRANSITIONS_MEASURED.md`. The earlier claim that kind was unmeasured (§46.1 and the
+transitions review) is closed by this section.

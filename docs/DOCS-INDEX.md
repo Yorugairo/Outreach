@@ -14,7 +14,7 @@ Levels 1-6 are Markdown heading depth; level 7 is a table row (CAPABILITIES, BAC
 A `{...}` tail lists the section's bold phrases; a `<...>` tail its body terms - code
 spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 
-3223 records across 254 files.
+3225 records across 254 files.
 
 ## content/video_engine/projects/history-of-bjj/episode-1-research-brief.md
 
@@ -2306,6 +2306,7 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 - L130 [2] 46.6 Speech rate — and a number I invented — Reference 183.6 WPM overall; our ep1 measured 182.8. Those two are real measurements. {183.6 WPM; RETRACTED 2026-09-04: the "145–165 WPM doctrine target" was; What the doctrine actually contains is 140 WPM, and it is no; 140 WPM basis} <"wpm_target": 140; timing.target_s; length-estimation; grep>
 - L161 [2] 46.7 Captions — Reference captions: bottom centre, no container box, no frosted pill, no tint — white {no container box, no frosted pill, no tint} <floating-caption>
 - L167 [2] 46.8 Sources — Primary: `04` (recomputed), `01`, `MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md` §10.
+- L172 [2] 46.5 The reference's transition kinds — measured 2026-09-06 (TR-1) — `measure_cut_kinds.py` on the 720p upload, 99 boundaries: hard cut 36 (36.4 %), dip through black 35 (35.4 %, 14 frames = {hard cut 36 (36.4 %), dip through black 35 (35.4 %, 14 frame} <blur-zoom; world-persists; [DERIVED]>
 
 ## docs/content-video-engine/47-FINDINGS-TO-CHECKS.md
 
@@ -3365,6 +3366,7 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 - L124 [3] 3. What the reference channel does (thin, and that is the finding) — Cadence and placement are measured (`bundle/01_wealth_logic_production_report.md:20,40,50,53`; doc 46). Transition kind is not: {Transition kind is not:} <unclassified; reference-derived; second-hand; quart-in-out; 29:659>
 - L132 [3] 4. What the player paints (`samples/scene-evidence-player.template.html`) — | exit / enter | painted at | duration | curve | cue from the build | <cut; :2879; wipe; wipe_right; :2939-2941; :2949; WIPE = 0.62; :830; quartIO; minJerk; kin("min_jerk"); dissolve>
 - L150 [3] 5. Not found where I looked — Roots: `docs/` (all), `content/video_engine/sources/` (incl. `reference_analyses/` and the bundle), `content/video_engine/scripts/`.
+- L157 [2] 6. TR-1 landed — the reference's transition mix, measured (2026-09-06, same day) — `content/video_engine/scripts/measure_cut_kinds.py` over the 720p upload (30 fps), all 99 boundaries in 2.4 s, calibrated on {dip through black; 14 frames (0.47 s) wide at every one; blur-zoom} <wealth_logic_transitions_measured.csv; one-frame; world-persists; Frame-level; non-cut; zoom-through; suck; voice-to-picture; [DERIVED: from the reference, measured]>
 
 ## docs/content-video-engine/TRIAGE-2026-09-05.md
 
@@ -3730,19 +3732,19 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 
 ## docs/research/motion/WEALTH_LOGIC_TRANSITIONS_RESEARCH_BLUEPRINT.md
 
-- L1 [1] Wealth Logic Transitions Research Blueprint — [Metric | 99 boundaries | source | URL: https://www.youtube.com/watch?v=rCHYttyvaw8 | Verified 2026-09-06] <zoom-throughs; blur-zooms; fade-throughs; frame-per-boundary; Zoom-through; blur-zoom; question-mark; World-persists; dissolve; UNVERIFIED>
-- L5 [2] The question — What are the transition kinds used in the Wealth Logic reference?
-- L8 [2] Verdict up front — Spot checks using the `/watch` skill at 30 fps frame density reveal the channel uses complex transitions like zoom-throughs (blur-zooms) and dissolves (fade-thr <zoom-throughs; blur-zooms; fade-throughs; frame-per-boundary>
-- L11 [2] 1. Hard cut — [UNVERIFIED]
-- L14 [2] 2. Dissolve — [Metric | 1 verified | source | URL: https://www.youtube.com/watch?v=rCHYttyvaw8 | Verified 2026-09-06]
-- L18 [2] 3. Wipe — [UNVERIFIED]
-- L21 [2] 4. Push — [UNVERIFIED]
-- L24 [2] 5. Zoom-through — [Metric | 1 verified | source | URL: https://www.youtube.com/watch?v=rCHYttyvaw8 | Verified 2026-09-06] <blur-zoom; question-mark>
-- L28 [2] 6. World-persists — [UNVERIFIED]
-- L31 [2] 7. Other — [UNVERIFIED]
-- L34 [2] 8. Summary — [DERIVED: from the csv, counts and medians] <zoom-through; dissolve; UNVERIFIED>
-- L41 [2] Sources — - docs/research/motion/wealth_logic_transitions.csv
-- L45 [2] NOT FOUND WHERE I LOOKED — The visual transition properties (kind, duration, world, first_motion) for the remaining 97 boundaries could not be classified. Why: a boundary that still canno
+- L1 [1] Wealth Logic Transitions Research Blueprint — > Superseded 2026-09-06 by `WEALTH_LOGIC_TRANSITIONS_MEASURED.md` (our own frame-series measurement of all 99 boundaries: {Superseded 2026-09-06 by `WEALTH_LOGIC_TRANSITIONS_MEASURED.} <frame-series; blur-zooms; at_gap; gap_s; zoom-throughs; fade-throughs; frame-per-boundary; Zoom-through; blur-zoom; question-mark; World-persists; dissolve>
+- L10 [2] The question — What are the transition kinds used in the Wealth Logic reference?
+- L13 [2] Verdict up front — Spot checks using the `/watch` skill at 30 fps frame density reveal the channel uses complex transitions like zoom-throughs (blur-zooms) and dissolves (fade-thr <zoom-throughs; blur-zooms; fade-throughs; frame-per-boundary>
+- L16 [2] 1. Hard cut — [UNVERIFIED]
+- L19 [2] 2. Dissolve — [Metric | 1 verified | source | URL: https://www.youtube.com/watch?v=rCHYttyvaw8 | Verified 2026-09-06]
+- L23 [2] 3. Wipe — [UNVERIFIED]
+- L26 [2] 4. Push — [UNVERIFIED]
+- L29 [2] 5. Zoom-through — [Metric | 1 verified | source | URL: https://www.youtube.com/watch?v=rCHYttyvaw8 | Verified 2026-09-06] <blur-zoom; question-mark>
+- L33 [2] 6. World-persists — [UNVERIFIED]
+- L36 [2] 7. Other — [UNVERIFIED]
+- L39 [2] 8. Summary — [DERIVED: from the csv, counts and medians] <zoom-through; dissolve; UNVERIFIED>
+- L46 [2] Sources — - docs/research/motion/wealth_logic_transitions.csv
+- L50 [2] NOT FOUND WHERE I LOOKED — The visual transition properties (kind, duration, world, first_motion) for the remaining 97 boundaries could not be classified. Why: a boundary that still canno
 
 ## docs/research/tech/MOTION_GRAPHICS_FROM_STILL_IMAGES_BLUEPRINT.md
 
