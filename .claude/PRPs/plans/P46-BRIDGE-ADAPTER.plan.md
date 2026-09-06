@@ -70,7 +70,7 @@ GEMINI.md and the hand-off note (pointer edits).
 
 - HG1: the packet shape and reply grammar (a cross-lane contract; Astra reviews it through the same bridge).
 - HG2: the first live send with the tool (one order, the operator names it).
-- HG3: the unattended handler's grace window, SLA and daily budget (each handler run is a headless session, ~25k tokens floor + the work).
+- HG3: the grace window, the SLA, and the daily RESIDUE budget (tier 1 only - a headless run of a minimal role, ~6k floor after tonight's cuts; tier 0 is Python and free).
 
 ## Mandatory Reads
 
@@ -141,13 +141,14 @@ actionable: the inbox hook for live sessions, the daemon + per-lane handlers for
 - Validate: `python content/video_engine/scripts/bridge_watch.py --lane gemini --id <new> ` exits done
 - Evidence: pending
 
-### T6: Landed replies become actionable without the operator (the requirement, 2026-09-06)
+### T6: Landed replies become actionable without the operator - Python first, a model only for the residue (2026-09-06)
 - Status: pending
-- Owner: implementation_luna (the daemon and hook), parent (the handler instruction), operator (SLA and budget)
+- Owner: implementation_luna (daemon, handlers, hook), parent (the residue handler's instruction), operator (grace window, SLA, residue budget)
 - Depends on: T1-T3
-- Write set: `content/video_engine/scripts/bridge_daemon.py` (+ tests), `~/.claude/hooks/bridge_inbox.py` (UserPromptSubmit + SessionStart: prints "N bridge replies waiting: <packetId lane first-line>" when `replied/` is non-empty, nothing otherwise), `docs/runbooks/BRIDGE-REPLY-HANDLER.md` (the standing instruction a handler run receives: verify the reply against disk, integrate or file the follow-up order, write `done/<packetId>/result.md`, append the ledger; never ask the operator to check anything), a Task Scheduler entry at logon (documented, operator-installed), `.gitignore`
-- Acceptance: (1) with a live session, a reply that lands is announced on the very next prompt with no tokens spent before it; (2) unattended, a reply unhandled past the grace window is dispatched to its lane's handler - Claude via a headless `claude -p` run with the handler instruction + order + reply, Gemini via `new-conversation`/`send-message`, Astra via a packet into its queue folder - and the result lands in `done/`; (3) a reply still unhandled past the SLA raises one desktop toast naming the packet; (4) the daemon is idempotent across restarts (folder state + pid lock), makes no model call itself, and stays within the operator's daily handler budget (count and token cap read from a config file)
-- Validate: `python -m pytest content/video_engine/tests/test_bridge_daemon.py -q -p no:cacheprovider` (synthetic folders: a landed reply is announced by the hook; the grace-window dispatch invokes a stubbed handler once; the SLA toast fires once; restart recovery); then one live cycle on a real order
+- Write set: `content/video_engine/scripts/bridge_daemon.py`, `content/video_engine/scripts/bridge_handlers.py` (+ tests), `~/.claude/hooks/bridge_inbox.py` (UserPromptSubmit + SessionStart: prints "N bridge replies waiting: <packetId lane first-line>" when `replied/` is non-empty, nothing otherwise), `docs/runbooks/BRIDGE-REPLY-HANDLER.md` (the standing instruction for the residue run only), a Task Scheduler entry at logon (documented, operator-installed), `.gitignore`
+- Handler tiers: **tier 0, deterministic, zero tokens** - a handler registry keyed by the order's `replyShape`: `paths-written` (every path the reply names exists and, when the order named a marker, contains it), `contract-block` (a named block is present at the source and every synced copy), `report-landed` (the report is under `docs/research/<area>/`, has the proof lines and the NOT FOUND block, `build_docs_layers.py --write` then `--check` green), `review` (the POSITION / DISAGREEMENTS grammar parses; no disagreement → done, disagreements → residue), `test-run` (the named command exits 0). A tier-0 pass marks `done/` and appends the ledger with `tier: 0`. **Tier 1, the residue** - only a reply that fails its tier-0 check, parses with disagreements, or carries a decision goes to a model: a headless run of a purpose-built `bridge_handler` role (minimal tools, no skills, no memory - the ~6k floor after tonight's cuts, not the explorer's), with the order, the reply, the tier-0 failure and the standing instruction; ledger `tier: 1` with its usage
+- Acceptance: (1) live session: a landed reply is announced on the very next prompt with no tokens spent before it; (2) unattended: tier 0 handles the four known shapes on synthetic and on tonight's real reply (7aaa9146: `paths-written` + `contract-block` pass without a model); (3) a reply past the grace window that tier 0 cannot close is dispatched to tier 1 exactly once and lands in `done/`; (4) a reply still open past the SLA raises one desktop toast; (5) the daemon is idempotent across restarts (folder state + pid lock), makes no model call itself, and stops dispatching tier 1 when the daily residue budget (count and token cap in a config file) is spent - then it toasts instead; (6) the ledger's tier column makes the escape rate measurable
+- Validate: `python -m pytest content/video_engine/tests/test_bridge_daemon.py content/video_engine/tests/test_bridge_handlers.py -q -p no:cacheprovider`; then `python content/video_engine/scripts/bridge_handlers.py --replay 7aaa9146-88f1-4f03-b004-d5bdf18a5492` exits done at tier 0
 - Evidence: pending
 
 ## Verification
