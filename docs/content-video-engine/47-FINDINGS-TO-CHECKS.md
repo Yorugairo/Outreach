@@ -139,11 +139,13 @@ to claim rather than either one alone.
 Named honestly, because a finding that cannot carry a check should not sit in a doc
 looking like a rule.
 
+A `DERIVED` tag marks a computed figure: a starting reference to test, never a research finding (R6; E42 2026-09-06).
+
 | finding | why it demotes |
 |---|---|
 | **42.4 Euler spirals over Béziers** | Real and worth building. But the quality threshold — how much curvature ripple is too much — we do not have, and inventing one repeats today's error. Build it; do not gate it yet. |
 | **42.5 all tunables** (`γ`, `λ_w`, `κ_v`, per-material ζ/ω₀, corner dwell) | Explicitly ours to tune. Configuration, never a gate. |
-| **A6 secondary-motion ratio (0.22)** | An invented number. The *shape* (secondary lags 2–4 frames, settles faster) is craft; the ratio is not a finding. |
+| **A6 secondary-motion ratio (0.22)** | An invented number. The *shape* (secondary lags 2–4 frames, settles faster) is craft; the ratio is not a finding. [DERIVED: from Lasseter 1987 + Williams 2001 craft doctrine (sources: not on file), extrapolated to an energy ratio - briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md] |
 | **A1 timing chart** | Superseded. `M_p = exp(−πζ/√(1−ζ²))` replaces a guessed table with a solvable model — the model is the mechanism, so there is nothing left to gate. |
 | **43.4 dirty flags** | A performance optimisation. Correct, but nothing to enforce. |
 | **43.7 BBW / dual quaternions** | Deferred until a prop actually needs to bend. Not doctrine until then. |

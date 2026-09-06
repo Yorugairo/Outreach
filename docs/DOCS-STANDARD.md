@@ -14,8 +14,8 @@ item, a quote, a table row or a fence.
 | Group | Files | Headings | Lead % | Termed % | Generic | Median score |
 |---|---:|---:|---:|---:|---:|---:|
 | Research (`docs/research/**`) | 7 | 122 | 93.4% | 93.4% | 0 | 96.0 |
-| Process (everything else) | 239 | 2866 | 97.5% | 91.5% | 9 | 100.0 |
-| All docs | 246 | 2988 | 97.4% | 91.6% | 9 | 100.0 |
+| Process (everything else) | 239 | 2866 | 97.6% | 91.6% | 9 | 100.0 |
+| All docs | 246 | 2988 | 97.4% | 91.7% | 9 | 100.0 |
 
 ## The 20 lowest-scoring docs
 
@@ -44,7 +44,7 @@ item, a quote, a table row or a fence.
 
 ## Appendix A - sections missing a lead line
 
-Non-exempt sections whose first real line is under 40 characters (79).
+Non-exempt sections whose first real line is under 40 characters (78).
 
 - `content/video_engine/projects/martial-matters/pilots/marshall-monday-001/script-draft.md:1` Why Rap Violence is Actually a Sign of Peace | Marshall Matters Ep. 1
 - `content/video_engine/projects/systems-and-blowups/learning/world-plate-evidence-caption-grammar.v1.md:1` World Plate, Evidence, and Caption Grammar v1
@@ -75,9 +75,8 @@ Non-exempt sections whose first real line is under 40 characters (79).
 - `docs/content-video-engine/53-THE-STICKMAN-LANE.md:183` 53.4 What this corrects in my own claims
 - `docs/content-video-engine/P13-GATE-A-ARMBAR-REVIEW.md:38` Locked Defaults
 - `docs/content-video-engine/briefs/ALICIA-SCRIPT-PERSONA-PASS.md:1` Alicia Script — Persona Pass (v2)
-- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:185` The On-1s / On-2s / On-3s Decision Rule (Proposal)
-- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:302` A6: The Secondary-Motion Budget [RECLASSIFIED: Design Proposal]
-- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:429` C3: Nested Coordinate Spaces [Tier 1 Architecture — CLOSED]
+- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:187` The On-1s / On-2s / On-3s Decision Rule (Proposal)
+- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:435` C3: Nested Coordinate Spaces [Tier 1 Architecture — CLOSED]
 - `docs/content-video-engine/briefs/FLOW-OMNI-EXPLAINER-PROMPT-PLAN.md:290` CORRECTION 2 — the persona over-corrects, and pre-empts an ordered test
 - `docs/content-video-engine/briefs/STEEL-AND-PAPER-REVISION-C.md:172` 6. Order of operations
 - `docs/content-video-engine/patterns/STRENGTH-LOOP.md:71` 4. L3 — SECTION strength (the pattern unit)

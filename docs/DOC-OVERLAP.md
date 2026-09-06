@@ -505,153 +505,154 @@ _none._
     - `:157` 5. Decoupling Camera Punch from Chart Build:
     - `:158` - Current Flaw: Virtual camera zooms in ($1.0\to 1.15\times$) simultaneously with bar chart growth.
     - `:159` - Free Fix: Stagger execution: complete camera zoom punch in $0.4\text{s}$, let camera settle, and then initiate chart line draw over $1.0\text{s}$. Eyes cannot
-- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:163` — 3. Track A — The Animator (Timing and Motion) — `docs/content-video-engine/42-DRAWING-KINETICS.md:63` 42.2 The settle — closed-form second-order dynamics — h 0.00 / j 0.02 / b 0.00 — 0 rules
-- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:165` — A1: The Timing Charts [RECLASSIFIED: Design Proposal] — no target section scores above zero — h 0.00 / j 0.00 / b 0.00 — 0 rules
-- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:185` — The On-1s / On-2s / On-3s Decision Rule (Proposal) — no target section scores above zero — h 0.00 / j 0.00 / b 0.00 — 3 rules
-    - `:189` \text{On-3s (8 fps)}, & \text{if Background Atmospheric Boil only (never on foreground)}
-    - `:191` - Failure Signature: Translating a chart board or camera at $v > 300\text{ px/s}$ on-2s creates severe stroboscopic double-imaging and retinal judder (Watson et
-    - `:192` - Source: Richard Williams, The Animator's Survival Kit (2001), pp. 35–42; John Lasseter, Principles of Traditional Animation Applied to 3D Computer Animation,
-- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:196` — A2: Ease Equivalence [RECLASSIFIED: Design Proposal] — no target section scores above zero — h 0.00 / j 0.00 / b 0.00 — 0 rules
-- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:219` — A3: Spring vs. Curve [RECLASSIFIED: Design Proposal] — `docs/content-video-engine/42-DRAWING-KINETICS.md:102` 42.4 Curve quality — Euler spirals for generated geometry — h 0.00 / j 0.04 / b 0.00 — 0 rules
-- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:221` — Analytic Mass-Spring-Damper Formulation (Tier 1 Math) — no target section scores above zero — h 0.00 / j 0.00 / b 0.00 — 0 rules
-- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:226` — Material Parameter Presets [Tier 2 Proposal] — `docs/content-video-engine/42-DRAWING-KINETICS.md:112` 42.5 What is ours to tune, not a finding — h 0.00 / j 0.05 / b 0.00 — 0 rules
-- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:247` — A4: The Threshold of "Alive" [RE-ASK 1 ★: Audited & Answered] — `docs/content-video-engine/42-DRAWING-KINETICS.md:63` 42.2 The settle — closed-form second-order dynamics — h 0.00 / j 0.02 / b 0.00 — 0 rules
-- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:249` — 1. The Direct Answer — `docs/content-video-engine/42-DRAWING-KINETICS.md:63` 42.2 The settle — closed-form second-order dynamics — h 0.00 / j 0.03 / b 0.00 — 0 rules
-- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:254` — 2. Nearest Adjacent Scientific Evidence — no target section scores above zero — h 0.00 / j 0.00 / b 0.00 — 0 rules
-- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:279` — 3. Pipeline & Doctrine Status — no target section scores above zero — h 0.00 / j 0.00 / b 0.00 — 3 rules
-    - `:280` Because no controlled study exists for our exact medium, our shipped gates represent operator-derived design doctrine:
-    - `:281` - Gate E21 ("Screen Never Still"): An editorial policy enforcing that the visual field maintains subtle optical flow so that viewer gaze remains synchronized ra
-    - `:282` - Gate M10 ("No Still Over 6s in First Minute"): An empirical heuristic derived from YouTube retention analytics, where static graphics during hook delivery cor
-- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:286` — A5: Drawing-On [CLOSED & RECLASSIFIED] — `docs/content-video-engine/42-DRAWING-KINETICS.md:63` 42.2 The settle — closed-form second-order dynamics — h 0.00 / j 0.03 / b 0.00 — 0 rules
-- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:288` — 1. The Kinematic Two-Thirds Power Law (Tier 1 Math — CLOSED) — `docs/content-video-engine/42-DRAWING-KINETICS.md:12` 42.1 The stroke — curvature-reparameterised drawing — h 0.00 / j 0.03 / b 0.00 — 1 rule
-    - `:293` - Source: Paolo Viviani & C. Terzuolo, Trajectory determines movement dynamics, Neuroscience 7(2): 431–437, 1982. (Closed, accepted).
-- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:295` — 2. Dynamic Nib Pooling [RECLASSIFIED: Engineering Heuristic Proposal] — no target section scores above zero — h 0.00 / j 0.00 / b 0.00 — 1 rule
-    - `:298` - Corner Discontinuity Rule: When interior angle $\theta_{\text{corner}} < 75^\circ$, decelerate stroke to $v=0$ over 3 frames, hold for 2 frames ($83\text{ms}$
-- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:302` — A6: The Secondary-Motion Budget [RECLASSIFIED: Design Proposal] — `docs/content-video-engine/42-DRAWING-KINETICS.md:91` 42.3 Squash and stretch, area-preserving and motion-driven — h 0.00 / j 0.04 / b 0.00 — 3 rules
-    - `:304` - Energy Ratio Proposal:
-    - `:306` - Lag & Settle Proposal: Phase lag $= 2\text{--}4$ frames ($83\text{--}166\text{ms}$). Secondary settle must complete within $1.5\times$ primary duration.
-    - `:307` - Source: John Lasseter (1987); Richard Williams (2001). (Classified as animator craft doctrine).
-- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:311` — 4. Track B — The Editor (Cutting and Rhythm) — no target section scores above zero — h 0.00 / j 0.00 / b 0.00 — 0 rules
-- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:313` — B1: The Gap-Cut Finding, Generalised [RE-ASK 4: Audited & Answered] — `docs/content-video-engine/42-DRAWING-KINETICS.md:112` 42.5 What is ours to tune, not a finding — h 0.00 / j 0.03 / b 0.00 — 0 rules
-- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:315` — 1. Practitioner Doctrine vs. Empirical Science — no target section scores above zero — h 0.00 / j 0.00 / b 0.00 — 4 rules
-    - `:316` - Walter Murch (In the Blink of an Eye, 1995): Murch posits that cuts should align with natural eye blinks and conversational breath pauses, proposing the famou
-    - `:317` - Empirical Film Cognition (Tim J. Smith & John M. Henderson 2008):
-    - `:318` - In "Edit Blindness: The Relationship Between Attention and Global Change Blindness in Dynamic Scenes" (Journal of Eye Movement Research 2(2):6, 1–17), Smith a
-    - `:319` - Crucially, they demonstrated that while blinks and saccades suppress the visual transient of a cut, most edit blindness in film viewing is attentional: viewer
-- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:321` — 2. Has Acoustic Silence Gap Alignment Ever Been Measured in Literature? — no target section scores above zero — h 0.00 / j 0.00 / b 0.00 — 2 rules
-    - `:324` - The $82\%$ (reference cuts in silence gaps) vs. $32\%$ (early algorithmic cuts) figures are original empirical measurements from our repository's forensic ana
-    - `:325` - We do not cite external papers for $82\%$. It is our internal benchmark.
-- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:327` — 3. Gate M13 Status: Candidate Doctrine — no target section scores above zero — h 0.00 / j 0.00 / b 0.00 — 2 rules
-    - `:328` - Decision Rule: Proposed cut points check the Whisper acoustic timestamp track. If audio level $< -32\text{ dBFS}$ for $\ge 200\text{ms}$ within $\pm 8$ frames
-    - `:329` - Cognitive Mechanism: Cutting during speech pauses prevents simultaneous auditory phonetic re-analysis and visual spatial re-orientation (Sweller et al. 2011).
-- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:333` — B2: Shot Length & Reading Floors [RE-ASK 2: Audited & Answered] — no target section scores above zero — h 0.00 / j 0.00 / b 0.00 — 5 rules
-    - `:335` We decouple the three thresholds conflated in Pass 1:
-    - `:357` - Scientific Proof:
-    - `:358` - Potter et al. (2014) proved conceptual detection at 13 ms, refuting any claim that 8 frames is needed for detection.
-    - `:359` - Rayner (1998) demonstrated that mean fixation duration during scene viewing is 260–330 ms, establishing the physical boundary for identifying an isolated visu
-    - `:360` - Carpenter & Shah (1998) and Cleveland & McGill (1984) showed graph comprehension requires iterative cognitive cycles between scale axes, data patterns, and la
-- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:364` — B3: L-Cuts / J-Cuts under Continuous Narration [RECLASSIFIED: Design Proposal] — no target section scores above zero — h 0.00 / j 0.00 / b 0.00 — 1 rule
-    - `:380` - Source: E. Pincus & S. Ascher, The Filmmaker's Handbook (2013). (Classified as film craft doctrine).
-- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:384` — B4: Graphic Match Cuts (ARAP Invariants) [Tier 1 Math — CLOSED] — `docs/content-video-engine/42-DRAWING-KINETICS.md:91` 42.3 Squash and stretch, area-preserving and motion-driven — h 0.00 / j 0.04 / b 0.00 — 4 rules
-    - `:386` To ensure an object morphing into a chart reads as one physical entity transforming rather than a dissolve:
-    - `:387` 1. Centroid Shift Invariant: $|\mathbf{C}{\text{end}} - \mathbf{C}{\text{start}}| \le 0.06 \cdot W_{\text{frame}}$ ($< 65\text{px}$ on 1080p).
-    - `:388` 2. Dominant Axis Invariant: $|\theta_{\text{end}} - \theta_{\text{start}}| \le 15^\circ$.
-    - `:389` 3. Bounding Area Continuity: $\frac{\min(A(t))}{\max(A(t))} \ge 0.60$ across the entire transformation window.
-- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:393` — B5: Rhythm as a Distribution [Tier 1 Science — CLOSED] — `docs/content-video-engine/42-DRAWING-KINETICS.md:63` 42.2 The settle — closed-form second-order dynamics — h 0.00 / j 0.03 / b 0.00 — 1 rule
-    - `:397` - Source: James E. Cutting, K. L. Brunick, C. DeLong, Quicken and Quenched: The Fluctuation of Shot Durations in Hollywood Film, Information Design Journal 19(2
-- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:401` — 5. Track C — The Drawing-Engine Builder — `docs/content-video-engine/42-DRAWING-KINETICS.md:12` 42.1 The stroke — curvature-reparameterised drawing — h 0.00 / j 0.02 / b 0.00 — 0 rules
-- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:403` — C1: Shape Interpolation (ARAP) [Tier 1 Math — CLOSED] — `docs/content-video-engine/42-DRAWING-KINETICS.md:63` 42.2 The settle — closed-form second-order dynamics — h 0.00 / j 0.03 / b 0.00 — 3 rules
-    - `:404` - Polar decomposition of deformation gradient:
-    - `:406` - Eliminates area shrinkage and vertex normal inversion inherent in linear vertex blending.
-    - `:407` - Source: Marc Alexa, Daniel Cohen-Or, David Levin, As-Rigid-As-Possible Shape Interpolation, ACM SIGGRAPH 2000; Takeo Igarashi et al., As-Rigid-As-Possible Sha
-- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:411` — C2: Rigging Without a Rig (The 5 Core Constraints) [Tier 1 Architecture — CLOSED] — `docs/content-video-engine/42-DRAWING-KINETICS.md:63` 42.2 The settle — closed-form second-order dynamics — h 0.00 / j 0.03 / b 0.00 — 0 rules
-- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:429` — C3: Nested Coordinate Spaces [Tier 1 Architecture — CLOSED] — `docs/content-video-engine/42-DRAWING-KINETICS.md:63` 42.2 The settle — closed-form second-order dynamics — h 0.00 / j 0.03 / b 0.00 — 2 rules
-    - `:430` - Matrix transform stack:
-    - `:432` - Direct data index placement: Local chart coordinate $p_{\text{chart}} = (x_i, y_i)$ maps to screen space via $M_{\text{ledger}} \times M_{\text{chart}} \times
-- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:436` — C4: Deterministic Runtime Under Seek [Tier 1 Architecture — CLOSED] — `docs/content-video-engine/42-DRAWING-KINETICS.md:63` 42.2 The settle — closed-form second-order dynamics — h 0.00 / j 0.06 / b 0.00 — 4 rules
-    - `:437` - Chromium headless seek performance envelope:
-    - `:438` - SVG DOM path limit: $\le 450$ paths.
-    - `:439` - SVG Filter limit: $\le 2$ filter primitives (`feTurbulence`, `feGaussianBlur`).
-    - `:440` - Production Standard: Bake heavy paper textures into static WebP background cards; use Canvas 2D / Skia for high-frequency dynamic line drawing.
-- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:444` — C5: Ink on Paper, Specifically [Tier 1 Math & Shaders — CLOSED] — `docs/content-video-engine/42-DRAWING-KINETICS.md:112` 42.5 What is ours to tune, not a finding — h 0.00 / j 0.03 / b 0.00 — 5 rules
-    - `:445` - Three physical components:
-    - `:446` 1. Two-Thirds Power Law velocity re-parameterization.
-    - `:447` 2. 1D Perlin noise deckle stroke edge ($\sigma = 0.6\text{px}$, frequency $= 0.18$).
-    - `:448` 3. Discrete vertex boil jitter on-2s (12fps) using static deterministic seed (`lpHash`).
-    - `:449` - Source: Georges Winkenbach & David H. Salesin, Computer-Generated Pen-and-Ink Illustration, ACM SIGGRAPH 1994.
-- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:453` — C6: What Rive / Lottie / Flash Got Right [Tier 1 Architecture — CLOSED] — `docs/content-video-engine/42-DRAWING-KINETICS.md:63` 42.2 The settle — closed-form second-order dynamics — h 0.00 / j 0.03 / b 0.00 — 2 rules
-    - `:454` - Separate timeline keyframe evaluation from state machine transitions.
-    - `:455` - The video engine must evaluate frame state as a pure, stateless function of clock time:
-- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:460` — 6. Track D — Placement (The "Where" Question) — `docs/content-video-engine/42-DRAWING-KINETICS.md:91` 42.3 Squash and stretch, area-preserving and motion-driven — h 0.00 / j 0.02 / b 0.00 — 0 rules
-- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:462` — D1: Eye-Trace & Fixation Decay [Tier 1 Psychophysics — CLOSED] — `docs/content-video-engine/42-DRAWING-KINETICS.md:63` 42.2 The settle — closed-form second-order dynamics — h 0.00 / j 0.03 / b 0.00 — 3 rules
-    - `:463` - Mean fixation duration in scene viewing: $260\text{--}330\text{ms}$ (Rayner 1998).
-    - `:464` - Visual search latency following an abrupt transition: $180\text{--}220\text{ms}$.
-    - `:465` - Design Proposal (15° Visual Cone): Place consecutive visual items within $R \le 260\text{px}$ of the preceding object's centroid to avoid visual hunting.
-- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:469` — D2: Non-Decorative Composition for 9:16 [Candidate Doctrine] — no target section scores above zero — h 0.00 / j 0.00 / b 0.00 — 2 rules
-    - `:484` - Tangency Elimination Rule: Minimum clearance $\ge 24\text{px}$ OR deliberate overlap $\ge 48\text{px}$ with cast shadow.
-    - `:485` - 180° Motion Vector Rule: Motion flow direction (e.g. left-to-right debt accumulation) must remain continuous across cuts.
-- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:489` — D3: Saliency Hierarchy & Mayer's Spatial Contiguity [Tier 1 Cognitive Science — CLOSED] — `docs/content-video-engine/42-DRAWING-KINETICS.md:63` 42.2 The settle — closed-form second-order dynamics — h 0.00 / j 0.02 / b 0.00 — 2 rules
-    - `:490` - Visual priority order: Kinetic Motion ($40\text{--}80\text{ms}$) $\to$ Luminance Contrast ($90\text{--}140\text{ms}$) $\to$ Scale/Area ($150\text{--}220\text{
-    - `:491` - Mayer's Spatial Contiguity Principle: Integrating text labels directly into graphic charts eliminates the split-attention effect (Mayer 2001, 2009; Ginns 2006
-- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:495` — D4: Motion-Graphics Grids (12-Column Vertical) [Tier 2 Proposal] — `docs/content-video-engine/42-DRAWING-KINETICS.md:91` 42.3 Squash and stretch, area-preserving and motion-driven — h 0.00 / j 0.07 / b 0.00 — 2 rules
-    - `:496` - 12-column layout: $1080\text{px}$ width, $48\text{px}$ outer margins, $12 \times 62\text{px}$ columns, $22\text{px}$ gutters.
-    - `:497` - Three functional docks: Header ($Y=320\text{px}$), Ledger Stage ($Y=480\text{px}$, $H=800\text{px}$), Callout Badge ($Y=1220\text{px}$).
-- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:501` — D5: The Abstract $	o$ Concrete Metaphor Library [Tier 1 Cognitive Linguistics — CLOSED] — `docs/content-video-engine/42-DRAWING-KINETICS.md:63` 42.2 The settle — closed-form second-order dynamics — h 0.00 / j 0.03 / b 0.00 — 6 rules
-    - `:502` - Derived directly from Lakoff & Johnson (Metaphors We Live By, 1980):
-    - `:503` - MORE IS UP: Reservoir / Silo $\to$ Vertical Bar Chart / Accumulation Area.
-    - `:504` - VELOCITY IS FLOW: High-pressure Pipe $\to$ First-Derivative Slope Curve.
-    - `:505` - LIMITS ARE BARRIERS: Toll Gate / Wall $\to$ Horizontal Debt Ceiling Threshold.
-    - `:506` - EQUILIBRIUM IS BALANCE: Balance Scale $\to$ Dual-column Comparative FRED Spread.
-    - `:507` - EXTRACTION IS A SIPHON: Leaky Bucket / Siphon Tube $\to$ Net Interest Margin Divergence.
-- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:511` — 7. Track E — The Feedback Loop (The Structural Gap) — `docs/content-video-engine/42-DRAWING-KINETICS.md:63` 42.2 The settle — closed-form second-order dynamics — h 0.00 / j 0.03 / b 0.00 — 0 rules
-- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:513` — E1: Frame Sequence Quality Metrics [Metrics: Tier 1 CLOSED; Thresholds: Tier 2 Proposal] — `docs/content-video-engine/42-DRAWING-KINETICS.md:63` 42.2 The settle — closed-form second-order dynamics — h 0.00 / j 0.05 / b 0.00 — 2 rules
-    - `:515` The four mathematical metrics are accepted as our diagnostic suite; the numerical thresholds are initial calibration proposals to be benchmarked against our act
-    - `:534` - Source: Laurent Itti & Christof Koch, Computational Modelling of Visual Attention, Nature Reviews Neuroscience 2001; Gunnar Farnebäck, Two-Frame Motion Estima
-- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:538` — E2: Diagnosing "The Race Feels Choppy" [Tier 1 Psychophysics — CLOSED] — `docs/content-video-engine/42-DRAWING-KINETICS.md:63` 42.2 The settle — closed-form second-order dynamics — h 0.00 / j 0.03 / b 0.00 — 0 rules
-- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:540` — 1. Mechanical Root Cause — no target section scores above zero — h 0.00 / j 0.00 / b 0.00 — 0 rules
-- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:544` — 2. Pipeline Fix — no target section scores above zero — h 0.00 / j 0.00 / b 0.00 — 2 rules
-    - `:545` 1. If object velocity $v > 100\text{ px/s}$, force rendering to On-1s (24fps).
-    - `:546` 2. Apply $180^\circ$ shutter motion blur ($0.5 \cdot v_{\text{pixel}}$ directional blur).
-- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:550` — 8. Procedural Code Audit: `parallax-runner.mjs` — no target section scores above zero — h 0.00 / j 0.00 / b 0.00 — 0 rules
-- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:554` — 8.1 Current Code & Line Coordinates — `docs/content-video-engine/42-DRAWING-KINETICS.md:63` 42.2 The settle — closed-form second-order dynamics — h 0.00 / j 0.02 / b 0.00 — 4 rules
-    - `:555` 1. Lines 33–43 (`motionInputs` in default Dolly preset):
-    - `:569` 2. Lines 49, 62, 76, 90, 108:
-    - `:571` 3. Line 129 (Node "2" inputs):
-    - `:577` 4. Line 142 (Node "4" inputs):
-- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:584` — 8.2 The Precise Defect & Proposed Fix — `docs/content-video-engine/42-DRAWING-KINETICS.md:12` 42.1 The stroke — curvature-reparameterised drawing — h 0.00 / j 0.02 / b 0.00 — 4 rules
-    - `:585` - The Defect: `intensity` is hardcoded to `1.0` across all six preset blocks. In ComfyUI-Depthflow-Nodes, `intensity` is the displacement multiplier. Combined w
-    - `:586` - The Exact Code Edit:
-    - `:587` - In lines 35, 49, 62, 76, 90, 108: derive intensity from caller parameter or clamp to safe ceiling:
-    - `:589` - In line 129: upgrade model to `depth_anything_v2_vitl_fp32.safetensors` (or `vitl_fp16`) for crisp edge delineation.
-- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:593` — 9. Sourcing Integrity & Bibliography — `docs/content-video-engine/42-DRAWING-KINETICS.md:12` 42.1 The stroke — curvature-reparameterised drawing — h 0.00 / j 0.05 / b 0.00 — 0 rules
-- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:597` — 9.1 Empirical Psychophysics & Mathematics (Primary Scientific Evidence) — `docs/content-video-engine/42-DRAWING-KINETICS.md:12` 42.1 The stroke — curvature-reparameterised drawing — h 0.00 / j 0.07 / b 0.00 — 20 rules
-    - `:598` 1. Paolo Viviani & C. Terzuolo (1982). Trajectory determines movement dynamics. Neuroscience, 7(2), 431–437. DOI: 10.1016/0306-4522(82)90277-9. (Cited for Two-T
-    - `:599` 2. M. C. Potter, B. Wyble, C. E. Hagmann, & E. S. McCourt (2014). Detecting meaning in RSVP at 13 ms per picture. Attention, Perception, & Psychophysics, 76(2),
-    - `:600` 3. Keith Rayner (1998). Eye movements in reading and information processing: 20 years of research. Psychological Bulletin, 124(3), 372–422. DOI: 10.1037/0033-29
-    - `:601` 4. Tim J. Smith & John M. Henderson (2008). Edit Blindness: The Relationship Between Attention and Global Change Blindness in Dynamic Scenes. Journal of Eye Mov
-    - `:602` 5. Tim J. Smith (2012). The Attentional Theory of Cinematic Continuity (AToCC). Projections: The Journal for Movies and Mind, 6(1), 1–27. (Cited for Gaze Synchr
-    - `:603` 6. James E. Cutting, K. L. Brunick, & C. DeLong (2011). Quicken and Quenched: The Fluctuation of Shot Durations in Hollywood Film. Information Design Journal, 1
-    - `:604` 7. A. B. Watson, A. J. Ahumada, & J. E. Farrell (1986). The window of visibility: a psychophysical theory of fidelity in time-sampled visual displays. Journal o
-    - `:605` 8. Marc Alexa, D. Cohen-Or, & D. Levin (2000). As-rigid-as-possible shape interpolation. ACM SIGGRAPH 2000, 157–164. (Cited for ARAP Polar Decomposition, C1).
-    - `:606` 9. Takeo Igarashi, T. Moscovich, & J. F. Hughes (2005). As-rigid-as-possible shape manipulation. ACM Transactions on Graphics (SIGGRAPH 2005), 24(3), 1134–1141.
-    - `:607` 10. Thomas Flash & Neville Hogan (1985). The coordination of arm movements: an experimentally confirmed mathematical model. Journal of Neuroscience, 5(7), 1688–
-    - `:608` 11. Laurent Itti, Christof Koch, & Ernst Niebur (1998). A model of saliency-based visual attention for rapid scene analysis. IEEE TPAMI, 20(11), 1254–1259. (Cit
-    - `:609` 12. B. Bridgeman, D. Hendry, & L. Stark (1975). Failure to detect displacement of the visual world during saccadic eye movements. Vision Research, 15(6), 719–72
-    - `:610` 13. P. Pastrana-Vidal & J. C. Gicquel (2006). Subjective evaluation of spatio-temporal quality of video sequences with freezing. IEEE Transactions on Broadcasti
-    - `:611` 14. S. Martinez-Conde, S. L. Macknik, & D. H. Hubel (2006). The role of fixational eye movements in visual perception. Nature Reviews Neuroscience, 7(10), 732–7
-    - `:612` 15. John Sweller, P. Ayres, & S. Kalyuga (2011). Cognitive Load Theory. Springer. (Cited for Split-Attention Extraneous Load, B1).
-    - `:613` 16. P. Ginns (2006). Integrating information: A meta-analysis of the spatial contiguity and temporal contiguity effects. Educational Psychology Review, 18(4), 4
-    - `:614` 17. W. S. Cleveland & R. McGill (1984). Graphical Perception: Theory, Experimentation, and Application to the Development of Graphical Methods. JASA, 79(387), 5
-    - `:615` 18. P. A. Carpenter & P. Shah (1998). A model of the perceptual and cognitive processes involved in comprehension of graphs. Journal of Experimental Psychology:
-    - `:616` 19. George Lakoff & Mark Johnson (1980). Metaphors We Live By. University of Chicago Press. (Cited for Conceptual Metaphors, D5).
-    - `:617` 20. Georges Winkenbach & David H. Salesin (1994). Computer-generated pen-and-ink illustration. ACM SIGGRAPH 1994, 91–100. (Cited for Procedural Ink Hatching, C5
-- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:619` — 9.2 Practitioner Doctrine (Editorial & Animation Craft) — no target section scores above zero — h 0.00 / j 0.00 / b 0.00 — 4 rules
-    - `:620` 21. Walter Murch (1995). In the Blink of an Eye: A Perspective on Film Editing. Silman-James Press. (Practitioner doctrine: Rule of Six, blink alignment).
-    - `:621` 22. Richard Williams (2001). The Animator's Survival Kit. Faber & Faber. (Practitioner doctrine: timing, spacing, anticipation charts).
-    - `:622` 23. John Lasseter (1987). Principles of traditional animation applied to 3D computer animation. ACM SIGGRAPH '87, 21(4), 35–44. (Practitioner doctrine: squash/s
-    - `:623` 24. Edward Pincus & Steven Ascher (2013). The Filmmaker's Handbook: A Comprehensive Guide for the Digital Age. Plume. (Practitioner doctrine: J-cuts and L-cuts)
-- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:625` — 9.3 Internal Repository Measurements — no target section scores above zero — h 0.00 / j 0.00 / b 0.00 — 1 rule
-    - `:626` 25. `04_shot_ledger_100_cuts.md` (2026-09-04). Forensic analysis of Wealth Logic (100 cuts): 82% reference cuts in acoustic silence gaps ($\ge 0.30\text{s}$) vs
+- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:163` — 3. Track A — The Animator (Timing and Motion) — `docs/content-video-engine/42-DRAWING-KINETICS.md:63` 42.2 The settle — closed-form second-order dynamics — h 0.00 / j 0.04 / b 0.00 — 0 rules
+- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:165` — A1: The Timing Charts [RECLASSIFIED: Design Proposal] — no target section scores above zero — h 0.00 / j 0.00 / b 0.00 — 1 rule
+    - `:169` A `DERIVED` tag marks a computed figure: a starting reference to test, never a research finding (R6; E42 2026-09-06).
+- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:187` — The On-1s / On-2s / On-3s Decision Rule (Proposal) — no target section scores above zero — h 0.00 / j 0.00 / b 0.00 — 3 rules
+    - `:191` \text{On-3s (8 fps)}, & \text{if Background Atmospheric Boil only (never on foreground)}
+    - `:193` - Failure Signature: Translating a chart board or camera at $v > 300\text{ px/s}$ on-2s creates severe stroboscopic double-imaging and retinal judder (Watson et
+    - `:194` - Source: Richard Williams, The Animator's Survival Kit (2001), pp. 35–42; John Lasseter, Principles of Traditional Animation Applied to 3D Computer Animation,
+- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:198` — A2: Ease Equivalence [RECLASSIFIED: Design Proposal] — `docs/content-video-engine/42-DRAWING-KINETICS.md:63` 42.2 The settle — closed-form second-order dynamics — h 0.00 / j 0.03 / b 0.00 — 0 rules
+- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:223` — A3: Spring vs. Curve [RECLASSIFIED: Design Proposal] — `docs/content-video-engine/42-DRAWING-KINETICS.md:102` 42.4 Curve quality — Euler spirals for generated geometry — h 0.00 / j 0.04 / b 0.00 — 0 rules
+- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:225` — Analytic Mass-Spring-Damper Formulation (Tier 1 Math) — no target section scores above zero — h 0.00 / j 0.00 / b 0.00 — 0 rules
+- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:230` — Material Parameter Presets [Tier 2 Proposal] — `docs/content-video-engine/42-DRAWING-KINETICS.md:112` 42.5 What is ours to tune, not a finding — h 0.00 / j 0.04 / b 0.00 — 0 rules
+- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:253` — A4: The Threshold of "Alive" [RE-ASK 1 ★: Audited & Answered] — `docs/content-video-engine/42-DRAWING-KINETICS.md:63` 42.2 The settle — closed-form second-order dynamics — h 0.00 / j 0.02 / b 0.00 — 0 rules
+- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:255` — 1. The Direct Answer — `docs/content-video-engine/42-DRAWING-KINETICS.md:63` 42.2 The settle — closed-form second-order dynamics — h 0.00 / j 0.03 / b 0.00 — 0 rules
+- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:260` — 2. Nearest Adjacent Scientific Evidence — no target section scores above zero — h 0.00 / j 0.00 / b 0.00 — 0 rules
+- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:285` — 3. Pipeline & Doctrine Status — no target section scores above zero — h 0.00 / j 0.00 / b 0.00 — 3 rules
+    - `:286` Because no controlled study exists for our exact medium, our shipped gates represent operator-derived design doctrine:
+    - `:287` - Gate E21 ("Screen Never Still"): An editorial policy enforcing that the visual field maintains subtle optical flow so that viewer gaze remains synchronized ra
+    - `:288` - Gate M10 ("No Still Over 6s in First Minute"): An empirical heuristic derived from YouTube retention analytics, where static graphics during hook delivery cor
+- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:292` — A5: Drawing-On [CLOSED & RECLASSIFIED] — `docs/content-video-engine/42-DRAWING-KINETICS.md:12` 42.1 The stroke — curvature-reparameterised drawing — h 0.00 / j 0.13 / b 0.00 — 0 rules
+- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:294` — 1. The Kinematic Two-Thirds Power Law (Tier 1 Math — CLOSED) — `docs/content-video-engine/42-DRAWING-KINETICS.md:12` 42.1 The stroke — curvature-reparameterised drawing — h 0.00 / j 0.03 / b 0.00 — 1 rule
+    - `:299` - Source: Paolo Viviani & C. Terzuolo, Trajectory determines movement dynamics, Neuroscience 7(2): 431–437, 1982. (Closed, accepted).
+- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:301` — 2. Dynamic Nib Pooling [RECLASSIFIED: Engineering Heuristic Proposal] — `docs/content-video-engine/42-DRAWING-KINETICS.md:118` 42.6 Sources — h 0.00 / j 0.11 / b 0.00 — 1 rule
+    - `:304` - Corner Discontinuity Rule: When interior angle $\theta_{\text{corner}} < 75^\circ$, decelerate stroke to $v=0$ over 3 frames, hold for 2 frames ($83\text{ms}$
+- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:308` — A6: The Secondary-Motion Budget [RECLASSIFIED: Design Proposal] — `docs/content-video-engine/42-DRAWING-KINETICS.md:91` 42.3 Squash and stretch, area-preserving and motion-driven — h 0.00 / j 0.04 / b 0.00 — 3 rules
+    - `:310` - Energy Ratio Proposal [DERIVED: from Lasseter 1987 + Williams 2001 craft doctrine (sources: not on file), extrapolated to an energy ratio]:
+    - `:312` - Lag & Settle Proposal: Phase lag $= 2\text{--}4$ frames ($83\text{--}166\text{ms}$). Secondary settle must complete within $1.5\times$ primary duration. [DERI
+    - `:313` - Source: John Lasseter (1987); Richard Williams (2001). (Classified as animator craft doctrine).
+- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:317` — 4. Track B — The Editor (Cutting and Rhythm) — no target section scores above zero — h 0.00 / j 0.00 / b 0.00 — 0 rules
+- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:319` — B1: The Gap-Cut Finding, Generalised [RE-ASK 4: Audited & Answered] — `docs/content-video-engine/42-DRAWING-KINETICS.md:112` 42.5 What is ours to tune, not a finding — h 0.00 / j 0.03 / b 0.00 — 0 rules
+- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:321` — 1. Practitioner Doctrine vs. Empirical Science — no target section scores above zero — h 0.00 / j 0.00 / b 0.00 — 4 rules
+    - `:322` - Walter Murch (In the Blink of an Eye, 1995): Murch posits that cuts should align with natural eye blinks and conversational breath pauses, proposing the famou
+    - `:323` - Empirical Film Cognition (Tim J. Smith & John M. Henderson 2008):
+    - `:324` - In "Edit Blindness: The Relationship Between Attention and Global Change Blindness in Dynamic Scenes" (Journal of Eye Movement Research 2(2):6, 1–17), Smith a
+    - `:325` - Crucially, they demonstrated that while blinks and saccades suppress the visual transient of a cut, most edit blindness in film viewing is attentional: viewer
+- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:327` — 2. Has Acoustic Silence Gap Alignment Ever Been Measured in Literature? — no target section scores above zero — h 0.00 / j 0.00 / b 0.00 — 2 rules
+    - `:330` - The $82\%$ (reference cuts in silence gaps) vs. $32\%$ (early algorithmic cuts) figures are original empirical measurements from our repository's forensic ana
+    - `:331` - We do not cite external papers for $82\%$. It is our internal benchmark.
+- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:333` — 3. Gate M13 Status: Candidate Doctrine — no target section scores above zero — h 0.00 / j 0.00 / b 0.00 — 2 rules
+    - `:334` - Decision Rule: Proposed cut points check the Whisper acoustic timestamp track. If audio level $< -32\text{ dBFS}$ for $\ge 200\text{ms}$ within $\pm 8$ frames
+    - `:335` - Cognitive Mechanism: Cutting during speech pauses prevents simultaneous auditory phonetic re-analysis and visual spatial re-orientation (Sweller et al. 2011).
+- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:339` — B2: Shot Length & Reading Floors [RE-ASK 2: Audited & Answered] — no target section scores above zero — h 0.00 / j 0.00 / b 0.00 — 5 rules
+    - `:341` We decouple the three thresholds conflated in Pass 1:
+    - `:363` - Scientific Proof:
+    - `:364` - Potter et al. (2014) proved conceptual detection at 13 ms, refuting any claim that 8 frames is needed for detection.
+    - `:365` - Rayner (1998) demonstrated that mean fixation duration during scene viewing is 260–330 ms, establishing the physical boundary for identifying an isolated visu
+    - `:366` - Carpenter & Shah (1998) and Cleveland & McGill (1984) showed graph comprehension requires iterative cognitive cycles between scale axes, data patterns, and la
+- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:370` — B3: L-Cuts / J-Cuts under Continuous Narration [RECLASSIFIED: Design Proposal] — no target section scores above zero — h 0.00 / j 0.00 / b 0.00 — 1 rule
+    - `:386` - Source: E. Pincus & S. Ascher, The Filmmaker's Handbook (2013). (Classified as film craft doctrine). [DERIVED: from Pincus & Ascher 2013 (sources: not on file
+- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:390` — B4: Graphic Match Cuts (ARAP Invariants) [Tier 1 Math — CLOSED] — `docs/content-video-engine/42-DRAWING-KINETICS.md:91` 42.3 Squash and stretch, area-preserving and motion-driven — h 0.00 / j 0.04 / b 0.00 — 4 rules
+    - `:392` To ensure an object morphing into a chart reads as one physical entity transforming rather than a dissolve:
+    - `:393` 1. Centroid Shift Invariant: $|\mathbf{C}{\text{end}} - \mathbf{C}{\text{start}}| \le 0.06 \cdot W_{\text{frame}}$ ($< 65\text{px}$ on 1080p).
+    - `:394` 2. Dominant Axis Invariant: $|\theta_{\text{end}} - \theta_{\text{start}}| \le 15^\circ$.
+    - `:395` 3. Bounding Area Continuity: $\frac{\min(A(t))}{\max(A(t))} \ge 0.60$ across the entire transformation window.
+- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:399` — B5: Rhythm as a Distribution [Tier 1 Science — CLOSED] — `docs/content-video-engine/42-DRAWING-KINETICS.md:63` 42.2 The settle — closed-form second-order dynamics — h 0.00 / j 0.03 / b 0.00 — 1 rule
+    - `:403` - Source: James E. Cutting, K. L. Brunick, C. DeLong, Quicken and Quenched: The Fluctuation of Shot Durations in Hollywood Film, Information Design Journal 19(2
+- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:407` — 5. Track C — The Drawing-Engine Builder — `docs/content-video-engine/42-DRAWING-KINETICS.md:12` 42.1 The stroke — curvature-reparameterised drawing — h 0.00 / j 0.02 / b 0.00 — 0 rules
+- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:409` — C1: Shape Interpolation (ARAP) [Tier 1 Math — CLOSED] — `docs/content-video-engine/42-DRAWING-KINETICS.md:63` 42.2 The settle — closed-form second-order dynamics — h 0.00 / j 0.03 / b 0.00 — 3 rules
+    - `:410` - Polar decomposition of deformation gradient:
+    - `:412` - Eliminates area shrinkage and vertex normal inversion inherent in linear vertex blending.
+    - `:413` - Source: Marc Alexa, Daniel Cohen-Or, David Levin, As-Rigid-As-Possible Shape Interpolation, ACM SIGGRAPH 2000; Takeo Igarashi et al., As-Rigid-As-Possible Sha
+- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:417` — C2: Rigging Without a Rig (The 5 Core Constraints) [Tier 1 Architecture — CLOSED] — `docs/content-video-engine/42-DRAWING-KINETICS.md:63` 42.2 The settle — closed-form second-order dynamics — h 0.00 / j 0.03 / b 0.00 — 0 rules
+- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:435` — C3: Nested Coordinate Spaces [Tier 1 Architecture — CLOSED] — `docs/content-video-engine/42-DRAWING-KINETICS.md:63` 42.2 The settle — closed-form second-order dynamics — h 0.00 / j 0.03 / b 0.00 — 2 rules
+    - `:436` - Matrix transform stack:
+    - `:438` - Direct data index placement: Local chart coordinate $p_{\text{chart}} = (x_i, y_i)$ maps to screen space via $M_{\text{ledger}} \times M_{\text{chart}} \times
+- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:442` — C4: Deterministic Runtime Under Seek [Tier 1 Architecture — CLOSED] — `docs/content-video-engine/42-DRAWING-KINETICS.md:63` 42.2 The settle — closed-form second-order dynamics — h 0.00 / j 0.06 / b 0.00 — 4 rules
+    - `:443` - Chromium headless seek performance envelope:
+    - `:444` - SVG DOM path limit: $\le 450$ paths.
+    - `:445` - SVG Filter limit: $\le 2$ filter primitives (`feTurbulence`, `feGaussianBlur`).
+    - `:446` - Production Standard: Bake heavy paper textures into static WebP background cards; use Canvas 2D / Skia for high-frequency dynamic line drawing.
+- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:450` — C5: Ink on Paper, Specifically [Tier 1 Math & Shaders — CLOSED] — `docs/content-video-engine/42-DRAWING-KINETICS.md:112` 42.5 What is ours to tune, not a finding — h 0.00 / j 0.03 / b 0.00 — 5 rules
+    - `:451` - Three physical components:
+    - `:452` 1. Two-Thirds Power Law velocity re-parameterization.
+    - `:453` 2. 1D Perlin noise deckle stroke edge ($\sigma = 0.6\text{px}$, frequency $= 0.18$).
+    - `:454` 3. Discrete vertex boil jitter on-2s (12fps) using static deterministic seed (`lpHash`).
+    - `:455` - Source: Georges Winkenbach & David H. Salesin, Computer-Generated Pen-and-Ink Illustration, ACM SIGGRAPH 1994.
+- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:459` — C6: What Rive / Lottie / Flash Got Right [Tier 1 Architecture — CLOSED] — `docs/content-video-engine/42-DRAWING-KINETICS.md:63` 42.2 The settle — closed-form second-order dynamics — h 0.00 / j 0.03 / b 0.00 — 2 rules
+    - `:460` - Separate timeline keyframe evaluation from state machine transitions.
+    - `:461` - The video engine must evaluate frame state as a pure, stateless function of clock time:
+- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:466` — 6. Track D — Placement (The "Where" Question) — `docs/content-video-engine/42-DRAWING-KINETICS.md:91` 42.3 Squash and stretch, area-preserving and motion-driven — h 0.00 / j 0.02 / b 0.00 — 0 rules
+- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:468` — D1: Eye-Trace & Fixation Decay [Tier 1 Psychophysics — CLOSED] — `docs/content-video-engine/42-DRAWING-KINETICS.md:63` 42.2 The settle — closed-form second-order dynamics — h 0.00 / j 0.03 / b 0.00 — 3 rules
+    - `:469` - Mean fixation duration in scene viewing: $260\text{--}330\text{ms}$ (Rayner 1998).
+    - `:470` - Visual search latency following an abrupt transition: $180\text{--}220\text{ms}$.
+    - `:471` - Design Proposal (15° Visual Cone): Place consecutive visual items within $R \le 260\text{px}$ of the preceding object's centroid to avoid visual hunting.
+- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:475` — D2: Non-Decorative Composition for 9:16 [Candidate Doctrine] — no target section scores above zero — h 0.00 / j 0.00 / b 0.00 — 2 rules
+    - `:490` - Tangency Elimination Rule: Minimum clearance $\ge 24\text{px}$ OR deliberate overlap $\ge 48\text{px}$ with cast shadow.
+    - `:491` - 180° Motion Vector Rule: Motion flow direction (e.g. left-to-right debt accumulation) must remain continuous across cuts.
+- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:495` — D3: Saliency Hierarchy & Mayer's Spatial Contiguity [Tier 1 Cognitive Science — CLOSED] — `docs/content-video-engine/42-DRAWING-KINETICS.md:63` 42.2 The settle — closed-form second-order dynamics — h 0.00 / j 0.02 / b 0.00 — 2 rules
+    - `:496` - Visual priority order: Kinetic Motion ($40\text{--}80\text{ms}$) $\to$ Luminance Contrast ($90\text{--}140\text{ms}$) $\to$ Scale/Area ($150\text{--}220\text{
+    - `:497` - Mayer's Spatial Contiguity Principle: Integrating text labels directly into graphic charts eliminates the split-attention effect (Mayer 2001, 2009; Ginns 2006
+- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:501` — D4: Motion-Graphics Grids (12-Column Vertical) [Tier 2 Proposal] — `docs/content-video-engine/42-DRAWING-KINETICS.md:91` 42.3 Squash and stretch, area-preserving and motion-driven — h 0.00 / j 0.07 / b 0.00 — 2 rules
+    - `:502` - 12-column layout: $1080\text{px}$ width, $48\text{px}$ outer margins, $12 \times 62\text{px}$ columns, $22\text{px}$ gutters.
+    - `:503` - Three functional docks: Header ($Y=320\text{px}$), Ledger Stage ($Y=480\text{px}$, $H=800\text{px}$), Callout Badge ($Y=1220\text{px}$).
+- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:507` — D5: The Abstract $	o$ Concrete Metaphor Library [Tier 1 Cognitive Linguistics — CLOSED] — `docs/content-video-engine/42-DRAWING-KINETICS.md:63` 42.2 The settle — closed-form second-order dynamics — h 0.00 / j 0.03 / b 0.00 — 6 rules
+    - `:508` - Derived directly from Lakoff & Johnson (Metaphors We Live By, 1980):
+    - `:509` - MORE IS UP: Reservoir / Silo $\to$ Vertical Bar Chart / Accumulation Area.
+    - `:510` - VELOCITY IS FLOW: High-pressure Pipe $\to$ First-Derivative Slope Curve.
+    - `:511` - LIMITS ARE BARRIERS: Toll Gate / Wall $\to$ Horizontal Debt Ceiling Threshold.
+    - `:512` - EQUILIBRIUM IS BALANCE: Balance Scale $\to$ Dual-column Comparative FRED Spread.
+    - `:513` - EXTRACTION IS A SIPHON: Leaky Bucket / Siphon Tube $\to$ Net Interest Margin Divergence.
+- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:517` — 7. Track E — The Feedback Loop (The Structural Gap) — `docs/content-video-engine/42-DRAWING-KINETICS.md:63` 42.2 The settle — closed-form second-order dynamics — h 0.00 / j 0.03 / b 0.00 — 0 rules
+- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:519` — E1: Frame Sequence Quality Metrics [Metrics: Tier 1 CLOSED; Thresholds: Tier 2 Proposal] — `docs/content-video-engine/42-DRAWING-KINETICS.md:63` 42.2 The settle — closed-form second-order dynamics — h 0.00 / j 0.05 / b 0.00 — 2 rules
+    - `:521` The four mathematical metrics are accepted as our diagnostic suite; the numerical thresholds are initial calibration proposals to be benchmarked against our act
+    - `:540` - Source: Laurent Itti & Christof Koch, Computational Modelling of Visual Attention, Nature Reviews Neuroscience 2001; Gunnar Farnebäck, Two-Frame Motion Estima
+- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:544` — E2: Diagnosing "The Race Feels Choppy" [Tier 1 Psychophysics — CLOSED] — `docs/content-video-engine/42-DRAWING-KINETICS.md:63` 42.2 The settle — closed-form second-order dynamics — h 0.00 / j 0.03 / b 0.00 — 0 rules
+- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:546` — 1. Mechanical Root Cause — no target section scores above zero — h 0.00 / j 0.00 / b 0.00 — 0 rules
+- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:550` — 2. Pipeline Fix — no target section scores above zero — h 0.00 / j 0.00 / b 0.00 — 2 rules
+    - `:551` 1. If object velocity $v > 100\text{ px/s}$, force rendering to On-1s (24fps).
+    - `:552` 2. Apply $180^\circ$ shutter motion blur ($0.5 \cdot v_{\text{pixel}}$ directional blur).
+- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:556` — 8. Procedural Code Audit: `parallax-runner.mjs` — no target section scores above zero — h 0.00 / j 0.00 / b 0.00 — 0 rules
+- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:560` — 8.1 Current Code & Line Coordinates — `docs/content-video-engine/42-DRAWING-KINETICS.md:63` 42.2 The settle — closed-form second-order dynamics — h 0.00 / j 0.02 / b 0.00 — 4 rules
+    - `:561` 1. Lines 33–43 (`motionInputs` in default Dolly preset):
+    - `:575` 2. Lines 49, 62, 76, 90, 108:
+    - `:577` 3. Line 129 (Node "2" inputs):
+    - `:583` 4. Line 142 (Node "4" inputs):
+- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:590` — 8.2 The Precise Defect & Proposed Fix — `docs/content-video-engine/42-DRAWING-KINETICS.md:12` 42.1 The stroke — curvature-reparameterised drawing — h 0.00 / j 0.02 / b 0.00 — 4 rules
+    - `:591` - The Defect: `intensity` is hardcoded to `1.0` across all six preset blocks. In ComfyUI-Depthflow-Nodes, `intensity` is the displacement multiplier. Combined w
+    - `:592` - The Exact Code Edit:
+    - `:593` - In lines 35, 49, 62, 76, 90, 108: derive intensity from caller parameter or clamp to safe ceiling:
+    - `:595` - In line 129: upgrade model to `depth_anything_v2_vitl_fp32.safetensors` (or `vitl_fp16`) for crisp edge delineation.
+- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:599` — 9. Sourcing Integrity & Bibliography — `docs/content-video-engine/42-DRAWING-KINETICS.md:12` 42.1 The stroke — curvature-reparameterised drawing — h 0.00 / j 0.05 / b 0.00 — 0 rules
+- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:603` — 9.1 Empirical Psychophysics & Mathematics (Primary Scientific Evidence) — `docs/content-video-engine/42-DRAWING-KINETICS.md:12` 42.1 The stroke — curvature-reparameterised drawing — h 0.00 / j 0.07 / b 0.00 — 20 rules
+    - `:604` 1. Paolo Viviani & C. Terzuolo (1982). Trajectory determines movement dynamics. Neuroscience, 7(2), 431–437. DOI: 10.1016/0306-4522(82)90277-9. (Cited for Two-T
+    - `:605` 2. M. C. Potter, B. Wyble, C. E. Hagmann, & E. S. McCourt (2014). Detecting meaning in RSVP at 13 ms per picture. Attention, Perception, & Psychophysics, 76(2),
+    - `:606` 3. Keith Rayner (1998). Eye movements in reading and information processing: 20 years of research. Psychological Bulletin, 124(3), 372–422. DOI: 10.1037/0033-29
+    - `:607` 4. Tim J. Smith & John M. Henderson (2008). Edit Blindness: The Relationship Between Attention and Global Change Blindness in Dynamic Scenes. Journal of Eye Mov
+    - `:608` 5. Tim J. Smith (2012). The Attentional Theory of Cinematic Continuity (AToCC). Projections: The Journal for Movies and Mind, 6(1), 1–27. (Cited for Gaze Synchr
+    - `:609` 6. James E. Cutting, K. L. Brunick, & C. DeLong (2011). Quicken and Quenched: The Fluctuation of Shot Durations in Hollywood Film. Information Design Journal, 1
+    - `:610` 7. A. B. Watson, A. J. Ahumada, & J. E. Farrell (1986). The window of visibility: a psychophysical theory of fidelity in time-sampled visual displays. Journal o
+    - `:611` 8. Marc Alexa, D. Cohen-Or, & D. Levin (2000). As-rigid-as-possible shape interpolation. ACM SIGGRAPH 2000, 157–164. (Cited for ARAP Polar Decomposition, C1).
+    - `:612` 9. Takeo Igarashi, T. Moscovich, & J. F. Hughes (2005). As-rigid-as-possible shape manipulation. ACM Transactions on Graphics (SIGGRAPH 2005), 24(3), 1134–1141.
+    - `:613` 10. Thomas Flash & Neville Hogan (1985). The coordination of arm movements: an experimentally confirmed mathematical model. Journal of Neuroscience, 5(7), 1688–
+    - `:614` 11. Laurent Itti, Christof Koch, & Ernst Niebur (1998). A model of saliency-based visual attention for rapid scene analysis. IEEE TPAMI, 20(11), 1254–1259. (Cit
+    - `:615` 12. B. Bridgeman, D. Hendry, & L. Stark (1975). Failure to detect displacement of the visual world during saccadic eye movements. Vision Research, 15(6), 719–72
+    - `:616` 13. P. Pastrana-Vidal & J. C. Gicquel (2006). Subjective evaluation of spatio-temporal quality of video sequences with freezing. IEEE Transactions on Broadcasti
+    - `:617` 14. S. Martinez-Conde, S. L. Macknik, & D. H. Hubel (2006). The role of fixational eye movements in visual perception. Nature Reviews Neuroscience, 7(10), 732–7
+    - `:618` 15. John Sweller, P. Ayres, & S. Kalyuga (2011). Cognitive Load Theory. Springer. (Cited for Split-Attention Extraneous Load, B1).
+    - `:619` 16. P. Ginns (2006). Integrating information: A meta-analysis of the spatial contiguity and temporal contiguity effects. Educational Psychology Review, 18(4), 4
+    - `:620` 17. W. S. Cleveland & R. McGill (1984). Graphical Perception: Theory, Experimentation, and Application to the Development of Graphical Methods. JASA, 79(387), 5
+    - `:621` 18. P. A. Carpenter & P. Shah (1998). A model of the perceptual and cognitive processes involved in comprehension of graphs. Journal of Experimental Psychology:
+    - `:622` 19. George Lakoff & Mark Johnson (1980). Metaphors We Live By. University of Chicago Press. (Cited for Conceptual Metaphors, D5).
+    - `:623` 20. Georges Winkenbach & David H. Salesin (1994). Computer-generated pen-and-ink illustration. ACM SIGGRAPH 1994, 91–100. (Cited for Procedural Ink Hatching, C5
+- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:625` — 9.2 Practitioner Doctrine (Editorial & Animation Craft) — no target section scores above zero — h 0.00 / j 0.00 / b 0.00 — 4 rules
+    - `:626` 21. Walter Murch (1995). In the Blink of an Eye: A Perspective on Film Editing. Silman-James Press. (Practitioner doctrine: Rule of Six, blink alignment).
+    - `:627` 22. Richard Williams (2001). The Animator's Survival Kit. Faber & Faber. (Practitioner doctrine: timing, spacing, anticipation charts).
+    - `:628` 23. John Lasseter (1987). Principles of traditional animation applied to 3D computer animation. ACM SIGGRAPH '87, 21(4), 35–44. (Practitioner doctrine: squash/s
+    - `:629` 24. Edward Pincus & Steven Ascher (2013). The Filmmaker's Handbook: A Comprehensive Guide for the Digital Age. Plume. (Practitioner doctrine: J-cuts and L-cuts)
+- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:631` — 9.3 Internal Repository Measurements — no target section scores above zero — h 0.00 / j 0.00 / b 0.00 — 1 rule
+    - `:632` 25. `04_shot_ledger_100_cuts.md` (2026-09-04). Forensic analysis of Wealth Logic (100 cuts): 82% reference cuts in acoustic silence gaps ($\ge 0.30\text{s}$) vs
 
 ### PARTIAL — the target carries some of it — check what it dropped
 

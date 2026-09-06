@@ -404,6 +404,36 @@ def test_a_row_calling_a_figure_invented_makes_it_derived(records) -> None:
     assert _one(records, "formula", "A6: The Secondary-Motion Budget")["provenance"] == "derived"
 
 
+def _records_with(root_dir: Path, rel: str, text: str) -> list[dict]:
+    """The synthetic tree with one file rewritten, the index and the citation graph rebuilt over it."""
+    root = _tree(root_dir)
+    (root / rel).write_text(text, encoding="utf-8")
+    BDI.write(root)
+    _, edges = BTI.build(BDI.build_index(root), root)
+    (root / BAR.CITATIONS_REL).write_text(
+        "".join(json.dumps(e, ensure_ascii=False) + "\n" for e in edges), encoding="utf-8")
+    return BAR.build(root)
+
+
+CADENCE_LINE = "On-1s above 250 px/s, On-2s below it.\n"
+DERIVED_TAG_LINE = ("Chosen, not measured [DERIVED: from Williams 2001 cadence practice "
+                    "(sources: not on file), a picked threshold].\n")
+
+
+def test_a_derived_tag_anywhere_in_the_section_makes_that_sections_figure_derived(tmp_path: Path) -> None:
+    """E42 / P45 T5: the tag is read over the record's whole section, not only its own line."""
+    # Arrange / Act - the same doc without the tag, and with it two lines below the figure
+    plain = _records_with(tmp_path / "plain", DOC_48_REL, DOC_48)
+    tagged = _records_with(tmp_path / "tagged", DOC_48_REL,
+                           DOC_48.replace(CADENCE_LINE, CADENCE_LINE + "\n" + DERIVED_TAG_LINE))
+
+    # Assert - the tag is two lines below the figure, so only a section-wide read finds it
+    rec = _one(tagged, "formula", "On-1s / On-2s")
+    assert _one(plain, "formula", "On-1s / On-2s")["provenance"] == "unsourced"
+    assert rec["provenance"] == "derived"
+    assert DERIVED_TAG_LINE.strip() not in DOC_48.split("\n")[rec["line"] - 1]
+
+
 def test_a_section_that_reaches_a_research_file_is_sourced(records) -> None:
     # the research file itself, and our own section whose body cites it
     assert _one(records, "formula", "3.1 Fake Damping Regimes")["provenance"] == "sourced"

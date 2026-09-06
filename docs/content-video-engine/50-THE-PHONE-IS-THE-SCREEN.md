@@ -45,7 +45,9 @@ scale = 390 / 1920 = 0.203        a 4.9x downscale
 | 60–64 px | 12.2–13.0 px | readable |
 
 > **A font must be ≥ 59 px on our stage to reach 12 px on a phone in portrait.
-> Fourteen of the sixteen distinct sizes in the template fall below that.**
+> Fourteen of the sixteen distinct sizes in the template fall below that.** [DERIVED: from our own template font sizes and 390/1920 (sources: this repo, 50 §50.2), arithmetic]
+
+A `DERIVED` tag marks a computed figure: a starting reference to test, never a research finding (R6; E42 2026-09-06).
 
 > **Addendum 2026-09-05 (P41): the same arithmetic on the native 9:16 stage.** A 1080 x 1920
 > short fills the 390 px phone width, a 2.77x downscale, so 12 px on the phone is **34 px on
@@ -115,7 +117,7 @@ is the only link we can act on directly.
 
 | | |
 |---|---|
-| **new gate** | **mobile legibility** — every rendered text size, at the portrait scale, against a 12 px floor. Mechanical, trivial, and it FAILs almost the whole template today |
+| **new gate** | **mobile legibility** — every rendered text size, at the portrait scale, against a 12 px floor. Mechanical, trivial, and it FAILs almost the whole template today. The 12 px floor itself is [DERIVED: from an asserted mobile-legibility threshold (sources: not on file - no citation in doc 50, doc 49 or the bundle), everything above rests on it; X0 tests it by reading a frame] |
 | **reprioritises** | this may be a larger retention lever than any animation work in P38, and it is a fraction of the cost |
 | **sharpens P40** | the target is no longer "the first minute" — it is **the cold cohort's first ~60 seconds on a 390 px screen** |
 | **does not overturn** | anything in 42–49. It sits in front of them: the finest stroke in the world is invisible at 5 px |

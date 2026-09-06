@@ -47,10 +47,12 @@ the §43.3 Z-stack instead, which costs no shader and cannot tear.
 
 Read from `tools/google-flow-driver/src/parallax-runner.mjs` on 2026-09-04.
 
+A `DERIVED` tag marks a computed figure: a starting reference to test, never a research finding (R6; E42 2026-09-06).
+
 | dial | our value | target | consequence of ours |
 |---|---|---|---|
 | `strength` (default, line 11) | `1.0` | see §45.4 | mathematical ceiling |
-| `intensity` (lines 35/49/62/76/90/108) | `1.0` hardcoded | `0.08`–`0.15`, ceiling `0.18` | maximum displacement |
+| `intensity` (lines 35/49/62/76/90/108) | `1.0` hardcoded | `0.08`–`0.15`, ceiling `0.18` [DERIVED: from content/video_engine/sources/reference_analyses/COMFYUI_PARALLAX_TECHNICAL_STANDARDS_RESEARCH.md, a recommended band; the exact ceiling's derivation is not stated there] | maximum displacement |
 | `tiling_mode` (line 157) | `"mirror"` | `"none"` + 1.10× pre-zoom crop | **the kaleidoscope ceiling glitch** |
 | `ssaa` (line 155) | `1.0` | `1.5`–`2.0` | edge crawl on thin silhouettes |
 | `quality` (line 154) | `75` | `80`–`95` | compression around displacement vectors |

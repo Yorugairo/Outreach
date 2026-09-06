@@ -59,8 +59,10 @@ See [47-FINDINGS-TO-CHECKS](47-FINDINGS-TO-CHECKS.md) §0.
 
 ## 46.3 The gap threshold — settled from the reference, 2026-09-04
 
+A `DERIVED` tag marks a computed figure: a starting reference to test, never a research finding (R6; E42 2026-09-06).
+
 `01` and the dossier's `gap_detector.py` blueprint used **Δt ≥ 0.45 s** and the gap's
-**midpoint**; `06` and `08` used **Δt ≥ 0.30 s** and gap **onset**. An earlier draft of this
+**midpoint**; `06` and `08` used **Δt ≥ 0.30 s** and gap **onset**. The 0.45 s floor is [DERIVED: from content/video_engine/sources/reference_analyses/DRAWING_ENGINE_ANIMATION_TRANSFORM_RESEARCH.md:402, a proposed silence floor - overturned by the measurement below]. An earlier draft of this
 section proposed settling it from our own word timeline. **Operator: *"is basing the gap
 threshold off our own work really the right way? We should check Wealth Logic's gap
 threshold and compare against ours."*** So it was measured on the reference — its audio

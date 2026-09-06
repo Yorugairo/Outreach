@@ -161,9 +161,11 @@ The document integrates with E22 rather than around it:
 - **Light wrap**: bleed 4–12 px of blurred background into the sprite perimeter.
 - **Substrate grain**: modulate vector fills with washi noise,
   `C = C_vector · [1 + κ(T_washi − 0.5)]`, κ ≈ 0.12–0.16, and stroke in charcoal
-  **`#25313C`** rather than pure black, with a 0.6–0.8 px alpha feather.
+  **`#25313C`** rather than pure black, with a 0.6–0.8 px alpha feather. [DERIVED: from our own washi-noise tokens (sources: not on file), κ chosen as the modulation depth]
 
 That last line is E22's charcoal, arrived at independently.
+
+A `DERIVED` tag marks a computed figure: a starting reference to test, never a research finding (R6; E42 2026-09-06).
 
 ## 48.9 What this changes
 

@@ -164,7 +164,9 @@ We establish a strict three-tier boundary to prevent unproven research from beco
 
 ### A1: The Timing Charts [RECLASSIFIED: Design Proposal]
 
-The figures below represent **animator craft heuristics** synthesized from classical practitioners (Richard Williams 2001; John Lasseter 1987). They are **design proposals** for pipeline defaults, not psychophysical laws.
+The figures below represent **animator craft heuristics** synthesized from classical practitioners (Richard Williams 2001; John Lasseter 1987). They are **design proposals** for pipeline defaults, not psychophysical laws. [DERIVED: from Williams 2001 pp. 35–42 + Lasseter 1987 (sources: not on file), tabulated by mass class]
+
+A `DERIVED` tag marks a computed figure: a starting reference to test, never a research finding (R6; E42 2026-09-06).
 
 ```
 +----------------------------------------------------------------------------------------------------+
@@ -188,7 +190,7 @@ $$\text{Frame Cadence} = \begin{cases}
 \text{On-2s (12 fps)}, & \text{if } v_{\text{trans}} \le 250\text{ px/s and Line Draw / Bar Rise} \\
 \text{On-3s (8 fps)},  & \text{if Background Atmospheric Boil only (never on foreground)}
 \end{cases}$$
-- **Failure Signature**: Translating a chart board or camera at $v > 300\text{ px/s}$ on-2s creates severe stroboscopic double-imaging and retinal judder (Watson et al. 1986).
+- **Failure Signature**: Translating a chart board or camera at $v > 300\text{ px/s}$ on-2s creates severe stroboscopic double-imaging and retinal judder (Watson et al. 1986). [DERIVED: from Williams/Lasseter cadence practice + Watson et al. 1986 on judder (sources: not on file), thresholds picked at 250/300 px/s - E2 §7 below states 100 px/s instead, so the two do not agree]
 - **Source**: Richard Williams, *The Animator's Survival Kit* (2001), pp. 35–42; John Lasseter, *Principles of Traditional Animation Applied to 3D Computer Animation*, SIGGRAPH 1987. *(Classified as practitioner doctrine)*.
 
 ---
@@ -213,6 +215,8 @@ $$\text{Frame Cadence} = \begin{cases}
 | Movement          | tau(t) = 10t^3-15t^4+6t^5  | Flash & Hogan 1985    | arm movement model        |
 +-------------------+----------------------------+-----------------------+---------------------------+
 ```
+
+The easing values in the table above are ours. [DERIVED: from the frame-count spacing charts of Williams 2001 (sources: not on file), converted by hand into the table; the Organic Human Movement row is the sourced one and carries its own citation]
 
 ---
 
@@ -241,6 +245,8 @@ $$x(t) = 1 - e^{-\zeta \omega_0 t} \left( \cos(\omega_d t) + \frac{\zeta \omega_
 | (Our Standard)    |        |        |        |        |            | (Crit. Damped)| (3.5 frames)  |
 +-------------------+--------+--------+--------+--------+------------+---------------+---------------+
 ```
+
+The material preset table above is ours. [DERIVED: from the mass-spring-damper formulation above (sources: not on file), m/k/c chosen to hit the stated overshoot and settle targets]
 
 ---
 
@@ -295,15 +301,15 @@ $$\kappa(t) = \frac{|\dot{x}\ddot{y} - \dot{y}\ddot{x}|}{(\dot{x}^2 + \dot{y}^2)
 #### 2. Dynamic Nib Pooling [RECLASSIFIED: Engineering Heuristic Proposal]
 Viviani's power law governs velocity, not width. The formula below is an **engineering heuristic proposal** for stroke dilation:
 $$w(s) = w_0 \cdot \left( \frac{v(s)}{v_{\text{mean}}} \right)^{-0.25}$$
-- **Corner Discontinuity Rule**: When interior angle $\theta_{\text{corner}} < 75^\circ$, decelerate stroke to $v=0$ over 3 frames, hold for 2 frames ($83\text{ms}$) representing pen pivot, and resume.
+- **Corner Discontinuity Rule**: When interior angle $\theta_{\text{corner}} < 75^\circ$, decelerate stroke to $v=0$ over 3 frames, hold for 2 frames ($83\text{ms}$) representing pen pivot, and resume. [DERIVED: from Viviani & Terzuolo 1982 (sources: not on file - the velocity law is cited, the dilation is not), the −0.25 exponent and the 75° corner rule are an engineering heuristic laid on top of it]
 
 ---
 
 ### A6: The Secondary-Motion Budget [RECLASSIFIED: Design Proposal]
 
-- **Energy Ratio Proposal**:
+- **Energy Ratio Proposal** [DERIVED: from Lasseter 1987 + Williams 2001 craft doctrine (sources: not on file), extrapolated to an energy ratio]:
   $$E_{\text{secondary}} = \int_0^T |v_{\text{secondary}}(t)|^2 dt \le 0.22 \cdot E_{\text{primary}}$$
-- **Lag & Settle Proposal**: Phase lag $= 2\text{--}4$ frames ($83\text{--}166\text{ms}$). Secondary settle must complete within $1.5\times$ primary duration.
+- **Lag & Settle Proposal**: Phase lag $= 2\text{--}4$ frames ($83\text{--}166\text{ms}$). Secondary settle must complete within $1.5\times$ primary duration. [DERIVED: from Lasseter 1987 + Williams 2001 craft doctrine (sources: not on file), constants picked to fit the craft shape]
 - **Source**: John Lasseter (1987); Richard Williams (2001). *(Classified as animator craft doctrine)*.
 
 ---
@@ -377,7 +383,7 @@ We decouple the three thresholds conflated in Pass 1:
 |                   | (250 - 416 ms)     | verbal metric analysis |                                  |
 +-------------------+--------------------+------------------------+----------------------------------+
 ```
-- **Source**: E. Pincus & S. Ascher, *The Filmmaker's Handbook* (2013). *(Classified as film craft doctrine)*.
+- **Source**: E. Pincus & S. Ascher, *The Filmmaker's Handbook* (2013). *(Classified as film craft doctrine)*. [DERIVED: from Pincus & Ascher 2013 (sources: not on file), converted to frames at 24 fps; never measured on a reference]
 
 ---
 

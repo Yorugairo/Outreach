@@ -146,13 +146,13 @@ owns HG decisions, integration and every diff review; `reviewer` before each com
 - Evidence: pending
 
 ### T5: Derived-number provenance
-- Status: running (D6 ruled by E42, 2026-09-06: tag all thirteen)
+- Status: complete
 - Owner: junior_developer, parent for GEMINI.md
 - Depends on: T2, HG3
 - Write set: the docs carrying derived figures (from the triage), `GEMINI.md` (intake step 3), `content/video_engine/scripts/build_animation_registry.py` (+ test: `provenance: derived` when a `[DERIVED:` tag is within the section)
 - Acceptance: 0.22 in doc 47 / the brief carries `[DERIVED: from …, how]`; each tag links the sources it was computed from when they are readily available in the sources bundle / research docs, or says `sources: not on file`; the registry lists every derived figure; the intake names the tag (ruled 2026-09-05)
 - Validate: `rg -c "\[DERIVED:" docs/ | tail -1; python -m pytest content/video_engine/tests/test_build_animation_registry.py -q -p no:cacheprovider`
-- Evidence: pending
+- Evidence: 2026-09-06 (junior_developer; parent reviewed and reworded one tag). 14 `[DERIVED:` tags for the thirteen figures across the brief, docs 45/46/47/48/50 (the 0.22 in the brief and doc 47); one R6 sentence per doc. The triage's brief line numbers were 2 off and several targets sat inside code fences or `$$` math, so tags went on the nearest prose line of the same section - the registry reads provenance over the section. The 0.45 s row IS in doc 46 §46.3 and is tagged there. Detection needed no change (`animation_registry_chain.provenance` already reads the section); a test pins it (`36 passed`). Registry provenance 296/2/50 → 295/12/42 (sourced/derived/unsourced), 348 formula records unchanged after the parent removed a law name from one tag that had minted a phantom record. `GEMINI.md` intake step 3 carries the E42 rule.
 
 ### T6: The craft map
 - Status: complete
