@@ -1,7 +1,7 @@
 """Send one order to one lane. An order is a file AND a send - this writes the file, then makes the send.
 
     python content/video_engine/scripts/bridge_send.py --lane gemini --brief-file order.md --title "profiles" --dry-run
-    python content/video_engine/scripts/bridge_send.py --lane gemini --brief-file order.md --title "profiles" --model pro
+    python content/video_engine/scripts/bridge_send.py --lane gemini --brief-file order.md --title "profiles" --model flash
     python content/video_engine/scripts/bridge_send.py --lane claude --brief-file review.md --reply-shape review --profile reviewer
 
 The packet folder is `docs/research/runs/bridge/<state>/<packetId>/` and the packet id is the sha256 of the
@@ -47,7 +47,8 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--brief-file", required=True, type=Path, help="the order body, markdown, <= 6 KB")
     parser.add_argument("--title", default=None, help="conversation title; also how the id is confirmed")
     parser.add_argument("--profile", default=None, help="gemini: --profile=<p>; claude: --agent <p>")
-    parser.add_argument("--model", default=None, help="gemini model, e.g. pro")
+    parser.add_argument("--model", default="flash",
+                        help="gemini model TIER: flash_lite | flash | pro (default flash - operator 2026-09-06: the current flash, 3.8, is the stronger model; pro is 3.1)")
     parser.add_argument("--reply-shape", choices=REPLY_SHAPES, default="free")
     parser.add_argument("--deadline-min", type=int, default=DEFAULT_DEADLINE_MIN)
     parser.add_argument("--repo", type=Path, default=REPO)

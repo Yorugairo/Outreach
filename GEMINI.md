@@ -120,7 +120,7 @@ It needs three environment variables: `ANTIGRAVITY_LS_ADDRESS=127.0.0.1:<the lan
 `ANTIGRAVITY_CSRF_TOKEN` (the `--csrf_token` value on `language_server.exe`'s command line - read it into the env, never print it),
 and `ANTIGRAVITY_PROJECT_ID` = the repository PATH (`C:/Users/Snipe/Downloads/Outreach Program`; a project name from
 projects.json fails with "file does not exist"). The repo must be in `~/.gemini/trustedFolders.json` (added 2026-09-06).
-Commands: `new-conversation [--model=pro] [--profile=<p>] [--title=<t>] "<prompt>"` (echoes the prompt; the conversation id is
+Commands: `new-conversation [--model=flash_lite|flash|pro] [--profile=<p>] [--title=<t>] "<prompt>"` (**use `flash`** - operator 2026-09-06: the current flash tier, 3.8, is the stronger model; pro is 3.1; `bridge_send.py` defaults to flash) (echoes the prompt; the conversation id is
 the newest `~/.gemini/antigravity/conversations/<id>.db`), `get-conversation-metadata <id>`, `send-message <id> "<text>"`.
 Progress lives on disk: `~/.gemini/antigravity/brain/<id>/.system_generated/logs/transcript.jsonl`, one record per step
 (PLANNER_RESPONSE with tool_calls, GENERIC tool output, SYSTEM_MESSAGE) - tail it instead of polling the IDE.
