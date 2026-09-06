@@ -3520,7 +3520,7 @@
      "badges": [],
      "emphasize": 0,
      "enter": "mount",
-     "mount_s": 1.3,
+     "mount_s": 2.0,
      "exit": "cut"
     },
     "ken_burns": {
@@ -3541,7 +3541,13 @@
      "enter": 9.09,
      "exit": 15.34,
      "badge_at": [],
-     "kind": "video"
+     "kind": "video",
+     "place": {
+      "x": 624,
+      "y": 313,
+      "w": 240,
+      "h": 159
+     }
     },
     {
      "slide": "dock-a2-counter-colder",
@@ -3549,7 +3555,13 @@
      "enter": 15.34,
      "exit": 18.95,
      "badge_at": [],
-     "kind": "video"
+     "kind": "video",
+     "place": {
+      "x": 624,
+      "y": 313,
+      "w": 240,
+      "h": 159
+     }
     },
     {
      "slide": "dock-g-two-fingers",
@@ -3557,13 +3569,19 @@
      "enter": 36.58,
      "exit": 38.96,
      "badge_at": [],
-     "kind": "video"
+     "kind": "video",
+     "place": {
+      "x": 624,
+      "y": 313,
+      "w": 240,
+      "h": 159
+     }
     }
    ],
    "species": [
     {
      "kind": "callout",
-     "at": 9.29,
+     "at": 10.79,
      "dur": 2.0,
      "target": {
       "kind": "datum",
@@ -5011,7 +5029,13 @@
      "enter": 55.31,
      "exit": 61.76,
      "badge_at": [],
-     "kind": "video"
+     "kind": "video",
+     "place": {
+      "x": 624,
+      "y": 313,
+      "w": 240,
+      "h": 159
+     }
     }
    ],
    "species": [

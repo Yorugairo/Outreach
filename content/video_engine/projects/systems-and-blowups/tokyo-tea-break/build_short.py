@@ -216,7 +216,7 @@ DOCK_META = [
 # ROLL .7 + SAVOR .8 + FIELD 2.4 + PUNCH .5 + BUILD 3.0. The chart LANDS at 7.4s after the page enters and the focus action
 # fires there - no highlight over the charcoal build (operator, 2026-09-04). A page cannot land a callout sooner than this.
 PAGE_BUILD_END_S = 7.4
-MOUNT_SKIP_S = 0.7   # ROLL only: the mount IS the roll-out and the savor stays (E45 s2), so a mounted chart lands at mount end + (7.4 - 0.7)
+LP_ROLL_S = 0.7      # the roll-out beat; a MOUNT replaces it (E45: the mount IS the roll-out, the savor stays) and ends where the roll would have
 
 
 def shot_table(ws: list[dict], runtime_s: float, t_outro: float | None = None) -> list[tuple]:
@@ -232,7 +232,8 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float | None = None) -
     # points; only the world changes that are still cuts (the promise plate, the catalyst, the ring) take cut_before.
     t_page = at("unfunded")                              # the page's own clock starts on "unfunded" (E44: the chart flexes on the hook)
     t_mount = at("left America")                         # E45 s2: the page MOUNTS over the host - the bar fades above while the cream builds beneath
-    mount_hook = round(t_page - t_mount, 2)              #   from "left America" to "unfunded"; the page's clock then runs from t_page as before
+    mount_hook = round(t_page + LP_ROLL_S - t_mount, 2)  #   E45: the timing does not change - the fade cuts INTO the prior scene and ends where the
+                                                         #   roll-out would have ended (t_page + 0.7), so the savor, the charcoal and the graph land as before
     t_panel = at("Three men in blue ties")               # the panel docks on "Three"
     t_sixty = at("sixty-three stick figures")            # ... and swaps to the host on the joke
     t_watch = at("watching")                             # ... and retracts on "watching", leaving the page bare for the datum
@@ -261,7 +262,7 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float | None = None) -
             (dock_still("dock-a2-counter-colder"), 0, t_sixty, t_watch),
             (dock_still("dock-g-two-fingers"), 0, t_two, t_promise),
         ], "cut", [
-            {"kind": "callout", "at": round(t_page + PAGE_BUILD_END_S - MOUNT_SKIP_S + 0.1, 2), "dur": 2.0, "target": datum(LAST_IDX)},   # -$122.6B, at the build's landing
+            {"kind": "callout", "at": round(t_page + PAGE_BUILD_END_S + 0.1, 2), "dur": 2.0, "target": datum(LAST_IDX)},   # -$122.6B, at the build's landing
             {"kind": "spotlight", "at": t_lender, "dur": 2.0, "target": datum(LAST_IDX)},                                  # the June datum on "our biggest lender"
             {"kind": "callout", "at": t_trillion, "dur": 2.0, "target": datum(PEAK_IDX)},                                  # the February peak on "over a trillion"
         ]),

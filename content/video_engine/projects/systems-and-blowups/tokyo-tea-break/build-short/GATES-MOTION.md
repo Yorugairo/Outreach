@@ -10,7 +10,7 @@
   still_over_12s_share: 0%
             per_minute: 0:00:205/6 1:00:167/4
 
-  [WARN ] M11 first chart ledger:s02 enters at 2.0s, its build lands at 9.2s, with callout at 9.3s; WARN no sound cue within 1.5s of the enter at 2.0s; window 0-10s (E44 short: the page rolls out on the hook - the chart is the mechanism by 0:10)
+  [WARN ] M11 first chart ledger:s02 enters at 2.0s, its build lands at 10.7s, with callout at 10.8s; WARN no sound cue within 1.5s of the enter at 2.0s; window 0-10s (E44 short: the page rolls out on the hook - the chart is the mechanism by 0:10)
           E24 / doc 29 s9.29 (long form) + E44 (short): the first chart enters 0:08-0:20, or 0:00-0:10 on a short, annotated on its divergence, with a sound cue
   [PASS ] M01 longest still stretch 1.3s at 0:26
           doc 29 s8.19 / s9.25 stillness ceiling
@@ -46,5 +46,5 @@
 RESULT: 0 FAIL / 1 WARN / 13 PASS / 1 JUDGE / 1 INFO
 ```
 
-TIMELINE: tokyo-short.timeline.json sha256:ed38696f49551384ae71a476ce595c13ff7f43646e5ece8168505979e504b60b
+TIMELINE: tokyo-short.timeline.json sha256:922886c7475cd5965cd21e56f606150645858947c3cadf256b855e9172c0eec4
 VERDICT: PASS (0 FAIL)
