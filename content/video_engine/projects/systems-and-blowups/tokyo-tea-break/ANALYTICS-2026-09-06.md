@@ -36,3 +36,30 @@ Three operator observations, same day, all in this window:
 Eight viewers cannot separate the hook from the timing test from the audience. The second step at 0:55 (s08, a clip
 between two ledger pages) is one viewer. Re-read at n ≥ 100 and after the Monday/Tuesday post; the comparison that
 matters is Tokyo against the next short built under E44, not Tokyo against ep1.
+
+## Second read, ~2 h after posting (n = 51 viewers, 282 views, 6 fifteen-second views, 3 interactions, 0 follows)
+
+| metric | value |
+|---|---|
+| average watch time | 25 s of 89 (28 %) — down from 50 s at n = 8, up from ep1's 7 s of 73 (9 %) |
+| watch time | 25 m 50 s |
+| biggest drop-off | **0:07** (was 0:11 at n = 8) |
+| views vs the page's typical curve | above typical through the first 2 h (~80 vs ~40); the typical line's jump to ~620 at 4 h is ep1's own spike and is not a baseline |
+
+**The curve, read against the scene list** (`build-short/tokyo-short.timeline.json`):
+
+| window | retention | scene(s) | world |
+|---|---|---|---|
+| 0:00–0:03 | 100 % | s01 | clip (the host enters) |
+| 0:03–0:15 | 100 % → ~30 % — **the cliff** | s01 tail, s02 (5.09–8.99), s03 (8.99–17.17) | **three clip scenes in a row, no page** |
+| 0:15–0:40 | **flat at ~30 %** | s04 (17.17–33.05) ledger, s05 clip (33.05–38.96) | the first ledger page lands at 17.17 and the bleed stops |
+| ~0:42 | step to ~25 % | s06 (38.96–44.88) | the `suck` transition scene (steam / trace / ticker), no page |
+| 0:45–0:55 | flat | s07 (44.88–54.52) ledger | page |
+| ~0:55 | step to ~18 % | s08 (54.52–61.76) | clip |
+| 0:55–1:02 | flat, then a step to ~12 % | s09 (61.76–75.73) ledger | page; the step is one or two viewers |
+| 1:02–1:29 | flat at ~12 % | s10 clip, s11 outro | — |
+
+**What it says (n = 51, still a sample):** every bleed is inside a clip scene; every plateau is a ledger page. The cliff is
+the twelve seconds of clips before the first page, and the flattening starts the moment the page rolls out. This is the
+E44 pattern with 51 viewers instead of 8. It says nothing yet about the voice: the voice is the same across the plateaus
+and the bleeds.
