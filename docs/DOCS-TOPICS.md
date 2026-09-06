@@ -14,10 +14,11 @@ rg '"ref": "42§42.2"' docs/DOCS-CITATIONS.jsonl      # every section that cites
 A topic key is casefolded, `_`/`-`/space-collapsed, singularised only when the singular
 also occurs; `aliases` are the surface forms merged into it. A key held by a single
 section is dropped unless it is a citation or a formula symbol. An edge's `ref` is the
-reference as normalised (`42§42.2`, `29§Part3`, `doc47`, `E38`, `M13`); `to` is null when
-nothing in the index answers it.
+reference as normalised (`42§42.2` - which `46 s46.4` also writes - `29§Part3`, `doc47`,
+`E38`, `M13`, `G-j`); a list (`docs 39 and 40`) makes one edge per document, and `to` is
+null when nothing in the index answers it.
 
-3498 topics, 2317 citation edges. The 200 largest topics follow,
+3498 topics, 2468 citation edges. The 200 largest topics follow,
 at most 12 sections each - the JSONL holds every one.
 
 ## youtube (112)
@@ -65,9 +66,9 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/40-PROCESS-AS-EVIDENCE.md:1 — 40 — Process as Evidence — Operator ruling, 2026-08-25:
 - docs/content-video-engine/40-PROCESS-AS-EVIDENCE.md:34 — 2. The audit beat — the narration device — A five-step unit, 20–35 seconds. It is an anecdote with a reversal,
 - docs/content-video-engine/51-THE-SHORTS-FORMAT.md:1 — 51 — The shorts format: one page, ship in an afternoon — Everything needed to build a short, consolidated from docs 46, 49, 50 and the operator's
-  cited by: docs/content-video-engine/BACKLOG.md:279, docs/content-video-engine/CAPABILITIES.md:94
+  cited by: docs/content-video-engine/BACKLOG.md:279
 - docs/content-video-engine/51-THE-SHORTS-FORMAT.md:24 — 51.2 The shape — Gated (G2, 2026-09-05) — `gate_opening_structure.py` reads a measured clock under 3:00 as a short and asks this shape, n
-  cited by: docs/content-video-engine/patterns/SCRIPT-PATTERN-KIT.md:112, docs/content-video-engine/patterns/SCRIPT-PATTERN-KIT.md:177, docs/portable/OPERATOR-RULINGS.md:1259
+  cited by: docs/content-video-engine/CAPABILITIES.md:94, docs/content-video-engine/patterns/SCRIPT-PATTERN-KIT.md:112, docs/content-video-engine/patterns/SCRIPT-PATTERN-KIT.md:177, docs/portable/OPERATOR-RULINGS.md:1259
 - … 52 more in `docs/DOCS-TOPICS.jsonl`
 
 ## closed-form (58)
@@ -281,7 +282,7 @@ at most 12 sections each - the JSONL holds every one.
 ## mckee (32)
 
 - docs/content-video-engine/32-WRITING-FOR-THE-EAR.md:1 — 32 — Writing for the Ear (craft doctrine, non-YouTube) — The fundamental-craft layer under the YouTube layer. Doc 31 holds the
-  cited by: docs/content-video-engine/28-AOY-MCP-EVALUATION.md:536, docs/content-video-engine/34-AOY-SCRIPT-WRITER-STUDY.md:87, docs/content-video-engine/34-AOY-SCRIPT-WRITER-STUDY.md:306, docs/content-video-engine/37-TTS-DELIVERY-STANDARDS.md:24, docs/content-video-engine/38-SCRIPT-ARCHITECTURE.md:1, docs/content-video-engine/38-SCRIPT-ARCHITECTURE.md:143, +2 more
+  cited by: docs/content-video-engine/28-AOY-MCP-EVALUATION.md:486, docs/content-video-engine/28-AOY-MCP-EVALUATION.md:536, docs/content-video-engine/34-AOY-SCRIPT-WRITER-STUDY.md:87, docs/content-video-engine/34-AOY-SCRIPT-WRITER-STUDY.md:306, docs/content-video-engine/37-TTS-DELIVERY-STANDARDS.md:24, docs/content-video-engine/38-SCRIPT-ARCHITECTURE.md:1, +3 more
 - docs/content-video-engine/32-WRITING-FOR-THE-EAR.md:163 — 7. Diff against doc 31 — what is additive — | This doc | vs AOY (doc 31) | Status |
 - docs/content-video-engine/35-ANSWER-FORMAT-DOCTRINE.md:87 — 3. The format — eight beats — From the operator's own worked example:
 - docs/content-video-engine/38-SCRIPT-ARCHITECTURE.md:1 — 38 — Script Architecture: the deterministic prompt structure — Operator thesis (2026-08-24), and this document's organizing principle:
@@ -1059,7 +1060,7 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md:436 — 14.2 9:16 vs. 16:9 Cross-Platform Architecture & Short vs. Long Form — 1. The Universal Clean Canvas ($800 \times 1060\text{ px}$):
 - docs/content-video-engine/03-SYSTEM-ARCHITECTURE.md:213 — 5. Service specs (the operator's three tools, hardened) — `audio_synth.py` — calls ElevenLabs `POST /v1/text-to-speech/{voice_id}/with-timestamps` per
 - docs/content-video-engine/49-GENERATIVE-VIDEO-AND-THE-VERTICAL-STAGE.md:1 — 49 — Generative video and the vertical stage — Extracted from `10_generative_video_tools_and_cross_platform_composition.md`.
-  cited by: docs/content-video-engine/BACKLOG.md:366, docs/content-video-engine/CAPABILITIES.md:47
+  cited by: docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:208, docs/content-video-engine/51-THE-SHORTS-FORMAT.md:1, docs/content-video-engine/BACKLOG.md:366, docs/content-video-engine/briefs/RESEARCH-BRIEF-animation-craft.md:118, docs/content-video-engine/CAPABILITIES.md:47
 - docs/content-video-engine/49-GENERATIVE-VIDEO-AND-THE-VERTICAL-STAGE.md:13 — 49.1 The vertical safe box, and the defect it exposed — Mobile platforms overlay UI on up to 59.1 % of a vertical frame. The intersection that
   cited by: docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:62, docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:208, docs/content-video-engine/49-GENERATIVE-VIDEO-AND-THE-VERTICAL-STAGE.md:1, docs/content-video-engine/50-THE-PHONE-IS-THE-SCREEN.md:30, docs/content-video-engine/51-THE-SHORTS-FORMAT.md:57, docs/content-video-engine/51-THE-SHORTS-FORMAT.md:184, +7 more
 - docs/content-video-engine/49-GENERATIVE-VIDEO-AND-THE-VERTICAL-STAGE.md:52 — The 3-zone vertical stage — Centre-cropping 16:9 → 9:16 destroys 68.36 % of horizontal area
@@ -1107,6 +1108,7 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/04-STORYBOARD-CONTRACT.md:1 — Storyboard Data Contract (v2) — Rationale and Usage — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine
 - docs/content-video-engine/04-STORYBOARD-CONTRACT.md:8 — Storyboard 2.3 living-editorial extension — Storyboard 2.3 adds immutable `coverage_plan_hash` and
 - docs/content-video-engine/10-HISTORY-DOCUMENTARY-EDITORIAL-SPEC.md:1 — History Documentary Editorial Specification — > STATUS: LANE DOCTRINE — history / documentary. The history lane is not retired; it is simply outside the finance set r
+  cited by: docs/content-video-engine/briefs/RESEARCH-BRIEF-animation-craft.md:118
 - docs/content-video-engine/10-HISTORY-DOCUMENTARY-EDITORIAL-SPEC.md:7 — 1. Product — History V4 produces evidence-backed, entertainment-focused documentary explainers:
 - docs/product-revenue-contract.md:1 — Product / Revenue Contract: Outreach Program
 - docs/product-revenue-contract.md:3 — Product goal — The Outreach Program is an internal, URL-first expertise demonstration. An
@@ -1195,10 +1197,10 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1103 — 9.11 Rebuild source charts — do not extract frames (operator, 2026-08-25) — Operator ruling, superseding the clip-extraction workflow in 9.10:
   cited by: docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:18
 - docs/content-video-engine/32-WRITING-FOR-THE-EAR.md:1 — 32 — Writing for the Ear (craft doctrine, non-YouTube) — The fundamental-craft layer under the YouTube layer. Doc 31 holds the
-  cited by: docs/content-video-engine/28-AOY-MCP-EVALUATION.md:536, docs/content-video-engine/34-AOY-SCRIPT-WRITER-STUDY.md:87, docs/content-video-engine/34-AOY-SCRIPT-WRITER-STUDY.md:306, docs/content-video-engine/37-TTS-DELIVERY-STANDARDS.md:24, docs/content-video-engine/38-SCRIPT-ARCHITECTURE.md:1, docs/content-video-engine/38-SCRIPT-ARCHITECTURE.md:143, +2 more
+  cited by: docs/content-video-engine/28-AOY-MCP-EVALUATION.md:486, docs/content-video-engine/28-AOY-MCP-EVALUATION.md:536, docs/content-video-engine/34-AOY-SCRIPT-WRITER-STUDY.md:87, docs/content-video-engine/34-AOY-SCRIPT-WRITER-STUDY.md:306, docs/content-video-engine/37-TTS-DELIVERY-STANDARDS.md:24, docs/content-video-engine/38-SCRIPT-ARCHITECTURE.md:1, +3 more
 - docs/content-video-engine/36-WRITER-PERSONA.md:392 — 6. Thread status (grill of 2026-08-24 — answered) — Resolved this date: the "beating the market" completion (→ T11) · both
 - docs/content-video-engine/50-THE-PHONE-IS-THE-SCREEN.md:1 — 50 — The phone is the screen: ep1's real analytics, and what they say — Operator-supplied YouTube analytics for ep1, 2026-09-04. This is ground truth, not
-  cited by: docs/content-video-engine/49-GENERATIVE-VIDEO-AND-THE-VERTICAL-STAGE.md:52, docs/content-video-engine/BACKLOG.md:207, docs/content-video-engine/BACKLOG.md:225, docs/content-video-engine/BACKLOG.md:279
+  cited by: docs/content-video-engine/49-GENERATIVE-VIDEO-AND-THE-VERTICAL-STAGE.md:52, docs/content-video-engine/51-THE-SHORTS-FORMAT.md:1, docs/content-video-engine/BACKLOG.md:207, docs/content-video-engine/BACKLOG.md:225, docs/content-video-engine/BACKLOG.md:279
 - … 4 more in `docs/DOCS-TOPICS.jsonl`
 
 ## scene-evidence (16)
@@ -1207,7 +1209,7 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/28-AOY-MCP-EVALUATION.md:328 — Voiceover and title doctrine — probed 2026-08-24 — Follow-up probes after the fact-check, plus one live run of the
 - docs/content-video-engine/28-AOY-MCP-EVALUATION.md:333 — Voiceover — delivery rules exist; ElevenLabs settings do not — What came back, all chunk-stable:
 - docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1 — 29 — Evidence Motion Standards (Gemini findings + v1 momentum + linked choreography) — Status: accepted working standard, 2026-08-24
-  cited by: content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/REPORT.md:1, content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:32, content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:74, content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/REPORT.md:1, content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/01_wealth_logic_production_report.md:32, content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/01_wealth_logic_production_report.md:74, +28 more
+  cited by: content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/REPORT.md:1, content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:32, content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:74, content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/REPORT.md:1, content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/01_wealth_logic_production_report.md:32, content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/01_wealth_logic_production_report.md:74, +25 more
 - docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:18 — Current state — what actually governs production — Consolidated 2026-08-28. Where this section and anything below it
 - docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:267 — Part 8 — The scene-evidence lane (default production pattern) — Status: accepted 2026-08-24. Proven by
 - docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:335 — 8.5 Lane selection — | | scene-evidence lane | linked choreography |
@@ -1673,7 +1675,7 @@ at most 12 sections each - the JSONL holds every one.
   cited by: docs/content-video-engine/briefs/ALICIA-FORMAT-RECREATION-BRIEF.md:1
 - docs/content-video-engine/21-ART-STYLE-REFERENCE-REVIEW.md:15 — The finding that matters — None of the reference channels animate characters. No articulated limbs, no rigs, no
 - docs/content-video-engine/50-THE-PHONE-IS-THE-SCREEN.md:1 — 50 — The phone is the screen: ep1's real analytics, and what they say — Operator-supplied YouTube analytics for ep1, 2026-09-04. This is ground truth, not
-  cited by: docs/content-video-engine/49-GENERATIVE-VIDEO-AND-THE-VERTICAL-STAGE.md:52, docs/content-video-engine/BACKLOG.md:207, docs/content-video-engine/BACKLOG.md:225, docs/content-video-engine/BACKLOG.md:279
+  cited by: docs/content-video-engine/49-GENERATIVE-VIDEO-AND-THE-VERTICAL-STAGE.md:52, docs/content-video-engine/51-THE-SHORTS-FORMAT.md:1, docs/content-video-engine/BACKLOG.md:207, docs/content-video-engine/BACKLOG.md:225, docs/content-video-engine/BACKLOG.md:279
 - docs/content-video-engine/50-THE-PHONE-IS-THE-SCREEN.md:30 — 50.2 The finding: our type is illegible on a phone — 75.2 % of watch time is a phone. Our stage is 1920 px wide. On a phone in portrait —
   cited by: docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:62, docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:208, docs/content-video-engine/50-THE-PHONE-IS-THE-SCREEN.md:86, docs/content-video-engine/51-THE-SHORTS-FORMAT.md:15, docs/content-video-engine/51-THE-SHORTS-FORMAT.md:184, docs/content-video-engine/BACKLOG.md:97, +1 more
 - docs/content-video-engine/53-THE-STICKMAN-LANE.md:387 — 53.10 Two Mikes, and the character pack needs upgrading — Operator, 2026-09-04:
@@ -2344,7 +2346,7 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/08-TOOLING-ALTERNATIVES.md:38 — 3. Higgsfield: mostly avoid, one thing to monitor seriously — What it is (mid-2026): a social-first AI video suite aggregating 15+ frontier models (Sora 2,
 - docs/content-video-engine/08-TOOLING-ALTERNATIVES.md:88 — 6. Monitor list — Higgsfield Explainer REST/API + per-video cost · Gemini Omni Pro (length/res) · Gemini TTS
 - docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1 — 29 — Evidence Motion Standards (Gemini findings + v1 momentum + linked choreography) — Status: accepted working standard, 2026-08-24
-  cited by: content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/REPORT.md:1, content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:32, content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:74, content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/REPORT.md:1, content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/01_wealth_logic_production_report.md:32, content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/01_wealth_logic_production_report.md:74, +28 more
+  cited by: content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/REPORT.md:1, content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:32, content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:74, content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/REPORT.md:1, content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/01_wealth_logic_production_report.md:32, content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/01_wealth_logic_production_report.md:74, +25 more
 - docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:18 — Current state — what actually governs production — Consolidated 2026-08-28. Where this section and anything below it
 - docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1103 — 9.11 Rebuild source charts — do not extract frames (operator, 2026-08-25) — Operator ruling, superseding the clip-extraction workflow in 9.10:
   cited by: docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:18
@@ -2375,7 +2377,7 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/21-ART-STYLE-REFERENCE-REVIEW.md:233 — What this does and does not prove — It does not support "we win on presentation." The 242K video has the worst
 - docs/content-video-engine/21-ART-STYLE-REFERENCE-REVIEW.md:582 — What this changes — - `stick_figure` is removed as a lane name — but not as a capability. Lane D is a
 - docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1 — 29 — Evidence Motion Standards (Gemini findings + v1 momentum + linked choreography) — Status: accepted working standard, 2026-08-24
-  cited by: content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/REPORT.md:1, content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:32, content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:74, content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/REPORT.md:1, content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/01_wealth_logic_production_report.md:32, content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/01_wealth_logic_production_report.md:74, +28 more
+  cited by: content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/REPORT.md:1, content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:32, content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:74, content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/REPORT.md:1, content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/01_wealth_logic_production_report.md:32, content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/01_wealth_logic_production_report.md:74, +25 more
 - docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:18 — Current state — what actually governs production — Consolidated 2026-08-28. Where this section and anything below it
 - docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:345 — 8.6 Evidence selection rules (operator correction, 2026-08-24) — The first v4 pass failed review on three counts. Each is now enforced in
 - docs/content-video-engine/53-THE-STICKMAN-LANE.md:206 — 53.5 What we would do differently — The workflow is sound; two stages are worse than what we already have.

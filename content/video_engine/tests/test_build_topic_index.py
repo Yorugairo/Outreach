@@ -8,6 +8,10 @@ reference form the spec lists resolving to the right heading, an unresolved refe
 `to: null`, fenced code contributing nothing, `--write` being byte-identical twice, and `--check`
 going red when a doc gains a reference.
 
+Four of those forms landed late and have a section of their own: a lowercase `s` for `§`
+(`42 s42.2`), the `J` judge ids, the hyphen-suffixed ids (`G-j`), and the multi-document list
+(`docs 29, 38 and 47`), which makes one edge per document.
+
 The last test runs over the REAL index: a `spring` topic reaches three files, `42§42.2` resolves to
 doc 42's settle, and `E38` resolves to the rulings ledger."""
 from __future__ import annotations
@@ -124,6 +128,22 @@ TREE = {
 
 CITER_SECTION = {"path": DOC_48_REL, "line": 3, "heading": "48.1 The chain"}
 
+# The four late forms, each written the way the corpus writes it. They sit in their own section so
+# the chain's edge set above stays exact.
+FORMS = (
+    "\n"                                                                            # 12
+    "## 48.2 The late forms\n"                                                      # 13
+    "\n"                                                                            # 14
+    "The settle is also written 42 s42.2, and the console is doc 51 s51.2.\n"        # 15
+    "The judges are J01, J07 and J50.\n"                                            # 16
+    "The screens are G-j, V-a and R-r.\n"                                           # 17
+    "Read docs 29, 38 and 47; then Docs 42 and 47.\n"                               # 18
+)
+
+FORMS_SECTION = {"path": DOC_48_REL, "line": 13, "heading": "48.2 The late forms"}
+
+BACKLOG_G_J_ROW = "| **G-j** | **Judge the ledger page** | queued |\n"               # 6
+
 
 def _tree(tmp_path: Path) -> Path:
     for rel, text in TREE.items():
@@ -142,6 +162,15 @@ def _built(tmp_path: Path) -> tuple[dict[str, dict], list[dict]]:
 
 def _refs(edges: list[dict], section: dict) -> dict[str, dict | None]:
     return {e["ref"]: e["to"] for e in edges if e["from"] == section}
+
+
+def _late_form_refs(tmp_path: Path, backlog: str = BACKLOG) -> dict[str, dict | None]:
+    """The refs of the late-form section, over the tree with an optionally extended BACKLOG."""
+    root = _tree(tmp_path)
+    (root / DOC_48_REL).write_text(DOC_48 + FORMS, encoding="utf-8")
+    (root / BACKLOG_REL).write_text(backlog, encoding="utf-8")
+    _, edges = BTI.build(BDI.build_index(root), root)
+    return _refs(edges, FORMS_SECTION)
 
 
 # --- topics -------------------------------------------------------------------------------
@@ -227,6 +256,38 @@ def test_edges_sort_by_source_then_ref_and_carry_the_enclosing_section(tmp_path:
     keys = [(e["from"]["path"], e["from"]["line"], e["ref"]) for e in edges]
     assert keys == sorted(keys, key=lambda k: (k[0].lower(), k[0], k[1], k[2]))
     assert all(e["from"]["line"] > 0 for e in edges if e["from"]["path"] == DOC_48_REL)
+
+
+def test_a_lowercase_s_is_the_section_sign_and_normalises_to_the_same_ref(tmp_path: Path) -> None:
+    refs = _late_form_refs(tmp_path)
+
+    assert refs["42§42.2"] == {                      # "42 s42.2" is the same edge as "42 §42.2"
+        "path": DOC_42_REL, "line": 5, "heading": "42.2 The settle — closed form"}
+    assert refs["51§51.2"] is None                   # "doc 51 s51.2": read, and nothing answers it
+
+
+def test_a_judge_id_joins_the_id_class_and_stays_null_until_a_heading_defines_it(tmp_path: Path) -> None:
+    refs = _late_form_refs(tmp_path)
+
+    assert {"J01", "J07", "J50"} <= set(refs)        # read like G/M/S, not skipped
+    assert all(refs[ident] is None for ident in ("J01", "J07", "J50"))
+
+
+def test_a_hyphen_suffixed_id_resolves_against_the_row_that_carries_it(tmp_path: Path) -> None:
+    refs = _late_form_refs(tmp_path, backlog=BACKLOG + BACKLOG_G_J_ROW)
+
+    assert refs["G-j"] == {                          # normalised as written, never "G" or "Gj"
+        "path": BACKLOG_REL, "line": 6, "heading": "G-j Judge the ledger page"}
+    assert refs["V-a"] is None and refs["R-r"] is None
+
+
+def test_a_multi_doc_list_makes_one_edge_per_document(tmp_path: Path) -> None:
+    refs = _late_form_refs(tmp_path)
+
+    assert refs["doc29"] == {"path": DOC_29_REL, "line": 1, "heading": "29 — Fake motion"}
+    assert refs["doc38"] == {"path": DOC_38_REL, "line": 1, "heading": "38 — Fake architecture"}
+    assert refs["doc42"] == {"path": DOC_42_REL, "line": 1, "heading": "42 — Fake kinetics"}
+    assert refs["doc47"] == {"path": DOC_47_REL, "line": 1, "heading": "47 — Fake checks"}
 
 
 def test_a_capabilities_row_answers_a_bare_gate_id(tmp_path: Path) -> None:

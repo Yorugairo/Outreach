@@ -136,14 +136,22 @@ def build_topics(records: list[dict]) -> list[dict]:
 
 # The forms the docs actually use. `(?<![\w:.\-])` keeps a clock ("0:03 S01") or a date from
 # reading as a document number. Case-sensitive on purpose: an id is upper-case.
+#
+# `s` is the corpus' plain-text `§` ("46 s46.4" is "46 §46.4"), so it normalises to the same ref;
+# an id may be a letter with a hyphen suffix ("G-j", "V-a"); and "docs 39 and 40" is a list, one
+# edge per document, not a reference to 39 alone.
 REFERENCE = re.compile(
-    r"(?:[Dd]ocs?\s+)?(?<![\w:.\-])(?P<dnum>\d{1,3})\s*§\s*(?P<dsec>[A-Za-z]?\d+(?:\.\d+)*[a-z]?)"
+    r"(?:[Dd]ocs?\s+)?(?<![\w:.\-])(?P<dnum>\d{1,3})(?:\s*§\s*|\s+s)(?P<dsec>[A-Za-z]?\d+(?:\.\d+)*[a-z]?)"
     r"|(?<![\w:.\-])(?P<pnum>\d{1,3})\s+Part\s+(?P<psec>\d{1,2})\b"
     r"|(?<![\w:.\-])(?P<bnum>\d{1,3})\s+(?P<bsec>[A-Z]\d{1,2}[a-z]?)(?![\w])"
+    r"|[Dd]ocs?\s+(?P<many>\d{1,3}(?:(?:\s*,\s*(?:and\s+)?|\s+and\s+)\d{1,3})+)(?!\w|\.\d)"
     r"|[Dd]ocs?\s+(?P<only>\d{1,3})(?![\w.])"
     r"|§\s*(?P<bare>\d+(?:\.\d+)*[a-z]?)"
-    r"|(?<![\w])(?P<ident>[EGMSPTR]\d{1,2}[a-z]?)(?![\w])"
+    r"|(?<![\w])(?P<ident>[EGJMSPTR]\d{1,2}[a-z]?)(?![\w])"
+    r"|(?<![\w])(?P<hyid>[GVR]-[a-z])(?![\w-])"
 )
+
+LIST_NUMBER = re.compile(r"\d{1,3}")     # the document numbers inside a "docs 26, 29, 37" list
 
 
 def prefix_matcher(token: str) -> re.Pattern:
@@ -168,7 +176,8 @@ def doc_number(rec: dict) -> int | None:
 
 
 class Resolver:
-    """Turns one reference match into (ref, to). `to` is null when nothing in the index answers."""
+    """Turns one reference match into its (ref, to) edges - one, or one per document for a list.
+    `to` is null when nothing in the index answers."""
 
     def __init__(self, records: list[dict]) -> None:
         self.records = records
@@ -203,29 +212,35 @@ class Resolver:
         hits = [r for r in self.records if pattern.match(r["heading"])]
         return self._best(hits) if len(hits) == 1 else None
 
-    def edge(self, m: re.Match) -> tuple[str, dict | None] | None:
+    def edge(self, m: re.Match) -> list[tuple[str, dict | None]]:
+        """The edges one match makes: one, except a multi-doc list, which makes one per document."""
         group = m.groupdict()
         if group["dnum"]:
             number, token = int(group["dnum"]), group["dsec"]
-            return f"{number}§{token}", self.doc_section(number, token)
+            return [(f"{number}§{token}", self.doc_section(number, token))]
         if group["pnum"]:
             number, token = int(group["pnum"]), f"Part {group['psec']}"
-            return f"{number}§Part{group['psec']}", self.doc_section(number, token)
+            return [(f"{number}§Part{group['psec']}", self.doc_section(number, token))]
         if group["bnum"]:
             number, token = int(group["bnum"]), group["bsec"]
-            return f"{number}§{token}", self.doc_section(number, token)
+            return [(f"{number}§{token}", self.doc_section(number, token))]
+        if group["many"]:
+            numbers = dict.fromkeys(int(n) for n in LIST_NUMBER.findall(group["many"]))
+            return [(f"doc{number}", self.whole_doc(number)) for number in numbers]
         if group["only"]:
             number = int(group["only"])
-            return f"doc{number}", self.whole_doc(number)
+            return [(f"doc{number}", self.whole_doc(number))]
         if group["bare"]:
             token = group["bare"]
             to = self.bare_section(token)
             doc = to and next((r["doc"] for r in self.records
                                if r["path"] == to["path"] and r["line"] == to["line"]), None)
-            return (f"{int(doc)}§{token}" if doc and doc.isdigit() else f"§{token}"), to
+            return [((f"{int(doc)}§{token}" if doc and doc.isdigit() else f"§{token}"), to)]
         if group["ident"]:
-            return group["ident"], self.bare_id(group["ident"])
-        return None
+            return [(group["ident"], self.bare_id(group["ident"]))]
+        if group["hyid"]:
+            return [(group["hyid"], self.bare_id(group["hyid"]))]
+        return []
 
 
 def enclosures(records: list[dict]) -> dict[str, list[dict]]:
@@ -249,15 +264,13 @@ def enclosing(sections: list[dict], line: int, rel_path: str) -> dict:
 
 
 def file_edges(rel_path: str, text: str, sections: list[dict], resolver: Resolver) -> list[dict]:
-    """One edge per reference occurrence outside a fenced code block."""
+    """One edge per reference occurrence outside a fenced code block; a multi-doc list, one per
+    document it names."""
     out: list[dict] = []
     for i, line in BDI.unfenced(BDI.split_lines(text)):
         for m in REFERENCE.finditer(line):
-            resolved = resolver.edge(m)
-            if resolved is None:
-                continue
-            ref, to = resolved
-            out.append({"from": enclosing(sections, i + 1, rel_path), "ref": ref, "to": to})
+            for ref, to in resolver.edge(m):
+                out.append({"from": enclosing(sections, i + 1, rel_path), "ref": ref, "to": to})
     return out
 
 
@@ -323,8 +336,9 @@ def render_hubs(topics: list[dict], edges: list[dict], records: list[dict], top:
         "A topic key is casefolded, `_`/`-`/space-collapsed, singularised only when the singular",
         "also occurs; `aliases` are the surface forms merged into it. A key held by a single",
         "section is dropped unless it is a citation or a formula symbol. An edge's `ref` is the",
-        "reference as normalised (`42§42.2`, `29§Part3`, `doc47`, `E38`, `M13`); `to` is null when",
-        "nothing in the index answers it.",
+        "reference as normalised (`42§42.2` - which `46 s46.4` also writes - `29§Part3`, `doc47`,",
+        "`E38`, `M13`, `G-j`); a list (`docs 39 and 40`) makes one edge per document, and `to` is",
+        "null when nothing in the index answers it.",
         "",
         f"{len(topics)} topics, {len(edges)} citation edges. The {len(shown)} largest topics follow,",
         f"at most {SECTION_LIMIT} sections each - the JSONL holds every one.",
