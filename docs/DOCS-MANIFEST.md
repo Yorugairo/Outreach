@@ -15,7 +15,7 @@ its own headings, capability names, backlog ids. `terms` are its most frequent b
 terms. Purpose, terms and defines are truncated here to keep the file cheap to grep;
 the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 
-240 documents across 13 kinds.
+241 documents across 13 kinds.
 
 ## doctrine
 
@@ -295,3 +295,4 @@ the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 - content/video_engine/projects/systems-and-blowups/tokyo-tea-break/sound/SOURCES.md — SOURCES — steel-and-paper sound — Per-asset licence ledger (SOUND-SOURCING — defines: P35 — terms: gain-matched; highest-rated; preview-hq-mp3; -ss
 - docs/agent-memory/explorer/MEMORY.md — explorer - durable memory (reviewed) — Promoted from worker scratch by the pare — defines: — — terms: path | heading or symbol | what; per-platform; tokyo-tea-break; il-tea-break
 - docs/content-video-engine/SCRIPT-CONTEXT-COMBINED.md — DOCTRINE CORE — portable content-operati — Model-agnostic; paste whole into any sys — defines: — — terms: scene-setting; pause-framed; seed-locked; paragraph-shaped
+- docs/content-video-engine/TRIAGE-2026-09-05.md — TRIAGE 2026-09-05 — the corpus against w — P45 T2 (`.claude/PRPs/plans/P45-CORPUS-R — defines: M13 — terms: recent-stumble; BACKLOG; EXPLORE; zero-slip
