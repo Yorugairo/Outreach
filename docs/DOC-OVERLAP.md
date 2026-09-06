@@ -722,6 +722,6 @@ _none._
 - `docs/content-video-engine/08-TOOLING-ALTERNATIVES.md:16` — marker "deprecated" names no target — (Do NOT build on Imagen 4 — deprecated, shuts down 2026-08-17) |
 - `docs/content-video-engine/README.md:12` — marker "superseded" names no target — Read it for *how* a decision was reached, never for what to do now. | | **DEPRECATED** | Superseded.
 - `docs/content-video-engine/README.md:15` — marker "deprecated" names no target — RECORD and DEPRECATED files carry a status banner at the top.
-- `docs/content-video-engine/TRIAGE-2026-09-05.md:10` — marker "superseded by" names no target — "Superseded by" labels came from compression, not from bad docs — lift the differences, dedupe, never kill.
-- `docs/content-video-engine/TRIAGE-2026-09-05.md:15` — marker "superseded by" names no target — **RETIRE** = strike from the triage list only — the item is already built under another name, superseded by a measurement, or is not a buildable claim.
+- `docs/content-video-engine/TRIAGE-2026-09-05.md:15` — marker "superseded by" names no target — "Superseded by" labels came from compression, not from bad docs — lift the differences, dedupe, never kill.
+- `docs/content-video-engine/TRIAGE-2026-09-05.md:20` — marker "superseded by" names no target — **RETIRE** = strike from the triage list only — the item is already built under another name, superseded by a measurement, or is not a buildable claim.
 - `docs/portable/OPERATOR-RULINGS.md:11` — marker "superseded" names no target — Nothing is deleted when superseded — it is marked SUPERSEDED with a pointer, so the reasoning chain stays legible.

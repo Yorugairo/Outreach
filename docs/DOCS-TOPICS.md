@@ -18,7 +18,7 @@ reference as normalised (`42§42.2` - which `46 s46.4` also writes - `29§Part3`
 `E38`, `M13`, `G-j`); a list (`docs 39 and 40`) makes one edge per document, and `to` is
 null when nothing in the index answers it.
 
-4006 topics, 3577 citation edges. The 200 largest topics follow,
+4008 topics, 3612 citation edges. The 200 largest topics follow,
 at most 12 sections each - the JSONL holds every one.
 
 ## youtube (125)
@@ -798,7 +798,7 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/12-HIGGSFIELD-EXPLAINER-LEARNINGS.md:1 — Higgsfield Explainer Learnings and Producer Orchestration — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine
 - docs/content-video-engine/14-HIGGSFIELD-AUDIO-DRIVEN-LANE.md:1 — P13 Higgsfield Audio-Driven Explainer Lane — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine
 - docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:1 — Living Scene Communication Language — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine
-  cited by: docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:2027, docs/content-video-engine/BACKLOG.md:483, docs/content-video-engine/TRIAGE-2026-09-05.md:142
+  cited by: docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:2027, docs/content-video-engine/BACKLOG.md:483, docs/content-video-engine/TRIAGE-2026-09-05.md:147
 - docs/content-video-engine/18-GRAPHIC-SILHOUETTE-WOODBLOCK-EXPLAINER-SPEC.md:1 — Graphic Silhouette + Combat Woodblock Explainer — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine
 - … 8 more in `docs/DOCS-TOPICS.jsonl`
 
@@ -934,7 +934,7 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/12-HIGGSFIELD-EXPLAINER-LEARNINGS.md:1 — Higgsfield Explainer Learnings and Producer Orchestration — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine
 - docs/content-video-engine/14-HIGGSFIELD-AUDIO-DRIVEN-LANE.md:1 — P13 Higgsfield Audio-Driven Explainer Lane — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine
 - docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:1 — Living Scene Communication Language — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine
-  cited by: docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:2027, docs/content-video-engine/BACKLOG.md:483, docs/content-video-engine/TRIAGE-2026-09-05.md:142
+  cited by: docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:2027, docs/content-video-engine/BACKLOG.md:483, docs/content-video-engine/TRIAGE-2026-09-05.md:147
 - docs/content-video-engine/18-GRAPHIC-SILHOUETTE-WOODBLOCK-EXPLAINER-SPEC.md:1 — Graphic Silhouette + Combat Woodblock Explainer — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine
 - … 7 more in `docs/DOCS-TOPICS.jsonl`
 
@@ -952,7 +952,7 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md:436 — 14.2 9:16 vs. 16:9 Cross-Platform Architecture & Short vs. Long Form — 1. The Universal Clean Canvas ($800 \times 1060\text{ px}$):
 - docs/content-video-engine/03-SYSTEM-ARCHITECTURE.md:213 — 5. Service specs (the operator's three tools, hardened) — `audio_synth.py` — calls ElevenLabs `POST /v1/text-to-speech/{voice_id}/with-timestamps` per
 - docs/content-video-engine/49-GENERATIVE-VIDEO-AND-THE-VERTICAL-STAGE.md:1 — 49 — Generative video and the vertical stage — Extracted from `10_generative_video_tools_and_cross_platform_composition.md`.
-  cited by: docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:208, docs/content-video-engine/51-THE-SHORTS-FORMAT.md:1, docs/content-video-engine/BACKLOG.md:366, docs/content-video-engine/briefs/RESEARCH-BRIEF-animation-craft.md:118, docs/content-video-engine/CAPABILITIES.md:47, docs/content-video-engine/TRIAGE-2026-09-05.md:180
+  cited by: docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:208, docs/content-video-engine/51-THE-SHORTS-FORMAT.md:1, docs/content-video-engine/BACKLOG.md:366, docs/content-video-engine/briefs/RESEARCH-BRIEF-animation-craft.md:118, docs/content-video-engine/CAPABILITIES.md:47, docs/content-video-engine/TRIAGE-2026-09-05.md:185
 - … 7 more in `docs/DOCS-TOPICS.jsonl`
 
 ## a-x (18)
@@ -1055,7 +1055,7 @@ at most 12 sections each - the JSONL holds every one.
 
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/08_answers_animation_craft_brief.md:288 — A6: The Secondary-Motion Budget [RECLASSIFIED: Design Proposal] — - Energy Ratio Proposal:
 - docs/content-video-engine/48-THE-FIGURE-AND-THE-GROUND.md:111 — 48.6 Mass is communicated before the object moves — - APA: for a heavy prop, postural muscles fire 100–150 ms before lift-off and the
-  cited by: docs/content-video-engine/53-THE-STICKMAN-LANE.md:112, docs/content-video-engine/BACKLOG.md:472, docs/content-video-engine/BACKLOG.md:508, docs/content-video-engine/briefs/RESEARCH-BRIEF-animation-craft.md:118, docs/content-video-engine/TRIAGE-2026-09-05.md:72, docs/content-video-engine/TRIAGE-2026-09-05.md:161
+  cited by: docs/content-video-engine/53-THE-STICKMAN-LANE.md:112, docs/content-video-engine/BACKLOG.md:472, docs/content-video-engine/BACKLOG.md:508, docs/content-video-engine/briefs/RESEARCH-BRIEF-animation-craft.md:118, docs/content-video-engine/TRIAGE-2026-09-05.md:77, docs/content-video-engine/TRIAGE-2026-09-05.md:166
 - docs/content-video-engine/48-THE-FIGURE-AND-THE-GROUND.md:168 — 48.9 What this changes — | | |
   cited by: docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:208
 - docs/content-video-engine/53-THE-STICKMAN-LANE.md:81 — 53.3 The two prompt schemas — Image prompt — every field appears in every scene:
@@ -1797,6 +1797,25 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/FINDING-what-the-bundle-already-answered.md:86 — 4. Backlog R4 is answered by `02_drawing_engine_and_transforms_research.md` — R4 asked whether Flow Characters lock identity under motion; our own test showed hair
 - … 3 more in `docs/DOCS-TOPICS.jsonl`
 
+## zero-slip (15)
+
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/09_2d_and_2_5d_body_animation_object_handling_and_grounding.md:402 — 4. Track 3: Animating Over a 2D Background (Grounding & Parallax)
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/09_2d_and_2_5d_body_animation_object_handling_and_grounding.md:404 — 4.1 Kinematic Zero-Slip & The Ground-Plane Homography Invariant — In 2.5D multiplane systems, foot-sliding and prop drift occur whenever the screen coordinate velocity of the sprite cont
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/09_2d_and_2_5d_body_animation_object_handling_and_grounding.md:410 — Kinematic Zero-Slip Condition (Kovar, Schreiner, & Gleicher 2002) — During support/contact phases, relative velocity against the contact plane must remain strictly zero:
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/09_2d_and_2_5d_body_animation_object_handling_and_grounding.md:739 — 6. Master Citation & Authority Registry
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/09_2d_and_2_5d_body_animation_object_handling_and_grounding.md:741 — 6.1 Biomechanics, Motor Control & Mathematics — 1. Hof, A. L., Gazendam, M. G. J., & Sinke, W. E. (2005). The condition for dynamic stability. Journal of Biomechanics,
+- docs/content-video-engine/48-THE-FIGURE-AND-THE-GROUND.md:133 — 48.7 Grounding — why composited figures look pasted — Four defects, each with a fix:
+  cited by: docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:62, docs/content-video-engine/BACKLOG.md:225, docs/content-video-engine/BACKLOG.md:257, docs/content-video-engine/BACKLOG.md:296, docs/content-video-engine/BACKLOG.md:366
+- docs/content-video-engine/BACKLOG.md:274 — G-j zero-slip anchoring — grounded sprites anchor `50% 100%` and bind to floor velocity (48 §48.7)
+  cited by: docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:62, docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:183, docs/content-video-engine/BACKLOG.md:225, docs/content-video-engine/BACKLOG.md:257, docs/content-video-engine/BACKLOG.md:296, docs/content-video-engine/BACKLOG.md:429, +4 more
+- docs/content-video-engine/BACKLOG.md:420 — P45 triage — 2026-09-05 (the corpus reconciled with what is built) — The judgment pass over the generated registries: [TRIAGE-2026-09-05.md](TRIAGE-2026-09-05.md) —
+  cited by: docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:2027, docs/content-video-engine/BACKLOG.md:237, docs/content-video-engine/BACKLOG.md:279, docs/content-video-engine/BACKLOG.md:296, docs/content-video-engine/BACKLOG.md:366, docs/content-video-engine/BACKLOG.md:407, +9 more
+- docs/content-video-engine/BACKLOG.md:429 — TOP — the next list (each becomes its own order, plan:67) — | id | item — what and where | why / evidence | cost |
+- docs/content-video-engine/BACKLOG.md:500 — pending D3 / D6 — held until the operator rules — | id | item — what and where | why / evidence | cost |
+- docs/content-video-engine/RESEARCH-INDEX.md:301 — `09_2d_and_2_5d_body_animation_object_handling_and_grounding.md` — 38 headings — | heading | disposition |
+- docs/content-video-engine/TRIAGE-2026-09-05.md:1 — TRIAGE 2026-09-05 — the corpus against what is built — Cites: BACKLOG rows by id + current line; registry rows by name (the registries regenerate, line numbers do not survive)
+- … 3 more in `docs/DOCS-TOPICS.jsonl`
+
 ## and-then (14)
 
 - docs/content-video-engine/31-FACELESS-CHANNEL-DOCTRINE.md:78 — 3. Retention architecture (the middle) — 4 Elements of Progression — all four run simultaneously; miss one and the
@@ -2110,25 +2129,6 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/RESEARCH-INDEX.md:117 — `02_drawing_engine_and_transforms_research.md` — 29 headings — | heading | disposition |
 - … 2 more in `docs/DOCS-TOPICS.jsonl`
 
-## zero-slip (14)
-
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/09_2d_and_2_5d_body_animation_object_handling_and_grounding.md:402 — 4. Track 3: Animating Over a 2D Background (Grounding & Parallax)
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/09_2d_and_2_5d_body_animation_object_handling_and_grounding.md:404 — 4.1 Kinematic Zero-Slip & The Ground-Plane Homography Invariant — In 2.5D multiplane systems, foot-sliding and prop drift occur whenever the screen coordinate velocity of the sprite cont
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/09_2d_and_2_5d_body_animation_object_handling_and_grounding.md:410 — Kinematic Zero-Slip Condition (Kovar, Schreiner, & Gleicher 2002) — During support/contact phases, relative velocity against the contact plane must remain strictly zero:
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/09_2d_and_2_5d_body_animation_object_handling_and_grounding.md:739 — 6. Master Citation & Authority Registry
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/09_2d_and_2_5d_body_animation_object_handling_and_grounding.md:741 — 6.1 Biomechanics, Motor Control & Mathematics — 1. Hof, A. L., Gazendam, M. G. J., & Sinke, W. E. (2005). The condition for dynamic stability. Journal of Biomechanics,
-- docs/content-video-engine/48-THE-FIGURE-AND-THE-GROUND.md:133 — 48.7 Grounding — why composited figures look pasted — Four defects, each with a fix:
-  cited by: docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:62, docs/content-video-engine/BACKLOG.md:225, docs/content-video-engine/BACKLOG.md:257, docs/content-video-engine/BACKLOG.md:296, docs/content-video-engine/BACKLOG.md:366
-- docs/content-video-engine/BACKLOG.md:274 — G-j zero-slip anchoring — grounded sprites anchor `50% 100%` and bind to floor velocity (48 §48.7)
-  cited by: docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:62, docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:183, docs/content-video-engine/BACKLOG.md:225, docs/content-video-engine/BACKLOG.md:257, docs/content-video-engine/BACKLOG.md:296, docs/content-video-engine/BACKLOG.md:429, +4 more
-- docs/content-video-engine/BACKLOG.md:420 — P45 triage — 2026-09-05 (the corpus reconciled with what is built) — The judgment pass over the generated registries: [TRIAGE-2026-09-05.md](TRIAGE-2026-09-05.md) —
-  cited by: docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:2027, docs/content-video-engine/BACKLOG.md:237, docs/content-video-engine/BACKLOG.md:279, docs/content-video-engine/BACKLOG.md:296, docs/content-video-engine/BACKLOG.md:366, docs/content-video-engine/BACKLOG.md:407, +9 more
-- docs/content-video-engine/BACKLOG.md:429 — TOP — the next list (each becomes its own order, plan:67) — | id | item — what and where | why / evidence | cost |
-- docs/content-video-engine/BACKLOG.md:500 — pending D3 / D6 — held until the operator rules — | id | item — what and where | why / evidence | cost |
-- docs/content-video-engine/RESEARCH-INDEX.md:301 — `09_2d_and_2_5d_body_animation_object_handling_and_grounding.md` — 38 headings — | heading | disposition |
-- docs/content-video-engine/TRIAGE-2026-09-05.md:1 — TRIAGE 2026-09-05 — the corpus against what is built — P45 T2 (`.claude/PRPs/plans/P45-CORPUS-RECONCILIATION.plan.md:121-128`). A judgment pass over
-- … 2 more in `docs/DOCS-TOPICS.jsonl`
-
 ## 0.18 (13)
 
 - content/video_engine/projects/systems-and-blowups/registration/WORK-ORDER.md:89 — 5. `figures[]` — verbatim numerals — Extract every printed number that states a fact. Exclude page numbers, axis
@@ -2291,7 +2291,7 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/07_academic_literature_drawing_and_2_5d_animation_engine.md:238 — Derivation of Damped Harmonic Oscillator Step Response — $$m \ddot{x}(t) + c \dot{x}(t) + k (x(t) - x_{ ext{target}}) = 0 \implies \ddot{y} + 2\zeta \omega_0 \dot{y} + \omega_0^
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/07_academic_literature_drawing_and_2_5d_animation_engine.md:242 — 1. Underdamped ($\zeta < 1$): Damped natural frequency $\omega_d = \omega_0 \sqrt{1 - \zeta^2}$ — $$x(t) = 1 - e^{-\zeta \omega_0 t} \left( \cos(\omega_d t) + rac{\zeta \omega_0}{\omega_d} \sin(\omega_d t)
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/09_2d_and_2_5d_body_animation_object_handling_and_grounding.md:274 — 2.8 Secondary Motion: Driven Damped Oscillators & Continuum Drag — Secondary appendages (coat tails, ties, hair, identification badges) behave as driven second-order damped harmonic oscil
-  cited by: docs/content-video-engine/48-THE-FIGURE-AND-THE-GROUND.md:111, docs/content-video-engine/TRIAGE-2026-09-05.md:161
+  cited by: docs/content-video-engine/48-THE-FIGURE-AND-THE-GROUND.md:111, docs/content-video-engine/TRIAGE-2026-09-05.md:166
 - docs/content-video-engine/BACKLOG.md:237 — Build — Tier 1, designed out (47 §1) → **[P38](../../.claude/PRPs/plans/P38-KINETICS-CAPABILITY-LAYER.plan.md)** — The strongest results of the day: once built they cannot be violated, because the wrong
 - docs/content-video-engine/BACKLOG.md:472 — EXPLORE — the first step is a measurement or a read, not a build (6) — | id | item — what and where | why / evidence | cost |
 - docs/content-video-engine/BACKLOG.md:508 — Routed from the demoted list (47 §4) — Demoted from doctrine — not dropped. Each lands as a build item, an exploration, or a closure.
@@ -2387,7 +2387,7 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/14-HIGGSFIELD-AUDIO-DRIVEN-LANE.md:34 — Local-first contract — The current Episode 1 coverage contains 138 reviewed editorial slots and the
 - docs/content-video-engine/14-HIGGSFIELD-AUDIO-DRIVEN-LANE.md:63 — Provider preflight and task ledger — `seedance_2_0` is preferred only when a live capability snapshot confirms
 - docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:1 — Living Scene Communication Language — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine
-  cited by: docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:2027, docs/content-video-engine/BACKLOG.md:483, docs/content-video-engine/TRIAGE-2026-09-05.md:142
+  cited by: docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:2027, docs/content-video-engine/BACKLOG.md:483, docs/content-video-engine/TRIAGE-2026-09-05.md:147
 - docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:9 — 1. Product decision — P13 does not use a full-video generator as its default renderer. The observed
 - docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:264 — 9. Cost control — Until a lower verified quote exists, estimates use 3.33 Higgsfield credits per
 - docs/content-video-engine/16-EDITORIAL-MOTION-SYSTEM.md:1 — Editorial Motion System — > STATUS: PARTIALLY SUPERSEDED. The production pattern is now the scene-evidence lane in 29. Sections that 29 does not r
@@ -2475,9 +2475,9 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/briefs/RESEARCH-BRIEF-animation-craft.md:10 — 1. The honest diagnosis — The operator's premise is that the math is already there. It is, and it is not the
 - docs/content-video-engine/briefs/RESEARCH-BRIEF-animation-craft.md:173 — Track C — the drawing-engine builder — | # | question | why it matters here |
 - docs/content-video-engine/RESEARCH-INDEX.md:225 — `07_academic_literature_drawing_and_2_5d_animation_engine.md` — 26 headings — | heading | disposition |
-- docs/content-video-engine/TRIAGE-2026-09-05.md:72 — 1b. Orphaned in the animation registry — research-side (39 names / 128 records) — One row per decision; the per-theme detail and counts are §2. All are in
-- docs/content-video-engine/TRIAGE-2026-09-05.md:161 — 2. The research-side orphans by theme (128 records / 39 names, `ANIMATION-REGISTRY.md:458-605`) — | theme | records | names | rec | the one derivation that matters most, and why |
-- docs/content-video-engine/TRIAGE-2026-09-05.md:263 — 5. Counts — | recommendation | rows |
+- docs/content-video-engine/TRIAGE-2026-09-05.md:77 — 1b. Orphaned in the animation registry — research-side (39 names / 128 records) — One row per decision; the per-theme detail and counts are §2. All are in
+- docs/content-video-engine/TRIAGE-2026-09-05.md:166 — 2. The research-side orphans by theme (128 records / 39 names, `ANIMATION-REGISTRY.md (the "orphaned" formula section)`) — | theme | records | names | rec | the one derivation that matters most, and why |
+- docs/content-video-engine/TRIAGE-2026-09-05.md:268 — 5. Counts — | recommendation | rows |
 
 ## audio-visual (12)
 
@@ -2614,7 +2614,7 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/briefs/RESEARCH-BRIEF-animation-craft.md:10 — 1. The honest diagnosis — The operator's premise is that the math is already there. It is, and it is not the
 - docs/content-video-engine/briefs/RESEARCH-BRIEF-animation-craft.md:148 — 3. The questions, by role — Priority marked ★ — if the pass can only go deep on five, take the starred ones.
 - docs/content-video-engine/briefs/RESEARCH-BRIEF-animation-craft.md:152 — Track A — the animator (timing and motion) — | # | question | why it matters here |
-- docs/content-video-engine/TRIAGE-2026-09-05.md:161 — 2. The research-side orphans by theme (128 records / 39 names, `ANIMATION-REGISTRY.md:458-605`) — | theme | records | names | rec | the one derivation that matters most, and why |
+- docs/content-video-engine/TRIAGE-2026-09-05.md:166 — 2. The research-side orphans by theme (128 records / 39 names, `ANIMATION-REGISTRY.md (the "orphaned" formula section)`) — | theme | records | names | rec | the one derivation that matters most, and why |
 
 ## image-space (12)
 
@@ -3197,7 +3197,7 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/patterns/FULL-VIDEO-MAP.md:210 — 7. P5 — REFLECTION & CONVERGENCE (16:30–26:00) — Classical: Glass Reflection dominant · chiastic center · Self-Revelation
 - docs/content-video-engine/patterns/FULL-VIDEO-MAP.md:227 — 8. P6 — THE CLOSE (26:00–30:00: true close 60–90s + end screen 20s) — Classical: Self-Revelation → New Equilibrium · chiastic echo · ring
 - docs/content-video-engine/patterns/LLM-CONTEXT-CLASSICAL.md:1 — LLM Context Block — Classical Craft Layer — Provenance: Gemini densification of the operator's writing-for-the-ear deep
-- docs/content-video-engine/TRIAGE-2026-09-05.md:110 — 1d. Judge-only craft devices (32), grouped by the CHECK-RESPONSIBILITIES section that owns the by-hand verdict — `docs/CRAFT-MAP.md:24` — 53 devices carry a gate id, 32 carry `judge`. "Owned" means
+- docs/content-video-engine/TRIAGE-2026-09-05.md:115 — 1d. Judge-only craft devices (32), grouped by the CHECK-RESPONSIBILITIES section that owns the by-hand verdict — `docs/CRAFT-MAP.md:24` — 53 devices carry a gate id, 32 carry `judge`. "Owned" means
 - docs/research/2026-08-24-writing-for-the-ear-craft-source.md:34 — **Deep Narrative Engineering: Screenwriting Mechanics and Structural Machinery** — While broadcast mechanics govern the sentence-level acoustic delivery of a script, screenwriting mechanics provide the s
 - docs/research/2026-08-24-writing-for-the-ear-craft-source.md:44 — **Truby’s Organic Architecture and the Designing Principle** — John Truby rejects rigid three-act templates, arguing that narrative must grow organically from character weakness, mora
 - docs/research/2026-08-24-writing-for-the-ear-craft-source.md:128 — **Integrated Synthesis Framework for Long-Form Audio-Visual Scripts** — To synthesize these diverse methodologies into an operational workflow, the following master blueprint maps broadcast me
