@@ -15,7 +15,7 @@ its own headings, capability names, backlog ids. `terms` are its most frequent b
 terms. Purpose, terms and defines are truncated here to keep the file cheap to grep;
 the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 
-242 documents across 13 kinds.
+243 documents across 13 kinds.
 
 ## doctrine
 
@@ -129,6 +129,7 @@ the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 - docs/runbooks/HEADLESS_CLAIM_RESUME.md — Runbook — Headless Claim Resume — What runs when a generation delivery lands, and how to drive the loop end to end without o — defines: — — terms: claim-resume; re-runs; follow-ups; .watchdog-scanned.json; VIDEO_ENGINE_CLAIM_RESUME_COMMAND; telegram_ceiling_usd
 - docs/runbooks/PRP_EXECUTION.md — PRP Execution — PRPs are durable execution contracts for work too broad or risky to manage from chat histo — defines: P2 — terms: junior_developer; implementation_luna; cross-module; speedster; architect_sol; SigMap
 - docs/runbooks/RENDER-REGRESSION.md — When a render looks wrong — You do not need to read any animation math to use this page. — defines: — — terms: PASS 4 golden frames identical; dock-pair; mid-build; false; kinetics: unknown flag ignored; curvature_stroke
+- docs/runbooks/WORK-ORDER-GEMINI-PROFILES-2026-09-05.md — Work order — Gemini research profiles, corrections at the so — To: the Gemini / Antigravity lane (the profile source, synced to every workspace's `.agent — defines: — — terms: Outreach Program; npm run research:index; closed-form; [DERIVED: from <sources>, <how>]; [UNVERIFIED]; ## NOT FOUND WHERE I LOOKED
 
 ## spec
 

@@ -14,7 +14,7 @@ Levels 1-6 are Markdown heading depth; level 7 is a table row (CAPABILITIES, BAC
 A `{...}` tail lists the section's bold phrases; a `<...>` tail its body terms - code
 spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 
-3129 records across 242 files.
+3134 records across 243 files.
 
 ## content/video_engine/projects/history-of-bjj/episode-1-research-brief.md
 
@@ -3729,6 +3729,14 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 - L57 [2] 3. How do I get back to the baseline? — The last approved player is tagged. One command restores its file exactly: <PASS>
 - L75 [2] If you approved a change and want it to become the new baseline — Refreshing is a decision, never a reflex: `--check` failing is the harness doing its job. <--check>
 - L86 [2] What the harness cannot see — It renders four synthetic surfaces from committed sources, at native size, with wall-clock <wall-clock>
+
+## docs/runbooks/WORK-ORDER-GEMINI-PROFILES-2026-09-05.md
+
+- L1 [1] Work order — Gemini research profiles, corrections at the source (2026-09-05) — To: the Gemini / Antigravity lane (the profile source, synced to every workspace's `.agents/agents/`). {To:; From:} <Outreach Program; animation-video-researcher; finance-narrative-researcher; per-repository; npm run research:index; closed-form; [DERIVED: from <sources>, <how>]; [UNVERIFIED]; ## NOT FOUND WHERE I LOOKED; video-researcher; projects.json; build_docs_layers.py --check>
+- L6 [2] 1. `animation-video-researcher` and `finance-narrative-researcher` — a per-repository contract block — Append a section "This repository's contract" that a workspace can override, and for `Outreach Program` set: {Output path:; Index step:} <Outreach Program; npm run research:index; closed-form; [DERIVED: from <sources>, <how>]; [UNVERIFIED]; ## NOT FOUND WHERE I LOOKED>
+- L16 [2] 2. A `video-researcher` profile for this repo — Scope: the drawing / ink engine (docs 42-53, the kinetics modules), retention analytics (doc 50, the analytics behind the retention curve), audio (beds, cuts, d
+- L20 [2] 3. Trusted folders — Add `C:/Users/Snipe/Downloads/Outreach Program` (the main checkout; never a worktree path) to `~/.gemini/trustedFolders.json` and `projects.json` so orders run <projects.json>
+- L24 [2] Validation — An order against this repo ends with `build_docs_layers.py --check` green and `docs_find.py "<topic>"` returning the new report's sections. Report back the prof <build_docs_layers.py --check; docs_find.py "<topic>">
 
 ## docs/seo-ingestion-implementation-tasks.md
 
