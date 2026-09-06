@@ -14,7 +14,7 @@ Levels 1-6 are Markdown heading depth; level 7 is a table row (CAPABILITIES, BAC
 A `{...}` tail lists the section's bold phrases; a `<...>` tail its body terms - code
 spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 
-3151 records across 246 files.
+3152 records across 246 files.
 
 ## content/video_engine/projects/history-of-bjj/episode-1-research-brief.md
 
@@ -2526,7 +2526,7 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 - L452 [3] BACKLOG — real work, owned by a plan or a row, not now (29 of 31; two held below) — | id | item — what and where | why / evidence | cost | {P45 O6; C3 nested coordinate spaces; P45 O8; 43.5 the morph, two methods} <BACKLOG.md:289; cotangent-weight; 43-SCENE-GRAPH-AND-TRANSFORM.md:91; BACKLOG.md:247; κ; 48…:163; G-i; G-j; BACKLOG.md:235; :316; ANIMATION-REGISTRY.md:530; zero-area>
 - L486 [3] EXPLORE — the first step is a measurement or a read, not a build (6) — | id | item — what and where | why / evidence | cost | {P45 S2; Figure kinematics / biomechanics; P45 S5; Secondary motion and placement dynamics} <FK-vs-IK; two-bone; ÿ+2ζω₀ẏ+ω₀²y = −ẍ_base; φ; :383; motion-cohesion; :283-285; follow-through; M_p; BACKLOG.md:516; secondary-motion; [DERIVED]>
 - L497 [3] RETIRE — struck from the triage list only; no doc line is deleted (R7) (12) — | id | item — what and where | why / evidence | cost | {P45 O2; Dynamic nib pooling; P45 O3; The five overlapping synergies} <corner-dwell; LAMBDA_W 0.12; ALPHA_W 1; mass-spring-damper; mẍ+cẋ+kx=0; ω₀; ζ; 47-FINDINGS-TO-CHECKS.md:199; BACKLOG.md:526-528; 47-FINDINGS-TO-CHECKS.md:150; BACKLOG.md:229; arc-length>
-- L514 [3] pending D3 / D6 — held until the operator rules — | id | item — what and where | why / evidence | cost | {P45 O9; 48.2 balance — the gesturing figure's hips; D3; P45 T5; 48.3 the rig / DQS / LBS collapse} <Hof 2005; 48-THE-FIGURE-AND-THE-GROUND.md:39; zero-slip; ANIMATION-REGISTRY.md:366-367; BACKLOG.md:249; [DERIVED]; G-c; intensity ≤ 0.18; 45-PARALLAX-AND-PLATE-MOTION.md:53; G-o; 50-THE-PHONE-IS-THE-SCREEN.md:36,41-48>
+- L514 [3] D3 / D6 — ruled 2026-09-06 (E42): poses first; tag all thirteen — | id | item — what and where | why / evidence | cost | {P45 O9; 48.2 balance — the gesturing figure's hips; D3; E42: BACKLOG; P45 T5} <Hof 2005; 48-THE-FIGURE-AND-THE-GROUND.md:39; zero-slip; ANIMATION-REGISTRY.md:366-367; BACKLOG.md:249; [DERIVED]; G-c; intensity ≤ 0.18; 45-PARALLAX-AND-PLATE-MOTION.md:53; G-o; 50-THE-PHONE-IS-THE-SCREEN.md:36,41-48>
 - L522 [2] Routed from the demoted list (47 §4) — Demoted from doctrine — not dropped. Each lands as a build item, an exploration, or a closure. {Euler-spiral generator; Build, do not gate.; Per-material `ζ` / `ω₀` values; Exploration X10.; RESOLVED 2026-09-04} <Secondary-motion; M_p; Dirty-flag; hand-tuning; three-quarters; Two-handed; dual-quaternion; designed-out; shot-length>
 - L528 [7] D1 Euler-spiral generator — for procedural curves (arrows, balance arms, connectors, axes)
 - L529 [7] D2 Per-material `ζ` / `ω₀` values — paper, metal, fabric, liquid, ink
@@ -3338,7 +3338,7 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 - L166 [2] 2. The research-side orphans by theme (128 records / 39 names, `ANIMATION-REGISTRY.md (the "orphaned" formula section)`) — | theme | records | names | rec | the one derivation that matters most, and why | {kinematics — stroke; RETIRE; kinematics — figure / IK; EXPLORE} <arc-length; κ₀; two-bone; det(T_blend)=0; step-response; re-open; ÿ+2ζω₀ẏ+ω₀²y = −ẍ_base; :283-285; follow-through; motion-cohesion; Chu & Tai 2005; ground-plane>
 - L185 [2] 3. Derived numbers — computations over sources, not sourced findings — `[DERIVED: from <sources>, <how>]` is adopted (R6). "Sources on file" means a path in {` carries the material the number was computed from. | numbe; | `briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:305`; so} <[DERIVED: from <sources>, <how>]; secondary-motion; Lasseter 1987; Williams 2001; [RECLASSIFIED: Design Proposal]; 47-FINDINGS-TO-CHECKS.md:146; 47-FINDINGS-TO-CHECKS.md:147; :545; Watson et al.; Watson 1986; :187; nib-pooling>
 - L212 [2] 4. Decisions only the operator can make — The residue after R1–R8. Recommendation in brackets. {D1 — the fourteen judge-only devices with no owner row.} <CHECK-RESPONSIBILITIES; BACKLOG.md:413 (row R1); coffee-ring; K-M; BACKLOG.md:218 (row 6); BACKLOG.md:219 (row 9); zero-slip; 48-THE-FIGURE-AND-THE-GROUND.md:39; ANIMATION-REGISTRY.md (48.3 The rig); OPERATOR-RULINGS.md:1245-1247; gate_motion_density.py:108-111; punch>
-- L268 [2] 5. Counts — | recommendation | rows | {TOP; BACKLOG; EXPLORE; RETIRE; total triage rows; 54} <zero-slip; motion-authoring; cut-gap; flag-roster; camera-move; plate-hold; BACKLOG.md:402 (row X10); two-handed; BACKLOG.md:519 (row D9); arc-length; source-side>
+- L270 [2] 5. Counts — | recommendation | rows | {TOP; BACKLOG; EXPLORE; RETIRE; total triage rows; 54} <zero-slip; motion-authoring; cut-gap; flag-roster; camera-move; plate-hold; BACKLOG.md:402 (row X10); two-handed; BACKLOG.md:519 (row D9); arc-length; source-side>
 
 ## docs/harness/AGENT_SELF_EVALUATION_GUIDE.md
 
@@ -3450,6 +3450,7 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 - L1210 [2] E39 — The stick lane lives on the house ground; the paper-toy medium is out (2026-09-04) — Three linked rulings on the host's art: {"A light application of woodblock print and vox newspaper wi} <hand-cut; crinkle-paper; @Mike; #F4E6C7; #25313C; mid-action; deckle-edged; @StickMike; @MikeMasterV3>
 - L1232 [2] E40 — Image generation is the strong tool; video only by FRAMES, never by ingredients (2026-09-05) — On the first full pass of the Tokyo short, with six Omni clips as worlds: <contact-sheeted; re-entry; frame-driven; re-using; enter=spiral; LP_RETRACT>
 - L1259 [2] E41 — The shorts-script ledger: move beats, never clip words; the brand line is the outro's; sentences break for the strip (2026-09-04 / 2026-09-05) — Three rulings from the Tokyo short, recorded together because the script skill has to cite them as one page. {Fit windows by moving beats, never by clipping words (2026-0} <long-form; gate_opening_structure; head-fake; where-we-sit; Remotion-kit; mid-word; gate-fit>
+- L1291 [2] E42 — The stick lane swaps approved poses; a rig only for what the first shot cannot fake. Our own thresholds carry `[DERIVED]` (2026-09-06) — Two P45 decisions the parent held open, ruled in one line each. {D3 — poses first.} <re-parenting; zero-slip; G-c; intensity ≤ 0.18; G-o>
 
 ## docs/portable/OUTRO-CTA-PLAYBOOK.md
 

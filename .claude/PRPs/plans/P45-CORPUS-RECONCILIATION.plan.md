@@ -128,13 +128,13 @@ owns HG decisions, integration and every diff review; `reviewer` before each com
 - Evidence: pending
 
 ### T3: Backlog and capabilities rows from the ratified triage
-- Status: review (pending D3/D6 rows)
+- Status: complete
 - Owner: junior_developer, parent integrates
 - Depends on: T2, HG1
 - Write set: `docs/content-video-engine/BACKLOG.md`, `docs/content-video-engine/CAPABILITIES.md` (rows only)
 - Acceptance: TOP rows at the head of the next list with their evidence; BACKLOG/EXPLORE rows in their sections; RETIRE rows struck with the reason; `build_docs_layers.py --write` run in the same commit
 - Validate: `python content/video_engine/scripts/build_docs_layers.py --check`
-- Evidence: pending
+- Evidence: rows landed 83a472f (reviewer-verified); the two held rows and the D6 row resolved 2026-09-06 by E42 (`OPERATOR-RULINGS.md` E42; BACKLOG "D3 / D6 — ruled"; TRIAGE D3/D6 annotated). O9 and T5 stay BACKLOG; D6 → tag all thirteen, executed by P45 T5.
 
 ### T4: Compressed docs - lift the differences out, dedupe, relabel
 - Status: complete (deterministic half + the four lifted rules; the remaining 418 delta rule lines are the operator's lift list in docs/DOC-OVERLAP.md)
@@ -146,7 +146,7 @@ owns HG decisions, integration and every diff review; `reviewer` before each com
 - Evidence: pending
 
 ### T5: Derived-number provenance
-- Status: pending (HG3 D6 open)
+- Status: running (D6 ruled by E42, 2026-09-06: tag all thirteen)
 - Owner: junior_developer, parent for GEMINI.md
 - Depends on: T2, HG3
 - Write set: the docs carrying derived figures (from the triage), `GEMINI.md` (intake step 3), `content/video_engine/scripts/build_animation_registry.py` (+ test: `provenance: derived` when a `[DERIVED:` tag is within the section)

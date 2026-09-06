@@ -1287,3 +1287,18 @@ Three rulings from the Tokyo short, recorded together because the script skill h
 versions of prose; the brand line was nearly recorded per episode; the caption pages wrapped to three
 lines on a third of the pages before the line rule was measured. Written down, the skill can cite them
 before the first draft instead of after the take.
+
+## E42 — The stick lane swaps approved poses; a rig only for what the first shot cannot fake. Our own thresholds carry `[DERIVED]` (2026-09-06)
+
+Two P45 decisions the parent held open, ruled in one line each.
+
+1. **D3 — poses first.** The stick lane animates by swapping approved still poses and letting the motion engine
+   carry the transitions (E40: the stills are the asset). A rig — joints that rotate, with what a rig then needs
+   (balance: XCOM hips, `48-THE-FIGURE-AND-THE-GROUND.md` §48.2; skinning: DQS over LBS, §48.3; object
+   re-parenting with cached offsets, research bundle 09) — is built only for the shot the first pose swap cannot
+   fake, and only that part of it. Consequence: P45 O9 and P45 T5 stay BACKLOG; FK/IK and zero-slip (R4) remain
+   the TOP items because a pose swap still has to land its feet.
+2. **D6 — tag all thirteen.** `[DERIVED]` marks every computed figure, including the three live FAIL thresholds
+   computed from our own material (G-c `intensity ≤ 0.18`, G-o's 12 px floor and its ≥ 59 px consequence), with a
+   link back to the source where one is readily available and "not linked" said where it is not. E38 already says
+   our own practice is never the calibration source; a threshold we computed is exactly that class.

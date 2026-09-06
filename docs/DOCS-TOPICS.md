@@ -18,7 +18,7 @@ reference as normalised (`42§42.2` - which `46 s46.4` also writes - `29§Part3`
 `E38`, `M13`, `G-j`); a list (`docs 39 and 40`) makes one edge per document, and `to` is
 null when nothing in the index answers it.
 
-4050 topics, 3659 citation edges. The 200 largest topics follow,
+4050 topics, 3682 citation edges. The 200 largest topics follow,
 at most 12 sections each - the JSONL holds every one.
 
 ## youtube (127)
@@ -1535,6 +1535,25 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/briefs/STEEL-AND-PAPER-REVISION-C.md:134 — 4. UNCHANGED — do not touch — The microhook, the promise, the reversal, the thesis, the ring echo and
 - … 4 more in `docs/DOCS-TOPICS.jsonl`
 
+## zero-slip (16)
+
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/09_2d_and_2_5d_body_animation_object_handling_and_grounding.md:402 — 4. Track 3: Animating Over a 2D Background (Grounding & Parallax)
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/09_2d_and_2_5d_body_animation_object_handling_and_grounding.md:404 — 4.1 Kinematic Zero-Slip & The Ground-Plane Homography Invariant — In 2.5D multiplane systems, foot-sliding and prop drift occur whenever the screen coordinate velocity of the sprite cont
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/09_2d_and_2_5d_body_animation_object_handling_and_grounding.md:410 — Kinematic Zero-Slip Condition (Kovar, Schreiner, & Gleicher 2002) — During support/contact phases, relative velocity against the contact plane must remain strictly zero:
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/09_2d_and_2_5d_body_animation_object_handling_and_grounding.md:739 — 6. Master Citation & Authority Registry
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/09_2d_and_2_5d_body_animation_object_handling_and_grounding.md:741 — 6.1 Biomechanics, Motor Control & Mathematics — 1. Hof, A. L., Gazendam, M. G. J., & Sinke, W. E. (2005). The condition for dynamic stability. Journal of Biomechanics,
+- docs/content-video-engine/48-THE-FIGURE-AND-THE-GROUND.md:133 — 48.7 Grounding — why composited figures look pasted — Four defects, each with a fix:
+  cited by: docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:62, docs/content-video-engine/BACKLOG.md:225, docs/content-video-engine/BACKLOG.md:257, docs/content-video-engine/BACKLOG.md:296, docs/content-video-engine/BACKLOG.md:366
+- docs/content-video-engine/BACKLOG.md:274 — G-j zero-slip anchoring — grounded sprites anchor `50% 100%` and bind to floor velocity (48 §48.7)
+  cited by: docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:62, docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:183, docs/content-video-engine/BACKLOG.md:225, docs/content-video-engine/BACKLOG.md:257, docs/content-video-engine/BACKLOG.md:296, docs/content-video-engine/BACKLOG.md:443, +4 more
+- docs/content-video-engine/BACKLOG.md:434 — P45 triage — 2026-09-05 (the corpus reconciled with what is built) — The judgment pass over the generated registries: [TRIAGE-2026-09-05.md](TRIAGE-2026-09-05.md) —
+  cited by: docs/AGENTS-VIDEO-ENGINE.md:1, docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:2027, docs/content-video-engine/BACKLOG.md:237, docs/content-video-engine/BACKLOG.md:279, docs/content-video-engine/BACKLOG.md:296, docs/content-video-engine/BACKLOG.md:366, +12 more
+- docs/content-video-engine/BACKLOG.md:443 — TOP — the next list (each becomes its own order, plan:67) — | id | item — what and where | why / evidence | cost |
+- docs/content-video-engine/BACKLOG.md:514 — D3 / D6 — ruled 2026-09-06 (E42): poses first; tag all thirteen — | id | item — what and where | why / evidence | cost |
+- docs/content-video-engine/RESEARCH-INDEX.md:301 — `09_2d_and_2_5d_body_animation_object_handling_and_grounding.md` — 38 headings — | heading | disposition |
+- docs/content-video-engine/TRIAGE-2026-09-05.md:1 — TRIAGE 2026-09-05 — the corpus against what is built — Cites: BACKLOG rows by id + current line; registry rows by name (the registries regenerate, line numbers do not survive)
+- … 4 more in `docs/DOCS-TOPICS.jsonl`
+
 ## 0.15 (15)
 
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md:342 — 12. Unified Ledger Drawing Engine & ComfyUI Specification — The channel's signature Ledger Page (cream washi paper `#F4E6C7`, subtle grid `#E5D5B5`, 1080x720 active evidence board)
@@ -1827,25 +1846,6 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/BACKLOG.md:354 — B6 — the multi-plane lane has no owner and the viability matrix needs it — 45 §45.2 bans Depthflow on any plate carrying a foreground character, an isolated prop,
 - docs/content-video-engine/CAPABILITIES.md:139 — The research reference layer (2026-09-04) — Docs 42–46 condense the research evidence bundle into what is applicable here.
 - docs/content-video-engine/FINDING-what-the-bundle-already-answered.md:86 — 4. Backlog R4 is answered by `02_drawing_engine_and_transforms_research.md` — R4 asked whether Flow Characters lock identity under motion; our own test showed hair
-- … 3 more in `docs/DOCS-TOPICS.jsonl`
-
-## zero-slip (15)
-
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/09_2d_and_2_5d_body_animation_object_handling_and_grounding.md:402 — 4. Track 3: Animating Over a 2D Background (Grounding & Parallax)
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/09_2d_and_2_5d_body_animation_object_handling_and_grounding.md:404 — 4.1 Kinematic Zero-Slip & The Ground-Plane Homography Invariant — In 2.5D multiplane systems, foot-sliding and prop drift occur whenever the screen coordinate velocity of the sprite cont
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/09_2d_and_2_5d_body_animation_object_handling_and_grounding.md:410 — Kinematic Zero-Slip Condition (Kovar, Schreiner, & Gleicher 2002) — During support/contact phases, relative velocity against the contact plane must remain strictly zero:
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/09_2d_and_2_5d_body_animation_object_handling_and_grounding.md:739 — 6. Master Citation & Authority Registry
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/09_2d_and_2_5d_body_animation_object_handling_and_grounding.md:741 — 6.1 Biomechanics, Motor Control & Mathematics — 1. Hof, A. L., Gazendam, M. G. J., & Sinke, W. E. (2005). The condition for dynamic stability. Journal of Biomechanics,
-- docs/content-video-engine/48-THE-FIGURE-AND-THE-GROUND.md:133 — 48.7 Grounding — why composited figures look pasted — Four defects, each with a fix:
-  cited by: docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:62, docs/content-video-engine/BACKLOG.md:225, docs/content-video-engine/BACKLOG.md:257, docs/content-video-engine/BACKLOG.md:296, docs/content-video-engine/BACKLOG.md:366
-- docs/content-video-engine/BACKLOG.md:274 — G-j zero-slip anchoring — grounded sprites anchor `50% 100%` and bind to floor velocity (48 §48.7)
-  cited by: docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:62, docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:183, docs/content-video-engine/BACKLOG.md:225, docs/content-video-engine/BACKLOG.md:257, docs/content-video-engine/BACKLOG.md:296, docs/content-video-engine/BACKLOG.md:443, +4 more
-- docs/content-video-engine/BACKLOG.md:434 — P45 triage — 2026-09-05 (the corpus reconciled with what is built) — The judgment pass over the generated registries: [TRIAGE-2026-09-05.md](TRIAGE-2026-09-05.md) —
-  cited by: docs/AGENTS-VIDEO-ENGINE.md:1, docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:2027, docs/content-video-engine/BACKLOG.md:237, docs/content-video-engine/BACKLOG.md:279, docs/content-video-engine/BACKLOG.md:296, docs/content-video-engine/BACKLOG.md:366, +11 more
-- docs/content-video-engine/BACKLOG.md:443 — TOP — the next list (each becomes its own order, plan:67) — | id | item — what and where | why / evidence | cost |
-- docs/content-video-engine/BACKLOG.md:514 — pending D3 / D6 — held until the operator rules — | id | item — what and where | why / evidence | cost |
-- docs/content-video-engine/RESEARCH-INDEX.md:301 — `09_2d_and_2_5d_body_animation_object_handling_and_grounding.md` — 38 headings — | heading | disposition |
-- docs/content-video-engine/TRIAGE-2026-09-05.md:1 — TRIAGE 2026-09-05 — the corpus against what is built — Cites: BACKLOG rows by id + current line; registry rows by name (the registries regenerate, line numbers do not survive)
 - … 3 more in `docs/DOCS-TOPICS.jsonl`
 
 ## and-then (14)
@@ -2509,7 +2509,7 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/RESEARCH-INDEX.md:225 — `07_academic_literature_drawing_and_2_5d_animation_engine.md` — 26 headings — | heading | disposition |
 - docs/content-video-engine/TRIAGE-2026-09-05.md:77 — 1b. Orphaned in the animation registry — research-side (39 names / 128 records) — One row per decision; the per-theme detail and counts are §2. All are in
 - docs/content-video-engine/TRIAGE-2026-09-05.md:166 — 2. The research-side orphans by theme (128 records / 39 names, `ANIMATION-REGISTRY.md (the "orphaned" formula section)`) — | theme | records | names | rec | the one derivation that matters most, and why |
-- docs/content-video-engine/TRIAGE-2026-09-05.md:268 — 5. Counts — | recommendation | rows |
+- docs/content-video-engine/TRIAGE-2026-09-05.md:270 — 5. Counts — | recommendation | rows |
 
 ## audio-visual (12)
 

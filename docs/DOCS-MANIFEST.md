@@ -91,7 +91,7 @@ the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 
 ## ruling-ledger
 
-- docs/portable/OPERATOR-RULINGS.md — OPERATOR RULINGS — the standing corrections ledger — Portable, model-agnostic. Load alongside `DOCTRINE-CORE.md`. — defines: A3; E11; E12; E13; +28 more — terms: long-form; YouTube; world-building; drop-off; high-paid; info-systems
+- docs/portable/OPERATOR-RULINGS.md — OPERATOR RULINGS — the standing corrections ledger — Portable, model-agnostic. Load alongside `DOCTRINE-CORE.md`. — defines: A3; E11; E12; E13; +29 more — terms: long-form; YouTube; world-building; drop-off; high-paid; info-systems
 
 ## capabilities
 
