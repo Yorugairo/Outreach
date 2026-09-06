@@ -14,7 +14,7 @@ Levels 1-6 are Markdown heading depth; level 7 is a table row (CAPABILITIES, BAC
 A `{...}` tail lists the section's bold phrases; a `<...>` tail its body terms - code
 spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 
-2665 records across 174 files.
+2670 records across 175 files.
 
 ## content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/COMPOSITING-VERDICT.md
 
@@ -2294,6 +2294,14 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 - L184 [2] 4. The runtime sequence
 - L200 [2] 5. The report contract — The report is not accepted without every block below. <script-writer>
 - L223 [2] 6. Moving a row across the line (R6) — A row moves from §3 into a tool when all of these hold: the verdict is a <false-positive; known-real; MEDIA-TDD>
+
+## docs/content-video-engine/patterns/CRAFT-DEVICES.md
+
+- L1 [1] CRAFT DEVICES — the curated seed for the craft map — Operator, 2026-09-05: *"the map of both micro and macro literary and speech {seed a reader authors; Read the generated map; edit this one.} <scale-free; judge; path#Heading; "verbatim line" (path:line); none found (roots searched: …); cross-phase; DOCTRINE-CORE; content-video-engine; phase-guides; viewer-facing; SCRIPT-ARCHITECTURE; FACELESS-CHANNEL-DOCTRINE>
+- L20 [2] The row format — | column | rule | {device; scale; scale-free; what it does; defined in} <judge; path#Heading; "verbatim line" (path:line); none found (roots searched: …); cross-phase>
+- L34 [2] The devices — | device | scale | what it does | defined in | exemplar | <DOCTRINE-CORE; content-video-engine; phase-guides; viewer-facing; SCRIPT-ARCHITECTURE; FACELESS-CHANNEL-DOCTRINE; systems-and-blowups; steel-and-paper; SCRIPT-G-VO; pre-opener; visual-only; WRITING-FOR-THE-EAR>
+- L120 [2] What is deliberately NOT here — Motion, evidence and surface choreography — the M-family and J-family gates on <M-family; J-family; EVIDENCE-MOTION-STANDARDS>
+- L127 [2] Provenance — Authored 2026-09-05 by reading the sources named at the top. Every exemplar was <re-checks>
 
 ## docs/content-video-engine/patterns/FULL-VIDEO-MAP.md
 

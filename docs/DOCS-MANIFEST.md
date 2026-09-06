@@ -15,7 +15,7 @@ its own headings, capability names, backlog ids. `terms` are its most frequent b
 terms. Purpose, terms and defines are truncated here to keep the file cheap to grep;
 the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 
-174 documents across 13 kinds.
+175 documents across 13 kinds.
 
 ## doctrine
 
@@ -102,6 +102,7 @@ the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 ## pattern
 
 - docs/content-video-engine/patterns/CHECK-RESPONSIBILITIES.md — CHECK RESPONSIBILITIES — what the tools decide, what the agent decides — The kit has four tool-enforced checkers and one reading-enforced loop. — defines: P3; P6 — terms: head-fake; [catalyst]; STRENGTH-LOOP; [loop]; [reflect]; [debate]
+- docs/content-video-engine/patterns/CRAFT-DEVICES.md — CRAFT DEVICES — the curated seed for the craft map — Operator, 2026-09-05: "the map of both micro and macro literary and speech tips, easily searched, referenced, — defines: — — terms: scale-free; judge; path#Heading; "verbatim line" (path:line); none found (roots searched: …); cross-phase
 - docs/content-video-engine/patterns/FULL-VIDEO-MAP.md — FULL VIDEO MAP — McKee Extended to the YouTube Era — The calculus. The classical six-phase architecture (doc 32 / the research blueprint) is the integral — where t — defines: P1; P2; P3; P4; P5; P6 — terms: McKee; [pre-key]; [post-key]; mini-pivots; micro-CTA; new-info
 - docs/content-video-engine/patterns/HIGHLIGHT-SESSION-2026-08-24.md — Highlight Session — 2026-08-24 (gate-1 record, P10 plan) — FINAL: 45 passages marked on the shared reading copy. — defines: P10 — terms: Ira Glass dual engine; syntactical triads + anaphora; ring composition; Operator-named; Triple-marked; Double-marked
 - docs/content-video-engine/patterns/INJECTION.md — INJECTION — the kit's parameter surface — The phase guides (P1–P6) are lane-agnostic generation contracts. — defines: — — terms: [verify]; Writer-chosen; lane-agnostic; channel-specific; attribution-first; Nothing else enters.

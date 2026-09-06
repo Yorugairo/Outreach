@@ -18,7 +18,7 @@ reference as normalised (`42§42.2` - which `46 s46.4` also writes - `29§Part3`
 `E38`, `M13`, `G-j`); a list (`docs 39 and 40`) makes one edge per document, and `to` is
 null when nothing in the index answers it.
 
-3498 topics, 2468 citation edges. The 200 largest topics follow,
+3504 topics, 2536 citation edges. The 200 largest topics follow,
 at most 12 sections each - the JSONL holds every one.
 
 ## youtube (112)
@@ -1747,7 +1747,7 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/28-AOY-MCP-EVALUATION.md:302 — Finding 5 — fabrication probe — Asked for a "Retention Pyramid framework — the five levels," a framework with
 - docs/content-video-engine/28-AOY-MCP-EVALUATION.md:509 — Verdict (running) — Pending the script comparison and Niche_Hunter test. Early lean: the
 - docs/content-video-engine/31-FACELESS-CHANNEL-DOCTRINE.md:1 — 31 — Faceless Channel Doctrine (verified AOY extracts) — Niche-agnostic reference for ANY faceless lane — finance, history, or
-  cited by: docs/content-video-engine/28-AOY-MCP-EVALUATION.md:486, docs/content-video-engine/32-WRITING-FOR-THE-EAR.md:1, docs/content-video-engine/32-WRITING-FOR-THE-EAR.md:148, docs/content-video-engine/32-WRITING-FOR-THE-EAR.md:163, docs/content-video-engine/34-AOY-SCRIPT-WRITER-STUDY.md:1, docs/content-video-engine/34-AOY-SCRIPT-WRITER-STUDY.md:87, +5 more
+  cited by: docs/content-video-engine/28-AOY-MCP-EVALUATION.md:486, docs/content-video-engine/32-WRITING-FOR-THE-EAR.md:1, docs/content-video-engine/32-WRITING-FOR-THE-EAR.md:148, docs/content-video-engine/32-WRITING-FOR-THE-EAR.md:163, docs/content-video-engine/34-AOY-SCRIPT-WRITER-STUDY.md:1, docs/content-video-engine/34-AOY-SCRIPT-WRITER-STUDY.md:87, +6 more
 - docs/content-video-engine/31-FACELESS-CHANNEL-DOCTRINE.md:276 — 11. Observed architecture note (2026-08-24) — Two retrievals returned a chunk that is not doctrine but an agent-directed
 - docs/portable/OUTRO-CTA-PLAYBOOK.md:1 — OUTRO / CTA / END-SCREEN PLAYBOOK — portable — Source: AOY coaching base (ask_tim, 2026-08-30) reconciled against our
 - … 1 more in `docs/DOCS-TOPICS.jsonl`
@@ -2651,6 +2651,21 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/briefs/RESPONSE-TO-RESEARCH-PASS-1.md:23 — 1. The headline, stated fairly — Most of the mechanism work is correct and is being adopted. The two-thirds power
 - docs/content-video-engine/FINDING-the-animation-math-and-what-it-changes.md:126 — 6. Why our ink looks sterile — three stacked models — - Coffee ring (Deegan 1997). Evaporative flux diverges at a pinned perimeter,
 
+## viewer-facing (11)
+
+- docs/content-video-engine/30-VOICE-SOURCE-MATERIAL.md:1 — 30 — Voice Source Material — Input for `brand-voice`. Everything here is evidence of how the operator
+  cited by: docs/content-video-engine/36-WRITER-PERSONA.md:45
+- docs/content-video-engine/30-VOICE-SOURCE-MATERIAL.md:38 — 2. Worked example — a rejected hook and its replacement — The single most useful artefact here, because both versions survive.
+- docs/content-video-engine/38-SCRIPT-ARCHITECTURE.md:45 — 2. Phase 1 — THE OPEN (0:00–1:30), fully fused — The research blueprint says: Truby's Weakness & Need · Glass's Anecdote ·
+- docs/content-video-engine/38-SCRIPT-ARCHITECTURE.md:53 — Beat 1 — MICROHOOK (0:00–0:03) — - The first sentence is the grab. Present tense, viewer-facing, concrete,
+- docs/content-video-engine/briefs/ALICIA-FORMAT-RECREATION-BRIEF.md:1 — Recreation Brief — Alicia-Format Systems Test (3:00) — The end-to-end pipeline test: recreate the format of Alicia Invests'
+- docs/content-video-engine/patterns/CRAFT-DEVICES.md:1 — CRAFT DEVICES — the curated seed for the craft map — Operator, 2026-09-05: *"the map of both micro and macro literary and speech
+- docs/content-video-engine/patterns/CRAFT-DEVICES.md:34 — The devices — | device | scale | what it does | defined in | exemplar |
+- docs/content-video-engine/SCRIPT-CONTEXT-COMBINED.md:191 — VOICE PACK — portable brand voice by exemplar — Third portable file, loaded with `DOCTRINE-CORE.md` and
+- docs/content-video-engine/SCRIPT-CONTEXT-COMBINED.md:218 — 1. The calibration pair (read before writing anything) — Same assignment, same facts, same person. One was rejected, one shipped.
+- docs/portable/VOICE-PACK.md:1 — VOICE PACK — portable brand voice by exemplar — Third portable file, loaded with `DOCTRINE-CORE.md` and
+- docs/portable/VOICE-PACK.md:21 — 1. The calibration pair (read before writing anything) — Same assignment, same facts, same person. One was rejected, one shipped.
+
 ## vit-large (11)
 
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/06_unified_ledger_drawing_engine_and_comfy_spec.md:73 — 2.4 Calibrated Dial Matrix for Engine 1 — - Model: `depth_anything_v2_vitl_fp32.safetensors` (ViT-Large in FP32; FP16 is strictly banned due to logit underflow).
@@ -3012,6 +3027,19 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/MASTER_RESEARCH_INDEX.md:25 — 1. Master File & Artifact Inventory — All research, evidence frames, technical specifications, and mathematical treatises produced during this research cycle
 - content/video_engine/sources/reference_analyses/MASTER_RESEARCH_INDEX.md:29 — 1.1 Complete Evidence Bundle (`complete_research_evidence_bundle/`) — | File / Artifact | Size / Scope | Primary Role & Description | Recommended Agent / Consumer |
 
+## pre-opener (10)
+
+- docs/content-video-engine/32-WRITING-FOR-THE-EAR.md:163 — 7. Diff against doc 31 — what is additive — | This doc | vs AOY (doc 31) | Status |
+- docs/content-video-engine/38-SCRIPT-ARCHITECTURE.md:45 — 2. Phase 1 — THE OPEN (0:00–1:30), fully fused — The research blueprint says: Truby's Weakness & Need · Glass's Anecdote ·
+- docs/content-video-engine/38-SCRIPT-ARCHITECTURE.md:53 — Beat 1 — MICROHOOK (0:00–0:03) — - The first sentence is the grab. Present tense, viewer-facing, concrete,
+- docs/content-video-engine/patterns/CRAFT-DEVICES.md:34 — The devices — | device | scale | what it does | defined in | exemplar |
+- docs/content-video-engine/patterns/FULL-VIDEO-MAP.md:125 — 3. P1 — THE OPEN (0:00–1:30, absolute) — Classical: Truby Weakness & Need · Glass anecdote opens · irony counterpoint.
+- docs/content-video-engine/patterns/KNOWLEDGE-GRAPH.md:21 — 1. Vertical edges — classical frame ← filled by → platform micro — | Classical node | is filled / operationalized by | Where |
+- docs/content-video-engine/patterns/phase-guides/P1.md:56 — Beat template
+- docs/content-video-engine/patterns/phase-guides/P1.md:58 — Beat 1 — MICROHOOK (0:00–0:03) — - `[MICROHOOK_LINE]` — one sentence, present tense, concrete, the
+- docs/research/2026-08-24-writing-for-the-ear-craft-source.md:70 — **Rhetorical Acoustics and Oral Cadence: Lessons from Speechwriting** — Speechwriting rhetoric is the art of engineering acoustic memory23. Because spoken words dissolve instantly upon utteran
+- docs/research/2026-08-24-writing-for-the-ear-craft-source.md:128 — **Integrated Synthesis Framework for Long-Form Audio-Visual Scripts** — To synthesize these diverse methodologies into an operational workflow, the following master blueprint maps broadcast me
+
 ## push-in (10)
 
 - content/video_engine/sources/reference_analyses/COMFYUI_PARALLAX_TECHNICAL_STANDARDS_RESEARCH.md:77 — 3. The Artistic Viability Matrix: When to Use What — Not all scenes are eligible for single-layer depth displacement. Using Depthflow on the wrong image is an automatic qual
@@ -3115,29 +3143,3 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/briefs/FLOW-OMNI-EXPLAINER-PROMPT-PLAN.md:219 — 9. Eliminating the Redundant Character Block (Flow Pinned Asset Architecture) — - The Original Defect: Mandated copy-pasting a 40-word text description of the stickman into every single animation prom
 - docs/content-video-engine/briefs/FLOW-OMNI-EXPLAINER-PROMPT-PLAN.md:223 — 10. Affirmative Physical Anchoring vs. Negative Prompt Contamination — - The Original Defect: Loaded the prompt with negative constraints ("no 3D shading, no photorealism, no color gradients,
 - docs/content-video-engine/briefs/FLOW-OMNI-EXPLAINER-PROMPT-PLAN.md:229 — 11. External Script Gating & The Stage 7 Role (Visual Director, Not Amateur Copywriter) — - The Original Defect: The original prompt assumed an interactive AI chat should invent the script from a raw topic out
-
-## topic (10)
-
-- docs/content-video-engine/patterns/phase-guides/P1.md:1 — P1 — THE OPEN — > Self-contained generation guide. Consume ONLY: the INJECTION block and
-- docs/content-video-engine/patterns/phase-guides/P1.md:31 — Inputs (injection slots) — - `{TOPIC}` — one claim cluster, one dramatic question.
-- docs/content-video-engine/patterns/phase-guides/P2.md:1 — P2 — THE ENGINE — > Self-contained generation guide. Consume ONLY: the INJECTION block, the
-- docs/content-video-engine/patterns/phase-guides/P2.md:24 — Inputs — `{TOPIC}` `{VOICE}` `{PERSONA}` `{EVIDENCE}` + P1 ledger (ring token,
-- docs/content-video-engine/patterns/phase-guides/P3.md:1 — P3 — THE GAP (the pattern unit) — > Self-contained generation guide. Consume ONLY: the INJECTION block, the
-- docs/content-video-engine/patterns/phase-guides/P3.md:27 — Inputs — `{TOPIC}` `{VOICE}` `{PERSONA}` `{EVIDENCE}` + P2 ledger (open loops,
-- docs/content-video-engine/patterns/phase-guides/P4.md:1 — P4 — THE MIDPOINT PIVOT — > Self-contained generation guide. Consume ONLY: the INJECTION block, the
-- docs/content-video-engine/patterns/phase-guides/P4.md:27 — Inputs — `{TOPIC}` `{VOICE}` `{PERSONA}` `{EVIDENCE}` + P3 ledger (head-fake,
-- docs/content-video-engine/patterns/phase-guides/P5.md:1 — P5 — REFLECTION & CONVERGENCE — > Self-contained generation guide. Consume ONLY: the INJECTION block, the
-- docs/content-video-engine/patterns/phase-guides/P5.md:29 — Inputs — `{TOPIC}` `{VOICE}` `{PERSONA}` `{EVIDENCE}` `{TELL}` (variable +
-
-## w-j (10)
-
-- content/video_engine/sources/reference_analyses/ACADEMIC_LITERATURE_DRAWING_AND_2_5D_ANIMATION_ENGINE.md:202 — 2.3 Bounded Biharmonic Weights (BBW) & 2D Dual Quaternion Skinning — For animating cutout characters and flexible props driven by control handles:
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/07_academic_literature_drawing_and_2_5d_animation_engine.md:202 — 2.3 Bounded Biharmonic Weights (BBW) & 2D Dual Quaternion Skinning — For animating cutout characters and flexible props driven by control handles:
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/09_2d_and_2_5d_body_animation_object_handling_and_grounding.md:188 — 2.5 2.5D Cutout Rigging vs. Mesh Deformation: LBS Collapse vs. 2D DQS & BBW
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/09_2d_and_2_5d_body_animation_object_handling_and_grounding.md:190 — A. Linear Blend Skinning (LBS) Volume Loss — In 2D LBS, a mesh vertex $\mathbf{v} \in \mathbb{R}^2$ is deformed by $M$ bones with scalar weights $w_j$:
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/09_2d_and_2_5d_body_animation_object_handling_and_grounding.md:197 — B. 2D Dual Quaternion Skinning (DQS) — Kavan, Collins, Žára, & O'Sullivan (2007, 2008) (IEEE TVCG 14(5): 1055–1071):
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/09_2d_and_2_5d_body_animation_object_handling_and_grounding.md:206 — C. Bounded Biharmonic Weights (BBW) — Jacobson, Baran, Popović, & Sorkine (2011) (ACM Trans. Graph. / SIGGRAPH 2011, 30(4): 78:1–8):
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_INDEX.md:210 — 6.3 Non-Rigid Shape Morphing (ARAP) & Skinning — - As-Rigid-As-Possible (ARAP) Shape Interpolation: Polar decomposition of deformation gradient $J_k = R_k S_k$ (Alexa, C
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_INDEX.md:240 — 7. Mathematical Formulas & Theoretical Laws Quick-Lookup — | Law / Formulation | Exact Mathematical Expression | Primary Application in Engine |
-- content/video_engine/sources/reference_analyses/MASTER_RESEARCH_INDEX.md:209 — 6.3 Non-Rigid Shape Morphing (ARAP) & Skinning — - As-Rigid-As-Possible (ARAP) Shape Interpolation: Polar decomposition of deformation gradient $J_k = R_k S_k$ (Alexa, C
-- content/video_engine/sources/reference_analyses/MASTER_RESEARCH_INDEX.md:239 — 7. Mathematical Formulas & Theoretical Laws Quick-Lookup — | Law / Formulation | Exact Mathematical Expression | Primary Application in Engine |
