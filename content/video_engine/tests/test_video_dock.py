@@ -257,9 +257,14 @@ def test_a_video_dock_frame_is_the_same_frame_on_every_seek(tmp_path: Path):
 
 # ---- E45 §1: a dock on a ledger page parks in the page's quiet space -------------------------
 # "A dock never covers the chart ... a small card - about half the stage width, not the 800px solo
-# card - in the page's least busy space ... never over the plot, the title or the source line, and
-# never in the caption's anchor. The placement is computed from the page's own geometry by the
-# compiler, not hand-placed per shot. A dock on a plain plate keeps the solo card."
+# card - in the page's least busy space ... never over the plot or the source line, and never in
+# the caption's anchor. The placement is computed from the page's own geometry by the compiler,
+# not hand-placed per shot. A dock on a plain plate keeps the solo card."
+#
+# THE TITLE IS ALLOWED (E45, the choreography, 2026-09-06): "shrinking it while we slide it to the
+# corner OR OVER THE TITLE, so that the graph gains its readability back". The heading is read
+# before the card parks, so the title block and the sub are fair ground; the plot (basis label and
+# tick labels included), the source line, the badge rail and the caption's anchor are not.
 #
 # The 9:16 page these cases use is the golden ledger source with ONE change: an E28 sub long enough
 # that the band between the title's foot and the plot's head can hold a half-width 16:9 card (a
@@ -301,7 +306,7 @@ def test_a_dock_on_a_ledger_page_takes_a_half_width_card_in_the_quiet_space():
     assert abs(place["w"] - round(B.DOCK_ON_PAGE_W * 1080)) <= 20, place    # ~518px: about half the stage
     assert place["h"] == B.dock_card_h(place["w"])                          # the card's own 16:9 height
     boxes = LPG.page_boxes(world["page"], "9:16")
-    for name in ("plot", "title", "source", "caption_anchor", "rail"):
+    for name in ("plot", "source", "caption_anchor", "rail"):
         assert not _overlap(place, boxes[name]), f"the card crosses the page's {name}: {place} vs {boxes[name]}"
     safe = boxes["safe"]
     assert safe["x"] <= place["x"] and place["x"] + place["w"] <= safe["x"] + safe["w"], (place, safe)
@@ -327,7 +332,7 @@ def test_a_tight_page_shrinks_the_card_rather_than_covering_the_chart():
     boxes = LPG.page_boxes(world["page"], "9:16")
     assert place is not None and place["w"] < round(B.DOCK_ON_PAGE_W * 1080)
     assert place["w"] >= B.DOCK_ON_PAGE_MIN_W
-    for name in ("plot", "title", "source", "caption_anchor"):
+    for name in ("plot", "source", "caption_anchor"):
         assert not _overlap(place, boxes[name]), f"the shrunk card crosses the page's {name}"
 
 
@@ -340,7 +345,7 @@ def test_the_landscape_page_still_places_its_dock_in_the_declared_quiet_zone():
     boxes = LPG.page_boxes(world["page"], "16:9")
     assert place is not None and place["w"] >= B.DOCK_ON_PAGE_MIN_W
     assert place["x"] >= boxes["plot"]["x"] + boxes["plot"]["w"], "a right quiet zone is right of the plot"
-    for name in ("plot", "title", "source", "caption_anchor"):
+    for name in ("plot", "source", "caption_anchor"):
         assert not _overlap(place, boxes[name]), f"the landscape card crosses the page's {name}"
 
 
@@ -350,22 +355,73 @@ def test_a_dock_on_a_plain_plate_keeps_the_solo_card():
     assert B.dock_place({"kind": "clip", "asset_id": "c"}, "9:16") is None
     entry = B.dock_entry("ev-still", 0, 4.0, 20.0, 0, B.DOCK_KIND_IMAGE, None)
     assert "place" not in entry, "a plain-plate dock must compile exactly as it did before E45"
+    for key in ("read_s", "park_s", "park"):
+        assert key not in entry, f"a plain-plate dock has no {key}: it keeps the 0.75s solo rise"
 
 
-def test_the_dock_entry_carries_the_placement_only_when_it_has_one():
+def test_the_dock_entry_carries_the_placement_and_its_choreography():
+    """E45: `place` never arrives alone - the card SPRINGS in at reading size, holds `read_s`, then
+    shrinks and slides to `place` over `park_s`. The clock rides on the entry so a gate, a test or
+    a later per-dock override can read it without re-deriving the player's constants."""
     place = {"x": 346, "y": 435, "w": 518, "h": 315}
     entry = B.dock_entry("clip-a", 0, 4.0, 20.0, 0, B.DOCK_KIND_VIDEO, place)
     assert entry == {"slide": "clip-a", "slot": 0, "enter": 4.0, "exit": 20.0,
-                     "badge_at": [], "kind": "video", "place": place}
+                     "badge_at": [], "kind": "video", "place": place,
+                     "read_s": B.DOCK_READ_S, "park_s": B.DOCK_PARK_S, "park": True}
+    assert (B.DOCK_READ_S, B.DOCK_PARK_S) == (1.2, 0.7)
+
+
+def test_a_dock_too_short_to_read_and_park_says_park_false():
+    """"If a dock's live span is shorter than READ + PARK, skip the park" - the card stays at
+    reading size for its whole life rather than parking the instant it has been read."""
+    place = {"x": 346, "y": 435, "w": 518, "h": 315}
+    short = B.dock_entry("clip-a", 0, 4.0, 4.0 + B.DOCK_READ_S + B.DOCK_PARK_S - 0.1, 0,
+                         B.DOCK_KIND_VIDEO, place)
+    assert short["park"] is False
+    exact = B.dock_entry("clip-a", 0, 4.0, 4.0 + B.DOCK_READ_S + B.DOCK_PARK_S, 0,
+                         B.DOCK_KIND_VIDEO, place)
+    assert exact["park"] is True, "a span exactly long enough parks"
 
 
 def test_the_player_reads_place_and_overrides_the_solo_defaults():
     html = TEMPLATE.read_text(encoding="utf-8")
-    for prop in ("width", "left", "top"):
-        assert f'el.style.{prop} = d.place ? d.place.' in html, f"the card's {prop} must come from place"
+    for prop, expr in (("width", "G.w"), ("left", "G.x"), ("top", "G.y")):
+        assert f"el.style.{prop} = G ? {expr}.toFixed(2)" in html, (
+            f"the card's {prop} must come from the choreography")
+    assert "const G = dockGeom(el, d, t);" in html
     # the frame keeps the clip's aspect and the image case keeps its intrinsic height
     assert ".dock.video .slide-frame { aspect-ratio: 16 / 9;" in html
     assert ".slide-frame img { display: block; width: 100%; height: auto; }" in html
+
+
+def test_the_park_is_the_engines_own_kinetics_not_a_cut_or_a_dissolve():
+    """E45: "you're just cutting the docks in instead of using our strong maths/springs". The
+    arrival is the analytic spring's POP preset (42 s42.2, Mp = 4%, settle 6); the shrink and the
+    slide are Flash & Hogan's minimum-jerk quintic, width and position on ONE clock."""
+    html = TEMPLATE.read_text(encoding="utf-8")
+    assert "const j = minJerk(clamp01((t - d.enter - readS) / parkS));" in html
+    assert "R.x + (P.x - R.x) * j" in html and "R.w + (P.w - R.w) * j" in html
+    assert "const pk = springPop(clamp01((t - d.enter) / DOCK_POP_S));" in html
+    assert "const rk = t > d.exit ? springPop(clamp01((t - d.exit) / DOCK_RETRACT_S)) : 0;" in html
+    assert "const DOCK_READ_S = 1.2, DOCK_PARK_S = 0.7;" in html
+    assert "DOCK_POP_S = 0.45, DOCK_POP_FROM = 0.85, DOCK_FADE_S = 0.12, DOCK_RETRACT_S = 0.35" in html
+    # a dissolve or a cut into the parked box is exactly what the ruling forbids
+    assert "el.style.width = d.place ? d.place.w" not in html
+
+
+def test_the_title_block_is_ground_the_parked_card_may_take():
+    """The choreography opens the top band: the card may park OVER THE TITLE (and the sub), which
+    on a 9:16 page is the difference between the 240px floor card and a readable one."""
+    tl, _ = _portrait_ledger_timeline(tall_sub=False)
+    world = tl["scenes"][0]["world"]
+    boxes = LPG.page_boxes(world["page"], "9:16")
+    bands = {b["band"]: b for b in B.free_bands(boxes)}
+    assert bands["above"]["y"] == boxes["safe"]["y"], "the top band starts at the safe box's head"
+    assert bands["above"]["y"] < boxes["title"]["y"] + boxes["title"]["h"], "the band reaches the title"
+    place = B.dock_place(world, "9:16")
+    assert place["w"] > B.DOCK_ON_PAGE_MIN_W, (
+        "with the title allowed the golden page holds more than the floor card")
+    assert _overlap(place, boxes["title"]), "the golden page parks its card over the title"
 
 
 def _synthetic_portrait_build(tmp_path: Path) -> tuple[Path, dict, dict]:
@@ -419,3 +475,124 @@ def test_the_placed_clip_paints_inside_its_rectangle_and_never_on_the_plot(tmp_p
     plot = boxes["plot"]
     assert not _overlap({"x": x, "y": y, "w": w, "h": h}, plot), (
         f"clip pixels at {box} reach into the plot {plot} - the dock is covering the chart")
+
+
+# ---- E45 the choreography: spring in, read, park by minimum jerk -----------------------------
+# Operator, 2026-09-06: "drawing on the heading, springing the dock, then shrinking it while we
+# slide it to the corner or over the title, so that the graph gains its readability back" and
+# "you're just cutting the docks in instead of using our strong maths/springs".
+#
+# The card's LAYOUT box carries the move (width/left/top per frame), so the parked box is `place`
+# to the pixel and the browser can be asked what it is. Measured here, never assumed.
+
+READ_S, PARK_S = B.DOCK_READ_S, B.DOCK_PARK_S
+MJ_TOL, PARK_TOL = 3.0, 2.0        # px: the min-jerk curve, and the parked rectangle
+
+
+def _min_jerk(u: float) -> float:
+    u = min(1.0, max(0.0, u))
+    return u * u * u * (10 - 15 * u + 6 * u * u)
+
+
+def _dock_rects(html: Path, ts, aspect: str = "9:16") -> dict:
+    """`#dock-1`'s box in STAGE pixels at each t, one browser, the renderer's own seek path."""
+    from playwright.sync_api import sync_playwright
+    w, h = RB.STAGE[aspect]
+    srv, port = RB.serve(html.parent)
+    out = {}
+    try:
+        with sync_playwright() as pw:
+            browser = pw.chromium.launch(headless=True)
+            page = browser.new_context(viewport={"width": w, "height": h}).new_page()
+            page.goto(f"http://127.0.0.1:{port}/{html.name}", wait_until="networkidle", timeout=120000)
+            RB.prepare_page(page, w, h)
+            for t in ts:
+                RB.frame_png(page, t, (w, h))
+                out[round(t, 3)] = page.evaluate("""() => {
+                    const st = document.getElementById('stage').getBoundingClientRect();
+                    const d = document.getElementById('dock-1').getBoundingClientRect();
+                    return [d.x - st.x, d.y - st.y, d.width, d.height]; }""")
+            browser.close()
+    finally:
+        srv.shutdown()
+    return out
+
+
+def _portrait_dock_build(tmp_path: Path, name: str, exitt: float = DOCK_OUT):
+    """The 9:16 ledger page with one placed video dock, its span the caller's."""
+    tl, uris = _portrait_ledger_timeline()
+    clip = _make_clip(tmp_path / f"{name}.mp4")
+    aid = f"clip-{name}"
+    tl["evidence"] = {aid: {"kind": "video", "title": "docked clip", "source": "synthetic",
+                            "species": "clip", "badges": []}}
+    place = B.dock_place(tl["scenes"][0]["world"], "9:16")
+    tl["scenes"][0]["docks"] = [B.dock_entry(aid, 0, DOCK_IN, exitt, 0, B.DOCK_KIND_VIDEO, place)]
+    uris[aid] = B.dock_uri(clip)
+    html = tmp_path / f"{name}.html"
+    html.write_text(RB.instantiate(tl, uris, TEMPLATE), encoding="utf-8")
+    return html, place, tl["scenes"][0]["docks"][0]
+
+
+@needs_ffmpeg
+@needs_browser
+def test_the_card_reads_at_full_size_then_parks_on_the_minimum_jerk_path(tmp_path: Path):
+    """The whole choreography in one browser session: reading size while it is being read, the
+    parked rectangle after the park, and the three samples between them on the min-jerk curve."""
+    html, place, entry = _portrait_dock_build(tmp_path, "choreo")
+    assert entry["park"] is True
+    # the harness drives #scrub, an <input type=range step=0.01>, so a sample t off the 10ms grid
+    # is snapped by the browser before the player ever sees it; these three land on it exactly
+    mids = [round(DOCK_IN + READ_S + PARK_S * f, 2) for f in (0.2, 0.5, 0.8)]
+    assert all(abs(m * 100 - round(m * 100)) < 1e-9 for m in mids)
+    ts = [DOCK_IN + 0.6, *mids, DOCK_IN + READ_S + PARK_S + 0.2]
+    rects = _dock_rects(html, ts)
+
+    read = rects[round(DOCK_IN + 0.6, 3)]
+    # PHASE A: the solo card, 800px in the mobile safe box - and the spring has settled on 1
+    assert abs(read[2] - 800) <= PARK_TOL, f"reading size is the 800px solo card, got {read}"
+    assert read[2] > place["w"] * 1.5, (read, place)
+
+    parked = rects[round(DOCK_IN + READ_S + PARK_S + 0.2, 3)]
+    for i, key in enumerate(("x", "y", "w")):
+        assert abs(parked[i] - place[key]) <= PARK_TOL, (
+            f"parked {key} is {parked[i]}, the compiler placed it at {place[key]}")
+    assert abs(parked[3] - place["h"]) <= PARK_TOL, (
+        f"the parked card stands {parked[3]}px, the compiler predicted {place['h']}")
+
+    # PHASE B: x, y and width all on minJerk(u) between the two rectangles - one clock, one move
+    for t in mids:
+        got = rects[round(t, 3)]
+        j = _min_jerk((t - DOCK_IN - READ_S) / PARK_S)
+        for i, key in enumerate(("x", "y", "w")):
+            want = read[i] + (place[key] - read[i]) * j
+            assert abs(got[i] - want) <= MJ_TOL, (
+                f"t={t:.3f} {key}={got[i]:.1f}, minimum jerk wants {want:.1f} (u={j:.3f})")
+
+
+@needs_ffmpeg
+@needs_browser
+def test_a_dock_too_short_for_read_plus_park_never_parks(tmp_path: Path):
+    """A card that would park the instant it had been read does not park at all - it holds at
+    reading size for its whole life, which is what `park: false` means on the entry."""
+    short = DOCK_IN + READ_S + PARK_S - 0.15
+    html, place, entry = _portrait_dock_build(tmp_path, "short", exitt=short)
+    assert entry["park"] is False
+    rects = _dock_rects(html, [DOCK_IN + 0.6, short - 0.05])
+    for t, got in rects.items():
+        assert abs(got[2] - 800) <= PARK_TOL, f"t={t}: the card shrank to {got[2]} - it parked"
+        assert got[2] > place["w"] * 1.5, (t, got, place)
+
+
+@needs_ffmpeg
+@needs_browser
+def test_the_parking_card_is_the_same_frame_in_two_browsers(tmp_path: Path):
+    """Determinism (P39 T2) at the hardest t there is: mid-park, where the layout box, the clip's
+    seek and the spring all resolve from t. Two fresh browsers, one hash."""
+    import hashlib
+    html, _, _ = _portrait_dock_build(tmp_path, "det")
+    t = DOCK_IN + READ_S + PARK_S * 0.5
+    a = RB.rgb_bytes(RB.render_frame(html, t, "9:16"))
+    b = RB.rgb_bytes(RB.render_frame(html, t, "9:16"))
+    assert a[0] == b[0] == RB.STAGE["9:16"]
+    assert hashlib.sha256(a[1]).hexdigest() == hashlib.sha256(b[1]).hexdigest(), (
+        "the parking card differs between two renders of the same t - the move is not pure in t")

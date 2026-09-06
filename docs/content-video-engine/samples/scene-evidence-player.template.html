@@ -841,6 +841,57 @@
 
   const EXIT = 0.72, CARD_IN = 0.75;
 
+  /* THE TWO-PHASE DOCK ON A LEDGER PAGE (ruling E45, 2026-09-06: "drawing on the heading,
+     springing the dock, then shrinking it while we slide it to the corner or over the title, so
+     that the graph gains its readability back" / "you're just cutting the docks in instead of
+     using our strong maths/springs").
+
+     PHASE A - READ. On its word the card SPRINGS in at reading size (its own CSS solo geometry,
+     800px centred in the mobile safe box at 9:16): scale DOCK_POP_FROM -> 1 by the analytic
+     spring's POP preset (42 s42.2 - overshoot Mp = 4%, settle at u = 1; the same preset that
+     lands the page's badge rail), opacity 0 -> 1 over DOCK_FADE_S. It holds there for `read_s`.
+     PHASE B - PARK. Over `park_s` the card shrinks to `place.w` and slides to `place.x/y` along
+     Flash & Hogan's minimum-jerk quintic (minJerk above) - width, x and y on ONE clock, so the
+     shrink and the slide are one move - and then holds at `place` until `exit`, live, with the
+     chart fully readable beside it. RETRACT: the spring in reverse over DOCK_RETRACT_S.
+
+     PURE IN t. The geometry is the card's LAYOUT (width/left/top), interpolated per frame, not a
+     transform: at the end of the park the element's box IS `place` to the pixel, and the spring's
+     scale is exactly 1 there, so a seek to any t lands on the same frame the play-through does.
+     NO KILL-SWITCH FLAG: the whole choreography hangs off the compiler's `place`, which only a
+     ledger scene carries - a build without it renders the tagged baseline, which is what P39's
+     switch is for. A dock on a plain plate keeps the 0.75s expo-out rise below untouched (that
+     rise is a lift and a scale, not a plain fade, so E45's "never a dissolve" is already met). */
+  const DOCK_READ_S = 1.2, DOCK_PARK_S = 0.7;   /* the compiler's defaults, mirrored for an entry that predates them */
+  /* DIALS, ours to tune (42 s42.5), not findings: DOCK_POP_S is the wall clock the spring's own
+     settle (u = 1) is spent over - a quarter longer than the badge rail's LP_BADGE_IN = 0.36, the
+     card being the heavier object; DOCK_POP_FROM the arrival scale; DOCK_FADE_S the opacity ramp
+     the ruling names; DOCK_RETRACT_S the fast settle out. */
+  const DOCK_POP_S = 0.45, DOCK_POP_FROM = 0.85, DOCK_FADE_S = 0.12, DOCK_RETRACT_S = 0.35;
+
+  /* the READING rectangle: the card's own CSS geometry, measured with no placement forced on it.
+     Content-independent (width, left and top are all CSS), so it is measured once per dock. */
+  const dockReadRect = (el, d) => {
+    if (d._read) return d._read;
+    const w = el.style.width, l = el.style.left, tp = el.style.top;
+    el.style.width = ""; el.style.left = ""; el.style.top = "";
+    const r = { x: el.offsetLeft, y: el.offsetTop, w: el.offsetWidth };
+    el.style.width = w; el.style.left = l; el.style.top = tp;
+    return (d._read = r);
+  };
+
+  /* the placed card's layout box at t: reading size, then the minimum-jerk park. `parks` is
+     recomputed from the LIVE span because the coalescer above can extend a dock's exit. */
+  const dockGeom = (el, d, t) => {
+    if (!d.place) return null;
+    const R = dockReadRect(el, d), P = d.place;
+    const readS = d.read_s != null ? d.read_s : DOCK_READ_S;
+    const parkS = d.park_s != null ? d.park_s : DOCK_PARK_S;
+    if (d.exit - d.enter < readS + parkS) return { x: R.x, y: R.y, w: R.w };   /* too short to park */
+    const j = minJerk(clamp01((t - d.enter - readS) / parkS));
+    return { x: R.x + (P.x - R.x) * j, y: R.y + (P.y - R.y) * j, w: R.w + (P.w - R.w) * j };
+  };
+
   /* every dock carries its own lifetime: enter -> hand-led reveal -> hold
      (7s cap) -> exit. Nothing lives to the end of a scene. */
   const DOCKS = [];
@@ -2968,10 +3019,14 @@
          height stays its content's (the video slide-frame keeps aspect-ratio 16/9 and an image keeps
          its intrinsic height), so `place.h` is the compiler's prediction, never a forced box. A dock
          with no `place` - every dock on a plain plate - is left exactly as it was, and the mount /
-         retract choreography below reads the card's own box either way. */
-      el.style.width = d.place ? d.place.w + "px" : "";
-      el.style.left = d.place ? d.place.x + "px" : "";
-      el.style.top = d.place ? d.place.y + "px" : "";
+         retract choreography below reads the card's own box either way.
+         The card does not CUT to that rectangle: dockGeom above springs it in at reading size,
+         holds it for `read_s`, then shrinks and slides it here over `park_s` on the minimum-jerk
+         path. At the end of the park this box is `place` exactly. */
+      const G = dockGeom(el, d, t);
+      el.style.width = G ? G.w.toFixed(2) + "px" : "";
+      el.style.left = G ? G.x.toFixed(2) + "px" : "";
+      el.style.top = G ? G.y.toFixed(2) + "px" : "";
 
       /* Card settle — the whole entrance. The document is simply present on
          the card; no mask, no drawing hand. Reference timing: a 0.75s
@@ -3018,7 +3073,17 @@
         el.style.maskImage = "none"; el.style.webkitMaskImage = "none";
         el.style.opacity = (1 - xe) * clamp01((t - d.enter) / (CARD_IN * 0.55));
       }
-      el.style.transform = (xk && !swept)
+      /* E45: a PLACED card arrives and leaves on the spring - it never cuts and never dissolves.
+         The arrival is the POP preset (Mp = 4%) on scale, DOCK_POP_FROM -> 1, landing on exactly
+         1 at u = 1 so the parked box is `place` to the pixel; the retract is the same spring run
+         backwards over DOCK_RETRACT_S, a fast settle rather than a fade. Everything else - a dock
+         on a plain plate - keeps the 0.75s expo-out lift it has always had. */
+      if (G) {
+        const pk = springPop(clamp01((t - d.enter) / DOCK_POP_S));
+        const rk = t > d.exit ? springPop(clamp01((t - d.exit) / DOCK_RETRACT_S)) : 0;
+        el.style.transform = "scale(" + (DOCK_POP_FROM + (1 - DOCK_POP_FROM) * (pk - rk)).toFixed(4) + ")";
+        if (!swept) el.style.opacity = clamp01(1 - rk) * clamp01((t - d.enter) / DOCK_FADE_S);
+      } else el.style.transform = (xk && !swept)
         ? "translateY(" + (-22 * xe) + "px) scale(" + (1 - 0.05 * xe) + ")"
         : "translateY(" + (32 * (1 - ck)) + "px) scale(" + (0.96 + 0.04 * ck) + ")";
       const sh = 12 * ck * (swept ? (1 - wk) : 1);   // light leaves with the page

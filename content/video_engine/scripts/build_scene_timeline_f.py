@@ -339,15 +339,27 @@ def dock_uri(p: Path) -> str:
 # or the source line, and never in the caption's anchor. The placement is computed from the page's
 # own geometry by the compiler, not hand-placed per shot. A dock on a plain plate keeps the solo card."
 #
-# THE RULE. LPG.page_boxes reports the page's own ink in stage pixels. Subtract the four forbidden
-# boxes from the mobile safe box and what is left is five candidate bands: `above` (title foot ->
-# plot head), `below` (plot foot -> source), `foot` (under the source/rail, above the anchored
-# caption) and the two side columns beside the plot. Each band yields the widest card it can hold
-# at 16:9 - capped at DOCK_ON_PAGE_W of the stage, floored at DOCK_ON_PAGE_MIN_W - and the band
-# that yields the widest card wins, the declared quiet zone breaking ties. In the band the card is
-# pushed to the quiet-zone side and parked against the PLOT (bottom-aligned in a horizontal band),
-# so the estimator's one risk - a title that wraps one line off the model - eats into the title
-# block E45's own choreography offers ("slide it to the corner or over the title"), never the chart.
+# E45 (2026-09-06), the choreography: "springing the dock, then shrinking it while we slide it to
+# the corner OR OVER THE TITLE, so that the graph gains its readability back". The title block is
+# therefore ALLOWED under the parked card - the heading has been read by the time the card parks -
+# and so is the sub. What stays forbidden is the evidence itself: the plot (which page_boxes
+# already widens to cover the basis label above it and the x tick labels below it), the source
+# line, the badge rail and the anchored caption's strip.
+#
+# THE RULE. LPG.page_boxes reports the page's own ink in stage pixels. Subtract the forbidden
+# boxes from the mobile safe box and what is left is five candidate bands: `above` (the safe box's
+# head -> the plot's head, across the title and the sub), `below` (plot foot -> source), `foot`
+# (under the source/rail, above the anchored caption) and the two side columns beside the plot.
+# Each band yields the widest card it can hold at 16:9 - capped at DOCK_ON_PAGE_W of the stage,
+# floored at DOCK_ON_PAGE_MIN_W - and the band that yields the widest card wins, the declared quiet
+# zone breaking ties and DOCK_BAND_ORDER (top band first, then the corners) breaking those. In the
+# band the card is pushed to the quiet-zone end and parked against the PLOT (bottom-aligned in a
+# horizontal band), so the estimator's one risk - a title that wraps one line off the model - eats
+# into the title block the ruling hands us, never the chart.
+#
+# THE MOBILE SAFE BOX IS NOT NEGOTIABLE (doc 49 s49.1 / 50): the band still starts at the safe
+# box's head, not at the title's own top. On a 9:16 page the title is drawn at y=150, above the
+# safe box's 280, so "over the title" buys only the part of the title that is on-screen anyway.
 #
 # THE CALLOUT/BADGE SPECIES STILL LAND (E45 review point): the emphasized datum's callout is drawn
 # INSIDE the chart's viewBox, on the datum, and the badge rail is drawn under the source line -
@@ -359,6 +371,12 @@ DOCK_PLACE_PAD = 16          # clear air between the card and the ink; also abso
 DOCK_CARD_CHROME_W = 38      # card width - frame width (padding 15+15 + border 4+4), measured
 DOCK_CARD_CHROME_H = 45      # card height - frame height (padding 13+13 + border 4+4 + rail gap), measured
 DOCK_BAND_ORDER = ("above", "right", "left", "below", "foot")   # ties break in this order, always
+# THE TWO-PHASE DOCK (E45, the choreography). A placed dock does not cut in at its parked size: it
+# SPRINGS in at reading size, holds DOCK_READ_S so the card can actually be read, then shrinks and
+# slides to `place` over DOCK_PARK_S along a minimum-jerk path. The player owns the motion; the
+# compiler only states the clock, per dock, so a gate or a test can read it off the timeline.
+DOCK_READ_S = 1.2      # the hold at reading size [DERIVED: one caption page, doc 51]
+DOCK_PARK_S = 0.7      # the shrink-and-slide to `place` [DERIVED: the roll-out's 0.7]
 
 
 def dock_card_h(width: int) -> int:
@@ -372,11 +390,14 @@ def _card_w_for(height: float) -> int:
 
 
 def free_bands(boxes: dict) -> list[dict]:
-    """The rectangles inside the safe box that the page's own ink leaves free (E45)."""
-    safe, plot, title = boxes["safe"], boxes["plot"], boxes["title"]
+    """The rectangles inside the safe box that the page's own ink leaves free (E45).
+
+    The title and the sub are NOT ink for this purpose - E45 parks the card "over the title" once
+    the heading has been read - so the head of the `above` band is the safe box's own head."""
+    safe, plot = boxes["safe"], boxes["plot"]
     src, rail, cap = boxes["source"], boxes["rail"], boxes["caption_anchor"]
     left, right = safe["x"], safe["x"] + safe["w"]
-    head = max(safe["y"], title["y"] + title["h"])
+    head = safe["y"]
     foot = min(safe["y"] + safe["h"], cap["y"])
     ink_foot = max(src["y"] + src["h"], rail["y"] + rail["h"])
     bands = {
@@ -439,13 +460,18 @@ def dock_entry(aid: str, slot: int, enter: float, exitt: float, n_badges: int,
     discussion. A flat hold drops the document mid-argument, which is what left 42% of claims
     naked. ``kind`` is written ONLY for a video dock - the motion gate credits a live video dock
     as continuous motion (M10 / M16) and an image dock's shape stays exactly as it was. ``place``
-    is written ONLY for a dock on a ledger page (E45), so a plain-plate build compiles unchanged."""
+    is written ONLY for a dock on a ledger page (E45), so a plain-plate build compiles unchanged;
+    with it come the two phases of the choreography - ``read_s`` at reading size, ``park_s`` for
+    the shrink-and-slide - and ``park``, which is False when the dock's own span is too short to
+    hold both (the card then simply stays at reading size for its whole life)."""
+    span = round(exitt - enter, 2)
     return {
         "slide": aid, "slot": slot,
         "enter": round(enter, 2), "exit": round(exitt, 2),
         "badge_at": [round(enter + 0.75 + 1.3 * (n + 1), 2) for n in range(n_badges)],
         **({"kind": DOCK_KIND_VIDEO} if kind == DOCK_KIND_VIDEO else {}),
-        **({"place": place} if place else {}),
+        **({"place": place, "read_s": DOCK_READ_S, "park_s": DOCK_PARK_S,
+            "park": span >= DOCK_READ_S + DOCK_PARK_S} if place else {}),
     }
 
 
