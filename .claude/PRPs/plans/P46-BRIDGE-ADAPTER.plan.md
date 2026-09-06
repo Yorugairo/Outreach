@@ -119,13 +119,13 @@ actionable: the inbox hook for live sessions, the daemon + per-lane handlers for
   the live send (T5) is where the two forms get decided.
 
 ### T2: bridge_watch
-- Status: pending
+- Status: complete
 - Owner: implementation_luna
 - Depends on: T1
 - Write set: `content/video_engine/scripts/bridge_watch.py`, `content/video_engine/tests/test_bridge_watch.py`
 - Acceptance: replaying the 7aaa9146 transcript yields reply.md ending with Gemini's completion report, steps.jsonl with the two user messages and the abstention at step 80, status done; a deadline test yields timeout; the Claude-session reader yields Astra's POSITION line from one agent-bridge-run transcript
 - Validate: `python content/video_engine/scripts/bridge_watch.py --lane gemini --id 7aaa9146-88f1-4f03-b004-d5bdf18a5492 --replay`
-- Evidence: pending
+- Evidence: 2026-09-06 (implementation_luna; parent re-ran all three suites - `60 passed in 0.63s` - and the replay: `status: done steps=101`, exit 0; `reply.md` opens on the completion report; 0 hits for thinking/csrf/host_bridge in the outputs). `bridge_watch.py` (466 lines), `test_bridge_watch.py` (378 lines, 18 tests, no skips - both real transcripts present). Reply rule pinned: the last PLANNER_RESPONSE with content, no tool_calls, status DONE and nothing pending after it; a copy cut at 100 records reads `working` (step 80's abstention, tool calls after it). Acceptance wording corrected: the transcript has ONE `USER_INPUT`; the send-message correction is step 82, a `SYSTEM_MESSAGE` with `sender=system` (tool results read `sender=<id>/task-NN`), and `steps.jsonl` marks both with `user: true`. `order.json` has no `sentAt` - it is read from `conversation.json`, then `createdAt`. Exit 3 = still working. `mask_text` also runs over the reply body. Claude lane exposes usage; gemini stays null.
 
 ### T3: bridge_reply + the ledger
 - Status: complete
