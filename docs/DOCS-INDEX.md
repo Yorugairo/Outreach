@@ -14,7 +14,7 @@ Levels 1-6 are Markdown heading depth; level 7 is a table row (CAPABILITIES, BAC
 A `{...}` tail lists the section's bold phrases; a `<...>` tail its body terms - code
 spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 
-3145 records across 245 files.
+3150 records across 246 files.
 
 ## content/video_engine/projects/history-of-bjj/episode-1-research-brief.md
 
@@ -3685,6 +3685,14 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 - L32 [3] After — Most tables are anchored to `insight_runs`, with `seo_target_id` attached where useful and `business_entity_id` optional. <insight_runs; seo_target_id; business_entity_id; run-specific>
 - L40 [2] Design rule — If a record exists because a specific analysis run happened, it should reference `insight_runs`. <insight_runs>
 - L51 [2] What remains entity-centric — - `business_entities` <business_entities; entity_aliases; entity_domains>
+
+## docs/runbooks/BRIDGE-DAEMON.md
+
+- L1 [1] The bridge daemon — the tick that makes a landed reply actionable (P46 T6) — `bridge_send.py` sends an order, `bridge_watch.py` lands the reply. Nothing between them was unattended: a reply sat in a folder {The daemon itself makes no model call} <order.json; conversation.json; follow-up; from: claude; conversationId; bridge_watch.py --once; steps.jsonl; watch.json; deadline; timeout; bridge_handlers.classify(); replyShape>
+- L14 [2] 1. One tick, in order — | step | folder | what happens | <order.json; conversation.json; follow-up; from: claude; conversationId; bridge_watch.py --once; steps.jsonl; watch.json; deadline; timeout; bridge_handlers.classify(); replyShape>
+- L31 [2] 2. Config — Defaults live in the module and are overridden by a JSON file — `~/.claude/bridge-config.json` by default, `--config <path>` <--config <path>; grace_min; sla_min; residue_runs_per_day; residue_tokens_per_day; poll_sec; --loop; --poll-sec>
+- L46 [2] 3. The Task Scheduler entry (install by hand, once) — Nothing installs itself. Open Task Scheduler → Create Task (not Basic Task): {General; Triggers; Actions; Conditions} <Claude Bridge Daemon; pythonw.exe; one-liner; schtasks>
+- L72 [2] 4. Reading the ledger's tier column — `evals/BRIDGE-LOG.jsonl` (per machine, gitignored) is one JSON line per event. `sent`, `replied`, `followup` and `timeout` come <sent; replied; followup; timeout; tier0; tier1; escalated; inputTokens; outputTokens; costUsd; decision; done>
 
 ## docs/runbooks/BRIDGE-PACKET.md
 

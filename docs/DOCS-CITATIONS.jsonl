@@ -3584,6 +3584,8 @@
 {"from": {"path": "docs/research/2026-07-28-accretive-revenue-assessment.md", "line": 269, "heading": "5. Ranked paths"}, "ref": "§2.6", "to": null}
 {"from": {"path": "docs/research/2026-08-22-agent-design-tooling-assessment.md", "line": 21, "heading": "Why no tool can do the production job"}, "ref": "T13", "to": null}
 {"from": {"path": "docs/research/2026-08-24-twenty-n8n-attio-evaluation.md", "line": 80, "heading": "Genuinely strong where it matters here"}, "ref": "S23", "to": null}
+{"from": {"path": "docs/runbooks/BRIDGE-DAEMON.md", "line": 1, "heading": "The bridge daemon — the tick that makes a landed reply actionable (P46 T6)"}, "ref": "P46", "to": null}
+{"from": {"path": "docs/runbooks/BRIDGE-DAEMON.md", "line": 1, "heading": "The bridge daemon — the tick that makes a landed reply actionable (P46 T6)"}, "ref": "T6", "to": {"path": "docs/content-video-engine/BACKLOG.md", "line": 252, "heading": "T6 `object → chart` transform on one page"}}
 {"from": {"path": "docs/runbooks/BRIDGE-PACKET.md", "line": 1, "heading": "The bridge packet — one shape for Claude, Gemini and Astra (P46 T4, draft for Astra's review)"}, "ref": "P46", "to": null}
 {"from": {"path": "docs/runbooks/BRIDGE-PACKET.md", "line": 1, "heading": "The bridge packet — one shape for Claude, Gemini and Astra (P46 T4, draft for Astra's review)"}, "ref": "T4", "to": {"path": "docs/content-video-engine/BACKLOG.md", "line": 247, "heading": "T4 ARAP morph"}}
 {"from": {"path": "docs/runbooks/BRIDGE-PACKET.md", "line": 8, "heading": "1. The packet (`order.json`)"}, "ref": "§4", "to": null}

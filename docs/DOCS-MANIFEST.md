@@ -15,7 +15,7 @@ its own headings, capability names, backlog ids. `terms` are its most frequent b
 terms. Purpose, terms and defines are truncated here to keep the file cheap to grep;
 the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 
-245 documents across 13 kinds.
+246 documents across 13 kinds.
 
 ## doctrine
 
@@ -124,6 +124,7 @@ the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 
 - docs/harness/AGENT_SELF_EVALUATION_GUIDE.md — 🤖 Agent Self-Evaluation & Adoption Guide — Instructions for the AI Agent reading this file: You are operating in — defines: — — terms: Disk-as-Bus; AST-Grep; Intent-Driven; Save-Stating; VideoDB; Self-Audit
 - docs/harness/HARNESS_EVALUATION_CHECKLIST.md — 📋 Repository Agentic Maturity Checklist — Use this scorecard to rate any codebase's agentic readiness before and — defines: — — terms: Disk-as-Bus; AST-Grep; sgconfig.yml; Intent-driven; save-stating; --dry-run
+- docs/runbooks/BRIDGE-DAEMON.md — The bridge daemon — the tick that makes a landed reply — `bridge_send.py` sends an order, `bridge_watch.py` lands the reply. — defines: P46 — terms: timeout; order.json; conversation.json; follow-up; from: claude; conversationId
 - docs/runbooks/BRIDGE-PACKET.md — The bridge packet — one shape for Claude, Gemini and As — An order between lanes is a file and a send. — defines: P46 — terms: packetId; replyShape; lane; brief; from; title
 - docs/runbooks/BRIDGE-REPLY-HANDLER.md — The reply handler's standing instruction (P46 T6, tier — You are `bridge_handler`, run headlessly by `bridge_daemon` because a — defines: P46 — terms: follow-up; PATHS WRITTEN; sed -n; done; path:line; from: claude
 - docs/runbooks/DEMAND_CONVERSION_EVIDENCE.md — Demand-to-conversion evidence runbook — Use this layer to estimate a bounded commercial opportunity, not to pr — defines: — — terms: close-variant; business-supplied; demand-conversion; owner-first-party; row-level; conversion-event

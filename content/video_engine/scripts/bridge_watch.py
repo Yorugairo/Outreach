@@ -29,6 +29,9 @@ completion report at step 103):
 Exit codes: 0 done, 2 timeout (the deadline passed with no reply), 3 still working (a replay of a live
 conversation - outside the plan's three codes, and not an error), 1 error.
 
+`--once` is `--replay` for a daemon (P46 T6): one read of the transcript, no polling, but the order's
+deadline still binds, so a packet past it lands as `timeout` instead of `working`.
+
 Standard library only.
 """
 from __future__ import annotations
@@ -70,6 +73,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--id", required=True, help="conversation id, session uuid, or a transcript path")
     parser.add_argument("--packet", default=None, help="packetId; the packet is expected in sent/")
     parser.add_argument("--replay", action="store_true", help="read the transcript once, never poll")
+    parser.add_argument("--once", action="store_true", help="one read like --replay, but the deadline still binds")
     parser.add_argument("--timeout-min", type=int, default=None, help="overrides the order's deadline")
     parser.add_argument("--poll-sec", type=int, default=DEFAULT_POLL_S)
     parser.add_argument("--out", type=Path, default=None, help="where a packet-less replay lands")
@@ -345,17 +349,30 @@ def resolve_deadline(timeout_min: int | None, order: dict[str, Any], started: dt
 # --------------------------------------------------------------------------- the watch
 
 
-def _poll(lane: str, path: Path, deadline: dt.datetime | None, poll_sec: int, replay: bool) -> tuple[list, dict, str]:
-    """Read until the reply lands, the deadline passes, or exactly once when replaying."""
+def _poll(
+    lane: str,
+    path: Path,
+    deadline: dt.datetime | None,
+    poll_sec: int,
+    replay: bool,
+    once: bool = False,
+) -> tuple[list, dict, str]:
+    """Read until the reply lands, the deadline passes, or exactly once when replaying.
+
+    `--replay` is a read of history and never times out; `--once` is one tick of a daemon, so a packet past
+    its deadline is a `timeout` on the first read and nothing sleeps either way.
+    """
 
     reader = READERS[lane]
     while True:
         records = read_records(path)
         reply = reader(records)
-        if reply["status"] == "done" or replay:
+        if reply["status"] == "done" or (replay and not once):
             return records, reply, reply["status"]
         if deadline and dt.datetime.now().astimezone() >= deadline:
             return records, reply, "timeout"
+        if once:
+            return records, reply, reply["status"]
         time.sleep(max(int(poll_sec), 1))
 
 
@@ -424,7 +441,8 @@ def run_watch(args: argparse.Namespace) -> dict[str, Any]:
         order = _read_json(folder / "order.json")
 
     deadline = resolve_deadline(args.timeout_min, order, started)
-    records, reply, status = _poll(args.lane, path, deadline, args.poll_sec, args.replay)
+    once = bool(getattr(args, "once", False))
+    records, reply, status = _poll(args.lane, path, deadline, args.poll_sec, args.replay or once, once)
     landed_at = dt.datetime.now().astimezone().isoformat(timespec="seconds")
     steps = STEPPERS[args.lane](records, secrets)
     watch = {
@@ -441,7 +459,9 @@ def run_watch(args: argparse.Namespace) -> dict[str, Any]:
     if folder is not None and status == "done" and state in ("sent", "queue"):
         folder = env_mod.move_packet(args.packet, state, "replied", repo=args.repo)
         written = {name: folder / target.name for name, target in written.items()}
-    if args.packet:
+    if args.packet and status != "working":
+        # a `working` read is not an event: a daemon ticking every minute would otherwise write one
+        # `timeout` line per tick for a lane that is simply still thinking.
         _ledger(args, order, watch, claude_usage(reply["record"]) if args.lane == "claude" else {})
     return {
         "watch": watch,
