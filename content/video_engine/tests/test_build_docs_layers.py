@@ -155,5 +155,7 @@ def test_the_committed_tree_passes_check():
     """The stack really runs: every tool, over this checkout, in order."""
     assert [layer.script for layer in BDL.LAYERS] == [
         "build_docs_index.py", "build_docs_manifest.py", "build_topic_index.py",
-        "build_gates_registry.py", "audit_docs_standard.py"]
+        "build_gates_registry.py",
+        "build_animation_registry.py",
+        "build_craft_map.py", "audit_docs_standard.py"]
     assert BDL.main(["--check", "--repo", str(ROOT)]) == 0
