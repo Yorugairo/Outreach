@@ -3,64 +3,56 @@
   "script": "SCRIPT-90S-VO.claude.txt",
   "window_s": 15.0,
   "memory_windows": 2,
-  "timing_source": "estimated",
-  "runtime_s": 92.94,
+  "timing_source": "measured",
+  "runtime_s": 82.723,
   "windows": [
     {
       "i": 0,
       "start_s": 0.0,
-      "end_s": 15.47,
+      "end_s": 15.047,
       "span": "0:00-0:15",
-      "text": "Tokyo took a tea break. And left America with an unfunded bar tab. The Fed hasn't moved, but your mortgage rate climbed anyway. Three men in blue ties blame the deficit, the Fed, or the vibes at Jackson Hole. On YouTube, it's sixty-three stick figures.",
+      "text": "Tokyo took a tea break. And left America with an unfunded bar tab. The Fed hasn't moved, but your borrowing costs climbed anyway. Three men in blue ties blame the deficit, the Fed, or the vibes at Jackson Hole. On YouTube,",
       "memory": ""
     },
     {
       "i": 1,
       "start_s": 15.0,
-      "end_s": 30.08,
+      "end_s": 30.122,
       "span": "0:15-0:30",
-      "text": "Here's what nobody on that panel is watching: our biggest lender. The Treasury's table shows Japan holds over a trillion dollars of our debt, and it's been selling since February. I ran risk at JPMorgan; when your biggest customer walks,",
-      "memory": "Tokyo took a tea break. And left America with an unfunded bar tab. The Fed hasn't moved, but your mortgage rate climbed anyway. Three men in blue ties blame the deficit, the Fed, or the vibes at Jackson Hole. On YouTube, it's sixty-three stick figures."
+      "text": "it's sixty-three stick figures. Here's what nobody on that panel is watching: our biggest lender. The Treasury's table shows Japan holds over a trillion dollars of our debt, and it's been selling since February. I ran risk at JPMorgan; when your biggest",
+      "memory": "Tokyo took a tea break. And left America with an unfunded bar tab. The Fed hasn't moved, but your borrowing costs climbed anyway. Three men in blue ties blame the deficit, the Fed, or the vibes at Jackson Hole. On YouTube,"
     },
     {
       "i": 2,
       "start_s": 30.0,
-      "end_s": 45.242,
+      "end_s": 44.398,
       "span": "0:30-0:45",
-      "text": "the auction sets your price. The opponent isn't the Fed; it's a Japanese balance sheet. Two numbers show where the money went: a Treasury page, and your phone. By the end you'll read both numbers yourself. Since February, Japan has sold a hundred",
-      "memory": "Tokyo took a tea break. And left America with an unfunded bar tab. The Fed hasn't moved, but your mortgage rate climbed anyway. Three men in blue ties blame the deficit, the Fed, or the vibes at Jackson Hole. On YouTube, it's sixty-three stick figures. Here's what nobody on that panel is watching: our biggest lender. The Treasury's table shows Japan holds over a trillion dollars of our debt, and it's been selling since February. I ran risk at JPMorgan; when your biggest customer walks,"
+      "text": "customer walks, the auction sets your price. The opponent isn't the Fed; it's a Japanese balance sheet. Two numbers show where the money went: a Treasury page, and your phone. By the end you'll read both numbers yourself.",
+      "memory": "Tokyo took a tea break. And left America with an unfunded bar tab. The Fed hasn't moved, but your borrowing costs climbed anyway. Three men in blue ties blame the deficit, the Fed, or the vibes at Jackson Hole. On YouTube, it's sixty-three stick figures. Here's what nobody on that panel is watching: our biggest lender. The Treasury's table shows Japan holds over a trillion dollars of our debt, and it's been selling since February. I ran risk at JPMorgan; when your biggest"
     },
     {
       "i": 3,
       "start_s": 45.0,
-      "end_s": 60.16,
+      "end_s": 60.124,
       "span": "0:45-1:00",
-      "text": "and twenty-two billion dollars of it, a tenth of the pile. The Treasury prints the new total monthly, and that print is your first number. The threshold: that pile grows, or it shrinks. Where we sit: a tenth below the February peak. The flip:",
-      "memory": "Here's what nobody on that panel is watching: our biggest lender. The Treasury's table shows Japan holds over a trillion dollars of our debt, and it's been selling since February. I ran risk at JPMorgan; when your biggest customer walks, the auction sets your price. The opponent isn't the Fed; it's a Japanese balance sheet. Two numbers show where the money went: a Treasury page, and your phone. By the end you'll read both numbers yourself. Since February, Japan has sold a hundred"
+      "text": "Since February, Japan has sold a hundred and twenty-two billion dollars of it, a tenth of the pile. The Treasury prints the new total monthly, and that print is your first number. Tokyo has pledged ten trillion yen to chips, and if that works, it beats our bonds. And here's what",
+      "memory": "it's sixty-three stick figures. Here's what nobody on that panel is watching: our biggest lender. The Treasury's table shows Japan holds over a trillion dollars of our debt, and it's been selling since February. I ran risk at JPMorgan; when your biggest customer walks, the auction sets your price. The opponent isn't the Fed; it's a Japanese balance sheet. Two numbers show where the money went: a Treasury page, and your phone. By the end you'll read both numbers yourself."
     },
     {
       "i": 4,
       "start_s": 60.0,
-      "end_s": 75.015,
+      "end_s": 75.24,
       "span": "1:00-1:15",
-      "text": "the pile grows again. If it does, I was wrong. Tokyo has pledged ten trillion yen to chips, and if that works, it beats our bonds. And here's what nobody says: the money went home, and the tab stayed here. So, the second number: it's on your",
-      "memory": "the auction sets your price. The opponent isn't the Fed; it's a Japanese balance sheet. Two numbers show where the money went: a Treasury page, and your phone. By the end you'll read both numbers yourself. Since February, Japan has sold a hundred and twenty-two billion dollars of it, a tenth of the pile. The Treasury prints the new total monthly, and that print is your first number. The threshold: that pile grows, or it shrinks. Where we sit: a tenth below the February peak. The flip:"
+      "text": "nobody says: the money went home, and the tab stayed here. So, the second number: it's on your phone. Pull up Meta and find its price-to-earnings multiple: that's the share of the price that's profit not yet earned, and a higher yield discounts",
+      "memory": "customer walks, the auction sets your price. The opponent isn't the Fed; it's a Japanese balance sheet. Two numbers show where the money went: a Treasury page, and your phone. By the end you'll read both numbers yourself. Since February, Japan has sold a hundred and twenty-two billion dollars of it, a tenth of the pile. The Treasury prints the new total monthly, and that print is your first number. Tokyo has pledged ten trillion yen to chips, and if that works, it beats our bonds. And here's what"
     },
     {
       "i": 5,
       "start_s": 75.0,
-      "end_s": 89.994,
+      "end_s": 82.723,
       "span": "1:15-1:30",
-      "text": "phone. Pull up Meta and find its price-to-earnings multiple: that's the share of the price that's profit not yet earned, and a higher yield discounts it. Not a panic. Not a plot. Mechanics. The Fed still hasn't moved. Tokyo is still on its tea",
-      "memory": "and twenty-two billion dollars of it, a tenth of the pile. The Treasury prints the new total monthly, and that print is your first number. The threshold: that pile grows, or it shrinks. Where we sit: a tenth below the February peak. The flip: the pile grows again. If it does, I was wrong. Tokyo has pledged ten trillion yen to chips, and if that works, it beats our bonds. And here's what nobody says: the money went home, and the tab stayed here. So, the second number: it's on your"
-    },
-    {
-      "i": 6,
-      "start_s": 90.0,
-      "end_s": 92.94,
-      "span": "1:30-1:45",
-      "text": "break. And that unfunded bar tab is still ours.",
-      "memory": "the pile grows again. If it does, I was wrong. Tokyo has pledged ten trillion yen to chips, and if that works, it beats our bonds. And here's what nobody says: the money went home, and the tab stayed here. So, the second number: it's on your phone. Pull up Meta and find its price-to-earnings multiple: that's the share of the price that's profit not yet earned, and a higher yield discounts it. Not a panic. Not a plot. Mechanics. The Fed still hasn't moved. Tokyo is still on its tea"
+      "text": "it. The Fed still hasn't moved. Tokyo is still on its tea break. And that unfunded bar tab is still ours.",
+      "memory": "Since February, Japan has sold a hundred and twenty-two billion dollars of it, a tenth of the pile. The Treasury prints the new total monthly, and that print is your first number. Tokyo has pledged ten trillion yen to chips, and if that works, it beats our bonds. And here's what nobody says: the money went home, and the tab stayed here. So, the second number: it's on your phone. Pull up Meta and find its price-to-earnings multiple: that's the share of the price that's profit not yet earned, and a higher yield discounts"
     }
   ]
 }

@@ -6,115 +6,99 @@
   "model": "(codex default)",
   "effort": "high",
   "lane": "codex",
-  "started_at": "2026-09-05T05:23:29+00:00",
-  "finished_at": "2026-09-05T05:24:50+00:00",
-  "windows_run": 7,
+  "started_at": "2026-09-06T12:17:17+00:00",
+  "finished_at": "2026-09-06T12:18:47+00:00",
+  "windows_run": 6,
   "package": {
     "status": "asked",
     "title": "Tokyo Tea Break",
     "thumb_file": "",
-    "promised": "A brief, atmospheric escape into a Tokyo tea break—showing the setting, the tea ritual, and what makes the moment distinctly Japanese. I expect to leave knowing what the experience feels like."
+    "promised": "I expect to see what taking a tea break in Tokyo looks like—the place, the tea, and the atmosphere. I expect to leave with a feel for that small part of life in the city."
   },
   "reports": [
     {
       "i": 0,
       "span": "0:00-0:15",
       "new_things": [
-        "Something involving Tokyo is being blamed for leaving America with an unfunded financial burden.",
-        "Mortgage rates rose even though the Federal Reserve did not change rates.",
-        "Commentators in blue ties blame the deficit, the Fed, or the mood at Jackson Hole.",
-        "YouTube explanations use sixty-three stick figures."
+        "Borrowing costs went up even though the Fed hasn't made a move.",
+        "The commentators are blaming the deficit, the Fed, or something about Jackson Hole."
       ],
-      "held_question": "What does Tokyo’s supposed tea break have to do with rising American mortgage rates?",
+      "held_question": "What does Tokyo taking a tea break have to do with borrowing costs in America?",
       "asked_of_me": "",
       "could_not_follow": [
-        "What “Tokyo took a tea break” means",
-        "Why sixty-three stick figures matters"
+        "What Tokyo's tea break and America's unpaid bar tab mean.",
+        "What Jackson Hole has to do with this."
       ],
-      "promise_answered": "not yet — I am still waiting to see the Tokyo setting, the tea ritual, and what makes the experience distinctly Japanese.",
+      "promise_answered": "Not yet. I'm still waiting to see the place, the tea, and what a tea break in Tokyo feels like.",
       "answered_by": ""
     },
     {
       "i": 1,
       "span": "0:15-0:30",
       "new_things": [
-        "Japan is described as America’s biggest lender.",
-        "Japan holds more than $1 trillion of U.S. debt.",
-        "Japan has been selling that debt since February.",
-        "The speaker says they previously worked in risk at JPMorgan."
+        "Japan is America's biggest lender, and the panel is overlooking it.",
+        "Japan holds over a trillion dollars of US debt.",
+        "Japan has been selling US debt since February.",
+        "The speaker used to run risk at JPMorgan."
       ],
-      "held_question": "What happens to borrowing costs when America’s biggest lender starts walking away?",
+      "held_question": "How does Japan selling our debt make borrowing more expensive for us?",
       "asked_of_me": "",
       "could_not_follow": [
-        "The sentence about what happens when the biggest customer walks was cut off."
+        "What the sixty-three stick figures have to do with this."
       ]
     },
     {
       "i": 2,
       "span": "0:30-0:45",
       "new_things": [
-        "When the biggest buyer leaves, the Treasury auction determines the price.",
-        "The real force moving rates is Japan’s balance sheet, not the Fed.",
-        "Two numbers—one on a Treasury page and one on a phone—show where the money went."
+        "When a big buyer leaves, the auction determines the borrowing price.",
+        "The speaker says a Japanese balance sheet is driving this, rather than the Fed.",
+        "Two numbers—one on a Treasury page and one on my phone—supposedly show where the money went."
       ],
-      "held_question": "What are the two numbers, and how do they explain where the money went?",
+      "held_question": "What are those two numbers, and what will they show me?",
       "asked_of_me": "",
-      "could_not_follow": [
-        "The amount Japan has sold was cut off after “a hundred.”"
-      ]
+      "could_not_follow": []
     },
     {
       "i": 3,
       "span": "0:45-1:00",
       "new_things": [
-        "Japan has sold $122 billion of U.S. debt since February, about one-tenth of its holdings.",
-        "The Treasury publishes Japan’s current holdings every month.",
-        "The first number to watch is whether Japan’s Treasury holdings are growing or shrinking.",
-        "Japan’s holdings are currently about 10% below their February peak."
+        "Japan has sold $122 billion of our debt since February, about a tenth of what it held.",
+        "The Treasury updates Japan's total every month. That's the first number to watch.",
+        "Tokyo has promised ten trillion yen for chips.",
+        "The claim is that chips could be a better investment than our bonds if that spending works."
       ],
-      "held_question": "What is the flip, and what happens if Japan’s holdings start growing instead of shrinking?",
+      "held_question": "How does the chip spending connect to Japan selling our debt?",
       "asked_of_me": "",
-      "could_not_follow": []
+      "could_not_follow": [
+        "The jump from selling our debt to putting money into chips."
+      ]
     },
     {
       "i": 4,
       "span": "1:00-1:15",
       "new_things": [
-        "If Japan’s Treasury holdings start growing again, the speaker’s thesis is wrong.",
-        "Tokyo has pledged 10 trillion yen to semiconductor development.",
-        "If that chip investment succeeds, it could offer Japan a better use of money than U.S. bonds.",
-        "The speaker claims Japan brought the money home while leaving the financial burden in the U.S.",
-        "The second number can be found on a phone."
+        "The money went back to Japan, but the bill stayed here.",
+        "The second number to check is Meta’s price-to-earnings multiple, which I can look up on my phone."
       ],
-      "held_question": "What is the second number on my phone, and what does it show?",
-      "asked_of_me": "",
-      "could_not_follow": []
+      "held_question": "How does a higher yield affect that Meta number?",
+      "asked_of_me": "Pull up Meta on my phone and find its price-to-earnings multiple.",
+      "could_not_follow": [
+        "How the multiple means a share of the price is profit not yet earned."
+      ]
     },
     {
       "i": 5,
       "span": "1:15-1:30",
       "new_things": [
-        "The second number to watch is Meta’s price-to-earnings multiple.",
-        "The multiple represents how much of the share price depends on profit that has not yet been earned.",
-        "Higher yields push that value down.",
-        "The Fed has not moved yet.",
-        "The speaker says this is ordinary market mechanics, not panic or a plot."
-      ],
-      "held_question": "What does Meta’s price-to-earnings multiple currently show?",
-      "asked_of_me": "Pull up Meta on my phone and find its price-to-earnings multiple.",
-      "could_not_follow": [
-        "The final thought about Tokyo and its tea was cut off."
-      ]
-    },
-    {
-      "i": 6,
-      "span": "1:30-1:45",
-      "new_things": [
-        "Tokyo is still holding off, and the unfunded cost is still ours."
+        "The Fed still hasn’t taken action.",
+        "Tokyo still isn’t doing anything either."
       ],
       "held_question": "",
       "asked_of_me": "",
-      "could_not_follow": []
+      "could_not_follow": [
+        "What action we’re waiting for from the Fed or Tokyo."
+      ]
     }
   ]
 }

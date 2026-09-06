@@ -1302,3 +1302,23 @@ Two P45 decisions the parent held open, ruled in one line each.
    computed from our own material (G-c `intensity ≤ 0.18`, G-o's 12 px floor and its ≥ 59 px consequence), with a
    link back to the source where one is readily available and "not linked" said where it is not. E38 already says
    our own practice is never the calibration source; a threshold we computed is exactly that class.
+
+## E43 — On a short the chart carries the number; the blind reader cannot see it, so a chart-carried beat is not a viewer miss (2026-09-06)
+
+Ruled on the Tokyo short's fresh viewer read (V01 21/24: `[promise]` and `[rehook]` at 0:30–0:45 unperceived on "By the end
+you'll read both numbers yourself"). The operator: *"the viewer is wrong about 0:30–0:45 — it just didn't name a number; cost
+of doing business in a 90-second video. The numbers carry themselves with the charts; we can't afford to keep re-describing
+them. That's why we get conjoined actions, which is our doctrine: if running shorts, compress, don't remove."*
+
+1. **Conjoined beats are the shorts doctrine, not a defect.** Two declared beats on one sentence (doc 51, E41: compress the
+   script to the geometry, never clip the sense) is how a short keeps every beat. V01 counts beats one sentence at a time and
+   will under-read a conjoined line by construction.
+2. **The reader is blind to the screen.** P36's viewer reads words. On a short the datum lives on the chart or the ledger
+   page named in the SCREENS file, and the line names the action on it, not the figure. A beat whose content the named
+   screen carries is **not a viewer miss**: the writer marks it JUDGE-by-ear, and the operator's read of the player is the
+   verdict for that beat. It is still a miss when no screen carries it.
+3. **What the tool should do next** (backlog R26-0): give the short's viewer the screen cards inside each window (the
+   SCREENS file's chart titles and the figures they show), so the blind read sees what the viewer sees and V01 stops
+   flagging chart-carried numbers. Until then, on a short the V01 row is read beat by beat against the SCREENS file before
+   it binds. Evidence: `content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SCRIPT-90S.claude-VIEWER.md`
+   (2026-09-06, six measured windows on the final take).
