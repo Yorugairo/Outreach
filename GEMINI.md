@@ -126,7 +126,8 @@ Progress lives on disk: `~/.gemini/antigravity/brain/<id>/.system_generated/logs
 (PLANNER_RESPONSE with tool_calls, GENERIC tool output, SYSTEM_MESSAGE) - tail it instead of polling the IDE.
 The other direction already runs: Astra opens headless Claude sessions (`~/.claude/projects/C--Users-Snipe-AppData-Local-Temp-agent-bridge-run-*`)
 with one JSON packet {packetId, brief <= 6 KB, review-only} and gets one structured reply (POSITION / DISAGREEMENTS / PREREQUISITES).
-Nobody polls `docs/runbooks/` for orders: an order is a file AND a send.
+Nobody polls `docs/runbooks/` for orders: an order is a file AND a send. **An order names the skills to use** ("use the `/watch`
+skill on <file>", or "choose your best skills for <job> and name them") - the skills folder is not opened unprompted.
 **The tools (P46, 2026-09-06) replace the hand procedure above:** `python content/video_engine/scripts/bridge_send.py --lane gemini
 --brief-file <order.md> --title "<title>" --reply-shape <paths-written|contract-block|report-landed|review|test-run|free> [--profile <p>] [--dry-run]`
 writes the packet under `docs/research/runs/bridge/queue/` and sends it; `bridge_watch.py --lane gemini --id <conversationId>

@@ -22,6 +22,12 @@ It adopts Astra's observed packet (six inbound sessions on 2026-09-05) and adds 
 
 Size caps are hard: a brief over 6 KB is split into two packets or points at a file by absolute path.
 
+**An order names its skills** (operator, 2026-09-06, after the first live order came back wrong): the addressee has a
+skills folder (`.agents/skills/`) it will not open on its own. Write *"use the `/watch` skill on <file>"*, or when the
+skill is not known, *"choose your best skills for <the job> and name the ones you used"* - never just the verb. The Wealth
+Logic cut classification went out as "classify from the video" with the `watch` skill (download, scene-aware frames,
+transcript) sitting unused beside the profile, and came back as "all 99 hard cuts", which two frames refuted.
+
 ## 2. The reply grammar
 
 Every reply, whatever the lane, opens with one of these lines and keeps the order:
