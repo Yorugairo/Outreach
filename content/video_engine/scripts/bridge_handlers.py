@@ -296,11 +296,28 @@ def check_report_landed(order: dict[str, Any], text: str, repo: Path) -> Tier0Re
     proofs = len(PROOF_LINE.findall(body))
     checks.append(check("proof-line", proofs > 0, f"{proofs} proof line(s) `[... | URL: https://... | Verified 20..]`"))
     checks.append(check("not-found-block", NOT_FOUND_BLOCK in body, f"`{NOT_FOUND_BLOCK}` {'present' if NOT_FOUND_BLOCK in body else 'absent'}"))
+    verdict = _verdict_line(body)
+    abstained = verdict is not None and "[UNVERIFIED]" in verdict
+    checks.append(check("verdict-verified", not abstained,
+                        "the verdict is an abstention - `[UNVERIFIED]` under `## Verdict up front`; a follow-up, not a pass"
+                        if abstained else (f"verdict: {verdict[:80]}" if verdict else "no `## Verdict up front` section (not required)")))
     if _first_failure(checks) is None:
         layers_ok, detail = run_layers(Path(repo))
         checks.append(check("docs-layers", layers_ok, detail))
     failure = _first_failure(checks)
     return result(failure is None, "" if failure is None else failure, checks)
+
+
+def _verdict_line(body: str) -> str | None:
+    """The first non-empty line under `## Verdict up front`, or None when the report has no such section."""
+    lines = body.splitlines()
+    for i, line in enumerate(lines):
+        if line.strip().lower().startswith("## verdict up front"):
+            for nxt in lines[i + 1:]:
+                if nxt.strip():
+                    return nxt.strip()
+            return ""
+    return None
 
 
 def _is_report(path: str) -> bool:

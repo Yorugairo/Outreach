@@ -299,3 +299,24 @@ def test_the_cli_reads_a_packet_in_place_and_moves_nothing(tmp_path, capsys):
 
     assert code == 0 and json.loads(capsys.readouterr().out)["pass"] is True
     assert folder.exists() and not BE.packet_dir(root, "abc123", "done").exists()
+
+
+# ---- an honest abstention is not a pass: tier 0 sends an [UNVERIFIED] verdict on to tier 1 ----
+def test_report_landed_fails_when_the_verdict_is_an_abstention(tmp_path, monkeypatch):
+    import bridge_handlers as H
+    rep = tmp_path / "docs" / "research" / "motion" / "X_RESEARCH_BLUEPRINT.md"
+    rep.parent.mkdir(parents=True)
+    rep.write_text(
+        "# X\n\n[Metric | 99 | source | URL: https://example.org | Verified 2026-09-06]\n\n"
+        "## Verdict up front\n[UNVERIFIED] - could not be resolved from the keyframes.\n\n"
+        "## NOT FOUND WHERE I LOOKED\nthe boundaries\n",
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(H, "run_layers", lambda repo: (True, "ok"))
+    order = {"replyShape": "report-landed", "brief": ""}
+    text = "POSITION: done\nPATHS WRITTEN:\n- " + str(rep) + "\n"
+    res = H.check_report_landed(order, text, tmp_path)
+    assert res["pass"] is False
+    assert "abstention" in res["reason"]
+    names = {c["name"]: c["ok"] for c in res["checks"]}
+    assert names["verdict-verified"] is False and names["proof-line"] is True and names["not-found-block"] is True

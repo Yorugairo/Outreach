@@ -145,7 +145,8 @@ def send_gemini(args: argparse.Namespace, order: dict[str, Any], folder: Path, l
         env_mod.write_json(folder / "send-error.json", {"returncode": proc.returncode, "stderr": stderr[:4000]})
         return result
 
-    conversation_id = env_mod.newest_conversation(after_ts=before, title=order["title"])
+    conversation_id = env_mod.newest_conversation(after_ts=before, title=order["title"],
+                                          needle=next((ln.strip() for ln in order["brief"].splitlines() if ln.strip()), None))
     if not conversation_id:
         lines.append("conversation id not found where I looked (store mtime + title scan); sent anyway")
     result.update({"conversationId": conversation_id, "sentAt": sent_at})

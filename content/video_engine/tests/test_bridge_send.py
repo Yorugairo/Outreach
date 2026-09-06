@@ -410,7 +410,7 @@ def test_a_real_send_records_the_conversation_moves_the_packet_and_ledgers(fake_
     monkeypatch.setattr(
         BE,
         "newest_conversation",
-        lambda store=store, after_ts=0.0, title=None: BE_newest(store, after_ts, title),
+        lambda store=store, after_ts=0.0, title=None, **_kw: BE_newest(store, after_ts, title),
     )
 
     brief_file = _brief(tmp_path)

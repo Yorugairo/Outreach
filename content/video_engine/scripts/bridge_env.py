@@ -413,6 +413,7 @@ def newest_conversation(
     after_ts: float = 0.0,
     title: str | None = None,
     brain: Path | str | None = None,
+    needle: str | None = None,
 ) -> str | None:
     """The conversation id the CLI just created: the newest `<uuid>.db` touched after ``after_ts``.
 
@@ -427,7 +428,7 @@ def newest_conversation(
         brain = BRAIN_ROOT if Path(store) == CONVERSATION_STORE else None
     root = Path(store)
     if not root.is_dir():
-        return newest_brain_conversation(brain, after_ts, title) if brain is not None else None
+        return newest_brain_conversation(brain, after_ts, needle or title) if brain is not None else None
     candidates = []
     for db in root.glob("*.db"):
         try:
@@ -440,12 +441,13 @@ def newest_conversation(
         if title and not _mentions(db, title):
             continue
         return db.stem
-    return newest_brain_conversation(brain, after_ts, title) if brain is not None else None
+    return newest_brain_conversation(brain, after_ts, needle or title) if brain is not None else None
 
 
 def newest_brain_conversation(brain: Path | str = BRAIN_ROOT, after_ts: float = 0.0, title: str | None = None) -> str | None:
     """Fallback for the id: the newest `brain/<id>/.system_generated/logs/transcript.jsonl` touched after
-    ``after_ts`` whose FIRST record carries the title (the CLI's prompt echo). The conversation database can
+    ``after_ts`` whose FIRST record carries ``title`` - pass the BRIEF'S FIRST LINE here, not the CLI title: the first
+    record is the prompt, and the CLI title is not in it. The conversation database can
     lag the send by more than the sender waits (seen 2026-09-06: 503 databases, none matched, the transcript
     was already 7 records long), and the transcript is written first."""
 
