@@ -417,6 +417,20 @@ Two rounds of delegated lookups (Fable `Explore` vs the Opus `explorer` role) su
 | R5 | **A persistent explorer** — continuation is `/resume` in the agent view (CLI only, not the desktop Code tab - docs agent-view.md); `memory: project` is now set on explorer / docs_researcher / reviewer (`.claude/agent-memory/<role>/MEMORY.md`, version-controlled, auto-loaded up to 200 lines) so the map of the tree accumulates across sessions; re-run the benchmark in a later session and compare tool calls, not tokens (an agent's growing context never touches the Fable cap) | Harness; after the docs index lands |
 | R6 | **Negative claims from a delegated agent are verified by the parent** — one Opus miss in ten hard lookups was "07 §5.3 does not exist" (it is `sources/reference_analyses/complete_research_evidence_bundle/07_academic_literature_drawing_and_2_5d_animation_engine.md:311`); the brief now says "not found where I looked", never "does not exist" | Runbook rule; doc 42 §42.2 now names the path |
 
+## Registry read — 2026-09-06 (what is written but never built, now that the layers show it)
+
+The first read of `docs/ANIMATION-REGISTRY.md` after P45: the 66 "orphaned" records collapse to nine ideas, and most are
+already doctrine under another name (Darcy → 44 §44.3, breathing → 48, the log-normal → 46, charcoal-to-the-deckle → E22,
+the punch/build decoupling → M14, the parallax intensity → G-c, silence snapping → M13, the ARAP morph → T4). Four were
+never pulled in. Rule (operator, 2026-09-05): a recent stumble → TOP; not implemented → BACKLOG or EXPLORE.
+
+| id | item — what and where | why / evidence | cost |
+|---|---|---|---|
+| **R26-1 TOP** | **Field-coloured halo on direct data labels** — the label sits on its datum with a 7 px stroke in the page colour behind the glyphs (`paint-order: stroke fill`), so text punches through grid and bars with no box and no legend; `briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:145-147` (Ginns 2006 split-attention, d = 0.72) | the operator's 2026-09-06 read of the chart examples: "we lost our labelling/charting best practices" (E28 chart reads at a glance). Only in the brief — not in doc 29, not in `GATES-REGISTRY.md`, not in any chart code | one CSS line per label + a gate that fails a label without the halo or off its datum |
+| **R26-2 BACKLOG** | **Harmonisation tokens for a composited figure** — light wrap 4–12 px of blurred ground into the sprite edge; substrate grain `C = C_vector · [1 + κ(T_washi − 0.5)]`, κ 0.12–0.16; charcoal `#25313C` stroke with a 0.6–0.8 px feather; `48-THE-FIGURE-AND-THE-GROUND.md:161-165` \| 48.8 | orphaned in our own doctrine: no row, nothing in `kinetics/`. It is the fix for 48.7 "composited figures look pasted"; becomes TOP the day the host or a stick figure lands on a ledger page | a compositing pass in the sprite mount (two filters + one multiply); measured against a Wealth Logic composite first (E38) |
+| **R26-3 EXPLORE** | **Euler spirals for generated geometry** — curvature-continuous paths instead of cubic Béziers for anything we generate; `42-DRAWING-KINETICS.md` \| 42.4, `FINDING-the-animation-math-and-what-it-changes.md` \| 5 | tracked, never built. Test against the race (operator 2026-09-06: "the race needs to be smoother, it feels a bit choppy"): if the choppiness is curvature jumps at segment joins, this is the fix; if it is timing, it is not — measure before adopting | a path-fitting helper next to `stroke.mjs`; one A/B on the race |
+| — | **Object handling: re-parenting with cached offsets** (a hand takes a prop without a pop) — `sources/reference_analyses/complete_research_evidence_bundle/09_…grounding.md:349-361` | not in doc 48; rig-dependent, so it rides on **D3** (poses first keeps it out) | — |
+
 ## P45 triage — 2026-09-05 (the corpus reconciled with what is built)
 
 The judgment pass over the generated registries: [TRIAGE-2026-09-05.md](TRIAGE-2026-09-05.md) —
