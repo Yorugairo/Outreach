@@ -13,14 +13,15 @@ item, a quote, a table row or a fence.
 
 | Group | Files | Headings | Lead % | Termed % | Generic | Median score |
 |---|---:|---:|---:|---:|---:|---:|
-| Research (`docs/research/**`) | 7 | 122 | 93.4% | 93.4% | 0 | 96.0 |
-| Process (everything else) | 244 | 2904 | 97.6% | 91.6% | 9 | 100.0 |
-| All docs | 251 | 3026 | 97.4% | 91.7% | 9 | 100.0 |
+| Research (`docs/research/**`) | 9 | 149 | 91.3% | 88.6% | 3 | 96.0 |
+| Process (everything else) | 245 | 2907 | 97.6% | 91.6% | 9 | 100.0 |
+| All docs | 254 | 3056 | 97.3% | 91.5% | 12 | 100.0 |
 
 ## The 20 lowest-scoring docs
 
 | Score | Doc | Headings | Leads | Termed | Generic |
 |---:|---|---:|---:|---:|---:|
+| 54 | `docs/research/motion/WEALTH_LOGIC_TRANSITIONS_RESEARCH_BLUEPRINT.md` | 13 | 8/13 | 4/13 | 2 |
 | 65 | `content/video_engine/projects/systems-and-blowups/steel-and-paper/packaging/PINNED-COMMENT.md` | 2 | 2/2 | 0/2 | 0 |
 | 70 | `docs/seo-insights-platform-implementation-plan.md` | 27 | 17/27 | 18/27 | 0 |
 | 73 | `docs/seo-ingestion-implementation-tasks.md` | 14 | 10/14 | 9/14 | 0 |
@@ -40,11 +41,10 @@ item, a quote, a table row or a fence.
 | 88 | `content/video_engine/projects/systems-and-blowups/learning/world-plate-evidence-rail-breakthrough.v1.md` | 4 | 3/4 | 4/4 | 0 |
 | 88 | `docs/runbooks/DEMAND_CONVERSION_EVIDENCE.md` | 6 | 6/6 | 4/6 | 0 |
 | 89 | `docs/AGENT_START_HERE.md` | 11 | 10/11 | 9/11 | 0 |
-| 89 | `docs/content-video-engine/patterns/phase-guides/P3.md` | 13 | 13/13 | 9/13 | 0 |
 
 ## Appendix A - sections missing a lead line
 
-Non-exempt sections whose first real line is under 40 characters (78).
+Non-exempt sections whose first real line is under 40 characters (83).
 
 - `content/video_engine/projects/martial-matters/pilots/marshall-monday-001/script-draft.md:1` Why Rap Violence is Actually a Sign of Peace | Marshall Matters Ep. 1
 - `content/video_engine/projects/systems-and-blowups/learning/world-plate-evidence-caption-grammar.v1.md:1` World Plate, Evidence, and Caption Grammar v1
@@ -94,6 +94,11 @@ Non-exempt sections whose first real line is under 40 characters (78).
 - `docs/research/2026-07-26-product-strength-competitive-research.md:374` Layer 3: methodology and export
 - `docs/research/2026-07-28-accretive-revenue-assessment.md:287` 6. 30 / 60 / 90
 - `docs/research/2026-08-22-agent-design-tooling-assessment.md:1` Agent-Native Design Tooling: Buy, Borrow, or Build
+- `docs/research/motion/WEALTH_LOGIC_TRANSITIONS_RESEARCH_BLUEPRINT.md:11` 1. Hard cut
+- `docs/research/motion/WEALTH_LOGIC_TRANSITIONS_RESEARCH_BLUEPRINT.md:18` 3. Wipe
+- `docs/research/motion/WEALTH_LOGIC_TRANSITIONS_RESEARCH_BLUEPRINT.md:21` 4. Push
+- `docs/research/motion/WEALTH_LOGIC_TRANSITIONS_RESEARCH_BLUEPRINT.md:28` 6. World-persists
+- `docs/research/motion/WEALTH_LOGIC_TRANSITIONS_RESEARCH_BLUEPRINT.md:31` 7. Other
 - `docs/run-centric-schema-notes.md:1` Run-Centric Schema Notes
 - `docs/run-centric-schema-notes.md:51` What remains entity-centric
 - `docs/runbooks/PRP_EXECUTION.md:2` PRP Execution
@@ -127,7 +132,7 @@ Non-exempt sections whose first real line is under 40 characters (78).
 
 ## Appendix B - generic headings
 
-Headings that name a filing slot, not a concept (9).
+Headings that name a filing slot, not a concept (12).
 
 - `content/video_engine/projects/history-of-bjj/episode-2-research-questions.md:5` Questions
 - `content/video_engine/projects/history-of-bjj/episode-3-research-questions.md:5` Questions
@@ -137,4 +142,7 @@ Headings that name a filing slot, not a concept (9).
 - `docs/content-video-engine/35-ANSWER-FORMAT-DOCTRINE.md:140` 5. Rules
 - `docs/content-video-engine/39-EVIDENCE-CHART-SYSTEM.md:267` Rules
 - `docs/content-video-engine/briefs/ANSWER-BRAVOS-HYPE-CYCLE.md:542` Notes
+- `docs/research/motion/WEALTH_LOGIC_TRANSITIONS_MEASURED.md:168` 6. Other
+- `docs/research/motion/WEALTH_LOGIC_TRANSITIONS_RESEARCH_BLUEPRINT.md:31` 7. Other
+- `docs/research/motion/WEALTH_LOGIC_TRANSITIONS_RESEARCH_BLUEPRINT.md:34` 8. Summary
 - `docs/run-centric-schema-notes.md:5` Purpose

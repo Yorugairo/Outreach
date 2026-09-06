@@ -3813,20 +3813,21 @@
 {"from": {"path": "docs/research/2026-07-28-accretive-revenue-assessment.md", "line": 269, "heading": "5. Ranked paths"}, "ref": "§2.6", "to": null}
 {"from": {"path": "docs/research/2026-08-22-agent-design-tooling-assessment.md", "line": 21, "heading": "Why no tool can do the production job"}, "ref": "T13", "to": null}
 {"from": {"path": "docs/research/2026-08-24-twenty-n8n-attio-evaluation.md", "line": 80, "heading": "Genuinely strong where it matters here"}, "ref": "S23", "to": null}
+{"from": {"path": "docs/research/motion/WEALTH_LOGIC_TRANSITIONS_MEASURED.md", "line": 5, "heading": "The question"}, "ref": "E38", "to": {"path": "docs/portable/OPERATOR-RULINGS.md", "line": 1196, "heading": "E38 — Thresholds are measured on the reference, then compared to ours (2026-09-04)"}}
 {"from": {"path": "docs/runbooks/BRIDGE-DAEMON.md", "line": 1, "heading": "The bridge daemon — the tick that makes a landed reply actionable (P46 T6)"}, "ref": "P46", "to": null}
 {"from": {"path": "docs/runbooks/BRIDGE-DAEMON.md", "line": 1, "heading": "The bridge daemon — the tick that makes a landed reply actionable (P46 T6)"}, "ref": "T6", "to": {"path": "docs/content-video-engine/BACKLOG.md", "line": 252, "heading": "T6 `object → chart` transform on one page"}}
 {"from": {"path": "docs/runbooks/BRIDGE-PACKET.md", "line": 1, "heading": "The bridge packet — one shape for Claude, Gemini and Astra (P46 T4, draft for Astra's review)"}, "ref": "P46", "to": null}
 {"from": {"path": "docs/runbooks/BRIDGE-PACKET.md", "line": 1, "heading": "The bridge packet — one shape for Claude, Gemini and Astra (P46 T4, draft for Astra's review)"}, "ref": "T4", "to": {"path": "docs/content-video-engine/BACKLOG.md", "line": 247, "heading": "T4 ARAP morph"}}
 {"from": {"path": "docs/runbooks/BRIDGE-PACKET.md", "line": 8, "heading": "1. The packet (`order.json`)"}, "ref": "§4", "to": null}
-{"from": {"path": "docs/runbooks/BRIDGE-PACKET.md", "line": 40, "heading": "3. The lanes"}, "ref": "P2", "to": null}
-{"from": {"path": "docs/runbooks/BRIDGE-PACKET.md", "line": 40, "heading": "3. The lanes"}, "ref": "P2", "to": null}
-{"from": {"path": "docs/runbooks/BRIDGE-PACKET.md", "line": 40, "heading": "3. The lanes"}, "ref": "T5", "to": {"path": "docs/content-video-engine/BACKLOG.md", "line": 251, "heading": "T5 Object-page renderer — the template draws registered props on the LP clock"}}
-{"from": {"path": "docs/runbooks/BRIDGE-PACKET.md", "line": 48, "heading": "4. What happens when a reply lands (P46 T6)"}, "ref": "P46", "to": null}
-{"from": {"path": "docs/runbooks/BRIDGE-PACKET.md", "line": 48, "heading": "4. What happens when a reply lands (P46 T6)"}, "ref": "T6", "to": {"path": "docs/content-video-engine/BACKLOG.md", "line": 252, "heading": "T6 `object → chart` transform on one page"}}
-{"from": {"path": "docs/runbooks/BRIDGE-PACKET.md", "line": 64, "heading": "6. Open for Astra's review (sent through the bridge as a `review` packet)"}, "ref": "P2", "to": null}
-{"from": {"path": "docs/runbooks/BRIDGE-PACKET.md", "line": 64, "heading": "6. Open for Astra's review (sent through the bridge as a `review` packet)"}, "ref": "P2", "to": null}
-{"from": {"path": "docs/runbooks/BRIDGE-PACKET.md", "line": 64, "heading": "6. Open for Astra's review (sent through the bridge as a `review` packet)"}, "ref": "P2", "to": null}
-{"from": {"path": "docs/runbooks/BRIDGE-PACKET.md", "line": 64, "heading": "6. Open for Astra's review (sent through the bridge as a `review` packet)"}, "ref": "P2", "to": null}
+{"from": {"path": "docs/runbooks/BRIDGE-PACKET.md", "line": 46, "heading": "3. The lanes"}, "ref": "P2", "to": null}
+{"from": {"path": "docs/runbooks/BRIDGE-PACKET.md", "line": 46, "heading": "3. The lanes"}, "ref": "P2", "to": null}
+{"from": {"path": "docs/runbooks/BRIDGE-PACKET.md", "line": 46, "heading": "3. The lanes"}, "ref": "T5", "to": {"path": "docs/content-video-engine/BACKLOG.md", "line": 251, "heading": "T5 Object-page renderer — the template draws registered props on the LP clock"}}
+{"from": {"path": "docs/runbooks/BRIDGE-PACKET.md", "line": 54, "heading": "4. What happens when a reply lands (P46 T6)"}, "ref": "P46", "to": null}
+{"from": {"path": "docs/runbooks/BRIDGE-PACKET.md", "line": 54, "heading": "4. What happens when a reply lands (P46 T6)"}, "ref": "T6", "to": {"path": "docs/content-video-engine/BACKLOG.md", "line": 252, "heading": "T6 `object → chart` transform on one page"}}
+{"from": {"path": "docs/runbooks/BRIDGE-PACKET.md", "line": 70, "heading": "6. Open for Astra's review (sent through the bridge as a `review` packet)"}, "ref": "P2", "to": null}
+{"from": {"path": "docs/runbooks/BRIDGE-PACKET.md", "line": 70, "heading": "6. Open for Astra's review (sent through the bridge as a `review` packet)"}, "ref": "P2", "to": null}
+{"from": {"path": "docs/runbooks/BRIDGE-PACKET.md", "line": 70, "heading": "6. Open for Astra's review (sent through the bridge as a `review` packet)"}, "ref": "P2", "to": null}
+{"from": {"path": "docs/runbooks/BRIDGE-PACKET.md", "line": 70, "heading": "6. Open for Astra's review (sent through the bridge as a `review` packet)"}, "ref": "P2", "to": null}
 {"from": {"path": "docs/runbooks/BRIDGE-REPLY-HANDLER.md", "line": 1, "heading": "The reply handler's standing instruction (P46 T6, tier 1 only)"}, "ref": "P46", "to": null}
 {"from": {"path": "docs/runbooks/BRIDGE-REPLY-HANDLER.md", "line": 1, "heading": "The reply handler's standing instruction (P46 T6, tier 1 only)"}, "ref": "T6", "to": {"path": "docs/content-video-engine/BACKLOG.md", "line": 252, "heading": "T6 `object → chart` transform on one page"}}
 {"from": {"path": "docs/runbooks/HANDOFF-ASTRA-GEMINI-2026-09-05.md", "line": 1, "heading": "Hand-off note to the Astra plan and the Gemini protocol (2026-09-05)"}, "ref": "P2", "to": null}

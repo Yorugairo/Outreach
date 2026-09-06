@@ -14,7 +14,7 @@ Levels 1-6 are Markdown heading depth; level 7 is a table row (CAPABILITIES, BAC
 A `{...}` tail lists the section's bold phrases; a `<...>` tail its body terms - code
 spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 
-3193 records across 251 files.
+3223 records across 254 files.
 
 ## content/video_engine/projects/history-of-bjj/episode-1-research-brief.md
 
@@ -3711,6 +3711,39 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 - L103 [2] Operational spec for Steel and Paper (and MP default) — 1. VO anchor: master the mix so integrated loudness lands ≈ {VO anchor:; Bed level:; −28 LU below the VO} <YouTube; measured-interference; number-dense; high-load; complex-task; simple-task; purpose-made; LU-below-VO; Cross-checked; dense-analysis; error-masking; steady-state>
 - L148 [2] Confidence & gaps — - HIGH: subliminal-audio null result; lyrics-are-speech; instrumental <subliminal-audio; lyrics-are-speech; room-tone>
 
+## docs/research/motion/WEALTH_LOGIC_TRANSITIONS_MEASURED.md
+
+- L1 [1] Wealth Logic Transitions, Measured From The Pixels — Pass-1 · 2026-09-06 · sources: the video on disk, the ledger · for: TR-1 <blur-zoom; all-hard-cut; blur-zooms; [t - 0.6 s, t + 0.8 s]; L_before; L_after; S_before; multi-frame; re-test; DIP_DARK_FRAC 0.60; DIP_BRIGHT_FRAC 1.60; DIP_MIN_FRAMES 3>
+- L5 [2] The question — What KIND of transition does the Wealth Logic reference use at each of its 99 shot boundaries - <blur-zoom>
+- L12 [2] Verdict up front — The reference is not an all-hard-cut edit. Only 36 of its 99 boundaries are hard cuts. {The reference is not an all-hard-cut edit. Only 36 of its 99} <blur-zooms; [t - 0.6 s, t + 0.8 s]; L_before; L_after; S_before; multi-frame; re-test; DIP_DARK_FRAC 0.60; DIP_BRIGHT_FRAC 1.60; DIP_MIN_FRAMES 3; blur-zoom; BLUR_VALLEY_FRAC 0.50>
+- L30 [3] How it was measured, and every threshold in it — `content/video_engine/scripts/measure_cut_kinds.py` decodes `[t - 0.6 s, t + 0.8 s]` around each {30 fps} <[t - 0.6 s, t + 0.8 s]; L_before; L_after; S_before; multi-frame; re-test; DIP_DARK_FRAC 0.60; DIP_BRIGHT_FRAC 1.60; DIP_MIN_FRAMES 3; blur-zoom; BLUR_VALLEY_FRAC 0.50; BLUR_MIN_FRAMES 2>
+- L60 [3] Calibration: what the frames show versus what the rules said — Seven boundaries were extracted to `docs/research/runs/wealth-logic-cuts/check/<boundary>/` (grey <spot-checks; question-mark; blur-zoom; hard-cut; dip; two-person; other; two-figure; world-persists; zoom-through>
+- L83 [2] 1. Hard cut — 36 of 99, 36.4 % `[DERIVED: from wealth_logic_transitions_measured.csv, count(kind=hard-cut)/99]` {36 of 99, 36.4 %; Median shot length 9.35 s} <motion_after_0_5s; t_s>
+- L103 [2] 2. Dissolve — 0 of 99, 0.0 % `[DERIVED: from wealth_logic_transitions_measured.csv, count(kind=dissolve)/99]` {0 of 99, 0.0 %} <cross-fade>
+- L113 [2] 3. Dip through black — 35 of 99, 35.4 % `[DERIVED: from wealth_logic_transitions_measured.csv, count(kind=dip)/99]` {35 of 99, 35.4 %; Median shot length 6.9 s; 0 or 1; 14 at all 35} <L_min; duration_frames; motion_after_0_5s; first_motion_frames; fade-up; t_s>
+- L135 [2] 4. Blur-zoom (zoom-through) — 28 of 99, 28.3 % `[DERIVED: from wealth_logic_transitions_measured.csv, count(kind=blur-zoom)/99]` {28 of 99, 28.3 %; Median shot length 9.8 s; all 28} <motion_after_0_5s; t_s; D_peak>
+- L158 [2] 5. World-persists — 0 of 99, 0.0 % `[DERIVED: from wealth_logic_transitions_measured.csv, count(kind=world-persists)/99]` {0 of 99, 0.0 %} <in-shot>
+- L168 [2] 6. Other — 0 of 99, 0.0 % `[DERIVED: from wealth_logic_transitions_measured.csv, count(kind=other)/99]` {0 of 99, 0.0 %}
+- L177 [2] 7. What the Gemini pass got wrong — `docs/research/motion/WEALTH_LOGIC_TRANSITIONS_RESEARCH_BLUEPRINT.md` and its <wealth_logic_transitions.csv; row-level; kind=hard-cut; duration_frames=0; world=changes; first_motion=nothing; kind = hard-cut; hard-cut; blur-zoom; L_min; S_min; duration_frames = 0>
+- L210 [2] Sources — - `docs/research/runs/wealth-logic-cuts/wealth-logic-6-ways.mp4` - the reference video on disk <at_gap; gap_s; kind; synthetic-series>
+- L224 [2] NOT FOUND WHERE I LOOKED — - Whether the blur-zooms are optical blur or scale-driven detail loss. Searched: the decoded {Whether the blur-zooms are optical blur or scale-driven deta; Whether any dip is a fade to white rather than to black.} <per-frame; optical-flow; scale-estimate; bright-dip; DIP_BRIGHT_FRAC 1.60; other; video-only; wealth-logic-6-ways.mp4>
+
+## docs/research/motion/WEALTH_LOGIC_TRANSITIONS_RESEARCH_BLUEPRINT.md
+
+- L1 [1] Wealth Logic Transitions Research Blueprint — [Metric | 99 boundaries | source | URL: https://www.youtube.com/watch?v=rCHYttyvaw8 | Verified 2026-09-06] <zoom-throughs; blur-zooms; fade-throughs; frame-per-boundary; Zoom-through; blur-zoom; question-mark; World-persists; dissolve; UNVERIFIED>
+- L5 [2] The question — What are the transition kinds used in the Wealth Logic reference?
+- L8 [2] Verdict up front — Spot checks using the `/watch` skill at 30 fps frame density reveal the channel uses complex transitions like zoom-throughs (blur-zooms) and dissolves (fade-thr <zoom-throughs; blur-zooms; fade-throughs; frame-per-boundary>
+- L11 [2] 1. Hard cut — [UNVERIFIED]
+- L14 [2] 2. Dissolve — [Metric | 1 verified | source | URL: https://www.youtube.com/watch?v=rCHYttyvaw8 | Verified 2026-09-06]
+- L18 [2] 3. Wipe — [UNVERIFIED]
+- L21 [2] 4. Push — [UNVERIFIED]
+- L24 [2] 5. Zoom-through — [Metric | 1 verified | source | URL: https://www.youtube.com/watch?v=rCHYttyvaw8 | Verified 2026-09-06] <blur-zoom; question-mark>
+- L28 [2] 6. World-persists — [UNVERIFIED]
+- L31 [2] 7. Other — [UNVERIFIED]
+- L34 [2] 8. Summary — [DERIVED: from the csv, counts and medians] <zoom-through; dissolve; UNVERIFIED>
+- L41 [2] Sources — - docs/research/motion/wealth_logic_transitions.csv
+- L45 [2] NOT FOUND WHERE I LOOKED — The visual transition properties (kind, duration, world, first_motion) for the remaining 97 boundaries could not be classified. Why: a boundary that still canno
+
 ## docs/research/tech/MOTION_GRAPHICS_FROM_STILL_IMAGES_BLUEPRINT.md
 
 - L1 [1] Motion Graphics & Animation from Still Images — Research Blueprint — Date: 2026-09-03 | Domain: Tech / Video Engine | Method: Deep Research Pass 1 & Pass 2 Synthesis {Date:; Domain:; Method:} <High-retention; broadcast-grade; high-engagement; three-tier; Micro-Motion; frame-level; DepthFlow; WebGL; context-aware; LaMa; Shih et al.; LTX-Video>
@@ -3747,11 +3780,11 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 
 - L1 [1] The bridge packet — one shape for Claude, Gemini and Astra (P46 T4, draft for Astra's review) — An order between lanes is a file and a send. Nobody polls a folder for orders; the sender emits the packet through the {a file and a send} <re-deriving; order.json; packetId; brief; lane; from; title; replyShape; paths-written; contract-block; report-landed; test-run>
 - L8 [2] 1. The packet (`order.json`) — | field | required | meaning | {≤ 6 KB} <packetId; brief; lane; gemini; claude; astra; from; title; replyShape; paths-written; contract-block; report-landed>
-- L25 [2] 2. The reply grammar — Every reply, whatever the lane, opens with one of these lines and keeps the order: <conditional; done>
-- L40 [2] 3. The lanes — | lane | how a packet reaches it | where its reply appears | <ANTIGRAVITY_LS_ADDRESS; ANTIGRAVITY_CSRF_TOKEN; ANTIGRAVITY_PROJECT_ID; PLANNER_RESPONSE; send-message <id> "<text>"; --resume>
-- L48 [2] 4. What happens when a reply lands (P46 T6) — `replied/<packetId>/reply.md` is written by the watcher. Then, in order: tier 0 — the deterministic handler for the {tier 0; tier 1; escalation} <replyShape; tier: 0; addressee-side; bridge_handler; follow-up; N bridge replies waiting>
-- L58 [2] 5. The ledger — `evals/BRIDGE-LOG.jsonl` (per machine, gitignored): one line per event — `sent`, `replied`, `tier0`, `tier1`, `timeout`, <sent; replied; tier0; tier1; timeout; escalated; lane; packetId; conversationId; sentAt>
-- L64 [2] 6. Open for Astra's review (sent through the bridge as a `review` packet) — 1. Field names: match P2's execution-order schema where one exists (`packetId` vs P2's run/task ids; `replyShape` vs P2's return schema). <execution-order; packetId; replyShape>
+- L31 [2] 2. The reply grammar — Every reply, whatever the lane, opens with one of these lines and keeps the order: <conditional; done>
+- L46 [2] 3. The lanes — | lane | how a packet reaches it | where its reply appears | <ANTIGRAVITY_LS_ADDRESS; ANTIGRAVITY_CSRF_TOKEN; ANTIGRAVITY_PROJECT_ID; PLANNER_RESPONSE; send-message <id> "<text>"; --resume>
+- L54 [2] 4. What happens when a reply lands (P46 T6) — `replied/<packetId>/reply.md` is written by the watcher. Then, in order: tier 0 — the deterministic handler for the {tier 0; tier 1; escalation} <replyShape; tier: 0; addressee-side; bridge_handler; follow-up; N bridge replies waiting>
+- L64 [2] 5. The ledger — `evals/BRIDGE-LOG.jsonl` (per machine, gitignored): one line per event — `sent`, `replied`, `tier0`, `tier1`, `timeout`, <sent; replied; tier0; tier1; timeout; escalated; lane; packetId; conversationId; sentAt>
+- L70 [2] 6. Open for Astra's review (sent through the bridge as a `review` packet) — 1. Field names: match P2's execution-order schema where one exists (`packetId` vs P2's run/task ids; `replyShape` vs P2's return schema). <execution-order; packetId; replyShape>
 
 ## docs/runbooks/BRIDGE-REPLY-HANDLER.md
 
@@ -3811,6 +3844,12 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 - L16 [2] 2. A `video-researcher` profile for this repo — Scope: the drawing / ink engine (docs 42-53, the kinetics modules), retention analytics (doc 50, the analytics behind the retention curve), audio (beds, cuts, d
 - L20 [2] 3. Trusted folders — Add `C:/Users/Snipe/Downloads/Outreach Program` (the main checkout; never a worktree path) to `~/.gemini/trustedFolders.json` and `projects.json` so orders run <projects.json>
 - L24 [2] Validation — An order against this repo ends with `build_docs_layers.py --check` green and `docs_find.py "<topic>"` returning the new report's sections. Report back the prof <build_docs_layers.py --check; docs_find.py "<topic>">
+
+## docs/runbooks/WORK-ORDER-GEMINI-PROFILES-FLASH-2026-09-06.md
+
+- L1 [1] Work order — the research profiles run on the flash tier (2026-09-06) — To: the Gemini / Antigravity lane (the profile source, synced to every workspace's `.agents/agents/`). {To:; From:} <Outreach Program; paths-written; video-researcher; animation-video-researcher; finance-narrative-researcher; model: pro; model: flash; model:; --model; POSITION: done | conditional | blocked; PATHS WRITTEN:; DISAGREEMENTS:>
+- L6 [2] The order — The operator's ruling (2026-09-06): bridge orders run on the flash tier. The current flash model (3.8) is stronger than the {flash} <video-researcher; animation-video-researcher; finance-narrative-researcher; model: pro; model: flash; model:; --model>
+- L18 [2] Reply — `POSITION: done | conditional | blocked`, `PATHS WRITTEN:` (the source path and every synced copy, absolute), <POSITION: done | conditional | blocked; PATHS WRITTEN:; DISAGREEMENTS:; PREREQUISITES:; NOT FOUND WHERE I LOOKED:>
 
 ## docs/runbooks/WORK-ORDER-GEMINI-WEALTH-LOGIC-CUTS-2026-09-06.md
 

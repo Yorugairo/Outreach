@@ -15,7 +15,7 @@ its own headings, capability names, backlog ids. `terms` are its most frequent b
 terms. Purpose, terms and defines are truncated here to keep the file cheap to grep;
 the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 
-251 documents across 13 kinds.
+254 documents across 13 kinds.
 
 ## doctrine
 
@@ -133,6 +133,7 @@ the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 - docs/runbooks/PRP_EXECUTION.md — PRP Execution — PRPs are durable execution contracts for work too broad or risky to ma — defines: P2 — terms: junior_developer; implementation_luna; cross-module; speedster; architect_sol; SigMap
 - docs/runbooks/RENDER-REGRESSION.md — When a render looks wrong — You do not need to read any animation math to use this page. — defines: — — terms: PASS 4 golden frames identical; dock-pair; mid-build; false; kinetics: unknown flag ignored; curvature_stroke
 - docs/runbooks/WORK-ORDER-GEMINI-PROFILES-2026-09-05.md — Work order — Gemini research profiles, corrections at t — To: the Gemini / Antigravity lane (the profile source, synced to every — defines: — — terms: Outreach Program; npm run research:index; closed-form; [DERIVED: from <sources>, <how>]; [UNVERIFIED]; ## NOT FOUND WHERE I LOOKED
+- docs/runbooks/WORK-ORDER-GEMINI-PROFILES-FLASH-2026-09-06.md — Work order — the research profiles run on the flash tie — To: the Gemini / Antigravity lane (the profile source, synced to every — defines: — — terms: video-researcher; animation-video-researcher; finance-narrative-researcher; model: pro; model: flash; --model
 - docs/runbooks/WORK-ORDER-GEMINI-WEALTH-LOGIC-CUTS-2026-09-06.md — Work order — classify every cut in the Wealth Logic ref — To: the Gemini research lane (profile `video-researcher`). — defines: — — terms: unclassified; re-deriving; video.en.vtt; word-timed; hard-cut; dissolve
 
 ## spec
@@ -164,6 +165,8 @@ the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 - docs/research/2026-08-24-twenty-n8n-attio-evaluation.md — Twenty vs n8n vs Attio: Workflow Fit Evaluation — Three tools, three different seams, three different answers. — defines: — — terms: git-versioned; self-hosted; human-in-the-loop; SEOTarget; InsightReport; video-engine
 - docs/research/2026-08-24-writing-for-the-ear-craft-source.md — Acoustic Narrative Architecture: Integrating Classical — Writing for spoken delivery requires a fundamental reorientation of li — defines: — — terms: McKee; long-form; Expectation-Reality; single-idea; Attribution-first; second-person
 - docs/research/audio/SUBTHRESHOLD_BACKGROUND_MUSIC_RESEARCH_BLUEPRINT.md — Sub-threshold Background Music — Research Blueprint — Pass-1 discovery brief · 2026-09-01 · sources: Exa semantic + Tavily e — defines: — — terms: room-tone; just-audible; subliminal-audio; Egermann et al.; SPL-verified; Greenwald et al.
+- docs/research/motion/WEALTH_LOGIC_TRANSITIONS_MEASURED.md — Wealth Logic Transitions, Measured From The Pixels — What KIND of transition does the Wealth Logic reference use at each of — defines: — — terms: blur-zoom; DIP_BRIGHT_FRAC 1.60; [t - 0.6 s, t + 0.8 s]; L_before; L_after; S_before
+- docs/research/motion/WEALTH_LOGIC_TRANSITIONS_RESEARCH_BLUEPRINT.md — Wealth Logic Transitions Research Blueprint — [Metric | 99 boundaries | source | URL: https://www.youtube.com/watch? — defines: — — terms: zoom-throughs; blur-zooms; fade-throughs; frame-per-boundary; Zoom-through; blur-zoom
 - docs/research/tech/MOTION_GRAPHICS_FROM_STILL_IMAGES_BLUEPRINT.md — Motion Graphics & Animation from Still Images — Researc — High-retention, broadcast-grade video content does not require renderi — defines: — — terms: context-aware; LaMa; Shih et al.; LTX-Video; Date.now(); spring()
 
 ## source-bundle

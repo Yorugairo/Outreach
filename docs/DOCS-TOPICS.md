@@ -18,7 +18,7 @@ reference as normalised (`42§42.2` - which `46 s46.4` also writes - `29§Part3`
 `E38`, `M13`, `G-j`); a list (`docs 39 and 40`) makes one edge per document, and `to` is
 null when nothing in the index answers it.
 
-4092 topics, 3879 citation edges. The 200 largest topics follow,
+4125 topics, 3880 citation edges. The 200 largest topics follow,
 at most 12 sections each - the JSONL holds every one.
 
 ## youtube (128)
@@ -2361,6 +2361,22 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/BACKLOG.md:529 — Routed from the demoted list (47 §4) — Demoted from doctrine — not dropped. Each lands as a build item, an exploration, or a closure.
 - … 1 more in `docs/DOCS-TOPICS.jsonl`
 
+## model (13)
+
+- content/video_engine/sources/reference_analyses/COMFYUI_PARALLAX_TECHNICAL_STANDARDS_RESEARCH.md:43 — The 5 Technical Failures in Our Configuration: — | Parameter | Current Value | Why It Ruined the Output | Target Professional Value |
+- content/video_engine/sources/reference_analyses/COMFYUI_PARALLAX_TECHNICAL_STANDARDS_RESEARCH.md:191 — 6. Actionable Implementation Changes for Our Pipeline
+- content/video_engine/sources/reference_analyses/COMFYUI_PARALLAX_TECHNICAL_STANDARDS_RESEARCH.md:193 — File Updates Required in `content/video_engine`: — 1. Modify `tools/google-flow-driver/src/parallax-runner.mjs`:
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/05_comfyui_parallax_technical_standards.md:43 — The 5 Technical Failures in Our Configuration: — | Parameter | Current Value | Why It Ruined the Output | Target Professional Value |
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/05_comfyui_parallax_technical_standards.md:191 — 6. Actionable Implementation Changes for Our Pipeline
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/05_comfyui_parallax_technical_standards.md:193 — File Updates Required in `content/video_engine`: — 1. Modify `tools/google-flow-driver/src/parallax-runner.mjs`:
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/06_unified_ledger_drawing_engine_and_comfy_spec.md:73 — 2.4 Calibrated Dial Matrix for Engine 1 — - Model: `depth_anything_v2_vitl_fp32.safetensors` (ViT-Large in FP32; FP16 is strictly banned due to logit underflow).
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_INDEX.md:264 — 8.1 Depthflow & Depth Anything v2 (Engine 1) — - Model: `depth_anything_v2_vitl_fp32.safetensors` (ViT-Large FP32; FP16 strictly banned).
+- content/video_engine/sources/reference_analyses/MASTER_RESEARCH_INDEX.md:263 — 8.1 Depthflow & Depth Anything v2 (Engine 1) — - Model: `depth_anything_v2_vitl_fp32.safetensors` (ViT-Large FP32; FP16 strictly banned).
+- content/video_engine/sources/reference_analyses/UNIFIED_LEDGER_DRAWING_ENGINE_AND_COMFY_SPEC.md:73 — 2.4 Calibrated Dial Matrix for Engine 1 — - Model: `depth_anything_v2_vitl_fp32.safetensors` (ViT-Large in FP32; FP16 is strictly banned due to logit underflow).
+- docs/AGENTS-SEO-PLATFORM.md:135 — 8. Repo conventions — - Python: run with the 3.11 interpreter. If a venv exists use it; otherwise `python` resolves to 3.11.15 on this host.
+- docs/runbooks/WORK-ORDER-GEMINI-PROFILES-FLASH-2026-09-06.md:1 — Work order — the research profiles run on the flash tier (2026-09-06) — To: the Gemini / Antigravity lane (the profile source, synced to every workspace's `.agents/agents/`).
+- … 1 more in `docs/DOCS-TOPICS.jsonl`
+
 ## multi-year (13)
 
 - content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-stealth-wealth-proof-v1/source/narration.locked.md:1 — P24 Narration Lock — - Proof: `finance-stealth-wealth-proof-v1`
@@ -3119,20 +3135,6 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-G-PRODUCTION.md:1 — STEEL AND PAPER — Script G (production) — Base: Script F. Changes per REWRITE-ORDER-G. Pause marks per doc 37.
 - content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-G-STRENGTH-LOG.md:119 — Round 5 — the emitted screens, walked to verdict (SCRIPT-G-SCREENS.md) — Under the enumeration mandate (STRENGTH-LOOP §8a, ruling E11), every
 - docs/content-video-engine/37-TTS-DELIVERY-STANDARDS.md:460 — 18. The half-beat - chart reads breathe at the reveal (operator, 2026-08-30) — Chart-read delivery has a rhythm problem the full-second pause class is
-
-## model (11)
-
-- content/video_engine/sources/reference_analyses/COMFYUI_PARALLAX_TECHNICAL_STANDARDS_RESEARCH.md:43 — The 5 Technical Failures in Our Configuration: — | Parameter | Current Value | Why It Ruined the Output | Target Professional Value |
-- content/video_engine/sources/reference_analyses/COMFYUI_PARALLAX_TECHNICAL_STANDARDS_RESEARCH.md:191 — 6. Actionable Implementation Changes for Our Pipeline
-- content/video_engine/sources/reference_analyses/COMFYUI_PARALLAX_TECHNICAL_STANDARDS_RESEARCH.md:193 — File Updates Required in `content/video_engine`: — 1. Modify `tools/google-flow-driver/src/parallax-runner.mjs`:
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/05_comfyui_parallax_technical_standards.md:43 — The 5 Technical Failures in Our Configuration: — | Parameter | Current Value | Why It Ruined the Output | Target Professional Value |
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/05_comfyui_parallax_technical_standards.md:191 — 6. Actionable Implementation Changes for Our Pipeline
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/05_comfyui_parallax_technical_standards.md:193 — File Updates Required in `content/video_engine`: — 1. Modify `tools/google-flow-driver/src/parallax-runner.mjs`:
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/06_unified_ledger_drawing_engine_and_comfy_spec.md:73 — 2.4 Calibrated Dial Matrix for Engine 1 — - Model: `depth_anything_v2_vitl_fp32.safetensors` (ViT-Large in FP32; FP16 is strictly banned due to logit underflow).
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_INDEX.md:264 — 8.1 Depthflow & Depth Anything v2 (Engine 1) — - Model: `depth_anything_v2_vitl_fp32.safetensors` (ViT-Large FP32; FP16 strictly banned).
-- content/video_engine/sources/reference_analyses/MASTER_RESEARCH_INDEX.md:263 — 8.1 Depthflow & Depth Anything v2 (Engine 1) — - Model: `depth_anything_v2_vitl_fp32.safetensors` (ViT-Large FP32; FP16 strictly banned).
-- content/video_engine/sources/reference_analyses/UNIFIED_LEDGER_DRAWING_ENGINE_AND_COMFY_SPEC.md:73 — 2.4 Calibrated Dial Matrix for Engine 1 — - Model: `depth_anything_v2_vitl_fp32.safetensors` (ViT-Large in FP32; FP16 is strictly banned due to logit underflow).
-- docs/AGENTS-SEO-PLATFORM.md:135 — 8. Repo conventions — - Python: run with the 3.11 interpreter. If a venv exists use it; otherwise `python` resolves to 3.11.15 on this host.
 
 ## muted-caption (11)
 
