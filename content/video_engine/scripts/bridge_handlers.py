@@ -113,6 +113,10 @@ def _collect(body: str) -> dict[str, list[str]]:
             continue
         if current is None or not line.strip():
             continue
+        if current == "POSITION" and not buckets[current]:
+            # a heading-form POSITION carries its value on the next line (`### POSITION` / `done ...`)
+            buckets[current].append(line.strip())
+            continue
         bare_path = current == "PATHS WRITTEN" and _ABSOLUTE.match(line.strip()) is not None
         if _BULLET.match(line) or bare_path or current == "NOT FOUND WHERE I LOOKED":
             # a PATHS WRITTEN list may be bare absolute paths, one per line, no bullet (Gemini, 2026-09-06 18:26):

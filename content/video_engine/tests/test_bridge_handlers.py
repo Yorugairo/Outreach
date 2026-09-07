@@ -364,3 +364,24 @@ def test_paths_written_as_bare_absolute_lines_are_a_list_not_prose():
         "C:/Users/Snipe/Downloads/Outreach Program/.agents/agents/video-researcher.md",
     ]
     assert g.disagreements == []
+
+
+# ---- the grammar as markdown headings, the POSITION value on the next line (Gemini, 2026-09-06 21:5x) ----
+def test_heading_form_grammar_with_the_position_on_the_next_line():
+    import bridge_handlers as H
+    lines = [
+        "### POSITION",
+        "done - the revisions landed",
+        "",
+        "### PATHS WRITTEN",
+        "C:/x/report.md",
+        "",
+        "### DISAGREEMENTS",
+        "- none",
+        "",
+        "**Synced:** the copies",
+    ]
+    g = H.parse_reply("\n".join(lines) + "\n")
+    assert g.position.startswith("done")
+    assert g.paths_written == ["C:/x/report.md"]
+    assert g.disagreements in ([], ["none"])
