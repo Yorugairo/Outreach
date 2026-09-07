@@ -69,7 +69,12 @@ rule: every sentence the page is under, the chart does one thing that proves it 
 | 15–16 | the Meta page (67.8–75.5) | callout on the multiple; punch on the discount | ✓ (as v2) |
 | 17 | "The Fed still hasn't moved. Tokyo is still on its tea break. And that unfunded bar tab is still ours." (75.8–82.7) | the holdings page returns unwound with the bracket standing; "still ours" re-lights the bracket's label; the host springs in as a dock on "still ours" | ✓ spiral, ✓ dock; ◆ bracket |
 
-## C. What must be built for B (the backlog skills, in the order B needs them)
+## C. What must be built for B (the backlog skills, in the order B needs them) → plan P47
+
+The operator (same hour): *"we need to operationalize stop-action mechanics to be able to throw things on page or land things with
+weight"*, and the three skills by name: *"the hyperframes stop motion skill + build-on, and chart morph"*. They are
+`.claude/PRPs/plans/P47-STOP-ACTION-BUILD-ON-AND-THE-CHART-MORPH.plan.md` T1 / T2 / T3; V3-1..3 below are T2, V3-4 is T3, and
+the arrivals (`arrive: spring|throw|land`) are T1.
 
 | id | capability | where it exists today | what to build | cost |
 |---|---|---|---|---|
