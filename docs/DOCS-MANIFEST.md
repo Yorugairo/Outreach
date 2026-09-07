@@ -15,7 +15,7 @@ its own headings, capability names, backlog ids. `terms` are its most frequent b
 terms. Purpose, terms and defines are truncated here to keep the file cheap to grep;
 the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 
-257 documents across 13 kinds.
+259 documents across 13 kinds.
 
 ## doctrine
 
@@ -166,6 +166,7 @@ the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 - docs/research/2026-08-24-twenty-n8n-attio-evaluation.md — Twenty vs n8n vs Attio: Workflow Fit Evaluation — Three tools, three different seams, three different answers. — defines: — — terms: git-versioned; self-hosted; human-in-the-loop; SEOTarget; InsightReport; video-engine
 - docs/research/2026-08-24-writing-for-the-ear-craft-source.md — Acoustic Narrative Architecture: Integrating Class — Writing for spoken delivery requires a fundamental reorienta — defines: — — terms: McKee; long-form; Expectation-Reality; single-idea; Attribution-first; second-person
 - docs/research/audio/SUBTHRESHOLD_BACKGROUND_MUSIC_RESEARCH_BLUEPRINT.md — Sub-threshold Background Music — Research Blueprin — Pass-1 discovery brief · 2026-09-01 · sources: Exa semantic — defines: — — terms: room-tone; just-audible; subliminal-audio; Egermann et al.; SPL-verified; Greenwald et al.
+- docs/research/motion/HYPERFRAMES_MOTION_TRANSITIONS_RESEARCH_BLUEPRINT.md — HyperFrames Motion, Transitions, and Kinetic Trans — How does HeyGen HyperFrames structure motion design, scene t — defines: — — terms: HyperFrames; HeyGen; on-twos; rules-and-anti-patterns; stop-motion; hand-drawn
 - docs/research/motion/WEALTH_LOGIC_CUT_OFFSETS_MEASURED.md — Wealth Logic — where the picture change sits relat — TR-2 (`docs/content-video-engine/TRANSITIONS-REVIEW-2026-09- — defines: — — terms: YouTube; split-edit; L-cut-like; J-cut-like; auto-captions; mid-speech
 - docs/research/motion/WEALTH_LOGIC_TRANSITIONS_MEASURED.md — Wealth Logic Transitions, Measured From The Pixels — What KIND of transition does the Wealth Logic reference use — defines: — — terms: blur-zoom; DIP_BRIGHT_FRAC 1.60; [t - 0.6 s, t + 0.8 s]; L_before; L_after; S_before
 - docs/research/motion/WEALTH_LOGIC_TRANSITIONS_RESEARCH_BLUEPRINT.md — Wealth Logic Transitions Research Blueprint — Superseded 2026-09-06 by `WEALTH_LOGIC_TRANSITIONS_MEASURED. — defines: — — terms: blur-zooms; zoom-throughs; fade-throughs; frame-per-boundary; Zoom-through; blur-zoom
@@ -309,6 +310,7 @@ the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 - content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-V3-PROPOSAL.md — Tokyo short v3 — the cut ledger and the page's per — The operator on v2 (docks springing, dips, the page mounted — defines: P47 — terms: re-lit; sixty-three; sell-off; blue-ties; two-fingers; toll-gate
 - content/video_engine/projects/systems-and-blowups/tokyo-tea-break/sound/SOURCES.md — SOURCES — steel-and-paper sound — Per-asset licence ledger (SOUND-SOURCING.md rule: an asset m — defines: P35 — terms: gain-matched; highest-rated; preview-hq-mp3; -ss; sort=rating_desc; afade
 - docs/agent-memory/explorer/MEMORY.md — explorer - durable memory (reviewed) — Promoted from worker scratch by the parent after review. — defines: — — terms: path | heading or symbol | what; per-platform; tokyo-tea-break; il-tea-break
+- docs/content-video-engine/HYPERFRAMES-INTAKE-2026-09-06.md — HyperFrames intake — the Gemini research, gated an — The operator: "HyperFrames has a GREAT resource library / pr — defines: — — terms: push-in; ## The question; ## Verdict up front; ## Sources; ## NOT FOUND WHERE I LOOKED; hyperframes.heygen.com
 - docs/content-video-engine/SCRIPT-CONTEXT-COMBINED.md — DOCTRINE CORE — portable content-operation context — Model-agnostic; paste whole into any system-instruction or r — defines: — — terms: scene-setting; pause-framed; seed-locked; paragraph-shaped; quarter-billion; de-risk
 - docs/content-video-engine/TRANSITIONS-REVIEW-2026-09-06.md — Transitions — the review (2026-09-06) — The operator: "I think we should review our research on tran — defines: — — terms: [DERIVED]; L-cuts; unclassified; quart-in-out; evidence-free; wipe
 - docs/content-video-engine/TRIAGE-2026-09-05.md — TRIAGE 2026-09-05 — the corpus against what is bui — Counts as of the registry at 86c46f5. The animation registry — defines: M13 — terms: recent-stumble; zero-slip; BACKLOG.md:218 (row 6); arc-length; motion-authoring; ANIMATION-REGISTRY.md (SOAK_STEP.FPS 8)
