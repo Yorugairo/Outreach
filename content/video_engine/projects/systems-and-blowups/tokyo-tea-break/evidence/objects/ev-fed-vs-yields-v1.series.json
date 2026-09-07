@@ -2377,6 +2377,12 @@
   "mortgage_rise_bp_from_low": 73.0,
   "window_from": "2025-10-27"
  },
+ "notes": [
+  "Japan started selling in February.",
+  "Rates went up immediately.",
+  "10-year +80 bp, mortgage +73 bp since the February lows.",
+  "The Fed's last move: December 2025."
+ ],
  "proof": [
   {
    "series": "DFEDTARU",

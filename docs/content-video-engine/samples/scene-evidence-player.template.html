@@ -77,6 +77,8 @@
   .lp-src { left: 6%; font-size: 22px; font-weight: 500; color: var(--lp-chalk); opacity: .85; }   /* the source sits under the chart box, clear of the anchor caption's band: chalk, not charcoal */
   /* E28: the sub carries the selection rule (which dates and why) - written under the title, wrapped by word */
   .lp-sub { font-size: 21px; font-weight: 400; line-height: 1.25; color: var(--lp-chalk); opacity: .8; white-space: normal; }
+  .lp-note { opacity: 1; }   /* a note is the page's own ink at the sub's size, in the quiet zone */
+  .world.ledger.snapping { background: transparent !important; }   /* a SNAPPING page grows over the world beneath it: no cream until it covers the stage */
   .lp-sub .w { display: inline-block; white-space: nowrap; }
   /* the page's badge rail: the dock's pill, painted from t (no transition) */
   /* a TIGHT cluster (operator, 2026-09-03: 'tight, sleek grouping that doesn't eat up so much space'): pills sized
@@ -1483,7 +1485,14 @@
   /* every dock carries its own lifetime: enter -> hand-led reveal -> hold
      (7s cap) -> exit. Nothing lives to the end of a scene. */
   const DOCKS = [];
+  /* SNAP (the third watch): a page that enters by `snap` grows from a landed card. The dock loop records that card's LAYOUT box
+     (offsets, transform-free - the same at every t the card is on the stage) and hides the card once the page has taken over;
+     the page reads the box here. Sequential rendering (frame N-1's dock loop before frame N's page) makes it exact; a cold seek
+     into the 0.45 s snap window shows the page full for one frame before the box is known - stated in the T7 evidence. */
+  const SNAP_FROM = {}, SNAP_RECT = {};
+  window.__lpSnap = () => ({ rect: SNAP_RECT, from: Object.keys(SNAP_FROM) });   /* P47 T7: the snap's recorded card box, for the tests */
   TL.scenes.forEach((sc, si) => (sc.docks || []).forEach((d) => DOCKS.push({ ...d, si, scene: sc })));
+  TL.scenes.forEach((sc) => { const pg = sc.world && sc.world.page; if (pg && pg.enter === "snap" && pg.snap_from) SNAP_FROM[pg.snap_from] = sc; });
   /* COALESCE. A document that holds through three scenes is authored as one
      dock per scene, so it used to exit and re-enter at every boundary - the
      entrance re-running on a card that never left. Evidence that persists
@@ -2380,6 +2389,7 @@
      value / tag with the series' accent as the key - spring in one at a time AFTER the build (the callout is the
      conclusion), in the page's quiet zone, painted as a function of t (never a CSS transition) */
   const LP_BADGE0 = 0.4, LP_BADGE_STEP = 0.9, LP_BADGE_IN = 0.36;
+  const SNAP_S = 0.45;   /* the third watch: the card snaps up to the full stage - a push tied to a landing [DERIVED: E45's spring-in span] */
   const LP_BADGE_COL = { coral: "crimson", teal: "teal", cobalt: "cobalt", ink: "deemph", sunflower: "amber" };   /* badge accent -> series colour (the key) */
   /* THE IDLE (E49, P47 T5): every held thing carries a NAMED subtle idle - a pure function of t, behind kinetics.idle.
      The class defaults below; a scene's world.idle overrides its page or plate ("none" is explicit stillness, declared);
@@ -3137,26 +3147,38 @@
       const fits = D[0] + PS.BRACKET_GAP + PS.BRACKET_ROOM <= G.W;
       const x = fits ? D[0] + 14 : D[0] - 14, anchor = fits ? "start" : "end";
       const y = D[1] + fs * 0.35 + (Number(sp.dy) || 0) * fs * 1.2;
-      const g = lpEl("g", "lp-figure", st.chart, { opacity: 0 });
-      const dot = lpEl("circle", "fg-dot", g, { cx: D[0].toFixed(1), cy: D[1].toFixed(1), r: P ? 7 : 5, fill: col, "transform-origin": D[0].toFixed(1) + "px " + D[1].toFixed(1) + "px" });
+      const g = lpEl("g", "lp-figure", st.chart, { opacity: 0 });   /* no pin dot: the figure stands where the line was (the third watch: lingering dots read as strange) */
       const label = lpEl("text", "bklab", g, { x: x.toFixed(1), y: y.toFixed(1), "text-anchor": anchor, style: "font-size:" + fs + "px;fill:" + col });
       const lg = [...String(sp.text || "")].map((ch) => { const ts = lpEl("tspan", "", label, { opacity: 0 }); ts.textContent = ch === " " ? "\u00a0" : ch; return ts; });
       let sub = null, sg = [];
       if (sp.sub) { sub = lpEl("text", "bksub", g, { x: x.toFixed(1), y: (y + fss * 1.3).toFixed(1), "text-anchor": anchor, style: "font-size:" + fss + "px;fill:" + col });
         sg = [...String(sp.sub)].map((ch) => { const ts = lpEl("tspan", "", sub, { opacity: 0 }); ts.textContent = ch === " " ? "\u00a0" : ch; return ts; }); }
-      return { sp, D, x, y, fits, g, dot, label, lg, sub, sg, fi };
+      return { sp, D, x, y, fits, g, label, lg, sub, sg, fi };
     }).filter(Boolean);
-    return { brackets, retitles, relights: pageSpecies(scene, "relight"), figures };
+    /* NOTES (the third watch: "the page has plenty of space on the side to write things"): a line of handwriting in the page's
+       QUIET ZONE beside the chart - the column the chart leaves free (the dock's band) - stacked in order, each written on its
+       word by the hand at the sub's size; when the chart has no free column the notes stack under the source line */
+    const notes = pageSpecies(scene, "note").map((sp, ni) => {
+      const div = lpEl("div", "lp-ink lp-sub lp-note", st.page);
+      const pr = st.page.getBoundingClientRect(), cr = st.chart.getBoundingClientRect();   /* the chart's box as % of the page (an SVG has no offsets; the ratios survive any transform) */
+      const cl = (cr.x - pr.x) / pr.width * 100, cw = cr.width / pr.width * 100, ct = (cr.y - pr.y) / pr.height * 100, chh = cr.height / pr.height * 100;
+      const right = 100 - (cl + cw), left = cl;
+      const step = P ? 7.0 : 8.5;   /* % of the page per note (one wrapped line and a breath) */
+      if (right >= 22) { div.style.left = (cl + cw + 3).toFixed(2) + "%"; div.style.width = (right - 7).toFixed(2) + "%"; div.style.top = (ct + 2 + ni * step).toFixed(2) + "%"; }
+      else if (left >= 22) { div.style.left = "4%"; div.style.width = (left - 7).toFixed(2) + "%"; div.style.top = (ct + 2 + ni * step).toFixed(2) + "%"; }
+      else { div.style.left = cl.toFixed(2) + "%"; div.style.width = cw.toFixed(2) + "%"; div.style.top = (ct + chh + (P ? 17 : 12) + ni * step * 0.75).toFixed(2) + "%"; }   /* no free column: under the source line and the caption band */
+      const glyphs = P ? lpGlyphsWrap(div, String(sp.text || ""), st.seed + 70 + ni) : lpGlyphs(div, String(sp.text || ""), st.seed + 70 + ni);
+      return { sp, div, glyphs };
+    });
+    return { brackets, retitles, relights: pageSpecies(scene, "relight"), figures, notes };
   };
-  /* the figure's write: the dot pops on the first quarter of its word, the figure writes glyph by glyph over the next, the sub last */
+  /* the figure's write: the figure writes glyph by glyph over the first 0.6 of its word, the sub over the rest */
   const paintFigure = (fg, t) => {
     const sp = fg.sp, dur = Math.max(0.001, sp.dur || 1), u = clamp01((t - sp.at) / dur);
     fg.g.setAttribute("opacity", t >= sp.at ? 1 : 0);
-    const pop = (kin("analytic_spring") ? springPop : stagePop)(clamp01(u / 0.25));
-    fg.dot.setAttribute("transform", "scale(" + pop.toFixed(4) + ")");
-    const nl = Math.max(1, fg.lg.length), perL = 0.75 * 0.6 / nl, uL = u - 0.25;
+    const nl = Math.max(1, fg.lg.length), perL = 0.6 / nl, uL = u;
     fg.lg.forEach((ts, j) => ts.setAttribute("opacity", clamp01((uL - j * perL) / (perL * 1.6)).toFixed(3)));
-    const ns = Math.max(1, fg.sg.length), perS = 0.75 * 0.4 / ns, uS = u - 0.25 - 0.75 * 0.6;
+    const ns = Math.max(1, fg.sg.length), perS = 0.4 / ns, uS = u - 0.6;
     fg.sg.forEach((ts, j) => ts.setAttribute("opacity", clamp01((uS - j * perS) / (perS * 1.6)).toFixed(3)));
   };
   const paintBracket = (b, t, ud) => {
@@ -3187,6 +3209,7 @@
     const undrawAll = pageSpecies(scene, "undraw").filter((sp) => (sp.series ?? (sp.target || {}).series) == null);
     for (const b of PF.brackets) paintBracket(b, t, undrawAll.find((sp) => sp.at >= b.sp.at));
     for (const fg of PF.figures || []) paintFigure(fg, t);   /* E50: the chart's next thing */
+    for (const nt of PF.notes || []) { nt.div.style.opacity = t >= nt.sp.at ? "" : "0"; writeGlyphs(nt.glyphs, t - nt.sp.at, Math.max(0.05, nt.sp.dur || 1)); }
     /* RELIGHT: the sunflower twin rises and falls on a sine over dur */
     for (const b of PF.brackets) b.glow.g.setAttribute("opacity", "0");
     for (const rl of PF.relights) {
@@ -3264,11 +3287,12 @@
     const pg = scene.world.page || {};
     if (!st.root.isConnected) { el.querySelectorAll(".lp").forEach((x) => x.remove()); el.appendChild(st.root); }
     const morphOn = pg.enter === "morph" && kin("arap_morph"), morphS = morphOn ? (pg.morph_s || MORPH.S) : 0;   /* P47 T3: the prop becomes the chart */
+    const snap = pg.enter === "snap";   /* the third watch: the thrown card BECOMES the world - the page arrives built and grows from the card's rectangle to the stage over SNAP_S */
     const mount = pg.enter === "mount" || (pg.enter === "morph" && !morphOn);   /* a morph with its flag off is a mount of the same length */
     const mountS = mount ? (pg.mount_s || pg.morph_s || LP.FIELD) : 0;   /* the mount phase: the world fades, the cream builds; then the page's clock starts at ROLL + SAVOR (no roll, no savor) */
-    const tr = t - scene.span[0] + (pg.enter === "spiral" ? LP_FOCUS_AT + LP_BADGE0 + LP_BADGE_STEP * ((st.badges || []).length + 1) : mount ? LP.ROLL - mountS : morphOn ? (LP.ROLL + LP.SAVOR + LP.FIELD + LP.PUNCH) - morphS : 0);   /* a spiral entry ARRIVES built: its beats are all past; a MOUNT is the roll-out (E45 s2): its cream builds over mount_s, then the SAVOR holds the empty page before the ink; a MORPH skips the roll, the savor and the soak - the board is there, the prop morphs, the build starts as it ends */
+    const tr = t - scene.span[0] + ((pg.enter === "spiral" || snap) ? LP_FOCUS_AT + LP_BADGE0 + LP_BADGE_STEP * ((st.badges || []).length + 1) : mount ? LP.ROLL - mountS : morphOn ? (LP.ROLL + LP.SAVOR + LP.FIELD + LP.PUNCH) - morphS : 0);   /* a spiral entry ARRIVES built: its beats are all past; a MOUNT is the roll-out (E45 s2): its cream builds over mount_s, then the SAVOR holds the empty page before the ink; a MORPH skips the roll, the savor and the soak - the board is there, the prop morphs, the build starts as it ends */
     /* beat 1: roll-out */
-    const rk = (mount || morphOn) ? 1 : expoOut(clamp01(tr / LP.ROLL));   /* a mounting page is in place from its first frame; it RISES (below) with the cream steps */
+    const rk = (mount || morphOn || snap) ? 1 : expoOut(clamp01(tr / LP.ROLL));   /* a mounting page is in place from its first frame; it RISES (below) with the cream steps */
     const mu = mount ? clamp01((t - scene.span[0]) / mountS) : 1;
     const lpDance = (u) => { if (u >= 1) return 1; const k = Math.floor(u * MOUNT_STEPS), f = u * MOUNT_STEPS - k; return (k + clamp01((f - 0.5) / 0.5)) / MOUNT_STEPS; };
     const mk = mount ? Math.floor(mu * MOUNT_STEPS) / MOUNT_STEPS : 1;
@@ -3314,7 +3338,24 @@
     const pk = (pg.punch === false || PORTRAIT) ? 0 : expoOut(clamp01(t3 / LP.PUNCH));   /* a host plate skips the punch: his gesture is the direction; portrait has no margin to spend (P41) */
     const bdc = st.boardCentre || { x: 50, y: 50 };
     st.page.style.transformOrigin = bdc.x.toFixed(2) + "% " + bdc.y.toFixed(2) + "%";
-    st.page.style.transform = "translateX(" + ((rk - 1) * 100).toFixed(2) + "%) " + (mount ? "translateY(" + ((1 - mk) * LP_MOUNT_RISE).toFixed(1) + "px) " : "") + "scale(" + (1 + (LP.PUNCH_SCALE - 1) * pk).toFixed(4) + ")"
+    let snapCss = "";
+    if (snap) {   /* the page's own charcoal board (measured once, untransformed) onto the card's box (from the dock loop): board -> card at u = 0, the page itself at u = 1 */
+      if (!st.snapBoard) {
+        const stage = document.getElementById("stage").getBoundingClientRect(), k = stage.width / (PORTRAIT ? 1080 : 1920);
+        const saved = st.page.style.transform; st.page.style.transform = "none";
+        const bd = st.field.getBoundingClientRect(); st.page.style.transform = saved;
+        st.snapBoard = { x: (bd.x - stage.x) / k, y: (bd.y - stage.y) / k, w: bd.width / k, h: bd.height / k };
+      }
+      const S = { board: st.snapBoard, card: SNAP_RECT[pg.snap_from] || null }, u = minJerk(clamp01((t - scene.span[0]) / SNAP_S));
+      if (S.card && S.board.w > 0 && S.board.h > 0) {
+        const sx0 = S.card.w / S.board.w, sy0 = S.card.h / S.board.h;
+        const sx = sx0 + (1 - sx0) * u, sy = sy0 + (1 - sy0) * u;
+        const tx = (S.card.x - S.board.x * sx0) * (1 - u), ty = (S.card.y - S.board.y * sy0) * (1 - u);
+        st.page.style.transformOrigin = "0 0";
+        snapCss = "translate(" + tx.toFixed(2) + "px," + ty.toFixed(2) + "px) scale(" + sx.toFixed(5) + "," + sy.toFixed(5) + ") ";
+      }
+    }
+    st.page.style.transform = snapCss + "translateX(" + ((rk - 1) * 100).toFixed(2) + "%) " + (mount ? "translateY(" + ((1 - mk) * LP_MOUNT_RISE).toFixed(1) + "px) " : "") + "scale(" + (1 + (LP.PUNCH_SCALE - 1) * pk).toFixed(4) + ")"
       + idleCssFor("page", pg.idle, t, st.seed, 1);   /* E49: the page breathes while it holds under a sentence */
     /* beat 6: the build - crisp, landing on the exact strings - on the punched page */
     const c = clamp01((t3 - LP.PUNCH) / (st.buildDur || LP.BUILD));   /* race/decline/combo declare their own envelope */
@@ -3351,6 +3392,7 @@
         f = f + (capFrac(pp, (ud.target || {}).index | 0) - f) * segEase(clamp01(u));
       }
       pp.p.setAttribute("stroke-dashoffset", (pp.len * (1 - f)).toFixed(1));
+      pp.p.style.opacity = f > 0.004 ? "" : "0";   /* E50 (the third watch: "dots that linger"): a zero-length round-capped dash paints a dot at the path's start - an un-drawn line shows nothing */
       const drawing = f > 0.01 && f < 0.995;
       if (drawing && pp.p.getPointAtLength) { const q = pp.p.getPointAtLength(pp.len * f); pp.tip.setAttribute("cx", q.x); pp.tip.setAttribute("cy", q.y); }
       pp.tip.setAttribute("opacity", drawing ? 1 : 0);
@@ -3762,6 +3804,8 @@
     const bzOut  = nxt && exitName(nxt.exit) === "blurzoom" ? exitSecs(nxt.exit, BLURZOOM_S) : 0;
     /* DISSOLVE (operator, 2026-09-05, on the wipe into the outro card - "what is this madness?"): a row whose exit reads dissolve
        arrives by a plain cross-fade over DISSOLVE_S - no front, no seam, the outgoing world keeps playing underneath */
+    const snapIn = prev && sc.world && sc.world.kind === "ledger" && sc.world.page && sc.world.page.enter === "snap";   /* the card becomes the world: the page grows over the outgoing scene, which stays until covered */
+    wB.classList.toggle("snapping", !!snapIn && t - sc.span[0] < SNAP_S);
     const mountIn = prev && sc.world && sc.world.kind === "ledger" && sc.world.page && (sc.world.page.enter === "mount" || sc.world.page.enter === "morph");   /* MOUNT (operator, 2026-09-05): the outgoing scene fades while the cream plate mounts over it - no page turn; a MORPH page arrives the same way (P47 T3) */
     const dissolve = prev && (sc.exit === "dissolve" || mountIn);
     /* THE DANCE (operator, 2026-09-05, corrected: "the fades should be the WORLD fading, beneath it the CREAM should be building,
@@ -3771,7 +3815,7 @@
        clock begins. The hand-off itself is no wipe (wk = 1) and no cross-fade of the page (dk = 1). */
     const mountS = mountIn ? (sc.world.page.mount_s || sc.world.page.morph_s || LP.FIELD) : 0, mu = mountIn ? clamp01((t - sc.span[0]) / mountS) : 1;
     const dk = dissolve && !mountIn ? (kin("min_jerk") ? minJerk : quartIO)(clamp01((t - sc.span[0]) / DISSOLVE_S)) : 1;
-    const wk = prev && !spiralIn && !suck && !dissolve && !dipIn && !bzIn ? (kin("min_jerk") ? minJerk : quartIO)(clamp01((t - sc.span[0]) / WIPE)) : 1;
+    const wk = prev && !spiralIn && !snapIn && !suck && !dissolve && !dipIn && !bzIn ? (kin("min_jerk") ? minJerk : quartIO)(clamp01((t - sc.span[0]) / WIPE)) : 1;
     const seaming = prev && wk > 0 && wk < 1;
     /* THE HARD-EDGE CLIP WIPE (restored 2026-09-01). The remotion-ui
        directional-wipe port (dd9e476, 2026-08-30) replaced this with a
@@ -3951,6 +3995,14 @@
          backwards over DOCK_RETRACT_S, a fast settle rather than a fade. Everything else - a dock
          on a plain plate - keeps the 0.75s expo-out lift it has always had. */
       const arr = arriveOf(d);
+      el.dataset.slide = d.slide;
+      el.style.visibility = "";
+      const snapSc = SNAP_FROM[d.slide];   /* the card a snapping page grows from: record its layout box, hide it once the page has it */
+      if (snapSc) {
+        const im = el.querySelector("img, video") || el;
+        if (im.offsetHeight > 2) SNAP_RECT[d.slide] = { x: el.offsetLeft + (im === el ? 0 : im.offsetLeft), y: el.offsetTop + (im === el ? 0 : im.offsetTop), w: im.offsetWidth, h: im.offsetHeight };   /* an image still loading has no height yet */
+        if (t >= snapSc.span[0]) el.style.visibility = "hidden";
+      }
       el.classList.toggle("arriving", arr !== "spring");
       let contact = el.parentNode ? el.parentNode.querySelector("#dock-contact-" + s) : null;
       if (arr !== "spring") {   /* P47 T1: the card ARRIVES by a throw or a landing, then the park choreography (dockGeom) is untouched */
@@ -4208,7 +4260,7 @@
     const st = world.__lp, PF = st.perform || { brackets: [], retitles: [], figures: [] };
     const paths = st.paths.map((pp) => { const off = parseFloat(pp.p.getAttribute("stroke-dashoffset") || "0"), drawn = pp.len - off;
       const q = pp.p.getPointAtLength ? pp.p.getPointAtLength(Math.max(0, Math.min(pp.len, drawn))) : { x: 0, y: 0 };
-      return { si: pp.si | 0, k0: pp.k0 | 0, muted: !!pp.muted, len: pp.len, drawn, frac: pp.len ? drawn / pp.len : 1, tip: [q.x, q.y], pts: pp.pts || [] }; });
+      return { si: pp.si | 0, k0: pp.k0 | 0, muted: !!pp.muted, len: pp.len, drawn, frac: pp.len ? drawn / pp.len : 1, tip: [q.x, q.y], pts: pp.pts || [], hidden: pp.p.style.opacity === "0" }; });
     const brackets = PF.brackets.map((b) => { const bb = b.main.g.getBBox(); return { x: b.x, y0: b.y0, y1: b.y1, A: b.A, B: b.B, fits: b.fits,
       opacity: parseFloat(b.main.g.getAttribute("opacity") || "0"), glow: parseFloat(b.glow.g.getAttribute("opacity") || "0"),
       offset: parseFloat(b.main.line.getAttribute("stroke-dashoffset") || "0"), len: b.main.len,
@@ -4216,7 +4268,7 @@
     const w = (gs) => gs.map((g) => parseFloat(g.style.getPropertyValue("--w") || "0"));
     const M = st.morph; const mb = M ? M.path.getBBox() : null;
     const figures = (PF.figures || []).map((fg) => ({ D: fg.D, x: fg.x, fits: fg.fits, opacity: parseFloat(fg.g.getAttribute("opacity") || "0"),
-      dot: fg.dot.getAttribute("transform") || "", label: fg.lg.map((ts) => parseFloat(ts.getAttribute("opacity") || "0")) }));
+      label: fg.lg.map((ts) => parseFloat(ts.getAttribute("opacity") || "0")) }));
     return { linePts: st.linePts, paths, brackets, figures, title: w(st.titleGlyphs || []), retitles: PF.retitles.map((r) => w(r.glyphs)),
              morph: M ? { u: M.u, bbox: [mb.x, mb.y, mb.width, mb.height], fill: parseFloat(M.path.getAttribute("fill-opacity")), on: M.svg.style.opacity } : null };
   };

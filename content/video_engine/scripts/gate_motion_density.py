@@ -51,6 +51,8 @@ captions do NOT count - they are what a viewer reads as stillness.
        steps on 1s above 250 px/s, on 2s below
   M21  the chart's deployed life (E50): from a page's LAST   WARN   (over 12s; INFO over 8s; ledger pages only)
        data mark to its exit or its undraw - 6-8s average, 12s at most
+  M22  a push is tied to a landing (E51): every punch /     WARN   (an untied push is filler)
+       focus_zoom has a landing on its scene inside (at - 1.5s, at + 0.3s)
   M17  the morph's match-cut invariants (P47 T3): centroid WARN   (only when a page enters by morph; INFO until
        <= 6 % W, axis <= 15 deg, area >= 60 %, det J > 0        measure_morph.py has run)
   J01  savor beats keep their picture (card up, badge lit) JUDGE
@@ -80,6 +82,8 @@ STOP_ON1_PX_S = 250        # P47 T1 [DERIVED: CADENCE.ON1_PX_S, the brief :185-1
 STOP_THROW_DX, STOP_THROW_DY, CARD_W_DEFAULT = 240, 160, 864   # the template's throw offsets and the .dock width, mirrored
 SRC_M20 = "P47 T1 (the brief :185-193, the cadence rule): a throw steps on 1s above 250 px/s, on 2s below - reported, not scored, until HG2 tunes it"
 DEPLOY_AVG_S, DEPLOY_MAX_S = 8.0, 12.0   # E50 [OPERATOR 2026-09-07]: a chart's deployed life - 6-8 s from its LAST data mark on average, 12 s at most
+PUSH_TIE_BEFORE_S, PUSH_TIE_AFTER_S = 1.5, 0.3   # [DERIVED] a push is TIED when a landing on its scene falls inside (at - 1.5 s, at + 0.3 s)
+SRC_M22 = "E51 (operator 2026-09-07): a push-in is only used tied to something - pushing into a newly landed badge or data series; a zoom on a thing that just sits there is filler"
 SRC_M21 = "E50 (operator 2026-09-07): a chart's deployed life is 6-8 s from its last data mark on average, 12 s at most - then it un-draws or becomes the next thing"
 SRC_M18 = "E49 / P47 T5: nothing ever goes truly still - a run of identical rendered frames over 0.5 s is a freeze (measure_frozen_frames.py)"
 STILL_WARN_S = 8.0         # s9.25 working target
@@ -139,7 +143,7 @@ SPECIES_EVENTS = {"punch": ("at",), "callout": ("at",), "focus_zoom": ("at", "en
                   "steam": "continuous", "trace": ("at", "end"), "ticker": "stepping",   # STILL LIFE (2026-09-05)
                   "life": "continuous",   # a DECLARED self-animating world (a rendered outro): the claim is the author's, verified by eye, credited here
                   "build_to": ("at", "end"), "bracket": ("at", "end"), "retitle": ("at", "end"), "relight": ("at",),   # P47 T2: the page performs on a word
-                  "undraw": ("at", "end"), "figure": ("at", "end")}   # E50 (P47 T6): the line unwinds; the figure writes
+                  "undraw": ("at", "end"), "figure": ("at", "end"), "note": ("at", "end")}   # E50 (P47 T6): the line unwinds; the figure writes; a note is handwriting
 LIFE_CONTINUOUS_S = 1.0    # a continuous life (steam) is one event per second of its window - it never lets the frame go still
 # VIDEO DOCK (ruling E44 / backlog R26-7, 2026-09-06): a dock whose asset is a clip is moving pictures on
 # the card, so the frame is never still while it is up - credited continuously, exactly like a "life"
@@ -553,6 +557,8 @@ def run(tl: dict, docks: list[dict], mp: dict, frames: list[dict] | str | None =
         g.append(cg)                                                      # M20 (P47 T1: the cadence rule per arrival, INFO)
     if (dg := _deployed_gate(tl.get("scenes", []))) is not None:
         g.append(dg)                                                      # M21 (E50: the chart's deployed life per page)
+    if (pg_ := _push_tie_gate(tl.get("scenes", []))) is not None:
+        g.append(pg_)                                                     # M22 (E51: a push is tied to a landing)
     if (mg := _morph_gate(tl.get("scenes", []), morph)) is not None:
         g.append(mg)                                                      # M17 (P47 T3: the match-cut invariants per morph page)
     add("J01", "JUDGE", "every savor beat holds its picture (card up, badge lit), never a bare plate with a drift", "doc 29 s9.25 #3")
@@ -620,6 +626,8 @@ def _page_land_offset(scene: dict) -> float:
         return mount_s + PAGE_BUILD_END_S - LP_ROLL_S
     if page.get("enter") == "morph":   # P47 T3: the morph replaces the roll, the savor, the soak and the punch; the build starts as it ends
         return float(page.get("morph_s") or MORPH_S) + LP_BUILD_S
+    if page.get("enter") in ("spiral", "snap"):   # a returning page, or a card become the world (P47 T7): arrives built
+        return 0.0
     return PAGE_BUILD_END_S
 
 def _first_chart_window(tl: dict) -> tuple[float, float, str]:
@@ -834,13 +842,58 @@ def _deployed_lives(scenes: list[dict]) -> list[tuple[str, float, float, float]]
         a, z = float(s["span"][0]), float(s["span"][1])
         sp = s.get("species", [])
         page = ((s.get("world") or {}).get("page") or {})
-        marks = [a if page.get("enter") == "spiral" else a + _page_land_offset(s)]
+        marks = [a + _page_land_offset(s)]
         marks += [float(x["at"]) + float(x.get("dur", 0.0)) for x in sp if x.get("kind") in ("build_to", "bracket") and a <= float(x.get("at", -1e9)) <= z]
         last = max(m for m in marks if m <= z + 1e-6) if any(m <= z + 1e-6 for m in marks) else a
         uds = sorted(float(x["at"]) for x in sp if x.get("kind") == "undraw" and last - 1e-6 <= float(x.get("at", -1e9)) <= z)
         end = uds[0] if uds else z
         out.append((str(s.get("scene_id", "?")), round(last, 2), round(end, 2), round(max(0.0, end - last), 2)))
     return out
+
+
+def _landings(s: dict) -> list[tuple[float, str]]:
+    """Every LANDING on a scene: the page's chart landing, each build_to / bracket / figure / note end, each dock's arrival
+    (its enter, plus a throw's flight or a land's anticipation + drop), each badge landing on a page."""
+    a = float(s["span"][0]) if s.get("span") else 0.0
+    out: list[tuple[float, str]] = []
+    if _is_page(s):
+        out.append((a + _page_land_offset(s), "the chart's landing"))
+        page = ((s.get("world") or {}).get("page") or {})
+        for k, bat in enumerate(((s.get("world") or {}).get("badge_at") or [])):
+            out.append((float(bat), f"badge {k}"))
+    for sp in s.get("species", []):
+        if sp.get("kind") in ("build_to", "bracket", "figure", "note"):
+            out.append((float(sp.get("at", 0.0)) + float(sp.get("dur", 0.0)), f"{sp['kind']} landing"))
+    for d in s.get("docks", []):
+        arr = d.get("arrive")
+        contact = float(d.get("enter", 0.0)) + (0.46 if arr == "throw" else 0.32 if arr == "land" else 0.0)
+        out.append((contact, f"dock {d.get('slide', '?')} {arr or 'spring'}"))
+    return out
+
+
+def _untied_pushes(scenes: list[dict]) -> list[tuple[str, str, float]]:
+    """E51: every punch / focus_zoom with no landing on its scene inside (at - PUSH_TIE_BEFORE_S, at + PUSH_TIE_AFTER_S)."""
+    out: list[tuple[str, str, float]] = []
+    for s in scenes:
+        lands = [t for t, _n in _landings(s)]
+        for sp in s.get("species", []):
+            if sp.get("kind") not in ("punch", "focus_zoom"):
+                continue
+            at = float(sp.get("at", 0.0))
+            if not any(at - PUSH_TIE_BEFORE_S <= t <= at + PUSH_TIE_AFTER_S for t in lands):
+                out.append((str(s.get("scene_id", "?")), sp["kind"], round(at, 2)))
+    return out
+
+
+def _push_tie_gate(scenes: list[dict]) -> Gate | None:
+    """M22 (E51): a push that is not tied to a landing is filler - WARN, naming each."""
+    if not any(sp.get("kind") in ("punch", "focus_zoom") for s in scenes for sp in s.get("species", [])):
+        return None
+    bad = _untied_pushes(scenes)
+    if bad:
+        return Gate("M22", "WARN", f"{len(bad)} push(es) tied to nothing: " + "; ".join(f"{sid} {k} at {_mm(t)}" for sid, k, t in bad[:8])
+                    + " - a push lands ON a thing that just landed (a badge, a datum, a bracket, a card) or it is cut", SRC_M22)
+    return Gate("M22", "PASS", "every push is tied to a landing on its scene", SRC_M22)
 
 
 def _deployed_gate(scenes: list[dict]) -> Gate | None:

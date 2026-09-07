@@ -56,6 +56,15 @@ def _bn(v: float) -> str:
 
 
 FACTS = _holdings_facts()
+FED_NOTES = json.loads((HERE / "evidence/objects/ev-fed-vs-yields-v1.series.json").read_text(encoding="utf-8"))["notes"]   # the Fed page's side notes, from its object
+
+
+def clip_dock(aid: str) -> str:
+    """A CLIP as a dock (the video dock, E44): the host's counter clip docked over a page instead of taking the frame."""
+    import build_render_f as R
+    name = DOCK_STILLS[aid][0]
+    R.STAMPED[aid] = str(CLIPS / name)
+    return aid
 MONTH = lambda ym: __import__("datetime").date(int(ym[:4]), int(ym[5:7]), 1).strftime("%B %Y")
 
 
@@ -228,7 +237,7 @@ def dock_still(aid: str) -> str:
     return aid
 
 
-def dock_card(aid: str, series: str, variant: str = "line") -> str:
+def dock_card(aid: str, series: str, variant: str = "line", aspect: str | None = None) -> str:
     """A CHART CARD (R26-19 / E50): the series object's ledger page rendered once at its landing by scripts/chart_card.py and
     registered as a dock still, so a 2-3 s beat can carry a chart a fresh page could never land in time. Rebuilt when the
     object or the renderer is newer than the card."""
@@ -237,7 +246,7 @@ def dock_card(aid: str, series: str, variant: str = "line") -> str:
     src = HERE / "evidence/objects" / f"{series}.series.json"
     out = BUILD / "docks" / f"{aid}.png"
     if not out.exists() or out.stat().st_mtime < max(src.stat().st_mtime, Path(CC.__file__).stat().st_mtime):
-        CC.render_card(src, out, variant)
+        CC.render_card(src, out, variant, aspect=aspect)
     R.STAMPED[aid] = str(out)
     return aid
 
@@ -297,8 +306,13 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float | None = None) -
     t_ring = cut_before(ws, "The Fed still hasn't moved")
     t_relit = at("that unfunded")                        # the second "unfunded bar tab" - the callout is re-lit on it
     t_ours = at("still ours")                            # the host mounts here as the last image before the card
-    t_fed_still = at("The Fed still")                    # R26-19: the Fed-vs-yields CARD is thrown on the ring's first half ...
-    t_tokyo_still = at("Tokyo is still")                 # ... and leaves as the sentence turns back to Tokyo
+    t_fed_still = at("The Fed still")                    # R26-19: the Fed-vs-yields CARD is thrown here ...
+    word_in = lambda phrase, word: next(round(w["start_s"], 2) for w in ws[phrase_start(ws, phrase)[0]:][:10] if w["w"].strip(".,;:!?").lower() == word)
+    t_moved = word_in("still hasn't moved", "moved")     # ... and SNAPS up to become the last world on the ring's "moved" (the third watch; the hook says it first)
+    t_tokyo_still = at("Tokyo is still")                 # the first side note writes here ...
+    t_tea = word_in("still on its tea break", "tea")     # ... the second here
+    t_bar_tab = word_in("bar tab is still ours", "bar")  # (the ring's last line)
+    t_that = word_in("that unfunded bar tab is", "that")  # the host arrives CENTRED on the Fed page for its whole last line
     # V3 words (P47 T2): the page performs on these
     t_build = round(t_page + PAGE_BUILD_START_S, 2)      # the page's own build beat (tr = t - t_page on a mount, E45 s2) - the line draws to the peak
     t_opponent = at("The opponent")                      # the title rewrites here
@@ -355,7 +369,7 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float | None = None) -
             (dock_still("dock-f-toll-gate-to-fab"), 0, t_pledge, t_second),
         ], "cut", [
             carried(t_catalyst),
-            {"kind": "punch", "at": at("Since February, Japan"), "dur": 0.9, "target": datum(PEAK_IDX)},
+            # E51 (the third watch): the punch on the peak here was tied to nothing - the page returns drawn - and is cut
             # V3: the BRACKET measures the drop from the peak to June by the hand on the number; its label is the number and
             # its sub lands on "a tenth of the pile" - the callout that said the same is gone (one thing per sentence)
             {"kind": "bracket", "at": t_hundred, "dur": 2.4, "from": PEAK_IDX, "to": LAST_IDX, "label": "\u2212$122.6B", "sub": "a tenth of the pile", "color": "neg"},
@@ -366,28 +380,34 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float | None = None) -
             {"kind": "figure", "at": t_first, "dur": 1.6, "target": datum(LAST_IDX), "text": _bn(FACTS["latest"]), "sub": "the " + MONTH(FACTS["latest_month"]) + " print"},
         ]),
         # 5 the second number: a Meta share priced at each yield, punch on the 5.5 % bar at "discounts" - as v1
-        (t_second, t_ring, meta, (0, 0, 0), [], None, [
+        # ... the Meta page HOLDS to the snap (E50: deployed 69.2 -> 76.8, 7.6 s) and the Fed CARD is thrown onto it on "The Fed still" -
+        #   the holdings page does not come back for the ring ("we bring back the old chart for no reason" - the third watch)
+        (t_second, t_moved, meta, (0, 0, 0), [
+            (dock_card("dock-h-fed-vs-yields", "ev-fed-vs-yields-v1", aspect="9:16"), 0, t_fed_still, t_moved, {"arrive": "throw", "mass": "paper"}),
+        ], None, [
             {"kind": "callout", "at": at("price-to-earnings multiple"), "dur": 2.0, "target": datum(0)},
-            {"kind": "punch", "at": at("discounts it."), "dur": 0.9, "target": datum(3)},
+            # E51 (the third watch, "the weak push-in at 1:14"): the punch on the 5.5 % bar at "discounts" zoomed on a bar that had landed
+            # five seconds earlier - filler - and is cut
         ]),
         # 6 THE RING on the mechanism, not the phrase (G15b): the holdings page returns UNWOUND on "The Fed still hasn't
         #   moved" with the drop already drawn, and the -$122.6B is re-lit on the second "unfunded bar tab". exit=cut
         #   because the callout would otherwise ride the retract (M15 / E40 #5) and because the host mounts on top of it.
-        (t_ring, t_ours, hold + ":spiral:cut", (0, 0, 0), [
-            # R26-19 / E50 (operator, 2026-09-07: "there has to be another one that we can pull in of value"): the HOOK'S OWN PROOF -
-            # the Fed's target flat since its last move against the 10-year and the 30-year mortgage climbing (FRED, fetched, proof
-            # lines in the object) - THROWN onto the ring on "The Fed still hasn't moved" and gone as the sentence turns to Tokyo. A
-            # chart card (scripts/chart_card.py): a fresh page could not land in 2.3 s; the card carries the same painter's frame.
-            (dock_card("dock-h-fed-vs-yields", "ev-fed-vs-yields-v1"), 0, t_fed_still, t_tokyo_still, {"arrive": "throw", "mass": "paper"}),
-        ], "cut", [
-            # V3: the page returns with the BRACKET STANDING (it draws in the unwind's first beat) and the second "unfunded bar
-            # tab" RE-LIGHTS it in the sunflower - the same element, not a lookalike (E48 s4: the callback is the thread)
-            carried(t_ring),
-            {"kind": "bracket", "at": t_ring, "dur": 0.8, "from": PEAK_IDX, "to": LAST_IDX, "label": "\u2212$122.6B", "sub": "a tenth of the pile", "color": "neg"},
-            {"kind": "relight", "at": t_relit, "dur": 1.0, "ref": "bracket", "index": 0},
+        # 6 THE RING (the third watch, operator 2026-09-07: "'The Fed hasn't moved. Your borrowing costs climbed anyway.' is the ring, and
+        #   it's also the wrapping words. We should throw it, then immediately zoom/snap to it to bring it to the full world-stage, and
+        #   that's the last scene that we land - center dock then retract the 'bar tab is still ours' video scene on that chart page").
+        #   the Fed-vs-yields CARD (R26-19 - the hook's own proof, FRED, proof lines in the object; a PORTRAIT card, the page it will
+        #   become) is THROWN onto the Meta page above on "The Fed still" ...
+        #   6b: on "moved" the card SNAPS up to the full stage and IS the last world - the Fed page, arrived built (E51: a push tied to
+        #   a landing); its side notes write as the ring is spoken (from the object's facts); the host arrives CENTRED on it for
+        #   "and that unfunded bar tab is still ours" and retracts before the dip to the card.
+        (t_moved, t_outro, "ledger:ev-fed-vs-yields-v1:line:0:right:snap=dock-h-fed-vs-yields:cut", (0, 0, 0), [
+            (clip_dock("dock-a2-counter-colder"), 0, t_that, t_outro - 0.3, {"centre": True}),
+        ], "cut", [   # the SNAP is this row's own transition (no dip into it); the outro row still dips
+            # the three notes write in the quiet zone over "Tokyo is still on its tea break", staggered, before the host lands over the page
+            {"kind": "note", "at": t_tokyo_still, "dur": 1.0, "text": FED_NOTES[0]},
+            {"kind": "note", "at": t_tokyo_still + 0.9, "dur": 1.0, "text": FED_NOTES[1]},
+            {"kind": "note", "at": t_tokyo_still + 1.8, "dur": 1.2, "text": FED_NOTES[2]},
         ]),
-        # 7 the host, mounted on "still ours" (s9.15: a mount is a dissolve on a word) - the last image before the card
-        (t_ours, t_outro, clip("clip-a2-counter-colder-v2.mp4"), (0, 0, 0), [], "dip", None),   # E47: a world change (page -> clip) dips through black, 0.47 s
         # 8 the outro: the Remotion kit's card dissolving in over the ring clip; `life` so the pulse gate credits its drift
         (t_outro, runtime_s, clip("outro-v2.mp4", OUTRO), (0, 0, 0), [], "dip", [   # E47: the card is a world change - the dip, not the dissolve
             {"kind": "life", "at": t_outro, "dur": round(runtime_s - t_outro, 2)},

@@ -47,18 +47,7 @@
    }
   },
   {
-   "slot": "page enter 6 (spiral)",
-   "at": 75.73,
-   "gain": 0.12,
-   "fade_in": 0.0,
-   "variants": {
-    "A": "fs-whoosh-3-spiral-in.mp3",
-    "B": "fs-whoosh-3-648729.mp3",
-    "C": "fs-swirl-in-478722.mp3"
-   }
-  },
-  {
-   "slot": "landing 6 (throw, paper)",
+   "slot": "landing 5 (throw, paper)",
    "at": 76.21,
    "gain": 0.12,
    "fade_in": 0.0,
@@ -67,6 +56,15 @@
     "B": "fs-page-stroke-447925.mp3"
    },
    "note": "contact at 76.25s, the cue one frame early (the report Q5: 0 to -1 frame); a documented hit file for metal is still to find"
+  },
+  {
+   "slot": "page enter 6",
+   "at": 76.83,
+   "gain": 0.12,
+   "fade_in": 0.0,
+   "variants": {
+    "A": "fs-page-roll-464302.mp3"
+   }
   },
   {
    "slot": "hook bed",

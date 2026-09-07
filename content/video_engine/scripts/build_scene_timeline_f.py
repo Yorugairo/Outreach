@@ -49,7 +49,7 @@ import ledger_page as LPG  # noqa: E402  (series.json -> ledger_page.v1 spec, do
 
 LEDGER_PREFIX = "ledger:"          # shot-table plate id prefix for a LEDGER PAGE world (s9.28 surface = page)
 LEDGER_ID_PARTS = (3, 7)           # ledger:<series>:<variant>[:<emphasize>[:<quiet_zone>[:<enter>[:<exit>]]]]  enter = spiral | mount=<seconds>; exit = cut
-LEDGER_ENTERS = ("spiral", "mount", "morph")   # enter=morph[=<s>]: the page's prop outline (world.morph) becomes the chart by ARAP (P47 T3); enter=spiral: the page RETURNS - unwinds from its point, no roll/soak/ink/build (E25; 2026-09-05)
+LEDGER_ENTERS = ("spiral", "mount", "morph", "snap")   # enter=snap=<dock asset>: the page arrives BUILT, grown from that landed card's rectangle to the stage (the third watch, 2026-09-07)   # enter=morph[=<s>]: the page's prop outline (world.morph) becomes the chart by ARAP (P47 T3); enter=spiral: the page RETURNS - unwinds from its point, no roll/soak/ink/build (E25; 2026-09-05)
                                       # enter=mount: no roll-out - the outgoing scene fades while the cream plate MOUNTS over it, then the page draws (operator, 2026-09-05)
 KINETICS: dict = {}                # timeline.kinetics - the template's capability flags a build turns on (P39 kill switch; default all off)
 CAPTION_STYLE: str | None = None   # timeline.caption_style - "phrase" on a short: the page lands as one readable phrase, only k-words punctuated (2026-09-05)
@@ -69,7 +69,7 @@ ARRIVALS = ("spring", "throw", "land")            # P47 T1: how a dock or a page
 MASSES = ("paper", "metal", "liquid", "ink")      # P47 T1: the material presets (stopaction.mjs MASS) a throw or a landing settles by
 MORPH_SHAPES = ("tab", "plate", "card")           # P47 T3: the named prop outline a morph page starts from (`;morph=<shape>`; tab is the default)
 PLATE_OPTS = ("idle", "arrive", "mass", "morph")  # the `;key=value` options a plate id may carry
-DOCK_OPTS = ("arrive", "mass")                    # the optional 5th element of a shot row's dock tuple: a dict of these
+DOCK_OPTS = ("arrive", "mass", "centre")          # the optional 5th element of a shot row's dock tuple: a dict of these; centre: True parks the card centred on the page
 TIMED_EXITS = ("dip", "blurzoom")   # ... and only these two read the suffix as SECONDS (suck's is a point)
 DEFAULT_EXIT_DOCKS = "dip"          # E47 #3: was "wipe_right" until 2026-09-06
 DEFAULT_EXIT_BARE = "cut"
@@ -105,10 +105,11 @@ SPECIES_KINDS = ("punch", "callout", "focus_zoom", "spotlight", "squiggle",
                  "build_to", "bracket", "retitle", "relight",   # PAGE species (P47 T2, build-on): the page performs on a word - a ledger
                                                # page only; build_to caps the drawn series at a datum, bracket spans two data, retitle
                                                # rewrites the title, relight re-fires a bracket or the title (SHOT-TABLE-V3-PROPOSAL part B)
-                 "undraw", "figure")           # E50 (P47 T6): a chart's deployed life is 6-8 s from its last data mark, 12 s at most - then it
+                 "undraw", "figure",           # E50 (P47 T6)
+                 "note")                       # the third watch (P47 T7): a line of handwriting in the page's quiet zone, on a word: a chart's deployed life is 6-8 s from its last data mark, 12 s at most - then it
                                                # UN-DRAWS (the line unwinds from where it stands back to a datum, index 0 = to nothing) or BECOMES
                                                # the next thing: a FIGURE the hand writes at a datum's spot (the treasury number the sentence turns to)
-PAGE_SPECIES = ("build_to", "bracket", "retitle", "relight", "undraw", "figure")   # a page species whose `at` is BEFORE its scene starts is a STATE: the page arrives in that state
+PAGE_SPECIES = ("build_to", "bracket", "retitle", "relight", "undraw", "figure", "note")   # a page species whose `at` is BEFORE its scene starts is a STATE: the page arrives in that state
                                                                 # (a returning page keeps its retitle, its bracket standing); the gate credits no event before the span
 RELIGHT_REFS = ("bracket", "title")
 BRACKET_COLORS = ("crimson", "teal", "cobalt", "amber", "deemph", "neg", "pos")
@@ -128,7 +129,7 @@ SPECIES_TARGETS = {
     "steam": ("region",), "trace": ("region",), "ticker": ("region",),
     "life": (),
     "build_to": ("datum",), "bracket": (), "retitle": (), "relight": (),   # P47 T2: the datum is the cap; the others carry their own fields
-    "undraw": ("datum",), "figure": ("datum",),   # E50: the datum the line unwinds back to (0 = nothing); the datum the figure is pinned to
+    "undraw": ("datum",), "figure": ("datum",), "note": (),   # E50: the datum the line unwinds back to (0 = nothing); the datum the figure is pinned to
 }
 TARGET_FIELDS = {"datum": ("index",), "point": ("x", "y"),
                  "region": ("x0", "y0", "x1", "y1"), "span": ("from_word", "to_word")}
@@ -197,6 +198,9 @@ def _validate_page_fields(kind: str, entry: dict) -> list[str]:
     elif kind == "undraw":
         if "series" in entry and not is_idx(entry["series"]):
             errs.append("undraw: series must be a non-negative integer series index")
+    elif kind == "note":
+        if not isinstance(entry.get("text"), str) or not entry["text"].strip():
+            errs.append("note: needs a non-empty string text (a line the page writes in its quiet zone)")
     return errs
 
 
@@ -353,7 +357,9 @@ def ledger_world(plate_id: str, ken: tuple, ep_dir: Path, dock_badges: list | No
     page = LPG.build_spec(series, variant, emphasize, quiet_zone)
     if enter:
         page["enter"] = enter.split("=")[0]   # the player: a returning page unwinds from its point (LP_RETRACT.IN); a mount builds its cream first
-        if "=" in enter:
+        if "=" in enter and enter.startswith("snap"):
+            page["snap_from"] = enter.split("=", 1)[1]   # the dock asset the page grows from (the card thrown on the previous scene)
+        elif "=" in enter:
             key = "morph_s" if enter.startswith("morph") else "mount_s"   # the mount phase (world fades, cream builds) before the page's own clock starts; a morph's seconds
             page[key] = float(enter.split("=", 1)[1])
     if exit_:
@@ -407,6 +413,10 @@ def dock_opts(raw) -> dict:
     for k, v in raw.items():
         if k not in DOCK_OPTS:
             raise ValueError(f"dock option {k!r} is not one of {'|'.join(DOCK_OPTS)}")
+        if k == "centre":
+            if v is not True:
+                raise ValueError("dock: centre must be True (the card parks centred on the page)")
+            continue
         _check_opt(k, v, "dock")
     return dict(raw)
 
@@ -611,6 +621,14 @@ def dock_place(world: dict, aspect: str | None) -> dict | None:
     return page_place(world["page"], aspect or "16:9")
 
 
+def centred_place(place: dict, aspect: str | None) -> dict:
+    """The same card, parked at the stage's centre (the third watch, 2026-09-07: "center dock then retract the host on that
+    chart page"). The width is the page's own placement width; the box sits centred in the stage."""
+    sw, sh = (1080, 1920) if (aspect or "16:9") == "9:16" else (1920, 1080)
+    w = place["w"]; h = dock_card_h(w)
+    return {"x": round((sw - w) / 2), "y": round((sh - h) / 2), "w": w, "h": h}
+
+
 def dock_entry(aid: str, slot: int, enter: float, exitt: float, n_badges: int,
                kind: str = DOCK_KIND_IMAGE, place: dict | None = None, arrive: str | None = None, mass: str | None = None) -> dict:
     """One dock on a compiled scene.
@@ -737,6 +755,7 @@ def main() -> int:
                 raise SystemExit(f"FAIL: shot row {i + 1} ({a}-{b}s) dock {aid}: {exc}") from exc
             d = META.get(aid, {"title": aid, "source": "", "species": "deck",
                                "badges": []})
+            dplace = centred_place(place, ASPECT) if (place and dopt.get("centre")) else place   # the third watch: the host centred on the last page
             if True:
                 if aid not in evidence:
                     try:

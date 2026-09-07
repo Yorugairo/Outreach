@@ -94,6 +94,12 @@ def main() -> int:
             "mortgage_latest": mort_now[1], "mortgage_latest_date": mort_now[0].isoformat(), "mortgage_rise_bp_from_low": round((mort_now[1] - mort_low[1]) * 100, 1),
             "window_from": start.isoformat(),
         },
+        "notes": [   # the side notes the page writes as the ring is spoken (the third watch: "plenty of space on the side") - every figure from facts
+            "Japan started selling in February.",
+            "Rates went up immediately.",
+            f"10-year +{round((ten_now[1] - ten_low[1]) * 100)} bp, mortgage +{round((mort_now[1] - mort_low[1]) * 100)} bp since the February lows.",
+            f"The Fed's last move: {last_move.strftime('%B %Y')}.",
+        ],
         "proof": proof,
         "note": ("R26-19 / E50 (2026-09-07): the hook's own claim, never charted until now. The window starts 45 days before the Fed's last move "
                  "so the flat line is measured, not cropped. Every number in facts is read from the CSVs in sources/ (sha256 in proof)."),

@@ -1,0 +1,10 @@
+{
+  "name": "remotion-ui-reference",
+  "private": true,
+  "description": "Reference-only harvest of remotion-ui components. Nothing here is wired into the player, the compiler or the gates.",
+  "scripts": {
+    "add": "npx --yes remotion-ui@0.9.0 add",
+    "list": "npx --yes remotion-ui@0.9.0 list",
+    "view": "npx --yes remotion-ui@0.9.0 view"
+  }
+}

@@ -22,15 +22,15 @@ HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 import render_baseline as RB  # noqa: E402
 
-SKELETON = "ledger-soak-page"   # the golden one-scene ledger timeline: its world.page is replaced by ours
+SKELETON = "ledger-soak-page"   # the golden one-scene ledger timeline: its world.page is replaced by ours (16:9); a portrait card sets aspect 9:16 on it
 LAND_T = 8.6                    # ROLL .7 + SAVOR .8 + FIELD 2.4 + PUNCH .5 + BUILD 3.0 = 7.4, plus the badges' settle
 
 
-def page_spec(series: Path, variant: str, emphasize: int | None) -> dict:
+def page_spec(series: Path, variant: str, emphasize: int | None, quiet_zone: str = "right") -> dict:
     """ledger_page.py's spec for the object - the compiler's own path, never a hand-built page."""
     with tempfile.TemporaryDirectory() as td:
         out = Path(td) / "card.page.json"
-        cmd = [sys.executable, str(HERE / "ledger_page.py"), str(series), "--variant", variant, "--quiet-zone", "right", "--out", str(out)]
+        cmd = [sys.executable, str(HERE / "ledger_page.py"), str(series), "--variant", variant, "--quiet-zone", quiet_zone, "--out", str(out)]
         if emphasize is not None:
             cmd += ["--emphasize", str(emphasize)]
         subprocess.run(cmd, check=True, capture_output=True, text=True)
@@ -51,14 +51,18 @@ def page_box(im) -> tuple[int, int, int, int]:
     return xs[0], ys[0], xs[-1] - xs[0] + 1, ys[-1] - ys[0] + 1
 
 
-def render_card(series: Path, out: Path, variant: str = "line", emphasize: int | None = None, width: int = 720, t: float = LAND_T) -> Path:
+def render_card(series: Path, out: Path, variant: str = "line", emphasize: int | None = None, width: int = 720, t: float = LAND_T,
+                aspect: str | None = None, quiet_zone: str = "right") -> Path:
+    """`aspect` 9:16 renders the PORTRAIT page (the layout a short's live page takes), so a card that later SNAPS up to become
+    the world matches it to the pixel; the default keeps the skeleton's own 16:9."""
     from PIL import Image
     from playwright.sync_api import sync_playwright
-    tl, uris, _t, aspect = RB.load_surface(SKELETON)
+    tl, uris, _t, aspect0 = RB.load_surface(SKELETON)
+    aspect = aspect or aspect0
     sc = tl["scenes"][0]
-    page = page_spec(series, variant, emphasize)
+    page = page_spec(series, variant, emphasize, quiet_zone)
     scenes = [dict(sc, species=[], docks=[], world=dict(sc["world"], page=page, ken_burns={"scale": 0, "x": 0, "y": 0}))]
-    tl2 = dict(tl, scenes=scenes, caption_pages=[], captions=[], kinetics=dict(tl.get("kinetics") or {}, idle=False))
+    tl2 = dict(tl, aspect=aspect, scenes=scenes, caption_pages=[], captions=[], kinetics=dict(tl.get("kinetics") or {}, idle=False))
     w, h = RB.STAGE[aspect]
     with tempfile.TemporaryDirectory() as td:
         html = Path(td) / "card.html"
@@ -89,8 +93,9 @@ def main() -> int:
     ap.add_argument("series"); ap.add_argument("out")
     ap.add_argument("--variant", default="line"); ap.add_argument("--emphasize", type=int, default=None)
     ap.add_argument("--width", type=int, default=720); ap.add_argument("--t", type=float, default=LAND_T)
+    ap.add_argument("--aspect", default=None, choices=[None, "16:9", "9:16"])
     a = ap.parse_args()
-    p = render_card(Path(a.series), Path(a.out), a.variant, a.emphasize, a.width, a.t)
+    p = render_card(Path(a.series), Path(a.out), a.variant, a.emphasize, a.width, a.t, a.aspect)
     from PIL import Image
     print(f"card {p} {Image.open(p).size}")
     return 0

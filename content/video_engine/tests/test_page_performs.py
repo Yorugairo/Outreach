@@ -53,15 +53,17 @@ needs_browser = pytest.mark.skipif(not _chromium_available(), reason="playwright
 
 
 def test_the_four_page_species_are_kinds_and_take_their_own_fields():
-    for k in ("build_to", "bracket", "retitle", "relight", "undraw", "figure"):
+    for k in ("build_to", "bracket", "retitle", "relight", "undraw", "figure", "note"):
         assert k in B.SPECIES_KINDS and k in B.PAGE_SPECIES
+    assert B.SPECIES_TARGETS["note"] == ()
     assert B.SPECIES_TARGETS["build_to"] == ("datum",) and B.SPECIES_TARGETS["undraw"] == ("datum",) and B.SPECIES_TARGETS["figure"] == ("datum",)
     ok = [{"kind": "build_to", "at": 4.4, "dur": 3.0, "target": {"kind": "datum", "index": 5}},
           {"kind": "bracket", "at": 15.0, "dur": 2.0, "from": 5, "to": 9, "label": "-$122.6B", "sub": "a tenth of the pile", "color": "neg"},
           {"kind": "retitle", "at": 19.0, "dur": 2.0, "text": "The opponent: a balance sheet"},
           {"kind": "relight", "at": 22.0, "dur": 1.0, "ref": "bracket", "index": 0},
           {"kind": "undraw", "at": 24.0, "dur": 1.5, "target": {"kind": "datum", "index": 0}},
-          {"kind": "figure", "at": 25.5, "dur": 1.5, "target": {"kind": "datum", "index": 5}, "text": "$1,239.3B", "sub": "February 2026", "dy": -0.5}]
+          {"kind": "figure", "at": 25.5, "dur": 1.5, "target": {"kind": "datum", "index": 5}, "text": "$1,239.3B", "sub": "February 2026", "dy": -0.5},
+          {"kind": "note", "at": 26.0, "dur": 1.2, "text": "Japan started selling in February."}]
     assert B.validate_species(ok, (0.0, 0, 0), LEDGER) == []
 
 
@@ -77,6 +79,7 @@ def test_the_four_page_species_are_kinds_and_take_their_own_fields():
     ({"kind": "undraw", "at": 1.0, "dur": 1.0}, "no declared target"),
     ({"kind": "figure", "at": 1.0, "dur": 1.0, "target": {"kind": "datum", "index": 2}}, "non-empty string text"),
     ({"kind": "figure", "at": 1.0, "dur": 1.0, "target": {"kind": "datum", "index": 2}, "text": "$1B", "dy": "up"}, "dy must be a number"),
+    ({"kind": "note", "at": 1.0, "dur": 1.0}, "non-empty string text"),
 ])
 def test_a_page_species_missing_its_field_is_a_build_error_naming_the_field(entry, needle):
     errs = B.validate_species([entry], (0.0, 0, 0), LEDGER)
@@ -134,6 +137,24 @@ def test_m21_the_deployed_life_runs_from_the_last_data_mark_to_the_exit_or_the_u
     assert G._deployed_gate([{"scene_id": "p", "span": [0.0, 30.0], "world": {"kind": "clip"}, "species": []}]) is None, "ledger pages only"
     ev = G._species_events([_scene(und)])
     assert 18.0 in ev and 19.2 in ev and 19.5 in ev and 21.0 in ev, "an undraw and a figure are events at both ends"
+
+
+def test_m22_a_push_is_tied_to_a_landing_or_it_is_filler():
+    """E51 (the third watch): the 1:14 push on the Meta page zoomed on a bar that landed five seconds earlier - filler."""
+    cap = {"kind": "build_to", "at": 4.4, "dur": 3.0, "target": {"kind": "datum", "index": 3}}
+    tied = {"kind": "punch", "at": 7.6, "dur": 0.9, "target": {"kind": "datum", "index": 3}}        # 0.2 s after the cap lands
+    late = {"kind": "punch", "at": 12.4, "dur": 0.9, "target": {"kind": "datum", "index": 3}}       # 5 s after anything landed
+    assert G._untied_pushes([_scene([cap, tied])]) == []
+    assert G._untied_pushes([_scene([cap, late])]) == [("s01", "punch", 12.4)]
+    g = G._push_tie_gate([_scene([cap, late])])
+    assert g.id == "M22" and g.level == "WARN" and "0:12" in g.message
+    assert G._push_tie_gate([_scene([cap])]) is None, "no push, no row"
+    sc = _scene([late]); sc["docks"] = [{"slide": "dock-x", "enter": 11.9, "exit": 20.0, "arrive": "throw"}]
+    assert G._untied_pushes([sc]) == [], "a card's contact (enter + 0.46 on a throw) is a landing the push may ride"
+    br = {"kind": "bracket", "at": 10.0, "dur": 2.0, "from": 3, "to": 9, "label": "x"}
+    assert G._untied_pushes([_scene([cap, br, late])]) == [], "the bracket's label landing at 12.0 ties the push at 12.4"
+    sp = _scene([]); sp["world"]["page"]["enter"] = "snap"
+    assert G._page_land_offset(sp) == 0.0 and G._deployed_lives([sp])[0][1] == 0.0, "a snapped page arrives built: its mark is its entry"
 
 
 # ---- the browser ----------------------------------------------------------------------------------
@@ -287,8 +308,10 @@ def test_undraw_unwinds_the_line_to_nothing_and_the_figure_writes_at_the_datum()
         gone = [p for p in P.probe(T_UNDRAW + UNDRAW_S + 0.05)["paths"] if not p["muted"] and p["pts"]]
         assert all(p["frac"] < 0.005 for p in gone), "to nothing"
         assert P.probe(T_FIGURE - 0.1)["figures"][0]["opacity"] == 0, "the figure waits for its word"
-        early = P.probe(T_FIGURE + FIGURE_S * 0.2)["figures"][0]
-        assert early["opacity"] == 1 and "scale(" in early["dot"] and all(o < 0.5 for o in early["label"]), "the dot pops first, the figure is not yet written"
+        early = P.probe(T_FIGURE + FIGURE_S * 0.05)["figures"][0]
+        assert early["opacity"] == 1 and any(o < 0.5 for o in early["label"]), "the figure is being written, glyph by glyph - no pin dot (the third watch)"
+        gone2 = [p for p in P.probe(T_FIGURE + FIGURE_S)["paths"] if not p["muted"] and p["pts"]]
+        assert all(p["hidden"] for p in gone2), "an un-drawn path is hidden outright - no zero-length cap dot lingers"
         done = P.probe(T_FIGURE + FIGURE_S)["figures"][0]
         assert all(o >= 0.999 for o in done["label"]), "written"
         D = done["D"]; lp = P.probe(T_FIGURE + FIGURE_S)["linePts"][0][peak]

@@ -1510,3 +1510,20 @@ the chart to stay still while a video plays in a dock."*
 4. **The species this needs.** `undraw` (the reverse of `build_to`, which is `Math.max`-guarded today and never retracts);
    the figure written by the hand where the ink ends; the same object in another form (`bars`, a comparison) as a
    transformation on the page rather than a new page - backlog R26-18 / R26-19.
+
+## E51 — A push-in is only used tied to something that just landed; an untied zoom is filler (2026-09-07)
+
+The operator, on v3's third watch: *"The push-in doesn't make sense - we are using it randomly it seems, it is a motion that
+should only be used tagged to something - pushing into a newly landed badge or data series. Right now, it reads as cheap filler
+motion because we just zoom in on something on the chart, then zoom back out, but that punctuation didn't actually mean
+anything."* And, naming it: *"the weak push-in I'm referencing is the 1:14 during the Meta beat."*
+
+1. **The rule.** A push (`punch`, `focus_zoom`) is punctuation on an ARRIVAL: it lands on a thing that just landed - a badge,
+   a datum a build reached, a bracket's label, a figure, a card thrown or landed, a page's chart landing. A push onto a thing
+   that has been sitting there is filler and is cut. The 1:14 push zoomed on the 5.5 % bar five seconds after it landed.
+2. **The tie.** Tied = a landing on the push's scene inside (at - 1.5 s, at + 0.3 s) `[DERIVED: E45's spring-in span plus
+   the read]`. The gate's **M22** names every untied push (WARN).
+3. **The push that is the arrival.** The largest legal push is the SNAP: a landed card grows to become the world (P47 T7's
+   `snap` page enter, the third watch: "throw it, then immediately zoom/snap to it to bring it to the full world-stage").
+4. **Applied.** v3's two punches (the catalyst's on the returning peak; the Meta beat's on the 5.5 % bar) are cut; the
+   ring's snap stands.
