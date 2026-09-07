@@ -242,3 +242,15 @@ def test_a_form_failure_with_no_conversation_queues_nothing(tmp_path: Path):
     _replied(repo, "orig5", {"replyShape": "paths-written"}, "no grammar", minutes_ago=5, conversation=None)
     BD.step_tier0(_tick(repo, grace_min=1))
     assert BD.packets(repo, "queue") == [] and _rows(repo) == []
+
+
+def test_a_packet_landed_twice_supersedes_the_older_copy_instead_of_crashing_the_loop(tmp_path: Path):
+    repo = _repo(tmp_path)
+    f = tmp_path / "a.md"; f.write_text("x", encoding="utf-8")
+    stale = BE.packet_dir(repo, "twice", "done"); stale.mkdir(parents=True)
+    (stale / "reply.md").write_text("the older landing", encoding="utf-8")
+    _replied(repo, "twice", {"replyShape": "paths-written"}, GRAMMAR.format(paths=str(f)), minutes_ago=1)
+    BD.step_tier0(_tick(repo, grace_min=1))
+    assert (BE.packet_dir(repo, "twice", "done") / "reply.md").read_text(encoding="utf-8") != "the older landing", "the newer landing is the one in done/"
+    kept = [p for p in (repo / BE.BRIDGE_ROOT / "done").iterdir() if p.name.startswith("twice.superseded-")]
+    assert len(kept) == 1 and (kept[0] / "reply.md").read_text(encoding="utf-8") == "the older landing", "the older copy is kept beside it, never deleted"

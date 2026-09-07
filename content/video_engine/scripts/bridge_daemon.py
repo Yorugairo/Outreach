@@ -329,6 +329,18 @@ def minutes_since(when: dt.datetime | None) -> float | None:
     return None if when is None else (now() - when).total_seconds() / 60.0
 
 
+def move_or_supersede(tick: Tick, packet: str, from_state: str, to_state: str) -> Path:
+    """`move_packet`, tolerant of a destination that already exists (a packet reset by hand and landed twice - 2026-09-07 03:2x
+    crashed the loop on FileExistsError): the older copy is renamed `<packet>.superseded-<stamp>` beside it and the newer one
+    moves in. Nothing is deleted."""
+    dst = env_mod.packet_dir(tick.repo, packet, to_state)
+    if dst.exists():
+        stale = dst.with_name(f"{packet}.superseded-{stamp().replace(':', '').replace('-', '')[:15]}")
+        dst.rename(stale)
+        tick.say(f"SUPERSEDED {packet[:12]} in {to_state}: the older copy kept as {stale.name[-30:]}")
+    return env_mod.move_packet(packet, from_state, to_state, repo=tick.repo)
+
+
 def step_tier0(tick: Tick) -> None:
     for folder in packets(tick.repo, "replied"):
         if (folder / "tier0.json").exists():
@@ -337,7 +349,7 @@ def step_tier0(tick: Tick) -> None:
                 # checked on an earlier tick (or reopened by hand) and never moved: finish the move, no re-check, no ledger
                 order = read_json(folder / "order.json")
                 packet = order.get("packetId") or folder.name
-                env_mod.move_packet(packet, "replied", "done", repo=tick.repo)
+                move_or_supersede(tick, packet, "replied", "done")
                 tick.say(f"TIER0-DONE {packet[:12]} (prior verdict, moved)")
             continue
         order = read_json(folder / "order.json")
@@ -354,7 +366,7 @@ def step_tier0(tick: Tick) -> None:
             if outcome.get("class") == handlers.CLASS_FORM and not order.get("repairs") and not (folder / REPAIR_MARKER).exists():
                 queue_repair(tick, folder, order, packet, outcome)   # P46 T7: one repair round, at zero Claude tokens, before tier 1
             continue
-        env_mod.move_packet(packet, "replied", "done", repo=tick.repo)
+        move_or_supersede(tick, packet, "replied", "done")
         tick.summary["tier0_done"] += 1
         tick.say(f"TIER0-DONE {packet[:12]} shape={outcome['shape']}")
         if order.get("repairs"):
@@ -424,7 +436,7 @@ def close_repaired(tick: Tick, original: str, repair_packet: str) -> None:
         return
     prior = read_json(folder / "tier0.json")
     env_mod.write_json(folder / "tier0.json", {**prior, "pass": True, "repairedBy": repair_packet, "closedAt": stamp()})
-    env_mod.move_packet(original, "replied", "done", repo=tick.repo)
+    move_or_supersede(tick, original, "replied", "done")
     tick.say(f"REPAIRED {original[:12]} by {repair_packet[:12]}")
     tick.ledger({"lane": None, "packetId": original, "event": "repaired", "repairPacket": repair_packet})
 
