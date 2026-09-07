@@ -3,12 +3,12 @@
 ```text
 === MOTION DENSITY GATE: C:\Users\Snipe\Downloads\Outreach Program\content\video_engine\projects\systems-and-blowups\tokyo-tea-break\build-short ===
                runtime: 1:28
-         visual_events: 286 (193.2/min)
+         visual_events: 290 (195.9/min)
                  docks: 4
            dock_source: timeline
           ledger_pages: 4
   still_over_12s_share: 0%
-            per_minute: 0:00:205/6 1:00:167/4
+            per_minute: 0:00:205/6 1:00:175/4
 
   [WARN ] M11 first chart ledger:s02 enters at 2.0s, its build lands at 10.7s, with callout at 10.8s; WARN no sound cue within 1.5s of the enter at 2.0s; window 0-10s (E44 short: the page rolls out on the hook - the chart is the mechanism by 0:10)
           E24 / doc 29 s9.29 (long form) + E44 (short): the first chart enters 0:08-0:20, or 0:00-0:10 on a short, annotated on its divergence, with a sound cue
@@ -38,7 +38,7 @@
           E40 #5 (operator, 2026-09-05): no spotlight on a spiral out - no species window overlaps a page's retract
   [PASS ] M16 longest gap between visual events 1.3s at 0:26; 0 gap(s) over 2.5s
           doc 49 s49.6 / operator 2026-09-05: the short-form gate is the pulse - no gap between visual events over 2.5 s; no ceiling
-  [INFO ] M07 short: 1 full minute(s) in 89s - opening 205.0 events/min, 6.0 evidence entries/min; tail from 1:00 166.5/min; whole runtime 191.8/min - no minute distribution to rank in (E21 is judged on the whole)
+  [INFO ] M07 short: 1 full minute(s) in 89s - opening 205.0 events/min, 6.0 evidence entries/min; tail from 1:00 174.9/min; whole runtime 194.5/min - no minute distribution to rank in (E21 is judged on the whole)
           E21: the opening is the densest minute, never the thinnest
   [JUDGE] J01 every savor beat holds its picture (card up, badge lit), never a bare plate with a drift
           doc 29 s9.25 #3
@@ -46,5 +46,5 @@
 RESULT: 0 FAIL / 1 WARN / 13 PASS / 1 JUDGE / 1 INFO
 ```
 
-TIMELINE: tokyo-short.timeline.json sha256:80649713cf19b0c4482ae98c59ea2c230b8e475b81559692c6c94bdd862736bd
+TIMELINE: tokyo-short.timeline.json sha256:b8096c6cc455de3792a75dd382109eac67c2e592d49e027c8186fd79036d4975
 VERDICT: PASS (0 FAIL)

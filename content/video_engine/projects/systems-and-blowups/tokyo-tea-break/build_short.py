@@ -296,9 +296,9 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float | None = None) -
             {"kind": "callout", "at": t_relit, "dur": 2.0, "target": datum(LAST_IDX)},
         ]),
         # 7 the host, mounted on "still ours" (s9.15: a mount is a dissolve on a word) - the last image before the card
-        (t_ours, t_outro, clip("clip-a2-counter-colder-v2.mp4"), (0, 0, 0), [], "dissolve", None),
+        (t_ours, t_outro, clip("clip-a2-counter-colder-v2.mp4"), (0, 0, 0), [], "dip", None),   # E47: a world change (page -> clip) dips through black, 0.47 s
         # 8 the outro: the Remotion kit's card dissolving in over the ring clip; `life` so the pulse gate credits its drift
-        (t_outro, runtime_s, clip("outro-v2.mp4", OUTRO), (0, 0, 0), [], "dissolve", [
+        (t_outro, runtime_s, clip("outro-v2.mp4", OUTRO), (0, 0, 0), [], "dip", [   # E47: the card is a world change - the dip, not the dissolve
             {"kind": "life", "at": t_outro, "dur": round(runtime_s - t_outro, 2)},
         ]),
     ]

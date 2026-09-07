@@ -6536,7 +6536,7 @@
      "y": 0
     }
    },
-   "exit": "dissolve",
+   "exit": "dip",
    "span": [
     81.55,
     82.62
@@ -6556,7 +6556,7 @@
      "y": 0
     }
    },
-   "exit": "dissolve",
+   "exit": "dip",
    "span": [
     82.62,
     88.82
