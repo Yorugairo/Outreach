@@ -1,7 +1,7 @@
-# MOTION GATE — build-short
+# MOTION GATE — build-short.v2-pre-e49
 
 ```text
-=== MOTION DENSITY GATE: content\video_engine\projects\systems-and-blowups\tokyo-tea-break\build-short ===
+=== MOTION DENSITY GATE: content\video_engine\projects\systems-and-blowups\tokyo-tea-break\build-short.v2-pre-e49 ===
                runtime: 1:28
          visual_events: 290 (195.9/min)
                  docks: 4
@@ -38,7 +38,7 @@
           E40 #5 (operator, 2026-09-05): no spotlight on a spiral out - no species window overlaps a page's retract
   [PASS ] M16 longest gap between visual events 1.3s at 0:26; 0 gap(s) over 2.5s
           doc 49 s49.6 / operator 2026-09-05: the short-form gate is the pulse - no gap between visual events over 2.5 s; no ceiling
-  [PASS ] M18 no run of bit-identical frames over 0.50s (1066 frames at 12 fps, 0:00-1:28); longest 0.08s at 0:19
+  [PASS ] M18 no run of bit-identical frames over 0.50s (1066 frames at 12 fps, 0:00-1:28); longest 0.33s at 1:01
           E49 / P47 T5: nothing ever goes truly still - a run of identical rendered frames over 0.5 s is a freeze (measure_frozen_frames.py)
   [INFO ] M07 short: 1 full minute(s) in 89s - opening 205.0 events/min, 6.0 evidence entries/min; tail from 1:00 174.9/min; whole runtime 194.5/min - no minute distribution to rank in (E21 is judged on the whole)
           E21: the opening is the densest minute, never the thinnest
@@ -48,5 +48,5 @@
 RESULT: 0 FAIL / 1 WARN / 14 PASS / 1 JUDGE / 1 INFO
 ```
 
-TIMELINE: tokyo-short.timeline.json sha256:fe3569ee7e99d912a1d136f055ec8581c3bfbad091219d8b02ba698df397ada5
+TIMELINE: tokyo-short.timeline.json sha256:b8096c6cc455de3792a75dd382109eac67c2e592d49e027c8186fd79036d4975
 VERDICT: PASS (0 FAIL)

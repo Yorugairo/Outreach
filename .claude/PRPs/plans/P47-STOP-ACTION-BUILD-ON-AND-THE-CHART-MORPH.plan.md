@@ -139,13 +139,29 @@ real page in the player.
 - Evidence: pending
 
 ### T5: The idle - nothing ever goes truly still (E49)
-- Status: running
+- Status: complete
 - Owner: implementation_luna
 - Depends on: none (small; can run first)
 - Write set: the template (an `idle` on every held element: the page's body, a parked dock, badges, the bracket, a plate; kinds `breath` (scale 1-2 %, a slow sine or the stepped clock), `drift` (px/s along a direction), `pulse` (luminance); the figure's asymmetric breath from doc 48 §48.4 as the `figure` kind), `content/video_engine/scripts/kinetics/idle.mjs` (new, synced), `build_scene_timeline_f.py` (defaults per element class; an authored `idle` on a shot row overrides; `idle: none` is explicit), `gate_motion_density.py` (the `frozen frames` row: hashes of rendered frames or the player's per-frame state, a run of identical frames > `FROZEN_MAX_S` WARNs; an idle never counts as an event for M01/M10/M16), tests (`content/video_engine/tests/kinetics/test_idle.py`, the gate test), `CAPABILITIES.md`
 - Acceptance: on the golden ledger scene with no species, two frames 0.5 s apart differ by the idle alone (a measured 1-2 % scale on the page body, nothing else moving); the frozen-frames row WARNs on the pre-E49 build and passes after; the goldens stay byte-identical (idle off on golden timelines by an explicit `idle: none` written into their sources, or the default applies only to timelines that declare `idle`); the Tokyo v3 page never freezes while it holds under a sentence
 - Validate: `python -m pytest content/video_engine/tests/kinetics/test_idle.py content/video_engine/tests/test_gate_motion_density.py content/video_engine/tests/test_golden_frames.py content/video_engine/tests/test_render_determinism.py -q -p no:cacheprovider; python content/video_engine/scripts/sync_kinetics.py --check`
-- Evidence: pending
+- Evidence (2026-09-06, commit d39a08e + this): `kinetics/idle.mjs` synced (6 modules in sync); `node --test` 40 pass; pytest
+  `test_idle_e49.py test_kinetics_flags.py test_gate_motion_density.py test_golden_frames.py test_render_determinism.py
+  test_video_dock.py test_transitions_e47.py` = **126 passed in 119.69s** (the five base goldens + six flag goldens byte-identical;
+  the new flag golden `ledger-soak-page@idle` at t=11.0). **The freeze, then its cure (browser, the soak golden's page under a bare
+  hold - captions off, Ken Burns zeroed):** flag off, the frames at 11.0 s and 11.5 s hash identical (the frozen frame E49 names);
+  flag on, they differ, the page's box breathes 1.0092 at the sampled t and its width ratio over a 4 s period sits in (1.008, 1.02)
+  (dial 1.2 %), the transform string is `translate(0px, 0px) scale(1.00xx)` - scale only - and a seek is the play. **The golden
+  itself carried a 0.04 Ken Burns push** (capped to 0.03 by the player): the blunt cure E49 retires, found by the test the moment
+  it was written. **Tokyo v2 measured at 12 fps (1066 frames, `measure_frozen_frames.py`):** pre-E49 build (preserved as
+  `build-short.v2-pre-e49/`, its `frame-hashes.json` + `GATES-MOTION.md` beside it) - 1036 distinct frames of 1066, longest
+  identical run 5 frames = 0.33 s at 1:01, **M18 PASS**; rebuilt with `kinetics.idle` on - 1065 distinct of 1066, longest run
+  2 frames = 0.08 s at 0:19, **M18 PASS**, VERDICT PASS (0 FAIL / 1 WARN / 14 PASS). **Finding, stated plainly:** the acceptance
+  assumed the pre-E49 build would WARN; it does not, because a short's PHRASE captions boil at 10 fps on every landed word for the
+  whole runtime (E49 s1: the captions were already at an idle) and a video dock moves - the whole-frame hash cannot see a frozen
+  page beneath a boiling caption. The per-element freeze is proven on the golden (captions off); M18 as built is the necessary
+  whole-frame check, and a per-layer hash (the caption and dock layers hidden) is the sharper tool - backlog R26-13. The Tokyo v2
+  player on :8731 now carries the idle (the operator's watch is still pending; nothing rendered).
 
 ## Verification
 
