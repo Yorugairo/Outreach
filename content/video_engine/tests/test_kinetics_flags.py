@@ -29,7 +29,8 @@ import render_baseline as RB  # noqa: E402
 CAPABILITIES = ["curvature_stroke", "analytic_spring", "area_squash", "arap_morph", "dqs_skinning", "prop_attach",
                 "min_jerk",    # + the minimum-jerk transition (FINDING-the-animation-math s2, 2026-09-05)
                 "km_ink",      # + Kubelka-Munk on overlapping ink (44 s44.1, P43 T3, 2026-09-05)
-                "idle"]        # + the named subtle idle on every held thing (E49, P47 T5, 2026-09-06)
+                "idle",        # + the named subtle idle on every held thing (E49, P47 T5, 2026-09-06)
+                "stop_action"] # + the arrivals: throw / land with a mass (P47 T1, 2026-09-06; authored per dock, so no flag golden)
 
 
 def _defaults_block() -> dict[str, str]:

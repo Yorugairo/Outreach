@@ -3550,7 +3550,9 @@
      },
      "read_s": 1.2,
      "park_s": 0.7,
-     "park": true
+     "park": true,
+     "arrive": "throw",
+     "mass": "paper"
     },
     {
      "slide": "dock-a2-counter-colder",
@@ -3584,7 +3586,9 @@
      },
      "read_s": 1.2,
      "park_s": 0.7,
-     "park": true
+     "park": true,
+     "arrive": "land",
+     "mass": "metal"
     }
    ],
    "species": [
@@ -6623,6 +6627,7 @@
  ],
  "kinetics": {
   "idle": true,
+  "stop_action": true,
   "analytic_spring": true,
   "min_jerk": true,
   "area_squash": true,

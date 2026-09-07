@@ -269,9 +269,12 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float | None = None) -
         #   ride a page's exit (E40 #5). The callout cannot land on "climbed anyway" (8.0): the page's own build lands at
         #   t_page + 7.4 and the operator's ruling is no highlight over the charcoal build - so the -$122.6B lands there.
         (t_mount, t_promise, hold + f":mount={mount_hook}:cut", (0, 0, 0), [   # E45 s2: the mount, not a cut into the roll-out
-            (dock_still("dock-c-blue-ties-panel"), 0, t_panel, t_sixty),
+            # V3 second pass (P47 T1, HG2 - judged by eye): the panel is THROWN onto the page on "Three men" (a prop with a path,
+            # paper), the two fingers LAND with weight on "Two numbers" (the lift, the drop, the impact, the settle); the host
+            # keeps E45's spring so the three arrivals can be compared in one watch
+            (dock_still("dock-c-blue-ties-panel"), 0, t_panel, t_sixty, {"arrive": "throw", "mass": "paper"}),
             (dock_still("dock-a2-counter-colder"), 0, t_sixty, t_watch),
-            (dock_still("dock-g-two-fingers"), 0, t_two, t_promise),
+            (dock_still("dock-g-two-fingers"), 0, t_two, t_promise, {"arrive": "land", "mass": "metal"}),
         ], "cut", [
             # V3: the build stops at the FEBRUARY PEAK ("The Fed hasn't moved, but your borrowing costs climbed anyway"); the coral
             # drop is its own stroke on "watching:", so the June datum is drawn the moment the sentence turns to the lender

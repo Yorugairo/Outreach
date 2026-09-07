@@ -65,6 +65,10 @@ SPECIES_LEDGER = "ledger"          # timeline["species"] entry; the player keys 
 SCENE_EXITS = ("cut", "dip", "blurzoom", "dissolve", "wipe", "wipe_right", "suck")
 IDLE_KINDS = ("none", "breath", "drift", "pulse", "figure")   # E49 / P47 T5: the player's named idles; `;idle=<kind>` on any plate id (`none` is explicit stillness)
 IDLE_OPT = ";idle="
+ARRIVALS = ("spring", "throw", "land")            # P47 T1: how a dock or a page's pills ARRIVE (spring = E45's pop, the default)
+MASSES = ("paper", "metal", "liquid", "ink")      # P47 T1: the material presets (stopaction.mjs MASS) a throw or a landing settles by
+PLATE_OPTS = ("idle", "arrive", "mass")           # the `;key=value` options a plate id may carry
+DOCK_OPTS = ("arrive", "mass")                    # the optional 5th element of a shot row's dock tuple: a dict of these
 TIMED_EXITS = ("dip", "blurzoom")   # ... and only these two read the suffix as SECONDS (suck's is a point)
 DEFAULT_EXIT_DOCKS = "dip"          # E47 #3: was "wipe_right" until 2026-09-06
 DEFAULT_EXIT_BARE = "cut"
@@ -345,24 +349,54 @@ def ledger_world(plate_id: str, ken: tuple, ep_dir: Path, dock_badges: list | No
             "ken_burns": {"scale": ken[0], "x": ken[1], "y": ken[2]}}
 
 
+def _check_opt(key: str, value, where: str) -> None:
+    allowed = {"idle": IDLE_KINDS, "arrive": ARRIVALS, "mass": MASSES}[key]
+    if value not in allowed:
+        raise ValueError(f"{where}: {key} {value!r} is not one of {'|'.join(allowed)}")
+
+
+def split_plate_opts(plate_id: str) -> tuple[str, dict]:
+    """``<plate id>[;idle=<kind>][;arrive=<how>][;mass=<material>]`` -> (the bare plate id, the options). E49's idle and
+    P47 T1's arrivals are NAMED per plate on the shot row; ValueError names the option, the caller names the row."""
+    if ";" not in plate_id:
+        return plate_id, {}
+    bare, *parts = plate_id.split(";")
+    opts: dict = {}
+    for part in parts:
+        if "=" not in part or part.split("=", 1)[0] not in PLATE_OPTS:
+            raise ValueError(f"{plate_id!r}: plate option {part!r} is not one of {'|'.join(k + '=' for k in PLATE_OPTS)}")
+        k, v = part.split("=", 1)
+        _check_opt(k, v, repr(plate_id))
+        opts[k] = v
+    return bare, opts
+
+
 def split_idle(plate_id: str) -> tuple[str, str | None]:
-    """``<plate id>[;idle=<kind>]`` -> (the bare plate id, the idle kind or None). E49: the idle is a NAMED kind
-    the shot row declares per plate; ValueError names the kind, the caller names the row."""
-    if IDLE_OPT not in plate_id:
-        return plate_id, None
-    bare, kind = plate_id.split(IDLE_OPT, 1)
-    if kind not in IDLE_KINDS:
-        raise ValueError(f"{plate_id!r}: idle {kind!r} is not one of {'|'.join(IDLE_KINDS)}")
-    return bare, kind
+    """The idle option alone (E49) - see split_plate_opts."""
+    bare, opts = split_plate_opts(plate_id)
+    return bare, opts.get("idle")
+
+
+def dock_opts(raw) -> dict:
+    """The optional 5th element of a dock tuple: ``{"arrive": spring|throw|land, "mass": paper|metal|liquid|ink}`` (P47 T1).
+    ValueError names the key; the caller names the row."""
+    if raw is None:
+        return {}
+    if not isinstance(raw, dict):
+        raise ValueError(f"dock options must be a dict of {'|'.join(DOCK_OPTS)}, not {raw!r}")
+    for k, v in raw.items():
+        if k not in DOCK_OPTS:
+            raise ValueError(f"dock option {k!r} is not one of {'|'.join(DOCK_OPTS)}")
+        _check_opt(k, v, "dock")
+    return dict(raw)
 
 
 def world_for_plate(plate_id: str, ken: tuple, ep_dir: Path, meta: dict | None = None) -> dict:
     """A scene's ``world`` for a shot-table plate id, with E49's ``;idle=<kind>`` option stripped off and carried
     as ``world["idle"]`` (the player reads it for the page or the plate; absent = the class default)."""
-    bare, idle = split_idle(plate_id)
+    bare, opts = split_plate_opts(plate_id)
     world = _world_for_bare_plate(bare, ken, ep_dir, meta)
-    if idle is not None:
-        world["idle"] = idle
+    world.update(opts)   # idle (E49), arrive / mass (P47 T1) - written only when the row names them
     return world
 
 
@@ -558,7 +592,7 @@ def dock_place(world: dict, aspect: str | None) -> dict | None:
 
 
 def dock_entry(aid: str, slot: int, enter: float, exitt: float, n_badges: int,
-               kind: str = DOCK_KIND_IMAGE, place: dict | None = None) -> dict:
+               kind: str = DOCK_KIND_IMAGE, place: dict | None = None, arrive: str | None = None, mass: str | None = None) -> dict:
     """One dock on a compiled scene.
 
     Spans come from the dock: evidence enters before its claim and holds through the whole
@@ -577,6 +611,7 @@ def dock_entry(aid: str, slot: int, enter: float, exitt: float, n_badges: int,
         **({"kind": DOCK_KIND_VIDEO} if kind == DOCK_KIND_VIDEO else {}),
         **({"place": place, "read_s": DOCK_READ_S, "park_s": DOCK_PARK_S,
             "park": span >= DOCK_READ_S + DOCK_PARK_S} if place else {}),
+        **({"arrive": arrive} if arrive else {}), **({"mass": mass} if mass else {}),   # P47 T1: only when the row names them
     }
 
 
@@ -621,7 +656,7 @@ def build_kinetics() -> dict:
     """The flags a compiled timeline carries. P39: every capability defaults OFF in the template. E49 (P47 T5): the
     IDLE is on for every timeline this compiler writes - a build that wants stillness says so (``KINETICS["idle"] =
     False``); the goldens' frozen sources carry no flag and stay byte-identical."""
-    return {"idle": True, **KINETICS}
+    return {"idle": True, "stop_action": True, **KINETICS}   # P47 T1: an authored `arrive` is the switch; the flag only guards the goldens
 
 
 def main() -> int:
@@ -675,7 +710,11 @@ def main() -> int:
         # page's own geometry. Only the SOLO card (slot 0) is placed - a paired/stacked dock keeps
         # the layout its slot declares, and a plain plate keeps the solo card entirely.
         place = dock_place(world, ASPECT)
-        for aid, slot, enter, exitt in ds:
+        for aid, slot, enter, exitt, *dextra in ds:   # P47 T1: an optional 5th element names how the card arrives
+            try:
+                dopt = dock_opts(dextra[0] if dextra else None)
+            except ValueError as exc:
+                raise SystemExit(f"FAIL: shot row {i + 1} ({a}-{b}s) dock {aid}: {exc}") from exc
             d = META.get(aid, {"title": aid, "source": "", "species": "deck",
                                "badges": []})
             if True:
@@ -733,7 +772,7 @@ def main() -> int:
                     uris[aid] = dock_uri(ap)
                 docks.append(dock_entry(aid, slot, enter, exitt, len(d["badges"]),
                                         evidence[aid].get("kind", DOCK_KIND_IMAGE),
-                                        place if slot == 0 else None))
+                                        place if slot == 0 else None, dopt.get("arrive"), dopt.get("mass")))
         try:
             exit_id, exit_s = scene_exit(authored_exit, bool(docks))
         except ValueError as exc:

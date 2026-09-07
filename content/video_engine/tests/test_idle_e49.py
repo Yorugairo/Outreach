@@ -90,9 +90,10 @@ def test_world_for_plate_carries_the_idle_and_strips_it_from_the_id(tmp_path: Pa
 
 def test_every_compiled_timeline_turns_the_idle_on_unless_the_build_says_otherwise(monkeypatch):
     monkeypatch.setattr(B, "KINETICS", {})
-    assert B.build_kinetics() == {"idle": True}
+    assert B.build_kinetics()["idle"] is True
     monkeypatch.setattr(B, "KINETICS", {"analytic_spring": True, "idle": False})
-    assert B.build_kinetics() == {"analytic_spring": True, "idle": False}, "stillness is explicit"
+    k = B.build_kinetics()
+    assert k["idle"] is False and k["analytic_spring"] is True, "stillness is explicit"
 
 
 def test_golden_sources_carry_no_idle_flag_so_they_stay_byte_identical():

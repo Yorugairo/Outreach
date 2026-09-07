@@ -47,6 +47,8 @@ captions do NOT count - they are what a viewer reads as stillness.
        frames longer than 0.5s, read from frame-hashes.json          measure_frozen_frames.py has run)
   M19  build_to holds (P47 T2): the line resting at a datum   INFO   (only when a build_to is declared)
        between two caps, listed by name
+  M20  the cadence rule per arrival (P47 T1): a thrown card  INFO   (only when a dock arrives by throw|land)
+       steps on 1s above 250 px/s, on 2s below
   J01  savor beats keep their picture (card up, badge lit) JUDGE
 
     python gate_motion_density.py <build-dir> [--timeline NAME.timeline.json]
@@ -64,6 +66,11 @@ from pathlib import Path
 STILL_FAIL_S = 12.0        # doc 29 s8.19 MAX_BARE, s9.25 ceiling
 FROZEN_MAX_S = 0.5         # E49: the longest run of bit-identical rendered frames [DERIVED: HyperFrames' "the final 1-2 seconds"; halved]
 FRAME_HASHES_NAME = "frame-hashes.json"   # written by measure_frozen_frames.py beside the timeline
+STOP_FLIGHT_S = 0.45       # P47 T1 [DERIVED: stopaction.mjs STOP.FLIGHT_S] - a thrown card lands this long after its enter
+STOP_LAND_S = 0.32         # P47 T1 [DERIVED: STOP.ANTIC_S + STOP.DROP_S] - a landed card hits its spot this long after its enter
+STOP_ON1_PX_S = 250        # P47 T1 [DERIVED: CADENCE.ON1_PX_S, the brief :185-193] - faster than this steps on 1s
+STOP_THROW_DX, STOP_THROW_DY, CARD_W_DEFAULT = 240, 160, 864   # the template's throw offsets and the .dock width, mirrored
+SRC_M20 = "P47 T1 (the brief :185-193, the cadence rule): a throw steps on 1s above 250 px/s, on 2s below - reported, not scored, until HG2 tunes it"
 SRC_M18 = "E49 / P47 T5: nothing ever goes truly still - a run of identical rendered frames over 0.5 s is a freeze (measure_frozen_frames.py)"
 STILL_WARN_S = 8.0         # s9.25 working target
 SHORT_PULSE_MAX_S = 2.5    # doc 49 s49.6: a short needs a visual event every 1.2-2.5 s. THE GATE IS THE PULSE (operator, 2026-09-05):
@@ -418,7 +425,7 @@ def analyse(tl: dict, docks: list[dict], mp: dict) -> dict:
     stage_rows += [{"t": float(tok["s"])} for pg in pages if isinstance(pg, dict) and pg.get("cap_mode") == "stage"
                    for tok in (pg.get("t") or []) if isinstance(tok, dict) and tok.get("s") is not None]
     # P35 T7: targeted species fire as tabled in SPECIES_EVENTS (s9.27 gate column)
-    events = _collect_events(tl, mp, spans, badges, page_beats, stage_rows, _species_events(scenes),
+    events = _collect_events(tl, mp, spans, badges, page_beats, stage_rows, _species_events(scenes) + _arrival_events(scenes),   # P47 T1: a throw / a landing is motion
                              _video_dock_events(scenes, docks))   # E44: a live video dock is continuous motion
     ev = sorted(t for t in events if 0.0 <= t <= runtime)
     if not ev or ev[0] > 0:
@@ -525,6 +532,8 @@ def run(tl: dict, docks: list[dict], mp: dict, frames: list[dict] | str | None =
     g.append(_frozen_gate(frames))                                        # M18 (E49: nothing ever goes truly still)
     if (bt := _build_to_gate(tl.get("scenes", []))) is not None:
         g.append(bt)                                                      # M19 (P47 T2: the build_to holds, INFO)
+    if (cg := _cadence_gate(tl.get("scenes", []))) is not None:
+        g.append(cg)                                                      # M20 (P47 T1: the cadence rule per arrival, INFO)
     add("J01", "JUDGE", "every savor beat holds its picture (card up, badge lit), never a bare plate with a drift", "doc 29 s9.25 #3")
     return g, _stats(A, tot)
 
@@ -797,6 +806,39 @@ def _build_to_gate(scenes: list[dict]) -> Gate | None:
     holds = _build_to_holds(scenes)
     msg = (f"{len(holds)} build_to hold(s) - the line rests at a datum until the next word: " + ", ".join(f"{_mm(a)}+{d:.1f}s" for a, d in holds[:8])) if holds else "build_to caps declared; none holds between caps"
     return Gate("M19", "INFO", msg, "P47 T2 (SHOT-TABLE-V3-PROPOSAL part B): a cap is a hold the sentence asked for, not stillness")
+
+
+def _arrivals(scenes: list[dict]) -> list[tuple[float, str, str, float]]:
+    """(enter, slide, arrive, landing time) for every dock that arrives by a throw or a landing (P47 T1)."""
+    out = []
+    for sc in scenes:
+        for d in sc.get("docks", []):
+            arr = d.get("arrive")
+            if arr in ("throw", "land"):
+                out.append((float(d["enter"]), str(d.get("slide", "?")), arr, float(d["enter"]) + (STOP_FLIGHT_S if arr == "throw" else STOP_LAND_S)))
+    return out
+
+
+def _arrival_events(scenes: list[dict]) -> list[float]:
+    """A throw or a landing is motion: its enter and its impact are events (the pop's enter is already the dock's)."""
+    return [round(t, 2) for e, _s, _a, t in _arrivals(scenes)]
+
+
+def _cadence_gate(scenes: list[dict]) -> Gate | None:
+    """M20 (INFO): the cadence rule per thrown card - the flight's speed and the hold it steps on."""
+    arr = _arrivals(scenes)
+    if not arr:
+        return None
+    rows = []
+    for sc in scenes:
+        for d in sc.get("docks", []):
+            if d.get("arrive") == "throw":
+                w = float((d.get("place") or {}).get("w") or CARD_W_DEFAULT)
+                v = ((w + STOP_THROW_DX) ** 2 + STOP_THROW_DY ** 2) ** 0.5 / STOP_FLIGHT_S
+                rows.append(f"{d.get('slide', '?')} throw ~{v:.0f} px/s -> on {1 if v > STOP_ON1_PX_S else 2}s")
+            elif d.get("arrive") == "land":
+                rows.append(f"{d.get('slide', '?')} land ({d.get('mass', 'paper')}) - weight sold {STOP_LAND_S:.2f}s before the impact")
+    return Gate("M20", "INFO", f"{len(arr)} arrival(s): " + "; ".join(rows[:8]), SRC_M20)
 
 
 def _stats(A: dict, still_total: float) -> dict:
