@@ -3605,20 +3605,45 @@
     {
      "kind": "spotlight",
      "at": 19.71,
-     "dur": 2.0,
+     "dur": 1.0,
      "target": {
       "kind": "datum",
       "index": 315
      }
     },
     {
-     "kind": "callout",
+     "kind": "undraw",
+     "at": 21.09,
+     "dur": 1.2,
+     "target": {
+      "kind": "datum",
+      "index": 0
+     }
+    },
+    {
+     "kind": "figure",
      "at": 23.1,
-     "dur": 2.0,
+     "dur": 1.6,
      "target": {
       "kind": "datum",
       "index": 311
-     }
+     },
+     "text": "$1,239.3B",
+     "sub": "February 2026",
+     "dy": -0.7
+    },
+    {
+     "kind": "figure",
+     "at": 25.56,
+     "dur": 1.6,
+     "target": {
+      "kind": "datum",
+      "index": 315
+     },
+     "text": "$1,116.7B",
+     "sub": "June 2026",
+     "color": "neg",
+     "dy": 1.6
     },
     {
      "kind": "retitle",
@@ -6607,13 +6632,15 @@
   "ledger",
   "build_to",
   "spotlight",
-  "callout",
+  "undraw",
+  "figure",
   "retitle",
   "steam",
   "trace",
   "ticker",
   "punch",
   "bracket",
+  "callout",
   "relight",
   "life"
  ],

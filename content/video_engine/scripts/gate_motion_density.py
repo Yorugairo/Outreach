@@ -49,6 +49,8 @@ captions do NOT count - they are what a viewer reads as stillness.
        between two caps, listed by name
   M20  the cadence rule per arrival (P47 T1): a thrown card  INFO   (only when a dock arrives by throw|land)
        steps on 1s above 250 px/s, on 2s below
+  M21  the chart's deployed life (E50): from a page's LAST   WARN   (over 12s; INFO over 8s; ledger pages only)
+       data mark to its exit or its undraw - 6-8s average, 12s at most
   M17  the morph's match-cut invariants (P47 T3): centroid WARN   (only when a page enters by morph; INFO until
        <= 6 % W, axis <= 15 deg, area >= 60 %, det J > 0        measure_morph.py has run)
   J01  savor beats keep their picture (card up, badge lit) JUDGE
@@ -77,6 +79,8 @@ STOP_LAND_S = 0.32         # P47 T1 [DERIVED: STOP.ANTIC_S + STOP.DROP_S] - a la
 STOP_ON1_PX_S = 250        # P47 T1 [DERIVED: CADENCE.ON1_PX_S, the brief :185-193] - faster than this steps on 1s
 STOP_THROW_DX, STOP_THROW_DY, CARD_W_DEFAULT = 240, 160, 864   # the template's throw offsets and the .dock width, mirrored
 SRC_M20 = "P47 T1 (the brief :185-193, the cadence rule): a throw steps on 1s above 250 px/s, on 2s below - reported, not scored, until HG2 tunes it"
+DEPLOY_AVG_S, DEPLOY_MAX_S = 8.0, 12.0   # E50 [OPERATOR 2026-09-07]: a chart's deployed life - 6-8 s from its LAST data mark on average, 12 s at most
+SRC_M21 = "E50 (operator 2026-09-07): a chart's deployed life is 6-8 s from its last data mark on average, 12 s at most - then it un-draws or becomes the next thing"
 SRC_M18 = "E49 / P47 T5: nothing ever goes truly still - a run of identical rendered frames over 0.5 s is a freeze (measure_frozen_frames.py)"
 STILL_WARN_S = 8.0         # s9.25 working target
 SHORT_PULSE_MAX_S = 2.5    # doc 49 s49.6: a short needs a visual event every 1.2-2.5 s. THE GATE IS THE PULSE (operator, 2026-09-05):
@@ -134,7 +138,8 @@ SPECIES_EVENTS = {"punch": ("at",), "callout": ("at",), "focus_zoom": ("at", "en
                   "radial": ("at",), "push": ("at",),
                   "steam": "continuous", "trace": ("at", "end"), "ticker": "stepping",   # STILL LIFE (2026-09-05)
                   "life": "continuous",   # a DECLARED self-animating world (a rendered outro): the claim is the author's, verified by eye, credited here
-                  "build_to": ("at", "end"), "bracket": ("at", "end"), "retitle": ("at", "end"), "relight": ("at",)}   # P47 T2: the page performs on a word
+                  "build_to": ("at", "end"), "bracket": ("at", "end"), "retitle": ("at", "end"), "relight": ("at",),   # P47 T2: the page performs on a word
+                  "undraw": ("at", "end"), "figure": ("at", "end")}   # E50 (P47 T6): the line unwinds; the figure writes
 LIFE_CONTINUOUS_S = 1.0    # a continuous life (steam) is one event per second of its window - it never lets the frame go still
 # VIDEO DOCK (ruling E44 / backlog R26-7, 2026-09-06): a dock whose asset is a clip is moving pictures on
 # the card, so the frame is never still while it is up - credited continuously, exactly like a "life"
@@ -546,6 +551,8 @@ def run(tl: dict, docks: list[dict], mp: dict, frames: list[dict] | str | None =
         g.append(bt)                                                      # M19 (P47 T2: the build_to holds, INFO)
     if (cg := _cadence_gate(tl.get("scenes", []))) is not None:
         g.append(cg)                                                      # M20 (P47 T1: the cadence rule per arrival, INFO)
+    if (dg := _deployed_gate(tl.get("scenes", []))) is not None:
+        g.append(dg)                                                      # M21 (E50: the chart's deployed life per page)
     if (mg := _morph_gate(tl.get("scenes", []), morph)) is not None:
         g.append(mg)                                                      # M17 (P47 T3: the match-cut invariants per morph page)
     add("J01", "JUDGE", "every savor beat holds its picture (card up, badge lit), never a bare plate with a drift", "doc 29 s9.25 #3")
@@ -813,6 +820,43 @@ def _build_to_holds(scenes: list[dict]) -> list[tuple[float, float]]:
             if b > a + d:
                 out.append((round(a + d, 2), round(b - a - d, 2)))
     return out
+
+
+def _deployed_lives(scenes: list[dict]) -> list[tuple[str, float, float, float]]:
+    """E50: per ledger page, (scene_id, last data mark, end, deployed). The data marks are the build's landing on the page's
+    own clock (a returning page arrives drawn: its entry) and the end of every build_to and bracket inside the span; the
+    life ends at the first undraw after the last mark, else at the page's exit. Annotations (spotlight, callout, retitle,
+    relight, figure) add no data and neither restart nor end the clock."""
+    out: list[tuple[str, float, float, float]] = []
+    for s in scenes:
+        if not _is_page(s) or not s.get("span"):
+            continue
+        a, z = float(s["span"][0]), float(s["span"][1])
+        sp = s.get("species", [])
+        page = ((s.get("world") or {}).get("page") or {})
+        marks = [a if page.get("enter") == "spiral" else a + _page_land_offset(s)]
+        marks += [float(x["at"]) + float(x.get("dur", 0.0)) for x in sp if x.get("kind") in ("build_to", "bracket") and a <= float(x.get("at", -1e9)) <= z]
+        last = max(m for m in marks if m <= z + 1e-6) if any(m <= z + 1e-6 for m in marks) else a
+        uds = sorted(float(x["at"]) for x in sp if x.get("kind") == "undraw" and last - 1e-6 <= float(x.get("at", -1e9)) <= z)
+        end = uds[0] if uds else z
+        out.append((str(s.get("scene_id", "?")), round(last, 2), round(end, 2), round(max(0.0, end - last), 2)))
+    return out
+
+
+def _deployed_gate(scenes: list[dict]) -> Gate | None:
+    """M21 (E50): the chart's deployed life per ledger page - over DEPLOY_MAX_S WARN, over DEPLOY_AVG_S INFO, else PASS."""
+    lives = _deployed_lives(scenes)
+    if not lives:
+        return None
+    row = lambda l: f"{l[0]} {l[3]:.1f}s ({_mm(l[1])} -> {_mm(l[2])})"
+    over = [l for l in lives if l[3] > DEPLOY_MAX_S]
+    long = [l for l in lives if DEPLOY_AVG_S < l[3] <= DEPLOY_MAX_S]
+    if over:
+        return Gate("M21", "WARN", f"{len(over)} page(s) deployed past {DEPLOY_MAX_S:.0f}s after the last data mark: " + "; ".join(row(l) for l in over[:8])
+                    + " - un-draw it (undraw) or let it become the next thing (figure, another display, the morph)", SRC_M21)
+    if long:
+        return Gate("M21", "INFO", f"{len(long)} page(s) deployed {DEPLOY_AVG_S:.0f}-{DEPLOY_MAX_S:.0f}s after the last data mark (a dock's clip may hold it): " + "; ".join(row(l) for l in long[:8]), SRC_M21)
+    return Gate("M21", "PASS", f"every ledger page leaves or un-draws within {DEPLOY_AVG_S:.0f}s of its last data mark: " + "; ".join(row(l) for l in lives[:8]), SRC_M21)
 
 
 def _build_to_gate(scenes: list[dict]) -> Gate | None:

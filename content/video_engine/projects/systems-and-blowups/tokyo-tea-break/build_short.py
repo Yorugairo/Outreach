@@ -46,6 +46,19 @@ def _holdings_indices() -> tuple[int, int]:
 PEAK_IDX, LAST_IDX = _holdings_indices()
 
 
+def _holdings_facts() -> dict:
+    """The object's own facts (peak, latest, the months): the figures the page writes come from here, never typed by hand."""
+    return json.loads((HERE / "evidence/ev-japan-holdings-v1.series.json").read_text(encoding="utf-8"))["facts"]
+
+
+def _bn(v: float) -> str:
+    return f"${v:,.1f}B"
+
+
+FACTS = _holdings_facts()
+MONTH = lambda ym: __import__("datetime").date(int(ym[:4]), int(ym[5:7]), 1).strftime("%B %Y")
+
+
 def words() -> list[dict]:
     """The take's words (start_s / end_s)."""
     d = json.loads((TAKE / "scene_1.words.json").read_text(encoding="utf-8"))
@@ -256,7 +269,9 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float | None = None) -
     t_sixty = at("sixty-three stick figures")            # ... and swaps to the host on the joke
     t_watch = at("watching")                             # ... and retracts on "watching", leaving the page bare for the datum
     t_lender = at("our biggest lender")
-    t_trillion = at("over a trillion")
+    t_table = at("The Treasury's table")                 # E50: the line UN-DRAWS here - the sentence turns to the treasury number
+    t_trillion = at("over a trillion")                   # ... and the peak figure writes where the line was
+    t_since = at("selling since February")               # ... the June figure beside it
     t_two = at("Two numbers")
     t_promise = cut_before(ws, "a Treasury page")        # the cut drops on "went:" (operator, 2026-09-05): the promise plate
     t_catalyst = cut_before(ws, "Since February, Japan")
@@ -294,8 +309,14 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float | None = None) -
             # drop is its own stroke on "watching:", so the June datum is drawn the moment the sentence turns to the lender
             {"kind": "build_to", "at": t_build, "dur": PAGE_BUILD_S, "target": datum(PEAK_IDX)},
             {"kind": "build_to", "at": t_watch, "dur": 1.2, "target": datum(LAST_IDX)},
-            {"kind": "spotlight", "at": t_lender, "dur": 2.0, "target": datum(LAST_IDX)},                                  # the June datum on "our biggest lender"
-            {"kind": "callout", "at": t_trillion, "dur": 2.0, "target": datum(PEAK_IDX)},                                  # the February peak on "over a trillion"
+            {"kind": "spotlight", "at": t_lender, "dur": 1.0, "target": datum(LAST_IDX)},                                  # the June datum on "our biggest lender"
+            # E50 (operator, 2026-09-07 second watch: "we're leaving the chart up for too long ... reverse the draw / transform the
+            # graph into the treasury"): the line's last data mark is the June stroke at "watching:"; on "The Treasury's table" the
+            # line UN-DRAWS to nothing and the two treasury figures write where it stood - the peak on "over a trillion", June on
+            # "selling since February" - from the object's facts; they hold under the anecdote, take the retitle and the fingers
+            {"kind": "undraw", "at": t_table, "dur": 1.2, "target": datum(0)},
+            {"kind": "figure", "at": t_trillion, "dur": 1.6, "target": datum(PEAK_IDX), "text": _bn(FACTS["peak"]), "sub": MONTH(FACTS["peak_month"]), "dy": -0.7},
+            {"kind": "figure", "at": t_since, "dur": 1.6, "target": datum(LAST_IDX), "text": _bn(FACTS["latest"]), "sub": MONTH(FACTS["latest_month"]), "color": "neg", "dy": 1.6},
             {"kind": "retitle", "at": t_opponent, "dur": 2.4, "text": RETITLE},                                       # the title rewrites by the hand on "The opponent"
         ]),
         # 3 the PROMISE plate: the viewer's desk, entered by SUCK - the page collapses into the black of the stick figure

@@ -3125,7 +3125,39 @@
       (st.rtGlyphs || (st.rtGlyphs = [])).push(...glyphs);
       return { sp, div, glyphs };
     });
-    return { brackets, retitles, relights: pageSpecies(scene, "relight") };
+    /* E50 (P47 T6): a FIGURE - the number the sentence turns to, pinned to its datum by a dot and written by the hand beside
+       it (to the right when the chart has room there, else to the left - a peak at the right edge writes leftward); `dy` moves
+       it by lines of its own size; `sub` writes under it at the small size. The chart's next thing after an undraw. */
+    const figures = pageSpecies(scene, "figure").map((sp, fi) => {
+      const pts = (st.linePts || [])[sp.series | 0] || [];
+      if (!pts.length) return null;
+      const i = Math.max(0, Math.min(pts.length - 1, ((sp.target || {}).index | 0))), D = pts[i];
+      /* a figure is ink on the page: the chalk unless a colour is named (an emphasised page's unmuted stroke is its coral tail) */
+      const col = sp.color ? (PS_PAL[sp.color] || sp.color) : "var(--lp-chalk)";
+      const fits = D[0] + PS.BRACKET_GAP + PS.BRACKET_ROOM <= G.W;
+      const x = fits ? D[0] + 14 : D[0] - 14, anchor = fits ? "start" : "end";
+      const y = D[1] + fs * 0.35 + (Number(sp.dy) || 0) * fs * 1.2;
+      const g = lpEl("g", "lp-figure", st.chart, { opacity: 0 });
+      const dot = lpEl("circle", "fg-dot", g, { cx: D[0].toFixed(1), cy: D[1].toFixed(1), r: P ? 7 : 5, fill: col, "transform-origin": D[0].toFixed(1) + "px " + D[1].toFixed(1) + "px" });
+      const label = lpEl("text", "bklab", g, { x: x.toFixed(1), y: y.toFixed(1), "text-anchor": anchor, style: "font-size:" + fs + "px;fill:" + col });
+      const lg = [...String(sp.text || "")].map((ch) => { const ts = lpEl("tspan", "", label, { opacity: 0 }); ts.textContent = ch === " " ? "\u00a0" : ch; return ts; });
+      let sub = null, sg = [];
+      if (sp.sub) { sub = lpEl("text", "bksub", g, { x: x.toFixed(1), y: (y + fss * 1.3).toFixed(1), "text-anchor": anchor, style: "font-size:" + fss + "px;fill:" + col });
+        sg = [...String(sp.sub)].map((ch) => { const ts = lpEl("tspan", "", sub, { opacity: 0 }); ts.textContent = ch === " " ? "\u00a0" : ch; return ts; }); }
+      return { sp, D, x, y, fits, g, dot, label, lg, sub, sg, fi };
+    }).filter(Boolean);
+    return { brackets, retitles, relights: pageSpecies(scene, "relight"), figures };
+  };
+  /* the figure's write: the dot pops on the first quarter of its word, the figure writes glyph by glyph over the next, the sub last */
+  const paintFigure = (fg, t) => {
+    const sp = fg.sp, dur = Math.max(0.001, sp.dur || 1), u = clamp01((t - sp.at) / dur);
+    fg.g.setAttribute("opacity", t >= sp.at ? 1 : 0);
+    const pop = (kin("analytic_spring") ? springPop : stagePop)(clamp01(u / 0.25));
+    fg.dot.setAttribute("transform", "scale(" + pop.toFixed(4) + ")");
+    const nl = Math.max(1, fg.lg.length), perL = 0.75 * 0.6 / nl, uL = u - 0.25;
+    fg.lg.forEach((ts, j) => ts.setAttribute("opacity", clamp01((uL - j * perL) / (perL * 1.6)).toFixed(3)));
+    const ns = Math.max(1, fg.sg.length), perS = 0.75 * 0.4 / ns, uS = u - 0.25 - 0.75 * 0.6;
+    fg.sg.forEach((ts, j) => ts.setAttribute("opacity", clamp01((uS - j * perS) / (perS * 1.6)).toFixed(3)));
   };
   const paintBracket = (b, t) => {
     const sp = b.sp, dur = Math.max(0.001, sp.dur || 1), u = clamp01((t - sp.at) / dur);
@@ -3149,6 +3181,7 @@
     if (!st.perform) st.perform = buildPerform(st, scene, pg);
     const PF = st.perform;
     for (const b of PF.brackets) paintBracket(b, t);
+    for (const fg of PF.figures || []) paintFigure(fg, t);   /* E50: the chart's next thing */
     /* RELIGHT: the sunflower twin rises and falls on a sine over dur */
     for (const b of PF.brackets) b.glow.g.setAttribute("opacity", "0");
     for (const rl of PF.relights) {
@@ -3304,6 +3337,13 @@
           const c0 = capFrac(pp, mine[k - 1].target.index), c1 = capFrac(pp, mine[k].target.index);
           f = Math.max(f, c0 + (c1 - c0) * segEase(clamp01(u)));
         }
+      }
+      /* E50 (P47 T6): the UNDRAW - on its word the line unwinds from where it stands back to the datum (index 0 = to nothing),
+         the nib retracing its own stroke; the axes stay, the series name fades with the line */
+      const uds = pp.pts ? pageSpecies(scene, "undraw").filter((sp) => { const ss = sp.series ?? (sp.target || {}).series; return ss == null || (ss | 0) === (pp.si | 0); }) : [];   /* no series named = every series unwinds */
+      for (const ud of uds) {
+        const u = (t - ud.at) / Math.max(0.001, ud.dur || 1); if (u <= 0) break;
+        f = f + (capFrac(pp, (ud.target || {}).index | 0) - f) * segEase(clamp01(u));
       }
       pp.p.setAttribute("stroke-dashoffset", (pp.len * (1 - f)).toFixed(1));
       const drawing = f > 0.01 && f < 0.995;
@@ -4160,7 +4200,7 @@
   /* P47 T2 test probe (read-only): the active ledger page's drawn state, in the chart's own units */
   window.__lpProbe = () => {
     const world = [wA, wB].find((e) => e.__lp && e.classList.contains("ledger")); if (!world) return null;
-    const st = world.__lp, PF = st.perform || { brackets: [], retitles: [] };
+    const st = world.__lp, PF = st.perform || { brackets: [], retitles: [], figures: [] };
     const paths = st.paths.map((pp) => { const off = parseFloat(pp.p.getAttribute("stroke-dashoffset") || "0"), drawn = pp.len - off;
       const q = pp.p.getPointAtLength ? pp.p.getPointAtLength(Math.max(0, Math.min(pp.len, drawn))) : { x: 0, y: 0 };
       return { si: pp.si | 0, k0: pp.k0 | 0, muted: !!pp.muted, len: pp.len, drawn, frac: pp.len ? drawn / pp.len : 1, tip: [q.x, q.y], pts: pp.pts || [] }; });
@@ -4170,7 +4210,9 @@
       label: b.main.lg.map((ts) => parseFloat(ts.getAttribute("opacity") || "0")), bbox: [bb.x, bb.y, bb.width, bb.height] }; });
     const w = (gs) => gs.map((g) => parseFloat(g.style.getPropertyValue("--w") || "0"));
     const M = st.morph; const mb = M ? M.path.getBBox() : null;
-    return { linePts: st.linePts, paths, brackets, title: w(st.titleGlyphs || []), retitles: PF.retitles.map((r) => w(r.glyphs)),
+    const figures = (PF.figures || []).map((fg) => ({ D: fg.D, x: fg.x, fits: fg.fits, opacity: parseFloat(fg.g.getAttribute("opacity") || "0"),
+      dot: fg.dot.getAttribute("transform") || "", label: fg.lg.map((ts) => parseFloat(ts.getAttribute("opacity") || "0")) }));
+    return { linePts: st.linePts, paths, brackets, figures, title: w(st.titleGlyphs || []), retitles: PF.retitles.map((r) => w(r.glyphs)),
              morph: M ? { u: M.u, bbox: [mb.x, mb.y, mb.width, mb.height], fill: parseFloat(M.path.getAttribute("fill-opacity")), on: M.svg.style.opacity } : null };
   };
   window.__filmstrip = async (t0, dur, n, name) => {

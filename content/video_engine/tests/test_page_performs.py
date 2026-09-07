@@ -32,6 +32,8 @@ T_CAP2, CAP2_S = 12.0, 1.5
 T_BRACKET, BRACKET_S = 15.0, 2.0
 T_RETITLE, RETITLE_S = 19.0, 2.0
 T_RELIGHT, RELIGHT_S = 22.0, 1.0
+T_UNDRAW, UNDRAW_S = 24.0, 1.5         # E50: the line unwinds to nothing on a word
+T_FIGURE, FIGURE_S = 25.5, 1.5         # ... and the figure the sentence turns to writes at the peak's spot
 
 
 def _chromium_available() -> bool:
@@ -51,13 +53,15 @@ needs_browser = pytest.mark.skipif(not _chromium_available(), reason="playwright
 
 
 def test_the_four_page_species_are_kinds_and_take_their_own_fields():
-    for k in ("build_to", "bracket", "retitle", "relight"):
+    for k in ("build_to", "bracket", "retitle", "relight", "undraw", "figure"):
         assert k in B.SPECIES_KINDS and k in B.PAGE_SPECIES
-    assert B.SPECIES_TARGETS["build_to"] == ("datum",)
+    assert B.SPECIES_TARGETS["build_to"] == ("datum",) and B.SPECIES_TARGETS["undraw"] == ("datum",) and B.SPECIES_TARGETS["figure"] == ("datum",)
     ok = [{"kind": "build_to", "at": 4.4, "dur": 3.0, "target": {"kind": "datum", "index": 5}},
           {"kind": "bracket", "at": 15.0, "dur": 2.0, "from": 5, "to": 9, "label": "-$122.6B", "sub": "a tenth of the pile", "color": "neg"},
           {"kind": "retitle", "at": 19.0, "dur": 2.0, "text": "The opponent: a balance sheet"},
-          {"kind": "relight", "at": 22.0, "dur": 1.0, "ref": "bracket", "index": 0}]
+          {"kind": "relight", "at": 22.0, "dur": 1.0, "ref": "bracket", "index": 0},
+          {"kind": "undraw", "at": 24.0, "dur": 1.5, "target": {"kind": "datum", "index": 0}},
+          {"kind": "figure", "at": 25.5, "dur": 1.5, "target": {"kind": "datum", "index": 5}, "text": "$1,239.3B", "sub": "February 2026", "dy": -0.5}]
     assert B.validate_species(ok, (0.0, 0, 0), LEDGER) == []
 
 
@@ -70,6 +74,9 @@ def test_the_four_page_species_are_kinds_and_take_their_own_fields():
     ({"kind": "retitle", "at": 1.0, "dur": 1.0}, "non-empty string text"),
     ({"kind": "relight", "at": 1.0, "dur": 1.0, "ref": "dock"}, "ref must be one of"),
     ({"kind": "relight", "at": 1.0, "dur": 1.0, "ref": "bracket", "index": -1}, "index must be"),
+    ({"kind": "undraw", "at": 1.0, "dur": 1.0}, "no declared target"),
+    ({"kind": "figure", "at": 1.0, "dur": 1.0, "target": {"kind": "datum", "index": 2}}, "non-empty string text"),
+    ({"kind": "figure", "at": 1.0, "dur": 1.0, "target": {"kind": "datum", "index": 2}, "text": "$1B", "dy": "up"}, "dy must be a number"),
 ])
 def test_a_page_species_missing_its_field_is_a_build_error_naming_the_field(entry, needle):
     errs = B.validate_species([entry], (0.0, 0, 0), LEDGER)
@@ -105,6 +112,30 @@ def test_the_gate_credits_each_page_species_and_lists_the_build_to_holds():
     assert G._build_to_gate([_scene([])]) is None, "no build_to, no row - the note exists only when the cap does"
 
 
+def test_m21_the_deployed_life_runs_from_the_last_data_mark_to_the_exit_or_the_undraw():
+    """E50: the clock starts when the last data point lands; annotations do not restart it; an undraw ends it."""
+    caps = [{"kind": "build_to", "at": 4.4, "dur": 3.0, "target": {"kind": "datum", "index": 3}},
+            {"kind": "build_to", "at": 12.0, "dur": 1.5, "target": {"kind": "datum", "index": 9}}]
+    ann = [{"kind": "retitle", "at": 19.0, "dur": 2.0, "text": "y"}, {"kind": "relight", "at": 22.0, "dur": 1.0, "ref": "title"},
+           {"kind": "spotlight", "at": 20.0, "dur": 2.0, "target": {"kind": "datum", "index": 9}}]
+    lives = G._deployed_lives([_scene(caps + ann)])
+    assert lives == [("s01", 13.5, 30.0, 16.5)], lives
+    g = G._deployed_gate([_scene(caps + ann)])
+    assert g.id == "M21" and g.level == "WARN" and "16.5s" in g.message and "undraw" in g.message
+    und = [{"kind": "undraw", "at": 18.0, "dur": 1.2, "target": {"kind": "datum", "index": 0}},
+           {"kind": "figure", "at": 19.5, "dur": 1.5, "target": {"kind": "datum", "index": 3}, "text": "$1B"}]
+    assert G._deployed_lives([_scene(caps + und)]) == [("s01", 13.5, 18.0, 4.5)], "the undraw ends the life; the figure is the next thing, not a data mark"
+    assert G._deployed_gate([_scene(caps + und)]).level == "PASS"
+    long = [dict(caps[1], at=8.0), {"kind": "bracket", "at": 10.0, "dur": 2.0, "from": 3, "to": 9, "label": "x"}]
+    lives = G._deployed_lives([_scene([caps[0]] + long)])
+    assert lives[0][1] == 12.0 and lives[0][3] == 18.0, "the bracket's label is a data mark"
+    sc = _scene(caps); sc["span"] = [0.0, 22.0]
+    assert G._deployed_gate([sc]).level == "INFO", "8-12 s is the ceiling a dock's clip may use"
+    assert G._deployed_gate([{"scene_id": "p", "span": [0.0, 30.0], "world": {"kind": "clip"}, "species": []}]) is None, "ledger pages only"
+    ev = G._species_events([_scene(und)])
+    assert 18.0 in ev and 19.2 in ev and 19.5 in ev and 21.0 in ev, "an undraw and a figure are events at both ends"
+
+
 # ---- the browser ----------------------------------------------------------------------------------
 
 
@@ -134,6 +165,8 @@ def _authored(tl: dict, pts: list) -> tuple[dict, int, int]:
         {"kind": "bracket", "at": T_BRACKET, "dur": BRACKET_S, "from": peak, "to": last, "label": "-$122.6B", "sub": "a tenth of the pile", "color": "neg"},
         {"kind": "retitle", "at": T_RETITLE, "dur": RETITLE_S, "text": "The opponent: a balance sheet"},
         {"kind": "relight", "at": T_RELIGHT, "dur": RELIGHT_S, "ref": "bracket", "index": 0},
+        {"kind": "undraw", "at": T_UNDRAW, "dur": UNDRAW_S, "target": {"kind": "datum", "index": 0}},
+        {"kind": "figure", "at": T_FIGURE, "dur": FIGURE_S, "target": {"kind": "datum", "index": peak}, "text": "$1,239.3B", "sub": "February 2026"},
     ]
     scenes = [dict(sc, species=species, world=dict(sc["world"], ken_burns={"scale": 0, "x": 0, "y": 0}))]
     return dict(tl, scenes=scenes, caption_pages=[], captions=[], kinetics={"min_jerk": True, "analytic_spring": True}), peak, last
@@ -234,6 +267,33 @@ def test_retitle_erases_the_old_title_glyph_by_glyph_before_the_new_one_writes()
         assert all(w == 0 for w in mid["retitles"][0]), "the new title does not write until the old is gone"
         post = P.probe(T_RETITLE + RETITLE_S + 0.6)
         assert all(w == 0 for w in post["title"]) and all(w >= 0.999 for w in post["retitles"][0]), "old gone, new written"
+    finally:
+        P.close()
+
+
+@needs_browser
+def test_undraw_unwinds_the_line_to_nothing_and_the_figure_writes_at_the_datum():
+    """E50: on its word the line retraces itself back to nothing (the axes stay); then the figure the sentence turns to
+    pops a dot on the datum and writes beside it, glyph by glyph."""
+    name, tl, uris, aspect, pts = _line_golden()
+    tl2, peak, last = _authored(tl, pts)
+    P = _Player(tl2, uris, aspect)
+    try:
+        full = [p for p in P.probe(T_UNDRAW - 0.1)["paths"] if not p["muted"] and p["pts"]]
+        assert full and all(p["frac"] > 0.99 for p in full), "fully deployed before the word"
+        mid = [p for p in P.probe(T_UNDRAW + UNDRAW_S * 0.5)["paths"] if not p["muted"] and p["pts"]]
+        assert all(0.05 < p["frac"] < 0.95 for p in mid), f"unwinding at the middle of the word: {[round(p['frac'], 3) for p in mid]}"
+        assert mid[0]["frac"] < full[0]["frac"], "the nib is retracing, not drawing"
+        gone = [p for p in P.probe(T_UNDRAW + UNDRAW_S + 0.05)["paths"] if not p["muted"] and p["pts"]]
+        assert all(p["frac"] < 0.005 for p in gone), "to nothing"
+        assert P.probe(T_FIGURE - 0.1)["figures"][0]["opacity"] == 0, "the figure waits for its word"
+        early = P.probe(T_FIGURE + FIGURE_S * 0.2)["figures"][0]
+        assert early["opacity"] == 1 and "scale(" in early["dot"] and all(o < 0.5 for o in early["label"]), "the dot pops first, the figure is not yet written"
+        done = P.probe(T_FIGURE + FIGURE_S)["figures"][0]
+        assert all(o >= 0.999 for o in done["label"]), "written"
+        D = done["D"]; lp = P.probe(T_FIGURE + FIGURE_S)["linePts"][0][peak]
+        assert abs(D[0] - lp[0]) < 1e-6 and abs(D[1] - lp[1]) < 1e-6, "pinned to the datum's exact position"
+        assert (done["x"] > D[0]) == done["fits"], "beside the datum on the side with room"
     finally:
         P.close()
 

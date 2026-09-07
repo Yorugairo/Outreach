@@ -102,10 +102,13 @@ SPECIES_KINDS = ("punch", "callout", "focus_zoom", "spotlight", "squiggle",
                  "life",                       # a DECLARED claim: this world animates on its own for the window (a Remotion render, a
                                                # rendered outro) - the template draws nothing for it; the motion gate credits it as continuous;
                                                # the agent verifies the claim by eye before declaring it (CHECK-RESPONSIBILITIES: declared)
-                 "build_to", "bracket", "retitle", "relight")   # PAGE species (P47 T2, build-on): the page performs on a word - a ledger
+                 "build_to", "bracket", "retitle", "relight",   # PAGE species (P47 T2, build-on): the page performs on a word - a ledger
                                                # page only; build_to caps the drawn series at a datum, bracket spans two data, retitle
                                                # rewrites the title, relight re-fires a bracket or the title (SHOT-TABLE-V3-PROPOSAL part B)
-PAGE_SPECIES = ("build_to", "bracket", "retitle", "relight")   # a page species whose `at` is BEFORE its scene starts is a STATE: the page arrives in that state
+                 "undraw", "figure")           # E50 (P47 T6): a chart's deployed life is 6-8 s from its last data mark, 12 s at most - then it
+                                               # UN-DRAWS (the line unwinds from where it stands back to a datum, index 0 = to nothing) or BECOMES
+                                               # the next thing: a FIGURE the hand writes at a datum's spot (the treasury number the sentence turns to)
+PAGE_SPECIES = ("build_to", "bracket", "retitle", "relight", "undraw", "figure")   # a page species whose `at` is BEFORE its scene starts is a STATE: the page arrives in that state
                                                                 # (a returning page keeps its retitle, its bracket standing); the gate credits no event before the span
 RELIGHT_REFS = ("bracket", "title")
 BRACKET_COLORS = ("crimson", "teal", "cobalt", "amber", "deemph", "neg", "pos")
@@ -125,6 +128,7 @@ SPECIES_TARGETS = {
     "steam": ("region",), "trace": ("region",), "ticker": ("region",),
     "life": (),
     "build_to": ("datum",), "bracket": (), "retitle": (), "relight": (),   # P47 T2: the datum is the cap; the others carry their own fields
+    "undraw": ("datum",), "figure": ("datum",),   # E50: the datum the line unwinds back to (0 = nothing); the datum the figure is pinned to
 }
 TARGET_FIELDS = {"datum": ("index",), "point": ("x", "y"),
                  "region": ("x0", "y0", "x1", "y1"), "span": ("from_word", "to_word")}
@@ -179,6 +183,20 @@ def _validate_page_fields(kind: str, entry: dict) -> list[str]:
             errs.append(f"relight: ref must be one of {'|'.join(RELIGHT_REFS)}")
         if "index" in entry and not is_idx(entry["index"]):
             errs.append("relight: index must be a non-negative integer (which bracket)")
+    elif kind == "figure":   # E50: the number the sentence turns to, written by the hand where the line was
+        if not isinstance(entry.get("text"), str) or not entry["text"].strip():
+            errs.append("figure: needs a non-empty string text (the figure, with its unit - never a bare number)")
+        if "sub" in entry and not isinstance(entry["sub"], str):
+            errs.append("figure: sub must be a string")
+        if "series" in entry and not is_idx(entry["series"]):
+            errs.append("figure: series must be a non-negative integer series index")
+        if "color" in entry and entry["color"] not in BRACKET_COLORS:
+            errs.append(f"figure: color must be one of {'|'.join(BRACKET_COLORS)}")
+        if "dy" in entry and (isinstance(entry["dy"], bool) or not isinstance(entry["dy"], (int, float))):
+            errs.append("figure: dy must be a number (lines of the figure's own size, negative = up)")
+    elif kind == "undraw":
+        if "series" in entry and not is_idx(entry["series"]):
+            errs.append("undraw: series must be a non-negative integer series index")
     return errs
 
 
