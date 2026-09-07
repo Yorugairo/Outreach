@@ -463,6 +463,7 @@
     prop_attach:      false,   // 48.5 cached-offset prop attachment
     min_jerk:         false,   // FINDING-the-animation-math s2: minimum-jerk quintic on spatial transitions (the wipe front, the suck)
     km_ink:           false,   // 44.1 Kubelka-Munk where two ink passes overlap (the soak's stains, the highlighter band)
+    idle:             false,   // E49 the named subtle idle on every held thing - page, plate, dock, pill, caption (P47 T5)
   });
   const KIN = Object.assign({}, KINETICS_DEFAULTS,
     (TL.kinetics && typeof TL.kinetics === "object") ? TL.kinetics : {});
@@ -828,6 +829,112 @@
     const p = springEval(u, params), v = travel * p.v / dur, a = travel * p.a / (dur * dur);
     return squashAlpha([0, v], [0, a], o);
   };
+  /* KINETICS:END */
+
+  /* KINETICS:BEGIN idle */
+  /* kinetics/idle.mjs - THE IDLE (ruling E49, 2026-09-06: "nothing ever goes truly still"; P47 T5). SOURCE OF TRUTH,
+     inlined into the scene-evidence player by sync_kinetics.py between KINETICS:BEGIN idle and KINETICS:END. Behind
+     kinetics.idle.
+     The defect it answers: a held thing - a page under a sentence, a parked dock, a pill, a caption, a plate - was
+     bit-identical from frame to frame, and the cure reached for was a whole plate moving (Ken Burns, the parallax push).
+     The operator: "we let things be completely still instead of being at a subtle idle." A camera move is a camera
+     move (29 s9.27, 45); a hold holds - at its idle.
+     The law: every idle is a NAMED kind, sized by a dial, a pure function of t (a scrubbed frame is the played frame),
+     phased per element so two pills never breathe in step, and never an event for the motion gate (M01 / M10 / M16
+     count events; the frozen-frames row M18 is the idle's own check).
+     Kinds: breath - a scale that inhales ABOVE rest and never below it (a plate shrinking under its box shows its
+     edge); drift - a bounded Lissajous walk of a few px; pulse - a luminance dip; figure - the asymmetric breath doc 48
+     s48.4 prescribes for a standing figure (inspiratory:expiratory 1:1.5-1:2, a post-expiratory pause) with its two-rate
+     sway; none - explicit stillness, declared.
+     Every number below is a starting reference, tagged where it came from; the operator's eye moves them (42 s42.5). */
+
+  const IDLE_KINDS = Object.freeze(["none", "breath", "drift", "pulse", "figure"]);
+
+  const IDLE = Object.freeze({
+    BREATH_AMP: 0.012,        /* [DERIVED: HyperFrames /prompting/motion "1-2 %", verified 2026-09-06; measure on ours] - a 1.2 % inhale */
+    BREATH_HZ: 0.25,          /* doc 48 s48.4: breath 0.20-0.30 Hz (12-18 / min) */
+    DRIFT_PX: 2.0,            /* dial (42 s42.5): the bounded drift's half-width, stage px */
+    DRIFT_HZ: [0.11, 0.17],   /* two rates whose common period (100 s) never closes inside a short: the walk never reads as a loop */
+    PULSE_AMP: 0.03,          /* dial: the luminance dips 3 % at most */
+    PULSE_HZ: 0.2,
+    FIGURE_IE: 1.75,          /* doc 48 s48.4: inspiratory:expiratory 1:1.5 to 1:2 - "never a sine" */
+    FIGURE_PAUSE_S: 0.7,      /* doc 48 s48.4: the post-expiratory pause, 0.5-1.0 s */
+    SWAY_PX: 1.5,             /* doc 48 s48.4: head excursion, scaled to a cutout - a dial */
+    SWAY_HZ: [0.15, 0.25],    /* doc 48 s48.4: "two oscillators at 0.15 and 0.25 Hz so it never loops visibly" */
+    SWAY_WANDER: 0.12,        /* the pink-noise stand-in: each oscillator's phase wanders by this fraction of a cycle ... */
+    SWAY_WANDER_HZ: [0.031, 0.047],   /* ... at two slow rates, so the two 20 s-periodic sines never return to one pose inside a short */
+    STEP_FPS: 0,              /* 0 = continuous; > 0 quantises the idle's clock to the INTEGER frame index (HyperFrames HF-1: never elapsed seconds) */
+  });
+
+  const IDLE_TAU = Math.PI * 2;
+  const idle01 = (v) => Math.min(1, Math.max(0, v));
+  const idleSmooth = (u) => { u = idle01(u); return u * u * (3 - 2 * u); };
+  const idleFrac = (v) => v - Math.floor(v);
+
+  /* the idle's clock: t itself, or t on the frame grid when STEP_FPS > 0 - floor(t * fps) is the frame index, and every
+     pose below is derived from the index, never from the elapsed seconds between frames */
+  const idleClock = (t, fps = IDLE.STEP_FPS) => (fps > 0 ? Math.floor(t * fps + 1e-9) / fps : t);
+
+  /* BREATH: scale in [1, 1 + AMP], exactly 1 at rest (t = 0, phase = 0), period 1 / HZ. Above rest only. */
+  const breath = (t, phase = 0, o = {}) => {
+    const P = Object.assign({}, IDLE, o);
+    return 1 + P.BREATH_AMP * (1 - Math.cos(IDLE_TAU * (P.BREATH_HZ * t + phase))) / 2;
+  };
+
+  /* DRIFT: [dx, dy] px, a Lissajous walk inside +-DRIFT_PX x +-0.6 DRIFT_PX, the two axes on their own rates. */
+  const drift = (t, phase = 0, o = {}) => {
+    const P = Object.assign({}, IDLE, o);
+    return [P.DRIFT_PX * Math.sin(IDLE_TAU * (P.DRIFT_HZ[0] * t + phase)),
+            P.DRIFT_PX * 0.6 * Math.sin(IDLE_TAU * (P.DRIFT_HZ[1] * t + phase * 1.7))];
+  };
+
+  /* PULSE: a luminance multiplier in [1 - AMP, 1], exactly 1 at rest. */
+  const pulse = (t, phase = 0, o = {}) => {
+    const P = Object.assign({}, IDLE, o);
+    return 1 - P.PULSE_AMP * (1 - Math.cos(IDLE_TAU * (P.PULSE_HZ * t + phase))) / 2;
+  };
+
+  /* THE FIGURE'S BREATH (48 s48.4): one cycle of period 1 / BREATH_HZ is an inhale over Ti, an exhale over Te = IE * Ti,
+     then a pause of FIGURE_PAUSE_S at rest. Returns the lung's fill in [0, 1]; the caller scales it. Never a sine: the
+     inhale is the short leg, the exhale the long one, and the rest is a real hold. */
+  const figureBreath = (t, phase = 0, o = {}) => {
+    const P = Object.assign({}, IDLE, o), T = 1 / P.BREATH_HZ, pause = Math.min(P.FIGURE_PAUSE_S, T * 0.5);
+    const active = T - pause, Ti = active / (1 + P.FIGURE_IE), Te = active - Ti;
+    const u = idleFrac(t / T + phase) * T;
+    if (u < Ti) return idleSmooth(u / Ti);
+    if (u < Ti + Te) return 1 - idleSmooth((u - Ti) / Te);
+    return 0;
+  };
+  const figurePhases = (o = {}) => {
+    const P = Object.assign({}, IDLE, o), T = 1 / P.BREATH_HZ, pause = Math.min(P.FIGURE_PAUSE_S, T * 0.5);
+    const active = T - pause, Ti = active / (1 + P.FIGURE_IE);
+    return { period: T, inhale: Ti, exhale: active - Ti, pause };
+  };
+
+  /* SWAY (48 s48.4): two oscillators at 0.15 and 0.25 Hz, the A-P axis the larger, in px. */
+  const sway = (t, phase = 0, o = {}) => {
+    const P = Object.assign({}, IDLE, o);
+    const w0 = P.SWAY_WANDER * Math.sin(IDLE_TAU * (P.SWAY_WANDER_HZ[0] * t + phase * 0.7));   /* the wandering phases */
+    const w1 = P.SWAY_WANDER * Math.sin(IDLE_TAU * (P.SWAY_WANDER_HZ[1] * t + phase * 1.9));
+    return [P.SWAY_PX * 0.4 * Math.sin(IDLE_TAU * (P.SWAY_HZ[0] * t + phase + w0)),
+            P.SWAY_PX * (0.5 * Math.sin(IDLE_TAU * (P.SWAY_HZ[1] * t + phase * 1.3 + w1)) + 0.5 * Math.sin(IDLE_TAU * (P.SWAY_HZ[0] * t + phase * 0.6 + w0)))];
+  };
+
+  /* ONE ENTRY: the transform of a held thing of `kind` at t. {scale, dx, dy, lum}; `none` is the identity. */
+  const idleXf = (kind, t, phase = 0, o = {}) => {
+    const P = Object.assign({}, IDLE, o), tq = idleClock(t, P.STEP_FPS);
+    const id = { scale: 1, dx: 0, dy: 0, lum: 1 };
+    if (kind === "breath") return Object.assign(id, { scale: breath(tq, phase, P) });
+    if (kind === "drift") { const d = drift(tq, phase, P); return Object.assign(id, { dx: d[0], dy: d[1] }); }
+    if (kind === "pulse") return Object.assign(id, { lum: pulse(tq, phase, P) });
+    if (kind === "figure") { const s = sway(tq, phase, P); return Object.assign(id, { scale: 1 + P.BREATH_AMP * figureBreath(tq, phase, P), dx: s[0], dy: s[1] }); }
+    return id;
+  };
+
+  /* the CSS suffix a painter appends to the element's own transform - fixed decimals, so two seeks to one t write one
+     string. The identity writes an explicit no-op so a flagged-off render and a `none` render differ by nothing. */
+  const idleCss = (x) => (x.scale === 1 && x.dx === 0 && x.dy === 0) ? ""
+    : " translate(" + x.dx.toFixed(2) + "px," + x.dy.toFixed(2) + "px) scale(" + x.scale.toFixed(4) + ")";
   /* KINETICS:END */
   /* Pills draw TEXT, so they take the text tier - never the graphic tier. */
   const ACCENT = { sunflower: "var(--t-sunflower)", coral: "var(--t-coral)", teal: "var(--t-teal)", cobalt: "var(--t-cobalt)", ink: "#d7dee6" };
@@ -1829,6 +1936,13 @@
      conclusion), in the page's quiet zone, painted as a function of t (never a CSS transition) */
   const LP_BADGE0 = 0.4, LP_BADGE_STEP = 0.9, LP_BADGE_IN = 0.36;
   const LP_BADGE_COL = { coral: "crimson", teal: "teal", cobalt: "cobalt", ink: "deemph", sunflower: "amber" };   /* badge accent -> series colour (the key) */
+  /* THE IDLE (E49, P47 T5): every held thing carries a NAMED subtle idle - a pure function of t, behind kinetics.idle.
+     The class defaults below; a scene's world.idle overrides its page or plate ("none" is explicit stillness, declared);
+     the phase is the element's own (lpHash), so two pills never breathe in step. Never an event for the motion gate
+     (M01 / M10 / M16 count events); the frozen-frames row M18 is the idle's own check (measure_frozen_frames.py). */
+  const IDLE_CLASS = Object.freeze({ page: "breath", plate: "breath", dock: "breath", pill: "breath", caption: "breath" });
+  const idleOf = (cls, override) => (kin("idle") ? (override || IDLE_CLASS[cls] || "none") : "none");
+  const idleCssFor = (cls, override, t, seed, salt) => { const k = idleOf(cls, override); return k === "none" ? "" : idleCss(idleXf(k, t, lpHash(seed | 0, salt | 0, 977))); };
   /* pure hash of (seed, index, salt) -> [0,1): the only source of jitter (handwriting-text rule 2) */
   const lpHash = (seed, i, salt) => {
     let h = (seed ^ Math.imul(i + 1, 0x9E3779B1) ^ Math.imul(salt + 1, 0x85EBCA77)) >>> 0;
@@ -2548,7 +2662,8 @@
     const pk = (pg.punch === false || PORTRAIT) ? 0 : expoOut(clamp01(t3 / LP.PUNCH));   /* a host plate skips the punch: his gesture is the direction; portrait has no margin to spend (P41) */
     const bdc = st.boardCentre || { x: 50, y: 50 };
     st.page.style.transformOrigin = bdc.x.toFixed(2) + "% " + bdc.y.toFixed(2) + "%";
-    st.page.style.transform = "translateX(" + ((rk - 1) * 100).toFixed(2) + "%) " + (mount ? "translateY(" + ((1 - mk) * LP_MOUNT_RISE).toFixed(1) + "px) " : "") + "scale(" + (1 + (LP.PUNCH_SCALE - 1) * pk).toFixed(4) + ")";
+    st.page.style.transform = "translateX(" + ((rk - 1) * 100).toFixed(2) + "%) " + (mount ? "translateY(" + ((1 - mk) * LP_MOUNT_RISE).toFixed(1) + "px) " : "") + "scale(" + (1 + (LP.PUNCH_SCALE - 1) * pk).toFixed(4) + ")"
+      + idleCssFor("page", pg.idle, t, st.seed, 1);   /* E49: the page breathes while it holds under a sentence */
     /* beat 6: the build - crisp, landing on the exact strings - on the punched page */
     const c = clamp01((t3 - LP.PUNCH) / (st.buildDur || LP.BUILD));   /* race/decline/combo declare their own envelope */
     st.chart.style.opacity = c > 0 ? 1 : 0;   /* axes and grid belong to the build, not the bleed */
@@ -2581,7 +2696,8 @@
          deceleration set alpha, the tensor stretches along the travel and compresses across it, area kept */
       const sq = kin("area_squash") && kin("analytic_spring") && ub > 0 && ub < 1
         ? " matrix(" + squashMatrix(Math.PI / 2, springSquash(ub, POP, 18, LP_BADGE_IN)).map((v) => v.toFixed(4)).join(",") + ",0,0)" : "";
-      bd.el.style.transform = "translateY(" + (18 * (1 - e)).toFixed(1) + "px) scale(" + (0.94 + 0.06 * e).toFixed(4) + ")" + sq;
+      bd.el.style.transform = "translateY(" + (18 * (1 - e)).toFixed(1) + "px) scale(" + (0.94 + 0.06 * e).toFixed(4) + ")" + sq
+        + idleCssFor("pill", pg.idle === "none" ? "none" : undefined, t, st.seed, 20 + (st.badges || []).indexOf(bd));   /* E49: each pill at its own phase */
     }
     lpSpiral(st, scene, t, pg);   /* the retract at the scene's end; the spiral entry at its start */
   };
@@ -2938,7 +3054,9 @@
          nothing this episode and returns, if ever, as a side-by-side A/B
          of one scene judged in isolation. The authored Ken Burns is the
          only world motion. */
-      const z = 1 + p * kb.scale;
+      /* E49: an IMAGE plate that holds, holds at its idle - a ledger page and a clip carry their own motion */
+      const zi = (isLedger || isClip) ? 1 : idleXf(idleOf("plate", scene.world.idle), t, lpHash(Math.round(scene.span[0] * 100), 0, 977)).scale;
+      const z = (1 + p * kb.scale) * zi;
       el.style.transform = camCss(camXf(scene, t)) + `translateX(${dx.toFixed(1)}px) scale(${z.toFixed(4)}) `
         + `translate(${(p*kb.x).toFixed(1)}px, ${(p*kb.y).toFixed(1)}px)`;
     };
@@ -3154,11 +3272,13 @@
       if (G) {
         const pk = springPop(clamp01((t - d.enter) / DOCK_POP_S));
         const rk = t > d.exit ? springPop(clamp01((t - d.exit) / DOCK_RETRACT_S)) : 0;
-        el.style.transform = "scale(" + (DOCK_POP_FROM + (1 - DOCK_POP_FROM) * (pk - rk)).toFixed(4) + ")";
+        el.style.transform = "scale(" + (DOCK_POP_FROM + (1 - DOCK_POP_FROM) * (pk - rk)).toFixed(4) + ")"
+          + idleCssFor("dock", d.idle, t, Math.round(d.enter * 100) + s, 3);   /* E49: the parked card breathes */
         if (!swept) el.style.opacity = clamp01(1 - rk) * clamp01((t - d.enter) / DOCK_FADE_S);
-      } else el.style.transform = (xk && !swept)
+      } else el.style.transform = ((xk && !swept)
         ? "translateY(" + (-22 * xe) + "px) scale(" + (1 - 0.05 * xe) + ")"
-        : "translateY(" + (32 * (1 - ck)) + "px) scale(" + (0.96 + 0.04 * ck) + ")";
+        : "translateY(" + (32 * (1 - ck)) + "px) scale(" + (0.96 + 0.04 * ck) + ")")
+        + idleCssFor("dock", d.idle, t, Math.round(d.enter * 100) + s, 3);
       const sh = 12 * ck * (swept ? (1 - wk) : 1);   // light leaves with the page
       el.style.boxShadow = sh.toFixed(1) + "px " + sh.toFixed(1) + "px 0 rgba(37,49,60,.82)";
 
@@ -3241,11 +3361,13 @@
             const sc = (1.16 + (1 - 1.16) * e) * (on && e >= 1 ? 1.06 : 1);
             ws[j].style.transform = "scale(" + sc.toFixed(4) + ") rotate(calc(var(--tilt, 0deg) * " + (1 - e).toFixed(3) + "))"; }
           else { ws[j].style.opacity = ""; ws[j].style.transform = ""; } } }); }
+      cap.style.transform = (pg && !(stage && PHRASE)) ? idleCssFor("caption", undefined, t, Math.round(pg.s * 100), 5) : "";   /* E49: the strip at its idle beneath the words' own pops (phrase mode boils already) */
       cap.style.opacity = pg ? 1 : 0;
     } else {
       let line = null;
       for (const c of TL.captions) { if (t >= c.at && t < c.until) { line = c; break; } }
       cap.textContent = line ? line.text : "";
+      cap.style.transform = line ? idleCssFor("caption", undefined, t, Math.round(line.at * 100), 5) : "";
       cap.style.opacity = line
         ? Math.min(clamp01((t - line.at) / 0.22), clamp01((line.until - t) / 0.18)) : 0;
     }

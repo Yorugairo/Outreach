@@ -63,6 +63,8 @@ SPECIES_LEDGER = "ledger"          # timeline["species"] entry; the player keys 
 # nowhere ("we made it the default because it worked, but we need a better default, and it can be
 # an effect at that point"). dip and blurzoom may carry their own length: `dip:<s>`, `blurzoom:<s>`.
 SCENE_EXITS = ("cut", "dip", "blurzoom", "dissolve", "wipe", "wipe_right", "suck")
+IDLE_KINDS = ("none", "breath", "drift", "pulse", "figure")   # E49 / P47 T5: the player's named idles; `;idle=<kind>` on any plate id (`none` is explicit stillness)
+IDLE_OPT = ";idle="
 TIMED_EXITS = ("dip", "blurzoom")   # ... and only these two read the suffix as SECONDS (suck's is a point)
 DEFAULT_EXIT_DOCKS = "dip"          # E47 #3: was "wipe_right" until 2026-09-06
 DEFAULT_EXIT_BARE = "cut"
@@ -303,7 +305,28 @@ def ledger_world(plate_id: str, ken: tuple, ep_dir: Path, dock_badges: list | No
             "ken_burns": {"scale": ken[0], "x": ken[1], "y": ken[2]}}
 
 
+def split_idle(plate_id: str) -> tuple[str, str | None]:
+    """``<plate id>[;idle=<kind>]`` -> (the bare plate id, the idle kind or None). E49: the idle is a NAMED kind
+    the shot row declares per plate; ValueError names the kind, the caller names the row."""
+    if IDLE_OPT not in plate_id:
+        return plate_id, None
+    bare, kind = plate_id.split(IDLE_OPT, 1)
+    if kind not in IDLE_KINDS:
+        raise ValueError(f"{plate_id!r}: idle {kind!r} is not one of {'|'.join(IDLE_KINDS)}")
+    return bare, kind
+
+
 def world_for_plate(plate_id: str, ken: tuple, ep_dir: Path, meta: dict | None = None) -> dict:
+    """A scene's ``world`` for a shot-table plate id, with E49's ``;idle=<kind>`` option stripped off and carried
+    as ``world["idle"]`` (the player reads it for the page or the plate; absent = the class default)."""
+    bare, idle = split_idle(plate_id)
+    world = _world_for_bare_plate(bare, ken, ep_dir, meta)
+    if idle is not None:
+        world["idle"] = idle
+    return world
+
+
+def _world_for_bare_plate(plate_id: str, ken: tuple, ep_dir: Path, meta: dict | None = None) -> dict:
     """A scene's ``world`` for a shot-table plate id: a ledger page (``ledger:``
     prefix) or an image plate resolved by the asset resolver. Pure apart from
     reading the series / plate file; ValueError on a bad or missing id."""
@@ -554,6 +577,13 @@ def narration_key_delays(chart: dict, dock_enter: float, tl: dict) -> dict:
     return chart
 
 
+def build_kinetics() -> dict:
+    """The flags a compiled timeline carries. P39: every capability defaults OFF in the template. E49 (P47 T5): the
+    IDLE is on for every timeline this compiler writes - a build that wants stillness says so (``KINETICS["idle"] =
+    False``); the goldens' frozen sources carry no flag and stay byte-identical."""
+    return {"idle": True, **KINETICS}
+
+
 def main() -> int:
     tl = json.loads((BUILD / "timeline.json").read_text(encoding="utf-8"))
     # THE AUTHORED SHOT TABLE is the source. Not an allocator.
@@ -599,7 +629,7 @@ def main() -> int:
         if world.get("kind") == SPECIES_CLIP:
             uris[world["asset_id"]] = data_uri(Path(world.pop("clip_path")))   # raw mp4, keyed by the clip's stem
         elif "asset_id" in world:
-            uris[plate] = data_uri(R.find_asset(plate), STAGE_W)
+            uris[world["asset_id"]] = data_uri(R.find_asset(world["asset_id"]), STAGE_W)   # the bare id (E49's `;idle=` is not part of it)
         docks = []
         # E45 §1: on a ledger page every dock parks in the same rectangle, computed from the
         # page's own geometry. Only the SOLO card (slot 0) is placed - a paired/stacked dock keeps
@@ -739,7 +769,7 @@ def main() -> int:
         # every species present (the ledger world + the targeted kinds), so
         # downstream (gate, render) can see it
         "species": timeline_species(scenes),
-        "kinetics": dict(KINETICS),   # the template's capability flags this build turns on (P39: default all off)
+        "kinetics": build_kinetics(),   # the template's capability flags this build turns on (P39: default all off; E49: the idle on)
         **({"caption_style": CAPTION_STYLE} if CAPTION_STYLE else {}),
     }
     (BUILD / TIMELINE_NAME).write_text(

@@ -1,7 +1,7 @@
 ---
 id: P47-STOP-ACTION-BUILD-ON-AND-THE-CHART-MORPH
 title: Stop-action mechanics (throw and land with weight), build-on (the page performs on a word), and the chart morph (the metaphor becomes the chart)
-status: draft
+status: running
 operation: feature
 risk: standard
 owner: parent
@@ -139,7 +139,7 @@ real page in the player.
 - Evidence: pending
 
 ### T5: The idle - nothing ever goes truly still (E49)
-- Status: pending
+- Status: running
 - Owner: implementation_luna
 - Depends on: none (small; can run first)
 - Write set: the template (an `idle` on every held element: the page's body, a parked dock, badges, the bracket, a plate; kinds `breath` (scale 1-2 %, a slow sine or the stepped clock), `drift` (px/s along a direction), `pulse` (luminance); the figure's asymmetric breath from doc 48 §48.4 as the `figure` kind), `content/video_engine/scripts/kinetics/idle.mjs` (new, synced), `build_scene_timeline_f.py` (defaults per element class; an authored `idle` on a shot row overrides; `idle: none` is explicit), `gate_motion_density.py` (the `frozen frames` row: hashes of rendered frames or the player's per-frame state, a run of identical frames > `FROZEN_MAX_S` WARNs; an idle never counts as an event for M01/M10/M16), tests (`content/video_engine/tests/kinetics/test_idle.py`, the gate test), `CAPABILITIES.md`

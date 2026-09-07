@@ -43,6 +43,8 @@ captions do NOT count - they are what a viewer reads as stillness.
   M12  a chart is the proof, not the homework: a chart dock FAIL   (E25 / s9.30)
        never spans a scene boundary; hold <= 10s anywhere,
        <= 6s inside the opening minute (re-enter it instead)
+  M18  frozen frames (E49): no run of bit-identical rendered  WARN   (E49 / P47 T5; INFO until
+       frames longer than 0.5s, read from frame-hashes.json          measure_frozen_frames.py has run)
   J01  savor beats keep their picture (card up, badge lit) JUDGE
 
     python gate_motion_density.py <build-dir> [--timeline NAME.timeline.json]
@@ -58,6 +60,9 @@ from dataclasses import dataclass
 from pathlib import Path
 
 STILL_FAIL_S = 12.0        # doc 29 s8.19 MAX_BARE, s9.25 ceiling
+FROZEN_MAX_S = 0.5         # E49: the longest run of bit-identical rendered frames [DERIVED: HyperFrames' "the final 1-2 seconds"; halved]
+FRAME_HASHES_NAME = "frame-hashes.json"   # written by measure_frozen_frames.py beside the timeline
+SRC_M18 = "E49 / P47 T5: nothing ever goes truly still - a run of identical rendered frames over 0.5 s is a freeze (measure_frozen_frames.py)"
 STILL_WARN_S = 8.0         # s9.25 working target
 SHORT_PULSE_MAX_S = 2.5    # doc 49 s49.6: a short needs a visual event every 1.2-2.5 s. THE GATE IS THE PULSE (operator, 2026-09-05):
                            # a floor on motion, never a ceiling - 'we could have much more animation and it would be fine'
@@ -438,7 +443,7 @@ def analyse(tl: dict, docks: list[dict], mp: dict) -> dict:
                             or any(isinstance(pg, dict) and "cap_mode" in pg for pg in pages)}
 
 
-def run(tl: dict, docks: list[dict], mp: dict) -> tuple[list[Gate], dict]:
+def run(tl: dict, docks: list[dict], mp: dict, frames: list[dict] | None = None) -> tuple[list[Gate], dict]:
     A = analyse(tl, docks, mp)
     R = A["runtime"]
     mm = lambda s: f"{int(s // 60)}:{int(s % 60):02d}"
@@ -512,6 +517,7 @@ def run(tl: dict, docks: list[dict], mp: dict) -> tuple[list[Gate], dict]:
     g.append(_pulse_gate(tl, A))                                           # M16 (49 s49.6, shorts)
     # E24 / E25: the opening minute and the chart-as-proof rule
     g += [_opening_still_gate(A["still"]), _first_chart_gate(tl, docks, mp), _chart_hold_gate(tl, docks)]
+    g.append(_frozen_gate(frames))                                        # M18 (E49: nothing ever goes truly still)
     add("J01", "JUDGE", "every savor beat holds its picture (card up, badge lit), never a bare plate with a drift", "doc 29 s9.25 #3")
     return g, _stats(A, tot)
 
@@ -703,6 +709,54 @@ def _camera_gate(clashes: list[tuple[str, str]]) -> Gate:
     return Gate("M09", "FAIL" if clashes else "PASS", msg, "doc 29 s9.27 precedence / s9.28 C3: one camera move per window")
 
 
+def load_frames(build: Path) -> list[dict] | None:
+    """The per-frame hashes measure_frozen_frames.py wrote beside the timeline, or None when it has not run."""
+    p = Path(build) / FRAME_HASHES_NAME
+    if not p.exists():
+        return None
+    doc = json.loads(p.read_text(encoding="utf-8"))
+    return list(doc.get("frames") or []) if isinstance(doc, dict) else list(doc)
+
+
+def frozen_runs(frames: list[dict], max_s: float = FROZEN_MAX_S) -> list[tuple[float, float]]:
+    """(start t, frozen seconds) of every run of identical consecutive hashes longer than max_s - the seconds between
+    the run's first and last identical frame. Mirrors measure_frozen_frames.frozen_runs."""
+    fs = sorted((float(f["t"]), str(f["sha256"])) for f in frames)
+    out: list[tuple[float, float]] = []
+    i = 0
+    while i < len(fs):
+        j = i
+        while j + 1 < len(fs) and fs[j + 1][1] == fs[i][1]:
+            j += 1
+        dur = fs[j][0] - fs[i][0]
+        if j > i and dur > max_s:
+            out.append((fs[i][0], dur))
+        i = j + 1
+    return out
+
+
+def _frozen_gate(frames: list[dict] | None) -> Gate:
+    """M18 (E49): the idle is not an event - it is the absence of a frozen frame. Measured, never inferred: without
+    frame-hashes.json the row is INFO and says what to run (no silent skip)."""
+    if frames is None:
+        return Gate("M18", "INFO", f"frozen frames not measured - run measure_frozen_frames.py <build> (writes {FRAME_HASHES_NAME})", SRC_M18)
+    if len(frames) < 2:
+        return Gate("M18", "INFO", f"{FRAME_HASHES_NAME} carries {len(frames)} frame(s) - nothing to compare", SRC_M18)
+    ts = sorted(float(f["t"]) for f in frames)
+    step = min((b - a for a, b in zip(ts, ts[1:]) if b > a), default=0.0)
+    fps = (1 / step) if step > 0 else 0.0
+    runs = frozen_runs(frames)
+    span = f"{len(frames)} frames at {fps:.0f} fps, {_mm(ts[0])}-{_mm(ts[-1])}"
+    if runs:
+        worst = max(runs, key=lambda r: r[1])
+        return Gate("M18", "WARN", f"{len(runs)} run(s) of bit-identical frames over {FROZEN_MAX_S:.2f}s ({span}); worst {worst[1]:.2f}s at {_mm(worst[0])}: "
+                    + ", ".join(f"{_mm(a)}+{d:.2f}s" for a, d in runs[:8]) + (" ..." if len(runs) > 8 else "")
+                    + " - give the held thing its idle (kinetics.idle; E49), never a plate move", SRC_M18)
+    # the longest run that stayed under the ceiling, for the record
+    longest = max(frozen_runs(frames, -1.0), key=lambda r: r[1], default=(0.0, 0.0))
+    return Gate("M18", "PASS", f"no run of bit-identical frames over {FROZEN_MAX_S:.2f}s ({span}); longest {longest[1]:.2f}s at {_mm(longest[0])}", SRC_M18)
+
+
 def _stats(A: dict, still_total: float) -> dict:
     R = A["runtime"]
     mm = lambda s: f"{int(s // 60)}:{int(s % 60):02d}"
@@ -743,7 +797,7 @@ def write_report(build_dir: Path, timeline_name: str | None = None) -> tuple[Pat
     build_dir = Path(build_dir)
     tl, docks, mp = _load(build_dir, timeline_name)
     tl_path = _timeline_path(build_dir, timeline_name)
-    gates, stats = run(tl, docks, mp)
+    gates, stats = run(tl, docks, mp, load_frames(build_dir))
     n_fail = fail_count(gates)
     verdict = "FAIL" if n_fail else "PASS"
     # the timeline hash keys the report to the build it measured; render_episode refuses a
@@ -765,7 +819,7 @@ def main() -> int:
     if hasattr(sys.stdout, "reconfigure"):
         sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     tl, docks, mp = _load(args.build, args.timeline)
-    gates, stats = run(tl, docks, mp)
+    gates, stats = run(tl, docks, mp, load_frames(args.build))
     print(report_text(gates, stats, args.build))
     return 1 if fail_count(gates) else 0
 

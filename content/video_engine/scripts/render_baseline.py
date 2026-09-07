@@ -41,6 +41,7 @@ FLAG_FRAMES = {
     "ledger-soak-page@km_ink": ("ledger-soak-page", {"km_ink": True}, 2.7),
     "ledger-soak-page@analytic_spring": ("ledger-soak-page", {"analytic_spring": True}, 7.86),
     "ledger-soak-page@area_squash": ("ledger-soak-page", {"analytic_spring": True, "area_squash": True}, 7.86),
+    "ledger-soak-page@idle": ("ledger-soak-page", {"idle": True}, 11.0),   # the page holding after its build: the breath is the only difference (E49)
 }
 
 

@@ -1,0 +1,123 @@
+"""FROZEN FRAMES - the measurement behind the motion gate's M18 row (ruling E49, P47 T5).
+
+E49: "nothing ever goes truly still" - a held thing is never bit-identical from frame to frame. This tool renders a
+built player at a fixed frame rate through the same harness the shipped renderer uses (render_baseline: headless
+Chromium seeks #scrub and screenshots #stage) and hashes every frame's RGB bytes. A run of identical consecutive
+hashes is a freeze; its length is the time across which nothing on screen changed. The gate reads the file this
+writes and WARNs on any run over FROZEN_MAX_S (0.5 s, [DERIVED: HyperFrames' "the final 1-2 seconds"; halved]).
+
+    python measure_frozen_frames.py <build-dir> [--fps 12] [--start S] [--end S] [--timeline NAME.timeline.json]
+                                                [--html player.html] [--out frame-hashes.json]
+
+Writes <build-dir>/frame-hashes.json: {"fps", "start", "end", "html_sha256", "frames": [{"t", "sha256"}]} and prints
+the runs. A 90 s short at 12 fps is ~1100 screenshots (a few minutes); 12 fps resolves a 0.5 s freeze to a frame.
+Deterministic: the player is a pure function of t, so the same build hashes the same way twice.
+"""
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import sys
+from pathlib import Path
+
+HERE = Path(__file__).resolve().parent
+sys.path.insert(0, str(HERE))
+
+import render_baseline as RB  # noqa: E402
+
+FRAME_HASHES_NAME = "frame-hashes.json"
+FROZEN_MAX_S = 0.5   # [DERIVED: HyperFrames' "the final 1-2 seconds"; halved] - mirrored in gate_motion_density.FROZEN_MAX_S
+
+
+def frozen_runs(frames: list[dict], max_s: float = FROZEN_MAX_S) -> list[tuple[float, float]]:
+    """(start t, frozen seconds) of every run of identical consecutive hashes longer than max_s, in time order.
+    The frozen seconds of a run are the time between its first and last identical frame."""
+    fs = sorted((float(f["t"]), str(f["sha256"])) for f in frames)
+    out: list[tuple[float, float]] = []
+    i = 0
+    while i < len(fs):
+        j = i
+        while j + 1 < len(fs) and fs[j + 1][1] == fs[i][1]:
+            j += 1
+        dur = fs[j][0] - fs[i][0]
+        if j > i and dur > max_s:
+            out.append((fs[i][0], dur))
+        i = j + 1
+    return out
+
+
+def hash_frames(html: Path, aspect: str, fps: float, start: float, end: float, progress=None) -> list[dict]:
+    """One browser, one seek per frame, one sha256 of the stage's RGB bytes per frame."""
+    from playwright.sync_api import sync_playwright
+    w, h = RB.STAGE[aspect]
+    srv, port = RB.serve(html.parent)
+    out: list[dict] = []
+    try:
+        with sync_playwright() as pw:
+            browser = pw.chromium.launch(headless=True)
+            page = browser.new_context(viewport={"width": w, "height": h}, device_scale_factor=1.0).new_page()
+            page.goto(f"http://127.0.0.1:{port}/{html.name}", wait_until="networkidle", timeout=120000)
+            RB.prepare_page(page, w, h)
+            n = int(round((end - start) * fps))
+            for i in range(n + 1):
+                t = round(start + i / fps, 4)
+                if t > end + 1e-9:
+                    break
+                png = RB.frame_png(page, t, (w, h))
+                out.append({"t": t, "sha256": hashlib.sha256(RB.rgb_bytes(png)[1]).hexdigest()})
+                if progress and i % int(fps) == 0:
+                    progress(t, end)
+            browser.close()
+    finally:
+        srv.shutdown()
+    return out
+
+
+def measure(build: Path, fps: float = 12.0, start: float | None = None, end: float | None = None,
+            timeline_name: str | None = None, html_name: str = "player.html", out_name: str = FRAME_HASHES_NAME,
+            progress=None) -> tuple[Path, list[tuple[float, float]]]:
+    tls = [build / timeline_name] if timeline_name else sorted(build.glob("*.timeline.json"))
+    if not tls or not tls[0].exists():
+        raise SystemExit(f"no timeline in {build}")
+    tl = json.loads(tls[0].read_text(encoding="utf-8"))
+    aspect = str(tl.get("aspect") or "16:9")
+    runtime = float(tl.get("runtime_s") or max(s["span"][1] for s in tl["scenes"]))
+    s0, s1 = (0.0 if start is None else start), (runtime if end is None else min(end, runtime))
+    html = build / html_name
+    if not html.exists():
+        raise SystemExit(f"no {html_name} in {build}")
+    frames = hash_frames(html, aspect, fps, s0, s1, progress)
+    runs = frozen_runs(frames)
+    doc = {"fps": fps, "start": s0, "end": s1, "aspect": aspect, "timeline": tls[0].name,
+           "html_sha256": hashlib.sha256(html.read_bytes()).hexdigest(), "frozen_max_s": FROZEN_MAX_S,
+           "frames": frames, "frozen_runs": [{"t": a, "s": round(d, 4)} for a, d in runs]}
+    out = build / out_name
+    out.write_text(json.dumps(doc, indent=1), encoding="utf-8")
+    return out, runs
+
+
+def main() -> int:
+    ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
+    ap.add_argument("build", type=Path)
+    ap.add_argument("--fps", type=float, default=12.0)
+    ap.add_argument("--start", type=float)
+    ap.add_argument("--end", type=float)
+    ap.add_argument("--timeline")
+    ap.add_argument("--html", default="player.html")
+    ap.add_argument("--out", default=FRAME_HASHES_NAME)
+    a = ap.parse_args()
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    out, runs = measure(a.build, a.fps, a.start, a.end, a.timeline, a.html, a.out,
+                        progress=lambda t, e: print(f"  {t:7.2f} / {e:.2f}", flush=True))
+    print(f"frame-hashes: {out}")
+    if runs:
+        print(f"FROZEN: {len(runs)} run(s) over {FROZEN_MAX_S:.2f}s: " + ", ".join(f"{a:.2f}s+{d:.2f}s" for a, d in runs[:12]))
+    else:
+        print(f"no run of identical frames over {FROZEN_MAX_S:.2f}s")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
