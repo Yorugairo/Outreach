@@ -18,10 +18,10 @@ reference as normalised (`42§42.2` - which `46 s46.4` also writes - `29§Part3`
 `E38`, `M13`, `G-j`); a list (`docs 39 and 40`) makes one edge per document, and `to` is
 null when nothing in the index answers it.
 
-4131 topics, 3894 citation edges. The 200 largest topics follow,
+4146 topics, 3913 citation edges. The 200 largest topics follow,
 at most 12 sections each - the JSONL holds every one.
 
-## youtube (128)
+## youtube (132)
 
 - content/video_engine/projects/history-of-bjj/README.md:1 — History of BJJ Series — This directory contains source-controlled editorial inputs for History Documentary
 - content/video_engine/projects/systems-and-blowups/steel-and-paper/REWRITE-ORDER-G.md:7 — Editorial changes (the reason for the rewrite) — 1. Hook: the audience claim retargets to what is TRUE. The single
@@ -35,7 +35,7 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/projects/systems-and-blowups/tokyo-tea-break/REVIEW-2026-09-04.claude.md:99 — VIEWER (P36, binds) — - v2 first pass: V01 15/28 (54 %). The raw reports showed the reader had filed the
 - content/video_engine/projects/systems-and-blowups/tokyo-tea-break/REVIEW-2026-09-04.claude.md:132 — DECISION (operator rules; recommendation on each) — 1. Runtime 2:20 against doc 51's 45–60 s. Every clear cut that clears G01–G45 has
 - content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SCRIPT-90S-DESCRIPTION.md:1 — Tokyo Tea Break — the publish description (YouTube Short) — Drafted 2026-09-06 against the approved render (`build-short/render/APPROVALS.json`) and the dossier
-- … 116 more in `docs/DOCS-TOPICS.jsonl`
+- … 120 more in `docs/DOCS-TOPICS.jsonl`
 
 ## review-only (102)
 
@@ -655,6 +655,25 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/DRAWING_ENGINE_ANIMATION_TRANSFORM_RESEARCH.md:398 — Improvement 5: Word-Gap Boundary Snapping Engine — Integrate the acoustic transition finding directly into the script-to-storyboard compiler (`src/services/storyboard_gene
 - … 11 more in `docs/DOCS-TOPICS.jsonl`
 
+## mid-word (22)
+
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-90S.claude.md:1 — Tokyo Tea Break — shot table (9:16, 2026-09-04): the long arm `SCRIPT-90S-VO.claude.v8-long.txt`, and the short `SCRIPT-90S-VO.claude.txt` (v9) below it — Authored, never generated (PIPELINE stage 7). Two clocks are quoted: the kit estimate
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-90S.claude.md:10 — The bars this table is built to — - Worlds are 10 s Omni clips of `@StickMike` on the cream page (`#F4E6C7` ground,
+- content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/KEY_LEARNINGS_FOR_CLAUDE.md:1 — Dossier: Claude Code (Free Plan) + YouTube Deconstruction — Source Video: https://www.youtube.com/watch?v=WVT2FCjhDDY
+- content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/KEY_LEARNINGS_FOR_CLAUDE.md:8 — 1. The Core Architectural Learning: Audio Gaps as Scene Breaks — The single most valuable technical takeaway from this deconstruction:
+- content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/KEY_LEARNINGS_FOR_CLAUDE.md:14 — The Mechanism — 1. The Flawed Status Quo:
+- content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/WHAT-WE-LEARN.md:1 — What we actually learn from the zapiwala tutorial — verified, 2026-09-04 — Read against Gemini's dossier in this directory, then re-measured from the primary
+- content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/WHAT-WE-LEARN.md:10 — 1. The finding that matters: they cut on the gap, we cut through the word — Their video's own edit, measured from its caption word timings against its own cut list:
+- docs/content-video-engine/46-REFERENCE-RHYTHM.md:1 — 46 — Reference rhythm: what the shot ledger actually measures — Extracted from `04_shot_ledger_100_cuts.md` (primary measurement, recomputed here) and
+  cited by: docs/content-video-engine/51-THE-SHORTS-FORMAT.md:1, docs/content-video-engine/TRANSITIONS-REVIEW-2026-09-06.md:8, docs/content-video-engine/TRANSITIONS-REVIEW-2026-09-06.md:38, docs/content-video-engine/TRANSITIONS-REVIEW-2026-09-06.md:124, docs/runbooks/WORK-ORDER-GEMINI-PROFILES-2026-09-05.md:16
+- docs/content-video-engine/46-REFERENCE-RHYTHM.md:43 — 46.2 What this means for M13 and for M10 — M13 (cut lands in an acoustic gap) is free. Since our cut frequency already matches,
+  cited by: docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:21, docs/content-video-engine/54-GOOGLE-FLOW-OMNI-NANO-BANANA-PRODUCTION-RESEARCH.md:1
+- docs/content-video-engine/46-REFERENCE-RHYTHM.md:60 — 46.3 The gap threshold — settled from the reference, 2026-09-04 — A `DERIVED` tag marks a computed figure: a starting reference to test, never a research finding (R6; E42 2026-09-06).
+  cited by: docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:62, docs/content-video-engine/BACKLOG.md:366, docs/content-video-engine/BACKLOG.md:450, docs/content-video-engine/BACKLOG.md:504, docs/content-video-engine/FINDING-gaps-are-the-edit.md:171, docs/content-video-engine/RESEARCH-INDEX.md:35, +8 more
+- docs/content-video-engine/BACKLOG.md:366 — Explorations — what we still cannot answer — Landed 2026-09-04 from the research agent: [54](54-GOOGLE-FLOW-OMNI-NANO-BANANA-PRODUCTION-RESEARCH.md)
+- docs/content-video-engine/FINDING-gaps-are-the-edit.md:81 — Test 3 — the question I should have asked first — Tests 1 and 2 asked "do gaps predict where we cut." That was backwards. The claim is
+- … 10 more in `docs/DOCS-TOPICS.jsonl`
+
 ## depthflow (21)
 
 - content/video_engine/sources/reference_analyses/COMFYUI_PARALLAX_TECHNICAL_STANDARDS_RESEARCH.md:1 — Deep Research Report: ComfyUI Parallax Engine — Technical Mechanics, Dial Calibration, and Professional Production Standards — Generated: 2026-09-04 | Status: Authoritative Technical Standard | Scope: 2.5D Parallax, Depthflow, and Camera Motion in
@@ -671,6 +690,28 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_INDEX.md:29 — 1.1 Complete Evidence Bundle (`complete_research_evidence_bundle/`) — | File / Artifact | Size / Scope | Primary Role & Description | Recommended Agent / Consumer |
 - … 9 more in `docs/DOCS-TOPICS.jsonl`
 
+## derived (21)
+
+- docs/content-video-engine/45-PARALLAX-AND-PLATE-MOTION.md:1 — 45 — Parallax and plate motion: what may move, how much, and what is banned — Extracted from `05_comfyui_parallax_technical_standards.md` and
+  cited by: docs/content-video-engine/43-SCENE-GRAPH-AND-TRANSFORM.md:37, docs/content-video-engine/51-THE-SHORTS-FORMAT.md:135
+- docs/content-video-engine/45-PARALLAX-AND-PLATE-MOTION.md:46 — 45.3 Our current dials, and what they should be — Read from `tools/google-flow-driver/src/parallax-runner.mjs` on 2026-09-04.
+  cited by: docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:62, docs/content-video-engine/RESEARCH-INDEX.md:35
+- docs/content-video-engine/46-REFERENCE-RHYTHM.md:1 — 46 — Reference rhythm: what the shot ledger actually measures — Extracted from `04_shot_ledger_100_cuts.md` (primary measurement, recomputed here) and
+  cited by: docs/content-video-engine/51-THE-SHORTS-FORMAT.md:1, docs/content-video-engine/TRANSITIONS-REVIEW-2026-09-06.md:8, docs/content-video-engine/TRANSITIONS-REVIEW-2026-09-06.md:38, docs/content-video-engine/TRANSITIONS-REVIEW-2026-09-06.md:124, docs/runbooks/WORK-ORDER-GEMINI-PROFILES-2026-09-05.md:16
+- docs/content-video-engine/46-REFERENCE-RHYTHM.md:60 — 46.3 The gap threshold — settled from the reference, 2026-09-04 — A `DERIVED` tag marks a computed figure: a starting reference to test, never a research finding (R6; E42 2026-09-06).
+  cited by: docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:62, docs/content-video-engine/BACKLOG.md:366, docs/content-video-engine/BACKLOG.md:450, docs/content-video-engine/BACKLOG.md:504, docs/content-video-engine/FINDING-gaps-are-the-edit.md:171, docs/content-video-engine/RESEARCH-INDEX.md:35, +8 more
+- docs/content-video-engine/46-REFERENCE-RHYTHM.md:172 — 46.5 The reference's transition kinds — measured 2026-09-06 (TR-1) — `measure_cut_kinds.py` on the 720p upload, 99 boundaries: hard cut 36 (36.4 %), dip through black 35 (35.4 %, 14 frames
+- docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:137 — 4. DEMOTED — knowledge, not doctrine — Named honestly, because a finding that cannot carry a check should not sit in a doc
+- docs/content-video-engine/48-THE-FIGURE-AND-THE-GROUND.md:154 — 48.8 Harmonisation, in our own tokens — The document integrates with E22 rather than around it:
+- docs/content-video-engine/50-THE-PHONE-IS-THE-SCREEN.md:1 — 50 — The phone is the screen: ep1's real analytics, and what they say — Operator-supplied YouTube analytics for ep1, 2026-09-04. This is ground truth, not
+  cited by: content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-90S.claude.md:10, docs/content-video-engine/49-GENERATIVE-VIDEO-AND-THE-VERTICAL-STAGE.md:52, docs/content-video-engine/50-THE-PHONE-IS-THE-SCREEN.md:116, docs/content-video-engine/51-THE-SHORTS-FORMAT.md:1, docs/content-video-engine/BACKLOG.md:207, docs/content-video-engine/BACKLOG.md:225, +3 more
+- docs/content-video-engine/50-THE-PHONE-IS-THE-SCREEN.md:30 — 50.2 The finding: our type is illegible on a phone — 75.2 % of watch time is a phone. Our stage is 1920 px wide. On a phone in portrait —
+  cited by: docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:62, docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:210, docs/content-video-engine/50-THE-PHONE-IS-THE-SCREEN.md:88, docs/content-video-engine/51-THE-SHORTS-FORMAT.md:15, docs/content-video-engine/51-THE-SHORTS-FORMAT.md:189, docs/content-video-engine/BACKLOG.md:97, +1 more
+- docs/content-video-engine/BACKLOG.md:493 — EXPLORE — the first step is a measurement or a read, not a build (6) — | id | item — what and where | why / evidence | cost |
+- docs/content-video-engine/BACKLOG.md:521 — D3 / D6 — ruled 2026-09-06 (E42): poses first; tag all thirteen — | id | item — what and where | why / evidence | cost |
+- docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:163 — 3. Track A — The Animator (Timing and Motion)
+- … 9 more in `docs/DOCS-TOPICS.jsonl`
+
 ## mask-pinned (21)
 
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/00_README_INDEX.md:29 — Key Architectural Decisions — 1. The Page is the Ground (`RULE-the-page-is-the-ground.md`): The cream Ledger Page (`#F4E6C7`) is not just a chart card
@@ -685,25 +726,6 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md:346 — The 3 Local ComfyUI Engines & Role Matrix — | Engine | Local Tech Stack | Role in Ledger Engine | Mathematical / Operational Law |
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_INDEX.md:305 — 10. Doctrine Rules, Operating Rulings, & Quality Gates — All engineering recommendations are cross-referenced with standing repository doctrine:
 - content/video_engine/sources/reference_analyses/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md:346 — The 3 Local ComfyUI Engines & Role Matrix — | Engine | Local Tech Stack | Role in Ledger Engine | Mathematical / Operational Law |
-- … 9 more in `docs/DOCS-TOPICS.jsonl`
-
-## mid-word (21)
-
-- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-90S.claude.md:1 — Tokyo Tea Break — shot table (9:16, 2026-09-04): the long arm `SCRIPT-90S-VO.claude.v8-long.txt`, and the short `SCRIPT-90S-VO.claude.txt` (v9) below it — Authored, never generated (PIPELINE stage 7). Two clocks are quoted: the kit estimate
-- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-90S.claude.md:10 — The bars this table is built to — - Worlds are 10 s Omni clips of `@StickMike` on the cream page (`#F4E6C7` ground,
-- content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/KEY_LEARNINGS_FOR_CLAUDE.md:1 — Dossier: Claude Code (Free Plan) + YouTube Deconstruction — Source Video: https://www.youtube.com/watch?v=WVT2FCjhDDY
-- content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/KEY_LEARNINGS_FOR_CLAUDE.md:8 — 1. The Core Architectural Learning: Audio Gaps as Scene Breaks — The single most valuable technical takeaway from this deconstruction:
-- content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/KEY_LEARNINGS_FOR_CLAUDE.md:14 — The Mechanism — 1. The Flawed Status Quo:
-- content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/WHAT-WE-LEARN.md:1 — What we actually learn from the zapiwala tutorial — verified, 2026-09-04 — Read against Gemini's dossier in this directory, then re-measured from the primary
-- content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/WHAT-WE-LEARN.md:10 — 1. The finding that matters: they cut on the gap, we cut through the word — Their video's own edit, measured from its caption word timings against its own cut list:
-- docs/content-video-engine/46-REFERENCE-RHYTHM.md:1 — 46 — Reference rhythm: what the shot ledger actually measures — Extracted from `04_shot_ledger_100_cuts.md` (primary measurement, recomputed here) and
-  cited by: docs/content-video-engine/51-THE-SHORTS-FORMAT.md:1, docs/content-video-engine/TRANSITIONS-REVIEW-2026-09-06.md:8, docs/content-video-engine/TRANSITIONS-REVIEW-2026-09-06.md:38, docs/content-video-engine/TRANSITIONS-REVIEW-2026-09-06.md:124, docs/runbooks/WORK-ORDER-GEMINI-PROFILES-2026-09-05.md:16
-- docs/content-video-engine/46-REFERENCE-RHYTHM.md:43 — 46.2 What this means for M13 and for M10 — M13 (cut lands in an acoustic gap) is free. Since our cut frequency already matches,
-  cited by: docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:21, docs/content-video-engine/54-GOOGLE-FLOW-OMNI-NANO-BANANA-PRODUCTION-RESEARCH.md:1
-- docs/content-video-engine/46-REFERENCE-RHYTHM.md:60 — 46.3 The gap threshold — settled from the reference, 2026-09-04 — A `DERIVED` tag marks a computed figure: a starting reference to test, never a research finding (R6; E42 2026-09-06).
-  cited by: docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:62, docs/content-video-engine/BACKLOG.md:366, docs/content-video-engine/BACKLOG.md:450, docs/content-video-engine/BACKLOG.md:504, docs/content-video-engine/FINDING-gaps-are-the-edit.md:171, docs/content-video-engine/RESEARCH-INDEX.md:35, +3 more
-- docs/content-video-engine/BACKLOG.md:366 — Explorations — what we still cannot answer — Landed 2026-09-04 from the research agent: [54](54-GOOGLE-FLOW-OMNI-NANO-BANANA-PRODUCTION-RESEARCH.md)
-- docs/content-video-engine/FINDING-gaps-are-the-edit.md:81 — Test 3 — the question I should have asked first — Tests 1 and 2 asked "do gaps predict where we cut." That was backwards. The claim is
 - … 9 more in `docs/DOCS-TOPICS.jsonl`
 
 ## re-ask (21)
@@ -869,28 +891,6 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/why-us-bond-yields-are-surging-again-do-this-asap/NICHE_BEND_DOSSIER.md:1 — NICHE BEND RESEARCH DOSSIER: WHY US BOND YIELDS ARE SURGING AGAIN — DO THIS ASAP! — > Strategic repositioning brief. Contrasts crowded competitor tropes with forensic mechanics,
 - content/video_engine/sources/reference_analyses/why-us-bond-yields-are-surging-again-do-this-asap/NICHE_BEND_DOSSIER.md:8 — 1. Top Competitor Cluster (The Crowded Mainstream) — | Competitor Title | Channel / Source | Core Hook Trope | Video URL |
 - content/video_engine/sources/reference_analyses/why-us-bond-yields-are-surging-again-do-this-asap/NICHE_BEND_DOSSIER.md:18 — Competitor Narrative & Art Style Patterns: — - Thumbnail & Title Trope: High-urgency doom ('Surging AGAIN - Do This ASAP!', 'Catastrophe ahead').
-- … 7 more in `docs/DOCS-TOPICS.jsonl`
-
-## derived (19)
-
-- docs/content-video-engine/45-PARALLAX-AND-PLATE-MOTION.md:1 — 45 — Parallax and plate motion: what may move, how much, and what is banned — Extracted from `05_comfyui_parallax_technical_standards.md` and
-  cited by: docs/content-video-engine/43-SCENE-GRAPH-AND-TRANSFORM.md:37, docs/content-video-engine/51-THE-SHORTS-FORMAT.md:135
-- docs/content-video-engine/45-PARALLAX-AND-PLATE-MOTION.md:46 — 45.3 Our current dials, and what they should be — Read from `tools/google-flow-driver/src/parallax-runner.mjs` on 2026-09-04.
-  cited by: docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:62, docs/content-video-engine/RESEARCH-INDEX.md:35
-- docs/content-video-engine/46-REFERENCE-RHYTHM.md:1 — 46 — Reference rhythm: what the shot ledger actually measures — Extracted from `04_shot_ledger_100_cuts.md` (primary measurement, recomputed here) and
-  cited by: docs/content-video-engine/51-THE-SHORTS-FORMAT.md:1, docs/content-video-engine/TRANSITIONS-REVIEW-2026-09-06.md:8, docs/content-video-engine/TRANSITIONS-REVIEW-2026-09-06.md:38, docs/content-video-engine/TRANSITIONS-REVIEW-2026-09-06.md:124, docs/runbooks/WORK-ORDER-GEMINI-PROFILES-2026-09-05.md:16
-- docs/content-video-engine/46-REFERENCE-RHYTHM.md:60 — 46.3 The gap threshold — settled from the reference, 2026-09-04 — A `DERIVED` tag marks a computed figure: a starting reference to test, never a research finding (R6; E42 2026-09-06).
-  cited by: docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:62, docs/content-video-engine/BACKLOG.md:366, docs/content-video-engine/BACKLOG.md:450, docs/content-video-engine/BACKLOG.md:504, docs/content-video-engine/FINDING-gaps-are-the-edit.md:171, docs/content-video-engine/RESEARCH-INDEX.md:35, +3 more
-- docs/content-video-engine/46-REFERENCE-RHYTHM.md:172 — 46.5 The reference's transition kinds — measured 2026-09-06 (TR-1) — `measure_cut_kinds.py` on the 720p upload, 99 boundaries: hard cut 36 (36.4 %), dip through black 35 (35.4 %, 14 frames
-- docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:137 — 4. DEMOTED — knowledge, not doctrine — Named honestly, because a finding that cannot carry a check should not sit in a doc
-- docs/content-video-engine/48-THE-FIGURE-AND-THE-GROUND.md:154 — 48.8 Harmonisation, in our own tokens — The document integrates with E22 rather than around it:
-- docs/content-video-engine/50-THE-PHONE-IS-THE-SCREEN.md:1 — 50 — The phone is the screen: ep1's real analytics, and what they say — Operator-supplied YouTube analytics for ep1, 2026-09-04. This is ground truth, not
-  cited by: content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-90S.claude.md:10, docs/content-video-engine/49-GENERATIVE-VIDEO-AND-THE-VERTICAL-STAGE.md:52, docs/content-video-engine/50-THE-PHONE-IS-THE-SCREEN.md:116, docs/content-video-engine/51-THE-SHORTS-FORMAT.md:1, docs/content-video-engine/BACKLOG.md:207, docs/content-video-engine/BACKLOG.md:225, +3 more
-- docs/content-video-engine/50-THE-PHONE-IS-THE-SCREEN.md:30 — 50.2 The finding: our type is illegible on a phone — 75.2 % of watch time is a phone. Our stage is 1920 px wide. On a phone in portrait —
-  cited by: docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:62, docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:210, docs/content-video-engine/50-THE-PHONE-IS-THE-SCREEN.md:88, docs/content-video-engine/51-THE-SHORTS-FORMAT.md:15, docs/content-video-engine/51-THE-SHORTS-FORMAT.md:189, docs/content-video-engine/BACKLOG.md:97, +1 more
-- docs/content-video-engine/BACKLOG.md:493 — EXPLORE — the first step is a measurement or a read, not a build (6) — | id | item — what and where | why / evidence | cost |
-- docs/content-video-engine/BACKLOG.md:521 — D3 / D6 — ruled 2026-09-06 (E42): poses first; tag all thirteen — | id | item — what and where | why / evidence | cost |
-- docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:163 — 3. Track A — The Animator (Timing and Motion)
 - … 7 more in `docs/DOCS-TOPICS.jsonl`
 
 ## dot-com (19)
@@ -1700,6 +1700,22 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/CAPABILITIES.md:28 — Kubelka-Munk ink — two-flux layer model per channel (44 §44.1), K/S from the ink's own colour; the soak's stains sum coverage (`mix-blend-m
 - … 3 more in `docs/DOCS-TOPICS.jsonl`
 
+## l-cut (15)
+
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/08_answers_animation_craft_brief.md:350 — B3: L-Cuts / J-Cuts under Continuous Narration [RECLASSIFIED: Design Proposal] — - Source: E. Pincus & S. Ascher, The Filmmaker's Handbook (2013). (Classified as film craft doctrine).
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/08_answers_animation_craft_brief.md:605 — 9.2 Practitioner Doctrine (Editorial & Animation Craft) — 21. Walter Murch (1995). In the Blink of an Eye: A Perspective on Film Editing. Silman-James Press. (Practitioner doctri
+- docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:370 — B3: L-Cuts / J-Cuts under Continuous Narration [RECLASSIFIED: Design Proposal] — - Source: E. Pincus & S. Ascher, The Filmmaker's Handbook (2013). (Classified as film craft doctrine). [DERIVED: from Pi
+- docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:625 — 9.2 Practitioner Doctrine (Editorial & Animation Craft) — 21. Walter Murch (1995). In the Blink of an Eye: A Perspective on Film Editing. Silman-James Press. (Practitioner doctri
+- docs/content-video-engine/briefs/RESEARCH-BRIEF-animation-craft.md:118 — 2.3 Answer status after five passes (2026-09-04) — Recorded so a later pass does not redo settled work. Reference layer: docs 42–49.
+- docs/content-video-engine/briefs/RESEARCH-BRIEF-animation-craft.md:163 — Track B — the editor (cutting and rhythm) — | # | question | why it matters here |
+- docs/content-video-engine/RESEARCH-INDEX.md:255 — `08_answers_animation_craft_brief.md` — 42 headings — | heading | disposition |
+- docs/content-video-engine/TRANSITIONS-REVIEW-2026-09-06.md:1 — Transitions — the review (2026-09-06) — The operator: "I think we should review our research on transitions also, I don't think we've gotten them nailed properl
+- docs/content-video-engine/TRANSITIONS-REVIEW-2026-09-06.md:8 — 1. The judgment — The research asked the right questions and mostly did not answer them. The research brief's Track B (`briefs/RESEARCH-BR
+- docs/content-video-engine/TRANSITIONS-REVIEW-2026-09-06.md:38 — What to do, in the operator's order (recent stumble → TOP; unbuilt → BACKLOG; unmeasured → EXPLORE) — | id | item | why | cost |
+- docs/research/motion/WEALTH_LOGIC_CUT_OFFSETS_MEASURED.md:1 — Wealth Logic — where the picture change sits relative to the narration (J-cut / L-cut, measured) — Pass-1 · 2026-09-06 · sources: the measured boundaries, video.en.vtt · for: TR-2
+- docs/research/motion/WEALTH_LOGIC_CUT_OFFSETS_MEASURED.md:5 — The question — TR-2 (`docs/content-video-engine/TRANSITIONS-REVIEW-2026-09-06.md` §1, from research brief B3,
+- … 3 more in `docs/DOCS-TOPICS.jsonl`
+
 ## none (15)
 
 - content/video_engine/sources/reference_analyses/COMFYUI_PARALLAX_TECHNICAL_STANDARDS_RESEARCH.md:27 — 1. Technical Anatomy of Our Current ComfyUI Stack — Our current pipeline executes the following graph in ComfyUI:
@@ -1910,6 +1926,23 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/patterns/STRENGTH-LOOP.md:1 — THE STRENGTH LOOP — gates at every scale, and across them — `SENTENCE-STRENGTH-CHECK.md` gates L0. The phase guides gate L4. The duty
 - docs/content-video-engine/patterns/STRENGTH-LOOP.md:42 — 2. L1 — PHRASE strength — Sub-sentence craft. A sentence can pass all ten S-gates and still be built
 - docs/content-video-engine/SCRIPT-CONTEXT-COMBINED.md:1 — DOCTRINE CORE — portable content-operation context — Model-agnostic; paste whole into any system-instruction or rules box
+- … 2 more in `docs/DOCS-TOPICS.jsonl`
+
+## blur-zoom (14)
+
+- docs/content-video-engine/46-REFERENCE-RHYTHM.md:172 — 46.5 The reference's transition kinds — measured 2026-09-06 (TR-1) — `measure_cut_kinds.py` on the 720p upload, 99 boundaries: hard cut 36 (36.4 %), dip through black 35 (35.4 %, 14 frames
+- docs/content-video-engine/TRANSITIONS-REVIEW-2026-09-06.md:157 — 6. TR-1 landed — the reference's transition mix, measured (2026-09-06, same day) — `content/video_engine/scripts/measure_cut_kinds.py` over the 720p upload (30 fps), all 99 boundaries in 2.4 s, calibrate
+- docs/portable/OPERATOR-RULINGS.md:1405 — E47 — The dip through black and the blur-zoom enter the kit for world changes; the mount, the spiral and the mount's dissolve are signatures; the wipe is retired as the world-change default (2026-09-06) — Ruled on the measured reference mix (doc 46 §46.5: 36 hard cuts, 35 dips through black at 0.47 s, 28 blur-zooms, 0 disso
+  cited by: docs/content-video-engine/TRANSITIONS-REVIEW-2026-09-06.md:157, docs/research/motion/WEALTH_LOGIC_CUT_OFFSETS_MEASURED.md:150, docs/research/motion/WEALTH_LOGIC_CUT_OFFSETS_MEASURED.md:189
+- docs/research/motion/WEALTH_LOGIC_CUT_OFFSETS_MEASURED.md:150 — 4. By kind — the dip is the one real offset, and it is an offset of the *transition*, not of the cut — Caption timeline, rule (a) ≥ 0.30 s:
+- docs/research/motion/WEALTH_LOGIC_TRANSITIONS_MEASURED.md:1 — Wealth Logic Transitions, Measured From The Pixels — Pass-1 · 2026-09-06 · sources: the video on disk, the ledger · for: TR-1
+- docs/research/motion/WEALTH_LOGIC_TRANSITIONS_MEASURED.md:5 — The question — What KIND of transition does the Wealth Logic reference use at each of its 99 shot boundaries -
+- docs/research/motion/WEALTH_LOGIC_TRANSITIONS_MEASURED.md:12 — Verdict up front — The reference is not an all-hard-cut edit. Only 36 of its 99 boundaries are hard cuts.
+- docs/research/motion/WEALTH_LOGIC_TRANSITIONS_MEASURED.md:30 — How it was measured, and every threshold in it — `content/video_engine/scripts/measure_cut_kinds.py` decodes `[t - 0.6 s, t + 0.8 s]` around each
+- docs/research/motion/WEALTH_LOGIC_TRANSITIONS_MEASURED.md:60 — Calibration: what the frames show versus what the rules said — Seven boundaries were extracted to `docs/research/runs/wealth-logic-cuts/check/<boundary>/` (grey
+- docs/research/motion/WEALTH_LOGIC_TRANSITIONS_MEASURED.md:135 — 4. Blur-zoom (zoom-through) — 28 of 99, 28.3 % `[DERIVED: from wealth_logic_transitions_measured.csv, count(kind=blur-zoom)/99]`
+- docs/research/motion/WEALTH_LOGIC_TRANSITIONS_MEASURED.md:177 — 7. What the Gemini pass got wrong — `docs/research/motion/WEALTH_LOGIC_TRANSITIONS_RESEARCH_BLUEPRINT.md` and its
+- docs/research/motion/WEALTH_LOGIC_TRANSITIONS_RESEARCH_BLUEPRINT.md:1 — Wealth Logic Transitions Research Blueprint — > Superseded 2026-09-06 by `WEALTH_LOGIC_TRANSITIONS_MEASURED.md` (our own frame-series measurement of all 99 boundaries
 - … 2 more in `docs/DOCS-TOPICS.jsonl`
 
 ## expectation-reality (14)
@@ -2241,23 +2274,6 @@ at most 12 sections each - the JSONL holds every one.
   cited by: docs/content-video-engine/28-AOY-MCP-EVALUATION.md:486, docs/content-video-engine/32-WRITING-FOR-THE-EAR.md:1, docs/content-video-engine/32-WRITING-FOR-THE-EAR.md:148, docs/content-video-engine/32-WRITING-FOR-THE-EAR.md:163, docs/content-video-engine/34-AOY-SCRIPT-WRITER-STUDY.md:1, docs/content-video-engine/34-AOY-SCRIPT-WRITER-STUDY.md:87, +6 more
 - docs/content-video-engine/31-FACELESS-CHANNEL-DOCTRINE.md:276 — 11. Observed architecture note (2026-08-24) — Two retrievals returned a chunk that is not doctrine but an agent-directed
 - docs/portable/OUTRO-CTA-PLAYBOOK.md:1 — OUTRO / CTA / END-SCREEN PLAYBOOK — portable — Source: AOY coaching base (ask_tim, 2026-08-30) reconciled against our
-- … 1 more in `docs/DOCS-TOPICS.jsonl`
-
-## blur-zoom (13)
-
-- docs/content-video-engine/46-REFERENCE-RHYTHM.md:172 — 46.5 The reference's transition kinds — measured 2026-09-06 (TR-1) — `measure_cut_kinds.py` on the 720p upload, 99 boundaries: hard cut 36 (36.4 %), dip through black 35 (35.4 %, 14 frames
-- docs/content-video-engine/TRANSITIONS-REVIEW-2026-09-06.md:157 — 6. TR-1 landed — the reference's transition mix, measured (2026-09-06, same day) — `content/video_engine/scripts/measure_cut_kinds.py` over the 720p upload (30 fps), all 99 boundaries in 2.4 s, calibrate
-- docs/portable/OPERATOR-RULINGS.md:1405 — E47 — The dip through black and the blur-zoom enter the kit for world changes; the mount, the spiral and the mount's dissolve are signatures; the wipe is retired as the world-change default (2026-09-06) — Ruled on the measured reference mix (doc 46 §46.5: 36 hard cuts, 35 dips through black at 0.47 s, 28 blur-zooms, 0 disso
-  cited by: docs/content-video-engine/TRANSITIONS-REVIEW-2026-09-06.md:157
-- docs/research/motion/WEALTH_LOGIC_TRANSITIONS_MEASURED.md:1 — Wealth Logic Transitions, Measured From The Pixels — Pass-1 · 2026-09-06 · sources: the video on disk, the ledger · for: TR-1
-- docs/research/motion/WEALTH_LOGIC_TRANSITIONS_MEASURED.md:5 — The question — What KIND of transition does the Wealth Logic reference use at each of its 99 shot boundaries -
-- docs/research/motion/WEALTH_LOGIC_TRANSITIONS_MEASURED.md:12 — Verdict up front — The reference is not an all-hard-cut edit. Only 36 of its 99 boundaries are hard cuts.
-- docs/research/motion/WEALTH_LOGIC_TRANSITIONS_MEASURED.md:30 — How it was measured, and every threshold in it — `content/video_engine/scripts/measure_cut_kinds.py` decodes `[t - 0.6 s, t + 0.8 s]` around each
-- docs/research/motion/WEALTH_LOGIC_TRANSITIONS_MEASURED.md:60 — Calibration: what the frames show versus what the rules said — Seven boundaries were extracted to `docs/research/runs/wealth-logic-cuts/check/<boundary>/` (grey
-- docs/research/motion/WEALTH_LOGIC_TRANSITIONS_MEASURED.md:135 — 4. Blur-zoom (zoom-through) — 28 of 99, 28.3 % `[DERIVED: from wealth_logic_transitions_measured.csv, count(kind=blur-zoom)/99]`
-- docs/research/motion/WEALTH_LOGIC_TRANSITIONS_MEASURED.md:177 — 7. What the Gemini pass got wrong — `docs/research/motion/WEALTH_LOGIC_TRANSITIONS_RESEARCH_BLUEPRINT.md` and its
-- docs/research/motion/WEALTH_LOGIC_TRANSITIONS_RESEARCH_BLUEPRINT.md:1 — Wealth Logic Transitions Research Blueprint — > Superseded 2026-09-06 by `WEALTH_LOGIC_TRANSITIONS_MEASURED.md` (our own frame-series measurement of all 99 boundaries
-- docs/research/motion/WEALTH_LOGIC_TRANSITIONS_RESEARCH_BLUEPRINT.md:13 — Verdict up front — Spot checks using the `/watch` skill at 30 fps frame density reveal the channel uses complex transitions like zoom-throu
 - … 1 more in `docs/DOCS-TOPICS.jsonl`
 
 ## date.now (13)
@@ -2777,6 +2793,22 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_INDEX.md:210 — 6.3 Non-Rigid Shape Morphing (ARAP) & Skinning — - As-Rigid-As-Possible (ARAP) Shape Interpolation: Polar decomposition of deformation gradient $J_k = R_k S_k$ (Alexa, C
 - content/video_engine/sources/reference_analyses/MASTER_RESEARCH_INDEX.md:209 — 6.3 Non-Rigid Shape Morphing (ARAP) & Skinning — - As-Rigid-As-Possible (ARAP) Shape Interpolation: Polar decomposition of deformation gradient $J_k = R_k S_k$ (Alexa, C
 
+## one-line (12)
+
+- docs/agent-context/SKILL_ROUTER.md:42 — Named Agent Routing — - Parent task: owns the critical path, shared-file integration, protected
+- docs/content-video-engine/07-PILOT-SEASON.md:1 — Pilot Season — Phase 0 Validation Cohort — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine
+- docs/content-video-engine/07-PILOT-SEASON.md:8 — History Documentary V4 cohort — 1. How Judo Became Brazilian Jiu-Jitsu — approximately 10-minute acceptance
+- docs/content-video-engine/27-DURABILITY-AND-LAYOUT.md:1 — 27 — Durability Classes And The Path Contract — One principle, and everything else follows from it:
+  cited by: docs/content-video-engine/26-AGENT-GENERATION-LOOP.md:59
+- docs/content-video-engine/27-DURABILITY-AND-LAYOUT.md:10 — The classes — Per project root (`VIDEO_ENGINE_PROJECT_ROOT`):
+- docs/content-video-engine/27-DURABILITY-AND-LAYOUT.md:79 — Porting the principle — Other products (bjjregistry, tradesinsights) port the principle — classes
+- docs/content-video-engine/32-WRITING-FOR-THE-EAR.md:181 — 8. Pipeline adoption candidates — 1. Script QC additions (join doc 31 §4's three passes): terminal-stress
+- docs/content-video-engine/briefs/VERDICT-research-brief-animation-craft.md:1 — Extraction verdict — the animation-craft research pass — Reviewed 2026-09-04 against [`ANSWERS-RESEARCH-BRIEF-animation-craft.md`](ANSWERS-RESEARCH-BRIEF-animation-craft.md).
+- docs/content-video-engine/briefs/VERDICT-research-brief-animation-craft.md:7 — The one-line read — Strong on mechanism, unreliable on magnitude. Where the pass names a real
+- docs/content-video-engine/patterns/CHECK-RESPONSIBILITIES.md:42 — 1. The rules — R1 — A tool's mechanical verdict is final. The agent does not re-derive
+- docs/content-video-engine/prompts/LIBRARY-BUILD-EP1-INDEX-FUNDS.md:357 — After generating — and one field you must not skip — Drop everything into `assets/generated/cutouts/`, then register each asset in
+- docs/research/motion/WEALTH_LOGIC_CUT_OFFSETS_MEASURED.md:54 — 1. Inside the pause — the dominant case — The nearest gap and the boundary's position inside it, all 99 boundaries.
+
 ## paint-order-stroke-fill (12)
 
 - content/video_engine/sources/reference_analyses/ACADEMIC_LITERATURE_DRAWING_AND_2_5D_ANIMATION_ENGINE.md:276 — Pillar 4: Perceptual Psychophysics & Cross-Modal Phase Locking
@@ -3109,6 +3141,20 @@ at most 12 sections each - the JSONL holds every one.
 - docs/research/tech/MOTION_GRAPHICS_FROM_STILL_IMAGES_BLUEPRINT.md:1 — Motion Graphics & Animation from Still Images — Research Blueprint — Date: 2026-09-03 | Domain: Tech / Video Engine | Method: Deep Research Pass 1 & Pass 2 Synthesis
 - docs/research/tech/MOTION_GRAPHICS_FROM_STILL_IMAGES_BLUEPRINT.md:7 — 1. Executive Summary & Core Hypothesis — High-retention, broadcast-grade video content does not require rendering every frame from scratch using slow, expensive,
 
+## j-cut (11)
+
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/08_answers_animation_craft_brief.md:350 — B3: L-Cuts / J-Cuts under Continuous Narration [RECLASSIFIED: Design Proposal] — - Source: E. Pincus & S. Ascher, The Filmmaker's Handbook (2013). (Classified as film craft doctrine).
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/08_answers_animation_craft_brief.md:605 — 9.2 Practitioner Doctrine (Editorial & Animation Craft) — 21. Walter Murch (1995). In the Blink of an Eye: A Perspective on Film Editing. Silman-James Press. (Practitioner doctri
+- docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:370 — B3: L-Cuts / J-Cuts under Continuous Narration [RECLASSIFIED: Design Proposal] — - Source: E. Pincus & S. Ascher, The Filmmaker's Handbook (2013). (Classified as film craft doctrine). [DERIVED: from Pi
+- docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:625 — 9.2 Practitioner Doctrine (Editorial & Animation Craft) — 21. Walter Murch (1995). In the Blink of an Eye: A Perspective on Film Editing. Silman-James Press. (Practitioner doctri
+- docs/content-video-engine/briefs/RESEARCH-BRIEF-animation-craft.md:118 — 2.3 Answer status after five passes (2026-09-04) — Recorded so a later pass does not redo settled work. Reference layer: docs 42–49.
+- docs/content-video-engine/briefs/RESEARCH-BRIEF-animation-craft.md:163 — Track B — the editor (cutting and rhythm) — | # | question | why it matters here |
+- docs/content-video-engine/RESEARCH-INDEX.md:255 — `08_answers_animation_craft_brief.md` — 42 headings — | heading | disposition |
+- docs/research/motion/WEALTH_LOGIC_CUT_OFFSETS_MEASURED.md:1 — Wealth Logic — where the picture change sits relative to the narration (J-cut / L-cut, measured) — Pass-1 · 2026-09-06 · sources: the measured boundaries, video.en.vtt · for: TR-2
+- docs/research/motion/WEALTH_LOGIC_CUT_OFFSETS_MEASURED.md:5 — The question — TR-2 (`docs/content-video-engine/TRANSITIONS-REVIEW-2026-09-06.md` §1, from research brief B3,
+- docs/research/motion/WEALTH_LOGIC_CUT_OFFSETS_MEASURED.md:133 — 3. Audio leads (J-cut) — the real minority, and it is 2–3 frames, not 4–8 — | | caption rule (a) | Whisper rule (a) |
+- docs/research/motion/WEALTH_LOGIC_CUT_OFFSETS_MEASURED.md:189 — 5. Against the design proposal (B3, `[DERIVED]`, never measured) — | B3 design proposal | proposed | measured on Wealth Logic (99 boundaries) | verdict |
+
 ## log-normal (11)
 
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/08_answers_animation_craft_brief.md:579 — 9. Sourcing Integrity & Bibliography — Every citation below carries a retrievable locator and is strictly categorized by type:
@@ -3168,21 +3214,6 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/CAPABILITIES.md:179 — Muted-caption judge — a model reads the captionless frame; verdict + `scenery` / `over-dense` diagnosis owned by code
 - docs/content-video-engine/RULE-abstract-to-concrete.md:1 — The plate throws the punch — abstract-to-concrete, 2026-09-04 — Adopted from the doodle-channel master prompt's rule 5, which is the one genuinely
 
-## one-line (11)
-
-- docs/agent-context/SKILL_ROUTER.md:42 — Named Agent Routing — - Parent task: owns the critical path, shared-file integration, protected
-- docs/content-video-engine/07-PILOT-SEASON.md:1 — Pilot Season — Phase 0 Validation Cohort — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine
-- docs/content-video-engine/07-PILOT-SEASON.md:8 — History Documentary V4 cohort — 1. How Judo Became Brazilian Jiu-Jitsu — approximately 10-minute acceptance
-- docs/content-video-engine/27-DURABILITY-AND-LAYOUT.md:1 — 27 — Durability Classes And The Path Contract — One principle, and everything else follows from it:
-  cited by: docs/content-video-engine/26-AGENT-GENERATION-LOOP.md:59
-- docs/content-video-engine/27-DURABILITY-AND-LAYOUT.md:10 — The classes — Per project root (`VIDEO_ENGINE_PROJECT_ROOT`):
-- docs/content-video-engine/27-DURABILITY-AND-LAYOUT.md:79 — Porting the principle — Other products (bjjregistry, tradesinsights) port the principle — classes
-- docs/content-video-engine/32-WRITING-FOR-THE-EAR.md:181 — 8. Pipeline adoption candidates — 1. Script QC additions (join doc 31 §4's three passes): terminal-stress
-- docs/content-video-engine/briefs/VERDICT-research-brief-animation-craft.md:1 — Extraction verdict — the animation-craft research pass — Reviewed 2026-09-04 against [`ANSWERS-RESEARCH-BRIEF-animation-craft.md`](ANSWERS-RESEARCH-BRIEF-animation-craft.md).
-- docs/content-video-engine/briefs/VERDICT-research-brief-animation-craft.md:7 — The one-line read — Strong on mechanism, unreliable on magnitude. Where the pass names a real
-- docs/content-video-engine/patterns/CHECK-RESPONSIBILITIES.md:42 — 1. The rules — R1 — A tool's mechanical verdict is final. The agent does not re-derive
-- docs/content-video-engine/prompts/LIBRARY-BUILD-EP1-INDEX-FUNDS.md:357 — After generating — and one field you must not skip — Drop everything into `assets/generated/cutouts/`, then register each asset in
-
 ## quality (11)
 
 - content/video_engine/sources/reference_analyses/COMFYUI_PARALLAX_TECHNICAL_STANDARDS_RESEARCH.md:191 — 6. Actionable Implementation Changes for Our Pipeline
@@ -3241,33 +3272,3 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/CAPABILITIES.md:128 — External evidence sources — | Source | Where | Gives | Rule |
 - docs/runbooks/HANDOFF-ASTRA-GEMINI-2026-09-05.md:51 — Astra's review (2026-09-05, later) - accepted, and what changed here — Astra agreed with the four recommendations with qualifications; all four are applied on this side:
 - docs/runbooks/PRP_EXECUTION.md:24 — Named Agents — | Agent | Use | Hard stop |
-
-## research-packet.v1 (11)
-
-- content/video_engine/projects/history-of-bjj/episode-2-research-questions.md:1 — Episode 2 Question Brief — The Branches BJJ History Forgot — This file is not an approved script or claim packet.
-- content/video_engine/projects/history-of-bjj/episode-2-research-questions.md:5 — Questions — - What documentary evidence establishes George Gracie’s teaching, travel, and
-- docs/content-video-engine/01-PRD.md:1 — PRD — Content-to-Video Flywheel Engine — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine
-- docs/content-video-engine/01-PRD.md:8 — V4 product override — The engine's primary product is an evidence-backed three-part History of BJJ
-- docs/content-video-engine/03-SYSTEM-ARCHITECTURE.md:1 — Content-to-Video Engine — System Architecture — > V4 architecture overlay: V1–V3 remain resumable. New History V4 jobs use the
-- docs/content-video-engine/03-SYSTEM-ARCHITECTURE.md:7 — V4 history pipeline — `research_packet.v1`, `asset_manifest.v1`, and `art_bible.v2` are independently
-- docs/content-video-engine/06-SCRIPT-TRANSFORMATION-SPEC.md:1 — Script Transformation Spec — Essay/Corpus → Beat Sheet → Storyboard — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine
-  cited by: docs/portable/OPERATOR-RULINGS.md:1384
-- docs/content-video-engine/10-HISTORY-DOCUMENTARY-EDITORIAL-SPEC.md:1 — History Documentary Editorial Specification — > STATUS: LANE DOCTRINE — history / documentary. The history lane is not retired; it is simply outside the finance set r
-  cited by: docs/content-video-engine/briefs/RESEARCH-BRIEF-animation-craft.md:118
-- docs/content-video-engine/10-HISTORY-DOCUMENTARY-EDITORIAL-SPEC.md:25 — 2. Editorial invariant — Every sentence presented as historical fact resolves to an approved claim in the
-- docs/content-video-engine/11-ARCHIVAL-ASSET-AND-CITATION-SPEC.md:1 — Archival Asset and Citation Specification — *Specification of record for History Documentary V4 rights, likeness, attribution,
-- docs/content-video-engine/11-ARCHIVAL-ASSET-AND-CITATION-SPEC.md:6 — 1. Separate evidence from permission — `research_packet.v1` answers “may we say this?”. `asset_manifest.v1` answers
-
-## rubber-sheet (11)
-
-- content/video_engine/sources/reference_analyses/COMFYUI_PARALLAX_TECHNICAL_STANDARDS_RESEARCH.md:1 — Deep Research Report: ComfyUI Parallax Engine — Technical Mechanics, Dial Calibration, and Professional Production Standards — Generated: 2026-09-04 | Status: Authoritative Technical Standard | Scope: 2.5D Parallax, Depthflow, and Camera Motion in
-- content/video_engine/sources/reference_analyses/COMFYUI_PARALLAX_TECHNICAL_STANDARDS_RESEARCH.md:14 — The Root Cause: — Our current stack (`tools/google-flow-driver/src/parallax-runner.mjs` and `2_5d_parallax_inpaint.json`) paired `Depth An
-- content/video_engine/sources/reference_analyses/COMFYUI_PARALLAX_TECHNICAL_STANDARDS_RESEARCH.md:136 — 5. The Professional Standard: Two-Plane Layer Inpainting — To achieve the 2.5D depth seen in professional documentaries (Ken Burns on steroids) where characters and props move aga
-- content/video_engine/sources/reference_analyses/COMFYUI_PARALLAX_TECHNICAL_STANDARDS_RESEARCH.md:156 — The 3-Step Protocol: — 1. Step 1: Automatic Foreground Segmentation (`RMBG-2.0` / `SAM 2`):
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/05_comfyui_parallax_technical_standards.md:1 — Deep Research Report: ComfyUI Parallax Engine — Technical Mechanics, Dial Calibration, and Professional Production Standards — Generated: 2026-09-04 | Status: Authoritative Technical Standard | Scope: 2.5D Parallax, Depthflow, and Camera Motion in
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/05_comfyui_parallax_technical_standards.md:14 — The Root Cause: — Our current stack (`tools/google-flow-driver/src/parallax-runner.mjs` and `2_5d_parallax_inpaint.json`) paired `Depth An
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/05_comfyui_parallax_technical_standards.md:136 — 5. The Professional Standard: Two-Plane Layer Inpainting — To achieve the 2.5D depth seen in professional documentaries (Ken Burns on steroids) where characters and props move aga
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/05_comfyui_parallax_technical_standards.md:156 — The 3-Step Protocol: — 1. Step 1: Automatic Foreground Segmentation (`RMBG-2.0` / `SAM 2`):
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/08_answers_animation_craft_brief.md:570 — 8.2 The Precise Defect & Proposed Fix — - The Defect: `intensity` is hardcoded to `1.0` across all six preset blocks. In ComfyUI-Depthflow-Nodes, `intensity` is
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/10_generative_video_tools_and_cross_platform_composition.md:140 — 3.3 ComfyUI-Depthflow-Nodes Mastery & Bug Resolution — ComfyUI-Depthflow-Nodes (`depthflow.glsl`) executes an image-space continuous heightfield ray-march:
-- docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:590 — 8.2 The Precise Defect & Proposed Fix — - The Defect: `intensity` is hardcoded to `1.0` across all six preset blocks. In ComfyUI-Depthflow-Nodes, `intensity` is

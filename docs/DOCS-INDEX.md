@@ -14,7 +14,7 @@ Levels 1-6 are Markdown heading depth; level 7 is a table row (CAPABILITIES, BAC
 A `{...}` tail lists the section's bold phrases; a `<...>` tail its body terms - code
 spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 
-3230 records across 255 files.
+3240 records across 256 files.
 
 ## content/video_engine/projects/history-of-bjj/episode-1-research-brief.md
 
@@ -3713,6 +3713,19 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 - L94 [3] 4. Where to set the fader (industry numbers) — - General practice: music −18 to −22 dB nominal (WeVideo); under {under dialogue specifically −30 to −35 dB} <WeVideo; high-pass; Dialogue-anchored; YouTube; full-mix>
 - L103 [2] Operational spec for Steel and Paper (and MP default) — 1. VO anchor: master the mix so integrated loudness lands ≈ {VO anchor:; Bed level:; −28 LU below the VO} <YouTube; measured-interference; number-dense; high-load; complex-task; simple-task; purpose-made; LU-below-VO; Cross-checked; dense-analysis; error-masking; steady-state>
 - L148 [2] Confidence & gaps — - HIGH: subliminal-audio null result; lyrics-are-speech; instrumental <subliminal-audio; lyrics-are-speech; room-tone>
+
+## docs/research/motion/WEALTH_LOGIC_CUT_OFFSETS_MEASURED.md
+
+- L1 [1] Wealth Logic — where the picture change sits relative to the narration (J-cut / L-cut, measured) — Pass-1 · 2026-09-06 · sources: the measured boundaries, video.en.vtt · for: TR-2 <Voice-driven; split-edit; [DERIVED]; wealth_logic_transitions_measured.csv; t < gap_start; L-cut-like; gap_start ≤ t ≤ gap_end; t > gap_end; J-cut-like; video.en.vtt; YouTube; auto-captions>
+- L5 [2] The question — TR-2 (`docs/content-video-engine/TRANSITIONS-REVIEW-2026-09-06.md` §1, from research brief B3, {before; L-cut; after; J-cut; on} <Voice-driven; split-edit; [DERIVED]; wealth_logic_transitions_measured.csv; t < gap_start; L-cut-like; gap_start ≤ t ≤ gap_end; t > gap_end; J-cut-like; video.en.vtt; YouTube; auto-captions>
+- L39 [2] Verdict up front — 1. There is no split-edit grammar to find: the reference puts the picture change on the {1. There is no split-edit grammar to find: the reference put; 2. The 4–8 / 6–10 frame proposal is not what the reference d} <t − gap_end; mid-sentence; L-cuts>
+- L54 [2] 1. Inside the pause — the dominant case — The nearest gap and the boundary's position inside it, all 99 boundaries. {82 (83 %); 65 (66 %); Caption timeline, rule (a) ≥ 0.30 s — the distribution:} <L-cut-like; J-cut-like; gap_end; t − gap_end; t − gap_start; cut = gap_start + 0.8 · gap; in-gap; one-line>
+- L115 [2] 2. Picture leads (L-cut) — 1 to 7 of 99, and they are not L-cuts — | | caption rule (a) | Whisper rule (a) | {There is no L-cut population.} <mid-speech; mid-word; picture-first>
+- L133 [2] 3. Audio leads (J-cut) — the real minority, and it is 2–3 frames, not 4–8 — | | caption rule (a) | Whisper rule (a) | {60 ms (1.8 f); 100 ms (3.0 f)} <mid-speech>
+- L150 [2] 4. By kind — the dip is the one real offset, and it is an offset of the *transition*, not of the cut — Caption timeline, rule (a) ≥ 0.30 s: <gap_end; blur-zoom; hard-cut; near-instantaneous; audio-leads; for a 14-frame dip>
+- L189 [2] 5. Against the design proposal (B3, `[DERIVED]`, never measured) — | B3 design proposal | proposed | measured on Wealth Logic (99 boundaries) | verdict | {1.8 f (60 ms); 3.0 f (100 ms); not supported; 1 of 99} <J-cut; L-cut; mid-speech; split-edit; ANSWERS-RESEARCH-BRIEF-animation-craft; film-craft; L-cuts; picture-lead>
+- L215 [2] Sources — - `docs/research/motion/wealth_logic_transitions_measured.csv` — the 99 boundaries with kind and <duration_frames; YouTube; auto-captions; roll-up; small.en int8 cpu; duration; automatic_captions; subtitles; machine-generated; author-supplied; of-gap; Row-level>
+- L248 [2] NOT FOUND WHERE I LOOKED — - Punctuated sentence boundaries for the reference. Searched {Punctuated sentence boundaries for the reference.} <video.info.json; subtitles; automatic_captions; auto-caption; machine-inserted; pause-free; re-cut; YouTube; word-timestamp; frame-exact; cross-channel>
 
 ## docs/research/motion/WEALTH_LOGIC_TRANSITIONS_MEASURED.md
 
