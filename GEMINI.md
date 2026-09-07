@@ -141,7 +141,10 @@ writes the packet under `docs/research/runs/bridge/queue/` and sends it; `bridge
 --packet <packetId>` lands the reply (`--replay` for history, `--once` for one daemon tick); `bridge_reply.py --packet <packetId>
 --text "<follow-up>"` continues the same conversation; `bridge_daemon.py --once` does all three per tick and closes replies at
 tier 0 without a model (`docs/runbooks/BRIDGE-DAEMON.md`). Packet shape and reply grammar: `docs/runbooks/BRIDGE-PACKET.md`.
-A live Claude session sees `N bridge replies waiting` on its next prompt; nobody is told to check the bridge. First order sent 2026-09-06 00:43: conversation
+**Before replying to any order (P46 T7):** run `python content/video_engine/scripts/bridge_check.py --shape <the order's reply shape>
+--reply <the file holding your reply>` from the repo root and paste its `PASS` line under the reply block; on `FAIL` it prints the
+block to fill - restate what you did, one bare absolute path per line, no links, no backticks. A reply that fails on form gets one
+repair follow-up asking for the block; a reply that fails on substance goes to a paid reader. A live Claude session sees `N bridge replies waiting` on its next prompt; nobody is told to check the bridge. First order sent 2026-09-06 00:43: conversation
 `7aaa9146-88f1-4f03-b004-d5bdf18a5492` (the profile work order).
 
 ## Execution bounds & Node guardrails

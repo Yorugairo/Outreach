@@ -15,7 +15,7 @@ its own headings, capability names, backlog ids. `terms` are its most frequent b
 terms. Purpose, terms and defines are truncated here to keep the file cheap to grep;
 the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 
-261 documents across 13 kinds.
+263 documents across 13 kinds.
 
 ## doctrine
 
@@ -137,6 +137,7 @@ the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 - docs/runbooks/WORK-ORDER-GEMINI-PROFILES-FLASH-2026-09-06.md — Work order — the research profiles run on the flas — To: the Gemini / Antigravity lane (the profile source, synce — defines: — — terms: video-researcher; animation-video-researcher; finance-narrative-researcher; model: pro; model: flash; --model
 - docs/runbooks/WORK-ORDER-GEMINI-PROFILES-LOOP-2026-09-06.md — Work order — the research profiles carry loop disc — To: the Gemini / Antigravity lane (the profile source, synce — defines: — — terms: cut-classification; video-researcher; animation-video-researcher; finance-narrative-researcher; POSITION; PATHS WRITTEN
 - docs/runbooks/WORK-ORDER-GEMINI-WEALTH-LOGIC-CUTS-2026-09-06.md — Work order — classify every cut in the Wealth Logi — To: the Gemini research lane (profile `video-researcher`). — defines: — — terms: unclassified; re-deriving; video.en.vtt; word-timed; hard-cut; dissolve
+- docs/runbooks/WORK-ORDER-GEMINI-WEIGHT-MASS-2026-09-07.md — Work order — weight, density and mass in drawing, — To: the Gemini research lane (profile `video-researcher`). — defines: — — terms: HyperFrames; stop-motion-cadence; headline-slam; impactSquash; contactShadow; groundShake
 
 ## spec
 
@@ -172,6 +173,7 @@ the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 - docs/research/motion/WEALTH_LOGIC_CUT_OFFSETS_MEASURED.md — Wealth Logic — where the picture change sits relat — TR-2 (`docs/content-video-engine/TRANSITIONS-REVIEW-2026-09- — defines: — — terms: YouTube; split-edit; L-cut-like; J-cut-like; auto-captions; mid-speech
 - docs/research/motion/WEALTH_LOGIC_TRANSITIONS_MEASURED.md — Wealth Logic Transitions, Measured From The Pixels — What KIND of transition does the Wealth Logic reference use — defines: — — terms: blur-zoom; DIP_BRIGHT_FRAC 1.60; [t - 0.6 s, t + 0.8 s]; L_before; L_after; S_before
 - docs/research/motion/WEALTH_LOGIC_TRANSITIONS_RESEARCH_BLUEPRINT.md — Wealth Logic Transitions Research Blueprint — Superseded 2026-09-06 by `WEALTH_LOGIC_TRANSITIONS_MEASURED. — defines: — — terms: blur-zooms; zoom-throughs; fade-throughs; frame-per-boundary; Zoom-through; blur-zoom
+- docs/research/motion/WEIGHT_DENSITY_MASS_RESEARCH_BLUEPRINT.md — Weight, Density, and Mass in Drawing, Animation, a — Pass Metadata: Workflow: Deep Research Engine (Pass 1: Broad — defines: — — terms: Kersten et al.; t_0; stop-motion; Whitaker & Halas 1981; High-Mass; hand-drawn
 - docs/research/tech/MOTION_GRAPHICS_FROM_STILL_IMAGES_BLUEPRINT.md — Motion Graphics & Animation from Still Images — Re — High-retention, broadcast-grade video content does not requi — defines: — — terms: context-aware; LaMa; Shih et al.; LTX-Video; Date.now(); spring()
 
 ## source-bundle

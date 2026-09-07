@@ -51,6 +51,11 @@ def build_parser() -> argparse.ArgumentParser:
                         help="gemini model TIER: flash_lite | flash | pro (default flash - operator 2026-09-06: the current flash, 3.8, is the stronger model; pro is 3.1)")
     parser.add_argument("--reply-shape", choices=REPLY_SHAPES, default="free")
     parser.add_argument("--deadline-min", type=int, default=DEFAULT_DEADLINE_MIN)
+    parser.add_argument("--root", action="append", default=[], dest="roots",
+                        help="P46 T7: an absolute root the order sends the addressee to; a relative path in the reply resolves under it too (repeatable)")
+    parser.add_argument("--verify", default=None,
+                        help="P46 T7: OUR verification command, run from the repo root once the reply passes on form; exit 0 closes the packet, else tier 1")
+    parser.add_argument("--no-template", action="store_true", help="do not append the reply's fill-in grammar block to the brief")
     parser.add_argument("--repo", type=Path, default=REPO)
     parser.add_argument("--dry-run", action="store_true", help="resolve and write, never call the CLI")
     parser.add_argument("--json", action="store_true", dest="as_json", help="one JSON object on stdout")
@@ -66,18 +71,34 @@ def read_brief(path: Path) -> str:
     return brief
 
 
-def build_order(args: argparse.Namespace, brief: str) -> dict[str, Any]:
+def build_order(args: argparse.Namespace, brief: str, packet_source: str | None = None) -> dict[str, Any]:
+    """`packet_source` (P46 T7): the packet id is the hash of the brief AS WRITTEN (the file), never of the block the sender
+    appends - so a packet keeps its identity whether or not the template rides along."""
     created = dt.datetime.now().astimezone()
     deadline = created + dt.timedelta(minutes=max(args.deadline_min, 0))
     return {
-        "packetId": env_mod.packet_id(brief),
+        "packetId": env_mod.packet_id(packet_source if packet_source is not None else brief),
         "lane": args.lane,
         "title": args.title or args.brief_file.stem,
         "replyShape": args.reply_shape,
         "deadline": deadline.isoformat(timespec="seconds"),
         "brief": brief,
         "createdAt": created.isoformat(timespec="seconds"),
+        **({"roots": [str(Path(r).expanduser()) for r in args.roots]} if getattr(args, "roots", None) else {}),
+        **({"verify": args.verify} if getattr(args, "verify", None) else {}),
     }
+
+
+def with_template(brief: str, shape: str) -> str:
+    """P46 T7: the reply's fill-in grammar block, appended to the brief - a block to copy beats prose about format. The
+    check CLI both sides can run is named beside it."""
+    import bridge_handlers as handlers
+    if "## Reply block" in brief or shape == "free":
+        return brief
+    return (brief.rstrip("\n") + "\n\n## Reply block (fill this in, verbatim, as the first thing in your reply)\n\n```\n"
+            + handlers.template(shape) + "```\n"
+            "Before replying, run `python content/video_engine/scripts/bridge_check.py --shape " + shape
+            + " --reply <the file holding your reply>` from the repo root and paste its PASS line under the block.\n")
 
 
 def quote(argv: Sequence[str]) -> str:
@@ -280,8 +301,9 @@ def main(argv: Sequence[str] | None = None) -> int:
         if hasattr(stream, "reconfigure"):
             stream.reconfigure(encoding="utf-8", errors="replace")
     args = build_parser().parse_args(argv)
-    brief = read_brief(args.brief_file)
-    order = build_order(args, brief)
+    raw = read_brief(args.brief_file)
+    brief = raw if getattr(args, "no_template", False) else with_template(raw, args.reply_shape)   # P46 T7: the fill-in block rides every order
+    order = build_order(args, brief, packet_source=raw)
     lines: list[str] = [f"packetId {order['packetId'][:12]} lane {order['lane']} shape {order['replyShape']}"]
 
     size = len(brief.encode("utf-8"))

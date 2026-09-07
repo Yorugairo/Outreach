@@ -27,6 +27,7 @@ from __future__ import annotations
 import argparse
 import json
 import re
+import shlex
 import subprocess
 import sys
 from dataclasses import dataclass
@@ -45,6 +46,13 @@ RESEARCH_ROOT = "docs/research/"
 NOT_FOUND_BLOCK = "## NOT FOUND WHERE I LOOKED"
 PROOF_LINE = re.compile(r"\[[^\]\n]*\|\s*URL:\s*https://[^|\]\n]+\|\s*Verified\s+20\d\d")
 REPLAY_DIR = "replay"
+# P46 T7: a tier-0 failure is one of two CLASSES. FORM - the reply's shape (no grammar, a mangled or missing path list, no
+# NOT FOUND block, stale docs layers, a truncated reply): the addressee can restate what it did in one follow-up at zero Claude
+# tokens - the REPAIR ROUND. SUBSTANCE - the work itself (a marker absent from a file, no proof line, an [UNVERIFIED] verdict, a
+# failed command, a failed verify): a follow-up would only invite invention (the operator, 2026-09-07: an evidence quota "gets
+# Gemini to write us bad numbers"), so it goes to tier 1. A repair is asked for FORM only, never for evidence.
+FORM_CHECKS = ("paths-named", "reply-whole", "report-named", "not-found-block", "docs-layers", "command-named", "shape", "exists")
+CLASS_FORM, CLASS_SUBSTANCE = "form", "substance"
 DETAIL_CHARS = 400
 
 _HEADER_COMMENT = re.compile(r"^<!--.*?-->", re.DOTALL)
@@ -117,7 +125,8 @@ def _collect(body: str) -> dict[str, list[str]]:
             # a heading-form POSITION carries its value on the next line (`### POSITION` / `done ...`)
             buckets[current].append(line.strip())
             continue
-        bare_path = current == "PATHS WRITTEN" and _ABSOLUTE.match(line.strip()) is not None
+        bare_path = current == "PATHS WRITTEN" and (_ABSOLUTE.match(line.strip()) is not None or _looks_like_path(line.strip()))
+        # P46 T7: a RELATIVE path is a list item too - it resolves under the order's `roots` (a file in another repo the order named)
         if _BULLET.match(line) or bare_path or current == "NOT FOUND WHERE I LOOKED":
             # a PATHS WRITTEN list may be bare absolute paths, one per line, no bullet (Gemini, 2026-09-06 18:26):
             # that is a list, not prose, and must not close the section
@@ -246,6 +255,69 @@ def result(passed: bool, reason: str, checks: list[dict[str, Any]]) -> Tier0Resu
     return {"pass": bool(passed), "reason": reason, "checks": checks}
 
 
+def failure_class(checks: list[dict[str, Any]]) -> str | None:
+    """`form` when the FIRST failing check is about the reply's shape, `substance` when it is about the work, None on a pass."""
+    for entry in checks:
+        if not entry["ok"]:
+            head = str(entry["name"]).split(":", 1)[0]
+            return CLASS_FORM if head in FORM_CHECKS else CLASS_SUBSTANCE
+    return None
+
+
+def order_roots(order: dict[str, Any], repo: Path | str) -> list[Path]:
+    """The roots the ORDER named (`roots`: absolute paths) - a relative path in the reply resolves under each; a path in another
+    repo the order sent the addressee to is never 'not found' for living outside ours (P46 T7, the second tier-1 run of 2026-09-06)."""
+    out: list[Path] = []
+    for raw in order.get("roots") or []:
+        p = Path(str(raw)).expanduser()
+        if p.exists():
+            out.append(p)
+    return out
+
+
+TEMPLATES: dict[str, str] = {
+    "paths-written": (
+        "POSITION: done | conditional | blocked\n"
+        "PATHS WRITTEN:\n"
+        "<one bare absolute path per line - no links, no backticks, no bullets, no prose>\n"
+        "DISAGREEMENTS:\n- none\n"
+        "PREREQUISITES:\n- none\n"
+        "NOT FOUND WHERE I LOOKED:\n- <the roots you searched, or none>\n"),
+    "report-landed": (
+        "POSITION: done | conditional | blocked\n"
+        "PATHS WRITTEN:\n"
+        "<the report's absolute path under docs/research/<area>/ first, then any other, one bare path per line>\n"
+        "DISAGREEMENTS:\n- none\n"
+        "PREREQUISITES:\n- none\n"
+        "NOT FOUND WHERE I LOOKED:\n- <the roots you searched>\n"
+        "(the report itself must carry `## Verdict up front`, proof lines of the form "
+        "`[Metric | value | authority | URL: https://... | Verified 2026-..]`, and a `## NOT FOUND WHERE I LOOKED` block)\n"),
+    "contract-block": (
+        "POSITION: done | conditional | blocked\n"
+        "PATHS WRITTEN:\n<one bare absolute path per line - every file that carries the block>\n"
+        "DISAGREEMENTS:\n- none\n"
+        "PREREQUISITES:\n- none\n"
+        "NOT FOUND WHERE I LOOKED:\n- none\n"),
+    "review": (
+        "POSITION: done | conditional | blocked\n"
+        "PATHS WRITTEN:\n- none\n"
+        "DISAGREEMENTS:\n- <each disagreement on its own line, or none>\n"
+        "PREREQUISITES:\n- <each, or none>\n"
+        "NOT FOUND WHERE I LOOKED:\n- <the files you could not open, or none>\n"),
+    "test-run": (
+        "POSITION: done | conditional | blocked\n"
+        "PATHS WRITTEN:\n<one bare absolute path per line, or none>\n"
+        "DISAGREEMENTS:\n- none\n"
+        "PREREQUISITES:\n- none\n"
+        "NOT FOUND WHERE I LOOKED:\n- none\n"),
+}
+
+
+def template(shape: str) -> str:
+    """The fill-in grammar block for a reply shape - what an order appends and what a repair asks for."""
+    return TEMPLATES.get(shape, TEMPLATES["paths-written"]).replace("\\n", "\n")
+
+
 def _first_failure(checks: list[dict[str, Any]]) -> str | None:
     for entry in checks:
         if not entry["ok"]:
@@ -267,7 +339,7 @@ def check_paths_written(order: dict[str, Any], text: str, repo: Path) -> Tier0Re
         # the list is partial and one item is a half-path: verify what survived, then fail on the truncation itself
         paths = [p for p in paths if "<truncated" not in p and not text.count(p) == 0]
         paths = [p for p in paths if _looks_whole(p)]
-    dirs = _named_dirs(paths, repo)
+    dirs = [*_named_dirs(paths, repo), *order_roots(order, repo)]   # P46 T7: the order's roots resolve a relative path too
     marker = order.get("marker")
     checks: list[dict[str, Any]] = []
     if cut:
@@ -330,7 +402,7 @@ def check_report_landed(order: dict[str, Any], text: str, repo: Path) -> Tier0Re
     if not reports:
         return result(False, "no report named", [check("report-named", False, f"no `{RESEARCH_ROOT}<area>/*.md` in the reply")])
     raw = reports[0]
-    found, ok = locate(raw, repo)
+    found, ok = locate(raw, repo, order_roots(order, repo))
     checks = [check(f"exists:{raw}", ok, f"{found}" if ok else f"not found where I looked: {found}")]
     if not ok:
         return result(False, checks[0]["detail"], checks)
@@ -431,7 +503,24 @@ def classify(order: dict[str, Any], reply_text: str, repo: Path | str = REPO) ->
         outcome = result(False, f"unknown replyShape {shape!r}", [check("shape", False, f"no handler for {shape!r}")])
     else:
         outcome = handler(order, reply_text or "", Path(repo))
-    return {"shape": shape, **outcome}
+    if outcome["pass"] and order.get("verify"):
+        # P46 T7: an order may carry its OWN verification command (ours, never the reply's); its exit code is a substance check,
+        # run only once the shape's checks pass, from the repo root - the parent no longer closes a passing-on-form reply by hand
+        outcome = check_verify(order, Path(repo), outcome)
+    return {"shape": shape, **outcome, "class": failure_class(outcome["checks"])}
+
+
+def check_verify(order: dict[str, Any], repo: Path, prior: Tier0Result) -> Tier0Result:
+    """Run `order.verify` (a command string or list) from the repo root; exit 0 is the check."""
+    raw = order.get("verify")
+    command = shlex.split(str(raw)) if isinstance(raw, str) else [str(x) for x in (raw or [])]
+    if not command:
+        return prior
+    code, tail = run_command(command, repo)
+    entry = check("verify-cmd", code == 0, f"exit {code}: {' '.join(command)[:120]} - {tail.strip()[:200]}")
+    checks = [*prior["checks"], entry]
+    failure = _first_failure(checks)
+    return result(failure is None, "" if failure is None else failure, checks)
 
 
 # --------------------------------------------------------------------------- the CLI

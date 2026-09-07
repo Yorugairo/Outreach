@@ -17,6 +17,8 @@ It adopts Astra's observed packet (six inbound sessions on 2026-09-05) and adds 
 | `replyShape` | yes | `paths-written` \| `contract-block` \| `report-landed` \| `review` \| `test-run` \| `free` — decides the tier-0 handler (§4) |
 | `existingEvidence` | when relevant | the output of `docs_find.py "<topic>"` pasted in, so the addressee reads our sections before searching (GEMINI.md intake, step 6) |
 | `deadline` | yes | ISO time; past it the watcher records `timeout` and the daemon escalates |
+| `roots` | when the order sends the addressee to another repo | absolute paths (`bridge_send --root`, repeatable); a relative path in the reply resolves under each, so a file that lives outside ours is never "not found" for that (P46 T7) |
+| `verify` | when we can check the work by command | OUR command (`bridge_send --verify "<cmd>"`), run from the repo root once the reply passes on form; exit 0 closes the packet, else tier 1 with the output (P46 T7) |
 | `reviewOnly` | default false | true = the addressee reads and replies, writes nothing (Astra's alignment briefs) |
 | `createdAt`, `sentAt`, `conversationId` | filled by the sender | provenance; `conversationId` is the addressee's handle for `send-message` / `--resume` |
 
@@ -43,6 +45,13 @@ DISAGREEMENTS: - ... (or none)
 PREREQUISITES: - ... (or none)
 NOT FOUND WHERE I LOOKED: <roots and sources searched, coverage limits> (or none)
 ```
+
+**The block is appended to every order as a fill-in template** (`bridge_send` does it; `--no-template` opts out), and
+**both sides run the same check:** `python content/video_engine/scripts/bridge_check.py --shape <shape> --reply <file>` (or
+`--packet <id>`) prints `PASS` or the first failing check and the block to fill; `--template <shape>` prints the block alone. The
+addressee runs it before replying (the order says so, the profiles will); the daemon runs it on landing; a `form` failure earns one
+repair round, a `substance` failure goes to tier 1 (`BRIDGE-DAEMON.md` §1, step 3b). This holds whether the order came through
+the bridge or the operator typed it: the CLI needs only the shape and the reply.
 
 then free text. "Does not exist" is never a valid claim; "not found in <roots>" is. A reply that names a path the sender cannot
 find on disk is `conditional`, not `done`. Replies are ≤ 250 words unless the order raises the cap.

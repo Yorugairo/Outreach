@@ -269,7 +269,7 @@ def test_a_dry_run_changes_not_one_byte(tmp_path, capsys):
     assert snapshot(repo) == before, "a dry run sends, moves, dispatches, toasts and ledgers nothing"
     assert not (repo / BD.LOCK_PATH).exists(), "not even the lock"
     summary = json.loads(capsys.readouterr().out)
-    assert summary == {"sent": 1, "watched": 1, "tier0_done": 0, "tier1_runs": 0, "escalated": 0, "skipped_budget": 0}
+    assert summary == {"sent": 1, "watched": 1, "tier0_done": 0, "tier1_runs": 0, "escalated": 0, "skipped_budget": 0, "repairs": 0}
 
 
 def test_a_dry_run_prints_the_toast_instead_of_raising_one(tmp_path):

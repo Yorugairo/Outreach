@@ -53,7 +53,7 @@ LOOPBACK = ("127.0.0.1", "[::1]")
 BRIDGE_ROOT = Path("docs/research/runs/bridge")
 STATES = ("queue", "sent", "replied", "done")
 LEDGER = Path("evals/BRIDGE-LOG.jsonl")
-LEDGER_EVENTS = ("sent", "replied", "followup", "tier0", "tier1", "timeout", "escalated")
+LEDGER_EVENTS = ("sent", "replied", "followup", "tier0", "tier1", "timeout", "escalated", "repair", "repaired")
 TELEMETRY_KEYS = ("conversationId", "secondsToReply", "inputTokens", "outputTokens", "totalTokens")
 
 _CSRF_RE = re.compile(r"--csrf_token[=\s]+(\S+)")

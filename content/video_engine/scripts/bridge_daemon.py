@@ -65,6 +65,7 @@ TOAST_APP_ID = "Claude Bridge"
 DECISION_RE = re.compile(r"^\s*\**DECISION:?\**\s*:?\s*\**\s*(done|follow-up|followup|escalate)", re.IGNORECASE | re.MULTILINE)
 LANDED_RE = re.compile(r"landedAt:\s*([0-9T:+\-\.]+)")
 ESCALATIONS = ("timeout", "sla", "handler-escalate", "budget")
+REPAIR_MARKER = "repair.json"   # P46 T7: the original packet's marker that ONE repair follow-up was queued for its form failure
 
 DEFAULTS: dict[str, Any] = {
     "grace_min": 10,
@@ -193,7 +194,7 @@ class Tick:
         self.config = config
         self.dry_run = dry_run
         self.lines: list[str] = []
-        self.summary = {"sent": 0, "watched": 0, "tier0_done": 0, "tier1_runs": 0, "escalated": 0, "skipped_budget": 0}
+        self.summary = {"sent": 0, "watched": 0, "tier0_done": 0, "tier1_runs": 0, "escalated": 0, "skipped_budget": 0, "repairs": 0}
 
     def say(self, line: str) -> None:
         self.lines.append(line)
@@ -349,11 +350,15 @@ def step_tier0(tick: Tick) -> None:
         outcome = handlers.classify(order, text, tick.repo)
         env_mod.write_json(folder / "tier0.json", {**outcome, "checkedAt": stamp()})
         if not outcome["pass"]:
-            tick.say(f"TIER0-FAIL {packet[:12]} shape={outcome['shape']}: {outcome['reason']}")
+            tick.say(f"TIER0-FAIL {packet[:12]} shape={outcome['shape']} class={outcome.get('class')}: {outcome['reason']}")
+            if outcome.get("class") == handlers.CLASS_FORM and not order.get("repairs") and not (folder / REPAIR_MARKER).exists():
+                queue_repair(tick, folder, order, packet, outcome)   # P46 T7: one repair round, at zero Claude tokens, before tier 1
             continue
         env_mod.move_packet(packet, "replied", "done", repo=tick.repo)
         tick.summary["tier0_done"] += 1
         tick.say(f"TIER0-DONE {packet[:12]} shape={outcome['shape']}")
+        if order.get("repairs"):
+            close_repaired(tick, str(order["repairs"]), packet)   # the repair passed: the original it repairs is closed with it
         tick.ledger(
             {
                 "lane": order.get("lane"),
@@ -365,6 +370,63 @@ def step_tier0(tick: Tick) -> None:
                 "checks": len(outcome["checks"]),
             }
         )
+
+
+# --------------------------------------------------------------------------- 3b. the repair round (P46 T7)
+
+
+def repair_brief(order: dict[str, Any], outcome: dict[str, Any]) -> str:
+    """What the addressee is asked for: the block, restated - never new evidence."""
+    shape = order.get("replyShape") or "paths-written"
+    return (
+        f"Your reply to the order \"{order.get('title') or order.get('packetId', '')[:12]}\" could not be closed on its FORM: "
+        f"{outcome.get('reason') or 'the grammar was not found'}.\n\n"
+        "Reply with the block below and nothing else, filled in from what you ALREADY did - restate, add nothing new, invent "
+        "nothing. One bare absolute path per line under PATHS WRITTEN: no markdown links, no backticks, no bullets.\n\n"
+        "```\n" + handlers.template(shape) + "```\n"
+        f"If you can, run `python content/video_engine/scripts/bridge_check.py --shape {shape} --reply <your reply file>` from "
+        "the repo root first and paste its PASS line under the block.\n"
+    )
+
+
+def queue_repair(tick: Tick, folder: Path, order: dict[str, Any], packet: str, outcome: dict[str, Any]) -> None:
+    """One follow-up on the original's conversation, queued for the next tick's send; the original waits for the repair.
+    Nothing is queued without a conversation to continue on, and never twice."""
+    conversation = str(read_json(folder / "conversation.json").get("conversationId") or order.get("conversationId") or "")
+    if not conversation:
+        tick.say(f"REPAIR-SKIP {packet[:12]}: no conversation to continue on")
+        return
+    brief = repair_brief(order, outcome)
+    repair_id = env_mod.packet_id(brief)
+    if tick.dry_run:
+        tick.say(f"REPAIR {packet[:12]} -> {repair_id[:12]} (dry-run: nothing queued)")
+        return
+    queued = env_mod.packet_dir(tick.repo, repair_id, "queue")
+    queued.mkdir(parents=True, exist_ok=True)
+    env_mod.write_json(queued / "order.json", {
+        "packetId": repair_id, "lane": order.get("lane") or "gemini", "from": "claude", "conversationId": conversation,
+        "title": f"repair: {order.get('title') or packet[:12]}", "replyShape": order.get("replyShape") or "paths-written",
+        "repairs": packet, "brief": brief, "createdAt": stamp(),
+        **({"roots": order["roots"]} if order.get("roots") else {}), **({"verify": order["verify"]} if order.get("verify") else {}),
+        **({"marker": order["marker"]} if order.get("marker") else {}),
+    })
+    env_mod.write_json(folder / REPAIR_MARKER, {"repairPacket": repair_id, "queuedAt": stamp(), "reason": outcome.get("reason")})
+    tick.summary["repairs"] += 1
+    tick.say(f"REPAIR {packet[:12]} -> {repair_id[:12]} queued ({outcome.get('reason')})")
+    tick.ledger({"lane": order.get("lane"), "packetId": packet, "event": "repair", "repairPacket": repair_id,
+                 "class": outcome.get("class"), "reason": outcome.get("reason")})
+
+
+def close_repaired(tick: Tick, original: str, repair_packet: str) -> None:
+    """The repair reply closed at tier 0 (or tier 1): the original moves to done with the repair named in its tier0.json."""
+    folder = env_mod.packet_dir(tick.repo, original, "replied")
+    if not folder.exists():
+        return
+    prior = read_json(folder / "tier0.json")
+    env_mod.write_json(folder / "tier0.json", {**prior, "pass": True, "repairedBy": repair_packet, "closedAt": stamp()})
+    env_mod.move_packet(original, "replied", "done", repo=tick.repo)
+    tick.say(f"REPAIRED {original[:12]} by {repair_packet[:12]}")
+    tick.ledger({"lane": None, "packetId": original, "event": "repaired", "repairPacket": repair_packet})
 
 
 # --------------------------------------------------------------------------- 4. tier 1, the residue
@@ -469,6 +531,8 @@ def step_tier1(tick: Tick) -> None:
         tier0 = read_json(folder / "tier0.json")
         if not tier0 or tier0.get("pass") or (folder / "tier1.json").exists():
             continue
+        if (folder / REPAIR_MARKER).exists():
+            continue   # P46 T7: the original waits for its repair reply; the repair packet is what tier 1 sees if that fails too
         order = read_json(folder / "order.json")
         packet = order.get("packetId") or folder.name
         age = minutes_since(landed_at(folder))
@@ -490,6 +554,7 @@ def _dispatch_tier1(tick: Tick, folder: Path, packet: str, order: dict[str, Any]
         tick.summary["tier1_runs"] += 1
         return
     started = stamp()
+    tier0_prior = read_json(folder / "tier0.json")   # read before the packet moves
     run = run_tier1(tick.repo, folder)
     usage = _usage(run.get("payload") or {})
     result_path, landed = land_result(tick.repo, packet, folder)
@@ -514,6 +579,8 @@ def _dispatch_tier1(tick: Tick, folder: Path, packet: str, order: dict[str, Any]
             "tier": 1,
             "replyShape": order.get("replyShape"),
             "decision": decision,
+            "reason": (f"{tier0_prior.get('class') or '?'}:{tier0_prior.get('reason') or ''}"[:200] if tier0_prior else None),   # P46 T7: the metric - tier 1 by cause
+            "repairs": order.get("repairs"),
             "exit": run.get("exit"),
             "inputTokens": (usage or {}).get("input_tokens"),
             "outputTokens": (usage or {}).get("output_tokens"),
@@ -522,6 +589,8 @@ def _dispatch_tier1(tick: Tick, folder: Path, packet: str, order: dict[str, Any]
     )
     if decision == "escalate":
         escalate(tick, landed, packet, "handler-escalate", f"{packet[:12]}: the handler escalated - read {result_path}")
+    elif decision == "done" and order.get("repairs"):
+        close_repaired(tick, str(order["repairs"]), packet)
 
 
 # --------------------------------------------------------------------------- 5. escalation
